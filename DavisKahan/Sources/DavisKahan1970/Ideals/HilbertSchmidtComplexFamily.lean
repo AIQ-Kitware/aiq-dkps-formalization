@@ -50,9 +50,9 @@ theorem isPaperHilbertSchmidt_add_complex
     (hA : IsPaperHilbertSchmidt A)
     (hB : IsPaperHilbertSchmidt B) :
     IsPaperHilbertSchmidt (A + B) := by
-  let zA := paperHilbertSchmidtTensor A hA
-  let zB := paperHilbertSchmidtTensor B hB
-  have hrepr : ofLp (paperHSBasis _) (zA + zB) = A + B := by
+  let zA := hilbertSchmidtTensor A hA
+  let zB := hilbertSchmidtTensor B hB
+  have hrepr : ofLp (hSBasis _) (zA + zB) = A + B := by
     rw [ofLp_add]
     rw [toOperator_paperHilbertSchmidtTensor,
       toOperator_paperHilbertSchmidtTensor]
@@ -60,22 +60,22 @@ theorem isPaperHilbertSchmidt_add_complex
   exact isPaperHilbertSchmidt_toOperator (zA + zB)
 
 /-- The canonical tensor of a sum is the sum of the canonical tensors. -/
-theorem paperHilbertSchmidtTensor_add
+theorem hilbertSchmidtTensor_add
     {A B : E →L[ℂ] F}
     (hA : IsPaperHilbertSchmidt A)
     (hB : IsPaperHilbertSchmidt B) :
-    paperHilbertSchmidtTensor (A + B)
+    hilbertSchmidtTensor (A + B)
         (isPaperHilbertSchmidt_add_complex hA hB) =
-      paperHilbertSchmidtTensor A hA +
-        paperHilbertSchmidtTensor B hB := by
-  apply ofLp_injective (paperHSBasis _)
+      hilbertSchmidtTensor A hA +
+        hilbertSchmidtTensor B hB := by
+  apply ofLp_injective (hSBasis _)
   rw [toOperator_paperHilbertSchmidtTensor,
     ofLp_add,
     toOperator_paperHilbertSchmidtTensor,
     toOperator_paperHilbertSchmidtTensor]
 
 /-- The paper Hilbert--Schmidt norm satisfies the triangle inequality. -/
-theorem paperHilbertSchmidtNorm_add_le_complex
+theorem hilbertSchmidtNorm_add_le_complex
     {A B : E →L[ℂ] F}
     (hA : IsPaperHilbertSchmidt A)
     (hB : IsPaperHilbertSchmidt B) :
@@ -83,21 +83,21 @@ theorem paperHilbertSchmidtNorm_add_le_complex
       paperHilbertSchmidtNorm A + paperHilbertSchmidtNorm B := by
   let hAB := isPaperHilbertSchmidt_add_complex hA hB
   rw [← norm_paperHilbertSchmidtTensor (A + B) hAB,
-    paperHilbertSchmidtTensor_add hA hB,
+    hilbertSchmidtTensor_add hA hB,
     ← norm_paperHilbertSchmidtTensor A hA,
     ← norm_paperHilbertSchmidtTensor B hB]
   exact norm_add_le _ _
 
 /-- A zero paper Hilbert--Schmidt norm forces the represented operator to
 vanish. -/
-theorem paperHilbertSchmidtNorm_eq_zero
+theorem hilbertSchmidtNorm_eq_zero
     {A : E →L[ℂ] F} (hA : IsPaperHilbertSchmidt A)
     (hzero : paperHilbertSchmidtNorm A = 0) : A = 0 := by
-  let z := paperHilbertSchmidtTensor A hA
+  let z := hilbertSchmidtTensor A hA
   have hzNorm : ‖z‖ = 0 := by
     rw [norm_paperHilbertSchmidtTensor]
     exact hzero
-  have hz : paperHilbertSchmidtTensor A hA = 0 := norm_eq_zero.mp hzNorm
+  have hz : hilbertSchmidtTensor A hA = 0 := norm_eq_zero.mp hzNorm
   have hrepr := toOperator_paperHilbertSchmidtTensor A hA
   rw [hz, ofLp_zero] at hrepr
   exact hrepr.symm
@@ -112,14 +112,14 @@ theorem isPaperHilbertSchmidt_sub
   exact isPaperHilbertSchmidt_add_complex hA ((isPaperHilbertSchmidt_neg_iff B).2 hB)
 
 /-- The canonical tensor respects subtraction. -/
-theorem paperHilbertSchmidtTensor_sub
+theorem hilbertSchmidtTensor_sub
     {A B : E →L[ℂ] F}
     (hA : IsPaperHilbertSchmidt A)
     (hB : IsPaperHilbertSchmidt B) :
-    paperHilbertSchmidtTensor (A - B) (isPaperHilbertSchmidt_sub hA hB) =
-      paperHilbertSchmidtTensor A hA -
-        paperHilbertSchmidtTensor B hB := by
-  apply ofLp_injective (paperHSBasis _)
+    hilbertSchmidtTensor (A - B) (isPaperHilbertSchmidt_sub hA hB) =
+      hilbertSchmidtTensor A hA -
+        hilbertSchmidtTensor B hB := by
+  apply ofLp_injective (hSBasis _)
   rw [toOperator_paperHilbertSchmidtTensor,
     ofLp_sub,
     toOperator_paperHilbertSchmidtTensor,
@@ -127,7 +127,7 @@ theorem paperHilbertSchmidtTensor_sub
 
 /-- A sequence Cauchy in the paper square norm converges to a paper
 Hilbert--Schmidt operator in that norm. -/
-theorem paperHilbertSchmidt_complete_complex
+theorem hilbertSchmidt_complete_complex
     (A : ℕ → E →L[ℂ] F)
     (hA : ∀ n, IsPaperHilbertSchmidt (A n))
     (hcauchy : ∀ ε : ℝ, 0 < ε → ∃ N, ∀ m n,
@@ -136,8 +136,8 @@ theorem paperHilbertSchmidt_complete_complex
     ∃ L : E →L[ℂ] F, IsPaperHilbertSchmidt L ∧
       ∀ ε : ℝ, 0 < ε → ∃ N, ∀ n, N ≤ n →
         paperHilbertSchmidtNorm (A n - L) < ε := by
-  let z : ℕ → lp (fun _ : PaperHSIndex E => F) 2 :=
-    fun n => paperHilbertSchmidtTensor (A n) (hA n)
+  let z : ℕ → lp (fun _ : HSIndex E => F) 2 :=
+    fun n => hilbertSchmidtTensor (A n) (hA n)
   have hzCauchy : CauchySeq z := by
     rw [Metric.cauchySeq_iff]
     intro ε hε
@@ -146,8 +146,8 @@ theorem paperHilbertSchmidt_complete_complex
     intro m hm n hn
     have hsub : IsPaperHilbertSchmidt (A m - A n) :=
       isPaperHilbertSchmidt_sub (hA m) (hA n)
-    have hcanon : paperHilbertSchmidtTensor (A m - A n) hsub = z m - z n := by
-      apply ofLp_injective (paperHSBasis _)
+    have hcanon : hilbertSchmidtTensor (A m - A n) hsub = z m - z n := by
+      apply ofLp_injective (hSBasis _)
       rw [toOperator_paperHilbertSchmidtTensor,
         ofLp_sub,
         toOperator_paperHilbertSchmidtTensor,
@@ -157,7 +157,7 @@ theorem paperHilbertSchmidt_complete_complex
       rw [← hcanon, norm_paperHilbertSchmidtTensor]
     simpa only [dist_eq_norm, hnorm] using hN m n hm hn
   obtain ⟨zlim, hzlim⟩ := cauchySeq_tendsto_of_complete hzCauchy
-  let L : E →L[ℂ] F := ofLp (paperHSBasis _) zlim
+  let L : E →L[ℂ] F := ofLp (hSBasis _) zlim
   have hL : IsPaperHilbertSchmidt L :=
     isPaperHilbertSchmidt_toOperator zlim
   refine ⟨L, hL, ?_⟩
@@ -167,8 +167,8 @@ theorem paperHilbertSchmidt_complete_complex
   intro n hn
   have hsub : IsPaperHilbertSchmidt (A n - L) :=
     isPaperHilbertSchmidt_sub (hA n) hL
-  have hcanon : paperHilbertSchmidtTensor (A n - L) hsub = z n - zlim := by
-    apply ofLp_injective (paperHSBasis _)
+  have hcanon : hilbertSchmidtTensor (A n - L) hsub = z n - zlim := by
+    apply ofLp_injective (hSBasis _)
     rw [toOperator_paperHilbertSchmidtTensor,
       ofLp_sub,
       toOperator_paperHilbertSchmidtTensor]
@@ -210,28 +210,28 @@ noncomputable def hilbertSchmidtComplex :
         exact hA.comp L R
       gauge_nonneg := by
         intro E F _ _ _ _ _ _ A hA
-        exact paperHilbertSchmidtNorm_nonneg A
+        exact hilbertSchmidtNorm_nonneg A
       gauge_zero := by
         intro E F _ _ _ _ _ _
-        exact paperHilbertSchmidtNorm_zero
+        exact hilbertSchmidtNorm_zero
       gauge_add_le := by
         intro E F _ _ _ _ _ _ A B hA hB
-        exact paperHilbertSchmidtNorm_add_le_complex hA hB
+        exact hilbertSchmidtNorm_add_le_complex hA hB
       gauge_smul := by
         intro E F _ _ _ _ _ _ c A hA
-        exact paperHilbertSchmidtNorm_smul c A hA
+        exact hilbertSchmidtNorm_smul c A hA
       gauge_adjoint := by
         intro E F _ _ _ _ _ _ A hA
-        exact paperHilbertSchmidtNorm_adjoint A
+        exact hilbertSchmidtNorm_adjoint A
       gauge_comp_le := by
         intro E F G H _ _ _ _ _ _ _ _ _ _ _ _ L A R hA
-        exact paperHilbertSchmidtNorm_comp_le L hA R
+        exact hilbertSchmidtNorm_comp_le L hA R
       opNorm_le_gauge := by
         intro E F _ _ _ _ _ _ A hA
         exact opNorm_le_paperHilbertSchmidtNorm hA
       gauge_complete := by
         intro E F _ _ _ _ _ _ A hA hcauchy
-        exact paperHilbertSchmidt_complete_complex A hA hcauchy }
+        exact hilbertSchmidt_complete_complex A hA hcauchy }
 
 end
 

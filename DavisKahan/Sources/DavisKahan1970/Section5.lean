@@ -59,9 +59,9 @@ More general than the printed inequality on three axes: the operators are closed
 self-adjoint rather than Hermitian matrices, the spaces are arbitrary complex Hilbert
 spaces rather than finite dimensional, and Hilbert--Schmidt membership of `X` is a
 conclusion rather than a hypothesis.  A real-scalar companion is
-`paperHilbertSchmidt_sylvester_real_le_of_pairwiseSpectrumGap`. -/
+`hilbertSchmidt_sylvester_real_le_of_pairwiseSpectrumGap`. -/
 alias Inequality5_1 :=
-  DavisKahan.ExactSinTheta.paperHilbertSchmidt_sylvester_le_of_pairwiseSpectrumGap
+  DavisKahan.ExactSinTheta.hilbertSchmidt_sylvester_le_of_pairwiseSpectrumGap
 
 /-- **Davis--Kahan 1970, inequality (5.2).**  Under the hypotheses of (5.1),
 `δ ‖X‖₁ ≤ ‖C‖₁ √(rank C)` in the paper's subscript-one norm, which Section 1 fixes as the

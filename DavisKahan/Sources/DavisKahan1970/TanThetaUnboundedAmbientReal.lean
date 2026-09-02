@@ -100,7 +100,7 @@ theorem norm_paperSinAngleOperatorR_lt_one_of_data_crossedDefectsEquivalent
     (hcross : ∀ z : U, (alpha + delta) * ‖Vᗮ.starProjection ((z : U) : E)‖ ^ 2 ≤
       ⟪Vᗮ.starProjection ((z : U) : E), Vᗮ.starProjection (data.action z)⟫_ℝ)
     (h35 : DavisKahan.CrossedDefectsEquivalent U V) :
-    ‖paperSinAngleOperatorR U V‖ < 1 := by
+    ‖sinAngleOperatorR U V‖ < 1 := by
   have hdirected := approximationSingularValue_sineBlockReal_lt_one_infiniteData
     data hdelta hCompression hcross 0
   rw [approximationSingularValue_zero] at hdirected
@@ -170,8 +170,8 @@ theorem tanTheta_ambient_unboundedOperator_boundedRitzData_symmetricNorming_real
     (h35 : DavisKahan.CrossedDefectsEquivalent U V)
     (hResidual : data.residual = Uᗮ.starProjection ∘L H ∘L U.subtypeL)
     (hMem : N.Mem H) :
-    N.Mem (paperTanAngleOperatorR U V) ∧
-      delta * N.gauge (paperTanAngleOperatorR U V) ≤ N.gauge H := by
+    N.Mem (tanAngleOperatorR U V) ∧
+      delta * N.gauge (tanAngleOperatorR U V) ≤ N.gauge H := by
   have htrC : ‖sinAngleOperatorC (complexifySubmodule U) (complexifySubmodule V)‖ < 1 := by
     rw [← complexify_paperSinAngleOperatorR U V, norm_complexify]
     exact norm_paperSinAngleOperatorR_lt_one_of_data_crossedDefectsEquivalent
@@ -225,8 +225,8 @@ theorem tanTheta_ambient_unboundedOperator_boundedRitz_symmetricNorming_real
     (h35 : DavisKahan.CrossedDefectsEquivalent U V)
     (hResidual : D.residual = Uᗮ.starProjection ∘L H ∘L U.subtypeL)
     (hMem : N.Mem H) :
-    N.Mem (paperTanAngleOperatorR U V) ∧
-      delta * N.gauge (paperTanAngleOperatorR U V) ≤ N.gauge H :=
+    N.Mem (tanAngleOperatorR U V) ∧
+      delta * N.gauge (tanAngleOperatorR U V) ≤ N.gauge H :=
   tanTheta_ambient_unboundedOperator_boundedRitzData_symmetricNorming_real N
     (Theorem63TrialData.ofUnbounded D V) H hH hdelta hCompression
     (fun z => by
@@ -252,7 +252,7 @@ theorem norm_paperSinAngleOperatorR_lt_one_of_unboundedCompression_crossedDefect
       (alpha + delta) * ‖Vᗮ.starProjection (((z : U) : E))‖ ^ 2 ≤
         ⟪Vᗮ.starProjection (((z : U) : E)), Vᗮ.starProjection (D.action z)⟫_ℝ)
     (h35 : DavisKahan.CrossedDefectsEquivalent U V) :
-    ‖paperSinAngleOperatorR U V‖ < 1 := by
+    ‖sinAngleOperatorR U V‖ < 1 := by
   have hdirected := approximationSingularValue_sineBlockReal_lt_one_unboundedCompression
     D V hdelta hupper hcross 0
   rw [approximationSingularValue_zero] at hdirected
@@ -299,7 +299,7 @@ theorem complexifyUnboundedCompressionTrialData_residual_eq_projectionBlock
 space, with a genuinely unbounded Ritz compression.**
 
 The unbounded compression is transported only as trial data.  The source
-operator `paperTanAngleOperatorR U V`, perturbation `H`, and final norm statement
+operator `tanAngleOperatorR U V`, perturbation `H`, and final norm statement
 remain genuinely real.  The complex proof performs the spectral cutoff on the
 complexified Ritz compression and the bounded two-corner ambient assembly; exact
 complexification identities then descend the result without changing the
@@ -316,8 +316,8 @@ theorem tanTheta_ambient_unboundedRitzData_symmetricNorming_real
     (h35 : DavisKahan.CrossedDefectsEquivalent U V)
     (hResidual : D.residual = Uᗮ.starProjection ∘L H ∘L U.subtypeL)
     (hMem : N.Mem H) :
-    N.Mem (paperTanAngleOperatorR U V) ∧
-      delta * N.gauge (paperTanAngleOperatorR U V) ≤ N.gauge H := by
+    N.Mem (tanAngleOperatorR U V) ∧
+      delta * N.gauge (tanAngleOperatorR U V) ≤ N.gauge H := by
   have htrC :
       ‖sinAngleOperatorC (complexifySubmodule U) (complexifySubmodule V)‖ < 1 := by
     rw [← complexify_paperSinAngleOperatorR U V, norm_complexify]
@@ -362,8 +362,8 @@ theorem tanTheta_ambient_unboundedRitz_raw_symmetricNorming_real
     (h35 : DavisKahan.CrossedDefectsEquivalent U V)
     (hResidual : D.residual = Uᗮ.starProjection ∘L H ∘L U.subtypeL)
     (hMem : N.Mem H) :
-    N.Mem (paperTanAngleOperatorR U V) ∧
-      delta * N.gauge (paperTanAngleOperatorR U V) ≤ N.gauge H := by
+    N.Mem (tanAngleOperatorR U V) ∧
+      delta * N.gauge (tanAngleOperatorR U V) ≤ N.gauge H := by
   refine tanTheta_ambient_unboundedRitzData_symmetricNorming_real
     N D H hH hdelta hupper ?_ h35 hResidual hMem
   intro z
@@ -388,7 +388,7 @@ compression, coercivity on the unwanted subspace, and the crossed-defect standin
 condition (3.5) -- is unchanged and still supplied by the caller.
 
 Everything here is real: the space, the operator, the subspaces, the
-perturbation, the ambient tangent `paperTanAngleOperatorR U V`, and the gauge. -/
+perturbation, the ambient tangent `tanAngleOperatorR U V`, and the gauge. -/
 theorem tanTheta_ambient_unboundedRitz_symmetricNorming_real
     (N : SymmetricNormingFunction)
     {A : E →ₗ.[ℝ] E}
@@ -402,8 +402,8 @@ theorem tanTheta_ambient_unboundedRitz_symmetricNorming_real
     (h35 : DavisKahan.CrossedDefectsEquivalent U V)
     (hResidual : D.trial.residual = Uᗮ.starProjection ∘L H ∘L U.subtypeL)
     (hMem : N.Mem H) :
-    N.Mem (paperTanAngleOperatorR U V) ∧
-      delta * N.gauge (paperTanAngleOperatorR U V) ≤ N.gauge H :=
+    N.Mem (tanAngleOperatorR U V) ∧
+      delta * N.gauge (tanAngleOperatorR U V) ≤ N.gauge H :=
   tanTheta_ambient_unboundedRitz_raw_symmetricNorming_real N D.trial A H hH
     hdelta D.mem_domain D.action_eq hV.mapsDomain hV.commutes hupper hUnwanted h35
     hResidual hMem

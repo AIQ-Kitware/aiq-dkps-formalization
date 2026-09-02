@@ -18,7 +18,7 @@
       "candidate_declarations": [
         "ForMathlib.DavisKahan.Experimental.ExactSinTheta.Scratch.RectangularHilbertSchmidt.realPartOperator",
         "ForMathlib.DavisKahan.Experimental.ExactSinTheta.Scratch.RectangularHilbertSchmidt.complexify_realPartOperator_eq",
-        "ForMathlib.DavisKahan.Experimental.ExactSinTheta.Scratch.RectangularHilbertSchmidt.paperHilbertSchmidt_complete_real",
+        "ForMathlib.DavisKahan.Experimental.ExactSinTheta.Scratch.RectangularHilbertSchmidt.hilbertSchmidt_complete_real",
         "ForMathlib.DavisKahan.Experimental.ExactSinTheta.Scratch.RectangularHilbertSchmidt.hilbertSchmidtReal",
         "ForMathlib.DavisKahan.Experimental.ExactSinTheta.HiddenFoundations.hilbertSchmidtComplex"
       ]

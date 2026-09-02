@@ -66,7 +66,7 @@ A nonacute direct rotation exists exactly when the crossed defect spaces have
 equal Hilbert dimension, expressed constructively by a linear isometric
 equivalence. -/
 theorem proposition3_2_exists_iff_crossedDefectsEquivalent :
-    (∃ T : H →L[𝕜] H, IsPaperDirectRotation U V T) ↔
+    (∃ T : H →L[𝕜] H, IsDirectRotation U V T) ↔
       CrossedDefectsEquivalent U V :=
   TauCeti.DavisKahan.proposition3_2_completed U V
 
@@ -80,7 +80,7 @@ theorem proposition3_2_parameterized_nonuniqueness
     ∃ build :
         (halmosSourceDefect U V ≃ₗᵢ[𝕜] halmosTargetDefect U V) →
           (H →L[𝕜] H),
-      (∀ J, IsPaperDirectRotation U V (build J)) ∧
+      (∀ J, IsDirectRotation U V (build J)) ∧
       Function.Injective build :=
   TauCeti.DavisKahan.proposition3_2_parameterization_completed U V hdefect
 
@@ -102,7 +102,7 @@ enough to refute uniqueness. -/
 theorem proposition3_2_not_unique
     (hdefect : CrossedDefectsEquivalent U V) (hnonacute : ¬ TauCeti.IsAcute U V) :
     ∃ T₁ T₂ : H →L[𝕜] H,
-      IsPaperDirectRotation U V T₁ ∧ IsPaperDirectRotation U V T₂ ∧ T₁ ≠ T₂ := by
+      IsDirectRotation U V T₁ ∧ IsDirectRotation U V T₂ ∧ T₁ ≠ T₂ := by
   obtain ⟨build, hbuild, hinj⟩ :=
     proposition3_2_parameterized_nonuniqueness U V hdefect
   obtain ⟨J⟩ := hdefect
@@ -129,7 +129,7 @@ theorem proposition3_2_not_unique
 /-- **Proposition 3.2's nonuniqueness in literal `∃!` form.** -/
 theorem proposition3_2_not_existsUnique
     (hdefect : CrossedDefectsEquivalent U V) (hnonacute : ¬ TauCeti.IsAcute U V) :
-    ¬ ∃! T : H →L[𝕜] H, IsPaperDirectRotation U V T := by
+    ¬ ∃! T : H →L[𝕜] H, IsDirectRotation U V T := by
   rintro ⟨T, _, huniq⟩
   obtain ⟨T₁, T₂, h₁, h₂, hne⟩ := proposition3_2_not_unique U V hdefect hnonacute
   exact hne ((huniq T₁ h₁).trans (huniq T₂ h₂).symm)
@@ -140,12 +140,12 @@ The proof of the proposition records a property of every direct rotation on the
 two crossed defect spaces: applying the rotation twice gives minus the original
 vector.  No acuteness or finite-dimensional hypothesis is added. -/
 theorem proposition3_2_crossing_square_minus_one
-    (T : H →L[𝕜] H) (hT : IsPaperDirectRotation U V T) :
+    (T : H →L[𝕜] H) (hT : IsDirectRotation U V T) :
     (∀ x : halmosSourceDefect U V, T (T (x : H)) = -(x : H)) ∧
       (∀ y : halmosTargetDefect U V, T (T (y : H)) = -(y : H)) := by
   refine ⟨fun x => ?_, fun y => ?_⟩
-  · exact TauCeti.DavisKahan.paperDirectRotation_sq_apply_sourceDefect U V T hT x.property
-  · exact TauCeti.DavisKahan.paperDirectRotation_sq_apply_targetDefect U V T hT y.property
+  · exact TauCeti.DavisKahan.directRotation_sq_apply_sourceDefect U V T hT x.property
+  · exact TauCeti.DavisKahan.directRotation_sq_apply_targetDefect U V T hT y.property
 
 end NonacuteExistence
 
@@ -201,7 +201,7 @@ theorem remark3_2_bilateralShift_separates_dimensionHypotheses
       halmosTargetDefect (coordinateHalfSpace b 0)
           (coordinateHalfSpace b 1) = ⊥ ∧
       ¬ ∃ T : H →L[𝕜] H,
-        IsPaperDirectRotation (coordinateHalfSpace b 0)
+        IsDirectRotation (coordinateHalfSpace b 0)
           (coordinateHalfSpace b 1) T := by
   refine ⟨⟨bilateralShiftL_mem_unitary b, ?_⟩, ?_,
     halmosSourceDefect_coordinateHalfSpace_ne_bot b,
@@ -251,7 +251,7 @@ direct rotation of the pair exists exactly when the two crossed intersections
 admit a linear isometric equivalence, which is the cardinal-free form of the
 paper's equal-dimension condition (3.5). -/
 theorem proposition3_2_exists_iff_crossedDefectsEquivalent_real :
-    (∃ T : E →L[ℝ] E, IsPaperDirectRotation U V T) ↔
+    (∃ T : E →L[ℝ] E, IsDirectRotation U V T) ↔
       CrossedDefectsEquivalent U V :=
   proposition3_2_exists_iff_crossedDefectsEquivalent U V
 
@@ -264,7 +264,7 @@ theorem proposition3_2_parameterized_nonuniqueness_real
     ∃ build :
         (halmosSourceDefect U V ≃ₗᵢ[ℝ] halmosTargetDefect U V) →
           (E →L[ℝ] E),
-      (∀ J, IsPaperDirectRotation U V (build J)) ∧
+      (∀ J, IsDirectRotation U V (build J)) ∧
       Function.Injective build :=
   proposition3_2_parameterized_nonuniqueness U V hdefect
 
@@ -278,7 +278,7 @@ theorem proposition3_2_not_unique_real
     (hdefect : CrossedDefectsEquivalent U V)
     (hnonacute : ¬ TauCeti.IsAcute U V) :
     ∃ T₁ T₂ : E →L[ℝ] E,
-      IsPaperDirectRotation U V T₁ ∧ IsPaperDirectRotation U V T₂ ∧
+      IsDirectRotation U V T₁ ∧ IsDirectRotation U V T₂ ∧
         T₁ ≠ T₂ :=
   proposition3_2_not_unique U V hdefect hnonacute
 
@@ -289,7 +289,7 @@ The `𝕜 = ℝ` instance of `proposition3_2_not_existsUnique`. -/
 theorem proposition3_2_not_existsUnique_real
     (hdefect : CrossedDefectsEquivalent U V)
     (hnonacute : ¬ TauCeti.IsAcute U V) :
-    ¬ ∃! T : E →L[ℝ] E, IsPaperDirectRotation U V T :=
+    ¬ ∃! T : E →L[ℝ] E, IsDirectRotation U V T :=
   proposition3_2_not_existsUnique U V hdefect hnonacute
 
 /-- **Davis--Kahan 1970, the Remark after Proposition 3.2, over a real Hilbert
@@ -312,7 +312,7 @@ theorem remark3_2_bilateralShift_separates_dimensionHypotheses_real
       halmosTargetDefect (coordinateHalfSpace b 0)
           (coordinateHalfSpace b 1) = ⊥ ∧
       ¬ ∃ T : E →L[ℝ] E,
-        IsPaperDirectRotation (coordinateHalfSpace b 0)
+        IsDirectRotation (coordinateHalfSpace b 0)
           (coordinateHalfSpace b 1) T :=
   remark3_2_bilateralShift_separates_dimensionHypotheses b
 

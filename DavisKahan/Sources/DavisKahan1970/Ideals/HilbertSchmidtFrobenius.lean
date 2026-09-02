@@ -39,7 +39,7 @@ universe u vE vF
 
 /-- In finite dimensions, the paper square energy is the finite sum of the
 squares of the ordinary rectangular singular values. -/
-theorem paperHilbertSchmidtEnergy_eq_ofReal_sum_sq_singularValues
+theorem hilbertSchmidtEnergy_eq_ofReal_sum_sq_singularValues
     {𝕜 : Type u} [RCLike 𝕜]
     {E : Type vE} {F : Type vF}
     [NormedAddCommGroup E] [InnerProductSpace 𝕜 E]
@@ -71,7 +71,7 @@ theorem paperHilbertSchmidtEnergy_eq_ofReal_sum_sq_singularValues
 
 /-- In finite dimensions, the basis-free paper square norm is exactly the
 rectangular Frobenius norm. -/
-theorem paperHilbertSchmidtNorm_eq_rectangularFrobenius
+theorem hilbertSchmidtNorm_eq_rectangularFrobenius
     {𝕜 : Type u} [RCLike 𝕜]
     {E : Type vE} {F : Type vF}
     [NormedAddCommGroup E] [InnerProductSpace 𝕜 E]
@@ -82,13 +82,13 @@ theorem paperHilbertSchmidtNorm_eq_rectangularFrobenius
     paperHilbertSchmidtNorm A =
       RectangularUnitarilyInvariantSeminorm.frobenius A.toLinearMap := by
   unfold paperHilbertSchmidtNorm
-  rw [paperHilbertSchmidtEnergy_eq_ofReal_sum_sq_singularValues,
+  rw [hilbertSchmidtEnergy_eq_ofReal_sum_sq_singularValues,
     ENNReal.toReal_ofReal (Finset.sum_nonneg fun i _ => sq_nonneg _)]
   exact (RectangularUnitarilyInvariantSeminorm.frobenius_eq_sqrt_sum_sq_singularValues
     A.toLinearMap).symm
 
 /-- Square-operator spelling of the finite-dimensional Frobenius bridge. -/
-theorem paperHilbertSchmidtNorm_eq_frobenius
+theorem hilbertSchmidtNorm_eq_frobenius
     {𝕜 : Type u} [RCLike 𝕜]
     {E : Type vE}
     [NormedAddCommGroup E] [InnerProductSpace 𝕜 E]
@@ -96,7 +96,7 @@ theorem paperHilbertSchmidtNorm_eq_frobenius
     (A : E →L[𝕜] E) :
     paperHilbertSchmidtNorm A =
       TauCeti.UnitarilyInvariantSeminorm.frobenius 𝕜 E A.toLinearMap := by
-  rw [paperHilbertSchmidtNorm_eq_rectangularFrobenius]
+  rw [hilbertSchmidtNorm_eq_rectangularFrobenius]
   rfl
 
 end

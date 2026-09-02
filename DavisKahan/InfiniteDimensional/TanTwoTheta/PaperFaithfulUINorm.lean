@@ -16,11 +16,11 @@ import DavisKahan.Sources.DavisKahan1970.SineTheta.Norms.SubspaceSingularTranspo
 
 This module now has two deliberately distinct results.
 
-* `paperTanTwoTheta_uiNorm_finite_alternate` retains the independently compiled
+* `tanTwoTheta_uiNorm_finite_alternate` retains the independently compiled
   finite-dimensional Riccati/approximation-number derivation.  The main
   Davis--Kahan tree already proves the finite Section 7 theorem, so this result
   is explicitly a duplicate regression proof rather than the completion target.
-* `paperFaithful_tanTwoTheta_uiNorm` states the unrestricted bounded target used
+* `faithful_tanTwoTheta_uiNorm` states the unrestricted bounded target used
   by this package: no finite-dimensional or finite-carrier hypothesis, the
   quarter-acute branch derived from the original form-gap/off-diagonal data,
   and the sharp source-ideal estimate for the canonical ambient
@@ -62,14 +62,14 @@ variable {E : Type u} [NormedAddCommGroup E] [InnerProductSpace ℂ E]
 -- `completeSpaceOfHasOrthogonalProjection` in this namespace; `local instance` only
 -- scopes the *attribute*, not the name, so re-enable the attribute here rather than
 -- redeclaring it.  It is needed at *statement* time -- `N.Mem
--- (paperTanTwoThetaRepresentative …)` mentions operators on `↥U` -- where the
+-- (tanTwoThetaGraphCoordinateOperator …)` mentions operators on `↥U` -- where the
 -- `letI`s inside the proofs below cannot help.
 attribute [local instance] completeSpaceOfHasOrthogonalProjection
 
 /-- The source-permitted graph-coordinate representative of `tan 2Theta`.
 Its approximation singular values are the double-angle tangents of the
 principal angles of the quarter-acute pair. -/
-noncomputable def paperTanTwoThetaRepresentative
+noncomputable def tanTwoThetaGraphCoordinateOperator
     (U V : Submodule ℂ E) [U.HasOrthogonalProjection]
     [V.HasOrthogonalProjection] (hquarter : IsQuarterAcute U V) :
     U →L[ℂ] Uᗮ := by
@@ -220,8 +220,8 @@ private theorem graphCoordinate_paper_bound_of_quarterAcute
     (hHUperp : ∀ x ∈ Uᗮ, H x ∈ U)
     (hHmem : N.Mem H)
     (hquarter : IsQuarterAcute U V) :
-    N.Mem (paperTanTwoThetaRepresentative U V hquarter) ∧
-      (b - a) * N.gauge (paperTanTwoThetaRepresentative U V hquarter) ≤
+    N.Mem (tanTwoThetaGraphCoordinateOperator U V hquarter) ∧
+      (b - a) * N.gauge (tanTwoThetaGraphCoordinateOperator U V hquarter) ≤
         2 * N.gauge H := by
   let : CompleteSpace U :=
     (U.isComplete_coe_of_hasOrthogonalProjection).completeSpace_coe
@@ -348,11 +348,11 @@ private theorem graphCoordinate_paper_bound_of_quarterAcute
       TauCeti.DavisKahanExt.norm_quarterAcuteAngularCoordinate_lt_one U V hquarter
   have hsharp := sharp_symmetricNormingFunction
     N D (sub_pos.mpr hab) hD0 hD1 hsolveD hcontractive hDmem
-  change N.Mem (paperTanTwoThetaRepresentative U V hquarter) ∧
-      (b - a) * N.gauge (paperTanTwoThetaRepresentative U V hquarter) ≤
+  change N.Mem (tanTwoThetaGraphCoordinateOperator U V hquarter) ∧
+      (b - a) * N.gauge (tanTwoThetaGraphCoordinateOperator U V hquarter) ≤
         2 * N.gauge H
   have hrepresentative :
-      paperTanTwoThetaRepresentative U V hquarter =
+      tanTwoThetaGraphCoordinateOperator U V hquarter =
         TauCeti.DavisKahan.doubleAngleTangentOperator X hcontractive := rfl
   rw [hrepresentative]
   refine ⟨hsharp.1, hsharp.2.trans ?_⟩
@@ -370,7 +370,7 @@ unitarily-invariant-norm theorem.  This theorem is deliberately retained
 because it independently routes the same finite source hypotheses through the
 new approximation-number/Riccati stack.  It is not the completion target and
 must not be cited as the arbitrary-Hilbert-space theorem. -/
-theorem paperTanTwoTheta_uiNorm_finite_alternate
+theorem tanTwoTheta_uiNorm_finite_alternate
     [FiniteDimensional ℂ E]
     (N : SymmetricNormingFunction)
     (A H : E →L[ℂ] E)
@@ -394,8 +394,8 @@ theorem paperTanTwoTheta_uiNorm_finite_alternate
     (hHUperp : ∀ x ∈ Uᗮ, H x ∈ U)
     (hHmem : N.Mem H) :
     ∃ hquarter : IsQuarterAcute U V,
-      N.Mem (paperTanTwoThetaRepresentative U V hquarter) ∧
-        (b - a) * N.gauge (paperTanTwoThetaRepresentative U V hquarter) ≤
+      N.Mem (tanTwoThetaGraphCoordinateOperator U V hquarter) ∧
+        (b - a) * N.gauge (tanTwoThetaGraphCoordinateOperator U V hquarter) ≤
           2 * N.gauge H := by
   have hquarter : IsQuarterAcute U V :=
     isQuarterAcute_of_paper_form_gap A H U V hA hH hAU hAplusH_V hab
@@ -411,7 +411,7 @@ starts from the two reducing subspaces and the fully off-diagonal perturbation,
 derives the strict quarter-angle branch, and proves the sharp estimate for the
 canonical ambient `tanTwoAngleOperatorC` in every source unitary-invariant norm.
 -/
-theorem paperFaithful_tanTwoTheta_uiNorm
+theorem faithful_tanTwoTheta_uiNorm
     (N : SymmetricNormingFunction)
     (A H : E →L[ℂ] E)
     (U V : Submodule ℂ E)
@@ -445,8 +445,8 @@ theorem paperFaithful_tanTwoTheta_uiNorm
       hHU hHUperp hHmem hquarter
   have hseq : SameApproximationSingularSequence
       (tanTwoAngleOperatorC U V hquarter)
-      (paperTanTwoThetaRepresentative U V hquarter) := by
-    simpa only [paperTanTwoThetaRepresentative] using
+      (tanTwoThetaGraphCoordinateOperator U V hquarter) := by
+    simpa only [tanTwoThetaGraphCoordinateOperator] using
       canonicalTanTwoAngle_hasSameApproximationNumbers_graphCoordinate U V hquarter
   have htransport := hseq.normingMem_iff_and_gauge_eq N
   refine ⟨hquarter, htransport.1.mpr hgraph.1, ?_⟩

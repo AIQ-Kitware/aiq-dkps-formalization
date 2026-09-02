@@ -7,7 +7,7 @@ import DavisKahan.Geometry.Halmos.TwoProjections
 -- supplies `halmosCosineSq`, `projection`, `complementaryProjection`, `projection_sq` and the
 -- two-projection calculus these block estimates run on.
 import DavisKahan.Geometry.Halmos.GenericRotationPredicates
--- supplies `IsPaperDirectRotation`, the five-field predicate the norm bounds are read against.
+-- supplies `IsDirectRotation`, the five-field predicate the norm bounds are read against.
 -- It lives in `TauCeti.DavisKahan`.
 import DavisKahan.Geometry.Polar.DirectRotationSquare
 import DavisKahan.Geometry.Polar.Section3Elementary
@@ -16,8 +16,8 @@ import DavisKahan.InfiniteDimensional.DoubleAngle
 -- supplies `reflectedSubspace` and `starProjection_reflectedSubspace`, the mirror image of
 -- one subspace in another.  That module imports only `SinTheta`/`SpectralTheory` material
 -- so the dependency is acyclic.
--- supplies `paperDirectRotation_conjugates_projection` and its complement form, the
--- intertwining identities a `IsPaperDirectRotation` gives on the two projections.
+-- supplies `directRotation_conjugates_projection` and its complement form, the
+-- intertwining identities a `IsDirectRotation` gives on the two projections.
 -- supplies `spectraDirectRotation_crossed_blocks`, the crossed-block identity of the
 -- canonical direct rotation.
 import DavisKahan.Geometry.Polar.PrincipalSquareRoot
@@ -45,10 +45,10 @@ Proposition 3.4 and its acute specialisations -- stay downstream.
 ## What is here
 
 * the two diagonal blocks of the canonical direct rotation are self-adjoint, which the
-  `star`-block calculus needs and which `IsPaperDirectRotation` does not give, because that
+  `star`-block calculus needs and which `IsDirectRotation` does not give, because that
   predicate records the compressions only through their numerical range;
 * the operator-norm bound `‖P_V w‖ ≤ (√2/2)‖w‖` on the source subspace, in a
-  hypothesis-light form and in the `IsPaperDirectRotation` form;
+  hypothesis-light form and in the `IsDirectRotation` form;
 * the numerical range of the Halmos cosine square, and the half-angle inequality
   `re ⟪x, (cos²Θ - ½) x⟫ ≥ 0` in both the paper-direct-rotation and the source form;
 * two reflection/projection identities and a numerical-range positivity criterion, all three
@@ -88,7 +88,7 @@ variable (U V : Submodule ℂ H) [U.HasOrthogonalProjection]
 
 /-- The source diagonal block of the canonical direct rotation is self-adjoint.
 
-`IsPaperDirectRotation` records the diagonal compressions only through their numerical range,
+`IsDirectRotation` records the diagonal compressions only through their numerical range,
 so their self-adjointness -- which the `star`-block calculus needs -- has to be read off the
 canonical construction, where the block *is* the positive Halmos cosine. -/
 theorem isSelfAdjoint_source_block_spectraDirectRotation
@@ -197,7 +197,7 @@ This is the direct-rotation form of `norm_projection_apply_le_of_forall_mem_sour
 Definition 3.1 supplies the equality of the two crossed-block norms directly, so the result
 applies to the full nonacute direct-rotation scope. -/
 theorem norm_projection_apply_le_of_paperDirectRotation
-    (T : H →L[ℂ] H) (hT : IsPaperDirectRotation U V T)
+    (T : H →L[ℂ] H) (hT : IsDirectRotation U V T)
     (hsource_sa : IsSelfAdjoint (projection U * T * projection U))
     (hcomplement_sa :
       IsSelfAdjoint (complementaryProjection U * T * complementaryProjection U))
@@ -215,13 +215,13 @@ theorem norm_projection_apply_le_of_paperDirectRotation
       complementaryProjection V z = T (complementaryProjection U (star T z)) := by
     intro z
     have h := congrArg (fun A : H →L[ℂ] H => A z)
-      (TauCeti.DavisKahan.paperDirectRotation_conjugates_complementaryProjection
+      (TauCeti.DavisKahan.directRotation_conjugates_complementaryProjection
         U V T hT)
     simpa only [mul_apply_eq_comp] using h.symm
   have hconj : ∀ z : H, projection V z = T (projection U (star T z)) := by
     intro z
     have h := congrArg (fun A : H →L[ℂ] H => A z)
-      (TauCeti.DavisKahan.paperDirectRotation_conjugates_projection U V T hT)
+      (TauCeti.DavisKahan.directRotation_conjugates_projection U V T hT)
     simpa only [mul_apply_eq_comp] using h.symm
   have hstarLbound : ∀ y : H, ‖star L y‖ ≤ r * ‖y‖ := by
     intro y
@@ -281,7 +281,7 @@ theorem re_inner_halmosCosineSq_self (x : H) :
 /-- The printed source-block half-angle bound yields the whole-space cosine-square bound for
 an arbitrary paper direct rotation with self-adjoint diagonal compressions. -/
 theorem re_inner_halmosCosineSq_sub_half_nonneg_of_paperDirectRotation
-    (T : H →L[ℂ] H) (hT : IsPaperDirectRotation U V T)
+    (T : H →L[ℂ] H) (hT : IsDirectRotation U V T)
     (hsource_sa : IsSelfAdjoint (projection U * T * projection U))
     (hcomplement_sa :
       IsSelfAdjoint (complementaryProjection U * T * complementaryProjection U))

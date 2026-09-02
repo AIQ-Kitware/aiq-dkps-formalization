@@ -340,7 +340,7 @@ theorem spectraDirectRotation_crossed_blocks
 theorem spectraDirectRotation_isPaperDirectRotation
     (U V : Submodule ℂ H) [U.HasOrthogonalProjection]
     [V.HasOrthogonalProjection] (hacute : IsUniformlyAcute U V) :
-    IsPaperDirectRotation U V (spectraDirectRotation U V hacute) where
+    IsDirectRotation U V (spectraDirectRotation U V hacute) where
   unitary_mem := spectraDirectRotation_mem_unitary U V hacute
   intertwines := spectraDirectRotation_intertwines U V hacute
   source_compression_nonnegative :=

@@ -20,7 +20,7 @@ operator sense: "we must still prove (i) and (ii), which for this case take the
 form `Q₋U²Q₋ ≥ 0` ...".
 
 `TauCeti.DavisKahan.proposition3_4_source_full_bundled_complex` concludes the
-weaker `IsPaperDirectRotation` predicate, whose diagonal clauses record only a
+weaker `IsDirectRotation` predicate, whose diagonal clauses record only a
 nonnegative real numerical range, `0 ≤ re ⟪x, (P T P) x⟫`.  Over a complex
 Hilbert space that does not even force the compression to be self-adjoint, so it
 is strictly weaker than Definition 3.1 and cannot by itself certify the printed
@@ -56,12 +56,12 @@ For a complex paper direct rotation whose square is the known reflection
 product, the reflection conjugation `J_K T J_K = T*` forces both diagonal
 compressions to be self-adjoint.  A self-adjoint operator with nonnegative real
 numerical range is positive, so the numerical-range clauses of
-`IsPaperDirectRotation` become the genuine `C₀ ≥ 0`, `C₁ ≥ 0` of Definition 3.1.
+`IsDirectRotation` become the genuine `C₀ ≥ 0`, `C₁ ≥ 0` of Definition 3.1.
 -/
 theorem positiveDiagonalBlocks_of_sq
     (K L : Submodule ℂ H) [K.HasOrthogonalProjection] [L.HasOrthogonalProjection]
     (T : H →L[ℂ] H)
-    (hT : IsPaperDirectRotation K L T)
+    (hT : IsDirectRotation K L T)
     (hsq : T * T = spectraReflectionProduct K L) :
     (K.starProjection * T * K.starProjection).IsPositive ∧
       (Kᗮ.starProjection * T * Kᗮ.starProjection).IsPositive := by
@@ -194,7 +194,7 @@ theorem proposition3_4_source_full_complex
           (reflectedSubspace U V).starProjection =
         -star ((reflectedSubspace U V).starProjection * (W * W) *
           (reflectedSubspace U V)ᗮ.starProjection) := by
-  have hpaper : IsPaperDirectRotation (reflectedSubspace U V) V (W * W) :=
+  have hpaper : IsDirectRotation (reflectedSubspace U V) V (W * W) :=
     proposition3_4_source_full_bundled_complex U V W hunitary hintertwines
       hcrossed
       ((ContinuousLinearMap.nonneg_iff_isPositive _).mpr hsource_pos)

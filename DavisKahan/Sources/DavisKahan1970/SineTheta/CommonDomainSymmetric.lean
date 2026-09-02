@@ -16,7 +16,7 @@ may be relaxed similarly".  Theorem 6.1 was relaxed in
 `DavisKahan.Sources.DavisKahan1970.SineTheta.CommonDomainTheorems`; this module performs
 the same relaxation for Proposition 6.1, the *symmetric* sine theorem.
 
-`PaperSymmetricSinThetaProblem` requires two **bounded** self-adjoint operators
+`SymmetricSinThetaProblem` requires two **bounded** self-adjoint operators
 `A B : E →L[𝕜] E`.  Here `A` and `B` are two closed densely defined self-adjoint
 operators sharing one domain, and the paper's `H = B - A` is the bounded operator that
 represents their difference on that common domain.  The bounded problem is the special
@@ -56,26 +56,26 @@ by instance search and nothing is assumed that was not already proved.
 
 *The conclusion operator.*  `paperSinAngleOperatorC` is `cfc Real.sin` of the **complex**
 operator angle, and this repository builds no real continuous functional calculus.  So the
-`RCLike`-generic conclusion is carried by `paperCrossSineSum U V`, which
-`paperCrossSineSum_same_projectionDiff` gives exactly the complete
+`RCLike`-generic conclusion is carried by `crossSineSum U V`, which
+`crossSineSum_same_projectionDiff` gives exactly the complete
 approximation-singular-value sequence of `P_V - P_U` -- the paper's whole-space `sin Θ`
 sequence, and all a unitarily invariant norm can see.  Over `ℂ` the literal form is then
-recovered verbatim through `paperCrossSineSum_same_literalSin`, so `symmetric_all_kyFan`
+recovered verbatim through `crossSineSum_same_literalSin`, so `symmetric_all_kyFan`
 and `result_every_unitarilyInvariantNorm` keep the statements they always had.
 
 ## Main results
 
-* `PaperCommonDomainSymmetricSinThetaProblem`: the common-domain inputs of
+* `CommonDomainSymmetricSinThetaProblem`: the common-domain inputs of
   Proposition 6.1, over any `RCLike` field;
-* `PaperCommonDomainSymmetricSinThetaProblem.symmetric_all_kyFan_crossSineSum`: the
+* `CommonDomainSymmetricSinThetaProblem.symmetric_all_kyFan_crossSineSum`: the
   estimate for every finite Ky Fan gauge, over any `RCLike` field;
-* `PaperCommonDomainSymmetricSinThetaProblem.symmetric_all_kyFan`: the same over `ℂ`, on
+* `CommonDomainSymmetricSinThetaProblem.symmetric_all_kyFan`: the same over `ℂ`, on
   the literal functional-calculus `sin Θ`;
-* `PaperCommonDomainSymmetricSinThetaProblem.result_every_unitarilyInvariantNorm`:
+* `CommonDomainSymmetricSinThetaProblem.result_every_unitarilyInvariantNorm`:
   Proposition 6.1 for every normalized unitarily invariant norm in the source sense;
-* `PaperCommonDomainSymmetricSinThetaProblem.result_every_unitarilyInvariantNorm_real`:
+* `CommonDomainSymmetricSinThetaProblem.result_every_unitarilyInvariantNorm_real`:
   the real-scalar form of the same;
-* `PaperCommonDomainSymmetricSinThetaProblem.ofBounded` and `.ofBoundedReal`: the bounded
+* `CommonDomainSymmetricSinThetaProblem.ofBounded` and `.ofBoundedReal`: the bounded
   Proposition 6.1 inputs are an instance of the common-domain ones, over each field.
 -/
 
@@ -119,7 +119,7 @@ domain, `U` reduces `A`, `V` reduces `B`, and `perturbation` is the paper's boun
 which represents `B - A` on the common domain.  The two gap hypotheses are the paper's two
 applications of the original sine theorem, now between reducing restrictions of *unbounded*
 operators. -/
-structure PaperCommonDomainSymmetricSinThetaProblem
+structure CommonDomainSymmetricSinThetaProblem
     (U V : Submodule 𝕜 E) [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] where
   /-- The unperturbed closed self-adjoint operator. -/
   A : E →ₗ.[𝕜] E
@@ -155,17 +155,17 @@ structure PaperCommonDomainSymmetricSinThetaProblem
     (TauCeti.LinearPMap.reducingRestriction A Uᗮ reduces_A_U.orthogonal)
     gap
 
-namespace PaperCommonDomainSymmetricSinThetaProblem
+namespace CommonDomainSymmetricSinThetaProblem
 
 variable {U V : Submodule 𝕜 E} [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
 
 /-- The common domain, read from `A` into `B`. -/
-theorem mem_domain_B (P : PaperCommonDomainSymmetricSinThetaProblem U V)
+theorem mem_domain_B (P : CommonDomainSymmetricSinThetaProblem U V)
     {x : E} (hx : x ∈ P.A.domain) : x ∈ P.B.domain := by
   rw [← P.domain_eq]; exact hx
 
 /-- The common domain, read from `B` into `A`. -/
-theorem mem_domain_A (P : PaperCommonDomainSymmetricSinThetaProblem U V)
+theorem mem_domain_A (P : CommonDomainSymmetricSinThetaProblem U V)
     {x : E} (hx : x ∈ P.B.domain) : x ∈ P.A.domain := by
   rw [P.domain_eq]; exact hx
 
@@ -174,7 +174,7 @@ theorem mem_domain_A (P : PaperCommonDomainSymmetricSinThetaProblem U V)
 On the common domain the identity `⟪H x, y⟫ = ⟪x, H y⟫` is the difference of the symmetry
 relations of `B` and of `A`.  Both sides are continuous in each argument separately and
 the domain is dense, so the identity extends to the whole space in two steps. -/
-theorem perturbation_isSymmetric (P : PaperCommonDomainSymmetricSinThetaProblem U V) :
+theorem perturbation_isSymmetric (P : CommonDomainSymmetricSinThetaProblem U V) :
     P.perturbation.IsSymmetric := by
   have hAs := TauCeti.LinearPMap.isSymmetric_of_isSelfAdjoint P.selfAdjoint_A
   have hBs := TauCeti.LinearPMap.isSymmetric_of_isSelfAdjoint P.selfAdjoint_B
@@ -210,7 +210,7 @@ theorem perturbation_isSymmetric (P : PaperCommonDomainSymmetricSinThetaProblem 
 trial operator is the reducing restriction of `A` to `U`, and the complementary operator
 is the reducing restriction of `B` to `Vᗮ`. -/
 noncomputable def forwardData
-    (P : PaperCommonDomainSymmetricSinThetaProblem U V) :
+    (P : CommonDomainSymmetricSinThetaProblem U V) :
     UnboundedSinThetaData (𝕜 := 𝕜) (E := E) (F := U) (G := Vᗮ) where
   A := P.B
   A₀ := TauCeti.LinearPMap.reducingRestriction P.A U P.reduces_A_U
@@ -241,7 +241,7 @@ noncomputable def forwardData
 
 /-- Internal data for the reversed application, with `A` and `B` interchanged. -/
 noncomputable def reverseData
-    (P : PaperCommonDomainSymmetricSinThetaProblem U V) :
+    (P : CommonDomainSymmetricSinThetaProblem U V) :
     UnboundedSinThetaData (𝕜 := 𝕜) (E := E) (F := V) (G := Uᗮ) where
   A := P.A
   A₀ := TauCeti.LinearPMap.reducingRestriction P.B V P.reduces_B_V
@@ -278,29 +278,29 @@ noncomputable def reverseData
 /-- The first exact cross-projection block.  It is determined by the two subspaces alone;
 the problem argument is carried only so that the estimates below can be stated with the
 same field notation as the bounded module. -/
-def forwardSineBlock (_P : PaperCommonDomainSymmetricSinThetaProblem U V) :
+def forwardSineBlock (_P : CommonDomainSymmetricSinThetaProblem U V) :
     E →L[𝕜] E :=
   Vᗮ.starProjection ∘L U.starProjection
 
 /-- The reversed exact cross-projection block, likewise determined by the two subspaces
 alone. -/
-def reverseSineBlock (_P : PaperCommonDomainSymmetricSinThetaProblem U V) :
+def reverseSineBlock (_P : CommonDomainSymmetricSinThetaProblem U V) :
     E →L[𝕜] E :=
   Uᗮ.starProjection ∘L V.starProjection
 
 /-- The first projected perturbation block from the proof of Proposition 6.1. -/
-def forwardResidualBlock (P : PaperCommonDomainSymmetricSinThetaProblem U V) :
+def forwardResidualBlock (P : CommonDomainSymmetricSinThetaProblem U V) :
     E →L[𝕜] E :=
   Vᗮ.starProjection ∘L P.perturbation ∘L U.starProjection
 
 /-- The second projected perturbation block. -/
-def reverseResidualBlock (P : PaperCommonDomainSymmetricSinThetaProblem U V) :
+def reverseResidualBlock (P : CommonDomainSymmetricSinThetaProblem U V) :
     E →L[𝕜] E :=
   V.starProjection ∘L P.perturbation ∘L Uᗮ.starProjection
 
 /-- First one-sided estimate simultaneously for every finite Ky Fan gauge. -/
 theorem forward_all_kyFan [HasUnboundedSylvesterKyFan.{u, v} 𝕜]
-    (P : PaperCommonDomainSymmetricSinThetaProblem U V) :
+    (P : CommonDomainSymmetricSinThetaProblem U V) :
     ∀ k,
       P.gap * kyFanApproximationGauge k P.forwardSineBlock ≤
         kyFanApproximationGauge k P.forwardResidualBlock := by
@@ -354,7 +354,7 @@ theorem forward_all_kyFan [HasUnboundedSylvesterKyFan.{u, v} 𝕜]
 
 /-- Reversed one-sided estimate simultaneously for every finite Ky Fan gauge. -/
 theorem reverse_all_kyFan [HasUnboundedSylvesterKyFan.{u, v} 𝕜]
-    (P : PaperCommonDomainSymmetricSinThetaProblem U V) :
+    (P : CommonDomainSymmetricSinThetaProblem U V) :
     ∀ k,
       P.gap * kyFanApproximationGauge k P.reverseSineBlock ≤
         kyFanApproximationGauge k P.reverseResidualBlock := by
@@ -409,16 +409,16 @@ theorem reverse_all_kyFan [HasUnboundedSylvesterKyFan.{u, v} 𝕜]
 /-- **Ky Fan form of the common-domain symmetric sine theorem over any `RCLike` field**,
 before universal Fan dominance.
 
-The left-hand operator is `paperCrossSineSum U V`, the paper's whole-space sine
-representative: `paperCrossSineSum_same_projectionDiff` gives it exactly the complete
+The left-hand operator is `crossSineSum U V`, the paper's whole-space sine
+representative: `crossSineSum_same_projectionDiff` gives it exactly the complete
 approximation-singular-value sequence of `P_V - P_U`, which is all a unitarily invariant
 norm can see.  Over `ℂ` the literal functional-calculus form is `symmetric_all_kyFan`. -/
 theorem symmetric_all_kyFan_crossSineSum
     [ContinuousLinearMap.HasMinMaxLowerBoundEverywhere.{u, v} 𝕜]
     [HasUnboundedSylvesterKyFan.{u, v} 𝕜]
-    (P : PaperCommonDomainSymmetricSinThetaProblem U V) :
+    (P : CommonDomainSymmetricSinThetaProblem U V) :
     ∀ k,
-      P.gap * kyFanApproximationGauge k (paperCrossSineSum U V) ≤
+      P.gap * kyFanApproximationGauge k (crossSineSum U V) ≤
         kyFanApproximationGauge k P.perturbation := by
   intro k
   have hadjH : P.perturbation.adjoint = P.perturbation :=
@@ -428,21 +428,21 @@ theorem symmetric_all_kyFan_crossSineSum
     rw [RCLike.norm_ofReal, abs_of_pos P.gap_pos]
   -- Lemma 6.1 is applied to the *scaled identity*, not to a scaled perturbation: the two
   -- one-sided estimates bound `gap` times a pure projection product, and
-  -- `paperProjectionBlock Ω Γ (gap • id)` is exactly `gap` times that product.
-  have hcombine := paperLemma61_all_kyFan Uᗮ V
+  -- `projectionBlock Ω Γ (gap • id)` is exactly `gap` times that product.
+  have hcombine := lemma61_all_kyFan Uᗮ V
     (((P.gap : ℝ) : 𝕜) • ContinuousLinearMap.id 𝕜 E)
     (((P.gap : ℝ) : 𝕜) • ContinuousLinearMap.id 𝕜 E)
     P.perturbation P.perturbation
     (fun j => by
       have hrev := P.reverse_all_kyFan j
       have hblockSine :
-          paperProjectionBlock Uᗮ V (((P.gap : ℝ) : 𝕜) • ContinuousLinearMap.id 𝕜 E) =
+          projectionBlock Uᗮ V (((P.gap : ℝ) : 𝕜) • ContinuousLinearMap.id 𝕜 E) =
             ((P.gap : ℝ) : 𝕜) • P.reverseSineBlock := by
-        ext x; simp [paperProjectionBlock, reverseSineBlock]
+        ext x; simp [projectionBlock, reverseSineBlock]
       have hblockRes :
-          paperProjectionBlock Uᗮ V P.perturbation =
+          projectionBlock Uᗮ V P.perturbation =
             P.reverseResidualBlock.adjoint := by
-        simp [paperProjectionBlock, reverseResidualBlock,
+        simp [projectionBlock, reverseResidualBlock,
           ContinuousLinearMap.adjoint_comp, hadjH,
           (isSelfAdjoint_starProjection V).adjoint_eq,
           (isSelfAdjoint_starProjection Uᗮ).adjoint_eq,
@@ -453,19 +453,19 @@ theorem symmetric_all_kyFan_crossSineSum
     (fun j => by
       have hfwd := P.forward_all_kyFan j
       have hblockSine :
-          paperProjectionBlock Uᗮᗮ Vᗮ (((P.gap : ℝ) : 𝕜) • ContinuousLinearMap.id 𝕜 E) =
+          projectionBlock Uᗮᗮ Vᗮ (((P.gap : ℝ) : 𝕜) • ContinuousLinearMap.id 𝕜 E) =
             ((P.gap : ℝ) : 𝕜) • P.forwardSineBlock.adjoint := by
         simp only [hUperp]
         ext x
-        simp [paperProjectionBlock, forwardSineBlock,
+        simp [projectionBlock, forwardSineBlock,
           ContinuousLinearMap.adjoint_comp,
           (isSelfAdjoint_starProjection U).adjoint_eq,
           (isSelfAdjoint_starProjection Vᗮ).adjoint_eq]
       have hblockRes :
-          paperProjectionBlock Uᗮᗮ Vᗮ P.perturbation =
+          projectionBlock Uᗮᗮ Vᗮ P.perturbation =
             P.forwardResidualBlock.adjoint := by
         simp only [hUperp]
-        simp [paperProjectionBlock, forwardResidualBlock,
+        simp [projectionBlock, forwardResidualBlock,
           ContinuousLinearMap.adjoint_comp, hadjH,
           (isSelfAdjoint_starProjection U).adjoint_eq,
           (isSelfAdjoint_starProjection Vᗮ).adjoint_eq,
@@ -474,22 +474,22 @@ theorem symmetric_all_kyFan_crossSineSum
         hgapNorm, kyFanApproximationGauge_adjoint,
         kyFanApproximationGauge_adjoint]
       exact hfwd) k
-  have hres := paperDiagonalPair_all_kyFan_le Uᗮ V P.perturbation k
+  have hres := diagonalPair_all_kyFan_le Uᗮ V P.perturbation k
   have hcross :
-      paperProjectionBlock Uᗮ V (((P.gap : ℝ) : 𝕜) • ContinuousLinearMap.id 𝕜 E) +
-          paperProjectionBlock Uᗮᗮ Vᗮ
+      projectionBlock Uᗮ V (((P.gap : ℝ) : 𝕜) • ContinuousLinearMap.id 𝕜 E) +
+          projectionBlock Uᗮᗮ Vᗮ
             (((P.gap : ℝ) : 𝕜) • ContinuousLinearMap.id 𝕜 E) =
-        ((P.gap : ℝ) : 𝕜) • paperCrossSineSum U V := by
+        ((P.gap : ℝ) : 𝕜) • crossSineSum U V := by
     simp only [hUperp]
     ext x
-    simp [paperProjectionBlock, paperCrossSineSum, smul_add]
+    simp [projectionBlock, crossSineSum, smul_add]
   rw [hcross] at hcombine
   calc
-    P.gap * kyFanApproximationGauge k (paperCrossSineSum U V) =
-        kyFanApproximationGauge k (((P.gap : ℝ) : 𝕜) • paperCrossSineSum U V) := by
+    P.gap * kyFanApproximationGauge k (crossSineSum U V) =
+        kyFanApproximationGauge k (((P.gap : ℝ) : 𝕜) • crossSineSum U V) := by
       rw [kyFanApproximationGauge_smul, hgapNorm]
     _ ≤ kyFanApproximationGauge k
-        (paperDiagonalPair Uᗮ V P.perturbation) := hcombine
+        (diagonalPair Uᗮ V P.perturbation) := hcombine
     _ ≤ kyFanApproximationGauge k P.perturbation := hres
 
 /-- **Davis--Kahan 1970, Proposition 6.1 on a common dense domain over any `RCLike`
@@ -501,10 +501,10 @@ singular-value sequence with the paper's. -/
 theorem result_every_unitarilyInvariantNorm_crossSineSum
     [ContinuousLinearMap.HasMinMaxLowerBoundEverywhere.{u, v} 𝕜]
     [HasUnboundedSylvesterKyFan.{u, v} 𝕜]
-    (P : PaperCommonDomainSymmetricSinThetaProblem U V)
+    (P : CommonDomainSymmetricSinThetaProblem U V)
     (N : SymmetricNormingFunction) (hH : N.Mem P.perturbation) :
-    N.Mem (paperCrossSineSum U V) ∧
-      P.gap * N.gauge (paperCrossSineSum U V) ≤ N.gauge P.perturbation :=
+    N.Mem (crossSineSum U V) ∧
+      P.gap * N.gauge (crossSineSum U V) ≤ N.gauge P.perturbation :=
   N.mul_gauge_le_of_all_mul_kyFan_le P.gap_pos hH P.symmetric_all_kyFan_crossSineSum
 
 /-- The compiled source dictionary.  Every source norm evaluates the operator appearing in
@@ -512,16 +512,16 @@ theorem result_every_unitarilyInvariantNorm_crossSineSum
 whole-space sine singular-value list, which is the complete approximation-singular-value
 sequence of the projector difference `P_V - P_U`. -/
 theorem crossSineSum_normingMem_iff_and_gauge_eq
-    (_P : PaperCommonDomainSymmetricSinThetaProblem U V)
+    (_P : CommonDomainSymmetricSinThetaProblem U V)
     (N : SymmetricNormingFunction) :
-    (N.Mem (paperCrossSineSum U V) ↔
+    (N.Mem (crossSineSum U V) ↔
         N.Mem (V.starProjection - U.starProjection)) ∧
-      N.gauge (paperCrossSineSum U V) =
+      N.gauge (crossSineSum U V) =
         N.gauge (V.starProjection - U.starProjection) :=
   SameApproximationSingularSequence.normingMem_iff_and_gauge_eq N
-    (paperCrossSineSum_same_projectionDiff U V)
+    (crossSineSum_same_projectionDiff U V)
 
-end PaperCommonDomainSymmetricSinThetaProblem
+end CommonDomainSymmetricSinThetaProblem
 
 end ScalarGeneric
 
@@ -530,7 +530,7 @@ section Complex
 variable {E : Type v}
   [NormedAddCommGroup E] [InnerProductSpace ℂ E] [CompleteSpace E]
 
-namespace PaperCommonDomainSymmetricSinThetaProblem
+namespace CommonDomainSymmetricSinThetaProblem
 
 variable {U V : Submodule ℂ E} [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
 
@@ -538,17 +538,17 @@ variable {U V : Submodule ℂ E} [U.HasOrthogonalProjection] [V.HasOrthogonalPro
 dominance.
 
 This is `symmetric_all_kyFan_crossSineSum` read through
-`paperCrossSineSum_same_literalSin`, which says the cross-block sum and the literal
+`crossSineSum_same_literalSin`, which says the cross-block sum and the literal
 functional-calculus `sin Θ` have the same complete singular-value sequence. -/
 theorem symmetric_all_kyFan
-    (P : PaperCommonDomainSymmetricSinThetaProblem U V) :
+    (P : CommonDomainSymmetricSinThetaProblem U V) :
     ∀ k,
       P.gap * kyFanApproximationGauge k
           (TauCeti.DavisKahanExt.paperSinAngleOperatorC U V) ≤
         kyFanApproximationGauge k P.perturbation := by
   intro k
   have h := P.symmetric_all_kyFan_crossSineSum k
-  rwa [(paperCrossSineSum_same_literalSin U V).kyFanApproximationGauge_eq k] at h
+  rwa [(crossSineSum_same_literalSin U V).kyFanApproximationGauge_eq k] at h
 
 /-- **Davis--Kahan 1970, Proposition 6.1 on a common dense domain**, for every normalized
 unitarily invariant norm in the source sense.
@@ -558,7 +558,7 @@ paper's `H` is the bounded operator representing `B - A` there.  This is the rel
 the Appendix to Section 6 licenses when it says the hypotheses of Proposition 6.1 may be
 relaxed in the same way as those of Theorem 6.1. -/
 theorem result_every_unitarilyInvariantNorm
-    (P : PaperCommonDomainSymmetricSinThetaProblem U V)
+    (P : CommonDomainSymmetricSinThetaProblem U V)
     (N : SymmetricNormingFunction) (hH : N.Mem P.perturbation) :
     N.Mem (TauCeti.DavisKahanExt.paperSinAngleOperatorC U V) ∧
       P.gap * N.gauge
@@ -568,10 +568,10 @@ theorem result_every_unitarilyInvariantNorm
 
 /-- **The bounded Proposition 6.1 inputs are an instance of the common-domain ones**, at
 the full domain.  This is what makes the theorem above a genuine relaxation rather than a
-parallel statement: no hypothesis of `PaperSymmetricSinThetaProblem` is dropped, and the
+parallel statement: no hypothesis of `SymmetricSinThetaProblem` is dropped, and the
 domain hypotheses are discharged by `⊤ = ⊤`. -/
-noncomputable def ofBounded (P : PaperSymmetricSinThetaProblem (E := E)) :
-    PaperCommonDomainSymmetricSinThetaProblem P.U P.V where
+noncomputable def ofBounded (P : SymmetricSinThetaProblem (E := E)) :
+    CommonDomainSymmetricSinThetaProblem P.U P.V where
   A := (P.A.toLinearMap.toPMap ⊤)
   B := (P.B.toLinearMap.toPMap ⊤)
   selfAdjoint_A := TauCeti.DavisKahanExt.ofBounded_isSelfAdjoint P.A P.selfAdjoint_A
@@ -587,14 +587,14 @@ noncomputable def ofBounded (P : PaperSymmetricSinThetaProblem (E := E)) :
   gap_V_to_Uperp := P.gap_V_to_Uperp
 
 /-- The bounded instance keeps the paper's perturbation `H = B - A`. -/
-@[simp] theorem ofBounded_perturbation (P : PaperSymmetricSinThetaProblem (E := E)) :
+@[simp] theorem ofBounded_perturbation (P : SymmetricSinThetaProblem (E := E)) :
     (ofBounded P).perturbation = P.perturbation := rfl
 
 /-- The bounded instance keeps the paper's spectral separation. -/
-@[simp] theorem ofBounded_gap (P : PaperSymmetricSinThetaProblem (E := E)) :
+@[simp] theorem ofBounded_gap (P : SymmetricSinThetaProblem (E := E)) :
     (ofBounded P).gap = P.gap := rfl
 
-end PaperCommonDomainSymmetricSinThetaProblem
+end CommonDomainSymmetricSinThetaProblem
 
 end Complex
 
@@ -603,7 +603,7 @@ section Real
 variable {E : Type v}
   [NormedAddCommGroup E] [InnerProductSpace ℝ E] [CompleteSpace E]
 
-namespace PaperCommonDomainSymmetricSinThetaProblem
+namespace CommonDomainSymmetricSinThetaProblem
 
 variable {U V : Submodule ℝ E} [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
 
@@ -614,9 +614,9 @@ the paper's whole-space sine representative, for the reason recorded in the modu
 docstring: no real continuous functional calculus is constructed anywhere, and none is
 needed, because a unitarily invariant norm sees only the singular-value sequence. -/
 theorem symmetric_all_kyFan_real
-    (P : PaperCommonDomainSymmetricSinThetaProblem U V) :
+    (P : CommonDomainSymmetricSinThetaProblem U V) :
     ∀ k,
-      P.gap * kyFanApproximationGauge k (paperCrossSineSum U V) ≤
+      P.gap * kyFanApproximationGauge k (crossSineSum U V) ≤
         kyFanApproximationGauge k P.perturbation :=
   P.symmetric_all_kyFan_crossSineSum
 
@@ -626,20 +626,20 @@ space**, for every normalized unitarily invariant norm in the source sense.
 `A` and `B` are unbounded closed self-adjoint operators on one dense real domain, and the
 paper's `H` is the bounded operator representing `B - A` there. -/
 theorem result_every_unitarilyInvariantNorm_real
-    (P : PaperCommonDomainSymmetricSinThetaProblem U V)
+    (P : CommonDomainSymmetricSinThetaProblem U V)
     (N : SymmetricNormingFunction) (hH : N.Mem P.perturbation) :
-    N.Mem (paperCrossSineSum U V) ∧
-      P.gap * N.gauge (paperCrossSineSum U V) ≤ N.gauge P.perturbation :=
+    N.Mem (crossSineSum U V) ∧
+      P.gap * N.gauge (crossSineSum U V) ≤ N.gauge P.perturbation :=
   P.result_every_unitarilyInvariantNorm_crossSineSum N hH
 
 /-- **The real bounded Proposition 6.1 inputs are an instance of the common-domain ones**,
 at the full domain.  This is the real counterpart of `ofBounded`, and it carries the same
-guarantee: no hypothesis of `PaperRealSymmetricSinThetaProblem` is dropped and none is
+guarantee: no hypothesis of `RealSymmetricSinThetaProblem` is dropped and none is
 added, the domain hypotheses being discharged by `⊤ = ⊤`.  Without it the real
 common-domain statement would only be parallel to the real bounded one rather than a
 relaxation of it. -/
-noncomputable def ofBoundedReal (P : PaperRealSymmetricSinThetaProblem (E := E)) :
-    PaperCommonDomainSymmetricSinThetaProblem P.U P.V where
+noncomputable def ofBoundedReal (P : RealSymmetricSinThetaProblem (E := E)) :
+    CommonDomainSymmetricSinThetaProblem P.U P.V where
   A := (P.A.toLinearMap.toPMap ⊤)
   B := (P.B.toLinearMap.toPMap ⊤)
   selfAdjoint_A := TauCeti.DavisKahanExt.ofBounded_isSelfAdjoint P.A P.selfAdjoint_A
@@ -656,14 +656,14 @@ noncomputable def ofBoundedReal (P : PaperRealSymmetricSinThetaProblem (E := E))
 
 /-- The real bounded instance keeps the paper's perturbation `H = B - A`. -/
 @[simp] theorem ofBoundedReal_perturbation
-    (P : PaperRealSymmetricSinThetaProblem (E := E)) :
+    (P : RealSymmetricSinThetaProblem (E := E)) :
     (ofBoundedReal P).perturbation = P.perturbation := rfl
 
 /-- The real bounded instance keeps the paper's spectral separation. -/
-@[simp] theorem ofBoundedReal_gap (P : PaperRealSymmetricSinThetaProblem (E := E)) :
+@[simp] theorem ofBoundedReal_gap (P : RealSymmetricSinThetaProblem (E := E)) :
     (ofBoundedReal P).gap = P.gap := rfl
 
-end PaperCommonDomainSymmetricSinThetaProblem
+end CommonDomainSymmetricSinThetaProblem
 
 end Real
 

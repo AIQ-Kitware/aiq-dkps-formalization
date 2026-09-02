@@ -29,22 +29,22 @@ conjugation, hence **is** the complexification of a bounded operator on `E`.
 The real objects are not defined by a formula that happens to complexify
 correctly; they are defined as the real restrictions, and the identity
 
-  `complexify (paperTanAngleOperatorR U V) = paperTanAngleOperatorC (Uᶜ) (Vᶜ)`
+  `complexify (tanAngleOperatorR U V) = paperTanAngleOperatorC (Uᶜ) (Vᶜ)`
 
 is proved.  Their real content is then pinned down without reference to the
 complexification:
 
-* `paperSinAngleOperatorR_mul_self`: `sin Θ · sin Θ = (P_U - P_V)²`;
-* `paperSinAngleOperatorR_nonneg` and `isSelfAdjoint_paperSinAngleOperatorR`:
+* `sinAngleOperatorR_mul_self`: `sin Θ · sin Θ = (P_U - P_V)²`;
+* `sinAngleOperatorR_nonneg` and `isSelfAdjoint_paperSinAngleOperatorR`:
   together with the previous item this *characterises* `sin Θ` as the
   nonnegative square root, i.e. as `|P_U - P_V|` in the real sense;
 * `norm_paperSinAngleOperatorR`: `‖sin Θ‖` is the real subspace gap.
 
 ## Main definitions
 
-* `TauCeti.DavisKahanExt.paperSinAngleOperatorR`, `paperAngleOperatorR`,
-  `paperSinTwoAngleOperatorR`, `paperTanAngleOperatorR`,
-  `paperTanTwoAngleOperatorR`: the five paper angle operators of a real pair, as
+* `TauCeti.DavisKahanExt.sinAngleOperatorR`, `angleOperatorR`,
+  `sinTwoAngleOperatorR`, `tanAngleOperatorR`,
+  `tanTwoAngleOperatorR`: the five paper angle operators of a real pair, as
   bounded operators on the real space.
 
 ## References
@@ -86,8 +86,8 @@ theorem conjugateOperator_sinAngleOperatorC_complexifySubmodule :
 /-- The operator angle of a complexified pair is conjugation-fixed. -/
 theorem conjugateOperator_paperAngleOperatorC_complexifySubmodule :
     conjugateOperator
-        (paperAngleOperatorC (complexifySubmodule U) (complexifySubmodule V)) =
-      paperAngleOperatorC (complexifySubmodule U) (complexifySubmodule V) :=
+        (angleOperatorC (complexifySubmodule U) (complexifySubmodule V)) =
+      angleOperatorC (complexifySubmodule U) (complexifySubmodule V) :=
   conjugateOperator_cfc _ (isSelfAdjoint_sinAngleOperatorC _ _)
     (conjugateOperator_sinAngleOperatorC_complexifySubmodule U V) Real.arcsin
 
@@ -97,9 +97,9 @@ operators below descend, with no per-symbol argument. -/
 theorem conjugateOperator_cfc_paperAngleOperatorC_complexifySubmodule
     (f : ℝ → ℝ) :
     conjugateOperator
-        (cfc f (paperAngleOperatorC (complexifySubmodule U)
+        (cfc f (angleOperatorC (complexifySubmodule U)
           (complexifySubmodule V))) =
-      cfc f (paperAngleOperatorC (complexifySubmodule U)
+      cfc f (angleOperatorC (complexifySubmodule U)
         (complexifySubmodule V)) :=
   conjugateOperator_cfc _ (isSelfAdjoint_paperAngleOperatorC _ _)
     (conjugateOperator_paperAngleOperatorC_complexifySubmodule U V) f
@@ -108,49 +108,49 @@ theorem conjugateOperator_cfc_paperAngleOperatorC_complexifySubmodule
 
 /-- The paper's `sin Θ` for a pair of **real** closed subspaces: a bounded
 operator on the real space. -/
-def paperSinAngleOperatorR : E →L[ℝ] E :=
+def sinAngleOperatorR : E →L[ℝ] E :=
   realPartOperator
     (sinAngleOperatorC (complexifySubmodule U) (complexifySubmodule V))
 
 /-- The paper's Hermitian operator angle `Θ = arcsin |P_U - P_V|` for a pair of
 **real** closed subspaces. -/
-def paperAngleOperatorR : E →L[ℝ] E :=
+def angleOperatorR : E →L[ℝ] E :=
   realPartOperator
-    (paperAngleOperatorC (complexifySubmodule U) (complexifySubmodule V))
+    (angleOperatorC (complexifySubmodule U) (complexifySubmodule V))
 
 /-- The paper's ambient `sin 2Θ` for a pair of **real** closed subspaces. -/
-def paperSinTwoAngleOperatorR : E →L[ℝ] E :=
+def sinTwoAngleOperatorR : E →L[ℝ] E :=
   realPartOperator
     (paperSinTwoAngleOperatorC (complexifySubmodule U) (complexifySubmodule V))
 
 /-- The paper's ambient `tan Θ` for a pair of **real** closed subspaces. -/
-def paperTanAngleOperatorR : E →L[ℝ] E :=
+def tanAngleOperatorR : E →L[ℝ] E :=
   realPartOperator
     (paperTanAngleOperatorC (complexifySubmodule U) (complexifySubmodule V))
 
 /-- The paper's ambient `tan 2Θ` for a pair of **real** closed subspaces. -/
-def paperTanTwoAngleOperatorR : E →L[ℝ] E :=
+def tanTwoAngleOperatorR : E →L[ℝ] E :=
   realPartOperator
     (paperTanTwoAngleOperatorC (complexifySubmodule U) (complexifySubmodule V))
 
 /-- The paper's branch-free ambient `|tan 2Θ|` for a pair of **real** closed
 subspaces.
 
-The real counterpart of `paperAbsTanTwoAngleOperatorC`, and the object the real
+The real counterpart of `absTanTwoAngleOperatorC`, and the object the real
 double-angle tangent theorem concludes on: a unitarily invariant norm sees a
 self-adjoint operator through its singular values, so it cannot tell `tan 2Θ`
 from `|tan 2Θ|`, and only the latter is defined without a quarter-acute branch
 hypothesis. -/
-def paperAbsTanTwoAngleOperatorR : E →L[ℝ] E :=
+def absTanTwoAngleOperatorR : E →L[ℝ] E :=
   realPartOperator
-    (paperAbsTanTwoAngleOperatorC (complexifySubmodule U) (complexifySubmodule V))
+    (absTanTwoAngleOperatorC (complexifySubmodule U) (complexifySubmodule V))
 
 /-! ### The descent identities -/
 
 /-- Complexifying the real sine-angle operator recovers the complex one. -/
 @[simp]
 theorem complexify_paperSinAngleOperatorR :
-    complexify (paperSinAngleOperatorR U V) =
+    complexify (sinAngleOperatorR U V) =
       sinAngleOperatorC (complexifySubmodule U) (complexifySubmodule V) :=
   complexify_realPartOperator
     (conjugateOperator_sinAngleOperatorC_complexifySubmodule U V)
@@ -158,15 +158,15 @@ theorem complexify_paperSinAngleOperatorR :
 /-- Complexifying the real operator angle recovers the complex one. -/
 @[simp]
 theorem complexify_paperAngleOperatorR :
-    complexify (paperAngleOperatorR U V) =
-      paperAngleOperatorC (complexifySubmodule U) (complexifySubmodule V) :=
+    complexify (angleOperatorR U V) =
+      angleOperatorC (complexifySubmodule U) (complexifySubmodule V) :=
   complexify_realPartOperator
     (conjugateOperator_paperAngleOperatorC_complexifySubmodule U V)
 
 /-- Complexifying the real `sin 2Θ` recovers the complex one. -/
 @[simp]
 theorem complexify_paperSinTwoAngleOperatorR :
-    complexify (paperSinTwoAngleOperatorR U V) =
+    complexify (sinTwoAngleOperatorR U V) =
       paperSinTwoAngleOperatorC (complexifySubmodule U) (complexifySubmodule V) :=
   complexify_realPartOperator
     (conjugateOperator_cfc_paperAngleOperatorC_complexifySubmodule U V _)
@@ -174,7 +174,7 @@ theorem complexify_paperSinTwoAngleOperatorR :
 /-- Complexifying the real `tan Θ` recovers the complex one. -/
 @[simp]
 theorem complexify_paperTanAngleOperatorR :
-    complexify (paperTanAngleOperatorR U V) =
+    complexify (tanAngleOperatorR U V) =
       paperTanAngleOperatorC (complexifySubmodule U) (complexifySubmodule V) :=
   complexify_realPartOperator
     (conjugateOperator_cfc_paperAngleOperatorC_complexifySubmodule U V _)
@@ -182,7 +182,7 @@ theorem complexify_paperTanAngleOperatorR :
 /-- Complexifying the real `tan 2Θ` recovers the complex one. -/
 @[simp]
 theorem complexify_paperTanTwoAngleOperatorR :
-    complexify (paperTanTwoAngleOperatorR U V) =
+    complexify (tanTwoAngleOperatorR U V) =
       paperTanTwoAngleOperatorC (complexifySubmodule U) (complexifySubmodule V) :=
   complexify_realPartOperator
     (conjugateOperator_cfc_paperAngleOperatorC_complexifySubmodule U V _)
@@ -190,15 +190,15 @@ theorem complexify_paperTanTwoAngleOperatorR :
 /-- Complexifying the real `|tan 2Θ|` recovers the complex one. -/
 @[simp]
 theorem complexify_paperAbsTanTwoAngleOperatorR :
-    complexify (paperAbsTanTwoAngleOperatorR U V) =
-      paperAbsTanTwoAngleOperatorC (complexifySubmodule U) (complexifySubmodule V) :=
+    complexify (absTanTwoAngleOperatorR U V) =
+      absTanTwoAngleOperatorC (complexifySubmodule U) (complexifySubmodule V) :=
   complexify_realPartOperator
     (conjugateOperator_cfc_paperAngleOperatorC_complexifySubmodule U V _)
 
 /-! ### Real content of the real sine-angle operator
 
 The three results below hold in `E` and never mention the complexification.
-Together they say `paperSinAngleOperatorR U V` is *the* nonnegative square root
+Together they say `sinAngleOperatorR U V` is *the* nonnegative square root
 of `(P_U - P_V)²`, which is the paper's `sin Θ = |P_U - P_V|`. -/
 
 /-- A conjugation-fixed self-adjoint complex operator restricts to a
@@ -213,43 +213,43 @@ private theorem isSelfAdjoint_realPartOperator_of_fixed
 
 /-- The real sine-angle operator is self-adjoint. -/
 theorem isSelfAdjoint_paperSinAngleOperatorR :
-    IsSelfAdjoint (paperSinAngleOperatorR U V) :=
+    IsSelfAdjoint (sinAngleOperatorR U V) :=
   isSelfAdjoint_realPartOperator_of_fixed
     (conjugateOperator_sinAngleOperatorC_complexifySubmodule U V)
     (isSelfAdjoint_sinAngleOperatorC _ _)
 
 /-- The real operator angle is self-adjoint. -/
 theorem isSelfAdjoint_paperAngleOperatorR :
-    IsSelfAdjoint (paperAngleOperatorR U V) :=
+    IsSelfAdjoint (angleOperatorR U V) :=
   isSelfAdjoint_realPartOperator_of_fixed
     (conjugateOperator_paperAngleOperatorC_complexifySubmodule U V)
     (isSelfAdjoint_paperAngleOperatorC _ _)
 
 /-- The real ambient `sin 2Θ` is self-adjoint. -/
 theorem isSelfAdjoint_paperSinTwoAngleOperatorR :
-    IsSelfAdjoint (paperSinTwoAngleOperatorR U V) :=
+    IsSelfAdjoint (sinTwoAngleOperatorR U V) :=
   isSelfAdjoint_realPartOperator_of_fixed
     (conjugateOperator_cfc_paperAngleOperatorC_complexifySubmodule U V _)
     (isSelfAdjoint_paperSinTwoAngleOperatorC _ _)
 
 /-- The real ambient `tan Θ` is self-adjoint. -/
 theorem isSelfAdjoint_paperTanAngleOperatorR :
-    IsSelfAdjoint (paperTanAngleOperatorR U V) :=
+    IsSelfAdjoint (tanAngleOperatorR U V) :=
   isSelfAdjoint_realPartOperator_of_fixed
     (conjugateOperator_cfc_paperAngleOperatorC_complexifySubmodule U V _)
     (isSelfAdjoint_paperTanAngleOperatorC _ _)
 
 /-- The real ambient `tan 2Θ` is self-adjoint. -/
 theorem isSelfAdjoint_paperTanTwoAngleOperatorR :
-    IsSelfAdjoint (paperTanTwoAngleOperatorR U V) :=
+    IsSelfAdjoint (tanTwoAngleOperatorR U V) :=
   isSelfAdjoint_realPartOperator_of_fixed
     (conjugateOperator_cfc_paperAngleOperatorC_complexifySubmodule U V _)
     (isSelfAdjoint_paperTanTwoAngleOperatorC _ _)
 
 /-- **The real sine-angle operator squares to the squared projection
 difference**, entirely inside `E`. -/
-theorem paperSinAngleOperatorR_mul_self :
-    paperSinAngleOperatorR U V ∘L paperSinAngleOperatorR U V =
+theorem sinAngleOperatorR_mul_self :
+    sinAngleOperatorR U V ∘L sinAngleOperatorR U V =
       (U.starProjection - V.starProjection) ∘L
         (U.starProjection - V.starProjection) := by
   apply complexify_injective
@@ -266,21 +266,21 @@ theorem paperSinAngleOperatorR_mul_self :
   exact h
 
 /-- **The real sine-angle operator is nonnegative.**  With
-`paperSinAngleOperatorR_mul_self` this identifies it as the real
+`sinAngleOperatorR_mul_self` this identifies it as the real
 `|P_U - P_V|`. -/
-theorem paperSinAngleOperatorR_nonneg :
-    0 ≤ paperSinAngleOperatorR U V := by
+theorem sinAngleOperatorR_nonneg :
+    0 ≤ sinAngleOperatorR U V := by
   rw [ContinuousLinearMap.nonneg_iff_isPositive]
   refine ⟨ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.1
     (isSelfAdjoint_paperSinAngleOperatorR U V), fun x => ?_⟩
   have hpos : (0 : ℝ) ≤ RCLike.re
-      ⟪complexify (paperSinAngleOperatorR U V) (ofReal x), ofReal x⟫_ℂ := by
+      ⟪complexify (sinAngleOperatorR U V) (ofReal x), ofReal x⟫_ℂ := by
     rw [complexify_paperSinAngleOperatorR]
     exact ((ContinuousLinearMap.nonneg_iff_isPositive _).1
       (sinAngleOperatorC_nonneg _ _)).2 _
   have hval : RCLike.re
-      ⟪complexify (paperSinAngleOperatorR U V) (ofReal x), ofReal x⟫_ℂ =
-      ⟪paperSinAngleOperatorR U V x, x⟫_ℝ + ⟪paperSinAngleOperatorR U V 0, 0⟫_ℝ :=
+      ⟪complexify (sinAngleOperatorR U V) (ofReal x), ofReal x⟫_ℂ =
+      ⟪sinAngleOperatorR U V x, x⟫_ℝ + ⟪sinAngleOperatorR U V 0, 0⟫_ℝ :=
     re_inner_complexify _ _
   simp only [map_zero, inner_zero_left, add_zero] at hval
   simpa [ContinuousLinearMap.reApplyInnerSelf_apply, hval] using hval ▸ hpos
@@ -288,7 +288,7 @@ theorem paperSinAngleOperatorR_nonneg :
 /-- **The norm of the real sine-angle operator is the real subspace gap**,
 `‖sin Θ‖ = ‖P_U - P_V‖`. -/
 theorem norm_paperSinAngleOperatorR :
-    ‖paperSinAngleOperatorR U V‖ = DavisKahan.subspaceGap U V := by
+    ‖sinAngleOperatorR U V‖ = DavisKahan.subspaceGap U V := by
   rw [← norm_complexify, complexify_paperSinAngleOperatorR,
     norm_sinAngleOperatorC]
   exact subspaceGap_complexifySubmodule U V

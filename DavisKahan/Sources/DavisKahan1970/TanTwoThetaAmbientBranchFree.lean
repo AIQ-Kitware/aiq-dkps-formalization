@@ -156,29 +156,29 @@ omit [CompleteSpace E] in
 private theorem projectionBlock_lower_branchFree
     {U : Submodule ℂ E} [U.HasOrthogonalProjection]
     (K : E →L[ℂ] E) :
-    paperProjectionBlock Uᗮ U K =
+    projectionBlock Uᗮ U K =
       (1 - U.starProjection) * K * U.starProjection := by
-  rw [paperProjectionBlock, Submodule.starProjection_orthogonal',
+  rw [projectionBlock, Submodule.starProjection_orthogonal',
     comp_eq_mul_branchFree, comp_eq_mul_branchFree, mul_assoc]
 
 omit [CompleteSpace E] in
 private theorem projectionBlock_upper_branchFree
     {U : Submodule ℂ E} [U.HasOrthogonalProjection]
     (K : E →L[ℂ] E) :
-    paperProjectionBlock Uᗮᗮ Uᗮ K =
+    projectionBlock Uᗮᗮ Uᗮ K =
       U.starProjection * K * (1 - U.starProjection) := by
   have hUperp : Uᗮᗮ = U := Submodule.orthogonal_orthogonal U
-  rw [paperProjectionBlock]
+  rw [projectionBlock]
   simp only [hUperp, Submodule.starProjection_orthogonal', comp_eq_mul_branchFree]
   rw [mul_assoc]
 
 private theorem kyFan_lowerBlock_eq_upperBlock_branchFree
     {U : Submodule ℂ E} [U.HasOrthogonalProjection]
     (K : E →L[ℂ] E) (hK : IsSelfAdjoint K) (k : ℕ) :
-    kyFanApproximationGauge k (paperProjectionBlock Uᗮ U K) =
-      kyFanApproximationGauge k (paperProjectionBlock Uᗮᗮ Uᗮ K) := by
-  have hadj : paperProjectionBlock Uᗮᗮ Uᗮ K =
-      (paperProjectionBlock Uᗮ U K).adjoint := by
+    kyFanApproximationGauge k (projectionBlock Uᗮ U K) =
+      kyFanApproximationGauge k (projectionBlock Uᗮᗮ Uᗮ K) := by
+  have hadj : projectionBlock Uᗮᗮ Uᗮ K =
+      (projectionBlock Uᗮ U K).adjoint := by
     rw [projectionBlock_upper_branchFree, projectionBlock_lower_branchFree]
     show _ = star _
     simp only [star_mul, star_sub, star_one,
@@ -191,9 +191,9 @@ private theorem projectionBlock_smul_branchFree
     (Ω Γ : Submodule ℂ E)
     [Ω.HasOrthogonalProjection] [Γ.HasOrthogonalProjection]
     (c : ℂ) (K : E →L[ℂ] E) :
-    paperProjectionBlock Ω Γ (c • K) = c • paperProjectionBlock Ω Γ K := by
+    projectionBlock Ω Γ (c • K) = c • projectionBlock Ω Γ K := by
   ext x
-  simp [paperProjectionBlock]
+  simp [projectionBlock]
 
 /-- **Branch-independent ambient assembly, Ky Fan form.**
 
@@ -210,10 +210,10 @@ theorem tanTwoTheta_ambient_bounded_kyFan_complex_of_block
     (hH : IsSelfAdjoint H) (hK : IsSelfAdjoint K) (hab : a < b)
     (hblockModulus : ∀ k : ℕ,
       kyFanApproximationGauge k (paperTanTwoAngleOperatorC U V) =
-        kyFanApproximationGauge k (paperDiagonalPair Uᗮ U K))
+        kyFanApproximationGauge k (diagonalPair Uᗮ U K))
     (hcorner : ∀ k : ℕ,
-      (b - a) * kyFanApproximationGauge k (paperProjectionBlock Uᗮ U K) ≤
-        2 * kyFanApproximationGauge k (paperProjectionBlock Uᗮᗮ Uᗮ H)) :
+      (b - a) * kyFanApproximationGauge k (projectionBlock Uᗮ U K) ≤
+        2 * kyFanApproximationGauge k (projectionBlock Uᗮᗮ Uᗮ H)) :
     ∀ k : ℕ,
       (b - a) * kyFanApproximationGauge k (paperTanTwoAngleOperatorC U V) ≤
         2 * kyFanApproximationGauge k H := by
@@ -222,36 +222,36 @@ theorem tanTwoTheta_ambient_bounded_kyFan_complex_of_block
   have hcnorm : ‖((((b - a) / 2 : ℝ)) : ℂ)‖ = (b - a) / 2 := by
     rw [Complex.norm_real, Real.norm_eq_abs, abs_of_pos hd]
   have h₀ : ∀ j : ℕ,
-      kyFanApproximationGauge j (paperProjectionBlock Uᗮ U
+      kyFanApproximationGauge j (projectionBlock Uᗮ U
           (((((b - a) / 2 : ℝ)) : ℂ) • K)) ≤
-        kyFanApproximationGauge j (paperProjectionBlock Uᗮ U H) := by
+        kyFanApproximationGauge j (projectionBlock Uᗮ U H) := by
     intro j
     rw [projectionBlock_smul_branchFree, kyFanApproximationGauge_smul, hcnorm,
       kyFan_lowerBlock_eq_upperBlock_branchFree H hH j]
     linarith [hcorner j]
   have h₁ : ∀ j : ℕ,
-      kyFanApproximationGauge j (paperProjectionBlock Uᗮᗮ Uᗮ
+      kyFanApproximationGauge j (projectionBlock Uᗮᗮ Uᗮ
           (((((b - a) / 2 : ℝ)) : ℂ) • K)) ≤
-        kyFanApproximationGauge j (paperProjectionBlock Uᗮᗮ Uᗮ H) := by
+        kyFanApproximationGauge j (projectionBlock Uᗮᗮ Uᗮ H) := by
     intro j
     rw [projectionBlock_smul_branchFree, kyFanApproximationGauge_smul, hcnorm,
       ← kyFan_lowerBlock_eq_upperBlock_branchFree K hK j]
     linarith [hcorner j]
-  have hcombine := paperLemma61_all_kyFan Uᗮ U
+  have hcombine := lemma61_all_kyFan Uᗮ U
     (((((b - a) / 2 : ℝ)) : ℂ) • K)
     (((((b - a) / 2 : ℝ)) : ℂ) • K) H H h₀ h₁ k
   have hsum :
-      paperProjectionBlock Uᗮ U (((((b - a) / 2 : ℝ)) : ℂ) • K) +
-        paperProjectionBlock Uᗮᗮ Uᗮ (((((b - a) / 2 : ℝ)) : ℂ) • K) =
-      ((((b - a) / 2 : ℝ)) : ℂ) • paperDiagonalPair Uᗮ U K := by
-    rw [paperDiagonalPair, projectionBlock_smul_branchFree,
+      projectionBlock Uᗮ U (((((b - a) / 2 : ℝ)) : ℂ) • K) +
+        projectionBlock Uᗮᗮ Uᗮ (((((b - a) / 2 : ℝ)) : ℂ) • K) =
+      ((((b - a) / 2 : ℝ)) : ℂ) • diagonalPair Uᗮ U K := by
+    rw [diagonalPair, projectionBlock_smul_branchFree,
       projectionBlock_smul_branchFree, ← smul_add]
     rfl
   have hsumH :
-      paperProjectionBlock Uᗮ U H + paperProjectionBlock Uᗮᗮ Uᗮ H =
-        paperDiagonalPair Uᗮ U H := rfl
+      projectionBlock Uᗮ U H + projectionBlock Uᗮᗮ Uᗮ H =
+        diagonalPair Uᗮ U H := rfl
   rw [hsum, hsumH, kyFanApproximationGauge_smul, hcnorm] at hcombine
-  have hpinch := paperDiagonalPair_all_kyFan_le Uᗮ U H k
+  have hpinch := diagonalPair_all_kyFan_le Uᗮ U H k
   rw [hblockModulus k]
   linarith [hcombine.trans hpinch]
 
@@ -264,10 +264,10 @@ theorem tanTwoTheta_ambient_bounded_symmetricNorming_complex_of_block
     (hH : IsSelfAdjoint H) (hK : IsSelfAdjoint K) (hab : a < b)
     (hblockModulus : ∀ k : ℕ,
       kyFanApproximationGauge k (paperTanTwoAngleOperatorC U V) =
-        kyFanApproximationGauge k (paperDiagonalPair Uᗮ U K))
+        kyFanApproximationGauge k (diagonalPair Uᗮ U K))
     (hcorner : ∀ k : ℕ,
-      (b - a) * kyFanApproximationGauge k (paperProjectionBlock Uᗮ U K) ≤
-        2 * kyFanApproximationGauge k (paperProjectionBlock Uᗮᗮ Uᗮ H))
+      (b - a) * kyFanApproximationGauge k (projectionBlock Uᗮ U K) ≤
+        2 * kyFanApproximationGauge k (projectionBlock Uᗮᗮ Uᗮ H))
     (hHmem : N.Mem H) :
     N.Mem (paperTanTwoAngleOperatorC U V) ∧
       (b - a) * N.gauge (paperTanTwoAngleOperatorC U V) ≤ 2 * N.gauge H := by

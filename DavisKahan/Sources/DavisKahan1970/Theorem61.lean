@@ -18,8 +18,8 @@ Hilbert--Schmidt.
 
 ## What changed, and why
 
-Both canonical declarations used to be *methods on a record* — `PaperTheorem61Data`
-and `PaperTheorem62Data`, each bundling an `UnboundedSinThetaData` (itself a
+Both canonical declarations used to be *methods on a record* — `Theorem61Data`
+and `Theorem62Data`, each bundling an `UnboundedSinThetaData` (itself a
 record) together with the exact map, three self-adjointness fields, the exact
 decomposition, the gap, and the frame bound.  A reader of the paper had to build
 two nested records before invoking the theorem.
@@ -42,7 +42,7 @@ IsTrialResidualEquation + LowerFrameBound E₀ ε    ->  Theorem 6.1 / Theorem 6
 ## What is preserved
 
 The printed representative freedom is preserved exactly: the conclusion is stated
-for an arbitrary `PaperSinThetaRepresentativeAcross` of the canonical directed
+for an arbitrary `SinThetaRepresentativeAcross` of the canonical directed
 block, which is the source's "`sin Θ₀` subject only to the singular-value
 condition".  The lower-frame factor, the sharp constant, the arbitrary source
 unitarily invariant norm (Theorem 6.1) and the Hilbert--Schmidt specialization
@@ -188,7 +188,7 @@ variable {E F G H : Type v}
 the lower frame bound of the trial map and `sin Θ₀` is any operator with the
 canonical directed block's singular-value sequence.
 
-Nothing about the proof's organisation appears: no `PaperTheorem61Data`, no
+Nothing about the proof's organisation appears: no `Theorem61Data`, no
 `UnboundedSinThetaData`, no Ky Fan family, no capability class. -/
 theorem theorem6_1_source_complex
     {E₀' F₀' : Type v}
@@ -202,11 +202,11 @@ theorem theorem6_1_source_complex
     (hexact : IsExactSpectralDecomposition A Λ₁ F₀ F₁)
     {ε : ℝ} (hε : 0 < ε) (hframe : LowerFrameBound E₀ ε)
     {δ : ℝ} (hδ : 0 < δ) (hgap : FormBoundedSylvesterGap A₀ Λ₁ δ)
-    (S : PaperSinThetaRepresentativeAcross (E₀ := E₀') (F₀ := F₀')
+    (S : SinThetaRepresentativeAcross (E₀ := E₀') (F₀ := F₀')
       (directedSinThetaOperator E₀ F₀ hframe hε))
     (hR : N.Mem R) :
     N.Mem S.operator ∧ δ * ε * N.gauge S.operator ≤ N.gauge R := by
-  let P : PaperTheorem61Data (E := E) (F := F) (G := G) (H := H) :=
+  let P : Theorem61Data (E := E) (F := F) (G := G) (H := H) :=
     { data := sectionSixData A A₀ Λ₁ E₀ F₀ F₁ R htrial hexact
       exactMap := F₀
       ambient_selfAdjoint := hA
@@ -245,11 +245,11 @@ theorem theorem6_1_source_real
     (hexact : IsExactSpectralDecomposition A Λ₁ F₀ F₁)
     {ε : ℝ} (hε : 0 < ε) (hframe : LowerFrameBound E₀ ε)
     {δ : ℝ} (hδ : 0 < δ) (hgap : FormBoundedSylvesterGap A₀ Λ₁ δ)
-    (S : PaperSinThetaRepresentativeAcross (E₀ := E₀') (F₀ := F₀')
+    (S : SinThetaRepresentativeAcross (E₀ := E₀') (F₀ := F₀')
       (directedSinThetaOperatorReal E₀ F₀ hframe hε))
     (hR : N.Mem R) :
     N.Mem S.operator ∧ δ * ε * N.gauge S.operator ≤ N.gauge R := by
-  let P : PaperRealTheorem61Data (E := E) (F := F) (G := G) (H := H) :=
+  let P : RealTheorem61Data (E := E) (F := F) (G := G) (H := H) :=
     { data := sectionSixData A A₀ Λ₁ E₀ F₀ F₁ R htrial hexact
       exactMap := F₀
       ambient_selfAdjoint := hA
@@ -304,12 +304,12 @@ theorem theorem6_2_source_complex
     (hexact : IsExactSpectralDecomposition A Λ₁ F₀ F₁)
     {ε : ℝ} (hε : 0 < ε) (hframe : LowerFrameBound E₀ ε)
     {δ : ℝ} (hδ : 0 < δ) (hdist : PairwiseSpectrumGap A₀ Λ₁ δ)
-    (S : PaperSinThetaRepresentativeAcross (E₀ := E₀') (F₀ := F₀')
+    (S : SinThetaRepresentativeAcross (E₀ := E₀') (F₀ := F₀')
       (sectionSixSinThetaBlock E₀ F₁ hframe hε))
     (hR : IsPaperHilbertSchmidt R) :
     IsPaperHilbertSchmidt S.operator ∧
       δ * ε * paperHilbertSchmidtNorm S.operator ≤ paperHilbertSchmidtNorm R := by
-  let P : PaperTheorem62Data (E := E) (F := F) (G := G) (H := H) :=
+  let P : Theorem62Data (E := E) (F := F) (G := G) (H := H) :=
     { data := sectionSixData A A₀ Λ₁ E₀ F₀ F₁ R htrial hexact
       exactMap := F₀
       ambient_selfAdjoint := hA
@@ -359,12 +359,12 @@ theorem theorem6_2_source_real
     {δ : ℝ} (hδ : 0 < δ)
     (hdist : ∀ lam ∈ TauCeti.LinearPMap.realSpectrum A₀,
       ∀ α ∈ TauCeti.LinearPMap.realSpectrum Λ₁, δ ≤ |lam - α|)
-    (S : PaperSinThetaRepresentativeAcross (E₀ := E₀') (F₀ := F₀')
+    (S : SinThetaRepresentativeAcross (E₀ := E₀') (F₀ := F₀')
       (sectionSixSinThetaBlockReal E₀ F₁ hframe hε))
     (hR : IsPaperHilbertSchmidt R) :
     IsPaperHilbertSchmidt S.operator ∧
       δ * ε * paperHilbertSchmidtNorm S.operator ≤ paperHilbertSchmidtNorm R := by
-  let P : PaperRealTheorem62Data (E := E) (F := F) (G := G) (H := H) :=
+  let P : RealTheorem62Data (E := E) (F := F) (G := G) (H := H) :=
     { data := sectionSixData A A₀ Λ₁ E₀ F₀ F₁ R htrial hexact
       exactMap := F₀
       ambient_selfAdjoint := hA

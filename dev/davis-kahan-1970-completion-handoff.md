@@ -124,7 +124,7 @@ For closed subspaces `U,V` with orthogonal projections `P,Q`:
 * `directedGap U V` is one directed sine quantity, morally `‖P_{V⊥}|_U‖`;
 * `subspaceGap U V = ‖P-Q‖` is the symmetric gap, the sine of the maximal ambient angle;
 * the paper has two directed angle operators, usually `Θ₀` and `Θ₁`, associated with the two crossed blocks;
-* the ambient Hermitian angle is represented in the complex tree by `paperAngleOperatorC U V` and in the real tree by its real counterpart;
+* the ambient Hermitian angle is represented in the complex tree by `angleOperatorC U V` and in the real tree by its real counterpart;
 * cosine/sine blocks in the Halmos decomposition carry the principal-angle data.
 
 The crossed defect spaces are the top-angle (`π/2`) pieces:
@@ -660,7 +660,7 @@ The Lean work is mostly API alignment:
 * obtain cfc-on-eigenvector lemmas for `cos`/`sin`;
 * use the already-proved skew-adjoint properties of `J`.
 
-The second axis is scope: existing commutations are finite-dimensional, while `paperAngleOperatorC` is bounded/infinite-dimensional. Lift commutation to the bounded complex cfc tree first. The `J` clause additionally needs a suitable infinite-dimensional angle complex structure/polar factor.
+The second axis is scope: existing commutations are finite-dimensional, while `angleOperatorC` is bounded/infinite-dimensional. Lift commutation to the bounded complex cfc tree first. The `J` clause additionally needs a suitable infinite-dimensional angle complex structure/polar factor.
 
 Do not assert `J²=-1` globally. It is false on the zero-angle kernel. The correct identity is
 

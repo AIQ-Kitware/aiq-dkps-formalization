@@ -80,7 +80,7 @@ end IsGraphCore
 end PartialMap
 
 /-- Residual data on a graph core of the trial operator. -/
-structure PaperCommonCoreResidualData
+structure CommonCoreResidualData
     (A : E →ₗ.[𝕜] E)
     (A₀ : F →ₗ.[𝕜] F)
     (X : F →L[𝕜] E) (R : F →L[𝕜] E) where
@@ -93,7 +93,7 @@ structure PaperCommonCoreResidualData
       X (A₀ ((x : core) : A₀.domain)) =
         R (((x : core) : A₀.domain) : F)
 
-namespace PaperCommonCoreResidualData
+namespace CommonCoreResidualData
 
 omit [CompleteSpace E] [CompleteSpace F] in
 /-- The core residual identity extends to every vector in the trial domain.
@@ -103,7 +103,7 @@ theorem extends_to_domain
     {A : E →ₗ.[𝕜] E}
     {A₀ : F →ₗ.[𝕜] F}
     {X : F →L[𝕜] E} {R : F →L[𝕜] E}
-    (C : PaperCommonCoreResidualData A A₀ X R)
+    (C : CommonCoreResidualData A A₀ X R)
     (hAclosed : A.IsClosed)
     (x : A₀.domain) :
     ∃ hx : X (x : F) ∈ A.domain,
@@ -163,7 +163,7 @@ theorem maps_domain
     {A : E →ₗ.[𝕜] E}
     {A₀ : F →ₗ.[𝕜] F}
     {X : F →L[𝕜] E} {R : F →L[𝕜] E}
-    (C : PaperCommonCoreResidualData A A₀ X R) (hAclosed : A.IsClosed) :
+    (C : CommonCoreResidualData A A₀ X R) (hAclosed : A.IsClosed) :
     ∀ x : A₀.domain, X (x : F) ∈ A.domain := by
   intro x
   exact (C.extends_to_domain hAclosed x).choose
@@ -174,7 +174,7 @@ theorem residual_eq
     {A : E →ₗ.[𝕜] E}
     {A₀ : F →ₗ.[𝕜] F}
     {X : F →L[𝕜] E} {R : F →L[𝕜] E}
-    (C : PaperCommonCoreResidualData A A₀ X R) (hAclosed : A.IsClosed)
+    (C : CommonCoreResidualData A A₀ X R) (hAclosed : A.IsClosed)
     (x : A₀.domain) :
     A ⟨X (x : F), C.maps_domain hAclosed x⟩ -
       X (A₀ x) = R (x : F) := by
@@ -184,7 +184,7 @@ theorem residual_eq
         ⟨X (x : F), C.maps_domain hAclosed x⟩ := Subtype.ext rfl
   simpa [hsub] using hEq
 
-end PaperCommonCoreResidualData
+end CommonCoreResidualData
 
 /-- Construct the accepted sine-theta bookkeeping package from a residual
 identity available only on a graph core. -/
@@ -193,7 +193,7 @@ noncomputable def unboundedSinThetaDataOfPaperCommonCore
     (A₀ : F →ₗ.[𝕜] F)
     (Λ₁ : G →ₗ.[𝕜] G)
     (X : F →L[𝕜] E) (F₁ : G →L[𝕜] E) (R : F →L[𝕜] E)
-    (C : PaperCommonCoreResidualData A A₀ X R) (hAclosed : A.IsClosed)
+    (C : CommonCoreResidualData A A₀ X R) (hAclosed : A.IsClosed)
     (hF₁ : ∀ y : Λ₁.domain, F₁ (y : G) ∈ A.domain)
     (hintertwines : ∀ y : Λ₁.domain,
       A ⟨F₁ (y : G), hF₁ y⟩ = F₁ (Λ₁ y)) :
@@ -221,7 +221,7 @@ theorem unboundedSinThetaDataOfPaperCommonCore_residual
     (A₀ : F →ₗ.[𝕜] F)
     (Λ₁ : G →ₗ.[𝕜] G)
     (X : F →L[𝕜] E) (F₁ : G →L[𝕜] E) (R : F →L[𝕜] E)
-    (C : PaperCommonCoreResidualData A A₀ X R) (hAclosed : A.IsClosed)
+    (C : CommonCoreResidualData A A₀ X R) (hAclosed : A.IsClosed)
     (hF₁ : ∀ y : Λ₁.domain, F₁ (y : G) ∈ A.domain)
     (hintertwines : ∀ y : Λ₁.domain,
       A ⟨F₁ (y : G), hF₁ y⟩ = F₁ (Λ₁ y)) :

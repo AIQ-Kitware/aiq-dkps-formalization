@@ -27,7 +27,7 @@ This module proves that, for both ambient angle operators:
 * `aₙ(tan Θ) = tan (arcsin aₙ(sin Θ))` under uniform transversality;
 * `aₙ(|tan 2Θ|) = tan (arcsin aₙ(sin 2Θ))` under uniform *quarter* transversality.
 
-Together with `paperSinTwoAngleOperatorC_eq_modulus_starProjection_sub`, which identifies
+Together with `sinTwoAngleOperatorC_eq_modulus_starProjection_sub`, which identifies
 `sin 2Θ` with the modulus of the projector difference between `U` and its mirror image in
 `V`, the second statement reads the doubled tangent off the same projector geometry the
 `sin 2Θ` theorem uses.
@@ -83,7 +83,7 @@ theorem approximationNumber_paperTanAngleOperatorC
       Real.tan (Real.arcsin ((sinAngleOperatorC U V).approximationNumber n)) := by
   refine approximationNumber_eq_tanArcsin (isSelfAdjoint_sinAngleOperatorC U V)
     (isSelfAdjoint_paperTanAngleOperatorC U V) htr ?_ n
-  have h := paperTan_sq_mul_one_sub_sin_sq (U := U) (V := V) htr
+  have h := tan_sq_mul_one_sub_sin_sq (U := U) (V := V) htr
   rw [mul_sub, mul_one] at h
   exact sub_eq_iff_eq_add.mp h
 
@@ -111,7 +111,7 @@ variable (U V : Submodule ℂ E)
 /-- The doubled angle avoids the tangent's poles exactly when the ambient double-angle
 sine is a strict contraction: `|sin 2θ| < 1` is `cos 2θ ≠ 0`. -/
 theorem norm_paperSinTwoAngleOperatorC_lt_one
-    (hcos : ∀ t ∈ spectrum ℝ (paperAngleOperatorC U V), Real.cos (2 * t) ≠ 0) :
+    (hcos : ∀ t ∈ spectrum ℝ (angleOperatorC U V), Real.cos (2 * t) ≠ 0) :
     ‖paperSinTwoAngleOperatorC U V‖ < 1 := by
   rw [paperSinTwoAngleOperatorC]
   refine norm_cfc_lt one_pos fun t ht => ?_
@@ -128,38 +128,38 @@ of functional calculi of the operator angle.
 The hypothesis is the printed theorem's own pole exclusion, which Section 7 *derives*:
 `cos 2θ ≠ 0` throughout the spectrum of the angle.  No branch condition is needed, because
 `|tan 2θ|` is what a unitarily invariant norm sees. -/
-theorem paperAbsTanTwo_sq_mul_one_sub_sinTwo_sq
-    (hcos : ∀ t ∈ spectrum ℝ (paperAngleOperatorC U V), Real.cos (2 * t) ≠ 0) :
-    paperAbsTanTwoAngleOperatorC U V * paperAbsTanTwoAngleOperatorC U V *
+theorem absTanTwo_sq_mul_one_sub_sinTwo_sq
+    (hcos : ∀ t ∈ spectrum ℝ (angleOperatorC U V), Real.cos (2 * t) ≠ 0) :
+    absTanTwoAngleOperatorC U V * absTanTwoAngleOperatorC U V *
         (1 - paperSinTwoAngleOperatorC U V * paperSinTwoAngleOperatorC U V) =
       paperSinTwoAngleOperatorC U V * paperSinTwoAngleOperatorC U V := by
-  have hsa : IsSelfAdjoint (paperAngleOperatorC U V) := isSelfAdjoint_paperAngleOperatorC U V
+  have hsa : IsSelfAdjoint (angleOperatorC U V) := isSelfAdjoint_paperAngleOperatorC U V
   have hs : ContinuousOn (fun t : ℝ => Real.sin (2 * t))
-      (spectrum ℝ (paperAngleOperatorC U V)) :=
+      (spectrum ℝ (angleOperatorC U V)) :=
     (Real.continuous_sin.comp (continuous_const.mul continuous_id)).continuousOn
   have ht : ContinuousOn (fun t : ℝ => |Real.tan (2 * t)|)
-      (spectrum ℝ (paperAngleOperatorC U V)) := by
+      (spectrum ℝ (angleOperatorC U V)) := by
     refine ContinuousOn.abs ?_
     exact Real.continuousOn_tan.comp
       ((continuous_const.mul continuous_id).continuousOn) hcos
   have hone : ContinuousOn (fun _ : ℝ => (1 : ℝ))
-      (spectrum ℝ (paperAngleOperatorC U V)) := continuousOn_const
+      (spectrum ℝ (angleOperatorC U V)) := continuousOn_const
   have hSS : paperSinTwoAngleOperatorC U V * paperSinTwoAngleOperatorC U V =
-      cfc (fun t : ℝ => Real.sin (2 * t) * Real.sin (2 * t)) (paperAngleOperatorC U V) := by
+      cfc (fun t : ℝ => Real.sin (2 * t) * Real.sin (2 * t)) (angleOperatorC U V) := by
     rw [paperSinTwoAngleOperatorC,
       ← cfc_mul (fun t : ℝ => Real.sin (2 * t)) (fun t : ℝ => Real.sin (2 * t))
-        (paperAngleOperatorC U V) hs hs]
+        (angleOperatorC U V) hs hs]
   have hcosop : 1 - paperSinTwoAngleOperatorC U V * paperSinTwoAngleOperatorC U V =
       cfc (fun t : ℝ => 1 - Real.sin (2 * t) * Real.sin (2 * t))
-        (paperAngleOperatorC U V) := by
+        (angleOperatorC U V) := by
     rw [cfc_sub (fun _ : ℝ => (1 : ℝ))
-      (fun t : ℝ => Real.sin (2 * t) * Real.sin (2 * t)) (paperAngleOperatorC U V)
-      hone (hs.mul hs), cfc_const_one ℝ (paperAngleOperatorC U V), ← hSS]
-  rw [paperAbsTanTwoAngleOperatorC, hcosop,
+      (fun t : ℝ => Real.sin (2 * t) * Real.sin (2 * t)) (angleOperatorC U V)
+      hone (hs.mul hs), cfc_const_one ℝ (angleOperatorC U V), ← hSS]
+  rw [absTanTwoAngleOperatorC, hcosop,
     ← cfc_mul (fun t : ℝ => |Real.tan (2 * t)|) (fun t : ℝ => |Real.tan (2 * t)|)
-      (paperAngleOperatorC U V) ht ht,
+      (angleOperatorC U V) ht ht,
     ← cfc_mul (fun t : ℝ => |Real.tan (2 * t)| * |Real.tan (2 * t)|)
-      (fun t : ℝ => 1 - Real.sin (2 * t) * Real.sin (2 * t)) (paperAngleOperatorC U V)
+      (fun t : ℝ => 1 - Real.sin (2 * t) * Real.sin (2 * t)) (angleOperatorC U V)
       (ht.mul ht) (hone.sub (hs.mul hs)), hSS]
   refine cfc_congr fun t htmem => ?_
   have hc := hcos t htmem
@@ -181,14 +181,14 @@ exclusion.  Note the right-hand side is `tan ∘ arcsin` of a *sine*, so it is `
 however far the doubled angle runs past a right angle — the branch-free reading a
 unitarily invariant norm forces. -/
 theorem approximationNumber_paperAbsTanTwoAngleOperatorC
-    (hcos : ∀ t ∈ spectrum ℝ (paperAngleOperatorC U V), Real.cos (2 * t) ≠ 0) (n : ℕ) :
-    (paperAbsTanTwoAngleOperatorC U V).approximationNumber n =
+    (hcos : ∀ t ∈ spectrum ℝ (angleOperatorC U V), Real.cos (2 * t) ≠ 0) (n : ℕ) :
+    (absTanTwoAngleOperatorC U V).approximationNumber n =
       Real.tan (Real.arcsin
         ((paperSinTwoAngleOperatorC U V).approximationNumber n)) := by
   refine approximationNumber_eq_tanArcsin (isSelfAdjoint_paperSinTwoAngleOperatorC U V)
     (isSelfAdjoint_paperAbsTanTwoAngleOperatorC U V)
     (norm_paperSinTwoAngleOperatorC_lt_one U V hcos) ?_ n
-  have h := paperAbsTanTwo_sq_mul_one_sub_sinTwo_sq U V hcos
+  have h := absTanTwo_sq_mul_one_sub_sinTwo_sq U V hcos
   rw [mul_sub, mul_one] at h
   exact sub_eq_iff_eq_add.mp h
 
@@ -198,7 +198,7 @@ theorem approximationNumber_paperSinTwoAngleOperatorC (n : ℕ) :
     (paperSinTwoAngleOperatorC U V).approximationNumber n =
       ((U.map (V.reflection.toLinearEquiv : E →ₗ[ℂ] E)).starProjection -
         U.starProjection).approximationNumber n := by
-  rw [paperSinTwoAngleOperatorC_eq_modulus_starProjection_sub]
+  rw [sinTwoAngleOperatorC_eq_modulus_starProjection_sub]
   exact ContinuousLinearMap.modulus_hasSameApproximationNumbers _ n
 
 /-- **The ambient doubled tangent, read off the ambient double-angle sine.**
@@ -216,9 +216,9 @@ already break it -- `sin 75° > sin 30°` while `sin 150° < sin 60°`.  Only th
 monotone `u ↦ tan (arcsin u)` may be applied to an approximation-number
 sequence, and here it is applied to the doubled sine, not the single one. -/
 theorem approximationNumber_paperAbsTanTwoAngleOperatorC_projectorDifference
-    (hcos : ∀ t ∈ spectrum ℝ (paperAngleOperatorC U V), Real.cos (2 * t) ≠ 0)
+    (hcos : ∀ t ∈ spectrum ℝ (angleOperatorC U V), Real.cos (2 * t) ≠ 0)
     (n : ℕ) :
-    (paperAbsTanTwoAngleOperatorC U V).approximationNumber n =
+    (absTanTwoAngleOperatorC U V).approximationNumber n =
       Real.tan (Real.arcsin
         (((U.map (V.reflection.toLinearEquiv : E →ₗ[ℂ] E)).starProjection -
           U.starProjection).approximationNumber n)) := by
@@ -229,7 +229,7 @@ theorem approximationNumber_paperAbsTanTwoAngleOperatorC_projectorDifference
 contraction, so each `tan (arcsin aₙ)` above is a genuine tangent and not the
 value Lean's field division assigns at a pole. -/
 theorem approximationNumber_projectorDifference_lt_one
-    (hcos : ∀ t ∈ spectrum ℝ (paperAngleOperatorC U V), Real.cos (2 * t) ≠ 0)
+    (hcos : ∀ t ∈ spectrum ℝ (angleOperatorC U V), Real.cos (2 * t) ≠ 0)
     (n : ℕ) :
     ((U.map (V.reflection.toLinearEquiv : E →ₗ[ℂ] E)).starProjection -
       U.starProjection).approximationNumber n < 1 := by

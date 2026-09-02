@@ -372,7 +372,7 @@ theorem schattenNorm_two_apply (A : E →ₗ[𝕜] F) :
 `∑' i, ‖T bᵢ‖ₑ²`; `frobenius` is the finite real-valued rectangular seminorm.  In finite
 dimensions they are the same number, and without this the two vocabularies for the
 Hilbert--Schmidt norm are only related through the paper-facing
-`paperHilbertSchmidtNorm_eq_rectangularFrobenius` in the Davis--Kahan package, which is the
+`hilbertSchmidtNorm_eq_rectangularFrobenius` in the Davis--Kahan package, which is the
 wrong direction of dependency for a reusable statement.
 
 This is the last link of the finite-dimensional identification chain: the square Frobenius

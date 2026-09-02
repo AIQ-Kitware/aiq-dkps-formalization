@@ -27,7 +27,7 @@ proves the ambient conclusion at the same scope as the directed one.
 
 ## The route, and why it needs no new analysis
 
-`paperSinTwoAngleOperatorC_eq_modulus_starProjection_sub` says the ambient
+`sinTwoAngleOperatorC_eq_modulus_starProjection_sub` says the ambient
 `sin 2Θ` between `U` and `V` is the modulus of `P_{J U} − P_U`, where `J` is the
 reflection through `V`.  So the ambient double angle between `U` and `V` *is* an
 ambient single angle between `U` and its mirror image, and the theorem to apply
@@ -338,7 +338,7 @@ theorem sinTwoTheta_ambient_unbounded_addBounded_symmetricNorming_complex
     SameApproximationSingularSequence.normingMem_iff_and_gauge_eq N
       (A := X.modulus) (B := X)
       (ContinuousLinearMap.modulus_hasSameApproximationNumbers X)
-  rw [TauCeti.DavisKahanExt.paperSinTwoAngleOperatorC_eq_modulus_starProjection_sub]
+  rw [TauCeti.DavisKahanExt.sinTwoAngleOperatorC_eq_modulus_starProjection_sub]
   exact ⟨hiff.mpr hmem, by rw [hgauge]; exact hle⟩
 
 end Complex
@@ -363,16 +363,16 @@ theorem sameSingular_paperSinTwoAngleOperatorR_reflectedProjectorDifference
     (U V : Submodule ℝ Er)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] :
     SameApproximationSingularSequence
-      (complexify (TauCeti.DavisKahanExt.paperSinTwoAngleOperatorR U V))
+      (complexify (TauCeti.DavisKahanExt.sinTwoAngleOperatorR U V))
       (complexify ((U.map (V.reflection.toLinearEquiv : Er →ₗ[ℝ] Er)).starProjection -
         U.starProjection)) := by
-  have hleft : complexify (TauCeti.DavisKahanExt.paperSinTwoAngleOperatorR U V) =
+  have hleft : complexify (TauCeti.DavisKahanExt.sinTwoAngleOperatorR U V) =
       (((complexifySubmodule U).map
             ((complexifySubmodule V).reflection.toLinearEquiv :
               RealComplexification Er →ₗ[ℂ] RealComplexification Er)).starProjection -
           (complexifySubmodule U).starProjection).modulus := by
     rw [TauCeti.DavisKahanExt.complexify_paperSinTwoAngleOperatorR U V,
-      TauCeti.DavisKahanExt.paperSinTwoAngleOperatorC_eq_modulus_starProjection_sub]
+      TauCeti.DavisKahanExt.sinTwoAngleOperatorC_eq_modulus_starProjection_sub]
   have hright : complexify
         ((U.map (V.reflection.toLinearEquiv : Er →ₗ[ℝ] Er)).starProjection -
           U.starProjection) =
@@ -416,7 +416,7 @@ arbitrary `SymmetricNormingFunction`, and the exact factor `2`.
 This is a canonical source witness in its own right.  The analytic content is
 the scalar-generic reflected-pair theorem at `ℝ`, not a complexification of the
 complex endpoint; complexification enters only to name the real ambient angle
-operator, since `paperSinTwoAngleOperatorR` is defined as the real part of the
+operator, since `sinTwoAngleOperatorR` is defined as the real part of the
 complex one. -/
 theorem sinTwoTheta_ambient_unbounded_addBounded_symmetricNorming_real
     (N : SymmetricNormingFunction)
@@ -428,11 +428,11 @@ theorem sinTwoTheta_ambient_unbounded_addBounded_symmetricNorming_real
       (realSelfAdjointSpectralRestriction A hA B hB)
       (realSelfAdjointSpectralRestriction A hA Bᶜ hB.compl) δ)
     (hEmem : N.Mem Eop) :
-    N.Mem (TauCeti.DavisKahanExt.paperSinTwoAngleOperatorR
+    N.Mem (TauCeti.DavisKahanExt.sinTwoAngleOperatorR
         (realSelfAdjointSpectralSubspace A hA B hB)
         (realSelfAdjointSpectralSubspace (TauCeti.LinearPMap.addBounded A Eop)
           (DavisKahan.addBounded_isSelfAdjoint A hA Eop hEop) S hS)) ∧
-      δ * N.gauge (TauCeti.DavisKahanExt.paperSinTwoAngleOperatorR
+      δ * N.gauge (TauCeti.DavisKahanExt.sinTwoAngleOperatorR
         (realSelfAdjointSpectralSubspace A hA B hB)
         (realSelfAdjointSpectralSubspace (TauCeti.LinearPMap.addBounded A Eop)
           (DavisKahan.addBounded_isSelfAdjoint A hA Eop hEop) S hS)) ≤

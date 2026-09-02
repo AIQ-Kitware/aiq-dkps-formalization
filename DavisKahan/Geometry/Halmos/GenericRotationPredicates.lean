@@ -43,7 +43,7 @@ variable {H : Type u} [NormedAddCommGroup H] [InnerProductSpace 𝕜 H]
 /-- A bounded operator is a paper-style direct rotation when it is unitary,
 intertwines the two orthogonal projections, has nonnegative diagonal
 compressions, and has skew-adjoint crossed blocks. -/
-structure IsPaperDirectRotation
+structure IsDirectRotation
     (U V : Submodule 𝕜 H) [U.HasOrthogonalProjection]
     [V.HasOrthogonalProjection] (T : H →L[𝕜] H) : Prop where
   unitary_mem : T ∈ unitary (H →L[𝕜] H)

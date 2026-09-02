@@ -76,7 +76,7 @@ theorem paperHilbertSchmidtEnergy_zero
 
 /-- The zero operator has zero Hilbert--Schmidt norm. -/
 @[simp]
-theorem paperHilbertSchmidtNorm_zero
+theorem hilbertSchmidtNorm_zero
     {𝕜 : Type u} [RCLike 𝕜]
     {E : Type vE} {F : Type vF}
     [NormedAddCommGroup E] [InnerProductSpace 𝕜 E] [CompleteSpace E]
@@ -85,7 +85,7 @@ theorem paperHilbertSchmidtNorm_zero
   simp [paperHilbertSchmidtNorm]
 
 /-- The square norm is nonnegative. -/
-theorem paperHilbertSchmidtNorm_nonneg
+theorem hilbertSchmidtNorm_nonneg
     {𝕜 : Type u} [RCLike 𝕜]
     {E : Type vE} {F : Type vF}
     [NormedAddCommGroup E] [InnerProductSpace 𝕜 E] [CompleteSpace E]
@@ -155,7 +155,7 @@ theorem isPaperHilbertSchmidt_adjoint_iff
   exact approximationSingularValue_adjoint n A
 
 /-- Adjoint invariance of the square norm. -/
-theorem paperHilbertSchmidtNorm_adjoint
+theorem hilbertSchmidtNorm_adjoint
     {𝕜 : Type u} [RCLike 𝕜]
     {E : Type vE} {F : Type vF}
     [NormedAddCommGroup E] [InnerProductSpace 𝕜 E] [CompleteSpace E]
@@ -167,7 +167,7 @@ theorem paperHilbertSchmidtNorm_adjoint
   exact approximationSingularValue_adjoint n A
 
 /-- The modulus has the same square norm as the original rectangular map. -/
-theorem paperHilbertSchmidtNorm_operatorModulus
+theorem hilbertSchmidtNorm_operatorModulus
     {E : Type vE} {F : Type vF}
     [NormedAddCommGroup E] [InnerProductSpace ℂ E] [CompleteSpace E]
     [NormedAddCommGroup F] [InnerProductSpace ℂ F] [CompleteSpace F]
@@ -179,7 +179,7 @@ theorem paperHilbertSchmidtNorm_operatorModulus
 
 
 /-- Real complexification preserves Hilbert--Schmidt energy exactly. -/
-theorem paperHilbertSchmidtEnergy_complexify
+theorem hilbertSchmidtEnergy_complexify
     {E : Type vE} {F : Type vF}
     [NormedAddCommGroup E] [InnerProductSpace ℝ E] [CompleteSpace E]
     [NormedAddCommGroup F] [InnerProductSpace ℝ F] [CompleteSpace F]
@@ -200,10 +200,10 @@ theorem isPaperHilbertSchmidt_complexify_iff
     IsPaperHilbertSchmidt (RealComplexification.complexify A) ↔
       IsPaperHilbertSchmidt A := by
   unfold IsPaperHilbertSchmidt
-  rw [paperHilbertSchmidtEnergy_complexify]
+  rw [hilbertSchmidtEnergy_complexify]
 
 /-- Real complexification preserves the square norm. -/
-theorem paperHilbertSchmidtNorm_complexify
+theorem hilbertSchmidtNorm_complexify
     {E : Type vE} {F : Type vF}
     [NormedAddCommGroup E] [InnerProductSpace ℝ E] [CompleteSpace E]
     [NormedAddCommGroup F] [InnerProductSpace ℝ F] [CompleteSpace F]
@@ -211,7 +211,7 @@ theorem paperHilbertSchmidtNorm_complexify
     paperHilbertSchmidtNorm (RealComplexification.complexify A) =
       paperHilbertSchmidtNorm A := by
   unfold paperHilbertSchmidtNorm
-  rw [paperHilbertSchmidtEnergy_complexify]
+  rw [hilbertSchmidtEnergy_complexify]
 
 /-- Scaling law for Hilbert--Schmidt energy. -/
 theorem paperHilbertSchmidtEnergy_smul
@@ -230,7 +230,7 @@ theorem paperHilbertSchmidtEnergy_smul
     ENNReal.ofReal_mul (sq_nonneg _)]
 
 /-- Absolute homogeneity of the square norm on finite-energy operators. -/
-theorem paperHilbertSchmidtNorm_smul
+theorem hilbertSchmidtNorm_smul
     {𝕜 : Type u} [RCLike 𝕜]
     {E : Type vE} {F : Type vF}
     [NormedAddCommGroup E] [InnerProductSpace 𝕜 E] [CompleteSpace E]
@@ -279,7 +279,7 @@ theorem isPaperHilbertSchmidt_neg_iff
 
 /-- Negation preserves the square norm. -/
 @[simp]
-theorem paperHilbertSchmidtNorm_neg
+theorem hilbertSchmidtNorm_neg
     {𝕜 : Type u} [RCLike 𝕜]
     {E : Type vE} {F : Type vF}
     [NormedAddCommGroup E] [InnerProductSpace 𝕜 E] [CompleteSpace E]
@@ -293,7 +293,7 @@ theorem paperHilbertSchmidtNorm_neg
 
 
 /-- Two-sided ideal control of the extended Hilbert--Schmidt energy. -/
-theorem paperHilbertSchmidtEnergy_comp_le
+theorem hilbertSchmidtEnergy_comp_le
     {𝕜 : Type u} [RCLike 𝕜]
     {E : Type vE} {F : Type vF}
     {G : Type vG} {H : Type vH}
@@ -336,11 +336,11 @@ theorem IsPaperHilbertSchmidt.comp
     (L : F →L[𝕜] G) (R : H →L[𝕜] E) :
     IsPaperHilbertSchmidt (L ∘L A ∘L R) := by
   unfold IsPaperHilbertSchmidt at hA ⊢
-  refine ne_top_of_le_ne_top ?_ (paperHilbertSchmidtEnergy_comp_le L A R)
+  refine ne_top_of_le_ne_top ?_ (hilbertSchmidtEnergy_comp_le L A R)
   exact ENNReal.mul_ne_top ENNReal.ofReal_ne_top hA
 
 /-- Sharp two-sided ideal norm estimate. -/
-theorem paperHilbertSchmidtNorm_comp_le
+theorem hilbertSchmidtNorm_comp_le
     {𝕜 : Type u} [RCLike 𝕜]
     {E : Type vE} {F : Type vF}
     {G : Type vG} {H : Type vH}
@@ -352,7 +352,7 @@ theorem paperHilbertSchmidtNorm_comp_le
     (R : H →L[𝕜] E) :
     paperHilbertSchmidtNorm (L ∘L A ∘L R) ≤
       ‖L‖ * paperHilbertSchmidtNorm A * ‖R‖ := by
-  have henergy := paperHilbertSchmidtEnergy_comp_le L A R
+  have henergy := hilbertSchmidtEnergy_comp_le L A R
   have hfinite :
       paperHilbertSchmidtEnergy (L ∘L A ∘L R) ≠ ⊤ :=
     hA.comp L R
@@ -373,7 +373,7 @@ theorem paperHilbertSchmidtNorm_comp_le
 
 /-- Inclusion and orthogonal projection contractions do not enlarge the
 square norm. -/
-theorem paperHilbertSchmidtNorm_comp_isometries_le
+theorem hilbertSchmidtNorm_comp_isometries_le
     {𝕜 : Type u} [RCLike 𝕜]
     {E : Type vE} {F : Type vF}
     {G : Type vG} {H : Type vH}
@@ -388,10 +388,10 @@ theorem paperHilbertSchmidtNorm_comp_isometries_le
   calc
     paperHilbertSchmidtNorm (L ∘L A ∘L R)
         ≤ ‖L‖ * paperHilbertSchmidtNorm A * ‖R‖ :=
-      paperHilbertSchmidtNorm_comp_le L hA R
+      hilbertSchmidtNorm_comp_le L hA R
     _ ≤ 1 * paperHilbertSchmidtNorm A * 1 := by
       gcongr <;>
-        simpa using paperHilbertSchmidtNorm_nonneg A
+        simpa using hilbertSchmidtNorm_nonneg A
     _ = paperHilbertSchmidtNorm A := by ring
 
 /-- Squared norm identity on the canonical ideal. -/

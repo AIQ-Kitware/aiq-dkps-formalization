@@ -82,20 +82,20 @@ theorem spectrum_sinAngleOperatorC_subset_Icc (U V : Submodule ℂ E)
     _ = 1 := by ring
 
 /-- The literal Hermitian operator angle between two closed complex subspaces. -/
-noncomputable def paperAngleOperatorC (U V : Submodule ℂ E)
+noncomputable def angleOperatorC (U V : Submodule ℂ E)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] : E →L[ℂ] E :=
   cfc Real.arcsin (sinAngleOperatorC U V)
 
 /-- The literal operator angle is self-adjoint. -/
 theorem isSelfAdjoint_paperAngleOperatorC (U V : Submodule ℂ E)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] :
-    IsSelfAdjoint (paperAngleOperatorC U V) := by
+    IsSelfAdjoint (angleOperatorC U V) := by
   exact cfc_predicate Real.arcsin (sinAngleOperatorC U V)
 
 /-- The literal operator angle is nonnegative. -/
-theorem paperAngleOperatorC_nonneg (U V : Submodule ℂ E)
+theorem angleOperatorC_nonneg (U V : Submodule ℂ E)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] :
-    0 ≤ paperAngleOperatorC U V := by
+    0 ≤ angleOperatorC U V := by
   apply cfc_nonneg
   intro x hx
   exact Real.arcsin_nonneg.mpr
@@ -105,7 +105,7 @@ theorem paperAngleOperatorC_nonneg (U V : Submodule ℂ E)
 exactly, not merely an operator with the same norm. -/
 theorem cfc_sin_paperAngleOperatorC (U V : Submodule ℂ E)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] :
-    cfc Real.sin (paperAngleOperatorC U V) = sinAngleOperatorC U V := by
+    cfc Real.sin (angleOperatorC U V) = sinAngleOperatorC U V := by
   have hsa : IsSelfAdjoint (sinAngleOperatorC U V) :=
     isSelfAdjoint_sinAngleOperatorC U V
   have harcsin : ContinuousOn Real.arcsin
@@ -114,7 +114,7 @@ theorem cfc_sin_paperAngleOperatorC (U V : Submodule ℂ E)
   have hsin : ContinuousOn Real.sin
       (Real.arcsin '' spectrum ℝ (sinAngleOperatorC U V)) :=
     Real.continuous_sin.continuousOn
-  rw [paperAngleOperatorC,
+  rw [angleOperatorC,
     ← cfc_comp Real.sin Real.arcsin (sinAngleOperatorC U V)
       hsa hsin harcsin]
   calc
@@ -130,11 +130,11 @@ theorem cfc_sin_paperAngleOperatorC (U V : Submodule ℂ E)
 the Hermitian angle. -/
 noncomputable def paperSinAngleOperatorC (U V : Submodule ℂ E)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] : E →L[ℂ] E :=
-  cfc Real.sin (paperAngleOperatorC U V)
+  cfc Real.sin (angleOperatorC U V)
 
 /-- The paper's complex sine-angle operator agrees with the canonical one. -/
 @[simp]
-theorem paperSinAngleOperatorC_eq (U V : Submodule ℂ E)
+theorem sinAngleOperatorC_eq (U V : Submodule ℂ E)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] :
     paperSinAngleOperatorC U V = sinAngleOperatorC U V :=
   cfc_sin_paperAngleOperatorC U V
@@ -142,14 +142,14 @@ theorem paperSinAngleOperatorC_eq (U V : Submodule ℂ E)
 /-- The paper's literal cosine of the angle. -/
 noncomputable def paperCosAngleOperatorC (U V : Submodule ℂ E)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] : E →L[ℂ] E :=
-  cfc Real.cos (paperAngleOperatorC U V)
+  cfc Real.cos (angleOperatorC U V)
 
 /-- The literal angle has spectrum in the canonical interval. -/
 theorem spectrum_paperAngleOperatorC_subset_Icc (U V : Submodule ℂ E)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] :
-    spectrum ℝ (paperAngleOperatorC U V) ⊆ Set.Icc 0 (Real.pi / 2) := by
+    spectrum ℝ (angleOperatorC U V) ⊆ Set.Icc 0 (Real.pi / 2) := by
   intro y hy
-  rw [paperAngleOperatorC,
+  rw [angleOperatorC,
     cfc_map_spectrum (R := ℝ) (f := Real.arcsin)
       (a := sinAngleOperatorC U V) (isSelfAdjoint_sinAngleOperatorC U V)
       Real.continuous_arcsin.continuousOn] at hy
@@ -159,30 +159,30 @@ theorem spectrum_paperAngleOperatorC_subset_Icc (U V : Submodule ℂ E)
     Real.arcsin_le_pi_div_two x⟩
 
 /-- Functional-calculus Pythagoras for the literal angle. -/
-theorem paperSin_sq_add_paperCos_sq (U V : Submodule ℂ E)
+theorem sinAngleOperatorC_sq_add_cosAngleOperatorC_sq (U V : Submodule ℂ E)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] :
     paperSinAngleOperatorC U V * paperSinAngleOperatorC U V +
       paperCosAngleOperatorC U V * paperCosAngleOperatorC U V =
         ContinuousLinearMap.id ℂ E := by
   rw [paperSinAngleOperatorC, paperCosAngleOperatorC,
-    ← cfc_mul Real.sin Real.sin (paperAngleOperatorC U V)
+    ← cfc_mul Real.sin Real.sin (angleOperatorC U V)
       Real.continuous_sin.continuousOn Real.continuous_sin.continuousOn,
-    ← cfc_mul Real.cos Real.cos (paperAngleOperatorC U V)
+    ← cfc_mul Real.cos Real.cos (angleOperatorC U V)
       Real.continuous_cos.continuousOn Real.continuous_cos.continuousOn,
-    ← cfc_add (a := paperAngleOperatorC U V)
+    ← cfc_add (a := angleOperatorC U V)
       (fun x : ℝ => Real.sin x * Real.sin x)
       (fun x : ℝ => Real.cos x * Real.cos x)
       ((Real.continuous_sin.mul Real.continuous_sin).continuousOn)
       ((Real.continuous_cos.mul Real.continuous_cos).continuousOn)]
   calc
     cfc (fun x : ℝ => Real.sin x * Real.sin x +
-        Real.cos x * Real.cos x) (paperAngleOperatorC U V)
-        = cfc (fun _ : ℝ => 1) (paperAngleOperatorC U V) := by
+        Real.cos x * Real.cos x) (angleOperatorC U V)
+        = cfc (fun _ : ℝ => 1) (angleOperatorC U V) := by
       apply cfc_congr
       intro x _
       nlinarith [Real.sin_sq_add_cos_sq x]
     _ = ContinuousLinearMap.id ℂ E := by
-      have ha : IsSelfAdjoint (paperAngleOperatorC U V) :=
+      have ha : IsSelfAdjoint (angleOperatorC U V) :=
         isSelfAdjoint_paperAngleOperatorC U V
       exact cfc_const_one ℝ _
 
@@ -191,7 +191,7 @@ theorem paperSin_sq_add_paperCos_sq (U V : Submodule ℂ E)
 `Θ` commutes with `P` and with `Q`.  The finite-dimensional `RCLike` forms of
 these are `TauCeti.DavisKahanTheory.angleOperator_comm_projection` and its right
 companion; the two below are the same assertions for the bounded complex angle
-`paperAngleOperatorC`, where the dimension is arbitrary.
+`angleOperatorC`, where the dimension is arbitrary.
 
 Both reduce to one two-idempotent identity.  `sin Θ = |P_U - P_V|` is the
 functional-calculus square root of the Gram operator
@@ -264,16 +264,16 @@ theorem commute_sinAngleOperatorC_starProjection_right (U V : Submodule ℂ E)
 complex angle operator at arbitrary dimension. -/
 theorem commute_paperAngleOperatorC_starProjection (U V : Submodule ℂ E)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] :
-    Commute (paperAngleOperatorC U V) U.starProjection := by
-  rw [paperAngleOperatorC]
+    Commute (angleOperatorC U V) U.starProjection := by
+  rw [angleOperatorC]
   exact Commute.cfc_real (commute_sinAngleOperatorC_starProjection U V) Real.arcsin
 
 /-- **Davis--Kahan Proposition 3.5: `Θ` commutes with `Q`**, for the bounded
 complex angle operator at arbitrary dimension. -/
 theorem commute_paperAngleOperatorC_starProjection_right (U V : Submodule ℂ E)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] :
-    Commute (paperAngleOperatorC U V) V.starProjection := by
-  rw [paperAngleOperatorC]
+    Commute (angleOperatorC U V) V.starProjection := by
+  rw [angleOperatorC]
   exact Commute.cfc_real (commute_sinAngleOperatorC_starProjection_right U V) Real.arcsin
 
 section Real
@@ -296,22 +296,22 @@ open scoped TauCeti.RealComplexification
 
 /-- The literal real operator angle, represented canonically on the
 complexification. -/
-noncomputable def paperAngleOperatorRC (U V : Submodule ℝ ER)
+noncomputable def angleOperatorRC (U V : Submodule ℝ ER)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] :
     RealComplexification ER →L[ℂ] RealComplexification ER :=
-  paperAngleOperatorC (complexifySubmodule U) (complexifySubmodule V)
+  angleOperatorC (complexifySubmodule U) (complexifySubmodule V)
 
 /-- Applying sine to the real angle recovers the complexification of the real
 projection-difference sine operator. -/
 theorem cfc_sin_paperAngleOperatorRC (U V : Submodule ℝ ER)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] :
-    cfc Real.sin (paperAngleOperatorRC U V) = sinAngleOperatorRC U V :=
+    cfc Real.sin (angleOperatorRC U V) = sinAngleOperatorRC U V :=
   cfc_sin_paperAngleOperatorC _ _
 
 /-- The real angle has the same canonical spectral interval. -/
 theorem spectrum_paperAngleOperatorRC_subset_Icc (U V : Submodule ℝ ER)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] :
-    spectrum ℝ (paperAngleOperatorRC U V) ⊆ Set.Icc 0 (Real.pi / 2) :=
+    spectrum ℝ (angleOperatorRC U V) ⊆ Set.Icc 0 (Real.pi / 2) :=
   spectrum_paperAngleOperatorC_subset_Icc _ _
 
 end Real

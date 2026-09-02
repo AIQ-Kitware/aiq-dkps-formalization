@@ -16,7 +16,7 @@ implementation declaration the source name aliases.
 Most rows quantify over a data record rather than a long hypothesis list, so
 the records are given once here.
 
-`PaperTheorem61Data` (complex `E F G H`):
+`Theorem61Data` (complex `E F G H`):
 
 | field | meaning |
 | --- | --- |
@@ -27,14 +27,14 @@ the records are given once here.
 | `lowerFrame : LowerFrameBound data.X frameLowerBound`, `frameLowerBound_pos` | the trial map is bounded below |
 | `spectral_gap : FormBoundedSylvesterGap data.A₀ data.Λ₁ gap` | interval/exterior **or** either ordered half-line orientation |
 
-`PaperTheorem62Data` is identical except that `spectral_gap` is replaced by
+`Theorem62Data` is identical except that `spectral_gap` is replaced by
 `spectral_distance : PairwiseSpectrumGap data.A₀ data.Λ₁ gap` — the
 weaker pairwise-distance hypothesis, which is what makes Theorem 6.2 a
 strictly stronger statement in the square norm.
 
-`PaperCommonDomainTheorem61Data` and `PaperCommonCoreTheorem61Data` carry the
-same fields over `PaperCommonDomainSinThetaData` / `PaperCommonCoreSinThetaData`
-respectively, and each supplies a `PaperTheorem61Data` by construction, so the
+`CommonDomainTheorem61Data` and `CommonCoreTheorem61Data` carry the
+same fields over `CommonDomainSinThetaData` / `CommonCoreSinThetaData`
+respectively, and each supplies a `Theorem61Data` by construction, so the
 appendix forms are specializations rather than parallel proofs.
 
 ## Norms
@@ -48,20 +48,20 @@ appendix forms are specializations rather than parallel proofs.
 
 | paper item | source name | target |
 | --- | --- | --- |
-| directed cosine equals the modulus | `directedCosAngle_eq_modulus` | `paperSourceDirectedCosC_eq` |
-| directed sine equals the sine modulus | `directedSinAngle_eq_modulus` | `paperSourceDirectedSinC_eq_paperSineModulusC` |
-| directed sine has the sine block's singular values | `directedSinAngle_singularValues` | `paperSourceDirectedSin_same_paperSineBlock` |
-| directed angle is `arcsin` of the sine modulus | `directedAngle_eq_arcsin_sineModulus` | `paperSourceDirectedAngleC_eq_arcsin_sineModulus` |
-| the same over ℝ | `directedAngle_real_eq_arcsin_sineModulus` | `paperSourceDirectedAngleR_eq_arcsin_sineModulus` |
-| real directed sine / cosine | `directedSinAngle_real`, `directedCosAngle_real` | `paperSourceDirectedSinR`, `paperSourceDirectedCosR` |
-| full sine matches the projection difference | `fullSinAngle_singularValues_projectionDifference` | `paperSourceFullSin_same_projectionDifference` |
-| and agrees in every unitarily invariant norm | `fullSinAngle_norm_projectionDifference` | `paperSourceFullSin_mem_iff_and_gauge_eq` |
+| directed cosine equals the modulus | `directedCosAngle_eq_modulus` | `sourceDirectedCosC_eq` |
+| directed sine equals the sine modulus | `directedSinAngle_eq_modulus` | `directedSinAngleBlockC_eq_sineBlockModulusC` |
+| directed sine has the sine block's singular values | `directedSinAngle_singularValues` | `directedSinAngleBlock_same_sineBlock` |
+| directed angle is `arcsin` of the sine modulus | `directedAngle_eq_arcsin_sineModulus` | `sourceDirectedAngleC_eq_arcsin_sineModulus` |
+| the same over ℝ | `directedAngle_real_eq_arcsin_sineModulus` | `sourceDirectedAngleR_eq_arcsin_sineModulus` |
+| real directed sine / cosine | `directedSinAngle_real`, `directedCosAngle_real` | `sourceDirectedSinR`, `sourceDirectedCosR` |
+| full sine matches the projection difference | `fullSinAngle_singularValues_projectionDifference` | `sourceFullSin_same_projectionDifference` |
+| and agrees in every unitarily invariant norm | `fullSinAngle_norm_projectionDifference` | `sourceFullSin_mem_iff_and_gauge_eq` |
 
 ## Lemmas 6.1 and 6.2
 
 | paper item | source name | target |
 | --- | --- | --- |
-| Lemma 6.1, every unitarily invariant norm | `lemma6_1` | `paperLemma61_every_unitarilyInvariantNorm` |
+| Lemma 6.1, every unitarily invariant norm | `lemma6_1` | `lemma61_every_unitarilyInvariantNorm` |
 | Lemma 6.2, diagonal pair gauge bound | `lemma6_2` | `paperDiagonalPair_paperGauge_le` |
 
 ## Theorem 6.1
@@ -81,12 +81,12 @@ matching "let `sin Θ₀` be **any** operator with the same singular values as
 
 | paper item | source name | target |
 | --- | --- | --- |
-| Theorem 6.1, complex | `Theorem6_1_complex` | `PaperTheorem61Data.result_every_unitarilyInvariantNorm_across` |
-| Theorem 6.1, real | `Theorem6_1_real` | `PaperRealTheorem61Data.result_every_unitarilyInvariantNorm_across` |
-| isometric-trial form, complex | `sinTheta_paperData_complex` | `PaperIsometricTheoremData.result_every_unitarilyInvariantNorm_across` |
-| isometric-trial form, real | `sinTheta_paperData_real` | `PaperRealIsometricTheoremData.result_every_unitarilyInvariantNorm_across` |
-| generalized (lower-frame) form, complex | `sinTheta_generalized_paperData_complex` | `PaperTheorem61Data.result_every_unitarilyInvariantNorm_across` |
-| generalized (lower-frame) form, real | `sinTheta_generalized_paperData_real` | `PaperRealTheorem61Data.result_every_unitarilyInvariantNorm_across` |
+| Theorem 6.1, complex | `Theorem6_1_complex` | `Theorem61Data.result_every_unitarilyInvariantNorm_across` |
+| Theorem 6.1, real | `Theorem6_1_real` | `RealTheorem61Data.result_every_unitarilyInvariantNorm_across` |
+| isometric-trial form, complex | `sinTheta_paperData_complex` | `IsometricTheoremData.result_every_unitarilyInvariantNorm_across` |
+| isometric-trial form, real | `sinTheta_paperData_real` | `RealIsometricTheoremData.result_every_unitarilyInvariantNorm_across` |
+| generalized (lower-frame) form, complex | `sinTheta_generalized_paperData_complex` | `Theorem61Data.result_every_unitarilyInvariantNorm_across` |
+| generalized (lower-frame) form, real | `sinTheta_generalized_paperData_real` | `RealTheorem61Data.result_every_unitarilyInvariantNorm_across` |
 
 ## Proposition 6.1
 
@@ -97,40 +97,40 @@ rows below show cannot be weakened to a single gap.
 
 | paper item | source name | target |
 | --- | --- | --- |
-| Proposition 6.1 | `Proposition6_1_complex` | `PaperSymmetricSinThetaProblem.result_every_unitarilyInvariantNorm` |
+| Proposition 6.1 | `Proposition6_1_complex` | `SymmetricSinThetaProblem.result_every_unitarilyInvariantNorm` |
 
 ## Theorem 6.2
 
 | paper item | source name | target |
 | --- | --- | --- |
-| Theorem 6.2, complex | `Theorem6_2_complex` | `PaperTheorem62Data.result_across` |
-| Theorem 6.2, real | `Theorem6_2_real` | `PaperRealTheorem62Data.result_across` |
-| printed finite-rank operator-norm consequence, complex | `Theorem6_2_boundNorm_of_finiteRank` | `PaperTheorem62Data.operatorNorm_result_across_of_rank_le` |
-| the same over ℝ | `Theorem6_2_real_boundNorm_of_finiteRank` | `PaperRealTheorem62Data.operatorNorm_result_across_of_rank_le` |
+| Theorem 6.2, complex | `Theorem6_2_complex` | `Theorem62Data.result_across` |
+| Theorem 6.2, real | `Theorem6_2_real` | `RealTheorem62Data.result_across` |
+| printed finite-rank operator-norm consequence, complex | `Theorem6_2_boundNorm_of_finiteRank` | `Theorem62Data.operatorNorm_result_across_of_rank_le` |
+| the same over ℝ | `Theorem6_2_real_boundNorm_of_finiteRank` | `RealTheorem62Data.operatorNorm_result_across_of_rank_le` |
 
 ## Appendix: common-domain and common-core forms
 
 | paper item | source name | target |
 | --- | --- | --- |
-| Theorem 6.1, common domain, complex | `Theorem6_1_commonDomain` | `PaperCommonDomainTheorem61Data.result_every_unitarilyInvariantNorm_across` |
-| Theorem 6.1, common domain, real | `Theorem6_1_real_commonDomain` | `PaperRealCommonDomainTheorem61Data.result_every_unitarilyInvariantNorm_across` |
-| Theorem 6.2, common domain, complex | `Theorem6_2_commonDomain` | `PaperCommonDomainTheorem62Data.result_across` |
-| Theorem 6.2, common domain, real | `Theorem6_2_real_commonDomain` | `PaperRealCommonDomainTheorem62Data.result_across` |
-| the core residual extends to the whole domain | `commonCoreResidual_extends_to_domain` | `PaperCommonCoreResidualData.extends_to_domain` |
-| Theorem 6.1, common core, complex | `Theorem6_1_commonCore` | `PaperCommonCoreTheorem61Data.result_every_unitarilyInvariantNorm_across` |
-| Theorem 6.1, common core, real | `Theorem6_1_real_commonCore` | `PaperRealCommonCoreTheorem61Data.result_every_unitarilyInvariantNorm_across` |
-| Theorem 6.2, common core, complex | `Theorem6_2_commonCore` | `PaperCommonCoreTheorem62Data.result_across` |
-| Theorem 6.2, common core, real | `Theorem6_2_real_commonCore` | `PaperRealCommonCoreTheorem62Data.result_across` |
+| Theorem 6.1, common domain, complex | `Theorem6_1_commonDomain` | `CommonDomainTheorem61Data.result_every_unitarilyInvariantNorm_across` |
+| Theorem 6.1, common domain, real | `Theorem6_1_real_commonDomain` | `RealCommonDomainTheorem61Data.result_every_unitarilyInvariantNorm_across` |
+| Theorem 6.2, common domain, complex | `Theorem6_2_commonDomain` | `CommonDomainTheorem62Data.result_across` |
+| Theorem 6.2, common domain, real | `Theorem6_2_real_commonDomain` | `RealCommonDomainTheorem62Data.result_across` |
+| the core residual extends to the whole domain | `commonCoreResidual_extends_to_domain` | `CommonCoreResidualData.extends_to_domain` |
+| Theorem 6.1, common core, complex | `Theorem6_1_commonCore` | `CommonCoreTheorem61Data.result_every_unitarilyInvariantNorm_across` |
+| Theorem 6.1, common core, real | `Theorem6_1_real_commonCore` | `RealCommonCoreTheorem61Data.result_every_unitarilyInvariantNorm_across` |
+| Theorem 6.2, common core, complex | `Theorem6_2_commonCore` | `CommonCoreTheorem62Data.result_across` |
+| Theorem 6.2, common core, real | `Theorem6_2_real_commonCore` | `RealCommonCoreTheorem62Data.result_across` |
 
 ## Equality, optimality, and the one-gap counterexample
 
 | paper item | source name | target |
 | --- | --- | --- |
-| the bound is attained (planar case), every norm | `Theorem6_1_equality_every_norm` | `paperTheorem61_planar_equality_every_norm` |
-| constant one cannot be improved | `sineTheta_constant_one_optimal` | `paperSinTheta_constant_one_optimal` |
-| counterexample: sine block, square norm | `oneGap_counterexample_sine_squareNorm` | `paperCounterexample_sine_square_norm` |
-| counterexample: perturbation, square norm | `oneGap_counterexample_perturbation_squareNorm` | `paperCounterexample_perturbation_square_norm` |
-| one gap does **not** suffice for Proposition 6.1 | `oneGap_does_not_imply_Proposition6_1` | `paperOneGap_does_not_imply_symmetric_square_estimate` |
+| the bound is attained (planar case), every norm | `Theorem6_1_equality_every_norm` | `theorem61_planar_equality_every_norm` |
+| constant one cannot be improved | `sineTheta_constant_one_optimal` | `sinTheta_constant_one_optimal` |
+| counterexample: sine block, square norm | `oneGap_counterexample_sine_squareNorm` | `counterexample_sine_square_norm` |
+| counterexample: perturbation, square norm | `oneGap_counterexample_perturbation_squareNorm` | `counterexample_perturbation_square_norm` |
+| one gap does **not** suffice for Proposition 6.1 | `oneGap_does_not_imply_Proposition6_1` | `oneGap_does_not_imply_symmetric_square_estimate` |
 
 ## Finite multiplicity
 

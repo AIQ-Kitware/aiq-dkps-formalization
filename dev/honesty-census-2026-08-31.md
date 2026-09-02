@@ -161,7 +161,7 @@ when `UnitaryInvariantNorm` is an alias for `PaperUnitaryInvariantNorm`; the row
 says `paperUINorm` now.  `proposition3_4_source_full`
 became `proposition3_4_source_full_bundled_complex`, because a
 `proposition3_4_source_full_complex` already existed in another namespace and the
-two differ in whether the conclusion is the bundled `IsPaperDirectRotation`
+two differ in whether the conclusion is the bundled `IsDirectRotation`
 predicate or its clauses spelled out.
 
 ## 8. `hidden-foundations` -- this finding was wrong, and is withdrawn
@@ -190,7 +190,7 @@ record of that open PDE work.
 
 On restore the gate immediately failed, which settles the question of whether it
 is live: the Section 2 campaign had renamed `paperHilbertSchmidt_complete` to
-`paperHilbertSchmidt_complete_complex`, and the ledger caught the drift the
+`hilbertSchmidt_complete_complex`, and the ledger caught the drift the
 moment it ran.  The node is repointed and the gate is green again.
 
 The gate description now says what green means -- the ledger is internally valid
@@ -285,13 +285,13 @@ restriction on `tan 2Θ`, the angle or representative in the conclusion, the nor
 and the gap.  But the binding constraint is upstream of all of them: the objects
 those conclusions name exist only as fixed-field pairs.  `...C` is defined
 natively and `...R` by transport --
-`paperTanAngleOperatorR U V = realPartOperator (paperTanAngleOperatorC
+`tanAngleOperatorR U V = realPartOperator (paperTanAngleOperatorC
 (complexifySubmodule U) (complexifySubmodule V))` -- so there is no
 `paperTanAngleOperator` over `𝕜` and a generic statement cannot presently be
 written at all.
 
 That obstacle does not look like new mathematics: the complex definitions are
-`cfc Real.arcsin (sinAngleOperatorC U V)` and `cfc Real.tan (paperAngleOperatorC
+`cfc Real.arcsin (sinAngleOperatorC U V)` and `cfc Real.tan (angleOperatorC
 U V)`, Mathlib's `cfc` applies to a self-adjoint element over any `RCLike`
 field, and `Geometry/Angle/Proposition35*.lean` are already `[RCLike 𝕜]` in the
 same directory.  It does carry an obligation: a generic definition owes a theorem

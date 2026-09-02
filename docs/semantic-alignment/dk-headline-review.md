@@ -680,7 +680,7 @@ TauCeti.DavisKahan1970.tanTheta_ambient_unboundedRitz_symmetricNorming_complex.{
 Structural type hash `3755748480`, printed-type hash `3ea82407819fc25d`.
 
 Statement closure: 25 project constant(s) unfolded, 0 project leaf/leaves, 58 boundary constant(s).
-**Project constants in the statement closure that the local semantic dictionary does not disclose:** `TauCeti.DavisKahan.UnboundedRitzPair`, `TauCeti.DavisKahan.ReducingComplement`, `TauCeti.LinearPMap.SemiboundedAbove`, `TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction.Mem`, `TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction.gauge`, `TauCeti.UnitarilyInvariantSeminorm`, `TauCeti.UnitarilyInvariantSeminorm.gauge`, `TauCeti.DavisKahan.ExactSinTheta.zeroPad`, `TauCeti.DavisKahan.ExactTanTheta.UnboundedCompressionTrialData`, `TauCeti.DavisKahan.ExactTanTheta.UnboundedCompressionTrialData.action`, `TauCeti.DavisKahan.halmosSourceDefect`, `TauCeti.DavisKahan.halmosTargetDefect`, `TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction.extendedGauge`, `TauCeti.DavisKahanExt.paperAngleOperatorC`, `TauCeti.diagOp`, `TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction.prefixGauge`, `TauCeti.DavisKahanExt.sinAngleOperatorC`, `TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction.finiteGauge`, `TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction.approximationPrefix`, `ContinuousLinearMap.modulus`, `TauCeti.ApproximationNumber.approximationSingularValue`, `ContinuousLinearMap.approximationNumber`
+**Project constants in the statement closure that the local semantic dictionary does not disclose:** `TauCeti.DavisKahan.UnboundedRitzPair`, `TauCeti.DavisKahan.ReducingComplement`, `TauCeti.LinearPMap.SemiboundedAbove`, `TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction.Mem`, `TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction.gauge`, `TauCeti.UnitarilyInvariantSeminorm`, `TauCeti.UnitarilyInvariantSeminorm.gauge`, `TauCeti.DavisKahan.ExactSinTheta.zeroPad`, `TauCeti.DavisKahan.ExactTanTheta.UnboundedCompressionTrialData`, `TauCeti.DavisKahan.ExactTanTheta.UnboundedCompressionTrialData.action`, `TauCeti.DavisKahan.halmosSourceDefect`, `TauCeti.DavisKahan.halmosTargetDefect`, `TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction.extendedGauge`, `TauCeti.DavisKahanExt.angleOperatorC`, `TauCeti.diagOp`, `TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction.prefixGauge`, `TauCeti.DavisKahanExt.sinAngleOperatorC`, `TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction.finiteGauge`, `TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction.approximationPrefix`, `ContinuousLinearMap.modulus`, `TauCeti.ApproximationNumber.approximationSingularValue`, `ContinuousLinearMap.approximationNumber`
 Dictionary definitions this statement never reaches: `TauCeti.principalTangents`, `TauCeti.ritzResidual`
 Boundary vocabulary: `NormedAddCommGroup`, `InnerProductSpace`, `Complex`, `CompleteSpace`, `LinearPMap`, `RingHom.id`, `Submodule`, `Submodule.HasOrthogonalProjection`, `Subtype`, `ContinuousLinearMap`, `IsSelfAdjoint`, `Real`, `Submodule.orthogonal`, `Nat`, `AddMonoidHom`, `LinearPMap.toFun'`, `Eq`, `ContinuousLinearMap.comp`, `Submodule.starProjection`, `Submodule.subtypeL`, `And`, `EuclideanSpace`, `Fin`, `ENNReal`, `EuclideanSpace.basisFun`, `RCLike`, `Nonempty`, `LinearIsometryEquiv`, `Ne`, `cfc`, `Real.tan`, `ENNReal.toReal`, `FiniteDimensional`, `LinearMap`, `LinearMap.comp`, `OrthonormalBasis`, `Fin.lastCases`, `iSup`, `ENNReal.ofReal`, `Real.arcsin`, `Finset.sum`, `Finset.univ`, `RCLike.ofReal`, `starRingEnd`, `InnerProductSpace.rankOne`, `Algebra`, `IsScalarTower`, `ContinuousFunctionalCalculus`, `CFC.sqrt`, `ContinuousLinearMap.instStarOrderedRingRCLike`, `ContinuousLinearMap.adjoint`, `NontriviallyNormedField`, `SeminormedAddCommGroup`, `NormedSpace`, `iInf`, `Cardinal`, `LinearMap.rank`, `Nat.cast`
 
@@ -827,8 +827,8 @@ TauCeti.DavisKahan1970.tanTheta_ambient_unboundedRitz_symmetricNorming_complex  
         [InnerProductSpace ℂ E] [CompleteSpace E] (U V : Submodule ℂ E) [U.HasOrthogonalProjection]
         [V.HasOrthogonalProjection] : E →L[ℂ] E
       hash: expr=187490045 text=178745a4708f5513
-    [body] TauCeti.DavisKahanExt.paperAngleOperatorC  (def, DavisKahan/Geometry/Angle/PaperOperatorAngle.lean:84)
-        TauCeti.DavisKahanExt.paperAngleOperatorC.{u_1} {E : Type u_1} [NormedAddCommGroup E]
+    [body] TauCeti.DavisKahanExt.angleOperatorC  (def, DavisKahan/Geometry/Angle/PaperOperatorAngle.lean:84)
+        TauCeti.DavisKahanExt.angleOperatorC.{u_1} {E : Type u_1} [NormedAddCommGroup E]
           [InnerProductSpace ℂ E] [CompleteSpace E] (U V : Submodule ℂ E) [U.HasOrthogonalProjection]
           [V.HasOrthogonalProjection] : E →L[ℂ] E
         hash: expr=187490045 text=178745a4708f5513
@@ -881,8 +881,8 @@ theorem tanTheta_ambient_unboundedRitz_symmetricNorming_real
     (h35 : DavisKahan.CrossedDefectsEquivalent U V)
     (hResidual : D.trial.residual = Uᗮ.starProjection ∘L H ∘L U.subtypeL)
     (hMem : N.Mem H) :
-    N.Mem (paperTanAngleOperatorR U V) ∧
-      delta * N.gauge (paperTanAngleOperatorR U V) ≤ N.gauge H
+    N.Mem (tanAngleOperatorR U V) ∧
+      delta * N.gauge (tanAngleOperatorR U V) ≤ N.gauge H
 ~~~~
 
 **Elaborated signature** (statement pin: current)
@@ -898,14 +898,14 @@ TauCeti.DavisKahan1970.tanTheta_ambient_unboundedRitz_symmetricNorming_real.{v} 
   (hUnwanted : ∀ y ∈ Vᗮ, ∀ (hy : y ∈ A.domain), (alpha + delta) * ‖y‖ ^ 2 ≤ inner ℝ (↑A ⟨y, hy⟩) y)
   (h35 : TauCeti.DavisKahan.CrossedDefectsEquivalent U V)
   (hResidual : D.trial.residual = Uᗮ.starProjection ∘SL H ∘SL U.subtypeL) (hMem : N.Mem H) :
-  N.Mem (TauCeti.DavisKahanExt.paperTanAngleOperatorR U V) ∧
-    delta * N.gauge (TauCeti.DavisKahanExt.paperTanAngleOperatorR U V) ≤ N.gauge H
+  N.Mem (TauCeti.DavisKahanExt.tanAngleOperatorR U V) ∧
+    delta * N.gauge (TauCeti.DavisKahanExt.tanAngleOperatorR U V) ≤ N.gauge H
 ~~~~
 
 Structural type hash `632860847`, printed-type hash `2b99dabf29e4fb9b`.
 
 Statement closure: 33 project constant(s) unfolded, 1 project leaf/leaves, 67 boundary constant(s).
-**Project constants in the statement closure that the local semantic dictionary does not disclose:** `TauCeti.DavisKahan.UnboundedRitzPair`, `TauCeti.DavisKahan.ReducingComplement`, `TauCeti.LinearPMap.SemiboundedAbove`, `TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction.Mem`, `TauCeti.DavisKahanExt.paperTanAngleOperatorR`, `TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction.gauge`, `TauCeti.UnitarilyInvariantSeminorm`, `TauCeti.UnitarilyInvariantSeminorm.gauge`, `TauCeti.DavisKahan.ExactSinTheta.zeroPad`, `TauCeti.DavisKahan.ExactTanTheta.UnboundedCompressionTrialData`, `TauCeti.DavisKahan.ExactTanTheta.UnboundedCompressionTrialData.action`, `TauCeti.DavisKahan.halmosSourceDefect`, `TauCeti.DavisKahan.halmosTargetDefect`, `TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction.extendedGauge`, `TauCeti.RealComplexification.realPartOperator`, `TauCeti.RealComplexification`, `TauCeti.DavisKahan.Foundation.RealComplexification.complexifySubmodule`, `TauCeti.diagOp`, `TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction.prefixGauge`, `TauCeti.RealComplexification.re`, `TauCeti.RealComplexification.ofReal`, `TauCeti.DavisKahanExt.paperAngleOperatorC`, `TauCeti.RealComplexification.im`, `TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction.finiteGauge`, `TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction.approximationPrefix`, `TauCeti.RealComplexification.mk`, `TauCeti.DavisKahanExt.sinAngleOperatorC`, `TauCeti.ApproximationNumber.approximationSingularValue`, `ContinuousLinearMap.modulus`, `ContinuousLinearMap.approximationNumber`, `TauCeti.DavisKahan1970.instCompleteSpaceCoeOfHasOrthogonalProjectionUnboundedAmbientReal`
+**Project constants in the statement closure that the local semantic dictionary does not disclose:** `TauCeti.DavisKahan.UnboundedRitzPair`, `TauCeti.DavisKahan.ReducingComplement`, `TauCeti.LinearPMap.SemiboundedAbove`, `TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction.Mem`, `TauCeti.DavisKahanExt.tanAngleOperatorR`, `TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction.gauge`, `TauCeti.UnitarilyInvariantSeminorm`, `TauCeti.UnitarilyInvariantSeminorm.gauge`, `TauCeti.DavisKahan.ExactSinTheta.zeroPad`, `TauCeti.DavisKahan.ExactTanTheta.UnboundedCompressionTrialData`, `TauCeti.DavisKahan.ExactTanTheta.UnboundedCompressionTrialData.action`, `TauCeti.DavisKahan.halmosSourceDefect`, `TauCeti.DavisKahan.halmosTargetDefect`, `TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction.extendedGauge`, `TauCeti.RealComplexification.realPartOperator`, `TauCeti.RealComplexification`, `TauCeti.DavisKahan.Foundation.RealComplexification.complexifySubmodule`, `TauCeti.diagOp`, `TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction.prefixGauge`, `TauCeti.RealComplexification.re`, `TauCeti.RealComplexification.ofReal`, `TauCeti.DavisKahanExt.angleOperatorC`, `TauCeti.RealComplexification.im`, `TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction.finiteGauge`, `TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction.approximationPrefix`, `TauCeti.RealComplexification.mk`, `TauCeti.DavisKahanExt.sinAngleOperatorC`, `TauCeti.ApproximationNumber.approximationSingularValue`, `ContinuousLinearMap.modulus`, `ContinuousLinearMap.approximationNumber`, `TauCeti.DavisKahan1970.instCompleteSpaceCoeOfHasOrthogonalProjectionUnboundedAmbientReal`
 Dictionary definitions this statement never reaches: `TauCeti.principalTangents`, `TauCeti.ritzResidual`
 Boundary vocabulary: `NormedAddCommGroup`, `InnerProductSpace`, `Real`, `CompleteSpace`, `Submodule`, `Submodule.HasOrthogonalProjection`, `LinearPMap`, `RingHom.id`, `ContinuousLinearMap`, `IsSelfAdjoint`, `Subtype`, `Submodule.orthogonal`, `Nat`, `LinearPMap.toFun'`, `Eq`, `ContinuousLinearMap.comp`, `Submodule.starProjection`, `Submodule.subtypeL`, `And`, `Complex`, `EuclideanSpace`, `Fin`, `ENNReal`, `EuclideanSpace.basisFun`, `RCLike`, `AddMonoidHom`, `Nonempty`, `LinearIsometryEquiv`, `Ne`, `ENNReal.toReal`, `FiniteDimensional`, `LinearMap`, `LinearMap.comp`, `OrthonormalBasis`, `Fin.lastCases`, `iSup`, `ENNReal.ofReal`, `LinearIsometry`, `LinearMap.mkContinuous`, `cfc`, `Real.tan`, `WithLp`, `Prod`, `Set.ofPred`, `Finset.sum`, `Finset.univ`, `RCLike.ofReal`, `starRingEnd`, `InnerProductSpace.rankOne`, `AddCommGroup`, `Module`, `Module.ofMinimalAxioms`, `NormedSpace`, `Real.arcsin`, `SMul`, `Algebra`, `IsScalarTower`, `ContinuousFunctionalCalculus`, `CFC.sqrt`, `ContinuousLinearMap.instStarOrderedRingRCLike`, `ContinuousLinearMap.adjoint`, `NontriviallyNormedField`, `SeminormedAddCommGroup`, `iInf`, `Cardinal`, `LinearMap.rank`, `Nat.cast`
 
@@ -923,8 +923,8 @@ TauCeti.DavisKahan1970.tanTheta_ambient_unboundedRitz_symmetricNorming_real  (th
       (hUnwanted : ∀ y ∈ Vᗮ, ∀ (hy : y ∈ A.domain), (alpha + delta) * ‖y‖ ^ 2 ≤ inner ℝ (↑A ⟨y, hy⟩) y)
       (h35 : TauCeti.DavisKahan.CrossedDefectsEquivalent U V)
       (hResidual : D.trial.residual = Uᗮ.starProjection ∘SL H ∘SL U.subtypeL) (hMem : N.Mem H) :
-      N.Mem (TauCeti.DavisKahanExt.paperTanAngleOperatorR U V) ∧
-        delta * N.gauge (TauCeti.DavisKahanExt.paperTanAngleOperatorR U V) ≤ N.gauge H
+      N.Mem (TauCeti.DavisKahanExt.tanAngleOperatorR U V) ∧
+        delta * N.gauge (TauCeti.DavisKahanExt.tanAngleOperatorR U V) ≤ N.gauge H
     hash: expr=632860847 text=2b99dabf29e4fb9b
   [type] TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction  (structure, DavisKahan/Sources/DavisKahan1970/SineTheta/Norms/UnitaryInvariantNorm.lean:47)
       TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction : Type
@@ -1051,8 +1051,8 @@ TauCeti.DavisKahan1970.tanTheta_ambient_unboundedRitz_symmetricNorming_real  (th
                   {E : Type v} {F : Type w} [SeminormedAddCommGroup E] [NormedSpace 𝕜 E] [SeminormedAddCommGroup F]
                   [NormedSpace 𝕜 F] (T : E →L[𝕜] F) (n : ℕ) : ℝ
                 hash: expr=2527437639 text=7dc5679d2ff68267
-  [type] TauCeti.DavisKahanExt.paperTanAngleOperatorR  (def, DavisKahan/Geometry/Angle/PaperOperatorAngleReal.lean:126)
-      TauCeti.DavisKahanExt.paperTanAngleOperatorR.{u_1} {E : Type u_1} [NormedAddCommGroup E]
+  [type] TauCeti.DavisKahanExt.tanAngleOperatorR  (def, DavisKahan/Geometry/Angle/PaperOperatorAngleReal.lean:126)
+      TauCeti.DavisKahanExt.tanAngleOperatorR.{u_1} {E : Type u_1} [NormedAddCommGroup E]
         [InnerProductSpace ℝ E] [CompleteSpace E] (U V : Submodule ℝ E) [U.HasOrthogonalProjection]
         [V.HasOrthogonalProjection] : E →L[ℝ] E
       hash: expr=2215108693 text=ca05c2be87f84df1
@@ -1082,8 +1082,8 @@ TauCeti.DavisKahan1970.tanTheta_ambient_unboundedRitz_symmetricNorming_real  (th
           [InnerProductSpace ℂ E] [CompleteSpace E] (U V : Submodule ℂ E) [U.HasOrthogonalProjection]
           [V.HasOrthogonalProjection] : E →L[ℂ] E
         hash: expr=187490045 text=178745a4708f5513
-      [body] TauCeti.DavisKahanExt.paperAngleOperatorC  (def, DavisKahan/Geometry/Angle/PaperOperatorAngle.lean:84)
-          TauCeti.DavisKahanExt.paperAngleOperatorC.{u_1} {E : Type u_1} [NormedAddCommGroup E]
+      [body] TauCeti.DavisKahanExt.angleOperatorC  (def, DavisKahan/Geometry/Angle/PaperOperatorAngle.lean:84)
+          TauCeti.DavisKahanExt.angleOperatorC.{u_1} {E : Type u_1} [NormedAddCommGroup E]
             [InnerProductSpace ℂ E] [CompleteSpace E] (U V : Submodule ℂ E) [U.HasOrthogonalProjection]
             [V.HasOrthogonalProjection] : E →L[ℂ] E
           hash: expr=187490045 text=178745a4708f5513
@@ -3505,7 +3505,7 @@ TauCeti.DavisKahan1970.sinTwoTheta_ambient_unbounded_addBounded_symmetricNorming
 Structural type hash `2000542141`, printed-type hash `b0e505a8268c9814`.
 
 Statement closure: 50 project constant(s) unfolded, 7 project leaf/leaves, 96 boundary constant(s).
-**Project constants in the statement closure that the local semantic dictionary does not disclose:** `TauCeti.DavisKahan.IsSelfAdjointOperator`, `TauCeti.DavisKahan.ExactSinTheta.FormBoundedSylvesterGap`, `TauCeti.DavisKahan.selfAdjointSpectralSubspace`, `TauCeti.DavisKahan.selfAdjointSpectralRestriction`, `TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction.Mem`, `TauCeti.LinearPMap.addBounded`, `TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction.gauge`, `TauCeti.UnitarilyInvariantSeminorm`, `TauCeti.UnitarilyInvariantSeminorm.gauge`, `TauCeti.DavisKahan.ExactSinTheta.zeroPad`, `TauCeti.DavisKahan.ExactSinTheta.RealSpectrumIntervalExteriorGap`, `TauCeti.LinearPMap.SemiboundedBelow`, `TauCeti.LinearPMap.SemiboundedAbove`, `TauCeti.pvmRangeSubspace`, `TauCeti.LinearPMap.spectralPVM`, `TauCeti.LinearPMap.specRestrict`, `TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction.extendedGauge`, `TauCeti.DavisKahanExt.paperAngleOperatorC`, `TauCeti.diagOp`, `TauCeti.LinearPMap.realSpectrum`, `TauCeti.ProjValMeasure`, `TauCeti.BorelCalculus.toProjValMeasure`, `TauCeti.LinearPMap.cayley`, `TauCeti.LinearPMap.cayleyInv`, `TauCeti.LinearPMap.specRange`, `TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction.prefixGauge`, `TauCeti.DavisKahanExt.sinAngleOperatorC`, `TauCeti.LinearPMap.realResolventSet`, `TauCeti.BorelCalculus.specProj`, `TauCeti.BorelCalculus.specDiag`, `TauCeti.LinearPMap.resolvent`, `TauCeti.LinearPMap.specProjection`, `TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction.finiteGauge`, `TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction.approximationPrefix`, `ContinuousLinearMap.modulus`, `TauCeti.BorelCalculus.borelCalculus`, `TauCeti.BorelCalculus.diagMeasure`, `TauCeti.LinearPMap.resolventSet`, `TauCeti.LinearPMap.IsResolventAt`, `TauCeti.ApproximationNumber.approximationSingularValue`, `TauCeti.BorelCalculus.IsBddMeasurable`, `TauCeti.BorelCalculus.borelVector`, `TauCeti.BorelCalculus.IsBddMeasurable.chooseBound`, `TauCeti.BorelCalculus.diagFunctional`, `ContinuousLinearMap.approximationNumber`, `TauCeti.BorelCalculus.pairFunctional`, `TauCeti.BorelCalculus.ofRealLM`, `TauCeti.BorelCalculus.pair`, `TauCeti.DavisKahan.addBounded_isSelfAdjoint`, `TauCeti.LinearPMap.measurable_cayleyInv`, `TauCeti.BorelCalculus.isFiniteMeasure_specDiag`, `TauCeti.BorelCalculus.inner_specProj_self`, `TauCeti.BorelCalculus.specProj_univ`, `TauCeti.BorelCalculus.specProj_inter`, `TauCeti.BorelCalculus.norm_borelVector_le`
+**Project constants in the statement closure that the local semantic dictionary does not disclose:** `TauCeti.DavisKahan.IsSelfAdjointOperator`, `TauCeti.DavisKahan.ExactSinTheta.FormBoundedSylvesterGap`, `TauCeti.DavisKahan.selfAdjointSpectralSubspace`, `TauCeti.DavisKahan.selfAdjointSpectralRestriction`, `TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction.Mem`, `TauCeti.LinearPMap.addBounded`, `TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction.gauge`, `TauCeti.UnitarilyInvariantSeminorm`, `TauCeti.UnitarilyInvariantSeminorm.gauge`, `TauCeti.DavisKahan.ExactSinTheta.zeroPad`, `TauCeti.DavisKahan.ExactSinTheta.RealSpectrumIntervalExteriorGap`, `TauCeti.LinearPMap.SemiboundedBelow`, `TauCeti.LinearPMap.SemiboundedAbove`, `TauCeti.pvmRangeSubspace`, `TauCeti.LinearPMap.spectralPVM`, `TauCeti.LinearPMap.specRestrict`, `TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction.extendedGauge`, `TauCeti.DavisKahanExt.angleOperatorC`, `TauCeti.diagOp`, `TauCeti.LinearPMap.realSpectrum`, `TauCeti.ProjValMeasure`, `TauCeti.BorelCalculus.toProjValMeasure`, `TauCeti.LinearPMap.cayley`, `TauCeti.LinearPMap.cayleyInv`, `TauCeti.LinearPMap.specRange`, `TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction.prefixGauge`, `TauCeti.DavisKahanExt.sinAngleOperatorC`, `TauCeti.LinearPMap.realResolventSet`, `TauCeti.BorelCalculus.specProj`, `TauCeti.BorelCalculus.specDiag`, `TauCeti.LinearPMap.resolvent`, `TauCeti.LinearPMap.specProjection`, `TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction.finiteGauge`, `TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction.approximationPrefix`, `ContinuousLinearMap.modulus`, `TauCeti.BorelCalculus.borelCalculus`, `TauCeti.BorelCalculus.diagMeasure`, `TauCeti.LinearPMap.resolventSet`, `TauCeti.LinearPMap.IsResolventAt`, `TauCeti.ApproximationNumber.approximationSingularValue`, `TauCeti.BorelCalculus.IsBddMeasurable`, `TauCeti.BorelCalculus.borelVector`, `TauCeti.BorelCalculus.IsBddMeasurable.chooseBound`, `TauCeti.BorelCalculus.diagFunctional`, `ContinuousLinearMap.approximationNumber`, `TauCeti.BorelCalculus.pairFunctional`, `TauCeti.BorelCalculus.ofRealLM`, `TauCeti.BorelCalculus.pair`, `TauCeti.DavisKahan.addBounded_isSelfAdjoint`, `TauCeti.LinearPMap.measurable_cayleyInv`, `TauCeti.BorelCalculus.isFiniteMeasure_specDiag`, `TauCeti.BorelCalculus.inner_specProj_self`, `TauCeti.BorelCalculus.specProj_univ`, `TauCeti.BorelCalculus.specProj_inter`, `TauCeti.BorelCalculus.norm_borelVector_le`
 Dictionary definitions this statement never reaches: `TauCeti.DavisKahan.residual`, `TauCeti.DavisKahanTheory.sinTwoThetaEmbedding`
 Boundary vocabulary: `NormedAddCommGroup`, `InnerProductSpace`, `Complex`, `CompleteSpace`, `LinearPMap`, `RingHom.id`, `IsSelfAdjoint`, `ContinuousLinearMap`, `Set`, `Real`, `MeasurableSet`, `Subtype`, `Submodule`, `MeasurableSet.compl`, `And`, `Nat`, `EuclideanSpace`, `Fin`, `ENNReal`, `Eq`, `EuclideanSpace.basisFun`, `RCLike`, `LinearMap.IsSymmetric`, `Ne`, `Submodule.HasOrthogonalProjection`, `cfc`, `Real.sin`, `LinearMap`, `LinearMap.domRestrict`, `ENNReal.toReal`, `FiniteDimensional`, `LinearIsometryEquiv`, `LinearMap.comp`, `OrthonormalBasis`, `Fin.lastCases`, `Or`, `Set.Icc`, `Set.ofPred`, `AddMonoidHom`, `LinearPMap.toFun'`, `LinearMap.range`, `Submodule.comap`, `Submodule.subtype`, `iSup`, `ENNReal.ofReal`, `Real.arcsin`, `Finset.sum`, `Finset.univ`, `RCLike.ofReal`, `starRingEnd`, `InnerProductSpace.rankOne`, `MeasureTheory.Measure`, `MeasureTheory.IsFiniteMeasure`, `Complex.ofReal`, `Set.univ`, `MeasurableSet.univ`, `ContinuousLinearMap.id`, `MeasurableSet.inter`, `IsStarNormal`, `Set.Elem`, `spectrum`, `Measurable`, `Complex.I`, `Submodule.starProjection`, `Exists`, `Set.indicator`, `Set.preimage`, `MeasureTheory.Measure.map`, `NontriviallyNormedField`, `NormedSpace`, `Exists.choose`, `Algebra`, `IsScalarTower`, `ContinuousFunctionalCalculus`, `CFC.sqrt`, `ContinuousLinearMap.instStarOrderedRingRCLike`, `ContinuousLinearMap.comp`, `ContinuousLinearMap.adjoint`, `LinearMap.mkContinuous`, `RealRMK.rieszMeasure`, `StrongDual`, `LinearIsometryEquiv.symm`, `InnerProductSpace.toDual`, `PositiveLinearMap`, `CompactlySupportedContinuousMap`, `StarAlgHom`, `ContinuousMap`, `cfcHom`, `SeminormedAddCommGroup`, `iInf`, `Cardinal`, `LinearMap.rank`, `Nat.cast`, `RingHom`, `TopologicalSpace`, `MeasureTheory.integral`
 
@@ -3820,8 +3820,8 @@ TauCeti.DavisKahan1970.sinTwoTheta_ambient_unbounded_addBounded_symmetricNorming
         [InnerProductSpace ℂ E] [CompleteSpace E] (U V : Submodule ℂ E) [U.HasOrthogonalProjection]
         [V.HasOrthogonalProjection] : E →L[ℂ] E
       hash: expr=187490045 text=178745a4708f5513
-    [body] TauCeti.DavisKahanExt.paperAngleOperatorC  (def, DavisKahan/Geometry/Angle/PaperOperatorAngle.lean:84)
-        TauCeti.DavisKahanExt.paperAngleOperatorC.{u_1} {E : Type u_1} [NormedAddCommGroup E]
+    [body] TauCeti.DavisKahanExt.angleOperatorC  (def, DavisKahan/Geometry/Angle/PaperOperatorAngle.lean:84)
+        TauCeti.DavisKahanExt.angleOperatorC.{u_1} {E : Type u_1} [NormedAddCommGroup E]
           [InnerProductSpace ℂ E] [CompleteSpace E] (U V : Submodule ℂ E) [U.HasOrthogonalProjection]
           [V.HasOrthogonalProjection] : E →L[ℂ] E
         hash: expr=187490045 text=178745a4708f5513
@@ -3880,11 +3880,11 @@ theorem sinTwoTheta_ambient_unbounded_addBounded_symmetricNorming_real
       (realSelfAdjointSpectralRestriction A hA B hB)
       (realSelfAdjointSpectralRestriction A hA Bᶜ hB.compl) δ)
     (hEmem : N.Mem Eop) :
-    N.Mem (TauCeti.DavisKahanExt.paperSinTwoAngleOperatorR
+    N.Mem (TauCeti.DavisKahanExt.sinTwoAngleOperatorR
         (realSelfAdjointSpectralSubspace A hA B hB)
         (realSelfAdjointSpectralSubspace (TauCeti.LinearPMap.addBounded A Eop)
           (DavisKahan.addBounded_isSelfAdjoint A hA Eop hEop) S hS)) ∧
-      δ * N.gauge (TauCeti.DavisKahanExt.paperSinTwoAngleOperatorR
+      δ * N.gauge (TauCeti.DavisKahanExt.sinTwoAngleOperatorR
         (realSelfAdjointSpectralSubspace A hA B hB)
         (realSelfAdjointSpectralSubspace (TauCeti.LinearPMap.addBounded A Eop)
           (DavisKahan.addBounded_isSelfAdjoint A hA Eop hEop) S hS)) ≤
@@ -3905,13 +3905,13 @@ TauCeti.DavisKahan1970.sinTwoTheta_ambient_unbounded_addBounded_symmetricNorming
       (TauCeti.DavisKahan.RealSpectralRestriction.realSelfAdjointSpectralRestriction A hA Bᶜ ⋯) δ)
   (hEmem : N.Mem Eop) :
   N.Mem
-      (TauCeti.DavisKahanExt.paperSinTwoAngleOperatorR
+      (TauCeti.DavisKahanExt.sinTwoAngleOperatorR
         (TauCeti.DavisKahan.RealSpectralRestriction.realSelfAdjointSpectralSubspace A hA B hB)
         (TauCeti.DavisKahan.RealSpectralRestriction.realSelfAdjointSpectralSubspace
           (TauCeti.LinearPMap.addBounded A Eop) ⋯ S hS)) ∧
     δ *
         N.gauge
-          (TauCeti.DavisKahanExt.paperSinTwoAngleOperatorR
+          (TauCeti.DavisKahanExt.sinTwoAngleOperatorR
             (TauCeti.DavisKahan.RealSpectralRestriction.realSelfAdjointSpectralSubspace A hA B hB)
             (TauCeti.DavisKahan.RealSpectralRestriction.realSelfAdjointSpectralSubspace
               (TauCeti.LinearPMap.addBounded A Eop) ⋯ S hS)) ≤
@@ -3921,7 +3921,7 @@ TauCeti.DavisKahan1970.sinTwoTheta_ambient_unbounded_addBounded_symmetricNorming
 Structural type hash `369870179`, printed-type hash `52bfefcf38cbbebd`.
 
 Statement closure: 68 project constant(s) unfolded, 9 project leaf/leaves, 102 boundary constant(s).
-**Project constants in the statement closure that the local semantic dictionary does not disclose:** `TauCeti.DavisKahan.IsSelfAdjointOperator`, `TauCeti.DavisKahan.ExactSinTheta.FormBoundedSylvesterGap`, `TauCeti.DavisKahan.RealSpectralRestriction.realSelfAdjointSpectralSubspace`, `TauCeti.DavisKahan.RealSpectralRestriction.realSelfAdjointSpectralRestriction`, `TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction.Mem`, `TauCeti.DavisKahanExt.paperSinTwoAngleOperatorR`, `TauCeti.LinearPMap.addBounded`, `TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction.gauge`, `TauCeti.UnitarilyInvariantSeminorm`, `TauCeti.UnitarilyInvariantSeminorm.gauge`, `TauCeti.DavisKahan.ExactSinTheta.zeroPad`, `TauCeti.DavisKahan.ExactSinTheta.RealSpectrumIntervalExteriorGap`, `TauCeti.LinearPMap.SemiboundedBelow`, `TauCeti.LinearPMap.SemiboundedAbove`, `TauCeti.DavisKahan.RealSpectralRestriction.realSelfAdjointSpectralProjection`, `TauCeti.LinearPMap.reducingRestriction`, `TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction.extendedGauge`, `TauCeti.RealComplexification.realPartOperator`, `TauCeti.RealComplexification`, `TauCeti.DavisKahan.Foundation.RealComplexification.complexifySubmodule`, `TauCeti.diagOp`, `TauCeti.LinearPMap.realSpectrum`, `TauCeti.DavisKahan.selfAdjointSpectralProjection`, `TauCeti.DavisKahan.ExactSinTheta.PartialMapComplexification.complexify`, `TauCeti.LinearPMap.ReducesSubspace`, `TauCeti.LinearPMap.reducingRestrictionDomain`, `TauCeti.LinearPMap.reducingRestrictionLinearMap`, `TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction.prefixGauge`, `TauCeti.RealComplexification.re`, `TauCeti.RealComplexification.ofReal`, `TauCeti.DavisKahanExt.paperAngleOperatorC`, `TauCeti.RealComplexification.im`, `TauCeti.LinearPMap.realResolventSet`, `TauCeti.LinearPMap.specProjection`, `TauCeti.DavisKahan.ExactSinTheta.PartialMapComplexification.domain`, `TauCeti.DavisKahan.ExactSinTheta.PartialMapComplexification.linearMap`, `TauCeti.LinearPMap.InvariantSubspace`, `TauCeti.LinearPMap.reducingRestrictionDomainToAmbient`, `TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction.finiteGauge`, `TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction.approximationPrefix`, `TauCeti.RealComplexification.mk`, `TauCeti.DavisKahanExt.sinAngleOperatorC`, `TauCeti.LinearPMap.spectralPVM`, `TauCeti.DavisKahan.ExactSinTheta.PartialMapComplexification.domainRe`, `TauCeti.DavisKahan.ExactSinTheta.PartialMapComplexification.domainIm`, `TauCeti.ApproximationNumber.approximationSingularValue`, `ContinuousLinearMap.modulus`, `TauCeti.ProjValMeasure`, `TauCeti.BorelCalculus.toProjValMeasure`, `TauCeti.LinearPMap.cayley`, `TauCeti.LinearPMap.cayleyInv`, `ContinuousLinearMap.approximationNumber`, `TauCeti.BorelCalculus.specProj`, `TauCeti.BorelCalculus.specDiag`, `TauCeti.LinearPMap.resolvent`, `TauCeti.BorelCalculus.borelCalculus`, `TauCeti.BorelCalculus.diagMeasure`, `TauCeti.LinearPMap.resolventSet`, `TauCeti.LinearPMap.IsResolventAt`, `TauCeti.BorelCalculus.IsBddMeasurable`, `TauCeti.BorelCalculus.borelVector`, `TauCeti.BorelCalculus.IsBddMeasurable.chooseBound`, `TauCeti.BorelCalculus.diagFunctional`, `TauCeti.BorelCalculus.pairFunctional`, `TauCeti.BorelCalculus.ofRealLM`, `TauCeti.BorelCalculus.pair`, `TauCeti.DavisKahan.addBounded_isSelfAdjoint`, `TauCeti.DavisKahan.RealSpectralRestriction.realSelfAdjointSpectralSubspace_reducing`, `TauCeti.DavisKahan.ExactSinTheta.PartialMapComplexification.isSelfAdjoint_complexify`, `TauCeti.LinearPMap.measurable_cayleyInv`, `TauCeti.BorelCalculus.isFiniteMeasure_specDiag`, `TauCeti.BorelCalculus.inner_specProj_self`, `TauCeti.BorelCalculus.specProj_univ`, `TauCeti.BorelCalculus.specProj_inter`, `TauCeti.BorelCalculus.norm_borelVector_le`
+**Project constants in the statement closure that the local semantic dictionary does not disclose:** `TauCeti.DavisKahan.IsSelfAdjointOperator`, `TauCeti.DavisKahan.ExactSinTheta.FormBoundedSylvesterGap`, `TauCeti.DavisKahan.RealSpectralRestriction.realSelfAdjointSpectralSubspace`, `TauCeti.DavisKahan.RealSpectralRestriction.realSelfAdjointSpectralRestriction`, `TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction.Mem`, `TauCeti.DavisKahanExt.sinTwoAngleOperatorR`, `TauCeti.LinearPMap.addBounded`, `TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction.gauge`, `TauCeti.UnitarilyInvariantSeminorm`, `TauCeti.UnitarilyInvariantSeminorm.gauge`, `TauCeti.DavisKahan.ExactSinTheta.zeroPad`, `TauCeti.DavisKahan.ExactSinTheta.RealSpectrumIntervalExteriorGap`, `TauCeti.LinearPMap.SemiboundedBelow`, `TauCeti.LinearPMap.SemiboundedAbove`, `TauCeti.DavisKahan.RealSpectralRestriction.realSelfAdjointSpectralProjection`, `TauCeti.LinearPMap.reducingRestriction`, `TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction.extendedGauge`, `TauCeti.RealComplexification.realPartOperator`, `TauCeti.RealComplexification`, `TauCeti.DavisKahan.Foundation.RealComplexification.complexifySubmodule`, `TauCeti.diagOp`, `TauCeti.LinearPMap.realSpectrum`, `TauCeti.DavisKahan.selfAdjointSpectralProjection`, `TauCeti.DavisKahan.ExactSinTheta.PartialMapComplexification.complexify`, `TauCeti.LinearPMap.ReducesSubspace`, `TauCeti.LinearPMap.reducingRestrictionDomain`, `TauCeti.LinearPMap.reducingRestrictionLinearMap`, `TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction.prefixGauge`, `TauCeti.RealComplexification.re`, `TauCeti.RealComplexification.ofReal`, `TauCeti.DavisKahanExt.angleOperatorC`, `TauCeti.RealComplexification.im`, `TauCeti.LinearPMap.realResolventSet`, `TauCeti.LinearPMap.specProjection`, `TauCeti.DavisKahan.ExactSinTheta.PartialMapComplexification.domain`, `TauCeti.DavisKahan.ExactSinTheta.PartialMapComplexification.linearMap`, `TauCeti.LinearPMap.InvariantSubspace`, `TauCeti.LinearPMap.reducingRestrictionDomainToAmbient`, `TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction.finiteGauge`, `TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction.approximationPrefix`, `TauCeti.RealComplexification.mk`, `TauCeti.DavisKahanExt.sinAngleOperatorC`, `TauCeti.LinearPMap.spectralPVM`, `TauCeti.DavisKahan.ExactSinTheta.PartialMapComplexification.domainRe`, `TauCeti.DavisKahan.ExactSinTheta.PartialMapComplexification.domainIm`, `TauCeti.ApproximationNumber.approximationSingularValue`, `ContinuousLinearMap.modulus`, `TauCeti.ProjValMeasure`, `TauCeti.BorelCalculus.toProjValMeasure`, `TauCeti.LinearPMap.cayley`, `TauCeti.LinearPMap.cayleyInv`, `ContinuousLinearMap.approximationNumber`, `TauCeti.BorelCalculus.specProj`, `TauCeti.BorelCalculus.specDiag`, `TauCeti.LinearPMap.resolvent`, `TauCeti.BorelCalculus.borelCalculus`, `TauCeti.BorelCalculus.diagMeasure`, `TauCeti.LinearPMap.resolventSet`, `TauCeti.LinearPMap.IsResolventAt`, `TauCeti.BorelCalculus.IsBddMeasurable`, `TauCeti.BorelCalculus.borelVector`, `TauCeti.BorelCalculus.IsBddMeasurable.chooseBound`, `TauCeti.BorelCalculus.diagFunctional`, `TauCeti.BorelCalculus.pairFunctional`, `TauCeti.BorelCalculus.ofRealLM`, `TauCeti.BorelCalculus.pair`, `TauCeti.DavisKahan.addBounded_isSelfAdjoint`, `TauCeti.DavisKahan.RealSpectralRestriction.realSelfAdjointSpectralSubspace_reducing`, `TauCeti.DavisKahan.ExactSinTheta.PartialMapComplexification.isSelfAdjoint_complexify`, `TauCeti.LinearPMap.measurable_cayleyInv`, `TauCeti.BorelCalculus.isFiniteMeasure_specDiag`, `TauCeti.BorelCalculus.inner_specProj_self`, `TauCeti.BorelCalculus.specProj_univ`, `TauCeti.BorelCalculus.specProj_inter`, `TauCeti.BorelCalculus.norm_borelVector_le`
 Dictionary definitions this statement never reaches: `TauCeti.DavisKahan.residual`, `TauCeti.DavisKahanTheory.sinTwoThetaEmbedding`
 Boundary vocabulary: `NormedAddCommGroup`, `InnerProductSpace`, `Real`, `CompleteSpace`, `LinearPMap`, `RingHom.id`, `IsSelfAdjoint`, `ContinuousLinearMap`, `Set`, `MeasurableSet`, `Subtype`, `Submodule`, `MeasurableSet.compl`, `And`, `Nat`, `Complex`, `EuclideanSpace`, `Fin`, `ENNReal`, `Eq`, `EuclideanSpace.basisFun`, `RCLike`, `LinearMap.IsSymmetric`, `LinearMap.range`, `Ne`, `Submodule.HasOrthogonalProjection`, `LinearMap`, `LinearMap.domRestrict`, `ENNReal.toReal`, `FiniteDimensional`, `LinearIsometryEquiv`, `LinearMap.comp`, `OrthonormalBasis`, `Fin.lastCases`, `Or`, `Set.Icc`, `Set.ofPred`, `AddMonoidHom`, `LinearPMap.toFun'`, `iSup`, `ENNReal.ofReal`, `LinearIsometry`, `LinearMap.mkContinuous`, `cfc`, `Real.sin`, `WithLp`, `Prod`, `Finset.sum`, `Finset.univ`, `RCLike.ofReal`, `starRingEnd`, `InnerProductSpace.rankOne`, `Submodule.starProjection`, `Submodule.orthogonal`, `AddCommGroup`, `Module`, `Module.ofMinimalAxioms`, `NormedSpace`, `Real.arcsin`, `Exists`, `SMul`, `Algebra`, `IsScalarTower`, `ContinuousFunctionalCalculus`, `CFC.sqrt`, `ContinuousLinearMap.instStarOrderedRingRCLike`, `ContinuousLinearMap.comp`, `ContinuousLinearMap.adjoint`, `MeasureTheory.Measure`, `MeasureTheory.IsFiniteMeasure`, `Complex.ofReal`, `Set.univ`, `MeasurableSet.univ`, `ContinuousLinearMap.id`, `MeasurableSet.inter`, `IsStarNormal`, `Set.Elem`, `spectrum`, `Measurable`, `Complex.I`, `NontriviallyNormedField`, `SeminormedAddCommGroup`, `iInf`, `Cardinal`, `LinearMap.rank`, `Nat.cast`, `Set.indicator`, `Set.preimage`, `MeasureTheory.Measure.map`, `Exists.choose`, `RealRMK.rieszMeasure`, `StrongDual`, `LinearIsometryEquiv.symm`, `InnerProductSpace.toDual`, `PositiveLinearMap`, `CompactlySupportedContinuousMap`, `StarAlgHom`, `ContinuousMap`, `cfcHom`, `RingHom`, `TopologicalSpace`, `MeasureTheory.integral`
 
@@ -3940,13 +3940,13 @@ TauCeti.DavisKahan1970.sinTwoTheta_ambient_unbounded_addBounded_symmetricNorming
           (TauCeti.DavisKahan.RealSpectralRestriction.realSelfAdjointSpectralRestriction A hA Bᶜ ⋯) δ)
       (hEmem : N.Mem Eop) :
       N.Mem
-          (TauCeti.DavisKahanExt.paperSinTwoAngleOperatorR
+          (TauCeti.DavisKahanExt.sinTwoAngleOperatorR
             (TauCeti.DavisKahan.RealSpectralRestriction.realSelfAdjointSpectralSubspace A hA B hB)
             (TauCeti.DavisKahan.RealSpectralRestriction.realSelfAdjointSpectralSubspace
               (TauCeti.LinearPMap.addBounded A Eop) ⋯ S hS)) ∧
         δ *
             N.gauge
-              (TauCeti.DavisKahanExt.paperSinTwoAngleOperatorR
+              (TauCeti.DavisKahanExt.sinTwoAngleOperatorR
                 (TauCeti.DavisKahan.RealSpectralRestriction.realSelfAdjointSpectralSubspace A hA B hB)
                 (TauCeti.DavisKahan.RealSpectralRestriction.realSelfAdjointSpectralSubspace
                   (TauCeti.LinearPMap.addBounded A Eop) ⋯ S hS)) ≤
@@ -4340,8 +4340,8 @@ TauCeti.DavisKahan1970.sinTwoTheta_ambient_unbounded_addBounded_symmetricNorming
                   {E : Type v} {F : Type w} [SeminormedAddCommGroup E] [NormedSpace 𝕜 E] [SeminormedAddCommGroup F]
                   [NormedSpace 𝕜 F] (T : E →L[𝕜] F) (n : ℕ) : ℝ
                 hash: expr=2527437639 text=7dc5679d2ff68267
-  [type] TauCeti.DavisKahanExt.paperSinTwoAngleOperatorR  (def, DavisKahan/Geometry/Angle/PaperOperatorAngleReal.lean:121)
-      TauCeti.DavisKahanExt.paperSinTwoAngleOperatorR.{u_1} {E : Type u_1} [NormedAddCommGroup E]
+  [type] TauCeti.DavisKahanExt.sinTwoAngleOperatorR  (def, DavisKahan/Geometry/Angle/PaperOperatorAngleReal.lean:121)
+      TauCeti.DavisKahanExt.sinTwoAngleOperatorR.{u_1} {E : Type u_1} [NormedAddCommGroup E]
         [InnerProductSpace ℝ E] [CompleteSpace E] (U V : Submodule ℝ E) [U.HasOrthogonalProjection]
         [V.HasOrthogonalProjection] : E →L[ℝ] E
       hash: expr=2215108693 text=ca05c2be87f84df1
@@ -4351,8 +4351,8 @@ TauCeti.DavisKahan1970.sinTwoTheta_ambient_unbounded_addBounded_symmetricNorming
           [InnerProductSpace ℂ E] [CompleteSpace E] (U V : Submodule ℂ E) [U.HasOrthogonalProjection]
           [V.HasOrthogonalProjection] : E →L[ℂ] E
         hash: expr=187490045 text=178745a4708f5513
-      [body] TauCeti.DavisKahanExt.paperAngleOperatorC  (def, DavisKahan/Geometry/Angle/PaperOperatorAngle.lean:84)
-          TauCeti.DavisKahanExt.paperAngleOperatorC.{u_1} {E : Type u_1} [NormedAddCommGroup E]
+      [body] TauCeti.DavisKahanExt.angleOperatorC  (def, DavisKahan/Geometry/Angle/PaperOperatorAngle.lean:84)
+          TauCeti.DavisKahanExt.angleOperatorC.{u_1} {E : Type u_1} [NormedAddCommGroup E]
             [InnerProductSpace ℂ E] [CompleteSpace E] (U V : Submodule ℂ E) [U.HasOrthogonalProjection]
             [V.HasOrthogonalProjection] : E →L[ℂ] E
           hash: expr=187490045 text=178745a4708f5513
@@ -4487,7 +4487,7 @@ theorem tanTwoTheta_directed_unboundedResidual_blockRepresentative_symmetricNorm
         (TauCeti.LinearPMap.specRange hA (Set.Iic c) measurableSet_Iic)ᗮ →
       b * ‖(x : G)‖ ^ 2 ≤ RCLike.re ⟪A x, (x : G)⟫_ℂ)
     (hab : a < b)
-    (hRmem : N.Mem (paperBlockCompression
+    (hRmem : N.Mem (blockCompression
       (TauCeti.LinearPMap.specRange hA (Set.Iic c) measurableSet_Iic)ᗮ
       (TauCeti.LinearPMap.specRange hA (Set.Iic c) measurableSet_Iic) B)) :
     IsUnit
@@ -4497,7 +4497,7 @@ theorem tanTwoTheta_directed_unboundedResidual_blockRepresentative_symmetricNorm
         (TauCeti.LinearPMap.specRange hA (Set.Iic c) measurableSet_Iic) Z) ∧
       (b - a) * N.gauge (reflectionTangentCorner
         (TauCeti.LinearPMap.specRange hA (Set.Iic c) measurableSet_Iic) Z) ≤
-        2 * N.gauge (paperBlockCompression
+        2 * N.gauge (blockCompression
           (TauCeti.LinearPMap.specRange hA (Set.Iic c) measurableSet_Iic)ᗮ
           (TauCeti.LinearPMap.specRange hA (Set.Iic c) measurableSet_Iic) B)
 ~~~~
@@ -4523,7 +4523,7 @@ TauCeti.DavisKahan1970.tanTwoTheta_directed_unboundedResidual_blockRepresentativ
   (hab : a < b)
   (hRmem :
     N.Mem
-      (TauCeti.DavisKahan.ExactSinTheta.paperBlockCompression
+      (TauCeti.DavisKahan.ExactSinTheta.blockCompression
         (TauCeti.LinearPMap.specRange hA (Set.Iic c) ⋯)ᗮ
         (TauCeti.LinearPMap.specRange hA (Set.Iic c) ⋯) B)) :
   IsUnit
@@ -4538,7 +4538,7 @@ TauCeti.DavisKahan1970.tanTwoTheta_directed_unboundedResidual_blockRepresentativ
               (TauCeti.LinearPMap.specRange hA (Set.Iic c) ⋯) Z) ≤
         2 *
           N.gauge
-            (TauCeti.DavisKahan.ExactSinTheta.paperBlockCompression
+            (TauCeti.DavisKahan.ExactSinTheta.blockCompression
               (TauCeti.LinearPMap.specRange hA (Set.Iic c) ⋯)ᗮ
               (TauCeti.LinearPMap.specRange hA (Set.Iic c) ⋯) B)
 ~~~~
@@ -4546,8 +4546,8 @@ TauCeti.DavisKahan1970.tanTwoTheta_directed_unboundedResidual_blockRepresentativ
 Structural type hash `2946508179`, printed-type hash `2f3a4e1c99e9c08f`.
 
 Statement closure: 41 project constant(s) unfolded, 8 project leaf/leaves, 87 boundary constant(s).
-**Project constants in the statement closure that the local semantic dictionary does not disclose:** `TauCeti.IsOddFor`, `TauCeti.LinearPMap.specRange`, `TauCeti.LinearPMap.MapsDomainTo`, `TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction.Mem`, `TauCeti.DavisKahan.ExactSinTheta.paperBlockCompression`, `Submodule.diagonalPart`, `TauCeti.DavisKahan1970.reflectionTangentCorner`, `TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction.gauge`, `TauCeti.UnitarilyInvariantSeminorm`, `TauCeti.UnitarilyInvariantSeminorm.gauge`, `TauCeti.DavisKahan.ExactSinTheta.zeroPad`, `TauCeti.LinearPMap.specProjection`, `TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction.extendedGauge`, `TauCeti.DavisKahan1970.unboundedReflectionTangent`, `TauCeti.diagOp`, `TauCeti.LinearPMap.spectralPVM`, `TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction.prefixGauge`, `Submodule.offDiagonalPart`, `TauCeti.ProjValMeasure`, `TauCeti.BorelCalculus.toProjValMeasure`, `TauCeti.LinearPMap.cayley`, `TauCeti.LinearPMap.cayleyInv`, `TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction.finiteGauge`, `TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction.approximationPrefix`, `TauCeti.BorelCalculus.specProj`, `TauCeti.BorelCalculus.specDiag`, `TauCeti.LinearPMap.resolvent`, `TauCeti.BorelCalculus.borelCalculus`, `TauCeti.BorelCalculus.diagMeasure`, `TauCeti.LinearPMap.resolventSet`, `TauCeti.LinearPMap.IsResolventAt`, `ContinuousLinearMap.approximationNumber`, `TauCeti.BorelCalculus.IsBddMeasurable`, `TauCeti.BorelCalculus.borelVector`, `TauCeti.BorelCalculus.IsBddMeasurable.chooseBound`, `TauCeti.BorelCalculus.diagFunctional`, `TauCeti.BorelCalculus.pairFunctional`, `TauCeti.BorelCalculus.ofRealLM`, `TauCeti.BorelCalculus.pair`, `TauCeti.DavisKahan1970.instCompleteSpaceCoeOfHasOrthogonalProjectionUnboundedExact`, `TauCeti.DavisKahan.ExactSinTheta.instCompleteSpaceCoeOfHasOrthogonalProjectionLemma61`, `TauCeti.LinearPMap.measurable_cayleyInv`, `TauCeti.BorelCalculus.isFiniteMeasure_specDiag`, `TauCeti.BorelCalculus.inner_specProj_self`, `TauCeti.BorelCalculus.specProj_univ`, `TauCeti.BorelCalculus.specProj_inter`, `TauCeti.BorelCalculus.norm_borelVector_le`
-Dictionary definitions this statement never reaches: `TauCeti.DavisKahanTheory.absDoubleAngleTangent`, `TauCeti.DavisKahan1970.paperDoubleSecant`, `TauCeti.DavisKahan1970.paperProjectorDifference`
+**Project constants in the statement closure that the local semantic dictionary does not disclose:** `TauCeti.IsOddFor`, `TauCeti.LinearPMap.specRange`, `TauCeti.LinearPMap.MapsDomainTo`, `TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction.Mem`, `TauCeti.DavisKahan.ExactSinTheta.blockCompression`, `Submodule.diagonalPart`, `TauCeti.DavisKahan1970.reflectionTangentCorner`, `TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction.gauge`, `TauCeti.UnitarilyInvariantSeminorm`, `TauCeti.UnitarilyInvariantSeminorm.gauge`, `TauCeti.DavisKahan.ExactSinTheta.zeroPad`, `TauCeti.LinearPMap.specProjection`, `TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction.extendedGauge`, `TauCeti.DavisKahan1970.unboundedReflectionTangent`, `TauCeti.diagOp`, `TauCeti.LinearPMap.spectralPVM`, `TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction.prefixGauge`, `Submodule.offDiagonalPart`, `TauCeti.ProjValMeasure`, `TauCeti.BorelCalculus.toProjValMeasure`, `TauCeti.LinearPMap.cayley`, `TauCeti.LinearPMap.cayleyInv`, `TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction.finiteGauge`, `TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction.approximationPrefix`, `TauCeti.BorelCalculus.specProj`, `TauCeti.BorelCalculus.specDiag`, `TauCeti.LinearPMap.resolvent`, `TauCeti.BorelCalculus.borelCalculus`, `TauCeti.BorelCalculus.diagMeasure`, `TauCeti.LinearPMap.resolventSet`, `TauCeti.LinearPMap.IsResolventAt`, `ContinuousLinearMap.approximationNumber`, `TauCeti.BorelCalculus.IsBddMeasurable`, `TauCeti.BorelCalculus.borelVector`, `TauCeti.BorelCalculus.IsBddMeasurable.chooseBound`, `TauCeti.BorelCalculus.diagFunctional`, `TauCeti.BorelCalculus.pairFunctional`, `TauCeti.BorelCalculus.ofRealLM`, `TauCeti.BorelCalculus.pair`, `TauCeti.DavisKahan1970.instCompleteSpaceCoeOfHasOrthogonalProjectionUnboundedExact`, `TauCeti.DavisKahan.ExactSinTheta.instCompleteSpaceCoeOfHasOrthogonalProjectionLemma61`, `TauCeti.LinearPMap.measurable_cayleyInv`, `TauCeti.BorelCalculus.isFiniteMeasure_specDiag`, `TauCeti.BorelCalculus.inner_specProj_self`, `TauCeti.BorelCalculus.specProj_univ`, `TauCeti.BorelCalculus.specProj_inter`, `TauCeti.BorelCalculus.norm_borelVector_le`
+Dictionary definitions this statement never reaches: `TauCeti.DavisKahanTheory.absDoubleAngleTangent`, `TauCeti.DavisKahan1970.doubleSecant`, `TauCeti.DavisKahan1970.projectorDifference`
 Boundary vocabulary: `NormedAddCommGroup`, `InnerProductSpace`, `Complex`, `CompleteSpace`, `LinearPMap`, `RingHom.id`, `ContinuousLinearMap`, `Real`, `IsSelfAdjoint`, `Set.Iic`, `measurableSet_Iic`, `Eq`, `Subtype`, `Submodule`, `LinearPMap.toFun'`, `AddMonoidHom`, `Nat`, `Submodule.orthogonal`, `And`, `IsUnit`, `EuclideanSpace`, `Fin`, `ENNReal`, `EuclideanSpace.basisFun`, `RCLike`, `Set`, `MeasurableSet`, `LinearMap.range`, `Ne`, `Submodule.HasOrthogonalProjection`, `ContinuousLinearMap.comp`, `LinearIsometryEquiv`, `starRingEnd`, `ContinuousLinearMap.adjoint`, `Submodule.subtypeL`, `Submodule.starProjection`, `ENNReal.toReal`, `FiniteDimensional`, `LinearMap`, `LinearMap.comp`, `OrthonormalBasis`, `Fin.lastCases`, `iSup`, `ENNReal.ofReal`, `Ring.inverse`, `Finset.sum`, `Finset.univ`, `RCLike.ofReal`, `InnerProductSpace.rankOne`, `MeasureTheory.Measure`, `MeasureTheory.IsFiniteMeasure`, `Complex.ofReal`, `Set.univ`, `MeasurableSet.univ`, `ContinuousLinearMap.id`, `MeasurableSet.inter`, `IsStarNormal`, `Set.Elem`, `spectrum`, `Measurable`, `Complex.I`, `Set.indicator`, `Set.preimage`, `MeasureTheory.Measure.map`, `NontriviallyNormedField`, `NormedSpace`, `Exists.choose`, `LinearMap.mkContinuous`, `RealRMK.rieszMeasure`, `Set.ofPred`, `Exists`, `SeminormedAddCommGroup`, `iInf`, `Cardinal`, `LinearMap.rank`, `Nat.cast`, `StrongDual`, `LinearIsometryEquiv.symm`, `InnerProductSpace.toDual`, `PositiveLinearMap`, `CompactlySupportedContinuousMap`, `StarAlgHom`, `ContinuousMap`, `cfcHom`, `RingHom`, `TopologicalSpace`, `MeasureTheory.integral`
 
 <details><summary>Statement closure tree</summary>
@@ -4572,7 +4572,7 @@ TauCeti.DavisKahan1970.tanTwoTheta_directed_unboundedResidual_blockRepresentativ
       (hab : a < b)
       (hRmem :
         N.Mem
-          (TauCeti.DavisKahan.ExactSinTheta.paperBlockCompression
+          (TauCeti.DavisKahan.ExactSinTheta.blockCompression
             (TauCeti.LinearPMap.specRange hA (Set.Iic c) ⋯)ᗮ
             (TauCeti.LinearPMap.specRange hA (Set.Iic c) ⋯) B)) :
       IsUnit
@@ -4587,7 +4587,7 @@ TauCeti.DavisKahan1970.tanTwoTheta_directed_unboundedResidual_blockRepresentativ
                   (TauCeti.LinearPMap.specRange hA (Set.Iic c) ⋯) Z) ≤
             2 *
               N.gauge
-                (TauCeti.DavisKahan.ExactSinTheta.paperBlockCompression
+                (TauCeti.DavisKahan.ExactSinTheta.blockCompression
                   (TauCeti.LinearPMap.specRange hA (Set.Iic c) ⋯)ᗮ
                   (TauCeti.LinearPMap.specRange hA (Set.Iic c) ⋯) B)
     hash: expr=2946508179 text=2f3a4e1c99e9c08f
@@ -4829,8 +4829,8 @@ TauCeti.DavisKahan1970.tanTwoTheta_directed_unboundedResidual_blockRepresentativ
         [NormedAddCommGroup G] [InnerProductSpace ℂ G] [CompleteSpace G] (W : Submodule ℂ G)
         [W.HasOrthogonalProjection] : CompleteSpace ↥W
       hash: expr=1317722915 text=adcae78b8367566c
-  [type] TauCeti.DavisKahan.ExactSinTheta.paperBlockCompression  (def, DavisKahan/Sources/DavisKahan1970/SineTheta/Lemma61.lean:54)
-      TauCeti.DavisKahan.ExactSinTheta.paperBlockCompression.{u, v} {𝕜 : Type u} [RCLike 𝕜] {E : Type v}
+  [type] TauCeti.DavisKahan.ExactSinTheta.blockCompression  (def, DavisKahan/Sources/DavisKahan1970/SineTheta/Lemma61.lean:54)
+      TauCeti.DavisKahan.ExactSinTheta.blockCompression.{u, v} {𝕜 : Type u} [RCLike 𝕜] {E : Type v}
         [NormedAddCommGroup E] [InnerProductSpace 𝕜 E] [CompleteSpace E] (Ω Γ : Submodule 𝕜 E)
         [Ω.HasOrthogonalProjection] [Γ.HasOrthogonalProjection] (K : E →L[𝕜] E) : ↥Γ →L[𝕜] ↥Ω
       hash: expr=244603371 text=33c1f17fcf589162
@@ -4849,7 +4849,7 @@ TauCeti.DavisKahan1970.tanTwoTheta_directed_unboundedResidual_blockRepresentativ
         [NormedAddCommGroup G] [InnerProductSpace 𝕜 G] [CompleteSpace G] (U : Submodule 𝕜 G)
         [U.HasOrthogonalProjection] (Z : G →L[𝕜] G) : ↥U →L[𝕜] ↥Uᗮ
       hash: expr=3938377629 text=e31c685a2b1630c9
-    [body] TauCeti.DavisKahan.ExactSinTheta.paperBlockCompression  (above)
+    [body] TauCeti.DavisKahan.ExactSinTheta.blockCompression  (above)
     [body] TauCeti.DavisKahan1970.unboundedReflectionTangent  (def, DavisKahan/Sources/DavisKahan1970/TanTwoThetaUnboundedKyFan.lean:2041)
         TauCeti.DavisKahan1970.unboundedReflectionTangent.{u_2, u_3} {𝕜 : Type u_2} [RCLike 𝕜]
           {G : Type u_3} [NormedAddCommGroup G] [InnerProductSpace 𝕜 G] (U : Submodule 𝕜 G)
@@ -4957,8 +4957,8 @@ TauCeti.DavisKahan1970.tanTwoTheta_directed_unboundedResidual_blockRepresentativ
 Structural type hash `3512068222`, printed-type hash `20562477f7339ac9`.
 
 Statement closure: 54 project constant(s) unfolded, 8 project leaf/leaves, 93 boundary constant(s).
-**Project constants in the statement closure that the local semantic dictionary does not disclose:** `TauCeti.IsOddFor`, `TauCeti.LinearPMap.realSpecRange`, `TauCeti.LinearPMap.MapsDomainTo`, `TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction.Mem`, `TauCeti.DavisKahan1970.reflectionResidualCorner`, `Submodule.diagonalPart`, `TauCeti.DavisKahan1970.reflectionTangentCorner`, `TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction.gauge`, `TauCeti.UnitarilyInvariantSeminorm`, `TauCeti.UnitarilyInvariantSeminorm.gauge`, `TauCeti.DavisKahan.ExactSinTheta.zeroPad`, `TauCeti.LinearPMap.realSpecProjection`, `TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction.extendedGauge`, `TauCeti.DavisKahan.ExactSinTheta.paperBlockCompression`, `TauCeti.DavisKahan1970.unboundedReflectionTangent`, `TauCeti.diagOp`, `TauCeti.RealComplexification.realPartOperator`, `TauCeti.LinearPMap.specProjection`, `TauCeti.RealComplexification`, `TauCeti.LinearPMap.complexifyReal`, `TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction.prefixGauge`, `Submodule.offDiagonalPart`, `TauCeti.RealComplexification.re`, `TauCeti.RealComplexification.ofReal`, `TauCeti.LinearPMap.spectralPVM`, `TauCeti.RealComplexification.im`, `TauCeti.LinearPMap.complexificationDomain`, `TauCeti.LinearPMap.complexificationLinearMap`, `TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction.finiteGauge`, `TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction.approximationPrefix`, `TauCeti.RealComplexification.mk`, `TauCeti.ProjValMeasure`, `TauCeti.BorelCalculus.toProjValMeasure`, `TauCeti.LinearPMap.cayley`, `TauCeti.LinearPMap.cayleyInv`, `TauCeti.LinearPMap.complexificationDomainRe`, `TauCeti.LinearPMap.complexificationDomainIm`, `TauCeti.BorelCalculus.specProj`, `TauCeti.BorelCalculus.specDiag`, `TauCeti.LinearPMap.resolvent`, `ContinuousLinearMap.approximationNumber`, `TauCeti.BorelCalculus.borelCalculus`, `TauCeti.BorelCalculus.diagMeasure`, `TauCeti.LinearPMap.resolventSet`, `TauCeti.LinearPMap.IsResolventAt`, `TauCeti.BorelCalculus.IsBddMeasurable`, `TauCeti.BorelCalculus.borelVector`, `TauCeti.BorelCalculus.IsBddMeasurable.chooseBound`, `TauCeti.BorelCalculus.diagFunctional`, `TauCeti.BorelCalculus.pairFunctional`, `TauCeti.BorelCalculus.ofRealLM`, `TauCeti.BorelCalculus.pair`, `TauCeti.LinearPMap.isSelfAdjoint_complexifyReal`, `TauCeti.DavisKahan.ExactSinTheta.instCompleteSpaceCoeOfHasOrthogonalProjectionLemma61`, `TauCeti.LinearPMap.measurable_cayleyInv`, `TauCeti.BorelCalculus.isFiniteMeasure_specDiag`, `TauCeti.BorelCalculus.inner_specProj_self`, `TauCeti.BorelCalculus.specProj_univ`, `TauCeti.BorelCalculus.specProj_inter`, `TauCeti.BorelCalculus.norm_borelVector_le`
-Dictionary definitions this statement never reaches: `TauCeti.DavisKahanTheory.absDoubleAngleTangent`, `TauCeti.DavisKahan1970.paperDoubleSecant`, `TauCeti.DavisKahan1970.paperProjectorDifference`
+**Project constants in the statement closure that the local semantic dictionary does not disclose:** `TauCeti.IsOddFor`, `TauCeti.LinearPMap.realSpecRange`, `TauCeti.LinearPMap.MapsDomainTo`, `TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction.Mem`, `TauCeti.DavisKahan1970.reflectionResidualCorner`, `Submodule.diagonalPart`, `TauCeti.DavisKahan1970.reflectionTangentCorner`, `TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction.gauge`, `TauCeti.UnitarilyInvariantSeminorm`, `TauCeti.UnitarilyInvariantSeminorm.gauge`, `TauCeti.DavisKahan.ExactSinTheta.zeroPad`, `TauCeti.LinearPMap.realSpecProjection`, `TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction.extendedGauge`, `TauCeti.DavisKahan.ExactSinTheta.blockCompression`, `TauCeti.DavisKahan1970.unboundedReflectionTangent`, `TauCeti.diagOp`, `TauCeti.RealComplexification.realPartOperator`, `TauCeti.LinearPMap.specProjection`, `TauCeti.RealComplexification`, `TauCeti.LinearPMap.complexifyReal`, `TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction.prefixGauge`, `Submodule.offDiagonalPart`, `TauCeti.RealComplexification.re`, `TauCeti.RealComplexification.ofReal`, `TauCeti.LinearPMap.spectralPVM`, `TauCeti.RealComplexification.im`, `TauCeti.LinearPMap.complexificationDomain`, `TauCeti.LinearPMap.complexificationLinearMap`, `TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction.finiteGauge`, `TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction.approximationPrefix`, `TauCeti.RealComplexification.mk`, `TauCeti.ProjValMeasure`, `TauCeti.BorelCalculus.toProjValMeasure`, `TauCeti.LinearPMap.cayley`, `TauCeti.LinearPMap.cayleyInv`, `TauCeti.LinearPMap.complexificationDomainRe`, `TauCeti.LinearPMap.complexificationDomainIm`, `TauCeti.BorelCalculus.specProj`, `TauCeti.BorelCalculus.specDiag`, `TauCeti.LinearPMap.resolvent`, `ContinuousLinearMap.approximationNumber`, `TauCeti.BorelCalculus.borelCalculus`, `TauCeti.BorelCalculus.diagMeasure`, `TauCeti.LinearPMap.resolventSet`, `TauCeti.LinearPMap.IsResolventAt`, `TauCeti.BorelCalculus.IsBddMeasurable`, `TauCeti.BorelCalculus.borelVector`, `TauCeti.BorelCalculus.IsBddMeasurable.chooseBound`, `TauCeti.BorelCalculus.diagFunctional`, `TauCeti.BorelCalculus.pairFunctional`, `TauCeti.BorelCalculus.ofRealLM`, `TauCeti.BorelCalculus.pair`, `TauCeti.LinearPMap.isSelfAdjoint_complexifyReal`, `TauCeti.DavisKahan.ExactSinTheta.instCompleteSpaceCoeOfHasOrthogonalProjectionLemma61`, `TauCeti.LinearPMap.measurable_cayleyInv`, `TauCeti.BorelCalculus.isFiniteMeasure_specDiag`, `TauCeti.BorelCalculus.inner_specProj_self`, `TauCeti.BorelCalculus.specProj_univ`, `TauCeti.BorelCalculus.specProj_inter`, `TauCeti.BorelCalculus.norm_borelVector_le`
+Dictionary definitions this statement never reaches: `TauCeti.DavisKahanTheory.absDoubleAngleTangent`, `TauCeti.DavisKahan1970.doubleSecant`, `TauCeti.DavisKahan1970.projectorDifference`
 Boundary vocabulary: `NormedAddCommGroup`, `InnerProductSpace`, `Real`, `CompleteSpace`, `LinearPMap`, `RingHom.id`, `ContinuousLinearMap`, `IsSelfAdjoint`, `Set.Iic`, `measurableSet_Iic`, `Eq`, `Subtype`, `Submodule`, `LinearPMap.toFun'`, `Nat`, `Submodule.orthogonal`, `And`, `IsUnit`, `Complex`, `EuclideanSpace`, `Fin`, `ENNReal`, `EuclideanSpace.basisFun`, `RCLike`, `Set`, `MeasurableSet`, `LinearMap.range`, `Ne`, `Submodule.HasOrthogonalProjection`, `ContinuousLinearMap.comp`, `Submodule.starProjection`, `ENNReal.toReal`, `FiniteDimensional`, `LinearMap`, `LinearIsometryEquiv`, `LinearMap.comp`, `OrthonormalBasis`, `Fin.lastCases`, `iSup`, `ENNReal.ofReal`, `starRingEnd`, `ContinuousLinearMap.adjoint`, `Submodule.subtypeL`, `Ring.inverse`, `Finset.sum`, `Finset.univ`, `RCLike.ofReal`, `InnerProductSpace.rankOne`, `LinearIsometry`, `LinearMap.mkContinuous`, `WithLp`, `Prod`, `AddCommGroup`, `Module`, `Module.ofMinimalAxioms`, `NormedSpace`, `Set.ofPred`, `SMul`, `MeasureTheory.Measure`, `MeasureTheory.IsFiniteMeasure`, `Complex.ofReal`, `Set.univ`, `MeasurableSet.univ`, `ContinuousLinearMap.id`, `MeasurableSet.inter`, `IsStarNormal`, `Set.Elem`, `spectrum`, `Measurable`, `Complex.I`, `Set.indicator`, `Set.preimage`, `MeasureTheory.Measure.map`, `NontriviallyNormedField`, `Exists.choose`, `SeminormedAddCommGroup`, `iInf`, `Cardinal`, `LinearMap.rank`, `Nat.cast`, `RealRMK.rieszMeasure`, `Exists`, `StrongDual`, `LinearIsometryEquiv.symm`, `InnerProductSpace.toDual`, `PositiveLinearMap`, `CompactlySupportedContinuousMap`, `StarAlgHom`, `ContinuousMap`, `cfcHom`, `RingHom`, `TopologicalSpace`, `MeasureTheory.integral`
 
 <details><summary>Statement closure tree</summary>
@@ -5310,8 +5310,8 @@ TauCeti.DavisKahan1970.tanTwoTheta_directed_unboundedResidual_blockRepresentativ
         [NormedAddCommGroup G] [InnerProductSpace 𝕜 G] [CompleteSpace G] (U : Submodule 𝕜 G)
         [U.HasOrthogonalProjection] (B : G →L[𝕜] G) : ↥U →L[𝕜] ↥Uᗮ
       hash: expr=3938377629 text=e31c685a2b1630c9
-    [body] TauCeti.DavisKahan.ExactSinTheta.paperBlockCompression  (def, DavisKahan/Sources/DavisKahan1970/SineTheta/Lemma61.lean:54)
-        TauCeti.DavisKahan.ExactSinTheta.paperBlockCompression.{u, v} {𝕜 : Type u} [RCLike 𝕜] {E : Type v}
+    [body] TauCeti.DavisKahan.ExactSinTheta.blockCompression  (def, DavisKahan/Sources/DavisKahan1970/SineTheta/Lemma61.lean:54)
+        TauCeti.DavisKahan.ExactSinTheta.blockCompression.{u, v} {𝕜 : Type u} [RCLike 𝕜] {E : Type v}
           [NormedAddCommGroup E] [InnerProductSpace 𝕜 E] [CompleteSpace E] (Ω Γ : Submodule 𝕜 E)
           [Ω.HasOrthogonalProjection] [Γ.HasOrthogonalProjection] (K : E →L[𝕜] E) : ↥Γ →L[𝕜] ↥Ω
         hash: expr=244603371 text=33c1f17fcf589162
@@ -5330,7 +5330,7 @@ TauCeti.DavisKahan1970.tanTwoTheta_directed_unboundedResidual_blockRepresentativ
         [NormedAddCommGroup G] [InnerProductSpace 𝕜 G] [CompleteSpace G] (U : Submodule 𝕜 G)
         [U.HasOrthogonalProjection] (Z : G →L[𝕜] G) : ↥U →L[𝕜] ↥Uᗮ
       hash: expr=3938377629 text=e31c685a2b1630c9
-    [body] TauCeti.DavisKahan.ExactSinTheta.paperBlockCompression  (above)
+    [body] TauCeti.DavisKahan.ExactSinTheta.blockCompression  (above)
     [body] TauCeti.DavisKahan1970.unboundedReflectionTangent  (def, DavisKahan/Sources/DavisKahan1970/TanTwoThetaUnboundedKyFan.lean:2041)
         TauCeti.DavisKahan1970.unboundedReflectionTangent.{u_2, u_3} {𝕜 : Type u_2} [RCLike 𝕜]
           {G : Type u_3} [NormedAddCommGroup G] [InnerProductSpace 𝕜 G] (U : Submodule 𝕜 G)
@@ -5384,9 +5384,9 @@ theorem tanTwoTheta_ambient_unbounded_symmetricNorming_complex
         (TauCeti.LinearPMap.specRange hA (Set.Iic c) measurableSet_Iic)ᗮ →
       b * ‖(x : G)‖ ^ 2 ≤ RCLike.re ⟪A x, (x : G)⟫_ℂ)
     (hab : a < b) (hBmem : N.Mem B) :
-    N.Mem (TauCeti.DavisKahanExt.paperAbsTanTwoAngleOperatorC
+    N.Mem (TauCeti.DavisKahanExt.absTanTwoAngleOperatorC
         (TauCeti.LinearPMap.specRange hA (Set.Iic c) measurableSet_Iic) V) ∧
-      (b - a) * N.gauge (TauCeti.DavisKahanExt.paperAbsTanTwoAngleOperatorC
+      (b - a) * N.gauge (TauCeti.DavisKahanExt.absTanTwoAngleOperatorC
         (TauCeti.LinearPMap.specRange hA (Set.Iic c) measurableSet_Iic) V) ≤
         2 * N.gauge B
 ~~~~
@@ -5410,11 +5410,11 @@ TauCeti.DavisKahan1970.tanTwoTheta_ambient_unbounded_symmetricNorming_complex.{u
         b * ‖↑x‖ ^ 2 ≤ RCLike.re (inner ℂ (↑A x) ↑x))
   (hab : a < b) (hBmem : N.Mem B) :
   N.Mem
-      (TauCeti.DavisKahanExt.paperAbsTanTwoAngleOperatorC
+      (TauCeti.DavisKahanExt.absTanTwoAngleOperatorC
         (TauCeti.LinearPMap.specRange hA (Set.Iic c) ⋯) V) ∧
     (b - a) *
         N.gauge
-          (TauCeti.DavisKahanExt.paperAbsTanTwoAngleOperatorC
+          (TauCeti.DavisKahanExt.absTanTwoAngleOperatorC
             (TauCeti.LinearPMap.specRange hA (Set.Iic c) ⋯) V) ≤
       2 * N.gauge B
 ~~~~
@@ -5422,8 +5422,8 @@ TauCeti.DavisKahan1970.tanTwoTheta_ambient_unbounded_symmetricNorming_complex.{u
 Structural type hash `1374896681`, printed-type hash `19ff5f0e26acf116`.
 
 Statement closure: 42 project constant(s) unfolded, 6 project leaf/leaves, 96 boundary constant(s).
-**Project constants in the statement closure that the local semantic dictionary does not disclose:** `TauCeti.IsOddFor`, `TauCeti.LinearPMap.specRange`, `TauCeti.DavisKahan.ReflectionIntertwines`, `TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction.Mem`, `TauCeti.DavisKahanExt.paperAbsTanTwoAngleOperatorC`, `TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction.gauge`, `TauCeti.UnitarilyInvariantSeminorm`, `TauCeti.UnitarilyInvariantSeminorm.gauge`, `TauCeti.DavisKahan.ExactSinTheta.zeroPad`, `TauCeti.LinearPMap.specProjection`, `TauCeti.LinearPMap.MapsDomainTo`, `Submodule.reflectionOperator`, `TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction.extendedGauge`, `TauCeti.DavisKahanExt.paperAngleOperatorC`, `TauCeti.diagOp`, `TauCeti.LinearPMap.spectralPVM`, `TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction.prefixGauge`, `TauCeti.DavisKahanExt.sinAngleOperatorC`, `TauCeti.ProjValMeasure`, `TauCeti.BorelCalculus.toProjValMeasure`, `TauCeti.LinearPMap.cayley`, `TauCeti.LinearPMap.cayleyInv`, `TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction.finiteGauge`, `TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction.approximationPrefix`, `ContinuousLinearMap.modulus`, `TauCeti.BorelCalculus.specProj`, `TauCeti.BorelCalculus.specDiag`, `TauCeti.LinearPMap.resolvent`, `TauCeti.BorelCalculus.borelCalculus`, `TauCeti.BorelCalculus.diagMeasure`, `TauCeti.LinearPMap.resolventSet`, `TauCeti.LinearPMap.IsResolventAt`, `ContinuousLinearMap.approximationNumber`, `TauCeti.BorelCalculus.IsBddMeasurable`, `TauCeti.BorelCalculus.borelVector`, `TauCeti.BorelCalculus.IsBddMeasurable.chooseBound`, `TauCeti.BorelCalculus.diagFunctional`, `TauCeti.BorelCalculus.pairFunctional`, `TauCeti.BorelCalculus.ofRealLM`, `TauCeti.BorelCalculus.pair`, `TauCeti.LinearPMap.measurable_cayleyInv`, `TauCeti.BorelCalculus.isFiniteMeasure_specDiag`, `TauCeti.BorelCalculus.inner_specProj_self`, `TauCeti.BorelCalculus.specProj_univ`, `TauCeti.BorelCalculus.specProj_inter`, `TauCeti.BorelCalculus.norm_borelVector_le`
-Dictionary definitions this statement never reaches: `TauCeti.DavisKahanTheory.absDoubleAngleTangent`, `TauCeti.DavisKahan1970.paperDoubleSecant`, `TauCeti.DavisKahan1970.paperProjectorDifference`
+**Project constants in the statement closure that the local semantic dictionary does not disclose:** `TauCeti.IsOddFor`, `TauCeti.LinearPMap.specRange`, `TauCeti.DavisKahan.ReflectionIntertwines`, `TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction.Mem`, `TauCeti.DavisKahanExt.absTanTwoAngleOperatorC`, `TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction.gauge`, `TauCeti.UnitarilyInvariantSeminorm`, `TauCeti.UnitarilyInvariantSeminorm.gauge`, `TauCeti.DavisKahan.ExactSinTheta.zeroPad`, `TauCeti.LinearPMap.specProjection`, `TauCeti.LinearPMap.MapsDomainTo`, `Submodule.reflectionOperator`, `TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction.extendedGauge`, `TauCeti.DavisKahanExt.angleOperatorC`, `TauCeti.diagOp`, `TauCeti.LinearPMap.spectralPVM`, `TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction.prefixGauge`, `TauCeti.DavisKahanExt.sinAngleOperatorC`, `TauCeti.ProjValMeasure`, `TauCeti.BorelCalculus.toProjValMeasure`, `TauCeti.LinearPMap.cayley`, `TauCeti.LinearPMap.cayleyInv`, `TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction.finiteGauge`, `TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction.approximationPrefix`, `ContinuousLinearMap.modulus`, `TauCeti.BorelCalculus.specProj`, `TauCeti.BorelCalculus.specDiag`, `TauCeti.LinearPMap.resolvent`, `TauCeti.BorelCalculus.borelCalculus`, `TauCeti.BorelCalculus.diagMeasure`, `TauCeti.LinearPMap.resolventSet`, `TauCeti.LinearPMap.IsResolventAt`, `ContinuousLinearMap.approximationNumber`, `TauCeti.BorelCalculus.IsBddMeasurable`, `TauCeti.BorelCalculus.borelVector`, `TauCeti.BorelCalculus.IsBddMeasurable.chooseBound`, `TauCeti.BorelCalculus.diagFunctional`, `TauCeti.BorelCalculus.pairFunctional`, `TauCeti.BorelCalculus.ofRealLM`, `TauCeti.BorelCalculus.pair`, `TauCeti.LinearPMap.measurable_cayleyInv`, `TauCeti.BorelCalculus.isFiniteMeasure_specDiag`, `TauCeti.BorelCalculus.inner_specProj_self`, `TauCeti.BorelCalculus.specProj_univ`, `TauCeti.BorelCalculus.specProj_inter`, `TauCeti.BorelCalculus.norm_borelVector_le`
+Dictionary definitions this statement never reaches: `TauCeti.DavisKahanTheory.absDoubleAngleTangent`, `TauCeti.DavisKahan1970.doubleSecant`, `TauCeti.DavisKahan1970.projectorDifference`
 Boundary vocabulary: `NormedAddCommGroup`, `InnerProductSpace`, `Complex`, `CompleteSpace`, `LinearPMap`, `RingHom.id`, `ContinuousLinearMap`, `Real`, `Submodule`, `Submodule.HasOrthogonalProjection`, `IsSelfAdjoint`, `Set.Iic`, `measurableSet_Iic`, `Subtype`, `AddMonoidHom`, `LinearPMap.toFun'`, `Nat`, `Submodule.orthogonal`, `And`, `EuclideanSpace`, `Fin`, `ENNReal`, `Eq`, `EuclideanSpace.basisFun`, `RCLike`, `Set`, `MeasurableSet`, `LinearMap.range`, `Ne`, `cfc`, `abs`, `Real.tan`, `ENNReal.toReal`, `FiniteDimensional`, `LinearMap`, `LinearIsometryEquiv`, `LinearMap.comp`, `OrthonormalBasis`, `Fin.lastCases`, `LinearIsometry.toContinuousLinearMap`, `LinearIsometryEquiv.toLinearIsometry`, `Submodule.reflection`, `iSup`, `ENNReal.ofReal`, `Real.arcsin`, `Finset.sum`, `Finset.univ`, `RCLike.ofReal`, `starRingEnd`, `InnerProductSpace.rankOne`, `Submodule.starProjection`, `MeasureTheory.Measure`, `MeasureTheory.IsFiniteMeasure`, `Complex.ofReal`, `Set.univ`, `MeasurableSet.univ`, `ContinuousLinearMap.id`, `MeasurableSet.inter`, `IsStarNormal`, `Set.Elem`, `spectrum`, `Measurable`, `Complex.I`, `Algebra`, `IsScalarTower`, `ContinuousFunctionalCalculus`, `CFC.sqrt`, `ContinuousLinearMap.instStarOrderedRingRCLike`, `ContinuousLinearMap.comp`, `ContinuousLinearMap.adjoint`, `Set.indicator`, `Set.preimage`, `MeasureTheory.Measure.map`, `NontriviallyNormedField`, `NormedSpace`, `Exists.choose`, `LinearMap.mkContinuous`, `RealRMK.rieszMeasure`, `Set.ofPred`, `Exists`, `SeminormedAddCommGroup`, `iInf`, `Cardinal`, `LinearMap.rank`, `Nat.cast`, `StrongDual`, `LinearIsometryEquiv.symm`, `InnerProductSpace.toDual`, `PositiveLinearMap`, `CompactlySupportedContinuousMap`, `StarAlgHom`, `ContinuousMap`, `cfcHom`, `RingHom`, `TopologicalSpace`, `MeasureTheory.integral`
 
 <details><summary>Statement closure tree</summary>
@@ -5446,11 +5446,11 @@ TauCeti.DavisKahan1970.tanTwoTheta_ambient_unbounded_symmetricNorming_complex  (
             b * ‖↑x‖ ^ 2 ≤ RCLike.re (inner ℂ (↑A x) ↑x))
       (hab : a < b) (hBmem : N.Mem B) :
       N.Mem
-          (TauCeti.DavisKahanExt.paperAbsTanTwoAngleOperatorC
+          (TauCeti.DavisKahanExt.absTanTwoAngleOperatorC
             (TauCeti.LinearPMap.specRange hA (Set.Iic c) ⋯) V) ∧
         (b - a) *
             N.gauge
-              (TauCeti.DavisKahanExt.paperAbsTanTwoAngleOperatorC
+              (TauCeti.DavisKahanExt.absTanTwoAngleOperatorC
                 (TauCeti.LinearPMap.specRange hA (Set.Iic c) ⋯) V) ≤
           2 * N.gauge B
     hash: expr=1374896681 text=19ff5f0e26acf116
@@ -5699,13 +5699,13 @@ TauCeti.DavisKahan1970.tanTwoTheta_ambient_unbounded_symmetricNorming_complex  (
                   {E : Type v} {F : Type w} [SeminormedAddCommGroup E] [NormedSpace 𝕜 E] [SeminormedAddCommGroup F]
                   [NormedSpace 𝕜 F] (T : E →L[𝕜] F) (n : ℕ) : ℝ
                 hash: expr=2527437639 text=7dc5679d2ff68267
-  [type] TauCeti.DavisKahanExt.paperAbsTanTwoAngleOperatorC  (def, DavisKahan/Geometry/Angle/PaperTanAngle.lean:179)
-      TauCeti.DavisKahanExt.paperAbsTanTwoAngleOperatorC.{u_1} {E : Type u_1} [NormedAddCommGroup E]
+  [type] TauCeti.DavisKahanExt.absTanTwoAngleOperatorC  (def, DavisKahan/Geometry/Angle/PaperTanAngle.lean:179)
+      TauCeti.DavisKahanExt.absTanTwoAngleOperatorC.{u_1} {E : Type u_1} [NormedAddCommGroup E]
         [InnerProductSpace ℂ E] [CompleteSpace E] (U V : Submodule ℂ E) [U.HasOrthogonalProjection]
         [V.HasOrthogonalProjection] : E →L[ℂ] E
       hash: expr=187490045 text=178745a4708f5513
-    [body] TauCeti.DavisKahanExt.paperAngleOperatorC  (def, DavisKahan/Geometry/Angle/PaperOperatorAngle.lean:84)
-        TauCeti.DavisKahanExt.paperAngleOperatorC.{u_1} {E : Type u_1} [NormedAddCommGroup E]
+    [body] TauCeti.DavisKahanExt.angleOperatorC  (def, DavisKahan/Geometry/Angle/PaperOperatorAngle.lean:84)
+        TauCeti.DavisKahanExt.angleOperatorC.{u_1} {E : Type u_1} [NormedAddCommGroup E]
           [InnerProductSpace ℂ E] [CompleteSpace E] (U V : Submodule ℂ E) [U.HasOrthogonalProjection]
           [V.HasOrthogonalProjection] : E →L[ℂ] E
         hash: expr=187490045 text=178745a4708f5513
@@ -5761,9 +5761,9 @@ theorem tanTwoTheta_ambient_unbounded_symmetricNorming_real
         (TauCeti.LinearPMap.realSpecRange hA (Set.Iic c) measurableSet_Iic)ᗮ →
       b * ‖(x : E)‖ ^ 2 ≤ ⟪A x, (x : E)⟫_ℝ)
     (hab : a < b) (hBmem : N.Mem B) :
-    N.Mem (TauCeti.DavisKahanExt.paperAbsTanTwoAngleOperatorR
+    N.Mem (TauCeti.DavisKahanExt.absTanTwoAngleOperatorR
         (TauCeti.LinearPMap.realSpecRange hA (Set.Iic c) measurableSet_Iic) V) ∧
-      (b - a) * N.gauge (TauCeti.DavisKahanExt.paperAbsTanTwoAngleOperatorR
+      (b - a) * N.gauge (TauCeti.DavisKahanExt.absTanTwoAngleOperatorR
         (TauCeti.LinearPMap.realSpecRange hA (Set.Iic c) measurableSet_Iic) V) ≤
         2 * N.gauge B
 ~~~~
@@ -5786,11 +5786,11 @@ TauCeti.DavisKahan1970.tanTwoTheta_ambient_unbounded_symmetricNorming_real.{u} {
       ↑x ∈ (TauCeti.LinearPMap.realSpecRange hA (Set.Iic c) ⋯)ᗮ → b * ‖↑x‖ ^ 2 ≤ inner ℝ (↑A x) ↑x)
   (hab : a < b) (hBmem : N.Mem B) :
   N.Mem
-      (TauCeti.DavisKahanExt.paperAbsTanTwoAngleOperatorR
+      (TauCeti.DavisKahanExt.absTanTwoAngleOperatorR
         (TauCeti.LinearPMap.realSpecRange hA (Set.Iic c) ⋯) V) ∧
     (b - a) *
         N.gauge
-          (TauCeti.DavisKahanExt.paperAbsTanTwoAngleOperatorR
+          (TauCeti.DavisKahanExt.absTanTwoAngleOperatorR
             (TauCeti.LinearPMap.realSpecRange hA (Set.Iic c) ⋯) V) ≤
       2 * N.gauge B
 ~~~~
@@ -5798,8 +5798,8 @@ TauCeti.DavisKahan1970.tanTwoTheta_ambient_unbounded_symmetricNorming_real.{u} {
 Structural type hash `2282470164`, printed-type hash `81828007b92d34da`.
 
 Statement closure: 56 project constant(s) unfolded, 7 project leaf/leaves, 102 boundary constant(s).
-**Project constants in the statement closure that the local semantic dictionary does not disclose:** `TauCeti.IsOddFor`, `TauCeti.LinearPMap.realSpecRange`, `TauCeti.DavisKahan.ReflectionIntertwines`, `TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction.Mem`, `TauCeti.DavisKahanExt.paperAbsTanTwoAngleOperatorR`, `TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction.gauge`, `TauCeti.UnitarilyInvariantSeminorm`, `TauCeti.UnitarilyInvariantSeminorm.gauge`, `TauCeti.DavisKahan.ExactSinTheta.zeroPad`, `TauCeti.LinearPMap.realSpecProjection`, `TauCeti.LinearPMap.MapsDomainTo`, `Submodule.reflectionOperator`, `TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction.extendedGauge`, `TauCeti.RealComplexification.realPartOperator`, `TauCeti.DavisKahanExt.paperAbsTanTwoAngleOperatorC`, `TauCeti.RealComplexification`, `TauCeti.DavisKahan.Foundation.RealComplexification.complexifySubmodule`, `TauCeti.diagOp`, `TauCeti.LinearPMap.specProjection`, `TauCeti.LinearPMap.complexifyReal`, `TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction.prefixGauge`, `TauCeti.RealComplexification.re`, `TauCeti.RealComplexification.ofReal`, `TauCeti.DavisKahanExt.paperAngleOperatorC`, `TauCeti.RealComplexification.im`, `TauCeti.LinearPMap.spectralPVM`, `TauCeti.LinearPMap.complexificationDomain`, `TauCeti.LinearPMap.complexificationLinearMap`, `TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction.finiteGauge`, `TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction.approximationPrefix`, `TauCeti.RealComplexification.mk`, `TauCeti.DavisKahanExt.sinAngleOperatorC`, `TauCeti.ProjValMeasure`, `TauCeti.BorelCalculus.toProjValMeasure`, `TauCeti.LinearPMap.cayley`, `TauCeti.LinearPMap.cayleyInv`, `TauCeti.LinearPMap.complexificationDomainRe`, `TauCeti.LinearPMap.complexificationDomainIm`, `ContinuousLinearMap.modulus`, `TauCeti.BorelCalculus.specProj`, `TauCeti.BorelCalculus.specDiag`, `TauCeti.LinearPMap.resolvent`, `ContinuousLinearMap.approximationNumber`, `TauCeti.BorelCalculus.borelCalculus`, `TauCeti.BorelCalculus.diagMeasure`, `TauCeti.LinearPMap.resolventSet`, `TauCeti.LinearPMap.IsResolventAt`, `TauCeti.BorelCalculus.IsBddMeasurable`, `TauCeti.BorelCalculus.borelVector`, `TauCeti.BorelCalculus.IsBddMeasurable.chooseBound`, `TauCeti.BorelCalculus.diagFunctional`, `TauCeti.BorelCalculus.pairFunctional`, `TauCeti.BorelCalculus.ofRealLM`, `TauCeti.BorelCalculus.pair`, `TauCeti.LinearPMap.isSelfAdjoint_complexifyReal`, `TauCeti.LinearPMap.measurable_cayleyInv`, `TauCeti.BorelCalculus.isFiniteMeasure_specDiag`, `TauCeti.BorelCalculus.inner_specProj_self`, `TauCeti.BorelCalculus.specProj_univ`, `TauCeti.BorelCalculus.specProj_inter`, `TauCeti.BorelCalculus.norm_borelVector_le`
-Dictionary definitions this statement never reaches: `TauCeti.DavisKahanTheory.absDoubleAngleTangent`, `TauCeti.DavisKahan1970.paperDoubleSecant`, `TauCeti.DavisKahan1970.paperProjectorDifference`
+**Project constants in the statement closure that the local semantic dictionary does not disclose:** `TauCeti.IsOddFor`, `TauCeti.LinearPMap.realSpecRange`, `TauCeti.DavisKahan.ReflectionIntertwines`, `TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction.Mem`, `TauCeti.DavisKahanExt.absTanTwoAngleOperatorR`, `TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction.gauge`, `TauCeti.UnitarilyInvariantSeminorm`, `TauCeti.UnitarilyInvariantSeminorm.gauge`, `TauCeti.DavisKahan.ExactSinTheta.zeroPad`, `TauCeti.LinearPMap.realSpecProjection`, `TauCeti.LinearPMap.MapsDomainTo`, `Submodule.reflectionOperator`, `TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction.extendedGauge`, `TauCeti.RealComplexification.realPartOperator`, `TauCeti.DavisKahanExt.absTanTwoAngleOperatorC`, `TauCeti.RealComplexification`, `TauCeti.DavisKahan.Foundation.RealComplexification.complexifySubmodule`, `TauCeti.diagOp`, `TauCeti.LinearPMap.specProjection`, `TauCeti.LinearPMap.complexifyReal`, `TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction.prefixGauge`, `TauCeti.RealComplexification.re`, `TauCeti.RealComplexification.ofReal`, `TauCeti.DavisKahanExt.angleOperatorC`, `TauCeti.RealComplexification.im`, `TauCeti.LinearPMap.spectralPVM`, `TauCeti.LinearPMap.complexificationDomain`, `TauCeti.LinearPMap.complexificationLinearMap`, `TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction.finiteGauge`, `TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction.approximationPrefix`, `TauCeti.RealComplexification.mk`, `TauCeti.DavisKahanExt.sinAngleOperatorC`, `TauCeti.ProjValMeasure`, `TauCeti.BorelCalculus.toProjValMeasure`, `TauCeti.LinearPMap.cayley`, `TauCeti.LinearPMap.cayleyInv`, `TauCeti.LinearPMap.complexificationDomainRe`, `TauCeti.LinearPMap.complexificationDomainIm`, `ContinuousLinearMap.modulus`, `TauCeti.BorelCalculus.specProj`, `TauCeti.BorelCalculus.specDiag`, `TauCeti.LinearPMap.resolvent`, `ContinuousLinearMap.approximationNumber`, `TauCeti.BorelCalculus.borelCalculus`, `TauCeti.BorelCalculus.diagMeasure`, `TauCeti.LinearPMap.resolventSet`, `TauCeti.LinearPMap.IsResolventAt`, `TauCeti.BorelCalculus.IsBddMeasurable`, `TauCeti.BorelCalculus.borelVector`, `TauCeti.BorelCalculus.IsBddMeasurable.chooseBound`, `TauCeti.BorelCalculus.diagFunctional`, `TauCeti.BorelCalculus.pairFunctional`, `TauCeti.BorelCalculus.ofRealLM`, `TauCeti.BorelCalculus.pair`, `TauCeti.LinearPMap.isSelfAdjoint_complexifyReal`, `TauCeti.LinearPMap.measurable_cayleyInv`, `TauCeti.BorelCalculus.isFiniteMeasure_specDiag`, `TauCeti.BorelCalculus.inner_specProj_self`, `TauCeti.BorelCalculus.specProj_univ`, `TauCeti.BorelCalculus.specProj_inter`, `TauCeti.BorelCalculus.norm_borelVector_le`
+Dictionary definitions this statement never reaches: `TauCeti.DavisKahanTheory.absDoubleAngleTangent`, `TauCeti.DavisKahan1970.doubleSecant`, `TauCeti.DavisKahan1970.projectorDifference`
 Boundary vocabulary: `NormedAddCommGroup`, `InnerProductSpace`, `Real`, `CompleteSpace`, `LinearPMap`, `RingHom.id`, `ContinuousLinearMap`, `Submodule`, `Submodule.HasOrthogonalProjection`, `IsSelfAdjoint`, `Set.Iic`, `measurableSet_Iic`, `Subtype`, `LinearPMap.toFun'`, `Nat`, `Submodule.orthogonal`, `And`, `Complex`, `EuclideanSpace`, `Fin`, `ENNReal`, `Eq`, `EuclideanSpace.basisFun`, `RCLike`, `Set`, `MeasurableSet`, `LinearMap.range`, `Ne`, `ENNReal.toReal`, `FiniteDimensional`, `LinearMap`, `LinearIsometryEquiv`, `LinearMap.comp`, `OrthonormalBasis`, `Fin.lastCases`, `LinearIsometry.toContinuousLinearMap`, `LinearIsometryEquiv.toLinearIsometry`, `Submodule.reflection`, `iSup`, `ENNReal.ofReal`, `LinearIsometry`, `LinearMap.mkContinuous`, `cfc`, `abs`, `Real.tan`, `WithLp`, `Prod`, `Set.ofPred`, `Finset.sum`, `Finset.univ`, `RCLike.ofReal`, `starRingEnd`, `InnerProductSpace.rankOne`, `AddCommGroup`, `Module`, `Module.ofMinimalAxioms`, `NormedSpace`, `Real.arcsin`, `SMul`, `Submodule.starProjection`, `MeasureTheory.Measure`, `MeasureTheory.IsFiniteMeasure`, `Complex.ofReal`, `Set.univ`, `MeasurableSet.univ`, `ContinuousLinearMap.id`, `MeasurableSet.inter`, `IsStarNormal`, `Set.Elem`, `spectrum`, `Measurable`, `Complex.I`, `Algebra`, `IsScalarTower`, `ContinuousFunctionalCalculus`, `CFC.sqrt`, `ContinuousLinearMap.instStarOrderedRingRCLike`, `ContinuousLinearMap.comp`, `ContinuousLinearMap.adjoint`, `Set.indicator`, `Set.preimage`, `MeasureTheory.Measure.map`, `NontriviallyNormedField`, `Exists.choose`, `SeminormedAddCommGroup`, `iInf`, `Cardinal`, `LinearMap.rank`, `Nat.cast`, `RealRMK.rieszMeasure`, `Exists`, `StrongDual`, `LinearIsometryEquiv.symm`, `InnerProductSpace.toDual`, `PositiveLinearMap`, `CompactlySupportedContinuousMap`, `StarAlgHom`, `ContinuousMap`, `cfcHom`, `RingHom`, `TopologicalSpace`, `MeasureTheory.integral`
 
 <details><summary>Statement closure tree</summary>
@@ -5821,11 +5821,11 @@ TauCeti.DavisKahan1970.tanTwoTheta_ambient_unbounded_symmetricNorming_real  (the
           ↑x ∈ (TauCeti.LinearPMap.realSpecRange hA (Set.Iic c) ⋯)ᗮ → b * ‖↑x‖ ^ 2 ≤ inner ℝ (↑A x) ↑x)
       (hab : a < b) (hBmem : N.Mem B) :
       N.Mem
-          (TauCeti.DavisKahanExt.paperAbsTanTwoAngleOperatorR
+          (TauCeti.DavisKahanExt.absTanTwoAngleOperatorR
             (TauCeti.LinearPMap.realSpecRange hA (Set.Iic c) ⋯) V) ∧
         (b - a) *
             N.gauge
-              (TauCeti.DavisKahanExt.paperAbsTanTwoAngleOperatorR
+              (TauCeti.DavisKahanExt.absTanTwoAngleOperatorR
                 (TauCeti.LinearPMap.realSpecRange hA (Set.Iic c) ⋯) V) ≤
           2 * N.gauge B
     hash: expr=2282470164 text=81828007b92d34da
@@ -6148,19 +6148,19 @@ TauCeti.DavisKahan1970.tanTwoTheta_ambient_unbounded_symmetricNorming_real  (the
                   {E : Type v} {F : Type w} [SeminormedAddCommGroup E] [NormedSpace 𝕜 E] [SeminormedAddCommGroup F]
                   [NormedSpace 𝕜 F] (T : E →L[𝕜] F) (n : ℕ) : ℝ
                 hash: expr=2527437639 text=7dc5679d2ff68267
-  [type] TauCeti.DavisKahanExt.paperAbsTanTwoAngleOperatorR  (def, DavisKahan/Geometry/Angle/PaperOperatorAngleReal.lean:136)
-      TauCeti.DavisKahanExt.paperAbsTanTwoAngleOperatorR.{u_1} {E : Type u_1} [NormedAddCommGroup E]
+  [type] TauCeti.DavisKahanExt.absTanTwoAngleOperatorR  (def, DavisKahan/Geometry/Angle/PaperOperatorAngleReal.lean:136)
+      TauCeti.DavisKahanExt.absTanTwoAngleOperatorR.{u_1} {E : Type u_1} [NormedAddCommGroup E]
         [InnerProductSpace ℝ E] [CompleteSpace E] (U V : Submodule ℝ E) [U.HasOrthogonalProjection]
         [V.HasOrthogonalProjection] : E →L[ℝ] E
       hash: expr=2215108693 text=ca05c2be87f84df1
     [body] TauCeti.RealComplexification.realPartOperator  (above)
-    [body] TauCeti.DavisKahanExt.paperAbsTanTwoAngleOperatorC  (def, DavisKahan/Geometry/Angle/PaperTanAngle.lean:179)
-        TauCeti.DavisKahanExt.paperAbsTanTwoAngleOperatorC.{u_1} {E : Type u_1} [NormedAddCommGroup E]
+    [body] TauCeti.DavisKahanExt.absTanTwoAngleOperatorC  (def, DavisKahan/Geometry/Angle/PaperTanAngle.lean:179)
+        TauCeti.DavisKahanExt.absTanTwoAngleOperatorC.{u_1} {E : Type u_1} [NormedAddCommGroup E]
           [InnerProductSpace ℂ E] [CompleteSpace E] (U V : Submodule ℂ E) [U.HasOrthogonalProjection]
           [V.HasOrthogonalProjection] : E →L[ℂ] E
         hash: expr=187490045 text=178745a4708f5513
-      [body] TauCeti.DavisKahanExt.paperAngleOperatorC  (def, DavisKahan/Geometry/Angle/PaperOperatorAngle.lean:84)
-          TauCeti.DavisKahanExt.paperAngleOperatorC.{u_1} {E : Type u_1} [NormedAddCommGroup E]
+      [body] TauCeti.DavisKahanExt.angleOperatorC  (def, DavisKahan/Geometry/Angle/PaperOperatorAngle.lean:84)
+          TauCeti.DavisKahanExt.angleOperatorC.{u_1} {E : Type u_1} [NormedAddCommGroup E]
             [InnerProductSpace ℂ E] [CompleteSpace E] (U V : Submodule ℂ E) [U.HasOrthogonalProjection]
             [V.HasOrthogonalProjection] : E →L[ℂ] E
           hash: expr=187490045 text=178745a4708f5513
@@ -6223,11 +6223,11 @@ The branch-free scalar function 2 t / |1-t^2| applied to graph-coordinate singul
 
 The approximation-number singular-value sequence used to express the branch-free tangent representative in arbitrary Hilbert space.
 
-#### `TauCeti.DavisKahan1970.paperDoubleSecant`
+#### `TauCeti.DavisKahan1970.doubleSecant`
 
 The source-shaped U,V directed-corner implementation used by the second canonical theorem; its invertibility is derived internally rather than assumed.
 
-#### `TauCeti.DavisKahan1970.paperProjectorDifference`
+#### `TauCeti.DavisKahan1970.projectorDifference`
 
 The projector-difference factor used to build the source-shaped directed tan(2 Theta0) representative.
 

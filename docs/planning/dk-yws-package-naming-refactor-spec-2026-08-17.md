@@ -519,12 +519,12 @@ That later change must be dependency-ordered and should not be bundled with the 
 Keep `paper*` when it genuinely distinguishes a literal source construction or source-specific witness from reusable mathematics, for example:
 
 ```text
-paperSourceDirectedAngleC
-paperSourceFullAngleC
-paperCounterexampleA
-paperTanTwoBlockRepresentative
-paperPlanarTrialMap
-paperProjectorDifference
+directedAngleBlockC
+fullAngleBlockC
+counterexampleA
+tanTwoBlockRepresentative
+planarTrialMap
+projectorDifference
 ```
 
 The prefix is meaningful there: these objects encode the paper's particular coordinate/source model.

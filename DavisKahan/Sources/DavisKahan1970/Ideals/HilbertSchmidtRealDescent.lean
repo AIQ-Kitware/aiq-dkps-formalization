@@ -129,7 +129,7 @@ theorem tendsto_opNorm_of_paperHilbertSchmidt
 
 /-- The real paper Hilbert--Schmidt class is complete.  The proof descends the
 complex tensor-space limit through the closed real-copy condition. -/
-theorem paperHilbertSchmidt_complete_real
+theorem hilbertSchmidt_complete_real
     (A : ℕ → E →L[ℝ] F)
     (hA : ∀ n, IsPaperHilbertSchmidt (A n))
     (hcauchy : ∀ ε : ℝ, 0 < ε → ∃ N, ∀ m n,
@@ -151,10 +151,10 @@ theorem paperHilbertSchmidt_complete_real
     intro m n hm hn
     rw [show Ac m - Ac n = complexify (A m - A n) by
       simp [Ac, complexify_sub]]
-    rw [paperHilbertSchmidtNorm_complexify]
+    rw [hilbertSchmidtNorm_complexify]
     exact hN m n hm hn
   obtain ⟨Lc, hLc, hconvC⟩ :=
-    paperHilbertSchmidt_complete_complex Ac hAc hcauchyC
+    hilbertSchmidt_complete_complex Ac hAc hcauchyC
   have hOp : Tendsto Ac atTop (𝓝 Lc) :=
     tendsto_opNorm_of_paperHilbertSchmidt Ac Lc hAc hLc hconvC
   have hreal : MapsRealCopy Lc :=
@@ -174,7 +174,7 @@ theorem paperHilbertSchmidt_complete_real
   calc
     paperHilbertSchmidtNorm (A n - L) =
         paperHilbertSchmidtNorm (complexify (A n - L)) := by
-          rw [paperHilbertSchmidtNorm_complexify]
+          rw [hilbertSchmidtNorm_complexify]
     _ = paperHilbertSchmidtNorm (Ac n - Lc) := by
           rw [complexify_sub, hLc_eq]
     _ < ε := hN n hn
@@ -193,7 +193,7 @@ theorem isPaperHilbertSchmidt_add_real
     ((isPaperHilbertSchmidt_complexify_iff B).2 hB)
 
 /-- Triangle inequality for the real paper Hilbert--Schmidt norm. -/
-theorem paperHilbertSchmidtNorm_add_le_real
+theorem hilbertSchmidtNorm_add_le_real
     {A B : E →L[ℝ] F}
     (hA : IsPaperHilbertSchmidt A)
     (hB : IsPaperHilbertSchmidt B) :
@@ -202,17 +202,17 @@ theorem paperHilbertSchmidtNorm_add_le_real
   calc
     paperHilbertSchmidtNorm (A + B) =
         paperHilbertSchmidtNorm (complexify (A + B)) := by
-          rw [paperHilbertSchmidtNorm_complexify]
+          rw [hilbertSchmidtNorm_complexify]
     _ = paperHilbertSchmidtNorm (complexify A + complexify B) := by
           rw [complexify_add]
     _ ≤ paperHilbertSchmidtNorm (complexify A) +
           paperHilbertSchmidtNorm (complexify B) :=
-      paperHilbertSchmidtNorm_add_le_complex
+      hilbertSchmidtNorm_add_le_complex
         ((isPaperHilbertSchmidt_complexify_iff A).2 hA)
         ((isPaperHilbertSchmidt_complexify_iff B).2 hB)
     _ = paperHilbertSchmidtNorm A + paperHilbertSchmidtNorm B := by
-          rw [paperHilbertSchmidtNorm_complexify,
-            paperHilbertSchmidtNorm_complexify]
+          rw [hilbertSchmidtNorm_complexify,
+            hilbertSchmidtNorm_complexify]
 
 /-- The complete rectangular Hilbert--Schmidt family over real Hilbert spaces. -/
 noncomputable def hilbertSchmidtReal :
@@ -247,28 +247,28 @@ noncomputable def hilbertSchmidtReal :
         exact hA.comp L R
       gauge_nonneg := by
         intro E F _ _ _ _ _ _ A hA
-        exact paperHilbertSchmidtNorm_nonneg A
+        exact hilbertSchmidtNorm_nonneg A
       gauge_zero := by
         intro E F _ _ _ _ _ _
-        exact paperHilbertSchmidtNorm_zero
+        exact hilbertSchmidtNorm_zero
       gauge_add_le := by
         intro E F _ _ _ _ _ _ A B hA hB
-        exact paperHilbertSchmidtNorm_add_le_real hA hB
+        exact hilbertSchmidtNorm_add_le_real hA hB
       gauge_smul := by
         intro E F _ _ _ _ _ _ c A hA
-        exact paperHilbertSchmidtNorm_smul c A hA
+        exact hilbertSchmidtNorm_smul c A hA
       gauge_adjoint := by
         intro E F _ _ _ _ _ _ A hA
-        exact paperHilbertSchmidtNorm_adjoint A
+        exact hilbertSchmidtNorm_adjoint A
       gauge_comp_le := by
         intro E F G H _ _ _ _ _ _ _ _ _ _ _ _ L A R hA
-        exact paperHilbertSchmidtNorm_comp_le L hA R
+        exact hilbertSchmidtNorm_comp_le L hA R
       opNorm_le_gauge := by
         intro E F _ _ _ _ _ _ A hA
         exact opNorm_le_paperHilbertSchmidtNorm hA
       gauge_complete := by
         intro E F _ _ _ _ _ _ A hA hcauchy
-        exact paperHilbertSchmidt_complete_real A hA hcauchy }
+        exact hilbertSchmidt_complete_real A hA hcauchy }
 
 end
 

@@ -73,10 +73,10 @@ theorem proposition3_4_source_full_bundled_complex
     (hcomplement_pos :
       (0 : H →L[ℂ] H) ≤ complementaryProjection U * W * complementaryProjection U)
     (hcos : ∀ x ∈ U, ‖x‖ ^ 2 / 2 ≤ ‖projection V x‖ ^ 2) :
-    IsPaperDirectRotation (reflectedSubspace U V) V (W * W) := by
+    IsDirectRotation (reflectedSubspace U V) V (W * W) := by
   have hsp := (ContinuousLinearMap.nonneg_iff_isPositive _).mp hsource_pos
   have hcp := (ContinuousLinearMap.nonneg_iff_isPositive _).mp hcomplement_pos
-  have hW : IsPaperDirectRotation U V W :=
+  have hW : IsDirectRotation U V W :=
     { unitary_mem := hunitary
       intertwines := hintertwines
       source_compression_nonnegative := fun x => by
@@ -160,7 +160,7 @@ Grounded by `:=` on `proposition3_3_principalSquareRoot_converse`, so no square-
 argument is duplicated. -/
 theorem proposition3_4_source (hacute : IsUniformlyAcute U V)
     (hcos : ∀ x ∈ U, ‖x‖ ^ 2 / 2 ≤ ‖projection V x‖ ^ 2) :
-    IsPaperDirectRotation (reflectedSubspace U V) V
+    IsDirectRotation (reflectedSubspace U V) V
       (spectraDirectRotation U V hacute * spectraDirectRotation U V hacute) := by
   set W := spectraDirectRotation U V hacute with hWdef
   have hWunit : W ∈ unitary (H →L[ℂ] H) := spectraDirectRotation_mem_unitary U V hacute

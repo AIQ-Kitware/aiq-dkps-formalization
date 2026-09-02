@@ -98,7 +98,7 @@ private theorem approximationNumber_realAmbientDoubleSine_complexify
   have hsame := sameSingular_paperSinTwoAngleOperatorR_reflectedProjectorDifference U V
   have hleft : (paperSinTwoAngleOperatorC (complexifySubmodule U)
       (complexifySubmodule V)).approximationNumber n =
-      (complexify (paperSinTwoAngleOperatorR U V)).approximationNumber n := by
+      (complexify (sinTwoAngleOperatorR U V)).approximationNumber n := by
     rw [complexify_paperSinTwoAngleOperatorR]
   have hmodulus := approximationNumber_paperSinTwoAngleOperatorC
     (complexifySubmodule U) (complexifySubmodule V) n
@@ -109,7 +109,7 @@ private theorem approximationNumber_realAmbientDoubleSine_complexify
         (complexifySubmodule U).starProjection).approximationNumber n
       = (paperSinTwoAngleOperatorC (complexifySubmodule U)
           (complexifySubmodule V)).approximationNumber n := hmodulus.symm
-    _ = (complexify (paperSinTwoAngleOperatorR U V)).approximationNumber n := hleft
+    _ = (complexify (sinTwoAngleOperatorR U V)).approximationNumber n := hleft
     _ = (complexify (realAmbientDoubleSine U V)).approximationNumber n := hsame n
     _ = (realAmbientDoubleSine U V).approximationNumber n := hright
 
@@ -137,12 +137,12 @@ theorem tanTwoTheta_ambient_unbounded_reducing_sineSequence_symmetricNorming_rea
     (hBmem : N.Mem B) :
     (∀ n : ℕ, ((U.map (V.reflection.toLinearEquiv : E →ₗ[ℝ] E)).starProjection -
         U.starProjection).approximationNumber n < 1) ∧
-      (∀ n : ℕ, (paperAbsTanTwoAngleOperatorR U V).approximationNumber n =
+      (∀ n : ℕ, (absTanTwoAngleOperatorR U V).approximationNumber n =
         Real.tan (Real.arcsin
           (((U.map (V.reflection.toLinearEquiv : E →ₗ[ℝ] E)).starProjection -
             U.starProjection).approximationNumber n))) ∧
-      N.Mem (paperAbsTanTwoAngleOperatorR U V) ∧
-      (b - a) * N.gauge (paperAbsTanTwoAngleOperatorR U V) ≤ 2 * N.gauge B := by
+      N.Mem (absTanTwoAngleOperatorR U V) ∧
+      (b - a) * N.gauge (absTanTwoAngleOperatorR U V) ≤ 2 * N.gauge B := by
   obtain ⟨hunit, hmem, hle⟩ :=
     tanTwoTheta_ambient_unbounded_blockRepresentative_reducing_symmetricNorming_real
       hA hred hB (TauCeti.DavisKahanExt.isSelfAdjoint_reflectionOperator V)
@@ -170,7 +170,7 @@ theorem tanTwoTheta_ambient_unbounded_reducing_sineSequence_symmetricNorming_rea
   · rw [show ((U.map (V.reflection.toLinearEquiv : E →ₗ[ℝ] E)).starProjection -
         U.starProjection) = realAmbientDoubleSine U V from rfl,
       ← approximationNumber_realAmbientDoubleSine_complexify U V n,
-      ← approximationNumber_complexify_eq (paperAbsTanTwoAngleOperatorR U V) n,
+      ← approximationNumber_complexify_eq (absTanTwoAngleOperatorR U V) n,
       complexify_paperAbsTanTwoAngleOperatorR]
     exact approximationNumber_paperAbsTanTwoAngleOperatorC_projectorDifference
       (complexifySubmodule U) (complexifySubmodule V) hcos n

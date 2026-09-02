@@ -322,7 +322,7 @@
             "TauCeti.DavisKahan1970.tanTwoTheta_directed_boundedResidual_blockRepresentative_spectralGap_symmetricNorming_complex",
             "TauCeti.DavisKahan1970.tanTwoTheta_directed_boundedResidual_blockRepresentative_spectralGap_symmetricNorming_real",
             "TauCeti.DavisKahan1970.tanTwoTheta_directed_boundedResidual_branchFree_blockRepresentative_symmetricNorming_complex",
-            "TauCeti.DavisKahan1970.paperTanTwoDirectedCornerR",
+            "TauCeti.DavisKahan1970.tanTwoDirectedCornerR",
             "TauCeti.DavisKahan1970.tanTwoTheta_directed_unboundedResidual_blockRepresentative_symmetricNorming_complex",
             "TauCeti.DavisKahan1970.tanTwoTheta_directed_unboundedResidual_blockRepresentative_symmetricNorming_real"
           ]
@@ -333,7 +333,7 @@
           "review_declarations": [
             "TauCeti.DavisKahan1970.tanTwoTheta_ambient_bounded_spectralGap_symmetricNorming_complex",
             "TauCeti.DavisKahan1970.tanTwoTheta_ambient_bounded_spectralGap_symmetricNorming_real",
-            "TauCeti.DavisKahan1970.paperAbsTanTwoAngleOperatorC_eq_modulus_paperTanTwoAngleOperatorC",
+            "TauCeti.DavisKahan1970.absTanTwoAngleOperatorC_eq_modulus_tanTwoAngleOperatorC",
             "TauCeti.DavisKahan1970.tanTwoTheta_ambient_unbounded_blockRepresentative_symmetricNorming_complex",
             "TauCeti.DavisKahan1970.tanTwoTheta_ambient_unbounded_blockRepresentative_symmetricNorming_real"
           ]
@@ -1169,7 +1169,7 @@
       "expected_verification": "proved_in_build",
       "tex_marker": "DK-5-hermitian-inequalities",
       "review_declarations": [
-        "TauCeti.DavisKahan.ExactSinTheta.paperHilbertSchmidt_sylvester_le_of_pairwiseSpectrumGap",
+        "TauCeti.DavisKahan.ExactSinTheta.hilbertSchmidt_sylvester_le_of_pairwiseSpectrumGap",
         "TauCeti.DavisKahan.ExactSinTheta.operatorNormingFunction_sylvester_le_of_pairwiseSpectrumGap"
       ],
       "audit_clauses": [
@@ -1177,9 +1177,9 @@
           "id": "DK-5-hermitian-inequalities.inequalities",
           "description": "Equations (5.1) and (5.2): for Hermitian A, B at pairwise spectral distance at least delta and C = AX - XB, the square-norm bound ||C||_sq >= delta ||X||_sq, and its trace-norm corollary carrying the sqrt(rank C) factor.",
           "review_declarations": [
-            "TauCeti.DavisKahan.ExactSinTheta.paperHilbertSchmidt_sylvester_le_of_pairwiseSpectrumGap",
-            "TauCeti.DavisKahan.ExactSinTheta.paperHilbertSchmidt_sylvester_real_le_of_pairwiseSpectrumGap",
-            "TauCeti.DavisKahan.ExactSinTheta.paperHilbertSchmidtEnergy_sylvester_le_of_pairwiseSpectrumGap",
+            "TauCeti.DavisKahan.ExactSinTheta.hilbertSchmidt_sylvester_le_of_pairwiseSpectrumGap",
+            "TauCeti.DavisKahan.ExactSinTheta.hilbertSchmidt_sylvester_real_le_of_pairwiseSpectrumGap",
+            "TauCeti.DavisKahan.ExactSinTheta.hilbertSchmidtEnergy_sylvester_le_of_pairwiseSpectrumGap",
             "TauCeti.DavisKahan.ExactSinTheta.operatorNormingFunction_sylvester_le_finrank_range"
           ]
         },

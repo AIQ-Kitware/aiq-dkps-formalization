@@ -171,17 +171,17 @@ variable (Ω Γ : Submodule ℝ E) [Ω.HasOrthogonalProjection] [Γ.HasOrthogona
 /-- The block compression, read back into the ambient space, is the pinched
 operator.  This is `coe_paperBlockCompression_apply` in operator form. -/
 theorem subtypeL_comp_paperBlockCompression (K : E →L[ℝ] E) :
-    Ω.subtypeL ∘L paperBlockCompression Ω Γ K =
+    Ω.subtypeL ∘L blockCompression Ω Γ K =
       Ω.starProjection ∘L K ∘L Γ.subtypeL :=
   ContinuousLinearMap.ext fun z => coe_paperBlockCompression_apply Ω Γ K z
 
 /-- **Through the canonical subspace adapters, the complexified directed corner is
 exactly the complexification of the real directed corner.** -/
-theorem paperBlockCompression_complexify_equiv (K : E →L[ℝ] E) :
+theorem blockCompression_complexify_equiv (K : E →L[ℝ] E) :
     (complexifySubmoduleEquiv Ω).toContinuousLinearEquiv.toContinuousLinearMap ∘L
-        complexify (paperBlockCompression Ω Γ K) ∘L
+        complexify (blockCompression Ω Γ K) ∘L
         (complexifySubmoduleEquiv Γ).symm.toContinuousLinearEquiv.toContinuousLinearMap =
-      paperBlockCompression (complexifySubmodule Ω) (complexifySubmodule Γ)
+      blockCompression (complexifySubmodule Ω) (complexifySubmodule Γ)
         (complexify K) := by
   refine ContinuousLinearMap.ext fun y => Subtype.ext ?_
   set w := (complexifySubmoduleEquiv Γ).symm y with hwdef
@@ -193,13 +193,13 @@ theorem paperBlockCompression_complexify_equiv (K : E →L[ℝ] E) :
     exact coe_complexifySubmoduleEquiv_eq_complexify_subtypeL Γ w
   have hlhs :
       ((((complexifySubmoduleEquiv Ω).toContinuousLinearEquiv.toContinuousLinearMap ∘L
-          complexify (paperBlockCompression Ω Γ K) ∘L
+          complexify (blockCompression Ω Γ K) ∘L
           (complexifySubmoduleEquiv Γ).symm.toContinuousLinearEquiv.toContinuousLinearMap)
             y : complexifySubmodule Ω) : RealComplexification E) =
-        complexify (Ω.subtypeL ∘L paperBlockCompression Ω Γ K) w := by
+        complexify (Ω.subtypeL ∘L blockCompression Ω Γ K) w := by
     rw [complexify_comp]
     exact coe_complexifySubmoduleEquiv_eq_complexify_subtypeL Ω
-      (complexify (paperBlockCompression Ω Γ K) w)
+      (complexify (blockCompression Ω Γ K) w)
   rw [hlhs, subtypeL_comp_paperBlockCompression,
     coe_paperBlockCompression_apply, starProjection_complexifySubmodule, hycoe,
     complexify_comp, complexify_comp]
@@ -211,23 +211,23 @@ sound. -/
 theorem approximationSingularValue_paperBlockCompression_complexify
     (K : E →L[ℝ] E) (n : ℕ) :
     approximationSingularValue n
-        (paperBlockCompression (complexifySubmodule Ω) (complexifySubmodule Γ)
+        (blockCompression (complexifySubmodule Ω) (complexifySubmodule Γ)
           (complexify K)) =
-      approximationSingularValue n (paperBlockCompression Ω Γ K) := by
+      approximationSingularValue n (blockCompression Ω Γ K) := by
   have hsame := SameApproximationSingularValues.of_isometricEquiv_comp
     (complexifySubmoduleEquiv Ω) (complexifySubmoduleEquiv Γ)
-    (paperBlockCompression_complexify_equiv Ω Γ K)
+    (blockCompression_complexify_equiv Ω Γ K)
   exact (hsame n).symm.trans
-    (approximationSingularValue_complexify (paperBlockCompression Ω Γ K) n)
+    (approximationSingularValue_complexify (blockCompression Ω Γ K) n)
 
 /-- The finite Ky Fan gauge of a directed corner is preserved on the nose by
 complexification. -/
 theorem kyFanApproximationGauge_paperBlockCompression_complexify
     (K : E →L[ℝ] E) (k : ℕ) :
     kyFanApproximationGauge k
-        (paperBlockCompression (complexifySubmodule Ω) (complexifySubmodule Γ)
+        (blockCompression (complexifySubmodule Ω) (complexifySubmodule Γ)
           (complexify K)) =
-      kyFanApproximationGauge k (paperBlockCompression Ω Γ K) := by
+      kyFanApproximationGauge k (blockCompression Ω Γ K) := by
   unfold kyFanApproximationGauge ContinuousLinearMap.kyFanGauge
   exact Finset.sum_congr rfl fun n _ =>
     approximationSingularValue_paperBlockCompression_complexify Ω Γ K n
@@ -327,7 +327,7 @@ theorem cutoffCorner_complexifyBoundedCutoff (Ω : TauCeti.BoundedCutoff A U τ)
         (complexifySubmoduleEquiv U).symm.toContinuousLinearEquiv.toContinuousLinearMap =
       cutoffCorner (complexifyBoundedCutoff Ω) := by
   rw [cutoffCorner, cutoffCorner]
-  exact paperBlockCompression_complexify_equiv U U Ω.toProj
+  exact blockCompression_complexify_equiv U U Ω.toProj
 
 end Cutoff
 
@@ -431,8 +431,8 @@ end Hypotheses
 `(complexifySubmodule U)ᗮ` and `complexifySubmodule Uᗮ` are equal submodules but
 not syntactically equal, and they occur in the *type* of a directed corner.  The
 transport therefore runs through the *ambient* projection block
-`paperProjectionBlock`, which has type `Eℂ →L[ℂ] Eℂ` and so carries no subtype at
-all; `paperProjectionBlock_same_compression` returns to the typed corner at each
+`projectionBlock`, which has type `Eℂ →L[ℂ] Eℂ` and so carries no subtype at
+all; `projectionBlock_same_compression` returns to the typed corner at each
 end. -/
 
 section CornerGauge
@@ -441,11 +441,11 @@ variable (U : Submodule ℝ E) [U.HasOrthogonalProjection]
 
 omit [CompleteSpace E] in
 /-- The ambient directed projection block commutes with complexification. -/
-theorem paperProjectionBlock_complexifySubmodule (K : E →L[ℝ] E) :
-    paperProjectionBlock (complexifySubmodule U)ᗮ (complexifySubmodule U)
+theorem projectionBlock_complexifySubmodule (K : E →L[ℝ] E) :
+    projectionBlock (complexifySubmodule U)ᗮ (complexifySubmodule U)
         (complexify K) =
-      complexify (paperProjectionBlock Uᗮ U K) := by
-  rw [paperProjectionBlock, paperProjectionBlock,
+      complexify (projectionBlock Uᗮ U K) := by
+  rw [projectionBlock, projectionBlock,
     starProjection_complexifySubmodule_orthogonal, starProjection_complexifySubmodule,
     complexify_comp, complexify_comp]
 
@@ -453,13 +453,13 @@ theorem paperProjectionBlock_complexifySubmodule (K : E →L[ℝ] E) :
 complexification.**  This is the single numerical fact the descent needs. -/
 theorem kyFanApproximationGauge_directedCorner_complexify (K : E →L[ℝ] E) (k : ℕ) :
     kyFanApproximationGauge k
-        (paperBlockCompression (complexifySubmodule U)ᗮ (complexifySubmodule U)
+        (blockCompression (complexifySubmodule U)ᗮ (complexifySubmodule U)
           (complexify K)) =
-      kyFanApproximationGauge k (paperBlockCompression Uᗮ U K) := by
-  have hc := (paperProjectionBlock_same_compression (complexifySubmodule U)ᗮ
+      kyFanApproximationGauge k (blockCompression Uᗮ U K) := by
+  have hc := (projectionBlock_same_compression (complexifySubmodule U)ᗮ
     (complexifySubmodule U) (complexify K)).symm.kyFanApproximationGauge_eq k
-  have hr := (paperProjectionBlock_same_compression Uᗮ U K).kyFanApproximationGauge_eq k
-  rw [hc, paperProjectionBlock_complexifySubmodule,
+  have hr := (projectionBlock_same_compression Uᗮ U K).kyFanApproximationGauge_eq k
+  rw [hc, projectionBlock_complexifySubmodule,
     kyFanApproximationGauge_complexify, hr]
 
 end CornerGauge
@@ -590,12 +590,12 @@ theorem gap_mul_kyFan_reflectionTangentCorner_le_two_mul_kyFan_real
     (fun i => complexifyBoundedCutoff (Ω i)) hstrong' k
   -- and the descent
   have htan : reflectionTangentCorner (complexifySubmodule U) (complexify Z) =
-      paperBlockCompression (complexifySubmodule U)ᗮ (complexifySubmodule U)
+      blockCompression (complexifySubmodule U)ᗮ (complexifySubmodule U)
         (complexify (unboundedReflectionTangent U Z)) := by
     unfold reflectionTangentCorner
     rw [unboundedReflectionTangent_complexifySubmodule U Z hCC]
   have hres : reflectionResidualCorner (complexifySubmodule U) (complexify B) =
-      paperBlockCompression (complexifySubmodule U)ᗮ (complexifySubmodule U)
+      blockCompression (complexifySubmodule U)ᗮ (complexifySubmodule U)
         (complexify B) := rfl
   rw [htan, hres, kyFanApproximationGauge_directedCorner_complexify U
       (unboundedReflectionTangent U Z) k,

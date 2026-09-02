@@ -43,20 +43,20 @@ variable (U V : Submodule ℂ E)
 
 /-- The projector difference `D = P_V − P_U`, the operator whose modulus is
 `sin Θ`. -/
-def paperProjectorDifference : E →L[ℂ] E :=
+def projectorDifference : E →L[ℂ] E :=
   V.starProjection - U.starProjection
 
 /-- The ambient `cos²Θ` as an inverse: `(1 − sin²Θ)⁻¹`.  Under uniform
 transversality this is the honest inverse; the `Ring.inverse` spelling keeps the
 definition total. -/
-def paperSecantSquared : E →L[ℂ] E :=
-  Ring.inverse (1 - paperProjectorDifference U V * paperProjectorDifference U V)
+def secantSquared : E →L[ℂ] E :=
+  Ring.inverse (1 - projectorDifference U V * projectorDifference U V)
 
 /-- The ambient `cos 2Θ` as an inverse: `(1 − 2 sin²Θ)⁻¹`.  Under uniform
 quarter transversality this is the honest inverse; the `Ring.inverse` spelling
 keeps the definition total. -/
-def paperDoubleSecant : E →L[ℂ] E :=
-  Ring.inverse (1 - 2 * (paperProjectorDifference U V * paperProjectorDifference U V))
+def doubleSecant : E →L[ℂ] E :=
+  Ring.inverse (1 - 2 * (projectorDifference U V * projectorDifference U V))
 
 end
 

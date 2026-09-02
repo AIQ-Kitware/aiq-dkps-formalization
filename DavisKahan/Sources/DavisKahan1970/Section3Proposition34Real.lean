@@ -143,7 +143,7 @@ Definition 3.1 sense and its source cosine square satisfies `C₀² ≥ 1/2`, th
 
 The conclusion spells out the exact real Definition 3.1 clauses.  In particular
 the two diagonal compressions are `IsPositive`, which is stronger than the
-real numerical-range fields of the generic `IsPaperDirectRotation` structure. -/
+real numerical-range fields of the generic `IsDirectRotation` structure. -/
 theorem proposition3_4_source_full_real
     (W : E →L[ℝ] E)
     (hunitary : W ∈ unitary (E →L[ℝ] E))
@@ -218,7 +218,7 @@ theorem proposition3_4_source_full_real
     intro z hz
     exact halfAngle_complexify U V hcos z hz
 
-  have hC : IsPaperDirectRotation CR CV (WC * WC) := by
+  have hC : IsDirectRotation CR CV (WC * WC) := by
     dsimp only [CR]
     exact proposition3_4_source_full_bundled_complex
       CU CV WC hunitaryC hintertwinesC hcrossedC

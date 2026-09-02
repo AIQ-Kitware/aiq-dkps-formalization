@@ -42,7 +42,7 @@ Recursive hidden-foundation map for the Davis--Kahan 1970 formalization. Each no
 | `two-projection-equivalence-data` | construction | high | yes | - | `TauCeti.DavisKahan.TwoProjectionOperatorEquivalence` |
 | `two-projection-ambient-unitary` | proof_candidate | medium | yes | - | `TauCeti.DavisKahan.TwoProjectionOperatorEquivalence.ambient` |
 | `two-projection-classification` | proof_candidate | medium | yes | - | `TauCeti.DavisKahan.twoProjection_operator_classification` |
-| `hs-completeness` | proof_candidate | low | yes | - | `TauCeti.DavisKahan.ExactSinTheta.paperHilbertSchmidt_complete_complex` |
+| `hs-completeness` | proof_candidate | low | yes | - | `TauCeti.DavisKahan.ExactSinTheta.hilbertSchmidt_complete_complex` |
 | `hs-complex-family` | construction | low | yes | - | `TauCeti.DavisKahan.ExactSinTheta.hilbertSchmidtComplex` |
 | `schatten-foundation` | construction | high | yes | - | `TauCeti.schattenIdealFamily` |
 | `schatten-family` | proof_candidate | high | yes | - | `ContinuousLinearMap.schattenENorm_add_le` |

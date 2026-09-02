@@ -14,7 +14,7 @@ import DavisKahan.Sources.DavisKahan1970.SineTheta.Norms.ComplexificationGauge
 Standing assumption 1 of Davis--Kahan 1970 is that the Hilbert space is "real or
 complex", and the paper says explicitly that "all four theorems are applicable
 for infinite- as well as finite-dimensional spaces".  This module supplies the
-real half of `paperFaithful_tanTwoTheta_uiNorm`.
+real half of `faithful_tanTwoTheta_uiNorm`.
 
 ## Scope: this is the selected-branch form, NOT the Section 2 theorem
 
@@ -91,7 +91,7 @@ spectrum of `Λ₀` and `Λ₁`, which the source does not assume, and which is 
 makes `IsQuarterAcute U V` available.  See the scope section of the module
 docstring.
 
-Real form of `paperFaithful_tanTwoTheta_uiNorm`.  `A` is self-adjoint with `U`
+Real form of `faithful_tanTwoTheta_uiNorm`.  `A` is self-adjoint with `U`
 invariant and the ordered form gap `b` on `U` against `a` on `Uᗮ`; `H` is
 self-adjoint and fully off-diagonal for `U`; `V` is invariant for `A + H` with
 the same ordered gap.  Then the pair is quarter-acute and
@@ -102,7 +102,7 @@ with the sharp constant, for every `N`.
 
 The quarter-acuteness is genuinely concluded here, not assumed: it comes back
 from the complex theorem through `isQuarterAcute_complexifySubmodule_iff`. -/
-theorem paperFaithful_tanTwoTheta_uiNorm_real
+theorem faithful_tanTwoTheta_uiNorm_real
     (N : SymmetricNormingFunction) (A H : E →L[ℝ] E) (U V : Submodule ℝ E)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] {a b : ℝ}
     (hA : IsSelfAdjoint A) (hH : IsSelfAdjoint H)
@@ -120,7 +120,7 @@ theorem paperFaithful_tanTwoTheta_uiNorm_real
         (b - a) * N.gauge (tanTwoAngleOperatorRC U V hquarter) ≤ 2 * N.gauge H := by
   have hsum : complexify (A + H) = complexify A + complexify H := complexify_add A H
   obtain ⟨hqc, hmemc, hboundc⟩ :=
-    paperFaithful_tanTwoTheta_uiNorm N (complexify A) (complexify H)
+    faithful_tanTwoTheta_uiNorm N (complexify A) (complexify H)
       (complexifySubmodule U) (complexifySubmodule V)
       ((complexify_isSelfAdjoint_iff A).2 hA)
       ((complexify_isSelfAdjoint_iff H).2 hH)

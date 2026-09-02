@@ -55,13 +55,13 @@ noncomputable local instance instCStarAlgebraSubspaceCoordinateAngleIdentity
 theorem spectrum_paperSourceDirectedAngleC_subset_Icc
     (U V : Submodule ℂ E)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] :
-    spectrum ℝ (paperSourceDirectedAngleC U V) ⊆
+    spectrum ℝ (directedAngleBlockC U V) ⊆
       Set.Icc 0 (Real.pi / 2) := by
-  have hsa : IsSelfAdjoint (paperCosineModulusC U V) :=
+  have hsa : IsSelfAdjoint (cosineBlockModulusC U V) :=
     ContinuousLinearMap.modulus_isSelfAdjoint _
   intro y hy
-  rw [paperSourceDirectedAngleC,
-    cfc_map_spectrum (R := ℝ) Real.arccos (paperCosineModulusC U V)
+  rw [directedAngleBlockC,
+    cfc_map_spectrum (R := ℝ) Real.arccos (cosineBlockModulusC U V)
       hsa Real.continuous_arccos.continuousOn] at hy
   obtain ⟨x, hx, rfl⟩ := hy
   have hxi := spectrum_paperCosineModulusC_subset_Icc U V hx
@@ -69,42 +69,42 @@ theorem spectrum_paperSourceDirectedAngleC_subset_Icc
     (Real.arccos_le_pi_div_two).2 hxi.1⟩
 
 /-- The angle reconstructed from the positive sine modulus. -/
-noncomputable def paperSineDefinedDirectedAngleC
+noncomputable def sineDefinedDirectedAngleC
     (U V : Submodule ℂ E)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] : U →L[ℂ] U :=
-  cfc Real.arcsin (paperSineModulusC U V)
+  cfc Real.arcsin (sineBlockModulusC U V)
 
 /-- The angle reconstructed from the sine modulus is exactly the source
 cosine-defined angle. -/
-theorem paperSineDefinedDirectedAngleC_eq_source
+theorem sineDefinedDirectedAngleC_eq_source
     (U V : Submodule ℂ E)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] :
-    paperSineDefinedDirectedAngleC U V = paperSourceDirectedAngleC U V := by
-  have hangle : IsSelfAdjoint (paperSourceDirectedAngleC U V) :=
-    cfc_predicate Real.arccos (paperCosineModulusC U V)
-  rw [paperSineDefinedDirectedAngleC,
-    ← paperSourceDirectedSinC_eq_paperSineModulusC U V,
-    paperSourceDirectedSinC,
-    ← cfc_comp Real.arcsin Real.sin (paperSourceDirectedAngleC U V)
+    sineDefinedDirectedAngleC U V = directedAngleBlockC U V := by
+  have hangle : IsSelfAdjoint (directedAngleBlockC U V) :=
+    cfc_predicate Real.arccos (cosineBlockModulusC U V)
+  rw [sineDefinedDirectedAngleC,
+    ← directedSinAngleBlockC_eq_sineBlockModulusC U V,
+    directedSinAngleBlockC,
+    ← cfc_comp Real.arcsin Real.sin (directedAngleBlockC U V)
       hangle Real.continuous_arcsin.continuousOn
       Real.continuous_sin.continuousOn]
   calc
-    cfc (Real.arcsin ∘ Real.sin) (paperSourceDirectedAngleC U V) =
-        cfc (fun x : ℝ => x) (paperSourceDirectedAngleC U V) := by
+    cfc (Real.arcsin ∘ Real.sin) (directedAngleBlockC U V) =
+        cfc (fun x : ℝ => x) (directedAngleBlockC U V) := by
       apply cfc_congr
       intro x hx
       have hxi := spectrum_paperSourceDirectedAngleC_subset_Icc U V hx
       exact Real.arcsin_sin
         (by linarith [hxi.1, Real.pi_pos]) hxi.2
-    _ = paperSourceDirectedAngleC U V := cfc_id' ℝ _
+    _ = directedAngleBlockC U V := cfc_id' ℝ _
 
 /-- Equivalent formulation with the source angle on the left. -/
-theorem paperSourceDirectedAngleC_eq_arcsin_sineModulus
+theorem sourceDirectedAngleC_eq_arcsin_sineModulus
     (U V : Submodule ℂ E)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] :
-    paperSourceDirectedAngleC U V =
-      cfc Real.arcsin (paperSineModulusC U V) :=
-  (paperSineDefinedDirectedAngleC_eq_source U V).symm
+    directedAngleBlockC U V =
+      cfc Real.arcsin (sineBlockModulusC U V) :=
+  (sineDefinedDirectedAngleC_eq_source U V).symm
 
 section Real
 
@@ -114,20 +114,20 @@ variable {F : Type v}
 /-- For real subspaces, the sine-reconstructed angle on the canonical
 complexification equals the source cosine-defined angle.
 
-The right-hand side is written through `paperSineDefinedDirectedAngleC`, which
-is *by definition* `cfc Real.arcsin (paperSineModulusC ..)`, so this is the same
+The right-hand side is written through `sineDefinedDirectedAngleC`, which
+is *by definition* `cfc Real.arcsin (sineBlockModulusC ..)`, so this is the same
 statement as the spelled-out functional calculus.  Writing it out here would not
 elaborate: in statement position there is no way to pin the C⋆-algebra instance
 on the complexified subspace coordinates, and the functional-calculus search
 does not find it unaided even though the C⋆-algebra structure itself resolves. -/
-theorem paperSourceDirectedAngleR_eq_arcsin_sineModulus
+theorem sourceDirectedAngleR_eq_arcsin_sineModulus
     (U V : Submodule ℝ F)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] :
-    paperSourceDirectedAngleR U V =
-      paperSineDefinedDirectedAngleC
+    sourceDirectedAngleR U V =
+      sineDefinedDirectedAngleC
         (complexifySubmodule U)
         (complexifySubmodule V) :=
-  (paperSineDefinedDirectedAngleC_eq_source _ _).symm
+  (sineDefinedDirectedAngleC_eq_source _ _).symm
 
 end Real
 

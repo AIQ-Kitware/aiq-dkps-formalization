@@ -247,7 +247,7 @@ reader will find them:
 | **norm** | `UINorm` ✓ |
 | **gap** | full `SylvesterGap` on the two blocks of `A`, at an **arbitrary reducing** `U` ✓ |
 | **RHS quantity** | `2 * N.norm H`, hypothesis `N.Finite H` only ✓ |
-| **angle multiplicity** | ambient, twice: `ambientDoubleSine U V = P_{J_V U} − P_U`, which is what `paperSinTwoAngleOperatorC_eq_modulus_starProjection_sub` identifies with the paper's `sin 2Θ` ✓ |
+| **angle multiplicity** | ambient, twice: `ambientDoubleSine U V = P_{J_V U} − P_U`, which is what `sinTwoAngleOperatorC_eq_modulus_starProjection_sub` identifies with the paper's `sin 2Θ` ✓ |
 | **constant** | `2` ✓ |
 | **status** | **exact and discharged.** This clause settles the reducing-versus-spectral question in the Challenge's favour for `sin 2Θ`: the development's ambient theorem already holds at arbitrary reducing `U`, and `Solution.reflectionIntertwines_of_reduces` supplies the reflection data from the source's own hypothesis that `Q` reduces `A + H`. |
 
@@ -272,7 +272,7 @@ above `α + δ`, `H` bounded self-adjoint with `H₀ = H₁ = 0`.
 | **norm** | `UINorm` ✓ |
 | **gap** | ordered form bounds on `block A U` / `block A Uᗮ`; production takes `TauCeti.LinearPMap.ReducesSubspace A U` — an **arbitrary reducing** `U`, no spectral selection. The earlier `U = specRange hA (Iic c)` narrowing is gone: `ReducingCutoff` obtains the Appendix cutoff approximation `Ω_τ → I` from the spectral bands of `A` restricted to the reducing subspace, so the cutoff no longer forces `U` to be a spectral projector |
 | **off-diagonal** | `P_U H P_U = 0` **and** `P_{Uᗮ} H P_{Uᗮ} = 0`; `Solution.isOddFor_of_offDiagonal` **proves** this is production's `IsOddFor U H` ✓ |
-| **RHS quantity** | `2 * N.norm (P_{Uᗮ} H P_U)` with hypothesis `N.Finite (P_{Uᗮ} H P_U)` — the **corner**, not `H` ✓ (production requires membership of exactly the corner `paperBlockCompression Uᗮ U B`) |
+| **RHS quantity** | `2 * N.norm (P_{Uᗮ} H P_U)` with hypothesis `N.Finite (P_{Uᗮ} H P_U)` — the **corner**, not `H` ✓ (production requires membership of exactly the corner `blockCompression Uᗮ U B`) |
 | **angle multiplicity** | directed, once: `tanSeq (directedDoubleSine U V)`, `directedDoubleSine U V = P_U P_{J_V Uᗮ}`, whose singular values are `sin 2θⱼ` once. `hasSameApproximationNumbers_reflectionSineCorner_sinTwoThetaIdealBlock` proves the production corner `reflectionSineCorner U J_V` has that same sequence, and `approximationNumber_reflectionTangentCorner` turns it into `tan (arcsin ·)` ✓ |
 | **constant** | `2` ✓ |
 | **pole handling** | `TangentDefined (directedDoubleSine U V)` is a **conclusion**, matching production's `IsUnit (diagonalPart J · diagonalPart J)` conclusion and the source's “Section 7 derives the nonvanishing … rather than assuming it” ✓.  Read on the *doubled* sine it is the uniform `‖sin 2Θ₀‖ < 1`, not a sequence check on the single angle; see §6.1 |
@@ -292,7 +292,7 @@ above `α + δ`, `H` bounded self-adjoint with `H₀ = H₁ = 0`.
 | **norm** | `UINorm` ✓ |
 | **gap** | ordered form bounds; production takes `TauCeti.LinearPMap.ReducesSubspace A U`, an **arbitrary reducing** `U`, by the same `ReducingCutoff` route as 4a |
 | **RHS quantity** | `2 * N.norm H`, hypothesis `N.Finite H` ✓ |
-| **angle multiplicity** | ambient, with the ambient multiplicity: `tanSeq (ambientDoubleSine U V)`, `ambientDoubleSine U V = P_{J_V U} − P_U`. Production concludes on `paperAbsTanTwoAngleOperatorC U V`, and `approximationNumber_paperAbsTanTwoAngleOperatorC_projectorDifference` proves the two sequences agree ✓ |
+| **angle multiplicity** | ambient, with the ambient multiplicity: `tanSeq (ambientDoubleSine U V)`, `ambientDoubleSine U V = P_{J_V U} − P_U`. Production concludes on `absTanTwoAngleOperatorC U V`, and `approximationNumber_paperAbsTanTwoAngleOperatorC_projectorDifference` proves the two sequences agree ✓ |
 | **constant** | `2` ✓ |
 | **pole handling** | conclusion, as in 4a; production's docstring says explicitly that no pole hypothesis is asked of the caller ✓ |
 | **status** | **proved, at arbitrary `[RCLike 𝕜]`** (`Solution.tanTwoTheta_ambient_proof`). |

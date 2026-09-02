@@ -207,7 +207,7 @@ theorem Question10_4_ambient_functionalChange_complex
     (hL1spec : spectrum ℝ (compressOperator Vᗮ (A + H)) ⊆ Set.Ici (α + δ))
     (hHU : ∀ x ∈ U, H x ∈ Uᗮ) (hHUperp : ∀ x ∈ Uᗮ, H x ∈ U)
     {f : ℝ → ℝ} (hf1 : ∀ t ≤ α, f t = 1) (hf0 : ∀ t, α + δ ≤ t → f t = 0) :
-    cfc f (A + H) - cfc f A = paperProjectorDifference U V := by
+    cfc f (A + H) - cfc f A = projectorDifference U V := by
   rw [Question10_4_stepFunction_perturbed_complex V hA hH hAplusH_V hδ hL0spec hL1spec hf1 hf0,
     Question10_4_stepFunction_unperturbed_complex U hA hH hAU hδ hA0spec hA1spec hHU hHUperp hf1 hf0]
   rfl
@@ -224,11 +224,11 @@ theorem Question10_4_ambient_norm_eq_sinTheta_complex
     (hL1spec : spectrum ℝ (compressOperator Vᗮ (A + H)) ⊆ Set.Ici (α + δ))
     (hHU : ∀ x ∈ U, H x ∈ Uᗮ) (hHUperp : ∀ x ∈ Uᗮ, H x ∈ U)
     {f : ℝ → ℝ} (hf1 : ∀ t ≤ α, f t = 1) (hf0 : ∀ t, α + δ ≤ t → f t = 0) :
-    ‖cfc f (A + H) - cfc f A‖ = ‖paperProjectorDifference U V‖ ∧
-      ‖paperProjectorDifference U V‖ = ‖sinAngleOperatorC U V‖ := by
+    ‖cfc f (A + H) - cfc f A‖ = ‖projectorDifference U V‖ ∧
+      ‖projectorDifference U V‖ = ‖sinAngleOperatorC U V‖ := by
   refine ⟨by rw [Question10_4_ambient_functionalChange_complex U V hA hH hAU hAplusH_V hδ hA0spec
       hA1spec hL0spec hL1spec hHU hHUperp hf1 hf0], ?_⟩
-  rw [sinAngleOperatorC, ContinuousLinearMap.norm_modulus, paperProjectorDifference,
+  rw [sinAngleOperatorC, ContinuousLinearMap.norm_modulus, projectorDifference,
     ← norm_neg (U.starProjection - V.starProjection)]
   congr 1
   abel
@@ -257,7 +257,7 @@ theorem Question10_4_directed_functionalChange_complex
   have hx : U.starProjection (x : E) = (x : E) :=
     Submodule.starProjection_eq_self_iff.mpr x.2
   simp only [ContinuousLinearMap.comp_apply, Submodule.subtypeL_apply,
-    paperProjectorDifference, sub_apply, hx,
+    projectorDifference, sub_apply, hx,
     neg_apply, TauCeti.principalSineOperator_apply,
     Submodule.starProjection_orthogonal_val]
   abel
@@ -298,7 +298,7 @@ identities feed into already have real endpoints
 claims over `ℝ`, on `TauCeti.SpectralGap.cfc_eq_starProjection_of_blockGap_real`.
 
 The ambient identity is stated as `Q − P` directly rather than through
-`paperProjectorDifference`, which is a complex-only definition; the norm form then reads
+`projectorDifference`, which is a complex-only definition; the norm form then reads
 `‖Q − P‖ = ‖sin Θ‖` through `TauCeti.DavisKahanExt.Real.sinAngleOperatorRC`, the real sine
 operator evaluated in the canonical complexification. -/
 

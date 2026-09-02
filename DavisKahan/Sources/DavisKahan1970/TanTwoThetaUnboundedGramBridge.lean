@@ -31,7 +31,7 @@ for the directed tangent corner `T₀` and the directed sine corner `S₀`.
 `unboundedReflectionTangent U Z` carries *both* off-diagonal corners `U → Uᗮ`
 and `Uᗮ → U`, so its approximation-number sequence lists each directed singular
 value twice.  Every statement here is therefore phrased with
-`paperBlockCompression Uᗮ U`, which is the `U → Uᗮ` corner as a map between the
+`blockCompression Uᗮ U`, which is the `U → Uᗮ` corner as a map between the
 subspaces themselves.
 
 ## The route
@@ -84,7 +84,7 @@ variable {H : Type u} [NormedAddCommGroup H] [InnerProductSpace ℂ H]
 /-- An orthogonally complemented subspace of a complete space is complete.  The
 instance is `local` in every module that declares it, so it does not propagate
 through imports and has to be reinstalled here; without it the adjoints inside
-`paperBlockCompression` do not elaborate. -/
+`blockCompression` do not elaborate. -/
 local instance instCompleteSpaceCoeOfHasOrthogonalProjectionGramBridge
     (W : Submodule ℂ H) [W.HasOrthogonalProjection] : CompleteSpace W :=
   (Submodule.isComplete_coe_of_hasOrthogonalProjection W).completeSpace_coe
@@ -265,44 +265,44 @@ local instance instCompleteSpaceCoeOfHasOrthogonalProjectionGramBridgeGeneric
 
 /-- The directed sine corner `S₀ : U → Uᗮ`. -/
 abbrev reflectionSineCorner (U : Submodule 𝕜 G) [U.HasOrthogonalProjection]
-    (Z : G →L[𝕜] G) : U →L[𝕜] Uᗮ := paperBlockCompression Uᗮ U Z
+    (Z : G →L[𝕜] G) : U →L[𝕜] Uᗮ := blockCompression Uᗮ U Z
 
 /-- **A compression out of `Γ` does not see the reflection through `Γ`.**
 
-`paperBlockCompression Ω Γ K` feeds `K` only vectors of `Γ`, and the reflection
+`blockCompression Ω Γ K` feeds `K` only vectors of `Γ`, and the reflection
 through `Γ` fixes those, so post-composing `K` with it changes nothing.  This is
 what lets a corner of the reflection tangent be read as a corner of the paper's
 own double-angle representative. -/
-theorem paperBlockCompression_mul_reflectionOperator
+theorem blockCompression_mul_reflectionOperator
     (Ω Γ : Submodule 𝕜 G) [Ω.HasOrthogonalProjection] [Γ.HasOrthogonalProjection]
     (K : G →L[𝕜] G) :
-    paperBlockCompression Ω Γ (K * Γ.reflectionOperator)
-      = paperBlockCompression Ω Γ K := by
+    blockCompression Ω Γ (K * Γ.reflectionOperator)
+      = blockCompression Ω Γ K := by
   ext x
-  simp only [paperBlockCompression, ContinuousLinearMap.coe_comp', Function.comp_apply,
+  simp only [blockCompression, ContinuousLinearMap.coe_comp', Function.comp_apply,
     ContinuousLinearMap.mul_apply, Submodule.subtypeL_apply]
   rw [Submodule.reflectionOperator_apply_of_mem Γ x.2]
 
 /-- **A `Γ → Γᗮ` compression only sees the `Γᗮ ← Γ` block of a diagonal pair.**
 
-`paperDiagonalPair Γᗮ Γ K` is `P_Γᗮ K P_Γ + P_Γ K P_Γᗮ`.  Compressed out of `Γ`,
+`diagonalPair Γᗮ Γ K` is `P_Γᗮ K P_Γ + P_Γ K P_Γᗮ`.  Compressed out of `Γ`,
 the second summand dies -- it starts by projecting onto `Γᗮ`, which kills every
 vector of `Γ` -- and the first is the block itself, because the compression's
 own adjoint already projects onto `Γᗮ`.
 
 This is the step from the paper's block representative to the block spelling its
 directed corner uses. -/
-theorem paperBlockCompression_paperDiagonalPair
+theorem blockCompression_diagonalPair
     (Γ : Submodule 𝕜 G) [Γ.HasOrthogonalProjection] [Γᗮ.HasOrthogonalProjection]
     (K : G →L[𝕜] G) :
-    paperBlockCompression Γᗮ Γ (paperDiagonalPair Γᗮ Γ K)
-      = paperBlockCompression Γᗮ Γ K := by
+    blockCompression Γᗮ Γ (diagonalPair Γᗮ Γ K)
+      = blockCompression Γᗮ Γ K := by
   ext x
   have hzero : Γᗮ.starProjection (x : G) = 0 :=
     Submodule.starProjection_orthogonal_apply_eq_zero x.2
   have hself : Γ.starProjection (x : G) = (x : G) :=
     Submodule.starProjection_eq_self_iff.mpr x.2
-  simp only [paperBlockCompression, paperDiagonalPair, ContinuousLinearMap.coe_comp',
+  simp only [blockCompression, diagonalPair, ContinuousLinearMap.coe_comp',
     Function.comp_apply, ContinuousLinearMap.add_apply, Submodule.subtypeL_apply,
     hzero, hself, map_zero, add_zero, Submodule.adjoint_subtypeL]
   rw [← Submodule.starProjection_apply, ← Submodule.starProjection_apply]
@@ -311,7 +311,7 @@ theorem paperBlockCompression_paperDiagonalPair
 /-- The directed tangent corner `T₀ : U → Uᗮ`. -/
 abbrev reflectionTangentCorner (U : Submodule 𝕜 G) [U.HasOrthogonalProjection]
     (Z : G →L[𝕜] G) : U →L[𝕜] Uᗮ :=
-  paperBlockCompression Uᗮ U (unboundedReflectionTangent U Z)
+  blockCompression Uᗮ U (unboundedReflectionTangent U Z)
 
 section CompressionAlgebra
 
@@ -320,15 +320,15 @@ variable (Ω Γ : Submodule 𝕜 G) [Ω.HasOrthogonalProjection] [Γ.HasOrthogon
 /-- The adjoint of a block compression is the transposed block compression of
 the adjoint. -/
 theorem adjoint_paperBlockCompression (K : G →L[𝕜] G) :
-    (paperBlockCompression Ω Γ K).adjoint = paperBlockCompression Γ Ω K.adjoint := by
-  rw [paperBlockCompression, paperBlockCompression, ContinuousLinearMap.adjoint_comp,
+    (blockCompression Ω Γ K).adjoint = blockCompression Γ Ω K.adjoint := by
+  rw [blockCompression, blockCompression, ContinuousLinearMap.adjoint_comp,
     ContinuousLinearMap.adjoint_comp, ContinuousLinearMap.adjoint_adjoint,
     ContinuousLinearMap.comp_assoc]
 
 /-- The block compression, evaluated in the ambient space. -/
 theorem coe_paperBlockCompression_apply (K : G →L[𝕜] G) (y : Γ) :
-    ((paperBlockCompression Ω Γ K y : Ω) : G) = Ω.starProjection (K (y : G)) := by
-  rw [paperBlockCompression]
+    ((blockCompression Ω Γ K y : Ω) : G) = Ω.starProjection (K (y : G)) := by
+  rw [blockCompression]
   simp only [ContinuousLinearMap.comp_apply, Submodule.subtypeL_apply,
     Submodule.adjoint_subtypeL]
   exact Submodule.coe_orthogonalProjectionOnto_apply Ω _
@@ -345,7 +345,7 @@ variable (Ω Γ : Submodule ℂ H) [Ω.HasOrthogonalProjection] [Γ.HasOrthogona
 `gramOperator` is complex-only, so this companion of
 `coe_paperBlockCompression_apply` stays at `ℂ`. -/
 theorem coe_gramOperator_paperBlockCompression_apply (K : H →L[ℂ] H) (y : Γ) :
-    ((gramOperator (paperBlockCompression Ω Γ K) y : Γ) : H) =
+    ((gramOperator (blockCompression Ω Γ K) y : Γ) : H) =
       Γ.starProjection (K.adjoint (Ω.starProjection (K (y : H)))) := by
   rw [gramOperator]
   simp only [ContinuousLinearMap.comp_apply]
@@ -543,7 +543,7 @@ theorem hasSameApproximationNumbers_reflectionSineCorner_sinTwoThetaIdealBlock :
       = Uᗮ.starProjection ∘L J ∘L U.starProjection := by
     ext x
     simp only [ContinuousLinearMap.comp_apply, reflectionSineCorner,
-      paperBlockCompression, Submodule.adjoint_subtypeL, Submodule.subtypeL_apply,
+      blockCompression, Submodule.adjoint_subtypeL, Submodule.subtypeL_apply,
       Submodule.coe_orthogonalProjectionOnto_apply]
   -- its adjoint
   have hstar : star (Uᗮ.starProjection ∘L J ∘L U.starProjection)
@@ -646,7 +646,7 @@ variable {A : G →ₗ.[𝕜] G} {τ : ℝ}
 /-- The bounded cutoff, compressed to the trial subspace `U`.  The cutoff's
 range already lies in `U`, so this loses nothing. -/
 def cutoffCorner (Ω : TauCeti.BoundedCutoff A U τ) : U →L[𝕜] U :=
-  paperBlockCompression U U Ω.toProj
+  blockCompression U U Ω.toProj
 
 /-- The compressed cutoff, evaluated in the ambient space. -/
 theorem coe_cutoffCorner_apply (Ω : TauCeti.BoundedCutoff A U τ) (y : U) :

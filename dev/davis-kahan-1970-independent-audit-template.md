@@ -722,7 +722,7 @@ One row per printed source clause per scalar field.  A clause is `PASS` only whe
 
 *Gap scope:* The printed tangent gap is the ORDERED one, and the Appendix drops the lower bound beta entirely, so both configurations are half-infinite: the primary takes `SemiboundedAbove D.trial.compression alpha` -- the trial compression bounded above by alpha, unbounded below -- against a coercivity bound `(alpha + delta) * |y|^2 <= re <A y, y>` on the reducing complement, which is bounded below by alpha + delta and unbounded above.  Neither side is confined to a finite interval.
 
-**`ambient.real`.** The real sibling of the complex ambient clause: delta * N(tan Theta) <= N(H) on the ambient paperTanAngleOperatorR, ideal membership concluded, unbounded self-adjoint ambient operator and unbounded Ritz compression, arbitrary SymmetricNormingFunction.
+**`ambient.real`.** The real sibling of the complex ambient clause: delta * N(tan Theta) <= N(H) on the ambient tanAngleOperatorR, ideal membership concluded, unbounded self-adjoint ambient operator and unbounded Ritz compression, arbitrary SymmetricNormingFunction.
 
 *Gap scope:* The printed tangent gap is the ORDERED one, and the Appendix drops the lower bound beta entirely, so both configurations are half-infinite: the primary takes `SemiboundedAbove D.trial.compression alpha` -- the trial compression bounded above by alpha, unbounded below -- against a coercivity bound `(alpha + delta) * |y|^2 <= re <A y, y>` on the reducing complement, which is bounded below by alpha + delta and unbounded above.  Neither side is confined to a finite interval.
 
@@ -1016,7 +1016,7 @@ One row per printed source clause per scalar field.  A clause is `PASS` only whe
 
 *Gap scope:* The primary takes `FormBoundedSylvesterGap` between the two reducing restrictions of the unperturbed operator, so both semibounded constructors -- the two half-infinite configurations -- are available to a caller, and `intervalExterior` is the bounded one. The reflection transport preserves the constructor: `FormBoundedSylvesterGap.unitaryConj_left` and `.unitaryConj_right` case on all three, so nothing collapses to the bounded interval on the way to Proposition 6.1's crossed gaps.
 
-**`ambient.real`.** The real sibling of the complex ambient clause, at the same strength: delta * N(sin 2Theta) <= 2 N(H) on the real ambient paperSinTwoAngleOperatorR, unbounded self-adjoint real LinearPMap, bounded self-adjoint perturbation, arbitrary real Hilbert dimension, arbitrary SymmetricNormingFunction, and the exact factor 2.
+**`ambient.real`.** The real sibling of the complex ambient clause, at the same strength: delta * N(sin 2Theta) <= 2 N(H) on the real ambient sinTwoAngleOperatorR, unbounded self-adjoint real LinearPMap, bounded self-adjoint perturbation, arbitrary real Hilbert dimension, arbitrary SymmetricNormingFunction, and the exact factor 2.
 
 *Gap scope:* The primary takes `FormBoundedSylvesterGap` between the two reducing restrictions of the unperturbed operator, so both semibounded constructors -- the two half-infinite configurations -- are available to a caller, and `intervalExterior` is the bounded one. The reflection transport preserves the constructor: `FormBoundedSylvesterGap.unitaryConj_left` and `.unitaryConj_right` case on all three, so nothing collapses to the bounded interval on the way to Proposition 6.1's crossed gaps.
 
@@ -1396,19 +1396,19 @@ One row per printed source clause per scalar field.  A clause is `PASS` only whe
 | `ambient.complex` | complex | `TauCeti.DavisKahan1970.tanTwoTheta_ambient_unbounded_symmetricNorming_complex` | **PASS** |
 | `ambient.real` | real | `TauCeti.DavisKahan1970.tanTwoTheta_ambient_unbounded_symmetricNorming_real` | **PASS** |
 
-**`directed.complex`.** (b - a) * N(tan 2Theta_0) <= 2 N(R) over an unbounded self-adjoint ambient operator and an arbitrary SymmetricNormingFunction. The primary concludes on `reflectionTangentCorner U Z`; `reflectionTangentCorner_same_paperTanTwoDirectedCorner` establishes that this object has the same approximation singular sequence as `paperProjectionBlock Uᗮ U (2 * (projectorDifference * doubleSecant))`, the ambient block spelling the paper-facing directed tan 2Theta_0 object uses, so every symmetric gauge of the two agrees. The chain is an equality underneath: `reflectionTangentCorner_reflection_eq_paperTanTwoCorner` identifies the canonical object with the compressed corner of the paper's own double-angle representative. Prose about what a unitarily invariant norm cannot distinguish is no longer doing any work here.
+**`directed.complex`.** (b - a) * N(tan 2Theta_0) <= 2 N(R) over an unbounded self-adjoint ambient operator and an arbitrary SymmetricNormingFunction. The primary concludes on `reflectionTangentCorner U Z`; `reflectionTangentCorner_same_paperTanTwoDirectedCorner` establishes that this object has the same approximation singular sequence as `projectionBlock Uᗮ U (2 * (projectorDifference * doubleSecant))`, the ambient block spelling the paper-facing directed tan 2Theta_0 object uses, so every symmetric gauge of the two agrees. The chain is an equality underneath: `reflectionTangentCorner_reflection_eq_paperTanTwoCorner` identifies the canonical object with the compressed corner of the paper's own double-angle representative. Prose about what a unitarily invariant norm cannot distinguish is no longer doing any work here.
 
 *Gap scope:* The printed double-tangent gap is ordered. The primary takes bare form bounds `re <A x, x> <= a |x|^2` on the selected spectral range and `b |x|^2 <= re <A x, x>` on its complement with `a < b`; neither bound confines a spectrum to a finite interval, so both separating regions are half-infinite.
 
 *OPEN — what is missing:* REOPENED 2026-09-02 on hostile review. The registered correspondence does not compose with this clause's canonical primary: the primary takes an arbitrary bounded `Z` with self-adjointness and involution hypotheses and concludes on `reflectionTangentCorner U Z`, while the correspondence theorem is about the special case `Z = V.reflectionOperator`, and its `IsUnit` hypothesis is not the one the primary supplies.
 
-**`directed.real`.** (b - a) * N(tan 2Theta_0) <= 2 N(R) over an unbounded self-adjoint ambient operator and an arbitrary SymmetricNormingFunction. The primary concludes on `reflectionTangentCorner U Z`; `reflectionTangentCorner_same_paperTanTwoDirectedCorner` establishes that this object has the same approximation singular sequence as `paperProjectionBlock Uᗮ U (2 * (projectorDifference * doubleSecant))`, the ambient block spelling the paper-facing directed tan 2Theta_0 object uses, so every symmetric gauge of the two agrees. The chain is an equality underneath: `reflectionTangentCorner_reflection_eq_paperTanTwoCorner` identifies the canonical object with the compressed corner of the paper's own double-angle representative. Prose about what a unitarily invariant norm cannot distinguish is no longer doing any work here.
+**`directed.real`.** (b - a) * N(tan 2Theta_0) <= 2 N(R) over an unbounded self-adjoint ambient operator and an arbitrary SymmetricNormingFunction. The primary concludes on `reflectionTangentCorner U Z`; `reflectionTangentCorner_same_paperTanTwoDirectedCorner` establishes that this object has the same approximation singular sequence as `projectionBlock Uᗮ U (2 * (projectorDifference * doubleSecant))`, the ambient block spelling the paper-facing directed tan 2Theta_0 object uses, so every symmetric gauge of the two agrees. The chain is an equality underneath: `reflectionTangentCorner_reflection_eq_paperTanTwoCorner` identifies the canonical object with the compressed corner of the paper's own double-angle representative. Prose about what a unitarily invariant norm cannot distinguish is no longer doing any work here.
 
 *Gap scope:* The printed double-tangent gap is ordered. The primary takes bare form bounds `re <A x, x> <= a |x|^2` on the selected spectral range and `b |x|^2 <= re <A x, x>` on its complement with `a < b`; neither bound confines a spectrum to a finite interval, so both separating regions are half-infinite.
 
 *OPEN — what is missing:* REOPENED 2026-09-02 on hostile review. The registered correspondence does not compose with this clause's canonical primary at all: the primary is over a REAL Hilbert space and concludes on the real `reflectionTangentCorner U Z`, while the registered witness is stated over `InnerProductSpace ℂ` for complex submodules. A complex theorem is not a correspondence for a real object. Registering it for both scalar scopes was an error in the 2026-09-02 closure.
 
-**`ambient.complex`.** (b - a) * N(|tan 2Theta|) <= 2 N(B) on the ambient branch-free paperAbsTanTwoAngleOperatorC, unbounded self-adjoint ambient operator, arbitrary SymmetricNormingFunction.
+**`ambient.complex`.** (b - a) * N(|tan 2Theta|) <= 2 N(B) on the ambient branch-free absTanTwoAngleOperatorC, unbounded self-adjoint ambient operator, arbitrary SymmetricNormingFunction.
 
 *Gap scope:* The printed double-tangent gap is ordered. The primary takes bare form bounds `re <A x, x> <= a |x|^2` on the selected spectral range and `b |x|^2 <= re <A x, x>` on its complement with `a < b`; neither bound confines a spectrum to a finite interval, so both separating regions are half-infinite.
 
@@ -1444,7 +1444,7 @@ The declarations that carry this result's printed statement, with the source ato
 - `TauCeti.DavisKahan.gram_unboundedReflectionTangent_eq_offDiagonal` — supporting_theorem
 - `TauCeti.DavisKahan.starProjection_offDiagonal_sq_reflection` — supporting_theorem
 - `TauCeti.DavisKahan.unboundedReflectionTangent_reflection_eq` — supporting_theorem
-- `TauCeti.DavisKahan.paperTanTwoBlockRepresentative_mul_signedCosTwo` — supporting_theorem
+- `TauCeti.DavisKahan.tanTwoBlockRepresentative_mul_signedCosTwo` — supporting_theorem
 - `TauCeti.DavisKahan.sameApproximationSingularValues_unboundedReflectionTangent` — supporting_theorem
 - `TauCeti.DavisKahan.extendedGauge_unboundedReflectionTangent_complex` — supporting_theorem
 - `TauCeti.DavisKahan.ReflectionIntertwines` — supporting_theorem
@@ -1453,14 +1453,14 @@ The declarations that carry this result's printed statement, with the source ato
 - `TauCeti.DavisKahan.isUnit_signedCosTwo_of_isUnit_diagonalPart_sq` — supporting_theorem
 - `TauCeti.DavisKahan.cos_two_ne_zero_of_isUnit_diagonalPart_reflection_sq` — supporting_theorem
 - `TauCeti.DavisKahan.extendedGauge_unboundedReflectionTangent_real` — supporting_theorem
-- `TauCeti.DavisKahanExt.paperAbsTanTwoAngleOperatorR` — supporting_theorem
+- `TauCeti.DavisKahanExt.absTanTwoAngleOperatorR` — supporting_theorem
 - `TauCeti.DavisKahanExt.complexify_paperAbsTanTwoAngleOperatorR` — supporting_theorem
 - `TauCeti.DavisKahan1970.tanTwoTheta_ambient_unbounded_blockRepresentative_derivedReflection_symmetricNorming_real` — presentation_wrapper
 - `TauCeti.DavisKahan1970.approximationNumber_reflectionTangentCorner` — source_correspondence
 - `TauCeti.DavisKahan1970.reflectionTangentCorner_reflection_eq_paperTanTwoCorner` — source_correspondence
-- `TauCeti.DavisKahan1970.paperBlockCompression_mul_reflectionOperator` — transport_lemma
+- `TauCeti.DavisKahan1970.blockCompression_mul_reflectionOperator` — transport_lemma
 - `TauCeti.DavisKahan1970.reflectionTangentCorner_same_paperTanTwoDirectedCorner` — source_correspondence
-- `TauCeti.DavisKahan1970.paperBlockCompression_paperDiagonalPair` — transport_lemma
+- `TauCeti.DavisKahan1970.blockCompression_diagonalPair` — transport_lemma
 - `TauCeti.DavisKahan1970.tanTwoTheta_directed_unboundedResidual_blockRepresentative_symmetricNorming_complex` — alternative_route
 - `TauCeti.DavisKahan1970.tanTwoTheta_directed_unboundedResidual_blockRepresentative_symmetricNorming_real` — alternative_route
 - `TauCeti.DavisKahan1970.tanTwoTheta_directed_unboundedResidual_reducing_paperCorner_symmetricNorming_complex` — source_correspondence
@@ -1581,7 +1581,7 @@ Source location candidates: `DavisKahan/DoubleAngle/TangentTransport.lean:457`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
-#### `TauCeti.DavisKahan.paperTanTwoBlockRepresentative_mul_signedCosTwo`
+#### `TauCeti.DavisKahan.tanTwoBlockRepresentative_mul_signedCosTwo`
 
 Source location candidates: `DavisKahan/DoubleAngle/TangentTransport.lean:430`
 
@@ -1641,7 +1641,7 @@ Source location candidates: `DavisKahan/DoubleAngle/TangentTransport.lean:709`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
-#### `TauCeti.DavisKahanExt.paperAbsTanTwoAngleOperatorR`
+#### `TauCeti.DavisKahanExt.absTanTwoAngleOperatorR`
 
 Source location candidates: `DavisKahan/Geometry/Angle/PaperOperatorAngleReal.lean:144`
 
@@ -1677,7 +1677,7 @@ Source location candidates: `DavisKahan/Sources/DavisKahan1970/TanTwoThetaUnboun
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
-#### `TauCeti.DavisKahan1970.paperBlockCompression_mul_reflectionOperator`
+#### `TauCeti.DavisKahan1970.blockCompression_mul_reflectionOperator`
 
 Source location candidates: `DavisKahan/Sources/DavisKahan1970/TanTwoThetaUnboundedGramBridge.lean:276`
 
@@ -1689,7 +1689,7 @@ Source location candidates: `DavisKahan/Sources/DavisKahan1970/TanTwoThetaUnboun
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
-#### `TauCeti.DavisKahan1970.paperBlockCompression_paperDiagonalPair`
+#### `TauCeti.DavisKahan1970.blockCompression_diagonalPair`
 
 Source location candidates: `DavisKahan/Sources/DavisKahan1970/TanTwoThetaUnboundedGramBridge.lean:295`
 

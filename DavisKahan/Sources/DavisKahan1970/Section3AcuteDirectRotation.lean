@@ -262,7 +262,7 @@ canonical direct rotation.**
 In the acute case the direct rotation is the unique unitary intertwiner whose
 diagonal `U`-compressions are positive.
 
-The predicate `IsPaperDirectRotation` records the diagonal compressions only
+The predicate `IsDirectRotation` records the diagonal compressions only
 through their numerical range (`0 ≤ re ⟪x, (P T P) x⟫`), which is strictly
 weaker than operator positivity and does not pin the phase on the common part:
 on `U = V` every scalar `exp (I * θ)` with `|θ| < π / 2` satisfies all five
@@ -285,7 +285,7 @@ theorem proposition3_1_positivity_characterization
     (hcomplement_sa : IsSelfAdjoint
       (DavisKahan.complementaryProjection U * T *
         DavisKahan.complementaryProjection U)) :
-    DavisKahan.IsPaperDirectRotation U V T ↔
+    DavisKahan.IsDirectRotation U V T ↔
       T = DavisKahan.spectraDirectRotation U V hacute := by
   constructor
   · intro hT

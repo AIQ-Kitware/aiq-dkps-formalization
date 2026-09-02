@@ -79,7 +79,7 @@ theorem spectrum_sinAngleOperatorDirectedC_subset_Icc
 
 /-- The literal directed angle `Theta0`, extended by zero on the orthogonal
 complement of the trial subspace. -/
-noncomputable def paperDirectedAngleOperatorC
+noncomputable def directedAngleOperatorC
     (U V : Submodule ℂ E)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] : E →L[ℂ] E :=
   cfc Real.arcsin
@@ -89,15 +89,15 @@ noncomputable def paperDirectedAngleOperatorC
 theorem isSelfAdjoint_paperDirectedAngleOperatorC
     (U V : Submodule ℂ E)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] :
-    IsSelfAdjoint (paperDirectedAngleOperatorC U V) := by
+    IsSelfAdjoint (directedAngleOperatorC U V) := by
   exact cfc_predicate Real.arcsin
     (TauCeti.DavisKahanExt.sinAngleOperatorDirectedC U V)
 
 /-- The literal directed angle is nonnegative. -/
-theorem paperDirectedAngleOperatorC_nonneg
+theorem directedAngleOperatorC_nonneg
     (U V : Submodule ℂ E)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] :
-    0 ≤ paperDirectedAngleOperatorC U V := by
+    0 ≤ directedAngleOperatorC U V := by
   apply cfc_nonneg
   intro x hx
   exact Real.arcsin_nonneg.mpr
@@ -107,7 +107,7 @@ theorem paperDirectedAngleOperatorC_nonneg
 theorem cfc_sin_paperDirectedAngleOperatorC
     (U V : Submodule ℂ E)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] :
-    cfc Real.sin (paperDirectedAngleOperatorC U V) =
+    cfc Real.sin (directedAngleOperatorC U V) =
       TauCeti.DavisKahanExt.sinAngleOperatorDirectedC U V := by
   have hsa : IsSelfAdjoint
       (TauCeti.DavisKahanExt.sinAngleOperatorDirectedC U V) :=
@@ -120,7 +120,7 @@ theorem cfc_sin_paperDirectedAngleOperatorC
       (Real.arcsin '' spectrum ℝ
         (TauCeti.DavisKahanExt.sinAngleOperatorDirectedC U V)) :=
     Real.continuous_sin.continuousOn
-  rw [paperDirectedAngleOperatorC,
+  rw [directedAngleOperatorC,
     ← cfc_comp Real.sin Real.arcsin
       (TauCeti.DavisKahanExt.sinAngleOperatorDirectedC U V)
       hsa hsin harcsin]
@@ -140,11 +140,11 @@ theorem cfc_sin_paperDirectedAngleOperatorC
 noncomputable def paperDirectedSinAngleOperatorC
     (U V : Submodule ℂ E)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] : E →L[ℂ] E :=
-  cfc Real.sin (paperDirectedAngleOperatorC U V)
+  cfc Real.sin (directedAngleOperatorC U V)
 
 /-- The paper's directed complex sine-angle operator agrees with the canonical one. -/
 @[simp]
-theorem paperDirectedSinAngleOperatorC_eq
+theorem directedSinAngleOperatorC_eq
     (U V : Submodule ℂ E)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] :
     paperDirectedSinAngleOperatorC U V =
@@ -153,25 +153,25 @@ theorem paperDirectedSinAngleOperatorC_eq
 
 /-- The directed literal sine has exactly the singular values of the cross
 projection `P_(V complement) P_U`, as in the paper. -/
-theorem paperDirectedSin_same_crossProjection
+theorem directedSin_same_crossProjection
     (U V : Submodule ℂ E)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] :
     SameApproximationSingularValues
       (paperDirectedSinAngleOperatorC U V)
       (Vᗮ.starProjection ∘L U.starProjection) := by
-  rw [paperDirectedSinAngleOperatorC_eq,
+  rw [directedSinAngleOperatorC_eq,
     TauCeti.DavisKahanExt.sinAngleOperatorDirectedC]
   exact modulus_hasSameApproximationNumbers _
 
 /-- The whole-space literal sine has exactly the singular values of the
 projector difference. -/
-theorem paperSin_same_projectionDiff
+theorem sin_same_projectionDiff
     (U V : Submodule ℂ E)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] :
     SameApproximationSingularValues
       (TauCeti.DavisKahanExt.paperSinAngleOperatorC U V)
       (U.starProjection - V.starProjection) := by
-  rw [TauCeti.DavisKahanExt.paperSinAngleOperatorC_eq,
+  rw [TauCeti.DavisKahanExt.sinAngleOperatorC_eq,
     TauCeti.DavisKahanExt.sinAngleOperatorC]
   exact modulus_hasSameApproximationNumbers _
 
@@ -187,15 +187,15 @@ theorem sameApproximationSingularValues_neg (A : E →L[ℂ] E) :
 
 /-- The cross-block sum in Proposition 6.1 realizes the singular values of the
 literal whole-space sine. -/
-theorem paperCrossSineSum_same_literalSin
+theorem crossSineSum_same_literalSin
     (U V : Submodule ℂ E)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] :
     SameApproximationSingularValues
-      (paperCrossSineSum U V)
+      (crossSineSum U V)
       (TauCeti.DavisKahanExt.paperSinAngleOperatorC U V) := by
-  refine (paperCrossSineSum_same_projectionDiff U V).trans
+  refine (crossSineSum_same_projectionDiff U V).trans
     (SameApproximationSingularValues.trans ?_
-      (paperSin_same_projectionDiff U V).symm)
+      (sin_same_projectionDiff U V).symm)
   rw [← neg_sub U.starProjection V.starProjection]
   exact sameApproximationSingularValues_neg _
 
@@ -203,7 +203,7 @@ theorem paperCrossSineSum_same_literalSin
 theorem spectrum_paperDirectedAngleOperatorC_subset_Icc
     (U V : Submodule ℂ E)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] :
-    spectrum ℝ (paperDirectedAngleOperatorC U V) ⊆
+    spectrum ℝ (directedAngleOperatorC U V) ⊆
       Set.Icc 0 (Real.pi / 2) := by
   have hsa : IsSelfAdjoint
       (TauCeti.DavisKahanExt.sinAngleOperatorDirectedC U V) :=
@@ -213,7 +213,7 @@ theorem spectrum_paperDirectedAngleOperatorC_subset_Icc
         (TauCeti.DavisKahanExt.sinAngleOperatorDirectedC U V)) :=
     Real.continuous_arcsin.continuousOn
   intro y hy
-  rw [paperDirectedAngleOperatorC,
+  rw [directedAngleOperatorC,
     cfc_map_spectrum (R := ℝ) Real.arcsin
       (TauCeti.DavisKahanExt.sinAngleOperatorDirectedC U V) hsa harcsin] at hy
   obtain ⟨x, hx, rfl⟩ := hy

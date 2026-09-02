@@ -7,7 +7,7 @@ import DavisKahan.Geometry.Halmos.TwoProjections
 -- supplies the two crossed intersections `halmosSourceDefect`/`halmosTargetDefect`, the
 -- projection calculus they are described by, and `complementaryProjection_mul_projection`.
 import DavisKahan.Geometry.Halmos.GenericRotationPredicates
--- supplies `IsPaperDirectRotation`, the five-field predicate whose characterisation this
+-- supplies `IsDirectRotation`, the five-field predicate whose characterisation this
 -- module proves.  It lives in `TauCeti.DavisKahan`.
 import DavisKahan.Geometry.Polar.DirectRotation
 -- supplies `spectraReflectionProduct`, `spectraCanonicalIntertwiner`, the operator absolute
@@ -214,7 +214,7 @@ theorem proposition3_3_principalSquareRoot_converse
       (spectraReflectionProduct U V) T)
     (hcross : T '' (halmosSourceDefect U V : Set H) =
       (halmosTargetDefect U V : Set H)) :
-    IsPaperDirectRotation U V T := by
+    IsDirectRotation U V T := by
   set A := spectraOperatorAbsoluteValue (spectraCanonicalIntertwiner U V) with hAdef
   have hunit := hroot.unitary_mem
   have hTsT : T * star T = 1 := Unitary.mul_star_self_of_mem hunit
@@ -514,7 +514,7 @@ cost anything:
   down to the other crossed intersection.
 
 The self-adjointness hypotheses on the diagonal compressions are the same two that
-Proposition 3.1 needs, and for the same reason: `IsPaperDirectRotation` records the compressions
+Proposition 3.1 needs, and for the same reason: `IsDirectRotation` records the compressions
 only through their numerical range, which does not by itself force `star T`'s diagonal blocks to
 agree with `T`'s. -/
 
@@ -523,7 +523,7 @@ section PrincipalSquareRoot
 variable (T : H →L[ℂ] H)
 
 /-- **The Hermitian part of a direct rotation is a positive operator.** -/
-theorem nonneg_add_star_of_isPaperDirectRotation (hT : IsPaperDirectRotation U V T)
+theorem nonneg_add_star_of_isPaperDirectRotation (hT : IsDirectRotation U V T)
     (hsource_sa : IsSelfAdjoint (projection U * T * projection U))
     (hcomplement_sa :
       IsSelfAdjoint (complementaryProjection U * T * complementaryProjection U)) :
@@ -706,7 +706,7 @@ carries the source crossed intersection onto the target one.  The second conclus
 mapping condition that the converse takes as a hypothesis; here it comes out rather than
 going in (`crossedDefect_image_of_unitary_sq`). -/
 theorem proposition3_3_principalSquareRoot_forward
-    (hT : IsPaperDirectRotation U V T)
+    (hT : IsDirectRotation U V T)
     (hsource_sa : IsSelfAdjoint (projection U * T * projection U))
     (hcomplement_sa :
       IsSelfAdjoint (complementaryProjection U * T * complementaryProjection U)) :
@@ -722,7 +722,7 @@ theorem proposition3_3_principalSquareRoot_forward
 /-- **Davis--Kahan 1970, Proposition 3.3, forward direction, from the printed hypotheses.**
 
 The source says the direct rotation has **positive diagonal blocks**; this repository's
-`IsPaperDirectRotation` records them only through their numerical range, which is strictly
+`IsDirectRotation` records them only through their numerical range, which is strictly
 weaker and is why `proposition3_3_principalSquareRoot_forward` has to ask for self-adjointness
 separately.  Stated with operator positivity, as printed, no side hypothesis is needed at all:
 a positive operator is self-adjoint and its numerical range is nonnegative, so both weaker
@@ -735,12 +735,12 @@ theorem proposition3_3_principalSquareRoot_forward_of_nonneg_blocks
     (hsource_pos : (0 : H →L[ℂ] H) ≤ projection U * T * projection U)
     (hcomplement_pos :
       (0 : H →L[ℂ] H) ≤ complementaryProjection U * T * complementaryProjection U) :
-    IsPaperDirectRotation U V T ∧
+    IsDirectRotation U V T ∧
       IsPrincipalUnitarySquareRoot (spectraReflectionProduct U V) T ∧
       T '' (halmosSourceDefect U V : Set H) = (halmosTargetDefect U V : Set H) := by
   have hsp := (ContinuousLinearMap.nonneg_iff_isPositive _).mp hsource_pos
   have hcp := (ContinuousLinearMap.nonneg_iff_isPositive _).mp hcomplement_pos
-  have hT : IsPaperDirectRotation U V T :=
+  have hT : IsDirectRotation U V T :=
     { unitary_mem := hunitary
       intertwines := hintertwines
       source_compression_nonnegative := fun x => by
@@ -768,7 +768,7 @@ theorem proposition3_3_principalSquareRoot_iff
     (hsource_sa : IsSelfAdjoint (projection U * T * projection U))
     (hcomplement_sa :
       IsSelfAdjoint (complementaryProjection U * T * complementaryProjection U)) :
-    IsPaperDirectRotation U V T ↔
+    IsDirectRotation U V T ↔
       (IsPrincipalUnitarySquareRoot (spectraReflectionProduct U V) T ∧
         T '' (halmosSourceDefect U V : Set H) = (halmosTargetDefect U V : Set H)) :=
   ⟨fun hT => proposition3_3_principalSquareRoot_forward U V T hT hsource_sa hcomplement_sa,
