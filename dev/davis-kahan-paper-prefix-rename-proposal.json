@@ -1,0 +1,5673 @@
+{
+  "schema_version": 1,
+  "status": "proposed",
+  "generated_on": "2026-09-02",
+  "purpose": "A census of the `paper`-prefixed declaration names in DavisKahan, and a mechanically applicable rename proposal. Nothing here has been applied. The intent is that a reviewer accepts or amends this document, and the rename is then a mechanical application of `renames[].current -> renames[].proposed` rather than a judgement call taken 238 times.",
+  "motivation": "The 2026-09-01 rename replaced `PaperUnitaryInvariantNorm` with `SymmetricNormingFunction` because the name recorded provenance where the mathematics had its own name. That decision was never generalised, and `paper` is not in the naming classification's banned-token list, so the rest of the family was left in place. Measured here: of the declarations carrying the token, the great majority contrast with nothing -- there is no other `blockCompression`, `diagonalPair`, or `projectorDifference` in the tree -- so the prefix distinguishes nothing and reads as unfinished. ForTauCeti, the permanent product, already carries none of these names.",
+  "policy": {
+    "provenance_only": "The token distinguishes nothing: no declaration of the stripped name exists. Proposed action is to drop the prefix. These are mechanical.",
+    "contrastive_decision_required": "A declaration of the stripped name already exists, so the prefix currently carries meaning. Each of these needs a human decision -- which spelling is canonical, and what the other becomes -- and MUST NOT be renamed mechanically.",
+    "dependent_declaration_names": "Declarations whose own names begin with the renamed one. They have to move in the same commit, or a lemma stops matching the object it is about.",
+    "not_covered": "Prose. Docstrings and audit narratives say 'the paper's ...' in the ordinary English sense, which is correct and stays. Only declaration names are proposed here."
+  },
+  "summary": {
+    "declarations_carrying_the_token": 273,
+    "provenance_only": 260,
+    "contrastive_decision_required": 13,
+    "dependent_declarations_that_must_move": 118,
+    "occurrences_by_surface": {
+      "lean_DavisKahan": 3662,
+      "lean_ForTauCeti": 1,
+      "source_census": 167,
+      "result_inventory": 32,
+      "statement_map": 6,
+      "atom_inventory": 0,
+      "audit_surface": 4,
+      "challenge": 24,
+      "comparator": 0
+    }
+  },
+  "application_notes": [
+    "Statement pins under `.leanq/` regenerate; they are not edited by hand.",
+    "`Challenge/**` and `comparator/*.json` hold declaration names as data and are not compiled by a default build. Run `python3 scripts/check_declaration_name_drift.py` and `lake build Challenge` after applying.",
+    "`Audits/ResultSemanticSurface.lean` names every canonical declaration; the result-inventory checker rejects a canonical declaration missing from it.",
+    "Re-pin statements and re-stamp `semantic_review_sweep.canonical_evidence_sha256` from the post-rename data, and record in the inventory review that the change is rename-only, with the evidence for that claim."
+  ],
+  "renames": [
+    {
+      "current": "IsPaperDirectRotation",
+      "proposed": "IsDirectRotation",
+      "kind": "structure",
+      "declared_in": "DavisKahan/Geometry/Halmos/GenericRotationPredicates.lean",
+      "classification": "provenance_only",
+      "collides_with_existing_declaration": false,
+      "dependent_declaration_names": [],
+      "occurrences": {
+        "lean_DavisKahan": 61,
+        "lean_ForTauCeti": 0,
+        "source_census": 15,
+        "result_inventory": 2,
+        "statement_map": 0,
+        "atom_inventory": 0,
+        "audit_surface": 0,
+        "challenge": 0,
+        "comparator": 0
+      }
+    },
+    {
+      "current": "IsPaperHilbertSchmidt",
+      "proposed": "IsHilbertSchmidt",
+      "kind": "def",
+      "declared_in": "DavisKahan/Sources/DavisKahan1970/Ideals/HilbertSchmidt.lean",
+      "classification": "contrastive_decision_required",
+      "collides_with_existing_declaration": true,
+      "dependent_declaration_names": [],
+      "occurrences": {
+        "lean_DavisKahan": 140,
+        "lean_ForTauCeti": 0,
+        "source_census": 1,
+        "result_inventory": 0,
+        "statement_map": 0,
+        "atom_inventory": 0,
+        "audit_surface": 0,
+        "challenge": 0,
+        "comparator": 0
+      }
+    },
+    {
+      "current": "IsPaperHilbertSchmidt.comp",
+      "proposed": "IsHilbertSchmidt.comp",
+      "kind": "theorem",
+      "declared_in": "DavisKahan/Sources/DavisKahan1970/Ideals/HilbertSchmidt.lean",
+      "classification": "provenance_only",
+      "collides_with_existing_declaration": false,
+      "dependent_declaration_names": [],
+      "occurrences": {
+        "lean_DavisKahan": 1,
+        "lean_ForTauCeti": 0,
+        "source_census": 0,
+        "result_inventory": 0,
+        "statement_map": 0,
+        "atom_inventory": 0,
+        "audit_surface": 0,
+        "challenge": 0,
+        "comparator": 0
+      }
+    },
+    {
+      "current": "PaperCommonCoreResidualData",
+      "proposed": "CommonCoreResidualData",
+      "kind": "structure",
+      "declared_in": "DavisKahan/Sources/DavisKahan1970/SineTheta/CommonCore.lean",
+      "classification": "provenance_only",
+      "collides_with_existing_declaration": false,
+      "dependent_declaration_names": [],
+      "occurrences": {
+        "lean_DavisKahan": 13,
+        "lean_ForTauCeti": 0,
+        "source_census": 0,
+        "result_inventory": 0,
+        "statement_map": 0,
+        "atom_inventory": 0,
+        "audit_surface": 0,
+        "challenge": 0,
+        "comparator": 0
+      }
+    },
+    {
+      "current": "PaperCommonCoreSinThetaData",
+      "proposed": "CommonCoreSinThetaData",
+      "kind": "structure",
+      "declared_in": "DavisKahan/Sources/DavisKahan1970/SineTheta/CommonCoreTheorems.lean",
+      "classification": "provenance_only",
+      "collides_with_existing_declaration": false,
+      "dependent_declaration_names": [],
+      "occurrences": {
+        "lean_DavisKahan": 13,
+        "lean_ForTauCeti": 0,
+        "source_census": 0,
+        "result_inventory": 0,
+        "statement_map": 0,
+        "atom_inventory": 0,
+        "audit_surface": 0,
+        "challenge": 0,
+        "comparator": 0
+      }
+    },
+    {
+      "current": "PaperCommonCoreTheorem61Data",
+      "proposed": "CommonCoreTheorem61Data",
+      "kind": "structure",
+      "declared_in": "DavisKahan/Sources/DavisKahan1970/SineTheta/CommonCoreTheorems.lean",
+      "classification": "provenance_only",
+      "collides_with_existing_declaration": false,
+      "dependent_declaration_names": [],
+      "occurrences": {
+        "lean_DavisKahan": 9,
+        "lean_ForTauCeti": 0,
+        "source_census": 0,
+        "result_inventory": 0,
+        "statement_map": 0,
+        "atom_inventory": 0,
+        "audit_surface": 0,
+        "challenge": 0,
+        "comparator": 0
+      }
+    },
+    {
+      "current": "PaperCommonCoreTheorem62Data",
+      "proposed": "CommonCoreTheorem62Data",
+      "kind": "structure",
+      "declared_in": "DavisKahan/Sources/DavisKahan1970/SineTheta/CommonCoreTheorems.lean",
+      "classification": "provenance_only",
+      "collides_with_existing_declaration": false,
+      "dependent_declaration_names": [],
+      "occurrences": {
+        "lean_DavisKahan": 9,
+        "lean_ForTauCeti": 0,
+        "source_census": 0,
+        "result_inventory": 0,
+        "statement_map": 0,
+        "atom_inventory": 0,
+        "audit_surface": 0,
+        "challenge": 0,
+        "comparator": 0
+      }
+    },
+    {
+      "current": "PaperCommonDomainSinThetaData",
+      "proposed": "CommonDomainSinThetaData",
+      "kind": "structure",
+      "declared_in": "DavisKahan/Sources/DavisKahan1970/SineTheta/CommonDomainTheorems.lean",
+      "classification": "provenance_only",
+      "collides_with_existing_declaration": false,
+      "dependent_declaration_names": [],
+      "occurrences": {
+        "lean_DavisKahan": 21,
+        "lean_ForTauCeti": 0,
+        "source_census": 2,
+        "result_inventory": 0,
+        "statement_map": 0,
+        "atom_inventory": 0,
+        "audit_surface": 0,
+        "challenge": 0,
+        "comparator": 0
+      }
+    },
+    {
+      "current": "PaperCommonDomainSymmetricSinThetaProblem",
+      "proposed": "CommonDomainSymmetricSinThetaProblem",
+      "kind": "structure",
+      "declared_in": "DavisKahan/Sources/DavisKahan1970/SineTheta/CommonDomainSymmetric.lean",
+      "classification": "provenance_only",
+      "collides_with_existing_declaration": false,
+      "dependent_declaration_names": [],
+      "occurrences": {
+        "lean_DavisKahan": 46,
+        "lean_ForTauCeti": 0,
+        "source_census": 9,
+        "result_inventory": 0,
+        "statement_map": 0,
+        "atom_inventory": 0,
+        "audit_surface": 0,
+        "challenge": 0,
+        "comparator": 0
+      }
+    },
+    {
+      "current": "PaperCommonDomainTheorem61Data",
+      "proposed": "CommonDomainTheorem61Data",
+      "kind": "structure",
+      "declared_in": "DavisKahan/Sources/DavisKahan1970/SineTheta/CommonDomainTheorems.lean",
+      "classification": "provenance_only",
+      "collides_with_existing_declaration": false,
+      "dependent_declaration_names": [],
+      "occurrences": {
+        "lean_DavisKahan": 8,
+        "lean_ForTauCeti": 0,
+        "source_census": 1,
+        "result_inventory": 0,
+        "statement_map": 0,
+        "atom_inventory": 0,
+        "audit_surface": 0,
+        "challenge": 0,
+        "comparator": 0
+      }
+    },
+    {
+      "current": "PaperCommonDomainTheorem62Data",
+      "proposed": "CommonDomainTheorem62Data",
+      "kind": "structure",
+      "declared_in": "DavisKahan/Sources/DavisKahan1970/SineTheta/CommonDomainTheorems.lean",
+      "classification": "provenance_only",
+      "collides_with_existing_declaration": false,
+      "dependent_declaration_names": [],
+      "occurrences": {
+        "lean_DavisKahan": 10,
+        "lean_ForTauCeti": 0,
+        "source_census": 0,
+        "result_inventory": 0,
+        "statement_map": 0,
+        "atom_inventory": 0,
+        "audit_surface": 0,
+        "challenge": 0,
+        "comparator": 0
+      }
+    },
+    {
+      "current": "PaperGeneralSinThetaProblem",
+      "proposed": "GeneralSinThetaProblem",
+      "kind": "structure",
+      "declared_in": "DavisKahan/Sources/DavisKahan1970/SineTheta/Theorem61.lean",
+      "classification": "provenance_only",
+      "collides_with_existing_declaration": false,
+      "dependent_declaration_names": [],
+      "occurrences": {
+        "lean_DavisKahan": 6,
+        "lean_ForTauCeti": 0,
+        "source_census": 0,
+        "result_inventory": 0,
+        "statement_map": 0,
+        "atom_inventory": 0,
+        "audit_surface": 0,
+        "challenge": 0,
+        "comparator": 0
+      }
+    },
+    {
+      "current": "PaperHSIndex",
+      "proposed": "HSIndex",
+      "kind": "abbrev",
+      "declared_in": "DavisKahan/Sources/DavisKahan1970/Ideals/HilbertSchmidtTensor.lean",
+      "classification": "provenance_only",
+      "collides_with_existing_declaration": false,
+      "dependent_declaration_names": [],
+      "occurrences": {
+        "lean_DavisKahan": 8,
+        "lean_ForTauCeti": 0,
+        "source_census": 0,
+        "result_inventory": 0,
+        "statement_map": 0,
+        "atom_inventory": 0,
+        "audit_surface": 0,
+        "challenge": 0,
+        "comparator": 0
+      }
+    },
+    {
+      "current": "PaperIsometricSinThetaProblem",
+      "proposed": "IsometricSinThetaProblem",
+      "kind": "structure",
+      "declared_in": "DavisKahan/Sources/DavisKahan1970/SineTheta/Theorem61.lean",
+      "classification": "provenance_only",
+      "collides_with_existing_declaration": false,
+      "dependent_declaration_names": [],
+      "occurrences": {
+        "lean_DavisKahan": 6,
+        "lean_ForTauCeti": 0,
+        "source_census": 0,
+        "result_inventory": 0,
+        "statement_map": 0,
+        "atom_inventory": 0,
+        "audit_surface": 0,
+        "challenge": 0,
+        "comparator": 0
+      }
+    },
+    {
+      "current": "PaperIsometricTheoremData",
+      "proposed": "IsometricTheoremData",
+      "kind": "structure",
+      "declared_in": "DavisKahan/Sources/DavisKahan1970/SineTheta/Theorem61Universal.lean",
+      "classification": "provenance_only",
+      "collides_with_existing_declaration": false,
+      "dependent_declaration_names": [],
+      "occurrences": {
+        "lean_DavisKahan": 8,
+        "lean_ForTauCeti": 0,
+        "source_census": 0,
+        "result_inventory": 0,
+        "statement_map": 0,
+        "atom_inventory": 0,
+        "audit_surface": 0,
+        "challenge": 0,
+        "comparator": 0
+      }
+    },
+    {
+      "current": "PaperPlane",
+      "proposed": "Plane",
+      "kind": "abbrev",
+      "declared_in": "DavisKahan/Sources/DavisKahan1970/SineTheta/Sharpness.lean",
+      "classification": "contrastive_decision_required",
+      "collides_with_existing_declaration": true,
+      "dependent_declaration_names": [],
+      "occurrences": {
+        "lean_DavisKahan": 20,
+        "lean_ForTauCeti": 0,
+        "source_census": 0,
+        "result_inventory": 0,
+        "statement_map": 0,
+        "atom_inventory": 0,
+        "audit_surface": 0,
+        "challenge": 0,
+        "comparator": 0
+      }
+    },
+    {
+      "current": "PaperRealCommonCoreTheorem61Data",
+      "proposed": "RealCommonCoreTheorem61Data",
+      "kind": "structure",
+      "declared_in": "DavisKahan/Sources/DavisKahan1970/SineTheta/CommonCoreTheorems.lean",
+      "classification": "provenance_only",
+      "collides_with_existing_declaration": false,
+      "dependent_declaration_names": [],
+      "occurrences": {
+        "lean_DavisKahan": 8,
+        "lean_ForTauCeti": 0,
+        "source_census": 0,
+        "result_inventory": 0,
+        "statement_map": 0,
+        "atom_inventory": 0,
+        "audit_surface": 0,
+        "challenge": 0,
+        "comparator": 0
+      }
+    },
+    {
+      "current": "PaperRealCommonCoreTheorem62Data",
+      "proposed": "RealCommonCoreTheorem62Data",
+      "kind": "structure",
+      "declared_in": "DavisKahan/Sources/DavisKahan1970/SineTheta/CommonCoreTheorems.lean",
+      "classification": "provenance_only",
+      "collides_with_existing_declaration": false,
+      "dependent_declaration_names": [],
+      "occurrences": {
+        "lean_DavisKahan": 8,
+        "lean_ForTauCeti": 0,
+        "source_census": 0,
+        "result_inventory": 0,
+        "statement_map": 0,
+        "atom_inventory": 0,
+        "audit_surface": 0,
+        "challenge": 0,
+        "comparator": 0
+      }
+    },
+    {
+      "current": "PaperRealCommonDomainTheorem61Data",
+      "proposed": "RealCommonDomainTheorem61Data",
+      "kind": "structure",
+      "declared_in": "DavisKahan/Sources/DavisKahan1970/SineTheta/CommonDomainTheorems.lean",
+      "classification": "provenance_only",
+      "collides_with_existing_declaration": false,
+      "dependent_declaration_names": [],
+      "occurrences": {
+        "lean_DavisKahan": 8,
+        "lean_ForTauCeti": 0,
+        "source_census": 1,
+        "result_inventory": 0,
+        "statement_map": 0,
+        "atom_inventory": 0,
+        "audit_surface": 0,
+        "challenge": 0,
+        "comparator": 0
+      }
+    },
+    {
+      "current": "PaperRealCommonDomainTheorem62Data",
+      "proposed": "RealCommonDomainTheorem62Data",
+      "kind": "structure",
+      "declared_in": "DavisKahan/Sources/DavisKahan1970/SineTheta/CommonDomainTheorems.lean",
+      "classification": "provenance_only",
+      "collides_with_existing_declaration": false,
+      "dependent_declaration_names": [],
+      "occurrences": {
+        "lean_DavisKahan": 10,
+        "lean_ForTauCeti": 0,
+        "source_census": 0,
+        "result_inventory": 0,
+        "statement_map": 0,
+        "atom_inventory": 0,
+        "audit_surface": 0,
+        "challenge": 0,
+        "comparator": 0
+      }
+    },
+    {
+      "current": "PaperRealGeneralSinThetaProblem",
+      "proposed": "RealGeneralSinThetaProblem",
+      "kind": "structure",
+      "declared_in": "DavisKahan/Sources/DavisKahan1970/SineTheta/Theorem61.lean",
+      "classification": "contrastive_decision_required",
+      "collides_with_existing_declaration": true,
+      "dependent_declaration_names": [],
+      "occurrences": {
+        "lean_DavisKahan": 6,
+        "lean_ForTauCeti": 0,
+        "source_census": 0,
+        "result_inventory": 0,
+        "statement_map": 0,
+        "atom_inventory": 0,
+        "audit_surface": 0,
+        "challenge": 0,
+        "comparator": 0
+      }
+    },
+    {
+      "current": "PaperRealIsometricSinThetaProblem",
+      "proposed": "RealIsometricSinThetaProblem",
+      "kind": "structure",
+      "declared_in": "DavisKahan/Sources/DavisKahan1970/SineTheta/Theorem61.lean",
+      "classification": "provenance_only",
+      "collides_with_existing_declaration": false,
+      "dependent_declaration_names": [],
+      "occurrences": {
+        "lean_DavisKahan": 6,
+        "lean_ForTauCeti": 0,
+        "source_census": 0,
+        "result_inventory": 0,
+        "statement_map": 0,
+        "atom_inventory": 0,
+        "audit_surface": 0,
+        "challenge": 0,
+        "comparator": 0
+      }
+    },
+    {
+      "current": "PaperRealIsometricTheoremData",
+      "proposed": "RealIsometricTheoremData",
+      "kind": "structure",
+      "declared_in": "DavisKahan/Sources/DavisKahan1970/SineTheta/Theorem61Universal.lean",
+      "classification": "provenance_only",
+      "collides_with_existing_declaration": false,
+      "dependent_declaration_names": [],
+      "occurrences": {
+        "lean_DavisKahan": 8,
+        "lean_ForTauCeti": 0,
+        "source_census": 1,
+        "result_inventory": 0,
+        "statement_map": 0,
+        "atom_inventory": 0,
+        "audit_surface": 0,
+        "challenge": 0,
+        "comparator": 0
+      }
+    },
+    {
+      "current": "PaperRealPlane",
+      "proposed": "RealPlane",
+      "kind": "abbrev",
+      "declared_in": "DavisKahan/Sources/DavisKahan1970/SineTheta/Sharpness.lean",
+      "classification": "contrastive_decision_required",
+      "collides_with_existing_declaration": true,
+      "dependent_declaration_names": [],
+      "occurrences": {
+        "lean_DavisKahan": 12,
+        "lean_ForTauCeti": 0,
+        "source_census": 0,
+        "result_inventory": 0,
+        "statement_map": 0,
+        "atom_inventory": 0,
+        "audit_surface": 0,
+        "challenge": 0,
+        "comparator": 0
+      }
+    },
+    {
+      "current": "PaperRealSymmetricSinThetaProblem",
+      "proposed": "RealSymmetricSinThetaProblem",
+      "kind": "structure",
+      "declared_in": "DavisKahan/Sources/DavisKahan1970/SineTheta/SymmetricReal.lean",
+      "classification": "provenance_only",
+      "collides_with_existing_declaration": false,
+      "dependent_declaration_names": [],
+      "occurrences": {
+        "lean_DavisKahan": 31,
+        "lean_ForTauCeti": 0,
+        "source_census": 0,
+        "result_inventory": 0,
+        "statement_map": 0,
+        "atom_inventory": 0,
+        "audit_surface": 0,
+        "challenge": 0,
+        "comparator": 0
+      }
+    },
+    {
+      "current": "PaperRealTheorem61Data",
+      "proposed": "RealTheorem61Data",
+      "kind": "structure",
+      "declared_in": "DavisKahan/Sources/DavisKahan1970/SineTheta/Theorem61Universal.lean",
+      "classification": "provenance_only",
+      "collides_with_existing_declaration": false,
+      "dependent_declaration_names": [],
+      "occurrences": {
+        "lean_DavisKahan": 17,
+        "lean_ForTauCeti": 0,
+        "source_census": 2,
+        "result_inventory": 0,
+        "statement_map": 0,
+        "atom_inventory": 0,
+        "audit_surface": 0,
+        "challenge": 0,
+        "comparator": 0
+      }
+    },
+    {
+      "current": "PaperRealTheorem62Data",
+      "proposed": "RealTheorem62Data",
+      "kind": "structure",
+      "declared_in": "DavisKahan/Sources/DavisKahan1970/SineTheta/Theorem62.lean",
+      "classification": "provenance_only",
+      "collides_with_existing_declaration": false,
+      "dependent_declaration_names": [],
+      "occurrences": {
+        "lean_DavisKahan": 17,
+        "lean_ForTauCeti": 0,
+        "source_census": 5,
+        "result_inventory": 0,
+        "statement_map": 0,
+        "atom_inventory": 0,
+        "audit_surface": 0,
+        "challenge": 0,
+        "comparator": 0
+      }
+    },
+    {
+      "current": "PaperSinThetaRepresentative",
+      "proposed": "SinThetaRepresentative",
+      "kind": "structure",
+      "declared_in": "DavisKahan/Sources/DavisKahan1970/SineTheta/Norms/SingularValueTransport.lean",
+      "classification": "provenance_only",
+      "collides_with_existing_declaration": false,
+      "dependent_declaration_names": [],
+      "occurrences": {
+        "lean_DavisKahan": 40,
+        "lean_ForTauCeti": 0,
+        "source_census": 0,
+        "result_inventory": 0,
+        "statement_map": 0,
+        "atom_inventory": 0,
+        "audit_surface": 0,
+        "challenge": 0,
+        "comparator": 0
+      }
+    },
+    {
+      "current": "PaperSinThetaRepresentativeAcross",
+      "proposed": "SinThetaRepresentativeAcross",
+      "kind": "structure",
+      "declared_in": "DavisKahan/Sources/DavisKahan1970/SineTheta/Norms/SingularValueTransport.lean",
+      "classification": "provenance_only",
+      "collides_with_existing_declaration": false,
+      "dependent_declaration_names": [],
+      "occurrences": {
+        "lean_DavisKahan": 29,
+        "lean_ForTauCeti": 0,
+        "source_census": 1,
+        "result_inventory": 0,
+        "statement_map": 0,
+        "atom_inventory": 0,
+        "audit_surface": 0,
+        "challenge": 0,
+        "comparator": 0
+      }
+    },
+    {
+      "current": "PaperSymmetricSinThetaProblem",
+      "proposed": "SymmetricSinThetaProblem",
+      "kind": "structure",
+      "declared_in": "DavisKahan/Sources/DavisKahan1970/SineTheta/Symmetric.lean",
+      "classification": "provenance_only",
+      "collides_with_existing_declaration": false,
+      "dependent_declaration_names": [],
+      "occurrences": {
+        "lean_DavisKahan": 30,
+        "lean_ForTauCeti": 0,
+        "source_census": 3,
+        "result_inventory": 0,
+        "statement_map": 0,
+        "atom_inventory": 0,
+        "audit_surface": 0,
+        "challenge": 1,
+        "comparator": 0
+      }
+    },
+    {
+      "current": "PaperTheorem61Data",
+      "proposed": "Theorem61Data",
+      "kind": "structure",
+      "declared_in": "DavisKahan/Sources/DavisKahan1970/SineTheta/Theorem61Universal.lean",
+      "classification": "provenance_only",
+      "collides_with_existing_declaration": false,
+      "dependent_declaration_names": [],
+      "occurrences": {
+        "lean_DavisKahan": 21,
+        "lean_ForTauCeti": 0,
+        "source_census": 2,
+        "result_inventory": 0,
+        "statement_map": 0,
+        "atom_inventory": 0,
+        "audit_surface": 0,
+        "challenge": 0,
+        "comparator": 0
+      }
+    },
+    {
+      "current": "PaperTheorem62Data",
+      "proposed": "Theorem62Data",
+      "kind": "structure",
+      "declared_in": "DavisKahan/Sources/DavisKahan1970/SineTheta/Theorem62.lean",
+      "classification": "provenance_only",
+      "collides_with_existing_declaration": false,
+      "dependent_declaration_names": [],
+      "occurrences": {
+        "lean_DavisKahan": 22,
+        "lean_ForTauCeti": 0,
+        "source_census": 2,
+        "result_inventory": 0,
+        "statement_map": 0,
+        "atom_inventory": 0,
+        "audit_surface": 0,
+        "challenge": 0,
+        "comparator": 0
+      }
+    },
+    {
+      "current": "paperAbsTanTwoAngleOperatorC",
+      "proposed": "absTanTwoAngleOperatorC",
+      "kind": "def",
+      "declared_in": "DavisKahan/Geometry/Angle/PaperTanAngle.lean",
+      "classification": "provenance_only",
+      "collides_with_existing_declaration": false,
+      "dependent_declaration_names": [
+        "paperAbsTanTwoAngleOperatorC_eq_modulus_blockRepresentative",
+        "paperAbsTanTwoAngleOperatorC_eq_modulus_paperTanTwoAngleOperatorC",
+        "paperAbsTanTwoAngleOperatorC_eq_paperTanTwoAngleOperatorC",
+        "paperAbsTanTwoAngleOperatorC_nonneg"
+      ],
+      "occurrences": {
+        "lean_DavisKahan": 47,
+        "lean_ForTauCeti": 0,
+        "source_census": 3,
+        "result_inventory": 3,
+        "statement_map": 0,
+        "atom_inventory": 0,
+        "audit_surface": 0,
+        "challenge": 2,
+        "comparator": 0
+      }
+    },
+    {
+      "current": "paperAbsTanTwoAngleOperatorC_eq_modulus_blockRepresentative",
+      "proposed": "absTanTwoAngleOperatorC_eq_modulus_blockRepresentative",
+      "kind": "theorem",
+      "declared_in": "DavisKahan/Sources/DavisKahan1970/TanTwoThetaAmbient.lean",
+      "classification": "provenance_only",
+      "collides_with_existing_declaration": false,
+      "dependent_declaration_names": [],
+      "occurrences": {
+        "lean_DavisKahan": 8,
+        "lean_ForTauCeti": 0,
+        "source_census": 3,
+        "result_inventory": 1,
+        "statement_map": 0,
+        "atom_inventory": 0,
+        "audit_surface": 0,
+        "challenge": 0,
+        "comparator": 0
+      }
+    },
+    {
+      "current": "paperAbsTanTwoAngleOperatorC_eq_modulus_paperTanTwoAngleOperatorC",
+      "proposed": "absTanTwoAngleOperatorC_eq_modulus_paperTanTwoAngleOperatorC",
+      "kind": "theorem",
+      "declared_in": "DavisKahan/Sources/DavisKahan1970/TanTwoThetaAmbient.lean",
+      "classification": "provenance_only",
+      "collides_with_existing_declaration": false,
+      "dependent_declaration_names": [],
+      "occurrences": {
+        "lean_DavisKahan": 2,
+        "lean_ForTauCeti": 0,
+        "source_census": 2,
+        "result_inventory": 0,
+        "statement_map": 1,
+        "atom_inventory": 0,
+        "audit_surface": 0,
+        "challenge": 0,
+        "comparator": 0
+      }
+    },
+    {
+      "current": "paperAbsTanTwoAngleOperatorC_eq_paperTanTwoAngleOperatorC",
+      "proposed": "absTanTwoAngleOperatorC_eq_paperTanTwoAngleOperatorC",
+      "kind": "theorem",
+      "declared_in": "DavisKahan/Geometry/Angle/PaperTanAngle.lean",
+      "classification": "provenance_only",
+      "collides_with_existing_declaration": false,
+      "dependent_declaration_names": [],
+      "occurrences": {
+        "lean_DavisKahan": 4,
+        "lean_ForTauCeti": 0,
+        "source_census": 1,
+        "result_inventory": 0,
+        "statement_map": 0,
+        "atom_inventory": 0,
+        "audit_surface": 0,
+        "challenge": 0,
+        "comparator": 0
+      }
+    },
+    {
+      "current": "paperAbsTanTwoAngleOperatorC_nonneg",
+      "proposed": "absTanTwoAngleOperatorC_nonneg",
+      "kind": "theorem",
+      "declared_in": "DavisKahan/Geometry/Angle/PaperTanAngle.lean",
+      "classification": "provenance_only",
+      "collides_with_existing_declaration": false,
+      "dependent_declaration_names": [],
+      "occurrences": {
+        "lean_DavisKahan": 3,
+        "lean_ForTauCeti": 0,
+        "source_census": 1,
+        "result_inventory": 0,
+        "statement_map": 0,
+        "atom_inventory": 0,
+        "audit_surface": 0,
+        "challenge": 0,
+        "comparator": 0
+      }
+    },
+    {
+      "current": "paperAbsTanTwoAngleOperatorR",
+      "proposed": "absTanTwoAngleOperatorR",
+      "kind": "def",
+      "declared_in": "DavisKahan/Geometry/Angle/PaperOperatorAngleReal.lean",
+      "classification": "provenance_only",
+      "collides_with_existing_declaration": false,
+      "dependent_declaration_names": [],
+      "occurrences": {
+        "lean_DavisKahan": 12,
+        "lean_ForTauCeti": 0,
+        "source_census": 2,
+        "result_inventory": 3,
+        "statement_map": 0,
+        "atom_inventory": 0,
+        "audit_surface": 1,
+        "challenge": 0,
+        "comparator": 0
+      }
+    },
+    {
+      "current": "paperAbsTanTwo_sq_mul_cos_two_sq",
+      "proposed": "absTanTwo_sq_mul_cos_two_sq",
+      "kind": "theorem",
+      "declared_in": "DavisKahan/Sources/DavisKahan1970/TanTwoThetaAmbient.lean",
+      "classification": "provenance_only",
+      "collides_with_existing_declaration": false,
+      "dependent_declaration_names": [],
+      "occurrences": {
+        "lean_DavisKahan": 3,
+        "lean_ForTauCeti": 0,
+        "source_census": 2,
+        "result_inventory": 0,
+        "statement_map": 0,
+        "atom_inventory": 0,
+        "audit_surface": 0,
+        "challenge": 0,
+        "comparator": 0
+      }
+    },
+    {
+      "current": "paperAbsTanTwo_sq_mul_one_sub_sinTwo_sq",
+      "proposed": "absTanTwo_sq_mul_one_sub_sinTwo_sq",
+      "kind": "theorem",
+      "declared_in": "DavisKahan/Sources/DavisKahan1970/TangentSingularValues.lean",
+      "classification": "provenance_only",
+      "collides_with_existing_declaration": false,
+      "dependent_declaration_names": [],
+      "occurrences": {
+        "lean_DavisKahan": 2,
+        "lean_ForTauCeti": 0,
+        "source_census": 0,
+        "result_inventory": 0,
+        "statement_map": 0,
+        "atom_inventory": 0,
+        "audit_surface": 0,
+        "challenge": 0,
+        "comparator": 0
+      }
+    },
+    {
+      "current": "paperAngleOperatorC",
+      "proposed": "angleOperatorC",
+      "kind": "def",
+      "declared_in": "DavisKahan/Geometry/Angle/PaperOperatorAngle.lean",
+      "classification": "provenance_only",
+      "collides_with_existing_declaration": false,
+      "dependent_declaration_names": [
+        "paperAngleOperatorC_nonneg"
+      ],
+      "occurrences": {
+        "lean_DavisKahan": 100,
+        "lean_ForTauCeti": 0,
+        "source_census": 9,
+        "result_inventory": 1,
+        "statement_map": 0,
+        "atom_inventory": 0,
+        "audit_surface": 0,
+        "challenge": 3,
+        "comparator": 0
+      }
+    },
+    {
+      "current": "paperAngleOperatorC_nonneg",
+      "proposed": "angleOperatorC_nonneg",
+      "kind": "theorem",
+      "declared_in": "DavisKahan/Geometry/Angle/PaperOperatorAngle.lean",
+      "classification": "provenance_only",
+      "collides_with_existing_declaration": false,
+      "dependent_declaration_names": [],
+      "occurrences": {
+        "lean_DavisKahan": 1,
+        "lean_ForTauCeti": 0,
+        "source_census": 0,
+        "result_inventory": 0,
+        "statement_map": 0,
+        "atom_inventory": 0,
+        "audit_surface": 0,
+        "challenge": 0,
+        "comparator": 0
+      }
+    },
+    {
+      "current": "paperAngleOperatorR",
+      "proposed": "angleOperatorR",
+      "kind": "def",
+      "declared_in": "DavisKahan/Geometry/Angle/PaperOperatorAngleReal.lean",
+      "classification": "provenance_only",
+      "collides_with_existing_declaration": false,
+      "dependent_declaration_names": [],
+      "occurrences": {
+        "lean_DavisKahan": 4,
+        "lean_ForTauCeti": 0,
+        "source_census": 0,
+        "result_inventory": 0,
+        "statement_map": 0,
+        "atom_inventory": 0,
+        "audit_surface": 0,
+        "challenge": 0,
+        "comparator": 0
+      }
+    },
+    {
+      "current": "paperAngleOperatorRC",
+      "proposed": "angleOperatorRC",
+      "kind": "def",
+      "declared_in": "DavisKahan/Geometry/Angle/PaperOperatorAngle.lean",
+      "classification": "provenance_only",
+      "collides_with_existing_declaration": false,
+      "dependent_declaration_names": [],
+      "occurrences": {
+        "lean_DavisKahan": 3,
+        "lean_ForTauCeti": 0,
+        "source_census": 0,
+        "result_inventory": 0,
+        "statement_map": 0,
+        "atom_inventory": 0,
+        "audit_surface": 0,
+        "challenge": 0,
+        "comparator": 0
+      }
+    },
+    {
+      "current": "paperBasisProjection",
+      "proposed": "basisProjection",
+      "kind": "def",
+      "declared_in": "DavisKahan/Sources/DavisKahan1970/Ideals/HilbertSchmidtBasis.lean",
+      "classification": "provenance_only",
+      "collides_with_existing_declaration": false,
+      "dependent_declaration_names": [
+        "paperBasisProjection_apply",
+        "paperBasisProjection_isOrthogonalProjection",
+        "paperBasisProjection_stronglyTendsto"
+      ],
+      "occurrences": {
+        "lean_DavisKahan": 23,
+        "lean_ForTauCeti": 0,
+        "source_census": 0,
+        "result_inventory": 0,
+        "statement_map": 0,
+        "atom_inventory": 0,
+        "audit_surface": 0,
+        "challenge": 0,
+        "comparator": 0
+      }
+    },
+    {
+      "current": "paperBasisProjection_apply",
+      "proposed": "basisProjection_apply",
+      "kind": "theorem",
+      "declared_in": "DavisKahan/Sources/DavisKahan1970/Ideals/HilbertSchmidtBasis.lean",
+      "classification": "provenance_only",
+      "collides_with_existing_declaration": false,
+      "dependent_declaration_names": [],
+      "occurrences": {
+        "lean_DavisKahan": 3,
+        "lean_ForTauCeti": 0,
+        "source_census": 0,
+        "result_inventory": 0,
+        "statement_map": 0,
+        "atom_inventory": 0,
+        "audit_surface": 0,
+        "challenge": 0,
+        "comparator": 0
+      }
+    },
+    {
+      "current": "paperBasisProjection_isOrthogonalProjection",
+      "proposed": "basisProjection_isOrthogonalProjection",
+      "kind": "theorem",
+      "declared_in": "DavisKahan/Sources/DavisKahan1970/Ideals/HilbertSchmidtBasis.lean",
+      "classification": "provenance_only",
+      "collides_with_existing_declaration": false,
+      "dependent_declaration_names": [],
+      "occurrences": {
+        "lean_DavisKahan": 3,
+        "lean_ForTauCeti": 0,
+        "source_census": 0,
+        "result_inventory": 0,
+        "statement_map": 0,
+        "atom_inventory": 0,
+        "audit_surface": 0,
+        "challenge": 0,
+        "comparator": 0
+      }
+    },
+    {
+      "current": "paperBasisProjection_stronglyTendsto",
+      "proposed": "basisProjection_stronglyTendsto",
+      "kind": "theorem",
+      "declared_in": "DavisKahan/Sources/DavisKahan1970/Ideals/HilbertSchmidtBasis.lean",
+      "classification": "provenance_only",
+      "collides_with_existing_declaration": false,
+      "dependent_declaration_names": [],
+      "occurrences": {
+        "lean_DavisKahan": 2,
+        "lean_ForTauCeti": 0,
+        "source_census": 0,
+        "result_inventory": 0,
+        "statement_map": 0,
+        "atom_inventory": 0,
+        "audit_surface": 0,
+        "challenge": 0,
+        "comparator": 0
+      }
+    },
+    {
+      "current": "paperBasisSpan_finiteDimensional",
+      "proposed": "basisSpan_finiteDimensional",
+      "kind": "instance",
+      "declared_in": "DavisKahan/Sources/DavisKahan1970/Ideals/HilbertSchmidtBasis.lean",
+      "classification": "provenance_only",
+      "collides_with_existing_declaration": false,
+      "dependent_declaration_names": [],
+      "occurrences": {
+        "lean_DavisKahan": 1,
+        "lean_ForTauCeti": 0,
+        "source_census": 0,
+        "result_inventory": 0,
+        "statement_map": 0,
+        "atom_inventory": 0,
+        "audit_surface": 0,
+        "challenge": 0,
+        "comparator": 0
+      }
+    },
+    {
+      "current": "paperBlockCompression",
+      "proposed": "blockCompression",
+      "kind": "def",
+      "declared_in": "DavisKahan/Sources/DavisKahan1970/SineTheta/Lemma61.lean",
+      "classification": "provenance_only",
+      "collides_with_existing_declaration": false,
+      "dependent_declaration_names": [
+        "paperBlockCompression_adjoint_of_selfAdjoint",
+        "paperBlockCompression_apply",
+        "paperBlockCompression_complexify_equiv",
+        "paperBlockCompression_mul_reflectionOperator",
+        "paperBlockCompression_paperDiagonalPair",
+        "paperBlockCompression_smul_one"
+      ],
+      "occurrences": {
+        "lean_DavisKahan": 97,
+        "lean_ForTauCeti": 0,
+        "source_census": 2,
+        "result_inventory": 1,
+        "statement_map": 0,
+        "atom_inventory": 0,
+        "audit_surface": 0,
+        "challenge": 2,
+        "comparator": 0
+      }
+    },
+    {
+      "current": "paperBlockCompression_adjoint_of_selfAdjoint",
+      "proposed": "blockCompression_adjoint_of_selfAdjoint",
+      "kind": "theorem",
+      "declared_in": "DavisKahan/Sources/DavisKahan1970/TanTwoThetaReflectionAmbient.lean",
+      "classification": "provenance_only",
+      "collides_with_existing_declaration": false,
+      "dependent_declaration_names": [],
+      "occurrences": {
+        "lean_DavisKahan": 2,
+        "lean_ForTauCeti": 0,
+        "source_census": 0,
+        "result_inventory": 0,
+        "statement_map": 0,
+        "atom_inventory": 0,
+        "audit_surface": 0,
+        "challenge": 0,
+        "comparator": 0
+      }
+    },
+    {
+      "current": "paperBlockCompression_apply",
+      "proposed": "blockCompression_apply",
+      "kind": "theorem",
+      "declared_in": "DavisKahan/Sources/DavisKahan1970/SinTwoThetaAmbient.lean",
+      "classification": "provenance_only",
+      "collides_with_existing_declaration": false,
+      "dependent_declaration_names": [],
+      "occurrences": {
+        "lean_DavisKahan": 2,
+        "lean_ForTauCeti": 0,
+        "source_census": 0,
+        "result_inventory": 0,
+        "statement_map": 0,
+        "atom_inventory": 0,
+        "audit_surface": 0,
+        "challenge": 0,
+        "comparator": 0
+      }
+    },
+    {
+      "current": "paperBlockCompression_complexify_equiv",
+      "proposed": "blockCompression_complexify_equiv",
+      "kind": "theorem",
+      "declared_in": "DavisKahan/Sources/DavisKahan1970/TanTwoThetaUnboundedGramReal.lean",
+      "classification": "provenance_only",
+      "collides_with_existing_declaration": false,
+      "dependent_declaration_names": [],
+      "occurrences": {
+        "lean_DavisKahan": 3,
+        "lean_ForTauCeti": 0,
+        "source_census": 0,
+        "result_inventory": 0,
+        "statement_map": 0,
+        "atom_inventory": 0,
+        "audit_surface": 0,
+        "challenge": 0,
+        "comparator": 0
+      }
+    },
+    {
+      "current": "paperBlockCompression_mul_reflectionOperator",
+      "proposed": "blockCompression_mul_reflectionOperator",
+      "kind": "theorem",
+      "declared_in": "DavisKahan/Sources/DavisKahan1970/TanTwoThetaUnboundedGramBridge.lean",
+      "classification": "provenance_only",
+      "collides_with_existing_declaration": false,
+      "dependent_declaration_names": [],
+      "occurrences": {
+        "lean_DavisKahan": 4,
+        "lean_ForTauCeti": 0,
+        "source_census": 1,
+        "result_inventory": 3,
+        "statement_map": 0,
+        "atom_inventory": 0,
+        "audit_surface": 1,
+        "challenge": 0,
+        "comparator": 0
+      }
+    },
+    {
+      "current": "paperBlockCompression_paperDiagonalPair",
+      "proposed": "blockCompression_paperDiagonalPair",
+      "kind": "theorem",
+      "declared_in": "DavisKahan/Sources/DavisKahan1970/TanTwoThetaUnboundedGramBridge.lean",
+      "classification": "provenance_only",
+      "collides_with_existing_declaration": false,
+      "dependent_declaration_names": [],
+      "occurrences": {
+        "lean_DavisKahan": 4,
+        "lean_ForTauCeti": 0,
+        "source_census": 1,
+        "result_inventory": 2,
+        "statement_map": 0,
+        "atom_inventory": 0,
+        "audit_surface": 1,
+        "challenge": 0,
+        "comparator": 0
+      }
+    },
+    {
+      "current": "paperBlockCompression_smul_one",
+      "proposed": "blockCompression_smul_one",
+      "kind": "theorem",
+      "declared_in": "DavisKahan/Sources/DavisKahan1970/SinTwoThetaAmbient.lean",
+      "classification": "provenance_only",
+      "collides_with_existing_declaration": false,
+      "dependent_declaration_names": [],
+      "occurrences": {
+        "lean_DavisKahan": 2,
+        "lean_ForTauCeti": 0,
+        "source_census": 0,
+        "result_inventory": 0,
+        "statement_map": 0,
+        "atom_inventory": 0,
+        "audit_surface": 0,
+        "challenge": 0,
+        "comparator": 0
+      }
+    },
+    {
+      "current": "paperCosAngleOperatorC",
+      "proposed": "cosAngleOperatorC",
+      "kind": "def",
+      "declared_in": "DavisKahan/Geometry/Angle/PaperOperatorAngle.lean",
+      "classification": "contrastive_decision_required",
+      "collides_with_existing_declaration": true,
+      "dependent_declaration_names": [],
+      "occurrences": {
+        "lean_DavisKahan": 6,
+        "lean_ForTauCeti": 0,
+        "source_census": 0,
+        "result_inventory": 0,
+        "statement_map": 0,
+        "atom_inventory": 0,
+        "audit_surface": 0,
+        "challenge": 0,
+        "comparator": 0
+      }
+    },
+    {
+      "current": "paperCos_mul_paperTan",
+      "proposed": "cos_mul_paperTan",
+      "kind": "theorem",
+      "declared_in": "DavisKahan/Geometry/Angle/PaperTanAngle.lean",
+      "classification": "provenance_only",
+      "collides_with_existing_declaration": false,
+      "dependent_declaration_names": [],
+      "occurrences": {
+        "lean_DavisKahan": 2,
+        "lean_ForTauCeti": 0,
+        "source_census": 2,
+        "result_inventory": 0,
+        "statement_map": 0,
+        "atom_inventory": 0,
+        "audit_surface": 0,
+        "challenge": 0,
+        "comparator": 0
+      }
+    },
+    {
+      "current": "paperCosineBlockC",
+      "proposed": "cosineBlockC",
+      "kind": "def",
+      "declared_in": "DavisKahan/Sources/DavisKahan1970/SineTheta/CosineAngle.lean",
+      "classification": "provenance_only",
+      "collides_with_existing_declaration": false,
+      "dependent_declaration_names": [],
+      "occurrences": {
+        "lean_DavisKahan": 7,
+        "lean_ForTauCeti": 0,
+        "source_census": 0,
+        "result_inventory": 0,
+        "statement_map": 0,
+        "atom_inventory": 0,
+        "audit_surface": 0,
+        "challenge": 0,
+        "comparator": 0
+      }
+    },
+    {
+      "current": "paperCosineModulusC",
+      "proposed": "cosineModulusC",
+      "kind": "def",
+      "declared_in": "DavisKahan/Sources/DavisKahan1970/SineTheta/CosineAngle.lean",
+      "classification": "provenance_only",
+      "collides_with_existing_declaration": false,
+      "dependent_declaration_names": [],
+      "occurrences": {
+        "lean_DavisKahan": 30,
+        "lean_ForTauCeti": 0,
+        "source_census": 0,
+        "result_inventory": 0,
+        "statement_map": 0,
+        "atom_inventory": 0,
+        "audit_surface": 0,
+        "challenge": 0,
+        "comparator": 0
+      }
+    },
+    {
+      "current": "paperCounterexampleA",
+      "proposed": "counterexampleA",
+      "kind": "def",
+      "declared_in": "DavisKahan/Sources/DavisKahan1970/SineTheta/Sharpness.lean",
+      "classification": "provenance_only",
+      "collides_with_existing_declaration": false,
+      "dependent_declaration_names": [],
+      "occurrences": {
+        "lean_DavisKahan": 1,
+        "lean_ForTauCeti": 0,
+        "source_census": 0,
+        "result_inventory": 0,
+        "statement_map": 0,
+        "atom_inventory": 0,
+        "audit_surface": 0,
+        "challenge": 0,
+        "comparator": 0
+      }
+    },
+    {
+      "current": "paperCounterexampleExact",
+      "proposed": "counterexampleExact",
+      "kind": "def",
+      "declared_in": "DavisKahan/Sources/DavisKahan1970/SineTheta/Sharpness.lean",
+      "classification": "provenance_only",
+      "collides_with_existing_declaration": false,
+      "dependent_declaration_names": [
+        "paperCounterexampleExact_projection",
+        "paperCounterexampleExact_starProjection_e0",
+        "paperCounterexampleExact_starProjection_e1"
+      ],
+      "occurrences": {
+        "lean_DavisKahan": 13,
+        "lean_ForTauCeti": 0,
+        "source_census": 0,
+        "result_inventory": 0,
+        "statement_map": 0,
+        "atom_inventory": 0,
+        "audit_surface": 0,
+        "challenge": 0,
+        "comparator": 0
+      }
+    },
+    {
+      "current": "paperCounterexampleExact_projection",
+      "proposed": "counterexampleExact_projection",
+      "kind": "instance",
+      "declared_in": "DavisKahan/Sources/DavisKahan1970/SineTheta/Sharpness.lean",
+      "classification": "provenance_only",
+      "collides_with_existing_declaration": false,
+      "dependent_declaration_names": [],
+      "occurrences": {
+        "lean_DavisKahan": 1,
+        "lean_ForTauCeti": 0,
+        "source_census": 0,
+        "result_inventory": 0,
+        "statement_map": 0,
+        "atom_inventory": 0,
+        "audit_surface": 0,
+        "challenge": 0,
+        "comparator": 0
+      }
+    },
+    {
+      "current": "paperCounterexampleExact_starProjection_e0",
+      "proposed": "counterexampleExact_starProjection_e0",
+      "kind": "theorem",
+      "declared_in": "DavisKahan/Sources/DavisKahan1970/SineTheta/Sharpness.lean",
+      "classification": "provenance_only",
+      "collides_with_existing_declaration": false,
+      "dependent_declaration_names": [],
+      "occurrences": {
+        "lean_DavisKahan": 2,
+        "lean_ForTauCeti": 0,
+        "source_census": 0,
+        "result_inventory": 0,
+        "statement_map": 0,
+        "atom_inventory": 0,
+        "audit_surface": 0,
+        "challenge": 0,
+        "comparator": 0
+      }
+    },
+    {
+      "current": "paperCounterexampleExact_starProjection_e1",
+      "proposed": "counterexampleExact_starProjection_e1",
+      "kind": "theorem",
+      "declared_in": "DavisKahan/Sources/DavisKahan1970/SineTheta/Sharpness.lean",
+      "classification": "provenance_only",
+      "collides_with_existing_declaration": false,
+      "dependent_declaration_names": [],
+      "occurrences": {
+        "lean_DavisKahan": 2,
+        "lean_ForTauCeti": 0,
+        "source_census": 0,
+        "result_inventory": 0,
+        "statement_map": 0,
+        "atom_inventory": 0,
+        "audit_surface": 0,
+        "challenge": 0,
+        "comparator": 0
+      }
+    },
+    {
+      "current": "paperCounterexampleH",
+      "proposed": "counterexampleH",
+      "kind": "def",
+      "declared_in": "DavisKahan/Sources/DavisKahan1970/SineTheta/Sharpness.lean",
+      "classification": "provenance_only",
+      "collides_with_existing_declaration": false,
+      "dependent_declaration_names": [
+        "paperCounterexampleH_e0",
+        "paperCounterexampleH_e1"
+      ],
+      "occurrences": {
+        "lean_DavisKahan": 10,
+        "lean_ForTauCeti": 0,
+        "source_census": 0,
+        "result_inventory": 0,
+        "statement_map": 0,
+        "atom_inventory": 0,
+        "audit_surface": 0,
+        "challenge": 0,
+        "comparator": 0
+      }
+    },
+    {
+      "current": "paperCounterexampleH_e0",
+      "proposed": "counterexampleH_e0",
+      "kind": "theorem",
+      "declared_in": "DavisKahan/Sources/DavisKahan1970/SineTheta/Sharpness.lean",
+      "classification": "provenance_only",
+      "collides_with_existing_declaration": false,
+      "dependent_declaration_names": [],
+      "occurrences": {
+        "lean_DavisKahan": 2,
+        "lean_ForTauCeti": 0,
+        "source_census": 0,
+        "result_inventory": 0,
+        "statement_map": 0,
+        "atom_inventory": 0,
+        "audit_surface": 0,
+        "challenge": 0,
+        "comparator": 0
+      }
+    },
+    {
+      "current": "paperCounterexampleH_e1",
+      "proposed": "counterexampleH_e1",
+      "kind": "theorem",
+      "declared_in": "DavisKahan/Sources/DavisKahan1970/SineTheta/Sharpness.lean",
+      "classification": "provenance_only",
+      "collides_with_existing_declaration": false,
+      "dependent_declaration_names": [],
+      "occurrences": {
+        "lean_DavisKahan": 2,
+        "lean_ForTauCeti": 0,
+        "source_census": 0,
+        "result_inventory": 0,
+        "statement_map": 0,
+        "atom_inventory": 0,
+        "audit_surface": 0,
+        "challenge": 0,
+        "comparator": 0
+      }
+    },
+    {
+      "current": "paperCounterexampleTrial",
+      "proposed": "counterexampleTrial",
+      "kind": "def",
+      "declared_in": "DavisKahan/Sources/DavisKahan1970/SineTheta/Sharpness.lean",
+      "classification": "provenance_only",
+      "collides_with_existing_declaration": false,
+      "dependent_declaration_names": [
+        "paperCounterexampleTrial_projection",
+        "paperCounterexampleTrial_starProjection_apply",
+        "paperCounterexampleTrial_starProjection_e0",
+        "paperCounterexampleTrial_starProjection_e1"
+      ],
+      "occurrences": {
+        "lean_DavisKahan": 12,
+        "lean_ForTauCeti": 0,
+        "source_census": 0,
+        "result_inventory": 0,
+        "statement_map": 0,
+        "atom_inventory": 0,
+        "audit_surface": 0,
+        "challenge": 0,
+        "comparator": 0
+      }
+    },
+    {
+      "current": "paperCounterexampleTrialVector",
+      "proposed": "counterexampleTrialVector",
+      "kind": "def",
+      "declared_in": "DavisKahan/Sources/DavisKahan1970/SineTheta/Sharpness.lean",
+      "classification": "provenance_only",
+      "collides_with_existing_declaration": false,
+      "dependent_declaration_names": [],
+      "occurrences": {
+        "lean_DavisKahan": 12,
+        "lean_ForTauCeti": 0,
+        "source_census": 0,
+        "result_inventory": 0,
+        "statement_map": 0,
+        "atom_inventory": 0,
+        "audit_surface": 0,
+        "challenge": 0,
+        "comparator": 0
+      }
+    },
+    {
+      "current": "paperCounterexampleTrial_projection",
+      "proposed": "counterexampleTrial_projection",
+      "kind": "instance",
+      "declared_in": "DavisKahan/Sources/DavisKahan1970/SineTheta/Sharpness.lean",
+      "classification": "provenance_only",
+      "collides_with_existing_declaration": false,
+      "dependent_declaration_names": [],
+      "occurrences": {
+        "lean_DavisKahan": 1,
+        "lean_ForTauCeti": 0,
+        "source_census": 0,
+        "result_inventory": 0,
+        "statement_map": 0,
+        "atom_inventory": 0,
+        "audit_surface": 0,
+        "challenge": 0,
+        "comparator": 0
+      }
+    },
+    {
+      "current": "paperCounterexampleTrial_starProjection_apply",
+      "proposed": "counterexampleTrial_starProjection_apply",
+      "kind": "theorem",
+      "declared_in": "DavisKahan/Sources/DavisKahan1970/SineTheta/Sharpness.lean",
+      "classification": "provenance_only",
+      "collides_with_existing_declaration": false,
+      "dependent_declaration_names": [],
+      "occurrences": {
+        "lean_DavisKahan": 3,
+        "lean_ForTauCeti": 0,
+        "source_census": 0,
+        "result_inventory": 0,
+        "statement_map": 0,
+        "atom_inventory": 0,
+        "audit_surface": 0,
+        "challenge": 0,
+        "comparator": 0
+      }
+    },
+    {
+      "current": "paperCounterexampleTrial_starProjection_e0",
+      "proposed": "counterexampleTrial_starProjection_e0",
+      "kind": "theorem",
+      "declared_in": "DavisKahan/Sources/DavisKahan1970/SineTheta/Sharpness.lean",
+      "classification": "provenance_only",
+      "collides_with_existing_declaration": false,
+      "dependent_declaration_names": [],
+      "occurrences": {
+        "lean_DavisKahan": 2,
+        "lean_ForTauCeti": 0,
+        "source_census": 0,
+        "result_inventory": 0,
+        "statement_map": 0,
+        "atom_inventory": 0,
+        "audit_surface": 0,
+        "challenge": 0,
+        "comparator": 0
+      }
+    },
+    {
+      "current": "paperCounterexampleTrial_starProjection_e1",
+      "proposed": "counterexampleTrial_starProjection_e1",
+      "kind": "theorem",
+      "declared_in": "DavisKahan/Sources/DavisKahan1970/SineTheta/Sharpness.lean",
+      "classification": "provenance_only",
+      "collides_with_existing_declaration": false,
+      "dependent_declaration_names": [],
+      "occurrences": {
+        "lean_DavisKahan": 2,
+        "lean_ForTauCeti": 0,
+        "source_census": 0,
+        "result_inventory": 0,
+        "statement_map": 0,
+        "atom_inventory": 0,
+        "audit_surface": 0,
+        "challenge": 0,
+        "comparator": 0
+      }
+    },
+    {
+      "current": "paperCounterexample_perturbation_square_norm",
+      "proposed": "counterexample_perturbation_square_norm",
+      "kind": "theorem",
+      "declared_in": "DavisKahan/Sources/DavisKahan1970/SineTheta/Sharpness.lean",
+      "classification": "provenance_only",
+      "collides_with_existing_declaration": false,
+      "dependent_declaration_names": [],
+      "occurrences": {
+        "lean_DavisKahan": 3,
+        "lean_ForTauCeti": 0,
+        "source_census": 0,
+        "result_inventory": 0,
+        "statement_map": 0,
+        "atom_inventory": 0,
+        "audit_surface": 0,
+        "challenge": 0,
+        "comparator": 0
+      }
+    },
+    {
+      "current": "paperCounterexample_projectionDifference_e0",
+      "proposed": "counterexample_projectionDifference_e0",
+      "kind": "theorem",
+      "declared_in": "DavisKahan/Sources/DavisKahan1970/SineTheta/Sharpness.lean",
+      "classification": "provenance_only",
+      "collides_with_existing_declaration": false,
+      "dependent_declaration_names": [],
+      "occurrences": {
+        "lean_DavisKahan": 2,
+        "lean_ForTauCeti": 0,
+        "source_census": 0,
+        "result_inventory": 0,
+        "statement_map": 0,
+        "atom_inventory": 0,
+        "audit_surface": 0,
+        "challenge": 0,
+        "comparator": 0
+      }
+    },
+    {
+      "current": "paperCounterexample_projectionDifference_e1",
+      "proposed": "counterexample_projectionDifference_e1",
+      "kind": "theorem",
+      "declared_in": "DavisKahan/Sources/DavisKahan1970/SineTheta/Sharpness.lean",
+      "classification": "provenance_only",
+      "collides_with_existing_declaration": false,
+      "dependent_declaration_names": [],
+      "occurrences": {
+        "lean_DavisKahan": 2,
+        "lean_ForTauCeti": 0,
+        "source_census": 0,
+        "result_inventory": 0,
+        "statement_map": 0,
+        "atom_inventory": 0,
+        "audit_surface": 0,
+        "challenge": 0,
+        "comparator": 0
+      }
+    },
+    {
+      "current": "paperCounterexample_sine_square_norm",
+      "proposed": "counterexample_sine_square_norm",
+      "kind": "theorem",
+      "declared_in": "DavisKahan/Sources/DavisKahan1970/SineTheta/Sharpness.lean",
+      "classification": "provenance_only",
+      "collides_with_existing_declaration": false,
+      "dependent_declaration_names": [],
+      "occurrences": {
+        "lean_DavisKahan": 3,
+        "lean_ForTauCeti": 0,
+        "source_census": 0,
+        "result_inventory": 0,
+        "statement_map": 0,
+        "atom_inventory": 0,
+        "audit_surface": 0,
+        "challenge": 0,
+        "comparator": 0
+      }
+    },
+    {
+      "current": "paperCrossSineSum",
+      "proposed": "crossSineSum",
+      "kind": "def",
+      "declared_in": "DavisKahan/Sources/DavisKahan1970/SineTheta/ProjectionBlocks.lean",
+      "classification": "provenance_only",
+      "collides_with_existing_declaration": false,
+      "dependent_declaration_names": [
+        "paperCrossSineSum_eq_projectionDiff_comp_reflection",
+        "paperCrossSineSum_same_literalSin",
+        "paperCrossSineSum_same_projectionDiff"
+      ],
+      "occurrences": {
+        "lean_DavisKahan": 50,
+        "lean_ForTauCeti": 0,
+        "source_census": 5,
+        "result_inventory": 0,
+        "statement_map": 0,
+        "atom_inventory": 0,
+        "audit_surface": 0,
+        "challenge": 0,
+        "comparator": 0
+      }
+    },
+    {
+      "current": "paperCrossSineSum_eq_projectionDiff_comp_reflection",
+      "proposed": "crossSineSum_eq_projectionDiff_comp_reflection",
+      "kind": "theorem",
+      "declared_in": "DavisKahan/Sources/DavisKahan1970/SineTheta/ProjectionBlocks.lean",
+      "classification": "provenance_only",
+      "collides_with_existing_declaration": false,
+      "dependent_declaration_names": [],
+      "occurrences": {
+        "lean_DavisKahan": 2,
+        "lean_ForTauCeti": 0,
+        "source_census": 0,
+        "result_inventory": 0,
+        "statement_map": 0,
+        "atom_inventory": 0,
+        "audit_surface": 0,
+        "challenge": 0,
+        "comparator": 0
+      }
+    },
+    {
+      "current": "paperCrossSineSum_same_literalSin",
+      "proposed": "crossSineSum_same_literalSin",
+      "kind": "theorem",
+      "declared_in": "DavisKahan/Sources/DavisKahan1970/SineTheta/OperatorAngleBridge.lean",
+      "classification": "provenance_only",
+      "collides_with_existing_declaration": false,
+      "dependent_declaration_names": [],
+      "occurrences": {
+        "lean_DavisKahan": 5,
+        "lean_ForTauCeti": 0,
+        "source_census": 0,
+        "result_inventory": 0,
+        "statement_map": 0,
+        "atom_inventory": 0,
+        "audit_surface": 0,
+        "challenge": 0,
+        "comparator": 0
+      }
+    },
+    {
+      "current": "paperCrossSineSum_same_projectionDiff",
+      "proposed": "crossSineSum_same_projectionDiff",
+      "kind": "theorem",
+      "declared_in": "DavisKahan/Sources/DavisKahan1970/SineTheta/ProjectionBlocks.lean",
+      "classification": "provenance_only",
+      "collides_with_existing_declaration": false,
+      "dependent_declaration_names": [],
+      "occurrences": {
+        "lean_DavisKahan": 10,
+        "lean_ForTauCeti": 0,
+        "source_census": 1,
+        "result_inventory": 0,
+        "statement_map": 0,
+        "atom_inventory": 0,
+        "audit_surface": 0,
+        "challenge": 0,
+        "comparator": 0
+      }
+    },
+    {
+      "current": "paperDiagonalPair",
+      "proposed": "diagonalPair",
+      "kind": "def",
+      "declared_in": "DavisKahan/Sources/DavisKahan1970/SineTheta/ProjectionBlocks.lean",
+      "classification": "provenance_only",
+      "collides_with_existing_declaration": false,
+      "dependent_declaration_names": [
+        "paperDiagonalPair_all_kyFan_le",
+        "paperDiagonalPair_even_kyFan_eq_two_mul_of_same",
+        "paperDiagonalPair_gauge_le",
+        "paperDiagonalPair_mem",
+        "paperDiagonalPair_normingGauge_le",
+        "paperDiagonalPair_orthogonal_eq_offDiagonalPart_unboundedAmbientExact",
+        "paperDiagonalPair_orthogonal_eq_self_of_isOddFor_unboundedAmbientExact",
+        "paperDiagonalPair_symmetricNorming_le"
+      ],
+      "occurrences": {
+        "lean_DavisKahan": 58,
+        "lean_ForTauCeti": 0,
+        "source_census": 0,
+        "result_inventory": 0,
+        "statement_map": 0,
+        "atom_inventory": 0,
+        "audit_surface": 0,
+        "challenge": 0,
+        "comparator": 0
+      }
+    },
+    {
+      "current": "paperDiagonalPair_all_kyFan_le",
+      "proposed": "diagonalPair_all_kyFan_le",
+      "kind": "theorem",
+      "declared_in": "DavisKahan/Sources/DavisKahan1970/SineTheta/ProjectionBlocks.lean",
+      "classification": "provenance_only",
+      "collides_with_existing_declaration": false,
+      "dependent_declaration_names": [],
+      "occurrences": {
+        "lean_DavisKahan": 13,
+        "lean_ForTauCeti": 0,
+        "source_census": 2,
+        "result_inventory": 0,
+        "statement_map": 0,
+        "atom_inventory": 0,
+        "audit_surface": 0,
+        "challenge": 0,
+        "comparator": 0
+      }
+    },
+    {
+      "current": "paperDiagonalPair_even_kyFan_eq_two_mul_of_same",
+      "proposed": "diagonalPair_even_kyFan_eq_two_mul_of_same",
+      "kind": "theorem",
+      "declared_in": "DavisKahan/Sources/DavisKahan1970/SineTheta/Lemma61.lean",
+      "classification": "provenance_only",
+      "collides_with_existing_declaration": false,
+      "dependent_declaration_names": [],
+      "occurrences": {
+        "lean_DavisKahan": 3,
+        "lean_ForTauCeti": 0,
+        "source_census": 1,
+        "result_inventory": 0,
+        "statement_map": 0,
+        "atom_inventory": 0,
+        "audit_surface": 0,
+        "challenge": 0,
+        "comparator": 0
+      }
+    },
+    {
+      "current": "paperDiagonalPair_gauge_le",
+      "proposed": "diagonalPair_gauge_le",
+      "kind": "theorem",
+      "declared_in": "DavisKahan/Sources/DavisKahan1970/SineTheta/ProjectionBlocks.lean",
+      "classification": "provenance_only",
+      "collides_with_existing_declaration": false,
+      "dependent_declaration_names": [],
+      "occurrences": {
+        "lean_DavisKahan": 2,
+        "lean_ForTauCeti": 0,
+        "source_census": 0,
+        "result_inventory": 0,
+        "statement_map": 0,
+        "atom_inventory": 0,
+        "audit_surface": 0,
+        "challenge": 0,
+        "comparator": 0
+      }
+    },
+    {
+      "current": "paperDiagonalPair_mem",
+      "proposed": "diagonalPair_mem",
+      "kind": "theorem",
+      "declared_in": "DavisKahan/Sources/DavisKahan1970/SineTheta/ProjectionBlocks.lean",
+      "classification": "provenance_only",
+      "collides_with_existing_declaration": false,
+      "dependent_declaration_names": [],
+      "occurrences": {
+        "lean_DavisKahan": 2,
+        "lean_ForTauCeti": 0,
+        "source_census": 0,
+        "result_inventory": 0,
+        "statement_map": 0,
+        "atom_inventory": 0,
+        "audit_surface": 0,
+        "challenge": 0,
+        "comparator": 0
+      }
+    },
+    {
+      "current": "paperDiagonalPair_normingGauge_le",
+      "proposed": "diagonalPair_normingGauge_le",
+      "kind": "theorem",
+      "declared_in": "DavisKahan/Sources/DavisKahan1970/SineTheta/ProjectionBlocks.lean",
+      "classification": "provenance_only",
+      "collides_with_existing_declaration": false,
+      "dependent_declaration_names": [],
+      "occurrences": {
+        "lean_DavisKahan": 2,
+        "lean_ForTauCeti": 0,
+        "source_census": 0,
+        "result_inventory": 0,
+        "statement_map": 0,
+        "atom_inventory": 0,
+        "audit_surface": 0,
+        "challenge": 0,
+        "comparator": 0
+      }
+    },
+    {
+      "current": "paperDiagonalPair_orthogonal_eq_offDiagonalPart_unboundedAmbientExact",
+      "proposed": "diagonalPair_orthogonal_eq_offDiagonalPart_unboundedAmbientExact",
+      "kind": "theorem",
+      "declared_in": "DavisKahan/Sources/DavisKahan1970/TanTwoThetaUnboundedAmbientExact.lean",
+      "classification": "provenance_only",
+      "collides_with_existing_declaration": false,
+      "dependent_declaration_names": [],
+      "occurrences": {
+        "lean_DavisKahan": 2,
+        "lean_ForTauCeti": 0,
+        "source_census": 0,
+        "result_inventory": 0,
+        "statement_map": 0,
+        "atom_inventory": 0,
+        "audit_surface": 0,
+        "challenge": 0,
+        "comparator": 0
+      }
+    },
+    {
+      "current": "paperDiagonalPair_orthogonal_eq_self_of_isOddFor_unboundedAmbientExact",
+      "proposed": "diagonalPair_orthogonal_eq_self_of_isOddFor_unboundedAmbientExact",
+      "kind": "theorem",
+      "declared_in": "DavisKahan/Sources/DavisKahan1970/TanTwoThetaUnboundedAmbientExact.lean",
+      "classification": "provenance_only",
+      "collides_with_existing_declaration": false,
+      "dependent_declaration_names": [],
+      "occurrences": {
+        "lean_DavisKahan": 5,
+        "lean_ForTauCeti": 0,
+        "source_census": 0,
+        "result_inventory": 0,
+        "statement_map": 0,
+        "atom_inventory": 0,
+        "audit_surface": 0,
+        "challenge": 0,
+        "comparator": 0
+      }
+    },
+    {
+      "current": "paperDiagonalPair_symmetricNorming_le",
+      "proposed": "diagonalPair_symmetricNorming_le",
+      "kind": "theorem",
+      "declared_in": "DavisKahan/Sources/DavisKahan1970/SineTheta/ProjectionBlocks.lean",
+      "classification": "provenance_only",
+      "collides_with_existing_declaration": false,
+      "dependent_declaration_names": [],
+      "occurrences": {
+        "lean_DavisKahan": 2,
+        "lean_ForTauCeti": 0,
+        "source_census": 0,
+        "result_inventory": 0,
+        "statement_map": 0,
+        "atom_inventory": 0,
+        "audit_surface": 0,
+        "challenge": 0,
+        "comparator": 0
+      }
+    },
+    {
+      "current": "paperDirectRotation_add_star_nonneg",
+      "proposed": "directRotation_add_star_nonneg",
+      "kind": "theorem",
+      "declared_in": "DavisKahan/Geometry/Polar/Section3Nonacute.lean",
+      "classification": "provenance_only",
+      "collides_with_existing_declaration": false,
+      "dependent_declaration_names": [],
+      "occurrences": {
+        "lean_DavisKahan": 5,
+        "lean_ForTauCeti": 0,
+        "source_census": 0,
+        "result_inventory": 0,
+        "statement_map": 0,
+        "atom_inventory": 0,
+        "audit_surface": 0,
+        "challenge": 0,
+        "comparator": 0
+      }
+    },
+    {
+      "current": "paperDirectRotation_apply_sourceDefect_eq_neg_star",
+      "proposed": "directRotation_apply_sourceDefect_eq_neg_star",
+      "kind": "theorem",
+      "declared_in": "DavisKahan/Geometry/Polar/Section3Nonacute.lean",
+      "classification": "provenance_only",
+      "collides_with_existing_declaration": false,
+      "dependent_declaration_names": [],
+      "occurrences": {
+        "lean_DavisKahan": 2,
+        "lean_ForTauCeti": 0,
+        "source_census": 0,
+        "result_inventory": 0,
+        "statement_map": 0,
+        "atom_inventory": 0,
+        "audit_surface": 0,
+        "challenge": 0,
+        "comparator": 0
+      }
+    },
+    {
+      "current": "paperDirectRotation_conjugates_complementaryProjection",
+      "proposed": "directRotation_conjugates_complementaryProjection",
+      "kind": "theorem",
+      "declared_in": "DavisKahan/Geometry/Polar/Section3Nonacute.lean",
+      "classification": "provenance_only",
+      "collides_with_existing_declaration": false,
+      "dependent_declaration_names": [],
+      "occurrences": {
+        "lean_DavisKahan": 2,
+        "lean_ForTauCeti": 0,
+        "source_census": 0,
+        "result_inventory": 0,
+        "statement_map": 0,
+        "atom_inventory": 0,
+        "audit_surface": 0,
+        "challenge": 0,
+        "comparator": 0
+      }
+    },
+    {
+      "current": "paperDirectRotation_conjugates_projection",
+      "proposed": "directRotation_conjugates_projection",
+      "kind": "theorem",
+      "declared_in": "DavisKahan/Geometry/Polar/Section3Nonacute.lean",
+      "classification": "provenance_only",
+      "collides_with_existing_declaration": false,
+      "dependent_declaration_names": [],
+      "occurrences": {
+        "lean_DavisKahan": 3,
+        "lean_ForTauCeti": 0,
+        "source_census": 0,
+        "result_inventory": 0,
+        "statement_map": 0,
+        "atom_inventory": 0,
+        "audit_surface": 0,
+        "challenge": 0,
+        "comparator": 0
+      }
+    },
+    {
+      "current": "paperDirectRotation_mapsto_targetDefect",
+      "proposed": "directRotation_mapsto_targetDefect",
+      "kind": "theorem",
+      "declared_in": "DavisKahan/Geometry/Polar/Section3Nonacute.lean",
+      "classification": "provenance_only",
+      "collides_with_existing_declaration": false,
+      "dependent_declaration_names": [],
+      "occurrences": {
+        "lean_DavisKahan": 2,
+        "lean_ForTauCeti": 0,
+        "source_census": 0,
+        "result_inventory": 0,
+        "statement_map": 0,
+        "atom_inventory": 0,
+        "audit_surface": 0,
+        "challenge": 0,
+        "comparator": 0
+      }
+    },
+    {
+      "current": "paperDirectRotation_sq_apply_sourceDefect",
+      "proposed": "directRotation_sq_apply_sourceDefect",
+      "kind": "theorem",
+      "declared_in": "DavisKahan/Geometry/Polar/Section3Nonacute.lean",
+      "classification": "provenance_only",
+      "collides_with_existing_declaration": false,
+      "dependent_declaration_names": [],
+      "occurrences": {
+        "lean_DavisKahan": 2,
+        "lean_ForTauCeti": 0,
+        "source_census": 0,
+        "result_inventory": 0,
+        "statement_map": 0,
+        "atom_inventory": 0,
+        "audit_surface": 0,
+        "challenge": 0,
+        "comparator": 0
+      }
+    },
+    {
+      "current": "paperDirectRotation_sq_apply_targetDefect",
+      "proposed": "directRotation_sq_apply_targetDefect",
+      "kind": "theorem",
+      "declared_in": "DavisKahan/Geometry/Polar/Section3Nonacute.lean",
+      "classification": "provenance_only",
+      "collides_with_existing_declaration": false,
+      "dependent_declaration_names": [],
+      "occurrences": {
+        "lean_DavisKahan": 2,
+        "lean_ForTauCeti": 0,
+        "source_census": 0,
+        "result_inventory": 0,
+        "statement_map": 0,
+        "atom_inventory": 0,
+        "audit_surface": 0,
+        "challenge": 0,
+        "comparator": 0
+      }
+    },
+    {
+      "current": "paperDirectRotation_star_apply_targetDefect_eq_neg",
+      "proposed": "directRotation_star_apply_targetDefect_eq_neg",
+      "kind": "theorem",
+      "declared_in": "DavisKahan/Geometry/Polar/Section3Nonacute.lean",
+      "classification": "provenance_only",
+      "collides_with_existing_declaration": false,
+      "dependent_declaration_names": [],
+      "occurrences": {
+        "lean_DavisKahan": 2,
+        "lean_ForTauCeti": 0,
+        "source_census": 0,
+        "result_inventory": 0,
+        "statement_map": 0,
+        "atom_inventory": 0,
+        "audit_surface": 0,
+        "challenge": 0,
+        "comparator": 0
+      }
+    },
+    {
+      "current": "paperDirectRotation_star_mapsto_sourceDefect",
+      "proposed": "directRotation_star_mapsto_sourceDefect",
+      "kind": "theorem",
+      "declared_in": "DavisKahan/Geometry/Polar/Section3Nonacute.lean",
+      "classification": "provenance_only",
+      "collides_with_existing_declaration": false,
+      "dependent_declaration_names": [],
+      "occurrences": {
+        "lean_DavisKahan": 2,
+        "lean_ForTauCeti": 0,
+        "source_census": 0,
+        "result_inventory": 0,
+        "statement_map": 0,
+        "atom_inventory": 0,
+        "audit_surface": 0,
+        "challenge": 0,
+        "comparator": 0
+      }
+    },
+    {
+      "current": "paperDirectedAngleOperatorC",
+      "proposed": "directedAngleOperatorC",
+      "kind": "def",
+      "declared_in": "DavisKahan/Sources/DavisKahan1970/SineTheta/OperatorAngleBridge.lean",
+      "classification": "provenance_only",
+      "collides_with_existing_declaration": false,
+      "dependent_declaration_names": [
+        "paperDirectedAngleOperatorC_nonneg"
+      ],
+      "occurrences": {
+        "lean_DavisKahan": 8,
+        "lean_ForTauCeti": 0,
+        "source_census": 0,
+        "result_inventory": 0,
+        "statement_map": 0,
+        "atom_inventory": 0,
+        "audit_surface": 0,
+        "challenge": 0,
+        "comparator": 0
+      }
+    },
+    {
+      "current": "paperDirectedAngleOperatorC_nonneg",
+      "proposed": "directedAngleOperatorC_nonneg",
+      "kind": "theorem",
+      "declared_in": "DavisKahan/Sources/DavisKahan1970/SineTheta/OperatorAngleBridge.lean",
+      "classification": "provenance_only",
+      "collides_with_existing_declaration": false,
+      "dependent_declaration_names": [],
+      "occurrences": {
+        "lean_DavisKahan": 1,
+        "lean_ForTauCeti": 0,
+        "source_census": 0,
+        "result_inventory": 0,
+        "statement_map": 0,
+        "atom_inventory": 0,
+        "audit_surface": 0,
+        "challenge": 0,
+        "comparator": 0
+      }
+    },
+    {
+      "current": "paperDirectedSinAngleOperatorC",
+      "proposed": "directedSinAngleOperatorC",
+      "kind": "def",
+      "declared_in": "DavisKahan/Sources/DavisKahan1970/SineTheta/OperatorAngleBridge.lean",
+      "classification": "provenance_only",
+      "collides_with_existing_declaration": false,
+      "dependent_declaration_names": [
+        "paperDirectedSinAngleOperatorC_eq"
+      ],
+      "occurrences": {
+        "lean_DavisKahan": 3,
+        "lean_ForTauCeti": 0,
+        "source_census": 0,
+        "result_inventory": 0,
+        "statement_map": 0,
+        "atom_inventory": 0,
+        "audit_surface": 0,
+        "challenge": 0,
+        "comparator": 0
+      }
+    },
+    {
+      "current": "paperDirectedSinAngleOperatorC_eq",
+      "proposed": "directedSinAngleOperatorC_eq",
+      "kind": "theorem",
+      "declared_in": "DavisKahan/Sources/DavisKahan1970/SineTheta/OperatorAngleBridge.lean",
+      "classification": "provenance_only",
+      "collides_with_existing_declaration": false,
+      "dependent_declaration_names": [],
+      "occurrences": {
+        "lean_DavisKahan": 2,
+        "lean_ForTauCeti": 0,
+        "source_census": 0,
+        "result_inventory": 0,
+        "statement_map": 0,
+        "atom_inventory": 0,
+        "audit_surface": 0,
+        "challenge": 0,
+        "comparator": 0
+      }
+    },
+    {
+      "current": "paperDirectedSin_same_crossProjection",
+      "proposed": "directedSin_same_crossProjection",
+      "kind": "theorem",
+      "declared_in": "DavisKahan/Sources/DavisKahan1970/SineTheta/OperatorAngleBridge.lean",
+      "classification": "provenance_only",
+      "collides_with_existing_declaration": false,
+      "dependent_declaration_names": [],
+      "occurrences": {
+        "lean_DavisKahan": 1,
+        "lean_ForTauCeti": 0,
+        "source_census": 0,
+        "result_inventory": 0,
+        "statement_map": 0,
+        "atom_inventory": 0,
+        "audit_surface": 0,
+        "challenge": 0,
+        "comparator": 0
+      }
+    },
+    {
+      "current": "paperDirectedSineAmbient",
+      "proposed": "directedSineAmbient",
+      "kind": "def",
+      "declared_in": "DavisKahan/Sources/DavisKahan1970/TanThetaAmbient.lean",
+      "classification": "provenance_only",
+      "collides_with_existing_declaration": false,
+      "dependent_declaration_names": [],
+      "occurrences": {
+        "lean_DavisKahan": 25,
+        "lean_ForTauCeti": 0,
+        "source_census": 1,
+        "result_inventory": 0,
+        "statement_map": 0,
+        "atom_inventory": 0,
+        "audit_surface": 0,
+        "challenge": 0,
+        "comparator": 0
+      }
+    },
+    {
+      "current": "paperDoubleSecant",
+      "proposed": "doubleSecant",
+      "kind": "def",
+      "declared_in": "DavisKahan/Sources/DavisKahan1970/AmbientBlockVocabulary.lean",
+      "classification": "provenance_only",
+      "collides_with_existing_declaration": false,
+      "dependent_declaration_names": [],
+      "occurrences": {
+        "lean_DavisKahan": 99,
+        "lean_ForTauCeti": 0,
+        "source_census": 2,
+        "result_inventory": 0,
+        "statement_map": 0,
+        "atom_inventory": 0,
+        "audit_surface": 0,
+        "challenge": 2,
+        "comparator": 0
+      }
+    },
+    {
+      "current": "paperEquation43Block1",
+      "proposed": "equation43Block1",
+      "kind": "def",
+      "declared_in": "DavisKahan/FiniteDimensional/DirectRotation/ShortRotationCounterexample.lean",
+      "classification": "provenance_only",
+      "collides_with_existing_declaration": false,
+      "dependent_declaration_names": [],
+      "occurrences": {
+        "lean_DavisKahan": 13,
+        "lean_ForTauCeti": 0,
+        "source_census": 0,
+        "result_inventory": 0,
+        "statement_map": 0,
+        "atom_inventory": 0,
+        "audit_surface": 0,
+        "challenge": 0,
+        "comparator": 0
+      }
+    },
+    {
+      "current": "paperEquation43Block2",
+      "proposed": "equation43Block2",
+      "kind": "def",
+      "declared_in": "DavisKahan/FiniteDimensional/DirectRotation/ShortRotationCounterexample.lean",
+      "classification": "provenance_only",
+      "collides_with_existing_declaration": false,
+      "dependent_declaration_names": [],
+      "occurrences": {
+        "lean_DavisKahan": 13,
+        "lean_ForTauCeti": 0,
+        "source_census": 0,
+        "result_inventory": 0,
+        "statement_map": 0,
+        "atom_inventory": 0,
+        "audit_surface": 0,
+        "challenge": 0,
+        "comparator": 0
+      }
+    },
+    {
+      "current": "paperFaithful_tanTwoTheta_uiNorm",
+      "proposed": "faithful_tanTwoTheta_uiNorm",
+      "kind": "theorem",
+      "declared_in": "DavisKahan/InfiniteDimensional/TanTwoTheta/PaperFaithfulUINorm.lean",
+      "classification": "provenance_only",
+      "collides_with_existing_declaration": false,
+      "dependent_declaration_names": [
+        "paperFaithful_tanTwoTheta_uiNorm_real"
+      ],
+      "occurrences": {
+        "lean_DavisKahan": 7,
+        "lean_ForTauCeti": 0,
+        "source_census": 3,
+        "result_inventory": 0,
+        "statement_map": 0,
+        "atom_inventory": 0,
+        "audit_surface": 0,
+        "challenge": 0,
+        "comparator": 0
+      }
+    },
+    {
+      "current": "paperFaithful_tanTwoTheta_uiNorm_real",
+      "proposed": "faithful_tanTwoTheta_uiNorm_real",
+      "kind": "theorem",
+      "declared_in": "DavisKahan/InfiniteDimensional/TanTwoTheta/RealPaperFaithful.lean",
+      "classification": "provenance_only",
+      "collides_with_existing_declaration": false,
+      "dependent_declaration_names": [],
+      "occurrences": {
+        "lean_DavisKahan": 1,
+        "lean_ForTauCeti": 0,
+        "source_census": 6,
+        "result_inventory": 0,
+        "statement_map": 0,
+        "atom_inventory": 0,
+        "audit_surface": 0,
+        "challenge": 0,
+        "comparator": 0
+      }
+    },
+    {
+      "current": "paperFiniteDimensional_scalar_homogeneity",
+      "proposed": "finiteDimensional_scalar_homogeneity",
+      "kind": "theorem",
+      "declared_in": "DavisKahan/Sources/DavisKahan1970/SineTheta/Sharpness.lean",
+      "classification": "provenance_only",
+      "collides_with_existing_declaration": false,
+      "dependent_declaration_names": [],
+      "occurrences": {
+        "lean_DavisKahan": 1,
+        "lean_ForTauCeti": 0,
+        "source_census": 0,
+        "result_inventory": 0,
+        "statement_map": 0,
+        "atom_inventory": 0,
+        "audit_surface": 0,
+        "challenge": 0,
+        "comparator": 0
+      }
+    },
+    {
+      "current": "paperHSBasis",
+      "proposed": "hSBasis",
+      "kind": "abbrev",
+      "declared_in": "DavisKahan/Sources/DavisKahan1970/Ideals/HilbertSchmidtTensor.lean",
+      "classification": "provenance_only",
+      "collides_with_existing_declaration": false,
+      "dependent_declaration_names": [],
+      "occurrences": {
+        "lean_DavisKahan": 37,
+        "lean_ForTauCeti": 0,
+        "source_census": 0,
+        "result_inventory": 0,
+        "statement_map": 0,
+        "atom_inventory": 0,
+        "audit_surface": 0,
+        "challenge": 0,
+        "comparator": 0
+      }
+    },
+    {
+      "current": "paperHilbertSchmidtBasisEnergy",
+      "proposed": "hilbertSchmidtBasisEnergy",
+      "kind": "def",
+      "declared_in": "DavisKahan/Sources/DavisKahan1970/Ideals/HilbertSchmidtBasis.lean",
+      "classification": "provenance_only",
+      "collides_with_existing_declaration": false,
+      "dependent_declaration_names": [
+        "paperHilbertSchmidtBasisEnergy_adjoint_swap",
+        "paperHilbertSchmidtBasisEnergy_eq_hilbertSchmidtEnergy",
+        "paperHilbertSchmidtBasisEnergy_eq_iSup_finset",
+        "paperHilbertSchmidtBasisEnergy_indep"
+      ],
+      "occurrences": {
+        "lean_DavisKahan": 15,
+        "lean_ForTauCeti": 0,
+        "source_census": 0,
+        "result_inventory": 0,
+        "statement_map": 0,
+        "atom_inventory": 0,
+        "audit_surface": 0,
+        "challenge": 0,
+        "comparator": 0
+      }
+    },
+    {
+      "current": "paperHilbertSchmidtBasisEnergy_adjoint_swap",
+      "proposed": "hilbertSchmidtBasisEnergy_adjoint_swap",
+      "kind": "theorem",
+      "declared_in": "DavisKahan/Sources/DavisKahan1970/Ideals/HilbertSchmidtBasis.lean",
+      "classification": "provenance_only",
+      "collides_with_existing_declaration": false,
+      "dependent_declaration_names": [],
+      "occurrences": {
+        "lean_DavisKahan": 4,
+        "lean_ForTauCeti": 0,
+        "source_census": 0,
+        "result_inventory": 0,
+        "statement_map": 0,
+        "atom_inventory": 0,
+        "audit_surface": 0,
+        "challenge": 0,
+        "comparator": 0
+      }
+    },
+    {
+      "current": "paperHilbertSchmidtBasisEnergy_eq_hilbertSchmidtEnergy",
+      "proposed": "hilbertSchmidtBasisEnergy_eq_hilbertSchmidtEnergy",
+      "kind": "theorem",
+      "declared_in": "DavisKahan/Sources/DavisKahan1970/Ideals/HilbertSchmidtBasis.lean",
+      "classification": "provenance_only",
+      "collides_with_existing_declaration": false,
+      "dependent_declaration_names": [],
+      "occurrences": {
+        "lean_DavisKahan": 1,
+        "lean_ForTauCeti": 0,
+        "source_census": 0,
+        "result_inventory": 0,
+        "statement_map": 0,
+        "atom_inventory": 0,
+        "audit_surface": 0,
+        "challenge": 0,
+        "comparator": 0
+      }
+    },
+    {
+      "current": "paperHilbertSchmidtBasisEnergy_eq_iSup_finset",
+      "proposed": "hilbertSchmidtBasisEnergy_eq_iSup_finset",
+      "kind": "theorem",
+      "declared_in": "DavisKahan/Sources/DavisKahan1970/Ideals/HilbertSchmidtBasis.lean",
+      "classification": "provenance_only",
+      "collides_with_existing_declaration": false,
+      "dependent_declaration_names": [],
+      "occurrences": {
+        "lean_DavisKahan": 2,
+        "lean_ForTauCeti": 0,
+        "source_census": 0,
+        "result_inventory": 0,
+        "statement_map": 0,
+        "atom_inventory": 0,
+        "audit_surface": 0,
+        "challenge": 0,
+        "comparator": 0
+      }
+    },
+    {
+      "current": "paperHilbertSchmidtBasisEnergy_indep",
+      "proposed": "hilbertSchmidtBasisEnergy_indep",
+      "kind": "theorem",
+      "declared_in": "DavisKahan/Sources/DavisKahan1970/Ideals/HilbertSchmidtBasis.lean",
+      "classification": "provenance_only",
+      "collides_with_existing_declaration": false,
+      "dependent_declaration_names": [],
+      "occurrences": {
+        "lean_DavisKahan": 1,
+        "lean_ForTauCeti": 0,
+        "source_census": 0,
+        "result_inventory": 0,
+        "statement_map": 0,
+        "atom_inventory": 0,
+        "audit_surface": 0,
+        "challenge": 0,
+        "comparator": 0
+      }
+    },
+    {
+      "current": "paperHilbertSchmidtEnergy",
+      "proposed": "hilbertSchmidtEnergy",
+      "kind": "def",
+      "declared_in": "DavisKahan/Sources/DavisKahan1970/Ideals/HilbertSchmidt.lean",
+      "classification": "contrastive_decision_required",
+      "collides_with_existing_declaration": true,
+      "dependent_declaration_names": [
+        "paperHilbertSchmidtEnergy_comp_le",
+        "paperHilbertSchmidtEnergy_comp_paperBasisProjection",
+        "paperHilbertSchmidtEnergy_comp_starProjection",
+        "paperHilbertSchmidtEnergy_complexify",
+        "paperHilbertSchmidtEnergy_domain_projection_add_complex",
+        "paperHilbertSchmidtEnergy_domain_projection_add_real",
+        "paperHilbertSchmidtEnergy_eq_basisEnergy",
+        "paperHilbertSchmidtEnergy_eq_iSup_cutoff",
+        "paperHilbertSchmidtEnergy_eq_ofReal_sum_sq_singularValues",
+        "paperHilbertSchmidtEnergy_eq_sum_range_of_rank_le",
+        "paperHilbertSchmidtEnergy_le_rank_mul_opNorm_sq",
+        "paperHilbertSchmidtEnergy_smul",
+        "paperHilbertSchmidtEnergy_sylvester_le_of_pairwiseSpectrumGap",
+        "paperHilbertSchmidtEnergy_zero"
+      ],
+      "occurrences": {
+        "lean_DavisKahan": 60,
+        "lean_ForTauCeti": 0,
+        "source_census": 0,
+        "result_inventory": 0,
+        "statement_map": 0,
+        "atom_inventory": 0,
+        "audit_surface": 0,
+        "challenge": 0,
+        "comparator": 0
+      }
+    },
+    {
+      "current": "paperHilbertSchmidtEnergy_comp_le",
+      "proposed": "hilbertSchmidtEnergy_comp_le",
+      "kind": "theorem",
+      "declared_in": "DavisKahan/Sources/DavisKahan1970/Ideals/HilbertSchmidt.lean",
+      "classification": "provenance_only",
+      "collides_with_existing_declaration": false,
+      "dependent_declaration_names": [],
+      "occurrences": {
+        "lean_DavisKahan": 3,
+        "lean_ForTauCeti": 0,
+        "source_census": 0,
+        "result_inventory": 0,
+        "statement_map": 0,
+        "atom_inventory": 0,
+        "audit_surface": 0,
+        "challenge": 0,
+        "comparator": 0
+      }
+    },
+    {
+      "current": "paperHilbertSchmidtEnergy_comp_paperBasisProjection",
+      "proposed": "hilbertSchmidtEnergy_comp_paperBasisProjection",
+      "kind": "theorem",
+      "declared_in": "DavisKahan/Sources/DavisKahan1970/Ideals/HilbertSchmidtBasis.lean",
+      "classification": "provenance_only",
+      "collides_with_existing_declaration": false,
+      "dependent_declaration_names": [],
+      "occurrences": {
+        "lean_DavisKahan": 2,
+        "lean_ForTauCeti": 0,
+        "source_census": 0,
+        "result_inventory": 0,
+        "statement_map": 0,
+        "atom_inventory": 0,
+        "audit_surface": 0,
+        "challenge": 0,
+        "comparator": 0
+      }
+    },
+    {
+      "current": "paperHilbertSchmidtEnergy_comp_starProjection",
+      "proposed": "hilbertSchmidtEnergy_comp_starProjection",
+      "kind": "theorem",
+      "declared_in": "DavisKahan/Sources/DavisKahan1970/Ideals/HilbertSchmidtBasis.lean",
+      "classification": "provenance_only",
+      "collides_with_existing_declaration": false,
+      "dependent_declaration_names": [],
+      "occurrences": {
+        "lean_DavisKahan": 2,
+        "lean_ForTauCeti": 0,
+        "source_census": 0,
+        "result_inventory": 0,
+        "statement_map": 0,
+        "atom_inventory": 0,
+        "audit_surface": 0,
+        "challenge": 0,
+        "comparator": 0
+      }
+    },
+    {
+      "current": "paperHilbertSchmidtEnergy_complexify",
+      "proposed": "hilbertSchmidtEnergy_complexify",
+      "kind": "theorem",
+      "declared_in": "DavisKahan/Sources/DavisKahan1970/Ideals/HilbertSchmidt.lean",
+      "classification": "provenance_only",
+      "collides_with_existing_declaration": false,
+      "dependent_declaration_names": [],
+      "occurrences": {
+        "lean_DavisKahan": 7,
+        "lean_ForTauCeti": 0,
+        "source_census": 1,
+        "result_inventory": 0,
+        "statement_map": 0,
+        "atom_inventory": 0,
+        "audit_surface": 0,
+        "challenge": 0,
+        "comparator": 0
+      }
+    },
+    {
+      "current": "paperHilbertSchmidtEnergy_domain_projection_add_complex",
+      "proposed": "hilbertSchmidtEnergy_domain_projection_add_complex",
+      "kind": "theorem",
+      "declared_in": "DavisKahan/Sources/DavisKahan1970/Section6AppendixLeakage.lean",
+      "classification": "provenance_only",
+      "collides_with_existing_declaration": false,
+      "dependent_declaration_names": [],
+      "occurrences": {
+        "lean_DavisKahan": 5,
+        "lean_ForTauCeti": 0,
+        "source_census": 1,
+        "result_inventory": 0,
+        "statement_map": 0,
+        "atom_inventory": 0,
+        "audit_surface": 0,
+        "challenge": 0,
+        "comparator": 0
+      }
+    },
+    {
+      "current": "paperHilbertSchmidtEnergy_domain_projection_add_real",
+      "proposed": "hilbertSchmidtEnergy_domain_projection_add_real",
+      "kind": "theorem",
+      "declared_in": "DavisKahan/Sources/DavisKahan1970/Section6AppendixLeakageReal.lean",
+      "classification": "provenance_only",
+      "collides_with_existing_declaration": false,
+      "dependent_declaration_names": [],
+      "occurrences": {
+        "lean_DavisKahan": 4,
+        "lean_ForTauCeti": 0,
+        "source_census": 2,
+        "result_inventory": 0,
+        "statement_map": 0,
+        "atom_inventory": 0,
+        "audit_surface": 0,
+        "challenge": 0,
+        "comparator": 0
+      }
+    },
+    {
+      "current": "paperHilbertSchmidtEnergy_eq_basisEnergy",
+      "proposed": "hilbertSchmidtEnergy_eq_basisEnergy",
+      "kind": "theorem",
+      "declared_in": "DavisKahan/Sources/DavisKahan1970/Ideals/HilbertSchmidtBasis.lean",
+      "classification": "provenance_only",
+      "collides_with_existing_declaration": false,
+      "dependent_declaration_names": [],
+      "occurrences": {
+        "lean_DavisKahan": 9,
+        "lean_ForTauCeti": 0,
+        "source_census": 1,
+        "result_inventory": 0,
+        "statement_map": 0,
+        "atom_inventory": 0,
+        "audit_surface": 0,
+        "challenge": 0,
+        "comparator": 0
+      }
+    },
+    {
+      "current": "paperHilbertSchmidtEnergy_eq_iSup_cutoff",
+      "proposed": "hilbertSchmidtEnergy_eq_iSup_cutoff",
+      "kind": "theorem",
+      "declared_in": "DavisKahan/Sources/DavisKahan1970/Ideals/HilbertSchmidtBasis.lean",
+      "classification": "provenance_only",
+      "collides_with_existing_declaration": false,
+      "dependent_declaration_names": [],
+      "occurrences": {
+        "lean_DavisKahan": 2,
+        "lean_ForTauCeti": 0,
+        "source_census": 0,
+        "result_inventory": 0,
+        "statement_map": 0,
+        "atom_inventory": 0,
+        "audit_surface": 0,
+        "challenge": 0,
+        "comparator": 0
+      }
+    },
+    {
+      "current": "paperHilbertSchmidtEnergy_eq_ofReal_sum_sq_singularValues",
+      "proposed": "hilbertSchmidtEnergy_eq_ofReal_sum_sq_singularValues",
+      "kind": "theorem",
+      "declared_in": "DavisKahan/Sources/DavisKahan1970/Ideals/HilbertSchmidtFrobenius.lean",
+      "classification": "provenance_only",
+      "collides_with_existing_declaration": false,
+      "dependent_declaration_names": [],
+      "occurrences": {
+        "lean_DavisKahan": 2,
+        "lean_ForTauCeti": 0,
+        "source_census": 0,
+        "result_inventory": 0,
+        "statement_map": 0,
+        "atom_inventory": 0,
+        "audit_surface": 0,
+        "challenge": 0,
+        "comparator": 0
+      }
+    },
+    {
+      "current": "paperHilbertSchmidtEnergy_eq_sum_range_of_rank_le",
+      "proposed": "hilbertSchmidtEnergy_eq_sum_range_of_rank_le",
+      "kind": "theorem",
+      "declared_in": "DavisKahan/Sources/DavisKahan1970/Ideals/HilbertSchmidtFiniteRank.lean",
+      "classification": "provenance_only",
+      "collides_with_existing_declaration": false,
+      "dependent_declaration_names": [],
+      "occurrences": {
+        "lean_DavisKahan": 5,
+        "lean_ForTauCeti": 0,
+        "source_census": 1,
+        "result_inventory": 0,
+        "statement_map": 0,
+        "atom_inventory": 0,
+        "audit_surface": 0,
+        "challenge": 0,
+        "comparator": 0
+      }
+    },
+    {
+      "current": "paperHilbertSchmidtEnergy_le_rank_mul_opNorm_sq",
+      "proposed": "hilbertSchmidtEnergy_le_rank_mul_opNorm_sq",
+      "kind": "theorem",
+      "declared_in": "DavisKahan/Sources/DavisKahan1970/Ideals/HilbertSchmidtFiniteRank.lean",
+      "classification": "provenance_only",
+      "collides_with_existing_declaration": false,
+      "dependent_declaration_names": [],
+      "occurrences": {
+        "lean_DavisKahan": 2,
+        "lean_ForTauCeti": 0,
+        "source_census": 0,
+        "result_inventory": 0,
+        "statement_map": 0,
+        "atom_inventory": 0,
+        "audit_surface": 0,
+        "challenge": 0,
+        "comparator": 0
+      }
+    },
+    {
+      "current": "paperHilbertSchmidtEnergy_smul",
+      "proposed": "hilbertSchmidtEnergy_smul",
+      "kind": "theorem",
+      "declared_in": "DavisKahan/Sources/DavisKahan1970/Ideals/HilbertSchmidt.lean",
+      "classification": "contrastive_decision_required",
+      "collides_with_existing_declaration": true,
+      "dependent_declaration_names": [],
+      "occurrences": {
+        "lean_DavisKahan": 3,
+        "lean_ForTauCeti": 0,
+        "source_census": 0,
+        "result_inventory": 0,
+        "statement_map": 0,
+        "atom_inventory": 0,
+        "audit_surface": 0,
+        "challenge": 0,
+        "comparator": 0
+      }
+    },
+    {
+      "current": "paperHilbertSchmidtEnergy_sylvester_le_of_pairwiseSpectrumGap",
+      "proposed": "hilbertSchmidtEnergy_sylvester_le_of_pairwiseSpectrumGap",
+      "kind": "theorem",
+      "declared_in": "DavisKahan/Sources/DavisKahan1970/Sylvester/PaperHilbertSchmidt.lean",
+      "classification": "provenance_only",
+      "collides_with_existing_declaration": false,
+      "dependent_declaration_names": [],
+      "occurrences": {
+        "lean_DavisKahan": 1,
+        "lean_ForTauCeti": 0,
+        "source_census": 1,
+        "result_inventory": 0,
+        "statement_map": 1,
+        "atom_inventory": 0,
+        "audit_surface": 0,
+        "challenge": 0,
+        "comparator": 0
+      }
+    },
+    {
+      "current": "paperHilbertSchmidtEnergy_zero",
+      "proposed": "hilbertSchmidtEnergy_zero",
+      "kind": "theorem",
+      "declared_in": "DavisKahan/Sources/DavisKahan1970/Ideals/HilbertSchmidt.lean",
+      "classification": "contrastive_decision_required",
+      "collides_with_existing_declaration": true,
+      "dependent_declaration_names": [],
+      "occurrences": {
+        "lean_DavisKahan": 5,
+        "lean_ForTauCeti": 0,
+        "source_census": 0,
+        "result_inventory": 0,
+        "statement_map": 0,
+        "atom_inventory": 0,
+        "audit_surface": 0,
+        "challenge": 0,
+        "comparator": 0
+      }
+    },
+    {
+      "current": "paperHilbertSchmidtNorm",
+      "proposed": "hilbertSchmidtNorm",
+      "kind": "def",
+      "declared_in": "DavisKahan/Sources/DavisKahan1970/Ideals/HilbertSchmidt.lean",
+      "classification": "provenance_only",
+      "collides_with_existing_declaration": false,
+      "dependent_declaration_names": [
+        "paperHilbertSchmidtNorm_add_le_complex",
+        "paperHilbertSchmidtNorm_add_le_real",
+        "paperHilbertSchmidtNorm_adjoint",
+        "paperHilbertSchmidtNorm_comp_isometries_le",
+        "paperHilbertSchmidtNorm_comp_le",
+        "paperHilbertSchmidtNorm_complexify",
+        "paperHilbertSchmidtNorm_eq_frobenius",
+        "paperHilbertSchmidtNorm_eq_rectangularFrobenius",
+        "paperHilbertSchmidtNorm_eq_sqrt_tsum_basis",
+        "paperHilbertSchmidtNorm_eq_zero",
+        "paperHilbertSchmidtNorm_le_sqrt_rank_mul_opNorm",
+        "paperHilbertSchmidtNorm_neg",
+        "paperHilbertSchmidtNorm_nonneg",
+        "paperHilbertSchmidtNorm_operatorModulus",
+        "paperHilbertSchmidtNorm_sinAngleOperatorRC_eq_projectionDifference",
+        "paperHilbertSchmidtNorm_smul",
+        "paperHilbertSchmidtNorm_toOperator",
+        "paperHilbertSchmidtNorm_zero"
+      ],
+      "occurrences": {
+        "lean_DavisKahan": 170,
+        "lean_ForTauCeti": 0,
+        "source_census": 3,
+        "result_inventory": 0,
+        "statement_map": 0,
+        "atom_inventory": 0,
+        "audit_surface": 0,
+        "challenge": 0,
+        "comparator": 0
+      }
+    },
+    {
+      "current": "paperHilbertSchmidtNorm_add_le_complex",
+      "proposed": "hilbertSchmidtNorm_add_le_complex",
+      "kind": "theorem",
+      "declared_in": "DavisKahan/Sources/DavisKahan1970/Ideals/HilbertSchmidtComplexFamily.lean",
+      "classification": "provenance_only",
+      "collides_with_existing_declaration": false,
+      "dependent_declaration_names": [],
+      "occurrences": {
+        "lean_DavisKahan": 3,
+        "lean_ForTauCeti": 0,
+        "source_census": 0,
+        "result_inventory": 0,
+        "statement_map": 0,
+        "atom_inventory": 0,
+        "audit_surface": 0,
+        "challenge": 0,
+        "comparator": 0
+      }
+    },
+    {
+      "current": "paperHilbertSchmidtNorm_add_le_real",
+      "proposed": "hilbertSchmidtNorm_add_le_real",
+      "kind": "theorem",
+      "declared_in": "DavisKahan/Sources/DavisKahan1970/Ideals/HilbertSchmidtRealDescent.lean",
+      "classification": "provenance_only",
+      "collides_with_existing_declaration": false,
+      "dependent_declaration_names": [],
+      "occurrences": {
+        "lean_DavisKahan": 2,
+        "lean_ForTauCeti": 0,
+        "source_census": 0,
+        "result_inventory": 0,
+        "statement_map": 0,
+        "atom_inventory": 0,
+        "audit_surface": 0,
+        "challenge": 0,
+        "comparator": 0
+      }
+    },
+    {
+      "current": "paperHilbertSchmidtNorm_adjoint",
+      "proposed": "hilbertSchmidtNorm_adjoint",
+      "kind": "theorem",
+      "declared_in": "DavisKahan/Sources/DavisKahan1970/Ideals/HilbertSchmidt.lean",
+      "classification": "provenance_only",
+      "collides_with_existing_declaration": false,
+      "dependent_declaration_names": [],
+      "occurrences": {
+        "lean_DavisKahan": 5,
+        "lean_ForTauCeti": 0,
+        "source_census": 0,
+        "result_inventory": 0,
+        "statement_map": 0,
+        "atom_inventory": 0,
+        "audit_surface": 0,
+        "challenge": 0,
+        "comparator": 0
+      }
+    },
+    {
+      "current": "paperHilbertSchmidtNorm_comp_isometries_le",
+      "proposed": "hilbertSchmidtNorm_comp_isometries_le",
+      "kind": "theorem",
+      "declared_in": "DavisKahan/Sources/DavisKahan1970/Ideals/HilbertSchmidt.lean",
+      "classification": "provenance_only",
+      "collides_with_existing_declaration": false,
+      "dependent_declaration_names": [],
+      "occurrences": {
+        "lean_DavisKahan": 3,
+        "lean_ForTauCeti": 0,
+        "source_census": 0,
+        "result_inventory": 0,
+        "statement_map": 0,
+        "atom_inventory": 0,
+        "audit_surface": 0,
+        "challenge": 0,
+        "comparator": 0
+      }
+    },
+    {
+      "current": "paperHilbertSchmidtNorm_comp_le",
+      "proposed": "hilbertSchmidtNorm_comp_le",
+      "kind": "theorem",
+      "declared_in": "DavisKahan/Sources/DavisKahan1970/Ideals/HilbertSchmidt.lean",
+      "classification": "provenance_only",
+      "collides_with_existing_declaration": false,
+      "dependent_declaration_names": [],
+      "occurrences": {
+        "lean_DavisKahan": 6,
+        "lean_ForTauCeti": 0,
+        "source_census": 0,
+        "result_inventory": 0,
+        "statement_map": 0,
+        "atom_inventory": 0,
+        "audit_surface": 0,
+        "challenge": 0,
+        "comparator": 0
+      }
+    },
+    {
+      "current": "paperHilbertSchmidtNorm_complexify",
+      "proposed": "hilbertSchmidtNorm_complexify",
+      "kind": "theorem",
+      "declared_in": "DavisKahan/Sources/DavisKahan1970/Ideals/HilbertSchmidt.lean",
+      "classification": "provenance_only",
+      "collides_with_existing_declaration": false,
+      "dependent_declaration_names": [],
+      "occurrences": {
+        "lean_DavisKahan": 8,
+        "lean_ForTauCeti": 0,
+        "source_census": 0,
+        "result_inventory": 0,
+        "statement_map": 0,
+        "atom_inventory": 0,
+        "audit_surface": 0,
+        "challenge": 0,
+        "comparator": 0
+      }
+    },
+    {
+      "current": "paperHilbertSchmidtNorm_eq_frobenius",
+      "proposed": "hilbertSchmidtNorm_eq_frobenius",
+      "kind": "theorem",
+      "declared_in": "DavisKahan/Sources/DavisKahan1970/Ideals/HilbertSchmidtFrobenius.lean",
+      "classification": "provenance_only",
+      "collides_with_existing_declaration": false,
+      "dependent_declaration_names": [],
+      "occurrences": {
+        "lean_DavisKahan": 3,
+        "lean_ForTauCeti": 0,
+        "source_census": 0,
+        "result_inventory": 0,
+        "statement_map": 0,
+        "atom_inventory": 0,
+        "audit_surface": 0,
+        "challenge": 0,
+        "comparator": 0
+      }
+    },
+    {
+      "current": "paperHilbertSchmidtNorm_eq_rectangularFrobenius",
+      "proposed": "hilbertSchmidtNorm_eq_rectangularFrobenius",
+      "kind": "theorem",
+      "declared_in": "DavisKahan/Sources/DavisKahan1970/Ideals/HilbertSchmidtFrobenius.lean",
+      "classification": "provenance_only",
+      "collides_with_existing_declaration": false,
+      "dependent_declaration_names": [],
+      "occurrences": {
+        "lean_DavisKahan": 2,
+        "lean_ForTauCeti": 1,
+        "source_census": 0,
+        "result_inventory": 0,
+        "statement_map": 0,
+        "atom_inventory": 0,
+        "audit_surface": 0,
+        "challenge": 0,
+        "comparator": 0
+      }
+    },
+    {
+      "current": "paperHilbertSchmidtNorm_eq_sqrt_tsum_basis",
+      "proposed": "hilbertSchmidtNorm_eq_sqrt_tsum_basis",
+      "kind": "theorem",
+      "declared_in": "DavisKahan/Sources/DavisKahan1970/Ideals/HilbertSchmidtBasis.lean",
+      "classification": "provenance_only",
+      "collides_with_existing_declaration": false,
+      "dependent_declaration_names": [],
+      "occurrences": {
+        "lean_DavisKahan": 2,
+        "lean_ForTauCeti": 0,
+        "source_census": 0,
+        "result_inventory": 0,
+        "statement_map": 0,
+        "atom_inventory": 0,
+        "audit_surface": 0,
+        "challenge": 0,
+        "comparator": 0
+      }
+    },
+    {
+      "current": "paperHilbertSchmidtNorm_eq_zero",
+      "proposed": "hilbertSchmidtNorm_eq_zero",
+      "kind": "theorem",
+      "declared_in": "DavisKahan/Sources/DavisKahan1970/Ideals/HilbertSchmidtComplexFamily.lean",
+      "classification": "provenance_only",
+      "collides_with_existing_declaration": false,
+      "dependent_declaration_names": [],
+      "occurrences": {
+        "lean_DavisKahan": 1,
+        "lean_ForTauCeti": 0,
+        "source_census": 0,
+        "result_inventory": 0,
+        "statement_map": 0,
+        "atom_inventory": 0,
+        "audit_surface": 0,
+        "challenge": 0,
+        "comparator": 0
+      }
+    },
+    {
+      "current": "paperHilbertSchmidtNorm_le_sqrt_rank_mul_opNorm",
+      "proposed": "hilbertSchmidtNorm_le_sqrt_rank_mul_opNorm",
+      "kind": "theorem",
+      "declared_in": "DavisKahan/Sources/DavisKahan1970/Ideals/HilbertSchmidtFiniteRank.lean",
+      "classification": "provenance_only",
+      "collides_with_existing_declaration": false,
+      "dependent_declaration_names": [],
+      "occurrences": {
+        "lean_DavisKahan": 5,
+        "lean_ForTauCeti": 0,
+        "source_census": 1,
+        "result_inventory": 0,
+        "statement_map": 0,
+        "atom_inventory": 0,
+        "audit_surface": 0,
+        "challenge": 0,
+        "comparator": 0
+      }
+    },
+    {
+      "current": "paperHilbertSchmidtNorm_neg",
+      "proposed": "hilbertSchmidtNorm_neg",
+      "kind": "theorem",
+      "declared_in": "DavisKahan/Sources/DavisKahan1970/Ideals/HilbertSchmidt.lean",
+      "classification": "provenance_only",
+      "collides_with_existing_declaration": false,
+      "dependent_declaration_names": [],
+      "occurrences": {
+        "lean_DavisKahan": 1,
+        "lean_ForTauCeti": 0,
+        "source_census": 0,
+        "result_inventory": 0,
+        "statement_map": 0,
+        "atom_inventory": 0,
+        "audit_surface": 0,
+        "challenge": 0,
+        "comparator": 0
+      }
+    },
+    {
+      "current": "paperHilbertSchmidtNorm_nonneg",
+      "proposed": "hilbertSchmidtNorm_nonneg",
+      "kind": "theorem",
+      "declared_in": "DavisKahan/Sources/DavisKahan1970/Ideals/HilbertSchmidt.lean",
+      "classification": "provenance_only",
+      "collides_with_existing_declaration": false,
+      "dependent_declaration_names": [],
+      "occurrences": {
+        "lean_DavisKahan": 12,
+        "lean_ForTauCeti": 0,
+        "source_census": 0,
+        "result_inventory": 0,
+        "statement_map": 0,
+        "atom_inventory": 0,
+        "audit_surface": 0,
+        "challenge": 0,
+        "comparator": 0
+      }
+    },
+    {
+      "current": "paperHilbertSchmidtNorm_operatorModulus",
+      "proposed": "hilbertSchmidtNorm_operatorModulus",
+      "kind": "theorem",
+      "declared_in": "DavisKahan/Sources/DavisKahan1970/Ideals/HilbertSchmidt.lean",
+      "classification": "provenance_only",
+      "collides_with_existing_declaration": false,
+      "dependent_declaration_names": [],
+      "occurrences": {
+        "lean_DavisKahan": 1,
+        "lean_ForTauCeti": 0,
+        "source_census": 0,
+        "result_inventory": 0,
+        "statement_map": 0,
+        "atom_inventory": 0,
+        "audit_surface": 0,
+        "challenge": 0,
+        "comparator": 0
+      }
+    },
+    {
+      "current": "paperHilbertSchmidtNorm_sinAngleOperatorRC_eq_projectionDifference",
+      "proposed": "hilbertSchmidtNorm_sinAngleOperatorRC_eq_projectionDifference",
+      "kind": "theorem",
+      "declared_in": "DavisKahan/Sources/DavisKahan1970/SineTheta/Sharpness.lean",
+      "classification": "provenance_only",
+      "collides_with_existing_declaration": false,
+      "dependent_declaration_names": [],
+      "occurrences": {
+        "lean_DavisKahan": 2,
+        "lean_ForTauCeti": 0,
+        "source_census": 0,
+        "result_inventory": 0,
+        "statement_map": 0,
+        "atom_inventory": 0,
+        "audit_surface": 0,
+        "challenge": 0,
+        "comparator": 0
+      }
+    },
+    {
+      "current": "paperHilbertSchmidtNorm_smul",
+      "proposed": "hilbertSchmidtNorm_smul",
+      "kind": "theorem",
+      "declared_in": "DavisKahan/Sources/DavisKahan1970/Ideals/HilbertSchmidt.lean",
+      "classification": "provenance_only",
+      "collides_with_existing_declaration": false,
+      "dependent_declaration_names": [],
+      "occurrences": {
+        "lean_DavisKahan": 3,
+        "lean_ForTauCeti": 0,
+        "source_census": 0,
+        "result_inventory": 0,
+        "statement_map": 0,
+        "atom_inventory": 0,
+        "audit_surface": 0,
+        "challenge": 0,
+        "comparator": 0
+      }
+    },
+    {
+      "current": "paperHilbertSchmidtNorm_toOperator",
+      "proposed": "hilbertSchmidtNorm_toOperator",
+      "kind": "theorem",
+      "declared_in": "DavisKahan/Sources/DavisKahan1970/Ideals/HilbertSchmidtTensor.lean",
+      "classification": "provenance_only",
+      "collides_with_existing_declaration": false,
+      "dependent_declaration_names": [],
+      "occurrences": {
+        "lean_DavisKahan": 4,
+        "lean_ForTauCeti": 0,
+        "source_census": 0,
+        "result_inventory": 0,
+        "statement_map": 0,
+        "atom_inventory": 0,
+        "audit_surface": 0,
+        "challenge": 0,
+        "comparator": 0
+      }
+    },
+    {
+      "current": "paperHilbertSchmidtNorm_zero",
+      "proposed": "hilbertSchmidtNorm_zero",
+      "kind": "theorem",
+      "declared_in": "DavisKahan/Sources/DavisKahan1970/Ideals/HilbertSchmidt.lean",
+      "classification": "provenance_only",
+      "collides_with_existing_declaration": false,
+      "dependent_declaration_names": [],
+      "occurrences": {
+        "lean_DavisKahan": 3,
+        "lean_ForTauCeti": 0,
+        "source_census": 0,
+        "result_inventory": 0,
+        "statement_map": 0,
+        "atom_inventory": 0,
+        "audit_surface": 0,
+        "challenge": 0,
+        "comparator": 0
+      }
+    },
+    {
+      "current": "paperHilbertSchmidtTensor",
+      "proposed": "hilbertSchmidtTensor",
+      "kind": "def",
+      "declared_in": "DavisKahan/Sources/DavisKahan1970/Ideals/HilbertSchmidtTensor.lean",
+      "classification": "provenance_only",
+      "collides_with_existing_declaration": false,
+      "dependent_declaration_names": [
+        "paperHilbertSchmidtTensor_add",
+        "paperHilbertSchmidtTensor_hasVectorSpectralGap",
+        "paperHilbertSchmidtTensor_sub"
+      ],
+      "occurrences": {
+        "lean_DavisKahan": 23,
+        "lean_ForTauCeti": 0,
+        "source_census": 0,
+        "result_inventory": 0,
+        "statement_map": 0,
+        "atom_inventory": 0,
+        "audit_surface": 0,
+        "challenge": 0,
+        "comparator": 0
+      }
+    },
+    {
+      "current": "paperHilbertSchmidtTensor_add",
+      "proposed": "hilbertSchmidtTensor_add",
+      "kind": "theorem",
+      "declared_in": "DavisKahan/Sources/DavisKahan1970/Ideals/HilbertSchmidtComplexFamily.lean",
+      "classification": "provenance_only",
+      "collides_with_existing_declaration": false,
+      "dependent_declaration_names": [],
+      "occurrences": {
+        "lean_DavisKahan": 2,
+        "lean_ForTauCeti": 0,
+        "source_census": 0,
+        "result_inventory": 0,
+        "statement_map": 0,
+        "atom_inventory": 0,
+        "audit_surface": 0,
+        "challenge": 0,
+        "comparator": 0
+      }
+    },
+    {
+      "current": "paperHilbertSchmidtTensor_hasVectorSpectralGap",
+      "proposed": "hilbertSchmidtTensor_hasVectorSpectralGap",
+      "kind": "theorem",
+      "declared_in": "DavisKahan/Sources/DavisKahan1970/Sylvester/HilbertSchmidtPairwise.lean",
+      "classification": "provenance_only",
+      "collides_with_existing_declaration": false,
+      "dependent_declaration_names": [],
+      "occurrences": {
+        "lean_DavisKahan": 4,
+        "lean_ForTauCeti": 0,
+        "source_census": 0,
+        "result_inventory": 0,
+        "statement_map": 0,
+        "atom_inventory": 0,
+        "audit_surface": 0,
+        "challenge": 0,
+        "comparator": 0
+      }
+    },
+    {
+      "current": "paperHilbertSchmidtTensor_sub",
+      "proposed": "hilbertSchmidtTensor_sub",
+      "kind": "theorem",
+      "declared_in": "DavisKahan/Sources/DavisKahan1970/Ideals/HilbertSchmidtComplexFamily.lean",
+      "classification": "provenance_only",
+      "collides_with_existing_declaration": false,
+      "dependent_declaration_names": [],
+      "occurrences": {
+        "lean_DavisKahan": 1,
+        "lean_ForTauCeti": 0,
+        "source_census": 0,
+        "result_inventory": 0,
+        "statement_map": 0,
+        "atom_inventory": 0,
+        "audit_surface": 0,
+        "challenge": 0,
+        "comparator": 0
+      }
+    },
+    {
+      "current": "paperHilbertSchmidt_complete_complex",
+      "proposed": "hilbertSchmidt_complete_complex",
+      "kind": "theorem",
+      "declared_in": "DavisKahan/Sources/DavisKahan1970/Ideals/HilbertSchmidtComplexFamily.lean",
+      "classification": "provenance_only",
+      "collides_with_existing_declaration": false,
+      "dependent_declaration_names": [],
+      "occurrences": {
+        "lean_DavisKahan": 3,
+        "lean_ForTauCeti": 0,
+        "source_census": 0,
+        "result_inventory": 0,
+        "statement_map": 0,
+        "atom_inventory": 0,
+        "audit_surface": 0,
+        "challenge": 0,
+        "comparator": 0
+      }
+    },
+    {
+      "current": "paperHilbertSchmidt_complete_real",
+      "proposed": "hilbertSchmidt_complete_real",
+      "kind": "theorem",
+      "declared_in": "DavisKahan/Sources/DavisKahan1970/Ideals/HilbertSchmidtRealDescent.lean",
+      "classification": "provenance_only",
+      "collides_with_existing_declaration": false,
+      "dependent_declaration_names": [],
+      "occurrences": {
+        "lean_DavisKahan": 2,
+        "lean_ForTauCeti": 0,
+        "source_census": 0,
+        "result_inventory": 0,
+        "statement_map": 0,
+        "atom_inventory": 0,
+        "audit_surface": 0,
+        "challenge": 0,
+        "comparator": 0
+      }
+    },
+    {
+      "current": "paperHilbertSchmidt_sylvester_defectFirst",
+      "proposed": "hilbertSchmidt_sylvester_defectFirst",
+      "kind": "theorem",
+      "declared_in": "DavisKahan/Sources/DavisKahan1970/Sylvester/HilbertSchmidtDefectFirst.lean",
+      "classification": "provenance_only",
+      "collides_with_existing_declaration": false,
+      "dependent_declaration_names": [],
+      "occurrences": {
+        "lean_DavisKahan": 4,
+        "lean_ForTauCeti": 0,
+        "source_census": 0,
+        "result_inventory": 0,
+        "statement_map": 0,
+        "atom_inventory": 0,
+        "audit_surface": 0,
+        "challenge": 0,
+        "comparator": 0
+      }
+    },
+    {
+      "current": "paperHilbertSchmidt_sylvester_le_of_pairwiseSpectrumGap",
+      "proposed": "hilbertSchmidt_sylvester_le_of_pairwiseSpectrumGap",
+      "kind": "theorem",
+      "declared_in": "DavisKahan/Sources/DavisKahan1970/Sylvester/PaperHilbertSchmidt.lean",
+      "classification": "provenance_only",
+      "collides_with_existing_declaration": false,
+      "dependent_declaration_names": [
+        "paperHilbertSchmidt_sylvester_le_of_pairwiseSpectrumGap_direct"
+      ],
+      "occurrences": {
+        "lean_DavisKahan": 3,
+        "lean_ForTauCeti": 0,
+        "source_census": 2,
+        "result_inventory": 0,
+        "statement_map": 2,
+        "atom_inventory": 0,
+        "audit_surface": 0,
+        "challenge": 0,
+        "comparator": 0
+      }
+    },
+    {
+      "current": "paperHilbertSchmidt_sylvester_le_of_pairwiseSpectrumGap_direct",
+      "proposed": "hilbertSchmidt_sylvester_le_of_pairwiseSpectrumGap_direct",
+      "kind": "theorem",
+      "declared_in": "DavisKahan/Sources/DavisKahan1970/Sylvester/HilbertSchmidtPairwise.lean",
+      "classification": "provenance_only",
+      "collides_with_existing_declaration": false,
+      "dependent_declaration_names": [],
+      "occurrences": {
+        "lean_DavisKahan": 7,
+        "lean_ForTauCeti": 0,
+        "source_census": 2,
+        "result_inventory": 0,
+        "statement_map": 0,
+        "atom_inventory": 0,
+        "audit_surface": 0,
+        "challenge": 0,
+        "comparator": 0
+      }
+    },
+    {
+      "current": "paperHilbertSchmidt_sylvester_real_le_of_pairwiseSpectrumGap",
+      "proposed": "hilbertSchmidt_sylvester_real_le_of_pairwiseSpectrumGap",
+      "kind": "theorem",
+      "declared_in": "DavisKahan/Sources/DavisKahan1970/Sylvester/PaperHilbertSchmidt.lean",
+      "classification": "provenance_only",
+      "collides_with_existing_declaration": false,
+      "dependent_declaration_names": [
+        "paperHilbertSchmidt_sylvester_real_le_of_pairwiseSpectrumGap_direct"
+      ],
+      "occurrences": {
+        "lean_DavisKahan": 3,
+        "lean_ForTauCeti": 0,
+        "source_census": 1,
+        "result_inventory": 0,
+        "statement_map": 1,
+        "atom_inventory": 0,
+        "audit_surface": 0,
+        "challenge": 0,
+        "comparator": 0
+      }
+    },
+    {
+      "current": "paperHilbertSchmidt_sylvester_real_le_of_pairwiseSpectrumGap_direct",
+      "proposed": "hilbertSchmidt_sylvester_real_le_of_pairwiseSpectrumGap_direct",
+      "kind": "theorem",
+      "declared_in": "DavisKahan/Sources/DavisKahan1970/Sylvester/HilbertSchmidtPairwise.lean",
+      "classification": "provenance_only",
+      "collides_with_existing_declaration": false,
+      "dependent_declaration_names": [],
+      "occurrences": {
+        "lean_DavisKahan": 5,
+        "lean_ForTauCeti": 0,
+        "source_census": 0,
+        "result_inventory": 0,
+        "statement_map": 0,
+        "atom_inventory": 0,
+        "audit_surface": 0,
+        "challenge": 0,
+        "comparator": 0
+      }
+    },
+    {
+      "current": "paperLemma61_all_kyFan",
+      "proposed": "lemma61_all_kyFan",
+      "kind": "theorem",
+      "declared_in": "DavisKahan/Sources/DavisKahan1970/SineTheta/Lemma61.lean",
+      "classification": "provenance_only",
+      "collides_with_existing_declaration": false,
+      "dependent_declaration_names": [],
+      "occurrences": {
+        "lean_DavisKahan": 14,
+        "lean_ForTauCeti": 0,
+        "source_census": 1,
+        "result_inventory": 0,
+        "statement_map": 0,
+        "atom_inventory": 0,
+        "audit_surface": 0,
+        "challenge": 0,
+        "comparator": 0
+      }
+    },
+    {
+      "current": "paperLemma61_converse",
+      "proposed": "lemma61_converse",
+      "kind": "theorem",
+      "declared_in": "DavisKahan/Sources/DavisKahan1970/SineTheta/Lemma61.lean",
+      "classification": "provenance_only",
+      "collides_with_existing_declaration": false,
+      "dependent_declaration_names": [],
+      "occurrences": {
+        "lean_DavisKahan": 2,
+        "lean_ForTauCeti": 0,
+        "source_census": 0,
+        "result_inventory": 0,
+        "statement_map": 0,
+        "atom_inventory": 0,
+        "audit_surface": 0,
+        "challenge": 0,
+        "comparator": 0
+      }
+    },
+    {
+      "current": "paperLemma61_every_unitarilyInvariantNorm",
+      "proposed": "lemma61_every_unitarilyInvariantNorm",
+      "kind": "theorem",
+      "declared_in": "DavisKahan/Sources/DavisKahan1970/SineTheta/Lemma61.lean",
+      "classification": "provenance_only",
+      "collides_with_existing_declaration": false,
+      "dependent_declaration_names": [],
+      "occurrences": {
+        "lean_DavisKahan": 2,
+        "lean_ForTauCeti": 0,
+        "source_census": 0,
+        "result_inventory": 0,
+        "statement_map": 0,
+        "atom_inventory": 0,
+        "audit_surface": 0,
+        "challenge": 0,
+        "comparator": 0
+      }
+    },
+    {
+      "current": "paperOmega1",
+      "proposed": "omega1",
+      "kind": "def",
+      "declared_in": "DavisKahan/FiniteDimensional/DirectRotation/ShortRotationCounterexample.lean",
+      "classification": "provenance_only",
+      "collides_with_existing_declaration": false,
+      "dependent_declaration_names": [],
+      "occurrences": {
+        "lean_DavisKahan": 8,
+        "lean_ForTauCeti": 0,
+        "source_census": 0,
+        "result_inventory": 0,
+        "statement_map": 0,
+        "atom_inventory": 0,
+        "audit_surface": 0,
+        "challenge": 0,
+        "comparator": 0
+      }
+    },
+    {
+      "current": "paperOmega1Basis",
+      "proposed": "omega1Basis",
+      "kind": "def",
+      "declared_in": "DavisKahan/FiniteDimensional/DirectRotation/ShortRotationCounterexample.lean",
+      "classification": "provenance_only",
+      "collides_with_existing_declaration": false,
+      "dependent_declaration_names": [
+        "paperOmega1Basis_projection"
+      ],
+      "occurrences": {
+        "lean_DavisKahan": 7,
+        "lean_ForTauCeti": 0,
+        "source_census": 0,
+        "result_inventory": 0,
+        "statement_map": 0,
+        "atom_inventory": 0,
+        "audit_surface": 0,
+        "challenge": 0,
+        "comparator": 0
+      }
+    },
+    {
+      "current": "paperOmega1Basis_projection",
+      "proposed": "omega1Basis_projection",
+      "kind": "theorem",
+      "declared_in": "DavisKahan/FiniteDimensional/DirectRotation/ShortRotationCounterexample.lean",
+      "classification": "provenance_only",
+      "collides_with_existing_declaration": false,
+      "dependent_declaration_names": [],
+      "occurrences": {
+        "lean_DavisKahan": 2,
+        "lean_ForTauCeti": 0,
+        "source_census": 0,
+        "result_inventory": 0,
+        "statement_map": 0,
+        "atom_inventory": 0,
+        "audit_surface": 0,
+        "challenge": 0,
+        "comparator": 0
+      }
+    },
+    {
+      "current": "paperOmega2",
+      "proposed": "omega2",
+      "kind": "def",
+      "declared_in": "DavisKahan/FiniteDimensional/DirectRotation/ShortRotationCounterexample.lean",
+      "classification": "provenance_only",
+      "collides_with_existing_declaration": false,
+      "dependent_declaration_names": [],
+      "occurrences": {
+        "lean_DavisKahan": 8,
+        "lean_ForTauCeti": 0,
+        "source_census": 0,
+        "result_inventory": 0,
+        "statement_map": 0,
+        "atom_inventory": 0,
+        "audit_surface": 0,
+        "challenge": 0,
+        "comparator": 0
+      }
+    },
+    {
+      "current": "paperOmega2Basis",
+      "proposed": "omega2Basis",
+      "kind": "def",
+      "declared_in": "DavisKahan/FiniteDimensional/DirectRotation/ShortRotationCounterexample.lean",
+      "classification": "provenance_only",
+      "collides_with_existing_declaration": false,
+      "dependent_declaration_names": [
+        "paperOmega2Basis_projection"
+      ],
+      "occurrences": {
+        "lean_DavisKahan": 5,
+        "lean_ForTauCeti": 0,
+        "source_census": 0,
+        "result_inventory": 0,
+        "statement_map": 0,
+        "atom_inventory": 0,
+        "audit_surface": 0,
+        "challenge": 0,
+        "comparator": 0
+      }
+    },
+    {
+      "current": "paperOmega2Basis_projection",
+      "proposed": "omega2Basis_projection",
+      "kind": "theorem",
+      "declared_in": "DavisKahan/FiniteDimensional/DirectRotation/ShortRotationCounterexample.lean",
+      "classification": "provenance_only",
+      "collides_with_existing_declaration": false,
+      "dependent_declaration_names": [],
+      "occurrences": {
+        "lean_DavisKahan": 2,
+        "lean_ForTauCeti": 0,
+        "source_census": 0,
+        "result_inventory": 0,
+        "statement_map": 0,
+        "atom_inventory": 0,
+        "audit_surface": 0,
+        "challenge": 0,
+        "comparator": 0
+      }
+    },
+    {
+      "current": "paperOneGap_does_not_imply_symmetric_square_estimate",
+      "proposed": "oneGap_does_not_imply_symmetric_square_estimate",
+      "kind": "theorem",
+      "declared_in": "DavisKahan/Sources/DavisKahan1970/SineTheta/Sharpness.lean",
+      "classification": "provenance_only",
+      "collides_with_existing_declaration": false,
+      "dependent_declaration_names": [],
+      "occurrences": {
+        "lean_DavisKahan": 2,
+        "lean_ForTauCeti": 0,
+        "source_census": 0,
+        "result_inventory": 0,
+        "statement_map": 0,
+        "atom_inventory": 0,
+        "audit_surface": 0,
+        "challenge": 0,
+        "comparator": 0
+      }
+    },
+    {
+      "current": "paperPlanarAmbient",
+      "proposed": "planarAmbient",
+      "kind": "def",
+      "declared_in": "DavisKahan/Sources/DavisKahan1970/SineTheta/Sharpness.lean",
+      "classification": "provenance_only",
+      "collides_with_existing_declaration": false,
+      "dependent_declaration_names": [],
+      "occurrences": {
+        "lean_DavisKahan": 10,
+        "lean_ForTauCeti": 0,
+        "source_census": 0,
+        "result_inventory": 0,
+        "statement_map": 0,
+        "atom_inventory": 0,
+        "audit_surface": 0,
+        "challenge": 0,
+        "comparator": 0
+      }
+    },
+    {
+      "current": "paperPlanarComplementMap",
+      "proposed": "planarComplementMap",
+      "kind": "def",
+      "declared_in": "DavisKahan/Sources/DavisKahan1970/SineTheta/Sharpness.lean",
+      "classification": "provenance_only",
+      "collides_with_existing_declaration": false,
+      "dependent_declaration_names": [
+        "paperPlanarComplementMap_apply",
+        "paperPlanarComplementMap_norm_rank"
+      ],
+      "occurrences": {
+        "lean_DavisKahan": 17,
+        "lean_ForTauCeti": 0,
+        "source_census": 0,
+        "result_inventory": 0,
+        "statement_map": 0,
+        "atom_inventory": 0,
+        "audit_surface": 0,
+        "challenge": 0,
+        "comparator": 0
+      }
+    },
+    {
+      "current": "paperPlanarComplementMap_apply",
+      "proposed": "planarComplementMap_apply",
+      "kind": "theorem",
+      "declared_in": "DavisKahan/Sources/DavisKahan1970/SineTheta/Sharpness.lean",
+      "classification": "provenance_only",
+      "collides_with_existing_declaration": false,
+      "dependent_declaration_names": [],
+      "occurrences": {
+        "lean_DavisKahan": 1,
+        "lean_ForTauCeti": 0,
+        "source_census": 0,
+        "result_inventory": 0,
+        "statement_map": 0,
+        "atom_inventory": 0,
+        "audit_surface": 0,
+        "challenge": 0,
+        "comparator": 0
+      }
+    },
+    {
+      "current": "paperPlanarComplementMap_norm_rank",
+      "proposed": "planarComplementMap_norm_rank",
+      "kind": "theorem",
+      "declared_in": "DavisKahan/Sources/DavisKahan1970/SineTheta/Sharpness.lean",
+      "classification": "provenance_only",
+      "collides_with_existing_declaration": false,
+      "dependent_declaration_names": [],
+      "occurrences": {
+        "lean_DavisKahan": 5,
+        "lean_ForTauCeti": 0,
+        "source_census": 0,
+        "result_inventory": 0,
+        "statement_map": 0,
+        "atom_inventory": 0,
+        "audit_surface": 0,
+        "challenge": 0,
+        "comparator": 0
+      }
+    },
+    {
+      "current": "paperPlanarExactMap",
+      "proposed": "planarExactMap",
+      "kind": "def",
+      "declared_in": "DavisKahan/Sources/DavisKahan1970/SineTheta/Sharpness.lean",
+      "classification": "provenance_only",
+      "collides_with_existing_declaration": false,
+      "dependent_declaration_names": [
+        "paperPlanarExactMap_apply"
+      ],
+      "occurrences": {
+        "lean_DavisKahan": 12,
+        "lean_ForTauCeti": 0,
+        "source_census": 0,
+        "result_inventory": 0,
+        "statement_map": 0,
+        "atom_inventory": 0,
+        "audit_surface": 0,
+        "challenge": 0,
+        "comparator": 0
+      }
+    },
+    {
+      "current": "paperPlanarExactMap_apply",
+      "proposed": "planarExactMap_apply",
+      "kind": "theorem",
+      "declared_in": "DavisKahan/Sources/DavisKahan1970/SineTheta/Sharpness.lean",
+      "classification": "provenance_only",
+      "collides_with_existing_declaration": false,
+      "dependent_declaration_names": [],
+      "occurrences": {
+        "lean_DavisKahan": 1,
+        "lean_ForTauCeti": 0,
+        "source_census": 0,
+        "result_inventory": 0,
+        "statement_map": 0,
+        "atom_inventory": 0,
+        "audit_surface": 0,
+        "challenge": 0,
+        "comparator": 0
+      }
+    },
+    {
+      "current": "paperPlanarResidual",
+      "proposed": "planarResidual",
+      "kind": "def",
+      "declared_in": "DavisKahan/Sources/DavisKahan1970/SineTheta/Sharpness.lean",
+      "classification": "provenance_only",
+      "collides_with_existing_declaration": false,
+      "dependent_declaration_names": [],
+      "occurrences": {
+        "lean_DavisKahan": 6,
+        "lean_ForTauCeti": 0,
+        "source_census": 0,
+        "result_inventory": 0,
+        "statement_map": 0,
+        "atom_inventory": 0,
+        "audit_surface": 0,
+        "challenge": 0,
+        "comparator": 0
+      }
+    },
+    {
+      "current": "paperPlanarSineBlock",
+      "proposed": "planarSineBlock",
+      "kind": "def",
+      "declared_in": "DavisKahan/Sources/DavisKahan1970/SineTheta/Sharpness.lean",
+      "classification": "provenance_only",
+      "collides_with_existing_declaration": false,
+      "dependent_declaration_names": [
+        "paperPlanarSineBlock_gauge_pos"
+      ],
+      "occurrences": {
+        "lean_DavisKahan": 10,
+        "lean_ForTauCeti": 0,
+        "source_census": 0,
+        "result_inventory": 0,
+        "statement_map": 0,
+        "atom_inventory": 0,
+        "audit_surface": 0,
+        "challenge": 0,
+        "comparator": 0
+      }
+    },
+    {
+      "current": "paperPlanarSineBlock_gauge_pos",
+      "proposed": "planarSineBlock_gauge_pos",
+      "kind": "theorem",
+      "declared_in": "DavisKahan/Sources/DavisKahan1970/SineTheta/Sharpness.lean",
+      "classification": "provenance_only",
+      "collides_with_existing_declaration": false,
+      "dependent_declaration_names": [],
+      "occurrences": {
+        "lean_DavisKahan": 2,
+        "lean_ForTauCeti": 0,
+        "source_census": 0,
+        "result_inventory": 0,
+        "statement_map": 0,
+        "atom_inventory": 0,
+        "audit_surface": 0,
+        "challenge": 0,
+        "comparator": 0
+      }
+    },
+    {
+      "current": "paperPlanarTrialMap",
+      "proposed": "planarTrialMap",
+      "kind": "def",
+      "declared_in": "DavisKahan/Sources/DavisKahan1970/SineTheta/Sharpness.lean",
+      "classification": "provenance_only",
+      "collides_with_existing_declaration": false,
+      "dependent_declaration_names": [
+        "paperPlanarTrialMap_apply",
+        "paperPlanarTrialMap_isometry"
+      ],
+      "occurrences": {
+        "lean_DavisKahan": 11,
+        "lean_ForTauCeti": 0,
+        "source_census": 0,
+        "result_inventory": 0,
+        "statement_map": 0,
+        "atom_inventory": 0,
+        "audit_surface": 0,
+        "challenge": 0,
+        "comparator": 0
+      }
+    },
+    {
+      "current": "paperPlanarTrialMap_apply",
+      "proposed": "planarTrialMap_apply",
+      "kind": "theorem",
+      "declared_in": "DavisKahan/Sources/DavisKahan1970/SineTheta/Sharpness.lean",
+      "classification": "provenance_only",
+      "collides_with_existing_declaration": false,
+      "dependent_declaration_names": [],
+      "occurrences": {
+        "lean_DavisKahan": 1,
+        "lean_ForTauCeti": 0,
+        "source_census": 0,
+        "result_inventory": 0,
+        "statement_map": 0,
+        "atom_inventory": 0,
+        "audit_surface": 0,
+        "challenge": 0,
+        "comparator": 0
+      }
+    },
+    {
+      "current": "paperPlanarTrialMap_isometry",
+      "proposed": "planarTrialMap_isometry",
+      "kind": "theorem",
+      "declared_in": "DavisKahan/Sources/DavisKahan1970/SineTheta/Sharpness.lean",
+      "classification": "provenance_only",
+      "collides_with_existing_declaration": false,
+      "dependent_declaration_names": [],
+      "occurrences": {
+        "lean_DavisKahan": 1,
+        "lean_ForTauCeti": 0,
+        "source_census": 0,
+        "result_inventory": 0,
+        "statement_map": 0,
+        "atom_inventory": 0,
+        "audit_surface": 0,
+        "challenge": 0,
+        "comparator": 0
+      }
+    },
+    {
+      "current": "paperPlanarTrialOperator",
+      "proposed": "planarTrialOperator",
+      "kind": "def",
+      "declared_in": "DavisKahan/Sources/DavisKahan1970/SineTheta/Sharpness.lean",
+      "classification": "provenance_only",
+      "collides_with_existing_declaration": false,
+      "dependent_declaration_names": [],
+      "occurrences": {
+        "lean_DavisKahan": 6,
+        "lean_ForTauCeti": 0,
+        "source_census": 0,
+        "result_inventory": 0,
+        "statement_map": 0,
+        "atom_inventory": 0,
+        "audit_surface": 0,
+        "challenge": 0,
+        "comparator": 0
+      }
+    },
+    {
+      "current": "paperPlanar_directedSine_identity",
+      "proposed": "planar_directedSine_identity",
+      "kind": "theorem",
+      "declared_in": "DavisKahan/Sources/DavisKahan1970/SineTheta/Sharpness.lean",
+      "classification": "provenance_only",
+      "collides_with_existing_declaration": false,
+      "dependent_declaration_names": [],
+      "occurrences": {
+        "lean_DavisKahan": 1,
+        "lean_ForTauCeti": 0,
+        "source_census": 0,
+        "result_inventory": 0,
+        "statement_map": 0,
+        "atom_inventory": 0,
+        "audit_surface": 0,
+        "challenge": 0,
+        "comparator": 0
+      }
+    },
+    {
+      "current": "paperPlanar_exact_decomposition",
+      "proposed": "planar_exact_decomposition",
+      "kind": "theorem",
+      "declared_in": "DavisKahan/Sources/DavisKahan1970/SineTheta/Sharpness.lean",
+      "classification": "provenance_only",
+      "collides_with_existing_declaration": false,
+      "dependent_declaration_names": [],
+      "occurrences": {
+        "lean_DavisKahan": 1,
+        "lean_ForTauCeti": 0,
+        "source_census": 0,
+        "result_inventory": 0,
+        "statement_map": 0,
+        "atom_inventory": 0,
+        "audit_surface": 0,
+        "challenge": 0,
+        "comparator": 0
+      }
+    },
+    {
+      "current": "paperPlanar_residual_identity",
+      "proposed": "planar_residual_identity",
+      "kind": "theorem",
+      "declared_in": "DavisKahan/Sources/DavisKahan1970/SineTheta/Sharpness.lean",
+      "classification": "provenance_only",
+      "collides_with_existing_declaration": false,
+      "dependent_declaration_names": [],
+      "occurrences": {
+        "lean_DavisKahan": 1,
+        "lean_ForTauCeti": 0,
+        "source_census": 0,
+        "result_inventory": 0,
+        "statement_map": 0,
+        "atom_inventory": 0,
+        "audit_surface": 0,
+        "challenge": 0,
+        "comparator": 0
+      }
+    },
+    {
+      "current": "paperPlaneE0",
+      "proposed": "planeE0",
+      "kind": "def",
+      "declared_in": "DavisKahan/Sources/DavisKahan1970/SineTheta/Sharpness.lean",
+      "classification": "provenance_only",
+      "collides_with_existing_declaration": false,
+      "dependent_declaration_names": [],
+      "occurrences": {
+        "lean_DavisKahan": 63,
+        "lean_ForTauCeti": 0,
+        "source_census": 0,
+        "result_inventory": 0,
+        "statement_map": 0,
+        "atom_inventory": 0,
+        "audit_surface": 0,
+        "challenge": 0,
+        "comparator": 0
+      }
+    },
+    {
+      "current": "paperPlaneE1",
+      "proposed": "planeE1",
+      "kind": "def",
+      "declared_in": "DavisKahan/Sources/DavisKahan1970/SineTheta/Sharpness.lean",
+      "classification": "provenance_only",
+      "collides_with_existing_declaration": false,
+      "dependent_declaration_names": [],
+      "occurrences": {
+        "lean_DavisKahan": 57,
+        "lean_ForTauCeti": 0,
+        "source_census": 0,
+        "result_inventory": 0,
+        "statement_map": 0,
+        "atom_inventory": 0,
+        "audit_surface": 0,
+        "challenge": 0,
+        "comparator": 0
+      }
+    },
+    {
+      "current": "paperPrefixGauge_eq",
+      "proposed": "prefixGauge_eq",
+      "kind": "theorem",
+      "declared_in": "DavisKahan/Sources/DavisKahan1970/SineTheta/Norms/HeterogeneousRepresentative.lean",
+      "classification": "provenance_only",
+      "collides_with_existing_declaration": false,
+      "dependent_declaration_names": [],
+      "occurrences": {
+        "lean_DavisKahan": 2,
+        "lean_ForTauCeti": 0,
+        "source_census": 0,
+        "result_inventory": 0,
+        "statement_map": 0,
+        "atom_inventory": 0,
+        "audit_surface": 0,
+        "challenge": 0,
+        "comparator": 0
+      }
+    },
+    {
+      "current": "paperProjectionBlock",
+      "proposed": "projectionBlock",
+      "kind": "def",
+      "declared_in": "DavisKahan/Sources/DavisKahan1970/SineTheta/Lemma61.lean",
+      "classification": "provenance_only",
+      "collides_with_existing_declaration": false,
+      "dependent_declaration_names": [
+        "paperProjectionBlock_complexifySubmodule",
+        "paperProjectionBlock_complexifySubmodule_real",
+        "paperProjectionBlock_eq_subtypeL_comp",
+        "paperProjectionBlock_same_compression"
+      ],
+      "occurrences": {
+        "lean_DavisKahan": 352,
+        "lean_ForTauCeti": 0,
+        "source_census": 0,
+        "result_inventory": 4,
+        "statement_map": 0,
+        "atom_inventory": 0,
+        "audit_surface": 0,
+        "challenge": 4,
+        "comparator": 0
+      }
+    },
+    {
+      "current": "paperProjectionBlockPair_same_blockSum",
+      "proposed": "projectionBlockPair_same_blockSum",
+      "kind": "theorem",
+      "declared_in": "DavisKahan/Sources/DavisKahan1970/SineTheta/Lemma61.lean",
+      "classification": "provenance_only",
+      "collides_with_existing_declaration": false,
+      "dependent_declaration_names": [],
+      "occurrences": {
+        "lean_DavisKahan": 6,
+        "lean_ForTauCeti": 0,
+        "source_census": 0,
+        "result_inventory": 0,
+        "statement_map": 0,
+        "atom_inventory": 0,
+        "audit_surface": 0,
+        "challenge": 0,
+        "comparator": 0
+      }
+    },
+    {
+      "current": "paperProjectionBlock_complexifySubmodule",
+      "proposed": "projectionBlock_complexifySubmodule",
+      "kind": "theorem",
+      "declared_in": "DavisKahan/Sources/DavisKahan1970/TanTwoThetaUnboundedGramReal.lean",
+      "classification": "provenance_only",
+      "collides_with_existing_declaration": false,
+      "dependent_declaration_names": [
+        "paperProjectionBlock_complexifySubmodule_real"
+      ],
+      "occurrences": {
+        "lean_DavisKahan": 3,
+        "lean_ForTauCeti": 0,
+        "source_census": 0,
+        "result_inventory": 0,
+        "statement_map": 0,
+        "atom_inventory": 0,
+        "audit_surface": 0,
+        "challenge": 0,
+        "comparator": 0
+      }
+    },
+    {
+      "current": "paperProjectionBlock_complexifySubmodule_real",
+      "proposed": "projectionBlock_complexifySubmodule_real",
+      "kind": "theorem",
+      "declared_in": "DavisKahan/Sources/DavisKahan1970/AmbientReal.lean",
+      "classification": "provenance_only",
+      "collides_with_existing_declaration": false,
+      "dependent_declaration_names": [],
+      "occurrences": {
+        "lean_DavisKahan": 2,
+        "lean_ForTauCeti": 0,
+        "source_census": 1,
+        "result_inventory": 0,
+        "statement_map": 0,
+        "atom_inventory": 0,
+        "audit_surface": 0,
+        "challenge": 0,
+        "comparator": 0
+      }
+    },
+    {
+      "current": "paperProjectionBlock_eq_subtypeL_comp",
+      "proposed": "projectionBlock_eq_subtypeL_comp",
+      "kind": "theorem",
+      "declared_in": "DavisKahan/Sources/DavisKahan1970/SineTheta/Lemma61.lean",
+      "classification": "provenance_only",
+      "collides_with_existing_declaration": false,
+      "dependent_declaration_names": [],
+      "occurrences": {
+        "lean_DavisKahan": 2,
+        "lean_ForTauCeti": 0,
+        "source_census": 0,
+        "result_inventory": 0,
+        "statement_map": 0,
+        "atom_inventory": 0,
+        "audit_surface": 0,
+        "challenge": 0,
+        "comparator": 0
+      }
+    },
+    {
+      "current": "paperProjectionBlock_same_compression",
+      "proposed": "projectionBlock_same_compression",
+      "kind": "theorem",
+      "declared_in": "DavisKahan/Sources/DavisKahan1970/SineTheta/Lemma61.lean",
+      "classification": "provenance_only",
+      "collides_with_existing_declaration": false,
+      "dependent_declaration_names": [],
+      "occurrences": {
+        "lean_DavisKahan": 27,
+        "lean_ForTauCeti": 0,
+        "source_census": 0,
+        "result_inventory": 0,
+        "statement_map": 0,
+        "atom_inventory": 0,
+        "audit_surface": 0,
+        "challenge": 0,
+        "comparator": 0
+      }
+    },
+    {
+      "current": "paperProjectorDifference",
+      "proposed": "projectorDifference",
+      "kind": "def",
+      "declared_in": "DavisKahan/Sources/DavisKahan1970/AmbientBlockVocabulary.lean",
+      "classification": "provenance_only",
+      "collides_with_existing_declaration": false,
+      "dependent_declaration_names": [
+        "paperProjectorDifference_anticommutator",
+        "paperProjectorDifference_sq"
+      ],
+      "occurrences": {
+        "lean_DavisKahan": 365,
+        "lean_ForTauCeti": 0,
+        "source_census": 2,
+        "result_inventory": 0,
+        "statement_map": 0,
+        "atom_inventory": 0,
+        "audit_surface": 0,
+        "challenge": 2,
+        "comparator": 0
+      }
+    },
+    {
+      "current": "paperProjectorDifference_anticommutator",
+      "proposed": "projectorDifference_anticommutator",
+      "kind": "theorem",
+      "declared_in": "DavisKahan/Sources/DavisKahan1970/TanThetaAmbient.lean",
+      "classification": "provenance_only",
+      "collides_with_existing_declaration": false,
+      "dependent_declaration_names": [],
+      "occurrences": {
+        "lean_DavisKahan": 10,
+        "lean_ForTauCeti": 0,
+        "source_census": 0,
+        "result_inventory": 0,
+        "statement_map": 0,
+        "atom_inventory": 0,
+        "audit_surface": 0,
+        "challenge": 0,
+        "comparator": 0
+      }
+    },
+    {
+      "current": "paperProjectorDifference_sq",
+      "proposed": "projectorDifference_sq",
+      "kind": "theorem",
+      "declared_in": "DavisKahan/Sources/DavisKahan1970/TanThetaAmbient.lean",
+      "classification": "provenance_only",
+      "collides_with_existing_declaration": false,
+      "dependent_declaration_names": [],
+      "occurrences": {
+        "lean_DavisKahan": 8,
+        "lean_ForTauCeti": 0,
+        "source_census": 0,
+        "result_inventory": 0,
+        "statement_map": 0,
+        "atom_inventory": 0,
+        "audit_surface": 0,
+        "challenge": 0,
+        "comparator": 0
+      }
+    },
+    {
+      "current": "paperRealPlane_finrank",
+      "proposed": "realPlane_finrank",
+      "kind": "theorem",
+      "declared_in": "DavisKahan/Sources/DavisKahan1970/SineTheta/Sharpness.lean",
+      "classification": "provenance_only",
+      "collides_with_existing_declaration": false,
+      "dependent_declaration_names": [],
+      "occurrences": {
+        "lean_DavisKahan": 3,
+        "lean_ForTauCeti": 0,
+        "source_census": 0,
+        "result_inventory": 0,
+        "statement_map": 0,
+        "atom_inventory": 0,
+        "audit_surface": 0,
+        "challenge": 0,
+        "comparator": 0
+      }
+    },
+    {
+      "current": "paperReal_diff_eq_combo",
+      "proposed": "real_diff_eq_combo",
+      "kind": "theorem",
+      "declared_in": "DavisKahan/Sources/DavisKahan1970/SineTheta/Sharpness.lean",
+      "classification": "provenance_only",
+      "collides_with_existing_declaration": false,
+      "dependent_declaration_names": [],
+      "occurrences": {
+        "lean_DavisKahan": 2,
+        "lean_ForTauCeti": 0,
+        "source_census": 0,
+        "result_inventory": 0,
+        "statement_map": 0,
+        "atom_inventory": 0,
+        "audit_surface": 0,
+        "challenge": 0,
+        "comparator": 0
+      }
+    },
+    {
+      "current": "paperReal_inner_diff_e0",
+      "proposed": "real_inner_diff_e0",
+      "kind": "theorem",
+      "declared_in": "DavisKahan/Sources/DavisKahan1970/SineTheta/Sharpness.lean",
+      "classification": "provenance_only",
+      "collides_with_existing_declaration": false,
+      "dependent_declaration_names": [],
+      "occurrences": {
+        "lean_DavisKahan": 2,
+        "lean_ForTauCeti": 0,
+        "source_census": 0,
+        "result_inventory": 0,
+        "statement_map": 0,
+        "atom_inventory": 0,
+        "audit_surface": 0,
+        "challenge": 0,
+        "comparator": 0
+      }
+    },
+    {
+      "current": "paperReal_inner_diff_e1",
+      "proposed": "real_inner_diff_e1",
+      "kind": "theorem",
+      "declared_in": "DavisKahan/Sources/DavisKahan1970/SineTheta/Sharpness.lean",
+      "classification": "provenance_only",
+      "collides_with_existing_declaration": false,
+      "dependent_declaration_names": [],
+      "occurrences": {
+        "lean_DavisKahan": 2,
+        "lean_ForTauCeti": 0,
+        "source_census": 0,
+        "result_inventory": 0,
+        "statement_map": 0,
+        "atom_inventory": 0,
+        "audit_surface": 0,
+        "challenge": 0,
+        "comparator": 0
+      }
+    },
+    {
+      "current": "paperReal_inner_e0_e1",
+      "proposed": "real_inner_e0_e1",
+      "kind": "theorem",
+      "declared_in": "DavisKahan/Sources/DavisKahan1970/SineTheta/Sharpness.lean",
+      "classification": "provenance_only",
+      "collides_with_existing_declaration": false,
+      "dependent_declaration_names": [],
+      "occurrences": {
+        "lean_DavisKahan": 3,
+        "lean_ForTauCeti": 0,
+        "source_census": 0,
+        "result_inventory": 0,
+        "statement_map": 0,
+        "atom_inventory": 0,
+        "audit_surface": 0,
+        "challenge": 0,
+        "comparator": 0
+      }
+    },
+    {
+      "current": "paperReal_norm_sq_combo",
+      "proposed": "real_norm_sq_combo",
+      "kind": "theorem",
+      "declared_in": "DavisKahan/Sources/DavisKahan1970/SineTheta/Sharpness.lean",
+      "classification": "provenance_only",
+      "collides_with_existing_declaration": false,
+      "dependent_declaration_names": [],
+      "occurrences": {
+        "lean_DavisKahan": 6,
+        "lean_ForTauCeti": 0,
+        "source_census": 0,
+        "result_inventory": 0,
+        "statement_map": 0,
+        "atom_inventory": 0,
+        "audit_surface": 0,
+        "challenge": 0,
+        "comparator": 0
+      }
+    },
+    {
+      "current": "paperScalarColumn",
+      "proposed": "scalarColumn",
+      "kind": "def",
+      "declared_in": "DavisKahan/Sources/DavisKahan1970/SineTheta/Sharpness.lean",
+      "classification": "provenance_only",
+      "collides_with_existing_declaration": false,
+      "dependent_declaration_names": [
+        "paperScalarColumn_apply"
+      ],
+      "occurrences": {
+        "lean_DavisKahan": 15,
+        "lean_ForTauCeti": 0,
+        "source_census": 0,
+        "result_inventory": 0,
+        "statement_map": 0,
+        "atom_inventory": 0,
+        "audit_surface": 0,
+        "challenge": 0,
+        "comparator": 0
+      }
+    },
+    {
+      "current": "paperScalarColumn_apply",
+      "proposed": "scalarColumn_apply",
+      "kind": "theorem",
+      "declared_in": "DavisKahan/Sources/DavisKahan1970/SineTheta/Sharpness.lean",
+      "classification": "provenance_only",
+      "collides_with_existing_declaration": false,
+      "dependent_declaration_names": [],
+      "occurrences": {
+        "lean_DavisKahan": 1,
+        "lean_ForTauCeti": 0,
+        "source_census": 0,
+        "result_inventory": 0,
+        "statement_map": 0,
+        "atom_inventory": 0,
+        "audit_surface": 0,
+        "challenge": 0,
+        "comparator": 0
+      }
+    },
+    {
+      "current": "paperSecantSquared",
+      "proposed": "secantSquared",
+      "kind": "def",
+      "declared_in": "DavisKahan/Sources/DavisKahan1970/AmbientBlockVocabulary.lean",
+      "classification": "provenance_only",
+      "collides_with_existing_declaration": false,
+      "dependent_declaration_names": [],
+      "occurrences": {
+        "lean_DavisKahan": 111,
+        "lean_ForTauCeti": 0,
+        "source_census": 1,
+        "result_inventory": 0,
+        "statement_map": 0,
+        "atom_inventory": 0,
+        "audit_surface": 0,
+        "challenge": 0,
+        "comparator": 0
+      }
+    },
+    {
+      "current": "paperSinAngleOperatorC",
+      "proposed": "sinAngleOperatorC",
+      "kind": "def",
+      "declared_in": "DavisKahan/Geometry/Angle/PaperOperatorAngle.lean",
+      "classification": "contrastive_decision_required",
+      "collides_with_existing_declaration": true,
+      "dependent_declaration_names": [
+        "paperSinAngleOperatorC_eq"
+      ],
+      "occurrences": {
+        "lean_DavisKahan": 27,
+        "lean_ForTauCeti": 0,
+        "source_census": 2,
+        "result_inventory": 0,
+        "statement_map": 0,
+        "atom_inventory": 0,
+        "audit_surface": 0,
+        "challenge": 2,
+        "comparator": 0
+      }
+    },
+    {
+      "current": "paperSinAngleOperatorC_eq",
+      "proposed": "sinAngleOperatorC_eq",
+      "kind": "theorem",
+      "declared_in": "DavisKahan/Geometry/Angle/PaperOperatorAngle.lean",
+      "classification": "provenance_only",
+      "collides_with_existing_declaration": false,
+      "dependent_declaration_names": [],
+      "occurrences": {
+        "lean_DavisKahan": 5,
+        "lean_ForTauCeti": 0,
+        "source_census": 0,
+        "result_inventory": 0,
+        "statement_map": 0,
+        "atom_inventory": 0,
+        "audit_surface": 0,
+        "challenge": 0,
+        "comparator": 0
+      }
+    },
+    {
+      "current": "paperSinAngleOperatorR",
+      "proposed": "sinAngleOperatorR",
+      "kind": "def",
+      "declared_in": "DavisKahan/Geometry/Angle/PaperOperatorAngleReal.lean",
+      "classification": "provenance_only",
+      "collides_with_existing_declaration": false,
+      "dependent_declaration_names": [
+        "paperSinAngleOperatorR_mul_self",
+        "paperSinAngleOperatorR_nonneg"
+      ],
+      "occurrences": {
+        "lean_DavisKahan": 20,
+        "lean_ForTauCeti": 0,
+        "source_census": 1,
+        "result_inventory": 0,
+        "statement_map": 0,
+        "atom_inventory": 0,
+        "audit_surface": 0,
+        "challenge": 0,
+        "comparator": 0
+      }
+    },
+    {
+      "current": "paperSinAngleOperatorR_mul_self",
+      "proposed": "sinAngleOperatorR_mul_self",
+      "kind": "theorem",
+      "declared_in": "DavisKahan/Geometry/Angle/PaperOperatorAngleReal.lean",
+      "classification": "provenance_only",
+      "collides_with_existing_declaration": false,
+      "dependent_declaration_names": [],
+      "occurrences": {
+        "lean_DavisKahan": 3,
+        "lean_ForTauCeti": 0,
+        "source_census": 1,
+        "result_inventory": 0,
+        "statement_map": 0,
+        "atom_inventory": 0,
+        "audit_surface": 0,
+        "challenge": 0,
+        "comparator": 0
+      }
+    },
+    {
+      "current": "paperSinAngleOperatorR_nonneg",
+      "proposed": "sinAngleOperatorR_nonneg",
+      "kind": "theorem",
+      "declared_in": "DavisKahan/Geometry/Angle/PaperOperatorAngleReal.lean",
+      "classification": "provenance_only",
+      "collides_with_existing_declaration": false,
+      "dependent_declaration_names": [],
+      "occurrences": {
+        "lean_DavisKahan": 2,
+        "lean_ForTauCeti": 0,
+        "source_census": 1,
+        "result_inventory": 0,
+        "statement_map": 0,
+        "atom_inventory": 0,
+        "audit_surface": 0,
+        "challenge": 0,
+        "comparator": 0
+      }
+    },
+    {
+      "current": "paperSinTheta_constant_one_optimal",
+      "proposed": "sinTheta_constant_one_optimal",
+      "kind": "theorem",
+      "declared_in": "DavisKahan/Sources/DavisKahan1970/SineTheta/Sharpness.lean",
+      "classification": "provenance_only",
+      "collides_with_existing_declaration": false,
+      "dependent_declaration_names": [],
+      "occurrences": {
+        "lean_DavisKahan": 2,
+        "lean_ForTauCeti": 0,
+        "source_census": 0,
+        "result_inventory": 0,
+        "statement_map": 0,
+        "atom_inventory": 0,
+        "audit_surface": 0,
+        "challenge": 0,
+        "comparator": 0
+      }
+    },
+    {
+      "current": "paperSinTwoAngleOperatorC",
+      "proposed": "sinTwoAngleOperatorC",
+      "kind": "def",
+      "declared_in": "DavisKahan/Geometry/Angle/PaperDoubleAngle.lean",
+      "classification": "contrastive_decision_required",
+      "collides_with_existing_declaration": true,
+      "dependent_declaration_names": [
+        "paperSinTwoAngleOperatorC_eq_modulus_reflect",
+        "paperSinTwoAngleOperatorC_eq_modulus_starProjection_sub",
+        "paperSinTwoAngleOperatorC_nonneg"
+      ],
+      "occurrences": {
+        "lean_DavisKahan": 45,
+        "lean_ForTauCeti": 0,
+        "source_census": 4,
+        "result_inventory": 2,
+        "statement_map": 0,
+        "atom_inventory": 0,
+        "audit_surface": 0,
+        "challenge": 2,
+        "comparator": 0
+      }
+    },
+    {
+      "current": "paperSinTwoAngleOperatorC_eq_modulus_reflect",
+      "proposed": "sinTwoAngleOperatorC_eq_modulus_reflect",
+      "kind": "theorem",
+      "declared_in": "DavisKahan/Geometry/Angle/PaperDoubleAngle.lean",
+      "classification": "provenance_only",
+      "collides_with_existing_declaration": false,
+      "dependent_declaration_names": [],
+      "occurrences": {
+        "lean_DavisKahan": 4,
+        "lean_ForTauCeti": 0,
+        "source_census": 1,
+        "result_inventory": 1,
+        "statement_map": 0,
+        "atom_inventory": 0,
+        "audit_surface": 0,
+        "challenge": 0,
+        "comparator": 0
+      }
+    },
+    {
+      "current": "paperSinTwoAngleOperatorC_eq_modulus_starProjection_sub",
+      "proposed": "sinTwoAngleOperatorC_eq_modulus_starProjection_sub",
+      "kind": "theorem",
+      "declared_in": "DavisKahan/Geometry/Angle/PaperDoubleAngle.lean",
+      "classification": "provenance_only",
+      "collides_with_existing_declaration": false,
+      "dependent_declaration_names": [],
+      "occurrences": {
+        "lean_DavisKahan": 9,
+        "lean_ForTauCeti": 0,
+        "source_census": 3,
+        "result_inventory": 0,
+        "statement_map": 0,
+        "atom_inventory": 0,
+        "audit_surface": 0,
+        "challenge": 0,
+        "comparator": 0
+      }
+    },
+    {
+      "current": "paperSinTwoAngleOperatorC_nonneg",
+      "proposed": "sinTwoAngleOperatorC_nonneg",
+      "kind": "theorem",
+      "declared_in": "DavisKahan/Geometry/Angle/PaperDoubleAngle.lean",
+      "classification": "contrastive_decision_required",
+      "collides_with_existing_declaration": true,
+      "dependent_declaration_names": [],
+      "occurrences": {
+        "lean_DavisKahan": 3,
+        "lean_ForTauCeti": 0,
+        "source_census": 0,
+        "result_inventory": 0,
+        "statement_map": 0,
+        "atom_inventory": 0,
+        "audit_surface": 0,
+        "challenge": 0,
+        "comparator": 0
+      }
+    },
+    {
+      "current": "paperSinTwoAngleOperatorR",
+      "proposed": "sinTwoAngleOperatorR",
+      "kind": "def",
+      "declared_in": "DavisKahan/Geometry/Angle/PaperOperatorAngleReal.lean",
+      "classification": "provenance_only",
+      "collides_with_existing_declaration": false,
+      "dependent_declaration_names": [],
+      "occurrences": {
+        "lean_DavisKahan": 25,
+        "lean_ForTauCeti": 0,
+        "source_census": 5,
+        "result_inventory": 3,
+        "statement_map": 0,
+        "atom_inventory": 0,
+        "audit_surface": 0,
+        "challenge": 0,
+        "comparator": 0
+      }
+    },
+    {
+      "current": "paperSin_same_projectionDiff",
+      "proposed": "sin_same_projectionDiff",
+      "kind": "theorem",
+      "declared_in": "DavisKahan/Sources/DavisKahan1970/SineTheta/OperatorAngleBridge.lean",
+      "classification": "provenance_only",
+      "collides_with_existing_declaration": false,
+      "dependent_declaration_names": [],
+      "occurrences": {
+        "lean_DavisKahan": 3,
+        "lean_ForTauCeti": 0,
+        "source_census": 0,
+        "result_inventory": 0,
+        "statement_map": 0,
+        "atom_inventory": 0,
+        "audit_surface": 0,
+        "challenge": 0,
+        "comparator": 0
+      }
+    },
+    {
+      "current": "paperSin_sq_add_paperCos_sq",
+      "proposed": "sin_sq_add_paperCos_sq",
+      "kind": "theorem",
+      "declared_in": "DavisKahan/Geometry/Angle/PaperOperatorAngle.lean",
+      "classification": "provenance_only",
+      "collides_with_existing_declaration": false,
+      "dependent_declaration_names": [],
+      "occurrences": {
+        "lean_DavisKahan": 1,
+        "lean_ForTauCeti": 0,
+        "source_census": 0,
+        "result_inventory": 0,
+        "statement_map": 0,
+        "atom_inventory": 0,
+        "audit_surface": 0,
+        "challenge": 0,
+        "comparator": 0
+      }
+    },
+    {
+      "current": "paperSineBlockC",
+      "proposed": "sineBlockC",
+      "kind": "def",
+      "declared_in": "DavisKahan/Sources/DavisKahan1970/SineTheta/CosineAngle.lean",
+      "classification": "provenance_only",
+      "collides_with_existing_declaration": false,
+      "dependent_declaration_names": [],
+      "occurrences": {
+        "lean_DavisKahan": 15,
+        "lean_ForTauCeti": 0,
+        "source_census": 0,
+        "result_inventory": 0,
+        "statement_map": 0,
+        "atom_inventory": 0,
+        "audit_surface": 0,
+        "challenge": 0,
+        "comparator": 0
+      }
+    },
+    {
+      "current": "paperSineDefinedDirectedAngleC",
+      "proposed": "sineDefinedDirectedAngleC",
+      "kind": "def",
+      "declared_in": "DavisKahan/Sources/DavisKahan1970/SineTheta/AngleIdentity.lean",
+      "classification": "provenance_only",
+      "collides_with_existing_declaration": false,
+      "dependent_declaration_names": [
+        "paperSineDefinedDirectedAngleC_eq_source"
+      ],
+      "occurrences": {
+        "lean_DavisKahan": 5,
+        "lean_ForTauCeti": 0,
+        "source_census": 0,
+        "result_inventory": 0,
+        "statement_map": 0,
+        "atom_inventory": 0,
+        "audit_surface": 0,
+        "challenge": 0,
+        "comparator": 0
+      }
+    },
+    {
+      "current": "paperSineDefinedDirectedAngleC_eq_source",
+      "proposed": "sineDefinedDirectedAngleC_eq_source",
+      "kind": "theorem",
+      "declared_in": "DavisKahan/Sources/DavisKahan1970/SineTheta/AngleIdentity.lean",
+      "classification": "provenance_only",
+      "collides_with_existing_declaration": false,
+      "dependent_declaration_names": [],
+      "occurrences": {
+        "lean_DavisKahan": 5,
+        "lean_ForTauCeti": 0,
+        "source_census": 0,
+        "result_inventory": 0,
+        "statement_map": 0,
+        "atom_inventory": 0,
+        "audit_surface": 0,
+        "challenge": 0,
+        "comparator": 0
+      }
+    },
+    {
+      "current": "paperSineModulusC",
+      "proposed": "sineModulusC",
+      "kind": "def",
+      "declared_in": "DavisKahan/Sources/DavisKahan1970/SineTheta/CosineAngle.lean",
+      "classification": "provenance_only",
+      "collides_with_existing_declaration": false,
+      "dependent_declaration_names": [],
+      "occurrences": {
+        "lean_DavisKahan": 10,
+        "lean_ForTauCeti": 0,
+        "source_census": 0,
+        "result_inventory": 0,
+        "statement_map": 0,
+        "atom_inventory": 0,
+        "audit_surface": 0,
+        "challenge": 0,
+        "comparator": 0
+      }
+    },
+    {
+      "current": "paperSineModulus_sq_add_paperCosineModulus_sq",
+      "proposed": "sineModulus_sq_add_paperCosineModulus_sq",
+      "kind": "theorem",
+      "declared_in": "DavisKahan/Sources/DavisKahan1970/SineTheta/CosineAngle.lean",
+      "classification": "provenance_only",
+      "collides_with_existing_declaration": false,
+      "dependent_declaration_names": [],
+      "occurrences": {
+        "lean_DavisKahan": 2,
+        "lean_ForTauCeti": 0,
+        "source_census": 0,
+        "result_inventory": 0,
+        "statement_map": 0,
+        "atom_inventory": 0,
+        "audit_surface": 0,
+        "challenge": 0,
+        "comparator": 0
+      }
+    },
+    {
+      "current": "paperSourceCrossBlockSumC",
+      "proposed": "sourceCrossBlockSumC",
+      "kind": "def",
+      "declared_in": "DavisKahan/Sources/DavisKahan1970/SineTheta/FullAngle.lean",
+      "classification": "provenance_only",
+      "collides_with_existing_declaration": false,
+      "dependent_declaration_names": [],
+      "occurrences": {
+        "lean_DavisKahan": 5,
+        "lean_ForTauCeti": 0,
+        "source_census": 0,
+        "result_inventory": 0,
+        "statement_map": 0,
+        "atom_inventory": 0,
+        "audit_surface": 0,
+        "challenge": 0,
+        "comparator": 0
+      }
+    },
+    {
+      "current": "paperSourceCrossBlockSum_same_ambientCrossSum",
+      "proposed": "sourceCrossBlockSum_same_ambientCrossSum",
+      "kind": "theorem",
+      "declared_in": "DavisKahan/Sources/DavisKahan1970/SineTheta/FullAngle.lean",
+      "classification": "provenance_only",
+      "collides_with_existing_declaration": false,
+      "dependent_declaration_names": [],
+      "occurrences": {
+        "lean_DavisKahan": 2,
+        "lean_ForTauCeti": 0,
+        "source_census": 0,
+        "result_inventory": 0,
+        "statement_map": 0,
+        "atom_inventory": 0,
+        "audit_surface": 0,
+        "challenge": 0,
+        "comparator": 0
+      }
+    },
+    {
+      "current": "paperSourceDirectedAngleC",
+      "proposed": "sourceDirectedAngleC",
+      "kind": "def",
+      "declared_in": "DavisKahan/Sources/DavisKahan1970/SineTheta/CosineAngle.lean",
+      "classification": "provenance_only",
+      "collides_with_existing_declaration": false,
+      "dependent_declaration_names": [
+        "paperSourceDirectedAngleC_eq_arcsin_sineModulus"
+      ],
+      "occurrences": {
+        "lean_DavisKahan": 38,
+        "lean_ForTauCeti": 0,
+        "source_census": 0,
+        "result_inventory": 0,
+        "statement_map": 0,
+        "atom_inventory": 0,
+        "audit_surface": 0,
+        "challenge": 0,
+        "comparator": 0
+      }
+    },
+    {
+      "current": "paperSourceDirectedAngleC_eq_arcsin_sineModulus",
+      "proposed": "sourceDirectedAngleC_eq_arcsin_sineModulus",
+      "kind": "theorem",
+      "declared_in": "DavisKahan/Sources/DavisKahan1970/SineTheta/AngleIdentity.lean",
+      "classification": "provenance_only",
+      "collides_with_existing_declaration": false,
+      "dependent_declaration_names": [],
+      "occurrences": {
+        "lean_DavisKahan": 5,
+        "lean_ForTauCeti": 0,
+        "source_census": 0,
+        "result_inventory": 0,
+        "statement_map": 0,
+        "atom_inventory": 0,
+        "audit_surface": 0,
+        "challenge": 0,
+        "comparator": 0
+      }
+    },
+    {
+      "current": "paperSourceDirectedAngleR",
+      "proposed": "sourceDirectedAngleR",
+      "kind": "def",
+      "declared_in": "DavisKahan/Sources/DavisKahan1970/SineTheta/CosineAngleReal.lean",
+      "classification": "provenance_only",
+      "collides_with_existing_declaration": false,
+      "dependent_declaration_names": [
+        "paperSourceDirectedAngleR_eq_arcsin_sineModulus"
+      ],
+      "occurrences": {
+        "lean_DavisKahan": 5,
+        "lean_ForTauCeti": 0,
+        "source_census": 1,
+        "result_inventory": 0,
+        "statement_map": 0,
+        "atom_inventory": 0,
+        "audit_surface": 0,
+        "challenge": 0,
+        "comparator": 0
+      }
+    },
+    {
+      "current": "paperSourceDirectedAngleR_eq_arcsin_sineModulus",
+      "proposed": "sourceDirectedAngleR_eq_arcsin_sineModulus",
+      "kind": "theorem",
+      "declared_in": "DavisKahan/Sources/DavisKahan1970/SineTheta/AngleIdentity.lean",
+      "classification": "provenance_only",
+      "collides_with_existing_declaration": false,
+      "dependent_declaration_names": [],
+      "occurrences": {
+        "lean_DavisKahan": 3,
+        "lean_ForTauCeti": 0,
+        "source_census": 0,
+        "result_inventory": 0,
+        "statement_map": 0,
+        "atom_inventory": 0,
+        "audit_surface": 0,
+        "challenge": 0,
+        "comparator": 0
+      }
+    },
+    {
+      "current": "paperSourceDirectedCosC",
+      "proposed": "sourceDirectedCosC",
+      "kind": "def",
+      "declared_in": "DavisKahan/Sources/DavisKahan1970/SineTheta/CosineAngle.lean",
+      "classification": "provenance_only",
+      "collides_with_existing_declaration": false,
+      "dependent_declaration_names": [
+        "paperSourceDirectedCosC_eq"
+      ],
+      "occurrences": {
+        "lean_DavisKahan": 6,
+        "lean_ForTauCeti": 0,
+        "source_census": 0,
+        "result_inventory": 0,
+        "statement_map": 0,
+        "atom_inventory": 0,
+        "audit_surface": 0,
+        "challenge": 0,
+        "comparator": 0
+      }
+    },
+    {
+      "current": "paperSourceDirectedCosC_eq",
+      "proposed": "sourceDirectedCosC_eq",
+      "kind": "theorem",
+      "declared_in": "DavisKahan/Sources/DavisKahan1970/SineTheta/CosineAngle.lean",
+      "classification": "provenance_only",
+      "collides_with_existing_declaration": false,
+      "dependent_declaration_names": [],
+      "occurrences": {
+        "lean_DavisKahan": 4,
+        "lean_ForTauCeti": 0,
+        "source_census": 0,
+        "result_inventory": 0,
+        "statement_map": 0,
+        "atom_inventory": 0,
+        "audit_surface": 0,
+        "challenge": 0,
+        "comparator": 0
+      }
+    },
+    {
+      "current": "paperSourceDirectedCosR",
+      "proposed": "sourceDirectedCosR",
+      "kind": "def",
+      "declared_in": "DavisKahan/Sources/DavisKahan1970/SineTheta/CosineAngleReal.lean",
+      "classification": "provenance_only",
+      "collides_with_existing_declaration": false,
+      "dependent_declaration_names": [
+        "paperSourceDirectedCosR_eq"
+      ],
+      "occurrences": {
+        "lean_DavisKahan": 3,
+        "lean_ForTauCeti": 0,
+        "source_census": 0,
+        "result_inventory": 0,
+        "statement_map": 0,
+        "atom_inventory": 0,
+        "audit_surface": 0,
+        "challenge": 0,
+        "comparator": 0
+      }
+    },
+    {
+      "current": "paperSourceDirectedCosR_eq",
+      "proposed": "sourceDirectedCosR_eq",
+      "kind": "theorem",
+      "declared_in": "DavisKahan/Sources/DavisKahan1970/SineTheta/CosineAngleReal.lean",
+      "classification": "provenance_only",
+      "collides_with_existing_declaration": false,
+      "dependent_declaration_names": [],
+      "occurrences": {
+        "lean_DavisKahan": 1,
+        "lean_ForTauCeti": 0,
+        "source_census": 0,
+        "result_inventory": 0,
+        "statement_map": 0,
+        "atom_inventory": 0,
+        "audit_surface": 0,
+        "challenge": 0,
+        "comparator": 0
+      }
+    },
+    {
+      "current": "paperSourceDirectedSinC",
+      "proposed": "sourceDirectedSinC",
+      "kind": "def",
+      "declared_in": "DavisKahan/Sources/DavisKahan1970/SineTheta/CosineAngle.lean",
+      "classification": "provenance_only",
+      "collides_with_existing_declaration": false,
+      "dependent_declaration_names": [
+        "paperSourceDirectedSinC_eq_paperSineModulusC"
+      ],
+      "occurrences": {
+        "lean_DavisKahan": 14,
+        "lean_ForTauCeti": 0,
+        "source_census": 0,
+        "result_inventory": 0,
+        "statement_map": 0,
+        "atom_inventory": 0,
+        "audit_surface": 0,
+        "challenge": 0,
+        "comparator": 0
+      }
+    },
+    {
+      "current": "paperSourceDirectedSinC_eq_paperSineModulusC",
+      "proposed": "sourceDirectedSinC_eq_paperSineModulusC",
+      "kind": "theorem",
+      "declared_in": "DavisKahan/Sources/DavisKahan1970/SineTheta/CosineAngle.lean",
+      "classification": "provenance_only",
+      "collides_with_existing_declaration": false,
+      "dependent_declaration_names": [],
+      "occurrences": {
+        "lean_DavisKahan": 5,
+        "lean_ForTauCeti": 0,
+        "source_census": 0,
+        "result_inventory": 0,
+        "statement_map": 0,
+        "atom_inventory": 0,
+        "audit_surface": 0,
+        "challenge": 0,
+        "comparator": 0
+      }
+    },
+    {
+      "current": "paperSourceDirectedSinR",
+      "proposed": "sourceDirectedSinR",
+      "kind": "def",
+      "declared_in": "DavisKahan/Sources/DavisKahan1970/SineTheta/CosineAngleReal.lean",
+      "classification": "provenance_only",
+      "collides_with_existing_declaration": false,
+      "dependent_declaration_names": [
+        "paperSourceDirectedSinR_eq"
+      ],
+      "occurrences": {
+        "lean_DavisKahan": 3,
+        "lean_ForTauCeti": 0,
+        "source_census": 0,
+        "result_inventory": 0,
+        "statement_map": 0,
+        "atom_inventory": 0,
+        "audit_surface": 0,
+        "challenge": 0,
+        "comparator": 0
+      }
+    },
+    {
+      "current": "paperSourceDirectedSinR_eq",
+      "proposed": "sourceDirectedSinR_eq",
+      "kind": "theorem",
+      "declared_in": "DavisKahan/Sources/DavisKahan1970/SineTheta/CosineAngleReal.lean",
+      "classification": "provenance_only",
+      "collides_with_existing_declaration": false,
+      "dependent_declaration_names": [],
+      "occurrences": {
+        "lean_DavisKahan": 1,
+        "lean_ForTauCeti": 0,
+        "source_census": 0,
+        "result_inventory": 0,
+        "statement_map": 0,
+        "atom_inventory": 0,
+        "audit_surface": 0,
+        "challenge": 0,
+        "comparator": 0
+      }
+    },
+    {
+      "current": "paperSourceDirectedSin_same_paperSineBlock",
+      "proposed": "sourceDirectedSin_same_paperSineBlock",
+      "kind": "theorem",
+      "declared_in": "DavisKahan/Sources/DavisKahan1970/SineTheta/CosineAngle.lean",
+      "classification": "provenance_only",
+      "collides_with_existing_declaration": false,
+      "dependent_declaration_names": [],
+      "occurrences": {
+        "lean_DavisKahan": 4,
+        "lean_ForTauCeti": 0,
+        "source_census": 0,
+        "result_inventory": 0,
+        "statement_map": 0,
+        "atom_inventory": 0,
+        "audit_surface": 0,
+        "challenge": 0,
+        "comparator": 0
+      }
+    },
+    {
+      "current": "paperSourceFullAngleC",
+      "proposed": "sourceFullAngleC",
+      "kind": "def",
+      "declared_in": "DavisKahan/Sources/DavisKahan1970/SineTheta/FullAngle.lean",
+      "classification": "provenance_only",
+      "collides_with_existing_declaration": false,
+      "dependent_declaration_names": [],
+      "occurrences": {
+        "lean_DavisKahan": 3,
+        "lean_ForTauCeti": 0,
+        "source_census": 0,
+        "result_inventory": 0,
+        "statement_map": 0,
+        "atom_inventory": 0,
+        "audit_surface": 0,
+        "challenge": 0,
+        "comparator": 0
+      }
+    },
+    {
+      "current": "paperSourceFullAngleR",
+      "proposed": "sourceFullAngleR",
+      "kind": "def",
+      "declared_in": "DavisKahan/Sources/DavisKahan1970/SineTheta/FullAngleReal.lean",
+      "classification": "provenance_only",
+      "collides_with_existing_declaration": false,
+      "dependent_declaration_names": [],
+      "occurrences": {
+        "lean_DavisKahan": 2,
+        "lean_ForTauCeti": 0,
+        "source_census": 0,
+        "result_inventory": 0,
+        "statement_map": 0,
+        "atom_inventory": 0,
+        "audit_surface": 0,
+        "challenge": 0,
+        "comparator": 0
+      }
+    },
+    {
+      "current": "paperSourceFullSinC",
+      "proposed": "sourceFullSinC",
+      "kind": "def",
+      "declared_in": "DavisKahan/Sources/DavisKahan1970/SineTheta/FullAngle.lean",
+      "classification": "provenance_only",
+      "collides_with_existing_declaration": false,
+      "dependent_declaration_names": [],
+      "occurrences": {
+        "lean_DavisKahan": 7,
+        "lean_ForTauCeti": 0,
+        "source_census": 0,
+        "result_inventory": 0,
+        "statement_map": 0,
+        "atom_inventory": 0,
+        "audit_surface": 0,
+        "challenge": 0,
+        "comparator": 0
+      }
+    },
+    {
+      "current": "paperSourceFullSinR",
+      "proposed": "sourceFullSinR",
+      "kind": "def",
+      "declared_in": "DavisKahan/Sources/DavisKahan1970/SineTheta/FullAngleReal.lean",
+      "classification": "provenance_only",
+      "collides_with_existing_declaration": false,
+      "dependent_declaration_names": [],
+      "occurrences": {
+        "lean_DavisKahan": 7,
+        "lean_ForTauCeti": 0,
+        "source_census": 1,
+        "result_inventory": 0,
+        "statement_map": 0,
+        "atom_inventory": 0,
+        "audit_surface": 0,
+        "challenge": 0,
+        "comparator": 0
+      }
+    },
+    {
+      "current": "paperSourceFullSin_mem_iff_and_gauge_eq",
+      "proposed": "sourceFullSin_mem_iff_and_gauge_eq",
+      "kind": "theorem",
+      "declared_in": "DavisKahan/Sources/DavisKahan1970/SineTheta/FullAngle.lean",
+      "classification": "provenance_only",
+      "collides_with_existing_declaration": false,
+      "dependent_declaration_names": [],
+      "occurrences": {
+        "lean_DavisKahan": 2,
+        "lean_ForTauCeti": 0,
+        "source_census": 0,
+        "result_inventory": 0,
+        "statement_map": 0,
+        "atom_inventory": 0,
+        "audit_surface": 0,
+        "challenge": 0,
+        "comparator": 0
+      }
+    },
+    {
+      "current": "paperSourceFullSin_same_coordinateCrossBlockSum",
+      "proposed": "sourceFullSin_same_coordinateCrossBlockSum",
+      "kind": "theorem",
+      "declared_in": "DavisKahan/Sources/DavisKahan1970/SineTheta/FullAngle.lean",
+      "classification": "provenance_only",
+      "collides_with_existing_declaration": false,
+      "dependent_declaration_names": [],
+      "occurrences": {
+        "lean_DavisKahan": 2,
+        "lean_ForTauCeti": 0,
+        "source_census": 0,
+        "result_inventory": 0,
+        "statement_map": 0,
+        "atom_inventory": 0,
+        "audit_surface": 0,
+        "challenge": 0,
+        "comparator": 0
+      }
+    },
+    {
+      "current": "paperSourceFullSin_same_projectionDifference",
+      "proposed": "sourceFullSin_same_projectionDifference",
+      "kind": "theorem",
+      "declared_in": "DavisKahan/Sources/DavisKahan1970/SineTheta/FullAngle.lean",
+      "classification": "provenance_only",
+      "collides_with_existing_declaration": false,
+      "dependent_declaration_names": [],
+      "occurrences": {
+        "lean_DavisKahan": 4,
+        "lean_ForTauCeti": 0,
+        "source_census": 0,
+        "result_inventory": 0,
+        "statement_map": 0,
+        "atom_inventory": 0,
+        "audit_surface": 0,
+        "challenge": 0,
+        "comparator": 0
+      }
+    },
+    {
+      "current": "paperTanAngleOperatorC",
+      "proposed": "tanAngleOperatorC",
+      "kind": "def",
+      "declared_in": "DavisKahan/Geometry/Angle/PaperTanAngle.lean",
+      "classification": "contrastive_decision_required",
+      "collides_with_existing_declaration": true,
+      "dependent_declaration_names": [
+        "paperTanAngleOperatorC_eq_cfc",
+        "paperTanAngleOperatorC_eq_modulus_blockRepresentative",
+        "paperTanAngleOperatorC_nonneg"
+      ],
+      "occurrences": {
+        "lean_DavisKahan": 57,
+        "lean_ForTauCeti": 0,
+        "source_census": 5,
+        "result_inventory": 2,
+        "statement_map": 0,
+        "atom_inventory": 0,
+        "audit_surface": 0,
+        "challenge": 2,
+        "comparator": 0
+      }
+    },
+    {
+      "current": "paperTanAngleOperatorC_eq_cfc",
+      "proposed": "tanAngleOperatorC_eq_cfc",
+      "kind": "theorem",
+      "declared_in": "DavisKahan/Sources/DavisKahan1970/TanThetaAmbient.lean",
+      "classification": "provenance_only",
+      "collides_with_existing_declaration": false,
+      "dependent_declaration_names": [],
+      "occurrences": {
+        "lean_DavisKahan": 2,
+        "lean_ForTauCeti": 0,
+        "source_census": 0,
+        "result_inventory": 0,
+        "statement_map": 0,
+        "atom_inventory": 0,
+        "audit_surface": 0,
+        "challenge": 0,
+        "comparator": 0
+      }
+    },
+    {
+      "current": "paperTanAngleOperatorC_eq_modulus_blockRepresentative",
+      "proposed": "tanAngleOperatorC_eq_modulus_blockRepresentative",
+      "kind": "theorem",
+      "declared_in": "DavisKahan/Sources/DavisKahan1970/TanThetaAmbient.lean",
+      "classification": "provenance_only",
+      "collides_with_existing_declaration": false,
+      "dependent_declaration_names": [],
+      "occurrences": {
+        "lean_DavisKahan": 4,
+        "lean_ForTauCeti": 0,
+        "source_census": 2,
+        "result_inventory": 0,
+        "statement_map": 0,
+        "atom_inventory": 0,
+        "audit_surface": 0,
+        "challenge": 0,
+        "comparator": 0
+      }
+    },
+    {
+      "current": "paperTanAngleOperatorC_nonneg",
+      "proposed": "tanAngleOperatorC_nonneg",
+      "kind": "theorem",
+      "declared_in": "DavisKahan/Geometry/Angle/PaperTanAngle.lean",
+      "classification": "provenance_only",
+      "collides_with_existing_declaration": false,
+      "dependent_declaration_names": [],
+      "occurrences": {
+        "lean_DavisKahan": 3,
+        "lean_ForTauCeti": 0,
+        "source_census": 1,
+        "result_inventory": 0,
+        "statement_map": 0,
+        "atom_inventory": 0,
+        "audit_surface": 0,
+        "challenge": 0,
+        "comparator": 0
+      }
+    },
+    {
+      "current": "paperTanAngleOperatorR",
+      "proposed": "tanAngleOperatorR",
+      "kind": "def",
+      "declared_in": "DavisKahan/Geometry/Angle/PaperOperatorAngleReal.lean",
+      "classification": "provenance_only",
+      "collides_with_existing_declaration": false,
+      "dependent_declaration_names": [],
+      "occurrences": {
+        "lean_DavisKahan": 26,
+        "lean_ForTauCeti": 0,
+        "source_census": 2,
+        "result_inventory": 1,
+        "statement_map": 0,
+        "atom_inventory": 0,
+        "audit_surface": 0,
+        "challenge": 0,
+        "comparator": 0
+      }
+    },
+    {
+      "current": "paperTanBlockRepresentative",
+      "proposed": "tanBlockRepresentative",
+      "kind": "def",
+      "declared_in": "DavisKahan/Sources/DavisKahan1970/TanThetaAmbient.lean",
+      "classification": "provenance_only",
+      "collides_with_existing_declaration": false,
+      "dependent_declaration_names": [
+        "paperTanBlockRepresentative_eq",
+        "paperTanBlockRepresentative_mul_self"
+      ],
+      "occurrences": {
+        "lean_DavisKahan": 20,
+        "lean_ForTauCeti": 0,
+        "source_census": 3,
+        "result_inventory": 0,
+        "statement_map": 0,
+        "atom_inventory": 0,
+        "audit_surface": 0,
+        "challenge": 0,
+        "comparator": 0
+      }
+    },
+    {
+      "current": "paperTanBlockRepresentative_eq",
+      "proposed": "tanBlockRepresentative_eq",
+      "kind": "theorem",
+      "declared_in": "DavisKahan/Sources/DavisKahan1970/TanThetaAmbient.lean",
+      "classification": "provenance_only",
+      "collides_with_existing_declaration": false,
+      "dependent_declaration_names": [],
+      "occurrences": {
+        "lean_DavisKahan": 3,
+        "lean_ForTauCeti": 0,
+        "source_census": 0,
+        "result_inventory": 0,
+        "statement_map": 0,
+        "atom_inventory": 0,
+        "audit_surface": 0,
+        "challenge": 0,
+        "comparator": 0
+      }
+    },
+    {
+      "current": "paperTanBlockRepresentative_mul_self",
+      "proposed": "tanBlockRepresentative_mul_self",
+      "kind": "theorem",
+      "declared_in": "DavisKahan/Sources/DavisKahan1970/TanThetaAmbient.lean",
+      "classification": "provenance_only",
+      "collides_with_existing_declaration": false,
+      "dependent_declaration_names": [],
+      "occurrences": {
+        "lean_DavisKahan": 2,
+        "lean_ForTauCeti": 0,
+        "source_census": 1,
+        "result_inventory": 0,
+        "statement_map": 0,
+        "atom_inventory": 0,
+        "audit_surface": 0,
+        "challenge": 0,
+        "comparator": 0
+      }
+    },
+    {
+      "current": "paperTanTwoAngleOperatorC",
+      "proposed": "tanTwoAngleOperatorC",
+      "kind": "def",
+      "declared_in": "DavisKahan/Geometry/Angle/PaperTanAngle.lean",
+      "classification": "contrastive_decision_required",
+      "collides_with_existing_declaration": true,
+      "dependent_declaration_names": [
+        "paperTanTwoAngleOperatorC_eq_modulus_blockRepresentative",
+        "paperTanTwoAngleOperatorC_nonneg"
+      ],
+      "occurrences": {
+        "lean_DavisKahan": 33,
+        "lean_ForTauCeti": 0,
+        "source_census": 6,
+        "result_inventory": 0,
+        "statement_map": 0,
+        "atom_inventory": 0,
+        "audit_surface": 0,
+        "challenge": 2,
+        "comparator": 0
+      }
+    },
+    {
+      "current": "paperTanTwoAngleOperatorC_eq_modulus_blockRepresentative",
+      "proposed": "tanTwoAngleOperatorC_eq_modulus_blockRepresentative",
+      "kind": "theorem",
+      "declared_in": "DavisKahan/Sources/DavisKahan1970/TanTwoThetaAmbient.lean",
+      "classification": "provenance_only",
+      "collides_with_existing_declaration": false,
+      "dependent_declaration_names": [],
+      "occurrences": {
+        "lean_DavisKahan": 2,
+        "lean_ForTauCeti": 0,
+        "source_census": 2,
+        "result_inventory": 0,
+        "statement_map": 0,
+        "atom_inventory": 0,
+        "audit_surface": 0,
+        "challenge": 0,
+        "comparator": 0
+      }
+    },
+    {
+      "current": "paperTanTwoAngleOperatorC_nonneg",
+      "proposed": "tanTwoAngleOperatorC_nonneg",
+      "kind": "theorem",
+      "declared_in": "DavisKahan/Geometry/Angle/PaperTanAngle.lean",
+      "classification": "provenance_only",
+      "collides_with_existing_declaration": false,
+      "dependent_declaration_names": [],
+      "occurrences": {
+        "lean_DavisKahan": 3,
+        "lean_ForTauCeti": 0,
+        "source_census": 1,
+        "result_inventory": 0,
+        "statement_map": 0,
+        "atom_inventory": 0,
+        "audit_surface": 0,
+        "challenge": 0,
+        "comparator": 0
+      }
+    },
+    {
+      "current": "paperTanTwoAngleOperatorR",
+      "proposed": "tanTwoAngleOperatorR",
+      "kind": "def",
+      "declared_in": "DavisKahan/Geometry/Angle/PaperOperatorAngleReal.lean",
+      "classification": "provenance_only",
+      "collides_with_existing_declaration": false,
+      "dependent_declaration_names": [],
+      "occurrences": {
+        "lean_DavisKahan": 8,
+        "lean_ForTauCeti": 0,
+        "source_census": 1,
+        "result_inventory": 0,
+        "statement_map": 0,
+        "atom_inventory": 0,
+        "audit_surface": 0,
+        "challenge": 0,
+        "comparator": 0
+      }
+    },
+    {
+      "current": "paperTanTwoBlockRepresentative",
+      "proposed": "tanTwoBlockRepresentative",
+      "kind": "def",
+      "declared_in": "DavisKahan/Sources/DavisKahan1970/TanTwoThetaAmbient.lean",
+      "classification": "provenance_only",
+      "collides_with_existing_declaration": false,
+      "dependent_declaration_names": [
+        "paperTanTwoBlockRepresentative_eq",
+        "paperTanTwoBlockRepresentative_lowerBlock",
+        "paperTanTwoBlockRepresentative_mul_self",
+        "paperTanTwoBlockRepresentative_mul_signedCosTwo"
+      ],
+      "occurrences": {
+        "lean_DavisKahan": 42,
+        "lean_ForTauCeti": 0,
+        "source_census": 3,
+        "result_inventory": 1,
+        "statement_map": 0,
+        "atom_inventory": 0,
+        "audit_surface": 0,
+        "challenge": 0,
+        "comparator": 0
+      }
+    },
+    {
+      "current": "paperTanTwoBlockRepresentative_eq",
+      "proposed": "tanTwoBlockRepresentative_eq",
+      "kind": "theorem",
+      "declared_in": "DavisKahan/Sources/DavisKahan1970/TanTwoThetaAmbient.lean",
+      "classification": "provenance_only",
+      "collides_with_existing_declaration": false,
+      "dependent_declaration_names": [],
+      "occurrences": {
+        "lean_DavisKahan": 5,
+        "lean_ForTauCeti": 0,
+        "source_census": 0,
+        "result_inventory": 0,
+        "statement_map": 0,
+        "atom_inventory": 0,
+        "audit_surface": 0,
+        "challenge": 0,
+        "comparator": 0
+      }
+    },
+    {
+      "current": "paperTanTwoBlockRepresentative_lowerBlock",
+      "proposed": "tanTwoBlockRepresentative_lowerBlock",
+      "kind": "theorem",
+      "declared_in": "DavisKahan/Sources/DavisKahan1970/TanTwoThetaAmbient.lean",
+      "classification": "provenance_only",
+      "collides_with_existing_declaration": false,
+      "dependent_declaration_names": [],
+      "occurrences": {
+        "lean_DavisKahan": 4,
+        "lean_ForTauCeti": 0,
+        "source_census": 2,
+        "result_inventory": 0,
+        "statement_map": 0,
+        "atom_inventory": 0,
+        "audit_surface": 0,
+        "challenge": 0,
+        "comparator": 0
+      }
+    },
+    {
+      "current": "paperTanTwoBlockRepresentative_mul_self",
+      "proposed": "tanTwoBlockRepresentative_mul_self",
+      "kind": "theorem",
+      "declared_in": "DavisKahan/Sources/DavisKahan1970/TanTwoThetaAmbient.lean",
+      "classification": "provenance_only",
+      "collides_with_existing_declaration": false,
+      "dependent_declaration_names": [],
+      "occurrences": {
+        "lean_DavisKahan": 3,
+        "lean_ForTauCeti": 0,
+        "source_census": 0,
+        "result_inventory": 0,
+        "statement_map": 0,
+        "atom_inventory": 0,
+        "audit_surface": 0,
+        "challenge": 0,
+        "comparator": 0
+      }
+    },
+    {
+      "current": "paperTanTwoBlockRepresentative_mul_signedCosTwo",
+      "proposed": "tanTwoBlockRepresentative_mul_signedCosTwo",
+      "kind": "theorem",
+      "declared_in": "DavisKahan/DoubleAngle/TangentTransport.lean",
+      "classification": "provenance_only",
+      "collides_with_existing_declaration": false,
+      "dependent_declaration_names": [],
+      "occurrences": {
+        "lean_DavisKahan": 3,
+        "lean_ForTauCeti": 0,
+        "source_census": 1,
+        "result_inventory": 2,
+        "statement_map": 0,
+        "atom_inventory": 0,
+        "audit_surface": 1,
+        "challenge": 0,
+        "comparator": 0
+      }
+    },
+    {
+      "current": "paperTanTwoDirectedCornerR",
+      "proposed": "tanTwoDirectedCornerR",
+      "kind": "def",
+      "declared_in": "DavisKahan/Sources/DavisKahan1970/AmbientReal.lean",
+      "classification": "provenance_only",
+      "collides_with_existing_declaration": false,
+      "dependent_declaration_names": [],
+      "occurrences": {
+        "lean_DavisKahan": 6,
+        "lean_ForTauCeti": 0,
+        "source_census": 1,
+        "result_inventory": 0,
+        "statement_map": 1,
+        "atom_inventory": 0,
+        "audit_surface": 0,
+        "challenge": 0,
+        "comparator": 0
+      }
+    },
+    {
+      "current": "paperTanTwoThetaRepresentative",
+      "proposed": "tanTwoThetaRepresentative",
+      "kind": "def",
+      "declared_in": "DavisKahan/InfiniteDimensional/TanTwoTheta/PaperFaithfulUINorm.lean",
+      "classification": "provenance_only",
+      "collides_with_existing_declaration": false,
+      "dependent_declaration_names": [],
+      "occurrences": {
+        "lean_DavisKahan": 11,
+        "lean_ForTauCeti": 0,
+        "source_census": 0,
+        "result_inventory": 0,
+        "statement_map": 0,
+        "atom_inventory": 0,
+        "audit_surface": 0,
+        "challenge": 0,
+        "comparator": 0
+      }
+    },
+    {
+      "current": "paperTanTwoTheta_uiNorm_finite_alternate",
+      "proposed": "tanTwoTheta_uiNorm_finite_alternate",
+      "kind": "theorem",
+      "declared_in": "DavisKahan/InfiniteDimensional/TanTwoTheta/PaperFaithfulUINorm.lean",
+      "classification": "provenance_only",
+      "collides_with_existing_declaration": false,
+      "dependent_declaration_names": [],
+      "occurrences": {
+        "lean_DavisKahan": 2,
+        "lean_ForTauCeti": 0,
+        "source_census": 0,
+        "result_inventory": 0,
+        "statement_map": 0,
+        "atom_inventory": 0,
+        "audit_surface": 0,
+        "challenge": 0,
+        "comparator": 0
+      }
+    },
+    {
+      "current": "paperTanTwo_sq_mul_cos_two_sq",
+      "proposed": "tanTwo_sq_mul_cos_two_sq",
+      "kind": "theorem",
+      "declared_in": "DavisKahan/Sources/DavisKahan1970/TanTwoThetaAmbient.lean",
+      "classification": "provenance_only",
+      "collides_with_existing_declaration": false,
+      "dependent_declaration_names": [],
+      "occurrences": {
+        "lean_DavisKahan": 1,
+        "lean_ForTauCeti": 0,
+        "source_census": 0,
+        "result_inventory": 0,
+        "statement_map": 0,
+        "atom_inventory": 0,
+        "audit_surface": 0,
+        "challenge": 0,
+        "comparator": 0
+      }
+    },
+    {
+      "current": "paperTan_sq_mul_one_sub_sin_sq",
+      "proposed": "tan_sq_mul_one_sub_sin_sq",
+      "kind": "theorem",
+      "declared_in": "DavisKahan/Sources/DavisKahan1970/TanThetaAmbient.lean",
+      "classification": "provenance_only",
+      "collides_with_existing_declaration": false,
+      "dependent_declaration_names": [],
+      "occurrences": {
+        "lean_DavisKahan": 3,
+        "lean_ForTauCeti": 0,
+        "source_census": 0,
+        "result_inventory": 0,
+        "statement_map": 0,
+        "atom_inventory": 0,
+        "audit_surface": 0,
+        "challenge": 0,
+        "comparator": 0
+      }
+    },
+    {
+      "current": "paperTheorem61_planar_equality_every_norm",
+      "proposed": "theorem61_planar_equality_every_norm",
+      "kind": "theorem",
+      "declared_in": "DavisKahan/Sources/DavisKahan1970/SineTheta/Sharpness.lean",
+      "classification": "provenance_only",
+      "collides_with_existing_declaration": false,
+      "dependent_declaration_names": [],
+      "occurrences": {
+        "lean_DavisKahan": 3,
+        "lean_ForTauCeti": 0,
+        "source_census": 0,
+        "result_inventory": 0,
+        "statement_map": 0,
+        "atom_inventory": 0,
+        "audit_surface": 0,
+        "challenge": 0,
+        "comparator": 0
+      }
+    }
+  ],
+  "verification": {
+    "checked_on": "2026-09-02",
+    "proposal_internal_collisions": [],
+    "proposal_internal_collisions_note": "No two proposed names coincide, so applying the map cannot merge two distinct declarations.",
+    "mathlib_short_name_collisions": [],
+    "mathlib_short_name_collisions_note": "No proposed short name also names a Mathlib declaration. Checked by scanning every declaration head under `.lake/packages/mathlib/Mathlib`. This is the hazard that would bite hardest -- `hilbertSchmidtNorm` and `projectionBlock` are the kind of name Mathlib might already own -- and it is clear.",
+    "fortauceti_references": [
+      "ForTauCeti/Analysis/InnerProductSpace/SchattenNorm.lean:375 -- a docstring naming `paperHilbertSchmidtNorm_eq_rectangularFrobenius`. ForTauCeti declares none of these names; this is a prose cross-reference into DavisKahan and must be updated with the rename."
+    ],
+    "method": "Declaration heads parsed from every .lean file under DavisKahan/ and ForTauCeti/; occurrence counts are word-boundary matches per surface. Counts are evidence of blast radius, not a substitute for applying the rename and rebuilding."
+  },
+  "not_yet_decided": [
+    "Whether to apply the 260 provenance-only renames at all, and when relative to the hostile-review sign-off.",
+    "Each of the 13 contrastive cases: which spelling is canonical, and what the other becomes. These are the only entries that touch the meaning of the tree rather than its presentation."
+  ]
+}
