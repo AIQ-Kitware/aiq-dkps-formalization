@@ -283,6 +283,31 @@ theorem paperBlockCompression_mul_reflectionOperator
     ContinuousLinearMap.mul_apply, Submodule.subtypeL_apply]
   rw [Submodule.reflectionOperator_apply_of_mem Γ x.2]
 
+/-- **A `Γ → Γᗮ` compression only sees the `Γᗮ ← Γ` block of a diagonal pair.**
+
+`paperDiagonalPair Γᗮ Γ K` is `P_Γᗮ K P_Γ + P_Γ K P_Γᗮ`.  Compressed out of `Γ`,
+the second summand dies -- it starts by projecting onto `Γᗮ`, which kills every
+vector of `Γ` -- and the first is the block itself, because the compression's
+own adjoint already projects onto `Γᗮ`.
+
+This is the step from the paper's block representative to the block spelling its
+directed corner uses. -/
+theorem paperBlockCompression_paperDiagonalPair
+    (Γ : Submodule 𝕜 G) [Γ.HasOrthogonalProjection] [Γᗮ.HasOrthogonalProjection]
+    (K : G →L[𝕜] G) :
+    paperBlockCompression Γᗮ Γ (paperDiagonalPair Γᗮ Γ K)
+      = paperBlockCompression Γᗮ Γ K := by
+  ext x
+  have hzero : Γᗮ.starProjection (x : G) = 0 :=
+    Submodule.starProjection_orthogonal_apply_eq_zero x.2
+  have hself : Γ.starProjection (x : G) = (x : G) :=
+    Submodule.starProjection_eq_self_iff.mpr x.2
+  simp only [paperBlockCompression, paperDiagonalPair, ContinuousLinearMap.coe_comp',
+    Function.comp_apply, ContinuousLinearMap.add_apply, Submodule.subtypeL_apply,
+    hzero, hself, map_zero, add_zero, Submodule.adjoint_subtypeL]
+  rw [← Submodule.starProjection_apply, ← Submodule.starProjection_apply]
+  exact Submodule.starProjection_eq_self_iff.mpr (Γᗮ.starProjection_apply_mem _)
+
 /-- The directed tangent corner `T₀ : U → Uᗮ`. -/
 abbrev reflectionTangentCorner (U : Submodule 𝕜 G) [U.HasOrthogonalProjection]
     (Z : G →L[𝕜] G) : U →L[𝕜] Uᗮ :=

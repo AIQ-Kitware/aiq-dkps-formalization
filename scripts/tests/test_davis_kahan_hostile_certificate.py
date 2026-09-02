@@ -66,32 +66,51 @@ def rejected(case: unittest.TestCase, expected: str):
 
 
 class LedgerAndRowsMustAgree(unittest.TestCase):
-    """Deleting the ledger must not certify evidence that did not change."""
+    """Deleting the ledger must not certify evidence that did not change.
 
-    def test_current_state_is_consistent(self):
+    Synthetic on purpose.  Earlier versions read the live inventory for a blocked
+    row, so the day the last obligation closed the tests stopped exercising the
+    invariant and passed for the wrong reason.
+    """
+
+    BLOCKED = "hostile_review_blocked"
+
+    def _fixture(self) -> dict:
+        return {
+            "results": [
+                {"id": "R-1", "semantic_certification": "accepted"},
+                {"id": "R-2", "semantic_certification": self.BLOCKED},
+            ],
+            "open_hostile_review_obligations": {
+                "status": "open",
+                "obligations": [{"id": "an-open-finding", "results": ["R-2"]}],
+            },
+        }
+
+    def test_a_consistent_pair_is_accepted(self):
+        data = self._fixture()
+        self.assertEqual(len(M._open_hostile_obligations(data, data["results"])), 1)
+
+    def test_the_live_inventory_is_consistent(self):
         data = inventory()
         M._open_hostile_obligations(data, data["results"])
 
     def test_deleting_the_ledger_is_rejected(self):
-        data = inventory()
-        blocked = [
-            r["id"] for r in data["results"]
-            if M._semantic_certification(r) in M.BLOCKED_SEMANTIC_CERTIFICATIONS
-        ]
-        self.assertTrue(blocked, "fixture has no blocked row; this test would be vacuous")
-        data["open_hostile_review_obligations"]["obligations"] = []
-        data["open_hostile_review_obligations"]["status"] = "closed"
+        data = self._fixture()
+        data["open_hostile_review_obligations"] = {"status": "closed", "obligations": []}
         with rejected(self, "no open hostile-review obligation"):
             M._open_hostile_obligations(data, data["results"])
 
     def test_accepting_a_blocked_row_while_its_obligation_is_open_is_rejected(self):
-        data = inventory()
-        target = next(
-            r for r in data["results"]
-            if M._semantic_certification(r) in M.BLOCKED_SEMANTIC_CERTIFICATIONS
-        )
-        target["semantic_certification"] = "accepted"
+        data = self._fixture()
+        data["results"][1]["semantic_certification"] = "accepted"
         with rejected(self, "still claim a terminal semantic_certification"):
+            M._open_hostile_obligations(data, data["results"])
+
+    def test_an_obligation_naming_an_unknown_result_is_rejected(self):
+        data = self._fixture()
+        data["open_hostile_review_obligations"]["obligations"][0]["results"] = ["R-9"]
+        with rejected(self, "unknown result"):
             M._open_hostile_obligations(data, data["results"])
 
 
@@ -178,3 +197,53 @@ class DischargeMustBeEvidenceForItsOwnRow(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
+
+
+class RepresentationChangeMustBeBridged(unittest.TestCase):
+    """A clause on a different object than the paper's must name what bridges them.
+
+    Added after a reviewer defeated the first 29/29 by emptying the directed
+    clauses' correspondence list, and again by swapping in another registered
+    correspondence theorem.  Both produced a green certificate over an unbridged
+    representation change.
+    """
+
+    def _directed(self, data: dict) -> list[dict]:
+        target = row(data, "S2-tan-two-theta")
+        return [c for c in target["source_clauses"] if c.get("correspondence_required")]
+
+    def test_the_current_clauses_declare_a_witness(self):
+        clauses = self._directed(inventory())
+        self.assertTrue(clauses, "no clause requires correspondence; this suite would be vacuous")
+        for clause in clauses:
+            witness = clause["correspondence_witness"]
+            self.assertIn(witness["declaration"], clause["evidence"]["correspondence"])
+
+    def test_the_witness_must_mention_both_objects(self):
+        clause = self._directed(inventory())[0]
+        witness = clause["correspondence_witness"]
+        statement = M._declaration_statement_text(witness["declaration"])
+        self.assertIsNotNone(statement, "the witness has no readable statement")
+        for key in ("from_object", "to_object"):
+            self.assertIn(witness[key], statement, f"{key} absent from the witness statement")
+
+    def test_an_unrelated_theorem_does_not_bridge(self):
+        """The substitution a reviewer used: another registered correspondence lemma."""
+        statement = M._declaration_statement_text(
+            "TauCeti.DavisKahan1970.approximationNumber_reflectionTangentCorner"
+        )
+        self.assertIsNotNone(statement)
+        clause = self._directed(inventory())[0]
+        self.assertNotIn(
+            clause["correspondence_witness"]["to_object"], statement,
+            "this lemma would wrongly pass as the bridge to the paper object",
+        )
+
+    def test_the_census_and_inventory_must_agree_a_change_happened(self):
+        data = inventory()
+        census = json.loads((ROOT / "dev/davis-kahan-1970-full-source-census.json").read_text())
+        rows = {r["id"]: r for r in census["items"]}
+        for clause in self._directed(data):
+            clause.pop("correspondence_required", None)
+        with rejected(self, "no inventory clause is marked correspondence_required"):
+            M._validate_representation_change_agreement(data["results"], rows)
