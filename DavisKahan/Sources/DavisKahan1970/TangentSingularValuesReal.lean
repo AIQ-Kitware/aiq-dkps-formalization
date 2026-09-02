@@ -82,7 +82,7 @@ theorem approximationNumber_tanAngleOperatorR
         ((V.starProjection - U.starProjection).approximationNumber n)) := by
   have htrC := norm_sinAngleOperatorC_complexify_lt_one U V htr
   have h1 : (tanAngleOperatorR U V).approximationNumber n =
-      (paperTanAngleOperatorC (complexifySubmodule U)
+      (tanAngleOperatorC (complexifySubmodule U)
         (complexifySubmodule V)).approximationNumber n := by
     rw [← complexify_tanAngleOperatorR]
     exact (ComplexificationApproximation.approximationSingularValue_complexify
@@ -93,7 +93,7 @@ theorem approximationNumber_tanAngleOperatorR
     rw [approximationNumber_sinAngleOperatorC, ← complexify_projectorDifference]
     exact ComplexificationApproximation.approximationSingularValue_complexify
       (V.starProjection - U.starProjection) n
-  rw [h1, approximationNumber_paperTanAngleOperatorC _ _ htrC n, h2]
+  rw [h1, approximationNumber_tanAngleOperatorC _ _ htrC n, h2]
 
 /-- Under uniform transversality no principal angle is a right angle, so each
 `tan (arcsin aₙ)` above is a genuine tangent. -/

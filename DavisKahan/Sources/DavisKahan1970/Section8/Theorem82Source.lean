@@ -343,9 +343,9 @@ the paper's own class `SymmetricNormingFunction`, inherited from equation (7.5)
 (`DavisKahan1970.sinTwoTheta_ambient_bounded_symmetricNorming_complex`) with nothing re-proved.
 
 The conclusion names the paper's literal `sin 2Θ`, the positive operator
-`paperSinTwoAngleOperatorC Q P`, rather than the modulus-free
+`sinTwoAngleOperatorC Q P`, rather than the modulus-free
 `sinTwoAngleOperator` of the operator-norm statements; the two have the same
-operator norm by `norm_paperSinTwoAngleOperatorC_eq_norm_sinTwoAngleOperatorC`,
+operator norm by `norm_sinTwoAngleOperatorC_eq_norm_directedSinTwoAngleOperatorC`,
 but only the former carries the whole singular-value list that a general
 unitarily invariant norm reads.
 
@@ -436,8 +436,8 @@ theorem theorem8_2_sinTwoTheta_perturbation_source_symmetricNorming
     (hQperp : Foundation.SpectrumIn (A + K) Qᗮ (gapExterior beta alpha delta))
     (hPred : Reduces A P)
     (hKmem : N.Mem K) :
-    N.Mem (paperSinTwoAngleOperatorC Q P) ∧
-      delta * N.gauge (paperSinTwoAngleOperatorC Q P) ≤ 2 * N.gauge K := by
+    N.Mem (sinTwoAngleOperatorC Q P) ∧
+      delta * N.gauge (sinTwoAngleOperatorC Q P) ≤ 2 * N.gauge K := by
   have hAsa : IsSelfAdjoint A :=
     ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mpr hA
   have hKsa : IsSelfAdjoint K :=

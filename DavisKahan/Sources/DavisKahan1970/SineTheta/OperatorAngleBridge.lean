@@ -38,11 +38,11 @@ variable {E : Type v}
   [NormedAddCommGroup E] [InnerProductSpace ℂ E] [CompleteSpace E]
 
 /-- The directed sine operator is a positive contraction. -/
-theorem norm_sinAngleOperatorDirectedC_le_one
+theorem norm_directedSinAngleOperatorC_le_one
     (U V : Submodule ℂ E)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] :
-    ‖TauCeti.DavisKahanExt.sinAngleOperatorDirectedC U V‖ ≤ 1 := by
-  rw [TauCeti.DavisKahanExt.norm_sinAngleOperatorDirectedC]
+    ‖TauCeti.DavisKahanExt.directedSinAngleOperatorC U V‖ ≤ 1 := by
+  rw [TauCeti.DavisKahanExt.norm_directedSinAngleOperatorC]
   change ‖Vᗮ.starProjection ∘L U.starProjection‖ ≤ 1
   calc
     ‖Vᗮ.starProjection ∘L U.starProjection‖ ≤
@@ -55,27 +55,27 @@ theorem norm_sinAngleOperatorDirectedC_le_one
 
 /-- Spectrum of the directed positive sine lies in the canonical unit
 interval. -/
-theorem spectrum_sinAngleOperatorDirectedC_subset_Icc
+theorem spectrum_directedSinAngleOperatorC_subset_Icc
     (U V : Submodule ℂ E)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] :
-    spectrum ℝ (TauCeti.DavisKahanExt.sinAngleOperatorDirectedC U V) ⊆
+    spectrum ℝ (TauCeti.DavisKahanExt.directedSinAngleOperatorC U V) ⊆
       Set.Icc 0 1 := by
   intro x hx
   refine ⟨spectrum_nonneg_of_nonneg
-    (TauCeti.DavisKahanExt.sinAngleOperatorDirectedC_nonneg U V) hx, ?_⟩
+    (TauCeti.DavisKahanExt.directedSinAngleOperatorC_nonneg U V) hx, ?_⟩
   -- `NormOneClass (E →L[ℂ] E)` fails for possibly trivial `E`, so the spectral
   -- radius bound is used in its `‖1‖`-corrected form.
   have hone : ‖(1 : E →L[ℂ] E)‖ ≤ 1 := ContinuousLinearMap.norm_id_le
   have habs : |x| ≤
-      ‖TauCeti.DavisKahanExt.sinAngleOperatorDirectedC U V‖ :=
+      ‖TauCeti.DavisKahanExt.directedSinAngleOperatorC U V‖ :=
     calc |x| = ‖x‖ := (Real.norm_eq_abs x).symm
-      _ ≤ ‖TauCeti.DavisKahanExt.sinAngleOperatorDirectedC U V‖ *
+      _ ≤ ‖TauCeti.DavisKahanExt.directedSinAngleOperatorC U V‖ *
             ‖(1 : E →L[ℂ] E)‖ := spectrum.norm_le_norm_mul_of_mem hx
-      _ ≤ ‖TauCeti.DavisKahanExt.sinAngleOperatorDirectedC U V‖ * 1 :=
+      _ ≤ ‖TauCeti.DavisKahanExt.directedSinAngleOperatorC U V‖ * 1 :=
           mul_le_mul_of_nonneg_left hone (norm_nonneg _)
-      _ = ‖TauCeti.DavisKahanExt.sinAngleOperatorDirectedC U V‖ := mul_one _
+      _ = ‖TauCeti.DavisKahanExt.directedSinAngleOperatorC U V‖ := mul_one _
   exact (le_abs_self x).trans
-    (habs.trans (norm_sinAngleOperatorDirectedC_le_one U V))
+    (habs.trans (norm_directedSinAngleOperatorC_le_one U V))
 
 /-- The literal directed angle `Theta0`, extended by zero on the orthogonal
 complement of the trial subspace. -/
@@ -83,7 +83,7 @@ noncomputable def directedAngleOperatorC
     (U V : Submodule ℂ E)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] : E →L[ℂ] E :=
   cfc Real.arcsin
-    (TauCeti.DavisKahanExt.sinAngleOperatorDirectedC U V)
+    (TauCeti.DavisKahanExt.directedSinAngleOperatorC U V)
 
 /-- The literal directed angle is self-adjoint. -/
 theorem isSelfAdjoint_directedAngleOperatorC
@@ -91,7 +91,7 @@ theorem isSelfAdjoint_directedAngleOperatorC
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] :
     IsSelfAdjoint (directedAngleOperatorC U V) := by
   exact cfc_predicate Real.arcsin
-    (TauCeti.DavisKahanExt.sinAngleOperatorDirectedC U V)
+    (TauCeti.DavisKahanExt.directedSinAngleOperatorC U V)
 
 /-- The literal directed angle is nonnegative. -/
 theorem directedAngleOperatorC_nonneg
@@ -101,39 +101,39 @@ theorem directedAngleOperatorC_nonneg
   apply cfc_nonneg
   intro x hx
   exact Real.arcsin_nonneg.mpr
-    ((spectrum_sinAngleOperatorDirectedC_subset_Icc U V hx).1)
+    ((spectrum_directedSinAngleOperatorC_subset_Icc U V hx).1)
 
 /-- Applying sine to `Theta0` recovers the positive directed sine exactly. -/
 theorem cfc_sin_directedAngleOperatorC
     (U V : Submodule ℂ E)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] :
     cfc Real.sin (directedAngleOperatorC U V) =
-      TauCeti.DavisKahanExt.sinAngleOperatorDirectedC U V := by
+      TauCeti.DavisKahanExt.directedSinAngleOperatorC U V := by
   have hsa : IsSelfAdjoint
-      (TauCeti.DavisKahanExt.sinAngleOperatorDirectedC U V) :=
-    TauCeti.DavisKahanExt.isSelfAdjoint_sinAngleOperatorDirectedC U V
+      (TauCeti.DavisKahanExt.directedSinAngleOperatorC U V) :=
+    TauCeti.DavisKahanExt.isSelfAdjoint_directedSinAngleOperatorC U V
   have harcsin : ContinuousOn Real.arcsin
       (spectrum ℝ
-        (TauCeti.DavisKahanExt.sinAngleOperatorDirectedC U V)) :=
+        (TauCeti.DavisKahanExt.directedSinAngleOperatorC U V)) :=
     Real.continuous_arcsin.continuousOn
   have hsin : ContinuousOn Real.sin
       (Real.arcsin '' spectrum ℝ
-        (TauCeti.DavisKahanExt.sinAngleOperatorDirectedC U V)) :=
+        (TauCeti.DavisKahanExt.directedSinAngleOperatorC U V)) :=
     Real.continuous_sin.continuousOn
   rw [directedAngleOperatorC,
     ← cfc_comp Real.sin Real.arcsin
-      (TauCeti.DavisKahanExt.sinAngleOperatorDirectedC U V)
+      (TauCeti.DavisKahanExt.directedSinAngleOperatorC U V)
       hsa hsin harcsin]
   calc
     cfc (Real.sin ∘ Real.arcsin)
-        (TauCeti.DavisKahanExt.sinAngleOperatorDirectedC U V) =
+        (TauCeti.DavisKahanExt.directedSinAngleOperatorC U V) =
       cfc (fun x : ℝ => x)
-        (TauCeti.DavisKahanExt.sinAngleOperatorDirectedC U V) := by
+        (TauCeti.DavisKahanExt.directedSinAngleOperatorC U V) := by
       apply cfc_congr
       intro x hx
-      have hxi := spectrum_sinAngleOperatorDirectedC_subset_Icc U V hx
+      have hxi := spectrum_directedSinAngleOperatorC_subset_Icc U V hx
       exact Real.sin_arcsin (by linarith [hxi.1]) hxi.2
-    _ = TauCeti.DavisKahanExt.sinAngleOperatorDirectedC U V :=
+    _ = TauCeti.DavisKahanExt.directedSinAngleOperatorC U V :=
       cfc_id' ℝ _
 
 /-- Literal `sin Theta0`. -/
@@ -148,7 +148,7 @@ theorem directedSinAngleOperatorC_eq
     (U V : Submodule ℂ E)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] :
     paperDirectedSinAngleOperatorC U V =
-      TauCeti.DavisKahanExt.sinAngleOperatorDirectedC U V :=
+      TauCeti.DavisKahanExt.directedSinAngleOperatorC U V :=
   cfc_sin_directedAngleOperatorC U V
 
 /-- The directed literal sine has exactly the singular values of the cross
@@ -160,7 +160,7 @@ theorem directedSin_same_crossProjection
       (paperDirectedSinAngleOperatorC U V)
       (Vᗮ.starProjection ∘L U.starProjection) := by
   rw [directedSinAngleOperatorC_eq,
-    TauCeti.DavisKahanExt.sinAngleOperatorDirectedC]
+    TauCeti.DavisKahanExt.directedSinAngleOperatorC]
   exact modulus_hasSameApproximationNumbers _
 
 /-- The whole-space literal sine has exactly the singular values of the
@@ -206,18 +206,18 @@ theorem spectrum_directedAngleOperatorC_subset_Icc
     spectrum ℝ (directedAngleOperatorC U V) ⊆
       Set.Icc 0 (Real.pi / 2) := by
   have hsa : IsSelfAdjoint
-      (TauCeti.DavisKahanExt.sinAngleOperatorDirectedC U V) :=
-    TauCeti.DavisKahanExt.isSelfAdjoint_sinAngleOperatorDirectedC U V
+      (TauCeti.DavisKahanExt.directedSinAngleOperatorC U V) :=
+    TauCeti.DavisKahanExt.isSelfAdjoint_directedSinAngleOperatorC U V
   have harcsin : ContinuousOn Real.arcsin
       (spectrum ℝ
-        (TauCeti.DavisKahanExt.sinAngleOperatorDirectedC U V)) :=
+        (TauCeti.DavisKahanExt.directedSinAngleOperatorC U V)) :=
     Real.continuous_arcsin.continuousOn
   intro y hy
   rw [directedAngleOperatorC,
     cfc_map_spectrum (R := ℝ) Real.arcsin
-      (TauCeti.DavisKahanExt.sinAngleOperatorDirectedC U V) hsa harcsin] at hy
+      (TauCeti.DavisKahanExt.directedSinAngleOperatorC U V) hsa harcsin] at hy
   obtain ⟨x, hx, rfl⟩ := hy
-  have hxi := spectrum_sinAngleOperatorDirectedC_subset_Icc U V hx
+  have hxi := spectrum_directedSinAngleOperatorC_subset_Icc U V hx
   exact ⟨Real.arcsin_nonneg.mpr hxi.1,
     Real.arcsin_le_pi_div_two x⟩
 

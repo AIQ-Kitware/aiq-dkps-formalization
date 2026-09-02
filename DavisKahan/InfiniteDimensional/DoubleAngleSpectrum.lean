@@ -521,11 +521,11 @@ theorem subspaceGap_map_reflection_eq_norm_sinTwoAngle
     (U V : Submodule ℂ E)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] :
     subspaceGap U (U.map (V.reflection.toLinearEquiv : E →ₗ[ℂ] E)) =
-      ‖sinTwoAngleOperatorC U V‖ := by
+      ‖directedSinTwoAngleOperatorC U V‖ := by
   rw [subspaceGap_map_reflection,
     reflectionDefect_eq_neg_two_smul_offdiag, norm_smul,
     norm_offdiag_add_eq V (isSelfAdjoint_starProjection U),
-    norm_sinTwoAngleOperatorC]
+    norm_directedSinTwoAngleOperatorC]
   norm_num
 
 /-- **The genuine-spectrum `sin 2Θ` theorem, exact operator form.**
@@ -542,7 +542,7 @@ theorem sinTwoTheta_spectrum_operator
     (hUspec : spectrum ℝ (compressOperator U A) ⊆ Set.Icc a b)
     (hUspec' : ∀ x ∈ spectrum ℝ (compressOperator Uᗮ A),
       x ≤ a - d ∨ b + d ≤ x) :
-    d * ‖sinTwoAngleOperatorC U V‖ ≤ 2 * ‖B - A‖ := by
+    d * ‖directedSinTwoAngleOperatorC U V‖ ≤ 2 * ‖B - A‖ := by
   rw [← subspaceGap_map_reflection_eq_norm_sinTwoAngle]
   exact sinTwoTheta_spectrum hA hU hV hd hab hUspec hUspec'
 
@@ -563,7 +563,7 @@ theorem sinTwoTheta_spectrum_residual_operator
     {X : F →L[ℂ] E} (hX : DavisKahan.IsometricEmbedding X)
     (hmem : ∀ u, X u ∈ V) (hsurj : ∀ v ∈ V, ∃ u, X u = v)
     (M : F →L[ℂ] F) :
-    d * ‖sinTwoAngleOperatorC U V‖ ≤ 2 * ‖A ∘L X - X ∘L M‖ := by
+    d * ‖directedSinTwoAngleOperatorC U V‖ ≤ 2 * ‖A ∘L X - X ∘L M‖ := by
   rw [← subspaceGap_map_reflection_eq_norm_sinTwoAngle]
   exact sinTwoTheta_spectrum_residual hA hU hd hab hUspec hUspec'
     hX hmem hsurj M

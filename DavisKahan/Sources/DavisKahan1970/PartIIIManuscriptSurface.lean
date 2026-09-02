@@ -89,36 +89,36 @@ alias real_sinTheta_symmetric_genuineSpectrum :=
 alias real_upperFormBound_of_spectrum :=
   TauCeti.SpectralOrder.Real.upperFormBoundOn_top_of_spectrum_subset_Iic
 alias bounded_sinAngleOperatorC_norm := DavisKahanExt.norm_sinAngleOperatorC
-alias bounded_sinAngleOperatorDirectedC_norm :=
-  DavisKahanExt.norm_sinAngleOperatorDirectedC
+alias bounded_directedSinAngleOperatorC_norm :=
+  DavisKahanExt.norm_directedSinAngleOperatorC
 alias bounded_angle_pythagoras :=
-  DavisKahanExt.sinAngleOperatorDirectedC_sq_add_cosAngleOperatorC_sq
+  DavisKahanExt.directedSinAngleOperatorC_sq_add_directedCosAngleOperatorC_sq
 alias bounded_angle_commute :=
-  DavisKahanExt.commute_sinAngleOperatorDirectedC_cosAngleOperatorC
-alias bounded_sinTwoAngleOperatorC := DavisKahanExt.sinTwoAngleOperatorC
-alias bounded_sinTwoAngleOperatorC_norm_le :=
-  DavisKahanExt.norm_sinTwoAngleOperatorC_le
+  DavisKahanExt.commute_directedSinAngleOperatorC_directedCosAngleOperatorC
+alias bounded_directedSinTwoAngleOperatorC := DavisKahanExt.directedSinTwoAngleOperatorC
+alias bounded_directedSinTwoAngleOperatorC_norm_le :=
+  DavisKahanExt.norm_directedSinTwoAngleOperatorC_le
 alias bounded_cosAngle_coercive :=
-  DavisKahanExt.norm_cosAngleOperatorC_apply_ge
+  DavisKahanExt.norm_directedCosAngleOperatorC_apply_ge
 alias bounded_cosAngle_injective_of_acute :=
-  DavisKahanExt.cosAngleOperatorC_eq_zero_imp_of_acute
+  DavisKahanExt.directedCosAngleOperatorC_eq_zero_imp_of_acute
 alias bounded_cosAngleExtended_invertible :=
   DavisKahanExt.cosAngleExtendedC_ker_bot_range_top
-alias bounded_tanAngleOperatorC := DavisKahanExt.tanAngleOperatorC
+alias bounded_directedTanAngleOperatorC := DavisKahanExt.directedTanAngleOperatorC
 alias bounded_tanAngle_defining_identity :=
-  DavisKahanExt.tanAngleOperatorC_comp_cosAngleExtendedC
+  DavisKahanExt.directedTanAngleOperatorC_comp_cosAngleExtendedC
 alias bounded_cosTwoAngleOperatorC := DavisKahanExt.cosTwoAngleOperatorC
 alias bounded_cosTwoAngle_coercive :=
   DavisKahanExt.norm_cosTwoAngleOperatorC_apply_ge
 alias bounded_cosTwoAngleExtended_invertible :=
   DavisKahanExt.cosTwoAngleExtendedC_ker_bot_range_top
-alias bounded_tanTwoAngleOperatorC := DavisKahanExt.tanTwoAngleOperatorC
+alias bounded_directedTanTwoAngleOperatorC := DavisKahanExt.directedTanTwoAngleOperatorC
 alias bounded_tanTwoAngle_defining_identity :=
-  DavisKahanExt.tanTwoAngleOperatorC_comp_cosTwoAngleExtendedC
-alias bounded_tanAngle_norm_le := DavisKahanExt.norm_tanAngleOperatorC_le
+  DavisKahanExt.directedTanTwoAngleOperatorC_comp_cosTwoAngleExtendedC
+alias bounded_tanAngle_norm_le := DavisKahanExt.norm_directedTanAngleOperatorC_le
 alias bounded_tanTheta_perVector := DavisKahanExt.tan_theta_le'
 alias bounded_sinTwoAngle_norm_eq :=
-  DavisKahanExt.norm_sinTwoAngleOperatorC
+  DavisKahanExt.norm_directedSinTwoAngleOperatorC
 
 /-! ## Direct rotation -/
 alias complex_directRotation :=

@@ -1891,7 +1891,7 @@ free variable by the genuine tangent and then measures exactly what the clause
 asks for.
 
 The genuine object is fixed by the same defining identity the bounded theory
-uses (`tanTwoAngleOperatorC_comp_cosTwoAngleExtendedC`): a **double-angle
+uses (`directedTanTwoAngleOperatorC_comp_cosTwoAngleExtendedC`): a **double-angle
 tangent** is an operator `T` with `T (C x) = S x` on the trial subspace, for
 `C = cos 2Θ₀` and `S = sin 2Θ₀` the even and odd blocks of `Z` relative to
 `𝔛₀ ⊕ 𝔛₁`.  Such a `T` exists **unconditionally** in the Davis--Kahan setting:
@@ -1926,7 +1926,7 @@ hypothesis exact rather than hiding it in a free operator.
 /-- `T` is a **double-angle tangent** for the reflection `Z` relative to the trial
 subspace `U`: composing it with the even block `C = cos 2Θ₀` returns the odd
 block `S = sin 2Θ₀` there.  This is the reflection-picture analogue of
-`tanTwoAngleOperatorC_comp_cosTwoAngleExtendedC`, and it is what makes an
+`directedTanTwoAngleOperatorC_comp_cosTwoAngleExtendedC`, and it is what makes an
 operator *the* `tan 2Θ₀` rather than a free variable. -/
 def IsDoubleAngleTangent (U : Submodule ℂ H) [U.HasOrthogonalProjection]
     (Z T : H →L[ℂ] H) : Prop :=

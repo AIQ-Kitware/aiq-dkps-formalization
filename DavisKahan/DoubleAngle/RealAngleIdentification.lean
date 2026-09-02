@@ -17,7 +17,7 @@ at every Ky-Fan-dominant unitarily invariant ideal gauge
 the *canonical reflected overlap block* `sinTwoThetaIdealBlock U V`, not about a
 named real angle operator.  Over `ℂ` the two are tied together by
 `norm_sinTwoThetaIdealBlock_complex`; that identification is stated for
-`sinTwoAngleOperatorC`, so nothing carried it to the reals.
+`directedSinTwoAngleOperatorC`, so nothing carried it to the reals.
 
 This module supplies the missing geometric renaming, and with it the printed
 operator-norm conclusion `δ ‖sin 2Θ‖ ≤ 2‖E‖` over a real Hilbert space, for an
@@ -29,11 +29,11 @@ The block is a composition of a projection, a reflection, a complementary
 projection and the same reflection — see `sinTwoThetaIdealBlock_eq_comp`, which
 is scalar-generic.  Each factor complexifies to its complex counterpart, so the
 whole block does (`complexify_sinTwoThetaIdealBlock`).  On the other side
-`sinTwoAngleOperatorR` complexifies to `paperSinTwoAngleOperatorC` by
+`sinTwoAngleOperatorR` complexifies to `sinTwoAngleOperatorC` by
 construction.  What remains is a purely complex fact: the two complex spellings
 of `sin 2Θ` have the same norm, because both equal the projection gap between
 `U` and its reflection through `V`
-(`norm_paperSinTwoAngleOperatorC_eq_norm_sinTwoAngleOperatorC`).
+(`norm_sinTwoAngleOperatorC_eq_norm_directedSinTwoAngleOperatorC`).
 
 ## Main results
 
@@ -60,16 +60,16 @@ variable {H : Type*} [NormedAddCommGroup H] [InnerProductSpace ℂ H]
 
 /-- The two complex spellings of `sin 2Θ` have the same norm.
 
-`sinTwoAngleOperatorC` is the product form `2 sin Θ cos Θ` and
-`paperSinTwoAngleOperatorC` is the functional calculus `sin (2 ·)` of the
+`directedSinTwoAngleOperatorC` is the product form `2 sin Θ cos Θ` and
+`sinTwoAngleOperatorC` is the functional calculus `sin (2 ·)` of the
 operator angle.  Both have the norm of the projection gap between `U` and its
 reflection through `V`: the second by the reflection double-angle identity, the
 first by `subspaceGap_map_reflection_eq_norm_sinTwoAngle`. -/
-theorem norm_paperSinTwoAngleOperatorC_eq_norm_sinTwoAngleOperatorC
+theorem norm_sinTwoAngleOperatorC_eq_norm_directedSinTwoAngleOperatorC
     (U V : Submodule ℂ H)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] :
-    ‖paperSinTwoAngleOperatorC U V‖ = ‖sinTwoAngleOperatorC U V‖ := by
-  rw [sinTwoAngleOperatorC_eq_modulus_starProjection_sub,
+    ‖sinTwoAngleOperatorC U V‖ = ‖directedSinTwoAngleOperatorC U V‖ := by
+  rw [directedSinTwoAngleOperatorC_eq_modulus_starProjection_sub,
     ContinuousLinearMap.norm_modulus, norm_sub_rev]
   exact DavisKahan.subspaceGap_map_reflection_eq_norm_sinTwoAngle U V
 
@@ -137,7 +137,7 @@ Hilbert space.**  The canonical reflected overlap block has exactly the norm of
 the real `sin 2Θ` of the pair.
 
 This is the real counterpart of `norm_sinTwoThetaIdealBlock_complex`, whose statement is
-about `sinTwoAngleOperatorC` and therefore never left the complex scalars. -/
+about `directedSinTwoAngleOperatorC` and therefore never left the complex scalars. -/
 theorem norm_sinTwoThetaIdealBlock_real (U V : Submodule ℝ E)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] :
     ‖sinTwoThetaIdealBlock U V‖ = ‖sinTwoAngleOperatorR U V‖ := by
@@ -145,7 +145,7 @@ theorem norm_sinTwoThetaIdealBlock_real (U V : Submodule ℝ E)
     ← norm_complexify (sinTwoAngleOperatorR U V),
     complexify_sinTwoThetaIdealBlock, complexify_sinTwoAngleOperatorR,
     norm_sinTwoThetaIdealBlock_complex,
-    norm_paperSinTwoAngleOperatorC_eq_norm_sinTwoAngleOperatorC]
+    norm_sinTwoAngleOperatorC_eq_norm_directedSinTwoAngleOperatorC]
 
 /-! ## The printed operator-norm conclusions over a real Hilbert space
 

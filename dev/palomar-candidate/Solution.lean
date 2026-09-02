@@ -470,9 +470,9 @@ end SinTwoThetaAmbient
 The Challenge's ambient `tan Θ` quantity is `N.seqNorm (tanSeq (ambientSine U V))`: the
 norm's value on the sequence `tan θ₀, tan θ₁, …` of tangents of the principal angles.  The
 development's ambient `tan Θ` estimate is about the *operator*
-`paperTanAngleOperatorC U V`.  These carry the same content exactly when the operator's
+`tanAngleOperatorC U V`.  These carry the same content exactly when the operator's
 approximation numbers are that sequence, which
-`DavisKahan1970.approximationNumber_paperTanAngleOperatorC` now proves.
+`DavisKahan1970.approximationNumber_tanAngleOperatorC` now proves.
 
 That closes the correspondence over `ℂ`; only the scalar field separates it from the
 Challenge's clause. -/
@@ -487,8 +487,8 @@ singular-value sequence.** -/
 theorem tanSeq_ambientSine_eq_approximationNumber
     (htr : ‖TauCeti.DavisKahanExt.sinAngleOperatorC U V‖ < 1) (n : ℕ) :
     tanSeq (ambientSine U V) n =
-      (TauCeti.DavisKahanExt.paperTanAngleOperatorC U V).approximationNumber n := by
-  rw [TauCeti.DavisKahan1970.approximationNumber_paperTanAngleOperatorC U V htr n,
+      (TauCeti.DavisKahanExt.tanAngleOperatorC U V).approximationNumber n := by
+  rw [TauCeti.DavisKahan1970.approximationNumber_tanAngleOperatorC U V htr n,
     TauCeti.DavisKahan1970.approximationNumber_sinAngleOperatorC U V n]
   rfl
 
@@ -517,7 +517,7 @@ theorem tangentDefined_ambientSine
 theorem evalSeq_tanSeq_ambientSine (N : SymmetricNormingFunction)
     (htr : ‖TauCeti.DavisKahanExt.sinAngleOperatorC U V‖ < 1) :
     N.evalSeq (tanSeq (ambientSine U V)) =
-      N.toSourceNorm.extendedGauge (TauCeti.DavisKahanExt.paperTanAngleOperatorC U V) :=
+      N.toSourceNorm.extendedGauge (TauCeti.DavisKahanExt.tanAngleOperatorC U V) :=
   N.evalSeq_eq_of_approximationNumber _ _
     (fun n => (tanSeq_ambientSine_eq_approximationNumber U V htr n).symm)
 
@@ -604,7 +604,7 @@ as a conclusion.  Uniform transversality is derived from the two form bounds and
 standing condition (3.5) by
 `DavisKahan1970.norm_sinAngleOperatorC_lt_one_of_unboundedRitz`, and the sequence is
 identified with the development's operator `tan Θ` by
-`DavisKahan1970.approximationNumber_paperTanAngleOperatorC`. -/
+`DavisKahan1970.approximationNumber_tanAngleOperatorC`. -/
 theorem tanTheta_ambient_proof_complex (N : SymmetricNormingFunction)
     {A : E →ₗ.[ℂ] E} {V : Submodule ℂ E} [V.HasOrthogonalProjection]
     (hV : Reduces A V) {α δ : ℝ} (hδ : 0 < δ)

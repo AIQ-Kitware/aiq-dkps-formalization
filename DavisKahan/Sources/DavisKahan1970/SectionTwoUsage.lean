@@ -32,8 +32,8 @@ What the four ask for, in the vocabulary of the subject:
   membership of the angle is part of the conclusion -- in infinite dimension that
   is a statement, not a side condition;
 * **the angle** in the conclusion is a paper object:
-  `(I - F₀F₀⋆) E₀` for `sin Θ`, `paperTanAngleOperatorC` for `tan Θ`,
-  `sinTwoAngleOperatorC` for `sin 2Θ`, `absTanTwoAngleOperatorC` for
+  `(I - F₀F₀⋆) E₀` for `sin Θ`, `tanAngleOperatorC` for `tan Θ`,
+  `directedSinTwoAngleOperatorC` for `sin 2Θ`, `absTanTwoAngleOperatorC` for
   `tan 2Θ`.
 
 Structural facts are carried by objects with constructors, so they never become
@@ -164,8 +164,8 @@ theorem tanTheta_from_reducingSubspace
     (h35 : DavisKahan.CrossedDefectsEquivalent U V)
     (hResidual : D.trial.residual = Uᗮ.starProjection ∘L Hop ∘L U.subtypeL)
     (hMem : N.Mem Hop) :
-    N.Mem (paperTanAngleOperatorC U V) ∧
-      delta * N.gauge (paperTanAngleOperatorC U V) ≤ N.gauge Hop :=
+    N.Mem (tanAngleOperatorC U V) ∧
+      delta * N.gauge (tanAngleOperatorC U V) ≤ N.gauge Hop :=
   SectionTwo.tanTheta_complex N D (DavisKahan.ReducingComplement.ofReducesSubspace hVred)
     Hop hH hdelta hupper hUnwanted h35 hResidual hMem
 
@@ -190,8 +190,8 @@ theorem tanTheta_from_trialBlock
     (h35 : DavisKahan.CrossedDefectsEquivalent U V)
     (hResidual : D.residual = Uᗮ.starProjection ∘L Hop ∘L U.subtypeL)
     (hMem : N.Mem Hop) :
-    N.Mem (paperTanAngleOperatorC U V) ∧
-      delta * N.gauge (paperTanAngleOperatorC U V) ≤ N.gauge Hop :=
+    N.Mem (tanAngleOperatorC U V) ∧
+      delta * N.gauge (tanAngleOperatorC U V) ≤ N.gauge Hop :=
   SectionTwo.tanTheta_complex N (DavisKahan.UnboundedRitzPair.ofTrialBlock D)
     (DavisKahan.ReducingComplement.ofReducesSubspace hVred) Hop hH hdelta hupper
     hUnwanted h35 hResidual hMem
@@ -227,11 +227,11 @@ theorem sinTwoTheta_from_printed_separation
       (DavisKahan.selfAdjointSpectralRestriction A hA B hB)
       (DavisKahan.selfAdjointSpectralRestriction A hA Bᶜ hB.compl) δ)
     (hEmem : N.Mem Eop) :
-    N.Mem (TauCeti.DavisKahanExt.sinTwoAngleOperatorC
+    N.Mem (TauCeti.DavisKahanExt.directedSinTwoAngleOperatorC
         (DavisKahan.selfAdjointSpectralSubspace A hA B hB)
         (DavisKahan.selfAdjointSpectralSubspace (TauCeti.LinearPMap.addBounded A Eop)
           (DavisKahan.addBounded_isSelfAdjoint A hA Eop hEop) S hS)) ∧
-      δ * N.gauge (TauCeti.DavisKahanExt.sinTwoAngleOperatorC
+      δ * N.gauge (TauCeti.DavisKahanExt.directedSinTwoAngleOperatorC
         (DavisKahan.selfAdjointSpectralSubspace A hA B hB)
         (DavisKahan.selfAdjointSpectralSubspace (TauCeti.LinearPMap.addBounded A Eop)
           (DavisKahan.addBounded_isSelfAdjoint A hA Eop hEop) S hS)) ≤
@@ -258,11 +258,11 @@ theorem sinTwoTheta_from_halfInfinite_separation
     (hBcomplHigh : TauCeti.LinearPMap.SemiboundedAbove
       (DavisKahan.selfAdjointSpectralRestriction A hA Bᶜ hB.compl) c)
     (hEmem : N.Mem Eop) :
-    N.Mem (TauCeti.DavisKahanExt.sinTwoAngleOperatorC
+    N.Mem (TauCeti.DavisKahanExt.directedSinTwoAngleOperatorC
         (DavisKahan.selfAdjointSpectralSubspace A hA B hB)
         (DavisKahan.selfAdjointSpectralSubspace (TauCeti.LinearPMap.addBounded A Eop)
           (DavisKahan.addBounded_isSelfAdjoint A hA Eop hEop) S hS)) ∧
-      δ * N.gauge (TauCeti.DavisKahanExt.sinTwoAngleOperatorC
+      δ * N.gauge (TauCeti.DavisKahanExt.directedSinTwoAngleOperatorC
         (DavisKahan.selfAdjointSpectralSubspace A hA B hB)
         (DavisKahan.selfAdjointSpectralSubspace (TauCeti.LinearPMap.addBounded A Eop)
           (DavisKahan.addBounded_isSelfAdjoint A hA Eop hEop) S hS)) ≤

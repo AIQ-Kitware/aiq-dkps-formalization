@@ -27,7 +27,7 @@ proves the ambient conclusion at the same scope as the directed one.
 
 ## The route, and why it needs no new analysis
 
-`sinTwoAngleOperatorC_eq_modulus_starProjection_sub` says the ambient
+`directedSinTwoAngleOperatorC_eq_modulus_starProjection_sub` says the ambient
 `sin 2Θ` between `U` and `V` is the modulus of `P_{J U} − P_U`, where `J` is the
 reflection through `V`.  So the ambient double angle between `U` and `V` *is* an
 ambient single angle between `U` and its mirror image, and the theorem to apply
@@ -273,7 +273,7 @@ open DavisKahan in
 norm.**
 
 `δ N(sin 2Θ) ≤ 2 N(H)` on the paper's ambient double-angle sine
-`paperSinTwoAngleOperatorC`, where `A` is an unbounded self-adjoint operator, `H`
+`sinTwoAngleOperatorC`, where `A` is an unbounded self-adjoint operator, `H`
 a bounded self-adjoint perturbation, and the two subspaces are the genuine
 spectral subspaces selected by `B` from `A` and by `S` from `A + H`.  The
 separation is the full `FormBoundedSylvesterGap`, so the separating interval may
@@ -293,11 +293,11 @@ theorem sinTwoTheta_ambient_unbounded_addBounded_symmetricNorming_complex
       (DavisKahan.selfAdjointSpectralRestriction A hA B hB)
       (DavisKahan.selfAdjointSpectralRestriction A hA Bᶜ hB.compl) δ)
     (hEmem : N.Mem Eop) :
-    N.Mem (TauCeti.DavisKahanExt.paperSinTwoAngleOperatorC
+    N.Mem (TauCeti.DavisKahanExt.sinTwoAngleOperatorC
         (DavisKahan.selfAdjointSpectralSubspace A hA B hB)
         (DavisKahan.selfAdjointSpectralSubspace (TauCeti.LinearPMap.addBounded A Eop)
           (DavisKahan.addBounded_isSelfAdjoint A hA Eop hEop) S hS)) ∧
-      δ * N.gauge (TauCeti.DavisKahanExt.paperSinTwoAngleOperatorC
+      δ * N.gauge (TauCeti.DavisKahanExt.sinTwoAngleOperatorC
         (DavisKahan.selfAdjointSpectralSubspace A hA B hB)
         (DavisKahan.selfAdjointSpectralSubspace (TauCeti.LinearPMap.addBounded A Eop)
           (DavisKahan.addBounded_isSelfAdjoint A hA Eop hEop) S hS)) ≤
@@ -338,7 +338,7 @@ theorem sinTwoTheta_ambient_unbounded_addBounded_symmetricNorming_complex
     SameApproximationSingularSequence.normingMem_iff_and_gauge_eq N
       (A := X.modulus) (B := X)
       (ContinuousLinearMap.modulus_hasSameApproximationNumbers X)
-  rw [TauCeti.DavisKahanExt.sinTwoAngleOperatorC_eq_modulus_starProjection_sub]
+  rw [TauCeti.DavisKahanExt.directedSinTwoAngleOperatorC_eq_modulus_starProjection_sub]
   exact ⟨hiff.mpr hmem, by rw [hgauge]; exact hle⟩
 
 end Complex
@@ -356,7 +356,7 @@ open DavisKahan TauCeti.RealComplexification
 and its mirror image through `V` have the same complete singular data.
 
 Both complexify to the two complex spellings of the same quantity: the left to
-`paperSinTwoAngleOperatorC`, which is the *modulus* of the reflected projector
+`sinTwoAngleOperatorC`, which is the *modulus* of the reflected projector
 difference, and the right to that difference itself.  A modulus does not change
 approximation numbers, so no source norm can tell them apart. -/
 theorem sameSingular_sinTwoAngleOperatorR_reflectedProjectorDifference
@@ -372,7 +372,7 @@ theorem sameSingular_sinTwoAngleOperatorR_reflectedProjectorDifference
               RealComplexification Er →ₗ[ℂ] RealComplexification Er)).starProjection -
           (complexifySubmodule U).starProjection).modulus := by
     rw [TauCeti.DavisKahanExt.complexify_sinTwoAngleOperatorR U V,
-      TauCeti.DavisKahanExt.sinTwoAngleOperatorC_eq_modulus_starProjection_sub]
+      TauCeti.DavisKahanExt.directedSinTwoAngleOperatorC_eq_modulus_starProjection_sub]
   have hright : complexify
         ((U.map (V.reflection.toLinearEquiv : Er →ₗ[ℝ] Er)).starProjection -
           U.starProjection) =

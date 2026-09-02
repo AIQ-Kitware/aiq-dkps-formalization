@@ -518,11 +518,11 @@ theorem subspaceGap_map_reflection_eq_norm_sinTwoAngle
     (U V : Submodule ℂ H)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] :
     subspaceGap U (U.map (V.reflection.toLinearEquiv : H →ₗ[ℂ] H)) =
-      ‖sinTwoAngleOperatorC U V‖ := by
+      ‖directedSinTwoAngleOperatorC U V‖ := by
   rw [subspaceGap_map_reflection,
     boundedReflectionDefect_eq_neg_two_smul_offdiag, norm_smul,
     norm_reflectedOffdiag_add_eq V (isSelfAdjoint_starProjection U),
-    norm_sinTwoAngleOperatorC]
+    norm_directedSinTwoAngleOperatorC]
   norm_num
 
 /-- The orthogonal projection onto the complementary spectral range is the

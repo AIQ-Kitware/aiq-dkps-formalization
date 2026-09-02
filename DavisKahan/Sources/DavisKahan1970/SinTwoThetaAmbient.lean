@@ -370,7 +370,7 @@ theorem sinTwoTheta_ambient_bounded_kyFan_complex
     (hUspec' : ∀ x ∈ spectrum ℝ (compressOperator Uᗮ A),
       x ≤ a - d ∨ b + d ≤ x) :
     ∀ k : ℕ,
-      d * kyFanApproximationGauge k (paperSinTwoAngleOperatorC U V) ≤
+      d * kyFanApproximationGauge k (sinTwoAngleOperatorC U V) ≤
         2 * kyFanApproximationGauge k (B - A) := by
   intro k
   have hkey := symmetric_sinTheta_spectrum_all_kyFan hA
@@ -378,7 +378,7 @@ theorem sinTwoTheta_ambient_bounded_kyFan_complex
       (hU.map_isometryEquiv V.reflection) hd hab hUspec hUspec'
       (by rw [reflected_spectra A U V]; exact hUspec)
       (by rw [reflected_spectra_orthogonal A U V]; exact hUspec') k
-  rw [← sinTwoAngleOperatorC_eq_modulus_starProjection_sub U V] at hkey
+  rw [← directedSinTwoAngleOperatorC_eq_modulus_starProjection_sub U V] at hkey
   exact hkey.trans (kyFan_reflectionDisplacement_le hV k)
 
 /-- **The sharp factor two for a reflection defect, at every Ky Fan gauge.**
@@ -612,12 +612,12 @@ theorem sinTwoTheta_ambient_bounded_symmetricNorming_complex
     (hUspec' : ∀ x ∈ spectrum ℝ (compressOperator Uᗮ A),
       x ≤ a - d ∨ b + d ≤ x)
     (hMem : N.Mem (B - A)) :
-    N.Mem (paperSinTwoAngleOperatorC U V) ∧
-      d * N.gauge (paperSinTwoAngleOperatorC U V) ≤
+    N.Mem (sinTwoAngleOperatorC U V) ∧
+      d * N.gauge (sinTwoAngleOperatorC U V) ≤
         2 * N.gauge (B - A) := by
   have htwo : ‖((2 : ℝ) : ℂ)‖ = 2 := by norm_num
   have hscaled : ∀ k : ℕ,
-      d * kyFanApproximationGauge k (paperSinTwoAngleOperatorC U V) ≤
+      d * kyFanApproximationGauge k (sinTwoAngleOperatorC U V) ≤
         kyFanApproximationGauge k (((2 : ℝ) : ℂ) • (B - A)) := by
     intro k
     rw [kyFanApproximationGauge_smul, htwo]

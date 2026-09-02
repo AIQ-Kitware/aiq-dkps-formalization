@@ -24,7 +24,7 @@ This module now has two deliberately distinct results.
   by this package: no finite-dimensional or finite-carrier hypothesis, the
   quarter-acute branch derived from the original form-gap/off-diagonal data,
   and the sharp source-ideal estimate for the canonical ambient
-  `tanTwoAngleOperatorC`.
+  `directedTanTwoAngleOperatorC`.
 
 The unrestricted proof is split into two genuine bridges:
 
@@ -409,7 +409,7 @@ theorem tanTwoTheta_uiNorm_finite_alternate
 No finite-dimensional or finite-carrier hypothesis is present.  The theorem
 starts from the two reducing subspaces and the fully off-diagonal perturbation,
 derives the strict quarter-angle branch, and proves the sharp estimate for the
-canonical ambient `tanTwoAngleOperatorC` in every source unitary-invariant norm.
+canonical ambient `directedTanTwoAngleOperatorC` in every source unitary-invariant norm.
 -/
 theorem faithful_tanTwoTheta_uiNorm
     (N : SymmetricNormingFunction)
@@ -434,8 +434,8 @@ theorem faithful_tanTwoTheta_uiNorm
     (hHUperp : ∀ x ∈ Uᗮ, H x ∈ U)
     (hHmem : N.Mem H) :
     ∃ hquarter : IsQuarterAcute U V,
-      N.Mem (tanTwoAngleOperatorC U V hquarter) ∧
-        (b - a) * N.gauge (tanTwoAngleOperatorC U V hquarter) ≤
+      N.Mem (directedTanTwoAngleOperatorC U V hquarter) ∧
+        (b - a) * N.gauge (directedTanTwoAngleOperatorC U V hquarter) ≤
           2 * N.gauge H := by
   have hquarter : IsQuarterAcute U V :=
     isQuarterAcute_of_paper_form_gap_infinite A H U V hA hH hAU hAplusH_V
@@ -444,7 +444,7 @@ theorem faithful_tanTwoTheta_uiNorm
     N A H U V hA hH hAU hAplusH_V hab hUhigh hUperpLow
       hHU hHUperp hHmem hquarter
   have hseq : SameApproximationSingularSequence
-      (tanTwoAngleOperatorC U V hquarter)
+      (directedTanTwoAngleOperatorC U V hquarter)
       (tanTwoThetaGraphCoordinateOperator U V hquarter) := by
     simpa only [tanTwoThetaGraphCoordinateOperator] using
       canonicalTanTwoAngle_hasSameApproximationNumbers_graphCoordinate U V hquarter

@@ -96,18 +96,18 @@ private theorem approximationNumber_realAmbientDoubleSine_complexify
       (complexifySubmodule U).starProjection).approximationNumber n =
       (realAmbientDoubleSine U V).approximationNumber n := by
   have hsame := sameSingular_sinTwoAngleOperatorR_reflectedProjectorDifference U V
-  have hleft : (paperSinTwoAngleOperatorC (complexifySubmodule U)
+  have hleft : (sinTwoAngleOperatorC (complexifySubmodule U)
       (complexifySubmodule V)).approximationNumber n =
       (complexify (sinTwoAngleOperatorR U V)).approximationNumber n := by
     rw [complexify_sinTwoAngleOperatorR]
-  have hmodulus := approximationNumber_paperSinTwoAngleOperatorC
+  have hmodulus := approximationNumber_sinTwoAngleOperatorC
     (complexifySubmodule U) (complexifySubmodule V) n
   have hright := approximationNumber_complexify_eq (realAmbientDoubleSine U V) n
   calc (((complexifySubmodule U).map
           ((complexifySubmodule V).reflection.toLinearEquiv :
             RealComplexification E →ₗ[ℂ] RealComplexification E)).starProjection -
         (complexifySubmodule U).starProjection).approximationNumber n
-      = (paperSinTwoAngleOperatorC (complexifySubmodule U)
+      = (sinTwoAngleOperatorC (complexifySubmodule U)
           (complexifySubmodule V)).approximationNumber n := hmodulus.symm
     _ = (complexify (sinTwoAngleOperatorR U V)).approximationNumber n := hleft
     _ = (complexify (realAmbientDoubleSine U V)).approximationNumber n := hsame n

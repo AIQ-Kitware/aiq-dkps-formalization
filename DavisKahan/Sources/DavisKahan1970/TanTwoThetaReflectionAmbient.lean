@@ -1310,8 +1310,8 @@ theorem tanTwoTheta_ambient_bounded_spectralGap_symmetricNorming_complex
     (hA1spec : spectrum ℝ (compressOperator Uᗮ A) ⊆ Set.Ici (α + δ))
     (hHU : ∀ x ∈ U, H x ∈ Uᗮ) (hHUperp : ∀ x ∈ Uᗮ, H x ∈ U)
     (hHmem : N.Mem H) :
-    N.Mem (paperTanTwoAngleOperatorC U V) ∧
-      δ * N.gauge (paperTanTwoAngleOperatorC U V) ≤ 2 * N.gauge H := by
+    N.Mem (tanTwoAngleOperatorC U V) ∧
+      δ * N.gauge (tanTwoAngleOperatorC U V) ≤ 2 * N.gauge H := by
   have hAred : A.Reduces U := by
     have hAsym := ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mp hA
     exact reduces_orthogonalComplement hAsym hAU
@@ -1402,21 +1402,21 @@ theorem tanTwoTheta_ambient_bounded_spectralGap_symmetricNorming_complex
       unfold SymmetricNormingFunction.gauge
       rw [hnegExt]
   have habsMod : absTanTwoAngleOperatorC U V =
-      (paperTanTwoAngleOperatorC U V).modulus :=
-    absTanTwoAngleOperatorC_eq_modulus_tanTwoAngleOperatorC hcos
+      (tanTwoAngleOperatorC U V).modulus :=
+    absTanTwoAngleOperatorC_eq_modulus_directedTanTwoAngleOperatorC hcos
   have hext : N.extendedGauge (absTanTwoAngleOperatorC U V) =
-      N.extendedGauge (paperTanTwoAngleOperatorC U V) := by
+      N.extendedGauge (tanTwoAngleOperatorC U V) := by
     calc
       N.extendedGauge (absTanTwoAngleOperatorC U V) =
-          N.extendedGauge ((paperTanTwoAngleOperatorC U V).modulus) := by
+          N.extendedGauge ((tanTwoAngleOperatorC U V).modulus) := by
             rw [habsMod]
-      _ = N.extendedGauge (paperTanTwoAngleOperatorC U V) :=
-        normingFunction_modulus_eq N (paperTanTwoAngleOperatorC U V)
-  have htanMem : N.Mem (paperTanTwoAngleOperatorC U V) := by
+      _ = N.extendedGauge (tanTwoAngleOperatorC U V) :=
+        normingFunction_modulus_eq N (tanTwoAngleOperatorC U V)
+  have htanMem : N.Mem (tanTwoAngleOperatorC U V) := by
     unfold SymmetricNormingFunction.Mem at habsMem ⊢
     rwa [← hext]
   have hgauge : N.gauge (absTanTwoAngleOperatorC U V) =
-      N.gauge (paperTanTwoAngleOperatorC U V) := by
+      N.gauge (tanTwoAngleOperatorC U V) := by
     unfold SymmetricNormingFunction.gauge
     rw [hext]
   refine ⟨htanMem, ?_⟩
