@@ -19,7 +19,7 @@ Each counted result carries a **source-alignment classification**, and the three
 
 Category 2 is never a softened category 3. If a reviewer concludes that a category 2 result is actually false as printed, that is a FAIL and the repository is asking to be told.
 
-Current result-level status: **27/29 terminal**, **2 awaiting semantic closure**.
+Current result-level status: **28/29 terminal**, **1 awaiting semantic closure**.
 Result-selection/boundary review: **accepted** under policy `dk_established_results_only`.
 
 A hostile reviewer should challenge both layers independently: (1) whether the fidelity inventory omitted source material or misclassified an exclusion, and (2) whether each of the 29 counted result statements is represented exactly in Lean.
@@ -1458,6 +1458,7 @@ The declarations that carry this result's printed statement, with the source ato
 - `TauCeti.DavisKahan1970.tanTwoTheta_ambient_unbounded_blockRepresentative_derivedReflection_symmetricNorming_real` — presentation_wrapper
 - `TauCeti.DavisKahan1970.tanTwoTheta_directed_unboundedResidual_blockRepresentative_symmetricNorming_complex` — alternative_route
 - `TauCeti.DavisKahan1970.tanTwoTheta_directed_unboundedResidual_blockRepresentative_symmetricNorming_real` — alternative_route
+- `TauCeti.DavisKahan1970.approximationNumber_reflectionTangentCorner` — source_correspondence
 
 ### Source-facing Lean declarations
 
@@ -1659,6 +1660,12 @@ Source location candidates: `DavisKahan/Sources/DavisKahan1970/TanTwoThetaUnboun
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
+#### `TauCeti.DavisKahan1970.approximationNumber_reflectionTangentCorner`
+
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/TanTwoThetaUnboundedGramBridge.lean:451`
+
+Compiler-printed type: *inserted when a compiler certificate is supplied.*
+
 ### Independent result audit checklist
 
 - [ ] The selected source atoms are exactly the hypotheses, conclusions, and scope of the printed result statement.
@@ -1769,7 +1776,7 @@ Compiler-printed type: *inserted when a compiler certificate is supplied.*
 - **Exact source anchor:** Proposition 3.2
 - **Result disposition:** `proved_exact`
 - **Compiler verification:** `proved_in_build`
-- **Hostile semantic certification:** `reviewer_decision_open`
+- **Hostile semantic certification:** `accepted`
 - **Boundary review:** `accepted`
 - **Source alignment:** `locally_exact`
 - **Printed statement locally self-contained:** `True`
@@ -1832,8 +1839,15 @@ The declarations that carry this result's printed statement, with the source ato
 
 - `TauCeti.DavisKahan1970.proposition3_2_exists_iff_crossedDefectsEquivalent_real` — specialization
 - `TauCeti.DavisKahan1970.proposition3_2_not_unique_real` — specialization
+- `TauCeti.DavisKahan.crossedDefectsEquivalent_iff_finrank_eq` — source_correspondence
 
 ### Source-facing Lean declarations
+
+#### `TauCeti.DavisKahan.crossedDefectsEquivalent_iff_finrank_eq`
+
+Source location candidates: `DavisKahan/Geometry/Halmos/CrossedDefectGap.lean:181`
+
+Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.proposition3_2_exists_iff_crossedDefectsEquivalent`
 
@@ -5805,8 +5819,8 @@ Every source atom remains visible here even when it is outside the 29-result den
 
 - **All 275 source-fidelity atoms reviewed for omission/classification:** yes / no
 - **All 29 counted DK-established results reviewed against their exact printed boundaries:** yes / no
-- **27 currently terminal results independently reconfirmed:** yes / no
-- **2 currently nonterminal/pending results resolved by this audit:** yes / no
+- **28 currently terminal results independently reconfirmed:** yes / no
+- **1 currently nonterminal/pending results resolved by this audit:** yes / no
 - **Any excluded fidelity atom that actually belongs to a counted result statement:** yes / no
 - **Any Davis--Kahan-established named/headline result missing from the 29-result inventory:** yes / no
 - **Any non-established/open/deferred material incorrectly included in the denominator:** yes / no

@@ -6,8 +6,8 @@ The denominator contains exactly the four Section 2 headline theorems and every 
 
 - Counted results: **29**
 - Result-boundary reviews accepted: **29/29**
-- Currently hostile-certified terminal: **27**
-- Awaiting closure: **2**
+- Currently hostile-certified terminal: **28**
+- Awaiting closure: **1**
 - Printed statements that are NOT locally self-contained: **5**
 - Result-only semantic sweep: `dev/davis-kahan-1970-result-semantic-review-2026-08-12.md`
 - Compiler-checkable theorem surface: `DavisKahan/Sources/DavisKahan1970/Audits/ResultSemanticSurface.lean`
@@ -27,7 +27,7 @@ Each result below explicitly partitions its primary source block into atoms insi
 | `S2-sin-two-theta` | unnumbered_theorem | `locally_exact` | yes | `proved_exact` | `proved_in_build` | `accepted` | `accepted` |
 | `S2-tan-two-theta` | unnumbered_theorem | `locally_exact` | yes | `proved_exact` | `proved_in_build` | `hostile_review_blocked` | `accepted` |
 | `DK-3.1-prop` | proposition | `locally_exact` | yes | `proved_exact` | `proved_in_build` | `accepted` | `accepted` |
-| `DK-3.2-prop` | proposition | `locally_exact` | yes | `proved_exact` | `proved_in_build` | `reviewer_decision_open` | `accepted` |
+| `DK-3.2-prop` | proposition | `locally_exact` | yes | `proved_exact` | `proved_in_build` | `accepted` | `accepted` |
 | `DK-3.3-prop` | proposition | `locally_exact` | yes | `proved_exact` | `proved_in_build` | `accepted` | `accepted` |
 | `DK-3.4-prop` | proposition | `locally_exact` | yes | `proved_exact` | `proved_in_build` | `accepted` | `accepted` |
 | `DK-3.1-thm` | theorem | `locally_exact` | yes | `proved_exact` | `proved_in_build` | `accepted` | `accepted` |
@@ -108,9 +108,32 @@ The accepted reading is hash-pinned to the distributable specification, the sour
 
 ## Current closure queue
 
-Empty. All 29 counted results are terminal on all three axes.
+`S2-tan-two-theta` — blocked by open hostile-review obligation
+`tan2theta-directed-correspondence`.
 
-`S2-tan-theta` is terminal after a hostile Appendix-scope correction. The earlier `tanTheta_unbounded_ambient_*_exact` declarations cover an unbounded ambient operator with a bounded Ritz compression. The Appendix-complete declarations `TauCeti.DavisKahan1970.tanTheta_ambient_unboundedRitz_raw_paperUINorm_complex` and `..._real_exact` additionally allow the Ritz compression `A_0` itself to be a genuinely unbounded self-adjoint closed operator semibounded above in form, while retaining a bounded residual/perturbation and the sharp factor-one ambient inequality.
+Its directed clauses conclude on `N.gauge (reflectionTangentCorner U Z)`, while
+Davis and Kahan state the bound on the unitarily invariant norm of `tan 2Θ₀`.
+The correspondence from that corner to the paper's directed object is neither
+registered nor proved, so the clauses are `open`, the row's
+`semantic_certification` is `hostile_review_blocked`, and the two directed
+block-representative theorems are recorded as supporting rather than canonical
+evidence. The ambient clauses of the same result are unaffected and remain
+established. Closing it means proving the corner-to-paper-object identity and
+registering it as clause correspondence, or stating source-shaped directed
+theorems on the paper object.
+
+This section lists exactly the results the machine state reports as
+nonterminal; the checker rejects it when the two disagree. It said "Empty. All
+29 counted results are terminal on all three axes" while two rows were blocked,
+and named declarations under pre-rename `paperUINorm` spellings, which is why it
+is now checked rather than maintained.
+
+`S2-tan-theta` is terminal after a hostile Appendix-scope correction. The
+Appendix-complete declarations
+`TauCeti.DavisKahan1970.tanTheta_ambient_unboundedRitz_symmetricNorming_complex`
+and `..._real` allow the Ritz compression `A₀` itself to be a genuinely
+unbounded self-adjoint operator semibounded above in form, while retaining a
+bounded residual and the sharp factor-one ambient inequality.
 
 ## Printed-statement boundary reviews
 

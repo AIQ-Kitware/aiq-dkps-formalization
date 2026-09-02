@@ -91,8 +91,44 @@ corresponding source result closely enough to withstand a hostile
 theorem-by-theorem comparison.
 
 The denominator is a set of **source results**, not a count of source assertions
-or proof steps.  The ~274 source atoms are the evidence base for auditing the 29;
+or proof steps.  The 275 source atoms are the evidence base for auditing the 29;
 they are deliberately far more exhaustive than the theorem denominator.
+
+#### Terminal, and the two ways a result can fail to be
+
+`semantic_certification` has three values, and only one of them is terminal.
+
+| value | meaning |
+| --- | --- |
+| `accepted` | hostile semantic review accepted this result |
+| `hostile_review_blocked` | an open hostile-review obligation names this result |
+| `reviewer_decision_open` | a representation or policy decision is owed before this result can be certified |
+
+The last two exist because the earlier schema had no way to say "proved, built,
+and not yet certified".  A blocked result kept saying `accepted`, and the only
+thing standing between the repository and a green certificate was the top-level
+obligation ledger — delete the entry and unchanged evidence certified itself.
+The ledger and the rows must now agree in both directions, and
+`--require-terminal` fails while any obligation is open, because that flag
+asserts hostile certification rather than a terminal disposition.
+
+A blocked result is therefore *mathematically* whatever its disposition says it
+is.  `DK-3.2-prop` was `reviewer_decision_open` while nothing about its
+mathematics was in question; what was owed was a decision.
+
+#### Source-representation conventions
+
+A representation question settled in
+`source_representation_conventions` is settled for **every** result that uses
+it.  The alternative — questioning a representation on one row while accepting
+it on the five others that depend on it — does not hold together, and hostile
+review found exactly that state.  A representation *not* settled there owes
+registered correspondence evidence wherever it is used.
+
+`CrossedDefectsEquivalent` is settled: it is this repository's reading of the
+paper's equality of crossed-defect Hilbert dimensions, witnessed in finite
+dimension by `crossedDefectsEquivalent_iff_finrank_eq`, and required to be
+constructive because Proposition 3.2 must *build* a direct rotation from it.
 
 ## Two inventories, two jobs
 
@@ -283,9 +319,24 @@ optional `note`.
 * the union of `covers_source_atoms` over canonical evidence covers every source
   atom of a **terminal** result, and no atom outside the result;
 * a **nonterminal** result may *not* claim complete canonical atom coverage —
-  either the coverage or the status is wrong;
+  either the coverage or the status is wrong.  One exception, added 2026-09-02:
+  a result whose `semantic_certification` is a *blocked* state may have complete
+  coverage, because what is withheld there is certification, not evidence;
 * supporting evidence cannot make a result terminal: a result with no canonical
   evidence fails;
+* the supporting-evidence role vocabulary is
+  `public_alias`, `specialization`, `alternative_route`, `generalization`,
+  `presentation_wrapper`, `implementation_structure`, `transport_lemma`,
+  `scalar_generic_facade`, `supporting_theorem`, and two roles added
+  2026-09-02: `standing_assumption_discharge`, proving that a standing source
+  assumption a result inherits follows from that result's own hypotheses, and
+  `source_correspondence`, proving that a paper object and the object a
+  canonical theorem is stated on are the same;
+* a `standing_assumption_discharge` record must name the predicate it
+  discharges into, that predicate must occur in the named declaration's own
+  statement, and the declaration must be registered as supporting evidence *on
+  the same row* — a correct discharge theorem belonging to another result is
+  not evidence for this one;
 * `DK-4.4-prop` — the one printed statement that is false — must carry
   `role: exact_refutation` / `evidence_kind: refutation` and disposition
   `refuted_as_transcribed`; no other result may claim a refutation;

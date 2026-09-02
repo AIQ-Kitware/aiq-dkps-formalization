@@ -340,7 +340,7 @@
         }
       ],
       "source_specification_sha256": "5c5b96c1cc563a42d13b8b4e06989c19ff82ec8ed6958f3da78d67dc9b2b7830",
-      "expected_completion_certification": "accepted",
+      "expected_completion_certification": "hostile_review_blocked",
       "known_completion_holes": [],
       "source_atom_ids": [
         "S2-tan-two-theta.ordered-gap-hypothesis",
@@ -349,7 +349,8 @@
         "S2-tan-two-theta.directed-conclusion",
         "S2-tan-two-theta.ambient-conclusion",
         "S2-tan-two-theta.pole-exclusion-derived"
-      ]
+      ],
+      "expectation_note": "Certification is blocked by open hostile-review obligation `tan2theta-directed-correspondence`; the status and verification expectations are unchanged, because the disposition and build axes are not what is in question."
     },
     {
       "id": "S2-sharpness",
