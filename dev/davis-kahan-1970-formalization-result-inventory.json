@@ -1111,7 +1111,8 @@
         "TauCeti.DavisKahanExt.paperAbsTanTwoAngleOperatorR",
         "TauCeti.DavisKahanExt.complexify_paperAbsTanTwoAngleOperatorR",
         "TauCeti.DavisKahan1970.tanTwoTheta_ambient_unbounded_blockRepresentative_derivedReflection_symmetricNorming_real",
-        "TauCeti.DavisKahan1970.tanTwoTheta_ambient_unbounded_symmetricNorming_real"
+        "TauCeti.DavisKahan1970.tanTwoTheta_ambient_unbounded_symmetricNorming_real",
+        "TauCeti.DavisKahan1970.approximationNumber_reflectionTangentCorner"
       ],
       "review_note": "Accepted result-only semantic review 2026-08-12. The bounded complex and real source wrappers already expose both directed and ambient arbitrary-PaperUI conclusions from the printed Section 2 hypotheses with pole exclusion derived internally. The unbounded source surface now closes the advertised global scope as well: `tanTwoTheta_directed_unboundedResidual_blockRepresentative_symmetricNorming_complex` and its real counterpart give the sharp directed residual inequality, while `tanTwoTheta_ambient_unbounded_blockRepresentative_symmetricNorming_complex` and its real counterpart give the sharp ambient factor-two inequality for unbounded self-adjoint A in arbitrary Hilbert dimension. The ambient proof assembles the two reflection-tangent corners using the existing Section 7 directed estimate, skew-adjoint symmetry, Lemma 6.1 block assembly, and Fan dominance; the real endpoints descend exactly through the maintained complexification layer. No quarter-angle assumption, caller-supplied pole certificate, finite-dimensional restriction, compactness premise, or perturbed-Q spectral-placement hypothesis is added. The final implementation was compiler-verified by the user on the 7cc049b4 baseline before this census promotion. Audit-surface update 2026-08-13: the already scalar-generic branch-free PaperUI theorem is promoted under the canonical alias `tanTwoTheta_branchFree_bounded_finiteSubspace_symmetricNorming_rclike`; source-shaped directed and unbounded endpoints remain registered separately.",
       "boundary_review": {
@@ -1309,6 +1310,11 @@
           "declaration": "TauCeti.DavisKahan1970.tanTwoTheta_directed_unboundedResidual_blockRepresentative_symmetricNorming_real",
           "role": "alternative_route",
           "note": "Proves the directed bound on the block/corner representation. It is the strongest existing evidence for the directed clauses, which stay open until the correspondence to the paper's tan 2Theta_0 object is registered; see remaining_gap."
+        },
+        {
+          "declaration": "TauCeti.DavisKahan1970.approximationNumber_reflectionTangentCorner",
+          "role": "source_correspondence",
+          "note": "Identifies the directed tangent corner's approximation numbers in closed form. Registered so it carries a statement pin: it is the strongest correspondence evidence that exists, and is not sufficient to close the corner-to-paper-object obligation."
         }
       ],
       "result_wide_scope_atoms": [
@@ -1493,8 +1499,9 @@
       ],
       "disposition": "proved_exact",
       "verification": "proved_in_build",
-      "semantic_certification": "reviewer_decision_open",
+      "semantic_certification": "accepted",
       "lean_declarations": [
+        "TauCeti.DavisKahan.crossedDefectsEquivalent_iff_finrank_eq",
         "TauCeti.DavisKahan1970.proposition3_2_exists_iff_crossedDefectsEquivalent",
         "TauCeti.DavisKahan1970.proposition3_2_not_unique",
         "TauCeti.DavisKahan1970.proposition3_2_exists_iff_crossedDefectsEquivalent_real",
@@ -1555,6 +1562,11 @@
           "declaration": "TauCeti.DavisKahan1970.proposition3_2_not_unique_real",
           "role": "specialization",
           "note": "The `ℝ` instance of the canonical `RCLike` theorem; its proof is that theorem applied."
+        },
+        {
+          "declaration": "TauCeti.DavisKahan.crossedDefectsEquivalent_iff_finrank_eq",
+          "role": "source_correspondence",
+          "note": "Proves that the constructive predicate CrossedDefectsEquivalent is exactly the paper's equality of crossed defect dimensions, in the finite-dimensional case where the printed phrase has an unambiguous elementary meaning."
         }
       ],
       "result_wide_scope_atoms": [
@@ -1590,16 +1602,7 @@
           "justification": "Canonical witness for nonuniqueness at rclike scalar scope, carried over from the pre-clause canonical evidence and re-checked against its compiler-printed type under the coherent model."
         }
       ],
-      "semantic_certification_note": "Blocked by open hostile-review obligation `crossed-defects-representation-consistency`. The mathematics is not in question: `CrossedDefectsEquivalent` is very likely the right constructive reading of the paper's Hilbert-dimension equality. What is owed is a stated policy decision -- either document it as the repository's definitional reading, or register a named correspondence theorem -- so that this representation is held to the same standard the tan 2Theta block representation is being held to.",
-      "remaining_gap": {
-        "category": "reviewer_representation_decision",
-        "missing_surface": "A stated decision on whether `CrossedDefectsEquivalent` is the repository's definitional reading of the paper's Hilbert-dimension equality, or a representation change that needs a named correspondence theorem like the one now required of the tan 2Theta block representation. The mathematics is not in question; the missing artifact is the policy statement or the theorem.",
-        "next_action": "Either document the definitional reading and the rule that makes it source-transparent, applying that rule consistently, or register a named correspondence theorem connecting the printed dimension condition to `CrossedDefectsEquivalent`.",
-        "strongest_existing_evidence": [
-          "TauCeti.DavisKahan1970.proposition3_2_exists_iff_crossedDefectsEquivalent",
-          "TauCeti.DavisKahan1970.proposition3_2_not_unique"
-        ]
-      }
+      "semantic_certification_note": "Reviewer decision made 2026-09-02 and witnessed rather than asserted. The paper states (3.5) as equality of the Hilbert dimensions of the crossed defect spaces; this repository represents it constructively as `CrossedDefectsEquivalent`, a linear isometric equivalence between them. `crossedDefectsEquivalent_iff_finrank_eq` proves the two are the same condition in finite dimension. The rule for the general case is stated: dimension equality of Hilbert spaces IS the existence of an isometry between them, and the constructive form is required rather than convenient, because Proposition 3.2 must BUILD a direct rotation from the condition, which an equality of cardinals cannot supply. The same rule is what the tan 2Theta block representation is being held to -- there the objects are genuinely different and the correspondence is owed."
     },
     {
       "id": "DK-3.3-prop",
@@ -4782,10 +4785,9 @@
     "method": "2026-08-31 hostile re-review of all 29 counted results under the coherent-clause model.  For each result: read the printed statement in the checked-in distributable specification, enumerate its separately quantified clauses, then read the COMPILER-PRINTED TYPE of each clause's canonical witness -- not its name -- and compare scalar field, bounded/unbounded operator scope, domain assumptions, dimension, norm class, separation alternatives, residual versus ambient perturbation, directed versus ambient angle, constants, representative choice, and any hypothesis present in Lean but not in the paper or the reverse.  Eight findings, all repaired in the same pass: (F1) the ambient sin 2Theta clause had no witness at the row's unbounded scope -- repaired by proving it; (F2) Corollary 4.1, Proposition 4.3, Theorem 5.2 and Theorem 6.3 are printed 'for every unitary-invariant norm' but were certified at `KyFanDominantIdealFamily` -- repaired by `symmetricNorming_of_kyFanDominant` and six new paper-norm endpoints; (F3) Theorem 6.3's witnesses were existential inside the ideal quantifier -- repaired by the parameterized paper-norm endpoints; (F4) the sin 2Theta directed clauses cited no correspondence for the reflected overlap block -- repaired by registering the existing lemmas; and four checker holes (F5 conclusions stated under `lemma` were unchecked, F6 a clause primary need not be canonical evidence, F7 a clause's scalar field was unchecked against its primary, F8 the half-infinite gap justification was unchecked prose), each repaired with a regression test.  Theorem 8.1 part (iii)'s `FiniteDimensional` binder was checked and is the printed scope; Proposition 4.4's single counterexample was checked and is sufficient for a refutation.  The earlier 2026-08-12 sweep is retained as history; its union-of-atoms acceptance is the defect this model replaced.  RE-RUN 2026-08-31 (second pass), on the unbounded-compression axis specifically, after the Palomar Section 2 statement audit exposed it.  For each of the seven printed Section 2 clauses the two scopes `ambient operator may be unbounded` and `trial/Ritz compression may itself be unbounded` were separated and read off the compiler-printed type of the clause's canonical witness.  One clause failed: `S2-tan-theta` directed, whose primaries took a bounded compression.  It is repaired; the axis is now a `type_requirements` obligation on `DK-6-appendix.unbounded-tangent-extension` rather than prose.  The per-clause result table is in the human report.  THIRD PASS 2026-09-01: no counted result's disposition changed and no canonical evidence moved.  Two things were closed and are recorded in the human report.  (a) The Palomar Section 2 Challenge, which had gone on demanding an unbounded trial compression for directed `sin 2Theta` after this audit concluded the Appendix does not grant one, was narrowed to a bounded compression; the repository now gives one answer to that question.  (b) The paper's ambient tangents were proved to carry the tangent singular-value sequence -- `approximationNumber_paperTanAngleOperatorC` and `approximationNumber_paperAbsTanTwoAngleOperatorC` -- by pairing the existing Gram resolvent transfer with its inverse `approximationNumber_le_of_gramContraction`, so that `||tan Theta||` is a norm of the sequence `tan theta_n` as a theorem rather than as a docstring.",
     "compiler_audit_surface": "DavisKahan/Sources/DavisKahan1970/Audits/ResultSemanticSurface.lean",
     "human_report": "dev/davis-kahan-1970-result-semantic-review-2026-08-31.md",
-    "terminal_results": 27,
+    "terminal_results": 28,
     "remaining_results": [
-      "S2-tan-two-theta",
-      "DK-3.2-prop"
+      "S2-tan-two-theta"
     ],
     "note": "The previous note recorded the 2026-08-31 reopening of `S2-sin-two-theta` and its repair; that history is now in the human report together with the seven further findings of the same day's result-by-result review.  The second 2026-08-31 pass changed canonical evidence for `S2-tan-theta` only: the directed primaries are now the Appendix-scope `tanTheta_directed_unboundedRitz_symmetricNorming_{complex,real}`.  2026-09-02: terminal_results is 27, not 29. Two rows carry a blocked semantic certification -- `S2-tan-two-theta` (hostile_review_blocked) and `DK-3.2-prop` (reviewer_decision_open) -- because open hostile-review obligations name them. Their dispositions and builds are unchanged; what is not yet true is hostile semantic certification, which is the axis this field reports.",
     "canonical_evidence_sha256": "510169889397ae304c1f9f71d4a1aa292cf0e9ebda62715ec11dc0182dad944a",
@@ -4818,16 +4820,6 @@
           "Prove the corner-to-operator link (same approximation numbers, or equal extendedGauge), then register the chain as `source_correspondence` evidence on the directed.complex and directed.real clauses; or",
           "add source-shaped wrappers concluding literally on the paper tangent object, make them the clause primaries, and keep the block theorems as supporting evidence."
         ]
-      },
-      {
-        "id": "crossed-defects-representation-consistency",
-        "results": [
-          "DK-3.2-prop"
-        ],
-        "finding": "Proposition 3.2 represents the paper's Hilbert-dimension equality as `CrossedDefectsEquivalent`, a constructive linear isometric equivalence of the crossed defect spaces. This is very likely correct, but once the contract demands registered correspondence evidence for the tan 2Theta block representation, the same rule should be applied here or an explicit exemption stated. Consistency is the point; the decision is not yet recorded either way.",
-        "required": [
-          "Either document `CrossedDefectsEquivalent` as the repository's definitional reading of the paper's dimension condition and state the rule that makes it source-transparent, or register a named correspondence theorem."
-        ]
       }
     ],
     "closed_obligations": [
@@ -4848,6 +4840,46 @@
         "status": "closed",
         "closed_on": "2026-09-02",
         "closure": "Closed. A Section 4 scope atom now exists -- `DK-4.1-prop.section4-compact-classification-setup`, quoting the section's opening sentence verbatim -- carrying a `scope_inheritance` record naming DK-4.1-cor, DK-4.2-prop, DK-4.3-prop and DK-4.4-prop as inheriting it and DK-4.1-prop as local to it. The three inheriting non-refuted rows are reclassified `paper_faithful_nonlocal_source_interpretation` with full records and explicit cross-block scope links; DK-4.4-prop carries a discharge instead, because its refuting witness is finite-dimensional and so lies inside the setup. Proposition 4.2 gained source-shaped witnesses `Proposition4_2_source_compact_nonacute{,_real}` carrying the inherited hypotheses, now the canonical evidence, with the stronger basis theorem retained as supporting evidence. Both compile."
+      },
+      {
+        "id": "crossed-defects-representation-consistency",
+        "results": [
+          "DK-3.2-prop"
+        ],
+        "finding": "Proposition 3.2 represents the paper's Hilbert-dimension equality as `CrossedDefectsEquivalent`, a constructive linear isometric equivalence of the crossed defect spaces. This is very likely correct, but once the contract demands registered correspondence evidence for the tan 2Theta block representation, the same rule should be applied here or an explicit exemption stated. Consistency is the point; the decision is not yet recorded either way.",
+        "required": [
+          "Either document `CrossedDefectsEquivalent` as the repository's definitional reading of the paper's dimension condition and state the rule that makes it source-transparent, or register a named correspondence theorem."
+        ],
+        "status": "closed",
+        "closed_on": "2026-09-02",
+        "closure": "Closed with a theorem rather than a policy statement alone. `crossedDefectsEquivalent_iff_finrank_eq` proves that the constructive predicate is exactly equality of the crossed defect dimensions whenever those spaces are finite-dimensional, which is the case where the printed phrase 'equal Hilbert dimension' has an unambiguous elementary reading. The general case is documented as the constructive reading, with the reason it must be data: Proposition 3.2 builds a direct rotation out of the condition. The consistency the obligation asked for is therefore satisfied in the direction it was raised -- a non-obvious representation now carries registered evidence, exactly as the tan 2Theta case is required to."
+      }
+    ]
+  },
+  "source_representation_conventions": {
+    "purpose": "Repository-wide decisions about how a printed source object is represented in Lean, made once and applied everywhere rather than adjudicated per row. A representation question that is settled here is settled for every result that uses it; a representation that is NOT settled here owes registered correspondence evidence wherever it is used. Hostile review found the middle position -- questioning a representation on one row while accepting it on five others -- and it does not hold together.",
+    "conventions": [
+      {
+        "id": "crossed-defect-dimension-equality",
+        "status": "accepted",
+        "accepted_on": "2026-09-02",
+        "printed_object": "Davis--Kahan condition (3.5): the crossed defect spaces have equal Hilbert dimension.",
+        "lean_representation": "TauCeti.DavisKahan.CrossedDefectsEquivalent, i.e. Nonempty (halmosSourceDefect U V ≃ₗᵢ halmosTargetDefect U V)",
+        "rule": "Equality of Hilbert dimensions IS the existence of a linear isometric equivalence; the constructive form is the faithful reading of the printed condition, not a strengthening of it. It is also required rather than convenient: Proposition 3.2 must BUILD a direct rotation out of the condition, which an equality of cardinals cannot supply. This convention is therefore source-transparent and needs no per-row correspondence evidence.",
+        "witness": "TauCeti.DavisKahan.crossedDefectsEquivalent_iff_finrank_eq",
+        "witness_scope": "Proves the two readings are the same condition whenever the crossed defect spaces are finite-dimensional, which is the case where the printed phrase has an unambiguous elementary meaning. The infinite-dimensional case is the convention above, stated rather than proved, because Mathlib has no isometric classification of Hilbert spaces by dimension to prove it against.",
+        "applies_to": [
+          "S2-tan-theta",
+          "DK-3.2-prop",
+          "DK-3.4-prop",
+          "DK-4.1-prop",
+          "DK-4.1-cor",
+          "DK-4.2-prop",
+          "DK-4.3-prop",
+          "DK-4.4-prop",
+          "DK-8.2-thm"
+        ],
+        "blast_radius_note": "Listed explicitly because the decision is load-bearing well beyond the row where it was raised: (3.5) enters S2-tan-theta as a nonlocal condition, DK-3.4-prop as a discharge, DK-8.2-thm as an inherited hypothesis, the Section 4 rows as the classification half of their setup, and DK-4.4-prop as the scope its counterexample must satisfy. Reopening this convention reopens all of them."
       }
     ]
   }

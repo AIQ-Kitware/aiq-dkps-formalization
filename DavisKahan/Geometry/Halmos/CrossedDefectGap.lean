@@ -164,5 +164,36 @@ theorem crossedDefectsEquivalent_of_isAcute
   exact LinearIsometryEquiv.refl 𝕜 _
 
 
+omit [CompleteSpace H] in
+/-- **(3.5) is exactly the paper's equality of crossed defect dimensions.**
+
+Davis and Kahan state condition (3.5) as an equality of Hilbert dimensions of
+the two crossed defect spaces.  This repository represents it constructively, as
+`CrossedDefectsEquivalent`: a linear isometric equivalence between them.  In
+finite dimension the two readings are literally the same condition, and this is
+the theorem that says so -- an isometric equivalence forces equal `finrank`, and
+equal `finrank` builds one through the standard orthonormal bases.
+
+The constructive form is the right general reading rather than a convenience.
+Dimension equality of Hilbert spaces *is* the existence of an isometry between
+them; stating it as data is what lets Proposition 3.2 produce a direct rotation
+from it, which an equality of cardinals could not do. -/
+theorem crossedDefectsEquivalent_iff_finrank_eq
+    (U V : Submodule 𝕜 H) [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
+    [FiniteDimensional 𝕜 (halmosSourceDefect U V)]
+    [FiniteDimensional 𝕜 (halmosTargetDefect U V)] :
+    CrossedDefectsEquivalent U V ↔
+      Module.finrank 𝕜 (halmosSourceDefect U V)
+        = Module.finrank 𝕜 (halmosTargetDefect U V) := by
+  constructor
+  · rintro ⟨e⟩
+    exact e.toLinearEquiv.finrank_eq
+  · intro h
+    refine ⟨?_⟩
+    exact (stdOrthonormalBasis 𝕜 (halmosSourceDefect U V)).repr.trans
+      (((stdOrthonormalBasis 𝕜 (halmosTargetDefect U V)).reindex
+        (finCongr h.symm)).repr).symm
+
+
 end DavisKahan
 end TauCeti

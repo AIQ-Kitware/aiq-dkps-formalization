@@ -1002,6 +1002,20 @@ def _check_standing_scope_consistency(
                 "predicate the inherited assumption is discharged into, so the claim can be checked against "
                 "the declaration's statement rather than taken on trust"
             )
+        # A discharge must be evidence for THIS result.  Requiring only that the
+        # named theorem concludes the right predicate let a reviewer substitute
+        # another row's discharge -- correct mathematics, wrong row.
+        same_row = {
+            entry.get("declaration")
+            for entry in (item.get("supporting_evidence") or [])
+            if isinstance(entry, dict) and entry.get("role") == "standing_assumption_discharge"
+        }
+        if declaration not in same_row:
+            fail(
+                f"{result_id}: standing_assumption_discharge names {declaration}, which is not registered on "
+                "this result as supporting evidence with role 'standing_assumption_discharge'. A discharge is "
+                "evidence for one row; another row's discharge theorem is not evidence for this one."
+            )
         statement = _declaration_statement_text(declaration)
         if statement is None:
             fail(
@@ -1583,7 +1597,9 @@ def _canonical_evidence_digest(items: list[dict[str, Any]]) -> str:
     ).hexdigest()
 
 
-def _validate_markdown_view(items: list[dict[str, Any]], terminal: int) -> None:
+def _validate_markdown_view(
+    items: list[dict[str, Any]], terminal: int, nonterminal: list[dict[str, Any]]
+) -> None:
     """Gate the hand-maintained Markdown view against the JSON it restates.
 
     `dev/davis-kahan-1970-formalization-result-inventory.md` is the file the
@@ -1604,6 +1620,34 @@ def _validate_markdown_view(items: list[dict[str, Any]], terminal: int) -> None:
         for item in items
         if item.get("semantic_alignment") == "paper_faithful_nonlocal_source_interpretation"
     )
+    # The closure queue is a copy of a moving fact, so it is checked rather than
+    # trusted.  It read "Empty. All 29 counted results are terminal on all three
+    # axes" while two rows were blocked, and the header counters alone did not
+    # catch that.
+    queue_start = text.find("## Current closure queue")
+    if queue_start == -1:
+        fail("dev/davis-kahan-1970-formalization-result-inventory.md must carry a '## Current closure queue'")
+    queue_end = text.find("\n## ", queue_start + 1)
+    queue = text[queue_start: queue_end if queue_end != -1 else len(text)]
+    open_ids = sorted(item["id"] for item in nonterminal)
+    for result_id in open_ids:
+        if f"`{result_id}`" not in queue:
+            fail(
+                "dev/davis-kahan-1970-formalization-result-inventory.md closure queue does not list nonterminal "
+                f"result {result_id}"
+            )
+    # The emptiness claim is the queue's opening line, not any occurrence of the
+    # word: the section may legitimately quote the stale claim it replaced.
+    body = [line.strip() for line in queue.splitlines()[1:] if line.strip()]
+    claims_empty = bool(body) and body[0].startswith("Empty")
+    if not open_ids and not claims_empty:
+        fail("closure queue must open by saying it is empty when every counted result is terminal")
+    if open_ids and claims_empty:
+        fail(
+            "dev/davis-kahan-1970-formalization-result-inventory.md closure queue claims to be empty while "
+            f"{open_ids} are nonterminal"
+        )
+
     for label, value in (
         ("Counted results", len(items)),
         ("Result-boundary reviews accepted", f"{obligations}/{obligations}"),
@@ -2273,7 +2317,7 @@ def completion_summary(
     )
     _validate_census_canonical_agreement(items)
     _validate_section_two_short_names(data)
-    _validate_markdown_view(items, terminal)
+    _validate_markdown_view(items, terminal, nonterminal)
     nonlocal_interpretation = _validate_nonlocal_interpretation(
         items, source_atoms, source_inventory_path, census_declarations, audit_text
     )

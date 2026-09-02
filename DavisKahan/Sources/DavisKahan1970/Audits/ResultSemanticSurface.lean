@@ -399,6 +399,8 @@ Status: **TERMINAL REFUTED + REPAIR**.
 #check @TauCeti.DavisKahanTheory.DavisKahanProposition4_4_Finite
 #check @TauCeti.DavisKahanTheory.not_davisKahanProposition4_4_Finite
 #check @TauCeti.DavisKahan.crossedDefectsEquivalent_of_isAcute
+#check @TauCeti.DavisKahan.crossedDefectsEquivalent_iff_finrank_eq
+#check @TauCeti.DavisKahan1970.approximationNumber_reflectionTangentCorner
 #check @TauCeti.DavisKahanTheory.shortRotation_fullDisplacement_refuted
 #check @TauCeti.DavisKahanTheory.directRotation_fullDisplacement_qnorm
 
