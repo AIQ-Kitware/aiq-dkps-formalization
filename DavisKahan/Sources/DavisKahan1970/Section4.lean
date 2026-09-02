@@ -418,6 +418,45 @@ side is infinite. -/
 alias Proposition4_2_infiniteDimensional :=
   DavisKahan.Section4.tsum_displacementAngleSineSq_ge_tsum_sq_sin_principalAngleSequence
 
+section Proposition42SourceScope
+
+universe u4
+
+variable {H : Type u4} [NormedAddCommGroup H] [InnerProductSpace ℂ H] [CompleteSpace H]
+
+/-- **Davis--Kahan 1970, Proposition 4.2, carrying the Section 4 setup it is
+printed under.**
+
+Section 4 opens, inside the Proposition 4.1 block, by fixing the
+compact/classification setup: the principal sine operator is compact, and every
+unitary carrying `Uℋ` onto `Vℋ` factors as `V = UZ` with the principal angles
+ordered.  Proposition 4.2 is printed under that setup and does not restate it.
+
+`Proposition4_2_infiniteDimensional` proves the inequality without either
+hypothesis, which is a stronger and correct theorem but not, by this
+repository's contract, automatically an exact witness for the printed one.  This
+wrapper is the source-shaped statement: it carries the inherited hypotheses
+`hcompact` and `J` exactly as Section 4 imposes them, and discharges them by
+invoking the stronger result, which needs neither.
+
+Keeping both is deliberate.  The reusable theorem stays as strong as it is, and
+the canonical source endpoint stays faithful to what Davis and Kahan printed. -/
+theorem Proposition4_2_source_compact_nonacute
+    (U V : Submodule ℂ H) [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
+    (_hcompact : IsCompactOperator (TauCeti.principalSineOperator U V))
+    (_J : DavisKahan.halmosSourceDefect U V ≃ₗᵢ[ℂ] DavisKahan.halmosTargetDefect U V)
+    {ι : Type u4} (b : HilbertBasis ι ℂ U)
+    (W : H →L[ℂ] H) (hWunitary : W ∈ unitary (H →L[ℂ] H))
+    (hWmap : W * DavisKahan.projection U = DavisKahan.projection V * W) :
+    (∑' n : ℕ, ENNReal.ofReal
+        (Real.sin (TauCeti.principalAngleSequence U V n)) ^ 2) ≤
+      ∑' i, ENNReal.ofReal
+        (DavisKahan.Section4.displacementAngleSineSq W ((b i : U) : H)) :=
+  DavisKahan.Section4.tsum_displacementAngleSineSq_ge_tsum_sq_sin_principalAngleSequence
+    U V b W hWunitary hWmap
+
+end Proposition42SourceScope
+
 /-- **Davis--Kahan 1970, Proposition 4.3, at the printed scope.**  In an arbitrary complex
 Hilbert space, the Ky Fan prefix sums of `(1 − W)⋆(1 − W)` are minimized by the direct
 rotation, over all unitaries `W` carrying `U` onto `V`.

@@ -8,7 +8,7 @@ The denominator contains exactly the four Section 2 headline theorems and every 
 - Result-boundary reviews accepted: **29/29**
 - Currently hostile-certified terminal: **29**
 - Awaiting closure: **0**
-- Printed statements that are NOT locally self-contained: **2**
+- Printed statements that are NOT locally self-contained: **5**
 - Result-only semantic sweep: `dev/davis-kahan-1970-result-semantic-review-2026-08-12.md`
 - Compiler-checkable theorem surface: `DavisKahan/Sources/DavisKahan1970/Audits/ResultSemanticSurface.lean`
 
@@ -35,9 +35,9 @@ Each result below explicitly partitions its primary source block into atoms insi
 | `DK-3.5-prop` | proposition | `locally_exact` | yes | `proved_exact` | `proved_in_build` | `accepted` | `accepted` |
 | `DK-3.2-cor` | corollary | `locally_exact` | yes | `proved_exact` | `proved_in_build` | `accepted` | `accepted` |
 | `DK-4.1-prop` | proposition | `locally_exact` | yes | `proved_exact` | `proved_in_build` | `accepted` | `accepted` |
-| `DK-4.1-cor` | corollary | `locally_exact` | yes | `proved_exact` | `proved_in_build` | `accepted` | `accepted` |
-| `DK-4.2-prop` | proposition | `locally_exact` | yes | `proved_exact` | `proved_in_build` | `accepted` | `accepted` |
-| `DK-4.3-prop` | proposition | `locally_exact` | yes | `proved_exact` | `proved_in_build` | `accepted` | `accepted` |
+| `DK-4.1-cor` | corollary | `paper_faithful_nonlocal_source_interpretation` | **no** | `proved_exact` | `proved_in_build` | `accepted` | `accepted` |
+| `DK-4.2-prop` | proposition | `paper_faithful_nonlocal_source_interpretation` | **no** | `proved_exact` | `proved_in_build` | `accepted` | `accepted` |
+| `DK-4.3-prop` | proposition | `paper_faithful_nonlocal_source_interpretation` | **no** | `proved_exact` | `proved_in_build` | `accepted` | `accepted` |
 | `DK-4.4-prop` | proposition | `refuted_as_transcribed` | yes | `refuted_as_transcribed` | `proved_in_build` | `accepted` | `accepted` |
 | `DK-5.1-thm` | theorem | `locally_exact` | yes | `proved_exact` | `proved_in_build` | `accepted` | `accepted` |
 | `DK-5.2-thm` | theorem | `locally_exact` | yes | `proved_exact` | `proved_in_build` | `accepted` | `accepted` |

@@ -1273,7 +1273,8 @@
             "correspondence_declarations": [
               "TauCeti.DavisKahan1970.approximationNumber_reflectionTangentCorner"
             ],
-            "note": "The paper writes the left-hand side as a unitary-invariant norm of tan(2 Theta_0). The canonical Lean theorem takes the gauge of reflectionTangentCorner, a corner of the reflection pair. The two agree because the corner's singular values are exactly the sequence |tan 2 theta_j|, each directed angle appearing once, which is what the cited correspondence theorem states; no unitarily invariant norm can distinguish two operators with the same singular values."
+            "note": "The paper writes the left-hand side as a unitary-invariant norm of tan(2 Theta_0). The canonical Lean theorem takes the gauge of reflectionTangentCorner, a corner of the reflection pair. The two agree because the corner's singular values are exactly the sequence |tan 2 theta_j|, each directed angle appearing once, which is what the cited correspondence theorem states; no unitarily invariant norm can distinguish two operators with the same singular values. HOSTILE REVIEW 2026-09-02: this correspondence is NOT yet sufficient, and the three audit layers were telling three different stories. `approximationNumber_reflectionTangentCorner` gives the corner's singular values in closed form, and `extendedGauge_unboundedReflectionTangent_{complex,real}` gives the FULL reflection tangent the same gauge as the paper object; the missing link is between the corner and the paper object, and it does not exist. Tracked as open obligation `tan2theta-directed-correspondence`; until it closes this clause must not be read as having registered correspondence evidence.",
+            "correspondence_sufficiency": "insufficient_open_obligation"
           },
           {
             "source_clause": "Infinite-dimensional/unbounded scope.",
@@ -2061,6 +2062,8 @@
         "hostile-audit-atomization"
       ],
       "lean_declarations": [
+        "TauCeti.DavisKahan1970.Proposition4_2_source_compact_nonacute_real",
+        "TauCeti.DavisKahan1970.Proposition4_2_source_compact_nonacute",
         "TauCeti.DavisKahan.Section4.sum_displacementAngleSineSq_ge",
         "TauCeti.DavisKahan.Section4.displacementAngleSineSq_directRotation_eq_of_smul",
         "TauCeti.DavisKahan.Section4.norm_absoluteValue_apply_eq_norm_projection",

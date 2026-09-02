@@ -944,6 +944,7 @@
       "known_completion_holes": [],
       "audit_warning": "HOSTILE RE-AUDIT REOPENED: PDF re-audit restored equations (4.1) and (4.2) explicitly in the distributable TeX. The source-specification defect is closed; the row remains reopened until the minimax and pointwise-angle atoms and the headline proposition are explicitly bound to exact Lean evidence.",
       "source_atom_ids": [
+        "DK-4.1-prop.section4-compact-classification-setup",
         "DK-4.1-prop.vz-factorization",
         "DK-4.1-prop.orthonormal-angle-lower-bounds",
         "DK-4.1-prop.singular-value-minimality",
