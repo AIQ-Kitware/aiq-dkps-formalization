@@ -733,6 +733,51 @@ theorem reflectionTangentCorner_same_paperTanTwoDirectedCorner
     paperTanTwoBlockRepresentative, paperBlockCompression_paperDiagonalPair]
   exact paperProjectionBlock_same_compression Uᗮ U _
 
+/-- **Davis--Kahan 1970, the directed `tan 2Θ₀` bound, stated on the paper's own
+object, over `ℂ`.**
+
+Source-shaped endpoint.  The reusable directed theorems quantify over an
+arbitrary self-adjoint involution `Z` and conclude on
+`reflectionTangentCorner U Z`; hostile review observed that such a statement is
+not an exact witness for a printed result about `tan 2Θ₀`, because nothing in
+its type says the object bounded is the paper's.  This takes the actual reducing
+subspace `V`, derives its reflection internally, and concludes on the `U → Uᗮ`
+corner of the paper's own double-angle block representative.
+
+The arbitrary-`Z` theorem remains as the general result; this is the spelling a
+reviewer compares against Section 2. -/
+theorem tanTwoTheta_directed_unboundedResidual_reducing_paperCorner_symmetricNorming_complex
+    (N : SymmetricNormingFunction)
+    {A : Ea →ₗ.[ℂ] Ea} {B : Ea →L[ℂ] Ea} {a b : ℝ}
+    (hA : IsSelfAdjoint A) (hred : TauCeti.LinearPMap.ReducesSubspace A U)
+    (hB : TauCeti.IsOddFor U B)
+    (hV : DavisKahan.ReflectionIntertwines A B V)
+    (hUa : ∀ x : A.domain, (x : Ea) ∈ U →
+      RCLike.re ⟪A x, (x : Ea)⟫_ℂ ≤ a * ‖(x : Ea)‖ ^ 2)
+    (hUb : ∀ x : A.domain, (x : Ea) ∈ Uᗮ →
+      b * ‖(x : Ea)‖ ^ 2 ≤ RCLike.re ⟪A x, (x : Ea)⟫_ℂ)
+    (hab : a < b) (hRmem : N.Mem (paperBlockCompression Uᗮ U B)) :
+    N.Mem (paperBlockCompression Uᗮ U (paperTanTwoBlockRepresentative U V)) ∧
+      (b - a) * N.gauge (paperBlockCompression Uᗮ U (paperTanTwoBlockRepresentative U V)) ≤
+        2 * N.gauge (paperBlockCompression Uᗮ U B) := by
+  have hZsa := TauCeti.DavisKahanExt.isSelfAdjoint_reflectionOperator V
+  have hZ2 := TauCeti.DavisKahan.reflectionOperator_mul_self_complex V
+  have hS1 : ‖U.offDiagonalPart V.reflectionOperator‖ < 1 :=
+    norm_offDiagonalPart_lt_one_reducing_exact hA hred hB hZsa hZ2 hV.mapsDomain
+      hV.commutes hUa hUb hab
+  have hsq : ‖U.offDiagonalPart V.reflectionOperator *
+      U.offDiagonalPart V.reflectionOperator‖ < 1 := by
+    have h := norm_mul_le (U.offDiagonalPart V.reflectionOperator)
+      (U.offDiagonalPart V.reflectionOperator)
+    nlinarith [norm_nonneg (U.offDiagonalPart V.reflectionOperator)]
+  have hinv := TauCeti.DavisKahan.isUnit_signedCosTwo_of_isUnit_diagonalPart_sq U V
+    (isUnit_diagonalPart_sq hZ2 hsq)
+  obtain ⟨-, -, hmem, hle⟩ :=
+    tanTwoTheta_directed_unboundedResidual_reducing_derivedReflection_symmetricNorming_complex
+      N V hA hred hB hV hUa hUb hab hRmem
+  rw [← reflectionTangentCorner_reflection_eq_paperTanTwoCorner U V hinv]
+  exact ⟨hmem, hle⟩
+
 end DirectedCornerCorrespondence
 
 

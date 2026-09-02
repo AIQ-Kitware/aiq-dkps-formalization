@@ -403,6 +403,7 @@ Status: **TERMINAL REFUTED + REPAIR**.
 #check @TauCeti.DavisKahan1970.approximationNumber_reflectionTangentCorner
 #check @TauCeti.DavisKahan1970.reflectionTangentCorner_reflection_eq_paperTanTwoCorner
 #check @TauCeti.DavisKahan1970.reflectionTangentCorner_same_paperTanTwoDirectedCorner
+#check @TauCeti.DavisKahan1970.tanTwoTheta_directed_unboundedResidual_reducing_paperCorner_symmetricNorming_complex
 #check @TauCeti.DavisKahan1970.paperBlockCompression_paperDiagonalPair
 #check @TauCeti.DavisKahan1970.paperBlockCompression_mul_reflectionOperator
 #check @TauCeti.DavisKahanTheory.shortRotation_fullDisplacement_refuted
