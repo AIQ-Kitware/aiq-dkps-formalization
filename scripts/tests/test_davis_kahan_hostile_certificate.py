@@ -239,6 +239,50 @@ class RepresentationChangeMustBeBridged(unittest.TestCase):
             "this lemma would wrongly pass as the bridge to the paper object",
         )
 
+    def test_a_bridge_must_start_from_the_primarys_own_object(self):
+        """Reviewer finding: from_object could name an object the primary never mentions.
+
+        Setting it to `V.reflectionOperator` left the gate green, even though the
+        canonical primary quantifies over an arbitrary involution `Z` and never
+        mentions that object.
+        """
+        primary = M._declaration_statement_text(
+            "TauCeti.DavisKahan1970."
+            "tanTwoTheta_directed_unboundedResidual_blockRepresentative_symmetricNorming_complex"
+        )
+        self.assertIsNotNone(primary)
+        self.assertIn("reflectionTangentCorner", primary, "the object the primary really concludes on")
+        self.assertNotIn(
+            "V.reflectionOperator", primary,
+            "if this ever appears, the from_object check stops discriminating and needs rethinking",
+        )
+
+    def test_a_complex_witness_cannot_certify_a_real_clause(self):
+        """Reviewer finding: the same complex theorem was registered for both scalar scopes."""
+        witness = M._declaration_statement_text(
+            "TauCeti.DavisKahan1970.reflectionTangentCorner_same_paperTanTwoDirectedCorner"
+        )
+        real_primary = M._declaration_statement_text(
+            "TauCeti.DavisKahan1970."
+            "tanTwoTheta_directed_unboundedResidual_blockRepresentative_symmetricNorming_real"
+        )
+        self.assertIsNotNone(witness)
+        self.assertIsNotNone(real_primary)
+        self.assertIn("\u211d", real_primary, "the real primary is over a real Hilbert space")
+        self.assertNotIn(
+            "\u211d", witness,
+            "the witness is complex-only, so the scalar check must refuse it for the real clause",
+        )
+
+    def test_the_directed_clauses_are_open_while_the_obligation_stands(self):
+        """The row was closed once on a correspondence that did not compose."""
+        target = row(inventory(), "S2-tan-two-theta")
+        directed = [c for c in target["source_clauses"] if c["id"].startswith("directed.")]
+        self.assertTrue(directed)
+        for clause in directed:
+            self.assertEqual(clause["status"], "open")
+            self.assertTrue(clause.get("open_reason", "").strip())
+
     def test_the_census_and_inventory_must_agree_a_change_happened(self):
         data = inventory()
         census = json.loads((ROOT / "dev/davis-kahan-1970-full-source-census.json").read_text())

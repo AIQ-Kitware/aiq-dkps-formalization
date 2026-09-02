@@ -6,8 +6,8 @@ The denominator contains exactly the four Section 2 headline theorems and every 
 
 - Counted results: **29**
 - Result-boundary reviews accepted: **29/29**
-- Currently hostile-certified terminal: **29**
-- Awaiting closure: **0**
+- Currently hostile-certified terminal: **28**
+- Awaiting closure: **1**
 - Printed statements that are NOT locally self-contained: **5**
 - Result-only semantic sweep: `dev/davis-kahan-1970-result-semantic-review-2026-08-12.md`
 - Compiler-checkable theorem surface: `DavisKahan/Sources/DavisKahan1970/Audits/ResultSemanticSurface.lean`
@@ -25,7 +25,7 @@ Each result below explicitly partitions its primary source block into atoms insi
 | `S2-sin-theta` | unnumbered_theorem | `locally_exact` | yes | `proved_exact` | `proved_in_build` | `accepted` | `accepted` |
 | `S2-tan-theta` | unnumbered_theorem | `paper_faithful_nonlocal_source_interpretation` | **no** | `proved_exact` | `proved_in_build` | `accepted` | `accepted` |
 | `S2-sin-two-theta` | unnumbered_theorem | `locally_exact` | yes | `proved_exact` | `proved_in_build` | `accepted` | `accepted` |
-| `S2-tan-two-theta` | unnumbered_theorem | `locally_exact` | yes | `proved_exact` | `proved_in_build` | `accepted` | `accepted` |
+| `S2-tan-two-theta` | unnumbered_theorem | `locally_exact` | yes | `proved_exact` | `proved_in_build` | `hostile_review_blocked` | `accepted` |
 | `DK-3.1-prop` | proposition | `locally_exact` | yes | `proved_exact` | `proved_in_build` | `accepted` | `accepted` |
 | `DK-3.2-prop` | proposition | `locally_exact` | yes | `proved_exact` | `proved_in_build` | `accepted` | `accepted` |
 | `DK-3.3-prop` | proposition | `locally_exact` | yes | `proved_exact` | `proved_in_build` | `accepted` | `accepted` |
@@ -108,18 +108,19 @@ The accepted reading is hash-pinned to the distributable specification, the sour
 
 ## Current closure queue
 
-Empty. All 29 counted results are terminal on all three axes, and the hostile
-review's obligations are closed.
+`S2-tan-two-theta` — reopened 2026-09-02 on hostile review, under obligation
+`tan2theta-directed-correspondence`.
 
-The last to close was `S2-tan-two-theta`. Its directed clauses concluded on
-`N.gauge (reflectionTangentCorner U Z)` while Davis and Kahan state the bound on
-the norm of `tan 2Θ₀`, and the bridge between those objects was prose. It is now
-three compiled theorems: a compression out of `U` cannot see the reflection
-through `U`; the canonical object therefore *equals* the compressed corner of
-the paper's own double-angle representative; and that corner has the same
-approximation singular sequence as the ambient block spelling the paper-facing
-object uses. The earlier reading of this gap — that it needed a
-corner-to-full-operator singular-value argument — was wrong.
+The corner-to-paper-object step is proved for the complex reflection corner, but
+the registered correspondence does not compose with the canonical directed
+primaries. Those primaries quantify over an arbitrary self-adjoint involution
+`Z` and conclude on `reflectionTangentCorner U Z`, while the correspondence
+theorem is about the special case `Z = V.reflectionOperator`; and the same
+complex theorem was registered as the witness for the REAL clause, whose primary
+is over a real Hilbert space. Closing it means source-shaped directed endpoints
+that take an actual reducing subspace and conclude on the paper objects —
+`paperTanTwoDirectedCornerR U V` on the real side — made canonical, with the
+arbitrary-`Z` theorems retained as supporting generalizations.
 
 This section lists exactly the results the machine state reports as
 nonterminal; the checker rejects it when the two disagree, and rejects an
