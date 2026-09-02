@@ -31,7 +31,7 @@ The Section 2 sin-theta theorem: interval/exterior spectral separation controls 
 
 **Human-written Lean statement**
 
-`DavisKahan/Sources/DavisKahan1970/SineTheta/PaperSurface.lean:343`
+`DavisKahan/Sources/DavisKahan1970/SineTheta/Presentation.lean:343`
 
 ~~~~lean
 variable {E F G H : Type v}
@@ -82,7 +82,7 @@ Boundary vocabulary: `NormedAddCommGroup`, `InnerProductSpace`, `Complex`, `Comp
 <details><summary>Statement closure tree</summary>
 
 ~~~~text
-DavisKahan1970.sinTheta_unbounded_formGap_symmetricNorming_complex  (theorem, DavisKahan/Sources/DavisKahan1970/SineTheta/PaperSurface.lean:326)
+DavisKahan1970.sinTheta_unbounded_formGap_symmetricNorming_complex  (theorem, DavisKahan/Sources/DavisKahan1970/SineTheta/Presentation.lean:326)
     DavisKahan1970.sinTheta_unbounded_formGap_symmetricNorming_complex.{v} {E F G H : Type v}
       [NormedAddCommGroup E] [InnerProductSpace ℂ E] [CompleteSpace E] [NormedAddCommGroup F]
       [InnerProductSpace ℂ F] [CompleteSpace F] [NormedAddCommGroup G] [InnerProductSpace ℂ G]
@@ -125,7 +125,7 @@ DavisKahan1970.sinTheta_unbounded_formGap_symmetricNorming_complex  (theorem, Da
     [body] TauCeti.DavisKahan.ExactSinTheta.zeroPad  (def, DavisKahan/Sources/DavisKahan1970/SineTheta/Norms/UnitaryInvariantNorm.lean:43)
         TauCeti.DavisKahan.ExactSinTheta.zeroPad {n : ℕ} (x : Fin n → ℝ) : Fin (n + 1) → ℝ
         hash: expr=135628739 text=485d6568d5290806
-  [type] DavisKahan1970.IsTrialResidual  (structure, DavisKahan/Sources/DavisKahan1970/SineTheta/PaperSurface.lean:67)
+  [type] DavisKahan1970.IsTrialResidual  (structure, DavisKahan/Sources/DavisKahan1970/SineTheta/Presentation.lean:67)
       DavisKahan1970.IsTrialResidual.{u, v} {𝕜 : Type u} [RCLike 𝕜] {E F : Type v} [NormedAddCommGroup E]
         [InnerProductSpace 𝕜 E] [NormedAddCommGroup F] [InnerProductSpace 𝕜 F] (A : E →ₗ.[𝕜] E)
         (A₀ : F →ₗ.[𝕜] F) (E₀ R : F →L[𝕜] E) : Prop
@@ -138,7 +138,7 @@ DavisKahan1970.sinTheta_unbounded_formGap_symmetricNorming_complex  (theorem, Da
           [NormedAddCommGroup E] [InnerProductSpace 𝕜 E] {F : Type u_3} [NormedAddCommGroup F]
           [InnerProductSpace 𝕜 F] (X : F →L[𝕜] E) : Prop
         hash: expr=2691607086 text=02c1b372cca3865c
-  [type] DavisKahan1970.IsExactSpectralDecomposition  (structure, DavisKahan/Sources/DavisKahan1970/SineTheta/PaperSurface.lean:146)
+  [type] DavisKahan1970.IsExactSpectralDecomposition  (structure, DavisKahan/Sources/DavisKahan1970/SineTheta/Presentation.lean:146)
       DavisKahan1970.IsExactSpectralDecomposition.{u, v} {𝕜 : Type u} [RCLike 𝕜] {E G H : Type v}
         [NormedAddCommGroup E] [InnerProductSpace 𝕜 E] [CompleteSpace E] [NormedAddCommGroup G]
         [InnerProductSpace 𝕜 G] [CompleteSpace G] [NormedAddCommGroup H] [InnerProductSpace 𝕜 H]
@@ -239,7 +239,7 @@ boundary: NormedAddCommGroup, InnerProductSpace, Complex, CompleteSpace, LinearP
 
 **Human-written Lean statement**
 
-`DavisKahan/Sources/DavisKahan1970/SineTheta/PaperSurface.lean:457`
+`DavisKahan/Sources/DavisKahan1970/SineTheta/Presentation.lean:457`
 
 ~~~~lean
 variable {E F G H : Type v}
@@ -290,7 +290,7 @@ Boundary vocabulary: `NormedAddCommGroup`, `InnerProductSpace`, `Real`, `Complet
 <details><summary>Statement closure tree</summary>
 
 ~~~~text
-DavisKahan1970.sinTheta_unbounded_formGap_symmetricNorming_real  (theorem, DavisKahan/Sources/DavisKahan1970/SineTheta/PaperSurface.lean:452)
+DavisKahan1970.sinTheta_unbounded_formGap_symmetricNorming_real  (theorem, DavisKahan/Sources/DavisKahan1970/SineTheta/Presentation.lean:452)
     DavisKahan1970.sinTheta_unbounded_formGap_symmetricNorming_real.{v} {E F G H : Type v}
       [NormedAddCommGroup E] [InnerProductSpace ℝ E] [CompleteSpace E] [NormedAddCommGroup F]
       [InnerProductSpace ℝ F] [CompleteSpace F] [NormedAddCommGroup G] [InnerProductSpace ℝ G]
@@ -333,7 +333,7 @@ DavisKahan1970.sinTheta_unbounded_formGap_symmetricNorming_real  (theorem, Davis
     [body] TauCeti.DavisKahan.ExactSinTheta.zeroPad  (def, DavisKahan/Sources/DavisKahan1970/SineTheta/Norms/UnitaryInvariantNorm.lean:43)
         TauCeti.DavisKahan.ExactSinTheta.zeroPad {n : ℕ} (x : Fin n → ℝ) : Fin (n + 1) → ℝ
         hash: expr=135628739 text=485d6568d5290806
-  [type] DavisKahan1970.IsTrialResidual  (structure, DavisKahan/Sources/DavisKahan1970/SineTheta/PaperSurface.lean:67)
+  [type] DavisKahan1970.IsTrialResidual  (structure, DavisKahan/Sources/DavisKahan1970/SineTheta/Presentation.lean:67)
       DavisKahan1970.IsTrialResidual.{u, v} {𝕜 : Type u} [RCLike 𝕜] {E F : Type v} [NormedAddCommGroup E]
         [InnerProductSpace 𝕜 E] [NormedAddCommGroup F] [InnerProductSpace 𝕜 F] (A : E →ₗ.[𝕜] E)
         (A₀ : F →ₗ.[𝕜] F) (E₀ R : F →L[𝕜] E) : Prop
@@ -346,7 +346,7 @@ DavisKahan1970.sinTheta_unbounded_formGap_symmetricNorming_real  (theorem, Davis
           [NormedAddCommGroup E] [InnerProductSpace 𝕜 E] {F : Type u_3} [NormedAddCommGroup F]
           [InnerProductSpace 𝕜 F] (X : F →L[𝕜] E) : Prop
         hash: expr=2691607086 text=02c1b372cca3865c
-  [type] DavisKahan1970.IsExactSpectralDecomposition  (structure, DavisKahan/Sources/DavisKahan1970/SineTheta/PaperSurface.lean:146)
+  [type] DavisKahan1970.IsExactSpectralDecomposition  (structure, DavisKahan/Sources/DavisKahan1970/SineTheta/Presentation.lean:146)
       DavisKahan1970.IsExactSpectralDecomposition.{u, v} {𝕜 : Type u} [RCLike 𝕜] {E G H : Type v}
         [NormedAddCommGroup E] [InnerProductSpace 𝕜 E] [CompleteSpace E] [NormedAddCommGroup G]
         [InnerProductSpace 𝕜 G] [CompleteSpace G] [NormedAddCommGroup H] [InnerProductSpace 𝕜 H]
@@ -822,12 +822,12 @@ TauCeti.DavisKahan1970.tanTheta_ambient_unboundedRitz_symmetricNorming_complex  
                   {E : Type v} {F : Type w} [SeminormedAddCommGroup E] [NormedSpace 𝕜 E] [SeminormedAddCommGroup F]
                   [NormedSpace 𝕜 F] (T : E →L[𝕜] F) (n : ℕ) : ℝ
                 hash: expr=2527437639 text=7dc5679d2ff68267
-  [type] TauCeti.DavisKahanExt.tanAngleOperatorC  (def, DavisKahan/Geometry/Angle/PaperTanAngle.lean:74)
+  [type] TauCeti.DavisKahanExt.tanAngleOperatorC  (def, DavisKahan/Geometry/Angle/TanAngleFunctionalCalculus.lean:74)
       TauCeti.DavisKahanExt.tanAngleOperatorC.{u_1} {E : Type u_1} [NormedAddCommGroup E]
         [InnerProductSpace ℂ E] [CompleteSpace E] (U V : Submodule ℂ E) [U.HasOrthogonalProjection]
         [V.HasOrthogonalProjection] : E →L[ℂ] E
       hash: expr=187490045 text=178745a4708f5513
-    [body] TauCeti.DavisKahanExt.angleOperatorC  (def, DavisKahan/Geometry/Angle/PaperOperatorAngle.lean:84)
+    [body] TauCeti.DavisKahanExt.angleOperatorC  (def, DavisKahan/Geometry/Angle/AngleFunctionalCalculus.lean:84)
         TauCeti.DavisKahanExt.angleOperatorC.{u_1} {E : Type u_1} [NormedAddCommGroup E]
           [InnerProductSpace ℂ E] [CompleteSpace E] (U V : Submodule ℂ E) [U.HasOrthogonalProjection]
           [V.HasOrthogonalProjection] : E →L[ℂ] E
@@ -1051,7 +1051,7 @@ TauCeti.DavisKahan1970.tanTheta_ambient_unboundedRitz_symmetricNorming_real  (th
                   {E : Type v} {F : Type w} [SeminormedAddCommGroup E] [NormedSpace 𝕜 E] [SeminormedAddCommGroup F]
                   [NormedSpace 𝕜 F] (T : E →L[𝕜] F) (n : ℕ) : ℝ
                 hash: expr=2527437639 text=7dc5679d2ff68267
-  [type] TauCeti.DavisKahanExt.tanAngleOperatorR  (def, DavisKahan/Geometry/Angle/PaperOperatorAngleReal.lean:126)
+  [type] TauCeti.DavisKahanExt.tanAngleOperatorR  (def, DavisKahan/Geometry/Angle/AngleFunctionalCalculusReal.lean:126)
       TauCeti.DavisKahanExt.tanAngleOperatorR.{u_1} {E : Type u_1} [NormedAddCommGroup E]
         [InnerProductSpace ℝ E] [CompleteSpace E] (U V : Submodule ℝ E) [U.HasOrthogonalProjection]
         [V.HasOrthogonalProjection] : E →L[ℝ] E
@@ -1077,12 +1077,12 @@ TauCeti.DavisKahan1970.tanTheta_ambient_unboundedRitz_symmetricNorming_real  (th
             TauCeti.RealComplexification.mk.{u_1} {E : Type u_1} (x y : E) : TauCeti.RealComplexification E
             hash: expr=2390836649 text=76af0c3ed38ec24a
           [type] TauCeti.RealComplexification  (above)
-    [body] TauCeti.DavisKahanExt.tanAngleOperatorC  (def, DavisKahan/Geometry/Angle/PaperTanAngle.lean:74)
+    [body] TauCeti.DavisKahanExt.tanAngleOperatorC  (def, DavisKahan/Geometry/Angle/TanAngleFunctionalCalculus.lean:74)
         TauCeti.DavisKahanExt.tanAngleOperatorC.{u_1} {E : Type u_1} [NormedAddCommGroup E]
           [InnerProductSpace ℂ E] [CompleteSpace E] (U V : Submodule ℂ E) [U.HasOrthogonalProjection]
           [V.HasOrthogonalProjection] : E →L[ℂ] E
         hash: expr=187490045 text=178745a4708f5513
-      [body] TauCeti.DavisKahanExt.angleOperatorC  (def, DavisKahan/Geometry/Angle/PaperOperatorAngle.lean:84)
+      [body] TauCeti.DavisKahanExt.angleOperatorC  (def, DavisKahan/Geometry/Angle/AngleFunctionalCalculus.lean:84)
           TauCeti.DavisKahanExt.angleOperatorC.{u_1} {E : Type u_1} [NormedAddCommGroup E]
             [InnerProductSpace ℂ E] [CompleteSpace E] (U V : Submodule ℂ E) [U.HasOrthogonalProjection]
             [V.HasOrthogonalProjection] : E →L[ℂ] E
@@ -3815,12 +3815,12 @@ TauCeti.DavisKahan1970.sinTwoTheta_ambient_unbounded_addBounded_symmetricNorming
                   {E : Type v} {F : Type w} [SeminormedAddCommGroup E] [NormedSpace 𝕜 E] [SeminormedAddCommGroup F]
                   [NormedSpace 𝕜 F] (T : E →L[𝕜] F) (n : ℕ) : ℝ
                 hash: expr=2527437639 text=7dc5679d2ff68267
-  [type] TauCeti.DavisKahanExt.sinTwoAngleOperatorC  (def, DavisKahan/Geometry/Angle/PaperDoubleAngle.lean:60)
+  [type] TauCeti.DavisKahanExt.sinTwoAngleOperatorC  (def, DavisKahan/Geometry/Angle/DoubleAngleFunctionalCalculus.lean:60)
       TauCeti.DavisKahanExt.sinTwoAngleOperatorC.{u_1} {E : Type u_1} [NormedAddCommGroup E]
         [InnerProductSpace ℂ E] [CompleteSpace E] (U V : Submodule ℂ E) [U.HasOrthogonalProjection]
         [V.HasOrthogonalProjection] : E →L[ℂ] E
       hash: expr=187490045 text=178745a4708f5513
-    [body] TauCeti.DavisKahanExt.angleOperatorC  (def, DavisKahan/Geometry/Angle/PaperOperatorAngle.lean:84)
+    [body] TauCeti.DavisKahanExt.angleOperatorC  (def, DavisKahan/Geometry/Angle/AngleFunctionalCalculus.lean:84)
         TauCeti.DavisKahanExt.angleOperatorC.{u_1} {E : Type u_1} [NormedAddCommGroup E]
           [InnerProductSpace ℂ E] [CompleteSpace E] (U V : Submodule ℂ E) [U.HasOrthogonalProjection]
           [V.HasOrthogonalProjection] : E →L[ℂ] E
@@ -4340,18 +4340,18 @@ TauCeti.DavisKahan1970.sinTwoTheta_ambient_unbounded_addBounded_symmetricNorming
                   {E : Type v} {F : Type w} [SeminormedAddCommGroup E] [NormedSpace 𝕜 E] [SeminormedAddCommGroup F]
                   [NormedSpace 𝕜 F] (T : E →L[𝕜] F) (n : ℕ) : ℝ
                 hash: expr=2527437639 text=7dc5679d2ff68267
-  [type] TauCeti.DavisKahanExt.sinTwoAngleOperatorR  (def, DavisKahan/Geometry/Angle/PaperOperatorAngleReal.lean:121)
+  [type] TauCeti.DavisKahanExt.sinTwoAngleOperatorR  (def, DavisKahan/Geometry/Angle/AngleFunctionalCalculusReal.lean:121)
       TauCeti.DavisKahanExt.sinTwoAngleOperatorR.{u_1} {E : Type u_1} [NormedAddCommGroup E]
         [InnerProductSpace ℝ E] [CompleteSpace E] (U V : Submodule ℝ E) [U.HasOrthogonalProjection]
         [V.HasOrthogonalProjection] : E →L[ℝ] E
       hash: expr=2215108693 text=ca05c2be87f84df1
     [body] TauCeti.RealComplexification.realPartOperator  (above)
-    [body] TauCeti.DavisKahanExt.sinTwoAngleOperatorC  (def, DavisKahan/Geometry/Angle/PaperDoubleAngle.lean:60)
+    [body] TauCeti.DavisKahanExt.sinTwoAngleOperatorC  (def, DavisKahan/Geometry/Angle/DoubleAngleFunctionalCalculus.lean:60)
         TauCeti.DavisKahanExt.sinTwoAngleOperatorC.{u_1} {E : Type u_1} [NormedAddCommGroup E]
           [InnerProductSpace ℂ E] [CompleteSpace E] (U V : Submodule ℂ E) [U.HasOrthogonalProjection]
           [V.HasOrthogonalProjection] : E →L[ℂ] E
         hash: expr=187490045 text=178745a4708f5513
-      [body] TauCeti.DavisKahanExt.angleOperatorC  (def, DavisKahan/Geometry/Angle/PaperOperatorAngle.lean:84)
+      [body] TauCeti.DavisKahanExt.angleOperatorC  (def, DavisKahan/Geometry/Angle/AngleFunctionalCalculus.lean:84)
           TauCeti.DavisKahanExt.angleOperatorC.{u_1} {E : Type u_1} [NormedAddCommGroup E]
             [InnerProductSpace ℂ E] [CompleteSpace E] (U V : Submodule ℂ E) [U.HasOrthogonalProjection]
             [V.HasOrthogonalProjection] : E →L[ℂ] E
@@ -5699,12 +5699,12 @@ TauCeti.DavisKahan1970.tanTwoTheta_ambient_unbounded_symmetricNorming_complex  (
                   {E : Type v} {F : Type w} [SeminormedAddCommGroup E] [NormedSpace 𝕜 E] [SeminormedAddCommGroup F]
                   [NormedSpace 𝕜 F] (T : E →L[𝕜] F) (n : ℕ) : ℝ
                 hash: expr=2527437639 text=7dc5679d2ff68267
-  [type] TauCeti.DavisKahanExt.absTanTwoAngleOperatorC  (def, DavisKahan/Geometry/Angle/PaperTanAngle.lean:179)
+  [type] TauCeti.DavisKahanExt.absTanTwoAngleOperatorC  (def, DavisKahan/Geometry/Angle/TanAngleFunctionalCalculus.lean:179)
       TauCeti.DavisKahanExt.absTanTwoAngleOperatorC.{u_1} {E : Type u_1} [NormedAddCommGroup E]
         [InnerProductSpace ℂ E] [CompleteSpace E] (U V : Submodule ℂ E) [U.HasOrthogonalProjection]
         [V.HasOrthogonalProjection] : E →L[ℂ] E
       hash: expr=187490045 text=178745a4708f5513
-    [body] TauCeti.DavisKahanExt.angleOperatorC  (def, DavisKahan/Geometry/Angle/PaperOperatorAngle.lean:84)
+    [body] TauCeti.DavisKahanExt.angleOperatorC  (def, DavisKahan/Geometry/Angle/AngleFunctionalCalculus.lean:84)
         TauCeti.DavisKahanExt.angleOperatorC.{u_1} {E : Type u_1} [NormedAddCommGroup E]
           [InnerProductSpace ℂ E] [CompleteSpace E] (U V : Submodule ℂ E) [U.HasOrthogonalProjection]
           [V.HasOrthogonalProjection] : E →L[ℂ] E
@@ -6148,18 +6148,18 @@ TauCeti.DavisKahan1970.tanTwoTheta_ambient_unbounded_symmetricNorming_real  (the
                   {E : Type v} {F : Type w} [SeminormedAddCommGroup E] [NormedSpace 𝕜 E] [SeminormedAddCommGroup F]
                   [NormedSpace 𝕜 F] (T : E →L[𝕜] F) (n : ℕ) : ℝ
                 hash: expr=2527437639 text=7dc5679d2ff68267
-  [type] TauCeti.DavisKahanExt.absTanTwoAngleOperatorR  (def, DavisKahan/Geometry/Angle/PaperOperatorAngleReal.lean:136)
+  [type] TauCeti.DavisKahanExt.absTanTwoAngleOperatorR  (def, DavisKahan/Geometry/Angle/AngleFunctionalCalculusReal.lean:136)
       TauCeti.DavisKahanExt.absTanTwoAngleOperatorR.{u_1} {E : Type u_1} [NormedAddCommGroup E]
         [InnerProductSpace ℝ E] [CompleteSpace E] (U V : Submodule ℝ E) [U.HasOrthogonalProjection]
         [V.HasOrthogonalProjection] : E →L[ℝ] E
       hash: expr=2215108693 text=ca05c2be87f84df1
     [body] TauCeti.RealComplexification.realPartOperator  (above)
-    [body] TauCeti.DavisKahanExt.absTanTwoAngleOperatorC  (def, DavisKahan/Geometry/Angle/PaperTanAngle.lean:179)
+    [body] TauCeti.DavisKahanExt.absTanTwoAngleOperatorC  (def, DavisKahan/Geometry/Angle/TanAngleFunctionalCalculus.lean:179)
         TauCeti.DavisKahanExt.absTanTwoAngleOperatorC.{u_1} {E : Type u_1} [NormedAddCommGroup E]
           [InnerProductSpace ℂ E] [CompleteSpace E] (U V : Submodule ℂ E) [U.HasOrthogonalProjection]
           [V.HasOrthogonalProjection] : E →L[ℂ] E
         hash: expr=187490045 text=178745a4708f5513
-      [body] TauCeti.DavisKahanExt.angleOperatorC  (def, DavisKahan/Geometry/Angle/PaperOperatorAngle.lean:84)
+      [body] TauCeti.DavisKahanExt.angleOperatorC  (def, DavisKahan/Geometry/Angle/AngleFunctionalCalculus.lean:84)
           TauCeti.DavisKahanExt.angleOperatorC.{u_1} {E : Type u_1} [NormedAddCommGroup E]
             [InnerProductSpace ℂ E] [CompleteSpace E] (U V : Submodule ℂ E) [U.HasOrthogonalProjection]
             [V.HasOrthogonalProjection] : E →L[ℂ] E

@@ -41,41 +41,41 @@ universe u
 variable {𝕜 : Type u} [RCLike 𝕜]
 
 /-- The two-dimensional model space `𝕜²` carrying the planar equality configuration. -/
-abbrev PaperPlane (𝕜 : Type u) [RCLike 𝕜] := EuclideanSpace 𝕜 (Fin 2)
+abbrev PlanarModelSpace (𝕜 : Type u) [RCLike 𝕜] := EuclideanSpace 𝕜 (Fin 2)
 
 /-- First standard vector of the planar equality model. -/
-def planarModelE0 : PaperPlane 𝕜 :=
+def planarModelE0 : PlanarModelSpace 𝕜 :=
   EuclideanSpace.single (0 : Fin 2) 1
 
 /-- Second standard vector of the planar equality model. -/
-def planeE1 : PaperPlane 𝕜 :=
+def planeE1 : PlanarModelSpace 𝕜 :=
   EuclideanSpace.single (1 : Fin 2) 1
 
 /-- Scalar-to-vector map used for all one-dimensional model blocks. -/
-noncomputable def scalarColumn (v : PaperPlane 𝕜) :
-    𝕜 →L[𝕜] PaperPlane 𝕜 :=
+noncomputable def scalarColumn (v : PlanarModelSpace 𝕜) :
+    𝕜 →L[𝕜] PlanarModelSpace 𝕜 :=
   (ContinuousLinearMap.id 𝕜 𝕜).smulRight v
 
 /-- Exact spectral inclusion. -/
 noncomputable def planarExactMap :
-    𝕜 →L[𝕜] PaperPlane 𝕜 :=
+    𝕜 →L[𝕜] PlanarModelSpace 𝕜 :=
   scalarColumn planarModelE0
 
 /-- Complementary spectral inclusion. -/
 noncomputable def planarComplementMap :
-    𝕜 →L[𝕜] PaperPlane 𝕜 :=
+    𝕜 →L[𝕜] PlanarModelSpace 𝕜 :=
   scalarColumn planeE1
 
 /-- Trial inclusion at angle `theta`. -/
 noncomputable def planarTrialMap (theta : ℝ) :
-    𝕜 →L[𝕜] PaperPlane 𝕜 :=
+    𝕜 →L[𝕜] PlanarModelSpace 𝕜 :=
   scalarColumn
     ((Real.cos theta : 𝕜) • planarModelE0 +
       (Real.sin theta : 𝕜) • planeE1)
 
 /-- Two-level self-adjoint operator with gap `delta`. -/
 noncomputable def planarAmbient (delta : ℝ) :
-    PaperPlane 𝕜 →L[𝕜] PaperPlane 𝕜 :=
+    PlanarModelSpace 𝕜 →L[𝕜] PlanarModelSpace 𝕜 :=
   (Matrix.toEuclideanLin
     !![(0 : 𝕜), 0; 0, (delta : 𝕜)]).toContinuousLinearMap
 
@@ -84,12 +84,12 @@ noncomputable def planarTrialOperator : 𝕜 →L[𝕜] 𝕜 := 0
 
 /-- Literal directed sine block of the planar model. -/
 noncomputable def planarSineBlock (theta : ℝ) :
-    𝕜 →L[𝕜] PaperPlane 𝕜 :=
+    𝕜 →L[𝕜] PlanarModelSpace 𝕜 :=
   ((Real.sin theta : 𝕜) • planarComplementMap)
 
 /-- Residual of the planar equality model. -/
 noncomputable def planarResidual (delta theta : ℝ) :
-    𝕜 →L[𝕜] PaperPlane 𝕜 :=
+    𝕜 →L[𝕜] PlanarModelSpace 𝕜 :=
   ((delta * Real.sin theta : ℝ) : 𝕜) • planarComplementMap
 
 /-- The first model vector is a unit vector. -/
@@ -106,7 +106,7 @@ theorem norm_planeE1 : ‖planeE1 (𝕜 := 𝕜)‖ = 1 := by
 
 Every block identity below needs this; without it the adjoint stays an opaque
 term and no component computation closes. -/
-theorem adjoint_scalarColumn_apply (i : Fin 2) (x : PaperPlane 𝕜) :
+theorem adjoint_scalarColumn_apply (i : Fin 2) (x : PlanarModelSpace 𝕜) :
     (scalarColumn (EuclideanSpace.single i (1 : 𝕜))).adjoint x =
       x.ofLp i := by
   -- Identify the adjoint by the defining inner-product identity, evaluated on
@@ -114,20 +114,20 @@ theorem adjoint_scalarColumn_apply (i : Fin 2) (x : PaperPlane 𝕜) :
   have hadj :
       (ContinuousLinearMap.id 𝕜 𝕜).smulRight
             (EuclideanSpace.single i (1 : 𝕜)) =
-          ((EuclideanSpace.proj i : PaperPlane 𝕜 →L[𝕜] 𝕜)).adjoint := by
+          ((EuclideanSpace.proj i : PlanarModelSpace 𝕜 →L[𝕜] 𝕜)).adjoint := by
     rw [ContinuousLinearMap.eq_adjoint_iff]
     intro z y
     rw [ContinuousLinearMap.smulRight_apply, ContinuousLinearMap.id_apply,
       inner_smul_left, EuclideanSpace.inner_single_left]
     simp [RCLike.inner_apply, mul_comm]
-  have := congrArg (fun T : 𝕜 →L[𝕜] PaperPlane 𝕜 => T.adjoint) hadj
+  have := congrArg (fun T : 𝕜 →L[𝕜] PlanarModelSpace 𝕜 => T.adjoint) hadj
   simp only [ContinuousLinearMap.adjoint_adjoint] at this
   rw [scalarColumn, this]
   rfl
 
 /-- Pointwise formula: the scalar column sends `z` to `z • v`. -/
 @[simp]
-theorem scalarColumn_apply (v : PaperPlane 𝕜) (z : 𝕜) :
+theorem scalarColumn_apply (v : PlanarModelSpace 𝕜) (z : 𝕜) :
     scalarColumn v z = z • v := rfl
 
 /-- Pointwise formula for the exact-subspace embedding: `z ↦ z • e₀`. -/
@@ -150,13 +150,13 @@ theorem planarTrialMap_apply (theta : ℝ) (z : 𝕜) :
 
 /-- The adjoint of the exact embedding reads off the zeroth coordinate. -/
 @[simp]
-theorem adjoint_planarExactMap_apply (x : PaperPlane 𝕜) :
+theorem adjoint_planarExactMap_apply (x : PlanarModelSpace 𝕜) :
     (planarExactMap (𝕜 := 𝕜)).adjoint x = x.ofLp 0 :=
   adjoint_scalarColumn_apply 0 x
 
 /-- The adjoint of the complement embedding reads off the first coordinate. -/
 @[simp]
-theorem adjoint_planarComplementMap_apply (x : PaperPlane 𝕜) :
+theorem adjoint_planarComplementMap_apply (x : PlanarModelSpace 𝕜) :
     (planarComplementMap (𝕜 := 𝕜)).adjoint x = x.ofLp 1 :=
   adjoint_scalarColumn_apply 1 x
 
@@ -234,7 +234,7 @@ theorem planar_residual_identity (delta theta : ℝ) :
 
 /-- The projection residual is literally the rank-one sine block. -/
 theorem planar_directedSine_identity (theta : ℝ) :
-    (ContinuousLinearMap.id 𝕜 (PaperPlane 𝕜) -
+    (ContinuousLinearMap.id 𝕜 (PlanarModelSpace 𝕜) -
         planarExactMap (𝕜 := 𝕜) ∘L
           (planarExactMap (𝕜 := 𝕜)).adjoint) ∘L
       planarTrialMap (𝕜 := 𝕜) theta =
@@ -312,11 +312,9 @@ theorem finiteDimensional_scalar_homogeneity
 
 section Counterexample
 
-/-- The real two-dimensional model space `ℝ²` carrying the one-gap counterexample. -/
-abbrev PaperRealPlane := EuclideanSpace ℝ (Fin 2)
 
 /-- The real model plane is two-dimensional. -/
-theorem realPlane_finrank : Module.finrank ℝ PaperRealPlane = 2 := by simp
+theorem realPlane_finrank : Module.finrank ℝ (PlanarModelSpace ℝ) = 2 := by simp
 
 /-!
 ### The real coordinate frame
@@ -365,26 +363,26 @@ private theorem real_inner_diff_e1 :
 
 /-- The perturbed operator of the counterexample: `diag(0, 1)`. -/
 noncomputable def counterexampleA :
-    PaperRealPlane →L[ℝ] PaperRealPlane :=
+    (PlanarModelSpace ℝ) →L[ℝ] (PlanarModelSpace ℝ) :=
   (Matrix.toEuclideanLin !![(0 : ℝ), 0; 0, 1]).toContinuousLinearMap
 
 /-- The perturbation of the counterexample: the off-diagonal involution `!![1,1;1,0]`. -/
 noncomputable def counterexampleH :
-    PaperRealPlane →L[ℝ] PaperRealPlane :=
+    (PlanarModelSpace ℝ) →L[ℝ] (PlanarModelSpace ℝ) :=
   (Matrix.toEuclideanLin !![(1 : ℝ), 1; 1, 0]).toContinuousLinearMap
 
 /-- The exact subspace of the counterexample: the line spanned by `e₀`. -/
-noncomputable def counterexampleExact : Submodule ℝ PaperRealPlane :=
+noncomputable def counterexampleExact : Submodule ℝ (PlanarModelSpace ℝ) :=
   Submodule.span ℝ {planarModelE0 (𝕜 := ℝ)}
 
 /-- Unit vector spanning the trial line in the printed counterexample. -/
-noncomputable def counterexampleTrialVector : PaperRealPlane :=
+noncomputable def counterexampleTrialVector : (PlanarModelSpace ℝ) :=
   (1 / Real.sqrt 2) •
     (planarModelE0 (𝕜 := ℝ) - planeE1 (𝕜 := ℝ))
 
 /-- The trial subspace of the counterexample: the line spanned by the unit vector
 along `e₀ - e₁`, i.e. at `π/4` to the exact subspace. -/
-noncomputable def counterexampleTrial : Submodule ℝ PaperRealPlane :=
+noncomputable def counterexampleTrial : Submodule ℝ (PlanarModelSpace ℝ) :=
   Submodule.span ℝ {counterexampleTrialVector}
 
 /-- The counterexample's exact subspace is orthogonally complemented. -/
@@ -459,7 +457,7 @@ theorem counterexampleExact_starProjection_e1 :
 
 /-- Pointwise formula for the orthogonal projection onto the trial line. -/
 @[simp]
-theorem counterexampleTrial_starProjection_apply (x : PaperRealPlane) :
+theorem counterexampleTrial_starProjection_apply (x : (PlanarModelSpace ℝ)) :
     counterexampleTrial.starProjection x =
       ⟪counterexampleTrialVector, x⟫_ℝ •
         counterexampleTrialVector :=
@@ -589,7 +587,7 @@ theorem counterexample_sine_square_norm :
   rw [hilbertSchmidtNorm_sinAngleOperatorRC_eq_projectionDifference,
     hilbertSchmidtNorm_eq_frobenius,
     TauCeti.UnitarilyInvariantSeminorm.frobenius_apply
-    ℝ PaperRealPlane
+    ℝ (PlanarModelSpace ℝ)
     (counterexampleExact.starProjection -
       counterexampleTrial.starProjection).toLinearMap
     realPlane_finrank (EuclideanSpace.basisFun (Fin 2) ℝ)]
@@ -610,7 +608,7 @@ theorem counterexample_perturbation_square_norm :
     paperHilbertSchmidtNorm counterexampleH = Real.sqrt 3 := by
   rw [hilbertSchmidtNorm_eq_frobenius,
     TauCeti.UnitarilyInvariantSeminorm.frobenius_apply
-    ℝ PaperRealPlane counterexampleH.toLinearMap
+    ℝ (PlanarModelSpace ℝ) counterexampleH.toLinearMap
     realPlane_finrank (EuclideanSpace.basisFun (Fin 2) ℝ)]
   rw [Fin.sum_univ_two]
   simp only [EuclideanSpace.basisFun_apply]

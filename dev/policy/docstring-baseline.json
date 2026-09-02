@@ -209,7 +209,7 @@
     "DavisKahan/TanTheta/Spectrum.lean:TauCeti.DavisKahanExt.instCStarAlgebraSubspaceCoordinateGenuineTanTheta": "",
     "DavisKahan/TanTheta/Spectrum.lean:TauCeti.DavisKahanExt.instCompleteSpaceCoeOfHasOrthogonalProjectionGenuineTanTheta": "",
     "ForTauCeti/Analysis/InnerProductSpace/PrincipalSineSequence.lean:TauCeti.sourceCompleteSpace": "",
-    "DavisKahan/Sources/DavisKahan1970/SineTheta/PaperSurface.lean:DavisKahan1970.sinTheta_unbounded_formGap_symmetricNorming_complex_ofRCLike_conforms": "Type-equality check; its meaning is the `/-! ### ... -/` section docstring immediately above.",
-    "DavisKahan/Sources/DavisKahan1970/SineTheta/PaperSurface.lean:DavisKahan1970.sinTheta_unbounded_formGap_symmetricNorming_real_ofRCLike_conforms": "Type-equality check; its meaning is the `/-! ### ... -/` section docstring immediately above."
+    "DavisKahan/Sources/DavisKahan1970/SineTheta/Presentation.lean:DavisKahan1970.sinTheta_unbounded_formGap_symmetricNorming_complex_ofRCLike_conforms": "Type-equality check; its meaning is the `/-! ### ... -/` section docstring immediately above.",
+    "DavisKahan/Sources/DavisKahan1970/SineTheta/Presentation.lean:DavisKahan1970.sinTheta_unbounded_formGap_symmetricNorming_real_ofRCLike_conforms": "Type-equality check; its meaning is the `/-! ### ... -/` section docstring immediately above."
   }
 }

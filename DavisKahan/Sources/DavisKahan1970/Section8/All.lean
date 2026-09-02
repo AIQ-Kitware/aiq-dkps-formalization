@@ -6,7 +6,7 @@ Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 import DavisKahan.Sources.DavisKahan1970.Section8.BranchRepulsion
 import DavisKahan.Sources.DavisKahan1970.Section8.CompressionApproximation
 import DavisKahan.Sources.DavisKahan1970.Section8.CompressionRepulsion
-import DavisKahan.Sources.DavisKahan1970.Section8.PaperSurface
+import DavisKahan.Sources.DavisKahan1970.Section8.Presentation
 import DavisKahan.Sources.DavisKahan1970.Section8.SelectedBranch
 import DavisKahan.Sources.DavisKahan1970.Section8.Smallness
 import DavisKahan.Sources.DavisKahan1970.Section8.SourceSurface

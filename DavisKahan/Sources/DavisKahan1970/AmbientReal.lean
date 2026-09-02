@@ -3,7 +3,7 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, Claude Opus 5, OpenAI GPT-5.6 Sol
 -/
-import DavisKahan.Geometry.Angle.PaperOperatorAngleReal
+import DavisKahan.Geometry.Angle.AngleFunctionalCalculusReal
 import DavisKahan.Sources.DavisKahan1970.SinTwoThetaAmbient
 import DavisKahan.Sources.DavisKahan1970.TanThetaAmbient
 import DavisKahan.Sources.DavisKahan1970.TanTwoThetaReflectionAmbient
@@ -28,7 +28,7 @@ are proved over `ℂ` in the corresponding source modules.  This module states a
 proves their real-Hilbert-space counterparts with **no** loss:
 
 * the space, operators, and subspaces are real; ambient angle operators use
-  `DavisKahan/Geometry/Angle/PaperOperatorAngleReal.lean`, while the directed
+  `DavisKahan/Geometry/Angle/AngleFunctionalCalculusReal.lean`, while the directed
   `Θ₀` convention follows `sourceDirectedAngleR` and is represented on the
   canonical complexification, which preserves its complete singular data;
 * the constants `δ`, `1` and `2` are unchanged;

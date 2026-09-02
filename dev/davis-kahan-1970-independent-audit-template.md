@@ -144,7 +144,7 @@ Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `DavisKahan1970.sinTheta_unbounded_intervalExterior_characterizedWitness_rclike`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/SineTheta/PaperSurface.lean:207`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/SineTheta/Presentation.lean:207`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
@@ -180,43 +180,43 @@ Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `DavisKahan1970.sinTheta_unbounded_formGap_symmetricNorming_complex`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/SineTheta/PaperSurface.lean:343`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/SineTheta/Presentation.lean:343`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `DavisKahan1970.sinTheta_unbounded_formGap_symmetricNorming_real`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/SineTheta/PaperSurface.lean:457`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/SineTheta/Presentation.lean:457`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `DavisKahan1970.sinTheta_unbounded_intervalExterior_symmetricNorming_complex`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/SineTheta/PaperSurface.lean:420`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/SineTheta/Presentation.lean:420`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `DavisKahan1970.sinTheta_unbounded_intervalExterior_symmetricNorming_real`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/SineTheta/PaperSurface.lean:508`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/SineTheta/Presentation.lean:508`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `DavisKahan1970.sinTheta_unbounded_formGap_symmetricNorming_rclike`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/SineTheta/PaperSurface.lean:297`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/SineTheta/Presentation.lean:297`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `DavisKahan1970.isTrialResidual_iff`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/SineTheta/PaperSurface.lean:129`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/SineTheta/Presentation.lean:129`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `DavisKahan1970.isExactSpectralDecomposition_iff`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/SineTheta/PaperSurface.lean:168`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/SineTheta/Presentation.lean:168`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
@@ -1643,13 +1643,13 @@ Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahanExt.absTanTwoAngleOperatorR`
 
-Source location candidates: `DavisKahan/Geometry/Angle/PaperOperatorAngleReal.lean:144`
+Source location candidates: `DavisKahan/Geometry/Angle/AngleFunctionalCalculusReal.lean:144`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahanExt.complexify_absTanTwoAngleOperatorR`
 
-Source location candidates: `DavisKahan/Geometry/Angle/PaperOperatorAngleReal.lean:191`
+Source location candidates: `DavisKahan/Geometry/Angle/AngleFunctionalCalculusReal.lean:191`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
@@ -5470,7 +5470,7 @@ The declarations that carry this result's printed statement, with the source ato
 
 #### `TauCeti.DavisKahan1970.Section8.theorem8_2_branch_source_directed_complex`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section8/PaperSurface.lean:123`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section8/Presentation.lean:123`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 

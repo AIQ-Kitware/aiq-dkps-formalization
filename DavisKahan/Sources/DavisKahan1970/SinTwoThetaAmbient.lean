@@ -3,7 +3,7 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, Claude Opus 5
 -/
-import DavisKahan.Geometry.Angle.PaperDoubleAngle
+import DavisKahan.Geometry.Angle.DoubleAngleFunctionalCalculus
 import DavisKahan.DoubleAngle.UnboundedIdeal
 import DavisKahan.BoundedOperator.TrialResidual
 import DavisKahan.InfiniteDimensional.DoubleAngleSpectrum
@@ -36,7 +36,7 @@ geometric input is that the pair `(U, X U)` realises the *doubled* angle,
 `|P_{X U} - P_U| = sin 2Θ`,
 
 as an operator identity, proved in
-`DavisKahan/Geometry/Angle/PaperDoubleAngle.lean`.  Only the operator-norm form
+`DavisKahan/Geometry/Angle/DoubleAngleFunctionalCalculus.lean`.  Only the operator-norm form
 of that identification was previously available, which is not enough for an
 arbitrary unitarily invariant norm.
 

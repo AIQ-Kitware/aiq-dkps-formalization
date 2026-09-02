@@ -17,9 +17,9 @@ import DavisKahan.Sources.DavisKahan1970.DoubleAngleTangentOperator
 import DavisKahan.Sources.DavisKahan1970.GeneralSinTheta
 import DavisKahan.Sources.DavisKahan1970.GeneralSinThetaExtensions
 import DavisKahan.Sources.DavisKahan1970.PaperNormFanDominance
-import DavisKahan.Sources.DavisKahan1970.SineTheta.PaperSurface
 import DavisKahan.Sources.DavisKahan1970.PartIII
 import DavisKahan.Sources.DavisKahan1970.PartIIIManuscriptSurface
+import DavisKahan.Sources.DavisKahan1970.SineTheta.Presentation
 import DavisKahan.Sources.DavisKahan1970.Proposition61
 import DavisKahan.Sources.DavisKahan1970.RemainingSourceSurface
 import DavisKahan.Sources.DavisKahan1970.ScalarGenericFinite

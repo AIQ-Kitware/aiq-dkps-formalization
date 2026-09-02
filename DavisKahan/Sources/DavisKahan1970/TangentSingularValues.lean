@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, Claude Opus 5
 -/
 import DavisKahan.Sources.DavisKahan1970.TanThetaAmbient
-import DavisKahan.Geometry.Angle.PaperDoubleAngle
+import DavisKahan.Geometry.Angle.DoubleAngleFunctionalCalculus
 import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.TangentTransfer
 
 /-!
