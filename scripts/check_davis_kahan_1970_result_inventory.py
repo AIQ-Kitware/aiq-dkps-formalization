@@ -49,6 +49,16 @@ TERMINAL_RESULT_DISPOSITIONS = {
 }
 TERMINAL_VERIFICATIONS = {"proved_in_build"}
 TERMINAL_SEMANTIC_CERTIFICATIONS = {"accepted"}
+#: Non-terminal semantic states a row can be in.  Before these existed, a row
+#: blocked by hostile review still said `accepted`, and only the top-level
+#: obligation ledger stood between the repository and a green certificate --
+#: delete the ledger entry and unchanged evidence became certified.  A blocked
+#: row now says so itself, and the ledger and the rows must agree.
+BLOCKED_SEMANTIC_CERTIFICATIONS = {
+    "hostile_review_blocked",   # a hostile-review finding is open against this row
+    "reviewer_decision_open",   # a representation/policy decision is owed by a reviewer
+}
+SEMANTIC_CERTIFICATIONS = TERMINAL_SEMANTIC_CERTIFICATIONS | BLOCKED_SEMANTIC_CERTIFICATIONS
 TERMINAL_REPAIR_STATUSES = {"proved", "documented_no_satisfactory_repair"}
 CANONICAL_EVIDENCE_ROLES = {"primary_source_witness", "exact_refutation"}
 CANONICAL_EVIDENCE_KINDS = {"proof", "refutation"}
@@ -522,7 +532,15 @@ def _validate_source_clauses(
                 for entry in item.get("canonical_evidence", []) or []
                 if isinstance(entry, dict)
             }
-            if primary not in canonical_scopes:
+            # An OPEN clause is the exception: its primary names the strongest
+            # evidence that exists, which is precisely not canonical yet -- that
+            # is what makes the clause open.  Requiring canonicity there would
+            # force a repository to either certify the gap away or delete the
+            # evidence it does have.
+            if clause.get("status") == "open" and primary not in canonical_scopes:
+                if not isinstance(clause.get("open_reason"), str) or not clause["open_reason"].strip():
+                    fail(f"{where}: an open clause must record open_reason saying what is missing")
+            elif primary not in canonical_scopes:
                 fail(
                     f"{where}: evidence.primary {primary} is not canonical evidence of this result; "
                     "a clause's primary witness is by definition canonical evidence, not supporting "
@@ -531,7 +549,7 @@ def _validate_source_clauses(
             # The clause's own scalar field must be the primary's, and the primary's is
             # compiler-derived.  Otherwise a row could claim both of the paper's scalar
             # fields while both clauses are witnessed over the same one.
-            if clause.get("scalar_scope") != canonical_scopes[primary]:
+            if primary in canonical_scopes and clause.get("scalar_scope") != canonical_scopes[primary]:
                 fail(
                     f"{where}: clause scalar_scope {clause.get('scalar_scope')!r} disagrees with the "
                     f"compiler-derived scalar scope {canonical_scopes[primary]!r} of its primary {primary}"
@@ -636,7 +654,12 @@ def _validate_source_clauses(
                 + (f"printed conclusions with no established clause: {uncovered}; " if uncovered else "")
                 + (f"open clauses: {opens}" if opens else "")
             )
-        if not is_terminal and not uncovered and not opens:
+        if (
+            not is_terminal
+            and not uncovered
+            and not opens
+            and _semantic_certification(item) not in BLOCKED_SEMANTIC_CERTIFICATIONS
+        ):
             fail(
                 f"{result_id}: every printed clause is established, so the result should not be "
                 "recorded as nonterminal"
@@ -967,6 +990,30 @@ def _check_standing_scope_consistency(
                 f"{result_id}: standing_assumption_discharge for {declaration} must state exactly what it "
                 "proves about the inherited assumption"
             )
+        # Existence is not discharge.  Until this check, any registered
+        # declaration satisfied the record -- a reviewer swapped in an unrelated
+        # theorem with plausible prose and the gate stayed clean.  The record
+        # must name the predicate the inherited assumption *is*, and that
+        # predicate has to appear in the declaration's own statement.
+        concludes = entry.get("concludes")
+        if not isinstance(concludes, str) or not concludes.strip():
+            fail(
+                f"{result_id}: standing_assumption_discharge for {declaration} must record `concludes`, the "
+                "predicate the inherited assumption is discharged into, so the claim can be checked against "
+                "the declaration's statement rather than taken on trust"
+            )
+        statement = _declaration_statement_text(declaration)
+        if statement is None:
+            fail(
+                f"{result_id}: standing_assumption_discharge names {declaration}, whose statement could not be "
+                "read from the Lean sources, so its discharge claim cannot be checked"
+            )
+        if concludes not in statement:
+            fail(
+                f"{result_id}: standing_assumption_discharge claims {declaration} discharges into "
+                f"{concludes!r}, but that does not occur in its statement. A discharge must be witnessed by a "
+                "theorem that actually mentions the inherited condition."
+            )
 
 
 
@@ -1008,7 +1055,114 @@ def _open_hostile_obligations(data: dict[str, Any], items: list[dict[str, Any]])
                 )
     if obligations and block.get("status") != "open":
         fail("open_hostile_review_obligations lists obligations but its status is not 'open'")
+
+    # The ledger and the rows must agree in both directions.  One-way trust is
+    # what let a reviewer delete two ledger entries and watch unchanged evidence
+    # certify itself clean.
+    blocked_by_ledger = {r for e in obligations if isinstance(e, dict) for r in (e.get("results") or [])}
+    blocked_by_row = {
+        item["id"]
+        for item in items
+        if _semantic_certification(item) in BLOCKED_SEMANTIC_CERTIFICATIONS
+    }
+    only_ledger = sorted(blocked_by_ledger - blocked_by_row)
+    only_row = sorted(blocked_by_row - blocked_by_ledger)
+    if only_ledger:
+        fail(
+            f"results {only_ledger} are named by an open hostile-review obligation but their rows still claim a "
+            "terminal semantic_certification; a blocked result must say so on its own row"
+        )
+    if only_row:
+        fail(
+            f"results {only_row} carry a blocked semantic_certification but no open hostile-review obligation "
+            "names them; record the obligation or restore the row's certification"
+        )
     return [e for e in obligations if isinstance(e, dict)]
+
+
+
+def _validate_scope_inheritance(source_atoms: dict[str, dict[str, Any]], items: list[dict[str, Any]]) -> None:
+    """Keep an atom's two statements about its own reach in agreement.
+
+    A scope atom says which results it reaches twice: once as
+    `scope_classification.extends_results` (and `formalization_result_ids`), and
+    once as `scope_inheritance.local_to` / `inherited_by`.  Nothing compared
+    them, so an atom could claim a result is in scope in one field and omit it
+    from the other -- and the standing-scope invariant reads only the second,
+    which is how a result could quietly stop being checked while still looking
+    linked.
+    """
+    known = {item["id"] for item in items}
+    for atom_id, atom in sorted(source_atoms.items()):
+        inheritance = atom.get("scope_inheritance")
+        if not isinstance(inheritance, dict):
+            continue
+        if inheritance.get("kind") not in STANDING_SCOPE_KINDS:
+            fail(
+                f"{atom_id}: scope_inheritance.kind must be one of {sorted(STANDING_SCOPE_KINDS)}; "
+                f"got {inheritance.get('kind')!r}"
+            )
+        local = list(inheritance.get("local_to") or [])
+        inherited = list(inheritance.get("inherited_by") or [])
+        for result_id in [*local, *inherited]:
+            if result_id not in known:
+                fail(f"{atom_id}: scope_inheritance names unknown result {result_id!r}")
+        overlap = sorted(set(local) & set(inherited))
+        if overlap:
+            fail(
+                f"{atom_id}: scope_inheritance lists {overlap} as both local_to and inherited_by; a result "
+                "either prints the assumption with itself or inherits it, not both"
+            )
+        classification = atom.get("scope_classification") or {}
+        extends = set(classification.get("extends_results") or [])
+        covered = set(local) | set(inherited)
+        if extends != covered:
+            fail(
+                f"{atom_id}: scope_inheritance local_to + inherited_by must equal "
+                f"scope_classification.extends_results; extends={sorted(extends)}, "
+                f"local_to+inherited_by={sorted(covered)}"
+            )
+        linked = set(atom.get("formalization_result_ids") or [])
+        if linked != extends:
+            fail(
+                f"{atom_id}: formalization_result_ids must equal scope_classification.extends_results for a "
+                f"scope atom; linked={sorted(linked)}, extends={sorted(extends)}"
+            )
+
+
+
+@functools.lru_cache(maxsize=1)
+def _source_declaration_index():
+    """A static scan of the Lean sources, for checking discharge claims.
+
+    Deliberately source-level: the compiler-free audit paths must be able to
+    check a discharge, and a statement read from the file is enough to say
+    whether a theorem mentions the condition it claims to discharge.
+    """
+    try:
+        from aiq_lean_tools.lean_source import scan_lean_project
+
+        return scan_lean_project(ROOT)
+    except Exception:
+        return None
+
+
+def _declaration_statement_text(name: str) -> str | None:
+    """The declaration's written statement, or None if it cannot be located."""
+    index = _source_declaration_index()
+    if index is None:
+        return None
+    try:
+        from aiq_lean_tools.lean_source import declaration_source_texts
+
+        texts = declaration_source_texts(index, name)
+    except Exception:
+        return None
+    if not texts:
+        # Aliases and short names resolve through the census; fall back to the
+        # unqualified tail, which is how these are written in their own file.
+        return None
+    return texts[0].render()
 
 
 def _supporting_atom_digest(atom_ids: list[str], source_atoms: dict[str, dict[str, Any]]) -> str:
@@ -1802,7 +1956,15 @@ def _validate_canonical_evidence(
                 f"{result_id}: terminal result has source atoms covered by no canonical "
                 "evidence: " + ", ".join(uncovered)
             )
-        if not is_terminal and not uncovered:
+        # A row blocked by hostile review may legitimately have complete atom
+        # coverage: what is withheld is certification, not evidence.  That is the
+        # whole point of `reviewer_decision_open` -- the mathematics is covered
+        # and a decision is owed.
+        if (
+            not is_terminal
+            and not uncovered
+            and _semantic_certification(item) not in BLOCKED_SEMANTIC_CERTIFICATIONS
+        ):
             fail(
                 f"{result_id}: nonterminal result claims complete canonical atom coverage; "
                 "either the coverage or the status is wrong"
@@ -2116,6 +2278,7 @@ def completion_summary(
         items, source_atoms, source_inventory_path, census_declarations, audit_text
     )
     _validate_scope_atom_classification(source_atoms)
+    _validate_scope_inheritance(source_atoms, items)
     _validate_boundary_accounting(source_atoms, items)
     classification_complete, classification_note = _validate_total_source_classification(
         data, source_atoms, obligation_source_atoms, require_terminal=require_terminal
