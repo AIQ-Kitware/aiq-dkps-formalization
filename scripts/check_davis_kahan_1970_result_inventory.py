@@ -559,7 +559,11 @@ def _validate_source_clauses(
             # only that the listed declarations are registered let a reviewer
             # empty the list, or swap in another registered theorem, and still
             # get a green 29/29 over an unbridged representation change.
-            if clause.get("correspondence_required"):
+            # Enforced on ESTABLISHED clauses.  An open clause is one whose
+            # correspondence is admittedly not sufficient yet; it may still record
+            # the strongest witness it has, and that record is what a reviewer
+            # reads.  The checks below are what must hold before it can close.
+            if clause.get("correspondence_required") and clause.get("status") == "established":
                 bridge = clause.get("correspondence_witness")
                 if not isinstance(bridge, dict):
                     fail(
@@ -591,6 +595,32 @@ def _validate_source_clauses(
                             f"({role}), but that does not occur in its statement. A representation change needs a "
                             "theorem that mentions both objects."
                         )
+                # The bridge must start from the object the PRIMARY concludes on.
+                # Without this, a witness could name any two objects and still be
+                # accepted: a reviewer set from_object to `V.reflectionOperator`,
+                # which the primary never mentions, and the gate stayed green.
+                primary_statement = _declaration_statement_text(primary)
+                if primary_statement is None:
+                    fail(
+                        f"{where}: the primary {primary} has no statement readable from the Lean sources, so the "
+                        "correspondence cannot be checked against it"
+                    )
+                if source_object not in primary_statement:
+                    fail(
+                        f"{where}: correspondence_witness.from_object is {source_object!r}, which does not occur in "
+                        f"the clause's primary {primary}. A bridge must start from the object the primary actually "
+                        "concludes on."
+                    )
+                # Scalar compatibility.  A complex theorem is not a correspondence
+                # for a real object, and the same witness was registered for both
+                # scalar scopes of this row before hostile review caught it.
+                scalar_token = {"real": "ℝ", "complex": "ℂ"}.get(clause.get("scalar_scope"))
+                if scalar_token and scalar_token not in statement:
+                    fail(
+                        f"{where}: the clause is {clause.get('scalar_scope')!r} but its correspondence_witness "
+                        f"{declaration} does not mention {scalar_token} anywhere in its statement, so it does not "
+                        "state a correspondence over this clause's scalar field"
+                    )
 
             for declaration in [primary, *correspondence]:
                 if declaration not in _declarations(item):
