@@ -326,8 +326,8 @@ theorem tanTheta_ambient_bounded_symmetricNorming_complex_of_crossedDefects
       (alpha + delta) * ‖y‖ ^ 2 ≤ RCLike.re ⟪T y, y⟫_ℂ)
     (h35 : DavisKahan.CrossedDefectsEquivalent U V)
     (hMem : N.Mem (T - A)) :
-    N.Mem (paperTanAngleOperatorC U V) ∧
-      delta * N.gauge (paperTanAngleOperatorC U V) ≤ N.gauge (T - A) := by
+    N.Mem (tanAngleOperatorC U V) ∧
+      delta * N.gauge (tanAngleOperatorC U V) ≤ N.gauge (T - A) := by
   sorry
 
 /-- **Intentional red target: the omitted nonvacuity qualification of the printed
@@ -370,7 +370,7 @@ theorem tanTheta_literalSection2_admits_ambientRightAngle
       spectrum ℝ (compressOperator P A) ⊆ Set.Icc 0 0 ∧
       spectrum ℝ (compressOperator Qᗮ (A + K)) ⊆ Set.Ici 1 ∧
       (∀ x ∈ P, K x ∈ Pᗮ) ∧
-      sinAngleOperatorDirectedC P Q = 0 ∧
+      directedSinAngleOperatorC P Q = 0 ∧
       ∃ t ∈ spectrum ℝ (angleOperatorC P Q), Real.cos t = 0 := by
   sorry
 
@@ -404,8 +404,8 @@ theorem sinTwoTheta_ambient_bounded_symmetricNorming_complex
     (hUspec' : ∀ x ∈ spectrum ℝ (compressOperator Uᗮ A),
       x ≤ a - d ∨ b + d ≤ x)
     (hMem : N.Mem (B - A)) :
-    N.Mem (paperSinTwoAngleOperatorC U V) ∧
-      d * N.gauge (paperSinTwoAngleOperatorC U V) ≤
+    N.Mem (sinTwoAngleOperatorC U V) ∧
+      d * N.gauge (sinTwoAngleOperatorC U V) ≤
         2 * N.gauge (B - A) := by
   sorry
 
@@ -546,8 +546,8 @@ theorem tanTwoTheta_ambient_bounded_spectralGap_symmetricNorming_complex
     (hA1spec : spectrum ℝ (compressOperator Uᗮ A) ⊆ Set.Ici (α + δ))
     (hHU : ∀ x ∈ U, H x ∈ Uᗮ) (hHUperp : ∀ x ∈ Uᗮ, H x ∈ U)
     (hHmem : N.Mem H) :
-    N.Mem (paperTanTwoAngleOperatorC U V) ∧
-      δ * N.gauge (paperTanTwoAngleOperatorC U V) ≤ 2 * N.gauge H := by
+    N.Mem (tanTwoAngleOperatorC U V) ∧
+      δ * N.gauge (tanTwoAngleOperatorC U V) ≤ 2 * N.gauge H := by
   sorry
 
 /-- **Intentional red static-semantic certificate:** pole exclusion for the

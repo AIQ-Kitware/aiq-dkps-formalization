@@ -29,7 +29,7 @@ conjugation, hence **is** the complexification of a bounded operator on `E`.
 The real objects are not defined by a formula that happens to complexify
 correctly; they are defined as the real restrictions, and the identity
 
-  `complexify (tanAngleOperatorR U V) = paperTanAngleOperatorC (Uᶜ) (Vᶜ)`
+  `complexify (tanAngleOperatorR U V) = tanAngleOperatorC (Uᶜ) (Vᶜ)`
 
 is proved.  Their real content is then pinned down without reference to the
 complexification:
@@ -121,17 +121,17 @@ def angleOperatorR : E →L[ℝ] E :=
 /-- The paper's ambient `sin 2Θ` for a pair of **real** closed subspaces. -/
 def sinTwoAngleOperatorR : E →L[ℝ] E :=
   realPartOperator
-    (paperSinTwoAngleOperatorC (complexifySubmodule U) (complexifySubmodule V))
+    (sinTwoAngleOperatorC (complexifySubmodule U) (complexifySubmodule V))
 
 /-- The paper's ambient `tan Θ` for a pair of **real** closed subspaces. -/
 def tanAngleOperatorR : E →L[ℝ] E :=
   realPartOperator
-    (paperTanAngleOperatorC (complexifySubmodule U) (complexifySubmodule V))
+    (tanAngleOperatorC (complexifySubmodule U) (complexifySubmodule V))
 
 /-- The paper's ambient `tan 2Θ` for a pair of **real** closed subspaces. -/
 def tanTwoAngleOperatorR : E →L[ℝ] E :=
   realPartOperator
-    (paperTanTwoAngleOperatorC (complexifySubmodule U) (complexifySubmodule V))
+    (tanTwoAngleOperatorC (complexifySubmodule U) (complexifySubmodule V))
 
 /-- The paper's branch-free ambient `|tan 2Θ|` for a pair of **real** closed
 subspaces.
@@ -167,7 +167,7 @@ theorem complexify_angleOperatorR :
 @[simp]
 theorem complexify_sinTwoAngleOperatorR :
     complexify (sinTwoAngleOperatorR U V) =
-      paperSinTwoAngleOperatorC (complexifySubmodule U) (complexifySubmodule V) :=
+      sinTwoAngleOperatorC (complexifySubmodule U) (complexifySubmodule V) :=
   complexify_realPartOperator
     (conjugateOperator_cfc_angleOperatorC_complexifySubmodule U V _)
 
@@ -175,7 +175,7 @@ theorem complexify_sinTwoAngleOperatorR :
 @[simp]
 theorem complexify_tanAngleOperatorR :
     complexify (tanAngleOperatorR U V) =
-      paperTanAngleOperatorC (complexifySubmodule U) (complexifySubmodule V) :=
+      tanAngleOperatorC (complexifySubmodule U) (complexifySubmodule V) :=
   complexify_realPartOperator
     (conjugateOperator_cfc_angleOperatorC_complexifySubmodule U V _)
 
@@ -183,7 +183,7 @@ theorem complexify_tanAngleOperatorR :
 @[simp]
 theorem complexify_tanTwoAngleOperatorR :
     complexify (tanTwoAngleOperatorR U V) =
-      paperTanTwoAngleOperatorC (complexifySubmodule U) (complexifySubmodule V) :=
+      tanTwoAngleOperatorC (complexifySubmodule U) (complexifySubmodule V) :=
   complexify_realPartOperator
     (conjugateOperator_cfc_angleOperatorC_complexifySubmodule U V _)
 
@@ -230,21 +230,21 @@ theorem isSelfAdjoint_sinTwoAngleOperatorR :
     IsSelfAdjoint (sinTwoAngleOperatorR U V) :=
   isSelfAdjoint_realPartOperator_of_fixed
     (conjugateOperator_cfc_angleOperatorC_complexifySubmodule U V _)
-    (isSelfAdjoint_paperSinTwoAngleOperatorC _ _)
+    (isSelfAdjoint_sinTwoAngleOperatorC _ _)
 
 /-- The real ambient `tan Θ` is self-adjoint. -/
 theorem isSelfAdjoint_tanAngleOperatorR :
     IsSelfAdjoint (tanAngleOperatorR U V) :=
   isSelfAdjoint_realPartOperator_of_fixed
     (conjugateOperator_cfc_angleOperatorC_complexifySubmodule U V _)
-    (isSelfAdjoint_paperTanAngleOperatorC _ _)
+    (isSelfAdjoint_tanAngleOperatorC _ _)
 
 /-- The real ambient `tan 2Θ` is self-adjoint. -/
 theorem isSelfAdjoint_tanTwoAngleOperatorR :
     IsSelfAdjoint (tanTwoAngleOperatorR U V) :=
   isSelfAdjoint_realPartOperator_of_fixed
     (conjugateOperator_cfc_angleOperatorC_complexifySubmodule U V _)
-    (isSelfAdjoint_paperTanTwoAngleOperatorC _ _)
+    (isSelfAdjoint_tanTwoAngleOperatorC _ _)
 
 /-- **The real sine-angle operator squares to the squared projection
 difference**, entirely inside `E`. -/

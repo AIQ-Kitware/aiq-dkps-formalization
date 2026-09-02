@@ -202,7 +202,7 @@ of twice the complex operator angle. -/
 theorem norm_sinTwoThetaIdealBlock_complex
     (U V : Submodule ℂ H)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] :
-    ‖sinTwoThetaIdealBlock U V‖ = ‖sinTwoAngleOperatorC U V‖ := by
+    ‖sinTwoThetaIdealBlock U V‖ = ‖directedSinTwoAngleOperatorC U V‖ := by
   exact norm_starProjection_reflectedComplementary_eq_sinTwoAngle U V
 
 /-- **Block form of the residual reflection sine-two-theta estimate.**
@@ -605,7 +605,7 @@ theorem sinTwoTheta_reflectionResidual_of_spectrum_gap
       (TauCeti.LinearPMap.addBounded A R)
           ⟨V.reflectionOperator (x : H), hJdom x⟩ =
         V.reflectionOperator (A x)) :
-    δ * ‖sinTwoAngleOperatorC
+    δ * ‖directedSinTwoAngleOperatorC
         (selfAdjointSpectralSubspace A hA B hB) V‖ ≤ ‖R‖ := by
   have h := (sinTwoTheta_reflectionResidual_gauge_of_spectrum_gap
     (TauCeti.operatorNormFamily ℂ) A hA R hR B hB V hβα hδ
@@ -629,7 +629,7 @@ theorem sinTwoTheta_addBounded_of_spectrum_gap
     (hBcomplSpec : ∀ lam ∈ Set.Ioo (β - δ) (α + δ),
       (lam : ℂ) ∉ TauCeti.LinearPMap.spectrum
         (selfAdjointSpectralRestriction A hA Bᶜ hB.compl)) :
-    δ * ‖sinTwoAngleOperatorC
+    δ * ‖directedSinTwoAngleOperatorC
         (selfAdjointSpectralSubspace A hA B hB)
         (selfAdjointSpectralSubspace (TauCeti.LinearPMap.addBounded A E)
           (addBounded_isSelfAdjoint A hA E hE) S hS)‖ ≤
@@ -641,7 +641,7 @@ theorem sinTwoTheta_addBounded_of_spectrum_gap
   have hD : IsSelfAdjointOperator D :=
     reflectionPerturbation_isSelfAdjoint V E hE
   have hmain :
-      δ * ‖sinTwoAngleOperatorC
+      δ * ‖directedSinTwoAngleOperatorC
         (selfAdjointSpectralSubspace A hA B hB) V‖ ≤ ‖D‖ :=
     sinTwoTheta_reflectionResidual_of_spectrum_gap
       A hA D hD B hB V hβα hδ hBlow hBhigh hBcomplSpec
@@ -658,7 +658,7 @@ theorem sinTwoTheta_addBounded_of_intervalExterior
     {β α δ : ℝ} (hβα : β ≤ α) (hδ : 0 < δ)
     (hBsub : B ⊆ Set.Icc β α)
     (hBcomplDisj : Bᶜ ∩ Set.Ioo (β - δ) (α + δ) = ∅) :
-    δ * ‖sinTwoAngleOperatorC
+    δ * ‖directedSinTwoAngleOperatorC
         (selfAdjointSpectralSubspace A hA B hB)
         (selfAdjointSpectralSubspace (TauCeti.LinearPMap.addBounded A E)
           (addBounded_isSelfAdjoint A hA E hE) S hS)‖ ≤

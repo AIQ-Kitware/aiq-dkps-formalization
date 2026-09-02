@@ -75,7 +75,7 @@ first.
 
 *Definitional.*  The objects the three conclusions name exist only as fixed-field
 pairs: `...C` is defined natively and `...R` by transport --
-`tanAngleOperatorR U V = realPartOperator (paperTanAngleOperatorC
+`tanAngleOperatorR U V = realPartOperator (tanAngleOperatorC
 (complexifySubmodule U) (complexifySubmodule V))`, and likewise for `sin 2Θ`,
 `tan 2Θ` and `|tan 2Θ|`.  There is no `paperTanAngleOperator` over `𝕜`, so a
 scalar-generic statement cannot presently be *written*.
@@ -193,7 +193,7 @@ not `unboundedReflectionTangent`, and not a caller-built spectral reflection.
 
 * `sin Θ` concludes on the paper's own `(I - F₀F₀⋆) E₀`, which is what the printed
   theorem displays.
-* `tan Θ` concludes on the *ambient* `paperTanAngleOperatorC` / `…R`.
+* `tan Θ` concludes on the *ambient* `tanAngleOperatorC` / `…R`.
 * `sin 2Θ` concludes on the *directed* double-angle sine `2 sin Θ cos Θ`.  Directed
   and ambient differ in multiplicity -- an ambient angle object carries each
   principal angle twice where the one-sided block carries it once -- and the
@@ -267,7 +267,7 @@ The printed `tan Θ` theorem has two boxed conclusions.  This name is the second
 `δ N(tan Θ) ≤ N(H)`; the first, `δ N(tan Θ₀) ≤ N(R)`, is `tanTheta_directed_complex`.
 The pair is the whole result; neither alone is.
 
-`δ · N(tan Θ) ≤ N(H)` on the ambient tangent `paperTanAngleOperatorC U V`, with
+`δ · N(tan Θ) ≤ N(H)` on the ambient tangent `tanAngleOperatorC U V`, with
 ideal membership, for an unbounded self-adjoint `A`, its unbounded Ritz pair on
 the trial subspace `U`, and a subspace `V` whose complement reduces `A`.
 
@@ -367,7 +367,7 @@ alias tanTwoTheta_ambient_complex := tanTwoTheta_ambient_unbounded_symmetricNorm
 alias tanTwoTheta_ambient_real := tanTwoTheta_ambient_unbounded_symmetricNorming_real
 
 /-- **`sin 2Θ`, ambient clause, over `ℂ`**: `δ N(sin 2Θ) ≤ 2 N(H)` on the paper's
-*ambient* double-angle sine `paperSinTwoAngleOperatorC`, at this result's unbounded
+*ambient* double-angle sine `sinTwoAngleOperatorC`, at this result's unbounded
 scope.
 
 This alias was deliberately absent until 2026-08-31, because the only paper-norm
@@ -467,10 +467,10 @@ theorem sinTwoTheta_source_complex
                 (selfAdjointSpectralSubspace A hA B hB) V) ≤ 2 * N.gauge R) ∧
       (∀ (Eop : Hc →L[ℂ] Hc) (hEop : IsSelfAdjointOperator Eop)
         (S : Set ℝ) (hS : MeasurableSet S), N.Mem Eop →
-          N.Mem (paperSinTwoAngleOperatorC (selfAdjointSpectralSubspace A hA B hB)
+          N.Mem (sinTwoAngleOperatorC (selfAdjointSpectralSubspace A hA B hB)
               (selfAdjointSpectralSubspace (TauCeti.LinearPMap.addBounded A Eop)
                 (addBounded_isSelfAdjoint A hA Eop hEop) S hS)) ∧
-            δ * N.gauge (paperSinTwoAngleOperatorC
+            δ * N.gauge (sinTwoAngleOperatorC
                 (selfAdjointSpectralSubspace A hA B hB)
                 (selfAdjointSpectralSubspace (TauCeti.LinearPMap.addBounded A Eop)
                   (addBounded_isSelfAdjoint A hA Eop hEop) S hS)) ≤ 2 * N.gauge Eop) :=

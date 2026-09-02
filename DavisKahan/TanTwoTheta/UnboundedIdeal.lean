@@ -19,7 +19,7 @@ the right with the inverse extended double-angle cosine.
 
 This construction gives genuine rectangular-ideal membership and the expected
 quarter-acute gauge denominator.  It does not claim an unavailable equality
-between this reflected-overlap companion and `tanTwoAngleOperatorC`.
+between this reflected-overlap companion and `directedTanTwoAngleOperatorC`.
 -/
 
 open scoped InnerProductSpace

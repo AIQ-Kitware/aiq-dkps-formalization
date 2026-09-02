@@ -82,7 +82,7 @@ which the printed right-hand side can be finite.
 
 * `TauCeti.DavisKahan1970.tanBlockRepresentative`: the explicit off-diagonal
   representative `Ξ`.
-* `TauCeti.DavisKahan1970.tanAngleOperatorC_eq_modulus_blockRepresentative`:
+* `TauCeti.DavisKahan1970.directedTanAngleOperatorC_eq_modulus_blockRepresentative`:
   `|Ξ| = tan Θ`.
 * `TauCeti.DavisKahan1970.tanTheta_ambient_bounded_kyFan_complex_of_transversality`: the Ky Fan form,
   `δ · kyFan_k (tan Θ) ≤ kyFan_k H` for every `k`.
@@ -462,10 +462,10 @@ private theorem continuousOn_tanArcsin (htr : ‖sinAngleOperatorC U V‖ < 1) :
     (Set.mapsTo_image _ _)
 
 /-- The ambient tangent as one functional calculus of the ambient sine. -/
-theorem tanAngleOperatorC_eq_cfc (htr : ‖sinAngleOperatorC U V‖ < 1) :
-    paperTanAngleOperatorC U V =
+theorem directedTanAngleOperatorC_eq_cfc (htr : ‖sinAngleOperatorC U V‖ < 1) :
+    tanAngleOperatorC U V =
       cfc (Real.tan ∘ Real.arcsin) (sinAngleOperatorC U V) := by
-  rw [paperTanAngleOperatorC, angleOperatorC,
+  rw [tanAngleOperatorC, angleOperatorC,
     ← cfc_comp Real.tan Real.arcsin (sinAngleOperatorC U V)
       (isSelfAdjoint_sinAngleOperatorC U V) (continuousOn_tan_image htr)
       Real.continuous_arcsin.continuousOn]
@@ -473,7 +473,7 @@ theorem tanAngleOperatorC_eq_cfc (htr : ‖sinAngleOperatorC U V‖ < 1) :
 /-- **`tan²Θ · cos²Θ = sin²Θ`**, the scalar Pythagoras of the tangent, as an
 operator identity of functional calculi. -/
 theorem tan_sq_mul_one_sub_sin_sq (htr : ‖sinAngleOperatorC U V‖ < 1) :
-    paperTanAngleOperatorC U V * paperTanAngleOperatorC U V *
+    tanAngleOperatorC U V * tanAngleOperatorC U V *
         (1 - sinAngleOperatorC U V * sinAngleOperatorC U V) =
       sinAngleOperatorC U V * sinAngleOperatorC U V := by
   have hsa : IsSelfAdjoint (sinAngleOperatorC U V) := isSelfAdjoint_sinAngleOperatorC U V
@@ -492,7 +492,7 @@ theorem tan_sq_mul_one_sub_sin_sq (htr : ‖sinAngleOperatorC U V‖ < 1) :
       cfc (fun t : ℝ => 1 - t * t) (sinAngleOperatorC U V) := by
     rw [cfc_sub (fun _ : ℝ => (1 : ℝ)) (fun t : ℝ => t * t) (sinAngleOperatorC U V)
       hone hsq, cfc_const_one ℝ (sinAngleOperatorC U V), ← hSS]
-  rw [tanAngleOperatorC_eq_cfc (U := U) (V := V) htr, hcos,
+  rw [directedTanAngleOperatorC_eq_cfc (U := U) (V := V) htr, hcos,
     ← cfc_mul (Real.tan ∘ Real.arcsin) (Real.tan ∘ Real.arcsin)
       (sinAngleOperatorC U V) hf hf,
     ← cfc_mul (fun x : ℝ => (Real.tan ∘ Real.arcsin) x * (Real.tan ∘ Real.arcsin) x)
@@ -727,10 +727,10 @@ This is the operator form of the paper's `‖tan Θ‖ = ‖[[0, −J₀⋆ tan 
 [J₀ tan Θ₀, 0]]‖`: not merely equality of norms, and not merely of
 singular-value lists, but equality of the two moduli, so the substitution is
 legitimate inside every unitarily invariant norm. -/
-theorem tanAngleOperatorC_eq_modulus_blockRepresentative :
-    paperTanAngleOperatorC U V = (tanBlockRepresentative U V).modulus := by
+theorem directedTanAngleOperatorC_eq_modulus_blockRepresentative :
+    tanAngleOperatorC U V = (tanBlockRepresentative U V).modulus := by
   refine ContinuousLinearMap.eq_modulus_of_nonneg_of_mul_self_eq
-    (tanAngleOperatorC_nonneg U V) ?_
+    (directedTanAngleOperatorC_nonneg U V) ?_
   have hself := isSelfAdjoint_tanBlockRepresentative htr
   have hadj : (tanBlockRepresentative U V).adjoint ∘L
       tanBlockRepresentative U V =
@@ -739,11 +739,11 @@ theorem tanAngleOperatorC_eq_modulus_blockRepresentative :
   rw [hadj, tanBlockRepresentative_mul_self htr]
   have hcancel := secant_mul_cancel htr
   rw [projectorDifference_sq] at hcancel
-  calc paperTanAngleOperatorC U V * paperTanAngleOperatorC U V
-      = paperTanAngleOperatorC U V * paperTanAngleOperatorC U V *
+  calc tanAngleOperatorC U V * tanAngleOperatorC U V
+      = tanAngleOperatorC U V * tanAngleOperatorC U V *
           ((1 - sinAngleOperatorC U V * sinAngleOperatorC U V) *
             secantSquared U V) := by rw [hcancel, mul_one]
-    _ = (paperTanAngleOperatorC U V * paperTanAngleOperatorC U V *
+    _ = (tanAngleOperatorC U V * tanAngleOperatorC U V *
           (1 - sinAngleOperatorC U V * sinAngleOperatorC U V)) *
           secantSquared U V := by noncomm_ring
     _ = sinAngleOperatorC U V * sinAngleOperatorC U V *
@@ -1114,7 +1114,7 @@ theorem tanTheta_ambient_bounded_kyFan_complex_of_transversality
       (alpha + delta) * ‖y‖ ^ 2 ≤ RCLike.re ⟪T y, y⟫_ℂ)
     (htr : ‖sinAngleOperatorC U V‖ < 1) :
     ∀ k : ℕ,
-      delta * kyFanApproximationGauge k (paperTanAngleOperatorC U V) ≤
+      delta * kyFanApproximationGauge k (tanAngleOperatorC U V) ≤
         kyFanApproximationGauge k (T - A) := by
   intro k
   have hTsa : IsSelfAdjoint T := ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mpr hT
@@ -1162,9 +1162,9 @@ theorem tanTheta_ambient_bounded_kyFan_complex_of_transversality
       projectionBlock Uᗮᗮ Uᗮ (T - A) = diagonalPair Uᗮ U (T - A) := rfl
   rw [hsum, hsumH, kyFanApproximationGauge_smul, hdeltac] at hcombine
   have hpinch := diagonalPair_all_kyFan_le Uᗮ U (T - A) k
-  have hmodulus : kyFanApproximationGauge k (paperTanAngleOperatorC U V) =
+  have hmodulus : kyFanApproximationGauge k (tanAngleOperatorC U V) =
       kyFanApproximationGauge k (tanBlockRepresentative U V) := by
-    rw [tanAngleOperatorC_eq_modulus_blockRepresentative htr]
+    rw [directedTanAngleOperatorC_eq_modulus_blockRepresentative htr]
     exact (ContinuousLinearMap.modulus_hasSameApproximationNumbers
       (tanBlockRepresentative U V)).kyFanGauge_eq k
   rw [hmodulus]
@@ -1184,8 +1184,8 @@ theorem tanTheta_ambient_bounded_symmetricNorming_complex_of_transversality
       (alpha + delta) * ‖y‖ ^ 2 ≤ RCLike.re ⟪T y, y⟫_ℂ)
     (htr : ‖sinAngleOperatorC U V‖ < 1)
     (hMem : N.Mem (T - A)) :
-    N.Mem (paperTanAngleOperatorC U V) ∧
-      delta * N.gauge (paperTanAngleOperatorC U V) ≤ N.gauge (T - A) :=
+    N.Mem (tanAngleOperatorC U V) ∧
+      delta * N.gauge (tanAngleOperatorC U V) ≤ N.gauge (T - A) :=
   N.mul_gauge_le_of_all_mul_kyFan_le hdelta hMem
     (tanTheta_ambient_bounded_kyFan_complex_of_transversality hT hA hV hAU hdelta hCompressionUpper
       hUnwantedLower htr)
@@ -1251,7 +1251,7 @@ theorem tanTheta_ambient_bounded_kyFan_complex_of_crossedDefects
       (alpha + delta) * ‖y‖ ^ 2 ≤ RCLike.re ⟪T y, y⟫_ℂ)
     (h35 : DavisKahan.CrossedDefectsEquivalent U V) :
     ∀ k : ℕ,
-      delta * kyFanApproximationGauge k (paperTanAngleOperatorC U V) ≤
+      delta * kyFanApproximationGauge k (tanAngleOperatorC U V) ≤
         kyFanApproximationGauge k (T - A) :=
   tanTheta_ambient_bounded_kyFan_complex_of_transversality hT hA hV hAU hdelta hCompressionUpper hUnwantedLower
     (norm_sinAngleOperatorC_lt_one_of_crossedDefectsEquivalent hT hV hdelta
@@ -1273,8 +1273,8 @@ theorem tanTheta_ambient_bounded_symmetricNorming_complex_of_crossedDefects
       (alpha + delta) * ‖y‖ ^ 2 ≤ RCLike.re ⟪T y, y⟫_ℂ)
     (h35 : DavisKahan.CrossedDefectsEquivalent U V)
     (hMem : N.Mem (T - A)) :
-    N.Mem (paperTanAngleOperatorC U V) ∧
-      delta * N.gauge (paperTanAngleOperatorC U V) ≤ N.gauge (T - A) :=
+    N.Mem (tanAngleOperatorC U V) ∧
+      delta * N.gauge (tanAngleOperatorC U V) ≤ N.gauge (T - A) :=
   tanTheta_ambient_bounded_symmetricNorming_complex_of_transversality N hT hA hV hAU hdelta hCompressionUpper hUnwantedLower
     (norm_sinAngleOperatorC_lt_one_of_crossedDefectsEquivalent hT hV hdelta
       hCompressionUpper hUnwantedLower h35) hMem

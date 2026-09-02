@@ -103,7 +103,7 @@ statement is *not* proved here; see the module note below.
   branch-free replacement for the quarter-acute norm bound.
 * `TauCeti.DavisKahan1970.absTanTwoAngleOperatorC_eq_modulus_blockRepresentative`:
   `|Ξ| = |tan 2Θ|`, branch-free.
-* `TauCeti.DavisKahan1970.tanTwoAngleOperatorC_eq_modulus_blockRepresentative`:
+* `TauCeti.DavisKahan1970.directedTanTwoAngleOperatorC_eq_modulus_blockRepresentative`:
   its quarter-acute specialisation, `|Ξ| = tan 2Θ`.
 * `TauCeti.DavisKahan1970.tanTwoTheta_ambient_bounded_branchFree_kyFan_complex_of_corner` and
   `TauCeti.DavisKahan1970.tanTwoTheta_ambient_bounded_branchFree_symmetricNorming_complex_of_corner`: the
@@ -564,10 +564,10 @@ tangent, the signed functional calculus is continuous on the angle spectrum,
 and taking its operator modulus is the same as applying `t ↦ |tan (2t)|`
 pointwise.  This bridge lets the branch-free proof below expose a literally
 paper-facing conclusion while retaining the positive representative internally. -/
-theorem absTanTwoAngleOperatorC_eq_modulus_tanTwoAngleOperatorC
+theorem absTanTwoAngleOperatorC_eq_modulus_directedTanTwoAngleOperatorC
     (hcos : ∀ t ∈ spectrum ℝ (angleOperatorC U V), Real.cos (2 * t) ≠ 0) :
     absTanTwoAngleOperatorC U V =
-      (paperTanTwoAngleOperatorC U V).modulus := by
+      (tanTwoAngleOperatorC U V).modulus := by
   have hcontTan : ContinuousOn (fun t : ℝ => Real.tan (2 * t))
       (spectrum ℝ (angleOperatorC U V)) :=
     Real.continuousOn_tan.comp (by fun_prop) hcos
@@ -576,9 +576,9 @@ theorem absTanTwoAngleOperatorC_eq_modulus_tanTwoAngleOperatorC
     ContinuousOn.abs hcontTan
   refine ContinuousLinearMap.eq_modulus_of_nonneg_of_mul_self_eq
     (absTanTwoAngleOperatorC_nonneg U V) ?_
-  have hself := isSelfAdjoint_paperTanTwoAngleOperatorC U V
+  have hself := isSelfAdjoint_tanTwoAngleOperatorC U V
   rw [comp_eq_mul', hself.adjoint_eq, absTanTwoAngleOperatorC,
-    paperTanTwoAngleOperatorC,
+    tanTwoAngleOperatorC,
     ← cfc_mul (fun t : ℝ => |Real.tan (2 * t)|)
       (fun t : ℝ => |Real.tan (2 * t)|) (angleOperatorC U V)
       hcontAbs hcontAbs,
@@ -592,7 +592,7 @@ ambient double-angle tangent is nonnegative and therefore equal to its
 branch-free counterpart. -/
 theorem tanTwo_sq_mul_cos_two_sq
     (htr : ‖sinAngleOperatorC U V‖ < Real.sqrt 2 / 2) :
-    paperTanTwoAngleOperatorC U V * paperTanTwoAngleOperatorC U V *
+    tanTwoAngleOperatorC U V * tanTwoAngleOperatorC U V *
         ((1 - 2 * (sinAngleOperatorC U V * sinAngleOperatorC U V)) *
           (1 - 2 * (sinAngleOperatorC U V * sinAngleOperatorC U V))) =
       4 * (sinAngleOperatorC U V * sinAngleOperatorC U V -
@@ -600,7 +600,7 @@ theorem tanTwo_sq_mul_cos_two_sq
           (sinAngleOperatorC U V * sinAngleOperatorC U V)) := by
   have h := absTanTwo_sq_mul_cos_two_sq
     (fun _ ht => cos_two_ne_zero_of_norm_sinAngleOperatorC_lt htr ht)
-  rwa [absTanTwoAngleOperatorC_eq_tanTwoAngleOperatorC U V htr] at h
+  rwa [absTanTwoAngleOperatorC_eq_directedTanTwoAngleOperatorC U V htr] at h
 
 end Identification
 
@@ -914,13 +914,13 @@ variable {U V : Submodule ℂ E}
 /-- The quarter-acute specialisation of
 `absTanTwoAngleOperatorC_eq_modulus_blockRepresentative`, in which the
 ambient tangent is nonnegative and the modulus is the literal `tan 2Θ`. -/
-theorem tanTwoAngleOperatorC_eq_modulus_blockRepresentative
+theorem directedTanTwoAngleOperatorC_eq_modulus_blockRepresentative
     (htr : ‖sinAngleOperatorC U V‖ < Real.sqrt 2 / 2) :
-    paperTanTwoAngleOperatorC U V =
+    tanTwoAngleOperatorC U V =
       (tanTwoBlockRepresentative U V).modulus := by
   have h := absTanTwoAngleOperatorC_eq_modulus_blockRepresentative
     (fun _ ht => cos_two_ne_zero_of_norm_sinAngleOperatorC_lt htr ht)
-  rwa [absTanTwoAngleOperatorC_eq_tanTwoAngleOperatorC U V htr] at h
+  rwa [absTanTwoAngleOperatorC_eq_directedTanTwoAngleOperatorC U V htr] at h
 
 end ModulusQuarterAcute
 
@@ -1500,7 +1500,7 @@ theorem tanTwoTheta_ambient_bounded_orderedForm_kyFan_complex
     (hVperpLow : ∀ x ∈ Vᗮ, RCLike.re ⟪(A + H) x, x⟫_ℂ ≤ a * ‖x‖ ^ 2)
     (hHU : ∀ x ∈ U, H x ∈ Uᗮ) (hHUperp : ∀ x ∈ Uᗮ, H x ∈ U) :
     ∀ k : ℕ,
-      (b - a) * kyFanApproximationGauge k (paperTanTwoAngleOperatorC U V) ≤
+      (b - a) * kyFanApproximationGauge k (tanTwoAngleOperatorC U V) ≤
         2 * kyFanApproximationGauge k H := by
   intro k
   have hq : IsQuarterAcute U V :=
@@ -1511,7 +1511,7 @@ theorem tanTwoTheta_ambient_bounded_orderedForm_kyFan_complex
     (fun _ ht => cos_two_ne_zero_of_norm_sinAngleOperatorC_lt htr ht)
     (fun j => tanTwoTheta_directed_boundedResidual_blockRepresentative_kyFan_complex hA hH hAU hAplusH_V
       hab hUhigh hUperpLow hHU hHUperp hq j) k
-  rwa [absTanTwoAngleOperatorC_eq_tanTwoAngleOperatorC U V htr] at h
+  rwa [absTanTwoAngleOperatorC_eq_directedTanTwoAngleOperatorC U V htr] at h
 
 /-- **The source-norm ambient conclusion, reduced to the directed corner with no
 branch anywhere.**
@@ -1570,12 +1570,12 @@ theorem tanTwoTheta_ambient_bounded_orderedForm_symmetricNorming_complex
     (hVperpLow : ∀ x ∈ Vᗮ, RCLike.re ⟪(A + H) x, x⟫_ℂ ≤ a * ‖x‖ ^ 2)
     (hHU : ∀ x ∈ U, H x ∈ Uᗮ) (hHUperp : ∀ x ∈ Uᗮ, H x ∈ U)
     (hHmem : N.Mem H) :
-    N.Mem (paperTanTwoAngleOperatorC U V) ∧
-      (b - a) * N.gauge (paperTanTwoAngleOperatorC U V) ≤ 2 * N.gauge H := by
+    N.Mem (tanTwoAngleOperatorC U V) ∧
+      (b - a) * N.gauge (tanTwoAngleOperatorC U V) ≤ 2 * N.gauge H := by
   have htwo : ‖((2 : ℝ) : ℂ)‖ = 2 := by norm_num
   have hd : (0 : ℝ) < b - a := by linarith
   have hscaled : ∀ k : ℕ,
-      (b - a) * kyFanApproximationGauge k (paperTanTwoAngleOperatorC U V) ≤
+      (b - a) * kyFanApproximationGauge k (tanTwoAngleOperatorC U V) ≤
         kyFanApproximationGauge k (((2 : ℝ) : ℂ) • H) := by
     intro k
     rw [kyFanApproximationGauge_smul, htwo]

@@ -365,16 +365,16 @@ theorem starProjection_offDiagonal_sq_reflection
     U.starProjection *
         (U.offDiagonalPart V.reflectionOperator *
           U.offDiagonalPart V.reflectionOperator) * U.starProjection
-      = sinTwoAngleOperatorC U V * sinTwoAngleOperatorC U V := by
+      = directedSinTwoAngleOperatorC U V * directedSinTwoAngleOperatorC U V := by
   rw [corner_offDiagonalPart_sq]
   have hRR : V.reflectionOperator * V.reflectionOperator = 1 :=
     V.reflectionOperator_involutive
   have hcompl : Uᗮ.starProjection = (1 : Ec →L[ℂ] Ec) - U.starProjection :=
     orthogonal_eq U
-  have hangle : sinTwoAngleOperatorC U V * sinTwoAngleOperatorC U V
+  have hangle : directedSinTwoAngleOperatorC U V * directedSinTwoAngleOperatorC U V
       = U.starProjection * ((reflectedU U V)ᗮ.starProjection) * U.starProjection := by
-    rw [← sinAngleOperatorDirectedC_reflected_eq_sinTwoAngleOperatorC U V,
-      sinAngleOperatorDirectedC_mul_self]
+    rw [← directedSinAngleOperatorC_reflected_eq_directedSinTwoAngleOperatorC U V,
+      directedSinAngleOperatorC_mul_self]
   rw [hangle, starProjection_orthogonal_eq (reflectedU U V), starProjection_reflectedU,
     hcompl]
   have hRform : (2 : Ec →L[ℂ] Ec) * V.starProjection - 1 = V.reflectionOperator := by
@@ -636,7 +636,7 @@ The route is the one the norm identification already used: complexification
 preserves approximation singular values, the real block complexifies to the
 complex block of the complexified pair, and the complex transport applies there.
 
-The target is `Real.sinTwoAngleOperatorRC`, the *directed* double-angle sine of the
+The target is `Real.directedSinTwoAngleOperatorRC`, the *directed* double-angle sine of the
 real pair read in the complexification, which is where the tree keeps it — there
 is no real directed spelling, only the ambient `sinTwoAngleOperatorR`.  As
 in the complex case the directed operator is the block's partner: the block is
@@ -648,7 +648,7 @@ theorem approximationSingularValue_sinTwoThetaIdealBlock_real
     (U V : Submodule ℝ Er) [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
     (n : ℕ) :
     approximationSingularValue n (sinTwoThetaIdealBlock U V)
-      = approximationSingularValue n (Real.sinTwoAngleOperatorRC U V) := by
+      = approximationSingularValue n (Real.directedSinTwoAngleOperatorRC U V) := by
   rw [← ExactSinTheta.ComplexificationApproximation.approximationSingularValue_complexify
       (sinTwoThetaIdealBlock U V) n,
     complexify_sinTwoThetaIdealBlock U V]
@@ -668,7 +668,7 @@ theorem extendedGauge_sinTwoThetaIdealBlock_real
     (U V : Submodule ℝ Er) [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
     (N : ExactSinTheta.SymmetricNormingFunction) :
     N.extendedGauge (sinTwoThetaIdealBlock U V)
-      = N.extendedGauge (Real.sinTwoAngleOperatorRC U V) := by
+      = N.extendedGauge (Real.directedSinTwoAngleOperatorRC U V) := by
   rw [← ExactSinTheta.SymmetricNormingFunction.extendedGauge_complexify N
       (sinTwoThetaIdealBlock U V),
     complexify_sinTwoThetaIdealBlock U V]
@@ -677,18 +677,18 @@ theorem extendedGauge_sinTwoThetaIdealBlock_real
 
 /-- Ideal membership transfers between the real block and the real directed
 `sin 2Θ`. -/
-theorem mem_sinTwoAngleOperatorRC_iff
+theorem mem_directedSinTwoAngleOperatorRC_iff
     (U V : Submodule ℝ Er) [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
     (N : ExactSinTheta.SymmetricNormingFunction) :
-    N.Mem (Real.sinTwoAngleOperatorRC U V) ↔ N.Mem (sinTwoThetaIdealBlock U V) := by
+    N.Mem (Real.directedSinTwoAngleOperatorRC U V) ↔ N.Mem (sinTwoThetaIdealBlock U V) := by
   unfold ExactSinTheta.SymmetricNormingFunction.Mem
   rw [extendedGauge_sinTwoThetaIdealBlock_real U V N]
 
 /-- The gauge transfers between the real block and the real directed `sin 2Θ`. -/
-theorem gauge_sinTwoAngleOperatorRC
+theorem gauge_directedSinTwoAngleOperatorRC
     (U V : Submodule ℝ Er) [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
     (N : ExactSinTheta.SymmetricNormingFunction) :
-    N.gauge (Real.sinTwoAngleOperatorRC U V)
+    N.gauge (Real.directedSinTwoAngleOperatorRC U V)
       = N.gauge (sinTwoThetaIdealBlock U V) := by
   unfold ExactSinTheta.SymmetricNormingFunction.gauge
   rw [extendedGauge_sinTwoThetaIdealBlock_real U V N]

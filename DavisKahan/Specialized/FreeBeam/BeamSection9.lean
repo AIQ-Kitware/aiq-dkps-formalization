@@ -859,7 +859,7 @@ theorem beamLow_semiboundedAbove :
 /-- **The largest sine of twice the angle** between the free beam's zero-mode spectral
 subspace and the low spectral subspace of the perturbed operator. -/
 def beamSinTwoTheta (ε : ℝ) : ℝ :=
-  ‖DavisKahanExt.sinTwoAngleOperatorC
+  ‖DavisKahanExt.directedSinTwoAngleOperatorC
       (selfAdjointSpectralSubspace beamOperator beamOperator_isSelfAdjoint beamLowSet
         measurableSet_beamLowSet)
       (selfAdjointSpectralSubspace (beamPerturbed ε) (beamPerturbed_isSelfAdjoint ε)
@@ -867,7 +867,7 @@ def beamSinTwoTheta (ε : ℝ) : ℝ :=
 
 /-- The beam model's `sin 2Θ` is nonnegative. -/
 theorem beamSinTwoTheta_nonneg (ε : ℝ) : 0 ≤ beamSinTwoTheta ε :=
-  norm_nonneg (DavisKahanExt.sinTwoAngleOperatorC
+  norm_nonneg (DavisKahanExt.directedSinTwoAngleOperatorC
       (selfAdjointSpectralSubspace beamOperator beamOperator_isSelfAdjoint beamLowSet
         measurableSet_beamLowSet)
       (selfAdjointSpectralSubspace (beamPerturbed ε) (beamPerturbed_isSelfAdjoint ε)

@@ -6044,7 +6044,8 @@
   "not_yet_decided": [
     "Stage A is applied. What remains undecided is the ORDER and content of stages B and C, for which the reviewer has given a recommended sequence: embedded-token residue, then the angle family atomically, then selected-branch tan 2Theta, then the Hilbert-Schmidt and plane migrations.",
     "The angle-family normalisation moves EXISTING unprefixed declarations, so it is a two-sided rename and cannot be applied by the mechanical map alone; it needs its own pass with a build after each family.",
-    "Whether the Hilbert--Schmidt and plane consolidations happen as part of this campaign or as separate migrations, since they delete concepts rather than rename them."
+    "Whether the Hilbert--Schmidt and plane consolidations happen as part of this campaign or as separate migrations, since they delete concepts rather than rename them.",
+    "Whether the `*RC` angle variants should keep wrapping the directed complex objects, or be re-pointed at the literal ones so that the R and RC families agree. That is a change of statement and needs a mathematical decision, not a rename."
   ],
   "amended_on": "2026-09-02",
   "policy_statement": "Provenance goes in namespaces, modules, docstrings, and source-census metadata. A permanent declaration name describes the mathematical object, or the representation that distinguishes it from another object. Resolving a collision is therefore never a matter of finding a different prefix: where two names collide, the collision is usually exposing an API distinction that should be settled.",
@@ -6451,12 +6452,44 @@
       "blocked": 13,
       "blocked_reason": "Names embedding `paperSinTwoAngleOperatorC`, `paperTanAngleOperatorC`, `paperTanTwoAngleOperatorC` or `paperHilbertSchmidt*`, whose objects stage A deliberately deferred. They resolve when stages B and C do.",
       "verification": "lake build DavisKahan.All, Challenge and ForTauCeti all exit 0; check_declaration_name_drift OK (0 findings); census render --check up to date. The 8 comparator signature failures are pre-existing: neither the old nor the new names occur anywhere in Challenge/ or comparator/, and two of the failures are in files this pass never touched."
+    },
+    {
+      "on": "2026-09-02",
+      "stage": "stage_b_angle_family",
+      "applied": 90,
+      "token_map": {
+        "cosAngleOperatorC": "directedCosAngleOperatorC",
+        "cosAngleOperatorRC": "directedCosAngleOperatorRC",
+        "sinTwoAngleOperatorC": "directedSinTwoAngleOperatorC",
+        "sinTwoAngleOperatorRC": "directedSinTwoAngleOperatorRC",
+        "tanAngleOperatorC": "directedTanAngleOperatorC",
+        "tanAngleOperatorRC": "directedTanAngleOperatorRC",
+        "tanTwoAngleOperatorC": "directedTanTwoAngleOperatorC",
+        "tanTwoAngleOperatorRC": "directedTanTwoAngleOperatorRC",
+        "sinAngleOperatorDirectedC": "directedSinAngleOperatorC",
+        "sinAngleOperatorDirectedRC": "directedSinAngleOperatorRC",
+        "paperCosAngleOperatorC": "cosAngleOperatorC",
+        "paperSinTwoAngleOperatorC": "sinTwoAngleOperatorC",
+        "paperTanAngleOperatorC": "tanAngleOperatorC",
+        "paperTanTwoAngleOperatorC": "tanTwoAngleOperatorC"
+      },
+      "method": "One simultaneous substitution pass, longest-token-first, with underscore treated as a separator so embedded theorem names moved with their objects. Vacating and occupying in a single pass is what makes it atomic: no intermediate state exists in which a name means two things.",
+      "semantics_verified": {
+        "directed": "modulus and product constructions carrying acuteness hypotheses -- `directedCosAngleOperatorC = modulus (P_V ∘L P_U)`, `directedSinTwoAngleOperatorC = 2 • (directedSinAngleOperatorC * directedCosAngleOperatorC)`.",
+        "canonical": "literal functional calculus of the Hermitian operator angle -- `cfc Real.cos (angleOperatorC U V)`, `cfc (fun t => Real.sin (2*t)) (angleOperatorC U V)`. These now own the unqualified names, consistent with `angleOperatorC` itself.",
+        "sine_needs_no_vacating": "`sinAngleOperatorC = modulus (P_U - P_V)` is already the ambient sine; the literal `paperSinAngleOperatorC` is a provable duplicate and is a stage C delete, not a rename."
+      },
+      "finding_not_in_the_review": "The R and RC families had DIVERGED, and a token-level rename would have frozen the divergence. Every `*RC` variant wraps the DIRECTED complex object (`cosAngleOperatorRC` wrapped `cosAngleOperatorC`), while `tanAngleOperatorR`, `tanTwoAngleOperatorR` and `sinTwoAngleOperatorR` wrap the LITERAL ones (`paperTanAngleOperatorC` and friends). So the same stem meant different mathematics at different scalar scopes. The RC variants were therefore renamed to `directed*RC` to preserve what they actually are. Making them agree with the R family instead would mean re-pointing them at the literal objects -- a change of statement, not of name -- so it is deliberately NOT done here and is left as an open question.",
+      "suffix_normalised": "`sinAngleOperatorDirectedC`/`RC` -> `directedSinAngleOperatorC`/`RC`, so the directed family spells the qualifier one way, matching `directedAngleBlockC` and `directedCosAngleBlockC`.",
+      "resolves": "The 13 embedded-token names left blocked by the 2026-09-02 residue pass; `approximationNumber_paperSinTwoAngleOperatorC` is now `approximationNumber_sinTwoAngleOperatorC`.",
+      "collisions": 0,
+      "verification": "lake build DavisKahan.All, Challenge, ForTauCeti all exit 0; check_declaration_name_drift 0 findings; census render --check up to date."
     }
   ],
   "stage_status": {
     "stage_a_one_sided_renames": "applied",
     "stage_a_embedded_token_residue": "applied 2026-09-02, 83 names; see below",
-    "stage_b_angle_family_two_sided": "not applied -- the reviewer asks for this next, as one atomic family change",
+    "stage_b_angle_family_two_sided": "applied 2026-09-02, atomically",
     "stage_c_delete_and_migrate": "not applied -- Hilbert-Schmidt consolidation and plane aliases",
     "selected_branch_tanTwoTheta": "not applied -- `faithful_tanTwoTheta_uiNorm` escaped stage A"
   }

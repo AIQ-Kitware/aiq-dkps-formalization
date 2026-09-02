@@ -56,12 +56,12 @@ and the residual identity all carry `[RCLike 𝕜]`.  The blockers are elsewhere
 
 ### Layer 1: the ambient angle, and the functional calculus under it
 
-`paperTanAngleOperatorC` exists only over `ℂ`, and `tanAngleOperatorR` is
+`tanAngleOperatorC` exists only over `ℂ`, and `tanAngleOperatorR` is
 defined by transport rather than as the `ℝ` instance of one definition:
 
 ```
 tanAngleOperatorR U V
-  = realPartOperator (paperTanAngleOperatorC (complexifySubmodule U) (complexifySubmodule V))
+  = realPartOperator (tanAngleOperatorC (complexifySubmodule U) (complexifySubmodule V))
 ```
 
 The chain is `cfc Real.tan (cfc Real.arcsin (ContinuousLinearMap.modulus (P_U - P_V)))`.

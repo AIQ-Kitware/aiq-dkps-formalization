@@ -73,7 +73,7 @@ theorem tanTwoTheta_addBounded_of_spectrum_gap
       (selfAdjointSpectralSubspace A hA B hB)
       (selfAdjointSpectralSubspace (TauCeti.LinearPMap.addBounded A E)
         (addBounded_isSelfAdjoint A hA E hE) S hS)) :
-    ‖tanTwoAngleOperatorC
+    ‖directedTanTwoAngleOperatorC
         (selfAdjointSpectralSubspace A hA B hB)
         (selfAdjointSpectralSubspace (TauCeti.LinearPMap.addBounded A E)
           (addBounded_isSelfAdjoint A hA E hE) S hS)
@@ -86,19 +86,19 @@ theorem tanTwoTheta_addBounded_of_spectrum_gap
   let U := selfAdjointSpectralSubspace A hA B hB
   let V := selfAdjointSpectralSubspace (TauCeti.LinearPMap.addBounded A E)
     (addBounded_isSelfAdjoint A hA E hE) S hS
-  have hsin : δ * ‖sinTwoAngleOperatorC U V‖ ≤ 2 * ‖E‖ :=
+  have hsin : δ * ‖directedSinTwoAngleOperatorC U V‖ ≤ 2 * ‖E‖ :=
     sinTwoTheta_addBounded_of_spectrum_gap
       A hA E hE B S hB hS hβα hδ hBlow hBhigh hBcomplSpec
-  have hsinDiv : ‖sinTwoAngleOperatorC U V‖ ≤ 2 * ‖E‖ / δ := by
+  have hsinDiv : ‖directedSinTwoAngleOperatorC U V‖ ≤ 2 * ‖E‖ / δ := by
     rw [le_div_iff₀ hδ]
     simpa only [mul_comm] using hsin
   have hden : 0 < 1 - 2 * directedGap U V ^ 2 :=
     doubleCosineDenominator_pos U V hquarter
   calc
-    ‖tanTwoAngleOperatorC U V hquarter‖ ≤
-        ‖sinTwoAngleOperatorC U V‖ /
+    ‖directedTanTwoAngleOperatorC U V hquarter‖ ≤
+        ‖directedSinTwoAngleOperatorC U V‖ /
           (1 - 2 * directedGap U V ^ 2) :=
-      norm_tanTwoAngleOperatorC_le_sine_div_doubleCosine U V hquarter
+      norm_directedTanTwoAngleOperatorC_le_sine_div_doubleCosine U V hquarter
     _ ≤ (2 * ‖E‖ / δ) /
           (1 - 2 * directedGap U V ^ 2) :=
       div_le_div_of_nonneg_right hsinDiv hden.le
@@ -116,7 +116,7 @@ theorem tanTwoTheta_addBounded_of_intervalExterior
       (selfAdjointSpectralSubspace A hA B hB)
       (selfAdjointSpectralSubspace (TauCeti.LinearPMap.addBounded A E)
         (addBounded_isSelfAdjoint A hA E hE) S hS)) :
-    ‖tanTwoAngleOperatorC
+    ‖directedTanTwoAngleOperatorC
         (selfAdjointSpectralSubspace A hA B hB)
         (selfAdjointSpectralSubspace (TauCeti.LinearPMap.addBounded A E)
           (addBounded_isSelfAdjoint A hA E hE) S hS)

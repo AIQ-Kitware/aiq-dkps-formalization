@@ -22,7 +22,7 @@ assembly.
 Second, the final ambient Lemma-6.1 / Lemma-6.2 assembly is factored away from
 the quarter-acute construction.  It accepts an arbitrary self-adjoint
 branch-free self-adjoint symbol `K` whose complementary off-diagonal pair has
-the same Ky Fan data as the actual ambient `paperTanTwoAngleOperatorC`, together
+the same Ky Fan data as the actual ambient `tanTwoAngleOperatorC`, together
 with the sharp residual estimate for one corner, and proves the printed ambient
 Ky Fan and source UI-norm conclusions.
 
@@ -209,13 +209,13 @@ theorem tanTwoTheta_ambient_bounded_kyFan_complex_of_block
     {a b : ℝ}
     (hH : IsSelfAdjoint H) (hK : IsSelfAdjoint K) (hab : a < b)
     (hblockModulus : ∀ k : ℕ,
-      kyFanApproximationGauge k (paperTanTwoAngleOperatorC U V) =
+      kyFanApproximationGauge k (tanTwoAngleOperatorC U V) =
         kyFanApproximationGauge k (diagonalPair Uᗮ U K))
     (hcorner : ∀ k : ℕ,
       (b - a) * kyFanApproximationGauge k (projectionBlock Uᗮ U K) ≤
         2 * kyFanApproximationGauge k (projectionBlock Uᗮᗮ Uᗮ H)) :
     ∀ k : ℕ,
-      (b - a) * kyFanApproximationGauge k (paperTanTwoAngleOperatorC U V) ≤
+      (b - a) * kyFanApproximationGauge k (tanTwoAngleOperatorC U V) ≤
         2 * kyFanApproximationGauge k H := by
   intro k
   have hd : (0 : ℝ) < (b - a) / 2 := by linarith
@@ -263,18 +263,18 @@ theorem tanTwoTheta_ambient_bounded_symmetricNorming_complex_of_block
     {a b : ℝ}
     (hH : IsSelfAdjoint H) (hK : IsSelfAdjoint K) (hab : a < b)
     (hblockModulus : ∀ k : ℕ,
-      kyFanApproximationGauge k (paperTanTwoAngleOperatorC U V) =
+      kyFanApproximationGauge k (tanTwoAngleOperatorC U V) =
         kyFanApproximationGauge k (diagonalPair Uᗮ U K))
     (hcorner : ∀ k : ℕ,
       (b - a) * kyFanApproximationGauge k (projectionBlock Uᗮ U K) ≤
         2 * kyFanApproximationGauge k (projectionBlock Uᗮᗮ Uᗮ H))
     (hHmem : N.Mem H) :
-    N.Mem (paperTanTwoAngleOperatorC U V) ∧
-      (b - a) * N.gauge (paperTanTwoAngleOperatorC U V) ≤ 2 * N.gauge H := by
+    N.Mem (tanTwoAngleOperatorC U V) ∧
+      (b - a) * N.gauge (tanTwoAngleOperatorC U V) ≤ 2 * N.gauge H := by
   have htwo : ‖((2 : ℝ) : ℂ)‖ = 2 := by norm_num
   have hd : (0 : ℝ) < b - a := by linarith
   have hscaled : ∀ k : ℕ,
-      (b - a) * kyFanApproximationGauge k (paperTanTwoAngleOperatorC U V) ≤
+      (b - a) * kyFanApproximationGauge k (tanTwoAngleOperatorC U V) ≤
         kyFanApproximationGauge k (((2 : ℝ) : ℂ) • H) := by
     intro k
     rw [kyFanApproximationGauge_smul, htwo]

@@ -616,7 +616,7 @@ The theorem is printed in Section 2, before (3.5) exists in the exposition, and 
 #### 5. What Lean says, and exactly where the implicit semantics became explicit
 
 - `TauCeti.DavisKahan1970.tanTheta_ambient_bounded_symmetricNorming_complex_of_crossedDefects`
-  - Carries `h35 : CrossedDefectsEquivalent U V`, the constructive form of (3.5) (an isometric equivalence of the two crossed defect spaces), and concludes both `N.Mem (paperTanAngleOperatorC U V)` and the sharp inequality. Membership in the norm's ideal is a conclusion, which is the explicit form of the source's vacuity convention.
+  - Carries `h35 : CrossedDefectsEquivalent U V`, the constructive form of (3.5) (an isometric equivalence of the two crossed defect spaces), and concludes both `N.Mem (tanAngleOperatorC U V)` and the sharp inequality. Membership in the norm's ideal is a conclusion, which is the explicit form of the source's vacuity convention.
 - `TauCeti.DavisKahan1970.tanTheta_ambient_unboundedRitz_raw_symmetricNorming_complex`
   - Appendix-complete complex ambient endpoint. The Ritz compression is a genuinely unbounded self-adjoint closed operator semibounded above in form; the residual and perturbation are bounded. The lower-corner Ky Fan estimate is supplied by the Appendix truncation/release theorem, (3.5) supplies ambient transversality, and norm-ideal membership is concluded.
 - `TauCeti.DavisKahan1970.tanTheta_ambient_unboundedRitz_raw_symmetricNorming_real`
@@ -718,7 +718,7 @@ One row per printed source clause per scalar field.  A clause is `PASS` only whe
 | `directed.complex` | complex | `TauCeti.DavisKahan1970.tanTheta_directed_unboundedRitz_symmetricNorming_complex` | **PASS** |
 | `directed.real` | real | `TauCeti.DavisKahan1970.tanTheta_directed_unboundedRitz_symmetricNorming_real` | **PASS** |
 
-**`ambient.complex`.** delta * N(tan Theta) <= N(H) on the ambient paperTanAngleOperatorC, with ideal membership, unbounded self-adjoint LinearPMap ambient operator and unbounded Ritz compression.
+**`ambient.complex`.** delta * N(tan Theta) <= N(H) on the ambient tanAngleOperatorC, with ideal membership, unbounded self-adjoint LinearPMap ambient operator and unbounded Ritz compression.
 
 *Gap scope:* The printed tangent gap is the ORDERED one, and the Appendix drops the lower bound beta entirely, so both configurations are half-infinite: the primary takes `SemiboundedAbove D.trial.compression alpha` -- the trial compression bounded above by alpha, unbounded below -- against a coercivity bound `(alpha + delta) * |y|^2 <= re <A y, y>` on the reducing complement, which is bounded below by alpha + delta and unbounded above.  Neither side is confined to a finite interval.
 
@@ -999,12 +999,12 @@ One row per printed source clause per scalar field.  A clause is `PASS` only whe
 
 | clause | scalar | witness | status |
 | --- | --- | --- | --- |
-| `directed.residual.complex` | complex | `TauCeti.DavisKahan1970.sinTwoTheta_directed_unboundedResidual_blockRepresentative_symmetricNorming_complex` + `TauCeti.DavisKahan.mem_sinTwoAngleOperatorC_iff` + `TauCeti.DavisKahan.gauge_sinTwoAngleOperatorC` + `TauCeti.DavisKahan.sinTwoThetaIdealBlock_hasSameApproximationNumbers` | **PASS** |
-| `directed.residual.real` | real | `TauCeti.DavisKahan1970.sinTwoTheta_directed_unboundedResidual_blockRepresentative_symmetricNorming_real` + `TauCeti.DavisKahan.mem_sinTwoAngleOperatorRC_iff` + `TauCeti.DavisKahan.gauge_sinTwoAngleOperatorRC` | **PASS** |
+| `directed.residual.complex` | complex | `TauCeti.DavisKahan1970.sinTwoTheta_directed_unboundedResidual_blockRepresentative_symmetricNorming_complex` + `TauCeti.DavisKahan.mem_directedSinTwoAngleOperatorC_iff` + `TauCeti.DavisKahan.gauge_directedSinTwoAngleOperatorC` + `TauCeti.DavisKahan.sinTwoThetaIdealBlock_hasSameApproximationNumbers` | **PASS** |
+| `directed.residual.real` | real | `TauCeti.DavisKahan1970.sinTwoTheta_directed_unboundedResidual_blockRepresentative_symmetricNorming_real` + `TauCeti.DavisKahan.mem_directedSinTwoAngleOperatorRC_iff` + `TauCeti.DavisKahan.gauge_directedSinTwoAngleOperatorRC` | **PASS** |
 | `ambient.complex` | complex | `TauCeti.DavisKahan1970.sinTwoTheta_ambient_unbounded_addBounded_symmetricNorming_complex` | **PASS** |
 | `ambient.real` | real | `TauCeti.DavisKahan1970.sinTwoTheta_ambient_unbounded_addBounded_symmetricNorming_real` | **PASS** |
 
-**`directed.residual.complex`.** delta * N(sin 2Theta_0) <= 2 N(R) with the printed trial residual R = A E_0 - E_0 A_0 as the only right-hand side, an unbounded self-adjoint ambient operator, an arbitrary closed trial subspace inside its domain, arbitrary SymmetricNormingFunction, and the full FormBoundedSylvesterGap.  The conclusion is on `sinTwoThetaIdealBlock`, the paper's reflected overlap block; the registered correspondence lemmas identify its complete singular-value sequence, hence every source norm's membership and value, with the directed double-angle sine `sinTwoAngleOperatorC`.
+**`directed.residual.complex`.** delta * N(sin 2Theta_0) <= 2 N(R) with the printed trial residual R = A E_0 - E_0 A_0 as the only right-hand side, an unbounded self-adjoint ambient operator, an arbitrary closed trial subspace inside its domain, arbitrary SymmetricNormingFunction, and the full FormBoundedSylvesterGap.  The conclusion is on `sinTwoThetaIdealBlock`, the paper's reflected overlap block; the registered correspondence lemmas identify its complete singular-value sequence, hence every source norm's membership and value, with the directed double-angle sine `directedSinTwoAngleOperatorC`.
 
 *Gap scope:* The primary takes `FormBoundedSylvesterGap` between the two spectral restrictions, so both semibounded constructors are available; the bounded-interval spelling is the separate `..._spectrumGap_...` declaration held as supporting evidence.
 
@@ -1012,7 +1012,7 @@ One row per printed source clause per scalar field.  A clause is `PASS` only whe
 
 *Gap scope:* The primary takes `FormBoundedSylvesterGap` between the two spectral restrictions, so both semibounded constructors are available; the bounded-interval spelling is the separate `..._spectrumGap_...` declaration held as supporting evidence.
 
-**`ambient.complex`.** The complex ambient clause: delta * N(sin 2Theta) <= 2 N(H) on the AMBIENT paperSinTwoAngleOperatorC, with an unbounded self-adjoint LinearPMap ambient operator, a bounded self-adjoint perturbation, arbitrary Hilbert dimension, arbitrary SymmetricNormingFunction, ideal membership concluded, and the exact factor 2.
+**`ambient.complex`.** The complex ambient clause: delta * N(sin 2Theta) <= 2 N(H) on the AMBIENT sinTwoAngleOperatorC, with an unbounded self-adjoint LinearPMap ambient operator, a bounded self-adjoint perturbation, arbitrary Hilbert dimension, arbitrary SymmetricNormingFunction, ideal membership concluded, and the exact factor 2.
 
 *Gap scope:* The primary takes `FormBoundedSylvesterGap` between the two reducing restrictions of the unperturbed operator, so both semibounded constructors -- the two half-infinite configurations -- are available to a caller, and `intervalExterior` is the bounded one. The reflection transport preserves the constructor: `FormBoundedSylvesterGap.unitaryConj_left` and `.unitaryConj_right` case on all three, so nothing collapses to the bounded interval on the way to Proposition 6.1's crossed gaps.
 
@@ -1046,13 +1046,13 @@ The declarations that carry this result's printed statement, with the source ato
 - `TauCeti.DavisKahan1970.sinTwoTheta_unbounded_reflectionResidual_arbitraryRepresentative_real` — generalization
 - `TauCeti.DavisKahan1970.sinTwoTheta_directed_unboundedResidual_blockRepresentative_intervalExterior_symmetricNorming_real` — specialization
 - `TauCeti.DavisKahan1970.sinTwoTheta_directed_unbounded_addBounded_blockRepresentative_symmetricNorming_complex` — presentation_wrapper
-- `TauCeti.DavisKahan.sinAngleOperatorDirectedC_reflected_eq_sinTwoAngleOperatorC` — supporting_theorem
+- `TauCeti.DavisKahan.directedSinAngleOperatorC_reflected_eq_directedSinTwoAngleOperatorC` — supporting_theorem
 - `TauCeti.DavisKahan.sinTwoThetaIdealBlock_hasSameApproximationNumbers` — supporting_theorem
 - `TauCeti.DavisKahan.extendedGauge_sinTwoThetaIdealBlock_complex` — supporting_theorem
 - `TauCeti.DavisKahan.approximationSingularValue_sinTwoThetaIdealBlock_real` — supporting_theorem
 - `TauCeti.DavisKahan.extendedGauge_sinTwoThetaIdealBlock_real` — supporting_theorem
-- `TauCeti.DavisKahan.mem_sinTwoAngleOperatorRC_iff` — supporting_theorem
-- `TauCeti.DavisKahan.gauge_sinTwoAngleOperatorRC` — supporting_theorem
+- `TauCeti.DavisKahan.mem_directedSinTwoAngleOperatorRC_iff` — supporting_theorem
+- `TauCeti.DavisKahan.gauge_directedSinTwoAngleOperatorRC` — supporting_theorem
 - `TauCeti.DavisKahan1970.sinTwoTheta_directed_unboundedResidual_blockRepresentative_spectrumGap_symmetricNorming_complex` — specialization
 - `TauCeti.DavisKahan1970.sinTwoTheta_directed_unbounded_addBounded_spectrumGap_symmetricNorming_complex` — specialization
 - `TauCeti.DavisKahan1970.sinTwoTheta_directed_unbounded_addBounded_blockRepresentative_spectrumGap_symmetricNorming_complex` — specialization
@@ -1066,8 +1066,8 @@ The declarations that carry this result's printed statement, with the source ato
 - `TauCeti.DavisKahan1970.SectionTwo.sinTwoTheta_ambient_real` — public_alias
 - `TauCeti.DavisKahan1970.sinTwoTheta_ambient_reflection_projectorDifference_symmetricNorming` — generalization
 - `TauCeti.DavisKahan1970.sinTheta_ambient_unitaryConj_projectorDifference_symmetricNorming` — supporting_theorem
-- `TauCeti.DavisKahan.mem_sinTwoAngleOperatorC_iff` — transport_lemma
-- `TauCeti.DavisKahan.gauge_sinTwoAngleOperatorC` — transport_lemma
+- `TauCeti.DavisKahan.mem_directedSinTwoAngleOperatorC_iff` — transport_lemma
+- `TauCeti.DavisKahan.gauge_directedSinTwoAngleOperatorC` — transport_lemma
 
 ### Source-facing Lean declarations
 
@@ -1149,7 +1149,7 @@ Source location candidates: `DavisKahan/Sources/DavisKahan1970/SinTwoTheta.lean:
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
-#### `TauCeti.DavisKahan.sinAngleOperatorDirectedC_reflected_eq_sinTwoAngleOperatorC`
+#### `TauCeti.DavisKahan.directedSinAngleOperatorC_reflected_eq_directedSinTwoAngleOperatorC`
 
 Source location candidates: `DavisKahan/DoubleAngle/AngleTransport.lean:262`
 
@@ -1191,13 +1191,13 @@ Source location candidates: `DavisKahan/DoubleAngle/TangentTransport.lean:667`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
-#### `TauCeti.DavisKahan.mem_sinTwoAngleOperatorRC_iff`
+#### `TauCeti.DavisKahan.mem_directedSinTwoAngleOperatorRC_iff`
 
 Source location candidates: `DavisKahan/DoubleAngle/TangentTransport.lean:680`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
-#### `TauCeti.DavisKahan.gauge_sinTwoAngleOperatorRC`
+#### `TauCeti.DavisKahan.gauge_directedSinTwoAngleOperatorRC`
 
 Source location candidates: `DavisKahan/DoubleAngle/TangentTransport.lean:688`
 
@@ -1293,13 +1293,13 @@ Source location candidates: `DavisKahan/Sources/DavisKahan1970/SinTwoThetaAmbien
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
-#### `TauCeti.DavisKahan.mem_sinTwoAngleOperatorC_iff`
+#### `TauCeti.DavisKahan.mem_directedSinTwoAngleOperatorC_iff`
 
 Source location candidates: `DavisKahan/DoubleAngle/AngleTransport.lean:342`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
-#### `TauCeti.DavisKahan.gauge_sinTwoAngleOperatorC`
+#### `TauCeti.DavisKahan.gauge_directedSinTwoAngleOperatorC`
 
 Source location candidates: `DavisKahan/DoubleAngle/AngleTransport.lean:348`
 

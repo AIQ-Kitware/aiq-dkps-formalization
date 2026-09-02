@@ -61,8 +61,8 @@ sharp constant `b - a` as the complex one.
 
 ## What the angle operator is
 
-The conclusion is phrased with `tanTwoAngleOperatorRC U V`, which is by
-definition `tanTwoAngleOperatorC` of the two complexified subspaces.  That is the
+The conclusion is phrased with `directedTanTwoAngleOperatorRC U V`, which is by
+definition `directedTanTwoAngleOperatorC` of the two complexified subspaces.  That is the
 faithful real object here rather than a workaround: the source theorem bounds a
 unitarily-invariant norm, a unitarily-invariant norm sees only the approximation
 singular values, and `approximationSingularValue_complexify` says those are
@@ -116,8 +116,8 @@ theorem faithful_tanTwoTheta_uiNorm_real
     (hHU : ∀ x ∈ U, H x ∈ Uᗮ) (hHUperp : ∀ x ∈ Uᗮ, H x ∈ U)
     (hHmem : N.Mem H) :
     ∃ hquarter : IsQuarterAcute U V,
-      N.Mem (tanTwoAngleOperatorRC U V hquarter) ∧
-        (b - a) * N.gauge (tanTwoAngleOperatorRC U V hquarter) ≤ 2 * N.gauge H := by
+      N.Mem (directedTanTwoAngleOperatorRC U V hquarter) ∧
+        (b - a) * N.gauge (directedTanTwoAngleOperatorRC U V hquarter) ≤ 2 * N.gauge H := by
   have hsum : complexify (A + H) = complexify A + complexify H := complexify_add A H
   obtain ⟨hqc, hmemc, hboundc⟩ :=
     faithful_tanTwoTheta_uiNorm N (complexify A) (complexify H)

@@ -105,7 +105,7 @@ theorem tanTheta_ambient_bounded_kyFan_complex_of_lowerCorner
             (projectorDifference U V * secantSquared U V)) ≤
         kyFanApproximationGauge k (projectionBlock Uᗮ U H)) :
     ∀ k : ℕ,
-      delta * kyFanApproximationGauge k (paperTanAngleOperatorC U V) ≤
+      delta * kyFanApproximationGauge k (tanAngleOperatorC U V) ≤
         kyFanApproximationGauge k H := by
   intro k
   have hdeltac : ‖((delta : ℝ) : ℂ)‖ = delta := by
@@ -160,9 +160,9 @@ theorem tanTheta_ambient_bounded_kyFan_complex_of_lowerCorner
   rw [hsum, hsumH, kyFanApproximationGauge_smul, hdeltac] at hcombine
   have hpinch := diagonalPair_all_kyFan_le Uᗮ U H k
   have hmodulus :
-      kyFanApproximationGauge k (paperTanAngleOperatorC U V) =
+      kyFanApproximationGauge k (tanAngleOperatorC U V) =
         kyFanApproximationGauge k (tanBlockRepresentative U V) := by
-    rw [tanAngleOperatorC_eq_modulus_blockRepresentative htr]
+    rw [directedTanAngleOperatorC_eq_modulus_blockRepresentative htr]
     exact (ContinuousLinearMap.modulus_hasSameApproximationNumbers
       (tanBlockRepresentative U V)).kyFanGauge_eq k
   rw [hmodulus]
@@ -182,8 +182,8 @@ theorem tanTheta_ambient_bounded_symmetricNorming_complex_of_lowerCorner
             (projectorDifference U V * secantSquared U V)) ≤
         kyFanApproximationGauge k (projectionBlock Uᗮ U H))
     (hMem : N.Mem H) :
-    N.Mem (paperTanAngleOperatorC U V) ∧
-      delta * N.gauge (paperTanAngleOperatorC U V) ≤ N.gauge H :=
+    N.Mem (tanAngleOperatorC U V) ∧
+      delta * N.gauge (tanAngleOperatorC U V) ≤ N.gauge H :=
   N.mul_gauge_le_of_all_mul_kyFan_le hdelta hMem
     (tanTheta_ambient_bounded_kyFan_complex_of_lowerCorner hH hdelta htr hlower)
 
@@ -216,8 +216,8 @@ theorem tanTheta_ambient_unboundedOperator_boundedRitzData_symmetricNorming_comp
     (hResidual :
       data.residual = Uᗮ.starProjection ∘L H ∘L U.subtypeL)
     (hMem : N.Mem H) :
-    N.Mem (paperTanAngleOperatorC U V) ∧
-      delta * N.gauge (paperTanAngleOperatorC U V) ≤ N.gauge H := by
+    N.Mem (tanAngleOperatorC U V) ∧
+      delta * N.gauge (tanAngleOperatorC U V) ≤ N.gauge H := by
   have hblock :
       projectionBlock Uᗮ U H =
         data.residual ∘L U.subtypeL.adjoint := by
@@ -288,8 +288,8 @@ theorem tanTheta_ambient_unboundedOperator_boundedRitzData_symmetricNorming_comp
     (hResidual :
       data.residual = Uᗮ.starProjection ∘L H ∘L U.subtypeL)
     (hMem : N.Mem H) :
-    N.Mem (paperTanAngleOperatorC U V) ∧
-      delta * N.gauge (paperTanAngleOperatorC U V) ≤ N.gauge H := by
+    N.Mem (tanAngleOperatorC U V) ∧
+      delta * N.gauge (tanAngleOperatorC U V) ≤ N.gauge H := by
   have hdirected :
       approximationSingularValue 0 (theorem63DirectedSineBlock U V) < 1 :=
     data.approximationSingularValue_sineBlock_lt_one_infiniteData
@@ -335,8 +335,8 @@ theorem tanTheta_ambient_unboundedRitzData_symmetricNorming_complex_of_transvers
     (hResidual :
       D.residual = Uᗮ.starProjection ∘L H ∘L U.subtypeL)
     (hMem : N.Mem H) :
-    N.Mem (paperTanAngleOperatorC U V) ∧
-      delta * N.gauge (paperTanAngleOperatorC U V) ≤ N.gauge H := by
+    N.Mem (tanAngleOperatorC U V) ∧
+      delta * N.gauge (tanAngleOperatorC U V) ≤ N.gauge H := by
   have hblock :
       projectionBlock Uᗮ U H =
         D.residual ∘L U.subtypeL.adjoint := by
@@ -399,8 +399,8 @@ theorem tanTheta_ambient_unboundedRitzData_symmetricNorming_complex
     (hResidual :
       D.residual = Uᗮ.starProjection ∘L H ∘L U.subtypeL)
     (hMem : N.Mem H) :
-    N.Mem (paperTanAngleOperatorC U V) ∧
-      delta * N.gauge (paperTanAngleOperatorC U V) ≤ N.gauge H := by
+    N.Mem (tanAngleOperatorC U V) ∧
+      delta * N.gauge (tanAngleOperatorC U V) ≤ N.gauge H := by
   have hdirected :
       approximationSingularValue 0 (theorem63DirectedSineBlock U V) < 1 :=
     D.approximationSingularValue_sineBlock_lt_one V hdelta hupper hcross 0
@@ -447,8 +447,8 @@ theorem tanTheta_ambient_unboundedRitz_raw_symmetricNorming_complex
     (h35 : DavisKahan.CrossedDefectsEquivalent U V)
     (hResidual : D.residual = Uᗮ.starProjection ∘L H ∘L U.subtypeL)
     (hMem : N.Mem H) :
-    N.Mem (paperTanAngleOperatorC U V) ∧
-      delta * N.gauge (paperTanAngleOperatorC U V) ≤ N.gauge H := by
+    N.Mem (tanAngleOperatorC U V) ∧
+      delta * N.gauge (tanAngleOperatorC U V) ≤ N.gauge H := by
   refine tanTheta_ambient_unboundedRitzData_symmetricNorming_complex
     N D H hH hdelta hupper ?_ h35 hResidual hMem
   intro z
@@ -477,8 +477,8 @@ theorem tanTheta_ambient_unboundedOperator_boundedRitz_symmetricNorming_complex
     (h35 : DavisKahan.CrossedDefectsEquivalent U V)
     (hResidual : D.residual = Uᗮ.starProjection ∘L H ∘L U.subtypeL)
     (hMem : N.Mem H) :
-    N.Mem (paperTanAngleOperatorC U V) ∧
-      delta * N.gauge (paperTanAngleOperatorC U V) ≤ N.gauge H := by
+    N.Mem (tanAngleOperatorC U V) ∧
+      delta * N.gauge (tanAngleOperatorC U V) ≤ N.gauge H := by
   let data := Theorem63TrialData.ofUnbounded D V
   refine tanTheta_ambient_unboundedOperator_boundedRitzData_symmetricNorming_complex N data H hH hdelta
     hCompression ?_ h35 ?_ hMem
@@ -505,7 +505,7 @@ extra assumption.**
 
 `‖sin Θ‖ < 1` for the ambient angle, from the two printed form bounds together with the
 standing condition (3.5).  The tangent theorem's proof derives this inline; exposing it is
-what lets a caller read the *sequence* `tan θ₀, tan θ₁, …` off `paperTanAngleOperatorC`,
+what lets a caller read the *sequence* `tan θ₀, tan θ₁, …` off `tanAngleOperatorC`,
 which needs the transversality separately from the estimate. -/
 theorem norm_sinAngleOperatorC_lt_one_of_unboundedRitz
     {A : E →ₗ.[ℂ] E}
@@ -556,8 +556,8 @@ theorem tanTheta_ambient_unboundedRitz_symmetricNorming_complex
     (h35 : DavisKahan.CrossedDefectsEquivalent U V)
     (hResidual : D.trial.residual = Uᗮ.starProjection ∘L H ∘L U.subtypeL)
     (hMem : N.Mem H) :
-    N.Mem (paperTanAngleOperatorC U V) ∧
-      delta * N.gauge (paperTanAngleOperatorC U V) ≤ N.gauge H :=
+    N.Mem (tanAngleOperatorC U V) ∧
+      delta * N.gauge (tanAngleOperatorC U V) ≤ N.gauge H :=
   tanTheta_ambient_unboundedRitz_raw_symmetricNorming_complex N D.trial A H hH hdelta
     D.mem_domain D.action_eq hV.mapsDomain hV.commutes hupper hUnwanted h35
     hResidual hMem
