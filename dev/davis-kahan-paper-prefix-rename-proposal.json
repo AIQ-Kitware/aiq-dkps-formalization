@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "status": "proposed",
+  "status": "proposed_amended",
   "generated_on": "2026-09-02",
   "purpose": "A census of the `paper`-prefixed declaration names in DavisKahan, and a mechanically applicable rename proposal. Nothing here has been applied. The intent is that a reviewer accepts or amends this document, and the rename is then a mechanical application of `renames[].current -> renames[].proposed` rather than a judgement call taken 238 times.",
   "motivation": "The 2026-09-01 rename replaced `PaperUnitaryInvariantNorm` with `SymmetricNormingFunction` because the name recorded provenance where the mathematics had its own name. That decision was never generalised, and `paper` is not in the naming classification's banned-token list, so the rest of the family was left in place. Measured here: of the declarations carrying the token, the great majority contrast with nothing -- there is no other `blockCompression`, `diagonalPair`, or `projectorDifference` in the tree -- so the prefix distinguishes nothing and reads as unfinished. ForTauCeti, the permanent product, already carries none of these names.",
@@ -25,7 +25,9 @@
       "audit_surface": 4,
       "challenge": 24,
       "comparator": 0
-    }
+    },
+    "family_decisions": 47,
+    "entries_with_embedded_token_remaining": 0
   },
   "application_notes": [
     "Statement pins under `.leanq/` regenerate; they are not edited by hand.",
@@ -52,14 +54,15 @@
         "audit_surface": 0,
         "challenge": 0,
         "comparator": 0
-      }
+      },
+      "action": "rename"
     },
     {
       "current": "IsPaperHilbertSchmidt",
-      "proposed": "IsHilbertSchmidt",
+      "proposed": "ContinuousLinearMap.IsHilbertSchmidt",
       "kind": "def",
       "declared_in": "DavisKahan/Sources/DavisKahan1970/Ideals/HilbertSchmidt.lean",
-      "classification": "contrastive_decision_required",
+      "classification": "family_decision",
       "collides_with_existing_declaration": true,
       "dependent_declaration_names": [],
       "occurrences": {
@@ -72,7 +75,10 @@
         "audit_surface": 0,
         "challenge": 0,
         "comparator": 0
-      }
+      },
+      "proposed_mechanical": "IsHilbertSchmidt",
+      "action": "delete_and_migrate",
+      "family": "hilbert-schmidt"
     },
     {
       "current": "IsPaperHilbertSchmidt.comp",
@@ -92,7 +98,8 @@
         "audit_surface": 0,
         "challenge": 0,
         "comparator": 0
-      }
+      },
+      "action": "rename"
     },
     {
       "current": "PaperCommonCoreResidualData",
@@ -112,7 +119,8 @@
         "audit_surface": 0,
         "challenge": 0,
         "comparator": 0
-      }
+      },
+      "action": "rename"
     },
     {
       "current": "PaperCommonCoreSinThetaData",
@@ -132,7 +140,8 @@
         "audit_surface": 0,
         "challenge": 0,
         "comparator": 0
-      }
+      },
+      "action": "rename"
     },
     {
       "current": "PaperCommonCoreTheorem61Data",
@@ -152,7 +161,8 @@
         "audit_surface": 0,
         "challenge": 0,
         "comparator": 0
-      }
+      },
+      "action": "rename"
     },
     {
       "current": "PaperCommonCoreTheorem62Data",
@@ -172,7 +182,8 @@
         "audit_surface": 0,
         "challenge": 0,
         "comparator": 0
-      }
+      },
+      "action": "rename"
     },
     {
       "current": "PaperCommonDomainSinThetaData",
@@ -192,7 +203,8 @@
         "audit_surface": 0,
         "challenge": 0,
         "comparator": 0
-      }
+      },
+      "action": "rename"
     },
     {
       "current": "PaperCommonDomainSymmetricSinThetaProblem",
@@ -212,7 +224,8 @@
         "audit_surface": 0,
         "challenge": 0,
         "comparator": 0
-      }
+      },
+      "action": "rename"
     },
     {
       "current": "PaperCommonDomainTheorem61Data",
@@ -232,7 +245,8 @@
         "audit_surface": 0,
         "challenge": 0,
         "comparator": 0
-      }
+      },
+      "action": "rename"
     },
     {
       "current": "PaperCommonDomainTheorem62Data",
@@ -252,14 +266,15 @@
         "audit_surface": 0,
         "challenge": 0,
         "comparator": 0
-      }
+      },
+      "action": "rename"
     },
     {
       "current": "PaperGeneralSinThetaProblem",
-      "proposed": "GeneralSinThetaProblem",
+      "proposed": "GeneralSinThetaRepresentativeProblem",
       "kind": "structure",
       "declared_in": "DavisKahan/Sources/DavisKahan1970/SineTheta/Theorem61.lean",
-      "classification": "provenance_only",
+      "classification": "family_decision",
       "collides_with_existing_declaration": false,
       "dependent_declaration_names": [],
       "occurrences": {
@@ -272,7 +287,10 @@
         "audit_surface": 0,
         "challenge": 0,
         "comparator": 0
-      }
+      },
+      "proposed_mechanical": "GeneralSinThetaProblem",
+      "action": "rename",
+      "family": "sin-theta-problem-wrappers"
     },
     {
       "current": "PaperHSIndex",
@@ -292,14 +310,15 @@
         "audit_surface": 0,
         "challenge": 0,
         "comparator": 0
-      }
+      },
+      "action": "rename"
     },
     {
       "current": "PaperIsometricSinThetaProblem",
-      "proposed": "IsometricSinThetaProblem",
+      "proposed": "IsometricSinThetaRepresentativeProblem",
       "kind": "structure",
       "declared_in": "DavisKahan/Sources/DavisKahan1970/SineTheta/Theorem61.lean",
-      "classification": "provenance_only",
+      "classification": "family_decision",
       "collides_with_existing_declaration": false,
       "dependent_declaration_names": [],
       "occurrences": {
@@ -312,7 +331,10 @@
         "audit_surface": 0,
         "challenge": 0,
         "comparator": 0
-      }
+      },
+      "proposed_mechanical": "IsometricSinThetaProblem",
+      "action": "rename",
+      "family": "sin-theta-problem-wrappers"
     },
     {
       "current": "PaperIsometricTheoremData",
@@ -332,14 +354,15 @@
         "audit_surface": 0,
         "challenge": 0,
         "comparator": 0
-      }
+      },
+      "action": "rename"
     },
     {
       "current": "PaperPlane",
-      "proposed": "Plane",
+      "proposed": "PlanarModelSpace",
       "kind": "abbrev",
       "declared_in": "DavisKahan/Sources/DavisKahan1970/SineTheta/Sharpness.lean",
-      "classification": "contrastive_decision_required",
+      "classification": "family_decision",
       "collides_with_existing_declaration": true,
       "dependent_declaration_names": [],
       "occurrences": {
@@ -352,7 +375,10 @@
         "audit_surface": 0,
         "challenge": 0,
         "comparator": 0
-      }
+      },
+      "proposed_mechanical": "Plane",
+      "action": "delete_and_migrate",
+      "family": "planar-model-space"
     },
     {
       "current": "PaperRealCommonCoreTheorem61Data",
@@ -372,7 +398,8 @@
         "audit_surface": 0,
         "challenge": 0,
         "comparator": 0
-      }
+      },
+      "action": "rename"
     },
     {
       "current": "PaperRealCommonCoreTheorem62Data",
@@ -392,7 +419,8 @@
         "audit_surface": 0,
         "challenge": 0,
         "comparator": 0
-      }
+      },
+      "action": "rename"
     },
     {
       "current": "PaperRealCommonDomainTheorem61Data",
@@ -412,7 +440,8 @@
         "audit_surface": 0,
         "challenge": 0,
         "comparator": 0
-      }
+      },
+      "action": "rename"
     },
     {
       "current": "PaperRealCommonDomainTheorem62Data",
@@ -432,14 +461,15 @@
         "audit_surface": 0,
         "challenge": 0,
         "comparator": 0
-      }
+      },
+      "action": "rename"
     },
     {
       "current": "PaperRealGeneralSinThetaProblem",
-      "proposed": "RealGeneralSinThetaProblem",
+      "proposed": "RealGeneralSinThetaRepresentativeProblem",
       "kind": "structure",
       "declared_in": "DavisKahan/Sources/DavisKahan1970/SineTheta/Theorem61.lean",
-      "classification": "contrastive_decision_required",
+      "classification": "family_decision",
       "collides_with_existing_declaration": true,
       "dependent_declaration_names": [],
       "occurrences": {
@@ -452,14 +482,17 @@
         "audit_surface": 0,
         "challenge": 0,
         "comparator": 0
-      }
+      },
+      "proposed_mechanical": "RealGeneralSinThetaProblem",
+      "action": "rename",
+      "family": "sin-theta-problem-wrappers"
     },
     {
       "current": "PaperRealIsometricSinThetaProblem",
-      "proposed": "RealIsometricSinThetaProblem",
+      "proposed": "RealIsometricSinThetaRepresentativeProblem",
       "kind": "structure",
       "declared_in": "DavisKahan/Sources/DavisKahan1970/SineTheta/Theorem61.lean",
-      "classification": "provenance_only",
+      "classification": "family_decision",
       "collides_with_existing_declaration": false,
       "dependent_declaration_names": [],
       "occurrences": {
@@ -472,7 +505,10 @@
         "audit_surface": 0,
         "challenge": 0,
         "comparator": 0
-      }
+      },
+      "proposed_mechanical": "RealIsometricSinThetaProblem",
+      "action": "rename",
+      "family": "sin-theta-problem-wrappers"
     },
     {
       "current": "PaperRealIsometricTheoremData",
@@ -492,14 +528,15 @@
         "audit_surface": 0,
         "challenge": 0,
         "comparator": 0
-      }
+      },
+      "action": "rename"
     },
     {
       "current": "PaperRealPlane",
-      "proposed": "RealPlane",
+      "proposed": "PlanarModelSpace ℝ",
       "kind": "abbrev",
       "declared_in": "DavisKahan/Sources/DavisKahan1970/SineTheta/Sharpness.lean",
-      "classification": "contrastive_decision_required",
+      "classification": "family_decision",
       "collides_with_existing_declaration": true,
       "dependent_declaration_names": [],
       "occurrences": {
@@ -512,7 +549,10 @@
         "audit_surface": 0,
         "challenge": 0,
         "comparator": 0
-      }
+      },
+      "proposed_mechanical": "RealPlane",
+      "action": "delete_and_migrate",
+      "family": "planar-model-space"
     },
     {
       "current": "PaperRealSymmetricSinThetaProblem",
@@ -532,7 +572,8 @@
         "audit_surface": 0,
         "challenge": 0,
         "comparator": 0
-      }
+      },
+      "action": "rename"
     },
     {
       "current": "PaperRealTheorem61Data",
@@ -552,7 +593,8 @@
         "audit_surface": 0,
         "challenge": 0,
         "comparator": 0
-      }
+      },
+      "action": "rename"
     },
     {
       "current": "PaperRealTheorem62Data",
@@ -572,14 +614,15 @@
         "audit_surface": 0,
         "challenge": 0,
         "comparator": 0
-      }
+      },
+      "action": "rename"
     },
     {
       "current": "PaperSinThetaRepresentative",
       "proposed": "SinThetaRepresentative",
       "kind": "structure",
       "declared_in": "DavisKahan/Sources/DavisKahan1970/SineTheta/Norms/SingularValueTransport.lean",
-      "classification": "provenance_only",
+      "classification": "family_decision",
       "collides_with_existing_declaration": false,
       "dependent_declaration_names": [],
       "occurrences": {
@@ -592,7 +635,10 @@
         "audit_surface": 0,
         "challenge": 0,
         "comparator": 0
-      }
+      },
+      "proposed_mechanical": "SinThetaRepresentative",
+      "action": "rename",
+      "family": "sin-theta-problem-wrappers"
     },
     {
       "current": "PaperSinThetaRepresentativeAcross",
@@ -612,7 +658,8 @@
         "audit_surface": 0,
         "challenge": 0,
         "comparator": 0
-      }
+      },
+      "action": "rename"
     },
     {
       "current": "PaperSymmetricSinThetaProblem",
@@ -632,7 +679,8 @@
         "audit_surface": 0,
         "challenge": 1,
         "comparator": 0
-      }
+      },
+      "action": "rename"
     },
     {
       "current": "PaperTheorem61Data",
@@ -652,7 +700,8 @@
         "audit_surface": 0,
         "challenge": 0,
         "comparator": 0
-      }
+      },
+      "action": "rename"
     },
     {
       "current": "PaperTheorem62Data",
@@ -672,14 +721,15 @@
         "audit_surface": 0,
         "challenge": 0,
         "comparator": 0
-      }
+      },
+      "action": "rename"
     },
     {
       "current": "paperAbsTanTwoAngleOperatorC",
       "proposed": "absTanTwoAngleOperatorC",
       "kind": "def",
       "declared_in": "DavisKahan/Geometry/Angle/PaperTanAngle.lean",
-      "classification": "provenance_only",
+      "classification": "family_decision",
       "collides_with_existing_declaration": false,
       "dependent_declaration_names": [
         "paperAbsTanTwoAngleOperatorC_eq_modulus_blockRepresentative",
@@ -697,7 +747,10 @@
         "audit_surface": 0,
         "challenge": 2,
         "comparator": 0
-      }
+      },
+      "proposed_mechanical": "absTanTwoAngleOperatorC",
+      "action": "rename",
+      "family": "angle-operator-family"
     },
     {
       "current": "paperAbsTanTwoAngleOperatorC_eq_modulus_blockRepresentative",
@@ -717,14 +770,15 @@
         "audit_surface": 0,
         "challenge": 0,
         "comparator": 0
-      }
+      },
+      "action": "rename"
     },
     {
       "current": "paperAbsTanTwoAngleOperatorC_eq_modulus_paperTanTwoAngleOperatorC",
-      "proposed": "absTanTwoAngleOperatorC_eq_modulus_paperTanTwoAngleOperatorC",
+      "proposed": "absTanTwoAngleOperatorC_eq_modulus_tanTwoAngleOperatorC",
       "kind": "theorem",
       "declared_in": "DavisKahan/Sources/DavisKahan1970/TanTwoThetaAmbient.lean",
-      "classification": "provenance_only",
+      "classification": "family_decision",
       "collides_with_existing_declaration": false,
       "dependent_declaration_names": [],
       "occurrences": {
@@ -737,14 +791,17 @@
         "audit_surface": 0,
         "challenge": 0,
         "comparator": 0
-      }
+      },
+      "action": "rename",
+      "proposed_mechanical": "absTanTwoAngleOperatorC_eq_modulus_paperTanTwoAngleOperatorC",
+      "family": "embedded-token-repair"
     },
     {
       "current": "paperAbsTanTwoAngleOperatorC_eq_paperTanTwoAngleOperatorC",
-      "proposed": "absTanTwoAngleOperatorC_eq_paperTanTwoAngleOperatorC",
+      "proposed": "absTanTwoAngleOperatorC_eq_tanTwoAngleOperatorC",
       "kind": "theorem",
       "declared_in": "DavisKahan/Geometry/Angle/PaperTanAngle.lean",
-      "classification": "provenance_only",
+      "classification": "family_decision",
       "collides_with_existing_declaration": false,
       "dependent_declaration_names": [],
       "occurrences": {
@@ -757,7 +814,10 @@
         "audit_surface": 0,
         "challenge": 0,
         "comparator": 0
-      }
+      },
+      "action": "rename",
+      "proposed_mechanical": "absTanTwoAngleOperatorC_eq_paperTanTwoAngleOperatorC",
+      "family": "embedded-token-repair"
     },
     {
       "current": "paperAbsTanTwoAngleOperatorC_nonneg",
@@ -777,14 +837,15 @@
         "audit_surface": 0,
         "challenge": 0,
         "comparator": 0
-      }
+      },
+      "action": "rename"
     },
     {
       "current": "paperAbsTanTwoAngleOperatorR",
       "proposed": "absTanTwoAngleOperatorR",
       "kind": "def",
       "declared_in": "DavisKahan/Geometry/Angle/PaperOperatorAngleReal.lean",
-      "classification": "provenance_only",
+      "classification": "family_decision",
       "collides_with_existing_declaration": false,
       "dependent_declaration_names": [],
       "occurrences": {
@@ -797,7 +858,10 @@
         "audit_surface": 1,
         "challenge": 0,
         "comparator": 0
-      }
+      },
+      "proposed_mechanical": "absTanTwoAngleOperatorR",
+      "action": "rename",
+      "family": "angle-operator-family"
     },
     {
       "current": "paperAbsTanTwo_sq_mul_cos_two_sq",
@@ -817,7 +881,8 @@
         "audit_surface": 0,
         "challenge": 0,
         "comparator": 0
-      }
+      },
+      "action": "rename"
     },
     {
       "current": "paperAbsTanTwo_sq_mul_one_sub_sinTwo_sq",
@@ -837,14 +902,15 @@
         "audit_surface": 0,
         "challenge": 0,
         "comparator": 0
-      }
+      },
+      "action": "rename"
     },
     {
       "current": "paperAngleOperatorC",
       "proposed": "angleOperatorC",
       "kind": "def",
       "declared_in": "DavisKahan/Geometry/Angle/PaperOperatorAngle.lean",
-      "classification": "provenance_only",
+      "classification": "family_decision",
       "collides_with_existing_declaration": false,
       "dependent_declaration_names": [
         "paperAngleOperatorC_nonneg"
@@ -859,7 +925,10 @@
         "audit_surface": 0,
         "challenge": 3,
         "comparator": 0
-      }
+      },
+      "proposed_mechanical": "angleOperatorC",
+      "action": "rename",
+      "family": "angle-operator-family"
     },
     {
       "current": "paperAngleOperatorC_nonneg",
@@ -879,14 +948,15 @@
         "audit_surface": 0,
         "challenge": 0,
         "comparator": 0
-      }
+      },
+      "action": "rename"
     },
     {
       "current": "paperAngleOperatorR",
       "proposed": "angleOperatorR",
       "kind": "def",
       "declared_in": "DavisKahan/Geometry/Angle/PaperOperatorAngleReal.lean",
-      "classification": "provenance_only",
+      "classification": "family_decision",
       "collides_with_existing_declaration": false,
       "dependent_declaration_names": [],
       "occurrences": {
@@ -899,14 +969,17 @@
         "audit_surface": 0,
         "challenge": 0,
         "comparator": 0
-      }
+      },
+      "proposed_mechanical": "angleOperatorR",
+      "action": "rename",
+      "family": "angle-operator-family"
     },
     {
       "current": "paperAngleOperatorRC",
       "proposed": "angleOperatorRC",
       "kind": "def",
       "declared_in": "DavisKahan/Geometry/Angle/PaperOperatorAngle.lean",
-      "classification": "provenance_only",
+      "classification": "family_decision",
       "collides_with_existing_declaration": false,
       "dependent_declaration_names": [],
       "occurrences": {
@@ -919,7 +992,10 @@
         "audit_surface": 0,
         "challenge": 0,
         "comparator": 0
-      }
+      },
+      "proposed_mechanical": "angleOperatorRC",
+      "action": "rename",
+      "family": "angle-operator-family"
     },
     {
       "current": "paperBasisProjection",
@@ -943,7 +1019,8 @@
         "audit_surface": 0,
         "challenge": 0,
         "comparator": 0
-      }
+      },
+      "action": "rename"
     },
     {
       "current": "paperBasisProjection_apply",
@@ -963,7 +1040,8 @@
         "audit_surface": 0,
         "challenge": 0,
         "comparator": 0
-      }
+      },
+      "action": "rename"
     },
     {
       "current": "paperBasisProjection_isOrthogonalProjection",
@@ -983,7 +1061,8 @@
         "audit_surface": 0,
         "challenge": 0,
         "comparator": 0
-      }
+      },
+      "action": "rename"
     },
     {
       "current": "paperBasisProjection_stronglyTendsto",
@@ -1003,7 +1082,8 @@
         "audit_surface": 0,
         "challenge": 0,
         "comparator": 0
-      }
+      },
+      "action": "rename"
     },
     {
       "current": "paperBasisSpan_finiteDimensional",
@@ -1023,7 +1103,8 @@
         "audit_surface": 0,
         "challenge": 0,
         "comparator": 0
-      }
+      },
+      "action": "rename"
     },
     {
       "current": "paperBlockCompression",
@@ -1050,7 +1131,8 @@
         "audit_surface": 0,
         "challenge": 2,
         "comparator": 0
-      }
+      },
+      "action": "rename"
     },
     {
       "current": "paperBlockCompression_adjoint_of_selfAdjoint",
@@ -1070,7 +1152,8 @@
         "audit_surface": 0,
         "challenge": 0,
         "comparator": 0
-      }
+      },
+      "action": "rename"
     },
     {
       "current": "paperBlockCompression_apply",
@@ -1090,7 +1173,8 @@
         "audit_surface": 0,
         "challenge": 0,
         "comparator": 0
-      }
+      },
+      "action": "rename"
     },
     {
       "current": "paperBlockCompression_complexify_equiv",
@@ -1110,7 +1194,8 @@
         "audit_surface": 0,
         "challenge": 0,
         "comparator": 0
-      }
+      },
+      "action": "rename"
     },
     {
       "current": "paperBlockCompression_mul_reflectionOperator",
@@ -1130,14 +1215,15 @@
         "audit_surface": 1,
         "challenge": 0,
         "comparator": 0
-      }
+      },
+      "action": "rename"
     },
     {
       "current": "paperBlockCompression_paperDiagonalPair",
-      "proposed": "blockCompression_paperDiagonalPair",
+      "proposed": "blockCompression_diagonalPair",
       "kind": "theorem",
       "declared_in": "DavisKahan/Sources/DavisKahan1970/TanTwoThetaUnboundedGramBridge.lean",
-      "classification": "provenance_only",
+      "classification": "family_decision",
       "collides_with_existing_declaration": false,
       "dependent_declaration_names": [],
       "occurrences": {
@@ -1150,7 +1236,10 @@
         "audit_surface": 1,
         "challenge": 0,
         "comparator": 0
-      }
+      },
+      "action": "rename",
+      "proposed_mechanical": "blockCompression_paperDiagonalPair",
+      "family": "embedded-token-repair"
     },
     {
       "current": "paperBlockCompression_smul_one",
@@ -1170,14 +1259,15 @@
         "audit_surface": 0,
         "challenge": 0,
         "comparator": 0
-      }
+      },
+      "action": "rename"
     },
     {
       "current": "paperCosAngleOperatorC",
       "proposed": "cosAngleOperatorC",
       "kind": "def",
       "declared_in": "DavisKahan/Geometry/Angle/PaperOperatorAngle.lean",
-      "classification": "contrastive_decision_required",
+      "classification": "family_decision",
       "collides_with_existing_declaration": true,
       "dependent_declaration_names": [],
       "occurrences": {
@@ -1190,14 +1280,17 @@
         "audit_surface": 0,
         "challenge": 0,
         "comparator": 0
-      }
+      },
+      "proposed_mechanical": "cosAngleOperatorC",
+      "action": "rename",
+      "family": "angle-operator-family"
     },
     {
       "current": "paperCos_mul_paperTan",
-      "proposed": "cos_mul_paperTan",
+      "proposed": "cosAngleOperatorC_mul_tanAngleOperatorC",
       "kind": "theorem",
       "declared_in": "DavisKahan/Geometry/Angle/PaperTanAngle.lean",
-      "classification": "provenance_only",
+      "classification": "family_decision",
       "collides_with_existing_declaration": false,
       "dependent_declaration_names": [],
       "occurrences": {
@@ -1210,14 +1303,17 @@
         "audit_surface": 0,
         "challenge": 0,
         "comparator": 0
-      }
+      },
+      "action": "rename",
+      "proposed_mechanical": "cos_mul_paperTan",
+      "family": "embedded-token-repair"
     },
     {
       "current": "paperCosineBlockC",
       "proposed": "cosineBlockC",
       "kind": "def",
       "declared_in": "DavisKahan/Sources/DavisKahan1970/SineTheta/CosineAngle.lean",
-      "classification": "provenance_only",
+      "classification": "family_decision",
       "collides_with_existing_declaration": false,
       "dependent_declaration_names": [],
       "occurrences": {
@@ -1230,14 +1326,17 @@
         "audit_surface": 0,
         "challenge": 0,
         "comparator": 0
-      }
+      },
+      "proposed_mechanical": "cosineBlockC",
+      "action": "rename",
+      "family": "source-block-family"
     },
     {
       "current": "paperCosineModulusC",
-      "proposed": "cosineModulusC",
+      "proposed": "cosineBlockModulusC",
       "kind": "def",
       "declared_in": "DavisKahan/Sources/DavisKahan1970/SineTheta/CosineAngle.lean",
-      "classification": "provenance_only",
+      "classification": "family_decision",
       "collides_with_existing_declaration": false,
       "dependent_declaration_names": [],
       "occurrences": {
@@ -1250,7 +1349,10 @@
         "audit_surface": 0,
         "challenge": 0,
         "comparator": 0
-      }
+      },
+      "proposed_mechanical": "cosineModulusC",
+      "action": "rename",
+      "family": "source-block-family"
     },
     {
       "current": "paperCounterexampleA",
@@ -1270,7 +1372,8 @@
         "audit_surface": 0,
         "challenge": 0,
         "comparator": 0
-      }
+      },
+      "action": "rename"
     },
     {
       "current": "paperCounterexampleExact",
@@ -1294,7 +1397,8 @@
         "audit_surface": 0,
         "challenge": 0,
         "comparator": 0
-      }
+      },
+      "action": "rename"
     },
     {
       "current": "paperCounterexampleExact_projection",
@@ -1314,7 +1418,8 @@
         "audit_surface": 0,
         "challenge": 0,
         "comparator": 0
-      }
+      },
+      "action": "rename"
     },
     {
       "current": "paperCounterexampleExact_starProjection_e0",
@@ -1334,7 +1439,8 @@
         "audit_surface": 0,
         "challenge": 0,
         "comparator": 0
-      }
+      },
+      "action": "rename"
     },
     {
       "current": "paperCounterexampleExact_starProjection_e1",
@@ -1354,7 +1460,8 @@
         "audit_surface": 0,
         "challenge": 0,
         "comparator": 0
-      }
+      },
+      "action": "rename"
     },
     {
       "current": "paperCounterexampleH",
@@ -1377,7 +1484,8 @@
         "audit_surface": 0,
         "challenge": 0,
         "comparator": 0
-      }
+      },
+      "action": "rename"
     },
     {
       "current": "paperCounterexampleH_e0",
@@ -1397,7 +1505,8 @@
         "audit_surface": 0,
         "challenge": 0,
         "comparator": 0
-      }
+      },
+      "action": "rename"
     },
     {
       "current": "paperCounterexampleH_e1",
@@ -1417,7 +1526,8 @@
         "audit_surface": 0,
         "challenge": 0,
         "comparator": 0
-      }
+      },
+      "action": "rename"
     },
     {
       "current": "paperCounterexampleTrial",
@@ -1442,7 +1552,8 @@
         "audit_surface": 0,
         "challenge": 0,
         "comparator": 0
-      }
+      },
+      "action": "rename"
     },
     {
       "current": "paperCounterexampleTrialVector",
@@ -1462,7 +1573,8 @@
         "audit_surface": 0,
         "challenge": 0,
         "comparator": 0
-      }
+      },
+      "action": "rename"
     },
     {
       "current": "paperCounterexampleTrial_projection",
@@ -1482,7 +1594,8 @@
         "audit_surface": 0,
         "challenge": 0,
         "comparator": 0
-      }
+      },
+      "action": "rename"
     },
     {
       "current": "paperCounterexampleTrial_starProjection_apply",
@@ -1502,7 +1615,8 @@
         "audit_surface": 0,
         "challenge": 0,
         "comparator": 0
-      }
+      },
+      "action": "rename"
     },
     {
       "current": "paperCounterexampleTrial_starProjection_e0",
@@ -1522,7 +1636,8 @@
         "audit_surface": 0,
         "challenge": 0,
         "comparator": 0
-      }
+      },
+      "action": "rename"
     },
     {
       "current": "paperCounterexampleTrial_starProjection_e1",
@@ -1542,7 +1657,8 @@
         "audit_surface": 0,
         "challenge": 0,
         "comparator": 0
-      }
+      },
+      "action": "rename"
     },
     {
       "current": "paperCounterexample_perturbation_square_norm",
@@ -1562,7 +1678,8 @@
         "audit_surface": 0,
         "challenge": 0,
         "comparator": 0
-      }
+      },
+      "action": "rename"
     },
     {
       "current": "paperCounterexample_projectionDifference_e0",
@@ -1582,7 +1699,8 @@
         "audit_surface": 0,
         "challenge": 0,
         "comparator": 0
-      }
+      },
+      "action": "rename"
     },
     {
       "current": "paperCounterexample_projectionDifference_e1",
@@ -1602,7 +1720,8 @@
         "audit_surface": 0,
         "challenge": 0,
         "comparator": 0
-      }
+      },
+      "action": "rename"
     },
     {
       "current": "paperCounterexample_sine_square_norm",
@@ -1622,7 +1741,8 @@
         "audit_surface": 0,
         "challenge": 0,
         "comparator": 0
-      }
+      },
+      "action": "rename"
     },
     {
       "current": "paperCrossSineSum",
@@ -1646,7 +1766,8 @@
         "audit_surface": 0,
         "challenge": 0,
         "comparator": 0
-      }
+      },
+      "action": "rename"
     },
     {
       "current": "paperCrossSineSum_eq_projectionDiff_comp_reflection",
@@ -1666,7 +1787,8 @@
         "audit_surface": 0,
         "challenge": 0,
         "comparator": 0
-      }
+      },
+      "action": "rename"
     },
     {
       "current": "paperCrossSineSum_same_literalSin",
@@ -1686,7 +1808,8 @@
         "audit_surface": 0,
         "challenge": 0,
         "comparator": 0
-      }
+      },
+      "action": "rename"
     },
     {
       "current": "paperCrossSineSum_same_projectionDiff",
@@ -1706,7 +1829,8 @@
         "audit_surface": 0,
         "challenge": 0,
         "comparator": 0
-      }
+      },
+      "action": "rename"
     },
     {
       "current": "paperDiagonalPair",
@@ -1735,7 +1859,8 @@
         "audit_surface": 0,
         "challenge": 0,
         "comparator": 0
-      }
+      },
+      "action": "rename"
     },
     {
       "current": "paperDiagonalPair_all_kyFan_le",
@@ -1755,7 +1880,8 @@
         "audit_surface": 0,
         "challenge": 0,
         "comparator": 0
-      }
+      },
+      "action": "rename"
     },
     {
       "current": "paperDiagonalPair_even_kyFan_eq_two_mul_of_same",
@@ -1775,7 +1901,8 @@
         "audit_surface": 0,
         "challenge": 0,
         "comparator": 0
-      }
+      },
+      "action": "rename"
     },
     {
       "current": "paperDiagonalPair_gauge_le",
@@ -1795,7 +1922,8 @@
         "audit_surface": 0,
         "challenge": 0,
         "comparator": 0
-      }
+      },
+      "action": "rename"
     },
     {
       "current": "paperDiagonalPair_mem",
@@ -1815,7 +1943,8 @@
         "audit_surface": 0,
         "challenge": 0,
         "comparator": 0
-      }
+      },
+      "action": "rename"
     },
     {
       "current": "paperDiagonalPair_normingGauge_le",
@@ -1835,7 +1964,8 @@
         "audit_surface": 0,
         "challenge": 0,
         "comparator": 0
-      }
+      },
+      "action": "rename"
     },
     {
       "current": "paperDiagonalPair_orthogonal_eq_offDiagonalPart_unboundedAmbientExact",
@@ -1855,7 +1985,8 @@
         "audit_surface": 0,
         "challenge": 0,
         "comparator": 0
-      }
+      },
+      "action": "rename"
     },
     {
       "current": "paperDiagonalPair_orthogonal_eq_self_of_isOddFor_unboundedAmbientExact",
@@ -1875,7 +2006,8 @@
         "audit_surface": 0,
         "challenge": 0,
         "comparator": 0
-      }
+      },
+      "action": "rename"
     },
     {
       "current": "paperDiagonalPair_symmetricNorming_le",
@@ -1895,7 +2027,8 @@
         "audit_surface": 0,
         "challenge": 0,
         "comparator": 0
-      }
+      },
+      "action": "rename"
     },
     {
       "current": "paperDirectRotation_add_star_nonneg",
@@ -1915,7 +2048,8 @@
         "audit_surface": 0,
         "challenge": 0,
         "comparator": 0
-      }
+      },
+      "action": "rename"
     },
     {
       "current": "paperDirectRotation_apply_sourceDefect_eq_neg_star",
@@ -1935,7 +2069,8 @@
         "audit_surface": 0,
         "challenge": 0,
         "comparator": 0
-      }
+      },
+      "action": "rename"
     },
     {
       "current": "paperDirectRotation_conjugates_complementaryProjection",
@@ -1955,7 +2090,8 @@
         "audit_surface": 0,
         "challenge": 0,
         "comparator": 0
-      }
+      },
+      "action": "rename"
     },
     {
       "current": "paperDirectRotation_conjugates_projection",
@@ -1975,7 +2111,8 @@
         "audit_surface": 0,
         "challenge": 0,
         "comparator": 0
-      }
+      },
+      "action": "rename"
     },
     {
       "current": "paperDirectRotation_mapsto_targetDefect",
@@ -1995,7 +2132,8 @@
         "audit_surface": 0,
         "challenge": 0,
         "comparator": 0
-      }
+      },
+      "action": "rename"
     },
     {
       "current": "paperDirectRotation_sq_apply_sourceDefect",
@@ -2015,7 +2153,8 @@
         "audit_surface": 0,
         "challenge": 0,
         "comparator": 0
-      }
+      },
+      "action": "rename"
     },
     {
       "current": "paperDirectRotation_sq_apply_targetDefect",
@@ -2035,7 +2174,8 @@
         "audit_surface": 0,
         "challenge": 0,
         "comparator": 0
-      }
+      },
+      "action": "rename"
     },
     {
       "current": "paperDirectRotation_star_apply_targetDefect_eq_neg",
@@ -2055,7 +2195,8 @@
         "audit_surface": 0,
         "challenge": 0,
         "comparator": 0
-      }
+      },
+      "action": "rename"
     },
     {
       "current": "paperDirectRotation_star_mapsto_sourceDefect",
@@ -2075,14 +2216,15 @@
         "audit_surface": 0,
         "challenge": 0,
         "comparator": 0
-      }
+      },
+      "action": "rename"
     },
     {
       "current": "paperDirectedAngleOperatorC",
       "proposed": "directedAngleOperatorC",
       "kind": "def",
       "declared_in": "DavisKahan/Sources/DavisKahan1970/SineTheta/OperatorAngleBridge.lean",
-      "classification": "provenance_only",
+      "classification": "family_decision",
       "collides_with_existing_declaration": false,
       "dependent_declaration_names": [
         "paperDirectedAngleOperatorC_nonneg"
@@ -2097,7 +2239,10 @@
         "audit_surface": 0,
         "challenge": 0,
         "comparator": 0
-      }
+      },
+      "proposed_mechanical": "directedAngleOperatorC",
+      "action": "rename",
+      "family": "angle-operator-family"
     },
     {
       "current": "paperDirectedAngleOperatorC_nonneg",
@@ -2117,14 +2262,15 @@
         "audit_surface": 0,
         "challenge": 0,
         "comparator": 0
-      }
+      },
+      "action": "rename"
     },
     {
       "current": "paperDirectedSinAngleOperatorC",
-      "proposed": "directedSinAngleOperatorC",
+      "proposed": null,
       "kind": "def",
       "declared_in": "DavisKahan/Sources/DavisKahan1970/SineTheta/OperatorAngleBridge.lean",
-      "classification": "provenance_only",
+      "classification": "family_decision",
       "collides_with_existing_declaration": false,
       "dependent_declaration_names": [
         "paperDirectedSinAngleOperatorC_eq"
@@ -2139,7 +2285,10 @@
         "audit_surface": 0,
         "challenge": 0,
         "comparator": 0
-      }
+      },
+      "proposed_mechanical": "directedSinAngleOperatorC",
+      "action": "delete_and_migrate: use directedSinAngleOperatorC",
+      "family": "angle-operator-family"
     },
     {
       "current": "paperDirectedSinAngleOperatorC_eq",
@@ -2159,7 +2308,8 @@
         "audit_surface": 0,
         "challenge": 0,
         "comparator": 0
-      }
+      },
+      "action": "rename"
     },
     {
       "current": "paperDirectedSin_same_crossProjection",
@@ -2179,7 +2329,8 @@
         "audit_surface": 0,
         "challenge": 0,
         "comparator": 0
-      }
+      },
+      "action": "rename"
     },
     {
       "current": "paperDirectedSineAmbient",
@@ -2199,7 +2350,8 @@
         "audit_surface": 0,
         "challenge": 0,
         "comparator": 0
-      }
+      },
+      "action": "rename"
     },
     {
       "current": "paperDoubleSecant",
@@ -2219,7 +2371,8 @@
         "audit_surface": 0,
         "challenge": 2,
         "comparator": 0
-      }
+      },
+      "action": "rename"
     },
     {
       "current": "paperEquation43Block1",
@@ -2239,7 +2392,8 @@
         "audit_surface": 0,
         "challenge": 0,
         "comparator": 0
-      }
+      },
+      "action": "rename"
     },
     {
       "current": "paperEquation43Block2",
@@ -2259,7 +2413,8 @@
         "audit_surface": 0,
         "challenge": 0,
         "comparator": 0
-      }
+      },
+      "action": "rename"
     },
     {
       "current": "paperFaithful_tanTwoTheta_uiNorm",
@@ -2281,7 +2436,8 @@
         "audit_surface": 0,
         "challenge": 0,
         "comparator": 0
-      }
+      },
+      "action": "rename"
     },
     {
       "current": "paperFaithful_tanTwoTheta_uiNorm_real",
@@ -2301,7 +2457,8 @@
         "audit_surface": 0,
         "challenge": 0,
         "comparator": 0
-      }
+      },
+      "action": "rename"
     },
     {
       "current": "paperFiniteDimensional_scalar_homogeneity",
@@ -2321,7 +2478,8 @@
         "audit_surface": 0,
         "challenge": 0,
         "comparator": 0
-      }
+      },
+      "action": "rename"
     },
     {
       "current": "paperHSBasis",
@@ -2341,7 +2499,8 @@
         "audit_surface": 0,
         "challenge": 0,
         "comparator": 0
-      }
+      },
+      "action": "rename"
     },
     {
       "current": "paperHilbertSchmidtBasisEnergy",
@@ -2366,7 +2525,8 @@
         "audit_surface": 0,
         "challenge": 0,
         "comparator": 0
-      }
+      },
+      "action": "rename"
     },
     {
       "current": "paperHilbertSchmidtBasisEnergy_adjoint_swap",
@@ -2386,7 +2546,8 @@
         "audit_surface": 0,
         "challenge": 0,
         "comparator": 0
-      }
+      },
+      "action": "rename"
     },
     {
       "current": "paperHilbertSchmidtBasisEnergy_eq_hilbertSchmidtEnergy",
@@ -2406,7 +2567,8 @@
         "audit_surface": 0,
         "challenge": 0,
         "comparator": 0
-      }
+      },
+      "action": "rename"
     },
     {
       "current": "paperHilbertSchmidtBasisEnergy_eq_iSup_finset",
@@ -2426,7 +2588,8 @@
         "audit_surface": 0,
         "challenge": 0,
         "comparator": 0
-      }
+      },
+      "action": "rename"
     },
     {
       "current": "paperHilbertSchmidtBasisEnergy_indep",
@@ -2446,14 +2609,15 @@
         "audit_surface": 0,
         "challenge": 0,
         "comparator": 0
-      }
+      },
+      "action": "rename"
     },
     {
       "current": "paperHilbertSchmidtEnergy",
-      "proposed": "hilbertSchmidtEnergy",
+      "proposed": "ContinuousLinearMap.hilbertSchmidtEnergy",
       "kind": "def",
       "declared_in": "DavisKahan/Sources/DavisKahan1970/Ideals/HilbertSchmidt.lean",
-      "classification": "contrastive_decision_required",
+      "classification": "family_decision",
       "collides_with_existing_declaration": true,
       "dependent_declaration_names": [
         "paperHilbertSchmidtEnergy_comp_le",
@@ -2481,7 +2645,10 @@
         "audit_surface": 0,
         "challenge": 0,
         "comparator": 0
-      }
+      },
+      "proposed_mechanical": "hilbertSchmidtEnergy",
+      "action": "delete_and_migrate",
+      "family": "hilbert-schmidt"
     },
     {
       "current": "paperHilbertSchmidtEnergy_comp_le",
@@ -2501,14 +2668,15 @@
         "audit_surface": 0,
         "challenge": 0,
         "comparator": 0
-      }
+      },
+      "action": "rename"
     },
     {
       "current": "paperHilbertSchmidtEnergy_comp_paperBasisProjection",
-      "proposed": "hilbertSchmidtEnergy_comp_paperBasisProjection",
+      "proposed": "hilbertSchmidtEnergy_comp_basisProjection",
       "kind": "theorem",
       "declared_in": "DavisKahan/Sources/DavisKahan1970/Ideals/HilbertSchmidtBasis.lean",
-      "classification": "provenance_only",
+      "classification": "family_decision",
       "collides_with_existing_declaration": false,
       "dependent_declaration_names": [],
       "occurrences": {
@@ -2521,7 +2689,11 @@
         "audit_surface": 0,
         "challenge": 0,
         "comparator": 0
-      }
+      },
+      "action": "rename_or_delete_with_hilbert_schmidt_migration",
+      "proposed_mechanical": "hilbertSchmidtEnergy_comp_paperBasisProjection",
+      "family": "embedded-token-repair",
+      "note": "Depends on the hilbert-schmidt family decision: if the duplicate concept is deleted, this theorem is restated against the canonical ForTauCeti API rather than renamed."
     },
     {
       "current": "paperHilbertSchmidtEnergy_comp_starProjection",
@@ -2541,7 +2713,8 @@
         "audit_surface": 0,
         "challenge": 0,
         "comparator": 0
-      }
+      },
+      "action": "rename"
     },
     {
       "current": "paperHilbertSchmidtEnergy_complexify",
@@ -2561,7 +2734,8 @@
         "audit_surface": 0,
         "challenge": 0,
         "comparator": 0
-      }
+      },
+      "action": "rename"
     },
     {
       "current": "paperHilbertSchmidtEnergy_domain_projection_add_complex",
@@ -2581,7 +2755,8 @@
         "audit_surface": 0,
         "challenge": 0,
         "comparator": 0
-      }
+      },
+      "action": "rename"
     },
     {
       "current": "paperHilbertSchmidtEnergy_domain_projection_add_real",
@@ -2601,7 +2776,8 @@
         "audit_surface": 0,
         "challenge": 0,
         "comparator": 0
-      }
+      },
+      "action": "rename"
     },
     {
       "current": "paperHilbertSchmidtEnergy_eq_basisEnergy",
@@ -2621,7 +2797,8 @@
         "audit_surface": 0,
         "challenge": 0,
         "comparator": 0
-      }
+      },
+      "action": "rename"
     },
     {
       "current": "paperHilbertSchmidtEnergy_eq_iSup_cutoff",
@@ -2641,7 +2818,8 @@
         "audit_surface": 0,
         "challenge": 0,
         "comparator": 0
-      }
+      },
+      "action": "rename"
     },
     {
       "current": "paperHilbertSchmidtEnergy_eq_ofReal_sum_sq_singularValues",
@@ -2661,7 +2839,8 @@
         "audit_surface": 0,
         "challenge": 0,
         "comparator": 0
-      }
+      },
+      "action": "rename"
     },
     {
       "current": "paperHilbertSchmidtEnergy_eq_sum_range_of_rank_le",
@@ -2681,7 +2860,8 @@
         "audit_surface": 0,
         "challenge": 0,
         "comparator": 0
-      }
+      },
+      "action": "rename"
     },
     {
       "current": "paperHilbertSchmidtEnergy_le_rank_mul_opNorm_sq",
@@ -2701,7 +2881,8 @@
         "audit_surface": 0,
         "challenge": 0,
         "comparator": 0
-      }
+      },
+      "action": "rename"
     },
     {
       "current": "paperHilbertSchmidtEnergy_smul",
@@ -2721,7 +2902,8 @@
         "audit_surface": 0,
         "challenge": 0,
         "comparator": 0
-      }
+      },
+      "action": "rename"
     },
     {
       "current": "paperHilbertSchmidtEnergy_sylvester_le_of_pairwiseSpectrumGap",
@@ -2741,7 +2923,8 @@
         "audit_surface": 0,
         "challenge": 0,
         "comparator": 0
-      }
+      },
+      "action": "rename"
     },
     {
       "current": "paperHilbertSchmidtEnergy_zero",
@@ -2761,14 +2944,15 @@
         "audit_surface": 0,
         "challenge": 0,
         "comparator": 0
-      }
+      },
+      "action": "rename"
     },
     {
       "current": "paperHilbertSchmidtNorm",
-      "proposed": "hilbertSchmidtNorm",
+      "proposed": "ContinuousLinearMap.hilbertSchmidtENorm",
       "kind": "def",
       "declared_in": "DavisKahan/Sources/DavisKahan1970/Ideals/HilbertSchmidt.lean",
-      "classification": "provenance_only",
+      "classification": "family_decision",
       "collides_with_existing_declaration": false,
       "dependent_declaration_names": [
         "paperHilbertSchmidtNorm_add_le_complex",
@@ -2800,7 +2984,10 @@
         "audit_surface": 0,
         "challenge": 0,
         "comparator": 0
-      }
+      },
+      "proposed_mechanical": "hilbertSchmidtNorm",
+      "action": "delete_and_migrate",
+      "family": "hilbert-schmidt"
     },
     {
       "current": "paperHilbertSchmidtNorm_add_le_complex",
@@ -2820,7 +3007,8 @@
         "audit_surface": 0,
         "challenge": 0,
         "comparator": 0
-      }
+      },
+      "action": "rename"
     },
     {
       "current": "paperHilbertSchmidtNorm_add_le_real",
@@ -2840,7 +3028,8 @@
         "audit_surface": 0,
         "challenge": 0,
         "comparator": 0
-      }
+      },
+      "action": "rename"
     },
     {
       "current": "paperHilbertSchmidtNorm_adjoint",
@@ -2860,7 +3049,8 @@
         "audit_surface": 0,
         "challenge": 0,
         "comparator": 0
-      }
+      },
+      "action": "rename"
     },
     {
       "current": "paperHilbertSchmidtNorm_comp_isometries_le",
@@ -2880,7 +3070,8 @@
         "audit_surface": 0,
         "challenge": 0,
         "comparator": 0
-      }
+      },
+      "action": "rename"
     },
     {
       "current": "paperHilbertSchmidtNorm_comp_le",
@@ -2900,7 +3091,8 @@
         "audit_surface": 0,
         "challenge": 0,
         "comparator": 0
-      }
+      },
+      "action": "rename"
     },
     {
       "current": "paperHilbertSchmidtNorm_complexify",
@@ -2920,7 +3112,8 @@
         "audit_surface": 0,
         "challenge": 0,
         "comparator": 0
-      }
+      },
+      "action": "rename"
     },
     {
       "current": "paperHilbertSchmidtNorm_eq_frobenius",
@@ -2940,7 +3133,8 @@
         "audit_surface": 0,
         "challenge": 0,
         "comparator": 0
-      }
+      },
+      "action": "rename"
     },
     {
       "current": "paperHilbertSchmidtNorm_eq_rectangularFrobenius",
@@ -2960,7 +3154,8 @@
         "audit_surface": 0,
         "challenge": 0,
         "comparator": 0
-      }
+      },
+      "action": "rename"
     },
     {
       "current": "paperHilbertSchmidtNorm_eq_sqrt_tsum_basis",
@@ -2980,7 +3175,8 @@
         "audit_surface": 0,
         "challenge": 0,
         "comparator": 0
-      }
+      },
+      "action": "rename"
     },
     {
       "current": "paperHilbertSchmidtNorm_eq_zero",
@@ -3000,7 +3196,8 @@
         "audit_surface": 0,
         "challenge": 0,
         "comparator": 0
-      }
+      },
+      "action": "rename"
     },
     {
       "current": "paperHilbertSchmidtNorm_le_sqrt_rank_mul_opNorm",
@@ -3020,7 +3217,8 @@
         "audit_surface": 0,
         "challenge": 0,
         "comparator": 0
-      }
+      },
+      "action": "rename"
     },
     {
       "current": "paperHilbertSchmidtNorm_neg",
@@ -3040,7 +3238,8 @@
         "audit_surface": 0,
         "challenge": 0,
         "comparator": 0
-      }
+      },
+      "action": "rename"
     },
     {
       "current": "paperHilbertSchmidtNorm_nonneg",
@@ -3060,7 +3259,8 @@
         "audit_surface": 0,
         "challenge": 0,
         "comparator": 0
-      }
+      },
+      "action": "rename"
     },
     {
       "current": "paperHilbertSchmidtNorm_operatorModulus",
@@ -3080,7 +3280,8 @@
         "audit_surface": 0,
         "challenge": 0,
         "comparator": 0
-      }
+      },
+      "action": "rename"
     },
     {
       "current": "paperHilbertSchmidtNorm_sinAngleOperatorRC_eq_projectionDifference",
@@ -3100,7 +3301,8 @@
         "audit_surface": 0,
         "challenge": 0,
         "comparator": 0
-      }
+      },
+      "action": "rename"
     },
     {
       "current": "paperHilbertSchmidtNorm_smul",
@@ -3120,7 +3322,8 @@
         "audit_surface": 0,
         "challenge": 0,
         "comparator": 0
-      }
+      },
+      "action": "rename"
     },
     {
       "current": "paperHilbertSchmidtNorm_toOperator",
@@ -3140,7 +3343,8 @@
         "audit_surface": 0,
         "challenge": 0,
         "comparator": 0
-      }
+      },
+      "action": "rename"
     },
     {
       "current": "paperHilbertSchmidtNorm_zero",
@@ -3160,7 +3364,8 @@
         "audit_surface": 0,
         "challenge": 0,
         "comparator": 0
-      }
+      },
+      "action": "rename"
     },
     {
       "current": "paperHilbertSchmidtTensor",
@@ -3184,7 +3389,8 @@
         "audit_surface": 0,
         "challenge": 0,
         "comparator": 0
-      }
+      },
+      "action": "rename"
     },
     {
       "current": "paperHilbertSchmidtTensor_add",
@@ -3204,7 +3410,8 @@
         "audit_surface": 0,
         "challenge": 0,
         "comparator": 0
-      }
+      },
+      "action": "rename"
     },
     {
       "current": "paperHilbertSchmidtTensor_hasVectorSpectralGap",
@@ -3224,7 +3431,8 @@
         "audit_surface": 0,
         "challenge": 0,
         "comparator": 0
-      }
+      },
+      "action": "rename"
     },
     {
       "current": "paperHilbertSchmidtTensor_sub",
@@ -3244,7 +3452,8 @@
         "audit_surface": 0,
         "challenge": 0,
         "comparator": 0
-      }
+      },
+      "action": "rename"
     },
     {
       "current": "paperHilbertSchmidt_complete_complex",
@@ -3264,7 +3473,8 @@
         "audit_surface": 0,
         "challenge": 0,
         "comparator": 0
-      }
+      },
+      "action": "rename"
     },
     {
       "current": "paperHilbertSchmidt_complete_real",
@@ -3284,7 +3494,8 @@
         "audit_surface": 0,
         "challenge": 0,
         "comparator": 0
-      }
+      },
+      "action": "rename"
     },
     {
       "current": "paperHilbertSchmidt_sylvester_defectFirst",
@@ -3304,7 +3515,8 @@
         "audit_surface": 0,
         "challenge": 0,
         "comparator": 0
-      }
+      },
+      "action": "rename"
     },
     {
       "current": "paperHilbertSchmidt_sylvester_le_of_pairwiseSpectrumGap",
@@ -3326,7 +3538,8 @@
         "audit_surface": 0,
         "challenge": 0,
         "comparator": 0
-      }
+      },
+      "action": "rename"
     },
     {
       "current": "paperHilbertSchmidt_sylvester_le_of_pairwiseSpectrumGap_direct",
@@ -3346,7 +3559,8 @@
         "audit_surface": 0,
         "challenge": 0,
         "comparator": 0
-      }
+      },
+      "action": "rename"
     },
     {
       "current": "paperHilbertSchmidt_sylvester_real_le_of_pairwiseSpectrumGap",
@@ -3368,7 +3582,8 @@
         "audit_surface": 0,
         "challenge": 0,
         "comparator": 0
-      }
+      },
+      "action": "rename"
     },
     {
       "current": "paperHilbertSchmidt_sylvester_real_le_of_pairwiseSpectrumGap_direct",
@@ -3388,7 +3603,8 @@
         "audit_surface": 0,
         "challenge": 0,
         "comparator": 0
-      }
+      },
+      "action": "rename"
     },
     {
       "current": "paperLemma61_all_kyFan",
@@ -3408,7 +3624,8 @@
         "audit_surface": 0,
         "challenge": 0,
         "comparator": 0
-      }
+      },
+      "action": "rename"
     },
     {
       "current": "paperLemma61_converse",
@@ -3428,7 +3645,8 @@
         "audit_surface": 0,
         "challenge": 0,
         "comparator": 0
-      }
+      },
+      "action": "rename"
     },
     {
       "current": "paperLemma61_every_unitarilyInvariantNorm",
@@ -3448,7 +3666,8 @@
         "audit_surface": 0,
         "challenge": 0,
         "comparator": 0
-      }
+      },
+      "action": "rename"
     },
     {
       "current": "paperOmega1",
@@ -3468,7 +3687,8 @@
         "audit_surface": 0,
         "challenge": 0,
         "comparator": 0
-      }
+      },
+      "action": "rename"
     },
     {
       "current": "paperOmega1Basis",
@@ -3490,7 +3710,8 @@
         "audit_surface": 0,
         "challenge": 0,
         "comparator": 0
-      }
+      },
+      "action": "rename"
     },
     {
       "current": "paperOmega1Basis_projection",
@@ -3510,7 +3731,8 @@
         "audit_surface": 0,
         "challenge": 0,
         "comparator": 0
-      }
+      },
+      "action": "rename"
     },
     {
       "current": "paperOmega2",
@@ -3530,7 +3752,8 @@
         "audit_surface": 0,
         "challenge": 0,
         "comparator": 0
-      }
+      },
+      "action": "rename"
     },
     {
       "current": "paperOmega2Basis",
@@ -3552,7 +3775,8 @@
         "audit_surface": 0,
         "challenge": 0,
         "comparator": 0
-      }
+      },
+      "action": "rename"
     },
     {
       "current": "paperOmega2Basis_projection",
@@ -3572,7 +3796,8 @@
         "audit_surface": 0,
         "challenge": 0,
         "comparator": 0
-      }
+      },
+      "action": "rename"
     },
     {
       "current": "paperOneGap_does_not_imply_symmetric_square_estimate",
@@ -3592,7 +3817,8 @@
         "audit_surface": 0,
         "challenge": 0,
         "comparator": 0
-      }
+      },
+      "action": "rename"
     },
     {
       "current": "paperPlanarAmbient",
@@ -3612,7 +3838,8 @@
         "audit_surface": 0,
         "challenge": 0,
         "comparator": 0
-      }
+      },
+      "action": "rename"
     },
     {
       "current": "paperPlanarComplementMap",
@@ -3635,7 +3862,8 @@
         "audit_surface": 0,
         "challenge": 0,
         "comparator": 0
-      }
+      },
+      "action": "rename"
     },
     {
       "current": "paperPlanarComplementMap_apply",
@@ -3655,7 +3883,8 @@
         "audit_surface": 0,
         "challenge": 0,
         "comparator": 0
-      }
+      },
+      "action": "rename"
     },
     {
       "current": "paperPlanarComplementMap_norm_rank",
@@ -3675,7 +3904,8 @@
         "audit_surface": 0,
         "challenge": 0,
         "comparator": 0
-      }
+      },
+      "action": "rename"
     },
     {
       "current": "paperPlanarExactMap",
@@ -3697,7 +3927,8 @@
         "audit_surface": 0,
         "challenge": 0,
         "comparator": 0
-      }
+      },
+      "action": "rename"
     },
     {
       "current": "paperPlanarExactMap_apply",
@@ -3717,7 +3948,8 @@
         "audit_surface": 0,
         "challenge": 0,
         "comparator": 0
-      }
+      },
+      "action": "rename"
     },
     {
       "current": "paperPlanarResidual",
@@ -3737,7 +3969,8 @@
         "audit_surface": 0,
         "challenge": 0,
         "comparator": 0
-      }
+      },
+      "action": "rename"
     },
     {
       "current": "paperPlanarSineBlock",
@@ -3759,7 +3992,8 @@
         "audit_surface": 0,
         "challenge": 0,
         "comparator": 0
-      }
+      },
+      "action": "rename"
     },
     {
       "current": "paperPlanarSineBlock_gauge_pos",
@@ -3779,7 +4013,8 @@
         "audit_surface": 0,
         "challenge": 0,
         "comparator": 0
-      }
+      },
+      "action": "rename"
     },
     {
       "current": "paperPlanarTrialMap",
@@ -3802,7 +4037,8 @@
         "audit_surface": 0,
         "challenge": 0,
         "comparator": 0
-      }
+      },
+      "action": "rename"
     },
     {
       "current": "paperPlanarTrialMap_apply",
@@ -3822,7 +4058,8 @@
         "audit_surface": 0,
         "challenge": 0,
         "comparator": 0
-      }
+      },
+      "action": "rename"
     },
     {
       "current": "paperPlanarTrialMap_isometry",
@@ -3842,7 +4079,8 @@
         "audit_surface": 0,
         "challenge": 0,
         "comparator": 0
-      }
+      },
+      "action": "rename"
     },
     {
       "current": "paperPlanarTrialOperator",
@@ -3862,7 +4100,8 @@
         "audit_surface": 0,
         "challenge": 0,
         "comparator": 0
-      }
+      },
+      "action": "rename"
     },
     {
       "current": "paperPlanar_directedSine_identity",
@@ -3882,7 +4121,8 @@
         "audit_surface": 0,
         "challenge": 0,
         "comparator": 0
-      }
+      },
+      "action": "rename"
     },
     {
       "current": "paperPlanar_exact_decomposition",
@@ -3902,7 +4142,8 @@
         "audit_surface": 0,
         "challenge": 0,
         "comparator": 0
-      }
+      },
+      "action": "rename"
     },
     {
       "current": "paperPlanar_residual_identity",
@@ -3922,14 +4163,15 @@
         "audit_surface": 0,
         "challenge": 0,
         "comparator": 0
-      }
+      },
+      "action": "rename"
     },
     {
       "current": "paperPlaneE0",
-      "proposed": "planeE0",
+      "proposed": "planarModelE0",
       "kind": "def",
       "declared_in": "DavisKahan/Sources/DavisKahan1970/SineTheta/Sharpness.lean",
-      "classification": "provenance_only",
+      "classification": "family_decision",
       "collides_with_existing_declaration": false,
       "dependent_declaration_names": [],
       "occurrences": {
@@ -3942,7 +4184,10 @@
         "audit_surface": 0,
         "challenge": 0,
         "comparator": 0
-      }
+      },
+      "proposed_mechanical": "planeE0",
+      "action": "rename",
+      "family": "planar-model-space"
     },
     {
       "current": "paperPlaneE1",
@@ -3962,7 +4207,8 @@
         "audit_surface": 0,
         "challenge": 0,
         "comparator": 0
-      }
+      },
+      "action": "rename"
     },
     {
       "current": "paperPrefixGauge_eq",
@@ -3982,7 +4228,8 @@
         "audit_surface": 0,
         "challenge": 0,
         "comparator": 0
-      }
+      },
+      "action": "rename"
     },
     {
       "current": "paperProjectionBlock",
@@ -4007,7 +4254,8 @@
         "audit_surface": 0,
         "challenge": 4,
         "comparator": 0
-      }
+      },
+      "action": "rename"
     },
     {
       "current": "paperProjectionBlockPair_same_blockSum",
@@ -4027,7 +4275,8 @@
         "audit_surface": 0,
         "challenge": 0,
         "comparator": 0
-      }
+      },
+      "action": "rename"
     },
     {
       "current": "paperProjectionBlock_complexifySubmodule",
@@ -4049,7 +4298,8 @@
         "audit_surface": 0,
         "challenge": 0,
         "comparator": 0
-      }
+      },
+      "action": "rename"
     },
     {
       "current": "paperProjectionBlock_complexifySubmodule_real",
@@ -4069,7 +4319,8 @@
         "audit_surface": 0,
         "challenge": 0,
         "comparator": 0
-      }
+      },
+      "action": "rename"
     },
     {
       "current": "paperProjectionBlock_eq_subtypeL_comp",
@@ -4089,7 +4340,8 @@
         "audit_surface": 0,
         "challenge": 0,
         "comparator": 0
-      }
+      },
+      "action": "rename"
     },
     {
       "current": "paperProjectionBlock_same_compression",
@@ -4109,7 +4361,8 @@
         "audit_surface": 0,
         "challenge": 0,
         "comparator": 0
-      }
+      },
+      "action": "rename"
     },
     {
       "current": "paperProjectorDifference",
@@ -4132,7 +4385,8 @@
         "audit_surface": 0,
         "challenge": 2,
         "comparator": 0
-      }
+      },
+      "action": "rename"
     },
     {
       "current": "paperProjectorDifference_anticommutator",
@@ -4152,7 +4406,8 @@
         "audit_surface": 0,
         "challenge": 0,
         "comparator": 0
-      }
+      },
+      "action": "rename"
     },
     {
       "current": "paperProjectorDifference_sq",
@@ -4172,7 +4427,8 @@
         "audit_surface": 0,
         "challenge": 0,
         "comparator": 0
-      }
+      },
+      "action": "rename"
     },
     {
       "current": "paperRealPlane_finrank",
@@ -4192,7 +4448,8 @@
         "audit_surface": 0,
         "challenge": 0,
         "comparator": 0
-      }
+      },
+      "action": "rename"
     },
     {
       "current": "paperReal_diff_eq_combo",
@@ -4212,7 +4469,8 @@
         "audit_surface": 0,
         "challenge": 0,
         "comparator": 0
-      }
+      },
+      "action": "rename"
     },
     {
       "current": "paperReal_inner_diff_e0",
@@ -4232,7 +4490,8 @@
         "audit_surface": 0,
         "challenge": 0,
         "comparator": 0
-      }
+      },
+      "action": "rename"
     },
     {
       "current": "paperReal_inner_diff_e1",
@@ -4252,7 +4511,8 @@
         "audit_surface": 0,
         "challenge": 0,
         "comparator": 0
-      }
+      },
+      "action": "rename"
     },
     {
       "current": "paperReal_inner_e0_e1",
@@ -4272,7 +4532,8 @@
         "audit_surface": 0,
         "challenge": 0,
         "comparator": 0
-      }
+      },
+      "action": "rename"
     },
     {
       "current": "paperReal_norm_sq_combo",
@@ -4292,7 +4553,8 @@
         "audit_surface": 0,
         "challenge": 0,
         "comparator": 0
-      }
+      },
+      "action": "rename"
     },
     {
       "current": "paperScalarColumn",
@@ -4314,7 +4576,8 @@
         "audit_surface": 0,
         "challenge": 0,
         "comparator": 0
-      }
+      },
+      "action": "rename"
     },
     {
       "current": "paperScalarColumn_apply",
@@ -4334,7 +4597,8 @@
         "audit_surface": 0,
         "challenge": 0,
         "comparator": 0
-      }
+      },
+      "action": "rename"
     },
     {
       "current": "paperSecantSquared",
@@ -4354,14 +4618,15 @@
         "audit_surface": 0,
         "challenge": 0,
         "comparator": 0
-      }
+      },
+      "action": "rename"
     },
     {
       "current": "paperSinAngleOperatorC",
-      "proposed": "sinAngleOperatorC",
+      "proposed": null,
       "kind": "def",
       "declared_in": "DavisKahan/Geometry/Angle/PaperOperatorAngle.lean",
-      "classification": "contrastive_decision_required",
+      "classification": "family_decision",
       "collides_with_existing_declaration": true,
       "dependent_declaration_names": [
         "paperSinAngleOperatorC_eq"
@@ -4376,7 +4641,10 @@
         "audit_surface": 0,
         "challenge": 2,
         "comparator": 0
-      }
+      },
+      "proposed_mechanical": "sinAngleOperatorC",
+      "action": "delete_and_migrate: use sinAngleOperatorC",
+      "family": "angle-operator-family"
     },
     {
       "current": "paperSinAngleOperatorC_eq",
@@ -4396,14 +4664,15 @@
         "audit_surface": 0,
         "challenge": 0,
         "comparator": 0
-      }
+      },
+      "action": "rename"
     },
     {
       "current": "paperSinAngleOperatorR",
       "proposed": "sinAngleOperatorR",
       "kind": "def",
       "declared_in": "DavisKahan/Geometry/Angle/PaperOperatorAngleReal.lean",
-      "classification": "provenance_only",
+      "classification": "family_decision",
       "collides_with_existing_declaration": false,
       "dependent_declaration_names": [
         "paperSinAngleOperatorR_mul_self",
@@ -4419,7 +4688,10 @@
         "audit_surface": 0,
         "challenge": 0,
         "comparator": 0
-      }
+      },
+      "proposed_mechanical": "sinAngleOperatorR",
+      "action": "rename",
+      "family": "angle-operator-family"
     },
     {
       "current": "paperSinAngleOperatorR_mul_self",
@@ -4439,7 +4711,8 @@
         "audit_surface": 0,
         "challenge": 0,
         "comparator": 0
-      }
+      },
+      "action": "rename"
     },
     {
       "current": "paperSinAngleOperatorR_nonneg",
@@ -4459,7 +4732,8 @@
         "audit_surface": 0,
         "challenge": 0,
         "comparator": 0
-      }
+      },
+      "action": "rename"
     },
     {
       "current": "paperSinTheta_constant_one_optimal",
@@ -4479,14 +4753,15 @@
         "audit_surface": 0,
         "challenge": 0,
         "comparator": 0
-      }
+      },
+      "action": "rename"
     },
     {
       "current": "paperSinTwoAngleOperatorC",
       "proposed": "sinTwoAngleOperatorC",
       "kind": "def",
       "declared_in": "DavisKahan/Geometry/Angle/PaperDoubleAngle.lean",
-      "classification": "contrastive_decision_required",
+      "classification": "family_decision",
       "collides_with_existing_declaration": true,
       "dependent_declaration_names": [
         "paperSinTwoAngleOperatorC_eq_modulus_reflect",
@@ -4503,7 +4778,10 @@
         "audit_surface": 0,
         "challenge": 2,
         "comparator": 0
-      }
+      },
+      "proposed_mechanical": "sinTwoAngleOperatorC",
+      "action": "rename",
+      "family": "angle-operator-family"
     },
     {
       "current": "paperSinTwoAngleOperatorC_eq_modulus_reflect",
@@ -4523,7 +4801,8 @@
         "audit_surface": 0,
         "challenge": 0,
         "comparator": 0
-      }
+      },
+      "action": "rename"
     },
     {
       "current": "paperSinTwoAngleOperatorC_eq_modulus_starProjection_sub",
@@ -4543,7 +4822,8 @@
         "audit_surface": 0,
         "challenge": 0,
         "comparator": 0
-      }
+      },
+      "action": "rename"
     },
     {
       "current": "paperSinTwoAngleOperatorC_nonneg",
@@ -4563,14 +4843,15 @@
         "audit_surface": 0,
         "challenge": 0,
         "comparator": 0
-      }
+      },
+      "action": "rename"
     },
     {
       "current": "paperSinTwoAngleOperatorR",
       "proposed": "sinTwoAngleOperatorR",
       "kind": "def",
       "declared_in": "DavisKahan/Geometry/Angle/PaperOperatorAngleReal.lean",
-      "classification": "provenance_only",
+      "classification": "family_decision",
       "collides_with_existing_declaration": false,
       "dependent_declaration_names": [],
       "occurrences": {
@@ -4583,7 +4864,10 @@
         "audit_surface": 0,
         "challenge": 0,
         "comparator": 0
-      }
+      },
+      "proposed_mechanical": "sinTwoAngleOperatorR",
+      "action": "rename",
+      "family": "angle-operator-family"
     },
     {
       "current": "paperSin_same_projectionDiff",
@@ -4603,14 +4887,15 @@
         "audit_surface": 0,
         "challenge": 0,
         "comparator": 0
-      }
+      },
+      "action": "rename"
     },
     {
       "current": "paperSin_sq_add_paperCos_sq",
-      "proposed": "sin_sq_add_paperCos_sq",
+      "proposed": "sinAngleOperatorC_sq_add_cosAngleOperatorC_sq",
       "kind": "theorem",
       "declared_in": "DavisKahan/Geometry/Angle/PaperOperatorAngle.lean",
-      "classification": "provenance_only",
+      "classification": "family_decision",
       "collides_with_existing_declaration": false,
       "dependent_declaration_names": [],
       "occurrences": {
@@ -4623,14 +4908,17 @@
         "audit_surface": 0,
         "challenge": 0,
         "comparator": 0
-      }
+      },
+      "action": "rename",
+      "proposed_mechanical": "sin_sq_add_paperCos_sq",
+      "family": "embedded-token-repair"
     },
     {
       "current": "paperSineBlockC",
       "proposed": "sineBlockC",
       "kind": "def",
       "declared_in": "DavisKahan/Sources/DavisKahan1970/SineTheta/CosineAngle.lean",
-      "classification": "provenance_only",
+      "classification": "family_decision",
       "collides_with_existing_declaration": false,
       "dependent_declaration_names": [],
       "occurrences": {
@@ -4643,7 +4931,10 @@
         "audit_surface": 0,
         "challenge": 0,
         "comparator": 0
-      }
+      },
+      "proposed_mechanical": "sineBlockC",
+      "action": "rename",
+      "family": "source-block-family"
     },
     {
       "current": "paperSineDefinedDirectedAngleC",
@@ -4665,7 +4956,8 @@
         "audit_surface": 0,
         "challenge": 0,
         "comparator": 0
-      }
+      },
+      "action": "rename"
     },
     {
       "current": "paperSineDefinedDirectedAngleC_eq_source",
@@ -4685,14 +4977,15 @@
         "audit_surface": 0,
         "challenge": 0,
         "comparator": 0
-      }
+      },
+      "action": "rename"
     },
     {
       "current": "paperSineModulusC",
-      "proposed": "sineModulusC",
+      "proposed": "sineBlockModulusC",
       "kind": "def",
       "declared_in": "DavisKahan/Sources/DavisKahan1970/SineTheta/CosineAngle.lean",
-      "classification": "provenance_only",
+      "classification": "family_decision",
       "collides_with_existing_declaration": false,
       "dependent_declaration_names": [],
       "occurrences": {
@@ -4705,14 +4998,17 @@
         "audit_surface": 0,
         "challenge": 0,
         "comparator": 0
-      }
+      },
+      "proposed_mechanical": "sineModulusC",
+      "action": "rename",
+      "family": "source-block-family"
     },
     {
       "current": "paperSineModulus_sq_add_paperCosineModulus_sq",
-      "proposed": "sineModulus_sq_add_paperCosineModulus_sq",
+      "proposed": "sineBlockModulus_sq_add_cosineBlockModulus_sq",
       "kind": "theorem",
       "declared_in": "DavisKahan/Sources/DavisKahan1970/SineTheta/CosineAngle.lean",
-      "classification": "provenance_only",
+      "classification": "family_decision",
       "collides_with_existing_declaration": false,
       "dependent_declaration_names": [],
       "occurrences": {
@@ -4725,14 +5021,17 @@
         "audit_surface": 0,
         "challenge": 0,
         "comparator": 0
-      }
+      },
+      "action": "rename",
+      "proposed_mechanical": "sineModulus_sq_add_paperCosineModulus_sq",
+      "family": "embedded-token-repair"
     },
     {
       "current": "paperSourceCrossBlockSumC",
-      "proposed": "sourceCrossBlockSumC",
+      "proposed": "crossBlockSumC",
       "kind": "def",
       "declared_in": "DavisKahan/Sources/DavisKahan1970/SineTheta/FullAngle.lean",
-      "classification": "provenance_only",
+      "classification": "family_decision",
       "collides_with_existing_declaration": false,
       "dependent_declaration_names": [],
       "occurrences": {
@@ -4745,7 +5044,10 @@
         "audit_surface": 0,
         "challenge": 0,
         "comparator": 0
-      }
+      },
+      "proposed_mechanical": "sourceCrossBlockSumC",
+      "action": "rename",
+      "family": "source-block-family"
     },
     {
       "current": "paperSourceCrossBlockSum_same_ambientCrossSum",
@@ -4765,14 +5067,15 @@
         "audit_surface": 0,
         "challenge": 0,
         "comparator": 0
-      }
+      },
+      "action": "rename"
     },
     {
       "current": "paperSourceDirectedAngleC",
-      "proposed": "sourceDirectedAngleC",
+      "proposed": "directedAngleBlockC",
       "kind": "def",
       "declared_in": "DavisKahan/Sources/DavisKahan1970/SineTheta/CosineAngle.lean",
-      "classification": "provenance_only",
+      "classification": "family_decision",
       "collides_with_existing_declaration": false,
       "dependent_declaration_names": [
         "paperSourceDirectedAngleC_eq_arcsin_sineModulus"
@@ -4787,7 +5090,10 @@
         "audit_surface": 0,
         "challenge": 0,
         "comparator": 0
-      }
+      },
+      "proposed_mechanical": "sourceDirectedAngleC",
+      "action": "rename",
+      "family": "source-block-family"
     },
     {
       "current": "paperSourceDirectedAngleC_eq_arcsin_sineModulus",
@@ -4807,7 +5113,8 @@
         "audit_surface": 0,
         "challenge": 0,
         "comparator": 0
-      }
+      },
+      "action": "rename"
     },
     {
       "current": "paperSourceDirectedAngleR",
@@ -4829,7 +5136,8 @@
         "audit_surface": 0,
         "challenge": 0,
         "comparator": 0
-      }
+      },
+      "action": "rename"
     },
     {
       "current": "paperSourceDirectedAngleR_eq_arcsin_sineModulus",
@@ -4849,14 +5157,15 @@
         "audit_surface": 0,
         "challenge": 0,
         "comparator": 0
-      }
+      },
+      "action": "rename"
     },
     {
       "current": "paperSourceDirectedCosC",
-      "proposed": "sourceDirectedCosC",
+      "proposed": "directedCosAngleBlockC",
       "kind": "def",
       "declared_in": "DavisKahan/Sources/DavisKahan1970/SineTheta/CosineAngle.lean",
-      "classification": "provenance_only",
+      "classification": "family_decision",
       "collides_with_existing_declaration": false,
       "dependent_declaration_names": [
         "paperSourceDirectedCosC_eq"
@@ -4871,7 +5180,10 @@
         "audit_surface": 0,
         "challenge": 0,
         "comparator": 0
-      }
+      },
+      "proposed_mechanical": "sourceDirectedCosC",
+      "action": "rename",
+      "family": "source-block-family"
     },
     {
       "current": "paperSourceDirectedCosC_eq",
@@ -4891,7 +5203,8 @@
         "audit_surface": 0,
         "challenge": 0,
         "comparator": 0
-      }
+      },
+      "action": "rename"
     },
     {
       "current": "paperSourceDirectedCosR",
@@ -4913,7 +5226,8 @@
         "audit_surface": 0,
         "challenge": 0,
         "comparator": 0
-      }
+      },
+      "action": "rename"
     },
     {
       "current": "paperSourceDirectedCosR_eq",
@@ -4933,14 +5247,15 @@
         "audit_surface": 0,
         "challenge": 0,
         "comparator": 0
-      }
+      },
+      "action": "rename"
     },
     {
       "current": "paperSourceDirectedSinC",
-      "proposed": "sourceDirectedSinC",
+      "proposed": "directedSinAngleBlockC",
       "kind": "def",
       "declared_in": "DavisKahan/Sources/DavisKahan1970/SineTheta/CosineAngle.lean",
-      "classification": "provenance_only",
+      "classification": "family_decision",
       "collides_with_existing_declaration": false,
       "dependent_declaration_names": [
         "paperSourceDirectedSinC_eq_paperSineModulusC"
@@ -4955,14 +5270,17 @@
         "audit_surface": 0,
         "challenge": 0,
         "comparator": 0
-      }
+      },
+      "proposed_mechanical": "sourceDirectedSinC",
+      "action": "rename",
+      "family": "source-block-family"
     },
     {
       "current": "paperSourceDirectedSinC_eq_paperSineModulusC",
-      "proposed": "sourceDirectedSinC_eq_paperSineModulusC",
+      "proposed": "directedSinAngleBlockC_eq_sineBlockModulusC",
       "kind": "theorem",
       "declared_in": "DavisKahan/Sources/DavisKahan1970/SineTheta/CosineAngle.lean",
-      "classification": "provenance_only",
+      "classification": "family_decision",
       "collides_with_existing_declaration": false,
       "dependent_declaration_names": [],
       "occurrences": {
@@ -4975,7 +5293,10 @@
         "audit_surface": 0,
         "challenge": 0,
         "comparator": 0
-      }
+      },
+      "action": "rename",
+      "proposed_mechanical": "sourceDirectedSinC_eq_paperSineModulusC",
+      "family": "embedded-token-repair"
     },
     {
       "current": "paperSourceDirectedSinR",
@@ -4997,7 +5318,8 @@
         "audit_surface": 0,
         "challenge": 0,
         "comparator": 0
-      }
+      },
+      "action": "rename"
     },
     {
       "current": "paperSourceDirectedSinR_eq",
@@ -5017,14 +5339,15 @@
         "audit_surface": 0,
         "challenge": 0,
         "comparator": 0
-      }
+      },
+      "action": "rename"
     },
     {
       "current": "paperSourceDirectedSin_same_paperSineBlock",
-      "proposed": "sourceDirectedSin_same_paperSineBlock",
+      "proposed": "directedSinAngleBlock_same_sineBlock",
       "kind": "theorem",
       "declared_in": "DavisKahan/Sources/DavisKahan1970/SineTheta/CosineAngle.lean",
-      "classification": "provenance_only",
+      "classification": "family_decision",
       "collides_with_existing_declaration": false,
       "dependent_declaration_names": [],
       "occurrences": {
@@ -5037,14 +5360,17 @@
         "audit_surface": 0,
         "challenge": 0,
         "comparator": 0
-      }
+      },
+      "action": "rename",
+      "proposed_mechanical": "sourceDirectedSin_same_paperSineBlock",
+      "family": "embedded-token-repair"
     },
     {
       "current": "paperSourceFullAngleC",
-      "proposed": "sourceFullAngleC",
+      "proposed": "fullAngleBlockC",
       "kind": "def",
       "declared_in": "DavisKahan/Sources/DavisKahan1970/SineTheta/FullAngle.lean",
-      "classification": "provenance_only",
+      "classification": "family_decision",
       "collides_with_existing_declaration": false,
       "dependent_declaration_names": [],
       "occurrences": {
@@ -5057,7 +5383,10 @@
         "audit_surface": 0,
         "challenge": 0,
         "comparator": 0
-      }
+      },
+      "proposed_mechanical": "sourceFullAngleC",
+      "action": "rename",
+      "family": "source-block-family"
     },
     {
       "current": "paperSourceFullAngleR",
@@ -5077,14 +5406,15 @@
         "audit_surface": 0,
         "challenge": 0,
         "comparator": 0
-      }
+      },
+      "action": "rename"
     },
     {
       "current": "paperSourceFullSinC",
-      "proposed": "sourceFullSinC",
+      "proposed": "fullSinAngleBlockC",
       "kind": "def",
       "declared_in": "DavisKahan/Sources/DavisKahan1970/SineTheta/FullAngle.lean",
-      "classification": "provenance_only",
+      "classification": "family_decision",
       "collides_with_existing_declaration": false,
       "dependent_declaration_names": [],
       "occurrences": {
@@ -5097,7 +5427,10 @@
         "audit_surface": 0,
         "challenge": 0,
         "comparator": 0
-      }
+      },
+      "proposed_mechanical": "sourceFullSinC",
+      "action": "rename",
+      "family": "source-block-family"
     },
     {
       "current": "paperSourceFullSinR",
@@ -5117,7 +5450,8 @@
         "audit_surface": 0,
         "challenge": 0,
         "comparator": 0
-      }
+      },
+      "action": "rename"
     },
     {
       "current": "paperSourceFullSin_mem_iff_and_gauge_eq",
@@ -5137,7 +5471,8 @@
         "audit_surface": 0,
         "challenge": 0,
         "comparator": 0
-      }
+      },
+      "action": "rename"
     },
     {
       "current": "paperSourceFullSin_same_coordinateCrossBlockSum",
@@ -5157,7 +5492,8 @@
         "audit_surface": 0,
         "challenge": 0,
         "comparator": 0
-      }
+      },
+      "action": "rename"
     },
     {
       "current": "paperSourceFullSin_same_projectionDifference",
@@ -5177,14 +5513,15 @@
         "audit_surface": 0,
         "challenge": 0,
         "comparator": 0
-      }
+      },
+      "action": "rename"
     },
     {
       "current": "paperTanAngleOperatorC",
       "proposed": "tanAngleOperatorC",
       "kind": "def",
       "declared_in": "DavisKahan/Geometry/Angle/PaperTanAngle.lean",
-      "classification": "contrastive_decision_required",
+      "classification": "family_decision",
       "collides_with_existing_declaration": true,
       "dependent_declaration_names": [
         "paperTanAngleOperatorC_eq_cfc",
@@ -5201,7 +5538,10 @@
         "audit_surface": 0,
         "challenge": 2,
         "comparator": 0
-      }
+      },
+      "proposed_mechanical": "tanAngleOperatorC",
+      "action": "rename",
+      "family": "angle-operator-family"
     },
     {
       "current": "paperTanAngleOperatorC_eq_cfc",
@@ -5221,7 +5561,8 @@
         "audit_surface": 0,
         "challenge": 0,
         "comparator": 0
-      }
+      },
+      "action": "rename"
     },
     {
       "current": "paperTanAngleOperatorC_eq_modulus_blockRepresentative",
@@ -5241,7 +5582,8 @@
         "audit_surface": 0,
         "challenge": 0,
         "comparator": 0
-      }
+      },
+      "action": "rename"
     },
     {
       "current": "paperTanAngleOperatorC_nonneg",
@@ -5261,14 +5603,15 @@
         "audit_surface": 0,
         "challenge": 0,
         "comparator": 0
-      }
+      },
+      "action": "rename"
     },
     {
       "current": "paperTanAngleOperatorR",
       "proposed": "tanAngleOperatorR",
       "kind": "def",
       "declared_in": "DavisKahan/Geometry/Angle/PaperOperatorAngleReal.lean",
-      "classification": "provenance_only",
+      "classification": "family_decision",
       "collides_with_existing_declaration": false,
       "dependent_declaration_names": [],
       "occurrences": {
@@ -5281,7 +5624,10 @@
         "audit_surface": 0,
         "challenge": 0,
         "comparator": 0
-      }
+      },
+      "proposed_mechanical": "tanAngleOperatorR",
+      "action": "rename",
+      "family": "angle-operator-family"
     },
     {
       "current": "paperTanBlockRepresentative",
@@ -5304,7 +5650,8 @@
         "audit_surface": 0,
         "challenge": 0,
         "comparator": 0
-      }
+      },
+      "action": "rename"
     },
     {
       "current": "paperTanBlockRepresentative_eq",
@@ -5324,7 +5671,8 @@
         "audit_surface": 0,
         "challenge": 0,
         "comparator": 0
-      }
+      },
+      "action": "rename"
     },
     {
       "current": "paperTanBlockRepresentative_mul_self",
@@ -5344,14 +5692,15 @@
         "audit_surface": 0,
         "challenge": 0,
         "comparator": 0
-      }
+      },
+      "action": "rename"
     },
     {
       "current": "paperTanTwoAngleOperatorC",
       "proposed": "tanTwoAngleOperatorC",
       "kind": "def",
       "declared_in": "DavisKahan/Geometry/Angle/PaperTanAngle.lean",
-      "classification": "contrastive_decision_required",
+      "classification": "family_decision",
       "collides_with_existing_declaration": true,
       "dependent_declaration_names": [
         "paperTanTwoAngleOperatorC_eq_modulus_blockRepresentative",
@@ -5367,7 +5716,10 @@
         "audit_surface": 0,
         "challenge": 2,
         "comparator": 0
-      }
+      },
+      "proposed_mechanical": "tanTwoAngleOperatorC",
+      "action": "rename",
+      "family": "angle-operator-family"
     },
     {
       "current": "paperTanTwoAngleOperatorC_eq_modulus_blockRepresentative",
@@ -5387,7 +5739,8 @@
         "audit_surface": 0,
         "challenge": 0,
         "comparator": 0
-      }
+      },
+      "action": "rename"
     },
     {
       "current": "paperTanTwoAngleOperatorC_nonneg",
@@ -5407,14 +5760,15 @@
         "audit_surface": 0,
         "challenge": 0,
         "comparator": 0
-      }
+      },
+      "action": "rename"
     },
     {
       "current": "paperTanTwoAngleOperatorR",
       "proposed": "tanTwoAngleOperatorR",
       "kind": "def",
       "declared_in": "DavisKahan/Geometry/Angle/PaperOperatorAngleReal.lean",
-      "classification": "provenance_only",
+      "classification": "family_decision",
       "collides_with_existing_declaration": false,
       "dependent_declaration_names": [],
       "occurrences": {
@@ -5427,7 +5781,10 @@
         "audit_surface": 0,
         "challenge": 0,
         "comparator": 0
-      }
+      },
+      "proposed_mechanical": "tanTwoAngleOperatorR",
+      "action": "rename",
+      "family": "angle-operator-family"
     },
     {
       "current": "paperTanTwoBlockRepresentative",
@@ -5452,7 +5809,8 @@
         "audit_surface": 0,
         "challenge": 0,
         "comparator": 0
-      }
+      },
+      "action": "rename"
     },
     {
       "current": "paperTanTwoBlockRepresentative_eq",
@@ -5472,7 +5830,8 @@
         "audit_surface": 0,
         "challenge": 0,
         "comparator": 0
-      }
+      },
+      "action": "rename"
     },
     {
       "current": "paperTanTwoBlockRepresentative_lowerBlock",
@@ -5492,7 +5851,8 @@
         "audit_surface": 0,
         "challenge": 0,
         "comparator": 0
-      }
+      },
+      "action": "rename"
     },
     {
       "current": "paperTanTwoBlockRepresentative_mul_self",
@@ -5512,7 +5872,8 @@
         "audit_surface": 0,
         "challenge": 0,
         "comparator": 0
-      }
+      },
+      "action": "rename"
     },
     {
       "current": "paperTanTwoBlockRepresentative_mul_signedCosTwo",
@@ -5532,7 +5893,8 @@
         "audit_surface": 1,
         "challenge": 0,
         "comparator": 0
-      }
+      },
+      "action": "rename"
     },
     {
       "current": "paperTanTwoDirectedCornerR",
@@ -5552,14 +5914,15 @@
         "audit_surface": 0,
         "challenge": 0,
         "comparator": 0
-      }
+      },
+      "action": "rename"
     },
     {
       "current": "paperTanTwoThetaRepresentative",
-      "proposed": "tanTwoThetaRepresentative",
+      "proposed": "tanTwoThetaGraphCoordinateOperator",
       "kind": "def",
       "declared_in": "DavisKahan/InfiniteDimensional/TanTwoTheta/PaperFaithfulUINorm.lean",
-      "classification": "provenance_only",
+      "classification": "family_decision",
       "collides_with_existing_declaration": false,
       "dependent_declaration_names": [],
       "occurrences": {
@@ -5572,7 +5935,10 @@
         "audit_surface": 0,
         "challenge": 0,
         "comparator": 0
-      }
+      },
+      "proposed_mechanical": "tanTwoThetaRepresentative",
+      "action": "rename",
+      "family": "semantic-not-review-vocabulary"
     },
     {
       "current": "paperTanTwoTheta_uiNorm_finite_alternate",
@@ -5592,7 +5958,8 @@
         "audit_surface": 0,
         "challenge": 0,
         "comparator": 0
-      }
+      },
+      "action": "rename"
     },
     {
       "current": "paperTanTwo_sq_mul_cos_two_sq",
@@ -5612,7 +5979,8 @@
         "audit_surface": 0,
         "challenge": 0,
         "comparator": 0
-      }
+      },
+      "action": "rename"
     },
     {
       "current": "paperTan_sq_mul_one_sub_sin_sq",
@@ -5632,7 +6000,8 @@
         "audit_surface": 0,
         "challenge": 0,
         "comparator": 0
-      }
+      },
+      "action": "rename"
     },
     {
       "current": "paperTheorem61_planar_equality_every_norm",
@@ -5652,7 +6021,8 @@
         "audit_surface": 0,
         "challenge": 0,
         "comparator": 0
-      }
+      },
+      "action": "rename"
     }
   ],
   "verification": {
@@ -5664,10 +6034,382 @@
     "fortauceti_references": [
       "ForTauCeti/Analysis/InnerProductSpace/SchattenNorm.lean:375 -- a docstring naming `paperHilbertSchmidtNorm_eq_rectangularFrobenius`. ForTauCeti declares none of these names; this is a prose cross-reference into DavisKahan and must be updated with the rename."
     ],
-    "method": "Declaration heads parsed from every .lean file under DavisKahan/ and ForTauCeti/; occurrence counts are word-boundary matches per surface. Counts are evidence of blast radius, not a substitute for applying the rename and rebuilding."
+    "method": "Declaration heads parsed from every .lean file under DavisKahan/ and ForTauCeti/; occurrence counts are word-boundary matches per surface. Counts are evidence of blast radius, not a substitute for applying the rename and rebuilding.",
+    "angle_family_finding": "Checked directly, 2026-09-02. The `paper*` angle operators are the functional calculus of the angle: `paperCosAngleOperatorC = cfc Real.cos (paperAngleOperatorC U V)`, and similarly for sin, tan, sin 2, tan 2. The existing UNPREFIXED names are different constructions built on the directed sine: `cosAngleOperatorC = modulus (P_V ∘L P_U)`, `sinTwoAngleOperatorC = 2 • (sinAngleOperatorDirectedC * cosAngleOperatorC)`, and `tanAngleOperatorC` composes `sinAngleOperatorDirectedC` with an inverse cosine equivalence and additionally takes an acuteness hypothesis. So the unqualified names currently denote the directed objects while the canonical functional-calculus objects carry a provenance prefix. That is the inconsistency the collision exposed, and it is why the resolution is to normalise the family rather than rename around it.",
+    "cited_names_present": "All 52 declarations named in the amended families were confirmed to exist in the tree before being written here.",
+    "embedded_token_repairs_required": 7,
+    "embedded_token_note": "Checked after amendment: no proposed name contains the token, as a prefix or embedded. The mechanical pass left nine half-converted, which is worse than either endpoint -- the name would no longer match the object it is about. Each is now renamed by applying the family decision to every object it mentions.",
+    "embedded_token_remaining_after_repair": []
   },
   "not_yet_decided": [
-    "Whether to apply the 260 provenance-only renames at all, and when relative to the hostile-review sign-off.",
-    "Each of the 13 contrastive cases: which spelling is canonical, and what the other becomes. These are the only entries that touch the meaning of the tree rather than its presentation."
+    "Whether to apply any of this, and when relative to the hostile-review sign-off. Nothing is applied.",
+    "The angle-family normalisation moves EXISTING unprefixed declarations, so it is a two-sided rename and cannot be applied by the mechanical map alone; it needs its own pass with a build after each family.",
+    "Whether the Hilbert--Schmidt and plane consolidations happen as part of this campaign or as separate migrations, since they delete concepts rather than rename them."
+  ],
+  "amended_on": "2026-09-02",
+  "policy_statement": "Provenance goes in namespaces, modules, docstrings, and source-census metadata. A permanent declaration name describes the mathematical object, or the representation that distinguishes it from another object. Resolving a collision is therefore never a matter of finding a different prefix: where two names collide, the collision is usually exposing an API distinction that should be settled.",
+  "amendment_note": "Amended on hostile review of the first proposal. The mechanical pass stripped `paper` and stopped, which would have preserved several latent defects under new spellings: it left the DIRECTED angle constructions holding the unqualified names, produced `source*` names that are still provenance, left `paper` embedded mid-name in theorem names whose prefix alone was stripped, and proposed competing for names the canonical ForTauCeti API already owns. The families below replace the mechanical proposal wherever they overlap it.",
+  "families": [
+    {
+      "id": "angle-operator-family",
+      "title": "Canonical angle-function objects take the unqualified names; the directed constructions say `directed`.",
+      "rationale": "The unqualified names currently hold the directed/product constructions while the canonical functional-calculus objects carry a provenance prefix. Swapping them gives a predictable API -- angleOperatorC, sinAngleOperatorC, cosAngleOperatorC, tanAngleOperatorC, sinTwoAngleOperatorC, tanTwoAngleOperatorC and their directed* siblings -- and puts the qualifier on the construction that is genuinely special. This is a two-sided rename: several EXISTING unprefixed declarations move, so it cannot be applied by stripping prefixes.",
+      "moves": [
+        {
+          "current": "paperAngleOperatorC",
+          "proposed": "angleOperatorC",
+          "action": "rename"
+        },
+        {
+          "current": "paperSinAngleOperatorC",
+          "proposed": null,
+          "action": "delete_and_migrate: use sinAngleOperatorC"
+        },
+        {
+          "current": "sinAngleOperatorDirectedC",
+          "proposed": "directedSinAngleOperatorC",
+          "action": "rename"
+        },
+        {
+          "current": "paperDirectedAngleOperatorC",
+          "proposed": "directedAngleOperatorC",
+          "action": "rename"
+        },
+        {
+          "current": "paperDirectedSinAngleOperatorC",
+          "proposed": null,
+          "action": "delete_and_migrate: use directedSinAngleOperatorC"
+        },
+        {
+          "current": "cosAngleOperatorC",
+          "proposed": "directedCosAngleOperatorC",
+          "action": "rename"
+        },
+        {
+          "current": "paperCosAngleOperatorC",
+          "proposed": "cosAngleOperatorC",
+          "action": "rename"
+        },
+        {
+          "current": "sinTwoAngleOperatorC",
+          "proposed": "directedSinTwoAngleOperatorC",
+          "action": "rename"
+        },
+        {
+          "current": "paperSinTwoAngleOperatorC",
+          "proposed": "sinTwoAngleOperatorC",
+          "action": "rename"
+        },
+        {
+          "current": "tanAngleOperatorC",
+          "proposed": "directedTanAngleOperatorC",
+          "action": "rename"
+        },
+        {
+          "current": "paperTanAngleOperatorC",
+          "proposed": "tanAngleOperatorC",
+          "action": "rename"
+        },
+        {
+          "current": "tanTwoAngleOperatorC",
+          "proposed": "directedTanTwoAngleOperatorC",
+          "action": "rename"
+        },
+        {
+          "current": "paperTanTwoAngleOperatorC",
+          "proposed": "tanTwoAngleOperatorC",
+          "action": "rename"
+        },
+        {
+          "current": "paperAbsTanTwoAngleOperatorC",
+          "proposed": "absTanTwoAngleOperatorC",
+          "action": "rename"
+        },
+        {
+          "current": "paperAngleOperatorR",
+          "proposed": "angleOperatorR",
+          "action": "rename"
+        },
+        {
+          "current": "paperAngleOperatorRC",
+          "proposed": "angleOperatorRC",
+          "action": "rename"
+        },
+        {
+          "current": "paperSinAngleOperatorR",
+          "proposed": "sinAngleOperatorR",
+          "action": "rename"
+        },
+        {
+          "current": "paperSinTwoAngleOperatorR",
+          "proposed": "sinTwoAngleOperatorR",
+          "action": "rename"
+        },
+        {
+          "current": "paperTanAngleOperatorR",
+          "proposed": "tanAngleOperatorR",
+          "action": "rename"
+        },
+        {
+          "current": "paperTanTwoAngleOperatorR",
+          "proposed": "tanTwoAngleOperatorR",
+          "action": "rename"
+        },
+        {
+          "current": "paperAbsTanTwoAngleOperatorR",
+          "proposed": "absTanTwoAngleOperatorR",
+          "action": "rename"
+        },
+        {
+          "current": "sinAngleOperatorDirectedRC",
+          "proposed": "directedSinAngleOperatorRC",
+          "action": "rename"
+        },
+        {
+          "current": "cosAngleOperatorRC",
+          "proposed": "directedCosAngleOperatorRC",
+          "action": "rename"
+        },
+        {
+          "current": "sinTwoAngleOperatorRC",
+          "proposed": "directedSinTwoAngleOperatorRC",
+          "action": "rename"
+        },
+        {
+          "current": "tanAngleOperatorRC",
+          "proposed": "directedTanAngleOperatorRC",
+          "action": "rename"
+        },
+        {
+          "current": "tanTwoAngleOperatorRC",
+          "proposed": "directedTanTwoAngleOperatorRC",
+          "action": "rename"
+        }
+      ]
+    },
+    {
+      "id": "hilbert-schmidt",
+      "title": "Consolidate into the canonical ForTauCeti API rather than renaming.",
+      "rationale": "`ContinuousLinearMap.IsHilbertSchmidt`, `hilbertSchmidtEnergy` and `hilbertSchmidtENorm` already exist and are canonical, and the repository has already proved that the source-side approximation-singular-value definitions describe the same notion. Renaming the paper copies into those names would compete with the canonical API; the polished end state migrates consumers to it and deletes the duplicate concept, keeping the mathematics as characterisation theorems. Any intermediate that must survive the migration is named for what distinguishes it, `singularValueHilbertSchmidtEnergy` / `singularValueHilbertSchmidtNorm`, not for the canonical name.",
+      "moves": [
+        {
+          "current": "IsPaperHilbertSchmidt",
+          "proposed": "ContinuousLinearMap.IsHilbertSchmidt",
+          "action": "delete_and_migrate"
+        },
+        {
+          "current": "paperHilbertSchmidtEnergy",
+          "proposed": "ContinuousLinearMap.hilbertSchmidtEnergy",
+          "action": "delete_and_migrate"
+        },
+        {
+          "current": "paperHilbertSchmidtNorm",
+          "proposed": "ContinuousLinearMap.hilbertSchmidtENorm",
+          "action": "delete_and_migrate",
+          "fallback": "singularValueHilbertSchmidtNorm, only if an intermediate is needed during migration"
+        }
+      ]
+    },
+    {
+      "id": "planar-model-space",
+      "title": "One canonical name for the two-dimensional model space.",
+      "rationale": "`Plane` is too generic to be a reusable name and the aliases add nothing. One name, `PlanarModelSpace 𝕜` for `EuclideanSpace 𝕜 (Fin 2)`, used as `PlanarModelSpace ℝ` and `PlanarModelSpace ℂ`. Role-bearing model names replace `planeE0`-style names.",
+      "moves": [
+        {
+          "current": "PaperPlane",
+          "proposed": "PlanarModelSpace",
+          "action": "delete_and_migrate"
+        },
+        {
+          "current": "Plane",
+          "proposed": "PlanarModelSpace",
+          "action": "delete_and_migrate"
+        },
+        {
+          "current": "PaperRealPlane",
+          "proposed": "PlanarModelSpace ℝ",
+          "action": "delete_and_migrate"
+        },
+        {
+          "current": "RealPlane",
+          "proposed": "PlanarModelSpace ℝ",
+          "action": "delete_and_migrate"
+        },
+        {
+          "current": "paperPlaneE0",
+          "proposed": "planarModelE0",
+          "action": "rename"
+        }
+      ]
+    },
+    {
+      "id": "sin-theta-problem-wrappers",
+      "title": "Name the extra data, not its provenance.",
+      "rationale": "These wrappers are not the canonical problem structures under another name: they carry additional data, a chosen `SinThetaRepresentative`. `RepresentativeProblem` says why a second structure exists; `Paper...Problem` does not.",
+      "moves": [
+        {
+          "current": "PaperRealGeneralSinThetaProblem",
+          "proposed": "RealGeneralSinThetaRepresentativeProblem",
+          "action": "rename"
+        },
+        {
+          "current": "PaperGeneralSinThetaProblem",
+          "proposed": "GeneralSinThetaRepresentativeProblem",
+          "action": "rename"
+        },
+        {
+          "current": "PaperIsometricSinThetaProblem",
+          "proposed": "IsometricSinThetaRepresentativeProblem",
+          "action": "rename"
+        },
+        {
+          "current": "PaperRealIsometricSinThetaProblem",
+          "proposed": "RealIsometricSinThetaRepresentativeProblem",
+          "action": "rename"
+        },
+        {
+          "current": "PaperSinThetaRepresentative",
+          "proposed": "SinThetaRepresentative",
+          "action": "rename"
+        }
+      ]
+    },
+    {
+      "id": "source-block-family",
+      "title": "`Block`, `Modulus`, `GraphCoordinate`, `SelectedBranch` carry the real distinction.",
+      "rationale": "Stripping `paper` from the `paperSource*` family leaves `source*`, which is the same provenance problem in a different word. These objects live on source-coordinate block spaces, so `Block` is the information worth keeping, and the positive U -> U modulus objects should visibly say `Modulus`.",
+      "moves": [
+        {
+          "current": "paperSourceDirectedAngleC",
+          "proposed": "directedAngleBlockC",
+          "action": "rename"
+        },
+        {
+          "current": "paperSourceDirectedCosC",
+          "proposed": "directedCosAngleBlockC",
+          "action": "rename"
+        },
+        {
+          "current": "paperSourceDirectedSinC",
+          "proposed": "directedSinAngleBlockC",
+          "action": "rename"
+        },
+        {
+          "current": "paperSourceFullAngleC",
+          "proposed": "fullAngleBlockC",
+          "action": "rename"
+        },
+        {
+          "current": "paperSourceFullSinC",
+          "proposed": "fullSinAngleBlockC",
+          "action": "rename"
+        },
+        {
+          "current": "paperSourceCrossBlockSumC",
+          "proposed": "crossBlockSumC",
+          "action": "rename"
+        },
+        {
+          "current": "paperCosineBlockC",
+          "proposed": "cosineBlockC",
+          "action": "rename"
+        },
+        {
+          "current": "paperSineBlockC",
+          "proposed": "sineBlockC",
+          "action": "rename"
+        },
+        {
+          "current": "paperCosineModulusC",
+          "proposed": "cosineBlockModulusC",
+          "action": "rename"
+        },
+        {
+          "current": "paperSineModulusC",
+          "proposed": "sineBlockModulusC",
+          "action": "rename"
+        }
+      ]
+    },
+    {
+      "id": "semantic-not-review-vocabulary",
+      "title": "Names record mathematical scope, not review verdicts.",
+      "rationale": "`faithful` is review terminology. The discriminator these theorems actually carry is the selected branch, so the name should say that. `paperTanTwoThetaRepresentative` is specifically a graph-coordinate operator and should say so rather than being stripped to a generic `Representative`.",
+      "moves": [
+        {
+          "current": "(any *faithful* tan 2Theta UI-norm theorem)",
+          "proposed": "tanTwoTheta_selectedBranch_symmetricNorming",
+          "action": "rename",
+          "alternative": "tanTwoTheta_orderedFormGap_symmetricNorming, if the ordered form gap is the stronger discriminator"
+        },
+        {
+          "current": "paperTanTwoThetaRepresentative",
+          "proposed": "tanTwoThetaGraphCoordinateOperator",
+          "action": "rename"
+        }
+      ]
+    },
+    {
+      "id": "embedded-token-repair",
+      "title": "Theorem names carrying the token mid-name are renamed in full.",
+      "rationale": "Stripping only a leading prefix leaves names like `sineModulus_sq_add_paperCosineModulus_sq`, which is worse than either endpoint: half-converted, and now inconsistent with the object it is about. Each is renamed by applying the family decision to every object the name mentions.",
+      "moves": [
+        {
+          "current": "paperAbsTanTwoAngleOperatorC_eq_modulus_paperTanTwoAngle",
+          "proposed": "absTanTwoAngleOperatorC_eq_modulus_tanTwoAngle",
+          "action": "rename"
+        },
+        {
+          "current": "paperAbsTanTwoAngleOperatorC_eq_paperTanTwoAngleOperator",
+          "proposed": "absTanTwoAngleOperatorC_eq_tanTwoAngleOperator",
+          "action": "rename"
+        },
+        {
+          "current": "paperBlockCompression_paperDiagonalPair",
+          "proposed": "blockCompression_diagonalPair",
+          "action": "rename"
+        },
+        {
+          "current": "paperCos_mul_paperTan",
+          "proposed": "cosAngleOperatorC_mul_tanAngleOperatorC",
+          "action": "rename"
+        },
+        {
+          "current": "paperHilbertSchmidtEnergy_comp_paperBasisProjection",
+          "proposed": "hilbertSchmidtEnergy_comp_basisProjection",
+          "action": "rename"
+        },
+        {
+          "current": "paperSin_sq_add_paperCos_sq",
+          "proposed": "sinAngleOperatorC_sq_add_cosAngleOperatorC_sq",
+          "action": "rename"
+        },
+        {
+          "current": "paperSineModulus_sq_add_paperCosineModulus_sq",
+          "proposed": "sineBlockModulus_sq_add_cosineBlockModulus_sq",
+          "action": "rename"
+        },
+        {
+          "current": "paperSourceDirectedSinC_eq_paperSineModulusC",
+          "proposed": "directedSinAngleBlockC_eq_sineBlockModulusC",
+          "action": "rename"
+        },
+        {
+          "current": "paperSourceDirectedSin_same_paperSineBlock",
+          "proposed": "directedSinAngleBlock_same_sineBlock",
+          "action": "rename"
+        },
+        {
+          "current": "paperAbsTanTwoAngleOperatorC_eq_modulus_paperTanTwoAngleOperatorC",
+          "proposed": "absTanTwoAngleOperatorC_eq_modulus_tanTwoAngleOperatorC",
+          "action": "rename"
+        },
+        {
+          "current": "paperAbsTanTwoAngleOperatorC_eq_paperTanTwoAngleOperatorC",
+          "proposed": "absTanTwoAngleOperatorC_eq_tanTwoAngleOperatorC",
+          "action": "rename"
+        }
+      ]
+    }
   ]
 }
