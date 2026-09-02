@@ -669,6 +669,12 @@ section DirectedCornerCorrespondence
 variable {Ea : Type*} [NormedAddCommGroup Ea] [InnerProductSpace ℂ Ea] [CompleteSpace Ea]
 variable (U V : Submodule ℂ Ea) [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
 
+/-- An orthogonally complemented subspace of a complete space is complete; the
+approximation-number API for block compressions needs it on the nose. -/
+local instance instCompleteSpaceCoeDirectedCorner
+    (W : Submodule ℂ Ea) [W.HasOrthogonalProjection] : CompleteSpace W :=
+  (Submodule.isComplete_coe_of_hasOrthogonalProjection W).completeSpace_coe
+
 /-- **The canonical directed tangent corner IS the paper's directed corner.**
 
 The Section 2 directed `tan 2Θ` theorems conclude on
@@ -696,6 +702,36 @@ theorem reflectionTangentCorner_reflection_eq_paperTanTwoCorner
   unfold reflectionTangentCorner
   rw [TauCeti.DavisKahan.unboundedReflectionTangent_reflection_eq U V hinv,
     paperBlockCompression_mul_reflectionOperator]
+
+/-- **The canonical directed object and the paper's directed `tan 2Θ₀` corner
+have the same approximation singular sequence.**
+
+This is the correspondence the Section 2 directed clauses need, and it is now a
+chain of equalities rather than an appeal to what a unitarily invariant norm can
+or cannot distinguish:
+
+1. the canonical object is the compressed corner of the paper's double-angle
+   block representative (`reflectionTangentCorner_reflection_eq_paperTanTwoCorner`);
+2. that representative is a `paperDiagonalPair`, whose complementary summand a
+   compression out of `U` does not see
+   (`paperBlockCompression_paperDiagonalPair`), leaving the compressed corner of
+   the doubled tangent expression itself;
+3. an ambient projection block and its compression have the same approximation
+   singular sequence (`paperProjectionBlock_same_compression`).
+
+The right-hand side is the ambient block spelling the paper-facing directed
+object uses, so a symmetric gauge of the two agrees and the printed norm is the
+one the canonical theorems bound. -/
+theorem reflectionTangentCorner_same_paperTanTwoDirectedCorner
+    (hinv : IsUnit ((1 : Ea →L[ℂ] Ea) - 2 *
+      (paperProjectorDifference U V * paperProjectorDifference U V))) :
+    SameApproximationSingularSequence
+      (paperProjectionBlock Uᗮ U
+        (2 * (paperProjectorDifference U V * paperDoubleSecant U V)))
+      (reflectionTangentCorner U V.reflectionOperator) := by
+  rw [reflectionTangentCorner_reflection_eq_paperTanTwoCorner U V hinv,
+    paperTanTwoBlockRepresentative, paperBlockCompression_paperDiagonalPair]
+  exact paperProjectionBlock_same_compression Uᗮ U _
 
 end DirectedCornerCorrespondence
 

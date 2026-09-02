@@ -554,6 +554,44 @@ def _validate_source_clauses(
                     f"{where}: clause scalar_scope {clause.get('scalar_scope')!r} disagrees with the "
                     f"compiler-derived scalar scope {canonical_scopes[primary]!r} of its primary {primary}"
                 )
+            # A clause whose Lean object is not the paper's own must SAY what
+            # bridges them, and the bridge must mention both objects.  Checking
+            # only that the listed declarations are registered let a reviewer
+            # empty the list, or swap in another registered theorem, and still
+            # get a green 29/29 over an unbridged representation change.
+            if clause.get("correspondence_required"):
+                bridge = clause.get("correspondence_witness")
+                if not isinstance(bridge, dict):
+                    fail(
+                        f"{where}: the clause declares correspondence_required, so it must record a "
+                        "correspondence_witness naming the declaration and the two objects it bridges"
+                    )
+                declaration = bridge.get("declaration")
+                source_object = bridge.get("from_object")
+                paper_object = bridge.get("to_object")
+                for field, value in (("declaration", declaration), ("from_object", source_object),
+                                     ("to_object", paper_object)):
+                    if not isinstance(value, str) or not value.strip():
+                        fail(f"{where}: correspondence_witness.{field} must be recorded")
+                if declaration not in correspondence:
+                    fail(
+                        f"{where}: correspondence_witness names {declaration}, which is not among this clause's "
+                        "evidence.correspondence"
+                    )
+                statement = _declaration_statement_text(declaration)
+                if statement is None:
+                    fail(
+                        f"{where}: correspondence_witness {declaration} has no statement readable from the Lean "
+                        "sources, so its bridging claim cannot be checked"
+                    )
+                for role, token in (("from_object", source_object), ("to_object", paper_object)):
+                    if token not in statement:
+                        fail(
+                            f"{where}: correspondence_witness claims {declaration} bridges to {token!r} "
+                            f"({role}), but that does not occur in its statement. A representation change needs a "
+                            "theorem that mentions both objects."
+                        )
+
             for declaration in [primary, *correspondence]:
                 if declaration not in _declarations(item):
                     fail(f"{where}: {declaration} is not registered in the result's lean_declarations")
@@ -1179,6 +1217,47 @@ def _declaration_statement_text(name: str) -> str | None:
     return texts[0].render()
 
 
+
+#: Census clause relations that assert another theorem carries the correspondence.
+REPRESENTATION_CHANGE_RELATIONS = {"representation_change"}
+
+
+def _validate_representation_change_agreement(
+    items: list[dict[str, Any]], census_rows: dict[str, dict[str, Any]]
+) -> None:
+    """The two ledgers must agree that a representation change happened.
+
+    `correspondence_required` is opt-in, so on its own it guards nothing: drop
+    the flag and the clause stops being checked.  The census says the same thing
+    independently, as `relation: representation_change` on its clause map, so the
+    flag is required exactly when the census asserts one.  Removing the
+    obligation now means editing both ledgers, and the census's own checker
+    rejects a representation change that names no correspondence.
+    """
+    for item in items:
+        row = census_rows.get(item["id"])
+        if not isinstance(row, dict):
+            continue
+        clause_map = ((row.get("semantic_review") or {}).get("clause_map")) or []
+        census_changes = sum(
+            1 for c in clause_map
+            if isinstance(c, dict) and c.get("relation") in REPRESENTATION_CHANGE_RELATIONS
+        )
+        if not census_changes:
+            continue
+        flagged = sum(
+            1 for c in (item.get("source_clauses") or [])
+            if isinstance(c, dict) and c.get("correspondence_required")
+        )
+        if not flagged:
+            fail(
+                f"{item['id']}: the source census records {census_changes} clause(s) with "
+                "relation 'representation_change', but no inventory clause is marked "
+                "correspondence_required. A representation change must be bridged by a named theorem "
+                "in both ledgers, or asserted in neither."
+            )
+
+
 def _supporting_atom_digest(atom_ids: list[str], source_atoms: dict[str, dict[str, Any]]) -> str:
     """Digest the exact interpretation evidence an accepted reading was built on.
 
@@ -1224,6 +1303,17 @@ def _validate_nonlocal_interpretation(
     """
     exceptional: list[str] = []
     linked_back: dict[str, set[str]] = {}
+
+    _validate_representation_change_agreement(
+        items,
+        {
+            row["id"]: row
+            for row in (json.loads(CENSUS_PATH.read_text(encoding="utf-8")).get("items") or [])
+            if isinstance(row, dict) and row.get("id")
+        }
+        if CENSUS_PATH.exists()
+        else {},
+    )
 
     for item in items:
         result_id = item["id"]

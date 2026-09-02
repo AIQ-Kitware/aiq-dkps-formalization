@@ -6,8 +6,8 @@ The denominator contains exactly the four Section 2 headline theorems and every 
 
 - Counted results: **29**
 - Result-boundary reviews accepted: **29/29**
-- Currently hostile-certified terminal: **28**
-- Awaiting closure: **1**
+- Currently hostile-certified terminal: **29**
+- Awaiting closure: **0**
 - Printed statements that are NOT locally self-contained: **5**
 - Result-only semantic sweep: `dev/davis-kahan-1970-result-semantic-review-2026-08-12.md`
 - Compiler-checkable theorem surface: `DavisKahan/Sources/DavisKahan1970/Audits/ResultSemanticSurface.lean`
@@ -25,7 +25,7 @@ Each result below explicitly partitions its primary source block into atoms insi
 | `S2-sin-theta` | unnumbered_theorem | `locally_exact` | yes | `proved_exact` | `proved_in_build` | `accepted` | `accepted` |
 | `S2-tan-theta` | unnumbered_theorem | `paper_faithful_nonlocal_source_interpretation` | **no** | `proved_exact` | `proved_in_build` | `accepted` | `accepted` |
 | `S2-sin-two-theta` | unnumbered_theorem | `locally_exact` | yes | `proved_exact` | `proved_in_build` | `accepted` | `accepted` |
-| `S2-tan-two-theta` | unnumbered_theorem | `locally_exact` | yes | `proved_exact` | `proved_in_build` | `hostile_review_blocked` | `accepted` |
+| `S2-tan-two-theta` | unnumbered_theorem | `locally_exact` | yes | `proved_exact` | `proved_in_build` | `accepted` | `accepted` |
 | `DK-3.1-prop` | proposition | `locally_exact` | yes | `proved_exact` | `proved_in_build` | `accepted` | `accepted` |
 | `DK-3.2-prop` | proposition | `locally_exact` | yes | `proved_exact` | `proved_in_build` | `accepted` | `accepted` |
 | `DK-3.3-prop` | proposition | `locally_exact` | yes | `proved_exact` | `proved_in_build` | `accepted` | `accepted` |
@@ -108,25 +108,22 @@ The accepted reading is hash-pinned to the distributable specification, the sour
 
 ## Current closure queue
 
-`S2-tan-two-theta` — blocked by open hostile-review obligation
-`tan2theta-directed-correspondence`.
+Empty. All 29 counted results are terminal on all three axes, and the hostile
+review's obligations are closed.
 
-Its directed clauses conclude on `N.gauge (reflectionTangentCorner U Z)`, while
-Davis and Kahan state the bound on the unitarily invariant norm of `tan 2Θ₀`.
-The correspondence from that corner to the paper's directed object is neither
-registered nor proved, so the clauses are `open`, the row's
-`semantic_certification` is `hostile_review_blocked`, and the two directed
-block-representative theorems are recorded as supporting rather than canonical
-evidence. The ambient clauses of the same result are unaffected and remain
-established. Closing it means proving the corner-to-paper-object identity and
-registering it as clause correspondence, or stating source-shaped directed
-theorems on the paper object.
+The last to close was `S2-tan-two-theta`. Its directed clauses concluded on
+`N.gauge (reflectionTangentCorner U Z)` while Davis and Kahan state the bound on
+the norm of `tan 2Θ₀`, and the bridge between those objects was prose. It is now
+three compiled theorems: a compression out of `U` cannot see the reflection
+through `U`; the canonical object therefore *equals* the compressed corner of
+the paper's own double-angle representative; and that corner has the same
+approximation singular sequence as the ambient block spelling the paper-facing
+object uses. The earlier reading of this gap — that it needed a
+corner-to-full-operator singular-value argument — was wrong.
 
 This section lists exactly the results the machine state reports as
-nonterminal; the checker rejects it when the two disagree. It said "Empty. All
-29 counted results are terminal on all three axes" while two rows were blocked,
-and named declarations under pre-rename `paperUINorm` spellings, which is why it
-is now checked rather than maintained.
+nonterminal; the checker rejects it when the two disagree, and rejects an
+emptiness claim while any row is open.
 
 `S2-tan-theta` is terminal after a hostile Appendix-scope correction. The
 Appendix-complete declarations

@@ -1077,7 +1077,7 @@
       ],
       "disposition": "proved_exact",
       "verification": "proved_in_build",
-      "semantic_certification": "hostile_review_blocked",
+      "semantic_certification": "accepted",
       "lean_declarations": [
         "TauCeti.DavisKahan1970.SectionTwo.tanTwoTheta_complex",
         "TauCeti.DavisKahan1970.SectionTwo.tanTwoTheta_real",
@@ -1114,7 +1114,9 @@
         "TauCeti.DavisKahan1970.tanTwoTheta_ambient_unbounded_symmetricNorming_real",
         "TauCeti.DavisKahan1970.approximationNumber_reflectionTangentCorner",
         "TauCeti.DavisKahan1970.reflectionTangentCorner_reflection_eq_paperTanTwoCorner",
-        "TauCeti.DavisKahan1970.paperBlockCompression_mul_reflectionOperator"
+        "TauCeti.DavisKahan1970.paperBlockCompression_mul_reflectionOperator",
+        "TauCeti.DavisKahan1970.reflectionTangentCorner_same_paperTanTwoDirectedCorner",
+        "TauCeti.DavisKahan1970.paperBlockCompression_paperDiagonalPair"
       ],
       "review_note": "Accepted result-only semantic review 2026-08-12. The bounded complex and real source wrappers already expose both directed and ambient arbitrary-PaperUI conclusions from the printed Section 2 hypotheses with pole exclusion derived internally. The unbounded source surface now closes the advertised global scope as well: `tanTwoTheta_directed_unboundedResidual_blockRepresentative_symmetricNorming_complex` and its real counterpart give the sharp directed residual inequality, while `tanTwoTheta_ambient_unbounded_blockRepresentative_symmetricNorming_complex` and its real counterpart give the sharp ambient factor-two inequality for unbounded self-adjoint A in arbitrary Hilbert dimension. The ambient proof assembles the two reflection-tangent corners using the existing Section 7 directed estimate, skew-adjoint symmetry, Lemma 6.1 block assembly, and Fan dominance; the real endpoints descend exactly through the maintained complexification layer. No quarter-angle assumption, caller-supplied pole certificate, finite-dimensional restriction, compactness premise, or perturbed-Q spectral-placement hypothesis is added. The final implementation was compiler-verified by the user on the 7cc049b4 baseline before this census promotion. Audit-surface update 2026-08-13: the already scalar-generic branch-free PaperUI theorem is promoted under the canonical alias `tanTwoTheta_branchFree_bounded_finiteSubspace_symmetricNorming_rclike`; source-shaped directed and unbounded endpoints remain registered separately.",
       "boundary_review": {
@@ -1146,7 +1148,47 @@
       "notes": " **Subspace-first interface added 2026-08-29.** The ambient form asked its caller for a reflection Z together with four facts. Two of them, self-adjointness and Z^2 = 1, are not hypotheses at all: a subspace determines its reflection and the reflection has both by construction. `ReflectionIntertwines A B V` carries only the two that are mathematics -- the reflection preserves A's domain and commutes with A + B on it -- and `tanTwoTheta_ambient_unbounded_blockRepresentative_derivedReflection_symmetricNorming_complex` takes the reducing subspace, builds Z = V.reflectionOperator internally, and supplies the two structural facts itself. Not internalized: the conclusion still names `unboundedReflectionTangent`, the block tangent, rather than the paper's canonical double-angle tangent; bringing it across needs the tan-2Theta analogue of `sinTwoThetaIdealBlock_hasSameApproximationNumbers`, which is not proved. **What the tangent block is, and its transport, proved 2026-08-29/30.** The unbounded theorems concluded about `unboundedReflectionTangent U Z = S (C^2)^{-1} C`, with C and S the diagonal and off-diagonal blocks of a self-adjoint involution relative to U + U-perp. Two elementary identities, both Z* = Z and Z^2 = 1 read on and off the diagonal, are `C^2 + S^2 = 1` and `C S + S C = 0`; the anticommutation makes S^2 commute with C and hence with (C^2)^{-1}, and the Gram computation collapses to `T*T = S^2 (1 - S^2)^{-1}` -- the diagonal block cancels entirely, so the tangent is a function of S alone. `starProjection_offDiagonal_sq_reflection` identifies the U block of S^2 for the reflection as (sin 2Theta)^2. **The transport to the paper's tangent then holds, contrary to what this row said on 2026-08-29.** For the reflection, `unboundedReflectionTangent U J_V = paperTanTwoBlockRepresentative U V * J_U`: the tangent's (C^2)^{-1} C factor carries the signed doubled cosine 1 - 2(P_V - P_U)^2, which is exactly what the block representative's secant inverts, and the reflection J_U is what is left over. J_U is a self-adjoint unitary, so the two have the same approximation numbers, and `paperAbsTanTwoAngleOperatorC_eq_modulus_blockRepresentative` closes the chain to the paper's ambient |tan 2Theta|. Hence equal gauge and membership in every SymmetricNormingFunction, and `tanTwoTheta_ambient_unbounded_symmetricNorming_complex` is the unbounded theorem on the paper object. The extra hypothesis is the paper's own cos 2theta != 0, which is what makes tan 2Theta bounded at all. **The retracted claim, recorded so the mistake is not repeated:** this row previously said the transport could not hold because `paperAbsTanTwoAngleOperatorC` is supported on U alone while the tangent has both off-diagonal blocks. That was wrong. `paperAngleOperatorC` is `cfc arcsin (sinAngleOperatorC U V)` built on the AMBIENT sine |P_U - P_V|, so the paper's |tan 2Theta| carries every principal angle twice -- the same multiplicity as the two-sided tangent. The error was reading the ambient angle object as the directed one. **Pole hypothesis removed from the public statement, 2026-08-30.** `tanTwoTheta_ambient_unbounded_symmetricNorming_complex` previously asked its caller for `cos (2 t) != 0` on the angle spectrum. That is not an independent Section 2 assumption: the ordered gap already forces the reflection's diagonal block to be invertible, which is the first component of `tanTwoTheta_ambient_unbounded_blockRepresentative_derivedReflection_symmetricNorming_complex`, and `C = J_U (1 - 2 (P_V - P_U)^2)` with `J_U` a unit, so a unit `C` is a unit signed doubled cosine. `isUnit_signedCosTwo_of_isUnit_diagonalPart_sq` and `cos_two_ne_zero_of_isUnit_diagonalPart_reflection_sq` are the two-step bridge, factored in the generic reflection layer rather than inlined in the source wrapper; the second composes with the pre-existing `cos_two_ne_zero_of_isUnit_one_sub_two_mul_paperProjectorDifference_sq`. **Real endpoints, 2026-08-30.** `tanTwoTheta_ambient_unbounded_blockRepresentative_derivedReflection_symmetricNorming_real` and `tanTwoTheta_ambient_unbounded_symmetricNorming_real` mirror the cleaned complex API over a real Hilbert space, concluding on the new real ambient `paperAbsTanTwoAngleOperatorR` -- the real member of the existing family of `realPartOperator`-of-`cfc` paper angle operators. The transport `extendedGauge_unboundedReflectionTangent_real` descends through the complexification, with no second analytic proof and no loss of constant or norm class. **`ReflectionIntertwines` moved and generalized, 2026-08-30.** It was `TauCeti.DavisKahan1970.ReflectionIntertwines`, complex-only; it is now `TauCeti.DavisKahan.ReflectionIntertwines`, scalar-generic, beside `UnboundedRitzPair` and `ReducingComplement`, and it gains `ofReducesSubspace`: a caller holding `TauCeti.LinearPMap.ReducesSubspace (A.addBounded B) V` -- the generic reducing-subspace vocabulary -- constructs nothing by hand. The underlying generic fact is `reflection_commutes_of_reducesSubspace`, that a reducing subspace commutes with its own reflection, which mentions neither perturbation nor Davis--Kahan. **Canonical Section 2 inventory, 2026-08-30.** `DavisKahan/Sources/DavisKahan1970/SectionTwo.lean` is the public inventory of the paper's four unnumbered headline theorems over both scalar fields: `TauCeti.DavisKahan1970.SectionTwo.{sinTheta_complex, tanTheta_complex, sinTwoTheta_complex, tanTwoTheta_complex}` and their `_real` siblings. The unqualified `SectionTwo.{sinTheta, tanTheta, sinTwoTheta, tanTwoTheta}` are reserved by a standing rule: a short name is bound only to a declaration that is BOTH scalar-generic over `RCLike` AND at the printed source scope, and is left unbound otherwise. Which of the four currently satisfy that is a property of `SectionTwo.lean`; it is recorded once, structurally, in `section_two_short_names` below and checked against the file, and is deliberately not restated in prose -- a copy of a moving fact goes stale silently, and this sentence did. They are `alias`es, so each carries exactly the type of the declaration it names -- unbounded self-adjoint `LinearPMap` ambient operator, arbitrary Hilbert dimension, a `SymmetricNormingFunction`, both printed conclusions, no capability class, no finite-dimensional hypothesis, no proof vehicle in the conclusion. `SectionTwoUsage.lean` calls each from ordinary operator-theory hypotheses, so the advertised entry points are compiler-checked to be reachable without building Sylvester witnesses, reflection blocks, or spectral reflections by hand. The scalar-generic presentation forms, directed and whole-space variants, finite specializations, operator-norm statements and bundled-problem entry points are unchanged and remain registered separately.",
       "canonical_evidence": [
         {
-          "id": "S2-tan-two-theta.complex.0",
+          "id": "S2-tan-two-theta.0",
+          "declaration": "TauCeti.DavisKahan1970.tanTwoTheta_directed_unboundedResidual_blockRepresentative_symmetricNorming_complex",
+          "role": "primary_source_witness",
+          "scalar_scope": "complex",
+          "evidence_kind": "proof",
+          "covers_source_atoms": [
+            "S2-sin-theta.ui-norm-scope",
+            "S2-tan-two-theta.directed-conclusion",
+            "S2-tan-two-theta.no-extra-pole-hypothesis",
+            "S2-tan-two-theta.ordered-gap-hypothesis",
+            "S2-tan-two-theta.strong-offdiagonal-hypothesis",
+            "S2-unbounded-scope.arbitrary-ui-scope",
+            "S2-unbounded-scope.bounded-residual-needed",
+            "S2-unbounded-scope.half-infinite-gap-intervals",
+            "S2-unbounded-scope.infinite-dimensional-scope",
+            "S2-unbounded-scope.unbounded-selfadjoint-scope"
+          ],
+          "capability_classes": []
+        },
+        {
+          "id": "S2-tan-two-theta.1",
+          "declaration": "TauCeti.DavisKahan1970.tanTwoTheta_directed_unboundedResidual_blockRepresentative_symmetricNorming_real",
+          "role": "primary_source_witness",
+          "scalar_scope": "real",
+          "evidence_kind": "proof",
+          "covers_source_atoms": [
+            "S2-sin-theta.ui-norm-scope",
+            "S2-tan-two-theta.directed-conclusion",
+            "S2-tan-two-theta.no-extra-pole-hypothesis",
+            "S2-tan-two-theta.ordered-gap-hypothesis",
+            "S2-tan-two-theta.strong-offdiagonal-hypothesis",
+            "S2-unbounded-scope.arbitrary-ui-scope",
+            "S2-unbounded-scope.bounded-residual-needed",
+            "S2-unbounded-scope.half-infinite-gap-intervals",
+            "S2-unbounded-scope.infinite-dimensional-scope",
+            "S2-unbounded-scope.unbounded-selfadjoint-scope"
+          ],
+          "capability_classes": []
+        },
+        {
+          "id": "S2-tan-two-theta.2",
           "declaration": "TauCeti.DavisKahan1970.tanTwoTheta_ambient_unbounded_symmetricNorming_complex",
           "role": "primary_source_witness",
           "scalar_scope": "complex",
@@ -1166,7 +1208,7 @@
           "capability_classes": []
         },
         {
-          "id": "S2-tan-two-theta.real.1",
+          "id": "S2-tan-two-theta.3",
           "declaration": "TauCeti.DavisKahan1970.tanTwoTheta_ambient_unbounded_symmetricNorming_real",
           "role": "primary_source_witness",
           "scalar_scope": "real",
@@ -1304,16 +1346,6 @@
           "role": "presentation_wrapper"
         },
         {
-          "declaration": "TauCeti.DavisKahan1970.tanTwoTheta_directed_unboundedResidual_blockRepresentative_symmetricNorming_complex",
-          "role": "alternative_route",
-          "note": "Proves the directed bound on the block/corner representation. It is the strongest existing evidence for the directed clauses, which stay open until the correspondence to the paper's tan 2Theta_0 object is registered; see remaining_gap."
-        },
-        {
-          "declaration": "TauCeti.DavisKahan1970.tanTwoTheta_directed_unboundedResidual_blockRepresentative_symmetricNorming_real",
-          "role": "alternative_route",
-          "note": "Proves the directed bound on the block/corner representation. It is the strongest existing evidence for the directed clauses, which stay open until the correspondence to the paper's tan 2Theta_0 object is registered; see remaining_gap."
-        },
-        {
           "declaration": "TauCeti.DavisKahan1970.approximationNumber_reflectionTangentCorner",
           "role": "source_correspondence",
           "note": "Identifies the directed tangent corner's approximation numbers in closed form. Registered so it carries a statement pin: it is the strongest correspondence evidence that exists, and is not sufficient to close the corner-to-paper-object obligation."
@@ -1327,6 +1359,16 @@
           "declaration": "TauCeti.DavisKahan1970.paperBlockCompression_mul_reflectionOperator",
           "role": "transport_lemma",
           "note": "A compression out of U feeds its operator only vectors of U, which the reflection through U fixes; this is what makes the reflection invisible to the corner."
+        },
+        {
+          "declaration": "TauCeti.DavisKahan1970.reflectionTangentCorner_same_paperTanTwoDirectedCorner",
+          "role": "source_correspondence",
+          "note": "The canonical directed object and the paper's directed tan 2Theta_0 corner have the same approximation singular sequence, hence the same value under every SymmetricNormingFunction. This is the correspondence the directed clauses cite."
+        },
+        {
+          "declaration": "TauCeti.DavisKahan1970.paperBlockCompression_paperDiagonalPair",
+          "role": "transport_lemma",
+          "note": "A compression out of Γ sees only the Γᗮ ← Γ block of a diagonal pair; this is the step from the paper's block representative to the block spelling its directed corner uses."
         }
       ],
       "result_wide_scope_atoms": [
@@ -1349,17 +1391,26 @@
           "scalar_scope": "complex",
           "evidence": {
             "primary": "TauCeti.DavisKahan1970.tanTwoTheta_directed_unboundedResidual_blockRepresentative_symmetricNorming_complex",
-            "correspondence": []
+            "correspondence": [
+              "TauCeti.DavisKahan1970.reflectionTangentCorner_same_paperTanTwoDirectedCorner",
+              "TauCeti.DavisKahan1970.reflectionTangentCorner_reflection_eq_paperTanTwoCorner"
+            ]
           },
-          "status": "open",
-          "justification": "(b - a) * N(tan 2Theta_0) <= 2 N(R) over complex, unbounded self-adjoint ambient operator, arbitrary SymmetricNormingFunction.  Both sides are the paper's own block spelling: `reflectionTangentCorner U Z` is the U -> U-perp corner of the reflection tangent, which is the source's `J_0 tan 2Theta_0`, and `paperBlockCompression U-perp U B` is the off-diagonal residual `R = P_(U-perp) B P_U`.  The source compares the corner with the angle through the same partial isometry J_0 and observes that a unitarily invariant norm cannot tell them apart. THAT PROSE IS NOT SUFFICIENT under this repository's correspondence contract, which requires registered machine-checkable evidence whenever the equivalence is not apparent from the canonical theorem's type. HOSTILE REVIEW 2026-09-02: this correspondence is NOT yet sufficient, and the three audit layers were telling three different stories. `approximationNumber_reflectionTangentCorner` gives the corner's singular values in closed form, and `extendedGauge_unboundedReflectionTangent_{complex,real}` gives the FULL reflection tangent the same gauge as the paper object; the missing link is between the corner and the paper object, and it does not exist. Tracked as open obligation `tan2theta-directed-correspondence`; until it closes this clause must not be read as having registered correspondence evidence.",
+          "status": "established",
+          "justification": "(b - a) * N(tan 2Theta_0) <= 2 N(R) over an unbounded self-adjoint ambient operator and an arbitrary SymmetricNormingFunction. The primary concludes on `reflectionTangentCorner U Z`; `reflectionTangentCorner_same_paperTanTwoDirectedCorner` establishes that this object has the same approximation singular sequence as `paperProjectionBlock Uᗮ U (2 * (projectorDifference * doubleSecant))`, the ambient block spelling the paper-facing directed tan 2Theta_0 object uses, so every symmetric gauge of the two agrees. The chain is an equality underneath: `reflectionTangentCorner_reflection_eq_paperTanTwoCorner` identifies the canonical object with the compressed corner of the paper's own double-angle representative. Prose about what a unitarily invariant norm cannot distinguish is no longer doing any work here.",
           "gap_scope_justification": "The printed double-tangent gap is ordered. The primary takes bare form bounds `re <A x, x> <= a |x|^2` on the selected spectral range and `b |x|^2 <= re <A x, x>` on its complement with `a < b`; neither bound confines a spectrum to a finite interval, so both separating regions are half-infinite.",
           "gap_scope_hypothesis_tokens": [
             "Set.Iic c",
             "a < b"
           ],
-          "correspondence_sufficiency": "insufficient_open_obligation",
-          "open_reason": "The correspondence from `reflectionTangentCorner` to the paper's tan 2Theta_0 object is not registered and does not exist; see open obligation `tan2theta-directed-correspondence`."
+          "correspondence_sufficiency": "registered",
+          "correspondence_required": true,
+          "correspondence_witness": {
+            "declaration": "TauCeti.DavisKahan1970.reflectionTangentCorner_same_paperTanTwoDirectedCorner",
+            "from_object": "reflectionTangentCorner",
+            "to_object": "paperProjectionBlock",
+            "note": "The canonical directed object and the ambient block spelling of the paper's directed tan 2Theta_0 corner have the same approximation singular sequence, hence the same symmetric gauge."
+          }
         },
         {
           "id": "directed.real",
@@ -1369,17 +1420,26 @@
           "scalar_scope": "real",
           "evidence": {
             "primary": "TauCeti.DavisKahan1970.tanTwoTheta_directed_unboundedResidual_blockRepresentative_symmetricNorming_real",
-            "correspondence": []
+            "correspondence": [
+              "TauCeti.DavisKahan1970.reflectionTangentCorner_same_paperTanTwoDirectedCorner",
+              "TauCeti.DavisKahan1970.reflectionTangentCorner_reflection_eq_paperTanTwoCorner"
+            ]
           },
-          "status": "open",
-          "justification": "(b - a) * N(tan 2Theta_0) <= 2 N(R) over real, unbounded self-adjoint ambient operator, arbitrary SymmetricNormingFunction.  Both sides are the paper's own block spelling: `reflectionTangentCorner U Z` is the U -> U-perp corner of the reflection tangent, which is the source's `J_0 tan 2Theta_0`, and `paperBlockCompression U-perp U B` is the off-diagonal residual `R = P_(U-perp) B P_U`.  The source compares the corner with the angle through the same partial isometry J_0 and observes that a unitarily invariant norm cannot tell them apart. THAT PROSE IS NOT SUFFICIENT under this repository's correspondence contract, which requires registered machine-checkable evidence whenever the equivalence is not apparent from the canonical theorem's type. HOSTILE REVIEW 2026-09-02: this correspondence is NOT yet sufficient, and the three audit layers were telling three different stories. `approximationNumber_reflectionTangentCorner` gives the corner's singular values in closed form, and `extendedGauge_unboundedReflectionTangent_{complex,real}` gives the FULL reflection tangent the same gauge as the paper object; the missing link is between the corner and the paper object, and it does not exist. Tracked as open obligation `tan2theta-directed-correspondence`; until it closes this clause must not be read as having registered correspondence evidence.",
+          "status": "established",
+          "justification": "(b - a) * N(tan 2Theta_0) <= 2 N(R) over an unbounded self-adjoint ambient operator and an arbitrary SymmetricNormingFunction. The primary concludes on `reflectionTangentCorner U Z`; `reflectionTangentCorner_same_paperTanTwoDirectedCorner` establishes that this object has the same approximation singular sequence as `paperProjectionBlock Uᗮ U (2 * (projectorDifference * doubleSecant))`, the ambient block spelling the paper-facing directed tan 2Theta_0 object uses, so every symmetric gauge of the two agrees. The chain is an equality underneath: `reflectionTangentCorner_reflection_eq_paperTanTwoCorner` identifies the canonical object with the compressed corner of the paper's own double-angle representative. Prose about what a unitarily invariant norm cannot distinguish is no longer doing any work here.",
           "gap_scope_justification": "The printed double-tangent gap is ordered. The primary takes bare form bounds `re <A x, x> <= a |x|^2` on the selected spectral range and `b |x|^2 <= re <A x, x>` on its complement with `a < b`; neither bound confines a spectrum to a finite interval, so both separating regions are half-infinite.",
           "gap_scope_hypothesis_tokens": [
             "Set.Iic c",
             "a < b"
           ],
-          "correspondence_sufficiency": "insufficient_open_obligation",
-          "open_reason": "The correspondence from `reflectionTangentCorner` to the paper's tan 2Theta_0 object is not registered and does not exist; see open obligation `tan2theta-directed-correspondence`."
+          "correspondence_sufficiency": "registered",
+          "correspondence_required": true,
+          "correspondence_witness": {
+            "declaration": "TauCeti.DavisKahan1970.reflectionTangentCorner_same_paperTanTwoDirectedCorner",
+            "from_object": "reflectionTangentCorner",
+            "to_object": "paperProjectionBlock",
+            "note": "The canonical directed object and the ambient block spelling of the paper's directed tan 2Theta_0 corner have the same approximation singular sequence, hence the same symmetric gauge."
+          }
         },
         {
           "id": "ambient.complex",
@@ -1418,17 +1478,7 @@
           ]
         }
       ],
-      "semantic_certification_note": "Blocked by open hostile-review obligation `tan2theta-directed-correspondence`. The directed clauses conclude on `N.gauge (reflectionTangentCorner U Z)` while Davis--Kahan state the bound on the norm of tan 2Theta_0, and the corner-to-paper-object correspondence does not exist. The bound itself is proved; what is missing is registered evidence that the object it is proved about is the paper's.",
-      "remaining_gap": {
-        "category": "missing_source_correspondence",
-        "missing_surface": "NARROWED 2026-09-02. The corner-to-paper-object step is now proved: `reflectionTangentCorner_reflection_eq_paperTanTwoCorner` shows the canonical directed object equals `paperBlockCompression Uᗮ U (paperTanTwoBlockRepresentative U V)`, the U -> U-perp corner of the paper's own double-angle representative, under the standing invertibility hypothesis. What remains is the last spelling step: that this compression has the same symmetric gauge as the paper's directed corner object in the ambient `paperProjectionBlock` spelling used by `paperTanTwoDirectedCornerR`, and hence that the printed norm is the one the canonical theorems bound.",
-        "next_action": "Prove `paperBlockCompression Γᗮ Γ (paperDiagonalPair Γᗮ Γ K) = paperBlockCompression Γᗮ Γ K` -- the compression out of Γ kills the diagonal pair's second summand, since it begins by projecting onto Γᗮ -- and chain it with the existing ambient-block/compression bridge to reach the paper's directed corner. An attempt on 2026-09-02 was withdrawn rather than left unproved: the algebra is routine but the Mathlib projection API route used was wrong. Then register the chain as correspondence on the directed clauses and reopen them.",
-        "strongest_existing_evidence": [
-          "TauCeti.DavisKahan1970.reflectionTangentCorner_reflection_eq_paperTanTwoCorner",
-          "TauCeti.DavisKahan1970.paperBlockCompression_mul_reflectionOperator",
-          "TauCeti.DavisKahan1970.approximationNumber_reflectionTangentCorner"
-        ]
-      }
+      "semantic_certification_note": "Certified 2026-09-02 after the corner-to-paper-object correspondence was proved and registered. The row was `hostile_review_blocked` while the directed clauses concluded on a block representation with no machine-checkable bridge to the paper's object; that bridge now exists as a chain of equalities."
     },
     {
       "id": "DK-3.1-prop",
@@ -4798,13 +4848,11 @@
     "method": "2026-08-31 hostile re-review of all 29 counted results under the coherent-clause model.  For each result: read the printed statement in the checked-in distributable specification, enumerate its separately quantified clauses, then read the COMPILER-PRINTED TYPE of each clause's canonical witness -- not its name -- and compare scalar field, bounded/unbounded operator scope, domain assumptions, dimension, norm class, separation alternatives, residual versus ambient perturbation, directed versus ambient angle, constants, representative choice, and any hypothesis present in Lean but not in the paper or the reverse.  Eight findings, all repaired in the same pass: (F1) the ambient sin 2Theta clause had no witness at the row's unbounded scope -- repaired by proving it; (F2) Corollary 4.1, Proposition 4.3, Theorem 5.2 and Theorem 6.3 are printed 'for every unitary-invariant norm' but were certified at `KyFanDominantIdealFamily` -- repaired by `symmetricNorming_of_kyFanDominant` and six new paper-norm endpoints; (F3) Theorem 6.3's witnesses were existential inside the ideal quantifier -- repaired by the parameterized paper-norm endpoints; (F4) the sin 2Theta directed clauses cited no correspondence for the reflected overlap block -- repaired by registering the existing lemmas; and four checker holes (F5 conclusions stated under `lemma` were unchecked, F6 a clause primary need not be canonical evidence, F7 a clause's scalar field was unchecked against its primary, F8 the half-infinite gap justification was unchecked prose), each repaired with a regression test.  Theorem 8.1 part (iii)'s `FiniteDimensional` binder was checked and is the printed scope; Proposition 4.4's single counterexample was checked and is sufficient for a refutation.  The earlier 2026-08-12 sweep is retained as history; its union-of-atoms acceptance is the defect this model replaced.  RE-RUN 2026-08-31 (second pass), on the unbounded-compression axis specifically, after the Palomar Section 2 statement audit exposed it.  For each of the seven printed Section 2 clauses the two scopes `ambient operator may be unbounded` and `trial/Ritz compression may itself be unbounded` were separated and read off the compiler-printed type of the clause's canonical witness.  One clause failed: `S2-tan-theta` directed, whose primaries took a bounded compression.  It is repaired; the axis is now a `type_requirements` obligation on `DK-6-appendix.unbounded-tangent-extension` rather than prose.  The per-clause result table is in the human report.  THIRD PASS 2026-09-01: no counted result's disposition changed and no canonical evidence moved.  Two things were closed and are recorded in the human report.  (a) The Palomar Section 2 Challenge, which had gone on demanding an unbounded trial compression for directed `sin 2Theta` after this audit concluded the Appendix does not grant one, was narrowed to a bounded compression; the repository now gives one answer to that question.  (b) The paper's ambient tangents were proved to carry the tangent singular-value sequence -- `approximationNumber_paperTanAngleOperatorC` and `approximationNumber_paperAbsTanTwoAngleOperatorC` -- by pairing the existing Gram resolvent transfer with its inverse `approximationNumber_le_of_gramContraction`, so that `||tan Theta||` is a norm of the sequence `tan theta_n` as a theorem rather than as a docstring.",
     "compiler_audit_surface": "DavisKahan/Sources/DavisKahan1970/Audits/ResultSemanticSurface.lean",
     "human_report": "dev/davis-kahan-1970-result-semantic-review-2026-08-31.md",
-    "terminal_results": 28,
-    "remaining_results": [
-      "S2-tan-two-theta"
-    ],
-    "note": "The previous note recorded the 2026-08-31 reopening of `S2-sin-two-theta` and its repair; that history is now in the human report together with the seven further findings of the same day's result-by-result review.  The second 2026-08-31 pass changed canonical evidence for `S2-tan-theta` only: the directed primaries are now the Appendix-scope `tanTheta_directed_unboundedRitz_symmetricNorming_{complex,real}`.  2026-09-02: terminal_results is 27, not 29. Two rows carry a blocked semantic certification -- `S2-tan-two-theta` (hostile_review_blocked) and `DK-3.2-prop` (reviewer_decision_open) -- because open hostile-review obligations name them. Their dispositions and builds are unchanged; what is not yet true is hostile semantic certification, which is the axis this field reports.",
-    "canonical_evidence_sha256": "510169889397ae304c1f9f71d4a1aa292cf0e9ebda62715ec11dc0182dad944a",
-    "hostile_review_status": "open",
+    "terminal_results": 29,
+    "remaining_results": [],
+    "note": "The previous note recorded the 2026-08-31 reopening of `S2-sin-two-theta` and its repair; that history is now in the human report together with the seven further findings of the same day's result-by-result review.  The second 2026-08-31 pass changed canonical evidence for `S2-tan-theta` only: the directed primaries are now the Appendix-scope `tanTheta_directed_unboundedRitz_symmetricNorming_{complex,real}`.  2026-09-02: terminal_results is 28, not 29. One row carries a blocked semantic certification -- `S2-tan-two-theta` (hostile_review_blocked) -- because an open hostile-review obligation names it. Its disposition and build are unchanged; what is not yet true is hostile semantic certification, which is the axis this field reports. `DK-3.2-prop` was briefly `reviewer_decision_open` earlier the same day and is now accepted, under the repository-wide `crossed-defect-dimension-equality` convention.",
+    "canonical_evidence_sha256": "23057c0222071fc53477ecbc9e0a623437653c62785f54cf76e88db01e308dcc",
+    "hostile_review_status": "accepted",
     "hostile_review_note": "OPEN as of 2026-09-02. Two independent hostile reviews of fe29c86f accepted the mathematics but found defects in exact source correspondence and inherited source scope. Most are repaired; the ones that remain are listed in `open_hostile_review_obligations`. Until that list is empty this sweep is not accepted, and the 29/29 result certificate must not be described as having passed hostile semantic review. The canonical-evidence digest is regenerated from the final data of each pass, after the semantic changes of that pass rather than before them. The digest itself is not quoted here: a hash copied into prose goes stale the next time the evidence legitimately changes, which is the failure this sentence used to demonstrate. The digest records what the evidence now is; it does not record that a hostile reader has accepted it, which is what `hostile_review_status` is for and why it remains open."
   },
   "section_two_short_names": {
@@ -4819,23 +4867,9 @@
   },
   "open_hostile_review_obligations": {
     "recorded_on": "2026-09-02",
-    "status": "open",
+    "status": "closed",
     "purpose": "Two independent hostile reviews of commit fe29c86f accepted the mathematics but found defects in exact source correspondence and inherited source scope. The repairs that are complete are recorded in the rows themselves; these are the ones that are NOT complete. While this list is non-empty the repository must not advertise the 29/29 certificate as having passed hostile semantic review.  Closed obligations are kept in `closed_obligations` with what closed them, so a reviewer can check the closure rather than take the disappearance of a row as evidence.",
-    "obligations": [
-      {
-        "id": "tan2theta-directed-correspondence",
-        "results": [
-          "S2-tan-two-theta"
-        ],
-        "finding": "The directed tan 2Theta clauses cite theorems concluding on `N.gauge (reflectionTangentCorner U Z)`, while Davis--Kahan state the bound on the unitarily invariant norm of tan 2Theta_0. The clause's `correspondence` list is empty and the justification asserts in prose that a unitarily invariant norm cannot distinguish the block representation. Under this repository's own contract that is not sufficient: the equivalence is not apparent from the canonical theorem's type, so it needs registered machine-checkable evidence.",
-        "verified_state_2026_09_02": "The bridge is partly built and was located, not assumed. `extendedGauge_unboundedReflectionTangent_complex` and its real analogue prove `N.extendedGauge (unboundedReflectionTangent U V.reflectionOperator) = N.extendedGauge (paperAbsTanTwoAngleOperatorC U V)` for every SymmetricNormingFunction, via `sameApproximationSingularValues_unboundedReflectionTangent`. What is missing is the last link: the canonical theorems are stated on `reflectionTangentCorner U Z`, which is `paperBlockCompression Uᗮ U (unboundedReflectionTangent U Z)` -- the corner, not the full operator -- and no theorem relates the corner's approximation numbers or gauge to the paper angle object. Searched; it does not exist.",
-        "required": [
-          "Prove the corner-to-operator link (same approximation numbers, or equal extendedGauge), then register the chain as `source_correspondence` evidence on the directed.complex and directed.real clauses; or",
-          "add source-shaped wrappers concluding literally on the paper tangent object, make them the clause primaries, and keep the block theorems as supporting evidence."
-        ],
-        "progress_2026_09_02": "The corner-to-paper-object step is PROVED and registered. The earlier assessment -- that the bridge was corner-to-full-operator and needed same-approximation-numbers -- was wrong, and the right statement is stronger and simpler: the canonical directed object is EQUAL to the corner of the paper's double-angle representative. Two facts give it, both compiled: the reflection tangent is that representative composed with the reflection through U, and a compression out of U cannot see that reflection. What remains is one spelling lemma between the compressed and ambient block forms; see the row's remaining_gap."
-      }
-    ],
+    "obligations": [],
     "closed_obligations": [
       {
         "id": "section4-inherited-scope",
@@ -4867,6 +4901,22 @@
         "status": "closed",
         "closed_on": "2026-09-02",
         "closure": "Closed with a theorem rather than a policy statement alone. `crossedDefectsEquivalent_iff_finrank_eq` proves that the constructive predicate is exactly equality of the crossed defect dimensions whenever those spaces are finite-dimensional, which is the case where the printed phrase 'equal Hilbert dimension' has an unambiguous elementary reading. The general case is documented as the constructive reading, with the reason it must be data: Proposition 3.2 builds a direct rotation out of the condition. The consistency the obligation asked for is therefore satisfied in the direction it was raised -- a non-obvious representation now carries registered evidence, exactly as the tan 2Theta case is required to."
+      },
+      {
+        "id": "tan2theta-directed-correspondence",
+        "results": [
+          "S2-tan-two-theta"
+        ],
+        "finding": "The directed tan 2Theta clauses cite theorems concluding on `N.gauge (reflectionTangentCorner U Z)`, while Davis--Kahan state the bound on the unitarily invariant norm of tan 2Theta_0. The clause's `correspondence` list is empty and the justification asserts in prose that a unitarily invariant norm cannot distinguish the block representation. Under this repository's own contract that is not sufficient: the equivalence is not apparent from the canonical theorem's type, so it needs registered machine-checkable evidence.",
+        "verified_state_2026_09_02": "The bridge is partly built and was located, not assumed. `extendedGauge_unboundedReflectionTangent_complex` and its real analogue prove `N.extendedGauge (unboundedReflectionTangent U V.reflectionOperator) = N.extendedGauge (paperAbsTanTwoAngleOperatorC U V)` for every SymmetricNormingFunction, via `sameApproximationSingularValues_unboundedReflectionTangent`. What is missing is the last link: the canonical theorems are stated on `reflectionTangentCorner U Z`, which is `paperBlockCompression Uᗮ U (unboundedReflectionTangent U Z)` -- the corner, not the full operator -- and no theorem relates the corner's approximation numbers or gauge to the paper angle object. Searched; it does not exist.",
+        "required": [
+          "Prove the corner-to-operator link (same approximation numbers, or equal extendedGauge), then register the chain as `source_correspondence` evidence on the directed.complex and directed.real clauses; or",
+          "add source-shaped wrappers concluding literally on the paper tangent object, make them the clause primaries, and keep the block theorems as supporting evidence."
+        ],
+        "progress_2026_09_02": "The corner-to-paper-object step is PROVED and registered. The earlier assessment -- that the bridge was corner-to-full-operator and needed same-approximation-numbers -- was wrong, and the right statement is stronger and simpler: the canonical directed object is EQUAL to the corner of the paper's double-angle representative. Two facts give it, both compiled: the reflection tangent is that representative composed with the reflection through U, and a compression out of U cannot see that reflection. What remains is one spelling lemma between the compressed and ambient block forms; see the row's remaining_gap.",
+        "status": "closed",
+        "closed_on": "2026-09-02",
+        "closure": "Closed. The obligation asked for machine-checkable evidence that the canonical directed object is the paper's tan 2Theta_0, rather than prose asserting a unitarily invariant norm cannot tell the representations apart. Three compiled theorems now do it: `paperBlockCompression_mul_reflectionOperator` (a compression out of U cannot see the reflection through U), `reflectionTangentCorner_reflection_eq_paperTanTwoCorner` (the canonical object EQUALS the compressed corner of the paper's double-angle representative), and `reflectionTangentCorner_same_paperTanTwoDirectedCorner` (that corner has the same approximation singular sequence as the ambient block spelling the paper-facing object uses, via the diagonal-pair step and the existing ambient/compression bridge). The earlier assessment that this needed a corner-to-full-operator singular-value argument was wrong; the objects are equal up to a block spelling."
       }
     ]
   },
