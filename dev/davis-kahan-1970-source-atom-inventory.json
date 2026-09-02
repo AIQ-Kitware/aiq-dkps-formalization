@@ -111,7 +111,7 @@
         "category": "source_wide_setup",
         "extends_results": [],
         "rationale": "Fixes the paper's ambient setting -- a separable real or complex Hilbert space, bounded in the main development with the unbounded extension announced. It governs every result rather than extending any one of them; the four Section 2 results carry that scope through their own `S2-unbounded-scope.*` atoms.",
-        "source_quote": "Separable real or complex Hilbert space; bounded main setting with stated unbounded extension."
+        "source_paraphrase": "Separable real or complex Hilbert space; bounded main setting with stated unbounded extension."
       }
     },
     {
@@ -140,7 +140,7 @@
         "category": "source_wide_setup",
         "extends_results": [],
         "rationale": "A paper-wide reading convention: results are vacuous where a norm occurring in them fails to exist, and the source will not repeat the qualification at individual statements. It changes how every statement is read; it does not widen the proved scope of one.",
-        "source_quote": "some of the paper's results are vacuous when certain norms occurring in them fail to exist"
+        "source_paraphrase": "some of the paper's results are vacuous when certain norms occurring in them fail to exist"
       }
     },
     {
@@ -194,7 +194,7 @@
         "category": "source_wide_setup",
         "extends_results": [],
         "rationale": "Section 1 setup: `P` and `Q` are arbitrary orthogonal projectors, not assumed spectral, and the diagonal spectral sets may overlap. This is the standing generality of the block framework, not an extension appended to a proved result.",
-        "source_quote": "P and Q need not be spectral projectors and the diagonal spectral sets may overlap."
+        "source_paraphrase": "P and Q need not be spectral projectors and the diagonal spectral sets may overlap."
       }
     },
     {
@@ -312,7 +312,7 @@
         "category": "source_wide_setup",
         "extends_results": [],
         "rationale": "Section 1 vocabulary distinguishing `H_0 = 0` from the stronger `H_0 = H_1 = 0`. Which of the two a given Section 2 theorem assumes is recorded on that theorem's own hypothesis atoms; this atom only fixes the terms.",
-        "source_quote": "H0=0 is distinguished from the stronger H0=H1=0 condition."
+        "source_paraphrase": "H0=0 is distinguished from the stronger H0=H1=0 condition."
       }
     },
     {
@@ -1184,7 +1184,7 @@
           "S2-tan-two-theta"
         ],
         "rationale": "The printed tan 2 Theta theorem carries no independent tan-pole exclusion and no perturbed-block spectral-placement hypothesis. This is a NEGATIVE scope clause of the printed statement: a Lean version that demanded a pole certificate from the caller would state a weaker theorem than the source, so the absence is itself an obligation.",
-        "source_quote": "the printed theorem has no independent tan-pole exclusion or perturbed-block spectral-placement hypothesis"
+        "source_paraphrase": "the printed theorem has no independent tan-pole exclusion or perturbed-block spectral-placement hypothesis"
       }
     },
     {
@@ -1410,7 +1410,7 @@
           "S2-tan-two-theta"
         ],
         "rationale": "The results are carried to unbounded self-adjoint operators under the stated domain condition. An explicit extension of the proved scope of all four counted results.",
-        "source_quote": "the source explicitly carries the theory to unbounded self-adjoint operators under domain and bounded-residual hypotheses"
+        "source_paraphrase": "the source explicitly carries the theory to unbounded self-adjoint operators under domain and bounded-residual hypotheses"
       },
       "type_requirements": {
         "must_contain": [
@@ -1839,7 +1839,7 @@
           "DK-8.2-thm"
         ],
         "rationale": "A standing convention fixed immediately after the proof of Proposition 3.2: (3.5) is assumed as well as (1.5) for the remainder of the paper except where the contrary is stated. It is therefore ambient hypothesis scope of every later result that does not say otherwise, and is linked to the two whose printed reading needs it.",
-        "source_quote": "(3.5) is assumed as well as (1.5) for the remainder of the paper, except where the contrary is explicitly stated"
+        "source_paraphrase": "(3.5) is assumed as well as (1.5) for the remainder of the paper, except where the contrary is explicitly stated"
       }
     },
     {
@@ -2984,7 +2984,7 @@
           "DK-6.1-thm"
         ],
         "rationale": "Theorem 6.1 is printed for comparison subspaces of unequal dimension: the trial coordinate space and the exact space need not have the same dimension, which is precisely what distinguishes it from the Section 2 sine theorem. That is printed scope of the counted Theorem 6.1, carried in Lean by the `_across` form, whose representative may live on its own pair of coordinate spaces.",
-        "source_quote": "the generalized theorem allows unequal-dimensional comparison subspaces as stated"
+        "source_paraphrase": "the generalized theorem allows unequal-dimensional comparison subspaces as stated"
       }
     },
     {
@@ -3216,7 +3216,7 @@
         "category": "proof_context",
         "extends_results": [],
         "rationale": "RECLASSIFIED 2026-08-31 (second pass). This clause describes HOW the headline sine theorem is read in the unbounded case -- assume a common dense domain carrying a bounded residual, extend it continuously, apply Theorem 5.2. The unbounded scope of the Section 2 sine theorem is already carried by the `S2-unbounded-scope.*` atoms; this passage supplies the mechanism, so it is `proof_context` rather than additional scope. It is not expository commentary either, which is what the first pass corrected.",
-        "source_quote": "For the sine theorem, one of $A_0,\\Lambda_1$ may be unbounded. ... the source assumes $(A+H)E_0$ and $E_0A_0$ share a dense domain on which (1.8) defines a bounded $R$, extends $R$ continuously, and then applies Theorem~5.2."
+        "source_paraphrase": "For the sine theorem, one of $A_0,\\Lambda_1$ may be unbounded. ... the source assumes $(A+H)E_0$ and $E_0A_0$ share a dense domain on which (1.8) defines a bounded $R$, extends $R$ continuously, and then applies Theorem~5.2."
       }
     },
     {

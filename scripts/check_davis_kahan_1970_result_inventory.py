@@ -26,6 +26,7 @@ from __future__ import annotations
 
 import argparse
 import hashlib
+import functools
 import json
 import re
 from pathlib import Path
@@ -737,11 +738,27 @@ def _validate_scope_atom_classification(source_atoms: dict[str, dict[str, Any]])
                 "(at least a couple of sentences)"
             )
         quote = classification.get("source_quote")
-        if not isinstance(quote, str) or not quote.strip():
+        paraphrase = classification.get("source_paraphrase")
+        if not (isinstance(quote, str) and quote.strip()) and not (
+            isinstance(paraphrase, str) and paraphrase.strip()
+        ):
             fail(
-                f"{atom_id}: scope_classification.source_quote must quote the source passage being "
-                "classified, so a reviewer can check the reading"
+                f"{atom_id}: scope_classification must carry either a verbatim source_quote or an "
+                "explicitly labelled source_paraphrase, so a reviewer can check the reading"
             )
+        if isinstance(quote, str) and quote.strip():
+            # `source_quote` used to be checked only for being non-empty while the
+            # certificate described it as verbatim evidence, and nine of twenty-six
+            # were not literal text -- an audit artifact claiming a stronger kind of
+            # evidence than it held.  A quote is now checked against the
+            # distributable specification, and anything that is not literal must say
+            # so by living in `source_paraphrase` instead.
+            if _normalize_source_text(quote) not in _normalized_specification():
+                fail(
+                    f"{atom_id}: scope_classification.source_quote is not a literal passage of "
+                    f"{TEX_PATH.relative_to(ROOT)} after whitespace normalization. Quote the source exactly, "
+                    "or record it as scope_classification.source_paraphrase."
+                )
         code = atom.get("formalization_role_reason_code")
         if code in GENERIC_SCOPE_REASON_CODES:
             fail(
@@ -953,6 +970,18 @@ def _check_standing_scope_consistency(
                 f"{result_id}: standing_assumption_discharge for {declaration} must state exactly what it "
                 "proves about the inherited assumption"
             )
+
+
+
+def _normalize_source_text(text: str) -> str:
+    """Collapse whitespace, so a quote may be re-wrapped but not re-worded."""
+    return re.sub(r"\s+", " ", text).strip()
+
+
+@functools.lru_cache(maxsize=1)
+def _normalized_specification() -> str:
+    """The distributable specification, whitespace-normalized, read once."""
+    return _normalize_source_text(TEX_PATH.read_text(encoding="utf-8"))
 
 
 def _supporting_atom_digest(atom_ids: list[str], source_atoms: dict[str, dict[str, Any]]) -> str:
