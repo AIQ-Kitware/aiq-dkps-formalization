@@ -1,15 +1,15 @@
 {
   "schema": "llm-resource-tally/v3",
-  "through": "2026-09-02T05:16:21.034610+00:00",
-  "ledger_rows": 1892,
-  "commits_accounted": 1712,
-  "turns": 50439,
+  "through": "2026-09-02T13:10:14.390951+00:00",
+  "ledger_rows": 1909,
+  "commits_accounted": 1713,
+  "turns": 51270,
   "tokens": {
-    "input": 8200287,
-    "cache_write": 177173029,
-    "cache_read": 19410480904,
-    "output": 52085236,
-    "billable_input": 19595854220
+    "input": 8213876,
+    "cache_write": 181142078,
+    "cache_read": 19661643211,
+    "output": 52978892,
+    "billable_input": 19850999165
   },
   "by_model": {
     "claude-fable-5": {
@@ -37,16 +37,22 @@
       "output": 327440
     },
     "claude-opus-5": {
-      "input": 123915,
-      "cache_write": 92021494,
-      "cache_read": 13679024620,
-      "output": 27763510
+      "input": 125401,
+      "cache_write": 95286675,
+      "cache_read": 13905850025,
+      "output": 28477822
     },
     "gpt-5.6-terra": {
       "input": 3590620,
       "cache_write": 0,
       "cache_read": 373341440,
       "output": 539325
+    },
+    "claude-fable-5-1": {
+      "input": 12103,
+      "cache_write": 703868,
+      "cache_read": 24336902,
+      "output": 179344
     }
   },
   "by_activity": {
@@ -57,10 +63,10 @@
       "output": 10700449
     },
     "unlabeled": {
-      "input": 7351548,
-      "cache_write": 123614709,
-      "cache_read": 14495305089,
-      "output": 39095982
+      "input": 7365137,
+      "cache_write": 127583758,
+      "cache_read": 14746467396,
+      "output": 39989638
     },
     "implementation": {
       "input": 79782,
@@ -77,10 +83,10 @@
   },
   "by_agent": {
     "claude-code": {
-      "input": 1172195,
-      "cache_write": 177173029,
-      "cache_read": 18869719304,
-      "output": 51218471
+      "input": 1185784,
+      "cache_write": 181142078,
+      "cache_read": 19120881611,
+      "output": 52112127
     },
     "codex": {
       "input": 7028092,
@@ -94,7 +100,7 @@
     "web_fetch": 0
   },
   "time": {
-    "wall_clock_s": 4094618.3
+    "wall_clock_s": 4153564.0
   },
   "compaction_signals": {
     "events": 79,
