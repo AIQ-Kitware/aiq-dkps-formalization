@@ -222,7 +222,7 @@ orthogonal projections. -/
 theorem signedCosTwo_selfAdjoint
     {U V : Submodule ℂ E} [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] :
     IsSelfAdjoint (signedCosTwo U V) := by
-  have hD := isSelfAdjoint_paperProjectorDifference (U := U) (V := V)
+  have hD := isSelfAdjoint_projectorDifference (U := U) (V := V)
   unfold signedCosTwo
   rw [IsSelfAdjoint, star_sub, star_one, star_mul, star_mul,
     star_ofNat, hD.star_eq]
@@ -279,7 +279,7 @@ private theorem coe_compressOperator_apply_of_maps
   rw [compressOperator_eq_restrict_of_invariant K U hK]
   rfl
 
-private theorem coe_paperBlockCompression_apply_of_maps
+private theorem coe_blockCompression_apply_of_maps
     {Ω Γ : Submodule ℂ E} [Ω.HasOrthogonalProjection] [Γ.HasOrthogonalProjection]
     (K : E →L[ℂ] E) (hK : ∀ x ∈ Γ, K x ∈ Ω) (x : Γ) :
     ((blockCompression Ω Γ K x : Ω) : E) = K (x : E) := by
@@ -327,7 +327,7 @@ private theorem signedCosBlock_isUnit
     IsUnit (compressOperator U (signedCosTwo U V)) := by
   let N := signedCosTwo U V
   let R := doubleSecant U V
-  have hinv := isUnit_one_sub_two_mul_paperProjectorDifference_sq_of_cos_two_ne_zero hcos
+  have hinv := isUnit_one_sub_two_mul_projectorDifference_sq_of_cos_two_ne_zero hcos
   have hNR : N * R = 1 := Ring.mul_inverse_cancel _ hinv
   have hRN : R * N = 1 := Ring.inverse_mul_cancel _ hinv
   have hNcomm := signedCosTwo_comm_starProjection (U := U) (V := V)
@@ -367,7 +367,7 @@ private theorem signedCosBlockOrthogonal_isUnit
     IsUnit (compressOperator Uᗮ (signedCosTwo U V)) := by
   let N := signedCosTwo U V
   let R := doubleSecant U V
-  have hinv := isUnit_one_sub_two_mul_paperProjectorDifference_sq_of_cos_two_ne_zero hcos
+  have hinv := isUnit_one_sub_two_mul_projectorDifference_sq_of_cos_two_ne_zero hcos
   have hNR : N * R = 1 := Ring.mul_inverse_cancel _ hinv
   have hRN : R * N = 1 := Ring.inverse_mul_cancel _ hinv
   have hNcomm := signedCosTwo_comm_starProjection (U := U) (V := V)
@@ -412,7 +412,7 @@ private theorem signedCosTwo_sq_mul_one_add_tanRep_sq
   let N := signedCosTwo U V
   let R := doubleSecant U V
   let L := tanTwoBlockRepresentative U V
-  have hinv := isUnit_one_sub_two_mul_paperProjectorDifference_sq_of_cos_two_ne_zero hcos
+  have hinv := isUnit_one_sub_two_mul_projectorDifference_sq_of_cos_two_ne_zero hcos
   have hNR : N * R = 1 := Ring.mul_inverse_cancel _ hinv
   have hN2R2 : (N * N) * (R * R) = 1 := by
     calc
@@ -594,8 +594,8 @@ private theorem reflection_block_data
       exact coe_compressOperator_apply_of_maps A hAUperp x
     simpa [Submodule.coe_norm, Submodule.coe_inner, hcoe] using h
   have hLsa : IsSelfAdjoint L := by
-    have hinv := isUnit_one_sub_two_mul_paperProjectorDifference_sq_of_cos_two_ne_zero hcos
-    simpa only [L] using isSelfAdjoint_paperTanTwoBlockRepresentative hinv
+    have hinv := isUnit_one_sub_two_mul_projectorDifference_sq_of_cos_two_ne_zero hcos
+    simpa only [L] using isSelfAdjoint_tanTwoBlockRepresentative hinv
   have hTadj : T.adjoint = blockCompression U Uᗮ L := by
     dsimp [T]
     exact blockCompression_adjoint_of_selfAdjoint L hLsa
@@ -611,13 +611,13 @@ private theorem reflection_block_data
     simp only [mul_apply_eq_comp, add_apply, one_apply_eq_self] at happ
     have hTx : ((T x : Uᗮ) : E) = L (x : E) := by
       dsimp [T]
-      exact coe_paperBlockCompression_apply_of_maps L hLU x
+      exact coe_blockCompression_apply_of_maps L hLU x
     have hTTx : ((T.adjoint (T x) : U) : E) = L (L (x : E)) := by
       rw [hTadj]
       calc
         (((blockCompression U Uᗮ L) (T x) : U) : E) =
             L ((T x : Uᗮ) : E) :=
-          coe_paperBlockCompression_apply_of_maps L hLUperp (T x)
+          coe_blockCompression_apply_of_maps L hLUperp (T x)
         _ = L (L (x : E)) := congrArg L hTx
     have harg : (((x + T.adjoint (T x) : U) : E)) =
         (x : E) + L (L (x : E)) := by
@@ -653,13 +653,13 @@ private theorem reflection_block_data
     simp only [mul_apply_eq_comp, add_apply, one_apply_eq_self] at happ
     have hTadjx : ((T.adjoint x : U) : E) = L (x : E) := by
       rw [hTadj]
-      exact coe_paperBlockCompression_apply_of_maps L hLUperp x
+      exact coe_blockCompression_apply_of_maps L hLUperp x
     have hTTadjx : ((T (T.adjoint x) : Uᗮ) : E) = L (L (x : E)) := by
       calc
         ((T (T.adjoint x) : Uᗮ) : E) =
             L ((T.adjoint x : U) : E) := by
           dsimp [T]
-          exact coe_paperBlockCompression_apply_of_maps L hLU (T.adjoint x)
+          exact coe_blockCompression_apply_of_maps L hLU (T.adjoint x)
         _ = L (L (x : E)) := congrArg L hTadjx
     have harg : (((x + T (T.adjoint x) : Uᗮ) : E)) =
         (x : E) + L (L (x : E)) := by
@@ -696,7 +696,7 @@ private theorem reflection_block_data
     have hVred : (A + H).Reduces V := reduces_orthogonalComplement hAHsym hAplusH_V
     have hcommZ := reflectionOperator_comm_of_reduces (A + H) V hVred
     -- Reduce the projected reflection identity to the explicit `N * L` blocks.
-    have hinv := isUnit_one_sub_two_mul_paperProjectorDifference_sq_of_cos_two_ne_zero hcos
+    have hinv := isUnit_one_sub_two_mul_projectorDifference_sq_of_cos_two_ne_zero hcos
     have hp := starProjection_idem_reflection U
     have hkey := projectorDifference_anticommutator (U := U) (V := V)
     have hQ : V.starProjection =
@@ -840,21 +840,21 @@ private theorem reflection_block_data
     have h0 : ((C1 (T (A0 x)) : Uᗮ) : E) = N (L (A (x : E))) := by
       dsimp [C1, T, A0]
       rw [coe_compressOperator_apply_of_maps N hNUperp,
-        coe_paperBlockCompression_apply_of_maps L hLU,
+        coe_blockCompression_apply_of_maps L hLU,
         coe_compressOperator_apply_of_maps A hAU]
     have h1 : ((A1 (C1 (T x)) : Uᗮ) : E) = A (N (L (x : E))) := by
       dsimp [A1, C1, T]
       rw [coe_compressOperator_apply_of_maps A hAUperp,
         coe_compressOperator_apply_of_maps N hNUperp,
-        coe_paperBlockCompression_apply_of_maps L hLU]
+        coe_blockCompression_apply_of_maps L hLU]
     have h2 : ((B (C0 x) : Uᗮ) : E) = H (N (x : E)) := by
       dsimp [B, C0]
-      rw [coe_paperBlockCompression_apply_of_maps H hHU,
+      rw [coe_blockCompression_apply_of_maps H hHU,
         coe_compressOperator_apply_of_maps N hNU]
     have h3 : ((C1 (B x) : Uᗮ) : E) = N (H (x : E)) := by
       dsimp [C1, B]
       rw [coe_compressOperator_apply_of_maps N hNUperp,
-        coe_paperBlockCompression_apply_of_maps H hHU]
+        coe_blockCompression_apply_of_maps H hHU]
     simp only [ContinuousLinearMap.comp_apply, sub_apply, add_apply]
     change ((C1 (T (A0 x)) : Uᗮ) : E) - ((A1 (C1 (T x)) : Uᗮ) : E) =
       ((B (C0 x) : Uᗮ) : E) + ((C1 (B x) : Uᗮ) : E)
@@ -1005,7 +1005,7 @@ private theorem cos_two_ne_zero_of_ordered_form_gap_offDiagonal
     rw [← hdiagSq]
     exact hCC
   have hN : IsUnit N := ((Commute.refl N).isUnit_mul_iff.mp hNN).1
-  exact cos_two_ne_zero_of_isUnit_one_sub_two_mul_paperProjectorDifference_sq
+  exact cos_two_ne_zero_of_isUnit_one_sub_two_mul_projectorDifference_sq
     (by simpa only [N, signedCosTwo] using hN)
 
 /-- **Branch-free Section 7 directed-corner estimate, lower-residual form.** -/

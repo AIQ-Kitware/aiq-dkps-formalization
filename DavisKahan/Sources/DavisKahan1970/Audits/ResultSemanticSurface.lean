@@ -250,7 +250,7 @@ Status: **TERMINAL EXACT**.
 #check @TauCeti.DavisKahan.isUnit_signedCosTwo_of_isUnit_diagonalPart_sq
 #check @TauCeti.DavisKahan.cos_two_ne_zero_of_isUnit_diagonalPart_reflection_sq
 #check @TauCeti.DavisKahanExt.absTanTwoAngleOperatorR
-#check @TauCeti.DavisKahanExt.complexify_paperAbsTanTwoAngleOperatorR
+#check @TauCeti.DavisKahanExt.complexify_absTanTwoAngleOperatorR
 #check @TauCeti.DavisKahan1970.tanTwoTheta_ambient_unbounded_symmetricNorming_complex
 #check @TauCeti.DavisKahan1970.tanTwoTheta_ambient_unbounded_symmetricNorming_real
 #check @TauCeti.DavisKahan1970.tanTwoTheta_directed_boundedResidual_blockRepresentative_spectralGap_symmetricNorming_complex

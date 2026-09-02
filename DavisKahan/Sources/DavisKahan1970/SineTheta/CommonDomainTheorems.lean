@@ -107,7 +107,7 @@ structure CommonDomainTheorem61Data where
 namespace CommonDomainTheorem61Data
 
 /-- Package common-domain Theorem 6.1 source data as the general Theorem 6.1 record. -/
-noncomputable def toPaperTheorem61Data
+noncomputable def toTheorem61Data
     (P : CommonDomainTheorem61Data
       (E := E) (F := F) (G := G) (H := H)) :
     Theorem61Data (E := E) (F := F) (G := G) (H := H) where
@@ -129,13 +129,13 @@ hypothesis and literal universal norm quantifier. -/
 theorem result_every_unitarilyInvariantNorm
     (P : CommonDomainTheorem61Data
       (E := E) (F := F) (G := G) (H := H))
-    (S : SinThetaRepresentative P.toPaperTheorem61Data.canonicalSinTheta)
+    (S : SinThetaRepresentative P.toTheorem61Data.canonicalSinTheta)
     (N : SymmetricNormingFunction) (hR : N.Mem P.source.R) :
     N.Mem S.operator ∧
       P.gap * P.epsilon * N.gauge S.operator ≤ N.gauge P.source.R := by
-  simpa [toPaperTheorem61Data,
+  simpa [toTheorem61Data,
     CommonDomainSinThetaData.toUnboundedSinThetaData] using
-    P.toPaperTheorem61Data.result_every_unitarilyInvariantNorm S N hR
+    P.toTheorem61Data.result_every_unitarilyInvariantNorm S N hR
 
 /-- Exact common-domain Theorem 6.1 with arbitrary representative
 coordinate spaces. -/
@@ -146,13 +146,13 @@ theorem result_every_unitarilyInvariantNorm_across
     (P : CommonDomainTheorem61Data
       (E := E) (F := F) (G := G) (H := H))
     (S : SinThetaRepresentativeAcross
-      (E₀ := E₀) (F₀ := F₀) P.toPaperTheorem61Data.canonicalSinTheta)
+      (E₀ := E₀) (F₀ := F₀) P.toTheorem61Data.canonicalSinTheta)
     (N : SymmetricNormingFunction) (hR : N.Mem P.source.R) :
     N.Mem S.operator ∧
       P.gap * P.epsilon * N.gauge S.operator ≤ N.gauge P.source.R := by
-  simpa [toPaperTheorem61Data,
+  simpa [toTheorem61Data,
     CommonDomainSinThetaData.toUnboundedSinThetaData] using
-    P.toPaperTheorem61Data.result_every_unitarilyInvariantNorm_across S N hR
+    P.toTheorem61Data.result_every_unitarilyInvariantNorm_across S N hR
 
 end CommonDomainTheorem61Data
 
@@ -169,7 +169,7 @@ structure CommonDomainTheorem62Data where
 namespace CommonDomainTheorem62Data
 
 /-- Package common-domain Theorem 6.2 source data as the general Theorem 6.2 record. -/
-noncomputable def toPaperTheorem62Data
+noncomputable def toTheorem62Data
     (P : CommonDomainTheorem62Data
       (E := E) (F := F) (G := G) (H := H)) :
     Theorem62Data (E := E) (F := F) (G := G) (H := H) where
@@ -190,25 +190,25 @@ noncomputable def toPaperTheorem62Data
 theorem result
     (P : CommonDomainTheorem62Data
       (E := E) (F := F) (G := G) (H := H))
-    (S : SinThetaRepresentative P.toPaperTheorem62Data.canonicalSinTheta)
+    (S : SinThetaRepresentative P.toTheorem62Data.canonicalSinTheta)
     (hR : IsPaperHilbertSchmidt P.source.R) :
     IsPaperHilbertSchmidt S.operator ∧
       P.gap * P.epsilon * paperHilbertSchmidtNorm S.operator ≤
         paperHilbertSchmidtNorm P.source.R := by
-  simpa [toPaperTheorem62Data,
+  simpa [toTheorem62Data,
     CommonDomainSinThetaData.toUnboundedSinThetaData] using
-    P.toPaperTheorem62Data.result S hR
+    P.toTheorem62Data.result S hR
 
 /-- The source bound-norm fallback under an explicit finite-rank premise. -/
 theorem operatorNorm_result_of_rank_le
     (P : CommonDomainTheorem62Data
       (E := E) (F := F) (G := G) (H := H))
-    (S : SinThetaRepresentative P.toPaperTheorem62Data.canonicalSinTheta)
+    (S : SinThetaRepresentative P.toTheorem62Data.canonicalSinTheta)
     {r : ℕ} (hRank : P.source.R.rank ≤ (r : Cardinal)) :
     P.gap * P.epsilon * ‖S.operator‖ ≤ ‖P.source.R‖ * Real.sqrt r := by
-  simpa [toPaperTheorem62Data,
+  simpa [toTheorem62Data,
     CommonDomainSinThetaData.toUnboundedSinThetaData] using
-    P.toPaperTheorem62Data.operatorNorm_result_of_rank_le S hRank
+    P.toTheorem62Data.operatorNorm_result_of_rank_le S hRank
 
 /-- Exact common-domain Theorem 6.2 with arbitrary representative
 coordinate spaces. -/
@@ -219,14 +219,14 @@ theorem result_across
     (P : CommonDomainTheorem62Data
       (E := E) (F := F) (G := G) (H := H))
     (S : SinThetaRepresentativeAcross
-      (E₀ := E₀) (F₀ := F₀) P.toPaperTheorem62Data.canonicalSinTheta)
+      (E₀ := E₀) (F₀ := F₀) P.toTheorem62Data.canonicalSinTheta)
     (hR : IsPaperHilbertSchmidt P.source.R) :
     IsPaperHilbertSchmidt S.operator ∧
       P.gap * P.epsilon * paperHilbertSchmidtNorm S.operator ≤
         paperHilbertSchmidtNorm P.source.R := by
-  simpa [toPaperTheorem62Data,
+  simpa [toTheorem62Data,
     CommonDomainSinThetaData.toUnboundedSinThetaData] using
-    P.toPaperTheorem62Data.result_across S hR
+    P.toTheorem62Data.result_across S hR
 
 end CommonDomainTheorem62Data
 
@@ -254,7 +254,7 @@ structure RealCommonDomainTheorem61Data where
 namespace RealCommonDomainTheorem61Data
 
 /-- Real-scalar packaging of common-domain Theorem 6.1 source data. -/
-noncomputable def toPaperTheorem61Data
+noncomputable def toTheorem61Data
     (P : RealCommonDomainTheorem61Data
       (E := E) (F := F) (G := G) (H := H)) :
     RealTheorem61Data (E := E) (F := F) (G := G) (H := H) where
@@ -275,13 +275,13 @@ noncomputable def toPaperTheorem61Data
 theorem result_every_unitarilyInvariantNorm
     (P : RealCommonDomainTheorem61Data
       (E := E) (F := F) (G := G) (H := H))
-    (S : SinThetaRepresentative P.toPaperTheorem61Data.canonicalSinTheta)
+    (S : SinThetaRepresentative P.toTheorem61Data.canonicalSinTheta)
     (N : SymmetricNormingFunction) (hR : N.Mem P.source.R) :
     N.Mem S.operator ∧
       P.gap * P.epsilon * N.gauge S.operator ≤ N.gauge P.source.R := by
-  simpa [toPaperTheorem61Data,
+  simpa [toTheorem61Data,
     CommonDomainSinThetaData.toUnboundedSinThetaData] using
-    P.toPaperTheorem61Data.result_every_unitarilyInvariantNorm S N hR
+    P.toTheorem61Data.result_every_unitarilyInvariantNorm S N hR
 
 /-- Real exact common-domain Theorem 6.1 with arbitrary representative
 coordinate spaces. -/
@@ -292,13 +292,13 @@ theorem result_every_unitarilyInvariantNorm_across
     (P : RealCommonDomainTheorem61Data
       (E := E) (F := F) (G := G) (H := H))
     (S : SinThetaRepresentativeAcross
-      (E₀ := E₀) (F₀ := F₀) P.toPaperTheorem61Data.canonicalSinTheta)
+      (E₀ := E₀) (F₀ := F₀) P.toTheorem61Data.canonicalSinTheta)
     (N : SymmetricNormingFunction) (hR : N.Mem P.source.R) :
     N.Mem S.operator ∧
       P.gap * P.epsilon * N.gauge S.operator ≤ N.gauge P.source.R := by
-  simpa [toPaperTheorem61Data,
+  simpa [toTheorem61Data,
     CommonDomainSinThetaData.toUnboundedSinThetaData] using
-    P.toPaperTheorem61Data.result_every_unitarilyInvariantNorm_across S N hR
+    P.toTheorem61Data.result_every_unitarilyInvariantNorm_across S N hR
 
 end RealCommonDomainTheorem61Data
 
@@ -317,7 +317,7 @@ structure RealCommonDomainTheorem62Data where
 namespace RealCommonDomainTheorem62Data
 
 /-- Real-scalar packaging of common-domain Theorem 6.2 source data. -/
-noncomputable def toPaperTheorem62Data
+noncomputable def toTheorem62Data
     (P : RealCommonDomainTheorem62Data
       (E := E) (F := F) (G := G) (H := H)) :
     RealTheorem62Data (E := E) (F := F) (G := G) (H := H) where
@@ -338,25 +338,25 @@ noncomputable def toPaperTheorem62Data
 theorem result
     (P : RealCommonDomainTheorem62Data
       (E := E) (F := F) (G := G) (H := H))
-    (S : SinThetaRepresentative P.toPaperTheorem62Data.canonicalSinTheta)
+    (S : SinThetaRepresentative P.toTheorem62Data.canonicalSinTheta)
     (hR : IsPaperHilbertSchmidt P.source.R) :
     IsPaperHilbertSchmidt S.operator ∧
       P.gap * P.epsilon * paperHilbertSchmidtNorm S.operator ≤
         paperHilbertSchmidtNorm P.source.R := by
-  simpa [toPaperTheorem62Data,
+  simpa [toTheorem62Data,
     CommonDomainSinThetaData.toUnboundedSinThetaData] using
-    P.toPaperTheorem62Data.result S hR
+    P.toTheorem62Data.result S hR
 
 /-- Real source bound-norm fallback. -/
 theorem operatorNorm_result_of_rank_le
     (P : RealCommonDomainTheorem62Data
       (E := E) (F := F) (G := G) (H := H))
-    (S : SinThetaRepresentative P.toPaperTheorem62Data.canonicalSinTheta)
+    (S : SinThetaRepresentative P.toTheorem62Data.canonicalSinTheta)
     {r : ℕ} (hRank : P.source.R.rank ≤ (r : Cardinal)) :
     P.gap * P.epsilon * ‖S.operator‖ ≤ ‖P.source.R‖ * Real.sqrt r := by
-  simpa [toPaperTheorem62Data,
+  simpa [toTheorem62Data,
     CommonDomainSinThetaData.toUnboundedSinThetaData] using
-    P.toPaperTheorem62Data.operatorNorm_result_of_rank_le S hRank
+    P.toTheorem62Data.operatorNorm_result_of_rank_le S hRank
 
 /-- Real exact common-domain Theorem 6.2 with arbitrary representative
 coordinate spaces. -/
@@ -367,14 +367,14 @@ theorem result_across
     (P : RealCommonDomainTheorem62Data
       (E := E) (F := F) (G := G) (H := H))
     (S : SinThetaRepresentativeAcross
-      (E₀ := E₀) (F₀ := F₀) P.toPaperTheorem62Data.canonicalSinTheta)
+      (E₀ := E₀) (F₀ := F₀) P.toTheorem62Data.canonicalSinTheta)
     (hR : IsPaperHilbertSchmidt P.source.R) :
     IsPaperHilbertSchmidt S.operator ∧
       P.gap * P.epsilon * paperHilbertSchmidtNorm S.operator ≤
         paperHilbertSchmidtNorm P.source.R := by
-  simpa [toPaperTheorem62Data,
+  simpa [toTheorem62Data,
     CommonDomainSinThetaData.toUnboundedSinThetaData] using
-    P.toPaperTheorem62Data.result_across S hR
+    P.toTheorem62Data.result_across S hR
 
 end RealCommonDomainTheorem62Data
 

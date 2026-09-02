@@ -109,7 +109,7 @@ structure CommonCoreTheorem61Data where
 namespace CommonCoreTheorem61Data
 
 /-- Package common-core Theorem 6.1 source data as the general Theorem 6.1 record. -/
-noncomputable def toPaperTheorem61Data
+noncomputable def toTheorem61Data
     (P : CommonCoreTheorem61Data
       (E := E) (F := F) (G := G) (H := H)) :
     Theorem61Data (E := E) (F := F) (G := G) (H := H) where
@@ -134,13 +134,13 @@ theorem result_every_unitarilyInvariantNorm_across
     (P : CommonCoreTheorem61Data
       (E := E) (F := F) (G := G) (H := H))
     (S : SinThetaRepresentativeAcross
-      (E₀ := E₀) (F₀ := F₀) P.toPaperTheorem61Data.canonicalSinTheta)
+      (E₀ := E₀) (F₀ := F₀) P.toTheorem61Data.canonicalSinTheta)
     (N : SymmetricNormingFunction) (hR : N.Mem P.source.R) :
     N.Mem S.operator ∧
       P.gap * P.epsilon * N.gauge S.operator ≤ N.gauge P.source.R := by
-  simpa [toPaperTheorem61Data,
+  simpa [toTheorem61Data,
     CommonCoreSinThetaData.toUnboundedSinThetaData] using
-    P.toPaperTheorem61Data.result_every_unitarilyInvariantNorm_across S N hR
+    P.toTheorem61Data.result_every_unitarilyInvariantNorm_across S N hR
 
 end CommonCoreTheorem61Data
 
@@ -157,7 +157,7 @@ structure CommonCoreTheorem62Data where
 namespace CommonCoreTheorem62Data
 
 /-- Package common-core Theorem 6.2 source data as the general Theorem 6.2 record. -/
-noncomputable def toPaperTheorem62Data
+noncomputable def toTheorem62Data
     (P : CommonCoreTheorem62Data
       (E := E) (F := F) (G := G) (H := H)) :
     Theorem62Data (E := E) (F := F) (G := G) (H := H) where
@@ -182,14 +182,14 @@ theorem result_across
     (P : CommonCoreTheorem62Data
       (E := E) (F := F) (G := G) (H := H))
     (S : SinThetaRepresentativeAcross
-      (E₀ := E₀) (F₀ := F₀) P.toPaperTheorem62Data.canonicalSinTheta)
+      (E₀ := E₀) (F₀ := F₀) P.toTheorem62Data.canonicalSinTheta)
     (hR : IsPaperHilbertSchmidt P.source.R) :
     IsPaperHilbertSchmidt S.operator ∧
       P.gap * P.epsilon * paperHilbertSchmidtNorm S.operator ≤
         paperHilbertSchmidtNorm P.source.R := by
-  simpa [toPaperTheorem62Data,
+  simpa [toTheorem62Data,
     CommonCoreSinThetaData.toUnboundedSinThetaData] using
-    P.toPaperTheorem62Data.result_across S hR
+    P.toTheorem62Data.result_across S hR
 
 end CommonCoreTheorem62Data
 
@@ -217,7 +217,7 @@ structure RealCommonCoreTheorem61Data where
 namespace RealCommonCoreTheorem61Data
 
 /-- Real-scalar packaging of common-core Theorem 6.1 source data. -/
-noncomputable def toPaperRealTheorem61Data
+noncomputable def toRealTheorem61Data
     (P : RealCommonCoreTheorem61Data
       (E := E) (F := F) (G := G) (H := H)) :
     RealTheorem61Data (E := E) (F := F) (G := G) (H := H) where
@@ -242,13 +242,13 @@ theorem result_every_unitarilyInvariantNorm_across
     (P : RealCommonCoreTheorem61Data
       (E := E) (F := F) (G := G) (H := H))
     (S : SinThetaRepresentativeAcross
-      (E₀ := E₀) (F₀ := F₀) P.toPaperRealTheorem61Data.canonicalSinTheta)
+      (E₀ := E₀) (F₀ := F₀) P.toRealTheorem61Data.canonicalSinTheta)
     (N : SymmetricNormingFunction) (hR : N.Mem P.source.R) :
     N.Mem S.operator ∧
       P.gap * P.epsilon * N.gauge S.operator ≤ N.gauge P.source.R := by
-  simpa [toPaperRealTheorem61Data,
+  simpa [toRealTheorem61Data,
     CommonCoreSinThetaData.toUnboundedSinThetaData] using
-    P.toPaperRealTheorem61Data.result_every_unitarilyInvariantNorm_across S N hR
+    P.toRealTheorem61Data.result_every_unitarilyInvariantNorm_across S N hR
 
 end RealCommonCoreTheorem61Data
 
@@ -267,7 +267,7 @@ structure RealCommonCoreTheorem62Data where
 namespace RealCommonCoreTheorem62Data
 
 /-- Real-scalar packaging of common-core Theorem 6.2 source data. -/
-noncomputable def toPaperRealTheorem62Data
+noncomputable def toRealTheorem62Data
     (P : RealCommonCoreTheorem62Data
       (E := E) (F := F) (G := G) (H := H)) :
     RealTheorem62Data (E := E) (F := F) (G := G) (H := H) where
@@ -292,14 +292,14 @@ theorem result_across
     (P : RealCommonCoreTheorem62Data
       (E := E) (F := F) (G := G) (H := H))
     (S : SinThetaRepresentativeAcross
-      (E₀ := E₀) (F₀ := F₀) P.toPaperRealTheorem62Data.canonicalSinTheta)
+      (E₀ := E₀) (F₀ := F₀) P.toRealTheorem62Data.canonicalSinTheta)
     (hR : IsPaperHilbertSchmidt P.source.R) :
     IsPaperHilbertSchmidt S.operator ∧
       P.gap * P.epsilon * paperHilbertSchmidtNorm S.operator ≤
         paperHilbertSchmidtNorm P.source.R := by
-  simpa [toPaperRealTheorem62Data,
+  simpa [toRealTheorem62Data,
     CommonCoreSinThetaData.toUnboundedSinThetaData] using
-    P.toPaperRealTheorem62Data.result_across S hR
+    P.toRealTheorem62Data.result_across S hR
 
 end RealCommonCoreTheorem62Data
 

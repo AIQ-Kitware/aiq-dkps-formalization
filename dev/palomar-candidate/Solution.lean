@@ -648,7 +648,7 @@ not in general the ordered singular-value sequence of `sin 2Θ` — principal an
 doubled angle from the single-angle sine at arbitrary dimension.
 
 The development supplies both halves.  For the ambient clause,
-`approximationNumber_paperAbsTanTwoAngleOperatorC_projectorDifference` says the
+`approximationNumber_absTanTwoAngleOperatorC_projectorDifference` says the
 paper's `|tan 2Θ|` has exactly the sequence `tan (arcsin aₙ(sin 2Θ))`; for the
 directed clause,
 `tanTwoTheta_directed_unboundedResidual_reducing_derivedReflection_symmetricNorming_complex`
@@ -771,7 +771,7 @@ theorem tanTwoTheta_ambient_proof_complex (N : SymmetricNormingFunction)
   have hseq : ∀ n,
       (TauCeti.DavisKahanExt.paperAbsTanTwoAngleOperatorC U V).approximationNumber n =
         tanSeq (ambientDoubleSine U V) n := fun n =>
-    TauCeti.DavisKahan1970.approximationNumber_paperAbsTanTwoAngleOperatorC_projectorDifference
+    TauCeti.DavisKahan1970.approximationNumber_absTanTwoAngleOperatorC_projectorDifference
       U V hcos n
   have heval : N.evalSeq (tanSeq (ambientDoubleSine U V)) =
       N.toSourceNorm.extendedGauge
@@ -1564,7 +1564,7 @@ theorem tanTheta_ambient_proof_real (N : SymmetricNormingFunction)
   have hupper' : TauCeti.LinearPMap.SemiboundedAbove
       D.toUnboundedRitzPair.trial.compression α := (semiboundedAbove_iff _ _).1 hupper
   have htr : ‖TauCeti.DavisKahanExt.paperSinAngleOperatorR U V‖ < 1 :=
-    TauCeti.DavisKahan1970.norm_paperSinAngleOperatorR_lt_one_of_unboundedCompression_crossedDefectsEquivalent
+    TauCeti.DavisKahan1970.norm_sinAngleOperatorR_lt_one_of_unboundedCompression_crossedDefectsEquivalent
       D.toUnboundedRitzPair.trial hδ hupper'
       (D.toUnboundedRitzPair.trial.crossed_lower_of_reducing V A
         D.toUnboundedRitzPair.mem_domain D.toUnboundedRitzPair.action_eq
@@ -1575,7 +1575,7 @@ theorem tanTheta_ambient_proof_real (N : SymmetricNormingFunction)
   have hseq : ∀ n,
       (TauCeti.DavisKahanExt.paperTanAngleOperatorR U V).approximationNumber n =
         tanSeq (ambientSine U V) n := fun n =>
-    TauCeti.DavisKahan1970.approximationNumber_paperTanAngleOperatorR U V htr n
+    TauCeti.DavisKahan1970.approximationNumber_tanAngleOperatorR U V htr n
   have heval : N.evalSeq (tanSeq (ambientSine U V)) =
       N.toSourceNorm.extendedGauge (TauCeti.DavisKahanExt.paperTanAngleOperatorR U V) :=
     N.evalSeq_eq_of_approximationNumber _ _ hseq

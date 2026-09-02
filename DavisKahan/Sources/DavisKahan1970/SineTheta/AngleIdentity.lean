@@ -52,7 +52,7 @@ noncomputable local instance instCStarAlgebraSubspaceCoordinateAngleIdentity
   inferInstance
 
 /-- The source cosine-defined directed angle has spectrum in `[0, pi/2]`. -/
-theorem spectrum_paperSourceDirectedAngleC_subset_Icc
+theorem spectrum_directedAngleBlockC_subset_Icc
     (U V : Submodule ℂ E)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] :
     spectrum ℝ (directedAngleBlockC U V) ⊆
@@ -64,7 +64,7 @@ theorem spectrum_paperSourceDirectedAngleC_subset_Icc
     cfc_map_spectrum (R := ℝ) Real.arccos (cosineBlockModulusC U V)
       hsa Real.continuous_arccos.continuousOn] at hy
   obtain ⟨x, hx, rfl⟩ := hy
-  have hxi := spectrum_paperCosineModulusC_subset_Icc U V hx
+  have hxi := spectrum_cosineBlockModulusC_subset_Icc U V hx
   exact ⟨Real.arccos_nonneg x,
     (Real.arccos_le_pi_div_two).2 hxi.1⟩
 
@@ -93,7 +93,7 @@ theorem sineDefinedDirectedAngleC_eq_source
         cfc (fun x : ℝ => x) (directedAngleBlockC U V) := by
       apply cfc_congr
       intro x hx
-      have hxi := spectrum_paperSourceDirectedAngleC_subset_Icc U V hx
+      have hxi := spectrum_directedAngleBlockC_subset_Icc U V hx
       exact Real.arcsin_sin
         (by linarith [hxi.1, Real.pi_pos]) hxi.2
     _ = directedAngleBlockC U V := cfc_id' ℝ _

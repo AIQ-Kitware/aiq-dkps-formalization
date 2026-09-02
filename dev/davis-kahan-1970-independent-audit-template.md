@@ -1454,7 +1454,7 @@ The declarations that carry this result's printed statement, with the source ato
 - `TauCeti.DavisKahan.cos_two_ne_zero_of_isUnit_diagonalPart_reflection_sq` — supporting_theorem
 - `TauCeti.DavisKahan.extendedGauge_unboundedReflectionTangent_real` — supporting_theorem
 - `TauCeti.DavisKahanExt.absTanTwoAngleOperatorR` — supporting_theorem
-- `TauCeti.DavisKahanExt.complexify_paperAbsTanTwoAngleOperatorR` — supporting_theorem
+- `TauCeti.DavisKahanExt.complexify_absTanTwoAngleOperatorR` — supporting_theorem
 - `TauCeti.DavisKahan1970.tanTwoTheta_ambient_unbounded_blockRepresentative_derivedReflection_symmetricNorming_real` — presentation_wrapper
 - `TauCeti.DavisKahan1970.approximationNumber_reflectionTangentCorner` — source_correspondence
 - `TauCeti.DavisKahan1970.reflectionTangentCorner_reflection_eq_paperTanTwoCorner` — source_correspondence
@@ -1647,7 +1647,7 @@ Source location candidates: `DavisKahan/Geometry/Angle/PaperOperatorAngleReal.le
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
-#### `TauCeti.DavisKahanExt.complexify_paperAbsTanTwoAngleOperatorR`
+#### `TauCeti.DavisKahanExt.complexify_absTanTwoAngleOperatorR`
 
 Source location candidates: `DavisKahan/Geometry/Angle/PaperOperatorAngleReal.lean:191`
 

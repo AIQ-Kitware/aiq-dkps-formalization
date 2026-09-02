@@ -117,7 +117,7 @@ theorem hilbertSchmidt_sylvester_defectFirst
   set z0 := TauCeti.LinearPMap.gapInverse hS hδ c with hz0def
   set X0 := ofLp (hSBasis F) z0 with hX0
   have hEq0raw := hasClosedSylvesterEquation_of_generator hA hB ⟨z0, hz0⟩
-  have hcOp : ofLp (hSBasis F) c = C := toOperator_paperHilbertSchmidtTensor C hC
+  have hcOp : ofLp (hSBasis F) c = C := toOperator_hilbertSchmidtTensor C hC
   have hEq0 : TauCeti.LinearPMap.SylvesterEquation A B X0 C := by
     have h := hEq0raw
     rw [hgen, hcOp] at h
@@ -133,7 +133,7 @@ theorem hilbertSchmidt_sylvester_defectFirst
       mul_le_mul_of_nonneg_left
         (TauCeti.LinearPMap.norm_gapInverse_apply_le hS hδ c) hδ.le
     _ = ‖c‖ := by field_simp
-    _ = paperHilbertSchmidtNorm C := norm_paperHilbertSchmidtTensor C hC
+    _ = paperHilbertSchmidtNorm C := norm_hilbertSchmidtTensor C hC
 
 end
 

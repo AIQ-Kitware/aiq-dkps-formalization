@@ -75,7 +75,7 @@ theorem paperSinTwoAngleOperatorC_nonneg (U V : Submodule ℂ E)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] :
     0 ≤ paperSinTwoAngleOperatorC U V := by
   refine cfc_nonneg fun t ht => ?_
-  have h := spectrum_paperAngleOperatorC_subset_Icc U V ht
+  have h := spectrum_angleOperatorC_subset_Icc U V ht
   exact Real.sin_nonneg_of_nonneg_of_le_pi (by linarith [h.1])
     (by linarith [h.2, Real.pi_pos])
 

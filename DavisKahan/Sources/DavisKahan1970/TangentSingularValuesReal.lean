@@ -18,7 +18,7 @@ analysis.
 
 ## Main results
 
-* `approximationNumber_paperTanAngleOperatorR` — `aₙ(tan Θ) = tan (arcsin aₙ(sin Θ))`
+* `approximationNumber_tanAngleOperatorR` — `aₙ(tan Θ) = tan (arcsin aₙ(sin Θ))`
   over `ℝ`, with `sin Θ` presented as the projector difference.
 * `approximationNumber_projectorDifference_lt_one_real` — the transversality that
   makes each of those a genuine tangent.
@@ -67,7 +67,7 @@ theorem norm_sinAngleOperatorC_complexify_lt_one
     (htr : ‖sinAngleOperatorR U V‖ < 1) :
     ‖sinAngleOperatorC (complexifySubmodule U) (complexifySubmodule V)‖ < 1 := by
   rw [norm_sinAngleOperatorC, subspaceGap_complexifySubmodule U V,
-    ← norm_paperSinAngleOperatorR]
+    ← norm_sinAngleOperatorR]
   exact htr
 
 /-- **The real ambient tangent carries the tangents of the principal angles.**
@@ -75,7 +75,7 @@ theorem norm_sinAngleOperatorC_complexify_lt_one
 `aₙ(tan Θ) = tan (arcsin aₙ(sin Θ))` over `ℝ`, with `sin Θ` presented as the
 projector difference `P_V − P_U`, whose singular values are the sines of the
 principal angles with their ambient multiplicity. -/
-theorem approximationNumber_paperTanAngleOperatorR
+theorem approximationNumber_tanAngleOperatorR
     (htr : ‖sinAngleOperatorR U V‖ < 1) (n : ℕ) :
     (tanAngleOperatorR U V).approximationNumber n =
       Real.tan (Real.arcsin
@@ -84,7 +84,7 @@ theorem approximationNumber_paperTanAngleOperatorR
   have h1 : (tanAngleOperatorR U V).approximationNumber n =
       (paperTanAngleOperatorC (complexifySubmodule U)
         (complexifySubmodule V)).approximationNumber n := by
-    rw [← complexify_paperTanAngleOperatorR]
+    rw [← complexify_tanAngleOperatorR]
     exact (ComplexificationApproximation.approximationSingularValue_complexify
       (tanAngleOperatorR U V) n).symm
   have h2 : (sinAngleOperatorC (complexifySubmodule U)

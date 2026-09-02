@@ -98,7 +98,7 @@ statement is *not* proved here; see the module note below.
 
 * `TauCeti.DavisKahan1970.tanTwoBlockRepresentative`: the explicit
   off-diagonal representative `Ξ`.
-* `TauCeti.DavisKahan1970.isUnit_one_sub_two_mul_paperProjectorDifference_sq_of_cos_two_ne_zero`:
+* `TauCeti.DavisKahan1970.isUnit_one_sub_two_mul_projectorDifference_sq_of_cos_two_ne_zero`:
   `cos 2Θ` is invertible as soon as no principal angle is `π/4` — the
   branch-free replacement for the quarter-acute norm bound.
 * `TauCeti.DavisKahan1970.absTanTwoAngleOperatorC_eq_modulus_blockRepresentative`:
@@ -295,7 +295,7 @@ private theorem starProjection_idem' (W : Submodule ℂ E)
 
 /-- Under uniform quarter transversality the operator `1 − 2 sin²Θ` is
 invertible: it is `cos 2Θ`, bounded away from `0`. -/
-theorem isUnit_one_sub_two_mul_paperProjectorDifference_sq
+theorem isUnit_one_sub_two_mul_projectorDifference_sq
     (htr : ‖sinAngleOperatorC U V‖ < Real.sqrt 2 / 2) :
     IsUnit (1 - 2 * (projectorDifference U V *
       projectorDifference U V)) := by
@@ -303,7 +303,7 @@ theorem isUnit_one_sub_two_mul_paperProjectorDifference_sq
     have h2 : Real.sqrt 2 * Real.sqrt 2 = 2 := Real.mul_self_sqrt (by norm_num)
     nlinarith [h2]
   have hD : ‖projectorDifference U V‖ < Real.sqrt 2 / 2 := by
-    rw [norm_paperProjectorDifference]; exact htr
+    rw [norm_projectorDifference]; exact htr
   have hD0 : 0 ≤ ‖projectorDifference U V‖ := norm_nonneg _
   have hnorm : ‖2 * (projectorDifference U V *
       projectorDifference U V)‖ < 1 := by
@@ -363,7 +363,7 @@ theorem cos_two_ne_zero_of_norm_sinAngleOperatorC_lt
     (htr : ‖sinAngleOperatorC U V‖ < Real.sqrt 2 / 2)
     {t : ℝ} (ht : t ∈ spectrum ℝ (angleOperatorC U V)) :
     Real.cos (2 * t) ≠ 0 := by
-  have h := spectrum_paperAngleOperatorC_lt_pi_div_four U V htr ht
+  have h := spectrum_angleOperatorC_lt_pi_div_four U V htr ht
   exact ne_of_gt (Real.cos_pos_of_mem_Ioo
     ⟨by linarith [Real.pi_pos, h.1], by linarith [h.2]⟩)
 
@@ -393,11 +393,11 @@ private theorem cfc_one_sub_two_sq' :
 /-- **`cos 2Θ` is invertible as soon as no principal angle is `π/4`.**
 
 This is the branch-free replacement for
-`isUnit_one_sub_two_mul_paperProjectorDifference_sq`: it asks only that the
+`isUnit_one_sub_two_mul_projectorDifference_sq`: it asks only that the
 angles avoid the pole of the doubled tangent, not that they lie on one
 particular side of it.  Compactness of the spectrum turns the pointwise
 condition into the uniform separation invertibility needs. -/
-theorem isUnit_one_sub_two_mul_paperProjectorDifference_sq_of_cos_two_ne_zero
+theorem isUnit_one_sub_two_mul_projectorDifference_sq_of_cos_two_ne_zero
     (hcos : ∀ t ∈ spectrum ℝ (angleOperatorC U V), Real.cos (2 * t) ≠ 0) :
     IsUnit (1 - 2 * (projectorDifference U V *
       projectorDifference U V)) := by
@@ -413,7 +413,7 @@ This is the direction needed by the literal Section 2 `tan 2θ` wrapper: the
 ordered gap first proves invertibility of the reflection's diagonal part, and
 that operator is the signed doubled cosine.  The source does not assume pole
 exclusion; it is recovered here from the resulting unit. -/
-theorem cos_two_ne_zero_of_isUnit_one_sub_two_mul_paperProjectorDifference_sq
+theorem cos_two_ne_zero_of_isUnit_one_sub_two_mul_projectorDifference_sq
     (hinv : IsUnit (1 - 2 * (projectorDifference U V *
       projectorDifference U V))) :
     ∀ t ∈ spectrum ℝ (angleOperatorC U V), Real.cos (2 * t) ≠ 0 := by
@@ -676,7 +676,7 @@ private theorem doubleSecant_selfAdjoint :
     star_inverse' (hinv)]
   congr 1
   rw [star_sub, star_one, star_mul, two_star', star_mul,
-    isSelfAdjoint_paperProjectorDifference.star_eq, two_comm']
+    isSelfAdjoint_projectorDifference.star_eq, two_comm']
 
 omit [CompleteSpace E] in
 private theorem doubleSecant_comm_lower :
@@ -784,9 +784,9 @@ theorem tanTwoBlockRepresentative_eq :
 
 /-- The block representative is self-adjoint: its two corners are adjoints of
 one another. -/
-theorem isSelfAdjoint_paperTanTwoBlockRepresentative :
+theorem isSelfAdjoint_tanTwoBlockRepresentative :
     IsSelfAdjoint (tanTwoBlockRepresentative U V) := by
-  have hD := isSelfAdjoint_paperProjectorDifference (U := U) (V := V)
+  have hD := isSelfAdjoint_projectorDifference (U := U) (V := V)
   have hp := isSelfAdjoint_starProjection U
   have hcross : star ((1 - U.starProjection) * projectorDifference U V *
       U.starProjection) = U.starProjection * projectorDifference U V *
@@ -870,11 +870,11 @@ object the norm sees. -/
 theorem absTanTwoAngleOperatorC_eq_modulus_blockRepresentative :
     absTanTwoAngleOperatorC U V =
       (tanTwoBlockRepresentative U V).modulus := by
-  have hinv := isUnit_one_sub_two_mul_paperProjectorDifference_sq_of_cos_two_ne_zero
+  have hinv := isUnit_one_sub_two_mul_projectorDifference_sq_of_cos_two_ne_zero
     hcos
   refine ContinuousLinearMap.eq_modulus_of_nonneg_of_mul_self_eq
     (absTanTwoAngleOperatorC_nonneg U V) ?_
-  have hself := isSelfAdjoint_paperTanTwoBlockRepresentative hinv
+  have hself := isSelfAdjoint_tanTwoBlockRepresentative hinv
   have hadj : (tanTwoBlockRepresentative U V).adjoint ∘L
       tanTwoBlockRepresentative U V =
       tanTwoBlockRepresentative U V * tanTwoBlockRepresentative U V := by
@@ -1078,7 +1078,7 @@ variable {U V : Submodule ℂ E}
 /-- `IsQuarterAcute` *is* uniform transversality at the quarter turn. -/
 theorem norm_sinAngleOperatorC_lt_of_isQuarterAcute (hq : IsQuarterAcute U V) :
     ‖sinAngleOperatorC U V‖ < Real.sqrt 2 / 2 := by
-  rw [← norm_paperProjectorDifference, projectorDifference,
+  rw [← norm_projectorDifference, projectorDifference,
     show V.starProjection - U.starProjection =
       -(U.starProjection - V.starProjection) from by abel, norm_neg]
   exact hq
@@ -1117,7 +1117,7 @@ theorem tanTwoBlockRepresentative_lowerBlock (hq : IsQuarterAcute U V) :
       doubleAngleTangentOperator (quarterAcuteAngularOperator U V hq)
         (norm_quarterAcuteAngularOperator_lt_one U V hq) := by
   have htr := norm_sinAngleOperatorC_lt_of_isQuarterAcute hq
-  have hinv := isUnit_one_sub_two_mul_paperProjectorDifference_sq htr
+  have hinv := isUnit_one_sub_two_mul_projectorDifference_sq htr
   have hang : IsAngularOperator U (quarterAcuteAngularOperator U V hq) :=
     quarterAcuteAngularOperator_isAngularOperator U V hq
   have hYc : ‖quarterAcuteAngularOperator U V hq‖ < 1 :=
@@ -1428,7 +1428,7 @@ theorem tanTwoTheta_ambient_bounded_branchFree_kyFan_complex_of_corner
       (b - a) * kyFanApproximationGauge k (absTanTwoAngleOperatorC U V) ≤
         2 * kyFanApproximationGauge k H := by
   intro k
-  have hinv := isUnit_one_sub_two_mul_paperProjectorDifference_sq_of_cos_two_ne_zero
+  have hinv := isUnit_one_sub_two_mul_projectorDifference_sq_of_cos_two_ne_zero
     hcos
   have hd : (0 : ℝ) < (b - a) / 2 := by linarith
   have hcnorm : ‖((((b - a) / 2 : ℝ)) : ℂ)‖ = (b - a) / 2 := by
@@ -1437,7 +1437,7 @@ theorem tanTwoTheta_ambient_bounded_branchFree_kyFan_complex_of_corner
       (2 * (projectorDifference U V * doubleSecant U V)) := by
     rw [IsSelfAdjoint, star_mul, star_mul, two_star',
       doubleSecant_selfAdjoint hinv,
-      isSelfAdjoint_paperProjectorDifference.star_eq,
+      isSelfAdjoint_projectorDifference.star_eq,
       ← doubleSecant_comm_projectorDifference hinv, two_comm']
   have h₀ : ∀ j : ℕ,
       kyFanApproximationGauge j (projectionBlock Uᗮ U

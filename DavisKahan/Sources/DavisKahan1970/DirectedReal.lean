@@ -656,7 +656,7 @@ consequence.**
 standing assumption (3.5).  The ambient directed block `P_{V^⊥} P_U` factors through the
 trial block `P_{V^⊥} P_U|_U`, whose approximation singular values are already known to be
 strictly below one, and (3.5) identifies the symmetric gap with the directed one. -/
-theorem norm_paperSinAngleOperatorR_lt_one_of_crossedDefectsEquivalent
+theorem norm_sinAngleOperatorR_lt_one_of_crossedDefectsEquivalent
     (T : E →L[ℝ] E) (hT : IsSelfAdjoint T)
     (U V : Submodule ℝ E) [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
     (hV : T.Reduces V) {alpha delta : ℝ} (hdelta : 0 < delta)
@@ -678,7 +678,7 @@ theorem norm_paperSinAngleOperatorR_lt_one_of_crossedDefectsEquivalent
           mul_le_mul_of_nonneg_left U.orthogonalProjectionOnto_norm_le
             (ContinuousLinearMap.opNorm_nonneg (theorem63DirectedSineBlockReal U V))
       _ < 1 := by rwa [mul_one]
-  rw [norm_paperSinAngleOperatorR,
+  rw [norm_sinAngleOperatorR,
     DavisKahan.subspaceGap_eq_directedGap_of_crossedDefectsEquivalent
       U V h35]
   exact hnorm
@@ -703,7 +703,7 @@ theorem tanTheta_ambient_bounded_symmetricNorming_real_of_crossedDefects
       delta * N.gauge (tanAngleOperatorR U V) ≤ N.gauge (T - A) :=
   tanTheta_ambient_bounded_symmetricNorming_real_of_transversality N hT hA hV hAU hdelta hCompressionUpper
     hUnwantedLower
-    (norm_paperSinAngleOperatorR_lt_one_of_crossedDefectsEquivalent T hT U V hV hdelta
+    (norm_sinAngleOperatorR_lt_one_of_crossedDefectsEquivalent T hT U V hV hdelta
       hCompressionUpper hUnwantedLower h35) hMem
 
 end

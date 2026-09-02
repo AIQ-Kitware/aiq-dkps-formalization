@@ -156,7 +156,7 @@ alias Proposition6_1_real_kyFan :=
 alias Proposition6_1_real_sinTheta_singularValues :=
   RealSymmetricSinThetaProblem.crossSineSum_normingMem_iff_and_gauge_eq
 alias Proposition6_1_real_sinTheta_eq_literalFullSinAngle :=
-  approximationNumber_paperSourceFullSinR_eq_paperCrossSineSum
+  approximationNumber_sourceFullSinR_eq_crossSineSum
 alias Proposition6_1_real_representative :=
   RealSymmetricSinThetaProblem.result_every_unitarilyInvariantNorm_representative_real
 

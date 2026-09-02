@@ -138,7 +138,7 @@ Every entry below was resolved in the tree at `5bfa2624`.
 
 | Declaration | Location |
 |---|---|
-| `norm_paperSinAngleOperatorR_lt_one_of_crossedDefectsEquivalent` | `Sources/DavisKahan1970/DirectedReal.lean:659` |
+| `norm_sinAngleOperatorR_lt_one_of_crossedDefectsEquivalent` | `Sources/DavisKahan1970/DirectedReal.lean:659` |
 | `approximationSingularValue_sineBlockReal_lt_one_infiniteData` | `Sources/DavisKahan1970/DirectedUnboundedReal.lean:269` |
 | `theorem63DirectedSineBlockReal` | `Sources/DavisKahan1970/DirectedReal.lean:54` |
 | `tanAngleOperatorR` | `Geometry/Angle/PaperOperatorAngleReal.lean:127` |
@@ -153,8 +153,8 @@ Every entry below was resolved in the tree at `5bfa2624`.
 | `complexifyTrialData_compression_upper` | `Sources/DavisKahan1970/DirectedUnboundedReal.lean:187` |
 | `complexifyTrialData_crossed_lower` | `Sources/DavisKahan1970/DirectedUnboundedReal.lean:207` |
 | `complexifyTrialData_residual_apply` | `Sources/DavisKahan1970/DirectedUnboundedReal.lean:138` |
-| `complexify_paperSinAngleOperatorR` | `Geometry/Angle/PaperOperatorAngleReal.lean:140` |
-| `complexify_paperTanAngleOperatorR` | `Geometry/Angle/PaperOperatorAngleReal.lean:164` |
+| `complexify_sinAngleOperatorR` | `Geometry/Angle/PaperOperatorAngleReal.lean:140` |
+| `complexify_tanAngleOperatorR` | `Geometry/Angle/PaperOperatorAngleReal.lean:164` |
 | `coe_complexifySubmoduleEquiv_eq_complexify_subtypeL` | `SpectralTheory/Complexification/SubmoduleEquiv.lean:126` |
 | `starProjection_complexifySubmodule_orthogonal` | `SpectralTheory/Complexification/Subspace.lean:232` |
 | `PaperUnitaryInvariantNorm.mem_complexify_iff` | `Sources/DavisKahan1970/SineTheta/Norms/ComplexificationGauge.lean:80` |
@@ -170,11 +170,11 @@ Every entry below was resolved in the tree at `5bfa2624`.
    complex `..._of_data` and makes the final wrapper trivial.
 2. **Real transversality, derived natively.** A private helper
    `norm_paperSinAngleOperatorR_lt_one_of_data_crossedDefects` following the proof shape of
-   `norm_paperSinAngleOperatorR_lt_one_of_crossedDefectsEquivalent`, but taking its
+   `norm_sinAngleOperatorR_lt_one_of_crossedDefectsEquivalent`, but taking its
    no-pole input from `approximationSingularValue_sineBlockReal_lt_one_infiniteData`
    instead of the bounded no-pole theorem. The mathematics is: real directed no-pole plus
    (3.5) gives real ambient `‖sin Θ‖ < 1`. Never take `htr` from the caller.
-3. **Complexify the transversality**, via `complexify_paperSinAngleOperatorR` and
+3. **Complexify the transversality**, via `complexify_sinAngleOperatorR` and
    `norm_complexify`. This is why no separate transport of `CrossedDefectsEquivalent`
    through complexification is needed: (3.5) is consumed entirely on the real side, and the
    complex assembly receives only its consequence.
@@ -188,7 +188,7 @@ Every entry below was resolved in the tree at `5bfa2624`.
    `all_kyFan_core_of_formBounds_infinite`. If a new double-corner lemma seems necessary,
    stop — that means the work has dropped below the intended abstraction.
 7. **Apply `tanTheta_ambient_bounded_paperUINorm_complex_of_lowerCorner`** over `RealComplexification E`.
-8. **Descend** with `complexify_paperTanAngleOperatorR`, `mem_complexify_iff`, and
+8. **Descend** with `complexify_tanAngleOperatorR`, `mem_complexify_iff`, and
    `gauge_complexify`. The final statement must be about `tanAngleOperatorR U V` and
    `H : E →L[ℝ] E`, never left on `RealComplexification E`.
 9. **Wrapper**: mirror the complex exact theorem, with

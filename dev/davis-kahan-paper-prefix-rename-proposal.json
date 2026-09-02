@@ -2,7 +2,7 @@
   "schema_version": 1,
   "status": "stage_a_applied",
   "generated_on": "2026-09-02",
-  "purpose": "A census of the `paper`-prefixed declaration names in DavisKahan, and a mechanically applicable rename proposal. Nothing here has been applied. The intent is that a reviewer accepts or amends this document, and the rename is then a mechanical application of `renames[].current -> renames[].proposed` rather than a judgement call taken 238 times.",
+  "purpose": "A census of the `paper`-prefixed declaration names in DavisKahan, and a mechanically applicable rename proposal. Stage A -- the one-sided renames whose targets were unoccupied -- IS APPLIED; see `application_log` and `stage_status` for exactly what, and what remains.",
   "motivation": "The 2026-09-01 rename replaced `PaperUnitaryInvariantNorm` with `SymmetricNormingFunction` because the name recorded provenance where the mathematics had its own name. That decision was never generalised, and `paper` is not in the naming classification's banned-token list, so the rest of the family was left in place. Measured here: of the declarations carrying the token, the great majority contrast with nothing -- there is no other `blockCompression`, `diagonalPair`, or `projectorDifference` in the tree -- so the prefix distinguishes nothing and reads as unfinished. ForTauCeti, the permanent product, already carries none of these names.",
   "policy": {
     "provenance_only": "The token distinguishes nothing: no declaration of the stripped name exists. Proposed action is to drop the prefix. These are mechanical.",
@@ -6038,11 +6038,11 @@
     "angle_family_finding": "Checked directly, 2026-09-02. The `paper*` angle operators are the functional calculus of the angle: `paperCosAngleOperatorC = cfc Real.cos (paperAngleOperatorC U V)`, and similarly for sin, tan, sin 2, tan 2. The existing UNPREFIXED names are different constructions built on the directed sine: `cosAngleOperatorC = modulus (P_V ∘L P_U)`, `sinTwoAngleOperatorC = 2 • (sinAngleOperatorDirectedC * cosAngleOperatorC)`, and `tanAngleOperatorC` composes `sinAngleOperatorDirectedC` with an inverse cosine equivalence and additionally takes an acuteness hypothesis. So the unqualified names currently denote the directed objects while the canonical functional-calculus objects carry a provenance prefix. That is the inconsistency the collision exposed, and it is why the resolution is to normalise the family rather than rename around it.",
     "cited_names_present": "All 52 declarations named in the amended families were confirmed to exist in the tree before being written here.",
     "embedded_token_repairs_required": 7,
-    "embedded_token_note": "Checked after amendment: no proposed name contains the token, as a prefix or embedded. The mechanical pass left nine half-converted, which is worse than either endpoint -- the name would no longer match the object it is about. Each is now renamed by applying the family decision to every object it mentions.",
-    "embedded_token_remaining_after_repair": []
+    "embedded_token_note": "CORRECTED 2026-09-02. The original census matched only LEADING `paper`/`Paper`/`IsPaper`, so declaration names carrying the token after an underscore or inside camelCase were never enumerated. A follow-up census found 144 such names, 96 of them mechanically stale -- the object had been renamed by stage A and the theorem name had not, so `adjoint_paperBlockCompression` stated a fact about `blockCompression`. This field previously reported no embedded-token residue; that claim was false, and it was false because the census did not look. 83 of the 96 were repaired on 2026-09-02; the remaining 13 are blocked on the stage B angle family and the stage C Hilbert-Schmidt decision, and will fall out of those.",
+    "embedded_token_remaining_after_repair": 13
   },
   "not_yet_decided": [
-    "Whether to apply any of this, and when relative to the hostile-review sign-off. Nothing is applied.",
+    "Stage A is applied. What remains undecided is the ORDER and content of stages B and C, for which the reviewer has given a recommended sequence: embedded-token residue, then the angle family atomically, then selected-branch tan 2Theta, then the Hilbert-Schmidt and plane migrations.",
     "The angle-family normalisation moves EXISTING unprefixed declarations, so it is a two-sided rename and cannot be applied by the mechanical map alone; it needs its own pass with a build after each family.",
     "Whether the Hilbert--Schmidt and plane consolidations happen as part of this campaign or as separate migrations, since they delete concepts rather than rename them."
   ],
@@ -6441,6 +6441,23 @@
       "stage": "C",
       "status": "not applied",
       "scope": "7 delete/migrate decisions -- Hilbert--Schmidt into the canonical ForTauCeti API, the plane aliases into `PlanarModelSpace`, and two angle duplicates. These remove concepts rather than move names, so they are migrations with their own review, not part of a rename pass."
+    },
+    {
+      "on": "2026-09-02",
+      "stage": "stage_a_embedded_token_residue",
+      "applied": 83,
+      "method": "Substituted the applied stage-A map inside declaration names, longest-key-first on word boundaries, across DavisKahan/, ForTauCeti/, Challenge/, comparator/, dev/, scripts/, papers/ and docs/, excluding the two rename proposals themselves and dated snapshots.",
+      "collisions": 0,
+      "blocked": 13,
+      "blocked_reason": "Names embedding `paperSinTwoAngleOperatorC`, `paperTanAngleOperatorC`, `paperTanTwoAngleOperatorC` or `paperHilbertSchmidt*`, whose objects stage A deliberately deferred. They resolve when stages B and C do.",
+      "verification": "lake build DavisKahan.All, Challenge and ForTauCeti all exit 0; check_declaration_name_drift OK (0 findings); census render --check up to date. The 8 comparator signature failures are pre-existing: neither the old nor the new names occur anywhere in Challenge/ or comparator/, and two of the failures are in files this pass never touched."
     }
-  ]
+  ],
+  "stage_status": {
+    "stage_a_one_sided_renames": "applied",
+    "stage_a_embedded_token_residue": "applied 2026-09-02, 83 names; see below",
+    "stage_b_angle_family_two_sided": "not applied -- the reviewer asks for this next, as one atomic family change",
+    "stage_c_delete_and_migrate": "not applied -- Hilbert-Schmidt consolidation and plane aliases",
+    "selected_branch_tanTwoTheta": "not applied -- `faithful_tanTwoTheta_uiNorm` escaped stage A"
+  }
 }

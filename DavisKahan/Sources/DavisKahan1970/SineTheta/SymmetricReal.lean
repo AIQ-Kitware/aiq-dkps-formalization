@@ -123,7 +123,7 @@ Lifting this to a `SymmetricNormingFunction` equality would need a cross-field
 counterpart of `SameApproximationSingularSequence.normingExtendedGauge_eq`, which
 is deliberately not added here -- the norm-level dictionary the theorem below
 actually uses is `crossSineSum_normingMem_iff_and_gauge_eq`, entirely over `ℝ`. -/
-theorem approximationNumber_paperSourceFullSinR_eq_paperCrossSineSum
+theorem approximationNumber_sourceFullSinR_eq_crossSineSum
     (U V : Submodule ℝ E)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] :
     ∀ n : ℕ,

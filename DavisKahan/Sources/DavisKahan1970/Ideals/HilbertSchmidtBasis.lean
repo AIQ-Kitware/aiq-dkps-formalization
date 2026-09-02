@@ -94,7 +94,7 @@ theorem basisProjection_isOrthogonalProjection {ι : Type*}
 
 omit [CompleteSpace F] in
 /-- The finite cutoff has rank at most the number of selected basis vectors. -/
-theorem rank_paperBasisProjection_le {ι : Type*}
+theorem rank_basisProjection_le {ι : Type*}
     (b : HilbertBasis ι ℂ F) (s : Finset ι) :
     (basisProjection b s).rank ≤ (s.card : Cardinal) := by
   classical
@@ -141,7 +141,7 @@ theorem basisProjection_apply {ι : Type*}
 
 omit [CompleteSpace E] [CompleteSpace F] in
 /-- The cutoff operator is the finite column expansion. -/
-theorem comp_paperBasisProjection_apply {ι : Type*}
+theorem comp_basisProjection_apply {ι : Type*}
     (b : HilbertBasis ι ℂ F) (s : Finset ι)
     (A : F →L[ℂ] E) (x : F) :
     (A ∘L basisProjection b s) x =

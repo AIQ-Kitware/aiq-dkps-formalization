@@ -95,11 +95,11 @@ private theorem approximationNumber_realAmbientDoubleSine_complexify
           RealComplexification E →ₗ[ℂ] RealComplexification E)).starProjection -
       (complexifySubmodule U).starProjection).approximationNumber n =
       (realAmbientDoubleSine U V).approximationNumber n := by
-  have hsame := sameSingular_paperSinTwoAngleOperatorR_reflectedProjectorDifference U V
+  have hsame := sameSingular_sinTwoAngleOperatorR_reflectedProjectorDifference U V
   have hleft : (paperSinTwoAngleOperatorC (complexifySubmodule U)
       (complexifySubmodule V)).approximationNumber n =
       (complexify (sinTwoAngleOperatorR U V)).approximationNumber n := by
-    rw [complexify_paperSinTwoAngleOperatorR]
+    rw [complexify_sinTwoAngleOperatorR]
   have hmodulus := approximationNumber_paperSinTwoAngleOperatorC
     (complexifySubmodule U) (complexifySubmodule V) n
   have hright := approximationNumber_complexify_eq (realAmbientDoubleSine U V) n
@@ -171,8 +171,8 @@ theorem tanTwoTheta_ambient_unbounded_reducing_sineSequence_symmetricNorming_rea
         U.starProjection) = realAmbientDoubleSine U V from rfl,
       ← approximationNumber_realAmbientDoubleSine_complexify U V n,
       ← approximationNumber_complexify_eq (absTanTwoAngleOperatorR U V) n,
-      complexify_paperAbsTanTwoAngleOperatorR]
-    exact approximationNumber_paperAbsTanTwoAngleOperatorC_projectorDifference
+      complexify_absTanTwoAngleOperatorR]
+    exact approximationNumber_absTanTwoAngleOperatorC_projectorDifference
       (complexifySubmodule U) (complexifySubmodule V) hcos n
   · unfold SymmetricNormingFunction.Mem at hmem ⊢
     rwa [← hgauge]

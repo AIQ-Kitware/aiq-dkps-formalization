@@ -1,6 +1,19 @@
 # Non-mathematical declaration names: census and rename proposal
 
-Status: **proposed** — nothing here is applied. Generated 2026-09-02.
+Status: **partially_applied** — generated 2026-09-02.
+
+**Applied from this document:**
+
+- 2026-09-02: the 83 mechanically stale `paper` names with computable targets, out of the 96 identified. The other 13 embed a stage-B angle object or a stage-C Hilbert-Schmidt object and resolve with those stages.
+
+## Reviewer's recommended order
+
+1. finish the mechanically stale `paper` theorem names (done, 83 of 96)
+2. the complete angle family, atomically, as one two-sided move
+3. the selected-branch tan 2Theta family, including `faithful_tanTwoTheta_uiNorm`
+4. the Hilbert-Schmidt and plane migrations
+5. module/file names, once the declaration API is settled
+6. only then revisit the broader `source` and scaffolding census
 
 ## Purpose
 
@@ -105,24 +118,30 @@ written down.
 
 Examples: `abs_canonicalIntertwiner_apply_eq_self_of_orthogonal_sources`, `abs_canonicalIntertwiner_apply_principalSourceVector`, `adjoint_apply_finiteSourceLeftSingularVector`, `apply_finiteSourceRightSingularBasis_eq_smul_leftSingularVector`, `apply_finiteSourceRightSingularBasis_eq_zero_of_singularValue_eq_zero`, `approximationNumber_eq_zero_of_finrank_source_le`, `approximationSingularValue_eq_finiteSourceSingularValue`, `basis_false_mem_sourceSubspace`
 
-### `source-provenance` — RENAME (106)
+### `source-provenance` — NEEDS CLASSIFICATION — do not apply as a batch (106)
 
-**`_source_` meaning `the printed form` is provenance.**
+**`source` as `the printed form` is provenance -- but the census cannot yet tell which ones.**
 
-Here `source` marks a statement as the source-shaped one, against a stronger general theorem:
-`Proposition4_2_source_compact_nonacute`, `corollary3_2_source`, `equation_9_1_source`. It records
-why the declaration exists rather than what it says. Every one of these lives under
-`DavisKahan/Sources/DavisKahan1970/` and carries a result tag, which is how they were separated from
-the domain-side uses -- the token alone does not distinguish them.
+Some of these genuinely mark the source-shaped statement against a stronger general theorem:
+`Proposition4_2_source_compact_nonacute`, `corollary3_2_source`, `equation_9_1_source`. But the
+heuristic that produced this list -- location under `Sources/DavisKahan1970/` plus a result tag --
+is NOT SAFE, and a reviewer produced the counterexample: `leftCompressed_comp_source_eq`
+(Section6AppendixLeakage.lean:223) is in this list and states `(Q.starProjection ∘L K) ∘L
+P.starProjection = K ∘L P.starProjection`. Its `source` is the domain-side restriction along
+`P.starProjection` -- the same mathematical sense as `halmosSourceDefect` on the keep-list. The
+token does not distinguish the senses, and neither does the file it lives in.
 
-*Rule.* Name the hypotheses that make it source-shaped. `Proposition4_2_source_compact_nonacute` already
-carries them -- `compact_nonacute` IS the Section 4 setup -- so the `_source_` token is redundant
-and can simply go. Where stripping it would leave two declarations with the same name, the general
-one takes a `_general` or `_ofBasis` qualifier naming what it generalises over.
+*Rule.* Do not apply this family as a pass. It needs an individual target mapping per declaration and a
+further semantic review. Where a name IS provenance, the repair is to name the hypotheses that make
+it source-shaped -- `Proposition4_2_source_compact_nonacute` already carries them, so the token is
+simply redundant there.
+
+*Blocked on.* Individual target mappings, then semantic review. The 96 mechanical `paper` fixes were the safe
+half.
 
 Examples: `Proposition4_2_source_compact_nonacute`, `Proposition4_2_source_compact_nonacute_real`, `Theorem81SourceConclusion`, `corollary3_2_reversal_source_form`, `corollary3_2_source`, `direct_individual_vector_bounds_source`, `equation_9_1_source`, `equation_9_2_source`
 
-### `source-needs-review` — NEEDS CLASSIFICATION (78)
+### `source-needs-review` — NEEDS CLASSIFICATION — do not apply as a batch (78)
 
 **Individual classification required.**
 
@@ -193,13 +212,7 @@ future pass does not 'fix' them: the naming classification's banned-token list a
 
 ## Not yet decided
 
-- Whether to apply any of this. Nothing is applied.
-- The `source-needs-review` family needs a human decision per declaration.
+- The 106-name `source-provenance` pass is NOT approved and must not be applied as a batch; see that family's counterexample.
+- The `source-needs-review` family (78) needs a human decision per declaration.
 - The presentation marker, `_presentation` against `_bundled`.
-- Whether `_source_` should be stripped or replaced where stripping would collide; the family names the rule but the collisions have not been enumerated, because that should follow the marker decision.
-
----
-
-Full lists are in the JSON beside this file, under `full_lists`. Apply nothing until a reviewer has
-accepted the families; the `paper`-prefix campaign showed that the census is where the mistakes are
-caught and the apply step is where they become invisible.
+- Whether the broader `source` and scaffolding campaign should happen at all. The reviewer's position is to finish the `paper` campaign cleanly first, on the grounds that it is already exposing architectural distinctions that will inform the decision.

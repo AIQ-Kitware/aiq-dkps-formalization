@@ -143,7 +143,7 @@ theorem norm_sinTwoThetaIdealBlock_real (U V : Submodule ℝ E)
     ‖sinTwoThetaIdealBlock U V‖ = ‖sinTwoAngleOperatorR U V‖ := by
   rw [← norm_complexify (sinTwoThetaIdealBlock U V),
     ← norm_complexify (sinTwoAngleOperatorR U V),
-    complexify_sinTwoThetaIdealBlock, complexify_paperSinTwoAngleOperatorR,
+    complexify_sinTwoThetaIdealBlock, complexify_sinTwoAngleOperatorR,
     norm_sinTwoThetaIdealBlock_complex,
     norm_paperSinTwoAngleOperatorC_eq_norm_sinTwoAngleOperatorC]
 
