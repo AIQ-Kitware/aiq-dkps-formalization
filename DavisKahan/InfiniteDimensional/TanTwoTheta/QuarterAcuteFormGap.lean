@@ -278,7 +278,7 @@ theorem spectrum_re_lower_of_coercive
 
 /-- Dimension-free strict quarter-angle branch from the paper's ordered form
 hypotheses and full off-diagonality. -/
-theorem isQuarterAcute_of_paper_form_gap_infinite
+theorem isQuarterAcute_of_orderedFormGap
     (A H : E →L[ℂ] E)
     (U V : Submodule ℂ E)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]

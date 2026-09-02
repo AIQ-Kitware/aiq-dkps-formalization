@@ -90,7 +90,7 @@ itself, `tanTwoTheta_directed_boundedResidual_blockRepresentative_kyFan_complex`
 the contractive Riccati coordinate and therefore needs `IsQuarterAcute U V`
 (`‖sin Θ‖ < √2/2`, every principal angle below `π/4`).  Quarter-acuteness is
 **concluded, not assumed**, from the paper's four ordered form bounds — the
-same configuration under which the directed `faithful_tanTwoTheta_uiNorm`
+same configuration under which the directed `tanTwoTheta_selectedBranch_symmetricNorming`
 is proved, and the one Theorem 8.1 supplies.  The genuinely branch-free ambient
 statement is *not* proved here; see the module note below.
 
@@ -1504,7 +1504,7 @@ theorem tanTwoTheta_ambient_bounded_orderedForm_kyFan_complex
         2 * kyFanApproximationGauge k H := by
   intro k
   have hq : IsQuarterAcute U V :=
-    isQuarterAcute_of_paper_form_gap_infinite A H U V hA hH hAU hAplusH_V hab
+    isQuarterAcute_of_orderedFormGap A H U V hA hH hAU hAplusH_V hab
       hUhigh hUperpLow hVhigh hVperpLow hHU hHUperp
   have htr := norm_sinAngleOperatorC_lt_of_isQuarterAcute hq
   have h := tanTwoTheta_ambient_bounded_branchFree_kyFan_complex_of_corner hH hab

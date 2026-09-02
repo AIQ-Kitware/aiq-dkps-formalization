@@ -6484,6 +6484,21 @@
       "resolves": "The 13 embedded-token names left blocked by the 2026-09-02 residue pass; `approximationNumber_paperSinTwoAngleOperatorC` is now `approximationNumber_sinTwoAngleOperatorC`.",
       "collisions": 0,
       "verification": "lake build DavisKahan.All, Challenge, ForTauCeti all exit 0; check_declaration_name_drift 0 findings; census render --check up to date."
+    },
+    {
+      "on": "2026-09-02",
+      "stage": "selected_branch_tanTwoTheta",
+      "applied": 5,
+      "map": {
+        "faithful_tanTwoTheta_uiNorm": "tanTwoTheta_selectedBranch_symmetricNorming",
+        "faithful_tanTwoTheta_uiNorm_real": "tanTwoTheta_selectedBranch_symmetricNorming_real",
+        "isQuarterAcute_of_paper_form_gap_infinite": "isQuarterAcute_of_orderedFormGap",
+        "isQuarterAcute_of_paper_form_gap": "isQuarterAcute_of_orderedFormGap_finiteDimensional",
+        "graphCoordinate_paper_bound_of_quarterAcute": "tanTwoThetaGraphCoordinate_bound_of_quarterAcute"
+      },
+      "scope_check": "The reviewer proposed the finite/dimension-free split without having checked it; it is correct. The private `isQuarterAcute_of_paper_form_gap` carries `[FiniteDimensional ℂ E]` and its docstring says \"finite-dimensional sharp operator-norm theorem\"; the public `_infinite` one has no such instance and says \"dimension-free\". The dimension-free result therefore takes the unqualified name and the specialization is marked, per the project rule reserving unqualified names for the more general statement.",
+      "docstring_defect_fixed": "`tanTwoTheta_selectedBranch_symmetricNorming` concludes on `directedTanTwoAngleOperatorC`, but its docstring called that \"the canonical ambient\" object. The angle rename made the contradiction legible -- the word `directed` now appears in the name the sentence uses. Corrected to say directed, and to say symmetric norming function rather than the retired `uiNorm` vocabulary.",
+      "verification": "lake build DavisKahan.All and Challenge exit 0; drift 0 findings; census render --check current."
     }
   ],
   "stage_status": {
@@ -6491,6 +6506,6 @@
     "stage_a_embedded_token_residue": "applied 2026-09-02, 83 names; see below",
     "stage_b_angle_family_two_sided": "applied 2026-09-02, atomically",
     "stage_c_delete_and_migrate": "not applied -- Hilbert-Schmidt consolidation and plane aliases",
-    "selected_branch_tanTwoTheta": "not applied -- `faithful_tanTwoTheta_uiNorm` escaped stage A"
+    "selected_branch_tanTwoTheta": "applied 2026-09-02"
   }
 }
