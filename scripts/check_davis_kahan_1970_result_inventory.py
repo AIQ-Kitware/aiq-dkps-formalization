@@ -1540,6 +1540,44 @@ def _validate_census_canonical_agreement(items: list[dict[str, Any]]) -> None:
             )
 
 
+def _census_interpretation_disagreements(items: list[dict[str, Any]]) -> list[str]:
+    """Where the census review and the inventory disagree about locality.
+
+    Both documents answer "is the printed statement self-contained?" -- the
+    census review through `semantic_review.source_interpretation`, the inventory
+    through `local_statement_self_contained` -- and a reviewer reading the
+    alignment browser sees only the first.  Flipping the inventory's answer
+    reclassifies a counted result and needs a human, so this is reported rather
+    than enforced; it must not be left invisible either way.
+    """
+    if not CENSUS_PATH.exists():
+        return []
+    census = json.loads(CENSUS_PATH.read_text(encoding="utf-8"))
+    inventory = {
+        item["id"]: item.get("local_statement_self_contained")
+        for item in items
+    }
+    out: list[str] = []
+    for census_item in census.get("items", []):
+        result_id = census_item.get("id")
+        if result_id not in inventory:
+            continue
+        review = census_item.get("semantic_review")
+        if not isinstance(review, dict):
+            continue
+        declared = review.get("source_interpretation")
+        if declared not in {"local", "nonlocal"}:
+            continue
+        if (declared == "local") == bool(inventory[result_id]):
+            continue
+        out.append(
+            f"{result_id}: the census review reads the passage as {declared}, "
+            f"the inventory records local_statement_self_contained="
+            f"{str(bool(inventory[result_id])).lower()}"
+        )
+    return out
+
+
 def _validate_canonical_evidence(
     items: list[dict[str, Any]],
     census_declarations: set[str],
@@ -2059,6 +2097,7 @@ def completion_summary(
         "source_coverage_terminal": source_coverage_terminal,
         "semantic_audit": semantic_audit,
         "nonlocal_source_interpretation": nonlocal_interpretation,
+        "census_interpretation_disagreements": _census_interpretation_disagreements(items),
         "nonterminal_results": nonterminal,
     }
 
@@ -2123,6 +2162,11 @@ def main() -> int:
             "  results accepted under a nonlocal source interpretation (printed statement not locally "
             "self-contained): " + ", ".join(exceptional)
         )
+    disagreements = summary.get("census_interpretation_disagreements") or []
+    if disagreements:
+        print("  census/inventory disagreement about local self-containment (needs a human):")
+        for line in disagreements:
+            print(f"    - {line}")
     if summary["nonterminal_results"]:
         print("  first nonterminal results:")
         for item in summary["nonterminal_results"][:10]:
