@@ -389,7 +389,7 @@ theorem projectorDifference_anticommutator :
   twoProjection_anticommutator (starProjection_idem U) (starProjection_idem V)
 
 /-- The projector difference is self-adjoint. -/
-theorem isSelfAdjoint_paperProjectorDifference :
+theorem isSelfAdjoint_projectorDifference :
     IsSelfAdjoint (projectorDifference U V) :=
   (isSelfAdjoint_starProjection V).sub (isSelfAdjoint_starProjection U)
 
@@ -404,7 +404,7 @@ theorem projectorDifference_sq :
   noncomm_ring
 
 /-- The projector difference has the norm of the sine. -/
-theorem norm_paperProjectorDifference :
+theorem norm_projectorDifference :
     ‖projectorDifference U V‖ = ‖sinAngleOperatorC U V‖ := by
   rw [sinAngleOperatorC, ContinuousLinearMap.norm_modulus, projectorDifference,
     show V.starProjection - U.starProjection =
@@ -412,12 +412,12 @@ theorem norm_paperProjectorDifference :
 
 /-- Under uniform transversality the operator `1 − sin²Θ` is invertible: it is
 `cos²Θ`, bounded below. -/
-theorem isUnit_one_sub_paperProjectorDifference_sq
+theorem isUnit_one_sub_projectorDifference_sq
     (htr : ‖sinAngleOperatorC U V‖ < 1) :
     IsUnit (1 - projectorDifference U V * projectorDifference U V) := by
   have hnorm : ‖projectorDifference U V * projectorDifference U V‖ < 1 := by
     refine lt_of_le_of_lt (norm_mul_le _ _) ?_
-    rw [norm_paperProjectorDifference]
+    rw [norm_projectorDifference]
     nlinarith [norm_nonneg (sinAngleOperatorC U V)]
   rw [← Units.val_oneSub _ hnorm]
   exact Units.isUnit _
@@ -523,17 +523,17 @@ include htr
 private theorem secant_mul_cancel :
     (1 - projectorDifference U V * projectorDifference U V) *
       secantSquared U V = 1 :=
-  Ring.mul_inverse_cancel _ (isUnit_one_sub_paperProjectorDifference_sq htr)
+  Ring.mul_inverse_cancel _ (isUnit_one_sub_projectorDifference_sq htr)
 
 private theorem secant_comm_projectorDifference :
     projectorDifference U V * secantSquared U V =
       secantSquared U V * projectorDifference U V :=
-  inverse_comm (isUnit_one_sub_paperProjectorDifference_sq htr) (by noncomm_ring)
+  inverse_comm (isUnit_one_sub_projectorDifference_sq htr) (by noncomm_ring)
 
 private theorem secant_comm_starProjection :
     secantSquared U V * U.starProjection =
       U.starProjection * secantSquared U V :=
-  (inverse_comm (isUnit_one_sub_paperProjectorDifference_sq htr)
+  (inverse_comm (isUnit_one_sub_projectorDifference_sq htr)
     (by
       have h := proj_comm_sq (starProjection_idem U)
         (projectorDifference_anticommutator (U := U) (V := V))
@@ -550,10 +550,10 @@ private theorem secant_comm_starProjection_compl :
 
 private theorem secant_selfAdjoint :
     star (secantSquared U V) = secantSquared U V := by
-  rw [secantSquared, star_inverse (isUnit_one_sub_paperProjectorDifference_sq htr)]
+  rw [secantSquared, star_inverse (isUnit_one_sub_projectorDifference_sq htr)]
   congr 1
   rw [star_sub, star_one, star_mul,
-    isSelfAdjoint_paperProjectorDifference.star_eq]
+    isSelfAdjoint_projectorDifference.star_eq]
 
 private theorem secant_comm_lower :
     ((1 - U.starProjection) * projectorDifference U V * U.starProjection) *
@@ -656,9 +656,9 @@ theorem tanBlockRepresentative_eq :
 
 /-- The block representative is self-adjoint: its two corners are adjoints of
 one another. -/
-theorem isSelfAdjoint_paperTanBlockRepresentative :
+theorem isSelfAdjoint_tanBlockRepresentative :
     IsSelfAdjoint (tanBlockRepresentative U V) := by
-  have hD := isSelfAdjoint_paperProjectorDifference (U := U) (V := V)
+  have hD := isSelfAdjoint_projectorDifference (U := U) (V := V)
   have hp := isSelfAdjoint_starProjection U
   have hcross : star ((1 - U.starProjection) * projectorDifference U V *
       U.starProjection) = U.starProjection * projectorDifference U V *
@@ -731,7 +731,7 @@ theorem tanAngleOperatorC_eq_modulus_blockRepresentative :
     paperTanAngleOperatorC U V = (tanBlockRepresentative U V).modulus := by
   refine ContinuousLinearMap.eq_modulus_of_nonneg_of_mul_self_eq
     (tanAngleOperatorC_nonneg U V) ?_
-  have hself := isSelfAdjoint_paperTanBlockRepresentative htr
+  have hself := isSelfAdjoint_tanBlockRepresentative htr
   have hadj : (tanBlockRepresentative U V).adjoint ∘L
       tanBlockRepresentative U V =
       tanBlockRepresentative U V * tanBlockRepresentative U V := by
@@ -791,7 +791,7 @@ private theorem projectionBlock_smul (Ω Γ : Submodule ℂ E)
 
 /-- The Gram operator of the ambient directed sine block is `sin²Θ` compressed
 to `U`. -/
-theorem gramOperator_paperDirectedSineAmbient :
+theorem gramOperator_directedSineAmbient :
     gramOperator (directedSineAmbient U V) =
       projectorDifference U V * projectorDifference U V *
         U.starProjection := by
@@ -856,7 +856,7 @@ theorem star_projectorDifference_mul_secant :
     star (projectorDifference U V * secantSquared U V) =
       projectorDifference U V * secantSquared U V := by
   rw [star_mul, secant_selfAdjoint htr,
-    isSelfAdjoint_paperProjectorDifference.star_eq,
+    isSelfAdjoint_projectorDifference.star_eq,
     ← secant_comm_projectorDifference htr]
 
 /-- The upper corner is the adjoint of the lower one. -/
@@ -880,7 +880,7 @@ theorem gramOperator_lowerCorner :
   have hp := starProjection_idem U
   have hkey := projectorDifference_anticommutator (U := U) (V := V)
   have hpsa := isSelfAdjoint_starProjection U
-  have hD := isSelfAdjoint_paperProjectorDifference (U := U) (V := V)
+  have hD := isSelfAdjoint_projectorDifference (U := U) (V := V)
   have hstar : star (((1 - U.starProjection) * projectorDifference U V *
       U.starProjection) * secantSquared U V) =
       secantSquared U V * (U.starProjection *
@@ -928,7 +928,7 @@ theorem gramOperator_lowerCorner_moebius (y : E) :
     (R := secantSquared U V) (proj_comm_sq hp hkey) hp
     (secant_comm_starProjection htr) (secant_mul_cancel htr)
   have h := congrArg (fun S : E →L[ℂ] E => S y) halg
-  simpa only [gramOperator_lowerCorner htr, gramOperator_paperDirectedSineAmbient,
+  simpa only [gramOperator_lowerCorner htr, gramOperator_directedSineAmbient,
     add_apply, mul_apply_eq_comp] using h
 
 end Corner
@@ -942,11 +942,11 @@ variable {T A : E →L[ℂ] E} {U V : Submodule ℂ E}
 
 /-- Under uniform transversality the ambient directed sine block is a strict
 contraction. -/
-theorem norm_paperDirectedSineAmbient_lt_one
+theorem norm_directedSineAmbient_lt_one
     (htr : ‖sinAngleOperatorC U V‖ < 1) :
     ‖directedSineAmbient U V‖ < 1 := by
   have h := norm_gramOperator (directedSineAmbient U V)
-  rw [gramOperator_paperDirectedSineAmbient] at h
+  rw [gramOperator_directedSineAmbient] at h
   have hp : ‖U.starProjection‖ ≤ 1 := U.starProjection_norm_le
   have e1 : ‖projectorDifference U V * projectorDifference U V *
       U.starProjection‖ ≤ ‖projectorDifference U V *
@@ -954,7 +954,7 @@ theorem norm_paperDirectedSineAmbient_lt_one
   have e2 : ‖projectorDifference U V * projectorDifference U V‖ ≤
       ‖projectorDifference U V‖ * ‖projectorDifference U V‖ :=
     norm_mul_le _ _
-  rw [norm_paperProjectorDifference] at e2
+  rw [norm_projectorDifference] at e2
   have hb : ‖projectorDifference U V * projectorDifference U V *
       U.starProjection‖ ≤ ‖sinAngleOperatorC U V‖ * ‖sinAngleOperatorC U V‖ := by
     nlinarith [norm_nonneg (projectorDifference U V *
@@ -966,7 +966,7 @@ theorem norm_paperDirectedSineAmbient_lt_one
 omit [CompleteSpace E] in
 /-- The ambient directed sine block factors through the trial subspace's own
 sine block, so it has no larger approximation numbers. -/
-theorem approximationNumber_paperDirectedSineAmbient_le (n : ℕ) :
+theorem approximationNumber_directedSineAmbient_le (n : ℕ) :
     (directedSineAmbient U V).approximationNumber n ≤
       approximationSingularValue n (theorem63DirectedSineBlock U V) := by
   have hfactor : directedSineAmbient U V =
@@ -1003,7 +1003,7 @@ theorem approximationSingularValue_theorem63DirectedSineBlock_lt_one
     refine le_trans (ContinuousLinearMap.opNorm_comp_le _ _) ?_
     have h1 : ‖U.subtypeL‖ ≤ (1 : ℝ) := U.norm_subtypeL_le
     nlinarith [norm_nonneg (directedSineAmbient U V)]
-  exact lt_of_le_of_lt hle (norm_paperDirectedSineAmbient_lt_one htr)
+  exact lt_of_le_of_lt hle (norm_directedSineAmbient_lt_one htr)
 
 /-- **The directed corner is dominated by the paper's directed tangent
 scalars.**  This is where the Möbius transfer of approximation numbers is
@@ -1020,9 +1020,9 @@ theorem approximationNumber_lowerCorner_le
   have hsig0 : 0 ≤ sig := ContinuousLinearMap.approximationNumber_nonneg _ _
   have hsiglt : sig < 1 :=
     lt_of_le_of_lt (ContinuousLinearMap.approximationNumber_le_norm _ n)
-      (norm_paperDirectedSineAmbient_lt_one htr)
+      (norm_directedSineAmbient_lt_one htr)
   have hres := approximationNumber_le_of_gramResolvent (directedSineAmbient U V)
-    (norm_paperDirectedSineAmbient_lt_one htr)
+    (norm_directedSineAmbient_lt_one htr)
     (gramOperator_lowerCorner_moebius htr) n
   rw [approximationNumber_gramOperator_complex c n] at hres
   -- the scalar identity `tan (arcsin σ)² = σ²/(1 − σ²)`
@@ -1039,7 +1039,7 @@ theorem approximationNumber_lowerCorner_le
     have ht0 : 0 ≤ Real.tan (Real.arcsin sig) := TanArcsin.tanArcsin_nonneg hsig0
     nlinarith [hres, htanSq]
   refine hstep.trans (TanArcsin.tanArcsin_le_tanArcsin hsig0 ?_ ?_)
-  · exact approximationNumber_paperDirectedSineAmbient_le n
+  · exact approximationNumber_directedSineAmbient_le n
   · exact approximationSingularValue_theorem63DirectedSineBlock_lt_one htr n
 
 /-- The Ky Fan gauge of the directed corner is dominated by the paper's directed
@@ -1229,7 +1229,7 @@ theorem norm_sinAngleOperatorC_lt_one_of_crossedDefectsEquivalent
     approximationSingularValue_sineBlock_lt_one_infiniteTrial T V U hT hV hdelta
       hCompressionUpper hUnwantedLower 0
   have hambient : ‖directedSineAmbient U V‖ < 1 := by
-    have h := approximationNumber_paperDirectedSineAmbient_le (U := U) (V := V) 0
+    have h := approximationNumber_directedSineAmbient_le (U := U) (V := V) 0
     rw [(directedSineAmbient U V).approximationNumber_index_zero] at h
     exact lt_of_le_of_lt h hdirected
   rw [norm_sinAngleOperatorC U V,

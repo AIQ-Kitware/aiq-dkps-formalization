@@ -83,17 +83,17 @@ noncomputable def hilbertSchmidtTensor (A : F →L[ℂ] E)
 /-- The tensor model's operator, unfolded.  This is the bridge between the tensor presentation of a
 Hilbert--Schmidt map and its operator form. -/
 @[simp]
-theorem toOperator_paperHilbertSchmidtTensor (A : F →L[ℂ] E)
+theorem toOperator_hilbertSchmidtTensor (A : F →L[ℂ] E)
     (hA : IsPaperHilbertSchmidt A) :
     ofLp (hSBasis F) (hilbertSchmidtTensor A hA) = A :=
   ofLp_columns (hSBasis F) A _
 
 /-- The model norm is exactly the paper square norm. -/
-theorem norm_paperHilbertSchmidtTensor (A : F →L[ℂ] E)
+theorem norm_hilbertSchmidtTensor (A : F →L[ℂ] E)
     (hA : IsPaperHilbertSchmidt A) :
     ‖hilbertSchmidtTensor A hA‖ = paperHilbertSchmidtNorm A := by
   have hsq := norm_sq_eq_tsum_norm_column_sq (hSBasis F) (hilbertSchmidtTensor A hA)
-  rw [toOperator_paperHilbertSchmidtTensor] at hsq
+  rw [toOperator_hilbertSchmidtTensor] at hsq
   rw [hilbertSchmidtNorm_eq_sqrt_tsum_basis (hSBasis F) A hA, ← hsq,
     Real.sqrt_sq (norm_nonneg _)]
 
@@ -108,9 +108,9 @@ theorem isPaperHilbertSchmidt_toOperator (f : lp (fun _ : HSIndex F => E) 2) :
 theorem hilbertSchmidtNorm_toOperator (f : lp (fun _ : HSIndex F => E) 2) :
     paperHilbertSchmidtNorm (ofLp (hSBasis F) f) = ‖f‖ := by
   have hZ := isPaperHilbertSchmidt_toOperator f
-  have hcanon := norm_paperHilbertSchmidtTensor (ofLp (hSBasis F) f) hZ
+  have hcanon := norm_hilbertSchmidtTensor (ofLp (hSBasis F) f) hZ
   have heq : hilbertSchmidtTensor (ofLp (hSBasis F) f) hZ = f :=
-    ofLp_injective (hSBasis F) (by rw [toOperator_paperHilbertSchmidtTensor])
+    ofLp_injective (hSBasis F) (by rw [toOperator_hilbertSchmidtTensor])
   rw [heq] at hcanon
   exact hcanon.symm
 

@@ -133,7 +133,7 @@ theorem absTanTwo_sq_mul_one_sub_sinTwo_sq
     absTanTwoAngleOperatorC U V * absTanTwoAngleOperatorC U V *
         (1 - paperSinTwoAngleOperatorC U V * paperSinTwoAngleOperatorC U V) =
       paperSinTwoAngleOperatorC U V * paperSinTwoAngleOperatorC U V := by
-  have hsa : IsSelfAdjoint (angleOperatorC U V) := isSelfAdjoint_paperAngleOperatorC U V
+  have hsa : IsSelfAdjoint (angleOperatorC U V) := isSelfAdjoint_angleOperatorC U V
   have hs : ContinuousOn (fun t : ℝ => Real.sin (2 * t))
       (spectrum ℝ (angleOperatorC U V)) :=
     (Real.continuous_sin.comp (continuous_const.mul continuous_id)).continuousOn
@@ -180,13 +180,13 @@ principal angles.**
 exclusion.  Note the right-hand side is `tan ∘ arcsin` of a *sine*, so it is `|tan 2θₙ|`
 however far the doubled angle runs past a right angle — the branch-free reading a
 unitarily invariant norm forces. -/
-theorem approximationNumber_paperAbsTanTwoAngleOperatorC
+theorem approximationNumber_absTanTwoAngleOperatorC
     (hcos : ∀ t ∈ spectrum ℝ (angleOperatorC U V), Real.cos (2 * t) ≠ 0) (n : ℕ) :
     (absTanTwoAngleOperatorC U V).approximationNumber n =
       Real.tan (Real.arcsin
         ((paperSinTwoAngleOperatorC U V).approximationNumber n)) := by
   refine approximationNumber_eq_tanArcsin (isSelfAdjoint_paperSinTwoAngleOperatorC U V)
-    (isSelfAdjoint_paperAbsTanTwoAngleOperatorC U V)
+    (isSelfAdjoint_absTanTwoAngleOperatorC U V)
     (norm_paperSinTwoAngleOperatorC_lt_one U V hcos) ?_ n
   have h := absTanTwo_sq_mul_one_sub_sinTwo_sq U V hcos
   rw [mul_sub, mul_one] at h
@@ -215,14 +215,14 @@ monotone on `[0, π/2]`, so applying it index by index to the ordered sequence o
 already break it -- `sin 75° > sin 30°` while `sin 150° < sin 60°`.  Only the
 monotone `u ↦ tan (arcsin u)` may be applied to an approximation-number
 sequence, and here it is applied to the doubled sine, not the single one. -/
-theorem approximationNumber_paperAbsTanTwoAngleOperatorC_projectorDifference
+theorem approximationNumber_absTanTwoAngleOperatorC_projectorDifference
     (hcos : ∀ t ∈ spectrum ℝ (angleOperatorC U V), Real.cos (2 * t) ≠ 0)
     (n : ℕ) :
     (absTanTwoAngleOperatorC U V).approximationNumber n =
       Real.tan (Real.arcsin
         (((U.map (V.reflection.toLinearEquiv : E →ₗ[ℂ] E)).starProjection -
           U.starProjection).approximationNumber n)) := by
-  rw [approximationNumber_paperAbsTanTwoAngleOperatorC U V hcos n,
+  rw [approximationNumber_absTanTwoAngleOperatorC U V hcos n,
     approximationNumber_paperSinTwoAngleOperatorC U V n]
 
 /-- Under the derived pole exclusion the ambient double-angle sine is a strict

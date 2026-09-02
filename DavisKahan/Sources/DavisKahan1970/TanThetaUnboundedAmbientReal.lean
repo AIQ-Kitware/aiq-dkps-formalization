@@ -29,14 +29,14 @@ unchanged.  The conclusion is read back by `SymmetricNormingFunction.gauge_compl
 No complexification of the source ambient closed operator is required.
 
 The printed standing assumption (3.5) is consumed entirely on the real side.
-`norm_paperSinAngleOperatorR_lt_one_of_data_crossedDefectsEquivalent` derives real uniform
+`norm_sinAngleOperatorR_lt_one_of_data_crossedDefectsEquivalent` derives real uniform
 transversality from the real directed no-pole estimate and (3.5); only its consequence
 `‖sin Θ‖ < 1` crosses to the complexification.  That is why the crossed-defect condition
 itself never has to be transported.
 
 ## Main results
 
-* `norm_paperSinAngleOperatorR_lt_one_of_data_crossedDefectsEquivalent`: real ambient
+* `norm_sinAngleOperatorR_lt_one_of_data_crossedDefectsEquivalent`: real ambient
   uniform transversality from real trial-block form bounds and the printed (3.5);
 * `tanTheta_ambient_unboundedOperator_boundedRitzData_symmetricNorming_real`: the ambient estimate over real
   trial-block data;
@@ -91,9 +91,9 @@ whose real approximation singular values are already known to be strictly below 
 every trial dimension, and (3.5) identifies the symmetric gap with the directed one.
 
 This is the trial-data twin of
-`norm_paperSinAngleOperatorR_lt_one_of_crossedDefectsEquivalent`, which takes its no-pole
+`norm_sinAngleOperatorR_lt_one_of_crossedDefectsEquivalent`, which takes its no-pole
 input from the *bounded* ambient hypotheses instead. -/
-theorem norm_paperSinAngleOperatorR_lt_one_of_data_crossedDefectsEquivalent
+theorem norm_sinAngleOperatorR_lt_one_of_data_crossedDefectsEquivalent
     (data : Theorem63TrialData U V)
     {alpha delta : ℝ} (hdelta : 0 < delta)
     (hCompression : ∀ z : U, ⟪data.compression z, z⟫_ℝ ≤ alpha * ‖z‖ ^ 2)
@@ -115,7 +115,7 @@ theorem norm_paperSinAngleOperatorR_lt_one_of_data_crossedDefectsEquivalent
           mul_le_mul_of_nonneg_left U.orthogonalProjectionOnto_norm_le
             (ContinuousLinearMap.opNorm_nonneg (theorem63DirectedSineBlockReal U V))
       _ < 1 := by rwa [mul_one]
-  rw [norm_paperSinAngleOperatorR,
+  rw [norm_sinAngleOperatorR,
     DavisKahan.subspaceGap_eq_directedGap_of_crossedDefectsEquivalent U V h35]
   exact hnorm
 
@@ -173,8 +173,8 @@ theorem tanTheta_ambient_unboundedOperator_boundedRitzData_symmetricNorming_real
     N.Mem (tanAngleOperatorR U V) ∧
       delta * N.gauge (tanAngleOperatorR U V) ≤ N.gauge H := by
   have htrC : ‖sinAngleOperatorC (complexifySubmodule U) (complexifySubmodule V)‖ < 1 := by
-    rw [← complexify_paperSinAngleOperatorR U V, norm_complexify]
-    exact norm_paperSinAngleOperatorR_lt_one_of_data_crossedDefectsEquivalent
+    rw [← complexify_sinAngleOperatorR U V, norm_complexify]
+    exact norm_sinAngleOperatorR_lt_one_of_data_crossedDefectsEquivalent
       data hdelta hCompression hcross h35
   have hMemC : N.Mem (complexify H) :=
     (SymmetricNormingFunction.mem_complexify_iff N H).2 hMem
@@ -185,7 +185,7 @@ theorem tanTheta_ambient_unboundedOperator_boundedRitzData_symmetricNorming_real
       (complexifyTrialData_compression_upper data hCompression)
       (complexifyTrialData_crossed_lower data hcross)
       htrC (complexifyTrialData_residual_eq_projectionBlock data H hResidual) hMemC
-  rw [← complexify_paperTanAngleOperatorR U V] at hmemC hboundC
+  rw [← complexify_tanAngleOperatorR U V] at hmemC hboundC
   refine ⟨(SymmetricNormingFunction.mem_complexify_iff N _).1 hmemC, ?_⟩
   rwa [SymmetricNormingFunction.gauge_complexify,
     SymmetricNormingFunction.gauge_complexify] at hboundC
@@ -241,10 +241,10 @@ theorem tanTheta_ambient_unboundedOperator_boundedRitz_symmetricNorming_real
 compression.**
 
 This is the Appendix-scope twin of
-`norm_paperSinAngleOperatorR_lt_one_of_data_crossedDefectsEquivalent`.  The no-pole
+`norm_sinAngleOperatorR_lt_one_of_data_crossedDefectsEquivalent`.  The no-pole
 input is the real unbounded-compression theorem; the standing crossed-defect
 condition (3.5) then converts the directed gap into the ambient gap. -/
-theorem norm_paperSinAngleOperatorR_lt_one_of_unboundedCompression_crossedDefectsEquivalent
+theorem norm_sinAngleOperatorR_lt_one_of_unboundedCompression_crossedDefectsEquivalent
     (D : UnboundedCompressionTrialData U)
     {alpha delta : ℝ} (hdelta : 0 < delta)
     (hupper : TauCeti.LinearPMap.SemiboundedAbove D.compression alpha)
@@ -268,7 +268,7 @@ theorem norm_paperSinAngleOperatorR_lt_one_of_unboundedCompression_crossedDefect
         mul_le_mul_of_nonneg_left U.orthogonalProjectionOnto_norm_le
           (ContinuousLinearMap.opNorm_nonneg (theorem63DirectedSineBlockReal U V))
       _ < 1 := by rwa [mul_one]
-  rw [norm_paperSinAngleOperatorR,
+  rw [norm_sinAngleOperatorR,
     DavisKahan.subspaceGap_eq_directedGap_of_crossedDefectsEquivalent U V h35]
   exact hnorm
 
@@ -320,8 +320,8 @@ theorem tanTheta_ambient_unboundedRitzData_symmetricNorming_real
       delta * N.gauge (tanAngleOperatorR U V) ≤ N.gauge H := by
   have htrC :
       ‖sinAngleOperatorC (complexifySubmodule U) (complexifySubmodule V)‖ < 1 := by
-    rw [← complexify_paperSinAngleOperatorR U V, norm_complexify]
-    exact norm_paperSinAngleOperatorR_lt_one_of_unboundedCompression_crossedDefectsEquivalent
+    rw [← complexify_sinAngleOperatorR U V, norm_complexify]
+    exact norm_sinAngleOperatorR_lt_one_of_unboundedCompression_crossedDefectsEquivalent
       D hdelta hupper hcross h35
   have hMemC : N.Mem (complexify H) :=
     (SymmetricNormingFunction.mem_complexify_iff N H).2 hMem
@@ -333,7 +333,7 @@ theorem tanTheta_ambient_unboundedRitzData_symmetricNorming_real
       (complexifyUnboundedCompressionTrialData_crossed_lower D hcross)
       htrC (complexifyUnboundedCompressionTrialData_residual_eq_projectionBlock D H hResidual)
       hMemC
-  rw [← complexify_paperTanAngleOperatorR U V] at hmemC hboundC
+  rw [← complexify_tanAngleOperatorR U V] at hmemC hboundC
   refine ⟨(SymmetricNormingFunction.mem_complexify_iff N _).1 hmemC, ?_⟩
   rwa [SymmetricNormingFunction.gauge_complexify,
     SymmetricNormingFunction.gauge_complexify] at hboundC

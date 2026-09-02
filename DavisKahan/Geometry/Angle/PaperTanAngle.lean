@@ -31,7 +31,7 @@ theory but a statement of where the theory lives.
 * `TauCeti.DavisKahanExt.paperTanTwoAngleOperatorC`: the literal ambient
   `tan 2Θ`, the object of the second conclusion of the Section 2 `tan 2θ`
   theorem.
-* `TauCeti.DavisKahanExt.spectrum_paperAngleOperatorC_lt_pi_div_four` and
+* `TauCeti.DavisKahanExt.spectrum_angleOperatorC_lt_pi_div_four` and
   `TauCeti.DavisKahanExt.tanTwoAngleOperatorC_nonneg`: under uniform
   *quarter* transversality the doubled angle stays inside the principal branch.
 * `TauCeti.DavisKahanExt.absTanTwoAngleOperatorC`: the **branch-free**
@@ -90,11 +90,11 @@ theorem tanAngleOperatorC_nonneg (U V : Submodule ℂ E)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] :
     0 ≤ paperTanAngleOperatorC U V := by
   refine cfc_nonneg fun t ht => ?_
-  have h := spectrum_paperAngleOperatorC_subset_Icc U V ht
+  have h := spectrum_angleOperatorC_subset_Icc U V ht
   exact Real.tan_nonneg_of_nonneg_of_le_pi_div_two h.1 h.2
 
 /-- Under uniform transversality the angle stays strictly below `π / 2`. -/
-theorem spectrum_paperAngleOperatorC_lt_pi_div_two
+theorem spectrum_angleOperatorC_lt_pi_div_two
     (U V : Submodule ℂ E)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
     (hlt : ‖sinAngleOperatorC U V‖ < 1)
@@ -138,7 +138,7 @@ theorem isSelfAdjoint_paperTanTwoAngleOperatorC (U V : Submodule ℂ E)
 `π / 4`, so the doubled angle stays inside the principal branch of the
 tangent.  The threshold `√2 / 2 = sin (π / 4)` is the repository's
 `IsQuarterAcute`. -/
-theorem spectrum_paperAngleOperatorC_lt_pi_div_four
+theorem spectrum_angleOperatorC_lt_pi_div_four
     (U V : Submodule ℂ E)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
     (hlt : ‖sinAngleOperatorC U V‖ < Real.sqrt 2 / 2)
@@ -172,7 +172,7 @@ theorem tanTwoAngleOperatorC_nonneg (U V : Submodule ℂ E)
     (hlt : ‖sinAngleOperatorC U V‖ < Real.sqrt 2 / 2) :
     0 ≤ paperTanTwoAngleOperatorC U V := by
   refine cfc_nonneg fun t ht => ?_
-  have h := spectrum_paperAngleOperatorC_lt_pi_div_four U V hlt ht
+  have h := spectrum_angleOperatorC_lt_pi_div_four U V hlt ht
   exact Real.tan_nonneg_of_nonneg_of_le_pi_div_two (by linarith [h.1])
     (by linarith [h.2])
 
@@ -190,7 +190,7 @@ noncomputable def absTanTwoAngleOperatorC (U V : Submodule ℂ E)
   cfc (fun t : ℝ => |Real.tan (2 * t)|) (angleOperatorC U V)
 
 /-- `|tan 2Θ|` is self-adjoint. -/
-theorem isSelfAdjoint_paperAbsTanTwoAngleOperatorC (U V : Submodule ℂ E)
+theorem isSelfAdjoint_absTanTwoAngleOperatorC (U V : Submodule ℂ E)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] :
     IsSelfAdjoint (absTanTwoAngleOperatorC U V) :=
   cfc_predicate _ (angleOperatorC U V)
@@ -212,7 +212,7 @@ theorem absTanTwoAngleOperatorC_eq_tanTwoAngleOperatorC
     (hlt : ‖sinAngleOperatorC U V‖ < Real.sqrt 2 / 2) :
     absTanTwoAngleOperatorC U V = paperTanTwoAngleOperatorC U V := by
   refine cfc_congr fun t ht => ?_
-  have h := spectrum_paperAngleOperatorC_lt_pi_div_four U V hlt ht
+  have h := spectrum_angleOperatorC_lt_pi_div_four U V hlt ht
   exact abs_of_nonneg (Real.tan_nonneg_of_nonneg_of_le_pi_div_two
     (by linarith [h.1]) (by linarith [h.2]))
 
@@ -230,11 +230,11 @@ theorem cosAngleOperatorC_mul_tanAngleOperatorC (U V : Submodule ℂ E)
       Real.continuous_cos.continuousOn
       (Real.continuousOn_tan.mono (by
         intro t ht
-        have h := spectrum_paperAngleOperatorC_lt_pi_div_two U V hlt ht
+        have h := spectrum_angleOperatorC_lt_pi_div_two U V hlt ht
         exact ne_of_gt (Real.cos_pos_of_mem_Ioo
           ⟨by linarith [Real.pi_pos, h.1], h.2⟩)))]
   refine cfc_congr fun t ht => ?_
-  have h := spectrum_paperAngleOperatorC_lt_pi_div_two U V hlt ht
+  have h := spectrum_angleOperatorC_lt_pi_div_two U V hlt ht
   have hcos : Real.cos t ≠ 0 := by
     have : 0 < Real.cos t := Real.cos_pos_of_mem_Ioo
       ⟨by linarith [Real.pi_pos, h.1], h.2⟩

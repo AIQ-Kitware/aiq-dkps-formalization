@@ -319,14 +319,14 @@ variable (Ω Γ : Submodule 𝕜 G) [Ω.HasOrthogonalProjection] [Γ.HasOrthogon
 
 /-- The adjoint of a block compression is the transposed block compression of
 the adjoint. -/
-theorem adjoint_paperBlockCompression (K : G →L[𝕜] G) :
+theorem adjoint_blockCompression (K : G →L[𝕜] G) :
     (blockCompression Ω Γ K).adjoint = blockCompression Γ Ω K.adjoint := by
   rw [blockCompression, blockCompression, ContinuousLinearMap.adjoint_comp,
     ContinuousLinearMap.adjoint_comp, ContinuousLinearMap.adjoint_adjoint,
     ContinuousLinearMap.comp_assoc]
 
 /-- The block compression, evaluated in the ambient space. -/
-theorem coe_paperBlockCompression_apply (K : G →L[𝕜] G) (y : Γ) :
+theorem coe_blockCompression_apply (K : G →L[𝕜] G) (y : Γ) :
     ((blockCompression Ω Γ K y : Ω) : G) = Ω.starProjection (K (y : G)) := by
   rw [blockCompression]
   simp only [ContinuousLinearMap.comp_apply, Submodule.subtypeL_apply,
@@ -343,14 +343,14 @@ variable (Ω Γ : Submodule ℂ H) [Ω.HasOrthogonalProjection] [Γ.HasOrthogona
 
 /-- The Gram operator of a block compression, evaluated in the ambient space.
 `gramOperator` is complex-only, so this companion of
-`coe_paperBlockCompression_apply` stays at `ℂ`. -/
-theorem coe_gramOperator_paperBlockCompression_apply (K : H →L[ℂ] H) (y : Γ) :
+`coe_blockCompression_apply` stays at `ℂ`. -/
+theorem coe_gramOperator_blockCompression_apply (K : H →L[ℂ] H) (y : Γ) :
     ((gramOperator (blockCompression Ω Γ K) y : Γ) : H) =
       Γ.starProjection (K.adjoint (Ω.starProjection (K (y : H)))) := by
   rw [gramOperator]
   simp only [ContinuousLinearMap.comp_apply]
-  rw [adjoint_paperBlockCompression, coe_paperBlockCompression_apply,
-    coe_paperBlockCompression_apply]
+  rw [adjoint_blockCompression, coe_blockCompression_apply,
+    coe_blockCompression_apply]
 
 end GramCompressionAlgebra
 
@@ -360,7 +360,7 @@ theorem coe_gramOperator_reflectionSineCorner_apply (hZsa : IsSelfAdjoint Z)
     (y : U) :
     ((gramOperator (reflectionSineCorner U Z) y : U) : H) =
       U.offDiagonalPart Z (U.offDiagonalPart Z (y : H)) := by
-  rw [reflectionSineCorner, coe_gramOperator_paperBlockCompression_apply,
+  rw [reflectionSineCorner, coe_gramOperator_blockCompression_apply,
     hZsa.adjoint_eq]
   have h1 : Uᗮ.starProjection (Z (y : H)) = U.offDiagonalPart Z (y : H) :=
     (TauCeti.offDiagonalPart_apply_of_mem U Z y.2).symm
@@ -379,7 +379,7 @@ theorem coe_gramOperator_reflectionTangentCorner_apply
     ((gramOperator (reflectionTangentCorner U Z) y : U) : H) =
       ((unboundedReflectionTangent U Z).adjoint *
         unboundedReflectionTangent U Z) (y : H) := by
-  rw [reflectionTangentCorner, coe_gramOperator_paperBlockCompression_apply]
+  rw [reflectionTangentCorner, coe_gramOperator_blockCompression_apply]
   have hTy : unboundedReflectionTangent U Z (y : H) ∈ Uᗮ :=
     unboundedReflectionTangent_mem_orthogonal_of_mem U Z hCC y.2
   rw [Submodule.starProjection_eq_self_iff.mpr hTy]
@@ -423,7 +423,7 @@ theorem norm_reflectionSineCorner_le :
   refine ContinuousLinearMap.opNorm_le_bound _ (norm_nonneg _) fun y => ?_
   have hcoe : ((reflectionSineCorner U Z y : Uᗮ) : H) =
       U.offDiagonalPart Z (y : H) := by
-    rw [reflectionSineCorner, coe_paperBlockCompression_apply]
+    rw [reflectionSineCorner, coe_blockCompression_apply]
     exact (TauCeti.offDiagonalPart_apply_of_mem U Z y.2).symm
   have hn : ‖reflectionSineCorner U Z y‖ = ‖U.offDiagonalPart Z (y : H)‖ := by
     rw [← hcoe]
@@ -651,7 +651,7 @@ def cutoffCorner (Ω : TauCeti.BoundedCutoff A U τ) : U →L[𝕜] U :=
 /-- The compressed cutoff, evaluated in the ambient space. -/
 theorem coe_cutoffCorner_apply (Ω : TauCeti.BoundedCutoff A U τ) (y : U) :
     ((cutoffCorner Ω y : U) : G) = Ω.toProj (y : G) := by
-  rw [cutoffCorner, coe_paperBlockCompression_apply]
+  rw [cutoffCorner, coe_blockCompression_apply]
   exact Submodule.starProjection_eq_self_iff.mpr (Ω.mem_subspace _)
 
 /-- The compressed cutoff is idempotent. -/

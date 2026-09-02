@@ -54,8 +54,8 @@ theorem isPaperHilbertSchmidt_add_complex
   let zB := hilbertSchmidtTensor B hB
   have hrepr : ofLp (hSBasis _) (zA + zB) = A + B := by
     rw [ofLp_add]
-    rw [toOperator_paperHilbertSchmidtTensor,
-      toOperator_paperHilbertSchmidtTensor]
+    rw [toOperator_hilbertSchmidtTensor,
+      toOperator_hilbertSchmidtTensor]
   rw [← hrepr]
   exact isPaperHilbertSchmidt_toOperator (zA + zB)
 
@@ -69,10 +69,10 @@ theorem hilbertSchmidtTensor_add
       hilbertSchmidtTensor A hA +
         hilbertSchmidtTensor B hB := by
   apply ofLp_injective (hSBasis _)
-  rw [toOperator_paperHilbertSchmidtTensor,
+  rw [toOperator_hilbertSchmidtTensor,
     ofLp_add,
-    toOperator_paperHilbertSchmidtTensor,
-    toOperator_paperHilbertSchmidtTensor]
+    toOperator_hilbertSchmidtTensor,
+    toOperator_hilbertSchmidtTensor]
 
 /-- The paper Hilbert--Schmidt norm satisfies the triangle inequality. -/
 theorem hilbertSchmidtNorm_add_le_complex
@@ -82,10 +82,10 @@ theorem hilbertSchmidtNorm_add_le_complex
     paperHilbertSchmidtNorm (A + B) ≤
       paperHilbertSchmidtNorm A + paperHilbertSchmidtNorm B := by
   let hAB := isPaperHilbertSchmidt_add_complex hA hB
-  rw [← norm_paperHilbertSchmidtTensor (A + B) hAB,
+  rw [← norm_hilbertSchmidtTensor (A + B) hAB,
     hilbertSchmidtTensor_add hA hB,
-    ← norm_paperHilbertSchmidtTensor A hA,
-    ← norm_paperHilbertSchmidtTensor B hB]
+    ← norm_hilbertSchmidtTensor A hA,
+    ← norm_hilbertSchmidtTensor B hB]
   exact norm_add_le _ _
 
 /-- A zero paper Hilbert--Schmidt norm forces the represented operator to
@@ -95,10 +95,10 @@ theorem hilbertSchmidtNorm_eq_zero
     (hzero : paperHilbertSchmidtNorm A = 0) : A = 0 := by
   let z := hilbertSchmidtTensor A hA
   have hzNorm : ‖z‖ = 0 := by
-    rw [norm_paperHilbertSchmidtTensor]
+    rw [norm_hilbertSchmidtTensor]
     exact hzero
   have hz : hilbertSchmidtTensor A hA = 0 := norm_eq_zero.mp hzNorm
-  have hrepr := toOperator_paperHilbertSchmidtTensor A hA
+  have hrepr := toOperator_hilbertSchmidtTensor A hA
   rw [hz, ofLp_zero] at hrepr
   exact hrepr.symm
 
@@ -120,10 +120,10 @@ theorem hilbertSchmidtTensor_sub
       hilbertSchmidtTensor A hA -
         hilbertSchmidtTensor B hB := by
   apply ofLp_injective (hSBasis _)
-  rw [toOperator_paperHilbertSchmidtTensor,
+  rw [toOperator_hilbertSchmidtTensor,
     ofLp_sub,
-    toOperator_paperHilbertSchmidtTensor,
-    toOperator_paperHilbertSchmidtTensor]
+    toOperator_hilbertSchmidtTensor,
+    toOperator_hilbertSchmidtTensor]
 
 /-- A sequence Cauchy in the paper square norm converges to a paper
 Hilbert--Schmidt operator in that norm. -/
@@ -148,13 +148,13 @@ theorem hilbertSchmidt_complete_complex
       isPaperHilbertSchmidt_sub (hA m) (hA n)
     have hcanon : hilbertSchmidtTensor (A m - A n) hsub = z m - z n := by
       apply ofLp_injective (hSBasis _)
-      rw [toOperator_paperHilbertSchmidtTensor,
+      rw [toOperator_hilbertSchmidtTensor,
         ofLp_sub,
-        toOperator_paperHilbertSchmidtTensor,
-        toOperator_paperHilbertSchmidtTensor]
+        toOperator_hilbertSchmidtTensor,
+        toOperator_hilbertSchmidtTensor]
     have hnorm : ‖z m - z n‖ =
         paperHilbertSchmidtNorm (A m - A n) := by
-      rw [← hcanon, norm_paperHilbertSchmidtTensor]
+      rw [← hcanon, norm_hilbertSchmidtTensor]
     simpa only [dist_eq_norm, hnorm] using hN m n hm hn
   obtain ⟨zlim, hzlim⟩ := cauchySeq_tendsto_of_complete hzCauchy
   let L : E →L[ℂ] F := ofLp (hSBasis _) zlim
@@ -169,11 +169,11 @@ theorem hilbertSchmidt_complete_complex
     isPaperHilbertSchmidt_sub (hA n) hL
   have hcanon : hilbertSchmidtTensor (A n - L) hsub = z n - zlim := by
     apply ofLp_injective (hSBasis _)
-    rw [toOperator_paperHilbertSchmidtTensor,
+    rw [toOperator_hilbertSchmidtTensor,
       ofLp_sub,
-      toOperator_paperHilbertSchmidtTensor]
+      toOperator_hilbertSchmidtTensor]
   have hnorm : paperHilbertSchmidtNorm (A n - L) = ‖z n - zlim‖ := by
-    rw [← norm_paperHilbertSchmidtTensor (A n - L) hsub, hcanon]
+    rw [← norm_hilbertSchmidtTensor (A n - L) hsub, hcanon]
   rw [hnorm, ← dist_eq_norm]
   exact hN n hn
 

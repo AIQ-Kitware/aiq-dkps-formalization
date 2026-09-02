@@ -25,7 +25,7 @@ namespace ExactSinTheta
 #check CommonCoreTheorem62Data.result_across
 #check RealCommonCoreTheorem61Data.result_every_unitarilyInvariantNorm_across
 #check RealCommonCoreTheorem62Data.result_across
-#check spectrum_paperSourceDirectedAngleC_subset_Icc
+#check spectrum_directedAngleBlockC_subset_Icc
 #check sineDefinedDirectedAngleC_eq_source
 #check sourceDirectedAngleC_eq_arcsin_sineModulus
 #check sourceDirectedAngleR_eq_arcsin_sineModulus

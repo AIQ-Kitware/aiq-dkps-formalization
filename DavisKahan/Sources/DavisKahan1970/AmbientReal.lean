@@ -221,7 +221,7 @@ theorem tanTheta_ambient_bounded_symmetricNorming_real_of_transversality
       delta * N.gauge (tanAngleOperatorR U V) ≤ N.gauge (T - A) := by
   have htrC : ‖sinAngleOperatorC (complexifySubmodule U)
       (complexifySubmodule V)‖ < 1 := by
-    rwa [← complexify_paperSinAngleOperatorR U V, norm_complexify]
+    rwa [← complexify_sinAngleOperatorR U V, norm_complexify]
   have hMemC : N.Mem (complexify T - complexify A) := by
     rw [← complexify_sub]
     exact (SymmetricNormingFunction.mem_complexify_iff N (T - A)).2 hMem
@@ -240,7 +240,7 @@ theorem tanTheta_ambient_bounded_symmetricNorming_real_of_transversality
         rw [← complexifySubmodule_orthogonal V] at hy
         exact le_re_inner_of_mem_complexifySubmodule hUnwantedLower hy)
       htrC hMemC
-  rw [← complexify_paperTanAngleOperatorR U V] at hmemC hboundC
+  rw [← complexify_tanAngleOperatorR U V] at hmemC hboundC
   rw [← complexify_sub] at hboundC
   refine ⟨(SymmetricNormingFunction.mem_complexify_iff N _).1 hmemC, ?_⟩
   rwa [SymmetricNormingFunction.gauge_complexify,
@@ -288,7 +288,7 @@ theorem sinTwoTheta_ambient_bounded_symmetricNorming_real
           (complexifySubmodule_orthogonal U).symm] at hr'
         exact hUspec' r hr')
       hMemC
-  rw [← complexify_paperSinTwoAngleOperatorR U V] at hmemC hboundC
+  rw [← complexify_sinTwoAngleOperatorR U V] at hmemC hboundC
   rw [← complexify_sub] at hboundC
   refine ⟨(SymmetricNormingFunction.mem_complexify_iff N _).1 hmemC, ?_⟩
   rwa [SymmetricNormingFunction.gauge_complexify,
@@ -341,7 +341,7 @@ theorem tanTwoTheta_ambient_bounded_orderedForm_symmetricNorming_real
       (fun z hz => mapsTo_orthogonal_complexifySubmodule U hHU hz)
       (fun z hz => mapsTo_of_mem_orthogonal_complexifySubmodule U hHUperp hz)
       ((SymmetricNormingFunction.mem_complexify_iff N H).2 hHmem)
-  rw [← complexify_paperTanTwoAngleOperatorR U V] at hmemC hboundC
+  rw [← complexify_tanTwoAngleOperatorR U V] at hmemC hboundC
   refine ⟨(SymmetricNormingFunction.mem_complexify_iff N _).1 hmemC, ?_⟩
   rwa [SymmetricNormingFunction.gauge_complexify,
     SymmetricNormingFunction.gauge_complexify] at hboundC
@@ -474,7 +474,7 @@ theorem tanTwoTheta_ambient_bounded_spectralGap_symmetricNorming_real
       (fun z hz => mapsTo_orthogonal_complexifySubmodule U hHU hz)
       (fun z hz => mapsTo_of_mem_orthogonal_complexifySubmodule U hHUperp hz)
       ((SymmetricNormingFunction.mem_complexify_iff N H).2 hHmem)
-  rw [← complexify_paperTanTwoAngleOperatorR U V] at hmemC hboundC
+  rw [← complexify_tanTwoAngleOperatorR U V] at hmemC hboundC
   refine ⟨(SymmetricNormingFunction.mem_complexify_iff N _).1 hmemC, ?_⟩
   rwa [SymmetricNormingFunction.gauge_complexify,
     SymmetricNormingFunction.gauge_complexify] at hboundC

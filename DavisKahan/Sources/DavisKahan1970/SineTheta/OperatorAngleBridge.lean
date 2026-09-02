@@ -86,7 +86,7 @@ noncomputable def directedAngleOperatorC
     (TauCeti.DavisKahanExt.sinAngleOperatorDirectedC U V)
 
 /-- The literal directed angle is self-adjoint. -/
-theorem isSelfAdjoint_paperDirectedAngleOperatorC
+theorem isSelfAdjoint_directedAngleOperatorC
     (U V : Submodule ℂ E)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] :
     IsSelfAdjoint (directedAngleOperatorC U V) := by
@@ -104,7 +104,7 @@ theorem directedAngleOperatorC_nonneg
     ((spectrum_sinAngleOperatorDirectedC_subset_Icc U V hx).1)
 
 /-- Applying sine to `Theta0` recovers the positive directed sine exactly. -/
-theorem cfc_sin_paperDirectedAngleOperatorC
+theorem cfc_sin_directedAngleOperatorC
     (U V : Submodule ℂ E)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] :
     cfc Real.sin (directedAngleOperatorC U V) =
@@ -149,7 +149,7 @@ theorem directedSinAngleOperatorC_eq
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] :
     paperDirectedSinAngleOperatorC U V =
       TauCeti.DavisKahanExt.sinAngleOperatorDirectedC U V :=
-  cfc_sin_paperDirectedAngleOperatorC U V
+  cfc_sin_directedAngleOperatorC U V
 
 /-- The directed literal sine has exactly the singular values of the cross
 projection `P_(V complement) P_U`, as in the paper. -/
@@ -200,7 +200,7 @@ theorem crossSineSum_same_literalSin
   exact sameApproximationSingularValues_neg _
 
 /-- The literal directed angle has spectrum in `[0, pi/2]`. -/
-theorem spectrum_paperDirectedAngleOperatorC_subset_Icc
+theorem spectrum_directedAngleOperatorC_subset_Icc
     (U V : Submodule ℂ E)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] :
     spectrum ℝ (directedAngleOperatorC U V) ⊆

@@ -292,7 +292,7 @@ above `α + δ`, `H` bounded self-adjoint with `H₀ = H₁ = 0`.
 | **norm** | `UINorm` ✓ |
 | **gap** | ordered form bounds; production takes `TauCeti.LinearPMap.ReducesSubspace A U`, an **arbitrary reducing** `U`, by the same `ReducingCutoff` route as 4a |
 | **RHS quantity** | `2 * N.norm H`, hypothesis `N.Finite H` ✓ |
-| **angle multiplicity** | ambient, with the ambient multiplicity: `tanSeq (ambientDoubleSine U V)`, `ambientDoubleSine U V = P_{J_V U} − P_U`. Production concludes on `absTanTwoAngleOperatorC U V`, and `approximationNumber_paperAbsTanTwoAngleOperatorC_projectorDifference` proves the two sequences agree ✓ |
+| **angle multiplicity** | ambient, with the ambient multiplicity: `tanSeq (ambientDoubleSine U V)`, `ambientDoubleSine U V = P_{J_V U} − P_U`. Production concludes on `absTanTwoAngleOperatorC U V`, and `approximationNumber_absTanTwoAngleOperatorC_projectorDifference` proves the two sequences agree ✓ |
 | **constant** | `2` ✓ |
 | **pole handling** | conclusion, as in 4a; production's docstring says explicitly that no pole hypothesis is asked of the caller ✓ |
 | **status** | **proved, at arbitrary `[RCLike 𝕜]`** (`Solution.tanTwoTheta_ambient_proof`). |

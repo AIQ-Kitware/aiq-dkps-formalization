@@ -359,7 +359,7 @@ Both complexify to the two complex spellings of the same quantity: the left to
 `paperSinTwoAngleOperatorC`, which is the *modulus* of the reflected projector
 difference, and the right to that difference itself.  A modulus does not change
 approximation numbers, so no source norm can tell them apart. -/
-theorem sameSingular_paperSinTwoAngleOperatorR_reflectedProjectorDifference
+theorem sameSingular_sinTwoAngleOperatorR_reflectedProjectorDifference
     (U V : Submodule ℝ Er)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] :
     SameApproximationSingularSequence
@@ -371,7 +371,7 @@ theorem sameSingular_paperSinTwoAngleOperatorR_reflectedProjectorDifference
             ((complexifySubmodule V).reflection.toLinearEquiv :
               RealComplexification Er →ₗ[ℂ] RealComplexification Er)).starProjection -
           (complexifySubmodule U).starProjection).modulus := by
-    rw [TauCeti.DavisKahanExt.complexify_paperSinTwoAngleOperatorR U V,
+    rw [TauCeti.DavisKahanExt.complexify_sinTwoAngleOperatorR U V,
       TauCeti.DavisKahanExt.sinTwoAngleOperatorC_eq_modulus_starProjection_sub]
   have hright : complexify
         ((U.map (V.reflection.toLinearEquiv : Er →ₗ[ℝ] Er)).starProjection -
@@ -461,7 +461,7 @@ theorem sinTwoTheta_ambient_unbounded_addBounded_symmetricNorming_real
       hδ hgap' hEmem
   obtain ⟨hiff, hgauge⟩ :=
     SameApproximationSingularSequence.normingMem_iff_and_gauge_eq N
-      (sameSingular_paperSinTwoAngleOperatorR_reflectedProjectorDifference
+      (sameSingular_sinTwoAngleOperatorR_reflectedProjectorDifference
         (realSelfAdjointSpectralSubspace A hA B hB)
         (realSelfAdjointSpectralSubspace (TauCeti.LinearPMap.addBounded A Eop)
           (DavisKahan.addBounded_isSelfAdjoint A hA Eop hEop) S hS))

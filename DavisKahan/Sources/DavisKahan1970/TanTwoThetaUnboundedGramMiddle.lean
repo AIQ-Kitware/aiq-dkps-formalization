@@ -424,7 +424,7 @@ theorem inner_reflectionResidualCorner (K : H →L[ℂ] H) (u : Uᗮ) (v : U) :
     ⟪u, reflectionResidualCorner U K v⟫_ℂ = ⟪(u : H), K ((v : U) : H)⟫_ℂ := by
   have h : ((reflectionResidualCorner U K v : Uᗮ) : H) =
       Uᗮ.starProjection (K ((v : U) : H)) :=
-    coe_paperBlockCompression_apply Uᗮ U K v
+    coe_blockCompression_apply Uᗮ U K v
   have h2 : ⟪u, reflectionResidualCorner U K v⟫_ℂ =
       ⟪(u : H), ((reflectionResidualCorner U K v : Uᗮ) : H)⟫_ℂ := rfl
   rw [h2, h, ← Submodule.inner_starProjection_left_eq_right,

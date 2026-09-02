@@ -47,7 +47,7 @@ def diagonalPair (U V : Submodule 𝕜 E)
 
 omit [CompleteSpace E] in
 /-- The reflection identity displayed in the proof of Davis--Kahan Lemma 6.2. -/
-theorem two_smul_paperDiagonalPair_eq_add_reflections
+theorem two_smul_diagonalPair_eq_add_reflections
     (U V : Submodule 𝕜 E)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
     (K : E →L[𝕜] E) :
@@ -101,7 +101,7 @@ theorem diagonalPair_gauge_le
       2 * N.gaugeReal (diagonalPair U V K) := by
     rw [N.gaugeReal_smul (2 : 𝕜) hB]
     norm_num
-  rw [← two_smul_paperDiagonalPair_eq_add_reflections U V K, htwo] at hsum
+  rw [← two_smul_diagonalPair_eq_add_reflections U V K, htwo] at hsum
   linarith
 
 /-- Lemma 6.2 simultaneously for every finite Ky Fan approximation gauge. -/

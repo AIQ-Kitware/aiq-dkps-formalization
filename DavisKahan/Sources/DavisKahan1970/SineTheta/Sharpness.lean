@@ -94,19 +94,19 @@ noncomputable def planarResidual (delta theta : ℝ) :
 
 /-- The first model vector is a unit vector. -/
 @[simp]
-theorem norm_paperPlaneE0 : ‖planarModelE0 (𝕜 := 𝕜)‖ = 1 := by
+theorem norm_planarModelE0 : ‖planarModelE0 (𝕜 := 𝕜)‖ = 1 := by
   simp [planarModelE0]
 
 /-- The second model vector is a unit vector. -/
 @[simp]
-theorem norm_paperPlaneE1 : ‖planeE1 (𝕜 := 𝕜)‖ = 1 := by
+theorem norm_planeE1 : ‖planeE1 (𝕜 := 𝕜)‖ = 1 := by
   simp [planeE1]
 
 /-- The adjoint of a scalar column reads off the corresponding coordinate.
 
 Every block identity below needs this; without it the adjoint stays an opaque
 term and no component computation closes. -/
-theorem adjoint_paperScalarColumn_apply (i : Fin 2) (x : PaperPlane 𝕜) :
+theorem adjoint_scalarColumn_apply (i : Fin 2) (x : PaperPlane 𝕜) :
     (scalarColumn (EuclideanSpace.single i (1 : 𝕜))).adjoint x =
       x.ofLp i := by
   -- Identify the adjoint by the defining inner-product identity, evaluated on
@@ -150,15 +150,15 @@ theorem planarTrialMap_apply (theta : ℝ) (z : 𝕜) :
 
 /-- The adjoint of the exact embedding reads off the zeroth coordinate. -/
 @[simp]
-theorem adjoint_paperPlanarExactMap_apply (x : PaperPlane 𝕜) :
+theorem adjoint_planarExactMap_apply (x : PaperPlane 𝕜) :
     (planarExactMap (𝕜 := 𝕜)).adjoint x = x.ofLp 0 :=
-  adjoint_paperScalarColumn_apply 0 x
+  adjoint_scalarColumn_apply 0 x
 
 /-- The adjoint of the complement embedding reads off the first coordinate. -/
 @[simp]
-theorem adjoint_paperPlanarComplementMap_apply (x : PaperPlane 𝕜) :
+theorem adjoint_planarComplementMap_apply (x : PaperPlane 𝕜) :
     (planarComplementMap (𝕜 := 𝕜)).adjoint x = x.ofLp 1 :=
-  adjoint_paperScalarColumn_apply 1 x
+  adjoint_scalarColumn_apply 1 x
 
 /-- The trial column is isometric for every real angle. -/
 theorem planarTrialMap_isometry (theta : ℝ) :
@@ -181,7 +181,7 @@ theorem planarTrialMap_isometry (theta : ℝ) :
     -- Pythagoras is stated in `mul_self` form, so the square is opened first.
     have hpyth :=
       norm_add_sq_eq_norm_sq_add_norm_sq_of_inner_eq_zero _ _ horthSmul
-    simp only [norm_smul, norm_smul, norm_paperPlaneE0, norm_paperPlaneE1, mul_one,
+    simp only [norm_smul, norm_smul, norm_planarModelE0, norm_planeE1, mul_one,
       mul_one, RCLike.norm_ofReal, RCLike.norm_ofReal] at hpyth
     rw [sq, hpyth, ← sq, ← sq, sq_abs, sq_abs]
     exact Real.cos_sq_add_sin_sq theta
@@ -250,7 +250,7 @@ theorem planarComplementMap_norm_rank :
   constructor
   · rw [planarComplementMap, scalarColumn,
       ContinuousLinearMap.norm_smulRight_apply,
-      ContinuousLinearMap.norm_id, one_mul, norm_paperPlaneE1]
+      ContinuousLinearMap.norm_id, one_mul, norm_planeE1]
   · exact (LinearMap.rank_le_domain
       (planarComplementMap (𝕜 := 𝕜)).toLinearMap).trans_eq (by simp)
 
@@ -341,7 +341,7 @@ private theorem real_norm_sq_combo (a b : ℝ) :
     rw [real_inner_smul_left, real_inner_smul_right, real_inner_e0_e1]
     ring
   have hpyth := norm_add_sq_eq_norm_sq_add_norm_sq_real horth
-  simp only [norm_smul, norm_smul, norm_paperPlaneE0, norm_paperPlaneE1, mul_one,
+  simp only [norm_smul, norm_smul, norm_planarModelE0, norm_planeE1, mul_one,
     mul_one, Real.norm_eq_abs, Real.norm_eq_abs] at hpyth
   rw [sq, hpyth, ← sq, ← sq, sq_abs, sq_abs]
 
@@ -416,7 +416,7 @@ private theorem starProjection_span_singleton_apply_of_norm_one
     | smul c a _ ha => rw [inner_smul_right, ha, mul_zero]
 
 /-- The trial generator in the printed counterexample is a unit vector. -/
-theorem norm_paperCounterexampleTrialVector :
+theorem norm_counterexampleTrialVector :
     ‖counterexampleTrialVector‖ = 1 := by
   have hsqrt2 : 0 < Real.sqrt 2 := Real.sqrt_pos.2 (by norm_num)
   have hdiffsq : ‖planarModelE0 (𝕜 := ℝ) - planeE1‖ ^ 2 = 2 := by
@@ -443,7 +443,7 @@ theorem counterexampleExact_starProjection_e0 :
   have h : counterexampleExact.starProjection (planarModelE0 (𝕜 := ℝ)) =
       ⟪planarModelE0 (𝕜 := ℝ), planarModelE0 (𝕜 := ℝ)⟫_ℝ •
         planarModelE0 (𝕜 := ℝ) :=
-    starProjection_span_singleton_apply_of_norm_one _ _ norm_paperPlaneE0
+    starProjection_span_singleton_apply_of_norm_one _ _ norm_planarModelE0
   rw [h]
   simp [planarModelE0]
 
@@ -454,7 +454,7 @@ theorem counterexampleExact_starProjection_e1 :
   have h : counterexampleExact.starProjection (planeE1 (𝕜 := ℝ)) =
       ⟪planarModelE0 (𝕜 := ℝ), planeE1 (𝕜 := ℝ)⟫_ℝ •
         planarModelE0 (𝕜 := ℝ) :=
-    starProjection_span_singleton_apply_of_norm_one _ _ norm_paperPlaneE0
+    starProjection_span_singleton_apply_of_norm_one _ _ norm_planarModelE0
   rw [h, real_inner_e0_e1, zero_smul]
 
 /-- Pointwise formula for the orthogonal projection onto the trial line. -/
@@ -464,7 +464,7 @@ theorem counterexampleTrial_starProjection_apply (x : PaperRealPlane) :
       ⟪counterexampleTrialVector, x⟫_ℝ •
         counterexampleTrialVector :=
   starProjection_span_singleton_apply_of_norm_one _ _
-    norm_paperCounterexampleTrialVector
+    norm_counterexampleTrialVector
 
 /-- Value of the trial projection at `e₀`: the `π/4` angle splits it evenly. -/
 @[simp]

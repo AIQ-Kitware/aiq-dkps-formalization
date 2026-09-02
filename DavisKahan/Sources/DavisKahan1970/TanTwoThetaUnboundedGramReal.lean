@@ -52,7 +52,7 @@ So the real statement below mentions no complex object at all: `A`, `B`, `Z`,
 
 * `complexifyBoundedCutoff` — a real bounded cutoff, transported to the
   complexification;
-* `approximationSingularValue_paperBlockCompression_complexify` — the exact
+* `approximationSingularValue_blockCompression_complexify` — the exact
   transport of every directed corner's approximation numbers;
 * `gap_mul_kyFan_reflectionTangentCorner_le_two_mul_kyFan_real` — the Ky Fan
   prefix endpoint over real scalars;
@@ -169,11 +169,11 @@ section Corners
 variable (Ω Γ : Submodule ℝ E) [Ω.HasOrthogonalProjection] [Γ.HasOrthogonalProjection]
 
 /-- The block compression, read back into the ambient space, is the pinched
-operator.  This is `coe_paperBlockCompression_apply` in operator form. -/
-theorem subtypeL_comp_paperBlockCompression (K : E →L[ℝ] E) :
+operator.  This is `coe_blockCompression_apply` in operator form. -/
+theorem subtypeL_comp_blockCompression (K : E →L[ℝ] E) :
     Ω.subtypeL ∘L blockCompression Ω Γ K =
       Ω.starProjection ∘L K ∘L Γ.subtypeL :=
-  ContinuousLinearMap.ext fun z => coe_paperBlockCompression_apply Ω Γ K z
+  ContinuousLinearMap.ext fun z => coe_blockCompression_apply Ω Γ K z
 
 /-- **Through the canonical subspace adapters, the complexified directed corner is
 exactly the complexification of the real directed corner.** -/
@@ -200,15 +200,15 @@ theorem blockCompression_complexify_equiv (K : E →L[ℝ] E) :
     rw [complexify_comp]
     exact coe_complexifySubmoduleEquiv_eq_complexify_subtypeL Ω
       (complexify (blockCompression Ω Γ K) w)
-  rw [hlhs, subtypeL_comp_paperBlockCompression,
-    coe_paperBlockCompression_apply, starProjection_complexifySubmodule, hycoe,
+  rw [hlhs, subtypeL_comp_blockCompression,
+    coe_blockCompression_apply, starProjection_complexifySubmodule, hycoe,
     complexify_comp, complexify_comp]
   rfl
 
 /-- **Approximation singular values of a directed corner are preserved on the nose
 by complexification.**  This is what makes the descent of the `tan 2Θ` endpoint
 sound. -/
-theorem approximationSingularValue_paperBlockCompression_complexify
+theorem approximationSingularValue_blockCompression_complexify
     (K : E →L[ℝ] E) (n : ℕ) :
     approximationSingularValue n
         (blockCompression (complexifySubmodule Ω) (complexifySubmodule Γ)
@@ -222,7 +222,7 @@ theorem approximationSingularValue_paperBlockCompression_complexify
 
 /-- The finite Ky Fan gauge of a directed corner is preserved on the nose by
 complexification. -/
-theorem kyFanApproximationGauge_paperBlockCompression_complexify
+theorem kyFanApproximationGauge_blockCompression_complexify
     (K : E →L[ℝ] E) (k : ℕ) :
     kyFanApproximationGauge k
         (blockCompression (complexifySubmodule Ω) (complexifySubmodule Γ)
@@ -230,7 +230,7 @@ theorem kyFanApproximationGauge_paperBlockCompression_complexify
       kyFanApproximationGauge k (blockCompression Ω Γ K) := by
   unfold kyFanApproximationGauge ContinuousLinearMap.kyFanGauge
   exact Finset.sum_congr rfl fun n _ =>
-    approximationSingularValue_paperBlockCompression_complexify Ω Γ K n
+    approximationSingularValue_blockCompression_complexify Ω Γ K n
 
 end Corners
 

@@ -558,14 +558,14 @@ theorem isUnit_signedCosTwo_of_isUnit_diagonalPart_sq
 /-- **The unbounded theorem's own conclusion excludes every quarter-turn pole.**
 
 Composition of `isUnit_signedCosTwo_of_isUnit_diagonalPart_sq` with
-`cos_two_ne_zero_of_isUnit_one_sub_two_mul_paperProjectorDifference_sq`.  This is
+`cos_two_ne_zero_of_isUnit_one_sub_two_mul_projectorDifference_sq`.  This is
 what lets the source-facing `tan 2Θ` theorem state the paper's `|tan 2Θ|` without
 asking its caller for an independent pole certificate. -/
 theorem cos_two_ne_zero_of_isUnit_diagonalPart_reflection_sq
     (h : IsUnit (U.diagonalPart V.reflectionOperator *
       U.diagonalPart V.reflectionOperator)) :
     ∀ t ∈ spectrum ℝ (angleOperatorC U V), Real.cos (2 * t) ≠ 0 :=
-  cos_two_ne_zero_of_isUnit_one_sub_two_mul_paperProjectorDifference_sq
+  cos_two_ne_zero_of_isUnit_one_sub_two_mul_projectorDifference_sq
     (isUnit_signedCosTwo_of_isUnit_diagonalPart_sq U V h)
 
 /-- **The reflection tangent and the paper's `|tan 2Θ|` have the same
@@ -581,7 +581,7 @@ theorem sameApproximationSingularValues_unboundedReflectionTangent
     ExactSinTheta.SameApproximationSingularValues
       (unboundedReflectionTangent U V.reflectionOperator)
       (absTanTwoAngleOperatorC U V) := by
-  have hinv := isUnit_one_sub_two_mul_paperProjectorDifference_sq_of_cos_two_ne_zero hcos
+  have hinv := isUnit_one_sub_two_mul_projectorDifference_sq_of_cos_two_ne_zero hcos
   have hrefl : U.reflectionOperator
       = U.reflection.toContinuousLinearEquiv.toContinuousLinearMap := by
     ext x; rfl
@@ -731,7 +731,7 @@ theorem extendedGauge_unboundedReflectionTangent_real
       (unboundedReflectionTangent U V.reflectionOperator),
     ← ExactSinTheta.SymmetricNormingFunction.extendedGauge_complexify N
       (absTanTwoAngleOperatorR U V),
-    complexify_paperAbsTanTwoAngleOperatorR,
+    complexify_absTanTwoAngleOperatorR,
     ← unboundedReflectionTangent_complexifySubmodule U V.reflectionOperator hCC,
     hZ]
   exact htrans

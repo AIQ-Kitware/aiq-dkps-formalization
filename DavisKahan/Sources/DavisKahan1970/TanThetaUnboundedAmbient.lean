@@ -295,7 +295,7 @@ theorem tanTheta_ambient_unboundedOperator_boundedRitzData_symmetricNorming_comp
     data.approximationSingularValue_sineBlock_lt_one_infiniteData
       hdelta hCompression hcross 0
   have hambient : ‖directedSineAmbient U V‖ < 1 := by
-    have h := approximationNumber_paperDirectedSineAmbient_le (U := U) (V := V) 0
+    have h := approximationNumber_directedSineAmbient_le (U := U) (V := V) 0
     rw [(directedSineAmbient U V).approximationNumber_index_zero] at h
     exact lt_of_le_of_lt h hdirected
   have htr : ‖sinAngleOperatorC U V‖ < 1 := by
@@ -405,7 +405,7 @@ theorem tanTheta_ambient_unboundedRitzData_symmetricNorming_complex
       approximationSingularValue 0 (theorem63DirectedSineBlock U V) < 1 :=
     D.approximationSingularValue_sineBlock_lt_one V hdelta hupper hcross 0
   have hambient : ‖directedSineAmbient U V‖ < 1 := by
-    have h := approximationNumber_paperDirectedSineAmbient_le (U := U) (V := V) 0
+    have h := approximationNumber_directedSineAmbient_le (U := U) (V := V) 0
     rw [(directedSineAmbient U V).approximationNumber_index_zero] at h
     exact lt_of_le_of_lt h hdirected
   have htr : ‖sinAngleOperatorC U V‖ < 1 := by
@@ -525,7 +525,7 @@ theorem norm_sinAngleOperatorC_lt_one_of_unboundedRitz
       approximationSingularValue 0 (theorem63DirectedSineBlock U V) < 1 :=
     D.trial.approximationSingularValue_sineBlock_lt_one V hdelta hupper hcross 0
   have hambient : ‖directedSineAmbient U V‖ < 1 := by
-    have h := approximationNumber_paperDirectedSineAmbient_le (U := U) (V := V) 0
+    have h := approximationNumber_directedSineAmbient_le (U := U) (V := V) 0
     rw [(directedSineAmbient U V).approximationNumber_index_zero] at h
     exact lt_of_le_of_lt h hdirected
   rw [norm_sinAngleOperatorC U V,

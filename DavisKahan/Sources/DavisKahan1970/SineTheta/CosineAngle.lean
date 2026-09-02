@@ -89,7 +89,7 @@ noncomputable def sineBlockModulusC
   ContinuousLinearMap.modulus (sineBlockC U V)
 
 /-- The cosine modulus is a positive contraction. -/
-theorem norm_paperCosineModulusC_le_one
+theorem norm_cosineBlockModulusC_le_one
     (U V : Submodule ℂ E)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] :
     ‖cosineBlockModulusC U V‖ ≤ 1 := by
@@ -108,7 +108,7 @@ theorem norm_paperCosineModulusC_le_one
     _ = 1 := by ring
 
 /-- The real spectrum of the cosine modulus lies in `[0,1]`. -/
-theorem spectrum_paperCosineModulusC_subset_Icc
+theorem spectrum_cosineBlockModulusC_subset_Icc
     (U V : Submodule ℂ E)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] :
     spectrum ℝ (cosineBlockModulusC U V) ⊆ Set.Icc 0 1 := by
@@ -125,7 +125,7 @@ theorem spectrum_paperCosineModulusC_subset_Icc
   refine (le_abs_self x).trans (habs.trans ?_)
   calc
     ‖cosineBlockModulusC U V‖ * ‖(1 : ↥U →L[ℂ] ↥U)‖ ≤ 1 * 1 :=
-      mul_le_mul (norm_paperCosineModulusC_le_one U V) hone
+      mul_le_mul (norm_cosineBlockModulusC_le_one U V) hone
         (norm_nonneg _) zero_le_one
     _ = 1 := by ring
 
@@ -163,7 +163,7 @@ theorem sourceDirectedCosC_eq
         cfc (fun x : ℝ => x) (cosineBlockModulusC U V) := by
       apply cfc_congr
       intro x hx
-      have hxi := spectrum_paperCosineModulusC_subset_Icc U V hx
+      have hxi := spectrum_cosineBlockModulusC_subset_Icc U V hx
       exact Real.cos_arccos (by linarith [hxi.1]) hxi.2
     _ = cosineBlockModulusC U V := cfc_id' ℝ _
 
