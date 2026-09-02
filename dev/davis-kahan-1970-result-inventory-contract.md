@@ -409,7 +409,7 @@ conclusion stated under `lemma`, and gap tokens absent from the printed type.
 
 `type_requirements` on a source atom are a **necessary** condition read off the
 compiler-printed type — `→ₗ.[` for unbounded ambient scope, no
-`FiniteDimensional`, `PaperUnitaryInvariantNorm` for the source norm, `→L[` for a
+`FiniteDimensional`, `SymmetricNormingFunction` for the source norm, `→L[` for a
 bounded residual.  Where no substring decides the question, the atom instead
 carries `scope_assertion_mode: clause_justified` and every clause must record a
 named justification.  `half-infinite-gap-intervals` is the case: the tangent
