@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "status": "partially_applied",
+  "status": "applied_and_retired",
   "generated_on": "2026-09-02",
   "purpose": "A census of declaration names in DavisKahan and ForTauCeti motivated by something other than the mathematics. The `paper`-residue family HAS BEEN APPLIED; see `applied_from_this_document`. The `source` and scaffolding families are PROPOSALS ONLY and none of them has been applied -- the `source-provenance` family is explicitly not approved, because a reviewer produced a counterexample to the heuristic that generated it.",
   "policy": "A permanent declaration name describes the mathematical object, or the hypotheses and scope that distinguish it from a neighbouring statement. Provenance -- which paper, which section, which campaign -- belongs in namespaces, modules, docstrings and census metadata. THE ONE SANCTIONED EXCEPTION is a declaration that exists purely for presentation: a wrapper that bundles arguments, or restates a theorem in display form, with no new mathematical content. Such a declaration should say that it is a presentation, because that is the true reason it exists. The repository already has this concept: `presentation_wrapper` is an accepted supporting-evidence role in the result inventory, used on ten declarations.",
@@ -200,10 +200,7 @@
     }
   ],
   "not_yet_decided": [
-    "The 106-name `source-provenance` pass is NOT approved and must not be applied as a batch; see that family's counterexample.",
-    "The `source-needs-review` family (78) needs a human decision per declaration.",
-    "The presentation marker, `_presentation` against `_bundled`.",
-    "Whether the broader `source` and scaffolding campaign should happen at all. The reviewer's position is to finish the `paper` campaign cleanly first, on the grounds that it is already exposing architectural distinctions that will inform the decision."
+    "RETIRED 2026-09-03: every question in this list has been decided and applied. The remaining naming work is namespace normalisation (`ExactSinTheta`, `DavisKahanExt`, `DavisKahanTheory`), which is an architectural migration and is not scoped by this document."
   ],
   "precedent": {
     "completed": "PaperUnitaryInvariantNorm -> SymmetricNormingFunction, applied and green.",
@@ -691,5 +688,7 @@
       "unboundedSinThetaDataOfPaperCommonDomain_residual"
     ],
     "shape": "What is left is not residue. 28 are the Hilbert-Schmidt family, parked as an API migration. Of the other 21, the paperData/paperForm names are the presentation family awaiting the marker decision, and the rest are two small clusters -- the unboundedSinThetaDataOfPaperCommonDomain/HasPaperCommonDomain cluster and three tan 2Theta corner names sitting on the open directed endpoint -- that need a reading rather than a substitution. The only two Paper-named modules left, Sylvester/PaperHilbertSchmidt.lean and Sylvester/PaperOperatorNorm.lean, are tied to the same Hilbert-Schmidt decision."
-  }
+  },
+  "retired_on": "2026-09-03",
+  "retirement_note": "HISTORICAL. Every family this document proposed has since been adjudicated and applied, so its `not_yet_decided` list and its `full_lists` classifications describe the tree as it was on 2026-09-02, not as it is. Read it as the census that motivated the campaign, never as a work list. What was applied after it was written: the 14 remaining non-Hilbert-Schmidt `paper` names; the scaffolding family (`raw`, the public `Aux` objects, `key_identity`, `smul_compat`, the `tripwire` counterexample); 107 of the `source-provenance` family, with 22 deliberately kept because there `source` is the domain side of an operator or subspace pair; six campaign filenames and two catch-all modules; and the Hilbert-Schmidt consolidation, which deleted `IsPaperHilbertSchmidt`, `paperHilbertSchmidtEnergy` and `paperHilbertSchmidtNorm` outright rather than renaming them. Two entries in this document's own `source-provenance` list were misclassified and are among the 22 kept: `kyFanGauge_add_le_of_finiteDimensional_source` (a finite-dimensional *domain*) and `leftCompressed_comp_source_eq`. Current state is recorded in the commit history and in `dev/davis-kahan-1970-full-source-census.json`."
 }

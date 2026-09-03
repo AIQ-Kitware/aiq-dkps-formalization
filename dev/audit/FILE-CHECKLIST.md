@@ -905,7 +905,7 @@ Mark a file complete only after its findings are recorded or fixed.
 - [x] `DavisKahan/Sources/Davis1963/RotationBound.lean` — 361 lines · Lean source
 - [ ] `DavisKahan/Sources/DavisKahan1970/Ideals/KyFanNorm.lean` — 360 lines · Lean source
 - [ ] `DavisKahan/Sources/DavisKahan1970/Section3PrincipalSquareRoot.lean` — 360 lines · Lean source
-- [ ] `DavisKahan/Sources/DavisKahan1970/Sylvester/PaperOperatorNorm.lean` — 360 lines · Lean source
+- [ ] `DavisKahan/Sources/DavisKahan1970/Sylvester/OperatorNormEstimate.lean` — 360 lines · Lean source
 - [ ] `DavisKahan/Sources/DavisKahan1970/Section3Proposition35.lean` — 355 lines · Lean source
 - [x] `DavisKahan/Sources/DavisKahan1970/SharpKyFan.lean` — 352 lines · Lean source
 - [ ] `DavisKahan/Sources/DavisKahan1970/Section3AcuteDirectRotation.lean` — 351 lines · Lean source
@@ -993,7 +993,7 @@ Mark a file complete only after its findings are recorded or fixed.
 - [x] `DavisKahan/Sources/DavisKahan1970/Section4FiniteSurface.lean` — 127 lines · Lean source
 - [x] `DavisKahan/Sources/DavisKahan1970/Ideals/HilbertSchmidtTensor.lean` — 122 lines · Lean source
 - [ ] `DavisKahan/Sources/DavisKahan1970/Section8/SourceSurface.lean` — 122 lines · Lean source
-- [x] `DavisKahan/Sources/DavisKahan1970/Sylvester/PaperHilbertSchmidt.lean` — 117 lines · Lean source
+- [x] `DavisKahan/Sources/DavisKahan1970/Sylvester/HilbertSchmidtEstimate.lean` — 117 lines · Lean source
 - [ ] `DavisKahan/Sources/DavisKahan1970/Audits/Section3.lean` — 112 lines · Lean source
 - [x] `DavisKahan/Sources/DavisKahan1970/Ideals/HilbertSchmidtFrobenius.lean` — 106 lines · Lean source
 - [x] `DavisKahan/Sources/DavisKahan1970/Audits/Section9.lean` — 103 lines · Lean source

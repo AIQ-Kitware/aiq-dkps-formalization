@@ -30,7 +30,7 @@ from a target splitting and at the canonical branch.
 The machinery is owned upstream.  The circle continuation witness is
 `InfiniteDimensional/SinTheta/Continuation/CircleWitness.lean`, the form/spectrum
 bridges are `SpectralTheory/SpectralGapFormBounds.lean`, and the branch itself
-is `Section8/SourceTheorem81.lean`; this module states the paper's sentences
+is `Section8/Theorem81.lean`; this module states the paper's sentences
 against them.
 -/
 
@@ -237,7 +237,7 @@ unperturbed and perturbed forms with cancelling cut terms, which is not the
 source inequality and is false in general.  The faithful quadratic-form
 content of Theorem 8.1(i) compares the perturbed form on the old branch with
 its cosine-block compression into the corresponding new branch. -/
-structure Theorem81SourceConclusion
+structure Theorem81ContinuationConclusion
     (C : SpectralContinuationWitness A E s) (a b delta : ℝ) : Prop where
   core : DavisKahan1970.Section8.Theorem81CoreConclusion C a b delta
   upper_compression :
@@ -268,7 +268,7 @@ theorem theorem8_1_selectedBranch_and_spectralRepulsion
     (h1 : SpectrumIn (A + E)
       (spectralContinuationWitness_of_circle D).targetSelectedSpectralSubspaceᗮ
       (Set.Ici b)) :
-    Theorem81SourceConclusion
+    Theorem81ContinuationConclusion
       (spectralContinuationWitness_of_circle D) a b delta := by
   have hsym : IsSelfAdjointOperator (A + E) := D.hA.add D.hE
   have hsmallC : selectedBranchProjectionLipschitzConstant
@@ -295,7 +295,7 @@ from the finite-gap, off-diagonal, and perturbation half-gap hypotheses by
 below is a sufficient one-step estimate for locating the endpoint below the
 quarter-turn threshold; replacing it by the source continuation/no-crossing
 argument is a separate branch-selection step. -/
-theorem perturbationHalfGapBridge_of_sourceHypotheses
+theorem perturbationHalfGapBridge_of_circleContinuationData
     (D : CircleContinuationData A E s) {delta : ℝ}
     (hdelta : 0 < delta) (hsmall : ‖E‖ < delta / 2)
     (hquant : D.radius * ‖E‖ / D.margin ^ 2 < Real.sqrt 2 / 2) :
@@ -311,7 +311,7 @@ theorem perturbationHalfGapBridge_of_sourceHypotheses
 the source the quantitative circle input for the residual alternative is
 produced by the Krein replacement argument, which remains the open analytic
 step. -/
-theorem residualHalfGapBridge_of_sourceHypotheses
+theorem residualHalfGapBridge_of_circleContinuationData
     (D : CircleContinuationData A E s) (R : F →L[ℂ] H) {delta : ℝ}
     (hdelta : 0 < delta) (hsmall : ‖R‖ < delta / 2)
     (hquant : D.radius * ‖E‖ / D.margin ^ 2 < Real.sqrt 2 / 2) :
@@ -332,7 +332,7 @@ theorem theorem8_2_perturbationHalfGap_selectedBranch
     DavisKahan1970.Section8.SelectedBranchConclusion
       (spectralContinuationWitness_of_circle D) :=
   DavisKahan1970.Section8.theorem82_branch_of_perturbationHalfGapBridge _
-    (perturbationHalfGapBridge_of_sourceHypotheses D hdelta hsmall hquant)
+    (perturbationHalfGapBridge_of_circleContinuationData D hdelta hsmall hquant)
 
 /-- Davis--Kahan 1970, Theorem 8.2, residual-smallness alternative, from the
 quantitative circle datum. -/
@@ -343,7 +343,7 @@ theorem theorem8_2_residualHalfGap_selectedBranch
     DavisKahan1970.Section8.SelectedBranchConclusion
       (spectralContinuationWitness_of_circle D) :=
   DavisKahan1970.Section8.theorem82_branch_of_residualHalfGapBridge _ R
-    (residualHalfGapBridge_of_sourceHypotheses D R hdelta hsmall hquant)
+    (residualHalfGapBridge_of_circleContinuationData D R hdelta hsmall hquant)
 
 end SourceTheorems
 

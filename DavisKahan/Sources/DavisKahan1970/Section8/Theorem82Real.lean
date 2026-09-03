@@ -18,7 +18,7 @@ This module descends Theorem 8.2 to a real Hilbert space.
 
 ## Why this is an exact transport, where Theorem 8.1 was not
 
-`Section8/SourceTheorem81Real.lean` had to do real work: Theorem 8.1 *asserts
+`Section8/Theorem81Real.lean` had to do real work: Theorem 8.1 *asserts
 the existence* of the canonical branch, so its real form has to exhibit a real
 subspace whose complexification is the complex branch, and that needed the
 bounded-gap spectral descent `realBoundedSpectralSubspaceIicOfGap`.  Picking an

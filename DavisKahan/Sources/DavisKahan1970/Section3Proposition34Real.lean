@@ -220,7 +220,7 @@ theorem proposition3_4_full_real
 
   have hC : IsDirectRotation CR CV (WC * WC) := by
     dsimp only [CR]
-    exact proposition3_4_full_bundled_complex
+    exact proposition3_4_isDirectRotation_complex
       CU CV WC hunitaryC hintertwinesC hcrossedC
         hsource_nonnegC hcomplement_nonnegC hcosC
 

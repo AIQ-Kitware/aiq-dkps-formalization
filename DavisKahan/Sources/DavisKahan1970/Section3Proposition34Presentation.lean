@@ -31,7 +31,7 @@ what makes this a move rather than a restatement.
 
 ## Main results
 
-* `proposition3_4_full_bundled_complex`: the full nonacute source scope.
+* `proposition3_4_isDirectRotation_complex`: the full nonacute source scope.
 * `proposition3_4`: the printed sentence, at `IsUniformlyAcute`.
 * `proposition3_4_eq_directRotation`: the acute form is the canonical direct rotation.
 -/
@@ -62,7 +62,7 @@ scope.
 The additional hypothesis `hcos` is exactly the printed `C₀² ≥ 1/2`, read through equation
 (3.7).  The conclusion says that `W²` satisfies Definition 3.1 for the ordered pair
 `(Q₋ℋ,Qℋ)`. -/
-theorem proposition3_4_full_bundled_complex
+theorem proposition3_4_isDirectRotation_complex
     (W : H →L[ℂ] H)
     (hunitary : W ∈ unitary (H →L[ℂ] H))
     (hintertwines : W * projection U = projection V * W)

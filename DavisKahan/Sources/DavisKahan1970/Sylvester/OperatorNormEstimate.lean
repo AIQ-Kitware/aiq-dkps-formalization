@@ -3,7 +3,7 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, Claude Opus 5
 -/
-import DavisKahan.Sources.DavisKahan1970.Sylvester.PaperHilbertSchmidt
+import DavisKahan.Sources.DavisKahan1970.Sylvester.HilbertSchmidtEstimate
 import DavisKahan.Sources.DavisKahan1970.Ideals.HilbertSchmidtFiniteRank
 -- the planar trace/determinant recovery of singular values, used for the
 -- source's own `2 × 2` witness at the end of this file
@@ -36,11 +36,11 @@ numerically: for its `2 × 2` data it records `‖AX - XB‖₁ = 3√2 = 4.24�
 
 ## Contents
 
-* `operatorNormingFunction_sylvester_le_of_pairwiseSpectrumGap` — inequality (5.2),
+* `opNorm_sylvester_le_of_pairwiseSpectrumGap` — inequality (5.2),
   derived from the compiled (5.1) by the two exact comparisons
   `‖·‖_op ≤ ‖·‖_sq` and `‖·‖_sq ≤ √(rank) ‖·‖_op`, at the same closed-operator
   generality as (5.1).  The real companion is the `_real_` variant.
-* `operatorNormingFunction_sylvester_le_finrank_range` — the same with the genuine
+* `opNorm_sylvester_le_finrank_range` — the same with the genuine
   `rank C`, i.e. `finrank` of the range, rather than an upper bound for it.
 * The source's `2 × 2` witness that the constant `1` is too small in (5.2):
   `X = [[3,-3],[-3,1]]`, `A = diag(1,-1)`, `B = diag(0,2)`, `δ = 1`, for which
@@ -69,7 +69,7 @@ The derivation is the paper's: the operator norm is below the square norm, the
 square norm obeys (5.1), and a rank-`r` operator's square norm is at most
 `√r` times its operator norm.  Hilbert--Schmidt membership of `C` is not a
 hypothesis here — the rank bound supplies it. -/
-theorem operatorNormingFunction_sylvester_le_of_pairwiseSpectrumGap
+theorem opNorm_sylvester_le_of_pairwiseSpectrumGap
     {E F : Type v}
     [NormedAddCommGroup E] [InnerProductSpace ℂ E] [CompleteSpace E]
     [NormedAddCommGroup F] [InnerProductSpace ℂ F] [CompleteSpace F]
@@ -93,7 +93,7 @@ theorem operatorNormingFunction_sylvester_le_of_pairwiseSpectrumGap
     _ = ‖C‖ * Real.sqrt r := mul_comm _ _
 
 /-- **Inequality (5.2) over real Hilbert spaces.** -/
-theorem operatorNormingFunction_sylvester_real_le_of_pairwiseSpectrumGap
+theorem opNorm_sylvester_real_le_of_pairwiseSpectrumGap
     {E F : Type v}
     [NormedAddCommGroup E] [InnerProductSpace ℝ E] [CompleteSpace E]
     [NormedAddCommGroup F] [InnerProductSpace ℝ F] [CompleteSpace F]
@@ -118,11 +118,11 @@ theorem operatorNormingFunction_sylvester_real_le_of_pairwiseSpectrumGap
 
 /-- **Inequality (5.2) with the genuine `rank C`.**
 
-`operatorNormingFunction_sylvester_le_of_pairwiseSpectrumGap` is stated against an
+`opNorm_sylvester_le_of_pairwiseSpectrumGap` is stated against an
 upper bound `r` for the rank, which is what a possibly infinite-dimensional
 statement can carry.  When the ambient spaces are finite dimensional the rank
 itself is available, and the printed `√(rank C)` is exactly this. -/
-theorem operatorNormingFunction_sylvester_le_finrank_range
+theorem opNorm_sylvester_le_finrank_range
     {E F : Type v}
     [NormedAddCommGroup E] [InnerProductSpace ℂ E] [CompleteSpace E]
     [NormedAddCommGroup F] [InnerProductSpace ℂ F] [CompleteSpace F]
@@ -139,7 +139,7 @@ theorem operatorNormingFunction_sylvester_le_finrank_range
   have hRank : C.rank ≤
       ((Module.finrank ℂ (LinearMap.range (C : F →ₗ[ℂ] E)) : ℕ) : Cardinal) :=
     le_of_eq (Module.finrank_eq_rank ℂ (LinearMap.range (C : F →ₗ[ℂ] E))).symm
-  exact operatorNormingFunction_sylvester_le_of_pairwiseSpectrumGap hA hB hδ hgap hEq hRank
+  exact opNorm_sylvester_le_of_pairwiseSpectrumGap hA hB hδ hgap hEq hRank
 
 /-! ### The source's `2 × 2` witness that the constant `1` is too small
 
