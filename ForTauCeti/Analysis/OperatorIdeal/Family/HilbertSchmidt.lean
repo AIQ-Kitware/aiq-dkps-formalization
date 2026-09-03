@@ -387,6 +387,7 @@ real statement into the extended one for a Hilbert--Schmidt operator, and
 noncomputable def hilbertSchmidtNorm (T : E →L[𝕜] F) : ℝ := T.hilbertSchmidtENorm.toReal
 
 omit [CompleteSpace F] in
+/-- The real norm is the extended one read in `ℝ`; this is the definition. -/
 theorem hilbertSchmidtNorm_eq_toReal (T : E →L[𝕜] F) :
     T.hilbertSchmidtNorm = T.hilbertSchmidtENorm.toReal := by
   rw [hilbertSchmidtNorm]
@@ -398,19 +399,24 @@ theorem ofReal_hilbertSchmidtNorm {T : E →L[𝕜] F} (hT : T.IsHilbertSchmidt)
   ENNReal.ofReal_toReal hT
 
 omit [CompleteSpace F] in
+/-- The real Hilbert--Schmidt norm is nonnegative, on and off the ideal. -/
 @[simp] theorem hilbertSchmidtNorm_nonneg (T : E →L[𝕜] F) : 0 ≤ T.hilbertSchmidtNorm :=
   ENNReal.toReal_nonneg
 
 omit [CompleteSpace F] in
+/-- The zero operator has zero real Hilbert--Schmidt norm. -/
 @[simp] theorem hilbertSchmidtNorm_zero : (0 : E →L[𝕜] F).hilbertSchmidtNorm = 0 := by
   simp [hilbertSchmidtNorm]
 
 omit [CompleteSpace F] in
+/-- The real Hilbert--Schmidt norm is unchanged by negation. -/
 @[simp] theorem hilbertSchmidtNorm_neg (T : E →L[𝕜] F) :
     (-T).hilbertSchmidtNorm = T.hilbertSchmidtNorm := by
   simp [hilbertSchmidtNorm]
 
 omit [CompleteSpace F] in
+/-- **Absolute homogeneity**, in `ℝ`.  No finiteness is needed: both sides are `0`
+off the ideal, and `‖c‖ * 0 = 0`. -/
 theorem hilbertSchmidtNorm_smul (c : 𝕜) (T : E →L[𝕜] F) :
     (c • T).hilbertSchmidtNorm = ‖c‖ * T.hilbertSchmidtNorm := by
   rw [hilbertSchmidtNorm, hilbertSchmidtENorm_smul, ENNReal.toReal_mul,

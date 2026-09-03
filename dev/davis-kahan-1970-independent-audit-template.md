@@ -5118,13 +5118,13 @@ The declarations that carry this result's printed statement, with the source ato
 
 #### `TauCeti.DavisKahan1970.Section6Appendix.lemma6_3_approximationNumber_leakage_complex`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section6AppendixLeakage.lean:352`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section6AppendixLeakage.lean:353`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.Section6Appendix.lemma6_3_singularValue_leakage_complex`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section6AppendixLeakage.lean:372`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section6AppendixLeakage.lean:373`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
