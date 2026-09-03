@@ -1,6 +1,7 @@
 /-
 Copyright (c) 2026 Kitware, Inc. All rights reserved.Released under Apache 2.0 license as described in the file LICENSE.Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
+import DavisKahan.Sources.DavisKahan1970.Ideals.HilbertSchmidtApproximationNorm
 import DavisKahan.Sylvester.PairwiseSpectrumGap
 import DavisKahan.SpectralTheory.PartialMap.Complexification
 import DavisKahan.Sylvester.PairwiseHomogeneousUniqueness
@@ -48,7 +49,7 @@ theorem hilbertSchmidtTensor_hasVectorSpectralGap
     (hA : IsSelfAdjoint A) (hB : IsSelfAdjoint B)
     {C : F →L[ℂ] E} {δ : ℝ}
     (hgap : PairwiseSpectrumGap A B δ)
-    (hC : IsPaperHilbertSchmidt C) :
+    (hC : approximationNumberEnergy C ≠ ⊤) :
     TauCeti.LinearPMap.HasVectorSpectralGap
       (TauCeti.HilbertSchmidt.isSelfAdjoint_generator_sylvesterGroup
         (TauCeti.LinearPMap.genToGroup hA) (TauCeti.LinearPMap.genToGroup hB) (hSBasis F))
@@ -70,9 +71,9 @@ theorem hilbertSchmidt_sylvester_le_of_pairwiseSpectrumGap_direct
     {δ : ℝ} (hδ : 0 < δ)
     (hgap : PairwiseSpectrumGap A B δ)
     (hEq : TauCeti.LinearPMap.SylvesterEquation A B X C)
-    (hC : IsPaperHilbertSchmidt C) :
-    IsPaperHilbertSchmidt X ∧
-      δ * paperHilbertSchmidtNorm X ≤ paperHilbertSchmidtNorm C := by
+    (hC : approximationNumberEnergy C ≠ ⊤) :
+    approximationNumberEnergy X ≠ ⊤ ∧
+      δ * ContinuousLinearMap.hilbertSchmidtNorm X ≤ ContinuousLinearMap.hilbertSchmidtNorm C := by
   apply hilbertSchmidt_sylvester_defectFirst
     hA hB hδ hEq
   · intro Y hY
@@ -97,9 +98,9 @@ theorem hilbertSchmidt_sylvester_real_le_of_pairwiseSpectrumGap_direct
     (hgap : ∀ lam ∈ TauCeti.LinearPMap.realSpectrum A, ∀ α ∈ TauCeti.LinearPMap.realSpectrum B,
       δ ≤ |lam - α|)
     (hEq : TauCeti.LinearPMap.SylvesterEquation A B X C)
-    (hC : IsPaperHilbertSchmidt C) :
-    IsPaperHilbertSchmidt X ∧
-      δ * paperHilbertSchmidtNorm X ≤ paperHilbertSchmidtNorm C := by
+    (hC : approximationNumberEnergy C ≠ ⊤) :
+    approximationNumberEnergy X ≠ ⊤ ∧
+      δ * ContinuousLinearMap.hilbertSchmidtNorm X ≤ ContinuousLinearMap.hilbertSchmidtNorm C := by
   have hgapC : PairwiseSpectrumGap
       (PartialMapComplexification.complexify A)
       (PartialMapComplexification.complexify B) δ := by
@@ -118,9 +119,9 @@ theorem hilbertSchmidt_sylvester_real_le_of_pairwiseSpectrumGap_direct
         rwa [PartialMapComplexification.realSpectrum_complexify B,
           Set.mem_preimage])
     rwa [← Complex.ofReal_sub, Complex.norm_real, Real.norm_eq_abs]
-  have hCcomplex : IsPaperHilbertSchmidt
-      (RealComplexification.complexify C) :=
-    (isPaperHilbertSchmidt_complexify_iff C).2 hC
+  have hCcomplex : approximationNumberEnergy
+      (RealComplexification.complexify C) ≠ ⊤ :=
+    (approximationNumberEnergy_ne_top_complexify_iff C).2 hC
   have hmain := hilbertSchmidt_sylvester_le_of_pairwiseSpectrumGap_direct
     (PartialMapComplexification.isSelfAdjoint_complexify hA)
     (PartialMapComplexification.isSelfAdjoint_complexify hB)
@@ -128,7 +129,7 @@ theorem hilbertSchmidt_sylvester_real_le_of_pairwiseSpectrumGap_direct
     (PartialMapComplexification.closedSylvesterEquation_complexify hEq)
     hCcomplex
   constructor
-  · exact (isPaperHilbertSchmidt_complexify_iff X).1 hmain.1
+  · exact (approximationNumberEnergy_ne_top_complexify_iff X).1 hmain.1
   · simpa [hilbertSchmidtNorm_complexify] using hmain.2
 
 end

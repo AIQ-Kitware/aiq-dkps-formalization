@@ -4,6 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
 import DavisKahan.Sources.DavisKahan1970.Ideals.HilbertSchmidt
+import DavisKahan.Sources.DavisKahan1970.Ideals.HilbertSchmidtApproximationNorm
 import DavisKahan.Sources.DavisKahan1970.Ideals.HilbertSchmidtBasis
 import DavisKahan.Sources.DavisKahan1970.Ideals.HilbertSchmidtComplexFamily
 import DavisKahan.Sources.DavisKahan1970.Ideals.HilbertSchmidtFiniteRank

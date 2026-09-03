@@ -36,7 +36,7 @@ namespace ExactSinTheta
 #check nuclearNormingFunction
 #check symmetricNormingFunction_nonempty
 #check TauCeti.HilbertSchmidt.ofLp
-#check isPaperHilbertSchmidt_iff_existsUnique_tensor
+#check approximationNumberEnergy_ne_top_iff_existsUnique_tensor
 #check hilbertSchmidtNorm_toOperator
 #check TauCeti.HilbertSchmidt.sylvesterGroup
 #check TauCeti.HilbertSchmidt.generator_sylvesterGroup_apply
@@ -53,7 +53,7 @@ namespace ExactSinTheta
 #check hilbertSchmidt_sylvester_real_le_of_pairwiseSpectrumGap_direct
 
 #print axioms symmetricNormingFunction_nonempty
-#print axioms isPaperHilbertSchmidt_iff_existsUnique_tensor
+#print axioms approximationNumberEnergy_ne_top_iff_existsUnique_tensor
 #print axioms hilbertSchmidtNorm_toOperator
 #print axioms TauCeti.HilbertSchmidt.generator_sylvesterGroup_apply
 #print axioms TauCeti.OneParameterUnitaryGroup.isSelfAdjoint_generator

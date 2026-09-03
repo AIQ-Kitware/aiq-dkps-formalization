@@ -45,29 +45,29 @@ theorem hilbertSchmidtEnergy_sylvester_le_of_pairwiseSpectrumGap
     {δ : ℝ} (hδ : 0 < δ)
     (hgap : PairwiseSpectrumGap A B δ)
     (hEq : TauCeti.LinearPMap.SylvesterEquation A B X C) :
-    ENNReal.ofReal (δ ^ 2) * paperHilbertSchmidtEnergy X ≤
-      paperHilbertSchmidtEnergy C := by
-  by_cases hC : IsPaperHilbertSchmidt C
+    ENNReal.ofReal (δ ^ 2) * approximationNumberEnergy X ≤
+      approximationNumberEnergy C := by
+  by_cases hC : approximationNumberEnergy C ≠ ⊤
   · have hmain :=
       hilbertSchmidt_sylvester_le_of_pairwiseSpectrumGap_direct
         hA hB hδ hgap hEq hC
     have hsq :
-        (δ * paperHilbertSchmidtNorm X) ^ 2 ≤
-          paperHilbertSchmidtNorm C ^ 2 :=
+        (δ * ContinuousLinearMap.hilbertSchmidtNorm X) ^ 2 ≤
+          ContinuousLinearMap.hilbertSchmidtNorm C ^ 2 :=
       (sq_le_sq₀
-        (mul_nonneg hδ.le (hilbertSchmidtNorm_nonneg X))
-        (hilbertSchmidtNorm_nonneg C)).2 hmain.2
+        (mul_nonneg hδ.le (ContinuousLinearMap.hilbertSchmidtNorm_nonneg X))
+        (ContinuousLinearMap.hilbertSchmidtNorm_nonneg C)).2 hmain.2
     have hreal :
-        (ENNReal.ofReal (δ ^ 2) * paperHilbertSchmidtEnergy X).toReal ≤
-          (paperHilbertSchmidtEnergy C).toReal := by
+        (ENNReal.ofReal (δ ^ 2) * approximationNumberEnergy X).toReal ≤
+          (approximationNumberEnergy C).toReal := by
       rw [ENNReal.toReal_mul,
         ENNReal.toReal_ofReal (sq_nonneg δ),
-        ← sq_paperHilbertSchmidtNorm hmain.1,
-        ← sq_paperHilbertSchmidtNorm hC]
+        ← sq_hilbertSchmidtNorm hmain.1,
+        ← sq_hilbertSchmidtNorm hC]
       simpa [mul_pow] using hsq
     exact (ENNReal.toReal_le_toReal
       (ENNReal.mul_ne_top ENNReal.ofReal_ne_top hmain.1) hC).mp hreal
-  · have htop : paperHilbertSchmidtEnergy C = ⊤ := by
+  · have htop : approximationNumberEnergy C = ⊤ := by
       by_contra hne
       exact hC hne
     rw [htop]
@@ -85,9 +85,9 @@ theorem hilbertSchmidt_sylvester_le_of_pairwiseSpectrumGap
     {δ : ℝ} (hδ : 0 < δ)
     (hgap : PairwiseSpectrumGap A B δ)
     (hEq : TauCeti.LinearPMap.SylvesterEquation A B X C)
-    (hC : IsPaperHilbertSchmidt C) :
-    IsPaperHilbertSchmidt X ∧
-      δ * paperHilbertSchmidtNorm X ≤ paperHilbertSchmidtNorm C :=
+    (hC : approximationNumberEnergy C ≠ ⊤) :
+    approximationNumberEnergy X ≠ ⊤ ∧
+      δ * ContinuousLinearMap.hilbertSchmidtNorm X ≤ ContinuousLinearMap.hilbertSchmidtNorm C :=
   hilbertSchmidt_sylvester_le_of_pairwiseSpectrumGap_direct
     hA hB hδ hgap hEq hC
 
@@ -104,9 +104,9 @@ theorem hilbertSchmidt_sylvester_real_le_of_pairwiseSpectrumGap
     (hgap : ∀ lam ∈ TauCeti.LinearPMap.realSpectrum A, ∀ α ∈ TauCeti.LinearPMap.realSpectrum B,
       δ ≤ |lam - α|)
     (hEq : TauCeti.LinearPMap.SylvesterEquation A B X C)
-    (hC : IsPaperHilbertSchmidt C) :
-    IsPaperHilbertSchmidt X ∧
-      δ * paperHilbertSchmidtNorm X ≤ paperHilbertSchmidtNorm C :=
+    (hC : approximationNumberEnergy C ≠ ⊤) :
+    approximationNumberEnergy X ≠ ⊤ ∧
+      δ * ContinuousLinearMap.hilbertSchmidtNorm X ≤ ContinuousLinearMap.hilbertSchmidtNorm C :=
   hilbertSchmidt_sylvester_real_le_of_pairwiseSpectrumGap_direct
     hA hB hδ hgap hEq hC
 

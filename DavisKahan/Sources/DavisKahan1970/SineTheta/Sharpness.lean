@@ -556,32 +556,32 @@ theorem hilbertSchmidtNorm_sinAngleOperatorRC_eq_projectionDifference
     [CompleteSpace E]
     (U V : Submodule ℝ E)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] :
-    paperHilbertSchmidtNorm
+    ContinuousLinearMap.hilbertSchmidtNorm
         (TauCeti.DavisKahanExt.Real.sinAngleOperatorRC U V) =
-      paperHilbertSchmidtNorm (U.starProjection - V.starProjection) := by
+      ContinuousLinearMap.hilbertSchmidtNorm (U.starProjection - V.starProjection) := by
   rw [TauCeti.DavisKahanExt.Real.sinAngleOperatorRC,
     TauCeti.DavisKahanExt.sinAngleOperatorC]
   calc
-    paperHilbertSchmidtNorm
+    ContinuousLinearMap.hilbertSchmidtNorm
         (ContinuousLinearMap.modulus
           ((complexifySubmodule U).starProjection -
             (complexifySubmodule V).starProjection)) =
-        paperHilbertSchmidtNorm
+        ContinuousLinearMap.hilbertSchmidtNorm
           ((complexifySubmodule U).starProjection -
             (complexifySubmodule V).starProjection) :=
-      SameApproximationSingularSequence.paperHilbertSchmidtNorm_eq
+      SameApproximationSingularSequence.hilbertSchmidtNorm_eq
         (modulus_hasSameApproximationNumbers _)
-    _ = paperHilbertSchmidtNorm
+    _ = ContinuousLinearMap.hilbertSchmidtNorm
         (complexify (U.starProjection - V.starProjection)) := by
       rw [starProjection_complexifySubmodule,
         starProjection_complexifySubmodule, complexify_sub]
-    _ = paperHilbertSchmidtNorm
+    _ = ContinuousLinearMap.hilbertSchmidtNorm
         (U.starProjection - V.starProjection) :=
       hilbertSchmidtNorm_complexify _
 
 /-- The source counterexample has angle `pi/4`, hence square sine norm one. -/
 theorem counterexample_sine_square_norm :
-    paperHilbertSchmidtNorm
+    ContinuousLinearMap.hilbertSchmidtNorm
       (TauCeti.DavisKahanExt.Real.sinAngleOperatorRC
         counterexampleExact counterexampleTrial) = 1 := by
   rw [hilbertSchmidtNorm_sinAngleOperatorRC_eq_projectionDifference,
@@ -605,7 +605,7 @@ theorem counterexample_sine_square_norm :
 
 /-- The perturbation in the printed counterexample has square norm `sqrt 3`. -/
 theorem counterexample_perturbation_square_norm :
-    paperHilbertSchmidtNorm counterexampleH = Real.sqrt 3 := by
+    ContinuousLinearMap.hilbertSchmidtNorm counterexampleH = Real.sqrt 3 := by
   rw [hilbertSchmidtNorm_eq_frobenius,
     TauCeti.UnitarilyInvariantSeminorm.frobenius_apply
     ℝ (PlanarModelSpace ℝ) counterexampleH.toLinearMap
@@ -622,8 +622,8 @@ theorem counterexample_perturbation_square_norm :
 /-- The single directional gap `delta=2` does not imply the symmetric
 square-norm estimate. -/
 theorem oneGap_does_not_imply_symmetric_square_estimate :
-    paperHilbertSchmidtNorm counterexampleH <
-      2 * paperHilbertSchmidtNorm
+    ContinuousLinearMap.hilbertSchmidtNorm counterexampleH <
+      2 * ContinuousLinearMap.hilbertSchmidtNorm
         (TauCeti.DavisKahanExt.Real.sinAngleOperatorRC
           counterexampleExact counterexampleTrial) := by
   rw [counterexample_sine_square_norm,

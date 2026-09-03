@@ -446,6 +446,17 @@ theorem hilbertSchmidtNorm_comp_le (L : F →L[𝕜] G) {T : E →L[𝕜] F}
   rwa [ENNReal.toReal_mul, ENNReal.toReal_mul, enorm_eq_nnnorm, enorm_eq_nnnorm,
     ENNReal.coe_toReal, ENNReal.coe_toReal, coe_nnnorm, coe_nnnorm] at h
 
+/-- **Contractions do not enlarge the Hilbert--Schmidt norm.**  This is the
+two-sided ideal bound with both factors of norm at most one. -/
+theorem hilbertSchmidtNorm_comp_isometries_le (L : F →L[𝕜] G) {T : E →L[𝕜] F}
+    (hT : T.IsHilbertSchmidt) (R : H →L[𝕜] E) (hL : ‖L‖ ≤ 1) (hR : ‖R‖ ≤ 1) :
+    (L ∘L T ∘L R).hilbertSchmidtNorm ≤ T.hilbertSchmidtNorm := by
+  calc (L ∘L T ∘L R).hilbertSchmidtNorm
+      ≤ ‖L‖ * T.hilbertSchmidtNorm * ‖R‖ := hilbertSchmidtNorm_comp_le L hT R
+    _ ≤ 1 * T.hilbertSchmidtNorm * 1 := by
+        gcongr <;> simp [hilbertSchmidtNorm_nonneg T]
+    _ = T.hilbertSchmidtNorm := by ring
+
 /-- **The Hilbert--Schmidt norm dominates the operator norm**, in `ℝ`. -/
 theorem norm_le_hilbertSchmidtNorm {T : E →L[𝕜] F} (hT : T.IsHilbertSchmidt) :
     ‖T‖ ≤ T.hilbertSchmidtNorm := by

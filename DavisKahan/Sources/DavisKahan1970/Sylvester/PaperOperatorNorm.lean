@@ -82,13 +82,13 @@ theorem operatorNormingFunction_sylvester_le_of_pairwiseSpectrumGap
     (hEq : TauCeti.LinearPMap.SylvesterEquation A B X C)
     {r : ℕ} (hRank : C.rank ≤ (r : Cardinal)) :
     δ * ‖X‖ ≤ ‖C‖ * Real.sqrt r := by
-  have hC : IsPaperHilbertSchmidt C := isPaperHilbertSchmidt_of_rank_le hRank
+  have hC : approximationNumberEnergy C ≠ ⊤ := approximationNumberEnergy_ne_top_of_rank_le hRank
   have hmain :=
     hilbertSchmidt_sylvester_le_of_pairwiseSpectrumGap hA hB hδ hgap hEq hC
   calc
-    δ * ‖X‖ ≤ δ * paperHilbertSchmidtNorm X :=
-      mul_le_mul_of_nonneg_left (opNorm_le_paperHilbertSchmidtNorm hmain.1) hδ.le
-    _ ≤ paperHilbertSchmidtNorm C := hmain.2
+    δ * ‖X‖ ≤ δ * ContinuousLinearMap.hilbertSchmidtNorm X :=
+      mul_le_mul_of_nonneg_left (opNorm_le_hilbertSchmidtNorm hmain.1) hδ.le
+    _ ≤ ContinuousLinearMap.hilbertSchmidtNorm C := hmain.2
     _ ≤ Real.sqrt r * ‖C‖ := hilbertSchmidtNorm_le_sqrt_rank_mul_opNorm hRank
     _ = ‖C‖ * Real.sqrt r := mul_comm _ _
 
@@ -106,13 +106,13 @@ theorem operatorNormingFunction_sylvester_real_le_of_pairwiseSpectrumGap
     (hEq : TauCeti.LinearPMap.SylvesterEquation A B X C)
     {r : ℕ} (hRank : C.rank ≤ (r : Cardinal)) :
     δ * ‖X‖ ≤ ‖C‖ * Real.sqrt r := by
-  have hC : IsPaperHilbertSchmidt C := isPaperHilbertSchmidt_of_rank_le hRank
+  have hC : approximationNumberEnergy C ≠ ⊤ := approximationNumberEnergy_ne_top_of_rank_le hRank
   have hmain :=
     hilbertSchmidt_sylvester_real_le_of_pairwiseSpectrumGap hA hB hδ hgap hEq hC
   calc
-    δ * ‖X‖ ≤ δ * paperHilbertSchmidtNorm X :=
-      mul_le_mul_of_nonneg_left (opNorm_le_paperHilbertSchmidtNorm hmain.1) hδ.le
-    _ ≤ paperHilbertSchmidtNorm C := hmain.2
+    δ * ‖X‖ ≤ δ * ContinuousLinearMap.hilbertSchmidtNorm X :=
+      mul_le_mul_of_nonneg_left (opNorm_le_hilbertSchmidtNorm hmain.1) hδ.le
+    _ ≤ ContinuousLinearMap.hilbertSchmidtNorm C := hmain.2
     _ ≤ Real.sqrt r * ‖C‖ := hilbertSchmidtNorm_le_sqrt_rank_mul_opNorm hRank
     _ = ‖C‖ * Real.sqrt r := mul_comm _ _
 
