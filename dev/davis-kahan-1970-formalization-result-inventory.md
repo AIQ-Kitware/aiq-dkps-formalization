@@ -6,8 +6,8 @@ The denominator contains exactly the four Section 2 headline theorems and every 
 
 - Counted results: **29**
 - Result-boundary reviews accepted: **29/29**
-- Currently hostile-certified terminal: **28**
-- Awaiting closure: **1**
+- Currently hostile-certified terminal: **29**
+- Awaiting closure: **0**
 - Printed statements that are NOT locally self-contained: **5**
 - Result-only semantic sweep: `dev/davis-kahan-1970-result-semantic-review-2026-08-12.md`
 - Compiler-checkable theorem surface: `DavisKahan/Sources/DavisKahan1970/Audits/ResultSemanticSurface.lean`
@@ -25,7 +25,7 @@ Each result below explicitly partitions its primary source block into atoms insi
 | `S2-sin-theta` | unnumbered_theorem | `locally_exact` | yes | `proved_exact` | `proved_in_build` | `accepted` | `accepted` |
 | `S2-tan-theta` | unnumbered_theorem | `paper_faithful_nonlocal_source_interpretation` | **no** | `proved_exact` | `proved_in_build` | `accepted` | `accepted` |
 | `S2-sin-two-theta` | unnumbered_theorem | `locally_exact` | yes | `proved_exact` | `proved_in_build` | `accepted` | `accepted` |
-| `S2-tan-two-theta` | unnumbered_theorem | `locally_exact` | yes | `proved_exact` | `proved_in_build` | `hostile_review_blocked` | `accepted` |
+| `S2-tan-two-theta` | unnumbered_theorem | `locally_exact` | yes | `proved_exact` | `proved_in_build` | `accepted` | `accepted` |
 | `DK-3.1-prop` | proposition | `locally_exact` | yes | `proved_exact` | `proved_in_build` | `accepted` | `accepted` |
 | `DK-3.2-prop` | proposition | `locally_exact` | yes | `proved_exact` | `proved_in_build` | `accepted` | `accepted` |
 | `DK-3.3-prop` | proposition | `locally_exact` | yes | `proved_exact` | `proved_in_build` | `accepted` | `accepted` |
@@ -108,23 +108,32 @@ The accepted reading is hash-pinned to the distributable specification, the sour
 
 ## Current closure queue
 
-`S2-tan-two-theta` — reopened 2026-09-02 on hostile review, under obligation
-`tan2theta-directed-correspondence`.
-
-The corner-to-paper-object step is proved for the complex reflection corner, but
-the registered correspondence does not compose with the canonical directed
-primaries. Those primaries quantify over an arbitrary self-adjoint involution
-`Z` and conclude on `reflectionTangentCorner U Z`, while the correspondence
-theorem is about the special case `Z = V.reflectionOperator`; and the same
-complex theorem was registered as the witness for the REAL clause, whose primary
-is over a real Hilbert space. Closing it means source-shaped directed endpoints
-that take an actual reducing subspace and conclude on the paper objects —
-`tanTwoDirectedCornerR U V` on the real side — made canonical, with the
-arbitrary-`Z` theorems retained as supporting generalizations.
+Empty. All 29 counted results are terminal on all three axes, and no
+hostile-review obligation is open.
 
 This section lists exactly the results the machine state reports as
 nonterminal; the checker rejects it when the two disagree, and rejects an
 emptiness claim while any row is open.
+
+What last emptied it, 2026-09-02: `S2-tan-two-theta` had been reopened under
+obligation `tan2theta-directed-correspondence` because its canonical directed
+primaries quantified over an arbitrary self-adjoint involution `Z` and the real
+clause carried a complex-only witness. It is closed by two source-shaped
+directed endpoints:
+
+- `TauCeti.DavisKahan1970.tanTwoTheta_directed_unboundedResidual_symmetricNorming_complex`
+  takes `V` reducing `A + B` and concludes on the paper's directed object, the
+  `U → Uᗮ` projection block of `2 (P_V − P_U)(1 − 2(P_V − P_U)²)⁻¹`, stating in
+  its own type that the block's singular values are `tan (arcsin aₙ(sin 2Θ₀))`;
+- `TauCeti.DavisKahan1970.tanTwoTheta_directed_unboundedResidual_symmetricNorming_real`
+  concludes on `tanTwoDirectedCornerR U V` with the real residual, through
+  registered complexification transports and the real correspondence
+  `approximationNumber_tanTwoDirectedCornerR`.
+
+The arbitrary-`Z` theorems are retained as generalizations. The checker now
+requires each clause's correspondence witness and transport chain to be invoked
+by the primary's proof, to agree between the inventory and the census, and to be
+statement-pinned.
 
 `S2-tan-theta` is terminal after a hostile Appendix-scope correction. The
 Appendix-complete declarations

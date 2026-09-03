@@ -780,6 +780,187 @@ theorem tanTwoTheta_directed_unboundedResidual_reducing_paperCorner_symmetricNor
 
 end DirectedCornerCorrespondence
 
+/-! ### The ambient block spelling of a directed corner
+
+`blockCompression Ω Γ K : Γ →L Ω` and `projectionBlock Ω Γ K : E →L E` are the
+same operator read in two coordinate systems, and `projectionBlock_same_compression`
+says they have the same approximation singular sequence.  A symmetric norming
+function sees nothing else, so the three facts below let a theorem proved in the
+compressed spelling be read in the ambient spelling the paper-facing directed
+objects use -- `tanTwoDirectedCornerR` is an ambient projection block. -/
+
+section AmbientSpelling
+
+variable {𝕜 : Type*} [RCLike 𝕜] {G : Type*} [NormedAddCommGroup G]
+  [InnerProductSpace 𝕜 G] [CompleteSpace G]
+
+/-- The scalar-generic completeness instance for an orthogonally complemented
+subspace, reinstalled because `local instance` does not propagate. -/
+local instance instCompleteSpaceCoeAmbientSpelling
+    (W : Submodule 𝕜 G) [W.HasOrthogonalProjection] : CompleteSpace W :=
+  (Submodule.isComplete_coe_of_hasOrthogonalProjection W).completeSpace_coe
+
+variable (Ω Γ : Submodule 𝕜 G) [Ω.HasOrthogonalProjection] [Γ.HasOrthogonalProjection]
+
+/-- An ambient projection block and its compression have the same extended
+gauge under every symmetric norming function. -/
+theorem extendedGauge_projectionBlock_eq_blockCompression
+    (N : SymmetricNormingFunction) (K : G →L[𝕜] G) :
+    N.extendedGauge (projectionBlock Ω Γ K) = N.extendedGauge (blockCompression Ω Γ K) :=
+  N.extendedGauge_eq_of_hasSameApproximationNumbers (projectionBlock_same_compression Ω Γ K)
+
+/-- Ideal membership of an ambient projection block is that of its compression. -/
+theorem mem_projectionBlock_iff_mem_blockCompression
+    (N : SymmetricNormingFunction) (K : G →L[𝕜] G) :
+    N.Mem (projectionBlock Ω Γ K) ↔ N.Mem (blockCompression Ω Γ K) := by
+  unfold SymmetricNormingFunction.Mem
+  rw [extendedGauge_projectionBlock_eq_blockCompression]
+
+/-- The gauge of an ambient projection block is that of its compression. -/
+theorem gauge_projectionBlock_eq_blockCompression
+    (N : SymmetricNormingFunction) (K : G →L[𝕜] G) :
+    N.gauge (projectionBlock Ω Γ K) = N.gauge (blockCompression Ω Γ K) := by
+  unfold SymmetricNormingFunction.gauge
+  rw [extendedGauge_projectionBlock_eq_blockCompression]
+
+end AmbientSpelling
+
+section DirectedSourceEndpoint
+
+variable {Ea : Type*} [NormedAddCommGroup Ea] [InnerProductSpace ℂ Ea] [CompleteSpace Ea]
+variable (U V : Submodule ℂ Ea) [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
+
+/-- An orthogonally complemented subspace of a complete space is complete;
+reinstalled for this section because `local instance` does not propagate. -/
+local instance instCompleteSpaceCoeDirectedSourceEndpoint
+    (W : Submodule ℂ Ea) [W.HasOrthogonalProjection] : CompleteSpace W :=
+  (Submodule.isComplete_coe_of_hasOrthogonalProjection W).completeSpace_coe
+
+/-- **The paper's directed `tan 2Θ₀` corner carries the doubled directed angles,
+singular value by singular value.**
+
+The directed object the Section 2 statement bounds is the `U → Uᗮ` projection
+block of `2 (P_V − P_U) (1 − 2 (P_V − P_U)²)⁻¹`, which is how `tan 2Θ₀ =
+2 sin Θ₀ cos Θ₀ / cos 2Θ₀` is spelled without choosing a branch.  This theorem is
+what makes that reading a theorem rather than a convention: its `n`-th
+approximation number is `tan (arcsin aₙ(sin 2Θ₀))`, with `sin 2Θ₀` the paper's
+directed double-angle sine `DavisKahan.sinTwoThetaIdealBlock U V` -- whose
+singular values are those of `directedSinTwoAngleOperatorC U V` by
+`DavisKahan.sinTwoThetaIdealBlock_hasSameApproximationNumbers`.  Each directed
+principal angle appears once, and `tan (arcsin (sin 2θ)) = |tan 2θ|` on both
+sides of the quarter turn, so no branch is chosen.
+
+The hypothesis is the pole exclusion `‖S‖ < 1` for the off-diagonal block of the
+reflection through `V`; it is derived, not assumed, in
+`tanTwoTheta_directed_unboundedResidual_symmetricNorming_complex`, which also
+restates this identity as its second conjunct.
+
+Chain: `reflectionTangentCorner_reflection_eq_paperTanTwoCorner` and
+`blockCompression_diagonalPair` identify the reflection tangent corner with the
+compression of this block; `projectionBlock_same_compression` moves to the
+ambient spelling; `approximationNumber_reflectionTangentCorner` and
+`hasSameApproximationNumbers_reflectionSineCorner_sinTwoThetaIdealBlock` read
+off the singular values. -/
+theorem approximationNumber_tanTwoDirectedCorner
+    (hS1 : ‖U.offDiagonalPart V.reflectionOperator‖ < 1) (n : ℕ) :
+    (projectionBlock Uᗮ U
+        (2 * (projectorDifference U V * doubleSecant U V))).approximationNumber n =
+      Real.tan (Real.arcsin
+        ((DavisKahan.sinTwoThetaIdealBlock U V).approximationNumber n)) := by
+  have hZsa := TauCeti.DavisKahanExt.isSelfAdjoint_reflectionOperator V
+  have hZ2 := TauCeti.DavisKahan.reflectionOperator_mul_self_complex V
+  have hsq : ‖U.offDiagonalPart V.reflectionOperator *
+      U.offDiagonalPart V.reflectionOperator‖ < 1 := by
+    have h := norm_mul_le (U.offDiagonalPart V.reflectionOperator)
+      (U.offDiagonalPart V.reflectionOperator)
+    nlinarith [norm_nonneg (U.offDiagonalPart V.reflectionOperator)]
+  have hinv := TauCeti.DavisKahan.isUnit_signedCosTwo_of_isUnit_diagonalPart_sq U V
+    (isUnit_diagonalPart_sq hZ2 hsq)
+  have hcorner : reflectionTangentCorner U V.reflectionOperator =
+      blockCompression Uᗮ U (2 * (projectorDifference U V * doubleSecant U V)) := by
+    rw [reflectionTangentCorner_reflection_eq_paperTanTwoCorner U V hinv,
+      tanTwoBlockRepresentative, blockCompression_diagonalPair]
+  rw [(projectionBlock_same_compression Uᗮ U _) n, ← hcorner,
+    approximationNumber_reflectionTangentCorner hZsa hZ2 hS1 n,
+    hasSameApproximationNumbers_reflectionSineCorner_sinTwoThetaIdealBlock U V n]
+
+/-- **Davis--Kahan 1970, the `tan 2Θ` theorem, directed clause, over `ℂ`:
+`(b − a) N(tan 2Θ₀) ≤ 2 N(R)`.**
+
+The source-shaped endpoint.  Its data are the paper's: a self-adjoint, possibly
+unbounded `A`; a closed subspace `U` reducing `A`, with the form of `A` at most
+`a` on `U` and at least `b` on `Uᗮ`, `a < b` (the ordered gap, both sides
+half-infinite); a bounded self-adjoint-free perturbation `B` that is odd for the
+splitting (`H₀ = H₁ = 0`); a closed subspace `V` reducing `A + B`; and a
+symmetric norming function `N` in whose ideal the residual `R = P_{Uᗮ} B P_U`
+lies.  Nothing else: no pole certificate, no quarter-angle branch, no spectral
+placement of the perturbed blocks, no finite-dimensionality, no reflection or
+involution supplied by the caller.
+
+The conclusion is on the paper's directed object, the `U → Uᗮ` projection block
+of `2 (P_V − P_U)(1 − 2(P_V − P_U)²)⁻¹`, and says four things: no directed
+doubled angle is a quarter turn (the pole exclusion Section 7 derives); that block
+has singular values exactly `tan (arcsin aₙ(sin 2Θ₀))`, one per directed
+principal angle (`approximationNumber_tanTwoDirectedCorner`), which is what
+makes it `tan 2Θ₀`; it lies in the ideal of `N`; and
+`(b − a) N(tan 2Θ₀) ≤ 2 N(R)`.
+
+The reusable theorems quantify over an arbitrary self-adjoint involution `Z` and
+conclude on `reflectionTangentCorner U Z`; they remain the general result.  This
+is the statement a reviewer compares against Section 2. -/
+theorem tanTwoTheta_directed_unboundedResidual_symmetricNorming_complex
+    (N : SymmetricNormingFunction)
+    {A : Ea →ₗ.[ℂ] Ea} {B : Ea →L[ℂ] Ea} {a b : ℝ}
+    (hA : IsSelfAdjoint A) (hred : TauCeti.LinearPMap.ReducesSubspace A U)
+    (hB : TauCeti.IsOddFor U B)
+    (hV : TauCeti.LinearPMap.ReducesSubspace (TauCeti.LinearPMap.addBounded A B) V)
+    (hUa : ∀ x : A.domain, (x : Ea) ∈ U →
+      RCLike.re ⟪A x, (x : Ea)⟫_ℂ ≤ a * ‖(x : Ea)‖ ^ 2)
+    (hUb : ∀ x : A.domain, (x : Ea) ∈ Uᗮ →
+      b * ‖(x : Ea)‖ ^ 2 ≤ RCLike.re ⟪A x, (x : Ea)⟫_ℂ)
+    (hab : a < b) (hRmem : N.Mem (projectionBlock Uᗮ U B)) :
+    (∀ n : ℕ, (DavisKahan.sinTwoThetaIdealBlock U V).approximationNumber n < 1) ∧
+      (∀ n : ℕ,
+        (projectionBlock Uᗮ U
+            (2 * (projectorDifference U V * doubleSecant U V))).approximationNumber n =
+          Real.tan (Real.arcsin
+            ((DavisKahan.sinTwoThetaIdealBlock U V).approximationNumber n))) ∧
+      N.Mem (projectionBlock Uᗮ U (2 * (projectorDifference U V * doubleSecant U V))) ∧
+      (b - a) * N.gauge
+          (projectionBlock Uᗮ U (2 * (projectorDifference U V * doubleSecant U V))) ≤
+        2 * N.gauge (projectionBlock Uᗮ U B) := by
+  have hV' : DavisKahan.ReflectionIntertwines A B V :=
+    DavisKahan.ReflectionIntertwines.ofReducesSubspace hV
+  have hZsa := TauCeti.DavisKahanExt.isSelfAdjoint_reflectionOperator V
+  have hZ2 := TauCeti.DavisKahan.reflectionOperator_mul_self_complex V
+  have hS1 : ‖U.offDiagonalPart V.reflectionOperator‖ < 1 :=
+    norm_offDiagonalPart_lt_one_reducing_exact hA hred hB hZsa hZ2 hV'.mapsDomain
+      hV'.commutes hUa hUb hab
+  have hsq : ‖U.offDiagonalPart V.reflectionOperator *
+      U.offDiagonalPart V.reflectionOperator‖ < 1 := by
+    have h := norm_mul_le (U.offDiagonalPart V.reflectionOperator)
+      (U.offDiagonalPart V.reflectionOperator)
+    nlinarith [norm_nonneg (U.offDiagonalPart V.reflectionOperator)]
+  have hinv := TauCeti.DavisKahan.isUnit_signedCosTwo_of_isUnit_diagonalPart_sq U V
+    (isUnit_diagonalPart_sq hZ2 hsq)
+  have hcorner : reflectionTangentCorner U V.reflectionOperator =
+      blockCompression Uᗮ U (2 * (projectorDifference U V * doubleSecant U V)) := by
+    rw [reflectionTangentCorner_reflection_eq_paperTanTwoCorner U V hinv,
+      tanTwoBlockRepresentative, blockCompression_diagonalPair]
+  have hRmem' : N.Mem (blockCompression Uᗮ U B) :=
+    (mem_projectionBlock_iff_mem_blockCompression Uᗮ U N B).1 hRmem
+  obtain ⟨hlt, -, hmem, hle⟩ :=
+    tanTwoTheta_directed_unboundedResidual_reducing_derivedReflection_symmetricNorming_complex
+      N V hA hred hB hV' hUa hUb hab hRmem'
+  refine ⟨hlt, fun n => approximationNumber_tanTwoDirectedCorner U V hS1 n, ?_, ?_⟩
+  · rw [mem_projectionBlock_iff_mem_blockCompression, ← hcorner]
+    exact hmem
+  · rw [gauge_projectionBlock_eq_blockCompression, gauge_projectionBlock_eq_blockCompression,
+      ← hcorner]
+    exact hle
+
+end DirectedSourceEndpoint
+
 
 end DavisKahan1970
 end TauCeti

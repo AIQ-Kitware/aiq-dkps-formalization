@@ -162,7 +162,7 @@ belong.  The implementations they select are, in order:
 | `tan Θ` | ambient | `tanTheta_ambient_unboundedRitz_symmetricNorming_complex` | `…_real` |
 | `sin 2Θ` | directed | `sinTwoTheta_directed_unboundedResidual_blockRepresentative_symmetricNorming_complex` | `…_real` |
 | `sin 2Θ` | ambient | `sinTwoTheta_ambient_unbounded_addBounded_symmetricNorming_complex` | `…_real` |
-| `tan 2Θ` | directed | `tanTwoTheta_directed_unboundedResidual_blockRepresentative_symmetricNorming_complex` | `…_real` |
+| `tan 2Θ` | directed | `tanTwoTheta_directed_unboundedResidual_symmetricNorming_complex` | `…_real` |
 | `tan 2Θ` | ambient | `tanTwoTheta_ambient_unbounded_symmetricNorming_complex` | `…_real` |
 
 The unqualified `tanTheta_complex`, `sinTwoTheta_complex` and `tanTwoTheta_complex`
@@ -185,9 +185,13 @@ constructors from the generic vocabulary --
 a `TauCeti.LinearPMap.ReducesSubspace` never meets a competing reduction
 vocabulary.
 
-The proof vehicles do not appear: not `HasUnboundedSylvesterKyFan`, not
-`ContinuousLinearMap.HasMinMaxLowerBoundEverywhere`, not `sinTwoThetaIdealBlock`,
-not `unboundedReflectionTangent`, and not a caller-built spectral reflection.
+The proof vehicles do not appear as hypotheses: not `HasUnboundedSylvesterKyFan`,
+not `ContinuousLinearMap.HasMinMaxLowerBoundEverywhere`, not
+`unboundedReflectionTangent`, and not a caller-built spectral reflection.
+`sinTwoThetaIdealBlock` -- the directed doubled sine `P_U P_{J_V Uᗮ}` -- is named
+only in conclusions: the `sin 2Θ` directed clause concludes on it, and the
+`tan 2Θ` directed clause identifies the singular values of `tan 2Θ₀` as
+`tan (arcsin aₙ(sin 2Θ₀))` against it.
 
 ## Angle conventions in the conclusions
 
@@ -352,13 +356,21 @@ alias sinTwoTheta_directed_complex :=
 alias sinTwoTheta_directed_real :=
   sinTwoTheta_directed_unboundedResidual_blockRepresentative_symmetricNorming_real
 
-/-- **`tan 2Θ`, directed clause, over `ℂ`**: `(b − a) N(tan 2Θ₀) ≤ 2 N(R)`. -/
-alias tanTwoTheta_directed_complex :=
-  tanTwoTheta_directed_unboundedResidual_blockRepresentative_symmetricNorming_complex
+/-- **`tan 2Θ`, directed clause, over `ℂ`**: `(b − a) N(tan 2Θ₀) ≤ 2 N(R)`, on the
+paper's directed object -- the `U → Uᗮ` projection block of the doubled tangent
+expression -- for a subspace `V` reducing `A + B`, with the block's singular values
+identified as `tan (arcsin aₙ(sin 2Θ₀))` in the statement itself.
 
-/-- **`tan 2Θ`, directed clause, over `ℝ`**. -/
+Until 2026-09-02 this alias named
+`tanTwoTheta_directed_unboundedResidual_blockRepresentative_symmetricNorming_complex`,
+which quantifies over an arbitrary self-adjoint involution `Z` and concludes on
+`reflectionTangentCorner U Z`; that theorem remains as the general result. -/
+alias tanTwoTheta_directed_complex :=
+  tanTwoTheta_directed_unboundedResidual_symmetricNorming_complex
+
+/-- **`tan 2Θ`, directed clause, over `ℝ`**, on `tanTwoDirectedCornerR U V`. -/
 alias tanTwoTheta_directed_real :=
-  tanTwoTheta_directed_unboundedResidual_blockRepresentative_symmetricNorming_real
+  tanTwoTheta_directed_unboundedResidual_symmetricNorming_real
 
 /-- **`tan 2Θ`, ambient clause, over `ℂ`**: `(b − a) N(|tan 2Θ|) ≤ 2 N(B)`. -/
 alias tanTwoTheta_ambient_complex := tanTwoTheta_ambient_unbounded_symmetricNorming_complex
