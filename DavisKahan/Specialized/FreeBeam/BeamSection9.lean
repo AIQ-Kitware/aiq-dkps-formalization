@@ -15,6 +15,8 @@ import ForTauCeti.Analysis.InnerProductSpace.LinearPMap.SpectralSupport
 import ForTauCeti.Analysis.InnerProductSpace.LinearPMap.RayleighRitz
 import ForTauCeti.MeasureTheory.MulLpAlgebra
 
+open TauCeti.DavisKahan.Sylvester
+
 /-!
 # The Davis--Kahan Section 9 free-beam example, on the genuine operator
 
@@ -57,7 +59,6 @@ namespace DavisKahan
 namespace FreeBeam
 namespace Model
 
-open TauCeti.DavisKahan.Sylvester
 
 noncomputable section
 

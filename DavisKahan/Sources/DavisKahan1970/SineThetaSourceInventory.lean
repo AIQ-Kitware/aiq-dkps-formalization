@@ -8,6 +8,8 @@ import DavisKahan.Sources.DavisKahan1970.SineTheta.All
 import DavisKahan.Sources.DavisKahan1970.SineTheta.FiniteMultiplicity
 import DavisKahan.Sources.DavisKahan1970.GeneralSinTheta
 
+open TauCeti.DavisKahan.Sylvester
+
 /-!
 # Literal Davis--Kahan 1970 sine-theta surface
 
@@ -24,7 +26,6 @@ namespace DavisKahan1970
 -- Lean has no namespace-alias command, so the paper implementation namespace
 -- is opened directly; every unprefixed `Paper...` name below resolves into it.
 open DavisKahan.ExactSinTheta
-open TauCeti.DavisKahan.Sylvester
 
 /-! ## Source norm class -/
 

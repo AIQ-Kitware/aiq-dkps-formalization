@@ -5,6 +5,8 @@ Authors: Jon Crall, OpenAI GPT-5.6 Thinking, Claude Opus 5
 -/
 import DavisKahan.SpectralTheory.SpectralCutoff
 
+open TauCeti.DavisKahan.Sylvester
+
 /-!
 # Bounded truncations for the unbounded Sylvester argument
 
@@ -37,7 +39,6 @@ namespace TauCeti
 namespace DavisKahan
 namespace ExactSinTheta
 
-open TauCeti.DavisKahan.Sylvester
 
 universe v
 

@@ -8,6 +8,8 @@ import DavisKahan.SinTheta.Unbounded.SpectrumGap
 import ForTauCeti.Analysis.InnerProductSpace.LinearPMap.Resolvent
 import ForTauCeti.Analysis.InnerProductSpace.LinearPMap.Constructions
 
+open TauCeti.DavisKahan.Sylvester
+
 /-!
 # Bounded-perturbation adapter for the unbounded sine-theta theorem
 
@@ -31,7 +33,6 @@ namespace TauCeti
 namespace DavisKahan
 
 open TauCeti.DavisKahan.ExactSinTheta
-open TauCeti.DavisKahan.Sylvester
 
 universe u v
 

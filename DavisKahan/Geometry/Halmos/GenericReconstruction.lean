@@ -431,7 +431,7 @@ theorem exists_cosineBlockEquiv_of_pairEquiv
     rw [genericLeftHalf, Submodule.map_inf _ hinj, hU, hGen]
   refine ⟨summandEquiv e _ hM, fun m => ?_⟩
   apply Subtype.ext
-  simp only [coe_summandEquiv, genericCosineBlock, DavisKahanExt.compressOperator,
+  simp only [coe_summandEquiv, genericCosineBlock, DavisKahan.Sylvester.compressOperator,
     ContinuousLinearMap.comp_apply, Submodule.subtypeL_apply,
     Submodule.coe_orthogonalProjectionOnto_apply]
   calc e ((genericLeftHalf U₁ V₁).starProjection (V₁.starProjection (m : H₁)))

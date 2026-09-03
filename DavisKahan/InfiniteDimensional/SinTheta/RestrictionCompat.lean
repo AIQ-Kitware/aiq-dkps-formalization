@@ -8,6 +8,8 @@ import DavisKahan.OperatorIdeal.ApproximationNumbers.ScalarGeneric
 import DavisKahan.SpectralTheory.AbstractSpectrum
 import DavisKahan.SinTheta.SpectralBridge
 
+open TauCeti.DavisKahan.Sylvester
+
 /-!
 # Current-API restriction layer for the infinite-dimensional sine theorems
 
@@ -23,6 +25,7 @@ modules do not depend on stale convenience constructors.
 
 namespace TauCeti
 namespace DavisKahanExt
+
 
 open DavisKahan.Foundation
 

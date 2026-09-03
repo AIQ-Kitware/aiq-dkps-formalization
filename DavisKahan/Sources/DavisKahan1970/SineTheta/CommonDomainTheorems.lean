@@ -6,6 +6,8 @@ Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 import DavisKahan.Sources.DavisKahan1970.SineTheta.CommonDomain
 import DavisKahan.Sources.DavisKahan1970.SineTheta.Theorem62
 
+open TauCeti.DavisKahan.Sylvester
+
 /-!
 # Literal common-domain source forms of Theorems 6.1 and 6.2
 
@@ -20,7 +22,6 @@ namespace DavisKahan
 namespace ExactSinTheta
 
 open scoped InnerProductSpace
-open TauCeti.DavisKahan.Sylvester
 
 noncomputable section
 

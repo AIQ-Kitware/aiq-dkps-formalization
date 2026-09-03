@@ -6,6 +6,8 @@ Authors: Jon Crall, Claude Fable 5
 
 import DavisKahan.TanTheta.Theorem63FiniteSource
 
+open TauCeti.DavisKahan.Sylvester
+
 /-!
 # Theorem 6.3 over abstract trial-block data
 
@@ -45,7 +47,6 @@ namespace DavisKahan
 namespace TanTheta
 
 open ExactSinTheta
-open TauCeti.DavisKahan.Sylvester
 open Module (finrank)
 
 universe u

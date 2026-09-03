@@ -10,6 +10,8 @@ import DavisKahan.Geometry.Polar.PrincipalSquareRoot
 import ForTauCeti.Analysis.InnerProductSpace.AngleGeometry
 import ForTauCeti.Analysis.InnerProductSpace.RealContinuousFunctionalCalculus
 
+open TauCeti.DavisKahan.Sylvester
+
 /-!
 # Davis--Kahan 1970, Proposition 3.1, at the paper's own acuteness hypothesis
 
@@ -41,7 +43,6 @@ open scoped InnerProductSpace ComplexOrder
 namespace TauCeti
 namespace DavisKahan1970
 
-open TauCeti.DavisKahan.Sylvester
 
 open DavisKahan
 

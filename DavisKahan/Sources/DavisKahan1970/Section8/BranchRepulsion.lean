@@ -18,6 +18,8 @@ import DavisKahan.InfiniteDimensional.SinTheta.Continuation.SharpDiagonalResolve
 import DavisKahan.InfiniteDimensional.SinTheta.Continuation.SharpSchurComplement
 import DavisKahan.InfiniteDimensional.Riccati.ContinuationWitnessOrientedBlocks
 
+open TauCeti.DavisKahan.Sylvester
+
 /-!
 # Davis--Kahan 1970, Section 8: the selected branch and its spectral repulsion
 
@@ -41,7 +43,6 @@ namespace TauCeti
 namespace DavisKahan1970
 namespace Section8
 
-open TauCeti.DavisKahan.Sylvester
 
 open DavisKahanExt
 open TauCeti.DavisKahan

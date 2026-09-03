@@ -8,6 +8,8 @@ import DavisKahan.DoubleAngle.CompatibilitySinTwoTheta
 import DavisKahan.InfiniteDimensional.SinTheta.General
 import DavisKahan.SpectralTheory.AbstractSpectrum
 
+open TauCeti.DavisKahan.Sylvester
+
 /-!
 # Infinite-dimensional `sin 2Θ` and generic double-angle bounds
 
@@ -19,7 +21,6 @@ namespace TauCeti
 namespace DavisKahanExt
 
 open DavisKahan.Foundation
-open TauCeti.DavisKahan.Sylvester
 
 open DavisKahan
 

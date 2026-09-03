@@ -9,6 +9,8 @@ import DavisKahan.TanTheta.UnboundedSpectrum
 import DavisKahan.SpectralTheory.ReflectionRestriction
 import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.GramSpectralRank
 
+open TauCeti.DavisKahan.Sylvester
+
 /-!
 # Theorem 6.3 for unbounded self-adjoint operators
 
@@ -53,7 +55,6 @@ namespace DavisKahan
 namespace TanTheta
 
 open ExactSinTheta
-open TauCeti.DavisKahan.Sylvester
 open TanTheta
 open Module (finrank)
 

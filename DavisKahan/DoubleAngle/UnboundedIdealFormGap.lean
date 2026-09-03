@@ -6,6 +6,8 @@ Authors: Jon Crall, Claude Opus 5
 import DavisKahan.DoubleAngle.UnboundedIdeal
 import DavisKahan.SinTheta.Unbounded.FormBoundedGap
 
+open TauCeti.DavisKahan.Sylvester
+
 /-!
 # The complex directed `sin 2Θ` theorem at the full source gap
 
@@ -65,7 +67,6 @@ namespace DavisKahan
 open TauCeti.DavisKahanExt
 open TauCeti.DavisKahan
 open TauCeti.DavisKahan.ExactSinTheta
-open TauCeti.DavisKahan.Sylvester
 
 noncomputable section
 

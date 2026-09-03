@@ -7,6 +7,8 @@ import DavisKahan.InfiniteDimensional.SinTheta.Continuation.SharpSourceSpectrum
 import DavisKahan.SpectralTheory.ResolventOperator
 import DavisKahan.SpectralTheory.AbstractSpectrum
 
+open TauCeti.DavisKahan.Sylvester
+
 /-!
 # Diagonal resolvent data for sharp off-diagonal continuation
 
@@ -24,7 +26,6 @@ namespace TauCeti
 namespace DavisKahanExt
 
 open DavisKahan.Foundation
-open TauCeti.DavisKahan.Sylvester
 
 open DavisKahan
 

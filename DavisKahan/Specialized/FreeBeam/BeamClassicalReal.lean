@@ -12,6 +12,8 @@ import DavisKahan.Sources.DavisKahan1970.Section9.FreeBeamRootLocalization
 import Mathlib.Analysis.Real.Pi.Bounds
 import Mathlib.Tactic
 
+open TauCeti.DavisKahan.Sylvester
+
 /-!
 # Classical identification of the real free-beam realization
 
@@ -37,7 +39,6 @@ namespace FreeBeam
 namespace Model
 namespace Real
 
-open TauCeti.DavisKahan.Sylvester
 
 noncomputable section
 

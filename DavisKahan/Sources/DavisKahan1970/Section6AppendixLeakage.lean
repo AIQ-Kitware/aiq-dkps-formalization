@@ -8,6 +8,8 @@ import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.FiniteDimensional
 import DavisKahan.Sources.DavisKahan1970.Ideals.HilbertSchmidtBasis
 import DavisKahan.Sources.DavisKahan1970.Ideals.HilbertSchmidtFiniteRank
 
+open TauCeti.DavisKahan.Sylvester
+
 /-!
 # Davis--Kahan 1970, Lemma 6.3
 
@@ -63,7 +65,6 @@ namespace Section6Appendix
 
 open TauCeti.DavisKahan
 open TauCeti.DavisKahan.ExactSinTheta
-open TauCeti.DavisKahan.Sylvester
 
 universe u v w
 

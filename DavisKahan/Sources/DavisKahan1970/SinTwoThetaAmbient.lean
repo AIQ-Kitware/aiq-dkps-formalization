@@ -12,6 +12,8 @@ import DavisKahan.Sources.DavisKahan1970.SineTheta.ReflectedDefectDoubling
 import DavisKahan.Sources.DavisKahan1970.SineTheta.Norms.UnitaryInvariantNormLaws
 import DavisKahan.Sources.DavisKahan1970.SineTheta.Norms.HeterogeneousRepresentative
 
+open TauCeti.DavisKahan.Sylvester
+
 /-!
 # The whole-space half of the `sin 2Θ` theorem
 
@@ -74,7 +76,6 @@ namespace DavisKahan1970
 open TauCeti.DavisKahanExt
 open TauCeti.DavisKahan
 open TauCeti.DavisKahan.ExactSinTheta
-open TauCeti.DavisKahan.Sylvester
 open TauCeti.DavisKahan
 
 open scoped InnerProductSpace

@@ -6,6 +6,8 @@ Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 import DavisKahan.InfiniteDimensional.SinTheta.Continuation.WitnessOffDiagonal
 import DavisKahan.InfiniteDimensional.TanTwoTheta.BoundedRiccatiShift
 
+open TauCeti.DavisKahan.Sylvester
+
 /-!
 # Riccati coordinates for an arbitrary quarter-acute reducing graph
 
@@ -23,6 +25,7 @@ integration is a later compatibility step.
 
 namespace TauCeti
 namespace DavisKahanExt
+
 
 open DavisKahan
 

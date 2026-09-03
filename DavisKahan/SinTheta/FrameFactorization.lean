@@ -11,6 +11,8 @@ import Mathlib.Analysis.InnerProductSpace.StarOrder
 import Mathlib.Analysis.Normed.Group.Uniform
 import Mathlib.Analysis.SpecialFunctions.ContinuousFunctionalCalculus.Rpow.Basic
 
+open TauCeti.DavisKahan.Sylvester
+
 /-!
 # Infinite-dimensional lower-frame factorization
 
@@ -47,7 +49,6 @@ it is not a strengthening of either.
 namespace TauCeti
 
 open TauCeti
-open TauCeti.DavisKahan.Sylvester
 namespace DavisKahan
 namespace ExactSinTheta
 

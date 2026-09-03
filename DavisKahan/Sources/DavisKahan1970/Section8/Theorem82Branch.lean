@@ -11,6 +11,8 @@ import DavisKahan.SpectralTheory.CentralBand
 import DavisKahan.BoundedOperator.TrialResidual
 import ForTauCeti.Analysis.InnerProductSpace.Polar.SelfAdjointCompletion
 
+open TauCeti.DavisKahan.Sylvester
+
 /-!
 # Davis--Kahan 1970, Theorem 8.2: branch selection under either smallness hypothesis
 
@@ -68,7 +70,6 @@ namespace TauCeti
 namespace DavisKahan1970
 namespace Section8
 
-open TauCeti.DavisKahan.Sylvester
 
 open DavisKahanExt
 open TauCeti.DavisKahan

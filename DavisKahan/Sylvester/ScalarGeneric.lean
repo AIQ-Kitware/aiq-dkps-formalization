@@ -37,8 +37,9 @@ namespace TauCeti
 namespace DavisKahan
 namespace Sylvester
 
-open scoped InnerProductSpace
 open TauCeti.DavisKahan.ExactSinTheta
+
+open scoped InnerProductSpace
 
 noncomputable section
 

@@ -7,6 +7,8 @@ import DavisKahan.InfiniteDimensional.SinTheta.BoundedBorelProjectionComplex
 import ForTauCeti.Analysis.InnerProductSpace.SpectralOrder.Complex
 import DavisKahan.InfiniteDimensional.SinTheta.Continuation.SelectedReduction
 
+open TauCeti.DavisKahan.Sylvester
+
 /-!
 # Sharp form bounds on the spectral subspaces of an operator with a gap
 
@@ -36,7 +38,6 @@ namespace TauCeti
 namespace DavisKahanExt
 
 open scoped InnerProductSpace
-open TauCeti.DavisKahan.Sylvester
 open DavisKahan
 open DavisKahan
 open DavisKahan.Foundation

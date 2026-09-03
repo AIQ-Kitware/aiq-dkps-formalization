@@ -11,6 +11,8 @@ import Mathlib.Analysis.SpecialFunctions.ContinuousFunctionalCalculus.Abs
 import ForTauCeti.Analysis.InnerProductSpace.Polar.GramContraction
 import DavisKahan.SpectralTheory.AbstractSpectrum
 
+open TauCeti.DavisKahan.Sylvester
+
 /-!
 # Infinite-dimensional `sin Θ` theorems
 
@@ -23,7 +25,6 @@ namespace TauCeti
 namespace DavisKahanExt
 
 open DavisKahan.Foundation
-open TauCeti.DavisKahan.Sylvester
 
 open DavisKahan
 
@@ -497,7 +498,7 @@ theorem sinTheta_directed_coercive
           refine mul_le_mul_of_nonneg_left ?_ (norm_nonneg _)
           rw [hQ]; exact V.norm_starProjection_apply_le x
   have hXbound : ‖X‖ ≤ ‖B - A‖ / g :=
-    (norm_sylvester_le_of_coercive hA'sym hB'sym hg hA'c hB'c hsylv).trans (by gcongr)
+    (Sylvester.norm_sylvester_le_of_coercive hA'sym hB'sym hg hA'c hB'c hsylv).trans (by gcongr)
   have hstar : star (Q ∘L P : E →L[𝕜] E) = P ∘L Q := by
     rw [ContinuousLinearMap.star_eq_adjoint, ContinuousLinearMap.adjoint_comp,
       ← ContinuousLinearMap.star_eq_adjoint, ← ContinuousLinearMap.star_eq_adjoint,

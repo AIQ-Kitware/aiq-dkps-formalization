@@ -5,6 +5,8 @@ Authors: Jon Crall, Claude Opus 5
 -/
 import DavisKahan.Sources.DavisKahan1970.SectionTwo
 
+open TauCeti.DavisKahan.Sylvester
+
 /-!
 # Using the four Section 2 theorems
 
@@ -61,7 +63,6 @@ namespace SectionTwoUsage
 open scoped InnerProductSpace
 
 open TauCeti.DavisKahan.ExactSinTheta TauCeti.DavisKahanExt
-open TauCeti.DavisKahan.Sylvester
 
 noncomputable section
 

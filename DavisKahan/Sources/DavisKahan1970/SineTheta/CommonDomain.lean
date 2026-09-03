@@ -5,6 +5,8 @@ Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
 import DavisKahan.Sources.DavisKahan1970.SineTheta.Theorem61Universal
 
+open TauCeti.DavisKahan.Sylvester
+
 /-!
 # The common-domain formulation used in the unbounded appendix
 
@@ -26,7 +28,6 @@ namespace DavisKahan
 namespace ExactSinTheta
 
 open scoped InnerProductSpace
-open TauCeti.DavisKahan.Sylvester
 
 universe u v
 

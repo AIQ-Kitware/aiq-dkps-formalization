@@ -10,6 +10,8 @@ import DavisKahan.Geometry.Halmos.AngleSequenceRealization
 import DavisKahan.Geometry.Halmos.CompactClassification
 import ForTauCeti.Analysis.InnerProductSpace.CompactApproximationEigenvalues
 
+open TauCeti.DavisKahan.Sylvester
+
 /-!
 # Davis--Kahan 1970, Corollary 3.1
 
@@ -45,7 +47,6 @@ open scoped InnerProductSpace
 namespace TauCeti
 namespace DavisKahan1970
 
-open TauCeti.DavisKahan.Sylvester
 
 open TauCeti.DavisKahan
 

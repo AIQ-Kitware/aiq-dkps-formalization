@@ -8,6 +8,8 @@ import DavisKahan.SinTheta.Natural.Reducing
 import DavisKahan.SinTheta.Natural.GapConvenience
 import DavisKahan.OperatorIdeal.ApproximationNumbers.ScalarGeneric
 
+open TauCeti.DavisKahan.Sylvester
+
 /-!
 # Compile-only usage examples for the natural sine-theta API
 
@@ -25,7 +27,6 @@ namespace DavisKahan
 namespace ExactSinTheta
 namespace NaturalExamples
 
-open TauCeti.DavisKahan.Sylvester
 
 noncomputable section
 

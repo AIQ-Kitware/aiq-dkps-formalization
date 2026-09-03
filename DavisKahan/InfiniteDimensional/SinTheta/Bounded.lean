@@ -7,6 +7,8 @@ import DavisKahan.InfiniteDimensional.SinTheta.SpectralBridge
 import DavisKahan.OperatorIdeal.CanonicalRealView
 import DavisKahan.SinTheta.Bounded.Core
 
+open TauCeti.DavisKahan.Sylvester
+
 /-!
 # Bounded `sin Θ` endpoints resting on the legacy bridge estimate
 
@@ -23,7 +25,6 @@ namespace DavisKahan
 namespace ExactSinTheta
 
 open scoped InnerProductSpace
-open TauCeti.DavisKahan.Sylvester
 
 section Generic
 

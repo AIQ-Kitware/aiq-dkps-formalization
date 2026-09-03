@@ -8,6 +8,8 @@ import DavisKahan.SinTheta.SpectralProjection
 import DavisKahan.Geometry.Angle.OperatorAngleComplex
 import ForTauCeti.Analysis.InnerProductSpace.Projection.Gap
 
+open TauCeti.DavisKahan.Sylvester
+
 /-!
 # Reflection transport for unbounded spectral restrictions
 
@@ -22,7 +24,6 @@ open scoped InnerProductSpace
 namespace TauCeti
 namespace DavisKahan
 
-open TauCeti.DavisKahan.Sylvester
 
 open TauCeti.DavisKahanExt
 open TauCeti.DavisKahan

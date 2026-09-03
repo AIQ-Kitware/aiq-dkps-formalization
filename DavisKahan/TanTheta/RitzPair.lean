@@ -6,6 +6,8 @@ Authors: Jon Crall, Claude Opus 5
 import DavisKahan.TanTheta.Theorem63UnboundedCompression
 import DavisKahan.TanTheta.UnboundedSpectrum
 
+open TauCeti.DavisKahan.Sylvester
+
 /-!
 # The unbounded Ritz pair, and the reducing complement
 
@@ -42,7 +44,6 @@ namespace TauCeti
 namespace DavisKahan
 
 open TauCeti.DavisKahan.ExactSinTheta TauCeti.DavisKahan.TanTheta
-open TauCeti.DavisKahan.Sylvester
   TauCeti.DavisKahan.TanTheta
 
 universe u v

@@ -7,6 +7,8 @@ import DavisKahan.Geometry.Halmos.GenericReconstruction
 import ForTauCeti.Analysis.InnerProductSpace.RealContinuousFunctionalCalculus
 import DavisKahan.SpectralTheory.Real.SpectralMultiplicityClassification
 
+open TauCeti.DavisKahan.Sylvester
+
 /-!
 # Davis--Kahan 1970, Theorem 3.1 in the paper's multiplicity phrasing
 
@@ -61,7 +63,6 @@ open scoped InnerProductSpace
 namespace TauCeti
 namespace DavisKahan1970
 
-open TauCeti.DavisKahan.Sylvester
 
 open DavisKahan
 open DavisKahan.RealSpectralRestriction

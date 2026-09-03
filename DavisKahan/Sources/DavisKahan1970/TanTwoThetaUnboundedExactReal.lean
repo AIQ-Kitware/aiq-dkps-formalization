@@ -11,6 +11,8 @@ import DavisKahan.Sources.DavisKahan1970.SineTheta.Norms.ComplexificationGauge
 import DavisKahan.DoubleAngle.TangentTransport
 import DavisKahan.Sources.DavisKahan1970.AmbientReal
 
+open TauCeti.DavisKahan.Sylvester
+
 /-!
 # Exact real unbounded `tan 2Theta` source wrappers
 
@@ -29,6 +31,7 @@ dependent-rewrite elaboration blowups.
 
 namespace TauCeti
 namespace DavisKahan1970
+
 
 open scoped InnerProductSpace
 open TauCeti.DavisKahan.ExactSinTheta

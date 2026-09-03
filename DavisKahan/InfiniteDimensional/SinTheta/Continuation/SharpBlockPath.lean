@@ -6,6 +6,8 @@ Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 import DavisKahan.InfiniteDimensional.SinTheta.Continuation.SharpRadius
 import DavisKahan.InfiniteDimensional.SinTheta.Continuation.WitnessOffDiagonal
 
+open TauCeti.DavisKahan.Sylvester
+
 /-!
 # Sharp continuation block data along the affine path
 
@@ -21,6 +23,7 @@ argument.  No spectral inclusion is claimed in this leaf.
 
 namespace TauCeti
 namespace DavisKahanExt
+
 
 open DavisKahan
 

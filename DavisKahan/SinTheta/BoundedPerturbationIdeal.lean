@@ -7,6 +7,8 @@ import DavisKahan.SinTheta.BoundedPerturbation
 import DavisKahan.OperatorIdeal.CanonicalRealView
 import ForTauCeti.Analysis.InnerProductSpace.LinearPMap.Resolvent
 
+open TauCeti.DavisKahan.Sylvester
+
 /-!
 # Ideal-gauge bounded-perturbation adapter for unbounded sine theta
 
@@ -20,6 +22,7 @@ open scoped InnerProductSpace
 
 namespace TauCeti
 namespace DavisKahan
+
 
 open TauCeti.DavisKahan.ExactSinTheta
 

@@ -9,6 +9,8 @@ import DavisKahan.OperatorIdeal.ComplexificationApproximation
 import DavisKahan.SpectralTheory.Complexification.Spectrum
 import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.KyFanBochner
 
+open TauCeti.DavisKahan.ExactSinTheta
+
 /-!
 # The separated Sylvester estimate in every finite Ky Fan gauge
 
@@ -55,7 +57,9 @@ and descends -- which is exact, because complexification changes no approximatio
 namespace TauCeti
 
 open TauCeti
-namespace DavisKahanExt
+namespace DavisKahan.Sylvester
+
+open TauCeti.DavisKahanExt
 
 open DavisKahan.Foundation
 open DavisKahan.Foundation.RealComplexification
@@ -227,5 +231,5 @@ end RealIdeal
 
 end
 
-end DavisKahanExt
+end DavisKahan.Sylvester
 end TauCeti

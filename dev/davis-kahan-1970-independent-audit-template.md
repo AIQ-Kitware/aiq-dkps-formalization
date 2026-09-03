@@ -132,25 +132,25 @@ The declarations that carry this result's printed statement, with the source ato
 
 #### `TauCeti.DavisKahan1970.SectionTwo.sinTheta_complex`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/SectionTwo.lean:257`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/SectionTwo.lean:260`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.SectionTwo.sinTheta_real`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/SectionTwo.lean:264`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/SectionTwo.lean:267`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `DavisKahan1970.sinTheta_unbounded_intervalExterior_characterizedWitness_rclike`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/SineTheta/Presentation.lean:208`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/SineTheta/Presentation.lean:212`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.sinTheta_unbounded_intervalExterior_symmetricNorming_rclike`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/SineTheta/ScalarGeneric.lean:184`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/SineTheta/ScalarGeneric.lean:185`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
@@ -162,7 +162,7 @@ Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.sinTheta_paperData_real`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/SineThetaSourceInventory.lean:108`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/SineThetaSourceInventory.lean:109`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
@@ -174,49 +174,49 @@ Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.sinTheta_generalized_paperData_real`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/SineThetaSourceInventory.lean:125`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/SineThetaSourceInventory.lean:126`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `DavisKahan1970.sinTheta_unbounded_formGap_symmetricNorming_complex`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/SineTheta/Presentation.lean:344`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/SineTheta/Presentation.lean:348`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `DavisKahan1970.sinTheta_unbounded_formGap_symmetricNorming_real`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/SineTheta/Presentation.lean:458`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/SineTheta/Presentation.lean:462`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `DavisKahan1970.sinTheta_unbounded_intervalExterior_symmetricNorming_complex`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/SineTheta/Presentation.lean:421`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/SineTheta/Presentation.lean:425`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `DavisKahan1970.sinTheta_unbounded_intervalExterior_symmetricNorming_real`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/SineTheta/Presentation.lean:509`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/SineTheta/Presentation.lean:513`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `DavisKahan1970.sinTheta_unbounded_formGap_symmetricNorming_rclike`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/SineTheta/Presentation.lean:298`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/SineTheta/Presentation.lean:302`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `DavisKahan1970.isTrialResidual_iff`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/SineTheta/Presentation.lean:130`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/SineTheta/Presentation.lean:134`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `DavisKahan1970.isExactSpectralDecomposition_iff`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/SineTheta/Presentation.lean:169`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/SineTheta/Presentation.lean:173`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
@@ -773,13 +773,13 @@ The declarations that carry this result's printed statement, with the source ato
 
 #### `TauCeti.DavisKahan1970.SectionTwo.tanTheta_complex`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/SectionTwo.lean:283`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/SectionTwo.lean:286`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.SectionTwo.tanTheta_real`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/SectionTwo.lean:294`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/SectionTwo.lean:297`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
@@ -797,127 +797,127 @@ Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan.Section2.theorem6_3_perturbation_infiniteTrial`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section2TanThetaPerturbation.lean:176`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section2TanThetaPerturbation.lean:177`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.tanTheta_ambient_bounded_symmetricNorming_complex_of_transversality`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/TanThetaAmbient.lean:1177`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/TanThetaAmbient.lean:1178`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.tanTheta_ambient_bounded_symmetricNorming_real_of_transversality`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/AmbientReal.lean:211`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/AmbientReal.lean:212`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.tanTheta_ambient_bounded_symmetricNorming_complex_of_crossedDefects`
 
-Source location candidates: `Challenge/DavisKahan1970/Conformance.lean:318`, `DavisKahan/Sources/DavisKahan1970/TanThetaAmbient.lean:1266`
+Source location candidates: `Challenge/DavisKahan1970/Conformance.lean:318`, `DavisKahan/Sources/DavisKahan1970/TanThetaAmbient.lean:1267`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.tanTheta_ambient_bounded_symmetricNorming_real_of_crossedDefects`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/DirectedReal.lean:692`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/DirectedReal.lean:693`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.tanTheta_ambient_unboundedOperator_boundedRitz_symmetricNorming_complex`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/TanThetaUnboundedAmbient.lean:461`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/TanThetaUnboundedAmbient.lean:465`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.tanTheta_ambient_unboundedOperator_boundedRitz_symmetricNorming_real`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/TanThetaUnboundedAmbientReal.lean:213`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/TanThetaUnboundedAmbientReal.lean:214`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.tanTheta_ambient_unboundedRitz_explicitCompatibility_symmetricNorming_complex`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/TanThetaUnboundedAmbient.lean:429`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/TanThetaUnboundedAmbient.lean:433`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.tanTheta_ambient_unboundedRitz_explicitCompatibility_symmetricNorming_real`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/TanThetaUnboundedAmbientReal.lean:347`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/TanThetaUnboundedAmbientReal.lean:348`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan.UnboundedRitzPair`
 
-Source location candidates: `DavisKahan/TanTheta/RitzPair.lean:59`
+Source location candidates: `DavisKahan/TanTheta/RitzPair.lean:60`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan.ReducingComplement`
 
-Source location candidates: `DavisKahan/TanTheta/RitzPair.lean:74`
+Source location candidates: `DavisKahan/TanTheta/RitzPair.lean:75`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan.UnboundedRitzPair.ofTrialBlock`
 
-Source location candidates: `DavisKahan/TanTheta/RitzPair.lean:93`
+Source location candidates: `DavisKahan/TanTheta/RitzPair.lean:94`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.tanTheta_ambient_unboundedRitz_symmetricNorming_complex`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/TanThetaUnboundedAmbient.lean:544`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/TanThetaUnboundedAmbient.lean:548`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.tanTheta_ambient_unboundedRitz_symmetricNorming_real`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/TanThetaUnboundedAmbientReal.lean:393`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/TanThetaUnboundedAmbientReal.lean:394`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.tanTheta_directed_unboundedRitz_symmetricNorming_complex`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/TanThetaDirectedUnbounded.lean:213`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/TanThetaDirectedUnbounded.lean:214`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.tanTheta_directed_unboundedRitz_symmetricNorming_real`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/TanThetaDirectedUnbounded.lean:257`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/TanThetaDirectedUnbounded.lean:258`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.tanTheta_directed_unboundedTrial_symmetricNorming_complex`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/TanThetaDirectedUnbounded.lean:95`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/TanThetaDirectedUnbounded.lean:96`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.tanTheta_directed_unboundedTrial_symmetricNorming_real`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/TanThetaDirectedUnbounded.lean:138`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/TanThetaDirectedUnbounded.lean:139`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan.TanTheta.theorem6_3_unbounded_infiniteTrial_ideal`
 
-Source location candidates: `DavisKahan/TanTheta/Theorem63UnboundedInfiniteTrial.lean:669`
+Source location candidates: `DavisKahan/TanTheta/Theorem63UnboundedInfiniteTrial.lean:670`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan.TanTheta.UnboundedCompressionTrialData.ideal_of_formBounds`
 
-Source location candidates: `DavisKahan/TanTheta/Theorem63TrialData.lean:557`, `DavisKahan/TanTheta/Theorem63UnboundedCompression.lean:763`
+Source location candidates: `DavisKahan/TanTheta/Theorem63TrialData.lean:558`, `DavisKahan/TanTheta/Theorem63UnboundedCompression.lean:764`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.theorem6_3_unboundedCompression_ideal_real`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/UnboundedCompressionReal.lean:346`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/UnboundedCompressionReal.lean:347`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
@@ -1073,13 +1073,13 @@ The declarations that carry this result's printed statement, with the source ato
 
 #### `TauCeti.DavisKahan1970.SectionTwo.sinTwoTheta_complex`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/SectionTwo.lean:315`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/SectionTwo.lean:318`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.SectionTwo.sinTwoTheta_real`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/SectionTwo.lean:327`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/SectionTwo.lean:330`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
@@ -1091,217 +1091,217 @@ Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.sinTwoTheta_ambient_bounded_symmetricNorming_complex`
 
-Source location candidates: `Challenge/DavisKahan1970/Conformance.lean:398`, `DavisKahan/Sources/DavisKahan1970/SinTwoThetaAmbient.lean:607`
+Source location candidates: `Challenge/DavisKahan1970/Conformance.lean:398`, `DavisKahan/Sources/DavisKahan1970/SinTwoThetaAmbient.lean:608`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.sinTwoTheta_ambient_bounded_symmetricNorming_real`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/AmbientReal.lean:253`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/AmbientReal.lean:254`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.sinTwoTheta_unbounded_perturbation_arbitraryRepresentative_complex`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/SinTwoTheta.lean:170`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/SinTwoTheta.lean:172`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.sinTwoTheta_unbounded_reflectionResidual_arbitraryRepresentative_complex`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/SinTwoTheta.lean:258`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/SinTwoTheta.lean:260`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.sinTwoTheta_unbounded_perturbation_arbitraryRepresentative_real`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/SinTwoTheta.lean:348`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/SinTwoTheta.lean:350`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.sinTwoTheta_unbounded_reflectionResidual_arbitraryRepresentative_real`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/SinTwoTheta.lean:408`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/SinTwoTheta.lean:410`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.sinTwoTheta_directed_unboundedResidual_blockRepresentative_symmetricNorming_complex`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/SinTwoThetaUnboundedDirectedResidual.lean:371`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/SinTwoThetaUnboundedDirectedResidual.lean:372`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.sinTwoTheta_directed_unboundedResidual_blockRepresentative_symmetricNorming_real`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/SinTwoThetaUnboundedDirectedResidualReal.lean:202`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/SinTwoThetaUnboundedDirectedResidualReal.lean:203`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.sinTwoTheta_directed_unboundedResidual_blockRepresentative_intervalExterior_symmetricNorming_real`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/SinTwoThetaUnboundedDirectedResidualReal.lean:246`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/SinTwoThetaUnboundedDirectedResidualReal.lean:247`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.sinTwoTheta_directed_unbounded_addBounded_blockRepresentative_symmetricNorming_complex`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/SinTwoTheta.lean:825`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/SinTwoTheta.lean:827`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan.directedSinAngleOperatorC_reflected_eq_directedSinTwoAngleOperatorC`
 
-Source location candidates: `DavisKahan/DoubleAngle/AngleTransport.lean:262`
+Source location candidates: `DavisKahan/DoubleAngle/AngleTransport.lean:264`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan.sinTwoThetaIdealBlock_hasSameApproximationNumbers`
 
-Source location candidates: `DavisKahan/DoubleAngle/AngleTransport.lean:295`
+Source location candidates: `DavisKahan/DoubleAngle/AngleTransport.lean:297`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan.extendedGauge_sinTwoThetaIdealBlock_complex`
 
-Source location candidates: `DavisKahan/DoubleAngle/AngleTransport.lean:335`
+Source location candidates: `DavisKahan/DoubleAngle/AngleTransport.lean:336`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.sinTwoTheta_directed_unbounded_addBounded_symmetricNorming_complex`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/SinTwoTheta.lean:873`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/SinTwoTheta.lean:875`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan.approximationSingularValue_sinTwoThetaIdealBlock_real`
 
-Source location candidates: `DavisKahan/DoubleAngle/TangentTransport.lean:647`
+Source location candidates: `DavisKahan/DoubleAngle/TangentTransport.lean:648`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.sinTwoTheta_directed_unbounded_addBounded_symmetricNorming_real`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/SinTwoTheta.lean:577`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/SinTwoTheta.lean:579`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan.extendedGauge_sinTwoThetaIdealBlock_real`
 
-Source location candidates: `DavisKahan/DoubleAngle/TangentTransport.lean:667`
+Source location candidates: `DavisKahan/DoubleAngle/TangentTransport.lean:668`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan.mem_directedSinTwoAngleOperatorRC_iff`
 
-Source location candidates: `DavisKahan/DoubleAngle/TangentTransport.lean:680`
+Source location candidates: `DavisKahan/DoubleAngle/TangentTransport.lean:681`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan.gauge_directedSinTwoAngleOperatorRC`
 
-Source location candidates: `DavisKahan/DoubleAngle/TangentTransport.lean:688`
+Source location candidates: `DavisKahan/DoubleAngle/TangentTransport.lean:689`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.sinTwoTheta_directed_unboundedResidual_blockRepresentative_spectrumGap_symmetricNorming_complex`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/SinTwoThetaUnboundedDirectedResidual.lean:209`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/SinTwoThetaUnboundedDirectedResidual.lean:210`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.sinTwoTheta_directed_unbounded_addBounded_spectrumGap_symmetricNorming_complex`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/SinTwoTheta.lean:761`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/SinTwoTheta.lean:763`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.sinTwoTheta_directed_unbounded_addBounded_blockRepresentative_spectrumGap_symmetricNorming_complex`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/SinTwoTheta.lean:701`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/SinTwoTheta.lean:703`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan.sinTwoTheta_addBounded_gauge_of_formGap`
 
-Source location candidates: `DavisKahan/DoubleAngle/UnboundedIdealFormGap.lean:503`
+Source location candidates: `DavisKahan/DoubleAngle/UnboundedIdealFormGap.lean:504`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan.sinTwoTheta_reflectionResidual_gauge_of_formGap`
 
-Source location candidates: `DavisKahan/DoubleAngle/UnboundedIdealFormGap.lean:290`
+Source location candidates: `DavisKahan/DoubleAngle/UnboundedIdealFormGap.lean:291`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.sinTwoTheta_directed_unbounded_addBounded_unequalDimension_symmetricNorming_complex`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/SinTwoTheta.lean:929`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/SinTwoTheta.lean:931`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.sinTwoTheta_directed_unbounded_addBounded_unequalDimension_symmetricNorming_real`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/SinTwoTheta.lean:611`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/SinTwoTheta.lean:613`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.sinTwoTheta_unbounded_perturbation_arbitraryRepresentative_unequalDimension_complex`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/SinTwoTheta.lean:224`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/SinTwoTheta.lean:226`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.sinTwoTheta_unbounded_reflectionResidual_arbitraryRepresentative_unequalDimension_complex`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/SinTwoTheta.lean:297`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/SinTwoTheta.lean:299`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.sinTwoTheta_ambient_unbounded_addBounded_symmetricNorming_complex`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/SinTwoThetaAmbientUnbounded.lean:287`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/SinTwoThetaAmbientUnbounded.lean:288`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.sinTwoTheta_ambient_unbounded_addBounded_symmetricNorming_real`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/SinTwoThetaAmbientUnbounded.lean:422`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/SinTwoThetaAmbientUnbounded.lean:423`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.SectionTwo.sinTwoTheta_ambient_complex`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/SectionTwo.lean:389`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/SectionTwo.lean:392`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.SectionTwo.sinTwoTheta_ambient_real`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/SectionTwo.lean:393`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/SectionTwo.lean:396`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.sinTwoTheta_ambient_reflection_projectorDifference_symmetricNorming`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/SinTwoThetaAmbientUnbounded.lean:220`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/SinTwoThetaAmbientUnbounded.lean:221`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.sinTheta_ambient_unitaryConj_projectorDifference_symmetricNorming`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/SinTwoThetaAmbientUnbounded.lean:123`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/SinTwoThetaAmbientUnbounded.lean:124`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan.mem_directedSinTwoAngleOperatorC_iff`
 
-Source location candidates: `DavisKahan/DoubleAngle/AngleTransport.lean:342`
+Source location candidates: `DavisKahan/DoubleAngle/AngleTransport.lean:343`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan.gauge_directedSinTwoAngleOperatorC`
 
-Source location candidates: `DavisKahan/DoubleAngle/AngleTransport.lean:348`
+Source location candidates: `DavisKahan/DoubleAngle/AngleTransport.lean:349`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
@@ -1492,13 +1492,13 @@ The declarations that carry this result's printed statement, with the source ato
 
 #### `TauCeti.DavisKahan1970.SectionTwo.tanTwoTheta_complex`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/SectionTwo.lean:412`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/SectionTwo.lean:415`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.SectionTwo.tanTwoTheta_real`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/SectionTwo.lean:421`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/SectionTwo.lean:424`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
@@ -1510,157 +1510,157 @@ Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.tanTwoTheta_directed_boundedResidual_blockRepresentative_spectralGap_symmetricNorming_complex`
 
-Source location candidates: `Challenge/DavisKahan1970/Conformance.lean:449`, `DavisKahan/Sources/DavisKahan1970/TanTwoThetaReflectionAmbient.lean:1164`
+Source location candidates: `Challenge/DavisKahan1970/Conformance.lean:449`, `DavisKahan/Sources/DavisKahan1970/TanTwoThetaReflectionAmbient.lean:1166`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.tanTwoTheta_directed_boundedResidual_blockRepresentative_spectralGap_symmetricNorming_real`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/AmbientReal.lean:363`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/AmbientReal.lean:364`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.tanTwoTheta_ambient_bounded_spectralGap_symmetricNorming_complex`
 
-Source location candidates: `Challenge/DavisKahan1970/Conformance.lean:539`, `DavisKahan/Sources/DavisKahan1970/TanTwoThetaReflectionAmbient.lean:1301`
+Source location candidates: `Challenge/DavisKahan1970/Conformance.lean:539`, `DavisKahan/Sources/DavisKahan1970/TanTwoThetaReflectionAmbient.lean:1303`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.tanTwoTheta_ambient_bounded_spectralGap_symmetricNorming_real`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/AmbientReal.lean:434`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/AmbientReal.lean:435`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.tanTwoTheta_directed_unboundedResidual_blockRepresentative_symmetricNorming_complex`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/TanTwoThetaUnboundedExact.lean:78`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/TanTwoThetaUnboundedExact.lean:79`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.tanTwoTheta_directed_unboundedResidual_blockRepresentative_symmetricNorming_real`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/TanTwoThetaUnboundedExactReal.lean:199`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/TanTwoThetaUnboundedExactReal.lean:202`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.tanTwoTheta_ambient_unbounded_blockRepresentative_symmetricNorming_complex`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/TanTwoThetaUnboundedAmbientExact.lean:264`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/TanTwoThetaUnboundedAmbientExact.lean:265`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.tanTwoTheta_ambient_unbounded_blockRepresentative_symmetricNorming_real`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/TanTwoThetaUnboundedExactReal.lean:347`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/TanTwoThetaUnboundedExactReal.lean:350`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.tanTwoTheta_ambient_unbounded_blockRepresentative_derivedReflection_symmetricNorming_complex`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/TanTwoThetaUnboundedAmbientExact.lean:579`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/TanTwoThetaUnboundedAmbientExact.lean:580`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan.diagonalPart_sq_add_offDiagonalPart_sq`
 
-Source location candidates: `DavisKahan/DoubleAngle/TangentTransport.lean:191`, `ForTauCeti/Analysis/InnerProductSpace/DoubleAngle/ReflectionBlocks.lean:177`
+Source location candidates: `DavisKahan/DoubleAngle/TangentTransport.lean:193`, `ForTauCeti/Analysis/InnerProductSpace/DoubleAngle/ReflectionBlocks.lean:177`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan.diagonalPart_anticommute_offDiagonalPart`
 
-Source location candidates: `DavisKahan/DoubleAngle/TangentTransport.lean:200`
+Source location candidates: `DavisKahan/DoubleAngle/TangentTransport.lean:202`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan.corner_offDiagonalPart_sq`
 
-Source location candidates: `DavisKahan/DoubleAngle/TangentTransport.lean:227`
+Source location candidates: `DavisKahan/DoubleAngle/TangentTransport.lean:229`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan.gram_unboundedReflectionTangent`
 
-Source location candidates: `DavisKahan/DoubleAngle/TangentTransport.lean:262`
+Source location candidates: `DavisKahan/DoubleAngle/TangentTransport.lean:264`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan.gram_unboundedReflectionTangent_eq_offDiagonal`
 
-Source location candidates: `DavisKahan/DoubleAngle/TangentTransport.lean:334`
+Source location candidates: `DavisKahan/DoubleAngle/TangentTransport.lean:336`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan.starProjection_offDiagonal_sq_reflection`
 
-Source location candidates: `DavisKahan/DoubleAngle/TangentTransport.lean:363`
+Source location candidates: `DavisKahan/DoubleAngle/TangentTransport.lean:364`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan.unboundedReflectionTangent_reflection_eq`
 
-Source location candidates: `DavisKahan/DoubleAngle/TangentTransport.lean:457`
+Source location candidates: `DavisKahan/DoubleAngle/TangentTransport.lean:458`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan.tanTwoBlockRepresentative_mul_signedCosTwo`
 
-Source location candidates: `DavisKahan/DoubleAngle/TangentTransport.lean:430`
+Source location candidates: `DavisKahan/DoubleAngle/TangentTransport.lean:431`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan.sameApproximationSingularValues_unboundedReflectionTangent`
 
-Source location candidates: `DavisKahan/DoubleAngle/TangentTransport.lean:579`
+Source location candidates: `DavisKahan/DoubleAngle/TangentTransport.lean:580`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan.extendedGauge_unboundedReflectionTangent_complex`
 
-Source location candidates: `DavisKahan/DoubleAngle/TangentTransport.lean:609`
+Source location candidates: `DavisKahan/DoubleAngle/TangentTransport.lean:610`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.tanTwoTheta_ambient_unbounded_symmetricNorming_complex`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/TanTwoThetaUnboundedAmbientExact.lean:631`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/TanTwoThetaUnboundedAmbientExact.lean:632`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan.ReflectionIntertwines`
 
-Source location candidates: `DavisKahan/TanTheta/RitzPair.lean:252`
+Source location candidates: `DavisKahan/TanTheta/RitzPair.lean:253`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan.ReflectionIntertwines.ofReducesSubspace`
 
-Source location candidates: `DavisKahan/TanTheta/RitzPair.lean:130`, `DavisKahan/TanTheta/RitzPair.lean:279`
+Source location candidates: `DavisKahan/TanTheta/RitzPair.lean:131`, `DavisKahan/TanTheta/RitzPair.lean:280`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan.reflection_commutes_of_reducesSubspace`
 
-Source location candidates: `DavisKahan/TanTheta/RitzPair.lean:181`
+Source location candidates: `DavisKahan/TanTheta/RitzPair.lean:182`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan.isUnit_signedCosTwo_of_isUnit_diagonalPart_sq`
 
-Source location candidates: `DavisKahan/DoubleAngle/TangentTransport.lean:540`
+Source location candidates: `DavisKahan/DoubleAngle/TangentTransport.lean:541`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan.cos_two_ne_zero_of_isUnit_diagonalPart_reflection_sq`
 
-Source location candidates: `DavisKahan/DoubleAngle/TangentTransport.lean:564`
+Source location candidates: `DavisKahan/DoubleAngle/TangentTransport.lean:565`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan.extendedGauge_unboundedReflectionTangent_real`
 
-Source location candidates: `DavisKahan/DoubleAngle/TangentTransport.lean:709`
+Source location candidates: `DavisKahan/DoubleAngle/TangentTransport.lean:710`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
@@ -1678,91 +1678,91 @@ Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.tanTwoTheta_ambient_unbounded_blockRepresentative_derivedReflection_symmetricNorming_real`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/TanTwoThetaUnboundedExactReal.lean:482`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/TanTwoThetaUnboundedExactReal.lean:485`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.tanTwoTheta_ambient_unbounded_symmetricNorming_real`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/TanTwoThetaUnboundedExactReal.lean:528`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/TanTwoThetaUnboundedExactReal.lean:531`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.approximationNumber_reflectionTangentCorner`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/TanTwoThetaUnboundedGramBridge.lean:493`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/TanTwoThetaUnboundedGramBridge.lean:494`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.reflectionTangentCorner_reflection_eq_tanTwoBlockCompression`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/TanTwoThetaUnboundedAmbientExact.lean:698`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/TanTwoThetaUnboundedAmbientExact.lean:699`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.blockCompression_mul_reflectionOperator`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/TanTwoThetaUnboundedGramBridge.lean:277`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/TanTwoThetaUnboundedGramBridge.lean:278`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.tanTwoDirectedCornerC_sameApproximationSingularSequence_reflectionTangentCorner`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/TanTwoThetaUnboundedAmbientExact.lean:726`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/TanTwoThetaUnboundedAmbientExact.lean:727`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.blockCompression_diagonalPair`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/TanTwoThetaUnboundedGramBridge.lean:296`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/TanTwoThetaUnboundedGramBridge.lean:297`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.tanTwoTheta_directed_unboundedResidual_reducing_blockCompression_symmetricNorming_complex`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/TanTwoThetaUnboundedAmbientExact.lean:750`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/TanTwoThetaUnboundedAmbientExact.lean:751`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.tanTwoTheta_directed_unboundedResidual_symmetricNorming_complex`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/TanTwoThetaUnboundedAmbientExact.lean:912`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/TanTwoThetaUnboundedAmbientExact.lean:913`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.tanTwoTheta_directed_unboundedResidual_symmetricNorming_real`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/TanTwoThetaUnboundedExactReal.lean:834`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/TanTwoThetaUnboundedExactReal.lean:837`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.approximationNumber_tanTwoDirectedCorner`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/TanTwoThetaUnboundedAmbientExact.lean:865`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/TanTwoThetaUnboundedAmbientExact.lean:866`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.approximationNumber_tanTwoDirectedCornerR`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/TanTwoThetaUnboundedExactReal.lean:783`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/TanTwoThetaUnboundedExactReal.lean:786`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan.sinTwoThetaIdealBlock_hasSameApproximationNumbers`
 
-Source location candidates: `DavisKahan/DoubleAngle/AngleTransport.lean:295`
+Source location candidates: `DavisKahan/DoubleAngle/AngleTransport.lean:297`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.mem_projectionBlock_iff_mem_blockCompression`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/TanTwoThetaUnboundedAmbientExact.lean:814`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/TanTwoThetaUnboundedAmbientExact.lean:815`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.gauge_projectionBlock_eq_blockCompression`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/TanTwoThetaUnboundedAmbientExact.lean:821`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/TanTwoThetaUnboundedAmbientExact.lean:822`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
@@ -1774,55 +1774,55 @@ Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.reducesSubspace_complexifyReal`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/TanTwoThetaUnboundedGramReal.lean:388`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/TanTwoThetaUnboundedGramReal.lean:389`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.isOddFor_complexifySubmodule`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/TanTwoThetaUnboundedGramReal.lean:373`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/TanTwoThetaUnboundedGramReal.lean:374`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.reducesSubspace_addBounded_complexifyReal`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/TanTwoThetaUnboundedGramReal.lean:447`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/TanTwoThetaUnboundedGramReal.lean:448`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.re_inner_complexifyReal_le_of_forall_mem`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/TanTwoThetaUnboundedGramReal.lean:460`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/TanTwoThetaUnboundedGramReal.lean:461`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.le_re_inner_complexifyReal_of_forall_mem_orthogonal`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/TanTwoThetaUnboundedGramReal.lean:484`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/TanTwoThetaUnboundedGramReal.lean:485`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.projectionBlock_complexifySubmodule`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/TanTwoThetaUnboundedGramReal.lean:525`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/TanTwoThetaUnboundedGramReal.lean:526`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction.mem_complexify_iff`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/SineTheta/Norms/ComplexificationGauge.lean:81`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/SineTheta/Norms/ComplexificationGauge.lean:82`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction.gauge_complexify`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/SineTheta/Norms/ComplexificationGauge.lean:90`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/SineTheta/Norms/ComplexificationGauge.lean:91`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan.complexify_sinTwoThetaIdealBlock`
 
-Source location candidates: `DavisKahan/DoubleAngle/RealAngleIdentification.lean:127`
+Source location candidates: `DavisKahan/DoubleAngle/RealAngleIdentification.lean:133`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
@@ -1834,13 +1834,13 @@ Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.norm_offDiagonalPart_reflectionOperator_complexifySubmodule`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/TanTwoThetaUnboundedExactReal.lean:762`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/TanTwoThetaUnboundedExactReal.lean:765`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.extendedGauge_projectionBlock_eq_blockCompression`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/TanTwoThetaUnboundedAmbientExact.lean:808`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/TanTwoThetaUnboundedAmbientExact.lean:809`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
@@ -1858,31 +1858,31 @@ Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.hasSameApproximationNumbers_reflectionSineCorner_sinTwoThetaIdealBlock`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/TanTwoThetaUnboundedGramBridge.lean:529`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/TanTwoThetaUnboundedGramBridge.lean:530`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.complexifyReal_addBounded`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/TanTwoThetaUnboundedGramReal.lean:433`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/TanTwoThetaUnboundedGramReal.lean:434`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.tanTwoDirectedCornerR`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/AmbientReal.lean:177`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/AmbientReal.lean:178`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.tanTwoTheta_directed_unboundedResidual_reducing_derivedReflection_symmetricNorming_complex`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/TanTwoThetaUnboundedReducing.lean:188`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/TanTwoThetaUnboundedReducing.lean:189`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.tanTwoTheta_directed_unboundedResidual_reducing_sineSequence_symmetricNorming_real`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/TanTwoThetaUnboundedExactReal.lean:674`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/TanTwoThetaUnboundedExactReal.lean:677`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
@@ -1962,7 +1962,7 @@ The declarations that carry this result's printed statement, with the source ato
 
 #### `TauCeti.DavisKahan1970.proposition3_1`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section3AcuteDirectRotation.lean:172`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section3AcuteDirectRotation.lean:173`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
@@ -2065,31 +2065,31 @@ The declarations that carry this result's printed statement, with the source ato
 
 #### `TauCeti.DavisKahan.crossedDefectsEquivalent_iff_finrank_eq`
 
-Source location candidates: `DavisKahan/Geometry/Halmos/CrossedDefectGap.lean:183`
+Source location candidates: `DavisKahan/Geometry/Halmos/CrossedDefectGap.lean:184`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.proposition3_2_exists_iff_crossedDefectsEquivalent`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section3Proposition32.lean:70`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section3Proposition32.lean:71`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.proposition3_2_not_unique`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section3Proposition32.lean:104`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section3Proposition32.lean:105`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.proposition3_2_exists_iff_crossedDefectsEquivalent_real`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section3Proposition32.lean:255`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section3Proposition32.lean:256`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.proposition3_2_not_unique_real`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section3Proposition32.lean:279`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section3Proposition32.lean:280`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
@@ -2321,7 +2321,7 @@ The declarations that carry this result's printed statement, with the source ato
 
 #### `TauCeti.DavisKahan1970.proposition3_4_full_complex`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section3Proposition34.lean:178`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section3Proposition34.lean:179`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
@@ -2345,7 +2345,7 @@ Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.proposition3_4_crossedDefectsEquivalent_complex`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section3Proposition34.lean:141`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section3Proposition34.lean:142`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
@@ -2453,7 +2453,7 @@ The declarations that carry this result's printed statement, with the source ato
 
 #### `TauCeti.DavisKahan1970.theorem3_1_spectralMultiplicity_classification_complex`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section3Classification.lean:194`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section3Classification.lean:195`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
@@ -2465,7 +2465,7 @@ Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.theorem3_1_spectralMultiplicity_classification_real`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section3Classification.lean:236`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section3Classification.lean:237`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
@@ -2557,19 +2557,19 @@ The declarations that carry this result's printed statement, with the source ato
 
 #### `TauCeti.DavisKahan1970.corollary3_1_compact_defectBlock_angleList_classification`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section3Corollary31.lean:161`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section3Corollary31.lean:162`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.corollary3_1_compact_classification_real`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section3Corollary31.lean:484`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section3Corollary31.lean:485`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.corollary3_1_realization`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section3Corollary31.lean:289`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section3Corollary31.lean:290`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
@@ -2675,37 +2675,37 @@ The declarations that carry this result's printed statement, with the source ato
 
 #### `TauCeti.DavisKahan1970.proposition3_5_commutations`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section3Proposition35.lean:272`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section3Proposition35.lean:273`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.proposition3_5_eigenvector_angle`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section3Proposition35.lean:307`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section3Proposition35.lean:308`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.proposition3_5_angleEigenspace_eq_fixedCosineSubspace`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section3Proposition35.lean:325`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section3Proposition35.lean:326`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.proposition3_5_angleEigenspace_uniqueMaximal`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section3Proposition35.lean:336`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section3Proposition35.lean:337`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.proposition3_5_commutations_acute`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section3Proposition35.lean:286`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section3Proposition35.lean:287`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.proposition3_5_eigenvector_angle_acute`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section3Proposition35.lean:317`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section3Proposition35.lean:318`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
@@ -2797,31 +2797,31 @@ The declarations that carry this result's printed statement, with the source ato
 
 #### `TauCeti.DavisKahan1970.corollary3_2`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section3Proposition35.lean:215`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section3Proposition35.lean:216`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.corollary3_2_nonacuteQuarterTurn_symm`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section3Proposition35.lean:184`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section3Proposition35.lean:185`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.corollary3_2_nonacute_directRotation_resolution`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section3Proposition35.lean:165`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section3Proposition35.lean:166`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.complex_directRotation_reversal`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/PartIIIPresentation.lean:130`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/PartIIIPresentation.lean:131`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.real_directRotation_reversal`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/PartIIIPresentation.lean:245`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/PartIIIPresentation.lean:246`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
@@ -2946,25 +2946,25 @@ The declarations that carry this result's printed statement, with the source ato
 
 #### `TauCeti.DavisKahan1970.Proposition4_1_compact_nonacute_complex`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section4.lean:312`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section4.lean:314`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.Proposition4_1_compact_nonacute_real`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section4Real.lean:1280`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section4Real.lean:1281`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.Proposition4_1_compact_nonacute_directRotationValues_complex`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section4.lean:244`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section4.lean:246`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.Proposition4_1_compact_nonacute_directRotationValues_real`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section4Real.lean:1202`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section4Real.lean:1203`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
@@ -3166,37 +3166,37 @@ The declarations that carry this result's printed statement, with the source ato
 
 #### `TauCeti.DavisKahan1970.Corollary4_1_compact_nonacute_complex`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section4.lean:343`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section4.lean:345`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.Corollary4_1_compact_nonacute_real`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section4Real.lean:1307`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section4Real.lean:1308`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.Corollary4_1_infiniteDimensional_nonacute`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section4.lean:374`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section4.lean:376`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.Corollary4_1_compact_nonacute_symmetricNorming_complex`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/SymmetricNormingFanDominance.lean:105`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/SymmetricNormingFanDominance.lean:108`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.Corollary4_1_compact_nonacute_symmetricNorming_real`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/SymmetricNormingFanDominance.lean:157`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/SymmetricNormingFanDominance.lean:160`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.symmetricNorming_of_kyFanDominant`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/SymmetricNormingFanDominance.lean:70`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/SymmetricNormingFanDominance.lean:73`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
@@ -3397,25 +3397,25 @@ The declarations that carry this result's printed statement, with the source ato
 
 #### `TauCeti.DavisKahan1970.Proposition4_2_compact_nonacute_real`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section4Real.lean:808`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section4Real.lean:809`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.Proposition4_2_compact_nonacute`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section4.lean:445`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section4.lean:447`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.Proposition4_2_infiniteDimensional`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section4.lean:419`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section4.lean:421`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.tsum_displacementAngleSineSqR_ge_tsum_sq_sin_principalAngleSequence`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section4Real.lean:788`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section4Real.lean:789`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
@@ -3681,31 +3681,31 @@ The declarations that carry this result's printed statement, with the source ato
 
 #### `TauCeti.DavisKahan1970.Proposition4_3_compact_nonacute_idealGauge`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section4.lean:549`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section4.lean:551`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.Proposition4_3_compact_nonacute_real_idealGauge`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section4Real.lean:1322`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section4Real.lean:1323`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.Proposition4_3_compact_nonacute_symmetricNorming_complex`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/SymmetricNormingFanDominance.lean:128`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/SymmetricNormingFanDominance.lean:131`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.Proposition4_3_compact_nonacute_symmetricNorming_real`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/SymmetricNormingFanDominance.lean:179`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/SymmetricNormingFanDominance.lean:182`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.symmetricNorming_of_kyFanDominant`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/SymmetricNormingFanDominance.lean:70`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/SymmetricNormingFanDominance.lean:73`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
@@ -3806,7 +3806,7 @@ The declarations that carry this result's printed statement, with the source ato
 
 #### `TauCeti.DavisKahan.crossedDefectsEquivalent_of_isAcute`
 
-Source location candidates: `DavisKahan/Geometry/Halmos/CrossedDefectGap.lean:146`
+Source location candidates: `DavisKahan/Geometry/Halmos/CrossedDefectGap.lean:147`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
@@ -3937,31 +3937,31 @@ The declarations that carry this result's printed statement, with the source ato
 
 #### `TauCeti.DavisKahan1970.banach_sylvester_lower_bound_uiNorm`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/PartIIIPresentation.lean:264`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/PartIIIPresentation.lean:265`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.banach_sylvester_lower_bound_exact`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/PartIIIPresentation.lean:267`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/PartIIIPresentation.lean:268`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.banach_sylvester_lower_bound_interchanged`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/PartIIIPresentation.lean:269`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/PartIIIPresentation.lean:270`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.banach_sylvester_lower_bound_interchanged_exact`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/PartIIIPresentation.lean:272`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/PartIIIPresentation.lean:273`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.banach_sylvester_lower_bound_unboundedA`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/PartIIIPresentation.lean:274`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/PartIIIPresentation.lean:275`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
@@ -4074,19 +4074,19 @@ Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.theorem5_2_symmetricNorming_complex`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/SymmetricNormingFanDominance.lean:210`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/SymmetricNormingFanDominance.lean:213`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.theorem5_2_symmetricNorming_real`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/SymmetricNormingFanDominance.lean:231`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/SymmetricNormingFanDominance.lean:234`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.symmetricNorming_of_kyFanDominant`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/SymmetricNormingFanDominance.lean:70`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/SymmetricNormingFanDominance.lean:73`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
@@ -4263,13 +4263,13 @@ The declarations that carry this result's printed statement, with the source ato
 
 #### `TauCeti.DavisKahan1970.lemma6_1`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/SineThetaSourceInventory.lean:87`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/SineThetaSourceInventory.lean:88`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.lemma6_1_converse`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/SineThetaSourceInventory.lean:88`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/SineThetaSourceInventory.lean:89`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
@@ -4351,7 +4351,7 @@ The declarations that carry this result's printed statement, with the source ato
 
 #### `TauCeti.DavisKahan1970.lemma6_2`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/SineThetaSourceInventory.lean:89`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/SineThetaSourceInventory.lean:90`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
@@ -4469,67 +4469,67 @@ The declarations that carry this result's printed statement, with the source ato
 
 #### `TauCeti.DavisKahan1970.Proposition6_1_complex`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/SineThetaSourceInventory.lean:139`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/SineThetaSourceInventory.lean:140`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.Proposition6_1_real`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/SineThetaSourceInventory.lean:151`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/SineThetaSourceInventory.lean:152`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.proposition6_1_complex`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/Proposition61.lean:93`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/Proposition61.lean:97`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.proposition6_1_real`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/Proposition61.lean:187`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/Proposition61.lean:191`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.proposition6_1_projectorDifference_complex`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/Proposition61.lean:133`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/Proposition61.lean:137`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.Proposition6_1_real_representative`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/SineThetaSourceInventory.lean:159`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/SineThetaSourceInventory.lean:160`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.Proposition6_1_real_sinTheta_singularValues`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/SineThetaSourceInventory.lean:155`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/SineThetaSourceInventory.lean:156`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.proposition6_1_commonDomain_complex`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/Proposition61.lean:260`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/Proposition61.lean:264`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.proposition6_1_commonDomain_real`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/Proposition61.lean:302`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/Proposition61.lean:306`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.Proposition6_1_commonDomain`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/SineThetaSourceInventory.lean:197`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/SineThetaSourceInventory.lean:198`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.Proposition6_1_real_commonDomain`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/SineThetaSourceInventory.lean:220`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/SineThetaSourceInventory.lean:221`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
@@ -4632,55 +4632,55 @@ The declarations that carry this result's printed statement, with the source ato
 
 #### `TauCeti.DavisKahan1970.Theorem6_1_complex`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/SineThetaSourceInventory.lean:118`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/SineThetaSourceInventory.lean:119`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.Theorem6_1_real`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/SineThetaSourceInventory.lean:121`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/SineThetaSourceInventory.lean:122`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.Theorem6_1_real_commonDomain`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/SineThetaSourceInventory.lean:228`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/SineThetaSourceInventory.lean:229`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.Theorem6_1_real_commonCore`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/SineThetaSourceInventory.lean:249`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/SineThetaSourceInventory.lean:250`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.theorem6_1_complex`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/Theorem61.lean:194`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/Theorem61.lean:197`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.theorem6_1_real`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/Theorem61.lean:237`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/Theorem61.lean:240`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.Theorem6_1_commonDomain`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/SineThetaSourceInventory.lean:183`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/SineThetaSourceInventory.lean:184`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.lowerFrameBound_iff_operator_inequality`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/Theorem61.lean:140`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/Theorem61.lean:143`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.lowerFrameBound_of_operator_inequality`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/Theorem61.lean:167`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/Theorem61.lean:170`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
@@ -4784,37 +4784,37 @@ The declarations that carry this result's printed statement, with the source ato
 
 #### `TauCeti.DavisKahan1970.Theorem6_2_complex`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/SineThetaSourceInventory.lean:171`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/SineThetaSourceInventory.lean:172`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.Theorem6_2_real`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/SineThetaSourceInventory.lean:175`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/SineThetaSourceInventory.lean:176`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.theorem6_2_complex`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/Theorem61.lean:297`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/Theorem61.lean:300`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.theorem6_2_real`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/Theorem61.lean:350`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/Theorem61.lean:353`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.lowerFrameBound_iff_operator_inequality`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/Theorem61.lean:140`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/Theorem61.lean:143`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.lowerFrameBound_of_operator_inequality`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/Theorem61.lean:167`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/Theorem61.lean:170`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
@@ -4994,37 +4994,37 @@ The declarations that carry this result's printed statement, with the source ato
 
 #### `TauCeti.DavisKahan.TanTheta.theorem6_3_unbounded_infiniteTrial_ideal_exists`
 
-Source location candidates: `DavisKahan/TanTheta/Theorem63UnboundedInfiniteTrial.lean:641`
+Source location candidates: `DavisKahan/TanTheta/Theorem63UnboundedInfiniteTrial.lean:642`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.theorem6_3_unbounded_infiniteTrial_ideal_exists_real`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/DirectedUnboundedReal.lean:535`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/DirectedUnboundedReal.lean:536`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.tanTheta_directed_bounded_spectralGap_symmetricNorming_complex`
 
-Source location candidates: `Challenge/DavisKahan1970/Conformance.lean:295`, `DavisKahan/Sources/DavisKahan1970/Directed.lean:123`
+Source location candidates: `Challenge/DavisKahan1970/Conformance.lean:295`, `DavisKahan/Sources/DavisKahan1970/Directed.lean:124`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.tanTheta_directed_bounded_spectralGap_symmetricNorming_real`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/DirectedReal.lean:493`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/DirectedReal.lean:494`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.tanTheta_directed_unboundedTrial_symmetricNorming_complex`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/TanThetaDirectedUnbounded.lean:95`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/TanThetaDirectedUnbounded.lean:96`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.tanTheta_directed_unboundedTrial_symmetricNorming_real`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/TanThetaDirectedUnbounded.lean:138`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/TanThetaDirectedUnbounded.lean:139`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
@@ -5118,19 +5118,19 @@ The declarations that carry this result's printed statement, with the source ato
 
 #### `TauCeti.DavisKahan1970.Section6Appendix.lemma6_3_approximationNumber_leakage_complex`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section6AppendixLeakage.lean:353`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section6AppendixLeakage.lean:354`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.Section6Appendix.lemma6_3_singularValue_leakage_complex`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section6AppendixLeakage.lean:373`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section6AppendixLeakage.lean:374`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.Section6Appendix.lemma6_3_approximationNumber_leakage_real`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section6AppendixLeakageReal.lean:115`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section6AppendixLeakageReal.lean:116`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
@@ -5331,103 +5331,103 @@ The declarations that carry this result's printed statement, with the source ato
 
 #### `TauCeti.DavisKahan1970.Section8.theorem8_1_canonicalBranch`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section8/Theorem81.lean:143`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section8/Theorem81.lean:144`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.Section8.theorem8_1_maximalAngle_le_iff_spectrumIn`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section8/Theorem81.lean:388`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section8/Theorem81.lean:389`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.Section8.theorem8_1_canonicalBranch_real`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section8/Theorem81Real.lean:79`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section8/Theorem81Real.lean:80`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.Section8.theorem8_1_maximalAngle_le_iff_spectrumIn_real`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section8/Theorem81Real.lean:241`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section8/Theorem81Real.lean:242`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.Section8.theorem8_1_upperCompressionRepulsion`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section8/BranchRepulsion.lean:507`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section8/BranchRepulsion.lean:508`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.Section8.theorem8_1_lowerCompressionRepulsion`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section8/BranchRepulsion.lean:555`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section8/BranchRepulsion.lean:556`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.Section8.theorem8_1_upperCompressionRepulsion_real`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section8/Theorem81ApproximationReal.lean:295`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section8/Theorem81ApproximationReal.lean:296`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.Section8.theorem8_1_lowerCompressionRepulsion_real`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section8/Theorem81ApproximationReal.lean:358`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section8/Theorem81ApproximationReal.lean:359`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.Section8.theorem8_1_upperApproximationRepulsion`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section8/Theorem81Approximation.lean:218`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section8/Theorem81Approximation.lean:219`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.Section8.theorem8_1_lowerApproximationRepulsion`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section8/Theorem81Approximation.lean:347`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section8/Theorem81Approximation.lean:348`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.Section8.theorem8_1_upperApproximationRepulsion_real`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section8/Theorem81ApproximationReal.lean:490`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section8/Theorem81ApproximationReal.lean:491`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.Section8.theorem8_1_lowerApproximationRepulsion_real`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section8/Theorem81ApproximationReal.lean:576`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section8/Theorem81ApproximationReal.lean:577`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.Section8.approximationNumber_eq_eigenvalues_of_isPositive`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section8/Theorem81AngleForms.lean:147`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section8/Theorem81AngleForms.lean:148`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.Section8.theorem8_1_upperSymmetricGaugeRepulsion_angle_rev`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section8/Theorem81AngleForms.lean:437`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section8/Theorem81AngleForms.lean:438`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.Section8.theorem8_1_lowerSymmetricGaugeRepulsion_angle_rev`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section8/Theorem81AngleForms.lean:490`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section8/Theorem81AngleForms.lean:491`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.Section8.theorem8_1_upperSymmetricGaugeRepulsion_angle_rev_real`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section8/Theorem81AngleForms.lean:715`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section8/Theorem81AngleForms.lean:716`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.Section8.theorem8_1_lowerSymmetricGaugeRepulsion_angle_rev_real`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section8/Theorem81AngleForms.lean:770`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section8/Theorem81AngleForms.lean:771`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
@@ -5655,49 +5655,49 @@ The declarations that carry this result's printed statement, with the source ato
 
 #### `TauCeti.DavisKahan1970.Section8.theorem8_2_branch_directed_complex`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section8/Presentation.lean:128`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section8/Presentation.lean:129`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.Section8.theorem8_2_sinTwoTheta_perturbation_symmetricNorming`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section8/Theorem82.lean:432`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section8/Theorem82.lean:433`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.Section8.theorem8_2_sinTwoTheta_residual_symmetricNorming`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section8/Theorem82.lean:508`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section8/Theorem82.lean:509`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.Section8.theorem8_2_branch_directed_real`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section8/Theorem82Real.lean:320`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section8/Theorem82Real.lean:321`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.Section8.theorem8_2_sinTwoTheta_perturbation_real_symmetricNorming`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section8/Theorem82Real.lean:554`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section8/Theorem82Real.lean:555`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.Section8.theorem8_2_sinTwoTheta_residual_real_symmetricNorming`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section8/Theorem82Real.lean:609`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section8/Theorem82Real.lean:610`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.Section8.theorem8_2_branch_maximalAngle_lt_of_crossedDefects`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section8/Theorem82.lean:596`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section8/Theorem82.lean:597`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.Section8.theorem8_2_branch_real_maximalAngle_lt_of_crossedDefects`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section8/Theorem82Real.lean:381`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section8/Theorem82Real.lean:382`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 

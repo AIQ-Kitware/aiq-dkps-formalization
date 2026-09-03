@@ -5,6 +5,8 @@ Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
 import DavisKahan.SinTheta.Canonical
 
+open TauCeti.DavisKahan.Sylvester
+
 /-!
 # Specialization bridges from the canonical unbounded sine theorem
 
@@ -19,7 +21,6 @@ namespace DavisKahan
 namespace ExactSinTheta
 
 open scoped InnerProductSpace
-open TauCeti.DavisKahan.Sylvester
 
 section Complex
 

@@ -9,6 +9,7 @@ import Mathlib.MeasureTheory.Integral.ExpDecay
 import DavisKahan.SpectralTheory.AbstractSpectrum
 import Mathlib.Analysis.SpecialFunctions.ContinuousFunctionalCalculus.ExpLog.Basic
 
+
 /-!
 # Ordered-spectrum Sylvester reconstruction
 
@@ -27,7 +28,9 @@ constant is `pi/2`.
 namespace TauCeti
 
 open TauCeti
-namespace DavisKahanExt
+namespace DavisKahan.Sylvester
+
+open TauCeti.DavisKahanExt
 
 open DavisKahan.Foundation
 
@@ -357,5 +360,5 @@ theorem orderedSylvester_reconstruction
 
 end
 
-end DavisKahanExt
+end DavisKahan.Sylvester
 end TauCeti

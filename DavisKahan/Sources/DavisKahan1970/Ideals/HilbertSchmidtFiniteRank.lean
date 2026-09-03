@@ -5,6 +5,8 @@ Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
 import DavisKahan.Sources.DavisKahan1970.Ideals.HilbertSchmidt
 
+open TauCeti.DavisKahan.Sylvester
+
 /-!
 # Finite-rank estimates for the paper square norm
 
@@ -26,7 +28,6 @@ namespace DavisKahan
 namespace ExactSinTheta
 
 open scoped InnerProductSpace BigOperators ENNReal
-open TauCeti.DavisKahan.Sylvester
 
 noncomputable section
 

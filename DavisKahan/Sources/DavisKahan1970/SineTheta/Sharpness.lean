@@ -10,6 +10,8 @@ import DavisKahan.Geometry.Angle.OperatorAngleReal
 import ForTauCeti.Analysis.InnerProductSpace.UnitarilyInvariantSeminorm
 import ForTauCeti.Analysis.InnerProductSpace.OperatorModulus
 
+open TauCeti.DavisKahan.Sylvester
+
 /-!
 # Source-faithful sharpness and the one-gap counterexample
 
@@ -28,7 +30,6 @@ namespace DavisKahan
 namespace ExactSinTheta
 
 open scoped InnerProductSpace BigOperators
-open TauCeti.DavisKahan.Sylvester
 
 open TauCeti.DavisKahan.Foundation
 open TauCeti.RealComplexification

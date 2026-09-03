@@ -7,6 +7,8 @@ import DavisKahan.Sources.DavisKahan1970.TanTwoThetaUnboundedExactReal
 import DavisKahan.Sources.DavisKahan1970.TangentSingularValues
 import DavisKahan.Sources.DavisKahan1970.SinTwoThetaAmbientUnbounded
 
+open TauCeti.DavisKahan.Sylvester
+
 /-!
 # The real `tan 2Θ` endpoints, with the doubled tangent read off the doubled sine
 
@@ -43,7 +45,6 @@ namespace DavisKahan1970
 open scoped InnerProductSpace
 open TauCeti.DavisKahanExt
 open TauCeti.DavisKahan.ExactSinTheta
-open TauCeti.DavisKahan.Sylvester
 open TauCeti.DavisKahan
 open TauCeti.ApproximationNumber
 open TauCeti.RealComplexification

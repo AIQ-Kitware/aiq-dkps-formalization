@@ -7,6 +7,8 @@ import DavisKahan.InfiniteDimensional.SinTheta.Continuation.WitnessGraph
 import DavisKahan.Riccati.BoundedReduction
 import DavisKahan.Sylvester.Spectrum
 
+open TauCeti.DavisKahan.Sylvester
+
 /-!
 # Riccati coordinates of the continuation-selected graph
 
@@ -24,6 +26,7 @@ result onto the two orthogonal coordinates.
 
 namespace TauCeti
 namespace DavisKahanExt
+
 
 open DavisKahan
 

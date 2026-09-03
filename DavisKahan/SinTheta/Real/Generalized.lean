@@ -6,6 +6,8 @@ Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 import DavisKahan.SinTheta.Real.Unbounded
 import DavisKahan.SinTheta.Real.FrameFactorization
 
+open TauCeti.DavisKahan.Sylvester
+
 /-!
 # Real generalized unbounded sine-theta theorem
 
@@ -20,7 +22,6 @@ namespace DavisKahan
 namespace ExactSinTheta
 
 open scoped InnerProductSpace
-open TauCeti.DavisKahan.Sylvester
 
 noncomputable section
 

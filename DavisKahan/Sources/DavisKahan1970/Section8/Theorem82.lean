@@ -8,6 +8,8 @@ import DavisKahan.Geometry.Halmos.CrossedDefectGap
 import DavisKahan.Sources.DavisKahan1970.SinTwoThetaAmbient
 import ForTauCeti.Analysis.InnerProductSpace.AngleGeometry
 
+open TauCeti.DavisKahan.Sylvester
+
 /-!
 # Davis--Kahan 1970, Theorem 8.2, under the paper's standing convention
 
@@ -163,7 +165,6 @@ namespace TauCeti
 namespace DavisKahan1970
 namespace Section8
 
-open TauCeti.DavisKahan.Sylvester
 
 open DavisKahanExt
 open TauCeti.DavisKahan

@@ -8,6 +8,8 @@ import DavisKahan.TanTheta.Theorem63InfiniteTrial
 import DavisKahan.OperatorIdeal.ComplexificationApproximation
 import DavisKahan.Sources.DavisKahan1970.SineTheta.Norms.SingularValueTransport
 
+open TauCeti.DavisKahan.Sylvester
+
 /-!
 # Directed Section 2 bounds over real Hilbert spaces
 
@@ -30,7 +32,6 @@ open scoped InnerProductSpace BigOperators
 open TauCeti.DavisKahanExt
 open TauCeti.DavisKahan
 open TauCeti.DavisKahan.ExactSinTheta
-open TauCeti.DavisKahan.Sylvester
 open TauCeti.DavisKahan.ExactSinTheta.ComplexificationApproximation
 open TauCeti.DavisKahan.TanTheta
 open TauCeti.RealComplexification
@@ -207,7 +208,7 @@ theorem theorem6_3_all_kyFan_core_infiniteTrial_real
     (complexify T) (complexifySubmodule V) (complexifySubmodule Z)
     hTC hVC hdelta
     (fun z => by
-      simpa [theorem63Compression, TauCeti.DavisKahanExt.compressOperator] using
+      simpa [theorem63Compression, TauCeti.DavisKahan.Sylvester.compressOperator] using
         re_inner_compressOperator_le Z T hCompressionUpper z)
     (fun y hy => by
       rw [← complexifySubmodule_orthogonal V] at hy
@@ -236,7 +237,7 @@ theorem approximationSingularValue_sineBlock_lt_one_infiniteTrial_real
     (complexify T) (complexifySubmodule V) (complexifySubmodule Z)
     hTC hVC hdelta
     (fun z => by
-      simpa [theorem63Compression, TauCeti.DavisKahanExt.compressOperator] using
+      simpa [theorem63Compression, TauCeti.DavisKahan.Sylvester.compressOperator] using
         re_inner_compressOperator_le Z T hCompressionUpper z)
     (fun y hy => by
       rw [← complexifySubmodule_orthogonal V] at hy

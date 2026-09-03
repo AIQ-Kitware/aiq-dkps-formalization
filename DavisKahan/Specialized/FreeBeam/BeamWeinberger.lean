@@ -6,6 +6,8 @@ Authors: Jon Crall, OpenAI GPT-5.6 Sol
 
 import DavisKahan.Specialized.FreeBeam.BeamTangent
 
+open TauCeti.DavisKahan.Sylvester
+
 /-!
 # Section 9, equation (9.8): unconditional beam statement
 
@@ -28,7 +30,6 @@ namespace FreeBeam
 namespace Model
 
 open DavisKahan1970.Section9
-open TauCeti.DavisKahan.Sylvester
 
 /-- **Equation (9.8), first line, for the genuine perturbed beam.**
 

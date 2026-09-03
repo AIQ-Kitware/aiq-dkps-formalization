@@ -8,6 +8,8 @@ import DavisKahan.Sources.DavisKahan1970.Ideals.HilbertSchmidtComplexFamily
 import DavisKahan.Sources.DavisKahan1970.Ideals.HilbertSchmidtFiniteRank
 import DavisKahan.SpectralTheory.PartialMap.Complexification
 
+open TauCeti.DavisKahan.Sylvester
+
 /-!
 # Real rectangular Hilbert--Schmidt family by complexification
 
@@ -30,7 +32,6 @@ namespace DavisKahan
 namespace ExactSinTheta
 
 open scoped InnerProductSpace
-open TauCeti.DavisKahan.Sylvester
 open Filter Topology
 open TauCeti.RealComplexification
 open PartialMapComplexification

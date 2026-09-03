@@ -49,6 +49,8 @@ Both are nonnegative, so the positive square root is unique and they are equal.
 namespace TauCeti
 namespace DavisKahan
 
+open TauCeti.DavisKahan.ExactSinTheta
+
 open TauCeti.DavisKahanExt
 
 universe v
@@ -319,7 +321,6 @@ end Transport
 
 section NormTransport
 
-open TauCeti.DavisKahan.ExactSinTheta
 
 variable (U V : Submodule ℂ E)
   [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]

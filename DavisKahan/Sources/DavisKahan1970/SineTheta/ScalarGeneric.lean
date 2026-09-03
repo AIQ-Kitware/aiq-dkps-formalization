@@ -7,6 +7,8 @@ import DavisKahan.Sylvester.ScalarGeneric
 import DavisKahan.SinTheta.Unbounded.FormBoundedGap
 import DavisKahan.Sources.DavisKahan1970.SineTheta.Norms.UnitaryInvariantNorm
 
+open TauCeti.DavisKahan.Sylvester
+
 /-!
 # Scalar-generic headline `sin Theta` theorem
 
@@ -32,7 +34,6 @@ universe u v
 
 open TauCeti.DavisKahan
 open TauCeti.DavisKahan.ExactSinTheta
-open TauCeti.DavisKahan.Sylvester
 
 section GenericEngine
 

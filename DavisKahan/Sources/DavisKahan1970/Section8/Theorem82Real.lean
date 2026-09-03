@@ -9,6 +9,8 @@ import DavisKahan.Sources.DavisKahan1970.AmbientReal
 import DavisKahan.Sources.DavisKahan1970.SineTheta.Norms.SingularValueTransport
 import DavisKahan.SpectralTheory.Complexification.SubmoduleEquiv
 
+open TauCeti.DavisKahan.Sylvester
+
 /-!
 # Davis--Kahan 1970, Theorem 8.2, over a real Hilbert space
 
@@ -101,7 +103,6 @@ namespace TauCeti
 namespace DavisKahan1970
 namespace Section8
 
-open TauCeti.DavisKahan.Sylvester
 
 open DavisKahanExt
 open TauCeti.DavisKahan

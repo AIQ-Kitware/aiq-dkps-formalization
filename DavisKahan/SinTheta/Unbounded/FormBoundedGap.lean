@@ -6,6 +6,8 @@ Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 import DavisKahan.SinTheta.Unbounded.Core
 import DavisKahan.Sylvester.Unbounded.FormBoundedGap
 
+open TauCeti.DavisKahan.Sylvester
+
 /-!
 # Sine-theta endpoints over the form-bounded gap
 
@@ -21,7 +23,6 @@ namespace DavisKahan
 namespace ExactSinTheta
 
 open scoped InnerProductSpace
-open TauCeti.DavisKahan.Sylvester
 
 section Complex
 

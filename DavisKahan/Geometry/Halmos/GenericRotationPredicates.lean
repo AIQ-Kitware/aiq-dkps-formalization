@@ -75,14 +75,14 @@ noncomputable def genericHalmosCosineSq
     (U V : Submodule 𝕜 H) [U.HasOrthogonalProjection]
     [V.HasOrthogonalProjection] :
     halmosGenericPart U V →L[𝕜] halmosGenericPart U V :=
-  DavisKahanExt.compressOperator (halmosGenericPart U V) (halmosCosineSq U V)
+  DavisKahan.Sylvester.compressOperator (halmosGenericPart U V) (halmosCosineSq U V)
 
 /-- Restriction of the Halmos sine square to the reducing generic summand. -/
 noncomputable def genericHalmosSineSq
     (U V : Submodule 𝕜 H) [U.HasOrthogonalProjection]
     [V.HasOrthogonalProjection] :
     halmosGenericPart U V →L[𝕜] halmosGenericPart U V :=
-  DavisKahanExt.compressOperator (halmosGenericPart U V) (halmosSineSq U V)
+  DavisKahan.Sylvester.compressOperator (halmosGenericPart U V) (halmosSineSq U V)
 
 /-- The restricted generic cosine and sine squares retain the Pythagorean
 identity. -/
@@ -97,7 +97,7 @@ theorem genericHalmosCosineSq_add_sineSq
       (fun T : H →L[𝕜] H => T (x : H)) (halmosCosineSq_add_sineSq U V)
     simpa using h
   simp only [add_apply, one_apply_eq_self,
-    genericHalmosCosineSq, genericHalmosSineSq, DavisKahanExt.compressOperator,
+    genericHalmosCosineSq, genericHalmosSineSq, DavisKahan.Sylvester.compressOperator,
     ContinuousLinearMap.comp_apply, Submodule.subtypeL_apply]
   simp only [Submodule.coe_add, Submodule.coe_orthogonalProjectionOnto_apply]
   rw [← map_add, hsum, Submodule.starProjection_eq_self_iff.mpr x.2]

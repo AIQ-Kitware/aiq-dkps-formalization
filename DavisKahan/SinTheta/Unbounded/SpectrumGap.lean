@@ -8,6 +8,8 @@ import DavisKahan.OperatorIdeal.CanonicalRealView
 import DavisKahan.SinTheta.Unbounded.Gauge
 import ForTauCeti.Analysis.InnerProductSpace.LinearPMap.Resolvent
 
+open TauCeti.DavisKahan.Sylvester
+
 /-!
 # `sin Θ` endpoints from a spectrum gap
 
@@ -24,7 +26,6 @@ namespace DavisKahan
 section SinTheta
 
 open TauCeti.DavisKahan.ExactSinTheta
-open TauCeti.DavisKahan.Sylvester
 
 universe v
 

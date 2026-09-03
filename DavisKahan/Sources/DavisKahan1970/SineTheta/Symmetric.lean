@@ -9,6 +9,8 @@ import DavisKahan.Sources.DavisKahan1970.SineTheta.Norms.SubspaceSingularTranspo
 import DavisKahan.SpectralTheory.ReducingSubspace.RestrictionExtras
 import DavisKahan.Sylvester.Unbounded.FormBoundedGap
 
+open TauCeti.DavisKahan.Sylvester
+
 /-!
 # Davis--Kahan Proposition 6.1: the symmetric sine theorem
 
@@ -31,7 +33,6 @@ namespace DavisKahan
 namespace ExactSinTheta
 
 open scoped InnerProductSpace
-open TauCeti.DavisKahan.Sylvester
 
 noncomputable section
 

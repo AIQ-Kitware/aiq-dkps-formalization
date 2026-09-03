@@ -7,6 +7,8 @@ Authors: Jon Crall, OpenAI GPT-5.6 Sol
 import DavisKahan.TanTheta.Theorem63InfiniteTrial
 import DavisKahan.TanTheta.Theorem63Unbounded
 
+open TauCeti.DavisKahan.Sylvester
+
 /-!
 # Theorem 6.3 for an unbounded operator and an arbitrary trial space
 
@@ -35,7 +37,6 @@ namespace DavisKahan
 namespace TanTheta
 
 open ExactSinTheta
-open TauCeti.DavisKahan.Sylvester
 open TanTheta
 open Module (finrank)
 

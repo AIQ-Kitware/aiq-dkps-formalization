@@ -7,6 +7,8 @@ import DavisKahan.TanTheta.Vector
 import DavisKahan.Sylvester.Spectrum
 import ForTauCeti.Analysis.CStarAlgebra.SelfAdjointGapInverse
 
+open TauCeti.DavisKahan.Sylvester
+
 /-!
 # The `tan Θ` theorem with genuine spectra
 
@@ -30,7 +32,6 @@ namespace TauCeti
 namespace DavisKahanExt
 
 open DavisKahan
-open TauCeti.DavisKahan.Sylvester
 
 open scoped InnerProductSpace
 

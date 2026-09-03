@@ -8,6 +8,8 @@ import DavisKahan.Sources.DavisKahan1970.Ideals.HilbertSchmidtFiniteRank
 import ForTauCeti.Analysis.OperatorIdeal.Family.HilbertSchmidt
 import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.ScalarTransport
 
+open TauCeti.DavisKahan.Sylvester
+
 /-!
 # Basis and tensor models of the paper square norm
 
@@ -35,7 +37,6 @@ namespace DavisKahan
 namespace ExactSinTheta
 
 open scoped InnerProductSpace BigOperators ENNReal
-open TauCeti.DavisKahan.Sylvester
 open scoped Topology
 open Filter
 

@@ -7,6 +7,8 @@ import DavisKahan.Sources.DavisKahan1970.SineTheta.CommonCore
 import DavisKahan.Sources.DavisKahan1970.SineTheta.Theorem61Universal
 import DavisKahan.Sources.DavisKahan1970.SineTheta.Theorem62
 
+open TauCeti.DavisKahan.Sylvester
+
 /-!
 # Literal graph-core forms of the generalized sine theorems
 
@@ -23,7 +25,6 @@ namespace DavisKahan
 namespace ExactSinTheta
 
 open scoped InnerProductSpace
-open TauCeti.DavisKahan.Sylvester
 
 noncomputable section
 

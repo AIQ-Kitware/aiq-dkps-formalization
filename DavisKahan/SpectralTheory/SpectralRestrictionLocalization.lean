@@ -7,6 +7,8 @@ import DavisKahan.SpectralTheory.SpectralRestrictionOperator
 import DavisKahan.Sylvester.ClosedSylvesterEquation
 import ForTauCeti.Analysis.InnerProductSpace.LinearPMap.Resolvent
 
+open TauCeti.DavisKahan.Sylvester
+
 /-!
 # Spectral localization of the restriction to a spectral range
 
@@ -49,8 +51,6 @@ open Complex Filter MeasureTheory Topology
 namespace TauCeti
 namespace DavisKahan
 
-open TauCeti.DavisKahan.Sylvester
-open TauCeti.DavisKahan.Sylvester
 
 variable {H : Type*} [NormedAddCommGroup H] [InnerProductSpace ℂ H]
   [CompleteSpace H]

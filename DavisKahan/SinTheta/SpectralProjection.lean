@@ -9,6 +9,8 @@ import DavisKahan.Sylvester.Unbounded.IntervalExterior
 import ForTauCeti.Analysis.InnerProductSpace.Projection.Gap
 import ForTauCeti.Analysis.InnerProductSpace.LinearPMap.Resolvent
 
+open TauCeti.DavisKahan.Sylvester
+
 /-!
 # Canonical unbounded spectral-projection sine-theta theorems
 
@@ -28,7 +30,6 @@ namespace TauCeti
 namespace DavisKahan
 
 open TauCeti.DavisKahan.ExactSinTheta
-open TauCeti.DavisKahan.Sylvester
 
 universe v
 

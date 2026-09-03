@@ -14,6 +14,8 @@ import DavisKahan.Sources.DavisKahan1970.SineTheta.Norms.SingularValueTransport
 import DavisKahan.Sources.DavisKahan1970.SineTheta.Norms.UnitaryInvariantNorm
 import ForTauCeti.Analysis.InnerProductSpace.LinearPMap.Resolvent
 
+open TauCeti.DavisKahan.Sylvester
+
 /-!
 # Literal Davis--Kahan 1970 Section 7 sine-double-angle surface
 
@@ -54,8 +56,8 @@ theorem; no new mathematics is introduced in this facade.
 namespace TauCeti
 namespace DavisKahan1970
 
+
 open DavisKahan.ExactSinTheta
-open TauCeti.DavisKahan.Sylvester
 open DavisKahan
 
 /-! ## The mirror proof package, equations (7.1)--(7.3)

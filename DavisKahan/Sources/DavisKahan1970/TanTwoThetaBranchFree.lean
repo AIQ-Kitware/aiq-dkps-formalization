@@ -108,7 +108,7 @@ theorem tanTwoTheta_branchFree_bounded_finiteSubspace_symmetricNorming_rclike
       (b - a) / 2 * kyFanApproximationGauge k tanTwoTheta ≤
         kyFanApproximationGauge k H := by
     intro k
-    have h := DavisKahan.FiniteDimensional.kyFan_absTanTwoTheta_le_of_finiteDimensional_invariantSubspace
+    have h := DavisKahan.TanTwoTheta.kyFan_absTanTwoTheta_le_of_finiteDimensional_invariantSubspace
       hA hH hAU hHU hHUperp hTmem hTzero hUb hUa hinv hab tanTwoTheta π htan k
     linarith
   obtain ⟨hmem, hgauge⟩ :=
@@ -134,9 +134,9 @@ arbitrary invariant graph over the trial subspace and may make angles
 arbitrarily close to `π/2` with it.
 
 **No uniform separation from the `π/4` pole is assumed either.**  It is derived
-from the ordered gap by `DavisKahan.FiniteDimensional.penalty_le_of_paired_approximate` and
+from the ordered gap by `DavisKahan.TanTwoTheta.penalty_le_of_paired_approximate` and
 removed by the `ε → 0` passage in
-`DavisKahan.FiniteDimensional.sum_absDoubleAngleTangent_le_of_invariantSubspace`. -/
+`DavisKahan.TanTwoTheta.sum_absDoubleAngleTangent_le_of_invariantSubspace`. -/
 theorem tanTwoTheta_branchFree_bounded_symmetricNorming_complex
     {E : Type v} [NormedAddCommGroup E]
     [InnerProductSpace ℂ E] [CompleteSpace E]
@@ -162,7 +162,7 @@ theorem tanTwoTheta_branchFree_bounded_symmetricNorming_complex
       (b - a) / 2 * kyFanApproximationGauge k tanTwoTheta ≤
         kyFanApproximationGauge k H := by
     intro k
-    have h := DavisKahan.FiniteDimensional.kyFan_absTanTwoTheta_le_of_invariantSubspace
+    have h := DavisKahan.TanTwoTheta.kyFan_absTanTwoTheta_le_of_invariantSubspace
       hA hH hAU hHU hHUperp hTmem hTzero hUb hUa hinv hab tanTwoTheta π htan k
     linarith
   obtain ⟨hmem, hgauge⟩ :=
@@ -201,7 +201,7 @@ alias tanTwoTheta_branchFree_finiteDimensional_uiNorm_rclike :=
 /-- **The unrestricted `tan 2Θ` theorem, every Fan-dominant unitary-invariant
 ideal, arbitrary Hilbert space** with a finite-dimensional trial subspace. -/
 alias tanTwoTheta_branchFree_finiteSubspace_idealFamily_rclike :=
-  DavisKahan.FiniteDimensional.absTanTwoTheta_offDiagonal_mem_and_gauge_le_of_finiteDimensional_invariantSubspace
+  DavisKahan.TanTwoTheta.absTanTwoTheta_offDiagonal_mem_and_gauge_le_of_finiteDimensional_invariantSubspace
 
 /-! ## The arbitrary-trial-subspace layer
 
@@ -214,31 +214,31 @@ equation (7.6) plus an `ε → 0` passage; see
 /-- **Equation (7.6) in cleared form for an approximate singular pair** -- the
 dimension-free replacement for the matched-singular-pair computation. -/
 alias tanTwoTheta_equation_7_6_approximate :=
-  DavisKahan.FiniteDimensional.paired_approximate_gap_inequality
+  DavisKahan.TanTwoTheta.paired_approximate_gap_inequality
 
 /-- **`cos 2θⱼ ≠ 0` for an approximate pair**, division-free. -/
 alias tanTwoTheta_cos_ne_zero_approximate :=
-  DavisKahan.FiniteDimensional.abs_one_sub_sq_pos_of_paired_approximate
+  DavisKahan.TanTwoTheta.abs_one_sub_sq_pos_of_paired_approximate
 
 /-- **The quantitative `π/4` pole separation**, derived from the ordered gap
 rather than assumed. -/
 alias tanTwoTheta_pole_separation :=
-  DavisKahan.FiniteDimensional.penalty_le_of_paired_approximate
+  DavisKahan.TanTwoTheta.penalty_le_of_paired_approximate
 
 /-- **The branch-free Ky Fan root over an arbitrary finite index set, arbitrary
 trial subspace.** -/
 alias tanTwoTheta_branchFree_kyFan_complex :=
-  DavisKahan.FiniteDimensional.sum_absDoubleAngleTangent_le_of_invariantSubspace
+  DavisKahan.TanTwoTheta.sum_absDoubleAngleTangent_le_of_invariantSubspace
 
 /-- **The branch-free `tan 2Θ` prefix bound for any representative, arbitrary
 trial subspace.** -/
 alias tanTwoTheta_branchFree_prefix_arbitrarySubspace :=
-  DavisKahan.FiniteDimensional.kyFan_absTanTwoTheta_le_of_invariantSubspace
+  DavisKahan.TanTwoTheta.kyFan_absTanTwoTheta_le_of_invariantSubspace
 
 /-- **The unrestricted `tan 2Θ` theorem, every Fan-dominant unitary-invariant
 ideal, arbitrary Hilbert space and arbitrary trial subspace.** -/
 alias tanTwoTheta_branchFree_idealFamily_complex :=
-  DavisKahan.FiniteDimensional.absTanTwoTheta_offDiagonal_mem_and_gauge_le_of_invariantSubspace
+  DavisKahan.TanTwoTheta.absTanTwoTheta_offDiagonal_mem_and_gauge_le_of_invariantSubspace
 
 end
 

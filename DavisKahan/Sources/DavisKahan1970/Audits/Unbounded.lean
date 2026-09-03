@@ -11,6 +11,8 @@ import DavisKahan.SinTheta.Real.Specializations
 import DavisKahan.Sources.DavisKahan1970.GeneralSinTheta
 import DavisKahan.Sources.DavisKahan1970.PartIIIPresentation
 
+open TauCeti.DavisKahan.Sylvester
+
 /-!
 # Full unbounded sine-theta trusted-dependency audit
 
@@ -28,7 +30,6 @@ namespace TauCeti
 namespace DavisKahan
 namespace ExactSinTheta
 
-open TauCeti.DavisKahan.Sylvester
 
 #check sylvesterNeumannPartialSum_cauchy
 #check sylvesterNeumannSolution_mem

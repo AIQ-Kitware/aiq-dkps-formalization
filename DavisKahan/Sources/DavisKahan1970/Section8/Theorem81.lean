@@ -9,6 +9,8 @@ import DavisKahan.Geometry.Polar.DirectRotation
 import DavisKahan.SpectralTheory.OperatorAngle
 import ForTauCeti.Analysis.InnerProductSpace.SpectralOrder.Complex
 
+open TauCeti.DavisKahan.Sylvester
+
 /-!
 # Davis--Kahan 1970, Theorem 8.1, from the printed hypotheses
 
@@ -49,7 +51,6 @@ namespace DavisKahan1970
 namespace Section8
 
 open Set
-open TauCeti.DavisKahan.Sylvester
 open scoped InnerProductSpace
 open DavisKahanExt
 open TauCeti.DavisKahan

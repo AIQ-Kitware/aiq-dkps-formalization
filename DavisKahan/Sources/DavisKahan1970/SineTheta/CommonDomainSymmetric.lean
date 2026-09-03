@@ -8,6 +8,8 @@ import DavisKahan.Sources.DavisKahan1970.SineTheta.Symmetric
 import DavisKahan.Sources.DavisKahan1970.SineTheta.SymmetricReal
 import DavisKahan.Sylvester.ScalarGeneric
 
+open TauCeti.DavisKahan.Sylvester
+
 /-!
 # Davis--Kahan Proposition 6.1 on a common dense domain
 
@@ -83,14 +85,15 @@ namespace TauCeti
 namespace DavisKahan
 namespace ExactSinTheta
 
+open TauCeti.DavisKahanExt
+
+
 open scoped InnerProductSpace
-open TauCeti.DavisKahan.Sylvester
 
 noncomputable section
 
 universe u v
 
-open TauCeti.DavisKahanExt
 open TauCeti.DavisKahan
 
 /-- A subspace admitting an orthogonal projection inside a complete ambient space is

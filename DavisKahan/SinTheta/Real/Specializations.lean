@@ -5,6 +5,8 @@ Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
 import DavisKahan.SinTheta.Real.Canonical
 
+open TauCeti.DavisKahan.Sylvester
+
 /-!
 # Real bounded specialization of the generalized theorem
 
@@ -17,7 +19,6 @@ namespace DavisKahan
 namespace ExactSinTheta
 
 open scoped InnerProductSpace
-open TauCeti.DavisKahan.Sylvester
 
 noncomputable section
 

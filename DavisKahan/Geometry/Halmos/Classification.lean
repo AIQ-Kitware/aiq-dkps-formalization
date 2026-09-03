@@ -190,7 +190,7 @@ theorem sameHalmosInvariant_of_pairEquiv
     ⟨summandEquiv e _ hTarget⟩, ⟨summandEquiv e _ hExterior⟩, summandEquiv e _ hGen, ?_⟩
   intro x
   apply Subtype.ext
-  simp only [coe_summandEquiv, genericHalmosCosineSq, DavisKahanExt.compressOperator,
+  simp only [coe_summandEquiv, genericHalmosCosineSq, DavisKahan.Sylvester.compressOperator,
     ContinuousLinearMap.comp_apply, Submodule.subtypeL_apply,
     Submodule.coe_orthogonalProjectionOnto_apply]
   calc e ((halmosGenericPart U₁ V₁).starProjection (halmosCosineSq U₁ V₁ (x : H₁)))

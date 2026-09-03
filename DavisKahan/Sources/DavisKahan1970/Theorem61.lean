@@ -7,6 +7,8 @@ import DavisKahan.Sources.DavisKahan1970.SineTheta.Theorem61Universal
 import DavisKahan.Sources.DavisKahan1970.SineTheta.Theorem62
 import DavisKahan.Sources.DavisKahan1970.SineTheta.Presentation
 
+open TauCeti.DavisKahan.Sylvester
+
 /-!
 # Davis--Kahan 1970, Theorems 6.1 and 6.2, on ordinary mathematical hypotheses
 
@@ -61,9 +63,10 @@ open scoped InnerProductSpace
 namespace TauCeti
 namespace DavisKahan1970
 
-open TauCeti.DavisKahan
 open TauCeti.DavisKahan.ExactSinTheta
-open TauCeti.DavisKahan.Sylvester
+
+
+open TauCeti.DavisKahan
 open _root_.DavisKahan1970
 
 noncomputable section

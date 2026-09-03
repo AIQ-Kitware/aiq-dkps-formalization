@@ -23,6 +23,8 @@ from the ambient source spectral subspace to the direct-sum block model.
 namespace TauCeti
 namespace DavisKahanExt
 
+open TauCeti.DavisKahanExt
+
 open DavisKahan
 
 open Set
@@ -176,12 +178,13 @@ namespace DavisKahan
 namespace SinTheta
 namespace Continuation
 
+open TauCeti.DavisKahanExt
+
 open DavisKahan
 
 open scoped InnerProductSpace Topology
 
 
-open TauCeti.DavisKahanExt
 
 variable {H : Type*} [NormedAddCommGroup H] [InnerProductSpace ℂ H]
   [CompleteSpace H]

@@ -5,6 +5,8 @@ Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
 import DavisKahan.Sources.DavisKahan1970.Sylvester.HilbertSchmidtPairwise
 
+open TauCeti.DavisKahan.Sylvester
+
 /-!
 # Source-facing square-norm Sylvester theorem
 
@@ -26,7 +28,6 @@ namespace DavisKahan
 namespace ExactSinTheta
 
 open scoped InnerProductSpace ENNReal
-open TauCeti.DavisKahan.Sylvester
 
 
 noncomputable section

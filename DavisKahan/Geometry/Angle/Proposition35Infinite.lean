@@ -18,6 +18,8 @@ import ForTauCeti.Analysis.InnerProductSpace.PositiveSqrt
 import ForTauCeti.Analysis.CStarAlgebra.PositiveSquareRootCommute
 import ForTauCeti.Analysis.CStarAlgebra.SelfAdjointGapInverse
 
+open TauCeti.DavisKahan.Sylvester
+
 /-!
 # Davis--Kahan Proposition 3.5 in arbitrary Hilbert dimension
 
@@ -41,7 +43,6 @@ namespace TauCeti
 namespace DavisKahan
 namespace Proposition35
 
-open TauCeti.DavisKahan.Sylvester
 
 noncomputable section
 

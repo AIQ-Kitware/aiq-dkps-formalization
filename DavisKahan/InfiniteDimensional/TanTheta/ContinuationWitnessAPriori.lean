@@ -6,6 +6,8 @@ Authors: Jon Crall, GPT-5.6 Thinking
 import DavisKahan.InfiniteDimensional.SinTheta.Continuation.WitnessOffDiagonal
 import DavisKahan.InfiniteDimensional.TanTwoTheta.BoundedRiccatiShift
 
+open TauCeti.DavisKahan.Sylvester
+
 /-!
 # A priori tangent control for a continuation-selected branch
 
@@ -23,6 +25,7 @@ supply the witness from sharp branch preservation.
 
 namespace TauCeti
 namespace DavisKahanExt
+
 
 open DavisKahan
 

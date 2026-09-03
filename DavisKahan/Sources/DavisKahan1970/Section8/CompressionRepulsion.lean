@@ -6,6 +6,8 @@ Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 
 import DavisKahan.Sources.DavisKahan1970.Section8.SelectedBranch
 
+open TauCeti.DavisKahan.Sylvester
+
 /-!
 # Davis--Kahan 1970, Theorem 8.1(i): compression-repulsion algebra
 
@@ -26,7 +28,6 @@ spectral argument.
 namespace TauCeti
 namespace DavisKahan1970
 namespace Section8
-open TauCeti.DavisKahan.Sylvester
 
 universe v
 

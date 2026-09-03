@@ -7,6 +7,8 @@ Authors: Jon Crall, Claude Opus 5
 import DavisKahan.Sources.DavisKahan1970.Section6AppendixLeakage
 import DavisKahan.SpectralTheory.Complexification.Subspace
 
+open TauCeti.DavisKahan.Sylvester
+
 /-!
 # Davis--Kahan 1970, Lemma 6.3 over a real Hilbert space
 
@@ -46,7 +48,6 @@ namespace Section6Appendix
 
 open TauCeti.DavisKahan
 open TauCeti.DavisKahan.ExactSinTheta
-open TauCeti.DavisKahan.Sylvester
 open TauCeti.RealComplexification
 open TauCeti.DavisKahan.Foundation.RealComplexification
 

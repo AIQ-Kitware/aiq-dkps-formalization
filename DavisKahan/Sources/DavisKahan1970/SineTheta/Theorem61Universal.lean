@@ -7,6 +7,8 @@ import DavisKahan.Sources.DavisKahan1970.SineTheta.Theorem61
 import DavisKahan.Sources.DavisKahan1970.SineTheta.Norms.UnitaryInvariantNorm
 import DavisKahan.Sources.DavisKahan1970.SineTheta.Norms.HeterogeneousRepresentative
 
+open TauCeti.DavisKahan.Sylvester
+
 /-!
 # Davis--Kahan Theorem 6.1 for every source-defined norm
 
@@ -27,7 +29,6 @@ namespace DavisKahan
 namespace ExactSinTheta
 
 open scoped InnerProductSpace BigOperators
-open TauCeti.DavisKahan.Sylvester
 
 noncomputable section
 

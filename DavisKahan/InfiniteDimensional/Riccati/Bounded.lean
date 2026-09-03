@@ -8,6 +8,8 @@ import DavisKahan.Riccati.BoundedStability
 import DavisKahan.InfiniteDimensional.Riccati.BoundedSpectralEnclosure
 import DavisKahan.SpectralTheory.AbstractSpectrum
 
+open TauCeti.DavisKahan.Sylvester
+
 /-!
 # Public bounded Riccati theory
 
@@ -26,7 +28,6 @@ namespace TauCeti
 namespace DavisKahanExt
 
 open DavisKahan.Foundation
-open TauCeti.DavisKahan.Sylvester
 
 open DavisKahan
 

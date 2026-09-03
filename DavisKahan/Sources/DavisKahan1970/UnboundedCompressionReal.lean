@@ -6,6 +6,8 @@ Authors: Jon Crall, Claude Opus 5
 import DavisKahan.TanTheta.Theorem63UnboundedCompression
 import DavisKahan.Sources.DavisKahan1970.DirectedUnboundedReal
 
+open TauCeti.DavisKahan.Sylvester
+
 /-!
 # Davis--Kahan Theorem 6.3 with an unbounded **real** Ritz compression
 
@@ -54,7 +56,6 @@ open TauCeti.DavisKahanExt
 open TauCeti.DavisKahan
 open TauCeti.DavisKahan
 open TauCeti.DavisKahan.ExactSinTheta
-open TauCeti.DavisKahan.Sylvester
 open TauCeti.DavisKahan.ExactSinTheta.ComplexificationApproximation
 open TauCeti.DavisKahan.TanTheta
 open TauCeti.DavisKahan.TanTheta

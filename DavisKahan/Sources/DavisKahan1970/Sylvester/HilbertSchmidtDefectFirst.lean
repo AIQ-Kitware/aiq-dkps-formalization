@@ -7,6 +7,8 @@ import ForTauCeti.Analysis.InnerProductSpace.Sylvester.Generator
 import ForTauCeti.Analysis.InnerProductSpace.LinearPMap.StoneUniqueness
 import ForTauCeti.Analysis.InnerProductSpace.LinearPMap.SpectralGapInverse
 
+open TauCeti.DavisKahan.Sylvester
+
 /-!
 # Defect-first reduction for the square-norm Sylvester theorem
 
@@ -43,7 +45,6 @@ namespace DavisKahan
 namespace ExactSinTheta
 
 open scoped InnerProductSpace
-open TauCeti.DavisKahan.Sylvester
 open TauCeti.HilbertSchmidt
 open TauCeti.OneParameterUnitaryGroup (generator)
 

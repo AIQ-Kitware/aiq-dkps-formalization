@@ -74,9 +74,10 @@ a consequence of the eigenvector relation together with `C² + S² = 1`.
 namespace TauCeti
 namespace DavisKahan1970
 
+open TauCeti.DavisKahan.ExactSinTheta
+
 open scoped InnerProductSpace BigOperators
 
-open TauCeti.DavisKahan.ExactSinTheta
 
 noncomputable section
 

@@ -7,6 +7,8 @@ import DavisKahan.SinTheta.Unbounded.IntervalExterior
 import DavisKahan.SinTheta.Unbounded.AllGap
 import DavisKahan.SinTheta.Unbounded.FormBoundedGap
 
+open TauCeti.DavisKahan.Sylvester
+
 /-!
 # Source-shaped generalized and isometric problems over the form-bounded gap
 
@@ -44,7 +46,7 @@ namespace TauCeti
 namespace DavisKahan
 namespace ExactSinTheta
 
-open TauCeti.DavisKahan.Sylvester
+
 
 section ComplexGeneralized
 

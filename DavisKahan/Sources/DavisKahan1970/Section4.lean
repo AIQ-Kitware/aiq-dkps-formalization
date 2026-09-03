@@ -11,6 +11,8 @@ import ForTauCeti.Analysis.InnerProductSpace.CompactSpectralDecomposition
 import ForTauCeti.Analysis.InnerProductSpace.VectorAngle
 import ForTauCeti.Analysis.OperatorIdeal.Family.GramGauge
 
+open TauCeti.DavisKahan.Sylvester
+
 /-!
 # Davis--Kahan 1970, Section 4: extremal properties of the direct rotation
 
@@ -34,6 +36,7 @@ the repository's source-coverage convention for a false printed claim.
 
 namespace TauCeti
 namespace DavisKahan1970
+
 
 /-! ## Proposition 4.1 -/
 
@@ -101,7 +104,6 @@ section Proposition41VectorForm
 
 open scoped InnerProductSpace
 open DavisKahan.ExactSinTheta
-open TauCeti.DavisKahan.Sylvester
 open TauCeti.ApproximationNumber
 
 universe v

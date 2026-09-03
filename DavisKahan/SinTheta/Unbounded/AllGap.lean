@@ -8,6 +8,8 @@ import DavisKahan.SinTheta.Unbounded.IntervalExterior
 import DavisKahan.Sylvester.Unbounded.AllGap
 import ForTauCeti.Analysis.InnerProductSpace.LinearPMap.Resolvent
 
+open TauCeti.DavisKahan.Sylvester
+
 /-!
 # Spectral all-gap unbounded sine-theta theorem
 
@@ -27,7 +29,6 @@ namespace TauCeti
 namespace DavisKahan
 namespace ExactSinTheta
 
-open TauCeti.DavisKahan.Sylvester
 
 universe v
 

@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "status": "applied_except_hilbert_schmidt",
+  "status": "applied_and_retired",
   "generated_on": "2026-09-02",
   "purpose": "A census of the `paper`-prefixed declaration names in DavisKahan, and a mechanically applicable rename proposal. Stage A -- the one-sided renames whose targets were unoccupied -- IS APPLIED; see `application_log` and `stage_status` for exactly what, and what remains.",
   "motivation": "The 2026-09-01 rename replaced `PaperUnitaryInvariantNorm` with `SymmetricNormingFunction` because the name recorded provenance where the mathematics had its own name. That decision was never generalised, and `paper` is not in the naming classification's banned-token list, so the rest of the family was left in place. Measured here: of the declarations carrying the token, the great majority contrast with nothing -- there is no other `blockCompression`, `diagonalPair`, or `projectorDifference` in the tree -- so the prefix distinguishes nothing and reads as unfinished. ForTauCeti, the permanent product, already carries none of these names.",
@@ -6555,5 +6555,7 @@
     "scale": "370 use sites across 18 files, including Theorem61, Theorem62, Section6AppendixLeakage and four Sylvester modules.",
     "recommendation": "Settle the carrier first. If the source-facing statements should keep `ℝ`, ForTauCeti needs an `ℝ`-valued norm alongside the `ℝ≥0∞` one and the migration is then mechanical. If they should move to `ℝ≥0∞`, that is a deliberate change to Theorems 6.1 and 6.2 and should be reviewed as such. Renaming the DavisKahan names instead -- to say they are the singular-value definition -- is explicitly what the review did not want, since it would preserve a competing concept under a better name."
   },
-  "reading_order": "`stage_status` is the CURRENT state. `application_log` is a HISTORICAL record in chronological order: each entry describes what one pass did on the day it ran, and entries are never edited afterwards, so an early entry saying a stage was not yet applied is a record of that moment, not a claim about today. `not_yet_decided` lists only what is still open."
+  "reading_order": "`stage_status` is the CURRENT state. `application_log` is a HISTORICAL record in chronological order: each entry describes what one pass did on the day it ran, and entries are never edited afterwards, so an early entry saying a stage was not yet applied is a record of that moment, not a claim about today. `not_yet_decided` lists only what is still open.",
+  "retired_on": "2026-09-03",
+  "retirement_note": "HISTORICAL. This document's `applied_except_hilbert_schmidt` status and its description of the Hilbert-Schmidt consolidation as blocked were true when written and are not true now. The consolidation was completed on 2026-09-03: `IsPaperHilbertSchmidt`, `paperHilbertSchmidtEnergy` and `paperHilbertSchmidtNorm` are deleted, not renamed, and the canonical `ContinuousLinearMap.IsHilbertSchmidt` / `hilbertSchmidtENorm` / `hilbertSchmidtNorm` API is the only one. The approximation-number sum survives as `approximationNumberEnergy`, connected by equivalence theorems. Read this file as the census that motivated the campaign, never as a work list."
 }

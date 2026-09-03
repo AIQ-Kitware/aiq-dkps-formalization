@@ -11,6 +11,8 @@ import DavisKahan.SinTheta.BoundedPerturbation
 import ForTauCeti.MeasureTheory.RadonNikodymL2
 import Mathlib.Tactic
 
+open TauCeti.DavisKahan.Sylvester
+
 /-!
 # Real Section 9 trial space and perturbation
 
@@ -30,7 +32,6 @@ namespace FreeBeam
 namespace Model
 namespace Real
 
-open TauCeti.DavisKahan.Sylvester
 
 noncomputable section
 

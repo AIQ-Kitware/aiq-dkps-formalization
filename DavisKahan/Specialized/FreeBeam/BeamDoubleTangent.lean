@@ -6,6 +6,8 @@ Authors: Jon Crall, Claude Opus 5
 import DavisKahan.Specialized.FreeBeam.BeamTangent
 import ForTauCeti.Analysis.InnerProductSpace.DoubleAngle.SpectralCutoff
 
+open TauCeti.DavisKahan.Sylvester
+
 /-!
 # Section 9, equation (9.7): the double-angle tangent, on the genuine operator
 
@@ -59,7 +61,6 @@ namespace DavisKahan
 namespace FreeBeam
 namespace Model
 
-open TauCeti.DavisKahan.Sylvester
 
 open DavisKahan1970.Section9
 

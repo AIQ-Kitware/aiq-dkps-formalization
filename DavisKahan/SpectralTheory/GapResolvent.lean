@@ -7,6 +7,8 @@ import DavisKahan.SpectralTheory.PartialMap.Basic
 import DavisKahan.Sylvester.ShiftedInverseGauge
 import ForTauCeti.Analysis.InnerProductSpace.LinearPMap.SelfAdjointResolvent
 
+open TauCeti.DavisKahan.Sylvester
+
 /-!
 # Norm-bounded gap resolvents
 
@@ -56,7 +58,6 @@ variable {H : Type*} [NormedAddCommGroup H] [InnerProductSpace ℂ H]
 namespace TauCeti
 namespace DavisKahan
 
-open TauCeti.DavisKahan.Sylvester
 
 /-- **A spectral gap gives a norm-bounded two-sided inverse.**  If the spectrum
 of a self-adjoint `A` avoids `(c - s, c + s)`, then `A - c` has a bounded

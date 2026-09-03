@@ -8,6 +8,8 @@ import DavisKahan.BoundedOperator.BlockShift
 import DavisKahan.OperatorIdeal.ComplexificationApproximation
 import DavisKahan.Sources.DavisKahan1970.Section8.Theorem81Real
 
+open TauCeti.DavisKahan.Sylvester
+
 /-!
 # Davis--Kahan 1970, Theorem 8.1(ii) over a REAL Hilbert space
 
@@ -65,7 +67,6 @@ open TauCeti.DavisKahan.Foundation
 open TauCeti.RealComplexification
 open TauCeti.DavisKahan.Foundation.RealComplexification
 open TauCeti.DavisKahan.ExactSinTheta.ComplexificationApproximation
-open TauCeti.DavisKahan.Sylvester
 
 noncomputable section
 
