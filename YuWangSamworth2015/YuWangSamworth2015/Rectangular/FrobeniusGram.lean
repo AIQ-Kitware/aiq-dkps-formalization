@@ -40,7 +40,7 @@ private theorem isPaperHilbertSchmidt_finite
     (A : E →L[𝕜] F) [CompleteSpace E] [CompleteSpace F] :
     IsPaperHilbertSchmidt A := by
   unfold IsPaperHilbertSchmidt
-  rw [paperHilbertSchmidtEnergy_eq_ofReal_sum_sq_singularValues]
+  rw [hilbertSchmidtEnergy_eq_ofReal_sum_sq_singularValues]
   exact ENNReal.ofReal_ne_top
 
 /-- A rectangular Frobenius norm is invariant under adjoint. -/
@@ -49,10 +49,10 @@ theorem rectangularFrobenius_adjoint (A : E →ₗ[𝕜] F) :
       RectangularUnitarilyInvariantSeminorm.frobenius A := by
   let : CompleteSpace E := FiniteDimensional.complete 𝕜 E
   let : CompleteSpace F := FiniteDimensional.complete 𝕜 F
-  have h := paperHilbertSchmidtNorm_adjoint A.toContinuousLinearMap
+  have h := hilbertSchmidtNorm_adjoint A.toContinuousLinearMap
   rw [← LinearMap.adjoint_toContinuousLinearMap,
-    paperHilbertSchmidtNorm_eq_rectangularFrobenius,
-    paperHilbertSchmidtNorm_eq_rectangularFrobenius] at h
+    hilbertSchmidtNorm_eq_rectangularFrobenius,
+    hilbertSchmidtNorm_eq_rectangularFrobenius] at h
   exact h
 
 /-- The Frobenius norm of a square product is bounded by the operator norm of
@@ -70,7 +70,7 @@ theorem frobenius_comp_rectangular_le_opNorm_mul
   let : CompleteSpace F := FiniteDimensional.complete 𝕜 F
   have hA : IsPaperHilbertSchmidt A.toContinuousLinearMap :=
     isPaperHilbertSchmidt_finite A.toContinuousLinearMap
-  have h := paperHilbertSchmidtNorm_comp_le
+  have h := hilbertSchmidtNorm_comp_le
     C.toContinuousLinearMap hA (ContinuousLinearMap.id 𝕜 E)
   rw [ContinuousLinearMap.comp_id] at h
   have h' :
@@ -80,10 +80,10 @@ theorem frobenius_comp_rectangular_le_opNorm_mul
           paperHilbertSchmidtNorm A.toContinuousLinearMap :=
     h.trans (mul_le_of_le_one_right
       (mul_nonneg (norm_nonneg _)
-        (paperHilbertSchmidtNorm_nonneg A.toContinuousLinearMap))
+        (hilbertSchmidtNorm_nonneg A.toContinuousLinearMap))
       ContinuousLinearMap.norm_id_le)
-  rw [paperHilbertSchmidtNorm_eq_frobenius,
-    paperHilbertSchmidtNorm_eq_rectangularFrobenius] at h'
+  rw [hilbertSchmidtNorm_eq_frobenius,
+    hilbertSchmidtNorm_eq_rectangularFrobenius] at h'
   have hcomp :
       (C.toContinuousLinearMap ∘L A.toContinuousLinearMap).toLinearMap =
         C ∘ₗ A := by
@@ -110,10 +110,10 @@ theorem rectangularFrobenius_twoSided_comp_le
   let : CompleteSpace H := FiniteDimensional.complete 𝕜 H
   have hA : IsPaperHilbertSchmidt A.toContinuousLinearMap :=
     isPaperHilbertSchmidt_finite A.toContinuousLinearMap
-  have h := paperHilbertSchmidtNorm_comp_le
+  have h := hilbertSchmidtNorm_comp_le
     L.toContinuousLinearMap hA R.toContinuousLinearMap
-  rw [paperHilbertSchmidtNorm_eq_rectangularFrobenius,
-    paperHilbertSchmidtNorm_eq_rectangularFrobenius] at h
+  rw [hilbertSchmidtNorm_eq_rectangularFrobenius,
+    hilbertSchmidtNorm_eq_rectangularFrobenius] at h
   have hcomp :
       (L.toContinuousLinearMap ∘L A.toContinuousLinearMap ∘L
         R.toContinuousLinearMap).toLinearMap = L ∘ₗ A ∘ₗ R := by
