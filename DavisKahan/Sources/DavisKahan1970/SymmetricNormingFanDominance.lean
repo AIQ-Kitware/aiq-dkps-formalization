@@ -50,6 +50,7 @@ namespace DavisKahan1970
 
 open TauCeti.DavisKahan
 open TauCeti.DavisKahan.ExactSinTheta
+open TauCeti.DavisKahan.Sylvester
 open TauCeti.ApproximationNumber
 
 noncomputable section
@@ -239,7 +240,7 @@ theorem theorem5_2_symmetricNorming_real
     (hR : N.Mem R) :
     N.Mem X ∧ δ * N.gauge X ≤ N.gauge R :=
   symmetricNorming_of_kyFanDominant N hδ hR
-    (fun M hM => DavisKahan.ExactSinTheta.davisKahan1970_sylvester_real
+    (fun M hM => DavisKahan.Sylvester.davisKahan1970_sylvester_real
       M hA hB hδ hgap hsyl hM)
 
 end Sylvester

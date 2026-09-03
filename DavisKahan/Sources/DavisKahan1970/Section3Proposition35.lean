@@ -54,6 +54,8 @@ open scoped InnerProductSpace
 namespace TauCeti
 namespace DavisKahan1970
 
+open TauCeti.DavisKahan.Sylvester
+
 open DavisKahan
 open DavisKahan.Proposition35
 

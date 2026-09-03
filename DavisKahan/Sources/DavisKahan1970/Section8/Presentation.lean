@@ -94,6 +94,7 @@ identifications are re-exported here under source-facing names.
 namespace TauCeti
 namespace DavisKahan1970
 namespace Section8
+open TauCeti.DavisKahan.Sylvester
 
 /-! ### Theorem 8.1(i), both blocks -/
 

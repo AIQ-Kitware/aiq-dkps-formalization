@@ -51,6 +51,8 @@ open scoped InnerProductSpace
 namespace TauCeti
 namespace DavisKahan
 
+open TauCeti.DavisKahan.Sylvester
+
 universe u
 
 variable {𝕜 : Type*} [RCLike 𝕜]

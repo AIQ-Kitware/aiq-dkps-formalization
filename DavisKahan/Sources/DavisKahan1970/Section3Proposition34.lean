@@ -45,6 +45,8 @@ open scoped InnerProductSpace ComplexOrder
 namespace TauCeti
 namespace DavisKahan1970
 
+open TauCeti.DavisKahan.Sylvester
+
 open TauCeti.DavisKahan
 open TauCeti.DavisKahanExt
 

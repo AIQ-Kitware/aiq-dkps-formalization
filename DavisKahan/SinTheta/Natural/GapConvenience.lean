@@ -24,6 +24,8 @@ namespace TauCeti
 namespace DavisKahan
 namespace ExactSinTheta
 
+open TauCeti.DavisKahan.Sylvester
+
 universe u v
 
 namespace SpectralSylvesterGap

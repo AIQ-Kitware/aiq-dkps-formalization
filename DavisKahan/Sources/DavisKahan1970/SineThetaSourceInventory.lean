@@ -24,6 +24,7 @@ namespace DavisKahan1970
 -- Lean has no namespace-alias command, so the paper implementation namespace
 -- is opened directly; every unprefixed `Paper...` name below resolves into it.
 open DavisKahan.ExactSinTheta
+open TauCeti.DavisKahan.Sylvester
 
 /-! ## Source norm class -/
 

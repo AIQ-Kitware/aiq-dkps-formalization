@@ -46,6 +46,7 @@ open DavisKahan1970.Section9
 open TauCeti.DavisKahan.TanTheta
 open TauCeti.DavisKahan.TanTheta
 open TauCeti.DavisKahan.ExactSinTheta
+open TauCeti.DavisKahan.Sylvester
 
 noncomputable section
 

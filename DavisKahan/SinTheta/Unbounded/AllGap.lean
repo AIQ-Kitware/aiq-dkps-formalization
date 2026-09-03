@@ -27,6 +27,8 @@ namespace TauCeti
 namespace DavisKahan
 namespace ExactSinTheta
 
+open TauCeti.DavisKahan.Sylvester
+
 universe v
 
 variable {E F G H : Type v}

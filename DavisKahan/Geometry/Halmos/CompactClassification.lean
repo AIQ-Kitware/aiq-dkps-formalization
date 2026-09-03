@@ -39,6 +39,8 @@ open scoped InnerProductSpace
 namespace TauCeti
 namespace DavisKahan
 
+open TauCeti.DavisKahan.Sylvester
+
 open Module (finrank)
 open Module.End (eigenspace)
 

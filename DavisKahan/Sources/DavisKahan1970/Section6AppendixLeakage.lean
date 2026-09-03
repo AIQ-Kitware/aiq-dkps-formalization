@@ -63,6 +63,7 @@ namespace Section6Appendix
 
 open TauCeti.DavisKahan
 open TauCeti.DavisKahan.ExactSinTheta
+open TauCeti.DavisKahan.Sylvester
 
 universe u v w
 

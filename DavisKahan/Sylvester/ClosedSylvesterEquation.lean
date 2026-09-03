@@ -19,7 +19,7 @@ stays in `DavisKahan.InfiniteDimensional.Core.UnboundedSpectral`.
 
 namespace TauCeti
 namespace DavisKahan
-namespace ExactSinTheta
+namespace Sylvester
 
 open scoped InnerProductSpace
 open scoped Topology
@@ -55,6 +55,6 @@ theorem equation_of_mem
 
 end SylvesterEquation
 
-end ExactSinTheta
+end Sylvester
 end DavisKahan
 end TauCeti

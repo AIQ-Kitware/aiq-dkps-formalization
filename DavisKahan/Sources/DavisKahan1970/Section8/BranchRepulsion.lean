@@ -41,6 +41,8 @@ namespace TauCeti
 namespace DavisKahan1970
 namespace Section8
 
+open TauCeti.DavisKahan.Sylvester
+
 open DavisKahanExt
 open TauCeti.DavisKahan
 open TauCeti.DavisKahan.Foundation

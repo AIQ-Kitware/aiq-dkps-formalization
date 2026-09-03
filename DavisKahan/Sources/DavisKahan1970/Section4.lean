@@ -101,6 +101,7 @@ section Proposition41VectorForm
 
 open scoped InnerProductSpace
 open DavisKahan.ExactSinTheta
+open TauCeti.DavisKahan.Sylvester
 open TauCeti.ApproximationNumber
 
 universe v

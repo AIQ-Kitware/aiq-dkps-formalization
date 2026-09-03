@@ -370,7 +370,7 @@ Accepted result-only semantic review 2026-08-12, after correcting the scalar-sco
 
 **Selected source-facing Lean declarations:**
 - `TauCeti.DavisKahan1970.Theorem5_2`
-- `TauCeti.DavisKahan.ExactSinTheta.davisKahan1970_sylvester_real`
+- `TauCeti.DavisKahan.Sylvester.davisKahan1970_sylvester_real`
 
 **Semantic review:**
 

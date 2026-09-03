@@ -28,6 +28,8 @@ namespace TauCeti
 namespace DavisKahan
 namespace ExactSinTheta
 
+open TauCeti.DavisKahan.Sylvester
+
 #check sylvesterNeumannPartialSum_cauchy
 #check sylvesterNeumannSolution_mem
 #check sylvesterNeumannSolution_eq

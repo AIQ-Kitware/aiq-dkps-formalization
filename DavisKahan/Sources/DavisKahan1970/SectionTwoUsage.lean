@@ -61,6 +61,7 @@ namespace SectionTwoUsage
 open scoped InnerProductSpace
 
 open TauCeti.DavisKahan.ExactSinTheta TauCeti.DavisKahanExt
+open TauCeti.DavisKahan.Sylvester
 
 noncomputable section
 
@@ -111,7 +112,7 @@ assembled by hand.  The two class hypotheses are the field capabilities, which
 theorem sinTheta_from_printed_separation_rclike
     {𝕜 : Type u₁} [RCLike 𝕜]
     [ContinuousLinearMap.HasMinMaxLowerBoundEverywhere.{u₁, v₁} 𝕜]
-    [TauCeti.DavisKahan.ExactSinTheta.HasUnboundedSylvesterKyFan.{u₁, v₁} 𝕜]
+    [TauCeti.DavisKahan.Sylvester.HasUnboundedSylvesterKyFan.{u₁, v₁} 𝕜]
     {E F G H : Type v₁}
     [NormedAddCommGroup E] [InnerProductSpace 𝕜 E] [CompleteSpace E]
     [NormedAddCommGroup F] [InnerProductSpace 𝕜 F] [CompleteSpace F]
@@ -223,7 +224,7 @@ theorem sinTwoTheta_from_printed_separation
     (Eop : E →L[ℂ] E) (hEop : DavisKahan.IsSelfAdjointOperator Eop)
     (B S : Set ℝ) (hB : MeasurableSet B) (hS : MeasurableSet S)
     {δ : ℝ} (hδ : 0 < δ)
-    (hgap : DavisKahan.ExactSinTheta.FormBoundedSylvesterGap
+    (hgap : DavisKahan.Sylvester.FormBoundedSylvesterGap
       (DavisKahan.selfAdjointSpectralRestriction A hA B hB)
       (DavisKahan.selfAdjointSpectralRestriction A hA Bᶜ hB.compl) δ)
     (hEmem : N.Mem Eop) :
@@ -268,7 +269,7 @@ theorem sinTwoTheta_from_halfInfinite_separation
           (DavisKahan.addBounded_isSelfAdjoint A hA Eop hEop) S hS)) ≤
         2 * N.gauge Eop :=
   SectionTwo.sinTwoTheta_complex N A hA Eop hEop B S hB hS hδ
-    (DavisKahan.ExactSinTheta.FormBoundedSylvesterGap.leftAboveRightBelow
+    (DavisKahan.Sylvester.FormBoundedSylvesterGap.leftAboveRightBelow
       c hBlow hBcomplHigh)
     hEmem
 

@@ -35,6 +35,7 @@ namespace DavisKahan
 namespace ExactSinTheta
 
 open scoped InnerProductSpace BigOperators ENNReal
+open TauCeti.DavisKahan.Sylvester
 open scoped Topology
 open Filter
 

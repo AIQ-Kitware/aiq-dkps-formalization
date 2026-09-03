@@ -19,9 +19,10 @@ membership and the arbitrary-gauge estimate.
 
 namespace TauCeti
 namespace DavisKahan
-namespace ExactSinTheta
+namespace Sylvester
 
 open scoped InnerProductSpace
+open TauCeti.DavisKahan.ExactSinTheta
 open TauCeti.RealComplexification
 
 noncomputable section
@@ -92,6 +93,6 @@ theorem davisKahan1970_sylvester_real
 
 end
 
-end ExactSinTheta
+end Sylvester
 end DavisKahan
 end TauCeti

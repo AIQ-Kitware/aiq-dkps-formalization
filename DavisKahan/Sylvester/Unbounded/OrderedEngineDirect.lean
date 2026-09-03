@@ -14,10 +14,11 @@ direct vendored-Spectra cutoff and bounded truncation implementations.
 -/
 
 open scoped InnerProductSpace
+open TauCeti.DavisKahan.ExactSinTheta
 
 namespace TauCeti
 namespace DavisKahan
-namespace ExactSinTheta
+namespace Sylvester
 
 universe v
 
@@ -86,6 +87,6 @@ theorem canonicalOrderedSylvesterEngine :
     OrderedSylvesterEngine :=
   directOrderedSylvesterEngine
 
-end ExactSinTheta
+end Sylvester
 end DavisKahan
 end TauCeti

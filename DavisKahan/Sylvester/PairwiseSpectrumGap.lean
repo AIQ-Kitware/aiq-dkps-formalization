@@ -28,7 +28,8 @@ uses, nothing changes.
 
 namespace TauCeti
 namespace DavisKahan
-namespace ExactSinTheta
+namespace Sylvester
+
 
 noncomputable section
 
@@ -136,6 +137,6 @@ end PairwiseSpectrumGap
 
 end
 
-end ExactSinTheta
+end Sylvester
 end DavisKahan
 end TauCeti

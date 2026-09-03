@@ -3120,11 +3120,11 @@ The first hole asked for a source-facing theorem for "(5.2) is not best possible
 
 **Lean declarations:**
 
-- `TauCeti.DavisKahan.ExactSinTheta.directOrderedSylvesterEngine_lowerUpper`
+- `TauCeti.DavisKahan.Sylvester.directOrderedSylvesterEngine_lowerUpper`
 - `TauCeti.DavisKahan1970.unbounded_sylvester_intervalExterior_uiNorm_genuineSpectrum`
 - `TauCeti.DavisKahan1970.Theorem5_2`
-- `TauCeti.DavisKahan.ExactSinTheta.davisKahan1970_sylvester_real`
-- `TauCeti.DavisKahan.ExactSinTheta.real_unbounded_sylvester_kyFan`
+- `TauCeti.DavisKahan.Sylvester.davisKahan1970_sylvester_real`
+- `TauCeti.DavisKahan.Sylvester.real_unbounded_sylvester_kyFan`
 - `TauCeti.DavisKahan1970.theorem5_2_symmetricNorming_complex`
 - `TauCeti.DavisKahan1970.theorem5_2_symmetricNorming_real`
 - `TauCeti.DavisKahan1970.symmetricNorming_of_kyFanDominant`

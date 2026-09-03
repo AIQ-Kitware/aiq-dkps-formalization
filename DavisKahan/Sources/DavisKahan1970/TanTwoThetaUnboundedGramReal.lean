@@ -85,6 +85,7 @@ open scoped InnerProductSpace BigOperators
 
 open TauCeti.ApproximationNumber
 open TauCeti.DavisKahan.ExactSinTheta
+open TauCeti.DavisKahan.Sylvester
 open TauCeti.DavisKahan.ExactSinTheta.ComplexificationApproximation
 open TauCeti.RealComplexification
 open TauCeti.DavisKahan.Foundation.RealComplexification

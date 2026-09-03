@@ -54,6 +54,7 @@ universe u v
 open TauCeti
 open TauCeti.DavisKahan
 open TauCeti.DavisKahan.ExactSinTheta
+open TauCeti.DavisKahan.Sylvester
 open TauCeti.DavisKahanExt
 open TauCeti.DavisKahan1970
 
@@ -296,7 +297,7 @@ They are the one respect in which this statement is less clean than the
 fixed-field pair. -/
 theorem sinTheta_unbounded_formGap_symmetricNorming_rclike
     [ContinuousLinearMap.HasMinMaxLowerBoundEverywhere.{u, v} 𝕜]
-    [TauCeti.DavisKahan.ExactSinTheta.HasUnboundedSylvesterKyFan.{u, v} 𝕜]
+    [TauCeti.DavisKahan.Sylvester.HasUnboundedSylvesterKyFan.{u, v} 𝕜]
     (N : SymmetricNormingFunction)
     (A : E →ₗ.[𝕜] E) (A₀ : F →ₗ.[𝕜] F) (Λ₁ : G →ₗ.[𝕜] G)
     (E₀ : F →L[𝕜] E) (F₀ : H →L[𝕜] E) (F₁ : G →L[𝕜] E) (R : F →L[𝕜] E)

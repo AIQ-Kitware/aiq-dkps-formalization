@@ -26,6 +26,7 @@ spectral argument.
 namespace TauCeti
 namespace DavisKahan1970
 namespace Section8
+open TauCeti.DavisKahan.Sylvester
 
 universe v
 

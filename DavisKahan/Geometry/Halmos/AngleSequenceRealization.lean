@@ -54,6 +54,7 @@ namespace TauCeti
 namespace DavisKahan
 
 open Filter Topology
+open TauCeti.DavisKahan.Sylvester
 open scoped InnerProductSpace
 
 section AngleSequence

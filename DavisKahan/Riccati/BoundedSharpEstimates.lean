@@ -21,6 +21,7 @@ namespace TauCeti
 namespace DavisKahanExt
 
 open scoped InnerProductSpace
+open TauCeti.DavisKahan.Sylvester
 
 variable {E0 : Type*} [NormedAddCommGroup E0] [InnerProductSpace ℂ E0]
   [CompleteSpace E0]

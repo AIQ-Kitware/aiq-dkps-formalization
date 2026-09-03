@@ -42,6 +42,7 @@ namespace TauCeti
 namespace DavisKahan
 
 open TauCeti.DavisKahan.ExactSinTheta TauCeti.DavisKahan.TanTheta
+open TauCeti.DavisKahan.Sylvester
   TauCeti.DavisKahan.TanTheta
 
 universe u v

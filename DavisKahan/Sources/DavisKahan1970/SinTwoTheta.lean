@@ -55,6 +55,7 @@ namespace TauCeti
 namespace DavisKahan1970
 
 open DavisKahan.ExactSinTheta
+open TauCeti.DavisKahan.Sylvester
 open DavisKahan
 
 /-! ## The mirror proof package, equations (7.1)--(7.3)

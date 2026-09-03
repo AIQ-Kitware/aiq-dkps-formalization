@@ -58,6 +58,7 @@ namespace DavisKahan.FiniteDimensional
 
 open scoped InnerProductSpace
 open DavisKahan.ExactSinTheta
+open TauCeti.DavisKahan.Sylvester
 open TauCeti.DavisKahan (exists_approximateLeadingSingularFamily)
 
 noncomputable section

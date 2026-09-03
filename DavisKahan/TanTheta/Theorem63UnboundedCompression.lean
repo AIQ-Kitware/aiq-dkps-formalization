@@ -68,6 +68,7 @@ namespace DavisKahan
 namespace TanTheta
 
 open ExactSinTheta
+open TauCeti.DavisKahan.Sylvester
 open TauCeti.ApproximationNumber (IsOrthogonalProjectionMap StronglyTendsto)
 
 universe u

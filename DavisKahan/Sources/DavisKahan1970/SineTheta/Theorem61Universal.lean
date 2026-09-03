@@ -27,6 +27,7 @@ namespace DavisKahan
 namespace ExactSinTheta
 
 open scoped InnerProductSpace BigOperators
+open TauCeti.DavisKahan.Sylvester
 
 noncomputable section
 

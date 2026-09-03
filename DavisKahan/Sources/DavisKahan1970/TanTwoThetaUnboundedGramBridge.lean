@@ -72,6 +72,7 @@ namespace DavisKahan1970
 open scoped InnerProductSpace
 
 open TauCeti.DavisKahan.ExactSinTheta
+open TauCeti.DavisKahan.Sylvester
 open TauCeti.ApproximationNumber
 
 noncomputable section

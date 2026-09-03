@@ -32,6 +32,7 @@ made this file look like an independent Spectra consumer when it is not.
 namespace TauCeti
 namespace DavisKahan
 namespace ExactSinTheta
+open TauCeti.DavisKahan.Sylvester
 
 #check nuclearNormingFunction
 #check symmetricNormingFunction_nonempty

@@ -90,6 +90,7 @@ namespace DavisKahan
 namespace Section4
 
 open ExactSinTheta
+open TauCeti.DavisKahan.Sylvester
 open TauCeti.ApproximationNumber
 
 noncomputable section

@@ -49,7 +49,8 @@ open Complex Filter MeasureTheory Topology
 namespace TauCeti
 namespace DavisKahan
 
-open TauCeti.DavisKahan.ExactSinTheta
+open TauCeti.DavisKahan.Sylvester
+open TauCeti.DavisKahan.Sylvester
 
 variable {H : Type*} [NormedAddCommGroup H] [InnerProductSpace ℂ H]
   [CompleteSpace H]

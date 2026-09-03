@@ -42,6 +42,8 @@ namespace DavisKahan
 namespace FreeBeam
 namespace Model
 
+open TauCeti.DavisKahan.Sylvester
+
 noncomputable section
 
 /-- The ambient Hilbert space of the free-beam model: `L²` of the unit interval. -/

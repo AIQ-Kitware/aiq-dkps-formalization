@@ -33,6 +33,7 @@ from the first and is irrelevant to the third.
 namespace TauCeti
 
 open TauCeti
+open TauCeti.DavisKahan.Sylvester
 namespace DavisKahan
 namespace ExactSinTheta
 

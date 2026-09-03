@@ -55,7 +55,7 @@ it is; each name says how its ordered configurations are given.
 
 namespace TauCeti
 namespace DavisKahan
-namespace ExactSinTheta
+namespace Sylvester
 
 open scoped InnerProductSpace
 
@@ -218,6 +218,6 @@ theorem FormBoundedSylvesterGap.reducingRestriction_congr_left
       (TauCeti.LinearPMap.reducingRestriction A q hq) X δ := by
   subst h; exact hgap
 
-end ExactSinTheta
+end Sylvester
 end DavisKahan
 end TauCeti

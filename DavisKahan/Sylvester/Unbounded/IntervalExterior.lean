@@ -35,6 +35,8 @@ open scoped InnerProductSpace
 namespace TauCeti
 namespace DavisKahan
 
+open TauCeti.DavisKahan.Sylvester
+
 open TauCeti.DavisKahan.ExactSinTheta
 
 universe v
@@ -43,7 +45,7 @@ variable {E F : Type v}
   [NormedAddCommGroup E] [InnerProductSpace ℂ E] [CompleteSpace E]
   [NormedAddCommGroup F] [InnerProductSpace ℂ F] [CompleteSpace F]
 
-namespace ExactSinTheta
+namespace Sylvester
 
 /-- **Interval/exterior separation** for two self-adjoint closed operators, stated over the
 Spectra spectrum.  Either orientation is permitted: one operator's real spectrum sits inside
@@ -69,7 +71,7 @@ def SpectralIntervalExteriorGap
     ∀ lam ∈ Set.Ioo (β - δ) (α + δ),
       (lam : ℂ) ∉ TauCeti.LinearPMap.spectrum A)
 
-end ExactSinTheta
+end Sylvester
 
 /-- **Form bounds from spectral inclusion.**  A closed self-adjoint operator
 with Spectra spectrum in `[β, α]` has its quadratic form in `[β, α]`:

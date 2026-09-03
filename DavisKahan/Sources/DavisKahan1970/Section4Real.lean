@@ -64,6 +64,7 @@ namespace DavisKahan1970
 open TauCeti.DavisKahan
 open TauCeti.DavisKahan
 open TauCeti.DavisKahan.ExactSinTheta
+open TauCeti.DavisKahan.Sylvester
 open TauCeti.DavisKahan.ExactSinTheta.ComplexificationApproximation
 open TauCeti.ApproximationNumber
 open TauCeti.RealComplexification

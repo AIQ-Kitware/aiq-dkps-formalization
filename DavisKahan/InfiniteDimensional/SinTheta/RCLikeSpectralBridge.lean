@@ -45,6 +45,7 @@ namespace DavisKahan
 namespace ExactSinTheta
 
 open scoped InnerProductSpace
+open TauCeti.DavisKahan.Sylvester
 
 universe u v
 

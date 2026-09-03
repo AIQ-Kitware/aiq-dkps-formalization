@@ -30,6 +30,7 @@ namespace DavisKahan
 open TauCeti.DavisKahanExt
 open TauCeti.DavisKahan
 open TauCeti.DavisKahan.ExactSinTheta
+open TauCeti.DavisKahan.Sylvester
 
 universe v
 

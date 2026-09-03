@@ -25,6 +25,7 @@ namespace TauCeti
 namespace DavisKahanExt
 
 open DavisKahan.Foundation
+open TauCeti.DavisKahan.Sylvester
 
 /-- A nonempty bounded-above ordered lower set admits a separating supremum
 center. -/

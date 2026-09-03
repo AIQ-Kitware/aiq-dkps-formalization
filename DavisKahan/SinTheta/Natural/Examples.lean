@@ -25,6 +25,8 @@ namespace DavisKahan
 namespace ExactSinTheta
 namespace NaturalExamples
 
+open TauCeti.DavisKahan.Sylvester
+
 noncomputable section
 
 open TauCeti.DavisKahanExt
