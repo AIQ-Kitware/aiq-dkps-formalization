@@ -295,11 +295,11 @@ theorem proposition3_1_positivity_characterization
     -- Accretivity fixes the square-root branch.
     have hre : ∀ x, 0 ≤ Complex.re ⟪T x, x⟫_ℂ := by
       intro x
-      have h := DavisKahan.re_inner_paperDirectRotation_nonneg U V T hT x
+      have h := DavisKahan.re_inner_directRotation_nonneg U V T hT x
       rwa [← inner_re_symm (𝕜 := ℂ) (T x) x, RCLike.re_eq_complex_re] at h
     exact DavisKahan.spectraDirectRotation_unique_of_sq U V hacute T hunitary hsq hre
   · rintro rfl
-    exact DavisKahan.spectraDirectRotation_isPaperDirectRotation U V hacute
+    exact DavisKahan.spectraDirectRotation_isDirectRotation U V hacute
 
 end Complex
 

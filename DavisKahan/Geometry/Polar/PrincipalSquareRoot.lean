@@ -523,7 +523,7 @@ section PrincipalSquareRoot
 variable (T : H →L[ℂ] H)
 
 /-- **The Hermitian part of a direct rotation is a positive operator.** -/
-theorem nonneg_add_star_of_isPaperDirectRotation (hT : IsDirectRotation U V T)
+theorem nonneg_add_star_of_isDirectRotation (hT : IsDirectRotation U V T)
     (hsource_sa : IsSelfAdjoint (projection U * T * projection U))
     (hcomplement_sa :
       IsSelfAdjoint (complementaryProjection U * T * complementaryProjection U)) :
@@ -714,7 +714,7 @@ theorem proposition3_3_principalSquareRoot_forward
       T '' (halmosSourceDefect U V : Set H) = (halmosTargetDefect U V : Set H) := by
   have hsq := sq_eq_spectraReflectionProduct U V T hT.unitary_mem hT.intertwines
     hsource_sa hcomplement_sa hT.crossed_blocks
-  have hpos := nonneg_add_star_of_isPaperDirectRotation U V T hT hsource_sa hcomplement_sa
+  have hpos := nonneg_add_star_of_isDirectRotation U V T hT hsource_sa hcomplement_sa
   have hspec := spectrum_re_nonneg_of_nonneg_add_star T hT.unitary_mem hpos
   exact ⟨⟨hT.unitary_mem, hsq, hspec⟩,
     crossedDefect_image_of_unitary_sq U V T hT.unitary_mem hsq hT.intertwines⟩

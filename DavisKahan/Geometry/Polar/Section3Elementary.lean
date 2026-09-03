@@ -337,7 +337,7 @@ theorem spectraDirectRotation_crossed_blocks
     _ = -star (P * D * Pc) := by rw [hstar]
 
 /-- The acute Spectra direct rotation satisfies the paper's block definition. -/
-theorem spectraDirectRotation_isPaperDirectRotation
+theorem spectraDirectRotation_isDirectRotation
     (U V : Submodule ℂ H) [U.HasOrthogonalProjection]
     [V.HasOrthogonalProjection] (hacute : IsUniformlyAcute U V) :
     IsDirectRotation U V (spectraDirectRotation U V hacute) where

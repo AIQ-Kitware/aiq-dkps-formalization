@@ -6038,7 +6038,7 @@
     "angle_family_finding": "Checked directly, 2026-09-02. The `paper*` angle operators are the functional calculus of the angle: `paperCosAngleOperatorC = cfc Real.cos (paperAngleOperatorC U V)`, and similarly for sin, tan, sin 2, tan 2. The existing UNPREFIXED names are different constructions built on the directed sine: `cosAngleOperatorC = modulus (P_V ∘L P_U)`, `sinTwoAngleOperatorC = 2 • (sinAngleOperatorDirectedC * cosAngleOperatorC)`, and `tanAngleOperatorC` composes `sinAngleOperatorDirectedC` with an inverse cosine equivalence and additionally takes an acuteness hypothesis. So the unqualified names currently denote the directed objects while the canonical functional-calculus objects carry a provenance prefix. That is the inconsistency the collision exposed, and it is why the resolution is to normalise the family rather than rename around it.",
     "cited_names_present": "All 52 declarations named in the amended families were confirmed to exist in the tree before being written here.",
     "embedded_token_repairs_required": 7,
-    "embedded_token_note": "CORRECTED 2026-09-02. The original census matched only LEADING `paper`/`Paper`/`IsPaper`, so declaration names carrying the token after an underscore or inside camelCase were never enumerated. A follow-up census found 144 such names, 96 of them mechanically stale -- the object had been renamed by stage A and the theorem name had not, so `adjoint_paperBlockCompression` stated a fact about `blockCompression`. This field previously reported no embedded-token residue; that claim was false, and it was false because the census did not look. 83 of the 96 were repaired on 2026-09-02; the remaining 13 are blocked on the stage B angle family and the stage C Hilbert-Schmidt decision, and will fall out of those.",
+    "embedded_token_note": "CORRECTED 2026-09-02. The original census matched only LEADING `paper`/`Paper`/`IsPaper`, so declaration names carrying the token after an underscore or inside camelCase were never enumerated. A follow-up census found 144 such names, 96 of them mechanically stale -- the object had been renamed by stage A and the theorem name had not, so `adjoint_paperBlockCompression` stated a fact about `blockCompression`. This field previously reported no embedded-token residue; that claim was false, and it was false because the census did not look. 83 of the 96 were repaired on 2026-09-02; the remaining 13 are blocked on the stage B angle family and the stage C Hilbert-Schmidt decision, and will fall out of those. A further 9 names were reached on 2026-09-02 by deriving inner tokens from `Is`/`Has`-prefixed renames; see the `stage_a_inner_token_residue` log entry.",
     "embedded_token_remaining_after_repair": 13
   },
   "not_yet_decided": [
@@ -6519,6 +6519,18 @@
         "DavisKahan/Sources/DavisKahan1970/Section8/PaperSurface.lean": "Presentation.lean"
       },
       "review_marks": "`git mv` plus a by-hand path rewrite in dev/audit/FILE-CHECKLIST.md, because `aiq-lean source checklist` does not carry marks across a rename. 711 marks before and after, and the one `[x]` on the angle module survived on its new path."
+    },
+    {
+      "on": "2026-09-02",
+      "stage": "stage_a_inner_token_residue",
+      "applied": 9,
+      "map": {
+        "PaperDirectRotation": "DirectRotation",
+        "paperDirectRotation": "directRotation"
+      },
+      "finding": "A SECOND shape gap, this time in the follow-up census rather than the original. Stage A renamed the structure `IsPaperDirectRotation` to `IsDirectRotation`, and the residue census looked for that whole key inside other names. But the names that were stale embed only the inner token: `crossedDefectEquivOfPaperDirectRotation` states a fact about `IsDirectRotation`, and contains `PaperDirectRotation`, not `IsPaperDirectRotation`. Deriving the inner token from each applied rename that differs only by an `Is`/`Has` prefix reaches them.",
+      "boundary_note": "These are camelCase embeddings, so the character before the token is a letter and an underscore-aware word boundary rejects them. The literal token is unambiguous because it starts with a capital, so it is substituted directly. Two boundary rules were wrong before this one: `\\b` misses `_paperX`, and the underscore-aware rule misses `OfPaperX`. Each was found by checking the output, not by reasoning about the regex.",
+      "collisions": 0
     }
   ],
   "stage_status": {

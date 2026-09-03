@@ -646,7 +646,11 @@
     }
   },
   "applied_from_this_document": [
-    "2026-09-02: the 83 mechanically stale `paper` names with computable targets, out of the 96 identified. The other 13 embed a stage-B angle object or a stage-C Hilbert-Schmidt object and resolve with those stages."
+    "2026-09-02: 83 of the 96 mechanically stale `paper` names with computable targets.",
+    "2026-09-02: the angle family, atomically -- 90 declarations, two-sided.",
+    "2026-09-02: the selected-branch tan 2Theta family -- 5 declarations.",
+    "2026-09-02: the plane migration and 8 module renames.",
+    "2026-09-02: 9 more names reached by deriving inner tokens from `Is`/`Has`-prefixed renames."
   ],
   "reviewer_order": [
     "finish the mechanically stale `paper` theorem names (done, 83 of 96)",
@@ -655,5 +659,36 @@
     "the Hilbert-Schmidt and plane migrations",
     "module/file names, once the declaration API is settled",
     "only then revisit the broader `source` and scaffolding census"
-  ]
+  ],
+  "paper_campaign_end_state": {
+    "remaining_paper_declarations": 51,
+    "blocked_on_the_hilbert_schmidt_carrier_decision": 28,
+    "remaining_for_review": 23,
+    "needs_review_list": [
+      "HasPaperCommonDomain",
+      "IsometricSinThetaPaperData",
+      "Question10_4_directed_functionalChange_paperForm_complex",
+      "Question10_4_directed_functionalChange_paperForm_real",
+      "RealIsometricSinThetaPaperData",
+      "approximationEnergy_eq_paperEnergy_toReal_of_rank_le",
+      "corollary3_2_paperQuarterTurn",
+      "corollary3_2_paperQuarterTurn_symm",
+      "paperDirectedSinAngleOperatorC",
+      "paperSinAngleOperatorC",
+      "real_freeBeam_paper_eigenvalue_indexing_source",
+      "reflectionTangentCorner_reflection_eq_paperTanTwoCorner",
+      "reflectionTangentCorner_same_paperTanTwoDirectedCorner",
+      "sinTheta_generalized_paperData_complex",
+      "sinTheta_generalized_paperData_real",
+      "sinTheta_paperData_complex",
+      "sinTheta_paperData_real",
+      "tanTwoTheta_directed_unboundedResidual_reducing_paperCorner_symmetricNorming_complex",
+      "unboundedSinThetaDataOfPaperCommonCore",
+      "unboundedSinThetaDataOfPaperCommonCore_residual",
+      "unboundedSinThetaDataOfPaperCommonDomain",
+      "unboundedSinThetaDataOfPaperCommonDomain_hasCommonDomain",
+      "unboundedSinThetaDataOfPaperCommonDomain_residual"
+    ],
+    "shape": "What is left is not residue. `sinTheta_paperData_complex` and `Question10_4_..._paperForm_real` are the presentation family and wait on the marker decision; `paperSinAngleOperatorC` and `paperDirectedSinAngleOperatorC` are the stage C sine duplicates, which are deletes rather than renames; `unboundedSinThetaDataOfPaperCommonDomain` and `HasPaperCommonDomain` are one cluster needing a reading of what `paper` qualifies; and three tan 2Theta corner names sit on the open directed endpoint."
+  }
 }
