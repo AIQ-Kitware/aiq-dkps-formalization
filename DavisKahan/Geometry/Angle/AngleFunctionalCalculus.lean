@@ -126,19 +126,6 @@ theorem cfc_sin_angleOperatorC (U V : Submodule ℂ E)
       exact Real.sin_arcsin (by linarith [hxi.1]) (by linarith [hxi.2])
     _ = sinAngleOperatorC U V := cfc_id' ℝ _
 
-/-- The paper's notation `sin Theta` interpreted literally by applying sine to
-the Hermitian angle. -/
-noncomputable def paperSinAngleOperatorC (U V : Submodule ℂ E)
-    [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] : E →L[ℂ] E :=
-  cfc Real.sin (angleOperatorC U V)
-
-/-- The paper's complex sine-angle operator agrees with the canonical one. -/
-@[simp]
-theorem sinAngleOperatorC_eq (U V : Submodule ℂ E)
-    [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] :
-    paperSinAngleOperatorC U V = sinAngleOperatorC U V :=
-  cfc_sin_angleOperatorC U V
-
 /-- The ambient `cos Θ`, obtained by applying `cos` to the Hermitian operator
 angle.  Unlike the directed `directedCosAngleOperatorC`, which is the modulus of
 `P_V P_U`, this carries every principal angle of the pair. -/
@@ -161,12 +148,12 @@ theorem spectrum_angleOperatorC_subset_Icc (U V : Submodule ℂ E)
     Real.arcsin_le_pi_div_two x⟩
 
 /-- Functional-calculus Pythagoras for the literal angle. -/
-theorem sinAngleOperatorC_sq_add_directedCosAngleOperatorC_sq (U V : Submodule ℂ E)
+theorem sinAngleOperatorC_sq_add_cosAngleOperatorC_sq (U V : Submodule ℂ E)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] :
-    paperSinAngleOperatorC U V * paperSinAngleOperatorC U V +
+    sinAngleOperatorC U V * sinAngleOperatorC U V +
       cosAngleOperatorC U V * cosAngleOperatorC U V =
         ContinuousLinearMap.id ℂ E := by
-  rw [paperSinAngleOperatorC, cosAngleOperatorC,
+  rw [← cfc_sin_angleOperatorC, cosAngleOperatorC,
     ← cfc_mul Real.sin Real.sin (angleOperatorC U V)
       Real.continuous_sin.continuousOn Real.continuous_sin.continuousOn,
     ← cfc_mul Real.cos Real.cos (angleOperatorC U V)

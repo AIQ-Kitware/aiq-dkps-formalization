@@ -261,8 +261,8 @@ theorem sinTheta_wholeSpace_symmetricNorming
       (TauCeti.DavisKahanExt.PartialMap.boundedReducingBlock B V hV)
       (TauCeti.DavisKahanExt.PartialMap.boundedReducingBlockCompl A U hU) δ)
     (hMem : N.Mem (B - A)) :
-    N.Mem (paperSinAngleOperatorC U V) ∧
-      δ * N.gauge (paperSinAngleOperatorC U V) ≤ N.gauge (B - A) := by
+    N.Mem (sinAngleOperatorC U V) ∧
+      δ * N.gauge (sinAngleOperatorC U V) ≤ N.gauge (B - A) := by
   sorry
 
 /-- Theorem 6.3 directed `tan Theta` theorem on arbitrary complete complex

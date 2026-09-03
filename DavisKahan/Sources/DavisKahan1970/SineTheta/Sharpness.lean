@@ -48,7 +48,7 @@ def planarModelE0 : PlanarModelSpace 𝕜 :=
   EuclideanSpace.single (0 : Fin 2) 1
 
 /-- Second standard vector of the planar equality model. -/
-def planeE1 : PlanarModelSpace 𝕜 :=
+def planarModelE1 : PlanarModelSpace 𝕜 :=
   EuclideanSpace.single (1 : Fin 2) 1
 
 /-- Scalar-to-vector map used for all one-dimensional model blocks. -/
@@ -64,14 +64,14 @@ noncomputable def planarExactMap :
 /-- Complementary spectral inclusion. -/
 noncomputable def planarComplementMap :
     𝕜 →L[𝕜] PlanarModelSpace 𝕜 :=
-  scalarColumn planeE1
+  scalarColumn planarModelE1
 
 /-- Trial inclusion at angle `theta`. -/
 noncomputable def planarTrialMap (theta : ℝ) :
     𝕜 →L[𝕜] PlanarModelSpace 𝕜 :=
   scalarColumn
     ((Real.cos theta : 𝕜) • planarModelE0 +
-      (Real.sin theta : 𝕜) • planeE1)
+      (Real.sin theta : 𝕜) • planarModelE1)
 
 /-- Two-level self-adjoint operator with gap `delta`. -/
 noncomputable def planarAmbient (delta : ℝ) :
@@ -99,8 +99,8 @@ theorem norm_planarModelE0 : ‖planarModelE0 (𝕜 := 𝕜)‖ = 1 := by
 
 /-- The second model vector is a unit vector. -/
 @[simp]
-theorem norm_planeE1 : ‖planeE1 (𝕜 := 𝕜)‖ = 1 := by
-  simp [planeE1]
+theorem norm_planarModelE1 : ‖planarModelE1 (𝕜 := 𝕜)‖ = 1 := by
+  simp [planarModelE1]
 
 /-- The adjoint of a scalar column reads off the corresponding coordinate.
 
@@ -138,7 +138,7 @@ theorem planarExactMap_apply (z : 𝕜) :
 /-- Pointwise formula for the complement embedding: `z ↦ z • e₁`. -/
 @[simp]
 theorem planarComplementMap_apply (z : 𝕜) :
-    planarComplementMap (𝕜 := 𝕜) z = z • planeE1 := rfl
+    planarComplementMap (𝕜 := 𝕜) z = z • planarModelE1 := rfl
 
 /-- Pointwise formula for the trial embedding: `z` times the unit vector at angle
 `theta` in the `e₀`-`e₁` frame. -/
@@ -146,7 +146,7 @@ theorem planarComplementMap_apply (z : 𝕜) :
 theorem planarTrialMap_apply (theta : ℝ) (z : 𝕜) :
     planarTrialMap (𝕜 := 𝕜) theta z =
       z • ((Real.cos theta : 𝕜) • planarModelE0 +
-        (Real.sin theta : 𝕜) • planeE1) := rfl
+        (Real.sin theta : 𝕜) • planarModelE1) := rfl
 
 /-- The adjoint of the exact embedding reads off the zeroth coordinate. -/
 @[simp]
@@ -168,32 +168,32 @@ theorem planarTrialMap_isometry (theta : ℝ) :
     ContinuousLinearMap.smulRight_apply, ContinuousLinearMap.id_apply]
   rw [norm_smul]
   have horth :
-      ⟪planarModelE0 (𝕜 := 𝕜), planeE1 (𝕜 := 𝕜)⟫_𝕜 = 0 := by
-    simp [planarModelE0, planeE1, EuclideanSpace.inner_single_left]
+      ⟪planarModelE0 (𝕜 := 𝕜), planarModelE1 (𝕜 := 𝕜)⟫_𝕜 = 0 := by
+    simp [planarModelE0, planarModelE1, EuclideanSpace.inner_single_left]
   have horthSmul :
       ⟪(Real.cos theta : 𝕜) • planarModelE0 (𝕜 := 𝕜),
-        (Real.sin theta : 𝕜) • planeE1 (𝕜 := 𝕜)⟫_𝕜 = 0 := by
+        (Real.sin theta : 𝕜) • planarModelE1 (𝕜 := 𝕜)⟫_𝕜 = 0 := by
     rw [inner_smul_left, inner_smul_right, horth]
     ring
   have hunitSq :
       ‖(Real.cos theta : 𝕜) • planarModelE0 (𝕜 := 𝕜) +
-          (Real.sin theta : 𝕜) • planeE1 (𝕜 := 𝕜)‖ ^ 2 = 1 := by
+          (Real.sin theta : 𝕜) • planarModelE1 (𝕜 := 𝕜)‖ ^ 2 = 1 := by
     -- Pythagoras is stated in `mul_self` form, so the square is opened first.
     have hpyth :=
       norm_add_sq_eq_norm_sq_add_norm_sq_of_inner_eq_zero _ _ horthSmul
-    simp only [norm_smul, norm_smul, norm_planarModelE0, norm_planeE1, mul_one,
+    simp only [norm_smul, norm_smul, norm_planarModelE0, norm_planarModelE1, mul_one,
       mul_one, RCLike.norm_ofReal, RCLike.norm_ofReal] at hpyth
     rw [sq, hpyth, ← sq, ← sq, sq_abs, sq_abs]
     exact Real.cos_sq_add_sin_sq theta
   have hunit :
       ‖(Real.cos theta : 𝕜) • planarModelE0 (𝕜 := 𝕜) +
-          (Real.sin theta : 𝕜) • planeE1 (𝕜 := 𝕜)‖ = 1 := by
+          (Real.sin theta : 𝕜) • planarModelE1 (𝕜 := 𝕜)‖ = 1 := by
     calc
       ‖(Real.cos theta : 𝕜) • planarModelE0 (𝕜 := 𝕜) +
-            (Real.sin theta : 𝕜) • planeE1 (𝕜 := 𝕜)‖ =
+            (Real.sin theta : 𝕜) • planarModelE1 (𝕜 := 𝕜)‖ =
           Real.sqrt
             (‖(Real.cos theta : 𝕜) • planarModelE0 (𝕜 := 𝕜) +
-              (Real.sin theta : 𝕜) • planeE1 (𝕜 := 𝕜)‖ ^ 2) :=
+              (Real.sin theta : 𝕜) • planarModelE1 (𝕜 := 𝕜)‖ ^ 2) :=
         (Real.sqrt_sq (norm_nonneg _)).symm
       _ = 1 := by rw [hunitSq, Real.sqrt_one]
   rw [hunit, mul_one]
@@ -214,10 +214,10 @@ theorem planar_exact_decomposition :
   · intro z
     simp [planarComplementMap, scalarColumn, norm_smul]
   · ext
-    simp [planeE1]
+    simp [planarModelE1]
   · ext x i
     fin_cases i <;>
-      simp [planarModelE0, planeE1]
+      simp [planarModelE0, planarModelE1]
 
 /-- Direct matrix calculation of the planar residual identity. -/
 theorem planar_residual_identity (delta theta : ℝ) :
@@ -229,7 +229,7 @@ theorem planar_residual_identity (delta theta : ℝ) :
   ext i
   fin_cases i <;>
     simp [planarAmbient, planarTrialOperator, planarResidual,
-      planarModelE0, planeE1, Matrix.toLpLin_apply,
+      planarModelE0, planarModelE1, Matrix.toLpLin_apply,
       mul_comm]
 
 /-- The projection residual is literally the rank-one sine block. -/
@@ -241,7 +241,7 @@ theorem planar_directedSine_identity (theta : ℝ) :
         planarSineBlock (𝕜 := 𝕜) theta := by
   ext i
   fin_cases i <;>
-    simp [planarSineBlock, planarModelE0, planeE1]
+    simp [planarSineBlock, planarModelE0, planarModelE1]
 
 /-- The complement inclusion is a norm-one rank-one map. -/
 theorem planarComplementMap_norm_rank :
@@ -250,7 +250,7 @@ theorem planarComplementMap_norm_rank :
   constructor
   · rw [planarComplementMap, scalarColumn,
       ContinuousLinearMap.norm_smulRight_apply,
-      ContinuousLinearMap.norm_id, one_mul, norm_planeE1]
+      ContinuousLinearMap.norm_id, one_mul, norm_planarModelE1]
   · exact (LinearMap.rank_le_domain
       (planarComplementMap (𝕜 := 𝕜)).toLinearMap).trans_eq (by simp)
 
@@ -327,39 +327,39 @@ having to unfold `EuclideanSpace` coordinates, where the simp set rewrites
 -/
 
 private theorem real_inner_e0_e1 :
-    ⟪planarModelE0 (𝕜 := ℝ), planeE1 (𝕜 := ℝ)⟫_ℝ = 0 := by
-  simp [planarModelE0, planeE1, EuclideanSpace.inner_single_left]
+    ⟪planarModelE0 (𝕜 := ℝ), planarModelE1 (𝕜 := ℝ)⟫_ℝ = 0 := by
+  simp [planarModelE0, planarModelE1, EuclideanSpace.inner_single_left]
 
 /-- Squared length of a combination of the two coordinate vectors. -/
 private theorem real_norm_sq_combo (a b : ℝ) :
-    ‖a • planarModelE0 (𝕜 := ℝ) + b • planeE1 (𝕜 := ℝ)‖ ^ 2 =
+    ‖a • planarModelE0 (𝕜 := ℝ) + b • planarModelE1 (𝕜 := ℝ)‖ ^ 2 =
       a ^ 2 + b ^ 2 := by
   have horth :
-      ⟪a • planarModelE0 (𝕜 := ℝ), b • planeE1 (𝕜 := ℝ)⟫_ℝ = 0 := by
+      ⟪a • planarModelE0 (𝕜 := ℝ), b • planarModelE1 (𝕜 := ℝ)⟫_ℝ = 0 := by
     rw [real_inner_smul_left, real_inner_smul_right, real_inner_e0_e1]
     ring
   have hpyth := norm_add_sq_eq_norm_sq_add_norm_sq_real horth
-  simp only [norm_smul, norm_smul, norm_planarModelE0, norm_planeE1, mul_one,
+  simp only [norm_smul, norm_smul, norm_planarModelE0, norm_planarModelE1, mul_one,
     mul_one, Real.norm_eq_abs, Real.norm_eq_abs] at hpyth
   rw [sq, hpyth, ← sq, ← sq, sq_abs, sq_abs]
 
 /-- The trial direction written in the coordinate frame. -/
 private theorem real_diff_eq_combo :
-    planarModelE0 (𝕜 := ℝ) - planeE1 (𝕜 := ℝ) =
-      (1 : ℝ) • planarModelE0 (𝕜 := ℝ) + (-1 : ℝ) • planeE1 (𝕜 := ℝ) := by
+    planarModelE0 (𝕜 := ℝ) - planarModelE1 (𝕜 := ℝ) =
+      (1 : ℝ) • planarModelE0 (𝕜 := ℝ) + (-1 : ℝ) • planarModelE1 (𝕜 := ℝ) := by
   rw [one_smul, neg_one_smul, sub_eq_add_neg]
 
 private theorem real_inner_diff_e0 :
-    ⟪planarModelE0 (𝕜 := ℝ) - planeE1 (𝕜 := ℝ),
+    ⟪planarModelE0 (𝕜 := ℝ) - planarModelE1 (𝕜 := ℝ),
       planarModelE0 (𝕜 := ℝ)⟫_ℝ = 1 := by
   rw [inner_sub_left]
-  simp [planarModelE0, planeE1, EuclideanSpace.inner_single_left]
+  simp [planarModelE0, planarModelE1, EuclideanSpace.inner_single_left]
 
 private theorem real_inner_diff_e1 :
-    ⟪planarModelE0 (𝕜 := ℝ) - planeE1 (𝕜 := ℝ),
-      planeE1 (𝕜 := ℝ)⟫_ℝ = -1 := by
+    ⟪planarModelE0 (𝕜 := ℝ) - planarModelE1 (𝕜 := ℝ),
+      planarModelE1 (𝕜 := ℝ)⟫_ℝ = -1 := by
   rw [inner_sub_left]
-  simp [planarModelE0, planeE1, EuclideanSpace.inner_single_left]
+  simp [planarModelE0, planarModelE1, EuclideanSpace.inner_single_left]
 
 /-- The perturbed operator of the counterexample: `diag(0, 1)`. -/
 noncomputable def counterexampleA :
@@ -378,7 +378,7 @@ noncomputable def counterexampleExact : Submodule ℝ (PlanarModelSpace ℝ) :=
 /-- Unit vector spanning the trial line in the printed counterexample. -/
 noncomputable def counterexampleTrialVector : (PlanarModelSpace ℝ) :=
   (1 / Real.sqrt 2) •
-    (planarModelE0 (𝕜 := ℝ) - planeE1 (𝕜 := ℝ))
+    (planarModelE0 (𝕜 := ℝ) - planarModelE1 (𝕜 := ℝ))
 
 /-- The trial subspace of the counterexample: the line spanned by the unit vector
 along `e₀ - e₁`, i.e. at `π/4` to the exact subspace. -/
@@ -417,13 +417,13 @@ private theorem starProjection_span_singleton_apply_of_norm_one
 theorem norm_counterexampleTrialVector :
     ‖counterexampleTrialVector‖ = 1 := by
   have hsqrt2 : 0 < Real.sqrt 2 := Real.sqrt_pos.2 (by norm_num)
-  have hdiffsq : ‖planarModelE0 (𝕜 := ℝ) - planeE1‖ ^ 2 = 2 := by
+  have hdiffsq : ‖planarModelE0 (𝕜 := ℝ) - planarModelE1‖ ^ 2 = 2 := by
     rw [real_diff_eq_combo, real_norm_sq_combo]
     norm_num
-  have hdiff : ‖planarModelE0 (𝕜 := ℝ) - planeE1‖ = Real.sqrt 2 := by
+  have hdiff : ‖planarModelE0 (𝕜 := ℝ) - planarModelE1‖ = Real.sqrt 2 := by
     calc
-      ‖planarModelE0 (𝕜 := ℝ) - planeE1‖ =
-          Real.sqrt (‖planarModelE0 (𝕜 := ℝ) - planeE1‖ ^ 2) :=
+      ‖planarModelE0 (𝕜 := ℝ) - planarModelE1‖ =
+          Real.sqrt (‖planarModelE0 (𝕜 := ℝ) - planarModelE1‖ ^ 2) :=
         (Real.sqrt_sq (norm_nonneg _)).symm
       _ = Real.sqrt 2 := by rw [hdiffsq]
   rw [counterexampleTrialVector, norm_smul, hdiff,
@@ -448,9 +448,9 @@ theorem counterexampleExact_starProjection_e0 :
 /-- The exact subspace annihilates `e₁`, which is orthogonal to it. -/
 @[simp]
 theorem counterexampleExact_starProjection_e1 :
-    counterexampleExact.starProjection (planeE1 (𝕜 := ℝ)) = 0 := by
-  have h : counterexampleExact.starProjection (planeE1 (𝕜 := ℝ)) =
-      ⟪planarModelE0 (𝕜 := ℝ), planeE1 (𝕜 := ℝ)⟫_ℝ •
+    counterexampleExact.starProjection (planarModelE1 (𝕜 := ℝ)) = 0 := by
+  have h : counterexampleExact.starProjection (planarModelE1 (𝕜 := ℝ)) =
+      ⟪planarModelE0 (𝕜 := ℝ), planarModelE1 (𝕜 := ℝ)⟫_ℝ •
         planarModelE0 (𝕜 := ℝ) :=
     starProjection_span_singleton_apply_of_norm_one _ _ norm_planarModelE0
   rw [h, real_inner_e0_e1, zero_smul]
@@ -469,7 +469,7 @@ theorem counterexampleTrial_starProjection_apply (x : (PlanarModelSpace ℝ)) :
 theorem counterexampleTrial_starProjection_e0 :
     counterexampleTrial.starProjection (planarModelE0 (𝕜 := ℝ)) =
       (1 / 2 : ℝ) •
-        (planarModelE0 (𝕜 := ℝ) - planeE1 (𝕜 := ℝ)) := by
+        (planarModelE0 (𝕜 := ℝ) - planarModelE1 (𝕜 := ℝ)) := by
   have hsqrt2 : 0 < Real.sqrt 2 := Real.sqrt_pos.2 (by norm_num)
   have hsqrt2sq : Real.sqrt 2 ^ 2 = 2 :=
     Real.sq_sqrt (by norm_num)
@@ -489,15 +489,15 @@ theorem counterexampleTrial_starProjection_e0 :
 /-- Value of the trial projection at `e₁`: the `π/4` angle splits it evenly. -/
 @[simp]
 theorem counterexampleTrial_starProjection_e1 :
-    counterexampleTrial.starProjection (planeE1 (𝕜 := ℝ)) =
+    counterexampleTrial.starProjection (planarModelE1 (𝕜 := ℝ)) =
       (-1 / 2 : ℝ) •
-        (planarModelE0 (𝕜 := ℝ) - planeE1 (𝕜 := ℝ)) := by
+        (planarModelE0 (𝕜 := ℝ) - planarModelE1 (𝕜 := ℝ)) := by
   have hsqrt2 : 0 < Real.sqrt 2 := Real.sqrt_pos.2 (by norm_num)
   have hsqrt2sq : Real.sqrt 2 ^ 2 = 2 :=
     Real.sq_sqrt (by norm_num)
   rw [counterexampleTrial_starProjection_apply]
   have hinner :
-      ⟪counterexampleTrialVector, planeE1 (𝕜 := ℝ)⟫_ℝ =
+      ⟪counterexampleTrialVector, planarModelE1 (𝕜 := ℝ)⟫_ℝ =
         -1 / Real.sqrt 2 := by
     rw [counterexampleTrialVector, real_inner_smul_left,
       real_inner_diff_e1]
@@ -514,7 +514,7 @@ theorem counterexample_projectionDifference_e0 :
     (counterexampleExact.starProjection -
         counterexampleTrial.starProjection) (planarModelE0 (𝕜 := ℝ)) =
       (1 / 2 : ℝ) • planarModelE0 (𝕜 := ℝ) +
-        (1 / 2 : ℝ) • planeE1 (𝕜 := ℝ) := by
+        (1 / 2 : ℝ) • planarModelE1 (𝕜 := ℝ) := by
   rw [sub_apply,
     counterexampleExact_starProjection_e0,
     counterexampleTrial_starProjection_e0]
@@ -523,9 +523,9 @@ theorem counterexample_projectionDifference_e0 :
 /-- The projection difference on the second coordinate vector. -/
 theorem counterexample_projectionDifference_e1 :
     (counterexampleExact.starProjection -
-        counterexampleTrial.starProjection) (planeE1 (𝕜 := ℝ)) =
+        counterexampleTrial.starProjection) (planarModelE1 (𝕜 := ℝ)) =
       (1 / 2 : ℝ) • planarModelE0 (𝕜 := ℝ) +
-        (-(1 / 2) : ℝ) • planeE1 (𝕜 := ℝ) := by
+        (-(1 / 2) : ℝ) • planarModelE1 (𝕜 := ℝ) := by
   rw [sub_apply,
     counterexampleExact_starProjection_e1,
     counterexampleTrial_starProjection_e1]
@@ -534,19 +534,19 @@ theorem counterexample_projectionDifference_e1 :
 /-- The printed perturbation on the first coordinate vector. -/
 theorem counterexampleH_e0 :
     counterexampleH (planarModelE0 (𝕜 := ℝ)) =
-      (1 : ℝ) • planarModelE0 (𝕜 := ℝ) + (1 : ℝ) • planeE1 (𝕜 := ℝ) := by
+      (1 : ℝ) • planarModelE0 (𝕜 := ℝ) + (1 : ℝ) • planarModelE1 (𝕜 := ℝ) := by
   ext i
   fin_cases i <;>
-    simp [counterexampleH, planarModelE0, planeE1,
+    simp [counterexampleH, planarModelE0, planarModelE1,
       Matrix.toLpLin_apply]
 
 /-- The printed perturbation on the second coordinate vector. -/
 theorem counterexampleH_e1 :
-    counterexampleH (planeE1 (𝕜 := ℝ)) =
-      (1 : ℝ) • planarModelE0 (𝕜 := ℝ) + (0 : ℝ) • planeE1 (𝕜 := ℝ) := by
+    counterexampleH (planarModelE1 (𝕜 := ℝ)) =
+      (1 : ℝ) • planarModelE0 (𝕜 := ℝ) + (0 : ℝ) • planarModelE1 (𝕜 := ℝ) := by
   ext i
   fin_cases i <;>
-    simp [counterexampleH, planarModelE0, planeE1,
+    simp [counterexampleH, planarModelE0, planarModelE1,
       Matrix.toLpLin_apply]
 
 /-- The real complexified sine operator has the same paper square norm as the
@@ -597,7 +597,7 @@ theorem counterexample_sine_square_norm :
     (‖(counterexampleExact.starProjection -
           counterexampleTrial.starProjection) (planarModelE0 (𝕜 := ℝ))‖ ^ 2 +
       ‖(counterexampleExact.starProjection -
-          counterexampleTrial.starProjection) (planeE1 (𝕜 := ℝ))‖ ^ 2) = 1
+          counterexampleTrial.starProjection) (planarModelE1 (𝕜 := ℝ))‖ ^ 2) = 1
   rw [counterexample_projectionDifference_e0,
     counterexample_projectionDifference_e1,
     real_norm_sq_combo, real_norm_sq_combo]
@@ -614,7 +614,7 @@ theorem counterexample_perturbation_square_norm :
   simp only [EuclideanSpace.basisFun_apply]
   change Real.sqrt
     (‖counterexampleH (planarModelE0 (𝕜 := ℝ))‖ ^ 2 +
-      ‖counterexampleH (planeE1 (𝕜 := ℝ))‖ ^ 2) = Real.sqrt 3
+      ‖counterexampleH (planarModelE1 (𝕜 := ℝ))‖ ^ 2) = Real.sqrt 3
   rw [counterexampleH_e0, counterexampleH_e1,
     real_norm_sq_combo, real_norm_sq_combo]
   norm_num

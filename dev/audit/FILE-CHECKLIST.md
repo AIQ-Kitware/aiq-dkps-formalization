@@ -954,7 +954,7 @@ Mark a file complete only after its findings are recorded or fixed.
 - [ ] `DavisKahan/Sources/DavisKahan1970/Section9/FreeBeamOrthogonality.lean` — 206 lines · Lean source
 - [x] `DavisKahan/Sources/DavisKahan1970/Section9/FreeBeamAnalyticFoundation.lean` — 199 lines · Lean source
 - [x] `DavisKahan/Sources/DavisKahan1970/Section9/FreeBeamRootLocalization.lean` — 195 lines · Lean source
-- [ ] `DavisKahan/Sources/DavisKahan1970/Section9/PaperNumericalResults.lean` — 190 lines · Lean source
+- [ ] `DavisKahan/Sources/DavisKahan1970/Section9/NumericalResults.lean` — 190 lines · Lean source
 - [ ] `DavisKahan/Sources/DavisKahan1970/Section8/CompressionApproximation.lean` — 189 lines · Lean source
 - [x] `DavisKahan/Sources/DavisKahan1970/PartIII.lean` — 181 lines · Lean source
 - [ ] `DavisKahan/Sources/DavisKahan1970/Section9/RealModel.lean` — 180 lines · Lean source

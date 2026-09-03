@@ -2,7 +2,7 @@
   "schema_version": 1,
   "status": "partially_applied",
   "generated_on": "2026-09-02",
-  "purpose": "A census of declaration names in DavisKahan and ForTauCeti that are motivated by something other than the mathematics, and a proposal for each. Nothing here is applied. It is the companion to the `paper`-prefix proposal, whose stage A is applied, and it exists because that campaign proved the value of censusing before renaming: the first census had a shape gap that a review caught only after the fact.",
+  "purpose": "A census of declaration names in DavisKahan and ForTauCeti motivated by something other than the mathematics. The `paper`-residue family HAS BEEN APPLIED; see `applied_from_this_document`. The `source` and scaffolding families are PROPOSALS ONLY and none of them has been applied -- the `source-provenance` family is explicitly not approved, because a reviewer produced a counterexample to the heuristic that generated it.",
   "policy": "A permanent declaration name describes the mathematical object, or the hypotheses and scope that distinguish it from a neighbouring statement. Provenance -- which paper, which section, which campaign -- belongs in namespaces, modules, docstrings and census metadata. THE ONE SANCTIONED EXCEPTION is a declaration that exists purely for presentation: a wrapper that bundles arguments, or restates a theorem in display form, with no new mathematical content. Such a declaration should say that it is a presentation, because that is the true reason it exists. The repository already has this concept: `presentation_wrapper` is an accepted supporting-evidence role in the result inventory, used on ten declarations.",
   "method": "All 11048 declaration heads in `DavisKahan/` and `ForTauCeti/` were parsed and tokenised (underscore segments, then camelCase words), giving 1274 distinct tokens. Tokens that could indicate provenance, review vocabulary, campaign history or scaffolding were checked against their actual declarations rather than judged from the token alone -- which is what separated the genuine mathematics below from the renames. Two first-draft classifications were wrong and are recorded rather than quietly fixed: a `_source_` regex swept in `continuous_re_source` (`Continuous (re : Eℂ → E)`, domain-side) and `compress_source_eq`, so provenance is now decided by LOCATION under `Sources/DavisKahan1970/` plus a result tag, not by the token; and `Bridge` was miscalled scaffolding. Both are the same failure the `paper` census made -- trusting a token to mean one thing.",
   "summary": {
@@ -650,7 +650,8 @@
     "2026-09-02: the angle family, atomically -- 90 declarations, two-sided.",
     "2026-09-02: the selected-branch tan 2Theta family -- 5 declarations.",
     "2026-09-02: the plane migration and 8 module renames.",
-    "2026-09-02: 9 more names reached by deriving inner tokens from `Is`/`Has`-prefixed renames."
+    "2026-09-02: 9 more names reached by deriving inner tokens from `Is`/`Has`-prefixed renames.",
+    "2026-09-02: deleted the two sine `paper*` aliases, renamed `planeE1` to `planarModelE1`, and renamed `PaperNormFanDominance.lean` and `Section9/PaperNumericalResults.lean`."
   ],
   "reviewer_order": [
     "finish the mechanically stale `paper` theorem names (done, 83 of 96)",
@@ -661,9 +662,9 @@
     "only then revisit the broader `source` and scaffolding census"
   ],
   "paper_campaign_end_state": {
-    "remaining_paper_declarations": 51,
+    "remaining_paper_declarations": 49,
     "blocked_on_the_hilbert_schmidt_carrier_decision": 28,
-    "remaining_for_review": 23,
+    "remaining_for_review": 21,
     "needs_review_list": [
       "HasPaperCommonDomain",
       "IsometricSinThetaPaperData",
@@ -689,6 +690,6 @@
       "unboundedSinThetaDataOfPaperCommonDomain_hasCommonDomain",
       "unboundedSinThetaDataOfPaperCommonDomain_residual"
     ],
-    "shape": "What is left is not residue. `sinTheta_paperData_complex` and `Question10_4_..._paperForm_real` are the presentation family and wait on the marker decision; `paperSinAngleOperatorC` and `paperDirectedSinAngleOperatorC` are the stage C sine duplicates, which are deletes rather than renames; `unboundedSinThetaDataOfPaperCommonDomain` and `HasPaperCommonDomain` are one cluster needing a reading of what `paper` qualifies; and three tan 2Theta corner names sit on the open directed endpoint."
+    "shape": "What is left is not residue. 28 are the Hilbert-Schmidt family, parked as an API migration. Of the other 21, the paperData/paperForm names are the presentation family awaiting the marker decision, and the rest are two small clusters -- the unboundedSinThetaDataOfPaperCommonDomain/HasPaperCommonDomain cluster and three tan 2Theta corner names sitting on the open directed endpoint -- that need a reading rather than a substitution. The only two Paper-named modules left, Sylvester/PaperHilbertSchmidt.lean and Sylvester/PaperOperatorNorm.lean, are tied to the same Hilbert-Schmidt decision."
   }
 }
