@@ -23,6 +23,8 @@ namespace FreeBeam
 namespace Model
 namespace Real
 
+open TauCeti.DavisKahan.Sylvester
+
 noncomputable section
 
 /-- The real `L²(0,1]` of the free-beam model. -/

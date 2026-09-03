@@ -26,6 +26,7 @@ namespace DavisKahan
 namespace ExactSinTheta
 
 open scoped InnerProductSpace
+open TauCeti.DavisKahan.Sylvester
 open TauCeti.RealComplexification
 -- The complexification of a bounded operator sits under the foundation namespace.
 

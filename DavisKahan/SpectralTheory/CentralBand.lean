@@ -64,6 +64,8 @@ open Set
 namespace TauCeti
 namespace DavisKahan
 
+open TauCeti.DavisKahan.Sylvester
+
 open DavisKahanExt
 open TauCeti.DavisKahan.Foundation
 

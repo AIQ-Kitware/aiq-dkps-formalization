@@ -54,6 +54,8 @@ namespace TauCeti
 namespace DavisKahan
 namespace ExactSinTheta
 
+open TauCeti.DavisKahan.Sylvester
+
 open scoped InnerProductSpace BigOperators ENNReal
 
 

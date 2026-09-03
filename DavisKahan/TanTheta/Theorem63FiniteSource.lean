@@ -47,6 +47,7 @@ namespace DavisKahan
 namespace TanTheta
 
 open ExactSinTheta
+open TauCeti.DavisKahan.Sylvester
 open Module (finrank)
 
 universe u v

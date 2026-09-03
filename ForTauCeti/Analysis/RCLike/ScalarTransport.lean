@@ -67,7 +67,7 @@ no scalars — it renames the field.
 * Extraction class: **new**.  It depends on nothing outside Mathlib, and is the
   reason the two capability classes
   `ContinuousLinearMap.HasMinMaxLowerBoundEverywhere` and
-  `TauCeti.DavisKahan.ExactSinTheta.HasUnboundedSylvesterKyFan` stopped being
+  `TauCeti.DavisKahan.Sylvester.HasUnboundedSylvesterKyFan` stopped being
   hypotheses.
 * Namespace: `TauCeti`, per `ForTauCeti/README.md` section 2.
 * `@[expose]` on ten definitional carriers, each measured load-bearing by

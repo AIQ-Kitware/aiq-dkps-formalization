@@ -25,6 +25,7 @@ lake env lean DavisKahan/Sources/DavisKahan1970/Audits/ResultSemanticSurface.lea
 -/
 
 namespace TauCeti.DavisKahan1970.Audits
+open TauCeti.DavisKahan.Sylvester
 
 /-! ### Exact audit wrappers for stronger reusable theorem surfaces
 
@@ -85,9 +86,9 @@ theorem theorem5_2_real_ordered_sourceAudit
     (hEq : TauCeti.LinearPMap.SylvesterEquation A B X C)
     (hC : N.Mem C) :
     N.Mem X ∧ δ * N.gauge X ≤ N.gauge C := by
-  exact TauCeti.DavisKahan.ExactSinTheta.davisKahan1970_sylvester_real
+  exact TauCeti.DavisKahan.Sylvester.davisKahan1970_sylvester_real
     N hA hB hδ
-      (TauCeti.DavisKahan.ExactSinTheta.FormBoundedSylvesterGap.leftAboveRightBelow
+      (TauCeti.DavisKahan.Sylvester.FormBoundedSylvesterGap.leftAboveRightBelow
         c hAc hBc)
       hEq hC
 
@@ -455,7 +456,7 @@ Status: **TERMINAL EXACT**.
 #check @TauCeti.DavisKahan1970.theorem5_2_symmetricNorming_complex
 #check @TauCeti.DavisKahan1970.theorem5_2_symmetricNorming_real
 #check @TauCeti.DavisKahan1970.Theorem5_2
-#check @TauCeti.DavisKahan.ExactSinTheta.davisKahan1970_sylvester_real
+#check @TauCeti.DavisKahan.Sylvester.davisKahan1970_sylvester_real
 #check @TauCeti.DavisKahan1970.Audits.theorem5_2_real_ordered_sourceAudit
 
 /-! ## DK-5.1-lem: Strong-cutoff convergence of singular values

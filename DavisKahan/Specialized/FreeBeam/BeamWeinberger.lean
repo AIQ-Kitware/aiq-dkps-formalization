@@ -28,6 +28,7 @@ namespace FreeBeam
 namespace Model
 
 open DavisKahan1970.Section9
+open TauCeti.DavisKahan.Sylvester
 
 /-- **Equation (9.8), first line, for the genuine perturbed beam.**
 

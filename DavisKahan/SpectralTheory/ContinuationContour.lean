@@ -35,6 +35,7 @@ namespace TauCeti
 namespace DavisKahanExt
 
 open DavisKahan.Foundation
+open TauCeti.DavisKahan.Sylvester
 
 open DavisKahan
 

@@ -37,6 +37,8 @@ namespace FreeBeam
 namespace Model
 namespace Real
 
+open TauCeti.DavisKahan.Sylvester
+
 noncomputable section
 
 /-! ## Plumbing for the shifted realization -/

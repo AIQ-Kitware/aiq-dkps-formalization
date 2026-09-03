@@ -17,9 +17,10 @@ passages and Fan dominance endpoint.
 
 namespace TauCeti
 namespace DavisKahan
-namespace ExactSinTheta
+namespace Sylvester
 
 open scoped InnerProductSpace Topology
+open TauCeti.DavisKahan.ExactSinTheta
 open Filter
 
 universe u v
@@ -525,6 +526,6 @@ theorem unbounded_sylvester_mem_and_gauge_le_direct_swapped
 
 end ApproximationNumberEndpointAssumptions
 
-end ExactSinTheta
+end Sylvester
 end DavisKahan
 end TauCeti

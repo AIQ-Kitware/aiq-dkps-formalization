@@ -35,9 +35,10 @@ statements are already built.
 
 namespace TauCeti
 namespace DavisKahan
-namespace ExactSinTheta
+namespace Sylvester
 
 open scoped InnerProductSpace
+open TauCeti.DavisKahan.ExactSinTheta
 
 noncomputable section
 
@@ -118,6 +119,6 @@ instance hasUnboundedSylvesterKyFan_real :
 
 end
 
-end ExactSinTheta
+end Sylvester
 end DavisKahan
 end TauCeti

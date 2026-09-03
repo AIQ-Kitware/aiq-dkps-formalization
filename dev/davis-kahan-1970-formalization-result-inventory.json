@@ -3387,7 +3387,7 @@
       "semantic_certification": "accepted",
       "lean_declarations": [
         "TauCeti.DavisKahan1970.Theorem5_2",
-        "TauCeti.DavisKahan.ExactSinTheta.davisKahan1970_sylvester_real",
+        "TauCeti.DavisKahan.Sylvester.davisKahan1970_sylvester_real",
         "TauCeti.DavisKahan1970.theorem5_2_symmetricNorming_complex",
         "TauCeti.DavisKahan1970.theorem5_2_symmetricNorming_real",
         "TauCeti.DavisKahan1970.symmetricNorming_of_kyFanDominant"
@@ -3439,7 +3439,7 @@
           "note": "The same estimate at an arbitrary Fan-dominant unitarily invariant ideal gauge.  Stronger in its own quantifier, but not the printed one: the source says 'for every unitary-invariant norm', and `SymmetricNormingFunction` is this repository's model of that object.  `symmetricNorming_of_kyFanDominant` is the compiled bridge between them."
         },
         {
-          "declaration": "TauCeti.DavisKahan.ExactSinTheta.davisKahan1970_sylvester_real",
+          "declaration": "TauCeti.DavisKahan.Sylvester.davisKahan1970_sylvester_real",
           "role": "generalization",
           "note": "The same estimate at an arbitrary Fan-dominant unitarily invariant ideal gauge.  Stronger in its own quantifier, but not the printed one: the source says 'for every unitary-invariant norm', and `SymmetricNormingFunction` is this repository's model of that object.  `symmetricNorming_of_kyFanDominant` is the compiled bridge between them."
         },

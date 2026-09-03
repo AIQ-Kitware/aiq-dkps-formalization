@@ -441,6 +441,7 @@ next to each other, which is what the clause aliases already are. -/
 section SinTwoThetaSource
 
 open TauCeti.DavisKahan TauCeti.DavisKahan.ExactSinTheta TauCeti.DavisKahanExt
+open TauCeti.DavisKahan.Sylvester
 
 universe v
 

@@ -59,6 +59,7 @@ namespace DavisKahan1970
 open TauCeti.DavisKahanExt
 open TauCeti.DavisKahan
 open TauCeti.DavisKahan.ExactSinTheta
+open TauCeti.DavisKahan.Sylvester
 
 open scoped InnerProductSpace
 
@@ -270,7 +271,7 @@ theorem sinTwoTheta_directed_unboundedResidual_blockRepresentative_kyFan_complex
     (hVdom : ∀ v : V, (v : H) ∈ A.domain)
     (hres : ∀ v : V, A ⟨(v : H), hVdom v⟩ = R v + ((M v : V) : H))
     {δ : ℝ} (hδ : 0 < δ)
-    (hgap : DavisKahan.ExactSinTheta.FormBoundedSylvesterGap
+    (hgap : DavisKahan.Sylvester.FormBoundedSylvesterGap
       (selfAdjointSpectralRestriction A hA B hB)
       (selfAdjointSpectralRestriction A hA Bᶜ hB.compl) δ) :
     ∀ k : ℕ,
@@ -374,7 +375,7 @@ theorem sinTwoTheta_directed_unboundedResidual_blockRepresentative_symmetricNorm
     (hVdom : ∀ v : V, (v : H) ∈ A.domain)
     (hres : ∀ v : V, A ⟨(v : H), hVdom v⟩ = R v + ((M v : V) : H))
     {δ : ℝ} (hδ : 0 < δ)
-    (hgap : DavisKahan.ExactSinTheta.FormBoundedSylvesterGap
+    (hgap : DavisKahan.Sylvester.FormBoundedSylvesterGap
       (selfAdjointSpectralRestriction A hA B hB)
       (selfAdjointSpectralRestriction A hA Bᶜ hB.compl) δ)
     (hRmem : N.Mem R) :
@@ -430,7 +431,7 @@ theorem sinTwoTheta_directed_unboundedResidual_blockRepresentative_reducing_kyFa
     (hVdom : ∀ v : V, (v : H) ∈ A.domain)
     (hres : ∀ v : V, A ⟨(v : H), hVdom v⟩ = R v + ((M v : V) : H))
     {δ : ℝ} (hδ : 0 < δ)
-    (hgap : DavisKahan.ExactSinTheta.FormBoundedSylvesterGap
+    (hgap : DavisKahan.Sylvester.FormBoundedSylvesterGap
       (TauCeti.LinearPMap.reducingRestriction A U hred)
       (TauCeti.LinearPMap.reducingRestriction A Uᗮ hred.orthogonal) δ) :
     ∀ k : ℕ,
@@ -528,7 +529,7 @@ theorem sinTwoTheta_directed_unboundedResidual_blockRepresentative_reducing_symm
     (hVdom : ∀ v : V, (v : H) ∈ A.domain)
     (hres : ∀ v : V, A ⟨(v : H), hVdom v⟩ = R v + ((M v : V) : H))
     {δ : ℝ} (hδ : 0 < δ)
-    (hgap : DavisKahan.ExactSinTheta.FormBoundedSylvesterGap
+    (hgap : DavisKahan.Sylvester.FormBoundedSylvesterGap
       (TauCeti.LinearPMap.reducingRestriction A U hred)
       (TauCeti.LinearPMap.reducingRestriction A Uᗮ hred.orthogonal) δ)
     (hRmem : N.Mem R) :

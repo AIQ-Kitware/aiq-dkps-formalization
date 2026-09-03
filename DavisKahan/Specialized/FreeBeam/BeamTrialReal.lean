@@ -30,6 +30,8 @@ namespace FreeBeam
 namespace Model
 namespace Real
 
+open TauCeti.DavisKahan.Sylvester
+
 noncomputable section
 
 /-! ## Exact unit-interval moments -/

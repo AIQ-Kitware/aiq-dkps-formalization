@@ -41,6 +41,8 @@ namespace TauCeti
 namespace DavisKahan
 namespace Proposition35
 
+open TauCeti.DavisKahan.Sylvester
+
 noncomputable section
 
 variable {𝕜 : Type*} [RCLike 𝕜]

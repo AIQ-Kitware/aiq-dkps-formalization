@@ -49,7 +49,7 @@ This is the *ordered* branch.  The interval/exterior separation hypothesis is a 
 theorem, `unbounded_sylvester_intervalExterior_uiNorm_genuineSpectrum`; do not substitute
 one for the other. -/
 alias Theorem5_2 :=
-  DavisKahan.ExactSinTheta.directOrderedSylvesterEngine_lowerUpper
+  DavisKahan.Sylvester.directOrderedSylvesterEngine_lowerUpper
 
 /-- **Davis--Kahan 1970, inequality (5.1).**  With `C = AX - XB` and the spectra of the
 self-adjoint operators `A` and `B` pairwise at distance at least `δ`,

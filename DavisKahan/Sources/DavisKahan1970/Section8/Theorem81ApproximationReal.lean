@@ -65,6 +65,7 @@ open TauCeti.DavisKahan.Foundation
 open TauCeti.RealComplexification
 open TauCeti.DavisKahan.Foundation.RealComplexification
 open TauCeti.DavisKahan.ExactSinTheta.ComplexificationApproximation
+open TauCeti.DavisKahan.Sylvester
 
 noncomputable section
 

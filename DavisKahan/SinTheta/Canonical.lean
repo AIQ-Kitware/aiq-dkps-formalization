@@ -44,6 +44,8 @@ namespace TauCeti
 namespace DavisKahan
 namespace ExactSinTheta
 
+open TauCeti.DavisKahan.Sylvester
+
 section ComplexGeneralized
 
 universe v

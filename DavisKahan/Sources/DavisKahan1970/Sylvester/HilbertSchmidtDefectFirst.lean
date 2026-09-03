@@ -43,6 +43,7 @@ namespace DavisKahan
 namespace ExactSinTheta
 
 open scoped InnerProductSpace
+open TauCeti.DavisKahan.Sylvester
 open TauCeti.HilbertSchmidt
 open TauCeti.OneParameterUnitaryGroup (generator)
 

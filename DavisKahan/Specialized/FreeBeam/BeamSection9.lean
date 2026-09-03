@@ -57,6 +57,8 @@ namespace DavisKahan
 namespace FreeBeam
 namespace Model
 
+open TauCeti.DavisKahan.Sylvester
+
 noncomputable section
 
 /-! ## Complex integrals on the unit interval -/

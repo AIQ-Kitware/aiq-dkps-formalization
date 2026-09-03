@@ -36,6 +36,7 @@ namespace TauCeti
 namespace DavisKahanExt
 
 open scoped InnerProductSpace
+open TauCeti.DavisKahan.Sylvester
 open DavisKahan
 open DavisKahan
 open DavisKahan.Foundation

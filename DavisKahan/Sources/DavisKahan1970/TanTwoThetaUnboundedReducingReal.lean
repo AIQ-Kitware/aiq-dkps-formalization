@@ -43,6 +43,7 @@ namespace DavisKahan1970
 open scoped InnerProductSpace
 open TauCeti.DavisKahanExt
 open TauCeti.DavisKahan.ExactSinTheta
+open TauCeti.DavisKahan.Sylvester
 open TauCeti.DavisKahan
 open TauCeti.ApproximationNumber
 open TauCeti.RealComplexification

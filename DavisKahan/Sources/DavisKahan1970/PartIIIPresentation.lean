@@ -39,6 +39,7 @@ The mathematical dependency order is recorded in
 
 namespace TauCeti
 namespace DavisKahan1970
+open TauCeti.DavisKahan.Sylvester
 
 /-! ## Canonical single-angle target
 
@@ -48,15 +49,15 @@ bounded aliases below are specializations and implementation seams. -/
 
 /-! ## Sylvester engine -/
 alias bounded_sylvester_neumann_solution :=
-  DavisKahan.ExactSinTheta.sylvesterNeumannSolution_eq
+  DavisKahan.Sylvester.sylvesterNeumannSolution_eq
 
 /-! ## Single-angle theorems -/
 alias sinTheta_unbounded_opNorm_complex :=
   DavisKahan.ExactSinTheta.sinTheta_unbounded_opNorm
 alias unbounded_sylvester_intervalExterior_opNorm :=
-  DavisKahan.ExactSinTheta.norm_sylvester_le_of_intervalExterior
+  DavisKahan.Sylvester.norm_sylvester_le_of_intervalExterior
 alias unbounded_sylvester_exteriorInterval_opNorm :=
-  DavisKahan.ExactSinTheta.norm_sylvester_le_of_exteriorInterval
+  DavisKahan.Sylvester.norm_sylvester_le_of_exteriorInterval
 alias sinTheta_unbounded_idealFamily_complex :=
   DavisKahan.ExactSinTheta.sinTheta_unbounded_gauge
 alias sinTheta_unbounded_spectrumGap_opNorm_complex :=
@@ -74,9 +75,9 @@ alias unbounded_spectralRestriction_spectrum_exterior :=
 alias sinTheta_unbounded_spectrumGap_idealFamily_complex :=
   DavisKahan.sinTheta_unbounded_gauge_of_spectrum_gap
 alias unbounded_sylvester_exteriorInterval_uiNorm :=
-  DavisKahan.ExactSinTheta.mem_and_gauge_le_of_exteriorLeft_intervalRight
+  DavisKahan.Sylvester.mem_and_gauge_le_of_exteriorLeft_intervalRight
 alias unbounded_sylvester_intervalExterior_uiNorm :=
-  DavisKahan.ExactSinTheta.mem_and_gauge_le_of_boundedLeft_exteriorRight
+  DavisKahan.Sylvester.mem_and_gauge_le_of_boundedLeft_exteriorRight
 alias unbounded_boundedRealization_of_spectrum_Icc :=
   DavisKahan.ExactSinTheta.exists_boundedRealization_of_spectrum_subset_Icc
 alias unbounded_semibounded_of_spectrum_Icc :=

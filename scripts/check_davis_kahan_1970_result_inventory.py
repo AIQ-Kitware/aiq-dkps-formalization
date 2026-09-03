@@ -74,7 +74,7 @@ PROBE_IMPORT = "DavisKahan.All"
 # therefore declare which of these it carries.
 CAPABILITY_CLASSES = {
     "ContinuousLinearMap.HasMinMaxLowerBoundEverywhere",
-    "TauCeti.DavisKahan.ExactSinTheta.HasUnboundedSylvesterKyFan",
+    "TauCeti.DavisKahan.Sylvester.HasUnboundedSylvesterKyFan",
     "TauCeti.DavisKahan.ExactSinTheta.HasApproximationNumberStrongCutoff",
 }
 SUPPORTING_EVIDENCE_ROLES = {

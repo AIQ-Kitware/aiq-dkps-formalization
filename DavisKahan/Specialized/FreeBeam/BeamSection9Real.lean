@@ -25,6 +25,8 @@ namespace FreeBeam
 namespace Model
 namespace Real
 
+open TauCeti.DavisKahan.Sylvester
+
 noncomputable section
 
 open DavisKahan1970.Section9

@@ -56,6 +56,8 @@ open scoped InnerProductSpace
 namespace TauCeti
 namespace DavisKahan
 
+open TauCeti.DavisKahan.Sylvester
+
 
 universe u
 

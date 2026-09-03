@@ -47,6 +47,7 @@ it is not a strengthening of either.
 namespace TauCeti
 
 open TauCeti
+open TauCeti.DavisKahan.Sylvester
 namespace DavisKahan
 namespace ExactSinTheta
 

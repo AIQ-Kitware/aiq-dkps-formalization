@@ -28,6 +28,7 @@ transported through complexification.
 namespace TauCeti
 
 open TauCeti
+open TauCeti.DavisKahan.Sylvester
 namespace DavisKahanExt
 
 open DavisKahan.Foundation

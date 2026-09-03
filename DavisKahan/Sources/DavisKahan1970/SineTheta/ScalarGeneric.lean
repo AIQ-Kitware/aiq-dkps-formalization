@@ -32,6 +32,7 @@ universe u v
 
 open TauCeti.DavisKahan
 open TauCeti.DavisKahan.ExactSinTheta
+open TauCeti.DavisKahan.Sylvester
 
 section GenericEngine
 

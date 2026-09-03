@@ -27,6 +27,7 @@ namespace DavisKahan
 namespace ExactSinTheta
 
 open scoped InnerProductSpace
+open TauCeti.DavisKahan.Sylvester
 open Filter Topology
 
 noncomputable section

@@ -98,6 +98,7 @@ namespace DavisKahan1970
 namespace Section8
 
 open scoped InnerProductSpace
+open TauCeti.DavisKahan.Sylvester
 open TauCeti.DavisKahan
 open Module (finrank)
 

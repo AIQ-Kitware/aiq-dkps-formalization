@@ -52,6 +52,7 @@ namespace DavisKahan
 namespace RealSpectralRestriction
 
 open ExactSinTheta
+open TauCeti.DavisKahan.Sylvester
 open ExactSinTheta.PartialMapComplexification
 open TauCeti.RealComplexification
 open TauCeti.DavisKahan.Foundation.RealComplexification

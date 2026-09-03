@@ -23,6 +23,7 @@ namespace RotationOfEigenvectors
 open TauCeti
 open TauCeti.DavisKahan
 open TauCeti.DavisKahan.ExactSinTheta
+open TauCeti.DavisKahan.Sylvester
 open TauCeti.ApproximationNumber
 
 open scoped InnerProductSpace
@@ -897,7 +898,7 @@ theorem sinTwoTheta_directed_proof_complex
     N.Finite (directedDoubleSine U V) ∧
       δ * N.norm (directedDoubleSine U V) ≤ 2 * N.norm D.residual := by
   have hUred : TauCeti.LinearPMap.ReducesSubspace A U := (reduces_iff A U).1 hU
-  have hgap' : TauCeti.DavisKahan.ExactSinTheta.FormBoundedSylvesterGap
+  have hgap' : TauCeti.DavisKahan.Sylvester.FormBoundedSylvesterGap
       (TauCeti.LinearPMap.reducingRestriction A U hUred)
       (TauCeti.LinearPMap.reducingRestriction A Uᗮ hUred.orthogonal) δ := by
     rw [block_eq A U hU, block_eq A Uᗮ hU.orthogonal] at hgap
@@ -1756,7 +1757,7 @@ theorem sinTwoTheta_directed_proof_real
     N.Finite (directedDoubleSine U V) ∧
       δ * N.norm (directedDoubleSine U V) ≤ 2 * N.norm D.residual := by
   have hUred : TauCeti.LinearPMap.ReducesSubspace A U := (reduces_iff A U).1 hU
-  have hgap' : TauCeti.DavisKahan.ExactSinTheta.FormBoundedSylvesterGap
+  have hgap' : TauCeti.DavisKahan.Sylvester.FormBoundedSylvesterGap
       (TauCeti.LinearPMap.reducingRestriction A U hUred)
       (TauCeti.LinearPMap.reducingRestriction A Uᗮ hUred.orthogonal) δ := by
     rw [block_eq A U hU, block_eq A Uᗮ hU.orthogonal] at hgap

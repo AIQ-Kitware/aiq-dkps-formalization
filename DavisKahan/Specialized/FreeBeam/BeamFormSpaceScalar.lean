@@ -43,6 +43,8 @@ namespace FreeBeam
 namespace Model
 namespace Scalar
 
+open TauCeti.DavisKahan.Sylvester
+
 noncomputable section
 
 variable {𝕜 : Type} [RCLike 𝕜]

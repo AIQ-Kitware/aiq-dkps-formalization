@@ -59,6 +59,8 @@ namespace DavisKahan
 namespace FreeBeam
 namespace Model
 
+open TauCeti.DavisKahan.Sylvester
+
 open DavisKahan1970.Section9
 
 noncomputable section

@@ -44,6 +44,7 @@ namespace ExactSinTheta
 namespace SymmetricNormingFunction
 
 open scoped ENNReal
+open TauCeti.DavisKahan.Sylvester
 open TauCeti.RealComplexification
 
 universe v

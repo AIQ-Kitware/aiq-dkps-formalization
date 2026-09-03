@@ -28,6 +28,7 @@ namespace DavisKahan
 namespace ExactSinTheta
 
 open scoped InnerProductSpace BigOperators
+open TauCeti.DavisKahan.Sylvester
 
 open TauCeti.DavisKahan.Foundation
 open TauCeti.RealComplexification

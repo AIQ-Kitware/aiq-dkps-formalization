@@ -22,9 +22,10 @@ square ideal.
 
 namespace TauCeti
 namespace DavisKahan
-namespace ExactSinTheta
+namespace Sylvester
 
 open scoped InnerProductSpace
+open TauCeti.DavisKahan.ExactSinTheta
 
 noncomputable section
 
@@ -138,6 +139,6 @@ end Real
 
 end
 
-end ExactSinTheta
+end Sylvester
 end DavisKahan
 end TauCeti

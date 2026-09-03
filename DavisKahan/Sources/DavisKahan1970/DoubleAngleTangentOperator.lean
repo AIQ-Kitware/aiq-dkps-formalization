@@ -32,6 +32,7 @@ open ApproximationNumber
 open scoped InnerProductSpace BigOperators
 open Set
 open DavisKahan.ExactSinTheta
+open TauCeti.DavisKahan.Sylvester
 
 noncomputable section
 

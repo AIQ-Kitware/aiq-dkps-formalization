@@ -30,6 +30,7 @@ namespace DavisKahan1970
 namespace Section8
 
 open Set
+open TauCeti.DavisKahan.Sylvester
 open scoped InnerProductSpace
 open DavisKahanExt
 open TauCeti.DavisKahan
