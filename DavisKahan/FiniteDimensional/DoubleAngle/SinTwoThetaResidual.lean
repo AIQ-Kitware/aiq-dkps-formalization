@@ -26,7 +26,7 @@ of ambient endomorphisms while the norm had rectangular type `F -> E`.
 -/
 
 namespace TauCeti
-namespace DavisKahanTheory
+namespace DavisKahan.FiniteDimensional
 
 open scoped InnerProductSpace BigOperators
 
@@ -99,5 +99,5 @@ theorem sinTwoTheta_residual_le_of_spectralDistance
       mul_le_mul_of_nonneg_left hsingle (by positivity)
     _ = Real.pi * N (residual A X M) := by ring
 
-end DavisKahanTheory
+end DavisKahan.FiniteDimensional
 end TauCeti

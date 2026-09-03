@@ -36,7 +36,7 @@ counterexample around to show that it is *not* a `Q`-norm.
 -/
 
 namespace TauCeti
-namespace DavisKahanTheory
+namespace DavisKahan.FiniteDimensional
 
 open scoped InnerProductSpace
 
@@ -83,5 +83,5 @@ theorem directRotation_fullDisplacement_qnorm
   nlinarith [N.nonneg (LinearMap.id - (directRotation U V hacute).toLinearMap),
     N.nonneg (LinearMap.id - W.toLinearMap), hsq]
 
-end DavisKahanTheory
+end DavisKahan.FiniteDimensional
 end TauCeti

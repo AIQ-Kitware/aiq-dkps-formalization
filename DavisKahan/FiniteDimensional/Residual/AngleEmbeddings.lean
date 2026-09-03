@@ -31,7 +31,7 @@ asserted here merely from these definitions.
 -/
 
 namespace TauCeti
-namespace DavisKahanTheory
+namespace DavisKahan.FiniteDimensional
 
 open scoped InnerProductSpace BigOperators
 open Module (finrank)
@@ -515,5 +515,5 @@ theorem tanTheta_vector_le
       _ = ρ * ‖cosThetaEmbedding U X y‖ := by
         rw [cosThetaMagnitude, norm_trialGramSqrt_apply]
 
-end DavisKahanTheory
+end DavisKahan.FiniteDimensional
 end TauCeti

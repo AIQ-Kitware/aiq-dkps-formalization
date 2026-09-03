@@ -34,7 +34,7 @@ orthogonality to prove the family-level Davis 1963 statements.
 -/
 
 namespace TauCeti
-namespace DavisKahanTheory
+namespace DavisKahan.FiniteDimensional
 
 open scoped InnerProductSpace BigOperators
 open Module (finrank)
@@ -213,5 +213,5 @@ theorem tanTwoTheta_eigenvector_product_le
   simpa [projection, complementaryProjection, mul_assoc] using
     tan_two_theta_le hA hH hU hlower hupper hHbound hHU hHUperp hx heig'
 
-end DavisKahanTheory
+end DavisKahan.FiniteDimensional
 end TauCeti

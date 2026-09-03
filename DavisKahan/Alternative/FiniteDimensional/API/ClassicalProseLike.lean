@@ -37,7 +37,7 @@ proved theorems.
 -/
 
 namespace TauCeti
-namespace DavisKahanTheory
+namespace DavisKahan.FiniteDimensional
 
 open scoped InnerProductSpace
 
@@ -328,5 +328,5 @@ theorem spectralProjector_difference_opNorm_classical_prose_like
     hgap.A_high hgap.Aperp_low hgap.B_high hgap.Bperp_low
     hgap.perturbation_nonneg hgap.perturbation_bound
 
-end DavisKahanTheory
+end DavisKahan.FiniteDimensional
 end TauCeti

@@ -762,11 +762,11 @@ The declarations that carry this result's printed statement, with the source ato
 - `TauCeti.DavisKahan.ReducingComplement` — supporting_theorem
 - `TauCeti.DavisKahan.UnboundedRitzPair.ofTrialBlock` — supporting_theorem
 - `TauCeti.DavisKahan.Section2.theorem6_3_perturbation_infiniteTrial` — specialization
-- `TauCeti.DavisKahanTheory.partIII_tanTheta_ritzResidual_uiNorm` — specialization
-- `TauCeti.DavisKahan.ExactTanTheta.theorem6_3_unbounded_infiniteTrial_ideal` — supporting_theorem
+- `TauCeti.DavisKahan.FiniteDimensional.partIII_tanTheta_ritzResidual_uiNorm` — specialization
+- `TauCeti.DavisKahan.TanTheta.theorem6_3_unbounded_infiniteTrial_ideal` — supporting_theorem
 - `TauCeti.DavisKahan1970.tanTheta_directed_unboundedTrial_symmetricNorming_complex` — specialization
 - `TauCeti.DavisKahan1970.tanTheta_directed_unboundedTrial_symmetricNorming_real` — specialization
-- `TauCeti.DavisKahan.ExactTanTheta.UnboundedCompressionTrialData.ideal_of_formBounds` — supporting_theorem
+- `TauCeti.DavisKahan.TanTheta.UnboundedCompressionTrialData.ideal_of_formBounds` — supporting_theorem
 - `TauCeti.DavisKahan1970.theorem6_3_unboundedCompression_ideal_real` — supporting_theorem
 
 ### Source-facing Lean declarations
@@ -789,7 +789,7 @@ Source location candidates: `DavisKahan/Sources/DavisKahan1970/ScalarGenericFini
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
-#### `TauCeti.DavisKahanTheory.partIII_tanTheta_ritzResidual_uiNorm`
+#### `TauCeti.DavisKahan.FiniteDimensional.partIII_tanTheta_ritzResidual_uiNorm`
 
 Source location candidates: `DavisKahan/Sources/DavisKahan1970/PartIII.lean:119`
 
@@ -815,7 +815,7 @@ Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.tanTheta_ambient_bounded_symmetricNorming_complex_of_crossedDefects`
 
-Source location candidates: `Challenge/DavisKahan1970/Conformance.lean:316`, `DavisKahan/Sources/DavisKahan1970/TanThetaAmbient.lean:1265`
+Source location candidates: `Challenge/DavisKahan1970/Conformance.lean:317`, `DavisKahan/Sources/DavisKahan1970/TanThetaAmbient.lean:1265`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
@@ -903,15 +903,15 @@ Source location candidates: `DavisKahan/Sources/DavisKahan1970/TanThetaDirectedU
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
-#### `TauCeti.DavisKahan.ExactTanTheta.theorem6_3_unbounded_infiniteTrial_ideal`
+#### `TauCeti.DavisKahan.TanTheta.theorem6_3_unbounded_infiniteTrial_ideal`
 
 Source location candidates: `DavisKahan/TanTheta/Theorem63UnboundedInfiniteTrial.lean:668`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
-#### `TauCeti.DavisKahan.ExactTanTheta.UnboundedCompressionTrialData.ideal_of_formBounds`
+#### `TauCeti.DavisKahan.TanTheta.UnboundedCompressionTrialData.ideal_of_formBounds`
 
-Source location candidates: `DavisKahan/TanTheta/Theorem63TrialData.lean:556`, `DavisKahan/TanTheta/Theorem63UnboundedCompression.lean:763`
+Source location candidates: `DavisKahan/TanTheta/Theorem63TrialData.lean:556`, `DavisKahan/TanTheta/Theorem63UnboundedCompression.lean:762`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
@@ -1091,7 +1091,7 @@ Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.sinTwoTheta_ambient_bounded_symmetricNorming_complex`
 
-Source location candidates: `Challenge/DavisKahan1970/Conformance.lean:396`, `DavisKahan/Sources/DavisKahan1970/SinTwoThetaAmbient.lean:606`
+Source location candidates: `Challenge/DavisKahan1970/Conformance.lean:397`, `DavisKahan/Sources/DavisKahan1970/SinTwoThetaAmbient.lean:606`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
@@ -1510,7 +1510,7 @@ Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.tanTwoTheta_directed_boundedResidual_blockRepresentative_spectralGap_symmetricNorming_complex`
 
-Source location candidates: `Challenge/DavisKahan1970/Conformance.lean:447`, `DavisKahan/Sources/DavisKahan1970/TanTwoThetaReflectionAmbient.lean:1164`
+Source location candidates: `Challenge/DavisKahan1970/Conformance.lean:448`, `DavisKahan/Sources/DavisKahan1970/TanTwoThetaReflectionAmbient.lean:1164`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
@@ -1522,7 +1522,7 @@ Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.tanTwoTheta_ambient_bounded_spectralGap_symmetricNorming_complex`
 
-Source location candidates: `Challenge/DavisKahan1970/Conformance.lean:537`, `DavisKahan/Sources/DavisKahan1970/TanTwoThetaReflectionAmbient.lean:1301`
+Source location candidates: `Challenge/DavisKahan1970/Conformance.lean:538`, `DavisKahan/Sources/DavisKahan1970/TanTwoThetaReflectionAmbient.lean:1301`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
@@ -3784,7 +3784,7 @@ One row per printed source clause per scalar field.  A clause is `PASS` only whe
 
 | clause | scalar | witness | status |
 | --- | --- | --- | --- |
-| `whole.not_visible_in_type` | not_visible_in_type | `TauCeti.DavisKahanTheory.not_davisKahanProposition4_4_Finite` | **PASS** |
+| `whole.not_visible_in_type` | not_visible_in_type | `TauCeti.DavisKahan.FiniteDimensional.not_davisKahanProposition4_4_Finite` | **PASS** |
 
 **`whole.not_visible_in_type`.** Canonical witness for the whole printed statement at not_visible_in_type scalar scope, carried over from the pre-clause canonical evidence and re-checked against its compiler-printed type under the coherent model.
 
@@ -3794,12 +3794,12 @@ Result-wide scope every clause must carry: `DK-4.1-prop.section4-compact-classif
 
 The declarations that carry this result's printed statement, with the source atoms each one covers.  Everything under *Other registered declarations* below accompanies the result without establishing it.
 
-- `TauCeti.DavisKahanTheory.not_davisKahanProposition4_4_Finite` — exact_refutation, not_visible_in_type scalars, refutation; covers `DK-4.1-prop.section4-compact-classification-setup`, `DK-4.4-prop.printed-proposition4-4`
+- `TauCeti.DavisKahan.FiniteDimensional.not_davisKahanProposition4_4_Finite` — exact_refutation, not_visible_in_type scalars, refutation; covers `DK-4.1-prop.section4-compact-classification-setup`, `DK-4.4-prop.printed-proposition4-4`
 
 ### Other registered declarations
 
-- `TauCeti.DavisKahanTheory.DavisKahanProposition4_4_Finite` — supporting_theorem
-- `TauCeti.DavisKahanTheory.shortRotation_fullDisplacement_refuted` — supporting_theorem
+- `TauCeti.DavisKahan.FiniteDimensional.DavisKahanProposition4_4_Finite` — supporting_theorem
+- `TauCeti.DavisKahan.FiniteDimensional.shortRotation_fullDisplacement_refuted` — supporting_theorem
 - `TauCeti.DavisKahan.crossedDefectsEquivalent_of_isAcute` — standing_assumption_discharge
 
 ### Source-facing Lean declarations
@@ -3810,19 +3810,19 @@ Source location candidates: `DavisKahan/Geometry/Halmos/CrossedDefectGap.lean:14
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
-#### `TauCeti.DavisKahanTheory.DavisKahanProposition4_4_Finite`
+#### `TauCeti.DavisKahan.FiniteDimensional.DavisKahanProposition4_4_Finite`
 
 Source location candidates: `DavisKahan/FiniteDimensional/DirectRotation/ShortRotationCounterexample.lean:838`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
-#### `TauCeti.DavisKahanTheory.not_davisKahanProposition4_4_Finite`
+#### `TauCeti.DavisKahan.FiniteDimensional.not_davisKahanProposition4_4_Finite`
 
 Source location candidates: `DavisKahan/FiniteDimensional/DirectRotation/ShortRotationCounterexample.lean:862`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
-#### `TauCeti.DavisKahanTheory.shortRotation_fullDisplacement_refuted`
+#### `TauCeti.DavisKahan.FiniteDimensional.shortRotation_fullDisplacement_refuted`
 
 Source location candidates: `DavisKahan/FiniteDimensional/DirectRotation/ShortRotationCounterexample.lean:809`
 
@@ -3831,7 +3831,7 @@ Compiler-printed type: *inserted when a compiler certificate is supplied.*
 ### False-source repair disposition
 
 - **Repair status:** `proved`
-- **Repair declarations:** `TauCeti.DavisKahanTheory.directRotation_fullDisplacement_qnorm`
+- **Repair declarations:** `TauCeti.DavisKahan.FiniteDimensional.directRotation_fullDisplacement_qnorm`
 - **Repair notes:** The printed real-space every-UI-norm full-displacement minimization claim is refuted exactly. The natural surviving Q-norm minimization theorem is proved by directRotation_fullDisplacement_qnorm.
 
 ### Independent result audit checklist
@@ -4987,12 +4987,12 @@ The declarations that carry this result's printed statement, with the source ato
 
 - `TauCeti.DavisKahan1970.tanTheta_directed_bounded_spectralGap_symmetricNorming_complex` — specialization
 - `TauCeti.DavisKahan1970.tanTheta_directed_bounded_spectralGap_symmetricNorming_real` — specialization
-- `TauCeti.DavisKahan.ExactTanTheta.theorem6_3_unbounded_infiniteTrial_ideal_exists` — generalization
+- `TauCeti.DavisKahan.TanTheta.theorem6_3_unbounded_infiniteTrial_ideal_exists` — generalization
 - `TauCeti.DavisKahan1970.theorem6_3_unbounded_infiniteTrial_ideal_exists_real` — generalization
 
 ### Source-facing Lean declarations
 
-#### `TauCeti.DavisKahan.ExactTanTheta.theorem6_3_unbounded_infiniteTrial_ideal_exists`
+#### `TauCeti.DavisKahan.TanTheta.theorem6_3_unbounded_infiniteTrial_ideal_exists`
 
 Source location candidates: `DavisKahan/TanTheta/Theorem63UnboundedInfiniteTrial.lean:640`
 
@@ -5006,7 +5006,7 @@ Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.tanTheta_directed_bounded_spectralGap_symmetricNorming_complex`
 
-Source location candidates: `Challenge/DavisKahan1970/Conformance.lean:293`, `DavisKahan/Sources/DavisKahan1970/Directed.lean:122`
+Source location candidates: `Challenge/DavisKahan1970/Conformance.lean:294`, `DavisKahan/Sources/DavisKahan1970/Directed.lean:122`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 

@@ -307,7 +307,7 @@
       "path": "DavisKahan/Experimental/FiniteDimensional/DirectRotation.lean"
     },
     {
-      "correction": "Rename Reduces to IsInvariant. The name meant two different predicates in one library: TauCeti.DavisKahanTheory.Reduces was invariance alone, while ContinuousLinearMap.Reduces was the two-sided condition. The weaker one was renamed IsInvariant on 2026-07-30 (commit 71c3f5f7). The eight signatures below changed by that rename only -- the hypothesis is the same proposition under a clearer name -- and the manifest had been frozen at 2026-07-20, so the gate had been red on a stale baseline ever since.",
+      "correction": "Rename Reduces to IsInvariant. The name meant two different predicates in one library: TauCeti.DavisKahan.FiniteDimensional.Reduces was invariance alone, while ContinuousLinearMap.Reduces was the two-sided condition. The weaker one was renamed IsInvariant on 2026-07-30 (commit 71c3f5f7). The eight signatures below changed by that rename only -- the hypothesis is the same proposition under a clearer name -- and the manifest had been frozen at 2026-07-20, so the gate had been red on a stale baseline ever since.",
       "date": "2026-07-31",
       "declarations": [
         "generalizedSinTheta_frobenius_le_of_spectralDistance",

@@ -26,7 +26,7 @@ an ordered graph-Sylvester formulation.
 -/
 
 namespace TauCeti
-namespace DavisKahanTheory
+namespace DavisKahan.FiniteDimensional
 
 open scoped InnerProductSpace BigOperators
 open Module (finrank)
@@ -705,5 +705,5 @@ theorem tanTheta0_ritzResidual_le_and_isTransverse
   exact ⟨isTransverse_of_tanThetaIntervalGap hA hU X hδ hgap,
     tanTheta0_ritzResidual_le N hA hU X hβα hδ hgap tanTheta0 htan⟩
 
-end DavisKahanTheory
+end DavisKahan.FiniteDimensional
 end TauCeti

@@ -40,23 +40,23 @@ namespace DavisKahan1970
 /-- **Davis--Kahan 1970, Proposition 4.1.**  Every singular value of the displacement
 restricted to the source subspace is minimized by the direct rotation, over all isometries
 carrying `U` onto `V`. -/
-alias Proposition4_1 := DavisKahanTheory.singularValues_restrictedDisplacement_le
+alias Proposition4_1 := DavisKahan.FiniteDimensional.singularValues_restrictedDisplacement_le
 
 /-- The direct rotation's restricted-displacement singular values, identified: the
 principal-plane chords, and zero past the last nontrivial angle.  This is the value the
 minimum in `Proposition4_1` takes. -/
 alias Proposition4_1_directRotationValues :=
-  DavisKahanTheory.singularValues_restrictedDisplacement_directRotation
+  DavisKahan.FiniteDimensional.singularValues_restrictedDisplacement_directRotation
 
 /-! ## Corollary 4.1 -/
 
 /-- **Davis--Kahan 1970, Corollary 4.1.**  Singular-value domination passes to every
 unitarily invariant norm of the restricted displacement. -/
-alias Corollary4_1 := DavisKahanTheory.uiNorm_restrictedDisplacement_le
+alias Corollary4_1 := DavisKahan.FiniteDimensional.uiNorm_restrictedDisplacement_le
 
 /-- Corollary 4.1 read as a minimality statement about the direct rotation. -/
 alias Corollary4_1_minimizer :=
-  DavisKahanTheory.directRotation_minimizes_restrictedDisplacement_uiNorm
+  DavisKahan.FiniteDimensional.directRotation_minimizes_restrictedDisplacement_uiNorm
 
 /-! ## Proposition 4.3 -/
 
@@ -67,15 +67,15 @@ Ky Fan level is the honest scope: the *individual* singular values are **not** d
 Pointwise domination would imply Proposition 4.4, which this repository refutes.  The
 refuting configuration is recorded with the stable theorem, in the module docstring of
 `DavisKahan/Geometry/Polar/DisplacementSquareExtremal.lean`. -/
-alias Proposition4_3_kyFan := DavisKahanTheory.directRotation_displacementSquare_kyFan
+alias Proposition4_3_kyFan := DavisKahan.FiniteDimensional.directRotation_displacementSquare_kyFan
 
 /-- **Davis--Kahan 1970, Proposition 4.3.**  Every unitarily invariant norm of the squared
 displacement is minimized by the direct rotation. -/
-alias Proposition4_3 := DavisKahanTheory.directRotation_displacementSquare_uiNorm
+alias Proposition4_3 := DavisKahan.FiniteDimensional.directRotation_displacementSquare_uiNorm
 
 /-- Proposition 4.3 read as a minimality statement about the direct rotation. -/
 alias Proposition4_3_minimizer :=
-  DavisKahanTheory.directRotation_minimizes_displacementSquare_uiNorm
+  DavisKahan.FiniteDimensional.directRotation_minimizes_displacementSquare_uiNorm
 
 /-! ## Infinite-dimensional source forms
 

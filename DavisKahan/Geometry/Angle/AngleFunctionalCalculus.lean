@@ -178,7 +178,7 @@ theorem sinAngleOperatorC_sq_add_cosAngleOperatorC_sq (U V : Submodule ℂ E)
 /-! ### Proposition 3.5's projection commutations, at bounded infinite dimension
 
 `Θ` commutes with `P` and with `Q`.  The finite-dimensional `RCLike` forms of
-these are `TauCeti.DavisKahanTheory.angleOperator_comm_projection` and its right
+these are `TauCeti.DavisKahan.FiniteDimensional.angleOperator_comm_projection` and its right
 companion; the two below are the same assertions for the bounded complex angle
 `angleOperatorC`, where the dimension is arbitrary.
 

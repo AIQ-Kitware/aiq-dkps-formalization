@@ -24,7 +24,7 @@ multiplicity spaces are mixed by the competitor; it is not reintroduced.
 -/
 
 namespace TauCeti
-namespace DavisKahanTheory
+namespace DavisKahan.FiniteDimensional
 
 open scoped InnerProductSpace BigOperators
 open Module (finrank)
@@ -779,5 +779,5 @@ theorem angleComplexStructure_comp_self (U V : Submodule 𝕜 E)
     _ = -(A * A) * (G * G) := by rw [hD2]
     _ = -(A * A * (G * G)) := by noncomm_ring
     _ = -(A * G) := by rw [hproj]
-end DavisKahanTheory
+end DavisKahan.FiniteDimensional
 end TauCeti

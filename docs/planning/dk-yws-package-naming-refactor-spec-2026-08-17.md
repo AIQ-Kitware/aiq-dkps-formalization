@@ -49,7 +49,7 @@ The naming rules for this refactor are:
 
 These are naming/ownership defects with a clear target and little mathematical ambiguity.
 
-- YWS `DavisKahanTheory` nested namespace.
+- YWS `DavisKahan.FiniteDimensional` nested namespace.
 - YWS redundant `yuWangSamworth_` declaration prefixes.
 - YWS preprint-era `Theorem4` / `Lemma5` filenames and declaration spellings.
 - YWS `Core`, `GroundedImports`, and `CitationSurface` module vocabulary.
@@ -136,16 +136,16 @@ YuWangSamworth2015.Appendix.Lemma5      -> YuWangSamworth2015.Appendix.LemmaA1
 
 The root `YuWangSamworth2015.lean` should import `YuWangSamworth2015.PaperSurface`.
 
-## 3.2 Remove the nested `DavisKahanTheory` namespace
+## 3.2 Remove the nested `DavisKahan.FiniteDimensional` namespace
 
 For every YWS file that currently has:
 
 ```lean
 namespace YuWangSamworth2015
-namespace DavisKahanTheory
+namespace DavisKahan.FiniteDimensional
 ```
 
-remove the inner `namespace DavisKahanTheory` / `end DavisKahanTheory` pair. The declarations become direct members of `YuWangSamworth2015`.
+remove the inner `namespace DavisKahan.FiniteDimensional` / `end DavisKahan.FiniteDimensional` pair. The declarations become direct members of `YuWangSamworth2015`.
 
 
 The 13 inspected files carrying the nested namespace are:
@@ -569,7 +569,7 @@ The agent should use separate commits/checkpoints. Do not attempt every rename i
 
 ## Phase Y2 — YWS namespaces/declarations
 
-1. Remove nested `DavisKahanTheory` namespace blocks.
+1. Remove nested `DavisKahan.FiniteDimensional` namespace blocks.
 2. Apply the exact declaration table in section 3.3.
 3. Update census JSON, semantic-audit references, Challenge, comparator, docs, and prose.
 4. Do not leave compatibility aliases in the final state.
@@ -714,7 +714,7 @@ The agent should not spend tokens on these questions:
 
 The naming campaign is complete when all of the following are true:
 
-- YWS has no live `DavisKahanTheory` namespace.
+- YWS has no live `DavisKahan.FiniteDimensional` namespace.
 - YWS has no live declaration beginning `yuWangSamworth_`.
 - YWS uses published `Theorem3` and `LemmaA1` module/declaration numbering.
 - YWS supporting theory is under `Theory`, and the public aggregate is `PaperSurface`.

@@ -100,7 +100,7 @@ sharpness development.
 -/
 
 namespace TauCeti
-namespace DavisKahanTheory
+namespace DavisKahan.FiniteDimensional
 
 open scoped InnerProductSpace BigOperators
 open Filter
@@ -2563,5 +2563,5 @@ theorem tanTwoTheta_directSum_subspace_equality
   rw [tanTwoAngleOperator_directSumModelSubspaces]
   exact tanTwoTheta_directSum_model_equality N hab h₁0 h₁1 h₂0 h₂1
 
-end DavisKahanTheory
+end DavisKahan.FiniteDimensional
 end TauCeti

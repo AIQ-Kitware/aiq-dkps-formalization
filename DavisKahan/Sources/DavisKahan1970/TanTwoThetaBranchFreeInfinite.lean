@@ -54,7 +54,7 @@ case is obtained by complexification in
 -/
 
 namespace TauCeti
-namespace DavisKahanTheory
+namespace DavisKahan.FiniteDimensional
 
 open scoped InnerProductSpace
 open DavisKahan.ExactSinTheta
@@ -518,5 +518,5 @@ end Main
 
 end
 
-end DavisKahanTheory
+end DavisKahan.FiniteDimensional
 end TauCeti

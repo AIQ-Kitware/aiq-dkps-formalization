@@ -33,7 +33,7 @@ transform `4x/(1-x)^2` preserves approximation-number order across `x = 1`.
 -/
 
 namespace TauCeti
-namespace DavisKahanTheory
+namespace DavisKahan.FiniteDimensional
 
 open scoped InnerProductSpace
 open DavisKahan.ExactSinTheta
@@ -125,7 +125,7 @@ theorem sum_absDoubleAngleTangent_le_of_approximatePairs_residual
   linarith
 
 end
-end DavisKahanTheory
+end DavisKahan.FiniteDimensional
 
 namespace DavisKahan1970
 

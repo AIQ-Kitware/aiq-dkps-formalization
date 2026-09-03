@@ -40,7 +40,7 @@ import DavisKahan.Sources.DavisKahan1970.Section8.All
 import DavisKahan.Sources.DavisKahan1970.Section9.All
 
 namespace TauCeti
-namespace DavisKahanTheory
+namespace DavisKahan.FiniteDimensional
 
 open scoped InnerProductSpace
 open Module (finrank)
@@ -102,7 +102,7 @@ theorem proposition4_4_counterexample :
         kyFanSum 4 (LinearMap.id - (directRotation U V hacute).toLinearMap) := by
   exact shortRotation_fullDisplacement_refuted
 
-end DavisKahanTheory
+end DavisKahan.FiniteDimensional
 end TauCeti
 
 namespace TauCeti
@@ -136,23 +136,23 @@ end TauCeti
 
 /-! ## Comparator targets that are currently proved -/
 
-#print axioms TauCeti.DavisKahanTheory.partIII_sinTheta_residual_uiNorm
-#print axioms TauCeti.DavisKahanTheory.partIII_sinTheta_uiNorm
+#print axioms TauCeti.DavisKahan.FiniteDimensional.partIII_sinTheta_residual_uiNorm
+#print axioms TauCeti.DavisKahan.FiniteDimensional.partIII_sinTheta_uiNorm
 #print axioms TauCeti.DavisKahan1970.sinTheta_wholeSpace_symmetricNorming
-#print axioms TauCeti.DavisKahanTheory.partIII_tanTheta_uiNorm
+#print axioms TauCeti.DavisKahan.FiniteDimensional.partIII_tanTheta_uiNorm
 #print axioms TauCeti.DavisKahan1970.tanTheta_directed_bounded_symmetricNorming_complex
 #print axioms TauCeti.DavisKahan1970.tanTheta_directed_bounded_spectralGap_symmetricNorming_complex
 #print axioms TauCeti.DavisKahan1970.tanTheta_ambient_bounded_symmetricNorming_complex_of_crossedDefects
-#print axioms TauCeti.DavisKahanTheory.partIII_sinTwoTheta_uiNorm
+#print axioms TauCeti.DavisKahan.FiniteDimensional.partIII_sinTwoTheta_uiNorm
 #print axioms TauCeti.DavisKahan1970.sinTwoTheta_directed_boundedResidual_blockRepresentative_symmetricNorming_complex
 #print axioms TauCeti.DavisKahan1970.sinTwoTheta_ambient_bounded_symmetricNorming_complex
-#print axioms TauCeti.DavisKahanTheory.partIII_tanTwoTheta_opNorm
+#print axioms TauCeti.DavisKahan.FiniteDimensional.partIII_tanTwoTheta_opNorm
 #print axioms TauCeti.DavisKahan1970.tanTwoTheta_branchFree_bounded_symmetricNorming_complex
 #print axioms TauCeti.DavisKahan1970.tanTwoTheta_ambient_bounded_branchFree_orderedForm_symmetricNorming_complex_of_poleExclusion
 #print axioms TauCeti.DavisKahan1970.tanTwoTheta_directed_boundedResidual_blockRepresentative_spectralGap_symmetricNorming_complex
 #print axioms TauCeti.DavisKahan1970.tanTwoTheta_ambient_bounded_spectralGap_symmetricNorming_complex
-#print axioms TauCeti.DavisKahanTheory.projectorDifference_restrictionSpectra_opNorm
-#print axioms TauCeti.DavisKahanTheory.proposition4_4_counterexample
+#print axioms TauCeti.DavisKahan.FiniteDimensional.projectorDifference_restrictionSpectra_opNorm
+#print axioms TauCeti.DavisKahan.FiniteDimensional.proposition4_4_counterexample
 
 /-!
 ## Additional exhibition sentinels
@@ -173,9 +173,9 @@ numbered Section 9 numerical consequence.
 #print axioms TauCeti.DavisKahan1970.sinTwoTheta_ambient_bounded_symmetricNorming_real
 #print axioms TauCeti.DavisKahan1970.tanTwoTheta_directed_boundedResidual_blockRepresentative_spectralGap_symmetricNorming_real
 #print axioms TauCeti.DavisKahan1970.tanTwoTheta_ambient_bounded_spectralGap_symmetricNorming_real
-#print axioms TauCeti.DavisKahanTheory.directSum_model_all_four_equalities
-#print axioms TauCeti.DavisKahanTheory.single_double_sine_tangent_ratios_tendsto_one
+#print axioms TauCeti.DavisKahan.FiniteDimensional.directSum_model_all_four_equalities
+#print axioms TauCeti.DavisKahan.FiniteDimensional.single_double_sine_tangent_ratios_tendsto_one
 #print axioms TauCeti.DavisKahan1970.remark3_2_bilateralShift_separates_dimensionHypotheses
-#print axioms TauCeti.DavisKahanTheory.not_davisKahanProposition4_4_Finite
+#print axioms TauCeti.DavisKahan.FiniteDimensional.not_davisKahanProposition4_4_Finite
 #print axioms TauCeti.DavisKahan1970.Section8.theorem8_1_canonicalBranch
 #print axioms TauCeti.DavisKahan1970.Section9.equation_9_7

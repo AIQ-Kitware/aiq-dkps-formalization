@@ -278,7 +278,7 @@
         "TauCeti.DavisKahan1970.SectionTwo.tanTheta_complex",
         "TauCeti.DavisKahan1970.SectionTwo.tanTheta_real",
         "TauCeti.DavisKahan1970.tanTheta_directed_finiteDimensional_symmetricNorming_rclike",
-        "TauCeti.DavisKahanTheory.partIII_tanTheta_ritzResidual_uiNorm",
+        "TauCeti.DavisKahan.FiniteDimensional.partIII_tanTheta_ritzResidual_uiNorm",
         "TauCeti.DavisKahan.Section2.theorem6_3_perturbation_infiniteTrial",
         "TauCeti.DavisKahan1970.tanTheta_ambient_bounded_symmetricNorming_complex_of_transversality",
         "TauCeti.DavisKahan1970.tanTheta_ambient_bounded_symmetricNorming_real_of_transversality",
@@ -297,8 +297,8 @@
         "TauCeti.DavisKahan1970.tanTheta_directed_unboundedRitz_symmetricNorming_real",
         "TauCeti.DavisKahan1970.tanTheta_directed_unboundedTrial_symmetricNorming_complex",
         "TauCeti.DavisKahan1970.tanTheta_directed_unboundedTrial_symmetricNorming_real",
-        "TauCeti.DavisKahan.ExactTanTheta.theorem6_3_unbounded_infiniteTrial_ideal",
-        "TauCeti.DavisKahan.ExactTanTheta.UnboundedCompressionTrialData.ideal_of_formBounds",
+        "TauCeti.DavisKahan.TanTheta.theorem6_3_unbounded_infiniteTrial_ideal",
+        "TauCeti.DavisKahan.TanTheta.UnboundedCompressionTrialData.ideal_of_formBounds",
         "TauCeti.DavisKahan1970.theorem6_3_unboundedCompression_ideal_real"
       ],
       "review_note": "Result-only audit 2026-08-12, superseding the earlier plan to classify this row as refuted-as-transcribed. The printed Section 2 tangent theorem is accepted as a TRUE counted result read under nonlocal source semantics; see `nonlocal_source_interpretation`. The directed conclusion is closed at full source scope (bounded and unbounded, complex and real, arbitrary paper UI norm). The ambient conclusion is closed at bounded scope over both fields in the source-shaped (3.5)-qualified form. The Appendix explicitly strengthens the unbounded scope further: in the ordered case A0 <= alpha and Lambda1 >= alpha + delta, both A0 and Lambda1 may be genuinely unbounded while the residual remains bounded. That Appendix scope is discharged over complex scalars by `tanTheta_ambient_unboundedRitz_explicitCompatibility_symmetricNorming_complex` and over real scalars by `tanTheta_ambient_unboundedRitz_explicitCompatibility_symmetricNorming_real`; both conclude ideal membership and the sharp factor-one ambient inequality. The older `tanTheta_ambient_unboundedOperator_boundedRitz_symmetricNorming_complex` and real sibling remain useful specializations in which the ambient operator is unbounded but the Ritz compression is bounded. The bilateral-shift material remains a vacuity/nonvacuity witness proving that (1.5) does not imply (3.5); it is NOT a counterexample to this result and must not be described as one. The transversality-form declarations `tanTheta_ambient_bounded_symmetricNorming_complex_of_transversality` and its real counterpart are retained as registered specializations: `‖sin Theta‖ < 1` is strictly stronger than the source's standing (3.5), so they are alternative routes rather than the source-shaped statement. Audit-surface update 2026-08-13: `tanTheta_directed_finiteDimensional_symmetricNorming_rclike` is now the canonical scalar-generic PaperUI directed facade; it exposes the Ritz spectral hypotheses directly and does not alter the separately certified arbitrary-dimensional/unbounded ambient coverage.  DEFECT FOUND AND REPAIRED 2026-08-31, by the Palomar Section 2 statement audit: the directed clause's registered primaries `tanTheta_directed_unboundedTrial_symmetricNorming_{complex,real}` take a `TanTheta.UnboundedTrialBlock`, whose Ritz compression `operator : Z ->L Z` is BOUNDED and everywhere defined; the bundle's name records only that the AMBIENT operator is unbounded.  They therefore did not establish `DK-6-appendix.unbounded-tangent-extension`, which is the Appendix's explicit statement that BOTH A_0 and Lambda_1 may be unbounded while only the residual stays bounded -- and the certificate could not see the difference, because that atom carried no `type_requirements`.  The repair is `tanTheta_directed_unboundedRitz_symmetricNorming_{complex,real}`, which take an `UnboundedRitzPair` whose `trial.compression : Z ->L. Z` is a densely defined self-adjoint partial map, and which promote the already-existing Appendix-scope Ky Fan estimates `UnboundedCompressionTrialData.ideal_of_formBounds` and `theorem6_3_unboundedCompression_ideal_real` to the paper's universal norm quantifier.  The atom now carries `must_contain: UnboundedRitzPair` / `must_not_contain: UnboundedTrialBlock`, so a bounded-compression witness can no longer satisfy it.  The bounded-compression declarations are retained as specializations.",
@@ -535,12 +535,12 @@
           "note": "Demoted from canonical evidence 2026-08-31 by the coherent-clause audit: its compiler-printed type does not carry the scope it was credited with. Retained as supporting evidence."
         },
         {
-          "declaration": "TauCeti.DavisKahanTheory.partIII_tanTheta_ritzResidual_uiNorm",
+          "declaration": "TauCeti.DavisKahan.FiniteDimensional.partIII_tanTheta_ritzResidual_uiNorm",
           "role": "specialization",
           "note": "Demoted from canonical evidence 2026-08-31 by the coherent-clause audit: its compiler-printed type does not carry the scope it was credited with. Retained as supporting evidence."
         },
         {
-          "declaration": "TauCeti.DavisKahan.ExactTanTheta.theorem6_3_unbounded_infiniteTrial_ideal",
+          "declaration": "TauCeti.DavisKahan.TanTheta.theorem6_3_unbounded_infiniteTrial_ideal",
           "role": "supporting_theorem",
           "note": "The directed clause of the Section 2 tangent theorem at the printed scope, added 2026-08-31. The mathematics was already present as `theorem6_3_unbounded_infiniteTrial_ideal` and its real sibling; what was missing was the promotion to the paper's universal norm quantifier, and the parameterized complex spectral-gap form the promotion needs (the existential form cannot be promoted, since it would return a different representative at each Ky Fan index)."
         },
@@ -553,7 +553,7 @@
           "role": "specialization"
         },
         {
-          "declaration": "TauCeti.DavisKahan.ExactTanTheta.UnboundedCompressionTrialData.ideal_of_formBounds",
+          "declaration": "TauCeti.DavisKahan.TanTheta.UnboundedCompressionTrialData.ideal_of_formBounds",
           "role": "supporting_theorem"
         },
         {
@@ -3157,16 +3157,16 @@
       "semantic_certification": "accepted",
       "lean_declarations": [
         "TauCeti.DavisKahan.crossedDefectsEquivalent_of_isAcute",
-        "TauCeti.DavisKahanTheory.DavisKahanProposition4_4_Finite",
-        "TauCeti.DavisKahanTheory.not_davisKahanProposition4_4_Finite",
-        "TauCeti.DavisKahanTheory.shortRotation_fullDisplacement_refuted"
+        "TauCeti.DavisKahan.FiniteDimensional.DavisKahanProposition4_4_Finite",
+        "TauCeti.DavisKahan.FiniteDimensional.not_davisKahanProposition4_4_Finite",
+        "TauCeti.DavisKahan.FiniteDimensional.shortRotation_fullDisplacement_refuted"
       ],
       "review_note": "Accepted by the hostile audit at the stated-result level.",
       "parent_claim_id": "DK-4.4-prop",
       "repair": {
         "status": "proved",
         "lean_declarations": [
-          "TauCeti.DavisKahanTheory.directRotation_fullDisplacement_qnorm"
+          "TauCeti.DavisKahan.FiniteDimensional.directRotation_fullDisplacement_qnorm"
         ],
         "notes": "The printed real-space every-UI-norm full-displacement minimization claim is refuted exactly. The natural surviving Q-norm minimization theorem is proved by directRotation_fullDisplacement_qnorm."
       },
@@ -3191,7 +3191,7 @@
       "local_statement_self_contained": true,
       "canonical_evidence": [
         {
-          "declaration": "TauCeti.DavisKahanTheory.not_davisKahanProposition4_4_Finite",
+          "declaration": "TauCeti.DavisKahan.FiniteDimensional.not_davisKahanProposition4_4_Finite",
           "role": "exact_refutation",
           "scalar_scope": "not_visible_in_type",
           "evidence_kind": "refutation",
@@ -3199,17 +3199,17 @@
             "DK-4.1-prop.section4-compact-classification-setup",
             "DK-4.4-prop.printed-proposition4-4"
           ],
-          "scalar_scope_note": "The type is `¬TauCeti.DavisKahanTheory.DavisKahanProposition4_4_Finite`: the refutation's scalar field is inside the refuted predicate, not in the theorem's own type, so it cannot be read off the printed type. `DavisKahanProposition4_4_Finite` is the finite REAL statement -- it quantifies `[InnerProductSpace ℝ E]` and `[FiniteDimensional ℝ E]`; an earlier revision of this note said complex, which was wrong; the counterexample declarations are in `supporting_evidence`.",
+          "scalar_scope_note": "The type is `¬TauCeti.DavisKahan.FiniteDimensional.DavisKahanProposition4_4_Finite`: the refutation's scalar field is inside the refuted predicate, not in the theorem's own type, so it cannot be read off the printed type. `DavisKahanProposition4_4_Finite` is the finite REAL statement -- it quantifies `[InnerProductSpace ℝ E]` and `[FiniteDimensional ℝ E]`; an earlier revision of this note said complex, which was wrong; the counterexample declarations are in `supporting_evidence`.",
           "capability_classes": []
         }
       ],
       "supporting_evidence": [
         {
-          "declaration": "TauCeti.DavisKahanTheory.DavisKahanProposition4_4_Finite",
+          "declaration": "TauCeti.DavisKahan.FiniteDimensional.DavisKahanProposition4_4_Finite",
           "role": "supporting_theorem"
         },
         {
-          "declaration": "TauCeti.DavisKahanTheory.shortRotation_fullDisplacement_refuted",
+          "declaration": "TauCeti.DavisKahan.FiniteDimensional.shortRotation_fullDisplacement_refuted",
           "role": "supporting_theorem"
         },
         {
@@ -3230,7 +3230,7 @@
           ],
           "scalar_scope": "not_visible_in_type",
           "evidence": {
-            "primary": "TauCeti.DavisKahanTheory.not_davisKahanProposition4_4_Finite",
+            "primary": "TauCeti.DavisKahan.FiniteDimensional.not_davisKahanProposition4_4_Finite",
             "correspondence": []
           },
           "status": "established",
@@ -4118,7 +4118,7 @@
       "verification": "proved_in_build",
       "semantic_certification": "accepted",
       "lean_declarations": [
-        "TauCeti.DavisKahan.ExactTanTheta.theorem6_3_unbounded_infiniteTrial_ideal_exists",
+        "TauCeti.DavisKahan.TanTheta.theorem6_3_unbounded_infiniteTrial_ideal_exists",
         "TauCeti.DavisKahan1970.theorem6_3_unbounded_infiniteTrial_ideal_exists_real",
         "TauCeti.DavisKahan1970.tanTheta_directed_bounded_spectralGap_symmetricNorming_complex",
         "TauCeti.DavisKahan1970.tanTheta_directed_bounded_spectralGap_symmetricNorming_real",
@@ -4182,7 +4182,7 @@
           "role": "specialization"
         },
         {
-          "declaration": "TauCeti.DavisKahan.ExactTanTheta.theorem6_3_unbounded_infiniteTrial_ideal_exists",
+          "declaration": "TauCeti.DavisKahan.TanTheta.theorem6_3_unbounded_infiniteTrial_ideal_exists",
           "role": "generalization",
           "note": "The same estimate at an arbitrary Fan-dominant unitarily invariant ideal gauge.  Stronger in its own quantifier, but not the printed one: the source says 'for every unitary-invariant norm', and `SymmetricNormingFunction` is this repository's model of that object.  `symmetricNorming_of_kyFanDominant` is the compiled bridge between them."
         },
@@ -5042,7 +5042,7 @@
     "terminal_results": 29,
     "remaining_results": [],
     "note": "The structured fields above are authoritative; this paragraph is regenerated whenever the count moves. 2026-09-02, closing: terminal_results is 29 and remaining_results is empty. `S2-tan-two-theta` was `hostile_review_blocked` under obligation `tan2theta-directed-correspondence` after a 2026-09-02 closure that did not compose; it is now accepted on canonical directed witnesses `tanTwoTheta_directed_unboundedResidual_symmetricNorming_{complex,real}`, which take the reducing subspace and conclude on the paper's directed corner (`tanTwoDirectedCornerR U V` over ℝ) with the singular-value identification in their types. The canonical-evidence digest changed accordingly and the statement pins were refreshed for the new canonical and bridging declarations. Earlier history of this field (the 2026-08-31 `S2-sin-two-theta` reopening, the `S2-tan-theta` Appendix-scope primaries, the paper-prefix rename with an unchanged digest) is in the human report.",
-    "canonical_evidence_sha256": "8ada0c5f9cbb379b59c4874791c83c344bd4b42edb7ee3fa5beb9462e81d2d65",
+    "canonical_evidence_sha256": "3cdeeead1a5aef94c1b5e0d519b38382e310e6f4ef04c7a070ba22cb249cbb04",
     "hostile_review_status": "accepted",
     "hostile_review_note": "ACCEPTED 2026-09-02, after the day's reopening was closed by new mathematics rather than by metadata: the directed tan 2Theta clauses have source-shaped complex and real endpoints on the paper objects, with the correspondence composed in Lean and pinned. `open_hostile_review_obligations` is closed and lists the closure; the structured fields `terminal_results`, `remaining_results` and `hostile_review_status` are the authoritative statement."
   },

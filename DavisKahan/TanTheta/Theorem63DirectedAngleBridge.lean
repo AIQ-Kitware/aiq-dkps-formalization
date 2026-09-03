@@ -34,7 +34,7 @@ open scoped InnerProductSpace BigOperators
 
 namespace TauCeti
 namespace DavisKahan
-namespace ExactTanTheta
+namespace TanTheta
 
 open ExactSinTheta
 open Module (finrank)
@@ -402,6 +402,6 @@ theorem theorem63DirectedTangent_eq_subtype_comp_cfcTan_sourceDirectedAngle_of_f
 end
 
 end
-end ExactTanTheta
+end TanTheta
 end DavisKahan
 end TauCeti

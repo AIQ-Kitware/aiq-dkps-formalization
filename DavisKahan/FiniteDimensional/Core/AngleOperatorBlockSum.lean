@@ -16,7 +16,7 @@ operator geometry through the Davis--Kahan finite functional-calculus definition
 -/
 
 namespace TauCeti
-namespace DavisKahanTheory
+namespace DavisKahan.FiniteDimensional
 
 open scoped InnerProductSpace
 
@@ -151,5 +151,5 @@ theorem tanTwoAngleOperator_orthogonalBlockSumSubmodule
     _ = RectangularUnitarilyInvariantSeminorm.orthogonalBlockSum
           (tanTwoAngleOperator U₁ V₁) (tanTwoAngleOperator U₂ V₂) := rfl
 
-end DavisKahanTheory
+end DavisKahan.FiniteDimensional
 end TauCeti

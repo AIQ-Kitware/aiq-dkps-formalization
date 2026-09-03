@@ -41,7 +41,7 @@ are what the theorem is about.
 namespace TauCeti
 namespace DavisKahan
 
-open TauCeti.DavisKahan.ExactSinTheta TauCeti.DavisKahan.ExactTanTheta
+open TauCeti.DavisKahan.ExactSinTheta TauCeti.DavisKahan.TanTheta
   TauCeti.DavisKahan.TanTheta
 
 universe u v

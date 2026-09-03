@@ -44,7 +44,7 @@ namespace Model
 
 open DavisKahan1970.Section9
 open TauCeti.DavisKahan.TanTheta
-open TauCeti.DavisKahan.ExactTanTheta
+open TauCeti.DavisKahan.TanTheta
 open TauCeti.DavisKahan.ExactSinTheta
 
 noncomputable section

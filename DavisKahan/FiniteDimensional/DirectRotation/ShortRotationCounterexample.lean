@@ -41,7 +41,7 @@ the displacement-square majorization
 -/
 
 namespace TauCeti
-namespace DavisKahanTheory
+namespace DavisKahan.FiniteDimensional
 namespace ShortRotationCounterexample
 
 open scoped InnerProductSpace
@@ -893,5 +893,5 @@ theorem kyFan_not_isQNorm :
       kyFanSum_eq_sum_fin] using hle
   exact absurd hle' (not_le.mpr kyFanSum_lt)
 
-end DavisKahanTheory
+end DavisKahan.FiniteDimensional
 end TauCeti

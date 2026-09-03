@@ -172,13 +172,14 @@ end WitnessSelectedGraph
 end DavisKahanExt
 end TauCeti
 namespace TauCeti
-namespace DavisKahanTheory
+namespace DavisKahan
+namespace SinTheta
+namespace Continuation
 
 open DavisKahan
 
 open scoped InnerProductSpace Topology
 
-namespace ComplexContinuation
 
 open TauCeti.DavisKahanExt
 
@@ -208,7 +209,8 @@ theorem sinTwoTheta_acute_of_small_perturbation
   isUniformlyAcute_of_isQuarterAcute _ _
     (C.selectedSpectralSubspaces_isQuarterAcute_of_contour_bound hsmall)
 
-end ComplexContinuation
 
-end DavisKahanTheory
+end Continuation
+end SinTheta
+end DavisKahan
 end TauCeti

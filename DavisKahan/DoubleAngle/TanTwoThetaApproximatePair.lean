@@ -58,7 +58,7 @@ Nothing in this file assumes `[FiniteDimensional]`, a contraction bound on
 -/
 
 namespace TauCeti
-namespace DavisKahanTheory
+namespace DavisKahan.FiniteDimensional
 
 open scoped InnerProductSpace
 open DavisKahan.ExactSinTheta
@@ -523,5 +523,5 @@ end Configuration
 
 end
 
-end DavisKahanTheory
+end DavisKahan.FiniteDimensional
 end TauCeti
