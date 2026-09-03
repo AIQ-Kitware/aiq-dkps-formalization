@@ -66,52 +66,48 @@ abbrev hSBasis (F : Type vF) [NormedAddCommGroup F] [InnerProductSpace ℂ F]
 
 /-- Finite paper square energy is equivalent to representation by a unique
 element of the `ℓ²` model. -/
-theorem isPaperHilbertSchmidt_iff_existsUnique_tensor (A : F →L[ℂ] E) :
-    IsPaperHilbertSchmidt A ↔
+theorem approximationNumberEnergy_ne_top_iff_existsUnique_tensor (A : F →L[ℂ] E) :
+    approximationNumberEnergy A ≠ ⊤ ↔
       ∃! f : lp (fun _ : HSIndex F => E) 2, ofLp (hSBasis F) f = A := by
-  rw [isPaperHilbertSchmidt_iff_summable_basis
-    ContinuousLinearMap.hasMinMaxLowerBound_complex (hSBasis F) A]
+  rw [approximationNumberEnergy_ne_top_iff_summable_basis (hSBasis F) A]
   exact (existsUnique_ofLp_iff_summable (hSBasis F) A).symm
 
 /-- The canonical model element representing a paper Hilbert--Schmidt operator:
 its column family. -/
 noncomputable def hilbertSchmidtTensor (A : F →L[ℂ] E)
-    (hA : IsPaperHilbertSchmidt A) : lp (fun _ : HSIndex F => E) 2 :=
+    (hA : approximationNumberEnergy A ≠ ⊤) : lp (fun _ : HSIndex F => E) 2 :=
   ⟨columns (hSBasis F) A,
     (memLp_columns_iff_summable (hSBasis F) A).mpr
-      ((isPaperHilbertSchmidt_iff_summable_basis
-    ContinuousLinearMap.hasMinMaxLowerBound_complex (hSBasis F) A).1 hA)⟩
+      ((approximationNumberEnergy_ne_top_iff_summable_basis (hSBasis F) A).1 hA)⟩
 
 /-- The tensor model's operator, unfolded.  This is the bridge between the tensor presentation of a
 Hilbert--Schmidt map and its operator form. -/
 @[simp]
 theorem toOperator_hilbertSchmidtTensor (A : F →L[ℂ] E)
-    (hA : IsPaperHilbertSchmidt A) :
+    (hA : approximationNumberEnergy A ≠ ⊤) :
     ofLp (hSBasis F) (hilbertSchmidtTensor A hA) = A :=
   ofLp_columns (hSBasis F) A _
 
 /-- The model norm is exactly the paper square norm. -/
 theorem norm_hilbertSchmidtTensor (A : F →L[ℂ] E)
-    (hA : IsPaperHilbertSchmidt A) :
-    ‖hilbertSchmidtTensor A hA‖ = paperHilbertSchmidtNorm A := by
+    (hA : approximationNumberEnergy A ≠ ⊤) :
+    ‖hilbertSchmidtTensor A hA‖ = ContinuousLinearMap.hilbertSchmidtNorm A := by
   have hsq := norm_sq_eq_tsum_norm_column_sq (hSBasis F) (hilbertSchmidtTensor A hA)
   rw [toOperator_hilbertSchmidtTensor] at hsq
-  rw [hilbertSchmidtNorm_eq_sqrt_tsum_basis
-    ContinuousLinearMap.hasMinMaxLowerBound_complex (hSBasis F) A hA, ← hsq,
+  rw [hilbertSchmidtNorm_eq_sqrt_tsum_basis (hSBasis F) A hA, ← hsq,
     Real.sqrt_sq (norm_nonneg _)]
 
 /-- Every element of the model represents a paper Hilbert--Schmidt operator. -/
-theorem isPaperHilbertSchmidt_toOperator (f : lp (fun _ : HSIndex F => E) 2) :
-    IsPaperHilbertSchmidt (ofLp (hSBasis F) f) := by
-  rw [isPaperHilbertSchmidt_iff_summable_basis
-    ContinuousLinearMap.hasMinMaxLowerBound_complex (hSBasis F), ←
+theorem approximationNumberEnergy_ne_top_toOperator (f : lp (fun _ : HSIndex F => E) 2) :
+    approximationNumberEnergy (ofLp (hSBasis F) f) ≠ ⊤ := by
+  rw [approximationNumberEnergy_ne_top_iff_summable_basis (hSBasis F), ←
     memLp_columns_iff_summable (hSBasis F), columns_ofLp]
   exact lp.memℓp f
 
 /-- The paper square norm of the represented operator is exactly the model norm. -/
 theorem hilbertSchmidtNorm_toOperator (f : lp (fun _ : HSIndex F => E) 2) :
-    paperHilbertSchmidtNorm (ofLp (hSBasis F) f) = ‖f‖ := by
-  have hZ := isPaperHilbertSchmidt_toOperator f
+    ContinuousLinearMap.hilbertSchmidtNorm (ofLp (hSBasis F) f) = ‖f‖ := by
+  have hZ := approximationNumberEnergy_ne_top_toOperator f
   have hcanon := norm_hilbertSchmidtTensor (ofLp (hSBasis F) f) hZ
   have heq : hilbertSchmidtTensor (ofLp (hSBasis F) f) hZ = f :=
     ofLp_injective (hSBasis F) (by rw [toOperator_hilbertSchmidtTensor])

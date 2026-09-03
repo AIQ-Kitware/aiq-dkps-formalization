@@ -6,6 +6,7 @@ Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 import DavisKahan.Sources.DavisKahan1970.Ideals.HilbertSchmidt
 import DavisKahan.Sources.DavisKahan1970.Ideals.HilbertSchmidtFiniteRank
 import ForTauCeti.Analysis.OperatorIdeal.Family.HilbertSchmidt
+import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.ScalarTransport
 
 /-!
 # Basis and tensor models of the paper square norm
@@ -154,10 +155,10 @@ theorem comp_basisProjection_apply {ι : Type*}
 energy of the compression of `A` to a finite-dimensional subspace `K` of the
 domain is the sum of the squared column norms over any orthonormal basis
 of `K`. -/
-theorem hilbertSchmidtEnergy_comp_starProjection
+theorem approximationNumberEnergy_comp_starProjection
     (A : F →L[𝕜] E) (K : Submodule 𝕜 F) [FiniteDimensional 𝕜 K]
     {n : ℕ} (c : OrthonormalBasis (Fin n) 𝕜 K) :
-    paperHilbertSchmidtEnergy (A ∘L K.starProjection) =
+    approximationNumberEnergy (A ∘L K.starProjection) =
       ∑ k : Fin n, ENNReal.ofReal (‖A ((c k : F))‖ ^ 2) := by
   classical
   have hn : Module.finrank 𝕜 K = n := by
@@ -256,8 +257,8 @@ theorem hilbertSchmidtEnergy_comp_starProjection
   have hfrob : ∑ k : Fin n, T.toLinearMap.singularValues (k : ℕ) ^ 2
       = ∑ k : Fin n, ‖T (c k)‖ ^ 2 :=
     TauCeti.sum_sq_singularValues T.toLinearMap hn c
-  rw [hsame.paperHilbertSchmidtEnergy_eq,
-    hilbertSchmidtEnergy_eq_sum_range_of_rank_le hTrank,
+  rw [hsame.approximationNumberEnergy_eq,
+    approximationNumberEnergy_eq_sum_range_of_rank_le hTrank,
     ← Fin.sum_univ_eq_sum_range
       (fun m => ENNReal.ofReal ((approximationSingularValue m T) ^ 2)) n,
     ← ENNReal.ofReal_sum_of_nonneg fun k _ => sq_nonneg _,
@@ -270,10 +271,10 @@ theorem hilbertSchmidtEnergy_comp_starProjection
     _ = ∑ k : Fin n, ‖A ((c k : F))‖ ^ 2 := rfl
 
 /-- Finite-cutoff Frobenius identity in approximation-number form. -/
-theorem paperHilbertSchmidtEnergy_comp_paperBasisProjection
+theorem approximationNumberEnergy_comp_basisProjection
     {ι : Type*} (b : HilbertBasis ι 𝕜 F) (s : Finset ι)
     (A : F →L[𝕜] E) :
-    paperHilbertSchmidtEnergy (A ∘L basisProjection b s) =
+    approximationNumberEnergy (A ∘L basisProjection b s) =
       ∑ i ∈ s, ENNReal.ofReal (‖A (b i)‖ ^ 2) := by
   classical
   -- enumerate the selected basis vectors
@@ -320,7 +321,7 @@ theorem paperHilbertSchmidtEnergy_comp_paperBasisProjection
     rw [show ⇑c = _ from OrthonormalBasis.coe_mk hon hsp]
   have hP : basisProjection b s
       = (Submodule.span 𝕜 (b '' (s : Set ι))).starProjection := rfl
-  rw [hP, hilbertSchmidtEnergy_comp_starProjection A _ c]
+  rw [hP, approximationNumberEnergy_comp_starProjection A _ c]
   calc ∑ k : Fin s.card, ENNReal.ofReal (‖A ((c k : F))‖ ^ 2)
       = ∑ k : Fin s.card,
           ENNReal.ofReal (‖A (b ((s.equivFin.symm k : ι)))‖ ^ 2) :=
@@ -353,24 +354,23 @@ coordinate bridge, and it is the only reason the bridge was ever stated over
 `hasMinMaxLowerBound_complex` and `hasMinMaxLowerBound_real`, and everything
 downstream becomes scalar-generic. -/
 theorem approximationSingularValue_cutoff_tendsto {ι : Type*}
-    (hlb : ContinuousLinearMap.HasMinMaxLowerBound 𝕜 F E)
     (b : HilbertBasis ι 𝕜 F) (A : F →L[𝕜] E) (n : ℕ) :
     Tendsto
       (fun s : Finset ι => approximationSingularValue n
         (A ∘L basisProjection b s))
       atTop (𝓝 (approximationSingularValue n A)) :=
-  approximationSingularValue_comp_strongProjection_tendsto_of_minMax hlb
+  approximationSingularValue_comp_strongProjection_tendsto_of_minMax
+    (ContinuousLinearMap.hasMinMaxLowerBound_rclike 𝕜)
     (fun s => basisProjection_isOrthogonalProjection b s)
     (basisProjection_stronglyTendsto b) n A
 
 /-- The approximation-number energy is the supremum of finite-basis cutoff
 energies. -/
-theorem hilbertSchmidtEnergy_eq_iSup_cutoff {ι : Type*}
-    (hlb : ContinuousLinearMap.HasMinMaxLowerBound 𝕜 F E)
+theorem approximationNumberEnergy_eq_iSup_cutoff {ι : Type*}
     (b : HilbertBasis ι 𝕜 F) (A : F →L[𝕜] E) :
-    paperHilbertSchmidtEnergy A =
+    approximationNumberEnergy A =
       ⨆ s : Finset ι,
-        paperHilbertSchmidtEnergy (A ∘L basisProjection b s) := by
+        approximationNumberEnergy (A ∘L basisProjection b s) := by
   have hle : ∀ (s : Finset ι) (n : ℕ),
       approximationSingularValue n (A ∘L basisProjection b s) ≤
         approximationSingularValue n A := by
@@ -389,7 +389,7 @@ theorem hilbertSchmidtEnergy_eq_iSup_cutoff {ι : Type*}
         _ = A.approximationNumber n := by rw [mul_one]
     exact_mod_cast hNN
   apply le_antisymm
-  · unfold paperHilbertSchmidtEnergy
+  · unfold approximationNumberEnergy
     rw [ENNReal.tsum_eq_iSup_sum]
     refine iSup_le fun t => ?_
     have hten : Tendsto
@@ -399,20 +399,20 @@ theorem hilbertSchmidtEnergy_eq_iSup_cutoff {ι : Type*}
           ((approximationSingularValue n A) ^ 2))) := by
       refine tendsto_finsetSum _ fun n _ => ?_
       exact ENNReal.tendsto_ofReal
-        ((approximationSingularValue_cutoff_tendsto hlb b A n).pow 2)
+        ((approximationSingularValue_cutoff_tendsto b A n).pow 2)
     refine le_of_tendsto hten (Filter.Eventually.of_forall fun s => ?_)
     calc
       ∑ n ∈ t, ENNReal.ofReal
           ((approximationSingularValue n (A ∘L basisProjection b s)) ^ 2)
-          ≤ paperHilbertSchmidtEnergy (A ∘L basisProjection b s) :=
+          ≤ approximationNumberEnergy (A ∘L basisProjection b s) :=
             ENNReal.sum_le_tsum t
       _ ≤ ⨆ t : Finset ι,
-            paperHilbertSchmidtEnergy
+            approximationNumberEnergy
               (A ∘L basisProjection b t) :=
             le_iSup (fun t : Finset ι =>
-              paperHilbertSchmidtEnergy (A ∘L basisProjection b t)) s
+              approximationNumberEnergy (A ∘L basisProjection b t)) s
   · refine iSup_le fun s => ?_
-    unfold paperHilbertSchmidtEnergy
+    unfold approximationNumberEnergy
     refine ENNReal.tsum_le_tsum fun n => ?_
     exact ENNReal.ofReal_le_ofReal (pow_le_pow_left₀
       (approximationSingularValue_nonneg n _) (hle s n) 2)
@@ -430,36 +430,58 @@ theorem hilbertSchmidtBasisEnergy_eq_iSup_finset {ι : Type*}
 
 /-- The approximation-number and basis definitions of rectangular
 Hilbert--Schmidt energy agree exactly. -/
-theorem hilbertSchmidtEnergy_eq_basisEnergy {ι : Type*}
-    (hlb : ContinuousLinearMap.HasMinMaxLowerBound 𝕜 F E)
+theorem approximationNumberEnergy_eq_basisEnergy {ι : Type*}
     (b : HilbertBasis ι 𝕜 F) (A : F →L[𝕜] E) :
-    paperHilbertSchmidtEnergy A = hilbertSchmidtBasisEnergy b A := by
-  rw [hilbertSchmidtEnergy_eq_iSup_cutoff hlb b A,
+    approximationNumberEnergy A = hilbertSchmidtBasisEnergy b A := by
+  rw [approximationNumberEnergy_eq_iSup_cutoff b A,
     hilbertSchmidtBasisEnergy_eq_iSup_finset b A]
   exact iSup_congr fun s =>
-    paperHilbertSchmidtEnergy_comp_paperBasisProjection b s A
+    approximationNumberEnergy_comp_basisProjection b s A
+
+/-- The paper square energy is the canonical extended norm, squared: the two
+energy interfaces agree without any finiteness hypothesis at all. -/
+theorem approximationNumberEnergy_eq_hilbertSchmidtENorm_sq
+    (A : F →L[𝕜] E) :
+    approximationNumberEnergy A = A.hilbertSchmidtENorm ^ (2 : ℝ) := by
+  obtain ⟨w, b, -⟩ := exists_hilbertBasis 𝕜 F
+  rw [A.hilbertSchmidtENorm_rpow_two b, approximationNumberEnergy_eq_basisEnergy b A,
+    hilbertSchmidtBasisEnergy_eq_hilbertSchmidtEnergy]
+
+/-- **The canonical real norm is the paper's square-root-of-energy formula**, with no
+finiteness hypothesis: off the ideal both sides are `0`, because `ENNReal.toReal` sends
+`∞` to `0` and `Real.sqrt 0 = 0`.
+
+This is what lets every estimate the paper proves about `√(Σ aₙ²)` be *stated* about the
+one canonical norm, rather than about a second norm that happens to be equal to it. -/
+theorem hilbertSchmidtNorm_eq_sqrt_approximationNumberEnergy
+    (A : F →L[𝕜] E) :
+    A.hilbertSchmidtNorm = Real.sqrt (approximationNumberEnergy A).toReal := by
+  rw [ContinuousLinearMap.hilbertSchmidtNorm_eq_toReal,
+    approximationNumberEnergy_eq_hilbertSchmidtENorm_sq A]
+  rcases eq_or_ne A.hilbertSchmidtENorm ⊤ with h | h
+  · rw [h]
+    rw [ENNReal.top_rpow_of_pos (by norm_num : (0:ℝ) < 2)]
+    simp
+  · rw [← ENNReal.toReal_rpow, Real.rpow_two, Real.sqrt_sq ENNReal.toReal_nonneg]
 
 /-- Paper square membership is equivalent to square-summable columns in any
 Hilbert basis. -/
-theorem isPaperHilbertSchmidt_iff_summable_basis {ι : Type*}
-    (hlb : ContinuousLinearMap.HasMinMaxLowerBound 𝕜 F E)
+theorem approximationNumberEnergy_ne_top_iff_summable_basis {ι : Type*}
     (b : HilbertBasis ι 𝕜 F) (A : F →L[𝕜] E) :
-    IsPaperHilbertSchmidt A ↔ Summable (fun i => ‖A (b i)‖ ^ 2) := by
+    approximationNumberEnergy A ≠ ⊤ ↔ Summable (fun i => ‖A (b i)‖ ^ 2) := by
   have hE : hilbertSchmidtBasisEnergy b A
       = ∑' i, ((‖A (b i)‖₊ ^ 2 : NNReal) : ENNReal) := by
     simp only [hilbertSchmidtBasisEnergy, ENNReal.coe_pow]
-  unfold IsPaperHilbertSchmidt
-  rw [hilbertSchmidtEnergy_eq_basisEnergy hlb b A, hE,
+  rw [approximationNumberEnergy_eq_basisEnergy b A, hE,
     ENNReal.tsum_coe_ne_top_iff_summable, ← NNReal.summable_coe]
   simp only [NNReal.coe_pow, coe_nnnorm]
 
 /-- The paper square norm is the ordinary basis Hilbert--Schmidt norm. -/
 theorem hilbertSchmidtNorm_eq_sqrt_tsum_basis {ι : Type*}
-    (hlb : ContinuousLinearMap.HasMinMaxLowerBound 𝕜 F E)
     (b : HilbertBasis ι 𝕜 F) (A : F →L[𝕜] E)
-    (hA : IsPaperHilbertSchmidt A) :
-    paperHilbertSchmidtNorm A = Real.sqrt (∑' i, ‖A (b i)‖ ^ 2) := by
-  have hsummable := (isPaperHilbertSchmidt_iff_summable_basis hlb b A).1 hA
+    (hA : approximationNumberEnergy A ≠ ⊤) :
+    ContinuousLinearMap.hilbertSchmidtNorm A = Real.sqrt (∑' i, ‖A (b i)‖ ^ 2) := by
+  have hsummable := (approximationNumberEnergy_ne_top_iff_summable_basis b A).1 hA
   have hnn : Summable (fun i => ‖A (b i)‖₊ ^ 2) := by
     rw [← NNReal.summable_coe]
     simpa only [NNReal.coe_pow, coe_nnnorm] using hsummable
@@ -467,8 +489,8 @@ theorem hilbertSchmidtNorm_eq_sqrt_tsum_basis {ι : Type*}
       = ((∑' i, (‖A (b i)‖₊ ^ 2 : NNReal) : NNReal) : ENNReal) := by
     simp only [hilbertSchmidtBasisEnergy]
     exact (ENNReal.coe_tsum hnn).symm
-  rw [paperHilbertSchmidtNorm, hilbertSchmidtEnergy_eq_basisEnergy hlb b A,
-    hE, ENNReal.coe_toReal]
+  rw [hilbertSchmidtNorm_eq_sqrt_approximationNumberEnergy,
+    approximationNumberEnergy_eq_basisEnergy b A, hE, ENNReal.coe_toReal]
   congr 1
   rw [NNReal.coe_tsum]
   simp only [NNReal.coe_pow, coe_nnnorm]
@@ -478,40 +500,40 @@ theorem hilbertSchmidtNorm_eq_sqrt_tsum_basis {ι : Type*}
 `ForTauCeti/Analysis/OperatorIdeal/Family/HilbertSchmidt.lean` builds the Hilbert--Schmidt
 ideal from orthonormal expansions alone, deliberately never mentioning approximation
 numbers, so that it needs no spectral theory.  The identity that reconciles the two
-definitions is exactly `hilbertSchmidtEnergy_eq_basisEnergy` above, and the four
+definitions is exactly `approximationNumberEnergy_eq_basisEnergy` above, and the four
 statements below record what it buys: the staged ideal, its membership predicate and its
 gauge agree with the paper ones, so the paper development may be reread through the staged
 API without reproving anything. -/
 
 /-- **The singular-value energy is the column energy.**  This is the obligation recorded
 against Milestone B3 of `TauCetiRoadmap/OperatorTheory/OperatorIdeals/README.md`. -/
-theorem tsum_approximationSingularValue_sq_eq_hilbertSchmidtEnergy {ι : Type*}
-    (hlb : ContinuousLinearMap.HasMinMaxLowerBound 𝕜 F E)
+theorem approximationNumberEnergy_eq_hilbertSchmidtEnergy {ι : Type*}
     (b : HilbertBasis ι 𝕜 F) (A : F →L[𝕜] E) :
     ∑' n : ℕ, ENNReal.ofReal (approximationSingularValue n A ^ 2) =
       A.hilbertSchmidtEnergy b :=
-  hilbertSchmidtEnergy_eq_basisEnergy hlb b A
+  approximationNumberEnergy_eq_basisEnergy b A
 
 /-- The staged Hilbert--Schmidt predicate is the paper one. -/
-theorem isHilbertSchmidt_iff_isPaperHilbertSchmidt
-    (hlb : ContinuousLinearMap.HasMinMaxLowerBound 𝕜 F E) (A : F →L[𝕜] E) :
-    A.IsHilbertSchmidt ↔ IsPaperHilbertSchmidt A := by
+theorem isHilbertSchmidt_iff_approximationNumberEnergy_ne_top
+    (A : F →L[𝕜] E) :
+    A.IsHilbertSchmidt ↔ approximationNumberEnergy A ≠ ⊤ := by
   obtain ⟨w, b, -⟩ := exists_hilbertBasis 𝕜 F
-  rw [A.isHilbertSchmidt_iff_energy_ne_top b, IsPaperHilbertSchmidt,
-    hilbertSchmidtEnergy_eq_basisEnergy hlb b A]
+  rw [A.isHilbertSchmidt_iff_energy_ne_top b,
+    approximationNumberEnergy_eq_basisEnergy b A]
   rfl
 
 /-- The staged Hilbert--Schmidt norm is the paper square norm. -/
-theorem hilbertSchmidtENorm_eq_ofReal_paperHilbertSchmidtNorm
-    (hlb : ContinuousLinearMap.HasMinMaxLowerBound 𝕜 F E) (A : F →L[𝕜] E)
-    (hA : IsPaperHilbertSchmidt A) :
-    A.hilbertSchmidtENorm = ENNReal.ofReal (paperHilbertSchmidtNorm A) := by
+theorem hilbertSchmidtENorm_eq_ofReal_hilbertSchmidtNorm
+    (A : F →L[𝕜] E)
+    (hA : approximationNumberEnergy A ≠ ⊤) :
+    A.hilbertSchmidtENorm = ENNReal.ofReal (ContinuousLinearMap.hilbertSchmidtNorm A) := by
   obtain ⟨w, b, -⟩ := exists_hilbertBasis 𝕜 F
-  have henergy : A.hilbertSchmidtEnergy b = paperHilbertSchmidtEnergy A :=
-    (hilbertSchmidtEnergy_eq_basisEnergy hlb b A).symm
-  have hne : paperHilbertSchmidtEnergy A ≠ ⊤ := hA
-  rw [A.hilbertSchmidtENorm_eq b, henergy, paperHilbertSchmidtNorm,
-    Real.sqrt_eq_rpow, ← ENNReal.ofReal_rpow_of_nonneg ENNReal.toReal_nonneg (by norm_num),
+  have henergy : A.hilbertSchmidtEnergy b = approximationNumberEnergy A :=
+    (approximationNumberEnergy_eq_basisEnergy b A).symm
+  have hne : approximationNumberEnergy A ≠ ⊤ := hA
+  rw [hilbertSchmidtNorm_eq_sqrt_approximationNumberEnergy, A.hilbertSchmidtENorm_eq b,
+    henergy, Real.sqrt_eq_rpow,
+    ← ENNReal.ofReal_rpow_of_nonneg ENNReal.toReal_nonneg (by norm_num),
     ENNReal.ofReal_toReal hne, one_div]
 
 /-- Consequently the gauge of the staged symmetric ideal family, read on the paper ideal,
@@ -519,14 +541,13 @@ is the paper square norm.
 
 `TauCeti.SymmetricOperatorIdealFamily` is the diagonal layer, so it constrains the source
 and target to one universe; the rectangular statements above are the general ones. -/
-theorem hilbertSchmidtIdealFamily_gauge_eq_paperHilbertSchmidtNorm {G K : Type vE}
+theorem hilbertSchmidtIdealFamily_gauge_eq_hilbertSchmidtNorm {G K : Type vE}
     [NormedAddCommGroup G] [InnerProductSpace 𝕜 G] [CompleteSpace G]
     [NormedAddCommGroup K] [InnerProductSpace 𝕜 K] [CompleteSpace K]
-    (hlb : ContinuousLinearMap.HasMinMaxLowerBound 𝕜 G K)
-    (A : G →L[𝕜] K) (hA : IsPaperHilbertSchmidt A) :
+    (A : G →L[𝕜] K) (hA : approximationNumberEnergy A ≠ ⊤) :
     (TauCeti.hilbertSchmidtIdealFamily 𝕜).toOperatorIdealFamily.gauge A =
-      ENNReal.ofReal (paperHilbertSchmidtNorm A) :=
-  hilbertSchmidtENorm_eq_ofReal_paperHilbertSchmidtNorm hlb A hA
+      ENNReal.ofReal (ContinuousLinearMap.hilbertSchmidtNorm A) :=
+  hilbertSchmidtENorm_eq_ofReal_hilbertSchmidtNorm A hA
 
 /-! ### The bridge at the two scalar fields
 
@@ -536,45 +557,9 @@ paper and staged Hilbert--Schmidt theories are one theory over `ℂ` and over
 `ℝ`-valued paper norm had no connection at all to the staged ideal gauge over
 a real Hilbert space. -/
 
-/-- The staged Hilbert--Schmidt predicate is the paper one, over `ℂ`. -/
-theorem isHilbertSchmidt_iff_isPaperHilbertSchmidt_complex
-    {Ec : Type vE} {Fc : Type vF}
-    [NormedAddCommGroup Ec] [InnerProductSpace ℂ Ec] [CompleteSpace Ec]
-    [NormedAddCommGroup Fc] [InnerProductSpace ℂ Fc] [CompleteSpace Fc]
-    (A : Fc →L[ℂ] Ec) :
-    A.IsHilbertSchmidt ↔ IsPaperHilbertSchmidt A :=
-  isHilbertSchmidt_iff_isPaperHilbertSchmidt
-    ContinuousLinearMap.hasMinMaxLowerBound_complex A
 
-/-- The staged Hilbert--Schmidt predicate is the paper one, over `ℝ`. -/
-theorem isHilbertSchmidt_iff_isPaperHilbertSchmidt_real
-    {Er : Type vE} {Fr : Type vF}
-    [NormedAddCommGroup Er] [InnerProductSpace ℝ Er] [CompleteSpace Er]
-    [NormedAddCommGroup Fr] [InnerProductSpace ℝ Fr] [CompleteSpace Fr]
-    (A : Fr →L[ℝ] Er) :
-    A.IsHilbertSchmidt ↔ IsPaperHilbertSchmidt A :=
-  isHilbertSchmidt_iff_isPaperHilbertSchmidt
-    TauCeti.ApproximationNumber.hasMinMaxLowerBound_real A
 
-/-- The staged Hilbert--Schmidt norm is the paper square norm, over `ℂ`. -/
-theorem hilbertSchmidtENorm_eq_ofReal_paperHilbertSchmidtNorm_complex
-    {Ec : Type vE} {Fc : Type vF}
-    [NormedAddCommGroup Ec] [InnerProductSpace ℂ Ec] [CompleteSpace Ec]
-    [NormedAddCommGroup Fc] [InnerProductSpace ℂ Fc] [CompleteSpace Fc]
-    (A : Fc →L[ℂ] Ec) (hA : IsPaperHilbertSchmidt A) :
-    A.hilbertSchmidtENorm = ENNReal.ofReal (paperHilbertSchmidtNorm A) :=
-  hilbertSchmidtENorm_eq_ofReal_paperHilbertSchmidtNorm
-    ContinuousLinearMap.hasMinMaxLowerBound_complex A hA
 
-/-- The staged Hilbert--Schmidt norm is the paper square norm, over `ℝ`. -/
-theorem hilbertSchmidtENorm_eq_ofReal_paperHilbertSchmidtNorm_real
-    {Er : Type vE} {Fr : Type vF}
-    [NormedAddCommGroup Er] [InnerProductSpace ℝ Er] [CompleteSpace Er]
-    [NormedAddCommGroup Fr] [InnerProductSpace ℝ Fr] [CompleteSpace Fr]
-    (A : Fr →L[ℝ] Er) (hA : IsPaperHilbertSchmidt A) :
-    A.hilbertSchmidtENorm = ENNReal.ofReal (paperHilbertSchmidtNorm A) :=
-  hilbertSchmidtENorm_eq_ofReal_paperHilbertSchmidtNorm
-    TauCeti.ApproximationNumber.hasMinMaxLowerBound_real A hA
 
 /-! ### The `ℝ` and `ℝ≥0∞` interfaces are the same number
 
@@ -583,43 +568,7 @@ paper's square norm is a real number because every estimate it appears in is an
 inequality between reals.  These say the two readings agree on the ideal, so a paper
 estimate and an ideal-gauge estimate are interchangeable rather than merely analogous. -/
 
-/-- The paper square norm is the canonical real-valued Hilbert--Schmidt norm. -/
-theorem paperHilbertSchmidtNorm_eq_hilbertSchmidtNorm
-    (hlb : ContinuousLinearMap.HasMinMaxLowerBound 𝕜 F E) (A : F →L[𝕜] E)
-    (hA : IsPaperHilbertSchmidt A) :
-    paperHilbertSchmidtNorm A = A.hilbertSchmidtNorm := by
-  rw [ContinuousLinearMap.hilbertSchmidtNorm_eq_toReal,
-    hilbertSchmidtENorm_eq_ofReal_paperHilbertSchmidtNorm hlb A hA,
-    ENNReal.toReal_ofReal (by rw [paperHilbertSchmidtNorm]; exact Real.sqrt_nonneg _)]
 
-/-- The paper square norm is the canonical real-valued norm, over `ℂ`. -/
-theorem paperHilbertSchmidtNorm_eq_hilbertSchmidtNorm_complex
-    {Ec : Type vE} {Fc : Type vF}
-    [NormedAddCommGroup Ec] [InnerProductSpace ℂ Ec] [CompleteSpace Ec]
-    [NormedAddCommGroup Fc] [InnerProductSpace ℂ Fc] [CompleteSpace Fc]
-    (A : Fc →L[ℂ] Ec) (hA : IsPaperHilbertSchmidt A) :
-    paperHilbertSchmidtNorm A = A.hilbertSchmidtNorm :=
-  paperHilbertSchmidtNorm_eq_hilbertSchmidtNorm
-    ContinuousLinearMap.hasMinMaxLowerBound_complex A hA
-
-/-- The paper square norm is the canonical real-valued norm, over `ℝ`. -/
-theorem paperHilbertSchmidtNorm_eq_hilbertSchmidtNorm_real
-    {Er : Type vE} {Fr : Type vF}
-    [NormedAddCommGroup Er] [InnerProductSpace ℝ Er] [CompleteSpace Er]
-    [NormedAddCommGroup Fr] [InnerProductSpace ℝ Fr] [CompleteSpace Fr]
-    (A : Fr →L[ℝ] Er) (hA : IsPaperHilbertSchmidt A) :
-    paperHilbertSchmidtNorm A = A.hilbertSchmidtNorm :=
-  paperHilbertSchmidtNorm_eq_hilbertSchmidtNorm
-    TauCeti.ApproximationNumber.hasMinMaxLowerBound_real A hA
-
-/-- The paper square energy is the canonical extended norm, squared: the two
-energy interfaces agree without any finiteness hypothesis at all. -/
-theorem paperHilbertSchmidtEnergy_eq_hilbertSchmidtENorm_sq
-    (hlb : ContinuousLinearMap.HasMinMaxLowerBound 𝕜 F E) (A : F →L[𝕜] E) :
-    paperHilbertSchmidtEnergy A = A.hilbertSchmidtENorm ^ (2 : ℝ) := by
-  obtain ⟨w, b, -⟩ := exists_hilbertBasis 𝕜 F
-  rw [A.hilbertSchmidtENorm_rpow_two b, hilbertSchmidtEnergy_eq_basisEnergy hlb b A,
-    hilbertSchmidtBasisEnergy_eq_hilbertSchmidtEnergy]
 
 end
 

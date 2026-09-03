@@ -136,7 +136,7 @@ fields: it mentions only approximation numbers, norms, linear independence and
 spans, and the transport changes none of them. -/
 theorem hasMinMaxLowerBound_of_transport {𝕜 : Type u} {𝕂 : Type w} [RCLike 𝕜] [RCLike 𝕂]
     (e : RCLikeIso 𝕜 𝕂) {E : Type v} [NormedAddCommGroup E] [InnerProductSpace 𝕜 E]
-    {F : Type v} [NormedAddCommGroup F] [InnerProductSpace 𝕜 F]
+    {F : Type v'} [NormedAddCommGroup F] [InnerProductSpace 𝕜 F]
     (h : HasMinMaxLowerBound 𝕂 (ScalarTransport e E) (ScalarTransport e F)) :
     HasMinMaxLowerBound 𝕜 E F := by
   intro T n r hr0 hr
@@ -160,13 +160,22 @@ independence and no span, so the two fixed-field instances give the general one.
 
 This removes `[HasMinMaxLowerBoundEverywhere 𝕜]` from every downstream statement
 that carried it as a hypothesis. -/
+theorem hasMinMaxLowerBound_rclike (𝕜 : Type u) [RCLike 𝕜]
+    {E : Type v} [NormedAddCommGroup E] [InnerProductSpace 𝕜 E] [CompleteSpace E]
+    {F : Type v'} [NormedAddCommGroup F] [InnerProductSpace 𝕜 F] [CompleteSpace F] :
+    HasMinMaxLowerBound 𝕜 E F := by
+  rcases RCLike.I_eq_zero_or_im_I_eq_one (K := 𝕜) with h | h
+  · exact hasMinMaxLowerBound_of_transport (RCLikeIso.real h)
+      TauCeti.ApproximationNumber.hasMinMaxLowerBound_real
+  · exact hasMinMaxLowerBound_of_transport (RCLikeIso.complex h) hasMinMaxLowerBound_complex
+
+/-- The single-universe class form of `hasMinMaxLowerBound_rclike`, so that the
+statements carrying `[HasMinMaxLowerBoundEverywhere 𝕜]` resolve it by instance
+search rather than by hypothesis. -/
 instance hasMinMaxLowerBoundEverywhere (𝕜 : Type u) [RCLike 𝕜] :
     HasMinMaxLowerBoundEverywhere.{u, v} 𝕜 where
   out := by
     intro E _ _ _ F _ _ _
-    rcases RCLike.I_eq_zero_or_im_I_eq_one (K := 𝕜) with h | h
-    · exact hasMinMaxLowerBound_of_transport (RCLikeIso.real h)
-        TauCeti.ApproximationNumber.hasMinMaxLowerBound_real
-    · exact hasMinMaxLowerBound_of_transport (RCLikeIso.complex h) hasMinMaxLowerBound_complex
+    exact hasMinMaxLowerBound_rclike 𝕜
 
 end ContinuousLinearMap

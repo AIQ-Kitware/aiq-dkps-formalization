@@ -183,10 +183,10 @@ theorem result_across
       (E := E) (F := F) (G := G) (H := H))
     (S : SinThetaRepresentativeAcross
       (E₀ := E₀) (F₀ := F₀) P.toTheorem62Data.canonicalSinTheta)
-    (hR : IsPaperHilbertSchmidt P.source.R) :
-    IsPaperHilbertSchmidt S.operator ∧
-      P.gap * P.epsilon * paperHilbertSchmidtNorm S.operator ≤
-        paperHilbertSchmidtNorm P.source.R := by
+    (hR : approximationNumberEnergy P.source.R ≠ ⊤) :
+    approximationNumberEnergy S.operator ≠ ⊤ ∧
+      P.gap * P.epsilon * ContinuousLinearMap.hilbertSchmidtNorm S.operator ≤
+        ContinuousLinearMap.hilbertSchmidtNorm P.source.R := by
   simpa [toTheorem62Data,
     CommonCoreSinThetaData.toUnboundedSinThetaData] using
     P.toTheorem62Data.result_across S hR
@@ -293,10 +293,10 @@ theorem result_across
       (E := E) (F := F) (G := G) (H := H))
     (S : SinThetaRepresentativeAcross
       (E₀ := E₀) (F₀ := F₀) P.toRealTheorem62Data.canonicalSinTheta)
-    (hR : IsPaperHilbertSchmidt P.source.R) :
-    IsPaperHilbertSchmidt S.operator ∧
-      P.gap * P.epsilon * paperHilbertSchmidtNorm S.operator ≤
-        paperHilbertSchmidtNorm P.source.R := by
+    (hR : approximationNumberEnergy P.source.R ≠ ⊤) :
+    approximationNumberEnergy S.operator ≠ ⊤ ∧
+      P.gap * P.epsilon * ContinuousLinearMap.hilbertSchmidtNorm S.operator ≤
+        ContinuousLinearMap.hilbertSchmidtNorm P.source.R := by
   simpa [toRealTheorem62Data,
     CommonCoreSinThetaData.toUnboundedSinThetaData] using
     P.toRealTheorem62Data.result_across S hR

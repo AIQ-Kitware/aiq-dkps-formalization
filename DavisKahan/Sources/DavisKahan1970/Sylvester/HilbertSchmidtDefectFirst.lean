@@ -103,13 +103,13 @@ theorem hilbertSchmidt_sylvester_defectFirst
     (hEq : TauCeti.LinearPMap.SylvesterEquation A B X C)
     (hunique : ∀ {Y : F →L[ℂ] E},
       TauCeti.LinearPMap.SylvesterEquation A B Y 0 → Y = 0)
-    (hC : IsPaperHilbertSchmidt C)
+    (hC : approximationNumberEnergy C ≠ ⊤)
     (hCgap : TauCeti.LinearPMap.HasVectorSpectralGap
       (isSelfAdjoint_generator_sylvesterGroup (TauCeti.LinearPMap.genToGroup hA)
         (TauCeti.LinearPMap.genToGroup hB) (hSBasis F))
       δ (hilbertSchmidtTensor C hC)) :
-    IsPaperHilbertSchmidt X ∧
-      δ * paperHilbertSchmidtNorm X ≤ paperHilbertSchmidtNorm C := by
+    approximationNumberEnergy X ≠ ⊤ ∧
+      δ * ContinuousLinearMap.hilbertSchmidtNorm X ≤ ContinuousLinearMap.hilbertSchmidtNorm C := by
   set hS := isSelfAdjoint_generator_sylvesterGroup (TauCeti.LinearPMap.genToGroup hA)
     (TauCeti.LinearPMap.genToGroup hB) (hSBasis F) with hSdef
   set c := hilbertSchmidtTensor C hC with hc
@@ -125,7 +125,7 @@ theorem hilbertSchmidt_sylvester_defectFirst
   have hhom : TauCeti.LinearPMap.SylvesterEquation A B (X - X0) 0 := by
     simpa using hEq.sub hEq0
   have hXX0 : X = X0 := sub_eq_zero.mp (hunique hhom)
-  have hX0mem : IsPaperHilbertSchmidt X0 := isPaperHilbertSchmidt_toOperator z0
+  have hX0mem : approximationNumberEnergy X0 ≠ ⊤ := approximationNumberEnergy_ne_top_toOperator z0
   refine ⟨hXX0 ▸ hX0mem, ?_⟩
   rw [hXX0, hX0, hilbertSchmidtNorm_toOperator]
   calc
@@ -133,7 +133,7 @@ theorem hilbertSchmidt_sylvester_defectFirst
       mul_le_mul_of_nonneg_left
         (TauCeti.LinearPMap.norm_gapInverse_apply_le hS hδ c) hδ.le
     _ = ‖c‖ := by field_simp
-    _ = paperHilbertSchmidtNorm C := norm_hilbertSchmidtTensor C hC
+    _ = ContinuousLinearMap.hilbertSchmidtNorm C := norm_hilbertSchmidtTensor C hC
 
 end
 

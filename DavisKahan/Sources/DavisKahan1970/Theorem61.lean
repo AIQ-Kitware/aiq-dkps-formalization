@@ -306,9 +306,9 @@ theorem theorem6_2_complex
     {δ : ℝ} (hδ : 0 < δ) (hdist : PairwiseSpectrumGap A₀ Λ₁ δ)
     (S : SinThetaRepresentativeAcross (E₀ := E₀') (F₀ := F₀')
       (sectionSixSinThetaBlock E₀ F₁ hframe hε))
-    (hR : IsPaperHilbertSchmidt R) :
-    IsPaperHilbertSchmidt S.operator ∧
-      δ * ε * paperHilbertSchmidtNorm S.operator ≤ paperHilbertSchmidtNorm R := by
+    (hR : approximationNumberEnergy R ≠ ⊤) :
+    approximationNumberEnergy S.operator ≠ ⊤ ∧
+      δ * ε * ContinuousLinearMap.hilbertSchmidtNorm S.operator ≤ ContinuousLinearMap.hilbertSchmidtNorm R := by
   let P : Theorem62Data (E := E) (F := F) (G := G) (H := H) :=
     { data := sectionSixData A A₀ Λ₁ E₀ F₀ F₁ R htrial hexact
       exactMap := F₀
@@ -361,9 +361,9 @@ theorem theorem6_2_real
       ∀ α ∈ TauCeti.LinearPMap.realSpectrum Λ₁, δ ≤ |lam - α|)
     (S : SinThetaRepresentativeAcross (E₀ := E₀') (F₀ := F₀')
       (sectionSixSinThetaBlockReal E₀ F₁ hframe hε))
-    (hR : IsPaperHilbertSchmidt R) :
-    IsPaperHilbertSchmidt S.operator ∧
-      δ * ε * paperHilbertSchmidtNorm S.operator ≤ paperHilbertSchmidtNorm R := by
+    (hR : approximationNumberEnergy R ≠ ⊤) :
+    approximationNumberEnergy S.operator ≠ ⊤ ∧
+      δ * ε * ContinuousLinearMap.hilbertSchmidtNorm S.operator ≤ ContinuousLinearMap.hilbertSchmidtNorm R := by
   let P : RealTheorem62Data (E := E) (F := F) (G := G) (H := H) :=
     { data := sectionSixData A A₀ Λ₁ E₀ F₀ F₁ R htrial hexact
       exactMap := F₀

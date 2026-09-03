@@ -5,6 +5,7 @@ Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
 import YuWangSamworth2015.GroundedImports
 import DavisKahan.Sources.DavisKahan1970.Ideals.HilbertSchmidtFrobenius
+import DavisKahan.Sources.DavisKahan1970.Ideals.HilbertSchmidtApproximationNorm
 
 /-!
 # Frobenius perturbation bounds for rectangular Gram operators
@@ -36,11 +37,10 @@ variable {F : Type*} [NormedAddCommGroup F] [InnerProductSpace 𝕜 F]
 
 /-- Every operator between finite-dimensional Hilbert spaces is
 Hilbert--Schmidt in the paper's approximation-number model. -/
-private theorem isPaperHilbertSchmidt_finite
+private theorem approximationNumberEnergy_ne_top_finite
     (A : E →L[𝕜] F) [CompleteSpace E] [CompleteSpace F] :
-    IsPaperHilbertSchmidt A := by
-  unfold IsPaperHilbertSchmidt
-  rw [hilbertSchmidtEnergy_eq_ofReal_sum_sq_singularValues]
+    approximationNumberEnergy A ≠ ⊤ := by
+  rw [approximationNumberEnergy_eq_ofReal_sum_sq_singularValues]
   exact ENNReal.ofReal_ne_top
 
 /-- A rectangular Frobenius norm is invariant under adjoint. -/
@@ -49,7 +49,7 @@ theorem rectangularFrobenius_adjoint (A : E →ₗ[𝕜] F) :
       RectangularUnitarilyInvariantSeminorm.frobenius A := by
   let : CompleteSpace E := FiniteDimensional.complete 𝕜 E
   let : CompleteSpace F := FiniteDimensional.complete 𝕜 F
-  have h := hilbertSchmidtNorm_adjoint A.toContinuousLinearMap
+  have h := ContinuousLinearMap.hilbertSchmidtNorm_adjoint A.toContinuousLinearMap
   rw [← LinearMap.adjoint_toContinuousLinearMap,
     hilbertSchmidtNorm_eq_rectangularFrobenius,
     hilbertSchmidtNorm_eq_rectangularFrobenius] at h
@@ -68,19 +68,21 @@ theorem frobenius_comp_rectangular_le_opNorm_mul
         RectangularUnitarilyInvariantSeminorm.frobenius A := by
   let : CompleteSpace E := FiniteDimensional.complete 𝕜 E
   let : CompleteSpace F := FiniteDimensional.complete 𝕜 F
-  have hA : IsPaperHilbertSchmidt A.toContinuousLinearMap :=
-    isPaperHilbertSchmidt_finite A.toContinuousLinearMap
-  have h := hilbertSchmidtNorm_comp_le
-    C.toContinuousLinearMap hA (ContinuousLinearMap.id 𝕜 E)
+  have hA : approximationNumberEnergy A.toContinuousLinearMap ≠ ⊤ :=
+    approximationNumberEnergy_ne_top_finite A.toContinuousLinearMap
+  have h := ContinuousLinearMap.hilbertSchmidtNorm_comp_le
+    C.toContinuousLinearMap
+    ((isHilbertSchmidt_iff_approximationNumberEnergy_ne_top _).2 hA)
+    (ContinuousLinearMap.id 𝕜 E)
   rw [ContinuousLinearMap.comp_id] at h
   have h' :
-      paperHilbertSchmidtNorm
+      ContinuousLinearMap.hilbertSchmidtNorm
           (C.toContinuousLinearMap ∘L A.toContinuousLinearMap) ≤
         ‖C.toContinuousLinearMap‖ *
-          paperHilbertSchmidtNorm A.toContinuousLinearMap :=
+          ContinuousLinearMap.hilbertSchmidtNorm A.toContinuousLinearMap :=
     h.trans (mul_le_of_le_one_right
       (mul_nonneg (norm_nonneg _)
-        (hilbertSchmidtNorm_nonneg A.toContinuousLinearMap))
+        (ContinuousLinearMap.hilbertSchmidtNorm_nonneg A.toContinuousLinearMap))
       ContinuousLinearMap.norm_id_le)
   rw [hilbertSchmidtNorm_eq_frobenius,
     hilbertSchmidtNorm_eq_rectangularFrobenius] at h'
@@ -108,10 +110,12 @@ theorem rectangularFrobenius_twoSided_comp_le
   let : CompleteSpace F := FiniteDimensional.complete 𝕜 F
   let : CompleteSpace G := FiniteDimensional.complete 𝕜 G
   let : CompleteSpace H := FiniteDimensional.complete 𝕜 H
-  have hA : IsPaperHilbertSchmidt A.toContinuousLinearMap :=
-    isPaperHilbertSchmidt_finite A.toContinuousLinearMap
-  have h := hilbertSchmidtNorm_comp_le
-    L.toContinuousLinearMap hA R.toContinuousLinearMap
+  have hA : approximationNumberEnergy A.toContinuousLinearMap ≠ ⊤ :=
+    approximationNumberEnergy_ne_top_finite A.toContinuousLinearMap
+  have h := ContinuousLinearMap.hilbertSchmidtNorm_comp_le
+    L.toContinuousLinearMap
+    ((isHilbertSchmidt_iff_approximationNumberEnergy_ne_top _).2 hA)
+    R.toContinuousLinearMap
   rw [hilbertSchmidtNorm_eq_rectangularFrobenius,
     hilbertSchmidtNorm_eq_rectangularFrobenius] at h
   have hcomp :
