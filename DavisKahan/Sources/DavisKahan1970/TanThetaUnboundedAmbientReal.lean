@@ -42,7 +42,7 @@ itself never has to be transported.
   trial-block data;
 * `tanTheta_ambient_unboundedOperator_boundedRitz_symmetricNorming_real`: the specialization with an
   unbounded ambient operator but bounded Ritz compression;
-* `tanTheta_ambient_unboundedRitz_raw_symmetricNorming_real`: the Appendix-complete
+* `tanTheta_ambient_unboundedRitz_explicitCompatibility_symmetricNorming_real`: the Appendix-complete
   endpoint in which the Ritz compression itself may be unbounded.
 
 ## References
@@ -343,7 +343,7 @@ theorem tanTheta_ambient_unboundedRitzData_symmetricNorming_real
 Both the ambient self-adjoint operator and the Ritz compression may be
 unbounded.  The residual and perturbation remain bounded, exactly as required
 for the displayed unitary-invariant norm inequality. -/
-theorem tanTheta_ambient_unboundedRitz_raw_symmetricNorming_real
+theorem tanTheta_ambient_unboundedRitz_explicitCompatibility_symmetricNorming_real
     (N : SymmetricNormingFunction)
     (D : UnboundedCompressionTrialData U)
     (A : E →ₗ.[ℝ] E)
@@ -381,7 +381,7 @@ scalar-generic, so no real-specific vocabulary is introduced. -/
 /-- **Davis--Kahan 1970, `tan Θ`, unbounded ambient form over `ℝ`, taking the Ritz
 pair and the reducing complement as objects.**
 
-`tanTheta_ambient_unboundedRitz_raw_symmetricNorming_real` with its four
+`tanTheta_ambient_unboundedRitz_explicitCompatibility_symmetricNorming_real` with its four
 structural arguments replaced by `DavisKahan.UnboundedRitzPair A U` and
 `DavisKahan.ReducingComplement A V`.  The mathematics -- semiboundedness of the
 compression, coercivity on the unwanted subspace, and the crossed-defect standing
@@ -404,7 +404,7 @@ theorem tanTheta_ambient_unboundedRitz_symmetricNorming_real
     (hMem : N.Mem H) :
     N.Mem (tanAngleOperatorR U V) ∧
       delta * N.gauge (tanAngleOperatorR U V) ≤ N.gauge H :=
-  tanTheta_ambient_unboundedRitz_raw_symmetricNorming_real N D.trial A H hH
+  tanTheta_ambient_unboundedRitz_explicitCompatibility_symmetricNorming_real N D.trial A H hH
     hdelta D.mem_domain D.action_eq hV.mapsDomain hV.commutes hupper hUnwanted h35
     hResidual hMem
 

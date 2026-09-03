@@ -3504,7 +3504,7 @@
     {
       "source_module": "DavisKahan/FiniteDimensional/DoubleAngle/Vector.lean",
       "source_declarations": [
-        "key_identity",
+        "eigenvector_block_energy_identity",
         "map_mem_orthogonal_of_forall_map_mem",
         "norm_smul_add_smul_sq",
         "re_inner_map_symm",

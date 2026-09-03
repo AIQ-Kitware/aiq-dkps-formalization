@@ -67,7 +67,7 @@ abbrev polarRange (T : H →L[𝕜] H) : Submodule 𝕜 H := T.polarInitial
 abbrev polarIsometry (T : H →L[𝕜] H) : H →L[𝕜] H := T.polarPartial
 
 /-- The isometry `K → H`, `|T| x ↦ T x`, on the initial space. -/
-abbrev polarPartial (T : H →L[𝕜] H) : T.polarInitial →L[𝕜] H := T.polarPartialAux
+abbrev polarPartial (T : H →L[𝕜] H) : T.polarInitial →L[𝕜] H := T.polarInitialMap
 
 /-- The modulus `|T|`. -/
 abbrev absOp (T : H →L[𝕜] H) : H →L[𝕜] H := T.modulus
@@ -100,12 +100,12 @@ theorem denseRange_absOpCorestrict (T : H →L[𝕜] H) : DenseRange (absOpCores
 /-- The polar factorization: the partial isometry applied to `|T| x` returns `T x`. -/
 theorem polarPartial_absOpCorestrict (T : H →L[𝕜] H) (x : H) :
     polarPartial T (absOpCorestrict T x) = T x :=
-  T.polarPartialAux_modulusCorestrict x
+  T.polarInitialMap_modulusCorestrict x
 
 /-- The polar partial isometry is isometric on the polar initial subspace. -/
 theorem norm_polarPartial_eq (T : H →L[𝕜] H) (x : T.polarInitial) :
     ‖polarPartial T x‖ = ‖x‖ :=
-  T.norm_polarPartialAux_apply x
+  T.norm_polarInitialMap_apply x
 
 /-- The polar isometry acts by first projecting onto the polar initial subspace and
 then applying the partial isometry. -/
@@ -120,7 +120,7 @@ theorem polarIsometry_apply_eq (T : H →L[𝕜] H) (w : H) :
 /-- The range of the polar partial isometry lies in the final polar space. -/
 theorem polarPartial_mem_finalRange (T : H →L[𝕜] H) (x : T.polarInitial) :
     polarPartial T x ∈ polarFinalRange T := by
-  have hx : T.polarPartialAux x = T.polarPartial (x : H) := by
+  have hx : T.polarInitialMap x = T.polarPartial (x : H) := by
     rw [ContinuousLinearMap.polarPartial_apply]
     congr 1
     exact (Subtype.ext (by
@@ -136,7 +136,7 @@ theorem polarPartial_final_surjective (T : H →L[𝕜] H) :
   rintro ⟨y, hy⟩
   rw [polarFinalRange, T.polarFinal_eq_range_polarPartial] at hy
   obtain ⟨z, rfl⟩ := hy
-  have hz : T.polarPartial z = T.polarPartialAux (T.polarInitial.orthogonalProjectionOnto z) :=
+  have hz : T.polarPartial z = T.polarInitialMap (T.polarInitial.orthogonalProjectionOnto z) :=
     rfl
   exact ⟨T.polarInitial.orthogonalProjectionOnto z, Subtype.ext (by simpa using hz.symm)⟩
 
@@ -148,7 +148,7 @@ def polarPartialFinalEquiv (T : H →L[𝕜] H) :
         (polarPartial_mem_finalRange T)).toLinearMap
       norm_map' := fun x => by
         change ‖polarPartial T x‖ = ‖x‖
-        exact T.norm_polarPartialAux_apply x }
+        exact T.norm_polarInitialMap_apply x }
     (polarPartial_final_surjective T)
 
 /-- **The final projection identity** `U U⋆ = P_(closure range T)`. -/

@@ -344,7 +344,7 @@ genuinely gone.
 | **(9.6)** `tan θ₁` | `M.beamTanTheta_lt_printed` | **EXACT, unconditional**, via `theorem6_3_unbounded_ideal_directedTangent` |
 | (9.6) 2-norm sum | `S9.equation_9_6` applied to a free real | **ASSUMED-VIA-RECORD** (`S9.TheoremOutputCertificate`) |
 | **(9.7)** and its 2-norm sum | `S9.equation_9_7` applied to free reals | **ASSUMED-VIA-RECORD**; no `beamTanTwoTheta` exists |
-| Weinberger's `sin²φ_k` inequality | appears only as an explicit hypothesis `hweinberger` | **EXTERNAL, correctly hypothesised, never assumed**; `S9.naive_second_scalar_lower_bound_tripwire` proves the naive substitute fails |
+| Weinberger's `sin²φ_k` inequality | appears only as an explicit hypothesis `hweinberger` | **EXTERNAL, correctly hypothesised, never assumed**; `S9.secondScalarLowerBound_angleBound_counterexample` proves the naive substitute fails |
 | Arrowhead 3×3 and its two lower roots; the `O(ε⁴)` expansion | `S9.ArrowheadThreeByThree`, `S9.exists_weinbergerLowerRootCertificate`, `S9.ritzLow_sub_weinbergerLowerRoots_le` | EXACT, and quantitatively sharper than the paper's prose |
 | **(9.8) both lines** | `M.beam_equation_9_8_lower`, `…_upper`, `M.beam_equation_9_8` | **EXACT, unconditional, and confirmed to go through the Theorem 6.3 route, not Weinberger's inequality** |
 | `θ₁ ≥ φ_k`, `sin²φ₁+sin²φ₂ = sin²θ₁+sin²θ₂` | — | ABSENT |

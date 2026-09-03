@@ -1275,7 +1275,7 @@
     },
     {
       "old_name": "tanTheta_unboundedCompression_ambient_symmetricNorming_exact",
-      "new_name": "tanTheta_ambient_unboundedRitz_raw_symmetricNorming_complex",
+      "new_name": "tanTheta_ambient_unboundedRitz_explicitCompatibility_symmetricNorming_complex",
       "trig_family": "tanTheta",
       "paper_role": "section2-result",
       "scalar_scope": "complex",
@@ -1360,7 +1360,7 @@
     },
     {
       "old_name": "tanTheta_unboundedCompression_ambient_symmetricNorming_real_exact",
-      "new_name": "tanTheta_ambient_unboundedRitz_raw_symmetricNorming_real",
+      "new_name": "tanTheta_ambient_unboundedRitz_explicitCompatibility_symmetricNorming_real",
       "trig_family": "tanTheta",
       "paper_role": "section2-result",
       "scalar_scope": "real",

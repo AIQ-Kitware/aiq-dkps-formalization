@@ -1542,8 +1542,8 @@ boundary: NormedAddCommGroup, InnerProductSpace, Real, CompleteSpace, LinearPMap
 - `TauCeti.DavisKahan1970.tanTheta_ambient_bounded_symmetricNorming_complex_of_crossedDefects` — elaborated; source located
 - `TauCeti.DavisKahan1970.tanTheta_ambient_bounded_symmetricNorming_real_of_crossedDefects` — elaborated; source located
 - `TauCeti.DavisKahan1970.tanTheta_ambient_unboundedOperator_boundedRitz_symmetricNorming_real` — elaborated; source located
-- `TauCeti.DavisKahan1970.tanTheta_ambient_unboundedRitz_raw_symmetricNorming_complex` — elaborated; source located
-- `TauCeti.DavisKahan1970.tanTheta_ambient_unboundedRitz_raw_symmetricNorming_real` — elaborated; source located
+- `TauCeti.DavisKahan1970.tanTheta_ambient_unboundedRitz_explicitCompatibility_symmetricNorming_complex` — elaborated; source located
+- `TauCeti.DavisKahan1970.tanTheta_ambient_unboundedRitz_explicitCompatibility_symmetricNorming_real` — elaborated; source located
 - `TauCeti.DavisKahan1970.tanTheta_directed_finiteDimensional_symmetricNorming_rclike` — elaborated; source located
 - `TauCeti.DavisKahan.Section2.theorem6_3_perturbation_infiniteTrial` — elaborated; source located
 - `TauCeti.DavisKahanTheory.partIII_tanTheta_ritzResidual_uiNorm` — not in environment; source located

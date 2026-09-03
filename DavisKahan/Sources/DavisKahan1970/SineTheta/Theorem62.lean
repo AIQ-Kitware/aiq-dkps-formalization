@@ -65,7 +65,7 @@ noncomputable def canonicalSinTheta
     P.data.F₁
 
 /-- The raw Sylvester unknown `E_0^* F_1`. -/
-def rawOverlap
+def sylvesterOverlap
     (P : Theorem62Data (E := E) (F := F) (G := G) (H := H)) :
     G →L[ℂ] F :=
   P.data.X.adjoint ∘L P.data.F₁
@@ -117,11 +117,11 @@ theorem projectedResidual_norm_le
       hilbertSchmidtNorm_adjoint P.data.residual
 
 /-- The weaker spectral hypothesis gives the raw square-norm estimate. -/
-theorem rawOverlap_bound
+theorem sylvesterOverlap_bound
     (P : Theorem62Data (E := E) (F := F) (G := G) (H := H))
     (hR : IsPaperHilbertSchmidt P.data.residual) :
-    IsPaperHilbertSchmidt P.rawOverlap ∧
-      P.gap * paperHilbertSchmidtNorm P.rawOverlap ≤
+    IsPaperHilbertSchmidt P.sylvesterOverlap ∧
+      P.gap * paperHilbertSchmidtNorm P.sylvesterOverlap ≤
         paperHilbertSchmidtNorm P.projectedResidual := by
   have hEq := unbounded_adjoint_residual_block_identity P.data
     P.ambient_selfAdjoint P.trial_selfAdjoint P.complement_selfAdjoint
@@ -132,14 +132,14 @@ theorem rawOverlap_bound
 /-- Whitening introduces exactly the source factor `epsilon^(-1)`. -/
 theorem canonicalSinTheta_frame_bound
     (P : Theorem62Data (E := E) (F := F) (G := G) (H := H))
-    (hraw : IsPaperHilbertSchmidt P.rawOverlap) :
+    (hraw : IsPaperHilbertSchmidt P.sylvesterOverlap) :
     IsPaperHilbertSchmidt P.canonicalSinTheta ∧
       P.frameLowerBound * paperHilbertSchmidtNorm P.canonicalSinTheta ≤
-        paperHilbertSchmidtNorm P.rawOverlap := by
+        paperHilbertSchmidtNorm P.sylvesterOverlap := by
   let Q := lowerFramePolarData P.data.X P.lowerFrame P.frameLowerBound_pos
   have hblock :
-      P.canonicalSinTheta = Q.invSqrt.adjoint ∘L P.rawOverlap := by
-    simp [canonicalSinTheta, rawOverlap, sinThetaBlockOfPolarData,
+      P.canonicalSinTheta = Q.invSqrt.adjoint ∘L P.sylvesterOverlap := by
+    simp [canonicalSinTheta, sylvesterOverlap, sinThetaBlockOfPolarData,
       frameIsometryOfPolarData, Q, ContinuousLinearMap.adjoint_comp,
       ContinuousLinearMap.comp_assoc]
   have hmem : IsPaperHilbertSchmidt P.canonicalSinTheta := by
@@ -149,7 +149,7 @@ theorem canonicalSinTheta_frame_bound
   have hnorm : ‖Q.invSqrt.adjoint‖ ≤ P.frameLowerBound⁻¹ := by
     simpa using Q.invSqrt_norm_le
   have hcomp : paperHilbertSchmidtNorm P.canonicalSinTheta ≤
-      ‖Q.invSqrt.adjoint‖ * paperHilbertSchmidtNorm P.rawOverlap := by
+      ‖Q.invSqrt.adjoint‖ * paperHilbertSchmidtNorm P.sylvesterOverlap := by
     have h := hilbertSchmidtNorm_comp_le
       Q.invSqrt.adjoint hraw (ContinuousLinearMap.id ℂ G)
     rw [ContinuousLinearMap.comp_id] at h
@@ -161,16 +161,16 @@ theorem canonicalSinTheta_frame_bound
   calc
     P.frameLowerBound * paperHilbertSchmidtNorm P.canonicalSinTheta
         ≤ P.frameLowerBound *
-            (‖Q.invSqrt.adjoint‖ * paperHilbertSchmidtNorm P.rawOverlap) :=
+            (‖Q.invSqrt.adjoint‖ * paperHilbertSchmidtNorm P.sylvesterOverlap) :=
       mul_le_mul_of_nonneg_left hcomp P.frameLowerBound_pos.le
     _ ≤ P.frameLowerBound *
           (P.frameLowerBound⁻¹ *
-            paperHilbertSchmidtNorm P.rawOverlap) :=
+            paperHilbertSchmidtNorm P.sylvesterOverlap) :=
       mul_le_mul_of_nonneg_left
         (mul_le_mul_of_nonneg_right hnorm
-          (hilbertSchmidtNorm_nonneg P.rawOverlap))
+          (hilbertSchmidtNorm_nonneg P.sylvesterOverlap))
         P.frameLowerBound_pos.le
-    _ = paperHilbertSchmidtNorm P.rawOverlap := by
+    _ = paperHilbertSchmidtNorm P.sylvesterOverlap := by
       rw [← mul_assoc, mul_inv_cancel₀ P.frameLowerBound_pos.ne', one_mul]
 
 /-- **Davis--Kahan 1970, Theorem 6.2, complex square-norm form.** -/
@@ -181,7 +181,7 @@ theorem result
     IsPaperHilbertSchmidt S.operator ∧
       P.gap * P.frameLowerBound * paperHilbertSchmidtNorm S.operator ≤
         paperHilbertSchmidtNorm P.data.residual := by
-  have hraw := P.rawOverlap_bound hR
+  have hraw := P.sylvesterOverlap_bound hR
   have hframe := P.canonicalSinTheta_frame_bound hraw.1
   have hS : IsPaperHilbertSchmidt S.operator :=
     (S.same_singular_values.isPaperHilbertSchmidt_iff).2 hframe.1
@@ -192,7 +192,7 @@ theorem result
     P.gap * P.frameLowerBound * paperHilbertSchmidtNorm P.canonicalSinTheta
         = P.gap *
             (P.frameLowerBound * paperHilbertSchmidtNorm P.canonicalSinTheta) := by ring
-    _ ≤ P.gap * paperHilbertSchmidtNorm P.rawOverlap :=
+    _ ≤ P.gap * paperHilbertSchmidtNorm P.sylvesterOverlap :=
       mul_le_mul_of_nonneg_left hframe.2 P.gap_pos.le
     _ ≤ paperHilbertSchmidtNorm P.projectedResidual := hraw.2
     _ ≤ paperHilbertSchmidtNorm P.data.residual :=
@@ -300,7 +300,7 @@ noncomputable def canonicalSinTheta
     P.data.F₁
 
 /-- The raw overlap block `X⋆ F₁`, before any frame normalization. -/
-def rawOverlap
+def sylvesterOverlap
     (P : RealTheorem62Data (E := E) (F := F) (G := G) (H := H)) :
     G →L[ℝ] F := P.data.X.adjoint ∘L P.data.F₁
 
@@ -316,13 +316,13 @@ factors this out and its `result` cites it; the real section had inlined the sam
 derivation into `result`, which is the only reason the two sections looked different. -/
 theorem canonicalSinTheta_frame_bound
     (P : RealTheorem62Data (E := E) (F := F) (G := G) (H := H))
-    (hraw : IsPaperHilbertSchmidt P.rawOverlap) :
+    (hraw : IsPaperHilbertSchmidt P.sylvesterOverlap) :
     IsPaperHilbertSchmidt P.canonicalSinTheta ∧
       P.frameLowerBound * paperHilbertSchmidtNorm P.canonicalSinTheta ≤
-        paperHilbertSchmidtNorm P.rawOverlap := by
+        paperHilbertSchmidtNorm P.sylvesterOverlap := by
   let Q := lowerFramePolarDataReal P.data.X P.lowerFrame P.frameLowerBound_pos
-  have hcanonical : P.canonicalSinTheta = Q.invSqrt.adjoint ∘L P.rawOverlap := by
-    simp [canonicalSinTheta, rawOverlap, sinThetaBlockOfPolarData,
+  have hcanonical : P.canonicalSinTheta = Q.invSqrt.adjoint ∘L P.sylvesterOverlap := by
+    simp [canonicalSinTheta, sylvesterOverlap, sinThetaBlockOfPolarData,
       frameIsometryOfPolarData, Q, ContinuousLinearMap.adjoint_comp,
       ContinuousLinearMap.comp_assoc]
   have hmem : IsPaperHilbertSchmidt P.canonicalSinTheta := by
@@ -332,7 +332,7 @@ theorem canonicalSinTheta_frame_bound
   have hnorm : ‖Q.invSqrt.adjoint‖ ≤ P.frameLowerBound⁻¹ := by
     simpa using Q.invSqrt_norm_le
   have hcomp : paperHilbertSchmidtNorm P.canonicalSinTheta ≤
-      ‖Q.invSqrt.adjoint‖ * paperHilbertSchmidtNorm P.rawOverlap := by
+      ‖Q.invSqrt.adjoint‖ * paperHilbertSchmidtNorm P.sylvesterOverlap := by
     have h := hilbertSchmidtNorm_comp_le
       Q.invSqrt.adjoint hraw (ContinuousLinearMap.id ℝ G)
     rw [ContinuousLinearMap.comp_id] at h
@@ -344,15 +344,15 @@ theorem canonicalSinTheta_frame_bound
   calc
     P.frameLowerBound * paperHilbertSchmidtNorm P.canonicalSinTheta
         ≤ P.frameLowerBound *
-            (‖Q.invSqrt.adjoint‖ * paperHilbertSchmidtNorm P.rawOverlap) :=
+            (‖Q.invSqrt.adjoint‖ * paperHilbertSchmidtNorm P.sylvesterOverlap) :=
       mul_le_mul_of_nonneg_left hcomp P.frameLowerBound_pos.le
     _ ≤ P.frameLowerBound *
-          (P.frameLowerBound⁻¹ * paperHilbertSchmidtNorm P.rawOverlap) :=
+          (P.frameLowerBound⁻¹ * paperHilbertSchmidtNorm P.sylvesterOverlap) :=
       mul_le_mul_of_nonneg_left
         (mul_le_mul_of_nonneg_right hnorm
-          (hilbertSchmidtNorm_nonneg P.rawOverlap))
+          (hilbertSchmidtNorm_nonneg P.sylvesterOverlap))
         P.frameLowerBound_pos.le
-    _ = paperHilbertSchmidtNorm P.rawOverlap := by
+    _ = paperHilbertSchmidtNorm P.sylvesterOverlap := by
       rw [← mul_assoc, mul_inv_cancel₀ P.frameLowerBound_pos.ne', one_mul]
 
 /-- Real Theorem 6.2, proved by exact complexification of the square-norm
@@ -376,7 +376,7 @@ theorem result
   have hraw := hilbertSchmidt_sylvester_real_le_of_pairwiseSpectrumGap_direct
     P.trial_selfAdjoint P.complement_selfAdjoint P.gap_pos
     P.spectral_distance hEq hProjected
-  have hrawHS : IsPaperHilbertSchmidt P.rawOverlap := hraw.1
+  have hrawHS : IsPaperHilbertSchmidt P.sylvesterOverlap := hraw.1
   obtain ⟨hcanonmem, hframe⟩ := P.canonicalSinTheta_frame_bound hrawHS
   have hprojNorm : paperHilbertSchmidtNorm P.projectedResidual ≤
       paperHilbertSchmidtNorm P.data.residual := by
@@ -403,7 +403,7 @@ theorem result
     P.gap * P.frameLowerBound * paperHilbertSchmidtNorm P.canonicalSinTheta
         = P.gap *
             (P.frameLowerBound * paperHilbertSchmidtNorm P.canonicalSinTheta) := by ring
-    _ ≤ P.gap * paperHilbertSchmidtNorm P.rawOverlap :=
+    _ ≤ P.gap * paperHilbertSchmidtNorm P.sylvesterOverlap :=
       mul_le_mul_of_nonneg_left hframe P.gap_pos.le
     _ ≤ paperHilbertSchmidtNorm P.projectedResidual := hraw.2
     _ ≤ paperHilbertSchmidtNorm P.data.residual := hprojNorm

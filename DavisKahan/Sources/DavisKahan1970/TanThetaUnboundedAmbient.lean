@@ -425,7 +425,7 @@ unbounded; the residual and perturbation `H` are bounded.  The hypotheses
 Ritz domain, `hVdom`/`hVcomm` say the unwanted subspace reduces the ambient
 operator, `hupper` and `hUnwanted` are the two printed form bounds, and `h35` is
 the standing condition (3.5). -/
-theorem tanTheta_ambient_unboundedRitz_raw_symmetricNorming_complex
+theorem tanTheta_ambient_unboundedRitz_explicitCompatibility_symmetricNorming_complex
     (N : SymmetricNormingFunction)
     {U V : Submodule ℂ E}
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
@@ -488,7 +488,7 @@ theorem tanTheta_ambient_unboundedOperator_boundedRitz_symmetricNorming_complex
 
 /-! ### The constructor-first interface
 
-`tanTheta_ambient_unboundedRitz_raw_symmetricNorming_complex` above is the most
+`tanTheta_ambient_unboundedRitz_explicitCompatibility_symmetricNorming_complex` above is the most
 general form, and it asks the caller for four separate facts that are not
 Davis--Kahan mathematics: two saying the compression data is `A`'s Ritz pair on
 `U`, and two saying `Vᗮ` reduces `A`.  `DavisKahan.UnboundedRitzPair` and
@@ -535,7 +535,7 @@ theorem norm_sinAngleOperatorC_lt_one_of_unboundedRitz
 /-- **Davis--Kahan 1970, `tan Θ`, unbounded ambient form, taking the Ritz pair and
 the reducing complement as objects.**
 
-`tanTheta_ambient_unboundedRitz_raw_symmetricNorming_complex` with its four
+`tanTheta_ambient_unboundedRitz_explicitCompatibility_symmetricNorming_complex` with its four
 structural arguments replaced by `DavisKahan.UnboundedRitzPair A U` and
 `DavisKahan.ReducingComplement A V`.  The mathematics -- semiboundedness,
 coercivity on the unwanted subspace, and the crossed-defect condition (3.5) --
@@ -558,7 +558,7 @@ theorem tanTheta_ambient_unboundedRitz_symmetricNorming_complex
     (hMem : N.Mem H) :
     N.Mem (tanAngleOperatorC U V) ∧
       delta * N.gauge (tanAngleOperatorC U V) ≤ N.gauge H :=
-  tanTheta_ambient_unboundedRitz_raw_symmetricNorming_complex N D.trial A H hH hdelta
+  tanTheta_ambient_unboundedRitz_explicitCompatibility_symmetricNorming_complex N D.trial A H hH hdelta
     D.mem_domain D.action_eq hV.mapsDomain hV.commutes hupper hUnwanted h35
     hResidual hMem
 
