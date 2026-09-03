@@ -589,11 +589,11 @@ def _validate_source_clauses(
                         "sources, so its bridging claim cannot be checked"
                     )
                 for role, token in (("from_object", source_object), ("to_object", paper_object)):
-                    if token not in statement:
+                    if not _mentions(statement, token):
                         fail(
                             f"{where}: correspondence_witness claims {declaration} bridges to {token!r} "
-                            f"({role}), but that does not occur in its statement. A representation change needs a "
-                            "theorem that mentions both objects."
+                            f"({role}), but that does not occur in its statement as a whole identifier. A "
+                            "representation change needs a theorem that mentions both objects."
                         )
                 # The bridge must start from the object the PRIMARY concludes on.
                 # Without this, a witness could name any two objects and still be
@@ -605,11 +605,21 @@ def _validate_source_clauses(
                         f"{where}: the primary {primary} has no statement readable from the Lean sources, so the "
                         "correspondence cannot be checked against it"
                     )
-                if source_object not in primary_statement:
+                if not _mentions(primary_statement, source_object):
                     fail(
                         f"{where}: correspondence_witness.from_object is {source_object!r}, which does not occur in "
-                        f"the clause's primary {primary}. A bridge must start from the object the primary actually "
-                        "concludes on."
+                        f"the clause's primary {primary} as a whole identifier. A bridge must start from the object "
+                        "the primary actually concludes on."
+                    )
+                # The bridge must COMPOSE with the primary, and the repository's
+                # contract prefers that composition to be done in Lean: the
+                # primary's own proof invokes the witness.  A witness that is
+                # merely registered beside a theorem was what the 2026-09-02
+                # closure had, and it did not compose.
+                if not _invokes(primary, declaration):
+                    fail(
+                        f"{where}: correspondence_witness {declaration} is not invoked by the proof of the clause's "
+                        f"primary {primary}. The correspondence must be composed in Lean, not registered beside it."
                     )
                 # Scalar compatibility.  A complex theorem is not a correspondence
                 # for a real object, and the same witness was registered for both
@@ -621,8 +631,30 @@ def _validate_source_clauses(
                         f"{declaration} does not mention {scalar_token} anywhere in its statement, so it does not "
                         "state a correspondence over this clause's scalar field"
                     )
+                # The bridging chain.  A clause on a representation change lists,
+                # in `transport_chain`, every theorem its primary composes to get
+                # from the general result to the paper object -- for a real
+                # clause, the complexification transports.  Each must be invoked
+                # by the primary's proof, so the list cannot name transports the
+                # theorem does not use; and (below, against the census) each must
+                # carry a statement pin, so a transport cannot change shape under
+                # an accepted review.
+                chain = clause.get("transport_chain")
+                if not isinstance(chain, list) or not chain or not all(
+                    isinstance(x, str) and x.strip() for x in chain
+                ):
+                    fail(
+                        f"{where}: a clause with correspondence_required must record transport_chain, the "
+                        "theorems its primary composes to reach the paper object"
+                    )
+                for transport in chain:
+                    if not _invokes(primary, transport):
+                        fail(
+                            f"{where}: transport_chain names {transport}, which the proof of the primary {primary} "
+                            "does not invoke; the chain must be the one the theorem actually composes"
+                        )
 
-            for declaration in [primary, *correspondence]:
+            for declaration in [primary, *correspondence, *(clause.get("transport_chain") or [])]:
                 if declaration not in _declarations(item):
                     fail(f"{where}: {declaration} is not registered in the result's lean_declarations")
                 if declaration not in census_declarations:
@@ -1248,8 +1280,76 @@ def _declaration_statement_text(name: str) -> str | None:
 
 
 
+def _mentions(text: str | None, token: str) -> bool:
+    """Whether `token` occurs in `text` as a whole identifier or phrase.
+
+    Substring matching let `tanTwoDirectedCorner` pass as a mention of
+    `tanTwoDirectedCornerR`, and `Corner` as a mention of anything.  A token
+    may be a multi-word phrase (a spelled-out operator); the boundary check is
+    applied at its two ends, and a namespace prefix before it is allowed.
+    """
+    if not text or not token:
+        return False
+    return re.search(
+        r"(?<![A-Za-z0-9_'!?])" + re.escape(token) + r"(?![A-Za-z0-9_'!?])", text
+    ) is not None
+
+
+def _short_name(name: str) -> str:
+    return name.rsplit(".", 1)[-1]
+
+
+def _declaration_proof_text(name: str) -> str | None:
+    """The declaration as written, minus its docstring and its statement.
+
+    A docstring may name every lemma the author *meant* to use; the proof body
+    names the ones the theorem actually composes.  Static and source-level on
+    purpose: whether the chain type-checks is Lean's business and the build
+    settles it, but whether a registered bridge is *invoked* by the theorem it
+    is registered against is a fact the file states directly.
+    """
+    index = _source_declaration_index()
+    if index is None:
+        return None
+    try:
+        from aiq_lean_tools.lean_source import declaration_source_texts, full_declaration_text
+
+        texts = declaration_source_texts(index, name)
+        if not texts:
+            return None
+        row = texts[0].declaration
+        full = full_declaration_text(row.path, row.line)
+    except Exception:
+        return None
+    if not full:
+        return None
+    body = full
+    doc_end = body.find("-/")
+    if body.lstrip().startswith("/-") and doc_end != -1:
+        body = body[doc_end + 2:]
+    header = texts[0].header.rstrip()
+    if header:
+        cut = body.find(header)
+        if cut != -1:
+            body = body[cut + len(header):]
+        else:
+            # the header renderer may normalize whitespace; fall back to the
+            # first top-level `:=`, which ends every theorem statement
+            cut = body.find(":=")
+            body = body[cut + 2:] if cut != -1 else body
+    return body
+
+
+def _invokes(primary: str, declaration: str) -> bool:
+    """Whether the proof of `primary` names `declaration` (by its short name)."""
+    proof = _declaration_proof_text(primary)
+    return _mentions(proof, _short_name(declaration))
+
+
 #: Census clause relations that assert another theorem carries the correspondence.
 REPRESENTATION_CHANGE_RELATIONS = {"representation_change"}
+#: Census clause fields naming the theorems that bridge a representation change.
+CENSUS_BRIDGE_FIELDS = ("correspondence_declarations", "transport_declarations")
 
 
 def _validate_representation_change_agreement(
@@ -1275,17 +1375,63 @@ def _validate_representation_change_agreement(
         )
         if not census_changes:
             continue
-        flagged = sum(
-            1 for c in (item.get("source_clauses") or [])
+        flagged_clauses = [
+            c for c in (item.get("source_clauses") or [])
             if isinstance(c, dict) and c.get("correspondence_required")
-        )
-        if not flagged:
+        ]
+        if not flagged_clauses:
             fail(
                 f"{item['id']}: the source census records {census_changes} clause(s) with "
                 "relation 'representation_change', but no inventory clause is marked "
                 "correspondence_required. A representation change must be bridged by a named theorem "
                 "in both ledgers, or asserted in neither."
             )
+        # The two ledgers must name the SAME bridging chain.  Dropping a
+        # transport from the inventory alone, or from the census alone, is then
+        # visible; and the census's chain is what the statement pins protect.
+        inventory_chain = {
+            name
+            for c in flagged_clauses
+            for name in [*(c.get("evidence") or {}).get("correspondence", []), *(c.get("transport_chain") or [])]
+        }
+        census_chain = {
+            name
+            for c in clause_map
+            if isinstance(c, dict) and c.get("relation") in REPRESENTATION_CHANGE_RELATIONS
+            for field in CENSUS_BRIDGE_FIELDS
+            for name in (c.get(field) or [])
+        }
+        if inventory_chain != census_chain:
+            fail(
+                f"{item['id']}: the inventory's bridging chain (correspondence + transport_chain) and the census's "
+                f"(correspondence_declarations + transport_declarations) disagree; only in the inventory: "
+                f"{sorted(inventory_chain - census_chain)}, only in the census: {sorted(census_chain - inventory_chain)}"
+            )
+        # Every declaration the chain relies on -- the primaries, the witnesses,
+        # the transports -- must carry a statement pin on the census row, so a
+        # change to its elaborated type fails the pin gate rather than passing
+        # silently under an accepted review.  Checked only for ESTABLISHED
+        # clauses: an open clause's chain is admittedly incomplete.
+        pinned = {
+            str(p.get("declaration"))
+            for p in ((row.get("semantic_review") or {}).get("statement_pins") or [])
+            if isinstance(p, dict)
+        }
+        for c in flagged_clauses:
+            if c.get("status") != "established":
+                continue
+            evidence = c.get("evidence") or {}
+            required = [evidence.get("primary"), *evidence.get("correspondence", []), *(c.get("transport_chain") or [])]
+            witness = c.get("correspondence_witness") or {}
+            if isinstance(witness, dict) and witness.get("declaration"):
+                required.append(witness["declaration"])
+            unpinned = sorted({str(n) for n in required if n} - pinned)
+            if unpinned:
+                fail(
+                    f"{item['id']}/{c.get('id')}: correspondence evidence without a statement pin on the census "
+                    f"row: {unpinned}. Pin it with `aiq-lean alignment pin` so the bridge cannot change shape "
+                    "under an accepted review."
+                )
 
 
 def _supporting_atom_digest(atom_ids: list[str], source_atoms: dict[str, dict[str, Any]]) -> str:

@@ -298,7 +298,9 @@
         "TauCeti.DavisKahan1970.tanTwoTheta_directed_unboundedResidual_blockRepresentative_symmetricNorming_complex",
         "TauCeti.DavisKahan1970.tanTwoTheta_directed_unboundedResidual_blockRepresentative_symmetricNorming_real",
         "TauCeti.DavisKahan1970.tanTwoTheta_ambient_unbounded_blockRepresentative_symmetricNorming_complex",
-        "TauCeti.DavisKahan1970.tanTwoTheta_ambient_unbounded_blockRepresentative_symmetricNorming_real"
+        "TauCeti.DavisKahan1970.tanTwoTheta_ambient_unbounded_blockRepresentative_symmetricNorming_real",
+        "TauCeti.DavisKahan1970.tanTwoTheta_directed_unboundedResidual_symmetricNorming_complex",
+        "TauCeti.DavisKahan1970.tanTwoTheta_directed_unboundedResidual_symmetricNorming_real"
       ],
       "audit_clauses": [
         {
@@ -312,19 +314,25 @@
             "TauCeti.DavisKahan1970.tanTwoTheta_directed_unboundedResidual_blockRepresentative_symmetricNorming_complex",
             "TauCeti.DavisKahan1970.tanTwoTheta_directed_unboundedResidual_blockRepresentative_symmetricNorming_real",
             "TauCeti.DavisKahan1970.tanTwoTheta_ambient_unbounded_blockRepresentative_symmetricNorming_complex",
-            "TauCeti.DavisKahan1970.tanTwoTheta_ambient_unbounded_blockRepresentative_symmetricNorming_real"
+            "TauCeti.DavisKahan1970.tanTwoTheta_ambient_unbounded_blockRepresentative_symmetricNorming_real",
+            "TauCeti.DavisKahan1970.tanTwoTheta_directed_unboundedResidual_symmetricNorming_complex",
+            "TauCeti.DavisKahan1970.tanTwoTheta_directed_unboundedResidual_symmetricNorming_real"
           ]
         },
         {
           "id": "S2-tan-two-theta.directed",
-          "description": "Directed conclusion: delta * ||tan(2 Theta_0)|| <= 2 ||R|| for every source unitarily invariant norm. Exact complex and real wrappers cover both the bounded source notation and the advertised infinite-dimensional unbounded-self-adjoint scope, with canonical cutoffs and pole exclusion internal to the theorem.",
+          "description": "Directed conclusion: delta * ||tan(2 Theta_0)|| <= 2 ||R|| for every source unitarily invariant norm. The canonical unbounded endpoints take the reducing subspace V and conclude on the paper's directed object (over ℝ, `tanTwoDirectedCornerR U V`), stating the singular-value identification tan (arcsin a_n(sin 2 Theta_0)) in their types; the bounded wrappers and the arbitrary-involution theorems remain as specializations and generalizations.",
           "review_declarations": [
             "TauCeti.DavisKahan1970.tanTwoTheta_directed_boundedResidual_blockRepresentative_spectralGap_symmetricNorming_complex",
             "TauCeti.DavisKahan1970.tanTwoTheta_directed_boundedResidual_blockRepresentative_spectralGap_symmetricNorming_real",
             "TauCeti.DavisKahan1970.tanTwoTheta_directed_boundedResidual_branchFree_blockRepresentative_symmetricNorming_complex",
             "TauCeti.DavisKahan1970.tanTwoDirectedCornerR",
             "TauCeti.DavisKahan1970.tanTwoTheta_directed_unboundedResidual_blockRepresentative_symmetricNorming_complex",
-            "TauCeti.DavisKahan1970.tanTwoTheta_directed_unboundedResidual_blockRepresentative_symmetricNorming_real"
+            "TauCeti.DavisKahan1970.tanTwoTheta_directed_unboundedResidual_blockRepresentative_symmetricNorming_real",
+            "TauCeti.DavisKahan1970.tanTwoTheta_directed_unboundedResidual_symmetricNorming_complex",
+            "TauCeti.DavisKahan1970.tanTwoTheta_directed_unboundedResidual_symmetricNorming_real",
+            "TauCeti.DavisKahan1970.approximationNumber_tanTwoDirectedCorner",
+            "TauCeti.DavisKahan1970.approximationNumber_tanTwoDirectedCornerR"
           ]
         },
         {
@@ -340,7 +348,7 @@
         }
       ],
       "source_specification_sha256": "5c5b96c1cc563a42d13b8b4e06989c19ff82ec8ed6958f3da78d67dc9b2b7830",
-      "expected_completion_certification": "hostile_review_blocked",
+      "expected_completion_certification": "accepted",
       "known_completion_holes": [],
       "source_atom_ids": [
         "S2-tan-two-theta.ordered-gap-hypothesis",
@@ -350,7 +358,7 @@
         "S2-tan-two-theta.ambient-conclusion",
         "S2-tan-two-theta.pole-exclusion-derived"
       ],
-      "expectation_note": "Reopened 2026-09-02: certification is blocked by obligation tan2theta-directed-correspondence; the status and verification axes are unchanged."
+      "expectation_note": "Closed 2026-09-02: obligation tan2theta-directed-correspondence discharged by source-shaped directed endpoints over both fields."
     },
     {
       "id": "S2-sharpness",

@@ -424,6 +424,83 @@ theorem mapsDomainTo_complexifyReal
   exact ⟨hZdom (TauCeti.LinearPMap.complexificationDomainRe A x),
     hZdom (TauCeti.LinearPMap.complexificationDomainIm A x)⟩
 
+
+omit [CompleteSpace E] [U.HasOrthogonalProjection] in
+/-- **Complexification commutes with a bounded perturbation of a partial map.**
+`A + B` has `A`'s domain and acts coordinatewise, and so does its
+complexification, so the two ways of forming `(A + B)_ℂ` agree on the nose. -/
+theorem complexifyReal_addBounded (A : E →ₗ.[ℝ] E) (B : E →L[ℝ] E) :
+    TauCeti.LinearPMap.complexifyReal (TauCeti.LinearPMap.addBounded A B) =
+      TauCeti.LinearPMap.addBounded (TauCeti.LinearPMap.complexifyReal A) (complexify B) := by
+  refine _root_.LinearPMap.ext rfl ?_
+  intro z hf hg
+  refine RealComplexification.ext ?_ ?_
+  · change A ⟨re z, hg.1⟩ + B (re z) = A ⟨re z, hg.1⟩ + re (complexify B z)
+    rw [re_complexify]
+  · change A ⟨im z, hg.2⟩ + B (im z) = A ⟨im z, hg.2⟩ + im (complexify B z)
+    rw [im_complexify]
+
+omit [CompleteSpace E] in
+/-- **A subspace reducing `A + B` complexifies to one reducing `A_ℂ + B_ℂ`.**
+This is the transport of the paper's "`V` reduces `A + H`" hypothesis. -/
+theorem reducesSubspace_addBounded_complexifyReal
+    {V : Submodule ℝ E} [V.HasOrthogonalProjection]
+    (hV : TauCeti.LinearPMap.ReducesSubspace (TauCeti.LinearPMap.addBounded A B) V) :
+    TauCeti.LinearPMap.ReducesSubspace
+      (TauCeti.LinearPMap.addBounded (TauCeti.LinearPMap.complexifyReal A) (complexify B))
+      (complexifySubmodule V) := by
+  rw [← complexifyReal_addBounded]
+  exact reducesSubspace_complexifyReal hV
+
+omit [CompleteSpace E] [U.HasOrthogonalProjection] in
+/-- **An upper form bound on a subspace transports to its complexification with
+the same constant.**  The real part of the complexified form is the sum of the
+real form on the real and imaginary coordinates. -/
+theorem re_inner_complexifyReal_le_of_forall_mem {a : ℝ}
+    (hUa : ∀ x : A.domain, (x : E) ∈ U → ⟪A x, (x : E)⟫_ℝ ≤ a * ‖(x : E)‖ ^ 2) :
+    ∀ y : (TauCeti.LinearPMap.complexifyReal A).domain,
+      (y : RealComplexification E) ∈ complexifySubmodule U →
+      RCLike.re ⟪TauCeti.LinearPMap.complexifyReal A y, (y : RealComplexification E)⟫_ℂ ≤
+        a * ‖(y : RealComplexification E)‖ ^ 2 := by
+  intro y hy
+  rw [mem_complexifySubmodule] at hy
+  have hcoord := (TauCeti.LinearPMap.mem_complexifyReal_domain_iff A
+    (y : RealComplexification E)).mp y.2
+  have h1 := hUa ⟨re (y : RealComplexification E), hcoord.1⟩ hy.1
+  have h2 := hUa ⟨im (y : RealComplexification E), hcoord.2⟩ hy.2
+  have hsplit : RCLike.re ⟪TauCeti.LinearPMap.complexifyReal A y,
+        (y : RealComplexification E)⟫_ℂ =
+      ⟪A ⟨re (y : RealComplexification E), hcoord.1⟩,
+          re (y : RealComplexification E)⟫_ℝ +
+        ⟪A ⟨im (y : RealComplexification E), hcoord.2⟩,
+          im (y : RealComplexification E)⟫_ℝ := rfl
+  rw [hsplit, RealComplexification.norm_sq, mul_add]
+  linarith
+
+omit [CompleteSpace E] [U.HasOrthogonalProjection] in
+/-- **A lower form bound on the orthogonal complement transports to the
+complexification with the same constant.** -/
+theorem le_re_inner_complexifyReal_of_forall_mem_orthogonal {b : ℝ}
+    (hUb : ∀ x : A.domain, (x : E) ∈ Uᗮ → b * ‖(x : E)‖ ^ 2 ≤ ⟪A x, (x : E)⟫_ℝ) :
+    ∀ y : (TauCeti.LinearPMap.complexifyReal A).domain,
+      (y : RealComplexification E) ∈ (complexifySubmodule U)ᗮ →
+      b * ‖(y : RealComplexification E)‖ ^ 2 ≤
+        RCLike.re ⟪TauCeti.LinearPMap.complexifyReal A y, (y : RealComplexification E)⟫_ℂ := by
+  intro y hy
+  rw [← complexifySubmodule_orthogonal, mem_complexifySubmodule] at hy
+  have hcoord := (TauCeti.LinearPMap.mem_complexifyReal_domain_iff A
+    (y : RealComplexification E)).mp y.2
+  have h1 := hUb ⟨re (y : RealComplexification E), hcoord.1⟩ hy.1
+  have h2 := hUb ⟨im (y : RealComplexification E), hcoord.2⟩ hy.2
+  have hsplit : RCLike.re ⟪TauCeti.LinearPMap.complexifyReal A y,
+        (y : RealComplexification E)⟫_ℂ =
+      ⟪A ⟨re (y : RealComplexification E), hcoord.1⟩,
+          re (y : RealComplexification E)⟫_ℝ +
+        ⟪A ⟨im (y : RealComplexification E), hcoord.2⟩,
+          im (y : RealComplexification E)⟫_ℝ := rfl
+  rw [hsplit, RealComplexification.norm_sq, mul_add]
+  linarith
+
 end Hypotheses
 
 /-! ## The directed corner gauge, transported without a subtype cast
@@ -440,7 +517,10 @@ section CornerGauge
 variable (U : Submodule ℝ E) [U.HasOrthogonalProjection]
 
 omit [CompleteSpace E] in
-/-- The ambient directed projection block commutes with complexification. -/
+/-- The ambient directed projection block commutes with complexification.
+
+TODO(dedupe): `AmbientReal.projectionBlock_complexifySubmodule_real` states the same
+equality with the same proof; neither module imports the other.  One should go. -/
 theorem projectionBlock_complexifySubmodule (K : E →L[ℝ] E) :
     projectionBlock (complexifySubmodule U)ᗮ (complexifySubmodule U)
         (complexify K) =

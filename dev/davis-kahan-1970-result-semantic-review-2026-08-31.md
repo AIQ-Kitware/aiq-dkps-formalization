@@ -341,8 +341,8 @@ angle scope, with no clause open.
 
   | clause | field | conclusion atom(s) | canonical witness | disposition |
   |---|---|---|---|---|
-  | `directed.complex` | complex | `S2-tan-two-theta.directed-conclusion` | `TauCeti.DavisKahan1970.tanTwoTheta_directed_unboundedResidual_blockRepresentative_symmetricNorming_complex` | **PASS** |
-  | `directed.real` | real | `S2-tan-two-theta.directed-conclusion` | `TauCeti.DavisKahan1970.tanTwoTheta_directed_unboundedResidual_blockRepresentative_symmetricNorming_real` | **PASS** |
+  | `directed.complex` | complex | `S2-tan-two-theta.directed-conclusion` | `TauCeti.DavisKahan1970.tanTwoTheta_directed_unboundedResidual_symmetricNorming_complex` | **PASS** (2026-09-02, see the fifth pass) |
+  | `directed.real` | real | `S2-tan-two-theta.directed-conclusion` | `TauCeti.DavisKahan1970.tanTwoTheta_directed_unboundedResidual_symmetricNorming_real` | **PASS** (2026-09-02, see the fifth pass) |
   | `ambient.complex` | complex | `S2-tan-two-theta.ambient-conclusion` | `TauCeti.DavisKahan1970.tanTwoTheta_ambient_unbounded_symmetricNorming_complex` | **PASS** |
   | `ambient.real` | real | `S2-tan-two-theta.ambient-conclusion` | `TauCeti.DavisKahan1970.tanTwoTheta_ambient_unbounded_symmetricNorming_real` | **PASS** |
 
@@ -782,3 +782,74 @@ The accepted canonical-evidence digest is
 
 **No result disposition and no source-fidelity judgement changed.**  This is a
 naming pass; it does not reopen any of the 29 result judgements recorded above.
+
+## Fifth pass, 2026-09-02: the directed `tan 2Θ` clauses, reopened and closed the same day
+
+**What was reopened.** A hostile reading of the 2026-09-02 morning closure of
+`S2-tan-two-theta` found that its registered correspondence did not compose with
+the canonical directed primaries: those primaries quantified over an arbitrary
+self-adjoint involution `Z` and concluded on `reflectionTangentCorner U Z`, while
+the correspondence was about the special case `Z = V.reflectionOperator`; and the
+same complex theorem had been registered as the witness for the real clause. The
+row went back to `hostile_review_blocked` under obligation
+`tan2theta-directed-correspondence`, 28/29.
+
+**What closes it.** Two source-shaped directed endpoints, both compiled, both
+canonical, both aliased by `SectionTwo.tanTwoTheta_directed_{complex,real}`:
+
+- `TauCeti.DavisKahan1970.tanTwoTheta_directed_unboundedResidual_symmetricNorming_complex`.
+  Hypotheses: `A : Ea →ₗ.[ℂ] Ea` self-adjoint; `U` reducing `A`, with
+  `re ⟪A x, x⟫ ≤ a ‖x‖²` on `U` and `b ‖x‖² ≤ re ⟪A x, x⟫` on `Uᗮ`, `a < b`;
+  `B : Ea →L[ℂ] Ea` odd for the splitting (`H₀ = H₁ = 0`); `V` reducing `A + B`
+  (`TauCeti.LinearPMap.ReducesSubspace (addBounded A B) V`); and `N.Mem (projectionBlock Uᗮ U B)`.
+  Conclusion, on the paper's directed object
+  `T₀ = projectionBlock Uᗮ U (2 * (projectorDifference U V * doubleSecant U V))`:
+  every approximation number of `sinTwoThetaIdealBlock U V` is `< 1`;
+  `aₙ(T₀) = tan (arcsin aₙ(sinTwoThetaIdealBlock U V))` for every `n`;
+  `N.Mem T₀`; and `(b − a) N(T₀) ≤ 2 N(projectionBlock Uᗮ U B)`.
+- `TauCeti.DavisKahan1970.tanTwoTheta_directed_unboundedResidual_symmetricNorming_real`.
+  The same data over `InnerProductSpace ℝ E`, concluding on `tanTwoDirectedCornerR U V`
+  with the real residual on the right and the same two identification conjuncts
+  against the *real* `sinTwoThetaIdealBlock U V`.
+
+**Why a reviewer needs no prose.** The object bounded is the block spelling of
+`tan 2Θ₀`, and the theorem type itself says what that block is: its singular values
+are `tan (arcsin sin 2θⱼ) = |tan 2θⱼ|`, one per directed principal angle, with
+`sin 2θⱼ < 1` the pole exclusion Section 7 derives. `sinTwoThetaIdealBlock` is the
+directed double-angle sine already accepted on `S2-sin-two-theta`, where
+`sinTwoThetaIdealBlock_hasSameApproximationNumbers` ties it to `directedSinTwoAngleOperatorC`.
+
+**The chain, composed in Lean.** Over `ℂ`: `ReflectionIntertwines.ofReducesSubspace`
+turns the printed reducing-subspace hypothesis into the intertwiner the engine
+`..._reducing_derivedReflection_...` takes; `reflectionTangentCorner_reflection_eq_paperTanTwoCorner`
+and `blockCompression_diagonalPair` identify the reflection tangent corner with the
+compression of the paper's block; `mem_projectionBlock_iff_mem_blockCompression`
+and `gauge_projectionBlock_eq_blockCompression` (three lines each, from
+`projectionBlock_same_compression` and the rectangular
+`extendedGauge_eq_of_hasSameApproximationNumbers`) move to the ambient spelling;
+`approximationNumber_tanTwoDirectedCorner` gives the singular values. The
+morning's `next_action` had said that ambient step could not be stated with the
+existing API; it could, and the retraction is recorded in the row. Over `ℝ`: every
+source hypothesis is complexified by a registered transport
+(`isSelfAdjoint_complexifyReal`, `reducesSubspace_complexifyReal`,
+`isOddFor_complexifySubmodule`, the new `reducesSubspace_addBounded_complexifyReal`,
+and the now-public form-bound transports), the complex endpoint is applied,
+`tanTwoDirectedCornerR` is definitionally the complex corner of the complexified
+pair, the residual returns through `projectionBlock_complexifySubmodule` and
+`gauge_complexify`, and `approximationNumber_tanTwoDirectedCornerR` -- stated over
+`Submodule ℝ` -- is the real correspondence, applied to the pole exclusion read back
+through `norm_offDiagonalPart_reflectionOperator_complexifySubmodule`.
+
+**What the checker now demands, so this cannot regress the way it did.** For a
+clause on a representation change: the witness's objects must occur as whole
+identifiers in the witness and the primary; the witness and every entry of the
+clause's `transport_chain` must be *invoked by the primary's proof*; the inventory's
+chain and the census's `correspondence_declarations + transport_declarations` must
+agree; and every link must carry a statement pin on the census row --
+`aiq-lean alignment pin` now pins a review's clause bridging declarations with its
+canonical ones, which it previously did not, so the earlier claim that the
+supporting declarations were "protected by pins" was false and is corrected.
+Eight tamper tests in `scripts/tests/test_davis_kahan_hostile_certificate.py` cover
+the mutations a reviewer would try.
+
+**Disposition.** `S2-tan-two-theta` accepted; obligation closed; 29/29.

@@ -205,12 +205,37 @@ class RepresentationChangeMustBeBridged(unittest.TestCase):
     Added after a reviewer defeated the first 29/29 by emptying the directed
     clauses' correspondence list, and again by swapping in another registered
     correspondence theorem.  Both produced a green certificate over an unbridged
-    representation change.
+    representation change.  Extended 2026-09-02 with the tamperings a hostile
+    reviewer would try against the closure that replaced it.
     """
+
+    COMPLEX_PRIMARY = "TauCeti.DavisKahan1970.tanTwoTheta_directed_unboundedResidual_symmetricNorming_complex"
+    REAL_PRIMARY = "TauCeti.DavisKahan1970.tanTwoTheta_directed_unboundedResidual_symmetricNorming_real"
+    COMPLEX_WITNESS = "TauCeti.DavisKahan1970.approximationNumber_tanTwoDirectedCorner"
+    REAL_WITNESS = "TauCeti.DavisKahan1970.approximationNumber_tanTwoDirectedCornerR"
+    OLD_CORNER = "reflectionTangentCorner"
 
     def _directed(self, data: dict) -> list[dict]:
         target = row(data, "S2-tan-two-theta")
         return [c for c in target["source_clauses"] if c.get("correspondence_required")]
+
+    def _clause(self, data: dict, cid: str) -> dict:
+        return next(c for c in self._directed(data) if c["id"] == cid)
+
+    def _census_rows(self) -> dict[str, dict]:
+        census = json.loads((ROOT / "dev/davis-kahan-1970-full-source-census.json").read_text())
+        return {r["id"]: r for r in census["items"]}
+
+    def _clauses_pass(self, data: dict) -> None:
+        """Run the clause validator statically (no compiler probe)."""
+        _, atom_table = M._load_source_atoms()
+        audit = (ROOT / data["semantic_review_sweep"]["compiler_audit_surface"]).read_text()
+        M._validate_source_clauses(
+            data["results"], atom_table, M._registered_census_declarations(), audit,
+            data["semantic_review_sweep"]["compiler_audit_surface"], None,
+        )
+
+    # -- the state that must hold ------------------------------------------------
 
     def test_the_current_clauses_declare_a_witness(self):
         clauses = self._directed(inventory())
@@ -219,75 +244,129 @@ class RepresentationChangeMustBeBridged(unittest.TestCase):
             witness = clause["correspondence_witness"]
             self.assertIn(witness["declaration"], clause["evidence"]["correspondence"])
 
+    def test_the_directed_clauses_are_established_on_the_source_shaped_endpoints(self):
+        data = inventory()
+        self.assertEqual(self._clause(data, "directed.complex")["evidence"]["primary"], self.COMPLEX_PRIMARY)
+        self.assertEqual(self._clause(data, "directed.real")["evidence"]["primary"], self.REAL_PRIMARY)
+        for clause in self._directed(data):
+            self.assertEqual(clause["status"], "established")
+        self._clauses_pass(data)
+
     def test_the_witness_must_mention_both_objects(self):
-        clause = self._directed(inventory())[0]
-        witness = clause["correspondence_witness"]
-        statement = M._declaration_statement_text(witness["declaration"])
-        self.assertIsNotNone(statement, "the witness has no readable statement")
-        for key in ("from_object", "to_object"):
-            self.assertIn(witness[key], statement, f"{key} absent from the witness statement")
+        for clause in self._directed(inventory()):
+            witness = clause["correspondence_witness"]
+            statement = M._declaration_statement_text(witness["declaration"])
+            self.assertIsNotNone(statement, "the witness has no readable statement")
+            for key in ("from_object", "to_object"):
+                self.assertTrue(M._mentions(statement, witness[key]), f"{key} absent from the witness statement")
 
-    def test_an_unrelated_theorem_does_not_bridge(self):
-        """The substitution a reviewer used: another registered correspondence lemma."""
-        statement = M._declaration_statement_text(
-            "TauCeti.DavisKahan1970.approximationNumber_reflectionTangentCorner"
-        )
-        self.assertIsNotNone(statement)
-        clause = self._directed(inventory())[0]
-        self.assertNotIn(
-            clause["correspondence_witness"]["to_object"], statement,
-            "this lemma would wrongly pass as the bridge to the paper object",
-        )
+    def test_the_primaries_conclude_on_the_paper_objects_not_the_corner(self):
+        for name in (self.COMPLEX_PRIMARY, self.REAL_PRIMARY):
+            statement = M._declaration_statement_text(name)
+            self.assertIsNotNone(statement)
+            self.assertFalse(M._mentions(statement, self.OLD_CORNER), f"{name} still concludes on the implementation corner")
+            self.assertFalse(M._mentions(statement, "ReflectionIntertwines"), f"{name} exposes the implementation hypothesis")
+        self.assertTrue(M._mentions(M._declaration_statement_text(self.REAL_PRIMARY), "tanTwoDirectedCornerR"))
 
-    def test_a_bridge_must_start_from_the_primarys_own_object(self):
-        """Reviewer finding: from_object could name an object the primary never mentions.
+    # -- the mutations that must go red ------------------------------------------
 
-        Setting it to `V.reflectionOperator` left the gate green, even though the
-        canonical primary quantifies over an arbitrary involution `Z` and never
-        mentions that object.
-        """
-        primary = M._declaration_statement_text(
-            "TauCeti.DavisKahan1970."
-            "tanTwoTheta_directed_unboundedResidual_blockRepresentative_symmetricNorming_complex"
-        )
-        self.assertIsNotNone(primary)
-        self.assertIn("reflectionTangentCorner", primary, "the object the primary really concludes on")
-        self.assertNotIn(
-            "V.reflectionOperator", primary,
-            "if this ever appears, the from_object check stops discriminating and needs rethinking",
-        )
+    def test_1_removing_the_real_endpoint_from_canonical_evidence_is_rejected(self):
+        data = inventory()
+        target = row(data, "S2-tan-two-theta")
+        target["canonical_evidence"] = [
+            e for e in target["canonical_evidence"] if e["declaration"] != self.REAL_PRIMARY
+        ]
+        with rejected(self, "is not canonical evidence of this result"):
+            self._clauses_pass(data)
 
-    def test_a_complex_witness_cannot_certify_a_real_clause(self):
-        """Reviewer finding: the same complex theorem was registered for both scalar scopes."""
-        witness = M._declaration_statement_text(
-            "TauCeti.DavisKahan1970.reflectionTangentCorner_same_paperTanTwoDirectedCorner"
-        )
-        real_primary = M._declaration_statement_text(
-            "TauCeti.DavisKahan1970."
-            "tanTwoTheta_directed_unboundedResidual_blockRepresentative_symmetricNorming_real"
-        )
+    def test_2_replacing_the_paper_object_with_the_old_corner_is_rejected(self):
+        data = inventory()
+        self._clause(data, "directed.real")["correspondence_witness"]["from_object"] = self.OLD_CORNER
+        with rejected(self, "does not occur in its statement as a whole identifier"):
+            self._clauses_pass(data)
+
+    def test_3_the_complex_correspondence_cannot_certify_the_real_clause(self):
+        data = inventory()
+        clause = self._clause(data, "directed.real")
+        clause["correspondence_witness"]["declaration"] = self.COMPLEX_WITNESS
+        clause["evidence"]["correspondence"] = [self.COMPLEX_WITNESS]
+        clause["correspondence_witness"]["from_object"] = "projectorDifference U V * doubleSecant U V"
+        with rejected(self, "does not occur in the clause's primary"):
+            self._clauses_pass(data)
+
+    def test_3b_a_complex_witness_does_not_mention_the_real_field(self):
+        witness = M._declaration_statement_text(self.COMPLEX_WITNESS)
+        real_witness = M._declaration_statement_text(self.REAL_WITNESS)
         self.assertIsNotNone(witness)
-        self.assertIsNotNone(real_primary)
-        self.assertIn("\u211d", real_primary, "the real primary is over a real Hilbert space")
-        self.assertNotIn(
-            "\u211d", witness,
-            "the witness is complex-only, so the scalar check must refuse it for the real clause",
-        )
+        self.assertIsNotNone(real_witness)
+        self.assertNotIn("\u211d", witness, "the complex witness is complex-only")
+        self.assertIn("\u211d", real_witness, "the real witness is stated over Submodule \u211d")
 
-    def test_the_directed_clauses_are_open_while_the_obligation_stands(self):
-        """The row was closed once on a correspondence that did not compose."""
-        target = row(inventory(), "S2-tan-two-theta")
-        directed = [c for c in target["source_clauses"] if c["id"].startswith("directed.")]
-        self.assertTrue(directed)
-        for clause in directed:
-            self.assertEqual(clause["status"], "open")
-            self.assertTrue(clause.get("open_reason", "").strip())
+    def test_4_a_transport_the_proof_does_not_use_is_rejected(self):
+        data = inventory()
+        clause = self._clause(data, "directed.real")
+        # a real transport that exists and is registered elsewhere, but which this
+        # primary's proof does not invoke
+        clause["transport_chain"].append("TauCeti.DavisKahan1970.complexifyReal_addBounded")
+        with rejected(self, "does not invoke"):
+            self._clauses_pass(data)
+
+    def test_4b_dropping_a_transport_from_one_ledger_is_rejected(self):
+        data = inventory()
+        clause = self._clause(data, "directed.real")
+        clause["transport_chain"].remove("TauCeti.DavisKahan1970.reducesSubspace_addBounded_complexifyReal")
+        with rejected(self, "bridging chain"):
+            M._validate_representation_change_agreement(data["results"], self._census_rows())
+
+    def test_5_removing_a_statement_pin_for_a_correspondence_declaration_is_rejected(self):
+        data = inventory()
+        rows = self._census_rows()
+        review = rows["S2-tan-two-theta"]["semantic_review"]
+        review["statement_pins"] = [p for p in review["statement_pins"] if p["declaration"] != self.REAL_WITNESS]
+        with rejected(self, "without a statement pin"):
+            M._validate_representation_change_agreement(data["results"], rows)
+
+    def test_6_a_similarly_named_unrelated_object_is_rejected(self):
+        data = inventory()
+        clause = self._clause(data, "directed.real")
+        clause["correspondence_witness"]["to_object"] = "sinTwoThetaIdealBloc"
+        with rejected(self, "does not occur in its statement as a whole identifier"):
+            self._clauses_pass(data)
+        data = inventory()
+        clause = self._clause(data, "directed.real")
+        clause["correspondence_witness"]["to_object"] = "sinTwoAngleOperatorR"
+        with rejected(self, "does not occur in its statement as a whole identifier"):
+            self._clauses_pass(data)
+
+    def test_7_deleting_an_obligation_before_the_row_is_accepted_is_rejected(self):
+        data = inventory()
+        row(data, "S2-tan-two-theta")["semantic_certification"] = "hostile_review_blocked"
+        with rejected(self, "no open hostile-review obligation"):
+            M._open_hostile_obligations(data, data["results"])
+
+    def test_8_accepting_the_row_while_the_real_clause_is_open_is_rejected(self):
+        data = inventory()
+        clause = self._clause(data, "directed.real")
+        clause["status"] = "open"
+        clause["open_reason"] = "synthetic: the real directed clause is reopened for this test, and nothing else changed"
+        with rejected(self, "recorded as terminal, but"):
+            self._clauses_pass(data)
+
+    def test_a_witness_not_invoked_by_the_primary_is_rejected(self):
+        """The 2026-09-02 morning defect: a witness registered beside a theorem that never used it."""
+        data = inventory()
+        clause = self._clause(data, "directed.complex")
+        other = "TauCeti.DavisKahan1970.reflectionTangentCorner_same_paperTanTwoDirectedCorner"
+        clause["correspondence_witness"]["declaration"] = other
+        clause["correspondence_witness"]["from_object"] = "projectionBlock"
+        clause["correspondence_witness"]["to_object"] = "reflectionTangentCorner"
+        clause["evidence"]["correspondence"].append(other)
+        with rejected(self, "is not invoked by the proof"):
+            self._clauses_pass(data)
 
     def test_the_census_and_inventory_must_agree_a_change_happened(self):
         data = inventory()
-        census = json.loads((ROOT / "dev/davis-kahan-1970-full-source-census.json").read_text())
-        rows = {r["id"]: r for r in census["items"]}
         for clause in self._directed(data):
             clause.pop("correspondence_required", None)
         with rejected(self, "no inventory clause is marked correspondence_required"):
-            M._validate_representation_change_agreement(data["results"], rows)
+            M._validate_representation_change_agreement(data["results"], self._census_rows())
