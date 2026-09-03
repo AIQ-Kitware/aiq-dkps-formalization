@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
 import DavisKahan.Sources.DavisKahan1970.PartIII
-import DavisKahan.Sources.DavisKahan1970.RemainingSourceSurface
+import DavisKahan.Sources.DavisKahan1970.Section5BanachSylvester
 import ForTauCeti.Analysis.Normed.Operator.SylvesterBoundedInverse
 import DavisKahan.Sources.DavisKahan1970.GeneralSinTheta
 import DavisKahan.Alternative.All
@@ -21,18 +21,19 @@ import DavisKahan.TanTheta.All
 import DavisKahan.TanTwoTheta.All
 
 /-!
-# Full Davis--Kahan 1970 Part III proof-manuscript surface
+# Davis--Kahan 1970 Part III, presented as one theorem package
 
-This source module names the theorem package targeted by the one-shot proof
-manuscript.  The stable finite results remain available through `PartIII`.
+This module gives the whole Part III package paper-facing names in one place,
+so that a reader who wants the printed results, rather than the modules they
+are proved in, has a single import.  The stable finite results remain
+available through `PartIII`.
 
 Every alias below is proved: each resolves to a declaration that depends on
-nothing beyond the three foundational assumptions Mathlib itself uses.  The
-manuscript components that are still open are named separately, in
-`DavisKahan.PartIII`, so that importing this file cannot pull an
-unproved result into a production build.
+nothing beyond the three foundational assumptions Mathlib itself uses.  Results
+that are still open are named separately, in `DavisKahan.PartIII`, so that
+importing this file cannot pull an unproved result into a production build.
 
-The mathematical dependency order and per-declaration repair ledger are in
+The mathematical dependency order is recorded in
 `dev/davis-kahan-1970-full-sine-theta-proof-manuscript-2026-07-19.md`.
 -/
 
@@ -263,14 +264,14 @@ alias banach_sylvester_lower_bound_uiNorm :=
   TauCeti.ContinuousLinearMap.opNorm_le_of_sylvester_of_leftInverse
 /-- Source-facing bounded Theorem 5.1 with the paper's literal two-sided inverse hypothesis. -/
 alias banach_sylvester_lower_bound_exact :=
-  DavisKahan1970.RemainingSourceSurface.theorem5_1_banach_sylvester_exact
+  DavisKahan1970.theorem5_1_banach_sylvester_exact
 alias banach_sylvester_lower_bound_interchanged :=
-  DavisKahan1970.RemainingSourceSurface.theorem5_1_banach_sylvester_interchanged
+  DavisKahan1970.theorem5_1_banach_sylvester_interchanged
 /-- Source-facing `A`/`B` interchange remark with a literal two-sided inverse of `B`. -/
 alias banach_sylvester_lower_bound_interchanged_exact :=
-  DavisKahan1970.RemainingSourceSurface.theorem5_1_banach_sylvester_interchanged_exact
+  DavisKahan1970.theorem5_1_banach_sylvester_interchanged_exact
 alias banach_sylvester_lower_bound_unboundedA :=
-  DavisKahan1970.RemainingSourceSurface.theorem5_1_banach_sylvester_unboundedA
+  DavisKahan1970.theorem5_1_banach_sylvester_unboundedA
 
 /-! ## Graph and Riccati theory (continued) -/
 alias bounded_coercive_isUnit :=

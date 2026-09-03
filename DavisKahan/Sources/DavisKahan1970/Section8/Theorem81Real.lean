@@ -3,7 +3,7 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, GPT-5.6 Sol
 -/
-import DavisKahan.Sources.DavisKahan1970.Section8.SourceTheorem81
+import DavisKahan.Sources.DavisKahan1970.Section8.Theorem81
 import DavisKahan.SpectralTheory.Complexification.BoundedGapProjection
 import DavisKahan.SpectralTheory.Complexification.FormTransport
 import DavisKahan.SpectralTheory.Complexification.SubmoduleEquiv

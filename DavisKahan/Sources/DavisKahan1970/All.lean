@@ -17,10 +17,9 @@ import DavisKahan.Sources.DavisKahan1970.DoubleAngleTangentOperator
 import DavisKahan.Sources.DavisKahan1970.GeneralSinTheta
 import DavisKahan.Sources.DavisKahan1970.GeneralSinThetaExtensions
 import DavisKahan.Sources.DavisKahan1970.PartIII
-import DavisKahan.Sources.DavisKahan1970.PartIIIManuscriptSurface
+import DavisKahan.Sources.DavisKahan1970.PartIIIPresentation
 import DavisKahan.Sources.DavisKahan1970.SineTheta.Presentation
 import DavisKahan.Sources.DavisKahan1970.Proposition61
-import DavisKahan.Sources.DavisKahan1970.RemainingSourceSurface
 import DavisKahan.Sources.DavisKahan1970.ScalarGenericFinite
 import DavisKahan.Sources.DavisKahan1970.Section1
 import DavisKahan.Sources.DavisKahan1970.Section10FunctionalCalculus
@@ -34,7 +33,7 @@ import DavisKahan.Sources.DavisKahan1970.Section3Corollary32
 import DavisKahan.Sources.DavisKahan1970.Section3PrincipalSquareRoot
 import DavisKahan.Sources.DavisKahan1970.Section3Proposition32
 import DavisKahan.Sources.DavisKahan1970.Section3Proposition34
-import DavisKahan.Sources.DavisKahan1970.Section3Proposition34Printed
+import DavisKahan.Sources.DavisKahan1970.Section3Proposition34Presentation
 import DavisKahan.Sources.DavisKahan1970.Section3Proposition34Real
 import DavisKahan.Sources.DavisKahan1970.Section3Proposition35
 import DavisKahan.Sources.DavisKahan1970.Section3Theorem31Realization
@@ -45,9 +44,12 @@ import DavisKahan.Sources.DavisKahan1970.Section4Examples
 import DavisKahan.Sources.DavisKahan1970.Section4FiniteSurface
 import DavisKahan.Sources.DavisKahan1970.Section4Real
 import DavisKahan.Sources.DavisKahan1970.Section5
+import DavisKahan.Sources.DavisKahan1970.Section5BanachSylvester
 import DavisKahan.Sources.DavisKahan1970.Section6AppendixLeakage
 import DavisKahan.Sources.DavisKahan1970.Section6AppendixLeakageReal
 import DavisKahan.Sources.DavisKahan1970.Section6Example61
+import DavisKahan.Sources.DavisKahan1970.Section6Theorem63Presentation
+import DavisKahan.Sources.DavisKahan1970.Section7IdealBounds
 import DavisKahan.Sources.DavisKahan1970.Section7SwapAsymmetry
 import DavisKahan.Sources.DavisKahan1970.SectionTwo
 import DavisKahan.Sources.DavisKahan1970.SectionTwoUsage

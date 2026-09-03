@@ -466,6 +466,22 @@ end Uniqueness
 
 end
 
+/-! ### Paper-facing names
+
+Theorem 8.1 states three things, and the printed section refers to them
+separately, so each has its own source-numbered name. -/
+
+/-- **Davis--Kahan 1970, Theorem 8.1: existence of the canonical branch.**
+Takes only the printed hypotheses. -/
+alias theorem8_1 := theorem8_1_canonicalBranch
+
+/-- **Davis--Kahan 1970, Theorem 8.1: the printed characterization.** -/
+alias theorem8_1_characterization := theorem8_1_maximalAngle_le_iff_spectrumIn
+
+/-- **Davis--Kahan 1970, Theorem 8.1: uniqueness of the branch.** -/
+alias theorem8_1_uniqueness := theorem8_1_eq_canonicalBranch_of_maximalAngle_le
+
+
 end Section8
 end DavisKahan1970
 end TauCeti

@@ -4,8 +4,10 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, Claude Opus 5
 -/
 import DavisKahan.Sources.DavisKahan1970.Section8.Theorem81AngleForms
-import DavisKahan.Sources.DavisKahan1970.Section8.Theorem82Source
-import DavisKahan.Sources.DavisKahan1970.Section8.Theorem82SourceReal
+import DavisKahan.InfiniteDimensional.TanTheta.ContinuationWitnessAPriori
+import DavisKahan.InfiniteDimensional.SinTheta.Continuation.WitnessGraph
+import DavisKahan.Sources.DavisKahan1970.Section8.Theorem82
+import DavisKahan.Sources.DavisKahan1970.Section8.Theorem82Real
 
 /-!
 # Davis--Kahan 1970 Section 8: the production source surface
@@ -15,14 +17,16 @@ section is reachable from here under a source-numbered name in
 
     `TauCeti.DavisKahan1970.Section8`.
 
-## Why this module and not `Section8/SourceSurface.lean`
+## Why this module
 
-That file is the *low-level* facade: it names the results that live upstream of
-the analytic layer, and `Section8/BranchRepulsion.lean` imports it.  Section 8's
-analytic content -- the canonical gap circle, the connectedness bootstrap of
-Theorem 8.2, the Krein completion, the sandwich majorization -- lives downstream
-of it, so it cannot import those modules without creating an import cycle.  This
-module is that downstream leaf.
+Section 8's analytic content -- the canonical gap circle, the connectedness
+bootstrap of Theorem 8.2, the Krein completion, the sandwich majorization --
+lives downstream of Theorem 8.1 and the compression algebra, so those modules
+cannot name it without creating an import cycle.  This module is the downstream
+leaf where all of it is reachable at once.  The names that belong upstream are
+declared upstream: Theorem 8.1's three paper-facing names in
+`Section8/Theorem81.lean`, and the two algebraic cores of 8.1(i) in
+`Section8/CompressionRepulsion.lean`.
 
 Most of what this file used to hold was a list of aliases forwarding
 `TauCeti.DavisKahan.Section8.X` to `X` in this namespace.  With the
@@ -130,6 +134,23 @@ generic Hilbert-space operator theory and is proved in
 alias is the source-facing name for it. -/
 alias theorem8_2_krein_completion :=
   TauCeti.exists_selfAdjoint_completion_eq_norm_restriction
+
+/-! ### Section 9's continuation-layer entry points
+
+Both are conditional: they take the branch selection as caller-supplied data.
+Section 9 uses them after the canonical spectral branch has been identified. -/
+
+/-- The continuation-selected endpoint has a unique contractive graph
+coordinate: the graph-theoretic form of selecting the side below the
+quarter-turn pole. -/
+alias theorem8_selectedEndpoint_existsUnique_contractiveAngularOperator :=
+  TauCeti.DavisKahanExt.SpectralContinuationWitness.existsUnique_selectedEndpointAngularOperator
+
+/-- The selected branch satisfies the witness-level a priori tangent bound once
+off-diagonality and the ordered form gap are supplied. -/
+alias theorem8_selectedBranch_tan_maximalAngle_le_div :=
+  TauCeti.DavisKahanExt.SpectralContinuationWitness.tan_maximalAngle_selectedSpectralSubspaces_le_div
+
 
 end Section8
 end DavisKahan1970

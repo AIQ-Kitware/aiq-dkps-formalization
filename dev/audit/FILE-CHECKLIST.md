@@ -854,10 +854,10 @@ Mark a file complete only after its findings are recorded or fixed.
 - [ ] `DavisKahan/Sources/DavisKahan1970/TanTwoThetaUnboundedGramReal.lean` — 896 lines · Lean source
 - [ ] `DavisKahan/Sources/DavisKahan1970/Section8/Theorem81AngleForms.lean` — 861 lines · Lean source
 - [ ] `DavisKahan/Sources/DavisKahan1970/DirectedReal.lean` — 712 lines · Lean source
-- [ ] `DavisKahan/Sources/DavisKahan1970/Section8/Theorem82SourceReal.lean` — 701 lines · Lean source
+- [ ] `DavisKahan/Sources/DavisKahan1970/Section8/Theorem82Real.lean` — 701 lines · Lean source
 - [x] `DavisKahan/Sources/DavisKahan1970/Section9/DomainLimitation.lean` — 690 lines · Lean source
 - [ ] `DavisKahan/Sources/DavisKahan1970/SineTheta/CommonDomainSymmetric.lean` — 675 lines · Lean source
-- [ ] `DavisKahan/Sources/DavisKahan1970/Section8/Theorem82Source.lean` — 649 lines · Lean source
+- [ ] `DavisKahan/Sources/DavisKahan1970/Section8/Theorem82.lean` — 649 lines · Lean source
 - [x] `DavisKahan/Sources/DavisKahan1970/SineTheta/Sharpness.lean` — 642 lines · Lean source
 - [ ] `DavisKahan/Sources/DavisKahan1970/SinTwoThetaAmbient.lean` — 641 lines · Lean source
 - [ ] `DavisKahan/Sources/DavisKahan1970/Section4.lean` — 625 lines · Lean source
@@ -868,7 +868,9 @@ Mark a file complete only after its findings are recorded or fixed.
 - [ ] `DavisKahan/Sources/DavisKahan1970/DirectedUnboundedReal.lean` — 586 lines · Lean source
 - [ ] `DavisKahan/Sources/DavisKahan1970/Section3Corollary31.lean` — 583 lines · Lean source
 - [ ] `DavisKahan/Sources/DavisKahan1970/SineTheta/Presentation.lean` — 580 lines · Lean source
-- [x] `DavisKahan/Sources/DavisKahan1970/RemainingSourceSurface.lean` — 565 lines · Lean source
+- [x] `DavisKahan/Sources/DavisKahan1970/Section5BanachSylvester.lean` — 297 lines · Lean source
+- [x] `DavisKahan/Sources/DavisKahan1970/Section6Theorem63Presentation.lean` — 171 lines · Lean source
+- [x] `DavisKahan/Sources/DavisKahan1970/Section7IdealBounds.lean` — 105 lines · Lean source
 - [ ] `DavisKahan/Sources/DavisKahan1970/TanTwoThetaUnboundedExactReal.lean` — 562 lines · Lean source
 - [ ] `DavisKahan/Sources/DavisKahan1970/TanThetaUnboundedAmbient.lean` — 537 lines · Lean source
 - [ ] `DavisKahan/Sources/DavisKahan1970/TanTwoThetaBranchFreeInfinite.lean` — 523 lines · Lean source
@@ -880,7 +882,7 @@ Mark a file complete only after its findings are recorded or fixed.
 - [x] `DavisKahan/Sources/DavisKahan1970/Ideals/SpectralSelection.lean` — 495 lines · Lean source
 - [ ] `DavisKahan/Sources/DavisKahan1970/AmbientReal.lean` — 486 lines · Lean source
 - [x] `DavisKahan/Sources/DavisKahan1970/SineTheta/Theorem62.lean` — 478 lines · Lean source
-- [ ] `DavisKahan/Sources/DavisKahan1970/Section8/SourceTheorem81.lean` — 472 lines · Lean source
+- [ ] `DavisKahan/Sources/DavisKahan1970/Section8/Theorem81.lean` — 472 lines · Lean source
 - [ ] `DavisKahan/Sources/DavisKahan1970/Section8/Theorem82Branch.lean` — 471 lines · Lean source
 - [ ] `DavisKahan/Sources/DavisKahan1970/Section10FunctionalCalculus.lean` — 462 lines · Lean source
 - [x] `DavisKahan/Sources/DavisKahan1970/Ideals/NormCorrespondence.lean` — 449 lines · Lean source
@@ -914,9 +916,9 @@ Mark a file complete only after its findings are recorded or fixed.
 - [ ] `DavisKahan/Sources/DavisKahan1970/Section3AcuteCounterexample.lean` — 321 lines · Lean source
 - [ ] `DavisKahan/Sources/DavisKahan1970/SectionTwoUsage.lean` — 321 lines · Lean source
 - [x] `DavisKahan/Sources/DavisKahan1970/SineTheta/CommonCoreTheorems.lean` — 312 lines · Lean source
-- [ ] `DavisKahan/Sources/DavisKahan1970/Section8/SourceTheorem81Real.lean` — 309 lines · Lean source
+- [ ] `DavisKahan/Sources/DavisKahan1970/Section8/Theorem81Real.lean` — 309 lines · Lean source
 - [ ] `DavisKahan/Sources/DavisKahan1970/Section8/Theorem81Majorization.lean` — 304 lines · Lean source
-- [x] `DavisKahan/Sources/DavisKahan1970/PartIIIManuscriptSurface.lean` — 300 lines · Lean source
+- [x] `DavisKahan/Sources/DavisKahan1970/PartIIIPresentation.lean` — 300 lines · Lean source
 - [ ] `DavisKahan/Sources/DavisKahan1970/TanTwoThetaAmbientBranchFree.lean` — 296 lines · Lean source
 - [x] `DavisKahan/Sources/DavisKahan1970/SineTheta/CosineAngle.lean` — 293 lines · Lean source
 - [ ] `DavisKahan/Sources/DavisKahan1970/Section1UnitaryInvariantNorms.lean` — 286 lines · Lean source
@@ -936,7 +938,7 @@ Mark a file complete only after its findings are recorded or fixed.
 - [x] `DavisKahan/Sources/DavisKahan1970/SharpIdeal.lean` — 249 lines · Lean source
 - [ ] `DavisKahan/Sources/DavisKahan1970/Section9/FreeBeamRootExclusion.lean` — 248 lines · Lean source
 - [ ] `DavisKahan/Sources/DavisKahan1970/TanTwoThetaBranchFree.lean` — 247 lines · Lean source
-- [ ] `DavisKahan/Sources/DavisKahan1970/Section3Proposition34Printed.lean` — 244 lines · Lean source
+- [ ] `DavisKahan/Sources/DavisKahan1970/Section3Proposition34Presentation.lean` — 244 lines · Lean source
 - [ ] `DavisKahan/Sources/DavisKahan1970/Section8/Theorem81MajorizationReal.lean` — 243 lines · Lean source
 - [ ] `DavisKahan/Sources/DavisKahan1970/SineTheta/ReflectedDefectDoubling.lean` — 241 lines · Lean source
 - [x] `DavisKahan/Sources/DavisKahan1970/Ideals/HilbertSchmidtComplexFamily.lean` — 240 lines · Lean source
