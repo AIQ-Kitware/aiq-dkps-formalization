@@ -186,7 +186,8 @@ theorem hilbertSchmidtEnergy_domain_projection_add_complex
         hilbertSchmidtBasisEnergy b M.adjoint := by
     intro M
     obtain ⟨κ, bE, -⟩ := exists_hilbertBasis ℂ E'
-    rw [hilbertSchmidtEnergy_eq_basisEnergy bE M,
+    rw [hilbertSchmidtEnergy_eq_basisEnergy
+        ContinuousLinearMap.hasMinMaxLowerBound_complex bE M,
       hilbertSchmidtBasisEnergy_adjoint_swap bE b M]
   -- The adjoints of the two compressed operators are the projected columns.
   have hPadj :

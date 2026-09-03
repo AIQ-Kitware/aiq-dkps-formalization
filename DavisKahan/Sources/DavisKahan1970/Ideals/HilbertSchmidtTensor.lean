@@ -69,7 +69,8 @@ element of the `ℓ²` model. -/
 theorem isPaperHilbertSchmidt_iff_existsUnique_tensor (A : F →L[ℂ] E) :
     IsPaperHilbertSchmidt A ↔
       ∃! f : lp (fun _ : HSIndex F => E) 2, ofLp (hSBasis F) f = A := by
-  rw [isPaperHilbertSchmidt_iff_summable_basis (hSBasis F) A]
+  rw [isPaperHilbertSchmidt_iff_summable_basis
+    ContinuousLinearMap.hasMinMaxLowerBound_complex (hSBasis F) A]
   exact (existsUnique_ofLp_iff_summable (hSBasis F) A).symm
 
 /-- The canonical model element representing a paper Hilbert--Schmidt operator:
@@ -78,7 +79,8 @@ noncomputable def hilbertSchmidtTensor (A : F →L[ℂ] E)
     (hA : IsPaperHilbertSchmidt A) : lp (fun _ : HSIndex F => E) 2 :=
   ⟨columns (hSBasis F) A,
     (memLp_columns_iff_summable (hSBasis F) A).mpr
-      ((isPaperHilbertSchmidt_iff_summable_basis (hSBasis F) A).1 hA)⟩
+      ((isPaperHilbertSchmidt_iff_summable_basis
+    ContinuousLinearMap.hasMinMaxLowerBound_complex (hSBasis F) A).1 hA)⟩
 
 /-- The tensor model's operator, unfolded.  This is the bridge between the tensor presentation of a
 Hilbert--Schmidt map and its operator form. -/
@@ -94,13 +96,15 @@ theorem norm_hilbertSchmidtTensor (A : F →L[ℂ] E)
     ‖hilbertSchmidtTensor A hA‖ = paperHilbertSchmidtNorm A := by
   have hsq := norm_sq_eq_tsum_norm_column_sq (hSBasis F) (hilbertSchmidtTensor A hA)
   rw [toOperator_hilbertSchmidtTensor] at hsq
-  rw [hilbertSchmidtNorm_eq_sqrt_tsum_basis (hSBasis F) A hA, ← hsq,
+  rw [hilbertSchmidtNorm_eq_sqrt_tsum_basis
+    ContinuousLinearMap.hasMinMaxLowerBound_complex (hSBasis F) A hA, ← hsq,
     Real.sqrt_sq (norm_nonneg _)]
 
 /-- Every element of the model represents a paper Hilbert--Schmidt operator. -/
 theorem isPaperHilbertSchmidt_toOperator (f : lp (fun _ : HSIndex F => E) 2) :
     IsPaperHilbertSchmidt (ofLp (hSBasis F) f) := by
-  rw [isPaperHilbertSchmidt_iff_summable_basis (hSBasis F), ←
+  rw [isPaperHilbertSchmidt_iff_summable_basis
+    ContinuousLinearMap.hasMinMaxLowerBound_complex (hSBasis F), ←
     memLp_columns_iff_summable (hSBasis F), columns_ofLp]
   exact lp.memℓp f
 

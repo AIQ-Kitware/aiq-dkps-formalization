@@ -41,33 +41,34 @@ noncomputable section
 
 universe vE vF
 
+variable {𝕜 : Type*} [RCLike 𝕜]
 variable {E : Type vE} {F : Type vF}
-variable [NormedAddCommGroup E] [InnerProductSpace ℂ E] [CompleteSpace E]
-variable [NormedAddCommGroup F] [InnerProductSpace ℂ F] [CompleteSpace F]
+variable [NormedAddCommGroup E] [InnerProductSpace 𝕜 E] [CompleteSpace E]
+variable [NormedAddCommGroup F] [InnerProductSpace 𝕜 F] [CompleteSpace F]
 
 /-- Extended column-square energy in a chosen Hilbert basis of the domain. -/
 def hilbertSchmidtBasisEnergy {ι : Type*}
-    (b : HilbertBasis ι ℂ F) (A : F →L[ℂ] E) : ENNReal :=
+    (b : HilbertBasis ι 𝕜 F) (A : F →L[𝕜] E) : ENNReal :=
   ∑' i, (‖A (b i)‖₊ : ENNReal) ^ 2
 
 omit [CompleteSpace E] [CompleteSpace F] in
 /-- The paper column energy is the staged `ContinuousLinearMap.hilbertSchmidtEnergy`. -/
 theorem hilbertSchmidtBasisEnergy_eq_hilbertSchmidtEnergy {ι : Type*}
-    (b : HilbertBasis ι ℂ F) (A : F →L[ℂ] E) :
+    (b : HilbertBasis ι 𝕜 F) (A : F →L[𝕜] E) :
     hilbertSchmidtBasisEnergy b A = A.hilbertSchmidtEnergy b := rfl
 
 /-- Adjoint cross-swap for rectangular operators. -/
 theorem hilbertSchmidtBasisEnergy_adjoint_swap
-    {ι κ : Type*} (bF : HilbertBasis ι ℂ F)
-    (bE : HilbertBasis κ ℂ E) (A : F →L[ℂ] E) :
+    {ι κ : Type*} (bF : HilbertBasis ι 𝕜 F)
+    (bE : HilbertBasis κ 𝕜 E) (A : F →L[𝕜] E) :
     hilbertSchmidtBasisEnergy bF A =
       hilbertSchmidtBasisEnergy bE A.adjoint :=
   A.hilbertSchmidtEnergy_adjoint bF bE
 
 /-- The rectangular column-square energy does not depend on the domain basis. -/
 theorem hilbertSchmidtBasisEnergy_indep
-    {ι κ : Type*} (b c : HilbertBasis ι ℂ F)
-    (d : HilbertBasis κ ℂ E) (A : F →L[ℂ] E) :
+    {ι κ : Type*} (b c : HilbertBasis ι 𝕜 F)
+    (d : HilbertBasis κ 𝕜 E) (A : F →L[𝕜] E) :
     hilbertSchmidtBasisEnergy b A =
       hilbertSchmidtBasisEnergy c A := by
   rw [hilbertSchmidtBasisEnergy_adjoint_swap b d A,
@@ -75,19 +76,19 @@ theorem hilbertSchmidtBasisEnergy_indep
 
 /-- The span of finitely many basis vectors is finite dimensional. -/
 instance basisSpan_finiteDimensional {ι : Type*}
-    (b : HilbertBasis ι ℂ F) (s : Finset ι) :
-    FiniteDimensional ℂ (Submodule.span ℂ (b '' (s : Set ι))) :=
-  FiniteDimensional.span_of_finite ℂ (s.finite_toSet.image b)
+    (b : HilbertBasis ι 𝕜 F) (s : Finset ι) :
+    FiniteDimensional 𝕜 (Submodule.span 𝕜 (b '' (s : Set ι))) :=
+  FiniteDimensional.span_of_finite 𝕜 (s.finite_toSet.image b)
 
 /-- Projection onto the span of a finite set of Hilbert-basis vectors. -/
 noncomputable def basisProjection {ι : Type*}
-    (b : HilbertBasis ι ℂ F) (s : Finset ι) : F →L[ℂ] F :=
-  (Submodule.span ℂ (b '' (s : Set ι))).starProjection
+    (b : HilbertBasis ι 𝕜 F) (s : Finset ι) : F →L[𝕜] F :=
+  (Submodule.span 𝕜 (b '' (s : Set ι))).starProjection
 
 omit [CompleteSpace F] in
 /-- The finite basis projection is an orthogonal projection. -/
 theorem basisProjection_isOrthogonalProjection {ι : Type*}
-    (b : HilbertBasis ι ℂ F) (s : Finset ι) :
+    (b : HilbertBasis ι 𝕜 F) (s : Finset ι) :
     IsOrthogonalProjectionMap (basisProjection b s) :=
   ⟨Submodule.isIdempotentElem_starProjection _,
     fun x y => Submodule.starProjection_isSymmetric _ x y⟩
@@ -95,16 +96,16 @@ theorem basisProjection_isOrthogonalProjection {ι : Type*}
 omit [CompleteSpace F] in
 /-- The finite cutoff has rank at most the number of selected basis vectors. -/
 theorem rank_basisProjection_le {ι : Type*}
-    (b : HilbertBasis ι ℂ F) (s : Finset ι) :
+    (b : HilbertBasis ι 𝕜 F) (s : Finset ι) :
     (basisProjection b s).rank ≤ (s.card : Cardinal) := by
   classical
   have hle : LinearMap.range (basisProjection b s).toLinearMap ≤
-      Submodule.span ℂ ((s.image b : Finset F) : Set F) := by
+      Submodule.span 𝕜 ((s.image b : Finset F) : Set F) := by
     rw [Finset.coe_image]
     exact (Submodule.range_starProjection _).le
   calc
     (basisProjection b s).rank
-        ≤ Module.rank ℂ (Submodule.span ℂ ((s.image b : Finset F) : Set F)) :=
+        ≤ Module.rank 𝕜 (Submodule.span 𝕜 ((s.image b : Finset F) : Set F)) :=
           Submodule.rank_mono hle
     _ ≤ ((s.image b).card : Cardinal) := rank_span_finset_le _
     _ ≤ (s.card : Cardinal) := by
@@ -113,13 +114,13 @@ theorem rank_basisProjection_le {ι : Type*}
 omit [CompleteSpace F] in
 /-- The finite basis projection is the finite Fourier partial sum. -/
 theorem basisProjection_apply {ι : Type*}
-    (b : HilbertBasis ι ℂ F) (s : Finset ι) (x : F) :
-    basisProjection b s x = ∑ i ∈ s, ⟪b i, x⟫_ℂ • b i := by
+    (b : HilbertBasis ι 𝕜 F) (s : Finset ι) (x : F) :
+    basisProjection b s x = ∑ i ∈ s, ⟪b i, x⟫_𝕜 • b i := by
   classical
   have hb := orthonormal_iff_ite.mp b.orthonormal
-  have hmem : ∀ i ∈ s, b i ∈ Submodule.span ℂ (b '' (s : Set ι)) := fun i hi =>
+  have hmem : ∀ i ∈ s, b i ∈ Submodule.span 𝕜 (b '' (s : Set ι)) := fun i hi =>
     Submodule.subset_span ⟨i, Finset.mem_coe.mpr hi, rfl⟩
-  show (Submodule.span ℂ (b '' (s : Set ι))).starProjection x = _
+  show (Submodule.span 𝕜 (b '' (s : Set ι))).starProjection x = _
   refine Submodule.eq_starProjection_of_mem_of_inner_eq_zero ?_ ?_
   · exact Submodule.sum_mem _ fun i hi => Submodule.smul_mem _ _ (hmem i hi)
   · intro w hw
@@ -128,8 +129,8 @@ theorem basisProjection_apply {ι : Type*}
         obtain ⟨j, hj, rfl⟩ := hw
         have hjs : j ∈ s := Finset.mem_coe.mp hj
         rw [inner_sub_left, sum_inner]
-        have hkey : ∀ i ∈ s, ⟪(⟪b i, x⟫_ℂ) • b i, b j⟫_ℂ =
-            if i = j then (starRingEnd ℂ) ⟪b j, x⟫_ℂ else 0 := by
+        have hkey : ∀ i ∈ s, ⟪(⟪b i, x⟫_𝕜) • b i, b j⟫_𝕜 =
+            if i = j then (starRingEnd 𝕜) ⟪b j, x⟫_𝕜 else 0 := by
           intro i _
           rw [inner_smul_left, hb i j]
           by_cases hij : i = j <;> simp [hij]
@@ -142,10 +143,10 @@ theorem basisProjection_apply {ι : Type*}
 omit [CompleteSpace E] [CompleteSpace F] in
 /-- The cutoff operator is the finite column expansion. -/
 theorem comp_basisProjection_apply {ι : Type*}
-    (b : HilbertBasis ι ℂ F) (s : Finset ι)
-    (A : F →L[ℂ] E) (x : F) :
+    (b : HilbertBasis ι 𝕜 F) (s : Finset ι)
+    (A : F →L[𝕜] E) (x : F) :
     (A ∘L basisProjection b s) x =
-      ∑ i ∈ s, ⟪b i, x⟫_ℂ • A (b i) := by
+      ∑ i ∈ s, ⟪b i, x⟫_𝕜 • A (b i) := by
   rw [ContinuousLinearMap.comp_apply, basisProjection_apply, map_sum]
   simp only [map_smul]
 
@@ -154,18 +155,18 @@ energy of the compression of `A` to a finite-dimensional subspace `K` of the
 domain is the sum of the squared column norms over any orthonormal basis
 of `K`. -/
 theorem hilbertSchmidtEnergy_comp_starProjection
-    (A : F →L[ℂ] E) (K : Submodule ℂ F) [FiniteDimensional ℂ K]
-    {n : ℕ} (c : OrthonormalBasis (Fin n) ℂ K) :
+    (A : F →L[𝕜] E) (K : Submodule 𝕜 F) [FiniteDimensional 𝕜 K]
+    {n : ℕ} (c : OrthonormalBasis (Fin n) 𝕜 K) :
     paperHilbertSchmidtEnergy (A ∘L K.starProjection) =
       ∑ k : Fin n, ENNReal.ofReal (‖A ((c k : F))‖ ^ 2) := by
   classical
-  have hn : Module.finrank ℂ K = n := by
+  have hn : Module.finrank 𝕜 K = n := by
     rw [Module.finrank_eq_card_basis c.toBasis, Fintype.card_fin]
   -- the compression of `A` to `K`, together with its finite-dimensional range
-  let T₀ : K →L[ℂ] E := A ∘L K.subtypeL
-  let L : Submodule ℂ E := LinearMap.range T₀.toLinearMap
-  have hLfd : FiniteDimensional ℂ L := inferInstance
-  let T : K →L[ℂ] L :=
+  let T₀ : K →L[𝕜] E := A ∘L K.subtypeL
+  let L : Submodule 𝕜 E := LinearMap.range T₀.toLinearMap
+  have hLfd : FiniteDimensional 𝕜 L := inferInstance
+  let T : K →L[𝕜] L :=
     T₀.codRestrict L fun x => LinearMap.mem_range_self T₀.toLinearMap x
   -- the three factorisations relating the cutoff and the compression
   have hfac1 : A ∘L K.starProjection = T₀ ∘L K.orthogonalProjectionOnto :=
@@ -235,15 +236,15 @@ theorem hilbertSchmidtEnergy_comp_starProjection
     unfold approximationSingularValue
     exact_mod_cast le_antisymm h1 h2
   -- the compression has rank at most `n`
-  -- The rank of `T` lives in the codomain universe and `Module.rank ℂ K` in the
+  -- The rank of `T` lives in the codomain universe and `Module.rank 𝕜 K` in the
   -- domain universe, so compare them through `Cardinal.lift`.
   have hTrank : T.rank ≤ (n : Cardinal) := by
-    have hK : Module.rank ℂ K = (n : Cardinal) := by
-      rw [← Module.finrank_eq_rank' ℂ K, hn]
+    have hK : Module.rank 𝕜 K = (n : Cardinal) := by
+      rw [← Module.finrank_eq_rank' 𝕜 K, hn]
     refine Cardinal.lift_le_natCast.mp
       ((lift_rank_range_le T.toLinearMap).trans ?_)
     calc
-      Cardinal.lift.{vE} (Module.rank ℂ K)
+      Cardinal.lift.{vE} (Module.rank 𝕜 K)
           = Cardinal.lift.{vE} ((n : Cardinal)) := by rw [hK]
       _ = (n : Cardinal) := Cardinal.lift_natCast n
       _ ≤ (n : Cardinal) := le_rfl
@@ -270,8 +271,8 @@ theorem hilbertSchmidtEnergy_comp_starProjection
 
 /-- Finite-cutoff Frobenius identity in approximation-number form. -/
 theorem paperHilbertSchmidtEnergy_comp_paperBasisProjection
-    {ι : Type*} (b : HilbertBasis ι ℂ F) (s : Finset ι)
-    (A : F →L[ℂ] E) :
+    {ι : Type*} (b : HilbertBasis ι 𝕜 F) (s : Finset ι)
+    (A : F →L[𝕜] E) :
     paperHilbertSchmidtEnergy (A ∘L basisProjection b s) =
       ∑ i ∈ s, ENNReal.ofReal (‖A (b i)‖ ^ 2) := by
   classical
@@ -279,7 +280,7 @@ theorem paperHilbertSchmidtEnergy_comp_paperBasisProjection
   have hinj : Function.Injective
       (fun k : Fin s.card => ((s.equivFin.symm k : ι))) := fun k l hkl =>
     s.equivFin.symm.injective (Subtype.ext hkl)
-  have hw : Orthonormal ℂ (fun k : Fin s.card => b ((s.equivFin.symm k : ι))) :=
+  have hw : Orthonormal 𝕜 (fun k : Fin s.card => b ((s.equivFin.symm k : ι))) :=
     b.orthonormal.comp _ hinj
   have hrange : Set.range (fun k : Fin s.card => b ((s.equivFin.symm k : ι)))
       = b '' (s : Set ι) := by
@@ -291,34 +292,34 @@ theorem paperHilbertSchmidtEnergy_comp_paperBasisProjection
       exact ⟨s.equivFin ⟨i, Finset.mem_coe.mp hi⟩, by simp⟩
   -- the selected vectors, viewed inside the cutoff subspace
   have hmem : ∀ k : Fin s.card,
-      b ((s.equivFin.symm k : ι)) ∈ Submodule.span ℂ (b '' (s : Set ι)) := by
+      b ((s.equivFin.symm k : ι)) ∈ Submodule.span 𝕜 (b '' (s : Set ι)) := by
     intro k
     exact Submodule.subset_span
       ⟨_, Finset.mem_coe.mpr (s.equivFin.symm k).2, rfl⟩
-  have hon : Orthonormal ℂ (fun k : Fin s.card =>
+  have hon : Orthonormal 𝕜 (fun k : Fin s.card =>
       (⟨b ((s.equivFin.symm k : ι)), hmem k⟩ :
-        Submodule.span ℂ (b '' (s : Set ι)))) := hw
-  have hsp : (⊤ : Submodule ℂ (Submodule.span ℂ (b '' (s : Set ι)))) ≤
-      Submodule.span ℂ (Set.range (fun k : Fin s.card =>
+        Submodule.span 𝕜 (b '' (s : Set ι)))) := hw
+  have hsp : (⊤ : Submodule 𝕜 (Submodule.span 𝕜 (b '' (s : Set ι)))) ≤
+      Submodule.span 𝕜 (Set.range (fun k : Fin s.card =>
         (⟨b ((s.equivFin.symm k : ι)), hmem k⟩ :
-          Submodule.span ℂ (b '' (s : Set ι))))) := by
-    have himg : (Submodule.span ℂ (b '' (s : Set ι))).subtype ''
+          Submodule.span 𝕜 (b '' (s : Set ι))))) := by
+    have himg : (Submodule.span 𝕜 (b '' (s : Set ι))).subtype ''
         Set.range (fun k : Fin s.card =>
           (⟨b ((s.equivFin.symm k : ι)), hmem k⟩ :
-            Submodule.span ℂ (b '' (s : Set ι))))
+            Submodule.span 𝕜 (b '' (s : Set ι))))
         = b '' (s : Set ι) := by
       rw [← Set.range_comp]
       exact hrange
     refine le_of_eq (Submodule.map_injective_of_injective
-      (Submodule.span ℂ (b '' (s : Set ι))).injective_subtype ?_).symm
+      (Submodule.span 𝕜 (b '' (s : Set ι))).injective_subtype ?_).symm
     rw [Submodule.map_span, Submodule.map_subtype_top, himg]
-  let c : OrthonormalBasis (Fin s.card) ℂ
-      (Submodule.span ℂ (b '' (s : Set ι))) := OrthonormalBasis.mk hon hsp
+  let c : OrthonormalBasis (Fin s.card) 𝕜
+      (Submodule.span 𝕜 (b '' (s : Set ι))) := OrthonormalBasis.mk hon hsp
   have hc : ∀ k, ((c k : F)) = b ((s.equivFin.symm k : ι)) := by
     intro k
     rw [show ⇑c = _ from OrthonormalBasis.coe_mk hon hsp]
   have hP : basisProjection b s
-      = (Submodule.span ℂ (b '' (s : Set ι))).starProjection := rfl
+      = (Submodule.span 𝕜 (b '' (s : Set ι))).starProjection := rfl
   rw [hP, hilbertSchmidtEnergy_comp_starProjection A _ c]
   calc ∑ k : Fin s.card, ENNReal.ofReal (‖A ((c k : F))‖ ^ 2)
       = ∑ k : Fin s.card,
@@ -333,32 +334,40 @@ theorem paperHilbertSchmidtEnergy_comp_paperBasisProjection
 omit [CompleteSpace F] in
 /-- Finite basis projections converge strongly to the identity. -/
 theorem basisProjection_stronglyTendsto {ι : Type*}
-    (b : HilbertBasis ι ℂ F) :
+    (b : HilbertBasis ι 𝕜 F) :
     StronglyTendsto (fun s : Finset ι => basisProjection b s)
-      atTop (ContinuousLinearMap.id ℂ F) := by
+      atTop (ContinuousLinearMap.id 𝕜 F) := by
   intro x
   have hsum := b.hasSum_repr x
   simp only [HilbertBasis.repr_apply_apply] at hsum
   have hpartial : Tendsto
-      (fun s : Finset ι => ∑ i ∈ s, ⟪b i, x⟫_ℂ • b i)
+      (fun s : Finset ι => ∑ i ∈ s, ⟪b i, x⟫_𝕜 • b i)
       atTop (𝓝 x) := hsum
   exact Tendsto.congr (fun s => (basisProjection_apply b s x).symm) hpartial
 
-/-- Approximation singular values of finite basis cutoffs converge pointwise. -/
+/-- Approximation singular values of finite basis cutoffs converge pointwise.
+
+The min--max lower bound is the one scalar-specific ingredient in the whole
+coordinate bridge, and it is the only reason the bridge was ever stated over
+`ℂ` alone.  Taken as a hypothesis it is discharged at `ℂ` and at `ℝ` by
+`hasMinMaxLowerBound_complex` and `hasMinMaxLowerBound_real`, and everything
+downstream becomes scalar-generic. -/
 theorem approximationSingularValue_cutoff_tendsto {ι : Type*}
-    (b : HilbertBasis ι ℂ F) (A : F →L[ℂ] E) (n : ℕ) :
+    (hlb : ContinuousLinearMap.HasMinMaxLowerBound 𝕜 F E)
+    (b : HilbertBasis ι 𝕜 F) (A : F →L[𝕜] E) (n : ℕ) :
     Tendsto
       (fun s : Finset ι => approximationSingularValue n
         (A ∘L basisProjection b s))
-      atTop (𝓝 (approximationSingularValue n A)) := by
-  exact approximationSingularValue_comp_strongProjection_tendsto_complex
+      atTop (𝓝 (approximationSingularValue n A)) :=
+  approximationSingularValue_comp_strongProjection_tendsto_of_minMax hlb
     (fun s => basisProjection_isOrthogonalProjection b s)
     (basisProjection_stronglyTendsto b) n A
 
 /-- The approximation-number energy is the supremum of finite-basis cutoff
 energies. -/
 theorem hilbertSchmidtEnergy_eq_iSup_cutoff {ι : Type*}
-    (b : HilbertBasis ι ℂ F) (A : F →L[ℂ] E) :
+    (hlb : ContinuousLinearMap.HasMinMaxLowerBound 𝕜 F E)
+    (b : HilbertBasis ι 𝕜 F) (A : F →L[𝕜] E) :
     paperHilbertSchmidtEnergy A =
       ⨆ s : Finset ι,
         paperHilbertSchmidtEnergy (A ∘L basisProjection b s) := by
@@ -390,7 +399,7 @@ theorem hilbertSchmidtEnergy_eq_iSup_cutoff {ι : Type*}
           ((approximationSingularValue n A) ^ 2))) := by
       refine tendsto_finsetSum _ fun n _ => ?_
       exact ENNReal.tendsto_ofReal
-        ((approximationSingularValue_cutoff_tendsto b A n).pow 2)
+        ((approximationSingularValue_cutoff_tendsto hlb b A n).pow 2)
     refine le_of_tendsto hten (Filter.Eventually.of_forall fun s => ?_)
     calc
       ∑ n ∈ t, ENNReal.ofReal
@@ -411,7 +420,7 @@ theorem hilbertSchmidtEnergy_eq_iSup_cutoff {ι : Type*}
 omit [CompleteSpace E] [CompleteSpace F] in
 /-- A nonnegative series is the supremum of its finite partial subsums. -/
 theorem hilbertSchmidtBasisEnergy_eq_iSup_finset {ι : Type*}
-    (b : HilbertBasis ι ℂ F) (A : F →L[ℂ] E) :
+    (b : HilbertBasis ι 𝕜 F) (A : F →L[𝕜] E) :
     hilbertSchmidtBasisEnergy b A =
       ⨆ s : Finset ι, ∑ i ∈ s, ENNReal.ofReal (‖A (b i)‖ ^ 2) := by
   unfold hilbertSchmidtBasisEnergy
@@ -422,9 +431,10 @@ theorem hilbertSchmidtBasisEnergy_eq_iSup_finset {ι : Type*}
 /-- The approximation-number and basis definitions of rectangular
 Hilbert--Schmidt energy agree exactly. -/
 theorem hilbertSchmidtEnergy_eq_basisEnergy {ι : Type*}
-    (b : HilbertBasis ι ℂ F) (A : F →L[ℂ] E) :
+    (hlb : ContinuousLinearMap.HasMinMaxLowerBound 𝕜 F E)
+    (b : HilbertBasis ι 𝕜 F) (A : F →L[𝕜] E) :
     paperHilbertSchmidtEnergy A = hilbertSchmidtBasisEnergy b A := by
-  rw [hilbertSchmidtEnergy_eq_iSup_cutoff b A,
+  rw [hilbertSchmidtEnergy_eq_iSup_cutoff hlb b A,
     hilbertSchmidtBasisEnergy_eq_iSup_finset b A]
   exact iSup_congr fun s =>
     paperHilbertSchmidtEnergy_comp_paperBasisProjection b s A
@@ -432,22 +442,24 @@ theorem hilbertSchmidtEnergy_eq_basisEnergy {ι : Type*}
 /-- Paper square membership is equivalent to square-summable columns in any
 Hilbert basis. -/
 theorem isPaperHilbertSchmidt_iff_summable_basis {ι : Type*}
-    (b : HilbertBasis ι ℂ F) (A : F →L[ℂ] E) :
+    (hlb : ContinuousLinearMap.HasMinMaxLowerBound 𝕜 F E)
+    (b : HilbertBasis ι 𝕜 F) (A : F →L[𝕜] E) :
     IsPaperHilbertSchmidt A ↔ Summable (fun i => ‖A (b i)‖ ^ 2) := by
   have hE : hilbertSchmidtBasisEnergy b A
       = ∑' i, ((‖A (b i)‖₊ ^ 2 : NNReal) : ENNReal) := by
     simp only [hilbertSchmidtBasisEnergy, ENNReal.coe_pow]
   unfold IsPaperHilbertSchmidt
-  rw [hilbertSchmidtEnergy_eq_basisEnergy b A, hE,
+  rw [hilbertSchmidtEnergy_eq_basisEnergy hlb b A, hE,
     ENNReal.tsum_coe_ne_top_iff_summable, ← NNReal.summable_coe]
   simp only [NNReal.coe_pow, coe_nnnorm]
 
 /-- The paper square norm is the ordinary basis Hilbert--Schmidt norm. -/
 theorem hilbertSchmidtNorm_eq_sqrt_tsum_basis {ι : Type*}
-    (b : HilbertBasis ι ℂ F) (A : F →L[ℂ] E)
+    (hlb : ContinuousLinearMap.HasMinMaxLowerBound 𝕜 F E)
+    (b : HilbertBasis ι 𝕜 F) (A : F →L[𝕜] E)
     (hA : IsPaperHilbertSchmidt A) :
     paperHilbertSchmidtNorm A = Real.sqrt (∑' i, ‖A (b i)‖ ^ 2) := by
-  have hsummable := (isPaperHilbertSchmidt_iff_summable_basis b A).1 hA
+  have hsummable := (isPaperHilbertSchmidt_iff_summable_basis hlb b A).1 hA
   have hnn : Summable (fun i => ‖A (b i)‖₊ ^ 2) := by
     rw [← NNReal.summable_coe]
     simpa only [NNReal.coe_pow, coe_nnnorm] using hsummable
@@ -455,7 +467,7 @@ theorem hilbertSchmidtNorm_eq_sqrt_tsum_basis {ι : Type*}
       = ((∑' i, (‖A (b i)‖₊ ^ 2 : NNReal) : NNReal) : ENNReal) := by
     simp only [hilbertSchmidtBasisEnergy]
     exact (ENNReal.coe_tsum hnn).symm
-  rw [paperHilbertSchmidtNorm, hilbertSchmidtEnergy_eq_basisEnergy b A,
+  rw [paperHilbertSchmidtNorm, hilbertSchmidtEnergy_eq_basisEnergy hlb b A,
     hE, ENNReal.coe_toReal]
   congr 1
   rw [NNReal.coe_tsum]
@@ -474,26 +486,29 @@ API without reproving anything. -/
 /-- **The singular-value energy is the column energy.**  This is the obligation recorded
 against Milestone B3 of `TauCetiRoadmap/OperatorTheory/OperatorIdeals/README.md`. -/
 theorem tsum_approximationSingularValue_sq_eq_hilbertSchmidtEnergy {ι : Type*}
-    (b : HilbertBasis ι ℂ F) (A : F →L[ℂ] E) :
+    (hlb : ContinuousLinearMap.HasMinMaxLowerBound 𝕜 F E)
+    (b : HilbertBasis ι 𝕜 F) (A : F →L[𝕜] E) :
     ∑' n : ℕ, ENNReal.ofReal (approximationSingularValue n A ^ 2) =
       A.hilbertSchmidtEnergy b :=
-  hilbertSchmidtEnergy_eq_basisEnergy b A
+  hilbertSchmidtEnergy_eq_basisEnergy hlb b A
 
 /-- The staged Hilbert--Schmidt predicate is the paper one. -/
-theorem isHilbertSchmidt_iff_isPaperHilbertSchmidt (A : F →L[ℂ] E) :
+theorem isHilbertSchmidt_iff_isPaperHilbertSchmidt
+    (hlb : ContinuousLinearMap.HasMinMaxLowerBound 𝕜 F E) (A : F →L[𝕜] E) :
     A.IsHilbertSchmidt ↔ IsPaperHilbertSchmidt A := by
-  obtain ⟨w, b, -⟩ := exists_hilbertBasis ℂ F
+  obtain ⟨w, b, -⟩ := exists_hilbertBasis 𝕜 F
   rw [A.isHilbertSchmidt_iff_energy_ne_top b, IsPaperHilbertSchmidt,
-    hilbertSchmidtEnergy_eq_basisEnergy b A]
+    hilbertSchmidtEnergy_eq_basisEnergy hlb b A]
   rfl
 
 /-- The staged Hilbert--Schmidt norm is the paper square norm. -/
-theorem hilbertSchmidtENorm_eq_ofReal_paperHilbertSchmidtNorm (A : F →L[ℂ] E)
+theorem hilbertSchmidtENorm_eq_ofReal_paperHilbertSchmidtNorm
+    (hlb : ContinuousLinearMap.HasMinMaxLowerBound 𝕜 F E) (A : F →L[𝕜] E)
     (hA : IsPaperHilbertSchmidt A) :
     A.hilbertSchmidtENorm = ENNReal.ofReal (paperHilbertSchmidtNorm A) := by
-  obtain ⟨w, b, -⟩ := exists_hilbertBasis ℂ F
+  obtain ⟨w, b, -⟩ := exists_hilbertBasis 𝕜 F
   have henergy : A.hilbertSchmidtEnergy b = paperHilbertSchmidtEnergy A :=
-    (hilbertSchmidtEnergy_eq_basisEnergy b A).symm
+    (hilbertSchmidtEnergy_eq_basisEnergy hlb b A).symm
   have hne : paperHilbertSchmidtEnergy A ≠ ⊤ := hA
   rw [A.hilbertSchmidtENorm_eq b, henergy, paperHilbertSchmidtNorm,
     Real.sqrt_eq_rpow, ← ENNReal.ofReal_rpow_of_nonneg ENNReal.toReal_nonneg (by norm_num),
@@ -505,12 +520,61 @@ is the paper square norm.
 `TauCeti.SymmetricOperatorIdealFamily` is the diagonal layer, so it constrains the source
 and target to one universe; the rectangular statements above are the general ones. -/
 theorem hilbertSchmidtIdealFamily_gauge_eq_paperHilbertSchmidtNorm {G K : Type vE}
-    [NormedAddCommGroup G] [InnerProductSpace ℂ G] [CompleteSpace G]
-    [NormedAddCommGroup K] [InnerProductSpace ℂ K] [CompleteSpace K]
-    (A : G →L[ℂ] K) (hA : IsPaperHilbertSchmidt A) :
-    (TauCeti.hilbertSchmidtIdealFamily ℂ).toOperatorIdealFamily.gauge A =
+    [NormedAddCommGroup G] [InnerProductSpace 𝕜 G] [CompleteSpace G]
+    [NormedAddCommGroup K] [InnerProductSpace 𝕜 K] [CompleteSpace K]
+    (hlb : ContinuousLinearMap.HasMinMaxLowerBound 𝕜 G K)
+    (A : G →L[𝕜] K) (hA : IsPaperHilbertSchmidt A) :
+    (TauCeti.hilbertSchmidtIdealFamily 𝕜).toOperatorIdealFamily.gauge A =
       ENNReal.ofReal (paperHilbertSchmidtNorm A) :=
-  hilbertSchmidtENorm_eq_ofReal_paperHilbertSchmidtNorm A hA
+  hilbertSchmidtENorm_eq_ofReal_paperHilbertSchmidtNorm hlb A hA
+
+/-! ### The bridge at the two scalar fields
+
+Min--max is the only hypothesis above, so it is discharged once here and the
+paper and staged Hilbert--Schmidt theories are one theory over `ℂ` and over
+`ℝ` alike.  Before this, the identification existed over `ℂ` only, and the
+`ℝ`-valued paper norm had no connection at all to the staged ideal gauge over
+a real Hilbert space. -/
+
+/-- The staged Hilbert--Schmidt predicate is the paper one, over `ℂ`. -/
+theorem isHilbertSchmidt_iff_isPaperHilbertSchmidt_complex
+    {Ec : Type vE} {Fc : Type vF}
+    [NormedAddCommGroup Ec] [InnerProductSpace ℂ Ec] [CompleteSpace Ec]
+    [NormedAddCommGroup Fc] [InnerProductSpace ℂ Fc] [CompleteSpace Fc]
+    (A : Fc →L[ℂ] Ec) :
+    A.IsHilbertSchmidt ↔ IsPaperHilbertSchmidt A :=
+  isHilbertSchmidt_iff_isPaperHilbertSchmidt
+    ContinuousLinearMap.hasMinMaxLowerBound_complex A
+
+/-- The staged Hilbert--Schmidt predicate is the paper one, over `ℝ`. -/
+theorem isHilbertSchmidt_iff_isPaperHilbertSchmidt_real
+    {Er : Type vE} {Fr : Type vF}
+    [NormedAddCommGroup Er] [InnerProductSpace ℝ Er] [CompleteSpace Er]
+    [NormedAddCommGroup Fr] [InnerProductSpace ℝ Fr] [CompleteSpace Fr]
+    (A : Fr →L[ℝ] Er) :
+    A.IsHilbertSchmidt ↔ IsPaperHilbertSchmidt A :=
+  isHilbertSchmidt_iff_isPaperHilbertSchmidt
+    TauCeti.ApproximationNumber.hasMinMaxLowerBound_real A
+
+/-- The staged Hilbert--Schmidt norm is the paper square norm, over `ℂ`. -/
+theorem hilbertSchmidtENorm_eq_ofReal_paperHilbertSchmidtNorm_complex
+    {Ec : Type vE} {Fc : Type vF}
+    [NormedAddCommGroup Ec] [InnerProductSpace ℂ Ec] [CompleteSpace Ec]
+    [NormedAddCommGroup Fc] [InnerProductSpace ℂ Fc] [CompleteSpace Fc]
+    (A : Fc →L[ℂ] Ec) (hA : IsPaperHilbertSchmidt A) :
+    A.hilbertSchmidtENorm = ENNReal.ofReal (paperHilbertSchmidtNorm A) :=
+  hilbertSchmidtENorm_eq_ofReal_paperHilbertSchmidtNorm
+    ContinuousLinearMap.hasMinMaxLowerBound_complex A hA
+
+/-- The staged Hilbert--Schmidt norm is the paper square norm, over `ℝ`. -/
+theorem hilbertSchmidtENorm_eq_ofReal_paperHilbertSchmidtNorm_real
+    {Er : Type vE} {Fr : Type vF}
+    [NormedAddCommGroup Er] [InnerProductSpace ℝ Er] [CompleteSpace Er]
+    [NormedAddCommGroup Fr] [InnerProductSpace ℝ Fr] [CompleteSpace Fr]
+    (A : Fr →L[ℝ] Er) (hA : IsPaperHilbertSchmidt A) :
+    A.hilbertSchmidtENorm = ENNReal.ofReal (paperHilbertSchmidtNorm A) :=
+  hilbertSchmidtENorm_eq_ofReal_paperHilbertSchmidtNorm
+    TauCeti.ApproximationNumber.hasMinMaxLowerBound_real A hA
 
 end
 
