@@ -523,7 +523,7 @@ Where census prose disagrees with what elaborates, **the build wins**.
     *mathematics* in the repo is sound; the *justification for the narrowing* is not.
 20. **`DK-8.2-thm`** — `compiled_exact` also overstates the norm axis: the conclusion is stated only at
     the operator norm where the printed theorem is for every UI norm. Stale prose in the same row names
-    `perturbationHalfGapBridge_of_sourceHypotheses` in namespace `…Section8`, where it does not exist
+    `perturbationHalfGapBridge_of_circleContinuationData` in namespace `…Section8`, where it does not exist
     (it is in `…Experimental.Frontier.Section8`), and does not mention that it needs an extra
     smallness hypothesis.
 21. **`DK-8.1-thm`, `DK-8.2-thm`** — both are `compiled_exact` while being entirely

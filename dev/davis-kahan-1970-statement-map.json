@@ -697,7 +697,7 @@
       "expected_verification": "proved_in_build",
       "tex_marker": "DK-3.4-prop",
       "review_declarations": [
-        "TauCeti.DavisKahan1970.proposition3_4_full_bundled_complex",
+        "TauCeti.DavisKahan1970.proposition3_4_isDirectRotation_complex",
         "TauCeti.DavisKahan1970.proposition3_4_eq_directRotation",
         "TauCeti.DavisKahan1970.proposition3_4_full_real"
       ],
@@ -706,7 +706,7 @@
           "id": "DK-3.4-prop.result",
           "description": "Exact result-only audit of Proposition 3.4 over complex and real Hilbert spaces at the printed nonacute half-angle scope.",
           "review_declarations": [
-            "TauCeti.DavisKahan1970.proposition3_4_full_bundled_complex",
+            "TauCeti.DavisKahan1970.proposition3_4_isDirectRotation_complex",
             "TauCeti.DavisKahan1970.proposition3_4_eq_directRotation",
             "TauCeti.DavisKahan1970.proposition3_4_full_real"
           ]
@@ -1178,7 +1178,7 @@
       "tex_marker": "DK-5-hermitian-inequalities",
       "review_declarations": [
         "TauCeti.DavisKahan.ExactSinTheta.hilbertSchmidt_sylvester_le_of_pairwiseSpectrumGap",
-        "TauCeti.DavisKahan.ExactSinTheta.operatorNormingFunction_sylvester_le_of_pairwiseSpectrumGap"
+        "TauCeti.DavisKahan.ExactSinTheta.opNorm_sylvester_le_of_pairwiseSpectrumGap"
       ],
       "audit_clauses": [
         {
@@ -1188,7 +1188,7 @@
             "TauCeti.DavisKahan.ExactSinTheta.hilbertSchmidt_sylvester_le_of_pairwiseSpectrumGap",
             "TauCeti.DavisKahan.ExactSinTheta.hilbertSchmidt_sylvester_real_le_of_pairwiseSpectrumGap",
             "TauCeti.DavisKahan.ExactSinTheta.hilbertSchmidtEnergy_sylvester_le_of_pairwiseSpectrumGap",
-            "TauCeti.DavisKahan.ExactSinTheta.operatorNormingFunction_sylvester_le_finrank_range"
+            "TauCeti.DavisKahan.ExactSinTheta.opNorm_sylvester_le_finrank_range"
           ]
         },
         {

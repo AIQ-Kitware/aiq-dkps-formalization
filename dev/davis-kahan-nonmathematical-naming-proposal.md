@@ -1,3 +1,9 @@
+> **RETIRED 2026-09-03 — historical.** Every family proposed here has been
+> adjudicated and applied; the classifications below describe the tree as it was on
+> 2026-09-02. Read this as the census that motivated the campaign, never as a work
+> list. See the JSON companion's `retirement_note` for what was applied and for the
+> two entries this document misclassified.
+
 # Non-mathematical declaration names: census and rename proposal
 
 Status: **partially_applied** — generated 2026-09-02.

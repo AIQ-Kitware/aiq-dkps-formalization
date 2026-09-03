@@ -177,7 +177,7 @@ The audit covers the 43 endpoints above.  It does not cover:
 
 The former `PaperHilbertSchmidtSylvester` draft is no longer an open item.  Its
 three intended public square-norm Sylvester declarations are restored in
-`DavisKahan/Sources/DavisKahan1970/Sylvester/PaperHilbertSchmidt.lean` through
+`DavisKahan/Sources/DavisKahan1970/Sylvester/HilbertSchmidtEstimate.lean` through
 the completed defect-first pairwise-gap proof.  The discarded joint-PVM route is
 historical only; its old recovery note remains available in Git history and is
 not claimed as an additional proof.

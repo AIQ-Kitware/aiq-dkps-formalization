@@ -296,7 +296,7 @@ Status: **TERMINAL EXACT**.
 
 #check @TauCeti.DavisKahan1970.proposition3_4_full_complex
 #check @TauCeti.DavisKahan1970.proposition3_4_full_real
-#check @TauCeti.DavisKahan1970.proposition3_4_full_bundled_complex
+#check @TauCeti.DavisKahan1970.proposition3_4_isDirectRotation_complex
 #check @TauCeti.DavisKahan1970.proposition3_4_eq_directRotation
 #check @TauCeti.DavisKahan1970.proposition3_4_crossedDefectsEquivalent_complex
 #check @TauCeti.DavisKahan1970.proposition3_4_crossedDefectsEquivalent_real

@@ -1972,7 +1972,7 @@ The self-adjointness hypotheses on the two diagonal compressions are *not* a spe
 
 **Lean declarations:**
 
-- `TauCeti.DavisKahan1970.proposition3_4_full_bundled_complex`
+- `TauCeti.DavisKahan1970.proposition3_4_isDirectRotation_complex`
 - `TauCeti.DavisKahan1970.proposition3_4_eq_directRotation`
 - `TauCeti.DavisKahan1970.proposition3_4_full_real`
 - `TauCeti.DavisKahan1970.proposition3_4`
@@ -2024,7 +2024,7 @@ printed statement was too strong.
 
 `proposition3_4_square_is_reflected_directRotation` is KEPT, not replaced: it is true, axiom-clean, and it is the statement about the other reflected pair.  All eleven new declarations are axiom-clean `[propext, Classical.choice, Quot.sound]`.
 
-SOURCE-FIDELITY REFRESH 2026-08-11.  `proposition3_4_full_bundled_complex` removes the remaining acute-constructor narrowing.  The row remains `compiled_exact`.
+SOURCE-FIDELITY REFRESH 2026-08-11.  `proposition3_4_isDirectRotation_complex` removes the remaining acute-constructor narrowing.  The row remains `compiled_exact`.
 
 **RESULT-ONLY CLOSURE 2026-08-12.** The complex full-scope Proposition 3.4 theorem is now paired with `TauCeti.DavisKahan1970.proposition3_4_full_real`, a compiler-validated real theorem at the same printed nonacute scope. The real theorem transports the printed direct-rotation hypotheses and the `C0^2 >= 1/2` condition through canonical complexification, invokes the existing complex theorem, and descends the exact real Definition 3.1 clauses including genuine positive diagonal blocks. No result-level hole remains on this row.
 
@@ -3079,9 +3079,9 @@ REOPENING WITHDRAWN 2026-08-31 and the rule corrected: a later source passage en
 - `TauCeti.DavisKahan.ExactSinTheta.hilbertSchmidt_sylvester_real_le_of_pairwiseSpectrumGap`
 - `TauCeti.DavisKahan.ExactSinTheta.hilbertSchmidtEnergy_sylvester_le_of_pairwiseSpectrumGap`
 - `TauCeti.DavisKahan.ExactSinTheta.hilbertSchmidt_sylvester_le_of_pairwiseSpectrumGap_direct`
-- `TauCeti.DavisKahan.ExactSinTheta.operatorNormingFunction_sylvester_le_of_pairwiseSpectrumGap`
-- `TauCeti.DavisKahan.ExactSinTheta.operatorNormingFunction_sylvester_real_le_of_pairwiseSpectrumGap`
-- `TauCeti.DavisKahan.ExactSinTheta.operatorNormingFunction_sylvester_le_finrank_range`
+- `TauCeti.DavisKahan.ExactSinTheta.opNorm_sylvester_le_of_pairwiseSpectrumGap`
+- `TauCeti.DavisKahan.ExactSinTheta.opNorm_sylvester_real_le_of_pairwiseSpectrumGap`
+- `TauCeti.DavisKahan.ExactSinTheta.opNorm_sylvester_le_finrank_range`
 - `TauCeti.DavisKahan.ExactSinTheta.sharp52_constant_one_too_small`
 - `TauCeti.DavisKahan.ExactSinTheta.sharp52_sylvester`
 - `TauCeti.DavisKahan.ExactSinTheta.sharp52_gap`
@@ -3094,7 +3094,7 @@ REOPENING WITHDRAWN 2026-08-31 and the rule corrected: a later source passage en
 
 WHY THE ROW IS NOT `compiled_exact`.  Two further printed items of the same passage are absent.  (a) Inequality (5.2), `||C||_1 sqrt(rank C) >= delta ||X||_1`, which the source derives from (5.1) and attributes independently to G. W. Stewart III.  The nearest compiled brick is a `sqrt(dim)` bound, not a `sqrt(rank)` one.  (b) The source's own 2x2 witness that the constant 1 is too small in (5.2): `X = [[3,-3],[-3,1]]`, `A = diag(1,-1)`, `B = diag(0,2)`, `delta = 1`, where `delta ||X||_1 = 2 + sqrt 10 > ||AX - XB||_1 = 3 sqrt 2`.  Note that whether `rank C` in (5.2) can be replaced by a constant is the source's OWN open question and is not proof debt.
 
-**(5.2) AND THE 2x2 WITNESS ARE COMPILED, 2026-08-10 (Claude Opus 5, coordinator-verified).**  `operatorNormingFunction_sylvester_le_of_pairwiseSpectrumGap` gives `delta * ||X|| <= ||C|| * sqrt r` from a rank bound `C.rank <= r`, with a `_real_` twin and a `finrank_range` form.  The sharpness calculation is compiled, not prose: `sharp52_sylvester`, `sharp52_gap`, `sharp52_opNorm_X`, `sharp52_opNorm_C`, and the punchline `sharp52_constant_one_too_small`.
+**(5.2) AND THE 2x2 WITNESS ARE COMPILED, 2026-08-10 (Claude Opus 5, coordinator-verified).**  `opNorm_sylvester_le_of_pairwiseSpectrumGap` gives `delta * ||X|| <= ||C|| * sqrt r` from a rank bound `C.rank <= r`, with a `_real_` twin and a `finrank_range` form.  The sharpness calculation is compiled, not prose: `sharp52_sylvester`, `sharp52_gap`, `sharp52_opNorm_X`, `sharp52_opNorm_C`, and the punchline `sharp52_constant_one_too_small`.
 
 **THIS ROW WAS STALE IN TWO WAYS, AND BOTH MATTERED.**  (i) The notes said `the nearest compiled brick is a sqrt(dim) bound, not a sqrt(rank) one`.  FALSE: `hilbertSchmidtNorm_le_sqrt_rank_mul_opNorm` (`Ideals/HilbertSchmidtFiniteRank.lean:119`, COORDINATOR-VERIFIED PRESENT) is a genuine `sqrt(rank)` bound and was already compiled, as were `opNorm_le_hilbertSchmidtNorm` and `approximationNumberEnergy_ne_top_of_rank_le`; the full derivation chain was already written TWICE, at `SineTheta/Theorem62.lean:205` and `:413`.  (ii) `next_action` said `at trace-norm scope`.  FALSE, and it contradicted a decision recorded in the docstring of the very module holding the brick.
 
@@ -3957,7 +3957,7 @@ ROW WAS STALE; CORRECTED 2026-08-07 (Fable 5).  The requested 'exact source norm
 - `TauCeti.DavisKahan1970.Section8.theorem8_1_upperCompressionRepulsion_real`
 - `TauCeti.DavisKahan1970.Section8.theorem8_1_lowerCompressionRepulsion_real`
 
-**Notes.** Theorems 8.1's conclusion is packaged as `Theorem81SourceConclusion` and proved sorry-free in `DavisKahan/Experimental/Frontier/Section8.lean`; `#print axioms` gives [propext, Classical.choice, Quot.sound]. The status stays `candidate_under_repair` because that axis is fidelity to the printed statement, which compiling does not establish -- not because anything fails to build.
+**Notes.** Theorems 8.1's conclusion is packaged as `Theorem81ContinuationConclusion` and proved sorry-free in `DavisKahan/Experimental/Frontier/Section8.lean`; `#print axioms` gives [propext, Classical.choice, Quot.sound]. The status stays `candidate_under_repair` because that axis is fidelity to the printed statement, which compiling does not establish -- not because anything fails to build.
 
 STATUS CORRECTED 2026-08-04: `candidate_under_repair` -> `compiled_exact`. All five declarations are compiled and axiom-clean. They resolve only outside the default build, which is what `proved_outside_build` records; the mathematics itself matches the printed theorem.
 
@@ -4155,7 +4155,7 @@ At the OPERATOR norm the compiled residual statement is sound and in fact STRONG
 
 **Notes.** REPAIRED AND RE-CLOSED 2026-08-12 (result inventory row `DK-8.2-thm`).  The reopening was correct on both counts.  (a) The standing post-Proposition-3.2 convention -- (3.5) is assumed as well as (1.5) except where the contrary is stated -- is now represented as the source SCOPE atom `S3-standing-scope.crossed-dimension-standing-assumption` and linked to the two counted results it genuinely governs, Theorem 8.2 and Proposition 3.4.  It is scope, not a new counted result, so the denominator is unchanged at 29.  (b) The printed quarter-angle conclusion is the AMBIENT Theta < pi/4, and the selected evidence is now `theorem8_2_branch_maximalAngle_lt_of_crossedDefects` and `theorem8_2_branch_real_maximalAngle_lt_of_crossedDefects`, which conclude `maximalAngle P Q < pi/4` from either printed smallness alternative under (3.5) in its constructive `CrossedDefectsEquivalent` form, with no finite-dimensionality and no rank hypothesis.  No new Lean mathematics was needed once the scope was right.
 
-`theorem8_2_perturbationHalfGap_selectedBranch` and `theorem8_2_residualHalfGap_selectedBranch` are proved sorry-free in `DavisKahan/Experimental/Frontier/Section8.lean`; `#print axioms` on the perturbation form gives [propext, Classical.choice, Quot.sound]. The half-gap bridges (`perturbationHalfGapBridge_of_sourceHypotheses`, `residualHalfGapBridge_of_sourceHypotheses`) are proved too.
+`theorem8_2_perturbationHalfGap_selectedBranch` and `theorem8_2_residualHalfGap_selectedBranch` are proved sorry-free in `DavisKahan/Experimental/Frontier/Section8.lean`; `#print axioms` on the perturbation form gives [propext, Classical.choice, Quot.sound]. The half-gap bridges (`perturbationHalfGapBridge_of_circleContinuationData`, `residualHalfGapBridge_of_circleContinuationData`) are proved too.
 
 STATUS CORRECTED 2026-08-04: `candidate_under_repair` -> `compiled_general_infrastructure`. All four declarations are compiled and axiom-clean, outside the default build. The audit of the two half-gap branches against the printed Theorem 8.2 has not been done, so this is not yet claimed as exact.
 
@@ -4258,7 +4258,7 @@ therefore OPEN and is recorded in `next_action`; nothing in the build settles it
 
 **(20) `compiled_exact` ALSO OVERSTATED THE NORM AXIS**, and one name in the prose above is wrong.
 `theorem8_2_sinTwoTheta_{perturbation,residual}_source` conclude at the operator norm only.  And
-`perturbationHalfGapBridge_of_sourceHypotheses` / `residualHalfGapBridge_of_sourceHypotheses` are NOT
+`perturbationHalfGapBridge_of_circleContinuationData` / `residualHalfGapBridge_of_circleContinuationData` are NOT
 in `TauCeti.DavisKahan1970.Section8`, where the prose above puts them: `#check` there fails with
 `unknownIdentifier`, and they live in `TauCeti.DavisKahan.Experimental.Frontier.Section8`
 (`DavisKahan/Sources/DavisKahan1970/Section8/BranchRepulsion.lean:804,820`).  Both also take an extra quantitative smallness

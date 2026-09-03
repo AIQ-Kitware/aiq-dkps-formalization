@@ -113,7 +113,7 @@ need no alias: they are declared in this namespace by
 Standing assumption 1 of the source admits a real or complex Hilbert space.
 Theorem 8.2 supplies both subspaces as data, so its real form is an exact
 complexification transport and adds no hypothesis; see
-`Sources/DavisKahan1970/Section8/Theorem82SourceReal.lean`.  `theorem8_2_real`
+`Sources/DavisKahan1970/Section8/Theorem82Real.lean`.  `theorem8_2_real`
 is the whole printed theorem over `R`, and the two inherited `sin 2Theta`
 estimates are available over `R` at the operator norm, the perturbation one also
 at every source unitarily invariant norm -- exactly the scope available over

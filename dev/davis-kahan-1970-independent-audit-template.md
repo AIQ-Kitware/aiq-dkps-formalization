@@ -2312,7 +2312,7 @@ The declarations that carry this result's printed statement, with the source ato
 
 ### Other registered declarations
 
-- `TauCeti.DavisKahan1970.proposition3_4_full_bundled_complex` — presentation_wrapper
+- `TauCeti.DavisKahan1970.proposition3_4_isDirectRotation_complex` — presentation_wrapper
 - `TauCeti.DavisKahan1970.proposition3_4_eq_directRotation` — supporting_theorem
 - `TauCeti.DavisKahan1970.proposition3_4_crossedDefectsEquivalent_complex` — standing_assumption_discharge
 - `TauCeti.DavisKahan1970.proposition3_4_crossedDefectsEquivalent_real` — standing_assumption_discharge
@@ -2331,7 +2331,7 @@ Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section3Propositi
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
-#### `TauCeti.DavisKahan1970.proposition3_4_full_bundled_complex`
+#### `TauCeti.DavisKahan1970.proposition3_4_isDirectRotation_complex`
 
 Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section3Proposition34Presentation.lean:65`
 

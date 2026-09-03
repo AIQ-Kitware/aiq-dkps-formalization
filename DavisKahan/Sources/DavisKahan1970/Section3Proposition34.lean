@@ -19,7 +19,7 @@ proof of Proposition 3.4 discharges the positivity clause in that genuine
 operator sense: "we must still prove (i) and (ii), which for this case take the
 form `Q₋U²Q₋ ≥ 0` ...".
 
-`TauCeti.DavisKahan.proposition3_4_full_bundled_complex` concludes the
+`TauCeti.DavisKahan.proposition3_4_isDirectRotation_complex` concludes the
 weaker `IsDirectRotation` predicate, whose diagonal clauses record only a
 nonnegative real numerical range, `0 ≤ re ⟪x, (P T P) x⟫`.  Over a complex
 Hilbert space that does not even force the compression to be self-adjoint, so it
@@ -195,7 +195,7 @@ theorem proposition3_4_full_complex
         -star ((reflectedSubspace U V).starProjection * (W * W) *
           (reflectedSubspace U V)ᗮ.starProjection) := by
   have hpaper : IsDirectRotation (reflectedSubspace U V) V (W * W) :=
-    proposition3_4_full_bundled_complex U V W hunitary hintertwines
+    proposition3_4_isDirectRotation_complex U V W hunitary hintertwines
       hcrossed
       ((ContinuousLinearMap.nonneg_iff_isPositive _).mpr hsource_pos)
       ((ContinuousLinearMap.nonneg_iff_isPositive _).mpr hcomplement_pos) hcos
@@ -226,7 +226,7 @@ It exhibits *an* unnamed acute pair, from a whole-space form bound, under an
 extra acuteness hypothesis on the reflected pair.  The printed statement names
 the pair `(Q₋ℋ, Qℋ)`, its hypothesis is `C₀² ≥ ½` on `Pℋ` alone, and it assumes
 nothing about the reflected pair; that is `proposition3_4` above, and
-`Section3Proposition34Printed.lean` records exactly which narrowings are removed.
+`Section3Proposition34Presentation.lean` records exactly which narrowings are removed.
 Both are kept because the census registers both. -/
 
 /-- **Davis--Kahan 1970, Proposition 3.4, the reflected-square form.**
