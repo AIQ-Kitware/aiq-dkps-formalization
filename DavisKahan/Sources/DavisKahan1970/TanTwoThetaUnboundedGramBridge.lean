@@ -14,6 +14,8 @@ import DavisKahan.Geometry.Polar.DirectRotation
 import ForTauCeti.Analysis.SpecialFunctions.TanArcsin
 import DavisKahan.Sources.DavisKahan1970.Ideals.SpectralSelection
 
+open TauCeti.DavisKahan.Sylvester
+
 /-!
 # The typed tangent/sine Gram-resolvent bridge in the unbounded reflection picture
 
@@ -72,7 +74,6 @@ namespace DavisKahan1970
 open scoped InnerProductSpace
 
 open TauCeti.DavisKahan.ExactSinTheta
-open TauCeti.DavisKahan.Sylvester
 open TauCeti.ApproximationNumber
 
 noncomputable section

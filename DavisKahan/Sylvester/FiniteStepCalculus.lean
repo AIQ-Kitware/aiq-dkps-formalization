@@ -6,6 +6,7 @@ Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 import DavisKahan.SpectralTheory.SelfAdjointBorelCalculus
 import DavisKahan.SpectralTheory.AbstractSpectrum
 
+
 /-!
 # Finite spectral-step calculus
 
@@ -31,7 +32,9 @@ they are until those clear.
 -/
 
 namespace TauCeti
-namespace DavisKahanExt
+namespace DavisKahan.Sylvester
+
+open TauCeti.DavisKahanExt
 
 open DavisKahan.Foundation
 
@@ -420,5 +423,5 @@ theorem boundedSelfAdjointBorelCalculus_eq_finset_sum_indicator [Nontrivial H]
     boundedSelfAdjointBorelCalculusC_finiteStep A hA cell hcell rep]
 
 end
-end DavisKahanExt
+end DavisKahan.Sylvester
 end TauCeti

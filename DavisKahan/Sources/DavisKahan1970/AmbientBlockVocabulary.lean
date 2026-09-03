@@ -29,6 +29,7 @@ namespace DavisKahan1970
 
 open TauCeti.DavisKahanExt
 
+
 open scoped InnerProductSpace
 
 noncomputable section

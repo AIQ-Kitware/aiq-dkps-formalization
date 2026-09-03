@@ -10,6 +10,8 @@ import DavisKahan.BoundedOperator.Compat
 import ForTauCeti.Analysis.InnerProductSpace.Spectral.GapProjection
 import ForTauCeti.Analysis.InnerProductSpace.PrincipalSineSequence
 
+open TauCeti.DavisKahan.Sylvester
+
 /-!
 # Davis--Kahan 1970, Question 10.4: the established step-function specialization
 
@@ -78,7 +80,6 @@ namespace TauCeti
 namespace DavisKahan1970
 
 open scoped InnerProductSpace
-open TauCeti.DavisKahan.Sylvester
 
 open TauCeti.DavisKahanExt
 open TauCeti.DavisKahan

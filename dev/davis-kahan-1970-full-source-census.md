@@ -732,9 +732,9 @@ AMBIENT CLAUSE REOPENED 2026-08-31 by the coherent-clause audit. The printed sin
 - `TauCeti.DavisKahan.FiniteDimensional.absDoubleAngleTangent_scalar`
 - `TauCeti.DavisKahan.FiniteDimensional.sum_absDoubleAngleTangent_le`
 - `TauCeti.DavisKahan.FiniteDimensional.absTanTwoTheta0_offDiagonal_le`
-- `TauCeti.DavisKahan.FiniteDimensional.sum_absDoubleAngleTangent_le_of_finiteDimensional_invariantSubspace`
-- `TauCeti.DavisKahan.FiniteDimensional.kyFan_absTanTwoTheta_le_of_finiteDimensional_invariantSubspace`
-- `TauCeti.DavisKahan.FiniteDimensional.absTanTwoTheta_offDiagonal_mem_and_gauge_le_of_finiteDimensional_invariantSubspace`
+- `TauCeti.DavisKahan.TanTwoTheta.sum_absDoubleAngleTangent_le_of_finiteDimensional_invariantSubspace`
+- `TauCeti.DavisKahan.TanTwoTheta.kyFan_absTanTwoTheta_le_of_finiteDimensional_invariantSubspace`
+- `TauCeti.DavisKahan.TanTwoTheta.absTanTwoTheta_offDiagonal_mem_and_gauge_le_of_finiteDimensional_invariantSubspace`
 - `TauCeti.DavisKahan1970.tanTwoTheta_branchFree_bounded_symmetricNorming_complex`
 - `TauCeti.DavisKahan1970.tanTwoTheta_branchFree_bounded_symmetricNorming_real`
 - `TauCeti.DavisKahan1970.tanTwoTheta_branchFree_kyFan_complex`
@@ -3121,7 +3121,7 @@ The first hole asked for a source-facing theorem for "(5.2) is not best possible
 **Lean declarations:**
 
 - `TauCeti.DavisKahan.Sylvester.directOrderedSylvesterEngine_lowerUpper`
-- `TauCeti.DavisKahan1970.unbounded_sylvester_intervalExterior_uiNorm_genuineSpectrum`
+- `TauCeti.DavisKahan1970.unbounded_sylvester_intervalExterior_uiNorm_of_spectra`
 - `TauCeti.DavisKahan1970.Theorem5_2`
 - `TauCeti.DavisKahan.Sylvester.davisKahan1970_sylvester_real`
 - `TauCeti.DavisKahan.Sylvester.real_unbounded_sylvester_kyFan`
@@ -3137,7 +3137,7 @@ VERIFIED 2026-08-04 by the elaborator, not by grep: a probe file importing `Davi
 
 **SOURCE WRAPPER ADDED 2026-08-05**: `Theorem5_2`, in `DavisKahan/Sources/DavisKahan1970/Section5.lean`, aliasing `directOrderedSylvesterEngine_lowerUpper`.  That engine is the printed theorem: `SemiboundedBelow A (c + delta)` and `SemiboundedAbove B c` are the source's ordering `A >= gamma + delta > gamma >= B`, `HasClosedSylvesterEquation A B X R` is `AX = XB + C`, and the conclusion `delta * N(X) <= N(R)` carries the sharp constant.  It is more general than the print on the ideal axis (arbitrary `KyFanDominantIdealFamily`, not a fixed UI norm) and admits unbounded closed self-adjoint operators.
 
-THE ORDERED BRANCH IS NOT THE INTERVAL/EXTERIOR BRANCH.  `unbounded_sylvester_intervalExterior_uiNorm_genuineSpectrum`, also on this row, carries a different separation hypothesis; the wrapper's docstring says so, and the two must not be substituted for one another.
+THE ORDERED BRANCH IS NOT THE INTERVAL/EXTERIOR BRANCH.  `unbounded_sylvester_intervalExterior_uiNorm_of_spectra`, also on this row, carries a different separation hypothesis; the wrapper's docstring says so, and the two must not be substituted for one another.
 
 **AUDIT METHOD CORRECTED 2026-08-07 (Claude Opus 5).**  The scalar-scope audit earlier the same day inspected only the declarations already LISTED on this row, which answers "does this row list a real theorem?" and not "does the repository HAVE one?".  Re-audited by searching the whole stable repo and elaborating candidate signatures.  FALSE POSITIVE, `scope_gap` removed.  `davisKahan1970_sylvester_real` (`DavisKahan/Sylvester/RealUnbounded.lean:77`) elaborates as an arbitrary real Hilbert-space, arbitrary `KyFanDominantIdealFamily ℝ`, UNBOUNDED (`LinearPMap`) form of the full Theorem 5.2: self-adjoint `A`, `B`, `0 < delta`, `FormBoundedSylvesterGap A B delta`, `HasClosedSylvesterEquation A B X C`, `N.Mem C`, concluding `N.Mem X` and `delta * N.gauge X <= N.gauge C`.  No new proof was needed -- only the census entry.  `real_unbounded_sylvester_kyFan` is the per-Ky-Fan-level companion.
 
@@ -4290,7 +4290,7 @@ To avoid duplicate spellings, SEVEN declarations were generalized to `RCLike` WI
 
 **THREE COORDINATOR/ROW CLAIMS ABOUT THE ROUTE WERE WRONG.**  (i) This field said the real spectral dictionary is `built from compressOperatorReal and realSpectrum_compressOperator_complexifySubmodule`.  The proof uses NEITHER -- it is `compressOperator_eq_restrict_of_invariant` plus a coercion; going through the complexification lemma would have been a DETOUR THROUGH `C` FOR A PURELY REAL FACT.  (ii) `needing only` undercounted: `complexify_sinTwoAngleOperator` was also required and existed NOWHERE.  (iii) The house preference for generalizing IN PLACE does NOT apply here, and not merely as a matter of taste -- MEASURED: at general `RCLike K` the statement `spectrum R (compressOperator U T) subset s` DOES NOT ELABORATE, because `Algebra R (F ->L[K] F)` fails to synthesize.  A separate real declaration is FORCED.
 
-**`compressOperatorReal` IS A REDUNDANT SPELLING AND ITS DOCSTRING SAID THE OPPOSITE.**  It claimed `compressOperator` is `forced to be stated over C` by Mathlib's functional calculus.  `DavisKahanExt.compressOperator` is `RCLike`-generic and `compressOperatorReal Z A = compressOperator Z A` holds BY `rfl` -- elaborator-verified.  The docstring is corrected; the two names should become one, but that deletion touches about twelve call sites and changes published signatures, so it was NOT done.
+**`compressOperatorReal` IS A REDUNDANT SPELLING AND ITS DOCSTRING SAID THE OPPOSITE.**  It claimed `compressOperator` is `forced to be stated over C` by Mathlib's functional calculus.  `TauCeti.DavisKahan.Sylvester.compressOperator` is `RCLike`-generic and `compressOperatorReal Z A = compressOperator Z A` holds BY `rfl` -- elaborator-verified.  The docstring is corrected; the two names should become one, but that deletion touches about twelve call sites and changes published signatures, so it was NOT done.
 
 THE DOCUMENTATION DEFECT EXISTED IN TWO PLACES, not one: the alias docstring in `Section8SourceSurface.lean` AND the underlying theorem's own docstring in `Section8SourceTheorem82.lean` both read `delta ||sin 2Theta_0|| <= 2 ||R||` for a statement at the AMBIENT operator.  Both fixed; fixing only the alias would have left the misleading text at the source.
 

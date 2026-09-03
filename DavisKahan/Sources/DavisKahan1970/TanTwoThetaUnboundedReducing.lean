@@ -9,6 +9,8 @@ import DavisKahan.InfiniteDimensional.DoubleAngle
 import DavisKahan.Geometry.Polar.DirectRotation
 import ForTauCeti.Analysis.InnerProductSpace.DoubleAngle.ReducingCutoff
 
+open TauCeti.DavisKahan.Sylvester
+
 /-!
 # `tan 2Θ` at an arbitrary reducing subspace
 
@@ -53,7 +55,6 @@ namespace DavisKahan1970
 open scoped InnerProductSpace
 open Filter
 open TauCeti.DavisKahan.ExactSinTheta
-open TauCeti.DavisKahan.Sylvester
 open TauCeti.ApproximationNumber
 
 noncomputable section

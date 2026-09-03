@@ -6,6 +6,8 @@ Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 import DavisKahan.SinTheta.Unbounded.Core
 import DavisKahan.Sylvester.RealUnbounded
 
+open TauCeti.DavisKahan.Sylvester
+
 /-!
 # Real unbounded sine-theta theorem
 
@@ -21,7 +23,6 @@ namespace DavisKahan
 namespace ExactSinTheta
 
 open scoped InnerProductSpace
-open TauCeti.DavisKahan.Sylvester
 
 noncomputable section
 

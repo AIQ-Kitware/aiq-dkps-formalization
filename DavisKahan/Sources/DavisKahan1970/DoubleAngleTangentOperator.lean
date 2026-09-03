@@ -9,6 +9,8 @@ import DavisKahan.DoubleAngle.TanTwoThetaKyFan
 import ForTauCeti.Analysis.CStarAlgebra.SelfAdjointGapInverse
 import ForTauCeti.Analysis.Matrix.EntrywiseOpNorm
 
+open TauCeti.DavisKahan.Sylvester
+
 /-!
 # Canonical double-angle tangent operator
 
@@ -32,7 +34,6 @@ open ApproximationNumber
 open scoped InnerProductSpace BigOperators
 open Set
 open DavisKahan.ExactSinTheta
-open TauCeti.DavisKahan.Sylvester
 
 noncomputable section
 

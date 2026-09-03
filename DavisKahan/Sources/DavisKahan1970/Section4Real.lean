@@ -10,6 +10,8 @@ import DavisKahan.Geometry.Polar.DirectRotationReal
 import DavisKahan.OperatorIdeal.ComplexificationApproximation
 import ForTauCeti.Analysis.InnerProductSpace.RealContinuousFunctionalCalculus
 
+open TauCeti.DavisKahan.Sylvester
+
 /-!
 # Davis--Kahan 1970, Section 4 over a **real** Hilbert space
 
@@ -64,7 +66,6 @@ namespace DavisKahan1970
 open TauCeti.DavisKahan
 open TauCeti.DavisKahan
 open TauCeti.DavisKahan.ExactSinTheta
-open TauCeti.DavisKahan.Sylvester
 open TauCeti.DavisKahan.ExactSinTheta.ComplexificationApproximation
 open TauCeti.ApproximationNumber
 open TauCeti.RealComplexification

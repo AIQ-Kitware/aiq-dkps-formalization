@@ -8,6 +8,8 @@ import DavisKahan.OperatorIdeal.CanonicalRealView
 import DavisKahan.TanTwoTheta.Unbounded
 import ForTauCeti.Analysis.InnerProductSpace.LinearPMap.Resolvent
 
+open TauCeti.DavisKahan.Sylvester
+
 /-!
 # Ideal-gauge unbounded tangent two theta
 
@@ -30,7 +32,6 @@ namespace DavisKahan
 open TauCeti.DavisKahanExt
 open TauCeti.DavisKahan
 open TauCeti.DavisKahan.ExactSinTheta
-open TauCeti.DavisKahan.Sylvester
 
 universe v
 

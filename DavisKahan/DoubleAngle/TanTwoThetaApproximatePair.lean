@@ -6,6 +6,8 @@ Authors: Jon Crall, Claude Opus 5
 import DavisKahan.DoubleAngle.TanTwoThetaBranchFree
 import DavisKahan.DoubleAngle.KyFanOrthonormal
 
+open TauCeti.DavisKahan.ExactSinTheta
+
 /-!
 # Branch-free equation (7.6) for *approximate* singular pairs
 
@@ -58,7 +60,9 @@ Nothing in this file assumes `[FiniteDimensional]`, a contraction bound on
 -/
 
 namespace TauCeti
-namespace DavisKahan.FiniteDimensional
+namespace DavisKahan.TanTwoTheta
+
+open TauCeti.DavisKahan.FiniteDimensional
 
 open scoped InnerProductSpace
 open DavisKahan.ExactSinTheta
@@ -523,5 +527,5 @@ end Configuration
 
 end
 
-end DavisKahan.FiniteDimensional
+end DavisKahan.TanTwoTheta
 end TauCeti

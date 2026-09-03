@@ -6,6 +6,8 @@ Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 import DavisKahan.InfiniteDimensional.TanTwoTheta.BoundedOffDiagonalRiccati
 import DavisKahan.SpectralTheory.AbstractSpectrum
 
+open TauCeti.DavisKahan.Sylvester
+
 /-!
 # Sharp Riccati estimate in ambient off-diagonal coordinates
 
@@ -22,6 +24,7 @@ implemented double-angle operator.
 
 namespace TauCeti
 namespace DavisKahanExt
+
 
 open DavisKahan.Foundation
 

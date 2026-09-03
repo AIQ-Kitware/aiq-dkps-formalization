@@ -8,6 +8,8 @@ import DavisKahan.SpectralTheory.Complexification.Subspace
 import DavisKahan.Sylvester.Gap
 import ForTauCeti.Analysis.InnerProductSpace.LinearPMap.Resolvent
 
+open TauCeti.DavisKahan.Sylvester
+
 /-!
 # Complexification of real closed operators
 
@@ -27,7 +29,6 @@ namespace DavisKahan
 namespace ExactSinTheta
 
 open scoped InnerProductSpace
-open TauCeti.DavisKahan.Sylvester
 open Filter Topology
 
 noncomputable section

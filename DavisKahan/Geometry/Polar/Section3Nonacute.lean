@@ -9,6 +9,8 @@ import DavisKahan.Geometry.Polar.PolarIsometryFinal
 import DavisKahan.Geometry.Polar.PolarIntertwining
 import ForTauCeti.Analysis.Normed.Operator.LinearIsometry
 
+open TauCeti.DavisKahan.Sylvester
+
 /-!
 # Nonacute direct rotations from crossed-defect data
 
@@ -28,7 +30,6 @@ open scoped InnerProductSpace
 namespace TauCeti
 namespace DavisKahan
 
-open TauCeti.DavisKahan.Sylvester
 
 
 noncomputable section

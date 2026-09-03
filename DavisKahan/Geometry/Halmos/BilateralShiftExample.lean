@@ -7,6 +7,8 @@ Authors: Jon Crall, Claude Opus 5
 import DavisKahan.Geometry.Halmos.CrossedDefectGap
 import Mathlib.Analysis.InnerProductSpace.l2Space
 
+open TauCeti.DavisKahan.Sylvester
+
 /-!
 # The bilateral shift and its coordinate half-spaces
 
@@ -48,7 +50,6 @@ open scoped InnerProductSpace
 namespace TauCeti
 namespace DavisKahan
 
-open TauCeti.DavisKahan.Sylvester
 
 
 universe u

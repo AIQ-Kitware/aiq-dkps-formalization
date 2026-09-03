@@ -7,6 +7,8 @@ import DavisKahan.Sources.DavisKahan1970.TanThetaUnboundedAmbient
 import DavisKahan.Sources.DavisKahan1970.DirectedUnboundedReal
 import DavisKahan.Sources.DavisKahan1970.UnboundedCompressionReal
 
+open TauCeti.DavisKahan.Sylvester
+
 /-!
 # The unbounded ambient `tan Theta` theorem over a **real** Hilbert space
 
@@ -59,7 +61,6 @@ open scoped InnerProductSpace BigOperators
 open TauCeti.DavisKahanExt
 open TauCeti.DavisKahan
 open TauCeti.DavisKahan.ExactSinTheta
-open TauCeti.DavisKahan.Sylvester
 open TauCeti.DavisKahan.TanTheta
 open TauCeti.DavisKahan.TanTheta
 open TauCeti.ApproximationNumber

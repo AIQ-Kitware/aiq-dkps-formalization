@@ -7,6 +7,8 @@ import DavisKahan.Sources.DavisKahan1970.Section4Real
 import DavisKahan.Sources.DavisKahan1970.Section5
 import DavisKahan.Sources.DavisKahan1970.SineTheta.Norms.UnitaryInvariantNormLaws
 
+open TauCeti.DavisKahan.Sylvester
+
 /-!
 # Reading the ideal-gauge results at the paper's own unitarily invariant norm
 
@@ -48,9 +50,10 @@ open scoped InnerProductSpace
 namespace TauCeti
 namespace DavisKahan1970
 
-open TauCeti.DavisKahan
 open TauCeti.DavisKahan.ExactSinTheta
-open TauCeti.DavisKahan.Sylvester
+
+
+open TauCeti.DavisKahan
 open TauCeti.ApproximationNumber
 
 noncomputable section

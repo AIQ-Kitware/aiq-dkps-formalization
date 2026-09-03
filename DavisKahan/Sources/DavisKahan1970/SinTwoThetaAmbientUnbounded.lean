@@ -9,6 +9,8 @@ import DavisKahan.Sources.DavisKahan1970.AmbientReal
 import DavisKahan.SpectralTheory.ReflectionRestriction
 import DavisKahan.Geometry.Angle.DoubleAngleFunctionalCalculus
 
+open TauCeti.DavisKahan.Sylvester
+
 /-!
 # The ambient `sin 2Θ` conclusion at the source's unbounded scope
 
@@ -85,7 +87,6 @@ namespace DavisKahan1970
 open TauCeti.DavisKahanExt
 open TauCeti.DavisKahan
 open TauCeti.DavisKahan.ExactSinTheta
-open TauCeti.DavisKahan.Sylvester
 
 noncomputable section
 

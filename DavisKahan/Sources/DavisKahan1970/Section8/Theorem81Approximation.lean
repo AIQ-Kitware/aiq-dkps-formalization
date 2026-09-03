@@ -7,6 +7,8 @@ import DavisKahan.BoundedOperator.BlockShift
 import DavisKahan.Sources.DavisKahan1970.Section8.CompressionApproximation
 import DavisKahan.Sources.DavisKahan1970.Section8.BranchRepulsion
 
+open TauCeti.DavisKahan.Sylvester
+
 /-!
 # Davis--Kahan 1970, Theorem 8.1(ii)
 
@@ -82,7 +84,6 @@ namespace DavisKahan1970
 namespace Section8
 
 open scoped InnerProductSpace
-open TauCeti.DavisKahan.Sylvester
 open TauCeti.DavisKahan
 
 universe u

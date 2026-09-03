@@ -7,6 +7,12 @@ import DavisKahan.DoubleAngle.RealUnboundedIdeal
 import DavisKahan.Geometry.Angle.AngleFunctionalCalculusReal
 import DavisKahan.Geometry.Polar.DirectRotationReal
 
+open TauCeti.DavisKahanExt
+
+open TauCeti.DavisKahan.ExactSinTheta
+
+open TauCeti.DavisKahan.Sylvester
+
 /-!
 # Reading the real reflected overlap block as the real `sin 2Θ`
 
@@ -53,6 +59,9 @@ open scoped InnerProductSpace
 namespace TauCeti
 namespace DavisKahanExt
 
+
+
+
 noncomputable section
 
 variable {H : Type*} [NormedAddCommGroup H] [InnerProductSpace ℂ H]
@@ -79,10 +88,7 @@ end DavisKahanExt
 
 namespace DavisKahan
 
-open TauCeti.DavisKahanExt
 open TauCeti.DavisKahan
-open TauCeti.DavisKahan.ExactSinTheta
-open TauCeti.DavisKahan.Sylvester
 open TauCeti.DavisKahan.RealSpectralRestriction
 open TauCeti.RealComplexification
 open TauCeti.DavisKahan.Foundation.RealComplexification

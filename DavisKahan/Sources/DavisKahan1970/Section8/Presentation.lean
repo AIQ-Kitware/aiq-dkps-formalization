@@ -9,6 +9,8 @@ import DavisKahan.InfiniteDimensional.SinTheta.Continuation.WitnessGraph
 import DavisKahan.Sources.DavisKahan1970.Section8.Theorem82
 import DavisKahan.Sources.DavisKahan1970.Section8.Theorem82Real
 
+open TauCeti.DavisKahan.Sylvester
+
 /-!
 # Davis--Kahan 1970 Section 8: the production source surface
 
@@ -94,7 +96,6 @@ identifications are re-exported here under source-facing names.
 namespace TauCeti
 namespace DavisKahan1970
 namespace Section8
-open TauCeti.DavisKahan.Sylvester
 
 /-! ### Theorem 8.1(i), both blocks -/
 

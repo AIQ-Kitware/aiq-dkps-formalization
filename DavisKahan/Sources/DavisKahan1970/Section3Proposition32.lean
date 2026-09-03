@@ -8,6 +8,8 @@ import DavisKahan.Geometry.Halmos.BilateralShiftExample
 import DavisKahan.Geometry.Polar.Section3Nonacute
 import ForTauCeti.Analysis.InnerProductSpace.RealContinuousFunctionalCalculus
 
+open TauCeti.DavisKahan.Sylvester
+
 /-!
 # Davis--Kahan 1970, Proposition 3.2 and its Remark
 
@@ -46,7 +48,6 @@ open scoped InnerProductSpace
 namespace TauCeti
 namespace DavisKahan1970
 
-open TauCeti.DavisKahan.Sylvester
 
 open TauCeti.DavisKahan
 

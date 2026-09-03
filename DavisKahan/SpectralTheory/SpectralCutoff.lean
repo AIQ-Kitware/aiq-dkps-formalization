@@ -7,6 +7,8 @@ import DavisKahan.SpectralTheory.PartialMap.Basic
 import DavisKahan.Sylvester.CutoffInterface
 import DavisKahan.SpectralTheory.SpectralRestriction
 
+open TauCeti.DavisKahan.Sylvester
+
 /-!
 # Direct Spectra cutoffs for the unbounded Sylvester argument
 
@@ -28,7 +30,6 @@ namespace TauCeti
 namespace DavisKahan
 namespace ExactSinTheta
 
-open TauCeti.DavisKahan.Sylvester
 
 universe v
 

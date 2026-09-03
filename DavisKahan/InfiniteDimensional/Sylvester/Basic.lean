@@ -11,6 +11,9 @@ import ForTauCeti.Analysis.InnerProductSpace.Sylvester.Bound
 import ForTauCeti.Analysis.InnerProductSpace.RectangularUnitarilyInvariantSeminorm
 import DavisKahan.SpectralTheory.AbstractSpectrum
 
+
+open TauCeti.DavisKahan.Sylvester
+
 /-!
 # Infinite-dimensional bounded Sylvester equations
 
@@ -28,8 +31,9 @@ transported through complexification.
 namespace TauCeti
 
 open TauCeti
-open TauCeti.DavisKahan.Sylvester
-namespace DavisKahanExt
+namespace DavisKahan.Sylvester
+
+open TauCeti.DavisKahanExt
 
 open DavisKahan.Foundation
 
@@ -284,5 +288,5 @@ end Complex
 
 end
 
-end DavisKahanExt
+end DavisKahan.Sylvester
 end TauCeti

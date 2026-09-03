@@ -6,6 +6,8 @@ Authors: Jon Crall, Claude Opus 5
 import DavisKahan.Sylvester.ScalarGeneric
 import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.ScalarTransport
 
+open TauCeti.DavisKahan.Sylvester
+
 /-!
 # The unbounded Sylvester Ky Fan estimate at every `RCLike` field
 
@@ -48,7 +50,6 @@ universe u w v
 namespace TauCeti
 namespace ScalarTransport
 
-open TauCeti.DavisKahan.Sylvester
 
 variable {𝕜 : Type u} {𝕂 : Type w} [RCLike 𝕜] [RCLike 𝕂] {e : RCLikeIso 𝕜 𝕂}
 variable {E : Type v} [NormedAddCommGroup E] [InnerProductSpace 𝕜 E] [CompleteSpace E]

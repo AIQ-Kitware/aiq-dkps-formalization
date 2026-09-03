@@ -20,6 +20,8 @@ import DavisKahan.Sylvester.All
 import DavisKahan.TanTheta.All
 import DavisKahan.TanTwoTheta.All
 
+open TauCeti.DavisKahan.Sylvester
+
 /-!
 # Davis--Kahan 1970 Part III, presented as one theorem package
 
@@ -39,7 +41,6 @@ The mathematical dependency order is recorded in
 
 namespace TauCeti
 namespace DavisKahan1970
-open TauCeti.DavisKahan.Sylvester
 
 /-! ## Canonical single-angle target
 
@@ -82,11 +83,11 @@ alias unbounded_boundedRealization_of_spectrum_Icc :=
   DavisKahan.ExactSinTheta.exists_boundedRealization_of_spectrum_subset_Icc
 alias unbounded_semibounded_of_spectrum_Icc :=
   DavisKahan.semibounded_of_spectrum_subset_Icc
-alias unbounded_sylvester_exteriorInterval_uiNorm_genuineSpectrum :=
+alias unbounded_sylvester_exteriorInterval_uiNorm_of_spectra :=
   DavisKahan.unbounded_sylvester_mem_and_gauge_le_of_spectra_exteriorLeft_intervalRight
-alias unbounded_sylvester_intervalExterior_uiNorm_genuineSpectrum :=
+alias unbounded_sylvester_intervalExterior_uiNorm_of_spectra :=
   DavisKahan.unbounded_sylvester_mem_and_gauge_le_of_spectra_intervalLeft_exteriorRight
-alias real_sinTheta_symmetric_genuineSpectrum :=
+alias real_sinTheta_symmetric_of_restriction_spectra :=
   TauCeti.SpectralOrder.Real.opNorm_starProjection_sub_le_of_restriction_spectra
 alias real_upperFormBound_of_spectrum :=
   TauCeti.SpectralOrder.Real.upperFormBoundOn_top_of_spectrum_subset_Iic

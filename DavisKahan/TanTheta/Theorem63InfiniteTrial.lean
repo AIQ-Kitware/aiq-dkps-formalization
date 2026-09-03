@@ -9,6 +9,8 @@ import ForTauCeti.Analysis.InnerProductSpace.BorelCalculus.AlmostInvariant
 import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.PrescribedSequence
 import ForTauCeti.Analysis.SpecialFunctions.TanArcsin
 
+open TauCeti.DavisKahan.Sylvester
+
 /-!
 # Theorem 6.3 with an infinite-dimensional trial space
 
@@ -60,7 +62,6 @@ namespace DavisKahan
 namespace TanTheta
 
 open ExactSinTheta
-open TauCeti.DavisKahan.Sylvester
 open Module (finrank)
 
 universe u
@@ -273,8 +274,8 @@ theorem exists_finiteDimensional_superset_leak
   have hTsa : IsSelfAdjoint T :=
     ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mpr hT
   have hMsa : IsSelfAdjoint (theorem63Compression T Z) := by
-    simpa [theorem63Compression, DavisKahanExt.compressOperator] using
-      DavisKahanExt.isSelfAdjoint_compressOperator hTsa Z
+    simpa [theorem63Compression, DavisKahan.Sylvester.compressOperator] using
+      DavisKahan.Sylvester.isSelfAdjoint_compressOperator hTsa Z
   have : FiniteDimensional ℂ (F₀.comap Z.subtype) :=
     LinearEquiv.finiteDimensional (Submodule.comapSubtypeEquivOfLe hF₀Z).symm
   obtain ⟨F', hF'fin, hF₀'F', hleak'⟩ :=
@@ -822,8 +823,8 @@ theorem theorem6_3_infiniteTrial_ideal
   have hTsa : IsSelfAdjoint T :=
     ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mpr hT
   have hMsa : IsSelfAdjoint (theorem63Compression T Z) := by
-    simpa [theorem63Compression, DavisKahanExt.compressOperator] using
-      DavisKahanExt.isSelfAdjoint_compressOperator hTsa Z
+    simpa [theorem63Compression, DavisKahan.Sylvester.compressOperator] using
+      DavisKahan.Sylvester.isSelfAdjoint_compressOperator hTsa Z
   have hCompressionUpper : ∀ z : Z,
       RCLike.re ⟪theorem63Compression T Z z, z⟫_ℂ ≤ alpha * ‖z‖ ^ 2 := by
     intro z
@@ -889,8 +890,8 @@ theorem theorem6_3_infiniteTrial_spectral_exists
   have hTsa : IsSelfAdjoint T :=
     ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mpr hT
   have hMsa : IsSelfAdjoint (theorem63Compression T Z) := by
-    simpa [theorem63Compression, DavisKahanExt.compressOperator] using
-      DavisKahanExt.isSelfAdjoint_compressOperator hTsa Z
+    simpa [theorem63Compression, DavisKahan.Sylvester.compressOperator] using
+      DavisKahan.Sylvester.isSelfAdjoint_compressOperator hTsa Z
   have hCompressionUpper : ∀ z : Z,
       RCLike.re ⟪theorem63Compression T Z z, z⟫_ℂ ≤ alpha * ‖z‖ ^ 2 := by
     intro z

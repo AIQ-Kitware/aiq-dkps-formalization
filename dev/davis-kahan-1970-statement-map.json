@@ -1234,7 +1234,7 @@
       "tex_marker": "DK-5.2-thm",
       "review_declarations": [
         "TauCeti.DavisKahan1970.Theorem5_2",
-        "TauCeti.DavisKahan1970.unbounded_sylvester_intervalExterior_uiNorm_genuineSpectrum"
+        "TauCeti.DavisKahan1970.unbounded_sylvester_intervalExterior_uiNorm_of_spectra"
       ],
       "audit_clauses": [
         {
@@ -1242,7 +1242,7 @@
           "description": "Audit the complete registered source passage as one semantic unit; split further if the independent reviewer finds separable mathematical clauses.",
           "review_declarations": [
             "TauCeti.DavisKahan1970.Theorem5_2",
-            "TauCeti.DavisKahan1970.unbounded_sylvester_intervalExterior_uiNorm_genuineSpectrum"
+            "TauCeti.DavisKahan1970.unbounded_sylvester_intervalExterior_uiNorm_of_spectra"
           ]
         }
       ],

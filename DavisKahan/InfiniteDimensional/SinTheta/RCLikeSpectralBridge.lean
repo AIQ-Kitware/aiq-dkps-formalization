@@ -7,6 +7,8 @@ import DavisKahan.SinTheta.SpectralBridge
 import DavisKahan.InfiniteDimensional.SinTheta.RestrictionCompat
 import Mathlib.Analysis.InnerProductSpace.Rayleigh
 
+open TauCeti.DavisKahan.Sylvester
+
 /-!
 # `RCLike` spectral-bridge lemmas
 
@@ -45,7 +47,6 @@ namespace DavisKahan
 namespace ExactSinTheta
 
 open scoped InnerProductSpace
-open TauCeti.DavisKahan.Sylvester
 
 universe u v
 

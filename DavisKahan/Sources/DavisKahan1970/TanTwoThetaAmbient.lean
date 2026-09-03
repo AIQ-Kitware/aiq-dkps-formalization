@@ -12,6 +12,8 @@ import DavisKahan.Sources.DavisKahan1970.SharpIdeal
 import DavisKahan.Sources.DavisKahan1970.TanThetaAmbient
 import Mathlib.Analysis.SpecialFunctions.Trigonometric.Arctan
 
+open TauCeti.DavisKahan.Sylvester
+
 /-!
 # The whole-space half of the `tan 2Θ` theorem
 
@@ -166,7 +168,6 @@ namespace DavisKahan1970
 open TauCeti.DavisKahanExt
 open TauCeti.DavisKahan
 open TauCeti.DavisKahan.ExactSinTheta
-open TauCeti.DavisKahan.Sylvester
 
 open scoped InnerProductSpace
 

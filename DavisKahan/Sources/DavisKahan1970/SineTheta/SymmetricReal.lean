@@ -10,6 +10,8 @@ import DavisKahan.Sources.DavisKahan1970.SineTheta.Norms.SubspaceSingularTranspo
 import DavisKahan.SpectralTheory.ReducingSubspace.RestrictionExtras
 import DavisKahan.Sylvester.RealUnbounded
 
+open TauCeti.DavisKahan.Sylvester
+
 /-!
 # Davis--Kahan Proposition 6.1 over a real Hilbert space
 
@@ -64,7 +66,6 @@ namespace DavisKahan
 namespace ExactSinTheta
 
 open scoped InnerProductSpace
-open TauCeti.DavisKahan.Sylvester
 
 noncomputable section
 

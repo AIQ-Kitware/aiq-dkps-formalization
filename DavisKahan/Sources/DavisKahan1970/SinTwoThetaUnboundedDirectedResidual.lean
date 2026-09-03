@@ -7,6 +7,8 @@ import DavisKahan.Sources.DavisKahan1970.SinTwoThetaAmbient
 import DavisKahan.Sources.DavisKahan1970.SineTheta.TrialReflection
 import DavisKahan.DoubleAngle.UnboundedIdealFormGap
 
+open TauCeti.DavisKahan.Sylvester
+
 /-!
 # The unbounded directed half of the `sin 2Θ` theorem, at the printed residual
 
@@ -59,7 +61,6 @@ namespace DavisKahan1970
 open TauCeti.DavisKahanExt
 open TauCeti.DavisKahan
 open TauCeti.DavisKahan.ExactSinTheta
-open TauCeti.DavisKahan.Sylvester
 
 open scoped InnerProductSpace
 

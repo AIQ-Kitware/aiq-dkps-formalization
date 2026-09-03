@@ -7,6 +7,8 @@ Authors: Jon Crall, Claude Opus 5
 import DavisKahan.TanTheta.Theorem63FiniteSource
 import DavisKahan.TanTheta.Theorem63InfiniteTrial
 
+open TauCeti.DavisKahan.Sylvester
+
 /-!
 # Davis--Kahan Section 2, tan Θ: the perturbation companion
 
@@ -51,7 +53,6 @@ namespace DavisKahan
 namespace Section2
 
 open ExactSinTheta
-open TauCeti.DavisKahan.Sylvester
 open TanTheta
 open Module (finrank)
 

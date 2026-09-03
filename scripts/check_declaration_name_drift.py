@@ -157,6 +157,37 @@ def main() -> int:
     findings: list[dict[str, str]] = []
     notes: list[dict[str, str]] = []
 
+    # 4. `dev/production-namespace-migration-map.json` asserts, as data, where a
+    #    retired declaration lives now. A namespace migration silently rots it:
+    #    the keys are historical and never move, so nothing else notices when a
+    #    destination stops resolving. An empty destination is the deliberate
+    #    "this declaration was removed, not moved" marker.
+    map_rel = os.path.join("dev", "production-namespace-migration-map.json")
+    map_path = os.path.join(root, map_rel)
+    if os.path.exists(map_path):
+        try:
+            with open(map_path, encoding="utf-8") as handle:
+                migration = json.load(handle)
+        except (OSError, json.JSONDecodeError) as exc:
+            findings.append({"check": "migration-map-readable", "where": map_rel,
+                             "detail": f"cannot parse: {exc}"})
+            migration = {}
+        dead = [(old, new) for old, new in migration.items()
+                if isinstance(new, str) and new and new not in index]
+        for old, new in dead[:20]:
+            findings.append({
+                "check": "migration-map-destination",
+                "where": map_rel,
+                "detail": (f"`{old}` is mapped to `{new}`, which resolves to no declaration "
+                           "in the tree; repoint it, or set it to \"\" if the declaration "
+                           "was removed rather than moved"),
+            })
+        if len(dead) > 20:
+            findings.append({"check": "migration-map-destination", "where": map_rel,
+                             "detail": f"... and {len(dead) - 20} further dead destination(s)"})
+        notes.append({"check": "migration-map-destination", "where": map_rel,
+                      "detail": f"{len(migration)} entries, {len(dead)} dead destination(s)"})
+
     configs = sorted(glob.glob(os.path.join(root, "comparator", "*.json")))
     for config_path in configs:
         rel_config = os.path.relpath(config_path, root)

@@ -6,6 +6,8 @@ Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 import DavisKahan.SinTheta.Unbounded.AllGap
 import DavisKahan.SpectralTheory.SpectralRestrictionOperator
 
+open TauCeti.DavisKahan.Sylvester
+
 /-!
 # Natural spectral-projection inputs for the unbounded sine-theta theorem
 
@@ -20,7 +22,6 @@ namespace TauCeti
 namespace DavisKahan
 namespace ExactSinTheta
 
-open TauCeti.DavisKahan.Sylvester
 
 
 universe v

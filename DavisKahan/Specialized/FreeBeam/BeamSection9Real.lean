@@ -6,6 +6,8 @@ Authors: Jon Crall, OpenAI GPT-5.6 Sol
 
 import DavisKahan.Specialized.FreeBeam.BeamEigenvalueSequenceReal
 
+open TauCeti.DavisKahan.Sylvester
+
 /-!
 # Source-facing real model for Davis--Kahan Section 9
 
@@ -25,7 +27,6 @@ namespace FreeBeam
 namespace Model
 namespace Real
 
-open TauCeti.DavisKahan.Sylvester
 
 noncomputable section
 

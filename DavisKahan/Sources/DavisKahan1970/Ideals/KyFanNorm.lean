@@ -6,6 +6,8 @@ Authors: Jon Crall, OpenAI GPT-5.6 Sol
 import DavisKahan.Sources.DavisKahan1970.Ideals.StandardInstances
 import ForTauCeti.Analysis.InnerProductSpace.RectangularUnitarilyInvariantSeminorm.Instances
 
+open TauCeti.DavisKahan.Sylvester
+
 /-!
 # Ky Fan norms inside the Davis--Kahan source norm class
 
@@ -32,7 +34,6 @@ namespace DavisKahan
 namespace ExactSinTheta
 
 open scoped InnerProductSpace BigOperators ENNReal
-open TauCeti.DavisKahan.Sylvester
 
 noncomputable section
 

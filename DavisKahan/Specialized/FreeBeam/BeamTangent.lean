@@ -8,6 +8,8 @@ import DavisKahan.TanTheta.Theorem63Unbounded
 import DavisKahan.Sources.DavisKahan1970.Section9.NumericalBounds
 import ForTauCeti.Analysis.InnerProductSpace.LinearPMap.RealLowerBound
 
+open TauCeti.DavisKahan.Sylvester
+
 /-!
 # Section 9, equations (9.5)--(9.7): the tangent refinement, on the genuine operator
 
@@ -46,7 +48,6 @@ open DavisKahan1970.Section9
 open TauCeti.DavisKahan.TanTheta
 open TauCeti.DavisKahan.TanTheta
 open TauCeti.DavisKahan.ExactSinTheta
-open TauCeti.DavisKahan.Sylvester
 
 noncomputable section
 

@@ -8,6 +8,8 @@ import DavisKahan.TanTheta.Theorem63UnboundedInfiniteTrial
 import DavisKahan.TanTheta.Theorem63UnboundedCompression
 import DavisKahan.TanTheta.RitzPair
 
+open TauCeti.DavisKahan.Sylvester
+
 /-!
 # Unbounded ambient single-angle tangent assembly
 
@@ -28,11 +30,13 @@ corners without loss.
 namespace TauCeti
 namespace DavisKahan1970
 
-open scoped InnerProductSpace BigOperators
 open TauCeti.DavisKahanExt
-open TauCeti.DavisKahan
+
 open TauCeti.DavisKahan.ExactSinTheta
-open TauCeti.DavisKahan.Sylvester
+
+
+open scoped InnerProductSpace BigOperators
+open TauCeti.DavisKahan
 open TauCeti.DavisKahan.TanTheta
 open TauCeti.DavisKahan.TanTheta
 open TauCeti.ApproximationNumber

@@ -10,6 +10,8 @@ import DavisKahan.Geometry.Halmos.GenericRotationPredicates
 -- supplies `IsDirectRotation`, the five-field predicate whose characterisation this
 -- module proves.  It lives in `TauCeti.DavisKahan`.
 import DavisKahan.Geometry.Polar.DirectRotation
+
+open TauCeti.DavisKahan.Sylvester
 -- supplies `spectraReflectionProduct`, `spectraCanonicalIntertwiner`, the operator absolute
 -- value `spectraOperatorAbsoluteValue` and the polar identities relating them.  That module
 -- and everything beneath it are `Geometry`/`BoundedOperator` leaves and never import
@@ -56,7 +58,6 @@ open scoped InnerProductSpace
 namespace TauCeti
 namespace DavisKahan
 
-open TauCeti.DavisKahan.Sylvester
 
 
 universe u

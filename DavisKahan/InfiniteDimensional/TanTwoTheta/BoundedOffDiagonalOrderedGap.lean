@@ -6,6 +6,8 @@ Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 import DavisKahan.InfiniteDimensional.TanTwoTheta.BoundedOffDiagonalSpectrumNonempty
 import DavisKahan.SpectralTheory.AbstractSpectrum
 
+open TauCeti.DavisKahan.Sylvester
+
 /-!
 # Forward ordered-gap estimate for bounded off-diagonal perturbations
 
@@ -22,6 +24,7 @@ the final public theorem.
 
 namespace TauCeti
 namespace DavisKahanExt
+
 
 open DavisKahan.Foundation
 

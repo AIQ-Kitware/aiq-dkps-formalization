@@ -6,6 +6,8 @@ Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 import DavisKahan.SinTheta.Natural.Generalized
 import DavisKahan.SinTheta.Natural.Real
 
+open TauCeti.DavisKahan.Sylvester
+
 /-!
 # Bounded natural spectral-subspace specializations
 
@@ -20,7 +22,6 @@ namespace TauCeti
 namespace DavisKahan
 namespace ExactSinTheta
 
-open TauCeti.DavisKahan.Sylvester
 
 noncomputable section
 

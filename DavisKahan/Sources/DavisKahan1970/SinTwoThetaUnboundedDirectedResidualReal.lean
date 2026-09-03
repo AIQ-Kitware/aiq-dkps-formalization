@@ -10,6 +10,8 @@ import DavisKahan.Sources.DavisKahan1970.SineTheta.Norms.SubspaceSingularTranspo
 import DavisKahan.Sources.DavisKahan1970.SineTheta.Norms.HeterogeneousRepresentative
 import DavisKahan.Sources.DavisKahan1970.SineTheta.Norms.UnitaryInvariantNormLaws
 
+open TauCeti.DavisKahan.Sylvester
+
 /-!
 # The unbounded directed half of the `sin 2Θ` theorem over a REAL Hilbert space
 
@@ -64,7 +66,6 @@ namespace DavisKahan1970
 open TauCeti.DavisKahanExt
 open TauCeti.DavisKahan
 open TauCeti.DavisKahan.ExactSinTheta
-open TauCeti.DavisKahan.Sylvester
 open TauCeti.DavisKahan.RealSpectralRestriction
 
 open scoped InnerProductSpace

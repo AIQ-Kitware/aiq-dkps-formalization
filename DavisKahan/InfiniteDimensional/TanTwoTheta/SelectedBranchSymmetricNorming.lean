@@ -11,6 +11,8 @@ import DavisKahan.InfiniteDimensional.TanTwoTheta.BoundedOffDiagonalReverseGap
 import DavisKahan.Sources.DavisKahan1970.SineTheta.Norms.HeterogeneousRepresentative
 import DavisKahan.Sources.DavisKahan1970.SineTheta.Norms.SubspaceSingularTransport
 
+open TauCeti.DavisKahan.Sylvester
+
 /-!
 # Full bounded paper-facing `tan 2Theta` theorem
 

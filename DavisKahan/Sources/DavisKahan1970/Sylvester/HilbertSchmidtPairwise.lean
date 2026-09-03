@@ -9,6 +9,8 @@ import DavisKahan.Sources.DavisKahan1970.Sylvester.HilbertSchmidtDefectFirst
 import ForTauCeti.Analysis.InnerProductSpace.LinearPMap.Resolvent
 import ForTauCeti.Analysis.InnerProductSpace.Sylvester.SpectralGap
 
+open TauCeti.DavisKahan.Sylvester
+
 /-!
 # Pairwise-gap square-norm Sylvester theorem
 
@@ -26,7 +28,6 @@ namespace DavisKahan
 namespace ExactSinTheta
 
 open scoped InnerProductSpace
-open TauCeti.DavisKahan.Sylvester
 open TauCeti.RealComplexification
 -- The complexification of a bounded operator sits under the foundation namespace.
 

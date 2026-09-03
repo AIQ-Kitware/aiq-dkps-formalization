@@ -6,6 +6,8 @@ Authors: Jon Crall, Claude Opus 5
 import DavisKahan.Sources.DavisKahan1970.Section3Proposition34Presentation
 import DavisKahan.Sources.DavisKahan1970.Section3Proposition32
 
+open TauCeti.DavisKahan.Sylvester
+
 /-!
 # Davis--Kahan 1970, Proposition 3.4 over complex Hilbert spaces
 
@@ -19,7 +21,7 @@ proof of Proposition 3.4 discharges the positivity clause in that genuine
 operator sense: "we must still prove (i) and (ii), which for this case take the
 form `Q₋U²Q₋ ≥ 0` ...".
 
-`TauCeti.DavisKahan.proposition3_4_isDirectRotation_complex` concludes the
+`TauCeti.DavisKahan1970.proposition3_4_isDirectRotation_complex` concludes the
 weaker `IsDirectRotation` predicate, whose diagonal clauses record only a
 nonnegative real numerical range, `0 ≤ re ⟪x, (P T P) x⟫`.  Over a complex
 Hilbert space that does not even force the compression to be self-adjoint, so it
@@ -45,7 +47,6 @@ open scoped InnerProductSpace ComplexOrder
 namespace TauCeti
 namespace DavisKahan1970
 
-open TauCeti.DavisKahan.Sylvester
 
 open TauCeti.DavisKahan
 open TauCeti.DavisKahanExt

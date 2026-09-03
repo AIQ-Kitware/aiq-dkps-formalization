@@ -7,6 +7,8 @@ import DavisKahan.DoubleAngle.TanTwoThetaBranchFree
 import DavisKahan.DoubleAngle.KyFanOrthonormal
 import DavisKahan.OperatorIdeal.ApproximationNumbers.ScalarGeneric
 
+open TauCeti.DavisKahan.ExactSinTheta
+
 /-!
 # The `tan 2Θ` theorem at every unitary-invariant ideal, finite carrier
 
@@ -47,7 +49,9 @@ projection, exactly for `T` and one-sidedly for `H`.
 -/
 
 namespace TauCeti
-namespace DavisKahan.FiniteDimensional
+namespace DavisKahan.TanTwoTheta
+
+open TauCeti.DavisKahan.FiniteDimensional
 
 open scoped InnerProductSpace
 open DavisKahan.ExactSinTheta
@@ -630,5 +634,5 @@ theorem absTanTwoTheta_offDiagonal_mem_and_gauge_le_of_finiteDimensional_invaria
 
 end Main
 
-end DavisKahan.FiniteDimensional
+end DavisKahan.TanTwoTheta
 end TauCeti

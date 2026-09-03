@@ -5,6 +5,8 @@ Authors: Jon Crall, OpenAI GPT-5.6 Sol
 -/
 import DavisKahan.All
 
+open TauCeti.DavisKahan.Sylvester
+
 /-!
 # Davis--Kahan 1970 result semantic audit surface
 
@@ -25,7 +27,6 @@ lake env lean DavisKahan/Sources/DavisKahan1970/Audits/ResultSemanticSurface.lea
 -/
 
 namespace TauCeti.DavisKahan1970.Audits
-open TauCeti.DavisKahan.Sylvester
 
 /-! ### Exact audit wrappers for stronger reusable theorem surfaces
 

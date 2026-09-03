@@ -6,6 +6,8 @@ Authors: Jon Crall, OpenAI GPT-5.6 Sol
 import DavisKahan.Sources.DavisKahan1970.TanTwoThetaUnboundedGramMiddle
 import DavisKahan.Sources.DavisKahan1970.SineTheta.Norms.UnitaryInvariantNorm
 
+open TauCeti.DavisKahan.Sylvester
+
 /-!
 # Exact source-facing unbounded `tan 2Theta` theorem
 
@@ -30,7 +32,6 @@ namespace DavisKahan1970
 open scoped InnerProductSpace
 open Filter
 open TauCeti.DavisKahan.ExactSinTheta
-open TauCeti.DavisKahan.Sylvester
 open TauCeti.ApproximationNumber
 
 noncomputable section

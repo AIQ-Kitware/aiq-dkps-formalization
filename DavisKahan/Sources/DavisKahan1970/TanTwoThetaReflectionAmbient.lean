@@ -10,6 +10,8 @@ import ForTauCeti.Analysis.InnerProductSpace.DoubleAngle.ReflectionBlocks
 import ForTauCeti.Analysis.InnerProductSpace.DoubleAngle.UnboundedPole
 import ForTauCeti.Analysis.InnerProductSpace.SpectralOrder.Complex
 
+open TauCeti.DavisKahan.Sylvester
+
 /-!
 # The branch-free ambient half of Davis--Kahan `tan 2Theta`
 

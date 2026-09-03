@@ -7,6 +7,8 @@ import DavisKahan.InfiniteDimensional.TanTwoTheta.BoundedOffDiagonalEstimate
 import ForTauCeti.Analysis.InnerProductSpace.SpectralOrder.Complex
 import DavisKahan.SpectralTheory.AbstractSpectrum
 
+open TauCeti.DavisKahan.Sylvester
+
 /-!
 # Spectral half-line bridge for bounded off-diagonal tangent-two-theta
 
@@ -18,6 +20,7 @@ a center, including the degenerate-subspace cases and the reverse orientation.
 -/
 
 namespace TauCeti
+
 
 open TauCeti
 namespace DavisKahanExt

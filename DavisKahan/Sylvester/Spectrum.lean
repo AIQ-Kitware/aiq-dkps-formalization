@@ -15,6 +15,9 @@ import Mathlib.Analysis.CStarAlgebra.ContinuousLinearMap
 import DavisKahan.BoundedOperator.Compat
 import DavisKahan.SpectralTheory.AbstractSpectrum
 
+
+open TauCeti.DavisKahan.Sylvester
+
 /-!
 # The genuine-spectrum Sylvester estimate and the general `sin Θ` theorem
 
@@ -66,10 +69,13 @@ is expected to follow by a norm-preserving complexification transfer.
 -/
 
 namespace TauCeti
-namespace DavisKahanExt
+namespace DavisKahan.Sylvester
+
+open TauCeti.DavisKahan.ExactSinTheta
+
+open TauCeti.DavisKahanExt
 
 open DavisKahan.Foundation
-open TauCeti.DavisKahan.Sylvester
 
 open DavisKahan
 
@@ -379,7 +385,6 @@ theorem sinTheta_spectrum_symmetric
 
 section IdealScope
 
-open TauCeti.DavisKahan.ExactSinTheta
 
 universe v'
 
@@ -594,5 +599,5 @@ theorem sinTheta_spectrum_gauge_symmetric
 
 end SinThetaIdealScope
 
-end DavisKahanExt
+end DavisKahan.Sylvester
 end TauCeti

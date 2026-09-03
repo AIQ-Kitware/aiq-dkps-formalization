@@ -8,6 +8,8 @@ import DavisKahan.OperatorIdeal.CanonicalRealView
 import DavisKahan.SpectralTheory.GapResolvent
 import ForTauCeti.Analysis.InnerProductSpace.LinearPMap.Resolvent
 
+open TauCeti.DavisKahan.Sylvester
+
 /-!
 # Theorem 5.2, interval/exterior orientation, with genuine spectra
 
@@ -35,7 +37,6 @@ open scoped InnerProductSpace
 namespace TauCeti
 namespace DavisKahan
 
-open TauCeti.DavisKahan.Sylvester
 
 open TauCeti.DavisKahan.ExactSinTheta
 

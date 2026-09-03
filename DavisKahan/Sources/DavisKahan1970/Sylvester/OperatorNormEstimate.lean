@@ -9,6 +9,8 @@ import DavisKahan.Sources.DavisKahan1970.Ideals.HilbertSchmidtFiniteRank
 -- source's own `2 × 2` witness at the end of this file
 import ForTauCeti.Analysis.InnerProductSpace.TwoDimensionalSingularValues
 
+open TauCeti.DavisKahan.Sylvester
+
 /-!
 # Davis--Kahan 1970, inequality (5.2), and the source's `2 × 2` witness
 
@@ -54,7 +56,6 @@ namespace TauCeti
 namespace DavisKahan
 namespace ExactSinTheta
 
-open TauCeti.DavisKahan.Sylvester
 
 open scoped InnerProductSpace BigOperators ENNReal
 

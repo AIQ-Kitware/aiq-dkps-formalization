@@ -9,6 +9,8 @@ import DavisKahan.SinTheta.FrameFactorization
 import DavisKahan.SinTheta.Real.FrameFactorization
 import DavisKahan.Sources.DavisKahan1970.SineTheta.OperatorAngleBridge
 
+open TauCeti.DavisKahan.Sylvester
+
 /-!
 # Davis--Kahan Theorem 6.2: the second generalized sine theorem
 
@@ -23,7 +25,6 @@ namespace DavisKahan
 namespace ExactSinTheta
 
 open scoped InnerProductSpace
-open TauCeti.DavisKahan.Sylvester
 
 noncomputable section
 

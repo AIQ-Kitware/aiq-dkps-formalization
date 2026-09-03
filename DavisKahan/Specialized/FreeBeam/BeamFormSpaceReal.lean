@@ -6,6 +6,8 @@ Authors: Jon Crall, GPT-5.6 Sol
 
 import DavisKahan.Specialized.FreeBeam.BeamFormSpaceScalar
 
+open TauCeti.DavisKahan.Sylvester
+
 /-!
 # The real free-beam form model
 
@@ -23,7 +25,6 @@ namespace FreeBeam
 namespace Model
 namespace Real
 
-open TauCeti.DavisKahan.Sylvester
 
 noncomputable section
 

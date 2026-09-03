@@ -7,6 +7,8 @@ import DavisKahan.DoubleAngle.UnboundedIdeal
 import DavisKahan.SinTheta.Real.Unbounded
 import DavisKahan.SpectralTheory.Real.SpectralRestriction
 
+open TauCeti.DavisKahan.Sylvester
+
 /-!
 # The directed `sin 2Θ` theorem over a **real** Hilbert space
 
@@ -61,9 +63,11 @@ namespace TauCeti
 namespace DavisKahan
 
 open TauCeti.DavisKahanExt
-open TauCeti.DavisKahan
+
 open TauCeti.DavisKahan.ExactSinTheta
-open TauCeti.DavisKahan.Sylvester
+
+
+open TauCeti.DavisKahan
 open TauCeti.DavisKahan.RealSpectralRestriction
 
 noncomputable section

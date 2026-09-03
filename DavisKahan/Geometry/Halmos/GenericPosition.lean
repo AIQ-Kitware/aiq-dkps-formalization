@@ -190,7 +190,7 @@ theorem norm_sq_eq_starProjection_add_orthogonal (W : Submodule 𝕜 H)
 `P_V`. -/
 noncomputable def genericCosineBlock :
     genericLeftHalf U V →L[𝕜] genericLeftHalf U V :=
-  DavisKahanExt.compressOperator (genericLeftHalf U V) V.starProjection
+  DavisKahan.Sylvester.compressOperator (genericLeftHalf U V) V.starProjection
 
 /-- **The quadratic form of the cosine block is `‖P_V m‖²`.**  Everything below
 is read off this identity. -/
@@ -199,7 +199,7 @@ theorem re_inner_genericCosineBlock (m : genericLeftHalf U V) :
       ‖V.starProjection (m : H)‖ ^ 2 := by
   have hcoe : ((genericCosineBlock U V m : genericLeftHalf U V) : H) =
       (genericLeftHalf U V).starProjection (V.starProjection (m : H)) := by
-    simp [genericCosineBlock, DavisKahanExt.compressOperator]
+    simp [genericCosineBlock, DavisKahan.Sylvester.compressOperator]
   have h1 : ⟪genericCosineBlock U V m, m⟫_𝕜 =
       ⟪V.starProjection (m : H), (m : H)⟫_𝕜 := by
     calc ⟪genericCosineBlock U V m, m⟫_𝕜
@@ -292,7 +292,7 @@ theorem starProjection_eq_cosineBlock_add_crossBlock (m : genericLeftHalf U V) :
       U.starProjection (V.starProjection (m : H)) := by
     have h : ((genericCosineBlock U V m : genericLeftHalf U V) : H) =
         (genericLeftHalf U V).starProjection (V.starProjection (m : H)) := by
-      simp [genericCosineBlock, DavisKahanExt.compressOperator]
+      simp [genericCosineBlock, DavisKahan.Sylvester.compressOperator]
     rw [h, starProjection_genericLeftHalf_of_mem_generic U V hgen]
   have hN : ((genericCrossBlock U V m : genericRightHalf U V) : H) =
       (genericRightHalf U V).starProjection (V.starProjection (m : H)) := by
@@ -470,13 +470,13 @@ theorem coe_genericHalmosCosineSq_of_mem_left (m : genericLeftHalf U V) :
     have h : ((genericHalmosCosineSq U V ⟨(m : H), m.2.2⟩ :
         halmosGenericPart U V) : H) =
         (halmosGenericPart U V).starProjection (halmosCosineSq U V (m : H)) := by
-      simp [genericHalmosCosineSq, DavisKahanExt.compressOperator]
+      simp [genericHalmosCosineSq, DavisKahan.Sylvester.compressOperator]
     rw [h, Submodule.starProjection_eq_self_iff.mpr hgen]
   have hR : ((genericCosineBlock U V m : genericLeftHalf U V) : H) =
       U.starProjection (V.starProjection (m : H)) := by
     have h : ((genericCosineBlock U V m : genericLeftHalf U V) : H) =
         (genericLeftHalf U V).starProjection (V.starProjection (m : H)) := by
-      simp [genericCosineBlock, DavisKahanExt.compressOperator]
+      simp [genericCosineBlock, DavisKahan.Sylvester.compressOperator]
     rw [h, starProjection_genericLeftHalf_of_mem_generic U V
       (projection_mem_halmosGenericPart_right U V m.2.2)]
   rw [hL, hR, hval]
@@ -689,7 +689,7 @@ below.
 /-- The cosine block is self-adjoint. -/
 theorem isSelfAdjoint_genericCosineBlock :
     IsSelfAdjoint (genericCosineBlock U V) :=
-  DavisKahanExt.isSelfAdjoint_compressOperator (isSelfAdjoint_starProjection V)
+  DavisKahan.Sylvester.isSelfAdjoint_compressOperator (isSelfAdjoint_starProjection V)
     (genericLeftHalf U V)
 
 /-- The complex-valued form of `re_inner_genericCosineBlock`. -/
@@ -698,7 +698,7 @@ theorem inner_genericCosineBlock_self (m : genericLeftHalf U V) :
       ((‖V.starProjection (m : H)‖ : ℝ) : 𝕜) ^ 2 := by
   have hcoe : ((genericCosineBlock U V m : genericLeftHalf U V) : H) =
       (genericLeftHalf U V).starProjection (V.starProjection (m : H)) := by
-    simp [genericCosineBlock, DavisKahanExt.compressOperator]
+    simp [genericCosineBlock, DavisKahan.Sylvester.compressOperator]
   calc ⟪genericCosineBlock U V m, m⟫_𝕜
       = ⟪((genericCosineBlock U V m : genericLeftHalf U V) : H), (m : H)⟫_𝕜 := rfl
     _ = ⟪(genericLeftHalf U V).starProjection (V.starProjection (m : H)),
@@ -738,7 +738,7 @@ theorem mirrorCrossBlock_comp_genericCrossBlock :
   have hA : ∀ x : genericLeftHalf U V,
       ((genericCosineBlock U V x : genericLeftHalf U V) : H) =
         (genericLeftHalf U V).starProjection (V.starProjection (x : H)) :=
-    fun x => by simp [genericCosineBlock, DavisKahanExt.compressOperator]
+    fun x => by simp [genericCosineBlock, DavisKahan.Sylvester.compressOperator]
   have hB' : ∀ n : genericRightHalf U V,
       ((genericCrossBlockMirror U V n : genericLeftHalf U V) : H) =
         (genericLeftHalf U V).starProjection (V.starProjection (n : H)) :=
@@ -795,7 +795,7 @@ terms of `A` and the halves-equivalence — the last block of the `2 × 2` model
 /-- The lower-right block of `P_V`, on the `Uᗮ`-half. -/
 noncomputable def genericSineBlock :
     genericRightHalf U V →L[𝕜] genericRightHalf U V :=
-  DavisKahanExt.compressOperator (genericRightHalf U V) V.starProjection
+  DavisKahan.Sylvester.compressOperator (genericRightHalf U V) V.starProjection
 
 /-- The lower-right block in ambient coordinates: `D n = P_N P_V n`, and on the
 generic part `P_N` is `1 - P_U`, because `P_U` there *is* the projection onto
@@ -805,7 +805,7 @@ theorem coe_genericSineBlock (n : genericRightHalf U V) :
       V.starProjection (n : H) - U.starProjection (V.starProjection (n : H)) := by
   have hcoe : ((genericSineBlock U V n : genericRightHalf U V) : H) =
       (genericRightHalf U V).starProjection (V.starProjection (n : H)) := by
-    simp [genericSineBlock, DavisKahanExt.compressOperator]
+    simp [genericSineBlock, DavisKahan.Sylvester.compressOperator]
   have hgen : V.starProjection (n : H) ∈ halmosGenericPart U V :=
     projection_mem_halmosGenericPart_right U V n.2.2
   have hMmem : U.starProjection (V.starProjection (n : H)) ∈ genericLeftHalf U V :=
@@ -855,7 +855,7 @@ theorem genericSineBlock_comp_genericCrossBlock :
       genericRightHalf U V) : H) =
       (genericRightHalf U V).starProjection
         (V.starProjection ((genericCrossBlock U V m : genericRightHalf U V) : H)) := by
-    simp [genericSineBlock, DavisKahanExt.compressOperator]
+    simp [genericSineBlock, DavisKahan.Sylvester.compressOperator]
   -- Idempotence of `P_V` on `m`, split along `M ⊕ N`.
   have hidem : V.starProjection (V.starProjection (m : H)) =
       V.starProjection (m : H) :=

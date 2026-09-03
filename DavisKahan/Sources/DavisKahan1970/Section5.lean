@@ -46,7 +46,7 @@ the conclusion is for an arbitrary `KyFanDominantIdealFamily`, not just a fixed 
 invariant norm -- and the operators are unbounded closed self-adjoint rather than bounded.
 
 This is the *ordered* branch.  The interval/exterior separation hypothesis is a different
-theorem, `unbounded_sylvester_intervalExterior_uiNorm_genuineSpectrum`; do not substitute
+theorem, `unbounded_sylvester_intervalExterior_uiNorm_of_spectra`; do not substitute
 one for the other. -/
 alias Theorem5_2 :=
   DavisKahan.Sylvester.directOrderedSylvesterEngine_lowerUpper

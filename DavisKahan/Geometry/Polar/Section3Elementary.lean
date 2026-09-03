@@ -7,6 +7,8 @@ Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 import DavisKahan.Geometry.Halmos.GenericRotationPredicates
 import DavisKahan.Geometry.Polar.DirectRotationSquare
 
+open TauCeti.DavisKahan.Sylvester
+
 /-!
 # Elementary Section 3 bridge
 
@@ -21,7 +23,6 @@ open scoped InnerProductSpace
 namespace TauCeti
 namespace DavisKahan
 
-open TauCeti.DavisKahan.Sylvester
 
 
 universe u

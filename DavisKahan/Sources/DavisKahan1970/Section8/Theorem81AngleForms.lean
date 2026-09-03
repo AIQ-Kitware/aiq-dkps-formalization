@@ -8,6 +8,8 @@ import DavisKahan.Sources.DavisKahan1970.Section8.Theorem81MajorizationReal
 import ForTauCeti.Analysis.InnerProductSpace.AngleGeometry
 import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.Examples
 
+open TauCeti.DavisKahan.Sylvester
+
 /-!
 # Davis--Kahan 1970, Theorem 8.1(ii)--(iii): the source dictionary
 
@@ -98,7 +100,6 @@ namespace DavisKahan1970
 namespace Section8
 
 open scoped InnerProductSpace
-open TauCeti.DavisKahan.Sylvester
 open TauCeti.DavisKahan
 open Module (finrank)
 

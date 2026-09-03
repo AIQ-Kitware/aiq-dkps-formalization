@@ -10,6 +10,8 @@ import DavisKahan.SpectralTheory.FormMethod.BoundedGraphCompactness
 import DavisKahan.SinTheta.BoundedPerturbation
 import Mathlib.Tactic
 
+open TauCeti.DavisKahan.Sylvester
+
 /-!
 # Shifted coercive realization of the free beam
 
@@ -33,6 +35,7 @@ namespace TauCeti
 namespace DavisKahan
 namespace FreeBeam
 namespace Analytic
+
 
 noncomputable section
 

@@ -14,6 +14,8 @@ import DavisKahan.Sources.DavisKahan1970.TanThetaDirectedUnbounded
 import DavisKahan.Sources.DavisKahan1970.TanTwoThetaUnboundedAmbientExact
 import DavisKahan.Sources.DavisKahan1970.TanTwoThetaUnboundedExactReal
 
+open TauCeti.DavisKahan.Sylvester
+
 /-!
 # The four Section 2 theorems, in one place
 
@@ -231,6 +233,7 @@ namespace TauCeti
 namespace DavisKahan1970
 namespace SectionTwo
 
+
 /-! ## `sin Θ` -/
 
 /-- **Davis--Kahan 1970, the `sin Θ` theorem, over an arbitrary `RCLike` field.**
@@ -441,7 +444,6 @@ next to each other, which is what the clause aliases already are. -/
 section SinTwoThetaSource
 
 open TauCeti.DavisKahan TauCeti.DavisKahan.ExactSinTheta TauCeti.DavisKahanExt
-open TauCeti.DavisKahan.Sylvester
 
 universe v
 

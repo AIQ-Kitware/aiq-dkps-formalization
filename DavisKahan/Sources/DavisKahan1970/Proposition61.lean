@@ -8,6 +8,8 @@ import DavisKahan.Sources.DavisKahan1970.SineTheta.SymmetricReal
 import DavisKahan.Geometry.Angle.AngleFunctionalCalculus
 import DavisKahan.Sources.DavisKahan1970.SineTheta.CommonDomainSymmetric
 
+open TauCeti.DavisKahan.Sylvester
+
 /-!
 # Davis--Kahan 1970, Proposition 6.1, on ordinary mathematical hypotheses
 
@@ -65,9 +67,11 @@ namespace TauCeti
 namespace DavisKahan1970
 
 open TauCeti.DavisKahanExt
-open TauCeti.DavisKahan
+
 open TauCeti.DavisKahan.ExactSinTheta
-open TauCeti.DavisKahan.Sylvester
+
+
+open TauCeti.DavisKahan
 
 noncomputable section
 

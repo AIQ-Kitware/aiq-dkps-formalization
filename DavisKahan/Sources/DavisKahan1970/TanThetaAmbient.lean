@@ -16,6 +16,8 @@ import DavisKahan.TanTheta.Theorem63InfiniteTrial
 import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.GramResolvent
 import Mathlib.Analysis.SpecialFunctions.Trigonometric.Arctan
 
+open TauCeti.DavisKahan.Sylvester
+
 /-!
 # The whole-space half of the `tan Θ` theorem
 
@@ -104,7 +106,6 @@ namespace DavisKahan1970
 open TauCeti.DavisKahanExt
 open TauCeti.DavisKahan
 open TauCeti.DavisKahan.ExactSinTheta
-open TauCeti.DavisKahan.Sylvester
 open TauCeti.DavisKahan.TanTheta
 open TauCeti.ApproximationNumber
 

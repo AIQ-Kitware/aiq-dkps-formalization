@@ -6,6 +6,8 @@ Authors: Jon Crall, GPT-5.6 Thinking
 import DavisKahan.InfiniteDimensional.Riccati.ContinuationWitnessEffectiveBlocks
 import DavisKahan.SpectralTheory.AbstractSpectrum
 
+open TauCeti.DavisKahan.Sylvester
+
 /-!
 # Oriented effective blocks of a continuation-selected branch
 
@@ -33,7 +35,6 @@ namespace TauCeti
 namespace DavisKahanExt
 
 open DavisKahan.Foundation
-open TauCeti.DavisKahan.Sylvester
 
 open DavisKahan
 

@@ -6,6 +6,8 @@ Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 import DavisKahan.SinTheta.Unbounded.FormBoundedGap
 import DavisKahan.SinTheta.Real.Canonical
 
+open TauCeti.DavisKahan.Sylvester
+
 /-!
 # Natural reducing-subspace inputs for the unbounded sine-theta theorem
 
@@ -26,7 +28,6 @@ namespace TauCeti
 namespace DavisKahan
 namespace ExactSinTheta
 
-open TauCeti.DavisKahan.Sylvester
 
 noncomputable section
 

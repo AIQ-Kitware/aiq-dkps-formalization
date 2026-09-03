@@ -8,6 +8,8 @@ import DavisKahan.Sources.DavisKahan1970.UnboundedCompressionReal
 import DavisKahan.SpectralTheory.Complexification.LinearPMapSpectralDescent
 import ForTauCeti.Analysis.InnerProductSpace.LinearPMap.Complexification
 
+open TauCeti.DavisKahan.Sylvester
+
 /-!
 # The unbounded `tan 2Θ` endpoint over **real** scalars
 
@@ -85,7 +87,6 @@ open scoped InnerProductSpace BigOperators
 
 open TauCeti.ApproximationNumber
 open TauCeti.DavisKahan.ExactSinTheta
-open TauCeti.DavisKahan.Sylvester
 open TauCeti.DavisKahan.ExactSinTheta.ComplexificationApproximation
 open TauCeti.RealComplexification
 open TauCeti.DavisKahan.Foundation.RealComplexification

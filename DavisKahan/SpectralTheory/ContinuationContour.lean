@@ -7,6 +7,8 @@ import DavisKahan.SpectralTheory.ResolventOperator
 import Mathlib.MeasureTheory.Integral.CurveIntegral.Basic
 import DavisKahan.SpectralTheory.AbstractSpectrum
 
+open TauCeti.DavisKahan.Sylvester
+
 /-!
 # Proof-carrying contours for spectral continuation
 
@@ -35,7 +37,6 @@ namespace TauCeti
 namespace DavisKahanExt
 
 open DavisKahan.Foundation
-open TauCeti.DavisKahan.Sylvester
 
 open DavisKahan
 

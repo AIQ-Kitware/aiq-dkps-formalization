@@ -12,6 +12,8 @@ import DavisKahan.SpectralTheory.Complexification.SubmoduleEquiv
 import DavisKahan.SpectralTheory.Complexification.Spectrum
 import DavisKahan.Sources.DavisKahan1970.SineTheta.Norms.ComplexificationGauge
 
+open TauCeti.DavisKahan.Sylvester
+
 /-!
 # Source-facing Section 2 angle bounds over a **real** Hilbert space
 
@@ -73,7 +75,6 @@ namespace DavisKahan1970
 open TauCeti.DavisKahanExt
 open TauCeti.DavisKahan
 open TauCeti.DavisKahan.ExactSinTheta
-open TauCeti.DavisKahan.Sylvester
 open TauCeti.RealComplexification
 open TauCeti.DavisKahan.Foundation
 open TauCeti.DavisKahan.Foundation.RealComplexification
@@ -105,7 +106,7 @@ variable (Z : Submodule ℝ E) [Z.HasOrthogonalProjection]
 /-- The real orthogonal compression of an operator to a closed subspace.
 
 This is the real-scalar spelling of `compressOperator`, and it is that operator:
-`DavisKahanExt.compressOperator` is `RCLike`-generic, and at `𝕜 = ℝ` its body is
+`DavisKahan.Sylvester.compressOperator` is `RCLike`-generic, and at `𝕜 = ℝ` its body is
 this one, so `compressOperatorReal Z A = compressOperator Z A` holds by `rfl` and
 `compressOperator_eq_restrict_of_invariant` applies to it verbatim.  (`ℂ`-only
 spellings such as `theorem63Compression` are a separate matter; it is Mathlib's

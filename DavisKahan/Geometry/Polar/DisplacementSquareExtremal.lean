@@ -9,6 +9,8 @@ import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.Pinching
 import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.GramSquare
 import DavisKahan.Geometry.Polar.DirectRotationSquare
 
+open TauCeti.DavisKahan.Sylvester
+
 /-!
 # Squared-displacement extremality by pinching and block sums
 
@@ -90,7 +92,6 @@ namespace DavisKahan
 namespace Section4
 
 open ExactSinTheta
-open TauCeti.DavisKahan.Sylvester
 open TauCeti.ApproximationNumber
 
 noncomputable section

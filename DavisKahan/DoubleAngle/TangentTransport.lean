@@ -62,6 +62,8 @@ bounded operator at all.
 namespace TauCeti
 namespace DavisKahan
 
+open TauCeti.DavisKahanExt
+
 open TauCeti.DavisKahan1970 TauCeti.DavisKahanExt
 
 universe v
@@ -349,7 +351,6 @@ end Identities
 
 section Reflection
 
-open TauCeti.DavisKahanExt
 
 variable {Ec : Type v} [NormedAddCommGroup Ec] [InnerProductSpace ℂ Ec]
   [CompleteSpace Ec]

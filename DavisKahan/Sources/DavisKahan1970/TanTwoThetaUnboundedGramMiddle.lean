@@ -6,6 +6,8 @@ Authors: Jon Crall, Claude Opus 5
 import DavisKahan.Sources.DavisKahan1970.TanTwoThetaUnboundedGramBridge
 import DavisKahan.Sources.DavisKahan1970.SharpKyFan
 
+open TauCeti.DavisKahan.Sylvester
+
 /-!
 # The middle inequality of the unbounded `tan 2Θ` chain
 
@@ -82,7 +84,6 @@ namespace DavisKahan1970
 open scoped InnerProductSpace BigOperators
 
 open TauCeti.DavisKahan.ExactSinTheta
-open TauCeti.DavisKahan.Sylvester
 open TauCeti.ApproximationNumber
 
 noncomputable section

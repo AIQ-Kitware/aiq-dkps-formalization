@@ -9,6 +9,8 @@ import DavisKahan.DoubleAngle.Unbounded
 import DavisKahan.SinTheta.BoundedPerturbationIdeal
 import ForTauCeti.Analysis.InnerProductSpace.LinearPMap.Resolvent
 
+open TauCeti.DavisKahan.Sylvester
+
 /-!
 # Ideal-gauge unbounded sine two theta
 

@@ -8,6 +8,8 @@ import DavisKahan.OperatorIdeal.CanonicalRealView
 import DavisKahan.Geometry.Angle.OperatorAngleComplex
 import DavisKahan.InfiniteDimensional.DoubleAngle
 
+open TauCeti.DavisKahan.Sylvester
+
 /-!
 # The `sin 2Θ` theorem through the compression spectrum
 
@@ -31,6 +33,9 @@ Supporting API, upstream candidates:
 
 namespace TauCeti
 namespace DavisKahanExt
+
+open TauCeti.DavisKahan.ExactSinTheta
+
 
 -- `reflectionDefect` and its lemmas live in `TauCeti.DavisKahan`
 -- (`DavisKahan/BoundedOperator/Reflection.lean`); `DoubleAngle.lean` used to carry a verbatim
@@ -319,8 +324,6 @@ theorem sinTwoTheta_spectrum_sinAngle
 
 section IdealScope
 
-open TauCeti.DavisKahan.ExactSinTheta
-open TauCeti.DavisKahan.Sylvester
 
 /-- **The genuine-spectrum `sin 2Θ` theorem at unitary-invariant ideal
 scope** (directed form).  Under the genuine internal configuration of `A`

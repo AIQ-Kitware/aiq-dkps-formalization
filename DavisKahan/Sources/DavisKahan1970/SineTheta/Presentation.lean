@@ -7,6 +7,8 @@ import DavisKahan.Sources.DavisKahan1970.SineThetaSourceInventory
 import DavisKahan.SinTheta.Canonical
 import DavisKahan.SinTheta.Real.Canonical
 
+open TauCeti.DavisKahan.Sylvester
+
 /-!
 # The Davis--Kahan 1970 sine-theta source surface
 
@@ -45,6 +47,11 @@ below expose every bundled clause to the semantic-alignment review.
 
 namespace DavisKahan1970
 
+open TauCeti.DavisKahanExt
+
+open TauCeti.DavisKahan.ExactSinTheta
+
+
 open scoped InnerProductSpace
 
 noncomputable section
@@ -53,9 +60,6 @@ universe u v
 
 open TauCeti
 open TauCeti.DavisKahan
-open TauCeti.DavisKahan.ExactSinTheta
-open TauCeti.DavisKahan.Sylvester
-open TauCeti.DavisKahanExt
 open TauCeti.DavisKahan1970
 
 variable {𝕜 : Type u} [RCLike 𝕜]

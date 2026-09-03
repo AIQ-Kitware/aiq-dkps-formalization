@@ -10,6 +10,8 @@ import ForTauCeti.MeasureTheory.IntervalSecondPrimitiveDeriv
 import Mathlib.Analysis.InnerProductSpace.ProdL2
 import Mathlib.Tactic
 
+open TauCeti.DavisKahan.Sylvester
+
 /-!
 # Scalar-generic free-beam form space on `L²(0,1]`
 
@@ -43,7 +45,6 @@ namespace FreeBeam
 namespace Model
 namespace Scalar
 
-open TauCeti.DavisKahan.Sylvester
 
 noncomputable section
 

@@ -7,6 +7,8 @@ import DavisKahan.Sources.DavisKahan1970.DirectedReal
 import DavisKahan.TanTheta.Theorem63UnboundedInfiniteTrial
 import DavisKahan.SpectralTheory.Real.SpectralRestriction
 
+open TauCeti.DavisKahan.Sylvester
+
 /-!
 # Davis--Kahan Theorem 6.3 for an unbounded real self-adjoint operator
 
@@ -54,7 +56,6 @@ open scoped InnerProductSpace BigOperators
 open TauCeti.DavisKahanExt
 open TauCeti.DavisKahan
 open TauCeti.DavisKahan.ExactSinTheta
-open TauCeti.DavisKahan.Sylvester
 open TauCeti.DavisKahan.ExactSinTheta.ComplexificationApproximation
 open TauCeti.DavisKahan.TanTheta
 open TauCeti.DavisKahan.TanTheta

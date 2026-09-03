@@ -7,6 +7,8 @@ import DavisKahan.BoundedOperator.Compat
 import DavisKahan.Geometry.Halmos.GenericRotationPredicates
 import ForTauCeti.Analysis.InnerProductSpace.AngleGeometry
 
+open TauCeti.DavisKahan.Sylvester
+
 /-!
 # Davis--Kahan 1970, standing assumption (3.5): the symmetric gap is directed
 
@@ -51,7 +53,6 @@ open scoped InnerProductSpace
 namespace TauCeti
 namespace DavisKahan
 
-open TauCeti.DavisKahan.Sylvester
 
 universe u
 

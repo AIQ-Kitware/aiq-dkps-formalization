@@ -7,6 +7,8 @@ import DavisKahan.SpectralTheory.PartialMap.Basic
 import DavisKahan.Sylvester.ClosedSylvesterEquation
 import ForTauCeti.Analysis.InnerProductSpace.LinearPMap.SpectralFormBounds
 
+open TauCeti.DavisKahan.Sylvester
+
 /-!
 # Genuine spectral half-line localization
 
@@ -32,8 +34,6 @@ open MeasureTheory
 namespace TauCeti
 namespace DavisKahan
 
-open TauCeti.DavisKahan.Sylvester
-open TauCeti.DavisKahan.Sylvester
 
 universe v
 

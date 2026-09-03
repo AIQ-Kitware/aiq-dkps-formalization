@@ -7,6 +7,8 @@ import DavisKahan.InfiniteDimensional.SinTheta.Continuation.Endpoints
 import DavisKahan.InfiniteDimensional.SinTheta.Continuation.RotationChain
 import DavisKahan.SpectralTheory.AbstractSpectrum
 
+open TauCeti.DavisKahan.Sylvester
+
 /-!
 # Final bounded spectral-continuation theorem
 
@@ -20,7 +22,6 @@ namespace TauCeti
 namespace DavisKahanExt
 
 open DavisKahan.Foundation
-open TauCeti.DavisKahan.Sylvester
 
 open DavisKahan
 

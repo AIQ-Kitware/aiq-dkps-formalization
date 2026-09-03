@@ -7,6 +7,8 @@ Authors: Jon Crall, Claude Opus 5
 import DavisKahan.TanTheta.Theorem63UnboundedInfiniteTrial
 import DavisKahan.SpectralTheory.BoundedTruncation
 
+open TauCeti.DavisKahan.Sylvester
+
 /-!
 # Theorem 6.3 with an **unbounded** Ritz compression
 
@@ -68,7 +70,6 @@ namespace DavisKahan
 namespace TanTheta
 
 open ExactSinTheta
-open TauCeti.DavisKahan.Sylvester
 open TauCeti.ApproximationNumber (IsOrthogonalProjectionMap StronglyTendsto)
 
 universe u

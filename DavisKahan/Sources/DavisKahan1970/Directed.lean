@@ -6,6 +6,8 @@ Authors: Jon Crall, Claude Opus 5
 import DavisKahan.TanTheta.Theorem63InfiniteTrial
 import DavisKahan.Sources.DavisKahan1970.SineTheta.Norms.UnitaryInvariantNorm
 
+open TauCeti.DavisKahan.Sylvester
+
 /-!
 # Davis--Kahan 1970, Theorem 6.3 at the paper's unitarily invariant norms, over `ℂ`
 
@@ -47,7 +49,6 @@ open scoped InnerProductSpace BigOperators
 open TauCeti.DavisKahanExt
 open TauCeti.DavisKahan
 open TauCeti.DavisKahan.ExactSinTheta
-open TauCeti.DavisKahan.Sylvester
 open TauCeti.DavisKahan.TanTheta
 
 noncomputable section
@@ -140,8 +141,8 @@ theorem tanTheta_directed_bounded_spectralGap_symmetricNorming_complex
   have hTsa : IsSelfAdjoint T :=
     ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mpr hT
   have hMsa : IsSelfAdjoint (theorem63Compression T Z) := by
-    simpa [theorem63Compression, DavisKahanExt.compressOperator] using
-      DavisKahanExt.isSelfAdjoint_compressOperator hTsa Z
+    simpa [theorem63Compression, DavisKahan.Sylvester.compressOperator] using
+      DavisKahan.Sylvester.isSelfAdjoint_compressOperator hTsa Z
   have hCompressionUpper : ∀ z : Z,
       RCLike.re ⟪theorem63Compression T Z z, z⟫_ℂ ≤ alpha * ‖z‖ ^ 2 := by
     intro z

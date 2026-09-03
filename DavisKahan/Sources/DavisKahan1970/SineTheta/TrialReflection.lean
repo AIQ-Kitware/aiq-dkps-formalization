@@ -7,6 +7,8 @@ import DavisKahan.BoundedOperator.Reflection
 import DavisKahan.InfiniteDimensional.DoubleAngle
 import DavisKahan.DoubleAngle.UnboundedIdeal
 
+open TauCeti.DavisKahan.Sylvester
+
 /-!
 # The reflected system built from Davis--Kahan trial data
 
@@ -39,7 +41,6 @@ namespace DavisKahan1970
 open TauCeti.DavisKahanExt
 open TauCeti.DavisKahan
 open TauCeti.DavisKahan.ExactSinTheta
-open TauCeti.DavisKahan.Sylvester
 
 open scoped InnerProductSpace
 

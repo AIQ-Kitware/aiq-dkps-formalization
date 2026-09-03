@@ -5,6 +5,8 @@ Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
 import DavisKahan.InfiniteDimensional.SinTheta.Continuation.WitnessRiccati
 
+open TauCeti.DavisKahan.Sylvester
+
 /-!
 # Off-diagonal block coordinates of the continuation-selected Riccati equation
 
@@ -23,6 +25,7 @@ norm and spectral estimates direct rewrite lemmas.
 
 namespace TauCeti
 namespace DavisKahanExt
+
 
 open DavisKahan
 

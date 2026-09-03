@@ -9,6 +9,8 @@ import DavisKahan.SpectralTheory.ReflectionRestriction
 import DavisKahan.Sources.DavisKahan1970.SineTheta.Lemma61
 import DavisKahan.Sources.DavisKahan1970.SineTheta.ProjectionBlocks
 
+open TauCeti.DavisKahan.Sylvester
+
 /-!
 # The sharp factor two of the reflection proof
 
@@ -37,7 +39,6 @@ namespace DavisKahan1970
 open TauCeti.DavisKahanExt
 open TauCeti.DavisKahan
 open TauCeti.DavisKahan.ExactSinTheta
-open TauCeti.DavisKahan.Sylvester
 
 open scoped InnerProductSpace
 

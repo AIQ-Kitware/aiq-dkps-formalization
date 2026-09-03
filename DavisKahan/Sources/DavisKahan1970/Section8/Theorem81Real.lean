@@ -9,6 +9,8 @@ import DavisKahan.SpectralTheory.Complexification.FormTransport
 import DavisKahan.SpectralTheory.Complexification.SubmoduleEquiv
 import DavisKahan.SpectralTheory.FormSpectrumBounds
 
+open TauCeti.DavisKahan.Sylvester
+
 /-!
 # Davis--Kahan 1970, Theorem 8.1 over a real Hilbert space
 
@@ -30,7 +32,6 @@ namespace DavisKahan1970
 namespace Section8
 
 open Set
-open TauCeti.DavisKahan.Sylvester
 open scoped InnerProductSpace
 open DavisKahanExt
 open TauCeti.DavisKahan

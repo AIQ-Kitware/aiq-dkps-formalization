@@ -10,6 +10,8 @@ import ForTauCeti.Analysis.InnerProductSpace.LinearPMap.Resolvent
 import ForTauCeti.Analysis.InnerProductSpace.LinearPMap.Constructions
 import DavisKahan.SpectralTheory.AbstractSpectrum
 
+open TauCeti.DavisKahan.Sylvester
+
 /-!
 # Bounded Borel calculus for bounded self-adjoint operators
 
@@ -29,7 +31,6 @@ namespace TauCeti
 namespace DavisKahanExt
 
 open DavisKahan.Foundation
-open TauCeti.DavisKahan.Sylvester
 
 open DavisKahan
 
