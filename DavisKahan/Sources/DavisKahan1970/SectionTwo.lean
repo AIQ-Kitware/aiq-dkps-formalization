@@ -299,7 +299,7 @@ alias tanTheta_real := tanTheta_ambient_unboundedRitz_symmetricNorming_real
 
 The printed `sin 2Θ` theorem has two boxed conclusions.  This name is the first,
 `δ N(sin 2Θ₀) ≤ 2 N(R)` in its bounded-perturbation form; the ambient one,
-`δ N(sin 2Θ) ≤ 2 N(H)`, is `sinTwoTheta_ambient_complex`.  `sinTwoTheta_source_complex`
+`δ N(sin 2Θ) ≤ 2 N(H)`, is `sinTwoTheta_ambient_complex`.  `sinTwoTheta_bothConclusions_complex`
 below states both together.
 
 `δ · N(sin 2Θ) ≤ 2 N(E)`, with the paper's sharp factor two, for the spectral
@@ -316,7 +316,7 @@ alias sinTwoTheta_complex := sinTwoTheta_directed_unbounded_addBounded_symmetric
 
 /-- **Davis--Kahan 1970, the `sin 2Θ` theorem, over `ℝ` -- the DIRECTED clause.**
 
-Its ambient partner is `sinTwoTheta_ambient_real`, and `sinTwoTheta_source_real`
+Its ambient partner is `sinTwoTheta_ambient_real`, and `sinTwoTheta_bothConclusions_real`
 states both together.
 
 The real sibling of `sinTwoTheta_complex`, reaching the ideal layer through
@@ -460,7 +460,7 @@ inside `dom A` with residual `R`, and `δ N(sin 2Θ) ≤ 2 N(H)` for every bound
 self-adjoint perturbation `H` and every measurable selection from the perturbed
 operator's spectrum.  Unbounded self-adjoint ambient operator, arbitrary Hilbert
 dimension, arbitrary source unitarily invariant norm, the whole gap. -/
-theorem sinTwoTheta_source_complex
+theorem sinTwoTheta_bothConclusions_complex
     {Hc : Type v} [NormedAddCommGroup Hc] [InnerProductSpace ℂ Hc] [CompleteSpace Hc]
     (N : SymmetricNormingFunction)
     (A : Hc →ₗ.[ℂ] Hc) (hA : IsSelfAdjoint A)
@@ -492,9 +492,9 @@ theorem sinTwoTheta_source_complex
       sinTwoTheta_ambient_complex N A hA Eop hEop B S hB hS hδ hgap hEmem⟩
 
 /-- **Davis--Kahan 1970, the `sin 2Θ` theorem over `ℝ`, both printed
-conclusions.**  The real sibling of `sinTwoTheta_source_complex`, at the same
+conclusions.**  The real sibling of `sinTwoTheta_bothConclusions_complex`, at the same
 strength. -/
-theorem sinTwoTheta_source_real
+theorem sinTwoTheta_bothConclusions_real
     {Er : Type v} [NormedAddCommGroup Er] [InnerProductSpace ℝ Er] [CompleteSpace Er]
     (N : SymmetricNormingFunction)
     (A : Er →ₗ.[ℝ] Er) (hA : IsSelfAdjoint A)

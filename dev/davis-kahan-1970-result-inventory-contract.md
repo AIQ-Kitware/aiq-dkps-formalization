@@ -51,7 +51,7 @@ result.
 
 Where a source formulation and the Lean formulation are equivalent but the
 equivalence is not apparent from the theorem types, an explicit correspondence
-lemma must be supplied.  `lowerFrameBound_iff_source_operator_inequality` is the
+lemma must be supplied.  `lowerFrameBound_iff_operator_inequality` is the
 model: the source prints Theorem 6.1's hypothesis as `E₀* E₀ ≥ ε² I` while the
 Lean statement takes `LowerFrameBound E₀ ε`, and that theorem is why a reviewer
 does not have to accept the equivalence informally.

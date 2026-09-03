@@ -3298,15 +3298,15 @@
       "present_in_distributable_spec": true,
       "restored_in_2026_08_12_pdf_reaudit": false,
       "formalization_role": "non_result",
-      "formalization_role_reason": "RECLASSIFIED 2026-08-31 (second pass), under the corrected statement_boundary. \"Proposition 6.1 and Theorem 6.1 admit the analogous relaxation\" states that an extension holds; the paper gives no separate proof for it and does not restate Proposition 6.1 with the relaxed hypothesis. It is an extension remark around a counted result, so it is `result_adjacent_extension` rather than scope of Proposition 6.1. The split of the Appendix sine paragraph into three atoms is kept: they are separately reviewable source claims, which is what the fidelity ledger is for. `proposition6_1_commonDomain_source_complex` and `..._real` are compiled and registered as supporting evidence.",
+      "formalization_role_reason": "RECLASSIFIED 2026-08-31 (second pass), under the corrected statement_boundary. \"Proposition 6.1 and Theorem 6.1 admit the analogous relaxation\" states that an extension holds; the paper gives no separate proof for it and does not restate Proposition 6.1 with the relaxed hypothesis. It is an extension remark around a counted result, so it is `result_adjacent_extension` rather than scope of Proposition 6.1. The split of the Appendix sine paragraph into three atoms is kept: they are separately reviewable source claims, which is what the fidelity ledger is for. `proposition6_1_commonDomain_complex` and `..._real` are compiled and registered as supporting evidence.",
       "formalization_role_reason_code": "post_result_consequence_not_in_printed_statement",
       "formalization_result_ids": [],
       "scope_classification": {
         "category": "result_adjacent_extension",
         "extends_results": [],
-        "rationale": "RECLASSIFIED 2026-08-31 (second pass), under the corrected statement_boundary. \"Proposition 6.1 and Theorem 6.1 admit the analogous relaxation\" states that an extension holds; the paper gives no separate proof for it and does not restate Proposition 6.1 with the relaxed hypothesis. It is an extension remark around a counted result, so it is `result_adjacent_extension` rather than scope of Proposition 6.1. The split of the Appendix sine paragraph into three atoms is kept: they are separately reviewable source claims, which is what the fidelity ledger is for. `proposition6_1_commonDomain_source_complex` and `..._real` are compiled and registered as supporting evidence.",
+        "rationale": "RECLASSIFIED 2026-08-31 (second pass), under the corrected statement_boundary. \"Proposition 6.1 and Theorem 6.1 admit the analogous relaxation\" states that an extension holds; the paper gives no separate proof for it and does not restate Proposition 6.1 with the relaxed hypothesis. It is an extension remark around a counted result, so it is `result_adjacent_extension` rather than scope of Proposition 6.1. The split of the Appendix sine paragraph into three atoms is kept: they are separately reviewable source claims, which is what the fidelity ledger is for. `proposition6_1_commonDomain_complex` and `..._real` are compiled and registered as supporting evidence.",
         "source_quote": "Proposition~6.1 and Theorem~6.1 admit the analogous relaxation.",
-        "stronger_lean_coverage": "TauCeti.DavisKahan1970.proposition6_1_commonDomain_source_complex"
+        "stronger_lean_coverage": "TauCeti.DavisKahan1970.proposition6_1_commonDomain_complex"
       }
     },
     {

@@ -26,14 +26,14 @@ namespace ExactSinTheta
 #check RealCommonCoreTheorem61Data.result_every_unitarilyInvariantNorm_across
 #check RealCommonCoreTheorem62Data.result_across
 #check spectrum_directedAngleBlockC_subset_Icc
-#check sineDefinedDirectedAngleC_eq_source
+#check sineDefinedDirectedAngleC_eq_directedAngleBlockC
 #check sourceDirectedAngleC_eq_arcsin_sineModulus
 #check sourceDirectedAngleR_eq_arcsin_sineModulus
 
 #print axioms CommonCoreResidualData.extends_to_domain
 #print axioms CommonCoreTheorem61Data.result_every_unitarilyInvariantNorm_across
 #print axioms CommonCoreTheorem62Data.result_across
-#print axioms sineDefinedDirectedAngleC_eq_source
+#print axioms sineDefinedDirectedAngleC_eq_directedAngleBlockC
 
 end ExactSinTheta
 end DavisKahan

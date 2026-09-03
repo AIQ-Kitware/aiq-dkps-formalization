@@ -44,7 +44,7 @@ operator only through its complete singular-value sequence.  The real conclusion
 is therefore stated on the **projector difference** `P_V − P_U`, whose
 approximation numbers are the sines of the principal angles.  That is not a
 weaker statement, and it is not a different one:
-`sinAngleOperatorC` is by definition `|P_U − P_V|`, so `proposition6_1_source_projectorDifference_complex`
+`sinAngleOperatorC` is by definition `|P_U − P_V|`, so `proposition6_1_projectorDifference_complex`
 below states the *same* conclusion over `ℂ`, and the complex and real surfaces
 are visibly one theorem.
 
@@ -89,7 +89,7 @@ The conclusion is on the paper's literal `sin Θ`,
 `cfc Real.sin (angleOperatorC U V)`.  Nothing about the proof's
 organisation is visible: no `SymmetricSinThetaProblem`, no
 `UnboundedSinThetaData`, no Ky Fan family. -/
-theorem proposition6_1_source_complex
+theorem proposition6_1_complex
     (N : SymmetricNormingFunction)
     {A B : E →L[ℂ] E} (hA : A.IsSymmetric) (hB : B.IsSymmetric)
     {U V : Submodule ℂ E} [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
@@ -129,7 +129,7 @@ theorem proposition6_1_source_complex
 singular values of its argument, so this is the same estimate on `P_V − P_U`.
 It is stated because it is the shape the real theorem below has, which is what
 makes the two fields visibly one theorem. -/
-theorem proposition6_1_source_projectorDifference_complex
+theorem proposition6_1_projectorDifference_complex
     (N : SymmetricNormingFunction)
     {A B : E →L[ℂ] E} (hA : A.IsSymmetric) (hB : B.IsSymmetric)
     {U V : Submodule ℂ E} [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
@@ -145,7 +145,7 @@ theorem proposition6_1_source_projectorDifference_complex
     N.Mem (V.starProjection - U.starProjection) ∧
       δ * N.gauge (V.starProjection - U.starProjection) ≤ N.gauge (B - A) := by
   obtain ⟨hmem, hle⟩ :=
-    proposition6_1_source_complex N hA hB hU hV hδ hgapUV hgapVU hMem
+    proposition6_1_complex N hA hB hU hV hδ hgapUV hgapVU hMem
   have hflip : U.starProjection - V.starProjection
       = -(V.starProjection - U.starProjection) := by abel
   have hext : N.extendedGauge (sinAngleOperatorC U V)
@@ -174,7 +174,7 @@ variable {E : Type v} [NormedAddCommGroup E] [InnerProductSpace ℝ E] [Complete
 
 /-- **Davis--Kahan 1970, Proposition 6.1, over `ℝ`.**
 
-The same theorem as `proposition6_1_source_projectorDifference_complex`, over a
+The same theorem as `proposition6_1_projectorDifference_complex`, over a
 real Hilbert space, with the same hypotheses and the same conclusion on the
 projector difference `P_V − P_U`, whose approximation numbers are the sines of
 the principal angles between `U` and `V`.
@@ -183,7 +183,7 @@ No functional calculus, no complexification and no representative supplied by
 the caller occurs in the statement.  The proof runs through
 `crossSineSum`, which the source real development computes with, and
 transports the conclusion off it. -/
-theorem proposition6_1_source_real
+theorem proposition6_1_real
     (N : SymmetricNormingFunction)
     {A B : E →L[ℝ] E} (hA : A.IsSymmetric) (hB : B.IsSymmetric)
     {U V : Submodule ℝ E} [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
@@ -256,7 +256,7 @@ conclusion is the same as in the bounded case, on the paper's literal `sin Θ`.
 
 `Proposition6_1_commonDomain_ofBounded` records that the bounded inputs are an
 instance, so this is a genuine relaxation rather than a parallel statement. -/
-theorem proposition6_1_commonDomain_source_complex
+theorem proposition6_1_commonDomain_complex
     (N : SymmetricNormingFunction)
     {A B : E →ₗ.[ℂ] E} (hA : IsSelfAdjoint A) (hB : IsSelfAdjoint B)
     {U V : Submodule ℂ E} [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
@@ -296,9 +296,9 @@ theorem proposition6_1_commonDomain_source_complex
 relaxation, over `ℝ`.**
 
 The real sibling, with the conclusion on the projector difference `P_V − P_U`,
-matching `proposition6_1_source_real`.  The proof runs through
+matching `proposition6_1_real`.  The proof runs through
 `crossSineSum` and transports the conclusion off it. -/
-theorem proposition6_1_commonDomain_source_real
+theorem proposition6_1_commonDomain_real
     {Er : Type v} [NormedAddCommGroup Er] [InnerProductSpace ℝ Er] [CompleteSpace Er]
     (N : SymmetricNormingFunction)
     {A B : Er →ₗ.[ℝ] Er} (hA : IsSelfAdjoint A) (hB : IsSelfAdjoint B)
@@ -359,7 +359,7 @@ The two capability binders are the Sylvester estimate and the min--max lower
 bound: both are instances at `ℝ` and at `ℂ`, so at either field they are
 discharged by instance search and nothing is assumed that was not already
 proved. -/
-theorem proposition6_1_commonDomain_source_projectorDifference
+theorem proposition6_1_commonDomain_projectorDifference
     [ContinuousLinearMap.HasMinMaxLowerBoundEverywhere.{u, v} 𝕜]
     [HasUnboundedSylvesterKyFan.{u, v} 𝕜]
     (N : SymmetricNormingFunction)

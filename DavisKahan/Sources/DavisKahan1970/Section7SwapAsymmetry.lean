@@ -147,7 +147,7 @@ theorem section7SwapSinTwoTheta0_gauge (N : SymmetricNormingFunction) :
   exact N.gauge_rankOne hV.1 hV.2
 
 /-- The two sides highlighted by Davis--Kahan are exactly `2` and `delta`. -/
-theorem section7Swap_source_quantities (N : SymmetricNormingFunction) (delta : ℝ) :
+theorem section7Swap_quantities (N : SymmetricNormingFunction) (delta : ℝ) :
     2 * N.gauge section7SwapResidual = 2 ∧
       delta * N.gauge section7SwapSinTwoTheta0 = delta := by
   rw [section7SwapResidual_gauge, section7SwapSinTwoTheta0_gauge]

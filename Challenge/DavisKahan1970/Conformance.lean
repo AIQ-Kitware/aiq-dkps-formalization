@@ -113,7 +113,7 @@ variable {F : Type*} [NormedAddCommGroup F] [InnerProductSpace 𝕜 F]
   [FiniteDimensional 𝕜 F]
 
 /-- Finite source-shaped directed `tan Theta` Ritz-residual theorem. -/
-theorem partIII_tanTheta_source_uiNorm
+theorem partIII_tanTheta_uiNorm
     (N : RectangularUnitarilyInvariantSeminorm 𝕜 F E)
     {A : E →ₗ[𝕜] E} (hA : A.IsSymmetric)
     {U : Submodule 𝕜 E} [U.HasOrthogonalProjection] (hU : IsInvariant A U)

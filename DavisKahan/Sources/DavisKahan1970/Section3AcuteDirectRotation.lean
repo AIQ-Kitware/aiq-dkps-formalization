@@ -167,7 +167,7 @@ direct-rotation crossed-block identity from Definition 3.1(ii), and property
 hypothesis, equation (3.8), standing dimension assumption (1.5), finite-
 dimensional hypothesis, or scalar-field specialization is present in the
 statement. -/
-theorem proposition3_1_source (hacute : TauCeti.IsAcute U V) :
+theorem proposition3_1 (hacute : TauCeti.IsAcute U V) :
     acute_directRotation U V ∈ unitary (H →L[𝕜] H) ∧
       acute_directRotation U V * U.starProjection =
         V.starProjection * acute_directRotation U V ∧
@@ -274,7 +274,7 @@ hypotheses are the minimal strengthening; with them the operator squares to the
 reflection product and the square-root branch is fixed by accretivity.
 
 The printed proposition at its own hypothesis, `TauCeti.IsAcute` rather than the
-strictly stronger uniform gap, is `proposition3_1_source` above; this is the
+strictly stronger uniform gap, is `proposition3_1` above; this is the
 `IsUniformlyAcute` form stated against `spectraDirectRotation`. -/
 theorem proposition3_1_positivity_characterization
     (hacute : DavisKahan.IsUniformlyAcute U V) (T : H →L[ℂ] H)

@@ -279,7 +279,7 @@ infinite-dimensional aliases exist and are build-guarded, so the mitigation is r
 | `tan θ` directed | `theorem6_3_generalizedTanTheta_equalRank_spectral`, `theorem6_3_all_kyFan_core` | EXACT (acuteness **derived**, `isTransverse_of_tanThetaIntervalGap`) |
 | `tan θ` ambient | `tanTheta_ambient_bounded_paperUINorm_complex_of_transversality` | NARROWER (acuteness assumed) |
 | Example 6.1 (one-sidedness of `Λ₁` essential) | — | **ABSENT** |
-| Thm 6.3 | `Theorem6_3` (`[RCLike]`, real+complex, every rectangular UI seminorm, but `[FiniteDimensional]` on both spaces); `theorem6_3_generalizedTanTheta_source_ideal` (`ℂ`, infinite ambient, `[FiniteDimensional ℂ ↥Z]`) | Split; `A₀ = E₀*(A+H)E₀` faithfully rendered |
+| Thm 6.3 | `Theorem6_3` (`[RCLike]`, real+complex, every rectangular UI seminorm, but `[FiniteDimensional]` on both spaces); `theorem6_3_generalizedTanTheta_ideal` (`ℂ`, infinite ambient, `[FiniteDimensional ℂ ↥Z]`) | Split; `A₀ = E₀*(A+H)E₀` faithfully rendered |
 | Thm 6.3 at arbitrary trial dimension | `theorem6_3_infiniteTrial_of_formBounds`, `theorem6_3_infiniteTrial_spectral_exists` | **YES** — and it drops `rank Z < rank V` entirely, so the `[FiniteDimensional ℂ ↥Z]` elsewhere is not a real limitation |
 | Appendix: sin θ with infinite interval `(−∞,α]` | `FormBoundedSylvesterGap` constructors feeding `Theorem6_1_complex`/`6_2` | EXACT |
 | Appendix: bounded continuous extension of `R` on a common dense domain | `Theorem6_{1,2}_common{Domain,Core}` + all four real twins | EXACT |
@@ -315,7 +315,7 @@ infinite-dimensional aliases exist and are build-guarded, so the mitigation is r
 | 8.2's appeal to Krein's completion | `Frontier.Krein.exists_selfAdjoint_completion_eq_norm_restriction` | **PROVED, not assumed** — axiom-clean |
 | Closing: `sin 2θ` extends to `dim X(E₀) < dim X(F₀)` (L2559) | — | **ABSENT**, and has **no census row** (tracked only inside `S2-sin-two-theta`'s prose) |
 | Closing: "no corresponding `tan 2θ` extension is known" | — | correctly not an obligation |
-| Closing prose (off-diagonal perturbation moving all eigenvectors must move eigenvalues) | `theorem8_1_upperApproximationRepulsion_source` | EXACT (a reading of (ii)) |
+| Closing prose (off-diagonal perturbation moving all eigenvectors must move eigenvalues) | `theorem8_1_upperApproximationRepulsion` | EXACT (a reading of (ii)) |
 
 `PerturbationHalfGapBridge` / `ResidualHalfGapBridge` **do** carry the conclusion as a field and are
 inhabited only from an extra quantitative hypothesis — but **no source-facing Section 8 theorem takes
@@ -552,7 +552,7 @@ Where census prose disagrees with what elaborates, **the build wins**.
 29. **Non-census stale prose that contradicts the build** (three instances):
     * `DavisKahan/Sources/DavisKahan1970/TanTheta.lean:50` says the general-Hilbert-space
       unitary-invariant-ideal conclusion of Theorem 6.3 *"is not yet compiled"*. It is
-      (`theorem6_3_generalizedTanTheta_source_ideal`, `theorem6_3_infiniteTrial_of_formBounds`).
+      (`theorem6_3_generalizedTanTheta_ideal`, `theorem6_3_infiniteTrial_of_formBounds`).
     * `DavisKahan/Geometry/Angle/TanAngleFunctionalCalculus.lean` carries an "## Open obligation" section saying the
       whole-space `tan Θ` estimate *"is **not** proved here"* — landed yesterday in
       `Sources/DavisKahan1970/TanThetaWholeSpace.lean`.

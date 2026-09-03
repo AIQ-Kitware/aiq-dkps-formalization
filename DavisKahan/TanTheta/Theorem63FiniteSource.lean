@@ -843,7 +843,7 @@ records the effective content of the paper's strict Hilbert-dimension
 assumption under its global separability convention.  The separate strict-rank
 hypothesis preserves that source condition explicitly; no symmetric acuteness
 is inferred from it. -/
-theorem theorem6_3_generalizedTanTheta_source_ideal
+theorem theorem6_3_generalizedTanTheta_ideal
     (N : KyFanDominantIdealFamily (𝕜 := ℂ))
     (T : H →L[ℂ] H) (hT : T.IsSymmetric)
     (V Z : Submodule ℂ H) [V.HasOrthogonalProjection]
@@ -1086,10 +1086,10 @@ theorem theorem6_3_all_kyFan_core_directedTangent
 
 /-- **Theorem 6.3 at ideal-gauge scope, unconditionally.**
 
-`theorem6_3_generalizedTanTheta_source_ideal` with the tangent representative
+`theorem6_3_generalizedTanTheta_ideal` with the tangent representative
 supplied rather than assumed.  Every hypothesis here is one Davis and Kahan
 state. -/
-theorem theorem6_3_generalizedTanTheta_source_ideal_directedTangent
+theorem theorem6_3_generalizedTanTheta_ideal_directedTangent
     (N : ExactSinTheta.KyFanDominantIdealFamily (𝕜 := ℂ))
     (T : H →L[ℂ] H) (hT : T.IsSymmetric)
     (hV : T.Reduces V)
@@ -1120,7 +1120,7 @@ theorem theorem6_3_generalizedTanTheta_source_ideal_directedTangent
       (alpha + delta) * ‖y‖ ^ 2 ≤ RCLike.re ⟪T y, y⟫_ℂ := fun y hy =>
     SpectralOrder.Complex.le_re_inner_on_subspace_of_restriction_spectrum_subset_Ici
       hT (hV.orthogonalComplement).1 hUnwantedSpectrum hy
-  exact theorem6_3_generalizedTanTheta_source_ideal N T hT V Z hV
+  exact theorem6_3_generalizedTanTheta_ideal N T hT V Z hV
     hStrictDimension hbetaalpha hdelta hCompressionSpectrum hUnwantedSpectrum
     (theorem63DirectedTangent Z V)
     (hasTheorem63DirectedTangentApproximationNumbers_theorem63DirectedTangent

@@ -51,7 +51,7 @@ variable {F : Type*} [NormedAddCommGroup F] [InnerProductSpace 𝕜 F]
   [FiniteDimensional 𝕜 F]
 
 /-- Comparator-facing spelling of the printed finite tangent interval hypotheses. -/
-theorem partIII_tanTheta_source_uiNorm
+theorem partIII_tanTheta_uiNorm
     (N : RectangularUnitarilyInvariantSeminorm 𝕜 F E)
     {A : E →ₗ[𝕜] E} (hA : A.IsSymmetric)
     {U : Submodule 𝕜 E} [U.HasOrthogonalProjection] (hU : IsInvariant A U)
@@ -125,10 +125,10 @@ variable {E : Type v} [NormedAddCommGroup E] [InnerProductSpace ℂ E]
 
 This used to be a wrapper that built `SymmetricSinThetaProblem` inline.  The
 direct-hypothesis architecture it demonstrated now lives in production as
-`TauCeti.DavisKahan1970.proposition6_1_source_complex`, so this is an alias: the
+`TauCeti.DavisKahan1970.proposition6_1_complex`, so this is an alias: the
 comparator target and the library theorem are the same declaration, not two
 declarations with the same statement. -/
-alias sinTheta_wholeSpace_symmetricNorming := proposition6_1_source_complex
+alias sinTheta_wholeSpace_symmetricNorming := proposition6_1_complex
 
 end
 end DavisKahan1970
@@ -139,7 +139,7 @@ end TauCeti
 #print axioms TauCeti.DavisKahanTheory.partIII_sinTheta_residual_uiNorm
 #print axioms TauCeti.DavisKahanTheory.partIII_sinTheta_uiNorm
 #print axioms TauCeti.DavisKahan1970.sinTheta_wholeSpace_symmetricNorming
-#print axioms TauCeti.DavisKahanTheory.partIII_tanTheta_source_uiNorm
+#print axioms TauCeti.DavisKahanTheory.partIII_tanTheta_uiNorm
 #print axioms TauCeti.DavisKahan1970.tanTheta_directed_bounded_symmetricNorming_complex
 #print axioms TauCeti.DavisKahan1970.tanTheta_directed_bounded_spectralGap_symmetricNorming_complex
 #print axioms TauCeti.DavisKahan1970.tanTheta_ambient_bounded_symmetricNorming_complex_of_crossedDefects

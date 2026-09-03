@@ -19,7 +19,7 @@ proof of Proposition 3.4 discharges the positivity clause in that genuine
 operator sense: "we must still prove (i) and (ii), which for this case take the
 form `Q₋U²Q₋ ≥ 0` ...".
 
-`TauCeti.DavisKahan.proposition3_4_source_full_bundled_complex` concludes the
+`TauCeti.DavisKahan.proposition3_4_full_bundled_complex` concludes the
 weaker `IsDirectRotation` predicate, whose diagonal clauses record only a
 nonnegative real numerical range, `0 ≤ re ⟪x, (P T P) x⟫`.  Over a complex
 Hilbert space that does not even force the compression to be self-adjoint, so it
@@ -33,11 +33,11 @@ numerical-range signs then *are* operator positivity.  The argument was written
 for the real descent and lived privately in `Section3Proposition34Real.lean`; it
 is promoted here because the complex source statement needs it too.
 
-`proposition3_4_source_full_complex` is the resulting public complex
+`proposition3_4_full_complex` is the resulting public complex
 source-facing theorem, with the printed hypothesis `C₀² ≥ ½` and the full
 Definition 3.1 conclusion.  It adds no acuteness, compactness,
 finite-dimensionality, or separability hypothesis.  The real counterpart is
-`TauCeti.DavisKahan1970.proposition3_4_source_full_real`.
+`TauCeti.DavisKahan1970.proposition3_4_full_real`.
 -/
 
 open scoped InnerProductSpace ComplexOrder
@@ -132,11 +132,11 @@ defects are equivalent.  The inherited assumption is therefore implied by the
 result's own hypotheses rather than added to them.
 
 This is the machine-checkable form of that claim: the exact hypothesis list of
-`proposition3_4_source_full_complex` yields `CrossedDefectsEquivalent U V`.  The
+`proposition3_4_full_complex` yields `CrossedDefectsEquivalent U V`.  The
 census cites it as the discharge of the inherited scope, so the row can hold the
 standing source atom and still be locally self-contained without the two facts
 contradicting each other. -/
-theorem proposition3_4_source_crossedDefectsEquivalent_complex
+theorem proposition3_4_crossedDefectsEquivalent_complex
     (U V : Submodule ℂ H) [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
     (W : H →L[ℂ] H)
     (hunitary : W ∈ unitary (H →L[ℂ] H))
@@ -173,7 +173,7 @@ numerical-range predicate.
 
 No acuteness, uniform acuteness, compactness, finite-dimensionality, or
 separability hypothesis is used. -/
-theorem proposition3_4_source_full_complex
+theorem proposition3_4_full_complex
     (U V : Submodule ℂ H) [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
     (W : H →L[ℂ] H)
     (hunitary : W ∈ unitary (H →L[ℂ] H))
@@ -195,7 +195,7 @@ theorem proposition3_4_source_full_complex
         -star ((reflectedSubspace U V).starProjection * (W * W) *
           (reflectedSubspace U V)ᗮ.starProjection) := by
   have hpaper : IsDirectRotation (reflectedSubspace U V) V (W * W) :=
-    proposition3_4_source_full_bundled_complex U V W hunitary hintertwines
+    proposition3_4_full_bundled_complex U V W hunitary hintertwines
       hcrossed
       ((ContinuousLinearMap.nonneg_iff_isPositive _).mpr hsource_pos)
       ((ContinuousLinearMap.nonneg_iff_isPositive _).mpr hcomplement_pos) hcos
@@ -225,7 +225,7 @@ reached first: it is true and proved, but it is not the printed statement.
 It exhibits *an* unnamed acute pair, from a whole-space form bound, under an
 extra acuteness hypothesis on the reflected pair.  The printed statement names
 the pair `(Q₋ℋ, Qℋ)`, its hypothesis is `C₀² ≥ ½` on `Pℋ` alone, and it assumes
-nothing about the reflected pair; that is `proposition3_4_source` above, and
+nothing about the reflected pair; that is `proposition3_4` above, and
 `Section3Proposition34Printed.lean` records exactly which narrowings are removed.
 Both are kept because the census registers both. -/
 
