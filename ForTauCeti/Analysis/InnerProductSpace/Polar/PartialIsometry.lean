@@ -180,7 +180,7 @@ theorem modulus_apply_mem_polarInitial (M : E →L[𝕜] F) (x : E) :
   Submodule.le_topologicalClosure _ ⟨x, rfl⟩
 
 /-- The initial space is complete, being a topological closure.  This is what
-lets `polarPartialAux` be built by continuous extension. -/
+lets `polarInitialMap` be built by continuous extension. -/
 instance (M : E →L[𝕜] F) : CompleteSpace M.polarInitial :=
   Submodule.topologicalClosure.completeSpace _
 
@@ -219,14 +219,14 @@ theorem norm_apply_le_norm_modulusCorestrict (M : E →L[𝕜] F) (x : E) :
 
 /-- The isometry `|M| x ↦ M x`, extended from the dense range of the modulus to the whole
 initial space. -/
-noncomputable def polarPartialAux (M : E →L[𝕜] F) : M.polarInitial →L[𝕜] F :=
+noncomputable def polarInitialMap (M : E →L[𝕜] F) : M.polarInitial →L[𝕜] F :=
   M.toLinearMap.extendOfNorm M.modulusCorestrict
 
 /-- The extension undoes the modulus on the dense range: `W₀ (|M| x) = M x`.
 This is the defining property carried across by continuity. -/
 @[simp]
-theorem polarPartialAux_modulusCorestrict (M : E →L[𝕜] F) (x : E) :
-    M.polarPartialAux (M.modulusCorestrict x) = M x :=
+theorem polarInitialMap_modulusCorestrict (M : E →L[𝕜] F) (x : E) :
+    M.polarInitialMap (M.modulusCorestrict x) = M x :=
   LinearMap.extendOfNorm_eq M.denseRange_modulusCorestrict
     ⟨1, M.norm_apply_le_norm_modulusCorestrict⟩ x
 
@@ -235,13 +235,13 @@ theorem polarPartialAux_modulusCorestrict (M : E →L[𝕜] F) (x : E) :
 Isometric on `M.polarInitial` and zero on its orthogonal complement, with
 `M.polarPartial ∘L |M| = M` unconditionally. -/
 noncomputable def polarPartial (M : E →L[𝕜] F) : E →L[𝕜] F :=
-  M.polarPartialAux ∘L M.polarInitial.orthogonalProjectionOnto
+  M.polarInitialMap ∘L M.polarInitial.orthogonalProjectionOnto
 
 /-- `polarPartial` unfolded: project onto the initial space, then apply the
 continuous extension.  The projection is what makes `W` vanish off the initial
 space, i.e. on `ker M`. -/
 theorem polarPartial_apply (M : E →L[𝕜] F) (x : E) :
-    M.polarPartial x = M.polarPartialAux (M.polarInitial.orthogonalProjectionOnto x) := (rfl)
+    M.polarPartial x = M.polarInitialMap (M.polarInitial.orthogonalProjectionOnto x) := (rfl)
 /-- **The polar identity.**  `M = W |M|` with `W` the polar partial isometry, for every
 bounded `M` and with no invertibility hypothesis. -/
 @[simp]
@@ -253,7 +253,7 @@ theorem polarPartial_apply_modulus (M : E →L[𝕜] F) (x : E) :
       = M.modulusCorestrict x := by
     apply Subtype.ext
     simpa using Submodule.starProjection_eq_self_iff.mpr hmem
-  rw [hproj, polarPartialAux_modulusCorestrict]
+  rw [hproj, polarInitialMap_modulusCorestrict]
 
 /-- **The polar identity in composed form**: `W ∘L |M| = M`, unconditionally.
 The pointwise version is `polarPartial_apply_modulus`; this is the form that
@@ -272,12 +272,12 @@ theorem inner_modulus_left (M : E →L[𝕜] F) (x z : E) :
 
 /-- The extension is an isometry on the whole initial space: it is one on the dense range
 of the modulus, and both sides are continuous. -/
-theorem norm_polarPartialAux_apply (M : E →L[𝕜] F) (y : M.polarInitial) :
-    ‖M.polarPartialAux y‖ = ‖y‖ := by
-  have heq : Set.EqOn (fun z : M.polarInitial => ‖M.polarPartialAux z‖)
+theorem norm_polarInitialMap_apply (M : E →L[𝕜] F) (y : M.polarInitial) :
+    ‖M.polarInitialMap y‖ = ‖y‖ := by
+  have heq : Set.EqOn (fun z : M.polarInitial => ‖M.polarInitialMap z‖)
       (fun z : M.polarInitial => ‖z‖) (Set.range M.modulusCorestrict) := by
     rintro _ ⟨x, rfl⟩
-    simp only [polarPartialAux_modulusCorestrict]
+    simp only [polarInitialMap_modulusCorestrict]
     exact (M.norm_modulus_apply x).symm
   exact congrFun (Continuous.ext_on M.denseRange_modulusCorestrict
     (by fun_prop) (by fun_prop) heq) y
@@ -289,7 +289,7 @@ theorem norm_polarPartial_apply_of_mem (M : E →L[𝕜] F) {y : E} (hy : y ∈ 
   have hproj : M.polarInitial.orthogonalProjectionOnto y = ⟨y, hy⟩ := by
     apply Subtype.ext
     simpa using Submodule.starProjection_eq_self_iff.mpr hy
-  rw [hproj, M.norm_polarPartialAux_apply ⟨y, hy⟩]
+  rw [hproj, M.norm_polarInitialMap_apply ⟨y, hy⟩]
   rfl
 
 /-- The polar partial isometry vanishes off the initial space. -/
@@ -510,15 +510,15 @@ theorem isIdempotentElem_polarPartial_comp_adjoint (M : E →L[𝕜] F) :
     _ = M.polarPartial ∘L M.polarPartial.adjoint := by rw [h]
 
 /-- The partial isometry, bundled as a `LinearIsometry` on the initial space. -/
-noncomputable def polarLinearIsometryAux (M : E →L[𝕜] F) :
+noncomputable def polarInitialIsometry (M : E →L[𝕜] F) :
     M.polarInitial →ₗᵢ[𝕜] F where
-  toLinearMap := M.polarPartialAux.toLinearMap
-  norm_map' := M.norm_polarPartialAux_apply
+  toLinearMap := M.polarInitialMap.toLinearMap
+  norm_map' := M.norm_polarInitialMap_apply
 
 /-- Every vector in the range of the partial isometry already comes from the initial
 space, because the projection is the identity there. -/
-theorem range_polarPartial_eq_range_aux (M : E →L[𝕜] F) :
-    Set.range M.polarPartial = Set.range M.polarPartialAux := by
+theorem range_polarPartial_eq_range_polarInitialMap (M : E →L[𝕜] F) :
+    Set.range M.polarPartial = Set.range M.polarInitialMap := by
   apply Set.Subset.antisymm
   · rintro _ ⟨x, rfl⟩
     exact ⟨M.polarInitial.orthogonalProjectionOnto x, rfl⟩
@@ -533,10 +533,10 @@ theorem range_polarPartial_eq_range_aux (M : E →L[𝕜] F) :
 initial space, and that space is complete. -/
 theorem isClosed_range_polarPartial (M : E →L[𝕜] F) :
     IsClosed (Set.range M.polarPartial) := by
-  rw [M.range_polarPartial_eq_range_aux]
-  have hrange : Set.range M.polarPartialAux = Set.range M.polarLinearIsometryAux := (rfl)
+  rw [M.range_polarPartial_eq_range_polarInitialMap]
+  have hrange : Set.range M.polarInitialMap = Set.range M.polarInitialIsometry := (rfl)
   rw [hrange, ← Set.image_univ]
-  exact ((LinearIsometry.isComplete_image_iff M.polarLinearIsometryAux).mpr
+  exact ((LinearIsometry.isComplete_image_iff M.polarInitialIsometry).mpr
     isComplete_univ).isClosed
 
 /-- **The range of the partial isometry is the closure of the range of `M`** — the *final*
@@ -548,19 +548,19 @@ theorem range_polarPartial (M : E →L[𝕜] F) :
   · rintro _ ⟨y, rfl⟩
     have hclosed : IsClosed
         {w : M.polarInitial |
-          M.polarPartialAux w ∈ (LinearMap.range M.toLinearMap).topologicalClosure} :=
-      (Submodule.isClosed_topologicalClosure _).preimage M.polarPartialAux.continuous
-    have hgen : ∀ x : E, M.polarPartialAux (M.modulusCorestrict x)
+          M.polarInitialMap w ∈ (LinearMap.range M.toLinearMap).topologicalClosure} :=
+      (Submodule.isClosed_topologicalClosure _).preimage M.polarInitialMap.continuous
+    have hgen : ∀ x : E, M.polarInitialMap (M.modulusCorestrict x)
         ∈ (LinearMap.range M.toLinearMap).topologicalClosure := by
       intro x
-      rw [polarPartialAux_modulusCorestrict]
+      rw [polarInitialMap_modulusCorestrict]
       exact Submodule.le_topologicalClosure _ ⟨x, rfl⟩
     -- states the goal with the definition unfolded, in the shape the next step needs;
     -- there is no `_apply` lemma to rewrite with here.
     change M.polarPartial y ∈ _
     rw [polarPartial_apply]
     exact M.denseRange_modulusCorestrict.induction_on
-      (p := fun w => M.polarPartialAux w ∈
+      (p := fun w => M.polarInitialMap w ∈
         (LinearMap.range M.toLinearMap).topologicalClosure)
       (M.polarInitial.orthogonalProjectionOnto y) hclosed hgen
   · refine Submodule.topologicalClosure_minimal _ ?_ ?_

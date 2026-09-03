@@ -194,8 +194,8 @@
         "TauCeti.DavisKahan1970.tanTheta_ambient_bounded_symmetricNorming_real_of_transversality",
         "TauCeti.DavisKahan1970.tanTheta_ambient_bounded_symmetricNorming_complex_of_crossedDefects",
         "TauCeti.DavisKahan1970.tanTheta_ambient_unboundedOperator_boundedRitz_symmetricNorming_complex",
-        "TauCeti.DavisKahan1970.tanTheta_ambient_unboundedRitz_raw_symmetricNorming_complex",
-        "TauCeti.DavisKahan1970.tanTheta_ambient_unboundedRitz_raw_symmetricNorming_real"
+        "TauCeti.DavisKahan1970.tanTheta_ambient_unboundedRitz_explicitCompatibility_symmetricNorming_complex",
+        "TauCeti.DavisKahan1970.tanTheta_ambient_unboundedRitz_explicitCompatibility_symmetricNorming_real"
       ],
       "audit_clauses": [
         {
@@ -212,8 +212,8 @@
             "TauCeti.DavisKahan1970.tanTheta_ambient_bounded_symmetricNorming_complex_of_transversality",
             "TauCeti.DavisKahan1970.tanTheta_ambient_bounded_symmetricNorming_real_of_transversality",
             "TauCeti.DavisKahan1970.tanTheta_ambient_unboundedOperator_boundedRitz_symmetricNorming_complex",
-            "TauCeti.DavisKahan1970.tanTheta_ambient_unboundedRitz_raw_symmetricNorming_complex",
-            "TauCeti.DavisKahan1970.tanTheta_ambient_unboundedRitz_raw_symmetricNorming_real"
+            "TauCeti.DavisKahan1970.tanTheta_ambient_unboundedRitz_explicitCompatibility_symmetricNorming_complex",
+            "TauCeti.DavisKahan1970.tanTheta_ambient_unboundedRitz_explicitCompatibility_symmetricNorming_real"
           ]
         }
       ],
@@ -1535,8 +1535,8 @@
         "TauCeti.DavisKahan1970.Theorem6_1_real_commonCore",
         "TauCeti.DavisKahan1970.Theorem6_2_real_commonDomain",
         "TauCeti.DavisKahan1970.Theorem6_2_real_commonCore",
-        "TauCeti.DavisKahan1970.tanTheta_ambient_unboundedRitz_raw_symmetricNorming_complex",
-        "TauCeti.DavisKahan1970.tanTheta_ambient_unboundedRitz_raw_symmetricNorming_real"
+        "TauCeti.DavisKahan1970.tanTheta_ambient_unboundedRitz_explicitCompatibility_symmetricNorming_complex",
+        "TauCeti.DavisKahan1970.tanTheta_ambient_unboundedRitz_explicitCompatibility_symmetricNorming_real"
       ],
       "audit_clauses": [
         {
@@ -1549,8 +1549,8 @@
             "TauCeti.DavisKahan1970.Theorem6_1_real_commonCore",
             "TauCeti.DavisKahan1970.Theorem6_2_real_commonDomain",
             "TauCeti.DavisKahan1970.Theorem6_2_real_commonCore",
-            "TauCeti.DavisKahan1970.tanTheta_ambient_unboundedRitz_raw_symmetricNorming_complex",
-            "TauCeti.DavisKahan1970.tanTheta_ambient_unboundedRitz_raw_symmetricNorming_real"
+            "TauCeti.DavisKahan1970.tanTheta_ambient_unboundedRitz_explicitCompatibility_symmetricNorming_complex",
+            "TauCeti.DavisKahan1970.tanTheta_ambient_unboundedRitz_explicitCompatibility_symmetricNorming_real"
           ]
         }
       ],
@@ -2019,7 +2019,7 @@
           "review_declarations": [
             "TauCeti.DavisKahan1970.Section9.weinberger_sine_sq_le_of_coupled_energy",
             "TauCeti.DavisKahan1970.Section9.tangent_sq_le_of_weinberger_sine_sq",
-            "TauCeti.DavisKahan1970.Section9.naive_second_scalar_lower_bound_tripwire"
+            "TauCeti.DavisKahan1970.Section9.secondScalarLowerBound_angleBound_counterexample"
           ]
         },
         {
@@ -2085,8 +2085,8 @@
       "expected_verification": "proved_in_build",
       "tex_marker": "DK-9-infinite-residual-counterexample",
       "review_declarations": [
-        "TauCeti.DavisKahan1970.Section9.rawDiagonalImage_eq_one",
-        "TauCeti.DavisKahan1970.Section9.rawDiagonalImage_partial_energy",
+        "TauCeti.DavisKahan1970.Section9.geometricDiagonalImage_eq_one",
+        "TauCeti.DavisKahan1970.Section9.geometricDiagonalImage_partial_energy",
         "TauCeti.DavisKahan1970.Section9.truncatedDiagonalImage_energy",
         "TauCeti.DavisKahan1970.Section9.diagonalOperator",
         "TauCeti.DavisKahan1970.Section9.geometricTrial_notMem_diagonalDomain",
@@ -2098,8 +2098,8 @@
           "id": "DK-9-infinite-residual-counterexample.whole",
           "description": "Audit the complete registered source passage as one semantic unit; split further if the independent reviewer finds separable mathematical clauses.",
           "review_declarations": [
-            "TauCeti.DavisKahan1970.Section9.rawDiagonalImage_eq_one",
-            "TauCeti.DavisKahan1970.Section9.rawDiagonalImage_partial_energy",
+            "TauCeti.DavisKahan1970.Section9.geometricDiagonalImage_eq_one",
+            "TauCeti.DavisKahan1970.Section9.geometricDiagonalImage_partial_energy",
             "TauCeti.DavisKahan1970.Section9.truncatedDiagonalImage_energy",
             "TauCeti.DavisKahan1970.Section9.diagonalOperator",
             "TauCeti.DavisKahan1970.Section9.geometricTrial_notMem_diagonalDomain",

@@ -375,7 +375,7 @@ def addEquiv : E ≃+ ScalarTransport e E where
   map_add' _ _ := rfl
 
 /-- The additive identity intertwines the two scalar actions through `e`. -/
-theorem smul_compat (r : 𝕜) (x : E) :
+theorem addEquiv_smul (r : 𝕜) (x : E) :
     addEquiv (e := e) (r • x) = e r • addEquiv (e := e) x := by
   change of (e := e) (r • x) = e r • of (e := e) x
   rw [smul_def, e.toRingEquiv.symm_apply_apply]
@@ -392,7 +392,7 @@ theorem rank_eq (S : Submodule 𝕜 E) :
       right_inv := fun _ => rfl
       map_add' := fun _ _ => rfl }
     e.toRingEquiv.bijective
-    (fun r m => Subtype.ext (smul_compat (e := e) r (m : E)))
+    (fun r m => Subtype.ext (addEquiv_smul (e := e) r (m : E)))
 
 /-- Hence the rank of a transported map. -/
 theorem rank_clm_eq (T : E →L[𝕜] F) :

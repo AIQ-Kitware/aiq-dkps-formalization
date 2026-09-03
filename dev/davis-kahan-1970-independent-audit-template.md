@@ -617,9 +617,9 @@ The theorem is printed in Section 2, before (3.5) exists in the exposition, and 
 
 - `TauCeti.DavisKahan1970.tanTheta_ambient_bounded_symmetricNorming_complex_of_crossedDefects`
   - Carries `h35 : CrossedDefectsEquivalent U V`, the constructive form of (3.5) (an isometric equivalence of the two crossed defect spaces), and concludes both `N.Mem (tanAngleOperatorC U V)` and the sharp inequality. Membership in the norm's ideal is a conclusion, which is the explicit form of the source's vacuity convention.
-- `TauCeti.DavisKahan1970.tanTheta_ambient_unboundedRitz_raw_symmetricNorming_complex`
+- `TauCeti.DavisKahan1970.tanTheta_ambient_unboundedRitz_explicitCompatibility_symmetricNorming_complex`
   - Appendix-complete complex ambient endpoint. The Ritz compression is a genuinely unbounded self-adjoint closed operator semibounded above in form; the residual and perturbation are bounded. The lower-corner Ky Fan estimate is supplied by the Appendix truncation/release theorem, (3.5) supplies ambient transversality, and norm-ideal membership is concluded.
-- `TauCeti.DavisKahan1970.tanTheta_ambient_unboundedRitz_raw_symmetricNorming_real`
+- `TauCeti.DavisKahan1970.tanTheta_ambient_unboundedRitz_explicitCompatibility_symmetricNorming_real`
   - Real Appendix-complete ambient endpoint with a genuinely unbounded Ritz compression. The unbounded compression data are complexified only for the spectral-cutoff/Ky-Fan proof, while the source angle operator, perturbation, crossed-defect condition, and final PaperUI statement are real; the sharp factor-one inequality and ideal membership descend exactly.
 - `TauCeti.DavisKahan1970.tanTheta_ambient_unboundedOperator_boundedRitz_symmetricNorming_complex`
   - Complex specialization with an unbounded ambient self-adjoint operator but bounded Ritz compression. It retains the same (3.5) explicitation and sharp ambient conclusion; the stronger Appendix case is certified separately by the unboundedCompression endpoint.
@@ -644,7 +644,7 @@ In that configuration tan Theta is not a bounded operator and the displayed unit
 
 #### 9. Semantic conclusion recorded by the repository
 
-S2-tan-theta is a true counted result whose exact formal representation requires nonlocal source semantics that the repository makes explicit rather than assumes silently. The interpretation is accepted. Mathematical coverage now also includes the Appendix's genuinely unbounded Ritz-compression scope over both complex and real scalars through `tanTheta_ambient_unboundedRitz_raw_symmetricNorming_complex` and its real sibling.
+S2-tan-theta is a true counted result whose exact formal representation requires nonlocal source semantics that the repository makes explicit rather than assumes silently. The interpretation is accepted. Mathematical coverage now also includes the Appendix's genuinely unbounded Ritz-compression scope over both complex and real scalars through `tanTheta_ambient_unboundedRitz_explicitCompatibility_symmetricNorming_complex` and its real sibling.
 
 #### Independent interpretation checklist
 
@@ -756,8 +756,8 @@ The declarations that carry this result's printed statement, with the source ato
 - `TauCeti.DavisKahan1970.tanTheta_ambient_bounded_symmetricNorming_real_of_crossedDefects` — supporting_theorem
 - `TauCeti.DavisKahan1970.tanTheta_ambient_unboundedOperator_boundedRitz_symmetricNorming_complex` — supporting_theorem
 - `TauCeti.DavisKahan1970.tanTheta_ambient_unboundedOperator_boundedRitz_symmetricNorming_real` — supporting_theorem
-- `TauCeti.DavisKahan1970.tanTheta_ambient_unboundedRitz_raw_symmetricNorming_complex` — supporting_theorem
-- `TauCeti.DavisKahan1970.tanTheta_ambient_unboundedRitz_raw_symmetricNorming_real` — supporting_theorem
+- `TauCeti.DavisKahan1970.tanTheta_ambient_unboundedRitz_explicitCompatibility_symmetricNorming_complex` — supporting_theorem
+- `TauCeti.DavisKahan1970.tanTheta_ambient_unboundedRitz_explicitCompatibility_symmetricNorming_real` — supporting_theorem
 - `TauCeti.DavisKahan.UnboundedRitzPair` — implementation_structure
 - `TauCeti.DavisKahan.ReducingComplement` — supporting_theorem
 - `TauCeti.DavisKahan.UnboundedRitzPair.ofTrialBlock` — supporting_theorem
@@ -837,13 +837,13 @@ Source location candidates: `DavisKahan/Sources/DavisKahan1970/TanThetaUnbounded
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
-#### `TauCeti.DavisKahan1970.tanTheta_ambient_unboundedRitz_raw_symmetricNorming_complex`
+#### `TauCeti.DavisKahan1970.tanTheta_ambient_unboundedRitz_explicitCompatibility_symmetricNorming_complex`
 
 Source location candidates: `DavisKahan/Sources/DavisKahan1970/TanThetaUnboundedAmbient.lean:428`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
-#### `TauCeti.DavisKahan1970.tanTheta_ambient_unboundedRitz_raw_symmetricNorming_real`
+#### `TauCeti.DavisKahan1970.tanTheta_ambient_unboundedRitz_explicitCompatibility_symmetricNorming_real`
 
 Source location candidates: `DavisKahan/Sources/DavisKahan1970/TanThetaUnboundedAmbientReal.lean:346`
 
