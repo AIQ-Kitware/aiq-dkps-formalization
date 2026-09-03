@@ -1023,7 +1023,7 @@ theorem nonacuteDirectRotation_crossed_blocks
 
 /-- The explicit nonacute construction satisfies the paper's direct-rotation
 predicate. -/
-theorem nonacuteDirectRotation_isPaperDirectRotation
+theorem nonacuteDirectRotation_isDirectRotation
     (J : halmosSourceDefect U V ≃ₗᵢ[𝕜] halmosTargetDefect U V) :
     IsDirectRotation U V (nonacuteDirectRotation U V J) := by
   refine
@@ -1052,12 +1052,12 @@ theorem nonacuteDirectRotation_injective :
   simpa [nonacuteDirectRotation, hpolar] using hx
 
 /-- Constructive half of Davis--Kahan Proposition 3.2. -/
-theorem exists_paperDirectRotation_of_crossedDefectsEquivalent
+theorem exists_directRotation_of_crossedDefectsEquivalent
     (hdefect : CrossedDefectsEquivalent U V) :
     ∃ T : H →L[𝕜] H, IsDirectRotation U V T := by
   rcases hdefect with ⟨J⟩
   exact ⟨nonacuteDirectRotation U V J,
-    nonacuteDirectRotation_isPaperDirectRotation U V J⟩
+    nonacuteDirectRotation_isDirectRotation U V J⟩
 
 /-- A positive operator that has vanishing quadratic form at a vector
 annihilates that vector: write `S = √S · √S`, so `⟪x, S x⟫ = ‖√S x‖²`. -/
@@ -1120,7 +1120,7 @@ omit [Algebra ℝ (H →L[𝕜] H)] [IsScalarTower ℝ 𝕜 (H →L[𝕜] H)]
 /-- A paper direct rotation is **accretive**: `re⟪z, T z⟫ ≥ 0`.  The two diagonal
 `U`-blocks are the nonnegative compressions; the two off-diagonal blocks are
 adjoint-negatives of each other (crossed blocks), so their real parts cancel. -/
-theorem re_inner_paperDirectRotation_nonneg
+theorem re_inner_directRotation_nonneg
     (T : H →L[𝕜] H) (hT : IsDirectRotation U V T) (z : H) :
     0 ≤ RCLike.re ⟪z, T z⟫_𝕜 := by
   have hsplit : T = projection U * T * projection U
@@ -1166,7 +1166,7 @@ theorem directRotation_add_star_nonneg
   have e2 : RCLike.re ⟪star T x, x⟫_𝕜 = RCLike.re ⟪x, T x⟫_𝕜 := by
     rw [ContinuousLinearMap.star_eq_adjoint, ContinuousLinearMap.adjoint_inner_left]
   rw [e1, e2]
-  have := re_inner_paperDirectRotation_nonneg U V T hT x
+  have := re_inner_directRotation_nonneg U V T hT x
   linarith
 
 /-- A paper direct rotation maps the source defect into the target defect.
@@ -1319,7 +1319,7 @@ theorem directRotation_sq_apply_targetDefect
 
 /-- A paper direct rotation restricts to a linear isometric equivalence between
 the two crossed defects. -/
-noncomputable def crossedDefectEquivOfPaperDirectRotation
+noncomputable def crossedDefectEquivOfDirectRotation
     (T : H →L[𝕜] H) (hT : IsDirectRotation U V T) :
     halmosSourceDefect U V ≃ₗᵢ[𝕜] halmosTargetDefect U V where
   toFun x := ⟨T x, directRotation_mapsto_targetDefect U V T hT x.property⟩
@@ -1347,19 +1347,19 @@ noncomputable def crossedDefectEquivOfPaperDirectRotation
     exact Unitary.norm_map ⟨T, hunit⟩ x
 
 /-- Necessity half of Davis--Kahan Proposition 3.2. -/
-theorem crossedDefectsEquivalent_of_exists_paperDirectRotation
+theorem crossedDefectsEquivalent_of_exists_directRotation
     (h : ∃ T : H →L[𝕜] H, IsDirectRotation U V T) :
     CrossedDefectsEquivalent U V := by
   rcases h with ⟨T, hT⟩
-  exact ⟨crossedDefectEquivOfPaperDirectRotation U V T hT⟩
+  exact ⟨crossedDefectEquivOfDirectRotation U V T hT⟩
 
 /-- Davis--Kahan Proposition 3.2 in constructive Hilbert-dimension form. -/
 theorem proposition3_2_completed :
     (∃ T : H →L[𝕜] H, IsDirectRotation U V T) ↔
       CrossedDefectsEquivalent U V := by
   constructor
-  · exact crossedDefectsEquivalent_of_exists_paperDirectRotation U V
-  · exact exists_paperDirectRotation_of_crossedDefectsEquivalent U V
+  · exact crossedDefectsEquivalent_of_exists_directRotation U V
+  · exact exists_directRotation_of_crossedDefectsEquivalent U V
 
 /-- Explicit injective parameterization of all constructed extensions. -/
 theorem proposition3_2_parameterization_completed
@@ -1372,7 +1372,7 @@ theorem proposition3_2_parameterization_completed
   refine ⟨nonacuteDirectRotation U V, ?_,
     nonacuteDirectRotation_injective U V⟩
   intro J
-  exact nonacuteDirectRotation_isPaperDirectRotation U V J
+  exact nonacuteDirectRotation_isDirectRotation U V J
 
 end
 

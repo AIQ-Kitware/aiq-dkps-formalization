@@ -64,9 +64,9 @@ identities need neither and carry an `omit`.
 * `isSelfAdjoint_source_block_spectraDirectRotation`,
   `isSelfAdjoint_complement_block_spectraDirectRotation`
 * `norm_projection_apply_le_of_forall_mem_source`,
-  `norm_projection_apply_le_of_paperDirectRotation`
+  `norm_projection_apply_le_of_directRotation`
 * `re_inner_halmosCosineSq_self`,
-  `re_inner_halmosCosineSq_sub_half_nonneg_of_paperDirectRotation`,
+  `re_inner_halmosCosineSq_sub_half_nonneg_of_directRotation`,
   `re_inner_halmosCosineSq_sub_half_nonneg_of_source`
 * `reflectionOperator_mul_projection_self`, `projection_mul_reflectionOperator_self`
 * `nonneg_add_star_of_re_inner_nonneg`
@@ -196,7 +196,7 @@ rotation whose two diagonal compressions are self-adjoint.
 This is the direct-rotation form of `norm_projection_apply_le_of_forall_mem_source`.
 Definition 3.1 supplies the equality of the two crossed-block norms directly, so the result
 applies to the full nonacute direct-rotation scope. -/
-theorem norm_projection_apply_le_of_paperDirectRotation
+theorem norm_projection_apply_le_of_directRotation
     (T : H →L[ℂ] H) (hT : IsDirectRotation U V T)
     (hsource_sa : IsSelfAdjoint (projection U * T * projection U))
     (hcomplement_sa :
@@ -280,7 +280,7 @@ theorem re_inner_halmosCosineSq_self (x : H) :
 
 /-- The printed source-block half-angle bound yields the whole-space cosine-square bound for
 an arbitrary paper direct rotation with self-adjoint diagonal compressions. -/
-theorem re_inner_halmosCosineSq_sub_half_nonneg_of_paperDirectRotation
+theorem re_inner_halmosCosineSq_sub_half_nonneg_of_directRotation
     (T : H →L[ℂ] H) (hT : IsDirectRotation U V T)
     (hsource_sa : IsSelfAdjoint (projection U * T * projection U))
     (hcomplement_sa :
@@ -307,7 +307,7 @@ theorem re_inner_halmosCosineSq_sub_half_nonneg_of_paperDirectRotation
     rwa [Real.sqrt_sq (norm_nonneg _),
       Real.sqrt_sq (by positivity : (0 : ℝ) ≤ (Real.sqrt 2 / 2) * ‖y‖)] at hle
   have htgt : ∀ w ∈ Uᗮ, ‖projection V w‖ ≤ (Real.sqrt 2 / 2) * ‖w‖ := fun w hw =>
-    norm_projection_apply_le_of_paperDirectRotation U V T hT hsource_sa hcomplement_sa
+    norm_projection_apply_le_of_directRotation U V T hT hsource_sa hcomplement_sa
       hroot hsrc w hw
   have hx : ‖x‖ ^ 2 =
       ‖projection U x‖ ^ 2 + ‖complementaryProjection U x‖ ^ 2 :=

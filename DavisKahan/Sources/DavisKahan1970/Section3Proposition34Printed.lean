@@ -122,7 +122,7 @@ theorem proposition3_4_source_full_bundled_complex
         rw [mul_assoc]
   have hhalf : ∀ x : H,
       0 ≤ RCLike.re ⟪x, halmosCosineSq U V x⟫_ℂ - ‖x‖ ^ 2 / 2 :=
-    re_inner_halmosCosineSq_sub_half_nonneg_of_paperDirectRotation U V W hW
+    re_inner_halmosCosineSq_sub_half_nonneg_of_directRotation U V W hW
       hsp.isSelfAdjoint hcp.isSelfAdjoint hcos
   have hre : ∀ x : H, 0 ≤ RCLike.re ⟪(W * W) x, x⟫_ℂ := by
     intro x
