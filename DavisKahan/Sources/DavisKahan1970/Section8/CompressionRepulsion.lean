@@ -98,6 +98,23 @@ theorem lowerCompressionRepulsion_of_data
 
 end CompressionAlgebra
 
+/-! ### Paper-facing names for the algebraic cores
+
+These take an abstract quadratic-data record rather than the concrete
+direct-rotation blocks, so they are the algebraic cores of Theorem 8.1(i) and
+not evidence about the printed theorem; the source-facing statements are in
+`Section8/Presentation.lean`. -/
+
+/-- Algebraic core of Theorem 8.1(i), before the abstract quadratic data is
+instantiated with the direct-rotation sine and cosine blocks. -/
+alias theorem8_1_upperCompressionRepulsion_of_rotatedBlockData :=
+  upperCompressionRepulsion_of_data
+
+/-- Lower-block companion of the compression-repulsion inequality. -/
+alias theorem8_1_lowerCompressionRepulsion_of_rotatedBlockData :=
+  lowerCompressionRepulsion_of_data
+
+
 end Section8
 end DavisKahan1970
 end TauCeti

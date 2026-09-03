@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, OpenAI GPT-5.6 Thinking, Claude Opus 5
 -/
 
-import DavisKahan.Sources.DavisKahan1970.Section8.SourceTheorem81
+import DavisKahan.Sources.DavisKahan1970.Section8.Theorem81
 import DavisKahan.InfiniteDimensional.SinTheta.Continuation.CircleWitness
 import DavisKahan.Geometry.Angle.DoubleAngleGapBound
 import DavisKahan.SpectralTheory.CentralBand

@@ -411,9 +411,9 @@ The DK tree contains much more deep implementation history than YWS. The goal he
 | `DavisKahan/Sources/DavisKahan1970/GeneralSinTheta.lean` | `DavisKahan/Sources/DavisKahan1970/SineTheta/Generalized.lean` | rename/move | The file owns generalized sine-theta source aliases. |
 | `DavisKahan/Sources/DavisKahan1970/GeneralSinThetaExtensions.lean` | fold into `SineTheta/Generalized.lean`, then delete | fold/delete | It is already in the production aggregate; “optional extensions” is stale staging vocabulary. |
 | `DavisKahan/Sources/DavisKahan1970/PartIII.lean` | `DavisKahan/Sources/DavisKahan1970/PartIII/FiniteSpecialization.lean` | rename/move | The current file explicitly says it is only the finite specialization. Unqualified `PartIII` should not mean the weaker specialization. |
-| `DavisKahan/Sources/DavisKahan1970/PartIIIManuscriptSurface.lean` | `DavisKahan/Sources/DavisKahan1970/PartIII.lean` | rename into canonical slot | This is the broader source API and should own the unqualified name. Update its import of old `PartIII` to `PartIII.FiniteSpecialization`. |
+| `DavisKahan/Sources/DavisKahan1970/PartIIIPresentation.lean` | `DavisKahan/Sources/DavisKahan1970/PartIII.lean` | rename into canonical slot | This is the broader source API and should own the unqualified name. Update its import of old `PartIII` to `PartIII.FiniteSpecialization`. |
 | `DavisKahan/Sources/DavisKahan1970/FullPartIIIExtensions.lean` | fold into canonical `PartIII.lean`, then delete | fold/delete | Its own header says it is temporary until extensions are accepted; the production aggregate already imports it. |
-| `DavisKahan/Sources/DavisKahan1970/RemainingSourceSurface.lean` | `DavisKahan/Frontier/SourceEndpoints.lean` | move out of production source tree | The file contains open/frontier endpoint signatures and already declares `Frontier.RemainingSourceSurface`; it should not be a production source aggregate member. |
+| `DavisKahan/Sources/DavisKahan1970/RemainingSourceSurface.lean` | ~~`DavisKahan/Frontier/SourceEndpoints.lean`~~ | **SUPERSEDED 2026-09-03** | `Frontier/` is deleted, and after the census reached 29/29 the module's premise -- "statements that still lack an exact source wrapper" -- was false. It was split by mathematics instead, into `Section5BanachSylvester.lean`, `Section6Theorem63Presentation.lean` and `Section7IdealBounds.lean`, all inside the production source tree. |
 | `DavisKahan/Sources/DavisKahan1970/Section4FiniteSurface.lean` | `DavisKahan/Sources/DavisKahan1970/Section4FiniteSpecialization.lean` | rename | Its header explicitly says this is a finite specialization, not the Section 4 completion boundary. |
 | `DavisKahan/Sources/DavisKahan1970/Section9/ExampleCertificateSurface.lean` | `DavisKahan/Sources/DavisKahan1970/Section9/Certificate.lean` | rename | The header calls it an end-to-end certificate surface; “FullExample” is completion-state vocabulary. |
 | `DavisKahan/Sources/DavisKahan1970/Section9/NumericalResults.lean` | `DavisKahan/Sources/DavisKahan1970/Section9/NumericalResults.lean` | rename | The enclosing package is already the paper source package. |
@@ -438,7 +438,7 @@ git mv DavisKahan/Sources/DavisKahan1970/GeneralSinTheta.lean   DavisKahan/Sourc
 
 mkdir -p DavisKahan/Sources/DavisKahan1970/PartIII
 git mv DavisKahan/Sources/DavisKahan1970/PartIII.lean   DavisKahan/Sources/DavisKahan1970/PartIII/FiniteSpecialization.lean
-git mv DavisKahan/Sources/DavisKahan1970/PartIIIManuscriptSurface.lean   DavisKahan/Sources/DavisKahan1970/PartIII.lean
+git mv DavisKahan/Sources/DavisKahan1970/PartIIIPresentation.lean   DavisKahan/Sources/DavisKahan1970/PartIII.lean
 
 git mv DavisKahan/Sources/DavisKahan1970/Section4FiniteSurface.lean   DavisKahan/Sources/DavisKahan1970/Section4FiniteSpecialization.lean
 
@@ -455,7 +455,7 @@ git mv DavisKahan/Sources/DavisKahan1970/Audits/SineThetaSourceInventory.lean   
 git mv DavisKahan/Sources/DavisKahan1970/Audits/GeneralSinThetaExtensions.lean   DavisKahan/Sources/DavisKahan1970/Audits/SineThetaNaturalInputs.lean
 ```
 
-Move `RemainingSourceSurface.lean` separately in Phase D2 because that move changes the production/frontier ownership boundary rather than only the spelling.
+Move `RemainingSourceSurface.lean` separately in Phase D2 because that move changes the production/frontier ownership boundary rather than only the spelling.  (**Superseded 2026-09-03**: it was split by mathematics inside the production tree instead; see the row above.)
 
 ### Files deliberately excluded from this pattern
 

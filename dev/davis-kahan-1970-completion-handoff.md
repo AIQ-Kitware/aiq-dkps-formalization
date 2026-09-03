@@ -363,7 +363,7 @@ This should be the next M36 source theorem, not another operator-theory detour.
 
 #### B.1 Complex theorem to reuse
 
-`DavisKahan/Sources/DavisKahan1970/Section8/SourceTheorem81.lean` contains:
+`DavisKahan/Sources/DavisKahan1970/Section8/Theorem81.lean` contains:
 
 * `canonicalLowBranch`;
 * `Theorem81Conclusion`;

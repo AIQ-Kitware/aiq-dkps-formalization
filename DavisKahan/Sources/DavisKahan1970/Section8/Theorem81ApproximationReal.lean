@@ -6,7 +6,7 @@ Authors: Jon Crall, Claude Opus 5
 import DavisKahan.Sources.DavisKahan1970.Section8.Theorem81Approximation
 import DavisKahan.BoundedOperator.BlockShift
 import DavisKahan.OperatorIdeal.ComplexificationApproximation
-import DavisKahan.Sources.DavisKahan1970.Section8.SourceTheorem81Real
+import DavisKahan.Sources.DavisKahan1970.Section8.Theorem81Real
 
 /-!
 # Davis--Kahan 1970, Theorem 8.1(ii) over a REAL Hilbert space

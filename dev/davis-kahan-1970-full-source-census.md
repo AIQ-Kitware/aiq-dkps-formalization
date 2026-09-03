@@ -371,10 +371,6 @@ REOPENING WITHDRAWN 2026-08-31 and the rule corrected: a later source passage en
 - `TauCeti.DavisKahan.ExactTanTheta.UnboundedCompressionTrialData.ideal_of_formBounds`
 - `TauCeti.DavisKahan1970.theorem6_3_unboundedCompression_ideal_real`
 
-**Planned declarations:**
-
-- `TauCeti.DavisKahan.Experimental.Frontier.RemainingSourceSurface.tanTheta_source_ideal`
-
 **Curated source/Lean review:**
 
 *Setup*
@@ -3020,15 +3016,15 @@ REOPENING WITHDRAWN 2026-08-31 and the rule corrected: a later source passage en
 - `TauCeti.DavisKahan1970.bounded_sylvester_neumann_solution`
 - `TauCeti.DavisKahan1970.banach_sylvester_lower_bound`
 - `TauCeti.DavisKahan1970.banach_sylvester_lower_bound_uiNorm`
-- `TauCeti.DavisKahan1970.RemainingSourceSurface.theorem5_1_banach_sylvester`
-- `TauCeti.DavisKahan1970.RemainingSourceSurface.theorem5_1_banach_sylvester_interchanged`
-- `TauCeti.DavisKahan1970.RemainingSourceSurface.theorem5_1_banach_sylvester_unboundedA`
+- `TauCeti.DavisKahan1970.theorem5_1_banach_sylvester`
+- `TauCeti.DavisKahan1970.theorem5_1_banach_sylvester_interchanged`
+- `TauCeti.DavisKahan1970.theorem5_1_banach_sylvester_unboundedA`
 - `TauCeti.DavisKahan1970.banach_sylvester_lower_bound_interchanged`
 - `TauCeti.DavisKahan1970.banach_sylvester_lower_bound_unboundedA`
 - `TauCeti.DavisKahan1970.banach_sylvester_lower_bound_exact`
 - `TauCeti.DavisKahan1970.banach_sylvester_lower_bound_interchanged_exact`
-- `TauCeti.DavisKahan1970.RemainingSourceSurface.theorem5_1_banach_sylvester_exact`
-- `TauCeti.DavisKahan1970.RemainingSourceSurface.theorem5_1_banach_sylvester_interchanged_exact`
+- `TauCeti.DavisKahan1970.theorem5_1_banach_sylvester_exact`
+- `TauCeti.DavisKahan1970.theorem5_1_banach_sylvester_interchanged_exact`
 
 **Notes.** SOURCE-SURFACE HARDENING 2026-08-12: added literal bounded wrappers carrying a two-sided inverse operator `Ainv` (and symmetrically `Binv`) together with the printed inverse-norm bound. The reusable left/right-inverse theorems remain stronger internal engines; the new wrappers exist specifically so statement-level auditing does not have to infer equivalence from a weaker inverse datum.
 
