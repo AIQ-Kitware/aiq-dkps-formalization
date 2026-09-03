@@ -540,7 +540,7 @@ omit [CompleteSpace E] in
 /-- The Challenge's directed sine block *is* the development's. -/
 theorem directedSineBlock_eq (U V : Submodule ℂ E)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] :
-    directedSineBlock U V = TauCeti.DavisKahan.ExactTanTheta.theorem63DirectedSineBlock U V :=
+    directedSineBlock U V = TauCeti.DavisKahan.TanTheta.theorem63DirectedSineBlock U V :=
   rfl
 
 /-- **The directed clause of the Challenge's `tan Θ` theorem, discharged from the

@@ -50,7 +50,7 @@ open scoped InnerProductSpace BigOperators
 
 namespace TauCeti
 namespace DavisKahan
-namespace ExactTanTheta
+namespace TanTheta
 
 open ExactSinTheta
 open TanTheta
@@ -509,6 +509,6 @@ theorem theorem6_3_unbounded_ideal_directedTangent_of_reducing
       (Theorem63TrialData.ofUnbounded D V) hδ hCompression
       (crossed_lower_of_reducing A D V hVdom hVcomm hUnwanted) i)
 
-end ExactTanTheta
+end TanTheta
 end DavisKahan
 end TauCeti

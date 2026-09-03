@@ -188,7 +188,7 @@
       "review_declarations": [
         "TauCeti.DavisKahan1970.SectionTwo.tanTheta_complex",
         "TauCeti.DavisKahan1970.SectionTwo.tanTheta_real",
-        "TauCeti.DavisKahanTheory.partIII_tanTheta_ritzResidual_uiNorm",
+        "TauCeti.DavisKahan.FiniteDimensional.partIII_tanTheta_ritzResidual_uiNorm",
         "TauCeti.DavisKahan.Section2.theorem6_3_perturbation_infiniteTrial",
         "TauCeti.DavisKahan1970.tanTheta_ambient_bounded_symmetricNorming_complex_of_transversality",
         "TauCeti.DavisKahan1970.tanTheta_ambient_bounded_symmetricNorming_real_of_transversality",
@@ -202,7 +202,7 @@
           "id": "S2-tan-theta.directed",
           "description": "Directed conclusion: delta * ||tan Theta_0|| <= ||R||.",
           "review_declarations": [
-            "TauCeti.DavisKahanTheory.partIII_tanTheta_ritzResidual_uiNorm"
+            "TauCeti.DavisKahan.FiniteDimensional.partIII_tanTheta_ritzResidual_uiNorm"
           ]
         },
         {
@@ -240,7 +240,7 @@
       "review_declarations": [
         "TauCeti.DavisKahan1970.SectionTwo.sinTwoTheta_complex",
         "TauCeti.DavisKahan1970.SectionTwo.sinTwoTheta_real",
-        "TauCeti.DavisKahanTheory.partIII_sinTwoTheta_uiNorm",
+        "TauCeti.DavisKahan.FiniteDimensional.partIII_sinTwoTheta_uiNorm",
         "TauCeti.DavisKahan1970.sinTwoTheta_ambient_bounded_symmetricNorming_complex",
         "TauCeti.DavisKahan1970.sinTwoTheta_ambient_bounded_symmetricNorming_real",
         "TauCeti.DavisKahan1970.sinTwoTheta_unbounded_perturbation_arbitraryRepresentative_complex",
@@ -255,7 +255,7 @@
           "id": "S2-sin-two-theta.directed",
           "description": "Directed conclusion: delta * ||sin(2 Theta_0)|| <= 2 ||R||.",
           "review_declarations": [
-            "TauCeti.DavisKahanTheory.partIII_sinTwoTheta_uiNorm"
+            "TauCeti.DavisKahan.FiniteDimensional.partIII_sinTwoTheta_uiNorm"
           ]
         },
         {
@@ -371,24 +371,24 @@
       "expected_verification": "proved_in_build",
       "tex_marker": "S2-sharpness",
       "review_declarations": [
-        "TauCeti.DavisKahanTheory.tanTheta_model_sourceSharpness",
-        "TauCeti.DavisKahanTheory.tanTwoTheta_model_sourceSharpness",
-        "TauCeti.DavisKahanTheory.sinTheta_constant_optimal",
-        "TauCeti.DavisKahanTheory.sinTwoTheta_constant_optimal",
-        "TauCeti.DavisKahanTheory.single_double_sine_tangent_ratios_tendsto_one",
-        "TauCeti.DavisKahanTheory.sinTheta_model_equality"
+        "TauCeti.DavisKahan.FiniteDimensional.tanTheta_model_sourceSharpness",
+        "TauCeti.DavisKahan.FiniteDimensional.tanTwoTheta_model_sourceSharpness",
+        "TauCeti.DavisKahan.FiniteDimensional.sinTheta_constant_optimal",
+        "TauCeti.DavisKahan.FiniteDimensional.sinTwoTheta_constant_optimal",
+        "TauCeti.DavisKahan.FiniteDimensional.single_double_sine_tangent_ratios_tendsto_one",
+        "TauCeti.DavisKahan.FiniteDimensional.sinTheta_model_equality"
       ],
       "audit_clauses": [
         {
           "id": "S2-sharpness.whole",
           "description": "Audit the complete registered source passage as one semantic unit; split further if the independent reviewer finds separable mathematical clauses.",
           "review_declarations": [
-            "TauCeti.DavisKahanTheory.tanTheta_model_sourceSharpness",
-            "TauCeti.DavisKahanTheory.tanTwoTheta_model_sourceSharpness",
-            "TauCeti.DavisKahanTheory.sinTheta_constant_optimal",
-            "TauCeti.DavisKahanTheory.sinTwoTheta_constant_optimal",
-            "TauCeti.DavisKahanTheory.single_double_sine_tangent_ratios_tendsto_one",
-            "TauCeti.DavisKahanTheory.sinTheta_model_equality"
+            "TauCeti.DavisKahan.FiniteDimensional.tanTheta_model_sourceSharpness",
+            "TauCeti.DavisKahan.FiniteDimensional.tanTwoTheta_model_sourceSharpness",
+            "TauCeti.DavisKahan.FiniteDimensional.sinTheta_constant_optimal",
+            "TauCeti.DavisKahan.FiniteDimensional.sinTwoTheta_constant_optimal",
+            "TauCeti.DavisKahan.FiniteDimensional.single_double_sine_tangent_ratios_tendsto_one",
+            "TauCeti.DavisKahan.FiniteDimensional.sinTheta_model_equality"
           ]
         }
       ],
@@ -919,9 +919,9 @@
         "TauCeti.DavisKahan1970.Proposition4_1_compact_nonacute_real",
         "TauCeti.DavisKahan1970.Proposition4_1_directRotationValues",
         "TauCeti.DavisKahan1970.Proposition4_1",
-        "TauCeti.DavisKahanTheory.singularValues_restrictedDisplacement_le",
-        "TauCeti.DavisKahanTheory.singularValues_restrictedDisplacement_directRotation",
-        "TauCeti.DavisKahanTheory.principalPlaneChord_eq_two_mul_sin_half"
+        "TauCeti.DavisKahan.FiniteDimensional.singularValues_restrictedDisplacement_le",
+        "TauCeti.DavisKahan.FiniteDimensional.singularValues_restrictedDisplacement_directRotation",
+        "TauCeti.DavisKahan.FiniteDimensional.principalPlaneChord_eq_two_mul_sin_half"
       ],
       "audit_clauses": [
         {
@@ -942,9 +942,9 @@
             "TauCeti.DavisKahan1970.Proposition4_1_compact_nonacute_real",
             "TauCeti.DavisKahan1970.Proposition4_1_directRotationValues",
             "TauCeti.DavisKahan1970.Proposition4_1",
-            "TauCeti.DavisKahanTheory.singularValues_restrictedDisplacement_le",
-            "TauCeti.DavisKahanTheory.singularValues_restrictedDisplacement_directRotation",
-            "TauCeti.DavisKahanTheory.principalPlaneChord_eq_two_mul_sin_half"
+            "TauCeti.DavisKahan.FiniteDimensional.singularValues_restrictedDisplacement_le",
+            "TauCeti.DavisKahan.FiniteDimensional.singularValues_restrictedDisplacement_directRotation",
+            "TauCeti.DavisKahan.FiniteDimensional.principalPlaneChord_eq_two_mul_sin_half"
           ]
         }
       ],
@@ -1087,18 +1087,18 @@
       "expected_verification": "proved_in_build",
       "tex_marker": "DK-4.4-prop",
       "review_declarations": [
-        "TauCeti.DavisKahanTheory.DavisKahanProposition4_4_Finite",
-        "TauCeti.DavisKahanTheory.not_davisKahanProposition4_4_Finite",
-        "TauCeti.DavisKahanTheory.shortRotation_fullDisplacement_refuted"
+        "TauCeti.DavisKahan.FiniteDimensional.DavisKahanProposition4_4_Finite",
+        "TauCeti.DavisKahan.FiniteDimensional.not_davisKahanProposition4_4_Finite",
+        "TauCeti.DavisKahan.FiniteDimensional.shortRotation_fullDisplacement_refuted"
       ],
       "audit_clauses": [
         {
           "id": "DK-4.4-prop.whole",
           "description": "Audit the complete registered source passage as one semantic unit; split further if the independent reviewer finds separable mathematical clauses.",
           "review_declarations": [
-            "TauCeti.DavisKahanTheory.DavisKahanProposition4_4_Finite",
-            "TauCeti.DavisKahanTheory.not_davisKahanProposition4_4_Finite",
-            "TauCeti.DavisKahanTheory.shortRotation_fullDisplacement_refuted"
+            "TauCeti.DavisKahan.FiniteDimensional.DavisKahanProposition4_4_Finite",
+            "TauCeti.DavisKahan.FiniteDimensional.not_davisKahanProposition4_4_Finite",
+            "TauCeti.DavisKahan.FiniteDimensional.shortRotation_fullDisplacement_refuted"
           ]
         }
       ],

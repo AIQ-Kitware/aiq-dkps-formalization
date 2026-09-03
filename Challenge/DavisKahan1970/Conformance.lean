@@ -54,7 +54,7 @@ endpoint exists.
 -/
 
 namespace TauCeti
-namespace DavisKahanTheory
+namespace DavisKahan.FiniteDimensional
 
 open scoped InnerProductSpace
 open Module (finrank)
@@ -82,7 +82,8 @@ theorem partIII_sinTheta_residual_uiNorm
     {a b δ : ℝ} (hδ : 0 < δ)
     (hMspec : SpectrumIn M ⊤ (Set.Icc a b))
     (hAspec : SpectrumIn A Uᗮ {lam | lam ∉ Set.Ioo (a - δ) (b + δ)}) :
-    δ * N (sinThetaEmbedding U X) ≤ N (residual A X M) := by
+    δ * N (_root_.TauCeti.sinThetaEmbedding U X) ≤
+      N (_root_.TauCeti.residual A X M) := by
   sorry
 
 end SinThetaFinite
@@ -216,7 +217,7 @@ theorem proposition4_4_counterexample :
         kyFanSum 4 (LinearMap.id - (directRotation U V hacute).toLinearMap) := by
   sorry
 
-end DavisKahanTheory
+end DavisKahan.FiniteDimensional
 end TauCeti
 
 namespace TauCeti
@@ -225,7 +226,7 @@ namespace DavisKahan1970
 open TauCeti.DavisKahanExt
 open TauCeti.DavisKahan
 open TauCeti.DavisKahan.ExactSinTheta
-open TauCeti.DavisKahan.ExactTanTheta
+open TauCeti.DavisKahan.TanTheta
 
 open scoped InnerProductSpace
 
@@ -428,7 +429,7 @@ theorem tanTwoTheta_branchFree_bounded_symmetricNorming_complex
     (hinv : ∀ x ∈ U, ∃ y ∈ U, (A + H) (x + T x) = y + T y)
     (tanTwoTheta : E →L[ℂ] E) (π : ℕ ≃ ℕ)
     (htan : ∀ n, approximationSingularValue (π n) tanTwoTheta =
-      DavisKahanTheory.absDoubleAngleTangent (approximationSingularValue n T))
+      DavisKahan.FiniteDimensional.absDoubleAngleTangent (approximationSingularValue n T))
     (hHmem : N.Mem H) :
     N.Mem tanTwoTheta ∧
       (b - a) * N.gauge tanTwoTheta ≤ 2 * N.gauge H := by

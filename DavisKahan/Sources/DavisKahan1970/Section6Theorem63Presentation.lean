@@ -63,12 +63,12 @@ separate open endpoints.
 Davis--Kahan 1970, Theorem 6.3.  This is intentionally not named as the full
 source endpoint. -/
 alias theorem6_3_finite_generalizedTanTheta_ideal :=
-  DavisKahanTheory.davisKahan1970_generalizedTanTheta0_ritzResidual_le
+  DavisKahan.FiniteDimensional.davisKahan1970_generalizedTanTheta0_ritzResidual_le
 
 /-- Compiled finite-dimensional equal-rank specialization of the Section 2
 single-angle tangent theorem. -/
 alias theorem6_3_equalRank_finite_tanTheta_ideal :=
-  DavisKahanTheory.davisKahan1970_tanTheta0_ritzResidual_le
+  DavisKahan.FiniteDimensional.davisKahan1970_tanTheta0_ritzResidual_le
 
 /-- Compiled unbounded graph-angle companion at operator norm.  This is useful
 partial source coverage but does not discharge the paper's arbitrary
@@ -78,7 +78,7 @@ alias theorem6_3_unbounded_graphAngle_opNorm_partial :=
 
 /-- The unbounded tangent theorem with an arbitrary tangent representative supplied. -/
 alias theorem6_3_unbounded_tanTheta_ideal :=
-  ExactTanTheta.theorem6_3_unbounded_ideal
+  TanTheta.theorem6_3_unbounded_ideal
 
 /-- Retained: the operator-norm graph-angle companion.  Useful partial coverage, and
 **not** the arbitrary-unitarily-invariant-norm scope claim -- that is the alias above. -/
@@ -87,11 +87,11 @@ alias theorem6_3_unbounded_graphAngle_opNorm_companion :=
 
 /-- Completed finite-trial/arbitrary-ambient Ky Fan root of Theorem 6.3. -/
 alias theorem6_3_all_kyFan_core :=
-  ExactTanTheta.theorem6_3_all_kyFan_core
+  TanTheta.theorem6_3_all_kyFan_core
 
 /-- Completed bounded source-faithful Davis--Kahan Theorem 6.3. -/
 alias theorem6_3_generalizedTanTheta_ideal :=
-  ExactTanTheta.theorem6_3_generalizedTanTheta_ideal
+  TanTheta.theorem6_3_generalizedTanTheta_ideal
 
 /-! ### Theorem 6.3 without a tangent-representative hypothesis
 
@@ -110,19 +110,19 @@ below therefore carry exactly the printed hypotheses and nothing else. -/
 /-- The directed tangent representative of Theorem 6.3, and the proof that it
 has the approximation numbers the theorem asks for. -/
 alias theorem6_3_directedTangent :=
-  ExactTanTheta.theorem63DirectedTangent
+  TanTheta.theorem63DirectedTangent
 
 alias theorem6_3_directedTangent_approximationNumbers :=
-  ExactTanTheta.hasTheorem63DirectedTangentApproximationNumbers_theorem63DirectedTangent
+  TanTheta.hasTheorem63DirectedTangentApproximationNumbers_theorem63DirectedTangent
 
 /-- Theorem 6.3's Ky Fan root with the representative supplied, not assumed. -/
 alias theorem6_3_all_kyFan_core_unconditional :=
-  ExactTanTheta.theorem6_3_all_kyFan_core_directedTangent
+  TanTheta.theorem6_3_all_kyFan_core_directedTangent
 
 /-- Theorem 6.3 at ideal-gauge scope with the representative supplied, not
 assumed. -/
 alias theorem6_3_generalizedTanTheta_ideal_unconditional :=
-  ExactTanTheta.theorem6_3_generalizedTanTheta_ideal_directedTangent
+  TanTheta.theorem6_3_generalizedTanTheta_ideal_directedTangent
 
 /-! ### The equal-rank tangent theorem
 
@@ -141,11 +141,11 @@ space and no dimension comparison. -/
 
 /-- The equal-rank tangent bound from form bounds. -/
 alias theorem6_3_equalRank_tanTheta_formBounds :=
-  ExactTanTheta.theorem6_3_generalizedTanTheta_of_formBounds_equalRank
+  TanTheta.theorem6_3_generalizedTanTheta_of_formBounds_equalRank
 
 /-- The equal-rank tangent bound in the source's spectral-separation form. -/
 alias theorem6_3_equalRank_tanTheta_ideal :=
-  ExactTanTheta.theorem6_3_generalizedTanTheta_equalRank_spectral
+  TanTheta.theorem6_3_generalizedTanTheta_equalRank_spectral
 
 /-! ### The equal-dimensional infinite/noncompact tangent theorem
 
@@ -165,12 +165,12 @@ perturbed operator, exactly as in the finite case. -/
 /-- Section 2 tangent theorem, residual half, at arbitrary trial dimension and
 ideal-gauge scope, spectral-separation form. -/
 alias theorem6_3_equalDimension_tanTheta_ideal_spectral :=
-  ExactTanTheta.theorem6_3_infiniteTrial_spectral_exists
+  TanTheta.theorem6_3_infiniteTrial_spectral_exists
 
 /-- Section 2 tangent theorem, residual half, at arbitrary trial dimension and
 ideal-gauge scope, form-bound form. -/
 alias theorem6_3_equalDimension_tanTheta_ideal_formBounds :=
-  ExactTanTheta.theorem6_3_infiniteTrial_of_formBounds_exists
+  TanTheta.theorem6_3_infiniteTrial_of_formBounds_exists
 
 /-- Section 2 tangent theorem, perturbation half, at arbitrary trial dimension and
 ideal-gauge scope. -/

@@ -143,14 +143,14 @@ than (3.5); they are registered as specializations, not as the source-shaped for
 #check @TauCeti.DavisKahan1970.tanTheta_directed_unboundedRitz_symmetricNorming_real
 #check @TauCeti.DavisKahan1970.tanTheta_directed_unboundedTrial_symmetricNorming_complex
 #check @TauCeti.DavisKahan1970.tanTheta_directed_unboundedTrial_symmetricNorming_real
-#check @TauCeti.DavisKahan.ExactTanTheta.theorem6_3_unbounded_infiniteTrial_ideal
-#check @TauCeti.DavisKahan.ExactTanTheta.UnboundedCompressionTrialData.ideal_of_formBounds
+#check @TauCeti.DavisKahan.TanTheta.theorem6_3_unbounded_infiniteTrial_ideal
+#check @TauCeti.DavisKahan.TanTheta.UnboundedCompressionTrialData.ideal_of_formBounds
 #check @TauCeti.DavisKahan1970.theorem6_3_unboundedCompression_ideal_real
 #check @TauCeti.DavisKahan.UnboundedRitzPair
 #check @TauCeti.DavisKahan.ReducingComplement
 #check @TauCeti.DavisKahan.UnboundedRitzPair.ofTrialBlock
 #check @TauCeti.DavisKahan.ReducingComplement.ofReducesSubspace
-#check @TauCeti.DavisKahanTheory.partIII_tanTheta_ritzResidual_uiNorm
+#check @TauCeti.DavisKahan.FiniteDimensional.partIII_tanTheta_ritzResidual_uiNorm
 #check @TauCeti.DavisKahan.Section2.theorem6_3_perturbation_infiniteTrial
 #check @TauCeti.DavisKahan1970.tanTheta_ambient_bounded_symmetricNorming_complex_of_transversality
 #check @TauCeti.DavisKahan1970.tanTheta_ambient_bounded_symmetricNorming_real_of_transversality
@@ -164,7 +164,7 @@ than (3.5); they are registered as specializations, not as the source-shaped for
 #check @TauCeti.DavisKahan1970.remark3_2_bilateralShift_separates_dimensionHypotheses
 #check @TauCeti.DavisKahan1970.tanTheta_directed_bounded_spectralGap_symmetricNorming_complex
 #check @TauCeti.DavisKahan1970.tanTheta_directed_bounded_spectralGap_symmetricNorming_real
-#check @TauCeti.DavisKahan.ExactTanTheta.theorem6_3_unbounded_infiniteTrial_ideal_exists
+#check @TauCeti.DavisKahan.TanTheta.theorem6_3_unbounded_infiniteTrial_ideal_exists
 #check @TauCeti.DavisKahan1970.theorem6_3_unbounded_infiniteTrial_ideal_exists_real
 
 /-! ## S2-sin-two-theta: Double-angle sine theorem
@@ -396,8 +396,8 @@ Status: **TERMINAL EXACT**.
 Status: **TERMINAL REFUTED + REPAIR**.
 -/
 
-#check @TauCeti.DavisKahanTheory.DavisKahanProposition4_4_Finite
-#check @TauCeti.DavisKahanTheory.not_davisKahanProposition4_4_Finite
+#check @TauCeti.DavisKahan.FiniteDimensional.DavisKahanProposition4_4_Finite
+#check @TauCeti.DavisKahan.FiniteDimensional.not_davisKahanProposition4_4_Finite
 #check @TauCeti.DavisKahan.crossedDefectsEquivalent_of_isAcute
 #check @TauCeti.DavisKahan.crossedDefectsEquivalent_iff_finrank_eq
 #check @TauCeti.DavisKahan1970.approximationNumber_reflectionTangentCorner
@@ -432,8 +432,8 @@ Status: **TERMINAL REFUTED + REPAIR**.
 #check @TauCeti.DavisKahan.ExactSinTheta.projectionBlock_same_compression
 #check @TauCeti.DavisKahan1970.hasSameApproximationNumbers_reflectionSineCorner_sinTwoThetaIdealBlock
 #check @TauCeti.DavisKahan1970.tanTwoDirectedCornerR
-#check @TauCeti.DavisKahanTheory.shortRotation_fullDisplacement_refuted
-#check @TauCeti.DavisKahanTheory.directRotation_fullDisplacement_qnorm
+#check @TauCeti.DavisKahan.FiniteDimensional.shortRotation_fullDisplacement_refuted
+#check @TauCeti.DavisKahan.FiniteDimensional.directRotation_fullDisplacement_qnorm
 
 /-! ## DK-5.1-thm: Banach-space Sylvester lower bound
 
@@ -537,8 +537,8 @@ representative per Ky Fan index and are supporting evidence.
 #check @TauCeti.DavisKahan1970.tanTheta_directed_unboundedRitz_symmetricNorming_real
 #check @TauCeti.DavisKahan1970.tanTheta_directed_unboundedTrial_symmetricNorming_complex
 #check @TauCeti.DavisKahan1970.tanTheta_directed_unboundedTrial_symmetricNorming_real
-#check @TauCeti.DavisKahan.ExactTanTheta.theorem6_3_unbounded_infiniteTrial_ideal
-#check @TauCeti.DavisKahan.ExactTanTheta.theorem6_3_unbounded_infiniteTrial_ideal_exists
+#check @TauCeti.DavisKahan.TanTheta.theorem6_3_unbounded_infiniteTrial_ideal
+#check @TauCeti.DavisKahan.TanTheta.theorem6_3_unbounded_infiniteTrial_ideal_exists
 #check @TauCeti.DavisKahan1970.theorem6_3_unbounded_infiniteTrial_ideal_exists_real
 #check @TauCeti.DavisKahan1970.tanTheta_directed_bounded_spectralGap_symmetricNorming_complex
 #check @TauCeti.DavisKahan1970.tanTheta_directed_bounded_spectralGap_symmetricNorming_real

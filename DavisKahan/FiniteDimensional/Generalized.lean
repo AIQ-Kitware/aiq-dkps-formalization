@@ -18,7 +18,7 @@ not imported through this finite module.
 -/
 
 namespace TauCeti
-namespace DavisKahanTheory
+namespace DavisKahan.FiniteDimensional
 
 open scoped InnerProductSpace BigOperators Topology unitInterval
 open Module (finrank)
@@ -170,5 +170,5 @@ theorem generalizedSinTwoTheta_unequalFinrank
   sinTwoTheta_residual_le_of_orderedGap N hA hU X hM hδ hgap
 
 
-end DavisKahanTheory
+end DavisKahan.FiniteDimensional
 end TauCeti

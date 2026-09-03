@@ -11,7 +11,7 @@ import DavisKahan.FiniteDimensional.Residual.AngleEmbeddings
 -/
 
 namespace TauCeti
-namespace DavisKahanTheory
+namespace DavisKahan.FiniteDimensional
 
 open scoped InnerProductSpace BigOperators
 open Module (finrank)
@@ -39,5 +39,5 @@ theorem tanThetaEmbedding_ritzResidual_le
     (tanThetaEmbedding U X) htan
 
 
-end DavisKahanTheory
+end DavisKahan.FiniteDimensional
 end TauCeti

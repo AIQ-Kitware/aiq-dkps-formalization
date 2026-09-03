@@ -16,7 +16,7 @@ tangents, and the ordered Ritz gap controls it through the trial residual.
 -/
 
 namespace TauCeti
-namespace DavisKahanTheory
+namespace DavisKahan.FiniteDimensional
 
 open scoped InnerProductSpace BigOperators
 
@@ -93,5 +93,5 @@ theorem kyFan_tanTheta_le
         (𝕜 := 𝕜) (E := F) (F := E) k)
       hA hU X hM hGalerkin hδ hgap
 
-end DavisKahanTheory
+end DavisKahan.FiniteDimensional
 end TauCeti

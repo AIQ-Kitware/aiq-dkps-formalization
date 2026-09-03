@@ -55,7 +55,7 @@ open TauCeti.DavisKahanExt
 open TauCeti.DavisKahan
 open TauCeti.DavisKahan.ExactSinTheta
 open TauCeti.DavisKahan.ExactSinTheta.ComplexificationApproximation
-open TauCeti.DavisKahan.ExactTanTheta
+open TauCeti.DavisKahan.TanTheta
 open TauCeti.DavisKahan.TanTheta
 open TauCeti.RealComplexification
 open TauCeti.DavisKahan.Foundation.RealComplexification
@@ -510,7 +510,7 @@ theorem le_re_inner_of_mem_orthogonal_realSelfAdjointSpectralSubspace_of_gap
       ofReal_mem_complexifySubmodule_iff]
     exact hyV
   have hC :=
-    _root_.TauCeti.DavisKahan.ExactTanTheta.le_re_inner_of_mem_orthogonal_selfAdjointSpectralSubspace_of_gap
+    _root_.TauCeti.DavisKahan.TanTheta.le_re_inner_of_mem_orthogonal_selfAdjointSpectralSubspace_of_gap
       Ac hAc hgapC (ofReal y) hyVC hydC
   -- Read the complex bound back on the real copy.
   have hact : Ac ⟨ofReal y, hydC⟩ = ofReal (A ⟨y, hy⟩) :=

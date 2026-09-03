@@ -37,7 +37,7 @@ universe u v
 
 open TauCeti.DavisKahan
 open TauCeti.DavisKahan.ExactSinTheta
-open TauCeti.DavisKahanTheory
+open TauCeti.DavisKahan.FiniteDimensional
 
 section FiniteGeneric
 

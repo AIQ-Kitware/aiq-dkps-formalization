@@ -32,7 +32,7 @@ readability while the final public API shape is still being refined.
 -/
 
 namespace TauCeti
-namespace DavisKahanTheory
+namespace DavisKahan.FiniteDimensional
 
 open scoped InnerProductSpace
 
@@ -164,5 +164,5 @@ theorem partIII_sinTheta_uiNorm_canonical_spectral_prose_like
   exact uiNorm_spectralSubspace_directed_sinTheta_le N hgap.T_symm hgap.S_symm
     hgap.gap_pos hgap.U_spectrum hgap.V_spectrum
 
-end DavisKahanTheory
+end DavisKahan.FiniteDimensional
 end TauCeti

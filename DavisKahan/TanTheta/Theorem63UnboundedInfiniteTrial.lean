@@ -32,7 +32,7 @@ open scoped InnerProductSpace BigOperators
 
 namespace TauCeti
 namespace DavisKahan
-namespace ExactTanTheta
+namespace TanTheta
 
 open ExactSinTheta
 open TanTheta
@@ -686,6 +686,6 @@ theorem theorem6_3_unbounded_infiniteTrial_ideal
   exact data.ideal_of_formBounds_infinite N hdelta hCompression
     (crossed_lower_of_spectralGap A hA D hgap) tanTheta0 htan hResidual
 
-end ExactTanTheta
+end TanTheta
 end DavisKahan
 end TauCeti

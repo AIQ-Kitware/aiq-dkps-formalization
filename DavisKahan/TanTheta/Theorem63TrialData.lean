@@ -42,7 +42,7 @@ open scoped InnerProductSpace BigOperators
 
 namespace TauCeti
 namespace DavisKahan
-namespace ExactTanTheta
+namespace TanTheta
 
 open ExactSinTheta
 open Module (finrank)
@@ -572,6 +572,6 @@ end Chain
 
 end Theorem63TrialData
 
-end ExactTanTheta
+end TanTheta
 end DavisKahan
 end TauCeti

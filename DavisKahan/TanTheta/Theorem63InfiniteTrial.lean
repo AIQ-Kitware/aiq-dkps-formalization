@@ -57,7 +57,7 @@ open scoped InnerProductSpace BigOperators
 
 namespace TauCeti
 namespace DavisKahan
-namespace ExactTanTheta
+namespace TanTheta
 
 open ExactSinTheta
 open Module (finrank)
@@ -904,6 +904,6 @@ theorem theorem6_3_infiniteTrial_spectral_exists
   exact theorem6_3_infiniteTrial_of_formBounds_exists N T hT V Z hV hdelta
     hCompressionUpper hUnwantedLower hResidual
 
-end ExactTanTheta
+end TanTheta
 end DavisKahan
 end TauCeti

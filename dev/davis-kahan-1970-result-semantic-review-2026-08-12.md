@@ -46,7 +46,7 @@ Accepted result-only semantic review 2026-08-12. `sinTheta_unbounded_intervalExt
 
 **Selected source-facing Lean declarations:**
 - `TauCeti.DavisKahan1970.tanTheta_directed_finiteDimensional_paperUINorm_rclike`
-- `TauCeti.DavisKahanTheory.partIII_tanTheta_ritzResidual_uiNorm`
+- `TauCeti.DavisKahan.FiniteDimensional.partIII_tanTheta_ritzResidual_uiNorm`
 - `TauCeti.DavisKahan.Section2.theorem6_3_perturbation_infiniteTrial`
 - `TauCeti.DavisKahan1970.tanTheta_ambient_bounded_paperUINorm_complex_of_transversality`
 - `TauCeti.DavisKahan1970.tanTheta_ambient_bounded_paperUINorm_real_of_transversality`
@@ -336,12 +336,12 @@ Accepted result-only semantic review 2026-08-12. The compact nonacute complex an
 **Counted source atoms:** `DK-4.4-prop.printed-proposition4-4`.
 
 **Selected source-facing Lean declarations:**
-- `TauCeti.DavisKahanTheory.DavisKahanProposition4_4_Finite`
-- `TauCeti.DavisKahanTheory.not_davisKahanProposition4_4_Finite`
-- `TauCeti.DavisKahanTheory.shortRotation_fullDisplacement_refuted`
+- `TauCeti.DavisKahan.FiniteDimensional.DavisKahanProposition4_4_Finite`
+- `TauCeti.DavisKahan.FiniteDimensional.not_davisKahanProposition4_4_Finite`
+- `TauCeti.DavisKahan.FiniteDimensional.shortRotation_fullDisplacement_refuted`
 
 **Repair evidence:**
-- `TauCeti.DavisKahanTheory.directRotation_fullDisplacement_qnorm`
+- `TauCeti.DavisKahan.FiniteDimensional.directRotation_fullDisplacement_qnorm`
 
 **Semantic review:**
 
@@ -467,7 +467,7 @@ Accepted result-only semantic review 2026-08-12. The complex and real Theorem 6.
 **Counted source atoms:** `DK-6.3-thm.generalized-tangent-theorem`.
 
 **Selected source-facing Lean declarations:**
-- `TauCeti.DavisKahan.ExactTanTheta.theorem6_3_unbounded_infiniteTrial_ideal_exists`
+- `TauCeti.DavisKahan.TanTheta.theorem6_3_unbounded_infiniteTrial_ideal_exists`
 - `TauCeti.DavisKahan1970.theorem6_3_unbounded_infiniteTrial_ideal_exists_real`
 - `TauCeti.DavisKahan1970.tanTheta_directed_bounded_spectralGap_paperUINorm_complex`
 - `TauCeti.DavisKahan1970.tanTheta_directed_bounded_spectralGap_paperUINorm_real`

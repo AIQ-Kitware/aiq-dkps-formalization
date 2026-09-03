@@ -76,8 +76,8 @@ proof modules, plus two particularly useful exhibition results:
 | tan Theta | finite source-shaped Ritz result, arbitrary-Hilbert directed spectral theorem, corrected ambient theorem under crossed-defect condition (3.5), **literal Section 2 pole-counterexample target** | preserves the directed/ambient distinction while making the apparent infinite-dimensional source-scope defect executable instead of silently adding (3.5) |
 | sin 2Theta | finite UI specialization, arbitrary-Hilbert directed residual theorem, arbitrary-Hilbert ambient theorem | exposes both printed geometries at source UI-norm scope |
 | tan 2Theta | finite sharp operator-norm theorem, branch-free infrastructure, **exact directed residual Section 2 inequality**, **exact ambient Section 2 inequality**, **public pole-exclusion target**, and **unbounded arbitrary-UI directed target** | both bounded arbitrary-UI conclusions are now green from the printed hypotheses; the signature-visible pole/domain certificate and source-shaped unbounded arbitrary-UI assembly remain intentionally red |
-| projector distance | `DavisKahanTheory.projectorDifference_restrictionSpectra_opNorm` | canonical modern projector/subspace-distance presentation on an arbitrary complex Hilbert space |
-| false Proposition 4.4 | `DavisKahanTheory.proposition4_4_counterexample` | exhibits source fidelity by formally refuting a false printed claim instead of silently dropping it |
+| projector distance | `DavisKahan.FiniteDimensional.projectorDifference_restrictionSpectra_opNorm` | canonical modern projector/subspace-distance presentation on an arbitrary complex Hilbert space |
+| false Proposition 4.4 | `DavisKahan.FiniteDimensional.proposition4_4_counterexample` | exhibits source fidelity by formally refuting a false printed claim instead of silently dropping it |
 
 The leaderboard also audits the definitive generalized sine Theorem 6.1 over
 both scalar fields, real-Hilbert counterparts of the corrected tangent and

@@ -481,7 +481,7 @@ end UnitarilyInvariantSeminorm
 
 end TauCeti
 namespace TauCeti
-namespace DavisKahanTheory
+namespace DavisKahan.FiniteDimensional
 
 open scoped InnerProductSpace BigOperators
 
@@ -690,5 +690,5 @@ theorem kyFan_sinTwoTheta_le
     RectangularUnitarilyInvariantSeminorm.rectangularKyFanSum,
     kyFanSum_eq_sum_fin] using h
 
-end DavisKahanTheory
+end DavisKahan.FiniteDimensional
 end TauCeti

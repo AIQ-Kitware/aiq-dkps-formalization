@@ -33,7 +33,7 @@ so their conditioning losses are visible in theorem statements.
 /-! ## Construction status
 
 The shared injective-trial-map coordinate layer now lives in
-`DavisKahanTheory.FrameFactorization`.  It provides the canonical rectangular
+`DavisKahan.FiniteDimensional.FrameFactorization`.  It provides the canonical rectangular
 polar factorization `X = Q T`, proves that `Q` is isometric with
 `range Q = range X`, and packages the positive Gram square root `T` as a
 linear equivalence.  It also proves `‖T⁻¹‖ ≤ ε⁻¹`, the corresponding
@@ -51,7 +51,7 @@ singular-value sequence.
 -/
 
 namespace TauCeti
-namespace DavisKahanTheory
+namespace DavisKahan.FiniteDimensional
 
 open scoped InnerProductSpace BigOperators Topology
 open Module (finrank)
@@ -296,5 +296,5 @@ theorem generalizedSinTheta_residual_le
       mul_le_mul_of_nonneg_left htransport hδ.le
     _ ≤ N (generalResidual A X M) := hraw
 
-end DavisKahanTheory
+end DavisKahan.FiniteDimensional
 end TauCeti

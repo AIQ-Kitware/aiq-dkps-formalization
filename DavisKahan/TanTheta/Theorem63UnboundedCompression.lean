@@ -65,10 +65,9 @@ open Filter
 
 namespace TauCeti
 namespace DavisKahan
-namespace ExactTanTheta
+namespace TanTheta
 
 open ExactSinTheta
-open TanTheta
 open TauCeti.ApproximationNumber (IsOrthogonalProjectionMap StronglyTendsto)
 
 universe u
@@ -160,7 +159,7 @@ The crossed bound the tangent chain consumes is stated at the abstraction level
 `Theorem63TrialData` consumes.  The printed Theorem 6.3 states it instead as
 `α + δ ≤ Λ₁ = F₁⋆ (A + H) F₁` for a *chosen* pair of complementary reducing subspaces.
 The two are connected exactly as they are on the bounded side
-(`ExactTanTheta.crossed_lower_of_reducing`): by block algebra on the domain.  The link
+(`TanTheta.crossed_lower_of_reducing`): by block algebra on the domain.  The link
 between the data and the ambient operator is the single equation `haction` — the data's
 ambient action is the ambient operator's — which encodes both `A₀ = E₀⋆ (A + H) E₀` and
 `R = (A + H) E₀ - E₀ A₀`.
@@ -852,6 +851,6 @@ theorem ideal_of_reducing_exists
 
 end UnboundedCompressionTrialData
 
-end ExactTanTheta
+end TanTheta
 end DavisKahan
 end TauCeti

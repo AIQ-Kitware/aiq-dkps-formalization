@@ -59,7 +59,7 @@ finite-dimensional because it consumes the intrinsic singular-system layer.
 -/
 
 namespace TauCeti
-namespace DavisKahanTheory
+namespace DavisKahan.FiniteDimensional
 
 open Module _root_.TauCeti.LinearMap
 open scoped InnerProductSpace
@@ -552,5 +552,5 @@ theorem tanTwoTheta0_offDiagonal_le
 
 end KyFan
 
-end DavisKahanTheory
+end DavisKahan.FiniteDimensional
 end TauCeti

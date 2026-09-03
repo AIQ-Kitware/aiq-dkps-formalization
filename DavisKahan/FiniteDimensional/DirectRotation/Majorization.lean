@@ -36,7 +36,7 @@ finite-dimensional Courant--Fischer theory.
 -/
 
 namespace TauCeti
-namespace DavisKahanTheory
+namespace DavisKahan.FiniteDimensional
 
 open scoped InnerProductSpace BigOperators
 open Module (finrank)
@@ -624,5 +624,5 @@ The corresponding full-displacement theorem is intentionally absent.  The
 valid arbitrary-UI endpoint is `uiNorm_restrictedDisplacement_le`.
 -/
 
-end DavisKahanTheory
+end DavisKahan.FiniteDimensional
 end TauCeti

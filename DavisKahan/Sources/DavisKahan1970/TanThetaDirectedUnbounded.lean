@@ -68,7 +68,7 @@ namespace DavisKahan1970
 
 open TauCeti.DavisKahan
 open TauCeti.DavisKahan.ExactSinTheta
-open TauCeti.DavisKahan.ExactTanTheta
+open TauCeti.DavisKahan.TanTheta
 
 noncomputable section
 

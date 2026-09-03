@@ -66,7 +66,7 @@ than a prefix statement and is what a rearranged representative needs.
 -/
 
 namespace TauCeti
-namespace DavisKahanTheory
+namespace DavisKahan.FiniteDimensional
 
 open Module _root_.TauCeti.LinearMap
 open scoped InnerProductSpace
@@ -384,5 +384,5 @@ theorem absTanTwoTheta0_offDiagonal_le
 
 end KyFan
 
-end DavisKahanTheory
+end DavisKahan.FiniteDimensional
 end TauCeti

@@ -504,7 +504,7 @@ angle scope, with no clause open.
 
   | clause | field | conclusion atom(s) | canonical witness | disposition |
   |---|---|---|---|---|
-  | `whole.not_visible_in_type` | not_visible_in_type | `DK-4.4-prop.printed-proposition4-4` | `TauCeti.DavisKahanTheory.not_davisKahanProposition4_4_Finite` | **PASS** |
+  | `whole.not_visible_in_type` | not_visible_in_type | `DK-4.4-prop.printed-proposition4-4` | `TauCeti.DavisKahan.FiniteDimensional.not_davisKahanProposition4_4_Finite` | **PASS** |
 
 - Result-wide scope atoms carried by every clause's own primary: `DK-4.4-prop.printed-proposition4-4`
 

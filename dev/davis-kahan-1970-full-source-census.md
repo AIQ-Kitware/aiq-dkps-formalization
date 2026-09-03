@@ -313,15 +313,15 @@ REOPENING WITHDRAWN 2026-08-31 and the rule corrected: a later source passage en
 - `TauCeti.DavisKahan1970.SectionTwo.tanTheta_complex`
 - `TauCeti.DavisKahan1970.SectionTwo.tanTheta_real`
 - `TauCeti.DavisKahan1970.tanTheta_directed_finiteDimensional_symmetricNorming_rclike`
-- `TauCeti.DavisKahanTheory.partIII_tanTheta_ritzResidual_uiNorm`
+- `TauCeti.DavisKahan.FiniteDimensional.partIII_tanTheta_ritzResidual_uiNorm`
 - `TauCeti.DavisKahanExt.tanTheta_spectrum`
-- `TauCeti.DavisKahan.ExactTanTheta.theorem6_3_generalizedTanTheta_of_formBounds_equalRank`
-- `TauCeti.DavisKahan.ExactTanTheta.theorem6_3_generalizedTanTheta_equalRank_spectral`
+- `TauCeti.DavisKahan.TanTheta.theorem6_3_generalizedTanTheta_of_formBounds_equalRank`
+- `TauCeti.DavisKahan.TanTheta.theorem6_3_generalizedTanTheta_equalRank_spectral`
 - `TauCeti.DavisKahan.Section2.theorem63Residual_eq_neg_of_invariant`
 - `TauCeti.DavisKahan.Section2.theorem6_3_perturbation_equalRank`
-- `TauCeti.DavisKahan.ExactTanTheta.theorem6_3_infiniteTrial_spectral_exists`
-- `TauCeti.DavisKahan.ExactTanTheta.theorem6_3_infiniteTrial_of_formBounds_exists`
-- `TauCeti.DavisKahan.ExactTanTheta.theorem6_3_all_kyFan_core_infiniteTrial`
+- `TauCeti.DavisKahan.TanTheta.theorem6_3_infiniteTrial_spectral_exists`
+- `TauCeti.DavisKahan.TanTheta.theorem6_3_infiniteTrial_of_formBounds_exists`
+- `TauCeti.DavisKahan.TanTheta.theorem6_3_all_kyFan_core_infiniteTrial`
 - `TauCeti.DavisKahan.Section2.theorem6_3_perturbation_infiniteTrial`
 - `TauCeti.DavisKahanExt.tanAngleOperatorC`
 - `TauCeti.DavisKahanExt.directedCosAngleOperatorC_mul_directedTanAngleOperatorC`
@@ -365,10 +365,10 @@ REOPENING WITHDRAWN 2026-08-31 and the rule corrected: a later source passage en
 - `TauCeti.DavisKahan1970.tanTheta_ambient_unboundedRitz_symmetricNorming_real`
 - `TauCeti.DavisKahan1970.tanTheta_directed_unboundedTrial_symmetricNorming_complex`
 - `TauCeti.DavisKahan1970.tanTheta_directed_unboundedTrial_symmetricNorming_real`
-- `TauCeti.DavisKahan.ExactTanTheta.theorem6_3_unbounded_infiniteTrial_ideal`
+- `TauCeti.DavisKahan.TanTheta.theorem6_3_unbounded_infiniteTrial_ideal`
 - `TauCeti.DavisKahan1970.tanTheta_directed_unboundedRitz_symmetricNorming_complex`
 - `TauCeti.DavisKahan1970.tanTheta_directed_unboundedRitz_symmetricNorming_real`
-- `TauCeti.DavisKahan.ExactTanTheta.UnboundedCompressionTrialData.ideal_of_formBounds`
+- `TauCeti.DavisKahan.TanTheta.UnboundedCompressionTrialData.ideal_of_formBounds`
 - `TauCeti.DavisKahan1970.theorem6_3_unboundedCompression_ideal_real`
 
 **Curated source/Lean review:**
@@ -399,7 +399,7 @@ REOPENING WITHDRAWN 2026-08-31 and the rule corrected: a later source passage en
 
 **Notes.** Finite arbitrary-UI-norm and Hilbert-space operator-norm forms are compiled. The source Hilbert-space arbitrary-UI-norm residual and perturbation statements remain open.
 
-**2026-08-05: the Theorem 6.3 core this row is told to reuse is now unconditional.** It had been stated relative to a tangent representative that nothing constructed; `ExactTanTheta.theorem63DirectedTangent` is now that representative and `theorem6_3_all_kyFan_core_directedTangent` needs no hypothesis beyond the printed ones.  See DK-6.3-thm for the details.  What remains for this row is unchanged: the source Hilbert-space arbitrary-UI-norm residual and perturbation statements at EQUAL rank -- Theorem 6.3 assumes `rank Z < rank V`, and the strict inequality is genuinely used only to make the directed reading meaningful, so the equal-rank statement needs its own argument, not a specialisation.
+**2026-08-05: the Theorem 6.3 core this row is told to reuse is now unconditional.** It had been stated relative to a tangent representative that nothing constructed; `TanTheta.theorem63DirectedTangent` is now that representative and `theorem6_3_all_kyFan_core_directedTangent` needs no hypothesis beyond the printed ones.  See DK-6.3-thm for the details.  What remains for this row is unchanged: the source Hilbert-space arbitrary-UI-norm residual and perturbation statements at EQUAL rank -- Theorem 6.3 assumes `rank Z < rank V`, and the strict inequality is genuinely used only to make the directed reading meaningful, so the equal-rank statement needs its own argument, not a specialisation.
 
 **THE RESIDUAL HALF IS DONE AT SOURCE SCOPE, 2026-08-05.** `theorem6_3_generalizedTanTheta_equalRank_spectral` (default build, axiom-clean, aliased as `theorem6_3_equalRank_tanTheta_ideal`): arbitrary complete complex Hilbert space, finite-dimensional trial space, arbitrary Fan-dominant unitarily invariant ideal gauge, spectral separation in the source's `[beta,alpha]` / `[alpha+delta,inf)` form, **and no comparison of the ranks of `Z` and `V`** -- which is what made it inapplicable to Section 2 before, since Section 2's pair has equal rank.
 
@@ -489,7 +489,7 @@ The directed clause of the Section 2 tangent theorem at the printed scope, added
 - `TauCeti.DavisKahan1970.SectionTwo.sinTwoTheta_complex`
 - `TauCeti.DavisKahan1970.SectionTwo.sinTwoTheta_real`
 - `TauCeti.DavisKahan1970.sinTwoTheta_directed_finiteDimensional_symmetricNorming_rclike`
-- `TauCeti.DavisKahanTheory.partIII_sinTwoTheta_uiNorm`
+- `TauCeti.DavisKahan.FiniteDimensional.partIII_sinTwoTheta_uiNorm`
 - `TauCeti.DavisKahan.sinTwoTheta_addBounded_of_spectrum_gap`
 - `TauCeti.DavisKahan1970.sinTwoTheta_unbounded_perturbation_arbitraryRepresentative_complex`
 - `TauCeti.DavisKahan1970.sinTwoTheta_unbounded_reflectionResidual_arbitraryRepresentative_complex`
@@ -620,7 +620,7 @@ WHAT IS STILL MISSING for the theorem, and why it was not attempted here: the es
 
 NO `tan 2theta` ANALOGUE WAS INVENTED, and none should be.  The structural obstruction is documented in the module docstring of `DoubleAngle/Gram.lean`: the `sin 2theta` proof reduces to an ordinary sine theorem for `(Q_-, Q)`, a pair that is automatically equidimensional because `X` is unitary; the `tan 2theta` proof instead imitates the single-angle tangent argument, whose load-bearing identity (7.6) is a 2x2 rotation-block system in matched `C_0, C_1, S_0` blocks of the DIRECT ROTATION `P -> Q`, and with unequal dimensions there is no direct rotation and hence no such system.  The rectangular repair that rescues Theorem 6.3 gives only `C_1*C_1 = 1 - S_0S_0*` -- enough for a `cos theta` denominator, not enough to reproduce the coupled `C_0/C_1` identity that produces the signed `cos 2theta`.  This is an obstruction to the method, not a claim of falsity.
 
-TWO DECOY NAMES, recorded so the next reader is not misled again.  `TauCeti.DavisKahanTheory.sinTwoTheta_perturbation_le_unequalFinrank` (`DavisKahan/FiniteDimensional/DoubleAngle/SinTheta.lean:646`) and `TauCeti.DavisKahanTheory.generalizedSinTwoTheta_unequalFinrank` (`DavisKahan/FiniteDimensional/Generalized.lean:163`) are named for a hypothesis they do not have.  Each is statement-identical to the theorem it delegates to (`sinTwoTheta_perturbation_le` and `sinTwoTheta_residual_le_of_orderedGap` respectively) -- no `finrank` or `Module.rank` hypothesis occurs in either signature.  Neither is coverage for the Section 8 sentence.  Neither is referenced by any Lean source, `comparator/*.json`, or `Challenge/` module, so removing them is safe; recommendation is to delete rather than rename, since a rename would preserve a pure forwarding duplicate.
+TWO DECOY NAMES, recorded so the next reader is not misled again.  `TauCeti.DavisKahan.FiniteDimensional.sinTwoTheta_perturbation_le_unequalFinrank` (`DavisKahan/FiniteDimensional/DoubleAngle/SinTheta.lean:646`) and `TauCeti.DavisKahan.FiniteDimensional.generalizedSinTwoTheta_unequalFinrank` (`DavisKahan/FiniteDimensional/Generalized.lean:163`) are named for a hypothesis they do not have.  Each is statement-identical to the theorem it delegates to (`sinTwoTheta_perturbation_le` and `sinTwoTheta_residual_le_of_orderedGap` respectively) -- no `finrank` or `Module.rank` hypothesis occurs in either signature.  Neither is coverage for the Section 8 sentence.  Neither is referenced by any Lean source, `comparator/*.json`, or `Challenge/` module, so removing them is safe; recommendation is to delete rather than rename, since a rename would preserve a pure forwarding duplicate.
 
 TRANSCRIPTION DEFECT FOUND 2026-08-08, NOT YET FIXED.  `non-distributable/davis-kahan-1970-modernized-transcription.tex` lines 2330-2343 drop a factor two in the residual step of the Section 7 `sin 2theta` proof.  The displayed inequality at 2331-2339 reads `delta ||[[0, -sin2Theta_0 J_0*],[J_0 sin2Theta_0, 0]]|| <= ||[[0, B*],[B, 0]]||` and the conclusion at 2342 reads `delta ||sin 2Theta_0|| <= ||B|| <= ||R||`.  But the "first inequality" being rewritten is (7.5), `delta ||sin 2Theta|| <= ||H - XHX||`, and `H - XHX = [[0, 2B*],[2B, 0]]`, whose norm is `2 ||[[0,B*],[B,0]]||`.  The right-hand sides should therefore be `2 ||[[0,B*],[B,0]]||` and `delta ||sin 2Theta_0|| <= 2 ||B|| <= 2 ||R||`, which is what the Section 2 statement of the theorem prints (`delta ||sin 2Theta_0|| <= 2 ||R||`, transcription line 758).  Do not propagate the factor-one line.
 
@@ -721,20 +721,20 @@ AMBIENT CLAUSE REOPENED 2026-08-31 by the coherent-clause audit. The printed sin
 - `TauCeti.DavisKahan1970.SectionTwo.tanTwoTheta_complex`
 - `TauCeti.DavisKahan1970.SectionTwo.tanTwoTheta_real`
 - `TauCeti.DavisKahan1970.tanTwoTheta_branchFree_bounded_finiteSubspace_symmetricNorming_rclike`
-- `TauCeti.DavisKahanTheory.partIII_tanTwoTheta_opNorm`
+- `TauCeti.DavisKahan.FiniteDimensional.partIII_tanTwoTheta_opNorm`
 - `TauCeti.DavisKahanExt.tanTwoTheta_offDiagonalC_of_weighted_sine`
 - `TauCeti.DavisKahan.sharp_symmetricNormingFunction`
 - `TauCeti.DavisKahan.sharp_symmetricNormingFunction_selectedBranch`
 - `TauCeti.DavisKahan.tanTwoTheta_selectedBranch_symmetricNorming_real`
 - `TauCeti.DavisKahan1970.tanTwoTheta_branchFree_bounded_finiteSubspace_symmetricNorming_rclike`
-- `TauCeti.DavisKahanTheory.paired_singularVector_gap_inequality`
-- `TauCeti.DavisKahanTheory.singularValue_ne_one`
-- `TauCeti.DavisKahanTheory.absDoubleAngleTangent_scalar`
-- `TauCeti.DavisKahanTheory.sum_absDoubleAngleTangent_le`
-- `TauCeti.DavisKahanTheory.absTanTwoTheta0_offDiagonal_le`
-- `TauCeti.DavisKahanTheory.sum_absDoubleAngleTangent_le_of_finiteDimensional_invariantSubspace`
-- `TauCeti.DavisKahanTheory.kyFan_absTanTwoTheta_le_of_finiteDimensional_invariantSubspace`
-- `TauCeti.DavisKahanTheory.absTanTwoTheta_offDiagonal_mem_and_gauge_le_of_finiteDimensional_invariantSubspace`
+- `TauCeti.DavisKahan.FiniteDimensional.paired_singularVector_gap_inequality`
+- `TauCeti.DavisKahan.FiniteDimensional.singularValue_ne_one`
+- `TauCeti.DavisKahan.FiniteDimensional.absDoubleAngleTangent_scalar`
+- `TauCeti.DavisKahan.FiniteDimensional.sum_absDoubleAngleTangent_le`
+- `TauCeti.DavisKahan.FiniteDimensional.absTanTwoTheta0_offDiagonal_le`
+- `TauCeti.DavisKahan.FiniteDimensional.sum_absDoubleAngleTangent_le_of_finiteDimensional_invariantSubspace`
+- `TauCeti.DavisKahan.FiniteDimensional.kyFan_absTanTwoTheta_le_of_finiteDimensional_invariantSubspace`
+- `TauCeti.DavisKahan.FiniteDimensional.absTanTwoTheta_offDiagonal_mem_and_gauge_le_of_finiteDimensional_invariantSubspace`
 - `TauCeti.DavisKahan1970.tanTwoTheta_branchFree_bounded_symmetricNorming_complex`
 - `TauCeti.DavisKahan1970.tanTwoTheta_branchFree_bounded_symmetricNorming_real`
 - `TauCeti.DavisKahan1970.tanTwoTheta_branchFree_kyFan_complex`
@@ -1187,35 +1187,35 @@ DIRECTED CLAUSES CLOSED 2026-09-02. `tanTwoTheta_directed_unboundedResidual_symm
 
 **Lean declarations:**
 
-- `TauCeti.DavisKahanTheory.sinTheta_constant_optimal`
-- `TauCeti.DavisKahanTheory.sinTwoTheta_constant_optimal`
-- `TauCeti.DavisKahanTheory.single_double_sine_tangent_ratios_tendsto_one`
-- `TauCeti.DavisKahanTheory.sinTheta_model_equality`
-- `TauCeti.DavisKahanTheory.tanTheta_model_equality`
-- `TauCeti.DavisKahanTheory.tanTwoTheta_model_equality`
-- `TauCeti.DavisKahanTheory.sinTwoTheta_model_operatorNorm_equality`
-- `TauCeti.DavisKahanTheory.sinTwoTheta_model_equality`
-- `TauCeti.DavisKahanTheory.sinTwoTheta_model_equality_fails_beyond_operatorNorm`
-- `TauCeti.DavisKahanTheory.norm_sinTwoAngle_model_eq_norm_sinAngle_doubled`
-- `TauCeti.DavisKahanTheory.model_all_four_equalities`
-- `TauCeti.DavisKahanTheory.sinTheta_directSum_model_equality`
-- `TauCeti.DavisKahanTheory.tanTheta_directSum_model_equality`
-- `TauCeti.DavisKahanTheory.sinTwoTheta_directSum_model_equality`
-- `TauCeti.DavisKahanTheory.tanTwoTheta_directSum_model_equality`
-- `TauCeti.DavisKahanTheory.directSum_model_all_four_equalities`
+- `TauCeti.DavisKahan.FiniteDimensional.sinTheta_constant_optimal`
+- `TauCeti.DavisKahan.FiniteDimensional.sinTwoTheta_constant_optimal`
+- `TauCeti.DavisKahan.FiniteDimensional.single_double_sine_tangent_ratios_tendsto_one`
+- `TauCeti.DavisKahan.FiniteDimensional.sinTheta_model_equality`
+- `TauCeti.DavisKahan.FiniteDimensional.tanTheta_model_equality`
+- `TauCeti.DavisKahan.FiniteDimensional.tanTwoTheta_model_equality`
+- `TauCeti.DavisKahan.FiniteDimensional.sinTwoTheta_model_operatorNorm_equality`
+- `TauCeti.DavisKahan.FiniteDimensional.sinTwoTheta_model_equality`
+- `TauCeti.DavisKahan.FiniteDimensional.sinTwoTheta_model_equality_fails_beyond_operatorNorm`
+- `TauCeti.DavisKahan.FiniteDimensional.norm_sinTwoAngle_model_eq_norm_sinAngle_doubled`
+- `TauCeti.DavisKahan.FiniteDimensional.model_all_four_equalities`
+- `TauCeti.DavisKahan.FiniteDimensional.sinTheta_directSum_model_equality`
+- `TauCeti.DavisKahan.FiniteDimensional.tanTheta_directSum_model_equality`
+- `TauCeti.DavisKahan.FiniteDimensional.sinTwoTheta_directSum_model_equality`
+- `TauCeti.DavisKahan.FiniteDimensional.tanTwoTheta_directSum_model_equality`
+- `TauCeti.DavisKahan.FiniteDimensional.directSum_model_all_four_equalities`
 - `TauCeti.RectangularUnitarilyInvariantSeminorm.orthogonalBlockSum_linearIsometryEquiv`
 - `TauCeti.RectangularUnitarilyInvariantSeminorm.singularValues_orthogonalBlockSum_congr`
 - `TauCeti.RectangularUnitarilyInvariantSeminorm.apply_orthogonalBlockSum_eq_of_singularValues_smul_eq`
-- `TauCeti.DavisKahanTheory.sinTheta_model_isAdmissiblePair`
-- `TauCeti.DavisKahanTheory.sinTheta_perturbation_le_model_equality`
-- `TauCeti.DavisKahanTheory.tanTheta_model_isAdmissiblePair`
-- `TauCeti.DavisKahanTheory.tanTheta_perturbation_le_model_equality`
-- `TauCeti.DavisKahanTheory.sinTwoTheta_model_isAdmissiblePair`
-- `TauCeti.DavisKahanTheory.sinTwoTheta_perturbation_le_model_operatorNorm_equality`
-- `TauCeti.DavisKahanTheory.sinTwoTheta_model_equality_of_admissiblePair`
-- `TauCeti.DavisKahanTheory.tanTwoTheta_model_isAdmissiblePair`
-- `TauCeti.DavisKahanTheory.tanTwoTheta_perturbation_le_model_equality`
-- `TauCeti.DavisKahanTheory.projection_orthogonalBlockSumSubmodule`
+- `TauCeti.DavisKahan.FiniteDimensional.sinTheta_model_isAdmissiblePair`
+- `TauCeti.DavisKahan.FiniteDimensional.sinTheta_perturbation_le_model_equality`
+- `TauCeti.DavisKahan.FiniteDimensional.tanTheta_model_isAdmissiblePair`
+- `TauCeti.DavisKahan.FiniteDimensional.tanTheta_perturbation_le_model_equality`
+- `TauCeti.DavisKahan.FiniteDimensional.sinTwoTheta_model_isAdmissiblePair`
+- `TauCeti.DavisKahan.FiniteDimensional.sinTwoTheta_perturbation_le_model_operatorNorm_equality`
+- `TauCeti.DavisKahan.FiniteDimensional.sinTwoTheta_model_equality_of_admissiblePair`
+- `TauCeti.DavisKahan.FiniteDimensional.tanTwoTheta_model_isAdmissiblePair`
+- `TauCeti.DavisKahan.FiniteDimensional.tanTwoTheta_perturbation_le_model_equality`
+- `TauCeti.DavisKahan.FiniteDimensional.projection_orthogonalBlockSumSubmodule`
 - `TauCeti.RectangularUnitarilyInvariantSeminorm.orthogonalBlockSumSubmodule`
 - `TauCeti.RectangularUnitarilyInvariantSeminorm.mem_orthogonalBlockSumSubmodule`
 - `TauCeti.RectangularUnitarilyInvariantSeminorm.starProjection_orthogonalBlockSumSubmodule`
@@ -1227,23 +1227,23 @@ DIRECTED CLAUSES CLOSED 2026-09-02. `tanTwoTheta_directed_unboundedResidual_symm
 - `TauCeti.selfAdjointFunctionalCalculus_orthogonalBlockSum`
 - `TauCeti.projection_orthogonalBlockSumSubmodule`
 - `TauCeti.sinAngleOperator_orthogonalBlockSumSubmodule`
-- `TauCeti.DavisKahanTheory.angleOperator_orthogonalBlockSumSubmodule`
-- `TauCeti.DavisKahanTheory.tanAngleOperator_orthogonalBlockSumSubmodule`
-- `TauCeti.DavisKahanTheory.tanTwoAngleOperator_orthogonalBlockSumSubmodule`
-- `TauCeti.DavisKahanTheory.tanTheta_model_sourceSharpness`
-- `TauCeti.DavisKahanTheory.sinTwoTheta_reflectionDefect_model_le`
-- `TauCeti.DavisKahanTheory.modelTanTwoThetaPerturbedResidual_offDiagonal`
-- `TauCeti.DavisKahanTheory.tanTwoTheta_model_sourceSharpness`
-- `TauCeti.DavisKahanTheory.directSumModelSubspace`
-- `TauCeti.DavisKahanTheory.directSumRotatedModelSubspace`
-- `TauCeti.DavisKahanTheory.sinAngleOperator_directSumModelSubspaces`
-- `TauCeti.DavisKahanTheory.angleOperator_directSumModelSubspaces`
-- `TauCeti.DavisKahanTheory.tanAngleOperator_directSumModelSubspaces`
-- `TauCeti.DavisKahanTheory.tanTwoAngleOperator_directSumModelSubspaces`
-- `TauCeti.DavisKahanTheory.sinTheta_directSum_subspace_equality`
-- `TauCeti.DavisKahanTheory.tanTheta_directSum_subspace_equality`
-- `TauCeti.DavisKahanTheory.sinTwoTheta_directSum_subspace_equality`
-- `TauCeti.DavisKahanTheory.tanTwoTheta_directSum_subspace_equality`
+- `TauCeti.DavisKahan.FiniteDimensional.angleOperator_orthogonalBlockSumSubmodule`
+- `TauCeti.DavisKahan.FiniteDimensional.tanAngleOperator_orthogonalBlockSumSubmodule`
+- `TauCeti.DavisKahan.FiniteDimensional.tanTwoAngleOperator_orthogonalBlockSumSubmodule`
+- `TauCeti.DavisKahan.FiniteDimensional.tanTheta_model_sourceSharpness`
+- `TauCeti.DavisKahan.FiniteDimensional.sinTwoTheta_reflectionDefect_model_le`
+- `TauCeti.DavisKahan.FiniteDimensional.modelTanTwoThetaPerturbedResidual_offDiagonal`
+- `TauCeti.DavisKahan.FiniteDimensional.tanTwoTheta_model_sourceSharpness`
+- `TauCeti.DavisKahan.FiniteDimensional.directSumModelSubspace`
+- `TauCeti.DavisKahan.FiniteDimensional.directSumRotatedModelSubspace`
+- `TauCeti.DavisKahan.FiniteDimensional.sinAngleOperator_directSumModelSubspaces`
+- `TauCeti.DavisKahan.FiniteDimensional.angleOperator_directSumModelSubspaces`
+- `TauCeti.DavisKahan.FiniteDimensional.tanAngleOperator_directSumModelSubspaces`
+- `TauCeti.DavisKahan.FiniteDimensional.tanTwoAngleOperator_directSumModelSubspaces`
+- `TauCeti.DavisKahan.FiniteDimensional.sinTheta_directSum_subspace_equality`
+- `TauCeti.DavisKahan.FiniteDimensional.tanTheta_directSum_subspace_equality`
+- `TauCeti.DavisKahan.FiniteDimensional.sinTwoTheta_directSum_subspace_equality`
+- `TauCeti.DavisKahan.FiniteDimensional.tanTwoTheta_directSum_subspace_equality`
 
 **Notes.** Sine sharpness and finite multiplicity are compiled; full quartet simultaneous equality remains in the Part III campaign.
 
@@ -1386,15 +1386,15 @@ NEW SUPPORT: `diagonalPart_congr` / `offDiagonalPart_congr`, needed because `rw`
 
 - `TauCeti.DavisKahan1970.sinTheta_generalized_bundled_complex`
 - `TauCeti.DavisKahan1970.sinTheta_unbounded_opNorm_complex`
-- `TauCeti.DavisKahan.ExactTanTheta.theorem6_3_unbounded_ideal_directedTangent_of_reducing`
-- `TauCeti.DavisKahan.ExactTanTheta.theorem6_3_unbounded_ideal_of_reducing`
-- `TauCeti.DavisKahan.ExactTanTheta.crossed_lower_of_reducing`
-- `TauCeti.DavisKahan.ExactTanTheta.theorem6_3_unbounded_ideal_directedTangent`
-- `TauCeti.DavisKahan.ExactTanTheta.theorem6_3_unbounded_ideal`
-- `TauCeti.DavisKahan.ExactTanTheta.Theorem63TrialData.all_kyFan_core_of_formBounds`
-- `TauCeti.DavisKahan.ExactTanTheta.theorem6_3_unbounded_infiniteTrial_ideal_exists_of_reducing`
-- `TauCeti.DavisKahan.ExactTanTheta.theorem6_3_unbounded_infiniteTrial_ideal_of_reducing`
-- `TauCeti.DavisKahan.ExactTanTheta.theorem6_3_unbounded_infiniteTrial_ideal_exists`
+- `TauCeti.DavisKahan.TanTheta.theorem6_3_unbounded_ideal_directedTangent_of_reducing`
+- `TauCeti.DavisKahan.TanTheta.theorem6_3_unbounded_ideal_of_reducing`
+- `TauCeti.DavisKahan.TanTheta.crossed_lower_of_reducing`
+- `TauCeti.DavisKahan.TanTheta.theorem6_3_unbounded_ideal_directedTangent`
+- `TauCeti.DavisKahan.TanTheta.theorem6_3_unbounded_ideal`
+- `TauCeti.DavisKahan.TanTheta.Theorem63TrialData.all_kyFan_core_of_formBounds`
+- `TauCeti.DavisKahan.TanTheta.theorem6_3_unbounded_infiniteTrial_ideal_exists_of_reducing`
+- `TauCeti.DavisKahan.TanTheta.theorem6_3_unbounded_infiniteTrial_ideal_of_reducing`
+- `TauCeti.DavisKahan.TanTheta.theorem6_3_unbounded_infiniteTrial_ideal_exists`
 - `TauCeti.DavisKahan1970.sinTwoTheta_unbounded_perturbation_arbitraryRepresentative_complex`
 - `TauCeti.DavisKahan1970.tanTwoTheta_unbounded_residual_opNorm_complex`
 - `TauCeti.DavisKahan.ExactSinTheta.sinTheta_unbounded_real`
@@ -1564,23 +1564,23 @@ FOR THIS ROW: does not close.  The remaining obstruction is the ATTAINMENT claus
 
 **Summary.** A unitary intertwining the two projections whose diagonal cosine blocks are positive and whose off-diagonal sine blocks are adjoints.
 
-**Scope gap.** dimension only, on the quarter-turn `J` clause.  `TauCeti.DavisKahanTheory.angleComplexStructure` and the `U = cos Theta + J sin Theta` / `U = exp(J Theta)` forms are `RCLike` (so real AND complex) but `[FiniteDimensional]`, and the bounded tree has no `J` to state them on.  The scalar axis is CLOSED: `real_directRotation` and its defining properties are `[InnerProductSpace R]`, `[CompleteSpace]`, with no `[FiniteDimensional]`.
+**Scope gap.** dimension only, on the quarter-turn `J` clause.  `TauCeti.DavisKahan.FiniteDimensional.angleComplexStructure` and the `U = cos Theta + J sin Theta` / `U = exp(J Theta)` forms are `RCLike` (so real AND complex) but `[FiniteDimensional]`, and the bounded tree has no `J` to state them on.  The scalar axis is CLOSED: `real_directRotation` and its defining properties are `[InnerProductSpace R]`, `[CompleteSpace]`, with no `[FiniteDimensional]`.
 
 **Lean declarations:**
 
 - `TauCeti.DavisKahan1970.complex_directRotation`
 - `TauCeti.DavisKahan.spectraCanonicalIntertwiner`
 - `TauCeti.DavisKahan.IsDirectRotation`
-- `TauCeti.DavisKahanTheory.angleComplexStructure`
-- `TauCeti.DavisKahanTheory.directRotation_eq_cos_add_J_sin`
-- `TauCeti.DavisKahanTheory.directRotationCosine_eq_half_smul_add`
-- `TauCeti.DavisKahanTheory.directRotation_sub_cosine_eq_half_smul_sub`
-- `TauCeti.DavisKahanTheory.directRotation_sub_cosine_comp_self`
-- `TauCeti.DavisKahanTheory.angleComplexStructure_comp_self`
-- `TauCeti.DavisKahanTheory.angleComplexStructure_comp_angleOperator_comp_self`
-- `TauCeti.DavisKahanTheory.directRotationCosine_eq_calculus`
-- `TauCeti.DavisKahanTheory.sinAngleOperator_eigenvalues_mem_Icc`
-- `TauCeti.DavisKahanTheory.directRotation_eq_exp_angleComplexStructure_comp_angleOperator`
+- `TauCeti.DavisKahan.FiniteDimensional.angleComplexStructure`
+- `TauCeti.DavisKahan.FiniteDimensional.directRotation_eq_cos_add_J_sin`
+- `TauCeti.DavisKahan.FiniteDimensional.directRotationCosine_eq_half_smul_add`
+- `TauCeti.DavisKahan.FiniteDimensional.directRotation_sub_cosine_eq_half_smul_sub`
+- `TauCeti.DavisKahan.FiniteDimensional.directRotation_sub_cosine_comp_self`
+- `TauCeti.DavisKahan.FiniteDimensional.angleComplexStructure_comp_self`
+- `TauCeti.DavisKahan.FiniteDimensional.angleComplexStructure_comp_angleOperator_comp_self`
+- `TauCeti.DavisKahan.FiniteDimensional.directRotationCosine_eq_calculus`
+- `TauCeti.DavisKahan.FiniteDimensional.sinAngleOperator_eigenvalues_mem_Icc`
+- `TauCeti.DavisKahan.FiniteDimensional.directRotation_eq_exp_angleComplexStructure_comp_angleOperator`
 - `TauCeti.DavisKahan1970.real_directRotation`
 - `TauCeti.DavisKahan1970.real_directRotation_orthogonal`
 - `TauCeti.DavisKahan1970.real_directRotation_intertwines`
@@ -1681,7 +1681,7 @@ the case that every Section 3 and Section 4 result is stated on the gap predicat
 2026-08-09 by enumerating the whole `DavisKahan.All` environment and inspecting the type of every
 declaration: 78 declarations are stated on the PRINTED predicate `TauCeti.IsAcute` and 160 on the
 gap predicate.  The split is by namespace, because an unqualified `IsAcute` resolves differently in
-different namespaces: the finite-dimensional tree (`TauCeti.DavisKahanTheory.*`, including
+different namespaces: the finite-dimensional tree (`TauCeti.DavisKahan.FiniteDimensional.*`, including
 `directRotation`, `directRotation_sq`, `directRotation_symm` and the whole Section 4 extremal
 package) is on the printed predicate, and `TauCeti.DavisKahan.Experimental.*` /
 `TauCeti.DavisKahanExt.*` are on the gap predicate.  Since the finite-dimensional tree is where the
@@ -1790,7 +1790,7 @@ PRECISE MISSING STATEMENT: *Let `U, V` be closed subspaces of a real or complex 
 
 **A CLAIM IN THIS ROW'S OWN `scope_gap`/`next_action` IS FALSE: "`IsUniformlyAcute` ... enters through clause (a) only".**  Coordinator-verified against the signatures: ALL the endpoints carry `hacute : IsUniformlyAcute` -- `complex_directRotation`, `complex_directRotation_unique`, `complex_directRotation_iff_positiveDiagonalBlocks`, `real_directRotation`, `real_directRotation_iff_positiveDiagonalBlocks` -- because (b) and (c) name `spectraDirectRotation U V hacute` / `directRotationR U V hacute`.  Clause (a) is the ROOT CAUSE (fixing it fixes all three), but the STATEMENTS are all narrowed.  The current phrasing invites a future mission to conclude (b)/(c) are already at the printed hypothesis; they are not.
 
-Also worth recording: in FINITE dimension the printed predicate is already used (`TauCeti.DavisKahanTheory.directRotation U V (hacute : TauCeti.IsAcute U V)`), but `directRotation_unique` there is POLAR uniqueness, not the printed characterization by property (i) -- so even a finite-dimensional exactness claim for clause (c) at the printed predicate is not yet on a declaration.
+Also worth recording: in FINITE dimension the printed predicate is already used (`TauCeti.DavisKahan.FiniteDimensional.directRotation U V (hacute : TauCeti.IsAcute U V)`), but `directRotation_unique` there is POLAR uniqueness, not the printed characterization by property (i) -- so even a finite-dimensional exactness claim for clause (c) at the printed predicate is not yet on a declaration.
 
 **PROMOTED TO `compiled_exact`, 2026-08-10.  PROPOSITION 3.1 NOW HOLDS AT THE PAPER'S OWN HYPOTHESIS (Claude Opus 5; coordinator-verified: build 9603 EXIT=0, six gates EXIT=0, baselines flat, all four ratchets byte-identical, probe `sorryAx` count ZERO).**  All three printed clauses -- existence, uniqueness, and characterization by property (i) alone -- hold at `TauCeti.IsAcute` (printed Definition 3.2), over REAL and COMPLEX Hilbert spaces of ARBITRARY dimension, with (3.8) neither assumed nor listed **and without (1.5)**.
 
@@ -1985,7 +1985,7 @@ The self-adjointness hypotheses on the two diagonal compressions are *not* a spe
 - `TauCeti.DavisKahan.nonneg_add_star_of_re_inner_nonneg`
 - `TauCeti.DavisKahan.reflectionOperator_mul_projection_self`
 - `TauCeti.DavisKahan.projection_mul_reflectionOperator_self`
-- `TauCeti.DavisKahanTheory.directRotation_sq`
+- `TauCeti.DavisKahan.FiniteDimensional.directRotation_sq`
 - `TauCeti.DavisKahan1970.complex_directRotation_sq`
 - `TauCeti.DavisKahan1970.proposition3_4_square_is_reflected_directRotation`
 - `TauCeti.DavisKahan1970.proposition3_4_full_complex`
@@ -2464,28 +2464,28 @@ The recorded strictness narrowing `0 < theta n < pi/2` sits ONLY on `corollary3_
 - `TauCeti.DavisKahan.proposition3_5_fixedAngle_maximal`
 - `TauCeti.DavisKahan.halmosCosineSq_commute_projection`
 - `TauCeti.DavisKahan.halmosCosineSq_commute_projection_right`
-- `TauCeti.DavisKahanTheory.sq_sinAngleOperator_add_sq_directRotationCosine`
-- `TauCeti.DavisKahanTheory.projection_comm_sinAngleOperator`
-- `TauCeti.DavisKahanTheory.projection_right_comm_sinAngleOperator`
-- `TauCeti.DavisKahanTheory.directRotation_comm_sinAngleOperator`
-- `TauCeti.DavisKahanTheory.angleOperator_comm_projection`
-- `TauCeti.DavisKahanTheory.angleOperator_comm_projection_right`
-- `TauCeti.DavisKahanTheory.angleOperator_comm_directRotation`
+- `TauCeti.DavisKahan.FiniteDimensional.sq_sinAngleOperator_add_sq_directRotationCosine`
+- `TauCeti.DavisKahan.FiniteDimensional.projection_comm_sinAngleOperator`
+- `TauCeti.DavisKahan.FiniteDimensional.projection_right_comm_sinAngleOperator`
+- `TauCeti.DavisKahan.FiniteDimensional.directRotation_comm_sinAngleOperator`
+- `TauCeti.DavisKahan.FiniteDimensional.angleOperator_comm_projection`
+- `TauCeti.DavisKahan.FiniteDimensional.angleOperator_comm_projection_right`
+- `TauCeti.DavisKahan.FiniteDimensional.angleOperator_comm_directRotation`
 - `TauCeti.adjoint_moorePenroseInverse_of_isSymmetric`
 - `TauCeti.comp_moorePenroseInverse_comm_of_isSymmetric`
 - `TauCeti.moorePenroseInverse_comm_of_isSymmetric`
-- `TauCeti.DavisKahanTheory.directRotationCosine_comm_sinAngleOperator`
-- `TauCeti.DavisKahanTheory.angleOperator_comm_directRotationCosine`
-- `TauCeti.DavisKahanTheory.angleOperator_comm_sinAngleOperator`
-- `TauCeti.DavisKahanTheory.angleOperator_comm_moorePenroseInverse_sinAngleOperator`
-- `TauCeti.DavisKahanTheory.angleOperator_comm_angleComplexStructure`
+- `TauCeti.DavisKahan.FiniteDimensional.directRotationCosine_comm_sinAngleOperator`
+- `TauCeti.DavisKahan.FiniteDimensional.angleOperator_comm_directRotationCosine`
+- `TauCeti.DavisKahan.FiniteDimensional.angleOperator_comm_sinAngleOperator`
+- `TauCeti.DavisKahan.FiniteDimensional.angleOperator_comm_moorePenroseInverse_sinAngleOperator`
+- `TauCeti.DavisKahan.FiniteDimensional.angleOperator_comm_angleComplexStructure`
 - `TauCeti.complementaryProjection_eq_id_sub`
-- `TauCeti.DavisKahanTheory.vectorAngle_directRotation_eq_of_angleOperator_apply`
-- `TauCeti.DavisKahanTheory.adjoint_angleComplexStructure`
-- `TauCeti.DavisKahanTheory.re_inner_angleComplexStructure_apply_self`
-- `TauCeti.DavisKahanTheory.sinAngleOperator_apply_of_angleOperator_apply`
-- `TauCeti.DavisKahanTheory.directRotationCosine_apply_of_angleOperator_apply`
-- `TauCeti.DavisKahanTheory.angleOperator_eigenvalue_mem_Icc`
+- `TauCeti.DavisKahan.FiniteDimensional.vectorAngle_directRotation_eq_of_angleOperator_apply`
+- `TauCeti.DavisKahan.FiniteDimensional.adjoint_angleComplexStructure`
+- `TauCeti.DavisKahan.FiniteDimensional.re_inner_angleComplexStructure_apply_self`
+- `TauCeti.DavisKahan.FiniteDimensional.sinAngleOperator_apply_of_angleOperator_apply`
+- `TauCeti.DavisKahan.FiniteDimensional.directRotationCosine_apply_of_angleOperator_apply`
+- `TauCeti.DavisKahan.FiniteDimensional.angleOperator_eigenvalue_mem_Icc`
 - `TauCeti.vectorAngle`
 - `TauCeti.vectorAngle_real_eq_angle`
 - `TauCeti.vectorAngle_eq_angle_rclikeToReal`
@@ -2548,7 +2548,7 @@ is genuinely proved (`fixedCosineSubspace_maximal`).  Absent: the commutations a
 rather than `cos^2 Theta`, `Theta <-> J` and `Theta <-> U` (there is no `J` operator anywhere in the
 repository -- see `next_action`), and the eigenvector-angle clause.
 
-**M19, 2026-08-09 (Claude Opus 5).**  THE PREVIOUS NOTE'S PARENTHESIS -- "there is no `J` operator anywhere in the repository" -- IS FALSE, and was false when written.  `TauCeti.DavisKahanTheory.angleComplexStructure` (`DavisKahan/FiniteDimensional/DirectRotation.lean`) is the paper's `J`, and `directRotation_eq_cos_add_J_sin` is the paper's `U = cos Theta + J sin Theta`.  Both predate this work; what was missing were the properties.
+**M19, 2026-08-09 (Claude Opus 5).**  THE PREVIOUS NOTE'S PARENTHESIS -- "there is no `J` operator anywhere in the repository" -- IS FALSE, and was false when written.  `TauCeti.DavisKahan.FiniteDimensional.angleComplexStructure` (`DavisKahan/FiniteDimensional/DirectRotation.lean`) is the paper's `J`, and `directRotation_eq_cos_add_J_sin` is the paper's `U = cos Theta + J sin Theta`.  Both predate this work; what was missing were the properties.
 
 THREE OF THE FOUR PRINTED COMMUTATIONS ARE NOW PROVED, at the level of `Theta` itself and not `cos^2 Theta`, over any `RCLike` field in finite dimension: `angleOperator_comm_projection` (`Theta` with `P`), `angleOperator_comm_projection_right` (`Theta` with `Q`) and `angleOperator_comm_directRotation` (`Theta` with `U`).  Each is the corresponding `sin Theta` statement pushed through `selfAdjointFunctionalCalculus_comm`, since `angleOperator U V = arcsin |P_U - P_V|`.
 
@@ -2615,14 +2615,14 @@ RESIDUAL FIDELITY NOTE: `fixedCosineSubspace` is `ker (cos^2 Theta - c^2)`, and 
 **Lean declarations:**
 
 - `TauCeti.DavisKahan1970.complex_directRotation_reversal`
-- `TauCeti.DavisKahanTheory.directRotation_symm`
+- `TauCeti.DavisKahan.FiniteDimensional.directRotation_symm`
 - `TauCeti.DavisKahan1970.corollary3_2_reversal`
 - `TauCeti.DavisKahan1970.corollary3_2_reversal_form`
 - `TauCeti.DavisKahan1970.corollary3_2_sinAngleOperator_symm`
-- `TauCeti.DavisKahanTheory.angleComplexStructure_symm`
-- `TauCeti.DavisKahanTheory.angleOperator_comm`
-- `TauCeti.DavisKahanTheory.sinAngleOperator_comm`
-- `TauCeti.DavisKahanTheory.directRotationCosine_comm`
+- `TauCeti.DavisKahan.FiniteDimensional.angleComplexStructure_symm`
+- `TauCeti.DavisKahan.FiniteDimensional.angleOperator_comm`
+- `TauCeti.DavisKahan.FiniteDimensional.sinAngleOperator_comm`
+- `TauCeti.DavisKahan.FiniteDimensional.directRotationCosine_comm`
 - `TauCeti.DavisKahan1970.real_directRotation_reversal`
 - `TauCeti.DavisKahan1970.corollary3_2`
 - `TauCeti.DavisKahan1970.corollary3_2_nonacute_directRotation_resolution`
@@ -2644,7 +2644,7 @@ docstring claimed and did not prove: the *angle* half.  Corollary 3.2 asserts bo
 row now carries `corollary3_2_sinAngleOperator_symm` and the combined
 `corollary3_2_reversal`, and the older docstring was corrected to say which half it proves.
 
-**M19, 2026-08-09 (Claude Opus 5).**  THE PRINTED FORM IS NOW PROVED, and the recorded narrowing `J |-> -J` rendered as `U |-> U*` is discharged.  `angleComplexStructure_symm` states exactly the corollary's second clause -- `J(V,U) = -J(U,V)` for the repository's `J`, `TauCeti.DavisKahanTheory.angleComplexStructure` -- and `angleOperator_comm` states the first, `Theta(V,U) = Theta(U,V)`, on the angle operator itself.  `sinAngleOperator_comm` and `directRotationCosine_comm` are the `sin Theta` and `cos Theta` halves of the latter.
+**M19, 2026-08-09 (Claude Opus 5).**  THE PRINTED FORM IS NOW PROVED, and the recorded narrowing `J |-> -J` rendered as `U |-> U*` is discharged.  `angleComplexStructure_symm` states exactly the corollary's second clause -- `J(V,U) = -J(U,V)` for the repository's `J`, `TauCeti.DavisKahan.FiniteDimensional.angleComplexStructure` -- and `angleOperator_comm` states the first, `Theta(V,U) = Theta(U,V)`, on the angle operator itself.  `sinAngleOperator_comm` and `directRotationCosine_comm` are the `sin Theta` and `cos Theta` halves of the latter.
 
 The `U |-> U*` form is now the INPUT rather than the conclusion: from `U(V,U) = U(U,V)^{-1}` (`directRotation_symm`) and `2 cos Theta = U + U^{-1}` (`two_smul_abs_canonicalIntertwiner`) one gets `U(V,U) - cos Theta = -(U(U,V) - cos Theta)`, and the Moore--Penrose factor is common to both sides because `Theta` is symmetric.  Scope: finite dimension, any `RCLike` field.  The bounded complex declarations already on this row are unchanged.
 
@@ -2662,8 +2662,8 @@ SOURCE-FIDELITY REFRESH 2026-08-11.  The former finite-dimensional J gap is clos
 
 **Lean declarations:**
 
-- `TauCeti.DavisKahanTheory.singularValues_restrictedDisplacement_le`
-- `TauCeti.DavisKahanTheory.singularValues_restrictedDisplacement_directRotation`
+- `TauCeti.DavisKahan.FiniteDimensional.singularValues_restrictedDisplacement_le`
+- `TauCeti.DavisKahan.FiniteDimensional.singularValues_restrictedDisplacement_directRotation`
 - `TauCeti.DavisKahan1970.Proposition4_1`
 - `TauCeti.DavisKahan1970.Proposition4_1_directRotationValues`
 - `TauCeti.DavisKahan1970.Proposition4_1_infiniteDimensional`
@@ -2679,7 +2679,7 @@ SOURCE-FIDELITY REFRESH 2026-08-11.  The former finite-dimensional J gap is clos
 - `TauCeti.DavisKahan1970.Proposition4_1_compact_nonacute_real`
 - `TauCeti.DavisKahan1970.Proposition4_1_compact_nonacute_directRotationValues_complex`
 - `TauCeti.DavisKahan1970.Proposition4_1_compact_nonacute_directRotationValues_real`
-- `TauCeti.DavisKahanTheory.principalPlaneChord_eq_two_mul_sin_half`
+- `TauCeti.DavisKahan.FiniteDimensional.principalPlaneChord_eq_two_mul_sin_half`
 
 **Notes.** The finite pointwise singular-value theorem is compiled: every singular value of the restricted displacement (1-V)P is minimized by the direct rotation, whose values are the doubled half-angle sines 2 sin(theta_k/2).  A source-numbered wrapper and the infinite-dimensional scope remain open.
 
@@ -2732,8 +2732,8 @@ Equations (4.1) and (4.2), the closest-`Q`-vector step and the `V = UZ` factoris
 
 **Lean declarations:**
 
-- `TauCeti.DavisKahanTheory.uiNorm_restrictedDisplacement_le`
-- `TauCeti.DavisKahanTheory.directRotation_minimizes_restrictedDisplacement_uiNorm`
+- `TauCeti.DavisKahan.FiniteDimensional.uiNorm_restrictedDisplacement_le`
+- `TauCeti.DavisKahan.FiniteDimensional.directRotation_minimizes_restrictedDisplacement_uiNorm`
 - `TauCeti.DavisKahan1970.Corollary4_1`
 - `TauCeti.DavisKahan1970.Corollary4_1_minimizer`
 - `TauCeti.DavisKahan1970.Corollary4_1_infiniteDimensional`
@@ -2832,7 +2832,7 @@ The frontier statement `proposition4_2_basisAngleSquareSum` is no longer `sorry`
 **M18 ADJUDICATION 2026-08-09 (Claude Opus 5), against `dev/davis-kahan-1970-final-audit-2026-08-09.md`.**  Disagreement 12 is UPHELD in both of its parts, and
 the status is LOWERED `compiled_exact` -> `compiled_specialization`.
 
-(a) `DavisKahanTheory.directRotation_minimizes_sum_sq_basis_angles` IS NOT PROPOSITION 4.2 and has
+(a) `DavisKahan.FiniteDimensional.directRotation_minimizes_sum_sq_basis_angles` IS NOT PROPOSITION 4.2 and has
 been moved off this row onto `DK-4.3-prop`.  MEASURED 2026-08-09 by elaboration: it is
 `sum_i ||U (b i) - b i||^2 <= sum_i ||W (b i) - b i||^2` over an `OrthonormalBasis (Fin n) K E` of the
 WHOLE SPACE and the FULL displacement, i.e. a Frobenius statement and a consequence of Proposition 4.3.
@@ -2884,14 +2884,14 @@ REOPENING WITHDRAWN 2026-08-31 and the rule corrected: a later source passage en
 
 **Lean declarations:**
 
-- `TauCeti.DavisKahanTheory.directRotation_displacementSquare_kyFan`
-- `TauCeti.DavisKahanTheory.directRotation_displacementSquare_uiNorm`
-- `TauCeti.DavisKahanTheory.directRotation_minimizes_displacementSquare_uiNorm`
+- `TauCeti.DavisKahan.FiniteDimensional.directRotation_displacementSquare_kyFan`
+- `TauCeti.DavisKahan.FiniteDimensional.directRotation_displacementSquare_uiNorm`
+- `TauCeti.DavisKahan.FiniteDimensional.directRotation_minimizes_displacementSquare_uiNorm`
 - `TauCeti.DavisKahan1970.Proposition4_3`
 - `TauCeti.DavisKahan1970.Proposition4_3_kyFan`
 - `TauCeti.DavisKahan1970.Proposition4_3_minimizer`
 - `TauCeti.DavisKahan1970.Proposition4_3_infiniteDimensional`
-- `TauCeti.DavisKahanTheory.directRotation_minimizes_sum_sq_basis_angles`
+- `TauCeti.DavisKahan.FiniteDimensional.directRotation_minimizes_sum_sq_basis_angles`
 - `TauCeti.DavisKahan1970.Proposition4_3_real`
 - `TauCeti.DavisKahan1970.Proposition4_3_infiniteDimensional_idealGauge`
 - `TauCeti.DavisKahan1970.Proposition4_3_real_idealGauge`
@@ -2970,10 +2970,10 @@ REOPENING WITHDRAWN 2026-08-31 and the rule corrected: a later source passage en
 **Lean declarations:**
 
 - `TauCeti.DavisKahan.crossedDefectsEquivalent_of_isAcute`
-- `TauCeti.DavisKahanTheory.shortRotation_fullDisplacement_refuted`
-- `TauCeti.DavisKahanTheory.DavisKahanProposition4_4_Finite`
-- `TauCeti.DavisKahanTheory.not_davisKahanProposition4_4_Finite`
-- `TauCeti.DavisKahanTheory.directRotation_fullDisplacement_qnorm`
+- `TauCeti.DavisKahan.FiniteDimensional.shortRotation_fullDisplacement_refuted`
+- `TauCeti.DavisKahan.FiniteDimensional.DavisKahanProposition4_4_Finite`
+- `TauCeti.DavisKahan.FiniteDimensional.not_davisKahanProposition4_4_Finite`
+- `TauCeti.DavisKahan.FiniteDimensional.directRotation_fullDisplacement_qnorm`
 
 **Curated source/Lean review:**
 
@@ -3370,20 +3370,20 @@ Residue, and not a gap: `[CompleteSpace Z]`, which `Theorem63InfiniteTrial.lean`
 
 **Lean declarations:**
 
-- `TauCeti.DavisKahan.ExactTanTheta.exists_hasTheorem63DirectedTangentApproximationNumbersInfinite`
-- `TauCeti.DavisKahan.ExactTanTheta.hasTheorem63DirectedTangentApproximationNumbers_iff_infinite`
-- `TauCeti.DavisKahan.ExactTanTheta.hasTheorem63DirectedTangentApproximationNumbers_theorem63DirectedTangent`
-- `TauCeti.DavisKahan.ExactTanTheta.theorem63DirectedTangent`
-- `TauCeti.DavisKahan.ExactTanTheta.theorem6_3_all_kyFan_core`
-- `TauCeti.DavisKahan.ExactTanTheta.theorem6_3_all_kyFan_core_directedTangent`
-- `TauCeti.DavisKahan.ExactTanTheta.theorem6_3_generalizedTanTheta_equalRank_spectral`
-- `TauCeti.DavisKahan.ExactTanTheta.theorem6_3_generalizedTanTheta_of_formBounds_equalRank`
-- `TauCeti.DavisKahan.ExactTanTheta.theorem6_3_generalizedTanTheta_ideal`
-- `TauCeti.DavisKahan.ExactTanTheta.theorem6_3_generalizedTanTheta_ideal_directedTangent`
-- `TauCeti.DavisKahan.ExactTanTheta.theorem6_3_generalizedTanTheta_ideal_of_infiniteTrial`
-- `TauCeti.DavisKahan.ExactTanTheta.theorem6_3_infiniteTrial_of_formBounds`
-- `TauCeti.DavisKahan.ExactTanTheta.theorem6_3_infiniteTrial_ideal`
-- `TauCeti.DavisKahan.ExactTanTheta.theorem6_3_infiniteTrial_spectral_exists`
+- `TauCeti.DavisKahan.TanTheta.exists_hasTheorem63DirectedTangentApproximationNumbersInfinite`
+- `TauCeti.DavisKahan.TanTheta.hasTheorem63DirectedTangentApproximationNumbers_iff_infinite`
+- `TauCeti.DavisKahan.TanTheta.hasTheorem63DirectedTangentApproximationNumbers_theorem63DirectedTangent`
+- `TauCeti.DavisKahan.TanTheta.theorem63DirectedTangent`
+- `TauCeti.DavisKahan.TanTheta.theorem6_3_all_kyFan_core`
+- `TauCeti.DavisKahan.TanTheta.theorem6_3_all_kyFan_core_directedTangent`
+- `TauCeti.DavisKahan.TanTheta.theorem6_3_generalizedTanTheta_equalRank_spectral`
+- `TauCeti.DavisKahan.TanTheta.theorem6_3_generalizedTanTheta_of_formBounds_equalRank`
+- `TauCeti.DavisKahan.TanTheta.theorem6_3_generalizedTanTheta_ideal`
+- `TauCeti.DavisKahan.TanTheta.theorem6_3_generalizedTanTheta_ideal_directedTangent`
+- `TauCeti.DavisKahan.TanTheta.theorem6_3_generalizedTanTheta_ideal_of_infiniteTrial`
+- `TauCeti.DavisKahan.TanTheta.theorem6_3_infiniteTrial_of_formBounds`
+- `TauCeti.DavisKahan.TanTheta.theorem6_3_infiniteTrial_ideal`
+- `TauCeti.DavisKahan.TanTheta.theorem6_3_infiniteTrial_spectral_exists`
 - `TauCeti.DavisKahan1970.Section6Example61.T_u`
 - `TauCeti.DavisKahan1970.Section6Example61.T_w`
 - `TauCeti.DavisKahan1970.Section6Example61.rayleigh_zero`
@@ -3405,7 +3405,7 @@ Residue, and not a gap: `[CompleteSpace Z]`, which `Theorem63InfiniteTrial.lean`
 
 **A HYPOTHESIS WITH NO PRODUCER, FOUND AND DISCHARGED 2026-08-05.** Every compiled form of Theorem 6.3 quantified over a `tanTheta0` satisfying `HasTheorem63DirectedTangentApproximationNumbers Z V tanTheta0`, and a grep for *producers* rather than consumers showed that nothing anywhere in the repository ever constructed one.  The compiled theorem was therefore a conditional whose antecedent had no witness -- strictly weaker than the printed theorem, which takes the tangent representative for granted.  The row said `proved_in_build`, which was true of the declarations and misleading about the mathematics.
 
-THE WITNESS.  `ExactTanTheta.theorem63DirectedTangent`: diagonal in the right singular basis of the directed sine block, with entries `tan (arcsin s_i)`.  `hasTheorem63DirectedTangentApproximationNumbers_theorem63DirectedTangent` proves it has the required approximation numbers.  Two facts do the work: the singular values of a diagonal operator with antitone nonnegative diagonal are the diagonal itself, and `t |-> t / sqrt(1 - t^2)` is increasing on `[0,1)`, so the entries inherit the sine block's ordering.  Post-composition with the inclusion `Z -> H` does not move approximation singular values (`approximationSingularValue_subtypeL_comp_complex`), and above `dim Z` both sides vanish (`approximationSingularValue_eq_zero_of_finrank_le_complex`).
+THE WITNESS.  `TanTheta.theorem63DirectedTangent`: diagonal in the right singular basis of the directed sine block, with entries `tan (arcsin s_i)`.  `hasTheorem63DirectedTangentApproximationNumbers_theorem63DirectedTangent` proves it has the required approximation numbers.  Two facts do the work: the singular values of a diagonal operator with antitone nonnegative diagonal are the diagonal itself, and `t |-> t / sqrt(1 - t^2)` is increasing on `[0,1)`, so the entries inherit the sine block's ordering.  Post-composition with the inclusion `Z -> H` does not move approximation singular values (`approximationSingularValue_subtypeL_comp_complex`), and above `dim Z` both sides vanish (`approximationSingularValue_eq_zero_of_finrank_le_complex`).
 
 **NO NEW HYPOTHESIS WAS NEEDED.** Finiteness of the entries requires `s_i < 1`, and `theorem63_singularValues_sine_lt_one` -- already in the file -- derives exactly that from the source gap, i.e. from the same `hCompressionUpper` and `hUnwantedLower` Theorem 6.3 assumes.  So `theorem6_3_all_kyFan_core_directedTangent` and `theorem6_3_generalizedTanTheta_ideal_directedTangent` carry precisely the printed hypotheses.  Both are in the default build and axiom-clean, and are wrapped in `RemainingSourceSurface` as `theorem6_3_all_kyFan_core_unconditional` and `theorem6_3_generalizedTanTheta_ideal_unconditional`.
 
@@ -3545,9 +3545,9 @@ THE CAUSE WAS MANIFEST GRANULARITY, NOT A STALE NUMBER, so the fix was to split 
 - `TauCeti.DavisKahan1970.Theorem6_1_real_commonCore`
 - `TauCeti.DavisKahan1970.Theorem6_2_real_commonDomain`
 - `TauCeti.DavisKahan1970.Theorem6_2_real_commonCore`
-- `TauCeti.DavisKahan.ExactTanTheta.theorem6_3_unbounded_infiniteTrial_ideal_exists_of_reducing`
-- `TauCeti.DavisKahan.ExactTanTheta.theorem6_3_unbounded_infiniteTrial_ideal_of_reducing`
-- `TauCeti.DavisKahan.ExactTanTheta.theorem6_3_unbounded_infiniteTrial_ideal_exists`
+- `TauCeti.DavisKahan.TanTheta.theorem6_3_unbounded_infiniteTrial_ideal_exists_of_reducing`
+- `TauCeti.DavisKahan.TanTheta.theorem6_3_unbounded_infiniteTrial_ideal_of_reducing`
+- `TauCeti.DavisKahan.TanTheta.theorem6_3_unbounded_infiniteTrial_ideal_exists`
 - `TauCeti.DavisKahan1970.theorem6_3_all_kyFan_core_infiniteData_real`
 - `TauCeti.DavisKahan1970.theorem6_3_unbounded_infiniteTrial_ideal_exists_of_reducing_real`
 - `TauCeti.DavisKahan1970.theorem6_3_unbounded_infiniteTrial_ideal_exists_real`
@@ -3570,12 +3570,12 @@ THE CAUSE WAS MANIFEST GRANULARITY, NOT A STALE NUMBER, so the fix was to split 
 - `TauCeti.DavisKahan1970.Proposition6_1_commonDomain_crossSineSum`
 - `TauCeti.DavisKahan1970.Proposition6_1_commonDomain_crossSineSum_kyFan`
 - `TauCeti.DavisKahan1970.Proposition6_1_commonDomain_sinTheta_singularValues`
-- `TauCeti.DavisKahan.ExactTanTheta.UnboundedCompressionTrialData`
-- `TauCeti.DavisKahan.ExactTanTheta.UnboundedCompressionTrialData.ofBounded`
-- `TauCeti.DavisKahan.ExactTanTheta.UnboundedCompressionTrialData.ideal_of_formBounds`
-- `TauCeti.DavisKahan.ExactTanTheta.UnboundedCompressionTrialData.ideal_of_formBounds_exists`
-- `TauCeti.DavisKahan.ExactTanTheta.UnboundedCompressionTrialData.ideal_of_reducing_exists`
-- `TauCeti.DavisKahan.ExactTanTheta.Theorem63TrialData.ofAction`
+- `TauCeti.DavisKahan.TanTheta.UnboundedCompressionTrialData`
+- `TauCeti.DavisKahan.TanTheta.UnboundedCompressionTrialData.ofBounded`
+- `TauCeti.DavisKahan.TanTheta.UnboundedCompressionTrialData.ideal_of_formBounds`
+- `TauCeti.DavisKahan.TanTheta.UnboundedCompressionTrialData.ideal_of_formBounds_exists`
+- `TauCeti.DavisKahan.TanTheta.UnboundedCompressionTrialData.ideal_of_reducing_exists`
+- `TauCeti.DavisKahan.TanTheta.Theorem63TrialData.ofAction`
 - `TauCeti.DavisKahan1970.all_kyFan_core_unboundedCompression_real`
 - `TauCeti.DavisKahan1970.theorem6_3_unboundedCompression_ideal_exists_real`
 - `TauCeti.DavisKahan1970.theorem6_3_unboundedCompression_ideal_of_reducing_exists_real`
@@ -4812,7 +4812,7 @@ VERIFIED 2026-08-04 by the elaborator, not by grep: a probe file importing `Davi
 
 **FRESH AUDIT 2026-08-07 (Claude Opus 5).  THE RECORDED `next_action` IS WRONG: THIS IS NOT THEOREM INSTANTIATION.**
 
-The target is exact and identified.  `tangentThetaExactBound eps = ((sqrt 15/15)/500 * eps) / (1 - (ritzHighCoefficient/500) * eps)`, which is `(eps * sqrt 15/15) / (500 - ritzHigh eps)`.  So the intended instantiation is: residual norm = `orthogonalResidualSingularValue eps = |eps| sqrt 15/15`, gap `delta = 500 - ritzHigh eps`, compression form bound `alpha = ritzHigh eps`.  The endpoint that would consume that data exists and is strong enough: `TauCeti.DavisKahan.ExactTanTheta.theorem6_3_unbounded_ideal_directedTangent`, which gives `delta * N.gauge (tanTheta) <= N.gauge D.residual` for every Fan-dominant unitary-invariant ideal, with the tangent representative exhibited rather than assumed.
+The target is exact and identified.  `tangentThetaExactBound eps = ((sqrt 15/15)/500 * eps) / (1 - (ritzHighCoefficient/500) * eps)`, which is `(eps * sqrt 15/15) / (500 - ritzHigh eps)`.  So the intended instantiation is: residual norm = `orthogonalResidualSingularValue eps = |eps| sqrt 15/15`, gap `delta = 500 - ritzHigh eps`, compression form bound `alpha = ritzHigh eps`.  The endpoint that would consume that data exists and is strong enough: `TauCeti.DavisKahan.TanTheta.theorem6_3_unbounded_ideal_directedTangent`, which gives `delta * N.gauge (tanTheta) <= N.gauge D.residual` for every Fan-dominant unitary-invariant ideal, with the tangent representative exhibited rather than assumed.
 
 WHAT ACTUALLY BLOCKS IT is its hypothesis
 

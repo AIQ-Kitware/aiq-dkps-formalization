@@ -51,7 +51,7 @@ namespace DavisKahan
 namespace Section2
 
 open ExactSinTheta
-open ExactTanTheta
+open TanTheta
 open Module (finrank)
 
 universe u
@@ -170,7 +170,7 @@ invariant for the perturbed operator `T + E` and `T` reduces `V` with the source
 some tangent representative with the paper's approximation numbers satisfies
 `δ · N(tan Θ₀) ≤ N(E|_Z)` in every Fan-dominant unitarily invariant ideal gauge.  This is
 the perturbation companion of the equal-dimensional infinite/noncompact residual theorem
-`ExactTanTheta.theorem6_3_infiniteTrial_of_formBounds_exists`; the bridge is the same one
+`TanTheta.theorem6_3_infiniteTrial_of_formBounds_exists`; the bridge is the same one
 line of algebra as in the finite case. -/
 theorem theorem6_3_perturbation_infiniteTrial
     (N : KyFanDominantIdealFamily (𝕜 := ℂ))

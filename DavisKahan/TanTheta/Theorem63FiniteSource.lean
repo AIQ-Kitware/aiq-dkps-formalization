@@ -44,7 +44,7 @@ namespace TauCeti
 
 open TauCeti
 namespace DavisKahan
-namespace ExactTanTheta
+namespace TanTheta
 
 open ExactSinTheta
 open Module (finrank)
@@ -1205,6 +1205,6 @@ theorem theorem6_3_generalizedTanTheta_equalRank_spectral
 
 end DirectedTangentExistence
 
-end ExactTanTheta
+end TanTheta
 end DavisKahan
 end TauCeti

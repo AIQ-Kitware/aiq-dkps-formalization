@@ -1731,7 +1731,7 @@
     {
       "source_module": "ForTauCeti.Analysis.InnerProductSpace.RectangularUnitarilyInvariantSeminorm",
       "source_declarations": [],
-      "current_namespace": "TauCeti.DavisKahanTheory",
+      "current_namespace": "TauCeti.DavisKahan.FiniteDimensional",
       "staging_module": "ForTauCeti.Analysis.InnerProductSpace.RectangularUnitarilyInvariantSeminorm.Basic",
       "final_tauceti_module": "TauCeti.Analysis.InnerProductSpace.RectangularUnitarilyInvariantSeminorm.Basic",
       "ownership_class": "tauceti",
@@ -1753,7 +1753,7 @@
     {
       "source_module": "ForTauCeti.Analysis.InnerProductSpace.RectangularUnitarilyInvariantSeminorm",
       "source_declarations": [],
-      "current_namespace": "TauCeti.DavisKahanTheory",
+      "current_namespace": "TauCeti.DavisKahan.FiniteDimensional",
       "staging_module": "ForTauCeti.Analysis.InnerProductSpace.RectangularUnitarilyInvariantSeminorm.Majorization",
       "final_tauceti_module": "TauCeti.Analysis.InnerProductSpace.RectangularUnitarilyInvariantSeminorm.Majorization",
       "ownership_class": "tauceti",
@@ -1771,7 +1771,7 @@
     {
       "source_module": "ForTauCeti.Analysis.InnerProductSpace.RectangularUnitarilyInvariantSeminorm",
       "source_declarations": [],
-      "current_namespace": "TauCeti.DavisKahanTheory",
+      "current_namespace": "TauCeti.DavisKahan.FiniteDimensional",
       "staging_module": "ForTauCeti.Analysis.InnerProductSpace.RectangularUnitarilyInvariantSeminorm.BlockSum",
       "final_tauceti_module": "TauCeti.Analysis.InnerProductSpace.RectangularUnitarilyInvariantSeminorm.BlockSum",
       "ownership_class": "tauceti",
@@ -1789,7 +1789,7 @@
     {
       "source_module": "ForTauCeti.Analysis.InnerProductSpace.RectangularUnitarilyInvariantSeminorm",
       "source_declarations": [],
-      "current_namespace": "TauCeti.DavisKahanTheory",
+      "current_namespace": "TauCeti.DavisKahan.FiniteDimensional",
       "staging_module": "ForTauCeti.Analysis.InnerProductSpace.RectangularUnitarilyInvariantSeminorm.Instances",
       "final_tauceti_module": "TauCeti.Analysis.InnerProductSpace.RectangularUnitarilyInvariantSeminorm.Instances",
       "ownership_class": "tauceti",
@@ -3429,7 +3429,7 @@
         "singularValues_sinThetaMap",
         "uiNorm_projection_sub_eq_sinAngleOperator"
       ],
-      "current_namespace": "TauCeti.DavisKahanTheory",
+      "current_namespace": "TauCeti.DavisKahan.FiniteDimensional",
       "staging_module": "ForTauCeti.Analysis.InnerProductSpace.AngleGeometry",
       "final_tauceti_module": "TauCeti.Analysis.InnerProductSpace.AngleGeometry",
       "ownership_class": "tauceti",
@@ -3675,7 +3675,7 @@
         "sylvester_sinThetaEmbedding_eq_projectedResidual",
         "tanThetaEmbedding_defined_iff"
       ],
-      "current_namespace": "TauCeti.DavisKahanTheory",
+      "current_namespace": "TauCeti.DavisKahan.FiniteDimensional",
       "staging_module": "ForTauCeti.Analysis.InnerProductSpace.Residual.AngleEmbedding",
       "final_tauceti_module": "TauCeti.Analysis.InnerProductSpace.Residual.AngleEmbedding",
       "ownership_class": "tauceti",
@@ -3710,7 +3710,7 @@
         "ritzResidual_eq_zero_iff_reduces",
         "ritzResidual_frobenius_minimal"
       ],
-      "current_namespace": "TauCeti.DavisKahanTheory",
+      "current_namespace": "TauCeti.DavisKahan.FiniteDimensional",
       "staging_module": "ForTauCeti.Analysis.InnerProductSpace.Residual.Ritz",
       "final_tauceti_module": "TauCeti.Analysis.InnerProductSpace.Residual.Ritz",
       "ownership_class": "tauceti",
@@ -3736,7 +3736,7 @@
         "generalResidual_toLinearMap",
         "sylvester_complementaryTrialBlock_eq_projectedGeneralResidual"
       ],
-      "current_namespace": "TauCeti.DavisKahanTheory",
+      "current_namespace": "TauCeti.DavisKahan.FiniteDimensional",
       "staging_module": "ForTauCeti.Analysis.InnerProductSpace.Residual.TrialMap",
       "final_tauceti_module": "TauCeti.Analysis.InnerProductSpace.Residual.TrialMap",
       "ownership_class": "tauceti",
@@ -3816,7 +3816,7 @@
         "uiNorm_directed_sinTheta_le",
         "uiNorm_spectralSubspace_directed_sinTheta_le"
       ],
-      "current_namespace": "TauCeti.DavisKahanTheory",
+      "current_namespace": "TauCeti.DavisKahan.FiniteDimensional",
       "staging_module": "ForTauCeti.Analysis.InnerProductSpace.SinTheta.Perturbation",
       "final_tauceti_module": "TauCeti.Analysis.InnerProductSpace.SinTheta.Perturbation",
       "ownership_class": "tauceti",
@@ -3903,7 +3903,7 @@
         "TwoBlockFormGap",
         "orderedInternalGap_of_spectrumIn_Iic_Ici"
       ],
-      "current_namespace": "TauCeti.DavisKahanTheory",
+      "current_namespace": "TauCeti.DavisKahan.FiniteDimensional",
       "staging_module": "ForTauCeti.Analysis.InnerProductSpace.Spectral.Gap",
       "final_tauceti_module": "TauCeti.Analysis.InnerProductSpace.SpectralGap",
       "ownership_class": "tauceti",
@@ -3975,7 +3975,7 @@
         "spectralSubspace_eq_span_eigenvectors",
         "spectrumIn_restrict_iff"
       ],
-      "current_namespace": "TauCeti.DavisKahanTheory",
+      "current_namespace": "TauCeti.DavisKahan.FiniteDimensional",
       "staging_module": "ForTauCeti.Analysis.InnerProductSpace.Spectral.Subspace",
       "final_tauceti_module": "TauCeti.Analysis.InnerProductSpace.SpectralSubspace",
       "ownership_class": "tauceti",
@@ -4009,7 +4009,7 @@
         "sylvesterOperator_injective",
         "sylvesterOperator_solveSylvester"
       ],
-      "current_namespace": "TauCeti.DavisKahanTheory",
+      "current_namespace": "TauCeti.DavisKahan.FiniteDimensional",
       "staging_module": "ForTauCeti.Analysis.InnerProductSpace.Sylvester.Basic",
       "final_tauceti_module": "TauCeti.Analysis.InnerProductSpace.Sylvester.Basic",
       "ownership_class": "tauceti",
@@ -4071,7 +4071,7 @@
         "doubledComplexScalarMapAction_apply",
         "doubledComplexScalarMapAction_ofReal"
       ],
-      "current_namespace": "TauCeti.DavisKahanTheory",
+      "current_namespace": "TauCeti.DavisKahan.FiniteDimensional",
       "staging_module": "ForTauCeti.Analysis.InnerProductSpace.Sylvester.Internal.ReciprocalMultiplier",
       "final_tauceti_module": "TauCeti.Analysis.InnerProductSpace.Sylvester.Internal.ReciprocalMultiplier",
       "ownership_class": "tauceti",
@@ -4098,7 +4098,7 @@
         "opNorm_shift_le_of_spectrumIn_Icc",
         "re_inner_le_of_eigenvalues_le"
       ],
-      "current_namespace": "TauCeti.DavisKahanTheory",
+      "current_namespace": "TauCeti.DavisKahan.FiniteDimensional",
       "staging_module": "ForTauCeti.Analysis.InnerProductSpace.Sylvester.Internal.SpectralBounds",
       "final_tauceti_module": "TauCeti.Analysis.InnerProductSpace.Sylvester.Internal.SpectralBounds",
       "ownership_class": "tauceti",
@@ -4127,7 +4127,7 @@
         "uiNorm_sylvester_le_of_orderedGap",
         "uiNorm_sylvester_le_of_unorderedIntervalGap"
       ],
-      "current_namespace": "TauCeti.DavisKahanTheory",
+      "current_namespace": "TauCeti.DavisKahan.FiniteDimensional",
       "staging_module": "ForTauCeti.Analysis.InnerProductSpace.Sylvester.Interval",
       "final_tauceti_module": "TauCeti.Analysis.InnerProductSpace.Sylvester.Interval",
       "ownership_class": "tauceti",
@@ -4164,7 +4164,7 @@
         "uiNorm_sylvester_le_of_spectralDistance_complex",
         "uiNorm_sylvester_le_of_spectralDistance_real"
       ],
-      "current_namespace": "TauCeti.DavisKahanTheory",
+      "current_namespace": "TauCeti.DavisKahan.FiniteDimensional",
       "staging_module": "ForTauCeti.Analysis.InnerProductSpace.Sylvester.SpectralDistance",
       "final_tauceti_module": "TauCeti.Analysis.InnerProductSpace.Sylvester.SpectralDistance",
       "ownership_class": "tauceti",

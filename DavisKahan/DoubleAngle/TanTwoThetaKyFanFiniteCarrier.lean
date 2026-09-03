@@ -47,7 +47,7 @@ projection, exactly for `T` and one-sidedly for `H`.
 -/
 
 namespace TauCeti
-namespace DavisKahanTheory
+namespace DavisKahan.FiniteDimensional
 
 open scoped InnerProductSpace
 open DavisKahan.ExactSinTheta
@@ -630,5 +630,5 @@ theorem absTanTwoTheta_offDiagonal_mem_and_gauge_le_of_finiteDimensional_invaria
 
 end Main
 
-end DavisKahanTheory
+end DavisKahan.FiniteDimensional
 end TauCeti

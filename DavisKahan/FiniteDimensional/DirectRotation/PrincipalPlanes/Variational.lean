@@ -25,7 +25,7 @@ exists, not a restriction on the conclusion.)  The main results are
 -/
 
 namespace TauCeti
-namespace DavisKahanTheory
+namespace DavisKahan.FiniteDimensional
 
 open scoped InnerProductSpace BigOperators
 open Module (finrank)
@@ -363,5 +363,5 @@ theorem uiNorm_restrictedDisplacement_le
       N ((LinearMap.id - W.toLinearMap) ∘ₗ projection U) :=
   N.apply_le_of_kyFanSum_le
     (kyFanSum_restrictedDisplacement_le U V hacute W hmap)
-end DavisKahanTheory
+end DavisKahan.FiniteDimensional
 end TauCeti

@@ -203,7 +203,7 @@ Other Section 2 claims:
 
 | Source | Lean | Verdict |
 |---|---|---|
-| Def 3.1 | `Frontier.IsDirectRotation`, `DavisKahanTheory.directRotation` | NARROWER: clause (i) `C_j ≥ 0` rendered as numerical-range accretivity `0 ≤ re⟪x,PTPx⟫`, strictly weaker over ℂ (module docstring concedes it); RCLike form is `[FiniteDimensional]` |
+| Def 3.1 | `Frontier.IsDirectRotation`, `DavisKahan.FiniteDimensional.directRotation` | NARROWER: clause (i) `C_j ≥ 0` rendered as numerical-range accretivity `0 ≤ re⟪x,PTPx⟫`, strictly weaker over ℂ (module docstring concedes it); RCLike form is `[FiniteDimensional]` |
 | Def 3.2 | `DavisKahan.IsAcute := subspaceGap < 1` | **NARROWER — headline (D)** |
 | Prop 3.1 existence / uniqueness | `complex_directRotation`, `complex_directRotation_unique` | EXACT modulo Def 3.2 |
 | Prop 3.1 "characterized by (i) alone" | — | **ABSENT**: both compiled characterizations put (ii) or (3.8) on the left of the iff |
@@ -494,7 +494,7 @@ Where census prose disagrees with what elaborates, **the build wins**.
     *"is `sorry` (`#print axioms` reaches `sorryAx`)"* in `DavisKahan/Experimental/Frontier/Section4.lean`.
     **That path no longer exists** and every Section-4 frontier declaration is axiom-clean.
 12. **`DK-4.2-prop`** — its first listed declaration,
-    `DavisKahanTheory.directRotation_minimizes_sum_sq_basis_angles`, **is not Proposition 4.2**: it is
+    `DavisKahan.FiniteDimensional.directRotation_minimizes_sum_sq_basis_angles`, **is not Proposition 4.2**: it is
     a Frobenius statement about a basis of the *whole space* and the full displacement, a consequence
     of Prop 4.3. The census's "nuclear-norm specialization" gloss for it is also wrong (it is
     Frobenius). And its `scope_gap` wrongly claims the dimension axis is open — the `_of_mem` /
