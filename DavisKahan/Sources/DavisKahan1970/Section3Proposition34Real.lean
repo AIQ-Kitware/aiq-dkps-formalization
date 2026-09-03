@@ -10,7 +10,7 @@ import DavisKahan.Geometry.Polar.DirectRotationReal
 # Davis--Kahan 1970, Proposition 3.4 over real Hilbert spaces
 
 The full nonacute complex theorem with the genuine Definition 3.1 conclusion is
-`TauCeti.DavisKahan1970.proposition3_4_source_full_complex`, in the companion
+`TauCeti.DavisKahan1970.proposition3_4_full_complex`, in the companion
 module `Section3Proposition34.lean`, which also owns the positivity upgrade
 `positiveDiagonalBlocks_of_sq` that both scalar fields use.
 This file transports that theorem to the real scalar field without identifying
@@ -108,12 +108,12 @@ private theorem halfAngle_complexify
 /-- **Proposition 3.4's explicit direct rotation discharges the Section 3
 standing assumption, over `ℝ`.**
 
-The real analogue of `proposition3_4_source_crossedDefectsEquivalent_complex`:
+The real analogue of `proposition3_4_crossedDefectsEquivalent_complex`:
 the printed hypotheses exhibit a direct rotation, and by Proposition 3.2 that is
 equivalent to the inherited crossed-defect condition (3.5), so the standing
 assumption is a consequence of this result's own hypotheses rather than an extra
 one it silently relies on. -/
-theorem proposition3_4_source_crossedDefectsEquivalent_real
+theorem proposition3_4_crossedDefectsEquivalent_real
     (W : E →L[ℝ] E)
     (hunitary : W ∈ unitary (E →L[ℝ] E))
     (hintertwines : W * U.starProjection = V.starProjection * W)
@@ -144,7 +144,7 @@ Definition 3.1 sense and its source cosine square satisfies `C₀² ≥ 1/2`, th
 The conclusion spells out the exact real Definition 3.1 clauses.  In particular
 the two diagonal compressions are `IsPositive`, which is stronger than the
 real numerical-range fields of the generic `IsDirectRotation` structure. -/
-theorem proposition3_4_source_full_real
+theorem proposition3_4_full_real
     (W : E →L[ℝ] E)
     (hunitary : W ∈ unitary (E →L[ℝ] E))
     (hintertwines : W * U.starProjection = V.starProjection * W)
@@ -220,7 +220,7 @@ theorem proposition3_4_source_full_real
 
   have hC : IsDirectRotation CR CV (WC * WC) := by
     dsimp only [CR]
-    exact proposition3_4_source_full_bundled_complex
+    exact proposition3_4_full_bundled_complex
       CU CV WC hunitaryC hintertwinesC hcrossedC
         hsource_nonnegC hcomplement_nonnegC hcosC
 

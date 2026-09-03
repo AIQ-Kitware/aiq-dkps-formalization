@@ -32,7 +32,7 @@ The ambient double angle is an ambient **single** angle.
 `sin 2Θ(U, V)` with `|P_{J U} − P_U|`, where `J` is the reflection through `V`,
 so the theorem to apply is Proposition 6.1 on a common dense domain — which
 already existed as `CommonDomainSymmetricSinThetaProblem.result_every_unitarilyInvariantNorm`
-and `proposition6_1_commonDomain_source_projectorDifference`.  The reflected
+and `proposition6_1_commonDomain_projectorDifference`.  The reflected
 operator `J A J` shares `dom A`, because `V` reduces `A + H` and `H` is bounded,
 so `P_V` and hence `J` preserve `dom A`.
 
@@ -161,7 +161,7 @@ nonterminal row, and the both-fields rule.
 | `sin 2Θ` | `sinTwoTheta_directed_complex`, `…_real` | `sinTwoTheta_ambient_complex`, `…_real` |
 | `tan 2Θ` | `tanTwoTheta_directed_complex`, `…_real` | `tanTwoTheta_ambient_complex`, `…_real` |
 
-**Source-result certificates.**  `SectionTwo.sinTwoTheta_source_complex` and
+**Source-result certificates.**  `SectionTwo.sinTwoTheta_bothConclusions_complex` and
 `…_real` state both printed conclusions in one declaration: the operator, the
 spectral selection and the gap are shared, and each clause's own data is
 quantified inside its own conjunct, so neither clause acquires the other's

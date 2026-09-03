@@ -773,7 +773,7 @@ instance binder, but `theorem63DirectedSineBlock` does not depend on it and neit
 does the body, so the two definitions unfold to one another.  Consequently the
 finite-dimensional trial hypothesis is not part of what the source condition *says*; it
 only restricts where the condition can be *stated*.  This is what lets
-`theorem6_3_infiniteTrial_source_ideal` below subsume the finite-trial source facade. -/
+`theorem6_3_infiniteTrial_ideal` below subsume the finite-trial source facade. -/
 theorem hasTheorem63DirectedTangentApproximationNumbers_iff_infinite
     (Z V : Submodule ℂ H) [Z.HasOrthogonalProjection] [V.HasOrthogonalProjection]
     [FiniteDimensional ℂ Z] (tanTheta0 : Z →L[ℂ] H) :
@@ -791,7 +791,7 @@ quantified over exactly as the paper quantifies it ("let `sin Θ₀` be *any* op
 singular values are the same as those of `E₀*F₁`"), and the conclusion is
 `δ ‖tan Θ₀‖ ≤ ‖R‖` in every Fan-dominant unitarily invariant ideal family.
 
-Unlike `theorem6_3_generalizedTanTheta_source_ideal`, the trial coordinate space carries
+Unlike `theorem6_3_generalizedTanTheta_ideal`, the trial coordinate space carries
 **no** finite-dimensionality typeclass: `[CompleteSpace Z]` is the only structure
 assumed, and it already follows from `[Z.HasOrthogonalProjection]` with `H` complete.
 
@@ -801,7 +801,7 @@ core holds at every relative dimension.  The strict-dimension binder in the fini
 chain was already inert — `theorem6_3_generalizedTanTheta_of_formBounds` binds it as
 `_hStrictDimension` and never uses it.  Dropping an unused hypothesis strengthens the
 statement; it does not narrow it. -/
-theorem theorem6_3_infiniteTrial_source_ideal
+theorem theorem6_3_infiniteTrial_ideal
     (N : ExactSinTheta.KyFanDominantIdealFamily (𝕜 := ℂ))
     (T : H →L[ℂ] H) (hT : T.IsSymmetric)
     (V Z : Submodule ℂ H) [V.HasOrthogonalProjection] [Z.HasOrthogonalProjection]
@@ -838,11 +838,11 @@ theorem theorem6_3_infiniteTrial_source_ideal
     hCompressionUpper hUnwantedLower tanTheta0 htan hResidual
 
 /-- The finite-trial source facade
-`theorem6_3_generalizedTanTheta_source_ideal` is subsumed: its
+`theorem6_3_generalizedTanTheta_ideal` is subsumed: its
 `[FiniteDimensional ℂ Z]` instance and its strict-rank hypothesis are both discardable,
 and its tangent hypothesis is definitionally the arbitrary-trial one.  Stating that
 collapse as a theorem keeps it machine-checked rather than asserted in prose. -/
-theorem theorem6_3_generalizedTanTheta_source_ideal_of_infiniteTrial
+theorem theorem6_3_generalizedTanTheta_ideal_of_infiniteTrial
     (N : ExactSinTheta.KyFanDominantIdealFamily (𝕜 := ℂ))
     (T : H →L[ℂ] H) (hT : T.IsSymmetric)
     (V Z : Submodule ℂ H) [V.HasOrthogonalProjection]
@@ -860,7 +860,7 @@ theorem theorem6_3_generalizedTanTheta_source_ideal_of_infiniteTrial
     (hResidual : N.Mem (theorem63Residual T Z)) :
     N.Mem tanTheta0 ∧
       delta * N.gauge tanTheta0 ≤ N.gauge (theorem63Residual T Z) :=
-  theorem6_3_infiniteTrial_source_ideal N T hT V Z hV hbetaalpha hdelta
+  theorem6_3_infiniteTrial_ideal N T hT V Z hV hbetaalpha hdelta
     hCompressionSpectrum hUnwantedSpectrum tanTheta0 htan hResidual
 
 /-- **Theorem 6.3 at ideal-gauge scope and arbitrary trial dimension, in the source's

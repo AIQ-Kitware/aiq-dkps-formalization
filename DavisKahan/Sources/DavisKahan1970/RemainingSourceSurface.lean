@@ -390,8 +390,8 @@ alias theorem6_3_all_kyFan_core :=
   ExactTanTheta.theorem6_3_all_kyFan_core
 
 /-- Completed bounded source-faithful Davis--Kahan Theorem 6.3. -/
-alias theorem6_3_generalizedTanTheta_source_ideal :=
-  ExactTanTheta.theorem6_3_generalizedTanTheta_source_ideal
+alias theorem6_3_generalizedTanTheta_ideal :=
+  ExactTanTheta.theorem6_3_generalizedTanTheta_ideal
 
 /-! ### Theorem 6.3 without a tangent-representative hypothesis
 
@@ -421,8 +421,8 @@ alias theorem6_3_all_kyFan_core_unconditional :=
 
 /-- Theorem 6.3 at ideal-gauge scope with the representative supplied, not
 assumed. -/
-alias theorem6_3_generalizedTanTheta_source_ideal_unconditional :=
-  ExactTanTheta.theorem6_3_generalizedTanTheta_source_ideal_directedTangent
+alias theorem6_3_generalizedTanTheta_ideal_unconditional :=
+  ExactTanTheta.theorem6_3_generalizedTanTheta_ideal_directedTangent
 
 /-! ### The equal-rank tangent theorem
 
@@ -486,7 +486,7 @@ variable {H : Type u} [NormedAddCommGroup H] [InnerProductSpace ℂ H]
 
 /-- Source-numbered residual and perturbation form of the sine-double-angle
 theorem at arbitrary rectangular ideal-gauge scope. -/
-theorem section7_sinTwoTheta_source_ideal
+theorem section7_sinTwoTheta_ideal
     (N : TauCeti.SymmetricOperatorIdealFamily.{0, u} ℂ)
     [N.toOperatorIdealFamily.IsComplete]
     (A : H →ₗ.[ℂ] H) (hA : IsSelfAdjoint A)
@@ -522,7 +522,7 @@ factor is intrinsic to `tanTwoThetaIdealBlock = sinTwoThetaIdealBlock ∘L cos�
 a bare `2 * N.gaugeReal E` on the right is strictly stronger than the tangent
 construction supports, so the denominator is a required part of the statement,
 not an artifact. -/
-theorem section7_tanTwoTheta_source_ideal
+theorem section7_tanTwoTheta_ideal
     (N : TauCeti.SymmetricOperatorIdealFamily.{0, u} ℂ)
     [N.toOperatorIdealFamily.IsComplete]
     (A : H →ₗ.[ℂ] H) (hA : IsSelfAdjoint A)

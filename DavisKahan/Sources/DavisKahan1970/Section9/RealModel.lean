@@ -41,7 +41,7 @@ abbrev realClassicalFreeBeamGraph : Set (RealBeamL2 × RealBeamL2) :=
 The real free-beam realization is self-adjoint and is exactly the graph closure of the
 classical fourth derivative on functions satisfying
 `u''(0)=u'''(0)=u''(1)=u'''(1)=0`. -/
-theorem real_freeBeam_operator_source :
+theorem real_freeBeam_operator_isSelfAdjoint_and_graphClosure :
     _root_.IsSelfAdjoint realBeamOperator ∧
       closure realClassicalFreeBeamGraph =
         (realBeamOperator.graph : Set (RealBeamL2 × RealBeamL2)) :=
@@ -51,7 +51,7 @@ theorem real_freeBeam_operator_source :
 
 Besides the two-dimensional zero eigenspace, the real spectrum is an increasing sequence of
 positive eigenvalues, every one of which is larger than `500`. -/
-theorem real_freeBeam_spectrum_source :
+theorem real_freeBeam_spectrum_decomposition :
     TauCeti.LinearPMap.realSpectrum realBeamOperator =
         insert 0 DavisKahan.FreeBeam.Model.Real.beamEigenvalues ∧
       (∃ f : ℕ → ℝ, StrictMono f ∧
@@ -96,7 +96,7 @@ theorem real_freeBeam_eigenvalue_indexing :
 
 /-- The paper's positive free-beam spectral values are exactly the fourth powers of the
 positive roots of `cos beta * cosh beta = 1`. -/
-theorem real_freeBeam_positive_spectrum_source :
+theorem real_freeBeam_positive_spectrum_eq_characteristicFourthPowers :
     DavisKahan.FreeBeam.Model.Real.beamEigenvalues =
       {lam : ℝ | ∃ beta : ℝ, 0 < beta ∧
         DavisKahan.FreeBeam.characteristic beta = 0 ∧
@@ -117,7 +117,7 @@ theorem real_freeBeam_operator_apply_trial {x : RealBeamL2}
   DavisKahan.FreeBeam.Model.Real.beamOperator_apply_trial hx hdom
 
 /-- The zero eigenspace is exactly the paper's two-dimensional affine trial plane. -/
-theorem real_freeBeam_zero_mode_source :
+theorem real_freeBeam_zero_eigenspace_eq_beamTrial :
     Module.finrank ℝ
         DavisKahan.FreeBeam.Model.Real.beamTrial = 2 ∧
       ∀ (x : RealBeamL2) (h : x ∈ realBeamOperator.domain),
@@ -142,7 +142,7 @@ zero mode and `alpha_3 < alpha_4 < ...` with `0 < alpha_3`.
 
 Both conjuncts are assembled from existing model facts; nothing new is proved here.
 -/
-theorem real_freeBeam_eigenvalue_ordering_source :
+theorem real_freeBeam_eigenvalue_ordering :
     (Module.finrank ℝ DavisKahan.FreeBeam.Model.Real.beamTrial = 2 ∧
       ∀ (x : RealBeamL2) (h : x ∈ realBeamOperator.domain),
         realBeamOperator ⟨x, h⟩ = 0 ↔
@@ -150,19 +150,19 @@ theorem real_freeBeam_eigenvalue_ordering_source :
     ∃ f : ℕ → ℝ, StrictMono f ∧
       Set.range f = DavisKahan.FreeBeam.Model.Real.beamEigenvalues ∧
       ∀ n, 0 < f n := by
-  refine ⟨real_freeBeam_zero_mode_source, ?_⟩
+  refine ⟨real_freeBeam_zero_eigenspace_eq_beamTrial, ?_⟩
   obtain ⟨f, hmono, hrange, hgt⟩ :=
     DavisKahan.FreeBeam.Model.Real.exists_strictMono_range_eq_beamEigenvalues
   exact ⟨f, hmono, hrange, fun n => by linarith [(hgt n).1]⟩
 
 /-- The exact finite-data certificate for the paper's real Section 9 model. -/
-def real_freeBeam_finiteData_source (ε : ℝ) (hε : 0 < ε) (hε100 : ε < 100) :
+def real_freeBeam_finiteDataCertificate (ε : ℝ) (hε : 0 < ε) (hε100 : ε < 100) :
     FreeBeamFiniteDataCertificate ε :=
   DavisKahan.FreeBeam.Model.Real.beamFiniteDataCertificate ε hε hε100
 
 /-- The real multiplication perturbation and orthonormal affine trial plane satisfy the
 source hypotheses used by the finite Section 9 calculation. -/
-theorem real_freeBeam_trial_and_perturbation_source (ε : ℝ) (hε : 0 < ε) :
+theorem real_freeBeam_trial_and_perturbation (ε : ℝ) (hε : 0 < ε) :
     DavisKahan.IsSelfAdjointOperator
         (DavisKahan.FreeBeam.Model.Real.beamPerturbation ε) ∧
       ‖DavisKahan.FreeBeam.Model.Real.beamPerturbation ε‖ ≤ ε ∧

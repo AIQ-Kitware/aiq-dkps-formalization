@@ -5,7 +5,7 @@
     "TauCeti.DavisKahanTheory.partIII_sinTheta_residual_uiNorm",
     "TauCeti.DavisKahanTheory.partIII_sinTheta_uiNorm",
     "TauCeti.DavisKahan1970.sinTheta_wholeSpace_symmetricNorming",
-    "TauCeti.DavisKahanTheory.partIII_tanTheta_source_uiNorm",
+    "TauCeti.DavisKahanTheory.partIII_tanTheta_uiNorm",
     "TauCeti.DavisKahan1970.tanTheta_directed_bounded_symmetricNorming_complex",
     "TauCeti.DavisKahan1970.tanTheta_directed_bounded_spectralGap_symmetricNorming_complex",
     "TauCeti.DavisKahan1970.tanTheta_ambient_bounded_symmetricNorming_complex_of_crossedDefects",
@@ -65,7 +65,7 @@
     "supporting_exhibition_targets": [
       "TauCeti.DavisKahanTheory.partIII_sinTheta_residual_uiNorm",
       "TauCeti.DavisKahanTheory.partIII_sinTheta_uiNorm",
-      "TauCeti.DavisKahanTheory.partIII_tanTheta_source_uiNorm",
+      "TauCeti.DavisKahanTheory.partIII_tanTheta_uiNorm",
       "TauCeti.DavisKahan1970.tanTheta_directed_bounded_symmetricNorming_complex",
       "TauCeti.DavisKahanTheory.partIII_sinTwoTheta_uiNorm",
       "TauCeti.DavisKahanTheory.partIII_tanTwoTheta_opNorm",

@@ -69,15 +69,15 @@ variable {A V : H →L[ℂ] H} {s : Set ℝ}
 
 Takes only the printed hypotheses.  Superseded name for
 `theorem8_1_canonicalBranch`. -/
-alias theorem8_1_source :=
+alias theorem8_1 :=
   theorem8_1_canonicalBranch
 
 /-- **Source-facing Theorem 8.1: the printed characterization.** -/
-alias theorem8_1_source_characterization :=
+alias theorem8_1_characterization :=
   theorem8_1_maximalAngle_le_iff_spectrumIn
 
 /-- **Source-facing Theorem 8.1: uniqueness of the branch.** -/
-alias theorem8_1_source_uniqueness :=
+alias theorem8_1_uniqueness :=
   theorem8_1_eq_canonicalBranch_of_maximalAngle_le
 
 /-! `theorem8_1_selectedBranch_and_spectralRepulsion` and

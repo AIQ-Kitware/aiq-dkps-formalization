@@ -141,11 +141,11 @@ Accepted result-only semantic review 2026-08-12. `tanTwoTheta_branchFree_bounded
 **Counted source atoms:** `DK-3.1-prop.existence`, `DK-3.1-prop.uniqueness`, `DK-3.1-prop.positive-diagonal-characterization`.
 
 **Selected source-facing Lean declarations:**
-- `TauCeti.DavisKahan1970.proposition3_1_source`
+- `TauCeti.DavisKahan1970.proposition3_1`
 
 **Semantic review:**
 
-Accepted result-only semantic review 2026-08-12. The exact generic RCLike wrapper `proposition3_1_source` uses the paper's printed `TauCeti.IsAcute` hypothesis, works in arbitrary dimension over real or complex Hilbert spaces, proves the Definition 3.1 crossed-block identity for the canonical direct rotation, and states that positivity of the two diagonal blocks alone characterizes it among unitary intertwiners. It assumes neither `IsUniformlyAcute`, equation (3.8), nor standing dimension assumption (1.5).
+Accepted result-only semantic review 2026-08-12. The exact generic RCLike wrapper `proposition3_1` uses the paper's printed `TauCeti.IsAcute` hypothesis, works in arbitrary dimension over real or complex Hilbert spaces, proves the Definition 3.1 crossed-block identity for the canonical direct rotation, and states that positivity of the two diagonal blocks alone characterizes it among unitary intertwiners. It assumes neither `IsUniformlyAcute`, equation (3.8), nor standing dimension assumption (1.5).
 
 ### 6. `DK-3.2-prop` — Nonacute existence criterion
 
@@ -170,10 +170,10 @@ Accepted result-only semantic review 2026-08-12. The generic Section 3 source su
 **Counted source atoms:** `DK-3.3-prop.principal-square-root`, `DK-3.3-prop.square-root-converse`.
 
 **Selected source-facing Lean declarations:**
-- `TauCeti.DavisKahan1970.proposition3_3_complex_forward_source`
-- `TauCeti.DavisKahan1970.proposition3_3_complex_converse_source`
-- `TauCeti.DavisKahan1970.proposition3_3_real_forward_source`
-- `TauCeti.DavisKahan1970.proposition3_3_real_converse_source`
+- `TauCeti.DavisKahan1970.proposition3_3_complex_forward`
+- `TauCeti.DavisKahan1970.proposition3_3_complex_converse`
+- `TauCeti.DavisKahan1970.proposition3_3_real_forward`
+- `TauCeti.DavisKahan1970.proposition3_3_real_converse`
 
 **Semantic review:**
 
@@ -186,16 +186,16 @@ Accepted result-only semantic review 2026-08-12. The full nonacute complex forwa
 **Counted source atoms:** `DK-3.4-prop.u-square-direct-rotation`, `S3-standing-scope.crossed-dimension-standing-assumption`.
 
 **Selected source-facing Lean declarations:**
-- `TauCeti.DavisKahan1970.proposition3_4_source_full_complex`
-- `TauCeti.DavisKahan1970.proposition3_4_source_full_real`
-- `TauCeti.DavisKahan.Frontier.Section3.proposition3_4_source_full_bundled_complex`
-- `TauCeti.DavisKahan.Frontier.Section3.proposition3_4_source_eq_directRotation`
+- `TauCeti.DavisKahan1970.proposition3_4_full_complex`
+- `TauCeti.DavisKahan1970.proposition3_4_full_real`
+- `TauCeti.DavisKahan.Frontier.Section3.proposition3_4_full_bundled_complex`
+- `TauCeti.DavisKahan.Frontier.Section3.proposition3_4_eq_directRotation`
 
 **Semantic review:**
 
-REOPENED 2026-08-12, and the reopening was correct. Definition 3.1 requires genuine operator positivity of the two diagonal blocks, `C_0 >= 0` and `C_1 >= 0`, and the source proof of Proposition 3.4 discharges exactly that ("we must still prove (i) and (ii), which for this case take the form `Q_- U^2 Q_- >= 0` ..."). The complex endpoint `proposition3_4_source_full_bundled_complex` concludes only `IsDirectRotation`, whose diagonal clauses are `0 <= re inner x ((P * T * P) x)`; over a complex Hilbert space that does not even force the compression to be self-adjoint, and the repository itself documents the predicate as weaker than Definition 3.1 in the complex setting. The real endpoint is unaffected: `proposition3_4_source_full_real`  gives the exact real counterpart at the printed scope: from the real direct-rotation clauses and the source half-angle condition `C0^2 >= 1/2`, it concludes that `W^2` is a direct rotation from the reflected subspace to the target, including genuine positive diagonal compressions and the crossed-block identity. The proof transports through canonical complexification and introduces no uniform-acuteness, finite-dimensional, separability, compactness, or extra branch hypothesis.
+REOPENED 2026-08-12, and the reopening was correct. Definition 3.1 requires genuine operator positivity of the two diagonal blocks, `C_0 >= 0` and `C_1 >= 0`, and the source proof of Proposition 3.4 discharges exactly that ("we must still prove (i) and (ii), which for this case take the form `Q_- U^2 Q_- >= 0` ..."). The complex endpoint `proposition3_4_full_bundled_complex` concludes only `IsDirectRotation`, whose diagonal clauses are `0 <= re inner x ((P * T * P) x)`; over a complex Hilbert space that does not even force the compression to be self-adjoint, and the repository itself documents the predicate as weaker than Definition 3.1 in the complex setting. The real endpoint is unaffected: `proposition3_4_full_real`  gives the exact real counterpart at the printed scope: from the real direct-rotation clauses and the source half-angle condition `C0^2 >= 1/2`, it concludes that `W^2` is a direct rotation from the reflected subspace to the target, including genuine positive diagonal compressions and the crossed-block identity. The proof transports through canonical complexification and introduces no uniform-acuteness, finite-dimensional, separability, compactness, or extra branch hypothesis.
 
-REPAIRED 2026-08-12 by `proposition3_4_source_full_complex`. Its hypotheses are exactly the Definition 3.1 data for `U` (unitarity, intertwining, genuine `IsPositive` diagonal compressions, crossed-block adjoint/sign relation) together with the printed half-angle condition `C_0^2 >= 1/2` in the form `||x||^2/2 <= ||P_V x||^2` for `x` in the source subspace. Its conclusion is the genuine Definition 3.1 statement for `U^2` from `Q_-` to `Q`: `W^2` unitary, `W^2 P_{Q_-} = P_Q W^2`, `IsPositive` for both diagonal compressions, and the crossed-block relation. No acuteness, compactness, finite-dimensional or separability hypothesis is added. The positivity upgrade reuses the real development's `positiveDiagonalBlocks_of_sq`, promoted to a public declaration, applied to the square identity `W^2 W^2 = spectraReflectionProduct (Q_-) Q`; the weaker `IsDirectRotation` statements are retained as supporting material, not as primary evidence. The row now also carries the standing Section 3 scope atom (3.5), which governs the direct-rotation setting this proposition inherits.
+REPAIRED 2026-08-12 by `proposition3_4_full_complex`. Its hypotheses are exactly the Definition 3.1 data for `U` (unitarity, intertwining, genuine `IsPositive` diagonal compressions, crossed-block adjoint/sign relation) together with the printed half-angle condition `C_0^2 >= 1/2` in the form `||x||^2/2 <= ||P_V x||^2` for `x` in the source subspace. Its conclusion is the genuine Definition 3.1 statement for `U^2` from `Q_-` to `Q`: `W^2` unitary, `W^2 P_{Q_-} = P_Q W^2`, `IsPositive` for both diagonal compressions, and the crossed-block relation. No acuteness, compactness, finite-dimensional or separability hypothesis is added. The positivity upgrade reuses the real development's `positiveDiagonalBlocks_of_sq`, promoted to a public declaration, applied to the square identity `W^2 W^2 = spectraReflectionProduct (Q_-) Q`; the weaker `IsDirectRotation` statements are retained as supporting material, not as primary evidence. The row now also carries the standing Section 3 scope atom (3.5), which governs the direct-rotation setting this proposition inherits.
 
 ### 9. `DK-3.1-thm` — Classification of pairs of subspaces
 
@@ -259,12 +259,12 @@ An independent hostile re-audit on 2026-08-13 confirmed the repaired signatures 
 **Counted source atoms:** `DK-3.2-cor.swap-invariance`.
 
 **Selected source-facing Lean declarations:**
-- `TauCeti.DavisKahan1970.corollary3_2_source`
+- `TauCeti.DavisKahan1970.corollary3_2`
 - `TauCeti.DavisKahan1970.corollary3_2_nonacuteQuarterTurn_symm`
 - `TauCeti.DavisKahan1970.corollary3_2_nonacute_directRotation_resolution`
 - `TauCeti.DavisKahan1970.complex_directRotation_reversal`
 - `TauCeti.DavisKahan1970.real_directRotation_reversal`
-- `TauCeti.DavisKahan.Frontier.Section3.corollary3_2_reversal_source_form`
+- `TauCeti.DavisKahan.Frontier.Section3.corollary3_2_reversal_form`
 
 **Semantic review:**
 
@@ -502,17 +502,17 @@ Accepted by the hostile audit at the stated-result level.
 - `TauCeti.DavisKahan1970.Section8.theorem8_1_maximalAngle_le_iff_spectrumIn`
 - `TauCeti.DavisKahan1970.Section8.theorem8_1_canonicalBranch_real`
 - `TauCeti.DavisKahan1970.Section8.theorem8_1_maximalAngle_le_iff_spectrumIn_real`
-- `TauCeti.DavisKahan1970.Section8.theorem8_1_upperCompressionRepulsion_source`
-- `TauCeti.DavisKahan1970.Section8.theorem8_1_lowerCompressionRepulsion_source`
+- `TauCeti.DavisKahan1970.Section8.theorem8_1_upperCompressionRepulsion`
+- `TauCeti.DavisKahan1970.Section8.theorem8_1_lowerCompressionRepulsion`
 - `TauCeti.DavisKahan1970.Section8.theorem8_1_upperCompressionRepulsion_real`
 - `TauCeti.DavisKahan1970.Section8.theorem8_1_lowerCompressionRepulsion_real`
-- `TauCeti.DavisKahan1970.Section8.theorem8_1_upperApproximationRepulsion_source`
-- `TauCeti.DavisKahan1970.Section8.theorem8_1_lowerApproximationRepulsion_source`
+- `TauCeti.DavisKahan1970.Section8.theorem8_1_upperApproximationRepulsion`
+- `TauCeti.DavisKahan1970.Section8.theorem8_1_lowerApproximationRepulsion`
 - `TauCeti.DavisKahan1970.Section8.theorem8_1_upperApproximationRepulsion_real`
 - `TauCeti.DavisKahan1970.Section8.theorem8_1_lowerApproximationRepulsion_real`
 - `TauCeti.DavisKahan1970.Section8.approximationNumber_eq_eigenvalues_of_isPositive`
-- `TauCeti.DavisKahan1970.Section8.theorem8_1_upperSymmetricGaugeRepulsion_angle_rev_source`
-- `TauCeti.DavisKahan1970.Section8.theorem8_1_lowerSymmetricGaugeRepulsion_angle_rev_source`
+- `TauCeti.DavisKahan1970.Section8.theorem8_1_upperSymmetricGaugeRepulsion_angle_rev`
+- `TauCeti.DavisKahan1970.Section8.theorem8_1_lowerSymmetricGaugeRepulsion_angle_rev`
 - `TauCeti.DavisKahan1970.Section8.theorem8_1_upperSymmetricGaugeRepulsion_angle_rev_real`
 - `TauCeti.DavisKahan1970.Section8.theorem8_1_lowerSymmetricGaugeRepulsion_angle_rev_real`
 
@@ -527,20 +527,20 @@ Result-only hostile review accepted 2026-08-12. The compiled source surface cove
 **Counted source atoms:** `DK-8.2-thm.smallness-alternative`, `DK-8.2-thm.double-angle-bound-retained`, `DK-8.2-thm.acute-branch-conclusion`, `S3-standing-scope.crossed-dimension-standing-assumption`.
 
 **Selected source-facing Lean declarations:**
-- `TauCeti.DavisKahan1970.Section8.theorem8_2_branch_source_directed_complex`
+- `TauCeti.DavisKahan1970.Section8.theorem8_2_branch_directed_complex`
 - `TauCeti.DavisKahan1970.Section8.theorem8_2_sinTwoTheta_perturbation_source_paperUINorm`
 - `TauCeti.DavisKahan1970.Section8.theorem8_2_sinTwoTheta_residual_source_paperUINorm`
-- `TauCeti.DavisKahan1970.Section8.theorem8_2_branch_source_directed_real`
+- `TauCeti.DavisKahan1970.Section8.theorem8_2_branch_directed_real`
 - `TauCeti.DavisKahan1970.Section8.theorem8_2_sinTwoTheta_perturbation_source_real_paperUINorm`
 - `TauCeti.DavisKahan.Frontier.Section8.theorem8_2_sinTwoTheta_residual_source_real_paperUINorm`
-- `TauCeti.DavisKahan1970.Section8.theorem8_2_branch_source_maximalAngle_lt_of_crossedDefects`
-- `TauCeti.DavisKahan1970.Section8.theorem8_2_branch_source_real_maximalAngle_lt_of_crossedDefects`
+- `TauCeti.DavisKahan1970.Section8.theorem8_2_branch_maximalAngle_lt_of_crossedDefects`
+- `TauCeti.DavisKahan1970.Section8.theorem8_2_branch_real_maximalAngle_lt_of_crossedDefects`
 
 **Semantic review:**
 
-REOPENED 2026-08-12, and the reopening was correct. Two defects, both in the accounting rather than in the mathematics. (1) Immediately after the proof of Proposition 3.2 the source states "We shall assume (3.5) as well as (1.5) except where stated otherwise"; Theorem 8.2 does not state otherwise, so (3.5) is part of its source scope, and the source-fidelity inventory carried no scope atom for it. (2) The printed conclusion is the **ambient** `Theta < pi/4`, but the selected quarter-angle evidence was `theorem8_2_branch_source_directed_complex`, whose conclusion is the directed gap `directedGap P Q < sqrt 2 / 2`. The ambient theorems exist already; the row selected the wrong ones. The `sin 2Theta` estimates, the two smallness alternatives, and the real scope were and remain fine. The proof homotopy, unequal-dimension extension remark, and comment about a tangent extension are adjacent material outside the counted Theorem 8.2 boundary.
+REOPENED 2026-08-12, and the reopening was correct. Two defects, both in the accounting rather than in the mathematics. (1) Immediately after the proof of Proposition 3.2 the source states "We shall assume (3.5) as well as (1.5) except where stated otherwise"; Theorem 8.2 does not state otherwise, so (3.5) is part of its source scope, and the source-fidelity inventory carried no scope atom for it. (2) The printed conclusion is the **ambient** `Theta < pi/4`, but the selected quarter-angle evidence was `theorem8_2_branch_directed_complex`, whose conclusion is the directed gap `directedGap P Q < sqrt 2 / 2`. The ambient theorems exist already; the row selected the wrong ones. The `sin 2Theta` estimates, the two smallness alternatives, and the real scope were and remain fine. The proof homotopy, unequal-dimension extension remark, and comment about a tangent extension are adjacent material outside the counted Theorem 8.2 boundary.
 
-REPAIRED 2026-08-12. (1) The standing convention is now inventoried as the source scope atom `S3-standing-scope.crossed-dimension-standing-assumption`, carried by the new registered claim block `S3-standing-scope` in the distributable source specification, and linked as scope — not as a counted result — to exactly the two counted results it governs, Theorem 8.2 and Proposition 3.4. The denominator remains 29. Theorem 8.1's ambient quarter-angle characterization `theorem8_1_maximalAngle_le_iff_spectrumIn` is proved with no dimension hypothesis at all, so it is deliberately not linked. (2) The selected quarter-angle evidence is now `theorem8_2_branch_source_maximalAngle_lt_of_crossedDefects` and `theorem8_2_branch_source_real_maximalAngle_lt_of_crossedDefects`, which conclude the printed ambient `maximalAngle P Q < pi/4` from either printed smallness alternative under (3.5) in its constructive `CrossedDefectsEquivalent` form, with no finite-dimensionality and no rank hypothesis, over both scalar fields. Together with the four retained `sin 2Theta` endpoints the evidence jointly establishes the printed result at the printed dimensional scope. No new Lean mathematics was required once the source scope was corrected.
+REPAIRED 2026-08-12. (1) The standing convention is now inventoried as the source scope atom `S3-standing-scope.crossed-dimension-standing-assumption`, carried by the new registered claim block `S3-standing-scope` in the distributable source specification, and linked as scope — not as a counted result — to exactly the two counted results it governs, Theorem 8.2 and Proposition 3.4. The denominator remains 29. Theorem 8.1's ambient quarter-angle characterization `theorem8_1_maximalAngle_le_iff_spectrumIn` is proved with no dimension hypothesis at all, so it is deliberately not linked. (2) The selected quarter-angle evidence is now `theorem8_2_branch_maximalAngle_lt_of_crossedDefects` and `theorem8_2_branch_real_maximalAngle_lt_of_crossedDefects`, which conclude the printed ambient `maximalAngle P Q < pi/4` from either printed smallness alternative under (3.5) in its constructive `CrossedDefectsEquivalent` form, with no finite-dimensionality and no rank hypothesis, over both scalar fields. Together with the four retained `sin 2Theta` endpoints the evidence jointly establishes the printed result at the printed dimensional scope. No new Lean mathematics was required once the source scope was corrected.
 
 ## Remaining mathematical targets
 

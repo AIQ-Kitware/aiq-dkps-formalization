@@ -54,7 +54,7 @@ coordinate datum from the spectral placement alone. Both were discharged and
 the note went stale; it is corrected here, 2026-08-09, after re-elaborating the
 endpoints.
 
-* `TauCeti.DavisKahan.ExactTanTheta.theorem6_3_generalizedTanTheta_source_ideal`
+* `TauCeti.DavisKahan.ExactTanTheta.theorem6_3_generalizedTanTheta_ideal`
   — arbitrary complete complex Hilbert space, arbitrary `KyFanDominantIdealFamily`,
   the source's one-sided spectral placement, with ideal membership of the tangent
   *concluded* rather than assumed.

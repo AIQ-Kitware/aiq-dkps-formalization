@@ -76,7 +76,7 @@ noncomputable def sineDefinedDirectedAngleC
 
 /-- The angle reconstructed from the sine modulus is exactly the source
 cosine-defined angle. -/
-theorem sineDefinedDirectedAngleC_eq_source
+theorem sineDefinedDirectedAngleC_eq_directedAngleBlockC
     (U V : Submodule ℂ E)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] :
     sineDefinedDirectedAngleC U V = directedAngleBlockC U V := by
@@ -104,7 +104,7 @@ theorem sourceDirectedAngleC_eq_arcsin_sineModulus
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] :
     directedAngleBlockC U V =
       cfc Real.arcsin (sineBlockModulusC U V) :=
-  (sineDefinedDirectedAngleC_eq_source U V).symm
+  (sineDefinedDirectedAngleC_eq_directedAngleBlockC U V).symm
 
 section Real
 
@@ -127,7 +127,7 @@ theorem sourceDirectedAngleR_eq_arcsin_sineModulus
       sineDefinedDirectedAngleC
         (complexifySubmodule U)
         (complexifySubmodule V) :=
-  (sineDefinedDirectedAngleC_eq_source _ _).symm
+  (sineDefinedDirectedAngleC_eq_directedAngleBlockC _ _).symm
 
 end Real
 

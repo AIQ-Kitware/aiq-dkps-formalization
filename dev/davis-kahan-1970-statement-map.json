@@ -552,14 +552,14 @@
       "expected_verification": "proved_in_build",
       "tex_marker": "DK-3.1-prop",
       "review_declarations": [
-        "TauCeti.DavisKahan1970.proposition3_1_source"
+        "TauCeti.DavisKahan1970.proposition3_1"
       ],
       "audit_clauses": [
         {
           "id": "DK-3.1-prop.whole",
           "description": "Exact result-only audit of Proposition 3.1: acute-case existence, uniqueness, and characterization by positivity of the two diagonal blocks alone.",
           "review_declarations": [
-            "TauCeti.DavisKahan1970.proposition3_1_source"
+            "TauCeti.DavisKahan1970.proposition3_1"
           ]
         }
       ],
@@ -656,20 +656,20 @@
       "expected_verification": "proved_in_build",
       "tex_marker": "DK-3.3-prop",
       "review_declarations": [
-        "TauCeti.DavisKahan1970.proposition3_3_complex_forward_source",
-        "TauCeti.DavisKahan1970.proposition3_3_complex_converse_source",
-        "TauCeti.DavisKahan1970.proposition3_3_real_forward_source",
-        "TauCeti.DavisKahan1970.proposition3_3_real_converse_source"
+        "TauCeti.DavisKahan1970.proposition3_3_complex_forward",
+        "TauCeti.DavisKahan1970.proposition3_3_complex_converse",
+        "TauCeti.DavisKahan1970.proposition3_3_real_forward",
+        "TauCeti.DavisKahan1970.proposition3_3_real_converse"
       ],
       "audit_clauses": [
         {
           "id": "DK-3.3-prop.result",
           "description": "Exact result-only audit of Proposition 3.3: every direct rotation is the principal square root, and the principal-root converse uses exactly the crossed-intersection mapping condition.",
           "review_declarations": [
-            "TauCeti.DavisKahan1970.proposition3_3_complex_forward_source",
-            "TauCeti.DavisKahan1970.proposition3_3_complex_converse_source",
-            "TauCeti.DavisKahan1970.proposition3_3_real_forward_source",
-            "TauCeti.DavisKahan1970.proposition3_3_real_converse_source"
+            "TauCeti.DavisKahan1970.proposition3_3_complex_forward",
+            "TauCeti.DavisKahan1970.proposition3_3_complex_converse",
+            "TauCeti.DavisKahan1970.proposition3_3_real_forward",
+            "TauCeti.DavisKahan1970.proposition3_3_real_converse"
           ]
         }
       ],
@@ -697,18 +697,18 @@
       "expected_verification": "proved_in_build",
       "tex_marker": "DK-3.4-prop",
       "review_declarations": [
-        "TauCeti.DavisKahan1970.proposition3_4_source_full_bundled_complex",
-        "TauCeti.DavisKahan1970.proposition3_4_source_eq_directRotation",
-        "TauCeti.DavisKahan1970.proposition3_4_source_full_real"
+        "TauCeti.DavisKahan1970.proposition3_4_full_bundled_complex",
+        "TauCeti.DavisKahan1970.proposition3_4_eq_directRotation",
+        "TauCeti.DavisKahan1970.proposition3_4_full_real"
       ],
       "audit_clauses": [
         {
           "id": "DK-3.4-prop.result",
           "description": "Exact result-only audit of Proposition 3.4 over complex and real Hilbert spaces at the printed nonacute half-angle scope.",
           "review_declarations": [
-            "TauCeti.DavisKahan1970.proposition3_4_source_full_bundled_complex",
-            "TauCeti.DavisKahan1970.proposition3_4_source_eq_directRotation",
-            "TauCeti.DavisKahan1970.proposition3_4_source_full_real"
+            "TauCeti.DavisKahan1970.proposition3_4_full_bundled_complex",
+            "TauCeti.DavisKahan1970.proposition3_4_eq_directRotation",
+            "TauCeti.DavisKahan1970.proposition3_4_full_real"
           ]
         }
       ],
@@ -874,24 +874,24 @@
       "expected_verification": "proved_in_build",
       "tex_marker": "DK-3.2-cor",
       "review_declarations": [
-        "TauCeti.DavisKahan1970.corollary3_2_source",
+        "TauCeti.DavisKahan1970.corollary3_2",
         "TauCeti.DavisKahan1970.corollary3_2_nonacuteQuarterTurn_symm",
         "TauCeti.DavisKahan1970.corollary3_2_nonacute_directRotation_resolution",
         "TauCeti.DavisKahan1970.complex_directRotation_reversal",
         "TauCeti.DavisKahan1970.real_directRotation_reversal",
-        "TauCeti.DavisKahan1970.corollary3_2_reversal_source_form"
+        "TauCeti.DavisKahan1970.corollary3_2_reversal_form"
       ],
       "audit_clauses": [
         {
           "id": "DK-3.2-cor.whole",
           "description": "Audit the complete registered source passage as one semantic unit; split further if the independent reviewer finds separable mathematical clauses.",
           "review_declarations": [
-            "TauCeti.DavisKahan1970.corollary3_2_source",
+            "TauCeti.DavisKahan1970.corollary3_2",
             "TauCeti.DavisKahan1970.corollary3_2_nonacuteQuarterTurn_symm",
             "TauCeti.DavisKahan1970.corollary3_2_nonacute_directRotation_resolution",
             "TauCeti.DavisKahan1970.complex_directRotation_reversal",
             "TauCeti.DavisKahan1970.real_directRotation_reversal",
-            "TauCeti.DavisKahan1970.corollary3_2_reversal_source_form"
+            "TauCeti.DavisKahan1970.corollary3_2_reversal_form"
           ]
         }
       ],
@@ -1732,17 +1732,17 @@
         "TauCeti.DavisKahan1970.Section8.theorem8_1_maximalAngle_le_iff_spectrumIn",
         "TauCeti.DavisKahan1970.Section8.theorem8_1_canonicalBranch_real",
         "TauCeti.DavisKahan1970.Section8.theorem8_1_maximalAngle_le_iff_spectrumIn_real",
-        "TauCeti.DavisKahan1970.Section8.theorem8_1_upperCompressionRepulsion_source",
-        "TauCeti.DavisKahan1970.Section8.theorem8_1_lowerCompressionRepulsion_source",
+        "TauCeti.DavisKahan1970.Section8.theorem8_1_upperCompressionRepulsion",
+        "TauCeti.DavisKahan1970.Section8.theorem8_1_lowerCompressionRepulsion",
         "TauCeti.DavisKahan1970.Section8.theorem8_1_upperCompressionRepulsion_real",
         "TauCeti.DavisKahan1970.Section8.theorem8_1_lowerCompressionRepulsion_real",
-        "TauCeti.DavisKahan1970.Section8.theorem8_1_upperApproximationRepulsion_source",
-        "TauCeti.DavisKahan1970.Section8.theorem8_1_lowerApproximationRepulsion_source",
+        "TauCeti.DavisKahan1970.Section8.theorem8_1_upperApproximationRepulsion",
+        "TauCeti.DavisKahan1970.Section8.theorem8_1_lowerApproximationRepulsion",
         "TauCeti.DavisKahan1970.Section8.theorem8_1_upperApproximationRepulsion_real",
         "TauCeti.DavisKahan1970.Section8.theorem8_1_lowerApproximationRepulsion_real",
         "TauCeti.DavisKahan1970.Section8.approximationNumber_eq_eigenvalues_of_isPositive",
-        "TauCeti.DavisKahan1970.Section8.theorem8_1_upperSymmetricGaugeRepulsion_angle_rev_source",
-        "TauCeti.DavisKahan1970.Section8.theorem8_1_lowerSymmetricGaugeRepulsion_angle_rev_source",
+        "TauCeti.DavisKahan1970.Section8.theorem8_1_upperSymmetricGaugeRepulsion_angle_rev",
+        "TauCeti.DavisKahan1970.Section8.theorem8_1_lowerSymmetricGaugeRepulsion_angle_rev",
         "TauCeti.DavisKahan1970.Section8.theorem8_1_upperSymmetricGaugeRepulsion_angle_rev_real",
         "TauCeti.DavisKahan1970.Section8.theorem8_1_lowerSymmetricGaugeRepulsion_angle_rev_real"
       ],
@@ -1761,8 +1761,8 @@
           "id": "DK-8.1-thm.i",
           "description": "Part (i): operator compression/sandwich inequality for A_1-alpha and C_1(Lambda_1-alpha)C_1, and the analogous lower block.",
           "review_declarations": [
-            "TauCeti.DavisKahan1970.Section8.theorem8_1_upperCompressionRepulsion_source",
-            "TauCeti.DavisKahan1970.Section8.theorem8_1_lowerCompressionRepulsion_source",
+            "TauCeti.DavisKahan1970.Section8.theorem8_1_upperCompressionRepulsion",
+            "TauCeti.DavisKahan1970.Section8.theorem8_1_lowerCompressionRepulsion",
             "TauCeti.DavisKahan1970.Section8.theorem8_1_upperCompressionRepulsion_real",
             "TauCeti.DavisKahan1970.Section8.theorem8_1_lowerCompressionRepulsion_real"
           ]
@@ -1771,8 +1771,8 @@
           "id": "DK-8.1-thm.ii",
           "description": "Part (ii): finite-dimensional eigenvalue inequalities and their natural infinite-dimensional approximation-number extensions.",
           "review_declarations": [
-            "TauCeti.DavisKahan1970.Section8.theorem8_1_upperApproximationRepulsion_source",
-            "TauCeti.DavisKahan1970.Section8.theorem8_1_lowerApproximationRepulsion_source",
+            "TauCeti.DavisKahan1970.Section8.theorem8_1_upperApproximationRepulsion",
+            "TauCeti.DavisKahan1970.Section8.theorem8_1_lowerApproximationRepulsion",
             "TauCeti.DavisKahan1970.Section8.theorem8_1_upperApproximationRepulsion_real",
             "TauCeti.DavisKahan1970.Section8.theorem8_1_lowerApproximationRepulsion_real",
             "TauCeti.DavisKahan1970.Section8.approximationNumber_eq_eigenvalues_of_isPositive"
@@ -1782,8 +1782,8 @@
           "id": "DK-8.1-thm.iii",
           "description": "Part (iii): symmetric-gauge/weak-majorization inequalities with principal-cosine weights, plus the analogous lower-block relation.",
           "review_declarations": [
-            "TauCeti.DavisKahan1970.Section8.theorem8_1_upperSymmetricGaugeRepulsion_angle_rev_source",
-            "TauCeti.DavisKahan1970.Section8.theorem8_1_lowerSymmetricGaugeRepulsion_angle_rev_source",
+            "TauCeti.DavisKahan1970.Section8.theorem8_1_upperSymmetricGaugeRepulsion_angle_rev",
+            "TauCeti.DavisKahan1970.Section8.theorem8_1_lowerSymmetricGaugeRepulsion_angle_rev",
             "TauCeti.DavisKahan1970.Section8.theorem8_1_upperSymmetricGaugeRepulsion_angle_rev_real",
             "TauCeti.DavisKahan1970.Section8.theorem8_1_lowerSymmetricGaugeRepulsion_angle_rev_real"
           ]
@@ -1816,20 +1816,20 @@
       "expected_verification": "proved_in_build",
       "tex_marker": "DK-8.2-thm",
       "review_declarations": [
-        "TauCeti.DavisKahan1970.Section8.theorem8_2_sinTwoTheta_perturbation_source_symmetricNorming",
-        "TauCeti.DavisKahan1970.Section8.theorem8_2_sinTwoTheta_perturbation_source_real_symmetricNorming",
-        "TauCeti.DavisKahan1970.Section8.theorem8_2_sinTwoTheta_residual_source_symmetricNorming",
-        "TauCeti.DavisKahan1970.Section8.theorem8_2_branch_source_directed_complex"
+        "TauCeti.DavisKahan1970.Section8.theorem8_2_sinTwoTheta_perturbation_symmetricNorming",
+        "TauCeti.DavisKahan1970.Section8.theorem8_2_sinTwoTheta_perturbation_real_symmetricNorming",
+        "TauCeti.DavisKahan1970.Section8.theorem8_2_sinTwoTheta_residual_symmetricNorming",
+        "TauCeti.DavisKahan1970.Section8.theorem8_2_branch_directed_complex"
       ],
       "audit_clauses": [
         {
           "id": "DK-8.2-thm.whole",
           "description": "Audit the complete registered source passage as one semantic unit; split further if the independent reviewer finds separable mathematical clauses.",
           "review_declarations": [
-            "TauCeti.DavisKahan1970.Section8.theorem8_2_sinTwoTheta_perturbation_source_symmetricNorming",
-            "TauCeti.DavisKahan1970.Section8.theorem8_2_sinTwoTheta_perturbation_source_real_symmetricNorming",
-            "TauCeti.DavisKahan1970.Section8.theorem8_2_sinTwoTheta_residual_source_symmetricNorming",
-            "TauCeti.DavisKahan1970.Section8.theorem8_2_branch_source_directed_complex"
+            "TauCeti.DavisKahan1970.Section8.theorem8_2_sinTwoTheta_perturbation_symmetricNorming",
+            "TauCeti.DavisKahan1970.Section8.theorem8_2_sinTwoTheta_perturbation_real_symmetricNorming",
+            "TauCeti.DavisKahan1970.Section8.theorem8_2_sinTwoTheta_residual_symmetricNorming",
+            "TauCeti.DavisKahan1970.Section8.theorem8_2_branch_directed_complex"
           ]
         }
       ],
@@ -1863,26 +1863,26 @@
       "expected_verification": "proved_in_build",
       "tex_marker": "DK-9-model",
       "review_declarations": [
-        "TauCeti.DavisKahan1970.Section9.real_freeBeam_operator_source",
-        "TauCeti.DavisKahan1970.Section9.real_freeBeam_spectrum_source",
-        "TauCeti.DavisKahan1970.Section9.real_freeBeam_zero_mode_source",
-        "TauCeti.DavisKahan1970.Section9.real_freeBeam_finiteData_source",
-        "TauCeti.DavisKahan1970.Section9.real_freeBeam_trial_and_perturbation_source",
-        "TauCeti.DavisKahan1970.Section9.real_freeBeam_positive_spectrum_source",
-        "TauCeti.DavisKahan1970.Section9.real_freeBeam_eigenvalue_ordering_source"
+        "TauCeti.DavisKahan1970.Section9.real_freeBeam_operator_isSelfAdjoint_and_graphClosure",
+        "TauCeti.DavisKahan1970.Section9.real_freeBeam_spectrum_decomposition",
+        "TauCeti.DavisKahan1970.Section9.real_freeBeam_zero_eigenspace_eq_beamTrial",
+        "TauCeti.DavisKahan1970.Section9.real_freeBeam_finiteDataCertificate",
+        "TauCeti.DavisKahan1970.Section9.real_freeBeam_trial_and_perturbation",
+        "TauCeti.DavisKahan1970.Section9.real_freeBeam_positive_spectrum_eq_characteristicFourthPowers",
+        "TauCeti.DavisKahan1970.Section9.real_freeBeam_eigenvalue_ordering"
       ],
       "audit_clauses": [
         {
           "id": "DK-9-model.whole",
           "description": "Audit the complete registered source passage as one semantic unit; split further if the independent reviewer finds separable mathematical clauses.",
           "review_declarations": [
-            "TauCeti.DavisKahan1970.Section9.real_freeBeam_operator_source",
-            "TauCeti.DavisKahan1970.Section9.real_freeBeam_spectrum_source",
-            "TauCeti.DavisKahan1970.Section9.real_freeBeam_zero_mode_source",
-            "TauCeti.DavisKahan1970.Section9.real_freeBeam_finiteData_source",
-            "TauCeti.DavisKahan1970.Section9.real_freeBeam_trial_and_perturbation_source",
-            "TauCeti.DavisKahan1970.Section9.real_freeBeam_positive_spectrum_source",
-            "TauCeti.DavisKahan1970.Section9.real_freeBeam_eigenvalue_ordering_source"
+            "TauCeti.DavisKahan1970.Section9.real_freeBeam_operator_isSelfAdjoint_and_graphClosure",
+            "TauCeti.DavisKahan1970.Section9.real_freeBeam_spectrum_decomposition",
+            "TauCeti.DavisKahan1970.Section9.real_freeBeam_zero_eigenspace_eq_beamTrial",
+            "TauCeti.DavisKahan1970.Section9.real_freeBeam_finiteDataCertificate",
+            "TauCeti.DavisKahan1970.Section9.real_freeBeam_trial_and_perturbation",
+            "TauCeti.DavisKahan1970.Section9.real_freeBeam_positive_spectrum_eq_characteristicFourthPowers",
+            "TauCeti.DavisKahan1970.Section9.real_freeBeam_eigenvalue_ordering"
           ]
         }
       ],

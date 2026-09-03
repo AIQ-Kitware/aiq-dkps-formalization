@@ -210,7 +210,7 @@ theorem corollary3_2_nonacuteQuarterTurn_symm
 /-- Full-scope Corollary 3.2 for a chosen direct rotation: the angle is symmetric,
 the paper quarter turn changes sign, and the reversed direct rotation is the
 adjoint. -/
-theorem corollary3_2_source
+theorem corollary3_2
     (J : halmosSourceDefect U V ≃ₗᵢ[𝕜] halmosTargetDefect U V) :
     proposition3_5_angleOperator V U = proposition3_5_angleOperator U V ∧
       corollary3_2_nonacuteQuarterTurn V U (swapCrossedDefectEquiv U V J) =

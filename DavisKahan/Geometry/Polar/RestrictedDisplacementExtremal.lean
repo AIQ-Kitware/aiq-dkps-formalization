@@ -935,7 +935,7 @@ theorem proposition4_1_nonacuteCosineDisplacementData
 
 /-- Proposition 4.1 in source coordinates for a chosen direct rotation at the
 full matched-crossed-defect scope of Corollary 3.1. -/
-theorem proposition4_1_nonacute_source_approximationNumbers
+theorem proposition4_1_nonacute_approximationNumbers
     (J : halmosSourceDefect U V ≃ₗᵢ[ℂ]
       halmosTargetDefect U V)
     (W : H →L[ℂ] H) (hWunitary : W ∈ unitary (H →L[ℂ] H))
@@ -947,7 +947,7 @@ theorem proposition4_1_nonacute_source_approximationNumbers
     (proposition4_1_nonacuteCosineDisplacementData U V J W hWunitary hWmap) n
 
 /-- Infinite-dimensional Proposition 4.1 in source coordinates. -/
-theorem proposition4_1_source_approximationNumbers
+theorem proposition4_1_approximationNumbers
     (hacute : IsUniformlyAcute U V) (W : H →L[ℂ] H)
     (hWunitary : W ∈ unitary (H →L[ℂ] H))
     (hWmap : W * projection U = projection V * W) (n : ℕ) :
@@ -987,7 +987,7 @@ theorem proposition4_1_restrictedDisplacement_approximationNumbers
         ((1 - spectraDirectRotation U V hacute) ∘L projection U) n ≤
       ContinuousLinearMap.approximationNumber
         ((1 - W) ∘L projection U) n := by
-  have hsource := proposition4_1_source_approximationNumbers
+  have hsource := proposition4_1_approximationNumbers
     U V hacute W hWunitary hWmap n
   have hDseq := sourceRestrictedDisplacement_sameApproximationSingularSequence
     U (spectraDirectRotation U V hacute) n
@@ -1016,7 +1016,7 @@ theorem proposition4_1_nonacute_restrictedDisplacement_approximationNumbers
     ContinuousLinearMap.approximationNumber
         ((1 - TauCeti.DavisKahan.nonacuteDirectRotation U V J) ∘L projection U) n ≤
       ContinuousLinearMap.approximationNumber ((1 - W) ∘L projection U) n := by
-  have hsource := proposition4_1_nonacute_source_approximationNumbers
+  have hsource := proposition4_1_nonacute_approximationNumbers
     U V J W hWunitary hWmap n
   have hDseq := sourceRestrictedDisplacement_sameApproximationSingularSequence
     U (TauCeti.DavisKahan.nonacuteDirectRotation U V J) n

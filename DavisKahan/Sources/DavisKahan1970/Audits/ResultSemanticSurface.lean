@@ -267,7 +267,7 @@ Status: **TERMINAL EXACT**.
 Status: **TERMINAL EXACT**.
 -/
 
-#check @TauCeti.DavisKahan1970.proposition3_1_source
+#check @TauCeti.DavisKahan1970.proposition3_1
 
 /-! ## DK-3.2-prop: Nonacute existence criterion
 
@@ -284,22 +284,22 @@ Status: **TERMINAL EXACT**.
 Status: **TERMINAL EXACT**.
 -/
 
-#check @TauCeti.DavisKahan1970.proposition3_3_complex_forward_source
-#check @TauCeti.DavisKahan1970.proposition3_3_complex_converse_source
-#check @TauCeti.DavisKahan1970.proposition3_3_real_forward_source
-#check @TauCeti.DavisKahan1970.proposition3_3_real_converse_source
+#check @TauCeti.DavisKahan1970.proposition3_3_complex_forward
+#check @TauCeti.DavisKahan1970.proposition3_3_complex_converse
+#check @TauCeti.DavisKahan1970.proposition3_3_real_forward
+#check @TauCeti.DavisKahan1970.proposition3_3_real_converse
 
 /-! ## DK-3.4-prop: Square as a direct rotation
 
 Status: **TERMINAL EXACT**.
 -/
 
-#check @TauCeti.DavisKahan1970.proposition3_4_source_full_complex
-#check @TauCeti.DavisKahan1970.proposition3_4_source_full_real
-#check @TauCeti.DavisKahan1970.proposition3_4_source_full_bundled_complex
-#check @TauCeti.DavisKahan1970.proposition3_4_source_eq_directRotation
-#check @TauCeti.DavisKahan1970.proposition3_4_source_crossedDefectsEquivalent_complex
-#check @TauCeti.DavisKahan1970.proposition3_4_source_crossedDefectsEquivalent_real
+#check @TauCeti.DavisKahan1970.proposition3_4_full_complex
+#check @TauCeti.DavisKahan1970.proposition3_4_full_real
+#check @TauCeti.DavisKahan1970.proposition3_4_full_bundled_complex
+#check @TauCeti.DavisKahan1970.proposition3_4_eq_directRotation
+#check @TauCeti.DavisKahan1970.proposition3_4_crossedDefectsEquivalent_complex
+#check @TauCeti.DavisKahan1970.proposition3_4_crossedDefectsEquivalent_real
 
 /-! ## DK-3.1-thm: Classification of pairs of subspaces
 
@@ -342,12 +342,12 @@ crossed-defect isometry and carry no acuteness hypothesis; the maximality clause
 Status: **TERMINAL EXACT**.
 -/
 
-#check @TauCeti.DavisKahan1970.corollary3_2_source
+#check @TauCeti.DavisKahan1970.corollary3_2
 #check @TauCeti.DavisKahan1970.corollary3_2_nonacuteQuarterTurn_symm
 #check @TauCeti.DavisKahan1970.corollary3_2_nonacute_directRotation_resolution
 #check @TauCeti.DavisKahan1970.complex_directRotation_reversal
 #check @TauCeti.DavisKahan1970.real_directRotation_reversal
-#check @TauCeti.DavisKahan1970.corollary3_2_reversal_source_form
+#check @TauCeti.DavisKahan1970.corollary3_2_reversal_form
 
 /-! ## DK-4.1-prop: Pointwise and singular-value extremality of the direct rotation
 
@@ -377,8 +377,8 @@ Status: **TERMINAL EXACT**.
 -/
 
 #check @TauCeti.DavisKahan1970.Proposition4_2_infiniteDimensional
-#check @TauCeti.DavisKahan1970.Proposition4_2_source_compact_nonacute
-#check @TauCeti.DavisKahan1970.Proposition4_2_source_compact_nonacute_real
+#check @TauCeti.DavisKahan1970.Proposition4_2_compact_nonacute
+#check @TauCeti.DavisKahan1970.Proposition4_2_compact_nonacute_real
 #check @TauCeti.DavisKahan1970.tsum_displacementAngleSineSqR_ge_tsum_sq_sin_principalAngleSequence
 
 /-! ## DK-4.3-prop: Squared displacement UI-norm minimality
@@ -485,11 +485,11 @@ Status: **TERMINAL EXACT**.
 Status: **TERMINAL EXACT**.
 -/
 
-#check @TauCeti.DavisKahan1970.proposition6_1_source_complex
-#check @TauCeti.DavisKahan1970.proposition6_1_source_projectorDifference_complex
-#check @TauCeti.DavisKahan1970.proposition6_1_source_real
-#check @TauCeti.DavisKahan1970.proposition6_1_commonDomain_source_complex
-#check @TauCeti.DavisKahan1970.proposition6_1_commonDomain_source_real
+#check @TauCeti.DavisKahan1970.proposition6_1_complex
+#check @TauCeti.DavisKahan1970.proposition6_1_projectorDifference_complex
+#check @TauCeti.DavisKahan1970.proposition6_1_real
+#check @TauCeti.DavisKahan1970.proposition6_1_commonDomain_complex
+#check @TauCeti.DavisKahan1970.proposition6_1_commonDomain_real
 #check @TauCeti.DavisKahan1970.Proposition6_1_commonDomain
 #check @TauCeti.DavisKahan1970.Proposition6_1_real_commonDomain
 #check @TauCeti.DavisKahan1970.Proposition6_1_complex
@@ -502,13 +502,13 @@ Status: **TERMINAL EXACT**.
 Status: **TERMINAL EXACT**.
 -/
 
-#check @TauCeti.DavisKahan1970.theorem6_1_source_complex
-#check @TauCeti.DavisKahan1970.theorem6_1_source_real
+#check @TauCeti.DavisKahan1970.theorem6_1_complex
+#check @TauCeti.DavisKahan1970.theorem6_1_real
 #check @TauCeti.DavisKahan1970.Theorem6_1_commonDomain
 #check @DavisKahan1970.IsTrialResidualEquation
 #check @DavisKahan1970.isTrialResidual_iff_equation_and_isometry
-#check @TauCeti.DavisKahan1970.lowerFrameBound_iff_source_operator_inequality
-#check @TauCeti.DavisKahan1970.lowerFrameBound_of_source_operator_inequality
+#check @TauCeti.DavisKahan1970.lowerFrameBound_iff_operator_inequality
+#check @TauCeti.DavisKahan1970.lowerFrameBound_of_operator_inequality
 #check @TauCeti.DavisKahan1970.Theorem6_1_complex
 #check @TauCeti.DavisKahan1970.Theorem6_1_real
 #check @TauCeti.DavisKahan1970.Theorem6_1_real_commonDomain
@@ -519,8 +519,8 @@ Status: **TERMINAL EXACT**.
 Status: **TERMINAL EXACT**.
 -/
 
-#check @TauCeti.DavisKahan1970.theorem6_2_source_complex
-#check @TauCeti.DavisKahan1970.theorem6_2_source_real
+#check @TauCeti.DavisKahan1970.theorem6_2_complex
+#check @TauCeti.DavisKahan1970.theorem6_2_real
 #check @TauCeti.DavisKahan1970.Theorem6_2_complex
 #check @TauCeti.DavisKahan1970.Theorem6_2_real
 
@@ -561,17 +561,17 @@ Status: **TERMINAL EXACT**.
 #check @TauCeti.DavisKahan1970.Section8.theorem8_1_maximalAngle_le_iff_spectrumIn
 #check @TauCeti.DavisKahan1970.Section8.theorem8_1_canonicalBranch_real
 #check @TauCeti.DavisKahan1970.Section8.theorem8_1_maximalAngle_le_iff_spectrumIn_real
-#check @TauCeti.DavisKahan1970.Section8.theorem8_1_upperCompressionRepulsion_source
-#check @TauCeti.DavisKahan1970.Section8.theorem8_1_lowerCompressionRepulsion_source
+#check @TauCeti.DavisKahan1970.Section8.theorem8_1_upperCompressionRepulsion
+#check @TauCeti.DavisKahan1970.Section8.theorem8_1_lowerCompressionRepulsion
 #check @TauCeti.DavisKahan1970.Section8.theorem8_1_upperCompressionRepulsion_real
 #check @TauCeti.DavisKahan1970.Section8.theorem8_1_lowerCompressionRepulsion_real
-#check @TauCeti.DavisKahan1970.Section8.theorem8_1_upperApproximationRepulsion_source
-#check @TauCeti.DavisKahan1970.Section8.theorem8_1_lowerApproximationRepulsion_source
+#check @TauCeti.DavisKahan1970.Section8.theorem8_1_upperApproximationRepulsion
+#check @TauCeti.DavisKahan1970.Section8.theorem8_1_lowerApproximationRepulsion
 #check @TauCeti.DavisKahan1970.Section8.theorem8_1_upperApproximationRepulsion_real
 #check @TauCeti.DavisKahan1970.Section8.theorem8_1_lowerApproximationRepulsion_real
 #check @TauCeti.DavisKahan1970.Section8.approximationNumber_eq_eigenvalues_of_isPositive
-#check @TauCeti.DavisKahan1970.Section8.theorem8_1_upperSymmetricGaugeRepulsion_angle_rev_source
-#check @TauCeti.DavisKahan1970.Section8.theorem8_1_lowerSymmetricGaugeRepulsion_angle_rev_source
+#check @TauCeti.DavisKahan1970.Section8.theorem8_1_upperSymmetricGaugeRepulsion_angle_rev
+#check @TauCeti.DavisKahan1970.Section8.theorem8_1_lowerSymmetricGaugeRepulsion_angle_rev
 #check @TauCeti.DavisKahan1970.Section8.theorem8_1_upperSymmetricGaugeRepulsion_angle_rev_real
 #check @TauCeti.DavisKahan1970.Section8.theorem8_1_lowerSymmetricGaugeRepulsion_angle_rev_real
 
@@ -580,13 +580,13 @@ Status: **TERMINAL EXACT**.
 Status: **TERMINAL EXACT**.
 -/
 
-#check @TauCeti.DavisKahan1970.Section8.theorem8_2_branch_source_directed_complex
-#check @TauCeti.DavisKahan1970.Section8.theorem8_2_sinTwoTheta_perturbation_source_symmetricNorming
-#check @TauCeti.DavisKahan1970.Section8.theorem8_2_sinTwoTheta_residual_source_symmetricNorming
-#check @TauCeti.DavisKahan1970.Section8.theorem8_2_branch_source_directed_real
-#check @TauCeti.DavisKahan1970.Section8.theorem8_2_sinTwoTheta_perturbation_source_real_symmetricNorming
-#check @TauCeti.DavisKahan1970.Section8.theorem8_2_sinTwoTheta_residual_source_real_symmetricNorming
-#check @TauCeti.DavisKahan1970.Section8.theorem8_2_branch_source_maximalAngle_lt_of_crossedDefects
-#check @TauCeti.DavisKahan1970.Section8.theorem8_2_branch_source_real_maximalAngle_lt_of_crossedDefects
+#check @TauCeti.DavisKahan1970.Section8.theorem8_2_branch_directed_complex
+#check @TauCeti.DavisKahan1970.Section8.theorem8_2_sinTwoTheta_perturbation_symmetricNorming
+#check @TauCeti.DavisKahan1970.Section8.theorem8_2_sinTwoTheta_residual_symmetricNorming
+#check @TauCeti.DavisKahan1970.Section8.theorem8_2_branch_directed_real
+#check @TauCeti.DavisKahan1970.Section8.theorem8_2_sinTwoTheta_perturbation_real_symmetricNorming
+#check @TauCeti.DavisKahan1970.Section8.theorem8_2_sinTwoTheta_residual_real_symmetricNorming
+#check @TauCeti.DavisKahan1970.Section8.theorem8_2_branch_maximalAngle_lt_of_crossedDefects
+#check @TauCeti.DavisKahan1970.Section8.theorem8_2_branch_real_maximalAngle_lt_of_crossedDefects
 #check @DavisKahan1970.isTrialResidual_iff
 #check @DavisKahan1970.isExactSpectralDecomposition_iff

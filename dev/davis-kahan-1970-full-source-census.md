@@ -1706,7 +1706,7 @@ results are at the printed hypothesis exactly.
 
 **Lean declarations:**
 
-- `TauCeti.DavisKahan1970.proposition3_1_source`
+- `TauCeti.DavisKahan1970.proposition3_1`
 - `TauCeti.DavisKahan1970.complex_directRotation`
 - `TauCeti.DavisKahan1970.complex_directRotation_unique`
 - `TauCeti.DavisKahan1970.complex_directRotation_diagonalBlock`
@@ -1808,9 +1808,9 @@ WHERE `IsUniformlyAcute` IS genuinely essential is the OTHER branch: `spectraDir
 
 ALSO SUPERSEDED: this row's "`IsUniformlyAcute` enters through clause (a) only" (false about signatures, as recorded earlier today) and the note that clause (c) at the printed predicate "is not yet on a declaration" even finite-dimensionally.  Both are now moot.
 
-**RESULT-ONLY HOSTILE REVIEW CLOSED 2026-08-12 (GPT-5.6 Sol).**  The newer 29-result inventory had accidentally regressed to the old complex/`IsUniformlyAcute` evidence even though the 2026-08-10 work had already proved Proposition 3.1 at the paper's own hypothesis.  Added `TauCeti.DavisKahan1970.proposition3_1_source`, a thin generic `RCLike` wrapper over the already-compiled acute polar-factor theorems.  Its telescope uses exactly `TauCeti.IsAcute`; it states unitarity, projection intertwining, positivity of both diagonal blocks, the Definition 3.1(ii) crossed-block identity, and uniqueness from property (i) alone.  No `IsUniformlyAcute`, (3.8), (1.5), finite-dimensional, or complex-only premise remains.  The compact result inventory now points directly at this wrapper and semantically certifies `DK-3.1-prop` as accepted.
+**RESULT-ONLY HOSTILE REVIEW CLOSED 2026-08-12 (GPT-5.6 Sol).**  The newer 29-result inventory had accidentally regressed to the old complex/`IsUniformlyAcute` evidence even though the 2026-08-10 work had already proved Proposition 3.1 at the paper's own hypothesis.  Added `TauCeti.DavisKahan1970.proposition3_1`, a thin generic `RCLike` wrapper over the already-compiled acute polar-factor theorems.  Its telescope uses exactly `TauCeti.IsAcute`; it states unitarity, projection intertwining, positivity of both diagonal blocks, the Definition 3.1(ii) crossed-block identity, and uniqueness from property (i) alone.  No `IsUniformlyAcute`, (3.8), (1.5), finite-dimensional, or complex-only premise remains.  The compact result inventory now points directly at this wrapper and semantically certifies `DK-3.1-prop` as accepted.
 
-**Next action.** None for Proposition 3.1. The 29-result audit now points at the exact generic `proposition3_1_source` wrapper and accepts its printed-scope semantics.
+**Next action.** None for Proposition 3.1. The 29-result audit now points at the exact generic `proposition3_1` wrapper and accepts its printed-scope semantics.
 
 ### `DK-3.2-prop` — Nonacute existence criterion
 
@@ -1933,10 +1933,10 @@ No new mathematics was written for this. The theorem already existed; what was m
 
 **Lean declarations:**
 
-- `TauCeti.DavisKahan1970.proposition3_3_complex_forward_source`
-- `TauCeti.DavisKahan1970.proposition3_3_complex_converse_source`
-- `TauCeti.DavisKahan1970.proposition3_3_real_forward_source`
-- `TauCeti.DavisKahan1970.proposition3_3_real_converse_source`
+- `TauCeti.DavisKahan1970.proposition3_3_complex_forward`
+- `TauCeti.DavisKahan1970.proposition3_3_complex_converse`
+- `TauCeti.DavisKahan1970.proposition3_3_real_forward`
+- `TauCeti.DavisKahan1970.proposition3_3_real_converse`
 - `TauCeti.DavisKahan.proposition3_3_principalSquareRoot_forward_of_nonneg_blocks`
 - `TauCeti.DavisKahan.proposition3_3_principalSquareRoot_converse`
 
@@ -1976,10 +1976,10 @@ The self-adjointness hypotheses on the two diagonal compressions are *not* a spe
 
 **Lean declarations:**
 
-- `TauCeti.DavisKahan1970.proposition3_4_source_full_bundled_complex`
-- `TauCeti.DavisKahan1970.proposition3_4_source_eq_directRotation`
-- `TauCeti.DavisKahan1970.proposition3_4_source_full_real`
-- `TauCeti.DavisKahan1970.proposition3_4_source`
+- `TauCeti.DavisKahan1970.proposition3_4_full_bundled_complex`
+- `TauCeti.DavisKahan1970.proposition3_4_eq_directRotation`
+- `TauCeti.DavisKahan1970.proposition3_4_full_real`
+- `TauCeti.DavisKahan1970.proposition3_4`
 - `TauCeti.DavisKahan.crossedDefect_image_of_unitary_sq`
 - `TauCeti.DavisKahan.norm_projection_apply_le_of_forall_mem_source`
 - `TauCeti.DavisKahan.re_inner_halmosCosineSq_sub_half_nonneg_of_source`
@@ -1992,11 +1992,11 @@ The self-adjointness hypotheses on the two diagonal compressions are *not* a spe
 - `TauCeti.DavisKahanTheory.directRotation_sq`
 - `TauCeti.DavisKahan1970.complex_directRotation_sq`
 - `TauCeti.DavisKahan1970.proposition3_4_square_is_reflected_directRotation`
-- `TauCeti.DavisKahan1970.proposition3_4_source_full_complex`
-- `TauCeti.DavisKahan1970.proposition3_4_source_crossedDefectsEquivalent_complex`
-- `TauCeti.DavisKahan1970.proposition3_4_source_crossedDefectsEquivalent_real`
+- `TauCeti.DavisKahan1970.proposition3_4_full_complex`
+- `TauCeti.DavisKahan1970.proposition3_4_crossedDefectsEquivalent_complex`
+- `TauCeti.DavisKahan1970.proposition3_4_crossedDefectsEquivalent_real`
 
-**Notes.** REPAIRED AND RE-CLOSED 2026-08-12 (result inventory row `DK-3.4-prop`).  The reopening was correct: the complex endpoint concluded only the `IsDirectRotation` numerical-range predicate.  Repaired by `proposition3_4_source_full_complex`, which takes exactly the printed hypothesis C_0^2 >= 1/2 together with the Definition 3.1 direct-rotation data for U, and concludes the genuine Definition 3.1 statement for U^2 from Q_- to Q: unitarity, intertwining, `IsPositive` for both diagonal compressions, and the crossed-block adjoint/sign relation.  It adds no acuteness, compactness, finite-dimensional or separability hypothesis, and reuses the real development's `positiveDiagonalBlocks_of_sq` rather than reproving the positivity upgrade.
+**Notes.** REPAIRED AND RE-CLOSED 2026-08-12 (result inventory row `DK-3.4-prop`).  The reopening was correct: the complex endpoint concluded only the `IsDirectRotation` numerical-range predicate.  Repaired by `proposition3_4_full_complex`, which takes exactly the printed hypothesis C_0^2 >= 1/2 together with the Definition 3.1 direct-rotation data for U, and concludes the genuine Definition 3.1 statement for U^2 from Q_- to Q: unitarity, intertwining, `IsPositive` for both diagonal compressions, and the crossed-block adjoint/sign relation.  It adds no acuteness, compactness, finite-dimensional or separability hypothesis, and reuses the real development's `positiveDiagonalBlocks_of_sq` rather than reproving the positivity upgrade.
 
 Square identities exist; exact source mapping between Q-minus and Q needs verification.
 
@@ -2016,7 +2016,7 @@ printed statement was too strong.
 
 **M37, 2026-08-09 (Claude Opus 5).  PRINTED PROPOSITION 3.4 IS COMPILED.  STATUS RAISED `compiled_specialization` -> `compiled_exact`, AND THE BLOCKER IS DISCHARGED BY PROOF.**  This was the only one of the six `exact-source-wrappers` rows with real work on it, and the work was not mechanical: each of the three narrowings recorded in `scope_gap` on 2026-08-09 needed mathematics, not a restatement.
 
-`proposition3_4_source` (`DavisKahan/Frontier/Section3.lean`) is the printed sentence -- if `C₀² ≥ ½` then `U²` is the direct rotation of `Q₋ℋ` to `Qℋ` -- as `IsDirectRotation (reflectedSubspace U V) V (W * W)`, with `W` the direct rotation of the pair.  The paper's own proof verifies exactly clauses (i) and (ii) of Definition 3.1 plus the intertwining `U²Q₋ = QU²`, which is what that predicate records.
+`proposition3_4` (`DavisKahan/Frontier/Section3.lean`) is the printed sentence -- if `C₀² ≥ ½` then `U²` is the direct rotation of `Q₋ℋ` to `Qℋ` -- as `IsDirectRotation (reflectedSubspace U V) V (W * W)`, with `W` the direct rotation of the pair.  The paper's own proof verifies exactly clauses (i) and (ii) of Definition 3.1 plus the intertwining `U²Q₋ = QU²`, which is what that predicate records.
 
 (1) THE PAIR WAS THE WRONG ONE, AND BOTH ARE TRUE.  `reflectedSubspace A B` is the mirror of `B` in `A`, so the paper's `Q₋ = XQX` is `reflectedSubspace U V`.  The compiled theorem exhibited `(U, reflectedSubspace V U)` -- the source and its own mirror in the target.  Each statement says `W²` is the direct rotation from some subspace onto its `W²`-image, and they are different subspaces; only the second is printed.
 
@@ -2024,13 +2024,13 @@ printed statement was too strong.
 
 (3) THE EXTRA ACUTENESS HYPOTHESIS IS GONE, AND THE ARGUMENT THAT IT WAS NECESSARY WAS ABOUT THE ROUTE, NOT THE CLAIM.  The docstring of `proposition3_4_square_is_reflected_directRotation` argues that `IsUniformlyAcute U (reflectedSubspace V U)` is 'genuinely not derivable' -- correctly, since at the boundary `C₀² = ½` the reflected pair has gap one.  But that hypothesis is needed only to index `spectraDirectRotation` for the reflected pair.  Routing through Proposition 3.3's NONACUTE converse removes it: the crossed-intersection mapping condition that the converse takes as a hypothesis is free for every unitary square root of the reflection product that intertwines the two projections.  That is `crossedDefect_image_of_unitary_sq`, factored out of `proposition3_3_principalSquareRoot_forward` -- which had contained it inline and now cites it, so the twenty-five lines exist once.  Acuteness of the ORIGINAL pair is retained: `spectraDirectRotation U V` is indexed by it, and (2) needs the intertwiner it provides.
 
-`proposition3_4_source_eq_directRotation` supplies the printed definite article: with the reflected pair acute as well, `W²` is the canonical direct rotation of `(Q₋ℋ, Qℋ)` on the nose, by Proposition 3.1 uniqueness.  Without it, `proposition3_4_source` still holds and Proposition 3.2 says the direct rotation need not be unique.
+`proposition3_4_eq_directRotation` supplies the printed definite article: with the reflected pair acute as well, `W²` is the canonical direct rotation of `(Q₋ℋ, Qℋ)` on the nose, by Proposition 3.1 uniqueness.  Without it, `proposition3_4` still holds and Proposition 3.2 says the direct rotation need not be unique.
 
 `proposition3_4_square_is_reflected_directRotation` is KEPT, not replaced: it is true, axiom-clean, and it is the statement about the other reflected pair.  All eleven new declarations are axiom-clean `[propext, Classical.choice, Quot.sound]`.
 
-SOURCE-FIDELITY REFRESH 2026-08-11.  `proposition3_4_source_full_bundled_complex` removes the remaining acute-constructor narrowing.  The row remains `compiled_exact`.
+SOURCE-FIDELITY REFRESH 2026-08-11.  `proposition3_4_full_bundled_complex` removes the remaining acute-constructor narrowing.  The row remains `compiled_exact`.
 
-**RESULT-ONLY CLOSURE 2026-08-12.** The complex full-scope Proposition 3.4 theorem is now paired with `TauCeti.DavisKahan1970.proposition3_4_source_full_real`, a compiler-validated real theorem at the same printed nonacute scope. The real theorem transports the printed direct-rotation hypotheses and the `C0^2 >= 1/2` condition through canonical complexification, invokes the existing complex theorem, and descends the exact real Definition 3.1 clauses including genuine positive diagonal blocks. No result-level hole remains on this row.
+**RESULT-ONLY CLOSURE 2026-08-12.** The complex full-scope Proposition 3.4 theorem is now paired with `TauCeti.DavisKahan1970.proposition3_4_full_real`, a compiler-validated real theorem at the same printed nonacute scope. The real theorem transports the printed direct-rotation hypotheses and the `C0^2 >= 1/2` condition through canonical complexification, invokes the existing complex theorem, and descends the exact real Definition 3.1 clauses including genuine positive diagonal blocks. No result-level hole remains on this row.
 
 **Next action.** No result-level hole remains for Proposition 3.4. Re-audit only if the source specification or source-facing theorem signatures change.
 
@@ -2621,14 +2621,14 @@ RESIDUAL FIDELITY NOTE: `fixedCosineSubspace` is `ker (cos^2 Theta - c^2)`, and 
 - `TauCeti.DavisKahan1970.complex_directRotation_reversal`
 - `TauCeti.DavisKahanTheory.directRotation_symm`
 - `TauCeti.DavisKahan1970.corollary3_2_reversal`
-- `TauCeti.DavisKahan1970.corollary3_2_reversal_source_form`
+- `TauCeti.DavisKahan1970.corollary3_2_reversal_form`
 - `TauCeti.DavisKahan1970.corollary3_2_sinAngleOperator_symm`
 - `TauCeti.DavisKahanTheory.angleComplexStructure_symm`
 - `TauCeti.DavisKahanTheory.angleOperator_comm`
 - `TauCeti.DavisKahanTheory.sinAngleOperator_comm`
 - `TauCeti.DavisKahanTheory.directRotationCosine_comm`
 - `TauCeti.DavisKahan1970.real_directRotation_reversal`
-- `TauCeti.DavisKahan1970.corollary3_2_source`
+- `TauCeti.DavisKahan1970.corollary3_2`
 - `TauCeti.DavisKahan1970.corollary3_2_nonacute_directRotation_resolution`
 - `TauCeti.DavisKahan1970.corollary3_2_nonacuteQuarterTurn_symm`
 
@@ -2642,7 +2642,7 @@ VERIFIED 2026-08-04 by the elaborator, not by grep: a probe file importing `Davi
 promote the reversal theorem out of the unguarded Experimental tree and then to add a
 source-facing statement.  `directRotation_symm` has been in the guarded tree
 (DavisKahan/FiniteDimensional/DirectRotation.lean) all along, and
-`corollary3_2_reversal_source_form` already stated the quarter-turn half in
+`corollary3_2_reversal_form` already stated the quarter-turn half in
 DavisKahan/Frontier/Section3.lean.  What was genuinely missing is what that theorem's own
 docstring claimed and did not prove: the *angle* half.  Corollary 3.2 asserts both, so the
 row now carries `corollary3_2_sinAngleOperator_symm` and the combined
@@ -2654,7 +2654,7 @@ The `U |-> U*` form is now the INPUT rather than the conclusion: from `U(V,U) = 
 
 **M33, 2026-08-09 (Claude Opus 5).  THE REAL-SCALAR AXIS IS CLOSED ON THIS ROW.**  The reversal clause is now proved over a REAL Hilbert space of arbitrary dimension: `real_directRotation_reversal` says `W(V,U) = W(U,V)^T` for the real direct rotation (`DavisKahan/Geometry/Polar/DirectRotationReal.lean`).  The angle half `Theta(V,U) = Theta(U,V)` already had a real form through `DavisKahan/Geometry/Angle/AngleFunctionalCalculusReal.lean`, whose operators are defined as real restrictions.  What is left is the DIMENSION axis on `J`.
 
-SOURCE-FIDELITY REFRESH 2026-08-11.  The former finite-dimensional J gap is closed by `corollary3_2_source`; the row remains `compiled_exact` for the full nonacute real-or-complex Hilbert-space statement.
+SOURCE-FIDELITY REFRESH 2026-08-11.  The former finite-dimensional J gap is closed by `corollary3_2`; the row remains `compiled_exact` for the full nonacute real-or-complex Hilbert-space statement.
 
 **Next action.** No hostile-review hole is currently recorded for this source passage. Preserve exact source scope and re-audit if the distributable source specification changes.
 
@@ -2784,8 +2784,8 @@ SECTION 4 STAGING RETIRED 2026-08-27.  `DavisKahan/Frontier/Section4.lean` is de
 
 **Lean declarations:**
 
-- `TauCeti.DavisKahan1970.Proposition4_2_source_compact_nonacute_real`
-- `TauCeti.DavisKahan1970.Proposition4_2_source_compact_nonacute`
+- `TauCeti.DavisKahan1970.Proposition4_2_compact_nonacute_real`
+- `TauCeti.DavisKahan1970.Proposition4_2_compact_nonacute`
 - `TauCeti.DavisKahan.Section4.sum_displacementAngleSineSq_ge`
 - `TauCeti.DavisKahan.Section4.displacementAngleSineSq_directRotation_eq_of_smul`
 - `TauCeti.DavisKahan.Section4.norm_absoluteValue_apply_eq_norm_projection`
@@ -3237,13 +3237,13 @@ with no finite-dimensionality hypothesis.  `HasMinMaxLowerBoundEverywhere` has i
 - `TauCeti.DavisKahan1970.Proposition6_1_real_sinTheta_singularValues`
 - `TauCeti.DavisKahan1970.Proposition6_1_real_sinTheta_eq_literalFullSinAngle`
 - `TauCeti.DavisKahan1970.Proposition6_1_real_representative`
-- `TauCeti.DavisKahan1970.proposition6_1_source_complex`
-- `TauCeti.DavisKahan1970.proposition6_1_source_projectorDifference_complex`
-- `TauCeti.DavisKahan1970.proposition6_1_source_real`
+- `TauCeti.DavisKahan1970.proposition6_1_complex`
+- `TauCeti.DavisKahan1970.proposition6_1_projectorDifference_complex`
+- `TauCeti.DavisKahan1970.proposition6_1_real`
 - `TauCeti.DavisKahanExt.PartialMap.boundedReducingBlock`
 - `TauCeti.DavisKahanExt.PartialMap.boundedReducingBlockCompl`
-- `TauCeti.DavisKahan1970.proposition6_1_commonDomain_source_complex`
-- `TauCeti.DavisKahan1970.proposition6_1_commonDomain_source_real`
+- `TauCeti.DavisKahan1970.proposition6_1_commonDomain_complex`
+- `TauCeti.DavisKahan1970.proposition6_1_commonDomain_real`
 - `TauCeti.DavisKahan1970.Proposition6_1_commonDomain`
 - `TauCeti.DavisKahan1970.Proposition6_1_real_commonDomain`
 
@@ -3260,7 +3260,7 @@ with no finite-dimensionality hypothesis.  `HasMinMaxLowerBoundEverywhere` has i
 
 The theorem's own statement mentions no complexification, no functional calculus, and no caller-supplied inequality.  Axiom audit on all five real declarations plus the structure: exactly `propext`, `Classical.choice`, `Quot.sound`.  Full `lake build` green (9487 jobs), plus the non-default `FinishTanTwoTheta` and `Challenge` libraries.
 
-CANONICAL SURFACE MOVED OFF THE RECORD 2026-08-31. `Proposition6_1_complex` and `Proposition6_1_real` are methods on `SymmetricSinThetaProblem` / its real sibling: a caller had to build the record to invoke the theorem. `proposition6_1_source_complex` and `proposition6_1_source_real` take the mathematics directly -- two bounded self-adjoint operators, two reducing subspaces, the gap, the two separations, membership of `B - A` -- and build the record inside the proof. `DavisKahanExt.PartialMap.boundedReducingBlock` and its complement partner are what made the separation hypotheses readable; the four-line inline composite they replace is most of why the record existed. The complex conclusion is the paper's literal `cfc Real.sin (angleOperatorC U V)`; the real one is the projector difference `P_V - P_U`, whose approximation numbers are the sines of the principal angles, and `proposition6_1_source_projectorDifference_complex` states the complex theorem in that same shape so the two fields are visibly one theorem. `crossSineSum` no longer appears in any Proposition 6.1 statement; it remains what the real proof computes with, and `Proposition6_1_real_sinTheta_singularValues` is the compiled transport off it. The Challenge wrapper `sinTheta_wholeSpace_symmetricNorming` is now an alias of the production declaration rather than a second theorem with the same statement.
+CANONICAL SURFACE MOVED OFF THE RECORD 2026-08-31. `Proposition6_1_complex` and `Proposition6_1_real` are methods on `SymmetricSinThetaProblem` / its real sibling: a caller had to build the record to invoke the theorem. `proposition6_1_complex` and `proposition6_1_real` take the mathematics directly -- two bounded self-adjoint operators, two reducing subspaces, the gap, the two separations, membership of `B - A` -- and build the record inside the proof. `DavisKahanExt.PartialMap.boundedReducingBlock` and its complement partner are what made the separation hypotheses readable; the four-line inline composite they replace is most of why the record existed. The complex conclusion is the paper's literal `cfc Real.sin (angleOperatorC U V)`; the real one is the projector difference `P_V - P_U`, whose approximation numbers are the sines of the principal angles, and `proposition6_1_projectorDifference_complex` states the complex theorem in that same shape so the two fields are visibly one theorem. `crossSineSum` no longer appears in any Proposition 6.1 statement; it remains what the real proof computes with, and `Proposition6_1_real_sinTheta_singularValues` is the compiled transport off it. The Challenge wrapper `sinTheta_wholeSpace_symmetricNorming` is now an alias of the production declaration rather than a second theorem with the same statement.
 
 REOPENED 2026-08-31 by the scope-atom re-audit: a source passage that explicitly extends this result's proved scope had been classified as generic post-result commentary. See the result inventory's `remaining_gap` for the exact atom and the evidence that must be registered.
 
@@ -3286,13 +3286,13 @@ REOPENING WITHDRAWN 2026-08-31 and the rule corrected: a later source passage en
 - `TauCeti.DavisKahan1970.Theorem6_1_real`
 - `TauCeti.DavisKahan1970.Theorem6_1_real_commonDomain`
 - `TauCeti.DavisKahan1970.Theorem6_1_real_commonCore`
-- `TauCeti.DavisKahan1970.theorem6_1_source_complex`
-- `TauCeti.DavisKahan1970.theorem6_1_source_real`
+- `TauCeti.DavisKahan1970.theorem6_1_complex`
+- `TauCeti.DavisKahan1970.theorem6_1_real`
 - `DavisKahan1970.IsTrialResidualEquation`
 - `DavisKahan1970.isTrialResidual_iff_equation_and_isometry`
 - `TauCeti.DavisKahan1970.Theorem6_1_commonDomain`
-- `TauCeti.DavisKahan1970.lowerFrameBound_iff_source_operator_inequality`
-- `TauCeti.DavisKahan1970.lowerFrameBound_of_source_operator_inequality`
+- `TauCeti.DavisKahan1970.lowerFrameBound_iff_operator_inequality`
+- `TauCeti.DavisKahan1970.lowerFrameBound_of_operator_inequality`
 
 **Notes.** This is the canonical source-general sine theorem.
 
@@ -3302,7 +3302,7 @@ REOPENING WITHDRAWN 2026-08-31 and the rule corrected: a later source passage en
 
 **M32, THE SECTION 6 SCALAR TRANCHE, 2026-08-09 (Claude Opus 5).**  THE `real-scalar-infinite-dimensional-scope` ENTRY IN `blocked_by` WAS STALE AND IS REMOVED.  The 2026-08-07 note above already recorded the false positive and restored the status, but the blocker was left on the row, so the blocker's own tally counted this row.  RE-MEASURED 2026-08-09 by elaborating the signature: `Theorem6_1_real` is `[InnerProductSpace ℝ]` on four spaces with `[CompleteSpace]` and NO `[FiniteDimensional]` anywhere, over `RealTheorem61Data` and an arbitrary `SymmetricNormingFunction`, concluding `N.Mem S.operator ∧ gap * frameLowerBound * N.gauge S.operator ≤ N.gauge P.data.residual` -- membership CONCLUDED, constant intact.  `Theorem6_1_real_commonDomain` and `Theorem6_1_real_commonCore` likewise.  All axiom-clean (`[propext, Classical.choice, Quot.sound]`).  Nothing was proved for this row today; the row was already correct.
 
-CANONICAL SURFACE MOVED OFF THE RECORD 2026-08-31. `Theorem6_1_complex` and `Theorem6_1_real` are methods on `Theorem61Data`, which bundles an `UnboundedSinThetaData` -- itself a record -- with the exact map, three self-adjointness fields, the exact decomposition, the gap and the frame bound. `theorem6_1_source_complex` and `theorem6_1_source_real` take the components. They reuse the Section 2 vocabulary rather than inventing a second one: `DavisKahan1970.IsExactSpectralDecomposition` unchanged, and `DavisKahan1970.IsTrialResidualEquation` -- `IsTrialResidual` with the isometry removed, tied by `isTrialResidual_iff_equation_and_isometry`. That split is the actual difference between Section 2 and Section 6: Section 2 asks for an isometric trial map, Theorems 6.1 and 6.2 ask only for `LowerFrameBound E_0 epsilon`, and epsilon is the factor the printed generalized bound carries. Hypotheses and conclusion are unchanged -- same lower-frame factor, same representative freedom, same arbitrary source UI norm.
+CANONICAL SURFACE MOVED OFF THE RECORD 2026-08-31. `Theorem6_1_complex` and `Theorem6_1_real` are methods on `Theorem61Data`, which bundles an `UnboundedSinThetaData` -- itself a record -- with the exact map, three self-adjointness fields, the exact decomposition, the gap and the frame bound. `theorem6_1_complex` and `theorem6_1_real` take the components. They reuse the Section 2 vocabulary rather than inventing a second one: `DavisKahan1970.IsExactSpectralDecomposition` unchanged, and `DavisKahan1970.IsTrialResidualEquation` -- `IsTrialResidual` with the isometry removed, tied by `isTrialResidual_iff_equation_and_isometry`. That split is the actual difference between Section 2 and Section 6: Section 2 asks for an isometric trial map, Theorems 6.1 and 6.2 ask only for `LowerFrameBound E_0 epsilon`, and epsilon is the factor the printed generalized bound carries. Hypotheses and conclusion are unchanged -- same lower-frame factor, same representative freedom, same arbitrary source UI norm.
 
 REOPENED 2026-08-31 by the scope-atom re-audit: a source passage that explicitly extends this result's proved scope had been classified as generic post-result commentary. See the result inventory's `remaining_gap` for the exact atom and the evidence that must be registered.
 
@@ -3324,10 +3324,10 @@ REOPENING WITHDRAWN 2026-08-31 and the rule corrected: a later source passage en
 - `TauCeti.DavisKahan1970.Theorem6_2_real_commonCore`
 - `TauCeti.DavisKahan.ExactSinTheta.Theorem62Data.operatorNorm_result_across_of_rank_le`
 - `TauCeti.DavisKahan.ExactSinTheta.RealTheorem62Data.operatorNorm_result_across_of_rank_le`
-- `TauCeti.DavisKahan1970.theorem6_2_source_complex`
-- `TauCeti.DavisKahan1970.theorem6_2_source_real`
-- `TauCeti.DavisKahan1970.lowerFrameBound_iff_source_operator_inequality`
-- `TauCeti.DavisKahan1970.lowerFrameBound_of_source_operator_inequality`
+- `TauCeti.DavisKahan1970.theorem6_2_complex`
+- `TauCeti.DavisKahan1970.theorem6_2_real`
+- `TauCeti.DavisKahan1970.lowerFrameBound_iff_operator_inequality`
+- `TauCeti.DavisKahan1970.lowerFrameBound_of_operator_inequality`
 
 **Notes.** The defect-first pairwise tensor proof is compiled.
 
@@ -3382,11 +3382,11 @@ Residue, and not a gap: `[CompleteSpace Z]`, which `Theorem63InfiniteTrial.lean`
 - `TauCeti.DavisKahan.ExactTanTheta.theorem6_3_all_kyFan_core_directedTangent`
 - `TauCeti.DavisKahan.ExactTanTheta.theorem6_3_generalizedTanTheta_equalRank_spectral`
 - `TauCeti.DavisKahan.ExactTanTheta.theorem6_3_generalizedTanTheta_of_formBounds_equalRank`
-- `TauCeti.DavisKahan.ExactTanTheta.theorem6_3_generalizedTanTheta_source_ideal`
-- `TauCeti.DavisKahan.ExactTanTheta.theorem6_3_generalizedTanTheta_source_ideal_directedTangent`
-- `TauCeti.DavisKahan.ExactTanTheta.theorem6_3_generalizedTanTheta_source_ideal_of_infiniteTrial`
+- `TauCeti.DavisKahan.ExactTanTheta.theorem6_3_generalizedTanTheta_ideal`
+- `TauCeti.DavisKahan.ExactTanTheta.theorem6_3_generalizedTanTheta_ideal_directedTangent`
+- `TauCeti.DavisKahan.ExactTanTheta.theorem6_3_generalizedTanTheta_ideal_of_infiniteTrial`
 - `TauCeti.DavisKahan.ExactTanTheta.theorem6_3_infiniteTrial_of_formBounds`
-- `TauCeti.DavisKahan.ExactTanTheta.theorem6_3_infiniteTrial_source_ideal`
+- `TauCeti.DavisKahan.ExactTanTheta.theorem6_3_infiniteTrial_ideal`
 - `TauCeti.DavisKahan.ExactTanTheta.theorem6_3_infiniteTrial_spectral_exists`
 - `TauCeti.DavisKahan1970.Section6Example61.T_u`
 - `TauCeti.DavisKahan1970.Section6Example61.T_w`
@@ -3405,19 +3405,19 @@ Residue, and not a gap: `[CompleteSpace Z]`, which `Theorem63InfiniteTrial.lean`
 - `TauCeti.DavisKahan1970.tanTheta_directed_unboundedTrial_symmetricNorming_real`
 - `TauCeti.DavisKahan1970.symmetricNorming_of_kyFanDominant`
 
-**Notes.** Bounded finite-source Theorem 6.3 proved axiom-clean in DavisKahan.TanTheta.Theorem63FiniteSource (theorem6_3_all_kyFan_core, theorem6_3_generalizedTanTheta_source_ideal); promoted out of Scratch.
+**Notes.** Bounded finite-source Theorem 6.3 proved axiom-clean in DavisKahan.TanTheta.Theorem63FiniteSource (theorem6_3_all_kyFan_core, theorem6_3_generalizedTanTheta_ideal); promoted out of Scratch.
 
 **A HYPOTHESIS WITH NO PRODUCER, FOUND AND DISCHARGED 2026-08-05.** Every compiled form of Theorem 6.3 quantified over a `tanTheta0` satisfying `HasTheorem63DirectedTangentApproximationNumbers Z V tanTheta0`, and a grep for *producers* rather than consumers showed that nothing anywhere in the repository ever constructed one.  The compiled theorem was therefore a conditional whose antecedent had no witness -- strictly weaker than the printed theorem, which takes the tangent representative for granted.  The row said `proved_in_build`, which was true of the declarations and misleading about the mathematics.
 
 THE WITNESS.  `ExactTanTheta.theorem63DirectedTangent`: diagonal in the right singular basis of the directed sine block, with entries `tan (arcsin s_i)`.  `hasTheorem63DirectedTangentApproximationNumbers_theorem63DirectedTangent` proves it has the required approximation numbers.  Two facts do the work: the singular values of a diagonal operator with antitone nonnegative diagonal are the diagonal itself, and `t |-> t / sqrt(1 - t^2)` is increasing on `[0,1)`, so the entries inherit the sine block's ordering.  Post-composition with the inclusion `Z -> H` does not move approximation singular values (`approximationSingularValue_subtypeL_comp_complex`), and above `dim Z` both sides vanish (`approximationSingularValue_eq_zero_of_finrank_le_complex`).
 
-**NO NEW HYPOTHESIS WAS NEEDED.** Finiteness of the entries requires `s_i < 1`, and `theorem63_singularValues_sine_lt_one` -- already in the file -- derives exactly that from the source gap, i.e. from the same `hCompressionUpper` and `hUnwantedLower` Theorem 6.3 assumes.  So `theorem6_3_all_kyFan_core_directedTangent` and `theorem6_3_generalizedTanTheta_source_ideal_directedTangent` carry precisely the printed hypotheses.  Both are in the default build and axiom-clean, and are wrapped in `RemainingSourceSurface` as `theorem6_3_all_kyFan_core_unconditional` and `theorem6_3_generalizedTanTheta_source_ideal_unconditional`.
+**NO NEW HYPOTHESIS WAS NEEDED.** Finiteness of the entries requires `s_i < 1`, and `theorem63_singularValues_sine_lt_one` -- already in the file -- derives exactly that from the source gap, i.e. from the same `hCompressionUpper` and `hUnwantedLower` Theorem 6.3 assumes.  So `theorem6_3_all_kyFan_core_directedTangent` and `theorem6_3_generalizedTanTheta_ideal_directedTangent` carry precisely the printed hypotheses.  Both are in the default build and axiom-clean, and are wrapped in `RemainingSourceSurface` as `theorem6_3_all_kyFan_core_unconditional` and `theorem6_3_generalizedTanTheta_ideal_unconditional`.
 
 **THE DIMENSION HYPOTHESIS WAS REDUNDANT, 2026-08-05.** `theorem6_3_generalizedTanTheta_of_formBounds` binds `_hStrictDimension : Module.rank Z < Module.rank V` and never uses it, and the Ky Fan core never took it at all.  The printed inequality does one job -- under the paper's separability convention it forces the trial coordinate space to be finite-dimensional -- and here that is an explicit instance.  `theorem6_3_generalizedTanTheta_of_formBounds_equalRank` and `theorem6_3_generalizedTanTheta_equalRank_spectral` state the theorem without it, which is what the equal-rank Section 2 tangent theorem needs; see S2-tan-theta.
 
 **RE-ASSESSED 2026-08-09 (Claude Opus 5).  THE ROW DOES NOT MOVE, AND HERE IS THE MEASUREMENT BEHIND THAT.**
 
-`theorem6_3_generalizedTanTheta_source_ideal_directedTangent` was elaborated in full.  It is the printed theorem: `Module.rank C Z < Module.rank C V` (the paper's strict source-coordinate dimension inequality, present rather than dropped), `spectrum R (theorem63Compression T Z) subset Icc beta alpha`, `spectrum R (T.restrict ...) subset Ici (alpha + delta)`, arbitrary `KyFanDominantIdealFamily`, conclusion `delta * N.gauge (theorem63DirectedTangent Z V) <= N.gauge (theorem63Residual T Z)` with the representative constructed.  Axiom-clean, in the default build.
+`theorem6_3_generalizedTanTheta_ideal_directedTangent` was elaborated in full.  It is the printed theorem: `Module.rank C Z < Module.rank C V` (the paper's strict source-coordinate dimension inequality, present rather than dropped), `spectrum R (theorem63Compression T Z) subset Icc beta alpha`, `spectrum R (T.restrict ...) subset Ici (alpha + delta)`, arbitrary `KyFanDominantIdealFamily`, conclusion `delta * N.gauge (theorem63DirectedTangent Z V) <= N.gauge (theorem63Residual T Z)` with the representative constructed.  Axiom-clean, in the default build.
 
 Two things keep it from `compiled_exact`.
 
@@ -3437,7 +3437,7 @@ ALREADY PRESENT, MISSING FROM THIS ROW: `theorem6_3_all_kyFan_core_infiniteTrial
 
 PROVED TODAY: the trial-dimension restriction on the real endpoint is removed.  `tanTheta_directed_bounded_arbitraryDimension_symmetricNorming_real` needed `¬ FiniteDimensional ℝ Z` because the only representative constructor available was `ApproximationNumber.exists_approximationNumber_eq_of_antitone`, which builds an operator with a prescribed antitone sequence only on an infinite-dimensional space.  On a finite-dimensional real trial space the representative is instead written down: `theorem63DirectedTangentReal` is `diagOp (stdOrthonormalBasis ℝ Z) (tan ∘ arcsin ∘ a_·(sineBlockReal Z V))`, included into the ambient space.  `TauCeti.singularValues_diagOp` is already `RCLike`, so the diagonal IS the singular sequence; above `finrank ℝ Z` both sequences vanish for rank reasons (`approximationSingularValue_eq_zero_of_finrank_le_real`); and the entries are finite because the source gap forces `a_n < 1` (`approximationSingularValue_sineBlock_lt_one_infiniteTrial_real`).  NO ORTHONORMAL BASIS ADAPTED TO THE SINE BLOCK IS NEEDED -- any orthonormal basis of `Z` works, because only the singular values are prescribed.  `exists_hasTheorem63DirectedTangentApproximationNumbersReal` then covers every closed real trial subspace by case split, and `tanTheta_directed_bounded_symmetricNorming_real` is Theorem 6.3 over a real Hilbert space of arbitrary dimension, arbitrary closed real trial subspace, every source `SymmetricNormingFunction`, tangent representative EXHIBITED and its membership CONCLUDED.  `tanTheta_directed_bounded_arbitraryDimension_symmetricNorming_real` is now a one-line specialization of it.  All axiom-clean.
 
-WHAT THE REAL ENDPOINT DOES NOT MATCH IN THE COMPLEX ONE, stated so nobody has to rediscover it: the complex `theorem6_3_generalizedTanTheta_source_ideal_directedTangent` quantifies over an arbitrary `KyFanDominantIdealFamily (𝕜 := ℂ)`, the real one over `SymmetricNormingFunction`.  That is the class the paper itself states the theorem for, and the transport is deliberately at the finite Ky Fan level precisely because `KyFanDominantIdealFamily` instances cannot be compared across scalar fields; it is a difference in the norm abstraction, not in scope or in the constant.  The real endpoint also drops the printed strict rank inequality `rank Z < rank V`, which is a weakening of hypotheses, not of conclusion.
+WHAT THE REAL ENDPOINT DOES NOT MATCH IN THE COMPLEX ONE, stated so nobody has to rediscover it: the complex `theorem6_3_generalizedTanTheta_ideal_directedTangent` quantifies over an arbitrary `KyFanDominantIdealFamily (𝕜 := ℂ)`, the real one over `SymmetricNormingFunction`.  That is the class the paper itself states the theorem for, and the transport is deliberately at the finite Ky Fan level precisely because `KyFanDominantIdealFamily` instances cannot be compared across scalar fields; it is a difference in the norm abstraction, not in scope or in the constant.  The real endpoint also drops the printed strict rank inequality `rank Z < rank V`, which is a weakening of hypotheses, not of conclusion.
 
 **TRIAL-DIMENSION AXIS CLOSED 2026-08-09 (Claude Opus 5, coordinator-verified).**  See `scope_gap` for the two measurements that collapsed it.  The short version: the finite and infinite tangent predicates are definitionally equal (`Iff.rfl`, now in the build) and the printed strict-dimension hypothesis was already bound as `_hStrictDimension` and never used.  The mission expected a cardinal argument and needed none.
 
@@ -3887,24 +3887,24 @@ ROW WAS STALE; CORRECTED 2026-08-07 (Fable 5).  The requested 'exact source norm
 - `TauCeti.DavisKahan.realSpectrum_add_offDiagonal_subset_exterior_of_form_gap`
 - `TauCeti.DavisKahanExt.re_inner_le_of_mem_boundedSelfAdjointSpectralSubspace_Iic`
 - `TauCeti.DavisKahanExt.le_re_inner_of_mem_boundedSelfAdjointSpectralSubspace_Iic_orthogonal`
-- `TauCeti.DavisKahan1970.Section8.theorem8_1_upperCompressionRepulsion_source`
-- `TauCeti.DavisKahan1970.Section8.theorem8_1_lowerCompressionRepulsion_source`
+- `TauCeti.DavisKahan1970.Section8.theorem8_1_upperCompressionRepulsion`
+- `TauCeti.DavisKahan1970.Section8.theorem8_1_lowerCompressionRepulsion`
 - `TauCeti.DavisKahan1970.Section8.theorem8_1_upperCompressionRepulsion_canonicalBranch`
 - `TauCeti.DavisKahan1970.Section8.theorem8_1_lowerCompressionRepulsion_canonicalBranch`
-- `TauCeti.DavisKahan1970.Section8.theorem8_1_upperSandwichApproximation_source`
-- `TauCeti.DavisKahan1970.Section8.theorem8_1_lowerSandwichApproximation_source`
-- `TauCeti.DavisKahan1970.Section8.theorem8_1_upperApproximationRepulsion_source`
-- `TauCeti.DavisKahan1970.Section8.theorem8_1_lowerApproximationRepulsion_source`
-- `TauCeti.DavisKahan1970.Section8.theorem8_1_upperApproximationRepulsion_angle_source`
-- `TauCeti.DavisKahan1970.Section8.theorem8_1_lowerApproximationRepulsion_angle_source`
-- `TauCeti.DavisKahan1970.Section8.theorem8_1_upperWeightedWeakMajorization_source`
-- `TauCeti.DavisKahan1970.Section8.theorem8_1_lowerWeightedWeakMajorization_source`
-- `TauCeti.DavisKahan1970.Section8.theorem8_1_upperSymmetricGaugeRepulsion_source`
-- `TauCeti.DavisKahan1970.Section8.theorem8_1_lowerSymmetricGaugeRepulsion_source`
-- `TauCeti.DavisKahan1970.Section8.theorem8_1_upperSymmetricGaugeRepulsion_angle_source`
-- `TauCeti.DavisKahan1970.Section8.theorem8_1_lowerSymmetricGaugeRepulsion_angle_source`
-- `TauCeti.DavisKahan1970.Section8.theorem8_1_upperSymmetricGaugeRepulsion_angle_rev_source`
-- `TauCeti.DavisKahan1970.Section8.theorem8_1_lowerSymmetricGaugeRepulsion_angle_rev_source`
+- `TauCeti.DavisKahan1970.Section8.theorem8_1_upperSandwichApproximation`
+- `TauCeti.DavisKahan1970.Section8.theorem8_1_lowerSandwichApproximation`
+- `TauCeti.DavisKahan1970.Section8.theorem8_1_upperApproximationRepulsion`
+- `TauCeti.DavisKahan1970.Section8.theorem8_1_lowerApproximationRepulsion`
+- `TauCeti.DavisKahan1970.Section8.theorem8_1_upperApproximationRepulsion_angle`
+- `TauCeti.DavisKahan1970.Section8.theorem8_1_lowerApproximationRepulsion_angle`
+- `TauCeti.DavisKahan1970.Section8.theorem8_1_upperWeightedWeakMajorization`
+- `TauCeti.DavisKahan1970.Section8.theorem8_1_lowerWeightedWeakMajorization`
+- `TauCeti.DavisKahan1970.Section8.theorem8_1_upperSymmetricGaugeRepulsion`
+- `TauCeti.DavisKahan1970.Section8.theorem8_1_lowerSymmetricGaugeRepulsion`
+- `TauCeti.DavisKahan1970.Section8.theorem8_1_upperSymmetricGaugeRepulsion_angle`
+- `TauCeti.DavisKahan1970.Section8.theorem8_1_lowerSymmetricGaugeRepulsion_angle`
+- `TauCeti.DavisKahan1970.Section8.theorem8_1_upperSymmetricGaugeRepulsion_angle_rev`
+- `TauCeti.DavisKahan1970.Section8.theorem8_1_lowerSymmetricGaugeRepulsion_angle_rev`
 - `TauCeti.singularValues_adjoint_sandwich_weaklyMajorized`
 - `TauCeti.approximationNumber_adjoint_sandwich_weaklyMajorized`
 - `TauCeti.DavisKahan1970.Section8.approximationNumber_eq_eigenvalues_of_isPositive`
@@ -3989,8 +3989,8 @@ WHAT WAS STILL MISSING AT THAT POINT (superseded later the same day; see the `co
 
 **PARTS (ii) AND (iii) LANDED, BOTH BLOCKS, AND THE ROW IS NOW `compiled_exact` 2026-08-07 (Claude Opus 5).**
 
-Part (ii).  `theorem8_1_upperApproximationRepulsion_source` and
-`theorem8_1_lowerApproximationRepulsion_source`.  The route recorded in the previous
+Part (ii).  `theorem8_1_upperApproximationRepulsion` and
+`theorem8_1_lowerApproximationRepulsion`.  The route recorded in the previous
 `next_action` was not the one taken, and the difference matters: it proposed
 `LinearMap.IsSymmetric.eigenvalue_mono`, which is finite-dimensional and would have forced a
 subspace transfer of the whole development.  `approximationNumber_mono_of_form_le` does the
@@ -4002,7 +4002,7 @@ its finite reading.  The two blocks share the step
 monotonicity and nothing else; part (ii) then applies the coarse cosine-sandwich bound
 `a_n(D* M D) <= ||D||^2 a_n(M)`.
 
-Part (iii).  `theorem8_1_upperSymmetricGaugeRepulsion_source` and its lower companion,
+Part (iii).  `theorem8_1_upperSymmetricGaugeRepulsion` and its lower companion,
 quantified over EVERY `FiniteSymmetricGauge` -- not the operator norm, not Frobenius, not
 Ky Fan k.  They are corollaries of the strictly stronger weak majorizations
 `theorem8_1_{upper,lower}WeightedWeakMajorization_source`,
@@ -4085,19 +4085,19 @@ At the OPERATOR norm the compiled residual statement is sound and in fact STRONG
 
 **Lean declarations:**
 
-- `TauCeti.DavisKahan1970.Section8.theorem8_2_perturbationHalfGap_source_complex`
-- `TauCeti.DavisKahan1970.Section8.theorem8_2_residualHalfGap_source_complex`
-- `TauCeti.DavisKahan1970.Section8.theorem8_2_branch_source_directed_complex`
-- `TauCeti.DavisKahan1970.Section8.theorem8_2_krein_completion_source`
-- `TauCeti.DavisKahan1970.Section8.theorem8_2_sinTwoTheta_perturbation_source_complex`
-- `TauCeti.DavisKahan1970.Section8.theorem8_2_sinTwoTheta_residual_source_complex`
+- `TauCeti.DavisKahan1970.Section8.theorem8_2_perturbationHalfGap_complex`
+- `TauCeti.DavisKahan1970.Section8.theorem8_2_residualHalfGap_complex`
+- `TauCeti.DavisKahan1970.Section8.theorem8_2_branch_directed_complex`
+- `TauCeti.DavisKahan1970.Section8.theorem8_2_krein_completion`
+- `TauCeti.DavisKahan1970.Section8.theorem8_2_sinTwoTheta_perturbation_complex`
+- `TauCeti.DavisKahan1970.Section8.theorem8_2_sinTwoTheta_residual_complex`
 - `TauCeti.DavisKahan1970.Section8.subspaceGap_eq_directedGap_of_finrank_eq`
-- `TauCeti.DavisKahan1970.Section8.theorem8_2_perturbationHalfGap_source_maximalAngle_lt`
-- `TauCeti.DavisKahan1970.Section8.theorem8_2_residualHalfGap_source_maximalAngle_lt`
-- `TauCeti.DavisKahan1970.Section8.theorem8_2_branch_source_maximalAngle_lt`
-- `TauCeti.DavisKahan1970.Section8.theorem8_2_source_complex`
-- `TauCeti.DavisKahan1970.Section8.theorem8_2_perturbationHalfGap_source_angle_lt`
-- `TauCeti.DavisKahan1970.Section8.theorem8_2_residualHalfGap_source_angle_lt`
+- `TauCeti.DavisKahan1970.Section8.theorem8_2_perturbationHalfGap_maximalAngle_lt`
+- `TauCeti.DavisKahan1970.Section8.theorem8_2_residualHalfGap_maximalAngle_lt`
+- `TauCeti.DavisKahan1970.Section8.theorem8_2_branch_maximalAngle_lt`
+- `TauCeti.DavisKahan1970.Section8.theorem8_2_complex`
+- `TauCeti.DavisKahan1970.Section8.theorem8_2_perturbationHalfGap_angle_lt`
+- `TauCeti.DavisKahan1970.Section8.theorem8_2_residualHalfGap_angle_lt`
 - `TauCeti.DavisKahan.BoundedOperator.residual_eq_comp_subtypeL`
 - `TauCeti.exists_selfAdjoint_completion_eq_norm_restriction`
 - `TauCeti.DavisKahan1970.Section8.PerturbationHalfGapBridge`
@@ -4106,29 +4106,29 @@ At the OPERATOR norm the compiled residual statement is sound and in fact STRONG
 - `TauCeti.DavisKahan1970.Section8.theorem8_2_perturbationHalfGap_selectedBranch`
 - `TauCeti.DavisKahan1970.Section8.subspaceGap_eq_directedGap_of_crossedDefects`
 - `TauCeti.DavisKahan1970.Section8.maximalAngle_lt_pi_div_four_of_crossedDefects`
-- `TauCeti.DavisKahan1970.Section8.theorem8_2_sinTwoTheta_perturbation_source_symmetricNorming`
-- `TauCeti.DavisKahan1970.Section8.theorem8_2_perturbationHalfGap_source_real`
-- `TauCeti.DavisKahan1970.Section8.theorem8_2_residualHalfGap_source_real`
-- `TauCeti.DavisKahan1970.Section8.theorem8_2_branch_source_directed_real`
-- `TauCeti.DavisKahan1970.Section8.theorem8_2_perturbationHalfGap_source_real_maximalAngle_lt`
-- `TauCeti.DavisKahan1970.Section8.theorem8_2_branch_source_real_maximalAngle_lt_of_crossedDefects`
+- `TauCeti.DavisKahan1970.Section8.theorem8_2_sinTwoTheta_perturbation_symmetricNorming`
+- `TauCeti.DavisKahan1970.Section8.theorem8_2_perturbationHalfGap_real`
+- `TauCeti.DavisKahan1970.Section8.theorem8_2_residualHalfGap_real`
+- `TauCeti.DavisKahan1970.Section8.theorem8_2_branch_directed_real`
+- `TauCeti.DavisKahan1970.Section8.theorem8_2_perturbationHalfGap_real_maximalAngle_lt`
+- `TauCeti.DavisKahan1970.Section8.theorem8_2_branch_real_maximalAngle_lt_of_crossedDefects`
 - `TauCeti.DavisKahan1970.Section8.spectrum_compressOperator_subset_of_spectrumIn`
 - `TauCeti.DavisKahan1970.Section8.norm_residual_complexify`
-- `TauCeti.DavisKahan1970.Section8.theorem8_2_sinTwoTheta_perturbation_source_real`
-- `TauCeti.DavisKahan1970.Section8.theorem8_2_sinTwoTheta_residual_source_real`
-- `TauCeti.DavisKahan1970.Section8.theorem8_2_sinTwoTheta_perturbation_source_real_symmetricNorming`
-- `TauCeti.DavisKahan1970.Section8.theorem8_2_branch_source_real_maximalAngle_lt`
-- `TauCeti.DavisKahan1970.Section8.theorem8_2_source_real`
+- `TauCeti.DavisKahan1970.Section8.theorem8_2_sinTwoTheta_perturbation_real`
+- `TauCeti.DavisKahan1970.Section8.theorem8_2_sinTwoTheta_residual_real`
+- `TauCeti.DavisKahan1970.Section8.theorem8_2_sinTwoTheta_perturbation_real_symmetricNorming`
+- `TauCeti.DavisKahan1970.Section8.theorem8_2_branch_real_maximalAngle_lt`
+- `TauCeti.DavisKahan1970.Section8.theorem8_2_real`
 - `TauCeti.DavisKahan1970.Section8.spectrum_compressOperatorReal_subset_of_spectrumIn`
 - `TauCeti.DavisKahan1970.Section8.complexify_sinTwoAngleOperator`
 - `TauCeti.DavisKahan1970.Section8.norm_sinTwoAngleOperator_complexifySubmodule`
 - `TauCeti.DavisKahan1970.Section8.theorem8_2_residualHalfGap_selectedBranch`
-- `TauCeti.DavisKahan1970.Section8.theorem8_2_sinTwoTheta_residual_source_all_kyFan`
-- `TauCeti.DavisKahan1970.Section8.theorem8_2_sinTwoTheta_residual_source_symmetricNorming`
-- `TauCeti.DavisKahan1970.Section8.theorem8_2_sinTwoTheta_residual_source_real_symmetricNorming`
-- `TauCeti.DavisKahan1970.Section8.theorem8_2_sinTwoTheta_residual_source_symmetricNorming`
-- `TauCeti.DavisKahan1970.Section8.theorem8_2_sinTwoTheta_residual_source_all_kyFan`
-- `TauCeti.DavisKahan1970.Section8.theorem8_2_branch_source_maximalAngle_lt_of_crossedDefects`
+- `TauCeti.DavisKahan1970.Section8.theorem8_2_sinTwoTheta_residual_all_kyFan`
+- `TauCeti.DavisKahan1970.Section8.theorem8_2_sinTwoTheta_residual_symmetricNorming`
+- `TauCeti.DavisKahan1970.Section8.theorem8_2_sinTwoTheta_residual_real_symmetricNorming`
+- `TauCeti.DavisKahan1970.Section8.theorem8_2_sinTwoTheta_residual_symmetricNorming`
+- `TauCeti.DavisKahan1970.Section8.theorem8_2_sinTwoTheta_residual_all_kyFan`
+- `TauCeti.DavisKahan1970.Section8.theorem8_2_branch_maximalAngle_lt_of_crossedDefects`
 
 **Curated source/Lean review:**
 
@@ -4150,14 +4150,14 @@ At the OPERATOR norm the compiled residual statement is sound and in fact STRONG
 
 | source clause | Lean realization | status |
 | --- | --- | --- |
-| Add to the hypotheses of the $\sin 2\theta$ theorem … | The spectral hypotheses hQ, hQperp and hPred of theorem8_2_source_complex are the sin(2 theta) hypotheses written out; the row does not have a Lean object standing for "the hypotheses of the previous theorem". | claimed_exact |
+| Add to the hypotheses of the $\sin 2\theta$ theorem … | The spectral hypotheses hQ, hQperp and hPred of theorem8_2_complex are the sin(2 theta) hypotheses written out; the row does not have a Lean object standing for "the hypotheses of the previous theorem". | claimed_exact |
 | either $\norm{H}_1<\delta/2$ or $\norm{R}_1<\delta/2$ | hsmall is literally the disjunction ‖K‖ < delta/2 ∨ ‖residual …‖ < delta/2. | claimed_exact |
 | and assume $\spec(A_0)\subset[\beta-\delta/2,\alpha+\delta/2]$ | hP : SpectrumIn A P (Set.Icc (beta - delta/2) (alpha + delta/2)). | claimed_exact |
-| The two crossed subspaces have equal dimension — condition (3.5), never restated in Theorem 8.2. | theorem8_2_branch_source_maximalAngle_lt_of_crossedDefects takes CrossedDefectsEquivalent P Q and no dimension hypothesis of any kind; theorem8_2_source_complex instead takes the finite form of (1.5), finrank ℂ P = finrank ℂ Q, which the source says makes (3.5) automatic. | claimed_exact |
-| the corresponding double-angle estimate remains valid | The first two conjuncts of theorem8_2_source_complex: the perturbation and residual factor-two estimates for sinTwoAngleOperator Q P. | claimed_exact |
-| $\Theta<\pi/4$ | maximalAngle P Q < Real.pi / 4, the third conjunct of theorem8_2_source_complex and the whole conclusion of the crossed-defect form. | claimed_exact |
+| The two crossed subspaces have equal dimension — condition (3.5), never restated in Theorem 8.2. | theorem8_2_branch_maximalAngle_lt_of_crossedDefects takes CrossedDefectsEquivalent P Q and no dimension hypothesis of any kind; theorem8_2_complex instead takes the finite form of (1.5), finrank ℂ P = finrank ℂ Q, which the source says makes (3.5) automatic. | claimed_exact |
+| the corresponding double-angle estimate remains valid | The first two conjuncts of theorem8_2_complex: the perturbation and residual factor-two estimates for sinTwoAngleOperator Q P. | claimed_exact |
+| $\Theta<\pi/4$ | maximalAngle P Q < Real.pi / 4, the third conjunct of theorem8_2_complex and the whole conclusion of the crossed-defect form. | claimed_exact |
 
-**Notes.** REPAIRED AND RE-CLOSED 2026-08-12 (result inventory row `DK-8.2-thm`).  The reopening was correct on both counts.  (a) The standing post-Proposition-3.2 convention -- (3.5) is assumed as well as (1.5) except where the contrary is stated -- is now represented as the source SCOPE atom `S3-standing-scope.crossed-dimension-standing-assumption` and linked to the two counted results it genuinely governs, Theorem 8.2 and Proposition 3.4.  It is scope, not a new counted result, so the denominator is unchanged at 29.  (b) The printed quarter-angle conclusion is the AMBIENT Theta < pi/4, and the selected evidence is now `theorem8_2_branch_source_maximalAngle_lt_of_crossedDefects` and `theorem8_2_branch_source_real_maximalAngle_lt_of_crossedDefects`, which conclude `maximalAngle P Q < pi/4` from either printed smallness alternative under (3.5) in its constructive `CrossedDefectsEquivalent` form, with no finite-dimensionality and no rank hypothesis.  No new Lean mathematics was needed once the scope was right.
+**Notes.** REPAIRED AND RE-CLOSED 2026-08-12 (result inventory row `DK-8.2-thm`).  The reopening was correct on both counts.  (a) The standing post-Proposition-3.2 convention -- (3.5) is assumed as well as (1.5) except where the contrary is stated -- is now represented as the source SCOPE atom `S3-standing-scope.crossed-dimension-standing-assumption` and linked to the two counted results it genuinely governs, Theorem 8.2 and Proposition 3.4.  It is scope, not a new counted result, so the denominator is unchanged at 29.  (b) The printed quarter-angle conclusion is the AMBIENT Theta < pi/4, and the selected evidence is now `theorem8_2_branch_maximalAngle_lt_of_crossedDefects` and `theorem8_2_branch_real_maximalAngle_lt_of_crossedDefects`, which conclude `maximalAngle P Q < pi/4` from either printed smallness alternative under (3.5) in its constructive `CrossedDefectsEquivalent` form, with no finite-dimensionality and no rank hypothesis.  No new Lean mathematics was needed once the scope was right.
 
 `theorem8_2_perturbationHalfGap_selectedBranch` and `theorem8_2_residualHalfGap_selectedBranch` are proved sorry-free in `DavisKahan/Experimental/Frontier/Section8.lean`; `#print axioms` on the perturbation form gives [propext, Classical.choice, Quot.sound]. The half-gap bridges (`perturbationHalfGapBridge_of_sourceHypotheses`, `residualHalfGapBridge_of_sourceHypotheses`) are proved too.
 
@@ -4180,16 +4180,16 @@ The move had to be the DOWNWARD CLOSURE of the flagged modules, not the flagged 
 **BOTH ALTERNATIVES LANDED FROM THE PRINTED HYPOTHESES, AND THE PRINTED `Theta < pi/4` IS NOW
 COMPILED UNDER THE PAPER'S OWN STANDING CONVENTION 2026-08-07 (Claude Opus 5).**
 
-Perturbation alternative: `theorem8_2_perturbationHalfGap_source_complex`, by the printed connectedness
+Perturbation alternative: `theorem8_2_perturbationHalfGap_complex`, by the printed connectedness
 bootstrap, from `||H|| < delta/2` plus the printed placement `spectrum(A_0)` in
 `[beta - delta/2, alpha + delta/2]` and the sin2theta configuration.  No contour, no
 `SpectralContinuationWitness`, no projection-Lipschitz constant, no half-gap bridge appears among
-the hypotheses.  Residual alternative: `theorem8_2_residualHalfGap_source_complex`, by the printed
+the hypotheses.  Residual alternative: `theorem8_2_residualHalfGap_complex`, by the printed
 one-sentence Krein reduction -- `Krein.exists_selfAdjoint_completion_eq_norm_restriction` replaces
 `H` by a self-adjoint `H'` with the same first block column and `||H'|| = ||R||`, so
 `A' := A + H - H'` leaves `A' + H' = A + H` and `A'|P = A|P` and every printed hypothesis
 transfers verbatim.  `R` is the source residual (1.8) exactly, and `residual_eq_comp_subtypeL`
-proves the Section 1 identity `R = H E_0` from invariance alone.  `theorem8_2_branch_source_directed_complex`
+proves the Section 1 identity `R = H E_0` from invariance alone.  `theorem8_2_branch_directed_complex`
 is the printed disjunction.  The two half-gap bridge records survive as internal conveniences and
 are listed as such; their field `contour_selects_quarter_branch` is the conclusion, so they must
 never appear in a source-facing statement.
@@ -4209,7 +4209,7 @@ conclusion meaningful, and it is what the formalization adds -- not `IsQuarterAc
 would be assuming the conclusion.  In its finite form (1.5) is `finrank P = finrank Q`, its second
 half being automatic, and `subspaceGap_eq_directedGap_of_finrank_eq` then identifies the symmetric
 and directed gaps.  `theorem8_2_{perturbationHalfGap,residualHalfGap,branch}_source_maximalAngle_lt`
-are the printed `Theta < pi/4`, and `theorem8_2_source_complex` is the whole printed theorem: both
+are the printed `Theta < pi/4`, and `theorem8_2_complex` is the whole printed theorem: both
 `sin 2Theta` estimates -- inherited from the maintained sin2theta development and restated at
 8.2's own hypotheses as `theorem8_2_sinTwoTheta_{perturbation,residual}_source` -- together with
 the strict quarter angle, under either printed smallness alternative.
@@ -4286,11 +4286,11 @@ ALSO: a SECOND sufficient condition for the two directed gaps to agree already e
 
 **THE SCALAR AXIS IS CLOSED, 2026-08-10 (Claude Opus 5, coordinator-verified), AND THE COORDINATOR'S STRUCTURAL WARNING DID NOT APPLY.**  The brief warned that 8.2's transport should expect to lean on the bounded spectral-projection descent, because 8.1(a)/(b) were not a mechanical transport.  MEASURED: 8.1 has an EXISTENTIAL -- it CONSTRUCTS the branch -- which is why it needed `realBoundedSpectralSubspaceIicOfGap`.  **THEOREM 8.2 HAS NO EXISTENTIAL**: both `P` and `Q` are caller data with their spectral placements given, so the real form IS an exact complexification transport through `spectrumIn_complexifySubmodule_iff`, `complexify_reduces_iff`, `norm_complexify` and `directedGap_complexifySubmodule`.  No branch identification anywhere.
 
-Six real endpoints landed in `Frontier/Section8SourceTheorem82Real.lean`, over `InnerProductSpace R`.  COORDINATOR-VERIFIED: the file contains exactly ONE `FiniteDimensional`, on `theorem8_2_perturbationHalfGap_source_real_maximalAngle_lt`, which is the finite (1.5) variant kept deliberately alongside `theorem8_2_branch_source_real_maximalAngle_lt_of_crossedDefects` -- the latter proves the printed `Theta < pi/4` over `R` IN ANY DIMENSION under (3.5), with no dimension hypothesis at all.
+Six real endpoints landed in `Frontier/Section8SourceTheorem82Real.lean`, over `InnerProductSpace R`.  COORDINATOR-VERIFIED: the file contains exactly ONE `FiniteDimensional`, on `theorem8_2_perturbationHalfGap_real_maximalAngle_lt`, which is the finite (1.5) variant kept deliberately alongside `theorem8_2_branch_real_maximalAngle_lt_of_crossedDefects` -- the latter proves the printed `Theta < pi/4` over `R` IN ANY DIMENSION under (3.5), with no dimension hypothesis at all.
 
 To avoid duplicate spellings, SEVEN declarations were generalized to `RCLike` WITH THEIR NAMES UNCHANGED: `Section8.residual_eq_comp_subtypeL`, `Krein.norm_comp_subtypeL_eq_norm_comp_starProjection`, `Section8.subspaceGap_eq_directedGap_of_finrank_eq`, `Section8.subspaceGap_eq_directedGap_of_crossedDefects`, `Section8.maximalAngle_lt_pi_div_four_of_crossedDefects`, `Section8.maximalAngle_lt_pi_div_four_of_directedGap_lt`, `DavisKahan1970.Section8.maximalAngle_lt_pi_div_four_iff`.
 
-**THE MECHANICAL LEFTOVERS AND THE DOCUMENTATION DEFECT ARE CLOSED, 2026-08-10 (Claude Opus 5, coordinator-verified).**  Three real `sin 2Theta` endpoints under 8.2's own hypotheses -- operator norm perturbation and residual, plus every `SymmetricNormingFunction` for the perturbation -- and `theorem8_2_source_real`, packaging the whole printed theorem over `R` with the same three conjuncts and hypothesis list as the complex `theorem8_2_source_complex`.  Assembling it required a missing piece: only the perturbation-only finrank form and the crossed-defects branch form existed over `R`, so `theorem8_2_branch_source_real_maximalAngle_lt` (the branch form under (1.5)) was added to mirror the complex packaging.
+**THE MECHANICAL LEFTOVERS AND THE DOCUMENTATION DEFECT ARE CLOSED, 2026-08-10 (Claude Opus 5, coordinator-verified).**  Three real `sin 2Theta` endpoints under 8.2's own hypotheses -- operator norm perturbation and residual, plus every `SymmetricNormingFunction` for the perturbation -- and `theorem8_2_real`, packaging the whole printed theorem over `R` with the same three conjuncts and hypothesis list as the complex `theorem8_2_complex`.  Assembling it required a missing piece: only the perturbation-only finrank form and the crossed-defects branch form existed over `R`, so `theorem8_2_branch_real_maximalAngle_lt` (the branch form under (1.5)) was added to mirror the complex packaging.
 
 **THREE COORDINATOR/ROW CLAIMS ABOUT THE ROUTE WERE WRONG.**  (i) This field said the real spectral dictionary is `built from compressOperatorReal and realSpectrum_compressOperator_complexifySubmodule`.  The proof uses NEITHER -- it is `compressOperator_eq_restrict_of_invariant` plus a coercion; going through the complexification lemma would have been a DETOUR THROUGH `C` FOR A PURELY REAL FACT.  (ii) `needing only` undercounted: `complexify_sinTwoAngleOperator` was also required and existed NOWHERE.  (iii) The house preference for generalizing IN PLACE does NOT apply here, and not merely as a matter of taste -- MEASURED: at general `RCLike K` the statement `spectrum R (compressOperator U T) subset s` DOES NOT ELABORATE, because `Algebra R (F ->L[K] F)` fails to synthesize.  A separate real declaration is FORCED.
 
@@ -4302,25 +4302,25 @@ RECORD CORRECTIONS: `theorem8_2_residualHalfGap_selectedBranch` was named in the
 
 OPERATIONAL, worth keeping: `check_expose_ratchet.py`, `check_tauceti_readiness.py` and `derive_tauceti_submission_ladder.py` all exit 0 WHEN RUN BARE; the nonzero readings appear only with `--check`.  A report saying such a checker `exits 0` can be true and useless -- always state the flag.
 
-**THE UI-NORM RESIDUAL ITEM IS DISCHARGED AT COMPLEX SCALARS ONLY, 2026-08-10 (owner's commits `4230e6e7`/`7400ba44`, coordinator-validated: build 9600 EXIT=0, six gates EXIT=0, baselines flat, all four ratchets flat, no `sorry` added, endpoints axiom-clean).**  `theorem8_2_sinTwoTheta_residual_source_all_kyFan` and `theorem8_2_sinTwoTheta_residual_source_symmetricNorming` prove `delta * N(sin 2Theta) <= 2 * N(residual)` at every Ky Fan gauge and at every `SymmetricNormingFunction`.  Supporting: `reflectionOperator_comp_reflectionDefect`, `sinTwoTheta_directed_boundedResidual_blockRepresentative_kyFan_complex`, `sinTwoTheta_directed_boundedResidual_blockRepresentative_symmetricNorming_complex`, `diagonalPair_even_kyFan_eq_two_mul_of_same`.
+**THE UI-NORM RESIDUAL ITEM IS DISCHARGED AT COMPLEX SCALARS ONLY, 2026-08-10 (owner's commits `4230e6e7`/`7400ba44`, coordinator-validated: build 9600 EXIT=0, six gates EXIT=0, baselines flat, all four ratchets flat, no `sorry` added, endpoints axiom-clean).**  `theorem8_2_sinTwoTheta_residual_all_kyFan` and `theorem8_2_sinTwoTheta_residual_symmetricNorming` prove `delta * N(sin 2Theta) <= 2 * N(residual)` at every Ky Fan gauge and at every `SymmetricNormingFunction`.  Supporting: `reflectionOperator_comp_reflectionDefect`, `sinTwoTheta_directed_boundedResidual_blockRepresentative_kyFan_complex`, `sinTwoTheta_directed_boundedResidual_blockRepresentative_symmetricNorming_complex`, `diagonalPair_even_kyFan_eq_two_mul_of_same`.
 
-**THIS ROW IS NOT COMPLETE, AND MUST NOT BE MARKED SO.  The campaign owner flagged this directly: "8.2 is not finished.  We have it on C not R."**  Coordinator-verified by reading the signatures: both new endpoints bind `{A K : H ->L[C] H}`.  There is NO `theorem8_2_sinTwoTheta_residual_source_real_symmetricNorming` and no real all-Ky-Fan residual endpoint -- checked by enumerating every `theorem8_2_*` in the tree.  The asymmetry is exact and worth stating: the PERTURBATION half HAS its real arbitrary-UI-norm endpoint (`theorem8_2_sinTwoTheta_perturbation_source_real_symmetricNorming`, axiom-clean), while the RESIDUAL half now has the complex one only.  `theorem8_2_sinTwoTheta_residual_source_real` exists but is not the arbitrary-UI-norm statement.
+**THIS ROW IS NOT COMPLETE, AND MUST NOT BE MARKED SO.  The campaign owner flagged this directly: "8.2 is not finished.  We have it on C not R."**  Coordinator-verified by reading the signatures: both new endpoints bind `{A K : H ->L[C] H}`.  There is NO `theorem8_2_sinTwoTheta_residual_real_symmetricNorming` and no real all-Ky-Fan residual endpoint -- checked by enumerating every `theorem8_2_*` in the tree.  The asymmetry is exact and worth stating: the PERTURBATION half HAS its real arbitrary-UI-norm endpoint (`theorem8_2_sinTwoTheta_perturbation_real_symmetricNorming`, axiom-clean), while the RESIDUAL half now has the complex one only.  `theorem8_2_sinTwoTheta_residual_real` exists but is not the arbitrary-UI-norm statement.
 
 **WHAT REMAINS ON THIS ROW: the real transport of the residual `sin 2Theta` at arbitrary unitarily invariant norm.**  The natural precedent is the perturbation half's own real UI-norm endpoint, which is already landed and should show the shape.
 
-**THE REAL RESIDUAL UI-NORM ENDPOINT LANDED, 2026-08-10 (owner's commits `45851cb1` -> `f55b3f4d` -> merge `2225d1f7`; coordinator-validated after rebase: build 9601 EXIT=0, six gates EXIT=0, baselines flat, all four ratchets flat).**  `theorem8_2_sinTwoTheta_residual_source_real_symmetricNorming` is axiom-clean and its signature is genuinely real -- coordinator-read: `{A K : E ->L[R] E}`, `{P Q : Submodule R E}`, at an arbitrary `ExactSinTheta.SymmetricNormingFunction`.
+**THE REAL RESIDUAL UI-NORM ENDPOINT LANDED, 2026-08-10 (owner's commits `45851cb1` -> `f55b3f4d` -> merge `2225d1f7`; coordinator-validated after rebase: build 9601 EXIT=0, six gates EXIT=0, baselines flat, all four ratchets flat).**  `theorem8_2_sinTwoTheta_residual_real_symmetricNorming` is axiom-clean and its signature is genuinely real -- coordinator-read: `{A K : E ->L[R] E}`, `{P Q : Submodule R E}`, at an arbitrary `ExactSinTheta.SymmetricNormingFunction`.
 
-**THIS CLOSES THE ONE AXIS THIS ROW RECORDED, AT BOTH SCALARS.**  Hours earlier this row recorded the residual `sin 2Theta` at a general unitarily invariant norm as the single remaining item, with a MATHEMATICAL obstruction: every route through `sinTwoTheta_ambient_bounded_symmetricNorming_complex` gave constant FOUR rather than the printed TWO, "not improvable within that route", and recovering the printed constant was said to need the Halmos generic decomposition.  **That obstruction is resolved and the constant is 2** -- the complex endpoints (`theorem8_2_sinTwoTheta_residual_source_all_kyFan`, `..._symmetricNorming`) conclude `delta * N(sin 2Theta) <= 2 * N(residual)`, and the real endpoint above matches.  The coordinator's note from earlier the same day, that the residual half "now has the complex one only", is SUPERSEDED.
+**THIS CLOSES THE ONE AXIS THIS ROW RECORDED, AT BOTH SCALARS.**  Hours earlier this row recorded the residual `sin 2Theta` at a general unitarily invariant norm as the single remaining item, with a MATHEMATICAL obstruction: every route through `sinTwoTheta_ambient_bounded_symmetricNorming_complex` gave constant FOUR rather than the printed TWO, "not improvable within that route", and recovering the printed constant was said to need the Halmos generic decomposition.  **That obstruction is resolved and the constant is 2** -- the complex endpoints (`theorem8_2_sinTwoTheta_residual_all_kyFan`, `..._symmetricNorming`) conclude `delta * N(sin 2Theta) <= 2 * N(residual)`, and the real endpoint above matches.  The coordinator's note from earlier the same day, that the residual half "now has the complex one only", is SUPERSEDED.
 
-**STATUS DECISION DELIBERATELY NOT TAKEN BY THE COORDINATOR.**  On the evidence this row is a candidate for promotion to `compiled_exact`: its recorded axis is closed at both scalars with the printed constant.  It is left at `compiled_specialization` because the campaign owner directed explicitly that this row not be marked complete prematurely, and because promotion is a PAPER-FIDELITY judgement -- in particular that the landed endpoints are the DIRECTED `Theta_0` statements the `scope_gap` asks for, and that no `FiniteDimensional` hypothesis rides along, as one does on `theorem8_2_source_real`.  **A promotion should be taken only after a fidelity read against the transcription, not inferred from this entry.**
+**STATUS DECISION DELIBERATELY NOT TAKEN BY THE COORDINATOR.**  On the evidence this row is a candidate for promotion to `compiled_exact`: its recorded axis is closed at both scalars with the printed constant.  It is left at `compiled_specialization` because the campaign owner directed explicitly that this row not be marked complete prematurely, and because promotion is a PAPER-FIDELITY judgement -- in particular that the landed endpoints are the DIRECTED `Theta_0` statements the `scope_gap` asks for, and that no `FiniteDimensional` hypothesis rides along, as one does on `theorem8_2_real`.  **A promotion should be taken only after a fidelity read against the transcription, not inferred from this entry.**
 
 **PROMOTED TO `compiled_exact`, 2026-08-10, on a fidelity read against the transcription (Claude Opus 5; coordinator-verified: all cited endpoints resolve against `DavisKahan.All`, axiom-clean, `sorryAx` count ZERO).**  Printed Theorem 8.2 is transcription L2514-2528.  Clause-by-clause coverage, at BOTH scalars, at the printed norm scope:
 
-* `delta N(sin 2Theta) <= 2 N(H)` at every UI norm -- `theorem8_2_sinTwoTheta_perturbation_source_symmetricNorming` (C, on `sinTwoAngleOperatorC Q P`, AMBIENT and correctly so: the print is ambient here) and `theorem8_2_sinTwoTheta_perturbation_source_real_symmetricNorming` (R).
-* `delta N(sin 2Theta_0) <= 2 N(R)` at every UI norm -- `theorem8_2_sinTwoTheta_residual_source_symmetricNorming` and `..._all_kyFan` (C), `theorem8_2_sinTwoTheta_residual_source_real_symmetricNorming` (R).
-* `Theta < pi/4` -- `theorem8_2_branch_source_maximalAngle_lt` (C, finite (1.5)) and dimension-free via `theorem8_2_branch_source_directed_complex` composed with `maximalAngle_lt_pi_div_four_of_crossedDefects`; over R the named dimension-free composite `theorem8_2_branch_source_real_maximalAngle_lt_of_crossedDefects` already exists.
+* `delta N(sin 2Theta) <= 2 N(H)` at every UI norm -- `theorem8_2_sinTwoTheta_perturbation_symmetricNorming` (C, on `sinTwoAngleOperatorC Q P`, AMBIENT and correctly so: the print is ambient here) and `theorem8_2_sinTwoTheta_perturbation_real_symmetricNorming` (R).
+* `delta N(sin 2Theta_0) <= 2 N(R)` at every UI norm -- `theorem8_2_sinTwoTheta_residual_symmetricNorming` and `..._all_kyFan` (C), `theorem8_2_sinTwoTheta_residual_real_symmetricNorming` (R).
+* `Theta < pi/4` -- `theorem8_2_branch_maximalAngle_lt` (C, finite (1.5)) and dimension-free via `theorem8_2_branch_directed_complex` composed with `maximalAngle_lt_pi_div_four_of_crossedDefects`; over R the named dimension-free composite `theorem8_2_branch_real_maximalAngle_lt_of_crossedDefects` already exists.
 
-**THE THREE QUESTIONS THAT BLOCKED THE PROMOTION ARE ANSWERED.**  (1) The residual endpoints ARE the directed `Theta_0` statements: their conclusion is on `sinTwoThetaIdealBlock Q P = P_Q . P_{J_P(Qperp)}`, the repository's canonical `sin 2Theta_0` block, checked by hand in dimension 2 to be rank <= 1 with single singular value `sin 2theta` -- directed data, not doubled ambient data, constant 2 not 4.  (2) NO `FiniteDimensional` rides on any of the six `sin 2Theta` endpoints; it appears only on the packaged `theorem8_2_source_complex` / `theorem8_2_source_real` and the `(1.5)`-finite `maximalAngle_lt` variants, and it is not a narrowing because the paper's own standing (3.5) (L961) suffices in any dimension via `CrossedDefectsEquivalent`.  **A COORDINATOR PREMISE WAS WRONG HERE: `theorem8_2_source_complex` (COMPLEX) carries `[FiniteDimensional C H]` too, not only the real one -- coordinator-verified at `Section8SourceTheorem82.lean:556`.**  (3) Nothing printed is complex-only; the only asymmetries run the other way.
+**THE THREE QUESTIONS THAT BLOCKED THE PROMOTION ARE ANSWERED.**  (1) The residual endpoints ARE the directed `Theta_0` statements: their conclusion is on `sinTwoThetaIdealBlock Q P = P_Q . P_{J_P(Qperp)}`, the repository's canonical `sin 2Theta_0` block, checked by hand in dimension 2 to be rank <= 1 with single singular value `sin 2theta` -- directed data, not doubled ambient data, constant 2 not 4.  (2) NO `FiniteDimensional` rides on any of the six `sin 2Theta` endpoints; it appears only on the packaged `theorem8_2_complex` / `theorem8_2_real` and the `(1.5)`-finite `maximalAngle_lt` variants, and it is not a narrowing because the paper's own standing (3.5) (L961) suffices in any dimension via `CrossedDefectsEquivalent`.  **A COORDINATOR PREMISE WAS WRONG HERE: `theorem8_2_complex` (COMPLEX) carries `[FiniteDimensional C H]` too, not only the real one -- coordinator-verified at `Section8SourceTheorem82.lean:556`.**  (3) Nothing printed is complex-only; the only asymmetries run the other way.
 
 **THIS ROW'S `scope_gap` IS STALE IN THREE PLACES AND IS SUPERSEDED BY THIS ENTRY.**  The axis it calls "MATHEMATICAL ... not improvable within that route" is closed.  Its claim that "the real residual half reaches the operator norm, EXACTLY MATCHING the complex coverage" is wrong in both directions -- both scalars now reach `SymmetricNormingFunction`.  And its claim that recovering constant 2 "needs the HALMOS GENERIC DECOMPOSITION" is refuted by the landed proof, which uses a Ky Fan even-prefix pinch plus `reflectedDefect_complementaryBlocks_same` and `offDiagonalBlocks_same`.
 
@@ -4330,7 +4330,7 @@ ALSO DISCHARGED: `dev/davis-kahan-1970-final-audit-2026-08-09.md` items 20 and 2
 
 **FIVE PRODUCTION DOCUMENTATION DEFECTS CORRECTED 2026-08-11 (Claude Opus 5; coordinator-verified: build 9631 jobs BUILD_EXIT=0 read from the echoed log line, six gates EXIT=0, baselines flat at 13/154/16 each EXIT=1, ratchets byte-flat at 165/51/51/94, coordinator axiom probe 20/20 records exactly [propext, Classical.choice, Quot.sound] with two positive controls).**  This is the defect class that downgraded this row on 2026-08-07 -- production prose asserting the OPPOSITE of the proved state -- so it is recorded rather than quietly fixed.
 
-(i) and (ii): `Section8SourceTheorem82.lean`'s section `## Why the residual alternative is not here`, and the paragraph in `Section8SourceSurface.lean` that forwarded to it as `the measurement`, both asserted that no route reaches the printed constant 2 at a general unitarily invariant norm -- while `theorem8_2_sinTwoTheta_residual_source_symmetricNorming`, IN THE SAME FILE, retains it.  REFRAMED rather than deleted, and the refinement matters: the `4`-not-`2` measurement was CORRECT, and only the inference from it was wrong.  It measures the AMBIENT `sin 2Theta`; the printed statement is the DIRECTED `Theta_0`.  The working route (`sinTwoTheta_directed_boundedResidual_blockRepresentative_symmetricNorming_complex`) never forms `C + C*` at all -- it states the conclusion at `sinTwoThetaIdealBlock Q P` and gets the 2 from the paper-projection-block chain with the residual extended by zero along `P.subtypeL.adjoint`.  **The Halmos generic decomposition is NOT used in it**, contrary to what the old passage predicted would be required.  The ambient reading at a general symmetric gauge with the printed constant remains genuinely unavailable, and that is now the correctly-scoped remainder.
+(i) and (ii): `Section8SourceTheorem82.lean`'s section `## Why the residual alternative is not here`, and the paragraph in `Section8SourceSurface.lean` that forwarded to it as `the measurement`, both asserted that no route reaches the printed constant 2 at a general unitarily invariant norm -- while `theorem8_2_sinTwoTheta_residual_symmetricNorming`, IN THE SAME FILE, retains it.  REFRAMED rather than deleted, and the refinement matters: the `4`-not-`2` measurement was CORRECT, and only the inference from it was wrong.  It measures the AMBIENT `sin 2Theta`; the printed statement is the DIRECTED `Theta_0`.  The working route (`sinTwoTheta_directed_boundedResidual_blockRepresentative_symmetricNorming_complex`) never forms `C + C*` at all -- it states the conclusion at `sinTwoThetaIdealBlock Q P` and gets the 2 from the paper-projection-block chain with the residual extended by zero along `P.subtypeL.adjoint`.  **The Halmos generic decomposition is NOT used in it**, contrary to what the old passage predicted would be required.  The ambient reading at a general symmetric gauge with the printed constant remains genuinely unavailable, and that is now the correctly-scoped remainder.
 
 (iii) THE CLAIMED CARDINAL-READING COUNTEREXAMPLE WAS NOT ONE, AND THE PAPER ITSELF SAYS SO.  The module docstring asserted that under the cardinal form of (1.5) the printed conclusion is false, with a configuration said to satisfy `every printed hypothesis of Theorem 8.2`.  Checked against the transcription: (3.5) is stated at L901-908 as `dim(P.H cap Qtilde.H) = dim(Ptilde.H cap Q.H)`, and L961 reads verbatim `We shall assume (3.5) as well as (1.5) except where stated otherwise` -- so (3.5) is a printed STANDING hypothesis in force for Theorem 8.2.  In the configuration those dimensions are 0 and 1, so (3.5) FAILS.  Worse, the paper's own Remark after Proposition 3.2 (L911-916) exhibits the same phenomenon -- with the two subspaces INTERCHANGED -- precisely as its illustration that (3.5) fails under the cardinal reading.  The docstring had reproduced the paper's own (3.5)-failure example and labelled it a counterexample to a theorem that assumes (3.5).  Audit disagreement 19 UPHELD and closed.
 
@@ -4338,7 +4338,7 @@ WHAT SURVIVES, ON BETTER GROUNDS: the finite form of (1.5) is still the right re
 
 THE FILE WAS SELF-CONTRADICTING, NOT MERELY STALE: the same module docstring already carried the correct (3.5) analysis about thirty lines below the false claim.  A FIFTH instance, not in the original finding list, was found in the same docstring's exported-surface list, asserting the residual endpoint is `not available` at the printed norm scope; corrected.
 
-(iv) The complex directed residual UI-norm endpoints now have source-facing aliases (`theorem8_2_sinTwoTheta_residual_source_symmetricNorming`, `..._all_kyFan`), matching the real side, plus a new `theorem8_2_branch_source_maximalAngle_lt_of_crossedDefects` over C.  The mirrored false counterexample in `dev/section8-source-theorems-2026-08-07.md` (L99-109, not L100-103 as previously recorded) was corrected by the coordinator in the same commit.
+(iv) The complex directed residual UI-norm endpoints now have source-facing aliases (`theorem8_2_sinTwoTheta_residual_symmetricNorming`, `..._all_kyFan`), matching the real side, plus a new `theorem8_2_branch_maximalAngle_lt_of_crossedDefects` over C.  The mirrored false counterexample in `dev/section8-source-theorems-2026-08-07.md` (L99-109, not L100-103 as previously recorded) was corrected by the coordinator in the same commit.
 
 REOPENING WITHDRAWN 2026-08-31 and the rule corrected: a later source passage enlarges a counted result only when it is needed to determine what Davis and Kahan actually claim in it. An extension, variant or consequence they mention without introducing and proving it as a result of its own is `result_adjacent_extension` fidelity material. The Lean coverage produced during the reopening is kept as supporting evidence.
 
@@ -4404,7 +4404,7 @@ AXIS (A) IS THE PAPER'S BOUNDARY CONDITIONS, NOT A SUBSTITUTE.  `ClassicalFreeBe
 
 AXIS (B) IS REACHED THROUGH THE SOURCE SURFACE, OVER R.  The five `Section9.real_freeBeam_*_source` entries pin the printed Rayleigh-Ritz data (`ritzLow`/`ritzHigh` matching (9.5), `residualGram` and `orthogonalResidualGram` matching the printed matrices), the trial plane `(1 -/+ sqrt 3 (2t-1))/sqrt 2`, the multiplication perturbation by `eps t`, and the sequence `0 = 0 < alpha_3 < ...` with every positive point above 500.  Hypotheses are only the paper's own `0 < eps` and `eps < 100`: no `FiniteDimensional`, no separability, no certificate hypothesis.
 
-**COORDINATOR'S OWN ERROR, RECORDED:** the dispatch brief called all five `real_freeBeam_*_source` entries THEOREMS.  `real_freeBeam_finiteData_source` is a `def` returning `FreeBeamFiniteDataCertificate eps`; its content lives in the structure's equational fields.  The brief also spoke of "the internal `FreeBeam.Model` namespace", conflating the C model (`...FreeBeam.Model.*`) with the real one (`...FreeBeam.Model.Real.*`).  Roughly 45 of the ~55 declaration names this row listed before today were the C twins, so anyone probing the old list was measuring the complex model; the `Real.*` and `Section9.*` names are appended above.
+**COORDINATOR'S OWN ERROR, RECORDED:** the dispatch brief called all five `real_freeBeam_*_source` entries THEOREMS.  `real_freeBeam_finiteDataCertificate` is a `def` returning `FreeBeamFiniteDataCertificate eps`; its content lives in the structure's equational fields.  The brief also spoke of "the internal `FreeBeam.Model` namespace", conflating the C model (`...FreeBeam.Model.*`) with the real one (`...FreeBeam.Model.Real.*`).  Roughly 45 of the ~55 declaration names this row listed before today were the C twins, so anyone probing the old list was measuring the complex model; the `Real.*` and `Section9.*` names are appended above.
 
 **WHAT NOW HOLDS THE ROW -- ONE CONTAINMENT, THE EASY DIRECTION MISSING.**  The printed text (transcription L2591-2594) says that for `k > 2` the `alpha_k` ARE the positive roots of `cos(alpha^(1/4)) cosh(alpha^(1/4)) = 1`.  Only the forward containment is proved: `...Model.Real.exists_characteristic_of_eigen` (`BeamClassicalReal.lean:955`) and `...Model.Real.realSpectrum_beamOperator_subset` (`BeamSpectrumReal.lean:241`) give that every positive spectral point is `beta^4` with `characteristic beta = 0`.  The missing statement is exactly
     for all beta : R, 0 < beta -> characteristic beta = 0 -> beta ^ 4 in ...FreeBeam.Model.Real.beamEigenvalues
@@ -4412,11 +4412,11 @@ i.e. equality rather than a subset.  THIS IS NO LONGER RESEARCH.  The ODE half i
 
 **A SECOND, SOFTER CLAUSE -- FLAGGED AS A READING QUESTION, NOT ASSERTED AS DEBT.**  The paper writes `alpha_1 = 0 = alpha_2 < alpha_3 < ...`, listing the two-dimensional kernel twice.  Read as a list WITH MULTIPLICITY, the strict `<` from `alpha_3` on asserts that every positive eigenvalue is SIMPLE, and nothing in the repository proves that -- `exists_strictMono_range_eq_beamEigenvalues` enumerates the SET of distinct positive eigenvalues, and no eigenspace-`finrank` statement was found under `FormMethod/`.  Read as an enumeration of distinct values, the clause is already covered.  The coordinator takes the second reading (the paper is naming the model's spectrum, not asserting simplicity) but records the first so it is decided rather than assumed.
 
-**SURFACE NIT, NOT MATHEMATICS.**  `real_freeBeam_zero_mode_source`'s iff is stated under the hypothesis `x in realBeamOperator.domain`, so on its own it does not say the trial plane LIES in the domain.  `...Model.Real.beamTrial_le_domain` (`BeamTrialReal.lean:70`) and `...Model.Real.beamOperator_apply_trial` (`:76`) prove it and are axiom-clean; they are simply not exposed in `Section9/RealModel.lean`.  Exposing them is an alias, no proof.
+**SURFACE NIT, NOT MATHEMATICS.**  `real_freeBeam_zero_eigenspace_eq_beamTrial`'s iff is stated under the hypothesis `x in realBeamOperator.domain`, so on its own it does not say the trial plane LIES in the domain.  `...Model.Real.beamTrial_le_domain` (`BeamTrialReal.lean:70`) and `...Model.Real.beamOperator_apply_trial` (`:76`) prove it and are axiom-clean; they are simply not exposed in `Section9/RealModel.lean`.  Exposing them is an alias, no proof.
 
 **PROMOTED TO `compiled_exact` 2026-08-10 (owner + GPT-5.6 Sol, commit `36930a2f`; coordinator-verified: merged build **9614 jobs BUILD_EXIT=0** read from the echoed log line, zero errors, seven checks EXIT=0, all four ratchets byte-identical at 165/51/51/91).**  The single containment this row was waiting on is proved, in the direction that was missing and as an EQUALITY:
   `beamEigenvalues_eq_characteristicFourthPowers : beamEigenvalues = {lam | exists beta, 0 < beta and characteristic beta = 0 and lam = beta ^ 4}`
-exposed on the source surface as `real_freeBeam_positive_spectrum_source`.  So the printed `for k > 2 the alpha_k ARE the positive roots of cos(alpha^(1/4)) cosh(alpha^(1/4)) = 1` now holds in BOTH directions rather than as a subset.  The route was the one this row predicted: `exists_eigenpair_of_characteristic` transports the classical free mode into a genuine eigenpair of the real self-adjoint operator, 237 insertions, no new mathematics.  The two surface aliases this row also asked for landed in the same commit -- `real_freeBeam_trial_le_domain` and `real_freeBeam_operator_apply_trial` -- so `real_freeBeam_zero_mode_source` is now self-contained and the recorded `SURFACE NIT` above is discharged.
+exposed on the source surface as `real_freeBeam_positive_spectrum_eq_characteristicFourthPowers`.  So the printed `for k > 2 the alpha_k ARE the positive roots of cos(alpha^(1/4)) cosh(alpha^(1/4)) = 1` now holds in BOTH directions rather than as a subset.  The route was the one this row predicted: `exists_eigenpair_of_characteristic` transports the classical free mode into a genuine eigenpair of the real self-adjoint operator, 237 insertions, no new mathematics.  The two surface aliases this row also asked for landed in the same commit -- `real_freeBeam_trial_le_domain` and `real_freeBeam_operator_apply_trial` -- so `real_freeBeam_zero_eigenspace_eq_beamTrial` is now self-contained and the recorded `SURFACE NIT` above is discharged.
 
 **THE ONE READING QUESTION IS DECIDED, NOT GLOSSED.**  The printed `alpha_1 = 0 = alpha_2 < alpha_3 < ...` is read as an enumeration of the DISTINCT spectral values, not as a list with multiplicity.  On the with-multiplicity reading the strict `<` from `alpha_3` on would additionally assert that every positive eigenvalue is SIMPLE, and nothing in the repository proves that -- there is still no eigenspace-`finrank` statement under `FormMethod/`.  The distinct-values reading is what the surrounding text supports (the paper is naming the model's spectrum, and it lists the two-dimensional kernel twice precisely because it is enumerating with multiplicity ONLY there, where it has just computed the dimension).  IF THE OWNER OVERRULES THIS READING, the row drops back to `compiled_specialization` and the missing statement is `finrank of each positive eigenspace = 1`; it is recorded here so the decision is visible rather than implicit.
 
@@ -4474,11 +4474,11 @@ exposed on the source surface as `real_freeBeam_positive_spectrum_source`.  So t
 - `TauCeti.DavisKahan.FreeBeam.Model.finite_realSpectrum_beamOperator_inter_Iic`
 - `TauCeti.DavisKahan.FreeBeam.Model.nonempty_orderIso_nat_beamEigenvalues`
 - `TauCeti.DavisKahan.FreeBeam.Model.exists_strictMono_range_eq_beamEigenvalues`
-- `TauCeti.DavisKahan1970.Section9.real_freeBeam_operator_source`
-- `TauCeti.DavisKahan1970.Section9.real_freeBeam_spectrum_source`
-- `TauCeti.DavisKahan1970.Section9.real_freeBeam_zero_mode_source`
-- `TauCeti.DavisKahan1970.Section9.real_freeBeam_finiteData_source`
-- `TauCeti.DavisKahan1970.Section9.real_freeBeam_trial_and_perturbation_source`
+- `TauCeti.DavisKahan1970.Section9.real_freeBeam_operator_isSelfAdjoint_and_graphClosure`
+- `TauCeti.DavisKahan1970.Section9.real_freeBeam_spectrum_decomposition`
+- `TauCeti.DavisKahan1970.Section9.real_freeBeam_zero_eigenspace_eq_beamTrial`
+- `TauCeti.DavisKahan1970.Section9.real_freeBeam_finiteDataCertificate`
+- `TauCeti.DavisKahan1970.Section9.real_freeBeam_trial_and_perturbation`
 - `TauCeti.DavisKahan1970.Section9.RealBeamL2`
 - `TauCeti.DavisKahan1970.Section9.realBeamOperator`
 - `TauCeti.DavisKahan1970.Section9.realClassicalFreeBeamGraph`
@@ -4500,14 +4500,14 @@ exposed on the source surface as `real_freeBeam_positive_spectrum_source`.  So t
 - `TauCeti.DavisKahan.FreeBeam.Model.Real.beamOperator_apply_trial`
 - `TauCeti.DavisKahan.FreeBeam.Classical.characteristic_iff_exists_nontrivial_freeBoundary`
 - `TauCeti.DavisKahan.FreeBeam.Classical.exists_nontrivial_freeBoundary_of_characteristic`
-- `TauCeti.DavisKahan1970.Section9.real_freeBeam_positive_spectrum_source`
+- `TauCeti.DavisKahan1970.Section9.real_freeBeam_positive_spectrum_eq_characteristicFourthPowers`
 - `TauCeti.DavisKahan1970.Section9.real_freeBeam_trial_le_domain`
 - `TauCeti.DavisKahan1970.Section9.real_freeBeam_operator_apply_trial`
 - `TauCeti.DavisKahan.FreeBeam.Model.Real.beamEigenvalues_eq_characteristicFourthPowers`
 - `TauCeti.DavisKahan.FreeBeam.Model.Real.pow_four_mem_beamEigenvalues_of_characteristic`
 - `TauCeti.DavisKahan.FreeBeam.Model.Real.exists_eigenpair_of_characteristic`
 - `TauCeti.DavisKahan.FreeBeam.Model.Real.beamRealPositiveSpectrum_sourceFacts`
-- `TauCeti.DavisKahan1970.Section9.real_freeBeam_eigenvalue_ordering_source`
+- `TauCeti.DavisKahan1970.Section9.real_freeBeam_eigenvalue_ordering`
 
 **Notes.** A source-facing candidate now reconstructs the affine trial basis through exact unit-interval moments and packages the remaining free-beam analytic facts behind an explicit certificate. The closed fourth-derivative operator and the bound alpha_3 > 500 are not yet proved.
 
@@ -4606,7 +4606,7 @@ TWO STANDING JUDGEMENTS IN THIS ROW ARE THEREFORE SUPERSEDED: "(ii) THE COST IS 
 
 **AXIS (A) -- FORM VERSUS CLOSURE -- IS CLOSED, AND OVER `R`.**  `beamOperator_is_closure_of_classical_freeBeam_fourthDerivative` (`BeamClassicalReal.lean:945`) concludes `beamOperator.IsSelfAdjoint AND closure classicalFreeBeamGraph = beamOperator.toLinearPMap.graph`, built through `classicalFreeBeamCoreGraph`, `classicalFreeBeamCoreGraph_subset_graph`, `closure_classicalFreeBeamCoreGraph_eq_graph` and `closure_classicalFreeBeamGraph_eq_graph`.  This was the row's ONLY remaining axis needing new mathematics.
 
-**AXIS (B) -- REAL `L^2(0,1)` -- IS CLOSED.**  Source-facing real endpoints, all coordinator-probed axiom-clean: `real_freeBeam_operator_source`, `real_freeBeam_spectrum_source`, `real_freeBeam_zero_mode_source`, `real_freeBeam_finiteData_source`, `real_freeBeam_trial_and_perturbation_source`.  The scalar-generic layer is `BeamFormSpaceScalar`/`BeamFormSpaceReal`, and the real chain continues through `BeamClassicalReal`, `BeamSpectrumReal`, `BeamTrialReal`, `BeamEigenvalueSequenceReal`, `BeamSection9Real`.
+**AXIS (B) -- REAL `L^2(0,1)` -- IS CLOSED.**  Source-facing real endpoints, all coordinator-probed axiom-clean: `real_freeBeam_operator_isSelfAdjoint_and_graphClosure`, `real_freeBeam_spectrum_decomposition`, `real_freeBeam_zero_eigenspace_eq_beamTrial`, `real_freeBeam_finiteDataCertificate`, `real_freeBeam_trial_and_perturbation`.  The scalar-generic layer is `BeamFormSpaceScalar`/`BeamFormSpaceReal`, and the real chain continues through `BeamClassicalReal`, `BeamSpectrumReal`, `BeamTrialReal`, `BeamEigenvalueSequenceReal`, `BeamSection9Real`.
 
 **THE ORPHAN DEFECT THIS ROW'S PREDECESSOR COMMIT CARRIED IS FIXED.**  `BeamFormSpaceReal` and `BeamFormSpaceScalar` (770 lines) had been imported by nothing, so the green 9603-job build compiled none of them.  The chain is now complete -- `DavisKahan.All` -> `FormMethod/All.lean` -> `BeamSection9Real` -> `BeamEigenvalueSequenceReal` -> `BeamTrialReal` -> `BeamSpectrumReal` -> `BeamClassicalReal` -> `BeamFormSpaceReal` -> `BeamFormSpaceScalar` -- and **library-structure check 1 is back to `ok`** after failing with 2 violations.
 
@@ -4620,13 +4620,13 @@ TWO STANDING JUDGEMENTS IN THIS ROW ARE THEREFORE SUPERSEDED: "(ii) THE COST IS 
 
 The hole said the formalization must justify the printed source scope `alpha_1 = 0 = alpha_2 < alpha_3 < alpha_4 < ...`, including the positive-eigenvalue multiplicity content, rather than weaken the statement. Re-audited against the current 85 declarations rather than the prose snapshot, as the row's own history warns to do: the content was already there, in three pieces, and none of it needed weakening.
 
-`alpha_1 = alpha_2 = 0` is `real_freeBeam_zero_mode_source`: the kernel of the beam operator is *exactly* the affine trial plane, and that plane has `finrank = 2`. So zero is an eigenvalue of multiplicity exactly two -- the `iff` is what makes it exact rather than a lower bound.
+`alpha_1 = alpha_2 = 0` is `real_freeBeam_zero_eigenspace_eq_beamTrial`: the kernel of the beam operator is *exactly* the affine trial plane, and that plane has `finrank = 2`. So zero is an eigenvalue of multiplicity exactly two -- the `iff` is what makes it exact rather than a lower bound.
 
 `alpha_3 < alpha_4 < ...` is `exists_strictMono_range_eq_beamEigenvalues`: a strictly monotone `f : N -> R` whose range is *all* of the positive eigenvalues, with every value above 500. Strict monotonicity onto the whole set is the printed strict ordering; the lower bound separates the positive branch from the zero mode, so `0 < alpha_3`.
 
-What was genuinely missing was a single place to read it. `real_freeBeam_eigenvalue_ordering_source` states both halves as one source-facing theorem, so a reviewer checking the printed ordering does not have to assemble it from three declarations and satisfy themselves that the pieces compose. It proves nothing new -- it is an assembly, and it says so.
+What was genuinely missing was a single place to read it. `real_freeBeam_eigenvalue_ordering` states both halves as one source-facing theorem, so a reviewer checking the printed ordering does not have to assemble it from three declarations and satisfy themselves that the pieces compose. It proves nothing new -- it is an assembly, and it says so.
 
-**Next action.** None. The printed ordering is stated in one source-facing theorem, `real_freeBeam_eigenvalue_ordering_source`: the zero eigenspace is exactly the two-dimensional trial plane, and the positive eigenvalues carry a strictly monotone enumeration onto all of them, bounded below well away from zero.
+**Next action.** None. The printed ordering is stated in one source-facing theorem, `real_freeBeam_eigenvalue_ordering`: the zero eigenspace is exactly the two-dimensional trial plane, and the positive eigenvalues carry a strictly monotone enumeration onto all of them, bounded below well away from zero.
 
 ### `DK-9.1-9.4` — Initial sine and sine-double-angle bounds
 

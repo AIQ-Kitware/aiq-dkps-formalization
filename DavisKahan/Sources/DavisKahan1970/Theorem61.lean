@@ -136,7 +136,7 @@ equivalence.
 Only `0 ≤ ε` is needed; the source's `ε > 0` is stronger.  The step is
 `re ⟪E₀* E₀ x, x⟫ = ‖E₀ x‖²`, after which the two inequalities differ by squaring
 nonnegative reals. -/
-theorem lowerFrameBound_iff_source_operator_inequality
+theorem lowerFrameBound_iff_operator_inequality
     (E₀ : F →L[𝕜] E) {ε : ℝ} (hε : 0 ≤ ε) :
     (∀ x : F, ε ^ 2 * ‖x‖ ^ 2 ≤
         RCLike.re (inner 𝕜 ((E₀.adjoint ∘L E₀) x) x)) ↔
@@ -163,12 +163,12 @@ theorem lowerFrameBound_iff_source_operator_inequality
 
 /-- The source's printed hypothesis implies the Lean one, in the direction a
 caller holding the operator inequality needs. -/
-theorem lowerFrameBound_of_source_operator_inequality
+theorem lowerFrameBound_of_operator_inequality
     (E₀ : F →L[𝕜] E) {ε : ℝ} (hε : 0 ≤ ε)
     (h : ∀ x : F, ε ^ 2 * ‖x‖ ^ 2 ≤
         RCLike.re (inner 𝕜 ((E₀.adjoint ∘L E₀) x) x)) :
     LowerFrameBound E₀ ε :=
-  (lowerFrameBound_iff_source_operator_inequality E₀ hε).mp h
+  (lowerFrameBound_iff_operator_inequality E₀ hε).mp h
 
 end LowerFrame
 
@@ -190,7 +190,7 @@ canonical directed block's singular-value sequence.
 
 Nothing about the proof's organisation appears: no `Theorem61Data`, no
 `UnboundedSinThetaData`, no Ky Fan family, no capability class. -/
-theorem theorem6_1_source_complex
+theorem theorem6_1_complex
     {E₀' F₀' : Type v}
     [NormedAddCommGroup E₀'] [InnerProductSpace ℂ E₀'] [CompleteSpace E₀']
     [NormedAddCommGroup F₀'] [InnerProductSpace ℂ F₀'] [CompleteSpace F₀']
@@ -232,8 +232,8 @@ variable {E F G H : Type v}
   [NormedAddCommGroup H] [InnerProductSpace ℝ H] [CompleteSpace H]
 
 /-- **Davis--Kahan 1970, Theorem 6.1, over `ℝ`.**  The real sibling of
-`theorem6_1_source_complex`, with the same hypotheses and the same conclusion. -/
-theorem theorem6_1_source_real
+`theorem6_1_complex`, with the same hypotheses and the same conclusion. -/
+theorem theorem6_1_real
     {E₀' F₀' : Type v}
     [NormedAddCommGroup E₀'] [InnerProductSpace ℝ E₀'] [CompleteSpace E₀']
     [NormedAddCommGroup F₀'] [InnerProductSpace ℝ F₀'] [CompleteSpace F₀']
@@ -293,7 +293,7 @@ representative freedom as Theorem 6.1.
 This is the counted Theorem 6.2 statement.  The stronger arbitrary-UI-norm
 theorem and the finite-rank operator-norm consequence are source-adjacent
 material and are deliberately not what this states. -/
-theorem theorem6_2_source_complex
+theorem theorem6_2_complex
     {E₀' F₀' : Type v}
     [NormedAddCommGroup E₀'] [InnerProductSpace ℂ E₀'] [CompleteSpace E₀']
     [NormedAddCommGroup F₀'] [InnerProductSpace ℂ F₀'] [CompleteSpace F₀']
@@ -343,10 +343,10 @@ noncomputable def sectionSixSinThetaBlockReal
 
 /-- **Davis--Kahan 1970, Theorem 6.2, over `ℝ`.**
 
-The real sibling of `theorem6_2_source_complex`.  The pairwise spectral-distance
+The real sibling of `theorem6_2_complex`.  The pairwise spectral-distance
 hypothesis is written out over `realSpectrum`, which is the real spelling of the
 same condition. -/
-theorem theorem6_2_source_real
+theorem theorem6_2_real
     {E₀' F₀' : Type v}
     [NormedAddCommGroup E₀'] [InnerProductSpace ℝ E₀'] [CompleteSpace E₀']
     [NormedAddCommGroup F₀'] [InnerProductSpace ℝ F₀'] [CompleteSpace F₀']

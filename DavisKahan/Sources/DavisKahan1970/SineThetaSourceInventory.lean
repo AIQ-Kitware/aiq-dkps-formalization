@@ -108,7 +108,7 @@ alias sinTheta_paperData_real :=
   RealIsometricTheoremData.result_every_unitarilyInvariantNorm_across
 
 alias Theorem6_1Data := Theorem61Data
--- **The canonical source theorems are `DavisKahan1970.theorem6_1_source_complex`
+-- **The canonical source theorems are `DavisKahan1970.theorem6_1_complex`
 -- and `..._real`** in `Sources/DavisKahan1970/Theorem61.lean`.  They take the
 -- components -- ambient/trial/complementary operators, coordinate maps, residual,
 -- `IsTrialResidualEquation`, `IsExactSpectralDecomposition`, the frame bound and
@@ -126,7 +126,7 @@ alias sinTheta_generalized_paperData_real :=
 
 /-! ## Proposition 6.1
 
-**The canonical source theorems are `DavisKahan1970.proposition6_1_source_complex`
+**The canonical source theorems are `DavisKahan1970.proposition6_1_complex`
 and `..._real` in `Sources/DavisKahan1970/Proposition61.lean`.**  They take the
 operators, the reducing subspaces, the gap and the two separations directly.
 The aliases below name the record methods those theorems call, and are the
@@ -160,7 +160,7 @@ alias Proposition6_1_real_representative :=
 
 /-! ## Theorem 6.2 and its printed finite-rank consequence
 
-**The canonical source theorems are `DavisKahan1970.theorem6_2_source_complex`
+**The canonical source theorems are `DavisKahan1970.theorem6_2_complex`
 and `..._real`** in `Sources/DavisKahan1970/Theorem61.lean`, on the same
 component hypotheses as Theorem 6.1.  The aliases below are the record methods
 they call. -/

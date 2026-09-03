@@ -293,12 +293,12 @@ theorem proposition4_3_squaredDisplacement_kyFan (U V : Submodule ℂ H)
   have hU : ∀ n,
       ((1 - spectraDirectRotation U V hacute) ∘L U.subtypeL).approximationNumber n ≤
         ((1 - W) ∘L U.subtypeL).approximationNumber n :=
-    proposition4_1_source_approximationNumbers U V hacute W hWunitary hWmap
+    proposition4_1_approximationNumbers U V hacute W hWunitary hWmap
   have hUperp : ∀ n,
       ((1 - spectraDirectRotation U V hacute) ∘L Uᗮ.subtypeL).approximationNumber n ≤
         ((1 - W) ∘L Uᗮ.subtypeL).approximationNumber n := by
     intro n
-    have h := proposition4_1_source_approximationNumbers Uᗮ Vᗮ
+    have h := proposition4_1_approximationNumbers Uᗮ Vᗮ
       (isUniformlyAcute_orthogonal hacute) W hWunitary
       (competitor_admissible_orthogonal_complex U V W hWmap) n
     rwa [spectraDirectRotation_orthogonal U V hacute] at h
@@ -368,12 +368,12 @@ theorem proposition4_3_nonacute_squaredDisplacement_kyFan (U V : Submodule ℂ H
   have hU : ∀ n,
       ((1 - nonacuteDirectRotation U V J) ∘L U.subtypeL).approximationNumber n ≤
         ((1 - W) ∘L U.subtypeL).approximationNumber n :=
-    proposition4_1_nonacute_source_approximationNumbers U V J W hWunitary hWmap
+    proposition4_1_nonacute_approximationNumbers U V J W hWunitary hWmap
   have hUperp : ∀ n,
       ((1 - nonacuteDirectRotation U V J) ∘L U.orthogonal.subtypeL).approximationNumber n ≤
         ((1 - W) ∘L U.orthogonal.subtypeL).approximationNumber n := by
     intro n
-    have h := proposition4_1_nonacute_source_approximationNumbers U.orthogonal V.orthogonal
+    have h := proposition4_1_nonacute_approximationNumbers U.orthogonal V.orthogonal
       (orthogonalCrossedDefectEquiv U V J) W hWunitary
       (competitor_admissible_orthogonal_complex U V W hWmap) n
     rwa [nonacuteDirectRotation_orthogonal U V J] at h

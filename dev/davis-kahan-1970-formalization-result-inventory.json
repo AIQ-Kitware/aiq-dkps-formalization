@@ -44,7 +44,7 @@
   "result_inventory_review": {
     "status": "accepted",
     "policy": "dk_established_results_only",
-    "source_fidelity_inventory_sha256": "2bcd308830e49eb293db24a8a5bd74543b656b354feacefd2022a8b5a567010d",
+    "source_fidelity_inventory_sha256": "b8e8640a55c9c585fcdcfc3d6c45722c041ed8cb4257049f44111b54aa6b6d2c",
     "distributable_specification_sha256": "05ef66dd33b497329f745505d3a04b0100f2a0052202a3b7a188d76a545e71fd",
     "method": "Reviewed the source-fidelity inventory and the exact theorem/proposition/lemma/corollary environments in paper order. Selected exactly the four Section 2 headline theorems plus all named results Davis--Kahan actually establish; for every counted result, partitioned the primary source block into statement atoms versus adjacent setup/proof/example/consequence/remark atoms, and classified every fidelity atom with an explicit inclusion/exclusion reason.  RE-AUDITED 2026-08-12 for the standing post-Proposition-3.2 convention: the source states, immediately after the proof of Proposition 3.2, that (3.5) is assumed as well as (1.5) except where the contrary is stated.  That convention is carried as the source SCOPE atom `S3-standing-scope.crossed-dimension-standing-assumption`.  It is deliberately NOT a new counted result and the denominator stays at 29.  RE-AUDITED AGAIN 2026-08-12 for nonlocal source semantics: the distributable specification now also carries the Section 1 norm-existence/vacuity convention, the finite-dimensional automatic case of (3.5) from the Proposition 3.2 remark, the Section 3 angle-operator/J_0 construction, and the Section 6 whole-space assembly step of the tangent proof, with five new source-fidelity atoms.  None of that material is a counted result; it is interpretation and proof-context evidence, reverse-linked through `interpretation_support` rather than through the printed-statement boundary.  The denominator stays at 29. HOSTILE APPENDIX SCOPE RE-AUDIT 2026-08-12: the Appendix explicitly says the tangent theorem is treated with A_0 <= alpha and Lambda_1 >= alpha + delta while both may now be unbounded. `DK-6-appendix.unbounded-tangent-extension` is therefore result scope for `S2-tan-theta`, not expository commentary. The denominator remains 29; the scope obligation is discharged by the new complex and real unboundedCompression ambient endpoints.  RE-ACCEPTED 2026-08-29 after a reason-only edit to five Section 10 fidelity atoms. The five `DK-10.4.*` atoms around Question 10.4 carried the generic boilerplate reasons the boundary rule forbids, so a reviewer could not tell why each was excluded. Each now says what it is: the two `restatement_of_counted_result` atoms name the double-angle tangent theorem they restate and the exact wrapper that carries it, and the three motivation atoms say that the step-function identification and the two norm readings are definitional consequences asserted in passing while setting up the question, not results established there. Their empty reverse links are now explained rather than merely present: a reverse link marks membership of a counted result's own source block, and this Section 10 passage is not in the Section 2 block. MEASURED: no atom added or removed, no `formalization_role` changed, no `formalization_result_ids` changed, and no counted result touched. The denominator stays at 29.  RE-ACCEPTED 2026-08-29 (second) after a reason-only edit to the two `S1-block-residual.residual-eigenvalue-*` atoms. They carried the generic `introductory_background_not_designated_result` reason, which does not explain why material this substantive is outside the denominator. The reason now states it: the source introduces these bounds as \"the standard residual-to-eigenvalue consequence\" that the paper \"also records\", so they are classical Rayleigh--Ritz error theory quoted for the numerical-approximation reading rather than results Davis and Kahan establish, and no later result of theirs depends on them. MEASURED: role unchanged, reverse links unchanged and still empty, no atom added or removed, no counted result touched, denominator still 29. RE-ACCEPTED 2026-08-30 after the Section 2 declaration-naming campaign. The source-fidelity inventory changed in exactly two `formalization_role_reason` strings, both under Question 10.4, and in both the change is the Lean declaration name quoted inside the rationale: `tanTwoTheta_wholeSpace_symmetricNorming_exact` became `tanTwoTheta_ambient_bounded_spectralGap_symmetricNorming_complex`, and `tanTwoTheta_directedCorner_residual_symmetricNorming_exact` became `tanTwoTheta_directed_boundedResidual_blockRepresentative_spectralGap_symmetricNorming_complex`. MEASURED against the previous accepted revision: no atom added or removed, no `atom_id`, `formalization_role`, `formalization_role_reason_code`, or `formalization_result_ids` changed, no source text touched, and the distributable specification is byte-identical (its hash is unchanged). No counted result was touched and the denominator stays at 29.  SCOPE-ATOM RE-AUDIT 2026-08-31. All 24 source atoms with `kind: \"scope\"` were re-audited against the distributable specification, their surrounding source blocks, the counted-result inventory and the compiled declarations. This is NOT a reason-only edit: four atoms changed role from `non_result` to `result_scope`, one was split into three, and every scope atom now carries a structured `scope_classification` giving one of five categories with a verbatim source quotation. THE DENOMINATOR IS UNCHANGED AT 29: every reclassified atom is scope of an EXISTING counted result, not a new result. MEASURED: atoms 272 -> 274, both additions being the split of `DK-6-appendix.unbounded-sine-extension` into its headline-sine clause and the two sentences naming Proposition 6.1 and Theorem 6.1; no atom removed; no source text touched; the distributable specification is byte-identical. The reclassifications were forced by the inventory's own statement_boundary policy: `DK-5.1-thm.roles-interchange`, `DK-5.1-thm.one-sided-unbounded-extension`, `DK-6-appendix.unbounded-sine-extension` and `DK-8.2-thm.sin2-unequal-dimension-extension` each state an explicit extension of a counted result's proved scope, and each had been excluded with a reason code whose grounds were that it occurs after the theorem environment -- the exact condition the policy says does not exclude an explicit extension. The internal inconsistency was visible: the Appendix's unbounded TANGENT sentence was already `result_scope` for `S2-tan-theta` while the adjacent SINE sentence was `expository_commentary_not_result`.  RE-ACCEPTED 2026-08-31 after a requirement-only edit to one fidelity atom.  `DK-6-appendix.unbounded-tangent-extension` carried no `type_requirements`, so the coherence check could not tell an Appendix-scope tangent witness (Ritz compression itself unbounded) from a witness with an unbounded ambient operator and a BOUNDED Ritz compression -- and the registered directed primaries were the latter.  The atom now requires `UnboundedRitzPair` and forbids `UnboundedTrialBlock`, which makes the third unbounded-scope axis compiler-checkable and distinct from the ambient-operator axis (`→ₗ.[`) and the bounded-residual axis (`→L[`).  No result was added, removed, or reclassified; the denominator remains 29 and no boundary review changed. RE-ACCEPTED 2026-09-01 after the norm-abstraction rename. The source-fidelity inventory changed in exactly six atoms, and in every one the change is the Lean type or declaration name quoted inside a rationale or `type_requirements` entry: `PaperUnitaryInvariantNorm` became `SymmetricNormingFunction` and the `_paperUINorm` declaration-name token became `_symmetricNorming`. The affected atoms are `S2-sin-theta.ui-norm-scope`, `S2-unbounded-scope.arbitrary-ui-scope`, `DK-6-appendix.unbounded-tangent-extension`, `DK-8.2-thm.sin2-unequal-dimension-extension`, `DK-10.4.ambient-tan2-bound` and `DK-10.4.directed-tan2-bound`. MEASURED against the previous accepted revision by applying the inverse substitution and comparing structurally: 274 atoms before and after, none added or removed, no `formalization_role`, `formalization_role_reason_code` or `formalization_result_ids` changed, and zero atoms differing beyond the renamed identifier. No source text was touched and the distributable specification is byte-identical (its hash is unchanged). The type requirement on `DK-6-appendix.unbounded-tangent-extension` still requires `UnboundedRitzPair` and still forbids `UnboundedTrialBlock`; only the norm type's name inside it moved. No counted result was touched and the denominator stays at 29.  RE-ACCEPTED 2026-09-02 after the source-fidelity `coverage_summary` was regenerated from the atom records: the checked-in aggregate had drifted from the data it summarises (result_support_atoms 75 vs 69, fidelity_only_atoms 199 vs 205, counted_result_scope 16 vs 10, post_result_consequence_not_in_printed_statement 4 vs 9, proof_or_derivation_not_result 68 vs 69) and only two of its fields were checked, so the drift was invisible.  MEASURED, not asserted: all 274 atom records are byte-identical to the previous revision and `coverage_summary` is the only top-level key that changed, so no atom classification, result link, or boundary decision was touched and the selection this review accepted is unchanged.  The aggregate is now derived by `scripts/check_davis_kahan_1970_statement_map.py --write-coverage-summary` and every field is recomputed and compared on each run.  This re-acceptance covers the selection review only; it is not a semantic acceptance.  RE-ACCEPTED 2026-09-02 (second change this date) after the Section 3 standing-scope atom gained an `interpretation_support` backlink to DK-8.2-thm. MEASURED: exactly one atom record changed, only by adding `DK-8.2-thm` to `interpretation_support.result_ids` and extending its note; no atom's role, reason code, `formalization_result_ids`, or scope classification changed, so the 29-result selection this review accepted is untouched. The edit records that Theorem 8.2 sits inside the same standing convention, which is the fact its reclassification rests on.  RE-ACCEPTED 2026-09-02 (third change this date) after the scope quotations were checked against the distributable specification for the first time: 9 of the 26 `scope_classification.source_quote` values were not literal passages of it, so the certificate described paraphrase as verbatim evidence. Those nine moved to `scope_classification.source_paraphrase` and every remaining `source_quote` is now verified to occur in the specification after whitespace normalization. MEASURED: the only atom-record change is that field rename; no atom's role, reason code, result links, or scope category moved, so the accepted selection is unchanged.  RE-ACCEPTED 2026-09-02 (fourth change this date) for a SUBSTANTIVE addition, not a derived one: the source-atom inventory gains `DK-4.1-prop.section4-compact-classification-setup`, taking it from 274 to 275 atoms. The Section 4 opening sentence -- 'Under the compact/classification setup ... the principal angles are ordered' -- is printed inside the Proposition 4.1 block and governs the extremal results that follow, but was represented by no atom, so the Section 4 rows could each declare themselves locally self-contained without contradicting anything. Its quote is verified verbatim against the specification. MEASURED: exactly one atom added, none removed, and no existing atom changed apart from source-order renumbering. The 29-result selection is unchanged -- this adds fidelity scope, not a completion obligation. The existing Section 3 standing atom additionally gained a `scope_inheritance` record so the checker can find inherited scope from the schema instead of matching atom ids.  RE-ACCEPTED 2026-09-02 (fifth change this date): the new Section 4 setup atom gained an `interpretation_support` backlink to DK-4.1-cor, DK-4.2-prop and DK-4.3-prop, which is the evidence their nonlocal readings rest on. MEASURED: that backlink is the only change since the previous hash; no atom was added or removed and no role, reason code, result link or scope category moved.  RE-ACCEPTED 2026-09-02 (sixth change this date): DK-4.4-prop added to the Section 4 setup atom's inheritance, on hostile-review advice that the refuted row must sit inside the scope model too. MEASURED: the only change is that result-id addition on one atom.",
     "boundary_review_status": "accepted"
@@ -389,7 +389,7 @@
         ],
         "distinct_from_refutation": "DK-4.4-prop",
         "distributable_specification_sha256": "05ef66dd33b497329f745505d3a04b0100f2a0052202a3b7a188d76a545e71fd",
-        "source_fidelity_inventory_sha256": "2bcd308830e49eb293db24a8a5bd74543b656b354feacefd2022a8b5a567010d",
+        "source_fidelity_inventory_sha256": "b8e8640a55c9c585fcdcfc3d6c45722c041ed8cb4257049f44111b54aa6b6d2c",
         "supporting_atom_digest_sha256": "a23733f61834f1ffa15a2c13641396999af05a6fbe680ba87281f330b20b843d",
         "reaudit_note": "RE-ACCEPTED 2026-08-31 after the scope-atom re-audit. The atoms this reading rests on are unchanged in text and role: `S1-block-residual.norm-existence-vacuity-convention` remains a paper-wide convention and `DK-3.2-prop.finite-crossing-automatic` remains automaticity used to read the statement -- both were given substantive reason codes in place of generic ones, with no change to their exclusion from the denominator."
       },
@@ -1686,9 +1686,9 @@
       "verification": "proved_in_build",
       "semantic_certification": "accepted",
       "lean_declarations": [
-        "TauCeti.DavisKahan1970.proposition3_1_source"
+        "TauCeti.DavisKahan1970.proposition3_1"
       ],
-      "review_note": "Accepted result-only semantic review 2026-08-12. The exact generic RCLike wrapper `proposition3_1_source` uses the paper's printed `TauCeti.IsAcute` hypothesis, works in arbitrary dimension over real or complex Hilbert spaces, proves the Definition 3.1 crossed-block identity for the canonical direct rotation, and states that positivity of the two diagonal blocks alone characterizes it among unitary intertwiners. It assumes neither `IsUniformlyAcute`, equation (3.8), nor standing dimension assumption (1.5).",
+      "review_note": "Accepted result-only semantic review 2026-08-12. The exact generic RCLike wrapper `proposition3_1` uses the paper's printed `TauCeti.IsAcute` hypothesis, works in arbitrary dimension over real or complex Hilbert spaces, proves the Definition 3.1 crossed-block identity for the canonical direct rotation, and states that positivity of the two diagonal blocks alone characterizes it among unitary intertwiners. It assumes neither `IsUniformlyAcute`, equation (3.8), nor standing dimension assumption (1.5).",
       "parent_claim_id": "DK-3.1-prop",
       "boundary_review": {
         "status": "accepted",
@@ -1707,7 +1707,7 @@
       "local_statement_self_contained": true,
       "canonical_evidence": [
         {
-          "declaration": "TauCeti.DavisKahan1970.proposition3_1_source",
+          "declaration": "TauCeti.DavisKahan1970.proposition3_1",
           "role": "primary_source_witness",
           "scalar_scope": "rclike",
           "evidence_kind": "proof",
@@ -1731,7 +1731,7 @@
           ],
           "scalar_scope": "rclike",
           "evidence": {
-            "primary": "TauCeti.DavisKahan1970.proposition3_1_source",
+            "primary": "TauCeti.DavisKahan1970.proposition3_1",
             "correspondence": []
           },
           "status": "established",
@@ -1872,10 +1872,10 @@
       "verification": "proved_in_build",
       "semantic_certification": "accepted",
       "lean_declarations": [
-        "TauCeti.DavisKahan1970.proposition3_3_complex_forward_source",
-        "TauCeti.DavisKahan1970.proposition3_3_complex_converse_source",
-        "TauCeti.DavisKahan1970.proposition3_3_real_forward_source",
-        "TauCeti.DavisKahan1970.proposition3_3_real_converse_source"
+        "TauCeti.DavisKahan1970.proposition3_3_complex_forward",
+        "TauCeti.DavisKahan1970.proposition3_3_complex_converse",
+        "TauCeti.DavisKahan1970.proposition3_3_real_forward",
+        "TauCeti.DavisKahan1970.proposition3_3_real_converse"
       ],
       "review_note": "Accepted result-only semantic review 2026-08-12. The full nonacute complex forward/converse characterization was already proved in `DavisKahan.Frontier.Section3`. The source-facing complex wrappers expose exactly those printed clauses. The real forward/converse wrappers transport the same arbitrary-dimensional nonacute statement through canonical real complexification: the principal branch is defined by the spectrum of the complexification, crossed-defect transport is coordinatewise, and unitarity/intertwining/positive diagonal blocks/crossed blocks descend through the established complexification API. No `IsUniformlyAcute`, finite-dimensional, separability, compactness, or extra branch hypothesis is added. Equations (3.6)--(3.8) and reflection conjugacy remain adjacent fidelity/proof material outside the counted proposition boundary.",
       "parent_claim_id": "DK-3.3-prop",
@@ -1900,7 +1900,7 @@
       "local_statement_self_contained": true,
       "canonical_evidence": [
         {
-          "declaration": "TauCeti.DavisKahan1970.proposition3_3_complex_forward_source",
+          "declaration": "TauCeti.DavisKahan1970.proposition3_3_complex_forward",
           "role": "primary_source_witness",
           "scalar_scope": "complex",
           "evidence_kind": "proof",
@@ -1910,7 +1910,7 @@
           "capability_classes": []
         },
         {
-          "declaration": "TauCeti.DavisKahan1970.proposition3_3_complex_converse_source",
+          "declaration": "TauCeti.DavisKahan1970.proposition3_3_complex_converse",
           "role": "primary_source_witness",
           "scalar_scope": "complex",
           "evidence_kind": "proof",
@@ -1920,7 +1920,7 @@
           "capability_classes": []
         },
         {
-          "declaration": "TauCeti.DavisKahan1970.proposition3_3_real_forward_source",
+          "declaration": "TauCeti.DavisKahan1970.proposition3_3_real_forward",
           "role": "primary_source_witness",
           "scalar_scope": "real",
           "evidence_kind": "proof",
@@ -1930,7 +1930,7 @@
           "capability_classes": []
         },
         {
-          "declaration": "TauCeti.DavisKahan1970.proposition3_3_real_converse_source",
+          "declaration": "TauCeti.DavisKahan1970.proposition3_3_real_converse",
           "role": "primary_source_witness",
           "scalar_scope": "real",
           "evidence_kind": "proof",
@@ -1950,7 +1950,7 @@
           ],
           "scalar_scope": "complex",
           "evidence": {
-            "primary": "TauCeti.DavisKahan1970.proposition3_3_complex_forward_source",
+            "primary": "TauCeti.DavisKahan1970.proposition3_3_complex_forward",
             "correspondence": []
           },
           "status": "established",
@@ -1964,7 +1964,7 @@
           ],
           "scalar_scope": "complex",
           "evidence": {
-            "primary": "TauCeti.DavisKahan1970.proposition3_3_complex_converse_source",
+            "primary": "TauCeti.DavisKahan1970.proposition3_3_complex_converse",
             "correspondence": []
           },
           "status": "established",
@@ -1978,7 +1978,7 @@
           ],
           "scalar_scope": "real",
           "evidence": {
-            "primary": "TauCeti.DavisKahan1970.proposition3_3_real_forward_source",
+            "primary": "TauCeti.DavisKahan1970.proposition3_3_real_forward",
             "correspondence": []
           },
           "status": "established",
@@ -1992,7 +1992,7 @@
           ],
           "scalar_scope": "real",
           "evidence": {
-            "primary": "TauCeti.DavisKahan1970.proposition3_3_real_converse_source",
+            "primary": "TauCeti.DavisKahan1970.proposition3_3_real_converse",
             "correspondence": []
           },
           "status": "established",
@@ -2015,14 +2015,14 @@
       "verification": "proved_in_build",
       "semantic_certification": "accepted",
       "lean_declarations": [
-        "TauCeti.DavisKahan1970.proposition3_4_source_full_complex",
-        "TauCeti.DavisKahan1970.proposition3_4_source_full_real",
-        "TauCeti.DavisKahan1970.proposition3_4_source_full_bundled_complex",
-        "TauCeti.DavisKahan1970.proposition3_4_source_eq_directRotation",
-        "TauCeti.DavisKahan1970.proposition3_4_source_crossedDefectsEquivalent_complex",
-        "TauCeti.DavisKahan1970.proposition3_4_source_crossedDefectsEquivalent_real"
+        "TauCeti.DavisKahan1970.proposition3_4_full_complex",
+        "TauCeti.DavisKahan1970.proposition3_4_full_real",
+        "TauCeti.DavisKahan1970.proposition3_4_full_bundled_complex",
+        "TauCeti.DavisKahan1970.proposition3_4_eq_directRotation",
+        "TauCeti.DavisKahan1970.proposition3_4_crossedDefectsEquivalent_complex",
+        "TauCeti.DavisKahan1970.proposition3_4_crossedDefectsEquivalent_real"
       ],
-      "review_note": "RE-CLOSED 2026-08-12 after repair (reopened earlier the same day; the reopening is retained in git history).  The defect was real: `proposition3_4_source_full_bundled_complex` concludes only `IsDirectRotation`, whose diagonal clauses are `0 <= re inner x (P T P) x`, which over C does not even force self-adjointness of the compression, whereas Definition 3.1 asks for genuine operator positivity.  The repair is `proposition3_4_source_full_complex`: printed hypothesis C_0^2 >= 1/2 together with the Definition 3.1 data for U, concluding the genuine Definition 3.1 statement for U^2 from Q_- to Q -- unitarity, intertwining Q_- to Q, `IsPositive` for both diagonal compressions, and the crossed-block adjoint/sign relation.  No acuteness, compactness, finite-dimensional or separability hypothesis is added, and the positivity upgrade reuses the real development's `positiveDiagonalBlocks_of_sq` (promoted to a public declaration) rather than reproving it.  Evidence for the row is now the new complex theorem together with `proposition3_4_source_full_real`; the `IsDirectRotation` statements are retained as supporting material, not as primary evidence.  The row also now carries the standing Section 3 scope atom (3.5).",
+      "review_note": "RE-CLOSED 2026-08-12 after repair (reopened earlier the same day; the reopening is retained in git history).  The defect was real: `proposition3_4_full_bundled_complex` concludes only `IsDirectRotation`, whose diagonal clauses are `0 <= re inner x (P T P) x`, which over C does not even force self-adjointness of the compression, whereas Definition 3.1 asks for genuine operator positivity.  The repair is `proposition3_4_full_complex`: printed hypothesis C_0^2 >= 1/2 together with the Definition 3.1 data for U, concluding the genuine Definition 3.1 statement for U^2 from Q_- to Q -- unitarity, intertwining Q_- to Q, `IsPositive` for both diagonal compressions, and the crossed-block adjoint/sign relation.  No acuteness, compactness, finite-dimensional or separability hypothesis is added, and the positivity upgrade reuses the real development's `positiveDiagonalBlocks_of_sq` (promoted to a public declaration) rather than reproving it.  Evidence for the row is now the new complex theorem together with `proposition3_4_full_real`; the `IsDirectRotation` statements are retained as supporting material, not as primary evidence.  The row also now carries the standing Section 3 scope atom (3.5).",
       "boundary_review": {
         "status": "accepted",
         "primary_source_block": "DK-3.4-prop",
@@ -2040,7 +2040,7 @@
       "local_statement_self_contained": true,
       "canonical_evidence": [
         {
-          "declaration": "TauCeti.DavisKahan1970.proposition3_4_source_full_complex",
+          "declaration": "TauCeti.DavisKahan1970.proposition3_4_full_complex",
           "role": "primary_source_witness",
           "scalar_scope": "complex",
           "evidence_kind": "proof",
@@ -2051,7 +2051,7 @@
           "capability_classes": []
         },
         {
-          "declaration": "TauCeti.DavisKahan1970.proposition3_4_source_full_real",
+          "declaration": "TauCeti.DavisKahan1970.proposition3_4_full_real",
           "role": "primary_source_witness",
           "scalar_scope": "real",
           "evidence_kind": "proof",
@@ -2064,19 +2064,19 @@
       ],
       "supporting_evidence": [
         {
-          "declaration": "TauCeti.DavisKahan1970.proposition3_4_source_full_bundled_complex",
+          "declaration": "TauCeti.DavisKahan1970.proposition3_4_full_bundled_complex",
           "role": "presentation_wrapper"
         },
         {
-          "declaration": "TauCeti.DavisKahan1970.proposition3_4_source_eq_directRotation",
+          "declaration": "TauCeti.DavisKahan1970.proposition3_4_eq_directRotation",
           "role": "supporting_theorem"
         },
         {
-          "declaration": "TauCeti.DavisKahan1970.proposition3_4_source_crossedDefectsEquivalent_complex",
+          "declaration": "TauCeti.DavisKahan1970.proposition3_4_crossedDefectsEquivalent_complex",
           "role": "standing_assumption_discharge"
         },
         {
-          "declaration": "TauCeti.DavisKahan1970.proposition3_4_source_crossedDefectsEquivalent_real",
+          "declaration": "TauCeti.DavisKahan1970.proposition3_4_crossedDefectsEquivalent_real",
           "role": "standing_assumption_discharge"
         }
       ],
@@ -2091,7 +2091,7 @@
           ],
           "scalar_scope": "complex",
           "evidence": {
-            "primary": "TauCeti.DavisKahan1970.proposition3_4_source_full_complex",
+            "primary": "TauCeti.DavisKahan1970.proposition3_4_full_complex",
             "correspondence": []
           },
           "status": "established",
@@ -2105,7 +2105,7 @@
           ],
           "scalar_scope": "real",
           "evidence": {
-            "primary": "TauCeti.DavisKahan1970.proposition3_4_source_full_real",
+            "primary": "TauCeti.DavisKahan1970.proposition3_4_full_real",
             "correspondence": []
           },
           "status": "established",
@@ -2123,18 +2123,18 @@
         "rationale": "Proposition 3.4's printed hypotheses already exhibit a direct rotation W from U to V in the Definition 3.1 sense. By Proposition 3.2 such a rotation exists exactly when the crossed defect spaces are equivalent, so (3.5) is implied by this result's own hypotheses rather than added to them. The inherited convention is therefore discharged, not relied upon: the result is locally self-contained and the standing atom remains correctly attached because the paper does state it over this result's scope.",
         "discharged_by": [
           {
-            "declaration": "TauCeti.DavisKahan1970.proposition3_4_source_crossedDefectsEquivalent_complex",
-            "proves": "the exact hypothesis list of proposition3_4_source_full_complex implies CrossedDefectsEquivalent U V",
+            "declaration": "TauCeti.DavisKahan1970.proposition3_4_crossedDefectsEquivalent_complex",
+            "proves": "the exact hypothesis list of proposition3_4_full_complex implies CrossedDefectsEquivalent U V",
             "concludes": "CrossedDefectsEquivalent"
           },
           {
-            "declaration": "TauCeti.DavisKahan1970.proposition3_4_source_crossedDefectsEquivalent_real",
-            "proves": "the exact hypothesis list of proposition3_4_source_full_real implies CrossedDefectsEquivalent U V",
+            "declaration": "TauCeti.DavisKahan1970.proposition3_4_crossedDefectsEquivalent_real",
+            "proves": "the exact hypothesis list of proposition3_4_full_real implies CrossedDefectsEquivalent U V",
             "concludes": "CrossedDefectsEquivalent"
           }
         ],
         "route": "TauCeti.DavisKahan1970.proposition3_2_exists_iff_crossedDefectsEquivalent",
-        "source_fidelity_inventory_sha256": "2bcd308830e49eb293db24a8a5bd74543b656b354feacefd2022a8b5a567010d"
+        "source_fidelity_inventory_sha256": "b8e8640a55c9c585fcdcfc3d6c45722c041ed8cb4257049f44111b54aa6b6d2c"
       }
     },
     {
@@ -2504,12 +2504,12 @@
       "verification": "proved_in_build",
       "semantic_certification": "accepted",
       "lean_declarations": [
-        "TauCeti.DavisKahan1970.corollary3_2_source",
+        "TauCeti.DavisKahan1970.corollary3_2",
         "TauCeti.DavisKahan1970.corollary3_2_nonacuteQuarterTurn_symm",
         "TauCeti.DavisKahan1970.corollary3_2_nonacute_directRotation_resolution",
         "TauCeti.DavisKahan1970.complex_directRotation_reversal",
         "TauCeti.DavisKahan1970.real_directRotation_reversal",
-        "TauCeti.DavisKahan1970.corollary3_2_reversal_source_form"
+        "TauCeti.DavisKahan1970.corollary3_2_reversal_form"
       ],
       "review_note": "Accepted by the hostile audit at the stated-result level.",
       "parent_claim_id": "DK-3.2-cor",
@@ -2528,7 +2528,7 @@
       "local_statement_self_contained": true,
       "canonical_evidence": [
         {
-          "declaration": "TauCeti.DavisKahan1970.corollary3_2_source",
+          "declaration": "TauCeti.DavisKahan1970.corollary3_2",
           "role": "primary_source_witness",
           "scalar_scope": "rclike",
           "evidence_kind": "proof",
@@ -2556,7 +2556,7 @@
           "role": "supporting_theorem"
         },
         {
-          "declaration": "TauCeti.DavisKahan1970.corollary3_2_reversal_source_form",
+          "declaration": "TauCeti.DavisKahan1970.corollary3_2_reversal_form",
           "role": "supporting_theorem"
         }
       ],
@@ -2569,7 +2569,7 @@
           ],
           "scalar_scope": "rclike",
           "evidence": {
-            "primary": "TauCeti.DavisKahan1970.corollary3_2_source",
+            "primary": "TauCeti.DavisKahan1970.corollary3_2",
             "correspondence": []
           },
           "status": "established",
@@ -2840,7 +2840,7 @@
         ],
         "distinct_from_refutation": "DK-4.4-prop",
         "distributable_specification_sha256": "05ef66dd33b497329f745505d3a04b0100f2a0052202a3b7a188d76a545e71fd",
-        "source_fidelity_inventory_sha256": "2bcd308830e49eb293db24a8a5bd74543b656b354feacefd2022a8b5a567010d",
+        "source_fidelity_inventory_sha256": "b8e8640a55c9c585fcdcfc3d6c45722c041ed8cb4257049f44111b54aa6b6d2c",
         "supporting_atom_digest_sha256": "4af52bf63c72a54131d5a60ddebaa841a2637d9dd1d1814e5b1b651c25dea82c",
         "reaudit_note": "ACCEPTED 2026-09-02 on hostile review (Blocker 3). Verified against the Section 4 opening in the distributable specification and against the canonical witnesses' signatures, not inferred from the row."
       }
@@ -2859,8 +2859,8 @@
       "verification": "proved_in_build",
       "semantic_certification": "accepted",
       "lean_declarations": [
-        "TauCeti.DavisKahan1970.Proposition4_2_source_compact_nonacute_real",
-        "TauCeti.DavisKahan1970.Proposition4_2_source_compact_nonacute",
+        "TauCeti.DavisKahan1970.Proposition4_2_compact_nonacute_real",
+        "TauCeti.DavisKahan1970.Proposition4_2_compact_nonacute",
         "TauCeti.DavisKahan1970.Proposition4_2_infiniteDimensional",
         "TauCeti.DavisKahan1970.tsum_displacementAngleSineSqR_ge_tsum_sq_sin_principalAngleSequence"
       ],
@@ -2907,7 +2907,7 @@
           ],
           "scalar_scope": "complex",
           "evidence": {
-            "primary": "TauCeti.DavisKahan1970.Proposition4_2_source_compact_nonacute",
+            "primary": "TauCeti.DavisKahan1970.Proposition4_2_compact_nonacute",
             "correspondence": []
           },
           "status": "established",
@@ -2921,7 +2921,7 @@
           ],
           "scalar_scope": "real",
           "evidence": {
-            "primary": "TauCeti.DavisKahan1970.Proposition4_2_source_compact_nonacute_real",
+            "primary": "TauCeti.DavisKahan1970.Proposition4_2_compact_nonacute_real",
             "correspondence": []
           },
           "status": "established",
@@ -2949,20 +2949,20 @@
         ],
         "lean_explicitation": [
           {
-            "declaration": "TauCeti.DavisKahan1970.Proposition4_2_source_compact_nonacute",
+            "declaration": "TauCeti.DavisKahan1970.Proposition4_2_compact_nonacute",
             "mechanism": "The source-shaped wrapper takes `_hcompact` and `_J`, which are exactly the Section 4 setup the printed proposition inherits and does not restate."
           }
         ],
         "distinct_from_refutation": "DK-4.4-prop",
         "distributable_specification_sha256": "05ef66dd33b497329f745505d3a04b0100f2a0052202a3b7a188d76a545e71fd",
-        "source_fidelity_inventory_sha256": "2bcd308830e49eb293db24a8a5bd74543b656b354feacefd2022a8b5a567010d",
+        "source_fidelity_inventory_sha256": "b8e8640a55c9c585fcdcfc3d6c45722c041ed8cb4257049f44111b54aa6b6d2c",
         "supporting_atom_digest_sha256": "4af52bf63c72a54131d5a60ddebaa841a2637d9dd1d1814e5b1b651c25dea82c",
         "reaudit_note": "ACCEPTED 2026-09-02 on hostile review (Blocker 3). Verified against the Section 4 opening in the distributable specification and against the canonical witnesses' signatures, not inferred from the row."
       },
       "canonical_evidence": [
         {
           "id": "DK-4.2-prop.complex",
-          "declaration": "TauCeti.DavisKahan1970.Proposition4_2_source_compact_nonacute",
+          "declaration": "TauCeti.DavisKahan1970.Proposition4_2_compact_nonacute",
           "role": "primary_source_witness",
           "scalar_scope": "complex",
           "evidence_kind": "proof",
@@ -2974,7 +2974,7 @@
         },
         {
           "id": "DK-4.2-prop.real",
-          "declaration": "TauCeti.DavisKahan1970.Proposition4_2_source_compact_nonacute_real",
+          "declaration": "TauCeti.DavisKahan1970.Proposition4_2_compact_nonacute_real",
           "role": "primary_source_witness",
           "scalar_scope": "real",
           "evidence_kind": "proof",
@@ -3137,7 +3137,7 @@
         ],
         "distinct_from_refutation": "DK-4.4-prop",
         "distributable_specification_sha256": "05ef66dd33b497329f745505d3a04b0100f2a0052202a3b7a188d76a545e71fd",
-        "source_fidelity_inventory_sha256": "2bcd308830e49eb293db24a8a5bd74543b656b354feacefd2022a8b5a567010d",
+        "source_fidelity_inventory_sha256": "b8e8640a55c9c585fcdcfc3d6c45722c041ed8cb4257049f44111b54aa6b6d2c",
         "supporting_atom_digest_sha256": "4af52bf63c72a54131d5a60ddebaa841a2637d9dd1d1814e5b1b651c25dea82c",
         "reaudit_note": "ACCEPTED 2026-09-02 on hostile review (Blocker 3). Verified against the Section 4 opening in the distributable specification and against the canonical witnesses' signatures, not inferred from the row."
       }
@@ -3254,7 +3254,7 @@
           }
         ],
         "route": "finite-dimensionality of the refuting configuration",
-        "source_fidelity_inventory_sha256": "2bcd308830e49eb293db24a8a5bd74543b656b354feacefd2022a8b5a567010d"
+        "source_fidelity_inventory_sha256": "b8e8640a55c9c585fcdcfc3d6c45722c041ed8cb4257049f44111b54aa6b6d2c"
       }
     },
     {
@@ -3725,13 +3725,13 @@
       "lean_declarations": [
         "TauCeti.DavisKahan1970.Proposition6_1_complex",
         "TauCeti.DavisKahan1970.Proposition6_1_real",
-        "TauCeti.DavisKahan1970.proposition6_1_source_complex",
-        "TauCeti.DavisKahan1970.proposition6_1_source_real",
-        "TauCeti.DavisKahan1970.proposition6_1_source_projectorDifference_complex",
+        "TauCeti.DavisKahan1970.proposition6_1_complex",
+        "TauCeti.DavisKahan1970.proposition6_1_real",
+        "TauCeti.DavisKahan1970.proposition6_1_projectorDifference_complex",
         "TauCeti.DavisKahan1970.Proposition6_1_real_representative",
         "TauCeti.DavisKahan1970.Proposition6_1_real_sinTheta_singularValues",
-        "TauCeti.DavisKahan1970.proposition6_1_commonDomain_source_complex",
-        "TauCeti.DavisKahan1970.proposition6_1_commonDomain_source_real",
+        "TauCeti.DavisKahan1970.proposition6_1_commonDomain_complex",
+        "TauCeti.DavisKahan1970.proposition6_1_commonDomain_real",
         "TauCeti.DavisKahan1970.Proposition6_1_commonDomain",
         "TauCeti.DavisKahan1970.Proposition6_1_real_commonDomain"
       ],
@@ -3756,7 +3756,7 @@
       "local_statement_self_contained": true,
       "canonical_evidence": [
         {
-          "declaration": "TauCeti.DavisKahan1970.proposition6_1_source_complex",
+          "declaration": "TauCeti.DavisKahan1970.proposition6_1_complex",
           "role": "primary_source_witness",
           "scalar_scope": "complex",
           "evidence_kind": "proof",
@@ -3766,7 +3766,7 @@
           "capability_classes": []
         },
         {
-          "declaration": "TauCeti.DavisKahan1970.proposition6_1_source_real",
+          "declaration": "TauCeti.DavisKahan1970.proposition6_1_real",
           "role": "primary_source_witness",
           "scalar_scope": "real",
           "evidence_kind": "proof",
@@ -3788,7 +3788,7 @@
           "note": "Superseded as canonical evidence 2026-08-31: it is a method on a `Paper*` record, so a caller had to build the record before invoking the theorem. The canonical declaration is now the component-hypothesis theorem, which builds the record internally. This one is retained as the implementation and compatibility API."
         },
         {
-          "declaration": "TauCeti.DavisKahan1970.proposition6_1_source_projectorDifference_complex",
+          "declaration": "TauCeti.DavisKahan1970.proposition6_1_projectorDifference_complex",
           "role": "transport_lemma"
         },
         {
@@ -3800,12 +3800,12 @@
           "role": "transport_lemma"
         },
         {
-          "declaration": "TauCeti.DavisKahan1970.proposition6_1_commonDomain_source_complex",
+          "declaration": "TauCeti.DavisKahan1970.proposition6_1_commonDomain_complex",
           "role": "generalization",
           "note": "Coverage of a `result_adjacent_extension` the source mentions around this result. It is stronger than the counted statement requires and is deliberately supporting rather than canonical evidence."
         },
         {
-          "declaration": "TauCeti.DavisKahan1970.proposition6_1_commonDomain_source_real",
+          "declaration": "TauCeti.DavisKahan1970.proposition6_1_commonDomain_real",
           "role": "generalization",
           "note": "Coverage of a `result_adjacent_extension` the source mentions around this result. It is stronger than the counted statement requires and is deliberately supporting rather than canonical evidence."
         },
@@ -3830,7 +3830,7 @@
           ],
           "scalar_scope": "complex",
           "evidence": {
-            "primary": "TauCeti.DavisKahan1970.proposition6_1_source_complex",
+            "primary": "TauCeti.DavisKahan1970.proposition6_1_complex",
             "correspondence": []
           },
           "status": "established",
@@ -3844,7 +3844,7 @@
           ],
           "scalar_scope": "real",
           "evidence": {
-            "primary": "TauCeti.DavisKahan1970.proposition6_1_source_real",
+            "primary": "TauCeti.DavisKahan1970.proposition6_1_real",
             "correspondence": []
           },
           "status": "established",
@@ -3872,11 +3872,11 @@
         "TauCeti.DavisKahan1970.Theorem6_1_real",
         "TauCeti.DavisKahan1970.Theorem6_1_real_commonDomain",
         "TauCeti.DavisKahan1970.Theorem6_1_real_commonCore",
-        "TauCeti.DavisKahan1970.theorem6_1_source_complex",
-        "TauCeti.DavisKahan1970.theorem6_1_source_real",
+        "TauCeti.DavisKahan1970.theorem6_1_complex",
+        "TauCeti.DavisKahan1970.theorem6_1_real",
         "TauCeti.DavisKahan1970.Theorem6_1_commonDomain",
-        "TauCeti.DavisKahan1970.lowerFrameBound_iff_source_operator_inequality",
-        "TauCeti.DavisKahan1970.lowerFrameBound_of_source_operator_inequality"
+        "TauCeti.DavisKahan1970.lowerFrameBound_iff_operator_inequality",
+        "TauCeti.DavisKahan1970.lowerFrameBound_of_operator_inequality"
       ],
       "review_note": "Accepted by the hostile audit at the stated-result level.\n\nREOPENED 2026-08-31 by the scope-atom re-audit. The inventory's own statement_boundary policy says a later source passage that explicitly extends the proved scope of a counted result is part of that result's scope and must be covered. Several such passages were classified as generic post-result commentary on the grounds that they occur after the theorem environment -- which is exactly the condition the policy says does not exclude an explicit extension. See the newly attached scope atom(s) and `remaining_gap`.\n\nREOPENING WITHDRAWN 2026-08-31, and the rule that caused it corrected. The scope-atom re-audit attached a later source passage to this result under a `statement_boundary` clause saying that any passage explicitly extending a counted result's proved scope becomes part of that result. That clause contradicted the same field's `does_not_count` entry for scope remarks outside the printed result environment, and it let the atom ledger enlarge the denominator by reclassification. The corrected rule is that a later passage affects a counted result only when it is needed to determine what Davis and Kahan actually claim in that result; an extension, variant or consequence they mention without introducing and proving it as a result of its own does not. The passage is now `result_adjacent_extension` fidelity material. The Lean coverage produced while the result was reopened is kept as SUPPORTING evidence -- it is stronger than the counted statement requires, which is a good thing to hold and not a canonical obligation.",
       "parent_claim_id": "DK-6.1-thm",
@@ -3897,7 +3897,7 @@
       "local_statement_self_contained": true,
       "canonical_evidence": [
         {
-          "declaration": "TauCeti.DavisKahan1970.theorem6_1_source_complex",
+          "declaration": "TauCeti.DavisKahan1970.theorem6_1_complex",
           "role": "primary_source_witness",
           "scalar_scope": "complex",
           "evidence_kind": "proof",
@@ -3909,7 +3909,7 @@
           "capability_classes": []
         },
         {
-          "declaration": "TauCeti.DavisKahan1970.theorem6_1_source_real",
+          "declaration": "TauCeti.DavisKahan1970.theorem6_1_real",
           "role": "primary_source_witness",
           "scalar_scope": "real",
           "evidence_kind": "proof",
@@ -3946,12 +3946,12 @@
           "note": "Coverage of a `result_adjacent_extension` the source mentions around this result. It is stronger than the counted statement requires and is deliberately supporting rather than canonical evidence."
         },
         {
-          "declaration": "TauCeti.DavisKahan1970.lowerFrameBound_iff_source_operator_inequality",
+          "declaration": "TauCeti.DavisKahan1970.lowerFrameBound_iff_operator_inequality",
           "role": "transport_lemma",
           "note": "The source prints the Theorem 6.1 lower-frame hypothesis as the operator inequality `E_0^* E_0 >= epsilon^2 I`; the canonical theorem takes `LowerFrameBound E_0 epsilon`. This is the correspondence lemma the contract's `equivalence_lemmas` clause requires, so a source auditor does not have to supply the equivalence informally."
         },
         {
-          "declaration": "TauCeti.DavisKahan1970.lowerFrameBound_of_source_operator_inequality",
+          "declaration": "TauCeti.DavisKahan1970.lowerFrameBound_of_operator_inequality",
           "role": "transport_lemma",
           "note": "The source prints the Theorem 6.1 lower-frame hypothesis as the operator inequality `E_0^* E_0 >= epsilon^2 I`; the canonical theorem takes `LowerFrameBound E_0 epsilon`. This is the correspondence lemma the contract's `equivalence_lemmas` clause requires, so a source auditor does not have to supply the equivalence informally."
         }
@@ -3969,7 +3969,7 @@
           ],
           "scalar_scope": "complex",
           "evidence": {
-            "primary": "TauCeti.DavisKahan1970.theorem6_1_source_complex",
+            "primary": "TauCeti.DavisKahan1970.theorem6_1_complex",
             "correspondence": []
           },
           "status": "established",
@@ -3983,7 +3983,7 @@
           ],
           "scalar_scope": "real",
           "evidence": {
-            "primary": "TauCeti.DavisKahan1970.theorem6_1_source_real",
+            "primary": "TauCeti.DavisKahan1970.theorem6_1_real",
             "correspondence": []
           },
           "status": "established",
@@ -4007,10 +4007,10 @@
       "lean_declarations": [
         "TauCeti.DavisKahan1970.Theorem6_2_complex",
         "TauCeti.DavisKahan1970.Theorem6_2_real",
-        "TauCeti.DavisKahan1970.theorem6_2_source_complex",
-        "TauCeti.DavisKahan1970.theorem6_2_source_real",
-        "TauCeti.DavisKahan1970.lowerFrameBound_iff_source_operator_inequality",
-        "TauCeti.DavisKahan1970.lowerFrameBound_of_source_operator_inequality"
+        "TauCeti.DavisKahan1970.theorem6_2_complex",
+        "TauCeti.DavisKahan1970.theorem6_2_real",
+        "TauCeti.DavisKahan1970.lowerFrameBound_iff_operator_inequality",
+        "TauCeti.DavisKahan1970.lowerFrameBound_of_operator_inequality"
       ],
       "review_note": "Accepted result-only semantic review 2026-08-12. The complex and real Theorem 6.2 wrappers state the pairwise-gap Hilbert-Schmidt sine inequality with the source lower-frame factor epsilon at the unbounded/common-domain source scope. The rank-corrected operator-norm consequence is an immediate post-theorem consequence in the source and is explicitly outside the 29-result denominator.",
       "parent_claim_id": "DK-6.2-thm",
@@ -4031,7 +4031,7 @@
       "local_statement_self_contained": true,
       "canonical_evidence": [
         {
-          "declaration": "TauCeti.DavisKahan1970.theorem6_2_source_complex",
+          "declaration": "TauCeti.DavisKahan1970.theorem6_2_complex",
           "role": "primary_source_witness",
           "scalar_scope": "complex",
           "evidence_kind": "proof",
@@ -4041,7 +4041,7 @@
           "capability_classes": []
         },
         {
-          "declaration": "TauCeti.DavisKahan1970.theorem6_2_source_real",
+          "declaration": "TauCeti.DavisKahan1970.theorem6_2_real",
           "role": "primary_source_witness",
           "scalar_scope": "real",
           "evidence_kind": "proof",
@@ -4063,12 +4063,12 @@
           "note": "Superseded as canonical evidence 2026-08-31: it is a method on a `Paper*` record, so a caller had to build the record before invoking the theorem. The canonical declaration is now the component-hypothesis theorem, which builds the record internally. This one is retained as the implementation and compatibility API."
         },
         {
-          "declaration": "TauCeti.DavisKahan1970.lowerFrameBound_iff_source_operator_inequality",
+          "declaration": "TauCeti.DavisKahan1970.lowerFrameBound_iff_operator_inequality",
           "role": "transport_lemma",
           "note": "The source prints the Theorem 6.1 lower-frame hypothesis as the operator inequality `E_0^* E_0 >= epsilon^2 I`; the canonical theorem takes `LowerFrameBound E_0 epsilon`. This is the correspondence lemma the contract's `equivalence_lemmas` clause requires, so a source auditor does not have to supply the equivalence informally."
         },
         {
-          "declaration": "TauCeti.DavisKahan1970.lowerFrameBound_of_source_operator_inequality",
+          "declaration": "TauCeti.DavisKahan1970.lowerFrameBound_of_operator_inequality",
           "role": "transport_lemma",
           "note": "The source prints the Theorem 6.1 lower-frame hypothesis as the operator inequality `E_0^* E_0 >= epsilon^2 I`; the canonical theorem takes `LowerFrameBound E_0 epsilon`. This is the correspondence lemma the contract's `equivalence_lemmas` clause requires, so a source auditor does not have to supply the equivalence informally."
         }
@@ -4082,7 +4082,7 @@
           ],
           "scalar_scope": "complex",
           "evidence": {
-            "primary": "TauCeti.DavisKahan1970.theorem6_2_source_complex",
+            "primary": "TauCeti.DavisKahan1970.theorem6_2_complex",
             "correspondence": []
           },
           "status": "established",
@@ -4096,7 +4096,7 @@
           ],
           "scalar_scope": "real",
           "evidence": {
-            "primary": "TauCeti.DavisKahan1970.theorem6_2_source_real",
+            "primary": "TauCeti.DavisKahan1970.theorem6_2_real",
             "correspondence": []
           },
           "status": "established",
@@ -4339,17 +4339,17 @@
         "TauCeti.DavisKahan1970.Section8.theorem8_1_maximalAngle_le_iff_spectrumIn",
         "TauCeti.DavisKahan1970.Section8.theorem8_1_canonicalBranch_real",
         "TauCeti.DavisKahan1970.Section8.theorem8_1_maximalAngle_le_iff_spectrumIn_real",
-        "TauCeti.DavisKahan1970.Section8.theorem8_1_upperCompressionRepulsion_source",
-        "TauCeti.DavisKahan1970.Section8.theorem8_1_lowerCompressionRepulsion_source",
+        "TauCeti.DavisKahan1970.Section8.theorem8_1_upperCompressionRepulsion",
+        "TauCeti.DavisKahan1970.Section8.theorem8_1_lowerCompressionRepulsion",
         "TauCeti.DavisKahan1970.Section8.theorem8_1_upperCompressionRepulsion_real",
         "TauCeti.DavisKahan1970.Section8.theorem8_1_lowerCompressionRepulsion_real",
-        "TauCeti.DavisKahan1970.Section8.theorem8_1_upperApproximationRepulsion_source",
-        "TauCeti.DavisKahan1970.Section8.theorem8_1_lowerApproximationRepulsion_source",
+        "TauCeti.DavisKahan1970.Section8.theorem8_1_upperApproximationRepulsion",
+        "TauCeti.DavisKahan1970.Section8.theorem8_1_lowerApproximationRepulsion",
         "TauCeti.DavisKahan1970.Section8.theorem8_1_upperApproximationRepulsion_real",
         "TauCeti.DavisKahan1970.Section8.theorem8_1_lowerApproximationRepulsion_real",
         "TauCeti.DavisKahan1970.Section8.approximationNumber_eq_eigenvalues_of_isPositive",
-        "TauCeti.DavisKahan1970.Section8.theorem8_1_upperSymmetricGaugeRepulsion_angle_rev_source",
-        "TauCeti.DavisKahan1970.Section8.theorem8_1_lowerSymmetricGaugeRepulsion_angle_rev_source",
+        "TauCeti.DavisKahan1970.Section8.theorem8_1_upperSymmetricGaugeRepulsion_angle_rev",
+        "TauCeti.DavisKahan1970.Section8.theorem8_1_lowerSymmetricGaugeRepulsion_angle_rev",
         "TauCeti.DavisKahan1970.Section8.theorem8_1_upperSymmetricGaugeRepulsion_angle_rev_real",
         "TauCeti.DavisKahan1970.Section8.theorem8_1_lowerSymmetricGaugeRepulsion_angle_rev_real"
       ],
@@ -4420,7 +4420,7 @@
           "capability_classes": []
         },
         {
-          "declaration": "TauCeti.DavisKahan1970.Section8.theorem8_1_upperCompressionRepulsion_source",
+          "declaration": "TauCeti.DavisKahan1970.Section8.theorem8_1_upperCompressionRepulsion",
           "role": "primary_source_witness",
           "scalar_scope": "complex",
           "evidence_kind": "proof",
@@ -4430,7 +4430,7 @@
           "capability_classes": []
         },
         {
-          "declaration": "TauCeti.DavisKahan1970.Section8.theorem8_1_lowerCompressionRepulsion_source",
+          "declaration": "TauCeti.DavisKahan1970.Section8.theorem8_1_lowerCompressionRepulsion",
           "role": "primary_source_witness",
           "scalar_scope": "complex",
           "evidence_kind": "proof",
@@ -4460,7 +4460,7 @@
           "capability_classes": []
         },
         {
-          "declaration": "TauCeti.DavisKahan1970.Section8.theorem8_1_upperApproximationRepulsion_source",
+          "declaration": "TauCeti.DavisKahan1970.Section8.theorem8_1_upperApproximationRepulsion",
           "role": "primary_source_witness",
           "scalar_scope": "complex",
           "evidence_kind": "proof",
@@ -4470,7 +4470,7 @@
           "capability_classes": []
         },
         {
-          "declaration": "TauCeti.DavisKahan1970.Section8.theorem8_1_lowerApproximationRepulsion_source",
+          "declaration": "TauCeti.DavisKahan1970.Section8.theorem8_1_lowerApproximationRepulsion",
           "role": "primary_source_witness",
           "scalar_scope": "complex",
           "evidence_kind": "proof",
@@ -4500,7 +4500,7 @@
           "capability_classes": []
         },
         {
-          "declaration": "TauCeti.DavisKahan1970.Section8.theorem8_1_upperSymmetricGaugeRepulsion_angle_rev_source",
+          "declaration": "TauCeti.DavisKahan1970.Section8.theorem8_1_upperSymmetricGaugeRepulsion_angle_rev",
           "role": "primary_source_witness",
           "scalar_scope": "complex",
           "evidence_kind": "proof",
@@ -4510,7 +4510,7 @@
           "capability_classes": []
         },
         {
-          "declaration": "TauCeti.DavisKahan1970.Section8.theorem8_1_lowerSymmetricGaugeRepulsion_angle_rev_source",
+          "declaration": "TauCeti.DavisKahan1970.Section8.theorem8_1_lowerSymmetricGaugeRepulsion_angle_rev",
           "role": "primary_source_witness",
           "scalar_scope": "complex",
           "evidence_kind": "proof",
@@ -4611,7 +4611,7 @@
           ],
           "scalar_scope": "complex",
           "evidence": {
-            "primary": "TauCeti.DavisKahan1970.Section8.theorem8_1_upperCompressionRepulsion_source",
+            "primary": "TauCeti.DavisKahan1970.Section8.theorem8_1_upperCompressionRepulsion",
             "correspondence": []
           },
           "status": "established",
@@ -4625,7 +4625,7 @@
           ],
           "scalar_scope": "complex",
           "evidence": {
-            "primary": "TauCeti.DavisKahan1970.Section8.theorem8_1_lowerCompressionRepulsion_source",
+            "primary": "TauCeti.DavisKahan1970.Section8.theorem8_1_lowerCompressionRepulsion",
             "correspondence": []
           },
           "status": "established",
@@ -4667,7 +4667,7 @@
           ],
           "scalar_scope": "complex",
           "evidence": {
-            "primary": "TauCeti.DavisKahan1970.Section8.theorem8_1_upperApproximationRepulsion_source",
+            "primary": "TauCeti.DavisKahan1970.Section8.theorem8_1_upperApproximationRepulsion",
             "correspondence": []
           },
           "status": "established",
@@ -4681,7 +4681,7 @@
           ],
           "scalar_scope": "complex",
           "evidence": {
-            "primary": "TauCeti.DavisKahan1970.Section8.theorem8_1_lowerApproximationRepulsion_source",
+            "primary": "TauCeti.DavisKahan1970.Section8.theorem8_1_lowerApproximationRepulsion",
             "correspondence": []
           },
           "status": "established",
@@ -4723,7 +4723,7 @@
           ],
           "scalar_scope": "complex",
           "evidence": {
-            "primary": "TauCeti.DavisKahan1970.Section8.theorem8_1_upperSymmetricGaugeRepulsion_angle_rev_source",
+            "primary": "TauCeti.DavisKahan1970.Section8.theorem8_1_upperSymmetricGaugeRepulsion_angle_rev",
             "correspondence": []
           },
           "status": "established",
@@ -4737,7 +4737,7 @@
           ],
           "scalar_scope": "complex",
           "evidence": {
-            "primary": "TauCeti.DavisKahan1970.Section8.theorem8_1_lowerSymmetricGaugeRepulsion_angle_rev_source",
+            "primary": "TauCeti.DavisKahan1970.Section8.theorem8_1_lowerSymmetricGaugeRepulsion_angle_rev",
             "correspondence": []
           },
           "status": "established",
@@ -4790,16 +4790,16 @@
       "verification": "proved_in_build",
       "semantic_certification": "accepted",
       "lean_declarations": [
-        "TauCeti.DavisKahan1970.Section8.theorem8_2_branch_source_directed_complex",
-        "TauCeti.DavisKahan1970.Section8.theorem8_2_sinTwoTheta_perturbation_source_symmetricNorming",
-        "TauCeti.DavisKahan1970.Section8.theorem8_2_sinTwoTheta_residual_source_symmetricNorming",
-        "TauCeti.DavisKahan1970.Section8.theorem8_2_branch_source_directed_real",
-        "TauCeti.DavisKahan1970.Section8.theorem8_2_sinTwoTheta_perturbation_source_real_symmetricNorming",
-        "TauCeti.DavisKahan1970.Section8.theorem8_2_sinTwoTheta_residual_source_real_symmetricNorming",
-        "TauCeti.DavisKahan1970.Section8.theorem8_2_branch_source_maximalAngle_lt_of_crossedDefects",
-        "TauCeti.DavisKahan1970.Section8.theorem8_2_branch_source_real_maximalAngle_lt_of_crossedDefects"
+        "TauCeti.DavisKahan1970.Section8.theorem8_2_branch_directed_complex",
+        "TauCeti.DavisKahan1970.Section8.theorem8_2_sinTwoTheta_perturbation_symmetricNorming",
+        "TauCeti.DavisKahan1970.Section8.theorem8_2_sinTwoTheta_residual_symmetricNorming",
+        "TauCeti.DavisKahan1970.Section8.theorem8_2_branch_directed_real",
+        "TauCeti.DavisKahan1970.Section8.theorem8_2_sinTwoTheta_perturbation_real_symmetricNorming",
+        "TauCeti.DavisKahan1970.Section8.theorem8_2_sinTwoTheta_residual_real_symmetricNorming",
+        "TauCeti.DavisKahan1970.Section8.theorem8_2_branch_maximalAngle_lt_of_crossedDefects",
+        "TauCeti.DavisKahan1970.Section8.theorem8_2_branch_real_maximalAngle_lt_of_crossedDefects"
       ],
-      "review_note": "RE-CLOSED 2026-08-12 after repair (reopened earlier the same day; the reopening is retained in git history).  Both defects were real.  (a) Source scope: immediately after the proof of Proposition 3.2 the paper fixes the standing convention that (3.5) is assumed as well as (1.5) except where the contrary is stated, and Theorem 8.2 does not state otherwise.  That convention is now inventoried as the source SCOPE atom `S3-standing-scope.crossed-dimension-standing-assumption` and linked, as scope, to exactly the two counted results it governs -- Theorem 8.2 and Proposition 3.4.  It is not a counted result and the denominator remains 29.  Theorem 8.1's ambient quarter-angle characterization `theorem8_1_maximalAngle_le_iff_spectrumIn` is proved with no dimension hypothesis at all, so it is deliberately not linked.  (b) Evidence: the printed quarter-angle conclusion is the AMBIENT Theta < pi/4, and the row previously selected a directed-gap theorem.  The selected evidence is now `theorem8_2_branch_source_maximalAngle_lt_of_crossedDefects` and `theorem8_2_branch_source_real_maximalAngle_lt_of_crossedDefects`, which conclude `maximalAngle P Q < pi/4` from either printed smallness alternative under (3.5) in its constructive `CrossedDefectsEquivalent` form, with no finite-dimensionality and no rank hypothesis, over both scalar fields.  Together with the four retained `sin 2Theta` endpoints (perturbation and residual, complex and real, arbitrary `SymmetricNormingFunction`) the evidence jointly establishes the printed result at the printed dimensional scope.  No new Lean mathematics was required once the source scope was corrected.",
+      "review_note": "RE-CLOSED 2026-08-12 after repair (reopened earlier the same day; the reopening is retained in git history).  Both defects were real.  (a) Source scope: immediately after the proof of Proposition 3.2 the paper fixes the standing convention that (3.5) is assumed as well as (1.5) except where the contrary is stated, and Theorem 8.2 does not state otherwise.  That convention is now inventoried as the source SCOPE atom `S3-standing-scope.crossed-dimension-standing-assumption` and linked, as scope, to exactly the two counted results it governs -- Theorem 8.2 and Proposition 3.4.  It is not a counted result and the denominator remains 29.  Theorem 8.1's ambient quarter-angle characterization `theorem8_1_maximalAngle_le_iff_spectrumIn` is proved with no dimension hypothesis at all, so it is deliberately not linked.  (b) Evidence: the printed quarter-angle conclusion is the AMBIENT Theta < pi/4, and the row previously selected a directed-gap theorem.  The selected evidence is now `theorem8_2_branch_maximalAngle_lt_of_crossedDefects` and `theorem8_2_branch_real_maximalAngle_lt_of_crossedDefects`, which conclude `maximalAngle P Q < pi/4` from either printed smallness alternative under (3.5) in its constructive `CrossedDefectsEquivalent` form, with no finite-dimensionality and no rank hypothesis, over both scalar fields.  Together with the four retained `sin 2Theta` endpoints (perturbation and residual, complex and real, arbitrary `SymmetricNormingFunction`) the evidence jointly establishes the printed result at the printed dimensional scope.  No new Lean mathematics was required once the source scope was corrected.",
       "boundary_review": {
         "status": "accepted",
         "primary_source_block": "DK-8.2-thm",
@@ -4824,7 +4824,7 @@
       "local_statement_self_contained": false,
       "canonical_evidence": [
         {
-          "declaration": "TauCeti.DavisKahan1970.Section8.theorem8_2_branch_source_maximalAngle_lt_of_crossedDefects",
+          "declaration": "TauCeti.DavisKahan1970.Section8.theorem8_2_branch_maximalAngle_lt_of_crossedDefects",
           "role": "primary_source_witness",
           "scalar_scope": "complex",
           "evidence_kind": "proof",
@@ -4836,7 +4836,7 @@
           "capability_classes": []
         },
         {
-          "declaration": "TauCeti.DavisKahan1970.Section8.theorem8_2_branch_source_real_maximalAngle_lt_of_crossedDefects",
+          "declaration": "TauCeti.DavisKahan1970.Section8.theorem8_2_branch_real_maximalAngle_lt_of_crossedDefects",
           "role": "primary_source_witness",
           "scalar_scope": "real",
           "evidence_kind": "proof",
@@ -4848,7 +4848,7 @@
           "capability_classes": []
         },
         {
-          "declaration": "TauCeti.DavisKahan1970.Section8.theorem8_2_sinTwoTheta_perturbation_source_symmetricNorming",
+          "declaration": "TauCeti.DavisKahan1970.Section8.theorem8_2_sinTwoTheta_perturbation_symmetricNorming",
           "role": "primary_source_witness",
           "scalar_scope": "complex",
           "evidence_kind": "proof",
@@ -4860,7 +4860,7 @@
           "capability_classes": []
         },
         {
-          "declaration": "TauCeti.DavisKahan1970.Section8.theorem8_2_sinTwoTheta_residual_source_symmetricNorming",
+          "declaration": "TauCeti.DavisKahan1970.Section8.theorem8_2_sinTwoTheta_residual_symmetricNorming",
           "role": "primary_source_witness",
           "scalar_scope": "complex",
           "evidence_kind": "proof",
@@ -4872,7 +4872,7 @@
           "capability_classes": []
         },
         {
-          "declaration": "TauCeti.DavisKahan1970.Section8.theorem8_2_sinTwoTheta_perturbation_source_real_symmetricNorming",
+          "declaration": "TauCeti.DavisKahan1970.Section8.theorem8_2_sinTwoTheta_perturbation_real_symmetricNorming",
           "role": "primary_source_witness",
           "scalar_scope": "real",
           "evidence_kind": "proof",
@@ -4884,7 +4884,7 @@
           "capability_classes": []
         },
         {
-          "declaration": "TauCeti.DavisKahan1970.Section8.theorem8_2_sinTwoTheta_residual_source_real_symmetricNorming",
+          "declaration": "TauCeti.DavisKahan1970.Section8.theorem8_2_sinTwoTheta_residual_real_symmetricNorming",
           "role": "primary_source_witness",
           "scalar_scope": "real",
           "evidence_kind": "proof",
@@ -4898,11 +4898,11 @@
       ],
       "supporting_evidence": [
         {
-          "declaration": "TauCeti.DavisKahan1970.Section8.theorem8_2_branch_source_directed_complex",
+          "declaration": "TauCeti.DavisKahan1970.Section8.theorem8_2_branch_directed_complex",
           "role": "supporting_theorem"
         },
         {
-          "declaration": "TauCeti.DavisKahan1970.Section8.theorem8_2_branch_source_directed_real",
+          "declaration": "TauCeti.DavisKahan1970.Section8.theorem8_2_branch_directed_real",
           "role": "supporting_theorem"
         }
       ],
@@ -4918,7 +4918,7 @@
           ],
           "scalar_scope": "complex",
           "evidence": {
-            "primary": "TauCeti.DavisKahan1970.Section8.theorem8_2_branch_source_maximalAngle_lt_of_crossedDefects",
+            "primary": "TauCeti.DavisKahan1970.Section8.theorem8_2_branch_maximalAngle_lt_of_crossedDefects",
             "correspondence": []
           },
           "status": "established",
@@ -4932,7 +4932,7 @@
           ],
           "scalar_scope": "real",
           "evidence": {
-            "primary": "TauCeti.DavisKahan1970.Section8.theorem8_2_branch_source_real_maximalAngle_lt_of_crossedDefects",
+            "primary": "TauCeti.DavisKahan1970.Section8.theorem8_2_branch_real_maximalAngle_lt_of_crossedDefects",
             "correspondence": []
           },
           "status": "established",
@@ -4946,7 +4946,7 @@
           ],
           "scalar_scope": "complex",
           "evidence": {
-            "primary": "TauCeti.DavisKahan1970.Section8.theorem8_2_sinTwoTheta_perturbation_source_symmetricNorming",
+            "primary": "TauCeti.DavisKahan1970.Section8.theorem8_2_sinTwoTheta_perturbation_symmetricNorming",
             "correspondence": []
           },
           "status": "established",
@@ -4960,7 +4960,7 @@
           ],
           "scalar_scope": "complex",
           "evidence": {
-            "primary": "TauCeti.DavisKahan1970.Section8.theorem8_2_sinTwoTheta_residual_source_symmetricNorming",
+            "primary": "TauCeti.DavisKahan1970.Section8.theorem8_2_sinTwoTheta_residual_symmetricNorming",
             "correspondence": []
           },
           "status": "established",
@@ -4974,7 +4974,7 @@
           ],
           "scalar_scope": "real",
           "evidence": {
-            "primary": "TauCeti.DavisKahan1970.Section8.theorem8_2_sinTwoTheta_perturbation_source_real_symmetricNorming",
+            "primary": "TauCeti.DavisKahan1970.Section8.theorem8_2_sinTwoTheta_perturbation_real_symmetricNorming",
             "correspondence": []
           },
           "status": "established",
@@ -4988,7 +4988,7 @@
           ],
           "scalar_scope": "real",
           "evidence": {
-            "primary": "TauCeti.DavisKahan1970.Section8.theorem8_2_sinTwoTheta_residual_source_real_symmetricNorming",
+            "primary": "TauCeti.DavisKahan1970.Section8.theorem8_2_sinTwoTheta_residual_real_symmetricNorming",
             "correspondence": []
           },
           "status": "established",
@@ -5017,17 +5017,17 @@
         ],
         "lean_explicitation": [
           {
-            "declaration": "TauCeti.DavisKahan1970.Section8.theorem8_2_branch_source_maximalAngle_lt_of_crossedDefects",
+            "declaration": "TauCeti.DavisKahan1970.Section8.theorem8_2_branch_maximalAngle_lt_of_crossedDefects",
             "mechanism": "The hypothesis `hcross : CrossedDefectsEquivalent P Q` carries the inherited Section 3 condition (3.5); the printed Theorem 8.2 does not restate it, and the conclusion `maximalAngle P Q < Real.pi / 4` is the printed acute-branch claim."
           },
           {
-            "declaration": "TauCeti.DavisKahan1970.Section8.theorem8_2_branch_source_real_maximalAngle_lt_of_crossedDefects",
+            "declaration": "TauCeti.DavisKahan1970.Section8.theorem8_2_branch_real_maximalAngle_lt_of_crossedDefects",
             "mechanism": "The real-scalar analogue: the same `hcross : CrossedDefectsEquivalent P Q` hypothesis carries the inherited (3.5) condition that the printed statement leaves to the standing convention."
           }
         ],
         "distinct_from_refutation": "DK-4.4-prop",
         "distributable_specification_sha256": "05ef66dd33b497329f745505d3a04b0100f2a0052202a3b7a188d76a545e71fd",
-        "source_fidelity_inventory_sha256": "2bcd308830e49eb293db24a8a5bd74543b656b354feacefd2022a8b5a567010d",
+        "source_fidelity_inventory_sha256": "b8e8640a55c9c585fcdcfc3d6c45722c041ed8cb4257049f44111b54aa6b6d2c",
         "supporting_atom_digest_sha256": "967e2e9ae741009395baf2da4b21fc1e97b3d623fe72fc9e5ca73f44e7fadef6",
         "reaudit_note": "ACCEPTED 2026-09-02 on hostile review. Reclassified from `locally_exact`: the row carried the Section 3 standing-scope atom while declaring no nonlocal dependency, and the Lean witnesses take the crossed-defect condition explicitly. Verified against the source-facing theorem signatures rather than inferred from the row."
       }
@@ -5042,7 +5042,7 @@
     "terminal_results": 29,
     "remaining_results": [],
     "note": "The structured fields above are authoritative; this paragraph is regenerated whenever the count moves. 2026-09-02, closing: terminal_results is 29 and remaining_results is empty. `S2-tan-two-theta` was `hostile_review_blocked` under obligation `tan2theta-directed-correspondence` after a 2026-09-02 closure that did not compose; it is now accepted on canonical directed witnesses `tanTwoTheta_directed_unboundedResidual_symmetricNorming_{complex,real}`, which take the reducing subspace and conclude on the paper's directed corner (`tanTwoDirectedCornerR U V` over ℝ) with the singular-value identification in their types. The canonical-evidence digest changed accordingly and the statement pins were refreshed for the new canonical and bridging declarations. Earlier history of this field (the 2026-08-31 `S2-sin-two-theta` reopening, the `S2-tan-theta` Appendix-scope primaries, the paper-prefix rename with an unchanged digest) is in the human report.",
-    "canonical_evidence_sha256": "99e71148b24308b732f5a4554c6fbc98bf481f3d771af29c15abbd53ff9cee4e",
+    "canonical_evidence_sha256": "8ada0c5f9cbb379b59c4874791c83c344bd4b42edb7ee3fa5beb9462e81d2d65",
     "hostile_review_status": "accepted",
     "hostile_review_note": "ACCEPTED 2026-09-02, after the day's reopening was closed by new mathematics rather than by metadata: the directed tan 2Theta clauses have source-shaped complex and real endpoints on the paper objects, with the correspondence composed in Lean and pinned. `open_hostile_review_obligations` is closed and lists the closure; the structured fields `terminal_results`, `remaining_results` and `hostile_review_status` are the authoritative statement."
   },
@@ -5096,7 +5096,7 @@
         ],
         "status": "closed",
         "closed_on": "2026-09-02",
-        "closure": "Closed. A Section 4 scope atom now exists -- `DK-4.1-prop.section4-compact-classification-setup`, quoting the section's opening sentence verbatim -- carrying a `scope_inheritance` record naming DK-4.1-cor, DK-4.2-prop, DK-4.3-prop and DK-4.4-prop as inheriting it and DK-4.1-prop as local to it. The three inheriting non-refuted rows are reclassified `paper_faithful_nonlocal_source_interpretation` with full records and explicit cross-block scope links; DK-4.4-prop carries a discharge instead, because its refuting witness is finite-dimensional and so lies inside the setup. Proposition 4.2 gained source-shaped witnesses `Proposition4_2_source_compact_nonacute{,_real}` carrying the inherited hypotheses, now the canonical evidence, with the stronger basis theorem retained as supporting evidence. Both compile."
+        "closure": "Closed. A Section 4 scope atom now exists -- `DK-4.1-prop.section4-compact-classification-setup`, quoting the section's opening sentence verbatim -- carrying a `scope_inheritance` record naming DK-4.1-cor, DK-4.2-prop, DK-4.3-prop and DK-4.4-prop as inheriting it and DK-4.1-prop as local to it. The three inheriting non-refuted rows are reclassified `paper_faithful_nonlocal_source_interpretation` with full records and explicit cross-block scope links; DK-4.4-prop carries a discharge instead, because its refuting witness is finite-dimensional and so lies inside the setup. Proposition 4.2 gained source-shaped witnesses `Proposition4_2_compact_nonacute{,_real}` carrying the inherited hypotheses, now the canonical evidence, with the stronger basis theorem retained as supporting evidence. Both compile."
       },
       {
         "id": "crossed-defects-representation-consistency",

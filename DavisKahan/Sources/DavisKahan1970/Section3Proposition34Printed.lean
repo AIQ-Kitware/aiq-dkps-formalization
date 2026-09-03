@@ -32,9 +32,9 @@ what makes this a move rather than a restatement.
 
 ## Main results
 
-* `proposition3_4_source_full_bundled_complex`: the full nonacute source scope.
-* `proposition3_4_source`: the printed sentence, at `IsUniformlyAcute`.
-* `proposition3_4_source_eq_directRotation`: the acute form is the canonical direct rotation.
+* `proposition3_4_full_bundled_complex`: the full nonacute source scope.
+* `proposition3_4`: the printed sentence, at `IsUniformlyAcute`.
+* `proposition3_4_eq_directRotation`: the acute form is the canonical direct rotation.
 -/
 
 open scoped InnerProductSpace
@@ -63,7 +63,7 @@ scope.
 The additional hypothesis `hcos` is exactly the printed `C₀² ≥ 1/2`, read through equation
 (3.7).  The conclusion says that `W²` satisfies Definition 3.1 for the ordered pair
 `(Q₋ℋ,Qℋ)`. -/
-theorem proposition3_4_source_full_bundled_complex
+theorem proposition3_4_full_bundled_complex
     (W : H →L[ℂ] H)
     (hunitary : W ∈ unitary (H →L[ℂ] H))
     (hintertwines : W * projection U = projection V * W)
@@ -158,7 +158,7 @@ by, and because the companion bound `C₁² ≥ ½` is false without an intertwi
 
 Grounded by `:=` on `proposition3_3_principalSquareRoot_converse`, so no square-root branch
 argument is duplicated. -/
-theorem proposition3_4_source (hacute : IsUniformlyAcute U V)
+theorem proposition3_4 (hacute : IsUniformlyAcute U V)
     (hcos : ∀ x ∈ U, ‖x‖ ^ 2 / 2 ≤ ‖projection V x‖ ^ 2) :
     IsDirectRotation (reflectedSubspace U V) V
       (spectraDirectRotation U V hacute * spectraDirectRotation U V hacute) := by
@@ -211,10 +211,10 @@ theorem proposition3_4_source (hacute : IsUniformlyAcute U V)
 
 "*the* direct rotation" presupposes uniqueness, which Proposition 3.1 supplies exactly when
 the reflected pair is acute.  Under that additional hypothesis the square is the canonical
-direct rotation of `(Q₋ℋ, Qℋ)` on the nose.  Without it `proposition3_4_source` still holds:
+direct rotation of `(Q₋ℋ, Qℋ)` on the nose.  Without it `proposition3_4` still holds:
 the square satisfies Definition 3.1, and by Proposition 3.2 it is then one of possibly
 several direct rotations. -/
-theorem proposition3_4_source_eq_directRotation (hacute : IsUniformlyAcute U V)
+theorem proposition3_4_eq_directRotation (hacute : IsUniformlyAcute U V)
     (hcos : ∀ x ∈ U, ‖x‖ ^ 2 / 2 ≤ ‖projection V x‖ ^ 2)
     (hacuteRef : IsUniformlyAcute (reflectedSubspace U V) V) :
     spectraDirectRotation U V hacute * spectraDirectRotation U V hacute

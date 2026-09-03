@@ -35,7 +35,7 @@ is Proposition 6.1 rather than a second double-angle argument.
 
 Over `ℂ` the bounded proof does exactly this, with the bounded symmetric sine
 theorem.  Its unbounded counterpart now exists — Proposition 6.1 on a common
-dense domain, `proposition6_1_commonDomain_source_projectorDifference` — and the
+dense domain, `proposition6_1_commonDomain_projectorDifference` — and the
 reflected operator is `J A J`, which shares `dom A` because `J` preserves it.
 The paper's bounded perturbation for the reflected pair is
 `D = H − J H J`, whose gauge is at most `2 N(H)`: that is where the printed
@@ -165,7 +165,7 @@ theorem sinTheta_ambient_unitaryConj_projectorDifference_symmetricNorming
       (TauCeti.LinearPMap.reducingRestriction A Uᗮ hUred.orthogonal) δ := by
     rw [TauCeti.LinearPMap.reducingRestriction_unitaryConj W A U hUred]
     exact hgap.unitaryConj_left (TauCeti.LinearPMap.submoduleMapIsometry W U)
-  exact proposition6_1_commonDomain_source_projectorDifference N hA hB hUred hUrred
+  exact proposition6_1_commonDomain_projectorDifference N hA hB hUred hUrred
     D hdomain hperturbation hδ hgapUV hgapVU hDmem
 
 /-- **The reflected perturbation costs at most a factor two in every source

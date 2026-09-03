@@ -500,7 +500,7 @@ read as a quadratic form.  The point of restricting is that off-diagonality of
 *unperturbed* compression `A₁` and not of `A + K`.  The right-hand side is the
 form of `Λ₁ - α` evaluated at `C₁ x = P_{Qᗮ} x`, which is the printed
 cosine-sandwiched term. -/
-theorem theorem8_1_upperCompressionRepulsion_source
+theorem theorem8_1_upperCompressionRepulsion
     (A K : H →L[ℂ] H) (P : Submodule ℂ H) [P.HasOrthogonalProjection]
     {alpha delta : ℝ} (hdelta : 0 < delta)
     (hA : IsSelfAdjoint A) (hK : IsSelfAdjoint K)
@@ -548,7 +548,7 @@ of `A + K`.  The right-hand side is the form of `(α + δ) - Λ₀` evaluated at
 The orientation is the mirror of the upper theorem: there `x ∈ Pᗮ` and
 `K x ∈ P`, here `x ∈ P` and `K x ∈ Pᗮ`, so the vanishing inner product is read
 off in the other argument order. -/
-theorem theorem8_1_lowerCompressionRepulsion_source
+theorem theorem8_1_lowerCompressionRepulsion
     (A K : H →L[ℂ] H) (P : Submodule ℂ H) [P.HasOrthogonalProjection]
     {alpha delta : ℝ} (hdelta : 0 < delta)
     (hA : IsSelfAdjoint A) (hK : IsSelfAdjoint K)

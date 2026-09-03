@@ -71,22 +71,22 @@ sequence back without loss.
 
 ## Main results
 
-* `theorem8_2_perturbationHalfGap_source_real`;
-* `theorem8_2_residualHalfGap_source_real`;
-* `theorem8_2_branch_source_directed_real` -- the printed disjunction;
-* `theorem8_2_perturbationHalfGap_source_real_maximalAngle_lt`,
-  `theorem8_2_branch_source_real_maximalAngle_lt` and
-  `theorem8_2_branch_source_real_maximalAngle_lt_of_crossedDefects` -- the
+* `theorem8_2_perturbationHalfGap_real`;
+* `theorem8_2_residualHalfGap_real`;
+* `theorem8_2_branch_directed_real` -- the printed disjunction;
+* `theorem8_2_perturbationHalfGap_real_maximalAngle_lt`,
+  `theorem8_2_branch_real_maximalAngle_lt` and
+  `theorem8_2_branch_real_maximalAngle_lt_of_crossedDefects` -- the
   printed `Θ < π/4`, under the finite form of (1.5) and under Section 3's
   standing assumption (3.5) respectively; the last carries no dimension
   hypothesis of any kind;
-* `theorem8_2_sinTwoTheta_perturbation_source_real` and
-  `theorem8_2_sinTwoTheta_residual_source_real` -- the inherited `sin 2Θ`
+* `theorem8_2_sinTwoTheta_perturbation_real` and
+  `theorem8_2_sinTwoTheta_residual_real` -- the inherited `sin 2Θ`
   estimates at the operator norm;
-* `theorem8_2_sinTwoTheta_perturbation_source_real_symmetricNorming` and
-  `theorem8_2_sinTwoTheta_residual_source_real_symmetricNorming` -- both inherited
+* `theorem8_2_sinTwoTheta_perturbation_real_symmetricNorming` and
+  `theorem8_2_sinTwoTheta_residual_real_symmetricNorming` -- both inherited
   `sin 2Θ` estimates at every source unitarily invariant norm;
-* `theorem8_2_source_real` -- the whole printed theorem over `ℝ`.
+* `theorem8_2_real` -- the whole printed theorem over `ℝ`.
 
 ## References
 
@@ -263,7 +263,7 @@ directed quarter-angle bound `directedGap P Q < √2/2`, exactly as over `ℂ`.
 Every hypothesis is the real reading of the printed one, and the proof is the
 complexification transport described in this module's header; the perturbation
 theory itself is not re-run. -/
-theorem theorem8_2_perturbationHalfGap_source_real
+theorem theorem8_2_perturbationHalfGap_real
     {A K : E →L[ℝ] E} (hA : IsSelfAdjointOperator A) (hK : IsSelfAdjointOperator K)
     {P Q : Submodule ℝ E} [P.HasOrthogonalProjection] [Q.HasOrthogonalProjection]
     {alpha beta delta : ℝ} (hdelta : 0 < delta) (hab : beta ≤ alpha)
@@ -275,7 +275,7 @@ theorem theorem8_2_perturbationHalfGap_source_real
     directedGap P Q < Real.sqrt 2 / 2 := by
   have hsmallc : ‖complexify K‖ < delta / 2 := by
     rw [norm_complexify]; exact hsmall
-  have hmain := theorem8_2_perturbationHalfGap_source_complex
+  have hmain := theorem8_2_perturbationHalfGap_complex
     (complexify_isSelfAdjointOperator hA) (complexify_isSelfAdjointOperator hK)
     hdelta hab (spectrumIn_complexify_add hQ)
     (spectrumIn_orthogonal_complexify_add hQperp)
@@ -290,7 +290,7 @@ space.**
 directed conclusion.  Krein's completion is not re-proved over `ℝ`: the residual
 norm is transported by `norm_residual_complexify` and the complex alternative is
 applied. -/
-theorem theorem8_2_residualHalfGap_source_real
+theorem theorem8_2_residualHalfGap_real
     {A K : E →L[ℝ] E} (hA : IsSelfAdjointOperator A) (hK : IsSelfAdjointOperator K)
     {P Q : Submodule ℝ E} [P.HasOrthogonalProjection] [Q.HasOrthogonalProjection]
     {alpha beta delta : ℝ} (hdelta : 0 < delta) (hab : beta ≤ alpha)
@@ -305,7 +305,7 @@ theorem theorem8_2_residualHalfGap_source_real
       (compressOperator (complexifySubmodule P) (complexify A))‖ < delta / 2 := by
     rw [norm_residual_complexify A K P hPred.1]
     exact hRsmall
-  have hmain := theorem8_2_residualHalfGap_source_complex
+  have hmain := theorem8_2_residualHalfGap_complex
     (complexify_isSelfAdjointOperator hA) (complexify_isSelfAdjointOperator hK)
     hdelta hab (spectrumIn_complexify_add hQ)
     (spectrumIn_orthogonal_complexify_add hQperp)
@@ -315,7 +315,7 @@ theorem theorem8_2_residualHalfGap_source_real
 
 /-- **Theorem 8.2's printed disjunction over a REAL Hilbert space.**  Either
 printed smallness alternative gives the directed quarter-angle bound. -/
-theorem theorem8_2_branch_source_directed_real
+theorem theorem8_2_branch_directed_real
     {A K : E →L[ℝ] E} (hA : IsSelfAdjointOperator A) (hK : IsSelfAdjointOperator K)
     {P Q : Submodule ℝ E} [P.HasOrthogonalProjection] [Q.HasOrthogonalProjection]
     {alpha beta delta : ℝ} (hdelta : 0 < delta) (hab : beta ≤ alpha)
@@ -327,9 +327,9 @@ theorem theorem8_2_branch_source_directed_real
       ‖residual (A + K) P.subtypeL (compressOperator P A)‖ < delta / 2) :
     directedGap P Q < Real.sqrt 2 / 2 := by
   rcases halt with hsmall | hRsmall
-  · exact theorem8_2_perturbationHalfGap_source_real hA hK hdelta hab hQ hQperp
+  · exact theorem8_2_perturbationHalfGap_real hA hK hdelta hab hQ hQperp
       hPred hP hsmall
-  · exact theorem8_2_residualHalfGap_source_real hA hK hdelta hab hQ hQperp
+  · exact theorem8_2_residualHalfGap_real hA hK hdelta hab hQ hQperp
       hPred hP hRsmall
 
 /-! ### 3. The printed `Θ < π/4` over `ℝ`
@@ -346,10 +346,10 @@ the dimension-free one carries no dimension hypothesis of any kind. -/
 /-- **Davis--Kahan 1970, Theorem 8.2, printed conclusion `Θ < π/4` over a REAL
 Hilbert space, under the finite form of the standing convention (1.5).**
 
-The real counterpart of `theorem8_2_perturbationHalfGap_source_maximalAngle_lt`.
+The real counterpart of `theorem8_2_perturbationHalfGap_maximalAngle_lt`.
 Finite dimensionality and equal rank are the printed statement's own standing
 convention, exactly as over `ℂ`. -/
-theorem theorem8_2_perturbationHalfGap_source_real_maximalAngle_lt
+theorem theorem8_2_perturbationHalfGap_real_maximalAngle_lt
     [FiniteDimensional ℝ E]
     {A K : E →L[ℝ] E} (hA : IsSelfAdjointOperator A) (hK : IsSelfAdjointOperator K)
     {P Q : Submodule ℝ E} [P.HasOrthogonalProjection] [Q.HasOrthogonalProjection]
@@ -361,7 +361,7 @@ theorem theorem8_2_perturbationHalfGap_source_real_maximalAngle_lt
     (hrank : Module.finrank ℝ P = Module.finrank ℝ Q)
     (hsmall : ‖K‖ < delta / 2) :
     maximalAngle P Q < Real.pi / 4 := by
-  have hdir := theorem8_2_perturbationHalfGap_source_real hA hK hdelta hab hQ
+  have hdir := theorem8_2_perturbationHalfGap_real hA hK hdelta hab hQ
     hQperp hPred hP hsmall
   have hlt : subspaceGap P Q < Real.sqrt 2 / 2 := by
     rw [subspaceGap_eq_directedGap_of_finrank_eq P Q hrank]
@@ -376,7 +376,7 @@ to Theorem 8.2's printed disjunction: either printed smallness alternative, plus
 (3.5) in its constructive form, gives the printed symmetric conclusion with
 **no** finite-dimensionality and **no** rank hypothesis, over `ℝ` exactly as
 over `ℂ`. -/
-theorem theorem8_2_branch_source_real_maximalAngle_lt_of_crossedDefects
+theorem theorem8_2_branch_real_maximalAngle_lt_of_crossedDefects
     {A K : E →L[ℝ] E} (hA : IsSelfAdjointOperator A) (hK : IsSelfAdjointOperator K)
     {P Q : Submodule ℝ E} [P.HasOrthogonalProjection] [Q.HasOrthogonalProjection]
     {alpha beta delta : ℝ} (hdelta : 0 < delta) (hab : beta ≤ alpha)
@@ -389,14 +389,14 @@ theorem theorem8_2_branch_source_real_maximalAngle_lt_of_crossedDefects
       ‖residual (A + K) P.subtypeL (compressOperator P A)‖ < delta / 2) :
     maximalAngle P Q < Real.pi / 4 :=
   maximalAngle_lt_pi_div_four_of_crossedDefects hcross
-    (theorem8_2_branch_source_directed_real hA hK hdelta hab hQ hQperp hPred hP halt)
+    (theorem8_2_branch_directed_real hA hK hdelta hab hQ hQperp hPred hP halt)
 
 /-- **Theorem 8.2's printed disjunction, printed conclusion `Θ < π/4`, over a
 REAL Hilbert space, under the finite form of the standing convention (1.5).**
 
-The real counterpart of `theorem8_2_branch_source_maximalAngle_lt`, and the form
-`theorem8_2_source_real` packages. -/
-theorem theorem8_2_branch_source_real_maximalAngle_lt [FiniteDimensional ℝ E]
+The real counterpart of `theorem8_2_branch_maximalAngle_lt`, and the form
+`theorem8_2_real` packages. -/
+theorem theorem8_2_branch_real_maximalAngle_lt [FiniteDimensional ℝ E]
     {A K : E →L[ℝ] E} (hA : IsSelfAdjointOperator A) (hK : IsSelfAdjointOperator K)
     {P Q : Submodule ℝ E} [P.HasOrthogonalProjection] [Q.HasOrthogonalProjection]
     {alpha beta delta : ℝ} (hdelta : 0 < delta) (hab : beta ≤ alpha)
@@ -409,7 +409,7 @@ theorem theorem8_2_branch_source_real_maximalAngle_lt [FiniteDimensional ℝ E]
       ‖residual (A + K) P.subtypeL (compressOperator P A)‖ < delta / 2) :
     maximalAngle P Q < Real.pi / 4 :=
   maximalAngle_lt_pi_div_four_of_directedGap_lt hrank
-    (theorem8_2_branch_source_directed_real hA hK hdelta hab hQ hQperp hPred hP halt)
+    (theorem8_2_branch_directed_real hA hK hdelta hab hQ hQperp hPred hP halt)
 
 /-! ### 4. The `sin 2Θ` estimates Theorem 8.2 inherits, over `ℝ`
 
@@ -456,11 +456,11 @@ theorem norm_sinTwoAngleOperator_complexifySubmodule (U V : Submodule ℝ E)
 /-- **The `sin 2Θ` estimate at Theorem 8.2's hypotheses, perturbation form, over
 a REAL Hilbert space**: `δ ‖sin 2Θ‖ ≤ 2 ‖H‖`.
 
-The real reading of `theorem8_2_sinTwoTheta_perturbation_source_complex`.  Nothing is
+The real reading of `theorem8_2_sinTwoTheta_perturbation_complex`.  Nothing is
 re-proved: the configuration is complexified, the complex estimate applied, and
 both sides read back by `norm_sinTwoAngleOperator_complexifySubmodule` and
 `norm_complexify`. -/
-theorem theorem8_2_sinTwoTheta_perturbation_source_real
+theorem theorem8_2_sinTwoTheta_perturbation_real
     {A K : E →L[ℝ] E} (hA : IsSelfAdjointOperator A) (hK : IsSelfAdjointOperator K)
     {P Q : Submodule ℝ E} [P.HasOrthogonalProjection] [Q.HasOrthogonalProjection]
     {alpha beta delta : ℝ} (hdelta : 0 < delta) (hab : beta ≤ alpha)
@@ -468,7 +468,7 @@ theorem theorem8_2_sinTwoTheta_perturbation_source_real
     (hQperp : Foundation.SpectrumIn (A + K) Qᗮ (gapExterior beta alpha delta))
     (hPred : A.Reduces P) :
     delta * ‖DavisKahanExt.sinTwoAngleOperator Q P‖ ≤ 2 * ‖K‖ := by
-  have hmain := theorem8_2_sinTwoTheta_perturbation_source_complex
+  have hmain := theorem8_2_sinTwoTheta_perturbation_complex
     (complexify_isSelfAdjointOperator hA) (complexify_isSelfAdjointOperator hK)
     hdelta hab (spectrumIn_complexify_add hQ)
     (spectrumIn_orthogonal_complexify_add hQperp)
@@ -478,13 +478,13 @@ theorem theorem8_2_sinTwoTheta_perturbation_source_real
 /-- **The `sin 2Θ` estimate at Theorem 8.2's hypotheses, residual form, over a
 REAL Hilbert space**: `δ ‖sin 2Θ‖ ≤ 2 ‖R‖` with `R` the printed residual (1.8).
 
-The real reading of `theorem8_2_sinTwoTheta_residual_source_complex`, transported the
+The real reading of `theorem8_2_sinTwoTheta_residual_complex`, transported the
 same way, with the residual norm carried by `norm_residual_complexify`.
 
 As over `ℂ`, the conclusion names the **ambient** `sin 2Θ` of the pair, not the
 directed `sin 2Θ₀` of the printed residual inequality; at the operator norm that
 is the stronger reading. -/
-theorem theorem8_2_sinTwoTheta_residual_source_real
+theorem theorem8_2_sinTwoTheta_residual_real
     {A K : E →L[ℝ] E} (hA : IsSelfAdjointOperator A) (hK : IsSelfAdjointOperator K)
     {P Q : Submodule ℝ E} [P.HasOrthogonalProjection] [Q.HasOrthogonalProjection]
     {alpha beta delta : ℝ} (hdelta : 0 < delta) (hab : beta ≤ alpha)
@@ -493,7 +493,7 @@ theorem theorem8_2_sinTwoTheta_residual_source_real
     (hPred : A.Reduces P) :
     delta * ‖DavisKahanExt.sinTwoAngleOperator Q P‖ ≤
       2 * ‖residual (A + K) P.subtypeL (compressOperator P A)‖ := by
-  have hmain := theorem8_2_sinTwoTheta_residual_source_complex
+  have hmain := theorem8_2_sinTwoTheta_residual_complex
     (complexify_isSelfAdjointOperator hA) (complexify_isSelfAdjointOperator hK)
     hdelta hab (spectrumIn_complexify_add hQ)
     (spectrumIn_orthogonal_complexify_add hQperp)
@@ -536,8 +536,8 @@ a REAL Hilbert space, for every source unitarily invariant norm.**
 
 `δ N(sin 2Θ) ≤ 2 N(H)`, at the paper's own class of unitarily invariant norms
 and at Theorem 8.2's own hypotheses.
-`theorem8_2_sinTwoTheta_perturbation_source_real` is the operator-norm reading of
-the same inheritance, and `theorem8_2_sinTwoTheta_perturbation_source_symmetricNorming`
+`theorem8_2_sinTwoTheta_perturbation_real` is the operator-norm reading of
+the same inheritance, and `theorem8_2_sinTwoTheta_perturbation_symmetricNorming`
 is the complex one.
 
 Nothing is re-proved.  This is equation (7.5) over a real Hilbert space,
@@ -549,7 +549,7 @@ The conclusion names the paper's literal `sin 2Θ`, the real positive operator
 `sinTwoAngleOperatorR Q P`, rather than the modulus-free
 `sinTwoAngleOperator` of the operator-norm statement: only the former carries the
 whole singular-value list that a general unitarily invariant norm reads. -/
-theorem theorem8_2_sinTwoTheta_perturbation_source_real_symmetricNorming
+theorem theorem8_2_sinTwoTheta_perturbation_real_symmetricNorming
     (N : ExactSinTheta.SymmetricNormingFunction)
     {A K : E →L[ℝ] E} (hA : IsSelfAdjointOperator A) (hK : IsSelfAdjointOperator K)
     {P Q : Submodule ℝ E} [P.HasOrthogonalProjection] [Q.HasOrthogonalProjection]
@@ -593,7 +593,7 @@ theorem theorem8_2_sinTwoTheta_perturbation_source_real_symmetricNorming
 a REAL Hilbert space, for every source unitarily invariant norm.**
 
 This is the real source-fidelity counterpart of
-`theorem8_2_sinTwoTheta_residual_source_symmetricNorming`:
+`theorem8_2_sinTwoTheta_residual_symmetricNorming`:
 
 `δ N(sin 2Θ₀) ≤ 2 N(R)`.
 
@@ -604,7 +604,7 @@ Those identities preserve the complete approximation-singular sequences, so
 `SymmetricNormingFunction.mem_complexify_iff`, `gauge_complexify`, and the
 heterogeneous singular-sequence transport return both membership and the norm
 inequality to the real spaces with no loss in the constant. -/
-theorem theorem8_2_sinTwoTheta_residual_source_real_symmetricNorming
+theorem theorem8_2_sinTwoTheta_residual_real_symmetricNorming
     (N : ExactSinTheta.SymmetricNormingFunction)
     {A K : E →L[ℝ] E} (hA : IsSelfAdjointOperator A) (hK : IsSelfAdjointOperator K)
     {P Q : Submodule ℝ E} [P.HasOrthogonalProjection] [Q.HasOrthogonalProjection]
@@ -627,7 +627,7 @@ theorem theorem8_2_sinTwoTheta_residual_source_real_symmetricNorming
           (compressOperator (complexifySubmodule P) (complexify A))) :=
     htransport.1.mp hRmemComplexified
   obtain ⟨hBlockMemC, hboundC⟩ :=
-    theorem8_2_sinTwoTheta_residual_source_symmetricNorming N
+    theorem8_2_sinTwoTheta_residual_symmetricNorming N
       (complexify_isSelfAdjointOperator hA) (complexify_isSelfAdjointOperator hK)
       hdelta hab (spectrumIn_complexify_add hQ)
       (spectrumIn_orthogonal_complexify_add hQperp)
@@ -665,15 +665,15 @@ theorem theorem8_2_sinTwoTheta_residual_source_real_symmetricNorming
 > `[β - δ/2, α + δ/2]`.  Then, in addition to `δ‖sin 2Θ‖ ≤ 2‖H‖` or
 > `δ‖sin 2Θ₀‖ ≤ 2‖R‖`, we have `Θ < π/4`.
 
-The real reading of `theorem8_2_source_complex`, hypothesis for hypothesis and
+The real reading of `theorem8_2_complex`, hypothesis for hypothesis and
 conclusion for conclusion: standing assumption 1 of the source admits a real or
 complex Hilbert space, and Theorem 8.2 supplies both subspaces as data, so the
 descent introduces no hypothesis of its own.
 
 `‖·‖₁` is the bound norm throughout Theorem 8.2, which is what the operator
-norms here are; `theorem8_2_sinTwoTheta_perturbation_source_real_symmetricNorming`
+norms here are; `theorem8_2_sinTwoTheta_perturbation_real_symmetricNorming`
 carries the perturbation estimate at the printed norm scope. -/
-theorem theorem8_2_source_real [FiniteDimensional ℝ E]
+theorem theorem8_2_real [FiniteDimensional ℝ E]
     {A K : E →L[ℝ] E} (hA : IsSelfAdjointOperator A) (hK : IsSelfAdjointOperator K)
     {P Q : Submodule ℝ E} [P.HasOrthogonalProjection] [Q.HasOrthogonalProjection]
     {alpha beta delta : ℝ} (hdelta : 0 < delta) (hab : beta ≤ alpha)
@@ -688,9 +688,9 @@ theorem theorem8_2_source_real [FiniteDimensional ℝ E]
       delta * ‖DavisKahanExt.sinTwoAngleOperator Q P‖ ≤
         2 * ‖residual (A + K) P.subtypeL (compressOperator P A)‖ ∧
       maximalAngle P Q < Real.pi / 4 :=
-  ⟨theorem8_2_sinTwoTheta_perturbation_source_real hA hK hdelta hab hQ hQperp hPred,
-    theorem8_2_sinTwoTheta_residual_source_real hA hK hdelta hab hQ hQperp hPred,
-    theorem8_2_branch_source_real_maximalAngle_lt hA hK hdelta hab hQ hQperp hPred
+  ⟨theorem8_2_sinTwoTheta_perturbation_real hA hK hdelta hab hQ hQperp hPred,
+    theorem8_2_sinTwoTheta_residual_real hA hK hdelta hab hQ hQperp hPred,
+    theorem8_2_branch_real_maximalAngle_lt hA hK hdelta hab hQ hQperp hPred
       hP hrank hsmall⟩
 
 end

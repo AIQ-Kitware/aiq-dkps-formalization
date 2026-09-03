@@ -99,7 +99,7 @@ second mathematical reader, not by the compiler.
 - `theorem5_1_banach_sylvester`: bounded-below `hA` is insufficient on a general
   Banach space — no bounded projection onto the range means no bounded left
   inverse. The faithful hypothesis is an explicit `BoundedLeftInverseData`.
-- `section7_tanTwoTheta_source_ideal`: the printed RHS `2·N.gauge E` is too
+- `section7_tanTwoTheta_ideal`: the printed RHS `2·N.gauge E` is too
   strong; the tangent block carries an intrinsic double-cosine denominator.
 
 ### A7. Fake proofs — a tactic that does not discharge the goal

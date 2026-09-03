@@ -88,14 +88,14 @@ restricted displacement is bounded below by the canonical acute direct
 rotation.  The chosen-defect declaration below carries the full nonacute scope
 of the paper. -/
 alias Proposition4_1_infiniteDimensional :=
-  DavisKahan.Section4.proposition4_1_source_approximationNumbers
+  DavisKahan.Section4.proposition4_1_approximationNumbers
 
 
 /-- **Proposition 4.1 at the nonacute compact scope inherited from Corollary
 3.1.**  A crossed-defect isometry selects the direct rotation when `π/2`
 principal-angle blocks are present. -/
 alias Proposition4_1_infiniteDimensional_nonacute :=
-  DavisKahan.Section4.proposition4_1_nonacute_source_approximationNumbers
+  DavisKahan.Section4.proposition4_1_nonacute_approximationNumbers
 
 section Proposition41VectorForm
 
@@ -441,7 +441,7 @@ invoking the stronger result, which needs neither.
 
 Keeping both is deliberate.  The reusable theorem stays as strong as it is, and
 the canonical source endpoint stays faithful to what Davis and Kahan printed. -/
-theorem Proposition4_2_source_compact_nonacute
+theorem Proposition4_2_compact_nonacute
     (U V : Submodule ℂ H) [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
     (_hcompact : IsCompactOperator (TauCeti.principalSineOperator U V))
     (_J : DavisKahan.halmosSourceDefect U V ≃ₗᵢ[ℂ] DavisKahan.halmosTargetDefect U V)

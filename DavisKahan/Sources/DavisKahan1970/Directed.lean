@@ -11,7 +11,7 @@ import DavisKahan.Sources.DavisKahan1970.SineTheta.Norms.UnitaryInvariantNorm
 
 Theorem 6.3 is printed "for every unitarily invariant norm".  The repository's
 complex directed endpoints
-(`…ExactTanTheta.theorem6_3_infiniteTrial_source_ideal` and its finite-trial
+(`…ExactTanTheta.theorem6_3_infiniteTrial_ideal` and its finite-trial
 siblings) are stated at `KyFanDominantIdealFamily (𝕜 := ℂ)`, while the real
 endpoint `tanTheta_directed_bounded_symmetricNorming_real` is stated at the paper's own
 `SymmetricNormingFunction`.  This module supplies the missing complex half, so
@@ -118,7 +118,7 @@ exhibited and its membership concluded.
 
 Grounded on `tanTheta_directed_bounded_symmetricNorming_complex`; the spectral placement is converted
 to the form bounds by the same two `SpectralOrder.Complex` lemmas the ideal-family
-endpoint `theorem6_3_infiniteTrial_source_ideal` uses. -/
+endpoint `theorem6_3_infiniteTrial_ideal` uses. -/
 theorem tanTheta_directed_bounded_spectralGap_symmetricNorming_complex
     (N : SymmetricNormingFunction)
     (T : H →L[ℂ] H) (hT : T.IsSymmetric)

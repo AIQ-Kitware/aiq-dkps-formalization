@@ -36,7 +36,7 @@ variable (U V : Submodule ℂ H) [U.HasOrthogonalProjection]
 /-- **Davis--Kahan 1970, Corollary 3.2, quarter-turn half.**
 
 Interchanging the subspaces reverses the canonical quarter-turn. -/
-theorem corollary3_2_reversal_source_form
+theorem corollary3_2_reversal_form
     (hacute : IsUniformlyAcute U V) :
     spectraDirectRotation V U (IsUniformlyAcute.symm hacute) =
       star (spectraDirectRotation U V hacute) :=
@@ -61,7 +61,7 @@ theorem corollary3_2_reversal
     DavisKahanExt.sinAngleOperator V U = DavisKahanExt.sinAngleOperator U V ∧
       spectraDirectRotation V U (IsUniformlyAcute.symm hacute) =
         star (spectraDirectRotation U V hacute) :=
-  ⟨corollary3_2_sinAngleOperator_symm U V, corollary3_2_reversal_source_form U V hacute⟩
+  ⟨corollary3_2_sinAngleOperator_symm U V, corollary3_2_reversal_form U V hacute⟩
 
 end DavisKahan1970
 end TauCeti
