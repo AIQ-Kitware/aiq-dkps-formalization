@@ -260,7 +260,7 @@ An independent hostile re-audit on 2026-08-13 confirmed the repaired signatures 
 
 **Selected source-facing Lean declarations:**
 - `TauCeti.DavisKahan1970.corollary3_2_source`
-- `TauCeti.DavisKahan1970.corollary3_2_paperQuarterTurn_symm`
+- `TauCeti.DavisKahan1970.corollary3_2_nonacuteQuarterTurn_symm`
 - `TauCeti.DavisKahan1970.corollary3_2_nonacute_directRotation_resolution`
 - `TauCeti.DavisKahan1970.complex_directRotation_reversal`
 - `TauCeti.DavisKahan1970.real_directRotation_reversal`

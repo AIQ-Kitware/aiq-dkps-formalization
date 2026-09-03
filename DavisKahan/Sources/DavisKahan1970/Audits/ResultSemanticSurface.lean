@@ -343,7 +343,7 @@ Status: **TERMINAL EXACT**.
 -/
 
 #check @TauCeti.DavisKahan1970.corollary3_2_source
-#check @TauCeti.DavisKahan1970.corollary3_2_paperQuarterTurn_symm
+#check @TauCeti.DavisKahan1970.corollary3_2_nonacuteQuarterTurn_symm
 #check @TauCeti.DavisKahan1970.corollary3_2_nonacute_directRotation_resolution
 #check @TauCeti.DavisKahan1970.complex_directRotation_reversal
 #check @TauCeti.DavisKahan1970.real_directRotation_reversal
@@ -401,9 +401,9 @@ Status: **TERMINAL REFUTED + REPAIR**.
 #check @TauCeti.DavisKahan.crossedDefectsEquivalent_of_isAcute
 #check @TauCeti.DavisKahan.crossedDefectsEquivalent_iff_finrank_eq
 #check @TauCeti.DavisKahan1970.approximationNumber_reflectionTangentCorner
-#check @TauCeti.DavisKahan1970.reflectionTangentCorner_reflection_eq_paperTanTwoCorner
-#check @TauCeti.DavisKahan1970.reflectionTangentCorner_same_paperTanTwoDirectedCorner
-#check @TauCeti.DavisKahan1970.tanTwoTheta_directed_unboundedResidual_reducing_paperCorner_symmetricNorming_complex
+#check @TauCeti.DavisKahan1970.reflectionTangentCorner_reflection_eq_tanTwoBlockCompression
+#check @TauCeti.DavisKahan1970.tanTwoDirectedCornerC_sameApproximationSingularSequence_reflectionTangentCorner
+#check @TauCeti.DavisKahan1970.tanTwoTheta_directed_unboundedResidual_reducing_blockCompression_symmetricNorming_complex
 #check @TauCeti.DavisKahan1970.tanTwoTheta_directed_unboundedResidual_reducing_derivedReflection_symmetricNorming_complex
 #check @TauCeti.DavisKahan1970.tanTwoTheta_directed_unboundedResidual_reducing_sineSequence_symmetricNorming_real
 #check @TauCeti.DavisKahan1970.blockCompression_diagonalPair

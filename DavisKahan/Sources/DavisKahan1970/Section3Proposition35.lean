@@ -97,7 +97,7 @@ variable (U V : Submodule 𝕜 H) [U.HasOrthogonalProjection]
 
 /-- The paper's quarter turn for a chosen completed nonacute direct rotation.
 It is defined by the same polar construction as on the acute branch. -/
-noncomputable def corollary3_2_paperQuarterTurn
+noncomputable def corollary3_2_nonacuteQuarterTurn
     (J : halmosSourceDefect U V ≃ₗᵢ[𝕜] halmosTargetDefect U V) :
     H →L[𝕜] H :=
   section3NonacuteQuarterTurn U V J
@@ -109,7 +109,7 @@ theorem equation1_18_directRotation_exponential
     (J : halmosSourceDefect U V ≃ₗᵢ[𝕜] halmosTargetDefect U V) :
     nonacuteDirectRotation U V J =
       NormedSpace.exp
-        (corollary3_2_paperQuarterTurn U V J * proposition3_5_angleOperator U V) := by
+        (corollary3_2_nonacuteQuarterTurn U V J * proposition3_5_angleOperator U V) := by
   change nonacuteDirectRotation U V J =
     NormedSpace.exp
       (section3NonacuteQuarterTurn U V J * section3AngleOperator U V)
@@ -120,8 +120,8 @@ theorem equation1_18_directRotation_resolution
     (J : halmosSourceDefect U V ≃ₗᵢ[𝕜] halmosTargetDefect U V) :
     nonacuteDirectRotation U V J =
       section3CosAngleOperator U V +
-        corollary3_2_paperQuarterTurn U V J ∘L section3SinAngleOperator U V := by
-  simpa [corollary3_2_paperQuarterTurn] using
+        corollary3_2_nonacuteQuarterTurn U V J ∘L section3SinAngleOperator U V := by
+  simpa [corollary3_2_nonacuteQuarterTurn] using
     nonacuteDirectRotation_eq_cos_add_quarterTurn_sin U V J
 
 /-- The defining polar resolution of the quarter turn used by Proposition 3.5:
@@ -164,8 +164,8 @@ theorem corollary3_2_nonacute_directRotation_resolution
     (J : halmosSourceDefect U V ≃ₗᵢ[𝕜] halmosTargetDefect U V) :
     nonacuteDirectRotation U V J =
       section3CosAngleOperator U V +
-        corollary3_2_paperQuarterTurn U V J ∘L section3SinAngleOperator U V := by
-  simpa [corollary3_2_paperQuarterTurn] using
+        corollary3_2_nonacuteQuarterTurn U V J ∘L section3SinAngleOperator U V := by
+  simpa [corollary3_2_nonacuteQuarterTurn] using
     nonacuteDirectRotation_eq_cos_add_quarterTurn_sin U V J
 
 
@@ -174,16 +174,16 @@ theorem corollary3_2_nonacute_directRotation_exponential
     (J : halmosSourceDefect U V ≃ₗᵢ[𝕜] halmosTargetDefect U V) :
     nonacuteDirectRotation U V J =
       NormedSpace.exp
-        (corollary3_2_paperQuarterTurn U V J * proposition3_5_angleOperator U V) :=
+        (corollary3_2_nonacuteQuarterTurn U V J * proposition3_5_angleOperator U V) :=
   equation1_18_directRotation_exponential U V J
 
 /-- Reversing the ordered pair and the crossed-defect choice negates the paper's
 quarter turn. -/
-theorem corollary3_2_paperQuarterTurn_symm
+theorem corollary3_2_nonacuteQuarterTurn_symm
     (J : halmosSourceDefect U V ≃ₗᵢ[𝕜] halmosTargetDefect U V) :
-    corollary3_2_paperQuarterTurn V U (swapCrossedDefectEquiv U V J) =
-      -corollary3_2_paperQuarterTurn U V J := by
-  rw [corollary3_2_paperQuarterTurn, corollary3_2_paperQuarterTurn,
+    corollary3_2_nonacuteQuarterTurn V U (swapCrossedDefectEquiv U V J) =
+      -corollary3_2_nonacuteQuarterTurn U V J := by
+  rw [corollary3_2_nonacuteQuarterTurn, corollary3_2_nonacuteQuarterTurn,
     section3NonacuteQuarterTurn, section3NonacuteQuarterTurn]
   have hW := nonacuteDirectRotation_swap U V J
   have hC := section3CosAngleOperator_symm U V
@@ -213,12 +213,12 @@ adjoint. -/
 theorem corollary3_2_source
     (J : halmosSourceDefect U V ≃ₗᵢ[𝕜] halmosTargetDefect U V) :
     proposition3_5_angleOperator V U = proposition3_5_angleOperator U V ∧
-      corollary3_2_paperQuarterTurn V U (swapCrossedDefectEquiv U V J) =
-        -corollary3_2_paperQuarterTurn U V J ∧
+      corollary3_2_nonacuteQuarterTurn V U (swapCrossedDefectEquiv U V J) =
+        -corollary3_2_nonacuteQuarterTurn U V J ∧
       nonacuteDirectRotation V U (swapCrossedDefectEquiv U V J) =
         star (nonacuteDirectRotation U V J) :=
   ⟨section3AngleOperator_symm U V,
-    corollary3_2_paperQuarterTurn_symm U V J,
+    corollary3_2_nonacuteQuarterTurn_symm U V J,
     nonacuteDirectRotation_swap U V J⟩
 
 /-- Reversal symmetry for the general chosen-defect quarter-turn construction.
@@ -271,7 +271,7 @@ theorem proposition3_5_commutations
     (J : halmosSourceDefect U V ≃ₗᵢ[𝕜] halmosTargetDefect U V) :
     Commute (proposition3_5_angleOperator U V) (TauCeti.DavisKahan.projection U) ∧
       Commute (proposition3_5_angleOperator U V) (TauCeti.DavisKahan.projection V) ∧
-      Commute (proposition3_5_angleOperator U V) (corollary3_2_paperQuarterTurn U V J) ∧
+      Commute (proposition3_5_angleOperator U V) (corollary3_2_nonacuteQuarterTurn U V J) ∧
       Commute (proposition3_5_angleOperator U V) (nonacuteDirectRotation U V J) :=
   ⟨section3AngleOperator_comm_projection U V,
     section3AngleOperator_comm_projection_right U V,

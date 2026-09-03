@@ -821,7 +821,7 @@ directed double-angle sine already accepted on `S2-sin-two-theta`, where
 
 **The chain, composed in Lean.** Over `ℂ`: `ReflectionIntertwines.ofReducesSubspace`
 turns the printed reducing-subspace hypothesis into the intertwiner the engine
-`..._reducing_derivedReflection_...` takes; `reflectionTangentCorner_reflection_eq_paperTanTwoCorner`
+`..._reducing_derivedReflection_...` takes; `reflectionTangentCorner_reflection_eq_tanTwoBlockCompression`
 and `blockCompression_diagonalPair` identify the reflection tangent corner with the
 compression of the paper's block; `mem_projectionBlock_iff_mem_blockCompression`
 and `gauge_projectionBlock_eq_blockCompression` (three lines each, from

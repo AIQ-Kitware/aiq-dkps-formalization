@@ -356,7 +356,7 @@ class RepresentationChangeMustBeBridged(unittest.TestCase):
         """The 2026-09-02 morning defect: a witness registered beside a theorem that never used it."""
         data = inventory()
         clause = self._clause(data, "directed.complex")
-        other = "TauCeti.DavisKahan1970.reflectionTangentCorner_same_paperTanTwoDirectedCorner"
+        other = "TauCeti.DavisKahan1970.tanTwoDirectedCornerC_sameApproximationSingularSequence_reflectionTangentCorner"
         clause["correspondence_witness"]["declaration"] = other
         clause["correspondence_witness"]["from_object"] = "projectionBlock"
         clause["correspondence_witness"]["to_object"] = "reflectionTangentCorner"
