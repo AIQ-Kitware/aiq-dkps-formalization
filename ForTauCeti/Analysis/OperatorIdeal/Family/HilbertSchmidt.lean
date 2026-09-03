@@ -369,6 +369,84 @@ theorem hilbertSchmidtENorm_le_liminf {ι : Type*} (b : HilbertBasis ι 𝕜 E)
         Filter.liminf_le_liminf (Filter.Eventually.of_forall fun n => by
           rw [hT n]; exact ENNReal.sum_le_tsum s)
 
+
+/-! ### The real-valued norm
+
+The gauge of an operator ideal is `ℝ≥0∞`-valued, because a gauge has to be defined on
+operators outside the ideal.  An estimate *inside* the ideal is an inequality between real
+numbers, and stating it in `ℝ≥0∞` forces every consumer to carry finiteness through
+arithmetic that does not need it.  So the ideal keeps the extended norm and this is its
+real-valued reading, defined on all operators and equal to zero off the ideal.
+
+The two are interchangeable exactly where it matters: `ofReal_hilbertSchmidtNorm` turns a
+real statement into the extended one for a Hilbert--Schmidt operator, and
+`hilbertSchmidtNorm_eq_toReal` is the definition. -/
+
+/-- The real-valued Hilbert--Schmidt norm.  Zero off the ideal. -/
+@[expose]
+noncomputable def hilbertSchmidtNorm (T : E →L[𝕜] F) : ℝ := T.hilbertSchmidtENorm.toReal
+
+omit [CompleteSpace F] in
+theorem hilbertSchmidtNorm_eq_toReal (T : E →L[𝕜] F) :
+    T.hilbertSchmidtNorm = T.hilbertSchmidtENorm.toReal := by
+  rw [hilbertSchmidtNorm]
+
+omit [CompleteSpace F] in
+/-- On the ideal, the real norm determines the extended one. -/
+theorem ofReal_hilbertSchmidtNorm {T : E →L[𝕜] F} (hT : T.IsHilbertSchmidt) :
+    ENNReal.ofReal T.hilbertSchmidtNorm = T.hilbertSchmidtENorm :=
+  ENNReal.ofReal_toReal hT
+
+omit [CompleteSpace F] in
+@[simp] theorem hilbertSchmidtNorm_nonneg (T : E →L[𝕜] F) : 0 ≤ T.hilbertSchmidtNorm :=
+  ENNReal.toReal_nonneg
+
+omit [CompleteSpace F] in
+@[simp] theorem hilbertSchmidtNorm_zero : (0 : E →L[𝕜] F).hilbertSchmidtNorm = 0 := by
+  simp [hilbertSchmidtNorm]
+
+omit [CompleteSpace F] in
+@[simp] theorem hilbertSchmidtNorm_neg (T : E →L[𝕜] F) :
+    (-T).hilbertSchmidtNorm = T.hilbertSchmidtNorm := by
+  simp [hilbertSchmidtNorm]
+
+omit [CompleteSpace F] in
+theorem hilbertSchmidtNorm_smul (c : 𝕜) (T : E →L[𝕜] F) :
+    (c • T).hilbertSchmidtNorm = ‖c‖ * T.hilbertSchmidtNorm := by
+  rw [hilbertSchmidtNorm, hilbertSchmidtENorm_smul, ENNReal.toReal_mul,
+    hilbertSchmidtNorm, enorm_eq_nnnorm, ENNReal.coe_toReal, coe_nnnorm]
+
+/-- **Adjoint invariance**, in `ℝ`. -/
+theorem hilbertSchmidtNorm_adjoint (T : E →L[𝕜] F) :
+    T.adjoint.hilbertSchmidtNorm = T.hilbertSchmidtNorm := by
+  rw [hilbertSchmidtNorm, hilbertSchmidtNorm, hilbertSchmidtENorm_adjoint]
+
+/-- **The triangle inequality**, in `ℝ`, for two Hilbert--Schmidt operators.  Finiteness
+is needed: `ENNReal.toReal` sends `∞` to `0`, so the inequality is false without it. -/
+theorem hilbertSchmidtNorm_add_le {S T : E →L[𝕜] F}
+    (hS : S.IsHilbertSchmidt) (hT : T.IsHilbertSchmidt) :
+    (S + T).hilbertSchmidtNorm ≤ S.hilbertSchmidtNorm + T.hilbertSchmidtNorm := by
+  rw [hilbertSchmidtNorm, hilbertSchmidtNorm, hilbertSchmidtNorm,
+    ← ENNReal.toReal_add hS hT]
+  exact ENNReal.toReal_mono (ENNReal.add_ne_top.2 ⟨hS, hT⟩) (hilbertSchmidtENorm_add_le S T)
+
+/-- **The two-sided ideal bound**, in `ℝ`. -/
+theorem hilbertSchmidtNorm_comp_le (L : F →L[𝕜] G) {T : E →L[𝕜] F}
+    (hT : T.IsHilbertSchmidt) (R : H →L[𝕜] E) :
+    (L ∘L T ∘L R).hilbertSchmidtNorm ≤ ‖L‖ * T.hilbertSchmidtNorm * ‖R‖ := by
+  have hfin : ‖L‖ₑ * T.hilbertSchmidtENorm * ‖R‖ₑ ≠ ∞ :=
+    ENNReal.mul_ne_top (ENNReal.mul_ne_top (by simp) hT) (by simp)
+  have h := ENNReal.toReal_mono hfin (hilbertSchmidtENorm_comp_le L T R)
+  rwa [ENNReal.toReal_mul, ENNReal.toReal_mul, enorm_eq_nnnorm, enorm_eq_nnnorm,
+    ENNReal.coe_toReal, ENNReal.coe_toReal, coe_nnnorm, coe_nnnorm] at h
+
+/-- **The Hilbert--Schmidt norm dominates the operator norm**, in `ℝ`. -/
+theorem norm_le_hilbertSchmidtNorm {T : E →L[𝕜] F} (hT : T.IsHilbertSchmidt) :
+    ‖T‖ ≤ T.hilbertSchmidtNorm := by
+  have h := ENNReal.toReal_mono hT (enorm_le_hilbertSchmidtENorm T)
+  rwa [enorm_eq_nnnorm, ENNReal.coe_toReal, coe_nnnorm] at h
+
+
 end ContinuousLinearMap
 
 namespace TauCeti

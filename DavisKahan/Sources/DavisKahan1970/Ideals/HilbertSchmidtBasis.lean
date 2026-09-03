@@ -576,6 +576,51 @@ theorem hilbertSchmidtENorm_eq_ofReal_paperHilbertSchmidtNorm_real
   hilbertSchmidtENorm_eq_ofReal_paperHilbertSchmidtNorm
     TauCeti.ApproximationNumber.hasMinMaxLowerBound_real A hA
 
+/-! ### The `ℝ` and `ℝ≥0∞` interfaces are the same number
+
+The ideal gauge is `ℝ≥0∞`-valued because a gauge must be defined off the ideal; the
+paper's square norm is a real number because every estimate it appears in is an
+inequality between reals.  These say the two readings agree on the ideal, so a paper
+estimate and an ideal-gauge estimate are interchangeable rather than merely analogous. -/
+
+/-- The paper square norm is the canonical real-valued Hilbert--Schmidt norm. -/
+theorem paperHilbertSchmidtNorm_eq_hilbertSchmidtNorm
+    (hlb : ContinuousLinearMap.HasMinMaxLowerBound 𝕜 F E) (A : F →L[𝕜] E)
+    (hA : IsPaperHilbertSchmidt A) :
+    paperHilbertSchmidtNorm A = A.hilbertSchmidtNorm := by
+  rw [ContinuousLinearMap.hilbertSchmidtNorm_eq_toReal,
+    hilbertSchmidtENorm_eq_ofReal_paperHilbertSchmidtNorm hlb A hA,
+    ENNReal.toReal_ofReal (by rw [paperHilbertSchmidtNorm]; exact Real.sqrt_nonneg _)]
+
+/-- The paper square norm is the canonical real-valued norm, over `ℂ`. -/
+theorem paperHilbertSchmidtNorm_eq_hilbertSchmidtNorm_complex
+    {Ec : Type vE} {Fc : Type vF}
+    [NormedAddCommGroup Ec] [InnerProductSpace ℂ Ec] [CompleteSpace Ec]
+    [NormedAddCommGroup Fc] [InnerProductSpace ℂ Fc] [CompleteSpace Fc]
+    (A : Fc →L[ℂ] Ec) (hA : IsPaperHilbertSchmidt A) :
+    paperHilbertSchmidtNorm A = A.hilbertSchmidtNorm :=
+  paperHilbertSchmidtNorm_eq_hilbertSchmidtNorm
+    ContinuousLinearMap.hasMinMaxLowerBound_complex A hA
+
+/-- The paper square norm is the canonical real-valued norm, over `ℝ`. -/
+theorem paperHilbertSchmidtNorm_eq_hilbertSchmidtNorm_real
+    {Er : Type vE} {Fr : Type vF}
+    [NormedAddCommGroup Er] [InnerProductSpace ℝ Er] [CompleteSpace Er]
+    [NormedAddCommGroup Fr] [InnerProductSpace ℝ Fr] [CompleteSpace Fr]
+    (A : Fr →L[ℝ] Er) (hA : IsPaperHilbertSchmidt A) :
+    paperHilbertSchmidtNorm A = A.hilbertSchmidtNorm :=
+  paperHilbertSchmidtNorm_eq_hilbertSchmidtNorm
+    TauCeti.ApproximationNumber.hasMinMaxLowerBound_real A hA
+
+/-- The paper square energy is the canonical extended norm, squared: the two
+energy interfaces agree without any finiteness hypothesis at all. -/
+theorem paperHilbertSchmidtEnergy_eq_hilbertSchmidtENorm_sq
+    (hlb : ContinuousLinearMap.HasMinMaxLowerBound 𝕜 F E) (A : F →L[𝕜] E) :
+    paperHilbertSchmidtEnergy A = A.hilbertSchmidtENorm ^ (2 : ℝ) := by
+  obtain ⟨w, b, -⟩ := exists_hilbertBasis 𝕜 F
+  rw [A.hilbertSchmidtENorm_rpow_two b, hilbertSchmidtEnergy_eq_basisEnergy hlb b A,
+    hilbertSchmidtBasisEnergy_eq_hilbertSchmidtEnergy]
+
 end
 
 end ExactSinTheta
