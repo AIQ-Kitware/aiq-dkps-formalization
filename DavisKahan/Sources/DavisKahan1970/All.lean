@@ -16,7 +16,6 @@ import DavisKahan.Sources.DavisKahan1970.DirectedUnboundedReal
 import DavisKahan.Sources.DavisKahan1970.DoubleAngleTangentOperator
 import DavisKahan.Sources.DavisKahan1970.GeneralSinTheta
 import DavisKahan.Sources.DavisKahan1970.GeneralSinThetaExtensions
-import DavisKahan.Sources.DavisKahan1970.PaperNormFanDominance
 import DavisKahan.Sources.DavisKahan1970.PartIII
 import DavisKahan.Sources.DavisKahan1970.PartIIIManuscriptSurface
 import DavisKahan.Sources.DavisKahan1970.SineTheta.Presentation
@@ -61,6 +60,7 @@ import DavisKahan.Sources.DavisKahan1970.SinTwoThetaUnboundedDirectedResidual
 import DavisKahan.Sources.DavisKahan1970.SinTwoThetaUnboundedDirectedResidualReal
 import DavisKahan.Sources.DavisKahan1970.SineThetaSourceInventory
 import DavisKahan.Sources.DavisKahan1970.StableRiccatiPair
+import DavisKahan.Sources.DavisKahan1970.SymmetricNormingFanDominance
 import DavisKahan.Sources.DavisKahan1970.TanTheta
 import DavisKahan.Sources.DavisKahan1970.TanThetaAmbient
 import DavisKahan.Sources.DavisKahan1970.TanThetaDirectedUnbounded

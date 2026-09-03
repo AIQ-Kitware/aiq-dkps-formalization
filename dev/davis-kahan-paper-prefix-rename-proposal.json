@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "status": "stage_a_applied",
+  "status": "applied_except_hilbert_schmidt",
   "generated_on": "2026-09-02",
   "purpose": "A census of the `paper`-prefixed declaration names in DavisKahan, and a mechanically applicable rename proposal. Stage A -- the one-sided renames whose targets were unoccupied -- IS APPLIED; see `application_log` and `stage_status` for exactly what, and what remains.",
   "motivation": "The 2026-09-01 rename replaced `PaperUnitaryInvariantNorm` with `SymmetricNormingFunction` because the name recorded provenance where the mathematics had its own name. That decision was never generalised, and `paper` is not in the naming classification's banned-token list, so the rest of the family was left in place. Measured here: of the declarations carrying the token, the great majority contrast with nothing -- there is no other `blockCompression`, `diagonalPair`, or `projectorDifference` in the tree -- so the prefix distinguishes nothing and reads as unfinished. ForTauCeti, the permanent product, already carries none of these names.",
@@ -6042,10 +6042,10 @@
     "embedded_token_remaining_after_repair": 13
   },
   "not_yet_decided": [
-    "Stage A is applied. What remains undecided is the ORDER and content of stages B and C, for which the reviewer has given a recommended sequence: embedded-token residue, then the angle family atomically, then selected-branch tan 2Theta, then the Hilbert-Schmidt and plane migrations.",
-    "The angle-family normalisation moves EXISTING unprefixed declarations, so it is a two-sided rename and cannot be applied by the mechanical map alone; it needs its own pass with a build after each family.",
-    "Whether the Hilbert--Schmidt and plane consolidations happen as part of this campaign or as separate migrations, since they delete concepts rather than rename them.",
-    "Whether the `*RC` angle variants should keep wrapping the directed complex objects, or be re-pointed at the literal ones so that the R and RC families agree. That is a change of statement and needs a mathematical decision, not a rename."
+    "The Hilbert-Schmidt consolidation: a carrier decision (ℝ against ℝ≥0∞) plus generalizing the ℂ-only bridge to `RCLike`. See `hilbert_schmidt_migration_assessment`. This is an API migration, not a naming question.",
+    "Whether the `*RC` angle variants should keep wrapping the directed complex objects or be re-pointed at the literal ones so the R and RC families agree. A change of statement, not of name.",
+    "The presentation marker for the `paperData`/`paperForm` family: `_presentation` against `_bundled`.",
+    "Whether `PlanarModelSpace`, `planarModelE0`, `planarModelE1` and `scalarColumn` should move out of the source-specific `ExactSinTheta` file into a small reusable model-support module, now that Section 7 imports them too. Raised in review 2026-09-02; not blocking the naming pass."
   ],
   "amended_on": "2026-09-02",
   "policy_statement": "Provenance goes in namespaces, modules, docstrings, and source-census metadata. A permanent declaration name describes the mathematical object, or the representation that distinguishes it from another object. Resolving a collision is therefore never a matter of finding a different prefix: where two names collide, the collision is usually exposing an API distinction that should be settled.",
@@ -6415,6 +6415,9 @@
   ],
   "application_log": [
     {
+      "_note": "HISTORICAL, append-only. Read `stage_status` for the current state; entries below describe the day they ran and are not updated afterwards."
+    },
+    {
       "stage": "A",
       "applied_on": "2026-09-02",
       "scope": "257 provenance-only renames whose target name was free, plus the embedded-token repairs.",
@@ -6551,5 +6554,6 @@
     "what_is_already_proved": "The correspondence itself: `hilbertSchmidtEnergy_eq_basisEnergy` gives basis-independence, `hilbertSchmidtENorm_eq_ofReal_paperHilbertSchmidtNorm` and the `IsPaperHilbertSchmidt` iff are proved at ℂ. So the migration is feasible; it is a decision and a generalization away, not an unknown.",
     "scale": "370 use sites across 18 files, including Theorem61, Theorem62, Section6AppendixLeakage and four Sylvester modules.",
     "recommendation": "Settle the carrier first. If the source-facing statements should keep `ℝ`, ForTauCeti needs an `ℝ`-valued norm alongside the `ℝ≥0∞` one and the migration is then mechanical. If they should move to `ℝ≥0∞`, that is a deliberate change to Theorems 6.1 and 6.2 and should be reviewed as such. Renaming the DavisKahan names instead -- to say they are the singular-value definition -- is explicitly what the review did not want, since it would preserve a competing concept under a better name."
-  }
+  },
+  "reading_order": "`stage_status` is the CURRENT state. `application_log` is a HISTORICAL record in chronological order: each entry describes what one pass did on the day it ran, and entries are never edited afterwards, so an early entry saying a stage was not yet applied is a record of that moment, not a claim about today. `not_yet_decided` lists only what is still open."
 }

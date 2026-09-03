@@ -36,7 +36,7 @@ why the record existed.
 ## The two conclusions, and why they are the same theorem
 
 Over `ℂ` the conclusion is the paper's literal object,
-`paperSinAngleOperatorC U V = cfc Real.sin (angleOperatorC U V)`.
+`sinAngleOperatorC U V = cfc Real.sin (angleOperatorC U V)`.
 
 Over `ℝ` there is no continuous functional calculus in this development, and
 building one would be the wrong response: a unitarily invariant norm sees an
@@ -44,8 +44,7 @@ operator only through its complete singular-value sequence.  The real conclusion
 is therefore stated on the **projector difference** `P_V − P_U`, whose
 approximation numbers are the sines of the principal angles.  That is not a
 weaker statement, and it is not a different one:
-`sinAngleOperatorC_eq` and `sinAngleOperatorC` identify the complex angle
-operator with `|P_U − P_V|`, so `proposition6_1_source_projectorDifference_complex`
+`sinAngleOperatorC` is by definition `|P_U − P_V|`, so `proposition6_1_source_projectorDifference_complex`
 below states the *same* conclusion over `ℂ`, and the complex and real surfaces
 are visibly one theorem.
 
@@ -103,8 +102,8 @@ theorem proposition6_1_source_complex
       (PartialMap.boundedReducingBlock B V hV)
       (PartialMap.boundedReducingBlockCompl A U hU) δ)
     (hMem : N.Mem (B - A)) :
-    N.Mem (paperSinAngleOperatorC U V) ∧
-      δ * N.gauge (paperSinAngleOperatorC U V) ≤ N.gauge (B - A) := by
+    N.Mem (sinAngleOperatorC U V) ∧
+      δ * N.gauge (sinAngleOperatorC U V) ≤ N.gauge (B - A) := by
   let P : SymmetricSinThetaProblem (E := E) :=
     { A := A
       B := B
@@ -126,8 +125,7 @@ theorem proposition6_1_source_complex
 
 /-- **Proposition 6.1 over `ℂ`, read on the projector difference.**
 
-`paperSinAngleOperatorC U V` is `|P_U − P_V|`
-(`sinAngleOperatorC_eq`, `sinAngleOperatorC`), and a modulus has the
+`sinAngleOperatorC U V` is `|P_U − P_V|` by definition, and a modulus has the
 singular values of its argument, so this is the same estimate on `P_V − P_U`.
 It is stated because it is the shape the real theorem below has, which is what
 makes the two fields visibly one theorem. -/
@@ -150,7 +148,7 @@ theorem proposition6_1_source_projectorDifference_complex
     proposition6_1_source_complex N hA hB hU hV hδ hgapUV hgapVU hMem
   have hflip : U.starProjection - V.starProjection
       = -(V.starProjection - U.starProjection) := by abel
-  have hext : N.extendedGauge (paperSinAngleOperatorC U V)
+  have hext : N.extendedGauge (sinAngleOperatorC U V)
       = N.extendedGauge (V.starProjection - U.starProjection) := by
     rw [N.gauge_eq_of_sameApproximationSingularValues
       (sin_same_projectionDiff U V), hflip]
@@ -160,7 +158,7 @@ theorem proposition6_1_source_projectorDifference_complex
     have : N.extendedGauge (V.starProjection - U.starProjection) ≠ ⊤ := by
       rw [← hext]; exact hmem
     exact this
-  have hgauge : N.gauge (paperSinAngleOperatorC U V)
+  have hgauge : N.gauge (sinAngleOperatorC U V)
       = N.gauge (V.starProjection - U.starProjection) := by
     unfold SymmetricNormingFunction.gauge
     rw [hext]
@@ -276,8 +274,8 @@ theorem proposition6_1_commonDomain_source_complex
       (TauCeti.LinearPMap.reducingRestriction B V hV)
       (TauCeti.LinearPMap.reducingRestriction A Uᗮ hU.orthogonal) δ)
     (hMem : N.Mem Hop) :
-    N.Mem (paperSinAngleOperatorC U V) ∧
-      δ * N.gauge (paperSinAngleOperatorC U V) ≤ N.gauge Hop := by
+    N.Mem (sinAngleOperatorC U V) ∧
+      δ * N.gauge (sinAngleOperatorC U V) ≤ N.gauge Hop := by
   let P : CommonDomainSymmetricSinThetaProblem (𝕜 := ℂ) (E := E) U V :=
     { A := A
       B := B

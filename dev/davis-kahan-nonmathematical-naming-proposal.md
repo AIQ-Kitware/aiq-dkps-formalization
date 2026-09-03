@@ -4,7 +4,12 @@ Status: **partially_applied** — generated 2026-09-02.
 
 **Applied from this document:**
 
-- 2026-09-02: the 83 mechanically stale `paper` names with computable targets, out of the 96 identified. The other 13 embed a stage-B angle object or a stage-C Hilbert-Schmidt object and resolve with those stages.
+- 2026-09-02: 83 of the 96 mechanically stale `paper` names with computable targets.
+- 2026-09-02: the angle family, atomically -- 90 declarations, two-sided.
+- 2026-09-02: the selected-branch tan 2Theta family -- 5 declarations.
+- 2026-09-02: the plane migration and 8 module renames.
+- 2026-09-02: 9 more names reached by deriving inner tokens from `Is`/`Has`-prefixed renames.
+- 2026-09-02: deleted the two sine `paper*` aliases, renamed `planeE1` to `planarModelE1`, and renamed `PaperNormFanDominance.lean` and `Section9/PaperNumericalResults.lean`.
 
 ## Reviewer's recommended order
 
@@ -15,13 +20,26 @@ Status: **partially_applied** — generated 2026-09-02.
 5. module/file names, once the declaration API is settled
 6. only then revisit the broader `source` and scaffolding census
 
+## `paper` campaign end state
+
+- remaining `paper` declarations: **51**
+- blocked on the Hilbert–Schmidt carrier decision: 28
+- remaining for review: 23
+
+What is left is not residue. `sinTheta_paperData_complex` and `Question10_4_..._paperForm_real` are
+the presentation family and wait on the marker decision; `paperSinAngleOperatorC` and
+`paperDirectedSinAngleOperatorC` are the stage C sine duplicates, which are deletes rather than
+renames; `unboundedSinThetaDataOfPaperCommonDomain` and `HasPaperCommonDomain` are one cluster
+needing a reading of what `paper` qualifies; and three tan 2Theta corner names sit on the open
+directed endpoint.
+
 ## Purpose
 
-A census of declaration names in DavisKahan and ForTauCeti that are motivated by something other
-than the mathematics, and a proposal for each. Nothing here is applied. It is the companion to the
-`paper`-prefix proposal, whose stage A is applied, and it exists because that campaign proved the
-value of censusing before renaming: the first census had a shape gap that a review caught only after
-the fact.
+A census of declaration names in DavisKahan and ForTauCeti motivated by something other than the
+mathematics. The `paper`-residue family HAS BEEN APPLIED; see `applied_from_this_document`. The
+`source` and scaffolding families are PROPOSALS ONLY and none of them has been applied -- the
+`source-provenance` family is explicitly not approved, because a reviewer produced a counterexample
+to the heuristic that generated it.
 
 ## Policy
 

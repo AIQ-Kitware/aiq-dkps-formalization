@@ -54,7 +54,7 @@ property of the scalar field, `HasUnboundedSylvesterKyFan`, exactly as the min--
 bound already is.  Both fields are instances, so at `ℝ` and at `ℂ` the binder is discharged
 by instance search and nothing is assumed that was not already proved.
 
-*The conclusion operator.*  `paperSinAngleOperatorC` is `cfc Real.sin` of the **complex**
+*The conclusion operator.*  `sinAngleOperatorC` is `cfc Real.sin` of the **complex**
 operator angle, and this repository builds no real continuous functional calculus.  So the
 `RCLike`-generic conclusion is carried by `crossSineSum U V`, which
 `crossSineSum_same_projectionDiff` gives exactly the complete
@@ -544,7 +544,7 @@ theorem symmetric_all_kyFan
     (P : CommonDomainSymmetricSinThetaProblem U V) :
     ∀ k,
       P.gap * kyFanApproximationGauge k
-          (TauCeti.DavisKahanExt.paperSinAngleOperatorC U V) ≤
+          (TauCeti.DavisKahanExt.sinAngleOperatorC U V) ≤
         kyFanApproximationGauge k P.perturbation := by
   intro k
   have h := P.symmetric_all_kyFan_crossSineSum k
@@ -560,9 +560,9 @@ relaxed in the same way as those of Theorem 6.1. -/
 theorem result_every_unitarilyInvariantNorm
     (P : CommonDomainSymmetricSinThetaProblem U V)
     (N : SymmetricNormingFunction) (hH : N.Mem P.perturbation) :
-    N.Mem (TauCeti.DavisKahanExt.paperSinAngleOperatorC U V) ∧
+    N.Mem (TauCeti.DavisKahanExt.sinAngleOperatorC U V) ∧
       P.gap * N.gauge
-          (TauCeti.DavisKahanExt.paperSinAngleOperatorC U V) ≤
+          (TauCeti.DavisKahanExt.sinAngleOperatorC U V) ≤
         N.gauge P.perturbation :=
   N.mul_gauge_le_of_all_mul_kyFan_le P.gap_pos hH P.symmetric_all_kyFan
 

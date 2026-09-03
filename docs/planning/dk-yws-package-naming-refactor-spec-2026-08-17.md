@@ -416,7 +416,7 @@ The DK tree contains much more deep implementation history than YWS. The goal he
 | `DavisKahan/Sources/DavisKahan1970/RemainingSourceSurface.lean` | `DavisKahan/Frontier/SourceEndpoints.lean` | move out of production source tree | The file contains open/frontier endpoint signatures and already declares `Frontier.RemainingSourceSurface`; it should not be a production source aggregate member. |
 | `DavisKahan/Sources/DavisKahan1970/Section4FiniteSurface.lean` | `DavisKahan/Sources/DavisKahan1970/Section4FiniteSpecialization.lean` | rename | Its header explicitly says this is a finite specialization, not the Section 4 completion boundary. |
 | `DavisKahan/Sources/DavisKahan1970/Section9/ExampleCertificateSurface.lean` | `DavisKahan/Sources/DavisKahan1970/Section9/Certificate.lean` | rename | The header calls it an end-to-end certificate surface; “FullExample” is completion-state vocabulary. |
-| `DavisKahan/Sources/DavisKahan1970/Section9/PaperNumericalResults.lean` | `DavisKahan/Sources/DavisKahan1970/Section9/NumericalResults.lean` | rename | The enclosing package is already the paper source package. |
+| `DavisKahan/Sources/DavisKahan1970/Section9/NumericalResults.lean` | `DavisKahan/Sources/DavisKahan1970/Section9/NumericalResults.lean` | rename | The enclosing package is already the paper source package. |
 | `DavisKahan/Sources/DavisKahan1970/Sylvester/PaperHilbertSchmidt.lean` | `DavisKahan/Sources/DavisKahan1970/Sylvester/Section5HilbertSchmidt.lean` | rename | It implements source inequality (5.1); section identity is more informative than `Paper`. |
 | `DavisKahan/Sources/DavisKahan1970/Sylvester/PaperOperatorNorm.lean` | `DavisKahan/Sources/DavisKahan1970/Sylvester/Section5OperatorNorm.lean` | rename | It implements source inequality (5.2). |
 | `DavisKahan/Sources/DavisKahan1970/Audits/SineThetaSourceInventory.lean` | `DavisKahan/Sources/DavisKahan1970/Audits/SineThetaSourceCoverage.lean` | rename | Audit role, not completion state. |
@@ -444,7 +444,7 @@ git mv DavisKahan/Sources/DavisKahan1970/Section4FiniteSurface.lean   DavisKahan
 
 git mv DavisKahan/Sources/DavisKahan1970/Section9/ExampleCertificateSurface.lean   DavisKahan/Sources/DavisKahan1970/Section9/Certificate.lean
 
-git mv DavisKahan/Sources/DavisKahan1970/Section9/PaperNumericalResults.lean   DavisKahan/Sources/DavisKahan1970/Section9/NumericalResults.lean
+git mv DavisKahan/Sources/DavisKahan1970/Section9/NumericalResults.lean   DavisKahan/Sources/DavisKahan1970/Section9/NumericalResults.lean
 
 git mv DavisKahan/Sources/DavisKahan1970/Sylvester/PaperHilbertSchmidt.lean   DavisKahan/Sources/DavisKahan1970/Sylvester/Section5HilbertSchmidt.lean
 

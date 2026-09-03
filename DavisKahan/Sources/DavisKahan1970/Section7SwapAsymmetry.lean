@@ -78,9 +78,9 @@ theorem section7SwapA_complement_block (delta : ℝ) :
       ((delta : ℝ) : ℂ) • planarComplementMap := by
   ext i
   fin_cases i
-  · simp [section7SwapA, planarAmbient, planeE1,
+  · simp [section7SwapA, planarAmbient, planarModelE1,
       Matrix.toLpLin_apply]
-  · simp [section7SwapA, planarAmbient, planeE1,
+  · simp [section7SwapA, planarAmbient, planarModelE1,
       Matrix.toLpLin_apply]
 
 /-- The perturbed operator fixes the line at angle `pi / 4`; hence that line is
@@ -91,10 +91,10 @@ theorem section7SwapPerturbed_trial_eigenline :
   ext i
   fin_cases i
   · simp [section7SwapPerturbed, planarTrialMap, scalarColumn,
-      planarModelE0, planeE1, Matrix.toLpLin_apply,
+      planarModelE0, planarModelE1, Matrix.toLpLin_apply,
       Real.sin_pi_div_four, Real.cos_pi_div_four]
   · simp [section7SwapPerturbed, planarTrialMap, scalarColumn,
-      planarModelE0, planeE1, Matrix.toLpLin_apply,
+      planarModelE0, planarModelE1, Matrix.toLpLin_apply,
       Real.sin_pi_div_four, Real.cos_pi_div_four]
 
 /-- The residual row for the coordinate trial line is the unit complementary
@@ -111,11 +111,11 @@ theorem section7SwapResidual_identity :
   fin_cases i
   · simp [section7SwapPerturbed, section7SwapResidual,
       planarExactMap, planarComplementMap, scalarColumn,
-      planarTrialOperator, planarModelE0, planeE1,
+      planarTrialOperator, planarModelE0, planarModelE1,
       Matrix.toLpLin_apply]
   · simp [section7SwapPerturbed, section7SwapResidual,
       planarExactMap, planarComplementMap, scalarColumn,
-      planarTrialOperator, planarModelE0, planeE1,
+      planarTrialOperator, planarModelE0, planarModelE1,
       Matrix.toLpLin_apply]
 
 /-- A singular-value representative of the directed `sin 2 Theta_0` block.

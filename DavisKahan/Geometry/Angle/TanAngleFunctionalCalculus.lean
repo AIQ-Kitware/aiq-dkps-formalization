@@ -224,8 +224,8 @@ theorem directedCosAngleOperatorC_mul_directedTanAngleOperatorC (U V : Submodule
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
     (hlt : ‖sinAngleOperatorC U V‖ < 1) :
     cosAngleOperatorC U V * tanAngleOperatorC U V =
-      paperSinAngleOperatorC U V := by
-  rw [cosAngleOperatorC, tanAngleOperatorC, paperSinAngleOperatorC,
+      sinAngleOperatorC U V := by
+  rw [cosAngleOperatorC, tanAngleOperatorC, ← cfc_sin_angleOperatorC,
     ← cfc_mul Real.cos Real.tan (angleOperatorC U V)
       Real.continuous_cos.continuousOn
       (Real.continuousOn_tan.mono (by

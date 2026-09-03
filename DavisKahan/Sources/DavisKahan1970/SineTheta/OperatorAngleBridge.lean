@@ -136,31 +136,15 @@ theorem cfc_sin_directedAngleOperatorC
     _ = TauCeti.DavisKahanExt.directedSinAngleOperatorC U V :=
       cfc_id' ℝ _
 
-/-- Literal `sin Theta0`. -/
-noncomputable def paperDirectedSinAngleOperatorC
-    (U V : Submodule ℂ E)
-    [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] : E →L[ℂ] E :=
-  cfc Real.sin (directedAngleOperatorC U V)
-
-/-- The paper's directed complex sine-angle operator agrees with the canonical one. -/
-@[simp]
-theorem directedSinAngleOperatorC_eq
-    (U V : Submodule ℂ E)
-    [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] :
-    paperDirectedSinAngleOperatorC U V =
-      TauCeti.DavisKahanExt.directedSinAngleOperatorC U V :=
-  cfc_sin_directedAngleOperatorC U V
-
 /-- The directed literal sine has exactly the singular values of the cross
 projection `P_(V complement) P_U`, as in the paper. -/
 theorem directedSin_same_crossProjection
     (U V : Submodule ℂ E)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] :
     SameApproximationSingularValues
-      (paperDirectedSinAngleOperatorC U V)
+      (TauCeti.DavisKahanExt.directedSinAngleOperatorC U V)
       (Vᗮ.starProjection ∘L U.starProjection) := by
-  rw [directedSinAngleOperatorC_eq,
-    TauCeti.DavisKahanExt.directedSinAngleOperatorC]
+  rw [TauCeti.DavisKahanExt.directedSinAngleOperatorC]
   exact modulus_hasSameApproximationNumbers _
 
 /-- The whole-space literal sine has exactly the singular values of the
@@ -169,10 +153,9 @@ theorem sin_same_projectionDiff
     (U V : Submodule ℂ E)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] :
     SameApproximationSingularValues
-      (TauCeti.DavisKahanExt.paperSinAngleOperatorC U V)
+      (TauCeti.DavisKahanExt.sinAngleOperatorC U V)
       (U.starProjection - V.starProjection) := by
-  rw [TauCeti.DavisKahanExt.sinAngleOperatorC_eq,
-    TauCeti.DavisKahanExt.sinAngleOperatorC]
+  rw [TauCeti.DavisKahanExt.sinAngleOperatorC]
   exact modulus_hasSameApproximationNumbers _
 
 /-- Negation changes no approximation singular value. -/
@@ -192,7 +175,7 @@ theorem crossSineSum_same_literalSin
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] :
     SameApproximationSingularValues
       (crossSineSum U V)
-      (TauCeti.DavisKahanExt.paperSinAngleOperatorC U V) := by
+      (TauCeti.DavisKahanExt.sinAngleOperatorC U V) := by
   refine (crossSineSum_same_projectionDiff U V).trans
     (SameApproximationSingularValues.trans ?_
       (sin_same_projectionDiff U V).symm)

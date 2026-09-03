@@ -18,7 +18,7 @@ This is the real-scalar sibling of
 of the transcription allows the ambient space to be real or complex, and
 assumption 4 allows infinite dimension; the complex file covers only half of
 that scope because its *conclusion* is phrased through
-`paperSinAngleOperatorC`, which is `cfc Real.sin` of the complex operator angle.
+`sinAngleOperatorC`, which is `cfc Real.sin` of the complex operator angle.
 
 The mathematics is not reopened here.  The proof is the paper's, step for step,
 and it is the same proof the complex file runs:
