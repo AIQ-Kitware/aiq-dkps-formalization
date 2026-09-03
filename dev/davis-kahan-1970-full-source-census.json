@@ -8,6 +8,12 @@
     "distributable_source_specification": "prose/distilled_literature/DavisKahan1970_part_III.tex"
   },
   "how_to_use": "Independent statement audit and Lean-evidence registry. `prose/distilled_literature/DavisKahan1970_part_III.tex` is the checked-in distributable source-order mathematical specification. Its `DK-CERT` passages are independently worded, source-faithful reconstructions; `dev/davis-kahan-1970-statement-map.json` hashes those passages and binds the 50 organizational rows to Lean evidence. `scripts/check_davis_kahan_1970_statement_map.py` validates that checked-in relationship without any private transcription, and `scripts/certify_davis_kahan_1970.py --clean` adds compiler-printed declaration types. A private transcription or lawful copy of the paper may be used separately to re-audit the distillation itself, but is not a repository-check dependency.\n\nThe 50 row statuses and completion_certification fields below are retained as legacy diagnostic triage from the broader hostile audit; they DO NOT define the 100% denominator. The exhaustive disclosure surface is `dev/davis-kahan-1970-source-atom-inventory.json` (275 atoms, including all 64 numbered equations). Every atom has a specific boundary reason and reverse link to counted results. The sole completion denominator is `dev/davis-kahan-1970-formalization-result-inventory.json`: exactly 29 results Davis--Kahan actually establish (four Section 2 headline theorems plus every named theorem/proposition/lemma/corollary in Sections 3--8). Each result has an accepted printed-statement boundary review.\n\nFor the 100% claim, only those 29 result entries matter. A true result must have exact source-facing Lean evidence at full printed scope, `proved_in_build`, and hostile semantic acceptance. A false counted result requires exact formal refutation plus the repository best-effort repair disposition. Definitions, proof equations, examples, Section 9 worked calculations, historical/external claims, Section 10 questions, and explicitly unresolved/deferred assertions remain visible source-fidelity material but are not additional proof obligations. Question 10.4 is therefore fidelity-only despite the established identities in its motivating discussion. Use `scripts/check_davis_kahan_1970_result_inventory.py` for the maintained denominator and boundary accounting; use `--require-terminal` on the statement-map checker for the final hard 29-result gate.\n\nThe `importance` field is an external-review priority, not a proof-status axis. `headline` is the deliberately small default semantic-alignment surface; `major` expands it to other important named results without changing the full census.",
+  "result_inventory": {
+    "path": "davis-kahan-1970-formalization-result-inventory.json",
+    "collection": "results",
+    "key": "id",
+    "why": "The census row records source-fidelity bookkeeping for a whole passage. Whether the printed result it contains has passed hostile semantic review is the separate judgement kept in the 29-result inventory, and the alignment browser must show both."
+  },
   "status_definitions": {
     "compiled_exact": "An exact source-facing theorem or construction is compiled on the base.",
     "compiled_specialization": "A useful compiled specialization exists, but not the full source scope.",
@@ -1341,7 +1347,8 @@
             "source_fragment": "printed",
             "lean_declarations": [
               "TauCeti.DavisKahan1970.tanTwoTheta_branchFree_bounded_finiteSubspace_symmetricNorming_rclike"
-            ]
+            ],
+            "source_excerpt": "\\boxed{\\delta\\norm{\\tan(2\\Theta)}\\le2\\norm{H}}"
           },
           {
             "source_clause": "delta ||tan(2 Theta0)|| <= 2 ||R|| in the source-shaped U,V corner notation.",
@@ -1379,7 +1386,8 @@
               "TauCeti.DavisKahan.complexify_sinTwoThetaIdealBlock",
               "TauCeti.DavisKahan.ExactSinTheta.ComplexificationApproximation.approximationSingularValue_complexify",
               "TauCeti.DavisKahan1970.norm_offDiagonalPart_reflectionOperator_complexifySubmodule"
-            ]
+            ],
+            "source_excerpt": "\\boxed{\\delta\\norm{\\tan(2\\Theta_0)}\\le2\\norm{R}}"
           },
           {
             "source_clause": "Infinite-dimensional/unbounded scope.",
