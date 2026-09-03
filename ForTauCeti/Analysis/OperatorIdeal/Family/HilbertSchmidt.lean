@@ -257,6 +257,81 @@ theorem hilbertSchmidtENorm_comp_le (L : F →L[𝕜] G) (T : E →L[𝕜] F) (R
   gcongr
   exact L.hilbertSchmidtENorm_comp_left_le T
 
+/-! ### Closure properties of the class
+
+The Hilbert--Schmidt operators form a self-adjoint two-sided ideal, and each of the
+closure facts below is the corresponding `hilbertSchmidtENorm` estimate read as a
+finiteness statement.  Nothing here needs a basis, a choice, or spectral theory: the
+`ℝ≥0∞`-valued norm already carries all of it.
+-/
+
+omit [CompleteSpace F] in
+/-- The zero operator is Hilbert--Schmidt. -/
+@[simp] theorem isHilbertSchmidt_zero : (0 : E →L[𝕜] F).IsHilbertSchmidt := by
+  simp [IsHilbertSchmidt]
+
+omit [CompleteSpace F] in
+/-- Negation does not change the class. -/
+@[simp] theorem isHilbertSchmidt_neg_iff (T : E →L[𝕜] F) :
+    (-T).IsHilbertSchmidt ↔ T.IsHilbertSchmidt := by
+  rw [IsHilbertSchmidt, IsHilbertSchmidt, hilbertSchmidtENorm_neg]
+
+omit [CompleteSpace F] in
+/-- A scalar multiple of a Hilbert--Schmidt operator is Hilbert--Schmidt. -/
+theorem IsHilbertSchmidt.smul {T : E →L[𝕜] F} (hT : T.IsHilbertSchmidt) (c : 𝕜) :
+    (c • T).IsHilbertSchmidt := by
+  rw [IsHilbertSchmidt, hilbertSchmidtENorm_smul]
+  exact ENNReal.mul_ne_top (by simp) hT
+
+omit [CompleteSpace F] in
+/-- Scaling by a nonzero scalar does not change the class. -/
+theorem isHilbertSchmidt_smul_iff {c : 𝕜} (hc : c ≠ 0) (T : E →L[𝕜] F) :
+    (c • T).IsHilbertSchmidt ↔ T.IsHilbertSchmidt := by
+  refine ⟨fun h => ?_, fun h => h.smul c⟩
+  have := h.smul c⁻¹
+  rwa [smul_smul, inv_mul_cancel₀ hc, one_smul] at this
+
+/-- **The class is closed under addition**, by the triangle inequality. -/
+theorem IsHilbertSchmidt.add {S T : E →L[𝕜] F}
+    (hS : S.IsHilbertSchmidt) (hT : T.IsHilbertSchmidt) : (S + T).IsHilbertSchmidt :=
+  ne_top_of_le_ne_top (ENNReal.add_ne_top.2 ⟨hS, hT⟩) (hilbertSchmidtENorm_add_le S T)
+
+/-- **The class is closed under subtraction.** -/
+theorem IsHilbertSchmidt.sub {S T : E →L[𝕜] F}
+    (hS : S.IsHilbertSchmidt) (hT : T.IsHilbertSchmidt) : (S - T).IsHilbertSchmidt := by
+  rw [sub_eq_add_neg]
+  exact hS.add ((isHilbertSchmidt_neg_iff T).2 hT)
+
+/-- **The class is self-adjoint.** -/
+@[simp] theorem isHilbertSchmidt_adjoint_iff (T : E →L[𝕜] F) :
+    T.adjoint.IsHilbertSchmidt ↔ T.IsHilbertSchmidt := by
+  rw [IsHilbertSchmidt, IsHilbertSchmidt, hilbertSchmidtENorm_adjoint]
+
+/-- Postcomposition with a bounded operator stays in the class. -/
+theorem IsHilbertSchmidt.comp_left {T : E →L[𝕜] F} (hT : T.IsHilbertSchmidt)
+    (A : F →L[𝕜] G) : (A ∘L T).IsHilbertSchmidt :=
+  ne_top_of_le_ne_top (ENNReal.mul_ne_top (by simp) hT)
+    (hilbertSchmidtENorm_comp_left_le A T)
+
+/-- Precomposition with a bounded operator stays in the class. -/
+theorem IsHilbertSchmidt.comp_right {T : F →L[𝕜] G} (hT : T.IsHilbertSchmidt)
+    (B : E →L[𝕜] F) : (T ∘L B).IsHilbertSchmidt :=
+  ne_top_of_le_ne_top (ENNReal.mul_ne_top hT (by simp))
+    (hilbertSchmidtENorm_comp_right_le T B)
+
+/-- **The two-sided ideal property**, as a statement about the class. -/
+theorem IsHilbertSchmidt.comp {T : E →L[𝕜] F} (hT : T.IsHilbertSchmidt)
+    (L : F →L[𝕜] G) (R : H →L[𝕜] E) : (L ∘L T ∘L R).IsHilbertSchmidt :=
+  (hT.comp_left L).comp_right R
+
+/-- **Every operator out of a finite-dimensional space is Hilbert--Schmidt**: the column
+sum has finitely many terms.  This is the entry point a finite-dimensional argument needs,
+and it is why the finite-dimensional theory never has to mention the class at all. -/
+theorem isHilbertSchmidt_of_finiteDimensional [FiniteDimensional 𝕜 E] (T : E →L[𝕜] F) :
+    T.IsHilbertSchmidt :=
+  (T.isHilbertSchmidt_iff_summable
+    (stdOrthonormalBasis 𝕜 E).toHilbertBasis).2 (summable_of_hasFiniteSupport (Set.toFinite _))
+
 /-- **Fatou for the Hilbert--Schmidt gauge.**  The gauge is lower semicontinuous along
 operator-norm convergence: if `T i → T` pointwise on a basis, the limit's energy is at most
 the `liminf` of the energies.
