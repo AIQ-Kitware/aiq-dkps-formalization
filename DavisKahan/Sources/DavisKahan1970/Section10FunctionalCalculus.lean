@@ -48,7 +48,7 @@ f(A + H) − f(A)              = Q − P                     (ambient)
 The second is the source's `‖Q^⊥E₀‖ = ‖sin Θ₀‖` because `P_{Q^⊥}|_U` — Lean spelling
 `TauCeti.principalSineOperator U V` — *is* the repository's directed sine operator, by
 definition; and the middle member of the source's chain, `f(A+H)E₀ − E₀f(A₀)`, is recovered
-by `Question10_4_directed_functionalChange_paperForm_complex` using `f(A₀) = 1`.
+by `Question10_4_directed_functionalCalculusResidual_complex` using `f(A₀) = 1`.
 
 ## Where the source is doing more than it says, and what this file assumes instead
 
@@ -266,7 +266,7 @@ theorem Question10_4_directed_functionalChange_complex
 
 `(f(A+H) − f(A))E₀ = f(A+H)E₀ − E₀f(A₀) = −Q^⊥E₀`.  The middle equality is where `f(A₀) = 1`
 is used, exactly as in the source. -/
-theorem Question10_4_directed_functionalChange_paperForm_complex
+theorem Question10_4_directed_functionalCalculusResidual_complex
     {A H : E →L[ℂ] E} (hA : IsSelfAdjoint A) (hH : IsSelfAdjoint H)
     (hAU : ∀ x ∈ U, A x ∈ U) (hAplusH_V : ∀ x ∈ V, (A + H) x ∈ V)
     {β α δ : ℝ} (hδ : 0 < δ)
@@ -429,7 +429,7 @@ theorem Question10_4_directed_functionalChange_real
   abel
 
 /-- **The source's displayed directed chain over `ℝ`**, in the paper's own middle spelling. -/
-theorem Question10_4_directed_functionalChange_paperForm_real
+theorem Question10_4_directed_functionalCalculusResidual_real
     {A H : E →L[ℝ] E} (hA : IsSelfAdjoint A) (hH : IsSelfAdjoint H)
     (hAU : ∀ x ∈ U, A x ∈ U) (hAplusH_V : ∀ x ∈ V, (A + H) x ∈ V)
     {β α δ : ℝ} (hδ : 0 < δ)

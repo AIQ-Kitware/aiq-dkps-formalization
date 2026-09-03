@@ -694,7 +694,7 @@ They are not merely cospectral; they are equal.  Two facts do it:
 So the reflection is invisible to the corner, and what remains on the right is
 the paper's directed corner.  Every symmetric gauge of the two therefore agrees,
 which is what the source-facing bound needs. -/
-theorem reflectionTangentCorner_reflection_eq_paperTanTwoCorner
+theorem reflectionTangentCorner_reflection_eq_tanTwoBlockCompression
     (hinv : IsUnit ((1 : Ea →L[ℂ] Ea) - 2 *
       (projectorDifference U V * projectorDifference U V))) :
     reflectionTangentCorner U V.reflectionOperator
@@ -711,7 +711,7 @@ chain of equalities rather than an appeal to what a unitarily invariant norm can
 or cannot distinguish:
 
 1. the canonical object is the compressed corner of the paper's double-angle
-   block representative (`reflectionTangentCorner_reflection_eq_paperTanTwoCorner`);
+   block representative (`reflectionTangentCorner_reflection_eq_tanTwoBlockCompression`);
 2. that representative is a `diagonalPair`, whose complementary summand a
    compression out of `U` does not see
    (`blockCompression_diagonalPair`), leaving the compressed corner of
@@ -722,14 +722,14 @@ or cannot distinguish:
 The right-hand side is the ambient block spelling the paper-facing directed
 object uses, so a symmetric gauge of the two agrees and the printed norm is the
 one the canonical theorems bound. -/
-theorem reflectionTangentCorner_same_paperTanTwoDirectedCorner
+theorem tanTwoDirectedCornerC_sameApproximationSingularSequence_reflectionTangentCorner
     (hinv : IsUnit ((1 : Ea →L[ℂ] Ea) - 2 *
       (projectorDifference U V * projectorDifference U V))) :
     SameApproximationSingularSequence
       (projectionBlock Uᗮ U
         (2 * (projectorDifference U V * doubleSecant U V)))
       (reflectionTangentCorner U V.reflectionOperator) := by
-  rw [reflectionTangentCorner_reflection_eq_paperTanTwoCorner U V hinv,
+  rw [reflectionTangentCorner_reflection_eq_tanTwoBlockCompression U V hinv,
     tanTwoBlockRepresentative, blockCompression_diagonalPair]
   exact projectionBlock_same_compression Uᗮ U _
 
@@ -746,7 +746,7 @@ corner of the paper's own double-angle block representative.
 
 The arbitrary-`Z` theorem remains as the general result; this is the spelling a
 reviewer compares against Section 2. -/
-theorem tanTwoTheta_directed_unboundedResidual_reducing_paperCorner_symmetricNorming_complex
+theorem tanTwoTheta_directed_unboundedResidual_reducing_blockCompression_symmetricNorming_complex
     (N : SymmetricNormingFunction)
     {A : Ea →ₗ.[ℂ] Ea} {B : Ea →L[ℂ] Ea} {a b : ℝ}
     (hA : IsSelfAdjoint A) (hred : TauCeti.LinearPMap.ReducesSubspace A U)
@@ -775,7 +775,7 @@ theorem tanTwoTheta_directed_unboundedResidual_reducing_paperCorner_symmetricNor
   obtain ⟨-, -, hmem, hle⟩ :=
     tanTwoTheta_directed_unboundedResidual_reducing_derivedReflection_symmetricNorming_complex
       N V hA hred hB hV hUa hUb hab hRmem
-  rw [← reflectionTangentCorner_reflection_eq_paperTanTwoCorner U V hinv]
+  rw [← reflectionTangentCorner_reflection_eq_tanTwoBlockCompression U V hinv]
   exact ⟨hmem, hle⟩
 
 end DirectedCornerCorrespondence
@@ -855,7 +855,7 @@ reflection through `V`; it is derived, not assumed, in
 `tanTwoTheta_directed_unboundedResidual_symmetricNorming_complex`, which also
 restates this identity as its second conjunct.
 
-Chain: `reflectionTangentCorner_reflection_eq_paperTanTwoCorner` and
+Chain: `reflectionTangentCorner_reflection_eq_tanTwoBlockCompression` and
 `blockCompression_diagonalPair` identify the reflection tangent corner with the
 compression of this block; `projectionBlock_same_compression` moves to the
 ambient spelling; `approximationNumber_reflectionTangentCorner` and
@@ -878,7 +878,7 @@ theorem approximationNumber_tanTwoDirectedCorner
     (isUnit_diagonalPart_sq hZ2 hsq)
   have hcorner : reflectionTangentCorner U V.reflectionOperator =
       blockCompression Uᗮ U (2 * (projectorDifference U V * doubleSecant U V)) := by
-    rw [reflectionTangentCorner_reflection_eq_paperTanTwoCorner U V hinv,
+    rw [reflectionTangentCorner_reflection_eq_tanTwoBlockCompression U V hinv,
       tanTwoBlockRepresentative, blockCompression_diagonalPair]
   rw [(projectionBlock_same_compression Uᗮ U _) n, ← hcorner,
     approximationNumber_reflectionTangentCorner hZsa hZ2 hS1 n,
@@ -945,7 +945,7 @@ theorem tanTwoTheta_directed_unboundedResidual_symmetricNorming_complex
     (isUnit_diagonalPart_sq hZ2 hsq)
   have hcorner : reflectionTangentCorner U V.reflectionOperator =
       blockCompression Uᗮ U (2 * (projectorDifference U V * doubleSecant U V)) := by
-    rw [reflectionTangentCorner_reflection_eq_paperTanTwoCorner U V hinv,
+    rw [reflectionTangentCorner_reflection_eq_tanTwoBlockCompression U V hinv,
       tanTwoBlockRepresentative, blockCompression_diagonalPair]
   have hRmem' : N.Mem (blockCompression Uᗮ U B) :=
     (mem_projectionBlock_iff_mem_blockCompression Uᗮ U N B).1 hRmem

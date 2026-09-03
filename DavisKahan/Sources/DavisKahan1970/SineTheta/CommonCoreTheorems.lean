@@ -69,7 +69,7 @@ noncomputable def toUnboundedSinThetaData
     [NormedAddCommGroup H] [InnerProductSpace 𝕜 H] [CompleteSpace H]
     (P : CommonCoreSinThetaData 𝕜 E F G H) :
     UnboundedSinThetaData (𝕜 := 𝕜) (E := E) (F := F) (G := G) :=
-  unboundedSinThetaDataOfPaperCommonCore
+  unboundedSinThetaDataOfCommonCore
     P.A P.A₀ P.Λ₁ P.E₀ P.F₁ P.R P.core_residual P.A_selfAdjoint.isClosed
     P.F₁_maps_domain P.F₁_intertwines
 

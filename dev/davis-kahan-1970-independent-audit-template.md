@@ -1455,13 +1455,13 @@ The declarations that carry this result's printed statement, with the source ato
 - `TauCeti.DavisKahanExt.complexify_absTanTwoAngleOperatorR` — supporting_theorem
 - `TauCeti.DavisKahan1970.tanTwoTheta_ambient_unbounded_blockRepresentative_derivedReflection_symmetricNorming_real` — presentation_wrapper
 - `TauCeti.DavisKahan1970.approximationNumber_reflectionTangentCorner` — source_correspondence
-- `TauCeti.DavisKahan1970.reflectionTangentCorner_reflection_eq_paperTanTwoCorner` — source_correspondence
+- `TauCeti.DavisKahan1970.reflectionTangentCorner_reflection_eq_tanTwoBlockCompression` — source_correspondence
 - `TauCeti.DavisKahan1970.blockCompression_mul_reflectionOperator` — transport_lemma
-- `TauCeti.DavisKahan1970.reflectionTangentCorner_same_paperTanTwoDirectedCorner` — source_correspondence
+- `TauCeti.DavisKahan1970.tanTwoDirectedCornerC_sameApproximationSingularSequence_reflectionTangentCorner` — source_correspondence
 - `TauCeti.DavisKahan1970.blockCompression_diagonalPair` — transport_lemma
 - `TauCeti.DavisKahan1970.tanTwoTheta_directed_unboundedResidual_blockRepresentative_symmetricNorming_complex` — generalization
 - `TauCeti.DavisKahan1970.tanTwoTheta_directed_unboundedResidual_blockRepresentative_symmetricNorming_real` — generalization
-- `TauCeti.DavisKahan1970.tanTwoTheta_directed_unboundedResidual_reducing_paperCorner_symmetricNorming_complex` — presentation_wrapper
+- `TauCeti.DavisKahan1970.tanTwoTheta_directed_unboundedResidual_reducing_blockCompression_symmetricNorming_complex` — presentation_wrapper
 - `TauCeti.DavisKahan1970.tanTwoTheta_directed_unboundedResidual_reducing_derivedReflection_symmetricNorming_complex` — generalization
 - `TauCeti.DavisKahan1970.tanTwoTheta_directed_unboundedResidual_reducing_sineSequence_symmetricNorming_real` — alternative_route
 - `TauCeti.DavisKahan1970.approximationNumber_tanTwoDirectedCorner` — source_correspondence
@@ -1694,7 +1694,7 @@ Source location candidates: `DavisKahan/Sources/DavisKahan1970/TanTwoThetaUnboun
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
-#### `TauCeti.DavisKahan1970.reflectionTangentCorner_reflection_eq_paperTanTwoCorner`
+#### `TauCeti.DavisKahan1970.reflectionTangentCorner_reflection_eq_tanTwoBlockCompression`
 
 Source location candidates: `DavisKahan/Sources/DavisKahan1970/TanTwoThetaUnboundedAmbientExact.lean:697`
 
@@ -1706,7 +1706,7 @@ Source location candidates: `DavisKahan/Sources/DavisKahan1970/TanTwoThetaUnboun
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
-#### `TauCeti.DavisKahan1970.reflectionTangentCorner_same_paperTanTwoDirectedCorner`
+#### `TauCeti.DavisKahan1970.tanTwoDirectedCornerC_sameApproximationSingularSequence_reflectionTangentCorner`
 
 Source location candidates: `DavisKahan/Sources/DavisKahan1970/TanTwoThetaUnboundedAmbientExact.lean:725`
 
@@ -1718,7 +1718,7 @@ Source location candidates: `DavisKahan/Sources/DavisKahan1970/TanTwoThetaUnboun
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
-#### `TauCeti.DavisKahan1970.tanTwoTheta_directed_unboundedResidual_reducing_paperCorner_symmetricNorming_complex`
+#### `TauCeti.DavisKahan1970.tanTwoTheta_directed_unboundedResidual_reducing_blockCompression_symmetricNorming_complex`
 
 Source location candidates: `DavisKahan/Sources/DavisKahan1970/TanTwoThetaUnboundedAmbientExact.lean:749`
 
@@ -2787,7 +2787,7 @@ The declarations that carry this result's printed statement, with the source ato
 
 ### Other registered declarations
 
-- `TauCeti.DavisKahan1970.corollary3_2_paperQuarterTurn_symm` — supporting_theorem
+- `TauCeti.DavisKahan1970.corollary3_2_nonacuteQuarterTurn_symm` — supporting_theorem
 - `TauCeti.DavisKahan1970.corollary3_2_nonacute_directRotation_resolution` — supporting_theorem
 - `TauCeti.DavisKahan1970.complex_directRotation_reversal` — supporting_theorem
 - `TauCeti.DavisKahan1970.real_directRotation_reversal` — supporting_theorem
@@ -2801,7 +2801,7 @@ Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section3Propositi
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
-#### `TauCeti.DavisKahan1970.corollary3_2_paperQuarterTurn_symm`
+#### `TauCeti.DavisKahan1970.corollary3_2_nonacuteQuarterTurn_symm`
 
 Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section3Proposition35.lean:182`
 

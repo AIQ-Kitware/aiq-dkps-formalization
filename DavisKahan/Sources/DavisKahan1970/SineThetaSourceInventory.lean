@@ -177,7 +177,6 @@ alias Theorem6_2_real_boundNorm_of_finiteRank :=
 
 /-! ## Exact unbounded appendix forms -/
 
-alias HasCommonDomain := HasPaperCommonDomain
 alias CommonDomainSinThetaData := CommonDomainSinThetaData
 alias CommonDomainTheorem6_1Data := CommonDomainTheorem61Data
 alias Theorem6_1_commonDomain :=

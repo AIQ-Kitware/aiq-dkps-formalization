@@ -46,7 +46,7 @@ structure CommonDomainSinThetaData
   A₀_selfAdjoint : IsSelfAdjoint A₀
   Λ₁_selfAdjoint : IsSelfAdjoint Λ₁
   exact_decomposition : OrthogonalExactDecomposition F₀ F₁
-  common_domain : HasPaperCommonDomain A A₀ E₀
+  common_domain : HasCommonDomain A A₀ E₀
   F₁_maps_domain : ∀ y : Λ₁.domain, F₁ (y : G) ∈ A.domain
   residual_on_common_domain :
     ∀ x : F, (hx : E₀ x ∈ A.domain) → (hx₀ : x ∈ A₀.domain) →
@@ -67,7 +67,7 @@ noncomputable def toUnboundedSinThetaData
     [NormedAddCommGroup H] [InnerProductSpace 𝕜 H] [CompleteSpace H]
     (P : CommonDomainSinThetaData 𝕜 E F G H) :
     UnboundedSinThetaData (𝕜 := 𝕜) (E := E) (F := F) (G := G) :=
-  unboundedSinThetaDataOfPaperCommonDomain
+  unboundedSinThetaDataOfCommonDomain
     P.A P.A₀ P.Λ₁ P.E₀ P.F₁ P.R P.common_domain
     P.F₁_maps_domain P.residual_on_common_domain P.F₁_intertwines
 

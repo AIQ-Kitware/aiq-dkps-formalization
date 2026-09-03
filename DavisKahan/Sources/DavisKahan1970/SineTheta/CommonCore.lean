@@ -188,7 +188,7 @@ end CommonCoreResidualData
 
 /-- Construct the accepted sine-theta bookkeeping package from a residual
 identity available only on a graph core. -/
-noncomputable def unboundedSinThetaDataOfPaperCommonCore
+noncomputable def unboundedSinThetaDataOfCommonCore
     (A : E →ₗ.[𝕜] E)
     (A₀ : F →ₗ.[𝕜] F)
     (Λ₁ : G →ₗ.[𝕜] G)
@@ -216,7 +216,7 @@ Downstream statements quote the source residual `R`, while the accepted engine
 returns the residual field of the constructed package; without this projection
 the two do not match syntactically. -/
 @[simp]
-theorem unboundedSinThetaDataOfPaperCommonCore_residual
+theorem unboundedSinThetaDataOfCommonCore_residual
     (A : E →ₗ.[𝕜] E)
     (A₀ : F →ₗ.[𝕜] F)
     (Λ₁ : G →ₗ.[𝕜] G)
@@ -225,7 +225,7 @@ theorem unboundedSinThetaDataOfPaperCommonCore_residual
     (hF₁ : ∀ y : Λ₁.domain, F₁ (y : G) ∈ A.domain)
     (hintertwines : ∀ y : Λ₁.domain,
       A ⟨F₁ (y : G), hF₁ y⟩ = F₁ (Λ₁ y)) :
-    (unboundedSinThetaDataOfPaperCommonCore A A₀ Λ₁ X F₁ R C hAclosed hF₁
+    (unboundedSinThetaDataOfCommonCore A A₀ Λ₁ X F₁ R C hAclosed hF₁
       hintertwines).residual = R := rfl
 
 end ExactSinTheta

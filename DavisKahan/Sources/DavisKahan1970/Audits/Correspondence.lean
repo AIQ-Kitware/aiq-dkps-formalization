@@ -20,7 +20,7 @@ namespace ExactSinTheta
 
 #check PartialMap.IsGraphCore
 #check CommonCoreResidualData.extends_to_domain
-#check unboundedSinThetaDataOfPaperCommonCore
+#check unboundedSinThetaDataOfCommonCore
 #check CommonCoreTheorem61Data.result_every_unitarilyInvariantNorm_across
 #check CommonCoreTheorem62Data.result_across
 #check RealCommonCoreTheorem61Data.result_every_unitarilyInvariantNorm_across

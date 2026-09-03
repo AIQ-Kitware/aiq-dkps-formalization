@@ -283,6 +283,17 @@ def tanTwoBlockRepresentative : E →L[ℂ] E :=
   diagonalPair Uᗮ U
     (2 * (projectorDifference U V * doubleSecant U V))
 
+/-- **The directed `tan 2Θ₀` corner, over `ℂ`.**
+
+The `U → Uᗮ` corner of the ambient double-angle tangent, read as an ambient
+operator.  This is the object the paper's directed `tan 2Θ₀` bound is stated on,
+and the complex counterpart of `tanTwoDirectedCornerR`; `tanTwoBlockRepresentative`
+is the same expression carried on both cross blocks, so the two differ exactly by
+which corner is kept. -/
+noncomputable def tanTwoDirectedCornerC : E →L[ℂ] E :=
+  projectionBlock Uᗮ U
+    (2 * (projectorDifference U V * doubleSecant U V))
+
 variable {U V}
 
 omit [CompleteSpace E] in

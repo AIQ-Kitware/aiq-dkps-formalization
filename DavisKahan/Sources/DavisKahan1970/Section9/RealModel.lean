@@ -71,7 +71,7 @@ positive eigenvalues admit the strictly increasing enumeration printed after
 `alpha_{n+3}`; and every positive eigenvalue is geometrically simple.  The last
 clause is essential: enumerating only the set of distinct positive spectral
 values would not justify the paper's strict multiplicity-sensitive indexing. -/
-theorem real_freeBeam_paper_eigenvalue_indexing_source :
+theorem real_freeBeam_eigenvalue_indexing :
     Module.finrank ℝ DavisKahan.FreeBeam.Model.Real.beamTrial = 2 ∧
       (∀ (x : RealBeamL2) (h : x ∈ realBeamOperator.domain),
         realBeamOperator ⟨x, h⟩ = 0 ↔

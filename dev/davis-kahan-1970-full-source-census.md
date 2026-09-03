@@ -806,11 +806,11 @@ AMBIENT CLAUSE REOPENED 2026-08-31 by the coherent-clause audit. The printed sin
 - `TauCeti.DavisKahan1970.tanTwoTheta_ambient_unbounded_blockRepresentative_derivedReflection_symmetricNorming_real`
 - `TauCeti.DavisKahan1970.tanTwoTheta_ambient_unbounded_symmetricNorming_real`
 - `TauCeti.DavisKahan1970.approximationNumber_reflectionTangentCorner`
-- `TauCeti.DavisKahan1970.reflectionTangentCorner_reflection_eq_paperTanTwoCorner`
+- `TauCeti.DavisKahan1970.reflectionTangentCorner_reflection_eq_tanTwoBlockCompression`
 - `TauCeti.DavisKahan1970.blockCompression_mul_reflectionOperator`
-- `TauCeti.DavisKahan1970.reflectionTangentCorner_same_paperTanTwoDirectedCorner`
+- `TauCeti.DavisKahan1970.tanTwoDirectedCornerC_sameApproximationSingularSequence_reflectionTangentCorner`
 - `TauCeti.DavisKahan1970.blockCompression_diagonalPair`
-- `TauCeti.DavisKahan1970.tanTwoTheta_directed_unboundedResidual_reducing_paperCorner_symmetricNorming_complex`
+- `TauCeti.DavisKahan1970.tanTwoTheta_directed_unboundedResidual_reducing_blockCompression_symmetricNorming_complex`
 - `TauCeti.DavisKahan1970.tanTwoTheta_directed_unboundedResidual_symmetricNorming_complex`
 - `TauCeti.DavisKahan1970.tanTwoTheta_directed_unboundedResidual_symmetricNorming_real`
 - `TauCeti.DavisKahan1970.approximationNumber_tanTwoDirectedCorner`
@@ -2630,7 +2630,7 @@ RESIDUAL FIDELITY NOTE: `fixedCosineSubspace` is `ker (cos^2 Theta - c^2)`, and 
 - `TauCeti.DavisKahan1970.real_directRotation_reversal`
 - `TauCeti.DavisKahan1970.corollary3_2_source`
 - `TauCeti.DavisKahan1970.corollary3_2_nonacute_directRotation_resolution`
-- `TauCeti.DavisKahan1970.corollary3_2_paperQuarterTurn_symm`
+- `TauCeti.DavisKahan1970.corollary3_2_nonacuteQuarterTurn_symm`
 
 **Notes.** Direct-rotation reversal is represented; the exact angle/J statement needs a source wrapper.
 
@@ -3483,7 +3483,7 @@ NARROWER GAP CREATED RATHER THAN CLOSED: there is no REAL common-domain Proposit
 
 (a) RESTATED AT THE LEVEL OF A STATEMENT, so it is never again mistaken for apparatus.  The printed text is explicit (L2124): `A_0 <= alpha` and `Lambda_1 >= alpha + delta`, BUT BOTH MAY NOW BE UNBOUNDED -- which is why the spectral resolution and the `Omega(tau) A_0 Omega(tau)` truncation appear at all.  Measured against the build (coordinator-verified, note the paths, which the subagent report gave with an extra `Sources/DavisKahan1970/` segment): `DavisKahan/TanTheta/UnboundedSpectrum.lean:46` has `structure UnboundedTrialBlock` with `domain_le : Z <= A.domain` and `operator : Z ->L[k] Z`, and `DavisKahan/TanTheta/Theorem63TrialData.lean:68` has `action : Z ->L[k] H` and `compression : Z ->L[k] Z`.  So on the TANGENT half unboundedness is permitted only in the ambient `A`; the Ritz compression -- indeed the whole restriction of `A` to `Z` -- is a hypothesis-level BOUNDED operator, and `hCompression` is a form bound on a CLM, strictly narrower than `semibounded above by alpha`.  The missing statement is Theorem 6.3 / the `tan theta` theorem with an UNBOUNDED densely-defined self-adjoint `A_0 : Z ->l.[k] Z`, semibounded above in form (`for all z in A_0.domain, re <A_0 z, z> <= alpha ||z||^2`), `Lambda_1 >= alpha + delta`, bounded residual `R : Z ->L[k] H`, concluding `delta * N.gauge tanTheta_0 <= N.gauge R` for every `KyFanDominantIdealFamily`.
 
-THE CONTRAST THAT SETTLES IT, and it also shows the target is reachable: on the SINE half the paper's generality IS attained.  `CommonDomainSinThetaData` is `[RCLike k]` with `A_0` an unbounded partial map, `R` bounded and `common_domain : HasPaperCommonDomain A A_0 E_0` -- L2118-2120 verbatim -- and `Theorem6_1_real_commonDomain` gives it over R.  A repository-wide search for an unbounded trial compression (`A_0 : ->l.`) puts EVERY hit on the sine side (`SineTheta/CommonDomainTheorems.lean`, `SineTheta/CommonCore*.lean`, `SinTheta/Unbounded/Core.lean`, `SinTheta/Natural/Reducing.lean`, `DoubleAngle/RealUnboundedIdeal.lean`) and NONE under `TanTheta/`.
+THE CONTRAST THAT SETTLES IT, and it also shows the target is reachable: on the SINE half the paper's generality IS attained.  `CommonDomainSinThetaData` is `[RCLike k]` with `A_0` an unbounded partial map, `R` bounded and `common_domain : HasCommonDomain A A_0 E_0` -- L2118-2120 verbatim -- and `Theorem6_1_real_commonDomain` gives it over R.  A repository-wide search for an unbounded trial compression (`A_0 : ->l.`) puts EVERY hit on the sine side (`SineTheta/CommonDomainTheorems.lean`, `SineTheta/CommonCore*.lean`, `SinTheta/Unbounded/Core.lean`, `SinTheta/Natural/Reducing.lean`, `DoubleAngle/RealUnboundedIdeal.lean`) and NONE under `TanTheta/`.
 
 **THE REAL COMMON-DOMAIN PROPOSITION 6.1 ABSENCE IS RE-VERIFIED TRUE 2026-08-10, AND NOW MEASURED RATHER THAN ASSERTED.**  Per policy, absence claims are re-grepped at dispatch, and this one survives -- but the earlier text left it ambiguous whether the real form might already follow by instantiation.  It does not: `DavisKahan/Sources/DavisKahan1970/SineTheta/CommonDomainSymmetric.lean` (524 lines, 15 declarations) is hardwired `[InnerProductSpace C E]` with every field written `(k := C)`, whereas its SIBLING `CommonDomainTheorems.lean` (Theorem 6.1) is already `[RCLike k]` with a real packaging `RealCommonDomainTheorem61Data`.  So the gap is a SCALAR-GENERALITY gap in one module, not a missing theorem -- and, per the owner's standing preference for generalizing in place, the first thing to try is rewriting `CommonDomainSymmetric.lean`'s C binders to `[RCLike k]` KEEPING EVERY NAME, falling back to a real sibling on the `SymmetricReal.lean` pattern only if the proof body turns out to use something C-only.
 
