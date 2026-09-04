@@ -185,6 +185,19 @@
         "canonical_declarations": [
           "DavisKahan1970.sinTheta_unbounded_formGap_symmetricNorming_rclike"
         ],
+        "presentation_declarations": [
+          {
+            "name": "DavisKahan1970.sinTheta_unbounded_intervalExterior_characterizedWitness_rclike",
+            "fronts": [
+              "DavisKahan1970.sinTheta_unbounded_formGap_symmetricNorming_rclike"
+            ],
+            "relation": "specialization",
+            "devices": [
+              "named auxiliary with a defining hypothesis"
+            ],
+            "why": "The operator sin Theta_0 is an explicit parameter and hSinTheta₀ fixes it to its concrete realization (1 - F₀ F₀*) E₀, so the claim after the colon is the printed inequality delta * N(sin Theta_0) <= N(R) itself rather than an inlined operator expression. This is the signature printed in the formalization paper. It buys legibility and costs scope: its separation hypothesis is only the interval/exterior branch of FormBoundedSylvesterGap, so it states strictly less than the canonical theorem, and it concludes the bound alone where the canonical also concludes membership in the norm's ideal. Cite the canonical."
+          }
+        ],
         "supporting_declarations": [
           "DavisKahan1970.sinTheta_unbounded_formGap_symmetricNorming_real",
           "DavisKahan1970.sinTheta_unbounded_formGap_symmetricNorming_complex",
@@ -192,7 +205,6 @@
           "DavisKahan1970.sinTheta_unbounded_formGap_symmetricNorming_real_ofRCLike",
           "TauCeti.DavisKahan1970.sinTheta_unbounded_formGap_symmetricNorming_ofComponents_rclike",
           "TauCeti.DavisKahan1970.sinTheta_unbounded_intervalExterior_symmetricNorming_rclike",
-          "DavisKahan1970.sinTheta_unbounded_intervalExterior_characterizedWitness_rclike",
           "TauCeti.DavisKahan1970.sinTheta_unbounded_formGap_idealFamily_rclike",
           "TauCeti.DavisKahan1970.sinTheta_unbounded_spectralSubspace_complex",
           "TauCeti.DavisKahan1970.sinTheta_unbounded_spectralSubspace_real",

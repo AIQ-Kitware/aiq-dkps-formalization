@@ -111,6 +111,40 @@ the proof dependencies), and one reaches the source-to-Lean lane view scrolled
 to that row. Hovering any name in a rendered statement says what it is; clicking
 it audits it.
 
+### Presentation forms
+
+A theorem usually has two Lean spellings. The **API-canonical** one is what the
+library exports and other proofs cite. A **presentation** one is restated so the
+signature reads like the printed theorem -- Davis--Kahan's
+`sinTheta_unbounded_intervalExterior_characterizedWitness_rclike` takes
+`sinTheta₀` as an explicit argument pinned by a defining hypothesis, so its
+conclusion is the printed `δ‖sin Θ₀‖ ≤ ‖R‖` itself; Yu--Wang--Samworth's
+`theorem2_sinTheta` uses `local notation` for the same purpose. The formalization
+paper prints the presentation form.
+
+A census row records one in `semantic_review.presentation_declarations`:
+
+```json
+{ "name": "…characterizedWitness_rclike",
+  "fronts": ["…formGap_symmetricNorming_rclike"],
+  "relation": "specialization",
+  "devices": ["named auxiliary with a defining hypothesis"],
+  "why": "What the restatement buys, and what it costs." }
+```
+
+`relation` is `equivalent` (same theorem, restated), `specialization` (states
+strictly less), `notation` (same statement, source-facing notation), or
+`unstated`. A bare string is shorthand for a name with nothing else said.
+
+Fronting is a *curatorial* claim about what a statement presents, not about how
+it is proved, so the tools check it against the saved dependency graph and
+report what they find: `delegates` when the presentation form's proof reaches
+the fronted statement, `shared-core` (naming the shared theorem) when both are
+proved from one engine, `independent` when the graph shows neither, and
+`unknown` with no graph. The Davis--Kahan pair is `shared-core`: neither reaches
+the other. Both the static page and the server show the presentation form first
+and the canonical under it.
+
 A review is a claim about a type on the day it was read.  `aiq-lean alignment
 pin <census-or-review>` records the elaborated-type hashes of every declaration
 a review claims (`statement_pins` on the review), and `aiq-lean alignment check`
