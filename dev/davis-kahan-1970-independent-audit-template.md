@@ -4025,12 +4025,9 @@ One row per printed source clause per scalar field.  A clause is `PASS` only whe
 
 | clause | scalar | witness | status |
 | --- | --- | --- | --- |
-| `sylvester-lower-bound.scalar_generic` | scalar_generic | `TauCeti.DavisKahan1970.theorem5_1_banach_sylvester_banachScope_ofProperties` | **PASS** |
-| `sylvester-lower-bound.complex` | complex | `TauCeti.DavisKahan1970.theorem5_1_banach_sylvester_banachScope` | **PASS** |
+| `sylvester-lower-bound.rclike` | rclike | `TauCeti.DavisKahan1970.theorem5_1_banach_sylvester_banachScope` | **PASS** |
 
-**`sylvester-lower-bound.scalar_generic`.** Canonical witness for sylvester-lower-bound at scalar_generic scalar scope, carried over from the pre-clause canonical evidence and re-checked against its compiler-printed type under the coherent model.  SCOPE CORRECTED 2026-09-04: the primary was the normed-space theorem, which never uses completeness and is therefore strictly stronger than the printed statement -- but the printed statement opens 'Let X, Y be BANACH spaces', and canonical evidence is supposed to be the printed statement.  The primary is now the thin wrapper carrying [CompleteSpace X] and [CompleteSpace Y] with the printed hypotheses in printed form (gamma >= 0, an actual two-sided inverse with ||A^-1|| <= (gamma+delta)^-1, and a norm on cross-space maps compatible with the two bound norms).  The normed-space theorem is unchanged and is retained as a generalization.
-
-**`sylvester-lower-bound.complex`.** Canonical witness for sylvester-lower-bound at complex scalar scope, carried over from the pre-clause canonical evidence and re-checked against its compiler-printed type under the coherent model.  SCOPE CORRECTED 2026-09-04: the primary was the normed-space theorem, which never uses completeness and is therefore strictly stronger than the printed statement -- but the printed statement opens 'Let X, Y be BANACH spaces', and canonical evidence is supposed to be the printed statement.  The primary is now the thin wrapper carrying [CompleteSpace X] and [CompleteSpace Y] with the printed hypotheses in printed form (gamma >= 0, an actual two-sided inverse with ||A^-1|| <= (gamma+delta)^-1, and a norm on cross-space maps compatible with the two bound norms).  The normed-space theorem is unchanged and is retained as a generalization.
+**`sylvester-lower-bound.rclike`.** delta * N(X) <= N(C) for A X - X B = C over BANACH spaces (`[CompleteSpace X]`, `[CompleteSpace Y]`), with gamma >= 0, delta > 0, an actual two-sided inverse satisfying ||A^-1|| <= (gamma + delta)^-1, and N a `CompatibleCrossOperatorNorm` -- an actual NORM on cross-space maps (nonnegativity, definiteness, absolute homogeneity, triangle inequality) that is unchanged by contractions on either side, which is the source's 'any norm compatible with those bound norms'.  Real or complex scalars, which is the paper's standing scope.  NORM-AXIOM DEFECT CORRECTED 2026-09-04: the scalar-generic witness registered earlier the same day was `..._ofProperties`, whose `N` is an arbitrary REAL-VALUED FUNCTION satisfying only the four inequalities the proof consumes -- no definiteness and no homogeneity -- so it is a strictly stronger theorem being presented as the printed one, which is the exact defect class the Banach-scope wrapper was added to remove.  It is now `generalization` evidence, and the `CompatibleCrossOperatorNorm` structure and its whole API were generalized from `ℂ` to `[RCLike 𝕜]` so that one witness carries both the printed norm axioms and the printed real-or-complex scope.
 
 Result-wide scope every clause must carry: `DK-5.1-thm.banach-hypotheses`
 
@@ -4038,8 +4035,7 @@ Result-wide scope every clause must carry: `DK-5.1-thm.banach-hypotheses`
 
 The declarations that carry this result's printed statement, with the source atoms each one covers.  Everything under *Other registered declarations* below accompanies the result without establishing it.
 
-- `TauCeti.DavisKahan1970.theorem5_1_banach_sylvester_banachScope_ofProperties` — primary_source_witness, scalar_generic scalars, proof; covers `DK-5.1-thm.banach-hypotheses`, `DK-5.1-thm.sylvester-lower-bound`
-- `TauCeti.DavisKahan1970.theorem5_1_banach_sylvester_banachScope` — primary_source_witness, complex scalars, proof; covers `DK-5.1-thm.banach-hypotheses`, `DK-5.1-thm.sylvester-lower-bound`
+- `TauCeti.DavisKahan1970.theorem5_1_banach_sylvester_banachScope` — primary_source_witness, rclike scalars, proof; covers `DK-5.1-thm.banach-hypotheses`, `DK-5.1-thm.sylvester-lower-bound`
 
 ### Other registered declarations
 
@@ -4048,6 +4044,7 @@ The declarations that carry this result's printed statement, with the source ato
 - `TauCeti.DavisKahan1970.banach_sylvester_lower_bound_unboundedA` — generalization
 - `TauCeti.DavisKahan1970.banach_sylvester_lower_bound_uiNorm` — generalization
 - `TauCeti.DavisKahan1970.banach_sylvester_lower_bound_exact` — generalization
+- `TauCeti.DavisKahan1970.theorem5_1_banach_sylvester_banachScope_ofProperties` — generalization
 
 ### Source-facing Lean declarations
 
@@ -4083,13 +4080,13 @@ Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.theorem5_1_banach_sylvester_banachScope_ofProperties`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section5BanachSylvester.lean:348`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section5BanachSylvester.lean:351`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.theorem5_1_banach_sylvester_banachScope`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section5BanachSylvester.lean:326`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section5BanachSylvester.lean:329`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
