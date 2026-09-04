@@ -336,24 +336,32 @@
             "type_expr_hash": "2817030801",
             "type_text_sha256": "1d5cbc0fa5b1cd6dbd4fb35ff4831f7fd327c042badb9d2529c82cf0f308ee62",
             "toolchain": "leanprover/lean4:v4.34.0-rc1",
-            "pinned_on": "2026-09-03",
-            "note": "Pinned 2026-09-03: the S2-sin-theta canonical witness is now the scalar-generic sinTheta_unbounded_formGap_symmetricNorming_rclike, whose signature no longer carries the two proof-capability classes (both are unconditional instances at every RCLike field)."
+            "pinned_on": "2026-09-04",
+            "note": "Pinned 2026-09-04 with the seven Section 3-8 major reviews: their declarations and the passages they cite are now guarded like the four Section 2 headline rows."
+          },
+          {
+            "declaration": "DavisKahan1970.sinTheta_unbounded_intervalExterior_characterizedWitness_rclike",
+            "type_expr_hash": "2847136573",
+            "type_text_sha256": "2c9a7c5f0b4772c20586533334b478188d940cdd908cd2f351f4cf07892495ad",
+            "toolchain": "leanprover/lean4:v4.34.0-rc1",
+            "pinned_on": "2026-09-04",
+            "note": "Pinned 2026-09-04 with the seven Section 3-8 major reviews: their declarations and the passages they cite are now guarded like the four Section 2 headline rows."
           },
           {
             "declaration": "DavisKahan1970.isTrialResidual_iff",
             "type_expr_hash": "3519097342",
             "type_text_sha256": "6c1259c784a54c4d534bc75f380610b3c0ff9d7fe73715cf6dd9fd3345f5dd2b",
             "toolchain": "leanprover/lean4:v4.34.0-rc1",
-            "pinned_on": "2026-09-03",
-            "note": "Pinned 2026-09-03: the S2-sin-theta canonical witness is now the scalar-generic sinTheta_unbounded_formGap_symmetricNorming_rclike, whose signature no longer carries the two proof-capability classes (both are unconditional instances at every RCLike field)."
+            "pinned_on": "2026-09-04",
+            "note": "Pinned 2026-09-04 with the seven Section 3-8 major reviews: their declarations and the passages they cite are now guarded like the four Section 2 headline rows."
           },
           {
             "declaration": "DavisKahan1970.isExactSpectralDecomposition_iff",
             "type_expr_hash": "2247439837",
             "type_text_sha256": "c1eca3491d967835932b797d2df97c56a34e7b908d6c05c43ae90e7f52959483",
             "toolchain": "leanprover/lean4:v4.34.0-rc1",
-            "pinned_on": "2026-09-03",
-            "note": "Pinned 2026-09-03: the S2-sin-theta canonical witness is now the scalar-generic sinTheta_unbounded_formGap_symmetricNorming_rclike, whose signature no longer carries the two proof-capability classes (both are unconditional instances at every RCLike field)."
+            "pinned_on": "2026-09-04",
+            "note": "Pinned 2026-09-04 with the seven Section 3-8 major reviews: their declarations and the passages they cite are now guarded like the four Section 2 headline rows."
           }
         ],
         "source_fragments": [
@@ -408,8 +416,8 @@
               "result": "Section 2, first unnumbered theorem"
             },
             "visibility": "public_reconstruction",
-            "pinned_on": "2026-09-03",
-            "note": "Pinned 2026-09-03: the S2-sin-theta canonical witness is now the scalar-generic sinTheta_unbounded_formGap_symmetricNorming_rclike, whose signature no longer carries the two proof-capability classes (both are unconditional instances at every RCLike field)."
+            "pinned_on": "2026-09-04",
+            "note": "Pinned 2026-09-04 with the seven Section 3-8 major reviews: their declarations and the passages they cite are now guarded like the four Section 2 headline rows."
           },
           {
             "fragment": "ui-norms",
@@ -427,8 +435,8 @@
               "result": "Unitary-invariant norms and singular values"
             },
             "visibility": "public_reconstruction",
-            "pinned_on": "2026-09-03",
-            "note": "Pinned 2026-09-03: the S2-sin-theta canonical witness is now the scalar-generic sinTheta_unbounded_formGap_symmetricNorming_rclike, whose signature no longer carries the two proof-capability classes (both are unconditional instances at every RCLike field)."
+            "pinned_on": "2026-09-04",
+            "note": "Pinned 2026-09-04 with the seven Section 3-8 major reviews: their declarations and the passages they cite are now guarded like the four Section 2 headline rows."
           },
           {
             "fragment": "scope",
@@ -446,8 +454,8 @@
               "result": "Scope of the four theorems"
             },
             "visibility": "public_reconstruction",
-            "pinned_on": "2026-09-03",
-            "note": "Pinned 2026-09-03: the S2-sin-theta canonical witness is now the scalar-generic sinTheta_unbounded_formGap_symmetricNorming_rclike, whose signature no longer carries the two proof-capability classes (both are unconditional instances at every RCLike field)."
+            "pinned_on": "2026-09-04",
+            "note": "Pinned 2026-09-04 with the seven Section 3-8 major reviews: their declarations and the passages they cite are now guarded like the four Section 2 headline rows."
           }
         ]
       },
@@ -698,32 +706,32 @@
             "type_expr_hash": "165662031",
             "type_text_sha256": "c0ba906ecbf749d5fc9be2ab7f53999458863ba994db27303d59d8ebb8717e8b",
             "toolchain": "leanprover/lean4:v4.34.0-rc1",
-            "pinned_on": "2026-09-03",
-            "note": "Pinned 2026-09-03: the S2-sin-theta canonical witness is now the scalar-generic sinTheta_unbounded_formGap_symmetricNorming_rclike, whose signature no longer carries the two proof-capability classes (both are unconditional instances at every RCLike field)."
+            "pinned_on": "2026-09-04",
+            "note": "Pinned 2026-09-04 with the seven Section 3-8 major reviews: their declarations and the passages they cite are now guarded like the four Section 2 headline rows."
           },
           {
             "declaration": "TauCeti.DavisKahan1970.tanTheta_ambient_unboundedRitz_symmetricNorming_real",
             "type_expr_hash": "3388153045",
             "type_text_sha256": "a6a9e7ec2bc733f029a659104e6a2cfe9e28ca4f5baab4849e385cc9d5028ee6",
             "toolchain": "leanprover/lean4:v4.34.0-rc1",
-            "pinned_on": "2026-09-03",
-            "note": "Pinned 2026-09-03: the S2-sin-theta canonical witness is now the scalar-generic sinTheta_unbounded_formGap_symmetricNorming_rclike, whose signature no longer carries the two proof-capability classes (both are unconditional instances at every RCLike field)."
+            "pinned_on": "2026-09-04",
+            "note": "Pinned 2026-09-04 with the seven Section 3-8 major reviews: their declarations and the passages they cite are now guarded like the four Section 2 headline rows."
           },
           {
             "declaration": "TauCeti.DavisKahan1970.tanTheta_directed_unboundedRitz_symmetricNorming_complex",
             "type_expr_hash": "2325256111",
             "type_text_sha256": "a901f19827f6f8e467bcd5964b63faa1972a22e1a6f7a1127b79f3bbec357f66",
             "toolchain": "leanprover/lean4:v4.34.0-rc1",
-            "pinned_on": "2026-09-03",
-            "note": "Pinned 2026-09-03: the S2-sin-theta canonical witness is now the scalar-generic sinTheta_unbounded_formGap_symmetricNorming_rclike, whose signature no longer carries the two proof-capability classes (both are unconditional instances at every RCLike field)."
+            "pinned_on": "2026-09-04",
+            "note": "Pinned 2026-09-04 with the seven Section 3-8 major reviews: their declarations and the passages they cite are now guarded like the four Section 2 headline rows."
           },
           {
             "declaration": "TauCeti.DavisKahan1970.tanTheta_directed_unboundedRitz_symmetricNorming_real",
             "type_expr_hash": "2680951132",
             "type_text_sha256": "e50b6b1077d11587e8e9a259fae6a489b2dc7a67ab6b49d7cd45ac4dc1b40b8b",
             "toolchain": "leanprover/lean4:v4.34.0-rc1",
-            "pinned_on": "2026-09-03",
-            "note": "Pinned 2026-09-03: the S2-sin-theta canonical witness is now the scalar-generic sinTheta_unbounded_formGap_symmetricNorming_rclike, whose signature no longer carries the two proof-capability classes (both are unconditional instances at every RCLike field)."
+            "pinned_on": "2026-09-04",
+            "note": "Pinned 2026-09-04 with the seven Section 3-8 major reviews: their declarations and the passages they cite are now guarded like the four Section 2 headline rows."
           }
         ],
         "source_fragments": [
@@ -772,8 +780,8 @@
               "result": "Section 2, second unnumbered theorem"
             },
             "visibility": "public_reconstruction",
-            "pinned_on": "2026-09-03",
-            "note": "Pinned 2026-09-03: the S2-sin-theta canonical witness is now the scalar-generic sinTheta_unbounded_formGap_symmetricNorming_rclike, whose signature no longer carries the two proof-capability classes (both are unconditional instances at every RCLike field)."
+            "pinned_on": "2026-09-04",
+            "note": "Pinned 2026-09-04 with the seven Section 3-8 major reviews: their declarations and the passages they cite are now guarded like the four Section 2 headline rows."
           },
           {
             "fragment": "standing-3-5",
@@ -795,8 +803,8 @@
               ]
             },
             "visibility": "public_reconstruction",
-            "pinned_on": "2026-09-03",
-            "note": "Pinned 2026-09-03: the S2-sin-theta canonical witness is now the scalar-generic sinTheta_unbounded_formGap_symmetricNorming_rclike, whose signature no longer carries the two proof-capability classes (both are unconditional instances at every RCLike field)."
+            "pinned_on": "2026-09-04",
+            "note": "Pinned 2026-09-04 with the seven Section 3-8 major reviews: their declarations and the passages they cite are now guarded like the four Section 2 headline rows."
           }
         ]
       }
@@ -987,48 +995,48 @@
             "type_expr_hash": "1943219647",
             "type_text_sha256": "35c514a22911d055c99f1e8351d0b20189e9ed7d876543e9f2b618f74eaff365",
             "toolchain": "leanprover/lean4:v4.34.0-rc1",
-            "pinned_on": "2026-09-03",
-            "note": "Pinned 2026-09-03: the S2-sin-theta canonical witness is now the scalar-generic sinTheta_unbounded_formGap_symmetricNorming_rclike, whose signature no longer carries the two proof-capability classes (both are unconditional instances at every RCLike field)."
+            "pinned_on": "2026-09-04",
+            "note": "Pinned 2026-09-04 with the seven Section 3-8 major reviews: their declarations and the passages they cite are now guarded like the four Section 2 headline rows."
           },
           {
             "declaration": "TauCeti.DavisKahan1970.sinTwoTheta_directed_unboundedResidual_blockRepresentative_symmetricNorming_real",
             "type_expr_hash": "1449676488",
             "type_text_sha256": "68488c05ce7f9d5a6324e96c1fa48631cdc848b7664589d5b11a7a95657eb03d",
             "toolchain": "leanprover/lean4:v4.34.0-rc1",
-            "pinned_on": "2026-09-03",
-            "note": "Pinned 2026-09-03: the S2-sin-theta canonical witness is now the scalar-generic sinTheta_unbounded_formGap_symmetricNorming_rclike, whose signature no longer carries the two proof-capability classes (both are unconditional instances at every RCLike field)."
+            "pinned_on": "2026-09-04",
+            "note": "Pinned 2026-09-04 with the seven Section 3-8 major reviews: their declarations and the passages they cite are now guarded like the four Section 2 headline rows."
           },
           {
             "declaration": "TauCeti.DavisKahan1970.sinTwoTheta_directed_unbounded_addBounded_symmetricNorming_complex",
             "type_expr_hash": "1913572006",
             "type_text_sha256": "6d9f2df62fd4b0306d8d810e6a2748659ba87a54256c5b268d16c03b265d570a",
             "toolchain": "leanprover/lean4:v4.34.0-rc1",
-            "pinned_on": "2026-09-03",
-            "note": "Pinned 2026-09-03: the S2-sin-theta canonical witness is now the scalar-generic sinTheta_unbounded_formGap_symmetricNorming_rclike, whose signature no longer carries the two proof-capability classes (both are unconditional instances at every RCLike field)."
+            "pinned_on": "2026-09-04",
+            "note": "Pinned 2026-09-04 with the seven Section 3-8 major reviews: their declarations and the passages they cite are now guarded like the four Section 2 headline rows."
           },
           {
             "declaration": "TauCeti.DavisKahan1970.sinTwoTheta_directed_unbounded_addBounded_symmetricNorming_real",
             "type_expr_hash": "529057092",
             "type_text_sha256": "fc133fd9d9489038ed2ac76fbd8b3f3d01c7e8ef14011748ed87dc5dbaf40ecc",
             "toolchain": "leanprover/lean4:v4.34.0-rc1",
-            "pinned_on": "2026-09-03",
-            "note": "Pinned 2026-09-03: the S2-sin-theta canonical witness is now the scalar-generic sinTheta_unbounded_formGap_symmetricNorming_rclike, whose signature no longer carries the two proof-capability classes (both are unconditional instances at every RCLike field)."
+            "pinned_on": "2026-09-04",
+            "note": "Pinned 2026-09-04 with the seven Section 3-8 major reviews: their declarations and the passages they cite are now guarded like the four Section 2 headline rows."
           },
           {
             "declaration": "TauCeti.DavisKahan1970.sinTwoTheta_ambient_unbounded_addBounded_symmetricNorming_complex",
             "type_expr_hash": "844499217",
             "type_text_sha256": "83b245ddbf7af88d0ee5343807f36425747dc97f19b830b377923314887f9f5b",
             "toolchain": "leanprover/lean4:v4.34.0-rc1",
-            "pinned_on": "2026-09-03",
-            "note": "Pinned 2026-09-03: the S2-sin-theta canonical witness is now the scalar-generic sinTheta_unbounded_formGap_symmetricNorming_rclike, whose signature no longer carries the two proof-capability classes (both are unconditional instances at every RCLike field)."
+            "pinned_on": "2026-09-04",
+            "note": "Pinned 2026-09-04 with the seven Section 3-8 major reviews: their declarations and the passages they cite are now guarded like the four Section 2 headline rows."
           },
           {
             "declaration": "TauCeti.DavisKahan1970.sinTwoTheta_ambient_unbounded_addBounded_symmetricNorming_real",
             "type_expr_hash": "4017633786",
             "type_text_sha256": "669cee6ca92c70ded28ab54b05f84e84cfd10faaa82389358d65af541f190090",
             "toolchain": "leanprover/lean4:v4.34.0-rc1",
-            "pinned_on": "2026-09-03",
-            "note": "Pinned 2026-09-03: the S2-sin-theta canonical witness is now the scalar-generic sinTheta_unbounded_formGap_symmetricNorming_rclike, whose signature no longer carries the two proof-capability classes (both are unconditional instances at every RCLike field)."
+            "pinned_on": "2026-09-04",
+            "note": "Pinned 2026-09-04 with the seven Section 3-8 major reviews: their declarations and the passages they cite are now guarded like the four Section 2 headline rows."
           }
         ],
         "source_fragments": [
@@ -1072,8 +1080,8 @@
               "result": "Section 2, third unnumbered theorem"
             },
             "visibility": "public_reconstruction",
-            "pinned_on": "2026-09-03",
-            "note": "Pinned 2026-09-03: the S2-sin-theta canonical witness is now the scalar-generic sinTheta_unbounded_formGap_symmetricNorming_rclike, whose signature no longer carries the two proof-capability classes (both are unconditional instances at every RCLike field)."
+            "pinned_on": "2026-09-04",
+            "note": "Pinned 2026-09-04 with the seven Section 3-8 major reviews: their declarations and the passages they cite are now guarded like the four Section 2 headline rows."
           },
           {
             "fragment": "scope",
@@ -1091,8 +1099,8 @@
               "result": "Scope of the four theorems"
             },
             "visibility": "public_reconstruction",
-            "pinned_on": "2026-09-03",
-            "note": "Pinned 2026-09-03: the S2-sin-theta canonical witness is now the scalar-generic sinTheta_unbounded_formGap_symmetricNorming_rclike, whose signature no longer carries the two proof-capability classes (both are unconditional instances at every RCLike field)."
+            "pinned_on": "2026-09-04",
+            "note": "Pinned 2026-09-04 with the seven Section 3-8 major reviews: their declarations and the passages they cite are now guarded like the four Section 2 headline rows."
           }
         ]
       }
@@ -1416,192 +1424,192 @@
             "type_expr_hash": "716420379",
             "type_text_sha256": "2d56e15145ee7163bf853425a8561b3c477135387c61aac5c5c37dbdbab68092",
             "toolchain": "leanprover/lean4:v4.34.0-rc1",
-            "pinned_on": "2026-09-03",
-            "note": "Pinned 2026-09-03: the S2-sin-theta canonical witness is now the scalar-generic sinTheta_unbounded_formGap_symmetricNorming_rclike, whose signature no longer carries the two proof-capability classes (both are unconditional instances at every RCLike field)."
+            "pinned_on": "2026-09-04",
+            "note": "Pinned 2026-09-04 with the seven Section 3-8 major reviews: their declarations and the passages they cite are now guarded like the four Section 2 headline rows."
           },
           {
             "declaration": "TauCeti.DavisKahan1970.tanTwoTheta_ambient_unbounded_symmetricNorming_real",
             "type_expr_hash": "2263193237",
             "type_text_sha256": "6a4b965490529826708928839ac81236eb533b0aa37fef2082b31394f36457ad",
             "toolchain": "leanprover/lean4:v4.34.0-rc1",
-            "pinned_on": "2026-09-03",
-            "note": "Pinned 2026-09-03: the S2-sin-theta canonical witness is now the scalar-generic sinTheta_unbounded_formGap_symmetricNorming_rclike, whose signature no longer carries the two proof-capability classes (both are unconditional instances at every RCLike field)."
+            "pinned_on": "2026-09-04",
+            "note": "Pinned 2026-09-04 with the seven Section 3-8 major reviews: their declarations and the passages they cite are now guarded like the four Section 2 headline rows."
           },
           {
             "declaration": "TauCeti.DavisKahan1970.tanTwoTheta_directed_unboundedResidual_symmetricNorming_complex",
             "type_expr_hash": "349438051",
             "type_text_sha256": "7ae7513c061cd74296af3fe0222ff5d4c55eba55215b9d00b793e41e64f65d1a",
             "toolchain": "leanprover/lean4:v4.34.0-rc1",
-            "pinned_on": "2026-09-03",
-            "note": "Pinned 2026-09-03: the S2-sin-theta canonical witness is now the scalar-generic sinTheta_unbounded_formGap_symmetricNorming_rclike, whose signature no longer carries the two proof-capability classes (both are unconditional instances at every RCLike field)."
+            "pinned_on": "2026-09-04",
+            "note": "Pinned 2026-09-04 with the seven Section 3-8 major reviews: their declarations and the passages they cite are now guarded like the four Section 2 headline rows."
           },
           {
             "declaration": "TauCeti.DavisKahan1970.tanTwoTheta_directed_unboundedResidual_symmetricNorming_real",
             "type_expr_hash": "2238813286",
             "type_text_sha256": "f1eb05f8378df1f2d832a5388ea06bf460a2411c580f3f81eddedcc649c86dd7",
             "toolchain": "leanprover/lean4:v4.34.0-rc1",
-            "pinned_on": "2026-09-03",
-            "note": "Pinned 2026-09-03: the S2-sin-theta canonical witness is now the scalar-generic sinTheta_unbounded_formGap_symmetricNorming_rclike, whose signature no longer carries the two proof-capability classes (both are unconditional instances at every RCLike field)."
+            "pinned_on": "2026-09-04",
+            "note": "Pinned 2026-09-04 with the seven Section 3-8 major reviews: their declarations and the passages they cite are now guarded like the four Section 2 headline rows."
           },
           {
             "declaration": "TauCeti.DavisKahan1970.approximationNumber_tanTwoDirectedCorner",
             "type_expr_hash": "361505299",
             "type_text_sha256": "faacaca01c7838606ca6f2fd1105c0ab424593e9fa1917945da733c279faf72e",
             "toolchain": "leanprover/lean4:v4.34.0-rc1",
-            "pinned_on": "2026-09-03",
-            "note": "Pinned 2026-09-03: the S2-sin-theta canonical witness is now the scalar-generic sinTheta_unbounded_formGap_symmetricNorming_rclike, whose signature no longer carries the two proof-capability classes (both are unconditional instances at every RCLike field)."
+            "pinned_on": "2026-09-04",
+            "note": "Pinned 2026-09-04 with the seven Section 3-8 major reviews: their declarations and the passages they cite are now guarded like the four Section 2 headline rows."
           },
           {
             "declaration": "TauCeti.DavisKahan.sinTwoThetaIdealBlock_hasSameApproximationNumbers",
             "type_expr_hash": "1243658403",
             "type_text_sha256": "fecc178d33f99c2ea216fdf1e00dd425617d89fb9c12e46acda41488c75da61d",
             "toolchain": "leanprover/lean4:v4.34.0-rc1",
-            "pinned_on": "2026-09-03",
-            "note": "Pinned 2026-09-03: the S2-sin-theta canonical witness is now the scalar-generic sinTheta_unbounded_formGap_symmetricNorming_rclike, whose signature no longer carries the two proof-capability classes (both are unconditional instances at every RCLike field)."
+            "pinned_on": "2026-09-04",
+            "note": "Pinned 2026-09-04 with the seven Section 3-8 major reviews: their declarations and the passages they cite are now guarded like the four Section 2 headline rows."
           },
           {
             "declaration": "TauCeti.DavisKahan1970.approximationNumber_tanTwoDirectedCornerR",
             "type_expr_hash": "366674181",
             "type_text_sha256": "33893c7d2b382aadc3ccd94ad536a5794459e5b91ce03f09b342e19d6673e8b2",
             "toolchain": "leanprover/lean4:v4.34.0-rc1",
-            "pinned_on": "2026-09-03",
-            "note": "Pinned 2026-09-03: the S2-sin-theta canonical witness is now the scalar-generic sinTheta_unbounded_formGap_symmetricNorming_rclike, whose signature no longer carries the two proof-capability classes (both are unconditional instances at every RCLike field)."
+            "pinned_on": "2026-09-04",
+            "note": "Pinned 2026-09-04 with the seven Section 3-8 major reviews: their declarations and the passages they cite are now guarded like the four Section 2 headline rows."
           },
           {
             "declaration": "TauCeti.DavisKahan.ReflectionIntertwines.ofReducesSubspace",
             "type_expr_hash": "3121153778",
             "type_text_sha256": "d36bfde9d24a1ad211284a5121e15e4aa0b2b9d1dc2e184b6f9f9a857ed102e2",
             "toolchain": "leanprover/lean4:v4.34.0-rc1",
-            "pinned_on": "2026-09-03",
-            "note": "Pinned 2026-09-03: the S2-sin-theta canonical witness is now the scalar-generic sinTheta_unbounded_formGap_symmetricNorming_rclike, whose signature no longer carries the two proof-capability classes (both are unconditional instances at every RCLike field)."
+            "pinned_on": "2026-09-04",
+            "note": "Pinned 2026-09-04 with the seven Section 3-8 major reviews: their declarations and the passages they cite are now guarded like the four Section 2 headline rows."
           },
           {
             "declaration": "TauCeti.DavisKahan1970.reflectionTangentCorner_reflection_eq_tanTwoBlockCompression",
             "type_expr_hash": "3430229937",
             "type_text_sha256": "3ba654bebf34db64df3da7e3f19a0aeeb68ea1216164d969fa2fed61d2a61410",
             "toolchain": "leanprover/lean4:v4.34.0-rc1",
-            "pinned_on": "2026-09-03",
-            "note": "Pinned 2026-09-03: the S2-sin-theta canonical witness is now the scalar-generic sinTheta_unbounded_formGap_symmetricNorming_rclike, whose signature no longer carries the two proof-capability classes (both are unconditional instances at every RCLike field)."
+            "pinned_on": "2026-09-04",
+            "note": "Pinned 2026-09-04 with the seven Section 3-8 major reviews: their declarations and the passages they cite are now guarded like the four Section 2 headline rows."
           },
           {
             "declaration": "TauCeti.DavisKahan1970.blockCompression_diagonalPair",
             "type_expr_hash": "1603235317",
             "type_text_sha256": "b4535300953e53bc0c4fae8868432b1f17e1bb42d575306532a777fda9b797e3",
             "toolchain": "leanprover/lean4:v4.34.0-rc1",
-            "pinned_on": "2026-09-03",
-            "note": "Pinned 2026-09-03: the S2-sin-theta canonical witness is now the scalar-generic sinTheta_unbounded_formGap_symmetricNorming_rclike, whose signature no longer carries the two proof-capability classes (both are unconditional instances at every RCLike field)."
+            "pinned_on": "2026-09-04",
+            "note": "Pinned 2026-09-04 with the seven Section 3-8 major reviews: their declarations and the passages they cite are now guarded like the four Section 2 headline rows."
           },
           {
             "declaration": "TauCeti.DavisKahan1970.mem_projectionBlock_iff_mem_blockCompression",
             "type_expr_hash": "2939650167",
             "type_text_sha256": "fde1c4bfceeb5915d1d9f704fb34cf5d19aa9be602d217a78176dcfb117c3956",
             "toolchain": "leanprover/lean4:v4.34.0-rc1",
-            "pinned_on": "2026-09-03",
-            "note": "Pinned 2026-09-03: the S2-sin-theta canonical witness is now the scalar-generic sinTheta_unbounded_formGap_symmetricNorming_rclike, whose signature no longer carries the two proof-capability classes (both are unconditional instances at every RCLike field)."
+            "pinned_on": "2026-09-04",
+            "note": "Pinned 2026-09-04 with the seven Section 3-8 major reviews: their declarations and the passages they cite are now guarded like the four Section 2 headline rows."
           },
           {
             "declaration": "TauCeti.DavisKahan1970.gauge_projectionBlock_eq_blockCompression",
             "type_expr_hash": "3089804860",
             "type_text_sha256": "05cf84a146eddcca7392b73e2e88b08d6c396ad4f8db8f87bd11c62b0cc30cdb",
             "toolchain": "leanprover/lean4:v4.34.0-rc1",
-            "pinned_on": "2026-09-03",
-            "note": "Pinned 2026-09-03: the S2-sin-theta canonical witness is now the scalar-generic sinTheta_unbounded_formGap_symmetricNorming_rclike, whose signature no longer carries the two proof-capability classes (both are unconditional instances at every RCLike field)."
+            "pinned_on": "2026-09-04",
+            "note": "Pinned 2026-09-04 with the seven Section 3-8 major reviews: their declarations and the passages they cite are now guarded like the four Section 2 headline rows."
           },
           {
             "declaration": "TauCeti.LinearPMap.isSelfAdjoint_complexifyReal",
             "type_expr_hash": "1704724094",
             "type_text_sha256": "54470d3f97383c71a25f48003bcf03649c56b728debe491b5a81f6f5eb7c38bc",
             "toolchain": "leanprover/lean4:v4.34.0-rc1",
-            "pinned_on": "2026-09-03",
-            "note": "Pinned 2026-09-03: the S2-sin-theta canonical witness is now the scalar-generic sinTheta_unbounded_formGap_symmetricNorming_rclike, whose signature no longer carries the two proof-capability classes (both are unconditional instances at every RCLike field)."
+            "pinned_on": "2026-09-04",
+            "note": "Pinned 2026-09-04 with the seven Section 3-8 major reviews: their declarations and the passages they cite are now guarded like the four Section 2 headline rows."
           },
           {
             "declaration": "TauCeti.DavisKahan1970.reducesSubspace_complexifyReal",
             "type_expr_hash": "4293858563",
             "type_text_sha256": "187cbdbede605aa77cf613da2914cb976b5421423bcb07fb6d4c94da4f2ed12e",
             "toolchain": "leanprover/lean4:v4.34.0-rc1",
-            "pinned_on": "2026-09-03",
-            "note": "Pinned 2026-09-03: the S2-sin-theta canonical witness is now the scalar-generic sinTheta_unbounded_formGap_symmetricNorming_rclike, whose signature no longer carries the two proof-capability classes (both are unconditional instances at every RCLike field)."
+            "pinned_on": "2026-09-04",
+            "note": "Pinned 2026-09-04 with the seven Section 3-8 major reviews: their declarations and the passages they cite are now guarded like the four Section 2 headline rows."
           },
           {
             "declaration": "TauCeti.DavisKahan1970.isOddFor_complexifySubmodule",
             "type_expr_hash": "1410327366",
             "type_text_sha256": "d10b78dd6ab3dc042895ddf0827e03d83cdc0a970477691750f2c266e989ee68",
             "toolchain": "leanprover/lean4:v4.34.0-rc1",
-            "pinned_on": "2026-09-03",
-            "note": "Pinned 2026-09-03: the S2-sin-theta canonical witness is now the scalar-generic sinTheta_unbounded_formGap_symmetricNorming_rclike, whose signature no longer carries the two proof-capability classes (both are unconditional instances at every RCLike field)."
+            "pinned_on": "2026-09-04",
+            "note": "Pinned 2026-09-04 with the seven Section 3-8 major reviews: their declarations and the passages they cite are now guarded like the four Section 2 headline rows."
           },
           {
             "declaration": "TauCeti.DavisKahan1970.reducesSubspace_addBounded_complexifyReal",
             "type_expr_hash": "4133496166",
             "type_text_sha256": "44d09d3d19e3b8357a86df24c0dea4aae67ea0acb47698b7e8191b6ff6f1a45e",
             "toolchain": "leanprover/lean4:v4.34.0-rc1",
-            "pinned_on": "2026-09-03",
-            "note": "Pinned 2026-09-03: the S2-sin-theta canonical witness is now the scalar-generic sinTheta_unbounded_formGap_symmetricNorming_rclike, whose signature no longer carries the two proof-capability classes (both are unconditional instances at every RCLike field)."
+            "pinned_on": "2026-09-04",
+            "note": "Pinned 2026-09-04 with the seven Section 3-8 major reviews: their declarations and the passages they cite are now guarded like the four Section 2 headline rows."
           },
           {
             "declaration": "TauCeti.DavisKahan1970.re_inner_complexifyReal_le_of_forall_mem",
             "type_expr_hash": "3361086614",
             "type_text_sha256": "ab74c79e1ef90153b835b63231295344de25e67b1359c3967f8ae913b51f89d7",
             "toolchain": "leanprover/lean4:v4.34.0-rc1",
-            "pinned_on": "2026-09-03",
-            "note": "Pinned 2026-09-03: the S2-sin-theta canonical witness is now the scalar-generic sinTheta_unbounded_formGap_symmetricNorming_rclike, whose signature no longer carries the two proof-capability classes (both are unconditional instances at every RCLike field)."
+            "pinned_on": "2026-09-04",
+            "note": "Pinned 2026-09-04 with the seven Section 3-8 major reviews: their declarations and the passages they cite are now guarded like the four Section 2 headline rows."
           },
           {
             "declaration": "TauCeti.DavisKahan1970.le_re_inner_complexifyReal_of_forall_mem_orthogonal",
             "type_expr_hash": "2437154870",
             "type_text_sha256": "3cbabb21e29759369d1a90ee364ca539c7a898a3c29edb79abfedf96b0b6a9c7",
             "toolchain": "leanprover/lean4:v4.34.0-rc1",
-            "pinned_on": "2026-09-03",
-            "note": "Pinned 2026-09-03: the S2-sin-theta canonical witness is now the scalar-generic sinTheta_unbounded_formGap_symmetricNorming_rclike, whose signature no longer carries the two proof-capability classes (both are unconditional instances at every RCLike field)."
+            "pinned_on": "2026-09-04",
+            "note": "Pinned 2026-09-04 with the seven Section 3-8 major reviews: their declarations and the passages they cite are now guarded like the four Section 2 headline rows."
           },
           {
             "declaration": "TauCeti.DavisKahan1970.projectionBlock_complexifySubmodule",
             "type_expr_hash": "347352333",
             "type_text_sha256": "60257b271040c8196b483f46cb87f3b6e3752e71e855ceaa8d362bc892a90243",
             "toolchain": "leanprover/lean4:v4.34.0-rc1",
-            "pinned_on": "2026-09-03",
-            "note": "Pinned 2026-09-03: the S2-sin-theta canonical witness is now the scalar-generic sinTheta_unbounded_formGap_symmetricNorming_rclike, whose signature no longer carries the two proof-capability classes (both are unconditional instances at every RCLike field)."
+            "pinned_on": "2026-09-04",
+            "note": "Pinned 2026-09-04 with the seven Section 3-8 major reviews: their declarations and the passages they cite are now guarded like the four Section 2 headline rows."
           },
           {
             "declaration": "TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction.mem_complexify_iff",
             "type_expr_hash": "2202658535",
             "type_text_sha256": "259e93c43f775e37e0dbd2e410aecc0c93da31b6626d35e881f6be9128479905",
             "toolchain": "leanprover/lean4:v4.34.0-rc1",
-            "pinned_on": "2026-09-03",
-            "note": "Pinned 2026-09-03: the S2-sin-theta canonical witness is now the scalar-generic sinTheta_unbounded_formGap_symmetricNorming_rclike, whose signature no longer carries the two proof-capability classes (both are unconditional instances at every RCLike field)."
+            "pinned_on": "2026-09-04",
+            "note": "Pinned 2026-09-04 with the seven Section 3-8 major reviews: their declarations and the passages they cite are now guarded like the four Section 2 headline rows."
           },
           {
             "declaration": "TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction.gauge_complexify",
             "type_expr_hash": "1247679917",
             "type_text_sha256": "24c0cd97d19319a8a83ffc0f924bd2601ed46e9e678b3bb45a588e4a6cc66dfd",
             "toolchain": "leanprover/lean4:v4.34.0-rc1",
-            "pinned_on": "2026-09-03",
-            "note": "Pinned 2026-09-03: the S2-sin-theta canonical witness is now the scalar-generic sinTheta_unbounded_formGap_symmetricNorming_rclike, whose signature no longer carries the two proof-capability classes (both are unconditional instances at every RCLike field)."
+            "pinned_on": "2026-09-04",
+            "note": "Pinned 2026-09-04 with the seven Section 3-8 major reviews: their declarations and the passages they cite are now guarded like the four Section 2 headline rows."
           },
           {
             "declaration": "TauCeti.DavisKahan.complexify_sinTwoThetaIdealBlock",
             "type_expr_hash": "2069344170",
             "type_text_sha256": "e35bbfcf6c91f5fc2c55e79571e96058f4c8756b651e1c6acc3d6b62bba46486",
             "toolchain": "leanprover/lean4:v4.34.0-rc1",
-            "pinned_on": "2026-09-03",
-            "note": "Pinned 2026-09-03: the S2-sin-theta canonical witness is now the scalar-generic sinTheta_unbounded_formGap_symmetricNorming_rclike, whose signature no longer carries the two proof-capability classes (both are unconditional instances at every RCLike field)."
+            "pinned_on": "2026-09-04",
+            "note": "Pinned 2026-09-04 with the seven Section 3-8 major reviews: their declarations and the passages they cite are now guarded like the four Section 2 headline rows."
           },
           {
             "declaration": "TauCeti.DavisKahan.ExactSinTheta.ComplexificationApproximation.approximationSingularValue_complexify",
             "type_expr_hash": "2360607312",
             "type_text_sha256": "78b15076246648285343fdcff51a4e8da02ef99f6ff256e1526eed75254837c9",
             "toolchain": "leanprover/lean4:v4.34.0-rc1",
-            "pinned_on": "2026-09-03",
-            "note": "Pinned 2026-09-03: the S2-sin-theta canonical witness is now the scalar-generic sinTheta_unbounded_formGap_symmetricNorming_rclike, whose signature no longer carries the two proof-capability classes (both are unconditional instances at every RCLike field)."
+            "pinned_on": "2026-09-04",
+            "note": "Pinned 2026-09-04 with the seven Section 3-8 major reviews: their declarations and the passages they cite are now guarded like the four Section 2 headline rows."
           },
           {
             "declaration": "TauCeti.DavisKahan1970.norm_offDiagonalPart_reflectionOperator_complexifySubmodule",
             "type_expr_hash": "3419515113",
             "type_text_sha256": "27324753faaa3aa44d600dda7ce0221728eddd5931a46e3065bc3e69bbccfe35",
             "toolchain": "leanprover/lean4:v4.34.0-rc1",
-            "pinned_on": "2026-09-03",
-            "note": "Pinned 2026-09-03: the S2-sin-theta canonical witness is now the scalar-generic sinTheta_unbounded_formGap_symmetricNorming_rclike, whose signature no longer carries the two proof-capability classes (both are unconditional instances at every RCLike field)."
+            "pinned_on": "2026-09-04",
+            "note": "Pinned 2026-09-04 with the seven Section 3-8 major reviews: their declarations and the passages they cite are now guarded like the four Section 2 headline rows."
           }
         ],
         "source_fragments": [
@@ -1645,8 +1653,8 @@
               "result": "Section 2, fourth unnumbered theorem"
             },
             "visibility": "public_reconstruction",
-            "pinned_on": "2026-09-03",
-            "note": "Pinned 2026-09-03: the S2-sin-theta canonical witness is now the scalar-generic sinTheta_unbounded_formGap_symmetricNorming_rclike, whose signature no longer carries the two proof-capability classes (both are unconditional instances at every RCLike field)."
+            "pinned_on": "2026-09-04",
+            "note": "Pinned 2026-09-04 with the seven Section 3-8 major reviews: their declarations and the passages they cite are now guarded like the four Section 2 headline rows."
           },
           {
             "fragment": "ui-norms",
@@ -1664,8 +1672,8 @@
               "result": "Unitary-invariant norms and singular values"
             },
             "visibility": "public_reconstruction",
-            "pinned_on": "2026-09-03",
-            "note": "Pinned 2026-09-03: the S2-sin-theta canonical witness is now the scalar-generic sinTheta_unbounded_formGap_symmetricNorming_rclike, whose signature no longer carries the two proof-capability classes (both are unconditional instances at every RCLike field)."
+            "pinned_on": "2026-09-04",
+            "note": "Pinned 2026-09-04 with the seven Section 3-8 major reviews: their declarations and the passages they cite are now guarded like the four Section 2 headline rows."
           }
         ]
       }
@@ -2222,7 +2230,7 @@
             "kind": "setup",
             "relation": "literal",
             "source_fragment": "printed",
-            "source_excerpt": "The polar resolution of $S_0$ is $S_0=J_0\\sin\\Theta_0$",
+            "source_excerpt": "The polar resolution of S_0 is S_0=J_0\\sin\\Theta_0",
             "lean_declarations": [
               "TauCeti.DavisKahan1970.theorem3_1_realization"
             ],
@@ -2250,7 +2258,7 @@
             "kind": "conclusion",
             "relation": "literal",
             "source_fragment": "printed",
-            "source_excerpt": "A complete invariant of the pair $(P\\Hsp,Q\\Hsp)$ under isometric equivalence is given by the spectral multiplicity functions of $\\Theta_0$ and $\\Theta_1$",
+            "source_excerpt": "A complete invariant of the pair (P\\Hsp,Q\\Hsp) under isometric equivalence is given by the spectral multiplicity functions of \\Theta_0 and \\Theta_1",
             "lean_declarations": [
               "TauCeti.DavisKahan1970.theorem3_1_spectralMultiplicity_classification_complex",
               "TauCeti.DavisKahan1970.theorem3_1_spectralMultiplicity_classification_real"
@@ -2280,7 +2288,7 @@
             "kind": "conclusion",
             "relation": "definitional",
             "source_fragment": "printed",
-            "source_excerpt": "their domain dimensions sum to $\\dim\\Hsp$",
+            "source_excerpt": "their domain dimensions sum to \\dim\\Hsp",
             "lean_declarations": [
               "TauCeti.DavisKahan1970.theorem3_1_realization"
             ]
@@ -2292,7 +2300,7 @@
             "kind": "conclusion",
             "relation": "literal",
             "source_fragment": "printed",
-            "source_excerpt": "the corresponding partial isometry $J_0$",
+            "source_excerpt": "the corresponding partial isometry J_0",
             "lean_declarations": [
               "TauCeti.DavisKahan1970.theorem3_1_realization",
               "TauCeti.DavisKahan1970.theorem3_1_realization_zeroAngle_unconstrained"
@@ -2305,7 +2313,7 @@
             "kind": "scope",
             "relation": "literal",
             "source_fragment": "ambient",
-            "source_excerpt": "Let $\\Hsp$ be a separable Hilbert space, real or complex; finite dimensionality is not assumed."
+            "source_excerpt": "Let \\Hsp be a separable Hilbert space, real or complex; finite dimensionality is not assumed."
           },
           {
             "source_clause": "Theorem 3.1 carries no compactness hypothesis.",
@@ -2362,7 +2370,135 @@
             }
           }
         ],
-        "note": "Two printed sentences, two canonical declarations plus a real sibling. The classification half is `theorem3_1_spectralMultiplicity_classification_complex` / `..._real`, stated in the paper's own multiplicity language and grounded by `:=` on the operator-level `twoProjection_operator_classification`, so there is one source of truth and the multiplicity phrasing adds only the Hahn--Hellinger translation. The realization half is `theorem3_1_realization_ofAngles` rather than `theorem3_1_realization`: the latter consumes a packaged `HalmosAngleDatum` with five independent fields, while the paper's hypotheses are two Hermitian operators and one intertwining partial isometry, which is what the `_ofAngles` form takes. The printed dimension conditions are not assumed by the Lean classification -- they reappear inside the invariant as two of the four elementary Halmos multiplicities -- so on that axis the Lean statement is a generalization of the print. This review does not enlarge the row's recorded scope: the row's `scope_gap` documents that the real noncompact multiplicity phrasing rests on Hahn--Hellinger over a real Hilbert space, which the paper itself imports from Halmos 1951 rather than proving, and the real classification content is carried separability-free by `twoProjection_operator_classification_real`. CANONICAL WITNESSES FOLLOW THE RESULT INVENTORY. `dev/davis-kahan-1970-formalization-result-inventory.json` is the single owner of which declaration is a counted result's canonical evidence, and it names `theorem3_1_realization` for the realization half. This review therefore cites that declaration as canonical and keeps `theorem3_1_realization_ofAngles` -- the same theorem in the paper's own hypothesis shape -- as supporting evidence; a reader auditing the printed sentence should read the `_ofAngles` form."
+        "note": "Two printed sentences, two canonical declarations plus a real sibling. The classification half is `theorem3_1_spectralMultiplicity_classification_complex` / `..._real`, stated in the paper's own multiplicity language and grounded by `:=` on the operator-level `twoProjection_operator_classification`, so there is one source of truth and the multiplicity phrasing adds only the Hahn--Hellinger translation. The realization half is `theorem3_1_realization_ofAngles` rather than `theorem3_1_realization`: the latter consumes a packaged `HalmosAngleDatum` with five independent fields, while the paper's hypotheses are two Hermitian operators and one intertwining partial isometry, which is what the `_ofAngles` form takes. The printed dimension conditions are not assumed by the Lean classification -- they reappear inside the invariant as two of the four elementary Halmos multiplicities -- so on that axis the Lean statement is a generalization of the print. This review does not enlarge the row's recorded scope: the row's `scope_gap` documents that the real noncompact multiplicity phrasing rests on Hahn--Hellinger over a real Hilbert space, which the paper itself imports from Halmos 1951 rather than proving, and the real classification content is carried separability-free by `twoProjection_operator_classification_real`. CANONICAL WITNESSES FOLLOW THE RESULT INVENTORY. `dev/davis-kahan-1970-formalization-result-inventory.json` is the single owner of which declaration is a counted result's canonical evidence, and it names `theorem3_1_realization` for the realization half. This review therefore cites that declaration as canonical and keeps `theorem3_1_realization_ofAngles` -- the same theorem in the paper's own hypothesis shape -- as supporting evidence; a reader auditing the printed sentence should read the `_ofAngles` form.",
+        "statement_pins": [
+          {
+            "declaration": "TauCeti.DavisKahan1970.theorem3_1_spectralMultiplicity_classification_complex",
+            "type_expr_hash": "143639709",
+            "type_text_sha256": "087c8e1fa61eb6ba2cc9521e7397fde07102c4b016aa22b574134d14c4c1315e",
+            "toolchain": "leanprover/lean4:v4.34.0-rc1",
+            "pinned_on": "2026-09-04",
+            "note": "Pinned 2026-09-04 with the seven Section 3-8 major reviews: their declarations and the passages they cite are now guarded like the four Section 2 headline rows."
+          },
+          {
+            "declaration": "TauCeti.DavisKahan1970.theorem3_1_spectralMultiplicity_classification_real",
+            "type_expr_hash": "1761433419",
+            "type_text_sha256": "dbc2c22531a94bbde4ca7110612ed2d502a72535f73bf492436e316a1124fa01",
+            "toolchain": "leanprover/lean4:v4.34.0-rc1",
+            "pinned_on": "2026-09-04",
+            "note": "Pinned 2026-09-04 with the seven Section 3-8 major reviews: their declarations and the passages they cite are now guarded like the four Section 2 headline rows."
+          },
+          {
+            "declaration": "TauCeti.DavisKahan1970.theorem3_1_realization",
+            "type_expr_hash": "3448530379",
+            "type_text_sha256": "b0b63cef6d8a3ba25ed9fbe1e5a155d82cd703f44673cf4ca8dfc1bef0913968",
+            "toolchain": "leanprover/lean4:v4.34.0-rc1",
+            "pinned_on": "2026-09-04",
+            "note": "Pinned 2026-09-04 with the seven Section 3-8 major reviews: their declarations and the passages they cite are now guarded like the four Section 2 headline rows."
+          },
+          {
+            "declaration": "TauCeti.DavisKahan.HalmosAngleDatum.starProjection_targetSubspace_apply",
+            "type_expr_hash": "3127010185",
+            "type_text_sha256": "8c27236802cc41d18b8784c74cb16be28914099455cad364bef762b437d14919",
+            "toolchain": "leanprover/lean4:v4.34.0-rc1",
+            "pinned_on": "2026-09-04",
+            "note": "Pinned 2026-09-04 with the seven Section 3-8 major reviews: their declarations and the passages they cite are now guarded like the four Section 2 headline rows."
+          },
+          {
+            "declaration": "TauCeti.DavisKahan1970.twoProjection_operator_classification",
+            "type_expr_hash": "3615696783",
+            "type_text_sha256": "ee83cf099f6f99ea1b03687420b33d387403aae535af38f3552a21b21ba18f75",
+            "toolchain": "leanprover/lean4:v4.34.0-rc1",
+            "pinned_on": "2026-09-04",
+            "note": "Pinned 2026-09-04 with the seven Section 3-8 major reviews: their declarations and the passages they cite are now guarded like the four Section 2 headline rows."
+          },
+          {
+            "declaration": "TauCeti.DavisKahan.pairOfSubspacesUnitaryEquivalent_iff_sameHalmosCosineBlockInvariant",
+            "type_expr_hash": "3725538082",
+            "type_text_sha256": "5445221df4cdcb0b0a1ec030b23b8b37e75c699bd26c28224ed8324253e2a744",
+            "toolchain": "leanprover/lean4:v4.34.0-rc1",
+            "pinned_on": "2026-09-04",
+            "note": "Pinned 2026-09-04 with the seven Section 3-8 major reviews: their declarations and the passages they cite are now guarded like the four Section 2 headline rows."
+          }
+        ],
+        "source_pins": [
+          {
+            "fragment": "printed",
+            "document": "DavisKahan1970",
+            "sha256": "835e0413b27b5147be7df1896a4849c5fbb1b7f21e786a34af5a6cd0e9f58a7a",
+            "locator": {
+              "document": "DavisKahan1970",
+              "marker": "DK-3.1-thm",
+              "file": "prose/distilled_literature/DavisKahan1970_part_III.tex",
+              "lines": [
+                437,
+                449
+              ],
+              "section": "3",
+              "result": "Theorem 3.1"
+            },
+            "visibility": "public_reconstruction",
+            "pinned_on": "2026-09-04",
+            "note": "Pinned 2026-09-04 with the seven Section 3-8 major reviews: their declarations and the passages they cite are now guarded like the four Section 2 headline rows."
+          },
+          {
+            "fragment": "angle-operators",
+            "document": "DavisKahan1970",
+            "sha256": "1cf01699d78a53a8beff5c7b2f51dc572e78a942cdf0565b085795b870333578",
+            "locator": {
+              "document": "DavisKahan1970",
+              "marker": "S1-ui-norms",
+              "file": "prose/distilled_literature/DavisKahan1970_part_III.tex",
+              "lines": [
+                108,
+                186
+              ],
+              "section": "1",
+              "result": "Unitary-invariant norms, angle operators and the direct-rotation setup"
+            },
+            "visibility": "public_reconstruction",
+            "pinned_on": "2026-09-04",
+            "note": "Pinned 2026-09-04 with the seven Section 3-8 major reviews: their declarations and the passages they cite are now guarded like the four Section 2 headline rows."
+          },
+          {
+            "fragment": "ambient",
+            "document": "DavisKahan1970",
+            "sha256": "27f71e8a793ebe0cf7e2cf0d4a95da0539c1810b34f345eb4dd75e102f90aeef",
+            "locator": {
+              "document": "DavisKahan1970",
+              "marker": "S1-block-residual",
+              "file": "prose/distilled_literature/DavisKahan1970_part_III.tex",
+              "lines": [
+                29,
+                100
+              ],
+              "section": "1",
+              "result": "Section 1, equations (1.1)--(1.8)"
+            },
+            "visibility": "public_reconstruction",
+            "pinned_on": "2026-09-04",
+            "note": "Pinned 2026-09-04 with the seven Section 3-8 major reviews: their declarations and the passages they cite are now guarded like the four Section 2 headline rows."
+          },
+          {
+            "fragment": "compact-corollary",
+            "document": "DavisKahan1970",
+            "sha256": "43566406dde15ad422b2db46343bb9a971f951ed76d70b60cc9cff6fba9b5cd4",
+            "locator": {
+              "document": "DavisKahan1970",
+              "marker": "DK-3.1-cor",
+              "file": "prose/distilled_literature/DavisKahan1970_part_III.tex",
+              "lines": [
+                457,
+                461
+              ],
+              "section": "3",
+              "result": "Corollary 3.1"
+            },
+            "visibility": "public_reconstruction",
+            "pinned_on": "2026-09-04",
+            "note": "Pinned 2026-09-04 with the seven Section 3-8 major reviews: their declarations and the passages they cite are now guarded like the four Section 2 headline rows."
+          }
+        ]
       }
     },
     {
@@ -2778,7 +2914,7 @@
             "kind": "hypothesis",
             "relation": "literal",
             "source_fragment": "ambient",
-            "source_excerpt": "A unitary $V$ carries $P\\Hsp$ onto $Q\\Hsp$ precisely through"
+            "source_excerpt": "A unitary V carries P\\Hsp onto Q\\Hsp precisely through"
           },
           {
             "source_clause": "The Ky Fan comparisons (4.3), for the two-dimensional reducing planes Omega_k, in the even and odd cases.",
@@ -2836,7 +2972,7 @@
             "status": "open",
             "kind": "conclusion",
             "source_fragment": "printed",
-            "source_excerpt": "They also imply minimality of the operator norm and Hilbert--Schmidt norm of $1-V$",
+            "source_excerpt": "They also imply minimality of the operator norm and Hilbert--Schmidt norm of 1-V",
             "lean_declarations": [
               "TauCeti.DavisKahan.FiniteDimensional.directRotation_minimizes_sum_sq_basis_angles"
             ]
@@ -2847,7 +2983,7 @@
             "status": "open",
             "kind": "scope",
             "source_fragment": "printed",
-            "source_excerpt": "but the source warns that arbitrary unitary-invariant norms of $1-V$ need not be minimized by the direct rotation"
+            "source_excerpt": "but the source warns that arbitrary unitary-invariant norms of 1-V need not be minimized by the direct rotation"
           },
           {
             "source_clause": "The scope is a separable Hilbert space, real or complex, of unrestricted dimension.",
@@ -2856,7 +2992,7 @@
             "kind": "scope",
             "relation": "literal",
             "source_fragment": "ambient",
-            "source_excerpt": "Let $\\Hsp$ be a separable Hilbert space, real or complex; finite dimensionality is not assumed."
+            "source_excerpt": "Let \\Hsp be a separable Hilbert space, real or complex; finite dimensionality is not assumed."
           },
           {
             "source_clause": "The norm is an arbitrary normalized unitary-invariant norm.",
@@ -2913,7 +3049,111 @@
             }
           }
         ],
-        "note": "The canonical declarations are the compact, matched-defect, every-source-norm forms, because that is the scope Section 4 states its propositions at: it opens by adopting the hypotheses of Theorem 3.1 and Corollary 3.1 and then works over infinite orthonormal sequences and infinite sums. The finite-dimensional aliases are specializations and are recorded as supporting evidence. Ky Fan level is where the underlying proof stops, and it is the honest level: pointwise domination of the individual approximation numbers is false here, and the repository records the refuting configuration with the stable theorem. This review is deliberately narrower than the hashed passage, and it says where. The row already carries a `reopened_mapping` certification and an `audit_mapping` completion hole recording that (4.3)--(4.6) and the closing unitary-invariant-norm limitation are inside the hashed block while the row's evidence is the boxed conclusion; the six clauses above marked `open` are exactly that gap, made clause-by-clause instead of left as one sentence. Nothing here is claimed about Proposition 4.4, the neighbouring printed proposition this repository formally refutes; it is the separate row DK-4.4-prop, and its refutation is not evidence for or against anything on this row."
+        "note": "The canonical declarations are the compact, matched-defect, every-source-norm forms, because that is the scope Section 4 states its propositions at: it opens by adopting the hypotheses of Theorem 3.1 and Corollary 3.1 and then works over infinite orthonormal sequences and infinite sums. The finite-dimensional aliases are specializations and are recorded as supporting evidence. Ky Fan level is where the underlying proof stops, and it is the honest level: pointwise domination of the individual approximation numbers is false here, and the repository records the refuting configuration with the stable theorem. This review is deliberately narrower than the hashed passage, and it says where. The row already carries a `reopened_mapping` certification and an `audit_mapping` completion hole recording that (4.3)--(4.6) and the closing unitary-invariant-norm limitation are inside the hashed block while the row's evidence is the boxed conclusion; the six clauses above marked `open` are exactly that gap, made clause-by-clause instead of left as one sentence. Nothing here is claimed about Proposition 4.4, the neighbouring printed proposition this repository formally refutes; it is the separate row DK-4.4-prop, and its refutation is not evidence for or against anything on this row.",
+        "statement_pins": [
+          {
+            "declaration": "TauCeti.DavisKahan1970.Proposition4_3_compact_nonacute_symmetricNorming_complex",
+            "type_expr_hash": "2749818722",
+            "type_text_sha256": "a2ab80674d38ae248e447a68a72d9761ecb67ab25f724144d8db4a4e59f63d5e",
+            "toolchain": "leanprover/lean4:v4.34.0-rc1",
+            "pinned_on": "2026-09-04",
+            "note": "Pinned 2026-09-04 with the seven Section 3-8 major reviews: their declarations and the passages they cite are now guarded like the four Section 2 headline rows."
+          },
+          {
+            "declaration": "TauCeti.DavisKahan1970.Proposition4_3_compact_nonacute_symmetricNorming_real",
+            "type_expr_hash": "4031762099",
+            "type_text_sha256": "5bb93fd1a6c55d8360f92828437d7a2867326b446d9125210f49dd1b4f138023",
+            "toolchain": "leanprover/lean4:v4.34.0-rc1",
+            "pinned_on": "2026-09-04",
+            "note": "Pinned 2026-09-04 with the seven Section 3-8 major reviews: their declarations and the passages they cite are now guarded like the four Section 2 headline rows."
+          },
+          {
+            "declaration": "TauCeti.DavisKahan1970.symmetricNorming_of_kyFanDominant",
+            "type_expr_hash": "1353657526",
+            "type_text_sha256": "1b48cee9e602d445c2d28d833f4434a479fb5d1572c7ed3099cf769d2699e643",
+            "toolchain": "leanprover/lean4:v4.34.0-rc1",
+            "pinned_on": "2026-09-04",
+            "note": "Pinned 2026-09-04 with the seven Section 3-8 major reviews: their declarations and the passages they cite are now guarded like the four Section 2 headline rows."
+          }
+        ],
+        "source_pins": [
+          {
+            "fragment": "printed",
+            "document": "DavisKahan1970",
+            "sha256": "931f3ce7b01a4dd1ac5f407e0457c81c93674b222278eebe300fe6c306c7b31b",
+            "locator": {
+              "document": "DavisKahan1970",
+              "marker": "DK-4.3-prop",
+              "file": "prose/distilled_literature/DavisKahan1970_part_III.tex",
+              "lines": [
+                552,
+                606
+              ],
+              "section": "4",
+              "result": "The whole-space extremality calculation through Proposition 4.3, including (4.3)--(4.6)"
+            },
+            "visibility": "public_reconstruction",
+            "pinned_on": "2026-09-04",
+            "note": "Pinned 2026-09-04 with the seven Section 3-8 major reviews: their declarations and the passages they cite are now guarded like the four Section 2 headline rows."
+          },
+          {
+            "fragment": "ui-norms",
+            "document": "DavisKahan1970",
+            "sha256": "1cf01699d78a53a8beff5c7b2f51dc572e78a942cdf0565b085795b870333578",
+            "locator": {
+              "document": "DavisKahan1970",
+              "marker": "S1-ui-norms",
+              "file": "prose/distilled_literature/DavisKahan1970_part_III.tex",
+              "lines": [
+                108,
+                186
+              ],
+              "section": "1",
+              "result": "Unitary-invariant norms and singular values"
+            },
+            "visibility": "public_reconstruction",
+            "pinned_on": "2026-09-04",
+            "note": "Pinned 2026-09-04 with the seven Section 3-8 major reviews: their declarations and the passages they cite are now guarded like the four Section 2 headline rows."
+          },
+          {
+            "fragment": "section-4-hypotheses",
+            "document": "DavisKahan1970",
+            "sha256": "790289f5e9ae65a3868ef040736f5cdc5223ad08458ef0e31e3bc48767081175",
+            "locator": {
+              "document": "DavisKahan1970",
+              "marker": "DK-4.1-prop",
+              "file": "prose/distilled_literature/DavisKahan1970_part_III.tex",
+              "lines": [
+                495,
+                518
+              ],
+              "section": "4",
+              "result": "Section 4 setup, Proposition 4.1, and equations (4.1)--(4.2)"
+            },
+            "visibility": "public_reconstruction",
+            "pinned_on": "2026-09-04",
+            "note": "Pinned 2026-09-04 with the seven Section 3-8 major reviews: their declarations and the passages they cite are now guarded like the four Section 2 headline rows."
+          },
+          {
+            "fragment": "ambient",
+            "document": "DavisKahan1970",
+            "sha256": "27f71e8a793ebe0cf7e2cf0d4a95da0539c1810b34f345eb4dd75e102f90aeef",
+            "locator": {
+              "document": "DavisKahan1970",
+              "marker": "S1-block-residual",
+              "file": "prose/distilled_literature/DavisKahan1970_part_III.tex",
+              "lines": [
+                29,
+                100
+              ],
+              "section": "1",
+              "result": "Section 1, equations (1.1)--(1.8)"
+            },
+            "visibility": "public_reconstruction",
+            "pinned_on": "2026-09-04",
+            "note": "Pinned 2026-09-04 with the seven Section 3-8 major reviews: their declarations and the passages they cite are now guarded like the four Section 2 headline rows."
+          }
+        ]
       }
     },
     {
@@ -3046,8 +3286,8 @@
               "result": "Examples 4.1--4.2 and Proposition 4.4"
             },
             "visibility": "public_reconstruction",
-            "pinned_on": "2026-09-03",
-            "note": "Pinned 2026-09-03: the S2-sin-theta canonical witness is now the scalar-generic sinTheta_unbounded_formGap_symmetricNorming_rclike, whose signature no longer carries the two proof-capability classes (both are unconditional instances at every RCLike field)."
+            "pinned_on": "2026-09-04",
+            "note": "Pinned 2026-09-04 with the seven Section 3-8 major reviews: their declarations and the passages they cite are now guarded like the four Section 2 headline rows."
           }
         ],
         "statement_pins": [
@@ -3056,24 +3296,24 @@
             "type_expr_hash": "3452003488",
             "type_text_sha256": "c54d4bbe6d38e3d6f89a09b71c2c82380ade81e715b0b40597daab7ec724c1a8",
             "toolchain": "leanprover/lean4:v4.34.0-rc1",
-            "pinned_on": "2026-09-03",
-            "note": "Pinned 2026-09-03: the S2-sin-theta canonical witness is now the scalar-generic sinTheta_unbounded_formGap_symmetricNorming_rclike, whose signature no longer carries the two proof-capability classes (both are unconditional instances at every RCLike field)."
+            "pinned_on": "2026-09-04",
+            "note": "Pinned 2026-09-04 with the seven Section 3-8 major reviews: their declarations and the passages they cite are now guarded like the four Section 2 headline rows."
           },
           {
             "declaration": "TauCeti.DavisKahan.FiniteDimensional.DavisKahanProposition4_4_Finite",
             "type_expr_hash": "3944470172",
             "type_text_sha256": "57d968860fabe1008d2c72342adec04b70f4bae48b7bcf6ebca915624100c353",
             "toolchain": "leanprover/lean4:v4.34.0-rc1",
-            "pinned_on": "2026-09-03",
-            "note": "Pinned 2026-09-03: the S2-sin-theta canonical witness is now the scalar-generic sinTheta_unbounded_formGap_symmetricNorming_rclike, whose signature no longer carries the two proof-capability classes (both are unconditional instances at every RCLike field)."
+            "pinned_on": "2026-09-04",
+            "note": "Pinned 2026-09-04 with the seven Section 3-8 major reviews: their declarations and the passages they cite are now guarded like the four Section 2 headline rows."
           },
           {
             "declaration": "TauCeti.DavisKahan.FiniteDimensional.shortRotation_fullDisplacement_refuted",
             "type_expr_hash": "3629569613",
             "type_text_sha256": "7454383c5969014e0f9b63af966a931cb30f273831218d3bb851db8176b22e63",
             "toolchain": "leanprover/lean4:v4.34.0-rc1",
-            "pinned_on": "2026-09-03",
-            "note": "Pinned 2026-09-03: the S2-sin-theta canonical witness is now the scalar-generic sinTheta_unbounded_formGap_symmetricNorming_rclike, whose signature no longer carries the two proof-capability classes (both are unconditional instances at every RCLike field)."
+            "pinned_on": "2026-09-04",
+            "note": "Pinned 2026-09-04 with the seven Section 3-8 major reviews: their declarations and the passages they cite are now guarded like the four Section 2 headline rows."
           }
         ]
       }
@@ -3182,7 +3422,7 @@
             "kind": "setup",
             "relation": "literal",
             "source_fragment": "printed",
-            "source_excerpt": "Let $\\mathcal X,\\mathcal Y$ be Banach spaces."
+            "source_excerpt": "Let \\mathcal X,\\mathcal Y be Banach spaces."
           },
           {
             "source_clause": "||B|| <= alpha, ||A^{-1}|| <= (alpha + delta)^{-1}, alpha >= 0, delta > 0.",
@@ -3226,7 +3466,7 @@
             "kind": "conclusion",
             "relation": "literal",
             "source_fragment": "printed",
-            "source_excerpt": "The roles and hypotheses of $A$ and $B$ may be interchanged.",
+            "source_excerpt": "The roles and hypotheses of A and B may be interchanged.",
             "lean_declarations": [
               "TauCeti.DavisKahan1970.theorem5_1_banach_sylvester_interchanged_exact",
               "TauCeti.DavisKahan1970.theorem5_1_banach_sylvester_interchanged"
@@ -3239,7 +3479,7 @@
             "kind": "conclusion",
             "relation": "literal",
             "source_fragment": "printed",
-            "source_excerpt": "The same proof also covers densely-defined unbounded $A$",
+            "source_excerpt": "The same proof also covers densely-defined unbounded A",
             "lean_declarations": [
               "TauCeti.DavisKahan1970.theorem5_1_banach_sylvester_unboundedA"
             ]
@@ -3251,7 +3491,7 @@
             "kind": "scope",
             "relation": "generalization",
             "source_fragment": "printed",
-            "source_excerpt": "Let $\\mathcal X,\\mathcal Y$ be Banach spaces.",
+            "source_excerpt": "Let \\mathcal X,\\mathcal Y be Banach spaces.",
             "lean_declarations": [
               "TauCeti.DavisKahan1970.banach_sylvester_lower_bound_uiNorm"
             ],
@@ -3290,7 +3530,48 @@
             }
           }
         ],
-        "note": "Two canonical declarations, for two different halves of the printed statement. `theorem5_1_banach_sylvester_exact` carries the printed hypothesis literally -- a genuine two-sided bounded inverse `Ainv` with `||Ainv|| <= (gamma+delta)^{-1}` -- and is what a statement-level auditor should read; `banach_sylvester_lower_bound_uiNorm` is the engine at the printed generality, over an arbitrary `NontriviallyNormedField` and arbitrary normed spaces, and it is what covers the source's unstated scalar field. The proof is the source's and is short: from `A X = C + X B` and a left inverse, `X = A^{-1}C + A^{-1}XB`, so `||X|| <= (rho+delta)^{-1}(||C|| + rho||X||)`, and one multiplication by `rho + delta` cancels `rho||X||`. The Neumann series produces a solution; it is not what bounds one, and `bounded_sylvester_neumann_solution` is recorded as the separate existence engine rather than as evidence for this inequality. The row's `audit_mapping` hole is not closed by this review: the interchange and unbounded remarks are now bound clause-by-clause to declarations, but the literal printed statement is still registered over the complex field only. CANONICAL WITNESSES FOLLOW THE RESULT INVENTORY, which names the two `banach_sylvester_lower_bound_*` aliases; `banach_sylvester_lower_bound_exact` is the alias of `theorem5_1_banach_sylvester_exact`, so the statement cited as canonical is the literal two-sided-inverse wrapper under its inventory name, and the underlying declaration is kept as supporting evidence."
+        "note": "Two canonical declarations, for two different halves of the printed statement. `theorem5_1_banach_sylvester_exact` carries the printed hypothesis literally -- a genuine two-sided bounded inverse `Ainv` with `||Ainv|| <= (gamma+delta)^{-1}` -- and is what a statement-level auditor should read; `banach_sylvester_lower_bound_uiNorm` is the engine at the printed generality, over an arbitrary `NontriviallyNormedField` and arbitrary normed spaces, and it is what covers the source's unstated scalar field. The proof is the source's and is short: from `A X = C + X B` and a left inverse, `X = A^{-1}C + A^{-1}XB`, so `||X|| <= (rho+delta)^{-1}(||C|| + rho||X||)`, and one multiplication by `rho + delta` cancels `rho||X||`. The Neumann series produces a solution; it is not what bounds one, and `bounded_sylvester_neumann_solution` is recorded as the separate existence engine rather than as evidence for this inequality. The row's `audit_mapping` hole is not closed by this review: the interchange and unbounded remarks are now bound clause-by-clause to declarations, but the literal printed statement is still registered over the complex field only. CANONICAL WITNESSES FOLLOW THE RESULT INVENTORY, which names the two `banach_sylvester_lower_bound_*` aliases; `banach_sylvester_lower_bound_exact` is the alias of `theorem5_1_banach_sylvester_exact`, so the statement cited as canonical is the literal two-sided-inverse wrapper under its inventory name, and the underlying declaration is kept as supporting evidence.",
+        "statement_pins": [],
+        "source_pins": [
+          {
+            "fragment": "printed",
+            "document": "DavisKahan1970",
+            "sha256": "5b4898a5ea742cf7ac818fdc45e8614f93ef148d9390357bbe8fe8417621aaf3",
+            "locator": {
+              "document": "DavisKahan1970",
+              "marker": "DK-5.1-thm",
+              "file": "prose/distilled_literature/DavisKahan1970_part_III.tex",
+              "lines": [
+                636,
+                651
+              ],
+              "section": "5",
+              "result": "Theorem 5.1 and its two immediate scope remarks"
+            },
+            "visibility": "public_reconstruction",
+            "pinned_on": "2026-09-04",
+            "note": "Pinned 2026-09-04 with the seven Section 3-8 major reviews: their declarations and the passages they cite are now guarded like the four Section 2 headline rows."
+          },
+          {
+            "fragment": "theorem-5-2",
+            "document": "DavisKahan1970",
+            "sha256": "6517f666fad6ff54fa8f8a00af739cfe36a4a4d8b073f468183d3da9a2d12d9d",
+            "locator": {
+              "document": "DavisKahan1970",
+              "marker": "DK-5.2-thm",
+              "file": "prose/distilled_literature/DavisKahan1970_part_III.tex",
+              "lines": [
+                686,
+                698
+              ],
+              "section": "5",
+              "result": "Theorem 5.2"
+            },
+            "visibility": "public_reconstruction",
+            "pinned_on": "2026-09-04",
+            "note": "Pinned 2026-09-04 with the seven Section 3-8 major reviews: their declarations and the passages they cite are now guarded like the four Section 2 headline rows."
+          }
+        ]
       }
     },
     {
@@ -3426,7 +3707,7 @@
             "kind": "setup",
             "relation": "literal",
             "source_fragment": "printed",
-            "source_excerpt": "let $A$ on $\\mathcal Y$, $B$ on $\\mathcal X$ be semibounded self-adjoint operators"
+            "source_excerpt": "let A on \\mathcal Y, B on \\mathcal X be semibounded self-adjoint operators"
           },
           {
             "source_clause": "A >= gamma + delta > gamma >= B.",
@@ -3448,7 +3729,7 @@
             "kind": "hypothesis",
             "relation": "literal",
             "source_fragment": "printed",
-            "source_excerpt": "If $X,C:\\mathcal X\\to\\mathcal Y$ are bounded and"
+            "source_excerpt": "If X,C:\\mathcal X\\to\\mathcal Y are bounded and"
           },
           {
             "source_clause": "Then for every unitary-invariant norm, ||C|| >= delta ||X||.",
@@ -3491,7 +3772,7 @@
             "kind": "scope",
             "relation": "literal",
             "source_fragment": "ambient",
-            "source_excerpt": "Let $\\Hsp$ be a separable Hilbert space, real or complex; finite dimensionality is not assumed."
+            "source_excerpt": "Let \\Hsp be a separable Hilbert space, real or complex; finite dimensionality is not assumed."
           }
         ],
         "source_fragments": [
@@ -3539,7 +3820,111 @@
             }
           }
         ],
-        "note": "The canonical declarations are the two fixed-field endpoints at the source's own norm class. They are preferred over the alias `Theorem5_2` and its engine because those quantify over a `KyFanDominantIdealFamily` rather than over the printed unitarily invariant norm; the ideal-family form is more general on the norm axis but is not the printed statement, and `symmetricNorming_of_kyFanDominant` is the compiled bridge. One warning is carried in the context declarations and repeats the row's own note: `unbounded_sylvester_intervalExterior_uiNorm_of_spectra` is listed on this row but carries the interval/exterior separation, which is a different theorem from the printed ordered branch, and the two must not be substituted for one another. The row's `audit_mapping` hole asked for clause-by-clause binding of the real and complex scope; that is what the clause map above supplies, and the review records one genuine asymmetry: the complex endpoint takes the printed ordering literally while the real endpoint takes the whole `FormBoundedSylvesterGap`, of which the printed ordering is a constructor."
+        "note": "The canonical declarations are the two fixed-field endpoints at the source's own norm class. They are preferred over the alias `Theorem5_2` and its engine because those quantify over a `KyFanDominantIdealFamily` rather than over the printed unitarily invariant norm; the ideal-family form is more general on the norm axis but is not the printed statement, and `symmetricNorming_of_kyFanDominant` is the compiled bridge. One warning is carried in the context declarations and repeats the row's own note: `unbounded_sylvester_intervalExterior_uiNorm_of_spectra` is listed on this row but carries the interval/exterior separation, which is a different theorem from the printed ordered branch, and the two must not be substituted for one another. The row's `audit_mapping` hole asked for clause-by-clause binding of the real and complex scope; that is what the clause map above supplies, and the review records one genuine asymmetry: the complex endpoint takes the printed ordering literally while the real endpoint takes the whole `FormBoundedSylvesterGap`, of which the printed ordering is a constructor.",
+        "statement_pins": [
+          {
+            "declaration": "TauCeti.DavisKahan1970.theorem5_2_symmetricNorming_complex",
+            "type_expr_hash": "2868615507",
+            "type_text_sha256": "e6c7118c923c81b4faa965d56a1ea30f7580e544572fc45620bea8fc99cbedf0",
+            "toolchain": "leanprover/lean4:v4.34.0-rc1",
+            "pinned_on": "2026-09-04",
+            "note": "Pinned 2026-09-04 with the seven Section 3-8 major reviews: their declarations and the passages they cite are now guarded like the four Section 2 headline rows."
+          },
+          {
+            "declaration": "TauCeti.DavisKahan1970.theorem5_2_symmetricNorming_real",
+            "type_expr_hash": "3292536204",
+            "type_text_sha256": "51c841b0acd5c34984b6313ceae154e44ca6cb9fa56f7e494d0d3c48648f21a8",
+            "toolchain": "leanprover/lean4:v4.34.0-rc1",
+            "pinned_on": "2026-09-04",
+            "note": "Pinned 2026-09-04 with the seven Section 3-8 major reviews: their declarations and the passages they cite are now guarded like the four Section 2 headline rows."
+          },
+          {
+            "declaration": "TauCeti.DavisKahan1970.symmetricNorming_of_kyFanDominant",
+            "type_expr_hash": "1353657526",
+            "type_text_sha256": "1b48cee9e602d445c2d28d833f4434a479fb5d1572c7ed3099cf769d2699e643",
+            "toolchain": "leanprover/lean4:v4.34.0-rc1",
+            "pinned_on": "2026-09-04",
+            "note": "Pinned 2026-09-04 with the seven Section 3-8 major reviews: their declarations and the passages they cite are now guarded like the four Section 2 headline rows."
+          }
+        ],
+        "source_pins": [
+          {
+            "fragment": "printed",
+            "document": "DavisKahan1970",
+            "sha256": "6517f666fad6ff54fa8f8a00af739cfe36a4a4d8b073f468183d3da9a2d12d9d",
+            "locator": {
+              "document": "DavisKahan1970",
+              "marker": "DK-5.2-thm",
+              "file": "prose/distilled_literature/DavisKahan1970_part_III.tex",
+              "lines": [
+                686,
+                698
+              ],
+              "section": "5",
+              "result": "Theorem 5.2"
+            },
+            "visibility": "public_reconstruction",
+            "pinned_on": "2026-09-04",
+            "note": "Pinned 2026-09-04 with the seven Section 3-8 major reviews: their declarations and the passages they cite are now guarded like the four Section 2 headline rows."
+          },
+          {
+            "fragment": "ui-norms",
+            "document": "DavisKahan1970",
+            "sha256": "1cf01699d78a53a8beff5c7b2f51dc572e78a942cdf0565b085795b870333578",
+            "locator": {
+              "document": "DavisKahan1970",
+              "marker": "S1-ui-norms",
+              "file": "prose/distilled_literature/DavisKahan1970_part_III.tex",
+              "lines": [
+                108,
+                186
+              ],
+              "section": "1",
+              "result": "Unitary-invariant norms and singular values"
+            },
+            "visibility": "public_reconstruction",
+            "pinned_on": "2026-09-04",
+            "note": "Pinned 2026-09-04 with the seven Section 3-8 major reviews: their declarations and the passages they cite are now guarded like the four Section 2 headline rows."
+          },
+          {
+            "fragment": "unbounded-scope",
+            "document": "DavisKahan1970",
+            "sha256": "373da5c27d116b626590ff5f1745d4efbea68d36df5fd07506860c31d834cb39",
+            "locator": {
+              "document": "DavisKahan1970",
+              "marker": "S2-unbounded-scope",
+              "file": "prose/distilled_literature/DavisKahan1970_part_III.tex",
+              "lines": [
+                289,
+                289
+              ],
+              "section": "2",
+              "result": "Scope of the four theorems"
+            },
+            "visibility": "public_reconstruction",
+            "pinned_on": "2026-09-04",
+            "note": "Pinned 2026-09-04 with the seven Section 3-8 major reviews: their declarations and the passages they cite are now guarded like the four Section 2 headline rows."
+          },
+          {
+            "fragment": "ambient",
+            "document": "DavisKahan1970",
+            "sha256": "27f71e8a793ebe0cf7e2cf0d4a95da0539c1810b34f345eb4dd75e102f90aeef",
+            "locator": {
+              "document": "DavisKahan1970",
+              "marker": "S1-block-residual",
+              "file": "prose/distilled_literature/DavisKahan1970_part_III.tex",
+              "lines": [
+                29,
+                100
+              ],
+              "section": "1",
+              "result": "Section 1, equations (1.1)--(1.8)"
+            },
+            "visibility": "public_reconstruction",
+            "pinned_on": "2026-09-04",
+            "note": "Pinned 2026-09-04 with the seven Section 3-8 major reviews: their declarations and the passages they cite are now guarded like the four Section 2 headline rows."
+          }
+        ]
       }
     },
     {
@@ -3741,7 +4126,7 @@
             "kind": "setup",
             "relation": "definitional",
             "source_fragment": "printed",
-            "source_excerpt": "Assume $A+H$ has the reducing decomposition (1.3) with exhaustive isometries $F_0,F_1$"
+            "source_excerpt": "Assume A+H has the reducing decomposition (1.3) with exhaustive isometries F_0,F_1"
           },
           {
             "source_clause": "R is defined by (1.8).",
@@ -3750,7 +4135,7 @@
             "kind": "setup",
             "relation": "definitional",
             "source_fragment": "printed",
-            "source_excerpt": "and define $R$ by (1.8)",
+            "source_excerpt": "and define R by (1.8)",
             "correspondence_declarations": [
               "DavisKahan1970.isTrialResidual_iff_equation_and_isometry"
             ]
@@ -3788,7 +4173,7 @@
             "kind": "setup",
             "relation": "literal",
             "source_fragment": "printed",
-            "source_excerpt": "let $\\sin\\Theta_0$ be any operator having the same singular values as $PQ^\\perp$"
+            "source_excerpt": "let \\sin\\Theta_0 be any operator having the same singular values as PQ^\\perp"
           },
           {
             "source_clause": "If one of A_0, Lambda_1 has spectrum in [beta, alpha] and the other has spectrum outside (beta - delta, alpha + delta).",
@@ -3797,7 +4182,7 @@
             "kind": "hypothesis",
             "relation": "generalization",
             "source_fragment": "printed",
-            "source_excerpt": "If one of $A_0,\\Lambda_1$ has spectrum in $[\\beta,\\alpha]$ and the other has spectrum outside $(\\beta-\\delta,\\alpha+\\delta)$",
+            "source_excerpt": "If one of A_0,\\Lambda_1 has spectrum in [\\beta,\\alpha] and the other has spectrum outside (\\beta-\\delta,\\alpha+\\delta)",
             "lean_declarations": [
               "TauCeti.DavisKahan1970.theorem6_1_complex",
               "TauCeti.DavisKahan1970.theorem6_1_real"
@@ -3832,7 +4217,7 @@
             "kind": "scope",
             "relation": "literal",
             "source_fragment": "ambient",
-            "source_excerpt": "Let $\\Hsp$ be a separable Hilbert space, real or complex; finite dimensionality is not assumed."
+            "source_excerpt": "Let \\Hsp be a separable Hilbert space, real or complex; finite dimensionality is not assumed."
           },
           {
             "source_clause": "The source's unbounded self-adjoint scope applies to the single-angle theorems.",
@@ -3841,7 +4226,7 @@
             "kind": "scope",
             "relation": "literal",
             "source_fragment": "unbounded-scope",
-            "source_excerpt": "the results are also intended for unbounded self-adjoint $A$"
+            "source_excerpt": "the results are also intended for unbounded self-adjoint A"
           }
         ],
         "source_fragments": [
@@ -3900,7 +4285,146 @@
             }
           }
         ],
-        "note": "The canonical declarations are the component-hypothesis forms `theorem6_1_complex` and `theorem6_1_real`, not the record methods `Theorem6_1_complex` / `Theorem6_1_real`. The record forms are methods on `Theorem61Data`, which bundles an `UnboundedSinThetaData` together with the exact map, three self-adjointness fields, the exact decomposition, the gap and the frame bound; the component forms take those as arguments, so a reader sees the printed hypothesis list. Nothing about the proof's organisation appears in either canonical signature: no data record, no Ky Fan family, no ideal family, no proof-capability class. Two clauses are stated at a scope wider than the print, and both are weakenings of hypotheses rather than strengthenings: the separation is the whole `FormBoundedSylvesterGap` rather than only the printed interval/exterior branch, and the lower frame bound is bridged to the printed operator inequality by a compiled biconditional rather than assumed to be the same thing. The row's own notes record that this row's earlier complex-only reading was a false positive; the real endpoints have been present and axiom-clean since 2026-08-07 and are canonical here alongside the complex ones."
+        "note": "The canonical declarations are the component-hypothesis forms `theorem6_1_complex` and `theorem6_1_real`, not the record methods `Theorem6_1_complex` / `Theorem6_1_real`. The record forms are methods on `Theorem61Data`, which bundles an `UnboundedSinThetaData` together with the exact map, three self-adjointness fields, the exact decomposition, the gap and the frame bound; the component forms take those as arguments, so a reader sees the printed hypothesis list. Nothing about the proof's organisation appears in either canonical signature: no data record, no Ky Fan family, no ideal family, no proof-capability class. Two clauses are stated at a scope wider than the print, and both are weakenings of hypotheses rather than strengthenings: the separation is the whole `FormBoundedSylvesterGap` rather than only the printed interval/exterior branch, and the lower frame bound is bridged to the printed operator inequality by a compiled biconditional rather than assumed to be the same thing. The row's own notes record that this row's earlier complex-only reading was a false positive; the real endpoints have been present and axiom-clean since 2026-08-07 and are canonical here alongside the complex ones.",
+        "statement_pins": [
+          {
+            "declaration": "TauCeti.DavisKahan1970.theorem6_1_complex",
+            "type_expr_hash": "549731632",
+            "type_text_sha256": "6199159837003998529f4f69ba8814d9d2b94c6b16beec2799144a0df41dc350",
+            "toolchain": "leanprover/lean4:v4.34.0-rc1",
+            "pinned_on": "2026-09-04",
+            "note": "Pinned 2026-09-04 with the seven Section 3-8 major reviews: their declarations and the passages they cite are now guarded like the four Section 2 headline rows."
+          },
+          {
+            "declaration": "TauCeti.DavisKahan1970.theorem6_1_real",
+            "type_expr_hash": "1342470425",
+            "type_text_sha256": "6f2adfe147e66fc6c9e505f6e992d24feff834de3362cfa55641183afadbb6ee",
+            "toolchain": "leanprover/lean4:v4.34.0-rc1",
+            "pinned_on": "2026-09-04",
+            "note": "Pinned 2026-09-04 with the seven Section 3-8 major reviews: their declarations and the passages they cite are now guarded like the four Section 2 headline rows."
+          },
+          {
+            "declaration": "DavisKahan1970.isTrialResidual_iff_equation_and_isometry",
+            "type_expr_hash": "4291718534",
+            "type_text_sha256": "00c61eb63c7993696903b55f24e175787917a5acf02ae16f9f3da0114c2af543",
+            "toolchain": "leanprover/lean4:v4.34.0-rc1",
+            "pinned_on": "2026-09-04",
+            "note": "Pinned 2026-09-04 with the seven Section 3-8 major reviews: their declarations and the passages they cite are now guarded like the four Section 2 headline rows."
+          },
+          {
+            "declaration": "TauCeti.DavisKahan1970.lowerFrameBound_iff_operator_inequality",
+            "type_expr_hash": "4212719904",
+            "type_text_sha256": "a437d198c0d5602ab14ede5fe60ab2ff5ec2aabb981520316d0f63ef6482ea57",
+            "toolchain": "leanprover/lean4:v4.34.0-rc1",
+            "pinned_on": "2026-09-04",
+            "note": "Pinned 2026-09-04 with the seven Section 3-8 major reviews: their declarations and the passages they cite are now guarded like the four Section 2 headline rows."
+          },
+          {
+            "declaration": "TauCeti.DavisKahan1970.lowerFrameBound_of_operator_inequality",
+            "type_expr_hash": "2886412651",
+            "type_text_sha256": "288a835276ff37b35c34bc07439ddcef39ab74ade18a2639e0f5bfe0fa3780ef",
+            "toolchain": "leanprover/lean4:v4.34.0-rc1",
+            "pinned_on": "2026-09-04",
+            "note": "Pinned 2026-09-04 with the seven Section 3-8 major reviews: their declarations and the passages they cite are now guarded like the four Section 2 headline rows."
+          }
+        ],
+        "source_pins": [
+          {
+            "fragment": "printed",
+            "document": "DavisKahan1970",
+            "sha256": "ca7f675be545f8e8cdb98f0e74208bb89389ea3b813f14b320b2a6d90968590c",
+            "locator": {
+              "document": "DavisKahan1970",
+              "marker": "DK-6.1-thm",
+              "file": "prose/distilled_literature/DavisKahan1970_part_III.tex",
+              "lines": [
+                779,
+                788
+              ],
+              "section": "6",
+              "result": "Theorem 6.1"
+            },
+            "visibility": "public_reconstruction",
+            "pinned_on": "2026-09-04",
+            "note": "Pinned 2026-09-04 with the seven Section 3-8 major reviews: their declarations and the passages they cite are now guarded like the four Section 2 headline rows."
+          },
+          {
+            "fragment": "ui-norms",
+            "document": "DavisKahan1970",
+            "sha256": "1cf01699d78a53a8beff5c7b2f51dc572e78a942cdf0565b085795b870333578",
+            "locator": {
+              "document": "DavisKahan1970",
+              "marker": "S1-ui-norms",
+              "file": "prose/distilled_literature/DavisKahan1970_part_III.tex",
+              "lines": [
+                108,
+                186
+              ],
+              "section": "1",
+              "result": "Unitary-invariant norms and singular values"
+            },
+            "visibility": "public_reconstruction",
+            "pinned_on": "2026-09-04",
+            "note": "Pinned 2026-09-04 with the seven Section 3-8 major reviews: their declarations and the passages they cite are now guarded like the four Section 2 headline rows."
+          },
+          {
+            "fragment": "block-residual",
+            "document": "DavisKahan1970",
+            "sha256": "27f71e8a793ebe0cf7e2cf0d4a95da0539c1810b34f345eb4dd75e102f90aeef",
+            "locator": {
+              "document": "DavisKahan1970",
+              "marker": "S1-block-residual",
+              "file": "prose/distilled_literature/DavisKahan1970_part_III.tex",
+              "lines": [
+                29,
+                100
+              ],
+              "section": "1",
+              "result": "Section 1, equations (1.1)--(1.8)"
+            },
+            "visibility": "public_reconstruction",
+            "pinned_on": "2026-09-04",
+            "note": "Pinned 2026-09-04 with the seven Section 3-8 major reviews: their declarations and the passages they cite are now guarded like the four Section 2 headline rows."
+          },
+          {
+            "fragment": "unbounded-scope",
+            "document": "DavisKahan1970",
+            "sha256": "373da5c27d116b626590ff5f1745d4efbea68d36df5fd07506860c31d834cb39",
+            "locator": {
+              "document": "DavisKahan1970",
+              "marker": "S2-unbounded-scope",
+              "file": "prose/distilled_literature/DavisKahan1970_part_III.tex",
+              "lines": [
+                289,
+                289
+              ],
+              "section": "2",
+              "result": "Scope of the four theorems"
+            },
+            "visibility": "public_reconstruction",
+            "pinned_on": "2026-09-04",
+            "note": "Pinned 2026-09-04 with the seven Section 3-8 major reviews: their declarations and the passages they cite are now guarded like the four Section 2 headline rows."
+          },
+          {
+            "fragment": "ambient",
+            "document": "DavisKahan1970",
+            "sha256": "27f71e8a793ebe0cf7e2cf0d4a95da0539c1810b34f345eb4dd75e102f90aeef",
+            "locator": {
+              "document": "DavisKahan1970",
+              "marker": "S1-block-residual",
+              "file": "prose/distilled_literature/DavisKahan1970_part_III.tex",
+              "lines": [
+                29,
+                100
+              ],
+              "section": "1",
+              "result": "Section 1, ambient scope"
+            },
+            "visibility": "public_reconstruction",
+            "pinned_on": "2026-09-04",
+            "note": "Pinned 2026-09-04 with the seven Section 3-8 major reviews: their declarations and the passages they cite are now guarded like the four Section 2 headline rows."
+          }
+        ]
       }
     },
     {
@@ -4118,7 +4642,7 @@
             "kind": "scope",
             "relation": "generalization",
             "source_fragment": "printed",
-            "source_excerpt": "the source temporarily supposes that all the operators are bounded and that $S_0$ is compact",
+            "source_excerpt": "the source temporarily supposes that all the operators are bounded and that S_0 is compact",
             "lean_declarations": [
               "TauCeti.DavisKahan1970.tanTheta_directed_unboundedTrial_symmetricNorming_complex",
               "TauCeti.DavisKahan1970.tanTheta_directed_unboundedTrial_symmetricNorming_real"
@@ -4131,7 +4655,7 @@
             "kind": "conclusion",
             "relation": "literal",
             "source_fragment": "printed",
-            "source_excerpt": "which is the ambient conclusion $\\delta\\norm{\\tan\\Theta}\\le\\norm H$"
+            "source_excerpt": "which is the ambient conclusion \\delta\\norm{\\tan\\Theta}\\le\\norm H"
           },
           {
             "source_clause": "Example 6.1 shows the one-sided placement of Lambda_1 is essential: a finite matrix example has delta = 1 and tangent quantity 1 while the residual is only 1/sqrt 2 if spectral mass is allowed on the wrong side.",
@@ -4140,7 +4664,7 @@
             "kind": "conclusion",
             "relation": "literal",
             "source_fragment": "printed",
-            "source_excerpt": "a finite matrix example has $\\delta=1$ and tangent quantity $1$ while the residual is only $1/\\sqrt2$",
+            "source_excerpt": "a finite matrix example has \\delta=1 and tangent quantity 1 while the residual is only 1/\\sqrt2",
             "lean_declarations": [
               "TauCeti.DavisKahan1970.Section6Example61.rayleigh_zero",
               "TauCeti.DavisKahan1970.Section6Example61.residual_norm",
@@ -4156,7 +4680,7 @@
             "kind": "setup",
             "relation": "definitional",
             "source_fragment": "printed",
-            "source_excerpt": "Set $A_0=E_0^*(A+H)E_0$, define $R$ by (1.8)",
+            "source_excerpt": "Set A_0=E_0^*(A+H)E_0, define R by (1.8)",
             "lean_declarations": [
               "TauCeti.DavisKahan1970.tanTheta_directed_unboundedTrial_symmetricNorming_complex",
               "TauCeti.DavisKahan1970.tanTheta_directed_unboundedTrial_symmetricNorming_real"
@@ -4181,7 +4705,7 @@
             "kind": "setup",
             "relation": "literal",
             "source_fragment": "printed",
-            "source_excerpt": "let the directed sine data have the singular values of $E_0^*F_1$",
+            "source_excerpt": "let the directed sine data have the singular values of E_0^*F_1",
             "lean_declarations": [
               "TauCeti.DavisKahan1970.tanTheta_directed_unboundedTrial_symmetricNorming_complex",
               "TauCeti.DavisKahan1970.tanTheta_directed_unboundedTrial_symmetricNorming_real"
@@ -4231,7 +4755,7 @@
             "kind": "scope",
             "relation": "literal",
             "source_fragment": "ambient",
-            "source_excerpt": "Let $\\Hsp$ be a separable Hilbert space, real or complex; finite dimensionality is not assumed.",
+            "source_excerpt": "Let \\Hsp be a separable Hilbert space, real or complex; finite dimensionality is not assumed.",
             "lean_declarations": [
               "TauCeti.DavisKahan1970.tanTheta_directed_unboundedTrial_symmetricNorming_complex",
               "TauCeti.DavisKahan1970.tanTheta_directed_unboundedTrial_symmetricNorming_real"
@@ -4294,7 +4818,122 @@
             }
           }
         ],
-        "note": "This row is not a single theorem and the review does not pretend otherwise. Of the three kinds of material in the hashed block, two are fully carried and one is not. The generalized Theorem 6.3 is carried at or beyond the printed scope by `tanTheta_directed_bounded_spectralGap_symmetricNorming_complex` -- the printed spectral orientation, every source unitarily invariant norm, arbitrary Hilbert dimension and arbitrary complete trial subspace, tangent representative exhibited rather than assumed -- and by `tanTheta_directed_bounded_symmetricNorming_real` over the real field. Example 6.1 is carried by five compiled theorems, each printed number its own statement. The proof machinery (6.2)--(6.6) is NOT carried: four clauses above are marked `open`, because the compiled proof reaches the same conclusion by a different route (Rayleigh--Ritz compression, Sylvester lower bound, Ky Fan dominance) and no declaration registered here states those intermediate identities. The row's own `next_action` records the same boundary: it claims the generalized theorem and the example, not the derivation. Two other honest asymmetries: the printed strict dimension inequality is dropped by the canonical endpoints and retained only by the supporting ideal-family form, and the real endpoint is stated in the form-bound rather than the spectral orientation. CANONICAL WITNESSES FOLLOW THE RESULT INVENTORY, which names the unbounded-trial endpoints rather than the bounded ones. That is the stronger and more source-faithful choice: the passage itself says the boundedness and compactness it uses are temporary and removed by the Appendix, so the unbounded endpoints are the theorem the source is reaching for. The cost, recorded in the separation clause above, is that the printed spectral inclusions appear literally only on the supporting bounded endpoint; the canonical form states the half-infinite ordered configuration instead, which is weaker as a hypothesis and which the source's scope paragraph explicitly allows."
+        "note": "This row is not a single theorem and the review does not pretend otherwise. Of the three kinds of material in the hashed block, two are fully carried and one is not. The generalized Theorem 6.3 is carried at or beyond the printed scope by `tanTheta_directed_bounded_spectralGap_symmetricNorming_complex` -- the printed spectral orientation, every source unitarily invariant norm, arbitrary Hilbert dimension and arbitrary complete trial subspace, tangent representative exhibited rather than assumed -- and by `tanTheta_directed_bounded_symmetricNorming_real` over the real field. Example 6.1 is carried by five compiled theorems, each printed number its own statement. The proof machinery (6.2)--(6.6) is NOT carried: four clauses above are marked `open`, because the compiled proof reaches the same conclusion by a different route (Rayleigh--Ritz compression, Sylvester lower bound, Ky Fan dominance) and no declaration registered here states those intermediate identities. The row's own `next_action` records the same boundary: it claims the generalized theorem and the example, not the derivation. Two other honest asymmetries: the printed strict dimension inequality is dropped by the canonical endpoints and retained only by the supporting ideal-family form, and the real endpoint is stated in the form-bound rather than the spectral orientation. CANONICAL WITNESSES FOLLOW THE RESULT INVENTORY, which names the unbounded-trial endpoints rather than the bounded ones. That is the stronger and more source-faithful choice: the passage itself says the boundedness and compactness it uses are temporary and removed by the Appendix, so the unbounded endpoints are the theorem the source is reaching for. The cost, recorded in the separation clause above, is that the printed spectral inclusions appear literally only on the supporting bounded endpoint; the canonical form states the half-infinite ordered configuration instead, which is weaker as a hypothesis and which the source's scope paragraph explicitly allows.",
+        "statement_pins": [
+          {
+            "declaration": "TauCeti.DavisKahan1970.tanTheta_directed_unboundedTrial_symmetricNorming_complex",
+            "type_expr_hash": "2295447959",
+            "type_text_sha256": "f0fb95f88b04a8bce58fa98a23859fc533d2d4b8744f937edc998527aa08a07d",
+            "toolchain": "leanprover/lean4:v4.34.0-rc1",
+            "pinned_on": "2026-09-04",
+            "note": "Pinned 2026-09-04 with the seven Section 3-8 major reviews: their declarations and the passages they cite are now guarded like the four Section 2 headline rows."
+          },
+          {
+            "declaration": "TauCeti.DavisKahan1970.tanTheta_directed_unboundedTrial_symmetricNorming_real",
+            "type_expr_hash": "184388189",
+            "type_text_sha256": "bdbc5f8e11f1b2083e6f43d5db3e65060563d960cb23eb4ad19eaa502f3e0ca1",
+            "toolchain": "leanprover/lean4:v4.34.0-rc1",
+            "pinned_on": "2026-09-04",
+            "note": "Pinned 2026-09-04 with the seven Section 3-8 major reviews: their declarations and the passages they cite are now guarded like the four Section 2 headline rows."
+          }
+        ],
+        "source_pins": [
+          {
+            "fragment": "printed",
+            "document": "DavisKahan1970",
+            "sha256": "2d772815f7de836c89bab94bf502d888fd2544d0675bc329bacb40772751726f",
+            "locator": {
+              "document": "DavisKahan1970",
+              "marker": "DK-6.3-thm",
+              "file": "prose/distilled_literature/DavisKahan1970_part_III.tex",
+              "lines": [
+                818,
+                892
+              ],
+              "section": "6",
+              "result": "Equations (6.2)--(6.6), Example 6.1, and Theorem 6.3"
+            },
+            "visibility": "public_reconstruction",
+            "pinned_on": "2026-09-04",
+            "note": "Pinned 2026-09-04 with the seven Section 3-8 major reviews: their declarations and the passages they cite are now guarded like the four Section 2 headline rows."
+          },
+          {
+            "fragment": "ui-norms",
+            "document": "DavisKahan1970",
+            "sha256": "1cf01699d78a53a8beff5c7b2f51dc572e78a942cdf0565b085795b870333578",
+            "locator": {
+              "document": "DavisKahan1970",
+              "marker": "S1-ui-norms",
+              "file": "prose/distilled_literature/DavisKahan1970_part_III.tex",
+              "lines": [
+                108,
+                186
+              ],
+              "section": "1",
+              "result": "Unitary-invariant norms and singular values"
+            },
+            "visibility": "public_reconstruction",
+            "pinned_on": "2026-09-04",
+            "note": "Pinned 2026-09-04 with the seven Section 3-8 major reviews: their declarations and the passages they cite are now guarded like the four Section 2 headline rows."
+          },
+          {
+            "fragment": "ambient-tangent",
+            "document": "DavisKahan1970",
+            "sha256": "f6596195258b1d94fa3c02fd62ec4e8d45e4fd373913d0c972c1b99e3b33bbf6",
+            "locator": {
+              "document": "DavisKahan1970",
+              "marker": "S2-tan-theta",
+              "file": "prose/distilled_literature/DavisKahan1970_part_III.tex",
+              "lines": [
+                215,
+                228
+              ],
+              "section": "2",
+              "result": "Section 2, second unnumbered theorem"
+            },
+            "visibility": "public_reconstruction",
+            "pinned_on": "2026-09-04",
+            "note": "Pinned 2026-09-04 with the seven Section 3-8 major reviews: their declarations and the passages they cite are now guarded like the four Section 2 headline rows."
+          },
+          {
+            "fragment": "appendix",
+            "document": "DavisKahan1970",
+            "sha256": "29080084e1c341cea94ddd23761c41888943e213f937dcdbbe6698aad96ebff1",
+            "locator": {
+              "document": "DavisKahan1970",
+              "marker": "DK-6-appendix",
+              "file": "prose/distilled_literature/DavisKahan1970_part_III.tex",
+              "lines": [
+                902,
+                936
+              ],
+              "section": "6 appendix",
+              "result": "Appendix to Section 6"
+            },
+            "visibility": "public_reconstruction",
+            "pinned_on": "2026-09-04",
+            "note": "Pinned 2026-09-04 with the seven Section 3-8 major reviews: their declarations and the passages they cite are now guarded like the four Section 2 headline rows."
+          },
+          {
+            "fragment": "ambient",
+            "document": "DavisKahan1970",
+            "sha256": "27f71e8a793ebe0cf7e2cf0d4a95da0539c1810b34f345eb4dd75e102f90aeef",
+            "locator": {
+              "document": "DavisKahan1970",
+              "marker": "S1-block-residual",
+              "file": "prose/distilled_literature/DavisKahan1970_part_III.tex",
+              "lines": [
+                29,
+                100
+              ],
+              "section": "1",
+              "result": "Section 1, ambient scope"
+            },
+            "visibility": "public_reconstruction",
+            "pinned_on": "2026-09-04",
+            "note": "Pinned 2026-09-04 with the seven Section 3-8 major reviews: their declarations and the passages they cite are now guarded like the four Section 2 headline rows."
+          }
+        ]
       }
     },
     {
@@ -4680,7 +5319,7 @@
             "status": "open",
             "kind": "note",
             "source_fragment": "printed",
-            "source_excerpt": "even when $H=0$, a poorly matched reducing subspace can require rotations near $\\pi/2$"
+            "source_excerpt": "even when H=0, a poorly matched reducing subspace can require rotations near \\pi/2"
           },
           {
             "source_clause": "Assume the hypotheses of the tan 2 theta theorem.",
@@ -4702,7 +5341,7 @@
             "kind": "conclusion",
             "relation": "literal",
             "source_fragment": "printed",
-            "source_excerpt": "if and only if the chosen reducing blocks of $A+H$ satisfy",
+            "source_excerpt": "if and only if the chosen reducing blocks of A+H satisfy",
             "lean_declarations": [
               "TauCeti.DavisKahan1970.Section8.theorem8_1_maximalAngle_le_iff_spectrumIn",
               "TauCeti.DavisKahan1970.Section8.theorem8_1_maximalAngle_le_iff_spectrumIn_real"
@@ -4715,7 +5354,7 @@
             "kind": "conclusion",
             "relation": "literal",
             "source_fragment": "printed",
-            "source_excerpt": "take the spectral projector of $A+H$ on the appropriate side of $\\alpha$",
+            "source_excerpt": "take the spectral projector of A+H on the appropriate side of \\alpha",
             "lean_declarations": [
               "TauCeti.DavisKahan1970.Section8.theorem8_1_canonicalBranch",
               "TauCeti.DavisKahan1970.Section8.theorem8_1_canonicalBranch_real"
@@ -4768,7 +5407,7 @@
             "kind": "conclusion",
             "relation": "literal",
             "source_fragment": "printed",
-            "source_excerpt": "for every symmetric gauge function $\\Phi$ in finite dimensions",
+            "source_excerpt": "for every symmetric gauge function \\Phi in finite dimensions",
             "lean_declarations": [
               "TauCeti.DavisKahan1970.Section8.theorem8_1_upperSymmetricGaugeRepulsion_angle",
               "TauCeti.DavisKahan1970.Section8.theorem8_1_lowerSymmetricGaugeRepulsion_angle",
@@ -4807,7 +5446,7 @@
             "kind": "scope",
             "relation": "literal",
             "source_fragment": "ambient",
-            "source_excerpt": "Let $\\Hsp$ be a separable Hilbert space, real or complex; finite dimensionality is not assumed."
+            "source_excerpt": "Let \\Hsp be a separable Hilbert space, real or complex; finite dimensionality is not assumed."
           },
           {
             "source_clause": "The dimension scope differs across the parts: (a), (b) and (i) carry none, (ii) is printed in finite dimensions with natural infinite-dimensional extensions, and (iii) in finite dimensions.",
@@ -4864,7 +5503,279 @@
             }
           }
         ],
-        "note": "Two canonical pairs, because the printed theorem has two headline assertions: the characterization (`theorem8_1_maximalAngle_le_iff_spectrumIn`, an honest biconditional over every reducing subspace) and the existence of the branch (`theorem8_1_canonicalBranch`, which constructs the spectral projector the paper names and concludes the whole package about it), each with its real sibling. Parts (i), (ii) and (iii) are separate declarations and are bound clause by clause rather than folded into the canonical list; they are registered as supporting evidence, on both blocks and over both fields. Two places where the Lean is stronger than the print, both recorded above: the constructed branch is strictly inside the quarter turn while the printed condition is closed, and part (ii) is dimension-free where the print is finite-dimensional with an unproved extension clause. One place where it is weaker in hypothesis and therefore stronger as a theorem: the tan 2 theta placement is taken as form bounds with the lower endpoint beta dropped. The only clause not claimed is the derivation itself: equations (8.1) and (8.2) have no registered declaration, because the compiled proof of the quarter-angle bound runs through a continuous functional calculus of the half-line indicator rather than through the printed singular-vector computation. This review does not move the row's bookkeeping: the row is `compiled_exact`, hostile-certified accepted, with no completion hole, and the review is consistent with that -- the one `open` clause is proof machinery, which the census's own boundary policy treats as source-fidelity material rather than as part of the printed result statement. CANONICAL WITNESSES FOLLOW THE RESULT INVENTORY. The printed theorem has five assertions -- the characterization, the existence of the branch, and parts (i), (ii), (iii) -- and the inventory records a canonical witness for each, over both scalar fields and on both blocks. This review now lists all sixteen rather than only the two headline pairs, so the two documents answer the question the same way. The `_canonicalBranch` instantiations of parts (i) and (ii), which take the printed configuration and no data record, remain supporting evidence and are what the corresponding clauses cite."
+        "note": "Two canonical pairs, because the printed theorem has two headline assertions: the characterization (`theorem8_1_maximalAngle_le_iff_spectrumIn`, an honest biconditional over every reducing subspace) and the existence of the branch (`theorem8_1_canonicalBranch`, which constructs the spectral projector the paper names and concludes the whole package about it), each with its real sibling. Parts (i), (ii) and (iii) are separate declarations and are bound clause by clause rather than folded into the canonical list; they are registered as supporting evidence, on both blocks and over both fields. Two places where the Lean is stronger than the print, both recorded above: the constructed branch is strictly inside the quarter turn while the printed condition is closed, and part (ii) is dimension-free where the print is finite-dimensional with an unproved extension clause. One place where it is weaker in hypothesis and therefore stronger as a theorem: the tan 2 theta placement is taken as form bounds with the lower endpoint beta dropped. The only clause not claimed is the derivation itself: equations (8.1) and (8.2) have no registered declaration, because the compiled proof of the quarter-angle bound runs through a continuous functional calculus of the half-line indicator rather than through the printed singular-vector computation. This review does not move the row's bookkeeping: the row is `compiled_exact`, hostile-certified accepted, with no completion hole, and the review is consistent with that -- the one `open` clause is proof machinery, which the census's own boundary policy treats as source-fidelity material rather than as part of the printed result statement. CANONICAL WITNESSES FOLLOW THE RESULT INVENTORY. The printed theorem has five assertions -- the characterization, the existence of the branch, and parts (i), (ii), (iii) -- and the inventory records a canonical witness for each, over both scalar fields and on both blocks. This review now lists all sixteen rather than only the two headline pairs, so the two documents answer the question the same way. The `_canonicalBranch` instantiations of parts (i) and (ii), which take the printed configuration and no data record, remain supporting evidence and are what the corresponding clauses cite.",
+        "statement_pins": [
+          {
+            "declaration": "TauCeti.DavisKahan1970.Section8.theorem8_1_canonicalBranch",
+            "type_expr_hash": "3574300275",
+            "type_text_sha256": "1625e2ddabfb0ff58ebf622b5ac62dac5cb08c78794b981642c031138eecf20f",
+            "toolchain": "leanprover/lean4:v4.34.0-rc1",
+            "pinned_on": "2026-09-04",
+            "note": "Pinned 2026-09-04 with the seven Section 3-8 major reviews: their declarations and the passages they cite are now guarded like the four Section 2 headline rows."
+          },
+          {
+            "declaration": "TauCeti.DavisKahan1970.Section8.theorem8_1_canonicalBranch_real",
+            "type_expr_hash": "1826728959",
+            "type_text_sha256": "8e0535f2c7c128de3a702406d48c33745edeb1f3911e652d3867e79819d6b200",
+            "toolchain": "leanprover/lean4:v4.34.0-rc1",
+            "pinned_on": "2026-09-04",
+            "note": "Pinned 2026-09-04 with the seven Section 3-8 major reviews: their declarations and the passages they cite are now guarded like the four Section 2 headline rows."
+          },
+          {
+            "declaration": "TauCeti.DavisKahan1970.Section8.theorem8_1_maximalAngle_le_iff_spectrumIn",
+            "type_expr_hash": "2435336685",
+            "type_text_sha256": "1411cbea6906fece63ac2fe71b70bac3df13a3a66fd98451dd1224091946fd9f",
+            "toolchain": "leanprover/lean4:v4.34.0-rc1",
+            "pinned_on": "2026-09-04",
+            "note": "Pinned 2026-09-04 with the seven Section 3-8 major reviews: their declarations and the passages they cite are now guarded like the four Section 2 headline rows."
+          },
+          {
+            "declaration": "TauCeti.DavisKahan1970.Section8.theorem8_1_maximalAngle_le_iff_spectrumIn_real",
+            "type_expr_hash": "228041677",
+            "type_text_sha256": "a43e309a094f14b84322d0a7f23f2002a98845e97cdf22171eb858785a282c74",
+            "toolchain": "leanprover/lean4:v4.34.0-rc1",
+            "pinned_on": "2026-09-04",
+            "note": "Pinned 2026-09-04 with the seven Section 3-8 major reviews: their declarations and the passages they cite are now guarded like the four Section 2 headline rows."
+          },
+          {
+            "declaration": "TauCeti.DavisKahan1970.Section8.theorem8_1_upperCompressionRepulsion",
+            "type_expr_hash": "2031654357",
+            "type_text_sha256": "c42af386a2de6c2198c29d0f1109fef1182150aaac8935581185a23005096314",
+            "toolchain": "leanprover/lean4:v4.34.0-rc1",
+            "pinned_on": "2026-09-04",
+            "note": "Pinned 2026-09-04 with the seven Section 3-8 major reviews: their declarations and the passages they cite are now guarded like the four Section 2 headline rows."
+          },
+          {
+            "declaration": "TauCeti.DavisKahan1970.Section8.theorem8_1_lowerCompressionRepulsion",
+            "type_expr_hash": "1739431262",
+            "type_text_sha256": "e7711fc7664bfa5cc6de7ca6fe79e97d347a19ab6386f173fe43fe55b3f66292",
+            "toolchain": "leanprover/lean4:v4.34.0-rc1",
+            "pinned_on": "2026-09-04",
+            "note": "Pinned 2026-09-04 with the seven Section 3-8 major reviews: their declarations and the passages they cite are now guarded like the four Section 2 headline rows."
+          },
+          {
+            "declaration": "TauCeti.DavisKahan1970.Section8.theorem8_1_upperCompressionRepulsion_real",
+            "type_expr_hash": "3065420298",
+            "type_text_sha256": "d8131a2e90c30b0a47daaec9d76f5b21a4f7eeace9103e75971e0e3f0fa52b43",
+            "toolchain": "leanprover/lean4:v4.34.0-rc1",
+            "pinned_on": "2026-09-04",
+            "note": "Pinned 2026-09-04 with the seven Section 3-8 major reviews: their declarations and the passages they cite are now guarded like the four Section 2 headline rows."
+          },
+          {
+            "declaration": "TauCeti.DavisKahan1970.Section8.theorem8_1_lowerCompressionRepulsion_real",
+            "type_expr_hash": "1759121186",
+            "type_text_sha256": "4c6c249f2cd9a47855fb78b9977b17a81349168ed2a70c7074039b2a82dc1437",
+            "toolchain": "leanprover/lean4:v4.34.0-rc1",
+            "pinned_on": "2026-09-04",
+            "note": "Pinned 2026-09-04 with the seven Section 3-8 major reviews: their declarations and the passages they cite are now guarded like the four Section 2 headline rows."
+          },
+          {
+            "declaration": "TauCeti.DavisKahan1970.Section8.theorem8_1_upperApproximationRepulsion",
+            "type_expr_hash": "2461765044",
+            "type_text_sha256": "e08f35c07cea1f0215038cec20d58c0e54d544dfab6b8e14a808f3653f96e222",
+            "toolchain": "leanprover/lean4:v4.34.0-rc1",
+            "pinned_on": "2026-09-04",
+            "note": "Pinned 2026-09-04 with the seven Section 3-8 major reviews: their declarations and the passages they cite are now guarded like the four Section 2 headline rows."
+          },
+          {
+            "declaration": "TauCeti.DavisKahan1970.Section8.theorem8_1_lowerApproximationRepulsion",
+            "type_expr_hash": "3676013689",
+            "type_text_sha256": "24cc141b58d975435f1da27dc488d199dd1014416827e7cc3524b83fee921b01",
+            "toolchain": "leanprover/lean4:v4.34.0-rc1",
+            "pinned_on": "2026-09-04",
+            "note": "Pinned 2026-09-04 with the seven Section 3-8 major reviews: their declarations and the passages they cite are now guarded like the four Section 2 headline rows."
+          },
+          {
+            "declaration": "TauCeti.DavisKahan1970.Section8.theorem8_1_upperApproximationRepulsion_real",
+            "type_expr_hash": "3489353981",
+            "type_text_sha256": "c8dfce936e096877b8d53a7ad57b4cf81cf7fc818bd6b5e759d855ccd0534f0f",
+            "toolchain": "leanprover/lean4:v4.34.0-rc1",
+            "pinned_on": "2026-09-04",
+            "note": "Pinned 2026-09-04 with the seven Section 3-8 major reviews: their declarations and the passages they cite are now guarded like the four Section 2 headline rows."
+          },
+          {
+            "declaration": "TauCeti.DavisKahan1970.Section8.theorem8_1_lowerApproximationRepulsion_real",
+            "type_expr_hash": "3639868629",
+            "type_text_sha256": "efda493026782b5d8411d2746d01d5006df54050c9cd4bbf85c78d389a9953fc",
+            "toolchain": "leanprover/lean4:v4.34.0-rc1",
+            "pinned_on": "2026-09-04",
+            "note": "Pinned 2026-09-04 with the seven Section 3-8 major reviews: their declarations and the passages they cite are now guarded like the four Section 2 headline rows."
+          },
+          {
+            "declaration": "TauCeti.DavisKahan1970.Section8.theorem8_1_upperSymmetricGaugeRepulsion_angle_rev",
+            "type_expr_hash": "1027594048",
+            "type_text_sha256": "44d4b9c1a0790b6226a61ef3f8e3e4d84db4547aac3ba2628992c338e98bb459",
+            "toolchain": "leanprover/lean4:v4.34.0-rc1",
+            "pinned_on": "2026-09-04",
+            "note": "Pinned 2026-09-04 with the seven Section 3-8 major reviews: their declarations and the passages they cite are now guarded like the four Section 2 headline rows."
+          },
+          {
+            "declaration": "TauCeti.DavisKahan1970.Section8.theorem8_1_lowerSymmetricGaugeRepulsion_angle_rev",
+            "type_expr_hash": "4093489885",
+            "type_text_sha256": "05a8d2ef7e12e100fa3aac78a2e191af7b4fbf195ec8e238529d552c1625efeb",
+            "toolchain": "leanprover/lean4:v4.34.0-rc1",
+            "pinned_on": "2026-09-04",
+            "note": "Pinned 2026-09-04 with the seven Section 3-8 major reviews: their declarations and the passages they cite are now guarded like the four Section 2 headline rows."
+          },
+          {
+            "declaration": "TauCeti.DavisKahan1970.Section8.theorem8_1_upperSymmetricGaugeRepulsion_angle_rev_real",
+            "type_expr_hash": "2435031727",
+            "type_text_sha256": "62468077f4b073a5353128a043af446fcba4438a096caef3d4cac8c33a6398d5",
+            "toolchain": "leanprover/lean4:v4.34.0-rc1",
+            "pinned_on": "2026-09-04",
+            "note": "Pinned 2026-09-04 with the seven Section 3-8 major reviews: their declarations and the passages they cite are now guarded like the four Section 2 headline rows."
+          },
+          {
+            "declaration": "TauCeti.DavisKahan1970.Section8.theorem8_1_lowerSymmetricGaugeRepulsion_angle_rev_real",
+            "type_expr_hash": "1003416426",
+            "type_text_sha256": "21e318cead9cfbf7c131d8df7ca182e661fe31f8e6903de9d7fae9d8687e671b",
+            "toolchain": "leanprover/lean4:v4.34.0-rc1",
+            "pinned_on": "2026-09-04",
+            "note": "Pinned 2026-09-04 with the seven Section 3-8 major reviews: their declarations and the passages they cite are now guarded like the four Section 2 headline rows."
+          },
+          {
+            "declaration": "TauCeti.DavisKahan1970.Section8.theorem8_1_eq_canonicalBranch_of_maximalAngle_le",
+            "type_expr_hash": "149697363",
+            "type_text_sha256": "d1b3f4c6e28fbce7dd09d07fa8b2449482dadf6a71a832c8ce3a60c7ffeefd32",
+            "toolchain": "leanprover/lean4:v4.34.0-rc1",
+            "pinned_on": "2026-09-04",
+            "note": "Pinned 2026-09-04 with the seven Section 3-8 major reviews: their declarations and the passages they cite are now guarded like the four Section 2 headline rows."
+          },
+          {
+            "declaration": "TauCeti.DavisKahan1970.Section8.theorem8_1_eq_of_maximalAngle_le_real",
+            "type_expr_hash": "1042509986",
+            "type_text_sha256": "f6d2c91adedd39f901288f27fdec65541ded3ebedc4f8730fa48f11426be8600",
+            "toolchain": "leanprover/lean4:v4.34.0-rc1",
+            "pinned_on": "2026-09-04",
+            "note": "Pinned 2026-09-04 with the seven Section 3-8 major reviews: their declarations and the passages they cite are now guarded like the four Section 2 headline rows."
+          },
+          {
+            "declaration": "TauCeti.DavisKahan1970.Section8.approximationNumber_eq_eigenvalues_of_isPositive",
+            "type_expr_hash": "3775176423",
+            "type_text_sha256": "d1d7bb35e9192fa5308884f96092e384fc6d7ccbaa1ea8002ce2c534c8450427",
+            "toolchain": "leanprover/lean4:v4.34.0-rc1",
+            "pinned_on": "2026-09-04",
+            "note": "Pinned 2026-09-04 with the seven Section 3-8 major reviews: their declarations and the passages they cite are now guarded like the four Section 2 headline rows."
+          },
+          {
+            "declaration": "TauCeti.DavisKahan1970.Section8.approximationNumber_upperBlockShift_eq_zero_of_le",
+            "type_expr_hash": "3904320923",
+            "type_text_sha256": "f2d63ba5d9ef503da0375e1eabaf80a5ef9a70f80d54aa872cc46c99940ce3e3",
+            "toolchain": "leanprover/lean4:v4.34.0-rc1",
+            "pinned_on": "2026-09-04",
+            "note": "Pinned 2026-09-04 with the seven Section 3-8 major reviews: their declarations and the passages they cite are now guarded like the four Section 2 headline rows."
+          },
+          {
+            "declaration": "TauCeti.DavisKahan1970.Section8.norm_cosineBlock_eq_principalCosines_zero",
+            "type_expr_hash": "3905871763",
+            "type_text_sha256": "920da1e7caabc52b17479ceccf10d28bc5c71dc7bb49a5d098fe8a5ac72a76d6",
+            "toolchain": "leanprover/lean4:v4.34.0-rc1",
+            "pinned_on": "2026-09-04",
+            "note": "Pinned 2026-09-04 with the seven Section 3-8 major reviews: their declarations and the passages they cite are now guarded like the four Section 2 headline rows."
+          },
+          {
+            "declaration": "TauCeti.DavisKahan1970.Section8.approximationNumber_cosineBlock_eq_principalCosines",
+            "type_expr_hash": "4009903803",
+            "type_text_sha256": "4b917aee70d4f84b962a7e85877e5543a3940bd68fe52f56f1dfd030bcde6e2d",
+            "toolchain": "leanprover/lean4:v4.34.0-rc1",
+            "pinned_on": "2026-09-04",
+            "note": "Pinned 2026-09-04 with the seven Section 3-8 major reviews: their declarations and the passages they cite are now guarded like the four Section 2 headline rows."
+          },
+          {
+            "declaration": "TauCeti.DavisKahan1970.Section8.cos_arccos_approximationNumber_cosineBlock",
+            "type_expr_hash": "1068664693",
+            "type_text_sha256": "07d5505061bfedd90d18d4134258fbe08cd7b8fbf7b0eabd70728803173600fa",
+            "toolchain": "leanprover/lean4:v4.34.0-rc1",
+            "pinned_on": "2026-09-04",
+            "note": "Pinned 2026-09-04 with the seven Section 3-8 major reviews: their declarations and the passages they cite are now guarded like the four Section 2 headline rows."
+          },
+          {
+            "declaration": "TauCeti.approximationNumber_adjoint_sandwich_weaklyMajorized",
+            "type_expr_hash": "1066161434",
+            "type_text_sha256": "c1f4a5857e6a0a0d178eb2da10df6dc8aff9ff384e7471fe61cb565d0987cec8",
+            "toolchain": "leanprover/lean4:v4.34.0-rc1",
+            "pinned_on": "2026-09-04",
+            "note": "Pinned 2026-09-04 with the seven Section 3-8 major reviews: their declarations and the passages they cite are now guarded like the four Section 2 headline rows."
+          }
+        ],
+        "source_pins": [
+          {
+            "fragment": "printed",
+            "document": "DavisKahan1970",
+            "sha256": "74ccdc24d8f0c4aaca34bca626baf6f2748d029c97bc777ae5c8d75ded1e16dc",
+            "locator": {
+              "document": "DavisKahan1970",
+              "marker": "DK-8.1-thm",
+              "file": "prose/distilled_literature/DavisKahan1970_part_III.tex",
+              "lines": [
+                1049,
+                1095
+              ],
+              "section": "8",
+              "result": "Theorem 8.1, equations (8.1)--(8.2), and the eigenvalue/majorization interpretation"
+            },
+            "visibility": "public_reconstruction",
+            "pinned_on": "2026-09-04",
+            "note": "Pinned 2026-09-04 with the seven Section 3-8 major reviews: their declarations and the passages they cite are now guarded like the four Section 2 headline rows."
+          },
+          {
+            "fragment": "tan-two-theta",
+            "document": "DavisKahan1970",
+            "sha256": "afa8ed70b4098a1774c3743484f4a3a29b645736e2051d561ee9928743300e97",
+            "locator": {
+              "document": "DavisKahan1970",
+              "marker": "S2-tan-two-theta",
+              "file": "prose/distilled_literature/DavisKahan1970_part_III.tex",
+              "lines": [
+                256,
+                273
+              ],
+              "section": "2",
+              "result": "Section 2, fourth unnumbered theorem"
+            },
+            "visibility": "public_reconstruction",
+            "pinned_on": "2026-09-04",
+            "note": "Pinned 2026-09-04 with the seven Section 3-8 major reviews: their declarations and the passages they cite are now guarded like the four Section 2 headline rows."
+          },
+          {
+            "fragment": "ui-norms",
+            "document": "DavisKahan1970",
+            "sha256": "1cf01699d78a53a8beff5c7b2f51dc572e78a942cdf0565b085795b870333578",
+            "locator": {
+              "document": "DavisKahan1970",
+              "marker": "S1-ui-norms",
+              "file": "prose/distilled_literature/DavisKahan1970_part_III.tex",
+              "lines": [
+                108,
+                186
+              ],
+              "section": "1",
+              "result": "Unitary-invariant norms, angle operators and the direct-rotation setup"
+            },
+            "visibility": "public_reconstruction",
+            "pinned_on": "2026-09-04",
+            "note": "Pinned 2026-09-04 with the seven Section 3-8 major reviews: their declarations and the passages they cite are now guarded like the four Section 2 headline rows."
+          },
+          {
+            "fragment": "ambient",
+            "document": "DavisKahan1970",
+            "sha256": "27f71e8a793ebe0cf7e2cf0d4a95da0539c1810b34f345eb4dd75e102f90aeef",
+            "locator": {
+              "document": "DavisKahan1970",
+              "marker": "S1-block-residual",
+              "file": "prose/distilled_literature/DavisKahan1970_part_III.tex",
+              "lines": [
+                29,
+                100
+              ],
+              "section": "1",
+              "result": "Section 1, ambient scope"
+            },
+            "visibility": "public_reconstruction",
+            "pinned_on": "2026-09-04",
+            "note": "Pinned 2026-09-04 with the seven Section 3-8 major reviews: their declarations and the passages they cite are now guarded like the four Section 2 headline rows."
+          }
+        ]
       }
     },
     {
@@ -5152,8 +6063,8 @@
               ]
             },
             "visibility": "public_reconstruction",
-            "pinned_on": "2026-09-03",
-            "note": "Pinned 2026-09-03: the S2-sin-theta canonical witness is now the scalar-generic sinTheta_unbounded_formGap_symmetricNorming_rclike, whose signature no longer carries the two proof-capability classes (both are unconditional instances at every RCLike field)."
+            "pinned_on": "2026-09-04",
+            "note": "Pinned 2026-09-04 with the seven Section 3-8 major reviews: their declarations and the passages they cite are now guarded like the four Section 2 headline rows."
           },
           {
             "fragment": "standing-3-5",
@@ -5175,8 +6086,8 @@
               ]
             },
             "visibility": "public_reconstruction",
-            "pinned_on": "2026-09-03",
-            "note": "Pinned 2026-09-03: the S2-sin-theta canonical witness is now the scalar-generic sinTheta_unbounded_formGap_symmetricNorming_rclike, whose signature no longer carries the two proof-capability classes (both are unconditional instances at every RCLike field)."
+            "pinned_on": "2026-09-04",
+            "note": "Pinned 2026-09-04 with the seven Section 3-8 major reviews: their declarations and the passages they cite are now guarded like the four Section 2 headline rows."
           },
           {
             "fragment": "crossing-3-5",
@@ -5197,8 +6108,8 @@
               ]
             },
             "visibility": "public_reconstruction",
-            "pinned_on": "2026-09-03",
-            "note": "Pinned 2026-09-03: the S2-sin-theta canonical witness is now the scalar-generic sinTheta_unbounded_formGap_symmetricNorming_rclike, whose signature no longer carries the two proof-capability classes (both are unconditional instances at every RCLike field)."
+            "pinned_on": "2026-09-04",
+            "note": "Pinned 2026-09-04 with the seven Section 3-8 major reviews: their declarations and the passages they cite are now guarded like the four Section 2 headline rows."
           },
           {
             "fragment": "sin-two-theta",
@@ -5216,8 +6127,8 @@
               "result": "Section 2, third unnumbered theorem"
             },
             "visibility": "public_reconstruction",
-            "pinned_on": "2026-09-03",
-            "note": "Pinned 2026-09-03: the S2-sin-theta canonical witness is now the scalar-generic sinTheta_unbounded_formGap_symmetricNorming_rclike, whose signature no longer carries the two proof-capability classes (both are unconditional instances at every RCLike field)."
+            "pinned_on": "2026-09-04",
+            "note": "Pinned 2026-09-04 with the seven Section 3-8 major reviews: their declarations and the passages they cite are now guarded like the four Section 2 headline rows."
           }
         ],
         "statement_pins": [
@@ -5226,56 +6137,56 @@
             "type_expr_hash": "2011549738",
             "type_text_sha256": "1ce5f09ce70b29d4989343e5b7e2f76e2fb47a6b13690decb76b27efef87df50",
             "toolchain": "leanprover/lean4:v4.34.0-rc1",
-            "pinned_on": "2026-09-03",
-            "note": "Pinned 2026-09-03: the S2-sin-theta canonical witness is now the scalar-generic sinTheta_unbounded_formGap_symmetricNorming_rclike, whose signature no longer carries the two proof-capability classes (both are unconditional instances at every RCLike field)."
+            "pinned_on": "2026-09-04",
+            "note": "Pinned 2026-09-04 with the seven Section 3-8 major reviews: their declarations and the passages they cite are now guarded like the four Section 2 headline rows."
           },
           {
             "declaration": "TauCeti.DavisKahan1970.Section8.theorem8_2_branch_real_maximalAngle_lt_of_crossedDefects",
             "type_expr_hash": "3135392223",
             "type_text_sha256": "f26b50ee1a1498f9f852a5467489a488570ed7b90981e3bcdc1ab9526c9c827d",
             "toolchain": "leanprover/lean4:v4.34.0-rc1",
-            "pinned_on": "2026-09-03",
-            "note": "Pinned 2026-09-03: the S2-sin-theta canonical witness is now the scalar-generic sinTheta_unbounded_formGap_symmetricNorming_rclike, whose signature no longer carries the two proof-capability classes (both are unconditional instances at every RCLike field)."
+            "pinned_on": "2026-09-04",
+            "note": "Pinned 2026-09-04 with the seven Section 3-8 major reviews: their declarations and the passages they cite are now guarded like the four Section 2 headline rows."
           },
           {
             "declaration": "TauCeti.DavisKahan1970.Section8.theorem8_2_sinTwoTheta_perturbation_symmetricNorming",
             "type_expr_hash": "3519782230",
             "type_text_sha256": "3dcd521c2fa6ce81417ddd92c7e7b77649b3578800010b5ff21134d7acc384bd",
             "toolchain": "leanprover/lean4:v4.34.0-rc1",
-            "pinned_on": "2026-09-03",
-            "note": "Pinned 2026-09-03: the S2-sin-theta canonical witness is now the scalar-generic sinTheta_unbounded_formGap_symmetricNorming_rclike, whose signature no longer carries the two proof-capability classes (both are unconditional instances at every RCLike field)."
+            "pinned_on": "2026-09-04",
+            "note": "Pinned 2026-09-04 with the seven Section 3-8 major reviews: their declarations and the passages they cite are now guarded like the four Section 2 headline rows."
           },
           {
             "declaration": "TauCeti.DavisKahan1970.Section8.theorem8_2_sinTwoTheta_residual_symmetricNorming",
             "type_expr_hash": "4222146958",
             "type_text_sha256": "0e01aa3ab41f9c1818f93ea71d4c6b31aeafdcafe68336bc560d31b70edf98da",
             "toolchain": "leanprover/lean4:v4.34.0-rc1",
-            "pinned_on": "2026-09-03",
-            "note": "Pinned 2026-09-03: the S2-sin-theta canonical witness is now the scalar-generic sinTheta_unbounded_formGap_symmetricNorming_rclike, whose signature no longer carries the two proof-capability classes (both are unconditional instances at every RCLike field)."
+            "pinned_on": "2026-09-04",
+            "note": "Pinned 2026-09-04 with the seven Section 3-8 major reviews: their declarations and the passages they cite are now guarded like the four Section 2 headline rows."
           },
           {
             "declaration": "TauCeti.DavisKahan1970.Section8.subspaceGap_eq_directedGap_of_crossedDefects",
             "type_expr_hash": "1545083445",
             "type_text_sha256": "bbb8ef3e4a38bd84e759eb972a52404cfb664f6529a8d3ff12097e900532b2e6",
             "toolchain": "leanprover/lean4:v4.34.0-rc1",
-            "pinned_on": "2026-09-03",
-            "note": "Pinned 2026-09-03: the S2-sin-theta canonical witness is now the scalar-generic sinTheta_unbounded_formGap_symmetricNorming_rclike, whose signature no longer carries the two proof-capability classes (both are unconditional instances at every RCLike field)."
+            "pinned_on": "2026-09-04",
+            "note": "Pinned 2026-09-04 with the seven Section 3-8 major reviews: their declarations and the passages they cite are now guarded like the four Section 2 headline rows."
           },
           {
             "declaration": "TauCeti.DavisKahan1970.Section8.subspaceGap_eq_directedGap_of_finrank_eq",
             "type_expr_hash": "4076426938",
             "type_text_sha256": "e17ced871fc6fbb6accf633a49b04b8fe6fa79c5d9458fdb38e3faac998c7fa7",
             "toolchain": "leanprover/lean4:v4.34.0-rc1",
-            "pinned_on": "2026-09-03",
-            "note": "Pinned 2026-09-03: the S2-sin-theta canonical witness is now the scalar-generic sinTheta_unbounded_formGap_symmetricNorming_rclike, whose signature no longer carries the two proof-capability classes (both are unconditional instances at every RCLike field)."
+            "pinned_on": "2026-09-04",
+            "note": "Pinned 2026-09-04 with the seven Section 3-8 major reviews: their declarations and the passages they cite are now guarded like the four Section 2 headline rows."
           },
           {
             "declaration": "TauCeti.DavisKahan1970.Section8.maximalAngle_lt_pi_div_four_of_crossedDefects",
             "type_expr_hash": "4092182616",
             "type_text_sha256": "a0efd2b03927dd657da40fdaadc47245416a1c4b992320ddd75adc607a2d491b",
             "toolchain": "leanprover/lean4:v4.34.0-rc1",
-            "pinned_on": "2026-09-03",
-            "note": "Pinned 2026-09-03: the S2-sin-theta canonical witness is now the scalar-generic sinTheta_unbounded_formGap_symmetricNorming_rclike, whose signature no longer carries the two proof-capability classes (both are unconditional instances at every RCLike field)."
+            "pinned_on": "2026-09-04",
+            "note": "Pinned 2026-09-04 with the seven Section 3-8 major reviews: their declarations and the passages they cite are now guarded like the four Section 2 headline rows."
           }
         ]
       }
