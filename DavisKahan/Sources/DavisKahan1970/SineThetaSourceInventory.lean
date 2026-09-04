@@ -204,8 +204,12 @@ alias Proposition6_1_commonDomain_ofBounded :=
 -- The common-domain Proposition 6.1 is stated over any `RCLike` field.  Its
 -- scalar-generic conclusion is carried by `crossSineSum U V` rather than by
 -- a functional-calculus sine, for the same reason as in the bounded real file:
--- no real continuous functional calculus is constructed, and a unitarily
--- invariant norm sees only the singular-value sequence.
+-- a unitarily invariant norm sees only the singular-value sequence, and the block
+-- form is what the proof produces.  Until 2026-09-03 the reason given was that no
+-- real continuous functional calculus was constructed; one now is, at every
+-- `RCLike` field, so `TauCeti.DavisKahan.Angle.sinAngleOperator` could name the
+-- conclusion directly.  Restating it that way is a separate change and would move
+-- this theorem's statement pin.
 -- `Proposition6_1_commonDomain_sinTheta_singularValues` is the compiled
 -- certificate that this operator carries exactly the paper's whole-space
 -- `sin Theta` sequence.  Over `ℂ` the literal form is `Proposition6_1_commonDomain`

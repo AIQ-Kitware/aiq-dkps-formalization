@@ -625,8 +625,10 @@ variable {U V : Submodule ℝ E} [U.HasOrthogonalProjection] [V.HasOrthogonalPro
 
 This is the `RCLike`-generic theorem at `ℝ`, not a second proof.  The left-hand operator is
 the paper's whole-space sine representative, for the reason recorded in the module
-docstring: no real continuous functional calculus is constructed anywhere, and none is
-needed, because a unitarily invariant norm sees only the singular-value sequence. -/
+docstring: a unitarily invariant norm sees only the singular-value sequence, so none of the
+statements here needs a functional-calculus sine.  The module docstring used to say that no
+real continuous functional calculus is constructed anywhere; one is, at every `RCLike` field,
+and that changes what is *possible* here rather than what is *needed*. -/
 theorem symmetric_all_kyFan_real
     (P : CommonDomainSymmetricSinThetaProblem U V) :
     ∀ k,

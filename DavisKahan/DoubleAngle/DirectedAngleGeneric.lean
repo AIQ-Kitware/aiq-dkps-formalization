@@ -5,7 +5,7 @@ Authors: Jon Crall, Claude Opus 5
 -/
 import DavisKahan.Geometry.Angle.OperatorAngleGeneric
 import DavisKahan.DoubleAngle.AngleTransport
-import DavisKahan.DoubleAngle.TangentTransport
+import DavisKahan.DoubleAngle.DirectedAngleRealTransport
 /-! ## The block representation, at every field
 
 `sinTwoThetaIdealBlock U V = P_U ∘ P_{J_V Uᗮ}` is the object the unbounded directed `sin 2Θ`

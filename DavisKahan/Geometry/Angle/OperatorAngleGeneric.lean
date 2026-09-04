@@ -50,6 +50,7 @@ open scoped InnerProductSpace
 
 attribute [local instance 100] ContinuousLinearMap.realAlgebra
   ContinuousLinearMap.realIsScalarTower ContinuousLinearMap.continuousFunctionalCalculusReal
+attribute [local instance] ContinuousLinearMap.instStarOrderedRingRCLike
 
 noncomputable section
 
@@ -233,6 +234,29 @@ def directedSinTwoAngleOperator (U V : Submodule 𝕜 E)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] : E →L[𝕜] E :=
   (2 : ℝ) • (directedSinAngleOperator U V * directedCosAngleOperator U V)
 
+/-! ### Structure of the directed angle
+
+The three facts the definition of `sin 2Θ₀` as `2 sin Θ₀ cos Θ₀` presupposes: the two factors
+are nonnegative, they commute, and therefore their product is nonnegative and self-adjoint.
+Nonnegativity is immediate -- both are moduli.  Commutation is the one that has content, and it
+is obtained by dispatch: it is a fact about the two cross-projections, proved over `ℂ` in
+`OperatorAngleComplex.lean`, and carried to `ℝ` by `complexify` and to an arbitrary field by the
+scalar transport. -/
+
+theorem directedSinAngleOperator_nonneg : 0 ≤ directedSinAngleOperator U V :=
+  ContinuousLinearMap.modulus_nonneg _
+
+theorem directedCosAngleOperator_nonneg : 0 ≤ directedCosAngleOperator U V :=
+  ContinuousLinearMap.modulus_nonneg _
+
+theorem isSelfAdjoint_directedSinAngleOperator :
+    IsSelfAdjoint (directedSinAngleOperator U V) :=
+  ContinuousLinearMap.modulus_isSelfAdjoint _
+
+theorem isSelfAdjoint_directedCosAngleOperator :
+    IsSelfAdjoint (directedCosAngleOperator U V) :=
+  ContinuousLinearMap.modulus_isSelfAdjoint _
+
 section DirectedComplex
 
 variable {F : Type v} [NormedAddCommGroup F] [InnerProductSpace ℂ F] [CompleteSpace F]
@@ -325,6 +349,74 @@ open TauCeti.ScalarTransport
   rfl
 
 end DirectedTransport
+
+section DirectedStructure
+
+/-- The directed sine and cosine of a **real** pair commute, by descent from `ℂ`. -/
+theorem commute_directedSinAngleOperator_directedCosAngleOperator_real {F : Type v}
+    [NormedAddCommGroup F] [InnerProductSpace ℝ F] [CompleteSpace F] (U V : Submodule ℝ F)
+    [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] :
+    Commute (directedSinAngleOperator U V) (directedCosAngleOperator U V) := by
+  refine complexify_injective ?_
+  show complexify (directedSinAngleOperator U V ∘L directedCosAngleOperator U V) =
+    complexify (directedCosAngleOperator U V ∘L directedSinAngleOperator U V)
+  rw [complexify_comp, complexify_comp, complexify_directedSinAngleOperator,
+    complexify_directedCosAngleOperator]
+  exact commute_directedSinAngleOperatorC_directedCosAngleOperatorC _ _
+
+/-- **The directed sine and cosine commute**, at an arbitrary `RCLike` field.  This is what
+makes `2 sin Θ₀ cos Θ₀` the ordinary double-angle formula rather than a choice of ordering. -/
+theorem commute_directedSinAngleOperator_directedCosAngleOperator :
+    Commute (directedSinAngleOperator U V) (directedCosAngleOperator U V) := by
+  have key : ∀ {𝕂 : Type} [RCLike 𝕂] (e : RCLikeIso 𝕜 𝕂),
+      Commute (directedSinAngleOperator (TauCeti.ScalarTransport.submodule (e := e) U)
+          (TauCeti.ScalarTransport.submodule (e := e) V))
+        (directedCosAngleOperator (TauCeti.ScalarTransport.submodule (e := e) U)
+          (TauCeti.ScalarTransport.submodule (e := e) V)) →
+      Commute (directedSinAngleOperator U V) (directedCosAngleOperator U V) := by
+    intro 𝕂 _ e h
+    refine (TauCeti.ScalarTransport.clmEquiv (e := e)).injective ?_
+    change TauCeti.ScalarTransport.clm (e := e)
+        (directedSinAngleOperator U V * directedCosAngleOperator U V) =
+      TauCeti.ScalarTransport.clm (e := e)
+        (directedCosAngleOperator U V * directedSinAngleOperator U V)
+    rw [TauCeti.ScalarTransport.clm_mul, TauCeti.ScalarTransport.clm_mul,
+      clm_directedSinAngleOperator, clm_directedCosAngleOperator]
+    exact h
+  rcases RCLike.I_eq_zero_or_im_I_eq_one (K := 𝕜) with h | h
+  · exact key (RCLikeIso.real h)
+      (commute_directedSinAngleOperator_directedCosAngleOperator_real _ _)
+  · exact key (RCLikeIso.complex h)
+      (commute_directedSinAngleOperatorC_directedCosAngleOperatorC _ _)
+
+/-- The directed `sin 2Θ₀` is nonnegative: it is a nonnegative multiple of the product of two
+commuting nonnegative operators. -/
+theorem directedSinTwoAngleOperator_nonneg : 0 ≤ directedSinTwoAngleOperator U V := by
+  have hprod : (0 : E →L[𝕜] E) ≤
+      directedSinAngleOperator U V * directedCosAngleOperator U V :=
+    (commute_iff_mul_nonneg (directedSinAngleOperator_nonneg U V)
+      (directedCosAngleOperator_nonneg U V)).mp
+      (commute_directedSinAngleOperator_directedCosAngleOperator U V)
+  have hdef : directedSinTwoAngleOperator U V =
+      (2 : ℝ) • (directedSinAngleOperator U V * directedCosAngleOperator U V) := rfl
+  rw [hdef, two_smul]
+  exact add_nonneg hprod hprod
+
+/-- The directed `sin 2Θ₀` is self-adjoint. -/
+theorem isSelfAdjoint_directedSinTwoAngleOperator :
+    IsSelfAdjoint (directedSinTwoAngleOperator U V) := by
+  have hdef : directedSinTwoAngleOperator U V =
+      (2 : ℝ) • (directedSinAngleOperator U V * directedCosAngleOperator U V) := rfl
+  have hmul : IsSelfAdjoint
+      (directedSinAngleOperator U V * directedCosAngleOperator U V) := by
+    rw [IsSelfAdjoint, star_mul, (isSelfAdjoint_directedCosAngleOperator U V).star_eq,
+      (isSelfAdjoint_directedSinAngleOperator U V).star_eq]
+    exact (commute_directedSinAngleOperator_directedCosAngleOperator U V).symm
+  rw [hdef, two_smul]
+  exact hmul.add hmul
+
+end DirectedStructure
+
 
 end Directed
 

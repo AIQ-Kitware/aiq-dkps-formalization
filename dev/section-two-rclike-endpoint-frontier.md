@@ -1,6 +1,85 @@
 # Scalar-generic Section 2 endpoints: what each family still needs
 
-Status: current as of the `sin 2Θ` full-gap closure (2026-08-31).
+Status: **partly superseded, 2026-09-04.**  The tracing below is still the record
+of how the three families were blocked, and the `tan Θ` and `tan 2Θ` analysis is
+unchanged.  Its central recommendation is not: it tells the reader to settle
+whether to build a scalar-generic projection-valued spectral measure *before*
+starting any family, and that is no longer the right next step.  Read
+"What the scalar transport settled" immediately below before acting on anything
+in this file.  Declaration names here also predate the `paperUINorm` →
+`symmetricNorming` rename; resolve a name against the tree before citing it.
+
+## What the scalar transport settled (2026-09-01 .. 2026-09-04)
+
+Four things this document treats as open or as costed obstacles are now facts in
+the tree.
+
+1. **The dispatch exists and is used.**  `ForTauCeti/Analysis/RCLike/`
+   `ScalarTransport.lean` carries a Hilbert space, its operators, its
+   `LinearPMap`s, its subspaces and its adjoints across an isomorphism of `RCLike`
+   fields.  The "second complexification-scale layer" the last section prices is
+   built, and it is about 550 lines, not a campaign.
+
+2. **The real continuous functional calculus is an instance at every `RCLike`
+   field**, not something behind a capability binder:
+   `ContinuousLinearMap.continuousFunctionalCalculusReal`
+   (`ForTauCeti/Analysis/RCLike/ScalarTransportFunctionalCalculus.lean`), obtained
+   by transporting the `ℝ` and `ℂ` constructions.  Every sentence below about the
+   angle vocabulary being available "behind a capability binder with instances at
+   `ℝ` and `ℂ`" should be read as: available, full stop.
+
+3. **The angle objects are written.**  `TauCeti.DavisKahan.Angle.sinAngleOperator`,
+   `.angleOperator`, `.sinTwoAngleOperator` and the directed
+   `.directedSinAngleOperator` / `.directedCosAngleOperator` /
+   `.directedSinTwoAngleOperator` are single definitions at arbitrary `[RCLike 𝕜]`
+   which *are* the `...C` objects over `ℂ` and complexify to the `...R` / `...RC`
+   ones over `ℝ`.  The ideal block and the directed `sin 2Θ` have the same gauge in
+   every `SymmetricNormingFunction` at every field
+   (`DoubleAngle/DirectedAngleGeneric.lean`).
+
+4. **The ambient `sin 2Θ` clause is proved at arbitrary `RCLike`**:
+   `sinTwoTheta_ambient_unbounded_reflectionPair_symmetricNorming_rclike`, on the
+   angle operator rather than on a projector-difference representative.
+
+### The spectral-selection question is not the blocker it is described as
+
+This file says the remaining obstacle is that the conclusion "names the angle
+operators **and the spectral selection**", and recommends deciding about a generic
+projection-valued measure first.  Do not start there.
+
+The ambient clause was closed without any generic spectral measure, by taking the
+hypotheses the *proof* actually needs -- a reducing subspace and a reflected pair --
+rather than the spectral subspaces the fixed-field wrappers construct from
+measurable sets.  The directed clause looks the same: the accepted fixed-field
+theorem `sinTwoTheta_directed_unboundedResidual_blockRepresentative_reducing_`
+`symmetricNorming_complex` already quantifies over an **arbitrary reducing
+subspace**, and so does the old Palomar directed proof.
+
+So the open question is a **source-correspondence** one -- whether the paper's
+standing hypotheses are faithfully expressed by "a reducing subspace with
+separated blocks" -- and it should be settled by reading the source, not by
+building operator theory.  Only if the answer is no does a generic spectral
+measure become the next task.
+
+### What the directed clause actually needs
+
+Transport of the unbounded-ideal proof data: `ReducesSubspace`,
+`LinearPMap.reducingRestriction`, the trial residual, and
+`SymmetricNormingFunction` membership and gauge.  `formBoundedSylvesterGap_pmap`,
+`kyFanApproximationGauge_clm`, `reducesSubspace_pmap_iff` and
+`approximationNumber_clm` are written; `reducingRestriction` is not, and its known
+snag is that `ScalarTransport e ↥U` and `↥(submodule U)` are the same type with
+the same norm and inner product but present `Submodule 𝕂` with different
+`AddCommMonoid` / `Module` instance paths, so `rw` needs bridging lemmas.
+
+Then the estimate lands on `sinTwoThetaIdealBlock` and the correspondence in (3)
+carries it to `Angle.directedSinTwoAngleOperator`, which is the object
+`SectionTwo.sinTwoTheta` may be bound to and nothing weaker.
+
+---
+
+*The original document follows, unedited except for this header.*
+
 
 ## Two different questions, kept apart
 
