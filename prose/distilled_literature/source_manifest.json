@@ -1274,6 +1274,11 @@
       "distilled_status": "complete",
       "primary_url": "https://arxiv.org/abs/1405.0680",
       "target_note": "YuWangSamworth2015_statistical_davis_kahan.tex",
+      "source_document": {
+        "marker_prefix": "YWS-CERT",
+        "format": "tex",
+        "note": "Locators cite the YWS-CERT-CLAIM markers; the passage read is the text between the matching YWS-CERT-SOURCE-BEGIN/END pair. The reconstruction's own \\sourcecomment commentary is deliberately outside every passage, so a fragment is source mathematics and never this note's opinion of it."
+      },
       "repo_evidence": [
         "YuWangSamworth2015/YuWangSamworth2015/Core/Residual.lean",
         "ForTauCeti/Analysis/InnerProductSpace/AlignedBasis.lean",
