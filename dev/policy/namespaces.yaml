@@ -32,6 +32,11 @@ rules:
       - "Cardinal"
       # facts about a `ContinuousLinearMap` -- norms, adjoints, composition
       - "ContinuousLinearMap"
+      # ways to obtain Mathlib's `ContinuousFunctionalCalculus` class that Mathlib
+      # does not provide: it has no transport of a calculus along an isomorphism
+      # of carriers, which is what registers the calculus at an arbitrary `RCLike`
+      # field
+      - "ContinuousFunctionalCalculus"
       # inequalities between real-extended-nonneg-valued functions, e.g.
       # Minkowski at p = 2 for `tsum`
       - "ENNReal"

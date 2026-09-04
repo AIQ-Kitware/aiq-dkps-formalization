@@ -344,3 +344,60 @@ example (T : E →L[ℝ] F) : T.polarPartial.IsPartialIsometry := T.polarPartial
 end Downstream
 
 end ContinuousLinearMap
+
+/-! ## Naturality of the calculus along the complexification
+
+The instance above makes `cfc f a` meaningful for a real self-adjoint `a`, but leaves it
+opaque: `cfcHom` is a `choose` against `exists_cfc_of_predicate`, so nothing yet connects it
+to `realCfcHom`, which is the map the instance actually supplied.  Uniqueness closes that gap
+(`ContinuousMap.UniqueHom ℝ` holds for every T2 real topological `⋆`-algebra), and with it the
+calculus commutes with `complexify`.
+
+This is the interface a consumer wants.  A statement proved over `ℂ` for `complexify a`
+transfers to `a` itself, and — in the other direction — a real object defined by descent from
+the complexification is recognized as a genuine real functional calculus. -/
+
+namespace TauCeti
+namespace RealComplexification
+
+open scoped TauCeti.RealComplexification
+
+variable {E : Type*} [NormedAddCommGroup E] [InnerProductSpace ℝ E] [CompleteSpace E]
+
+/-- `cfcHom`, for a self-adjoint operator on a real Hilbert space, **is** the descended
+calculus `realCfcHom`.  Both are continuous `⋆`-algebra maps sending the identity symbol to
+`a`, and `ContinuousMap.UniqueHom ℝ` says there is only one such. -/
+theorem cfcHom_eq_realCfcHom {a : E →L[ℝ] E} (ha : IsSelfAdjoint a) :
+    cfcHom ha = realCfcHom ha :=
+  cfcHom_eq_of_continuous_of_map_id ha _ (continuous_realCfcHom ha) (realCfcHom_id ha)
+
+/-- **The continuous functional calculus commutes with complexification.**
+
+The complexification is an injective isometric unital `⋆`-algebra map that preserves spectra,
+so this is the naturality one expects; the content is that the *real* calculus on `E →L[ℝ] E`
+that this file registers is the one descended from the complex side, which is
+`cfcHom_eq_realCfcHom`.
+
+The hypotheses are the ones `cfc` itself requires: without them both sides are `0` by
+`cfc_apply_of_not_predicate`, so the statement is not vacuous but is uninteresting. -/
+theorem complexify_cfc (f : ℝ → ℝ) {a : E →L[ℝ] E} (ha : IsSelfAdjoint a)
+    (hf : ContinuousOn f (spectrum ℝ a)) :
+    complexify (cfc f a) = cfc f (complexify a) := by
+  have ha' : IsSelfAdjoint (complexify a) := (complexify_isSelfAdjoint_iff a).2 ha
+  have hf' : ContinuousOn f (spectrum ℝ (complexify a)) := by
+    rw [spectrum_complexify]; exact hf
+  rw [cfc_apply f a ha hf, cfc_apply f (complexify a) ha' hf', cfcHom_eq_realCfcHom,
+    complexify_realCfcHom, complexifiedCfcHom_apply]
+  rfl
+
+/-- The reverse reading of `complexify_cfc`: a real functional calculus may be *computed* in the
+complexification.  This is the form the angle operators of the Davis--Kahan development use,
+where the real object is defined by descent and has to be recognized as `cfc`. -/
+theorem realPartOperator_cfc_complexify (f : ℝ → ℝ) {a : E →L[ℝ] E} (ha : IsSelfAdjoint a)
+    (hf : ContinuousOn f (spectrum ℝ a)) :
+    realPartOperator (cfc f (complexify a)) = cfc f a := by
+  rw [← complexify_cfc f ha hf]
+  exact ContinuousLinearMap.ext fun x => by simp
+
+end RealComplexification
+end TauCeti
