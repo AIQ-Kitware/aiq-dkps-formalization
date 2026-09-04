@@ -271,8 +271,9 @@ The real mirror of the reducing endpoints in
 unbounded self-adjoint operator over a REAL Hilbert space, Ky Fan form, at an
 arbitrary reducing subspace.**
 
-`δ · kyFan_k (sin 2Θ₀) ≤ 2 · kyFan_k R` with the printed factor two and the
-trial subspace assumed only to reduce `A`. -/
+`δ · kyFan_k (sin 2Θ₀) ≤ 2 · kyFan_k R` with the printed factor two, and with
+`hred` about `U`, the gap-carrying subspace, rather than about the trial subspace
+`V`, which is assumed only to lie inside `dom A`. -/
 theorem sinTwoTheta_directed_unboundedResidual_blockRepresentative_reducing_kyFan_real
     (hA : IsSelfAdjoint A)
     {U : Submodule ℝ E} [U.HasOrthogonalProjection]
@@ -362,8 +363,13 @@ theorem sinTwoTheta_directed_unboundedResidual_blockRepresentative_reducing_kyFa
 unbounded self-adjoint operator over a REAL Hilbert space, at every source
 unitarily invariant norm and at an arbitrary reducing subspace.**
 
-`δ N(sin 2Θ₀) ≤ 2 N(R)` with the printed residual and the printed factor two;
-nothing selects the trial subspace spectrally. -/
+`δ N(sin 2Θ₀) ≤ 2 N(R)` with the printed residual and the printed factor two.
+`hred` is about `U`, the gap-carrying subspace, which is not required to be a
+spectral projector; the trial subspace `V` is assumed only to lie inside `dom A`.
+
+The conclusion is on the proof's own block;
+`sinTwoTheta_directed_unboundedResidual_reducing_symmetricNorming_real` restates it
+on the paper's trial-side angle. -/
 theorem sinTwoTheta_directed_unboundedResidual_blockRepresentative_reducing_symmetricNorming_real
     (N : SymmetricNormingFunction)
     (hA : IsSelfAdjoint A)

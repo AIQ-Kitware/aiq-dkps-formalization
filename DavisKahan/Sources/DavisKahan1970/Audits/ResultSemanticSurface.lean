@@ -237,6 +237,99 @@ calculus: the real calculus on `E →L[𝕜] E` is a theorem at every `RCLike` f
 #check @TauCeti.DavisKahan1970.sinTwoTheta_directed_unboundedResidual_blockRepresentative_spectrumGap_symmetricNorming_complex
 #check @TauCeti.DavisKahan1970.sinTwoTheta_directed_unboundedResidual_blockRepresentative_symmetricNorming_real
 #check @TauCeti.DavisKahan1970.sinTwoTheta_directed_unboundedResidual_blockRepresentative_intervalExterior_symmetricNorming_real
+#check @TauCeti.DavisKahan1970.sinTwoTheta_directed_unboundedResidual_symmetricNorming_complex
+#check @TauCeti.DavisKahan1970.sinTwoTheta_directed_unboundedResidual_symmetricNorming_real
+#check @TauCeti.DavisKahan1970.sinTwoTheta_directed_unboundedResidual_reducing_symmetricNorming_complex
+#check @TauCeti.DavisKahan1970.sinTwoTheta_directed_unboundedResidual_reducing_symmetricNorming_real
+#check @TauCeti.DavisKahan.Angle.directedSinTwoAngleOperator_hasSameApproximationNumbers_swap
+#check @TauCeti.DavisKahan.Angle.sinTwoThetaIdealBlock_hasSameApproximationNumbers_trialSide
+#check @TauCeti.DavisKahan.Angle.mem_directedSinTwoAngleOperator_trialSide_iff
+#check @TauCeti.DavisKahan.Angle.gauge_directedSinTwoAngleOperator_trialSide
+#check @TauCeti.DavisKahan1970.SectionTwo.sinTwoTheta_directed_blockRepresentative_complex
+#check @TauCeti.DavisKahan1970.SectionTwo.sinTwoTheta_directed_blockRepresentative_real
+
+/-! ### The directed `sin 2Θ` orientation, pinned
+
+`Angle.directedSinTwoAngleOperator` is an **ordered** object, and the directed
+Section 2 clause is about one of the two orderings.  A `#check` cannot see that: the
+type of `sinTwoTheta_directed_complex` mentions both subspaces, and swapping them
+leaves a well-typed theorem with the same name and the same declaration signature
+shape.  The audit below fixes the semantic names and states the intended conclusion
+literally, so that a later argument swap fails to elaborate here rather than passing
+silently.
+
+`trial` is the subspace carrying the printed residual `R = A E₀ - E₀ A₀`; `gapCarrier`
+is the subspace whose two reducing restrictions the printed separation `δ` separates.
+The paper's `sin Θ₀` is `Q^⊥ E₀` -- the cross-projection with the trial subspace on
+the right -- so the conclusion must be on
+`directedSinTwoAngleOperator trial gapCarrier`, in that order. -/
+
+open TauCeti.DavisKahan.Sylvester in
+/-- **Orientation audit for the directed `sin 2Θ` clause, over `ℂ`.**
+
+Discharged by a bare application of the source theorem with no adapter and no
+rewriting, so it holds exactly when that theorem's conclusion is on the trial-side
+ordering. -/
+theorem sinTwoTheta_directed_orientation_sourceAudit_complex
+    {Hc : Type*} [NormedAddCommGroup Hc] [InnerProductSpace ℂ Hc] [CompleteSpace Hc]
+    (N : TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction)
+    {A : Hc →ₗ.[ℂ] Hc} (hA : IsSelfAdjoint A)
+    {trial : Submodule ℂ Hc} [trial.HasOrthogonalProjection]
+    [CompleteSpace trial]
+    {ritz : trial →L[ℂ] trial} {residual : trial →L[ℂ] Hc}
+    {gapCarrier : Submodule ℂ Hc} [gapCarrier.HasOrthogonalProjection]
+    (hred : TauCeti.LinearPMap.ReducesSubspace A gapCarrier)
+    (hVdom : ∀ v : trial, (v : Hc) ∈ A.domain)
+    (hres : ∀ v : trial, A ⟨(v : Hc), hVdom v⟩ = residual v + ((ritz v : trial) : Hc))
+    {δ : ℝ} (hδ : 0 < δ)
+    (hgap : FormBoundedSylvesterGap
+      (TauCeti.LinearPMap.reducingRestriction A gapCarrier hred)
+      (TauCeti.LinearPMap.reducingRestriction A gapCarrierᗮ hred.orthogonal) δ)
+    (hRmem : N.Mem residual) :
+    N.Mem (TauCeti.DavisKahan.Angle.directedSinTwoAngleOperator trial gapCarrier) ∧
+      δ * N.gauge
+          (TauCeti.DavisKahan.Angle.directedSinTwoAngleOperator trial gapCarrier) ≤
+        2 * N.gauge residual :=
+  TauCeti.DavisKahan1970.sinTwoTheta_directed_unboundedResidual_reducing_symmetricNorming_complex
+    N hA hred hVdom hres hδ hgap hRmem
+
+open TauCeti.DavisKahan.Sylvester in
+/-- **Orientation audit for the directed `sin 2Θ` clause, over `ℝ`.** -/
+theorem sinTwoTheta_directed_orientation_sourceAudit_real
+    {Er : Type*} [NormedAddCommGroup Er] [InnerProductSpace ℝ Er] [CompleteSpace Er]
+    (N : TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction)
+    {A : Er →ₗ.[ℝ] Er} (hA : IsSelfAdjoint A)
+    {trial : Submodule ℝ Er} [trial.HasOrthogonalProjection]
+    [CompleteSpace trial]
+    {ritz : trial →L[ℝ] trial} {residual : trial →L[ℝ] Er}
+    {gapCarrier : Submodule ℝ Er} [gapCarrier.HasOrthogonalProjection]
+    (hred : TauCeti.LinearPMap.ReducesSubspace A gapCarrier)
+    (hVdom : ∀ v : trial, (v : Er) ∈ A.domain)
+    (hres : ∀ v : trial, A ⟨(v : Er), hVdom v⟩ = residual v + ((ritz v : trial) : Er))
+    {δ : ℝ} (hδ : 0 < δ)
+    (hgap : FormBoundedSylvesterGap
+      (TauCeti.LinearPMap.reducingRestriction A gapCarrier hred)
+      (TauCeti.LinearPMap.reducingRestriction A gapCarrierᗮ hred.orthogonal) δ)
+    (hRmem : N.Mem residual) :
+    N.Mem (TauCeti.DavisKahan.Angle.directedSinTwoAngleOperator trial gapCarrier) ∧
+      δ * N.gauge
+          (TauCeti.DavisKahan.Angle.directedSinTwoAngleOperator trial gapCarrier) ≤
+        2 * N.gauge residual :=
+  TauCeti.DavisKahan1970.sinTwoTheta_directed_unboundedResidual_reducing_symmetricNorming_real
+    N hA hred hVdom hres hδ hgap hRmem
+
+/-- **The two orderings are not the same operator.**
+
+Recorded so that the orientation audits above are read as content rather than
+bookkeeping: what makes them necessary is that the *sines* differ.  The doubled
+sines agree only at the level of the approximation-number sequence, which is
+`directedSinTwoAngleOperator_hasSameApproximationNumbers_swap`, and that is a
+theorem about the doubling. -/
+example {Hc : Type*} [NormedAddCommGroup Hc] [InnerProductSpace ℂ Hc] [CompleteSpace Hc]
+    (U V : Submodule ℂ Hc) [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] :
+    (TauCeti.DavisKahan.Angle.directedSinTwoAngleOperator U V).HasSameApproximationNumbers
+      (TauCeti.DavisKahan.Angle.directedSinTwoAngleOperator V U) :=
+  TauCeti.DavisKahan.Angle.directedSinTwoAngleOperator_hasSameApproximationNumbers_swap U V
 
 /-! ## S2-tan-two-theta: Double-angle tangent theorem
 
