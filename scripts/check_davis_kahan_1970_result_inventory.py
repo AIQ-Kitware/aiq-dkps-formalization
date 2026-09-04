@@ -109,6 +109,36 @@ CAPABILITY_CLASSES = {
 SCALAR_GENERIC_CANONICAL_RESULTS = {
     "S2-sin-theta": "TauCeti.DavisKahan1970.SectionTwo.sinTheta",
 }
+
+# Canonical evidence whose *conclusion object* is part of what the row claims,
+# expressed as tokens that must and must not occur in the compiler-printed type.
+#
+# This exists because of a defect a name-based check could not see.  The directed
+# `sin 2Theta` clause was canonicalized on a theorem concluding on
+# `sinTwoThetaIdealBlock U V` -- the proof's own one-sided block, not an angle --
+# and separately the public alias for it named a theorem whose right-hand side is
+# the full bounded perturbation rather than the printed trial residual.  Both
+# declarations have entirely plausible names; both were registered; the row read
+# terminal for weeks.
+#
+# The tokens are deliberately coarse.  A precise assertion about argument ORDER is
+# not expressible here without matching printed binder names across line wraps,
+# so ordering is pinned where it can be checked exactly: by the two audit theorems
+# `sinTwoTheta_directed_orientation_sourceAudit_complex`/`_real`, which fix the
+# semantic names `trial` and `gapCarrier` and stop elaborating if the arguments are
+# swapped, and by this row's statement pins.  What this table catches is the
+# coarser regression of canonicalizing a proof representative or the wrong
+# right-hand side again.
+CANONICAL_CONCLUSION_TOKENS: dict[str, dict[str, list[str]]] = {
+    "TauCeti.DavisKahan1970.sinTwoTheta_directed_unboundedResidual_symmetricNorming_complex": {
+        "required": ["Angle.directedSinTwoAngleOperator", "N.gauge R"],
+        "forbidden": ["sinTwoThetaIdealBlock", "N.gauge Eop"],
+    },
+    "TauCeti.DavisKahan1970.sinTwoTheta_directed_unboundedResidual_symmetricNorming_real": {
+        "required": ["Angle.directedSinTwoAngleOperator", "N.gauge R"],
+        "forbidden": ["sinTwoThetaIdealBlock", "N.gauge Eop"],
+    },
+}
 SUPPORTING_EVIDENCE_ROLES = {
     "public_alias", "specialization", "alternative_route", "generalization",
     "presentation_wrapper", "implementation_structure", "transport_lemma",
@@ -2197,6 +2227,25 @@ def _validate_canonical_evidence(
                     "capability_classes (an empty list when it carries none)"
                 )
             if probed_types is not None:
+                tokens = CANONICAL_CONCLUSION_TOKENS.get(declaration)
+                if tokens is not None:
+                    printed = probed_types[declaration]
+                    for token in tokens["required"]:
+                        if token not in printed:
+                            fail(
+                                f"{result_id}: canonical evidence {declaration} no longer "
+                                f"mentions {token!r} in its compiler-printed type.  This row "
+                                "claims a conclusion on a specific source object; a witness "
+                                "that stopped mentioning it is answering a different question"
+                            )
+                    for token in tokens["forbidden"]:
+                        if token in printed:
+                            fail(
+                                f"{result_id}: canonical evidence {declaration} mentions "
+                                f"{token!r} in its compiler-printed type, which this row's "
+                                "conclusion must not use -- it names a proof representative or "
+                                "the wrong right-hand side rather than the printed object"
+                            )
                 derived = _derive_scalar_scope(probed_types[declaration])
                 if derived != scope:
                     fail(

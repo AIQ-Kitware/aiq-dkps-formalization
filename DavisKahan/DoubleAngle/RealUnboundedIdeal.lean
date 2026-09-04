@@ -386,8 +386,10 @@ local instance instCompleteSpaceCoeRealUnboundedIdealReducing
 space, reflection-residual block form, at an arbitrary reducing subspace.**
 
 The real mirror of
-`sinTwoTheta_reflectionResidual_block_gauge_of_formGap_reducing`: the trial
-subspace need only reduce `A`, which is the source's own hypothesis. -/
+`sinTwoTheta_reflectionResidual_block_gauge_of_formGap_reducing`: the
+gap-carrying subspace `U` need only reduce `A` and is not required to be
+spectral, which is the source's own hypothesis.  `V` is the reflecting subspace
+and reduces nothing. -/
 theorem sinTwoTheta_reflectionResidual_block_gauge_reducing_real
     {A : E →ₗ.[ℝ] E} (hA : IsSelfAdjoint A)
     {U : Submodule ℝ E} [U.HasOrthogonalProjection]

@@ -10,6 +10,7 @@ import DavisKahan.Sources.DavisKahan1970.SinTwoTheta
 import DavisKahan.Sources.DavisKahan1970.SinTwoThetaAmbientUnbounded
 import DavisKahan.Sources.DavisKahan1970.SinTwoThetaUnboundedDirectedResidual
 import DavisKahan.Sources.DavisKahan1970.SinTwoThetaUnboundedDirectedResidualReal
+import DavisKahan.Sources.DavisKahan1970.SinTwoThetaDirectedAngle
 import DavisKahan.Sources.DavisKahan1970.TanThetaDirectedUnbounded
 import DavisKahan.Sources.DavisKahan1970.TanTwoThetaUnboundedAmbientExact
 import DavisKahan.Sources.DavisKahan1970.TanTwoThetaUnboundedExactReal
@@ -116,6 +117,19 @@ complexification, so a scalar-generic directed statement needs the
 the trial residual, and `SymmetricNormingFunction` membership and gauge -- which
 is not yet written.
 
+The directed clause's *angle* layer, by contrast, is scalar-generic already, and
+2026-09-04 fixed an orientation defect in it.  The estimate is proved about
+`sinTwoThetaIdealBlock U V` with `U` the subspace whose blocks the gap separates
+and `V` the trial subspace, and the block correspondence lands on
+`Angle.directedSinTwoAngleOperator U V`.  The paper's `Θ₀` is the **trial-side**
+angle -- `‖sin Θ₀‖ = ‖Q^⊥ E₀‖`, the cross-projection with the trial subspace on
+the right -- which is `Angle.directedSinTwoAngleOperator V U`.  The two orderings
+are not interchangeable by renaming: the two ordered directed *sines* have
+different approximation numbers in general.  What is true is that the *doubled*
+sines do not, and
+`Angle.directedSinTwoAngleOperator_hasSameApproximationNumbers_swap` proves it at
+every field.
+
 None of this says the remaining mathematics resists generalization; it says the
 work is operator-theoretic infrastructure, not a rename.
 `tanTwoTheta_branchFree_bounded_symmetricNorming_complex` is evidence on the other
@@ -138,8 +152,14 @@ field.  The older unqualified names are retained at whichever clause they always
 named, and they do **not** all name the same one: `tanTheta_complex` and
 `tanTwoTheta_complex` (with their real siblings) are the ambient clause, and
 `sinTwoTheta_complex` and `sinTwoTheta_real` are the **directed** one.  Prose in
-this file claimed the uniform reading until 2026-09-04; the aliases themselves
-were always right, and the docstring on each says which clause it is.
+this file claimed the uniform reading until 2026-09-04, and the docstring on each
+alias says which clause it is.
+
+For `sin 2Θ` the alias itself was wrong until the same date: it named the
+bounded-perturbation theorem, whose right-hand side is `2 N(E)` for the full
+perturbation, while being documented as the printed residual clause `2 N(R)`.
+Those are different source quantities.  The alias now names the residual theorem,
+on the paper's own trial-side angle.
 
 The maintained per-clause witness table is generated from
 `dev/davis-kahan-1970-formalization-result-inventory.json` into the reviewer
@@ -180,7 +200,7 @@ belong.  The implementations they select are, in order:
 | `sin Θ` | directed (only) | `DavisKahan1970.sinTheta_unbounded_formGap_symmetricNorming_complex` | `…_real` |
 | `tan Θ` | directed | `tanTheta_directed_unboundedTrial_symmetricNorming_complex` | `…_real` |
 | `tan Θ` | ambient | `tanTheta_ambient_unboundedRitz_symmetricNorming_complex` | `…_real` |
-| `sin 2Θ` | directed | `sinTwoTheta_directed_unboundedResidual_blockRepresentative_symmetricNorming_complex` | `…_real` |
+| `sin 2Θ` | directed | `sinTwoTheta_directed_unboundedResidual_symmetricNorming_complex` | `…_real` |
 | `sin 2Θ` | ambient | `sinTwoTheta_ambient_unbounded_addBounded_symmetricNorming_complex` | `…_real` |
 | `tan 2Θ` | directed | `tanTwoTheta_directed_unboundedResidual_symmetricNorming_complex` | `…_real` |
 | `tan 2Θ` | ambient | `tanTwoTheta_ambient_unbounded_symmetricNorming_complex` | `…_real` |
@@ -322,33 +342,34 @@ alias tanTheta_real := tanTheta_ambient_unboundedRitz_symmetricNorming_real
 /-- **Davis--Kahan 1970, the `sin 2Θ` theorem, over `ℂ` -- the DIRECTED clause.**
 
 The printed `sin 2Θ` theorem has two boxed conclusions.  This name is the first,
-`δ N(sin 2Θ₀) ≤ 2 N(R)` in its bounded-perturbation form; the ambient one,
-`δ N(sin 2Θ) ≤ 2 N(H)`, is `sinTwoTheta_ambient_complex`.  `sinTwoTheta_bothConclusions_complex`
-below states both together.
+`δ N(sin 2Θ₀) ≤ 2 N(R)`, on the printed trial residual `R = A E₀ - E₀ A₀`; the
+ambient one, `δ N(sin 2Θ) ≤ 2 N(H)`, is `sinTwoTheta_ambient_complex`.
+`sinTwoTheta_bothConclusions_complex` below states both together.
 
-`δ · N(sin 2Θ) ≤ 2 N(E)`, with the paper's sharp factor two, for the spectral
-subspaces selected by `B` from an unbounded self-adjoint `A` and by `S` from the
-bounded perturbation `A + E`, under the whole `FormBoundedSylvesterGap` -- so the
-separating interval may be half-infinite, as the source permits.  The conclusion
-is on the directed double-angle sine `2 sin Θ cos Θ`, not on the proof's overlap
-block.
+The conclusion is on `Angle.directedSinTwoAngleOperator V U` with `V` the trial
+subspace and `U` the spectral subspace whose two blocks the gap separates: that is
+the paper's `Θ₀`, whose sine is `Q^⊥ E₀` in the source's own notation, and it is
+the trial-side object.  Not the proof's overlap block, and not the other ordering
+of the pair.
 
-`sinTwoTheta_directed_unbounded_addBounded_spectrumGap_symmetricNorming_complex` is the
-earlier route, which reads the separation as a bounded interval `[β, α]` whose
-enlargement the complementary restriction's spectrum avoids. -/
-alias sinTwoTheta_complex := sinTwoTheta_directed_unbounded_addBounded_symmetricNorming_complex
+Until 2026-09-04 this alias named
+`sinTwoTheta_directed_unbounded_addBounded_symmetricNorming_complex`, whose
+right-hand side is `2 N(E)` for the full bounded perturbation `E`.  That is a
+different source quantity from the printed residual `R`; that theorem is retained
+as a derived perturbation-norm corollary and is no longer presented as this
+clause. -/
+alias sinTwoTheta_complex := sinTwoTheta_directed_unboundedResidual_symmetricNorming_complex
 
 /-- **Davis--Kahan 1970, the `sin 2Θ` theorem, over `ℝ` -- the DIRECTED clause.**
 
 Its ambient partner is `sinTwoTheta_ambient_real`, and `sinTwoTheta_bothConclusions_real`
 states both together.
 
-The real sibling of `sinTwoTheta_complex`, reaching the ideal layer through
-`FormBoundedSylvesterGap` -- which is the hypothesis shape the real proof actually
-has -- and concluding on the directed double-angle sine of the real pair, read in
-the canonical complexification where this development keeps the real double-angle
-operators. -/
-alias sinTwoTheta_real := sinTwoTheta_directed_unbounded_addBounded_symmetricNorming_real
+The real sibling of `sinTwoTheta_complex`: the printed trial residual on the right,
+`FormBoundedSylvesterGap` for the separation, and the conclusion on the real directed
+double-angle sine of the real pair in the trial-side ordering.  Nothing here is read
+in a complexification. -/
+alias sinTwoTheta_real := sinTwoTheta_directed_unboundedResidual_symmetricNorming_real
 
 /-! ## The two printed clauses, named
 
@@ -378,12 +399,31 @@ alias tanTheta_directed_complex := tanTheta_directed_unboundedTrial_symmetricNor
 /-- **`tan Θ`, directed clause, over `ℝ`**. -/
 alias tanTheta_directed_real := tanTheta_directed_unboundedTrial_symmetricNorming_real
 
-/-- **`sin 2Θ`, directed clause, over `ℂ`**: `δ N(sin 2Θ₀) ≤ 2 N(R)`. -/
+/-- **`sin 2Θ`, directed clause, over `ℂ`**: `δ N(sin 2Θ₀) ≤ 2 N(R)`, on the paper's
+own trial-side directed double-angle sine.
+
+Until 2026-09-04 this named the `blockRepresentative` theorem, whose conclusion is
+on `sinTwoThetaIdealBlock U V` -- a one-sided block, not an angle.  That theorem is
+the proof's own statement and is retained;
+`Angle.sinTwoThetaIdealBlock_hasSameApproximationNumbers_trialSide` is what carries
+it to the angle, and it is a theorem rather than a rewriting, because it composes
+the block correspondence with the order swap. -/
 alias sinTwoTheta_directed_complex :=
+  sinTwoTheta_directed_unboundedResidual_symmetricNorming_complex
+
+/-- **`sin 2Θ`, directed clause, over `ℝ`**, on the paper's own trial-side directed
+double-angle sine. -/
+alias sinTwoTheta_directed_real :=
+  sinTwoTheta_directed_unboundedResidual_symmetricNorming_real
+
+/-- **`sin 2Θ`, directed clause, over `ℂ`, in the proof's block form**:
+`δ N(P_U P_{J_V Uᗮ}) ≤ 2 N(R)`.  The estimate is proved here and transported to the
+angle by `sinTwoTheta_directed_complex`. -/
+alias sinTwoTheta_directed_blockRepresentative_complex :=
   sinTwoTheta_directed_unboundedResidual_blockRepresentative_symmetricNorming_complex
 
-/-- **`sin 2Θ`, directed clause, over `ℝ`**. -/
-alias sinTwoTheta_directed_real :=
+/-- **`sin 2Θ`, directed clause, over `ℝ`, in the proof's block form**. -/
+alias sinTwoTheta_directed_blockRepresentative_real :=
   sinTwoTheta_directed_unboundedResidual_blockRepresentative_symmetricNorming_real
 
 /-- **`tan 2Θ`, directed clause, over `ℂ`**: `(b − a) N(tan 2Θ₀) ≤ 2 N(R)`, on the
@@ -504,9 +544,10 @@ theorem sinTwoTheta_bothConclusions_complex
         (hVdom : ∀ v : V, ((v : V) : Hc) ∈ A.domain),
         (∀ v : V, A ⟨((v : V) : Hc), hVdom v⟩ = R v + ((M v : V) : Hc)) →
         N.Mem R →
-          N.Mem (sinTwoThetaIdealBlock (selfAdjointSpectralSubspace A hA B hB) V) ∧
-            δ * N.gauge (sinTwoThetaIdealBlock
-                (selfAdjointSpectralSubspace A hA B hB) V) ≤ 2 * N.gauge R) ∧
+          N.Mem (Angle.directedSinTwoAngleOperator V
+              (selfAdjointSpectralSubspace A hA B hB)) ∧
+            δ * N.gauge (Angle.directedSinTwoAngleOperator V
+                (selfAdjointSpectralSubspace A hA B hB)) ≤ 2 * N.gauge R) ∧
       (∀ (Eop : Hc →L[ℂ] Hc) (hEop : IsSelfAdjointOperator Eop)
         (S : Set ℝ) (hS : MeasurableSet S), N.Mem Eop →
           N.Mem (sinTwoAngleOperatorC (selfAdjointSpectralSubspace A hA B hB)
@@ -538,10 +579,10 @@ theorem sinTwoTheta_bothConclusions_real
         (hVdom : ∀ v : V, ((v : V) : Er) ∈ A.domain),
         (∀ v : V, A ⟨((v : V) : Er), hVdom v⟩ = R v + ((M v : V) : Er)) →
         N.Mem R →
-          N.Mem (sinTwoThetaIdealBlock
-              (RealSpectralRestriction.realSelfAdjointSpectralSubspace A hA B hB) V) ∧
-            δ * N.gauge (sinTwoThetaIdealBlock
-                (RealSpectralRestriction.realSelfAdjointSpectralSubspace A hA B hB) V) ≤
+          N.Mem (Angle.directedSinTwoAngleOperator V
+              (RealSpectralRestriction.realSelfAdjointSpectralSubspace A hA B hB)) ∧
+            δ * N.gauge (Angle.directedSinTwoAngleOperator V
+                (RealSpectralRestriction.realSelfAdjointSpectralSubspace A hA B hB)) ≤
               2 * N.gauge R) ∧
       (∀ (Eop : Er →L[ℝ] Er) (hEop : IsSelfAdjointOperator Eop)
         (S : Set ℝ) (hS : MeasurableSet S), N.Mem Eop →

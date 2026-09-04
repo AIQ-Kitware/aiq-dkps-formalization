@@ -9,6 +9,7 @@ public import ForTauCeti.Analysis.CStarAlgebra.ContinuousFunctionalCalculusTrans
 public import ForTauCeti.Analysis.InnerProductSpace.OperatorRealAlgebra
 public import ForTauCeti.Analysis.InnerProductSpace.RealContinuousFunctionalCalculus
 public import ForTauCeti.Analysis.RCLike.ScalarTransport
+public import ForTauCeti.Analysis.InnerProductSpace.Projection.ScalarTransport
 
 /-!
 # Real continuous functional calculus at an arbitrary `RCLike` field
@@ -144,6 +145,7 @@ noncomputable def clmStarAlgEquiv (e : RCLikeIso 𝕜 𝕂) (E : Type v) [Normed
   map_star' := clm_star
   map_smul' := clm_real_smul
 
+/-- The star-algebra equivalence acts by the operator transport `clm`. -/
 @[simp] theorem clmStarAlgEquiv_apply (T : E →L[𝕜] E) :
     clmStarAlgEquiv e E T = clm (e := e) T := rfl
 
@@ -267,33 +269,6 @@ omit [CompleteSpace E] in
     Submodule.reflectionOperator_eq_two_smul_sub_id, two_smul, two_smul, starProjection_clm,
     clm_sub, clm_add]
   rfl
-
-omit [CompleteSpace E] in
-/-- Hence it carries the image of a subspace under the reflection in another. -/
-@[simp] theorem submodule_map_reflection (S T : Submodule 𝕜 E) [T.HasOrthogonalProjection] :
-    submodule (e := e) (S.map (T.reflection.toLinearEquiv : E →ₗ[𝕜] E)) =
-      (submodule (e := e) S).map
-        (((submodule (e := e) T).reflection.toLinearEquiv :
-          ScalarTransport e E →ₗ[𝕂] ScalarTransport e E)) := by
-  have hfun : ∀ x : ScalarTransport e E,
-      ((submodule (e := e) T).reflection.toLinearEquiv :
-          ScalarTransport e E →ₗ[𝕂] ScalarTransport e E) x =
-        of (e := e) ((T.reflection.toLinearEquiv : E →ₗ[𝕜] E) (out x)) := by
-    intro x
-    change ((submodule (e := e) T).reflection x : ScalarTransport e E) =
-      of (e := e) (T.reflection (out x))
-    rw [Submodule.reflection_apply, Submodule.reflection_apply, two_smul, two_smul,
-      starProjection_clm]
-    rfl
-  ext x
-  simp only [mem_submodule, Submodule.mem_map]
-  constructor
-  · rintro ⟨y, hy, hxy⟩
-    exact ⟨of (e := e) y, hy, by rw [hfun]; exact congrArg (of (e := e)) hxy⟩
-  · rintro ⟨y, hy, hxy⟩
-    refine ⟨out y, hy, ?_⟩
-    rw [hfun] at hxy
-    exact congrArg (out (e := e)) hxy
 
 end ScalarTransport
 end TauCeti

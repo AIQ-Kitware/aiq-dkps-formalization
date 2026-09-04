@@ -107,10 +107,12 @@ section Complex
 variable {F : Type v} [NormedAddCommGroup F] [InnerProductSpace ℂ F] [CompleteSpace F]
 variable (U V : Submodule ℂ F) [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
 
+/-- Over `ℂ` the generic ambient sine *is* `sinAngleOperatorC`. -/
 @[simp] theorem sinAngleOperator_complex : sinAngleOperator U V = sinAngleOperatorC U V := rfl
 
 @[simp] theorem angleOperator_complex : angleOperator U V = angleOperatorC U V := rfl
 
+/-- Over `ℂ` the generic ambient `sin 2Θ` *is* `sinTwoAngleOperatorC`. -/
 @[simp] theorem sinTwoAngleOperator_complex :
     sinTwoAngleOperator U V = sinTwoAngleOperatorC U V := rfl
 
@@ -128,6 +130,7 @@ section Real
 variable {F : Type v} [NormedAddCommGroup F] [InnerProductSpace ℝ F] [CompleteSpace F]
 variable (U V : Submodule ℝ F) [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
 
+/-- Over `ℝ` the generic ambient sine *is* `sinAngleOperatorR`. -/
 @[simp] theorem sinAngleOperator_real : sinAngleOperator U V = sinAngleOperatorR U V := by
   refine complexify_injective ?_
   rw [complexify_sinAngleOperatorR]
@@ -137,6 +140,7 @@ variable (U V : Submodule ℝ F) [U.HasOrthogonalProjection] [V.HasOrthogonalPro
   rw [complexify_modulus, starProjection_complexifySubmodule, starProjection_complexifySubmodule,
     complexify_sub]
 
+/-- Over `ℝ` the generic ambient angle *is* `angleOperatorR`. -/
 @[simp] theorem angleOperator_real : angleOperator U V = angleOperatorR U V := by
   refine complexify_injective ?_
   rw [complexify_angleOperatorR]
@@ -146,6 +150,7 @@ variable (U V : Submodule ℝ F) [U.HasOrthogonalProjection] [V.HasOrthogonalPro
     sinAngleOperator_real, complexify_sinAngleOperatorR]
   rfl
 
+/-- Over `ℝ` the generic ambient `sin 2Θ` *is* `sinTwoAngleOperatorR`. -/
 @[simp] theorem sinTwoAngleOperator_real :
     sinTwoAngleOperator U V = sinTwoAngleOperatorR U V := by
   refine complexify_injective ?_
@@ -171,6 +176,7 @@ variable {𝕂 : Type w} [RCLike 𝕂] {e : RCLikeIso 𝕜 𝕂}
 
 open TauCeti.ScalarTransport
 
+/-- The scalar transport carries the ambient sine. -/
 @[simp] theorem clm_sinAngleOperator :
     clm (e := e) (sinAngleOperator U V) =
       sinAngleOperator (ScalarTransport.submodule (e := e) U)
@@ -181,6 +187,7 @@ open TauCeti.ScalarTransport
         (ScalarTransport.submodule (e := e) V).starProjection)
   rw [clm_modulus, starProjection_clm, starProjection_clm, clm_sub]
 
+/-- The scalar transport carries the ambient angle. -/
 @[simp] theorem clm_angleOperator :
     clm (e := e) (angleOperator U V) =
       angleOperator (ScalarTransport.submodule (e := e) U)
@@ -190,6 +197,7 @@ open TauCeti.ScalarTransport
       Real.continuous_arcsin.continuousOn, clm_sinAngleOperator]
   rfl
 
+/-- The scalar transport carries the ambient `sin 2Θ`. -/
 @[simp] theorem clm_sinTwoAngleOperator :
     clm (e := e) (sinTwoAngleOperator U V) =
       sinTwoAngleOperator (ScalarTransport.submodule (e := e) U)
@@ -243,16 +251,20 @@ is obtained by dispatch: it is a fact about the two cross-projections, proved ov
 `OperatorAngleComplex.lean`, and carried to `ℝ` by `complexify` and to an arbitrary field by the
 scalar transport. -/
 
+/-- The directed sine is nonnegative: it is a modulus. -/
 theorem directedSinAngleOperator_nonneg : 0 ≤ directedSinAngleOperator U V :=
   ContinuousLinearMap.modulus_nonneg _
 
+/-- The directed cosine is nonnegative: it is a modulus. -/
 theorem directedCosAngleOperator_nonneg : 0 ≤ directedCosAngleOperator U V :=
   ContinuousLinearMap.modulus_nonneg _
 
+/-- The directed sine is self-adjoint: it is a modulus. -/
 theorem isSelfAdjoint_directedSinAngleOperator :
     IsSelfAdjoint (directedSinAngleOperator U V) :=
   ContinuousLinearMap.modulus_isSelfAdjoint _
 
+/-- The directed cosine is self-adjoint: it is a modulus. -/
 theorem isSelfAdjoint_directedCosAngleOperator :
     IsSelfAdjoint (directedCosAngleOperator U V) :=
   ContinuousLinearMap.modulus_isSelfAdjoint _
@@ -262,12 +274,15 @@ section DirectedComplex
 variable {F : Type v} [NormedAddCommGroup F] [InnerProductSpace ℂ F] [CompleteSpace F]
 variable (U V : Submodule ℂ F) [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
 
+/-- Over `ℂ` the generic directed sine *is* `directedSinAngleOperatorC`. -/
 @[simp] theorem directedSinAngleOperator_complex :
     directedSinAngleOperator U V = directedSinAngleOperatorC U V := rfl
 
+/-- Over `ℂ` the generic directed cosine *is* `directedCosAngleOperatorC`. -/
 @[simp] theorem directedCosAngleOperator_complex :
     directedCosAngleOperator U V = directedCosAngleOperatorC U V := rfl
 
+/-- Over `ℂ` the generic directed `sin 2Θ₀` *is* `directedSinTwoAngleOperatorC`. -/
 @[simp] theorem directedSinTwoAngleOperator_complex :
     directedSinTwoAngleOperator U V = directedSinTwoAngleOperatorC U V := rfl
 
@@ -278,6 +293,8 @@ section DirectedReal
 variable {F : Type v} [NormedAddCommGroup F] [InnerProductSpace ℝ F] [CompleteSpace F]
 variable (U V : Submodule ℝ F) [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
 
+/-- Over `ℝ` the directed sine complexifies to the complex directed sine of the complexified
+pair, which is where this development keeps the real directed angle. -/
 @[simp] theorem complexify_directedSinAngleOperator :
     complexify (directedSinAngleOperator U V) = Real.directedSinAngleOperatorRC U V := by
   change complexify (ContinuousLinearMap.modulus (Vᗮ.starProjection ∘L U.starProjection)) =
@@ -287,6 +304,7 @@ variable (U V : Submodule ℝ F) [U.HasOrthogonalProjection] [V.HasOrthogonalPro
     Submodule.starProjection_congr (complexifySubmodule_orthogonal V).symm,
     starProjection_complexifySubmodule, starProjection_complexifySubmodule]
 
+/-- The same for the directed cosine. -/
 @[simp] theorem complexify_directedCosAngleOperator :
     complexify (directedCosAngleOperator U V) = Real.directedCosAngleOperatorRC U V := by
   change complexify (ContinuousLinearMap.modulus (V.starProjection ∘L U.starProjection)) =
@@ -295,6 +313,7 @@ variable (U V : Submodule ℝ F) [U.HasOrthogonalProjection] [V.HasOrthogonalPro
   rw [complexify_modulus, complexify_comp, starProjection_complexifySubmodule,
     starProjection_complexifySubmodule]
 
+/-- The same for the directed `sin 2Θ₀`. -/
 @[simp] theorem complexify_directedSinTwoAngleOperator :
     complexify (directedSinTwoAngleOperator U V) = Real.directedSinTwoAngleOperatorRC U V := by
   have hl : directedSinTwoAngleOperator U V =
@@ -314,6 +333,7 @@ variable {𝕂 : Type w} [RCLike 𝕂] {e : RCLikeIso 𝕜 𝕂}
 
 open TauCeti.ScalarTransport
 
+/-- The scalar transport carries the directed sine. -/
 @[simp] theorem clm_directedSinAngleOperator :
     clm (e := e) (directedSinAngleOperator U V) =
       directedSinAngleOperator (ScalarTransport.submodule (e := e) U)
@@ -327,6 +347,7 @@ open TauCeti.ScalarTransport
     starProjection_clm, starProjection_clm]
   rfl
 
+/-- The scalar transport carries the directed cosine. -/
 @[simp] theorem clm_directedCosAngleOperator :
     clm (e := e) (directedCosAngleOperator U V) =
       directedCosAngleOperator (ScalarTransport.submodule (e := e) U)
@@ -338,6 +359,7 @@ open TauCeti.ScalarTransport
   rw [clm_modulus, starProjection_clm, starProjection_clm]
   rfl
 
+/-- The scalar transport carries the directed `sin 2Θ₀`. -/
 @[simp] theorem clm_directedSinTwoAngleOperator :
     clm (e := e) (directedSinTwoAngleOperator U V) =
       directedSinTwoAngleOperator (ScalarTransport.submodule (e := e) U)
@@ -536,6 +558,216 @@ theorem sinTwoAngleOperator_hasSameApproximationNumbers :
   exact modulus_hasSameApproximationNumbers_rclike _
 
 end ReflectionForm
+
+/-! ## Order symmetry of the directed double-angle sine
+
+`sin Θ₀(U, V)` and `sin Θ₀(V, U)` are genuinely different operators: a line inside a plane makes
+the first zero and the second not.  Their *doubles* are not.  `sin 2Θ₀(U, V)` and
+`sin 2Θ₀(V, U)` carry the same complete approximation-number sequence, so no unitarily
+invariant norm distinguishes them.
+
+This is the geometric fact the source-facing `sin 2Θ` wrapper needs.  The analytic estimate is
+naturally parameterized by the pair (reducing subspace carrying the spectral gap, trial
+subspace), whereas Davis and Kahan's `Θ₀` is the trial-side angle -- `‖Q^⊥P‖ = ‖sin Θ₀‖` with
+`P` the trial projector and `Q` the one whose blocks are separated.  Without this theorem the
+two sides of that correspondence are different operators and the wrapper would be stating a
+different result.
+
+The proof is one polar decomposition.  With `T = P_U P_V`,
+
+`t = T T⋆ = P_U P_V P_U`,   `s = T⋆ T = P_V P_U P_V`,
+
+both doubled sines are square roots -- `sin 2Θ₀(U,V)² = 4(t - t²)` and
+`sin 2Θ₀(V,U)² = 4(s - s²)` -- and `W = T (1 - s)^{1/2}` has `W W⋆ = t - t²` and
+`W⋆ W = s - s²`.  So the two are the moduli of `2W⋆` and `2W`, and an operator and its adjoint
+have the same approximation numbers. -/
+
+section Swap
+
+omit [CompleteSpace E] in
+/-- Orthogonal projections are idempotent, in the operator algebra. -/
+private theorem starProjection_mul_self_generic (W : Submodule 𝕜 E)
+    [W.HasOrthogonalProjection] :
+    W.starProjection * W.starProjection = W.starProjection := by
+  ext x
+  show W.starProjection (W.starProjection x) = W.starProjection x
+  rw [Submodule.starProjection_eq_self_iff]
+  exact W.starProjection_apply_mem x
+
+omit [CompleteSpace E] in
+/-- Idempotence in the position a left-associated product actually presents it. -/
+private theorem mul_starProjection_mul_self (W : Submodule 𝕜 E)
+    [W.HasOrthogonalProjection] (x : E →L[𝕜] E) :
+    x * W.starProjection * W.starProjection = x * W.starProjection := by
+  rw [mul_assoc, starProjection_mul_self_generic]
+
+omit [CompleteSpace E] in
+/-- `P_{Wᗮ} = 1 - P_W`, in the operator algebra. -/
+private theorem starProjection_orthogonal_generic (W : Submodule 𝕜 E)
+    [W.HasOrthogonalProjection] :
+    Wᗮ.starProjection = (1 : E →L[𝕜] E) - W.starProjection := by
+  ext x
+  simp
+
+/-- The Gram operator of a cross projection product. -/
+private theorem gram_cross_generic (U W : Submodule 𝕜 E)
+    [U.HasOrthogonalProjection] [W.HasOrthogonalProjection] :
+    (W.starProjection ∘L U.starProjection).adjoint ∘L
+        (W.starProjection ∘L U.starProjection)
+      = U.starProjection * W.starProjection * U.starProjection := by
+  rw [ContinuousLinearMap.adjoint_comp, ← ContinuousLinearMap.star_eq_adjoint,
+    ← ContinuousLinearMap.star_eq_adjoint, (isSelfAdjoint_starProjection U).star_eq,
+    (isSelfAdjoint_starProjection W).star_eq]
+  calc U.starProjection ∘L W.starProjection ∘L W.starProjection ∘L U.starProjection
+      = U.starProjection * (W.starProjection * W.starProjection) * U.starProjection := by
+        simp only [mul_assoc]; rfl
+    _ = U.starProjection * W.starProjection * U.starProjection := by
+        rw [starProjection_mul_self_generic]
+
+/-- The square of the directed sine is the compressed cross block `P_U P_{Vᗮ} P_U`. -/
+theorem directedSinAngleOperator_mul_self :
+    directedSinAngleOperator U V * directedSinAngleOperator U V
+      = U.starProjection * Vᗮ.starProjection * U.starProjection := by
+  rw [directedSinAngleOperator, ContinuousLinearMap.modulus_mul_self]
+  exact gram_cross_generic U Vᗮ
+
+/-- The square of the directed cosine is the compressed cross block `P_U P_V P_U`. -/
+theorem directedCosAngleOperator_mul_self :
+    directedCosAngleOperator U V * directedCosAngleOperator U V
+      = U.starProjection * V.starProjection * U.starProjection := by
+  rw [directedCosAngleOperator, ContinuousLinearMap.modulus_mul_self]
+  exact gram_cross_generic U V
+
+/-- **The directed `sin 2Θ₀` squares to `4(t - t²)`**, where `t = P_U P_V P_U` is the
+two-projection operator carrying the squared principal cosines. -/
+theorem directedSinTwoAngleOperator_mul_self :
+    directedSinTwoAngleOperator U V * directedSinTwoAngleOperator U V
+      = (4 : ℝ) • (U.starProjection * V.starProjection * U.starProjection -
+          U.starProjection * V.starProjection * U.starProjection *
+            (U.starProjection * V.starProjection * U.starProjection)) := by
+  have hAA : U.starProjection * U.starProjection = U.starProjection :=
+    starProjection_mul_self_generic U
+  have hcomm := commute_directedSinAngleOperator_directedCosAngleOperator U V
+  have hsin : directedSinAngleOperator U V * directedSinAngleOperator U V
+      = U.starProjection - U.starProjection * V.starProjection * U.starProjection := by
+    rw [directedSinAngleOperator_mul_self, starProjection_orthogonal_generic, mul_sub, sub_mul,
+      mul_one, hAA]
+  have hcos := directedCosAngleOperator_mul_self U V
+  have hrearrange :
+      directedSinAngleOperator U V * directedCosAngleOperator U V *
+          (directedSinAngleOperator U V * directedCosAngleOperator U V)
+        = (directedSinAngleOperator U V * directedSinAngleOperator U V) *
+            (directedCosAngleOperator U V * directedCosAngleOperator U V) := by
+    calc directedSinAngleOperator U V * directedCosAngleOperator U V *
+          (directedSinAngleOperator U V * directedCosAngleOperator U V)
+        = directedSinAngleOperator U V *
+            (directedCosAngleOperator U V * directedSinAngleOperator U V) *
+              directedCosAngleOperator U V := by noncomm_ring
+      _ = directedSinAngleOperator U V *
+            (directedSinAngleOperator U V * directedCosAngleOperator U V) *
+              directedCosAngleOperator U V := by rw [hcomm.symm.eq]
+      _ = (directedSinAngleOperator U V * directedSinAngleOperator U V) *
+            (directedCosAngleOperator U V * directedCosAngleOperator U V) := by noncomm_ring
+  show (2 : ℝ) • _ * ((2 : ℝ) • _) = _
+  rw [smul_mul_smul_comm, hrearrange, hsin, hcos]
+  congr 1
+  · norm_num
+  · simp only [sub_mul, ← mul_assoc, mul_starProjection_mul_self,
+      starProjection_mul_self_generic]
+
+/-- **The directed double-angle sine is order-symmetric at the level of approximation
+numbers.**
+
+`sin 2Θ₀(U, V)` and `sin 2Θ₀(V, U)` have the same complete approximation-number sequence, so no
+unitarily invariant norm distinguishes them.  The individual directed sines do *not* have this
+property -- a line inside a plane makes `sin Θ₀(U, V)` zero and `sin Θ₀(V, U)` not -- so this
+is a fact about the doubling, and it needs a proof.
+
+`sin 2Θ₀(U,V)² = 4(t - t²)` and `sin 2Θ₀(V,U)² = 4(s - s²)` for the two Gram operators
+`t = T T⋆` and `s = T⋆ T` of the single operator `T = P_U P_V`.  So with `W = T (1 - s)^{1/2}`
+the two are the moduli of `2W⋆` and `2W`, which have the same approximation numbers. -/
+theorem directedSinTwoAngleOperator_hasSameApproximationNumbers_swap :
+    (directedSinTwoAngleOperator U V).HasSameApproximationNumbers
+      (directedSinTwoAngleOperator V U) := by
+  have hAsa : star U.starProjection = U.starProjection :=
+    (isSelfAdjoint_starProjection U).star_eq
+  have hBsa : star V.starProjection = V.starProjection :=
+    (isSelfAdjoint_starProjection V).star_eq
+  set T : E →L[𝕜] E := U.starProjection * V.starProjection with hTdef
+  have hTstar : star T = V.starProjection * U.starProjection := by
+    rw [hTdef, star_mul, hAsa, hBsa]
+  set t : E →L[𝕜] E := U.starProjection * V.starProjection * U.starProjection with htdef
+  set s : E →L[𝕜] E := V.starProjection * U.starProjection * V.starProjection with hsdef
+  have htT : T * star T = t := by
+    rw [hTdef, hTstar, htdef]
+    simp only [← mul_assoc, mul_starProjection_mul_self]
+  have hsT : star T * T = s := by
+    rw [hTdef, hTstar, hsdef]
+    simp only [← mul_assoc, mul_starProjection_mul_self]
+  -- `1 - s` splits as `P_{Vᗮ} + (P_{Uᗮ} P_V)⋆ (P_{Uᗮ} P_V)`, so it is nonnegative.
+  have hnn : (0 : E →L[𝕜] E) ≤ 1 - s := by
+    have hVo : star Vᗮ.starProjection * Vᗮ.starProjection
+        = (1 : E →L[𝕜] E) - V.starProjection := by
+      rw [(isSelfAdjoint_starProjection Vᗮ).star_eq, starProjection_mul_self_generic,
+        starProjection_orthogonal_generic]
+    have hUo : star (Uᗮ.starProjection * V.starProjection) *
+        (Uᗮ.starProjection * V.starProjection) = V.starProjection - s := by
+      rw [star_mul, (isSelfAdjoint_starProjection Uᗮ).star_eq, hBsa]
+      simp only [← mul_assoc, mul_starProjection_mul_self]
+      rw [starProjection_orthogonal_generic U, hsdef, mul_sub, sub_mul, mul_one,
+        starProjection_mul_self_generic]
+    have hsum : (1 : E →L[𝕜] E) - s
+        = star Vᗮ.starProjection * Vᗮ.starProjection
+          + star (Uᗮ.starProjection * V.starProjection) *
+              (Uᗮ.starProjection * V.starProjection) := by
+      rw [hVo, hUo]; abel
+    rw [hsum]
+    exact add_nonneg (star_mul_self_nonneg _) (star_mul_self_nonneg _)
+  set S : E →L[𝕜] E := CFC.sqrt (1 - s) with hSdef
+  have hSS : S * S = 1 - s := CFC.sqrt_mul_sqrt_self _ hnn
+  have hSsa : star S = S :=
+    (IsSelfAdjoint.of_nonneg (hSdef ▸ CFC.sqrt_nonneg (1 - s))).star_eq
+  have hs' : s = 1 - S * S := by rw [hSS]; abel
+  set W : E →L[𝕜] E := T * S with hWdef
+  have hWstar : star W = S * star T := by rw [hWdef, star_mul, hSsa]
+  have hWW : W * star W = t - t * t := by
+    have h1 : W * star W = T * (S * S) * star T := by
+      rw [hWdef, hWstar]; noncomm_ring
+    have h2 : T * (1 - star T * T) * star T
+        = T * star T - T * star T * (T * star T) := by noncomm_ring
+    rw [h1, hSS, ← hsT, h2, htT]
+  have hW'W : star W * W = s - s * s := by
+    have h1 : star W * W = S * (star T * T) * S := by
+      rw [hWdef, hWstar]; noncomm_ring
+    rw [h1, hsT, hs']
+    noncomm_ring
+  have hstar2 : ∀ x : E →L[𝕜] E, star ((2 : ℝ) • x) = (2 : ℝ) • star x := by
+    intro x; rw [two_smul, two_smul, star_add]
+  have hfour : ∀ a b : E →L[𝕜] E,
+      ((2 : ℝ) • a) * ((2 : ℝ) • b) = (4 : ℝ) • (a * b) := by
+    intro a b
+    rw [smul_mul_smul_comm]
+    norm_num
+  have hUV : directedSinTwoAngleOperator U V
+      = ContinuousLinearMap.modulus ((2 : ℝ) • star W) := by
+    refine ContinuousLinearMap.eq_modulus_of_nonneg_of_mul_self_eq
+      (directedSinTwoAngleOperator_nonneg U V) ?_
+    show _ = star ((2 : ℝ) • star W) * ((2 : ℝ) • star W)
+    rw [hstar2, star_star, hfour, hWW, directedSinTwoAngleOperator_mul_self, ← htdef]
+  have hVU : directedSinTwoAngleOperator V U
+      = ContinuousLinearMap.modulus ((2 : ℝ) • W) := by
+    refine ContinuousLinearMap.eq_modulus_of_nonneg_of_mul_self_eq
+      (directedSinTwoAngleOperator_nonneg V U) ?_
+    show _ = star ((2 : ℝ) • W) * ((2 : ℝ) • W)
+    rw [hstar2, hfour, hW'W, directedSinTwoAngleOperator_mul_self, ← hsdef]
+  intro n
+  rw [hUV, hVU, modulus_hasSameApproximationNumbers_rclike ((2 : ℝ) • star W) n,
+    modulus_hasSameApproximationNumbers_rclike ((2 : ℝ) • W) n,
+    show ((2 : ℝ) • star W) = ((2 : ℝ) • W).adjoint by
+      rw [← ContinuousLinearMap.star_eq_adjoint, hstar2],
+    ContinuousLinearMap.approximationNumber_adjoint]
+
+end Swap
 
 
 end

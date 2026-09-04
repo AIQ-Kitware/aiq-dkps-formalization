@@ -240,6 +240,8 @@
       "review_declarations": [
         "TauCeti.DavisKahan1970.SectionTwo.sinTwoTheta_complex",
         "TauCeti.DavisKahan1970.SectionTwo.sinTwoTheta_real",
+        "TauCeti.DavisKahan1970.sinTwoTheta_directed_unboundedResidual_symmetricNorming_real",
+        "TauCeti.DavisKahan1970.sinTwoTheta_directed_unboundedResidual_symmetricNorming_complex",
         "TauCeti.DavisKahan.FiniteDimensional.partIII_sinTwoTheta_uiNorm",
         "TauCeti.DavisKahan1970.sinTwoTheta_ambient_bounded_symmetricNorming_complex",
         "TauCeti.DavisKahan1970.sinTwoTheta_ambient_bounded_symmetricNorming_real",
@@ -253,8 +255,14 @@
       "audit_clauses": [
         {
           "id": "S2-sin-two-theta.directed",
-          "description": "Directed conclusion: delta * ||sin(2 Theta_0)|| <= 2 ||R||.",
+          "description": "Directed conclusion: delta * ||sin(2 Theta_0)|| <= 2 ||R||, with the printed trial residual on the right and the conclusion on the paper's TRIAL-SIDE directed double-angle sine Angle.directedSinTwoAngleOperator V U (V the trial subspace, U the subspace whose blocks the gap separates).",
           "review_declarations": [
+            "TauCeti.DavisKahan1970.sinTwoTheta_directed_unboundedResidual_symmetricNorming_complex",
+            "TauCeti.DavisKahan1970.sinTwoTheta_directed_unboundedResidual_symmetricNorming_real",
+            "TauCeti.DavisKahan1970.sinTwoTheta_directed_unboundedResidual_reducing_symmetricNorming_complex",
+            "TauCeti.DavisKahan1970.sinTwoTheta_directed_unboundedResidual_reducing_symmetricNorming_real",
+            "TauCeti.DavisKahan.Angle.sinTwoThetaIdealBlock_hasSameApproximationNumbers_trialSide",
+            "TauCeti.DavisKahan.Angle.directedSinTwoAngleOperator_hasSameApproximationNumbers_swap",
             "TauCeti.DavisKahan.FiniteDimensional.partIII_sinTwoTheta_uiNorm"
           ]
         },
