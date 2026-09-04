@@ -4,7 +4,7 @@
 
 **Census family:** `source-completion-census`  
 **Items:** 50  
-**Unique cited Lean declarations:** 1216
+**Unique cited Lean declarations:** 1219
 
 ## How to use this census
 
@@ -3114,6 +3114,8 @@ REOPENING WITHDRAWN 2026-08-31 and the rule corrected: a later source passage en
 - `TauCeti.DavisKahan1970.banach_sylvester_lower_bound_interchanged_exact`
 - `TauCeti.DavisKahan1970.theorem5_1_banach_sylvester_exact`
 - `TauCeti.DavisKahan1970.theorem5_1_banach_sylvester_interchanged_exact`
+- `TauCeti.DavisKahan1970.theorem5_1_banach_sylvester_banachScope_ofProperties`
+- `TauCeti.DavisKahan1970.theorem5_1_banach_sylvester_banachScope`
 
 **Curated source/Lean review:**
 
@@ -3249,6 +3251,7 @@ The first hole asked for a source-facing theorem for "(5.2) is not best possible
 - `TauCeti.DavisKahan1970.theorem5_2_symmetricNorming_complex`
 - `TauCeti.DavisKahan1970.theorem5_2_symmetricNorming_real`
 - `TauCeti.DavisKahan1970.symmetricNorming_of_kyFanDominant`
+- `TauCeti.DavisKahan1970.theorem5_2_orderedGap_symmetricNorming_real`
 
 **Curated source/Lean review:**
 

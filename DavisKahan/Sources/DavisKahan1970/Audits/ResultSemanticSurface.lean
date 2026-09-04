@@ -555,6 +555,8 @@ Status: **TERMINAL EXACT**.
 
 #check @TauCeti.DavisKahan1970.banach_sylvester_lower_bound_uiNorm
 #check @TauCeti.DavisKahan1970.banach_sylvester_lower_bound_exact
+#check @TauCeti.DavisKahan1970.theorem5_1_banach_sylvester_banachScope
+#check @TauCeti.DavisKahan1970.theorem5_1_banach_sylvester_banachScope_ofProperties
 #check @TauCeti.DavisKahan1970.banach_sylvester_lower_bound_interchanged
 #check @TauCeti.DavisKahan1970.banach_sylvester_lower_bound_interchanged_exact
 #check @TauCeti.DavisKahan1970.banach_sylvester_lower_bound_unboundedA
@@ -567,6 +569,7 @@ Status: **TERMINAL EXACT**.
 
 #check @TauCeti.DavisKahan1970.theorem5_2_symmetricNorming_complex
 #check @TauCeti.DavisKahan1970.theorem5_2_symmetricNorming_real
+#check @TauCeti.DavisKahan1970.theorem5_2_orderedGap_symmetricNorming_real
 #check @TauCeti.DavisKahan1970.Theorem5_2
 #check @TauCeti.DavisKahan.Sylvester.davisKahan1970_sylvester_real
 #check @TauCeti.DavisKahan1970.Audits.theorem5_2_real_ordered_sourceAudit

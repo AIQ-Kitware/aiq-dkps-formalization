@@ -4025,12 +4025,12 @@ One row per printed source clause per scalar field.  A clause is `PASS` only whe
 
 | clause | scalar | witness | status |
 | --- | --- | --- | --- |
-| `sylvester-lower-bound.scalar_generic` | scalar_generic | `TauCeti.DavisKahan1970.banach_sylvester_lower_bound_uiNorm` | **PASS** |
-| `sylvester-lower-bound.complex` | complex | `TauCeti.DavisKahan1970.banach_sylvester_lower_bound_exact` | **PASS** |
+| `sylvester-lower-bound.scalar_generic` | scalar_generic | `TauCeti.DavisKahan1970.theorem5_1_banach_sylvester_banachScope_ofProperties` | **PASS** |
+| `sylvester-lower-bound.complex` | complex | `TauCeti.DavisKahan1970.theorem5_1_banach_sylvester_banachScope` | **PASS** |
 
-**`sylvester-lower-bound.scalar_generic`.** Canonical witness for sylvester-lower-bound at scalar_generic scalar scope, carried over from the pre-clause canonical evidence and re-checked against its compiler-printed type under the coherent model.
+**`sylvester-lower-bound.scalar_generic`.** Canonical witness for sylvester-lower-bound at scalar_generic scalar scope, carried over from the pre-clause canonical evidence and re-checked against its compiler-printed type under the coherent model.  SCOPE CORRECTED 2026-09-04: the primary was the normed-space theorem, which never uses completeness and is therefore strictly stronger than the printed statement -- but the printed statement opens 'Let X, Y be BANACH spaces', and canonical evidence is supposed to be the printed statement.  The primary is now the thin wrapper carrying [CompleteSpace X] and [CompleteSpace Y] with the printed hypotheses in printed form (gamma >= 0, an actual two-sided inverse with ||A^-1|| <= (gamma+delta)^-1, and a norm on cross-space maps compatible with the two bound norms).  The normed-space theorem is unchanged and is retained as a generalization.
 
-**`sylvester-lower-bound.complex`.** Canonical witness for sylvester-lower-bound at complex scalar scope, carried over from the pre-clause canonical evidence and re-checked against its compiler-printed type under the coherent model.
+**`sylvester-lower-bound.complex`.** Canonical witness for sylvester-lower-bound at complex scalar scope, carried over from the pre-clause canonical evidence and re-checked against its compiler-printed type under the coherent model.  SCOPE CORRECTED 2026-09-04: the primary was the normed-space theorem, which never uses completeness and is therefore strictly stronger than the printed statement -- but the printed statement opens 'Let X, Y be BANACH spaces', and canonical evidence is supposed to be the printed statement.  The primary is now the thin wrapper carrying [CompleteSpace X] and [CompleteSpace Y] with the printed hypotheses in printed form (gamma >= 0, an actual two-sided inverse with ||A^-1|| <= (gamma+delta)^-1, and a norm on cross-space maps compatible with the two bound norms).  The normed-space theorem is unchanged and is retained as a generalization.
 
 Result-wide scope every clause must carry: `DK-5.1-thm.banach-hypotheses`
 
@@ -4038,14 +4038,16 @@ Result-wide scope every clause must carry: `DK-5.1-thm.banach-hypotheses`
 
 The declarations that carry this result's printed statement, with the source atoms each one covers.  Everything under *Other registered declarations* below accompanies the result without establishing it.
 
-- `TauCeti.DavisKahan1970.banach_sylvester_lower_bound_uiNorm` — primary_source_witness, scalar_generic scalars, proof; covers `DK-5.1-thm.banach-hypotheses`, `DK-5.1-thm.sylvester-lower-bound`
-- `TauCeti.DavisKahan1970.banach_sylvester_lower_bound_exact` — primary_source_witness, complex scalars, proof; covers `DK-5.1-thm.banach-hypotheses`, `DK-5.1-thm.sylvester-lower-bound`
+- `TauCeti.DavisKahan1970.theorem5_1_banach_sylvester_banachScope_ofProperties` — primary_source_witness, scalar_generic scalars, proof; covers `DK-5.1-thm.banach-hypotheses`, `DK-5.1-thm.sylvester-lower-bound`
+- `TauCeti.DavisKahan1970.theorem5_1_banach_sylvester_banachScope` — primary_source_witness, complex scalars, proof; covers `DK-5.1-thm.banach-hypotheses`, `DK-5.1-thm.sylvester-lower-bound`
 
 ### Other registered declarations
 
 - `TauCeti.DavisKahan1970.banach_sylvester_lower_bound_interchanged` — generalization
 - `TauCeti.DavisKahan1970.banach_sylvester_lower_bound_interchanged_exact` — generalization
 - `TauCeti.DavisKahan1970.banach_sylvester_lower_bound_unboundedA` — generalization
+- `TauCeti.DavisKahan1970.banach_sylvester_lower_bound_uiNorm` — generalization
+- `TauCeti.DavisKahan1970.banach_sylvester_lower_bound_exact` — generalization
 
 ### Source-facing Lean declarations
 
@@ -4076,6 +4078,18 @@ Compiler-printed type: *inserted when a compiler certificate is supplied.*
 #### `TauCeti.DavisKahan1970.banach_sylvester_lower_bound_unboundedA`
 
 Source location candidates: `DavisKahan/Sources/DavisKahan1970/PartIIIPresentation.lean:275`
+
+Compiler-printed type: *inserted when a compiler certificate is supplied.*
+
+#### `TauCeti.DavisKahan1970.theorem5_1_banach_sylvester_banachScope_ofProperties`
+
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section5BanachSylvester.lean:348`
+
+Compiler-printed type: *inserted when a compiler certificate is supplied.*
+
+#### `TauCeti.DavisKahan1970.theorem5_1_banach_sylvester_banachScope`
+
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section5BanachSylvester.lean:326`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
@@ -4151,11 +4165,11 @@ One row per printed source clause per scalar field.  A clause is `PASS` only whe
 | clause | scalar | witness | status |
 | --- | --- | --- | --- |
 | `hilbert-unbounded-conclusion.complex` | complex | `TauCeti.DavisKahan1970.theorem5_2_symmetricNorming_complex` | **PASS** |
-| `hilbert-unbounded-conclusion.real` | real | `TauCeti.DavisKahan1970.theorem5_2_symmetricNorming_real` | **PASS** |
+| `hilbert-unbounded-conclusion.real` | real | `TauCeti.DavisKahan1970.theorem5_2_orderedGap_symmetricNorming_real` | **PASS** |
 
 **`hilbert-unbounded-conclusion.complex`.** delta * N(X) <= N(R) for a bounded solution of A X = X B + R with closed self-adjoint A >= c + delta > c >= B, at every source unitarily invariant norm, with ideal membership concluded.
 
-**`hilbert-unbounded-conclusion.real`.** delta * N(X) <= N(R) for a bounded solution of A X = X B + R with closed self-adjoint A >= c + delta > c >= B, at every source unitarily invariant norm, with ideal membership concluded.
+**`hilbert-unbounded-conclusion.real`.** delta * N(X) <= N(R) for a bounded solution of A X = X B + R with closed self-adjoint A >= c + delta > c >= B, at every source unitarily invariant norm, with ideal membership concluded.  SCOPE CORRECTED 2026-09-04: the real primary took `FormBoundedSylvesterGap`, which also covers the interval/exterior and reversed configurations and is therefore broader than the printed `A >= gamma + delta > gamma >= B`.  The primary is now the instance at the printed ordered semibounds, matching the complex endpoint, which was already in that shape; the `FormBoundedSylvesterGap` theorem is retained as a generalization.
 
 Result-wide scope every clause must carry: `DK-5.2-thm.hilbert-unbounded-hypotheses`
 
@@ -4164,13 +4178,14 @@ Result-wide scope every clause must carry: `DK-5.2-thm.hilbert-unbounded-hypothe
 The declarations that carry this result's printed statement, with the source atoms each one covers.  Everything under *Other registered declarations* below accompanies the result without establishing it.
 
 - `TauCeti.DavisKahan1970.theorem5_2_symmetricNorming_complex` — primary_source_witness, complex scalars, proof; covers `DK-5.2-thm.hilbert-unbounded-hypotheses`, `DK-5.2-thm.hilbert-unbounded-conclusion`
-- `TauCeti.DavisKahan1970.theorem5_2_symmetricNorming_real` — primary_source_witness, real scalars, proof; covers `DK-5.2-thm.hilbert-unbounded-hypotheses`, `DK-5.2-thm.hilbert-unbounded-conclusion`
+- `TauCeti.DavisKahan1970.theorem5_2_orderedGap_symmetricNorming_real` — primary_source_witness, real scalars, proof; covers `DK-5.2-thm.hilbert-unbounded-hypotheses`, `DK-5.2-thm.hilbert-unbounded-conclusion`
 
 ### Other registered declarations
 
 - `TauCeti.DavisKahan1970.Theorem5_2` — generalization
 - `TauCeti.DavisKahan.Sylvester.davisKahan1970_sylvester_real` — generalization
 - `TauCeti.DavisKahan1970.symmetricNorming_of_kyFanDominant` — supporting_theorem
+- `TauCeti.DavisKahan1970.theorem5_2_symmetricNorming_real` — generalization
 
 ### Source-facing Lean declarations
 
@@ -4201,6 +4216,12 @@ Compiler-printed type: *inserted when a compiler certificate is supplied.*
 #### `TauCeti.DavisKahan1970.symmetricNorming_of_kyFanDominant`
 
 Source location candidates: `DavisKahan/Sources/DavisKahan1970/SymmetricNormingFanDominance.lean:78`
+
+Compiler-printed type: *inserted when a compiler certificate is supplied.*
+
+#### `TauCeti.DavisKahan1970.theorem5_2_orderedGap_symmetricNorming_real`
+
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/SymmetricNormingFanDominance.lean:263`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
