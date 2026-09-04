@@ -62,10 +62,6 @@ variable {𝕜 : Type u} {𝕂 : Type w} [RCLike 𝕜] [RCLike 𝕂] {e : RCLike
 variable {E : Type v} [NormedAddCommGroup E] [InnerProductSpace 𝕜 E]
 variable {F : Type v'} [NormedAddCommGroup F] [InnerProductSpace 𝕜 F]
 
-/-- The transport of operators is additive. -/
-@[simp] theorem clm_sub (T R : E →L[𝕜] F) :
-    clm (e := e) (T - R) = clm (e := e) T - clm (e := e) R := rfl
-
 /-- The transport does not change an approximation number: it is an infimum of
 operator norms over the maps of bounded rank, and the transport is a
 rank-preserving, norm-preserving bijection of those. -/

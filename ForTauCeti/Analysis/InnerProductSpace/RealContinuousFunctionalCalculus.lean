@@ -399,5 +399,39 @@ theorem realPartOperator_cfc_complexify (f : ℝ → ℝ) {a : E →L[ℝ] E} (h
   rw [← complexify_cfc f ha hf]
   exact ContinuousLinearMap.ext fun x => by simp
 
+/-! ### Positivity and the modulus
+
+`complexify` preserves and reflects the order, because it preserves self-adjointness and the
+real spectrum, and in a `C⋆`-algebra nonnegativity is exactly a self-adjoint element with
+nonnegative spectrum.  The modulus then transports as well, since it is the unique nonnegative
+square root of the Gram operator. -/
+
+attribute [local instance] ContinuousLinearMap.instStarOrderedRingRCLike
+
+/-- Complexification preserves and reflects nonnegativity. -/
+@[simp] theorem complexify_nonneg_iff {A : E →L[ℝ] E} : 0 ≤ complexify A ↔ 0 ≤ A := by
+  constructor
+  · intro h
+    have hsa : IsSelfAdjoint A := (complexify_isSelfAdjoint_iff A).1 (.of_nonneg h)
+    rw [StarOrderedRing.nonneg_iff_spectrum_nonneg (R := ℝ) _ hsa]
+    rw [StarOrderedRing.nonneg_iff_spectrum_nonneg (R := ℝ) _ (.of_nonneg h),
+      spectrum_complexify] at h
+    exact h
+  · intro h
+    have hsa : IsSelfAdjoint (complexify A) := (complexify_isSelfAdjoint_iff A).2 (.of_nonneg h)
+    rw [StarOrderedRing.nonneg_iff_spectrum_nonneg (R := ℝ) _ hsa, spectrum_complexify]
+    rw [StarOrderedRing.nonneg_iff_spectrum_nonneg (R := ℝ) _ (.of_nonneg h)] at h
+    exact h
+
+/-- **The operator modulus commutes with complexification.**  Both sides are nonnegative and
+square to the complexified Gram operator, and the nonnegative square root is unique. -/
+@[simp] theorem complexify_modulus (T : E →L[ℝ] E) :
+    complexify T.modulus = (complexify T).modulus := by
+  refine ContinuousLinearMap.eq_modulus_of_nonneg_of_mul_self_eq ?_ ?_
+  · exact complexify_nonneg_iff.2 T.modulus_nonneg
+  · have hmul : complexify T.modulus * complexify T.modulus =
+        complexify (T.modulus * T.modulus) := (complexify_comp _ _).symm
+    rw [hmul, ContinuousLinearMap.modulus_mul_self, complexify_comp, complexify_adjoint]
+
 end RealComplexification
 end TauCeti

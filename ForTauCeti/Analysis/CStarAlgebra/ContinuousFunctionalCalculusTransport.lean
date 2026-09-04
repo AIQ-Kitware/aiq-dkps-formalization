@@ -122,4 +122,43 @@ theorem of_starAlgEquiv [ContinuousFunctionalCalculus R B q]
       rw [Φ.apply_symm_apply]
       exact cfcHom_predicate hb _
 
+/-! ## Naturality of `cfc`
+
+The transport also computes: an isomorphism carries the calculus of `a` to the calculus of
+`Φ a`, symbol by symbol.  This is the form a consumer uses, and it needs the calculus on both
+sides rather than producing one. -/
+
+/-- The identity, read as a map from the spectrum of `Φ a` to the spectrum of `a`. -/
+private def spectrumEquivMap' (Φ : A ≃⋆ₐ[R] B) (a : A) :
+    C(spectrum R a, spectrum R (Φ a)) :=
+  ⟨Set.inclusion (AlgEquiv.spectrum_eq Φ a).symm.subset, continuous_inclusion _⟩
+
+/-- **A `⋆`-algebra isomorphism commutes with the continuous functional calculus.**
+
+Both `Φ ∘ cfcHom` and `cfcHom` at `Φ a` are continuous `⋆`-algebra maps out of the symbol
+algebra sending the identity symbol to `Φ a`, and `ContinuousMap.UniqueHom` says there is only
+one such. -/
+theorem map_cfc [ContinuousFunctionalCalculus R A p] [ContinuousFunctionalCalculus R B q]
+    [ContinuousMap.UniqueHom R B]
+    (Φ : A ≃⋆ₐ[R] B) (hΦ : Continuous Φ) (hpq : ∀ a, p a ↔ q (Φ a))
+    (f : R → R) {a : A} (ha : p a) (hf : ContinuousOn f (spectrum R a)) :
+    Φ (cfc f a) = cfc f (Φ a) := by
+  have hb : q (Φ a) := (hpq a).1 ha
+  have hsp : spectrum R (Φ a) = spectrum R a := AlgEquiv.spectrum_eq Φ a
+  have hf' : ContinuousOn f (spectrum R (Φ a)) := by rw [hsp]; exact hf
+  have hcfc : cfcHom hb =
+      (Φ.toStarAlgHom.comp
+        ((cfcHom ha).comp (ContinuousMap.compStarAlgHom' R R (spectrumEquivMap' Φ a)))) := by
+    refine cfcHom_eq_of_continuous_of_map_id hb _ ?_ ?_
+    · exact hΦ.comp
+        ((cfcHom_continuous ha).comp (ContinuousMap.continuous_precomp (spectrumEquivMap' Φ a)))
+    · have hid : ((ContinuousMap.id R).restrict (spectrum R (Φ a))).comp
+          (spectrumEquivMap' Φ a) = (ContinuousMap.id R).restrict (spectrum R a) :=
+        ContinuousMap.ext fun _ => rfl
+      change Φ (cfcHom ha (((ContinuousMap.id R).restrict (spectrum R (Φ a))).comp
+        (spectrumEquivMap' Φ a))) = Φ a
+      rw [hid, cfcHom_id ha]
+  rw [cfc_apply f a ha hf, cfc_apply f (Φ a) hb hf', hcfc]
+  rfl
+
 end ContinuousFunctionalCalculus
