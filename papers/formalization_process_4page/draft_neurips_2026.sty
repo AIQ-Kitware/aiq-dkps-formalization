@@ -1,0 +1,32 @@
+% Draft-only approximation of the NeurIPS 2026 workshop layout.
+% DO NOT SUBMIT THIS STYLE FILE. Replace it with the official workshop template.
+\NeedsTeXFormat{LaTeX2e}
+\ProvidesPackage{draft_neurips_2026}[2026/09/04 draft page-count approximation]
+\RequirePackage[letterpaper,textheight=9in,textwidth=5.5in,top=1in,headheight=12pt,headsep=25pt,footskip=30pt]{geometry}
+\RequirePackage{times}
+\RequirePackage{microtype}
+\RequirePackage{natbib}
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{5.5pt}
+\setlength{\emergencystretch}{3em}
+\widowpenalty=10000
+\clubpenalty=10000
+\flushbottom
+\makeatletter
+\renewcommand{\normalsize}{\@setfontsize\normalsize{10pt}{11pt}}
+\renewcommand{\small}{\@setfontsize\small{9pt}{10pt}}
+\renewcommand{\footnotesize}{\@setfontsize\footnotesize{8pt}{9.5pt}}
+\renewcommand{\scriptsize}{\@setfontsize\scriptsize{7pt}{8pt}}
+\renewcommand{\large}{\@setfontsize\large{12pt}{14pt}}
+\renewcommand{\Large}{\@setfontsize\Large{14pt}{16pt}}
+\renewcommand{\LARGE}{\@setfontsize\LARGE{17pt}{20pt}}
+\renewcommand{\section}{\@startsection{section}{1}{\z@}{-2.0ex plus -.5ex minus -.2ex}{1.5ex plus .3ex minus .2ex}{\large\bfseries\raggedright}}
+\renewcommand{\subsection}{\@startsection{subsection}{2}{\z@}{-1.8ex plus -.5ex minus -.2ex}{.8ex plus .2ex}{\normalsize\bfseries\raggedright}}
+\renewcommand{\paragraph}{\@startsection{paragraph}{4}{\z@}{1.5ex plus .5ex minus .2ex}{-1em}{\normalsize\bfseries}}
+\renewcommand{\maketitle}{%
+  \vbox{\hsize\textwidth\linewidth\hsize
+    \vskip .1in\hrule height 4pt\vskip .22in
+    \centering{\LARGE\bfseries\@title\par}\vskip .22in\hrule height 1pt\vskip .12in
+    {\bfseries\@author\par}\vskip .18in}}
+\makeatother
+\AtBeginDocument{\normalsize}
