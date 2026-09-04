@@ -9,6 +9,7 @@ import DavisKahan.DoubleAngle.KyFanOrthonormal
 import DavisKahan.DoubleAngle.RealAngleIdentification
 import DavisKahan.DoubleAngle.RealUnboundedIdeal
 import DavisKahan.DoubleAngle.ReflectionTangentKyFan
+import DavisKahan.DoubleAngle.ScalarDoubleAngleTangent
 import DavisKahan.DoubleAngle.TanTwoThetaApproximatePair
 import DavisKahan.DoubleAngle.TanTwoThetaBranchFree
 import DavisKahan.DoubleAngle.TanTwoThetaKyFan

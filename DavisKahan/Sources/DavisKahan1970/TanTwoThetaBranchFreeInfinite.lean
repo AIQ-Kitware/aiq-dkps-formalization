@@ -61,7 +61,6 @@ case is obtained by complexification in
 namespace TauCeti
 namespace DavisKahan.TanTwoTheta
 
-open TauCeti.DavisKahan.FiniteDimensional
 
 open scoped InnerProductSpace
 open DavisKahan.ExactSinTheta

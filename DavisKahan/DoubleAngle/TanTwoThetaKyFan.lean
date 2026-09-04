@@ -3,6 +3,7 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, Claude Fable 5
 -/
+import DavisKahan.DoubleAngle.ScalarDoubleAngleTangent
 import ForTauCeti.Analysis.InnerProductSpace.Singular.System
 import ForTauCeti.Analysis.InnerProductSpace.KyFan
 import ForTauCeti.Analysis.InnerProductSpace.RectangularUnitarilyInvariantSeminorm
@@ -61,25 +62,12 @@ finite-dimensional because it consumes the intrinsic singular-system layer.
 namespace TauCeti
 namespace DavisKahan.FiniteDimensional
 
+open TauCeti.DavisKahan.TanTwoTheta
 open Module _root_.TauCeti.LinearMap
 open scoped InnerProductSpace
 
 variable {𝕜 E : Type*} [RCLike 𝕜]
   [NormedAddCommGroup E] [InnerProductSpace 𝕜 E] [FiniteDimensional 𝕜 E]
-
-/-- The double-angle tangent of a single-angle tangent value:
-`tan 2θ = 2 tan θ / (1 - tan² θ)`. -/
-noncomputable def doubleAngleTangent (t : ℝ) : ℝ := 2 * t / (1 - t ^ 2)
-
-/-- The double-angle tangent vanishes at zero. -/
-@[simp] theorem doubleAngleTangent_zero : doubleAngleTangent 0 = 0 := by
-  simp [doubleAngleTangent]
-
-/-- The double-angle tangent is nonnegative on the admissible range. -/
-theorem doubleAngleTangent_nonneg {t : ℝ} (h0 : 0 ≤ t) (h1 : t < 1) :
-    0 ≤ doubleAngleTangent t := by
-  have h1t : (0 : ℝ) < 1 - t ^ 2 := by nlinarith
-  exact div_nonneg (by linarith) h1t.le
 
 omit [FiniteDimensional 𝕜 E] in
 /-- A symmetric operator with an invariant subspace leaves the orthogonal

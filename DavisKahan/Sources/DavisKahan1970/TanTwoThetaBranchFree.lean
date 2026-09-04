@@ -99,7 +99,7 @@ theorem tanTwoTheta_branchFree_bounded_finiteSubspace_symmetricNorming_rclike
     (hinv : ∀ x ∈ U, ∃ y ∈ U, (A + H) (x + T x) = y + T y)
     (tanTwoTheta : E →L[𝕜] E) (π : ℕ ≃ ℕ)
     (htan : ∀ n, approximationSingularValue (π n) tanTwoTheta =
-      DavisKahan.FiniteDimensional.absDoubleAngleTangent (approximationSingularValue n T))
+      DavisKahan.TanTwoTheta.absDoubleAngleTangent (approximationSingularValue n T))
     (hHmem : N.Mem H) :
     N.Mem tanTwoTheta ∧
       (b - a) * N.gauge tanTwoTheta ≤ 2 * N.gauge H := by
@@ -153,7 +153,7 @@ theorem tanTwoTheta_branchFree_bounded_symmetricNorming_complex
     (hinv : ∀ x ∈ U, ∃ y ∈ U, (A + H) (x + T x) = y + T y)
     (tanTwoTheta : E →L[ℂ] E) (π : ℕ ≃ ℕ)
     (htan : ∀ n, approximationSingularValue (π n) tanTwoTheta =
-      DavisKahan.FiniteDimensional.absDoubleAngleTangent (approximationSingularValue n T))
+      DavisKahan.TanTwoTheta.absDoubleAngleTangent (approximationSingularValue n T))
     (hHmem : N.Mem H) :
     N.Mem tanTwoTheta ∧
       (b - a) * N.gauge tanTwoTheta ≤ 2 * N.gauge H := by
@@ -172,7 +172,7 @@ theorem tanTwoTheta_branchFree_bounded_symmetricNorming_complex
 /-- The branch-free double-angle tangent scalar function
 `t ↦ 2t/|1 - t²|`, meaningful on both sides of the quarter turn. -/
 alias tanTwoTheta_absDoubleAngleTangent :=
-  DavisKahan.FiniteDimensional.absDoubleAngleTangent
+  DavisKahan.TanTwoTheta.absDoubleAngleTangent
 
 /-- **`cos 2θⱼ ≠ 0` from the spectral gap**: the first of the two moves the
 printed Section 7 proof makes after equation (7.6). -/
