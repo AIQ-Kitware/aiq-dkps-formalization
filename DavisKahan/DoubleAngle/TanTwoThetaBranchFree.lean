@@ -68,37 +68,12 @@ than a prefix statement and is what a rearranged representative needs.
 namespace TauCeti
 namespace DavisKahan.FiniteDimensional
 
+open TauCeti.DavisKahan.TanTwoTheta
 open Module _root_.TauCeti.LinearMap
 open scoped InnerProductSpace
 
 variable {𝕜 E : Type*} [RCLike 𝕜]
   [NormedAddCommGroup E] [InnerProductSpace 𝕜 E] [FiniteDimensional 𝕜 E]
-
-/-- **The branch-free double-angle tangent magnitude**
-`|tan 2θ| = 2 tan θ / |1 - tan² θ|`.
-
-Unlike `doubleAngleTangent` this is meaningful on both sides of `π/4`: it is
-the modulus of `tan 2θ`, which is what a unitarily invariant norm of `tan 2Θ`
-reads off.  In terms of `s = sin θ` it is `2 s √(1 - s²) / |1 - 2 s²|`. -/
-noncomputable def absDoubleAngleTangent (t : ℝ) : ℝ := 2 * t / |1 - t ^ 2|
-
-/-- The branch-free double-angle tangent vanishes at zero. -/
-@[simp] theorem absDoubleAngleTangent_zero : absDoubleAngleTangent 0 = 0 := by
-  simp [absDoubleAngleTangent]
-
-/-- The branch-free double-angle tangent is nonnegative wherever the single
-angle is. -/
-theorem absDoubleAngleTangent_nonneg {t : ℝ} (h0 : 0 ≤ t) :
-    0 ≤ absDoubleAngleTangent t :=
-  div_nonneg (by linarith) (abs_nonneg _)
-
-/-- On the acute quarter the branch-free magnitude is the selected-branch
-double-angle tangent, so the unrestricted theorem below genuinely extends the
-one in `TanTwoThetaKyFan`. -/
-theorem absDoubleAngleTangent_eq_doubleAngleTangent {t : ℝ} (h1 : t < 1)
-    (h0 : 0 ≤ t) : absDoubleAngleTangent t = doubleAngleTangent t := by
-  have : (0 : ℝ) < 1 - t ^ 2 := by nlinarith
-  rw [absDoubleAngleTangent, doubleAngleTangent, abs_of_pos this]
 
 section Scalar
 

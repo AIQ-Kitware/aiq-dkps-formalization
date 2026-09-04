@@ -39,7 +39,6 @@ open TauCeti.DavisKahanExt
 
 open TauCeti.DavisKahan.ExactSinTheta
 
-open TauCeti.DavisKahan.FiniteDimensional
 
 open scoped InnerProductSpace
 open DavisKahan.ExactSinTheta
