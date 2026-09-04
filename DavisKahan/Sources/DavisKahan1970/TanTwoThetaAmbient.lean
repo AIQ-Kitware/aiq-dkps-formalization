@@ -12,6 +12,9 @@ import DavisKahan.Sources.DavisKahan1970.SharpIdeal
 import DavisKahan.Sources.DavisKahan1970.TanThetaAmbient
 import Mathlib.Analysis.SpecialFunctions.Trigonometric.Arctan
 
+open TauCeti.DavisKahan.Angle
+
+
 open TauCeti.DavisKahan.Sylvester
 
 /-!

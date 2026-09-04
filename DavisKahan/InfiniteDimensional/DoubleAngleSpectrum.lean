@@ -8,6 +8,9 @@ import DavisKahan.OperatorIdeal.CanonicalRealView
 import DavisKahan.Geometry.Angle.OperatorAngleComplex
 import DavisKahan.InfiniteDimensional.DoubleAngle
 
+open TauCeti.DavisKahan.Angle
+
+
 open TauCeti.DavisKahan.Sylvester
 
 /-!

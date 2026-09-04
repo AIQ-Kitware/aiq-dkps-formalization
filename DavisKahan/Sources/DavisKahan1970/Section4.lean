@@ -11,6 +11,9 @@ import ForTauCeti.Analysis.InnerProductSpace.CompactSpectralDecomposition
 import ForTauCeti.Analysis.InnerProductSpace.VectorAngle
 import ForTauCeti.Analysis.OperatorIdeal.Family.GramGauge
 
+open TauCeti.DavisKahan.Angle
+
+
 open TauCeti.DavisKahan.Sylvester
 
 /-!

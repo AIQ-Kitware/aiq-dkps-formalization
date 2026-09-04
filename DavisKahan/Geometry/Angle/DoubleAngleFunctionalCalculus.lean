@@ -30,13 +30,13 @@ ordinary `sin Θ` theorem applied to the reflected pair.
 
 ## Main results
 
-* `TauCeti.DavisKahanExt.sinTwoAngleOperatorC`: the literal `sin 2Θ`.
-* `TauCeti.DavisKahanExt.sinTwoAngleOperatorC_nonneg`.
-* `TauCeti.DavisKahanExt.starProjection_map_reflection_eq`: the reflected
+* `TauCeti.DavisKahan.Angle.sinTwoAngleOperatorC`: the literal `sin 2Θ`.
+* `TauCeti.DavisKahan.Angle.sinTwoAngleOperatorC_nonneg`.
+* `TauCeti.DavisKahan.Angle.starProjection_map_reflection_eq`: the reflected
   subspace has projection `J_V P_U J_V`.
-* `TauCeti.DavisKahanExt.directedSinTwoAngleOperatorC_eq_modulus_reflect`:
+* `TauCeti.DavisKahan.Angle.directedSinTwoAngleOperatorC_eq_modulus_reflect`:
   `sin 2Θ = |J_V P_U J_V - P_U|`.
-* `TauCeti.DavisKahanExt.directedSinTwoAngleOperatorC_eq_modulus_starProjection_sub`:
+* `TauCeti.DavisKahan.Angle.directedSinTwoAngleOperatorC_eq_modulus_starProjection_sub`:
   `sin 2Θ = |P_{J_V U} - P_U|`.
 
 ## References
@@ -46,7 +46,7 @@ ordinary `sin Θ` theorem applied to the reflected pair.
 -/
 
 namespace TauCeti
-namespace DavisKahanExt
+namespace DavisKahan.Angle
 
 open DavisKahan
 
@@ -203,5 +203,5 @@ end Identity
 
 end
 
-end DavisKahanExt
+end DavisKahan.Angle
 end TauCeti

@@ -6,6 +6,9 @@ Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 import DavisKahan.Sources.DavisKahan1970.SineTheta.CommonDomain
 import DavisKahan.Sources.DavisKahan1970.SineTheta.Theorem62
 
+open TauCeti.DavisKahan.Angle
+
+
 open TauCeti.DavisKahan.Sylvester
 
 /-!

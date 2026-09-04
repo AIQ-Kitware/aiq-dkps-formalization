@@ -6,6 +6,9 @@ Authors: Jon Crall, OpenAI GPT-5.6 Sol
 import DavisKahan.Sources.DavisKahan1970.Section3Proposition34
 import DavisKahan.Geometry.Polar.DirectRotationReal
 
+open TauCeti.DavisKahan.Angle
+
+
 /-!
 # Davis--Kahan 1970, Proposition 3.4 over real Hilbert spaces
 

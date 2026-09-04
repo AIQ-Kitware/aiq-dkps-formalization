@@ -8,6 +8,9 @@ import DavisKahan.Sources.DavisKahan1970.SineTheta.OperatorAngleBridge
 import Mathlib.Analysis.SpecialFunctions.Trigonometric.Inverse
 import Mathlib.Analysis.CStarAlgebra.ContinuousFunctionalCalculus.Instances
 
+open TauCeti.DavisKahan.Angle
+
+
 /-!
 # The source definition of the directed Davis--Kahan angle
 

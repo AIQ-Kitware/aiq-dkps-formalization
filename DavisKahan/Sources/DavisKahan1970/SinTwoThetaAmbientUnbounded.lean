@@ -9,6 +9,9 @@ import DavisKahan.Sources.DavisKahan1970.AmbientReal
 import DavisKahan.SpectralTheory.ReflectionRestriction
 import DavisKahan.Geometry.Angle.DoubleAngleFunctionalCalculus
 
+open TauCeti.DavisKahan.Angle
+
+
 open TauCeti.DavisKahan.Sylvester
 
 /-!
@@ -295,11 +298,11 @@ theorem sinTwoTheta_ambient_unbounded_addBounded_symmetricNorming_complex
       (DavisKahan.selfAdjointSpectralRestriction A hA B hB)
       (DavisKahan.selfAdjointSpectralRestriction A hA Bᶜ hB.compl) δ)
     (hEmem : N.Mem Eop) :
-    N.Mem (TauCeti.DavisKahanExt.sinTwoAngleOperatorC
+    N.Mem (TauCeti.DavisKahan.Angle.sinTwoAngleOperatorC
         (DavisKahan.selfAdjointSpectralSubspace A hA B hB)
         (DavisKahan.selfAdjointSpectralSubspace (TauCeti.LinearPMap.addBounded A Eop)
           (DavisKahan.addBounded_isSelfAdjoint A hA Eop hEop) S hS)) ∧
-      δ * N.gauge (TauCeti.DavisKahanExt.sinTwoAngleOperatorC
+      δ * N.gauge (TauCeti.DavisKahan.Angle.sinTwoAngleOperatorC
         (DavisKahan.selfAdjointSpectralSubspace A hA B hB)
         (DavisKahan.selfAdjointSpectralSubspace (TauCeti.LinearPMap.addBounded A Eop)
           (DavisKahan.addBounded_isSelfAdjoint A hA Eop hEop) S hS)) ≤
@@ -340,7 +343,7 @@ theorem sinTwoTheta_ambient_unbounded_addBounded_symmetricNorming_complex
     SameApproximationSingularSequence.normingMem_iff_and_gauge_eq N
       (A := X.modulus) (B := X)
       (ContinuousLinearMap.modulus_hasSameApproximationNumbers X)
-  rw [TauCeti.DavisKahanExt.directedSinTwoAngleOperatorC_eq_modulus_starProjection_sub]
+  rw [TauCeti.DavisKahan.Angle.directedSinTwoAngleOperatorC_eq_modulus_starProjection_sub]
   exact ⟨hiff.mpr hmem, by rw [hgauge]; exact hle⟩
 
 end Complex
@@ -365,16 +368,16 @@ theorem sameSingular_sinTwoAngleOperatorR_reflectedProjectorDifference
     (U V : Submodule ℝ Er)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] :
     SameApproximationSingularSequence
-      (complexify (TauCeti.DavisKahanExt.sinTwoAngleOperatorR U V))
+      (complexify (TauCeti.DavisKahan.Angle.sinTwoAngleOperatorR U V))
       (complexify ((U.map (V.reflection.toLinearEquiv : Er →ₗ[ℝ] Er)).starProjection -
         U.starProjection)) := by
-  have hleft : complexify (TauCeti.DavisKahanExt.sinTwoAngleOperatorR U V) =
+  have hleft : complexify (TauCeti.DavisKahan.Angle.sinTwoAngleOperatorR U V) =
       (((complexifySubmodule U).map
             ((complexifySubmodule V).reflection.toLinearEquiv :
               RealComplexification Er →ₗ[ℂ] RealComplexification Er)).starProjection -
           (complexifySubmodule U).starProjection).modulus := by
-    rw [TauCeti.DavisKahanExt.complexify_sinTwoAngleOperatorR U V,
-      TauCeti.DavisKahanExt.directedSinTwoAngleOperatorC_eq_modulus_starProjection_sub]
+    rw [TauCeti.DavisKahan.Angle.complexify_sinTwoAngleOperatorR U V,
+      TauCeti.DavisKahan.Angle.directedSinTwoAngleOperatorC_eq_modulus_starProjection_sub]
   have hright : complexify
         ((U.map (V.reflection.toLinearEquiv : Er →ₗ[ℝ] Er)).starProjection -
           U.starProjection) =
@@ -430,11 +433,11 @@ theorem sinTwoTheta_ambient_unbounded_addBounded_symmetricNorming_real
       (realSelfAdjointSpectralRestriction A hA B hB)
       (realSelfAdjointSpectralRestriction A hA Bᶜ hB.compl) δ)
     (hEmem : N.Mem Eop) :
-    N.Mem (TauCeti.DavisKahanExt.sinTwoAngleOperatorR
+    N.Mem (TauCeti.DavisKahan.Angle.sinTwoAngleOperatorR
         (realSelfAdjointSpectralSubspace A hA B hB)
         (realSelfAdjointSpectralSubspace (TauCeti.LinearPMap.addBounded A Eop)
           (DavisKahan.addBounded_isSelfAdjoint A hA Eop hEop) S hS)) ∧
-      δ * N.gauge (TauCeti.DavisKahanExt.sinTwoAngleOperatorR
+      δ * N.gauge (TauCeti.DavisKahan.Angle.sinTwoAngleOperatorR
         (realSelfAdjointSpectralSubspace A hA B hB)
         (realSelfAdjointSpectralSubspace (TauCeti.LinearPMap.addBounded A Eop)
           (DavisKahan.addBounded_isSelfAdjoint A hA Eop hEop) S hS)) ≤

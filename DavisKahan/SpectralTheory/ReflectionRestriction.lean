@@ -8,6 +8,9 @@ import DavisKahan.SinTheta.SpectralProjection
 import DavisKahan.Geometry.Angle.OperatorAngleComplex
 import ForTauCeti.Analysis.InnerProductSpace.Projection.Gap
 
+open TauCeti.DavisKahan.Angle
+
+
 open TauCeti.DavisKahan.Sylvester
 
 /-!

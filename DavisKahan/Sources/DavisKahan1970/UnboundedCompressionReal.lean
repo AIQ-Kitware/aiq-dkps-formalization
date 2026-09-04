@@ -6,6 +6,9 @@ Authors: Jon Crall, Claude Opus 5
 import DavisKahan.TanTheta.Theorem63UnboundedCompression
 import DavisKahan.Sources.DavisKahan1970.DirectedUnboundedReal
 
+open TauCeti.DavisKahan.Angle
+
+
 open TauCeti.DavisKahan.Sylvester
 
 /-!

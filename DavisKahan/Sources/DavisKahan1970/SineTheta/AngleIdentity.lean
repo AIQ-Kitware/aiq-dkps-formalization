@@ -6,6 +6,9 @@ Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 import DavisKahan.Sources.DavisKahan1970.SineTheta.CosineAngle
 import DavisKahan.Sources.DavisKahan1970.SineTheta.CosineAngleReal
 
+open TauCeti.DavisKahan.Angle
+
+
 /-!
 # Equality of the cosine-defined and sine-defined directed angles
 

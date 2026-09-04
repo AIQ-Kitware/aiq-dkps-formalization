@@ -8,6 +8,9 @@ import DavisKahan.TanTheta.Theorem63InfiniteTrial
 import DavisKahan.OperatorIdeal.ComplexificationApproximation
 import DavisKahan.Sources.DavisKahan1970.SineTheta.Norms.SingularValueTransport
 
+open TauCeti.DavisKahan.Angle
+
+
 open TauCeti.DavisKahan.Sylvester
 
 /-!

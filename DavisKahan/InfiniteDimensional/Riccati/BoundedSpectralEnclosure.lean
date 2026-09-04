@@ -6,6 +6,7 @@ Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 import DavisKahan.InfiniteDimensional.Riccati.BoundedBlockSpectrum
 import DavisKahan.SpectralTheory.AbstractSpectrum
 
+
 /-!
 # Bounded Riccati spectral enclosures
 

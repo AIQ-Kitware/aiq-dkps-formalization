@@ -11,6 +11,9 @@ import ForTauCeti.Analysis.InnerProductSpace.Sylvester.Bound
 import ForTauCeti.Analysis.InnerProductSpace.RectangularUnitarilyInvariantSeminorm
 import DavisKahan.SpectralTheory.AbstractSpectrum
 
+open TauCeti.DavisKahan.Angle
+
+
 
 open TauCeti.DavisKahan.Sylvester
 

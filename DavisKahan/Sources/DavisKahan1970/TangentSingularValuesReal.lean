@@ -7,6 +7,9 @@ import DavisKahan.Sources.DavisKahan1970.TangentSingularValues
 import DavisKahan.Geometry.Angle.AngleFunctionalCalculusReal
 import DavisKahan.OperatorIdeal.ComplexificationApproximation
 
+open TauCeti.DavisKahan.Angle
+
+
 /-!
 # The single-angle tangent's singular values, over `ℝ`
 

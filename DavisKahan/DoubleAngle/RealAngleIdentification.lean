@@ -7,6 +7,9 @@ import DavisKahan.DoubleAngle.RealUnboundedIdeal
 import DavisKahan.Geometry.Angle.AngleFunctionalCalculusReal
 import DavisKahan.Geometry.Polar.DirectRotationReal
 
+open TauCeti.DavisKahan.Angle
+
+
 open TauCeti.DavisKahanExt
 
 open TauCeti.DavisKahan.ExactSinTheta

@@ -24,12 +24,12 @@ the single native endpoint
 
 Also 2026-07-29: the direct `Spectra.QuantumMechanics.BornRule.Joint.ProjectivePVM`
 import was dropped.  Nothing in this file referenced a declaration from it — the
-
-open TauCeti.DavisKahan.Sylvester
 Born-rule module was reached anyway, transitively, through
 `Sylvester.HilbertSchmidtPairwise`, so the explicit import bought nothing and
 made this file look like an independent Spectra consumer when it is not.
 -/
+
+open TauCeti.DavisKahan.Sylvester
 
 namespace TauCeti
 namespace DavisKahan

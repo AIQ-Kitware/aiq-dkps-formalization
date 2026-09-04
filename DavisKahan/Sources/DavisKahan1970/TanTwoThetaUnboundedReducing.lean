@@ -9,6 +9,9 @@ import DavisKahan.InfiniteDimensional.DoubleAngle
 import DavisKahan.Geometry.Polar.DirectRotation
 import ForTauCeti.Analysis.InnerProductSpace.DoubleAngle.ReducingCutoff
 
+open TauCeti.DavisKahan.Angle
+
+
 open TauCeti.DavisKahan.Sylvester
 
 /-!

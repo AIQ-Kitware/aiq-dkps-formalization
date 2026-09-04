@@ -8,6 +8,9 @@ import DavisKahan.Riccati.BoundedStability
 import DavisKahan.InfiniteDimensional.Riccati.BoundedSpectralEnclosure
 import DavisKahan.SpectralTheory.AbstractSpectrum
 
+open TauCeti.DavisKahan.Angle
+
+
 open TauCeti.DavisKahan.Sylvester
 
 /-!

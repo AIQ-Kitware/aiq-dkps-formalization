@@ -10,6 +10,9 @@ import DavisKahan.SinTheta.FrameFactorization
 import ForTauCeti.Analysis.InnerProductSpace.CoerciveUnit
 import ForTauCeti.Analysis.InnerProductSpace.BorelCalculus.DiagonalMeasure
 
+open TauCeti.DavisKahan.Angle
+
+
 /-!
 # Dimension-free quarter-angle branch for the off-diagonal tan 2Theta theorem
 

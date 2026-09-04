@@ -7,6 +7,9 @@ import DavisKahan.InfiniteDimensional.TanTheta.ContinuationWitnessAPriori
 import DavisKahan.InfiniteDimensional.Riccati.BoundedSpectralEnclosure
 import DavisKahan.SpectralTheory.AbstractSpectrum
 
+open TauCeti.DavisKahan.Angle
+
+
 /-!
 # Effective blocks of a continuation-selected Riccati branch
 

@@ -5,6 +5,9 @@ Authors: Jon Crall, Claude Opus 5
 -/
 import DavisKahan.Sources.DavisKahan1970.SectionTwo
 
+open TauCeti.DavisKahan.Angle
+
+
 open TauCeti.DavisKahan.Sylvester
 
 /-!
@@ -229,11 +232,11 @@ theorem sinTwoTheta_from_printed_separation
       (DavisKahan.selfAdjointSpectralRestriction A hA B hB)
       (DavisKahan.selfAdjointSpectralRestriction A hA Bᶜ hB.compl) δ)
     (hEmem : N.Mem Eop) :
-    N.Mem (TauCeti.DavisKahanExt.directedSinTwoAngleOperatorC
+    N.Mem (TauCeti.DavisKahan.Angle.directedSinTwoAngleOperatorC
         (DavisKahan.selfAdjointSpectralSubspace A hA B hB)
         (DavisKahan.selfAdjointSpectralSubspace (TauCeti.LinearPMap.addBounded A Eop)
           (DavisKahan.addBounded_isSelfAdjoint A hA Eop hEop) S hS)) ∧
-      δ * N.gauge (TauCeti.DavisKahanExt.directedSinTwoAngleOperatorC
+      δ * N.gauge (TauCeti.DavisKahan.Angle.directedSinTwoAngleOperatorC
         (DavisKahan.selfAdjointSpectralSubspace A hA B hB)
         (DavisKahan.selfAdjointSpectralSubspace (TauCeti.LinearPMap.addBounded A Eop)
           (DavisKahan.addBounded_isSelfAdjoint A hA Eop hEop) S hS)) ≤
@@ -260,11 +263,11 @@ theorem sinTwoTheta_from_halfInfinite_separation
     (hBcomplHigh : TauCeti.LinearPMap.SemiboundedAbove
       (DavisKahan.selfAdjointSpectralRestriction A hA Bᶜ hB.compl) c)
     (hEmem : N.Mem Eop) :
-    N.Mem (TauCeti.DavisKahanExt.directedSinTwoAngleOperatorC
+    N.Mem (TauCeti.DavisKahan.Angle.directedSinTwoAngleOperatorC
         (DavisKahan.selfAdjointSpectralSubspace A hA B hB)
         (DavisKahan.selfAdjointSpectralSubspace (TauCeti.LinearPMap.addBounded A Eop)
           (DavisKahan.addBounded_isSelfAdjoint A hA Eop hEop) S hS)) ∧
-      δ * N.gauge (TauCeti.DavisKahanExt.directedSinTwoAngleOperatorC
+      δ * N.gauge (TauCeti.DavisKahan.Angle.directedSinTwoAngleOperatorC
         (DavisKahan.selfAdjointSpectralSubspace A hA B hB)
         (DavisKahan.selfAdjointSpectralSubspace (TauCeti.LinearPMap.addBounded A Eop)
           (DavisKahan.addBounded_isSelfAdjoint A hA Eop hEop) S hS)) ≤

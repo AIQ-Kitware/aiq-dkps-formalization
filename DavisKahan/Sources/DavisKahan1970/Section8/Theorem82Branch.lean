@@ -11,6 +11,9 @@ import DavisKahan.SpectralTheory.CentralBand
 import DavisKahan.BoundedOperator.TrialResidual
 import ForTauCeti.Analysis.InnerProductSpace.Polar.SelfAdjointCompletion
 
+open TauCeti.DavisKahan.Angle
+
+
 open TauCeti.DavisKahan.Sylvester
 
 /-!

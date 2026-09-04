@@ -6,6 +6,9 @@ Authors: Jon Crall, GPT 5.6 Thinking
 import DavisKahan.Riccati.BoundedCanonicalSolution
 import DavisKahan.Riccati.BoundedReduction
 
+open TauCeti.DavisKahan.Angle
+
+
 /-!
 # Canonical local bounded Riccati graph
 

@@ -8,6 +8,9 @@ import DavisKahan.Sources.DavisKahan1970.SineTheta.SymmetricReal
 import DavisKahan.Geometry.Angle.AngleFunctionalCalculus
 import DavisKahan.Sources.DavisKahan1970.SineTheta.CommonDomainSymmetric
 
+open TauCeti.DavisKahan.Angle
+
+
 open TauCeti.DavisKahan.Sylvester
 
 /-!

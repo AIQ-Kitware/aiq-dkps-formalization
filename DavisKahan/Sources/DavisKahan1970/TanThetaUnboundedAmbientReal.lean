@@ -7,6 +7,9 @@ import DavisKahan.Sources.DavisKahan1970.TanThetaUnboundedAmbient
 import DavisKahan.Sources.DavisKahan1970.DirectedUnboundedReal
 import DavisKahan.Sources.DavisKahan1970.UnboundedCompressionReal
 
+open TauCeti.DavisKahan.Angle
+
+
 open TauCeti.DavisKahan.Sylvester
 
 /-!

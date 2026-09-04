@@ -10,6 +10,9 @@ import ForTauCeti.Analysis.InnerProductSpace.Polar.CFCBridge
 import ForTauCeti.Analysis.InnerProductSpace.PrincipalAngles.Equisingular
 import Mathlib.Analysis.SpecialFunctions.Trigonometric.Arctan
 
+open TauCeti.DavisKahan.Angle
+
+
 /-!
 # Identifying the Theorem 6.3 tangent with the paper's directed angle
 

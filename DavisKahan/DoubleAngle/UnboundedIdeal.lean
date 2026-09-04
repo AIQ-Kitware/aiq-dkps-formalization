@@ -9,6 +9,9 @@ import DavisKahan.DoubleAngle.Unbounded
 import DavisKahan.SinTheta.BoundedPerturbationIdeal
 import ForTauCeti.Analysis.InnerProductSpace.LinearPMap.Resolvent
 
+open TauCeti.DavisKahan.Angle
+
+
 open TauCeti.DavisKahan.Sylvester
 
 /-!

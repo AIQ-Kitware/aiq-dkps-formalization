@@ -16,6 +16,9 @@ import DavisKahan.TanTheta.Theorem63InfiniteTrial
 import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.GramResolvent
 import Mathlib.Analysis.SpecialFunctions.Trigonometric.Arctan
 
+open TauCeti.DavisKahan.Angle
+
+
 open TauCeti.DavisKahan.Sylvester
 
 /-!

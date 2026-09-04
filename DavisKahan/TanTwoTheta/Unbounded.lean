@@ -7,6 +7,9 @@ import DavisKahan.DoubleAngle.UnboundedIdeal
 import DavisKahan.TanTwoTheta.BoundedOffDiagonal
 import ForTauCeti.Analysis.InnerProductSpace.LinearPMap.Resolvent
 
+open TauCeti.DavisKahan.Angle
+
+
 /-!
 # Unbounded tangent two theta at operator-norm scope
 

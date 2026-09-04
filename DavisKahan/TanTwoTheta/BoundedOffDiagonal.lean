@@ -6,6 +6,9 @@ Authors: Jon Crall, GPT-5.6 Thinking
 import DavisKahan.Geometry.Angle.OperatorAngleComplex
 import DavisKahan.BoundedOperator.Compat
 
+open TauCeti.DavisKahan.Angle
+
+
 /-!
 # Bounded double-angle tangent reduction
 

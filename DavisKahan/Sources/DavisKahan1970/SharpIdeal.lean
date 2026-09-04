@@ -10,6 +10,9 @@ import DavisKahan.Sources.DavisKahan1970.Ideals.StandardFanDominance
 import DavisKahan.Riccati.BoundedCanonicalSolution
 import ForTauCeti.Analysis.InnerProductSpace.SpectralOrder.Complex
 
+open TauCeti.DavisKahan.Angle
+
+
 /-!
 # Sharp standard-ideal `tan 2Theta`
 

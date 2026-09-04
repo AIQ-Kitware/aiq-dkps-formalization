@@ -8,6 +8,9 @@ import DavisKahan.SpectralTheory.CircleRieszIntegral
 import DavisKahan.SpectralTheory.ContinuationContour
 import DavisKahan.InfiniteDimensional.SinTheta.Continuation.Transport
 
+open TauCeti.DavisKahan.Angle
+
+
 /-!
 # The circle as a proof-carrying continuation contour
 

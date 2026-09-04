@@ -8,6 +8,9 @@ import DavisKahan.DoubleAngle.UnboundedIdeal
 import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.SameSequence
 import DavisKahan.Sources.DavisKahan1970.SineTheta.Norms.UnitaryInvariantNorm
 
+open TauCeti.DavisKahan.Angle
+
+
 /-!
 # Angle doubling at the operator level, and the ideal transport it gives
 

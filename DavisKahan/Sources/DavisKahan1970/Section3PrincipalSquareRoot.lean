@@ -12,6 +12,9 @@ import DavisKahan.Geometry.Polar.DirectRotationBlocks
 -- It is a `Geometry` module.
 import DavisKahan.Geometry.Polar.DirectRotationReal
 
+open TauCeti.DavisKahan.Angle
+
+
 /-!
 # Davis--Kahan 1970, Proposition 3.3, at the printed nonacute scope
 

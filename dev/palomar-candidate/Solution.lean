@@ -486,9 +486,9 @@ variable (U V : Submodule ℂ E) [U.HasOrthogonalProjection] [V.HasOrthogonalPro
 /-- **The Challenge's ambient tangent sequence is the development's tangent operator's
 singular-value sequence.** -/
 theorem tanSeq_ambientSine_eq_approximationNumber
-    (htr : ‖TauCeti.DavisKahanExt.sinAngleOperatorC U V‖ < 1) (n : ℕ) :
+    (htr : ‖TauCeti.DavisKahan.Angle.sinAngleOperatorC U V‖ < 1) (n : ℕ) :
     tanSeq (ambientSine U V) n =
-      (TauCeti.DavisKahanExt.tanAngleOperatorC U V).approximationNumber n := by
+      (TauCeti.DavisKahan.Angle.tanAngleOperatorC U V).approximationNumber n := by
   rw [TauCeti.DavisKahan1970.approximationNumber_tanAngleOperatorC U V htr n,
     TauCeti.DavisKahan1970.approximationNumber_sinAngleOperatorC U V n]
   rfl
@@ -496,12 +496,12 @@ theorem tanSeq_ambientSine_eq_approximationNumber
 /-- **Under uniform transversality no principal angle is a right angle**, so the
 Challenge's `TangentDefined` conclusion holds. -/
 theorem tangentDefined_ambientSine
-    (htr : ‖TauCeti.DavisKahanExt.sinAngleOperatorC U V‖ < 1) :
+    (htr : ‖TauCeti.DavisKahan.Angle.sinAngleOperatorC U V‖ < 1) :
     TangentDefined (ambientSine U V) := by
   intro n
   have hnorm : ‖ambientSine U V‖ < 1 := by
-    have h : ‖TauCeti.DavisKahanExt.sinAngleOperatorC U V‖ = ‖ambientSine U V‖ := by
-      rw [TauCeti.DavisKahanExt.sinAngleOperatorC, ContinuousLinearMap.norm_modulus,
+    have h : ‖TauCeti.DavisKahan.Angle.sinAngleOperatorC U V‖ = ‖ambientSine U V‖ := by
+      rw [TauCeti.DavisKahan.Angle.sinAngleOperatorC, ContinuousLinearMap.norm_modulus,
         norm_sub_rev]
       rfl
     rwa [h] at htr
@@ -516,9 +516,9 @@ theorem tangentDefined_ambientSine
 /-- **The Challenge's ambient tangent sequence norm is the development's paper norm of
 `tan Θ`.**  This is the bridge the ambient `tan Θ` clause consumes. -/
 theorem evalSeq_tanSeq_ambientSine (N : SymmetricNormingFunction)
-    (htr : ‖TauCeti.DavisKahanExt.sinAngleOperatorC U V‖ < 1) :
+    (htr : ‖TauCeti.DavisKahan.Angle.sinAngleOperatorC U V‖ < 1) :
     N.evalSeq (tanSeq (ambientSine U V)) =
-      N.toSourceNorm.extendedGauge (TauCeti.DavisKahanExt.tanAngleOperatorC U V) :=
+      N.toSourceNorm.extendedGauge (TauCeti.DavisKahan.Angle.tanAngleOperatorC U V) :=
   N.evalSeq_eq_of_approximationNumber _ _
     (fun n => (tanSeq_ambientSine_eq_approximationNumber U V htr n).symm)
 
@@ -624,7 +624,7 @@ theorem tanTheta_ambient_proof_complex (N : SymmetricNormingFunction)
     TauCeti.DavisKahan.ReducingComplement.ofReducesSubspace ((reduces_iff A V).1 hV)
   have hupper' : TauCeti.LinearPMap.SemiboundedAbove
       D.toUnboundedRitzPair.trial.compression α := (semiboundedAbove_iff _ _).1 hupper
-  have htr : ‖TauCeti.DavisKahanExt.sinAngleOperatorC U V‖ < 1 :=
+  have htr : ‖TauCeti.DavisKahan.Angle.sinAngleOperatorC U V‖ < 1 :=
     TauCeti.DavisKahan1970.norm_sinAngleOperatorC_lt_one_of_unboundedRitz
       D.toUnboundedRitzPair hVc hδ hupper' hUnwanted h35
   obtain ⟨hmem, hbound⟩ :=

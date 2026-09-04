@@ -11,6 +11,9 @@ import Mathlib.Analysis.SpecialFunctions.ContinuousFunctionalCalculus.Abs
 import ForTauCeti.Analysis.InnerProductSpace.Polar.GramContraction
 import DavisKahan.SpectralTheory.AbstractSpectrum
 
+open TauCeti.DavisKahan.Angle
+
+
 open TauCeti.DavisKahan.Sylvester
 
 /-!

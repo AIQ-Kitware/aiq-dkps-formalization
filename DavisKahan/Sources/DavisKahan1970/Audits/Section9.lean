@@ -6,6 +6,9 @@ Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 
 import DavisKahan.Sources.DavisKahan1970.Section9.All
 
+open TauCeti.DavisKahan.Angle
+
+
 /-!
 # Dependency audit for the Section 9 numerical example
 

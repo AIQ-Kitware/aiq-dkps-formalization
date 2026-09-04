@@ -27,7 +27,6 @@ module boundary moved.
 namespace TauCeti
 namespace DavisKahan1970
 
-open TauCeti.DavisKahanExt
 
 
 open scoped InnerProductSpace

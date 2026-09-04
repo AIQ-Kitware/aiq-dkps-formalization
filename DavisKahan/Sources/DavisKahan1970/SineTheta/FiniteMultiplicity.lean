@@ -8,6 +8,9 @@ import DavisKahan.OperatorIdeal.ApproximationNumbers.BlockSum
 import DavisKahan.Sources.DavisKahan1970.SineTheta.Norms.UnitaryInvariantNormLaws
 import DavisKahan.BoundedOperator.Compat
 
+open TauCeti.DavisKahan.Angle
+
+
 /-!
 # Finite-multiplicity equality models for Davis--Kahan Theorem 6.1
 

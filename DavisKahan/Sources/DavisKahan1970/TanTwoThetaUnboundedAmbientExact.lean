@@ -11,6 +11,9 @@ import DavisKahan.Geometry.Polar.DirectRotation
 import DavisKahan.DoubleAngle.TangentTransport
 import DavisKahan.TanTheta.RitzPair
 
+open TauCeti.DavisKahan.Angle
+
+
 open TauCeti.DavisKahan.Sylvester
 
 /-!
@@ -531,11 +534,11 @@ theorem tanTwoTheta_ambient_unbounded_reducing_symmetricNorming_complex
     (hUb : ∀ x : A.domain, (x : G) ∈ Uᗮ →
       b * ‖(x : G)‖ ^ 2 ≤ RCLike.re ⟪A x, (x : G)⟫_ℂ)
     (hab : a < b) (hBmem : N.Mem B) :
-    (∀ t ∈ spectrum ℝ (TauCeti.DavisKahanExt.angleOperatorC U V),
+    (∀ t ∈ spectrum ℝ (TauCeti.DavisKahan.Angle.angleOperatorC U V),
         Real.cos (2 * t) ≠ 0) ∧
-      N.Mem (TauCeti.DavisKahanExt.absTanTwoAngleOperatorC U V) ∧
+      N.Mem (TauCeti.DavisKahan.Angle.absTanTwoAngleOperatorC U V) ∧
       (b - a) * N.gauge
-          (TauCeti.DavisKahanExt.absTanTwoAngleOperatorC U V) ≤
+          (TauCeti.DavisKahan.Angle.absTanTwoAngleOperatorC U V) ≤
         2 * N.gauge B := by
   obtain ⟨hunit, hmem, hle⟩ :=
     tanTwoTheta_ambient_unbounded_blockRepresentative_reducing_symmetricNorming_complex
@@ -646,9 +649,9 @@ theorem tanTwoTheta_ambient_unbounded_symmetricNorming_complex
         (TauCeti.LinearPMap.specRange hA (Set.Iic c) measurableSet_Iic)ᗮ →
       b * ‖(x : G)‖ ^ 2 ≤ RCLike.re ⟪A x, (x : G)⟫_ℂ)
     (hab : a < b) (hBmem : N.Mem B) :
-    N.Mem (TauCeti.DavisKahanExt.absTanTwoAngleOperatorC
+    N.Mem (TauCeti.DavisKahan.Angle.absTanTwoAngleOperatorC
         (TauCeti.LinearPMap.specRange hA (Set.Iic c) measurableSet_Iic) V) ∧
-      (b - a) * N.gauge (TauCeti.DavisKahanExt.absTanTwoAngleOperatorC
+      (b - a) * N.gauge (TauCeti.DavisKahan.Angle.absTanTwoAngleOperatorC
         (TauCeti.LinearPMap.specRange hA (Set.Iic c) measurableSet_Iic) V) ≤
         2 * N.gauge B := by
   obtain ⟨hunit, hmem, hle⟩ :=

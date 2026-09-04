@@ -10,6 +10,7 @@ import DavisKahan.Sources.DavisKahan1970.SineTheta.Norms.SubspaceSingularTranspo
 import DavisKahan.SpectralTheory.ReducingSubspace.RestrictionExtras
 import DavisKahan.Sylvester.RealUnbounded
 
+
 open TauCeti.DavisKahan.Sylvester
 
 /-!

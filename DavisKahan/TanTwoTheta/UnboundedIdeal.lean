@@ -8,6 +8,9 @@ import DavisKahan.OperatorIdeal.CanonicalRealView
 import DavisKahan.TanTwoTheta.Unbounded
 import ForTauCeti.Analysis.InnerProductSpace.LinearPMap.Resolvent
 
+open TauCeti.DavisKahan.Angle
+
+
 open TauCeti.DavisKahan.Sylvester
 
 /-!

@@ -12,6 +12,9 @@ import DavisKahan.SpectralTheory.Complexification.SubmoduleEquiv
 import DavisKahan.SpectralTheory.Complexification.Spectrum
 import DavisKahan.Sources.DavisKahan1970.SineTheta.Norms.ComplexificationGauge
 
+open TauCeti.DavisKahan.Angle
+
+
 open TauCeti.DavisKahan.Sylvester
 
 /-!

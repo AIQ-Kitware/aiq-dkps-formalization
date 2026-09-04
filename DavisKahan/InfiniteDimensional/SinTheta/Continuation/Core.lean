@@ -8,6 +8,9 @@ import DavisKahan.InfiniteDimensional.SpectraBridge.DirectRotationAPI
 import DavisKahan.SpectralTheory.ResolventOperator
 import DavisKahan.SpectralTheory.AbstractSpectrum
 
+open TauCeti.DavisKahan.Angle
+
+
 /-!
 # Spectral projection continuation and branch selection
 

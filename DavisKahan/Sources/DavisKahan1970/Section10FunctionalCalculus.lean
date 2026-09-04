@@ -10,6 +10,9 @@ import DavisKahan.BoundedOperator.Compat
 import ForTauCeti.Analysis.InnerProductSpace.Spectral.GapProjection
 import ForTauCeti.Analysis.InnerProductSpace.PrincipalSineSequence
 
+open TauCeti.DavisKahan.Angle
+
+
 open TauCeti.DavisKahan.Sylvester
 
 /-!
@@ -301,7 +304,7 @@ claims over `ℝ`, on `TauCeti.SpectralGap.cfc_eq_starProjection_of_blockGap_rea
 
 The ambient identity is stated as `Q − P` directly rather than through
 `projectorDifference`, which is a complex-only definition; the norm form then reads
-`‖Q − P‖ = ‖sin Θ‖` through `TauCeti.DavisKahanExt.Real.sinAngleOperatorRC`, the real sine
+`‖Q − P‖ = ‖sin Θ‖` through `TauCeti.DavisKahan.Angle.Real.sinAngleOperatorRC`, the real sine
 operator evaluated in the canonical complexification. -/
 
 section RealScalars
@@ -399,10 +402,10 @@ theorem Question10_4_ambient_norm_eq_sinTheta_real
     {f : ℝ → ℝ} (hf1 : ∀ t ≤ α, f t = 1) (hf0 : ∀ t, α + δ ≤ t → f t = 0) :
     ‖cfc f (A + H) - cfc f A‖ = ‖V.starProjection - U.starProjection‖ ∧
       ‖V.starProjection - U.starProjection‖ =
-        ‖TauCeti.DavisKahanExt.Real.sinAngleOperatorRC U V‖ := by
+        ‖TauCeti.DavisKahan.Angle.Real.sinAngleOperatorRC U V‖ := by
   refine ⟨by rw [Question10_4_ambient_functionalChange_real U V hA hH hAU hAplusH_V hδ
       hA0spec hA1spec hL0spec hL1spec hHU hHUperp hf1 hf0], ?_⟩
-  rw [TauCeti.DavisKahanExt.Real.norm_sinAngleOperatorRC U V]
+  rw [TauCeti.DavisKahan.Angle.Real.norm_sinAngleOperatorRC U V]
   show ‖V.starProjection - U.starProjection‖ = U.projectionGap V
   rw [Submodule.projectionGap,
     show V.starProjection - U.starProjection = -(U.starProjection - V.starProjection) by abel,
