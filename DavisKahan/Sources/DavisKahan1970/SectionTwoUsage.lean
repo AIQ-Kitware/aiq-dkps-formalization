@@ -215,7 +215,12 @@ variable {E : Type v} [NormedAddCommGroup E] [InnerProductSpace ℂ E]
   [CompleteSpace E]
 
 /-- `sin 2Θ` over `ℂ`, from a measurable spectral selection and the printed
-separation, through `SectionTwo.sinTwoTheta_complex`.
+separation, through
+`sinTwoTheta_directed_unbounded_addBounded_symmetricNorming_complex`.
+
+This is the perturbation-norm corollary, `2 N(E)` on the right, not the printed
+directed clause `2 N(R)`; the latter is `SectionTwo.sinTwoTheta_complex`, whose
+right-hand side is the trial residual.
 
 The separation is `FormBoundedSylvesterGap` between the two spectral
 restrictions, which is the printed scope: it carries the bounded interval and
@@ -241,7 +246,8 @@ theorem sinTwoTheta_from_printed_separation
         (DavisKahan.selfAdjointSpectralSubspace (TauCeti.LinearPMap.addBounded A Eop)
           (DavisKahan.addBounded_isSelfAdjoint A hA Eop hEop) S hS)) ≤
         2 * N.gauge Eop :=
-  SectionTwo.sinTwoTheta_complex N A hA Eop hEop B S hB hS hδ hgap hEmem
+  sinTwoTheta_directed_unbounded_addBounded_symmetricNorming_complex
+    N A hA Eop hEop B S hB hS hδ hgap hEmem
 
 /-- `sin 2Θ` over `ℂ` at a **half-infinite** separating interval.
 
@@ -272,7 +278,8 @@ theorem sinTwoTheta_from_halfInfinite_separation
         (DavisKahan.selfAdjointSpectralSubspace (TauCeti.LinearPMap.addBounded A Eop)
           (DavisKahan.addBounded_isSelfAdjoint A hA Eop hEop) S hS)) ≤
         2 * N.gauge Eop :=
-  SectionTwo.sinTwoTheta_complex N A hA Eop hEop B S hB hS hδ
+  sinTwoTheta_directed_unbounded_addBounded_symmetricNorming_complex
+    N A hA Eop hEop B S hB hS hδ
     (DavisKahan.Sylvester.FormBoundedSylvesterGap.leftAboveRightBelow
       c hBlow hBcomplHigh)
     hEmem

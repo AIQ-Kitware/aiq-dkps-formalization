@@ -41,8 +41,16 @@ variable {H G : Type v}
   [NormedAddCommGroup H] [InnerProductSpace 𝕜 H] [CompleteSpace H]
   [NormedAddCommGroup G] [InnerProductSpace 𝕜 G] [CompleteSpace G]
 
-/-- The ambient sine-two-theta ideal block obtained by overlapping the exact
-spectral subspace with the reflected exact complementary subspace. -/
+/-- The directed sine-two-theta ideal block `P_U P_{J_V Uᗮ}`: the overlap of `U`
+with the `V`-reflection of `Uᗮ`.
+
+This is the object the unbounded directed `sin 2Θ` estimates are proved about.  It
+is a one-sided block, not an angle;
+`Angle.sinTwoThetaIdealBlock_hasSameApproximationNumbers_rclike` identifies its
+singular-value sequence with that of `Angle.directedSinTwoAngleOperator U V`, and
+`Angle.sinTwoThetaIdealBlock_hasSameApproximationNumbers_trialSide` with that of the
+other ordering `Angle.directedSinTwoAngleOperator V U`, which is the one Davis and
+Kahan's `Θ₀` names when `U` carries the gap and `V` is the trial subspace. -/
 noncomputable def sinTwoThetaIdealBlock
     (U V : Submodule 𝕜 H)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] : H →L[𝕜] H :=

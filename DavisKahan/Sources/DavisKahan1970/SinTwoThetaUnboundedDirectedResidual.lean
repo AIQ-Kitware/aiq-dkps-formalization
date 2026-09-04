@@ -521,7 +521,14 @@ unbounded self-adjoint operator, at every source unitarily invariant norm and at
 an arbitrary reducing subspace.**
 
 `δ N(sin 2Θ₀) ≤ 2 N(R)` with the printed residual and the printed factor two.
-The trial subspace need only reduce `A`; nothing selects it spectrally. -/
+`hred` is about `U`, the subspace whose two reducing restrictions the gap `δ`
+separates; `U` is not required to be a spectral projector, which is what Section 1
+of the source assumes.  The trial subspace `V` is assumed only to lie inside
+`dom A` and to carry the residual, and it reduces nothing.
+
+The conclusion is on the proof's own block `sinTwoThetaIdealBlock U V`;
+`sinTwoTheta_directed_unboundedResidual_reducing_symmetricNorming_complex` restates
+it on the paper's trial-side angle `Angle.directedSinTwoAngleOperator V U`. -/
 theorem sinTwoTheta_directed_unboundedResidual_blockRepresentative_reducing_symmetricNorming_complex
     (N : SymmetricNormingFunction)
     (hA : IsSelfAdjoint A)
