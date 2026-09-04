@@ -31,25 +31,26 @@ universe u v
 
 section BanachSylvester
 
+variable {𝕜 : Type*} [RCLike 𝕜]
 variable {X : Type u} {Y : Type v}
-  [NormedAddCommGroup X] [NormedSpace ℂ X]
-  [NormedAddCommGroup Y] [NormedSpace ℂ Y]
+  [NormedAddCommGroup X] [NormedSpace 𝕜 X]
+  [NormedAddCommGroup Y] [NormedSpace 𝕜 Y]
 
 /-- A norm on cross-space bounded operators compatible with contractions on
 both sides, as required in Davis--Kahan Theorem 5.1. -/
 structure CompatibleCrossOperatorNorm where
-  toFun : (X →L[ℂ] Y) → ℝ
+  toFun : (X →L[𝕜] Y) → ℝ
   nonneg : ∀ T, 0 ≤ toFun T
   eq_zero : ∀ T, toFun T = 0 → T = 0
-  smul : ∀ c : ℂ, ∀ T, toFun (c • T) = ‖c‖ * toFun T
+  smul : ∀ c : 𝕜, ∀ T, toFun (c • T) = ‖c‖ * toFun T
   triangle : ∀ S T, toFun (S + T) ≤ toFun S + toFun T
-  compatible : ∀ (L : Y →L[ℂ] Y) (T : X →L[ℂ] Y)
-    (R : X →L[ℂ] X), ‖L‖ ≤ 1 → ‖R‖ ≤ 1 →
+  compatible : ∀ (L : Y →L[𝕜] Y) (T : X →L[𝕜] Y)
+    (R : X →L[𝕜] X), ‖L‖ ≤ 1 → ‖R‖ ≤ 1 →
       toFun (L ∘L T ∘L R) ≤ toFun T
 
 /-- The residual surface subspace is orthogonally complemented. -/
-instance : CoeFun (CompatibleCrossOperatorNorm (X := X) (Y := Y))
-    (fun _ => (X →L[ℂ] Y) → ℝ) :=
+instance : CoeFun (CompatibleCrossOperatorNorm (𝕜 := 𝕜) (X := X) (Y := Y))
+    (fun _ => (X →L[𝕜] Y) → ℝ) :=
   ⟨CompatibleCrossOperatorNorm.toFun⟩
 
 /-- An explicit bounded left inverse of `A` with a reciprocal norm bound.  On a
@@ -57,91 +58,93 @@ general Banach space a lower bound on `A` does not furnish a bounded projection
 onto the (possibly non-complemented) range, so the reusable datum is the left
 inverse itself; on a Hilbert space the spectral-separation lower bound supplies
 it through the closed-range orthogonal projection. -/
-structure BoundedLeftInverseData (A : Y →L[ℂ] Y) (c : ℝ) where
-  leftInverse : Y →L[ℂ] Y
-  comp_eq_id : leftInverse ∘L A = ContinuousLinearMap.id ℂ Y
+structure BoundedLeftInverseData (A : Y →L[𝕜] Y) (c : ℝ) where
+  leftInverse : Y →L[𝕜] Y
+  comp_eq_id : leftInverse ∘L A = ContinuousLinearMap.id 𝕜 Y
   norm_le : ‖leftInverse‖ ≤ c
 
 /-- An explicit bounded right inverse with a reciprocal norm bound, used by the
 source's symmetric form of Theorem 5.1. -/
-structure BoundedRightInverseData (B : X →L[ℂ] X) (c : ℝ) where
-  rightInverse : X →L[ℂ] X
-  comp_eq_id : B ∘L rightInverse = ContinuousLinearMap.id ℂ X
+structure BoundedRightInverseData (B : X →L[𝕜] X) (c : ℝ) where
+  rightInverse : X →L[𝕜] X
+  comp_eq_id : B ∘L rightInverse = ContinuousLinearMap.id 𝕜 X
   norm_le : ‖rightInverse‖ ≤ c
 
 namespace CompatibleCrossOperatorNorm
 
 /-- The compatible norm vanishes at the zero operator. -/
-theorem map_zero (N : CompatibleCrossOperatorNorm (X := X) (Y := Y)) :
-    N (0 : X →L[ℂ] Y) = 0 := by
-  have h := N.smul 0 (0 : X →L[ℂ] Y)
+theorem map_zero (N : CompatibleCrossOperatorNorm (𝕜 := 𝕜) (X := X) (Y := Y)) :
+    N (0 : X →L[𝕜] Y) = 0 := by
+  have h := N.smul 0 (0 : X →L[𝕜] Y)
   simpa using h
 
 /-- Full two-sided ideal estimate obtained by normalizing the multipliers. -/
-theorem comp_le_mul (N : CompatibleCrossOperatorNorm (X := X) (Y := Y))
-    (L : Y →L[ℂ] Y) (T : X →L[ℂ] Y) (R : X →L[ℂ] X) :
+theorem comp_le_mul (N : CompatibleCrossOperatorNorm (𝕜 := 𝕜) (X := X) (Y := Y))
+    (L : Y →L[𝕜] Y) (T : X →L[𝕜] Y) (R : X →L[𝕜] X) :
     N (L ∘L T ∘L R) ≤ ‖L‖ * N T * ‖R‖ := by
   by_cases hL : L = 0
   · subst L; simp [map_zero N]
   by_cases hR : R = 0
   · subst R; simp [map_zero N]
-  let Ln : Y →L[ℂ] Y := (‖L‖ : ℂ)⁻¹ • L
-  let Rn : X →L[ℂ] X := (‖R‖ : ℂ)⁻¹ • R
+  let Ln : Y →L[𝕜] Y := (‖L‖ : 𝕜)⁻¹ • L
+  let Rn : X →L[𝕜] X := (‖R‖ : 𝕜)⁻¹ • R
   have hLnorm : ‖L‖ ≠ 0 := norm_ne_zero_iff.mpr hL
   have hRnorm : ‖R‖ ≠ 0 := norm_ne_zero_iff.mpr hR
-  have hLcomplex : (‖L‖ : ℂ) ≠ 0 := Complex.ofReal_ne_zero.mpr hLnorm
-  have hRcomplex : (‖R‖ : ℂ) ≠ 0 := Complex.ofReal_ne_zero.mpr hRnorm
+  have hLscalar : (‖L‖ : 𝕜) ≠ 0 := RCLike.ofReal_ne_zero.mpr hLnorm
+  have hRscalar : (‖R‖ : 𝕜) ≠ 0 := RCLike.ofReal_ne_zero.mpr hRnorm
   have hLn : ‖Ln‖ ≤ 1 := by
-    change ‖(‖L‖ : ℂ)⁻¹ • L‖ ≤ 1
-    rw [norm_smul, norm_inv, Complex.norm_real, Real.norm_eq_abs,
+    change ‖(‖L‖ : 𝕜)⁻¹ • L‖ ≤ 1
+    rw [norm_smul, norm_inv, RCLike.norm_ofReal,
       abs_of_nonneg (norm_nonneg L), inv_mul_cancel₀ hLnorm]
   have hRn : ‖Rn‖ ≤ 1 := by
-    change ‖(‖R‖ : ℂ)⁻¹ • R‖ ≤ 1
-    rw [norm_smul, norm_inv, Complex.norm_real, Real.norm_eq_abs,
+    change ‖(‖R‖ : 𝕜)⁻¹ • R‖ ≤ 1
+    rw [norm_smul, norm_inv, RCLike.norm_ofReal,
       abs_of_nonneg (norm_nonneg R), inv_mul_cancel₀ hRnorm]
   have hcompat := N.compatible Ln T Rn hLn hRn
   have hfactor :
-      L ∘L T ∘L R = ((‖L‖ * ‖R‖ : ℝ) : ℂ) • (Ln ∘L T ∘L Rn) := by
+      L ∘L T ∘L R = ((‖L‖ * ‖R‖ : ℝ) : 𝕜) • (Ln ∘L T ∘L Rn) := by
     ext x
-    simp [Ln, Rn, hLcomplex, hRcomplex, smul_smul,
-      mul_left_comm, mul_comm]
+    simp only [Ln, Rn, ContinuousLinearMap.comp_apply, smul_apply,
+      map_smul, smul_smul, RCLike.ofReal_mul]
+    rw [show ((‖L‖ : 𝕜) * (‖R‖ : 𝕜)) * ((‖R‖ : 𝕜)⁻¹ * (‖L‖ : 𝕜)⁻¹) = 1 from by
+      field_simp, one_smul]
   rw [hfactor, N.smul]
   calc
-    ‖((‖L‖ * ‖R‖ : ℝ) : ℂ)‖ * N (Ln ∘L T ∘L Rn)
+    ‖((‖L‖ * ‖R‖ : ℝ) : 𝕜)‖ * N (Ln ∘L T ∘L Rn)
         ≤ (‖L‖ * ‖R‖) * N T := by
           simpa using mul_le_mul_of_nonneg_left hcompat
             (mul_nonneg (norm_nonneg L) (norm_nonneg R))
     _ = ‖L‖ * N T * ‖R‖ := by ring
 
 /-- One-sided left estimate. -/
-theorem comp_left_le_mul (N : CompatibleCrossOperatorNorm (X := X) (Y := Y))
-    (L : Y →L[ℂ] Y) (T : X →L[ℂ] Y) :
+theorem comp_left_le_mul (N : CompatibleCrossOperatorNorm (𝕜 := 𝕜) (X := X) (Y := Y))
+    (L : Y →L[𝕜] Y) (T : X →L[𝕜] Y) :
     N (L ∘L T) ≤ ‖L‖ * N T := by
-  have h := comp_le_mul N L T (ContinuousLinearMap.id ℂ X)
+  have h := comp_le_mul N L T (ContinuousLinearMap.id 𝕜 X)
   rw [ContinuousLinearMap.comp_id] at h
   calc
-    N (L ∘L T) ≤ ‖L‖ * N T * ‖ContinuousLinearMap.id ℂ X‖ := h
+    N (L ∘L T) ≤ ‖L‖ * N T * ‖ContinuousLinearMap.id 𝕜 X‖ := h
     _ ≤ ‖L‖ * N T * 1 :=
       mul_le_mul_of_nonneg_left ContinuousLinearMap.norm_id_le
         (mul_nonneg (norm_nonneg L) (N.nonneg T))
     _ = ‖L‖ * N T := by ring
 
 /-- A compatible cross-operator norm is invariant under negation. -/
-theorem map_neg (N : CompatibleCrossOperatorNorm (X := X) (Y := Y))
-    (T : X →L[ℂ] Y) : N (-T) = N T := by
+theorem map_neg (N : CompatibleCrossOperatorNorm (𝕜 := 𝕜) (X := X) (Y := Y))
+    (T : X →L[𝕜] Y) : N (-T) = N T := by
   have h := N.smul (-1) T
   simpa using h
 
 /-- One-sided right ideal estimate. -/
-theorem comp_right_le_mul (N : CompatibleCrossOperatorNorm (X := X) (Y := Y))
-    (T : X →L[ℂ] Y) (R : X →L[ℂ] X) :
+theorem comp_right_le_mul (N : CompatibleCrossOperatorNorm (𝕜 := 𝕜) (X := X) (Y := Y))
+    (T : X →L[𝕜] Y) (R : X →L[𝕜] X) :
     N (T ∘L R) ≤ N T * ‖R‖ := by
-  have h := comp_le_mul N (ContinuousLinearMap.id ℂ Y) T R
-  have hid : ‖ContinuousLinearMap.id ℂ Y‖ ≤ 1 := ContinuousLinearMap.norm_id_le
+  have h := comp_le_mul N (ContinuousLinearMap.id 𝕜 Y) T R
+  have hid : ‖ContinuousLinearMap.id 𝕜 Y‖ ≤ 1 := ContinuousLinearMap.norm_id_le
   calc
-    N (T ∘L R) = N ((ContinuousLinearMap.id ℂ Y) ∘L T ∘L R) := by
+    N (T ∘L R) = N ((ContinuousLinearMap.id 𝕜 Y) ∘L T ∘L R) := by
       rw [ContinuousLinearMap.id_comp]
-    _ ≤ ‖ContinuousLinearMap.id ℂ Y‖ * N T * ‖R‖ := h
+    _ ≤ ‖ContinuousLinearMap.id 𝕜 Y‖ * N T * ‖R‖ := h
     _ ≤ 1 * N T * ‖R‖ :=
       mul_le_mul_of_nonneg_right
         (mul_le_mul_of_nonneg_right hid (N.nonneg T)) (norm_nonneg R)
@@ -157,9 +160,9 @@ datum, so this reusable theorem is intentionally stronger than the printed
 statement.  The source-facing theorem `theorem5_1_banach_sylvester_exact` below
 restores the literal two-sided inverse hypothesis for statement-level auditing. -/
 theorem theorem5_1_banach_sylvester
-    (N : CompatibleCrossOperatorNorm (X := X) (Y := Y))
-    (A : Y →L[ℂ] Y) (B : X →L[ℂ] X)
-    (T C : X →L[ℂ] Y) {gamma delta : ℝ}
+    (N : CompatibleCrossOperatorNorm (𝕜 := 𝕜) (X := X) (Y := Y))
+    (A : Y →L[𝕜] Y) (B : X →L[𝕜] X)
+    (T C : X →L[𝕜] Y) {gamma delta : ℝ}
     (hgamma : 0 ≤ gamma) (hdelta : 0 < delta)
     (hB : ‖B‖ ≤ gamma)
     (hleft : BoundedLeftInverseData A (gamma + delta)⁻¹)
@@ -168,14 +171,14 @@ theorem theorem5_1_banach_sylvester
   let L := hleft.leftInverse
   have hgd : 0 < gamma + delta := add_pos_of_nonneg_of_pos hgamma hdelta
   have hLT : T = L ∘L C + L ∘L T ∘L B := by
-    have hcancel : L ∘L A = ContinuousLinearMap.id ℂ Y := hleft.comp_eq_id
+    have hcancel : L ∘L A = ContinuousLinearMap.id 𝕜 Y := hleft.comp_eq_id
     apply ContinuousLinearMap.ext
     intro x
-    have heqpoint := congrArg (fun S : X →L[ℂ] Y => S x) hEq
+    have heqpoint := congrArg (fun S : X →L[𝕜] Y => S x) hEq
     simp only [sub_apply, ContinuousLinearMap.comp_apply] at heqpoint
     change T x = L (C x) + L (T (B x))
     have hLA : L (A (T x)) = T x := by
-      have hp := congrArg (fun S : Y →L[ℂ] Y => S (T x)) hcancel
+      have hp := congrArg (fun S : Y →L[𝕜] Y => S (T x)) hcancel
       simpa using hp
     rw [← heqpoint, map_sub, hLA]
     abel
@@ -219,13 +222,13 @@ right inverse of `A`.  The proof below only needs the left-inverse equation,
 which is why the reusable theorem `theorem5_1_banach_sylvester` is formulated
 with the weaker `BoundedLeftInverseData` hypothesis. -/
 theorem theorem5_1_banach_sylvester_exact
-    (N : CompatibleCrossOperatorNorm (X := X) (Y := Y))
-    (A Ainv : Y →L[ℂ] Y) (B : X →L[ℂ] X)
-    (T C : X →L[ℂ] Y) {gamma delta : ℝ}
+    (N : CompatibleCrossOperatorNorm (𝕜 := 𝕜) (X := X) (Y := Y))
+    (A Ainv : Y →L[𝕜] Y) (B : X →L[𝕜] X)
+    (T C : X →L[𝕜] Y) {gamma delta : ℝ}
     (hgamma : 0 ≤ gamma) (hdelta : 0 < delta)
     (hB : ‖B‖ ≤ gamma)
-    (hAinv_left : Ainv ∘L A = ContinuousLinearMap.id ℂ Y)
-    (_hAinv_right : A ∘L Ainv = ContinuousLinearMap.id ℂ Y)
+    (hAinv_left : Ainv ∘L A = ContinuousLinearMap.id 𝕜 Y)
+    (_hAinv_right : A ∘L Ainv = ContinuousLinearMap.id 𝕜 Y)
     (hAinv_norm : ‖Ainv‖ ≤ (gamma + delta)⁻¹)
     (hEq : A ∘L T - T ∘L B = C) :
     delta * N T ≤ N C := by
@@ -240,9 +243,9 @@ This is the printed symmetry remark following Theorem 5.1.  The left block is
 bounded by `gamma`, the right block has a bounded right inverse of norm at most
 `(gamma + delta)⁻¹`, and the same compatible-norm conclusion follows. -/
 theorem theorem5_1_banach_sylvester_interchanged
-    (N : CompatibleCrossOperatorNorm (X := X) (Y := Y))
-    (A : Y →L[ℂ] Y) (B : X →L[ℂ] X)
-    (T C : X →L[ℂ] Y) {gamma delta : ℝ}
+    (N : CompatibleCrossOperatorNorm (𝕜 := 𝕜) (X := X) (Y := Y))
+    (A : Y →L[𝕜] Y) (B : X →L[𝕜] X)
+    (T C : X →L[𝕜] Y) {gamma delta : ℝ}
     (hgamma : 0 ≤ gamma) (hdelta : 0 < delta)
     (hA : ‖A‖ ≤ gamma)
     (hright : BoundedRightInverseData B (gamma + delta)⁻¹)
@@ -261,13 +264,13 @@ This is the symmetric source wrapper: `A` is bounded by `gamma`, while `Binv`
 is a genuine bounded two-sided inverse of `B` with norm at most
 `(gamma + delta)⁻¹`. -/
 theorem theorem5_1_banach_sylvester_interchanged_exact
-    (N : CompatibleCrossOperatorNorm (X := X) (Y := Y))
-    (A : Y →L[ℂ] Y) (B Binv : X →L[ℂ] X)
-    (T C : X →L[ℂ] Y) {gamma delta : ℝ}
+    (N : CompatibleCrossOperatorNorm (𝕜 := 𝕜) (X := X) (Y := Y))
+    (A : Y →L[𝕜] Y) (B Binv : X →L[𝕜] X)
+    (T C : X →L[𝕜] Y) {gamma delta : ℝ}
     (hgamma : 0 ≤ gamma) (hdelta : 0 < delta)
     (hA : ‖A‖ ≤ gamma)
-    (_hBinv_left : Binv ∘L B = ContinuousLinearMap.id ℂ X)
-    (hBinv_right : B ∘L Binv = ContinuousLinearMap.id ℂ X)
+    (_hBinv_left : Binv ∘L B = ContinuousLinearMap.id 𝕜 X)
+    (hBinv_right : B ∘L Binv = ContinuousLinearMap.id 𝕜 X)
     (hBinv_norm : ‖Binv‖ ≤ (gamma + delta)⁻¹)
     (hEq : A ∘L T - T ∘L B = C) :
     delta * N T ≤ N C := by
@@ -283,11 +286,11 @@ surjectivity hypothesis is imposed: the proof uses only cancellation after
 applying `A` to `T x`.  The conclusion is the same compatible-norm bound as in
 the bounded theorem. -/
 theorem theorem5_1_banach_sylvester_unboundedA
-    (N : CompatibleCrossOperatorNorm (X := X) (Y := Y))
-    (A : Y →ₗ.[ℂ] Y) (_hAdense : Dense (A.domain : Set Y))
+    (N : CompatibleCrossOperatorNorm (𝕜 := 𝕜) (X := X) (Y := Y))
+    (A : Y →ₗ.[𝕜] Y) (_hAdense : Dense (A.domain : Set Y))
     (_hAclosed : A.IsClosed)
     (hAinv : TauCeti.LinearPMap.BoundedEverywhereLeftInverseData A)
-    (B : X →L[ℂ] X) (T C : X →L[ℂ] Y) {gamma delta : ℝ}
+    (B : X →L[𝕜] X) (T C : X →L[𝕜] Y) {gamma delta : ℝ}
     (hgamma : 0 ≤ gamma) (hdelta : 0 < delta)
     (hAinvNorm : ‖hAinv.inv‖ ≤ (gamma + delta)⁻¹)
     (hB : ‖B‖ ≤ gamma)
@@ -325,13 +328,13 @@ the two bound norms.
 stronger theorem, and this one is the printed one. -/
 theorem theorem5_1_banach_sylvester_banachScope
     [CompleteSpace X] [CompleteSpace Y]
-    (N : CompatibleCrossOperatorNorm (X := X) (Y := Y))
-    (A Ainv : Y →L[ℂ] Y) (B : X →L[ℂ] X)
-    (T C : X →L[ℂ] Y) {gamma delta : ℝ}
+    (N : CompatibleCrossOperatorNorm (𝕜 := 𝕜) (X := X) (Y := Y))
+    (A Ainv : Y →L[𝕜] Y) (B : X →L[𝕜] X)
+    (T C : X →L[𝕜] Y) {gamma delta : ℝ}
     (hgamma : 0 ≤ gamma) (hdelta : 0 < delta)
     (hB : ‖B‖ ≤ gamma)
-    (hAinv_left : Ainv ∘L A = ContinuousLinearMap.id ℂ Y)
-    (hAinv_right : A ∘L Ainv = ContinuousLinearMap.id ℂ Y)
+    (hAinv_left : Ainv ∘L A = ContinuousLinearMap.id 𝕜 Y)
+    (hAinv_right : A ∘L Ainv = ContinuousLinearMap.id 𝕜 Y)
     (hAinv_norm : ‖Ainv‖ ≤ (gamma + delta)⁻¹)
     (hEq : A ∘L T - T ∘L B = C) :
     delta * N T ≤ N C :=
