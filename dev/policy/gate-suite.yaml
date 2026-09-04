@@ -27,6 +27,9 @@ slow:
   - statement-pins-dk
   - statement-pins-yws
   - statement-pins-quench
+  - statement-pins-acharyya-2024
+  - statement-pins-acharyya-2025
+  - statement-pins-helm-2025
 
 # Kept empty deliberately.  A check whose output nobody acts on is worse than no
 # check -- it trains everyone to ignore the suite -- and "advisory" is the
@@ -121,6 +124,21 @@ gates:
     command: ["aiq-lean", "alignment", "check",
               "dev/quench-2026-result-semantic-review.json"]
     description: "the same for the Quench 2026 standalone review, which pins every declaration its rows cite"
+
+  - name: statement-pins-acharyya-2024
+    command: ["aiq-lean", "alignment", "check",
+              "dev/acharyya-2024-result-semantic-review.json"]
+    description: "the same for the Acharyya 2024 standalone review; it pins both halves -- the elaborated types and the transcription passages its rows cite"
+
+  - name: statement-pins-acharyya-2025
+    command: ["aiq-lean", "alignment", "check",
+              "dev/acharyya-2025-result-semantic-review.json"]
+    description: "the same for the Acharyya 2025 standalone review"
+
+  - name: statement-pins-helm-2025
+    command: ["aiq-lean", "alignment", "check",
+              "dev/helm-2025-result-semantic-review.json"]
+    description: "the same for the Helm 2025 standalone review"
 
   - name: grounding-yws
     command: ["aiq-lean", "source", "grounding", "dev/policy/yu-wang-samworth-grounding.yaml"]
