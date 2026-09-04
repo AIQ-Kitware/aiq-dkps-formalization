@@ -7,6 +7,9 @@ import DavisKahan.InfiniteDimensional.SinTheta.Continuation.QuarterAcute
 import DavisKahan.SpectralTheory.GraphSubspace
 import DavisKahan.SpectralTheory.AbstractSpectrum
 
+open TauCeti.DavisKahan.Angle
+
+
 /-!
 # Contractive graph representation of a selected continuation endpoint
 

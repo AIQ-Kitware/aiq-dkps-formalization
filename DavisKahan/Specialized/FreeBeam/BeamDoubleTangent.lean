@@ -6,6 +6,9 @@ Authors: Jon Crall, Claude Opus 5
 import DavisKahan.Specialized.FreeBeam.BeamTangent
 import ForTauCeti.Analysis.InnerProductSpace.DoubleAngle.SpectralCutoff
 
+open TauCeti.DavisKahan.Angle
+
+
 open TauCeti.DavisKahan.Sylvester
 
 /-!

@@ -9,6 +9,9 @@ import DavisKahan.SpectralTheory.Complexification.FormTransport
 import DavisKahan.SpectralTheory.Complexification.SubmoduleEquiv
 import DavisKahan.SpectralTheory.FormSpectrumBounds
 
+open TauCeti.DavisKahan.Angle
+
+
 open TauCeti.DavisKahan.Sylvester
 
 /-!

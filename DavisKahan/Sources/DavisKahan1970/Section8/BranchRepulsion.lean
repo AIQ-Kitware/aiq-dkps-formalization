@@ -18,6 +18,9 @@ import DavisKahan.InfiniteDimensional.SinTheta.Continuation.SharpDiagonalResolve
 import DavisKahan.InfiniteDimensional.SinTheta.Continuation.SharpSchurComplement
 import DavisKahan.InfiniteDimensional.Riccati.ContinuationWitnessOrientedBlocks
 
+open TauCeti.DavisKahan.Angle
+
+
 open TauCeti.DavisKahan.Sylvester
 
 /-!

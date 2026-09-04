@@ -11,6 +11,9 @@ import DavisKahan.Sources.DavisKahan1970.SineTheta.Norms.ComplexificationGauge
 import DavisKahan.Sources.DavisKahan1970.TanTwoThetaUnboundedGramReal
 import DavisKahan.Geometry.Polar.DirectRotationReal
 
+open TauCeti.DavisKahan.Angle
+
+
 /-!
 # The unbounded `tan 2Θ` block, and its transport to the paper's tangent
 

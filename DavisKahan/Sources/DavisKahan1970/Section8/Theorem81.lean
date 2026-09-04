@@ -9,6 +9,9 @@ import DavisKahan.Geometry.Polar.DirectRotation
 import DavisKahan.SpectralTheory.OperatorAngle
 import ForTauCeti.Analysis.InnerProductSpace.SpectralOrder.Complex
 
+open TauCeti.DavisKahan.Angle
+
+
 open TauCeti.DavisKahan.Sylvester
 
 /-!

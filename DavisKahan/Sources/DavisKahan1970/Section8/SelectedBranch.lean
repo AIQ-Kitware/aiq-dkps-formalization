@@ -7,6 +7,9 @@ Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 import DavisKahan.InfiniteDimensional.SinTheta.Continuation.WitnessGraph
 import DavisKahan.InfiniteDimensional.Riccati.ContinuationWitnessOrientedBlocks
 
+open TauCeti.DavisKahan.Angle
+
+
 /-!
 # Davis--Kahan 1970, Section 8: the continuation-selected branch
 

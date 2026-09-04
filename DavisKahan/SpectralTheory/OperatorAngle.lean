@@ -9,6 +9,9 @@ import DavisKahan.Geometry.Angle.AngleFunctionalCalculus
 import ForTauCeti.Analysis.InnerProductSpace.Projection.Gap
 import DavisKahan.BoundedOperator.Compat
 
+open TauCeti.DavisKahan.Angle
+
+
 /-!
 # Canonical operator-angle compatibility surface
 

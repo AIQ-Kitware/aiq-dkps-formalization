@@ -5,6 +5,9 @@ Authors: Jon Crall, GPT 5.6 Thinking
 -/
 import DavisKahan.Riccati.BoundedEstimates
 
+open TauCeti.DavisKahan.Angle
+
+
 open TauCeti.DavisKahan.Sylvester
 
 /-!

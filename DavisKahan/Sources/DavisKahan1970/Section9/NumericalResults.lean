@@ -8,6 +8,9 @@ import DavisKahan.Specialized.FreeBeam.BeamWeinberger
 import DavisKahan.Specialized.FreeBeam.BeamInPlaneAngle
 import DavisKahan.Sources.DavisKahan1970.Section9.BeamDoubleTangentKyFan
 
+open TauCeti.DavisKahan.Angle
+
+
 /-!
 # Davis--Kahan 1970, Section 9: paper-exact numerical result surface
 

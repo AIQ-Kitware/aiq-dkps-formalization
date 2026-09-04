@@ -22,7 +22,7 @@ here.
 -/
 
 namespace TauCeti
-namespace DavisKahanExt
+namespace DavisKahan.Angle
 
 open DavisKahan
 namespace Real
@@ -189,5 +189,5 @@ theorem directedTanTwoAngleOperatorRC_comp_cosTwoAngleExtended
 end
 
 end Real
-end DavisKahanExt
+end DavisKahan.Angle
 end TauCeti

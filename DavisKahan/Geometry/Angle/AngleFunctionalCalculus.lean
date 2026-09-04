@@ -26,7 +26,7 @@ the repository for real operator functional calculus.
 -/
 
 namespace TauCeti
-namespace DavisKahanExt
+namespace DavisKahan.Angle
 
 open DavisKahan
 
@@ -271,7 +271,7 @@ open TauCeti.DavisKahan.Foundation
 open TauCeti.RealComplexification
 -- the namespace is split across the two libraries: `Basic` is in `ForTauCeti`, `Subspace` here
 open TauCeti.DavisKahan.Foundation.RealComplexification
-open TauCeti.DavisKahanExt.Real
+open TauCeti.DavisKahan.Angle.Real
 
 variable {ER : Type*} [NormedAddCommGroup ER] [InnerProductSpace ℝ ER]
   [CompleteSpace ER]
@@ -307,5 +307,5 @@ end Real
 
 end
 
-end DavisKahanExt
+end DavisKahan.Angle
 end TauCeti

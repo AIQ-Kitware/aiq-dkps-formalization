@@ -8,6 +8,9 @@ import DavisKahan.Sources.DavisKahan1970.UnboundedCompressionReal
 import DavisKahan.SpectralTheory.Complexification.LinearPMapSpectralDescent
 import ForTauCeti.Analysis.InnerProductSpace.LinearPMap.Complexification
 
+open TauCeti.DavisKahan.Angle
+
+
 open TauCeti.DavisKahan.Sylvester
 
 /-!

@@ -39,6 +39,9 @@ import DavisKahan.Sources.DavisKahan1970.Section3Proposition32
 import DavisKahan.Sources.DavisKahan1970.Section8.All
 import DavisKahan.Sources.DavisKahan1970.Section9.All
 
+open TauCeti.DavisKahan.Angle
+
+
 namespace TauCeti
 namespace DavisKahan.FiniteDimensional
 

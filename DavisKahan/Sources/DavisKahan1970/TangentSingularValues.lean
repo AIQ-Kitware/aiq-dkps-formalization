@@ -7,6 +7,9 @@ import DavisKahan.Sources.DavisKahan1970.TanThetaAmbient
 import DavisKahan.Geometry.Angle.DoubleAngleFunctionalCalculus
 import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.TangentTransfer
 
+open TauCeti.DavisKahan.Angle
+
+
 /-!
 # The ambient tangents have the tangents of the principal angles as singular values
 

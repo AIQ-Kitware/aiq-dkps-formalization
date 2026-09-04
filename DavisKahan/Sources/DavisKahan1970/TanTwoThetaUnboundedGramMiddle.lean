@@ -6,6 +6,9 @@ Authors: Jon Crall, Claude Opus 5
 import DavisKahan.Sources.DavisKahan1970.TanTwoThetaUnboundedGramBridge
 import DavisKahan.Sources.DavisKahan1970.SharpKyFan
 
+open TauCeti.DavisKahan.Angle
+
+
 open TauCeti.DavisKahan.Sylvester
 
 /-!

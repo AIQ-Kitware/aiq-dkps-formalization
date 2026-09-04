@@ -8,6 +8,9 @@ import DavisKahan.TanTheta.Theorem63UnboundedInfiniteTrial
 import DavisKahan.TanTheta.Theorem63UnboundedCompression
 import DavisKahan.TanTheta.RitzPair
 
+open TauCeti.DavisKahan.Angle
+
+
 open TauCeti.DavisKahan.Sylvester
 
 /-!

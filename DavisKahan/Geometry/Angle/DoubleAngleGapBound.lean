@@ -7,6 +7,8 @@ Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 import DavisKahan.Geometry.Angle.OperatorAngleComplex
 import DavisKahan.InfiniteDimensional.DoubleAngle
 
+open TauCeti.DavisKahanExt
+
 /-!
 # The double-angle sine dominates the directed gap on the close branch
 
@@ -31,7 +33,7 @@ of the two subspaces exchanged.
 open scoped InnerProductSpace
 
 namespace TauCeti
-namespace DavisKahanExt
+namespace DavisKahan.Angle
 
 open DavisKahan
 
@@ -153,5 +155,5 @@ theorem sqrt_two_mul_directedGap_le_norm_sinTwoAngleOperator
 
 end Bridge
 
-end DavisKahanExt
+end DavisKahan.Angle
 end TauCeti

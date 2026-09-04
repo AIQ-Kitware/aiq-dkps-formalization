@@ -8,6 +8,9 @@ import DavisKahan.Geometry.Halmos.CrossedDefectGap
 import DavisKahan.Sources.DavisKahan1970.SinTwoThetaAmbient
 import ForTauCeti.Analysis.InnerProductSpace.AngleGeometry
 
+open TauCeti.DavisKahan.Angle
+
+
 open TauCeti.DavisKahan.Sylvester
 
 /-!

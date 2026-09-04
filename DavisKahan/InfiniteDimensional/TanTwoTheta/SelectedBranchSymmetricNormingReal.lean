@@ -79,7 +79,7 @@ open TauCeti.RealComplexification
 open TauCeti.DavisKahan.Foundation.RealComplexification
 open TauCeti.DavisKahan.ExactSinTheta
 open TauCeti.DavisKahanExt
-open TauCeti.DavisKahanExt.Real
+open TauCeti.DavisKahan.Angle.Real
 
 variable {E : Type*} [NormedAddCommGroup E] [InnerProductSpace ℝ E] [CompleteSpace E]
 

@@ -9,6 +9,9 @@ import DavisKahan.SinTheta.FrameFactorization
 import DavisKahan.SinTheta.Real.FrameFactorization
 import DavisKahan.Sources.DavisKahan1970.SineTheta.OperatorAngleBridge
 
+open TauCeti.DavisKahan.Angle
+
+
 open TauCeti.DavisKahan.Sylvester
 
 /-!

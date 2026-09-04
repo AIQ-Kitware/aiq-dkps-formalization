@@ -71,7 +71,6 @@ is expected to follow by a norm-preserving complexification transfer.
 namespace TauCeti
 namespace DavisKahan.Sylvester
 
-open TauCeti.DavisKahan.ExactSinTheta
 
 open TauCeti.DavisKahanExt
 

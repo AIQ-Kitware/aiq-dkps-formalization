@@ -14,6 +14,9 @@ import DavisKahan.Geometry.Polar.DirectRotation
 import ForTauCeti.Analysis.SpecialFunctions.TanArcsin
 import DavisKahan.Sources.DavisKahan1970.Ideals.SpectralSelection
 
+open TauCeti.DavisKahan.Angle
+
+
 open TauCeti.DavisKahan.Sylvester
 
 /-!

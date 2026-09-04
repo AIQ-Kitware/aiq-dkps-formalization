@@ -7,6 +7,9 @@ import DavisKahan.SpectralTheory.ContinuationRieszIntegral
 import DavisKahan.InfiniteDimensional.SinTheta.Continuation.Core
 import DavisKahan.SpectralTheory.AbstractSpectrum
 
+open TauCeti.DavisKahan.Angle
+
+
 /-!
 # Quantitative Riesz continuation along affine operator paths
 

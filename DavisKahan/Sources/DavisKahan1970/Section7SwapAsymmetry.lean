@@ -7,6 +7,9 @@ Authors: Jon Crall, OpenAI GPT-5.6 Sol
 import DavisKahan.Sources.DavisKahan1970.SineTheta.Sharpness
 import DavisKahan.Sources.DavisKahan1970.Ideals.RankOneNormalization
 
+open TauCeti.DavisKahan.Angle
+
+
 /-!
 # Davis--Kahan 1970, Section 7 residual swap asymmetry
 

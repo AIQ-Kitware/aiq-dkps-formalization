@@ -6,6 +6,9 @@ Authors: Jon Crall, GPT-5.6 Thinking
 import DavisKahan.InfiniteDimensional.SinTheta.Continuation.WitnessOffDiagonal
 import DavisKahan.InfiniteDimensional.TanTwoTheta.BoundedRiccatiShift
 
+open TauCeti.DavisKahan.Angle
+
+
 open TauCeti.DavisKahan.Sylvester
 
 /-!

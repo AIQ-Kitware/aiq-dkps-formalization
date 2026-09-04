@@ -7,6 +7,9 @@ Authors: Jon Crall, OpenAI GPT-5.6 Sol
 import DavisKahan.TanTheta.Theorem63InfiniteTrial
 import DavisKahan.TanTheta.Theorem63Unbounded
 
+open TauCeti.DavisKahan.Angle
+
+
 open TauCeti.DavisKahan.Sylvester
 
 /-!

@@ -24,6 +24,9 @@ import DavisKahan.Geometry.Polar.PrincipalSquareRoot
 -- supplies the `U`-block calculus (`star_blocks_eq`, `eq_sum_blocks`) promoted out of the
 -- frontier alongside Proposition 3.3.
 import DavisKahan.Geometry.Halmos.FixedCosineSubspace
+
+open TauCeti.DavisKahan.Angle
+
 -- supplies `inner_starProjection_self_eq`.
 -- supplies `spectraDirectRotation`, `IsUniformlyAcute` and the reflection/projection algebra
 -- (`reflectionOperator_eq_projection_add_projection_sub_one`).  That module and everything

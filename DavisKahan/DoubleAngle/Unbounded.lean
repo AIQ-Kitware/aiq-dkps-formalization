@@ -5,6 +5,9 @@ Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
 import DavisKahan.SpectralTheory.ReflectionRestriction
 
+open TauCeti.DavisKahan.Angle
+
+
 /-!
 # Reflection geometry for the unbounded sine-two-theta theorem
 

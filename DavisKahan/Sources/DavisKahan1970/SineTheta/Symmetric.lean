@@ -298,7 +298,7 @@ theorem symmetric_all_kyFan
     (P : SymmetricSinThetaProblem (E := E)) :
     ∀ k,
       P.gap * kyFanApproximationGauge k
-          (TauCeti.DavisKahanExt.sinAngleOperatorC P.U P.V) ≤
+          (TauCeti.DavisKahan.Angle.sinAngleOperatorC P.U P.V) ≤
         kyFanApproximationGauge k P.perturbation := by
   intro k
   have hadjA : P.A.adjoint = P.A := P.selfAdjoint_A.isSelfAdjoint.adjoint_eq
@@ -370,7 +370,7 @@ theorem symmetric_all_kyFan
   rw [hcross] at hcombine
   calc
     P.gap * kyFanApproximationGauge k
-        (TauCeti.DavisKahanExt.sinAngleOperatorC P.U P.V) =
+        (TauCeti.DavisKahan.Angle.sinAngleOperatorC P.U P.V) =
       kyFanApproximationGauge k
         (((P.gap : ℝ) : ℂ) • crossSineSum P.U P.V) := by
       rw [kyFanApproximationGauge_smul, hgapNorm,
@@ -384,9 +384,9 @@ invariant norm in the source sense. -/
 theorem result_every_unitarilyInvariantNorm
     (P : SymmetricSinThetaProblem (E := E))
     (N : SymmetricNormingFunction) (hH : N.Mem P.perturbation) :
-    N.Mem (TauCeti.DavisKahanExt.sinAngleOperatorC P.U P.V) ∧
+    N.Mem (TauCeti.DavisKahan.Angle.sinAngleOperatorC P.U P.V) ∧
       P.gap * N.gauge
-          (TauCeti.DavisKahanExt.sinAngleOperatorC P.U P.V) ≤
+          (TauCeti.DavisKahan.Angle.sinAngleOperatorC P.U P.V) ≤
         N.gauge P.perturbation :=
   N.mul_gauge_le_of_all_mul_kyFan_le P.gap_pos hH P.symmetric_all_kyFan
 

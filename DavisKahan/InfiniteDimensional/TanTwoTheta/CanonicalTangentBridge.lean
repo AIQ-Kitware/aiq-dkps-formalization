@@ -10,6 +10,9 @@ import DavisKahan.SpectralTheory.GraphSubspace
 import DavisKahan.OperatorIdeal.ApproximationNumbers.OperatorModulus
 import DavisKahan.Sources.DavisKahan1970.SineTheta.Norms.SubspaceSingularTransport
 
+open TauCeti.DavisKahan.Angle
+
+
 open TauCeti.DavisKahan.Sylvester
 
 /-!

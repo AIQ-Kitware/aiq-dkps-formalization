@@ -42,7 +42,7 @@ complexification:
 
 ## Main definitions
 
-* `TauCeti.DavisKahanExt.sinAngleOperatorR`, `angleOperatorR`,
+* `TauCeti.DavisKahan.Angle.sinAngleOperatorR`, `angleOperatorR`,
   `sinTwoAngleOperatorR`, `tanAngleOperatorR`,
   `tanTwoAngleOperatorR`: the five paper angle operators of a real pair, as
   bounded operators on the real space.
@@ -55,7 +55,7 @@ complexification:
 -/
 
 namespace TauCeti
-namespace DavisKahanExt
+namespace DavisKahan.Angle
 
 open DavisKahan
 open TauCeti.RealComplexification
@@ -295,5 +295,5 @@ theorem norm_sinAngleOperatorR :
 
 end
 
-end DavisKahanExt
+end DavisKahan.Angle
 end TauCeti

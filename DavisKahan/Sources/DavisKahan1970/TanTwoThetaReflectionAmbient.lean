@@ -10,6 +10,9 @@ import ForTauCeti.Analysis.InnerProductSpace.DoubleAngle.ReflectionBlocks
 import ForTauCeti.Analysis.InnerProductSpace.DoubleAngle.UnboundedPole
 import ForTauCeti.Analysis.InnerProductSpace.SpectralOrder.Complex
 
+open TauCeti.DavisKahan.Angle
+
+
 open TauCeti.DavisKahan.Sylvester
 
 /-!

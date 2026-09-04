@@ -10,6 +10,9 @@ import DavisKahan.Geometry.Polar.DirectRotationReal
 import DavisKahan.OperatorIdeal.ComplexificationApproximation
 import ForTauCeti.Analysis.InnerProductSpace.RealContinuousFunctionalCalculus
 
+open TauCeti.DavisKahan.Angle
+
+
 open TauCeti.DavisKahan.Sylvester
 
 /-!

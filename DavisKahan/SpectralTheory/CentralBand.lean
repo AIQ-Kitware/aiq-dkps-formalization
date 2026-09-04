@@ -13,6 +13,9 @@ import DavisKahan.Sylvester.Spectrum
 -- supplies `compressOperator` and its self-adjointness.
 import DavisKahan.InfiniteDimensional.Riccati.ContinuationWitnessOrientedBlocks
 
+open TauCeti.DavisKahan.Angle
+
+
 open TauCeti.DavisKahan.Sylvester
 -- supplies `realSpectrum_compressOperator_eq_restrictedSpectrum`.
 

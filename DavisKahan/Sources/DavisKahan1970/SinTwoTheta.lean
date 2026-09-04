@@ -14,6 +14,9 @@ import DavisKahan.Sources.DavisKahan1970.SineTheta.Norms.SingularValueTransport
 import DavisKahan.Sources.DavisKahan1970.SineTheta.Norms.UnitaryInvariantNorm
 import ForTauCeti.Analysis.InnerProductSpace.LinearPMap.Resolvent
 
+open TauCeti.DavisKahan.Angle
+
+
 open TauCeti.DavisKahan.Sylvester
 
 /-!
@@ -587,11 +590,11 @@ theorem sinTwoTheta_directed_unbounded_addBounded_symmetricNorming_real
       (realSelfAdjointSpectralRestriction A hA B hB)
       (realSelfAdjointSpectralRestriction A hA Bᶜ hB.compl) δ)
     (hEmem : N.Mem Eop) :
-    N.Mem (TauCeti.DavisKahanExt.Real.directedSinTwoAngleOperatorRC
+    N.Mem (TauCeti.DavisKahan.Angle.Real.directedSinTwoAngleOperatorRC
         (realSelfAdjointSpectralSubspace A hA B hB)
         (realSelfAdjointSpectralSubspace (TauCeti.LinearPMap.addBounded A Eop)
           (addBounded_isSelfAdjoint A hA Eop hEop) S hS)) ∧
-      δ * N.gauge (TauCeti.DavisKahanExt.Real.directedSinTwoAngleOperatorRC
+      δ * N.gauge (TauCeti.DavisKahan.Angle.Real.directedSinTwoAngleOperatorRC
         (realSelfAdjointSpectralSubspace A hA B hB)
         (realSelfAdjointSpectralSubspace (TauCeti.LinearPMap.addBounded A Eop)
           (addBounded_isSelfAdjoint A hA Eop hEop) S hS)) ≤
@@ -627,7 +630,7 @@ theorem sinTwoTheta_directed_unbounded_addBounded_unequalDimension_symmetricNorm
           (TauCeti.LinearPMap.addBounded A Eop)
           (addBounded_isSelfAdjoint A hA Eop hEop) S hS))
     (sinTwoTheta₀ : SinThetaRepresentative
-      (TauCeti.DavisKahanExt.Real.directedSinTwoAngleOperatorRC
+      (TauCeti.DavisKahan.Angle.Real.directedSinTwoAngleOperatorRC
         (realSelfAdjointSpectralSubspace A hA B hB)
         (realSelfAdjointSpectralSubspace (TauCeti.LinearPMap.addBounded A Eop)
           (addBounded_isSelfAdjoint A hA Eop hEop) S hS))) :
@@ -643,7 +646,7 @@ theorem sinTwoTheta_directed_unbounded_addBounded_unequalDimension_symmetricNorm
     rw [hext]
     exact hmem
   · have hgauge : N.gauge sinTwoTheta₀.operator
-        = N.gauge (TauCeti.DavisKahanExt.Real.directedSinTwoAngleOperatorRC
+        = N.gauge (TauCeti.DavisKahan.Angle.Real.directedSinTwoAngleOperatorRC
             (realSelfAdjointSpectralSubspace A hA B hB)
             (realSelfAdjointSpectralSubspace (TauCeti.LinearPMap.addBounded A Eop)
               (addBounded_isSelfAdjoint A hA Eop hEop) S hS)) := by
@@ -774,11 +777,11 @@ theorem sinTwoTheta_directed_unbounded_addBounded_spectrumGap_symmetricNorming_c
       (lam : ℂ) ∉ TauCeti.LinearPMap.spectrum
         (DavisKahan.selfAdjointSpectralRestriction A hA Bᶜ hB.compl))
     (hEmem : N.Mem Eop) :
-    N.Mem (TauCeti.DavisKahanExt.directedSinTwoAngleOperatorC
+    N.Mem (TauCeti.DavisKahan.Angle.directedSinTwoAngleOperatorC
         (DavisKahan.selfAdjointSpectralSubspace A hA B hB)
         (DavisKahan.selfAdjointSpectralSubspace (TauCeti.LinearPMap.addBounded A Eop)
           (DavisKahan.addBounded_isSelfAdjoint A hA Eop hEop) S hS)) ∧
-      δ * N.gauge (TauCeti.DavisKahanExt.directedSinTwoAngleOperatorC
+      δ * N.gauge (TauCeti.DavisKahan.Angle.directedSinTwoAngleOperatorC
         (DavisKahan.selfAdjointSpectralSubspace A hA B hB)
         (DavisKahan.selfAdjointSpectralSubspace (TauCeti.LinearPMap.addBounded A Eop)
           (DavisKahan.addBounded_isSelfAdjoint A hA Eop hEop) S hS)) ≤
@@ -882,11 +885,11 @@ theorem sinTwoTheta_directed_unbounded_addBounded_symmetricNorming_complex
       (DavisKahan.selfAdjointSpectralRestriction A hA B hB)
       (DavisKahan.selfAdjointSpectralRestriction A hA Bᶜ hB.compl) δ)
     (hEmem : N.Mem Eop) :
-    N.Mem (TauCeti.DavisKahanExt.directedSinTwoAngleOperatorC
+    N.Mem (TauCeti.DavisKahan.Angle.directedSinTwoAngleOperatorC
         (DavisKahan.selfAdjointSpectralSubspace A hA B hB)
         (DavisKahan.selfAdjointSpectralSubspace (TauCeti.LinearPMap.addBounded A Eop)
           (DavisKahan.addBounded_isSelfAdjoint A hA Eop hEop) S hS)) ∧
-      δ * N.gauge (TauCeti.DavisKahanExt.directedSinTwoAngleOperatorC
+      δ * N.gauge (TauCeti.DavisKahan.Angle.directedSinTwoAngleOperatorC
         (DavisKahan.selfAdjointSpectralSubspace A hA B hB)
         (DavisKahan.selfAdjointSpectralSubspace (TauCeti.LinearPMap.addBounded A Eop)
           (DavisKahan.addBounded_isSelfAdjoint A hA Eop hEop) S hS)) ≤
@@ -944,7 +947,7 @@ theorem sinTwoTheta_directed_unbounded_addBounded_unequalDimension_symmetricNorm
           (TauCeti.LinearPMap.addBounded A Eop)
           (DavisKahan.addBounded_isSelfAdjoint A hA Eop hEop) S hS))
     (sinTwoTheta₀ : SinThetaRepresentative
-      (TauCeti.DavisKahanExt.directedSinTwoAngleOperatorC
+      (TauCeti.DavisKahan.Angle.directedSinTwoAngleOperatorC
         (DavisKahan.selfAdjointSpectralSubspace A hA B hB)
         (DavisKahan.selfAdjointSpectralSubspace (TauCeti.LinearPMap.addBounded A Eop)
           (DavisKahan.addBounded_isSelfAdjoint A hA Eop hEop) S hS))) :
@@ -959,7 +962,7 @@ theorem sinTwoTheta_directed_unbounded_addBounded_unequalDimension_symmetricNorm
   · show N.extendedGauge sinTwoTheta₀.operator ≠ ⊤
     rw [hext]; exact hmem
   · have hgauge : N.gauge sinTwoTheta₀.operator
-        = N.gauge (TauCeti.DavisKahanExt.directedSinTwoAngleOperatorC
+        = N.gauge (TauCeti.DavisKahan.Angle.directedSinTwoAngleOperatorC
             (DavisKahan.selfAdjointSpectralSubspace A hA B hB)
             (DavisKahan.selfAdjointSpectralSubspace (TauCeti.LinearPMap.addBounded A Eop)
               (DavisKahan.addBounded_isSelfAdjoint A hA Eop hEop) S hS)) := by

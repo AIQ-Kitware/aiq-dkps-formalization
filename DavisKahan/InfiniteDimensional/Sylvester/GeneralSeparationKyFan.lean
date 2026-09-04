@@ -9,6 +9,9 @@ import DavisKahan.OperatorIdeal.ComplexificationApproximation
 import DavisKahan.SpectralTheory.Complexification.Spectrum
 import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.KyFanBochner
 
+open TauCeti.DavisKahan.Angle
+
+
 open TauCeti.DavisKahan.ExactSinTheta
 
 /-!

@@ -14,6 +14,9 @@ import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.SubspaceTransport
 -- about `Submodule.subtypeL` and approximation numbers, with nothing paper-specific in it.
 import DavisKahan.Sylvester.Spectrum
 
+open TauCeti.DavisKahan.Angle
+
+
 /-!
 # Restricted-displacement extremality by spectral cutoff
 

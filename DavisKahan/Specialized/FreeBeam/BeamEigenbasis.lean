@@ -7,6 +7,9 @@ Authors: Jon Crall, Claude Opus 5
 import DavisKahan.Specialized.FreeBeam.BeamWeinberger
 import DavisKahan.Sources.DavisKahan1970.Section9.SchurComplement
 
+open TauCeti.DavisKahan.Angle
+
+
 open TauCeti.DavisKahan.Sylvester
 
 /-!

@@ -6,6 +6,9 @@ Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 import DavisKahan.InfiniteDimensional.SinTheta.Continuation.Theorem
 import DavisKahan.InfiniteDimensional.SinTheta.Continuation.SelectedReduction
 
+open TauCeti.DavisKahan.Angle
+
+
 /-!
 # Canonical graph of a spectral-continuation witness
 

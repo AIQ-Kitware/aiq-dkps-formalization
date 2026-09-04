@@ -7,6 +7,9 @@ import DavisKahan.DoubleAngle.UnboundedIdeal
 import DavisKahan.SinTheta.Real.Unbounded
 import DavisKahan.SpectralTheory.Real.SpectralRestriction
 
+open TauCeti.DavisKahan.Angle
+
+
 open TauCeti.DavisKahan.Sylvester
 
 /-!

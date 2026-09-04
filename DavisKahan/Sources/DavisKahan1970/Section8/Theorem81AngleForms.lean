@@ -8,6 +8,9 @@ import DavisKahan.Sources.DavisKahan1970.Section8.Theorem81MajorizationReal
 import ForTauCeti.Analysis.InnerProductSpace.AngleGeometry
 import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.Examples
 
+open TauCeti.DavisKahan.Angle
+
+
 open TauCeti.DavisKahan.Sylvester
 
 /-!

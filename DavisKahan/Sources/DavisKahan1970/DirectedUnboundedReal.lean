@@ -7,6 +7,9 @@ import DavisKahan.Sources.DavisKahan1970.DirectedReal
 import DavisKahan.TanTheta.Theorem63UnboundedInfiniteTrial
 import DavisKahan.SpectralTheory.Real.SpectralRestriction
 
+open TauCeti.DavisKahan.Angle
+
+
 open TauCeti.DavisKahan.Sylvester
 
 /-!

@@ -11,6 +11,9 @@ import DavisKahan.Sources.DavisKahan1970.SineTheta.Norms.ComplexificationGauge
 import DavisKahan.DoubleAngle.TangentTransport
 import DavisKahan.Sources.DavisKahan1970.AmbientReal
 
+open TauCeti.DavisKahan.Angle
+
+
 open TauCeti.DavisKahan.Sylvester
 
 /-!
@@ -545,9 +548,9 @@ theorem tanTwoTheta_ambient_unbounded_symmetricNorming_real
         (TauCeti.LinearPMap.realSpecRange hA (Set.Iic c) measurableSet_Iic)ᗮ →
       b * ‖(x : E)‖ ^ 2 ≤ ⟪A x, (x : E)⟫_ℝ)
     (hab : a < b) (hBmem : N.Mem B) :
-    N.Mem (TauCeti.DavisKahanExt.absTanTwoAngleOperatorR
+    N.Mem (TauCeti.DavisKahan.Angle.absTanTwoAngleOperatorR
         (TauCeti.LinearPMap.realSpecRange hA (Set.Iic c) measurableSet_Iic) V) ∧
-      (b - a) * N.gauge (TauCeti.DavisKahanExt.absTanTwoAngleOperatorR
+      (b - a) * N.gauge (TauCeti.DavisKahan.Angle.absTanTwoAngleOperatorR
         (TauCeti.LinearPMap.realSpecRange hA (Set.Iic c) measurableSet_Iic) V) ≤
         2 * N.gauge B := by
   obtain ⟨hunit, hmem, hle⟩ :=

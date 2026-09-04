@@ -8,6 +8,7 @@ import DavisKahan.SpectralTheory.Complexification.Subspace
 import DavisKahan.SpectralTheory.SpectralGapFormBounds
 import ForTauCeti.Analysis.InnerProductSpace.LinearPMap.Complexification.SpectralDescent
 
+
 /-!
 # Real bounded spectral branches across a gap
 

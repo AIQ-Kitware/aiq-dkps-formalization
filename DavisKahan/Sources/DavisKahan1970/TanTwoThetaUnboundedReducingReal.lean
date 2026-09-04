@@ -7,6 +7,9 @@ import DavisKahan.Sources.DavisKahan1970.TanTwoThetaUnboundedExactReal
 import DavisKahan.Sources.DavisKahan1970.TangentSingularValues
 import DavisKahan.Sources.DavisKahan1970.SinTwoThetaAmbientUnbounded
 
+open TauCeti.DavisKahan.Angle
+
+
 open TauCeti.DavisKahan.Sylvester
 
 /-!

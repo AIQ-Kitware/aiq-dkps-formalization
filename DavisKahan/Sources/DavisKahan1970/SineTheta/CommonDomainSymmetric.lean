@@ -8,6 +8,9 @@ import DavisKahan.Sources.DavisKahan1970.SineTheta.Symmetric
 import DavisKahan.Sources.DavisKahan1970.SineTheta.SymmetricReal
 import DavisKahan.Sylvester.ScalarGeneric
 
+open TauCeti.DavisKahan.Angle
+
+
 open TauCeti.DavisKahan.Sylvester
 
 /-!
@@ -548,7 +551,7 @@ theorem symmetric_all_kyFan
     (P : CommonDomainSymmetricSinThetaProblem U V) :
     ∀ k,
       P.gap * kyFanApproximationGauge k
-          (TauCeti.DavisKahanExt.sinAngleOperatorC U V) ≤
+          (TauCeti.DavisKahan.Angle.sinAngleOperatorC U V) ≤
         kyFanApproximationGauge k P.perturbation := by
   intro k
   have h := P.symmetric_all_kyFan_crossSineSum k
@@ -564,9 +567,9 @@ relaxed in the same way as those of Theorem 6.1. -/
 theorem result_every_unitarilyInvariantNorm
     (P : CommonDomainSymmetricSinThetaProblem U V)
     (N : SymmetricNormingFunction) (hH : N.Mem P.perturbation) :
-    N.Mem (TauCeti.DavisKahanExt.sinAngleOperatorC U V) ∧
+    N.Mem (TauCeti.DavisKahan.Angle.sinAngleOperatorC U V) ∧
       P.gap * N.gauge
-          (TauCeti.DavisKahanExt.sinAngleOperatorC U V) ≤
+          (TauCeti.DavisKahan.Angle.sinAngleOperatorC U V) ≤
         N.gauge P.perturbation :=
   N.mul_gauge_le_of_all_mul_kyFan_le P.gap_pos hH P.symmetric_all_kyFan
 

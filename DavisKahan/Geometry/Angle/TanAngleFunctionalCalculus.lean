@@ -24,17 +24,17 @@ theory but a statement of where the theory lives.
 
 ## Main results
 
-* `TauCeti.DavisKahanExt.tanAngleOperatorC`: the literal `tan Θ`.
-* `TauCeti.DavisKahanExt.directedTanAngleOperatorC_nonneg`.
-* `TauCeti.DavisKahanExt.directedCosAngleOperatorC_mul_directedTanAngleOperatorC`: `cos Θ · tan Θ = sin Θ` under
+* `TauCeti.DavisKahan.Angle.tanAngleOperatorC`: the literal `tan Θ`.
+* `TauCeti.DavisKahan.Angle.directedTanAngleOperatorC_nonneg`.
+* `TauCeti.DavisKahan.Angle.directedCosAngleOperatorC_mul_directedTanAngleOperatorC`: `cos Θ · tan Θ = sin Θ` under
   uniform transversality.
-* `TauCeti.DavisKahanExt.tanTwoAngleOperatorC`: the literal ambient
+* `TauCeti.DavisKahan.Angle.tanTwoAngleOperatorC`: the literal ambient
   `tan 2Θ`, the object of the second conclusion of the Section 2 `tan 2θ`
   theorem.
-* `TauCeti.DavisKahanExt.spectrum_angleOperatorC_lt_pi_div_four` and
-  `TauCeti.DavisKahanExt.directedTanTwoAngleOperatorC_nonneg`: under uniform
+* `TauCeti.DavisKahan.Angle.spectrum_angleOperatorC_lt_pi_div_four` and
+  `TauCeti.DavisKahan.Angle.directedTanTwoAngleOperatorC_nonneg`: under uniform
   *quarter* transversality the doubled angle stays inside the principal branch.
-* `TauCeti.DavisKahanExt.absTanTwoAngleOperatorC`: the **branch-free**
+* `TauCeti.DavisKahan.Angle.absTanTwoAngleOperatorC`: the **branch-free**
   ambient `|tan 2Θ|`, which is nonnegative with no hypothesis at all and agrees
   with `tanTwoAngleOperatorC` on the quarter-acute branch.  A unitarily
   invariant norm sees a self-adjoint operator through its singular values, so
@@ -60,7 +60,7 @@ forms of both, and the real counterparts of the operators defined here, are in
 -/
 
 namespace TauCeti
-namespace DavisKahanExt
+namespace DavisKahan.Angle
 
 open DavisKahan
 
@@ -244,5 +244,5 @@ theorem directedCosAngleOperatorC_mul_directedTanAngleOperatorC (U V : Submodule
 
 end
 
-end DavisKahanExt
+end DavisKahan.Angle
 end TauCeti

@@ -10,6 +10,9 @@ import DavisKahan.Geometry.Angle.OperatorAngleReal
 import ForTauCeti.Analysis.InnerProductSpace.UnitarilyInvariantSeminorm
 import ForTauCeti.Analysis.InnerProductSpace.OperatorModulus
 
+open TauCeti.DavisKahan.Angle
+
+
 open TauCeti.DavisKahan.Sylvester
 
 /-!
@@ -559,10 +562,10 @@ theorem hilbertSchmidtNorm_sinAngleOperatorRC_eq_projectionDifference
     (U V : Submodule ℝ E)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] :
     ContinuousLinearMap.hilbertSchmidtNorm
-        (TauCeti.DavisKahanExt.Real.sinAngleOperatorRC U V) =
+        (TauCeti.DavisKahan.Angle.Real.sinAngleOperatorRC U V) =
       ContinuousLinearMap.hilbertSchmidtNorm (U.starProjection - V.starProjection) := by
-  rw [TauCeti.DavisKahanExt.Real.sinAngleOperatorRC,
-    TauCeti.DavisKahanExt.sinAngleOperatorC]
+  rw [TauCeti.DavisKahan.Angle.Real.sinAngleOperatorRC,
+    TauCeti.DavisKahan.Angle.sinAngleOperatorC]
   calc
     ContinuousLinearMap.hilbertSchmidtNorm
         (ContinuousLinearMap.modulus
@@ -584,7 +587,7 @@ theorem hilbertSchmidtNorm_sinAngleOperatorRC_eq_projectionDifference
 /-- The source counterexample has angle `pi/4`, hence square sine norm one. -/
 theorem counterexample_sine_square_norm :
     ContinuousLinearMap.hilbertSchmidtNorm
-      (TauCeti.DavisKahanExt.Real.sinAngleOperatorRC
+      (TauCeti.DavisKahan.Angle.Real.sinAngleOperatorRC
         counterexampleExact counterexampleTrial) = 1 := by
   rw [hilbertSchmidtNorm_sinAngleOperatorRC_eq_projectionDifference,
     hilbertSchmidtNorm_eq_frobenius,
@@ -626,7 +629,7 @@ square-norm estimate. -/
 theorem oneGap_does_not_imply_symmetric_square_estimate :
     ContinuousLinearMap.hilbertSchmidtNorm counterexampleH <
       2 * ContinuousLinearMap.hilbertSchmidtNorm
-        (TauCeti.DavisKahanExt.Real.sinAngleOperatorRC
+        (TauCeti.DavisKahan.Angle.Real.sinAngleOperatorRC
           counterexampleExact counterexampleTrial) := by
   rw [counterexample_sine_square_norm,
     counterexample_perturbation_square_norm]

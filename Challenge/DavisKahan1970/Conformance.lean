@@ -42,6 +42,9 @@ import DavisKahan.TanTheta.Theorem63InfiniteTrial
 import DavisKahan.FiniteDimensional.DirectRotation.Basic
 import DavisKahan.Sources.DavisKahan1970.AmbientBlockVocabulary
 
+open TauCeti.DavisKahan.Angle
+
+
 /-!
 ## Comparator maintenance rule
 

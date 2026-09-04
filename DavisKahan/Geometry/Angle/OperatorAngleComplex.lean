@@ -26,7 +26,7 @@ with a real-scalar bridge by complexification expected later.
 -/
 
 namespace TauCeti
-namespace DavisKahanExt
+namespace DavisKahan.Angle
 
 open DavisKahan
 
@@ -1119,5 +1119,5 @@ theorem range_directedSinTwoAngleOperatorC_le (U V : Submodule ℂ E)
   exact U.smul_mem _
     (range_directedSinAngleOperatorC_le U V ⟨directedCosAngleOperatorC U V x, rfl⟩)
 
-end DavisKahanExt
+end DavisKahan.Angle
 end TauCeti

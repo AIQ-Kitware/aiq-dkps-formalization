@@ -6,6 +6,9 @@ Authors: Jon Crall, GPT-5.6 Sol
 import DavisKahan.Sources.DavisKahan1970.TanTwoThetaAmbient
 import DavisKahan.DoubleAngle.TanTwoThetaApproximatePair
 
+open TauCeti.DavisKahan.Angle
+
+
 /-!
 # Branch-free ambient `tan 2Θ`: residual and assembly layer
 

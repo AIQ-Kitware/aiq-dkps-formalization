@@ -77,8 +77,8 @@ alias fullSinAngle_singularValues_projectionDifference :=
   sourceFullSin_same_projectionDifference
 alias fullSinAngle_norm_projectionDifference :=
   sourceFullSin_mem_iff_and_gauge_eq
-alias ambientEquivalentAngle := DavisKahanExt.angleOperatorC
-alias ambientEquivalentSinAngle := DavisKahanExt.sinAngleOperatorC
+alias ambientEquivalentAngle := DavisKahan.Angle.angleOperatorC
+alias ambientEquivalentSinAngle := DavisKahan.Angle.sinAngleOperatorC
 alias fullAngleCoordinates_real := sourceFullAngleR
 alias fullSinAngleCoordinates_real := sourceFullSinR
 

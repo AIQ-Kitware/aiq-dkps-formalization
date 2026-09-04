@@ -8,6 +8,9 @@ import DavisKahan.DoubleAngle.CompatibilitySinTwoTheta
 import DavisKahan.InfiniteDimensional.SinTheta.General
 import DavisKahan.SpectralTheory.AbstractSpectrum
 
+open TauCeti.DavisKahan.Angle
+
+
 open TauCeti.DavisKahan.Sylvester
 
 /-!

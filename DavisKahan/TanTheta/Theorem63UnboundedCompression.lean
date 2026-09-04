@@ -7,6 +7,9 @@ Authors: Jon Crall, Claude Opus 5
 import DavisKahan.TanTheta.Theorem63UnboundedInfiniteTrial
 import DavisKahan.SpectralTheory.BoundedTruncation
 
+open TauCeti.DavisKahan.Angle
+
+
 open TauCeti.DavisKahan.Sylvester
 
 /-!

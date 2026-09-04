@@ -8,6 +8,9 @@ import DavisKahan.TanTheta.Theorem63Unbounded
 import DavisKahan.Sources.DavisKahan1970.Section9.NumericalBounds
 import ForTauCeti.Analysis.InnerProductSpace.LinearPMap.RealLowerBound
 
+open TauCeti.DavisKahan.Angle
+
+
 open TauCeti.DavisKahan.Sylvester
 
 /-!

@@ -10,6 +10,9 @@ import Mathlib.Analysis.Normed.Ring.Units
 import Mathlib.Topology.Algebra.Module.LinearPMap
 import Mathlib.Topology.MetricSpace.Antilipschitz
 
+open TauCeti.DavisKahan.Angle
+
+
 /-!
 # Graph subspaces and angular operators
 
