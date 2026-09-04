@@ -113,9 +113,11 @@ This is the compiled answer to the source-acceptance question: every source
 unitarily invariant norm evaluates the operator appearing in
 `result_every_unitarilyInvariantNorm_real` exactly as it evaluates the paper's
 whole-space `sin Theta` list.  The equality is proved through the projector
-difference and exact complexification invariance of the approximation numbers;
-no real continuous functional calculus is constructed, and the real theorem's
-own statement does not mention a complexification.
+difference and exact complexification invariance of the approximation numbers,
+and the real theorem's own statement does not mention a complexification.  It was
+also proved this way because no real continuous functional calculus existed; one
+now does (`ForTauCeti/Analysis/InnerProductSpace/RealContinuousFunctionalCalculus.lean`,
+and at every `RCLike` field), so that is history rather than an obstruction.
 
 It is stated as a raw equality of approximation numbers rather than as a
 `SameApproximationSingularSequence`, because that relation fixes a single scalar
