@@ -7,6 +7,8 @@ import DavisKahan.Sources.DavisKahan1970.SineTheta.Sharpness
 import DavisKahan.OperatorIdeal.ApproximationNumbers.BlockSum
 import DavisKahan.Sources.DavisKahan1970.SineTheta.Norms.UnitaryInvariantNormLaws
 import DavisKahan.BoundedOperator.Compat
+import DavisKahan.Sylvester.ScalarTransport
+import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.ScalarTransport
 
 open TauCeti.DavisKahan.Angle
 
@@ -267,7 +269,6 @@ The gauge triangle inequality is what makes this true, and it is available for
 the real and complex scalar fields; it is a property of the field, not an
 assumption about the operators involved. -/
 theorem SymmetricNormingFunction.mem_add
-    [ContinuousLinearMap.HasMinMaxLowerBoundEverywhere.{u, u} 𝕜]
     (N : SymmetricNormingFunction)
     {E F : Type u}
     [NormedAddCommGroup E] [InnerProductSpace 𝕜 E] [CompleteSpace E]
@@ -281,7 +282,6 @@ theorem SymmetricNormingFunction.mem_add
 
 /-- Membership in a source ideal is closed under finite sums. -/
 theorem SymmetricNormingFunction.mem_finset_sum
-    [ContinuousLinearMap.HasMinMaxLowerBoundEverywhere.{u, u} 𝕜]
     (N : SymmetricNormingFunction)
     {E F : Type u}
     [NormedAddCommGroup E] [InnerProductSpace 𝕜 E] [CompleteSpace E]
@@ -307,7 +307,6 @@ theorem SymmetricNormingFunction.mem_finset_sum
 /-- The multiplicity-`m` complementary inclusion belongs to every source
 unitarily invariant ideal. -/
 theorem finiteMultiplicityComplementMap_mem
-    [ContinuousLinearMap.HasMinMaxLowerBoundEverywhere.{u, u} 𝕜]
     (m : ℕ) (N : SymmetricNormingFunction) :
     N.Mem (finiteMultiplicityComplementMap (𝕜 := 𝕜) m) := by
   rw [finiteMultiplicityComplementMap_eq_sum_coordinateColumn]
@@ -323,7 +322,6 @@ theorem finiteMultiplicityComplementMap_mem
 
 /-- The sine block belongs to every source ideal. -/
 theorem finiteMultiplicitySineBlock_mem
-    [ContinuousLinearMap.HasMinMaxLowerBoundEverywhere.{u, u} 𝕜]
     (m : ℕ) (theta : ℝ) (N : SymmetricNormingFunction) :
     N.Mem (finiteMultiplicitySineBlock (𝕜 := 𝕜) m theta) := by
   unfold finiteMultiplicitySineBlock SymmetricNormingFunction.Mem
@@ -334,7 +332,6 @@ theorem finiteMultiplicitySineBlock_mem
 /-- Equality in Theorem 6.1 at every finite multiplicity and simultaneously
 for every normalized source norm. -/
 theorem Theorem6_1_finiteMultiplicity_equality_every_norm
-    [ContinuousLinearMap.HasMinMaxLowerBoundEverywhere.{u, u} 𝕜]
     (m : ℕ) (N : SymmetricNormingFunction)
     {delta theta : ℝ} (hdelta : 0 ≤ delta) :
     N.gauge (finiteMultiplicityResidual (𝕜 := 𝕜) m delta theta) =

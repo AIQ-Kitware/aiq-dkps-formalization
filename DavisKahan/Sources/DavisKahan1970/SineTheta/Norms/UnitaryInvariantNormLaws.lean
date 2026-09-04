@@ -4,6 +4,8 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
 import DavisKahan.Sources.DavisKahan1970.SineTheta.Norms.UnitaryInvariantNorm
+import DavisKahan.Sylvester.ScalarTransport
+import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.ScalarTransport
 
 /-!
 # Operator laws for the source-defined unitarily invariant norms
@@ -84,7 +86,7 @@ theorem extendedGauge_smul (N : SymmetricNormingFunction)
 The Ky Fan triangle inequality in infinite dimensions is proved from the min--max lower
 bound, so what is carried here is the class asserting that bound over the scalar field,
 `ContinuousLinearMap.HasMinMaxLowerBoundEverywhere`, instantiated for `ℝ` and `ℂ`. -/
-theorem prefixGauge_add_le [ContinuousLinearMap.HasMinMaxLowerBoundEverywhere.{u, v} 𝕜]
+theorem prefixGauge_add_le
     (N : SymmetricNormingFunction)
     (n : ℕ) (A B : E →L[𝕜] F) :
     N.prefixGauge n (A + B) ≤ N.prefixGauge n A + N.prefixGauge n B := by
@@ -128,7 +130,7 @@ theorem prefixGauge_add_le [ContinuousLinearMap.HasMinMaxLowerBoundEverywhere.{u
   exact hmajor.trans (N.finiteGauge_add_le _ _)
 
 /-- Triangle inequality of the canonical infinite-dimensional extension. -/
-theorem extendedGauge_add_le [ContinuousLinearMap.HasMinMaxLowerBoundEverywhere.{u, v} 𝕜]
+theorem extendedGauge_add_le
     (N : SymmetricNormingFunction)
     (A B : E →L[𝕜] F) :
     N.extendedGauge (A + B) ≤ N.extendedGauge A + N.extendedGauge B := by
@@ -290,7 +292,7 @@ theorem gauge_smul (N : SymmetricNormingFunction)
     ENNReal.toReal_ofReal (norm_nonneg c)]
 
 /-- The real gauge is subadditive on its canonical ideal. -/
-theorem gauge_add_le [ContinuousLinearMap.HasMinMaxLowerBoundEverywhere.{u, v} 𝕜]
+theorem gauge_add_le
     (N : SymmetricNormingFunction)
     {A B : E →L[𝕜] F} (hA : N.Mem A) (hB : N.Mem B) :
     N.gauge (A + B) ≤ N.gauge A + N.gauge B := by
