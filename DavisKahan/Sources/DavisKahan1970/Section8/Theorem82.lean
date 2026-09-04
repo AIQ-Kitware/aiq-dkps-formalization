@@ -7,6 +7,7 @@ import DavisKahan.Sources.DavisKahan1970.Section8.Theorem82Branch
 import DavisKahan.Geometry.Halmos.CrossedDefectGap
 import DavisKahan.Sources.DavisKahan1970.SinTwoThetaAmbient
 import ForTauCeti.Analysis.InnerProductSpace.AngleGeometry
+import DavisKahan.DoubleAngle.DirectedAngleGeneric
 
 open TauCeti.DavisKahan.Angle
 
@@ -386,8 +387,8 @@ statement below claims it.
 printed constant needs the singular-value identification of `sin 2Θ₀` with
 `sin 2Θ₁` -- the paper's `S_0`/`S_1` discussion, i.e. the Halmos generic
 decomposition.  It does not.  The printed conclusion is about `Θ₀`, so the route
-that works never forms the ambient sum at all: state the conclusion at the
-canonical directed block `sinTwoThetaIdealBlock Q P`, and the constant `2` comes
+that works never forms the ambient sum at all: prove the estimate at the
+directed block `sinTwoThetaIdealBlock Q P`, and the constant `2` comes
 out of `sinTwoTheta_directed_boundedResidual_blockRepresentative_symmetricNorming_complex`'s own chain -- the paper
 projection block dominates `δ` times the ideal block, the block defect costs the
 factor `2`, and the residual is extended by zero along `P.subtypeL.adjoint`,
@@ -398,7 +399,10 @@ norm.  No generic decomposition is used anywhere in it.
 `theorem8_2_sinTwoTheta_residual_all_kyFan` at every Ky Fan level and
 `theorem8_2_sinTwoTheta_residual_symmetricNorming` at every norm in the
 paper's own class, both at the directed `sin 2Θ₀` and both with the printed
-factor `2`.  The negative knowledge that survives is exactly one sentence: the
+factor `2`.  The block is the proof's statement;
+`theorem8_2_sinTwoTheta_residual_directedAngle_symmetricNorming` moves it onto
+the paper's own trial-side directed angle, which is a theorem rather than a
+rewriting -- see its docstring.  The negative knowledge that survives is exactly one sentence: the
 **ambient** `sin 2Θ` reading of the residual alternative does not reach the
 printed constant at a general symmetric gauge, and is available only at the
 operator norm. -/
@@ -502,13 +506,15 @@ theorem theorem8_2_sinTwoTheta_residual_all_kyFan
     (A := A + K) (U := Q) (V := P)
     hAKsa hQred hdelta hab hUspec hUspec' (compressOperator P A)
 
-/-- **Theorem 8.2's printed residual alternative for every source unitarily
-invariant norm.**
+/-- **Theorem 8.2's residual alternative for every source unitarily invariant
+norm, in the proof's block form.**
 
-The conclusion is the directed canonical `sin 2Θ₀` block, not the ambient
-`sin 2Θ`: at general symmetric gauges the latter carries the same nonzero
-singular data twice.  The source-level residual theorem performs the paper's
-matching-multiplicity argument and therefore retains the printed factor `2`. -/
+The conclusion is on `sinTwoThetaIdealBlock Q P`, the one-sided block the
+estimate is actually proved about -- not the ambient `sin 2Θ`, which at general
+symmetric gauges carries the same nonzero singular data twice, and not the
+paper's directed angle, which is an *ordered* object in the opposite ordering.
+`theorem8_2_sinTwoTheta_residual_directedAngle_symmetricNorming` is the
+source-facing statement, and it is what this row's canonical evidence names. -/
 theorem theorem8_2_sinTwoTheta_residual_symmetricNorming
     (N : ExactSinTheta.SymmetricNormingFunction)
     {A K : H →L[ℂ] H} (hA : IsSelfAdjointOperator A) (hK : IsSelfAdjointOperator K)
@@ -535,6 +541,40 @@ theorem theorem8_2_sinTwoTheta_residual_symmetricNorming
   exact DavisKahan1970.sinTwoTheta_directed_boundedResidual_blockRepresentative_symmetricNorming_complex
     (A := A + K) (U := Q) (V := P) N hAKsa hQred hdelta hab
     hUspec hUspec' (compressOperator P A) hRmem
+
+/-- **Theorem 8.2's printed residual alternative, on the paper's own directed
+angle.**
+
+`δ N(sin 2Θ₀) ≤ 2 N(R)` with the conclusion on
+`Angle.directedSinTwoAngleOperator P Q` -- the **trial-side** ordering, `P` the
+trial subspace carrying the residual and `Q` the subspace whose two blocks the
+printed gap separates.  That is what `‖sin Θ₀‖ = ‖Q^⊥ P‖ = ‖Q^⊥ E₀‖` names in
+Section 1.
+
+`theorem8_2_sinTwoTheta_residual_symmetricNorming` above proves the same estimate
+about `sinTwoThetaIdealBlock Q P`, which is the proof's one-sided block rather
+than an angle, and in the opposite ordering of the pair.  Crossing that gap is a
+theorem and not a renaming: the two ordered directed *sines* have different
+approximation numbers in general.  The doubled sines do not, which is
+`Angle.directedSinTwoAngleOperator_hasSameApproximationNumbers_swap`, and the
+composite bridge used here is
+`Angle.sinTwoThetaIdealBlock_hasSameApproximationNumbers_trialSide`. -/
+theorem theorem8_2_sinTwoTheta_residual_directedAngle_symmetricNorming
+    (N : ExactSinTheta.SymmetricNormingFunction)
+    {A K : H →L[ℂ] H} (hA : IsSelfAdjointOperator A) (hK : IsSelfAdjointOperator K)
+    {P Q : Submodule ℂ H} [P.HasOrthogonalProjection] [Q.HasOrthogonalProjection]
+    {alpha beta delta : ℝ} (hdelta : 0 < delta) (hab : beta ≤ alpha)
+    (hQ : Foundation.SpectrumIn (A + K) Q (Set.Icc beta alpha))
+    (hQperp : Foundation.SpectrumIn (A + K) Qᗮ (gapExterior beta alpha delta))
+    (hPred : Reduces A P)
+    (hRmem : N.Mem (residual (A + K) P.subtypeL (compressOperator P A))) :
+    N.Mem (Angle.directedSinTwoAngleOperator P Q) ∧
+      delta * N.gauge (Angle.directedSinTwoAngleOperator P Q) ≤
+        2 * N.gauge (residual (A + K) P.subtypeL (compressOperator P A)) := by
+  obtain ⟨hmem, hle⟩ :=
+    theorem8_2_sinTwoTheta_residual_symmetricNorming N hA hK hdelta hab hQ hQperp hPred hRmem
+  refine ⟨(Angle.mem_directedSinTwoAngleOperator_trialSide_iff _ _ N).mpr hmem, ?_⟩
+  rwa [Angle.gauge_directedSinTwoAngleOperator_trialSide]
 
 /-! ### 3. The printed conclusion `Θ < π/4` -/
 

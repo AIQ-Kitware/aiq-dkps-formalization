@@ -426,6 +426,11 @@ Status: **TERMINAL EXACT**.
 #check @TauCeti.DavisKahan1970.corollary3_1_compact_defectBlock_angleList_classification
 #check @TauCeti.DavisKahan1970.corollary3_1_compact_classification_real
 #check @TauCeti.DavisKahan1970.corollary3_1_realization
+#check @TauCeti.DavisKahan1970.corollary3_1_realization_zeroMultiplicity
+#check @TauCeti.DavisKahan1970.corollary3_1_prescribedAngleSequence_classification
+#check @TauCeti.DavisKahan1970.corollary3_1_prescribedAngleSequence_classification_real
+#check @TauCeti.DavisKahan1970.angleSequence_eq_of_angleList_eq
+#check @TauCeti.DavisKahan1970.angle_eq_of_sin_sq_eq
 
 /-! ## DK-3.5-prop: Angle commutation and eigenspace geometry
 
@@ -550,6 +555,8 @@ Status: **TERMINAL EXACT**.
 
 #check @TauCeti.DavisKahan1970.banach_sylvester_lower_bound_uiNorm
 #check @TauCeti.DavisKahan1970.banach_sylvester_lower_bound_exact
+#check @TauCeti.DavisKahan1970.theorem5_1_banach_sylvester_banachScope
+#check @TauCeti.DavisKahan1970.theorem5_1_banach_sylvester_banachScope_ofProperties
 #check @TauCeti.DavisKahan1970.banach_sylvester_lower_bound_interchanged
 #check @TauCeti.DavisKahan1970.banach_sylvester_lower_bound_interchanged_exact
 #check @TauCeti.DavisKahan1970.banach_sylvester_lower_bound_unboundedA
@@ -562,6 +569,7 @@ Status: **TERMINAL EXACT**.
 
 #check @TauCeti.DavisKahan1970.theorem5_2_symmetricNorming_complex
 #check @TauCeti.DavisKahan1970.theorem5_2_symmetricNorming_real
+#check @TauCeti.DavisKahan1970.theorem5_2_orderedGap_symmetricNorming_real
 #check @TauCeti.DavisKahan1970.Theorem5_2
 #check @TauCeti.DavisKahan.Sylvester.davisKahan1970_sylvester_real
 #check @TauCeti.DavisKahan1970.Audits.theorem5_2_real_ordered_sourceAudit
@@ -691,6 +699,8 @@ Status: **TERMINAL EXACT**.
 #check @TauCeti.DavisKahan1970.Section8.theorem8_2_branch_directed_complex
 #check @TauCeti.DavisKahan1970.Section8.theorem8_2_sinTwoTheta_perturbation_symmetricNorming
 #check @TauCeti.DavisKahan1970.Section8.theorem8_2_sinTwoTheta_residual_symmetricNorming
+#check @TauCeti.DavisKahan1970.Section8.theorem8_2_sinTwoTheta_residual_directedAngle_symmetricNorming
+#check @TauCeti.DavisKahan1970.Section8.theorem8_2_sinTwoTheta_residual_directedAngle_real_symmetricNorming
 #check @TauCeti.DavisKahan1970.Section8.theorem8_2_branch_directed_real
 #check @TauCeti.DavisKahan1970.Section8.theorem8_2_sinTwoTheta_perturbation_real_symmetricNorming
 #check @TauCeti.DavisKahan1970.Section8.theorem8_2_sinTwoTheta_residual_real_symmetricNorming

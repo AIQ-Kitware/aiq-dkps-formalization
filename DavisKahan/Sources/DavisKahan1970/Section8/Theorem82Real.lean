@@ -598,10 +598,12 @@ theorem theorem8_2_sinTwoTheta_perturbation_real_symmetricNorming
 /-- **The `sin 2Θ₀` estimate at Theorem 8.2's hypotheses, residual form, over
 a REAL Hilbert space, for every source unitarily invariant norm.**
 
-This is the real source-fidelity counterpart of
-`theorem8_2_sinTwoTheta_residual_symmetricNorming`:
+This is the real counterpart of
+`theorem8_2_sinTwoTheta_residual_symmetricNorming`, in the same block form:
 
-`δ N(sin 2Θ₀) ≤ 2 N(R)`.
+`δ N(sin 2Θ₀) ≤ 2 N(R)` read on `sinTwoThetaIdealBlock Q P`.
+`theorem8_2_sinTwoTheta_residual_directedAngle_real_symmetricNorming` is the
+source-facing statement, on the paper's own trial-side directed angle.
 
 The analytic estimate is not reproved over `ℝ`.  Complexification carries the
 directed doubled-angle block exactly, while `residual_complexify_equiv` carries
@@ -661,6 +663,31 @@ theorem theorem8_2_sinTwoTheta_residual_real_symmetricNorming
         ExactSinTheta.SymmetricNormingFunction.gauge_complexify N _
   rw [ExactSinTheta.SymmetricNormingFunction.gauge_complexify, hResidualGauge] at hboundC
   exact hboundC
+
+/-- **Theorem 8.2's printed residual alternative over `ℝ`, on the paper's own
+directed angle.**
+
+The real sibling of
+`theorem8_2_sinTwoTheta_residual_directedAngle_symmetricNorming`: same residual,
+same factor two, and the same trial-side ordering
+`Angle.directedSinTwoAngleOperator P Q`, with `P` the trial subspace and `Q` the
+subspace whose blocks the gap separates. -/
+theorem theorem8_2_sinTwoTheta_residual_directedAngle_real_symmetricNorming
+    (N : ExactSinTheta.SymmetricNormingFunction)
+    {A K : E →L[ℝ] E} (hA : IsSelfAdjointOperator A) (hK : IsSelfAdjointOperator K)
+    {P Q : Submodule ℝ E} [P.HasOrthogonalProjection] [Q.HasOrthogonalProjection]
+    {alpha beta delta : ℝ} (hdelta : 0 < delta) (hab : beta ≤ alpha)
+    (hQ : Foundation.SpectrumIn (A + K) Q (Set.Icc beta alpha))
+    (hQperp : Foundation.SpectrumIn (A + K) Qᗮ (gapExterior beta alpha delta))
+    (hPred : A.Reduces P)
+    (hRmem : N.Mem (residual (A + K) P.subtypeL (compressOperator P A))) :
+    N.Mem (Angle.directedSinTwoAngleOperator P Q) ∧
+      delta * N.gauge (Angle.directedSinTwoAngleOperator P Q) ≤
+        2 * N.gauge (residual (A + K) P.subtypeL (compressOperator P A)) := by
+  obtain ⟨hmem, hle⟩ :=
+    theorem8_2_sinTwoTheta_residual_real_symmetricNorming N hA hK hdelta hab hQ hQperp hPred hRmem
+  refine ⟨(Angle.mem_directedSinTwoAngleOperator_trialSide_iff _ _ N).mpr hmem, ?_⟩
+  rwa [Angle.gauge_directedSinTwoAngleOperator_trialSide]
 
 /-! ### 6. The whole printed theorem over `ℝ` -/
 
