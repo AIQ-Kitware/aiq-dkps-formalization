@@ -200,6 +200,134 @@ open TauCeti.ScalarTransport
 
 end Transport
 
+/-! ## The directed angle
+
+The paper's *directed* angle between an ordered pair of subspaces, as opposed to the ambient
+angle above.  `sin Θ₀` and `cos Θ₀` are the moduli of the two cross-projections `Uᗮ ← U` and
+`V ← U`, they commute, and `sin 2Θ₀` is `2 sin Θ₀ cos Θ₀` -- the ordinary double-angle formula,
+usable because the two factors commute.
+
+Nothing here is field-specific either, and the three definitions are the direct ones.  Over `ℂ`
+they *are* `directedSinAngleOperatorC`, `directedCosAngleOperatorC` and
+`directedSinTwoAngleOperatorC`; over `ℝ` the development keeps the directed operators in the
+canonical complexification (`Real.directedSinTwoAngleOperatorRC` and its siblings are
+*defined* as the complex ones of the complexified pair), so the identification there is stated
+through `complexify`. -/
+
+section Directed
+
+/-- **The paper's directed `sin Θ₀`** between an ordered pair of closed subspaces, at an
+arbitrary `RCLike` field: the modulus of the cross-projection `U → Uᗮ` through `V`. -/
+def directedSinAngleOperator (U V : Submodule 𝕜 E)
+    [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] : E →L[𝕜] E :=
+  ContinuousLinearMap.modulus (Vᗮ.starProjection ∘L U.starProjection)
+
+/-- **The paper's directed `cos Θ₀`**, at an arbitrary `RCLike` field. -/
+def directedCosAngleOperator (U V : Submodule 𝕜 E)
+    [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] : E →L[𝕜] E :=
+  ContinuousLinearMap.modulus (V.starProjection ∘L U.starProjection)
+
+/-- **The paper's directed `sin 2Θ₀`**, at an arbitrary `RCLike` field: `2 sin Θ₀ cos Θ₀`
+through the commuting directed sine and cosine. -/
+def directedSinTwoAngleOperator (U V : Submodule 𝕜 E)
+    [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] : E →L[𝕜] E :=
+  (2 : ℝ) • (directedSinAngleOperator U V * directedCosAngleOperator U V)
+
+section DirectedComplex
+
+variable {F : Type v} [NormedAddCommGroup F] [InnerProductSpace ℂ F] [CompleteSpace F]
+variable (U V : Submodule ℂ F) [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
+
+@[simp] theorem directedSinAngleOperator_complex :
+    directedSinAngleOperator U V = directedSinAngleOperatorC U V := rfl
+
+@[simp] theorem directedCosAngleOperator_complex :
+    directedCosAngleOperator U V = directedCosAngleOperatorC U V := rfl
+
+@[simp] theorem directedSinTwoAngleOperator_complex :
+    directedSinTwoAngleOperator U V = directedSinTwoAngleOperatorC U V := rfl
+
+end DirectedComplex
+
+section DirectedReal
+
+variable {F : Type v} [NormedAddCommGroup F] [InnerProductSpace ℝ F] [CompleteSpace F]
+variable (U V : Submodule ℝ F) [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
+
+@[simp] theorem complexify_directedSinAngleOperator :
+    complexify (directedSinAngleOperator U V) = Real.directedSinAngleOperatorRC U V := by
+  change complexify (ContinuousLinearMap.modulus (Vᗮ.starProjection ∘L U.starProjection)) =
+    ContinuousLinearMap.modulus
+      ((complexifySubmodule V)ᗮ.starProjection ∘L (complexifySubmodule U).starProjection)
+  rw [complexify_modulus, complexify_comp,
+    Submodule.starProjection_congr (complexifySubmodule_orthogonal V).symm,
+    starProjection_complexifySubmodule, starProjection_complexifySubmodule]
+
+@[simp] theorem complexify_directedCosAngleOperator :
+    complexify (directedCosAngleOperator U V) = Real.directedCosAngleOperatorRC U V := by
+  change complexify (ContinuousLinearMap.modulus (V.starProjection ∘L U.starProjection)) =
+    ContinuousLinearMap.modulus
+      ((complexifySubmodule V).starProjection ∘L (complexifySubmodule U).starProjection)
+  rw [complexify_modulus, complexify_comp, starProjection_complexifySubmodule,
+    starProjection_complexifySubmodule]
+
+@[simp] theorem complexify_directedSinTwoAngleOperator :
+    complexify (directedSinTwoAngleOperator U V) = Real.directedSinTwoAngleOperatorRC U V := by
+  have hl : directedSinTwoAngleOperator U V =
+      (2 : ℝ) • (directedSinAngleOperator U V * directedCosAngleOperator U V) := rfl
+  have hmul : complexify (directedSinAngleOperator U V * directedCosAngleOperator U V) =
+      complexify (directedSinAngleOperator U V) * complexify (directedCosAngleOperator U V) :=
+    complexify_comp _ _
+  rw [hl, complexify_real_smul, hmul, complexify_directedSinAngleOperator,
+    complexify_directedCosAngleOperator]
+  rfl
+
+end DirectedReal
+
+section DirectedTransport
+
+variable {𝕂 : Type w} [RCLike 𝕂] {e : RCLikeIso 𝕜 𝕂}
+
+open TauCeti.ScalarTransport
+
+@[simp] theorem clm_directedSinAngleOperator :
+    clm (e := e) (directedSinAngleOperator U V) =
+      directedSinAngleOperator (ScalarTransport.submodule (e := e) U)
+        (ScalarTransport.submodule (e := e) V) := by
+  change clm (e := e) (ContinuousLinearMap.modulus (Vᗮ.starProjection ∘L U.starProjection)) =
+    ContinuousLinearMap.modulus
+      ((ScalarTransport.submodule (e := e) V)ᗮ.starProjection ∘L
+        (ScalarTransport.submodule (e := e) U).starProjection)
+  rw [clm_modulus,
+    Submodule.starProjection_congr (ScalarTransport.submodule_orthogonal (e := e) V),
+    starProjection_clm, starProjection_clm]
+  rfl
+
+@[simp] theorem clm_directedCosAngleOperator :
+    clm (e := e) (directedCosAngleOperator U V) =
+      directedCosAngleOperator (ScalarTransport.submodule (e := e) U)
+        (ScalarTransport.submodule (e := e) V) := by
+  change clm (e := e) (ContinuousLinearMap.modulus (V.starProjection ∘L U.starProjection)) =
+    ContinuousLinearMap.modulus
+      ((ScalarTransport.submodule (e := e) V).starProjection ∘L
+        (ScalarTransport.submodule (e := e) U).starProjection)
+  rw [clm_modulus, starProjection_clm, starProjection_clm]
+  rfl
+
+@[simp] theorem clm_directedSinTwoAngleOperator :
+    clm (e := e) (directedSinTwoAngleOperator U V) =
+      directedSinTwoAngleOperator (ScalarTransport.submodule (e := e) U)
+        (ScalarTransport.submodule (e := e) V) := by
+  have hl : directedSinTwoAngleOperator U V =
+      (2 : ℝ) • (directedSinAngleOperator U V * directedCosAngleOperator U V) := rfl
+  rw [hl, clm_real_smul, ScalarTransport.clm_mul, clm_directedSinAngleOperator,
+    clm_directedCosAngleOperator]
+  rfl
+
+end DirectedTransport
+
+end Directed
+
 /-! ## The reflection form of `sin 2Θ`
 
 `sin 2Θ` is the modulus of the difference between the projection onto `U` and the projection

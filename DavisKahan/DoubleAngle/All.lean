@@ -5,6 +5,7 @@ Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
 import DavisKahan.DoubleAngle.AngleTransport
 import DavisKahan.DoubleAngle.CompatibilitySinTwoTheta
+import DavisKahan.DoubleAngle.DirectedAngleGeneric
 import DavisKahan.DoubleAngle.KyFanOrthonormal
 import DavisKahan.DoubleAngle.RealAngleIdentification
 import DavisKahan.DoubleAngle.RealUnboundedIdeal

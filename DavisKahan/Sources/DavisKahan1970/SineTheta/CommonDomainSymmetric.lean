@@ -50,19 +50,28 @@ structure field: adding it would strengthen the source hypotheses.
 ## Scalar scope
 
 Standing assumption 1 of the transcription allows the ambient space to be real or complex,
-so the whole development below is stated over `[RCLike 𝕜]`.  Two things resisted, and both
-are recorded here rather than worked around silently.
+so the whole development below is stated over `[RCLike 𝕜]`.  Two things resisted when this
+module was written; both have since been resolved one layer down, and the record of what
+they were is kept because it explains the shape of the statements.
 
 *The Sylvester estimate.*  `davisKahan1970_sylvester_complex` is hardwired to `ℂ` at every
 level beneath it, and `real_unbounded_sylvester_kyFan` is hardwired to `ℝ`; no
-`RCLike`-generic form exists, and none can be obtained by case analysis, since `RCLike`
-offers no discriminator between its two models.  The estimate is therefore taken as a
-property of the scalar field, `HasUnboundedSylvesterKyFan`, exactly as the min--max lower
-bound already is.  Both fields are instances, so at `ℝ` and at `ℂ` the binder is discharged
-by instance search and nothing is assumed that was not already proved.
+`RCLike`-generic form is proved directly.  The estimate is therefore named as a property of
+the scalar field, `HasUnboundedSylvesterKyFan`, exactly as the min--max lower bound already
+is.  This file said until 2026-09-03 that the two fixed-field proofs could not be combined
+"since `RCLike` offers no discriminator between its two models"; that was wrong.
+`RCLike.I_eq_zero_or_im_I_eq_one` is the discriminator, `Sylvester/ScalarTransport.lean`
+transports the estimate along the resulting field isomorphism, and the class is an instance
+at **every** `RCLike` field.  Nothing below takes it as a binder.
 
-*The conclusion operator.*  `sinAngleOperatorC` is `cfc Real.sin` of the **complex**
-operator angle, and this repository builds no real continuous functional calculus.  So the
+*The conclusion operator.*  `sinAngleOperatorC` was `cfc Real.arcsin` of the **complex**
+operator angle, and at the time this repository built no real continuous functional
+calculus.  It now does, at every `RCLike` field
+(`ForTauCeti/Analysis/RCLike/ScalarTransportFunctionalCalculus.lean`), and
+`TauCeti.DavisKahan.Angle.sinAngleOperator` is the scalar-generic angle.  The statements
+below still conclude on `crossSineSum U V`, which is not a defect: the two have the same
+complete approximation-singular-value sequence, which is all a unitarily invariant norm can
+see, and the block form is what the proof produces.  So the
 `RCLike`-generic conclusion is carried by `crossSineSum U V`, which
 `crossSineSum_same_projectionDiff` gives exactly the complete
 approximation-singular-value sequence of `P_V - P_U` -- the paper's whole-space `sin Θ`
@@ -308,7 +317,7 @@ def reverseResidualBlock (P : CommonDomainSymmetricSinThetaProblem U V) :
   V.starProjection ∘L P.perturbation ∘L Uᗮ.starProjection
 
 /-- First one-sided estimate simultaneously for every finite Ky Fan gauge. -/
-theorem forward_all_kyFan [HasUnboundedSylvesterKyFan.{u, v} 𝕜]
+theorem forward_all_kyFan
     (P : CommonDomainSymmetricSinThetaProblem U V) :
     ∀ k,
       P.gap * kyFanApproximationGauge k P.forwardSineBlock ≤
@@ -362,7 +371,7 @@ theorem forward_all_kyFan [HasUnboundedSylvesterKyFan.{u, v} 𝕜]
   exact hraw
 
 /-- Reversed one-sided estimate simultaneously for every finite Ky Fan gauge. -/
-theorem reverse_all_kyFan [HasUnboundedSylvesterKyFan.{u, v} 𝕜]
+theorem reverse_all_kyFan
     (P : CommonDomainSymmetricSinThetaProblem U V) :
     ∀ k,
       P.gap * kyFanApproximationGauge k P.reverseSineBlock ≤

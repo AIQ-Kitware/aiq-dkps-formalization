@@ -113,8 +113,10 @@ with the bounded-interval branch spelled out, and
 `DavisKahan1970.sinTheta_unbounded_formGap_symmetricNorming_rclike` is it again with the
 structural hypotheses bundled as `IsTrialResidual` and `IsExactSpectralDecomposition`.
 
-The two class hypotheses are analytic capabilities of the scalar field, proved
-for `R` and `C`; they are present only because `RCLike` is an open class. -/
+`[RCLike 𝕜]` is the whole scalar hypothesis.  This theorem carried two capability
+binders until 2026-09-03; both classes have unconditional instances at every
+`RCLike` field, so they were never hypotheses of the mathematics and instance
+search supplies them. -/
 theorem sinTheta_unbounded_formGap_symmetricNorming_ofComponents_rclike
     (N : SymmetricNormingFunction)
     (A : E →ₗ.[𝕜] E)

@@ -645,9 +645,17 @@ real pair read in the complexification, which is where the tree keeps it — the
 is no real directed spelling, only the ambient `sinTwoAngleOperatorR`.  As
 in the complex case the directed operator is the block's partner: the block is
 one-sided and carries each principal angle once, where an ambient angle object
-carries it twice.  Turning this into an equality of *real* `SymmetricNormingFunction`
-gauges would need a real directed `sin 2Θ` operator, which would be a second
-spelling of an existing concept and is deliberately not introduced here. -/
+carries it twice.
+
+Superseded 2026-09-04, and the reasoning above no longer applies.  This docstring
+said an equality of *real* `SymmetricNormingFunction` gauges "would need a real
+directed `sin 2Θ` operator, which would be a second spelling of an existing
+concept".  `TauCeti.DavisKahan.Angle.directedSinTwoAngleOperator` is that operator
+and is not a second spelling: it is the single definition at every `RCLike` field,
+of which `directedSinTwoAngleOperatorC` is the instance at `ℂ` and
+`Real.directedSinTwoAngleOperatorRC` the complexification of the instance at `ℝ`.
+`DoubleAngle/DirectedAngleGeneric.lean` proves the gauge equality there, at every
+field at once. -/
 theorem approximationSingularValue_sinTwoThetaIdealBlock_real
     (U V : Submodule ℝ Er) [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
     (n : ℕ) :
