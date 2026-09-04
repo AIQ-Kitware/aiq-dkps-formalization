@@ -4,6 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, OpenAI GPT-5.6 Sol
 -/
 import DavisKahan.Geometry.Angle.Proposition35Exponential
+import ForTauCeti.Analysis.RCLike.ScalarTransportFunctionalCalculus
 
 open TauCeti.DavisKahan.Sylvester
 
@@ -71,14 +72,23 @@ alias proposition3_5_directRotation := section3DirectRotation
 /-- The paper's quarter turn `J`, zero on the zero-angle space. -/
 alias proposition3_5_quarterTurn := section3QuarterTurn
 
+/-! The real functional calculus on `H →L[𝕜] H`, and the two scalar-action facts Mathlib
+pairs it with, are theorems at every `RCLike` field
+(`ContinuousLinearMap.continuousFunctionalCalculusReal`), so they are activated here rather
+than quantified over.  Until 2026-09-04 they were section `variable`s and explicit binders, so
+every source-facing theorem in this file asked its caller for three instances that instance
+search finds.  They are `local instance 100` rather than global because a global
+`Algebra ℝ (E →L[𝕜] E)` makes Lean's `•` elaborator drop an author-written `((r : ℝ) : 𝕜) •`
+coercion. -/
+attribute [local instance 100] ContinuousLinearMap.realAlgebra
+  ContinuousLinearMap.realIsScalarTower ContinuousLinearMap.continuousFunctionalCalculusReal
+
 /-- The assembled regular-and-defect quarter-turn candidate for a general pair.
 The two summands act on orthogonal blocks. -/
 noncomputable def corollary3_2_quarterTurn
     {𝕜 : Type*} [RCLike 𝕜]
     {H : Type*} [NormedAddCommGroup H] [InnerProductSpace 𝕜 H]
     [CompleteSpace H]
-    [Algebra ℝ (H →L[𝕜] H)] [IsScalarTower ℝ 𝕜 (H →L[𝕜] H)]
-    [ContinuousFunctionalCalculus ℝ (H →L[𝕜] H) IsSelfAdjoint]
     (U V : Submodule 𝕜 H) [U.HasOrthogonalProjection]
     [V.HasOrthogonalProjection]
     (J : halmosSourceDefect U V ≃ₗᵢ[𝕜] halmosTargetDefect U V) :
@@ -93,8 +103,6 @@ section Generic
 variable {𝕜 : Type*} [RCLike 𝕜]
 variable {H : Type*} [NormedAddCommGroup H] [InnerProductSpace 𝕜 H]
   [CompleteSpace H]
-variable [Algebra ℝ (H →L[𝕜] H)] [IsScalarTower ℝ 𝕜 (H →L[𝕜] H)]
-  [ContinuousFunctionalCalculus ℝ (H →L[𝕜] H) IsSelfAdjoint]
 variable (U V : Submodule 𝕜 H) [U.HasOrthogonalProjection]
   [V.HasOrthogonalProjection]
 

@@ -7,6 +7,7 @@ Authors: Jon Crall, OpenAI GPT-5.6 Sol, OpenAI GPT-5.6 Thinking, Claude Opus 5
 import DavisKahan.Geometry.Halmos.BilateralShiftExample
 import DavisKahan.Geometry.Polar.Section3Nonacute
 import ForTauCeti.Analysis.InnerProductSpace.RealContinuousFunctionalCalculus
+import ForTauCeti.Analysis.RCLike.ScalarTransportFunctionalCalculus
 
 open TauCeti.DavisKahan.Sylvester
 
@@ -60,8 +61,16 @@ variable {H : Type u} [NormedAddCommGroup H] [InnerProductSpace 𝕜 H]
   [CompleteSpace H]
 variable (U V : Submodule 𝕜 H) [U.HasOrthogonalProjection]
   [V.HasOrthogonalProjection]
-variable [Algebra ℝ (H →L[𝕜] H)] [IsScalarTower ℝ 𝕜 (H →L[𝕜] H)]
-  [ContinuousFunctionalCalculus ℝ (H →L[𝕜] H) IsSelfAdjoint]
+/-! The real functional calculus on `H →L[𝕜] H`, and the two scalar-action facts Mathlib
+pairs it with, are theorems at every `RCLike` field
+(`ContinuousLinearMap.continuousFunctionalCalculusReal`), so they are activated here rather
+than quantified over.  Until 2026-09-04 they were section `variable`s, and every theorem in
+this section therefore asked its caller for three instances that instance search finds.  They
+are `local instance 100` rather than global because a global `Algebra ℝ (E →L[𝕜] E)` makes
+Lean's `•` elaborator drop an author-written `((r : ℝ) : 𝕜) •` coercion. -/
+attribute [local instance 100] ContinuousLinearMap.realAlgebra
+  ContinuousLinearMap.realIsScalarTower ContinuousLinearMap.continuousFunctionalCalculusReal
+
 
 /-- **Davis--Kahan 1970, Proposition 3.2.**
 
@@ -180,8 +189,9 @@ section Remark
 variable {𝕜 : Type*} [RCLike 𝕜]
 variable {H : Type u} [NormedAddCommGroup H] [InnerProductSpace 𝕜 H]
   [CompleteSpace H]
-variable [Algebra ℝ (H →L[𝕜] H)] [IsScalarTower ℝ 𝕜 (H →L[𝕜] H)]
-  [ContinuousFunctionalCalculus ℝ (H →L[𝕜] H) IsSelfAdjoint]
+attribute [local instance 100] ContinuousLinearMap.realAlgebra
+  ContinuousLinearMap.realIsScalarTower ContinuousLinearMap.continuousFunctionalCalculusReal
+
 
 /-- **Davis--Kahan 1970, the Remark after Proposition 3.2.**
 

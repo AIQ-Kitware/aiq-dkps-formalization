@@ -1824,6 +1824,8 @@
       "expected_verification": "proved_in_build",
       "tex_marker": "DK-8.2-thm",
       "review_declarations": [
+        "TauCeti.DavisKahan1970.Section8.theorem8_2_sinTwoTheta_residual_directedAngle_real_symmetricNorming",
+        "TauCeti.DavisKahan1970.Section8.theorem8_2_sinTwoTheta_residual_directedAngle_symmetricNorming",
         "TauCeti.DavisKahan1970.Section8.theorem8_2_sinTwoTheta_perturbation_symmetricNorming",
         "TauCeti.DavisKahan1970.Section8.theorem8_2_sinTwoTheta_perturbation_real_symmetricNorming",
         "TauCeti.DavisKahan1970.Section8.theorem8_2_sinTwoTheta_residual_symmetricNorming",
@@ -1836,7 +1838,7 @@
           "review_declarations": [
             "TauCeti.DavisKahan1970.Section8.theorem8_2_sinTwoTheta_perturbation_symmetricNorming",
             "TauCeti.DavisKahan1970.Section8.theorem8_2_sinTwoTheta_perturbation_real_symmetricNorming",
-            "TauCeti.DavisKahan1970.Section8.theorem8_2_sinTwoTheta_residual_symmetricNorming",
+            "TauCeti.DavisKahan1970.Section8.theorem8_2_sinTwoTheta_residual_directedAngle_symmetricNorming",
             "TauCeti.DavisKahan1970.Section8.theorem8_2_branch_directed_complex"
           ]
         }
