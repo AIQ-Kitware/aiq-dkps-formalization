@@ -8,6 +8,8 @@ import DavisKahan.InfiniteDimensional.DoubleAngle
 import DavisKahan.SpectralTheory.ReflectionRestriction
 import DavisKahan.Sources.DavisKahan1970.SineTheta.Lemma61
 import DavisKahan.Sources.DavisKahan1970.SineTheta.ProjectionBlocks
+import DavisKahan.Sylvester.ScalarTransport
+import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.ScalarTransport
 
 open TauCeti.DavisKahan.Sylvester
 
@@ -47,11 +49,10 @@ noncomputable section
 universe u v
 
 variable {𝕜 : Type u} [RCLike 𝕜]
-  [ContinuousLinearMap.HasMinMaxLowerBoundEverywhere.{u, v} 𝕜]
 variable {E : Type v} [NormedAddCommGroup E] [InnerProductSpace 𝕜 E]
   [CompleteSpace E]
 
-omit [ContinuousLinearMap.HasMinMaxLowerBoundEverywhere.{u, v} 𝕜] [CompleteSpace E] in
+omit [CompleteSpace E] in
 /-- The projection onto a mirrored subspace is the conjugated projection. -/
 private theorem starProjection_map_reflectionOperator
     (U V : Submodule 𝕜 E)
@@ -63,7 +64,6 @@ private theorem starProjection_map_reflectionOperator
   rw [Submodule.reflection_symm]
   rfl
 
-omit [ContinuousLinearMap.HasMinMaxLowerBoundEverywhere.{u, v} 𝕜] in
 /-- The reflection defect of a self-adjoint operator is self-adjoint. -/
 private theorem isSelfAdjoint_reflectionDefect
     {S : E →L[𝕜] E} (hS : IsSelfAdjoint S) (V : Submodule 𝕜 E)
@@ -77,7 +77,6 @@ private theorem isSelfAdjoint_reflectionDefect
     star_mul, hJ.star_eq, hS.star_eq]
   rfl
 
-omit [ContinuousLinearMap.HasMinMaxLowerBoundEverywhere.{u, v} 𝕜] in
 /-- The two complementary blocks of a reflection defect, read between a subspace
 and the mirror of its complement, have the same complete singular sequence. -/
 private theorem reflectedDefectBlocks_same
@@ -141,7 +140,6 @@ private theorem reflectedDefectBlocks_same
           V.reflectionOperator).approximationNumber n :=
       (hright n).symm
 
-omit [ContinuousLinearMap.HasMinMaxLowerBoundEverywhere.{u, v} 𝕜] in
 /-- The two off-diagonal blocks of a self-adjoint operator have the same
 complete singular sequence. -/
 private theorem offDiagonalBlocks_same

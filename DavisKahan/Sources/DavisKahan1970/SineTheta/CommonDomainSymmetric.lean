@@ -7,6 +7,8 @@ import DavisKahan.Sources.DavisKahan1970.SineTheta.Norms.HeterogeneousRepresenta
 import DavisKahan.Sources.DavisKahan1970.SineTheta.Symmetric
 import DavisKahan.Sources.DavisKahan1970.SineTheta.SymmetricReal
 import DavisKahan.Sylvester.ScalarGeneric
+import DavisKahan.Sylvester.ScalarTransport
+import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.ScalarTransport
 
 open TauCeti.DavisKahan.Angle
 
@@ -421,8 +423,6 @@ representative: `crossSineSum_same_projectionDiff` gives it exactly the complete
 approximation-singular-value sequence of `P_V - P_U`, which is all a unitarily invariant
 norm can see.  Over `ℂ` the literal functional-calculus form is `symmetric_all_kyFan`. -/
 theorem symmetric_all_kyFan_crossSineSum
-    [ContinuousLinearMap.HasMinMaxLowerBoundEverywhere.{u, v} 𝕜]
-    [HasUnboundedSylvesterKyFan.{u, v} 𝕜]
     (P : CommonDomainSymmetricSinThetaProblem U V) :
     ∀ k,
       P.gap * kyFanApproximationGauge k (crossSineSum U V) ≤
@@ -506,8 +506,6 @@ The conclusion is carried by the paper's whole-space sine representative; see
 `crossSineSum_normingMem_iff_and_gauge_eq` for the compiled dictionary identifying its
 singular-value sequence with the paper's. -/
 theorem result_every_unitarilyInvariantNorm_crossSineSum
-    [ContinuousLinearMap.HasMinMaxLowerBoundEverywhere.{u, v} 𝕜]
-    [HasUnboundedSylvesterKyFan.{u, v} 𝕜]
     (P : CommonDomainSymmetricSinThetaProblem U V)
     (N : SymmetricNormingFunction) (hH : N.Mem P.perturbation) :
     N.Mem (crossSineSum U V) ∧

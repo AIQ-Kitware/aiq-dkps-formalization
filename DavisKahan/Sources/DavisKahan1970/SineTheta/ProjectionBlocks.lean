@@ -6,6 +6,8 @@ Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 import ForTauCeti.Analysis.InnerProductSpace.Projection.Blocks
 import DavisKahan.OperatorIdeal.CanonicalRealView
 import DavisKahan.Sources.DavisKahan1970.SineTheta.Norms.UnitaryInvariantNorm
+import DavisKahan.Sylvester.ScalarTransport
+import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.ScalarTransport
 
 /-!
 # Projection-block lemmas from Davis--Kahan section 6
@@ -106,7 +108,6 @@ theorem diagonalPair_gauge_le
 
 /-- Lemma 6.2 simultaneously for every finite Ky Fan approximation gauge. -/
 theorem diagonalPair_all_kyFan_le
-    [ContinuousLinearMap.HasMinMaxLowerBoundEverywhere.{u, v} 𝕜]
     (U V : Submodule 𝕜 E)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
     (K : E →L[𝕜] E) :
@@ -127,7 +128,6 @@ theorem diagonalPair_all_kyFan_le
 
 /-- Literal source-norm form of Davis--Kahan Lemma 6.2. -/
 theorem diagonalPair_symmetricNorming_le
-    [ContinuousLinearMap.HasMinMaxLowerBoundEverywhere.{u, v} 𝕜]
     (N : SymmetricNormingFunction)
     (U V : Submodule 𝕜 E)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
@@ -138,7 +138,6 @@ theorem diagonalPair_symmetricNorming_le
 
 /-- Real-valued source-norm form on the canonical ideal. -/
 theorem diagonalPair_normingGauge_le
-    [ContinuousLinearMap.HasMinMaxLowerBoundEverywhere.{u, v} 𝕜]
     (N : SymmetricNormingFunction)
     (U V : Submodule 𝕜 E)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]

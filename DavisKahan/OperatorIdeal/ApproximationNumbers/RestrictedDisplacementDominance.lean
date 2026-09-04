@@ -5,6 +5,8 @@ Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
 
 import DavisKahan.OperatorIdeal.ApproximationNumbers.ScalarGeneric
+import DavisKahan.Sylvester.ScalarTransport
+import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.ScalarTransport
 
 /-!
 # Approximation-number dominance for restricted displacements
@@ -89,7 +91,6 @@ theorem restrictedDisplacement_opNorm_le
 omit [CompleteSpace E] [CompleteSpace F] in
 /-- Every fixed positive Ky Fan gauge is a direct specialization. -/
 theorem restrictedDisplacement_kyFan_le
-    [ContinuousLinearMap.HasMinMaxLowerBoundEverywhere.{u, v} 𝕜]
     {A B : E →L[𝕜] F}
     (D : RestrictedDisplacementApproximationDominance A B)
     (k : ℕ) :

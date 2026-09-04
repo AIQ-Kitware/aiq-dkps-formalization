@@ -7,6 +7,8 @@ import DavisKahan.Sources.DavisKahan1970.SineTheta.Symmetric
 import DavisKahan.Sources.DavisKahan1970.SineTheta.SymmetricReal
 import DavisKahan.Geometry.Angle.AngleFunctionalCalculus
 import DavisKahan.Sources.DavisKahan1970.SineTheta.CommonDomainSymmetric
+import DavisKahan.Sylvester.ScalarTransport
+import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.ScalarTransport
 
 open TauCeti.DavisKahan.Angle
 
@@ -368,8 +370,6 @@ bound: both are instances at `ℝ` and at `ℂ`, so at either field they are
 discharged by instance search and nothing is assumed that was not already
 proved. -/
 theorem proposition6_1_commonDomain_projectorDifference
-    [ContinuousLinearMap.HasMinMaxLowerBoundEverywhere.{u, v} 𝕜]
-    [HasUnboundedSylvesterKyFan.{u, v} 𝕜]
     (N : SymmetricNormingFunction)
     {A B : E →ₗ.[𝕜] E} (hA : IsSelfAdjoint A) (hB : IsSelfAdjoint B)
     {U V : Submodule 𝕜 E} [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]

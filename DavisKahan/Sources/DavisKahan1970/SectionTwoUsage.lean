@@ -4,6 +4,8 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, Claude Opus 5
 -/
 import DavisKahan.Sources.DavisKahan1970.SectionTwo
+import DavisKahan.Sylvester.ScalarTransport
+import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.ScalarTransport
 
 open TauCeti.DavisKahan.Angle
 
@@ -115,8 +117,6 @@ assembled by hand.  The two class hypotheses are the field capabilities, which
 `ℝ` and `ℂ` both satisfy by instance. -/
 theorem sinTheta_from_printed_separation_rclike
     {𝕜 : Type u₁} [RCLike 𝕜]
-    [ContinuousLinearMap.HasMinMaxLowerBoundEverywhere.{u₁, v₁} 𝕜]
-    [TauCeti.DavisKahan.Sylvester.HasUnboundedSylvesterKyFan.{u₁, v₁} 𝕜]
     {E F G H : Type v₁}
     [NormedAddCommGroup E] [InnerProductSpace 𝕜 E] [CompleteSpace E]
     [NormedAddCommGroup F] [InnerProductSpace 𝕜 F] [CompleteSpace F]

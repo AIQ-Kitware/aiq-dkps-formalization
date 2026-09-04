@@ -6,6 +6,8 @@ Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 import DavisKahan.OperatorIdeal.ApproximationNumbers.BlockSum
 import DavisKahan.Sources.DavisKahan1970.SineTheta.Norms.SubspaceSingularTransport
 import DavisKahan.Sources.DavisKahan1970.SineTheta.ProjectionBlocks
+import DavisKahan.Sylvester.ScalarTransport
+import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.ScalarTransport
 
 /-!
 # Davis--Kahan Lemma 6.1
@@ -135,7 +137,6 @@ theorem projectionBlockPair_same_blockSum
 
 /-- **Davis--Kahan 1970, Lemma 6.1, forward direction.** -/
 theorem lemma61_all_kyFan
-    [ContinuousLinearMap.HasMinMaxLowerBoundEverywhere.{u, v} 𝕜]
     (Ω Γ : Submodule 𝕜 E)
     [Ω.HasOrthogonalProjection] [Γ.HasOrthogonalProjection]
     (K Ktilde L Ltilde : E →L[𝕜] E)
@@ -165,7 +166,6 @@ theorem lemma61_all_kyFan
 
 /-- Lemma 6.1 for every source-defined unitarily invariant norm. -/
 theorem lemma61_every_unitarilyInvariantNorm
-    [ContinuousLinearMap.HasMinMaxLowerBoundEverywhere.{u, v} 𝕜]
     (N : SymmetricNormingFunction)
     (Ω Γ : Submodule 𝕜 E)
     [Ω.HasOrthogonalProjection] [Γ.HasOrthogonalProjection]
@@ -281,7 +281,6 @@ twice the corresponding prefix of either block.  This is the multiplicity
 bookkeeping used when a self-adjoint off-diagonal operator is compared with
 one rectangular corner. -/
 theorem diagonalPair_even_kyFan_eq_two_mul_of_same
-    [ContinuousLinearMap.HasMinMaxLowerBoundEverywhere.{u, v} 𝕜]
     (Ω Γ : Submodule 𝕜 E)
     [Ω.HasOrthogonalProjection] [Γ.HasOrthogonalProjection]
     (K : E →L[𝕜] E)
@@ -310,7 +309,6 @@ theorem diagonalPair_even_kyFan_eq_two_mul_of_same
 /-- The converse in Lemma 6.1 under the source paper's matching-singular-value
 hypotheses. -/
 theorem lemma61_converse
-    [ContinuousLinearMap.HasMinMaxLowerBoundEverywhere.{u, v} 𝕜]
     (Ω Γ : Submodule 𝕜 E)
     [Ω.HasOrthogonalProjection] [Γ.HasOrthogonalProjection]
     (K Ktilde L Ltilde : E →L[𝕜] E)

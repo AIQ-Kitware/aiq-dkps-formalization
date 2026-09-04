@@ -6,6 +6,8 @@ Authors: Jon Crall, Claude Opus 5
 import DavisKahan.Sources.DavisKahan1970.Section4Real
 import DavisKahan.Sources.DavisKahan1970.Section5
 import DavisKahan.Sources.DavisKahan1970.SineTheta.Norms.UnitaryInvariantNormLaws
+import DavisKahan.Sylvester.ScalarTransport
+import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.ScalarTransport
 
 open TauCeti.DavisKahan.Angle
 
@@ -75,7 +77,6 @@ The proof instantiates the hypothesis at the finite Ky Fan gauges, which are
 themselves such families, and then applies Fan dominance. -/
 theorem symmetricNorming_of_kyFanDominant
     {𝕜 : Type u} [RCLike 𝕜]
-    [ContinuousLinearMap.HasMinMaxLowerBoundEverywhere.{u, v} 𝕜]
     {E F : Type v}
     [NormedAddCommGroup E] [InnerProductSpace 𝕜 E] [CompleteSpace E]
     [NormedAddCommGroup F] [InnerProductSpace 𝕜 F] [CompleteSpace F]

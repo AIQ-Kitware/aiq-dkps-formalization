@@ -12,6 +12,8 @@ import ForTauCeti.Analysis.OperatorIdeal.Family.KyFan
 import ForTauCeti.Analysis.OperatorIdeal.Family.Schatten
 import ForTauCeti.Analysis.OperatorIdeal.Family.TraceClass
 import DavisKahan.SpectralTheory.AbstractSpectrum
+import DavisKahan.Sylvester.ScalarTransport
+import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.ScalarTransport
 
 /-!
 # Symmetric norm ideals
@@ -217,13 +219,13 @@ noncomputable def compactOperator :
 
 /-- Schatten `p` ideal.  Carries the min--max hypothesis `schattenIdealFamily`
 needs. -/
-noncomputable def schatten [ContinuousLinearMap.HasMinMaxLowerBoundEverywhere 𝕜]
+noncomputable def schatten
     {p : ℝ} (hp : 1 ≤ p) :
     SymmetricNormIdeal (𝕜 := 𝕜) (E := E) :=
   ofCanonical (TauCeti.schattenIdealFamily 𝕜 hp)
 
 /-- Trace-class ideal. -/
-noncomputable def traceClass [ContinuousLinearMap.HasMinMaxLowerBoundEverywhere 𝕜] :
+noncomputable def traceClass :
     SymmetricNormIdeal (𝕜 := 𝕜) (E := E) :=
   ofCanonical (TauCeti.traceClassIdealFamily 𝕜)
 
@@ -232,7 +234,7 @@ noncomputable def hilbertSchmidt : SymmetricNormIdeal (𝕜 := 𝕜) (E := E) :=
   ofCanonical (TauCeti.hilbertSchmidtIdealFamily 𝕜)
 
 /-- Ky Fan `k` gauge for positive `k`. -/
-noncomputable def kyFan [ContinuousLinearMap.HasMinMaxLowerBoundEverywhere 𝕜]
+noncomputable def kyFan
     (k : ℕ) (hk : 0 < k) :
     SymmetricNormIdeal (𝕜 := 𝕜) (E := E) :=
   ofCanonical (TauCeti.kyFanIdealFamily 𝕜 k hk)

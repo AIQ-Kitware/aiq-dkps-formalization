@@ -8,6 +8,8 @@ import DavisKahan.Sources.DavisKahan1970.SinTwoTheta
 import DavisKahan.Sources.DavisKahan1970.AmbientReal
 import DavisKahan.SpectralTheory.ReflectionRestriction
 import DavisKahan.Geometry.Angle.DoubleAngleFunctionalCalculus
+import DavisKahan.Sylvester.ScalarTransport
+import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.ScalarTransport
 
 open TauCeti.DavisKahan.Angle
 
@@ -125,8 +127,6 @@ two reducing restrictions of the *unperturbed* operator.  Both of Proposition
 6.1's crossed gaps are obtained from it by conjugating one block, which is why no
 second separation assumption appears. -/
 theorem sinTheta_ambient_unitaryConj_projectorDifference_symmetricNorming
-    [ContinuousLinearMap.HasMinMaxLowerBoundEverywhere.{u, v} 𝕜]
-    [HasUnboundedSylvesterKyFan.{u, v} 𝕜]
     (N : SymmetricNormingFunction)
     {A B : H →ₗ.[𝕜] H} (hA : IsSelfAdjoint A) (hB : IsSelfAdjoint B)
     {U : Submodule 𝕜 H} [U.HasOrthogonalProjection]
@@ -181,7 +181,6 @@ that of `H`; Fan dominance turns that into the same statement for an arbitrary
 `SymmetricNormingFunction`.  This is where the printed constant `2` enters the
 ambient conclusion, and it is the only constant in the proof. -/
 theorem reflectionPerturbation_normingMem_and_gauge_le
-    [ContinuousLinearMap.HasMinMaxLowerBoundEverywhere.{u, v} 𝕜]
     (N : SymmetricNormingFunction)
     (V : Submodule 𝕜 H) [V.HasOrthogonalProjection]
     (Eop : H →L[𝕜] H) (hEmem : N.Mem Eop) :
@@ -222,8 +221,6 @@ perturbed spectral subspace.
 The two hypotheses are exactly what the spectral development supplies over each
 field — `J` preserves `dom A`, and `(A + (H − J H J)) J = J A` there. -/
 theorem sinTwoTheta_ambient_reflection_projectorDifference_symmetricNorming
-    [ContinuousLinearMap.HasMinMaxLowerBoundEverywhere.{u, v} 𝕜]
-    [HasUnboundedSylvesterKyFan.{u, v} 𝕜]
     (N : SymmetricNormingFunction)
     {A : H →ₗ.[𝕜] H} (hA : IsSelfAdjoint A)
     (Eop : H →L[𝕜] H) (hEop : DavisKahan.IsSelfAdjointOperator Eop)
