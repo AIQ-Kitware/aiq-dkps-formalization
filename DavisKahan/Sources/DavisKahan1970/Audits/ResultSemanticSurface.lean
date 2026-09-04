@@ -185,6 +185,14 @@ The **ambient** clause is discharged by
 `sinTwoTheta_ambient_unbounded_addBounded_symmetricNorming_complex` and its real
 sibling, at the same unbounded scope as the directed clause.  The bounded ambient
 endpoints below them are their specializations, retained as an alternative proof.
+
+`sinTwoTheta_ambient_unbounded_reflectionPair_symmetricNorming_rclike` is the same
+ambient bound at an **arbitrary `RCLike` field**, on the paper's own ambient
+double-angle sine.  It is supporting rather than canonical evidence because it
+hypothesises `U` and `V` as a reducing subspace and a reflected pair instead of
+naming the printed spectral subspaces, whose construction in this tree is
+field-specific.  Its signature carries no capability class and no functional
+calculus: the real calculus on `E →L[𝕜] E` is a theorem at every `RCLike` field.
 -/
 
 #check @TauCeti.DavisKahan1970.SectionTwo.sinTwoTheta_complex
@@ -212,6 +220,7 @@ endpoints below them are their specializations, retained as an alternative proof
 #check @TauCeti.DavisKahan.gauge_directedSinTwoAngleOperatorC
 #check @TauCeti.DavisKahan.mem_directedSinTwoAngleOperatorRC_iff
 #check @TauCeti.DavisKahan.gauge_directedSinTwoAngleOperatorRC
+#check @TauCeti.DavisKahan1970.sinTwoTheta_ambient_unbounded_reflectionPair_symmetricNorming_rclike
 #check @TauCeti.DavisKahan1970.sinTwoTheta_ambient_unbounded_addBounded_symmetricNorming_complex
 #check @TauCeti.DavisKahan1970.sinTwoTheta_ambient_unbounded_addBounded_symmetricNorming_real
 #check @TauCeti.DavisKahan1970.SectionTwo.sinTwoTheta_ambient_complex
