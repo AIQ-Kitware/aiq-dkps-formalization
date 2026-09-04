@@ -102,6 +102,15 @@ The page shows each declaration's docstring and statement, with the proof body
 elided as `:= by <proof-omitted>`; how a theorem is proved is answered by the
 dependency and axiom panels instead.
 
+The server opens on the **headline theorems** of every paper at once -- the
+prose claim beside the Lean statement that answers it, with the row's status,
+verification and certification. From a card, one click reaches the full audit of
+a declaration (source context and clause map, the statement as written, the
+elaborated signature and hashes, the vocabulary the statement is stated in, and
+the proof dependencies), and one reaches the source-to-Lean lane view scrolled
+to that row. Hovering any name in a rendered statement says what it is; clicking
+it audits it.
+
 A review is a claim about a type on the day it was read.  `aiq-lean alignment
 pin <census-or-review>` records the elaborated-type hashes of every declaration
 a review claims (`statement_pins` on the review), and `aiq-lean alignment check`
