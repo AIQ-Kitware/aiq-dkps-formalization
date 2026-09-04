@@ -299,6 +299,73 @@ theorem theorem5_1_banach_sylvester_unboundedA
     (fun S R => N.comp_right_le_mul S R)
     N.nonneg hAinv hgamma hdelta hAinvNorm hB hEq
 
+/-! ## Theorem 5.1 at the printed Banach scope
+
+Davis and Kahan open Theorem 5.1 with "Let `X`, `Y` be **Banach** spaces".  The theorems
+above never use completeness -- the estimate is a rearrangement of the Sylvester identity,
+not a fixed-point argument -- so they hold over normed spaces, which is strictly stronger
+mathematics and is worth keeping as such.
+
+It is not the same *statement* as the printed one, though, and this row's canonical evidence
+should be the printed one.  The two wrappers below add `[CompleteSpace X]` and
+`[CompleteSpace Y]`, carry the printed hypotheses in their printed form -- `α ≥ 0` and not
+`α > 0`, an actual two-sided inverse with `‖A⁻¹‖ ≤ (α + δ)⁻¹`, and a norm on cross-space maps
+compatible with the two bound norms -- and invoke the general theorems internally.  Nothing is
+reproved and nothing above is weakened. -/
+
+section BanachScope
+
+/-- **Davis--Kahan 1970, Theorem 5.1, at the printed Banach scope.**
+
+`δ N(X) ≤ N(C)` for `AX - XB = C`, with `X` and `Y` Banach, `‖B‖ ≤ α`,
+`‖A⁻¹‖ ≤ (α + δ)⁻¹`, `α ≥ 0` and `δ > 0`, and `N` any norm on `X → Y` maps compatible with
+the two bound norms.
+
+`theorem5_1_banach_sylvester_exact` is the same statement without completeness; it is the
+stronger theorem, and this one is the printed one. -/
+theorem theorem5_1_banach_sylvester_banachScope
+    [CompleteSpace X] [CompleteSpace Y]
+    (N : CompatibleCrossOperatorNorm (X := X) (Y := Y))
+    (A Ainv : Y →L[ℂ] Y) (B : X →L[ℂ] X)
+    (T C : X →L[ℂ] Y) {gamma delta : ℝ}
+    (hgamma : 0 ≤ gamma) (hdelta : 0 < delta)
+    (hB : ‖B‖ ≤ gamma)
+    (hAinv_left : Ainv ∘L A = ContinuousLinearMap.id ℂ Y)
+    (hAinv_right : A ∘L Ainv = ContinuousLinearMap.id ℂ Y)
+    (hAinv_norm : ‖Ainv‖ ≤ (gamma + delta)⁻¹)
+    (hEq : A ∘L T - T ∘L B = C) :
+    delta * N T ≤ N C :=
+  theorem5_1_banach_sylvester_exact N A Ainv B T C hgamma hdelta hB
+    hAinv_left hAinv_right hAinv_norm hEq
+
+/-- **Davis--Kahan 1970, Theorem 5.1 at the printed Banach scope, with the compatible norm
+spelled out as its three printed properties**, over an arbitrary scalar field.
+
+The source's "any norm compatible with those bound norms" is exactly subadditivity together
+with the two one-sided bounds by the operator norm, which is what a symmetric-norm ideal gauge
+supplies.  This is the same content as the bundled `CompatibleCrossOperatorNorm` wrapper above
+with the bundle unfolded, and it is not restricted to `ℂ`. -/
+theorem theorem5_1_banach_sylvester_banachScope_ofProperties
+    {𝕜 : Type*} [NontriviallyNormedField 𝕜]
+    {E F : Type*} [NormedAddCommGroup E] [NormedSpace 𝕜 E] [CompleteSpace E]
+    [NormedAddCommGroup F] [NormedSpace 𝕜 F] [CompleteSpace F]
+    {N : (F →L[𝕜] E) → ℝ}
+    (hadd : ∀ f g : F →L[𝕜] E, N (f + g) ≤ N f + N g)
+    (hidealL : ∀ (L : E →L[𝕜] E) (f : F →L[𝕜] E), N (L ∘L f) ≤ ‖L‖ * N f)
+    (hidealR : ∀ (f : F →L[𝕜] E) (R : F →L[𝕜] F), N (f ∘L R) ≤ N f * ‖R‖)
+    (hNnonneg : ∀ f : F →L[𝕜] E, 0 ≤ N f)
+    {A Ainv : E →L[𝕜] E} {B : F →L[𝕜] F} {T C : F →L[𝕜] E} {gamma delta : ℝ}
+    (hgamma : 0 ≤ gamma) (hdelta : 0 < delta)
+    (hAinv_left : Ainv ∘L A = ContinuousLinearMap.id 𝕜 E)
+    (_hAinv_right : A ∘L Ainv = ContinuousLinearMap.id 𝕜 E)
+    (hAinv_norm : ‖Ainv‖ ≤ (gamma + delta)⁻¹) (hB : ‖B‖ ≤ gamma)
+    (hEq : A ∘L T - T ∘L B = C) :
+    delta * N T ≤ N C :=
+  TauCeti.ContinuousLinearMap.opNorm_le_of_sylvester_of_leftInverse
+    hadd hidealL hidealR hNnonneg hAinv_left hgamma hdelta hAinv_norm hB hEq
+
+end BanachScope
+
 end BanachSylvester
 end DavisKahan1970
 end TauCeti
