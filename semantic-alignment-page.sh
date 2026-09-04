@@ -8,15 +8,27 @@
 # and reload when a ledger changes -- use ./semantic-alignment-server.sh.
 #
 # By default the page is built from the censuses alone, which needs no Lean and
-# takes seconds. The two richer panels are opt-in because they are slow:
+# takes seconds -- nothing has to be built first. The two richer panels are the
+# only things that do, and they are opt-in because they are slow:
 #
-#   --statements   elaborated signatures and pin status (invokes Lean)
+#   --statements   elaborated signatures and pin status (invokes Lean, so the
+#                  libraries must be built: about 90s warm)
 #   --graph        the proof-dependency panel, from a saved leanq graph index
+#                  (built by `leanq graph-index`, about ten minutes)
+#
+# --build does that preparation for you. Without it the script says what it
+# found: a missing input is left out of the page, and one older than the Lean
+# sources is included and labelled stale rather than shown as current.
 #
 # Usage:
 #   ./semantic-alignment-page.sh [options] [census.json ...]
 #
 # Options:
+#   --build               build what the requested panels need before rendering:
+#                         `lake build`, and a leanq graph index when --graph is
+#                         asked for and is missing or older than the sources.
+#                         With no panel requested it turns both on, because a
+#                         page with neither needs no build at all.
 #   --statements          build/refresh the leanq statement sidecar (slow: runs Lean)
 #   --graph [FILE]        add the proof-dependency panel
 #                         (default: build/leanq/project-semantic-graph.json)
@@ -38,6 +50,7 @@ TITLE="Semantic alignment review"
 GRAPH=""
 DEFAULT_GRAPH="build/leanq/project-semantic-graph.json"
 STATEMENTS=0
+BUILD=0
 OPEN=1
 CENSUSES=()
 
@@ -45,6 +58,7 @@ usage() { sed -n '2,${/^#/!q;s/^# \{0,1\}//;p}' "$0"; }
 
 while [ $# -gt 0 ]; do
     case "$1" in
+        --build) BUILD=1; shift ;;
         --statements) STATEMENTS=1; shift ;;
         --graph=*) GRAPH="${1#--graph=}"; shift ;;
         --graph)
@@ -76,6 +90,50 @@ fi
 for c in "${CENSUSES[@]}"; do
     [ -f "$c" ] || { echo "no such census: $c" >&2; exit 2; }
 done
+
+# A Lean source newer than the index means the index describes declarations that
+# may since have been renamed or removed -- the drift this page exists to catch,
+# so it is never presented as current.
+graph_stale() {
+    [ -f "$1" ] || return 0
+    [ -n "$(find . -name '*.lean' -newer "$1" -not -path './.lake/*' \
+              -not -path './submodules/*' -print -quit 2>/dev/null)" ]
+}
+
+if [ "$BUILD" -eq 1 ]; then
+    # A page with neither rich panel reads nothing that has to be built, so
+    # --build on its own would spend ninety seconds to change nothing.
+    if [ "$STATEMENTS" -eq 0 ] && [ -z "$GRAPH" ]; then
+        echo "--build with no panel requested: turning on --statements and --graph."
+        STATEMENTS=1
+        GRAPH="$DEFAULT_GRAPH"
+    fi
+    echo "Building the Lean libraries (about 90s warm; do not run this while the"
+    echo "gate suite is running -- several gates invoke lake and will fail)."
+    if ! lake build; then
+        cat >&2 <<'EOF'
+
+The Lean build failed, so nothing was rendered: the elaborated signatures and
+the dependency graph would describe a tree that does not compile, and a page
+that presents them as evidence is worse than one without them.
+
+Fix the build, or render the census-only page, which needs no Lean at all:
+
+    ./semantic-alignment-page.sh
+
+EOF
+        exit 1
+    fi
+    if [ -n "$GRAPH" ] && graph_stale "$GRAPH"; then
+        echo
+        echo "Building the dependency graph index at $GRAPH (about ten minutes)."
+        mkdir -p "$(dirname "$GRAPH")"
+        leanq graph-index --out "$GRAPH"
+    elif [ -n "$GRAPH" ]; then
+        echo "Dependency graph index is current: $GRAPH"
+    fi
+    echo
+fi
 
 if ! command -v aiq-lean >/dev/null 2>&1; then
     cat >&2 <<'EOF'
@@ -113,14 +171,24 @@ EOF
 fi
 
 if [ -n "$GRAPH" ]; then
-    if [ -f "$GRAPH" ]; then
-        ARGS+=(--graph "$GRAPH")
-    else
+    if [ ! -f "$GRAPH" ]; then
         cat >&2 <<EOF
 warning: no graph index at $GRAPH -- building without the proof-dependency panel.
   Build one with:  leanq graph-index --out $GRAPH
+  or re-run this script with --build.
 
 EOF
+    elif graph_stale "$GRAPH"; then
+        cat >&2 <<EOF
+warning: $GRAPH is older than a Lean source, so it may name declarations that
+  have since been renamed. The panel is included and says it is stale.
+  Rebuild with:  leanq graph-index --out $GRAPH
+  or re-run this script with --build.
+
+EOF
+        ARGS+=(--graph "$GRAPH")
+    else
+        ARGS+=(--graph "$GRAPH")
     fi
 fi
 

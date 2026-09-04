@@ -11,6 +11,12 @@
 # the two cannot disagree. For a single self-contained file you can mail to
 # someone, use ./semantic-alignment-page.sh instead.
 #
+# Nothing has to be built to serve: the ledgers and the Lean sources are read
+# from disk. Two panels are richer when their inputs exist -- the elaborated
+# signatures come from leanq statement sidecars and the proof dependencies from
+# a saved graph index -- and the server says which are missing or stale rather
+# than presenting an absence as an answer. --build prepares both.
+#
 # The server needs the optional FastAPI extra. It prefers an aiq-lean in
 # $AIQ_SERVE_VENV (default /home/agent/venvs/aiq-serve) and otherwise falls back
 # to PATH, which prints the install line if the extra is missing.
@@ -19,6 +25,12 @@
 #   ./semantic-alignment-server.sh [options]
 #
 # Options:
+#   --build               prepare the elaborated-signature and proof-dependency
+#                         inputs before serving, by running
+#                         ./semantic-alignment-page.sh --build --statements
+#                         --graph (which also writes the static page). Slow:
+#                         a Lean build and, when the graph index is stale, about
+#                         ten minutes to rebuild it.
 #   --port N              port to listen on (default: 8800)
 #   --host ADDR           address to bind (default: 127.0.0.1)
 #   --title TEXT          window title
@@ -34,6 +46,7 @@ set -euo pipefail
 
 cd "$(dirname "$0")"
 
+BUILD=0
 PORT=8800
 HOST="127.0.0.1"
 TITLE=""
@@ -45,6 +58,7 @@ usage() { sed -n '2,${/^#/!q;s/^# \{0,1\}//;p}' "$0"; }
 
 while [ $# -gt 0 ]; do
     case "$1" in
+        --build) BUILD=1; shift ;;
         --port) PORT="$2"; shift 2 ;;
         --host) HOST="$2"; shift 2 ;;
         --title) TITLE="$2"; shift 2 ;;
@@ -57,6 +71,14 @@ while [ $# -gt 0 ]; do
 done
 
 if [ -n "$TITLE" ]; then EXTRA+=(--title "$TITLE"); fi
+
+if [ "$BUILD" -eq 1 ]; then
+    # Delegated rather than duplicated: refreshing a statement sidecar means
+    # elaborating the declarations a census registers, which is the page
+    # renderer's job, and the graph index is the same file both read.
+    ./semantic-alignment-page.sh --build --statements --graph --no-open
+    echo
+fi
 
 # Prefer a venv that has the FastAPI extra; fall back to whatever aiq-lean is on
 # PATH and let it print the install line.
