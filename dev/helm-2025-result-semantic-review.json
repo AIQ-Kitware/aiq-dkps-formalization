@@ -149,6 +149,80 @@
           "pinned_on": "2026-09-03",
           "note": "Source passages pinned 2026-09-03: the retained transcription is now a registered source document and every cited passage is hashed, so a line shift is reported instead of silently changing what the row cites."
         }
+      ],
+      "statement_pins": [
+        {
+          "declaration": "Helm2025.DKPS.ContinuousLossInPrediction",
+          "type_expr_hash": "2714790261",
+          "type_text_sha256": "4495c7622dee95ae23515a8e98d0312fcde741ba5f6bbe6199850c1d6647aabb",
+          "toolchain": "leanprover/lean4:v4.34.0-rc1",
+          "pinned_on": "2026-09-03",
+          "note": "Statement pins recorded 2026-09-03: the review's declarations are now guarded against elaborated-type drift, as Quench's already were."
+        },
+        {
+          "declaration": "Helm2025.DKPS.LossDominated",
+          "type_expr_hash": "3595019423",
+          "type_text_sha256": "b22efbd3ce3bbd2291e93ebe935e72be9c215e68a2ff2fcc1a156689ecca04ed",
+          "toolchain": "leanprover/lean4:v4.34.0-rc1",
+          "pinned_on": "2026-09-03",
+          "note": "Statement pins recorded 2026-09-03: the review's declarations are now guarded against elaborated-type drift, as Quench's already were."
+        },
+        {
+          "declaration": "Helm2025.DKPS.Theorem1",
+          "type_expr_hash": "2368860134",
+          "type_text_sha256": "4606df7f4453a6d5c45881f9436ffd660e52dac3df276f6b1ee02ec0a6244c5a",
+          "toolchain": "leanprover/lean4:v4.34.0-rc1",
+          "pinned_on": "2026-09-03",
+          "note": "Statement pins recorded 2026-09-03: the review's declarations are now guarded against elaborated-type drift, as Quench's already were."
+        },
+        {
+          "declaration": "Helm2025.DKPS.Theorem1_printed",
+          "type_expr_hash": "1114599351",
+          "type_text_sha256": "0cd2d798aa36050386ea50e19422a4826325a31cedaf178395ab791e359c9ccc",
+          "toolchain": "leanprover/lean4:v4.34.0-rc1",
+          "pinned_on": "2026-09-03",
+          "note": "Statement pins recorded 2026-09-03: the review's declarations are now guarded against elaborated-type drift, as Quench's already were."
+        },
+        {
+          "declaration": "Helm2025.DKPS.lossDominated_of_boundedLabelSupport",
+          "type_expr_hash": "973212579",
+          "type_text_sha256": "86d90497a57e421026cd3d2d0076654ef0b4804586e069a3def45b3a0ccda1a4",
+          "toolchain": "leanprover/lean4:v4.34.0-rc1",
+          "pinned_on": "2026-09-03",
+          "note": "Statement pins recorded 2026-09-03: the review's declarations are now guarded against elaborated-type drift, as Quench's already were."
+        },
+        {
+          "declaration": "Helm2025.DKPS.prob_convergence_not_enough_for_expectations",
+          "type_expr_hash": "935005649",
+          "type_text_sha256": "7d2d5f50c85a00922e1e1171447a7391bb0eb1a3dedefbc273c638c2c08743dc",
+          "toolchain": "leanprover/lean4:v4.34.0-rc1",
+          "pinned_on": "2026-09-03",
+          "note": "Statement pins recorded 2026-09-03: the review's declarations are now guarded against elaborated-type drift, as Quench's already were."
+        },
+        {
+          "declaration": "Helm2025.DKPS.risk_converges_fixed_n",
+          "type_expr_hash": "2373568637",
+          "type_text_sha256": "2e54f25f5c63711717ccca53dbd1fc06c3008b2846f76d0d3e5fa6406bd04a5b",
+          "toolchain": "leanprover/lean4:v4.34.0-rc1",
+          "pinned_on": "2026-09-03",
+          "note": "Statement pins recorded 2026-09-03: the review's declarations are now guarded against elaborated-type drift, as Quench's already were."
+        },
+        {
+          "declaration": "Helm2025.DKPS.risk_converges_fixed_n_printed",
+          "type_expr_hash": "4055675425",
+          "type_text_sha256": "110a4b4383a2edb88988f296d990586da66d29e028858a20c7b1302625e5e3ae",
+          "toolchain": "leanprover/lean4:v4.34.0-rc1",
+          "pinned_on": "2026-09-03",
+          "note": "Statement pins recorded 2026-09-03: the review's declarations are now guarded against elaborated-type drift, as Quench's already were."
+        },
+        {
+          "declaration": "Helm2025.DKPS.stronglyMeasurable_loss_of_printed_assumption4",
+          "type_expr_hash": "645141542",
+          "type_text_sha256": "eac80c50dbb594e6e068fdd532196de4e9c4bddfcb059dfb98a36515c95a5086",
+          "toolchain": "leanprover/lean4:v4.34.0-rc1",
+          "pinned_on": "2026-09-03",
+          "note": "Statement pins recorded 2026-09-03: the review's declarations are now guarded against elaborated-type drift, as Quench's already were."
+        }
       ]
     },
     {
@@ -265,6 +339,128 @@
           "pinned_on": "2026-09-03",
           "note": "Source passages pinned 2026-09-03: the retained transcription is now a registered source document and every cited passage is hashed, so a line shift is reported instead of silently changing what the row cites."
         }
+      ],
+      "statement_pins": [
+        {
+          "declaration": "Helm2025.DKPS.ConsistentInProbability",
+          "type_expr_hash": "3095354353",
+          "type_text_sha256": "881756be2999fcd481593784a58c74ca429702ce65107f4203e3e4c50339f261",
+          "toolchain": "leanprover/lean4:v4.34.0-rc1",
+          "pinned_on": "2026-09-03",
+          "note": "Statement pins recorded 2026-09-03: the review's declarations are now guarded against elaborated-type drift, as Quench's already were."
+        },
+        {
+          "declaration": "Helm2025.DKPS.ContinuousLossInPrediction",
+          "type_expr_hash": "2714790261",
+          "type_text_sha256": "4495c7622dee95ae23515a8e98d0312fcde741ba5f6bbe6199850c1d6647aabb",
+          "toolchain": "leanprover/lean4:v4.34.0-rc1",
+          "pinned_on": "2026-09-03",
+          "note": "Statement pins recorded 2026-09-03: the review's declarations are now guarded against elaborated-type drift, as Quench's already were."
+        },
+        {
+          "declaration": "Helm2025.DKPS.LossDominated",
+          "type_expr_hash": "3595019423",
+          "type_text_sha256": "b22efbd3ce3bbd2291e93ebe935e72be9c215e68a2ff2fcc1a156689ecca04ed",
+          "toolchain": "leanprover/lean4:v4.34.0-rc1",
+          "pinned_on": "2026-09-03",
+          "note": "Statement pins recorded 2026-09-03: the review's declarations are now guarded against elaborated-type drift, as Quench's already were."
+        },
+        {
+          "declaration": "Helm2025.DKPS.Theorem2_bayes",
+          "type_expr_hash": "2974152281",
+          "type_text_sha256": "7d3709a441285604eda4db0326e9d50b2d30d2d49afe28f59d1f3606ec604412",
+          "toolchain": "leanprover/lean4:v4.34.0-rc1",
+          "pinned_on": "2026-09-03",
+          "note": "Statement pins recorded 2026-09-03: the review's declarations are now guarded against elaborated-type drift, as Quench's already were."
+        },
+        {
+          "declaration": "Helm2025.DKPS.Theorem2_bayes_printed",
+          "type_expr_hash": "1784024104",
+          "type_text_sha256": "c834287f5892b1cd591867c539daff5e5b231121c2d801e4b493c3f48bfafe16",
+          "toolchain": "leanprover/lean4:v4.34.0-rc1",
+          "pinned_on": "2026-09-03",
+          "note": "Statement pins recorded 2026-09-03: the review's declarations are now guarded against elaborated-type drift, as Quench's already were."
+        },
+        {
+          "declaration": "Helm2025.DKPS.consistency_transfer_dkps_bayes",
+          "type_expr_hash": "3965412585",
+          "type_text_sha256": "8e43c1cc6cc7a6d77877c835e8fe943cf808ebedfa9a8b8a5003da3a1cf96a38",
+          "toolchain": "leanprover/lean4:v4.34.0-rc1",
+          "pinned_on": "2026-09-03",
+          "note": "Statement pins recorded 2026-09-03: the review's declarations are now guarded against elaborated-type drift, as Quench's already were."
+        },
+        {
+          "declaration": "Helm2025.DKPS.consistentExpected_of_consistentInProbability",
+          "type_expr_hash": "53290736",
+          "type_text_sha256": "399bc560eebb081b98edd1f7373d2ba448575f37dc01a2704e304461d566c264",
+          "toolchain": "leanprover/lean4:v4.34.0-rc1",
+          "pinned_on": "2026-09-03",
+          "note": "Statement pins recorded 2026-09-03: the review's declarations are now guarded against elaborated-type drift, as Quench's already were."
+        },
+        {
+          "declaration": "Helm2025.DKPS.diagonal_convergence",
+          "type_expr_hash": "1523253519",
+          "type_text_sha256": "d3d9b3ab83d9857700bc274764de9e11f4d51a184bed5f16dcbe0cc63b5d9c25",
+          "toolchain": "leanprover/lean4:v4.34.0-rc1",
+          "pinned_on": "2026-09-03",
+          "note": "Statement pins recorded 2026-09-03: the review's declarations are now guarded against elaborated-type drift, as Quench's already were."
+        },
+        {
+          "declaration": "Helm2025.DKPS.lossDominated_of_boundedLabelSupport",
+          "type_expr_hash": "973212579",
+          "type_text_sha256": "86d90497a57e421026cd3d2d0076654ef0b4804586e069a3def45b3a0ccda1a4",
+          "toolchain": "leanprover/lean4:v4.34.0-rc1",
+          "pinned_on": "2026-09-03",
+          "note": "Statement pins recorded 2026-09-03: the review's declarations are now guarded against elaborated-type drift, as Quench's already were."
+        },
+        {
+          "declaration": "Helm2025.DKPS.prob_convergence_not_enough_for_expectations",
+          "type_expr_hash": "935005649",
+          "type_text_sha256": "7d2d5f50c85a00922e1e1171447a7391bb0eb1a3dedefbc273c638c2c08743dc",
+          "toolchain": "leanprover/lean4:v4.34.0-rc1",
+          "pinned_on": "2026-09-03",
+          "note": "Statement pins recorded 2026-09-03: the review's declarations are now guarded against elaborated-type drift, as Quench's already were."
+        },
+        {
+          "declaration": "Helm2025.DKPS.riskGivenTraining",
+          "type_expr_hash": "1065729927",
+          "type_text_sha256": "ad2453887cd7391a66c54f629b777a9522a1a485697249073b236cb9315a3196",
+          "toolchain": "leanprover/lean4:v4.34.0-rc1",
+          "pinned_on": "2026-09-03",
+          "note": "Statement pins recorded 2026-09-03: the review's declarations are now guarded against elaborated-type drift, as Quench's already were."
+        },
+        {
+          "declaration": "Helm2025.DKPS.risk_eq_integral_riskGivenTraining",
+          "type_expr_hash": "2450084525",
+          "type_text_sha256": "49d8454fd1d181cd3a3d3fc50ff43390832a41df6689d9c5b9f2991ee9f87e4c",
+          "toolchain": "leanprover/lean4:v4.34.0-rc1",
+          "pinned_on": "2026-09-03",
+          "note": "Statement pins recorded 2026-09-03: the review's declarations are now guarded against elaborated-type drift, as Quench's already were."
+        },
+        {
+          "declaration": "Helm2025.DKPS.stronglyMeasurable_loss_of_printed_assumption4",
+          "type_expr_hash": "645141542",
+          "type_text_sha256": "eac80c50dbb594e6e068fdd532196de4e9c4bddfcb059dfb98a36515c95a5086",
+          "toolchain": "leanprover/lean4:v4.34.0-rc1",
+          "pinned_on": "2026-09-03",
+          "note": "Statement pins recorded 2026-09-03: the review's declarations are now guarded against elaborated-type drift, as Quench's already were."
+        },
+        {
+          "declaration": "Helm2025.DKPS.tendsto_integral_riskGivenTraining_of_consistentInProbability",
+          "type_expr_hash": "2392873107",
+          "type_text_sha256": "ea9c30e77b76bd4ba47e46c9dee577f626c57cec3f19c06b2dffa7163bf808a2",
+          "toolchain": "leanprover/lean4:v4.34.0-rc1",
+          "pinned_on": "2026-09-03",
+          "note": "Statement pins recorded 2026-09-03: the review's declarations are now guarded against elaborated-type drift, as Quench's already were."
+        },
+        {
+          "declaration": "TauCeti.exists_rigidMotion_of_dist_eq",
+          "type_expr_hash": "1631689487",
+          "type_text_sha256": "88150070eba35dd613b2a23a2ccd957aeda40506752893b33d8d8ee7e2a261cf",
+          "toolchain": "leanprover/lean4:v4.34.0-rc1",
+          "pinned_on": "2026-09-03",
+          "note": "Statement pins recorded 2026-09-03: the review's declarations are now guarded against elaborated-type drift, as Quench's already were."
+        }
       ]
     },
     {
@@ -330,6 +526,24 @@
           "visibility": "public_reconstruction",
           "pinned_on": "2026-09-03",
           "note": "Source passages pinned 2026-09-03: the retained transcription is now a registered source document and every cited passage is hashed, so a line shift is reported instead of silently changing what the row cites."
+        }
+      ],
+      "statement_pins": [
+        {
+          "declaration": "Helm2025.DKPS.Assumption1",
+          "type_expr_hash": "2355872850",
+          "type_text_sha256": "8ad39dd7dc3424c7f0add2cefcb33053849557e1d41294eebef1b57fad45b059",
+          "toolchain": "leanprover/lean4:v4.34.0-rc1",
+          "pinned_on": "2026-09-03",
+          "note": "Statement pins recorded 2026-09-03: the review's declarations are now guarded against elaborated-type drift, as Quench's already were."
+        },
+        {
+          "declaration": "Helm2025.DKPS.InvariantToAffineIsometries",
+          "type_expr_hash": "2355872850",
+          "type_text_sha256": "339990056fc83e4aa153116733f886978b9367c48cf2ff128e6d7a4ab9e22549",
+          "toolchain": "leanprover/lean4:v4.34.0-rc1",
+          "pinned_on": "2026-09-03",
+          "note": "Statement pins recorded 2026-09-03: the review's declarations are now guarded against elaborated-type drift, as Quench's already were."
         }
       ]
     },
@@ -405,6 +619,72 @@
           "pinned_on": "2026-09-03",
           "note": "Source passages pinned 2026-09-03: the retained transcription is now a registered source document and every cited passage is hashed, so a line shift is reported instead of silently changing what the row cites."
         }
+      ],
+      "statement_pins": [
+        {
+          "declaration": "Helm2025.DKPS.Assumption2",
+          "type_expr_hash": "2355872850",
+          "type_text_sha256": "8ad39dd7dc3424c7f0add2cefcb33053849557e1d41294eebef1b57fad45b059",
+          "toolchain": "leanprover/lean4:v4.34.0-rc1",
+          "pinned_on": "2026-09-03",
+          "note": "Statement pins recorded 2026-09-03: the review's declarations are now guarded against elaborated-type drift, as Quench's already were."
+        },
+        {
+          "declaration": "Helm2025.DKPS.ContinuousLearningRule.paperA2",
+          "type_expr_hash": "558034186",
+          "type_text_sha256": "353b6bd6edc3b647c09567b605cbc6e2b0aa192a43b077e584dc1665d5c1d2a6",
+          "toolchain": "leanprover/lean4:v4.34.0-rc1",
+          "pinned_on": "2026-09-03",
+          "note": "Statement pins recorded 2026-09-03: the review's declarations are now guarded against elaborated-type drift, as Quench's already were."
+        },
+        {
+          "declaration": "Helm2025.DKPS.ContinuousLearningRuleInEmbeddings",
+          "type_expr_hash": "2355872850",
+          "type_text_sha256": "339990056fc83e4aa153116733f886978b9367c48cf2ff128e6d7a4ab9e22549",
+          "toolchain": "leanprover/lean4:v4.34.0-rc1",
+          "pinned_on": "2026-09-03",
+          "note": "Statement pins recorded 2026-09-03: the review's declarations are now guarded against elaborated-type drift, as Quench's already were."
+        },
+        {
+          "declaration": "Helm2025.DKPS.PaperA2_SequentialContinuity",
+          "type_expr_hash": "2355872850",
+          "type_text_sha256": "339990056fc83e4aa153116733f886978b9367c48cf2ff128e6d7a4ab9e22549",
+          "toolchain": "leanprover/lean4:v4.34.0-rc1",
+          "pinned_on": "2026-09-03",
+          "note": "Statement pins recorded 2026-09-03: the review's declarations are now guarded against elaborated-type drift, as Quench's already were."
+        },
+        {
+          "declaration": "Helm2025.DKPS.Theorem1_printed",
+          "type_expr_hash": "1114599351",
+          "type_text_sha256": "0cd2d798aa36050386ea50e19422a4826325a31cedaf178395ab791e359c9ccc",
+          "toolchain": "leanprover/lean4:v4.34.0-rc1",
+          "pinned_on": "2026-09-03",
+          "note": "Statement pins recorded 2026-09-03: the review's declarations are now guarded against elaborated-type drift, as Quench's already were."
+        },
+        {
+          "declaration": "Helm2025.DKPS.Theorem2_bayes_printed",
+          "type_expr_hash": "1784024104",
+          "type_text_sha256": "c834287f5892b1cd591867c539daff5e5b231121c2d801e4b493c3f48bfafe16",
+          "toolchain": "leanprover/lean4:v4.34.0-rc1",
+          "pinned_on": "2026-09-03",
+          "note": "Statement pins recorded 2026-09-03: the review's declarations are now guarded against elaborated-type drift, as Quench's already were."
+        },
+        {
+          "declaration": "Helm2025.DKPS.consistency_transfer_dkps_printed",
+          "type_expr_hash": "3217092921",
+          "type_text_sha256": "297e6725c4e8d1225e72b4b3fa42f385c0f09922ac0d7cf548abfa79f51ecdbe",
+          "toolchain": "leanprover/lean4:v4.34.0-rc1",
+          "pinned_on": "2026-09-03",
+          "note": "Statement pins recorded 2026-09-03: the review's declarations are now guarded against elaborated-type drift, as Quench's already were."
+        },
+        {
+          "declaration": "Helm2025.DKPS.continuousLearningRuleInEmbeddings_of_continuousLearningRule",
+          "type_expr_hash": "3978994843",
+          "type_text_sha256": "d90c14f5a7cc5b31e4361d32c3af42e1a72279968cd10c4da6c4ea2323d6f408",
+          "toolchain": "leanprover/lean4:v4.34.0-rc1",
+          "pinned_on": "2026-09-03",
+          "note": "Statement pins recorded 2026-09-03: the review's declarations are now guarded against elaborated-type drift, as Quench's already were."
+        }
       ]
     },
     {
@@ -472,6 +752,40 @@
           "visibility": "public_reconstruction",
           "pinned_on": "2026-09-03",
           "note": "Source passages pinned 2026-09-03: the retained transcription is now a registered source document and every cited passage is hashed, so a line shift is reported instead of silently changing what the row cites."
+        }
+      ],
+      "statement_pins": [
+        {
+          "declaration": "Helm2025.DKPS.PaperA3_ImageClosedBoundedComplete",
+          "type_expr_hash": "2355872850",
+          "type_text_sha256": "8ad39dd7dc3424c7f0add2cefcb33053849557e1d41294eebef1b57fad45b059",
+          "toolchain": "leanprover/lean4:v4.34.0-rc1",
+          "pinned_on": "2026-09-03",
+          "note": "Statement pins recorded 2026-09-03: the review's declarations are now guarded against elaborated-type drift, as Quench's already were."
+        },
+        {
+          "declaration": "Helm2025.DKPS.Assumption3",
+          "type_expr_hash": "2355872850",
+          "type_text_sha256": "8ad39dd7dc3424c7f0add2cefcb33053849557e1d41294eebef1b57fad45b059",
+          "toolchain": "leanprover/lean4:v4.34.0-rc1",
+          "pinned_on": "2026-09-03",
+          "note": "Statement pins recorded 2026-09-03: the review's declarations are now guarded against elaborated-type drift, as Quench's already were."
+        },
+        {
+          "declaration": "Helm2025.DKPS.Assumption3'",
+          "type_expr_hash": "2355872850",
+          "type_text_sha256": "8ad39dd7dc3424c7f0add2cefcb33053849557e1d41294eebef1b57fad45b059",
+          "toolchain": "leanprover/lean4:v4.34.0-rc1",
+          "pinned_on": "2026-09-03",
+          "note": "Statement pins recorded 2026-09-03: the review's declarations are now guarded against elaborated-type drift, as Quench's already were."
+        },
+        {
+          "declaration": "Helm2025.DKPS.BoundedLearningRule",
+          "type_expr_hash": "2355872850",
+          "type_text_sha256": "339990056fc83e4aa153116733f886978b9367c48cf2ff128e6d7a4ab9e22549",
+          "toolchain": "leanprover/lean4:v4.34.0-rc1",
+          "pinned_on": "2026-09-03",
+          "note": "Statement pins recorded 2026-09-03: the review's declarations are now guarded against elaborated-type drift, as Quench's already were."
         }
       ]
     },
@@ -550,6 +864,96 @@
           "pinned_on": "2026-09-03",
           "note": "Source passages pinned 2026-09-03: the retained transcription is now a registered source document and every cited passage is hashed, so a line shift is reported instead of silently changing what the row cites."
         }
+      ],
+      "statement_pins": [
+        {
+          "declaration": "Helm2025.DKPS.Assumption4",
+          "type_expr_hash": "2714790261",
+          "type_text_sha256": "bdc3284d803edd0c95310bcfa7764b5bb7bd26c16c4787c3477d4cd73c03d90d",
+          "toolchain": "leanprover/lean4:v4.34.0-rc1",
+          "pinned_on": "2026-09-03",
+          "note": "Statement pins recorded 2026-09-03: the review's declarations are now guarded against elaborated-type drift, as Quench's already were."
+        },
+        {
+          "declaration": "Helm2025.DKPS.Assumption4'",
+          "type_expr_hash": "2714790261",
+          "type_text_sha256": "bdc3284d803edd0c95310bcfa7764b5bb7bd26c16c4787c3477d4cd73c03d90d",
+          "toolchain": "leanprover/lean4:v4.34.0-rc1",
+          "pinned_on": "2026-09-03",
+          "note": "Statement pins recorded 2026-09-03: the review's declarations are now guarded against elaborated-type drift, as Quench's already were."
+        },
+        {
+          "declaration": "Helm2025.DKPS.ContinuousLoss.continuousLossInPred",
+          "type_expr_hash": "2572785281",
+          "type_text_sha256": "9898d0b1c0bbcaab0785856fa7f4a9ec31d4fd27d1bfed5aa469d49e96837641",
+          "toolchain": "leanprover/lean4:v4.34.0-rc1",
+          "pinned_on": "2026-09-03",
+          "note": "Statement pins recorded 2026-09-03: the review's declarations are now guarded against elaborated-type drift, as Quench's already were."
+        },
+        {
+          "declaration": "Helm2025.DKPS.ContinuousLossInPred",
+          "type_expr_hash": "2714790261",
+          "type_text_sha256": "4495c7622dee95ae23515a8e98d0312fcde741ba5f6bbe6199850c1d6647aabb",
+          "toolchain": "leanprover/lean4:v4.34.0-rc1",
+          "pinned_on": "2026-09-03",
+          "note": "Statement pins recorded 2026-09-03: the review's declarations are now guarded against elaborated-type drift, as Quench's already were."
+        },
+        {
+          "declaration": "Helm2025.DKPS.ContinuousLossInPrediction",
+          "type_expr_hash": "2714790261",
+          "type_text_sha256": "4495c7622dee95ae23515a8e98d0312fcde741ba5f6bbe6199850c1d6647aabb",
+          "toolchain": "leanprover/lean4:v4.34.0-rc1",
+          "pinned_on": "2026-09-03",
+          "note": "Statement pins recorded 2026-09-03: the review's declarations are now guarded against elaborated-type drift, as Quench's already were."
+        },
+        {
+          "declaration": "Helm2025.DKPS.Theorem1_printed",
+          "type_expr_hash": "1114599351",
+          "type_text_sha256": "0cd2d798aa36050386ea50e19422a4826325a31cedaf178395ab791e359c9ccc",
+          "toolchain": "leanprover/lean4:v4.34.0-rc1",
+          "pinned_on": "2026-09-03",
+          "note": "Statement pins recorded 2026-09-03: the review's declarations are now guarded against elaborated-type drift, as Quench's already were."
+        },
+        {
+          "declaration": "Helm2025.DKPS.Theorem2_bayes_printed",
+          "type_expr_hash": "1784024104",
+          "type_text_sha256": "c834287f5892b1cd591867c539daff5e5b231121c2d801e4b493c3f48bfafe16",
+          "toolchain": "leanprover/lean4:v4.34.0-rc1",
+          "pinned_on": "2026-09-03",
+          "note": "Statement pins recorded 2026-09-03: the review's declarations are now guarded against elaborated-type drift, as Quench's already were."
+        },
+        {
+          "declaration": "Helm2025.DKPS.consistency_transfer_dkps_printed",
+          "type_expr_hash": "3217092921",
+          "type_text_sha256": "297e6725c4e8d1225e72b4b3fa42f385c0f09922ac0d7cf548abfa79f51ecdbe",
+          "toolchain": "leanprover/lean4:v4.34.0-rc1",
+          "pinned_on": "2026-09-03",
+          "note": "Statement pins recorded 2026-09-03: the review's declarations are now guarded against elaborated-type drift, as Quench's already were."
+        },
+        {
+          "declaration": "Helm2025.DKPS.loss_converges_in_prob_printed",
+          "type_expr_hash": "2054625286",
+          "type_text_sha256": "a35d2f4e163e192674467b89af2c6b452666067317430609470db2b2042b84ae",
+          "toolchain": "leanprover/lean4:v4.34.0-rc1",
+          "pinned_on": "2026-09-03",
+          "note": "Statement pins recorded 2026-09-03: the review's declarations are now guarded against elaborated-type drift, as Quench's already were."
+        },
+        {
+          "declaration": "Helm2025.DKPS.stronglyMeasurable_combined_loss_of_printed",
+          "type_expr_hash": "3042260149",
+          "type_text_sha256": "c59f87e4fef996b30dd360fc807b88e5c3f0f90ecf0b2b76a2c0034bf74eff27",
+          "toolchain": "leanprover/lean4:v4.34.0-rc1",
+          "pinned_on": "2026-09-03",
+          "note": "Statement pins recorded 2026-09-03: the review's declarations are now guarded against elaborated-type drift, as Quench's already were."
+        },
+        {
+          "declaration": "Helm2025.DKPS.stronglyMeasurable_loss_of_printed_assumption4",
+          "type_expr_hash": "645141542",
+          "type_text_sha256": "eac80c50dbb594e6e068fdd532196de4e9c4bddfcb059dfb98a36515c95a5086",
+          "toolchain": "leanprover/lean4:v4.34.0-rc1",
+          "pinned_on": "2026-09-03",
+          "note": "Statement pins recorded 2026-09-03: the review's declarations are now guarded against elaborated-type drift, as Quench's already were."
+        }
       ]
     },
     {
@@ -621,6 +1025,24 @@
           "visibility": "public_reconstruction",
           "pinned_on": "2026-09-03",
           "note": "Source passages pinned 2026-09-03: the retained transcription is now a registered source document and every cited passage is hashed, so a line shift is reported instead of silently changing what the row cites."
+        }
+      ],
+      "statement_pins": [
+        {
+          "declaration": "Helm2025.DKPS.DKPSAlignmentConsistency",
+          "type_expr_hash": "3131465331",
+          "type_text_sha256": "45eee0974fcd381fedc14c7c54a121a4db7051b7bd3229a5b8d85c9956e268cc",
+          "toolchain": "leanprover/lean4:v4.34.0-rc1",
+          "pinned_on": "2026-09-03",
+          "note": "Statement pins recorded 2026-09-03: the review's declarations are now guarded against elaborated-type drift, as Quench's already were."
+        },
+        {
+          "declaration": "Helm2025.DKPS.AlignmentConsistency",
+          "type_expr_hash": "2290780688",
+          "type_text_sha256": "f4e31616c5e9a9c71e6d9b4364b584650fa6790d25e274592843e9f3cf0184ca",
+          "toolchain": "leanprover/lean4:v4.34.0-rc1",
+          "pinned_on": "2026-09-03",
+          "note": "Statement pins recorded 2026-09-03: the review's declarations are now guarded against elaborated-type drift, as Quench's already were."
         }
       ]
     },
@@ -709,6 +1131,72 @@
           "pinned_on": "2026-09-03",
           "note": "Source passages pinned 2026-09-03: the retained transcription is now a registered source document and every cited passage is hashed, so a line shift is reported instead of silently changing what the row cites."
         }
+      ],
+      "statement_pins": [
+        {
+          "declaration": "Helm2025.DKPS.AcharyyaBridge.alignmentConsistency_of_aligned_spectral",
+          "type_expr_hash": "239583520",
+          "type_text_sha256": "28acdb1a826cd4eb90fe69485096291f8e3ffa8c0373f09450994f6368004dfd",
+          "toolchain": "leanprover/lean4:v4.34.0-rc1",
+          "pinned_on": "2026-09-03",
+          "note": "Statement pins recorded 2026-09-03: the review's declarations are now guarded against elaborated-type drift, as Quench's already were."
+        },
+        {
+          "declaration": "Helm2025.DKPS.AcharyyaBridge.alignmentConsistency_of_aligned_spectral_of_gram",
+          "type_expr_hash": "2139722725",
+          "type_text_sha256": "4f88db2d10e030c4bf9b11fddfedf4d69c88393e8dc5f3faed423038d9209931",
+          "toolchain": "leanprover/lean4:v4.34.0-rc1",
+          "pinned_on": "2026-09-03",
+          "note": "Statement pins recorded 2026-09-03: the review's declarations are now guarded against elaborated-type drift, as Quench's already were."
+        },
+        {
+          "declaration": "Helm2025.DKPS.AcharyyaBridge.alignmentConsistency_of_aligned_spectral_of_gram_entrywiseBound",
+          "type_expr_hash": "2906970115",
+          "type_text_sha256": "16a440755fe013b089c5c0446409bf74e86dda34f3dd741dc22551c23aca703d",
+          "toolchain": "leanprover/lean4:v4.34.0-rc1",
+          "pinned_on": "2026-09-03",
+          "note": "Statement pins recorded 2026-09-03: the review's declarations are now guarded against elaborated-type drift, as Quench's already were."
+        },
+        {
+          "declaration": "Helm2025.DKPS.AcharyyaBridge.alignmentConsistency_of_pairwiseDist",
+          "type_expr_hash": "3811626481",
+          "type_text_sha256": "54ec299f30180c01f51643a1fdada1601043a28233c2c0afa4721b4d8d49ffd7",
+          "toolchain": "leanprover/lean4:v4.34.0-rc1",
+          "pinned_on": "2026-09-03",
+          "note": "Statement pins recorded 2026-09-03: the review's declarations are now guarded against elaborated-type drift, as Quench's already were."
+        },
+        {
+          "declaration": "TauCeti.alignedConfig",
+          "type_expr_hash": "412763161",
+          "type_text_sha256": "5e15f6719491c200ca0e39a57ae8e45eb678bab7dffb535a9227703e57975c93",
+          "toolchain": "leanprover/lean4:v4.34.0-rc1",
+          "pinned_on": "2026-09-03",
+          "note": "Statement pins recorded 2026-09-03: the review's declarations are now guarded against elaborated-type drift, as Quench's already were."
+        },
+        {
+          "declaration": "TauCeti.exists_delta_forall_exists_rigidMotion",
+          "type_expr_hash": "905486272",
+          "type_text_sha256": "cb3cea99e70c40df06b29d7fa70d7b20b946f8c6f6e7eac3b01644c7844ee0a2",
+          "toolchain": "leanprover/lean4:v4.34.0-rc1",
+          "pinned_on": "2026-09-03",
+          "note": "Statement pins recorded 2026-09-03: the review's declarations are now guarded against elaborated-type drift, as Quench's already were."
+        },
+        {
+          "declaration": "TauCeti.exists_rigidMotion_of_dist_eq",
+          "type_expr_hash": "1631689487",
+          "type_text_sha256": "88150070eba35dd613b2a23a2ccd957aeda40506752893b33d8d8ee7e2a261cf",
+          "toolchain": "leanprover/lean4:v4.34.0-rc1",
+          "pinned_on": "2026-09-03",
+          "note": "Statement pins recorded 2026-09-03: the review's declarations are now guarded against elaborated-type drift, as Quench's already were."
+        },
+        {
+          "declaration": "TauCeti.tendsto_measure_alignmentError_gt",
+          "type_expr_hash": "3172866528",
+          "type_text_sha256": "6f06583e269d4fdc65d4c24cf46b9ed5d6d8d46d2b5e3f32a00f7391bda0e362",
+          "toolchain": "leanprover/lean4:v4.34.0-rc1",
+          "pinned_on": "2026-09-03",
+          "note": "Statement pins recorded 2026-09-03: the review's declarations are now guarded against elaborated-type drift, as Quench's already were."
+        }
       ]
     },
     {
@@ -774,6 +1262,24 @@
           "visibility": "public_reconstruction",
           "pinned_on": "2026-09-03",
           "note": "Source passages pinned 2026-09-03: the retained transcription is now a registered source document and every cited passage is hashed, so a line shift is reported instead of silently changing what the row cites."
+        }
+      ],
+      "statement_pins": [
+        {
+          "declaration": "Acharyya2024.responseDistEntry",
+          "type_expr_hash": "2624069128",
+          "type_text_sha256": "1e0f0f92bb1808a2b5b3a3c6a881dd93d7b05d6c8bce7cb015ae5493fdc5a650",
+          "toolchain": "leanprover/lean4:v4.34.0-rc1",
+          "pinned_on": "2026-09-03",
+          "note": "Statement pins recorded 2026-09-03: the review's declarations are now guarded against elaborated-type drift, as Quench's already were."
+        },
+        {
+          "declaration": "Acharyya2024.responseDist",
+          "type_expr_hash": "1372540492",
+          "type_text_sha256": "697b011fd352f5ba93737d5faa17892cb19a02867f83a9478ead9bdfe5b0e332",
+          "toolchain": "leanprover/lean4:v4.34.0-rc1",
+          "pinned_on": "2026-09-03",
+          "note": "Statement pins recorded 2026-09-03: the review's declarations are now guarded against elaborated-type drift, as Quench's already were."
         }
       ]
     },
@@ -843,6 +1349,24 @@
           "pinned_on": "2026-09-03",
           "note": "Source passages pinned 2026-09-03: the retained transcription is now a registered source document and every cited passage is hashed, so a line shift is reported instead of silently changing what the row cites."
         }
+      ],
+      "statement_pins": [
+        {
+          "declaration": "Acharyya2024.responseDist",
+          "type_expr_hash": "1372540492",
+          "type_text_sha256": "697b011fd352f5ba93737d5faa17892cb19a02867f83a9478ead9bdfe5b0e332",
+          "toolchain": "leanprover/lean4:v4.34.0-rc1",
+          "pinned_on": "2026-09-03",
+          "note": "Statement pins recorded 2026-09-03: the review's declarations are now guarded against elaborated-type drift, as Quench's already were."
+        },
+        {
+          "declaration": "Acharyya2025.Bridge.EntrywiseClose",
+          "type_expr_hash": "1659826171",
+          "type_text_sha256": "bab7758df4fb3b16392a2d37f976f851a9b01eb8302d1abd9c3e6877e8b20707",
+          "toolchain": "leanprover/lean4:v4.34.0-rc1",
+          "pinned_on": "2026-09-03",
+          "note": "Statement pins recorded 2026-09-03: the review's declarations are now guarded against elaborated-type drift, as Quench's already were."
+        }
       ]
     },
     {
@@ -908,6 +1432,24 @@
           "visibility": "public_reconstruction",
           "pinned_on": "2026-09-03",
           "note": "Source passages pinned 2026-09-03: the retained transcription is now a registered source document and every cited passage is hashed, so a line shift is reported instead of silently changing what the row cites."
+        }
+      ],
+      "statement_pins": [
+        {
+          "declaration": "Helm2025.DKPS.risk_df",
+          "type_expr_hash": "1417425814",
+          "type_text_sha256": "22e423203a4a719c32efd33367a791611c74f464663ab3e664f00e5072aaf93c",
+          "toolchain": "leanprover/lean4:v4.34.0-rc1",
+          "pinned_on": "2026-09-03",
+          "note": "Statement pins recorded 2026-09-03: the review's declarations are now guarded against elaborated-type drift, as Quench's already were."
+        },
+        {
+          "declaration": "Helm2025.DKPS.bayesRisk",
+          "type_expr_hash": "4163875875",
+          "type_text_sha256": "75bf197dfc4a65786fe8809f4ff00c9ffec92e5a17e84ad4ff279f0fc4897922",
+          "toolchain": "leanprover/lean4:v4.34.0-rc1",
+          "pinned_on": "2026-09-03",
+          "note": "Statement pins recorded 2026-09-03: the review's declarations are now guarded against elaborated-type drift, as Quench's already were."
         }
       ]
     },
@@ -987,6 +1529,64 @@
           "visibility": "public_reconstruction",
           "pinned_on": "2026-09-03",
           "note": "Source passages pinned 2026-09-03: the retained transcription is now a registered source document and every cited passage is hashed, so a line shift is reported instead of silently changing what the row cites."
+        }
+      ],
+      "statement_pins": [
+        {
+          "declaration": "Helm2025.DKPS.ConsistentExpected",
+          "type_expr_hash": "2261616368",
+          "type_text_sha256": "d45fa0e0013e1a6344e7c439467f07bc7b7e43c7e6037a625601885b4810851d",
+          "toolchain": "leanprover/lean4:v4.34.0-rc1",
+          "pinned_on": "2026-09-03",
+          "note": "Statement pins recorded 2026-09-03: the review's declarations are now guarded against elaborated-type drift, as Quench's already were."
+        },
+        {
+          "declaration": "Helm2025.DKPS.ConsistentInProbability",
+          "type_expr_hash": "3095354353",
+          "type_text_sha256": "881756be2999fcd481593784a58c74ca429702ce65107f4203e3e4c50339f261",
+          "toolchain": "leanprover/lean4:v4.34.0-rc1",
+          "pinned_on": "2026-09-03",
+          "note": "Statement pins recorded 2026-09-03: the review's declarations are now guarded against elaborated-type drift, as Quench's already were."
+        },
+        {
+          "declaration": "Helm2025.DKPS.ConvergesInProbabilityToZero",
+          "type_expr_hash": "2952115693",
+          "type_text_sha256": "ef67e3f1109d92aa61d392d5bdadeebf16a4e5c1030531558e61f5671cf42122",
+          "toolchain": "leanprover/lean4:v4.34.0-rc1",
+          "pinned_on": "2026-09-03",
+          "note": "Statement pins recorded 2026-09-03: the review's declarations are now guarded against elaborated-type drift, as Quench's already were."
+        },
+        {
+          "declaration": "Helm2025.DKPS.consistentExpected_of_consistentInProbability",
+          "type_expr_hash": "53290736",
+          "type_text_sha256": "399bc560eebb081b98edd1f7373d2ba448575f37dc01a2704e304461d566c264",
+          "toolchain": "leanprover/lean4:v4.34.0-rc1",
+          "pinned_on": "2026-09-03",
+          "note": "Statement pins recorded 2026-09-03: the review's declarations are now guarded against elaborated-type drift, as Quench's already were."
+        },
+        {
+          "declaration": "Helm2025.DKPS.riskGivenTraining",
+          "type_expr_hash": "1065729927",
+          "type_text_sha256": "ad2453887cd7391a66c54f629b777a9522a1a485697249073b236cb9315a3196",
+          "toolchain": "leanprover/lean4:v4.34.0-rc1",
+          "pinned_on": "2026-09-03",
+          "note": "Statement pins recorded 2026-09-03: the review's declarations are now guarded against elaborated-type drift, as Quench's already were."
+        },
+        {
+          "declaration": "Helm2025.DKPS.risk_eq_integral_riskGivenTraining",
+          "type_expr_hash": "2450084525",
+          "type_text_sha256": "49d8454fd1d181cd3a3d3fc50ff43390832a41df6689d9c5b9f2991ee9f87e4c",
+          "toolchain": "leanprover/lean4:v4.34.0-rc1",
+          "pinned_on": "2026-09-03",
+          "note": "Statement pins recorded 2026-09-03: the review's declarations are now guarded against elaborated-type drift, as Quench's already were."
+        },
+        {
+          "declaration": "Helm2025.DKPS.tendsto_integral_riskGivenTraining_of_consistentInProbability",
+          "type_expr_hash": "2392873107",
+          "type_text_sha256": "ea9c30e77b76bd4ba47e46c9dee577f626c57cec3f19c06b2dffa7163bf808a2",
+          "toolchain": "leanprover/lean4:v4.34.0-rc1",
+          "pinned_on": "2026-09-03",
+          "note": "Statement pins recorded 2026-09-03: the review's declarations are now guarded against elaborated-type drift, as Quench's already were."
         }
       ]
     }

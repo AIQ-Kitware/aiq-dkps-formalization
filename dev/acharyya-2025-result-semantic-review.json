@@ -116,6 +116,64 @@
           "pinned_on": "2026-09-03",
           "note": "Source passages pinned 2026-09-03: the retained transcription is now a registered source document and every cited passage is hashed, so a line shift is reported instead of silently changing what the row cites."
         }
+      ],
+      "statement_pins": [
+        {
+          "declaration": "Acharyya2025.Bridge.EntrywiseClose",
+          "type_expr_hash": "1659826171",
+          "type_text_sha256": "bab7758df4fb3b16392a2d37f976f851a9b01eb8302d1abd9c3e6877e8b20707",
+          "toolchain": "leanprover/lean4:v4.34.0-rc1",
+          "pinned_on": "2026-09-03",
+          "note": "Statement pins recorded 2026-09-03: the review's declarations are now guarded against elaborated-type drift, as Quench's already were."
+        },
+        {
+          "declaration": "Acharyya2025.Bridge.entrywise_close_to_cmds_entrywise_close_of_bounded",
+          "type_expr_hash": "3186086077",
+          "type_text_sha256": "23f3f3e5bb129b278e164814b53a0ec64098dce6750b816230928f5355e529f8",
+          "toolchain": "leanprover/lean4:v4.34.0-rc1",
+          "pinned_on": "2026-09-03",
+          "note": "Statement pins recorded 2026-09-03: the review's declarations are now guarded against elaborated-type drift, as Quench's already were."
+        },
+        {
+          "declaration": "Acharyya2025.GrowingResponse.highProb_uniformResponseMeanClose_of_growing_iid_replicates_paperScale",
+          "type_expr_hash": "3158091550",
+          "type_text_sha256": "47059a9ecd18ba62f5b74afa3d6d44041ecfa8c4cc3cabdb1bee464c8e0c2d6b",
+          "toolchain": "leanprover/lean4:v4.34.0-rc1",
+          "pinned_on": "2026-09-03",
+          "note": "Statement pins recorded 2026-09-03: the review's declarations are now guarded against elaborated-type drift, as Quench's already were."
+        },
+        {
+          "declaration": "Acharyya2025.GrowingResponse.prob_uniformResponseMeanClose_ge_of_secondMoment",
+          "type_expr_hash": "1972343791",
+          "type_text_sha256": "848a6e96fd2c70d7fc119b29ef44404950ae2564e8a04833105f8155562fe903",
+          "toolchain": "leanprover/lean4:v4.34.0-rc1",
+          "pinned_on": "2026-09-03",
+          "note": "Statement pins recorded 2026-09-03: the review's declarations are now guarded against elaborated-type drift, as Quench's already were."
+        },
+        {
+          "declaration": "Acharyya2025.Theorem1Scale.mean_eq",
+          "type_expr_hash": "260809563",
+          "type_text_sha256": "2ce66ce9add02466aab15930ad91cbc91f14940d30c94b287cea78cc5a341141",
+          "toolchain": "leanprover/lean4:v4.34.0-rc1",
+          "pinned_on": "2026-09-03",
+          "note": "Statement pins recorded 2026-09-03: the review's declarations are now guarded against elaborated-type drift, as Quench's already were."
+        },
+        {
+          "declaration": "Acharyya2025.Theorem1Scale.prob_entrywiseClose_lt_paper_bound",
+          "type_expr_hash": "3334568879",
+          "type_text_sha256": "d9fab52264219dd93da741c594c1331660b03bb7974b1b36abbf16ad54026a71",
+          "toolchain": "leanprover/lean4:v4.34.0-rc1",
+          "pinned_on": "2026-09-03",
+          "note": "Statement pins recorded 2026-09-03: the review's declarations are now guarded against elaborated-type drift, as Quench's already were."
+        },
+        {
+          "declaration": "Acharyya2025.Theorem1Scale.secondMoment_eq",
+          "type_expr_hash": "1931675631",
+          "type_text_sha256": "e4b1b2ff63fb6181d2103781227d53c5c7dce5647655ddbd141969e916ca7449",
+          "toolchain": "leanprover/lean4:v4.34.0-rc1",
+          "pinned_on": "2026-09-03",
+          "note": "Statement pins recorded 2026-09-03: the review's declarations are now guarded against elaborated-type drift, as Quench's already were."
+        }
       ]
     },
     {
@@ -191,6 +249,48 @@
           "pinned_on": "2026-09-03",
           "note": "Source passages pinned 2026-09-03: the retained transcription is now a registered source document and every cited passage is hashed, so a line shift is reported instead of silently changing what the row cites."
         }
+      ],
+      "statement_pins": [
+        {
+          "declaration": "Acharyya2025.MathlibBridge.MatrixOperatorNormClose",
+          "type_expr_hash": "1828846634",
+          "type_text_sha256": "24d22b7692e036c0ae34914a30b3346b04af5619b8fa8523cced6fa6f14e222b",
+          "toolchain": "leanprover/lean4:v4.34.0-rc1",
+          "pinned_on": "2026-09-03",
+          "note": "Statement pins recorded 2026-09-03: the review's declarations are now guarded against elaborated-type drift, as Quench's already were."
+        },
+        {
+          "declaration": "Acharyya2025.SpectralPipeline.operatorNormClose_of_entrywiseClose",
+          "type_expr_hash": "4172292234",
+          "type_text_sha256": "bf5254a5287076d130b6ce69323e906588fe3689443ca0cd0e543a0ac02e0a6b",
+          "toolchain": "leanprover/lean4:v4.34.0-rc1",
+          "pinned_on": "2026-09-03",
+          "note": "Statement pins recorded 2026-09-03: the review's declarations are now guarded against elaborated-type drift, as Quench's already were."
+        },
+        {
+          "declaration": "Acharyya2025.PaperRate.paperBaseRatio",
+          "type_expr_hash": "747556866",
+          "type_text_sha256": "321f102c206135a2a989c111ce80438a218f51232001cbe7ad0f9aab90d145ab",
+          "toolchain": "leanprover/lean4:v4.34.0-rc1",
+          "pinned_on": "2026-09-03",
+          "note": "Statement pins recorded 2026-09-03: the review's declarations are now guarded against elaborated-type drift, as Quench's already were."
+        },
+        {
+          "declaration": "Acharyya2025.PaperRate.paperDeltaScale",
+          "type_expr_hash": "2859705154",
+          "type_text_sha256": "e2d5394375dfe2f80a1d289a5743b64f5a8fc87f7358d8988c31d88db9d3c5fa",
+          "toolchain": "leanprover/lean4:v4.34.0-rc1",
+          "pinned_on": "2026-09-03",
+          "note": "Statement pins recorded 2026-09-03: the review's declarations are now guarded against elaborated-type drift, as Quench's already were."
+        },
+        {
+          "declaration": "Acharyya2025.PaperRate.tendsto_concentration_ratio_paperDeltaScale_zero",
+          "type_expr_hash": "3639661487",
+          "type_text_sha256": "220feafd83e4289b33f41e2bbf9b0f51e7b0d650da1c211c4986294729ea7322",
+          "toolchain": "leanprover/lean4:v4.34.0-rc1",
+          "pinned_on": "2026-09-03",
+          "note": "Statement pins recorded 2026-09-03: the review's declarations are now guarded against elaborated-type drift, as Quench's already were."
+        }
       ]
     },
     {
@@ -256,6 +356,24 @@
           "visibility": "public_reconstruction",
           "pinned_on": "2026-09-03",
           "note": "Source passages pinned 2026-09-03: the retained transcription is now a registered source document and every cited passage is hashed, so a line shift is reported instead of silently changing what the row cites."
+        }
+      ],
+      "statement_pins": [
+        {
+          "declaration": "Acharyya2025.SpectralPipeline.CMDSpectralAssumptions",
+          "type_expr_hash": "3249439993",
+          "type_text_sha256": "3adfd3da4a9736c8988c045c1c1315a938877d6b15e377224e304785e0cae0fb",
+          "toolchain": "leanprover/lean4:v4.34.0-rc1",
+          "pinned_on": "2026-09-03",
+          "note": "Statement pins recorded 2026-09-03: the review's declarations are now guarded against elaborated-type drift, as Quench's already were."
+        },
+        {
+          "declaration": "Acharyya2025.ConfigPerturbation.exists_isometry_configFrobError_spectralConfig_le",
+          "type_expr_hash": "1731088773",
+          "type_text_sha256": "70885d4787cd5bca5b9e56255b5de6411e474625f8ecb99bb981f77b3ff9eea4",
+          "toolchain": "leanprover/lean4:v4.34.0-rc1",
+          "pinned_on": "2026-09-03",
+          "note": "Statement pins recorded 2026-09-03: the review's declarations are now guarded against elaborated-type drift, as Quench's already were."
         }
       ]
     },
@@ -329,6 +447,24 @@
           "pinned_on": "2026-09-03",
           "note": "Source passages pinned 2026-09-03: the retained transcription is now a registered source document and every cited passage is hashed, so a line shift is reported instead of silently changing what the row cites."
         }
+      ],
+      "statement_pins": [
+        {
+          "declaration": "Acharyya2025.ConfigPerturbation.exists_isometry_configFrobError_spectralConfig_le",
+          "type_expr_hash": "1731088773",
+          "type_text_sha256": "70885d4787cd5bca5b9e56255b5de6411e474625f8ecb99bb981f77b3ff9eea4",
+          "toolchain": "leanprover/lean4:v4.34.0-rc1",
+          "pinned_on": "2026-09-03",
+          "note": "Statement pins recorded 2026-09-03: the review's declarations are now guarded against elaborated-type drift, as Quench's already were."
+        },
+        {
+          "declaration": "Acharyya2025.PaperRate.paperDeltaGrowingConfigControl",
+          "type_expr_hash": "2207437514",
+          "type_text_sha256": "72059aaf45a748e429df5d2f80a8e84cfa6872d7a087c0a695b1fa87210d5ab2",
+          "toolchain": "leanprover/lean4:v4.34.0-rc1",
+          "pinned_on": "2026-09-03",
+          "note": "Statement pins recorded 2026-09-03: the review's declarations are now guarded against elaborated-type drift, as Quench's already were."
+        }
       ]
     },
     {
@@ -398,6 +534,40 @@
           "visibility": "public_reconstruction",
           "pinned_on": "2026-09-03",
           "note": "Source passages pinned 2026-09-03: the retained transcription is now a registered source document and every cited passage is hashed, so a line shift is reported instead of silently changing what the row cites."
+        }
+      ],
+      "statement_pins": [
+        {
+          "declaration": "Acharyya2025.ManifoldCondition.classicalMDSMatrix_const_eq_zero",
+          "type_expr_hash": "2553102592",
+          "type_text_sha256": "0bcfca59e4c8111c33ab0e4f4b753572de2df1cf47b4339b7de75aafe9545a1b",
+          "toolchain": "leanprover/lean4:v4.34.0-rc1",
+          "pinned_on": "2026-09-03",
+          "note": "Statement pins recorded 2026-09-03: the review's declarations are now guarded against elaborated-type drift, as Quench's already were."
+        },
+        {
+          "declaration": "Acharyya2025.ManifoldCondition.eigenvalues₀_classicalMDSMatrix_const_eq_zero",
+          "type_expr_hash": "318218449",
+          "type_text_sha256": "1e6769f55323bd267aacc7e3d548e5d730b36712861b42a6182722b8f108c242",
+          "toolchain": "leanprover/lean4:v4.34.0-rc1",
+          "pinned_on": "2026-09-03",
+          "note": "Statement pins recorded 2026-09-03: the review's declarations are now guarded against elaborated-type drift, as Quench's already were."
+        },
+        {
+          "declaration": "Acharyya2025.ManifoldCondition.no_eigenvalue_floor_for_const_selection",
+          "type_expr_hash": "2576093634",
+          "type_text_sha256": "8fda53ff0d17428e0757a34cd37950c3d859f05fded7f0521ca3cb52eac2bdba",
+          "toolchain": "leanprover/lean4:v4.34.0-rc1",
+          "pinned_on": "2026-09-03",
+          "note": "Statement pins recorded 2026-09-03: the review's declarations are now guarded against elaborated-type drift, as Quench's already were."
+        },
+        {
+          "declaration": "Acharyya2025.ManifoldCondition.rank_classicalMDSMatrix_const_eq_zero",
+          "type_expr_hash": "1532830659",
+          "type_text_sha256": "402107e3f02710b04789044e3cd08f2d78bb87fbd583cba07b1d7a193937a063",
+          "toolchain": "leanprover/lean4:v4.34.0-rc1",
+          "pinned_on": "2026-09-03",
+          "note": "Statement pins recorded 2026-09-03: the review's declarations are now guarded against elaborated-type drift, as Quench's already were."
         }
       ]
     },
@@ -507,6 +677,48 @@
           "pinned_on": "2026-09-03",
           "note": "Source passages pinned 2026-09-03: the retained transcription is now a registered source document and every cited passage is hashed, so a line shift is reported instead of silently changing what the row cites."
         }
+      ],
+      "statement_pins": [
+        {
+          "declaration": "Acharyya2025.ConfigPerturbation.ConfigFrobError",
+          "type_expr_hash": "4176238551",
+          "type_text_sha256": "345993908fc6c91be1880f59e546fbad40de267c67d7f5a577d700a0d5adb550",
+          "toolchain": "leanprover/lean4:v4.34.0-rc1",
+          "pinned_on": "2026-09-03",
+          "note": "Statement pins recorded 2026-09-03: the review's declarations are now guarded against elaborated-type drift, as Quench's already were."
+        },
+        {
+          "declaration": "Acharyya2025.ConfigPerturbation.configFrobBound",
+          "type_expr_hash": "3081034975",
+          "type_text_sha256": "f85503e05b0295b0b1075f64fc27d2abb30bee8aea4d6fcbff91b274e84cd245",
+          "toolchain": "leanprover/lean4:v4.34.0-rc1",
+          "pinned_on": "2026-09-03",
+          "note": "Statement pins recorded 2026-09-03: the review's declarations are now guarded against elaborated-type drift, as Quench's already were."
+        },
+        {
+          "declaration": "Acharyya2025.ConfigPerturbation.exists_isometry_configFrobError_spectralConfig_le",
+          "type_expr_hash": "1731088773",
+          "type_text_sha256": "70885d4787cd5bca5b9e56255b5de6411e474625f8ecb99bb981f77b3ff9eea4",
+          "toolchain": "leanprover/lean4:v4.34.0-rc1",
+          "pinned_on": "2026-09-03",
+          "note": "Statement pins recorded 2026-09-03: the review's declarations are now guarded against elaborated-type drift, as Quench's already were."
+        },
+        {
+          "declaration": "Acharyya2025.AlignedPipeline.highProb_aligned_configFrobError_of_entrywise_close",
+          "type_expr_hash": "3812157783",
+          "type_text_sha256": "f8d6617d8c1d9cd9bec55e38070cdbeb8c1efc326209b8783c98fdcc22aad66f",
+          "toolchain": "leanprover/lean4:v4.34.0-rc1",
+          "pinned_on": "2026-09-03",
+          "note": "Statement pins recorded 2026-09-03: the review's declarations are now guarded against elaborated-type drift, as Quench's already were."
+        },
+        {
+          "declaration": "Acharyya2025.RateChain.endToEndFrobQuadraticRate",
+          "type_expr_hash": "111958597",
+          "type_text_sha256": "5139c6d032132ef3c6a26cd338b20e0da1c60b68555d2e0e2e96b1bb3b99894e",
+          "toolchain": "leanprover/lean4:v4.34.0-rc1",
+          "pinned_on": "2026-09-03",
+          "note": "Statement pins recorded 2026-09-03: the review's declarations are now guarded against elaborated-type drift, as Quench's already were."
+        }
       ]
     },
     {
@@ -586,6 +798,56 @@
           "pinned_on": "2026-09-03",
           "note": "Source passages pinned 2026-09-03: the retained transcription is now a registered source document and every cited passage is hashed, so a line shift is reported instead of silently changing what the row cites."
         }
+      ],
+      "statement_pins": [
+        {
+          "declaration": "Acharyya2025.RateChain.endToEndFrobRate",
+          "type_expr_hash": "111958597",
+          "type_text_sha256": "5139c6d032132ef3c6a26cd338b20e0da1c60b68555d2e0e2e96b1bb3b99894e",
+          "toolchain": "leanprover/lean4:v4.34.0-rc1",
+          "pinned_on": "2026-09-03",
+          "note": "Statement pins recorded 2026-09-03: the review's declarations are now guarded against elaborated-type drift, as Quench's already were."
+        },
+        {
+          "declaration": "Acharyya2025.RateChain.endToEndFrobQuadraticRate",
+          "type_expr_hash": "111958597",
+          "type_text_sha256": "5139c6d032132ef3c6a26cd338b20e0da1c60b68555d2e0e2e96b1bb3b99894e",
+          "toolchain": "leanprover/lean4:v4.34.0-rc1",
+          "pinned_on": "2026-09-03",
+          "note": "Statement pins recorded 2026-09-03: the review's declarations are now guarded against elaborated-type drift, as Quench's already were."
+        },
+        {
+          "declaration": "Acharyya2025.RateChain.eventually_endToEndFrobRate_le_endToEndFrobQuadraticRate",
+          "type_expr_hash": "457010309",
+          "type_text_sha256": "592f0cc7ed267b68bed94ffe74e6efdcd776e726743ce264e07f09cb9478ce30",
+          "toolchain": "leanprover/lean4:v4.34.0-rc1",
+          "pinned_on": "2026-09-03",
+          "note": "Statement pins recorded 2026-09-03: the review's declarations are now guarded against elaborated-type drift, as Quench's already were."
+        },
+        {
+          "declaration": "Acharyya2025.RateChain.tendsto_endToEndFrobQuadraticRate_zero",
+          "type_expr_hash": "3782094883",
+          "type_text_sha256": "774773f238556bdddfc52caddc8fb5d72a4414742e6947ae17980dac29338670",
+          "toolchain": "leanprover/lean4:v4.34.0-rc1",
+          "pinned_on": "2026-09-03",
+          "note": "Statement pins recorded 2026-09-03: the review's declarations are now guarded against elaborated-type drift, as Quench's already were."
+        },
+        {
+          "declaration": "Acharyya2025.RateChain.highProb_aligned_configFrobError_endToEndFrobRate",
+          "type_expr_hash": "3424988596",
+          "type_text_sha256": "a10fe4e4ad6f911f8a63beca24b3c7473440a794bae0ea4703cec6001975fc3e",
+          "toolchain": "leanprover/lean4:v4.34.0-rc1",
+          "pinned_on": "2026-09-03",
+          "note": "Statement pins recorded 2026-09-03: the review's declarations are now guarded against elaborated-type drift, as Quench's already were."
+        },
+        {
+          "declaration": "Acharyya2025.PaperRate.paperDeltaScale",
+          "type_expr_hash": "2859705154",
+          "type_text_sha256": "e2d5394375dfe2f80a1d289a5743b64f5a8fc87f7358d8988c31d88db9d3c5fa",
+          "toolchain": "leanprover/lean4:v4.34.0-rc1",
+          "pinned_on": "2026-09-03",
+          "note": "Statement pins recorded 2026-09-03: the review's declarations are now guarded against elaborated-type drift, as Quench's already were."
+        }
       ]
     },
     {
@@ -652,6 +914,16 @@
           "visibility": "public_reconstruction",
           "pinned_on": "2026-09-03",
           "note": "Source passages pinned 2026-09-03: the retained transcription is now a registered source document and every cited passage is hashed, so a line shift is reported instead of silently changing what the row cites."
+        }
+      ],
+      "statement_pins": [
+        {
+          "declaration": "Acharyya2025.ConfigPerturbation.exists_isometry_configFrobError_spectralConfig_le",
+          "type_expr_hash": "1731088773",
+          "type_text_sha256": "70885d4787cd5bca5b9e56255b5de6411e474625f8ecb99bb981f77b3ff9eea4",
+          "toolchain": "leanprover/lean4:v4.34.0-rc1",
+          "pinned_on": "2026-09-03",
+          "note": "Statement pins recorded 2026-09-03: the review's declarations are now guarded against elaborated-type drift, as Quench's already were."
         }
       ]
     },
@@ -721,6 +993,24 @@
           "pinned_on": "2026-09-03",
           "note": "Source passages pinned 2026-09-03: the retained transcription is now a registered source document and every cited passage is hashed, so a line shift is reported instead of silently changing what the row cites."
         }
+      ],
+      "statement_pins": [
+        {
+          "declaration": "Acharyya2025.ConfigPerturbation.exists_isometry_configFrobError_spectralConfig_le",
+          "type_expr_hash": "1731088773",
+          "type_text_sha256": "70885d4787cd5bca5b9e56255b5de6411e474625f8ecb99bb981f77b3ff9eea4",
+          "toolchain": "leanprover/lean4:v4.34.0-rc1",
+          "pinned_on": "2026-09-03",
+          "note": "Statement pins recorded 2026-09-03: the review's declarations are now guarded against elaborated-type drift, as Quench's already were."
+        },
+        {
+          "declaration": "Acharyya2025.ConfigPerturbation.configFrobBound",
+          "type_expr_hash": "3081034975",
+          "type_text_sha256": "f85503e05b0295b0b1075f64fc27d2abb30bee8aea4d6fcbff91b274e84cd245",
+          "toolchain": "leanprover/lean4:v4.34.0-rc1",
+          "pinned_on": "2026-09-03",
+          "note": "Statement pins recorded 2026-09-03: the review's declarations are now guarded against elaborated-type drift, as Quench's already were."
+        }
       ]
     },
     {
@@ -788,6 +1078,24 @@
           "visibility": "public_reconstruction",
           "pinned_on": "2026-09-03",
           "note": "Source passages pinned 2026-09-03: the retained transcription is now a registered source document and every cited passage is hashed, so a line shift is reported instead of silently changing what the row cites."
+        }
+      ],
+      "statement_pins": [
+        {
+          "declaration": "Acharyya2025.ConfigPerturbation.exists_isometry_configFrobError_spectralConfig_le",
+          "type_expr_hash": "1731088773",
+          "type_text_sha256": "70885d4787cd5bca5b9e56255b5de6411e474625f8ecb99bb981f77b3ff9eea4",
+          "toolchain": "leanprover/lean4:v4.34.0-rc1",
+          "pinned_on": "2026-09-03",
+          "note": "Statement pins recorded 2026-09-03: the review's declarations are now guarded against elaborated-type drift, as Quench's already were."
+        },
+        {
+          "declaration": "YuWangSamworth2015.yuWangSamworth_alignmentMap_sub_overlapOp_apply_le",
+          "type_expr_hash": "2329327429",
+          "type_text_sha256": "6f9401aabd9af759e221daaefcb98599bf4cb83336cc78d8a7a01c52225a7dfe",
+          "toolchain": "leanprover/lean4:v4.34.0-rc1",
+          "pinned_on": "2026-09-03",
+          "note": "Statement pins recorded 2026-09-03: the review's declarations are now guarded against elaborated-type drift, as Quench's already were."
         }
       ]
     },
@@ -857,6 +1165,24 @@
           "pinned_on": "2026-09-03",
           "note": "Source passages pinned 2026-09-03: the retained transcription is now a registered source document and every cited passage is hashed, so a line shift is reported instead of silently changing what the row cites."
         }
+      ],
+      "statement_pins": [
+        {
+          "declaration": "Acharyya2025.ConfigPerturbation.exists_isometry_configFrobError_spectralConfig_le",
+          "type_expr_hash": "1731088773",
+          "type_text_sha256": "70885d4787cd5bca5b9e56255b5de6411e474625f8ecb99bb981f77b3ff9eea4",
+          "toolchain": "leanprover/lean4:v4.34.0-rc1",
+          "pinned_on": "2026-09-03",
+          "note": "Statement pins recorded 2026-09-03: the review's declarations are now guarded against elaborated-type drift, as Quench's already were."
+        },
+        {
+          "declaration": "YuWangSamworth2015.yuWangSamworth_alignmentMap_sub_overlapOp_apply_le",
+          "type_expr_hash": "2329327429",
+          "type_text_sha256": "6f9401aabd9af759e221daaefcb98599bf4cb83336cc78d8a7a01c52225a7dfe",
+          "toolchain": "leanprover/lean4:v4.34.0-rc1",
+          "pinned_on": "2026-09-03",
+          "note": "Statement pins recorded 2026-09-03: the review's declarations are now guarded against elaborated-type drift, as Quench's already were."
+        }
       ]
     },
     {
@@ -924,6 +1250,24 @@
           "visibility": "public_reconstruction",
           "pinned_on": "2026-09-03",
           "note": "Source passages pinned 2026-09-03: the retained transcription is now a registered source document and every cited passage is hashed, so a line shift is reported instead of silently changing what the row cites."
+        }
+      ],
+      "statement_pins": [
+        {
+          "declaration": "Acharyya2025.ConfigPerturbation.exists_isometry_configFrobError_spectralConfig_le",
+          "type_expr_hash": "1731088773",
+          "type_text_sha256": "70885d4787cd5bca5b9e56255b5de6411e474625f8ecb99bb981f77b3ff9eea4",
+          "toolchain": "leanprover/lean4:v4.34.0-rc1",
+          "pinned_on": "2026-09-03",
+          "note": "Statement pins recorded 2026-09-03: the review's declarations are now guarded against elaborated-type drift, as Quench's already were."
+        },
+        {
+          "declaration": "Acharyya2025.ConfigPerturbation.configFrobBound",
+          "type_expr_hash": "3081034975",
+          "type_text_sha256": "f85503e05b0295b0b1075f64fc27d2abb30bee8aea4d6fcbff91b274e84cd245",
+          "toolchain": "leanprover/lean4:v4.34.0-rc1",
+          "pinned_on": "2026-09-03",
+          "note": "Statement pins recorded 2026-09-03: the review's declarations are now guarded against elaborated-type drift, as Quench's already were."
         }
       ]
     },
@@ -993,6 +1337,24 @@
           "pinned_on": "2026-09-03",
           "note": "Source passages pinned 2026-09-03: the retained transcription is now a registered source document and every cited passage is hashed, so a line shift is reported instead of silently changing what the row cites."
         }
+      ],
+      "statement_pins": [
+        {
+          "declaration": "Acharyya2025.ConfigPerturbation.exists_isometry_configFrobError_spectralConfig_le",
+          "type_expr_hash": "1731088773",
+          "type_text_sha256": "70885d4787cd5bca5b9e56255b5de6411e474625f8ecb99bb981f77b3ff9eea4",
+          "toolchain": "leanprover/lean4:v4.34.0-rc1",
+          "pinned_on": "2026-09-03",
+          "note": "Statement pins recorded 2026-09-03: the review's declarations are now guarded against elaborated-type drift, as Quench's already were."
+        },
+        {
+          "declaration": "YuWangSamworth2015.yuWangSamworth_alignmentMap_sub_overlapOp_apply_le",
+          "type_expr_hash": "2329327429",
+          "type_text_sha256": "6f9401aabd9af759e221daaefcb98599bf4cb83336cc78d8a7a01c52225a7dfe",
+          "toolchain": "leanprover/lean4:v4.34.0-rc1",
+          "pinned_on": "2026-09-03",
+          "note": "Statement pins recorded 2026-09-03: the review's declarations are now guarded against elaborated-type drift, as Quench's already were."
+        }
       ]
     },
     {
@@ -1061,6 +1423,24 @@
           "pinned_on": "2026-09-03",
           "note": "Source passages pinned 2026-09-03: the retained transcription is now a registered source document and every cited passage is hashed, so a line shift is reported instead of silently changing what the row cites."
         }
+      ],
+      "statement_pins": [
+        {
+          "declaration": "Acharyya2025.ConfigPerturbation.exists_isometry_configFrobError_spectralConfig_le",
+          "type_expr_hash": "1731088773",
+          "type_text_sha256": "70885d4787cd5bca5b9e56255b5de6411e474625f8ecb99bb981f77b3ff9eea4",
+          "toolchain": "leanprover/lean4:v4.34.0-rc1",
+          "pinned_on": "2026-09-03",
+          "note": "Statement pins recorded 2026-09-03: the review's declarations are now guarded against elaborated-type drift, as Quench's already were."
+        },
+        {
+          "declaration": "Acharyya2025.Overlap.eigenvalue_commutator_eq",
+          "type_expr_hash": "168025615",
+          "type_text_sha256": "d2336e137e5d01747267e6b4e6688f4e1d5b50de611c962f57ad694c2528ed99",
+          "toolchain": "leanprover/lean4:v4.34.0-rc1",
+          "pinned_on": "2026-09-03",
+          "note": "Statement pins recorded 2026-09-03: the review's declarations are now guarded against elaborated-type drift, as Quench's already were."
+        }
       ]
     },
     {
@@ -1128,6 +1508,16 @@
           "pinned_on": "2026-09-03",
           "note": "Source passages pinned 2026-09-03: the retained transcription is now a registered source document and every cited passage is hashed, so a line shift is reported instead of silently changing what the row cites."
         }
+      ],
+      "statement_pins": [
+        {
+          "declaration": "Acharyya2025.ConfigPerturbation.exists_isometry_configFrobError_spectralConfig_le",
+          "type_expr_hash": "1731088773",
+          "type_text_sha256": "70885d4787cd5bca5b9e56255b5de6411e474625f8ecb99bb981f77b3ff9eea4",
+          "toolchain": "leanprover/lean4:v4.34.0-rc1",
+          "pinned_on": "2026-09-03",
+          "note": "Statement pins recorded 2026-09-03: the review's declarations are now guarded against elaborated-type drift, as Quench's already were."
+        }
       ]
     },
     {
@@ -1194,6 +1584,16 @@
           "visibility": "public_reconstruction",
           "pinned_on": "2026-09-03",
           "note": "Source passages pinned 2026-09-03: the retained transcription is now a registered source document and every cited passage is hashed, so a line shift is reported instead of silently changing what the row cites."
+        }
+      ],
+      "statement_pins": [
+        {
+          "declaration": "Acharyya2025.ConfigPerturbation.exists_isometry_configFrobError_spectralConfig_le",
+          "type_expr_hash": "1731088773",
+          "type_text_sha256": "70885d4787cd5bca5b9e56255b5de6411e474625f8ecb99bb981f77b3ff9eea4",
+          "toolchain": "leanprover/lean4:v4.34.0-rc1",
+          "pinned_on": "2026-09-03",
+          "note": "Statement pins recorded 2026-09-03: the review's declarations are now guarded against elaborated-type drift, as Quench's already were."
         }
       ]
     },
@@ -1263,6 +1663,24 @@
           "pinned_on": "2026-09-03",
           "note": "Source passages pinned 2026-09-03: the retained transcription is now a registered source document and every cited passage is hashed, so a line shift is reported instead of silently changing what the row cites."
         }
+      ],
+      "statement_pins": [
+        {
+          "declaration": "Acharyya2025.ConfigPerturbation.exists_isometry_configFrobError_spectralConfig_le",
+          "type_expr_hash": "1731088773",
+          "type_text_sha256": "70885d4787cd5bca5b9e56255b5de6411e474625f8ecb99bb981f77b3ff9eea4",
+          "toolchain": "leanprover/lean4:v4.34.0-rc1",
+          "pinned_on": "2026-09-03",
+          "note": "Statement pins recorded 2026-09-03: the review's declarations are now guarded against elaborated-type drift, as Quench's already were."
+        },
+        {
+          "declaration": "Acharyya2025.ConfigPerturbation.configFrobBound",
+          "type_expr_hash": "3081034975",
+          "type_text_sha256": "f85503e05b0295b0b1075f64fc27d2abb30bee8aea4d6fcbff91b274e84cd245",
+          "toolchain": "leanprover/lean4:v4.34.0-rc1",
+          "pinned_on": "2026-09-03",
+          "note": "Statement pins recorded 2026-09-03: the review's declarations are now guarded against elaborated-type drift, as Quench's already were."
+        }
       ]
     },
     {
@@ -1330,6 +1748,24 @@
           "visibility": "public_reconstruction",
           "pinned_on": "2026-09-03",
           "note": "Source passages pinned 2026-09-03: the retained transcription is now a registered source document and every cited passage is hashed, so a line shift is reported instead of silently changing what the row cites."
+        }
+      ],
+      "statement_pins": [
+        {
+          "declaration": "Acharyya2025.ConfigPerturbation.exists_isometry_configFrobError_spectralConfig_le",
+          "type_expr_hash": "1731088773",
+          "type_text_sha256": "70885d4787cd5bca5b9e56255b5de6411e474625f8ecb99bb981f77b3ff9eea4",
+          "toolchain": "leanprover/lean4:v4.34.0-rc1",
+          "pinned_on": "2026-09-03",
+          "note": "Statement pins recorded 2026-09-03: the review's declarations are now guarded against elaborated-type drift, as Quench's already were."
+        },
+        {
+          "declaration": "Acharyya2025.ConfigPerturbation.configFrobBound",
+          "type_expr_hash": "3081034975",
+          "type_text_sha256": "f85503e05b0295b0b1075f64fc27d2abb30bee8aea4d6fcbff91b274e84cd245",
+          "toolchain": "leanprover/lean4:v4.34.0-rc1",
+          "pinned_on": "2026-09-03",
+          "note": "Statement pins recorded 2026-09-03: the review's declarations are now guarded against elaborated-type drift, as Quench's already were."
         }
       ]
     },
