@@ -4,7 +4,7 @@
 
 **Census family:** `source-completion-census`  
 **Items:** 50  
-**Unique cited Lean declarations:** 1212
+**Unique cited Lean declarations:** 1216
 
 ## How to use this census
 
@@ -2414,6 +2414,8 @@ AN ELABORATION TRAP WORTH KEEPING: `(cfc Real.sin Theta_0 : E ->l[k] E)` does NO
 - `TauCeti.DavisKahan1970.corollary3_1_compact_defectBlock_angleList_classification_complex`
 - `TauCeti.DavisKahan1970.corollary3_1_compact_defectBlock_angleList_classification_real`
 - `TauCeti.DavisKahan1970.corollary3_1_prescribedAngleSequence_classification_real`
+- `TauCeti.DavisKahan1970.angleSequence_eq_of_angleList_eq`
+- `TauCeti.DavisKahan1970.angle_eq_of_sin_sq_eq`
 
 **Notes.** **PROVED 2026-08-04, both directions, admission-free.**
 
@@ -2491,6 +2493,8 @@ STALE CITATION CORRECTED: this row's notes cited `corollary3_1_compact_defectBlo
 **ALL THREE ITEMS THIS ROW HELD OPEN ARE THINGS THE PAPER DOES NOT ASK FOR.**  (1) The multiplicity-aware COMPOSITION: the paper prints classification and realization as two separate sentences and never asks for a single composed statement -- internal architecture.  (2) The `P(I-Q)P` versus `PQP` question: **CLOSED, and the `next_action` was stale against this row's own notes** -- the printed-hypothesis theorem is on the defect block at both scalars, and the `PQP` version is a separate true theorem the paper does not ask for; the 2026-08-10 note already said so and `next_action` was never updated.  (3) The concrete-pair CFC instance diamond: an upstream Mathlib synthesis failure, which this row itself calls "an honest WORKAROUND, not a narrowing".
 
 The recorded strictness narrowing `0 < theta n < pi/2` sits ONLY on `corollary3_1_prescribedAngleSequence_classification`, a convenience composite that is not printed; both printed halves are separately at full generality.  And the printed "`Theta_1`'s eigenvalues are the same except perhaps the multiplicity of 0" is SUBSUMED rather than missing: the compiled invariant is `SameHalmosTrivialDimensions` plus ONE generic angle list, so the classification proves `Theta_1` contributes no independent invariant -- strictly more than the printed sentence.
+
+**UNDER-CERTIFICATION CORRECTED 2026-09-04.**  The realization clause now uses `corollary3_1_realization_zeroMultiplicity`, which prescribes the two angle-zero multiplicities independently as the printed sentence allows; `corollary3_1_realization` forces them equal and is retained as a specialization.
 
 **Next action.** No hostile-review hole is currently recorded for this source passage. Preserve exact source scope and re-audit if the distributable source specification changes.
 
@@ -4383,6 +4387,12 @@ At the OPERATOR norm the compiled residual statement is sound and in fact STRONG
 - `TauCeti.DavisKahan1970.Section8.theorem8_2_sinTwoTheta_residual_symmetricNorming`
 - `TauCeti.DavisKahan1970.Section8.theorem8_2_sinTwoTheta_residual_all_kyFan`
 - `TauCeti.DavisKahan1970.Section8.theorem8_2_branch_maximalAngle_lt_of_crossedDefects`
+- `TauCeti.DavisKahan1970.Section8.theorem8_2_sinTwoTheta_residual_directedAngle_symmetricNorming`
+- `TauCeti.DavisKahan1970.Section8.theorem8_2_sinTwoTheta_residual_directedAngle_real_symmetricNorming`
+- `TauCeti.DavisKahan.Angle.sinTwoThetaIdealBlock_hasSameApproximationNumbers_trialSide`
+- `TauCeti.DavisKahan.Angle.directedSinTwoAngleOperator_hasSameApproximationNumbers_swap`
+- `TauCeti.DavisKahan.Angle.mem_directedSinTwoAngleOperator_trialSide_iff`
+- `TauCeti.DavisKahan.Angle.gauge_directedSinTwoAngleOperator_trialSide`
 
 **Curated source/Lean review:**
 
@@ -4595,6 +4605,8 @@ THE FILE WAS SELF-CONTRADICTING, NOT MERELY STALE: the same module docstring alr
 (iv) The complex directed residual UI-norm endpoints now have source-facing aliases (`theorem8_2_sinTwoTheta_residual_symmetricNorming`, `..._all_kyFan`), matching the real side, plus a new `theorem8_2_branch_maximalAngle_lt_of_crossedDefects` over C.  The mirrored false counterexample in `dev/section8-source-theorems-2026-08-07.md` (L99-109, not L100-103 as previously recorded) was corrected by the coordinator in the same commit.
 
 REOPENING WITHDRAWN 2026-08-31 and the rule corrected: a later source passage enlarges a counted result only when it is needed to determine what Davis and Kahan actually claim in it. An extension, variant or consequence they mention without introducing and proving it as a result of its own is `result_adjacent_extension` fidelity material. The Lean coverage produced during the reopening is kept as supporting evidence.
+
+**ORIENTATION CORRECTION 2026-09-04 (Claude Opus 5, on hostile review).**  The printed residual alternative is now certified on `Angle.directedSinTwoAngleOperator P Q`, the paper's trial-side directed angle, rather than on `sinTwoThetaIdealBlock Q P`.  Same defect class as the `S2-sin-two-theta` repair earlier the same day; the bridge is `Angle.sinTwoThetaIdealBlock_hasSameApproximationNumbers_trialSide`.
 
 **Next action.** Hostile re-audit reopened this row. A single `.whole` clause covers two alternative half-gap hypotheses, branch selection, homotopy, perturbation and residual forms, unequal-dimensional extension, and the source statement that no analogous tan(2 Theta) extension is known. These need atomic evidence/dispositions.
 
