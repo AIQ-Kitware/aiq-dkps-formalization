@@ -214,6 +214,11 @@
       "distilled_status": "transcription_only",
       "primary_url": "https://arxiv.org/abs/2409.17308",
       "target_note": "AcharyyaTrossetPriebeHelm2024_consistency.tex",
+      "source_document": {
+        "path": "Acharyya2024/prose/consistent-estimation-dkps-2409.17308_transcription.md",
+        "format": "markdown",
+        "note": "The retained source-order transcription is this work's source document; no separate distilled note is planned. Locators cite it by line range, and every cited passage is pinned, so a shift in the file is reported rather than silently changing what a row cites."
+      },
       "repo_evidence": [
         "Acharyya2024/README.md",
         "Acharyya2024/Consistency.lean",
@@ -297,6 +302,11 @@
       "distilled_status": "transcription_only",
       "primary_url": "https://arxiv.org/abs/2511.08307",
       "target_note": "AcharyyaAgterbergParkPriebe2025_concentration.tex",
+      "source_document": {
+        "path": "Acharyya2025/prose/concentration-bounds-response-embeddings-2511.08307_transcription.md",
+        "format": "markdown",
+        "note": "The retained source-order transcription is this work's source document; no separate distilled note is planned. Locators cite it by line range, and every cited passage is pinned, so a shift in the file is reported rather than silently changing what a row cites."
+      },
       "repo_evidence": [
         "Acharyya2025/README.md",
         "Acharyya2025/Deterministic.lean",
@@ -329,6 +339,11 @@
       "distilled_status": "source_text_only",
       "primary_url": "https://arxiv.org/abs/2410.01106",
       "target_note": "HelmAcharyyaDuderstadtParkPriebe2025_inference.tex",
+      "source_document": {
+        "path": "Helm2025/prose/statistical_inference_black_box_generative_models_dkps.md",
+        "format": "markdown",
+        "note": "The retained source-order transcription is this work's source document; no separate distilled note is planned. Locators cite it by line range, and every cited passage is pinned, so a shift in the file is reported rather than silently changing what a row cites."
+      },
       "repo_evidence": [
         "Helm2025/README.md",
         "Helm2025/Basic.lean",
@@ -360,6 +375,11 @@
       "distilled_status": "transcription_sufficient",
       "primary_url": "https://arxiv.org/abs/2605.07096",
       "target_note": "HelmJohnsonPriebe2026_quench.tex",
+      "source_document": {
+        "path": "DkpsQuench2026/prose/quench-icml-nonanon_transcription.md",
+        "format": "markdown",
+        "note": "The retained source-order transcription is this work's source document; no separate distilled note is planned. Locators cite it by line range, and every cited passage is pinned, so a shift in the file is reported rather than silently changing what a row cites."
+      },
       "repo_evidence": [
         "DkpsQuench2026/README.md",
         "DkpsQuench2026/Paper/Theorem2.lean",

@@ -37,6 +37,7 @@
       "literal_source_covered": false,
       "source_claim": "For r=omega(n^3) and bounded response covariance, the maximum aligned perspective error is bounded by a cubic polynomial in (n^3/r)^(1/2-delta) with high probability.",
       "source_locator": {
+        "document": "HelmJohnsonPriebe2026",
         "file": "DkpsQuench2026/prose/quench-icml-nonanon_transcription.md",
         "lines": [
           78,
@@ -98,6 +99,38 @@
           "toolchain": "leanprover/lean4:v4.34.0-rc1",
           "pinned_on": "2026-09-01"
         }
+      ],
+      "source_fragments": [
+        {
+          "id": "source",
+          "role": "primary",
+          "locator": {
+            "document": "HelmJohnsonPriebe2026",
+            "file": "DkpsQuench2026/prose/quench-icml-nonanon_transcription.md",
+            "lines": [
+              78,
+              96
+            ]
+          }
+        }
+      ],
+      "source_pins": [
+        {
+          "fragment": "source",
+          "document": "HelmJohnsonPriebe2026",
+          "sha256": "e9e3f2005573b8e769af28d2da059a8493649a902c83998f437679133b207a7b",
+          "locator": {
+            "document": "HelmJohnsonPriebe2026",
+            "file": "DkpsQuench2026/prose/quench-icml-nonanon_transcription.md",
+            "lines": [
+              78,
+              96
+            ]
+          },
+          "visibility": "public_reconstruction",
+          "pinned_on": "2026-09-03",
+          "note": "Source passages pinned 2026-09-03: the retained transcription is now a registered source document and every cited passage is hashed, so a line shift is reported instead of silently changing what the row cites."
+        }
       ]
     },
     {
@@ -110,6 +143,7 @@
       "literal_source_covered": false,
       "source_claim": "The d-dimensional DKPS representations are a solution to argmin over z of the sum of (||z_i - z_j|| - D_{ii'})^2.",
       "source_locator": {
+        "document": "HelmJohnsonPriebe2026",
         "file": "DkpsQuench2026/prose/quench-icml-nonanon_transcription.md",
         "lines": [
           64,
@@ -164,6 +198,38 @@
           "toolchain": "leanprover/lean4:v4.34.0-rc1",
           "pinned_on": "2026-09-01"
         }
+      ],
+      "source_fragments": [
+        {
+          "id": "source",
+          "role": "primary",
+          "locator": {
+            "document": "HelmJohnsonPriebe2026",
+            "file": "DkpsQuench2026/prose/quench-icml-nonanon_transcription.md",
+            "lines": [
+              64,
+              70
+            ]
+          }
+        }
+      ],
+      "source_pins": [
+        {
+          "fragment": "source",
+          "document": "HelmJohnsonPriebe2026",
+          "sha256": "57e3cf32b6ba8d455f3e7c53883284ced62fdf4b6bbd57e58f3758c99234569e",
+          "locator": {
+            "document": "HelmJohnsonPriebe2026",
+            "file": "DkpsQuench2026/prose/quench-icml-nonanon_transcription.md",
+            "lines": [
+              64,
+              70
+            ]
+          },
+          "visibility": "public_reconstruction",
+          "pinned_on": "2026-09-03",
+          "note": "Source passages pinned 2026-09-03: the retained transcription is now a registered source document and every cited passage is hashed, so a line shift is reported instead of silently changing what the row cites."
+        }
       ]
     },
     {
@@ -176,6 +242,7 @@
       "literal_source_covered": true,
       "source_claim": "Eventually the DKPS predictor risk is no larger than the subset-score baseline; m-query efficiency quantifies over all subsets of size m and full query efficiency quantifies over all m<M.",
       "source_locator": {
+        "document": "HelmJohnsonPriebe2026",
         "file": "DkpsQuench2026/prose/quench-icml-nonanon_transcription.md",
         "lines": [
           118,
@@ -257,6 +324,38 @@
           "toolchain": "leanprover/lean4:v4.34.0-rc1",
           "pinned_on": "2026-09-01"
         }
+      ],
+      "source_fragments": [
+        {
+          "id": "source",
+          "role": "primary",
+          "locator": {
+            "document": "HelmJohnsonPriebe2026",
+            "file": "DkpsQuench2026/prose/quench-icml-nonanon_transcription.md",
+            "lines": [
+              118,
+              133
+            ]
+          }
+        }
+      ],
+      "source_pins": [
+        {
+          "fragment": "source",
+          "document": "HelmJohnsonPriebe2026",
+          "sha256": "daf35b3a566a691058bbf41effcd4c4771a791b3865aa04a7a324221a009c5e2",
+          "locator": {
+            "document": "HelmJohnsonPriebe2026",
+            "file": "DkpsQuench2026/prose/quench-icml-nonanon_transcription.md",
+            "lines": [
+              118,
+              133
+            ]
+          },
+          "visibility": "public_reconstruction",
+          "pinned_on": "2026-09-03",
+          "note": "Source passages pinned 2026-09-03: the retained transcription is now a registered source document and every cited passage is hashed, so a line shift is reported instead of silently changing what the row cites."
+        }
       ]
     },
     {
@@ -269,6 +368,7 @@
       "literal_source_covered": false,
       "source_claim": "Average the full-benchmark scores of every reference model tied at the minimum estimated perspective distance.",
       "source_locator": {
+        "document": "HelmJohnsonPriebe2026",
         "file": "DkpsQuench2026/prose/quench-icml-nonanon_transcription.md",
         "lines": [
           135,
@@ -330,6 +430,38 @@
           "toolchain": "leanprover/lean4:v4.34.0-rc1",
           "pinned_on": "2026-09-01"
         }
+      ],
+      "source_fragments": [
+        {
+          "id": "source",
+          "role": "primary",
+          "locator": {
+            "document": "HelmJohnsonPriebe2026",
+            "file": "DkpsQuench2026/prose/quench-icml-nonanon_transcription.md",
+            "lines": [
+              135,
+              144
+            ]
+          }
+        }
+      ],
+      "source_pins": [
+        {
+          "fragment": "source",
+          "document": "HelmJohnsonPriebe2026",
+          "sha256": "6aba10804e3f3ad49bfcda57e7edd5a171b58e7b86e02a6bfa898f5eefc1efe3",
+          "locator": {
+            "document": "HelmJohnsonPriebe2026",
+            "file": "DkpsQuench2026/prose/quench-icml-nonanon_transcription.md",
+            "lines": [
+              135,
+              144
+            ]
+          },
+          "visibility": "public_reconstruction",
+          "pinned_on": "2026-09-03",
+          "note": "Source passages pinned 2026-09-03: the retained transcription is now a registered source document and every cited passage is hashed, so a line shift is reported instead of silently changing what the row cites."
+        }
       ]
     },
     {
@@ -342,6 +474,7 @@
       "literal_source_covered": true,
       "source_claim": "There exists gamma>0 such that score differences are at most gamma times perspective distance.",
       "source_locator": {
+        "document": "HelmJohnsonPriebe2026",
         "file": "DkpsQuench2026/prose/quench-icml-nonanon_transcription.md",
         "lines": [
           145,
@@ -387,6 +520,38 @@
           "toolchain": "leanprover/lean4:v4.34.0-rc1",
           "pinned_on": "2026-09-01"
         }
+      ],
+      "source_fragments": [
+        {
+          "id": "source",
+          "role": "primary",
+          "locator": {
+            "document": "HelmJohnsonPriebe2026",
+            "file": "DkpsQuench2026/prose/quench-icml-nonanon_transcription.md",
+            "lines": [
+              145,
+              152
+            ]
+          }
+        }
+      ],
+      "source_pins": [
+        {
+          "fragment": "source",
+          "document": "HelmJohnsonPriebe2026",
+          "sha256": "b0920656bba6f357e3e28d2815bfd4e69549d9d219ff9a34489310c3ace12f0a",
+          "locator": {
+            "document": "HelmJohnsonPriebe2026",
+            "file": "DkpsQuench2026/prose/quench-icml-nonanon_transcription.md",
+            "lines": [
+              145,
+              152
+            ]
+          },
+          "visibility": "public_reconstruction",
+          "pinned_on": "2026-09-03",
+          "note": "Source passages pinned 2026-09-03: the retained transcription is now a registered source document and every cited passage is hashed, so a line shift is reported instead of silently changing what the row cites."
+        }
       ]
     },
     {
@@ -399,6 +564,7 @@
       "literal_source_covered": false,
       "source_claim": "The prose claims positive mass for every compact subset and calls this equivalent to positive mass for each target-centered ball.",
       "source_locator": {
+        "document": "HelmJohnsonPriebe2026",
         "file": "DkpsQuench2026/prose/quench-icml-nonanon_transcription.md",
         "lines": [
           153,
@@ -466,6 +632,38 @@
           "toolchain": "leanprover/lean4:v4.34.0-rc1",
           "pinned_on": "2026-09-01"
         }
+      ],
+      "source_fragments": [
+        {
+          "id": "source",
+          "role": "primary",
+          "locator": {
+            "document": "HelmJohnsonPriebe2026",
+            "file": "DkpsQuench2026/prose/quench-icml-nonanon_transcription.md",
+            "lines": [
+              153,
+              162
+            ]
+          }
+        }
+      ],
+      "source_pins": [
+        {
+          "fragment": "source",
+          "document": "HelmJohnsonPriebe2026",
+          "sha256": "f575d6ef65fe4fb16be4fdcde283c7558c059cb9d10ba18404aa555c1830459e",
+          "locator": {
+            "document": "HelmJohnsonPriebe2026",
+            "file": "DkpsQuench2026/prose/quench-icml-nonanon_transcription.md",
+            "lines": [
+              153,
+              162
+            ]
+          },
+          "visibility": "public_reconstruction",
+          "pinned_on": "2026-09-03",
+          "note": "Source passages pinned 2026-09-03: the retained transcription is now a registered source document and every cited passage is hashed, so a line shift is reported instead of silently changing what the row cites."
+        }
       ]
     },
     {
@@ -478,6 +676,7 @@
       "literal_source_covered": false,
       "source_claim": "For every epsilon>0 there are sufficiently large sampling/model budgets for which MSE(yhat_NN)<=epsilon with high probability.",
       "source_locator": {
+        "document": "HelmJohnsonPriebe2026",
         "file": "DkpsQuench2026/prose/quench-icml-nonanon_transcription.md",
         "lines": [
           163,
@@ -635,6 +834,38 @@
           "toolchain": "leanprover/lean4:v4.34.0-rc1",
           "pinned_on": "2026-09-01"
         }
+      ],
+      "source_fragments": [
+        {
+          "id": "source",
+          "role": "primary",
+          "locator": {
+            "document": "HelmJohnsonPriebe2026",
+            "file": "DkpsQuench2026/prose/quench-icml-nonanon_transcription.md",
+            "lines": [
+              163,
+              171
+            ]
+          }
+        }
+      ],
+      "source_pins": [
+        {
+          "fragment": "source",
+          "document": "HelmJohnsonPriebe2026",
+          "sha256": "f460d60d0769b58a38c4cf526e96b10b88c903f0c3e878e88e12db92d949f5c3",
+          "locator": {
+            "document": "HelmJohnsonPriebe2026",
+            "file": "DkpsQuench2026/prose/quench-icml-nonanon_transcription.md",
+            "lines": [
+              163,
+              171
+            ]
+          },
+          "visibility": "public_reconstruction",
+          "pinned_on": "2026-09-03",
+          "note": "Source passages pinned 2026-09-03: the retained transcription is now a registered source document and every cited passage is hashed, so a line shift is reported instead of silently changing what the row cites."
+        }
       ]
     },
     {
@@ -647,6 +878,7 @@
       "literal_source_covered": false,
       "source_claim": "When m<M and the subset-score baseline has positive MSE, nearest-neighbor DKPS prediction is query-efficient with high probability.",
       "source_locator": {
+        "document": "HelmJohnsonPriebe2026",
         "file": "DkpsQuench2026/prose/quench-icml-nonanon_transcription.md",
         "lines": [
           165,
@@ -791,6 +1023,38 @@
           "toolchain": "leanprover/lean4:v4.34.0-rc1",
           "pinned_on": "2026-09-01"
         }
+      ],
+      "source_fragments": [
+        {
+          "id": "source",
+          "role": "primary",
+          "locator": {
+            "document": "HelmJohnsonPriebe2026",
+            "file": "DkpsQuench2026/prose/quench-icml-nonanon_transcription.md",
+            "lines": [
+              165,
+              236
+            ]
+          }
+        }
+      ],
+      "source_pins": [
+        {
+          "fragment": "source",
+          "document": "HelmJohnsonPriebe2026",
+          "sha256": "29492b0bd049eb6c500f4ce41442589272b257bfcb0074ef79007eed403201aa",
+          "locator": {
+            "document": "HelmJohnsonPriebe2026",
+            "file": "DkpsQuench2026/prose/quench-icml-nonanon_transcription.md",
+            "lines": [
+              165,
+              236
+            ]
+          },
+          "visibility": "public_reconstruction",
+          "pinned_on": "2026-09-03",
+          "note": "Source passages pinned 2026-09-03: the retained transcription is now a registered source document and every cited passage is hashed, so a line shift is reported instead of silently changing what the row cites."
+        }
       ]
     },
     {
@@ -803,6 +1067,7 @@
       "literal_source_covered": false,
       "source_claim": "Theorem 2 at the finite model-class scope: the paper's proof derives the representation error from Theorem 1, so discharging it is inside the printed argument rather than beyond it.",
       "source_locator": {
+        "document": "HelmJohnsonPriebe2026",
         "file": "DkpsQuench2026/prose/quench-icml-nonanon_transcription.md",
         "lines": [
           163,
@@ -897,6 +1162,38 @@
           "toolchain": "leanprover/lean4:v4.34.0-rc1",
           "pinned_on": "2026-09-01"
         }
+      ],
+      "source_fragments": [
+        {
+          "id": "source",
+          "role": "primary",
+          "locator": {
+            "document": "HelmJohnsonPriebe2026",
+            "file": "DkpsQuench2026/prose/quench-icml-nonanon_transcription.md",
+            "lines": [
+              163,
+              236
+            ]
+          }
+        }
+      ],
+      "source_pins": [
+        {
+          "fragment": "source",
+          "document": "HelmJohnsonPriebe2026",
+          "sha256": "c8fb085388a9cc7a82c8c7306822236c7ffabf828d5465fbee658bfafb6ecbb7",
+          "locator": {
+            "document": "HelmJohnsonPriebe2026",
+            "file": "DkpsQuench2026/prose/quench-icml-nonanon_transcription.md",
+            "lines": [
+              163,
+              236
+            ]
+          },
+          "visibility": "public_reconstruction",
+          "pinned_on": "2026-09-03",
+          "note": "Source passages pinned 2026-09-03: the retained transcription is now a registered source document and every cited passage is hashed, so a line shift is reported instead of silently changing what the row cites."
+        }
       ]
     },
     {
@@ -909,6 +1206,7 @@
       "literal_source_covered": false,
       "source_claim": "Theorem 2 at the compact-infinite model-class scope: the paper's proof derives the representation error from Theorem 1, so discharging it is inside the printed argument rather than beyond it.",
       "source_locator": {
+        "document": "HelmJohnsonPriebe2026",
         "file": "DkpsQuench2026/prose/quench-icml-nonanon_transcription.md",
         "lines": [
           163,
@@ -997,6 +1295,38 @@
           "toolchain": "leanprover/lean4:v4.34.0-rc1",
           "pinned_on": "2026-09-01"
         }
+      ],
+      "source_fragments": [
+        {
+          "id": "source",
+          "role": "primary",
+          "locator": {
+            "document": "HelmJohnsonPriebe2026",
+            "file": "DkpsQuench2026/prose/quench-icml-nonanon_transcription.md",
+            "lines": [
+              163,
+              236
+            ]
+          }
+        }
+      ],
+      "source_pins": [
+        {
+          "fragment": "source",
+          "document": "HelmJohnsonPriebe2026",
+          "sha256": "c8fb085388a9cc7a82c8c7306822236c7ffabf828d5465fbee658bfafb6ecbb7",
+          "locator": {
+            "document": "HelmJohnsonPriebe2026",
+            "file": "DkpsQuench2026/prose/quench-icml-nonanon_transcription.md",
+            "lines": [
+              163,
+              236
+            ]
+          },
+          "visibility": "public_reconstruction",
+          "pinned_on": "2026-09-03",
+          "note": "Source passages pinned 2026-09-03: the retained transcription is now a registered source document and every cited passage is hashed, so a line shift is reported instead of silently changing what the row cites."
+        }
       ]
     },
     {
@@ -1009,6 +1339,7 @@
       "literal_source_covered": false,
       "source_claim": "The experiments use OLS/ensemble regressors although Theorem 2 proves nearest-neighbor query efficiency.",
       "source_locator": {
+        "document": "HelmJohnsonPriebe2026",
         "file": "DkpsQuench2026/prose/quench-icml-nonanon_transcription.md",
         "lines": [
           239,
@@ -1029,7 +1360,39 @@
       "gap_refs": [
         "ols-theory-practice"
       ],
-      "next_action": "None for Theorem 2 source fidelity."
+      "next_action": "None for Theorem 2 source fidelity.",
+      "source_fragments": [
+        {
+          "id": "source",
+          "role": "primary",
+          "locator": {
+            "document": "HelmJohnsonPriebe2026",
+            "file": "DkpsQuench2026/prose/quench-icml-nonanon_transcription.md",
+            "lines": [
+              239,
+              353
+            ]
+          }
+        }
+      ],
+      "source_pins": [
+        {
+          "fragment": "source",
+          "document": "HelmJohnsonPriebe2026",
+          "sha256": "627ab17a7d9740c40128169d75b216d5e1096ba677467b8db850df9540828c90",
+          "locator": {
+            "document": "HelmJohnsonPriebe2026",
+            "file": "DkpsQuench2026/prose/quench-icml-nonanon_transcription.md",
+            "lines": [
+              239,
+              353
+            ]
+          },
+          "visibility": "public_reconstruction",
+          "pinned_on": "2026-09-03",
+          "note": "Source passages pinned 2026-09-03: the retained transcription is now a registered source document and every cited passage is hashed, so a line shift is reported instead of silently changing what the row cites."
+        }
+      ]
     },
     {
       "id": "Q26-Y",
@@ -1041,6 +1404,7 @@
       "literal_source_covered": true,
       "source_claim": "y : F x 2^{Q*} -> [0,1] is the benchmark scoring function; y(f, Q*) is the score of f on all queries, and yhat_Q := y(f, Q) its score on a subset.",
       "source_locator": {
+        "document": "HelmJohnsonPriebe2026",
         "file": "DkpsQuench2026/prose/quench-icml-nonanon_transcription.md",
         "lines": [
           36,
@@ -1110,6 +1474,38 @@
           "toolchain": "leanprover/lean4:v4.34.0-rc1",
           "pinned_on": "2026-09-01"
         }
+      ],
+      "source_fragments": [
+        {
+          "id": "source",
+          "role": "primary",
+          "locator": {
+            "document": "HelmJohnsonPriebe2026",
+            "file": "DkpsQuench2026/prose/quench-icml-nonanon_transcription.md",
+            "lines": [
+              36,
+              44
+            ]
+          }
+        }
+      ],
+      "source_pins": [
+        {
+          "fragment": "source",
+          "document": "HelmJohnsonPriebe2026",
+          "sha256": "5c19ce1aebb8d090311229deb97b8885897098c62f12bcb8313c3e2986b90eb5",
+          "locator": {
+            "document": "HelmJohnsonPriebe2026",
+            "file": "DkpsQuench2026/prose/quench-icml-nonanon_transcription.md",
+            "lines": [
+              36,
+              44
+            ]
+          },
+          "visibility": "public_reconstruction",
+          "pinned_on": "2026-09-03",
+          "note": "Source passages pinned 2026-09-03: the retained transcription is now a registered source document and every cited passage is hashed, so a line shift is reported instead of silently changing what the row cites."
+        }
       ]
     },
     {
@@ -1122,6 +1518,7 @@
       "literal_source_covered": false,
       "source_claim": "Xbar_{ij.} = (1/r) sum_k g(f_i(q_j))_k, and D is the pairwise distance matrix with entries D_{ii'} = ||Xbar_i - Xbar_{i'}||_F.",
       "source_locator": {
+        "document": "HelmJohnsonPriebe2026",
         "file": "DkpsQuench2026/prose/quench-icml-nonanon_transcription.md",
         "lines": [
           50,
@@ -1198,6 +1595,38 @@
           "toolchain": "leanprover/lean4:v4.34.0-rc1",
           "pinned_on": "2026-09-01"
         }
+      ],
+      "source_fragments": [
+        {
+          "id": "source",
+          "role": "primary",
+          "locator": {
+            "document": "HelmJohnsonPriebe2026",
+            "file": "DkpsQuench2026/prose/quench-icml-nonanon_transcription.md",
+            "lines": [
+              50,
+              62
+            ]
+          }
+        }
+      ],
+      "source_pins": [
+        {
+          "fragment": "source",
+          "document": "HelmJohnsonPriebe2026",
+          "sha256": "83d42b1bb9fefd221da6e86443622afd9ddb15091b7ecc27661479bf9a69570b",
+          "locator": {
+            "document": "HelmJohnsonPriebe2026",
+            "file": "DkpsQuench2026/prose/quench-icml-nonanon_transcription.md",
+            "lines": [
+              50,
+              62
+            ]
+          },
+          "visibility": "public_reconstruction",
+          "pinned_on": "2026-09-03",
+          "note": "Source passages pinned 2026-09-03: the retained transcription is now a registered source document and every cited passage is hashed, so a line shift is reported instead of silently changing what the row cites."
+        }
       ]
     },
     {
@@ -1210,6 +1639,7 @@
       "literal_source_covered": true,
       "source_claim": "h_n^Q(f) = hhat_n^Q(Psihat_Q(f)) with hhat_n^Q trained on the perspective-score pairs, and the goal is to minimise E_{P_f}[l(h_n^Q(f), y)].",
       "source_locator": {
+        "document": "HelmJohnsonPriebe2026",
         "file": "DkpsQuench2026/prose/quench-icml-nonanon_transcription.md",
         "lines": [
           99,
@@ -1246,6 +1676,38 @@
           "type_text_sha256": "af6423b2cdc45b8d2840b274f187f8742a9f32ff7a1cb6fa7df7cc948e05b73c",
           "toolchain": "leanprover/lean4:v4.34.0-rc1",
           "pinned_on": "2026-09-01"
+        }
+      ],
+      "source_fragments": [
+        {
+          "id": "source",
+          "role": "primary",
+          "locator": {
+            "document": "HelmJohnsonPriebe2026",
+            "file": "DkpsQuench2026/prose/quench-icml-nonanon_transcription.md",
+            "lines": [
+              99,
+              116
+            ]
+          }
+        }
+      ],
+      "source_pins": [
+        {
+          "fragment": "source",
+          "document": "HelmJohnsonPriebe2026",
+          "sha256": "46d7a1f5a11a090b5b6daa208d7c2047011d531897eef75181267f6071104218",
+          "locator": {
+            "document": "HelmJohnsonPriebe2026",
+            "file": "DkpsQuench2026/prose/quench-icml-nonanon_transcription.md",
+            "lines": [
+              99,
+              116
+            ]
+          },
+          "visibility": "public_reconstruction",
+          "pinned_on": "2026-09-03",
+          "note": "Source passages pinned 2026-09-03: the retained transcription is now a registered source document and every cited passage is hashed, so a line shift is reported instead of silently changing what the row cites."
         }
       ]
     }

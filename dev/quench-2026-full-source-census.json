@@ -114,6 +114,7 @@
       "status": "compiled_source_repair",
       "verification": "proved_in_build",
       "source_locator": {
+        "document": "HelmJohnsonPriebe2026",
         "file": "DkpsQuench2026/prose/quench-icml-nonanon_transcription.md",
         "lines": [
           50,
@@ -150,6 +151,7 @@
       "status": "compiled_generalized",
       "verification": "proved_in_build",
       "source_locator": {
+        "document": "HelmJohnsonPriebe2026",
         "file": "DkpsQuench2026/prose/quench-icml-nonanon_transcription.md",
         "lines": [
           36,
@@ -185,6 +187,7 @@
       "status": "compiled_source_repair",
       "verification": "proved_in_build",
       "source_locator": {
+        "document": "HelmJohnsonPriebe2026",
         "file": "DkpsQuench2026/prose/quench-icml-nonanon_transcription.md",
         "lines": [
           78,
@@ -220,6 +223,7 @@
       "status": "compiled_role_replaced",
       "verification": "proved_in_build",
       "source_locator": {
+        "document": "HelmJohnsonPriebe2026",
         "file": "DkpsQuench2026/prose/quench-icml-nonanon_transcription.md",
         "lines": [
           64,
@@ -254,6 +258,7 @@
       "status": "compiled_equivalent",
       "verification": "proved_in_build",
       "source_locator": {
+        "document": "HelmJohnsonPriebe2026",
         "file": "DkpsQuench2026/prose/quench-icml-nonanon_transcription.md",
         "lines": [
           99,
@@ -284,6 +289,7 @@
       "status": "compiled_exact",
       "verification": "proved_in_build",
       "source_locator": {
+        "document": "HelmJohnsonPriebe2026",
         "file": "DkpsQuench2026/prose/quench-icml-nonanon_transcription.md",
         "lines": [
           118,
@@ -318,6 +324,7 @@
       "status": "compiled_source_repair",
       "verification": "proved_in_build",
       "source_locator": {
+        "document": "HelmJohnsonPriebe2026",
         "file": "DkpsQuench2026/prose/quench-icml-nonanon_transcription.md",
         "lines": [
           135,
@@ -352,6 +359,7 @@
       "status": "compiled_generalized",
       "verification": "proved_in_build",
       "source_locator": {
+        "document": "HelmJohnsonPriebe2026",
         "file": "DkpsQuench2026/prose/quench-icml-nonanon_transcription.md",
         "lines": [
           145,
@@ -384,6 +392,7 @@
       "status": "compiled_source_repair",
       "verification": "proved_in_build",
       "source_locator": {
+        "document": "HelmJohnsonPriebe2026",
         "file": "DkpsQuench2026/prose/quench-icml-nonanon_transcription.md",
         "lines": [
           153,
@@ -418,6 +427,7 @@
       "status": "compiled_stronger_hypotheses",
       "verification": "proved_in_build",
       "source_locator": {
+        "document": "HelmJohnsonPriebe2026",
         "file": "DkpsQuench2026/prose/quench-icml-nonanon_transcription.md",
         "lines": [
           163,
@@ -463,6 +473,7 @@
       "status": "compiled_stronger_hypotheses",
       "verification": "proved_in_build",
       "source_locator": {
+        "document": "HelmJohnsonPriebe2026",
         "file": "DkpsQuench2026/prose/quench-icml-nonanon_transcription.md",
         "lines": [
           165,
@@ -507,6 +518,7 @@
       "status": "compiled_stronger_hypotheses",
       "verification": "proved_in_build",
       "source_locator": {
+        "document": "HelmJohnsonPriebe2026",
         "file": "DkpsQuench2026/prose/quench-icml-nonanon_transcription.md",
         "lines": [
           163,
@@ -547,6 +559,7 @@
       "status": "compiled_stronger_hypotheses",
       "verification": "proved_in_build",
       "source_locator": {
+        "document": "HelmJohnsonPriebe2026",
         "file": "DkpsQuench2026/prose/quench-icml-nonanon_transcription.md",
         "lines": [
           163,
@@ -587,6 +600,7 @@
       "status": "not_proof_debt",
       "verification": "not_applicable",
       "source_locator": {
+        "document": "HelmJohnsonPriebe2026",
         "file": "DkpsQuench2026/prose/quench-icml-nonanon_transcription.md",
         "lines": [
           239,

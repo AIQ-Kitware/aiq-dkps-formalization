@@ -36,6 +36,7 @@
       "literal_source_covered": true,
       "source_claim": "For a finite dissimilarity matrix, define the raw-stress objective and MDS(Delta) as its minimizers in R^d.",
       "source_locator": {
+        "document": "AcharyyaTrossetPriebeHelm2024",
         "file": "Acharyya2024/prose/consistent-estimation-dkps-2409.17308_transcription.md",
         "lines": [
           100,
@@ -63,7 +64,39 @@
       "review": "The Lean definitions directly encode the finite raw-stress objective and minimizer set.",
       "notes": "The package treats configurations as Fin n -> EuclideanSpace rather than matrices with rows.",
       "gap_refs": [],
-      "next_action": "None."
+      "next_action": "None.",
+      "source_fragments": [
+        {
+          "id": "source",
+          "role": "primary",
+          "locator": {
+            "document": "AcharyyaTrossetPriebeHelm2024",
+            "file": "Acharyya2024/prose/consistent-estimation-dkps-2409.17308_transcription.md",
+            "lines": [
+              100,
+              113
+            ]
+          }
+        }
+      ],
+      "source_pins": [
+        {
+          "fragment": "source",
+          "document": "AcharyyaTrossetPriebeHelm2024",
+          "sha256": "af986609eb0674c1cb9163a97348e2672c0c89f20418ec9c64b52c71abff61e6",
+          "locator": {
+            "document": "AcharyyaTrossetPriebeHelm2024",
+            "file": "Acharyya2024/prose/consistent-estimation-dkps-2409.17308_transcription.md",
+            "lines": [
+              100,
+              113
+            ]
+          },
+          "visibility": "public_reconstruction",
+          "pinned_on": "2026-09-03",
+          "note": "Source passages pinned 2026-09-03: the retained transcription is now a registered source document and every cited passage is hashed, so a line shift is reported instead of silently changing what the row cites."
+        }
+      ]
     },
     {
       "id": "A24-R1",
@@ -75,6 +108,7 @@
       "literal_source_covered": false,
       "source_claim": "Applying a rigid/affine transformation to a minimizer gives another minimizer; additional non-congruent minimizers may also exist.",
       "source_locator": {
+        "document": "AcharyyaTrossetPriebeHelm2024",
         "file": "Acharyya2024/prose/consistent-estimation-dkps-2409.17308_transcription.md",
         "lines": [
           114,
@@ -107,7 +141,39 @@
       "gap_refs": [
         "affine-invariance-partial"
       ],
-      "next_action": "None. The invariance is proved at the correct class and the wording slip is recorded with a counterexample."
+      "next_action": "None. The invariance is proved at the correct class and the wording slip is recorded with a counterexample.",
+      "source_fragments": [
+        {
+          "id": "source",
+          "role": "primary",
+          "locator": {
+            "document": "AcharyyaTrossetPriebeHelm2024",
+            "file": "Acharyya2024/prose/consistent-estimation-dkps-2409.17308_transcription.md",
+            "lines": [
+              114,
+              117
+            ]
+          }
+        }
+      ],
+      "source_pins": [
+        {
+          "fragment": "source",
+          "document": "AcharyyaTrossetPriebeHelm2024",
+          "sha256": "26e4a69c03e26070c2c0f96892d73bf61f51d994a7aa17523b6b8c6fa8a7201c",
+          "locator": {
+            "document": "AcharyyaTrossetPriebeHelm2024",
+            "file": "Acharyya2024/prose/consistent-estimation-dkps-2409.17308_transcription.md",
+            "lines": [
+              114,
+              117
+            ]
+          },
+          "visibility": "public_reconstruction",
+          "pinned_on": "2026-09-03",
+          "note": "Source passages pinned 2026-09-03: the retained transcription is now a registered source document and every cited passage is hashed, so a line shift is reported instead of silently changing what the row cites."
+        }
+      ]
     },
     {
       "id": "A24-R2",
@@ -119,6 +185,7 @@
       "literal_source_covered": true,
       "source_claim": "The finite raw-stress problem attains a minimizer.",
       "source_locator": {
+        "document": "AcharyyaTrossetPriebeHelm2024",
         "file": "Acharyya2024/prose/consistent-estimation-dkps-2409.17308_transcription.md",
         "lines": [
           118,
@@ -140,7 +207,39 @@
       "review": "Lean proves nonemptiness directly for the finite raw-stress minimizer set, without requiring the source proof route through a bounded set of Euclidean distance matrices.",
       "notes": "The conclusion is the source conclusion; the proof architecture is different and the Lean statement is usable for arbitrary finite dissimilarity data.",
       "gap_refs": [],
-      "next_action": "None."
+      "next_action": "None.",
+      "source_fragments": [
+        {
+          "id": "source",
+          "role": "primary",
+          "locator": {
+            "document": "AcharyyaTrossetPriebeHelm2024",
+            "file": "Acharyya2024/prose/consistent-estimation-dkps-2409.17308_transcription.md",
+            "lines": [
+              118,
+              132
+            ]
+          }
+        }
+      ],
+      "source_pins": [
+        {
+          "fragment": "source",
+          "document": "AcharyyaTrossetPriebeHelm2024",
+          "sha256": "e4efc2aba2f3f98760a5091206551d1810babd5e26a35242bb514f138b77776d",
+          "locator": {
+            "document": "AcharyyaTrossetPriebeHelm2024",
+            "file": "Acharyya2024/prose/consistent-estimation-dkps-2409.17308_transcription.md",
+            "lines": [
+              118,
+              132
+            ]
+          },
+          "visibility": "public_reconstruction",
+          "pinned_on": "2026-09-03",
+          "note": "Source passages pinned 2026-09-03: the retained transcription is now a registered source document and every cited passage is hashed, so a line shift is reported instead of silently changing what the row cites."
+        }
+      ]
     },
     {
       "id": "A24-R3",
@@ -152,6 +251,7 @@
       "literal_source_covered": false,
       "source_claim": "Define continuous raw stress by a P x P integral over a compact model space and let mds minimize it over Borel-measurable embeddings.",
       "source_locator": {
+        "document": "AcharyyaTrossetPriebeHelm2024",
         "file": "Acharyya2024/prose/consistent-estimation-dkps-2409.17308_transcription.md",
         "lines": [
           134,
@@ -193,7 +293,39 @@
       "gap_refs": [
         "continuous-mds-lp"
       ],
-      "next_action": "None. This row is the construction, and it is complete; the L^p limit theorem stated over it is A24-L2's and A24-T5's business, and is tracked there."
+      "next_action": "None. This row is the construction, and it is complete; the L^p limit theorem stated over it is A24-L2's and A24-T5's business, and is tracked there.",
+      "source_fragments": [
+        {
+          "id": "source",
+          "role": "primary",
+          "locator": {
+            "document": "AcharyyaTrossetPriebeHelm2024",
+            "file": "Acharyya2024/prose/consistent-estimation-dkps-2409.17308_transcription.md",
+            "lines": [
+              134,
+              159
+            ]
+          }
+        }
+      ],
+      "source_pins": [
+        {
+          "fragment": "source",
+          "document": "AcharyyaTrossetPriebeHelm2024",
+          "sha256": "050f2b7756c1f5d7dba0c1f84e9bab96940ee65fd6c3db0f40653eecb113469d",
+          "locator": {
+            "document": "AcharyyaTrossetPriebeHelm2024",
+            "file": "Acharyya2024/prose/consistent-estimation-dkps-2409.17308_transcription.md",
+            "lines": [
+              134,
+              159
+            ]
+          },
+          "visibility": "public_reconstruction",
+          "pinned_on": "2026-09-03",
+          "note": "Source passages pinned 2026-09-03: the retained transcription is now a registered source document and every cited passage is hashed, so a line shift is reported instead of silently changing what the row cites."
+        }
+      ]
     },
     {
       "id": "A24-T1",
@@ -205,6 +337,7 @@
       "literal_source_covered": false,
       "source_claim": "With n and m fixed, a subsequence of estimated raw-stress minimizers has pairwise distances converging in probability to those of a fixed population minimizer.",
       "source_locator": {
+        "document": "AcharyyaTrossetPriebeHelm2024",
         "file": "Acharyya2024/prose/consistent-estimation-dkps-2409.17308_transcription.md",
         "lines": [
           205,
@@ -256,7 +389,39 @@
       "gap_refs": [
         "fixed-profile-uniqueness"
       ],
-      "next_action": "None. The printed statement is refuted, the repair is proved, and the premise-free set form is available alongside it."
+      "next_action": "None. The printed statement is refuted, the repair is proved, and the premise-free set form is available alongside it.",
+      "source_fragments": [
+        {
+          "id": "source",
+          "role": "primary",
+          "locator": {
+            "document": "AcharyyaTrossetPriebeHelm2024",
+            "file": "Acharyya2024/prose/consistent-estimation-dkps-2409.17308_transcription.md",
+            "lines": [
+              205,
+              224
+            ]
+          }
+        }
+      ],
+      "source_pins": [
+        {
+          "fragment": "source",
+          "document": "AcharyyaTrossetPriebeHelm2024",
+          "sha256": "e3d3b0dc737d33062a3571b598abbc6718d844ddfe95977ac7d91e3c0dc26efc",
+          "locator": {
+            "document": "AcharyyaTrossetPriebeHelm2024",
+            "file": "Acharyya2024/prose/consistent-estimation-dkps-2409.17308_transcription.md",
+            "lines": [
+              205,
+              224
+            ]
+          },
+          "visibility": "public_reconstruction",
+          "pinned_on": "2026-09-03",
+          "note": "Source passages pinned 2026-09-03: the retained transcription is now a registered source document and every cited passage is hashed, so a line shift is reported instead of silently changing what the row cites."
+        }
+      ]
     },
     {
       "id": "A24-A1",
@@ -268,6 +433,7 @@
       "literal_source_covered": true,
       "source_claim": "For fixed models there are vectors phi_i in a finite-dimensional Euclidean space whose pairwise distances are the limits of the population model-mean discrepancies as m,r grow.",
       "source_locator": {
+        "document": "AcharyyaTrossetPriebeHelm2024",
         "file": "Acharyya2024/prose/consistent-estimation-dkps-2409.17308_transcription.md",
         "lines": [
           236,
@@ -290,7 +456,39 @@
       "review": "The active theorem only needs deterministic convergence of the population dissimilarity matrices to a fixed DeltaInf; for fixed n entrywise convergence suffices. It does not require that DeltaInf be represented by named phi_i vectors.",
       "notes": "This weakens the structural content of the paper assumption to the part actually used by the proof.",
       "gap_refs": [],
-      "next_action": "None."
+      "next_action": "None.",
+      "source_fragments": [
+        {
+          "id": "source",
+          "role": "primary",
+          "locator": {
+            "document": "AcharyyaTrossetPriebeHelm2024",
+            "file": "Acharyya2024/prose/consistent-estimation-dkps-2409.17308_transcription.md",
+            "lines": [
+              236,
+              247
+            ]
+          }
+        }
+      ],
+      "source_pins": [
+        {
+          "fragment": "source",
+          "document": "AcharyyaTrossetPriebeHelm2024",
+          "sha256": "5e8fc16cba89350dbc3b24690ec652854875c6e384fe5b025de092fbee5de18a",
+          "locator": {
+            "document": "AcharyyaTrossetPriebeHelm2024",
+            "file": "Acharyya2024/prose/consistent-estimation-dkps-2409.17308_transcription.md",
+            "lines": [
+              236,
+              247
+            ]
+          },
+          "visibility": "public_reconstruction",
+          "pinned_on": "2026-09-03",
+          "note": "Source passages pinned 2026-09-03: the retained transcription is now a registered source document and every cited passage is hashed, so a line shift is reported instead of silently changing what the row cites."
+        }
+      ]
     },
     {
       "id": "A24-L1",
@@ -302,6 +500,7 @@
       "literal_source_covered": false,
       "source_claim": "If D converges to Delta^(infinity) with n fixed, a subsequence of MDS(D) has pairwise distances converging to those of a fixed minimizer of MDS(Delta^(infinity)).",
       "source_locator": {
+        "document": "AcharyyaTrossetPriebeHelm2024",
         "file": "Acharyya2024/prose/consistent-estimation-dkps-2409.17308_transcription.md",
         "lines": [
           248,
@@ -341,7 +540,39 @@
       "gap_refs": [
         "fixed-profile-uniqueness"
       ],
-      "next_action": "None. The printed statement is refuted, the repair is proved, and the premise-free set form is available alongside it."
+      "next_action": "None. The printed statement is refuted, the repair is proved, and the premise-free set form is available alongside it.",
+      "source_fragments": [
+        {
+          "id": "source",
+          "role": "primary",
+          "locator": {
+            "document": "AcharyyaTrossetPriebeHelm2024",
+            "file": "Acharyya2024/prose/consistent-estimation-dkps-2409.17308_transcription.md",
+            "lines": [
+              248,
+              263
+            ]
+          }
+        }
+      ],
+      "source_pins": [
+        {
+          "fragment": "source",
+          "document": "AcharyyaTrossetPriebeHelm2024",
+          "sha256": "b84f54b2ece5adedaa79540472bebde3d7fdcdd230efca4ef10a53b8eb27e22b",
+          "locator": {
+            "document": "AcharyyaTrossetPriebeHelm2024",
+            "file": "Acharyya2024/prose/consistent-estimation-dkps-2409.17308_transcription.md",
+            "lines": [
+              248,
+              263
+            ]
+          },
+          "visibility": "public_reconstruction",
+          "pinned_on": "2026-09-03",
+          "note": "Source passages pinned 2026-09-03: the retained transcription is now a registered source document and every cited passage is hashed, so a line shift is reported instead of silently changing what the row cites."
+        }
+      ]
     },
     {
       "id": "A24-T2",
@@ -353,6 +584,7 @@
       "literal_source_covered": true,
       "source_claim": "If (1/m) sum_j gamma_ij / r tends to zero for every fixed model, then the empirical dissimilarity matrix converges in Frobenius norm in probability to Delta^(infinity).",
       "source_locator": {
+        "document": "AcharyyaTrossetPriebeHelm2024",
         "file": "Acharyya2024/prose/consistent-estimation-dkps-2409.17308_transcription.md",
         "lines": [
           264,
@@ -401,7 +633,39 @@
       "review": "The printed theorem is proved from the source's sampling model: replicates, their trace-covariances, and the ((1/m) sum_j gamma_ij)/r condition in; Frobenius convergence in probability out. Appendix A.2 is discharged rather than assumed. The intermediate form that takes the second-moment bound as a hypothesis remains available, and its moment hypothesis is now required only eventually -- at r = 0 the printed rate gamma/r is not a bound on anything.",
       "notes": "The fixed-m form remains and is what the downstream finite theorems consume.",
       "gap_refs": [],
-      "next_action": "None."
+      "next_action": "None.",
+      "source_fragments": [
+        {
+          "id": "source",
+          "role": "primary",
+          "locator": {
+            "document": "AcharyyaTrossetPriebeHelm2024",
+            "file": "Acharyya2024/prose/consistent-estimation-dkps-2409.17308_transcription.md",
+            "lines": [
+              264,
+              278
+            ]
+          }
+        }
+      ],
+      "source_pins": [
+        {
+          "fragment": "source",
+          "document": "AcharyyaTrossetPriebeHelm2024",
+          "sha256": "db5b1f2a08825fbe18c3b2f9873da5363a8c93a092522988e306c3414040f99f",
+          "locator": {
+            "document": "AcharyyaTrossetPriebeHelm2024",
+            "file": "Acharyya2024/prose/consistent-estimation-dkps-2409.17308_transcription.md",
+            "lines": [
+              264,
+              278
+            ]
+          },
+          "visibility": "public_reconstruction",
+          "pinned_on": "2026-09-03",
+          "note": "Source passages pinned 2026-09-03: the retained transcription is now a registered source document and every cited passage is hashed, so a line shift is reported instead of silently changing what the row cites."
+        }
+      ]
     },
     {
       "id": "A24-T3",
@@ -413,6 +677,7 @@
       "literal_source_covered": false,
       "source_claim": "Under the Theorem 2 rate condition, estimated raw-stress pairwise distances converge along a subsequence to a population MDS configuration.",
       "source_locator": {
+        "document": "AcharyyaTrossetPriebeHelm2024",
         "file": "Acharyya2024/prose/consistent-estimation-dkps-2409.17308_transcription.md",
         "lines": [
           279,
@@ -458,7 +723,39 @@
         "fixed-profile-uniqueness",
         "growing-query-rate-wiring"
       ],
-      "next_action": "None. The printed statement is refuted, the repair is proved, and the premise-free set form is available alongside it."
+      "next_action": "None. The printed statement is refuted, the repair is proved, and the premise-free set form is available alongside it.",
+      "source_fragments": [
+        {
+          "id": "source",
+          "role": "primary",
+          "locator": {
+            "document": "AcharyyaTrossetPriebeHelm2024",
+            "file": "Acharyya2024/prose/consistent-estimation-dkps-2409.17308_transcription.md",
+            "lines": [
+              279,
+              303
+            ]
+          }
+        }
+      ],
+      "source_pins": [
+        {
+          "fragment": "source",
+          "document": "AcharyyaTrossetPriebeHelm2024",
+          "sha256": "fc2913ce519d75b5c481c951fa9aaeea96cac2a991da405b6d1be685b394805b",
+          "locator": {
+            "document": "AcharyyaTrossetPriebeHelm2024",
+            "file": "Acharyya2024/prose/consistent-estimation-dkps-2409.17308_transcription.md",
+            "lines": [
+              279,
+              303
+            ]
+          },
+          "visibility": "public_reconstruction",
+          "pinned_on": "2026-09-03",
+          "note": "Source passages pinned 2026-09-03: the retained transcription is now a registered source document and every cited passage is hashed, so a line shift is reported instead of silently changing what the row cites."
+        }
+      ]
     },
     {
       "id": "A24-C1",
@@ -470,6 +767,7 @@
       "literal_source_covered": false,
       "source_claim": "There exist orthogonal W^(u) and translations a^(u) such that every estimated point converges in probability to W^(u) psi_i + a^(u).",
       "source_locator": {
+        "document": "AcharyyaTrossetPriebeHelm2024",
         "file": "Acharyya2024/prose/consistent-estimation-dkps-2409.17308_transcription.md",
         "lines": [
           305,
@@ -521,7 +819,39 @@
         "rigid-alignment-corollary",
         "rigid-motion-engine-now-available"
       ],
-      "next_action": "None. The printed statement is refuted and the repair is proved; retain the counterexample as the record of why the alignment must sit inside the probability."
+      "next_action": "None. The printed statement is refuted and the repair is proved; retain the counterexample as the record of why the alignment must sit inside the probability.",
+      "source_fragments": [
+        {
+          "id": "source",
+          "role": "primary",
+          "locator": {
+            "document": "AcharyyaTrossetPriebeHelm2024",
+            "file": "Acharyya2024/prose/consistent-estimation-dkps-2409.17308_transcription.md",
+            "lines": [
+              305,
+              326
+            ]
+          }
+        }
+      ],
+      "source_pins": [
+        {
+          "fragment": "source",
+          "document": "AcharyyaTrossetPriebeHelm2024",
+          "sha256": "da89b8b5888784f8237a22909c0fded487c1a763861882b45a7b057c62326ce9",
+          "locator": {
+            "document": "AcharyyaTrossetPriebeHelm2024",
+            "file": "Acharyya2024/prose/consistent-estimation-dkps-2409.17308_transcription.md",
+            "lines": [
+              305,
+              326
+            ]
+          },
+          "visibility": "public_reconstruction",
+          "pinned_on": "2026-09-03",
+          "note": "Source passages pinned 2026-09-03: the retained transcription is now a registered source document and every cited passage is hashed, so a line shift is reported instead of silently changing what the row cites."
+        }
+      ]
     },
     {
       "id": "A24-A2",
@@ -533,6 +863,7 @@
       "literal_source_covered": false,
       "source_claim": "There is a compact Riemannian manifold M containing latent vectors phi_i whose pairwise distances are the limiting model dissimilarities.",
       "source_locator": {
+        "document": "AcharyyaTrossetPriebeHelm2024",
         "file": "Acharyya2024/prose/consistent-estimation-dkps-2409.17308_transcription.md",
         "lines": [
           333,
@@ -578,7 +909,39 @@
         "continuous-mds-lp",
         "riemannian-structure-decorative"
       ],
-      "next_action": "None. The remaining growing-model gap is the population law in Lemma 2 and Theorem 5, not this assumption."
+      "next_action": "None. The remaining growing-model gap is the population law in Lemma 2 and Theorem 5, not this assumption.",
+      "source_fragments": [
+        {
+          "id": "source",
+          "role": "primary",
+          "locator": {
+            "document": "AcharyyaTrossetPriebeHelm2024",
+            "file": "Acharyya2024/prose/consistent-estimation-dkps-2409.17308_transcription.md",
+            "lines": [
+              333,
+              341
+            ]
+          }
+        }
+      ],
+      "source_pins": [
+        {
+          "fragment": "source",
+          "document": "AcharyyaTrossetPriebeHelm2024",
+          "sha256": "f00a32460b308bf78a552b191d302315decc15fd77a1ac61b7d7e48187ddcd49",
+          "locator": {
+            "document": "AcharyyaTrossetPriebeHelm2024",
+            "file": "Acharyya2024/prose/consistent-estimation-dkps-2409.17308_transcription.md",
+            "lines": [
+              333,
+              341
+            ]
+          },
+          "visibility": "public_reconstruction",
+          "pinned_on": "2026-09-03",
+          "note": "Source passages pinned 2026-09-03: the retained transcription is now a registered source document and every cited passage is hashed, so a line shift is reported instead of silently changing what the row cites."
+        }
+      ]
     },
     {
       "id": "A24-L2",
@@ -590,6 +953,7 @@
       "literal_source_covered": true,
       "source_claim": "For iid phi_i from P, pointwise convergence of empirical dissimilarities implies, along a subsequence, L^p(P x P) convergence of estimated pairwise distances to continuous-MDS distances.",
       "source_locator": {
+        "document": "AcharyyaTrossetPriebeHelm2024",
         "file": "Acharyya2024/prose/consistent-estimation-dkps-2409.17308_transcription.md",
         "lines": [
           342,
@@ -722,7 +1086,39 @@
       "gap_refs": [
         "continuous-mds-lp"
       ],
-      "next_action": "None. Theorem 5, which composes the Theorem 4 rate with this lemma, is closed over the population law on A24-T5."
+      "next_action": "None. Theorem 5, which composes the Theorem 4 rate with this lemma, is closed over the population law on A24-T5.",
+      "source_fragments": [
+        {
+          "id": "source",
+          "role": "primary",
+          "locator": {
+            "document": "AcharyyaTrossetPriebeHelm2024",
+            "file": "Acharyya2024/prose/consistent-estimation-dkps-2409.17308_transcription.md",
+            "lines": [
+              342,
+              355
+            ]
+          }
+        }
+      ],
+      "source_pins": [
+        {
+          "fragment": "source",
+          "document": "AcharyyaTrossetPriebeHelm2024",
+          "sha256": "19f74abbbb760bc77a72485f996c62cfecf195f485087950a78cf9f6c3289c54",
+          "locator": {
+            "document": "AcharyyaTrossetPriebeHelm2024",
+            "file": "Acharyya2024/prose/consistent-estimation-dkps-2409.17308_transcription.md",
+            "lines": [
+              342,
+              355
+            ]
+          },
+          "visibility": "public_reconstruction",
+          "pinned_on": "2026-09-03",
+          "note": "Source passages pinned 2026-09-03: the retained transcription is now a registered source document and every cited passage is hashed, so a line shift is reported instead of silently changing what the row cites."
+        }
+      ]
     },
     {
       "id": "A24-T4",
@@ -734,6 +1130,7 @@
       "literal_source_covered": true,
       "source_claim": "When n,m grow with r, the same covariance-trace rate implies pointwise convergence D_ii' -> Delta^(infinity)(phi_i,phi_i') in probability for every fixed pair.",
       "source_locator": {
+        "document": "AcharyyaTrossetPriebeHelm2024",
         "file": "Acharyya2024/prose/consistent-estimation-dkps-2409.17308_transcription.md",
         "lines": [
           356,
@@ -795,7 +1192,39 @@
       "review": "The printed theorem is proved from the source's sampling model, with the model count growing, and also in the drawn-model form Theorem 5 consumes. Nothing is shared across the model collection: each model carries its own sum_j gamma_kj and its own rate, and each model's moment bound is required only eventually. Appendix A.2 is discharged rather than assumed.",
       "notes": "The source proof is pointwise in each pair, and the formalization confirms that no uniform-in-n and no uniform-in-model concentration is needed -- neither for the growing model count, nor for the passage to a drawn model population. An earlier pass asserted the second of these while the fixed-model theorem still imposed one bound on every model index; that hypothesis has been removed, so the assertion is now true of the declarations and not only of the argument.",
       "gap_refs": [],
-      "next_action": "None."
+      "next_action": "None.",
+      "source_fragments": [
+        {
+          "id": "source",
+          "role": "primary",
+          "locator": {
+            "document": "AcharyyaTrossetPriebeHelm2024",
+            "file": "Acharyya2024/prose/consistent-estimation-dkps-2409.17308_transcription.md",
+            "lines": [
+              356,
+              370
+            ]
+          }
+        }
+      ],
+      "source_pins": [
+        {
+          "fragment": "source",
+          "document": "AcharyyaTrossetPriebeHelm2024",
+          "sha256": "dfd6e3d8b1da84869c4ab4f5d62e123e7d6b54d449015174b552772049d9f018",
+          "locator": {
+            "document": "AcharyyaTrossetPriebeHelm2024",
+            "file": "Acharyya2024/prose/consistent-estimation-dkps-2409.17308_transcription.md",
+            "lines": [
+              356,
+              370
+            ]
+          },
+          "visibility": "public_reconstruction",
+          "pinned_on": "2026-09-03",
+          "note": "Source passages pinned 2026-09-03: the retained transcription is now a registered source document and every cited passage is hashed, so a line shift is reported instead of silently changing what the row cites."
+        }
+      ]
     },
     {
       "id": "A24-T5",
@@ -807,6 +1236,7 @@
       "literal_source_covered": true,
       "source_claim": "Under the Theorem 4 rate, along a subsequence the pairwise-distance error converges to zero in L^p(P x P) in probability for every p >= 1.",
       "source_locator": {
+        "document": "AcharyyaTrossetPriebeHelm2024",
         "file": "Acharyya2024/prose/consistent-estimation-dkps-2409.17308_transcription.md",
         "lines": [
           413,
@@ -940,7 +1370,39 @@
       "review": "The printed theorem is proved over the population law, from the paper's replicate and gamma assumptions. The composition the source asserts -- Theorem 4, then Lemma 2 -- needed three passages, and each is a proved theorem rather than an added hypothesis: the conditional bad-event probabilities integrate over the model draw by domination by 1, so no uniformity over the model population is required; a fresh query paired with a drawn reference and two distinct drawn references have the same law P x P, so Theorem 4's conclusion is literally Lemma 2's hypothesis; and the per-index errors have a common mean because the source's D is a statistic of the two models involved. The single repair is in the sampling model: the population measure is augmented by the response outcome, because the printed integral does not denote anything without it. That augmentation is a choice among possible repairs and the row says so. The subsequence is independent of the tolerance and the exponent range is wider than printed.",
       "notes": "The earlier reading of this row -- that the composition needs a uniformity condition over models that the source does not state -- is withdrawn. It was an artifact of routing through an integrated second-moment bound, which does need such a condition; the conditional route does not. pointwise_dissimilarity_convergesInProbability_of_secondMoment_random remains as the integrated-bound form and is not used by this composition. A separate uniformity, one bound covering every model index in the fixed-model Theorem 4, survived that pass and has since been removed.",
       "gap_refs": [],
-      "next_action": "None."
+      "next_action": "None.",
+      "source_fragments": [
+        {
+          "id": "source",
+          "role": "primary",
+          "locator": {
+            "document": "AcharyyaTrossetPriebeHelm2024",
+            "file": "Acharyya2024/prose/consistent-estimation-dkps-2409.17308_transcription.md",
+            "lines": [
+              413,
+              424
+            ]
+          }
+        }
+      ],
+      "source_pins": [
+        {
+          "fragment": "source",
+          "document": "AcharyyaTrossetPriebeHelm2024",
+          "sha256": "fc7f49ce39cc873bc9906127ae16671ef416f2f805197c1c0e82511b5e8a6d98",
+          "locator": {
+            "document": "AcharyyaTrossetPriebeHelm2024",
+            "file": "Acharyya2024/prose/consistent-estimation-dkps-2409.17308_transcription.md",
+            "lines": [
+              413,
+              424
+            ]
+          },
+          "visibility": "public_reconstruction",
+          "pinned_on": "2026-09-03",
+          "note": "Source passages pinned 2026-09-03: the retained transcription is now a registered source document and every cited passage is hashed, so a line shift is reported instead of silently changing what the row cites."
+        }
+      ]
     },
     {
       "id": "A24-R4",
@@ -952,6 +1414,7 @@
       "literal_source_covered": true,
       "source_claim": "In every setting r -> infinity; for quantities whose definition depends on r, such as psi-hat, the dependence is sometimes written psi-hat^(r).",
       "source_locator": {
+        "document": "AcharyyaTrossetPriebeHelm2024",
         "file": "Acharyya2024/prose/consistent-estimation-dkps-2409.17308_transcription.md",
         "lines": [
           189,
@@ -970,7 +1433,39 @@
       "review": "A notational convention rather than a mathematical claim. It is recorded so the census covers every numbered source item and a reviewer can see it was classified, not skipped.",
       "notes": "No additional note.",
       "gap_refs": [],
-      "next_action": "None."
+      "next_action": "None.",
+      "source_fragments": [
+        {
+          "id": "source",
+          "role": "primary",
+          "locator": {
+            "document": "AcharyyaTrossetPriebeHelm2024",
+            "file": "Acharyya2024/prose/consistent-estimation-dkps-2409.17308_transcription.md",
+            "lines": [
+              189,
+              191
+            ]
+          }
+        }
+      ],
+      "source_pins": [
+        {
+          "fragment": "source",
+          "document": "AcharyyaTrossetPriebeHelm2024",
+          "sha256": "a6993a172415ffe22f3d16bb55000de177f5ca39fb40cd0546bad593e35c449f",
+          "locator": {
+            "document": "AcharyyaTrossetPriebeHelm2024",
+            "file": "Acharyya2024/prose/consistent-estimation-dkps-2409.17308_transcription.md",
+            "lines": [
+              189,
+              191
+            ]
+          },
+          "visibility": "public_reconstruction",
+          "pinned_on": "2026-09-03",
+          "note": "Source passages pinned 2026-09-03: the retained transcription is now a registered source document and every cited passage is hashed, so a line shift is reported instead of silently changing what the row cites."
+        }
+      ]
     }
   ]
 }
