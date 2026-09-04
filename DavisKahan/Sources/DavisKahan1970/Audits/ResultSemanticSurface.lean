@@ -99,11 +99,15 @@ end TauCeti.DavisKahan1970.Audits
 
 Status: **TERMINAL EXACT**.
 
-The first two are the canonical Section 2 inventory names; the two after them are
-the declarations they alias, with the full `FormBoundedSylvesterGap`, both
-conclusions and no capability class.  The rest are the presentation declaration,
-the engine, and the scope companions. -/
+The first name is the public Section 2 short name, aliasing the canonical
+witness `sinTheta_unbounded_formGap_symmetricNorming_rclike`: an arbitrary
+`RCLike` field, the full `FormBoundedSylvesterGap`, both conclusions, and nothing
+in the signature that is not Davis and Kahan's -- in particular no
+proof-capability class.  The fixed-field inventory names and the declarations
+they alias follow, as corroboration at `ℂ` and at `ℝ`.  The rest are the
+presentation declaration, the engine, and the scope companions. -/
 
+#check @TauCeti.DavisKahan1970.SectionTwo.sinTheta
 #check @TauCeti.DavisKahan1970.SectionTwo.sinTheta_complex
 #check @TauCeti.DavisKahan1970.SectionTwo.sinTheta_real
 #check @DavisKahan1970.sinTheta_unbounded_formGap_symmetricNorming_complex
@@ -251,8 +255,8 @@ Status: **TERMINAL EXACT**.
 #check @TauCeti.DavisKahan.extendedGauge_unboundedReflectionTangent_real
 #check @TauCeti.DavisKahan.isUnit_signedCosTwo_of_isUnit_diagonalPart_sq
 #check @TauCeti.DavisKahan.cos_two_ne_zero_of_isUnit_diagonalPart_reflection_sq
-#check @TauCeti.DavisKahanExt.absTanTwoAngleOperatorR
-#check @TauCeti.DavisKahanExt.complexify_absTanTwoAngleOperatorR
+#check @TauCeti.DavisKahan.Angle.absTanTwoAngleOperatorR
+#check @TauCeti.DavisKahan.Angle.complexify_absTanTwoAngleOperatorR
 #check @TauCeti.DavisKahan1970.tanTwoTheta_ambient_unbounded_symmetricNorming_complex
 #check @TauCeti.DavisKahan1970.tanTwoTheta_ambient_unbounded_symmetricNorming_real
 #check @TauCeti.DavisKahan1970.tanTwoTheta_directed_boundedResidual_blockRepresentative_spectralGap_symmetricNorming_complex

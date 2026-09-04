@@ -4,6 +4,8 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, OpenAI GPT-5.6 Sol
 -/
 import DavisKahan.Sylvester.ScalarGeneric
+import DavisKahan.Sylvester.ScalarTransport
+import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.ScalarTransport
 import DavisKahan.SinTheta.Unbounded.FormBoundedGap
 import DavisKahan.Sources.DavisKahan1970.SineTheta.Norms.UnitaryInvariantNorm
 
@@ -14,8 +16,13 @@ open TauCeti.DavisKahan.Sylvester
 
 This module gives the Section 2 single-angle sine theorem an intentionally
 paper-facing production surface.  The analytic engine is scalar-generic through
-`HasUnboundedSylvesterKyFan`; that class has instances for both scalar fields of
-the paper, `R` and `C`.
+`HasUnboundedSylvesterKyFan` and
+`ContinuousLinearMap.HasMinMaxLowerBoundEverywhere`, both of which hold at every
+`RCLike` field: `TauCeti.DavisKahan.Sylvester.hasUnboundedSylvesterKyFan` and
+`ContinuousLinearMap.hasMinMaxLowerBoundEverywhere` obtain them by transporting
+the fixed-field proofs along the real/complex dichotomy of `RCLike`.  They are
+therefore implementation infrastructure, resolved by instance search, and no
+theorem in this module quantifies over them.
 
 The public theorem `sinTheta_unbounded_intervalExterior_symmetricNorming_rclike` avoids the historical bundled
 problem records.  It displays the operators, coordinate maps, residual
@@ -48,8 +55,6 @@ variable {E F G H : Type v}
 Ky-Fan-dominant ideal-family layer.  This is the reusable engine behind the
 paper-facing theorem below. -/
 theorem sinTheta_unbounded_formGap_idealFamily_rclike
-    [ContinuousLinearMap.HasMinMaxLowerBoundEverywhere.{u, v} 𝕜]
-    [HasUnboundedSylvesterKyFan.{u, v} 𝕜]
     (N : KyFanDominantIdealFamily (𝕜 := 𝕜))
     (D : UnboundedSinThetaData (𝕜 := 𝕜) (E := E) (F := F) (G := G))
     (F₀ : H →L[𝕜] E)
@@ -111,8 +116,6 @@ structural hypotheses bundled as `IsTrialResidual` and `IsExactSpectralDecomposi
 The two class hypotheses are analytic capabilities of the scalar field, proved
 for `R` and `C`; they are present only because `RCLike` is an open class. -/
 theorem sinTheta_unbounded_formGap_symmetricNorming_ofComponents_rclike
-    [ContinuousLinearMap.HasMinMaxLowerBoundEverywhere.{u, v} 𝕜]
-    [HasUnboundedSylvesterKyFan.{u, v} 𝕜]
     (N : SymmetricNormingFunction)
     (A : E →ₗ.[𝕜] E)
     (A₀ : F →ₗ.[𝕜] F)
@@ -183,8 +186,6 @@ The interval/exterior hypothesis is written literally: one of `A0` and
 `Lambda1` has real spectrum in `[beta, alpha]`, while the other avoids the open
 `delta`-neighborhood of that interval. -/
 theorem sinTheta_unbounded_intervalExterior_symmetricNorming_rclike
-    [ContinuousLinearMap.HasMinMaxLowerBoundEverywhere.{u, v} 𝕜]
-    [HasUnboundedSylvesterKyFan.{u, v} 𝕜]
     (N : SymmetricNormingFunction)
     (A : E →ₗ.[𝕜] E)
     (A₀ : F →ₗ.[𝕜] F)
