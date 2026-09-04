@@ -99,6 +99,7 @@
       "status": "compiled_exact",
       "verification": "proved_in_build",
       "source_locator": {
+        "document": "AcharyyaTrossetPriebeHelm2024",
         "file": "Acharyya2024/prose/consistent-estimation-dkps-2409.17308_transcription.md",
         "lines": [
           100,
@@ -129,6 +130,7 @@
       "status": "compiled_source_repair",
       "verification": "proved_in_build",
       "source_locator": {
+        "document": "AcharyyaTrossetPriebeHelm2024",
         "file": "Acharyya2024/prose/consistent-estimation-dkps-2409.17308_transcription.md",
         "lines": [
           114,
@@ -164,6 +166,7 @@
       "status": "compiled_generalized",
       "verification": "proved_in_build",
       "source_locator": {
+        "document": "AcharyyaTrossetPriebeHelm2024",
         "file": "Acharyya2024/prose/consistent-estimation-dkps-2409.17308_transcription.md",
         "lines": [
           118,
@@ -194,6 +197,7 @@
       "status": "compiled_exact",
       "verification": "proved_in_build",
       "source_locator": {
+        "document": "AcharyyaTrossetPriebeHelm2024",
         "file": "Acharyya2024/prose/consistent-estimation-dkps-2409.17308_transcription.md",
         "lines": [
           134,
@@ -232,6 +236,7 @@
       "status": "not_proof_debt",
       "verification": "not_applicable",
       "source_locator": {
+        "document": "AcharyyaTrossetPriebeHelm2024",
         "file": "Acharyya2024/prose/consistent-estimation-dkps-2409.17308_transcription.md",
         "lines": [
           189,
@@ -259,6 +264,7 @@
       "status": "compiled_source_repair",
       "verification": "proved_in_build",
       "source_locator": {
+        "document": "AcharyyaTrossetPriebeHelm2024",
         "file": "Acharyya2024/prose/consistent-estimation-dkps-2409.17308_transcription.md",
         "lines": [
           205,
@@ -295,6 +301,7 @@
       "status": "compiled_generalized",
       "verification": "proved_in_build",
       "source_locator": {
+        "document": "AcharyyaTrossetPriebeHelm2024",
         "file": "Acharyya2024/prose/consistent-estimation-dkps-2409.17308_transcription.md",
         "lines": [
           236,
@@ -326,6 +333,7 @@
       "status": "compiled_source_repair",
       "verification": "proved_in_build",
       "source_locator": {
+        "document": "AcharyyaTrossetPriebeHelm2024",
         "file": "Acharyya2024/prose/consistent-estimation-dkps-2409.17308_transcription.md",
         "lines": [
           248,
@@ -362,6 +370,7 @@
       "status": "compiled_exact",
       "verification": "proved_in_build",
       "source_locator": {
+        "document": "AcharyyaTrossetPriebeHelm2024",
         "file": "Acharyya2024/prose/consistent-estimation-dkps-2409.17308_transcription.md",
         "lines": [
           264,
@@ -403,6 +412,7 @@
       "status": "compiled_source_repair",
       "verification": "proved_in_build",
       "source_locator": {
+        "document": "AcharyyaTrossetPriebeHelm2024",
         "file": "Acharyya2024/prose/consistent-estimation-dkps-2409.17308_transcription.md",
         "lines": [
           279,
@@ -439,6 +449,7 @@
       "status": "compiled_source_repair",
       "verification": "proved_in_build",
       "source_locator": {
+        "document": "AcharyyaTrossetPriebeHelm2024",
         "file": "Acharyya2024/prose/consistent-estimation-dkps-2409.17308_transcription.md",
         "lines": [
           305,
@@ -481,6 +492,7 @@
       "status": "compiled_exact",
       "verification": "proved_in_build",
       "source_locator": {
+        "document": "AcharyyaTrossetPriebeHelm2024",
         "file": "Acharyya2024/prose/consistent-estimation-dkps-2409.17308_transcription.md",
         "lines": [
           333,
@@ -517,6 +529,7 @@
       "status": "compiled_source_repair",
       "verification": "proved_in_build",
       "source_locator": {
+        "document": "AcharyyaTrossetPriebeHelm2024",
         "file": "Acharyya2024/prose/consistent-estimation-dkps-2409.17308_transcription.md",
         "lines": [
           342,
@@ -610,6 +623,7 @@
       "status": "compiled_exact",
       "verification": "proved_in_build",
       "source_locator": {
+        "document": "AcharyyaTrossetPriebeHelm2024",
         "file": "Acharyya2024/prose/consistent-estimation-dkps-2409.17308_transcription.md",
         "lines": [
           356,
@@ -659,6 +673,7 @@
       "status": "compiled_source_repair",
       "verification": "proved_in_build",
       "source_locator": {
+        "document": "AcharyyaTrossetPriebeHelm2024",
         "file": "Acharyya2024/prose/consistent-estimation-dkps-2409.17308_transcription.md",
         "lines": [
           413,
