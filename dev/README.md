@@ -90,6 +90,18 @@ aiq-lean alignment html dev/yu-wang-samworth-2015-full-source-census.json \
     -o build/semantic-alignment/yws-alignment.html
 ```
 
+Two commands at the repository root wrap those two shapes, with the browser
+opened for you:
+
+```bash
+./semantic-alignment-page.sh      # one self-contained HTML file, no server
+./semantic-alignment-server.sh    # the live server: every ledger under one shell
+```
+
+The page shows each declaration's docstring and statement, with the proof body
+elided as `:= by <proof-omitted>`; how a theorem is proved is answered by the
+dependency and axiom panels instead.
+
 A review is a claim about a type on the day it was read.  `aiq-lean alignment
 pin <census-or-review>` records the elaborated-type hashes of every declaration
 a review claims (`statement_pins` on the review), and `aiq-lean alignment check`
