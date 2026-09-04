@@ -134,8 +134,12 @@ ambient:   δ N(tan Θ)    ≤ N(H)      -- on the whole-space perturbation
 They are different quantities with different right-hand sides, and **no single
 alias below is the whole printed theorem for those three.**  Each result
 therefore has an explicit `_directed_` and `_ambient_` alias at each scalar
-field, and the older unqualified `tanTheta_complex`-style names are retained as
-the ambient clause, which is what they always were.
+field.  The older unqualified names are retained at whichever clause they always
+named, and they do **not** all name the same one: `tanTheta_complex` and
+`tanTwoTheta_complex` (with their real siblings) are the ambient clause, and
+`sinTwoTheta_complex` and `sinTwoTheta_real` are the **directed** one.  Prose in
+this file claimed the uniform reading until 2026-09-04; the aliases themselves
+were always right, and the docstring on each says which clause it is.
 
 The maintained per-clause witness table is generated from
 `dev/davis-kahan-1970-formalization-result-inventory.json` into the reviewer
@@ -348,11 +352,17 @@ alias sinTwoTheta_real := sinTwoTheta_directed_unbounded_addBounded_symmetricNor
 
 /-! ## The two printed clauses, named
 
-`tanTheta_complex`, `sinTwoTheta_complex` and `tanTwoTheta_complex` (and their
-real siblings) are the AMBIENT clause of their theorem.  The directed clause is a
-different statement -- a different angle object and the trial residual rather than
-the ambient perturbation on the right -- so it gets its own name rather than
-being folded into the ambient one with irrelevant hypotheses. -/
+The two clauses of a theorem are different statements -- a different angle object,
+and the trial residual rather than the ambient perturbation on the right -- so each
+gets its own name rather than being folded into the other with irrelevant
+hypotheses.  Every name below says which clause it is.
+
+The unqualified legacy names are not uniform, and a reader should not guess:
+`tanTheta_complex` / `tanTheta_real` and `tanTwoTheta_complex` / `tanTwoTheta_real`
+are the AMBIENT clause, while `sinTwoTheta_complex` / `sinTwoTheta_real` are the
+DIRECTED one (their `_ambient_` partners are named explicitly).  They are kept
+because they are cited elsewhere; the `_directed_` and `_ambient_` names below are
+what new code should use. -/
 
 /-- **`tan Θ`, ambient clause, over `ℂ`**: `δ N(tan Θ) ≤ N(H)`. -/
 alias tanTheta_ambient_complex := tanTheta_ambient_unboundedRitz_symmetricNorming_complex
