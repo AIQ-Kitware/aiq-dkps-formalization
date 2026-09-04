@@ -4,7 +4,7 @@
 
 **Census family:** `source-completion-census`  
 **Items:** 50  
-**Unique cited Lean declarations:** 1219
+**Unique cited Lean declarations:** 1221
 
 ## How to use this census
 
@@ -2131,6 +2131,8 @@ CENSUS-GATE NOTE 2026-08-11: `TauCeti.MultiplicityDatum.retype` is deliberately 
 - `TauCeti.starOperatorUnitaryEquiv_of_isHilbertSum`
 - `TauCeti.star_linearIsometryEquiv_trans_symm_of_isHilbertSum`
 - `TauCeti.operatorUnitaryEquiv_retype_real_of_starOperatorUnitaryEquiv`
+- `TauCeti.DavisKahan1970.theorem3_1_intertwiner_of_sameSpectralMultiplicity_complex`
+- `TauCeti.DavisKahan1970.theorem3_1_realization_ofSpectralMultiplicity_complex`
 
 **Curated source/Lean review:**
 
@@ -2379,6 +2381,8 @@ THE SPECTRAL CONFINEMENT IS ON THE WRAPPER, as this row directed, and it cost no
 TWO CORRECTIONS TO THIS ROW'S OWN CLAIMS.  (i) "`ofIntertwinedAngles` has no consumer at all" is false as stated: it has five, the `@[simp]` accessors in its own section, each by `rfl`.  The true claim is "no consumer OUTSIDE its declaring section, and none source-numbered".  This is not pedantry -- those `rfl`s are the evidence that the constructor's fields are DEFINITIONALLY the `cfc` terms, which is exactly why the wrapper can restate the conclusion in `cfc Real.cos Theta_0` form and still close by a bare `:=`.  (ii) The census gate does NOT require a row to name every declaration in a module it lists: it checks only that names in `lean_declarations` RESOLVE, plus the `planned_declarations` promotion rule.  The row is extended here for accounting, not because a gate forced it.
 
 AN ELABORATION TRAP WORTH KEEPING: `(cfc Real.sin Theta_0 : E ->l[k] E)` does NOT elaborate -- `cfc` is generic in the ambient algebra, so the ascription makes Lean try to build the calculus inside `E ->l[k] E` and it fails at `TopologicalSpace`.  The DOUBLE ascription `((cfc Real.sin Theta_0 : E ->L[k] E) : E ->l[k] E)` is required.  The datum form never hits this because `d.sin_0` already has a type.
+
+**REOPENED 2026-09-04 (hostile review).**  The converse clause's witness now takes only the printed angle data and constructs the intertwining partial isometry J_0 internally, instead of asking the caller for it.  The clause is still OPEN: the printed hypothesis allows the two spectral multiplicity functions to differ at 0, and the available classification is agreement everywhere.  See the result inventory's open hostile-review obligations.
 
 **Next action.** No hostile-review hole is currently recorded for this source passage. Preserve exact source scope and re-audit if the distributable source specification changes.
 

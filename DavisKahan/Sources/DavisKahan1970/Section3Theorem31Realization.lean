@@ -6,6 +6,8 @@ Authors: Jon Crall, OpenAI GPT-5.6 Thinking, Claude Opus 5
 
 import DavisKahan.Geometry.Halmos.Realization
 import ForTauCeti.Analysis.InnerProductSpace.RealContinuousFunctionalCalculus
+import ForTauCeti.Analysis.RCLike.ScalarTransportFunctionalCalculus
+import ForTauCeti.Analysis.InnerProductSpace.BorelCalculus.SpectralMultiplicityEquiv
 
 /-!
 # Davis--Kahan 1970, Theorem 3.1, the realization half
@@ -251,6 +253,125 @@ example {Θ₀ : H₁ →L[ℝ] H₁} {Θ₁ : H₂ →L[ℝ] H₂}
   ⟨(theorem3_1_realization_ofAngles hΘ₀ hΘ₁ hspec₀ hspec₁ J hJ hisom hcoisom).2.2.2.2.1,
     (theorem3_1_realization_ofAngles hΘ₀ hΘ₁ hspec₀ hspec₁ J hJ hisom hcoisom).2.2.2.2.2.2⟩
 end RealScalars
+
+/-! ## The intertwiner is reconstructed from the multiplicity data, not assumed
+
+The printed converse of Theorem 3.1 gives arbitrary Hermitian `Θ₀, Θ₁` with `0 ≤ Θⱼ ≤ π/2`
+whose spectral multiplicity functions agree, and then says: "the proof reconstructs the pair
+from these angle data **and the corresponding partial isometry `J₀`**".  `J₀` is therefore
+output of the proof, not input to the theorem.
+
+`theorem3_1_realization_ofAngles` asks its caller for `J` and its two partial-isometry
+identities.  Those are consequences of the multiplicity hypothesis; taking them as hypotheses
+makes the Lean statement weaker than the printed one, which is a source-correspondence defect
+even though every instance of it is true.  The theorem below closes that gap in the case where
+the multiplicity functions agree everywhere -- the printed hypothesis allows them to differ at
+the spectral point `0`, and that residual freedom is recorded below.  Over `ℂ` the
+classification `TauCeti.operatorUnitaryEquiv_of_sameSpectralMultiplicity_complex` supplies the
+unitary directly. -/
+
+section OfMultiplicity
+
+variable {E₂ : Type u} [NormedAddCommGroup E₂] [InnerProductSpace ℂ E₂] [CompleteSpace E₂]
+variable {F₂ : Type v} [NormedAddCommGroup F₂] [InnerProductSpace ℂ F₂] [CompleteSpace F₂]
+
+/-- **Davis--Kahan 1970, Theorem 3.1: the printed partial isometry `J₀`, constructed.**
+
+From equality of the spectral multiplicity data of two self-adjoint operators, the intertwining
+partial isometry the printed converse names is produced, together with the two identities
+`theorem3_1_realization_ofAngles` asks for.  Nothing about `J` is hypothesised.
+
+The two spectral confinements `0 ≤ Θⱼ ≤ π/2` are carried because they are printed, and are not
+consumed: the construction is a fact about multiplicity data at any spectrum.
+
+**Recorded narrowing.**  The printed hypothesis is that the multiplicity functions agree
+*except possibly at `0`*.  `SameSpectralMultiplicity` is agreement everywhere, so this covers
+the equal-null-space case.  The freedom at `0` is realized separately, and unconditionally, by
+`corollary3_1_realization_zeroMultiplicity` in the compact setting; closing it here needs the
+multiplicity comparison restricted to the closures of the ranges, which is not written. -/
+theorem theorem3_1_intertwiner_of_sameSpectralMultiplicity_complex
+    {Θ₀ : E₂ →L[ℂ] E₂} {Θ₁ : F₂ →L[ℂ] F₂}
+    (_hΘ₀ : IsSelfAdjoint Θ₀) (_hΘ₁ : IsSelfAdjoint Θ₁)
+    (_hspec₀ : spectrum ℝ Θ₀ ⊆ Set.Icc 0 (Real.pi / 2))
+    (_hspec₁ : spectrum ℝ Θ₁ ⊆ Set.Icc 0 (Real.pi / 2))
+    (hmult : TauCeti.SameSpectralMultiplicity Θ₀ Θ₁) :
+    ∃ J : E₂ →L[ℂ] F₂, J ∘L Θ₀ = Θ₁ ∘L J ∧
+      ContinuousLinearMap.adjoint J ∘L J = 1 ∧
+      J ∘L ContinuousLinearMap.adjoint J = 1 := by
+  obtain ⟨e, he⟩ := TauCeti.operatorUnitaryEquiv_of_sameSpectralMultiplicity_complex Θ₀ Θ₁ hmult
+  refine ⟨(e : E₂ →L[ℂ] F₂), ContinuousLinearMap.ext fun x => he x, ?_, ?_⟩
+  · exact (ContinuousLinearMap.norm_map_iff_adjoint_comp_self _).mp e.norm_map
+  · rw [e.adjoint_eq_symm]
+    exact ContinuousLinearMap.ext fun y => by simp
+
+
+attribute [local instance 100] ContinuousLinearMap.realAlgebra
+  ContinuousLinearMap.realIsScalarTower ContinuousLinearMap.continuousFunctionalCalculusReal
+
+/-- **Davis--Kahan 1970, Theorem 3.1, converse sentence, from the printed angle data alone.**
+
+Two arbitrary self-adjoint operators with `0 ≤ Θⱼ ≤ π/2` and equal spectral multiplicity data,
+and nothing else.  The intertwining partial isometry `J₀` the printed proof reconstructs is
+produced here rather than demanded of the caller, and the pair it realizes has the printed
+invariants: the two compressions are `cos²Θⱼ`, the two angle-`0` spaces are the kernels of
+`sin Θⱼ`, the two angle-`π/2` spaces are the kernels of `cos Θⱼ`, and the two crossed defects
+are isometrically equivalent.
+
+`theorem3_1_realization_ofAngles` is the same conclusion with `J` as a hypothesis; it remains
+as the lower-level surface, and this theorem is `..._ofAngles` composed with
+`theorem3_1_intertwiner_of_sameSpectralMultiplicity_complex`.  The recorded narrowing at the
+spectral point `0` is the one on that theorem. -/
+theorem theorem3_1_realization_ofSpectralMultiplicity_complex
+    {Θ₀ : E₂ →L[ℂ] E₂} {Θ₁ : F₂ →L[ℂ] F₂}
+    (hΘ₀ : IsSelfAdjoint Θ₀) (hΘ₁ : IsSelfAdjoint Θ₁)
+    (hspec₀ : spectrum ℝ Θ₀ ⊆ Set.Icc 0 (Real.pi / 2))
+    (hspec₁ : spectrum ℝ Θ₁ ⊆ Set.Icc 0 (Real.pi / 2))
+    (hmult : TauCeti.SameSpectralMultiplicity Θ₀ Θ₁) :
+    ∃ (J : E₂ →L[ℂ] F₂) (hJ : J ∘L Θ₀ = Θ₁ ∘L J)
+      (hisom : ContinuousLinearMap.adjoint J ∘L J ∘L cfc Real.sin Θ₀ = cfc Real.sin Θ₀)
+      (hcoisom : J ∘L ContinuousLinearMap.adjoint J ∘L cfc Real.sin Θ₁ = cfc Real.sin Θ₁),
+      (∀ x : E₂, (sourceSubspace ℂ E₂ F₂).starProjection
+          ((HalmosAngleDatum.ofIntertwinedAngles hΘ₀ hΘ₁ J hJ hisom
+              hcoisom).targetSubspace.starProjection (modelInl ℂ E₂ F₂ x)) =
+            modelInl ℂ E₂ F₂ (cfc Real.cos Θ₀ (cfc Real.cos Θ₀ x))) ∧
+        (∀ y : F₂, (sourceSubspace ℂ E₂ F₂)ᗮ.starProjection
+          (((HalmosAngleDatum.ofIntertwinedAngles hΘ₀ hΘ₁ J hJ hisom
+              hcoisom).targetSubspace)ᗮ.starProjection (modelInr ℂ E₂ F₂ y)) =
+            modelInr ℂ E₂ F₂ (cfc Real.cos Θ₁ (cfc Real.cos Θ₁ y))) ∧
+        halmosCommonPart (sourceSubspace ℂ E₂ F₂)
+            (HalmosAngleDatum.ofIntertwinedAngles hΘ₀ hΘ₁ J hJ hisom hcoisom).targetSubspace =
+          Submodule.map (modelInl ℂ E₂ F₂ : E₂ →ₗ[ℂ] WithLp 2 (E₂ × F₂))
+            (LinearMap.ker ((cfc Real.sin Θ₀ : E₂ →L[ℂ] E₂) : E₂ →ₗ[ℂ] E₂)) ∧
+        halmosExteriorPart (sourceSubspace ℂ E₂ F₂)
+            (HalmosAngleDatum.ofIntertwinedAngles hΘ₀ hΘ₁ J hJ hisom hcoisom).targetSubspace =
+          Submodule.map (modelInr ℂ E₂ F₂ : F₂ →ₗ[ℂ] WithLp 2 (E₂ × F₂))
+            (LinearMap.ker ((cfc Real.sin Θ₁ : F₂ →L[ℂ] F₂) : F₂ →ₗ[ℂ] F₂)) ∧
+        halmosSourceDefect (sourceSubspace ℂ E₂ F₂)
+            (HalmosAngleDatum.ofIntertwinedAngles hΘ₀ hΘ₁ J hJ hisom hcoisom).targetSubspace =
+          Submodule.map (modelInl ℂ E₂ F₂ : E₂ →ₗ[ℂ] WithLp 2 (E₂ × F₂))
+            (LinearMap.ker ((cfc Real.cos Θ₀ : E₂ →L[ℂ] E₂) : E₂ →ₗ[ℂ] E₂)) ∧
+        halmosTargetDefect (sourceSubspace ℂ E₂ F₂)
+            (HalmosAngleDatum.ofIntertwinedAngles hΘ₀ hΘ₁ J hJ hisom hcoisom).targetSubspace =
+          Submodule.map (modelInr ℂ E₂ F₂ : F₂ →ₗ[ℂ] WithLp 2 (E₂ × F₂))
+            (LinearMap.ker ((cfc Real.cos Θ₁ : F₂ →L[ℂ] F₂) : F₂ →ₗ[ℂ] F₂)) ∧
+        Nonempty (↥(halmosSourceDefect (sourceSubspace ℂ E₂ F₂)
+            (HalmosAngleDatum.ofIntertwinedAngles hΘ₀ hΘ₁ J hJ hisom
+              hcoisom).targetSubspace) ≃ₗᵢ[ℂ]
+          ↥(halmosTargetDefect (sourceSubspace ℂ E₂ F₂)
+            (HalmosAngleDatum.ofIntertwinedAngles hΘ₀ hΘ₁ J hJ hisom
+              hcoisom).targetSubspace)) := by
+  obtain ⟨J, hJ, hadj, hcoadj⟩ :=
+    theorem3_1_intertwiner_of_sameSpectralMultiplicity_complex hΘ₀ hΘ₁ hspec₀ hspec₁ hmult
+  have hisom : ContinuousLinearMap.adjoint J ∘L J ∘L cfc Real.sin Θ₀ = cfc Real.sin Θ₀ := by
+    rw [← ContinuousLinearMap.comp_assoc, hadj, ContinuousLinearMap.one_def,
+      ContinuousLinearMap.id_comp]
+  have hcoisom : J ∘L ContinuousLinearMap.adjoint J ∘L cfc Real.sin Θ₁ = cfc Real.sin Θ₁ := by
+    rw [← ContinuousLinearMap.comp_assoc, hcoadj, ContinuousLinearMap.one_def,
+      ContinuousLinearMap.id_comp]
+  exact ⟨J, hJ, hisom, hcoisom,
+    theorem3_1_realization_ofAngles hΘ₀ hΘ₁ hspec₀ hspec₁ J hJ hisom hcoisom⟩
+
+end OfMultiplicity
 
 end DavisKahan1970
 end TauCeti
