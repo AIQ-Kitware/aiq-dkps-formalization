@@ -147,6 +147,51 @@ theorem gauge_directedSinTwoAngleOperator (N : SymmetricNormingFunction) :
   unfold SymmetricNormingFunction.gauge
   rw [extendedGauge_sinTwoThetaIdealBlock_rclike U V N]
 
+/-! ### The trial-side orientation
+
+The estimates are proved about `sinTwoThetaIdealBlock U V` with `U` the reducing subspace
+carrying the spectral gap and `V` the trial subspace, and the correspondence above lands on
+`directedSinTwoAngleOperator U V`.  Davis and Kahan's `Θ₀` is the **trial-side** angle:
+`‖sin Θ₀‖ = ‖Q^⊥ P‖ = ‖Q^⊥ E₀‖` with `P` the trial projector and `Q` the one whose blocks are
+separated, so the paper's object is `directedSinTwoAngleOperator V U` -- trial first.
+
+`directedSinTwoAngleOperator_hasSameApproximationNumbers_swap` is what closes that gap, and it
+is a theorem, not a renaming: the two ordered directed *sines* have different approximation
+numbers in general.  The three lemmas below are the source-facing forms. -/
+
+/-- **The ideal block and the paper's trial-side directed `sin 2Θ₀` have the same approximation
+numbers**, at an arbitrary `RCLike` field.
+
+This composes the block correspondence with the order swap, and it is the form a source-facing
+directed `sin 2Θ` theorem consumes: the estimate is proved about the block of the pair
+(gap-carrying subspace, trial subspace), and the paper's conclusion is about the directed
+double-angle sine of the same pair *in the other order*. -/
+theorem sinTwoThetaIdealBlock_hasSameApproximationNumbers_trialSide :
+    (sinTwoThetaIdealBlock U V).HasSameApproximationNumbers
+      (directedSinTwoAngleOperator V U) :=
+  (sinTwoThetaIdealBlock_hasSameApproximationNumbers_rclike U V).trans
+    (directedSinTwoAngleOperator_hasSameApproximationNumbers_swap U V)
+
+/-- The block and the trial-side directed `sin 2Θ₀` have the same gauge in every source
+unitarily invariant norm. -/
+theorem extendedGauge_sinTwoThetaIdealBlock_trialSide (N : SymmetricNormingFunction) :
+    N.extendedGauge (sinTwoThetaIdealBlock U V) =
+      N.extendedGauge (directedSinTwoAngleOperator V U) :=
+  N.gauge_eq_of_sameApproximationSingularValues
+    (sinTwoThetaIdealBlock_hasSameApproximationNumbers_trialSide U V)
+
+/-- Ideal membership transfers between the block and the trial-side directed `sin 2Θ₀`. -/
+theorem mem_directedSinTwoAngleOperator_trialSide_iff (N : SymmetricNormingFunction) :
+    N.Mem (directedSinTwoAngleOperator V U) ↔ N.Mem (sinTwoThetaIdealBlock U V) := by
+  unfold SymmetricNormingFunction.Mem
+  rw [extendedGauge_sinTwoThetaIdealBlock_trialSide U V N]
+
+/-- The gauge transfers between the block and the trial-side directed `sin 2Θ₀`. -/
+theorem gauge_directedSinTwoAngleOperator_trialSide (N : SymmetricNormingFunction) :
+    N.gauge (directedSinTwoAngleOperator V U) = N.gauge (sinTwoThetaIdealBlock U V) := by
+  unfold SymmetricNormingFunction.gauge
+  rw [extendedGauge_sinTwoThetaIdealBlock_trialSide U V N]
+
 end
 
 end DavisKahan.Angle

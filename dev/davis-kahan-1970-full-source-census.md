@@ -4,7 +4,7 @@
 
 **Census family:** `source-completion-census`  
 **Items:** 50  
-**Unique cited Lean declarations:** 1202
+**Unique cited Lean declarations:** 1212
 
 ## How to use this census
 
@@ -553,6 +553,16 @@ The directed clause of the Section 2 tangent theorem at the printed scope, added
 - `TauCeti.DavisKahan.mem_directedSinTwoAngleOperatorC_iff`
 - `TauCeti.DavisKahan.gauge_directedSinTwoAngleOperatorC`
 - `TauCeti.DavisKahan1970.sinTwoTheta_ambient_unbounded_reflectionPair_symmetricNorming_rclike`
+- `TauCeti.DavisKahan1970.sinTwoTheta_directed_unboundedResidual_symmetricNorming_complex`
+- `TauCeti.DavisKahan1970.sinTwoTheta_directed_unboundedResidual_symmetricNorming_real`
+- `TauCeti.DavisKahan1970.sinTwoTheta_directed_unboundedResidual_reducing_symmetricNorming_complex`
+- `TauCeti.DavisKahan1970.sinTwoTheta_directed_unboundedResidual_reducing_symmetricNorming_real`
+- `TauCeti.DavisKahan.Angle.directedSinTwoAngleOperator_hasSameApproximationNumbers_swap`
+- `TauCeti.DavisKahan.Angle.sinTwoThetaIdealBlock_hasSameApproximationNumbers_trialSide`
+- `TauCeti.DavisKahan.Angle.mem_directedSinTwoAngleOperator_trialSide_iff`
+- `TauCeti.DavisKahan.Angle.gauge_directedSinTwoAngleOperator_trialSide`
+- `TauCeti.DavisKahan1970.SectionTwo.sinTwoTheta_directed_blockRepresentative_complex`
+- `TauCeti.DavisKahan1970.SectionTwo.sinTwoTheta_directed_blockRepresentative_real`
 
 **Curated source/Lean review:**
 
@@ -708,6 +718,8 @@ REOPENED 2026-08-31 by the scope-atom re-audit: a source passage that explicitly
 REOPENING WITHDRAWN 2026-08-31 and the rule corrected: a later source passage enlarges a counted result only when it is needed to determine what Davis and Kahan actually claim in it. An extension, variant or consequence they mention without introducing and proving it as a result of its own is `result_adjacent_extension` fidelity material. The Lean coverage produced during the reopening is kept as supporting evidence.
 
 AMBIENT CLAUSE REOPENED 2026-08-31 by the coherent-clause audit. The printed sin 2 Theta theorem has a directed and an ambient conclusion. The directed one is established at full unbounded scope over both fields. The ambient one is not: the only paper-norm ambient endpoints are stated for BOUNDED operators. This was masked by a checker that unioned source atoms across unrelated canonical declarations -- the directed theorems donated the unbounded scope and the bounded ambient theorem donated the ambient conclusion, and no theorem proved the conjunction. See the result inventory's `remaining_gap` for the three missing transport lemmas.
+
+**ORIENTATION CORRECTION 2026-09-04 (Claude Opus 5, on hostile review).**  The directed clause's canonical witness now concludes on the paper's own trial-side directed double-angle sine `Angle.directedSinTwoAngleOperator V U` (V the trial subspace, U the subspace whose two blocks the gap separates), not on `sinTwoThetaIdealBlock U V` and not on the other ordering `directedSinTwoAngleOperator U V`.  The bridge is `Angle.directedSinTwoAngleOperator_hasSameApproximationNumbers_swap`, a new theorem at every `RCLike` field: the two ordered directed *sines* have different approximation numbers in general, so the reordering is mathematics rather than renaming.  Separately, the public alias `SectionTwo.sinTwoTheta_complex` had named the bounded-perturbation theorem (right-hand side `2 N(E)`) while being documented as the printed residual clause (right-hand side `2 N(R)`); it now names the residual theorem.
 
 **Next action.** No hostile-review hole is currently recorded for this source passage. Preserve exact source scope and re-audit if the distributable source specification changes.
 

@@ -66,15 +66,81 @@ measure become the next task.
 Transport of the unbounded-ideal proof data: `ReducesSubspace`,
 `LinearPMap.reducingRestriction`, the trial residual, and
 `SymmetricNormingFunction` membership and gauge.  `formBoundedSylvesterGap_pmap`,
-`kyFanApproximationGauge_clm`, `reducesSubspace_pmap_iff` and
-`approximationNumber_clm` are written; `reducingRestriction` is not, and its known
-snag is that `ScalarTransport e ↥U` and `↥(submodule U)` are the same type with
-the same norm and inner product but present `Submodule 𝕂` with different
-`AddCommMonoid` / `Module` instance paths, so `rw` needs bridging lemmas.
+`kyFanApproximationGauge_clm`, `reducesSubspace_pmap_iff`, `isSelfAdjoint_pmap_iff`
+and `approximationNumber_clm` are written.
 
-Then the estimate lands on `sinTwoThetaIdealBlock` and the correspondence in (3)
-carries it to `Angle.directedSinTwoAngleOperator`, which is the object
-`SectionTwo.sinTwoTheta` may be bound to and nothing weaker.
+**One missing layer accounts for everything that is left**, and it is the
+*subspace* side of the transport rather than the operator side.  `ScalarTransport`
+is a type synonym (`ScalarTransport e E := E`, with `of` and `out` the identity),
+so `ScalarTransport e ↥S` and `↥(submodule (e := e) S)` are the same type by `rfl`
+and carry the same norm and inner product.  They are not the same *instance path*:
+the first gets its `𝕂`-module structure from `Module.compHom`, the second from
+`Submodule.module` over the transported ambient space.  Nothing rewrites across
+that on its own.
+
+What is needed is a `ScalarTransport e ↥S ≃ₗᵢ[𝕂] ↥(submodule (e := e) S)`, and then
+three consequences of it: `reducingRestriction` read through it as a `LinearPMap`
+equality, the trial residual `R : ↥V →L[𝕜] H` read through it as a `𝕂`-operator,
+and `SymmetricNormingFunction` membership and gauge carried along it — the last is
+free once the first two land, because an isometry preserves approximation numbers.
+Each of the three appears once in the directed statement.  This is bounded,
+well-understood work; it is not written.
+
+Then the estimate lands on `sinTwoThetaIdealBlock`, and the correspondence in (3)
+carries it to `Angle.directedSinTwoAngleOperator`.
+
+### The correspondence has an orientation, and it is not free
+
+Sentence (3) above was written as if the block-to-angle step finished the source
+correspondence.  It does not, and a hostile review on 2026-09-04 found the gap.
+
+`Angle.directedSinTwoAngleOperator` is an **ordered** object:
+`directedSinAngleOperator X Y = |P_{Yᗮ} P_X|`.  The reducing residual theorem is
+naturally parameterized as (gap-carrying subspace `U`, trial subspace `V`), and
+`Angle.sinTwoThetaIdealBlock_hasSameApproximationNumbers_rclike` lands on
+`directedSinTwoAngleOperator U V`.  Davis and Kahan's `Θ₀` is the **trial-side**
+angle: Section 1 reads it off as `‖sin Θ₀‖ = ‖Q^⊥ P‖ = ‖Q^⊥ E₀‖`, the
+cross-projection with the trial subspace on the right, which is
+`directedSinTwoAngleOperator V U`.
+
+That is not a renaming.  The two ordered directed *sines* have different
+approximation numbers in general — a line inside a plane makes one zero and the
+other not.  The doubled sines do agree, and that is now a theorem:
+
+* `Angle.directedSinTwoAngleOperator_hasSameApproximationNumbers_swap`
+  (`Geometry/Angle/OperatorAngleGeneric.lean`), at every `RCLike` field, by the
+  polar decomposition of `T = P_U P_V`: both doubled sines are moduli of `2W⋆`
+  and `2W` for `W = T (1 - T⋆T)^{1/2}`, and an operator and its adjoint have the
+  same approximation numbers.
+* `Angle.sinTwoThetaIdealBlock_hasSameApproximationNumbers_trialSide` composes it
+  with the block correspondence, and
+  `Angle.mem_directedSinTwoAngleOperator_trialSide_iff` /
+  `..._gauge_...` are the `SymmetricNormingFunction` forms
+  (`DoubleAngle/DirectedAngleGeneric.lean`).
+
+**This point is settled.**  The remaining chain is therefore:
+
+```text
+arbitrary [RCLike 𝕜]
+  → real-like / complex-like dispatch
+  → transport the operator, reducing subspace, trial subspace, residual, gap
+    and symmetric-norm data
+  → fixed-field reducing residual theorem
+  → estimate on `sinTwoThetaIdealBlock gapCarrier trial`
+  → `sinTwoThetaIdealBlock_hasSameApproximationNumbers_trialSide`
+  → `Angle.directedSinTwoAngleOperator trial gapCarrier`   ← the paper's Θ₀
+```
+
+and only the transport step is open.  The fixed-field ends of that chain already
+exist in the trial-side orientation:
+`sinTwoTheta_directed_unboundedResidual_reducing_symmetricNorming_complex` and
+its real sibling.  `SectionTwo.sinTwoTheta` may be bound to the generic form of
+those, and nothing weaker; the orientation is pinned by
+`sinTwoTheta_directed_orientation_sourceAudit_complex`/`_real` in
+`Audits/ResultSemanticSurface.lean`, which fix the semantic names `trial` and
+`gapCarrier` and stop elaborating if the arguments are swapped.
+
+A generic projection-valued measure is still not a prerequisite for any of this.
 
 ---
 

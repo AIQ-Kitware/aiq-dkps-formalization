@@ -330,9 +330,10 @@ local instance instCompleteSpaceCoeUnboundedIdealFormGapReducing
 space, reflection-residual block form, at an arbitrary reducing subspace.**
 
 The same estimate as `sinTwoTheta_reflectionResidual_block_gauge_of_formGap`
-with the trial subspace's spectral *selection* removed: `U` is any subspace
-reducing `A`, and the separation is the form-bounded Sylvester gap between its
-two reducing restrictions.  Section 1 of the source says in as many words that
+with the spectral *selection* of the gap-carrying subspace removed: `U` is any
+subspace reducing `A`, and the separation is the form-bounded Sylvester gap
+between its two reducing restrictions.  `V` is the reflecting subspace and is not
+assumed to reduce anything.  Section 1 of the source says in as many words that
 neither projector is assumed spectral; what is assumed is that the decomposition
 reduces the operator and that the two blocks are separated.
 
