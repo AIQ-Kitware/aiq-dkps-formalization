@@ -67,11 +67,18 @@ CANONICAL_SCALAR_SCOPES = {
 }
 PROBE_IMPORT = "DavisKahan.All"
 # Instance binders that are proof *capabilities* rather than printed source
-# hypotheses.  Each has instances for both scalar fields of the paper, so a
-# declaration carrying one still proves the printed result at `ℝ` and at `ℂ`;
-# but `RCLike` is an open class, so the binder is a real hypothesis at any other
-# field, and it is not something Davis and Kahan print.  Canonical evidence must
-# therefore declare which of these it carries.
+# hypotheses: they say the proof technique is available, not what the theorem
+# asserts, and Davis and Kahan print none of them.  Canonical evidence must
+# declare which of these it carries.
+#
+# Carrying one is not the same defect it was before 2026-09-02.  `RCLike` is an
+# open class in Lean's extensibility sense, but its axioms admit exactly two
+# models -- `RCLike.I_eq_zero_or_im_I_eq_one` -- so there is no third
+# mathematical case, and each of these classes now has an unconditional instance
+# at every `RCLike` field, proved by transporting the two fixed-field proofs.
+# What a leftover binder costs today is therefore honesty about the API rather
+# than generality: it advertises as a hypothesis something the caller never has
+# to supply.  That is still worth failing on, which is why this stays.
 CAPABILITY_CLASSES = {
     "ContinuousLinearMap.HasMinMaxLowerBoundEverywhere",
     "TauCeti.DavisKahan.Sylvester.HasUnboundedSylvesterKyFan",

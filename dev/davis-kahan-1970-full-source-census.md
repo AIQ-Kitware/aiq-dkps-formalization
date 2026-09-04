@@ -4,7 +4,7 @@
 
 **Census family:** `source-completion-census`  
 **Items:** 50  
-**Unique cited Lean declarations:** 1201
+**Unique cited Lean declarations:** 1202
 
 ## How to use this census
 
@@ -552,6 +552,7 @@ The directed clause of the Section 2 tangent theorem at the printed scope, added
 - `TauCeti.DavisKahan1970.sinTheta_ambient_unitaryConj_projectorDifference_symmetricNorming`
 - `TauCeti.DavisKahan.mem_directedSinTwoAngleOperatorC_iff`
 - `TauCeti.DavisKahan.gauge_directedSinTwoAngleOperatorC`
+- `TauCeti.DavisKahan1970.sinTwoTheta_ambient_unbounded_reflectionPair_symmetricNorming_rclike`
 
 **Curated source/Lean review:**
 
@@ -2119,6 +2120,40 @@ CENSUS-GATE NOTE 2026-08-11: `TauCeti.MultiplicityDatum.retype` is deliberately 
 - `TauCeti.star_linearIsometryEquiv_trans_symm_of_isHilbertSum`
 - `TauCeti.operatorUnitaryEquiv_retype_real_of_starOperatorUnitaryEquiv`
 
+**Curated source/Lean review:**
+
+*Setup*
+- The angle operators of (1.16)-(1.17) are in force: Theta_j = arccos C_j, read under the standing conventions fixed just before the theorem.
+- The unitarity relations give S_0^* S_0 = 1 - C_0^2 on X(E_0) and S_0 S_0^* = 1 - C_1^2 on X(E_1), so Theta_0 and Theta_1 are isometric-equivalent except perhaps for different dimensionalities of their null spaces.
+- The polar resolution of S_0 is S_0 = J_0 sin Theta_0, where J_0 carries the closure of Ran Theta_0 isometrically onto the closure of Ran Theta_1 and satisfies J_0 Theta_0 = Theta_1 J_0.
+- The skew block operator J of (1.18) is built from J_0, is unitary on the closure of Ran Theta with J^2 = -1 there, and is set to 0 on Null Theta.
+
+*Hypotheses*
+- dim P H = dim Q H.
+- dim (P H cap Q-perp H) = dim (P-perp H cap Q H).
+
+*Conclusions*
+- A complete invariant of the pair (P H, Q H) under isometric equivalence is given by the spectral multiplicity functions of Theta_0 and Theta_1.
+- Conversely the angle operators may be arbitrary Hermitian operators satisfying 0 <= Theta_j <= pi/2, whose domain dimensions sum to dim H and whose spectral multiplicity functions agree except possibly at the spectral point 0.
+- The pair is reconstructed from these angle data and the corresponding partial isometry J_0.
+
+*Scope*
+- The ambient space is a separable Hilbert space, real or complex; finite dimensionality is not assumed.
+- Theorem 3.1 itself carries no compactness hypothesis; the compact reduction to eigenvalue sequences is the separate Corollary 3.1.
+
+| source clause | Lean realization | status |
+| --- | --- | --- |
+| The angle operators of (1.16)--(1.17) are in force under the standing conventions, Theta_j = arccos C_j. | The Lean invariant is stated on `genericCosineBlock`, the compression of the target projection to the `U`-half of the generic part, which is exactly `cos^2 Theta_0` in equation (1.16). No separate arccosine is applied: an arccosine is a monotone homeomorphism of `[0,1]` onto `[0, pi/2]`, so the spectral multiplicity data of `cos^2 Theta_0` and of `Theta_0` are the same data. | claimed_exact |
+| The unitarity relations make Theta_0 and Theta_1 isometric-equivalent except perhaps for different dimensionalities of their null spaces. | `HalmosAngleDatum.crossedDefectEquiv` and `HalmosAngleDatum.nonempty_halmosSourceDefect_equiv_targetDefect` carry the matching of the two sides away from the degenerate angles; `theorem3_1_realization_zeroAngle_unconstrained` is the compiled witness that the multiplicity at angle `0` is genuinely unconstrained, which is the "except perhaps" of the printed sentence. | claimed_exact |
+| The polar resolution S_0 = J_0 sin Theta_0, with J_0 isometric from the closure of Ran Theta_0 onto the closure of Ran Theta_1 and J_0 Theta_0 = Theta_1 J_0; the skew block J of (1.18) is built from J_0. | `theorem3_1_realization_ofAngles` takes exactly this partial isometry as its hypothesis: `J` isometric on `ran sin Theta_0` and co-isometric onto `ran sin Theta_1`, intertwining the two angle operators. The block form the datum produces is `HalmosAngleDatum.starProjection_targetSubspace_apply`, which is the source's equation (3.7). | claimed_exact |
+| Assume dim P H = dim Q H and dim (P H cap Q-perp H) = dim (P-perp H cap Q H). | The Lean classification assumes neither. `theorem3_1_spectralMultiplicity_classification_complex` and its real sibling are biconditionals between pair-equivalence and the pair of invariants, valid for arbitrary ordered pairs; the printed dimension conditions reappear inside the invariant, as two of the four elementary multiplicities of `SameHalmosTrivialDimensions`. Dropping them from the hypothesis list weakens the assumption, so the Lean statement is strictly stronger than the printed one on this axis. | claimed_exact |
+| A complete invariant of the pair (P H, Q H) under isometric equivalence is given by the spectral multiplicity functions of Theta_0 and Theta_1. | `theorem3_1_spectralMultiplicity_classification_complex` (and `..._real`) states `PairOfSubspacesUnitaryEquivalent U1 V1 U2 V2 <-> SameHalmosTrivialDimensions ... /\ SameSpectralMultiplicity (genericCosineBlock U1 V1) (genericCosineBlock U2 V2)`. Both directions are proved; the invariant is the paper's, in the paper's multiplicity language. | claimed_exact |
+| Conversely the angle operators may be arbitrary Hermitian operators satisfying 0 <= Theta_j <= pi/2. | `theorem3_1_realization_ofAngles` takes two Hermitian angle operators and binds the printed confinement `0 <= Theta_j <= pi/2` as explicit hypotheses. They are deliberately unused in the proof -- `cos^2 + sin^2 = 1` and the intertwining hold over all of the reals -- and are retained for source correspondence. | claimed_exact |
+| their domain dimensions sum to dim H | The realization is built inside `WithLp 2 (E x F)`, the orthogonal direct sum of the two angle-operator spaces, so the printed dimension sum is the construction of the ambient space rather than a side condition on it. | claimed_exact |
+| and their spectral multiplicity functions agree except possibly at the eigenvalue/spectral point 0; the pair is reconstructed from these angle data and the corresponding partial isometry J_0. | The realization theorem consumes the printed passage's own reformulation of this condition -- the partial isometry `J_0` it names in the next clause -- rather than a multiplicity-function hypothesis: `J` is isometric on `ran sin Theta_0`, co-isometric onto `ran sin Theta_1`, and intertwines the two angle operators. `theorem3_1_realization_zeroAngle_unconstrained` records that the multiplicity at `0` is left free, which is the printed "except possibly". | claimed_exact |
+| The ambient scope is a separable Hilbert space, real or complex, of unrestricted dimension. | Both scalar fields are covered by their own theorems, `..._complex` and `..._real`; neither carries a finite-dimensionality hypothesis. The operator-level classification underneath is `RCLike`-generic and carries no separability hypothesis at all; separability appears only as `[TopologicalSpace.SeparableSpace H1]` on the multiplicity translation's forward direction, and it is the paper's own ambient assumption. | claimed_exact |
+| Theorem 3.1 carries no compactness hypothesis. | No declaration cited here assumes compactness of any block. Compactness belongs to Corollary 3.1, which is the separate census row DK-3.1-cor. | scope_companion |
+
 **Notes.** **PROVED 2026-08-04, in the paper's own invariant, both directions, admission-free.**
 
 `pairOfSubspacesUnitaryEquivalent_iff_sameHalmosCosineBlockInvariant` (`DavisKahan/Geometry/Halmos/GenericReconstruction.lean`): two ordered pairs of subspaces of two complex Hilbert spaces are unitarily equivalent as pairs **iff** their four elementary Halmos summands are linearly isometric and their angle operators `cos^2 Theta` -- the compression of `P_V` to `U /\ generic` -- are unitarily equivalent. No compactness, no finite dimension, no separability, no direct-integral presentation. `#print axioms` gives exactly [propext, Classical.choice, Quot.sound], and the module is reachable from `DavisKahan.All`, so CI guards it.
@@ -2905,6 +2940,44 @@ REOPENING WITHDRAWN 2026-08-31 and the rule corrected: a later source passage en
 - `TauCeti.DavisKahan1970.Proposition4_3_compact_nonacute_symmetricNorming_real`
 - `TauCeti.DavisKahan1970.symmetricNorming_of_kyFanDominant`
 
+**Curated source/Lean review:**
+
+*Setup*
+- The source studies the full operator 1 - V, for V a unitary carrying P H onto Q H.
+- Omega_k H = [u_k, J u_k] are the two-dimensional reducing planes of the direct rotation.
+- On one such plane, V u = a_0 U u + b_0 w and V J u = a_1 U J u + b_1 x with |a_j|^2 + |b_j|^2 = 1 and w, x orthogonal to that plane in the appropriate Q and Q-perp subspaces; mu_1 >= mu_2 are the singular values of (1 - V) Omega, and a_0 + a_1 = 2c + 2ie, a_0 - a_1 = 2d - 2if.
+
+*Hypotheses*
+- The hypotheses of Theorem 3.1 and Corollary 3.1 are in force for the pair (P H, Q H), which is what makes the direct rotation available and, in Corollary 3.1's setting, makes the angle data a compact eigenvalue sequence.
+- V ranges over the unitaries carrying P H onto Q H.
+- The norm is an arbitrary normalized unitary-invariant norm.
+
+*Conclusions*
+- The Ky Fan comparisons (4.3) and, after compressing on both sides, (4.4).
+- The singular-value identities (4.5) for the two singular values of (1 - V) Omega.
+- The unitarity constraints (4.6).
+- The squared displacement has the global extremal property: ||(1 - V*)(1 - V)|| is minimized when V = U, for every unitary-invariant norm.
+- The same formulas imply minimality of the operator norm and of the Hilbert--Schmidt norm of 1 - V.
+- Arbitrary unitary-invariant norms of 1 - V need not be minimized by the direct rotation.
+
+*Scope*
+- Section 4 is written at the infinite-dimensional scope of Theorem 3.1 and Corollary 3.1, over a separable real or complex Hilbert space; it is not a finite-dimensional section.
+- The conclusion quantifies over every normalized unitary-invariant norm.
+
+| source clause | Lean realization | status |
+| --- | --- | --- |
+| The hypotheses of Theorem 3.1 and Corollary 3.1 are in force, so the direct rotation exists and the angle data are compact. | The canonical declarations take an explicit linear isometric equivalence `J` between the two crossed Halmos defects -- the Theorem 3.1 dimension condition, in constructive form -- and an explicit `IsCompactOperator (principalSineOperator U V)` hypothesis, which is Corollary 3.1's setting. The direct rotation they compare against is `nonacuteDirectRotation U V J`, so no acuteness restriction narrows the printed scope. | claimed_exact |
+| V ranges over the unitaries carrying P H onto Q H. | `W in unitary (H ->L H)` together with `W * projection U = projection V * W`, which is the source's intertwining condition (1.4). | claimed_exact |
+| The Ky Fan comparisons (4.3), for the two-dimensional reducing planes Omega_k, in the even and odd cases. | No declaration registered on this row states (4.3). The compiled route to the boxed conclusion does not pass through the two-plane decomposition at all: it reads the direct rotation's squared displacement as an already block-diagonal operator, applies Proposition 4.1 on each of the two halves, and closes with the Fan--Hoffman pinching contraction at Ky Fan level. | open |
+| The compressed Ky Fan comparisons (4.4). | No declaration registered on this row states (4.4), for the same reason as (4.3). | open |
+| The singular-value identities (4.5) for the two singular values of (1 - V) Omega. | No declaration registered on this row states (4.5). These are the source's own two-plane computation and are not steps of the compiled proof. | open |
+| The unitarity constraints (4.6). | No declaration registered on this row states (4.6). | open |
+| \|\|(1 - V*)(1 - V)\|\| is minimized when V = U, for every unitary-invariant norm. | The conclusion of `Proposition4_3_compact_nonacute_symmetricNorming_complex` is exactly `N.Mem ((1 - star U_d) * (1 - U_d)) /\ N.gauge ((1 - star U_d) * (1 - U_d)) <= N.gauge ((1 - star W) * (1 - W))` for an arbitrary source unitarily invariant norm `N`, with `U_d = nonacuteDirectRotation U V J`; `..._real` is the same statement over a real Hilbert space. Membership in the norm's ideal is concluded as well as the inequality. | claimed_exact |
+| The same formulas also imply minimality of the operator norm and of the Hilbert--Schmidt norm of 1 - V. | Not claimed. The strongest registered evidence is `directRotation_minimizes_sum_sq_basis_angles`, the finite-dimensional statement that the direct rotation minimizes the orthonormal-basis displacement energy `sum_k \|\|V v_k - v_k\|\|^2`, which is the squared Hilbert--Schmidt norm of `1 - V`; it is the neighbouring Proposition 4.2 in Hilbert--Schmidt form rather than a declaration on this row's own conclusion. The operator-norm half and the infinite-dimensional Hilbert--Schmidt half have no registered declaration here. | open |
+| The source warns that arbitrary unitary-invariant norms of 1 - V need not be minimized by the direct rotation. | Not claimed on this row. The repository does refute the corresponding printed minimality assertion -- Proposition 4.4, whose known-false status is recorded on the separate census row DK-4.4-prop -- but no declaration registered here states this negative scope clause, and this review makes no claim about Proposition 4.4 or its repair. | open |
+| The scope is a separable Hilbert space, real or complex, of unrestricted dimension. | Both canonical declarations are stated on an arbitrary Hilbert space with no finite-dimensionality hypothesis, one over the complex field and one over the real field. The finite-dimensional aliases `Proposition4_3`, `Proposition4_3_kyFan` and `Proposition4_3_minimizer` are labelled specializations and are recorded as supporting evidence only. | claimed_exact |
+| The norm is an arbitrary normalized unitary-invariant norm. | `N : SymmetricNormingFunction` is an explicit argument of both canonical declarations; that is the repository's carrier for the source's norm class, with its axioms (1.9) and the rank-one normalization. | claimed_exact |
+
 **Notes.** Compiled for every unitarily invariant norm over every RCLike field (finite dimension), via Fan-Hoffman majorization of the pinched competitor and two-block pinching contraction.
 
 VERIFIED 2026-08-04: the finite-dimensional UI-norm minimality is compiled, axiom-clean and in the default build. The **infinite-dimensional** form is stated in `DavisKahan/Experimental/Frontier/Section4.lean` and is `sorry` (`#print axioms` reaches `sorryAx`). Proposition 4.1's infinite form *is* proved, in `Experimental/MathAhead/Section4/InfiniteProposition41.lean`, by a spectral-cutoff min-max argument -- that is the pattern to follow.
@@ -3026,6 +3099,38 @@ REOPENING WITHDRAWN 2026-08-31 and the rule corrected: a later source passage en
 - `TauCeti.DavisKahan1970.theorem5_1_banach_sylvester_exact`
 - `TauCeti.DavisKahan1970.theorem5_1_banach_sylvester_interchanged_exact`
 
+**Curated source/Lean review:**
+
+*Setup*
+- X and Y are Banach spaces; B is an operator on X and A an operator on Y.
+- For maps X -> Y one uses any norm compatible with the two bound norms.
+
+*Hypotheses*
+- ||B|| <= alpha, in the bound norm on X.
+- ||A^{-1}|| <= (alpha + delta)^{-1}, in the bound norm on Y.
+- alpha >= 0 and delta > 0.
+- A X - X B = C.
+
+*Conclusions*
+- ||C|| >= delta ||X||.
+- The roles and hypotheses of A and B may be interchanged.
+- The same proof covers a densely-defined unbounded A, provided the inverse hypothesis is meaningful and bounded while B and X remain bounded.
+
+*Scope*
+- Banach spaces, not Hilbert spaces: no inner product, no completeness argument, no self-adjointness, and no spectral theorem is used.
+- The conclusion holds in any norm on the cross maps compatible with the two bound norms, which includes the operator norm and any symmetric-norm-ideal gauge.
+
+| source clause | Lean realization | status |
+| --- | --- | --- |
+| Let X, Y be Banach spaces; B an operator on X and A an operator on Y. | `theorem5_1_banach_sylvester_exact` takes `A Ainv : Y ->L Y`, `B : X ->L X` and `T C : X ->L Y` over normed spaces with no inner product, no self-adjointness and no spectral hypothesis anywhere in the signature. | claimed_exact |
+| \|\|B\|\| <= alpha, \|\|A^{-1}\|\| <= (alpha + delta)^{-1}, alpha >= 0, delta > 0. | `hB : \|\|B\|\| <= gamma`, `hgamma : 0 <= gamma`, `hdelta : 0 < delta` and `hAinv_norm : \|\|Ainv\|\| <= (gamma + delta)^{-1}` are literal, and the printed inverse is carried as an actual operator `Ainv` constrained by both `hAinv_left` and `_hAinv_right`, so the hypothesis is the two-sided inverse the paper prints rather than a weaker inverse datum. | claimed_exact |
+| For maps X -> Y, use any norm compatible with those bound norms. | `N : CompatibleCrossOperatorNorm` is an explicit argument: a size function subject to exactly subadditivity and the two one-sided ideal bounds, which is what the printed compatibility clause asks for and what both an operator norm and a symmetric-norm-ideal gauge supply. | claimed_exact |
+| If A X - X B = C then \|\|C\|\| >= delta \|\|X\|\|. | `hEq : A comp T - T comp B = C` is the printed equation and the conclusion is `delta * N T <= N C`, the printed inequality with the printed constant. | claimed_exact |
+| The roles and hypotheses of A and B may be interchanged. | `theorem5_1_banach_sylvester_interchanged_exact` is the mirrored statement with the printed inverse on the other side: `\|\|A\|\| <= gamma`, a two-sided bounded inverse `Binv` of `B` with `\|\|Binv\|\| <= (gamma + delta)^{-1}`, the same equation, the same conclusion. | claimed_exact |
+| The same proof also covers densely-defined unbounded A provided the inverse hypothesis is meaningful/bounded while B and X remain bounded. | `theorem5_1_banach_sylvester_unboundedA` takes `A` as a closed densely defined partial map with an everywhere-defined bounded left inverse of norm at most `(gamma + delta)^{-1}`, `B` and the two cross maps bounded, and the Sylvester equation on that domain, concluding the same compatible-norm bound. Density and closedness are bound as printed and are not consumed by the argument, which uses only cancellation. | claimed_exact |
+| The scalar field is the source's, real or complex, and no Hilbert structure is used. | `banach_sylvester_lower_bound_uiNorm` is the engine over an arbitrary `NontriviallyNormedField` and arbitrary normed spaces, so it covers both source scalar fields and is strictly more general than the printed scalar scope; its inverse hypothesis is the left-inverse half, which the printed two-sided inverse supplies. The literal two-sided-inverse wrappers `theorem5_1_banach_sylvester_exact` and `..._interchanged_exact` are fixed to the complex field, so the printed statement in its literal shape is registered over the complex field only, and over the real field only through the more general engine. | derived |
+| The source then proceeds to a separate result allowing unbounded behavior on both sides in the Hilbert-space setting. | That separate result is Theorem 5.2, the census row DK-5.2-thm; nothing on this row claims it. | scope_companion |
+
 **Notes.** SOURCE-SURFACE HARDENING 2026-08-12: added literal bounded wrappers carrying a two-sided inverse operator `Ainv` (and symmetrically `Binv`) together with the printed inverse-norm bound. The reusable left/right-inverse theorems remain stronger internal engines; the new wrappers exist specifically so statement-level auditing does not have to infer equivalence from a weaker inverse datum.
 
 The repository has Neumann and ordered-gap engines, but no explicit audited source wrapper for this Banach-space theorem.
@@ -3128,6 +3233,36 @@ The first hole asked for a source-facing theorem for "(5.2) is not best possible
 - `TauCeti.DavisKahan1970.theorem5_2_symmetricNorming_complex`
 - `TauCeti.DavisKahan1970.theorem5_2_symmetricNorming_real`
 - `TauCeti.DavisKahan1970.symmetricNorming_of_kyFanDominant`
+
+**Curated source/Lean review:**
+
+*Setup*
+- X and Y are Hilbert spaces.
+- A acts on Y and B on X; X and C are bounded maps X -> Y.
+
+*Hypotheses*
+- A and B are semibounded self-adjoint operators.
+- A >= gamma + delta > gamma >= B, in the quadratic-form sense.
+- A X = X B + C, with X and C bounded.
+
+*Conclusions*
+- For every unitary-invariant norm, ||C|| >= delta ||X||.
+
+*Scope*
+- Hilbert spaces, real or complex, of unrestricted dimension.
+- A and B may be unbounded: the ordering is a form condition, and only X and C are required to be bounded.
+- The norm is an arbitrary normalized unitary-invariant norm.
+- This is the source's main Sylvester tool for the unbounded self-adjoint passages, which is what places the additional analytic work of the paper here and in the Appendix to Section 6.
+
+| source clause | Lean realization | status |
+| --- | --- | --- |
+| Let X, Y be Hilbert spaces and let A on Y, B on X be semibounded self-adjoint operators. | `A : E ->L. E` and `B : F ->L. F` are Mathlib `LinearPMap`s with `IsSelfAdjoint` as a hypothesis, over complete inner-product spaces with no finite-dimensionality assumption. Semiboundedness is not a field of a carrier; it is the two form hypotheses below. | claimed_exact |
+| A >= gamma + delta > gamma >= B. | In `theorem5_2_symmetricNorming_complex` this is literal: `hAlow : SemiboundedBelow A (c + delta)` and `hBhigh : SemiboundedAbove B c` with `hdelta : 0 < delta`, which is exactly the printed chain. `theorem5_2_symmetricNorming_real` instead takes the whole `FormBoundedSylvesterGap A B delta`, of which the printed ordering is one constructor, so the real endpoint assumes strictly less than the print. | claimed_exact |
+| If X, C : X -> Y are bounded and A X = X B + C. | `X R : F ->L E` are bounded continuous linear maps and `hsyl : SylvesterEquation A B X R` is the printed equation on the domain where it is meaningful. | claimed_exact |
+| Then for every unitary-invariant norm, \|\|C\|\| >= delta \|\|X\|\|. | `N : SymmetricNormingFunction` is an explicit argument and the conclusion is `N.Mem X /\ delta * N.gauge X <= N.gauge R`. The printed inequality is the second conjunct with the printed sharp constant; the first conjunct additionally concludes that X lies in the norm's ideal whenever C does, which the source's own convention about vacuous norms leaves implicit. | claimed_exact |
+| The norm is an arbitrary normalized unitary-invariant norm. | `SymmetricNormingFunction` is the repository's carrier for that class. The ideal-family forms `Theorem5_2` and `davisKahan1970_sylvester_real` quantify instead over an arbitrary Ky-Fan-dominant symmetric operator ideal family; `symmetricNorming_of_kyFanDominant` is the compiled promotion between the two, so the paper's norm class is reached by a theorem and not by an assertion. | claimed_exact |
+| This is the source's main Sylvester tool for the unbounded self-adjoint passages. | Both canonical declarations are stated for unbounded `LinearPMap` operators on arbitrary complete inner-product spaces; only the two cross maps are bounded, exactly as the printed theorem asks. The source states that the additional analytic work for the unbounded scope is concentrated in Theorem 5.2 and the Appendix to Section 6, and that is the scope these declarations are proved at. | claimed_exact |
+| The scalar field is the source's, real or complex. | `theorem5_2_symmetricNorming_complex` and `theorem5_2_symmetricNorming_real` are the two fixed-field endpoints, both at every source unitarily invariant norm and both without a finite-dimensionality hypothesis. `davisKahan1970_sylvester_real` and `real_unbounded_sylvester_kyFan` are the real ideal-family and per-Ky-Fan-level companions. | claimed_exact |
 
 **Notes.** The completed Section 6 route contains the needed constant-one engines, while the exact source theorem alias is still in the full Part III repair campaign.
 
@@ -3290,6 +3425,38 @@ REOPENING WITHDRAWN 2026-08-31 and the rule corrected: a later source passage en
 - `TauCeti.DavisKahan1970.lowerFrameBound_iff_operator_inequality`
 - `TauCeti.DavisKahan1970.lowerFrameBound_of_operator_inequality`
 
+**Curated source/Lean review:**
+
+*Setup*
+- A + H has the reducing decomposition (1.3) with exhaustive isometries F_0, F_1, and R is defined by (1.8).
+- P and Q are the projectors onto Ran(E_0) and Ran(F_0), with no equality-of-dimension hypothesis.
+- sin Theta_0 is any operator having the same singular values as P Q-perp.
+
+*Hypotheses*
+- The trial map E_0 need not be isometric; only E_0^* E_0 >= epsilon^2 I with epsilon > 0 is assumed.
+- One of A_0, Lambda_1 has spectrum in [beta, alpha] and the other has spectrum outside (beta - delta, alpha + delta).
+- The norm is an arbitrary normalized unitary-invariant norm.
+
+*Conclusions*
+- delta * epsilon * ||sin Theta_0|| <= ||R||, for every unitary-invariant norm.
+
+*Scope*
+- A separable Hilbert space, real or complex, of unrestricted dimension.
+- The source's unbounded self-adjoint scope applies: the ambient operator may be unbounded provided the domain conditions hold and the residual extends boundedly.
+
+| source clause | Lean realization | status |
+| --- | --- | --- |
+| A + H has the reducing decomposition (1.3) with exhaustive isometries F_0, F_1. | `hexact : IsExactSpectralDecomposition A Lambda_1 F_0 F_1` is an explicit hypothesis, carrying the isometric coordinates, their orthogonality and exhaustiveness, the domain transport and the intertwining A F_1 = F_1 Lambda_1. | claimed_exact |
+| R is defined by (1.8). | `htrial : IsTrialResidualEquation A A_0 E_0 R` is the residual equation R = A E_0 - E_0 A_0 on the transported domain -- the source's (1.8) -- with the isometry requirement dropped, which is what Theorem 6.1 replaces by the lower frame bound. | claimed_exact |
+| The trial map E_0 need not be isometric; assume only E_0^* E_0 >= epsilon^2 I with epsilon > 0. | The Lean hypothesis is `hframe : LowerFrameBound E_0 epsilon`, i.e. epsilon * \|\|x\|\| <= \|\|E_0 x\|\|, together with `hepsilon : 0 < epsilon`. The two readings are the same hypothesis and the repository proves it rather than asserting it: `lowerFrameBound_iff_operator_inequality` is the biconditional between the printed operator inequality, read in the quadratic-form sense, and LowerFrameBound. | claimed_exact |
+| P and Q are the projectors onto Ran(E_0) and Ran(F_0), with no equality-of-dimension hypothesis. | The canonical declarations carry four independent coordinate spaces and no dimension comparison of any kind. The directed block is built from E_0 and F_0 directly by `directedSinThetaOperator`; nothing in the signature relates their dimensions. | claimed_exact |
+| sin Theta_0 is any operator having the same singular values as P Q-perp. | `S : SinThetaRepresentativeAcross (directedSinThetaOperator E_0 F_0 hframe hepsilon)` is an explicit argument, and the conclusion is stated about `S.operator`. The representative may live between different spaces; only the singular-value sequence is prescribed, which is the printed freedom. | claimed_exact |
+| If one of A_0, Lambda_1 has spectrum in [beta, alpha] and the other has spectrum outside (beta - delta, alpha + delta). | `hgap : FormBoundedSylvesterGap A_0 Lambda_1 delta` with `hdelta : 0 < delta`. The printed interval/exterior alternative in either orientation is two of that predicate's constructors; the other two are the ordered semibounded configurations the source's scope paragraph explicitly permits when the separating interval is half-infinite. The Lean hypothesis is therefore weaker than the printed one, so the theorem is stronger on this axis. | claimed_exact |
+| Then for every unitary-invariant norm, delta * epsilon * \|\|sin Theta_0\|\| <= \|\|R\|\|. | The text after the theorem colon is `N.Mem S.operator /\ delta * epsilon * N.gauge S.operator <= N.gauge R`. The second conjunct is the boxed inequality with both printed factors intact; the first additionally concludes that the sine representative lies in the norm's ideal whenever the residual does. | claimed_exact |
+| The norm is an arbitrary normalized unitary-invariant norm. | `N : SymmetricNormingFunction` is the first explicit argument of both canonical declarations; no Ky Fan family, ideal family or proof-capability class appears in either signature. | claimed_exact |
+| The scalar field is real or complex and the dimension is unrestricted. | `theorem6_1_complex` and `theorem6_1_real` are the two fixed-field endpoints, on complete inner-product spaces with no finite-dimensionality hypothesis anywhere. | claimed_exact |
+| The source's unbounded self-adjoint scope applies to the single-angle theorems. | A, A_0 and Lambda_1 are `LinearPMap` values in both canonical declarations, with self-adjointness and the domain transport as hypotheses, so the unbounded reading is the statement rather than a later extension. The Appendix relaxations -- one dense common domain, and a common graph core -- are the supporting `Theorem6_1_commonDomain`, `Theorem6_1_real_commonDomain` and `Theorem6_1_real_commonCore`. | claimed_exact |
+
 **Notes.** This is the canonical source-general sine theorem.
 
 **STATUS LOWERED 2026-08-07 (Claude Opus 5): `compiled_exact` -> `compiled_specialization`, on scalar scope, not on any doubt about the mathematics.**  Every declaration on this row is stated for `InnerProductSpace ℂ`.  Standing assumption 1 of the transcription says the space is real OR complex and assumption 4 says the headline theorems apply in infinite as well as finite dimension, so the compiled statement is a specialization of the printed one.  `compiled_specialization` is defined as exactly that: 'a useful compiled specialization exists, but not the full source scope'.  The remedy is a real wrapper through the complexification route, not a reproof; see blocker `real-scalar-infinite-dimensional-scope`.
@@ -3400,6 +3567,47 @@ Residue, and not a gap: `[CompleteSpace Z]`, which `Theorem63InfiniteTrial.lean`
 - `TauCeti.DavisKahan1970.tanTheta_directed_unboundedTrial_symmetricNorming_complex`
 - `TauCeti.DavisKahan1970.tanTheta_directed_unboundedTrial_symmetricNorming_real`
 - `TauCeti.DavisKahan1970.symmetricNorming_of_kyFanDominant`
+
+**Curated source/Lean review:**
+
+*Setup*
+- The Section 1--2 hypotheses are restored, and the direct rotation is written in the block form (6.2) with J_0 Theta_0 = Theta_1 J_0 and C_j >= 0.
+- The two reducing representations are related by (6.3), whose off-diagonal corner is (6.4).
+- For the generalized theorem, E_0, E_1, F_0, F_1 are exhaustive isometries whose ranges reduce A and A + H respectively; A_0 = E_0^*(A + H) E_0 is the Rayleigh--Ritz block, R is defined by (1.8), and the directed sine data have the singular values of E_0^* F_1.
+
+*Hypotheses*
+- For the proof machinery: A_0 <= alpha, Lambda_1 >= alpha + delta and H_0 = 0.
+- In the machinery the source temporarily supposes that all operators are bounded and that S_0 is compact, and states that the Appendix to Section 6 removes both restrictions.
+- For the generalized theorem: dim X(E_0) < dim X(F_0), spec(A_0) subset [beta, alpha] and spec(Lambda_1) subset [alpha + delta, infinity).
+- The norm is an arbitrary normalized unitary-invariant norm.
+
+*Conclusions*
+- (6.5): C_1 B = S_0 A_0 - Lambda_1 S_0.
+- (6.6): cos theta_j |y_j^* B x_j| >= delta sin theta_j, so the relevant cosines are positive and Ky Fan/Fan dominance gives the directed tangent conclusion delta ||tan Theta_0|| <= ||R||.
+- The ambient conclusion delta ||tan Theta|| <= ||H||, assembled from the directed one through the direct-rotation geometry of (6.2) and Lemmas 6.1 and 6.2.
+- Example 6.1: a finite matrix example with delta = 1 and tangent quantity 1 whose residual is only 1/sqrt 2, showing that the one-sided placement of Lambda_1 is essential.
+- The generalized theorem: for every unitary-invariant norm, delta ||tan Theta_0|| <= ||R||.
+
+*Scope*
+- A separable Hilbert space, real or complex, of unrestricted dimension.
+- The boundedness and compactness restrictions used in the machinery are temporary; the Appendix to Section 6 removes them.
+
+| source clause | Lean realization | status |
+| --- | --- | --- |
+| The direct rotation is written in the block form (6.2), with J_0 Theta_0 = Theta_1 J_0 and C_j >= 0. | No declaration registered on this row states (6.2). The compiled route to the boxed conclusion does not build the direct rotation at all: it goes through the Rayleigh--Ritz compression, the Sylvester lower bound and Ky Fan dominance. The direct-rotation block form itself is covered by the Section 1 and Section 3 rows. | open |
+| The two reducing representations are related by (6.3), so in particular (6.4). | No declaration registered on this row states (6.3) or (6.4). These are the source's own derivation steps; the compiled proof reaches the same conclusion by a different route. | open |
+| Under A_0 <= alpha, Lambda_1 >= alpha + delta and H_0 = 0, transposing (6.4) gives (6.5): C_1 B = S_0 A_0 - Lambda_1 S_0. | No declaration registered on this row states (6.5). The corresponding step in the compiled proof is the Sylvester equation between the trial compression and the unwanted exact restriction, which is Theorem 5.2's input rather than this identity. | open |
+| Singular vectors for S_0 give the scalar estimate (6.6), so the relevant cosines are positive and Ky Fan/Fan dominance gives the directed tangent conclusion. | The scalar estimate itself has no registered declaration. Its consequence -- that the relevant cosines are positive, equivalently that the directed sine singular values are strictly below 1 -- is what makes the tangent representative finite in the compiled proof, and it is derived there from the same printed gap hypotheses rather than assumed. The Ky Fan/Fan dominance step is `symmetricNorming_of_kyFanDominant`. | open |
+| In this argument the source temporarily supposes that all the operators are bounded and that S_0 is compact, and states that the Appendix to Section 6 removes both restrictions. | Neither restriction is present in the canonical declarations: the trial subspace is an arbitrary complete subspace of an arbitrary Hilbert space and no compactness hypothesis appears. The unbounded ambient case, which is what the Appendix supplies, is `tanTheta_directed_unboundedTrial_symmetricNorming_complex` and its real sibling, where the ambient operator is an unbounded self-adjoint `LinearPMap`. | claimed_exact |
+| The ambient conclusion delta \|\|tan Theta\|\| <= \|\|H\|\| is assembled from the directed one through the direct-rotation geometry of (6.2) and Lemmas 6.1 and 6.2. | The ambient tangent conclusion is the Section 2 tan theta theorem and is carried by the census row S2-tan-theta, not by this row; Lemmas 6.1 and 6.2 are the rows DK-6.1-lem and DK-6.2-lem. No declaration registered here states the ambient bound. | scope_companion |
+| Example 6.1 shows the one-sided placement of Lambda_1 is essential: a finite matrix example has delta = 1 and tangent quantity 1 while the residual is only 1/sqrt 2 if spectral mass is allowed on the wrong side. | Formalized explicitly and two-dimensionally, with each printed number its own theorem: `rayleigh_zero` gives A_0 = 0 hence alpha = 0; `residual_norm` gives \|\|R\|\| = 1/sqrt 2 exactly; `T_w` and `tangent_components_equal` give the eigenvector whose trial and orthogonal components are both 1/sqrt 2, so the tangent quantity is 1; and `tangent_bound_fails` states that with delta = 1 the conclusion delta * \|\|tan Theta_0\|\| <= \|\|R\|\| fails. Both eigenvalues of T are plus and minus 1/sqrt 2, below alpha + delta = 1, which is the spectral mass on the wrong side. | claimed_exact |
+| The generalized theorem assumes exhaustive isometries E_0, E_1, F_0, F_1 whose ranges reduce A and A + H, with A_0 = E_0^*(A + H) E_0 and R defined by (1.8). | The canonical declarations take the ambient self-adjoint operator T, a reducing subspace V, and the trial subspace Z; `theorem63Compression T Z` is the Rayleigh--Ritz block and `theorem63Residual T Z` is the residual of (1.8) at that choice. The isometries are replaced by the subspaces they exhaust, which is the same data in coordinate-free form. | claimed_exact |
+| but allow dim X(E_0) < dim X(F_0). | The canonical declarations do not assume the strict dimension inequality; they prove the conclusion for an arbitrary complete trial subspace, so dropping the hypothesis strengthens rather than narrows. The literal form is registered as supporting evidence: `theorem6_3_generalizedTanTheta_ideal_directedTangent` binds `Module.rank Z < Module.rank V` exactly as printed, at the cost of also carrying a finite-dimensionality instance on the trial space. | claimed_exact |
+| let the directed sine data have the singular values of E_0^* F_1. | `HasTheorem63DirectedTangentApproximationNumbersInfinite Z V tanTheta0` prescribes exactly the tangents of the arcsines of the directed sine block's approximation numbers, and the conclusion is existential: the theorem exhibits such a representative rather than assuming one. `theorem63DirectedTangent` and `theorem63DirectedTangentReal` are the explicit witnesses. | claimed_exact |
+| If spec(A_0) subset [beta, alpha] and spec(Lambda_1) subset [alpha + delta, infinity). | `tanTheta_directed_bounded_spectralGap_symmetricNorming_complex` takes exactly these two spectral inclusions, together with `beta <= alpha` (bound and unused) and `0 < delta`. The real endpoint `tanTheta_directed_bounded_symmetricNorming_real` instead takes the equivalent quadratic-form bounds -- the Ritz compression bounded above by alpha, the unwanted part bounded below by alpha + delta -- which is the form the spectral inclusions are converted to in the complex proof; there is no separate real declaration stated in the printed spectral orientation. | claimed_exact |
+| then the corresponding directed tangent operator satisfies, for every unitary-invariant norm, delta \|\|tan Theta_0\|\| <= \|\|R\|\|. | Both canonical declarations conclude the existence of a directed tangent representative with the printed singular-value sequence, its membership in the norm's ideal, and `delta * N.gauge tanTheta0 <= N.gauge (residual)`. `N : SymmetricNormingFunction` is arbitrary, which is the printed norm class. | claimed_exact |
+| The norm is an arbitrary normalized unitary-invariant norm. | `N : SymmetricNormingFunction` in both canonical declarations. The ideal-family endpoints quantify over a `KyFanDominantIdealFamily` instead; the two abstractions are equi-strong for this theorem, because the paper's norm class literally contains the Ky Fan norms and Fan dominance recovers the family back. | claimed_exact |
+| The scalar field is real or complex and the dimension is unrestricted. | Both fields are covered at arbitrary Hilbert dimension and arbitrary complete trial subspace, and both endpoints are at the paper's norm class. | claimed_exact |
 
 **Notes.** Bounded finite-source Theorem 6.3 proved axiom-clean in DavisKahan.TanTheta.Theorem63FiniteSource (theorem6_3_all_kyFan_core, theorem6_3_generalizedTanTheta_ideal); promoted out of Scratch.
 
@@ -3956,6 +4164,44 @@ ROW WAS STALE; CORRECTED 2026-08-07 (Fable 5).  The requested 'exact source norm
 - `TauCeti.DavisKahan1970.Section8.theorem8_1_lowerSymmetricGaugeRepulsion_angle_rev_real`
 - `TauCeti.DavisKahan1970.Section8.theorem8_1_upperCompressionRepulsion_real`
 - `TauCeti.DavisKahan1970.Section8.theorem8_1_lowerCompressionRepulsion_real`
+
+**Curated source/Lean review:**
+
+*Setup*
+- The hypotheses of the tan 2 theta theorem are assumed: spec(A_0) subset [beta, alpha], spec(A_1) subset [alpha + delta, infinity) with delta > 0, and the strong off-diagonal condition H_0 = H_1 = 0.
+- Lambda_0 and Lambda_1 are the reducing blocks of A + H for the chosen reducing subspace Q, and C_0, C_1 are the cosine blocks of the pair.
+- The branch proof uses the two representations (8.1) and the consequence (8.2).
+
+*Hypotheses*
+- The hypotheses of the tan 2 theta theorem.
+- For the characterization, Q is a reducing subspace of A + H.
+- For part (ii) the source states the eigenvalue form in finite dimensions with natural infinite-dimensional extensions; for part (iii) the symmetric-gauge form in finite dimensions.
+
+*Conclusions*
+- Theta <= pi/4 if and only if Lambda_1 >= alpha + delta and Lambda_0 <= alpha.
+- For fixed A, P, H there exists a reducing projector Q with these properties, namely the spectral projector of A + H on the appropriate side of alpha.
+- (i) A_1 - alpha <= C_1 (Lambda_1 - alpha) C_1, with the analogous lower-block inequality.
+- (ii) In finite dimensions, alpha_k - alpha <= ||C_1||_1^2 (lambda_k - alpha), with the analogous lower-block statement and natural infinite-dimensional extensions.
+- (iii) For every symmetric gauge function Phi in finite dimensions, Phi(alpha_1 - alpha, ..., alpha_n - alpha) <= Phi((lambda_1 - alpha) cos^2 theta_1, ..., (lambda_n - alpha) cos^2 theta_n), again with the analogous lower-block relation.
+- Equations (8.1) and (8.2), which exclude theta = pi/4 and then theta > pi/4 under the chosen spectral placement.
+- Parts (ii)--(iii) are quantitative spectral repulsion: an off-diagonal perturbation that rotates all relevant eigenvectors strongly must also move eigenvalues by a definite amount.
+
+*Scope*
+- A separable Hilbert space, real or complex; parts (a), (b) and (i) are stated without a dimension restriction, part (ii) in finite dimensions with natural infinite-dimensional extensions, and part (iii) in finite dimensions.
+
+| source clause | Lean realization | status |
+| --- | --- | --- |
+| Small sin 2 Theta or tan 2 Theta does not by itself force all principal angles near 0: some may lie near pi/2, because the double-angle theorems impose no distinguished choice of the reducing subspace Q H of A + H. | This is the motivating diagnosis rather than a claim of the theorem, and nothing registered here states it. The repository does carry the corresponding positive fact -- that a distinguished branch exists and is unique -- as the existence and uniqueness halves below. | open |
+| Assume the hypotheses of the tan 2 theta theorem. | The Lean hypotheses are `A` self-adjoint, `P` reducing `A`, the `P`-block bounded above by alpha in form, the `P`-perp block bounded below by alpha + delta in form, and `H` self-adjoint and fully off-diagonal relative to `P`, which is the printed H_0 = H_1 = 0. The form bounds are the printed spectral placement with the lower endpoint beta dropped, so the Lean hypothesis is weaker than the printed one. | claimed_exact |
+| Then Theta <= pi/4 if and only if the chosen reducing blocks of A + H satisfy Lambda_1 >= alpha + delta and Lambda_0 <= alpha. | `theorem8_1_maximalAngle_le_iff_spectrumIn` is literally that biconditional, for an arbitrary reducing subspace M of A + H: `maximalAngle P M <= pi/4 <-> (SpectrumIn (A + H) M (Iic alpha) /\ SpectrumIn (A + H) M-perp (Ici (alpha + delta)))`. Both directions are proved from the printed hypotheses; neither is supplied by the caller. `..._real` is the same statement over a real Hilbert space. | claimed_exact |
+| For fixed A, P, H there exists a reducing projector Q with these properties (take the spectral projector of A + H on the appropriate side of alpha). | `theorem8_1_canonicalBranch` constructs it: the witness is `canonicalLowBranch (A + H) _ alpha`, the genuine spectral subspace of the perturbed operator for the half-line below alpha, and the theorem concludes the full `Theorem81Conclusion` package about it -- spectral repulsion, reduction, both sharp form bounds, both restricted-spectrum orientations, and the quarter-angle bound. `theorem8_1_eq_canonicalBranch_of_maximalAngle_le` is the converse: a reducing subspace satisfying the printed closed condition equals it, so the branch is unique and not merely existent. | claimed_exact |
+| (i) The upper block obeys A_1 - alpha <= C_1 (Lambda_1 - alpha) C_1, with the analogous lower-block inequality. | `theorem8_1_upperCompressionRepulsion_canonicalBranch` and its lower companion, instantiated at the branch the existence half constructs, so the caller supplies only the printed configuration and no abstract data record appears. Both are dimension-free. The real siblings are `theorem8_1_upperCompressionRepulsion_real` and `theorem8_1_lowerCompressionRepulsion_real`. | claimed_exact |
+| (ii) In finite dimensions, if lambda_k are the ordered eigenvalues of Lambda_1 and alpha_k those of A_1, then alpha_k - alpha <= \|\|C_1\|\|_1^2 (lambda_k - alpha), with the analogous lower-block statement and natural infinite-dimensional extensions. | `theorem8_1_upperApproximationRepulsion` and its lower companion state exactly this in approximation-number form, in ARBITRARY dimension, which is what discharges the printed clause's "and natural infinite-dimensional extensions" rather than only its finite reading. The identification with the printed eigenvalue lists is compiled, not asserted: `approximationNumber_eq_eigenvalues_of_isPositive` (for a positive operator the approximation numbers are the sorted eigenvalues), `approximationNumber_upperBlockShift_eq_zero_of_le` (extension by zero only appends zeros) and `norm_cosineBlock_eq_principalCosines_zero` (the printed bound norm \|\|C_1\|\|_1 is the largest principal cosine). | claimed_exact |
+| (iii) For every symmetric gauge function Phi in finite dimensions, Phi(alpha_1 - alpha, ..., alpha_n - alpha) <= Phi((lambda_1 - alpha) cos^2 theta_1, ..., (lambda_n - alpha) cos^2 theta_n), again with the analogous lower-block relation. | `theorem8_1_upperSymmetricGaugeRepulsion_angle` and its lower companion are quantified over EVERY `FiniteSymmetricGauge`, in finite dimensions exactly as printed, with the right-hand side weighted by `principalCosines` squared -- the paper's cos^2 theta_k, by equation (1.16). They are corollaries of the strictly stronger weak majorizations `theorem8_1_{upper,lower}WeightedWeakMajorization`, so part (iii) is not derived from part (ii), which has already discarded every cosine but the largest. `..._angle_rev` reindexes both sides simultaneously by `Fin.rev`, which is the paper's increasing index order. Real siblings exist for all four. | claimed_exact |
+| The branch proof uses the two representations (8.1) and hence (8.2), which exclude theta = pi/4 and then theta > pi/4 under the chosen spectral placement. | No declaration registered on this row states (8.1) or (8.2). The compiled proof of the quarter-angle bound does not go through the singular-vector computation: it derives the spectral repulsion and the sharp form bounds from a continuous functional calculus of the indicator of the half-line, which is continuous on the spectrum precisely because of the printed gap, and reads the angle bound off those. | open |
+| The source interprets parts (ii)--(iii) as quantitative spectral repulsion: an off-diagonal perturbation that rotates all relevant eigenvectors strongly must also move eigenvalues by a definite amount. | This is the source's reading of the two inequalities rather than an additional assertion; the inequalities themselves are the clauses above. Nothing separate is claimed for it. | scope_companion |
+| The scalar field is real or complex. | Both fields are carried at every part. The characterization and the existence and uniqueness halves have real endpoints (`theorem8_1_maximalAngle_le_iff_spectrumIn_real`, `theorem8_1_canonicalBranch_real`, `theorem8_1_eq_of_maximalAngle_le_real`), proved by complexifying both candidate subspaces, applying the dimension-free complex theorem, and descending through injectivity of the complexification rather than by replaying the argument; parts (i), (ii) and (iii) have `_real` siblings as well. | claimed_exact |
+| The dimension scope differs across the parts: (a), (b) and (i) carry none, (ii) is printed in finite dimensions with natural infinite-dimensional extensions, and (iii) in finite dimensions. | That is exactly how the declarations are stated: the characterization, the branch construction and part (i) carry no dimension hypothesis; part (ii) is dimension-free, which is the printed extension; part (iii) carries `[FiniteDimensional]`, which is the printed restriction. | claimed_exact |
 
 **Notes.** Theorems 8.1's conclusion is packaged as `Theorem81ContinuationConclusion` and proved sorry-free in `DavisKahan/Experimental/Frontier/Section8.lean`; `#print axioms` gives [propext, Classical.choice, Quot.sound]. The status stays `candidate_under_repair` because that axis is fidelity to the printed statement, which compiling does not establish -- not because anything fails to build.
 

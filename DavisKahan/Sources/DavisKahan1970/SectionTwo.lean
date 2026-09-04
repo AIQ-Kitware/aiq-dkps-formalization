@@ -56,13 +56,13 @@ fixed-field endpoint it should match:
 
 | axis | `tan Θ` | `sin 2Θ` | `tan 2Θ` |
 | --- | --- | --- | --- |
-| closest `RCLike` declaration | `tanTheta_directed_finiteDimensional_symmetricNorming_rclike` | `sinTwoTheta_directed_finiteDimensional_symmetricNorming_rclike` | `tanTwoTheta_branchFree_bounded_finiteSubspace_symmetricNorming_rclike` |
-| ambient dimension | finite `E`, `F` | finite `E`, `F` | arbitrary ✓ |
-| ambient operator | bounded `E →ₗ[𝕜] E` | bounded | bounded `E →L[𝕜] E` |
+| closest `RCLike` declaration | `tanTheta_directed_finiteDimensional_symmetricNorming_rclike` | ambient: `sinTwoTheta_ambient_unbounded_reflectionPair_symmetricNorming_rclike` ✓; directed: `sinTwoTheta_directed_finiteDimensional_symmetricNorming_rclike` | `tanTwoTheta_branchFree_bounded_finiteSubspace_symmetricNorming_rclike` |
+| ambient dimension | finite `E`, `F` | ambient: arbitrary ✓; directed: finite `E`, `F` | arbitrary ✓ |
+| ambient operator | bounded `E →ₗ[𝕜] E` | ambient: unbounded `H →ₗ.[𝕜] H` ✓; directed: bounded | bounded `E →L[𝕜] E` |
 | trial subspace | -- | -- | `[FiniteDimensional 𝕜 U]` |
 | Ritz scope | bounded compression | -- | -- |
-| angle in the conclusion | directed tangent supplied as a parameter with a `singularValues` characterization | `sinTwoThetaEmbedding U X`, the trial-coordinate `2S|C|` | an arbitrary representative whose approximation numbers rearrange the branch-free scalars |
-| endpoint's angle | ambient `paperTanAngleOperator` | directed double-angle sine of the spectral pair | ambient `paperAbsTanTwoAngleOperator` |
+| angle in the conclusion | directed tangent supplied as a parameter with a `singularValues` characterization | ambient: `Angle.sinTwoAngleOperator`, the paper's own object ✓; directed: `sinTwoThetaEmbedding U X`, the trial-coordinate `2S\|C\|` | an arbitrary representative whose approximation numbers rearrange the branch-free scalars |
+| endpoint's angle | ambient `paperTanAngleOperator` | ambient: the same object ✓; directed: double-angle sine of the spectral pair | ambient `paperAbsTanTwoAngleOperator` |
 | norm | `SymmetricNormingFunction` ✓ | ✓ | ✓ |
 | gap | interval/exterior, against the endpoint's `FormBoundedSylvesterGap` | same | ordered form `a < b` |
 
@@ -71,42 +71,53 @@ component theorem already proved the paper-norm statement by applying the
 full-gap ideal-family theorem one Ky Fan index at a time, so taking `hgap`
 directly cost nothing.
 
-### Two obstacles, and they are different
+### Two obstacles, and they were different
 
-For the other three, a scalar-generic statement meets **a definitional obstacle
-first and a field-specific analytic layer behind it.**  Both are real; neither
-alone is the whole story, and an earlier version of this file claimed only the
+For the other three, a scalar-generic statement met **a definitional obstacle
+first and a field-specific analytic layer behind it.**  Both were real; neither
+alone was the whole story, and an earlier version of this file claimed only the
 first.
 
-*Definitional.*  The objects the three conclusions name exist only as fixed-field
-pairs: `...C` is defined natively and `...R` by transport --
-`tanAngleOperatorR U V = realPartOperator (tanAngleOperatorC
-(complexifySubmodule U) (complexifySubmodule V))`, and likewise for `sin 2Θ`,
-`tan 2Θ` and `|tan 2Θ|`.  There is no `paperTanAngleOperator` over `𝕜`, so a
-scalar-generic statement cannot presently be *written*.
+**The definitional obstacle is gone, for every one of the three** (2026-09-03).
+It was never about the angles.  `sinAngleOperatorC` is `ContinuousLinearMap.modulus
+(P_U - P_V)`, and the modulus carries `[ContinuousFunctionalCalculus ℝ (E →L[𝕜]
+E) IsSelfAdjoint]`; that calculus is now an ordinary fact at every `RCLike` field
+(`ForTauCeti/Analysis/RCLike/ScalarTransportFunctionalCalculus.lean`, transported
+along `RCLike.I_eq_zero_or_im_I_eq_one` from the `ℝ` and `ℂ` constructions), so
+the arcsin, sine and tangent layers built on it can simply be written over `𝕜`.
+`TauCeti.DavisKahan.Angle.sinAngleOperator`, `.angleOperator` and
+`.sinTwoAngleOperator` are those definitions, and they come with the theorem the
+older text correctly said was owed: over `ℂ` they *are* the `...C` objects, and
+over `ℝ` they agree with the transport-defined `...R` ones, so every existing
+fixed-field theorem still applies to them.
 
-*Availability.*  Writing one is not a matter of copying the `ℂ` definition under a
-`[RCLike 𝕜]` binder.  `sinAngleOperatorC` is `ContinuousLinearMap.modulus (P_U -
-P_V)`, and `ContinuousLinearMap.modulus` carries
-`[ContinuousFunctionalCalculus ℝ (E →L[𝕜] E) IsSelfAdjoint]` as a hypothesis --
-Mathlib declines to register that as an instance precisely because it is not
-available outside `ℂ`.  So the arcsin/tan layers built on it are not "essentially
-available for arbitrary `RCLike` operator algebras"; they are available where that
-functional calculus is.
-
-*Analytic.*  Behind both sits a genuine field-specific proof layer.  The `tan Θ`
-route runs through `UnboundedCompressionTrialData.all_kyFan_core`, which lives in
-the `ℂ`-pinned half of `TanTheta/Theorem63UnboundedCompression.lean` -- the file
-splits a scalar-generic algebra layer from a truncation layer fixed to
+*Analytic.*  Behind the `tan` axes still sits a genuine field-specific proof
+layer.  The `tan Θ` route runs through
+`UnboundedCompressionTrialData.all_kyFan_core`, which lives in the `ℂ`-pinned half
+of `TanTheta/Theorem63UnboundedCompression.lean` -- the file splits a
+scalar-generic algebra layer from a truncation layer fixed to
 `[InnerProductSpace ℂ H]` because the latter uses the projection-valued spectral
 measure -- and `TanThetaUnboundedAmbientReal.lean` says in its own header that the
 real route complexifies the data and reuses that complex Appendix cutoff/Ky-Fan
-argument.  A generic definition would also owe a theorem that its `ℝ` instance
-agrees with the transport-defined `...R`, or every existing real theorem stops
-applying to it.
+argument.
 
-None of this says the mathematics resists generalization; it says the work is
-operator-theoretic infrastructure, not a rename.
+For `sin 2Θ` the analytic layer divides.  The **ambient** clause had a
+scalar-generic proof already -- the reflected-pair theorem
+`sinTwoTheta_ambient_reflection_projectorDifference_symmetricNorming` -- and what
+kept it from being a source statement was that it concluded on the projector
+difference `P_{J_V U} - P_U` rather than on `sin 2Θ`.  The paper's own reflection
+identity closes that gap at every field
+(`Angle.sinTwoAngleOperator_eq_modulus_starProjection_sub`), and
+`sinTwoTheta_ambient_unbounded_reflectionPair_symmetricNorming_rclike` is the
+result.  The **directed** clause is still fixed-field: its core,
+`DoubleAngle/UnboundedIdealFormGap.lean`, is pinned to `ℂ` and reaches `ℝ` by
+complexification, so a scalar-generic directed statement needs the
+`ScalarTransport` dispatch of the unbounded-ideal apparatus -- `ReducesSubspace`,
+the trial residual, and `SymmetricNormingFunction` membership and gauge -- which
+is not yet written.
+
+None of this says the remaining mathematics resists generalization; it says the
+work is operator-theoretic infrastructure, not a rename.
 `tanTwoTheta_branchFree_bounded_symmetricNorming_complex` is evidence on the other
 side: it is the arbitrary-trial-subspace form over `ℂ`, so the finite-subspace
 restriction is already known to be removable at one field.
