@@ -77,6 +77,31 @@ CAPABILITY_CLASSES = {
     "TauCeti.DavisKahan.Sylvester.HasUnboundedSylvesterKyFan",
     "TauCeti.DavisKahan.ExactSinTheta.HasApproximationNumberStrongCutoff",
 }
+# Counted results whose canonical witness has reached the paper's own scalar
+# scope, mapped to the public `SectionTwo` short name that must alias it.
+#
+# Davis and Kahan state Section 2 for a real *or* complex separable Hilbert
+# space.  A result whose canonical evidence is a pair of fixed-field theorems is
+# therefore answering the printed statement one field at a time; once a witness
+# generic in `RCLike 𝕜` exists, that witness is the answer, and demoting the row
+# back to the fixed-field pair is a regression.
+#
+# That regression happened.  `S2-sin-theta` was canonicalized on
+# `..._complex`/`..._real` because the generic theorem carried
+# `[ContinuousLinearMap.HasMinMaxLowerBoundEverywhere]` and
+# `[HasUnboundedSylvesterKyFan]`, which are not paper hypotheses.  The objection
+# was fair at the time and went stale the moment both capabilities became
+# unconditional instances at every `RCLike` field; nothing noticed for a week.
+# So the requirement is checked rather than remembered: for each row below, every
+# canonical evidence entry must be scalar-generic and carry no capability class,
+# and the public short name must be `#check`ed by the audit surface.
+#
+# Add a row here when its generic witness lands.  Removing one is a claim that a
+# result no longer has a source-scope witness, and needs the same review as any
+# other canonical-evidence change.
+SCALAR_GENERIC_CANONICAL_RESULTS = {
+    "S2-sin-theta": "TauCeti.DavisKahan1970.SectionTwo.sinTheta",
+}
 SUPPORTING_EVIDENCE_ROLES = {
     "public_alias", "specialization", "alternative_route", "generalization",
     "presentation_wrapper", "implementation_structure", "transport_lemma",
@@ -2178,6 +2203,23 @@ def _validate_canonical_evidence(
                         f"capability_classes {sorted(recorded_caps)!r}, but its "
                         f"compiler-printed type carries {derived_caps!r}"
                     )
+            if result_id in SCALAR_GENERIC_CANONICAL_RESULTS:
+                if scope != "rclike":
+                    fail(
+                        f"{result_id}: canonical evidence {declaration} has scalar_scope "
+                        f"{scope!r}, but this result has a witness generic in `RCLike 𝕜` "
+                        "and the paper states it for a real or complex Hilbert space; the "
+                        "generic theorem is the canonical evidence, and the fixed-field "
+                        "statements are supporting"
+                    )
+                if recorded_caps:
+                    fail(
+                        f"{result_id}: canonical evidence {declaration} exposes the "
+                        f"proof-capability class(es) {sorted(recorded_caps)!r} in its "
+                        "signature.  These are implementation infrastructure with "
+                        "unconditional instances at every `RCLike` field; resolve them by "
+                        "instance search instead of quantifying over them"
+                    )
             atoms = entry.get("covers_source_atoms")
             if not isinstance(atoms, list) or not all(isinstance(a, str) for a in atoms):
                 fail(
@@ -2354,6 +2396,16 @@ def _validate_semantic_audit_surface(
 
     audit_text = audit_path.read_text(encoding="utf-8")
     report_text = report_path.read_text(encoding="utf-8")
+    for result_id, short_name in sorted(SCALAR_GENERIC_CANONICAL_RESULTS.items()):
+        if (
+            f"#check @{short_name}" not in audit_text
+            and f"#check {short_name}" not in audit_text
+        ):
+            fail(
+                f"{result_id}: the public Section 2 short name {short_name} is bound to a "
+                f"scalar-generic source theorem, so {audit_rel} must #check it -- that is "
+                "what makes the binding, and its type, visible to a reviewer"
+            )
     expected_evidence_digest = _canonical_evidence_digest(items)
     recorded_evidence_digest = sweep.get("canonical_evidence_sha256")
     if recorded_evidence_digest != expected_evidence_digest:

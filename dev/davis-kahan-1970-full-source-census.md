@@ -323,8 +323,8 @@ REOPENING WITHDRAWN 2026-08-31 and the rule corrected: a later source passage en
 - `TauCeti.DavisKahan.TanTheta.theorem6_3_infiniteTrial_of_formBounds_exists`
 - `TauCeti.DavisKahan.TanTheta.theorem6_3_all_kyFan_core_infiniteTrial`
 - `TauCeti.DavisKahan.Section2.theorem6_3_perturbation_infiniteTrial`
-- `TauCeti.DavisKahanExt.tanAngleOperatorC`
-- `TauCeti.DavisKahanExt.directedCosAngleOperatorC_mul_directedTanAngleOperatorC`
+- `TauCeti.DavisKahan.Angle.tanAngleOperatorC`
+- `TauCeti.DavisKahan.Angle.directedCosAngleOperatorC_mul_directedTanAngleOperatorC`
 - `TauCeti.ApproximationNumber.approximationNumber_le_of_gramResolvent`
 - `TauCeti.DavisKahan1970.twoProjection_anticommutator`
 - `TauCeti.DavisKahan1970.offDiagonal_sq`
@@ -338,8 +338,8 @@ REOPENING WITHDRAWN 2026-08-31 and the rule corrected: a later source passage en
 - `TauCeti.DavisKahan1970.corner_all_kyFan`
 - `TauCeti.DavisKahan1970.tanTheta_ambient_bounded_kyFan_complex_of_transversality`
 - `TauCeti.DavisKahan1970.tanTheta_ambient_bounded_symmetricNorming_complex_of_transversality`
-- `TauCeti.DavisKahanExt.tanAngleOperatorR`
-- `TauCeti.DavisKahanExt.complexify_tanAngleOperatorR`
+- `TauCeti.DavisKahan.Angle.tanAngleOperatorR`
+- `TauCeti.DavisKahan.Angle.complexify_tanAngleOperatorR`
 - `TauCeti.DavisKahan1970.tanTheta_ambient_bounded_symmetricNorming_real_of_transversality`
 - `TauCeti.DavisKahan1970.tanTheta_directed_bounded_arbitraryDimension_symmetricNorming_real`
 - `TauCeti.DavisKahan1970.theorem6_3_all_kyFan_core_infiniteTrial_real`
@@ -421,7 +421,7 @@ WHY THE RIGHT-HAND SIDE IS `E` RESTRICTED TO `Z`, not `E`: the two live in diffe
 
 **THE AMBIENT `Theta` HALF IS STILL OPEN, and this row had not been recording it, 2026-08-08 (Claude Opus 5).**  The printed theorem has TWO conclusions -- `delta ||tan Theta_0|| <= ||R||` AND `delta ||tan Theta|| <= ||H||` (transcription lines 738-747).  Everything listed above, and every claim of completeness in the notes above, is about the DIRECTED `Theta_0` half.  The ambient `Theta` half is not proved, in any scalar field or dimension.
 
-What landed towards it this session: the ambient object itself, `TauCeti.DavisKahanExt.tanAngleOperatorC := cfc Real.tan (angleOperatorC U V)` (`DavisKahan/Geometry/Angle/TanAngleFunctionalCalculus.lean`, default build, `[propext, Classical.choice, Quot.sound]`), with `directedTanAngleOperatorC_nonneg` and `directedCosAngleOperatorC_mul_directedTanAngleOperatorC` (`cos Theta . tan Theta = sin Theta` under uniform transversality `||sin Theta|| < 1`), which is what makes it the tangent rather than an arbitrary functional calculus.
+What landed towards it this session: the ambient object itself, `TauCeti.DavisKahan.Angle.tanAngleOperatorC := cfc Real.tan (angleOperatorC U V)` (`DavisKahan/Geometry/Angle/TanAngleFunctionalCalculus.lean`, default build, `[propext, Classical.choice, Quot.sound]`), with `directedTanAngleOperatorC_nonneg` and `directedCosAngleOperatorC_mul_directedTanAngleOperatorC` (`cos Theta . tan Theta = sin Theta` under uniform transversality `||sin Theta|| < 1`), which is what makes it the tangent rather than an arbitrary functional calculus.
 
 Also landed, as the foundation the ambient half needs: `TauCeti.modulus_comp_left_cfc` and its polar instance `TauCeti.modulus_polarPartial_comp_cfc_modulus` (`ForTauCeti/Analysis/InnerProductSpace/PrincipalAngles/Equisingular.lean`), the identity `|J f(Theta)| = |f(Theta)|` for `f` vanishing at the origin.  This is the step that lets the paper's off-diagonal representative `[[0, -J_0* f(Theta_1)],[J_0 f(Theta_0), 0]]` be substituted for the block-diagonal `f(Theta)` inside ANY unitarily invariant norm, not merely with the same singular-value list.  It is an operator identity (equal Gram operators), so it survives noncompactness.
 
@@ -445,7 +445,7 @@ WHAT REMAINS ON THIS ROW.  Real scalars.  Both halves are stated for `InnerProdu
 
 **THE AMBIENT HALF NOW HAS A REAL-SCALAR ENDPOINT, 2026-08-09 (Claude Opus 5).  THE DIRECTED HALF DOES NOT.**  `TauCeti.DavisKahan1970.tanTheta_ambient_bounded_symmetricNorming_real_of_transversality` (`DavisKahan/Sources/DavisKahan1970/AmbientReal.lean`, default build, `[propext, Classical.choice, Quot.sound]`) is the second printed conclusion `delta ||tan Theta|| <= ||H||` over a REAL Hilbert space of arbitrary dimension, for every `SymmetricNormingFunction`, with the membership conclusion supplied rather than assumed and with no constant lost.
 
-It is a genuine real statement, not a complex statement with a real hypothesis: `E` is `[InnerProductSpace R E]`, the operators are `E ->L[R] E`, the subspaces are `Submodule R E`, and the conclusion is about `TauCeti.DavisKahanExt.tanAngleOperatorR U V : E ->L[R] E`.  That object is the real restriction of the complex `tan Theta` of the complexified pair (`complexify_tanAngleOperatorR`), which is legitimate because every operator in the chain `|P_U - P_V| -> arcsin -> tan` is a continuous functional calculus of a complexified real operator and therefore lies in the fixed-point algebra of the canonical conjugation (`ForTauCeti` `conjugateOperator_modulus`, `conjugateOperator_cfc`); the real content of the objects is pinned down independently by `sinAngleOperatorR_mul_self` (`sin Theta . sin Theta = (P_U - P_V)^2`), `sinAngleOperatorR_nonneg` and `norm_sinAngleOperatorR`.
+It is a genuine real statement, not a complex statement with a real hypothesis: `E` is `[InnerProductSpace R E]`, the operators are `E ->L[R] E`, the subspaces are `Submodule R E`, and the conclusion is about `TauCeti.DavisKahan.Angle.tanAngleOperatorR U V : E ->L[R] E`.  That object is the real restriction of the complex `tan Theta` of the complexified pair (`complexify_tanAngleOperatorR`), which is legitimate because every operator in the chain `|P_U - P_V| -> arcsin -> tan` is a continuous functional calculus of a complexified real operator and therefore lies in the fixed-point algebra of the canonical conjugation (`ForTauCeti` `conjugateOperator_modulus`, `conjugateOperator_cfc`); the real content of the objects is pinned down independently by `sinAngleOperatorR_mul_self` (`sin Theta . sin Theta = (P_U - P_V)^2`), `sinAngleOperatorR_nonneg` and `norm_sinAngleOperatorR`.
 
 The DIRECTED half is still complex-only, and the census's own recipe for it (see `next_action`) understates one step: the complex directed endpoints `theorem6_3_infiniteTrial_of_formBounds{,_exists}` are stated for `KyFanDominantIdealFamily (C)`, whose gauge has no complexification transport, so the real directed statement has to be reassembled from `theorem6_3_all_kyFan_core_infiniteTrial` at `SymmetricNormingFunction` scope.  Beyond that reassembly, the `_exists` form additionally needs a REAL tangent representative, and `TauCeti.ApproximationNumber.exists_approximationNumber_eq_of_antitone` (`ForTauCeti/Analysis/OperatorIdeal/ApproximationNumber/PrescribedSequence.lean`) is stated over `C` only.  Generalising that file to `RCLike` is the prerequisite; nothing else in the route is scalar-specific.
 
@@ -503,11 +503,11 @@ The directed clause of the Section 2 tangent theorem at the printed scope, added
 - `TauCeti.DavisKahanExt.sinTwoTheta_generalSeparation`
 - `TauCeti.DavisKahan1970.sinTwoTheta_ambient_bounded_symmetricNorming_complex`
 - `TauCeti.DavisKahan1970.sinTwoTheta_ambient_bounded_symmetricNorming_real`
-- `TauCeti.DavisKahanExt.sinTwoAngleOperatorR`
-- `TauCeti.DavisKahanExt.complexify_sinTwoAngleOperatorR`
+- `TauCeti.DavisKahan.Angle.sinTwoAngleOperatorR`
+- `TauCeti.DavisKahan.Angle.complexify_sinTwoAngleOperatorR`
 - `TauCeti.DavisKahan1970.sinTwoTheta_ambient_bounded_kyFan_complex`
 - `TauCeti.DavisKahan1970.symmetric_sinTheta_spectrum_all_kyFan`
-- `TauCeti.DavisKahanExt.directedSinTwoAngleOperatorC_eq_modulus_starProjection_sub`
+- `TauCeti.DavisKahan.Angle.directedSinTwoAngleOperatorC_eq_modulus_starProjection_sub`
 - `TauCeti.DavisKahan.norm_sinTwoThetaIdealBlock_real`
 - `TauCeti.DavisKahan.sinTwoThetaIdealBlock_eq_comp`
 - `TauCeti.DavisKahan.complexify_sinTwoThetaIdealBlock`
@@ -634,7 +634,7 @@ The bridge that was missing was NOT a singular-value comparison between the dire
 
   `sin 2Theta = |P_{J_V U} - P_U|`,
 
-where `sin 2Theta := cfc (fun t => sin (2t)) (angleOperatorC U V)` is the paper's literal ambient object.  Proved as `TauCeti.DavisKahanExt.directedSinTwoAngleOperatorC_eq_modulus_starProjection_sub` (`DavisKahan/Geometry/Angle/DoubleAngleFunctionalCalculus.lean`).  Only the OPERATOR NORM version of this identification existed before (`subspaceGap_map_reflection_eq_norm_sinTwoAngle`), and an operator-norm identity says nothing about any other unitarily invariant norm -- that is precisely why the row could not be closed by the existing reflection machinery.
+where `sin 2Theta := cfc (fun t => sin (2t)) (angleOperatorC U V)` is the paper's literal ambient object.  Proved as `TauCeti.DavisKahan.Angle.directedSinTwoAngleOperatorC_eq_modulus_starProjection_sub` (`DavisKahan/Geometry/Angle/DoubleAngleFunctionalCalculus.lean`).  Only the OPERATOR NORM version of this identification existed before (`subspaceGap_map_reflection_eq_norm_sinTwoAngle`), and an operator-norm identity says nothing about any other unitarily invariant norm -- that is precisely why the row could not be closed by the existing reflection machinery.
 
 WHY IT IS AN IDENTITY AND NOT AN ESTIMATE.  For orthogonal projections `P, Q` and `X = 2Q - 1`, `XPX - P = 2 X (PQ - QP)`, and `X` is a self-adjoint unitary, so `|XPX - P| = 2|[P,Q]|`.  The commutator's Gram operator is computed by a purely algebraic identity in the ring generated by two idempotents, `(QP - PQ)^2 = D^4 - D^2` for `D = P - Q` (`TauCeti.commutator_mul_self_of_isIdempotentElem`, `ForTauCeti/Analysis/InnerProductSpace/DoubleAngle/Reflection.lean`), so `|2[P,Q]|^2 = 4(D^2 - D^4) = 4 sin^2 Theta cos^2 Theta`.  Uniqueness of the positive square root then gives equality with `cfc (sin 2.) Theta`.  Nothing here is finite-dimensional or compact.
 
@@ -743,9 +743,9 @@ AMBIENT CLAUSE REOPENED 2026-08-31 by the coherent-clause audit. The printed sin
 - `TauCeti.DavisKahan1970.tanTwoTheta_equation_7_6_approximate`
 - `TauCeti.DavisKahan1970.tanTwoTheta_cos_ne_zero_approximate`
 - `TauCeti.DavisKahan1970.tanTwoTheta_pole_separation`
-- `TauCeti.DavisKahanExt.tanTwoAngleOperatorC`
-- `TauCeti.DavisKahanExt.spectrum_angleOperatorC_lt_pi_div_four`
-- `TauCeti.DavisKahanExt.directedTanTwoAngleOperatorC_nonneg`
+- `TauCeti.DavisKahan.Angle.tanTwoAngleOperatorC`
+- `TauCeti.DavisKahan.Angle.spectrum_angleOperatorC_lt_pi_div_four`
+- `TauCeti.DavisKahan.Angle.directedTanTwoAngleOperatorC_nonneg`
 - `TauCeti.DavisKahan1970.doubleSecant`
 - `TauCeti.DavisKahan1970.tanTwoBlockRepresentative`
 - `TauCeti.DavisKahan1970.directedTanTwoAngleOperatorC_eq_modulus_blockRepresentative`
@@ -753,12 +753,12 @@ AMBIENT CLAUSE REOPENED 2026-08-31 by the coherent-clause audit. The printed sin
 - `TauCeti.DavisKahan1970.tanTwoTheta_directed_boundedResidual_blockRepresentative_kyFan_complex`
 - `TauCeti.DavisKahan1970.tanTwoTheta_ambient_bounded_orderedForm_kyFan_complex`
 - `TauCeti.DavisKahan1970.tanTwoTheta_ambient_bounded_orderedForm_symmetricNorming_complex`
-- `TauCeti.DavisKahanExt.tanTwoAngleOperatorR`
-- `TauCeti.DavisKahanExt.complexify_tanTwoAngleOperatorR`
+- `TauCeti.DavisKahan.Angle.tanTwoAngleOperatorR`
+- `TauCeti.DavisKahan.Angle.complexify_tanTwoAngleOperatorR`
 - `TauCeti.DavisKahan1970.tanTwoTheta_ambient_bounded_orderedForm_symmetricNorming_real`
-- `TauCeti.DavisKahanExt.absTanTwoAngleOperatorC`
-- `TauCeti.DavisKahanExt.absTanTwoAngleOperatorC_nonneg`
-- `TauCeti.DavisKahanExt.absTanTwoAngleOperatorC_eq_directedTanTwoAngleOperatorC`
+- `TauCeti.DavisKahan.Angle.absTanTwoAngleOperatorC`
+- `TauCeti.DavisKahan.Angle.absTanTwoAngleOperatorC_nonneg`
+- `TauCeti.DavisKahan.Angle.absTanTwoAngleOperatorC_eq_directedTanTwoAngleOperatorC`
 - `TauCeti.DavisKahan1970.isUnit_one_sub_two_mul_projectorDifference_sq_of_cos_two_ne_zero`
 - `TauCeti.DavisKahan1970.absTanTwo_sq_mul_cos_two_sq`
 - `TauCeti.DavisKahan1970.absTanTwoAngleOperatorC_eq_modulus_blockRepresentative`
@@ -797,8 +797,8 @@ AMBIENT CLAUSE REOPENED 2026-08-31 by the coherent-clause audit. The printed sin
 - `TauCeti.DavisKahan.isUnit_signedCosTwo_of_isUnit_diagonalPart_sq`
 - `TauCeti.DavisKahan.cos_two_ne_zero_of_isUnit_diagonalPart_reflection_sq`
 - `TauCeti.DavisKahan.extendedGauge_unboundedReflectionTangent_real`
-- `TauCeti.DavisKahanExt.absTanTwoAngleOperatorR`
-- `TauCeti.DavisKahanExt.complexify_absTanTwoAngleOperatorR`
+- `TauCeti.DavisKahan.Angle.absTanTwoAngleOperatorR`
+- `TauCeti.DavisKahan.Angle.complexify_absTanTwoAngleOperatorR`
 - `TauCeti.DavisKahan1970.tanTwoTheta_ambient_unbounded_blockRepresentative_derivedReflection_symmetricNorming_real`
 - `TauCeti.DavisKahan1970.tanTwoTheta_ambient_unbounded_symmetricNorming_real`
 - `TauCeti.DavisKahan1970.approximationNumber_reflectionTangentCorner`
@@ -987,7 +987,7 @@ ambient object itself is added to `DavisKahan/Geometry/Angle/TanAngleFunctionalC
 Every new declaration is axiom-clean -- [propext, Classical.choice, Quot.sound] --
 checked at the elaborator, not by grep.
 
-THE OBJECT.  `TauCeti.DavisKahanExt.tanTwoAngleOperatorC U V :=
+THE OBJECT.  `TauCeti.DavisKahan.Angle.tanTwoAngleOperatorC U V :=
 cfc (fun t => Real.tan (2 * t)) (angleOperatorC U V)`: the literal ambient
 `tan 2Theta`, which carries every principal angle TWICE.  It did not exist
 before, exactly as the 2026-08-09 correction above recorded.
@@ -1107,7 +1107,7 @@ can tell from `tan 2Theta`.
 
 NEW DECLARATIONS, all axiom-clean -- [propext, Classical.choice, Quot.sound], checked at
 the elaborator, not by grep:
-* `TauCeti.DavisKahanExt.absTanTwoAngleOperatorC` (`Geometry/Angle/PaperTanAngle.lean`)
+* `TauCeti.DavisKahan.Angle.absTanTwoAngleOperatorC` (`Geometry/Angle/PaperTanAngle.lean`)
   -- `cfc (fun t => |tan (2t)|) Theta`.  Nonnegative with NO hypothesis at all, and equal
   to `tanTwoAngleOperatorC` on the quarter-acute branch.
 * `TauCeti.DavisKahan1970.isUnit_one_sub_two_mul_projectorDifference_sq_of_cos_two_ne_zero`
@@ -2494,11 +2494,11 @@ The recorded strictness narrowing `0 < theta n < pi/2` sits ONLY on `corollary3_
 - `TauCeti.repr_eq_zero_of_calculus_apply_eq_smul`
 - `TauCeti.selfAdjointFunctionalCalculus_apply_of_calculus_apply_eq_smul`
 - `TauCeti.exists_eigenvalue_of_calculus_apply_eq_smul`
-- `TauCeti.DavisKahanExt.commute_angleOperatorC_starProjection`
-- `TauCeti.DavisKahanExt.commute_angleOperatorC_starProjection_right`
-- `TauCeti.DavisKahanExt.commute_sinAngleOperatorC_starProjection`
-- `TauCeti.DavisKahanExt.commute_sinAngleOperatorC_starProjection_right`
-- `TauCeti.DavisKahanExt.adjoint_starProjection_sub`
+- `TauCeti.DavisKahan.Angle.commute_angleOperatorC_starProjection`
+- `TauCeti.DavisKahan.Angle.commute_angleOperatorC_starProjection_right`
+- `TauCeti.DavisKahan.Angle.commute_sinAngleOperatorC_starProjection`
+- `TauCeti.DavisKahan.Angle.commute_sinAngleOperatorC_starProjection_right`
+- `TauCeti.DavisKahan.Angle.adjoint_starProjection_sub`
 - `TauCeti.DavisKahan.IsPrintedFixedCosineReducingSubspace`
 - `TauCeti.DavisKahan.fixedCosineSubspace_maximal_printed`
 - `TauCeti.DavisKahan.isPrintedFixedCosineReducingSubspace_of_isFixedCosineReducingSubspace`
@@ -3495,7 +3495,7 @@ The in-place `RCLike` generalization of `SineTheta/CommonDomainSymmetric.lean` S
 
 (i) NO `RCLike`-GENERIC SYLVESTER THEOREM EXISTS, and none can be derived by case analysis -- `RCLike` has no discriminator between its models.  `davisKahan1970_sylvester_complex` (`DavisKahan/Sylvester/Unbounded/FormBoundedGap.lean:97`) is C-hardwired and so is everything under it (`davisKahan1970_sylvester_of_spectrumGap`, `inductive SpectralSylvesterGap` whose ordered constructors are literally `Complex.ofReal` preimages, `directOrderedSylvesterEngine_lowerUpper/_upperLower`); `real_unbounded_sylvester_kyFan` is R-hardwired.  What IS 𝕜-generic is only the HYPOTHESIS `FormBoundedSylvesterGap` (`DavisKahan/Sylvester/Gap.lean:141`) -- which is what made the coordinator optimistic.  RESOLUTION: new module `DavisKahan/Sylvester/ScalarGeneric.lean` (125 lines) names the estimate as a property of the scalar field, `class HasUnboundedSylvesterKyFan (𝕜) [RCLike 𝕜]`, on the repository's own established `ContinuousLinearMap.HasMinMaxLowerBoundEverywhere` pattern, with BOTH instances supplied (`_complex` from the Section 5 theorem, `_real` from the complexification descent).  Because both are instances, NO hypothesis is added to anything previously written over a fixed field.
 
-(ii) THE HARDER ONE, AND THE COORDINATOR'S BRIEF OMITTED IT ENTIRELY.  `symmetric_all_kyFan` and `result_every_unitarilyInvariantNorm` state their conclusions on `TauCeti.DavisKahanExt.sinAngleOperatorC`, defined at `DavisKahan/Geometry/Angle/AngleFunctionalCalculus.lean:131` as `cfc Real.sin (angleOperatorC U V)` over `Submodule ℂ E`.  This is NOT binder editing and NOT a proof-body issue: the statement is UNSTATABLE over general 𝕜, because no real continuous functional calculus exists for this angle operator.  Those two statements therefore remain C, byte-for-byte unchanged, and the generic content is carried by new siblings `symmetric_all_kyFan_crossSineSum` / `result_every_unitarilyInvariantNorm_crossSineSum` on `crossSineSum`, with `crossSineSum_normingMem_iff_and_gauge_eq` as the compiled dictionary against `V.starProjection - U.starProjection`.  This is the SAME split `SymmetricReal.lean` already argues for: a unitarily invariant norm sees only the singular-value sequence.
+(ii) THE HARDER ONE, AND THE COORDINATOR'S BRIEF OMITTED IT ENTIRELY.  `symmetric_all_kyFan` and `result_every_unitarilyInvariantNorm` state their conclusions on `TauCeti.DavisKahan.Angle.sinAngleOperatorC`, defined at `DavisKahan/Geometry/Angle/AngleFunctionalCalculus.lean:131` as `cfc Real.sin (angleOperatorC U V)` over `Submodule ℂ E`.  This is NOT binder editing and NOT a proof-body issue: the statement is UNSTATABLE over general 𝕜, because no real continuous functional calculus exists for this angle operator.  Those two statements therefore remain C, byte-for-byte unchanged, and the generic content is carried by new siblings `symmetric_all_kyFan_crossSineSum` / `result_every_unitarilyInvariantNorm_crossSineSum` on `crossSineSum`, with `crossSineSum_normingMem_iff_and_gauge_eq` as the compiled dictionary against `V.starProjection - U.starProjection`.  This is the SAME split `SymmetricReal.lean` already argues for: a unitarily invariant norm sees only the singular-value sequence.
 
 **THREE FALSE PREMISES IN THE COORDINATOR'S BRIEF, ALL RECORDED.**  (1) The brief suggested the census note about substituting `real_unbounded_sylvester_kyFan` might be describing an obsolete route; it was not, and the census note was correct.  (2) The brief said the sibling `CommonDomainTheorems.lean` `is already [RCLike 𝕜]`; only its DATA layer is -- `CommonDomainTheorem61Data` sits inside a `section Complex`, with a separate real packaging.  The sibling had in fact already taken exactly the generic-data / per-field-endpoint split this mission ended up taking.  (3) The brief warned of several `local instance` declarations needing binder treatment; there is exactly one.  The predicted `Complex.I` / `conj = id` hazard did NOT materialize -- every proof body transferred with `inner_C -> inner_𝕜` and nothing else.
 

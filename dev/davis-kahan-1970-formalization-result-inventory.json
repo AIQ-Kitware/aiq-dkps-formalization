@@ -71,6 +71,7 @@
       "verification": "proved_in_build",
       "semantic_certification": "accepted",
       "lean_declarations": [
+        "TauCeti.DavisKahan1970.SectionTwo.sinTheta",
         "TauCeti.DavisKahan1970.SectionTwo.sinTheta_complex",
         "TauCeti.DavisKahan1970.SectionTwo.sinTheta_real",
         "DavisKahan1970.sinTheta_unbounded_intervalExterior_characterizedWitness_rclike",
@@ -87,7 +88,7 @@
         "DavisKahan1970.isTrialResidual_iff",
         "DavisKahan1970.isExactSpectralDecomposition_iff"
       ],
-      "review_note": "Accepted semantic review. **`DavisKahan1970.sinTheta_unbounded_formGap_symmetricNorming_complex` and `DavisKahan1970.sinTheta_unbounded_formGap_symmetricNorming_real` are the primary source-facing witnesses** (canonicalized 2026-08-29). They state the result at its full proved scope: unbounded self-adjoint `LinearPMap` operators, arbitrary Hilbert dimension, the whole `FormBoundedSylvesterGap` rather than one of its branches, a `SymmetricNormingFunction`, and both conclusions -- ideal membership of the sine block and the factor-one inequality. They carry neither `HasUnboundedSylvesterKyFan` nor `ContinuousLinearMap.HasMinMaxLowerBoundEverywhere`. `sinTheta_unbounded_intervalExterior_symmetricNorming_complex` and its real sibling spell out the printed Section 2 separation for callers who want the familiar form.\n\n`DavisKahan1970.sinTheta_unbounded_intervalExterior_characterizedWitness_rclike` is retained as the **presentation and compatibility** declaration, and the review still reads it for the properties that make it legible: it names the source norm with the public `UnitaryInvariantNorm` spelling, makes `sinTheta_0` an explicit parameter tied by a literal equality to `(I - F0 F0-dagger) E0`, writes the interval/exterior alternative literally, has no finite-dimensional hypothesis, and places exactly the factor-one source inequality after the theorem colon. Its costs are now recorded rather than glossed: being generic over `RCLike` forces the two capability classes into its signature, its separation hypothesis is only the interval/exterior branch, so it states a strictly smaller theorem than the one proved, and it drops the ideal-membership half of the conclusion. The two domain-heavy setup predicates have characteristic theorems that fully expand their contents. `sinTheta_unbounded_intervalExterior_symmetricNorming_rclike` remains the stronger supporting certificate and the engine both surfaces run through.\n\nREOPENED 2026-08-31 by the scope-atom re-audit. The inventory's own statement_boundary policy says a later source passage that explicitly extends the proved scope of a counted result is part of that result's scope and must be covered. Several such passages were classified as generic post-result commentary on the grounds that they occur after the theorem environment -- which is exactly the condition the policy says does not exclude an explicit extension. See the newly attached scope atom(s) and `remaining_gap`.\n\nREOPENING WITHDRAWN 2026-08-31, and the rule that caused it corrected. The scope-atom re-audit attached a later source passage to this result under a `statement_boundary` clause saying that any passage explicitly extending a counted result's proved scope becomes part of that result. That clause contradicted the same field's `does_not_count` entry for scope remarks outside the printed result environment, and it let the atom ledger enlarge the denominator by reclassification. The corrected rule is that a later passage affects a counted result only when it is needed to determine what Davis and Kahan actually claim in that result; an extension, variant or consequence they mention without introducing and proving it as a result of its own does not. The passage is now `result_adjacent_extension` fidelity material. The Lean coverage produced while the result was reopened is kept as SUPPORTING evidence -- it is stronger than the counted statement requires, which is a good thing to hold and not a canonical obligation.",
+      "review_note": "REOPENED 2026-08-31 by the scope-atom re-audit. The inventory's own statement_boundary policy says a later source passage that explicitly extends the proved scope of a counted result is part of that result's scope and must be covered. Several such passages were classified as generic post-result commentary on the grounds that they occur after the theorem environment -- which is exactly the condition the policy says does not exclude an explicit extension. See the newly attached scope atom(s) and `remaining_gap`.\n\nREOPENING WITHDRAWN 2026-08-31, and the rule that caused it corrected. The scope-atom re-audit attached a later source passage to this result under a `statement_boundary` clause saying that any passage explicitly extending a counted result's proved scope becomes part of that result. That clause contradicted the same field's `does_not_count` entry for scope remarks outside the printed result environment, and it let the atom ledger enlarge the denominator by reclassification. The corrected rule is that a later passage affects a counted result only when it is needed to determine what Davis and Kahan actually claim in that result; an extension, variant or consequence they mention without introducing and proving it as a result of its own does not. The passage is now `result_adjacent_extension` fidelity material. The Lean coverage produced while the result was reopened is kept as SUPPORTING evidence -- it is stronger than the counted statement requires, which is a good thing to hold and not a canonical obligation.",
       "boundary_review": {
         "status": "accepted",
         "primary_source_block": "S2-sin-theta",
@@ -114,9 +115,9 @@
       "notes": " **Canonical fixed-field statements added 2026-08-29.** `sinTheta_unbounded_intervalExterior_characterizedWitness_rclike` is the presentation declaration and pays twice for being scalar-generic: it carries the capability classes `ContinuousLinearMap.HasMinMaxLowerBoundEverywhere` and `HasUnboundedSylvesterKyFan`, and it inlines the finite interval/exterior branch of the separation, which fixes a strictly smaller theorem than the one proved. Neither cost is Davis--Kahan mathematics: the capability classes package the unbounded Sylvester Ky Fan estimate and a min-max lower bound, both proved here for both scalar fields, and they appear only because RCLike is an open abstraction. `sinTheta_complex` and `sinTheta_real` take direct argument lists, the full `FormBoundedSylvesterGap`, and conclude both ideal membership and the bound, with no capability class; they route through the already capability-free `FormBoundedIsometricSinThetaProblem.result_complex`/`.result_real` one Ky Fan gauge at a time. The `_of_intervalExterior` pair spells out the printed Section 2 separation. `sinTheta_unbounded_intervalExterior_symmetricNorming_rclike` remains the engine and is unchanged. **Canonical Section 2 inventory, 2026-08-30.** `DavisKahan/Sources/DavisKahan1970/SectionTwo.lean` is the public inventory of the paper's four unnumbered headline theorems over both scalar fields: `TauCeti.DavisKahan1970.SectionTwo.{sinTheta_complex, tanTheta_complex, sinTwoTheta_complex, tanTwoTheta_complex}` and their `_real` siblings. The unqualified `SectionTwo.{sinTheta, tanTheta, sinTwoTheta, tanTwoTheta}` are reserved by a standing rule: a short name is bound only to a declaration that is BOTH scalar-generic over `RCLike` AND at the printed source scope, and is left unbound otherwise. Which of the four currently satisfy that is a property of `SectionTwo.lean`; it is recorded once, structurally, in `section_two_short_names` below and checked against the file, and is deliberately not restated in prose -- a copy of a moving fact goes stale silently, and this sentence did. They are `alias`es, so each carries exactly the type of the declaration it names -- unbounded self-adjoint `LinearPMap` ambient operator, arbitrary Hilbert dimension, a `SymmetricNormingFunction`, both printed conclusions, no capability class, no finite-dimensional hypothesis, no proof vehicle in the conclusion. `SectionTwoUsage.lean` calls each from ordinary operator-theory hypotheses, so the advertised entry points are compiler-checked to be reachable without building Sylvester witnesses, reflection blocks, or spectral reflections by hand. The scalar-generic presentation forms, directed and whole-space variants, finite specializations, operator-norm statements and bundled-problem entry points are unchanged and remain registered separately.",
       "canonical_evidence": [
         {
-          "declaration": "DavisKahan1970.sinTheta_unbounded_formGap_symmetricNorming_complex",
+          "declaration": "DavisKahan1970.sinTheta_unbounded_formGap_symmetricNorming_rclike",
           "role": "primary_source_witness",
-          "scalar_scope": "complex",
+          "scalar_scope": "rclike",
           "evidence_kind": "proof",
           "covers_source_atoms": [
             "S2-sin-theta.ui-norm-scope",
@@ -128,27 +129,28 @@
             "S2-unbounded-scope.bounded-residual-needed",
             "S2-unbounded-scope.half-infinite-gap-intervals"
           ],
-          "capability_classes": []
-        },
-        {
-          "declaration": "DavisKahan1970.sinTheta_unbounded_formGap_symmetricNorming_real",
-          "role": "primary_source_witness",
-          "scalar_scope": "real",
-          "evidence_kind": "proof",
-          "covers_source_atoms": [
-            "S2-sin-theta.ui-norm-scope",
-            "S2-sin-theta.gap-hypothesis",
-            "S2-sin-theta.directed-conclusion",
-            "S2-unbounded-scope.infinite-dimensional-scope",
-            "S2-unbounded-scope.arbitrary-ui-scope",
-            "S2-unbounded-scope.unbounded-selfadjoint-scope",
-            "S2-unbounded-scope.bounded-residual-needed",
-            "S2-unbounded-scope.half-infinite-gap-intervals"
-          ],
-          "capability_classes": []
+          "capability_classes": [],
+          "note": "The scalar-generic Section 2 sine endpoint, at the printed source scope. Davis and Kahan state Section 2 for a real or complex separable Hilbert space, so the witness for the printed result is the one generic in the field.  Its signature carries only the paper's hypotheses: the two analytic capabilities its proof consumes, ContinuousLinearMap.HasMinMaxLowerBoundEverywhere and HasUnboundedSylvesterKyFan, are unconditional instances at every RCLike field and are supplied by instance search."
         }
       ],
       "supporting_evidence": [
+        {
+          "declaration": "TauCeti.DavisKahan1970.SectionTwo.sinTheta",
+          "role": "public_alias",
+          "note": "The public Section 2 short name.  It is bound only because the canonical theorem is both scalar-generic over RCLike and at the printed source scope."
+        },
+        {
+          "declaration": "DavisKahan1970.sinTheta_unbounded_formGap_symmetricNorming_real",
+          "role": "specialization",
+          "scalar_scope": "real",
+          "note": "The canonical rclike theorem stated at one of the two fields Davis and Kahan write about, with the same argument list, the same full FormBoundedSylvesterGap scope and the same two conclusions.  `..._real_ofRCLike` derives it from the canonical theorem and `..._real_ofRCLike_conforms` checks the two agree by type equality."
+        },
+        {
+          "declaration": "DavisKahan1970.sinTheta_unbounded_formGap_symmetricNorming_complex",
+          "role": "specialization",
+          "scalar_scope": "complex",
+          "note": "The canonical rclike theorem stated at one of the two fields Davis and Kahan write about, with the same argument list, the same full FormBoundedSylvesterGap scope and the same two conclusions.  `..._complex_ofRCLike` derives it from the canonical theorem and `..._complex_ofRCLike_conforms` checks the two agree by type equality."
+        },
         {
           "declaration": "TauCeti.DavisKahan1970.SectionTwo.sinTheta_complex",
           "role": "public_alias"
@@ -190,11 +192,6 @@
           "role": "specialization"
         },
         {
-          "declaration": "DavisKahan1970.sinTheta_unbounded_formGap_symmetricNorming_rclike",
-          "role": "generalization",
-          "note": "The scalar-generic form of the two canonical fixed-field endpoints.  It is not canonical evidence: `RCLike` is an open class, so its two capability binders (`HasMinMaxLowerBoundEverywhere`, `HasUnboundedSylvesterKyFan`) are genuine hypotheses at a field other than the paper's two, and the printed statement carries no such hypothesis.  `PaperSurface.lean` says the same thing.  `..._complex_ofRCLike_conforms` and its real partner tie it to the canonical pair by type equality."
-        },
-        {
           "declaration": "DavisKahan1970.isTrialResidual_iff",
           "role": "source_correspondence",
           "note": "Carries the correspondence from the bundled Lean predicate to the printed source equation. Registered so a statement pin protects it: the census cited it as correspondence evidence while nothing checked it."
@@ -217,34 +214,17 @@
       ],
       "source_clauses": [
         {
-          "id": "directed.complex",
+          "id": "directed",
           "conclusion_atoms": [
             "S2-sin-theta.directed-conclusion"
           ],
-          "scalar_scope": "complex",
+          "scalar_scope": "rclike",
           "evidence": {
-            "primary": "DavisKahan1970.sinTheta_unbounded_formGap_symmetricNorming_complex",
+            "primary": "DavisKahan1970.sinTheta_unbounded_formGap_symmetricNorming_rclike",
             "correspondence": []
           },
           "status": "established",
           "justification": "delta * N(sin Theta_0) <= N(R) with sin Theta_0 = (I - F0 F0*) E0, ideal membership concluded, unbounded self-adjoint LinearPMap ambient operator, arbitrary Hilbert dimension, arbitrary SymmetricNormingFunction, whole FormBoundedSylvesterGap.",
-          "gap_scope_justification": "The primary takes `FormBoundedSylvesterGap A_0 Lambda_1 delta`, whose `leftAboveRightBelow` and `leftBelowRightAbove` constructors ARE the two half-infinite configurations; `intervalExterior` is the bounded one. All three are available to a caller.",
-          "gap_scope_hypothesis_tokens": [
-            "FormBoundedSylvesterGap"
-          ]
-        },
-        {
-          "id": "directed.real",
-          "conclusion_atoms": [
-            "S2-sin-theta.directed-conclusion"
-          ],
-          "scalar_scope": "real",
-          "evidence": {
-            "primary": "DavisKahan1970.sinTheta_unbounded_formGap_symmetricNorming_real",
-            "correspondence": []
-          },
-          "status": "established",
-          "justification": "The real sibling of the complex directed clause: delta * N(sin Theta_0) <= N(R), same argument list, same full FormBoundedSylvesterGap scope, same two printed conclusions.",
           "gap_scope_justification": "The primary takes `FormBoundedSylvesterGap A_0 Lambda_1 delta`, whose `leftAboveRightBelow` and `leftBelowRightAbove` constructors ARE the two half-infinite configurations; `intervalExterior` is the bounded one. All three are available to a caller.",
           "gap_scope_hypothesis_tokens": [
             "FormBoundedSylvesterGap"
@@ -1108,8 +1088,8 @@
         "TauCeti.DavisKahan.isUnit_signedCosTwo_of_isUnit_diagonalPart_sq",
         "TauCeti.DavisKahan.cos_two_ne_zero_of_isUnit_diagonalPart_reflection_sq",
         "TauCeti.DavisKahan.extendedGauge_unboundedReflectionTangent_real",
-        "TauCeti.DavisKahanExt.absTanTwoAngleOperatorR",
-        "TauCeti.DavisKahanExt.complexify_absTanTwoAngleOperatorR",
+        "TauCeti.DavisKahan.Angle.absTanTwoAngleOperatorR",
+        "TauCeti.DavisKahan.Angle.complexify_absTanTwoAngleOperatorR",
         "TauCeti.DavisKahan1970.tanTwoTheta_ambient_unbounded_blockRepresentative_derivedReflection_symmetricNorming_real",
         "TauCeti.DavisKahan1970.tanTwoTheta_ambient_unbounded_symmetricNorming_real",
         "TauCeti.DavisKahan1970.approximationNumber_reflectionTangentCorner",
@@ -1363,11 +1343,11 @@
           "role": "supporting_theorem"
         },
         {
-          "declaration": "TauCeti.DavisKahanExt.absTanTwoAngleOperatorR",
+          "declaration": "TauCeti.DavisKahan.Angle.absTanTwoAngleOperatorR",
           "role": "supporting_theorem"
         },
         {
-          "declaration": "TauCeti.DavisKahanExt.complexify_absTanTwoAngleOperatorR",
+          "declaration": "TauCeti.DavisKahan.Angle.complexify_absTanTwoAngleOperatorR",
           "role": "supporting_theorem"
         },
         {
@@ -5042,7 +5022,7 @@
     "terminal_results": 29,
     "remaining_results": [],
     "note": "The structured fields above are authoritative; this paragraph is regenerated whenever the count moves. 2026-09-02, closing: terminal_results is 29 and remaining_results is empty. `S2-tan-two-theta` was `hostile_review_blocked` under obligation `tan2theta-directed-correspondence` after a 2026-09-02 closure that did not compose; it is now accepted on canonical directed witnesses `tanTwoTheta_directed_unboundedResidual_symmetricNorming_{complex,real}`, which take the reducing subspace and conclude on the paper's directed corner (`tanTwoDirectedCornerR U V` over ℝ) with the singular-value identification in their types. The canonical-evidence digest changed accordingly and the statement pins were refreshed for the new canonical and bridging declarations. Earlier history of this field (the 2026-08-31 `S2-sin-two-theta` reopening, the `S2-tan-theta` Appendix-scope primaries, the paper-prefix rename with an unchanged digest) is in the human report.",
-    "canonical_evidence_sha256": "3cdeeead1a5aef94c1b5e0d519b38382e310e6f4ef04c7a070ba22cb249cbb04",
+    "canonical_evidence_sha256": "eb2152236837821a60c0b7963468e5fd0660421aef9534bea6a3aeff36ddef08",
     "hostile_review_status": "accepted",
     "hostile_review_note": "ACCEPTED 2026-09-02, after the day's reopening was closed by new mathematics rather than by metadata: the directed tan 2Theta clauses have source-shaped complex and real endpoints on the paper objects, with the correspondence composed in Lean and pinned. `open_hostile_review_obligations` is closed and lists the closure; the structured fields `terminal_results`, `remaining_results` and `hostile_review_status` are the authoritative statement."
   },

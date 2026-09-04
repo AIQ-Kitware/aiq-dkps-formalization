@@ -12,24 +12,39 @@ open TauCeti.DavisKahan.Sylvester
 /-!
 # The Davis--Kahan 1970 sine-theta source surface
 
-**The canonical source-facing theorems are `sinTheta_unbounded_formGap_symmetricNorming_complex` and
-`sinTheta_unbounded_formGap_symmetricNorming_real`**, at the end of this module, and they are re-exported as
-`TauCeti.DavisKahan1970.SectionTwo.sinTheta_complex` / `…sinTheta_unbounded_formGap_symmetricNorming_real` alongside the other
-three Section 2 results.  They state the Section 2 result at
-its full proved scope: unbounded self-adjoint `LinearPMap` operators, arbitrary
-Hilbert dimension, the whole `FormBoundedSylvesterGap` rather than one of its
-branches, a `SymmetricNormingFunction`, and both conclusions -- ideal membership
-and the inequality.  They carry no capability class.  Cite one of those two.
+**The canonical source-facing theorem is
+`sinTheta_unbounded_formGap_symmetricNorming_rclike`**, at the end of this module
+and re-exported as `TauCeti.DavisKahan1970.SectionTwo.sinTheta`.  Davis and Kahan
+state Section 2 for a real or complex separable Hilbert space, so the theorem
+that answers them is the one generic in the field.  It states the result at its
+full proved scope: an arbitrary `RCLike` field, unbounded self-adjoint
+`LinearPMap` operators, arbitrary Hilbert dimension, the whole
+`FormBoundedSylvesterGap` rather than one of its branches, a
+`SymmetricNormingFunction`, and both conclusions -- ideal membership and the
+inequality.  Cite it.
 
-`sinTheta_unbounded_intervalExterior_characterizedWitness_rclike` below is kept for **presentation and compatibility**.  It is
-scalar-generic, which reads well, but it pays for that twice: it carries the
-capability classes `ContinuousLinearMap.HasMinMaxLowerBoundEverywhere` and
-`HasUnboundedSylvesterKyFan` in its signature, and it inlines the finite
-interval/exterior branch of the separation, so it states a strictly smaller
-theorem than the one that is proved.  It also drops the ideal-membership half of
-the conclusion.  It remains correct and remains the declaration the semantic
-review reads for its explicit `sinTheta₀` parameter; it is no longer the theorem
-to cite.
+Its signature carries only the paper's hypotheses.  The two analytic
+capabilities the proof runs on -- `ContinuousLinearMap.HasMinMaxLowerBoundEverywhere`
+and `HasUnboundedSylvesterKyFan` -- were once binders here.  They are now
+unconditional instances at every `RCLike` field
+(`ContinuousLinearMap.hasMinMaxLowerBoundEverywhere` in
+`ForTauCeti/Analysis/OperatorIdeal/ApproximationNumber/ScalarTransport.lean`,
+`TauCeti.DavisKahan.Sylvester.hasUnboundedSylvesterKyFan` in
+`DavisKahan/Sylvester/ScalarTransport.lean`), so instance search supplies them
+and a caller never sees them.
+
+`sinTheta_unbounded_formGap_symmetricNorming_complex` and
+`…_real` state the same theorem at the two fields Davis and Kahan write about.
+They are fixed-field corroboration, and convenient when a field is already in
+hand; they are not the canonical statement of a result whose source scope is
+real-or-complex.
+
+`sinTheta_unbounded_intervalExterior_characterizedWitness_rclike` below is kept
+for **presentation and compatibility**.  It inlines the finite interval/exterior
+branch of the separation, so it states a strictly smaller theorem than the one
+that is proved, and it drops the ideal-membership half of the conclusion.  It
+remains correct and remains the declaration the semantic review reads for its
+explicit `sinTheta₀` parameter; it is not the theorem to cite.
 
 The substantive proof remains
 `TauCeti.DavisKahan1970.sinTheta_unbounded_intervalExterior_symmetricNorming_rclike`.
@@ -194,15 +209,15 @@ theorem isExactSpectralDecomposition_iff
 
 /-- **Davis--Kahan 1970, Section 2 sine-theta theorem, presentation form.**
 
-**Not the theorem to cite.**  `sinTheta_unbounded_formGap_symmetricNorming_complex` and `sinTheta_unbounded_formGap_symmetricNorming_real` below are the
-canonical source-facing statements; this one is kept because its explicit
-`sinTheta₀` parameter makes the printed inequality legible in the signature, and
-because callers already depend on it.
+**Not the theorem to cite.**  `sinTheta_unbounded_formGap_symmetricNorming_rclike`
+below is the canonical source-facing statement; this one is kept because its
+explicit `sinTheta₀` parameter makes the printed inequality legible in the
+signature, and because callers already depend on it.
 
 It is generic over `RCLike 𝕜`, so it retains the real/complex and
-infinite-dimensional scope of the proved headline theorem -- but that genericity
-is why it must carry the two capability classes, and its separation hypothesis is
-only the interval/exterior branch of `FormBoundedSylvesterGap`.
+infinite-dimensional scope of the proved headline theorem, but its separation
+hypothesis is only the interval/exterior branch of `FormBoundedSylvesterGap`, so
+it states a strictly smaller theorem.
 
 The source object `sinTheta₀` is an explicit parameter, and `hSinTheta₀` states
 its concrete realization `(I - F₀ F₀*) E₀` in the theorem signature.  The
@@ -210,8 +225,6 @@ claim after the colon is therefore the printed factor-one inequality itself.
 The stronger supporting theorem `sinTheta_unbounded_intervalExterior_symmetricNorming_rclike` additionally
 certifies membership of this operator in the source norm ideal. -/
 theorem sinTheta_unbounded_intervalExterior_characterizedWitness_rclike
-    [ContinuousLinearMap.HasMinMaxLowerBoundEverywhere.{u, v} 𝕜]
-    [HasUnboundedSylvesterKyFan.{u, v} 𝕜]
     (N : SymmetricNormingFunction)
     (A : E →ₗ.[𝕜] E)
     (A₀ : F →ₗ.[𝕜] F)
@@ -251,32 +264,25 @@ theorem sinTheta_unbounded_intervalExterior_characterizedWitness_rclike
 
 /-! ## The canonical fixed-field statements
 
-`sinTheta_unbounded_intervalExterior_characterizedWitness_rclike` above is the presentation declaration, and it pays for being
-scalar-generic twice over: it carries the two capability classes
-`ContinuousLinearMap.HasMinMaxLowerBoundEverywhere` and
-`HasUnboundedSylvesterKyFan`, and its separation hypothesis is only the finite
-interval/exterior branch.
+`sinTheta_unbounded_formGap_symmetricNorming_rclike` below is the canonical
+source-facing statement: an arbitrary `RCLike` field, direct argument lists, the
+full gap, both conclusions, and nothing in the signature that is not Davis and
+Kahan's.  `sinTheta_unbounded_intervalExterior_symmetricNorming_rclike` remains
+the engine underneath.
 
-Neither cost is Davis--Kahan mathematics.
-
-The capability classes package the unbounded Sylvester Ky Fan estimate and a
-min-max lower bound, both of which this repository *proves* for the two scalar
-fields the paper uses.  They appear in a scalar-generic signature only because
-`RCLike` is an open abstraction: separate proofs for `ℝ` and `ℂ` do not give a
-proof for an arbitrary instance.  A reader of the source theorem should not have
-to meet them, and a caller working over `ℂ` or `ℝ` should not have to supply
-them.
-
-The separation hypothesis is the second cost.  `FormBoundedSylvesterGap` is the
-general form-bounded gap, and the interval/exterior configuration is one of its
-constructors (`FormBoundedSylvesterGap.intervalExterior`); the ordered half-line
+`sinTheta_unbounded_intervalExterior_characterizedWitness_rclike` above is the
+presentation declaration, and it inlines the finite interval/exterior branch of
+the separation.  `FormBoundedSylvesterGap` is the general form-bounded gap, and
+the interval/exterior configuration is one of its constructors
+(`FormBoundedSylvesterGap.intervalExterior`); the ordered half-line
 configurations the Appendix needs are others.  Stating the headline with the
 interval branch inlined therefore fixes a strictly smaller theorem than the one
 that is proved.
 
-The two declarations below are the canonical source-facing statements: direct
-argument lists, the full gap, both conclusions, and no capability class.  The
-scalar-generic `sinTheta_unbounded_intervalExterior_symmetricNorming_rclike` remains the engine underneath. -/
+The fixed-field pair further below states the canonical theorem at `ℂ` and at
+`ℝ`.  They corroborate it and are convenient when the field is already in hand;
+they are not the canonical statement of a result the paper writes for a real *or*
+complex Hilbert space. -/
 
 /-- **Davis--Kahan 1970, the `sin Theta` theorem, over an arbitrary `RCLike` field.**
 
@@ -293,15 +299,10 @@ predicates the complex and real statements take, and they were already
 scalar-generic; `isTrialResidual_iff` and `isExactSpectralDecomposition_iff`
 expand them.
 
-The two class hypotheses are analytic capabilities of `𝕜`, proved for `ℝ`
-(`hasMinMaxLowerBoundEverywhere_real`, `hasUnboundedSylvesterKyFan_real`) and for
-`ℂ`.  They carry no Davis--Kahan mathematics: they are present only because
-`RCLike` is an open class, so a third field would owe the same two estimates.
-They are the one respect in which this statement is less clean than the
-fixed-field pair. -/
+Nothing in the signature is a proof vehicle.  The two analytic capabilities the
+proof consumes hold at every `RCLike` field and reach it by instance search, so
+the hypotheses here are exactly Davis and Kahan's. -/
 theorem sinTheta_unbounded_formGap_symmetricNorming_rclike
-    [ContinuousLinearMap.HasMinMaxLowerBoundEverywhere.{u, v} 𝕜]
-    [TauCeti.DavisKahan.Sylvester.HasUnboundedSylvesterKyFan.{u, v} 𝕜]
     (N : SymmetricNormingFunction)
     (A : E →ₗ.[𝕜] E) (A₀ : F →ₗ.[𝕜] F) (Λ₁ : G →ₗ.[𝕜] G)
     (E₀ : F →L[𝕜] E) (F₀ : H →L[𝕜] E) (F₁ : G →L[𝕜] E) (R : F →L[𝕜] E)
@@ -398,7 +399,8 @@ and discharges it by applying `sinTheta_unbounded_formGap_symmetricNorming_rclik
 with no adapter.  If any hypothesis or the conclusion differed mathematically,
 this would not elaborate.
 
-The capability classes do not appear: `ℂ` satisfies both by instance. -/
+The generic theorem carries no capability class, so this is a plain
+instantiation. -/
 theorem sinTheta_unbounded_formGap_symmetricNorming_complex_ofRCLike
     (N : SymmetricNormingFunction)
     (A : E →ₗ.[ℂ] E) (A₀ : F →ₗ.[ℂ] F) (Λ₁ : G →ₗ.[ℂ] G)

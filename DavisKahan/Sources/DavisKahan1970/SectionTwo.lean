@@ -14,6 +14,9 @@ import DavisKahan.Sources.DavisKahan1970.TanThetaDirectedUnbounded
 import DavisKahan.Sources.DavisKahan1970.TanTwoThetaUnboundedAmbientExact
 import DavisKahan.Sources.DavisKahan1970.TanTwoThetaUnboundedExactReal
 
+open TauCeti.DavisKahan.Angle
+
+
 open TauCeti.DavisKahan.Sylvester
 
 /-!
@@ -241,11 +244,14 @@ namespace SectionTwo
 The scalar-generic endpoint at the printed source scope: unbounded self-adjoint
 ambient `LinearPMap`, arbitrary Hilbert dimension, the whole
 `FormBoundedSylvesterGap`, an arbitrary `SymmetricNormingFunction`, and both
-printed conclusions.  `sinTheta_complex` and `sinTheta_real` below are the same
-statement at the two fields Davis and Kahan write about, and they are the ones to
-cite when a fixed field is in hand: this one additionally carries the two
-`RCLike` capability classes, which are theorems for `ℝ` and `ℂ` but appear in the
-signature because `RCLike` is an open class. -/
+printed conclusions.  **This is the theorem to cite.**  Its hypotheses are the
+paper's; the analytic capabilities its proof runs on -- a min-max lower bound and
+the unbounded Sylvester Ky Fan estimate -- hold at every `RCLike` field and are
+supplied by instance search, so they do not appear in the signature.
+
+`sinTheta_complex` and `sinTheta_real` below are this statement at the two fields
+Davis and Kahan write about.  They are corroboration, and convenient when a fixed
+field is already in hand. -/
 alias sinTheta := _root_.DavisKahan1970.sinTheta_unbounded_formGap_symmetricNorming_rclike
 
 /-- **Davis--Kahan 1970, the `sin Θ` theorem, over `ℂ`.**
