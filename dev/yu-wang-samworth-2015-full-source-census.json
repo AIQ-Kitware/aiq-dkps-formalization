@@ -149,6 +149,40 @@
         "group": "YWS-T1-baseline",
         "group_title": "Yu--Wang--Samworth Theorem 1",
         "claim": "With a mixed spectral separation delta > 0 between the perturbed and population blocks, ‖sin Theta(V-hat, V)‖_F <= ‖Sigma-hat - Sigma‖_F / delta; the paper notes both norms may be replaced by the operator norm or any orthogonally invariant norm.",
+        "source_fragments": [
+          {
+            "id": "printed",
+            "role": "primary",
+            "locator": {
+              "document": "YuWangSamworth2015",
+              "marker": "YWS-T1",
+              "section": "1",
+              "result": "Theorem 1, the statistical Davis--Kahan baseline"
+            }
+          },
+          {
+            "id": "separation",
+            "role": "definition",
+            "why": "The theorem's hypothesis delta > 0 refers to a separation defined in this passage.",
+            "locator": {
+              "document": "YuWangSamworth2015",
+              "marker": "YWS-T1-setup",
+              "section": "1",
+              "result": "The mixed population--sample separation delta"
+            }
+          },
+          {
+            "id": "angles",
+            "role": "definition",
+            "why": "The conclusion's left-hand side is defined here, not in the theorem passage.",
+            "locator": {
+              "document": "YuWangSamworth2015",
+              "marker": "YWS-S1-angles",
+              "section": "1",
+              "result": "Principal angles and the Frobenius sine distance"
+            }
+          }
+        ],
         "declarations": [
           "YuWangSamworth2015.DavisKahanTheory.yuWangSamworth_theorem1_frobenius_le",
           "YuWangSamworth2015.DavisKahanTheory.yuWangSamworth_theorem1_opNorm_le"
@@ -168,6 +202,65 @@
             "type_text_sha256": "1aa31e2175022a85eba092d7287967685d21b166e7d539255cc194ee91caf541",
             "toolchain": "leanprover/lean4:v4.34.0-rc1",
             "pinned_on": "2026-09-01"
+          }
+        ],
+        "source_pins": [
+          {
+            "fragment": "printed",
+            "document": "YuWangSamworth2015",
+            "sha256": "716a1fe9f87ea966acf0423e022213b2b64c5f59a76150c1b6c8692aaffd7f1d",
+            "locator": {
+              "document": "YuWangSamworth2015",
+              "marker": "YWS-T1",
+              "file": "prose/distilled_literature/YuWangSamworth2015_statistical_davis_kahan.tex",
+              "lines": [
+                125,
+                133
+              ],
+              "section": "1",
+              "result": "Theorem 1, the statistical Davis--Kahan baseline"
+            },
+            "visibility": "public_reconstruction",
+            "pinned_on": "2026-09-03",
+            "note": "Source passages marked and bound 2026-09-03: the reconstruction gained YWS-CERT markers and each reviewed row now cites the printed passage its Lean statement answers."
+          },
+          {
+            "fragment": "separation",
+            "document": "YuWangSamworth2015",
+            "sha256": "5cdfea72c7a1d69c43c1ad31810bee10c5b385ff9061ea82073f7c985fd12f1b",
+            "locator": {
+              "document": "YuWangSamworth2015",
+              "marker": "YWS-T1-setup",
+              "file": "prose/distilled_literature/YuWangSamworth2015_statistical_davis_kahan.tex",
+              "lines": [
+                83,
+                117
+              ],
+              "section": "1",
+              "result": "The mixed population--sample separation delta"
+            },
+            "visibility": "public_reconstruction",
+            "pinned_on": "2026-09-03",
+            "note": "Source passages marked and bound 2026-09-03: the reconstruction gained YWS-CERT markers and each reviewed row now cites the printed passage its Lean statement answers."
+          },
+          {
+            "fragment": "angles",
+            "document": "YuWangSamworth2015",
+            "sha256": "26be75b00c2d7d8980decddc9bfe3814eba34d4440ca25b0cfd998fc6cc151b9",
+            "locator": {
+              "document": "YuWangSamworth2015",
+              "marker": "YWS-S1-angles",
+              "file": "prose/distilled_literature/YuWangSamworth2015_statistical_davis_kahan.tex",
+              "lines": [
+                23,
+                53
+              ],
+              "section": "1",
+              "result": "Principal angles and the Frobenius sine distance"
+            },
+            "visibility": "public_reconstruction",
+            "pinned_on": "2026-09-03",
+            "note": "Source passages marked and bound 2026-09-03: the reconstruction gained YWS-CERT markers and each reviewed row now cites the printed passage its Lean statement answers."
           }
         ]
       }
@@ -263,6 +356,51 @@
         "group": "YWS-Theorem-2",
         "group_title": "Yu--Wang--Samworth Theorem 2",
         "claim": "Theorem 2, first conclusion: the population two-sided exterior gap alone controls the Frobenius sine distance by 2 min(sqrt(d)||E||op,||E||F)/Delta, with no sample eigengap.",
+        "source_fragments": [
+          {
+            "id": "printed",
+            "role": "primary",
+            "locator": {
+              "document": "YuWangSamworth2015",
+              "marker": "YWS-T2",
+              "section": "2",
+              "result": "Theorem 2, first conclusion, equation (2)"
+            }
+          },
+          {
+            "id": "gap",
+            "role": "definition",
+            "why": "Both symbols in the printed denominator and numerator are defined here.",
+            "locator": {
+              "document": "YuWangSamworth2015",
+              "marker": "YWS-T2-gap",
+              "section": "2",
+              "result": "The population exterior gap Delta and the perturbation E"
+            }
+          },
+          {
+            "id": "angles",
+            "role": "definition",
+            "why": "The conclusion's left-hand side is defined here, not in the theorem passage.",
+            "locator": {
+              "document": "YuWangSamworth2015",
+              "marker": "YWS-S1-angles",
+              "section": "1",
+              "result": "Principal angles and the Frobenius sine distance"
+            }
+          },
+          {
+            "id": "blocks",
+            "role": "context",
+            "why": "The ordered eigenvector blocks V and Vhat that the theorem quantifies over are fixed in this passage.",
+            "locator": {
+              "document": "YuWangSamworth2015",
+              "marker": "YWS-T1-setup",
+              "section": "1",
+              "result": "Ordered eigenvector blocks and the mixed separation"
+            }
+          }
+        ],
         "source_statement": {
           "setup": [
             "Sigma and Sigma-hat are real symmetric p x p matrices with ordered eigenvalues lambda_1>=...>=lambda_p and corresponding d-column eigenvector blocks V and V-hat at indices r,...,s; d=s-r+1; E=Sigma-hat-Sigma."
@@ -347,6 +485,84 @@
             "toolchain": "leanprover/lean4:v4.34.0-rc1",
             "pinned_on": "2026-09-01"
           }
+        ],
+        "source_pins": [
+          {
+            "fragment": "printed",
+            "document": "YuWangSamworth2015",
+            "sha256": "47a78c9f6a7a5269c6a107800547a0ef6f8eb3e22df57dc118368411e5530b7d",
+            "locator": {
+              "document": "YuWangSamworth2015",
+              "marker": "YWS-T2",
+              "file": "prose/distilled_literature/YuWangSamworth2015_statistical_davis_kahan.tex",
+              "lines": [
+                190,
+                203
+              ],
+              "section": "2",
+              "result": "Theorem 2, first conclusion, equation (2)"
+            },
+            "visibility": "public_reconstruction",
+            "pinned_on": "2026-09-03",
+            "note": "Source passages marked and bound 2026-09-03: the reconstruction gained YWS-CERT markers and each reviewed row now cites the printed passage its Lean statement answers."
+          },
+          {
+            "fragment": "gap",
+            "document": "YuWangSamworth2015",
+            "sha256": "10eed7fe039fa54f428032aad70dfc8b3e8d3cf7058c6829b5cf0ec3c9c41428",
+            "locator": {
+              "document": "YuWangSamworth2015",
+              "marker": "YWS-T2-gap",
+              "file": "prose/distilled_literature/YuWangSamworth2015_statistical_davis_kahan.tex",
+              "lines": [
+                170,
+                184
+              ],
+              "section": "2",
+              "result": "The population exterior gap Delta and the perturbation E"
+            },
+            "visibility": "public_reconstruction",
+            "pinned_on": "2026-09-03",
+            "note": "Source passages marked and bound 2026-09-03: the reconstruction gained YWS-CERT markers and each reviewed row now cites the printed passage its Lean statement answers."
+          },
+          {
+            "fragment": "angles",
+            "document": "YuWangSamworth2015",
+            "sha256": "26be75b00c2d7d8980decddc9bfe3814eba34d4440ca25b0cfd998fc6cc151b9",
+            "locator": {
+              "document": "YuWangSamworth2015",
+              "marker": "YWS-S1-angles",
+              "file": "prose/distilled_literature/YuWangSamworth2015_statistical_davis_kahan.tex",
+              "lines": [
+                23,
+                53
+              ],
+              "section": "1",
+              "result": "Principal angles and the Frobenius sine distance"
+            },
+            "visibility": "public_reconstruction",
+            "pinned_on": "2026-09-03",
+            "note": "Source passages marked and bound 2026-09-03: the reconstruction gained YWS-CERT markers and each reviewed row now cites the printed passage its Lean statement answers."
+          },
+          {
+            "fragment": "blocks",
+            "document": "YuWangSamworth2015",
+            "sha256": "5cdfea72c7a1d69c43c1ad31810bee10c5b385ff9061ea82073f7c985fd12f1b",
+            "locator": {
+              "document": "YuWangSamworth2015",
+              "marker": "YWS-T1-setup",
+              "file": "prose/distilled_literature/YuWangSamworth2015_statistical_davis_kahan.tex",
+              "lines": [
+                83,
+                117
+              ],
+              "section": "1",
+              "result": "Ordered eigenvector blocks and the mixed separation"
+            },
+            "visibility": "public_reconstruction",
+            "pinned_on": "2026-09-03",
+            "note": "Source passages marked and bound 2026-09-03: the reconstruction gained YWS-CERT markers and each reviewed row now cites the printed passage its Lean statement answers."
+          }
         ]
       }
     },
@@ -388,6 +604,51 @@
         "group": "YWS-Theorem-2",
         "group_title": "Yu--Wang--Samworth Theorem 2",
         "claim": "Theorem 2, second conclusion: under the same population-gap hypotheses, there is an orthogonal matrix O-hat aligning the supplied sample frame to the supplied population frame with the printed 2^(3/2) Frobenius bound.",
+        "source_fragments": [
+          {
+            "id": "printed",
+            "role": "primary",
+            "locator": {
+              "document": "YuWangSamworth2015",
+              "marker": "YWS-T2",
+              "section": "2",
+              "result": "Theorem 2, second conclusion, equation (3)"
+            }
+          },
+          {
+            "id": "gap",
+            "role": "definition",
+            "why": "Both symbols in the printed denominator and numerator are defined here.",
+            "locator": {
+              "document": "YuWangSamworth2015",
+              "marker": "YWS-T2-gap",
+              "section": "2",
+              "result": "The population exterior gap Delta and the perturbation E"
+            }
+          },
+          {
+            "id": "procrustes",
+            "role": "definition",
+            "why": "The orthogonal alignment the aligned-basis conclusion asserts, and the relation to the sine distance, are fixed here.",
+            "locator": {
+              "document": "YuWangSamworth2015",
+              "marker": "YWS-S1-procrustes",
+              "section": "1",
+              "result": "Procrustes alignment and the sqrt-2 comparison"
+            }
+          },
+          {
+            "id": "blocks",
+            "role": "context",
+            "why": "The ordered eigenvector blocks V and Vhat that the theorem quantifies over are fixed in this passage.",
+            "locator": {
+              "document": "YuWangSamworth2015",
+              "marker": "YWS-T1-setup",
+              "section": "1",
+              "result": "Ordered eigenvector blocks and the mixed separation"
+            }
+          }
+        ],
         "source_statement": {
           "setup": [
             "The same Sigma, Sigma-hat, consecutive block r,...,s, supplied eigenvector frames V,V-hat, perturbation E, and d=s-r+1 as in the first conclusion."
@@ -458,6 +719,84 @@
             "toolchain": "leanprover/lean4:v4.34.0-rc1",
             "pinned_on": "2026-09-01"
           }
+        ],
+        "source_pins": [
+          {
+            "fragment": "printed",
+            "document": "YuWangSamworth2015",
+            "sha256": "47a78c9f6a7a5269c6a107800547a0ef6f8eb3e22df57dc118368411e5530b7d",
+            "locator": {
+              "document": "YuWangSamworth2015",
+              "marker": "YWS-T2",
+              "file": "prose/distilled_literature/YuWangSamworth2015_statistical_davis_kahan.tex",
+              "lines": [
+                190,
+                203
+              ],
+              "section": "2",
+              "result": "Theorem 2, second conclusion, equation (3)"
+            },
+            "visibility": "public_reconstruction",
+            "pinned_on": "2026-09-03",
+            "note": "Source passages marked and bound 2026-09-03: the reconstruction gained YWS-CERT markers and each reviewed row now cites the printed passage its Lean statement answers."
+          },
+          {
+            "fragment": "gap",
+            "document": "YuWangSamworth2015",
+            "sha256": "10eed7fe039fa54f428032aad70dfc8b3e8d3cf7058c6829b5cf0ec3c9c41428",
+            "locator": {
+              "document": "YuWangSamworth2015",
+              "marker": "YWS-T2-gap",
+              "file": "prose/distilled_literature/YuWangSamworth2015_statistical_davis_kahan.tex",
+              "lines": [
+                170,
+                184
+              ],
+              "section": "2",
+              "result": "The population exterior gap Delta and the perturbation E"
+            },
+            "visibility": "public_reconstruction",
+            "pinned_on": "2026-09-03",
+            "note": "Source passages marked and bound 2026-09-03: the reconstruction gained YWS-CERT markers and each reviewed row now cites the printed passage its Lean statement answers."
+          },
+          {
+            "fragment": "procrustes",
+            "document": "YuWangSamworth2015",
+            "sha256": "634d73a2f183d99aff8c928aba0373a22bda5f304e80cec7e9053ec2e3a0d80a",
+            "locator": {
+              "document": "YuWangSamworth2015",
+              "marker": "YWS-S1-procrustes",
+              "file": "prose/distilled_literature/YuWangSamworth2015_statistical_davis_kahan.tex",
+              "lines": [
+                59,
+                73
+              ],
+              "section": "1",
+              "result": "Procrustes alignment and the sqrt-2 comparison"
+            },
+            "visibility": "public_reconstruction",
+            "pinned_on": "2026-09-03",
+            "note": "Source passages marked and bound 2026-09-03: the reconstruction gained YWS-CERT markers and each reviewed row now cites the printed passage its Lean statement answers."
+          },
+          {
+            "fragment": "blocks",
+            "document": "YuWangSamworth2015",
+            "sha256": "5cdfea72c7a1d69c43c1ad31810bee10c5b385ff9061ea82073f7c985fd12f1b",
+            "locator": {
+              "document": "YuWangSamworth2015",
+              "marker": "YWS-T1-setup",
+              "file": "prose/distilled_literature/YuWangSamworth2015_statistical_davis_kahan.tex",
+              "lines": [
+                83,
+                117
+              ],
+              "section": "1",
+              "result": "Ordered eigenvector blocks and the mixed separation"
+            },
+            "visibility": "public_reconstruction",
+            "pinned_on": "2026-09-03",
+            "note": "Source passages marked and bound 2026-09-03: the reconstruction gained YWS-CERT markers and each reviewed row now cites the printed passage its Lean statement answers."
+          }
         ]
       }
     },
@@ -490,6 +829,40 @@
         "group": "YWS-Theorem-2",
         "group_title": "Yu--Wang--Samworth Theorem 2",
         "claim": "The proof actually establishes ‖sin Theta‖_F <= ‖V-hat Lambda - Sigma V-hat‖_F / Delta and the aligned form with sqrt 2 times the same residual; the printed theorem weakens the residual to a perturbation norm.",
+        "source_fragments": [
+          {
+            "id": "printed",
+            "role": "primary",
+            "locator": {
+              "document": "YuWangSamworth2015",
+              "marker": "YWS-T2-residual",
+              "section": "2",
+              "result": "Theorem 2, the sharper residual forms the proof establishes"
+            }
+          },
+          {
+            "id": "theorem",
+            "role": "context",
+            "why": "The residual forms are stated as what the proof of this theorem actually gives.",
+            "locator": {
+              "document": "YuWangSamworth2015",
+              "marker": "YWS-T2",
+              "section": "2",
+              "result": "Theorem 2, both printed conclusions"
+            }
+          },
+          {
+            "id": "gap",
+            "role": "definition",
+            "why": "Both symbols in the printed denominator and numerator are defined here.",
+            "locator": {
+              "document": "YuWangSamworth2015",
+              "marker": "YWS-T2-gap",
+              "section": "2",
+              "result": "The population exterior gap Delta and the perturbation E"
+            }
+          }
+        ],
         "declarations": [
           "YuWangSamworth2015.yuWangSamworth_sinTheta_le_residual",
           "YuWangSamworth2015.yuWangSamworth_alignedBasis_le_residual"
@@ -509,6 +882,65 @@
             "type_text_sha256": "bd0bcd8febbaa578fbfdae7aeefec4b9a945a7d83529b9ed37da16c4a854479a",
             "toolchain": "leanprover/lean4:v4.34.0-rc1",
             "pinned_on": "2026-09-01"
+          }
+        ],
+        "source_pins": [
+          {
+            "fragment": "printed",
+            "document": "YuWangSamworth2015",
+            "sha256": "eb3cdc0c3051d2dc20b23c8ea785e282040897fbd46b177704872c931717d53c",
+            "locator": {
+              "document": "YuWangSamworth2015",
+              "marker": "YWS-T2-residual",
+              "file": "prose/distilled_literature/YuWangSamworth2015_statistical_davis_kahan.tex",
+              "lines": [
+                219,
+                235
+              ],
+              "section": "2",
+              "result": "Theorem 2, the sharper residual forms the proof establishes"
+            },
+            "visibility": "public_reconstruction",
+            "pinned_on": "2026-09-03",
+            "note": "Source passages marked and bound 2026-09-03: the reconstruction gained YWS-CERT markers and each reviewed row now cites the printed passage its Lean statement answers."
+          },
+          {
+            "fragment": "theorem",
+            "document": "YuWangSamworth2015",
+            "sha256": "47a78c9f6a7a5269c6a107800547a0ef6f8eb3e22df57dc118368411e5530b7d",
+            "locator": {
+              "document": "YuWangSamworth2015",
+              "marker": "YWS-T2",
+              "file": "prose/distilled_literature/YuWangSamworth2015_statistical_davis_kahan.tex",
+              "lines": [
+                190,
+                203
+              ],
+              "section": "2",
+              "result": "Theorem 2, both printed conclusions"
+            },
+            "visibility": "public_reconstruction",
+            "pinned_on": "2026-09-03",
+            "note": "Source passages marked and bound 2026-09-03: the reconstruction gained YWS-CERT markers and each reviewed row now cites the printed passage its Lean statement answers."
+          },
+          {
+            "fragment": "gap",
+            "document": "YuWangSamworth2015",
+            "sha256": "10eed7fe039fa54f428032aad70dfc8b3e8d3cf7058c6829b5cf0ec3c9c41428",
+            "locator": {
+              "document": "YuWangSamworth2015",
+              "marker": "YWS-T2-gap",
+              "file": "prose/distilled_literature/YuWangSamworth2015_statistical_davis_kahan.tex",
+              "lines": [
+                170,
+                184
+              ],
+              "section": "2",
+              "result": "The population exterior gap Delta and the perturbation E"
+            },
+            "visibility": "public_reconstruction",
+            "pinned_on": "2026-09-03",
+            "note": "Source passages marked and bound 2026-09-03: the reconstruction gained YWS-CERT markers and each reviewed row now cites the printed passage its Lean statement answers."
           }
         ]
       }
@@ -649,6 +1081,40 @@
         "group": "YWS-C1-rankone",
         "group_title": "Yu--Wang--Samworth Corollary 1",
         "claim": "With Delta_j = min(lambda_{j-1} - lambda_j, lambda_j - lambda_{j+1}) > 0 and arbitrary v, v-hat with Sigma v = lambda_j v and Sigma-hat v-hat = lambda-hat_j v-hat: sin Theta(v-hat, v) <= 2 ||Sigma-hat - Sigma||_op / Delta_j, and moreover if v-hat^T v >= 0 then ||v-hat - v|| <= 2^{3/2} ||Sigma-hat - Sigma||_op / Delta_j.",
+        "source_fragments": [
+          {
+            "id": "printed",
+            "role": "primary",
+            "locator": {
+              "document": "YuWangSamworth2015",
+              "marker": "YWS-C1",
+              "section": "2",
+              "result": "Corollary 1, both displays"
+            }
+          },
+          {
+            "id": "gap",
+            "role": "definition",
+            "why": "Both symbols in the printed denominator and numerator are defined here.",
+            "locator": {
+              "document": "YuWangSamworth2015",
+              "marker": "YWS-T2-gap",
+              "section": "2",
+              "result": "The population exterior gap Delta and the perturbation E"
+            }
+          },
+          {
+            "id": "angles",
+            "role": "definition",
+            "why": "The conclusion's left-hand side is defined here, not in the theorem passage.",
+            "locator": {
+              "document": "YuWangSamworth2015",
+              "marker": "YWS-S1-angles",
+              "section": "1",
+              "result": "Principal angles and the Frobenius sine distance"
+            }
+          }
+        ],
         "declarations": [
           "YuWangSamworth2015.DavisKahanTheory.yuWangSamworth_corollary1_sinTheta_le",
           "YuWangSamworth2015.DavisKahanTheory.yuWangSamworth_corollary1_real_le"
@@ -668,6 +1134,65 @@
             "type_text_sha256": "b902a191cbe85235394560aa97848f6a34a12229b837450a0b55a984e3e61b7a",
             "toolchain": "leanprover/lean4:v4.34.0-rc1",
             "pinned_on": "2026-09-01"
+          }
+        ],
+        "source_pins": [
+          {
+            "fragment": "printed",
+            "document": "YuWangSamworth2015",
+            "sha256": "3b195a997865a2e0cc6fa4a5c8dc736a9e26677e1e1f02c4f6c04722231f779d",
+            "locator": {
+              "document": "YuWangSamworth2015",
+              "marker": "YWS-C1",
+              "file": "prose/distilled_literature/YuWangSamworth2015_statistical_davis_kahan.tex",
+              "lines": [
+                348,
+                366
+              ],
+              "section": "2",
+              "result": "Corollary 1, both displays"
+            },
+            "visibility": "public_reconstruction",
+            "pinned_on": "2026-09-03",
+            "note": "Source passages marked and bound 2026-09-03: the reconstruction gained YWS-CERT markers and each reviewed row now cites the printed passage its Lean statement answers."
+          },
+          {
+            "fragment": "gap",
+            "document": "YuWangSamworth2015",
+            "sha256": "10eed7fe039fa54f428032aad70dfc8b3e8d3cf7058c6829b5cf0ec3c9c41428",
+            "locator": {
+              "document": "YuWangSamworth2015",
+              "marker": "YWS-T2-gap",
+              "file": "prose/distilled_literature/YuWangSamworth2015_statistical_davis_kahan.tex",
+              "lines": [
+                170,
+                184
+              ],
+              "section": "2",
+              "result": "The population exterior gap Delta and the perturbation E"
+            },
+            "visibility": "public_reconstruction",
+            "pinned_on": "2026-09-03",
+            "note": "Source passages marked and bound 2026-09-03: the reconstruction gained YWS-CERT markers and each reviewed row now cites the printed passage its Lean statement answers."
+          },
+          {
+            "fragment": "angles",
+            "document": "YuWangSamworth2015",
+            "sha256": "26be75b00c2d7d8980decddc9bfe3814eba34d4440ca25b0cfd998fc6cc151b9",
+            "locator": {
+              "document": "YuWangSamworth2015",
+              "marker": "YWS-S1-angles",
+              "file": "prose/distilled_literature/YuWangSamworth2015_statistical_davis_kahan.tex",
+              "lines": [
+                23,
+                53
+              ],
+              "section": "1",
+              "result": "Principal angles and the Frobenius sine distance"
+            },
+            "visibility": "public_reconstruction",
+            "pinned_on": "2026-09-03",
+            "note": "Source passages marked and bound 2026-09-03: the reconstruction gained YWS-CERT markers and each reviewed row now cites the printed passage its Lean statement answers."
           }
         ]
       }
@@ -729,6 +1254,40 @@
         "group": "YWS-Theorem-3",
         "group_title": "Yu--Wang--Samworth Theorem 3",
         "claim": "For rectangular A, A-hat with D = A-hat - A and Delta_sv = min(sigma_{r-1}^2 - sigma_r^2, sigma_s^2 - sigma_{s+1}^2) > 0, ‖sin Theta(V-hat, V)‖_F <= 2 (2 sigma_1 + ‖D‖_op) min(sqrt d ‖D‖_op, ‖D‖_F) / Delta_sv.",
+        "source_fragments": [
+          {
+            "id": "printed",
+            "role": "primary",
+            "locator": {
+              "document": "YuWangSamworth2015",
+              "marker": "YWS-T3",
+              "section": "Appendix",
+              "result": "Theorem 3, right singular-subspace bound"
+            }
+          },
+          {
+            "id": "sv-setup",
+            "role": "definition",
+            "why": "D, the singular values, and the squared gap Delta_sv are defined here, together with the printed endpoint conventions.",
+            "locator": {
+              "document": "YuWangSamworth2015",
+              "marker": "YWS-T3-setup",
+              "section": "Appendix",
+              "result": "Rectangular setup, the squared singular gap, and the printed conventions"
+            }
+          },
+          {
+            "id": "angles",
+            "role": "definition",
+            "why": "The conclusion's left-hand side is defined here, not in the theorem passage.",
+            "locator": {
+              "document": "YuWangSamworth2015",
+              "marker": "YWS-S1-angles",
+              "section": "1",
+              "result": "Principal angles and the Frobenius sine distance"
+            }
+          }
+        ],
         "declarations": [
           "YuWangSamworth2015.DavisKahanTheory.yuWangSamworth_rightSingularSubspace_le"
         ],
@@ -740,6 +1299,65 @@
             "type_text_sha256": "12d5a138d10aa196a3a8aec6aaeb39ae542485e55b10c041ffe511900852936a",
             "toolchain": "leanprover/lean4:v4.34.0-rc1",
             "pinned_on": "2026-09-01"
+          }
+        ],
+        "source_pins": [
+          {
+            "fragment": "printed",
+            "document": "YuWangSamworth2015",
+            "sha256": "754029eb802c9f3fcf195194d897699c4140145e3a50521889de3aed1af01408",
+            "locator": {
+              "document": "YuWangSamworth2015",
+              "marker": "YWS-T3",
+              "file": "prose/distilled_literature/YuWangSamworth2015_statistical_davis_kahan.tex",
+              "lines": [
+                443,
+                462
+              ],
+              "section": "Appendix",
+              "result": "Theorem 3, right singular-subspace bound"
+            },
+            "visibility": "public_reconstruction",
+            "pinned_on": "2026-09-03",
+            "note": "Source passages marked and bound 2026-09-03: the reconstruction gained YWS-CERT markers and each reviewed row now cites the printed passage its Lean statement answers."
+          },
+          {
+            "fragment": "sv-setup",
+            "document": "YuWangSamworth2015",
+            "sha256": "b593d9ff6fad451fe5f63eb14ca67a9038a93c7fbc5ba33b82c081205a32b659",
+            "locator": {
+              "document": "YuWangSamworth2015",
+              "marker": "YWS-T3-setup",
+              "file": "prose/distilled_literature/YuWangSamworth2015_statistical_davis_kahan.tex",
+              "lines": [
+                392,
+                419
+              ],
+              "section": "Appendix",
+              "result": "Rectangular setup, the squared singular gap, and the printed conventions"
+            },
+            "visibility": "public_reconstruction",
+            "pinned_on": "2026-09-03",
+            "note": "Source passages marked and bound 2026-09-03: the reconstruction gained YWS-CERT markers and each reviewed row now cites the printed passage its Lean statement answers."
+          },
+          {
+            "fragment": "angles",
+            "document": "YuWangSamworth2015",
+            "sha256": "26be75b00c2d7d8980decddc9bfe3814eba34d4440ca25b0cfd998fc6cc151b9",
+            "locator": {
+              "document": "YuWangSamworth2015",
+              "marker": "YWS-S1-angles",
+              "file": "prose/distilled_literature/YuWangSamworth2015_statistical_davis_kahan.tex",
+              "lines": [
+                23,
+                53
+              ],
+              "section": "1",
+              "result": "Principal angles and the Frobenius sine distance"
+            },
+            "visibility": "public_reconstruction",
+            "pinned_on": "2026-09-03",
+            "note": "Source passages marked and bound 2026-09-03: the reconstruction gained YWS-CERT markers and each reviewed row now cites the printed passage its Lean statement answers."
           }
         ]
       }
@@ -777,6 +1395,40 @@
         "group": "YWS-Theorem-3",
         "group_title": "Yu--Wang--Samworth Theorem 3",
         "claim": "The paper states that the identical bounds hold for the corresponding left singular-vector blocks U, U-hat.",
+        "source_fragments": [
+          {
+            "id": "printed",
+            "role": "primary",
+            "locator": {
+              "document": "YuWangSamworth2015",
+              "marker": "YWS-T3",
+              "section": "Appendix",
+              "result": "Theorem 3, the left singular-vector blocks the final sentence extends it to"
+            }
+          },
+          {
+            "id": "sv-setup",
+            "role": "definition",
+            "why": "D, the singular values, and the squared gap Delta_sv are defined here, together with the printed endpoint conventions.",
+            "locator": {
+              "document": "YuWangSamworth2015",
+              "marker": "YWS-T3-setup",
+              "section": "Appendix",
+              "result": "Rectangular setup, the squared singular gap, and the printed conventions"
+            }
+          },
+          {
+            "id": "angles",
+            "role": "definition",
+            "why": "The conclusion's left-hand side is defined here, not in the theorem passage.",
+            "locator": {
+              "document": "YuWangSamworth2015",
+              "marker": "YWS-S1-angles",
+              "section": "1",
+              "result": "Principal angles and the Frobenius sine distance"
+            }
+          }
+        ],
         "declarations": [
           "YuWangSamworth2015.DavisKahanTheory.yuWangSamworth_leftSingularSubspace_le"
         ],
@@ -788,6 +1440,65 @@
             "type_text_sha256": "7372d51ce48898e19e20ca77d2b11068114bd431188492b035184924b7162d9d",
             "toolchain": "leanprover/lean4:v4.34.0-rc1",
             "pinned_on": "2026-09-01"
+          }
+        ],
+        "source_pins": [
+          {
+            "fragment": "printed",
+            "document": "YuWangSamworth2015",
+            "sha256": "754029eb802c9f3fcf195194d897699c4140145e3a50521889de3aed1af01408",
+            "locator": {
+              "document": "YuWangSamworth2015",
+              "marker": "YWS-T3",
+              "file": "prose/distilled_literature/YuWangSamworth2015_statistical_davis_kahan.tex",
+              "lines": [
+                443,
+                462
+              ],
+              "section": "Appendix",
+              "result": "Theorem 3, the left singular-vector blocks the final sentence extends it to"
+            },
+            "visibility": "public_reconstruction",
+            "pinned_on": "2026-09-03",
+            "note": "Source passages marked and bound 2026-09-03: the reconstruction gained YWS-CERT markers and each reviewed row now cites the printed passage its Lean statement answers."
+          },
+          {
+            "fragment": "sv-setup",
+            "document": "YuWangSamworth2015",
+            "sha256": "b593d9ff6fad451fe5f63eb14ca67a9038a93c7fbc5ba33b82c081205a32b659",
+            "locator": {
+              "document": "YuWangSamworth2015",
+              "marker": "YWS-T3-setup",
+              "file": "prose/distilled_literature/YuWangSamworth2015_statistical_davis_kahan.tex",
+              "lines": [
+                392,
+                419
+              ],
+              "section": "Appendix",
+              "result": "Rectangular setup, the squared singular gap, and the printed conventions"
+            },
+            "visibility": "public_reconstruction",
+            "pinned_on": "2026-09-03",
+            "note": "Source passages marked and bound 2026-09-03: the reconstruction gained YWS-CERT markers and each reviewed row now cites the printed passage its Lean statement answers."
+          },
+          {
+            "fragment": "angles",
+            "document": "YuWangSamworth2015",
+            "sha256": "26be75b00c2d7d8980decddc9bfe3814eba34d4440ca25b0cfd998fc6cc151b9",
+            "locator": {
+              "document": "YuWangSamworth2015",
+              "marker": "YWS-S1-angles",
+              "file": "prose/distilled_literature/YuWangSamworth2015_statistical_davis_kahan.tex",
+              "lines": [
+                23,
+                53
+              ],
+              "section": "1",
+              "result": "Principal angles and the Frobenius sine distance"
+            },
+            "visibility": "public_reconstruction",
+            "pinned_on": "2026-09-03",
+            "note": "Source passages marked and bound 2026-09-03: the reconstruction gained YWS-CERT markers and each reviewed row now cites the printed passage its Lean statement answers."
           }
         ]
       }
@@ -824,6 +1535,40 @@
         "group": "YWS-Theorem-3",
         "group_title": "Yu--Wang--Samworth Theorem 3",
         "claim": "Some O-hat in O(d) satisfies ‖V-hat O-hat - V‖_F <= 2^{3/2} (2 sigma_1 + ‖D‖_op) min(sqrt d ‖D‖_op, ‖D‖_F) / Delta_sv, and likewise on the left.",
+        "source_fragments": [
+          {
+            "id": "printed",
+            "role": "primary",
+            "locator": {
+              "document": "YuWangSamworth2015",
+              "marker": "YWS-T3",
+              "section": "Appendix",
+              "result": "Theorem 3, aligned-frame conclusion"
+            }
+          },
+          {
+            "id": "sv-setup",
+            "role": "definition",
+            "why": "D, the singular values, and the squared gap Delta_sv are defined here, together with the printed endpoint conventions.",
+            "locator": {
+              "document": "YuWangSamworth2015",
+              "marker": "YWS-T3-setup",
+              "section": "Appendix",
+              "result": "Rectangular setup, the squared singular gap, and the printed conventions"
+            }
+          },
+          {
+            "id": "procrustes",
+            "role": "definition",
+            "why": "The orthogonal alignment the aligned-basis conclusion asserts, and the relation to the sine distance, are fixed here.",
+            "locator": {
+              "document": "YuWangSamworth2015",
+              "marker": "YWS-S1-procrustes",
+              "section": "1",
+              "result": "Procrustes alignment and the sqrt-2 comparison"
+            }
+          }
+        ],
         "declarations": [
           "YuWangSamworth2015.DavisKahanTheory.yuWangSamworth_rightSingularAlignedBasis_le",
           "YuWangSamworth2015.DavisKahanTheory.yuWangSamworth_leftSingularAlignedBasis_le"
@@ -843,6 +1588,65 @@
             "type_text_sha256": "89b706ea2411e3c53dcfd9fbd0213bd5c9cb09a0ca79a02532c3c720c99e2b2d",
             "toolchain": "leanprover/lean4:v4.34.0-rc1",
             "pinned_on": "2026-09-01"
+          }
+        ],
+        "source_pins": [
+          {
+            "fragment": "printed",
+            "document": "YuWangSamworth2015",
+            "sha256": "754029eb802c9f3fcf195194d897699c4140145e3a50521889de3aed1af01408",
+            "locator": {
+              "document": "YuWangSamworth2015",
+              "marker": "YWS-T3",
+              "file": "prose/distilled_literature/YuWangSamworth2015_statistical_davis_kahan.tex",
+              "lines": [
+                443,
+                462
+              ],
+              "section": "Appendix",
+              "result": "Theorem 3, aligned-frame conclusion"
+            },
+            "visibility": "public_reconstruction",
+            "pinned_on": "2026-09-03",
+            "note": "Source passages marked and bound 2026-09-03: the reconstruction gained YWS-CERT markers and each reviewed row now cites the printed passage its Lean statement answers."
+          },
+          {
+            "fragment": "sv-setup",
+            "document": "YuWangSamworth2015",
+            "sha256": "b593d9ff6fad451fe5f63eb14ca67a9038a93c7fbc5ba33b82c081205a32b659",
+            "locator": {
+              "document": "YuWangSamworth2015",
+              "marker": "YWS-T3-setup",
+              "file": "prose/distilled_literature/YuWangSamworth2015_statistical_davis_kahan.tex",
+              "lines": [
+                392,
+                419
+              ],
+              "section": "Appendix",
+              "result": "Rectangular setup, the squared singular gap, and the printed conventions"
+            },
+            "visibility": "public_reconstruction",
+            "pinned_on": "2026-09-03",
+            "note": "Source passages marked and bound 2026-09-03: the reconstruction gained YWS-CERT markers and each reviewed row now cites the printed passage its Lean statement answers."
+          },
+          {
+            "fragment": "procrustes",
+            "document": "YuWangSamworth2015",
+            "sha256": "634d73a2f183d99aff8c928aba0373a22bda5f304e80cec7e9053ec2e3a0d80a",
+            "locator": {
+              "document": "YuWangSamworth2015",
+              "marker": "YWS-S1-procrustes",
+              "file": "prose/distilled_literature/YuWangSamworth2015_statistical_davis_kahan.tex",
+              "lines": [
+                59,
+                73
+              ],
+              "section": "1",
+              "result": "Procrustes alignment and the sqrt-2 comparison"
+            },
+            "visibility": "public_reconstruction",
+            "pinned_on": "2026-09-03",
+            "note": "Source passages marked and bound 2026-09-03: the reconstruction gained YWS-CERT markers and each reviewed row now cites the printed passage its Lean statement answers."
           }
         ]
       }
@@ -873,6 +1677,30 @@
         "group": "YWS-Theorem-3",
         "group_title": "Yu--Wang--Samworth Theorem 3",
         "claim": "Theorem 3 defines sigma_0^2 = infinity and sigma_{rank(A)+1}^2 = -infinity. The second convention makes the denominator infinite when s = rank(A), so the printed bound asserts that the sample and population right singular subspaces coincide -- and they can be orthogonal.",
+        "source_fragments": [
+          {
+            "id": "printed",
+            "role": "primary",
+            "why": "The printed convention sigma_{rank(A)+1}^2 := -infinity is stated in this passage; it is the claim the row refutes.",
+            "locator": {
+              "document": "YuWangSamworth2015",
+              "marker": "YWS-T3-setup",
+              "section": "Appendix",
+              "result": "Rectangular setup, the squared singular gap, and the printed conventions"
+            }
+          },
+          {
+            "id": "theorem",
+            "role": "context",
+            "why": "Under the printed convention the displayed bound asserts that the two singular subspaces coincide.",
+            "locator": {
+              "document": "YuWangSamworth2015",
+              "marker": "YWS-T3",
+              "section": "Appendix",
+              "result": "Theorem 3, the bound the convention empties"
+            }
+          }
+        ],
         "declarations": [
           "YuWangSamworth2015.DavisKahanTheory.yuWangSamworth_theorem3_printed_rankBoundary_refutation"
         ],
@@ -884,6 +1712,46 @@
             "type_text_sha256": "082809e2eb2392ce0b6c926046483d198bd9cf8f1509ce94b80a49cf40166a69",
             "toolchain": "leanprover/lean4:v4.34.0-rc1",
             "pinned_on": "2026-09-01"
+          }
+        ],
+        "source_pins": [
+          {
+            "fragment": "printed",
+            "document": "YuWangSamworth2015",
+            "sha256": "b593d9ff6fad451fe5f63eb14ca67a9038a93c7fbc5ba33b82c081205a32b659",
+            "locator": {
+              "document": "YuWangSamworth2015",
+              "marker": "YWS-T3-setup",
+              "file": "prose/distilled_literature/YuWangSamworth2015_statistical_davis_kahan.tex",
+              "lines": [
+                392,
+                419
+              ],
+              "section": "Appendix",
+              "result": "Rectangular setup, the squared singular gap, and the printed conventions"
+            },
+            "visibility": "public_reconstruction",
+            "pinned_on": "2026-09-03",
+            "note": "Source passages marked and bound 2026-09-03: the reconstruction gained YWS-CERT markers and each reviewed row now cites the printed passage its Lean statement answers."
+          },
+          {
+            "fragment": "theorem",
+            "document": "YuWangSamworth2015",
+            "sha256": "754029eb802c9f3fcf195194d897699c4140145e3a50521889de3aed1af01408",
+            "locator": {
+              "document": "YuWangSamworth2015",
+              "marker": "YWS-T3",
+              "file": "prose/distilled_literature/YuWangSamworth2015_statistical_davis_kahan.tex",
+              "lines": [
+                443,
+                462
+              ],
+              "section": "Appendix",
+              "result": "Theorem 3, the bound the convention empties"
+            },
+            "visibility": "public_reconstruction",
+            "pinned_on": "2026-09-03",
+            "note": "Source passages marked and bound 2026-09-03: the reconstruction gained YWS-CERT markers and each reviewed row now cites the printed passage its Lean statement answers."
           }
         ]
       }
