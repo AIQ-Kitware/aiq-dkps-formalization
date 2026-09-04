@@ -72,6 +72,9 @@ public section
 
 open scoped InnerProductSpace
 
+attribute [local instance 100] ContinuousLinearMap.realAlgebra
+  ContinuousLinearMap.realIsScalarTower
+
 universe u w v
 
 namespace TauCeti
@@ -108,8 +111,9 @@ omit [CompleteSpace E] in
 own `algebraMap` from `ℝ`, and `e` fixes the reals. -/
 @[simp] theorem clm_real_smul (r : ℝ) (T : E →L[𝕜] E) :
     clm (e := e) (r • T) = r • clm (e := e) T := by
-  have h1 : (r • T : E →L[𝕜] E) = (algebraMap ℝ 𝕜 r) • T := rfl
-  have h2 : (r • clm (e := e) T) = (algebraMap ℝ 𝕂 r) • clm (e := e) T := rfl
+  have h1 : (r • T : E →L[𝕜] E) = (algebraMap ℝ 𝕜 r) • T := (algebraMap_smul 𝕜 r T).symm
+  have h2 : (r • clm (e := e) T) = (algebraMap ℝ 𝕂 r) • clm (e := e) T :=
+    (algebraMap_smul 𝕂 r (clm (e := e) T)).symm
   rw [h1, h2, clm_smul]
   congr 1
   rw [RCLike.algebraMap_eq_ofReal, RCLike.algebraMap_eq_ofReal]
@@ -143,6 +147,13 @@ noncomputable def clmStarAlgEquiv (e : RCLikeIso 𝕜 𝕂) (E : Type v) [Normed
 @[simp] theorem clmStarAlgEquiv_apply (T : E →L[𝕜] E) :
     clmStarAlgEquiv e E T = clm (e := e) T := rfl
 
+/-- The transport preserves the operator norm, so it is continuous. -/
+theorem continuous_clmStarAlgEquiv :
+    Continuous (clmStarAlgEquiv e E) :=
+  AddMonoidHomClass.continuous_of_bound (clmStarAlgEquiv e E) 1 fun T => by
+    rw [one_mul]
+    exact le_of_eq (clm_norm (e := e) T)
+
 /-- The transport preserves the operator norm, so its inverse is continuous.  This is the one
 analytic input `ContinuousFunctionalCalculus.of_starAlgEquiv` asks for. -/
 theorem continuous_clmStarAlgEquiv_symm :
@@ -163,9 +174,18 @@ open TauCeti TauCeti.ScalarTransport
 Hilbert space over an arbitrary `RCLike` field, in unrestricted dimension.**
 
 Proved by transport: the field is isomorphic to `ℝ` or to `ℂ`, and the calculus is already
-registered at both.  `ContinuousFunctionalCalculus` is a `Prop`, so this instance and the two
-it specializes to are interchangeable wherever both apply. -/
-instance instContinuousFunctionalCalculusRealIsSelfAdjointRCLike
+registered at both.
+
+Not an instance, for the reason `ContinuousLinearMap.realAlgebra` is not: its statement mentions
+that real algebra structure, so it can only be activated together with it.  A consumer writes
+
+```lean
+attribute [local instance 100] ContinuousLinearMap.realAlgebra
+  ContinuousLinearMap.realIsScalarTower ContinuousLinearMap.continuousFunctionalCalculusReal
+```
+
+and a definition elaborated under those carries them in its body. -/
+theorem continuousFunctionalCalculusReal
     {𝕜 : Type u} [RCLike 𝕜] {E : Type v} [NormedAddCommGroup E] [InnerProductSpace 𝕜 E]
     [CompleteSpace E] :
     ContinuousFunctionalCalculus ℝ (E →L[𝕜] E) IsSelfAdjoint := by
@@ -178,3 +198,102 @@ instance instContinuousFunctionalCalculusRealIsSelfAdjointRCLike
       fun _ => isSelfAdjoint_clm_iff.symm
 
 end ContinuousLinearMap
+
+attribute [local instance 100] ContinuousLinearMap.continuousFunctionalCalculusReal
+
+namespace TauCeti
+namespace ScalarTransport
+
+/-! ## What the transport does to the calculus
+
+With the instance in place on both sides, `clm` commutes with everything built from the
+calculus.  These are the lemmas a scalar-generic theorem about angles between subspaces
+actually consumes when it dispatches to a fixed field. -/
+
+variable {𝕜 : Type u} {𝕂 : Type w} [RCLike 𝕜] [RCLike 𝕂] {e : RCLikeIso 𝕜 𝕂}
+variable {E : Type v} [NormedAddCommGroup E] [InnerProductSpace 𝕜 E] [CompleteSpace E]
+
+attribute [local instance] ContinuousLinearMap.instStarOrderedRingRCLike
+
+/-- The transport preserves the real spectrum: it is an `ℝ`-algebra isomorphism. -/
+@[simp] theorem spectrum_clm (T : E →L[𝕜] E) :
+    spectrum ℝ (clm (e := e) T) = spectrum ℝ T :=
+  AlgEquiv.spectrum_eq (clmStarAlgEquiv e E) T
+
+/-- The transport preserves and reflects nonnegativity. -/
+@[simp] theorem nonneg_clm_iff {T : E →L[𝕜] E} : 0 ≤ clm (e := e) T ↔ 0 ≤ T := by
+  constructor
+  · intro h
+    have hsa : IsSelfAdjoint T := isSelfAdjoint_clm_iff.1 (.of_nonneg h)
+    rw [StarOrderedRing.nonneg_iff_spectrum_nonneg (R := ℝ) _ hsa]
+    rw [StarOrderedRing.nonneg_iff_spectrum_nonneg (R := ℝ) _ (.of_nonneg h), spectrum_clm] at h
+    exact h
+  · intro h
+    have hsa : IsSelfAdjoint (clm (e := e) T) := isSelfAdjoint_clm_iff.2 (.of_nonneg h)
+    rw [StarOrderedRing.nonneg_iff_spectrum_nonneg (R := ℝ) _ hsa, spectrum_clm]
+    rw [StarOrderedRing.nonneg_iff_spectrum_nonneg (R := ℝ) _ (.of_nonneg h)] at h
+    exact h
+
+/-- **The transport commutes with the continuous functional calculus.** -/
+theorem clm_cfc (f : ℝ → ℝ) {T : E →L[𝕜] E} (hT : IsSelfAdjoint T)
+    (hf : ContinuousOn f (spectrum ℝ T)) :
+    clm (e := e) (cfc f T) = cfc f (clm (e := e) T) :=
+  ContinuousFunctionalCalculus.map_cfc (clmStarAlgEquiv e E)
+    continuous_clmStarAlgEquiv (fun _ => isSelfAdjoint_clm_iff.symm) f hT hf
+
+/-- **The transport commutes with the operator modulus.**  Both sides are nonnegative and
+square to the transported Gram operator. -/
+@[simp] theorem clm_modulus (T : E →L[𝕜] E) :
+    clm (e := e) T.modulus = (clm (e := e) T).modulus := by
+  refine ContinuousLinearMap.eq_modulus_of_nonneg_of_mul_self_eq ?_ ?_
+  · exact nonneg_clm_iff.2 T.modulus_nonneg
+  · rw [← clm_mul, ContinuousLinearMap.modulus_mul_self]
+    change clm (e := e) (ContinuousLinearMap.adjoint T ∘L T) =
+      ContinuousLinearMap.adjoint (clm (e := e) T) ∘L clm (e := e) T
+    rw [adjoint_clm]
+    rfl
+
+/-! ## Reflections and reflected subspaces
+
+The reflection in a subspace is `2 P - 1`, so the transport carries it, and hence carries the
+image of one subspace under the reflection in another.  That image is the object the
+Davis--Kahan double-angle statements are about. -/
+
+omit [CompleteSpace E] in
+/-- The transport carries the reflection operator of a subspace. -/
+@[simp] theorem reflectionOperator_clm (S : Submodule 𝕜 E) [S.HasOrthogonalProjection] :
+    (submodule (e := e) S).reflectionOperator = clm (e := e) S.reflectionOperator := by
+  rw [Submodule.reflectionOperator_eq_two_smul_sub_id,
+    Submodule.reflectionOperator_eq_two_smul_sub_id, two_smul, two_smul, starProjection_clm,
+    clm_sub, clm_add]
+  rfl
+
+omit [CompleteSpace E] in
+/-- Hence it carries the image of a subspace under the reflection in another. -/
+@[simp] theorem submodule_map_reflection (S T : Submodule 𝕜 E) [T.HasOrthogonalProjection] :
+    submodule (e := e) (S.map (T.reflection.toLinearEquiv : E →ₗ[𝕜] E)) =
+      (submodule (e := e) S).map
+        (((submodule (e := e) T).reflection.toLinearEquiv :
+          ScalarTransport e E →ₗ[𝕂] ScalarTransport e E)) := by
+  have hfun : ∀ x : ScalarTransport e E,
+      ((submodule (e := e) T).reflection.toLinearEquiv :
+          ScalarTransport e E →ₗ[𝕂] ScalarTransport e E) x =
+        of (e := e) ((T.reflection.toLinearEquiv : E →ₗ[𝕜] E) (out x)) := by
+    intro x
+    change ((submodule (e := e) T).reflection x : ScalarTransport e E) =
+      of (e := e) (T.reflection (out x))
+    rw [Submodule.reflection_apply, Submodule.reflection_apply, two_smul, two_smul,
+      starProjection_clm]
+    rfl
+  ext x
+  simp only [mem_submodule, Submodule.mem_map]
+  constructor
+  · rintro ⟨y, hy, hxy⟩
+    exact ⟨of (e := e) y, hy, by rw [hfun]; exact congrArg (of (e := e)) hxy⟩
+  · rintro ⟨y, hy, hxy⟩
+    refine ⟨out y, hy, ?_⟩
+    rw [hfun] at hxy
+    exact congrArg (out (e := e)) hxy
+
+end ScalarTransport
+end TauCeti

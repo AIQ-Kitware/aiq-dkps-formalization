@@ -8,6 +8,7 @@ import DavisKahan.Sources.DavisKahan1970.SinTwoTheta
 import DavisKahan.Sources.DavisKahan1970.AmbientReal
 import DavisKahan.SpectralTheory.ReflectionRestriction
 import DavisKahan.Geometry.Angle.DoubleAngleFunctionalCalculus
+import DavisKahan.Geometry.Angle.OperatorAngleGeneric
 import DavisKahan.Sylvester.ScalarTransport
 import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.ScalarTransport
 
@@ -259,6 +260,58 @@ theorem sinTwoTheta_ambient_reflection_projectorDifference_symmetricNorming
         rw [hxx, add_sub_cancel_left])
       hδ hgap hDideal.1
   exact ⟨hmemD, hleD.trans hDideal.2⟩
+
+/-- **Davis--Kahan 1970, the ambient conclusion of the `sin 2Θ` theorem, at an arbitrary
+`RCLike` field.**
+
+`δ N(sin 2Θ) ≤ 2 N(H)` on the paper's ambient double-angle sine
+`TauCeti.DavisKahan.Angle.sinTwoAngleOperator`, for an unbounded self-adjoint ambient operator
+`A`, a bounded self-adjoint perturbation `Eop`, arbitrary Hilbert dimension, an arbitrary
+`SymmetricNormingFunction`, and the full `FormBoundedSylvesterGap` -- so the separating
+interval may be half-infinite.  Membership in the norm ideal is concluded, not assumed, and
+the constant is exactly `2`.
+
+The scalar field is arbitrary and the statement mentions no capability class: the real
+functional calculus that names `sin 2Θ` is an instance at every `RCLike` field
+(`ForTauCeti/Analysis/RCLike/ScalarTransportFunctionalCalculus.lean`).
+
+The conclusion is on the mathematical angle operator, not on a proof representative.  What
+converts the one into the other is `sinTwoAngleOperator_eq_modulus_starProjection_sub`, the
+paper's own reflection identity: `sin 2Θ(U, V) = |P_{J_V U} - P_U|`, and a modulus does not
+change approximation numbers, so no source norm can tell the two apart.
+
+`sinTwoTheta_ambient_unbounded_addBounded_symmetricNorming_complex` and its real sibling are
+the specializations in which `U` and `V` are the spectral subspaces the paper names; the
+spectral selection is field-specific (the spectral measure is built over `ℂ` and descended to
+`ℝ`), which is why the hypotheses here are the reducing-subspace and intertwining conditions
+that the spectral development supplies over each field. -/
+theorem sinTwoTheta_ambient_unbounded_reflectionPair_symmetricNorming_rclike
+    (N : SymmetricNormingFunction)
+    {A : H →ₗ.[𝕜] H} (hA : IsSelfAdjoint A)
+    (Eop : H →L[𝕜] H) (hEop : DavisKahan.IsSelfAdjointOperator Eop)
+    {U V : Submodule 𝕜 H} [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
+    (hUred : TauCeti.LinearPMap.ReducesSubspace A U)
+    (hmem : ∀ x : A.domain, V.reflectionOperator (x : H) ∈ A.domain)
+    (hint : ∀ x : A.domain,
+      (TauCeti.LinearPMap.addBounded A (DavisKahan.reflectionPerturbation V Eop))
+          ⟨V.reflectionOperator (x : H), hmem x⟩ =
+        V.reflectionOperator (A x))
+    {δ : ℝ} (hδ : 0 < δ)
+    (hgap : FormBoundedSylvesterGap
+      (TauCeti.LinearPMap.reducingRestriction A U hUred)
+      (TauCeti.LinearPMap.reducingRestriction A Uᗮ hUred.orthogonal) δ)
+    (hEmem : N.Mem Eop) :
+    N.Mem (TauCeti.DavisKahan.Angle.sinTwoAngleOperator U V) ∧
+      δ * N.gauge (TauCeti.DavisKahan.Angle.sinTwoAngleOperator U V) ≤ 2 * N.gauge Eop := by
+  obtain ⟨hmemX, hleX⟩ :=
+    sinTwoTheta_ambient_reflection_projectorDifference_symmetricNorming N hA Eop hEop hUred
+      hmem hint hδ hgap hEmem
+  obtain ⟨hiff, hgauge⟩ :=
+    SameApproximationSingularSequence.normingMem_iff_and_gauge_eq N
+      (A := TauCeti.DavisKahan.Angle.sinTwoAngleOperator U V)
+      (B := (U.map (V.reflection.toLinearEquiv : H →ₗ[𝕜] H)).starProjection - U.starProjection)
+      (TauCeti.DavisKahan.Angle.sinTwoAngleOperator_hasSameApproximationNumbers U V)
+  exact ⟨hiff.mpr hmemX, by rw [hgauge]; exact hleX⟩
 
 end Generic
 

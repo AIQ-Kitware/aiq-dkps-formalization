@@ -9,6 +9,7 @@ import DavisKahan.Geometry.Angle.BasisAngleEnergy
 import DavisKahan.Geometry.Angle.DoubleAngleFunctionalCalculus
 import DavisKahan.Geometry.Angle.DoubleAngleGapBound
 import DavisKahan.Geometry.Angle.OperatorAngleComplex
+import DavisKahan.Geometry.Angle.OperatorAngleGeneric
 import DavisKahan.Geometry.Angle.OperatorAngleReal
 import DavisKahan.Geometry.Angle.Proposition35Exponential
 import DavisKahan.Geometry.Angle.Proposition35Infinite

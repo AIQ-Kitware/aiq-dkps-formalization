@@ -160,7 +160,7 @@ theorem tanTwoTheta_ambient_unbounded_reducing_sineSequence_symmetricNorming_rea
       (complexifySubmodule U).diagonalPart
         (complexifySubmodule V).reflectionOperator) := by
     rw [← TauCeti.DavisKahan.complexify_reflectionOperator, diagonalPart_complexifySubmodule,
-      ← Foundation.RealComplexification.complexify_mul, isUnit_complexify_iff]
+      ← Foundation.RealComplexification.complexify_mul, Foundation.RealComplexification.isUnit_complexify_iff]
     exact hunit
   have hcos := DavisKahan.cos_two_ne_zero_of_isUnit_diagonalPart_reflection_sq
     (complexifySubmodule U) (complexifySubmodule V) hunitC

@@ -338,6 +338,10 @@ def clm (T : E →L[𝕜] F) : ScalarTransport e E →L[𝕂] ScalarTransport e 
 @[simp] theorem clm_apply (T : E →L[𝕜] F) (x : E) :
     clm (e := e) T (of x) = of (T x) := rfl
 
+/-- The transport of operators is subtractive: it does not change the functions. -/
+@[simp] theorem clm_sub (T R : E →L[𝕜] F) :
+    clm (e := e) (T - R) = clm (e := e) T - clm (e := e) R := rfl
+
 /-- and has the same operator norm. -/
 @[simp] theorem clm_norm (T : E →L[𝕜] F) : ‖clm (e := e) T‖ = ‖T‖ := by
   refine le_antisymm (ContinuousLinearMap.opNorm_le_bound _ (norm_nonneg T) fun x => ?_)
