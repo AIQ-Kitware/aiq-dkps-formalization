@@ -2301,9 +2301,14 @@
       "lean_declarations": [
         "TauCeti.DavisKahan1970.corollary3_1_compact_defectBlock_angleList_classification",
         "TauCeti.DavisKahan1970.corollary3_1_compact_classification_real",
-        "TauCeti.DavisKahan1970.corollary3_1_realization"
+        "TauCeti.DavisKahan1970.corollary3_1_realization",
+        "TauCeti.DavisKahan1970.corollary3_1_realization_zeroMultiplicity",
+        "TauCeti.DavisKahan1970.angleSequence_eq_of_angleList_eq",
+        "TauCeti.DavisKahan1970.angle_eq_of_sin_sq_eq",
+        "TauCeti.DavisKahan1970.corollary3_1_prescribedAngleSequence_classification",
+        "TauCeti.DavisKahan1970.corollary3_1_prescribedAngleSequence_classification_real"
       ],
-      "review_note": "Accepted by the hostile audit at the stated-result level.",
+      "review_note": "Accepted by the hostile audit at the stated-result level.\n\n**UNDER-CERTIFICATION FOUND AND FIXED 2026-09-04 (Claude Opus 5, on hostile review).**  The realization clause was canonicalized on `corollary3_1_realization`, whose own docstring records that the two angle-zero multiplicities come out equal.  The printed sentence allows them to differ -- that is the whole content of 'except perhaps for the multiplicity of 0' -- and the repository already contained `corollary3_1_realization_zeroMultiplicity`, which prescribes them independently.  The row was under-certified against a theorem it already had.  Canonical evidence moved to the stronger realization, and the classification half (`corollary3_1_prescribedAngleSequence_classification`) is registered beside it.  Two new correspondence theorems record that the eigenvalue list this development stores, `n |-> sin^2 theta_n`, determines the printed angle sequence.",
       "parent_claim_id": "DK-3.1-cor",
       "boundary_review": {
         "status": "accepted",
@@ -2333,7 +2338,7 @@
           "capability_classes": []
         },
         {
-          "declaration": "TauCeti.DavisKahan1970.corollary3_1_realization",
+          "declaration": "TauCeti.DavisKahan1970.corollary3_1_realization_zeroMultiplicity",
           "role": "primary_source_witness",
           "scalar_scope": "rclike",
           "evidence_kind": "proof",
@@ -2348,6 +2353,26 @@
           "declaration": "TauCeti.DavisKahan1970.corollary3_1_compact_classification_real",
           "role": "specialization",
           "note": "The `ℝ` instance of the canonical `RCLike` classification; its proof is that theorem applied."
+        },
+        {
+          "declaration": "TauCeti.DavisKahan1970.corollary3_1_realization",
+          "role": "specialization"
+        },
+        {
+          "declaration": "TauCeti.DavisKahan1970.angleSequence_eq_of_angleList_eq",
+          "role": "source_correspondence"
+        },
+        {
+          "declaration": "TauCeti.DavisKahan1970.angle_eq_of_sin_sq_eq",
+          "role": "source_correspondence"
+        },
+        {
+          "declaration": "TauCeti.DavisKahan1970.corollary3_1_prescribedAngleSequence_classification",
+          "role": "supporting_theorem"
+        },
+        {
+          "declaration": "TauCeti.DavisKahan1970.corollary3_1_prescribedAngleSequence_classification_real",
+          "role": "supporting_theorem"
         }
       ],
       "result_wide_scope_atoms": [],
@@ -2374,12 +2399,15 @@
           ],
           "scalar_scope": "rclike",
           "evidence": {
-            "primary": "TauCeti.DavisKahan1970.corollary3_1_realization",
-            "correspondence": []
+            "primary": "TauCeti.DavisKahan1970.corollary3_1_realization_zeroMultiplicity",
+            "correspondence": [
+              "TauCeti.DavisKahan1970.angleSequence_eq_of_angleList_eq",
+              "TauCeti.DavisKahan1970.angle_eq_of_sin_sq_eq"
+            ]
           },
           "status": "established",
           "evidence_kind": "proof",
-          "justification": "Canonical witness for allowed-angle-sequence at rclike scalar scope, carried over from the pre-clause canonical evidence and re-checked against its compiler-printed type under the coherent model."
+          "justification": "The printed sentence: the eigenvalues of Theta_0 are an arbitrary sequence pi/2 >= theta_1 >= theta_2 >= ... -> 0 together with a possible eigenvalue 0, and those of Theta_1 are the same EXCEPT PERHAPS FOR THE MULTIPLICITY OF 0.  UNDER-CERTIFICATION CORRECTED 2026-09-04: the primary was `corollary3_1_realization`, which realizes the sequence but forces the two angle-zero multiplicities to coincide, so it does not witness the clause that distinguishes Theta_0 from Theta_1.  `corollary3_1_realization_zeroMultiplicity` prescribes them as two arbitrary Hilbert spaces Z_0 and Z_1, chosen independently of each other and of theta, which is the printed freedom; the weaker realization stays as supporting evidence.  The recorded invariant is the approximation-number list `n |-> sin^2 theta_n` rather than a list of angles; `angleSequence_eq_of_angleList_eq` proves that recording it records the angles, since `theta |-> sin^2 theta` is injective on the printed range [0, pi/2]."
         }
       ]
     },
@@ -3306,9 +3334,11 @@
         "TauCeti.DavisKahan1970.banach_sylvester_lower_bound_exact",
         "TauCeti.DavisKahan1970.banach_sylvester_lower_bound_interchanged",
         "TauCeti.DavisKahan1970.banach_sylvester_lower_bound_interchanged_exact",
-        "TauCeti.DavisKahan1970.banach_sylvester_lower_bound_unboundedA"
+        "TauCeti.DavisKahan1970.banach_sylvester_lower_bound_unboundedA",
+        "TauCeti.DavisKahan1970.theorem5_1_banach_sylvester_banachScope_ofProperties",
+        "TauCeti.DavisKahan1970.theorem5_1_banach_sylvester_banachScope"
       ],
-      "review_note": "Accepted result-only semantic review 2026-08-12, corrected after rechecking scalar scope. `banach_sylvester_lower_bound_uiNorm` aliases the scalar-generic Banach-space Sylvester lower-bound theorem over an arbitrary nontrivially normed field; its left-inverse hypothesis is weaker than the printed two-sided-inverse hypothesis, so it covers both real and complex source scope. `banach_sylvester_lower_bound_exact` is retained as the literal complex source-shape witness with both inverse equations. The compiler audit surface additionally restates the printed two-sided-inverse theorem over a generic scalar field and proves it directly from the scalar-generic engine. The A/B interchange and one-sided unbounded remarks are outside the counted Theorem 5.1 boundary.\n\nREOPENED 2026-08-31 by the scope-atom re-audit. The inventory's own statement_boundary policy says a later source passage that explicitly extends the proved scope of a counted result is part of that result's scope and must be covered. Several such passages were classified as generic post-result commentary on the grounds that they occur after the theorem environment -- which is exactly the condition the policy says does not exclude an explicit extension. See the newly attached scope atom(s) and `remaining_gap`.\n\nREOPENING WITHDRAWN 2026-08-31, and the rule that caused it corrected. The scope-atom re-audit attached a later source passage to this result under a `statement_boundary` clause saying that any passage explicitly extending a counted result's proved scope becomes part of that result. That clause contradicted the same field's `does_not_count` entry for scope remarks outside the printed result environment, and it let the atom ledger enlarge the denominator by reclassification. The corrected rule is that a later passage affects a counted result only when it is needed to determine what Davis and Kahan actually claim in that result; an extension, variant or consequence they mention without introducing and proving it as a result of its own does not. The passage is now `result_adjacent_extension` fidelity material. The Lean coverage produced while the result was reopened is kept as SUPPORTING evidence -- it is stronger than the counted statement requires, which is a good thing to hold and not a canonical obligation.",
+      "review_note": "Accepted result-only semantic review 2026-08-12, corrected after rechecking scalar scope. `banach_sylvester_lower_bound_uiNorm` aliases the scalar-generic Banach-space Sylvester lower-bound theorem over an arbitrary nontrivially normed field; its left-inverse hypothesis is weaker than the printed two-sided-inverse hypothesis, so it covers both real and complex source scope. `banach_sylvester_lower_bound_exact` is retained as the literal complex source-shape witness with both inverse equations. The compiler audit surface additionally restates the printed two-sided-inverse theorem over a generic scalar field and proves it directly from the scalar-generic engine. The A/B interchange and one-sided unbounded remarks are outside the counted Theorem 5.1 boundary.\n\nREOPENED 2026-08-31 by the scope-atom re-audit. The inventory's own statement_boundary policy says a later source passage that explicitly extends the proved scope of a counted result is part of that result's scope and must be covered. Several such passages were classified as generic post-result commentary on the grounds that they occur after the theorem environment -- which is exactly the condition the policy says does not exclude an explicit extension. See the newly attached scope atom(s) and `remaining_gap`.\n\nREOPENING WITHDRAWN 2026-08-31, and the rule that caused it corrected. The scope-atom re-audit attached a later source passage to this result under a `statement_boundary` clause saying that any passage explicitly extending a counted result's proved scope becomes part of that result. That clause contradicted the same field's `does_not_count` entry for scope remarks outside the printed result environment, and it let the atom ledger enlarge the denominator by reclassification. The corrected rule is that a later passage affects a counted result only when it is needed to determine what Davis and Kahan actually claim in that result; an extension, variant or consequence they mention without introducing and proving it as a result of its own does not. The passage is now `result_adjacent_extension` fidelity material. The Lean coverage produced while the result was reopened is kept as SUPPORTING evidence -- it is stronger than the counted statement requires, which is a good thing to hold and not a canonical obligation.\n\n**SCOPE WRAPPER ADDED 2026-09-04 (Claude Opus 5, on hostile review).**  The canonical evidence was stated over normed spaces where the paper says Banach.  That is stronger mathematics and stays; it is not the printed statement, so canonical evidence moved to a completeness-carrying wrapper over it.  The printed `gamma >= 0` was already correct and was not strengthened.",
       "parent_claim_id": "DK-5.1-thm",
       "boundary_review": {
         "status": "accepted",
@@ -3329,7 +3359,7 @@
       "local_statement_self_contained": true,
       "canonical_evidence": [
         {
-          "declaration": "TauCeti.DavisKahan1970.banach_sylvester_lower_bound_uiNorm",
+          "declaration": "TauCeti.DavisKahan1970.theorem5_1_banach_sylvester_banachScope_ofProperties",
           "role": "primary_source_witness",
           "scalar_scope": "scalar_generic",
           "evidence_kind": "proof",
@@ -3340,7 +3370,7 @@
           "capability_classes": []
         },
         {
-          "declaration": "TauCeti.DavisKahan1970.banach_sylvester_lower_bound_exact",
+          "declaration": "TauCeti.DavisKahan1970.theorem5_1_banach_sylvester_banachScope",
           "role": "primary_source_witness",
           "scalar_scope": "complex",
           "evidence_kind": "proof",
@@ -3366,6 +3396,14 @@
           "declaration": "TauCeti.DavisKahan1970.banach_sylvester_lower_bound_unboundedA",
           "role": "generalization",
           "note": "Coverage of a `result_adjacent_extension` the source mentions around this result. It is stronger than the counted statement requires and is deliberately supporting rather than canonical evidence."
+        },
+        {
+          "declaration": "TauCeti.DavisKahan1970.banach_sylvester_lower_bound_uiNorm",
+          "role": "generalization"
+        },
+        {
+          "declaration": "TauCeti.DavisKahan1970.banach_sylvester_lower_bound_exact",
+          "role": "generalization"
         }
       ],
       "expected_status": "compiled_exact",
@@ -3380,12 +3418,12 @@
           ],
           "scalar_scope": "scalar_generic",
           "evidence": {
-            "primary": "TauCeti.DavisKahan1970.banach_sylvester_lower_bound_uiNorm",
+            "primary": "TauCeti.DavisKahan1970.theorem5_1_banach_sylvester_banachScope_ofProperties",
             "correspondence": []
           },
           "status": "established",
           "evidence_kind": "proof",
-          "justification": "Canonical witness for sylvester-lower-bound at scalar_generic scalar scope, carried over from the pre-clause canonical evidence and re-checked against its compiler-printed type under the coherent model."
+          "justification": "Canonical witness for sylvester-lower-bound at scalar_generic scalar scope, carried over from the pre-clause canonical evidence and re-checked against its compiler-printed type under the coherent model.  SCOPE CORRECTED 2026-09-04: the primary was the normed-space theorem, which never uses completeness and is therefore strictly stronger than the printed statement -- but the printed statement opens 'Let X, Y be BANACH spaces', and canonical evidence is supposed to be the printed statement.  The primary is now the thin wrapper carrying [CompleteSpace X] and [CompleteSpace Y] with the printed hypotheses in printed form (gamma >= 0, an actual two-sided inverse with ||A^-1|| <= (gamma+delta)^-1, and a norm on cross-space maps compatible with the two bound norms).  The normed-space theorem is unchanged and is retained as a generalization."
         },
         {
           "id": "sylvester-lower-bound.complex",
@@ -3394,12 +3432,12 @@
           ],
           "scalar_scope": "complex",
           "evidence": {
-            "primary": "TauCeti.DavisKahan1970.banach_sylvester_lower_bound_exact",
+            "primary": "TauCeti.DavisKahan1970.theorem5_1_banach_sylvester_banachScope",
             "correspondence": []
           },
           "status": "established",
           "evidence_kind": "proof",
-          "justification": "Canonical witness for sylvester-lower-bound at complex scalar scope, carried over from the pre-clause canonical evidence and re-checked against its compiler-printed type under the coherent model."
+          "justification": "Canonical witness for sylvester-lower-bound at complex scalar scope, carried over from the pre-clause canonical evidence and re-checked against its compiler-printed type under the coherent model.  SCOPE CORRECTED 2026-09-04: the primary was the normed-space theorem, which never uses completeness and is therefore strictly stronger than the printed statement -- but the printed statement opens 'Let X, Y be BANACH spaces', and canonical evidence is supposed to be the printed statement.  The primary is now the thin wrapper carrying [CompleteSpace X] and [CompleteSpace Y] with the printed hypotheses in printed form (gamma >= 0, an actual two-sided inverse with ||A^-1|| <= (gamma+delta)^-1, and a norm on cross-space maps compatible with the two bound norms).  The normed-space theorem is unchanged and is retained as a generalization."
         }
       ]
     },
@@ -3421,9 +3459,10 @@
         "TauCeti.DavisKahan.Sylvester.davisKahan1970_sylvester_real",
         "TauCeti.DavisKahan1970.theorem5_2_symmetricNorming_complex",
         "TauCeti.DavisKahan1970.theorem5_2_symmetricNorming_real",
-        "TauCeti.DavisKahan1970.symmetricNorming_of_kyFanDominant"
+        "TauCeti.DavisKahan1970.symmetricNorming_of_kyFanDominant",
+        "TauCeti.DavisKahan1970.theorem5_2_orderedGap_symmetricNorming_real"
       ],
-      "review_note": "Accepted result-only semantic review 2026-08-12. `Theorem5_2` is the source-facing complex ordered unbounded theorem for `A >= c+delta > c >= B`, arbitrary unitary-invariant ideal gauge, and the exact domain-aware Sylvester equation. `davisKahan1970_sylvester_real` is the real unbounded theorem under `FormBoundedSylvesterGap`; that predicate has an explicit `leftAboveRightBelow` constructor with exactly the printed ordered semibounded hypotheses, so this theorem is a strictly more general real statement and specializes immediately to Theorem 5.2. The compiler audit surface records that specialization explicitly.",
+      "review_note": "Accepted result-only semantic review 2026-08-12. `Theorem5_2` is the source-facing complex ordered unbounded theorem for `A >= c+delta > c >= B`, arbitrary unitary-invariant ideal gauge, and the exact domain-aware Sylvester equation. `davisKahan1970_sylvester_real` is the real unbounded theorem under `FormBoundedSylvesterGap`; that predicate has an explicit `leftAboveRightBelow` constructor with exactly the printed ordered semibounded hypotheses, so this theorem is a strictly more general real statement and specializes immediately to Theorem 5.2. The compiler audit surface records that specialization explicitly.\n\n**SCOPE WRAPPER ADDED 2026-09-04 (Claude Opus 5, on hostile review).**  The real endpoint was canonicalized on the `FormBoundedSylvesterGap` abstraction while the complex endpoint carried the printed ordered semibounds; the two now agree, and the broader theorem is supporting evidence.",
       "parent_claim_id": "DK-5.2-thm",
       "boundary_review": {
         "status": "accepted",
@@ -3452,7 +3491,7 @@
           "capability_classes": []
         },
         {
-          "declaration": "TauCeti.DavisKahan1970.theorem5_2_symmetricNorming_real",
+          "declaration": "TauCeti.DavisKahan1970.theorem5_2_orderedGap_symmetricNorming_real",
           "role": "primary_source_witness",
           "scalar_scope": "real",
           "evidence_kind": "proof",
@@ -3478,6 +3517,10 @@
           "declaration": "TauCeti.DavisKahan1970.symmetricNorming_of_kyFanDominant",
           "role": "supporting_theorem",
           "note": "Fan dominance: an estimate holding in every Fan-dominant ideal gauge holds at every source unitarily invariant norm, because the finite Ky Fan gauges are such families."
+        },
+        {
+          "declaration": "TauCeti.DavisKahan1970.theorem5_2_symmetricNorming_real",
+          "role": "generalization"
         }
       ],
       "result_wide_scope_atoms": [
@@ -3505,12 +3548,12 @@
           ],
           "scalar_scope": "real",
           "evidence": {
-            "primary": "TauCeti.DavisKahan1970.theorem5_2_symmetricNorming_real",
+            "primary": "TauCeti.DavisKahan1970.theorem5_2_orderedGap_symmetricNorming_real",
             "correspondence": []
           },
           "status": "established",
           "evidence_kind": "proof",
-          "justification": "delta * N(X) <= N(R) for a bounded solution of A X = X B + R with closed self-adjoint A >= c + delta > c >= B, at every source unitarily invariant norm, with ideal membership concluded."
+          "justification": "delta * N(X) <= N(R) for a bounded solution of A X = X B + R with closed self-adjoint A >= c + delta > c >= B, at every source unitarily invariant norm, with ideal membership concluded.  SCOPE CORRECTED 2026-09-04: the real primary took `FormBoundedSylvesterGap`, which also covers the interval/exterior and reversed configurations and is therefore broader than the printed `A >= gamma + delta > gamma >= B`.  The primary is now the instance at the printed ordered semibounds, matching the complex endpoint, which was already in that shape; the `FormBoundedSylvesterGap` theorem is retained as a generalization."
         }
       ]
     },
@@ -4822,9 +4865,15 @@
         "TauCeti.DavisKahan1970.Section8.theorem8_2_sinTwoTheta_perturbation_real_symmetricNorming",
         "TauCeti.DavisKahan1970.Section8.theorem8_2_sinTwoTheta_residual_real_symmetricNorming",
         "TauCeti.DavisKahan1970.Section8.theorem8_2_branch_maximalAngle_lt_of_crossedDefects",
-        "TauCeti.DavisKahan1970.Section8.theorem8_2_branch_real_maximalAngle_lt_of_crossedDefects"
+        "TauCeti.DavisKahan1970.Section8.theorem8_2_branch_real_maximalAngle_lt_of_crossedDefects",
+        "TauCeti.DavisKahan1970.Section8.theorem8_2_sinTwoTheta_residual_directedAngle_symmetricNorming",
+        "TauCeti.DavisKahan1970.Section8.theorem8_2_sinTwoTheta_residual_directedAngle_real_symmetricNorming",
+        "TauCeti.DavisKahan.Angle.sinTwoThetaIdealBlock_hasSameApproximationNumbers_trialSide",
+        "TauCeti.DavisKahan.Angle.directedSinTwoAngleOperator_hasSameApproximationNumbers_swap",
+        "TauCeti.DavisKahan.Angle.mem_directedSinTwoAngleOperator_trialSide_iff",
+        "TauCeti.DavisKahan.Angle.gauge_directedSinTwoAngleOperator_trialSide"
       ],
-      "review_note": "RE-CLOSED 2026-08-12 after repair (reopened earlier the same day; the reopening is retained in git history).  Both defects were real.  (a) Source scope: immediately after the proof of Proposition 3.2 the paper fixes the standing convention that (3.5) is assumed as well as (1.5) except where the contrary is stated, and Theorem 8.2 does not state otherwise.  That convention is now inventoried as the source SCOPE atom `S3-standing-scope.crossed-dimension-standing-assumption` and linked, as scope, to exactly the two counted results it governs -- Theorem 8.2 and Proposition 3.4.  It is not a counted result and the denominator remains 29.  Theorem 8.1's ambient quarter-angle characterization `theorem8_1_maximalAngle_le_iff_spectrumIn` is proved with no dimension hypothesis at all, so it is deliberately not linked.  (b) Evidence: the printed quarter-angle conclusion is the AMBIENT Theta < pi/4, and the row previously selected a directed-gap theorem.  The selected evidence is now `theorem8_2_branch_maximalAngle_lt_of_crossedDefects` and `theorem8_2_branch_real_maximalAngle_lt_of_crossedDefects`, which conclude `maximalAngle P Q < pi/4` from either printed smallness alternative under (3.5) in its constructive `CrossedDefectsEquivalent` form, with no finite-dimensionality and no rank hypothesis, over both scalar fields.  Together with the four retained `sin 2Theta` endpoints (perturbation and residual, complex and real, arbitrary `SymmetricNormingFunction`) the evidence jointly establishes the printed result at the printed dimensional scope.  No new Lean mathematics was required once the source scope was corrected.",
+      "review_note": "RE-CLOSED 2026-08-12 after repair (reopened earlier the same day; the reopening is retained in git history).  Both defects were real.  (a) Source scope: immediately after the proof of Proposition 3.2 the paper fixes the standing convention that (3.5) is assumed as well as (1.5) except where the contrary is stated, and Theorem 8.2 does not state otherwise.  That convention is now inventoried as the source SCOPE atom `S3-standing-scope.crossed-dimension-standing-assumption` and linked, as scope, to exactly the two counted results it governs -- Theorem 8.2 and Proposition 3.4.  It is not a counted result and the denominator remains 29.  Theorem 8.1's ambient quarter-angle characterization `theorem8_1_maximalAngle_le_iff_spectrumIn` is proved with no dimension hypothesis at all, so it is deliberately not linked.  (b) Evidence: the printed quarter-angle conclusion is the AMBIENT Theta < pi/4, and the row previously selected a directed-gap theorem.  The selected evidence is now `theorem8_2_branch_maximalAngle_lt_of_crossedDefects` and `theorem8_2_branch_real_maximalAngle_lt_of_crossedDefects`, which conclude `maximalAngle P Q < pi/4` from either printed smallness alternative under (3.5) in its constructive `CrossedDefectsEquivalent` form, with no finite-dimensionality and no rank hypothesis, over both scalar fields.  Together with the four retained `sin 2Theta` endpoints (perturbation and residual, complex and real, arbitrary `SymmetricNormingFunction`) the evidence jointly establishes the printed result at the printed dimensional scope.  No new Lean mathematics was required once the source scope was corrected.\n\n**ORIENTATION DEFECT FOUND AND FIXED 2026-09-04 (Claude Opus 5, on hostile review).**  The printed residual alternative was certified on `sinTwoThetaIdealBlock Q P` rather than on the paper's directed angle, and in the wrong ordering of the pair.  This is exactly the defect repaired on `S2-sin-two-theta` earlier the same day; the repair was not propagated here, and the row read terminal throughout.  The canonical evidence is now `theorem8_2_sinTwoTheta_residual_directedAngle_symmetricNorming` and its real sibling, on `Angle.directedSinTwoAngleOperator P Q` with `P` the trial subspace; the block theorems remain as `implementation_structure`.  The perturbation alternative needed no change: it is the AMBIENT clause, and `sinAngleOperatorC` is the modulus of a projector difference, hence insensitive to the order of the pair.",
       "boundary_review": {
         "status": "accepted",
         "primary_source_block": "DK-8.2-thm",
@@ -4885,7 +4934,7 @@
           "capability_classes": []
         },
         {
-          "declaration": "TauCeti.DavisKahan1970.Section8.theorem8_2_sinTwoTheta_residual_symmetricNorming",
+          "declaration": "TauCeti.DavisKahan1970.Section8.theorem8_2_sinTwoTheta_residual_directedAngle_symmetricNorming",
           "role": "primary_source_witness",
           "scalar_scope": "complex",
           "evidence_kind": "proof",
@@ -4909,7 +4958,7 @@
           "capability_classes": []
         },
         {
-          "declaration": "TauCeti.DavisKahan1970.Section8.theorem8_2_sinTwoTheta_residual_real_symmetricNorming",
+          "declaration": "TauCeti.DavisKahan1970.Section8.theorem8_2_sinTwoTheta_residual_directedAngle_real_symmetricNorming",
           "role": "primary_source_witness",
           "scalar_scope": "real",
           "evidence_kind": "proof",
@@ -4929,6 +4978,30 @@
         {
           "declaration": "TauCeti.DavisKahan1970.Section8.theorem8_2_branch_directed_real",
           "role": "supporting_theorem"
+        },
+        {
+          "declaration": "TauCeti.DavisKahan1970.Section8.theorem8_2_sinTwoTheta_residual_symmetricNorming",
+          "role": "implementation_structure"
+        },
+        {
+          "declaration": "TauCeti.DavisKahan1970.Section8.theorem8_2_sinTwoTheta_residual_real_symmetricNorming",
+          "role": "implementation_structure"
+        },
+        {
+          "declaration": "TauCeti.DavisKahan.Angle.sinTwoThetaIdealBlock_hasSameApproximationNumbers_trialSide",
+          "role": "source_correspondence"
+        },
+        {
+          "declaration": "TauCeti.DavisKahan.Angle.directedSinTwoAngleOperator_hasSameApproximationNumbers_swap",
+          "role": "source_correspondence"
+        },
+        {
+          "declaration": "TauCeti.DavisKahan.Angle.mem_directedSinTwoAngleOperator_trialSide_iff",
+          "role": "source_correspondence"
+        },
+        {
+          "declaration": "TauCeti.DavisKahan.Angle.gauge_directedSinTwoAngleOperator_trialSide",
+          "role": "source_correspondence"
         }
       ],
       "result_wide_scope_atoms": [
@@ -4985,12 +5058,17 @@
           ],
           "scalar_scope": "complex",
           "evidence": {
-            "primary": "TauCeti.DavisKahan1970.Section8.theorem8_2_sinTwoTheta_residual_symmetricNorming",
-            "correspondence": []
+            "primary": "TauCeti.DavisKahan1970.Section8.theorem8_2_sinTwoTheta_residual_directedAngle_symmetricNorming",
+            "correspondence": [
+              "TauCeti.DavisKahan.Angle.sinTwoThetaIdealBlock_hasSameApproximationNumbers_trialSide",
+              "TauCeti.DavisKahan.Angle.directedSinTwoAngleOperator_hasSameApproximationNumbers_swap",
+              "TauCeti.DavisKahan.Angle.mem_directedSinTwoAngleOperator_trialSide_iff",
+              "TauCeti.DavisKahan.Angle.gauge_directedSinTwoAngleOperator_trialSide"
+            ]
           },
           "status": "established",
           "evidence_kind": "proof",
-          "justification": "Canonical witness for double-angle-bound-retained at complex scalar scope, carried over from the pre-clause canonical evidence and re-checked against its compiler-printed type under the coherent model."
+          "justification": "Canonical witness for double-angle-bound-retained at complex scalar scope, carried over from the pre-clause canonical evidence and re-checked against its compiler-printed type under the coherent model.  ORIENTATION CORRECTED 2026-09-04: the primary was the block theorem, whose conclusion is on `sinTwoThetaIdealBlock Q P` -- the proof's one-sided block, and in the ordering (gap-carrying, trial) rather than the paper's.  Section 1 reads the directed angle as `||sin Theta_0|| = ||Q^perp P|| = ||Q^perp E_0||`, the cross-projection with the TRIAL subspace on the right, so the printed object is `Angle.directedSinTwoAngleOperator P Q`.  The two ordered directed sines have different approximation numbers in general, so this is a theorem and not a renaming; the bridge is `..._trialSide`, which composes the block correspondence with `directedSinTwoAngleOperator_hasSameApproximationNumbers_swap`.  This is the same defect class that was repaired on `S2-sin-two-theta` earlier the same day, and this row stayed green through it -- which is why the conclusion-object invariant now covers both rows."
         },
         {
           "id": "double-angle-bound-retained.real",
@@ -5013,12 +5091,17 @@
           ],
           "scalar_scope": "real",
           "evidence": {
-            "primary": "TauCeti.DavisKahan1970.Section8.theorem8_2_sinTwoTheta_residual_real_symmetricNorming",
-            "correspondence": []
+            "primary": "TauCeti.DavisKahan1970.Section8.theorem8_2_sinTwoTheta_residual_directedAngle_real_symmetricNorming",
+            "correspondence": [
+              "TauCeti.DavisKahan.Angle.sinTwoThetaIdealBlock_hasSameApproximationNumbers_trialSide",
+              "TauCeti.DavisKahan.Angle.directedSinTwoAngleOperator_hasSameApproximationNumbers_swap",
+              "TauCeti.DavisKahan.Angle.mem_directedSinTwoAngleOperator_trialSide_iff",
+              "TauCeti.DavisKahan.Angle.gauge_directedSinTwoAngleOperator_trialSide"
+            ]
           },
           "status": "established",
           "evidence_kind": "proof",
-          "justification": "Canonical witness for double-angle-bound-retained at real scalar scope, carried over from the pre-clause canonical evidence and re-checked against its compiler-printed type under the coherent model."
+          "justification": "Canonical witness for double-angle-bound-retained at real scalar scope, carried over from the pre-clause canonical evidence and re-checked against its compiler-printed type under the coherent model.  ORIENTATION CORRECTED 2026-09-04: the primary was the block theorem, whose conclusion is on `sinTwoThetaIdealBlock Q P` -- the proof's one-sided block, and in the ordering (gap-carrying, trial) rather than the paper's.  Section 1 reads the directed angle as `||sin Theta_0|| = ||Q^perp P|| = ||Q^perp E_0||`, the cross-projection with the TRIAL subspace on the right, so the printed object is `Angle.directedSinTwoAngleOperator P Q`.  The two ordered directed sines have different approximation numbers in general, so this is a theorem and not a renaming; the bridge is `..._trialSide`, which composes the block correspondence with `directedSinTwoAngleOperator_hasSameApproximationNumbers_swap`.  This is the same defect class that was repaired on `S2-sin-two-theta` earlier the same day, and this row stayed green through it -- which is why the conclusion-object invariant now covers both rows."
         }
       ],
       "nonlocal_source_interpretation": {
@@ -5061,13 +5144,13 @@
   "semantic_review_sweep": {
     "date": "2026-09-04",
     "upstream_main_minimum": "bf1334bdf7608783b9147447bd9786b168cb5233",
-    "method": "2026-08-31 hostile re-review of all 29 counted results under the coherent-clause model.  For each result: read the printed statement in the checked-in distributable specification, enumerate its separately quantified clauses, then read the COMPILER-PRINTED TYPE of each clause's canonical witness -- not its name -- and compare scalar field, bounded/unbounded operator scope, domain assumptions, dimension, norm class, separation alternatives, residual versus ambient perturbation, directed versus ambient angle, constants, representative choice, and any hypothesis present in Lean but not in the paper or the reverse.  Eight findings, all repaired in the same pass: (F1) the ambient sin 2Theta clause had no witness at the row's unbounded scope -- repaired by proving it; (F2) Corollary 4.1, Proposition 4.3, Theorem 5.2 and Theorem 6.3 are printed 'for every unitary-invariant norm' but were certified at `KyFanDominantIdealFamily` -- repaired by `symmetricNorming_of_kyFanDominant` and six new paper-norm endpoints; (F3) Theorem 6.3's witnesses were existential inside the ideal quantifier -- repaired by the parameterized paper-norm endpoints; (F4) the sin 2Theta directed clauses cited no correspondence for the reflected overlap block -- repaired by registering the existing lemmas; and four checker holes (F5 conclusions stated under `lemma` were unchecked, F6 a clause primary need not be canonical evidence, F7 a clause's scalar field was unchecked against its primary, F8 the half-infinite gap justification was unchecked prose), each repaired with a regression test.  Theorem 8.1 part (iii)'s `FiniteDimensional` binder was checked and is the printed scope; Proposition 4.4's single counterexample was checked and is sufficient for a refutation.  The earlier 2026-08-12 sweep is retained as history; its union-of-atoms acceptance is the defect this model replaced.  RE-RUN 2026-08-31 (second pass), on the unbounded-compression axis specifically, after the Palomar Section 2 statement audit exposed it.  For each of the seven printed Section 2 clauses the two scopes `ambient operator may be unbounded` and `trial/Ritz compression may itself be unbounded` were separated and read off the compiler-printed type of the clause's canonical witness.  One clause failed: `S2-tan-theta` directed, whose primaries took a bounded compression.  It is repaired; the axis is now a `type_requirements` obligation on `DK-6-appendix.unbounded-tangent-extension` rather than prose.  The per-clause result table is in the human report.  THIRD PASS 2026-09-01: no counted result's disposition changed and no canonical evidence moved.  Two things were closed and are recorded in the human report.  (a) The Palomar Section 2 Challenge, which had gone on demanding an unbounded trial compression for directed `sin 2Theta` after this audit concluded the Appendix does not grant one, was narrowed to a bounded compression; the repository now gives one answer to that question.  (b) The paper's ambient tangents were proved to carry the tangent singular-value sequence -- `approximationNumber_tanAngleOperatorC` and `approximationNumber_absTanTwoAngleOperatorC` -- by pairing the existing Gram resolvent transfer with its inverse `approximationNumber_le_of_gramContraction`, so that `||tan Theta||` is a norm of the sequence `tan theta_n` as a theorem rather than as a docstring.  FOURTH PASS 2026-09-02: the directed `tan 2Θ` clauses were re-read against the compiler-printed types of the new source-shaped endpoints; both scalar fields now conclude on the paper's directed object with the identification of its singular values as tan (arcsin a_n(sin 2Θ₀)) inside the theorem type, and the checker now requires the registered correspondence and transport chain to be invoked by the primary's proof, to agree across both ledgers, and to be statement-pinned.  FIFTH PASS 2026-09-04, on the ordered-angle and right-hand-side axes, after a hostile review of the directed Section 2 clause.  Scope of this pass: only `S2-sin-two-theta` changed canonical evidence; the other 28 rows' canonical evidence is byte-identical and their prior acceptance is carried forward unexamined.  Two defects were found on the row that changed, both by reading the compiler-printed type rather than the name.  (i) RIGHT-HAND SIDE.  The public alias `SectionTwo.sinTwoTheta_complex`, registered here and in the statement map as the printed directed clause `delta N(sin 2Theta_0) <= 2 N(R)`, named `sinTwoTheta_directed_unbounded_addBounded_symmetricNorming_complex`, whose right-hand side is `2 N(E)` for the full bounded perturbation.  `N(E)` and `N(R)` are different source quantities and the printed directed clause is the residual one, so the alias exposed a theorem the row did not claim.  Repaired by repointing the alias; the perturbation theorem is retained as `alternative_route`.  (ii) ORDERED ANGLE.  The registered primary concluded on `sinTwoThetaIdealBlock U V` and the correspondence registered by finding F4 of the 2026-08-31 pass -- `mem_directedSinTwoAngleOperatorC_iff` and `gauge_directedSinTwoAngleOperatorC` -- carries it to `directedSinTwoAngleOperator U V`, with `U` the subspace whose blocks the gap separates and `V` the trial subspace.  Section 1 of the source reads the directed angle as `||sin Theta_0|| = ||Q^perp P|| = ||Q^perp E_0||`, the cross-projection with the TRIAL subspace on the right, which in this development is `directedSinTwoAngleOperator V U`.  F4 therefore closed the block-to-angle gap in the wrong ordering, and the ordering is not a naming choice: the two ordered directed sines have different approximation numbers in general.  Repaired by proving `Angle.directedSinTwoAngleOperator_hasSameApproximationNumbers_swap` -- the doubled sines do agree, by the polar decomposition of `T = P_U P_V` -- and canonicalizing the row on the angle-level theorems in the trial-side ordering.  The orientation is now pinned by two audit theorems that fix the semantic names `trial` and `gapCarrier` and would stop elaborating if the arguments were swapped.  No other row's disposition changed and the denominator is unchanged.",
+    "method": "2026-08-31 hostile re-review of all 29 counted results under the coherent-clause model.  For each result: read the printed statement in the checked-in distributable specification, enumerate its separately quantified clauses, then read the COMPILER-PRINTED TYPE of each clause's canonical witness -- not its name -- and compare scalar field, bounded/unbounded operator scope, domain assumptions, dimension, norm class, separation alternatives, residual versus ambient perturbation, directed versus ambient angle, constants, representative choice, and any hypothesis present in Lean but not in the paper or the reverse.  Eight findings, all repaired in the same pass: (F1) the ambient sin 2Theta clause had no witness at the row's unbounded scope -- repaired by proving it; (F2) Corollary 4.1, Proposition 4.3, Theorem 5.2 and Theorem 6.3 are printed 'for every unitary-invariant norm' but were certified at `KyFanDominantIdealFamily` -- repaired by `symmetricNorming_of_kyFanDominant` and six new paper-norm endpoints; (F3) Theorem 6.3's witnesses were existential inside the ideal quantifier -- repaired by the parameterized paper-norm endpoints; (F4) the sin 2Theta directed clauses cited no correspondence for the reflected overlap block -- repaired by registering the existing lemmas; and four checker holes (F5 conclusions stated under `lemma` were unchecked, F6 a clause primary need not be canonical evidence, F7 a clause's scalar field was unchecked against its primary, F8 the half-infinite gap justification was unchecked prose), each repaired with a regression test.  Theorem 8.1 part (iii)'s `FiniteDimensional` binder was checked and is the printed scope; Proposition 4.4's single counterexample was checked and is sufficient for a refutation.  The earlier 2026-08-12 sweep is retained as history; its union-of-atoms acceptance is the defect this model replaced.  RE-RUN 2026-08-31 (second pass), on the unbounded-compression axis specifically, after the Palomar Section 2 statement audit exposed it.  For each of the seven printed Section 2 clauses the two scopes `ambient operator may be unbounded` and `trial/Ritz compression may itself be unbounded` were separated and read off the compiler-printed type of the clause's canonical witness.  One clause failed: `S2-tan-theta` directed, whose primaries took a bounded compression.  It is repaired; the axis is now a `type_requirements` obligation on `DK-6-appendix.unbounded-tangent-extension` rather than prose.  The per-clause result table is in the human report.  THIRD PASS 2026-09-01: no counted result's disposition changed and no canonical evidence moved.  Two things were closed and are recorded in the human report.  (a) The Palomar Section 2 Challenge, which had gone on demanding an unbounded trial compression for directed `sin 2Theta` after this audit concluded the Appendix does not grant one, was narrowed to a bounded compression; the repository now gives one answer to that question.  (b) The paper's ambient tangents were proved to carry the tangent singular-value sequence -- `approximationNumber_tanAngleOperatorC` and `approximationNumber_absTanTwoAngleOperatorC` -- by pairing the existing Gram resolvent transfer with its inverse `approximationNumber_le_of_gramContraction`, so that `||tan Theta||` is a norm of the sequence `tan theta_n` as a theorem rather than as a docstring.  FOURTH PASS 2026-09-02: the directed `tan 2Θ` clauses were re-read against the compiler-printed types of the new source-shaped endpoints; both scalar fields now conclude on the paper's directed object with the identification of its singular values as tan (arcsin a_n(sin 2Θ₀)) inside the theorem type, and the checker now requires the registered correspondence and transport chain to be invoked by the primary's proof, to agree across both ledgers, and to be statement-pinned.  FIFTH PASS 2026-09-04, on the ordered-angle and right-hand-side axes, after a hostile review of the directed Section 2 clause.  Scope of this pass: only `S2-sin-two-theta` changed canonical evidence; the other 28 rows' canonical evidence is byte-identical and their prior acceptance is carried forward unexamined.  Two defects were found on the row that changed, both by reading the compiler-printed type rather than the name.  (i) RIGHT-HAND SIDE.  The public alias `SectionTwo.sinTwoTheta_complex`, registered here and in the statement map as the printed directed clause `delta N(sin 2Theta_0) <= 2 N(R)`, named `sinTwoTheta_directed_unbounded_addBounded_symmetricNorming_complex`, whose right-hand side is `2 N(E)` for the full bounded perturbation.  `N(E)` and `N(R)` are different source quantities and the printed directed clause is the residual one, so the alias exposed a theorem the row did not claim.  Repaired by repointing the alias; the perturbation theorem is retained as `alternative_route`.  (ii) ORDERED ANGLE.  The registered primary concluded on `sinTwoThetaIdealBlock U V` and the correspondence registered by finding F4 of the 2026-08-31 pass -- `mem_directedSinTwoAngleOperatorC_iff` and `gauge_directedSinTwoAngleOperatorC` -- carries it to `directedSinTwoAngleOperator U V`, with `U` the subspace whose blocks the gap separates and `V` the trial subspace.  Section 1 of the source reads the directed angle as `||sin Theta_0|| = ||Q^perp P|| = ||Q^perp E_0||`, the cross-projection with the TRIAL subspace on the right, which in this development is `directedSinTwoAngleOperator V U`.  F4 therefore closed the block-to-angle gap in the wrong ordering, and the ordering is not a naming choice: the two ordered directed sines have different approximation numbers in general.  Repaired by proving `Angle.directedSinTwoAngleOperator_hasSameApproximationNumbers_swap` -- the doubled sines do agree, by the polar decomposition of `T = P_U P_V` -- and canonicalizing the row on the angle-level theorems in the trial-side ordering.  The orientation is now pinned by two audit theorems that fix the semantic names `trial` and `gapCarrier` and would stop elaborating if the arguments were swapped.  No other row's disposition changed and the denominator is unchanged.  SIXTH PASS 2026-09-04, propagating the fifth pass.  Scope: only `DK-8.2-thm` changed canonical evidence.  Theorem 8.2 retains the Section 2 residual alternative, so its printed conclusion is the same directed `sin 2Theta_0` with the same ordering question, and its canonical evidence had the same defect: `theorem8_2_sinTwoTheta_residual_symmetricNorming` concludes on `sinTwoThetaIdealBlock Q P`, the proof's one-sided block, in the ordering (gap-carrying, trial) rather than the paper's trial-side reading `||sin Theta_0|| = ||Q^perp E_0||`.  The row read terminal through the fifth pass, which repaired exactly this on `S2-sin-two-theta`: the repair was not propagated and nothing noticed.  Repaired by `theorem8_2_sinTwoTheta_residual_directedAngle_symmetricNorming` and its real sibling, on `Angle.directedSinTwoAngleOperator P Q`, through the same trial-side bridge; the block theorems are demoted to `implementation_structure`.  The perturbation alternative was checked and needs no change: it is the ambient clause, and the ambient sine is the modulus of a projector difference, so it does not depend on the order of the pair.  The conclusion-object invariant now covers both rows rather than only the one that was repaired first.  SEVENTH PASS 2026-09-04, on `DK-3.1-cor` only.  The realization clause was canonicalized on a theorem strictly weaker than the printed sentence: `corollary3_1_realization` realizes the angle sequence but forces the two angle-zero multiplicities to coincide, and 'except perhaps for the multiplicity of 0' is precisely the clause that distinguishes Theta_0 from Theta_1.  The repository already contained `corollary3_1_realization_zeroMultiplicity`, which prescribes them as two independent Hilbert spaces, so the row was under-certified against a theorem it already had.  Canonical evidence moved; the weaker realization is retained as a specialization, and the classification half is registered beside it.  Also added and registered: `angle_eq_of_sin_sq_eq` and `angleSequence_eq_of_angleList_eq`, which prove that the approximation-number list `n |-> sin^2 theta_n` this development records determines the printed angle sequence -- previously an explanatory sentence rather than a theorem.  EIGHTH PASS 2026-09-04, on public-signature honesty across all 29 rows.  Every one of the 82 canonical declarations was `#check`ed against the build and its compiler-printed type searched for implementation-only structure classes.  Eight declarations in six Section 3 rows -- `DK-3.1-cor`, `DK-3.1-prop`, `DK-3.2-cor`, `DK-3.2-prop` (two), `DK-3.5-prop` (three) -- quantified over `[Algebra ℝ (H →L[𝕜] H)]`, `[IsScalarTower ℝ 𝕜 (H →L[𝕜] H)]` and `[ContinuousFunctionalCalculus ℝ (H →L[𝕜] H) IsSelfAdjoint]` as section `variable`s.  Davis and Kahan print none of them, and all three hold unconditionally at every `RCLike` field since 2026-09-01, so the signatures asked callers for instances that instance search finds.  Repaired by activating them with `attribute [local instance 100]` (not globally: a global `Algebra ℝ (E →L[𝕜] E)` makes Lean's `•` elaborator drop an author-written coercion).  Re-probed: 0 of 82 leak.  The existing capability check could not see any of this -- it matches `Has…`-shaped class names -- so `IMPLEMENTATION_STRUCTURE_CLASSES` now checks the printed type for these too, and was tamper-tested.  No canonical evidence moved in this pass; only the types got smaller.  NINTH PASS 2026-09-04, on 'stronger theorem used as exact source witness', for `DK-5.1-thm` and `DK-5.2-thm`.  Neither row was mathematically wrong; both named a theorem more general than the printed one as the printed one.  Theorem 5.1 is printed over BANACH spaces and its witnesses were stated over normed spaces -- the estimate is a rearrangement of the Sylvester identity and never uses completeness -- so a wrapper carrying `[CompleteSpace X]` and `[CompleteSpace Y]` is now canonical and the normed-space theorems are `generalization` evidence.  The printed `gamma >= 0` was checked and was already carried as nonneg, not strengthened to positive.  Theorem 5.2's real witness took `FormBoundedSylvesterGap`, which also covers the interval/exterior and reversed configurations, while the complex witness already carried the printed `A >= gamma + delta > gamma >= B`; the two now agree at the printed hypothesis.  Both wrappers invoke the general theorems internally and reprove nothing.",
     "compiler_audit_surface": "DavisKahan/Sources/DavisKahan1970/Audits/ResultSemanticSurface.lean",
     "human_report": "dev/davis-kahan-1970-result-semantic-review-2026-08-31.md",
     "terminal_results": 29,
     "remaining_results": [],
     "note": "The structured fields above are authoritative; this paragraph is regenerated whenever the count moves. 2026-09-02, closing: terminal_results is 29 and remaining_results is empty. `S2-tan-two-theta` was `hostile_review_blocked` under obligation `tan2theta-directed-correspondence` after a 2026-09-02 closure that did not compose; it is now accepted on canonical directed witnesses `tanTwoTheta_directed_unboundedResidual_symmetricNorming_{complex,real}`, which take the reducing subspace and conclude on the paper's directed corner (`tanTwoDirectedCornerR U V` over ℝ) with the singular-value identification in their types. The canonical-evidence digest changed accordingly and the statement pins were refreshed for the new canonical and bridging declarations. Earlier history of this field (the 2026-08-31 `S2-sin-two-theta` reopening, the `S2-tan-theta` Appendix-scope primaries, the paper-prefix rename with an unchanged digest) is in the human report.",
-    "canonical_evidence_sha256": "74cb5d7611fa11da515729735ac09997ec40d4f42dc43034434d799f023c2d64",
+    "canonical_evidence_sha256": "ac31dec0fbcf12b81db02a6e06a2401b30c1bbbdc16f106aae0dde41ac54ec61",
     "hostile_review_status": "accepted",
     "hostile_review_note": "ACCEPTED 2026-09-02, after the day's reopening was closed by new mathematics rather than by metadata: the directed tan 2Theta clauses have source-shaped complex and real endpoints on the paper objects, with the correspondence composed in Lean and pinned. `open_hostile_review_obligations` is closed and lists the closure; the structured fields `terminal_results`, `remaining_results` and `hostile_review_status` are the authoritative statement."
   },
@@ -5149,7 +5232,7 @@
         "lean_representation": "TauCeti.DavisKahan.CrossedDefectsEquivalent, i.e. Nonempty (halmosSourceDefect U V ≃ₗᵢ halmosTargetDefect U V)",
         "rule": "Equality of Hilbert dimensions IS the existence of a linear isometric equivalence; the constructive form is the faithful reading of the printed condition, not a strengthening of it. It is also required rather than convenient: Proposition 3.2 must BUILD a direct rotation out of the condition, which an equality of cardinals cannot supply. This convention is therefore source-transparent and needs no per-row correspondence evidence.",
         "witness": "TauCeti.DavisKahan.crossedDefectsEquivalent_iff_finrank_eq",
-        "witness_scope": "Proves the two readings are the same condition whenever the crossed defect spaces are finite-dimensional, which is the case where the printed phrase has an unambiguous elementary meaning. The infinite-dimensional case is the convention above, stated rather than proved, because Mathlib has no isometric classification of Hilbert spaces by dimension to prove it against.",
+        "witness_scope": "Proves the two readings are the same condition whenever the crossed defect spaces are finite-dimensional, which is the case where the printed phrase has an unambiguous elementary meaning. The infinite-dimensional case is the convention above, stated rather than proved.  MEASURED AGAINST THE PINNED MATHLIB 2026-09-04, because the previous wording ('Mathlib has no isometric classification of Hilbert spaces by dimension') was accurate but too vague to act on, and a hostile review reasonably asked why separability does not settle it.  What the pinned Mathlib has is `exists_hilbertBasis` and `HilbertBasis.repr`.  What it does NOT have, checked by grep over `Mathlib/Analysis/`: (i) invariance of the cardinality of a Hilbert basis, (ii) any statement that a separable Hilbert space has a countable orthonormal basis, and (iii) any isometric classification of Hilbert spaces.  Restricting to the paper's separable scope removes (i) but not (ii): the remaining obligation is 'an orthonormal family in a separable space is countable' -- true because distinct members are sqrt 2 apart -- and then 'two infinite-dimensional separable Hilbert spaces are isometrically isomorphic', via `HilbertBasis.repr` and an index equivalence.  Combined with the finite case already proved here, that yields the separable-scope correspondence `Nonempty (S ≃ₗᵢ T) ↔ finrank S = finrank T` for finite-dimensional crossed defects and unconditionally for infinite-dimensional ones.  That is a bounded piece of reusable Hilbert-space theory and belongs in `ForTauCeti`; it is not written, and until it is, the infinite-dimensional reading of (3.5) is a representation convention rather than a theorem.",
         "applies_to": [
           "S2-tan-theta",
           "DK-3.2-prop",

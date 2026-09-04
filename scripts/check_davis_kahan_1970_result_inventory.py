@@ -84,6 +84,25 @@ CAPABILITY_CLASSES = {
     "TauCeti.DavisKahan.Sylvester.HasUnboundedSylvesterKyFan",
     "TauCeti.DavisKahan.ExactSinTheta.HasApproximationNumberStrongCutoff",
 }
+#: Structure classes that are *implementation plumbing* on an operator algebra:
+#: the real functional calculus and the two scalar-action facts Mathlib pairs it
+#: with.  Davis and Kahan print none of them, and since 2026-09-01 each holds
+#: unconditionally at every `RCLike` field, so a canonical signature that still
+#: quantifies over one is asking its caller for something instance search finds.
+#:
+#: These are checked separately from `CAPABILITY_CLASSES` because they are not
+#: `Has…`-shaped and the head-name heuristic below cannot see them.  That gap was
+#: real: on 2026-09-04 a probe of all 82 canonical declarations found eight, in
+#: six Section 3 rows, carrying all three -- every one of them invisible to the
+#: capability check that had been green for weeks.
+IMPLEMENTATION_STRUCTURE_CLASSES = {
+    "ContinuousFunctionalCalculus",
+    "NonUnitalContinuousFunctionalCalculus",
+    "ContinuousMap.UniqueHom",
+    "Algebra ℝ",
+    "IsScalarTower ℝ",
+    "StarOrderedRing",
+}
 # Counted results whose canonical witness has reached the paper's own scalar
 # scope, mapped to the public `SectionTwo` short name that must alias it.
 #
@@ -137,6 +156,19 @@ CANONICAL_CONCLUSION_TOKENS: dict[str, dict[str, list[str]]] = {
     "TauCeti.DavisKahan1970.sinTwoTheta_directed_unboundedResidual_symmetricNorming_real": {
         "required": ["Angle.directedSinTwoAngleOperator", "N.gauge R"],
         "forbidden": ["sinTwoThetaIdealBlock", "N.gauge Eop"],
+    },
+    # Theorem 8.2 retains the Section 2 residual alternative, so its printed
+    # conclusion is the same object with the same ordering problem.  It was
+    # certified on the block for weeks *after* the Section 2 row was repaired,
+    # and stayed green throughout, which is what made this table worth having
+    # rather than trusting the repair to propagate by attention.
+    "TauCeti.DavisKahan1970.Section8.theorem8_2_sinTwoTheta_residual_directedAngle_symmetricNorming": {
+        "required": ["Angle.directedSinTwoAngleOperator", "residual"],
+        "forbidden": ["sinTwoThetaIdealBlock", "N.gauge K"],
+    },
+    "TauCeti.DavisKahan1970.Section8.theorem8_2_sinTwoTheta_residual_directedAngle_real_symmetricNorming": {
+        "required": ["Angle.directedSinTwoAngleOperator", "residual"],
+        "forbidden": ["sinTwoThetaIdealBlock", "N.gauge K"],
     },
 }
 SUPPORTING_EVIDENCE_ROLES = {
@@ -2227,6 +2259,19 @@ def _validate_canonical_evidence(
                     "capability_classes (an empty list when it carries none)"
                 )
             if probed_types is not None:
+                leaked = sorted(
+                    cls for cls in IMPLEMENTATION_STRUCTURE_CLASSES
+                    if cls in probed_types[declaration]
+                )
+                if leaked:
+                    fail(
+                        f"{result_id}: canonical evidence {declaration} quantifies over the "
+                        f"implementation-structure class(es) {leaked!r}.  These are the real "
+                        "functional calculus on an operator algebra and its scalar-action "
+                        "companions; they hold at every `RCLike` field and Davis and Kahan "
+                        "print none of them, so activate them with `attribute [local instance]` "
+                        "instead of asking the caller for them"
+                    )
                 tokens = CANONICAL_CONCLUSION_TOKENS.get(declaration)
                 if tokens is not None:
                     printed = probed_types[declaration]

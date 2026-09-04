@@ -2041,7 +2041,7 @@ The declarations that carry this result's printed statement, with the source ato
 
 #### `TauCeti.DavisKahan1970.proposition3_1`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section3AcuteDirectRotation.lean:173`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section3AcuteDirectRotation.lean:182`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
@@ -2150,25 +2150,25 @@ Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.proposition3_2_exists_iff_crossedDefectsEquivalent`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section3Proposition32.lean:71`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section3Proposition32.lean:80`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.proposition3_2_not_unique`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section3Proposition32.lean:105`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section3Proposition32.lean:114`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.proposition3_2_exists_iff_crossedDefectsEquivalent_real`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section3Proposition32.lean:256`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section3Proposition32.lean:266`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.proposition3_2_not_unique_real`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section3Proposition32.lean:280`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section3Proposition32.lean:290`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
@@ -2613,11 +2613,11 @@ One row per printed source clause per scalar field.  A clause is `PASS` only whe
 | clause | scalar | witness | status |
 | --- | --- | --- | --- |
 | `compact-complete-invariants.rclike` | rclike | `TauCeti.DavisKahan1970.corollary3_1_compact_defectBlock_angleList_classification` | **PASS** |
-| `allowed-angle-sequence.rclike` | rclike | `TauCeti.DavisKahan1970.corollary3_1_realization` | **PASS** |
+| `allowed-angle-sequence.rclike` | rclike | `TauCeti.DavisKahan1970.corollary3_1_realization_zeroMultiplicity` + `TauCeti.DavisKahan1970.angleSequence_eq_of_angleList_eq` + `TauCeti.DavisKahan1970.angle_eq_of_sin_sq_eq` | **PASS** |
 
 **`compact-complete-invariants.rclike`.** Canonical witness for compact-complete-invariants, theta1-match at rclike scalar scope, carried over from the pre-clause canonical evidence and re-checked against its compiler-printed type under the coherent model.
 
-**`allowed-angle-sequence.rclike`.** Canonical witness for allowed-angle-sequence at rclike scalar scope, carried over from the pre-clause canonical evidence and re-checked against its compiler-printed type under the coherent model.
+**`allowed-angle-sequence.rclike`.** The printed sentence: the eigenvalues of Theta_0 are an arbitrary sequence pi/2 >= theta_1 >= theta_2 >= ... -> 0 together with a possible eigenvalue 0, and those of Theta_1 are the same EXCEPT PERHAPS FOR THE MULTIPLICITY OF 0.  UNDER-CERTIFICATION CORRECTED 2026-09-04: the primary was `corollary3_1_realization`, which realizes the sequence but forces the two angle-zero multiplicities to coincide, so it does not witness the clause that distinguishes Theta_0 from Theta_1.  `corollary3_1_realization_zeroMultiplicity` prescribes them as two arbitrary Hilbert spaces Z_0 and Z_1, chosen independently of each other and of theta, which is the printed freedom; the weaker realization stays as supporting evidence.  The recorded invariant is the approximation-number list `n |-> sin^2 theta_n` rather than a list of angles; `angleSequence_eq_of_angleList_eq` proves that recording it records the angles, since `theta |-> sin^2 theta` is injective on the printed range [0, pi/2].
 
 Result-wide scope every clause must carry: *(none)*
 
@@ -2626,29 +2626,64 @@ Result-wide scope every clause must carry: *(none)*
 The declarations that carry this result's printed statement, with the source atoms each one covers.  Everything under *Other registered declarations* below accompanies the result without establishing it.
 
 - `TauCeti.DavisKahan1970.corollary3_1_compact_defectBlock_angleList_classification` — primary_source_witness, rclike scalars, proof; covers `DK-3.1-cor.compact-complete-invariants`, `DK-3.1-cor.theta1-match`
-- `TauCeti.DavisKahan1970.corollary3_1_realization` — primary_source_witness, rclike scalars, proof; covers `DK-3.1-cor.allowed-angle-sequence`
+- `TauCeti.DavisKahan1970.corollary3_1_realization_zeroMultiplicity` — primary_source_witness, rclike scalars, proof; covers `DK-3.1-cor.allowed-angle-sequence`
 
 ### Other registered declarations
 
 - `TauCeti.DavisKahan1970.corollary3_1_compact_classification_real` — specialization
+- `TauCeti.DavisKahan1970.corollary3_1_realization` — specialization
+- `TauCeti.DavisKahan1970.angleSequence_eq_of_angleList_eq` — source_correspondence
+- `TauCeti.DavisKahan1970.angle_eq_of_sin_sq_eq` — source_correspondence
+- `TauCeti.DavisKahan1970.corollary3_1_prescribedAngleSequence_classification` — supporting_theorem
+- `TauCeti.DavisKahan1970.corollary3_1_prescribedAngleSequence_classification_real` — supporting_theorem
 
 ### Source-facing Lean declarations
 
 #### `TauCeti.DavisKahan1970.corollary3_1_compact_defectBlock_angleList_classification`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section3Corollary31.lean:162`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section3Corollary31.lean:152`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.corollary3_1_compact_classification_real`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section3Corollary31.lean:485`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section3Corollary31.lean:514`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.corollary3_1_realization`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section3Corollary31.lean:290`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section3Corollary31.lean:280`
+
+Compiler-printed type: *inserted when a compiler certificate is supplied.*
+
+#### `TauCeti.DavisKahan1970.corollary3_1_realization_zeroMultiplicity`
+
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section3Corollary31.lean:330`
+
+Compiler-printed type: *inserted when a compiler certificate is supplied.*
+
+#### `TauCeti.DavisKahan1970.angleSequence_eq_of_angleList_eq`
+
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section3Corollary31.lean:416`
+
+Compiler-printed type: *inserted when a compiler certificate is supplied.*
+
+#### `TauCeti.DavisKahan1970.angle_eq_of_sin_sq_eq`
+
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section3Corollary31.lean:402`
+
+Compiler-printed type: *inserted when a compiler certificate is supplied.*
+
+#### `TauCeti.DavisKahan1970.corollary3_1_prescribedAngleSequence_classification`
+
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section3Corollary31.lean:462`
+
+Compiler-printed type: *inserted when a compiler certificate is supplied.*
+
+#### `TauCeti.DavisKahan1970.corollary3_1_prescribedAngleSequence_classification_real`
+
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section3Corollary31.lean:593`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
@@ -2754,37 +2789,37 @@ The declarations that carry this result's printed statement, with the source ato
 
 #### `TauCeti.DavisKahan1970.proposition3_5_commutations`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section3Proposition35.lean:273`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section3Proposition35.lean:281`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.proposition3_5_eigenvector_angle`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section3Proposition35.lean:308`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section3Proposition35.lean:316`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.proposition3_5_angleEigenspace_eq_fixedCosineSubspace`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section3Proposition35.lean:326`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section3Proposition35.lean:334`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.proposition3_5_angleEigenspace_uniqueMaximal`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section3Proposition35.lean:337`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section3Proposition35.lean:345`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.proposition3_5_commutations_acute`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section3Proposition35.lean:287`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section3Proposition35.lean:295`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.proposition3_5_eigenvector_angle_acute`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section3Proposition35.lean:318`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section3Proposition35.lean:326`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
@@ -2876,19 +2911,19 @@ The declarations that carry this result's printed statement, with the source ato
 
 #### `TauCeti.DavisKahan1970.corollary3_2`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section3Proposition35.lean:216`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section3Proposition35.lean:224`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.corollary3_2_nonacuteQuarterTurn_symm`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section3Proposition35.lean:185`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section3Proposition35.lean:193`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.corollary3_2_nonacute_directRotation_resolution`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section3Proposition35.lean:166`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section3Proposition35.lean:174`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
@@ -3990,12 +4025,12 @@ One row per printed source clause per scalar field.  A clause is `PASS` only whe
 
 | clause | scalar | witness | status |
 | --- | --- | --- | --- |
-| `sylvester-lower-bound.scalar_generic` | scalar_generic | `TauCeti.DavisKahan1970.banach_sylvester_lower_bound_uiNorm` | **PASS** |
-| `sylvester-lower-bound.complex` | complex | `TauCeti.DavisKahan1970.banach_sylvester_lower_bound_exact` | **PASS** |
+| `sylvester-lower-bound.scalar_generic` | scalar_generic | `TauCeti.DavisKahan1970.theorem5_1_banach_sylvester_banachScope_ofProperties` | **PASS** |
+| `sylvester-lower-bound.complex` | complex | `TauCeti.DavisKahan1970.theorem5_1_banach_sylvester_banachScope` | **PASS** |
 
-**`sylvester-lower-bound.scalar_generic`.** Canonical witness for sylvester-lower-bound at scalar_generic scalar scope, carried over from the pre-clause canonical evidence and re-checked against its compiler-printed type under the coherent model.
+**`sylvester-lower-bound.scalar_generic`.** Canonical witness for sylvester-lower-bound at scalar_generic scalar scope, carried over from the pre-clause canonical evidence and re-checked against its compiler-printed type under the coherent model.  SCOPE CORRECTED 2026-09-04: the primary was the normed-space theorem, which never uses completeness and is therefore strictly stronger than the printed statement -- but the printed statement opens 'Let X, Y be BANACH spaces', and canonical evidence is supposed to be the printed statement.  The primary is now the thin wrapper carrying [CompleteSpace X] and [CompleteSpace Y] with the printed hypotheses in printed form (gamma >= 0, an actual two-sided inverse with ||A^-1|| <= (gamma+delta)^-1, and a norm on cross-space maps compatible with the two bound norms).  The normed-space theorem is unchanged and is retained as a generalization.
 
-**`sylvester-lower-bound.complex`.** Canonical witness for sylvester-lower-bound at complex scalar scope, carried over from the pre-clause canonical evidence and re-checked against its compiler-printed type under the coherent model.
+**`sylvester-lower-bound.complex`.** Canonical witness for sylvester-lower-bound at complex scalar scope, carried over from the pre-clause canonical evidence and re-checked against its compiler-printed type under the coherent model.  SCOPE CORRECTED 2026-09-04: the primary was the normed-space theorem, which never uses completeness and is therefore strictly stronger than the printed statement -- but the printed statement opens 'Let X, Y be BANACH spaces', and canonical evidence is supposed to be the printed statement.  The primary is now the thin wrapper carrying [CompleteSpace X] and [CompleteSpace Y] with the printed hypotheses in printed form (gamma >= 0, an actual two-sided inverse with ||A^-1|| <= (gamma+delta)^-1, and a norm on cross-space maps compatible with the two bound norms).  The normed-space theorem is unchanged and is retained as a generalization.
 
 Result-wide scope every clause must carry: `DK-5.1-thm.banach-hypotheses`
 
@@ -4003,14 +4038,16 @@ Result-wide scope every clause must carry: `DK-5.1-thm.banach-hypotheses`
 
 The declarations that carry this result's printed statement, with the source atoms each one covers.  Everything under *Other registered declarations* below accompanies the result without establishing it.
 
-- `TauCeti.DavisKahan1970.banach_sylvester_lower_bound_uiNorm` — primary_source_witness, scalar_generic scalars, proof; covers `DK-5.1-thm.banach-hypotheses`, `DK-5.1-thm.sylvester-lower-bound`
-- `TauCeti.DavisKahan1970.banach_sylvester_lower_bound_exact` — primary_source_witness, complex scalars, proof; covers `DK-5.1-thm.banach-hypotheses`, `DK-5.1-thm.sylvester-lower-bound`
+- `TauCeti.DavisKahan1970.theorem5_1_banach_sylvester_banachScope_ofProperties` — primary_source_witness, scalar_generic scalars, proof; covers `DK-5.1-thm.banach-hypotheses`, `DK-5.1-thm.sylvester-lower-bound`
+- `TauCeti.DavisKahan1970.theorem5_1_banach_sylvester_banachScope` — primary_source_witness, complex scalars, proof; covers `DK-5.1-thm.banach-hypotheses`, `DK-5.1-thm.sylvester-lower-bound`
 
 ### Other registered declarations
 
 - `TauCeti.DavisKahan1970.banach_sylvester_lower_bound_interchanged` — generalization
 - `TauCeti.DavisKahan1970.banach_sylvester_lower_bound_interchanged_exact` — generalization
 - `TauCeti.DavisKahan1970.banach_sylvester_lower_bound_unboundedA` — generalization
+- `TauCeti.DavisKahan1970.banach_sylvester_lower_bound_uiNorm` — generalization
+- `TauCeti.DavisKahan1970.banach_sylvester_lower_bound_exact` — generalization
 
 ### Source-facing Lean declarations
 
@@ -4041,6 +4078,18 @@ Compiler-printed type: *inserted when a compiler certificate is supplied.*
 #### `TauCeti.DavisKahan1970.banach_sylvester_lower_bound_unboundedA`
 
 Source location candidates: `DavisKahan/Sources/DavisKahan1970/PartIIIPresentation.lean:275`
+
+Compiler-printed type: *inserted when a compiler certificate is supplied.*
+
+#### `TauCeti.DavisKahan1970.theorem5_1_banach_sylvester_banachScope_ofProperties`
+
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section5BanachSylvester.lean:348`
+
+Compiler-printed type: *inserted when a compiler certificate is supplied.*
+
+#### `TauCeti.DavisKahan1970.theorem5_1_banach_sylvester_banachScope`
+
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section5BanachSylvester.lean:326`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
@@ -4116,11 +4165,11 @@ One row per printed source clause per scalar field.  A clause is `PASS` only whe
 | clause | scalar | witness | status |
 | --- | --- | --- | --- |
 | `hilbert-unbounded-conclusion.complex` | complex | `TauCeti.DavisKahan1970.theorem5_2_symmetricNorming_complex` | **PASS** |
-| `hilbert-unbounded-conclusion.real` | real | `TauCeti.DavisKahan1970.theorem5_2_symmetricNorming_real` | **PASS** |
+| `hilbert-unbounded-conclusion.real` | real | `TauCeti.DavisKahan1970.theorem5_2_orderedGap_symmetricNorming_real` | **PASS** |
 
 **`hilbert-unbounded-conclusion.complex`.** delta * N(X) <= N(R) for a bounded solution of A X = X B + R with closed self-adjoint A >= c + delta > c >= B, at every source unitarily invariant norm, with ideal membership concluded.
 
-**`hilbert-unbounded-conclusion.real`.** delta * N(X) <= N(R) for a bounded solution of A X = X B + R with closed self-adjoint A >= c + delta > c >= B, at every source unitarily invariant norm, with ideal membership concluded.
+**`hilbert-unbounded-conclusion.real`.** delta * N(X) <= N(R) for a bounded solution of A X = X B + R with closed self-adjoint A >= c + delta > c >= B, at every source unitarily invariant norm, with ideal membership concluded.  SCOPE CORRECTED 2026-09-04: the real primary took `FormBoundedSylvesterGap`, which also covers the interval/exterior and reversed configurations and is therefore broader than the printed `A >= gamma + delta > gamma >= B`.  The primary is now the instance at the printed ordered semibounds, matching the complex endpoint, which was already in that shape; the `FormBoundedSylvesterGap` theorem is retained as a generalization.
 
 Result-wide scope every clause must carry: `DK-5.2-thm.hilbert-unbounded-hypotheses`
 
@@ -4129,13 +4178,14 @@ Result-wide scope every clause must carry: `DK-5.2-thm.hilbert-unbounded-hypothe
 The declarations that carry this result's printed statement, with the source atoms each one covers.  Everything under *Other registered declarations* below accompanies the result without establishing it.
 
 - `TauCeti.DavisKahan1970.theorem5_2_symmetricNorming_complex` — primary_source_witness, complex scalars, proof; covers `DK-5.2-thm.hilbert-unbounded-hypotheses`, `DK-5.2-thm.hilbert-unbounded-conclusion`
-- `TauCeti.DavisKahan1970.theorem5_2_symmetricNorming_real` — primary_source_witness, real scalars, proof; covers `DK-5.2-thm.hilbert-unbounded-hypotheses`, `DK-5.2-thm.hilbert-unbounded-conclusion`
+- `TauCeti.DavisKahan1970.theorem5_2_orderedGap_symmetricNorming_real` — primary_source_witness, real scalars, proof; covers `DK-5.2-thm.hilbert-unbounded-hypotheses`, `DK-5.2-thm.hilbert-unbounded-conclusion`
 
 ### Other registered declarations
 
 - `TauCeti.DavisKahan1970.Theorem5_2` — generalization
 - `TauCeti.DavisKahan.Sylvester.davisKahan1970_sylvester_real` — generalization
 - `TauCeti.DavisKahan1970.symmetricNorming_of_kyFanDominant` — supporting_theorem
+- `TauCeti.DavisKahan1970.theorem5_2_symmetricNorming_real` — generalization
 
 ### Source-facing Lean declarations
 
@@ -4166,6 +4216,12 @@ Compiler-printed type: *inserted when a compiler certificate is supplied.*
 #### `TauCeti.DavisKahan1970.symmetricNorming_of_kyFanDominant`
 
 Source location candidates: `DavisKahan/Sources/DavisKahan1970/SymmetricNormingFanDominance.lean:78`
+
+Compiler-printed type: *inserted when a compiler certificate is supplied.*
+
+#### `TauCeti.DavisKahan1970.theorem5_2_orderedGap_symmetricNorming_real`
+
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/SymmetricNormingFanDominance.lean:263`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
@@ -5696,9 +5752,9 @@ One row per printed source clause per scalar field.  A clause is `PASS` only whe
 | `acute-branch-conclusion.complex` | complex | `TauCeti.DavisKahan1970.Section8.theorem8_2_branch_maximalAngle_lt_of_crossedDefects` | **PASS** |
 | `acute-branch-conclusion.real` | real | `TauCeti.DavisKahan1970.Section8.theorem8_2_branch_real_maximalAngle_lt_of_crossedDefects` | **PASS** |
 | `double-angle-bound-retained.complex` | complex | `TauCeti.DavisKahan1970.Section8.theorem8_2_sinTwoTheta_perturbation_symmetricNorming` | **PASS** |
-| `double-angle-bound-retained.complex.2` | complex | `TauCeti.DavisKahan1970.Section8.theorem8_2_sinTwoTheta_residual_symmetricNorming` | **PASS** |
+| `double-angle-bound-retained.complex.2` | complex | `TauCeti.DavisKahan1970.Section8.theorem8_2_sinTwoTheta_residual_directedAngle_symmetricNorming` + `TauCeti.DavisKahan.Angle.sinTwoThetaIdealBlock_hasSameApproximationNumbers_trialSide` + `TauCeti.DavisKahan.Angle.directedSinTwoAngleOperator_hasSameApproximationNumbers_swap` + `TauCeti.DavisKahan.Angle.mem_directedSinTwoAngleOperator_trialSide_iff` + `TauCeti.DavisKahan.Angle.gauge_directedSinTwoAngleOperator_trialSide` | **PASS** |
 | `double-angle-bound-retained.real` | real | `TauCeti.DavisKahan1970.Section8.theorem8_2_sinTwoTheta_perturbation_real_symmetricNorming` | **PASS** |
-| `double-angle-bound-retained.real.2` | real | `TauCeti.DavisKahan1970.Section8.theorem8_2_sinTwoTheta_residual_real_symmetricNorming` | **PASS** |
+| `double-angle-bound-retained.real.2` | real | `TauCeti.DavisKahan1970.Section8.theorem8_2_sinTwoTheta_residual_directedAngle_real_symmetricNorming` + `TauCeti.DavisKahan.Angle.sinTwoThetaIdealBlock_hasSameApproximationNumbers_trialSide` + `TauCeti.DavisKahan.Angle.directedSinTwoAngleOperator_hasSameApproximationNumbers_swap` + `TauCeti.DavisKahan.Angle.mem_directedSinTwoAngleOperator_trialSide_iff` + `TauCeti.DavisKahan.Angle.gauge_directedSinTwoAngleOperator_trialSide` | **PASS** |
 
 **`acute-branch-conclusion.complex`.** Canonical witness for acute-branch-conclusion at complex scalar scope, carried over from the pre-clause canonical evidence and re-checked against its compiler-printed type under the coherent model.
 
@@ -5706,11 +5762,11 @@ One row per printed source clause per scalar field.  A clause is `PASS` only whe
 
 **`double-angle-bound-retained.complex`.** Canonical witness for double-angle-bound-retained at complex scalar scope, carried over from the pre-clause canonical evidence and re-checked against its compiler-printed type under the coherent model.
 
-**`double-angle-bound-retained.complex.2`.** Canonical witness for double-angle-bound-retained at complex scalar scope, carried over from the pre-clause canonical evidence and re-checked against its compiler-printed type under the coherent model.
+**`double-angle-bound-retained.complex.2`.** Canonical witness for double-angle-bound-retained at complex scalar scope, carried over from the pre-clause canonical evidence and re-checked against its compiler-printed type under the coherent model.  ORIENTATION CORRECTED 2026-09-04: the primary was the block theorem, whose conclusion is on `sinTwoThetaIdealBlock Q P` -- the proof's one-sided block, and in the ordering (gap-carrying, trial) rather than the paper's.  Section 1 reads the directed angle as `||sin Theta_0|| = ||Q^perp P|| = ||Q^perp E_0||`, the cross-projection with the TRIAL subspace on the right, so the printed object is `Angle.directedSinTwoAngleOperator P Q`.  The two ordered directed sines have different approximation numbers in general, so this is a theorem and not a renaming; the bridge is `..._trialSide`, which composes the block correspondence with `directedSinTwoAngleOperator_hasSameApproximationNumbers_swap`.  This is the same defect class that was repaired on `S2-sin-two-theta` earlier the same day, and this row stayed green through it -- which is why the conclusion-object invariant now covers both rows.
 
 **`double-angle-bound-retained.real`.** Canonical witness for double-angle-bound-retained at real scalar scope, carried over from the pre-clause canonical evidence and re-checked against its compiler-printed type under the coherent model.
 
-**`double-angle-bound-retained.real.2`.** Canonical witness for double-angle-bound-retained at real scalar scope, carried over from the pre-clause canonical evidence and re-checked against its compiler-printed type under the coherent model.
+**`double-angle-bound-retained.real.2`.** Canonical witness for double-angle-bound-retained at real scalar scope, carried over from the pre-clause canonical evidence and re-checked against its compiler-printed type under the coherent model.  ORIENTATION CORRECTED 2026-09-04: the primary was the block theorem, whose conclusion is on `sinTwoThetaIdealBlock Q P` -- the proof's one-sided block, and in the ordering (gap-carrying, trial) rather than the paper's.  Section 1 reads the directed angle as `||sin Theta_0|| = ||Q^perp P|| = ||Q^perp E_0||`, the cross-projection with the TRIAL subspace on the right, so the printed object is `Angle.directedSinTwoAngleOperator P Q`.  The two ordered directed sines have different approximation numbers in general, so this is a theorem and not a renaming; the bridge is `..._trialSide`, which composes the block correspondence with `directedSinTwoAngleOperator_hasSameApproximationNumbers_swap`.  This is the same defect class that was repaired on `S2-sin-two-theta` earlier the same day, and this row stayed green through it -- which is why the conclusion-object invariant now covers both rows.
 
 Result-wide scope every clause must carry: `DK-8.2-thm.smallness-alternative`, `S3-standing-scope.crossed-dimension-standing-assumption`
 
@@ -5721,14 +5777,20 @@ The declarations that carry this result's printed statement, with the source ato
 - `TauCeti.DavisKahan1970.Section8.theorem8_2_branch_maximalAngle_lt_of_crossedDefects` — primary_source_witness, complex scalars, proof; covers `DK-8.2-thm.smallness-alternative`, `DK-8.2-thm.acute-branch-conclusion`, `S3-standing-scope.crossed-dimension-standing-assumption`
 - `TauCeti.DavisKahan1970.Section8.theorem8_2_branch_real_maximalAngle_lt_of_crossedDefects` — primary_source_witness, real scalars, proof; covers `DK-8.2-thm.smallness-alternative`, `DK-8.2-thm.acute-branch-conclusion`, `S3-standing-scope.crossed-dimension-standing-assumption`
 - `TauCeti.DavisKahan1970.Section8.theorem8_2_sinTwoTheta_perturbation_symmetricNorming` — primary_source_witness, complex scalars, proof; covers `DK-8.2-thm.smallness-alternative`, `DK-8.2-thm.double-angle-bound-retained`, `S3-standing-scope.crossed-dimension-standing-assumption`
-- `TauCeti.DavisKahan1970.Section8.theorem8_2_sinTwoTheta_residual_symmetricNorming` — primary_source_witness, complex scalars, proof; covers `DK-8.2-thm.smallness-alternative`, `DK-8.2-thm.double-angle-bound-retained`, `S3-standing-scope.crossed-dimension-standing-assumption`
+- `TauCeti.DavisKahan1970.Section8.theorem8_2_sinTwoTheta_residual_directedAngle_symmetricNorming` — primary_source_witness, complex scalars, proof; covers `DK-8.2-thm.smallness-alternative`, `DK-8.2-thm.double-angle-bound-retained`, `S3-standing-scope.crossed-dimension-standing-assumption`
 - `TauCeti.DavisKahan1970.Section8.theorem8_2_sinTwoTheta_perturbation_real_symmetricNorming` — primary_source_witness, real scalars, proof; covers `DK-8.2-thm.smallness-alternative`, `DK-8.2-thm.double-angle-bound-retained`, `S3-standing-scope.crossed-dimension-standing-assumption`
-- `TauCeti.DavisKahan1970.Section8.theorem8_2_sinTwoTheta_residual_real_symmetricNorming` — primary_source_witness, real scalars, proof; covers `DK-8.2-thm.smallness-alternative`, `DK-8.2-thm.double-angle-bound-retained`, `S3-standing-scope.crossed-dimension-standing-assumption`
+- `TauCeti.DavisKahan1970.Section8.theorem8_2_sinTwoTheta_residual_directedAngle_real_symmetricNorming` — primary_source_witness, real scalars, proof; covers `DK-8.2-thm.smallness-alternative`, `DK-8.2-thm.double-angle-bound-retained`, `S3-standing-scope.crossed-dimension-standing-assumption`
 
 ### Other registered declarations
 
 - `TauCeti.DavisKahan1970.Section8.theorem8_2_branch_directed_complex` — supporting_theorem
 - `TauCeti.DavisKahan1970.Section8.theorem8_2_branch_directed_real` — supporting_theorem
+- `TauCeti.DavisKahan1970.Section8.theorem8_2_sinTwoTheta_residual_symmetricNorming` — implementation_structure
+- `TauCeti.DavisKahan1970.Section8.theorem8_2_sinTwoTheta_residual_real_symmetricNorming` — implementation_structure
+- `TauCeti.DavisKahan.Angle.sinTwoThetaIdealBlock_hasSameApproximationNumbers_trialSide` — source_correspondence
+- `TauCeti.DavisKahan.Angle.directedSinTwoAngleOperator_hasSameApproximationNumbers_swap` — source_correspondence
+- `TauCeti.DavisKahan.Angle.mem_directedSinTwoAngleOperator_trialSide_iff` — source_correspondence
+- `TauCeti.DavisKahan.Angle.gauge_directedSinTwoAngleOperator_trialSide` — source_correspondence
 
 ### Source-facing Lean declarations
 
@@ -5740,13 +5802,13 @@ Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.Section8.theorem8_2_sinTwoTheta_perturbation_symmetricNorming`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section8/Theorem82.lean:436`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section8/Theorem82.lean:440`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.Section8.theorem8_2_sinTwoTheta_residual_symmetricNorming`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section8/Theorem82.lean:512`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section8/Theorem82.lean:518`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
@@ -5764,19 +5826,55 @@ Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.Section8.theorem8_2_sinTwoTheta_residual_real_symmetricNorming`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section8/Theorem82Real.lean:613`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section8/Theorem82Real.lean:615`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.Section8.theorem8_2_branch_maximalAngle_lt_of_crossedDefects`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section8/Theorem82.lean:600`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section8/Theorem82.lean:640`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.Section8.theorem8_2_branch_real_maximalAngle_lt_of_crossedDefects`
 
 Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section8/Theorem82Real.lean:385`
+
+Compiler-printed type: *inserted when a compiler certificate is supplied.*
+
+#### `TauCeti.DavisKahan1970.Section8.theorem8_2_sinTwoTheta_residual_directedAngle_symmetricNorming`
+
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section8/Theorem82.lean:562`
+
+Compiler-printed type: *inserted when a compiler certificate is supplied.*
+
+#### `TauCeti.DavisKahan1970.Section8.theorem8_2_sinTwoTheta_residual_directedAngle_real_symmetricNorming`
+
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section8/Theorem82Real.lean:675`
+
+Compiler-printed type: *inserted when a compiler certificate is supplied.*
+
+#### `TauCeti.DavisKahan.Angle.sinTwoThetaIdealBlock_hasSameApproximationNumbers_trialSide`
+
+Source location candidates: `DavisKahan/DoubleAngle/DirectedAngleGeneric.lean:169`
+
+Compiler-printed type: *inserted when a compiler certificate is supplied.*
+
+#### `TauCeti.DavisKahan.Angle.directedSinTwoAngleOperator_hasSameApproximationNumbers_swap`
+
+Source location candidates: `DavisKahan/Geometry/Angle/OperatorAngleGeneric.lean:689`
+
+Compiler-printed type: *inserted when a compiler certificate is supplied.*
+
+#### `TauCeti.DavisKahan.Angle.mem_directedSinTwoAngleOperator_trialSide_iff`
+
+Source location candidates: `DavisKahan/DoubleAngle/DirectedAngleGeneric.lean:184`
+
+Compiler-printed type: *inserted when a compiler certificate is supplied.*
+
+#### `TauCeti.DavisKahan.Angle.gauge_directedSinTwoAngleOperator_trialSide`
+
+Source location candidates: `DavisKahan/DoubleAngle/DirectedAngleGeneric.lean:190`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 

@@ -9,6 +9,7 @@ import DavisKahan.Geometry.Polar.DirectRotationSquare
 import DavisKahan.Geometry.Polar.PrincipalSquareRoot
 import ForTauCeti.Analysis.InnerProductSpace.AngleGeometry
 import ForTauCeti.Analysis.InnerProductSpace.RealContinuousFunctionalCalculus
+import ForTauCeti.Analysis.RCLike.ScalarTransportFunctionalCalculus
 
 open TauCeti.DavisKahan.Sylvester
 
@@ -58,8 +59,16 @@ section Generic
 variable {𝕜 : Type*} [RCLike 𝕜]
 variable {H : Type*} [NormedAddCommGroup H] [InnerProductSpace 𝕜 H]
   [CompleteSpace H]
-variable [Algebra ℝ (H →L[𝕜] H)] [IsScalarTower ℝ 𝕜 (H →L[𝕜] H)]
-  [ContinuousFunctionalCalculus ℝ (H →L[𝕜] H) IsSelfAdjoint]
+/-! The real functional calculus on `H →L[𝕜] H`, and the two scalar-action facts Mathlib
+pairs it with, are theorems at every `RCLike` field
+(`ContinuousLinearMap.continuousFunctionalCalculusReal`), so they are activated here rather
+than quantified over.  Until 2026-09-04 they were section `variable`s, and every theorem in
+this section therefore asked its caller for three instances that instance search finds.  They
+are `local instance 100` rather than global because a global `Algebra ℝ (E →L[𝕜] E)` makes
+Lean's `•` elaborator drop an author-written `((r : ℝ) : 𝕜) •` coercion. -/
+attribute [local instance 100] ContinuousLinearMap.realAlgebra
+  ContinuousLinearMap.realIsScalarTower ContinuousLinearMap.continuousFunctionalCalculusReal
+
 variable (U V : Submodule 𝕜 H) [U.HasOrthogonalProjection]
   [V.HasOrthogonalProjection]
 

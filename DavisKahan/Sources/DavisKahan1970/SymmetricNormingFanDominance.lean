@@ -250,6 +250,31 @@ theorem theorem5_2_symmetricNorming_real
     (fun M hM => DavisKahan.Sylvester.davisKahan1970_sylvester_real
       M hA hB hδ hgap hsyl hM)
 
+/-- **Davis--Kahan 1970, Theorem 5.2 over a real Hilbert space, at the printed ordered
+separation.**
+
+`A ≥ c + δ > c ≥ B` in the printed form -- one semibound each way -- rather than the
+`FormBoundedSylvesterGap` abstraction, which also covers the interval/exterior and reversed
+configurations and is therefore a broader hypothesis than Theorem 5.2 prints.
+
+`theorem5_2_symmetricNorming_real` is the general theorem and is not weakened; this is its
+instance at the printed hypothesis, and it is what the source row's canonical evidence names.
+The complex endpoint `theorem5_2_symmetricNorming_complex` was already in this shape. -/
+theorem theorem5_2_orderedGap_symmetricNorming_real
+    {E F : Type v}
+    [NormedAddCommGroup E] [InnerProductSpace ℝ E] [CompleteSpace E]
+    [NormedAddCommGroup F] [InnerProductSpace ℝ F] [CompleteSpace F]
+    (N : SymmetricNormingFunction) {A : E →ₗ.[ℝ] E} {B : F →ₗ.[ℝ] F}
+    (hA : IsSelfAdjoint A) (hB : IsSelfAdjoint B)
+    {X R : F →L[ℝ] E} {c δ : ℝ} (hδ : 0 < δ)
+    (hAlow : TauCeti.LinearPMap.SemiboundedBelow A (c + δ))
+    (hBhigh : TauCeti.LinearPMap.SemiboundedAbove B c)
+    (hsyl : TauCeti.LinearPMap.SylvesterEquation A B X R)
+    (hR : N.Mem R) :
+    N.Mem X ∧ δ * N.gauge X ≤ N.gauge R :=
+  theorem5_2_symmetricNorming_real N hA hB hδ
+    (DavisKahan.Sylvester.FormBoundedSylvesterGap.leftAboveRightBelow c hAlow hBhigh) hsyl hR
+
 end Sylvester
 
 end

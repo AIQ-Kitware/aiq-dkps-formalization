@@ -9,6 +9,7 @@ import DavisKahan.Sources.DavisKahan1970.Section3Theorem31Realization
 import DavisKahan.Geometry.Halmos.AngleSequenceRealization
 import DavisKahan.Geometry.Halmos.CompactClassification
 import ForTauCeti.Analysis.InnerProductSpace.CompactApproximationEigenvalues
+import ForTauCeti.Analysis.RCLike.ScalarTransportFunctionalCalculus
 
 open TauCeti.DavisKahan.Sylvester
 
@@ -57,6 +58,17 @@ section CosineBlock
 variable {𝕜 : Type*} [RCLike 𝕜]
 variable {H₁ : Type u} [NormedAddCommGroup H₁] [InnerProductSpace 𝕜 H₁]
   [CompleteSpace H₁]
+/-! The real functional calculus on an operator algebra, and the two scalar-action facts
+Mathlib pairs it with, are theorems at every `RCLike` field
+(`ContinuousLinearMap.continuousFunctionalCalculusReal`), so they are activated here rather
+than quantified over.  Until 2026-09-04 they were section `variable`s on the generic-half
+algebras, and the source-facing classification theorems therefore asked their callers for
+instances that instance search finds.  `local instance 100` rather than global: a global
+`Algebra ℝ (E →L[𝕜] E)` makes Lean's `•` elaborator drop an author-written `((r : ℝ) : 𝕜) •`
+coercion. -/
+attribute [local instance 100] ContinuousLinearMap.realAlgebra
+  ContinuousLinearMap.realIsScalarTower ContinuousLinearMap.continuousFunctionalCalculusReal
+
 variable {H₂ : Type v} [NormedAddCommGroup H₂] [InnerProductSpace 𝕜 H₂]
   [CompleteSpace H₂]
 variable (U₁ V₁ : Submodule 𝕜 H₁) [U₁.HasOrthogonalProjection]
@@ -64,14 +76,6 @@ variable (U₁ V₁ : Submodule 𝕜 H₁) [U₁.HasOrthogonalProjection]
 variable (U₂ V₂ : Submodule 𝕜 H₂) [U₂.HasOrthogonalProjection]
   [V₂.HasOrthogonalProjection]
 
-variable [Algebra ℝ (genericLeftHalf U₁ V₁ →L[𝕜] genericLeftHalf U₁ V₁)]
-  [IsScalarTower ℝ 𝕜 (genericLeftHalf U₁ V₁ →L[𝕜] genericLeftHalf U₁ V₁)]
-  [ContinuousFunctionalCalculus ℝ
-    (genericLeftHalf U₁ V₁ →L[𝕜] genericLeftHalf U₁ V₁) IsSelfAdjoint]
-variable [Algebra ℝ (genericLeftHalf U₂ V₂ →L[𝕜] genericLeftHalf U₂ V₂)]
-  [IsScalarTower ℝ 𝕜 (genericLeftHalf U₂ V₂ →L[𝕜] genericLeftHalf U₂ V₂)]
-  [ContinuousFunctionalCalculus ℝ
-    (genericLeftHalf U₂ V₂ →L[𝕜] genericLeftHalf U₂ V₂) IsSelfAdjoint]
 
 /-- Davis--Kahan 1970, Corollary 3.1: when the cross-projection is compact, the
 angle eigenvalue lists and elementary multiplicities classify the pair. -/
@@ -139,20 +143,6 @@ variable (U₁ V₁ : Submodule 𝕜 H₁) [U₁.HasOrthogonalProjection]
 variable (U₂ V₂ : Submodule 𝕜 H₂) [U₂.HasOrthogonalProjection]
   [V₂.HasOrthogonalProjection]
 
-variable [Algebra ℝ (genericLeftHalf U₁ V₁ᗮ →L[𝕜]
-    genericLeftHalf U₁ V₁ᗮ)]
-  [IsScalarTower ℝ 𝕜 (genericLeftHalf U₁ V₁ᗮ →L[𝕜]
-    genericLeftHalf U₁ V₁ᗮ)]
-  [ContinuousFunctionalCalculus ℝ
-    (genericLeftHalf U₁ V₁ᗮ →L[𝕜]
-      genericLeftHalf U₁ V₁ᗮ) IsSelfAdjoint]
-variable [Algebra ℝ (genericLeftHalf U₂ V₂ᗮ →L[𝕜]
-    genericLeftHalf U₂ V₂ᗮ)]
-  [IsScalarTower ℝ 𝕜 (genericLeftHalf U₂ V₂ᗮ →L[𝕜]
-    genericLeftHalf U₂ V₂ᗮ)]
-  [ContinuousFunctionalCalculus ℝ
-    (genericLeftHalf U₂ V₂ᗮ →L[𝕜]
-      genericLeftHalf U₂ V₂ᗮ) IsSelfAdjoint]
 
 /-- **Davis--Kahan 1970, Corollary 3.1, with the printed hypothesis.**
 
@@ -392,6 +382,45 @@ theorem corollary3_1_realization_zeroMultiplicity (𝕜 : Type*) [RCLike 𝕜] (
   · refine (angleSequenceZeroDatum 𝕜 θ Z₀ Z₁).halmosExteriorPart_eq.trans ?_
     rw [angleSequenceZeroDatum_sin₁, ker_blockMap_angleSinOp 𝕜 θ hθ0 hθ2 hne Z₁]
 end Realization
+
+/-! ## The recorded invariant is the printed one
+
+Corollary 3.1's invariant is printed as the eigenvalues of the angle operators.  Every
+statement here records instead the eigenvalue list `n ↦ sin² θₙ` of the defect block, because
+that is what an approximation-number sequence of a compact positive block *is*.  The two are
+the same information: `θ ↦ sin² θ` is injective on the printed range `[0, π/2]`, so a
+recorded list determines the angle sequence it came from and nothing is lost by recording the
+transformed one.
+
+This is stated rather than explained, because "these encode the same data" is exactly the
+kind of claim a hostile reviewer should be able to check in Lean. -/
+
+section RecordedInvariant
+
+/-- **`sin²` is injective on the printed angle range.**  Two angles in `[0, π/2]` with the
+same `sin²` are equal. -/
+theorem angle_eq_of_sin_sq_eq {a b : ℝ}
+    (ha0 : 0 ≤ a) (ha2 : a ≤ Real.pi / 2) (hb0 : 0 ≤ b) (hb2 : b ≤ Real.pi / 2)
+    (h : Real.sin a ^ 2 = Real.sin b ^ 2) : a = b := by
+  have hpi : (0 : ℝ) ≤ Real.pi / 2 := by positivity
+  have hsa : 0 ≤ Real.sin a := Real.sin_nonneg_of_nonneg_of_le_pi ha0 (by linarith [Real.pi_pos])
+  have hsb : 0 ≤ Real.sin b := Real.sin_nonneg_of_nonneg_of_le_pi hb0 (by linarith [Real.pi_pos])
+  have hsin : Real.sin a = Real.sin b := by nlinarith [hsa, hsb, h]
+  exact Real.injOn_sin ⟨by linarith, ha2⟩ ⟨by linarith, hb2⟩ hsin
+
+/-- **The recorded eigenvalue list determines the printed angle sequence.**
+
+If two admissible angle sequences produce the same recorded list `n ↦ sin² θₙ`, they are the
+same sequence.  So recording the list is recording the angles, and the classification and
+realization statements above lose nothing by being phrased through it. -/
+theorem angleSequence_eq_of_angleList_eq {θ φ : ℕ → ℝ}
+    (hθ0 : ∀ n, 0 ≤ θ n) (hθ2 : ∀ n, θ n ≤ Real.pi / 2)
+    (hφ0 : ∀ n, 0 ≤ φ n) (hφ2 : ∀ n, φ n ≤ Real.pi / 2)
+    (h : (fun n => Real.sin (θ n) ^ 2) = fun n => Real.sin (φ n) ^ 2) : θ = φ :=
+  funext fun n =>
+    angle_eq_of_sin_sq_eq (hθ0 n) (hθ2 n) (hφ0 n) (hφ2 n) (congrFun h n)
+
+end RecordedInvariant
 
 /-! ## Corollary 3.1: realization composed with classification
 
