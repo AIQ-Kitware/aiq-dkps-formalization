@@ -1,0 +1,226 @@
+\documentclass{article}
+
+% Draft-only layout approximation. See README.md before submission.
+\usepackage{draft_neurips_2026}
+\usepackage{amsmath,amssymb}
+\usepackage{booktabs,tabularx,array}
+\usepackage{float}
+\usepackage{graphicx}
+\usepackage{xcolor}
+\usepackage[colorlinks=true,allcolors=blue]{hyperref}
+\usepackage[nameinlink]{cleveref}
+\usepackage{enumitem}
+\setlist{nosep,leftmargin=*}
+\newcolumntype{Y}{>{\raggedright\arraybackslash}X}
+\newcommand{\Lean}{\textsc{Lean}}
+\newcommand{\DK}{Davis--Kahan}
+\input{generated/semantic_reversal_macros.tex}
+
+\title{Semantic Auditing for LLM-Assisted Formalization:\\Lessons from a Davis--Kahan Case Study}
+\author{Anonymous Authors}
+\date{}
+
+\begin{document}
+\maketitle
+
+\begin{abstract}
+Recent LLM and agentic tooling has lowered the practical barrier to producing
+formal mathematics in Lean.  This creates an approachable entry point for
+researchers who do not begin as Lean experts, but it also creates a second task:
+determining whether a checked formal statement expresses the mathematics that
+was intended.  We report lessons from one such experience, an LLM-assisted
+formalization of the 1970 Davis--Kahan paper.  The workflow began with manual
+copy/paste between chat and an editor and gradually acquired explicit source
+tracking, independent semantic review, and a local dashboard that places source
+passages, correspondence notes, and compiler-derived Lean evidence together.
+We place these practices in the context of recent systems for semantic review,
+including EconCSLib, Lean Atlas, ATLAS/AutoformBot, ShadowBench, LeanMarathon,
+and FormaTheoria.  A retrospective Git-history analysis finds
+\SemanticReversalCount{} transitions in which a result previously accepted by
+semantic review was later reopened, affecting \SemanticReversalResultCount{} of
+29 tracked Davis--Kahan results.  These observations come from one evolving
+project.  We use them as practical examples; they do not estimate model accuracy.
+\end{abstract}
+
+\section{From checked proofs to source correspondence}
+
+Lean checks whether a formal proposition follows from its formal hypotheses
+\citep{demoura2021lean4,mathlib2020}.  A source-driven formalization requires an
+additional judgment: whether that proposition represents the theorem, scope,
+and mathematical objects intended by the source.  A theorem can compile while
+using a narrower domain, stronger assumptions, a different norm class, or an
+alternate representation whose relation to the source has not been justified.
+Recent work studies this gap through semantic critics, formal-equivalence tests,
+human review, and project-scale tooling
+\citep{peng2025criticlean,zhang2026beyondcompilation,han2026shadowbench}.
+
+Our experience began with a comparatively simple workflow: describe a theorem
+to a conversational model, copy generated Lean into an editor, report compiler
+errors, and repeat.  Missing spectral and operator-theory foundations frequently
+blocked progress, and we did not initially know how to decompose those gaps into
+feasible formal tasks.  As later agentic models became capable of constructing
+larger prerequisite chains and completing longer proofs, our main uncertainty
+shifted toward interpretation.  A proof-producing context could report that a
+Davis--Kahan result had been formalized while a fresh review later identified a
+finite-dimensional, bounded-operator, norm-class, or representation restriction
+absent from the paper.
+
+\begin{figure}[t]
+  \centering
+  \includegraphics[width=\linewidth]{figures/formalization_workflow.png}
+  \caption{The workflow that emerged during the case study.  Source
+  decomposition, foundation building, compilation, and semantic criticism were
+  added as concrete failures made each step useful.  This diagram describes one
+  project's working process, which evolved during the project.}
+  \label{fig:workflow}
+\end{figure}
+
+This paper distills practical lessons from that process for researchers entering
+formalization through LLM-assisted tools.  We also describe the local review
+infrastructure that grew from the project and compare it with recent systems
+that address the same problems more systematically.
+
+\input{related_work_condensed.tex}
+
+\section{Practical lessons from the case study}
+\label{sec:lessons}
+
+\paragraph{Fix the mathematical target before judging completion.}
+``Formalize Davis--Kahan'' was too vague to support a reliable completion claim.
+The 1970 paper contains a family of related results with standing conventions,
+multiple angle constructions, real and complex settings, bounded and unbounded
+operators, and several norm scopes \citep{davis1970rotation}.  We eventually
+tracked the paper's stated results explicitly and recorded the source passages
+needed to interpret each one.  For a newcomer, the practical lesson is to name
+the exact source claim and the scope being claimed before asking whether a
+formalization is finished.
+
+\paragraph{Read the elaborated statement, not only the proof status.}
+Compilation establishes a theorem about the proposition Lean received.  A
+semantic review should therefore inspect the theorem's elaborated type and the
+definitions that determine its meaning.  This caught cases where a valid Lean
+result lived in a narrower setting than the paper.  Systems such as Lean Atlas
+attack a related scaling problem by identifying the project declarations whose
+semantics can affect selected target theorems \citep{yanahama2026leanatlas}.
+
+\paragraph{Treat decomposition as part of formalization.}
+When an agent reports that a required foundation is missing, the next useful
+step may be to split that missing result into smaller obligations.  Repeated prompting for the
+endpoint was less useful.  In our project, progress accelerated once
+agentic models could build prerequisite chains around results such as
+Courant--Fischer and Weyl.  This changed our role from relaying compiler errors
+toward selecting and reviewing intermediate mathematical obligations.
+
+\paragraph{Use review contexts with an explicit falsification objective.}
+We repeatedly placed apparently completed results into fresh contexts and asked
+for a concrete mismatch with the source.  The review prompts check hypotheses,
+conclusions, constants, object identity, scalar field, dimension, operator
+domain, norm class, gap assumptions, inherited conventions, and representation
+changes.  LeanMarathon and FormaTheoria independently make semantic or
+adversarial review explicit parts of longer formalization workflows
+\citep{zhang2026leanmarathon,nie2026formatheoria}.  Our history supports this as
+a useful practice in this project; it does not establish a general performance
+advantage for independent reviewers.
+
+\paragraph{Persist what was reviewed.}
+Conversational confidence is difficult to maintain once statements and source
+interpretations change.  We therefore began recording the source fragment, the
+Lean statement, the semantic relation being asserted, and hashes that flag a
+previous review after either side changes.  EconCSLib provides a closely related
+author-facing workflow with paper statements, Lean statements, LLM assistance,
+human review controls, dependency graphs, and validation reports
+\citep{garg2026econcs}.  LeanArchitect addresses maintenance through synchronized
+informal/formal blueprint metadata \citep{zhu2026leanarchitect}.  These systems
+provide useful starting points for researchers who need this infrastructure.
+
+\section{One implementation: a semantic-review dashboard}
+\label{sec:dashboard}
+
+Our local dashboard grew from the preceding practices.  It organizes a reviewed
+result into three lanes: the mathematical source, the correspondence record, and
+Lean evidence.  The source lane can include the displayed theorem together with
+inherited assumptions or definitions needed to interpret it.  The correspondence
+lane decomposes the claim into setup, hypotheses, conclusions, scope, and
+representation relations.  The Lean lane displays the declaration, its
+compiler-elaborated type, and optional statement closure and dependency
+information.  Representation changes can name a bridge theorem, providing formal evidence for
+the relation described in prose.
+
+The tool also pins reviewed source fragments and hashes elaborated Lean
+statements.  When either changes, the previous semantic acceptance requires
+inspection again.  Mechanical evidence and mathematical judgment remain
+separate: the compiler can establish the exact formal type and the tool can
+identify changed evidence, while a reviewer still decides whether the source
+and Lean clauses express the same mathematics.
+
+We view this implementation as one concrete realization of practices that are
+now appearing across several projects.  EconCSLib offers a paper-oriented review
+dashboard \citep{garg2026econcs}; Lean Atlas provides an interactive semantic
+review environment and prunes proof-only dependencies \citep{yanahama2026leanatlas};
+ATLAS lets users compare textbook statements with Lean formalizations and
+inspect dependency graphs, with automated faithfulness reports generated by
+AutoformBot \citep{rammal2026scale}; and ShadowBench provides a compiler-grounded
+statement-level semantic test through auxiliary shadow statements
+\citep{han2026shadowbench}.  Our dashboard has been most useful for recording
+fine-grained source context and correspondence decisions in a changing research
+formalization.
+
+\section{Retrospective evidence and limitations}
+\label{sec:case}
+
+The maintained Davis--Kahan register contains 29 source results.  Twenty-eight
+currently have Lean proofs at the scope asserted by the source, while
+Proposition~4.4 is false as printed and is represented by a formal refutation.
+The mathematical formalization is reserved for a longer paper; here the set of
+29 results gives a stable unit for examining review history.
+
+We analyzed Git history through snapshot \texttt{\SemanticSnapshotShort}.  We
+count a \emph{review reversal} when a result marked accepted by semantic review
+changes to a nonaccepted state at the next revision of the maintained register.
+This gives \SemanticReversalCount{} reversals across
+\SemanticReversalResultCount{} of the 29 results.  The count includes
+mathematical-scope findings, correspondence-record defects, and cases where a
+stronger checker invalidated evidence previously treated as sufficient.
+
+\begin{table}[t]
+\centering
+\small
+\caption{Representative review episodes reconstructed from Git history.}
+\label{tab:episodes}
+\begin{tabularx}{\linewidth}{@{}p{0.13\linewidth}p{0.21\linewidth}Y@{}}
+\toprule
+Date & Event & What reopened the review \\
+\midrule
+Aug.~12 & Three accepted results & Wrong residual object; weaker complex direct-rotation conclusion; missing standing-scope and ambient-angle evidence. \\
+Aug.~31 & Full 29-result rereview & Four semantic/registration defects and four defects in checks, including norm scope and missing representation evidence. \\
+Sep.~2 & 29/29 state returned to 28/29 & A bridge covered a special reflection object, and a complex witness had been registered for a real clause. \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+These events explain why our review process acquired stricter scope checks,
+explicit representation bridges, and drift-sensitive pins.  They do not form
+independent trials.  Models, prompts, human knowledge, source interpretation,
+and the checker itself all changed during the project.  Git co-author trailers
+and saved session identifiers preserve model provenance for some episodes, but
+many interactions cannot be reconstructed at that level.  The reversal count
+should therefore be read as a historical description of one evolving project.
+
+\section{Conclusion}
+
+Researchers can now reach substantial Lean developments through LLM-assisted
+tools before they have accumulated deep experience with Lean or with every part
+of the source mathematics.  Our Davis--Kahan effort suggests a practical set of
+habits for that situation: identify the exact source claim, inspect the
+elaborated formal statement, decompose missing foundations, ask independent
+reviewers to search for concrete mismatches, and preserve the evidence behind
+accepted correspondence judgments.  Recent systems provide increasingly mature
+implementations of many of these ideas.  Our local dashboard records how these
+needs appeared in one project and provides a concrete case study for comparing
+approaches to semantic review.
+
+\clearpage
+\bibliographystyle{plainnat}
+\bibliography{references}
+
+\end{document}
