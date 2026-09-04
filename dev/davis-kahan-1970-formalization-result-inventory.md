@@ -6,8 +6,8 @@ The denominator contains exactly the four Section 2 headline theorems and every 
 
 - Counted results: **29**
 - Result-boundary reviews accepted: **29/29**
-- Currently hostile-certified terminal: **29**
-- Awaiting closure: **0**
+- Currently hostile-certified terminal: **26**
+- Awaiting closure: **3**
 - Printed statements that are NOT locally self-contained: **5**
 - Result-only semantic sweep: `dev/davis-kahan-1970-result-semantic-review-2026-08-12.md`
 - Compiler-checkable theorem surface: `DavisKahan/Sources/DavisKahan1970/Audits/ResultSemanticSurface.lean`
@@ -23,14 +23,14 @@ Each result below explicitly partitions its primary source block into atoms insi
 | Result | Kind | Alignment | Self-contained | Disposition | Compiler | Semantic review | Boundary |
 |---|---|---|---|---|---|---|---|
 | `S2-sin-theta` | unnumbered_theorem | `locally_exact` | yes | `proved_exact` | `proved_in_build` | `accepted` | `accepted` |
-| `S2-tan-theta` | unnumbered_theorem | `paper_faithful_nonlocal_source_interpretation` | **no** | `proved_exact` | `proved_in_build` | `accepted` | `accepted` |
+| `S2-tan-theta` | unnumbered_theorem | `paper_faithful_nonlocal_source_interpretation` | **no** | `proved_exact` | `proved_in_build` | `hostile_review_blocked` | `accepted` |
 | `S2-sin-two-theta` | unnumbered_theorem | `locally_exact` | yes | `proved_exact` | `proved_in_build` | `accepted` | `accepted` |
 | `S2-tan-two-theta` | unnumbered_theorem | `locally_exact` | yes | `proved_exact` | `proved_in_build` | `accepted` | `accepted` |
 | `DK-3.1-prop` | proposition | `locally_exact` | yes | `proved_exact` | `proved_in_build` | `accepted` | `accepted` |
-| `DK-3.2-prop` | proposition | `locally_exact` | yes | `proved_exact` | `proved_in_build` | `accepted` | `accepted` |
+| `DK-3.2-prop` | proposition | `locally_exact` | yes | `proved_exact` | `proved_in_build` | `hostile_review_blocked` | `accepted` |
 | `DK-3.3-prop` | proposition | `locally_exact` | yes | `proved_exact` | `proved_in_build` | `accepted` | `accepted` |
 | `DK-3.4-prop` | proposition | `locally_exact` | yes | `proved_exact` | `proved_in_build` | `accepted` | `accepted` |
-| `DK-3.1-thm` | theorem | `locally_exact` | yes | `proved_exact` | `proved_in_build` | `accepted` | `accepted` |
+| `DK-3.1-thm` | theorem | `locally_exact` | yes | `proved_exact` | `proved_in_build` | `hostile_review_blocked` | `accepted` |
 | `DK-3.1-cor` | corollary | `locally_exact` | yes | `proved_exact` | `proved_in_build` | `accepted` | `accepted` |
 | `DK-3.5-prop` | proposition | `locally_exact` | yes | `proved_exact` | `proved_in_build` | `accepted` | `accepted` |
 | `DK-3.2-cor` | corollary | `locally_exact` | yes | `proved_exact` | `proved_in_build` | `accepted` | `accepted` |
@@ -108,39 +108,36 @@ The accepted reading is hash-pinned to the distributable specification, the sour
 
 ## Current closure queue
 
-Empty. All 29 counted results are terminal on all three axes, and no
-hostile-review obligation is open.
+Three results are open, reopened 2026-09-04 by a hostile review of the Section 2
+and Theorem 8.2 ordered-angle repairs. Each is a source-hypothesis mismatch, not
+a doubt about the mathematics, and each has an entry in
+`open_hostile_review_obligations` naming the repair it needs.
+
+- `S2-tan-theta` — the printed Section 2 tangent theorem assumes the ordered
+  spectral gap, `delta > 0` and `H_0 = 0`. The Lean ambient conclusion also
+  carries the crossed-defect condition (3.5), which the paper introduces in
+  Section 3 *after* Proposition 3.2 and declares to hold for the remainder of the
+  paper. A convention introduced after a theorem is not a hypothesis of it, and
+  the earlier "retroactive standing assumption" reading is withdrawn. The repair
+  is to model the source's own Section 1 definedness/vacuity convention
+  explicitly.
+- `DK-3.1-thm` — the converse clause was certified against theorems that take the
+  intertwining partial isometry `J_0` as a hypothesis, while the source says the
+  proof *reconstructs* it. `theorem3_1_realization_ofSpectralMultiplicity_complex`
+  now constructs it from the multiplicity hypothesis, but that hypothesis is
+  agreement everywhere and the printed one permits disagreement at the spectral
+  point `0`, so the clause is open.
+- `DK-3.2-prop` — the source's (3.5) is equality of the crossed defects' Hilbert
+  dimensions; Lean uses existence of a linear isometric equivalence. Only the
+  finite-dimensional half is proved. Every later row whose exact correspondence
+  rests on (3.5), including `DK-8.2-thm`, inherits this.
 
 This section lists exactly the results the machine state reports as
 nonterminal; the checker rejects it when the two disagree, and rejects an
 emptiness claim while any row is open.
 
 What last emptied it, 2026-09-02: `S2-tan-two-theta` had been reopened under
-obligation `tan2theta-directed-correspondence` because its canonical directed
-primaries quantified over an arbitrary self-adjoint involution `Z` and the real
-clause carried a complex-only witness. It is closed by two source-shaped
-directed endpoints:
-
-- `TauCeti.DavisKahan1970.tanTwoTheta_directed_unboundedResidual_symmetricNorming_complex`
-  takes `V` reducing `A + B` and concludes on the paper's directed object, the
-  `U → Uᗮ` projection block of `2 (P_V − P_U)(1 − 2(P_V − P_U)²)⁻¹`, stating in
-  its own type that the block's singular values are `tan (arcsin aₙ(sin 2Θ₀))`;
-- `TauCeti.DavisKahan1970.tanTwoTheta_directed_unboundedResidual_symmetricNorming_real`
-  concludes on `tanTwoDirectedCornerR U V` with the real residual, through
-  registered complexification transports and the real correspondence
-  `approximationNumber_tanTwoDirectedCornerR`.
-
-The arbitrary-`Z` theorems are retained as generalizations. The checker now
-requires each clause's correspondence witness and transport chain to be invoked
-by the primary's proof, to agree between the inventory and the census, and to be
-statement-pinned.
-
-`S2-tan-theta` is terminal after a hostile Appendix-scope correction. The
-Appendix-complete declarations
-`TauCeti.DavisKahan1970.tanTheta_ambient_unboundedRitz_symmetricNorming_complex`
-and `..._real` allow the Ritz compression `A₀` itself to be a genuinely
-unbounded self-adjoint operator semibounded above in form, while retaining a
-bounded residual and the sharp factor-one ambient inequality.
+obligation `tan2theta-directed-correspondence`.
 
 ## Printed-statement boundary reviews
 

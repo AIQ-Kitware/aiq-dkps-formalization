@@ -19,7 +19,7 @@ Each counted result carries a **source-alignment classification**, and the three
 
 Category 2 is never a softened category 3. If a reviewer concludes that a category 2 result is actually false as printed, that is a FAIL and the repository is asking to be told.
 
-Current result-level status: **29/29 terminal**, **0 awaiting semantic closure**.
+Current result-level status: **26/29 terminal**, **3 awaiting semantic closure**.
 Result-selection/boundary review: **accepted** under policy `dk_established_results_only`.
 
 A hostile reviewer should challenge both layers independently: (1) whether the fidelity inventory omitted source material or misclassified an exclusion, and (2) whether each of the 29 counted result statements is represented exactly in Lean.
@@ -252,7 +252,7 @@ Compiler-printed type: *inserted when a compiler certificate is supplied.*
 - **Exact source anchor:** Section 2, tan theta theorem
 - **Result disposition:** `proved_exact`
 - **Compiler verification:** `proved_in_build`
-- **Hostile semantic certification:** `accepted`
+- **Hostile semantic certification:** `hostile_review_blocked`
 - **Boundary review:** `accepted`
 - **Source alignment:** `paper_faithful_nonlocal_source_interpretation`
 - **Printed statement locally self-contained:** `False`
@@ -2075,7 +2075,7 @@ Compiler-printed type: *inserted when a compiler certificate is supplied.*
 - **Exact source anchor:** Proposition 3.2
 - **Result disposition:** `proved_exact`
 - **Compiler verification:** `proved_in_build`
-- **Hostile semantic certification:** `accepted`
+- **Hostile semantic certification:** `hostile_review_blocked`
 - **Boundary review:** `accepted`
 - **Source alignment:** `locally_exact`
 - **Printed statement locally self-contained:** `True`
@@ -2464,7 +2464,7 @@ Compiler-printed type: *inserted when a compiler certificate is supplied.*
 - **Exact source anchor:** Theorem 3.1
 - **Result disposition:** `proved_exact`
 - **Compiler verification:** `proved_in_build`
-- **Hostile semantic certification:** `accepted`
+- **Hostile semantic certification:** `hostile_review_blocked`
 - **Boundary review:** `accepted`
 - **Source alignment:** `locally_exact`
 - **Printed statement locally self-contained:** `True`
@@ -2510,13 +2510,15 @@ One row per printed source clause per scalar field.  A clause is `PASS` only whe
 | --- | --- | --- | --- |
 | `complete-invariant.complex` | complex | `TauCeti.DavisKahan1970.theorem3_1_spectralMultiplicity_classification_complex` | **PASS** |
 | `complete-invariant.real` | real | `TauCeti.DavisKahan1970.theorem3_1_spectralMultiplicity_classification_real` | **PASS** |
-| `converse-angle-data.rclike` | rclike | `TauCeti.DavisKahan1970.theorem3_1_realization` | **PASS** |
+| `converse-angle-data.complex` | complex | `TauCeti.DavisKahan1970.theorem3_1_realization_ofSpectralMultiplicity_complex` + `TauCeti.DavisKahan1970.theorem3_1_intertwiner_of_sameSpectralMultiplicity_complex` | **OPEN** |
 
 **`complete-invariant.complex`.** Canonical witness for complete-invariant at complex scalar scope, carried over from the pre-clause canonical evidence and re-checked against its compiler-printed type under the coherent model.
 
 **`complete-invariant.real`.** Canonical witness for complete-invariant at real scalar scope, carried over from the pre-clause canonical evidence and re-checked against its compiler-printed type under the coherent model.
 
-**`converse-angle-data.rclike`.** Canonical witness for converse-angle-data at rclike scalar scope, carried over from the pre-clause canonical evidence and re-checked against its compiler-printed type under the coherent model.
+**`converse-angle-data.complex`.** The printed converse gives arbitrary Hermitian Theta_0, Theta_1 with 0 <= Theta_j <= pi/2 whose spectral multiplicity functions agree EXCEPT POSSIBLY AT 0, and says 'the proof reconstructs the pair from these angle data and the corresponding partial isometry J_0'.  REOPENED 2026-09-04: the previous witness `theorem3_1_realization` consumes a `HalmosAngleDatum`, which packages cos/sin of both angles AND the intertwiner as fields, and `theorem3_1_realization_ofAngles` asks its caller for J together with its two partial-isometry identities.  J_0 is output of the printed proof, not input to the printed theorem, so both are weaker statements than the source's.  `theorem3_1_realization_ofSpectralMultiplicity_complex` now takes only the two self-adjoint operators, the two spectral confinements and the multiplicity hypothesis, and constructs J_0 internally through `operatorUnitaryEquiv_of_sameSpectralMultiplicity_complex`.  The clause is nevertheless OPEN, not established: `SameSpectralMultiplicity` is agreement everywhere, while the printed hypothesis permits disagreement at the spectral point 0.  Closing it needs the multiplicity comparison restricted to the closures of the ranges of the two angle operators, which is not written.  The freedom at 0 is realized unconditionally in the compact case by `corollary3_1_realization_zeroMultiplicity` (row DK-3.1-cor).
+
+*OPEN — what is missing:* The printed hypothesis is that the two spectral multiplicity functions agree EXCEPT POSSIBLY AT the spectral point 0.  The witness uses `SameSpectralMultiplicity`, which is agreement everywhere, so it establishes the printed converse only when the two angle operators also have unitarily equivalent null spaces.  Missing: the multiplicity comparison restricted to the closures of the ranges of the two angle operators, from which the printed partial isometry J_0 would be rebuilt with the null spaces free.
 
 Result-wide scope every clause must carry: *(none)*
 
@@ -2526,7 +2528,13 @@ The declarations that carry this result's printed statement, with the source ato
 
 - `TauCeti.DavisKahan1970.theorem3_1_spectralMultiplicity_classification_complex` — primary_source_witness, complex scalars, proof; covers `DK-3.1-thm.complete-invariant`
 - `TauCeti.DavisKahan1970.theorem3_1_spectralMultiplicity_classification_real` — primary_source_witness, real scalars, proof; covers `DK-3.1-thm.complete-invariant`
-- `TauCeti.DavisKahan1970.theorem3_1_realization` — primary_source_witness, rclike scalars, proof; covers `DK-3.1-thm.converse-angle-data`
+- `TauCeti.DavisKahan1970.theorem3_1_realization_ofSpectralMultiplicity_complex` — primary_source_witness, complex scalars, proof; covers 
+
+### Other registered declarations
+
+- `TauCeti.DavisKahan1970.theorem3_1_realization` — generalization
+- `TauCeti.DavisKahan1970.theorem3_1_realization_ofAngles` — implementation_structure
+- `TauCeti.DavisKahan1970.theorem3_1_intertwiner_of_sameSpectralMultiplicity_complex` — source_correspondence
 
 ### Source-facing Lean declarations
 
@@ -2538,13 +2546,31 @@ Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.theorem3_1_realization`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section3Theorem31Realization.lean:79`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section3Theorem31Realization.lean:81`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.theorem3_1_spectralMultiplicity_classification_real`
 
 Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section3Classification.lean:237`
+
+Compiler-printed type: *inserted when a compiler certificate is supplied.*
+
+#### `TauCeti.DavisKahan1970.theorem3_1_intertwiner_of_sameSpectralMultiplicity_complex`
+
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section3Theorem31Realization.lean:292`
+
+Compiler-printed type: *inserted when a compiler certificate is supplied.*
+
+#### `TauCeti.DavisKahan1970.theorem3_1_realization_ofSpectralMultiplicity_complex`
+
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section3Theorem31Realization.lean:324`
+
+Compiler-printed type: *inserted when a compiler certificate is supplied.*
+
+#### `TauCeti.DavisKahan1970.theorem3_1_realization_ofAngles`
+
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section3Theorem31Realization.lean:153`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
@@ -6213,8 +6239,8 @@ Every source atom remains visible here even when it is outside the 29-result den
 
 - **All 275 source-fidelity atoms reviewed for omission/classification:** yes / no
 - **All 29 counted DK-established results reviewed against their exact printed boundaries:** yes / no
-- **29 currently terminal results independently reconfirmed:** yes / no
-- **0 currently nonterminal/pending results resolved by this audit:** yes / no
+- **26 currently terminal results independently reconfirmed:** yes / no
+- **3 currently nonterminal/pending results resolved by this audit:** yes / no
 - **Any excluded fidelity atom that actually belongs to a counted result statement:** yes / no
 - **Any Davis--Kahan-established named/headline result missing from the 29-result inventory:** yes / no
 - **Any non-established/open/deferred material incorrectly included in the denominator:** yes / no
