@@ -570,7 +570,7 @@
             },
             "visibility": "public_reconstruction",
             "pinned_on": "2026-09-04",
-            "note": "Pinned with the inherited Section 1 setup now shown directly in the S2 semantic review."
+            "note": "Pinned for the inherited Section 1 setup used by S2-sin-theta semantic focus."
           },
           {
             "fragment": "ui-norms",
