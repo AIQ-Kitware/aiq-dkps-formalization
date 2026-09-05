@@ -4,7 +4,7 @@
 
 **Census family:** `source-completion-census`  
 **Items:** 50  
-**Unique cited Lean declarations:** 1268
+**Unique cited Lean declarations:** 1284
 
 ## How to use this census
 
@@ -262,6 +262,11 @@ THREE NEW REUSABLE DECLARATIONS underwrite it, each grounding the next by `:=`, 
 - `TauCeti.DavisKahan1970.symmetricNorming_of_kyFanDominant`
 - `TauCeti.DavisKahan1970.kyFanDominant_of_symmetricNorming`
 - `TauCeti.DavisKahan1970.symmetricNorming_iff_kyFanDominant`
+- `TauCeti.DavisKahan1970.normalizedUnitaryInvariant_of_symmetricNorming`
+- `TauCeti.DavisKahan1970.normalizedUnitaryInvariant_of_symmetricNorming_mul`
+- `TauCeti.DavisKahan.ExactSinTheta.NormalizedUnitaryInvariantNorm`
+- `TauCeti.DavisKahan1970.sinTheta_unbounded_formGap_sourceExact_complex`
+- `TauCeti.DavisKahan1970.sinTheta_unbounded_formGap_sourceExact_real`
 
 **Curated source/Lean review:**
 
@@ -282,7 +287,7 @@ THREE NEW REUSABLE DECLARATIONS underwrite it, each grounding the next by `:=`, 
 
 | source clause | Lean realization | status |
 | --- | --- | --- |
-| The scalar field is real or complex. | The canonical theorem is generic over 𝕜 with [RCLike 𝕜]. Its two scalar capability binders have proved instances for both source scalar fields ℝ and ℂ. | claimed_exact |
+| The scalar field is real or complex. | The source's scalar scope is realized twice over. Canonical evidence is the pair of fixed-field source-exact façades, one at ℝ and one at ℂ -- the paper's own fields (GOAL.md section 4.3). The retained scalar-generic theorem named below, which is where the `RCLike` binder lives, covers both at once and is registered as a stronger variant; its two scalar capability binders have proved instances at both source fields. | claimed_exact |
 | A, A0, and Lambda1 are self-adjoint; E0 is the trial coordinate map and F0,F1 are orthogonal exact-space coordinates. | A, A₀, Λ₁, E₀, F₀, and F₁ are explicit arguments. Self-adjointness is literal; IsTrialResidual and IsExactSpectralDecomposition are expanded immediately in the local semantic dictionary. | claimed_exact |
 | R = A E0 - E0 A0 on the operator domain, while F1 intertwines Lambda1 with A. | These clauses are exactly the residualEquation and intertwines components exposed by isTrialResidual_iff and isExactSpectralDecomposition_iff, together with their domain-transport hypotheses. | claimed_exact |
 | sin Theta0 is the directed sine block from the trial subspace to the exact subspace. | sinTheta₀ is an explicit theorem parameter and hSinTheta₀ literally states sinTheta₀ = (I - F₀ F₀†) E₀. No named definition hides this identification. | claimed_exact |
@@ -302,6 +307,8 @@ THREE NEW REUSABLE DECLARATIONS underwrite it, each grounding the next by `:=`, 
 REOPENED 2026-08-31 by the scope-atom re-audit: a source passage that explicitly extends this result's proved scope had been classified as generic post-result commentary. See the result inventory's `remaining_gap` for the exact atom and the evidence that must be registered.
 
 REOPENING WITHDRAWN 2026-08-31 and the rule corrected: a later source passage enlarges a counted result only when it is needed to determine what Davis and Kahan actually claim in it. An extension, variant or consequence they mention without introducing and proving it as a result of its own is `result_adjacent_extension` fidelity material. The Lean coverage produced during the reopening is kept as supporting evidence.
+
+SOURCE-EXACT FAÇADES REGISTERED 2026-09-05. Canonical evidence for this row is now the façade at the printed scope -- separable ambient Hilbert space and the literal `NormalizedUnitaryInvariantNorm` class -- with the arbitrary-Hilbert `SymmetricNormingFunction` theorem retained beneath it as a registered generalization. See GOAL.md sections I, III and IV.
 
 **Next action.** No hostile-review hole is currently recorded for this source passage. Preserve exact source scope and re-audit if the distributable source specification changes.
 
@@ -389,6 +396,13 @@ REOPENING WITHDRAWN 2026-08-31 and the rule corrected: a later source passage en
 - `TauCeti.DavisKahan1970.symmetricNorming_of_kyFanDominant`
 - `TauCeti.DavisKahan1970.kyFanDominant_of_symmetricNorming`
 - `TauCeti.DavisKahan1970.symmetricNorming_iff_kyFanDominant`
+- `TauCeti.DavisKahan1970.tanTheta_ambient_unboundedRitz_definedTangent_sourceExact_complex`
+- `TauCeti.DavisKahan1970.tanTheta_ambient_unboundedRitz_definedTangent_sourceExact_real`
+- `TauCeti.DavisKahan1970.tanTheta_directed_unboundedRitz_sourceExact_complex`
+- `TauCeti.DavisKahan1970.tanTheta_directed_unboundedRitz_sourceExact_real`
+- `TauCeti.DavisKahan1970.normalizedUnitaryInvariant_of_symmetricNorming`
+- `TauCeti.DavisKahan1970.normalizedUnitaryInvariant_of_symmetricNorming_mul`
+- `TauCeti.DavisKahan.ExactSinTheta.NormalizedUnitaryInvariantNorm`
 
 **Curated source/Lean review:**
 
@@ -495,6 +509,8 @@ The `next_action` prerequisite `first generalise PrescribedSequence.lean from C 
 
 The directed clause of the Section 2 tangent theorem at the printed scope, added 2026-08-31. The mathematics was already present as `theorem6_3_unbounded_infiniteTrial_ideal` and its real sibling; what was missing was the promotion to the paper's universal norm quantifier, and the parameterized complex spectral-gap form the promotion needs (the existential form cannot be promoted, since it would return a different representative at each Ky Fan index).
 
+SOURCE-EXACT FAÇADES REGISTERED 2026-09-05. Canonical evidence for this row is now the façade at the printed scope -- separable ambient Hilbert space and the literal `NormalizedUnitaryInvariantNorm` class -- with the arbitrary-Hilbert `SymmetricNormingFunction` theorem retained beneath it as a registered generalization. See GOAL.md sections I, III and IV.
+
 **Next action.** No counted-result gap remains. Preserve the accepted nonlocal source interpretation and the bounded/unbounded, real/complex source-facing endpoints; re-audit only if the distributable source specification changes.
 
 ### `S2-sin-two-theta` — Double-angle sine theorem
@@ -593,6 +609,13 @@ The directed clause of the Section 2 tangent theorem at the printed scope, added
 - `TauCeti.DavisKahan.Angle.sinTwoAngleOperator_comm`
 - `TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction.gauge_neg`
 - `TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction.mem_neg`
+- `TauCeti.DavisKahan1970.sinTwoTheta_directed_unboundedResidual_sourceExact_complex`
+- `TauCeti.DavisKahan1970.sinTwoTheta_directed_unboundedResidual_sourceExact_real`
+- `TauCeti.DavisKahan1970.sinTwoTheta_ambient_unbounded_perturbedGap_sourceExact_complex`
+- `TauCeti.DavisKahan1970.sinTwoTheta_ambient_unbounded_perturbedGap_sourceExact_real`
+- `TauCeti.DavisKahan1970.normalizedUnitaryInvariant_of_symmetricNorming`
+- `TauCeti.DavisKahan1970.normalizedUnitaryInvariant_of_symmetricNorming_mul`
+- `TauCeti.DavisKahan.ExactSinTheta.NormalizedUnitaryInvariantNorm`
 
 **Curated source/Lean review:**
 
@@ -753,6 +776,8 @@ AMBIENT CLAUSE REOPENED 2026-08-31 by the coherent-clause audit. The printed sin
 
 AMBIENT OPERATOR ROLES CORRECTED 2026-09-05. The registered ambient witnesses had the spectral gap between the two blocks of the UNPERTURBED operator, and the inventory called that the printed hypothesis. The source's Section 2 setup says otherwise: (1.2) has `P` reducing `A` with blocks `A_0, A_1`, (1.3) has `Q` reducing `A + H` with blocks `Lambda_0, Lambda_1`, and the sin 2Theta theorem's gap is `spec(Lambda_0) subset [beta, alpha]`, `spec(Lambda_1)` disjoint from `(beta - delta, alpha + delta)` -- the PERTURBED blocks. `sinTwoTheta_ambient_unbounded_perturbedGap_symmetricNorming_{rclike,complex,real}` take that hypothesis and are now canonical; the `..._reducing_...` forms are retained as supporting evidence. This is a role reversal, not new mathematics: the ambient estimate is symmetric in the pair. Its four steps are `addBounded_neg_cancel` (so `(A + H) + (-H)` is `A` on the nose), `sinTwoAngleOperator_comm`, `gauge_neg` and `mem_neg`.
 
+SOURCE-EXACT FAÇADES REGISTERED 2026-09-05. Canonical evidence for this row is now the façade at the printed scope -- separable ambient Hilbert space and the literal `NormalizedUnitaryInvariantNorm` class -- with the arbitrary-Hilbert `SymmetricNormingFunction` theorem retained beneath it as a registered generalization. See GOAL.md sections I, III and IV.
+
 **Next action.** No hostile-review hole is currently recorded for this source passage. Preserve exact source scope and re-audit if the distributable source specification changes.
 
 ### `S2-tan-two-theta` — Double-angle tangent theorem
@@ -872,6 +897,12 @@ AMBIENT OPERATOR ROLES CORRECTED 2026-09-05. The registered ambient witnesses ha
 - `TauCeti.DavisKahan1970.kyFanDominant_of_symmetricNorming`
 - `TauCeti.DavisKahan1970.symmetricNorming_iff_kyFanDominant`
 - `TauCeti.DavisKahan1970.cos_two_ne_zero_of_isUnit_diagonalPart_reflection_sq_real`
+- `TauCeti.DavisKahan1970.tanTwoTheta_directed_unboundedResidual_sourceExact_complex`
+- `TauCeti.DavisKahan1970.tanTwoTheta_ambient_unbounded_sourceExact_complex`
+- `TauCeti.DavisKahan1970.tanTwoTheta_ambient_unbounded_sourceExact_real`
+- `TauCeti.DavisKahan1970.normalizedUnitaryInvariant_of_symmetricNorming`
+- `TauCeti.DavisKahan1970.normalizedUnitaryInvariant_of_symmetricNorming_mul`
+- `TauCeti.DavisKahan.ExactSinTheta.NormalizedUnitaryInvariantNorm`
 
 **Curated source/Lean review:**
 
@@ -1214,6 +1245,8 @@ DECLARATION LIST COMPLETED 2026-08-09 (Claude Opus 5, integrating M30).  The M30
 
 DIRECTED CLAUSES CLOSED 2026-09-02. `tanTwoTheta_directed_unboundedResidual_symmetricNorming_complex` takes `V` reducing `A + B` and concludes on the paper's directed projection block, identifying its singular values as tan (arcsin a_n(sinTwoThetaIdealBlock U V)); `tanTwoTheta_directed_unboundedResidual_symmetricNorming_real` does the same on `tanTwoDirectedCornerR U V` with the real residual, through registered complexification transports and the real correspondence `approximationNumber_tanTwoDirectedCornerR`. The obligation `tan2theta-directed-correspondence` is closed in the result inventory.
 
+SOURCE-EXACT FAÇADES REGISTERED 2026-09-05. Canonical evidence for this row is now the façade at the printed scope -- separable ambient Hilbert space and the literal `NormalizedUnitaryInvariantNorm` class -- with the arbitrary-Hilbert `SymmetricNormingFunction` theorem retained beneath it as a registered generalization. See GOAL.md sections I, III and IV.
+
 **Next action.** None. Closed 2026-09-02: canonical directed endpoints on the paper objects over both fields, correspondence composed in Lean and pinned. Reopen only on a fresh hostile finding.
 
 ### `S2-sharpness` — Best constants and simultaneous equality
@@ -1283,6 +1316,9 @@ DIRECTED CLAUSES CLOSED 2026-09-02. `tanTwoTheta_directed_unboundedResidual_symm
 - `TauCeti.DavisKahan.FiniteDimensional.tanTheta_directSum_subspace_equality`
 - `TauCeti.DavisKahan.FiniteDimensional.sinTwoTheta_directSum_subspace_equality`
 - `TauCeti.DavisKahan.FiniteDimensional.tanTwoTheta_directSum_subspace_equality`
+- `TauCeti.DavisKahan1970.normalizedUnitaryInvariant_of_symmetricNorming`
+- `TauCeti.DavisKahan1970.normalizedUnitaryInvariant_of_symmetricNorming_mul`
+- `TauCeti.DavisKahan.ExactSinTheta.NormalizedUnitaryInvariantNorm`
 
 **Notes.** Sine sharpness and finite multiplicity are compiled; full quartet simultaneous equality remains in the Part III campaign.
 
@@ -1453,6 +1489,9 @@ NEW SUPPORT: `diagonalPart_congr` / `offDiagonalPart_congr`, needed because `rw`
 - `TauCeti.DavisKahan1970.gap_mul_kyFan_reflectionTangentCorner_le_two_mul_kyFan_ambient_real`
 - `TauCeti.DavisKahan1970.tanTwoTheta_unbounded_residual_opNorm_real`
 - `TauCeti.DavisKahan1970.tanTwoTheta_unbounded_residual_div_real`
+- `TauCeti.DavisKahan1970.normalizedUnitaryInvariant_of_symmetricNorming`
+- `TauCeti.DavisKahan1970.normalizedUnitaryInvariant_of_symmetricNorming_mul`
+- `TauCeti.DavisKahan.ExactSinTheta.NormalizedUnitaryInvariantNorm`
 
 **Notes.** The sine family is complete in source scope. Tangent has an operator-norm graph-coordinate companion, but the paper claims arbitrary-UI-norm unbounded scope and the cutoff/Ky-Fan passage is not yet formalized.
 
