@@ -4,7 +4,7 @@
 
 **Census family:** `source-completion-census`  
 **Items:** 50  
-**Unique cited Lean declarations:** 1229
+**Unique cited Lean declarations:** 1230
 
 ## How to use this census
 
@@ -378,6 +378,7 @@ REOPENING WITHDRAWN 2026-08-31 and the rule corrected: a later source passage en
 - `TauCeti.DavisKahan1970.continuousOn_tan_spectrum_of_hasDefinedAmbientTangent`
 - `TauCeti.DavisKahan1970.HasDefinedAmbientTangentReal`
 - `TauCeti.DavisKahan1970.crossedDefectsEquivalent_of_hasDefinedAmbientTangentReal`
+- `TauCeti.DavisKahan1970.hasDefinedAmbientTangent_iff_pi_div_two_notMem_spectrum`
 
 **Curated source/Lean review:**
 

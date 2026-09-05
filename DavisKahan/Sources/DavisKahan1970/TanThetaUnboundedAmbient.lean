@@ -628,6 +628,46 @@ theorem spectrum_angleOperator_lt_pi_div_two_of_hasDefinedAmbientTangent
     (ht : t ∈ spectrum ℝ (angleOperatorC U V)) : 0 ≤ t ∧ t < Real.pi / 2 :=
   spectrum_angleOperatorC_lt_pi_div_two U V (by rwa [norm_sinAngleOperatorC]) ht
 
+/-- **The definedness hypothesis is exactly "no principal angle is `π/2`".**
+
+The forward direction says the hypothesis is sufficient for `tan` to be finite on the angle
+spectrum.  This is the converse, and it is what makes the modelling of Section 1's vacuity
+convention two-directional rather than one: when `‖P_U − P_V‖ = 1` the gap is attained in the
+spectrum -- a nonnegative operator has its norm in its spectrum -- so `arcsin 1 = π/2` is an
+angle of the pair and the paper's `tan Θ` genuinely does not exist.  The printed statement is
+then vacuous, and the hypothesis fails, in step.
+
+`Nontrivial E` is what puts the norm in the spectrum; over the zero space every gap is `0` and
+the hypothesis holds outright. -/
+theorem hasDefinedAmbientTangent_iff_pi_div_two_notMem_spectrum
+    [Nontrivial E] (U V : Submodule ℂ E)
+    [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] :
+    HasDefinedAmbientTangent U V ↔
+      Real.pi / 2 ∉ spectrum ℝ (angleOperatorC U V) := by
+  constructor
+  · intro h hmem
+    have := (spectrum_angleOperator_lt_pi_div_two_of_hasDefinedAmbientTangent h hmem).2
+    exact absurd this (lt_irrefl _)
+  · intro h
+    by_contra hgap
+    -- the gap is at most one, so failing to be `< 1` pins it at `1`
+    have hle : ‖sinAngleOperatorC U V‖ ≤ 1 := norm_sinAngleOperatorC_le_one U V
+    have hgap' : ¬ ‖sinAngleOperatorC U V‖ < 1 := by
+      rw [norm_sinAngleOperatorC]
+      exact hgap
+    have heq : ‖sinAngleOperatorC U V‖ = 1 := le_antisymm hle (not_lt.mp hgap')
+    -- a nonnegative operator attains its norm in its spectrum
+    have hone : (1 : ℝ) ∈ spectrum ℝ (sinAngleOperatorC U V) := by
+      have := CStarAlgebra.norm_mem_spectrum_of_nonneg (a := sinAngleOperatorC U V)
+        (sinAngleOperatorC_nonneg U V)
+      rwa [heq] at this
+    -- and `arcsin` carries it to `π/2` in the angle spectrum
+    refine h ?_
+    rw [angleOperatorC,
+      cfc_map_spectrum (R := ℝ) (f := Real.arcsin) (a := sinAngleOperatorC U V)
+        (isSelfAdjoint_sinAngleOperatorC U V) Real.continuous_arcsin.continuousOn]
+    exact ⟨1, hone, Real.arcsin_one⟩
+
 /-- **Under a defined tangent, `cfc Real.tan` is the paper's `tan Θ` and not Mathlib's
 totalisation.**
 
