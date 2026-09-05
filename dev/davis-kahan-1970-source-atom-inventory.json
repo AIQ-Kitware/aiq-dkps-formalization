@@ -953,7 +953,7 @@
           "SymmetricNormingFunction"
         ],
         "must_not_contain": [],
-        "rationale": "The printed norm is an arbitrary unitarily invariant norm. A Ky Fan family, a symmetric ideal family, or the operator norm is a narrower statement."
+        "rationale": "The printed norm is an arbitrary normalized unitarily invariant norm in the sense Section 1 fixes, and Section 1 also fixes the criterion: Fan dominance in the strong form, \"||K|| <= ||L|| for every unitary-invariant norm iff the inequality holds for every Ky Fan norm\" (1.11)-(1.13). `SymmetricNormingFunction` is the token this requirement checks for, because it is the source-facing quantifier the endpoints use, and it is not a narrowing: the Ky Fan gauges are themselves coherent symmetric norming functions (`ExactSinTheta.kyFanNormingFunction`, `Ideals/KyFanNorm.lean`), so a bound proved over the whole class yields the Ky Fan majorization, and `kyFanDominant_of_symmetricNorming` carries it to every Fan-dominant unitarily invariant ideal gauge -- including norms on B(H) such as ||T|| + ||pi(T)|| that no symmetric gauge generates.  `symmetricNorming_iff_kyFanDominant` states the equivalence of the two quantifiers.  A theorem concluding at ONE Ky Fan gauge, at one symmetric ideal family, or at the operator norm is still a narrower statement and does not satisfy this atom."
       }
     },
     {
@@ -1378,7 +1378,7 @@
           "SymmetricNormingFunction"
         ],
         "must_not_contain": [],
-        "rationale": "As above: the quantifier must be over the paper's norm object."
+        "rationale": "The printed norm is an arbitrary normalized unitarily invariant norm in the sense Section 1 fixes, and Section 1 also fixes the criterion: Fan dominance in the strong form, \"||K|| <= ||L|| for every unitary-invariant norm iff the inequality holds for every Ky Fan norm\" (1.11)-(1.13). `SymmetricNormingFunction` is the token this requirement checks for, because it is the source-facing quantifier the endpoints use, and it is not a narrowing: the Ky Fan gauges are themselves coherent symmetric norming functions (`ExactSinTheta.kyFanNormingFunction`, `Ideals/KyFanNorm.lean`), so a bound proved over the whole class yields the Ky Fan majorization, and `kyFanDominant_of_symmetricNorming` carries it to every Fan-dominant unitarily invariant ideal gauge -- including norms on B(H) such as ||T|| + ||pi(T)|| that no symmetric gauge generates.  `symmetricNorming_iff_kyFanDominant` states the equivalence of the two quantifiers.  A theorem concluding at ONE Ky Fan gauge, at one symmetric ideal family, or at the operator norm is still a narrower statement and does not satisfy this atom."
       }
     },
     {

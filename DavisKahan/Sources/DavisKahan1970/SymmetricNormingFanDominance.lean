@@ -3,6 +3,7 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, Claude Opus 5
 -/
+import DavisKahan.Sources.DavisKahan1970.Ideals.KyFanNorm
 import DavisKahan.Sources.DavisKahan1970.Section4Real
 import DavisKahan.Sources.DavisKahan1970.Section5
 import DavisKahan.Sources.DavisKahan1970.SineTheta.Norms.UnitaryInvariantNormLaws
@@ -18,27 +19,44 @@ open TauCeti.DavisKahan.Sylvester
 # Reading the ideal-gauge results at the paper's own unitarily invariant norm
 
 Several results Davis and Kahan state "for every unitary-invariant norm" are
-proved here at an arbitrary `KyFanDominantIdealFamily`.  That is a genuine
-theorem and, as a quantifier, it is not the printed one: `SymmetricNormingFunction`
-is the repository's model of the source's norm object -- a normalized symmetric
-gauge read on the complete approximation-singular-value sequence -- and a
-reviewer comparing a Lean statement with the paper should see it.
+proved here at an arbitrary `KyFanDominantIdealFamily`, and stated source-facing
+at an arbitrary `SymmetricNormingFunction`.  The two are different Lean objects,
+and a reviewer comparing a Lean statement with the paper is entitled to ask which
+one is the printed quantifier.
 
-The gap is bridgeable once and for all.  A `KyFanDominantIdealFamily`-quantified
-estimate can be instantiated at the finite Ky Fan gauges themselves, which are
-such families; that yields Ky Fan majorization, and Fan dominance
-(`SymmetricNormingFunction.mul_gauge_le_of_all_mul_kyFan_le`) turns majorization
-into the same estimate at every source norm.  `symmetricNorming_of_kyFanDominant`
-below is that bridge, and the endpoints after it are its instances.
+**Neither is, on its own, and it does not matter, because a bound proved in one
+holds in the other.**  Both bridges are theorems here:
 
-This module adds no mathematics beyond the bridge: each endpoint is the already
-proved ideal-gauge theorem, read at the source's norm.  The ideal-gauge forms are
-retained -- they are stronger in their own quantifier -- and are recorded as
-supporting evidence in the result inventory.
+* `symmetricNorming_of_kyFanDominant` -- an estimate holding at every
+  Fan-dominant ideal gauge holds at every symmetric norming function.  Instantiate
+  at the finite Ky Fan gauges, which are such families, to get Ky Fan
+  majorization, then apply Fan dominance
+  (`SymmetricNormingFunction.mul_gauge_le_of_all_mul_kyFan_le`).
+* `kyFanDominant_of_symmetricNorming` -- the converse.  Instantiate at
+  `kyFanNormingFunction k`, the Ky Fan gauge presented as a coherent symmetric
+  norming function (`Ideals/KyFanNorm.lean`), to get the same majorization, then
+  apply the family's own dominance field.
+
+So both quantifiers are equivalent to weak Ky Fan majorization, which is exactly
+the criterion the paper's Section 1 states it will use: "Fan dominance is used in
+the strong form: `‖K‖ ≤ ‖L‖` for every unitary-invariant norm iff the inequality
+holds for every Ky Fan norm."
+
+That equivalence is what makes the source-facing endpoints cover the *printed*
+norm class rather than only the Gohberg--Krein symmetrically normed ideals.  A
+unitarily invariant norm on `B(H)` such as `T ↦ ‖T‖ + ‖π(T)‖`, with `π` the Calkin
+quotient map, agrees with the operator norm on finite-rank operators and so is not
+the prefix-supremum extension of any symmetric gauge -- it is *not* a
+`SymmetricNormingFunction`.  It is a Fan-dominant ideal family, though, so the
+displayed estimates hold in it, by `kyFanDominant_of_symmetricNorming` applied to
+the source-facing endpoint.
+
+This module adds no mathematics beyond the two bridges: each endpoint is the
+already proved ideal-gauge theorem, read at the source's norm.
 
 ## Main results
 
-* `symmetricNorming_of_kyFanDominant`;
+* `symmetricNorming_of_kyFanDominant` and `kyFanDominant_of_symmetricNorming`;
 * `Corollary4_1_compact_nonacute_symmetricNorming_complex` and `..._real`;
 * `Proposition4_3_compact_nonacute_symmetricNorming_complex` and `..._real`;
 * `theorem5_2_symmetricNorming_complex` and `theorem5_2_symmetricNorming_real`.
@@ -95,6 +113,62 @@ theorem symmetricNorming_of_kyFanDominant
     rw [KyFanDominantIdealFamily.kyFan_gauge,
       KyFanDominantIdealFamily.kyFan_gauge] at hM
     exact hM.2
+
+/-- **The converse bridge: a source-norm estimate holds at every Fan-dominant
+ideal gauge.**
+
+If `d · N(X) ≤ N(Y)` holds at every normalized unitarily invariant norm in the
+source's sense, then it holds at every Fan-dominant unitarily invariant ideal
+gauge, and `X` lies in that gauge's ideal whenever `Y` does.
+
+The proof instantiates the hypothesis at `kyFanNormingFunction k`, the Ky Fan
+gauge presented as a coherent symmetric norming function; every bounded operator
+lies in its ideal, so the hypothesis applies unconditionally and yields Ky Fan
+majorization, which is what a Fan-dominant family consumes.
+
+With `symmetricNorming_of_kyFanDominant` this says the two norm quantifiers used
+in this development are equivalent: each is weak Ky Fan majorization, the
+criterion the paper's Section 1 announces it will use.  In particular a
+source-facing endpoint stated over `SymmetricNormingFunction` is not confined to
+the symmetrically normed ideals: it delivers the same bound in every unitarily
+invariant norm that is Fan dominant, including norms on `B(H)` such as
+`‖·‖ + ‖π(·)‖` that no symmetric gauge generates. -/
+theorem kyFanDominant_of_symmetricNorming
+    {𝕜 : Type u} [RCLike 𝕜]
+    {E F : Type v}
+    [NormedAddCommGroup E] [InnerProductSpace 𝕜 E] [CompleteSpace E]
+    [NormedAddCommGroup F] [InnerProductSpace 𝕜 F] [CompleteSpace F]
+    (M : KyFanDominantIdealFamily.{u, v} 𝕜) {X Y : E →L[𝕜] F} {d : ℝ} (hd : 0 < d)
+    (hY : M.Mem Y)
+    (h : ∀ N : SymmetricNormingFunction, N.Mem Y → N.Mem X ∧ d * N.gauge X ≤ N.gauge Y) :
+    M.Mem X ∧ d * M.gauge X ≤ M.gauge Y := by
+  refine mem_and_scaled_gauge_le_of_all_scaled_kyFan_le M hd hY (fun k => ?_)
+  rcases Nat.eq_zero_or_pos k with rfl | hk
+  · rw [kyFanApproximationGauge, kyFanApproximationGauge,
+      ContinuousLinearMap.kyFanGauge_zero_index,
+      ContinuousLinearMap.kyFanGauge_zero_index, mul_zero]
+  · have hN := (h (kyFanNormingFunction k hk) (kyFanNormingFunction_mem k hk Y)).2
+    rwa [kyFanNormingFunction_gauge, kyFanNormingFunction_gauge] at hN
+
+/-- **The two norm quantifiers of this development are equivalent.**
+
+Read together, `symmetricNorming_of_kyFanDominant` and
+`kyFanDominant_of_symmetricNorming` say that "`d · N(X) ≤ N(Y)` at every source
+norming function" and "`d · M(X) ≤ M(Y)` at every Fan-dominant ideal gauge" are the
+same assertion, modulo the membership side condition each carries.  Registering
+this as a theorem rather than a remark is the point: a reviewer asking which
+quantifier is the paper's does not have to choose. -/
+theorem symmetricNorming_iff_kyFanDominant
+    {𝕜 : Type u} [RCLike 𝕜]
+    {E F : Type v}
+    [NormedAddCommGroup E] [InnerProductSpace 𝕜 E] [CompleteSpace E]
+    [NormedAddCommGroup F] [InnerProductSpace 𝕜 F] [CompleteSpace F]
+    {X Y : E →L[𝕜] F} {d : ℝ} (hd : 0 < d) :
+    (∀ N : SymmetricNormingFunction, N.Mem Y → N.Mem X ∧ d * N.gauge X ≤ N.gauge Y) ↔
+      (∀ M : KyFanDominantIdealFamily.{u, v} 𝕜,
+        M.Mem Y → M.Mem X ∧ d * M.gauge X ≤ M.gauge Y) :=
+  ⟨fun h M hY => kyFanDominant_of_symmetricNorming M hd hY h,
+    fun h N hY => symmetricNorming_of_kyFanDominant N hd hY (fun M hM => h M hM)⟩
 
 /-! ## Corollary 4.1 and Proposition 4.3 at the source norm -/
 

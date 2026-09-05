@@ -95,6 +95,32 @@ theorem theorem5_2_real_ordered_sourceAudit
 
 end TauCeti.DavisKahan1970.Audits
 
+/-! ## The source's norm class: the two Lean quantifiers are equivalent
+
+Section 1 fixes `‖·‖` as an arbitrary normalized unitarily invariant norm and then
+declares the criterion it will use: "Fan dominance is used in the strong form:
+`‖K‖ ≤ ‖L‖` for every unitary-invariant norm iff the inequality holds for every Ky
+Fan norm."
+
+Two Lean objects model that class in this development.  `SymmetricNormingFunction`
+is the Gohberg--Krein reading -- a dimension-coherent symmetric gauge, extended to
+infinite dimension as the supremum of its singular-value prefixes.
+`KyFanDominantIdealFamily` is the axiomatic reading -- a symmetric operator ideal
+family with Fan dominance as a field.  Neither exhausts the other as a *type*: the
+Calkin-augmented norm `T ↦ ‖T‖ + ‖π(T)‖` is a Fan-dominant unitarily invariant norm
+on `B(H)` that agrees with the operator norm on finite-rank operators, so no
+symmetric gauge generates it.
+
+The two theorems below show the *estimates* do not care.  Each quantifier is
+equivalent to weak Ky Fan majorization, so a bound proved over one holds over the
+other -- and a source-facing endpoint stated over `SymmetricNormingFunction`
+therefore delivers the printed "for every unitary-invariant norm", including at
+norms outside the symmetrically normed ideals. -/
+
+#check @TauCeti.DavisKahan1970.symmetricNorming_of_kyFanDominant
+#check @TauCeti.DavisKahan1970.kyFanDominant_of_symmetricNorming
+#check @TauCeti.DavisKahan1970.symmetricNorming_iff_kyFanDominant
+
 /-! ## S2-sin-theta: Single-angle sine theorem
 
 Status: **TERMINAL EXACT**.
@@ -181,6 +207,10 @@ than (3.5); they are registered as specializations, not as the source-shaped for
 #check @TauCeti.DavisKahan1970.tanTheta_directed_bounded_spectralGap_symmetricNorming_real
 #check @TauCeti.DavisKahan.TanTheta.theorem6_3_unbounded_infiniteTrial_ideal_exists
 #check @TauCeti.DavisKahan1970.theorem6_3_unbounded_infiniteTrial_ideal_exists_real
+#check @TauCeti.DavisKahan1970.tanTheta_directed_unboundedRitz_symmetricNorming_exists_complex
+#check @TauCeti.DavisKahan1970.tanTheta_directed_unboundedRitz_symmetricNorming_exists_real
+#check @TauCeti.DavisKahan1970.approximationSingularValue_directedSineBlock_lt_one_unboundedRitz_complex
+#check @TauCeti.DavisKahan1970.approximationSingularValue_directedSineBlock_lt_one_unboundedRitz_real
 
 /-! ## S2-sin-two-theta: Double-angle sine theorem
 
@@ -671,13 +701,26 @@ Status: **TERMINAL EXACT**.
 
 /-! ## DK-6.3-thm: Tangent proof machinery, Example 6.1, and generalized tangent theorem
 
-Status: **TERMINAL EXACT**.  The canonical witnesses are the two paper-norm
-endpoints: Theorem 6.3 is printed "for every unitary-invariant norm", and the
-representative is a parameter characterised by its approximation numbers, so one
-theorem serves every norm.  The existential ideal-gauge forms below select a
-representative per Ky Fan index and are supporting evidence.
+Status: **TERMINAL EXACT**.  The canonical witnesses are the two `_exists_`
+unbounded-Ritz paper-norm endpoints.  They ask the caller for nothing the printed
+theorem does not: an unbounded Ritz pair, an arbitrary reducing complement, the two
+ordered form bounds, and a bounded residual.  From those they *derive* the pole
+exclusion (no principal angle is right), *construct* a representative with the
+paper's approximation numbers `tan θⱼ`, and bound it in every source norm.
+
+The parameterized `_unboundedRitz_` pair below is the same estimate with the
+representative and its characterisation supplied by the caller; it is the
+implementation the `_exists_` form composes, and remains registered as
+correspondence evidence.  The `_unboundedTrial_` pair adds a spectral-gap
+hypothesis the printed theorem does not have -- it assumes the perturbed operator
+has no spectrum in `(α, α + δ)`, equivalently that the reducing subspace *is* the
+spectral subspace below `α` -- and is a specialization, not a witness.
 -/
 
+#check @TauCeti.DavisKahan1970.tanTheta_directed_unboundedRitz_symmetricNorming_exists_complex
+#check @TauCeti.DavisKahan1970.tanTheta_directed_unboundedRitz_symmetricNorming_exists_real
+#check @TauCeti.DavisKahan1970.approximationSingularValue_directedSineBlock_lt_one_unboundedRitz_complex
+#check @TauCeti.DavisKahan1970.approximationSingularValue_directedSineBlock_lt_one_unboundedRitz_real
 #check @TauCeti.DavisKahan1970.tanTheta_directed_unboundedRitz_symmetricNorming_complex
 #check @TauCeti.DavisKahan1970.tanTheta_directed_unboundedRitz_symmetricNorming_real
 #check @TauCeti.DavisKahan1970.tanTheta_directed_unboundedTrial_symmetricNorming_complex
