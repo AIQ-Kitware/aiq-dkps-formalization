@@ -907,6 +907,38 @@ Do not assume the large Riesz/continuation roadmap is necessary until the proof 
 
 Protect the residual alternative from accidental extra perturbation hypotheses.
 
+## 3b. Theorem 3.1's real forward invariant
+
+The complex forward theorem states the classification on the source's angle
+operator (`genericAngleBlock`). The real one is still on `genericCosineBlock`,
+and that is a genuine scalar-parity defect: the invariant Davis and Kahan name is
+`Θ`, not `cos²Θ`.
+
+**The obvious route does not work, and the obstruction is worth recording.** The
+complex proof gets `spectrum ℝ (cos²Θ) ⊆ [0,1]` from
+`StarOrderedRing.nonneg_iff_spectrum_nonneg`, then transports the multiplicity
+invariant along `t ↦ arccos √t`. Transcribing it over `ℝ` fails at the first
+step: Mathlib's C⋆-order theory is complex, and
+`StarOrderedRing (E →L[ℝ] E)` / `AddRightMono (E →L[ℝ] E)` do not exist. Making
+the section `RCLike`-generic fails earlier still, at
+`Algebra ℝ (E →L[𝕜] E)`.
+
+So the real forward invariant has to go through complexification, the way the
+real directed `tan 2Θ` endpoint does: complexify the pair, apply the complex
+angle-invariant theorem, and read the multiplicity statement back. The pieces for
+the *transport* half now exist -- `OperatorUnitaryEquiv.cfc_ofReal`,
+`continuous_conjStarAlgEquiv_real` and `cfc_cfc_eq_self_of_leftInverse_real` in
+`SpectralMultiplicityEquiv.lean`, together with the real classification pair
+`operatorUnitaryEquiv_of_sameSpectralMultiplicity_real` /
+`sameSpectralMultiplicity_of_operatorUnitaryEquiv_real`. What is missing is the
+bridge identifying the real generic cosine block's spectrum, and that is where
+complexification enters.
+
+While doing this, drop the two derived `[SeparableSpace (genericLeftHalf …)]`
+instances the complex statement currently exposes: the source assumes
+separability of the ambient space, and separability of a closed subspace of a
+separable space is a consequence, not a hypothesis a caller should supply.
+
 ## 5. Fresh hostile review of all designated results
 
 Review source statements against compiler-expanded theorem types.

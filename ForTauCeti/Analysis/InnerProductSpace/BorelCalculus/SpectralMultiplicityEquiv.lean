@@ -6,6 +6,7 @@ Authors: Jon Crall, OpenAI GPT-5.6 Thinking, Claude Opus 5
 module
 
 public import ForTauCeti.Analysis.InnerProductSpace.BorelCalculus.MultiplicityModel
+public import ForTauCeti.Analysis.InnerProductSpace.RealContinuousFunctionalCalculus
 
 /-!
 # Spectral multiplicity data as a complete unitary invariant
@@ -270,6 +271,58 @@ theorem sameSpectralMultiplicity_cfc_iff
     have := hu.cfc_real g hgA hfA
     rw [hbackA, hbackB] at this
     exact sameSpectralMultiplicity_of_operatorUnitaryEquiv_complex _ _ hA this
+
+/-! ### The real twin
+
+`Algebra ℝ (H →L[𝕜] H)` is not available for a bare `RCLike 𝕜`, so the two
+theorems above cannot simply be stated over `𝕜`.  The real statements are the
+same proofs with `ℂ` replaced by `ℝ`; they are written out rather than derived
+because the only obstruction to sharing them is an instance, not an argument. -/
+
+section RealTransport
+
+variable {G₁ : Type u} [NormedAddCommGroup G₁] [InnerProductSpace ℝ G₁] [CompleteSpace G₁]
+variable {G₂ : Type v} [NormedAddCommGroup G₂] [InnerProductSpace ℝ G₂] [CompleteSpace G₂]
+
+/-- Conjugation by a real linear isometric equivalence is continuous on operators. -/
+theorem continuous_conjStarAlgEquiv_real (e : G₁ ≃ₗᵢ[ℝ] G₂) :
+    Continuous (e.conjStarAlgEquiv : (G₁ →L[ℝ] G₁) → (G₂ →L[ℝ] G₂)) := by
+  have hrw : (e.conjStarAlgEquiv : (G₁ →L[ℝ] G₁) → (G₂ →L[ℝ] G₂)) =
+      fun x => (e.toContinuousLinearEquiv : G₁ →L[ℝ] G₂) ∘L x ∘L
+        (e.symm.toContinuousLinearEquiv : G₂ →L[ℝ] G₁) := rfl
+  rw [hrw]
+  fun_prop
+
+/-- **Unitary equivalence survives the continuous functional calculus over `ℝ`.** -/
+theorem OperatorUnitaryEquiv.cfc_ofReal {A : G₁ →L[ℝ] G₁} {B : G₂ →L[ℝ] G₂} (f : ℝ → ℝ)
+    (h : OperatorUnitaryEquiv A B)
+    (hf : ContinuousOn f (spectrum ℝ A) := by cfc_cont_tac)
+    (ha : IsSelfAdjoint A := by cfc_tac) :
+    OperatorUnitaryEquiv (_root_.cfc f A) (_root_.cfc f B) := by
+  obtain ⟨e, he⟩ := h.exists_intertwiner
+  have hB : B = e.conjStarAlgEquiv A := by
+    ext y
+    simp only [LinearIsometryEquiv.conjStarAlgEquiv_apply_apply]
+    rw [he (e.symm y)]
+    simp
+  refine operatorUnitaryEquiv_of_intertwines e fun x => ?_
+  have hmap := StarAlgHomClass.map_cfc e.conjStarAlgEquiv f A hf
+    (continuous_conjStarAlgEquiv_real e)
+  rw [hB, ← hmap]
+  simp
+
+/-- **The functional-calculus inverse pair, over `ℝ`.**  `cfc g (cfc f A) = A`
+when `g ∘ f` is the identity on the spectrum. -/
+theorem cfc_cfc_eq_self_of_leftInverse_real {A : G₁ →L[ℝ] G₁} (hA : IsSelfAdjoint A)
+    (f g : ℝ → ℝ) (hf : ContinuousOn f (spectrum ℝ A))
+    (hg : ContinuousOn g (f '' spectrum ℝ A))
+    (hgf : ∀ t ∈ spectrum ℝ A, g (f t) = t) :
+    _root_.cfc g (_root_.cfc f A) = A := by
+  rw [← cfc_comp g f A hA hg hf,
+    cfc_congr (f := (g ∘ f : ℝ → ℝ)) (g := (id : ℝ → ℝ)) (fun t ht => hgf t ht),
+    cfc_id ℝ A]
+
+end RealTransport
 
 end FunctionalCalculusTransport
 
