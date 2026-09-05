@@ -19,6 +19,66 @@ A temporary loss of `29/29` while the remaining source-exact surfaces are being 
 
 ---
 
+# Progress record — 2026-09-05
+
+Kept here so a reader knows what is done without re-deriving it. Items not listed
+are not started.
+
+## Done
+
+**§III — the literal source norm class.** `NormalizedUnitaryInvariantNorm`
+(`DavisKahan/OperatorIdeal/NormalizedUnitaryInvariantNorm.lean`) is the Lean type
+for Section 1's object. It extends `KyFanDominantIdealFamily`, so the ideal domain
+(`∞` off the ideal, preserving the source's "the norm may not exist here"), the
+norm axioms, contraction compatibility and Fan dominance come with it; the one
+thing not already available, the rank-one normalization, is its only new field.
+Nonnegativity, definiteness, equation (1.9) unitary invariance, contraction
+compatibility and adjoint invariance are **derived theorems**, not assumed, so a
+caller supplies irredundant data. §3.2's bridge is
+`normalizedUnitaryInvariant_of_symmetricNorming`, plus a `_mul` form carrying the
+source constant 2. No Calkin theory was introduced, per §3.2.
+
+**§III.3 + §IV — source-exact façades for Section 2.** Twelve of the thirteen
+clauses. Each states its clause at the printed scope: separable ambient Hilbert
+space, literal UIN class, unbounded self-adjoint ambient operator. Only the
+*ambient* space carries separability (§4.2). §4.3's split into `ℝ` and `ℂ` is done
+for `S2-sin-theta`.
+
+**§X — the exact/stronger distinction, in the existing schema.** The façades are
+canonical; the arbitrary-Hilbert `SymmetricNormingFunction` theorems and the
+`RCLike` theorem are registered as `generalization`. Two gates were updated to
+follow the reversed policy **with their discipline kept**: separability posture is
+still derived from compiler types and every separable witness must still be
+classified; the scalar-generic tripwire still requires the generic witness to stay
+registered and audited.
+
+**A supporting generalization.** Fan dominance is now heterogeneous — it was
+stated for one pair of spaces, which blocked every clause comparing operators
+between different spaces. Both existing constructors satisfy the stronger field
+unchanged.
+
+## Known gaps, precisely
+
+* **`S2-tan-two-theta` directed real** has no façade. Its two sides live over
+  different scalar fields: the tangent corner exists only on the complexification
+  while the residual is real, and `NormalizedUnitaryInvariantNorm 𝕜` is indexed by
+  one field where `SymmetricNormingFunction` is not. Recorded in
+  `TanTwoThetaUnboundedExactReal.lean` with the two routes out.
+* **`S2-tan-two-theta` directed complex** has a façade but keeps the older
+  primary. That clause's contract requires the *primary itself* to compose its
+  five-step transport chain; a thin façade delegates. Loosening that check would
+  defeat its purpose. Closing it means building the façade from the
+  block-representative theorem with the transport composed inside.
+* **§III.3 beyond Section 2** — `DK-4.1-cor`, `DK-4.3-prop`, `DK-5.2-thm`,
+  `DK-6.3-thm`, `DK-8.1-thm`, `DK-8.2-thm` use the same UIN quantifier and have no
+  façades yet. §IV likewise beyond Section 2.
+* **§V, §XI, §XII, §XIII, §XV** not started.
+* **§VI–§VIII (Section 8 unbounded)** not started. §VI needs the unbounded
+  coercive inverse of §6.2; §VII is the resolvent/Riesz layer and remains the
+  largest single piece in this plan.
+
+---
+
 # I. Final source-correspondence policy
 
 Adopt the following rule globally:
