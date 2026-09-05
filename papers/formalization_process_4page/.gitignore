@@ -1,4 +1,3 @@
-# LaTeX build products
 *.aux
 *.bbl
 *.blg
@@ -6,6 +5,4 @@
 *.fls
 *.log
 *.out
-*.toc
 paper.pdf
-related_work_semantic_alignment.pdf
