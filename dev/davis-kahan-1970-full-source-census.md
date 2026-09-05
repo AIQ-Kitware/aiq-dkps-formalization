@@ -4,7 +4,7 @@
 
 **Census family:** `source-completion-census`  
 **Items:** 50  
-**Unique cited Lean declarations:** 1253
+**Unique cited Lean declarations:** 1255
 
 ## How to use this census
 
@@ -3374,6 +3374,8 @@ REOPENING WITHDRAWN 2026-08-31 and the rule corrected: a later source passage en
 
 - `TauCeti.DavisKahan.ExactSinTheta.approximationSingularValue_comp_strongProjection_tendsto`
 - `TauCeti.DavisKahan1970.Lemma5_1`
+- `TauCeti.DavisKahan1970.lemma5_1_complex`
+- `TauCeti.DavisKahan1970.lemma5_1_real`
 
 **Notes.** The modern approximation-number theorem is stronger and scalar-generic.
 
