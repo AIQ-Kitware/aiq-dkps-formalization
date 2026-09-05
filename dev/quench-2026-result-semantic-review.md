@@ -216,7 +216,7 @@ Compare the printed Quench definitions, assumptions, and Theorem 2 with the Lean
 
 **Notes.** No additional note.
 
-**Next action.** Finite route: none, it runs at the source rate. Infinite route: remove the perspective net, which is the continuum treatment recorded on the Acharyya 2024 side.
+**Next action.** Finite route: none, it runs at the source rate. Infinite route: remove the perspective net, which is the continuum treatment recorded on the Acharyya 2024 side. Caveat added 2026-09-05: that treatment is now marked RESOLVED there, but it is raw-stress with an L^p(P x P) functional while this chain is classical MDS with a uniform per-model event, and no Quench module references any Acharyya 2024 theorem. A raw-stress-to-classical-MDS step would have to be proved first; naming it is part of this action. See gap replicate-schedule-exceeds-source-rate.
 
 **Gap refs:** `raw-response-explicit-assumptions`, `replicate-schedule-exceeds-source-rate`, `technical-assumptions-are-acharyya-1-and-2`, `theorem1-rate-not-instantiated`, `tie-display-proof-mismatch`
 
@@ -253,7 +253,7 @@ Compare the printed Quench definitions, assumptions, and Theorem 2 with the Lean
 
 **Notes.** The formal proof supplies the missing uniform-target/measurability step before integrating pointwise squared error to MSE.
 
-**Next action.** Finite route: none, it runs at the source rate. Infinite route: remove the perspective net, which is the continuum treatment recorded on the Acharyya 2024 side.
+**Next action.** Finite route: none, it runs at the source rate. Infinite route: remove the perspective net, which is the continuum treatment recorded on the Acharyya 2024 side. Caveat added 2026-09-05: that treatment is now marked RESOLVED there, but it is raw-stress with an L^p(P x P) functional while this chain is classical MDS with a uniform per-model event, and no Quench module references any Acharyya 2024 theorem. A raw-stress-to-classical-MDS step would have to be proved first; naming it is part of this action. See gap replicate-schedule-exceeds-source-rate.
 
 **Gap refs:** `raw-response-explicit-assumptions`, `replicate-schedule-exceeds-source-rate`, `technical-assumptions-are-acharyya-1-and-2`, `theorem1-rate-not-instantiated`
 
@@ -283,7 +283,7 @@ Compare the printed Quench definitions, assumptions, and Theorem 2 with the Lean
 
 **Notes.** No additional note.
 
-**Next action.** Finite route: none, it runs at the source rate. Infinite route: remove the perspective net, which is the continuum treatment recorded on the Acharyya 2024 side.
+**Next action.** Finite route: none, it runs at the source rate. Infinite route: remove the perspective net, which is the continuum treatment recorded on the Acharyya 2024 side. Caveat added 2026-09-05: that treatment is now marked RESOLVED there, but it is raw-stress with an L^p(P x P) functional while this chain is classical MDS with a uniform per-model event, and no Quench module references any Acharyya 2024 theorem. A raw-stress-to-classical-MDS step would have to be proved first; naming it is part of this action. See gap replicate-schedule-exceeds-source-rate.
 
 **Gap refs:** `raw-response-explicit-assumptions`, `replicate-schedule-exceeds-source-rate`, `technical-assumptions-are-acharyya-1-and-2`, `theorem1-rate-not-instantiated`
 
@@ -312,7 +312,7 @@ Compare the printed Quench definitions, assumptions, and Theorem 2 with the Lean
 
 **Notes.** No additional note.
 
-**Next action.** Finite route: none, it runs at the source rate. Infinite route: remove the perspective net, which is the continuum treatment recorded on the Acharyya 2024 side.
+**Next action.** Finite route: none, it runs at the source rate. Infinite route: remove the perspective net, which is the continuum treatment recorded on the Acharyya 2024 side. Caveat added 2026-09-05: that treatment is now marked RESOLVED there, but it is raw-stress with an L^p(P x P) functional while this chain is classical MDS with a uniform per-model event, and no Quench module references any Acharyya 2024 theorem. A raw-stress-to-classical-MDS step would have to be proved first; naming it is part of this action. See gap replicate-schedule-exceeds-source-rate.
 
 **Gap refs:** `raw-response-explicit-assumptions`, `replicate-schedule-exceeds-source-rate`, `technical-assumptions-are-acharyya-1-and-2`, `theorem1-rate-not-instantiated`
 

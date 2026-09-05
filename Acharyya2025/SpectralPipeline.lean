@@ -14,12 +14,21 @@ This file is intentionally a map between "worlds":
 
 The elementary representation bridges are proved in `MathlibBridge`.  The hard
 spectral facts are now FULLY PROVED, one stage per file: Weyl eigenvalue
-perturbation (`Acharyya2025.Weyl`), Davis-Kahan eigenspace perturbation
-(`Acharyya2025.DavisKahan`), polar-factor alignment
-(`Acharyya2025.PolarFactor`), the configuration-level capstone
+perturbation (`Acharyya2025.Weyl`), the configuration-level capstone
 (`Acharyya2025.ConfigPerturbation`), its matrix-world packaging
 (`Acharyya2025.MatrixPerturbation`), and the high-probability aligned pipeline
-(`Acharyya2025.AlignedPipeline`).  This file retains the world-map definitions
+(`Acharyya2025.AlignedPipeline`).
+
+`Acharyya2025.DavisKahan`, `Acharyya2025.RankGap` and `Acharyya2025.PolarFactor`
+are **no longer stages of this pipeline** and this list used to say they were.
+The capstone routes its eigenvector perturbation through the Yu--Wang--Samworth
+population-gap residual bound, which carries no `ε ≤ α/2` smallness condition,
+and its polar alignment through
+`TauCeti.LinearMap.exists_linearIsometryEquiv_norm_sub_apply_le` (`δ < 1`) with
+a Procrustes fallback, not through the `δ ≤ 1/2` form `PolarFactor` wraps.
+Those three modules have no consumers.
+
+This file retains the world-map definitions
 (`configGram`, `GramRealizesCMDS`, the hardened `CMDSpectralAssumptions`, the
 stage records), the proved norm-comparison bridge
 (`operatorNormClose_of_entrywiseClose`), and the proved population CMDS

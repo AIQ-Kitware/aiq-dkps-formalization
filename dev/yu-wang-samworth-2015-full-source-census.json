@@ -1811,7 +1811,7 @@
       "source_anchor": "Theorem 3, rank-one singular-vector consequence",
       "title": "Rank-one singular-vector corollaries (beyond the printed paper)",
       "summary": "Direct right and left single-singular-vector bounds, obtained by reusing the symmetric rank-one theorem on Gram operators.",
-      "status": "compiled_generalized",
+      "status": "compiled_specialization",
       "verification": "proved_in_build",
       "lean_declarations": [
         "YuWangSamworth2015.DavisKahanTheory.yuWangSamworth_rightSingularVector_le",
@@ -1819,9 +1819,11 @@
         "YuWangSamworth2015.DavisKahanTheory.yuWangSamworth_rightSingularVector_opNormCoefficient_le",
         "YuWangSamworth2015.DavisKahanTheory.yuWangSamworth_leftSingularVector_opNormCoefficient_le"
       ],
-      "notes": "The paper does not print these; the lane adds them because the rectangular rank-one case is what applications actually use. Recorded so that the census is not read as claiming they are source items.",
-      "next_action": "None.",
-      "gap_refs": [],
+      "notes": "The paper does not print these; the lane adds them because the rectangular rank-one case is what applications actually use. Recorded so that the census is not read as claiming they are source items.\n\n**Status corrected 2026-09-05 from `compiled_generalized` to `compiled_specialization`, and this is a real defect the row was hiding.** All four declarations take `CorrespondingRightSingularBlock` / `CorrespondingLeftSingularBlock` and route through `yuWangSamworth_eigenvector_le`. `Rectangular/Theorem4.lean`'s own header says those predicates are *narrower than the printed hypothesis* -- they pin both blocks to Mathlib's chosen Gram eigenbases, whereas the paper takes the singular frames to be arbitrary orthonormal ones with no sample separation -- and `Core/Statistics.lean` documents `yuWangSamworth_eigenvector_le` as narrower than Corollary 1. Row `YWS-C1-rankone` spells out exactly why that narrowing matters: at a repeated sample eigenvalue, a statement pinning the sample vector to a chosen eigenbasis covers one choice out of a continuum. So calling these `compiled_generalized` was backwards: the symmetric side was repaired on 2026-08-13 and the rectangular rank-one side was not.\n\nThe repair is mechanical and is the row's open action. `Rectangular/Theorem4.lean` defines `IsOrderedRightSingularFrame A hn e v := IsOrderedEigenframe (isSymmetric_rightGram A) hn e v`, so `yuWangSamworth_eigenvector_frame_le` applies verbatim to `rightGram A` / `rightGram Ahat` at a chosen index, with the same singular-coefficient transport the present proofs already perform after `hbase`.",
+      "next_action": "Restate the four rank-one corollaries with an arbitrary orthonormal singular pair at a chosen index, via `yuWangSamworth_eigenvector_frame_le` on the Gram operators, and keep the `CorrespondingEigenblock` forms only for callers that already hold that datum -- the same shape the symmetric side settled on.",
+      "gap_refs": [
+        "preprint-numbering-aliases"
+      ],
       "importance": "supporting"
     },
     {

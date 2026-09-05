@@ -47,9 +47,11 @@ singular-subspace argument that consumes them.
   `ForTauCeti/Analysis/InnerProductSpace/SingularSubspace.lean`.
 * Deliberately **not** migrated with it: `rightSingularSubspace` and
   `leftSingularSubspace`, which depend on `spectralSubspace` (still in
-  `DavisKahan/FiniteDimensional/Core`), and the Hermitian-dilation block —
-  unused outside its defining file, and homonymous with an unrelated bounded
-  `hermitianDilation` in `TauCeti.DavisKahanExt`.
+  `DavisKahan/FiniteDimensional/Core`), and the Hermitian-dilation block,
+  which is unused outside its defining file.  (This note used to add that the
+  name was homonymous with an unrelated bounded `hermitianDilation` in
+  `TauCeti.DavisKahanExt`; no such declaration exists, so that half of the
+  recorded reason is void.)
 * Spectra influence: none.
 -/
 

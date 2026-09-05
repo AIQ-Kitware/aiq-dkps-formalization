@@ -124,8 +124,11 @@ gives the eigenvector alignment used in Theorem 2.
 as claiming it.**  The classical bound is `‖sin Θ‖_F ≤ ‖S − T‖_F / gap`; this one
 is `‖sin Θ‖_F ≤ √n · ε / gap`, worse by a factor of the *ambient* dimension,
 because it starts from an operator-norm hypothesis and pays `‖S − T‖²_F ≤ n ε²`
-for it.  It is what the paper's prose invokes and it is what Theorem 2 needs, so
-it stays; but the sharp form is already available in this repository as
+for it.  It is what the paper's prose invokes, so it stays as the source-facing
+reading; it is **not** what Theorem 2 uses -- nothing consumes it, and the live
+route is the Yu--Wang--Samworth population-gap residual bound applied in
+`Acharyya2025.ConfigPerturbation`, which needs no perturbative smallness side
+condition at all.  The sharp form is already available in this repository as
 `TauCeti.sum_cross_norm_inner_eigenvectorBasis_sq_le_hilbertSchmidt`
 (`DavisKahan/Alternative/FiniteDimensional/EigenbasisFrobenius.lean`), of which
 this is a corollary, and the arbitrary-unitarily-invariant-norm form as
@@ -155,7 +158,8 @@ size `d`, rather than the ambient dimension `n`:
 `sum cross <= d * epsilon^2 / gap^2`.
 
 The crude `sum_cross_inner_sq_le` theorem remains available for source-facing
-uses that intentionally mirror the older ambient-Frobenius argument. -/
+uses that intentionally mirror the older ambient-Frobenius argument.  Neither
+this declaration nor that one has a consumer; see the note there. -/
 theorem sum_cross_inner_sq_le_opNorm
     (hT : T.IsSymmetric) (hS : S.IsSymmetric)
     (hn : finrank ℝ E = n)

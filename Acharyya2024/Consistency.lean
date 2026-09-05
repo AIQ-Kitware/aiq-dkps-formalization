@@ -568,14 +568,18 @@ argument.  Under the repaired layer-1 stability the diagonal argument is
 unnecessary: the full sequence converges at every stage, so the shared
 subsequence is simply `id` — a strictly stronger conclusion.
 
-SCOPE CAVEAT (honesty).  This is the *per-stage, finite* form: a countable family
-of finite (`Fin (nOf k)`) consistency statements, one per stage `k`.  It is NOT
-the paper's full Theorem 4/5 conclusion, which is an `Lᵖ` average over a
+SCOPE (narrowed 2026-09-05).  This is the *per-stage, finite* form: a countable
+family of finite (`Fin (nOf k)`) consistency statements, one per stage `k`.  It
+is not the paper's full Theorem 4/5 conclusion, which is an `Lᵖ` average over a
 *continuum* of iid model draws `φ ~ P` from the model space —
-`∫∫ |‖ψ̂₁ − ψ̂₂‖ − ‖mds(φ₁) − mds(φ₂)‖|ᵖ dP dP →P 0`.  Modelling the model
-distribution `P`, the iid draw of models, and the continuous-MDS map `mds(φ)` is
-not formalized here; this theorem is the finite consistency content that the
-paper's argument specializes to at each stage, re-indexed over stages.
+`∫∫ |‖ψ̂₁ − ψ̂₂‖ − ‖mds(φ₁) − mds(φ₂)‖|ᵖ dP dP →P 0`.  That conclusion **is**
+formalized, in `lp_consistency_of_gamma_population` and
+`lp_consistency_of_replicates_population` below, over
+`P = Pmod ⊗ₘ κ` with the models drawn from a population law and `mds` supplied by
+`Acharyya2024.ContinuousMDS`.  This caveat used to say the model distribution,
+the iid draw, and the continuous-MDS map were "not formalized here"; that was
+true when it was written and is no longer.  This theorem remains the finite
+per-stage content the paper's argument specializes to at each stage.
 
 Mathematical source/citation:
 - Acharyya, Trosset, Priebe, Helm, "Consistent estimation of generative model
@@ -682,10 +686,10 @@ dissimilarity convergence is split into a per-stage sampling error against a
 stage-and-budget population `Delta r k` plus a deterministic per-stage
 Assumption-1 error, mirroring `fixed_models_growing_queries_consistency_of_uniqueProfile`.
 
-Same SCOPE CAVEAT as `growing_models_growing_queries_perStage_consistency_of_uniqueProfile`:
-this is the finite per-stage form, not the paper's `Lᵖ`-over-the-model-distribution
-conclusion (the model distribution and the continuous-MDS map are not
-formalized).
+Same scope as `growing_models_growing_queries_perStage_consistency_of_uniqueProfile`:
+this is the finite per-stage form.  The paper's `Lᵖ`-over-the-model-distribution
+conclusion is `lp_consistency_of_gamma_population` and
+`lp_consistency_of_replicates_population` below.
 
 Formalized by Claude Fable 5 (claude-fable-5[1m]).
 -/

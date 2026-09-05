@@ -3101,7 +3101,7 @@
   "TauCeti.DavisKahan.Experimental.TanTheta.UnboundedTrialBlock.residual_mem_orthogonal": "TauCeti.DavisKahan.TanTheta.BoundedCompressionTrialBlock.residual_mem_orthogonal",
   "TauCeti.DavisKahan.Experimental.TanTheta.abs_le_max_of_mem_Icc": "TauCeti.DavisKahan.TanTheta.abs_le_max_of_mem_Icc",
   "TauCeti.DavisKahan.Experimental.TanTheta.coercive_of_selfAdjoint_spectrum_exterior": "TauCeti.DavisKahan.TanTheta.coercive_of_selfAdjoint_spectrum_exterior",
-  "TauCeti.DavisKahan.Experimental.TanTheta.norm_starProjection_closedOperator_le_of_mem_orthogonal": "TauCeti.DavisKahan.TanTheta.norm_starProjection_closedOperator_le_of_mem_orthogonal",
+  "TauCeti.DavisKahan.Experimental.TanTheta.norm_starProjection_symmetricPMap_le_of_mem_orthogonal": "TauCeti.DavisKahan.TanTheta.norm_starProjection_symmetricPMap_le_of_mem_orthogonal",
   "TauCeti.DavisKahan.Experimental.TanTheta.selfAdjointSpectralIcc_centered_norm_le": "TauCeti.DavisKahan.TanTheta.selfAdjointSpectralIcc_centered_norm_le",
   "TauCeti.DavisKahan.Experimental.TanTheta.selfAdjointSpectralIcc_mem_domain": "TauCeti.DavisKahan.TanTheta.selfAdjointSpectralIcc_mem_domain",
   "TauCeti.DavisKahan.Experimental.TanTheta.tanTheta_unbounded_exactSpectralIcc": "TauCeti.DavisKahan.TanTheta.tanTheta_unbounded_exactSpectralIcc",

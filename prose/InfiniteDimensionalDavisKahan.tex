@@ -259,8 +259,11 @@ all ideal gauges without proof.
 \section{Closed operators}
 Unbounded extensions require densely defined closed operators, graph norms,
 extension relations, adjoints, resolvents, and spectral projections.  The
-local Lean scaffold uses an explicit `ClosedOperator` structure while marking
-reconciliation with `LinearPMap` as a foundational task.
+carrier is Mathlib's \code{LinearPMap}: an unbounded operator is a partial map,
+and dense domain, closed graph and self-adjointness are hypotheses on it, not
+fields of a record.  There is no bundled closed-operator structure anywhere in
+the tree --- \code{TauCeti.DavisKahanExt.ClosedOperator} and its whole
+forwarding API were deleted on 2026-08-28 --- and none must be reintroduced.
 
 \section{Kato--Rellich perturbations}
 A bounded self-adjoint perturbation preserves self-adjointness on the original
