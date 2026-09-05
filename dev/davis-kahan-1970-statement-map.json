@@ -186,8 +186,8 @@
       "expected_verification": "proved_in_build",
       "tex_marker": "S2-tan-theta",
       "review_declarations": [
-        "TauCeti.DavisKahan1970.SectionTwo.tanTheta_complex",
-        "TauCeti.DavisKahan1970.SectionTwo.tanTheta_real",
+        "TauCeti.DavisKahan1970.SectionTwo.tanTheta_ambient_complex",
+        "TauCeti.DavisKahan1970.SectionTwo.tanTheta_ambient_real",
         "TauCeti.DavisKahan.FiniteDimensional.partIII_tanTheta_ritzResidual_uiNorm",
         "TauCeti.DavisKahan1970.theorem6_3_perturbation_infiniteTrial",
         "TauCeti.DavisKahan1970.tanTheta_ambient_bounded_symmetricNorming_complex_of_transversality",
@@ -238,8 +238,8 @@
       "expected_verification": "proved_in_build",
       "tex_marker": "S2-sin-two-theta",
       "review_declarations": [
-        "TauCeti.DavisKahan1970.SectionTwo.sinTwoTheta_complex",
-        "TauCeti.DavisKahan1970.SectionTwo.sinTwoTheta_real",
+        "TauCeti.DavisKahan1970.SectionTwo.sinTwoTheta_directed_complex",
+        "TauCeti.DavisKahan1970.SectionTwo.sinTwoTheta_directed_real",
         "TauCeti.DavisKahan1970.sinTwoTheta_directed_unboundedResidual_symmetricNorming_real",
         "TauCeti.DavisKahan1970.sinTwoTheta_directed_unboundedResidual_symmetricNorming_complex",
         "TauCeti.DavisKahan.FiniteDimensional.partIII_sinTwoTheta_uiNorm",
@@ -297,8 +297,8 @@
       "expected_verification": "proved_in_build",
       "tex_marker": "S2-tan-two-theta",
       "review_declarations": [
-        "TauCeti.DavisKahan1970.SectionTwo.tanTwoTheta_complex",
-        "TauCeti.DavisKahan1970.SectionTwo.tanTwoTheta_real",
+        "TauCeti.DavisKahan1970.SectionTwo.tanTwoTheta_ambient_complex",
+        "TauCeti.DavisKahan1970.SectionTwo.tanTwoTheta_ambient_real",
         "TauCeti.DavisKahan1970.tanTwoTheta_directed_boundedResidual_blockRepresentative_spectralGap_symmetricNorming_complex",
         "TauCeti.DavisKahan1970.tanTwoTheta_directed_boundedResidual_blockRepresentative_spectralGap_symmetricNorming_real",
         "TauCeti.DavisKahan1970.tanTwoTheta_ambient_bounded_spectralGap_symmetricNorming_complex",

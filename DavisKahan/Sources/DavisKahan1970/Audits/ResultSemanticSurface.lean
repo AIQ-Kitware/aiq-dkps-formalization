@@ -166,8 +166,8 @@ The transversality-form declarations assume `‖sin Θ‖ < 1`, which is strictl
 than (3.5); they are registered as specializations, not as the source-shaped form.
 -/
 
-#check @TauCeti.DavisKahan1970.SectionTwo.tanTheta_complex
-#check @TauCeti.DavisKahan1970.SectionTwo.tanTheta_real
+#check @TauCeti.DavisKahan1970.SectionTwo.tanTheta_ambient_complex
+#check @TauCeti.DavisKahan1970.SectionTwo.tanTheta_ambient_real
 #check @TauCeti.DavisKahan1970.tanTheta_directed_finiteDimensional_symmetricNorming_rclike
 #check @TauCeti.DavisKahan1970.tanTheta_ambient_unboundedRitz_symmetricNorming_complex
 #check @TauCeti.DavisKahan1970.tanTheta_ambient_unboundedRitz_definedTangent_symmetricNorming_complex
@@ -234,8 +234,8 @@ field-specific.  Its signature carries no capability class and no functional
 calculus: the real calculus on `E →L[𝕜] E` is a theorem at every `RCLike` field.
 -/
 
-#check @TauCeti.DavisKahan1970.SectionTwo.sinTwoTheta_complex
-#check @TauCeti.DavisKahan1970.SectionTwo.sinTwoTheta_real
+#check @TauCeti.DavisKahan1970.SectionTwo.sinTwoTheta_directed_complex
+#check @TauCeti.DavisKahan1970.SectionTwo.sinTwoTheta_directed_real
 #check @TauCeti.DavisKahan1970.sinTwoTheta_directed_finiteDimensional_symmetricNorming_rclike
 #check @TauCeti.DavisKahan1970.sinTwoTheta_directed_unbounded_addBounded_blockRepresentative_symmetricNorming_complex
 #check @TauCeti.DavisKahan1970.sinTwoTheta_directed_unbounded_addBounded_symmetricNorming_complex
@@ -378,8 +378,8 @@ example {Hc : Type*} [NormedAddCommGroup Hc] [InnerProductSpace ℂ Hc] [Complet
 Status: **TERMINAL EXACT**.
 -/
 
-#check @TauCeti.DavisKahan1970.SectionTwo.tanTwoTheta_complex
-#check @TauCeti.DavisKahan1970.SectionTwo.tanTwoTheta_real
+#check @TauCeti.DavisKahan1970.SectionTwo.tanTwoTheta_ambient_complex
+#check @TauCeti.DavisKahan1970.SectionTwo.tanTwoTheta_ambient_real
 #check @TauCeti.DavisKahan1970.tanTwoTheta_branchFree_bounded_finiteSubspace_symmetricNorming_rclike
 #check @TauCeti.DavisKahan1970.tanTwoTheta_ambient_unbounded_blockRepresentative_derivedReflection_symmetricNorming_complex
 #check @TauCeti.DavisKahan1970.tanTwoTheta_ambient_unbounded_blockRepresentative_derivedReflection_symmetricNorming_real

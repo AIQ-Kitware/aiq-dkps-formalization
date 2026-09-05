@@ -222,30 +222,6 @@
           {
             "name": "TauCeti.DavisKahan1970.isTrialResidual_iff",
             "mathematical_role": "Expands the compact trial-residual hypothesis into the trial isometry, domain transport, and exact residual identity R = A E0 - E0 A0."
-          },
-          {
-            "name": "TauCeti.DavisKahan1970.isExactSpectralDecomposition_iff",
-            "mathematical_role": "Expands the compact exact-space hypothesis into isometric F0/F1 coordinates, orthogonality, completeness, domain transport, and A F1 = F1 Lambda1."
-          },
-          {
-            "name": "TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction",
-            "mathematical_role": "Implementation structure behind the public theorem spelling UnitaryInvariantNorm: the dimension-coherent normalized unitary-invariant norm quantified over by Davis--Kahan."
-          },
-          {
-            "name": "TauCeti.DavisKahan.Sylvester.HasUnboundedSylvesterKyFan",
-            "mathematical_role": "Scalar-field proof capability used to keep one theorem generic over RCLike. The repository provides instances for both source scalar fields, R and C; this is implementation evidence rather than an additional paper hypothesis."
-          },
-          {
-            "name": "ContinuousLinearMap.HasMinMaxLowerBoundEverywhere",
-            "mathematical_role": "Approximation-number min--max capability needed by the universal norm machinery. It has proved R and C instances and is not an extra source restriction."
-          },
-          {
-            "name": "LinearPMap",
-            "mathematical_role": "Mathlib's partial linear map: the repository representation of the paper's possibly unbounded self-adjoint operators. Dense domain, closed graph and self-adjointness are hypotheses of the theorems that need them, not fields of the carrier; the bundled DKPS record that once played this role was deleted on 2026-08-28."
-          },
-          {
-            "name": "TauCeti.LinearPMap.realSpectrum",
-            "mathematical_role": "Real spectrum of a self-adjoint partial/closed operator; the interval/exterior alternative itself remains literal in the canonical theorem."
           }
         ],
         "clause_map": [
@@ -668,8 +644,8 @@
       "verification": "proved_in_build",
       "blocked_by": [],
       "lean_declarations": [
-        "TauCeti.DavisKahan1970.SectionTwo.tanTheta_complex",
-        "TauCeti.DavisKahan1970.SectionTwo.tanTheta_real",
+        "TauCeti.DavisKahan1970.SectionTwo.tanTheta_ambient_complex",
+        "TauCeti.DavisKahan1970.SectionTwo.tanTheta_ambient_real",
         "TauCeti.DavisKahan1970.tanTheta_directed_finiteDimensional_symmetricNorming_rclike",
         "TauCeti.DavisKahan.FiniteDimensional.partIII_tanTheta_ritzResidual_uiNorm",
         "TauCeti.DavisKahanExt.tanTheta_spectrum",
@@ -809,22 +785,6 @@
           {
             "name": "TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction",
             "mathematical_role": "The literal dimension-coherent source unitary-invariant norm. The new generic directed headline theorem uses it directly over arbitrary RCLike scalars."
-          },
-          {
-            "name": "TauCeti.principalTangents",
-            "mathematical_role": "The directed principal-tangent singular-value sequence used in the paper definition of tan Theta0."
-          },
-          {
-            "name": "TauCeti.ritzResidual",
-            "mathematical_role": "The Rayleigh--Ritz residual. In the generic headline theorem it appears directly on the right-hand side rather than through a bundled problem record."
-          },
-          {
-            "name": "TauCeti.DavisKahan.CrossedDefectsEquivalent",
-            "mathematical_role": "The paper-wide nonacute direct-rotation existence condition (3.5), needed only for the ambient whole-space tangent semantics in the general infinite-dimensional case."
-          },
-          {
-            "name": "TauCeti.DavisKahan.Angle.tanAngleOperatorC",
-            "mathematical_role": "The canonical complex ambient tan(Theta) operator used by the unbounded whole-space scope companion."
           }
         ],
         "clause_map": [
@@ -1003,8 +963,8 @@
       "verification": "proved_in_build",
       "blocked_by": [],
       "lean_declarations": [
-        "TauCeti.DavisKahan1970.SectionTwo.sinTwoTheta_complex",
-        "TauCeti.DavisKahan1970.SectionTwo.sinTwoTheta_real",
+        "TauCeti.DavisKahan1970.SectionTwo.sinTwoTheta_directed_complex",
+        "TauCeti.DavisKahan1970.SectionTwo.sinTwoTheta_directed_real",
         "TauCeti.DavisKahan1970.sinTwoTheta_directed_finiteDimensional_symmetricNorming_rclike",
         "TauCeti.DavisKahan.FiniteDimensional.partIII_sinTwoTheta_uiNorm",
         "TauCeti.DavisKahan.sinTwoTheta_addBounded_of_spectrum_gap",
@@ -1055,8 +1015,6 @@
         "TauCeti.DavisKahan1970.sinTwoTheta_directed_unboundedResidual_blockRepresentative_spectrumGap_symmetricNorming_complex",
         "TauCeti.DavisKahan1970.sinTwoTheta_directed_unbounded_addBounded_spectrumGap_symmetricNorming_complex",
         "TauCeti.DavisKahan1970.sinTwoTheta_directed_unbounded_addBounded_blockRepresentative_spectrumGap_symmetricNorming_complex",
-        "TauCeti.DavisKahan.sinTwoTheta_addBounded_gauge_of_formGap",
-        "TauCeti.DavisKahan.sinTwoTheta_reflectionResidual_gauge_of_formGap",
         "TauCeti.DavisKahan.sinTheta_addBounded_gauge_complex_block_of_formGap",
         "TauCeti.DavisKahan.ExactSinTheta.sinTheta_unbounded_complex_block",
         "TauCeti.DavisKahan1970.sinTwoTheta_directed_unbounded_addBounded_unequalDimension_symmetricNorming_complex",
@@ -1138,22 +1096,6 @@
           {
             "name": "TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction",
             "mathematical_role": "The literal source unitary-invariant norm. The new directed headline theorem evaluates it over generic RCLike scalars."
-          },
-          {
-            "name": "TauCeti.DavisKahan.FiniteDimensional.sinTwoThetaEmbedding",
-            "mathematical_role": "The rectangular directed sin(2 Theta0) representative used by the scalar-generic headline theorem."
-          },
-          {
-            "name": "TauCeti.DavisKahan.residual",
-            "mathematical_role": "The literal residual A X - X M appearing on the right-hand side of the directed theorem."
-          },
-          {
-            "name": "TauCeti.DavisKahan.Angle.sinTwoAngleOperatorC",
-            "mathematical_role": "The complex whole-space sin(2 Theta) operator used by the ambient perturbation scope companion."
-          },
-          {
-            "name": "TauCeti.DavisKahan.Angle.directedSinTwoAngleOperator",
-            "mathematical_role": "The paper's directed sin(2 Theta_0), at every RCLike field.  It is an ORDERED object: `directedSinAngleOperator X Y = |P_{Y-perp} P_X|`, so the source's `||sin Theta_0|| = ||Q^perp P|| = ||Q^perp E_0||` is the ordering with the TRIAL subspace first.  The canonical directed theorems conclude on `directedSinTwoAngleOperator V U` with V the trial subspace and U the subspace whose two blocks the gap separates."
           }
         ],
         "clause_map": [
@@ -1312,15 +1254,14 @@
       "verification": "proved_in_build",
       "blocked_by": [],
       "lean_declarations": [
-        "TauCeti.DavisKahan1970.SectionTwo.tanTwoTheta_complex",
-        "TauCeti.DavisKahan1970.SectionTwo.tanTwoTheta_real",
+        "TauCeti.DavisKahan1970.SectionTwo.tanTwoTheta_ambient_complex",
+        "TauCeti.DavisKahan1970.SectionTwo.tanTwoTheta_ambient_real",
         "TauCeti.DavisKahan1970.tanTwoTheta_branchFree_bounded_finiteSubspace_symmetricNorming_rclike",
         "TauCeti.DavisKahan.FiniteDimensional.partIII_tanTwoTheta_opNorm",
         "TauCeti.DavisKahanExt.tanTwoTheta_offDiagonalC_of_weighted_sine",
         "TauCeti.DavisKahan.sharp_symmetricNormingFunction",
         "TauCeti.DavisKahan.sharp_symmetricNormingFunction_selectedBranch",
         "TauCeti.DavisKahan.tanTwoTheta_selectedBranch_symmetricNorming_real",
-        "TauCeti.DavisKahan1970.tanTwoTheta_branchFree_bounded_finiteSubspace_symmetricNorming_rclike",
         "TauCeti.DavisKahan.FiniteDimensional.paired_singularVector_gap_inequality",
         "TauCeti.DavisKahan.FiniteDimensional.singularValue_ne_one",
         "TauCeti.DavisKahan.FiniteDimensional.absDoubleAngleTangent_scalar",
@@ -1374,21 +1315,12 @@
         "TauCeti.DavisKahan1970.tanTwoTheta_ambient_unbounded_blockRepresentative_symmetricNorming_complex",
         "TauCeti.DavisKahan1970.tanTwoTheta_ambient_unbounded_blockRepresentative_symmetricNorming_real",
         "TauCeti.DavisKahan1970.tanTwoTheta_ambient_unbounded_blockRepresentative_derivedReflection_symmetricNorming_complex",
-        "TauCeti.DavisKahan.diagonalPart_sq_add_offDiagonalPart_sq",
-        "TauCeti.DavisKahan.diagonalPart_anticommute_offDiagonalPart",
-        "TauCeti.DavisKahan.corner_offDiagonalPart_sq",
-        "TauCeti.DavisKahan.gram_unboundedReflectionTangent",
-        "TauCeti.DavisKahan.gram_unboundedReflectionTangent_eq_offDiagonal",
-        "TauCeti.DavisKahan.starProjection_offDiagonal_sq_reflection",
         "TauCeti.DavisKahan.unboundedReflectionTangent_reflection_eq",
-        "TauCeti.DavisKahan.tanTwoBlockRepresentative_mul_signedCosTwo",
         "TauCeti.DavisKahan.sameApproximationSingularValues_unboundedReflectionTangent",
         "TauCeti.DavisKahan.extendedGauge_unboundedReflectionTangent_complex",
         "TauCeti.DavisKahan1970.tanTwoTheta_ambient_unbounded_symmetricNorming_complex",
         "TauCeti.DavisKahan.ReflectionIntertwines",
         "TauCeti.DavisKahan.ReflectionIntertwines.ofReducesSubspace",
-        "TauCeti.DavisKahan.reflection_commutes_of_reducesSubspace",
-        "TauCeti.DavisKahan.isUnit_signedCosTwo_of_isUnit_diagonalPart_sq",
         "TauCeti.DavisKahan.cos_two_ne_zero_of_isUnit_diagonalPart_reflection_sq",
         "TauCeti.DavisKahan.extendedGauge_unboundedReflectionTangent_real",
         "TauCeti.DavisKahan.Angle.absTanTwoAngleOperatorR",
@@ -1513,22 +1445,6 @@
           {
             "name": "TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction",
             "mathematical_role": "The literal source unitary-invariant norm; tanTwoTheta_branchFree_bounded_finiteSubspace_symmetricNorming_rclike is already generic over RCLike 𝕜 at this norm scope."
-          },
-          {
-            "name": "TauCeti.DavisKahan.FiniteDimensional.absDoubleAngleTangent",
-            "mathematical_role": "The branch-free scalar function 2 t / |1-t^2| applied to graph-coordinate singular values; this is the generic theorem’s representation of |tan(2 Theta)|."
-          },
-          {
-            "name": "TauCeti.ApproximationNumber.approximationSingularValue",
-            "mathematical_role": "The approximation-number singular-value sequence used to express the branch-free tangent representative in arbitrary Hilbert space."
-          },
-          {
-            "name": "TauCeti.DavisKahan1970.doubleSecant",
-            "mathematical_role": "The source-shaped U,V directed-corner implementation used by the second canonical theorem; its invertibility is derived internally rather than assumed."
-          },
-          {
-            "name": "TauCeti.DavisKahan1970.projectorDifference",
-            "mathematical_role": "The projector-difference factor used to build the source-shaped directed tan(2 Theta0) representative."
           }
         ],
         "clause_map": [
@@ -2330,7 +2246,6 @@
         "TauCeti.DavisKahan1970.invariantFor_nonzeroPart",
         "TauCeti.DavisKahan1970.theorem3_1_realization_ofSpectralMultiplicityAwayFromZero_real",
         "TauCeti.DavisKahan1970.theorem3_1_realization_ofNonzeroPartsUnitaryEquiv",
-        "TauCeti.DavisKahan1970.theorem3_1_intertwiner_of_nonzeroPartsUnitaryEquiv",
         "TauCeti.DavisKahan1970.NonzeroPartsUnitaryEquiv",
         "TauCeti.DavisKahan1970.theorem3_1_realization_inAmbient_ofSpectralMultiplicityAwayFromZero_complex",
         "TauCeti.DavisKahan1970.theorem3_1_realization_inAmbient_ofSpectralMultiplicityAwayFromZero_real",
@@ -2410,7 +2325,6 @@
           "TauCeti.DavisKahan1970.nonzeroPart",
           "TauCeti.DavisKahan1970.invariantFor_nonzeroPart",
           "TauCeti.DavisKahan1970.theorem3_1_realization_ofNonzeroPartsUnitaryEquiv",
-          "TauCeti.DavisKahan1970.theorem3_1_intertwiner_of_nonzeroPartsUnitaryEquiv",
           "TauCeti.DavisKahan1970.NonzeroPartsUnitaryEquiv",
           "TauCeti.DavisKahan1970.theorem3_1_realization_ofSpectralMultiplicityAwayFromZero_complex",
           "TauCeti.DavisKahan1970.theorem3_1_realization_ofSpectralMultiplicityAwayFromZero_real",
@@ -2420,26 +2334,6 @@
           {
             "name": "TauCeti.DavisKahan.PairOfSubspacesUnitaryEquivalent",
             "mathematical_role": "The paper's \"isometric equivalence of pairs\": one unitary carrying the first pair of subspaces onto the second, simultaneously. This is the relation the printed complete invariant classifies."
-          },
-          {
-            "name": "TauCeti.DavisKahan.genericCosineBlock",
-            "mathematical_role": "The angle operator the invariant is read from: the compression of the target projection to the U-half of the generic part, i.e. the paper's cos^2 Theta_0 of equation (1.16). Its spectral multiplicity function is the printed invariant."
-          },
-          {
-            "name": "TauCeti.DavisKahan.SameHalmosTrivialDimensions",
-            "mathematical_role": "The four elementary Halmos multiplicities -- the dimensions of the common part, the two crossed defects and the exterior part. These are the invariants of the four degenerate summands the angle operator cannot see, and they carry the printed dimension bookkeeping."
-          },
-          {
-            "name": "TauCeti.SameSpectralMultiplicity",
-            "mathematical_role": "Equality of spectral multiplicity data: each operator is unitarily equivalent to a multiplication model whose base measures share a measure class and whose antitone level sets agree up to null sets. This is the repository's rendering of the paper's \"spectral multiplicity function\"."
-          },
-          {
-            "name": "TauCeti.MultiplicityDatum",
-            "mathematical_role": "The multiplication-model presentation behind SameSpectralMultiplicity: a finite measure on the spectral parameter together with an antitone sequence of measurable level sets, i.e. the Hahn--Hellinger data the paper imports rather than proves."
-          },
-          {
-            "name": "TauCeti.DavisKahan.HalmosAngleDatum",
-            "mathematical_role": "The reconstruction datum for the converse half: cos Theta_0, sin Theta_0 on one space, cos Theta_1, sin Theta_1 on another, and the intertwining partial isometry. It is the packaged form of the paper's \"such Theta_j together with J_0\"; theorem3_1_realization_ofAngles takes the two Hermitian angle operators and the intertwiner directly instead."
           }
         ],
         "clause_map": [
@@ -3127,18 +3021,6 @@
           {
             "name": "TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction",
             "mathematical_role": "The implementation structure behind the public spelling of the source's normalized unitary-invariant norm; this is the class the printed \"for every unitary-invariant norm\" quantifies over."
-          },
-          {
-            "name": "TauCeti.DavisKahan.nonacuteDirectRotation",
-            "mathematical_role": "The paper's direct rotation at the Theorem 3.1 scope: an explicit isometry between the two crossed defects selects the rotation on the right-angle blocks, so no acuteness restriction is imposed. This is the printed U."
-          },
-          {
-            "name": "TauCeti.principalSineOperator",
-            "mathematical_role": "The principal-sine block of the pair. Its compactness is the Corollary 3.1 hypothesis Section 4 inherits and that the canonical declarations carry."
-          },
-          {
-            "name": "TauCeti.DavisKahan.ExactSinTheta.KyFanDominantIdealFamily",
-            "mathematical_role": "The Ky-Fan-dominant symmetric operator ideal family through which the Ky Fan estimate is promoted to a source norm; `symmetricNorming_of_kyFanDominant` is that promotion."
           }
         ],
         "clause_map": [
@@ -3652,18 +3534,6 @@
           {
             "name": "CompatibleCrossOperatorNorm",
             "mathematical_role": "The source's \"any norm compatible with those bound norms\", as data: a size function on the cross maps X -> Y subject to subadditivity and the two one-sided ideal bounds. The operator norm has these, and so does a symmetric-norm-ideal gauge, so one statement covers both readings of the printed clause."
-          },
-          {
-            "name": "BoundedLeftInverseData",
-            "mathematical_role": "A bounded left inverse of A of prescribed norm. The proof uses only the left-inverse half of the printed two-sided inverse, so the reusable engine is stated with this and the source-facing wrapper restores the printed hypothesis."
-          },
-          {
-            "name": "TauCeti.LinearPMap.BoundedEverywhereLeftInverseData",
-            "mathematical_role": "The unbounded analogue: an everywhere-defined bounded left inverse of a closed densely-defined partial map. This is what makes the printed unbounded-A remark a statement rather than an aspiration."
-          },
-          {
-            "name": "TauCeti.ContinuousLinearMap.opNorm_le_of_sylvester_of_leftInverse",
-            "mathematical_role": "The reusable engine that `banach_sylvester_lower_bound_uiNorm` names. It is stated over an arbitrary `NontriviallyNormedField` and arbitrary normed spaces, which covers the source's Banach-space scope over either scalar field."
           }
         ],
         "clause_map": [
@@ -3940,26 +3810,6 @@
           {
             "name": "TauCeti.LinearPMap.SemiboundedBelow",
             "mathematical_role": "The left half of the printed ordering: A >= gamma + delta as a quadratic-form bound on the domain of the partial map. Together with SemiboundedAbove it is the printed chain A >= gamma + delta > gamma >= B."
-          },
-          {
-            "name": "TauCeti.LinearPMap.SemiboundedAbove",
-            "mathematical_role": "The right half of the printed ordering, gamma >= B."
-          },
-          {
-            "name": "TauCeti.LinearPMap.SylvesterEquation",
-            "mathematical_role": "The printed equation A X = X B + C, read on the domain where it makes sense, with X and C bounded."
-          },
-          {
-            "name": "FormBoundedSylvesterGap",
-            "mathematical_role": "The full separation hypothesis of the repository's Sylvester theory: the interval/exterior configuration in either orientation together with both ordered semibounded configurations. The printed Theorem 5.2 ordering is its `leftAboveRightBelow` constructor, so a theorem taking the whole gap assumes strictly less than the print."
-          },
-          {
-            "name": "TauCeti.DavisKahan1970.unbounded_sylvester_intervalExterior_uiNorm_of_spectra",
-            "mathematical_role": "A DIFFERENT branch, listed on this row but not evidence for it: it carries the interval/exterior separation rather than the printed ordering. The two must not be substituted for one another."
-          },
-          {
-            "name": "TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction",
-            "mathematical_role": "The implementation structure behind the source's normalized unitary-invariant norm, which the canonical declarations quantify over."
           }
         ],
         "clause_map": [
@@ -4359,22 +4209,6 @@
           {
             "name": "TauCeti.DavisKahan1970.IsExactSpectralDecomposition",
             "mathematical_role": "The source's equation (1.3): isometric F_0/F_1 coordinates for the reducing decomposition of the perturbed operator, with orthogonality, exhaustiveness, domain transport and the intertwining A F_1 = F_1 Lambda_1."
-          },
-          {
-            "name": "TauCeti.DavisKahan1970.IsTrialResidualEquation",
-            "mathematical_role": "The source's equation (1.8) without the isometry: E_0 carries dom A_0 into dom A and R = A E_0 - E_0 A_0 there. Splitting the isometry off IsTrialResidual is exactly the difference between Section 2 and Theorem 6.1, which asks only for a lower frame bound; isTrialResidual_iff_equation_and_isometry ties the two."
-          },
-          {
-            "name": "SinThetaRepresentativeAcross",
-            "mathematical_role": "The printed representative freedom: an operator, possibly between different spaces, carrying the same singular-value sequence as the canonical directed block. This is \"let sin Theta_0 be any operator having the same singular values as P Q-perp\", as data rather than as prose."
-          },
-          {
-            "name": "FormBoundedSylvesterGap",
-            "mathematical_role": "The separation hypothesis: the interval/exterior configuration in either orientation, together with both ordered semibounded configurations. The printed \"one has spectrum in [beta, alpha] and the other outside (beta - delta, alpha + delta)\" is its interval/exterior branch, and the source separately states that the intervals may be half-infinite, which is the ordered branch."
-          },
-          {
-            "name": "TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction",
-            "mathematical_role": "The implementation structure behind the source's normalized unitary-invariant norm, quantified over by both canonical declarations."
           }
         ],
         "clause_map": [
@@ -4844,26 +4678,6 @@
           {
             "name": "TauCeti.DavisKahan.TanTheta.BoundedCompressionTrialBlock",
             "mathematical_role": "The trial data for an unbounded ambient operator: a trial subspace inside the operator domain, the Ritz block as the compression of the operator to it, and the residual as the complementary column. This is the source's A_0 = E_0^*(A + H) E_0 and its R of (1.8), packaged as bounded data so the ambient operator need not be bounded."
-          },
-          {
-            "name": "TauCeti.DavisKahan.TanTheta.theorem63Compression",
-            "mathematical_role": "The Rayleigh--Ritz trial block A_0 = E_0^*(A + H) E_0, as the compression of the ambient operator to the trial subspace."
-          },
-          {
-            "name": "TauCeti.DavisKahan.TanTheta.theorem63Residual",
-            "mathematical_role": "The residual R of equation (1.8) at the Rayleigh--Ritz choice, which is the printed right-hand side."
-          },
-          {
-            "name": "HasTheorem63DirectedTangentApproximationNumbersInfinite",
-            "mathematical_role": "The printed directed tangent representative freedom: an operator whose approximation numbers are tan(arcsin(.)) applied to the singular values of the directed sine block E_0^* F_1. The theorem exhibits such an operator rather than assuming one exists."
-          },
-          {
-            "name": "TauCeti.DavisKahan.TanTheta.theorem63DirectedTangent",
-            "mathematical_role": "The explicit witness for that predicate: diagonal in the right singular basis of the directed sine block, with entries tan(arcsin s_i). Its finiteness comes from the source gap, which forces s_i < 1, so no hypothesis beyond the printed ones is needed."
-          },
-          {
-            "name": "TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction",
-            "mathematical_role": "The implementation structure behind the source's normalized unitary-invariant norm, quantified over by both canonical declarations."
           }
         ],
         "clause_map": [
@@ -5549,34 +5363,6 @@
           {
             "name": "TauCeti.DavisKahan1970.Section8.canonicalLowBranch",
             "mathematical_role": "The printed \"spectral projector of A + H on the appropriate side of alpha\", as a construction: the spectral subspace of the perturbed operator for the half-line below alpha. It is the Q whose existence part (b) asserts."
-          },
-          {
-            "name": "TauCeti.DavisKahan1970.Section8.Theorem81Conclusion",
-            "mathematical_role": "The packaged conclusion of the existence half: spectral repulsion, that the branch reduces the perturbed operator, both sharp form bounds, both printed restricted-spectrum orientations, and the quarter-angle bound in both its subspace and its scalar form."
-          },
-          {
-            "name": "TauCeti.DavisKahan.maximalAngle",
-            "mathematical_role": "The printed Theta read as a scalar: the largest principal angle of the pair. maximalAngle P Q <= pi/4 is the printed closed condition."
-          },
-          {
-            "name": "TauCeti.DavisKahan.IsQuarterAcute",
-            "mathematical_role": "The strict form of the same condition. The existence half concludes this, which is strictly stronger than the printed closed inequality; the characterization and the uniqueness half use the printed closed one."
-          },
-          {
-            "name": "TauCeti.DavisKahan1970.Section8.upperBlockShift",
-            "mathematical_role": "The shifted upper block A_1 - alpha, extended by zero to the ambient space. Extending by zero only appends zeros to the singular sequence, which changes neither a prefix sum nor a symmetric gauge."
-          },
-          {
-            "name": "TauCeti.DavisKahan1970.Section8.cosineBlock",
-            "mathematical_role": "The printed C_1: the cross projection between the two orthogonal complements. Its singular values are the principal cosines, which is the paper's equation (1.16)."
-          },
-          {
-            "name": "TauCeti.principalCosines",
-            "mathematical_role": "The cosines cos theta_k of the principal angles, defined as the singular values of the cross projection. This is what appears on the right-hand side of part (iii)."
-          },
-          {
-            "name": "FiniteSymmetricGauge",
-            "mathematical_role": "The printed \"every symmetric gauge function Phi in finite dimensions\" of part (iii), quantified over rather than replaced by a particular norm."
           }
         ],
         "clause_map": [
@@ -6101,8 +5887,6 @@
         "TauCeti.DavisKahan1970.Section8.theorem8_2_sinTwoTheta_residual_all_kyFan",
         "TauCeti.DavisKahan1970.Section8.theorem8_2_sinTwoTheta_residual_symmetricNorming",
         "TauCeti.DavisKahan1970.Section8.theorem8_2_sinTwoTheta_residual_real_symmetricNorming",
-        "TauCeti.DavisKahan1970.Section8.theorem8_2_sinTwoTheta_residual_symmetricNorming",
-        "TauCeti.DavisKahan1970.Section8.theorem8_2_sinTwoTheta_residual_all_kyFan",
         "TauCeti.DavisKahan1970.Section8.theorem8_2_branch_maximalAngle_lt_of_crossedDefects",
         "TauCeti.DavisKahan1970.Section8.theorem8_2_sinTwoTheta_residual_directedAngle_symmetricNorming",
         "TauCeti.DavisKahan1970.Section8.theorem8_2_sinTwoTheta_residual_directedAngle_real_symmetricNorming",
@@ -6230,10 +6014,6 @@
           {
             "name": "TauCeti.DavisKahan.CrossedDefectsEquivalent",
             "mathematical_role": "The repository's constructive form of (3.5): a linear isometry between the two crossed defects P ⊓ Qᴿ and Pᴿ ⊓ Q. Equality of their dimensions is what the paper writes; a unitary identification is what a dimension-free statement can carry."
-          },
-          {
-            "name": "TauCeti.DavisKahan1970.Section8.subspaceGap_eq_directedGap_of_crossedDefects",
-            "mathematical_role": "Why (3.5) is the hypothesis that is doing the work: under it the symmetric projector gap and the directed gap agree, which is exactly what the printed Theta < pi/4 needs."
           }
         ],
         "clause_map": [

@@ -274,8 +274,8 @@
       "verification": "proved_in_build",
       "semantic_certification": "accepted",
       "lean_declarations": [
-        "TauCeti.DavisKahan1970.SectionTwo.tanTheta_complex",
-        "TauCeti.DavisKahan1970.SectionTwo.tanTheta_real",
+        "TauCeti.DavisKahan1970.SectionTwo.tanTheta_ambient_complex",
+        "TauCeti.DavisKahan1970.SectionTwo.tanTheta_ambient_real",
         "TauCeti.DavisKahan1970.tanTheta_directed_finiteDimensional_symmetricNorming_rclike",
         "TauCeti.DavisKahan.FiniteDimensional.partIII_tanTheta_ritzResidual_uiNorm",
         "TauCeti.DavisKahan1970.theorem6_3_perturbation_infiniteTrial",
@@ -511,11 +511,11 @@
           "note": "The real sibling of the directed clause's pole exclusion."
         },
         {
-          "declaration": "TauCeti.DavisKahan1970.SectionTwo.tanTheta_complex",
+          "declaration": "TauCeti.DavisKahan1970.SectionTwo.tanTheta_ambient_complex",
           "role": "public_alias"
         },
         {
-          "declaration": "TauCeti.DavisKahan1970.SectionTwo.tanTheta_real",
+          "declaration": "TauCeti.DavisKahan1970.SectionTwo.tanTheta_ambient_real",
           "role": "public_alias"
         },
         {
@@ -765,8 +765,8 @@
       "verification": "proved_in_build",
       "semantic_certification": "accepted",
       "lean_declarations": [
-        "TauCeti.DavisKahan1970.SectionTwo.sinTwoTheta_complex",
-        "TauCeti.DavisKahan1970.SectionTwo.sinTwoTheta_real",
+        "TauCeti.DavisKahan1970.SectionTwo.sinTwoTheta_directed_complex",
+        "TauCeti.DavisKahan1970.SectionTwo.sinTwoTheta_directed_real",
         "TauCeti.DavisKahan1970.sinTwoTheta_directed_finiteDimensional_symmetricNorming_rclike",
         "TauCeti.DavisKahan1970.sinTwoTheta_ambient_bounded_symmetricNorming_complex",
         "TauCeti.DavisKahan1970.sinTwoTheta_ambient_bounded_symmetricNorming_real",
@@ -790,8 +790,6 @@
         "TauCeti.DavisKahan1970.sinTwoTheta_directed_unboundedResidual_blockRepresentative_spectrumGap_symmetricNorming_complex",
         "TauCeti.DavisKahan1970.sinTwoTheta_directed_unbounded_addBounded_spectrumGap_symmetricNorming_complex",
         "TauCeti.DavisKahan1970.sinTwoTheta_directed_unbounded_addBounded_blockRepresentative_spectrumGap_symmetricNorming_complex",
-        "TauCeti.DavisKahan.sinTwoTheta_addBounded_gauge_of_formGap",
-        "TauCeti.DavisKahan.sinTwoTheta_reflectionResidual_gauge_of_formGap",
         "TauCeti.DavisKahan1970.sinTwoTheta_directed_unbounded_addBounded_unequalDimension_symmetricNorming_complex",
         "TauCeti.DavisKahan1970.sinTwoTheta_directed_unbounded_addBounded_unequalDimension_symmetricNorming_real",
         "TauCeti.DavisKahan1970.sinTwoTheta_unbounded_perturbation_arbitraryRepresentative_unequalDimension_complex",
@@ -946,11 +944,11 @@
           "note": "The scalar-generic form of the ambient clause at an arbitrary reducing pair; the two fixed-field canonical witnesses are its instances."
         },
         {
-          "declaration": "TauCeti.DavisKahan1970.SectionTwo.sinTwoTheta_complex",
+          "declaration": "TauCeti.DavisKahan1970.SectionTwo.sinTwoTheta_directed_complex",
           "role": "public_alias"
         },
         {
-          "declaration": "TauCeti.DavisKahan1970.SectionTwo.sinTwoTheta_real",
+          "declaration": "TauCeti.DavisKahan1970.SectionTwo.sinTwoTheta_directed_real",
           "role": "public_alias"
         },
         {
@@ -983,31 +981,38 @@
         },
         {
           "declaration": "TauCeti.DavisKahan.directedSinAngleOperatorC_reflected_eq_directedSinTwoAngleOperatorC",
-          "role": "supporting_theorem"
+          "role": "source_correspondence",
+          "note": "The paper's own reflection identity: the directed double-angle sine IS the directed sine of the reflected pair, which is what lets a single-angle estimate carry the doubled conclusion."
         },
         {
           "declaration": "TauCeti.DavisKahan.sinTwoThetaIdealBlock_hasSameApproximationNumbers",
-          "role": "supporting_theorem"
+          "role": "source_correspondence",
+          "note": "Carries the proof's one-sided ideal block to the paper's directed double-angle sine: the two have the same complete approximation-singular sequence, so no source unitarily invariant norm distinguishes them."
         },
         {
           "declaration": "TauCeti.DavisKahan.extendedGauge_sinTwoThetaIdealBlock_complex",
-          "role": "supporting_theorem"
+          "role": "source_correspondence",
+          "note": "The gauge identity behind that correspondence over the complex field."
         },
         {
           "declaration": "TauCeti.DavisKahan.approximationSingularValue_sinTwoThetaIdealBlock_real",
-          "role": "supporting_theorem"
+          "role": "source_correspondence",
+          "note": "The real approximation-number identity the gauge identity rests on."
         },
         {
           "declaration": "TauCeti.DavisKahan.extendedGauge_sinTwoThetaIdealBlock_real",
-          "role": "supporting_theorem"
+          "role": "source_correspondence",
+          "note": "The real gauge identity behind the same correspondence."
         },
         {
           "declaration": "TauCeti.DavisKahan.mem_directedSinTwoAngleOperatorRC_iff",
-          "role": "supporting_theorem"
+          "role": "transport_lemma",
+          "note": "Ideal membership of the real directed double-angle sine, read through its complexification."
         },
         {
           "declaration": "TauCeti.DavisKahan.gauge_directedSinTwoAngleOperatorRC",
-          "role": "supporting_theorem"
+          "role": "transport_lemma",
+          "note": "The matching gauge identity for the real directed double-angle sine."
         },
         {
           "declaration": "TauCeti.DavisKahan1970.sinTwoTheta_directed_unboundedResidual_blockRepresentative_spectrumGap_symmetricNorming_complex",
@@ -1020,14 +1025,6 @@
         {
           "declaration": "TauCeti.DavisKahan1970.sinTwoTheta_directed_unbounded_addBounded_blockRepresentative_spectrumGap_symmetricNorming_complex",
           "role": "specialization"
-        },
-        {
-          "declaration": "TauCeti.DavisKahan.sinTwoTheta_addBounded_gauge_of_formGap",
-          "role": "supporting_theorem"
-        },
-        {
-          "declaration": "TauCeti.DavisKahan.sinTwoTheta_reflectionResidual_gauge_of_formGap",
-          "role": "supporting_theorem"
         },
         {
           "declaration": "TauCeti.DavisKahan1970.sinTwoTheta_directed_unbounded_addBounded_unequalDimension_symmetricNorming_complex",
@@ -1260,8 +1257,8 @@
       "verification": "proved_in_build",
       "semantic_certification": "accepted",
       "lean_declarations": [
-        "TauCeti.DavisKahan1970.SectionTwo.tanTwoTheta_complex",
-        "TauCeti.DavisKahan1970.SectionTwo.tanTwoTheta_real",
+        "TauCeti.DavisKahan1970.SectionTwo.tanTwoTheta_ambient_complex",
+        "TauCeti.DavisKahan1970.SectionTwo.tanTwoTheta_ambient_real",
         "TauCeti.DavisKahan1970.tanTwoTheta_branchFree_bounded_finiteSubspace_symmetricNorming_rclike",
         "TauCeti.DavisKahan1970.tanTwoTheta_directed_boundedResidual_blockRepresentative_spectralGap_symmetricNorming_complex",
         "TauCeti.DavisKahan1970.tanTwoTheta_directed_boundedResidual_blockRepresentative_spectralGap_symmetricNorming_real",
@@ -1272,21 +1269,12 @@
         "TauCeti.DavisKahan1970.tanTwoTheta_ambient_unbounded_blockRepresentative_symmetricNorming_complex",
         "TauCeti.DavisKahan1970.tanTwoTheta_ambient_unbounded_blockRepresentative_symmetricNorming_real",
         "TauCeti.DavisKahan1970.tanTwoTheta_ambient_unbounded_blockRepresentative_derivedReflection_symmetricNorming_complex",
-        "TauCeti.DavisKahan.diagonalPart_sq_add_offDiagonalPart_sq",
-        "TauCeti.DavisKahan.diagonalPart_anticommute_offDiagonalPart",
-        "TauCeti.DavisKahan.corner_offDiagonalPart_sq",
-        "TauCeti.DavisKahan.gram_unboundedReflectionTangent",
-        "TauCeti.DavisKahan.gram_unboundedReflectionTangent_eq_offDiagonal",
-        "TauCeti.DavisKahan.starProjection_offDiagonal_sq_reflection",
         "TauCeti.DavisKahan.unboundedReflectionTangent_reflection_eq",
-        "TauCeti.DavisKahan.tanTwoBlockRepresentative_mul_signedCosTwo",
         "TauCeti.DavisKahan.sameApproximationSingularValues_unboundedReflectionTangent",
         "TauCeti.DavisKahan.extendedGauge_unboundedReflectionTangent_complex",
         "TauCeti.DavisKahan1970.tanTwoTheta_ambient_unbounded_symmetricNorming_complex",
         "TauCeti.DavisKahan.ReflectionIntertwines",
         "TauCeti.DavisKahan.ReflectionIntertwines.ofReducesSubspace",
-        "TauCeti.DavisKahan.reflection_commutes_of_reducesSubspace",
-        "TauCeti.DavisKahan.isUnit_signedCosTwo_of_isUnit_diagonalPart_sq",
         "TauCeti.DavisKahan.cos_two_ne_zero_of_isUnit_diagonalPart_reflection_sq",
         "TauCeti.DavisKahan.extendedGauge_unboundedReflectionTangent_real",
         "TauCeti.DavisKahan.Angle.absTanTwoAngleOperatorR",
@@ -1448,11 +1436,11 @@
           "note": "The real pole exclusion standing alone: invertibility of the reflection's diagonal block excludes `cos 2 theta = 0` on the spectrum of the REAL angle operator.  The real twin of `DavisKahan.cos_two_ne_zero_of_isUnit_diagonalPart_reflection_sq`, proved by complexification through `spectrum_complexify`.  It is what lets the real ambient endpoint state its pole exclusion rather than leave it inside the proof."
         },
         {
-          "declaration": "TauCeti.DavisKahan1970.SectionTwo.tanTwoTheta_complex",
+          "declaration": "TauCeti.DavisKahan1970.SectionTwo.tanTwoTheta_ambient_complex",
           "role": "public_alias"
         },
         {
-          "declaration": "TauCeti.DavisKahan1970.SectionTwo.tanTwoTheta_real",
+          "declaration": "TauCeti.DavisKahan1970.SectionTwo.tanTwoTheta_ambient_real",
           "role": "public_alias"
         },
         {
@@ -1488,48 +1476,24 @@
           "role": "presentation_wrapper"
         },
         {
-          "declaration": "TauCeti.DavisKahan.diagonalPart_sq_add_offDiagonalPart_sq",
-          "role": "supporting_theorem"
-        },
-        {
-          "declaration": "TauCeti.DavisKahan.diagonalPart_anticommute_offDiagonalPart",
-          "role": "supporting_theorem"
-        },
-        {
-          "declaration": "TauCeti.DavisKahan.corner_offDiagonalPart_sq",
-          "role": "supporting_theorem"
-        },
-        {
-          "declaration": "TauCeti.DavisKahan.gram_unboundedReflectionTangent",
-          "role": "supporting_theorem"
-        },
-        {
-          "declaration": "TauCeti.DavisKahan.gram_unboundedReflectionTangent_eq_offDiagonal",
-          "role": "supporting_theorem"
-        },
-        {
-          "declaration": "TauCeti.DavisKahan.starProjection_offDiagonal_sq_reflection",
-          "role": "supporting_theorem"
-        },
-        {
           "declaration": "TauCeti.DavisKahan.unboundedReflectionTangent_reflection_eq",
-          "role": "supporting_theorem"
-        },
-        {
-          "declaration": "TauCeti.DavisKahan.tanTwoBlockRepresentative_mul_signedCosTwo",
-          "role": "supporting_theorem"
+          "role": "source_correspondence",
+          "note": "The reflection tangent is the paper's block representative composed with the reflection through the trial subspace; half of the identification of the proof object with `|tan 2Theta|`."
         },
         {
           "declaration": "TauCeti.DavisKahan.sameApproximationSingularValues_unboundedReflectionTangent",
-          "role": "supporting_theorem"
+          "role": "source_correspondence",
+          "note": "The other half: the reflection tangent and the paper's `|tan 2Theta|` have the same complete approximation-singular sequence."
         },
         {
           "declaration": "TauCeti.DavisKahan.extendedGauge_unboundedReflectionTangent_complex",
-          "role": "supporting_theorem"
+          "role": "source_correspondence",
+          "note": "The gauge identity that turns the proof's reflection-tangent estimate into the printed `|tan 2Theta|` estimate, over the complex field."
         },
         {
           "declaration": "TauCeti.DavisKahan.ReflectionIntertwines",
-          "role": "supporting_theorem"
+          "role": "implementation_structure",
+          "note": "The reduction hypothesis of the ambient endpoint, in the reflection form its proof consumes; `ofReducesSubspace` shows it is exactly `ReducesSubspace (A + B) V`."
         },
         {
           "declaration": "TauCeti.DavisKahan.ReflectionIntertwines.ofReducesSubspace",
@@ -1537,28 +1501,24 @@
           "note": "Builds the reflection intertwiner from the source hypothesis `V` reduces `A + B`; how the canonical directed endpoints take the paper's hypothesis rather than the implementation's."
         },
         {
-          "declaration": "TauCeti.DavisKahan.reflection_commutes_of_reducesSubspace",
-          "role": "supporting_theorem"
-        },
-        {
-          "declaration": "TauCeti.DavisKahan.isUnit_signedCosTwo_of_isUnit_diagonalPart_sq",
-          "role": "supporting_theorem"
-        },
-        {
           "declaration": "TauCeti.DavisKahan.cos_two_ne_zero_of_isUnit_diagonalPart_reflection_sq",
-          "role": "supporting_theorem"
+          "role": "supporting_theorem",
+          "note": "Turns invertibility of the reflection's diagonal block -- which the ordered gap forces -- into exclusion of the quarter-turn poles on the angle spectrum.  Since 2026-09-05 this exclusion is a conjunct of the ambient endpoints' conclusions rather than a fact inside their proofs."
         },
         {
           "declaration": "TauCeti.DavisKahan.extendedGauge_unboundedReflectionTangent_real",
-          "role": "supporting_theorem"
+          "role": "source_correspondence",
+          "note": "The real gauge identity behind the same transport."
         },
         {
           "declaration": "TauCeti.DavisKahan.Angle.absTanTwoAngleOperatorR",
-          "role": "supporting_theorem"
+          "role": "implementation_structure",
+          "note": "The object the real ambient endpoint concludes on: the paper's `|tan 2Theta|` over a real Hilbert space."
         },
         {
           "declaration": "TauCeti.DavisKahan.Angle.complexify_absTanTwoAngleOperatorR",
-          "role": "supporting_theorem"
+          "role": "transport_lemma",
+          "note": "Identifies that real object with its complexification, which is where the estimate is proved."
         },
         {
           "declaration": "TauCeti.DavisKahan1970.tanTwoTheta_ambient_unbounded_blockRepresentative_derivedReflection_symmetricNorming_real",
@@ -2415,7 +2375,6 @@
         "TauCeti.DavisKahan1970.invariantFor_nonzeroPart",
         "TauCeti.DavisKahan1970.theorem3_1_realization_ofSpectralMultiplicityAwayFromZero_real",
         "TauCeti.DavisKahan1970.theorem3_1_realization_ofNonzeroPartsUnitaryEquiv",
-        "TauCeti.DavisKahan1970.theorem3_1_intertwiner_of_nonzeroPartsUnitaryEquiv",
         "TauCeti.DavisKahan1970.NonzeroPartsUnitaryEquiv",
         "TauCeti.DavisKahan1970.theorem3_1_realization_inAmbient_ofSpectralMultiplicityAwayFromZero_complex",
         "TauCeti.DavisKahan1970.theorem3_1_realization_inAmbient_ofSpectralMultiplicityAwayFromZero_real",

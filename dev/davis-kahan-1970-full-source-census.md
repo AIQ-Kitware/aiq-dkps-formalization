@@ -4,7 +4,7 @@
 
 **Census family:** `source-completion-census`  
 **Items:** 50  
-**Unique cited Lean declarations:** 1255
+**Unique cited Lean declarations:** 1244
 
 ## How to use this census
 
@@ -313,8 +313,8 @@ REOPENING WITHDRAWN 2026-08-31 and the rule corrected: a later source passage en
 
 **Lean declarations:**
 
-- `TauCeti.DavisKahan1970.SectionTwo.tanTheta_complex`
-- `TauCeti.DavisKahan1970.SectionTwo.tanTheta_real`
+- `TauCeti.DavisKahan1970.SectionTwo.tanTheta_ambient_complex`
+- `TauCeti.DavisKahan1970.SectionTwo.tanTheta_ambient_real`
 - `TauCeti.DavisKahan1970.tanTheta_directed_finiteDimensional_symmetricNorming_rclike`
 - `TauCeti.DavisKahan.FiniteDimensional.partIII_tanTheta_ritzResidual_uiNorm`
 - `TauCeti.DavisKahanExt.tanTheta_spectrum`
@@ -505,8 +505,8 @@ The directed clause of the Section 2 tangent theorem at the printed scope, added
 
 **Lean declarations:**
 
-- `TauCeti.DavisKahan1970.SectionTwo.sinTwoTheta_complex`
-- `TauCeti.DavisKahan1970.SectionTwo.sinTwoTheta_real`
+- `TauCeti.DavisKahan1970.SectionTwo.sinTwoTheta_directed_complex`
+- `TauCeti.DavisKahan1970.SectionTwo.sinTwoTheta_directed_real`
 - `TauCeti.DavisKahan1970.sinTwoTheta_directed_finiteDimensional_symmetricNorming_rclike`
 - `TauCeti.DavisKahan.FiniteDimensional.partIII_sinTwoTheta_uiNorm`
 - `TauCeti.DavisKahan.sinTwoTheta_addBounded_of_spectrum_gap`
@@ -557,8 +557,6 @@ The directed clause of the Section 2 tangent theorem at the printed scope, added
 - `TauCeti.DavisKahan1970.sinTwoTheta_directed_unboundedResidual_blockRepresentative_spectrumGap_symmetricNorming_complex`
 - `TauCeti.DavisKahan1970.sinTwoTheta_directed_unbounded_addBounded_spectrumGap_symmetricNorming_complex`
 - `TauCeti.DavisKahan1970.sinTwoTheta_directed_unbounded_addBounded_blockRepresentative_spectrumGap_symmetricNorming_complex`
-- `TauCeti.DavisKahan.sinTwoTheta_addBounded_gauge_of_formGap`
-- `TauCeti.DavisKahan.sinTwoTheta_reflectionResidual_gauge_of_formGap`
 - `TauCeti.DavisKahan.sinTheta_addBounded_gauge_complex_block_of_formGap`
 - `TauCeti.DavisKahan.ExactSinTheta.sinTheta_unbounded_complex_block`
 - `TauCeti.DavisKahan1970.sinTwoTheta_directed_unbounded_addBounded_unequalDimension_symmetricNorming_complex`
@@ -756,15 +754,14 @@ AMBIENT CLAUSE REOPENED 2026-08-31 by the coherent-clause audit. The printed sin
 
 **Lean declarations:**
 
-- `TauCeti.DavisKahan1970.SectionTwo.tanTwoTheta_complex`
-- `TauCeti.DavisKahan1970.SectionTwo.tanTwoTheta_real`
+- `TauCeti.DavisKahan1970.SectionTwo.tanTwoTheta_ambient_complex`
+- `TauCeti.DavisKahan1970.SectionTwo.tanTwoTheta_ambient_real`
 - `TauCeti.DavisKahan1970.tanTwoTheta_branchFree_bounded_finiteSubspace_symmetricNorming_rclike`
 - `TauCeti.DavisKahan.FiniteDimensional.partIII_tanTwoTheta_opNorm`
 - `TauCeti.DavisKahanExt.tanTwoTheta_offDiagonalC_of_weighted_sine`
 - `TauCeti.DavisKahan.sharp_symmetricNormingFunction`
 - `TauCeti.DavisKahan.sharp_symmetricNormingFunction_selectedBranch`
 - `TauCeti.DavisKahan.tanTwoTheta_selectedBranch_symmetricNorming_real`
-- `TauCeti.DavisKahan1970.tanTwoTheta_branchFree_bounded_finiteSubspace_symmetricNorming_rclike`
 - `TauCeti.DavisKahan.FiniteDimensional.paired_singularVector_gap_inequality`
 - `TauCeti.DavisKahan.FiniteDimensional.singularValue_ne_one`
 - `TauCeti.DavisKahan.FiniteDimensional.absDoubleAngleTangent_scalar`
@@ -818,21 +815,12 @@ AMBIENT CLAUSE REOPENED 2026-08-31 by the coherent-clause audit. The printed sin
 - `TauCeti.DavisKahan1970.tanTwoTheta_ambient_unbounded_blockRepresentative_symmetricNorming_complex`
 - `TauCeti.DavisKahan1970.tanTwoTheta_ambient_unbounded_blockRepresentative_symmetricNorming_real`
 - `TauCeti.DavisKahan1970.tanTwoTheta_ambient_unbounded_blockRepresentative_derivedReflection_symmetricNorming_complex`
-- `TauCeti.DavisKahan.diagonalPart_sq_add_offDiagonalPart_sq`
-- `TauCeti.DavisKahan.diagonalPart_anticommute_offDiagonalPart`
-- `TauCeti.DavisKahan.corner_offDiagonalPart_sq`
-- `TauCeti.DavisKahan.gram_unboundedReflectionTangent`
-- `TauCeti.DavisKahan.gram_unboundedReflectionTangent_eq_offDiagonal`
-- `TauCeti.DavisKahan.starProjection_offDiagonal_sq_reflection`
 - `TauCeti.DavisKahan.unboundedReflectionTangent_reflection_eq`
-- `TauCeti.DavisKahan.tanTwoBlockRepresentative_mul_signedCosTwo`
 - `TauCeti.DavisKahan.sameApproximationSingularValues_unboundedReflectionTangent`
 - `TauCeti.DavisKahan.extendedGauge_unboundedReflectionTangent_complex`
 - `TauCeti.DavisKahan1970.tanTwoTheta_ambient_unbounded_symmetricNorming_complex`
 - `TauCeti.DavisKahan.ReflectionIntertwines`
 - `TauCeti.DavisKahan.ReflectionIntertwines.ofReducesSubspace`
-- `TauCeti.DavisKahan.reflection_commutes_of_reducesSubspace`
-- `TauCeti.DavisKahan.isUnit_signedCosTwo_of_isUnit_diagonalPart_sq`
 - `TauCeti.DavisKahan.cos_two_ne_zero_of_isUnit_diagonalPart_reflection_sq`
 - `TauCeti.DavisKahan.extendedGauge_unboundedReflectionTangent_real`
 - `TauCeti.DavisKahan.Angle.absTanTwoAngleOperatorR`
@@ -2178,7 +2166,6 @@ CENSUS-GATE NOTE 2026-08-11: `TauCeti.MultiplicityDatum.retype` is deliberately 
 - `TauCeti.DavisKahan1970.invariantFor_nonzeroPart`
 - `TauCeti.DavisKahan1970.theorem3_1_realization_ofSpectralMultiplicityAwayFromZero_real`
 - `TauCeti.DavisKahan1970.theorem3_1_realization_ofNonzeroPartsUnitaryEquiv`
-- `TauCeti.DavisKahan1970.theorem3_1_intertwiner_of_nonzeroPartsUnitaryEquiv`
 - `TauCeti.DavisKahan1970.NonzeroPartsUnitaryEquiv`
 - `TauCeti.DavisKahan1970.theorem3_1_realization_inAmbient_ofSpectralMultiplicityAwayFromZero_complex`
 - `TauCeti.DavisKahan1970.theorem3_1_realization_inAmbient_ofSpectralMultiplicityAwayFromZero_real`
@@ -4443,8 +4430,6 @@ At the OPERATOR norm the compiled residual statement is sound and in fact STRONG
 - `TauCeti.DavisKahan1970.Section8.theorem8_2_sinTwoTheta_residual_all_kyFan`
 - `TauCeti.DavisKahan1970.Section8.theorem8_2_sinTwoTheta_residual_symmetricNorming`
 - `TauCeti.DavisKahan1970.Section8.theorem8_2_sinTwoTheta_residual_real_symmetricNorming`
-- `TauCeti.DavisKahan1970.Section8.theorem8_2_sinTwoTheta_residual_symmetricNorming`
-- `TauCeti.DavisKahan1970.Section8.theorem8_2_sinTwoTheta_residual_all_kyFan`
 - `TauCeti.DavisKahan1970.Section8.theorem8_2_branch_maximalAngle_lt_of_crossedDefects`
 - `TauCeti.DavisKahan1970.Section8.theorem8_2_sinTwoTheta_residual_directedAngle_symmetricNorming`
 - `TauCeti.DavisKahan1970.Section8.theorem8_2_sinTwoTheta_residual_directedAngle_real_symmetricNorming`

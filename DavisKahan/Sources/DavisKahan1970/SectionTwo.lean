@@ -23,248 +23,76 @@ open TauCeti.DavisKahan.Sylvester
 /-!
 # The four Section 2 theorems, in one place
 
-Davis--Kahan 1970 opens with four unnumbered theorems -- `sin Θ`, `tan Θ`,
-`sin 2Θ`, `tan 2Θ` -- and the rest of the paper is their proof, their sharpness,
-and their consequences.  **This module is the public inventory of those four, over
-both scalar fields, and is the module to cite.**
+Davis--Kahan 1970 opens with four unnumbered theorems -- `sin Θ`, `tan Θ`, `sin 2Θ`,
+`tan 2Θ` -- and the rest of the paper is their proof, their sharpness and their
+consequences.  **This module is the public inventory of those four, over both scalar
+fields, and is the module to cite.**
 
-```
-TauCeti.DavisKahan1970.SectionTwo.sinTheta_complex       sinTheta_real
-TauCeti.DavisKahan1970.SectionTwo.tanTheta_complex       tanTheta_real
-TauCeti.DavisKahan1970.SectionTwo.sinTwoTheta_complex    sinTwoTheta_real
-TauCeti.DavisKahan1970.SectionTwo.tanTwoTheta_complex    tanTwoTheta_real
-```
+## The table
+
+Three of the four print *two* conclusions, a directed one bounding the trial-side angle
+by the residual and an ambient one bounding the whole-space angle by the perturbation.
+The names say which.
+
+| result | directed clause | ambient clause |
+| --- | --- | --- |
+| `sin Θ` | `sinTheta`, `sinTheta_complex`, `sinTheta_real` | -- (one printed conclusion) |
+| `tan Θ` | `tanTheta_directed_complex`, `tanTheta_directed_real` | `tanTheta_ambient_complex`, `tanTheta_ambient_real` |
+| `sin 2Θ` | `sinTwoTheta_directed_complex`, `sinTwoTheta_directed_real` | `sinTwoTheta_ambient_complex`, `sinTwoTheta_ambient_real` |
+| `tan 2Θ` | `tanTwoTheta_directed_complex`, `tanTwoTheta_directed_real` | `tanTwoTheta_ambient_complex`, `tanTwoTheta_ambient_real` |
+
+`sinTwoTheta_bothConclusions_{complex,real}` and `tanTwoTheta_bothConclusions_{complex,real}`
+state both clauses of one result under one set of separation hypotheses, so a reviewer has a
+single name to point at.
+
+The unqualified `tanTheta_{complex,real}`, `sinTwoTheta_{complex,real}` and
+`tanTwoTheta_{complex,real}` are **deprecated**.  They were not uniform -- two of the three
+named the ambient clause and one the directed -- and each now carries a `@[deprecated]`
+pointing at the name that says which.  They survive only because the standalone Davis--Kahan
+submission repository under `submodules/` still consumes them.
 
 ## `sinTheta` is bound; the other three short names are reserved
 
-`SectionTwo.sinTheta` names the scalar-generic endpoint
-`DavisKahan1970.sinTheta_unbounded_formGap_symmetricNorming_rclike`: the printed
-statement, over an arbitrary `RCLike` field, at the printed scope.
+A short unqualified name is bound only to a declaration that is **both** scalar-generic over
+`RCLike 𝕜` **and** at the printed source scope.  `SectionTwo.sinTheta` satisfies that;
+`SectionTwo.tanTheta`, `.sinTwoTheta` and `.tanTwoTheta` name nothing, because no such
+declaration exists for those three yet.  Binding a short name to a complex-only statement is
+what once made `SectionTwo.sinTheta` read as the canonical theorem when it was the complex
+one, so the three stay empty.  Which of the four are bound is recorded structurally, in
+`section_two_short_names` in the result inventory, and checked against this file -- a prose
+copy of that fact went stale once and is deliberately not restated here.
 
-`SectionTwo.tanTheta`, `.sinTwoTheta` and `.tanTwoTheta` name nothing.  They are
-reserved for the same thing -- generic over `RCLike 𝕜` **and** at the printed
-source scope -- and no such declaration exists for those three.  Binding a short
-name to the complex statement is what previously made `SectionTwo.sinTheta` read
-as the canonical theorem when it was the complex one, so the three stay empty.
+## What these names carry
 
-The gap is measured against the *paper*, not against the strongest form the
-library happens to hold.  The distributable source specification fixes the scope:
-the four results are stated "for infinite as well as finite dimensional separable
-Hilbert spaces", the spectral intervals in the gap hypotheses "may be
-half-infinite", and the norm is an arbitrary unitary-invariant norm.  Against
-that, every axis on which the closest scalar-generic declaration differs from the
-fixed-field endpoint it should match:
+Each is an `alias`, so each has exactly the type of the declaration it names: an unbounded
+self-adjoint `LinearPMap` ambient operator, arbitrary Hilbert dimension, an arbitrary source
+unitarily invariant norm, both printed conclusions where the result has two, no capability
+class, no finite-dimensional hypothesis and no proof vehicle in the conclusion.
+`SectionTwoUsage.lean` calls each from ordinary operator-theory hypotheses, so the advertised
+entry points are compiler-checked to be reachable without building Sylvester witnesses,
+reflection blocks or spectral reflections by hand.
 
-| axis | `tan Θ` | `sin 2Θ` | `tan 2Θ` |
-| --- | --- | --- | --- |
-| closest `RCLike` declaration | `tanTheta_directed_finiteDimensional_symmetricNorming_rclike` | ambient: `sinTwoTheta_ambient_unbounded_reflectionPair_symmetricNorming_rclike` ✓; directed: `sinTwoTheta_directed_finiteDimensional_symmetricNorming_rclike` | `tanTwoTheta_branchFree_bounded_finiteSubspace_symmetricNorming_rclike` |
-| ambient dimension | finite `E`, `F` | ambient: arbitrary ✓; directed: finite `E`, `F` | arbitrary ✓ |
-| ambient operator | bounded `E →ₗ[𝕜] E` | ambient: unbounded `H →ₗ.[𝕜] H` ✓; directed: bounded | bounded `E →L[𝕜] E` |
-| trial subspace | -- | -- | `[FiniteDimensional 𝕜 U]` |
-| Ritz scope | bounded compression | -- | -- |
-| angle in the conclusion | directed tangent supplied as a parameter with a `singularValues` characterization | ambient: `Angle.sinTwoAngleOperator`, the paper's own object ✓; directed: `sinTwoThetaEmbedding U X`, the trial-coordinate `2S\|C\|` | an arbitrary representative whose approximation numbers rearrange the branch-free scalars |
-| endpoint's angle | ambient `paperTanAngleOperator` | ambient: the same object ✓; directed: double-angle sine of the spectral pair | ambient `paperAbsTanTwoAngleOperator` |
-| norm | `SymmetricNormingFunction` ✓ | ✓ | ✓ |
-| gap | interval/exterior, against the endpoint's `FormBoundedSylvesterGap` | same | ordered form `a < b` |
+The tangent endpoints additionally *conclude* their own pole exclusion, so a reader can see
+from the type that the object bounded is the paper's tangent and not the value Mathlib's
+totalised `cfc` assigns at a quarter turn.
 
-The `sin Θ` bridge that produced the binding above was a repackaging: the
-component theorem already proved the paper-norm statement by applying the
-full-gap ideal-family theorem one Ky Fan index at a time, so taking `hgap`
-directly cost nothing.
+## What is deliberately not here
 
-### Two obstacles, and they were different
+Presentation forms, finite-dimensional specializations, operator-norm statements, bundled
+problem entry points and the proofs' own block representatives all live in the modules that
+own them and are registered separately in the census.  This module holds names, not
+mathematics.
 
-For the other three, a scalar-generic statement met **a definitional obstacle
-first and a field-specific analytic layer behind it.**  Both were real; neither
-alone was the whole story, and an earlier version of this file claimed only the
-first.
-
-**The definitional obstacle is gone, for every one of the three** (2026-09-03).
-It was never about the angles.  `sinAngleOperatorC` is `ContinuousLinearMap.modulus
-(P_U - P_V)`, and the modulus carries `[ContinuousFunctionalCalculus ℝ (E →L[𝕜]
-E) IsSelfAdjoint]`; that calculus is now an ordinary fact at every `RCLike` field
-(`ForTauCeti/Analysis/RCLike/ScalarTransportFunctionalCalculus.lean`, transported
-along `RCLike.I_eq_zero_or_im_I_eq_one` from the `ℝ` and `ℂ` constructions), so
-the arcsin, sine and tangent layers built on it can simply be written over `𝕜`.
-`TauCeti.DavisKahan.Angle.sinAngleOperator`, `.angleOperator` and
-`.sinTwoAngleOperator` are those definitions, and they come with the theorem the
-older text correctly said was owed: over `ℂ` they *are* the `...C` objects, and
-over `ℝ` they agree with the transport-defined `...R` ones, so every existing
-fixed-field theorem still applies to them.
-
-*Analytic.*  Behind the `tan` axes still sits a genuine field-specific proof
-layer.  The `tan Θ` route runs through
-`UnboundedCompressionTrialData.all_kyFan_core`, which lives in the `ℂ`-pinned half
-of `TanTheta/Theorem63UnboundedCompression.lean` -- the file splits a
-scalar-generic algebra layer from a truncation layer fixed to
-`[InnerProductSpace ℂ H]` because the latter uses the projection-valued spectral
-measure -- and `TanThetaUnboundedAmbientReal.lean` says in its own header that the
-real route complexifies the data and reuses that complex Appendix cutoff/Ky-Fan
-argument.
-
-For `sin 2Θ` the analytic layer divides.  The **ambient** clause had a
-scalar-generic proof already -- the reflected-pair theorem
-`sinTwoTheta_ambient_reflection_projectorDifference_symmetricNorming` -- and what
-kept it from being a source statement was that it concluded on the projector
-difference `P_{J_V U} - P_U` rather than on `sin 2Θ`.  The paper's own reflection
-identity closes that gap at every field
-(`Angle.sinTwoAngleOperator_eq_modulus_starProjection_sub`), and
-`sinTwoTheta_ambient_unbounded_reflectionPair_symmetricNorming_rclike` is the
-result.  The **directed** clause is still fixed-field: its core,
-`DoubleAngle/UnboundedIdealFormGap.lean`, is pinned to `ℂ` and reaches `ℝ` by
-complexification, so a scalar-generic directed statement needs the
-`ScalarTransport` dispatch of the unbounded-ideal apparatus -- `ReducesSubspace`,
-the trial residual, and `SymmetricNormingFunction` membership and gauge -- which
-is not yet written.
-
-The directed clause's *angle* layer, by contrast, is scalar-generic already, and
-2026-09-04 fixed an orientation defect in it.  The estimate is proved about
-`sinTwoThetaIdealBlock U V` with `U` the subspace whose blocks the gap separates
-and `V` the trial subspace, and the block correspondence lands on
-`Angle.directedSinTwoAngleOperator U V`.  The paper's `Θ₀` is the **trial-side**
-angle -- `‖sin Θ₀‖ = ‖Q^⊥ E₀‖`, the cross-projection with the trial subspace on
-the right -- which is `Angle.directedSinTwoAngleOperator V U`.  The two orderings
-are not interchangeable by renaming: the two ordered directed *sines* have
-different approximation numbers in general.  What is true is that the *doubled*
-sines do not, and
-`Angle.directedSinTwoAngleOperator_hasSameApproximationNumbers_swap` proves it at
-every field.
-
-None of this says the remaining mathematics resists generalization; it says the
-work is operator-theoretic infrastructure, not a rename.
-`tanTwoTheta_branchFree_bounded_symmetricNorming_complex` is evidence on the other
-side: it is the arbitrary-trial-subspace form over `ℂ`, so the finite-subspace
-restriction is already known to be removable at one field.
-
-## Three of the four printed theorems have TWO clauses
-
-`sin Θ` prints one conclusion.  `tan Θ`, `sin 2Θ` and `tan 2Θ` each print two:
-
-```text
-directed:  δ N(tan Θ₀)   ≤ N(R)      -- on the trial residual
-ambient:   δ N(tan Θ)    ≤ N(H)      -- on the whole-space perturbation
-```
-
-They are different quantities with different right-hand sides, and **no single
-alias below is the whole printed theorem for those three.**  Each result
-therefore has an explicit `_directed_` and `_ambient_` alias at each scalar
-field.  The older unqualified names are retained at whichever clause they always
-named, and they do **not** all name the same one: `tanTheta_complex` and
-`tanTwoTheta_complex` (with their real siblings) are the ambient clause, and
-`sinTwoTheta_complex` and `sinTwoTheta_real` are the **directed** one.  Prose in
-this file claimed the uniform reading until 2026-09-04, and the docstring on each
-alias says which clause it is.
-
-For `sin 2Θ` the alias itself was wrong until the same date: it named the
-bounded-perturbation theorem, whose right-hand side is `2 N(E)` for the full
-perturbation, while being documented as the printed residual clause `2 N(R)`.
-Those are different source quantities.  The alias now names the residual theorem,
-on the paper's own trial-side angle.
-
-The maintained per-clause witness table is generated from
-`dev/davis-kahan-1970-formalization-result-inventory.json` into the reviewer
-packet; it, not this comment, is where a reviewer checks which theorem
-discharges which clause.
-
-## What each fixed-field alias says, and what has been reviewed
-
-Each has a type that displays an unbounded self-adjoint `LinearPMap` ambient
-operator, a Hilbert space of arbitrary dimension, a `SymmetricNormingFunction`
--- the paper's symmetric gauge, not the operator norm -- and the two halves of
-its own printed clause: ideal membership and the inequality.  No capability
-class, no finite-dimensionality hypothesis, no proof-vehicle operator in the
-conclusion, and no branch or pole certificate demanded of the caller.
-
-That is what the *types* say.  Whether each matches the printed result is a
-separate, reviewed question, and the answer lives in the maintained result
-inventory rather than here -- including its one standing qualification, that
-`S2-tan-theta` is accepted under a nonlocal source interpretation because its
-printed statement is not locally self-contained.  Do not read the paragraph above
-as that review's verdict.
-
-Both `sin 2Θ` endpoints now take `FormBoundedSylvesterGap`, so the printed
-half-infinite gap scope is covered over both fields;
-`sinTwoTheta_directed_unbounded_addBounded_spectrumGap_symmetricNorming_complex` is the
-earlier complex route, at a bounded separating interval only, and is kept as an
-alternative rather than as this result's witness.  The `sin 2Θ` *ambient* clause
-is covered at the same scope by
-`sinTwoTheta_ambient_unbounded_addBounded_symmetricNorming_complex` and its real
-sibling; the bounded ambient endpoints are their specializations.
-
-The declarations here are `alias`es, so each has exactly the type of the theorem
-it names; the proofs and the supporting theory stay in the modules where they
-belong.  The implementations they select are, in order:
-
-| result | clause | complex | real |
-| --- | --- | --- | --- |
-| `sin Θ` | directed (only) | `DavisKahan1970.sinTheta_unbounded_formGap_symmetricNorming_complex` | `…_real` |
-| `tan Θ` | directed | `tanTheta_directed_unboundedTrial_symmetricNorming_complex` | `…_real` |
-| `tan Θ` | ambient | `tanTheta_ambient_unboundedRitz_definedTangent_symmetricNorming_complex` | `…_real` |
-| `sin 2Θ` | directed | `sinTwoTheta_directed_unboundedResidual_symmetricNorming_complex` | `…_real` |
-| `sin 2Θ` | ambient | `sinTwoTheta_ambient_unbounded_addBounded_symmetricNorming_complex` | `…_real` |
-| `tan 2Θ` | directed | `tanTwoTheta_directed_unboundedResidual_symmetricNorming_complex` | `…_real` |
-| `tan 2Θ` | ambient | `tanTwoTheta_ambient_unbounded_symmetricNorming_complex` | `…_real` |
-
-The unqualified `tanTheta_complex`, `sinTwoTheta_complex` and `tanTwoTheta_complex`
-(and their real siblings) each name **one** clause -- the ambient one for the two
-tangent theorems, the directed one for `sin 2Θ` -- and their docstrings say which.
-They are retained because they are the names downstream code already uses; a reader
-looking for the whole printed result should use the `_directed_`/`_ambient_` pair,
-or, for `sin 2Θ`, the `sinTwoTheta_source_*` certificate that states both.
-
-## What the four ask for, and what they do not
-
-Each takes ordinary mathematical data: the operator, the subspace or spectral
-selection, the gap, the bounded residual or perturbation, the norm, and the ideal
-membership of the perturbation.  Structural facts that are properties of those
-objects rather than hypotheses of the theorem are carried by objects with
-constructors from the generic vocabulary --
-`DavisKahan.UnboundedRitzPair` (`.ofTrialBlock`),
-`DavisKahan.ReducingComplement` (`.ofReducesSubspace`), and
-`DavisKahan.ReflectionIntertwines` (`.ofReducesSubspace`) -- so a caller who holds
-a `TauCeti.LinearPMap.ReducesSubspace` never meets a competing reduction
-vocabulary.
-
-The proof vehicles do not appear as hypotheses: not `HasUnboundedSylvesterKyFan`,
-not `ContinuousLinearMap.HasMinMaxLowerBoundEverywhere`, not
-`unboundedReflectionTangent`, and not a caller-built spectral reflection.
-`sinTwoThetaIdealBlock` -- the directed doubled sine `P_U P_{J_V Uᗮ}` -- is named
-only in conclusions: the `sin 2Θ` directed clause concludes on it, and the
-`tan 2Θ` directed clause identifies the singular values of `tan 2Θ₀` as
-`tan (arcsin aₙ(sin 2Θ₀))` against it.
-
-## Angle conventions in the conclusions
-
-* `sin Θ` concludes on the paper's own `(I - F₀F₀⋆) E₀`, which is what the printed
-  theorem displays.
-* `tan Θ` concludes on the *ambient* `tanAngleOperatorC` / `…R`.
-* `sin 2Θ` concludes on the *directed* double-angle sine `2 sin Θ cos Θ`.  Directed
-  and ambient differ in multiplicity -- an ambient angle object carries each
-  principal angle twice where the one-sided block carries it once -- and the
-  directed operator is the block's partner, so it is the faithful target here.
-* `tan 2Θ` concludes on the *ambient* branch-free `|tan 2Θ|`.  Its block is
-  two-sided, so here the ambient object is the partner.  A unitarily invariant
-  norm cannot distinguish `tan 2Θ` from `|tan 2Θ|`, and only the latter is defined
-  without a quarter-acute branch hypothesis.
-
-Getting that directed/ambient distinction backwards once cost this development a
-false claim that the `tan 2Θ` transport could not exist; the census records the
-retraction.
-
-## What is deliberately *not* here
-
-Everything else in the development remains available and is unaffected: the
-scalar-generic presentation forms, the directed and whole-space variants, the
-finite-dimensional specializations, the operator-norm statements, the Ky Fan
-families, and the bundled-problem entry points such as
-`TauCeti.DavisKahan1970.sinTheta_bundled_complex`.  Those are useful and are kept; they are simply
-not the theorem inventory a reader should have to assemble.
+The history of how these names were arrived at -- which bindings were wrong, which clause an
+alias used to point at, and what each repair changed -- is in Git history and in the
+`review_note` fields of the four Section 2 rows of
+`dev/davis-kahan-1970-formalization-result-inventory.json`.  It used to be here, and it made
+the file long enough that the table above was hard to find.
 
 ## References
 
 * C. Davis and W. M. Kahan, *The rotation of eigenvectors by a perturbation. III*,
-  SIAM J. Numer. Anal. 7 (1970), 1--46: the four unnumbered Section 2 theorems,
-  the Section 6 ambient assembly, and the Appendix to Section 6.
+  SIAM J. Numer. Anal. 7 (1970), 1--46, Section 2.
 -/
 
 namespace TauCeti
@@ -324,6 +152,7 @@ The caller supplies the mathematics -- semiboundedness of the compression above
 condition (3.5) of Section 3, and the Rayleigh--Ritz residual identity -- and
 nothing else: the structural facts live in `DavisKahan.UnboundedRitzPair` and
 `DavisKahan.ReducingComplement`. -/
+@[deprecated "The unqualified clause names are not uniform; use `tanTheta_ambient_complex`, which says which of the two printed conclusions it is." (since := "2026-09-05")]
 alias tanTheta_complex := tanTheta_ambient_unboundedRitz_definedTangent_symmetricNorming_complex
 
 /-- **Davis--Kahan 1970, the `tan Θ` theorem, over `ℝ` -- the AMBIENT clause.**
@@ -335,6 +164,7 @@ The real sibling of `tanTheta_ambient_complex`, on the real ambient tangent
 gauge are all real; only the Appendix Ky Fan passage is proved by
 complexification, at the level where approximation numbers are preserved
 exactly. -/
+@[deprecated "The unqualified clause names are not uniform; use `tanTheta_ambient_real`, which says which of the two printed conclusions it is." (since := "2026-09-05")]
 alias tanTheta_real := tanTheta_ambient_unboundedRitz_definedTangent_symmetricNorming_real
 
 /-! ## `sin 2Θ` -/
@@ -358,6 +188,7 @@ right-hand side is `2 N(E)` for the full bounded perturbation `E`.  That is a
 different source quantity from the printed residual `R`; that theorem is retained
 as a derived perturbation-norm corollary and is no longer presented as this
 clause. -/
+@[deprecated "The unqualified clause names are not uniform; use `sinTwoTheta_directed_complex`, which says which of the two printed conclusions it is." (since := "2026-09-05")]
 alias sinTwoTheta_complex := sinTwoTheta_directed_unboundedResidual_symmetricNorming_complex
 
 /-- **Davis--Kahan 1970, the `sin 2Θ` theorem, over `ℝ` -- the DIRECTED clause.**
@@ -369,6 +200,7 @@ The real sibling of `sinTwoTheta_complex`: the printed trial residual on the rig
 `FormBoundedSylvesterGap` for the separation, and the conclusion on the real directed
 double-angle sine of the real pair in the trial-side ordering.  Nothing here is read
 in a complexification. -/
+@[deprecated "The unqualified clause names are not uniform; use `sinTwoTheta_directed_real`, which says which of the two printed conclusions it is." (since := "2026-09-05")]
 alias sinTwoTheta_real := sinTwoTheta_directed_unboundedResidual_symmetricNorming_real
 
 /-! ## The two printed clauses, named
@@ -378,12 +210,13 @@ and the trial residual rather than the ambient perturbation on the right -- so e
 gets its own name rather than being folded into the other with irrelevant
 hypotheses.  Every name below says which clause it is.
 
-The unqualified legacy names are not uniform, and a reader should not guess:
-`tanTheta_complex` / `tanTheta_real` and `tanTwoTheta_complex` / `tanTwoTheta_real`
-are the AMBIENT clause, while `sinTwoTheta_complex` / `sinTwoTheta_real` are the
-DIRECTED one (their `_ambient_` partners are named explicitly).  They are kept
-because they are cited elsewhere; the `_directed_` and `_ambient_` names below are
-what new code should use. -/
+The six unqualified legacy names are **deprecated since 2026-09-05** (finding F6.6 of the
+2026-09-04 hostile review).  They were not uniform, and a reader had to guess:
+`tanTheta_{complex,real}` and `tanTwoTheta_{complex,real}` name the AMBIENT clause while
+`sinTwoTheta_{complex,real}` names the DIRECTED one.  Each now carries a `@[deprecated]`
+attribute pointing at its `_ambient_` or `_directed_` name.  They are retained only because
+the standalone Davis--Kahan submission repository under `submodules/` still consumes them;
+delete them once that repository has been refreshed. -/
 
 /-- **`tan Θ`, ambient clause, over `ℂ`**: `δ N(tan Θ) ≤ N(H)`. -/
 alias tanTheta_ambient_complex := tanTheta_ambient_unboundedRitz_definedTangent_symmetricNorming_complex
@@ -391,13 +224,20 @@ alias tanTheta_ambient_complex := tanTheta_ambient_unboundedRitz_definedTangent_
 /-- **`tan Θ`, ambient clause, over `ℝ`**. -/
 alias tanTheta_ambient_real := tanTheta_ambient_unboundedRitz_definedTangent_symmetricNorming_real
 
-/-- **`tan Θ`, directed clause, over `ℂ`**: `δ N(tan Θ₀) ≤ N(R)`, with the trial
-residual on the right and the representative characterized by its approximation
-numbers. -/
-alias tanTheta_directed_complex := tanTheta_directed_unboundedTrial_symmetricNorming_complex
+/-- **`tan Θ`, directed clause, over `ℂ`**: `δ N(tan Θ₀) ≤ N(R)` with the paper's residual
+`R` of (1.8) on the right, and with the representative *constructed* rather than supplied.
 
-/-- **`tan Θ`, directed clause, over `ℝ`**. -/
-alias tanTheta_directed_real := tanTheta_directed_unboundedTrial_symmetricNorming_real
+Retargeted 2026-09-05.  Until then this named
+`tanTheta_directed_unboundedTrial_symmetricNorming_complex`, which assumes the perturbed
+operator has no spectrum in `(α, α + δ)` and compares against the spectral subspace below
+`α` -- a specialization the printed theorem does not impose (finding F1 of the 2026-09-04
+hostile review). -/
+alias tanTheta_directed_complex :=
+  tanTheta_directed_unboundedRitz_symmetricNorming_exists_complex
+
+/-- **`tan Θ`, directed clause, over `ℝ`**, likewise with the representative constructed. -/
+alias tanTheta_directed_real :=
+  tanTheta_directed_unboundedRitz_symmetricNorming_exists_real
 
 /-- **`sin 2Θ`, directed clause, over `ℂ`**: `δ N(sin 2Θ₀) ≤ 2 N(R)`, on the paper's
 own trial-side directed double-angle sine.
@@ -481,6 +321,7 @@ subspace `V` whose reflection intertwines `A + B`
 
 No pole certificate is asked for: the ordered gap forces the reflection's diagonal
 block to be a unit, and that unit excludes the quarter-turn poles. -/
+@[deprecated "The unqualified clause names are not uniform; use `tanTwoTheta_ambient_complex`, which says which of the two printed conclusions it is." (since := "2026-09-05")]
 alias tanTwoTheta_complex := tanTwoTheta_ambient_unbounded_symmetricNorming_complex
 
 /-- **Davis--Kahan 1970, the `tan 2Θ` theorem, over `ℝ` -- the AMBIENT clause.**
@@ -490,6 +331,7 @@ Its directed partner is `tanTwoTheta_directed_real`.
 The real sibling of `tanTwoTheta_ambient_complex`, on the real ambient `|tan 2Θ|`.  The real
 statement is transported from the complex one through the complexification, with
 no loss of constant or norm class and no second analytic proof. -/
+@[deprecated "The unqualified clause names are not uniform; use `tanTwoTheta_ambient_real`, which says which of the two printed conclusions it is." (since := "2026-09-05")]
 alias tanTwoTheta_real := tanTwoTheta_ambient_unbounded_symmetricNorming_real
 
 /-! ## The whole printed `sin 2Θ` theorem, in one declaration
