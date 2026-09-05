@@ -1301,8 +1301,11 @@
         ]
       },
       "lean_declarations": [
+        "Helm2025.DKPS.AcharyyaBridge.highProb_entrywiseClose_responseDist_of_tendsto",
         "Acharyya2024.responseDist",
-        "Acharyya2025.Bridge.EntrywiseClose"
+        "Acharyya2025.Bridge.EntrywiseClose",
+        "Acharyya2025.Bridge.response_mean_close_hp_to_entrywise_hp",
+        "Acharyya2025.Bridge.responseEntrywiseRate"
       ],
       "clauses": [
         {
