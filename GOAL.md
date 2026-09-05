@@ -23,9 +23,13 @@ refresh the standalone repository mechanically.
   printed theorem omits is carried by `B`, a bound on the *population* response norms only;
   the sample responses are controlled on the event itself. The printed form stays refuted by
   `Theorem1Scale.prob_entrywiseClose_lt_paper_bound`.
-- **`A25-C1`** — one source-facing declaration for the spectral-norm `r = omega(n^3)`
-  corollary, if it really is a single assembly step. Recognizability, not new
-  mathematics.
+- **`A25-C1`** — **done 2026-09-05.**
+  `PaperRate.highProb_operatorNormClose_paperDeltaScale` states the corollary at the literal
+  source scale: with high probability the two classical-MDS matrices are operator-norm close
+  at `paperOperatorScale m R ((n³/r)^(1/2−δ))`, which is `16 R/m` times the printed scale and
+  independent of `n`, with the paper's own constant `16` in it. It carries the dissimilarity
+  bound `R` that Theorem 1 needs and the printed corollary omits, so the row moved from
+  `compiled_by_composition` to `compiled_source_repair`.
 - **`A25-P1`** — the printed compact-Riemannian condition does not force the
   nondegeneracy the argument needs. If a repair is wanted, formulate a meaningful
   spread condition and prove Assumptions 1 and 2 from it. **Label it a repair; it is

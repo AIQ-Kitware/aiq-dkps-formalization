@@ -20,6 +20,7 @@ syntax, so the source rate is not conflated with a hand-picked schedule.
 import Acharyya2025.GrowingResponse
 import Acharyya2025.GrowingPipeline
 import Acharyya2025.RateChain
+import Acharyya2025.SpectralPipeline
 import Mathlib.Analysis.Asymptotics.Lemmas
 import Mathlib.Analysis.SpecialFunctions.Pow.Continuity
 
@@ -343,5 +344,81 @@ noncomputable def paperDeltaGrowingConfigControl
         ((count u : Real) * entryRate u)) atTop (𝓝 0) :=
     Acharyya2025.RateChain.tendsto_configFrobBound_comp_zero d α Λ hscaled
   exact GrowingConfigControl.of_tendsto hentry hbound
+
+/-! ## Corollary 1: the spectral-norm rate under `r = ω(n³)`
+
+Acharyya 2025's corollary to Theorem 1 reads: under uniformly bounded response variance and
+`r` growing faster than `n³`, the operator norm `‖B̂ − B‖` is below `(n³/r)^(1/2−δ)` with high
+probability, for every `δ ∈ (0, 1/2)`.
+
+Every ingredient was compiled before this declaration; what was missing was the statement.
+The assembly is three steps: the response-mean event at the paper's own tolerance
+`(n³/r)^(1/2−δ)/n`, the entrywise CMDS bridge at a bounded dissimilarity range, and the
+entrywise-to-operator comparison, which costs the factor `n` that the paper's tolerance was
+divided by.  `scaled_cmdsEntrywiseRate_eq_paperOperatorScale` is where the `n` cancels, and it
+is why the resulting operator bound is `16 R / m` times the source scale with the paper's own
+constant `16` in it, independent of `n`.
+
+The bounded dissimilarity range `R` is the same correction Theorem 1 needs: it is not an
+artifact of this assembly, and `Theorem1Scale.prob_entrywiseClose_lt_paper_bound` is why. -/
+
+open Acharyya2025.MathlibBridge in
+open Acharyya2025.SpectralPipeline in
+open Acharyya2025.Deterministic in
+/-- **Acharyya 2025, Corollary 1 (spectral-norm rate), at the literal source scale.**
+
+With high probability as the stage index grows, the sample and population classical-MDS
+matrices are operator-norm close at `paperOperatorScale m R ((n³/r)^(1/2−δ))`, which is
+`16 R / m` times the printed scale `(n³/r)^(1/2−δ)` and does not depend on `n`.
+
+The hypotheses are the paper's -- iid replicates with a uniform `O(1)` second-moment bound,
+`r = ω(n³)` as a little-o statement, and `δ ∈ (0, 1/2)` -- together with the dissimilarity
+bound `R` that Theorem 1 needs and the printed statement omits. -/
+theorem highProb_operatorNormClose_paperDeltaScale
+    {Ω0 : Type} [MeasurableSpace Ω0]
+    (P : Nat → Measure Ω0) [∀ u, IsProbabilityMeasure (P u)]
+    {m p : Nat} (count replicates : Nat → Nat)
+    (hcount : ∀ u, 0 < count u) (hrep : ∀ u, 0 < replicates u)
+    (Y : ∀ u, Fin (count u) → Fin (replicates u) → Ω0 → Mat m p)
+    (μ : ∀ u, Fin (count u) → Mat m p)
+    (hL2 : ∀ u i k, MemLp (Y u i k) 2 (P u))
+    (hmean : ∀ u i k c, ∫ ω, Y u i k ω c ∂(P u) = μ u i c)
+    (hindep : ∀ u i,
+      Set.Pairwise (Set.univ : Set (Fin (replicates u)))
+        fun k l => IndepFun (Y u i k) (Y u i l) (P u))
+    (γ : Nat → Real) (Γ δ R : Real)
+    (hbound : ∀ u i k, ∫ ω, ‖Y u i k ω - μ u i‖ ^ 2 ∂(P u) ≤ γ u)
+    (hsample_int : ∀ u i, Integrable
+      (fun ω => ‖growingReplicateMean count replicates Y u ω i - μ u i‖ ^ 2)
+      (P u))
+    (hγ : ∀ u, |γ u| ≤ Γ)
+    (hω : ReplicatesDominateCubic count replicates)
+    (hδ0 : 0 < δ) (hδhalf : δ < 1 / 2)
+    (hsampleDist : ∀ u ω i j,
+      |responseDist (growingReplicateMean count replicates Y u ω) i j| ≤ R)
+    (hpopulationDist : ∀ u i j, |responseDist (μ u) i j| ≤ R) :
+    HighProbAtTop P (fun u => {ω |
+      MatrixOperatorNormClose
+        (disMatToMatrix
+          (classicalMDSMatrix (responseDist (growingReplicateMean count replicates Y u ω))))
+        (disMatToMatrix (classicalMDSMatrix (responseDist (μ u))))
+        (paperOperatorScale m R (paperDeltaScale count replicates δ u))}) := by
+  have hmeanEvent :=
+    highProb_uniformResponseMeanClose_of_growing_iid_replicates_deltaScale
+      P count replicates hcount hrep Y μ hL2 hmean hindep γ Γ δ hbound hsample_int hγ hω
+      hδ0 hδhalf
+  refine HighProbAtTop.mono hmeanEvent (fun u ω hω' => ?_)
+  have hentry := cmdsEntrywise_of_responseMeanClose (hcount u)
+    (growingReplicateMean count replicates Y u ω) (μ u) hω'
+    (fun i j => hsampleDist u ω i j) (fun i j => hpopulationDist u i j)
+  have hop := operatorNormClose_of_entrywiseClose
+    (A := disMatToMatrix
+      (classicalMDSMatrix (responseDist (growingReplicateMean count replicates Y u ω))))
+    (B := disMatToMatrix (classicalMDSMatrix (responseDist (μ u))))
+    (ε := cmdsEntrywiseRate (count u) m R
+      (paperResponseTolerance (count u) (paperDeltaScale count replicates δ u)))
+    hentry
+  rwa [scaled_cmdsEntrywiseRate_eq_paperOperatorScale (count u) m (hcount u) R
+    (paperDeltaScale count replicates δ u)] at hop
 
 end Acharyya2025.PaperRate
