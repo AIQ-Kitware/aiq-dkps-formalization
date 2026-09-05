@@ -7,7 +7,7 @@ Compare each retained source result in the 2025 concentration paper with the Lea
 **Companion census:** `dev/acharyya-2025-full-source-census.json`
 
 **Rows:** 19  
-**Unique cited Lean declarations:** 40
+**Unique cited Lean declarations:** 41
 
 ## Clause relation summary
 
@@ -173,6 +173,7 @@ Compare each retained source result in the 2025 concentration paper with the Lea
 - `Acharyya2025.ConfigPerturbation.exists_isometry_configFrobError_spectralConfig_le`
 - `Acharyya2025.AlignedPipeline.highProb_aligned_configFrobError_of_entrywise_close`
 - `Acharyya2025.RateChain.endToEndFrobQuadraticRate`
+- `Acharyya2025.ConfigPerturbation.sum_cross_inner_sq_le_of_rank_floor_populationGap`
 
 | source clause | Lean clause | relation | note |
 | --- | --- | --- | --- |
@@ -186,7 +187,7 @@ Compare each retained source result in the 2025 concentration paper with the Lea
 
 **Review.** The current theorem proves the Frobenius configuration bound supported by the paper discussion/appendix and obtains rowwise control as a consequence. It does not label the internally inconsistent v1 2,infinity display as literally proved.
 
-**Notes.** The active proof now uses the YWS population-only gap residual bound and YWS Procrustes alignment. It needs neither epsilon<=alpha/2 nor the former polar-factor smallness condition. Term 2 uses sqrt(alpha), improving the previous sqrt(alpha/2) envelope.
+**Notes.** The active proof now uses the YWS population-only gap residual bound and YWS Procrustes alignment. It needs neither epsilon<=alpha/2 nor the former polar-factor smallness condition. Term 2 uses sqrt(alpha), improving the previous sqrt(alpha/2) envelope. Public route named 2026-09-05: the eigenvector-perturbation step is `sum_cross_inner_sq_le_of_rank_floor_populationGap`, which carries no perturbative smallness condition, where the public `Acharyya2025.RankGap` forms carry `hsmall` and have no consumer.
 
 **Next action.** None.
 
