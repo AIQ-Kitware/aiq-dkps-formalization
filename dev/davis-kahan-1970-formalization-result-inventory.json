@@ -74,19 +74,19 @@
         "TauCeti.DavisKahan1970.SectionTwo.sinTheta",
         "TauCeti.DavisKahan1970.SectionTwo.sinTheta_complex",
         "TauCeti.DavisKahan1970.SectionTwo.sinTheta_real",
-        "DavisKahan1970.sinTheta_unbounded_intervalExterior_characterizedWitness_rclike",
+        "TauCeti.DavisKahan1970.sinTheta_unbounded_intervalExterior_characterizedWitness_rclike",
         "TauCeti.DavisKahan1970.sinTheta_unbounded_intervalExterior_symmetricNorming_rclike",
         "TauCeti.DavisKahan1970.sinTheta_bundled_complex",
         "TauCeti.DavisKahan1970.sinTheta_paperData_real",
         "TauCeti.DavisKahan1970.sinTheta_generalized_bundled_complex",
         "TauCeti.DavisKahan1970.sinTheta_generalized_paperData_real",
-        "DavisKahan1970.sinTheta_unbounded_formGap_symmetricNorming_complex",
-        "DavisKahan1970.sinTheta_unbounded_formGap_symmetricNorming_real",
-        "DavisKahan1970.sinTheta_unbounded_intervalExterior_symmetricNorming_complex",
-        "DavisKahan1970.sinTheta_unbounded_intervalExterior_symmetricNorming_real",
-        "DavisKahan1970.sinTheta_unbounded_formGap_symmetricNorming_rclike",
-        "DavisKahan1970.isTrialResidual_iff",
-        "DavisKahan1970.isExactSpectralDecomposition_iff",
+        "TauCeti.DavisKahan1970.sinTheta_unbounded_formGap_symmetricNorming_complex",
+        "TauCeti.DavisKahan1970.sinTheta_unbounded_formGap_symmetricNorming_real",
+        "TauCeti.DavisKahan1970.sinTheta_unbounded_intervalExterior_symmetricNorming_complex",
+        "TauCeti.DavisKahan1970.sinTheta_unbounded_intervalExterior_symmetricNorming_real",
+        "TauCeti.DavisKahan1970.sinTheta_unbounded_formGap_symmetricNorming_rclike",
+        "TauCeti.DavisKahan1970.isTrialResidual_iff",
+        "TauCeti.DavisKahan1970.isExactSpectralDecomposition_iff",
         "TauCeti.DavisKahan1970.kyFanDominant_of_symmetricNorming",
         "TauCeti.DavisKahan1970.symmetricNorming_of_kyFanDominant",
         "TauCeti.DavisKahan1970.symmetricNorming_iff_kyFanDominant"
@@ -118,7 +118,7 @@
       "notes": " **Canonical fixed-field statements added 2026-08-29.** `sinTheta_unbounded_intervalExterior_characterizedWitness_rclike` is the presentation declaration and pays twice for being scalar-generic: it carries the capability classes `ContinuousLinearMap.HasMinMaxLowerBoundEverywhere` and `HasUnboundedSylvesterKyFan`, and it inlines the finite interval/exterior branch of the separation, which fixes a strictly smaller theorem than the one proved. Neither cost is Davis--Kahan mathematics: the capability classes package the unbounded Sylvester Ky Fan estimate and a min-max lower bound, both proved here for both scalar fields, and they appear only because RCLike is an open abstraction. `sinTheta_complex` and `sinTheta_real` take direct argument lists, the full `FormBoundedSylvesterGap`, and conclude both ideal membership and the bound, with no capability class; they route through the already capability-free `FormBoundedIsometricSinThetaProblem.result_complex`/`.result_real` one Ky Fan gauge at a time. The `_of_intervalExterior` pair spells out the printed Section 2 separation. `sinTheta_unbounded_intervalExterior_symmetricNorming_rclike` remains the engine and is unchanged. **Canonical Section 2 inventory, 2026-08-30.** `DavisKahan/Sources/DavisKahan1970/SectionTwo.lean` is the public inventory of the paper's four unnumbered headline theorems over both scalar fields: `TauCeti.DavisKahan1970.SectionTwo.{sinTheta_complex, tanTheta_complex, sinTwoTheta_complex, tanTwoTheta_complex}` and their `_real` siblings. The unqualified `SectionTwo.{sinTheta, tanTheta, sinTwoTheta, tanTwoTheta}` are reserved by a standing rule: a short name is bound only to a declaration that is BOTH scalar-generic over `RCLike` AND at the printed source scope, and is left unbound otherwise. Which of the four currently satisfy that is a property of `SectionTwo.lean`; it is recorded once, structurally, in `section_two_short_names` below and checked against the file, and is deliberately not restated in prose -- a copy of a moving fact goes stale silently, and this sentence did. They are `alias`es, so each carries exactly the type of the declaration it names -- unbounded self-adjoint `LinearPMap` ambient operator, arbitrary Hilbert dimension, a `SymmetricNormingFunction`, both printed conclusions, no capability class, no finite-dimensional hypothesis, no proof vehicle in the conclusion. `SectionTwoUsage.lean` calls each from ordinary operator-theory hypotheses, so the advertised entry points are compiler-checked to be reachable without building Sylvester witnesses, reflection blocks, or spectral reflections by hand. The scalar-generic presentation forms, directed and whole-space variants, finite specializations, operator-norm statements and bundled-problem entry points are unchanged and remain registered separately.",
       "canonical_evidence": [
         {
-          "declaration": "DavisKahan1970.sinTheta_unbounded_formGap_symmetricNorming_rclike",
+          "declaration": "TauCeti.DavisKahan1970.sinTheta_unbounded_formGap_symmetricNorming_rclike",
           "role": "primary_source_witness",
           "scalar_scope": "rclike",
           "evidence_kind": "proof",
@@ -143,13 +143,13 @@
           "note": "The public Section 2 short name.  It is bound only because the canonical theorem is both scalar-generic over RCLike and at the printed source scope."
         },
         {
-          "declaration": "DavisKahan1970.sinTheta_unbounded_formGap_symmetricNorming_real",
+          "declaration": "TauCeti.DavisKahan1970.sinTheta_unbounded_formGap_symmetricNorming_real",
           "role": "specialization",
           "scalar_scope": "real",
           "note": "The canonical rclike theorem stated at one of the two fields Davis and Kahan write about, with the same argument list, the same full FormBoundedSylvesterGap scope and the same two conclusions.  `..._real_ofRCLike` derives it from the canonical theorem and `..._real_ofRCLike_conforms` checks the two agree by type equality."
         },
         {
-          "declaration": "DavisKahan1970.sinTheta_unbounded_formGap_symmetricNorming_complex",
+          "declaration": "TauCeti.DavisKahan1970.sinTheta_unbounded_formGap_symmetricNorming_complex",
           "role": "specialization",
           "scalar_scope": "complex",
           "note": "The canonical rclike theorem stated at one of the two fields Davis and Kahan write about, with the same argument list, the same full FormBoundedSylvesterGap scope and the same two conclusions.  `..._complex_ofRCLike` derives it from the canonical theorem and `..._complex_ofRCLike_conforms` checks the two agree by type equality."
@@ -163,7 +163,7 @@
           "role": "public_alias"
         },
         {
-          "declaration": "DavisKahan1970.sinTheta_unbounded_intervalExterior_characterizedWitness_rclike",
+          "declaration": "TauCeti.DavisKahan1970.sinTheta_unbounded_intervalExterior_characterizedWitness_rclike",
           "role": "scalar_generic_facade"
         },
         {
@@ -187,20 +187,20 @@
           "role": "presentation_wrapper"
         },
         {
-          "declaration": "DavisKahan1970.sinTheta_unbounded_intervalExterior_symmetricNorming_complex",
+          "declaration": "TauCeti.DavisKahan1970.sinTheta_unbounded_intervalExterior_symmetricNorming_complex",
           "role": "specialization"
         },
         {
-          "declaration": "DavisKahan1970.sinTheta_unbounded_intervalExterior_symmetricNorming_real",
+          "declaration": "TauCeti.DavisKahan1970.sinTheta_unbounded_intervalExterior_symmetricNorming_real",
           "role": "specialization"
         },
         {
-          "declaration": "DavisKahan1970.isTrialResidual_iff",
+          "declaration": "TauCeti.DavisKahan1970.isTrialResidual_iff",
           "role": "source_correspondence",
           "note": "Carries the correspondence from the bundled Lean predicate to the printed source equation. Registered so a statement pin protects it: the census cited it as correspondence evidence while nothing checked it."
         },
         {
-          "declaration": "DavisKahan1970.isExactSpectralDecomposition_iff",
+          "declaration": "TauCeti.DavisKahan1970.isExactSpectralDecomposition_iff",
           "role": "source_correspondence",
           "note": "Carries the correspondence from the bundled Lean predicate to the printed source equation. Registered so a statement pin protects it: the census cited it as correspondence evidence while nothing checked it."
         },
@@ -238,7 +238,7 @@
           ],
           "scalar_scope": "rclike",
           "evidence": {
-            "primary": "DavisKahan1970.sinTheta_unbounded_formGap_symmetricNorming_rclike",
+            "primary": "TauCeti.DavisKahan1970.sinTheta_unbounded_formGap_symmetricNorming_rclike",
             "correspondence": []
           },
           "status": "established",
@@ -5586,7 +5586,7 @@
     "terminal_results": 29,
     "remaining_results": [],
     "note": "The structured fields above are authoritative; this paragraph is regenerated whenever the count moves. 2026-09-02, closing: terminal_results is 29 and remaining_results is empty. `S2-tan-two-theta` was `hostile_review_blocked` under obligation `tan2theta-directed-correspondence` after a 2026-09-02 closure that did not compose; it is now accepted on canonical directed witnesses `tanTwoTheta_directed_unboundedResidual_symmetricNorming_{complex,real}`, which take the reducing subspace and conclude on the paper's directed corner (`tanTwoDirectedCornerR U V` over ℝ) with the singular-value identification in their types. The canonical-evidence digest changed accordingly and the statement pins were refreshed for the new canonical and bridging declarations. Earlier history of this field (the 2026-08-31 `S2-sin-two-theta` reopening, the `S2-tan-theta` Appendix-scope primaries, the paper-prefix rename with an unchanged digest) is in the human report.",
-    "canonical_evidence_sha256": "53e66962fab8bbc8d93cbf8b4c6e89d0626b23570315341be3bf929f22cad2c3",
+    "canonical_evidence_sha256": "821e4923e700fb7e36b27f6f7d6a00b40cf051e2df604b114ca10e68e4ab62c0",
     "hostile_review_status": "accepted",
     "hostile_review_note": "ACCEPTED 2026-09-02, after the day's reopening was closed by new mathematics rather than by metadata: the directed tan 2Theta clauses have source-shaped complex and real endpoints on the paper objects, with the correspondence composed in Lean and pinned. `open_hostile_review_obligations` is closed and lists the closure; the structured fields `terminal_results`, `remaining_results` and `hostile_review_status` are the authoritative statement."
   },
@@ -5594,7 +5594,7 @@
     "purpose": "The four unqualified `TauCeti.DavisKahan1970.SectionTwo.*` names, and what each is bound to. A short name is bound only to a declaration that is scalar-generic over `RCLike` AND at the printed source scope; `null` means deliberately unbound. This is the single owner of that fact: `check_davis_kahan_1970_result_inventory.py` reads `SectionTwo.lean`'s own `alias` lines and fails if they disagree.",
     "source_file": "DavisKahan/Sources/DavisKahan1970/SectionTwo.lean",
     "bindings": {
-      "sinTheta": "_root_.DavisKahan1970.sinTheta_unbounded_formGap_symmetricNorming_rclike",
+      "sinTheta": "DavisKahan1970.sinTheta_unbounded_formGap_symmetricNorming_rclike",
       "tanTheta": null,
       "sinTwoTheta": null,
       "tanTwoTheta": null

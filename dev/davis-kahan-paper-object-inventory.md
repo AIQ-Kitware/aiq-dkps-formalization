@@ -144,7 +144,7 @@ already demonstrated the intended direct-hypothesis API.
 
 What that migration needed, and did not have, was a way to say *"`E₀` carries
 `dom A₀` into `dom A` and `R` is the residual there"* without also saying `E₀`
-is isometric. `DavisKahan1970.IsTrialResidualEquation` is that predicate, and
+is isometric. `TauCeti.DavisKahan1970.IsTrialResidualEquation` is that predicate, and
 `isTrialResidual_iff_equation_and_isometry` ties it to the Section 2 one:
 
 ```text

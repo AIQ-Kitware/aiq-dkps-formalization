@@ -67,7 +67,7 @@ open TauCeti.DavisKahan.ExactSinTheta
 
 
 open TauCeti.DavisKahan
-open _root_.DavisKahan1970
+open DavisKahan1970
 
 noncomputable section
 

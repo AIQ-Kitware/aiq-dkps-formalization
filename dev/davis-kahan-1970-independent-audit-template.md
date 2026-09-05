@@ -92,7 +92,7 @@ One row per printed source clause per scalar field.  A clause is `PASS` only whe
 
 | clause | scalar | witness | status |
 | --- | --- | --- | --- |
-| `directed` | rclike | `DavisKahan1970.sinTheta_unbounded_formGap_symmetricNorming_rclike` | **PASS** |
+| `directed` | rclike | `TauCeti.DavisKahan1970.sinTheta_unbounded_formGap_symmetricNorming_rclike` | **PASS** |
 
 **`directed`.** delta * N(sin Theta_0) <= N(R) with sin Theta_0 = (I - F0 F0*) E0, ideal membership concluded, unbounded self-adjoint LinearPMap ambient operator, arbitrary Hilbert dimension, arbitrary SymmetricNormingFunction, whole FormBoundedSylvesterGap.
 
@@ -104,25 +104,25 @@ Result-wide scope every clause must carry: `S2-sin-theta.ui-norm-scope`, `S2-sin
 
 The declarations that carry this result's printed statement, with the source atoms each one covers.  Everything under *Other registered declarations* below accompanies the result without establishing it.
 
-- `DavisKahan1970.sinTheta_unbounded_formGap_symmetricNorming_rclike` — primary_source_witness, rclike scalars, proof; covers `S2-sin-theta.ui-norm-scope`, `S2-sin-theta.gap-hypothesis`, `S2-sin-theta.directed-conclusion`, `S2-unbounded-scope.infinite-dimensional-scope`, `S2-unbounded-scope.arbitrary-ui-scope`, `S2-unbounded-scope.unbounded-selfadjoint-scope`, `S2-unbounded-scope.bounded-residual-needed`, `S2-unbounded-scope.half-infinite-gap-intervals`
+- `TauCeti.DavisKahan1970.sinTheta_unbounded_formGap_symmetricNorming_rclike` — primary_source_witness, rclike scalars, proof; covers `S2-sin-theta.ui-norm-scope`, `S2-sin-theta.gap-hypothesis`, `S2-sin-theta.directed-conclusion`, `S2-unbounded-scope.infinite-dimensional-scope`, `S2-unbounded-scope.arbitrary-ui-scope`, `S2-unbounded-scope.unbounded-selfadjoint-scope`, `S2-unbounded-scope.bounded-residual-needed`, `S2-unbounded-scope.half-infinite-gap-intervals`
 
 ### Other registered declarations
 
 - `TauCeti.DavisKahan1970.SectionTwo.sinTheta` — public_alias
-- `DavisKahan1970.sinTheta_unbounded_formGap_symmetricNorming_real` — specialization
-- `DavisKahan1970.sinTheta_unbounded_formGap_symmetricNorming_complex` — specialization
+- `TauCeti.DavisKahan1970.sinTheta_unbounded_formGap_symmetricNorming_real` — specialization
+- `TauCeti.DavisKahan1970.sinTheta_unbounded_formGap_symmetricNorming_complex` — specialization
 - `TauCeti.DavisKahan1970.SectionTwo.sinTheta_complex` — public_alias
 - `TauCeti.DavisKahan1970.SectionTwo.sinTheta_real` — public_alias
-- `DavisKahan1970.sinTheta_unbounded_intervalExterior_characterizedWitness_rclike` — scalar_generic_facade
+- `TauCeti.DavisKahan1970.sinTheta_unbounded_intervalExterior_characterizedWitness_rclike` — scalar_generic_facade
 - `TauCeti.DavisKahan1970.sinTheta_unbounded_intervalExterior_symmetricNorming_rclike` — scalar_generic_facade
 - `TauCeti.DavisKahan1970.sinTheta_bundled_complex` — presentation_wrapper
 - `TauCeti.DavisKahan1970.sinTheta_paperData_real` — presentation_wrapper
 - `TauCeti.DavisKahan1970.sinTheta_generalized_bundled_complex` — presentation_wrapper
 - `TauCeti.DavisKahan1970.sinTheta_generalized_paperData_real` — presentation_wrapper
-- `DavisKahan1970.sinTheta_unbounded_intervalExterior_symmetricNorming_complex` — specialization
-- `DavisKahan1970.sinTheta_unbounded_intervalExterior_symmetricNorming_real` — specialization
-- `DavisKahan1970.isTrialResidual_iff` — source_correspondence
-- `DavisKahan1970.isExactSpectralDecomposition_iff` — source_correspondence
+- `TauCeti.DavisKahan1970.sinTheta_unbounded_intervalExterior_symmetricNorming_complex` — specialization
+- `TauCeti.DavisKahan1970.sinTheta_unbounded_intervalExterior_symmetricNorming_real` — specialization
+- `TauCeti.DavisKahan1970.isTrialResidual_iff` — source_correspondence
+- `TauCeti.DavisKahan1970.isExactSpectralDecomposition_iff` — source_correspondence
 - `TauCeti.DavisKahan1970.kyFanDominant_of_symmetricNorming` — transport_lemma
 - `TauCeti.DavisKahan1970.symmetricNorming_of_kyFanDominant` — transport_lemma
 - `TauCeti.DavisKahan1970.symmetricNorming_iff_kyFanDominant` — transport_lemma
@@ -147,9 +147,9 @@ Source location candidates: `DavisKahan/Sources/DavisKahan1970/SectionTwo.lean:3
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
-#### `DavisKahan1970.sinTheta_unbounded_intervalExterior_characterizedWitness_rclike`
+#### `TauCeti.DavisKahan1970.sinTheta_unbounded_intervalExterior_characterizedWitness_rclike`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/SineTheta/Presentation.lean:227`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/SineTheta/Presentation.lean:226`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
@@ -183,45 +183,45 @@ Source location candidates: `DavisKahan/Sources/DavisKahan1970/SineThetaSourceIn
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
-#### `DavisKahan1970.sinTheta_unbounded_formGap_symmetricNorming_complex`
+#### `TauCeti.DavisKahan1970.sinTheta_unbounded_formGap_symmetricNorming_complex`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/SineTheta/Presentation.lean:349`
-
-Compiler-printed type: *inserted when a compiler certificate is supplied.*
-
-#### `DavisKahan1970.sinTheta_unbounded_formGap_symmetricNorming_real`
-
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/SineTheta/Presentation.lean:464`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/SineTheta/Presentation.lean:348`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
-#### `DavisKahan1970.sinTheta_unbounded_intervalExterior_symmetricNorming_complex`
+#### `TauCeti.DavisKahan1970.sinTheta_unbounded_formGap_symmetricNorming_real`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/SineTheta/Presentation.lean:427`
-
-Compiler-printed type: *inserted when a compiler certificate is supplied.*
-
-#### `DavisKahan1970.sinTheta_unbounded_intervalExterior_symmetricNorming_real`
-
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/SineTheta/Presentation.lean:515`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/SineTheta/Presentation.lean:463`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
-#### `DavisKahan1970.sinTheta_unbounded_formGap_symmetricNorming_rclike`
+#### `TauCeti.DavisKahan1970.sinTheta_unbounded_intervalExterior_symmetricNorming_complex`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/SineTheta/Presentation.lean:305`
-
-Compiler-printed type: *inserted when a compiler certificate is supplied.*
-
-#### `DavisKahan1970.isTrialResidual_iff`
-
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/SineTheta/Presentation.lean:149`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/SineTheta/Presentation.lean:426`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
-#### `DavisKahan1970.isExactSpectralDecomposition_iff`
+#### `TauCeti.DavisKahan1970.sinTheta_unbounded_intervalExterior_symmetricNorming_real`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/SineTheta/Presentation.lean:188`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/SineTheta/Presentation.lean:514`
+
+Compiler-printed type: *inserted when a compiler certificate is supplied.*
+
+#### `TauCeti.DavisKahan1970.sinTheta_unbounded_formGap_symmetricNorming_rclike`
+
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/SineTheta/Presentation.lean:304`
+
+Compiler-printed type: *inserted when a compiler certificate is supplied.*
+
+#### `TauCeti.DavisKahan1970.isTrialResidual_iff`
+
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/SineTheta/Presentation.lean:148`
+
+Compiler-printed type: *inserted when a compiler certificate is supplied.*
+
+#### `TauCeti.DavisKahan1970.isExactSpectralDecomposition_iff`
+
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/SineTheta/Presentation.lean:187`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 

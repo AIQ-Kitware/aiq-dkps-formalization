@@ -27,7 +27,7 @@ The Section 2 sin-theta theorem: interval/exterior spectral separation controls 
 
 ### Canonical Lean declarations
 
-#### `DavisKahan1970.sinTheta_unbounded_formGap_symmetricNorming_complex`
+#### `TauCeti.DavisKahan1970.sinTheta_unbounded_formGap_symmetricNorming_complex`
 
 **Human-written Lean statement**
 
@@ -57,15 +57,15 @@ theorem sinTheta_unbounded_formGap_symmetricNorming_complex
 **Elaborated signature** (statement pin: current)
 
 ~~~~lean
-DavisKahan1970.sinTheta_unbounded_formGap_symmetricNorming_complex.{v} {E F G H : Type v}
+TauCeti.DavisKahan1970.sinTheta_unbounded_formGap_symmetricNorming_complex.{v} {E F G H : Type v}
   [NormedAddCommGroup E] [InnerProductSpace ℂ E] [CompleteSpace E] [NormedAddCommGroup F]
   [InnerProductSpace ℂ F] [CompleteSpace F] [NormedAddCommGroup G] [InnerProductSpace ℂ G]
   [CompleteSpace G] [NormedAddCommGroup H] [InnerProductSpace ℂ H] [CompleteSpace H]
   (N : TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction) (A : E →ₗ.[ℂ] E) (A₀ : F →ₗ.[ℂ] F)
   (Λ₁ : G →ₗ.[ℂ] G) (E₀ : F →L[ℂ] E) (F₀ : H →L[ℂ] E) (F₁ : G →L[ℂ] E) (R : F →L[ℂ] E)
   (hA : IsSelfAdjoint A) (hA₀ : IsSelfAdjoint A₀) (hΛ₁ : IsSelfAdjoint Λ₁)
-  (htrial : DavisKahan1970.IsTrialResidual A A₀ E₀ R)
-  (hexact : DavisKahan1970.IsExactSpectralDecomposition A Λ₁ F₀ F₁) {δ : ℝ} (hδ : 0 < δ)
+  (htrial : TauCeti.DavisKahan1970.IsTrialResidual A A₀ E₀ R)
+  (hexact : TauCeti.DavisKahan1970.IsExactSpectralDecomposition A Λ₁ F₀ F₁) {δ : ℝ} (hδ : 0 < δ)
   (hgap : TauCeti.DavisKahan.Sylvester.FormBoundedSylvesterGap A₀ Λ₁ δ) (hR : N.Mem R) :
   N.Mem ((ContinuousLinearMap.id ℂ E - F₀ ∘SL ContinuousLinearMap.adjoint F₀) ∘SL E₀) ∧
     δ * N.gauge ((ContinuousLinearMap.id ℂ E - F₀ ∘SL ContinuousLinearMap.adjoint F₀) ∘SL E₀) ≤
@@ -82,16 +82,16 @@ Boundary vocabulary: `NormedAddCommGroup`, `InnerProductSpace`, `Complex`, `Comp
 <details><summary>Statement closure tree</summary>
 
 ~~~~text
-DavisKahan1970.sinTheta_unbounded_formGap_symmetricNorming_complex  (theorem, DavisKahan/Sources/DavisKahan1970/SineTheta/Presentation.lean:326)
-    DavisKahan1970.sinTheta_unbounded_formGap_symmetricNorming_complex.{v} {E F G H : Type v}
+TauCeti.DavisKahan1970.sinTheta_unbounded_formGap_symmetricNorming_complex  (theorem, DavisKahan/Sources/DavisKahan1970/SineTheta/Presentation.lean:326)
+    TauCeti.DavisKahan1970.sinTheta_unbounded_formGap_symmetricNorming_complex.{v} {E F G H : Type v}
       [NormedAddCommGroup E] [InnerProductSpace ℂ E] [CompleteSpace E] [NormedAddCommGroup F]
       [InnerProductSpace ℂ F] [CompleteSpace F] [NormedAddCommGroup G] [InnerProductSpace ℂ G]
       [CompleteSpace G] [NormedAddCommGroup H] [InnerProductSpace ℂ H] [CompleteSpace H]
       (N : TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction) (A : E →ₗ.[ℂ] E) (A₀ : F →ₗ.[ℂ] F)
       (Λ₁ : G →ₗ.[ℂ] G) (E₀ : F →L[ℂ] E) (F₀ : H →L[ℂ] E) (F₁ : G →L[ℂ] E) (R : F →L[ℂ] E)
       (hA : IsSelfAdjoint A) (hA₀ : IsSelfAdjoint A₀) (hΛ₁ : IsSelfAdjoint Λ₁)
-      (htrial : DavisKahan1970.IsTrialResidual A A₀ E₀ R)
-      (hexact : DavisKahan1970.IsExactSpectralDecomposition A Λ₁ F₀ F₁) {δ : ℝ} (hδ : 0 < δ)
+      (htrial : TauCeti.DavisKahan1970.IsTrialResidual A A₀ E₀ R)
+      (hexact : TauCeti.DavisKahan1970.IsExactSpectralDecomposition A Λ₁ F₀ F₁) {δ : ℝ} (hδ : 0 < δ)
       (hgap : TauCeti.DavisKahan.Sylvester.FormBoundedSylvesterGap A₀ Λ₁ δ) (hR : N.Mem R) :
       N.Mem ((ContinuousLinearMap.id ℂ E - F₀ ∘SL ContinuousLinearMap.adjoint F₀) ∘SL E₀) ∧
         δ * N.gauge ((ContinuousLinearMap.id ℂ E - F₀ ∘SL ContinuousLinearMap.adjoint F₀) ∘SL E₀) ≤
@@ -125,30 +125,30 @@ DavisKahan1970.sinTheta_unbounded_formGap_symmetricNorming_complex  (theorem, Da
     [body] TauCeti.DavisKahan.ExactSinTheta.zeroPad  (def, DavisKahan/Sources/DavisKahan1970/SineTheta/Norms/UnitaryInvariantNorm.lean:43)
         TauCeti.DavisKahan.ExactSinTheta.zeroPad {n : ℕ} (x : Fin n → ℝ) : Fin (n + 1) → ℝ
         hash: expr=135628739 text=485d6568d5290806
-  [type] DavisKahan1970.IsTrialResidual  (structure, DavisKahan/Sources/DavisKahan1970/SineTheta/Presentation.lean:67)
-      DavisKahan1970.IsTrialResidual.{u, v} {𝕜 : Type u} [RCLike 𝕜] {E F : Type v} [NormedAddCommGroup E]
+  [type] TauCeti.DavisKahan1970.IsTrialResidual  (structure, DavisKahan/Sources/DavisKahan1970/SineTheta/Presentation.lean:67)
+      TauCeti.DavisKahan1970.IsTrialResidual.{u, v} {𝕜 : Type u} [RCLike 𝕜] {E F : Type v} [NormedAddCommGroup E]
         [InnerProductSpace 𝕜 E] [NormedAddCommGroup F] [InnerProductSpace 𝕜 F] (A : E →ₗ.[𝕜] E)
         (A₀ : F →ₗ.[𝕜] F) (E₀ R : F →L[𝕜] E) : Prop
-      field isometry : ∀ {𝕜 : Type u} [inst : RCLike 𝕜] {E F : Type v} [inst_1 : NormedAddCommGroup E] [inst_2 : InnerProductSpace 𝕜 E] [inst_3 : NormedAddCommGroup F] [inst_4 : InnerProductSpace 𝕜 F] {A : E →ₗ.[𝕜] E} {A₀ : F →ₗ.[𝕜] F} {E₀ R : F →L[𝕜] E}, DavisKahan1970.IsTrialResidual A A₀ E₀ R → TauCeti.DavisKahan.IsometricEmbedding E₀
-      field mapsDomain : ∀ {𝕜 : Type u} [inst : RCLike 𝕜] {E F : Type v} [inst_1 : NormedAddCommGroup E] [inst_2 : InnerProductSpace 𝕜 E] [inst_3 : NormedAddCommGroup F] [inst_4 : InnerProductSpace 𝕜 F] {A : E →ₗ.[𝕜] E} {A₀ : F →ₗ.[𝕜] F} {E₀ R : F →L[𝕜] E}, DavisKahan1970.IsTrialResidual A A₀ E₀ R → ∀ (x : ↥A₀.domain), E₀ ↑x ∈ A.domain
-      field residualEquation : ∀ {𝕜 : Type u} [inst : RCLike 𝕜] {E F : Type v} [inst_1 : NormedAddCommGroup E] [inst_2 : InnerProductSpace 𝕜 E] [inst_3 : NormedAddCommGroup F] [inst_4 : InnerProductSpace 𝕜 F] {A : E →ₗ.[𝕜] E} {A₀ : F →ₗ.[𝕜] F} {E₀ R : F →L[𝕜] E} (self : DavisKahan1970.IsTrialResidual A A₀ E₀ R) (x : ↥A₀.domain), ↑A ⟨E₀ ↑x, ⋯⟩ - E₀ (↑A₀ x) = R ↑x
+      field isometry : ∀ {𝕜 : Type u} [inst : RCLike 𝕜] {E F : Type v} [inst_1 : NormedAddCommGroup E] [inst_2 : InnerProductSpace 𝕜 E] [inst_3 : NormedAddCommGroup F] [inst_4 : InnerProductSpace 𝕜 F] {A : E →ₗ.[𝕜] E} {A₀ : F →ₗ.[𝕜] F} {E₀ R : F →L[𝕜] E}, TauCeti.DavisKahan1970.IsTrialResidual A A₀ E₀ R → TauCeti.DavisKahan.IsometricEmbedding E₀
+      field mapsDomain : ∀ {𝕜 : Type u} [inst : RCLike 𝕜] {E F : Type v} [inst_1 : NormedAddCommGroup E] [inst_2 : InnerProductSpace 𝕜 E] [inst_3 : NormedAddCommGroup F] [inst_4 : InnerProductSpace 𝕜 F] {A : E →ₗ.[𝕜] E} {A₀ : F →ₗ.[𝕜] F} {E₀ R : F →L[𝕜] E}, TauCeti.DavisKahan1970.IsTrialResidual A A₀ E₀ R → ∀ (x : ↥A₀.domain), E₀ ↑x ∈ A.domain
+      field residualEquation : ∀ {𝕜 : Type u} [inst : RCLike 𝕜] {E F : Type v} [inst_1 : NormedAddCommGroup E] [inst_2 : InnerProductSpace 𝕜 E] [inst_3 : NormedAddCommGroup F] [inst_4 : InnerProductSpace 𝕜 F] {A : E →ₗ.[𝕜] E} {A₀ : F →ₗ.[𝕜] F} {E₀ R : F →L[𝕜] E} (self : TauCeti.DavisKahan1970.IsTrialResidual A A₀ E₀ R) (x : ↥A₀.domain), ↑A ⟨E₀ ↑x, ⋯⟩ - E₀ (↑A₀ x) = R ↑x
       hash: expr=697366030 text=7086524c853f1414
     [body] TauCeti.DavisKahan.IsometricEmbedding  (def, DavisKahan/BoundedOperator/Compat.lean:107)
         TauCeti.DavisKahan.IsometricEmbedding.{u_1, u_2, u_3} {𝕜 : Type u_1} [RCLike 𝕜] {E : Type u_2}
           [NormedAddCommGroup E] [InnerProductSpace 𝕜 E] {F : Type u_3} [NormedAddCommGroup F]
           [InnerProductSpace 𝕜 F] (X : F →L[𝕜] E) : Prop
         hash: expr=2691607086 text=02c1b372cca3865c
-  [type] DavisKahan1970.IsExactSpectralDecomposition  (structure, DavisKahan/Sources/DavisKahan1970/SineTheta/Presentation.lean:146)
-      DavisKahan1970.IsExactSpectralDecomposition.{u, v} {𝕜 : Type u} [RCLike 𝕜] {E G H : Type v}
+  [type] TauCeti.DavisKahan1970.IsExactSpectralDecomposition  (structure, DavisKahan/Sources/DavisKahan1970/SineTheta/Presentation.lean:146)
+      TauCeti.DavisKahan1970.IsExactSpectralDecomposition.{u, v} {𝕜 : Type u} [RCLike 𝕜] {E G H : Type v}
         [NormedAddCommGroup E] [InnerProductSpace 𝕜 E] [CompleteSpace E] [NormedAddCommGroup G]
         [InnerProductSpace 𝕜 G] [CompleteSpace G] [NormedAddCommGroup H] [InnerProductSpace 𝕜 H]
         [CompleteSpace H] (A : E →ₗ.[𝕜] E) (Λ₁ : G →ₗ.[𝕜] G) (F₀ : H →L[𝕜] E) (F₁ : G →L[𝕜] E) : Prop
-      field desiredIsometry : ∀ {𝕜 : Type u} [inst : RCLike 𝕜] {E G H : Type v} [inst_1 : NormedAddCommGroup E] [inst_2 : InnerProductSpace 𝕜 E] [inst_3 : CompleteSpace E] [inst_4 : NormedAddCommGroup G] [inst_5 : InnerProductSpace 𝕜 G] [inst_6 : CompleteSpace G] [inst_7 : NormedAddCommGroup H] [inst_8 : InnerProductSpace 𝕜 H] [inst_9 : CompleteSpace H] {A : E →ₗ.[𝕜] E} {Λ₁ : G →ₗ.[𝕜] G} {F₀ : H →L[𝕜] E} {F₁ : G →L[𝕜] E}, DavisKahan1970.IsExactSpectralDecomposition A Λ₁ F₀ F₁ → TauCeti.DavisKahan.IsometricEmbedding F₀
-      field complementIsometry : ∀ {𝕜 : Type u} [inst : RCLike 𝕜] {E G H : Type v} [inst_1 : NormedAddCommGroup E] [inst_2 : InnerProductSpace 𝕜 E] [inst_3 : CompleteSpace E] [inst_4 : NormedAddCommGroup G] [inst_5 : InnerProductSpace 𝕜 G] [inst_6 : CompleteSpace G] [inst_7 : NormedAddCommGroup H] [inst_8 : InnerProductSpace 𝕜 H] [inst_9 : CompleteSpace H] {A : E →ₗ.[𝕜] E} {Λ₁ : G →ₗ.[𝕜] G} {F₀ : H →L[𝕜] E} {F₁ : G →L[𝕜] E}, DavisKahan1970.IsExactSpectralDecomposition A Λ₁ F₀ F₁ → TauCeti.DavisKahan.IsometricEmbedding F₁
-      field orthogonal : ∀ {𝕜 : Type u} [inst : RCLike 𝕜] {E G H : Type v} [inst_1 : NormedAddCommGroup E] [inst_2 : InnerProductSpace 𝕜 E] [inst_3 : CompleteSpace E] [inst_4 : NormedAddCommGroup G] [inst_5 : InnerProductSpace 𝕜 G] [inst_6 : CompleteSpace G] [inst_7 : NormedAddCommGroup H] [inst_8 : InnerProductSpace 𝕜 H] [inst_9 : CompleteSpace H] {A : E →ₗ.[𝕜] E} {Λ₁ : G →ₗ.[𝕜] G} {F₀ : H →L[𝕜] E} {F₁ : G →L[𝕜] E}, DavisKahan1970.IsExactSpectralDecomposition A Λ₁ F₀ F₁ → ContinuousLinearMap.adjoint F₀ ∘SL F₁ = 0
-      field complete : ∀ {𝕜 : Type u} [inst : RCLike 𝕜] {E G H : Type v} [inst_1 : NormedAddCommGroup E] [inst_2 : InnerProductSpace 𝕜 E] [inst_3 : CompleteSpace E] [inst_4 : NormedAddCommGroup G] [inst_5 : InnerProductSpace 𝕜 G] [inst_6 : CompleteSpace G] [inst_7 : NormedAddCommGroup H] [inst_8 : InnerProductSpace 𝕜 H] [inst_9 : CompleteSpace H] {A : E →ₗ.[𝕜] E} {Λ₁ : G →ₗ.[𝕜] G} {F₀ : H →L[𝕜] E} {F₁ : G →L[𝕜] E}, DavisKahan1970.IsExactSpectralDecomposition A Λ₁ F₀ F₁ → F₀ ∘SL ContinuousLinearMap.adjoint F₀ + F₁ ∘SL ContinuousLinearMap.adjoint F₁ = ContinuousLinearMap.id 𝕜 E
-      field mapsDomain : ∀ {𝕜 : Type u} [inst : RCLike 𝕜] {E G H : Type v} [inst_1 : NormedAddCommGroup E] [inst_2 : InnerProductSpace 𝕜 E] [inst_3 : CompleteSpace E] [inst_4 : NormedAddCommGroup G] [inst_5 : InnerProductSpace 𝕜 G] [inst_6 : CompleteSpace G] [inst_7 : NormedAddCommGroup H] [inst_8 : InnerProductSpace 𝕜 H] [inst_9 : CompleteSpace H] {A : E →ₗ.[𝕜] E} {Λ₁ : G →ₗ.[𝕜] G} {F₀ : H →L[𝕜] E} {F₁ : G →L[𝕜] E}, DavisKahan1970.IsExactSpectralDecomposition A Λ₁ F₀ F₁ → ∀ (y : ↥Λ₁.domain), F₁ ↑y ∈ A.domain
-      field intertwines : ∀ {𝕜 : Type u} [inst : RCLike 𝕜] {E G H : Type v} [inst_1 : NormedAddCommGroup E] [inst_2 : InnerProductSpace 𝕜 E] [inst_3 : CompleteSpace E] [inst_4 : NormedAddCommGroup G] [inst_5 : InnerProductSpace 𝕜 G] [inst_6 : CompleteSpace G] [inst_7 : NormedAddCommGroup H] [inst_8 : InnerProductSpace 𝕜 H] [inst_9 : CompleteSpace H] {A : E →ₗ.[𝕜] E} {Λ₁ : G →ₗ.[𝕜] G} {F₀ : H →L[𝕜] E} {F₁ : G →L[𝕜] E} (self : DavisKahan1970.IsExactSpectralDecomposition A Λ₁ F₀ F₁) (y : ↥Λ₁.domain), ↑A ⟨F₁ ↑y, ⋯⟩ = F₁ (↑Λ₁ y)
+      field desiredIsometry : ∀ {𝕜 : Type u} [inst : RCLike 𝕜] {E G H : Type v} [inst_1 : NormedAddCommGroup E] [inst_2 : InnerProductSpace 𝕜 E] [inst_3 : CompleteSpace E] [inst_4 : NormedAddCommGroup G] [inst_5 : InnerProductSpace 𝕜 G] [inst_6 : CompleteSpace G] [inst_7 : NormedAddCommGroup H] [inst_8 : InnerProductSpace 𝕜 H] [inst_9 : CompleteSpace H] {A : E →ₗ.[𝕜] E} {Λ₁ : G →ₗ.[𝕜] G} {F₀ : H →L[𝕜] E} {F₁ : G →L[𝕜] E}, TauCeti.DavisKahan1970.IsExactSpectralDecomposition A Λ₁ F₀ F₁ → TauCeti.DavisKahan.IsometricEmbedding F₀
+      field complementIsometry : ∀ {𝕜 : Type u} [inst : RCLike 𝕜] {E G H : Type v} [inst_1 : NormedAddCommGroup E] [inst_2 : InnerProductSpace 𝕜 E] [inst_3 : CompleteSpace E] [inst_4 : NormedAddCommGroup G] [inst_5 : InnerProductSpace 𝕜 G] [inst_6 : CompleteSpace G] [inst_7 : NormedAddCommGroup H] [inst_8 : InnerProductSpace 𝕜 H] [inst_9 : CompleteSpace H] {A : E →ₗ.[𝕜] E} {Λ₁ : G →ₗ.[𝕜] G} {F₀ : H →L[𝕜] E} {F₁ : G →L[𝕜] E}, TauCeti.DavisKahan1970.IsExactSpectralDecomposition A Λ₁ F₀ F₁ → TauCeti.DavisKahan.IsometricEmbedding F₁
+      field orthogonal : ∀ {𝕜 : Type u} [inst : RCLike 𝕜] {E G H : Type v} [inst_1 : NormedAddCommGroup E] [inst_2 : InnerProductSpace 𝕜 E] [inst_3 : CompleteSpace E] [inst_4 : NormedAddCommGroup G] [inst_5 : InnerProductSpace 𝕜 G] [inst_6 : CompleteSpace G] [inst_7 : NormedAddCommGroup H] [inst_8 : InnerProductSpace 𝕜 H] [inst_9 : CompleteSpace H] {A : E →ₗ.[𝕜] E} {Λ₁ : G →ₗ.[𝕜] G} {F₀ : H →L[𝕜] E} {F₁ : G →L[𝕜] E}, TauCeti.DavisKahan1970.IsExactSpectralDecomposition A Λ₁ F₀ F₁ → ContinuousLinearMap.adjoint F₀ ∘SL F₁ = 0
+      field complete : ∀ {𝕜 : Type u} [inst : RCLike 𝕜] {E G H : Type v} [inst_1 : NormedAddCommGroup E] [inst_2 : InnerProductSpace 𝕜 E] [inst_3 : CompleteSpace E] [inst_4 : NormedAddCommGroup G] [inst_5 : InnerProductSpace 𝕜 G] [inst_6 : CompleteSpace G] [inst_7 : NormedAddCommGroup H] [inst_8 : InnerProductSpace 𝕜 H] [inst_9 : CompleteSpace H] {A : E →ₗ.[𝕜] E} {Λ₁ : G →ₗ.[𝕜] G} {F₀ : H →L[𝕜] E} {F₁ : G →L[𝕜] E}, TauCeti.DavisKahan1970.IsExactSpectralDecomposition A Λ₁ F₀ F₁ → F₀ ∘SL ContinuousLinearMap.adjoint F₀ + F₁ ∘SL ContinuousLinearMap.adjoint F₁ = ContinuousLinearMap.id 𝕜 E
+      field mapsDomain : ∀ {𝕜 : Type u} [inst : RCLike 𝕜] {E G H : Type v} [inst_1 : NormedAddCommGroup E] [inst_2 : InnerProductSpace 𝕜 E] [inst_3 : CompleteSpace E] [inst_4 : NormedAddCommGroup G] [inst_5 : InnerProductSpace 𝕜 G] [inst_6 : CompleteSpace G] [inst_7 : NormedAddCommGroup H] [inst_8 : InnerProductSpace 𝕜 H] [inst_9 : CompleteSpace H] {A : E →ₗ.[𝕜] E} {Λ₁ : G →ₗ.[𝕜] G} {F₀ : H →L[𝕜] E} {F₁ : G →L[𝕜] E}, TauCeti.DavisKahan1970.IsExactSpectralDecomposition A Λ₁ F₀ F₁ → ∀ (y : ↥Λ₁.domain), F₁ ↑y ∈ A.domain
+      field intertwines : ∀ {𝕜 : Type u} [inst : RCLike 𝕜] {E G H : Type v} [inst_1 : NormedAddCommGroup E] [inst_2 : InnerProductSpace 𝕜 E] [inst_3 : CompleteSpace E] [inst_4 : NormedAddCommGroup G] [inst_5 : InnerProductSpace 𝕜 G] [inst_6 : CompleteSpace G] [inst_7 : NormedAddCommGroup H] [inst_8 : InnerProductSpace 𝕜 H] [inst_9 : CompleteSpace H] {A : E →ₗ.[𝕜] E} {Λ₁ : G →ₗ.[𝕜] G} {F₀ : H →L[𝕜] E} {F₁ : G →L[𝕜] E} (self : TauCeti.DavisKahan1970.IsExactSpectralDecomposition A Λ₁ F₀ F₁) (y : ↥Λ₁.domain), ↑A ⟨F₁ ↑y, ⋯⟩ = F₁ (↑Λ₁ y)
       hash: expr=3953242937 text=f545b1a4a840a6d9
     [body] TauCeti.DavisKahan.IsometricEmbedding  (above)
   [type] TauCeti.DavisKahan.Sylvester.FormBoundedSylvesterGap  (inductive, DavisKahan/Sylvester/Gap.lean:89)
@@ -235,7 +235,7 @@ boundary: NormedAddCommGroup, InnerProductSpace, Complex, CompleteSpace, LinearP
 
 </details>
 
-#### `DavisKahan1970.sinTheta_unbounded_formGap_symmetricNorming_real`
+#### `TauCeti.DavisKahan1970.sinTheta_unbounded_formGap_symmetricNorming_real`
 
 **Human-written Lean statement**
 
@@ -265,15 +265,15 @@ theorem sinTheta_unbounded_formGap_symmetricNorming_real
 **Elaborated signature** (statement pin: current)
 
 ~~~~lean
-DavisKahan1970.sinTheta_unbounded_formGap_symmetricNorming_real.{v} {E F G H : Type v}
+TauCeti.DavisKahan1970.sinTheta_unbounded_formGap_symmetricNorming_real.{v} {E F G H : Type v}
   [NormedAddCommGroup E] [InnerProductSpace ℝ E] [CompleteSpace E] [NormedAddCommGroup F]
   [InnerProductSpace ℝ F] [CompleteSpace F] [NormedAddCommGroup G] [InnerProductSpace ℝ G]
   [CompleteSpace G] [NormedAddCommGroup H] [InnerProductSpace ℝ H] [CompleteSpace H]
   (N : TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction) (A : E →ₗ.[ℝ] E) (A₀ : F →ₗ.[ℝ] F)
   (Λ₁ : G →ₗ.[ℝ] G) (E₀ : F →L[ℝ] E) (F₀ : H →L[ℝ] E) (F₁ : G →L[ℝ] E) (R : F →L[ℝ] E)
   (hA : IsSelfAdjoint A) (hA₀ : IsSelfAdjoint A₀) (hΛ₁ : IsSelfAdjoint Λ₁)
-  (htrial : DavisKahan1970.IsTrialResidual A A₀ E₀ R)
-  (hexact : DavisKahan1970.IsExactSpectralDecomposition A Λ₁ F₀ F₁) {δ : ℝ} (hδ : 0 < δ)
+  (htrial : TauCeti.DavisKahan1970.IsTrialResidual A A₀ E₀ R)
+  (hexact : TauCeti.DavisKahan1970.IsExactSpectralDecomposition A Λ₁ F₀ F₁) {δ : ℝ} (hδ : 0 < δ)
   (hgap : TauCeti.DavisKahan.Sylvester.FormBoundedSylvesterGap A₀ Λ₁ δ) (hR : N.Mem R) :
   N.Mem ((ContinuousLinearMap.id ℝ E - F₀ ∘SL ContinuousLinearMap.adjoint F₀) ∘SL E₀) ∧
     δ * N.gauge ((ContinuousLinearMap.id ℝ E - F₀ ∘SL ContinuousLinearMap.adjoint F₀) ∘SL E₀) ≤
@@ -290,16 +290,16 @@ Boundary vocabulary: `NormedAddCommGroup`, `InnerProductSpace`, `Real`, `Complet
 <details><summary>Statement closure tree</summary>
 
 ~~~~text
-DavisKahan1970.sinTheta_unbounded_formGap_symmetricNorming_real  (theorem, DavisKahan/Sources/DavisKahan1970/SineTheta/Presentation.lean:452)
-    DavisKahan1970.sinTheta_unbounded_formGap_symmetricNorming_real.{v} {E F G H : Type v}
+TauCeti.DavisKahan1970.sinTheta_unbounded_formGap_symmetricNorming_real  (theorem, DavisKahan/Sources/DavisKahan1970/SineTheta/Presentation.lean:452)
+    TauCeti.DavisKahan1970.sinTheta_unbounded_formGap_symmetricNorming_real.{v} {E F G H : Type v}
       [NormedAddCommGroup E] [InnerProductSpace ℝ E] [CompleteSpace E] [NormedAddCommGroup F]
       [InnerProductSpace ℝ F] [CompleteSpace F] [NormedAddCommGroup G] [InnerProductSpace ℝ G]
       [CompleteSpace G] [NormedAddCommGroup H] [InnerProductSpace ℝ H] [CompleteSpace H]
       (N : TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction) (A : E →ₗ.[ℝ] E) (A₀ : F →ₗ.[ℝ] F)
       (Λ₁ : G →ₗ.[ℝ] G) (E₀ : F →L[ℝ] E) (F₀ : H →L[ℝ] E) (F₁ : G →L[ℝ] E) (R : F →L[ℝ] E)
       (hA : IsSelfAdjoint A) (hA₀ : IsSelfAdjoint A₀) (hΛ₁ : IsSelfAdjoint Λ₁)
-      (htrial : DavisKahan1970.IsTrialResidual A A₀ E₀ R)
-      (hexact : DavisKahan1970.IsExactSpectralDecomposition A Λ₁ F₀ F₁) {δ : ℝ} (hδ : 0 < δ)
+      (htrial : TauCeti.DavisKahan1970.IsTrialResidual A A₀ E₀ R)
+      (hexact : TauCeti.DavisKahan1970.IsExactSpectralDecomposition A Λ₁ F₀ F₁) {δ : ℝ} (hδ : 0 < δ)
       (hgap : TauCeti.DavisKahan.Sylvester.FormBoundedSylvesterGap A₀ Λ₁ δ) (hR : N.Mem R) :
       N.Mem ((ContinuousLinearMap.id ℝ E - F₀ ∘SL ContinuousLinearMap.adjoint F₀) ∘SL E₀) ∧
         δ * N.gauge ((ContinuousLinearMap.id ℝ E - F₀ ∘SL ContinuousLinearMap.adjoint F₀) ∘SL E₀) ≤
@@ -333,30 +333,30 @@ DavisKahan1970.sinTheta_unbounded_formGap_symmetricNorming_real  (theorem, Davis
     [body] TauCeti.DavisKahan.ExactSinTheta.zeroPad  (def, DavisKahan/Sources/DavisKahan1970/SineTheta/Norms/UnitaryInvariantNorm.lean:43)
         TauCeti.DavisKahan.ExactSinTheta.zeroPad {n : ℕ} (x : Fin n → ℝ) : Fin (n + 1) → ℝ
         hash: expr=135628739 text=485d6568d5290806
-  [type] DavisKahan1970.IsTrialResidual  (structure, DavisKahan/Sources/DavisKahan1970/SineTheta/Presentation.lean:67)
-      DavisKahan1970.IsTrialResidual.{u, v} {𝕜 : Type u} [RCLike 𝕜] {E F : Type v} [NormedAddCommGroup E]
+  [type] TauCeti.DavisKahan1970.IsTrialResidual  (structure, DavisKahan/Sources/DavisKahan1970/SineTheta/Presentation.lean:67)
+      TauCeti.DavisKahan1970.IsTrialResidual.{u, v} {𝕜 : Type u} [RCLike 𝕜] {E F : Type v} [NormedAddCommGroup E]
         [InnerProductSpace 𝕜 E] [NormedAddCommGroup F] [InnerProductSpace 𝕜 F] (A : E →ₗ.[𝕜] E)
         (A₀ : F →ₗ.[𝕜] F) (E₀ R : F →L[𝕜] E) : Prop
-      field isometry : ∀ {𝕜 : Type u} [inst : RCLike 𝕜] {E F : Type v} [inst_1 : NormedAddCommGroup E] [inst_2 : InnerProductSpace 𝕜 E] [inst_3 : NormedAddCommGroup F] [inst_4 : InnerProductSpace 𝕜 F] {A : E →ₗ.[𝕜] E} {A₀ : F →ₗ.[𝕜] F} {E₀ R : F →L[𝕜] E}, DavisKahan1970.IsTrialResidual A A₀ E₀ R → TauCeti.DavisKahan.IsometricEmbedding E₀
-      field mapsDomain : ∀ {𝕜 : Type u} [inst : RCLike 𝕜] {E F : Type v} [inst_1 : NormedAddCommGroup E] [inst_2 : InnerProductSpace 𝕜 E] [inst_3 : NormedAddCommGroup F] [inst_4 : InnerProductSpace 𝕜 F] {A : E →ₗ.[𝕜] E} {A₀ : F →ₗ.[𝕜] F} {E₀ R : F →L[𝕜] E}, DavisKahan1970.IsTrialResidual A A₀ E₀ R → ∀ (x : ↥A₀.domain), E₀ ↑x ∈ A.domain
-      field residualEquation : ∀ {𝕜 : Type u} [inst : RCLike 𝕜] {E F : Type v} [inst_1 : NormedAddCommGroup E] [inst_2 : InnerProductSpace 𝕜 E] [inst_3 : NormedAddCommGroup F] [inst_4 : InnerProductSpace 𝕜 F] {A : E →ₗ.[𝕜] E} {A₀ : F →ₗ.[𝕜] F} {E₀ R : F →L[𝕜] E} (self : DavisKahan1970.IsTrialResidual A A₀ E₀ R) (x : ↥A₀.domain), ↑A ⟨E₀ ↑x, ⋯⟩ - E₀ (↑A₀ x) = R ↑x
+      field isometry : ∀ {𝕜 : Type u} [inst : RCLike 𝕜] {E F : Type v} [inst_1 : NormedAddCommGroup E] [inst_2 : InnerProductSpace 𝕜 E] [inst_3 : NormedAddCommGroup F] [inst_4 : InnerProductSpace 𝕜 F] {A : E →ₗ.[𝕜] E} {A₀ : F →ₗ.[𝕜] F} {E₀ R : F →L[𝕜] E}, TauCeti.DavisKahan1970.IsTrialResidual A A₀ E₀ R → TauCeti.DavisKahan.IsometricEmbedding E₀
+      field mapsDomain : ∀ {𝕜 : Type u} [inst : RCLike 𝕜] {E F : Type v} [inst_1 : NormedAddCommGroup E] [inst_2 : InnerProductSpace 𝕜 E] [inst_3 : NormedAddCommGroup F] [inst_4 : InnerProductSpace 𝕜 F] {A : E →ₗ.[𝕜] E} {A₀ : F →ₗ.[𝕜] F} {E₀ R : F →L[𝕜] E}, TauCeti.DavisKahan1970.IsTrialResidual A A₀ E₀ R → ∀ (x : ↥A₀.domain), E₀ ↑x ∈ A.domain
+      field residualEquation : ∀ {𝕜 : Type u} [inst : RCLike 𝕜] {E F : Type v} [inst_1 : NormedAddCommGroup E] [inst_2 : InnerProductSpace 𝕜 E] [inst_3 : NormedAddCommGroup F] [inst_4 : InnerProductSpace 𝕜 F] {A : E →ₗ.[𝕜] E} {A₀ : F →ₗ.[𝕜] F} {E₀ R : F →L[𝕜] E} (self : TauCeti.DavisKahan1970.IsTrialResidual A A₀ E₀ R) (x : ↥A₀.domain), ↑A ⟨E₀ ↑x, ⋯⟩ - E₀ (↑A₀ x) = R ↑x
       hash: expr=697366030 text=7086524c853f1414
     [body] TauCeti.DavisKahan.IsometricEmbedding  (def, DavisKahan/BoundedOperator/Compat.lean:107)
         TauCeti.DavisKahan.IsometricEmbedding.{u_1, u_2, u_3} {𝕜 : Type u_1} [RCLike 𝕜] {E : Type u_2}
           [NormedAddCommGroup E] [InnerProductSpace 𝕜 E] {F : Type u_3} [NormedAddCommGroup F]
           [InnerProductSpace 𝕜 F] (X : F →L[𝕜] E) : Prop
         hash: expr=2691607086 text=02c1b372cca3865c
-  [type] DavisKahan1970.IsExactSpectralDecomposition  (structure, DavisKahan/Sources/DavisKahan1970/SineTheta/Presentation.lean:146)
-      DavisKahan1970.IsExactSpectralDecomposition.{u, v} {𝕜 : Type u} [RCLike 𝕜] {E G H : Type v}
+  [type] TauCeti.DavisKahan1970.IsExactSpectralDecomposition  (structure, DavisKahan/Sources/DavisKahan1970/SineTheta/Presentation.lean:146)
+      TauCeti.DavisKahan1970.IsExactSpectralDecomposition.{u, v} {𝕜 : Type u} [RCLike 𝕜] {E G H : Type v}
         [NormedAddCommGroup E] [InnerProductSpace 𝕜 E] [CompleteSpace E] [NormedAddCommGroup G]
         [InnerProductSpace 𝕜 G] [CompleteSpace G] [NormedAddCommGroup H] [InnerProductSpace 𝕜 H]
         [CompleteSpace H] (A : E →ₗ.[𝕜] E) (Λ₁ : G →ₗ.[𝕜] G) (F₀ : H →L[𝕜] E) (F₁ : G →L[𝕜] E) : Prop
-      field desiredIsometry : ∀ {𝕜 : Type u} [inst : RCLike 𝕜] {E G H : Type v} [inst_1 : NormedAddCommGroup E] [inst_2 : InnerProductSpace 𝕜 E] [inst_3 : CompleteSpace E] [inst_4 : NormedAddCommGroup G] [inst_5 : InnerProductSpace 𝕜 G] [inst_6 : CompleteSpace G] [inst_7 : NormedAddCommGroup H] [inst_8 : InnerProductSpace 𝕜 H] [inst_9 : CompleteSpace H] {A : E →ₗ.[𝕜] E} {Λ₁ : G →ₗ.[𝕜] G} {F₀ : H →L[𝕜] E} {F₁ : G →L[𝕜] E}, DavisKahan1970.IsExactSpectralDecomposition A Λ₁ F₀ F₁ → TauCeti.DavisKahan.IsometricEmbedding F₀
-      field complementIsometry : ∀ {𝕜 : Type u} [inst : RCLike 𝕜] {E G H : Type v} [inst_1 : NormedAddCommGroup E] [inst_2 : InnerProductSpace 𝕜 E] [inst_3 : CompleteSpace E] [inst_4 : NormedAddCommGroup G] [inst_5 : InnerProductSpace 𝕜 G] [inst_6 : CompleteSpace G] [inst_7 : NormedAddCommGroup H] [inst_8 : InnerProductSpace 𝕜 H] [inst_9 : CompleteSpace H] {A : E →ₗ.[𝕜] E} {Λ₁ : G →ₗ.[𝕜] G} {F₀ : H →L[𝕜] E} {F₁ : G →L[𝕜] E}, DavisKahan1970.IsExactSpectralDecomposition A Λ₁ F₀ F₁ → TauCeti.DavisKahan.IsometricEmbedding F₁
-      field orthogonal : ∀ {𝕜 : Type u} [inst : RCLike 𝕜] {E G H : Type v} [inst_1 : NormedAddCommGroup E] [inst_2 : InnerProductSpace 𝕜 E] [inst_3 : CompleteSpace E] [inst_4 : NormedAddCommGroup G] [inst_5 : InnerProductSpace 𝕜 G] [inst_6 : CompleteSpace G] [inst_7 : NormedAddCommGroup H] [inst_8 : InnerProductSpace 𝕜 H] [inst_9 : CompleteSpace H] {A : E →ₗ.[𝕜] E} {Λ₁ : G →ₗ.[𝕜] G} {F₀ : H →L[𝕜] E} {F₁ : G →L[𝕜] E}, DavisKahan1970.IsExactSpectralDecomposition A Λ₁ F₀ F₁ → ContinuousLinearMap.adjoint F₀ ∘SL F₁ = 0
-      field complete : ∀ {𝕜 : Type u} [inst : RCLike 𝕜] {E G H : Type v} [inst_1 : NormedAddCommGroup E] [inst_2 : InnerProductSpace 𝕜 E] [inst_3 : CompleteSpace E] [inst_4 : NormedAddCommGroup G] [inst_5 : InnerProductSpace 𝕜 G] [inst_6 : CompleteSpace G] [inst_7 : NormedAddCommGroup H] [inst_8 : InnerProductSpace 𝕜 H] [inst_9 : CompleteSpace H] {A : E →ₗ.[𝕜] E} {Λ₁ : G →ₗ.[𝕜] G} {F₀ : H →L[𝕜] E} {F₁ : G →L[𝕜] E}, DavisKahan1970.IsExactSpectralDecomposition A Λ₁ F₀ F₁ → F₀ ∘SL ContinuousLinearMap.adjoint F₀ + F₁ ∘SL ContinuousLinearMap.adjoint F₁ = ContinuousLinearMap.id 𝕜 E
-      field mapsDomain : ∀ {𝕜 : Type u} [inst : RCLike 𝕜] {E G H : Type v} [inst_1 : NormedAddCommGroup E] [inst_2 : InnerProductSpace 𝕜 E] [inst_3 : CompleteSpace E] [inst_4 : NormedAddCommGroup G] [inst_5 : InnerProductSpace 𝕜 G] [inst_6 : CompleteSpace G] [inst_7 : NormedAddCommGroup H] [inst_8 : InnerProductSpace 𝕜 H] [inst_9 : CompleteSpace H] {A : E →ₗ.[𝕜] E} {Λ₁ : G →ₗ.[𝕜] G} {F₀ : H →L[𝕜] E} {F₁ : G →L[𝕜] E}, DavisKahan1970.IsExactSpectralDecomposition A Λ₁ F₀ F₁ → ∀ (y : ↥Λ₁.domain), F₁ ↑y ∈ A.domain
-      field intertwines : ∀ {𝕜 : Type u} [inst : RCLike 𝕜] {E G H : Type v} [inst_1 : NormedAddCommGroup E] [inst_2 : InnerProductSpace 𝕜 E] [inst_3 : CompleteSpace E] [inst_4 : NormedAddCommGroup G] [inst_5 : InnerProductSpace 𝕜 G] [inst_6 : CompleteSpace G] [inst_7 : NormedAddCommGroup H] [inst_8 : InnerProductSpace 𝕜 H] [inst_9 : CompleteSpace H] {A : E →ₗ.[𝕜] E} {Λ₁ : G →ₗ.[𝕜] G} {F₀ : H →L[𝕜] E} {F₁ : G →L[𝕜] E} (self : DavisKahan1970.IsExactSpectralDecomposition A Λ₁ F₀ F₁) (y : ↥Λ₁.domain), ↑A ⟨F₁ ↑y, ⋯⟩ = F₁ (↑Λ₁ y)
+      field desiredIsometry : ∀ {𝕜 : Type u} [inst : RCLike 𝕜] {E G H : Type v} [inst_1 : NormedAddCommGroup E] [inst_2 : InnerProductSpace 𝕜 E] [inst_3 : CompleteSpace E] [inst_4 : NormedAddCommGroup G] [inst_5 : InnerProductSpace 𝕜 G] [inst_6 : CompleteSpace G] [inst_7 : NormedAddCommGroup H] [inst_8 : InnerProductSpace 𝕜 H] [inst_9 : CompleteSpace H] {A : E →ₗ.[𝕜] E} {Λ₁ : G →ₗ.[𝕜] G} {F₀ : H →L[𝕜] E} {F₁ : G →L[𝕜] E}, TauCeti.DavisKahan1970.IsExactSpectralDecomposition A Λ₁ F₀ F₁ → TauCeti.DavisKahan.IsometricEmbedding F₀
+      field complementIsometry : ∀ {𝕜 : Type u} [inst : RCLike 𝕜] {E G H : Type v} [inst_1 : NormedAddCommGroup E] [inst_2 : InnerProductSpace 𝕜 E] [inst_3 : CompleteSpace E] [inst_4 : NormedAddCommGroup G] [inst_5 : InnerProductSpace 𝕜 G] [inst_6 : CompleteSpace G] [inst_7 : NormedAddCommGroup H] [inst_8 : InnerProductSpace 𝕜 H] [inst_9 : CompleteSpace H] {A : E →ₗ.[𝕜] E} {Λ₁ : G →ₗ.[𝕜] G} {F₀ : H →L[𝕜] E} {F₁ : G →L[𝕜] E}, TauCeti.DavisKahan1970.IsExactSpectralDecomposition A Λ₁ F₀ F₁ → TauCeti.DavisKahan.IsometricEmbedding F₁
+      field orthogonal : ∀ {𝕜 : Type u} [inst : RCLike 𝕜] {E G H : Type v} [inst_1 : NormedAddCommGroup E] [inst_2 : InnerProductSpace 𝕜 E] [inst_3 : CompleteSpace E] [inst_4 : NormedAddCommGroup G] [inst_5 : InnerProductSpace 𝕜 G] [inst_6 : CompleteSpace G] [inst_7 : NormedAddCommGroup H] [inst_8 : InnerProductSpace 𝕜 H] [inst_9 : CompleteSpace H] {A : E →ₗ.[𝕜] E} {Λ₁ : G →ₗ.[𝕜] G} {F₀ : H →L[𝕜] E} {F₁ : G →L[𝕜] E}, TauCeti.DavisKahan1970.IsExactSpectralDecomposition A Λ₁ F₀ F₁ → ContinuousLinearMap.adjoint F₀ ∘SL F₁ = 0
+      field complete : ∀ {𝕜 : Type u} [inst : RCLike 𝕜] {E G H : Type v} [inst_1 : NormedAddCommGroup E] [inst_2 : InnerProductSpace 𝕜 E] [inst_3 : CompleteSpace E] [inst_4 : NormedAddCommGroup G] [inst_5 : InnerProductSpace 𝕜 G] [inst_6 : CompleteSpace G] [inst_7 : NormedAddCommGroup H] [inst_8 : InnerProductSpace 𝕜 H] [inst_9 : CompleteSpace H] {A : E →ₗ.[𝕜] E} {Λ₁ : G →ₗ.[𝕜] G} {F₀ : H →L[𝕜] E} {F₁ : G →L[𝕜] E}, TauCeti.DavisKahan1970.IsExactSpectralDecomposition A Λ₁ F₀ F₁ → F₀ ∘SL ContinuousLinearMap.adjoint F₀ + F₁ ∘SL ContinuousLinearMap.adjoint F₁ = ContinuousLinearMap.id 𝕜 E
+      field mapsDomain : ∀ {𝕜 : Type u} [inst : RCLike 𝕜] {E G H : Type v} [inst_1 : NormedAddCommGroup E] [inst_2 : InnerProductSpace 𝕜 E] [inst_3 : CompleteSpace E] [inst_4 : NormedAddCommGroup G] [inst_5 : InnerProductSpace 𝕜 G] [inst_6 : CompleteSpace G] [inst_7 : NormedAddCommGroup H] [inst_8 : InnerProductSpace 𝕜 H] [inst_9 : CompleteSpace H] {A : E →ₗ.[𝕜] E} {Λ₁ : G →ₗ.[𝕜] G} {F₀ : H →L[𝕜] E} {F₁ : G →L[𝕜] E}, TauCeti.DavisKahan1970.IsExactSpectralDecomposition A Λ₁ F₀ F₁ → ∀ (y : ↥Λ₁.domain), F₁ ↑y ∈ A.domain
+      field intertwines : ∀ {𝕜 : Type u} [inst : RCLike 𝕜] {E G H : Type v} [inst_1 : NormedAddCommGroup E] [inst_2 : InnerProductSpace 𝕜 E] [inst_3 : CompleteSpace E] [inst_4 : NormedAddCommGroup G] [inst_5 : InnerProductSpace 𝕜 G] [inst_6 : CompleteSpace G] [inst_7 : NormedAddCommGroup H] [inst_8 : InnerProductSpace 𝕜 H] [inst_9 : CompleteSpace H] {A : E →ₗ.[𝕜] E} {Λ₁ : G →ₗ.[𝕜] G} {F₀ : H →L[𝕜] E} {F₁ : G →L[𝕜] E} (self : TauCeti.DavisKahan1970.IsExactSpectralDecomposition A Λ₁ F₀ F₁) (y : ↥Λ₁.domain), ↑A ⟨F₁ ↑y, ⋯⟩ = F₁ (↑Λ₁ y)
       hash: expr=3953242937 text=f545b1a4a840a6d9
     [body] TauCeti.DavisKahan.IsometricEmbedding  (above)
   [type] TauCeti.DavisKahan.Sylvester.FormBoundedSylvesterGap  (inductive, DavisKahan/Sylvester/Gap.lean:89)
@@ -445,26 +445,26 @@ boundary: NormedAddCommGroup, InnerProductSpace, Real, CompleteSpace, LinearPMap
 
 ### Supporting scope declarations
 
-- `DavisKahan1970.sinTheta_unbounded_formGap_symmetricNorming_complex_ofRCLike` — elaborated; source located
-- `DavisKahan1970.sinTheta_unbounded_formGap_symmetricNorming_real_ofRCLike` — elaborated; source located
+- `TauCeti.DavisKahan1970.sinTheta_unbounded_formGap_symmetricNorming_complex_ofRCLike` — elaborated; source located
+- `TauCeti.DavisKahan1970.sinTheta_unbounded_formGap_symmetricNorming_real_ofRCLike` — elaborated; source located
 - `TauCeti.DavisKahan1970.sinTheta_unbounded_formGap_symmetricNorming_ofComponents_rclike` — elaborated; source located
 - `TauCeti.DavisKahan1970.sinTheta_unbounded_intervalExterior_symmetricNorming_rclike` — elaborated; source located
-- `DavisKahan1970.sinTheta_unbounded_intervalExterior_characterizedWitness_rclike` — elaborated; source located
+- `TauCeti.DavisKahan1970.sinTheta_unbounded_intervalExterior_characterizedWitness_rclike` — elaborated; source located
 - `TauCeti.DavisKahan1970.sinTheta_unbounded_formGap_idealFamily_rclike` — elaborated; source located
 - `TauCeti.DavisKahan1970.sinTheta_unbounded_spectralSubspace_complex` — not in environment; source located
 - `TauCeti.DavisKahan1970.sinTheta_unbounded_spectralSubspace_real` — elaborated; source located
 - `TauCeti.DavisKahan1970.sinTheta_bounded_spectralSubspace_complex` — not in environment; source located
-- `DavisKahan1970.sinTheta_unbounded_formGap_symmetricNorming_complex_ofRCLike_conforms` — elaborated; source located
-- `DavisKahan1970.sinTheta_unbounded_formGap_symmetricNorming_real_ofRCLike_conforms` — elaborated; source located
-- `DavisKahan1970.sinTheta_unbounded_formGap_symmetricNorming_rclike` — elaborated; source located
+- `TauCeti.DavisKahan1970.sinTheta_unbounded_formGap_symmetricNorming_complex_ofRCLike_conforms` — elaborated; source located
+- `TauCeti.DavisKahan1970.sinTheta_unbounded_formGap_symmetricNorming_real_ofRCLike_conforms` — elaborated; source located
+- `TauCeti.DavisKahan1970.sinTheta_unbounded_formGap_symmetricNorming_rclike` — elaborated; source located
 
 ### Local semantic dictionary
 
-#### `DavisKahan1970.isTrialResidual_iff`
+#### `TauCeti.DavisKahan1970.isTrialResidual_iff`
 
 Expands the compact trial-residual hypothesis into the trial isometry, domain transport, and exact residual identity R = A E0 - E0 A0.
 
-#### `DavisKahan1970.isExactSpectralDecomposition_iff`
+#### `TauCeti.DavisKahan1970.isExactSpectralDecomposition_iff`
 
 Expands the compact exact-space hypothesis into isometric F0/F1 coordinates, orthogonality, completeness, domain transport, and A F1 = F1 Lambda1.
 
@@ -501,9 +501,9 @@ Real spectrum of a self-adjoint partial/closed operator; the interval/exterior a
 | delta \|\|sin Theta0\|\| <= \|\|R\|\|. | The text after the theorem colon is exactly δ * N.gauge sinTheta₀ <= N.gauge R. The supporting sinTheta_unbounded_intervalExterior_symmetricNorming_rclike theorem additionally certifies N.Mem sinTheta₀ after rewriting by hSinTheta₀. | claimed_exact |
 | Infinite-dimensional and unbounded self-adjoint scope. | There is no FiniteDimensional hypothesis; A, A₀, and Λ₁ are `LinearPMap` values and the two expanded setup predicates carry the required domain conditions. | claimed_exact |
 
-**Review note.** The canonical review declaration is also the intended paper-display declaration. It names sinTheta₀ as a theorem parameter but gives its concrete projection-block formula by a literal equality hypothesis in the same signature, so the claim after the colon is a one-to-one rendering of the printed inequality without an opaque angle definition. Only the domain-heavy trial and exact-coordinate setup is bundled, and both bundles are fully expanded by characteristic theorems in the local semantic dictionary. The stronger generic theorem remains supporting evidence for norm-ideal membership and the implementation proof bridge. CANONICAL WITNESS CORRECTED 2026-08-31. The row named `sinTheta_unbounded_intervalExterior_characterizedWitness_rclike` as the exact source match. That was wrong on two counts: it carries only the bounded interval/exterior branch of the gap, while the source permits half-infinite separating intervals, and it drops the ideal-membership half of the conclusion. The canonical witness is now `DavisKahan1970.sinTheta_unbounded_formGap_symmetricNorming_rclike`, added the same day: scalar-generic over `RCLike`, unbounded `LinearPMap` ambient operator, arbitrary Hilbert dimension, the whole `FormBoundedSylvesterGap` (interval/exterior plus both ordered semibounded configurations), an arbitrary `SymmetricNormingFunction`, and both conclusions. It is proved by taking the gap directly into the Ky-Fan-to-paper-norm promotion the interval/exterior theorem already ran, so it is a repackaging rather than a new argument, and the interval/exterior form is now a one-line consequence of it. `..._complex_ofRCLike` and `..._real_ofRCLike` are the compiled conformance checks: each restates the corresponding fixed-field endpoint's type verbatim and discharges it by the generic theorem with no adapter. The fixed-field endpoints remain as corroborating full-source witnesses and the interval/exterior theorem as a presentation specialization. The two `RCLike` capability classes in the generic signature are proof capabilities with instances for both source fields, not printed source hypotheses. CONFORMANCE TIED BY NAME 2026-08-31. The `_ofRCLike` wrappers restate a type, and a restatement cannot notice if the declaration it mirrors changes. `..._ofRCLike_conforms` closes that: an equation between two constants elaborates only when both sides have the same type, so it asserts exactly that the restatement is the fixed-field endpoint's type, and `rfl` discharges it by proof irrelevance. It is a type-level check by design and says nothing about the two proofs.
+**Review note.** The canonical review declaration is also the intended paper-display declaration. It names sinTheta₀ as a theorem parameter but gives its concrete projection-block formula by a literal equality hypothesis in the same signature, so the claim after the colon is a one-to-one rendering of the printed inequality without an opaque angle definition. Only the domain-heavy trial and exact-coordinate setup is bundled, and both bundles are fully expanded by characteristic theorems in the local semantic dictionary. The stronger generic theorem remains supporting evidence for norm-ideal membership and the implementation proof bridge. CANONICAL WITNESS CORRECTED 2026-08-31. The row named `sinTheta_unbounded_intervalExterior_characterizedWitness_rclike` as the exact source match. That was wrong on two counts: it carries only the bounded interval/exterior branch of the gap, while the source permits half-infinite separating intervals, and it drops the ideal-membership half of the conclusion. The canonical witness is now `TauCeti.DavisKahan1970.sinTheta_unbounded_formGap_symmetricNorming_rclike`, added the same day: scalar-generic over `RCLike`, unbounded `LinearPMap` ambient operator, arbitrary Hilbert dimension, the whole `FormBoundedSylvesterGap` (interval/exterior plus both ordered semibounded configurations), an arbitrary `SymmetricNormingFunction`, and both conclusions. It is proved by taking the gap directly into the Ky-Fan-to-paper-norm promotion the interval/exterior theorem already ran, so it is a repackaging rather than a new argument, and the interval/exterior form is now a one-line consequence of it. `..._complex_ofRCLike` and `..._real_ofRCLike` are the compiled conformance checks: each restates the corresponding fixed-field endpoint's type verbatim and discharges it by the generic theorem with no adapter. The fixed-field endpoints remain as corroborating full-source witnesses and the interval/exterior theorem as a presentation specialization. The two `RCLike` capability classes in the generic signature are proof capabilities with instances for both source fields, not printed source hypotheses. CONFORMANCE TIED BY NAME 2026-08-31. The `_ofRCLike` wrappers restate a type, and a restatement cannot notice if the declaration it mirrors changes. `..._ofRCLike_conforms` closes that: an equation between two constants elaborates only when both sides have the same type, so it asserts exactly that the restatement is the fixed-field endpoint's type, and `rfl` discharges it by proof irrelevance. It is a type-level check by design and says nothing about the two proofs.
 
-2026-08-31 (second pass): canonical declarations follow the result inventory's `canonical_evidence`. Demoted to supporting: DavisKahan1970.sinTheta_unbounded_formGap_symmetricNorming_rclike -- the scalar-generic form carries proof-capability instance binders that the printed statement does not, and the two fixed-field endpoints state the result at the paper's two fields with no such binder.
+2026-08-31 (second pass): canonical declarations follow the result inventory's `canonical_evidence`. Demoted to supporting: TauCeti.DavisKahan1970.sinTheta_unbounded_formGap_symmetricNorming_rclike -- the scalar-generic form carries proof-capability instance binders that the printed statement does not, and the two fixed-field endpoints state the result at the paper's two fields with no such binder.
 
 **Next action.** No hostile-review hole is currently recorded for this source passage. Preserve exact source scope and re-audit if the distributable source specification changes.
 

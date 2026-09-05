@@ -2767,7 +2767,7 @@
       "conclusion_representation": "canonicalAngle",
       "canonical_status": "alternative",
       "section_two_endpoint": "none",
-      "canonical_status_reason": "The scalar-generic endpoint with the structural hypotheses spelled out as components rather than bundled; `DavisKahan1970.sinTheta_unbounded_formGap_symmetricNorming_rclike` is the same theorem in the shape the fixed-field siblings use, and is the one to cite."
+      "canonical_status_reason": "The scalar-generic endpoint with the structural hypotheses spelled out as components rather than bundled; `TauCeti.DavisKahan1970.sinTheta_unbounded_formGap_symmetricNorming_rclike` is the same theorem in the shape the fixed-field siblings use, and is the one to cite."
     },
     {
       "old_name": "(new 2026-08-31)",

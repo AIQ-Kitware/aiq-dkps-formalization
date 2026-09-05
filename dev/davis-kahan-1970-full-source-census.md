@@ -236,7 +236,7 @@ THREE NEW REUSABLE DECLARATIONS underwrite it, each grounding the next by `:=`, 
 
 - `TauCeti.DavisKahan1970.SectionTwo.sinTheta_complex`
 - `TauCeti.DavisKahan1970.SectionTwo.sinTheta_real`
-- `DavisKahan1970.sinTheta_unbounded_intervalExterior_characterizedWitness_rclike`
+- `TauCeti.DavisKahan1970.sinTheta_unbounded_intervalExterior_characterizedWitness_rclike`
 - `TauCeti.DavisKahan1970.sinTheta_unbounded_intervalExterior_symmetricNorming_rclike`
 - `TauCeti.DavisKahan1970.sinTheta_unbounded_formGap_idealFamily_rclike`
 - `TauCeti.DavisKahan1970.sinTheta_bundled_complex`
@@ -246,19 +246,19 @@ THREE NEW REUSABLE DECLARATIONS underwrite it, each grounding the next by `:=`, 
 - `TauCeti.DavisKahan1970.sinTheta_unbounded_spectralSubspace_complex`
 - `TauCeti.DavisKahan1970.sinTheta_unbounded_spectralSubspace_real`
 - `TauCeti.DavisKahan1970.sinTheta_bounded_spectralSubspace_complex`
-- `DavisKahan1970.sinTheta_unbounded_formGap_symmetricNorming_complex`
-- `DavisKahan1970.sinTheta_unbounded_formGap_symmetricNorming_real`
-- `DavisKahan1970.sinTheta_unbounded_intervalExterior_symmetricNorming_complex`
-- `DavisKahan1970.sinTheta_unbounded_intervalExterior_symmetricNorming_real`
+- `TauCeti.DavisKahan1970.sinTheta_unbounded_formGap_symmetricNorming_complex`
+- `TauCeti.DavisKahan1970.sinTheta_unbounded_formGap_symmetricNorming_real`
+- `TauCeti.DavisKahan1970.sinTheta_unbounded_intervalExterior_symmetricNorming_complex`
+- `TauCeti.DavisKahan1970.sinTheta_unbounded_intervalExterior_symmetricNorming_real`
 - `TauCeti.DavisKahan1970.SectionTwo.sinTheta`
-- `DavisKahan1970.sinTheta_unbounded_formGap_symmetricNorming_rclike`
-- `DavisKahan1970.sinTheta_unbounded_formGap_symmetricNorming_complex_ofRCLike`
-- `DavisKahan1970.sinTheta_unbounded_formGap_symmetricNorming_real_ofRCLike`
+- `TauCeti.DavisKahan1970.sinTheta_unbounded_formGap_symmetricNorming_rclike`
+- `TauCeti.DavisKahan1970.sinTheta_unbounded_formGap_symmetricNorming_complex_ofRCLike`
+- `TauCeti.DavisKahan1970.sinTheta_unbounded_formGap_symmetricNorming_real_ofRCLike`
 - `TauCeti.DavisKahan1970.sinTheta_unbounded_formGap_symmetricNorming_ofComponents_rclike`
-- `DavisKahan1970.sinTheta_unbounded_formGap_symmetricNorming_complex_ofRCLike_conforms`
-- `DavisKahan1970.sinTheta_unbounded_formGap_symmetricNorming_real_ofRCLike_conforms`
-- `DavisKahan1970.isTrialResidual_iff`
-- `DavisKahan1970.isExactSpectralDecomposition_iff`
+- `TauCeti.DavisKahan1970.sinTheta_unbounded_formGap_symmetricNorming_complex_ofRCLike_conforms`
+- `TauCeti.DavisKahan1970.sinTheta_unbounded_formGap_symmetricNorming_real_ofRCLike_conforms`
+- `TauCeti.DavisKahan1970.isTrialResidual_iff`
+- `TauCeti.DavisKahan1970.isExactSpectralDecomposition_iff`
 - `TauCeti.DavisKahan1970.symmetricNorming_of_kyFanDominant`
 - `TauCeti.DavisKahan1970.kyFanDominant_of_symmetricNorming`
 - `TauCeti.DavisKahan1970.symmetricNorming_iff_kyFanDominant`
@@ -3494,8 +3494,8 @@ REOPENING WITHDRAWN 2026-08-31 and the rule corrected: a later source passage en
 - `TauCeti.DavisKahan1970.Theorem6_1_real_commonCore`
 - `TauCeti.DavisKahan1970.theorem6_1_complex`
 - `TauCeti.DavisKahan1970.theorem6_1_real`
-- `DavisKahan1970.IsTrialResidualEquation`
-- `DavisKahan1970.isTrialResidual_iff_equation_and_isometry`
+- `TauCeti.DavisKahan1970.IsTrialResidualEquation`
+- `TauCeti.DavisKahan1970.isTrialResidual_iff_equation_and_isometry`
 - `TauCeti.DavisKahan1970.Theorem6_1_commonDomain`
 - `TauCeti.DavisKahan1970.lowerFrameBound_iff_operator_inequality`
 - `TauCeti.DavisKahan1970.lowerFrameBound_of_operator_inequality`
@@ -3540,7 +3540,7 @@ REOPENING WITHDRAWN 2026-08-31 and the rule corrected: a later source passage en
 
 **M32, THE SECTION 6 SCALAR TRANCHE, 2026-08-09 (Claude Opus 5).**  THE `real-scalar-infinite-dimensional-scope` ENTRY IN `blocked_by` WAS STALE AND IS REMOVED.  The 2026-08-07 note above already recorded the false positive and restored the status, but the blocker was left on the row, so the blocker's own tally counted this row.  RE-MEASURED 2026-08-09 by elaborating the signature: `Theorem6_1_real` is `[InnerProductSpace ℝ]` on four spaces with `[CompleteSpace]` and NO `[FiniteDimensional]` anywhere, over `RealTheorem61Data` and an arbitrary `SymmetricNormingFunction`, concluding `N.Mem S.operator ∧ gap * frameLowerBound * N.gauge S.operator ≤ N.gauge P.data.residual` -- membership CONCLUDED, constant intact.  `Theorem6_1_real_commonDomain` and `Theorem6_1_real_commonCore` likewise.  All axiom-clean (`[propext, Classical.choice, Quot.sound]`).  Nothing was proved for this row today; the row was already correct.
 
-CANONICAL SURFACE MOVED OFF THE RECORD 2026-08-31. `Theorem6_1_complex` and `Theorem6_1_real` are methods on `Theorem61Data`, which bundles an `UnboundedSinThetaData` -- itself a record -- with the exact map, three self-adjointness fields, the exact decomposition, the gap and the frame bound. `theorem6_1_complex` and `theorem6_1_real` take the components. They reuse the Section 2 vocabulary rather than inventing a second one: `DavisKahan1970.IsExactSpectralDecomposition` unchanged, and `DavisKahan1970.IsTrialResidualEquation` -- `IsTrialResidual` with the isometry removed, tied by `isTrialResidual_iff_equation_and_isometry`. That split is the actual difference between Section 2 and Section 6: Section 2 asks for an isometric trial map, Theorems 6.1 and 6.2 ask only for `LowerFrameBound E_0 epsilon`, and epsilon is the factor the printed generalized bound carries. Hypotheses and conclusion are unchanged -- same lower-frame factor, same representative freedom, same arbitrary source UI norm.
+CANONICAL SURFACE MOVED OFF THE RECORD 2026-08-31. `Theorem6_1_complex` and `Theorem6_1_real` are methods on `Theorem61Data`, which bundles an `UnboundedSinThetaData` -- itself a record -- with the exact map, three self-adjointness fields, the exact decomposition, the gap and the frame bound. `theorem6_1_complex` and `theorem6_1_real` take the components. They reuse the Section 2 vocabulary rather than inventing a second one: `TauCeti.DavisKahan1970.IsExactSpectralDecomposition` unchanged, and `TauCeti.DavisKahan1970.IsTrialResidualEquation` -- `IsTrialResidual` with the isometry removed, tied by `isTrialResidual_iff_equation_and_isometry`. That split is the actual difference between Section 2 and Section 6: Section 2 asks for an isometric trial map, Theorems 6.1 and 6.2 ask only for `LowerFrameBound E_0 epsilon`, and epsilon is the factor the printed generalized bound carries. Hypotheses and conclusion are unchanged -- same lower-frame factor, same representative freedom, same arbitrary source UI norm.
 
 REOPENED 2026-08-31 by the scope-atom re-audit: a source passage that explicitly extends this result's proved scope had been classified as generic post-result commentary. See the result inventory's `remaining_gap` for the exact atom and the evidence that must be registered.
 

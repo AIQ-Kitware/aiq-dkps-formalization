@@ -183,7 +183,7 @@ omit [CompleteSpace E] [CompleteSpace F] in
 /-- The Challenge's trial-residual data is the development's. -/
 theorem isTrialResidual_iff (A : E →ₗ.[𝕜] E) (A₀ : F →ₗ.[𝕜] F)
     (E₀ R : F →L[𝕜] E) :
-    IsTrialResidual A A₀ E₀ R ↔ _root_.DavisKahan1970.IsTrialResidual A A₀ E₀ R := by
+    IsTrialResidual A A₀ E₀ R ↔ _root_.TauCeti.DavisKahan1970.IsTrialResidual A A₀ E₀ R := by
   constructor
   · exact fun h => ⟨h.isometry, h.mapsDomain, h.residualEquation⟩
   · exact fun h => ⟨h.isometry, h.mapsDomain, h.residualEquation⟩
@@ -192,7 +192,7 @@ theorem isTrialResidual_iff (A : E →ₗ.[𝕜] E) (A₀ : F →ₗ.[𝕜] F)
 theorem isExactDecomposition_iff (A : E →ₗ.[𝕜] E) (Λ₁ : G →ₗ.[𝕜] G)
     (F₀ : K →L[𝕜] E) (F₁ : G →L[𝕜] E) :
     IsExactDecomposition A Λ₁ F₀ F₁ ↔
-      _root_.DavisKahan1970.IsExactSpectralDecomposition A Λ₁ F₀ F₁ := by
+      _root_.TauCeti.DavisKahan1970.IsExactSpectralDecomposition A Λ₁ F₀ F₁ := by
   constructor
   · exact fun h => ⟨h.desiredIsometry, h.complementIsometry, h.orthogonal, h.complete,
       h.mapsDomain, h.intertwines⟩
@@ -401,7 +401,7 @@ theorem sinTheta_proof
     {δ : ℝ} (hδ : 0 < δ) (hgap : SylvesterGap A₀ Λ₁ δ) (hR : N.Finite R) :
     N.Finite (directedSine E₀ F₀) ∧
       δ * N.norm (directedSine E₀ F₀) ≤ N.norm R :=
-  _root_.DavisKahan1970.sinTheta_unbounded_formGap_symmetricNorming_rclike
+  _root_.TauCeti.DavisKahan1970.sinTheta_unbounded_formGap_symmetricNorming_rclike
     N.toSourceNorm A A₀ Λ₁ E₀ F₀ F₁ R hA hA₀ hΛ₁
     ((isTrialResidual_iff A A₀ E₀ R).1 hres)
     ((isExactDecomposition_iff A Λ₁ F₀ F₁).1 hdec)
