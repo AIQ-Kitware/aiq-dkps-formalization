@@ -29,7 +29,7 @@ theorem measurable_of_iUnion_restrict {Ω A : Type*}
     [MeasurableSpace Ω] [MeasurableSpace A]
     {g : Ω → A} {s : ℕ → Set Ω}
     (hs : ∀ k, MeasurableSet (s k)) (hcov : (⋃ k, s k) = univ)
-    (hg : ∀ k, Measurable ((s k).restrict g)) : Measurable g := by
+    (hg : ∀ k, Measurable ((s k).domRestrict g)) : Measurable g := by
   intro t ht
   have hcov' : g ⁻¹' t = ⋃ k, s k ∩ g ⁻¹' t := by
     rw [← Set.iUnion_inter, hcov, Set.univ_inter]
