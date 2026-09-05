@@ -461,3 +461,136 @@ strictly weaker hypotheses); **OK−** = OK with a statement-honesty or registra
 7. **F8** — clear the 81 production warnings (mostly `omit … in` lines and dead `simp`
    arguments) so the documented certificate command is green; fix `--output-dir`.
 8. **F7** — wording.
+
+---
+
+## Closure, 2026-09-05
+
+Written by the repair pass, not by the reviewer. The findings above are left as they
+were written. This section says, for each one, what closes it and where — and says
+plainly which ones are not closed.
+
+A second, independent hostile review arrived between the report above and this repair
+pass. It accepted the four commits that answered its own previous round, agreed with
+F1, F4 and F5, and reopened three things the report above under-rated: the norm class
+(F7, which the report treated as wording), the directed tangent representation, and the
+separability policy. It also raised Theorem 3.1's ambient-dimension clause, which the
+report above did not reach. Those four are treated as first-order below, ahead of the
+report's own ordering, because that is what the follow-up review asked for.
+
+### Closed
+
+**Norm class (F7, promoted to a semantic finding).** Closed by a theorem, not by
+wording. `TauCeti.DavisKahan1970.kyFanDominant_of_symmetricNorming`
+(`SymmetricNormingFanDominance.lean`, commit `23fc0954`) transports any estimate proved
+over every `SymmetricNormingFunction` to every `KyFanDominantIdealFamily`, by
+instantiating at `kyFanNormingFunction k` — the Ky Fan gauge presented as a coherent
+symmetric norming function, which was already in the tree in
+`Ideals/KyFanNorm.lean` and which the report and the follow-up review both missed.
+`symmetricNorming_iff_kyFanDominant` states the resulting equivalence with the existing
+forward bridge. So the two quantifiers are the same assertion — each is weak Ky Fan
+majorization, which is the criterion Section 1 of the paper announces at (1.11)–(1.13)
+— and a `SymmetricNormingFunction` endpoint does deliver the printed "every
+unitary-invariant norm", including at norms outside the symmetrically normed ideals such
+as the Calkin-augmented `‖T‖ + ‖π(T)‖` the follow-up review named. The four Section 2
+rows carry the reading in a new `norm_class_reading` field and register the transports;
+the two unitary-invariant-norm atoms' `type_requirements.rationale` says why the token
+they check for is not a narrowing. No endpoint was restated and no row's norm quantifier
+moved, because none needed to.
+
+**Directed `tan Θ` representation.** Closed by re-registration, commit `23fc0954`.
+`S2-tan-theta`'s directed clauses and `DK-6.3-thm` now canonicalize
+`tanTheta_directed_unboundedRitz_symmetricNorming_exists_{complex,real}`, which take
+only the source data — an unbounded Ritz pair, an arbitrary reducing complement, the two
+ordered form bounds, and the paper's residual `R` of (1.8), now an explicit bounded
+operator in the type — and *derive* the pole exclusion and *construct* the tangent
+representative. The parameterized `_unboundedRitz_` pair the follow-up review objected to
+is `alternative_route`. This also closes F3.3 at the canonical surface: the `_exists_`
+conclusion carries `∀ n, aₙ(theorem63DirectedSineBlock Z V) < 1`.
+
+**F1 — DK-6.3-thm's spectral-gap hypothesis.** Same commit. The `_unboundedTrial_` pair
+is `specialization`, with the extra hypothesis named in its note and in the row's
+`review_note`; the 4×4 instance from the report is cited there.
+
+**F4 — Lemma 5.1's capability class.** Commit `dd33d00d`. `lemma5_1_complex` and
+`lemma5_1_real` state the lemma at the paper's two fields with nothing in the signature
+but the paper's hypotheses; `Lemma5_1` stays a `scalar_generic_facade`.
+
+**F5 — the ambient sin 2θ clause.** Commit `13cff6da`.
+`sinTwoTheta_ambient_unbounded_reducing_symmetricNorming_{rclike,complex,real}` take
+`ReducesSubspace A U` and `ReducesSubspace (A + H) V` — the printed hypothesis, no
+spectral subspaces. The bridge is `ReflectionIntertwines.ofReducesSubspace` plus the new
+scalar-generic `addBounded_reflectionPerturbation_intertwines_of_commutes`, the `RCLike`
+core of the existing ℂ-and-spectral `add_reflectionPerturbation_intertwines`.
+`SectionTwo.sinTwoTheta_ambient_*` and the ambient conjunct of
+`sinTwoTheta_bothConclusions_*` were retargeted, so the both-conclusions certificate now
+quantifies over a reducing subspace rather than a measurable set. The canonical entry
+with an empty `covers_source_atoms` is demoted to `specialization`.
+
+**Separability.** Commit `4c968186`. Measured rather than argued: 28 of the 29 rows have
+canonical evidence assuming no separability at all, and `DK-3.1-thm` is the one row where
+it appears. `ambient_scope_policy` states the rule — a source-wide ambient convention is
+not a per-result hypothesis, so omitting it is an accepted generalization and carrying it
+is the printed scope exactly — and `_validate_ambient_scope_policy` *derives* each row's
+posture from the compiler-printed types and fails when the table disagrees, or when a
+witness assumes separability with no entry saying why. Checked against a deliberate flip.
+The stale docstring the follow-up review caught, on the real Theorem 3.1 converse, is
+corrected: `A₀` never carried separability and the signature never did.
+
+**Theorem 3.1's ambient-dimension clause.** Commit `ad3cc210`.
+`theorem3_1_realization_inAmbient_ofSpectralMultiplicityAwayFromZero_{complex,real}` take
+the printed clause as `e : WithLp 2 (A₀ × A₁) ≃ₗᵢ[𝕜] H` and exhibit the realized pair
+inside `H` as the isometric image of the model pair, with
+`PairOfSubspacesUnitaryEquivalent` between them in the conclusion. They are the canonical
+evidence; the ambient-free realizations are `generalization`. The reading of `e` as "their
+domain dimensions sum to `dim H`" is registered as the representation convention
+`theorem31-ambient-dimension`, with `nonempty_linearIsometryEquiv_of_hilbertBasis` as its
+compiled witness.
+
+**F2 — Section 8's operator scope.** Commit `76c8e360`, and *not* by the metadata-only
+route the report offered as Option A, which the follow-up review refused. Both rows now
+carry an argued reading with its source evidence: Section 1 fixes bounded as the setting
+and unbounded as an allowance; the Section 2 scope paragraph attaches that allowance to
+*the four main results* and locates the extra analytic work in Theorem 5.2 and the
+Appendix to Section 6, naming no Section 8 counterpart; and Section 8 restricts its own
+parts (ii) and (iii) to finite dimensions, so a section that says nothing about unbounded
+operators is being read rather than silently narrowed. The competing reading is stated in
+full, including that (8.1)/(8.2) survive an unbounded `A`. `DK-8.1-thm` moves from
+`locally_exact` to `paper_faithful_nonlocal_source_interpretation`. **The lift is the
+honest end state and remains open**, tracked as `DK-S8-UNBOUNDED` in `GOAL.md`.
+
+**F8 — the 81 production warnings.** Commits `551ebe1a`, `3fe37b1f`, `60c442f2`,
+`1b6ca96c` (merged as `70c367e6`) and `33e257f9`. `lake build DavisKahan.All` is
+warning-free, so `certify_davis_kahan_1970.py --require-terminal` runs without
+`--allow-warnings`. The count was 72 warnings, not 81; the report's figure counted nine
+`Hint:` continuation lines ending in the word "warning:".
+
+**F9 — stale row text.** Commit `2f75ba2c` for the norm-class notes and the
+`crossed-defect-dimension-equality` `witness_scope`, which still called the
+infinite-dimensional reading of (3.5) unwritten after
+`crossedDefectsEquivalent_iff_sameDimension` closed it. Commit `23fc0954` for the
+`S2-tan-theta` review note that named the `_unboundedTrial_` pair as the directed
+clause's registered primaries.
+
+**F10.** A positive finding; nothing to close.
+
+### Not closed
+
+**F3 for the *ambient* tangent family.** The canonical ambient witnesses are the
+`_definedTangent_` endpoints, which take `HasDefinedAmbientTangent U V` as a hypothesis
+with `hasDefinedAmbientTangent_iff_pi_div_two_notMem_spectrum` proving it is exactly
+"π/2 ∉ spectrum Θ", so the canonical surface is honest already. What remains is the
+report's F3.1 and F3.2: adding the definedness conjunct to the (3.5)-form ambient
+endpoints and the cosine conjunct to the ambient `tan 2Θ` endpoints, both of which are
+supporting evidence. The unbounded-Ritz case needs the unbounded analogue of
+`norm_sinAngleOperatorC_lt_one_of_crossedDefectsEquivalent`, which does not exist yet;
+`approximationSingularValue_directedSineBlock_lt_one_unboundedRitz_complex` is the
+quantitative half. Tracked as `DK-HR-TANGENT-POLE` in `GOAL.md`.
+
+**F6 — naming and placement.** Not started. All eight sub-items are tracked as
+`DK-HR-NAMING` in `GOAL.md`. Doing them meant renaming declarations this pass was
+simultaneously re-registering, and the repair contract's own ordering puts the renames
+last for that reason.
+
+**F7's `--output-dir` bug.** `certify_davis_kahan_1970.py` still crashes at
+`probe_path.relative_to(ROOT)` for an output directory outside the repository. Not fixed.
