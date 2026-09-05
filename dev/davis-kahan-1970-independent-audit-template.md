@@ -19,7 +19,7 @@ Each counted result carries a **source-alignment classification**, and the three
 
 Category 2 is never a softened category 3. If a reviewer concludes that a category 2 result is actually false as printed, that is a FAIL and the repository is asking to be told.
 
-Current result-level status: **27/29 terminal**, **2 awaiting semantic closure**.
+Current result-level status: **29/29 terminal**, **0 awaiting semantic closure**.
 Result-selection/boundary review: **accepted** under policy `dk_established_results_only`.
 
 A hostile reviewer should challenge both layers independently: (1) whether the fidelity inventory omitted source material or misclassified an exclusion, and (2) whether each of the 29 counted result statements is represented exactly in Lean.
@@ -2138,7 +2138,7 @@ Compiler-printed type: *inserted when a compiler certificate is supplied.*
 - **Exact source anchor:** Proposition 3.2
 - **Result disposition:** `proved_exact`
 - **Compiler verification:** `proved_in_build`
-- **Hostile semantic certification:** `hostile_review_blocked`
+- **Hostile semantic certification:** `accepted`
 - **Boundary review:** `accepted`
 - **Source alignment:** `locally_exact`
 - **Printed statement locally self-contained:** `True`
@@ -2202,12 +2202,21 @@ The declarations that carry this result's printed statement, with the source ato
 - `TauCeti.DavisKahan1970.proposition3_2_exists_iff_crossedDefectsEquivalent_real` — specialization
 - `TauCeti.DavisKahan1970.proposition3_2_not_unique_real` — specialization
 - `TauCeti.DavisKahan.crossedDefectsEquivalent_iff_finrank_eq` — source_correspondence
+- `TauCeti.DavisKahan.CrossedDefectsSameDimension` — source_correspondence
+- `TauCeti.DavisKahan.crossedDefectsEquivalent_iff_sameDimension` — source_correspondence
+- `TauCeti.nonempty_linearIsometryEquiv_of_separable_of_infiniteDimensional` — source_correspondence
+- `TauCeti.nonempty_linearIsometryEquiv_of_countable_infinite_hilbertBasis` — source_correspondence
+- `TauCeti.nonempty_linearIsometryEquiv_of_hilbertBasis` — source_correspondence
+- `TauCeti.exists_countable_hilbertBasis` — source_correspondence
+- `TauCeti.finiteDimensional_of_finite_hilbertBasis` — source_correspondence
+- `TauCeti.lpIndexCongr` — source_correspondence
+- `TauCeti.countable_of_orthonormal` — source_correspondence
 
 ### Source-facing Lean declarations
 
 #### `TauCeti.DavisKahan.crossedDefectsEquivalent_iff_finrank_eq`
 
-Source location candidates: `DavisKahan/Geometry/Halmos/CrossedDefectGap.lean:184`
+Source location candidates: `DavisKahan/Geometry/Halmos/CrossedDefectGap.lean:185`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
@@ -2232,6 +2241,60 @@ Compiler-printed type: *inserted when a compiler certificate is supplied.*
 #### `TauCeti.DavisKahan1970.proposition3_2_not_unique_real`
 
 Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section3Proposition32.lean:290`
+
+Compiler-printed type: *inserted when a compiler certificate is supplied.*
+
+#### `TauCeti.DavisKahan.CrossedDefectsSameDimension`
+
+Source location candidates: `DavisKahan/Geometry/Halmos/CrossedDefectGap.lean:222`
+
+Compiler-printed type: *inserted when a compiler certificate is supplied.*
+
+#### `TauCeti.DavisKahan.crossedDefectsEquivalent_iff_sameDimension`
+
+Source location candidates: `DavisKahan/Geometry/Halmos/CrossedDefectGap.lean:238`
+
+Compiler-printed type: *inserted when a compiler certificate is supplied.*
+
+#### `TauCeti.nonempty_linearIsometryEquiv_of_separable_of_infiniteDimensional`
+
+Source location candidates: `ForTauCeti/Analysis/InnerProductSpace/SeparableOrthonormal.lean:180`
+
+Compiler-printed type: *inserted when a compiler certificate is supplied.*
+
+#### `TauCeti.nonempty_linearIsometryEquiv_of_countable_infinite_hilbertBasis`
+
+Source location candidates: `ForTauCeti/Analysis/InnerProductSpace/SeparableOrthonormal.lean:135`
+
+Compiler-printed type: *inserted when a compiler certificate is supplied.*
+
+#### `TauCeti.nonempty_linearIsometryEquiv_of_hilbertBasis`
+
+Source location candidates: `ForTauCeti/Analysis/InnerProductSpace/LpIndexCongr.lean:75`
+
+Compiler-printed type: *inserted when a compiler certificate is supplied.*
+
+#### `TauCeti.exists_countable_hilbertBasis`
+
+Source location candidates: `ForTauCeti/Analysis/InnerProductSpace/SeparableOrthonormal.lean:122`
+
+Compiler-printed type: *inserted when a compiler certificate is supplied.*
+
+#### `TauCeti.finiteDimensional_of_finite_hilbertBasis`
+
+Source location candidates: `ForTauCeti/Analysis/InnerProductSpace/SeparableOrthonormal.lean:166`
+
+Compiler-printed type: *inserted when a compiler certificate is supplied.*
+
+#### `TauCeti.lpIndexCongr`
+
+Source location candidates: `ForTauCeti/Analysis/InnerProductSpace/LpIndexCongr.lean:50`
+
+Compiler-printed type: *inserted when a compiler certificate is supplied.*
+
+#### `TauCeti.countable_of_orthonormal`
+
+Source location candidates: `ForTauCeti/Analysis/InnerProductSpace/SeparableOrthonormal.lean:95`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
@@ -2527,7 +2590,7 @@ Compiler-printed type: *inserted when a compiler certificate is supplied.*
 - **Exact source anchor:** Theorem 3.1
 - **Result disposition:** `proved_exact`
 - **Compiler verification:** `proved_in_build`
-- **Hostile semantic certification:** `hostile_review_blocked`
+- **Hostile semantic certification:** `accepted`
 - **Boundary review:** `accepted`
 - **Source alignment:** `locally_exact`
 - **Printed statement locally self-contained:** `True`
@@ -2573,15 +2636,16 @@ One row per printed source clause per scalar field.  A clause is `PASS` only whe
 | --- | --- | --- | --- |
 | `complete-invariant.complex` | complex | `TauCeti.DavisKahan1970.theorem3_1_spectralMultiplicity_classification_complex` | **PASS** |
 | `complete-invariant.real` | real | `TauCeti.DavisKahan1970.theorem3_1_spectralMultiplicity_classification_real` | **PASS** |
-| `converse-angle-data.complex` | complex | `TauCeti.DavisKahan1970.theorem3_1_realization_ofSpectralMultiplicity_complex` + `TauCeti.DavisKahan1970.theorem3_1_intertwiner_of_sameSpectralMultiplicity_complex` | **OPEN** |
+| `converse-angle-data.complex` | complex | `TauCeti.DavisKahan1970.theorem3_1_realization_ofSpectralMultiplicityAwayFromZero_complex` + `TauCeti.DavisKahan1970.theorem3_1_realization_ofNonzeroPartsUnitaryEquiv` + `TauCeti.DavisKahan1970.theorem3_1_intertwiner_of_nonzeroPartsUnitaryEquiv` + `TauCeti.DavisKahan1970.SameSpectralMultiplicityAwayFromZero` + `TauCeti.DavisKahan1970.NonzeroPartsUnitaryEquiv` + `TauCeti.DavisKahan1970.nonzeroPart` + `TauCeti.DavisKahan1970.invariantFor_nonzeroPart` | **PASS** |
+| `converse-angle-data.real` | real | `TauCeti.DavisKahan1970.theorem3_1_realization_ofSpectralMultiplicityAwayFromZero_real` + `TauCeti.DavisKahan1970.theorem3_1_realization_ofNonzeroPartsUnitaryEquiv` + `TauCeti.DavisKahan1970.theorem3_1_intertwiner_of_nonzeroPartsUnitaryEquiv` + `TauCeti.DavisKahan1970.SameSpectralMultiplicityAwayFromZero` + `TauCeti.DavisKahan1970.NonzeroPartsUnitaryEquiv` + `TauCeti.DavisKahan1970.nonzeroPart` + `TauCeti.DavisKahan1970.invariantFor_nonzeroPart` | **PASS** |
 
 **`complete-invariant.complex`.** Canonical witness for complete-invariant at complex scalar scope, carried over from the pre-clause canonical evidence and re-checked against its compiler-printed type under the coherent model.
 
 **`complete-invariant.real`.** Canonical witness for complete-invariant at real scalar scope, carried over from the pre-clause canonical evidence and re-checked against its compiler-printed type under the coherent model.
 
-**`converse-angle-data.complex`.** The printed converse gives arbitrary Hermitian Theta_0, Theta_1 with 0 <= Theta_j <= pi/2 whose spectral multiplicity functions agree EXCEPT POSSIBLY AT 0, and says 'the proof reconstructs the pair from these angle data and the corresponding partial isometry J_0'.  REOPENED 2026-09-04: the previous witness `theorem3_1_realization` consumes a `HalmosAngleDatum`, which packages cos/sin of both angles AND the intertwiner as fields, and `theorem3_1_realization_ofAngles` asks its caller for J together with its two partial-isometry identities.  J_0 is output of the printed proof, not input to the printed theorem, so both are weaker statements than the source's.  `theorem3_1_realization_ofSpectralMultiplicity_complex` now takes only the two self-adjoint operators, the two spectral confinements and the multiplicity hypothesis, and constructs J_0 internally through `operatorUnitaryEquiv_of_sameSpectralMultiplicity_complex`.  The clause is nevertheless OPEN, not established: `SameSpectralMultiplicity` is agreement everywhere, while the printed hypothesis permits disagreement at the spectral point 0.  Closing it needs the multiplicity comparison restricted to the closures of the ranges of the two angle operators, which is not written.  The freedom at 0 is realized unconditionally in the compact case by `corollary3_1_realization_zeroMultiplicity` (row DK-3.1-cor).
+**`converse-angle-data.complex`.** The printed converse gives arbitrary Hermitian Theta_0, Theta_1 with 0 <= Theta_j <= pi/2 whose spectral multiplicity functions agree EXCEPT POSSIBLY AT 0, and says 'the proof reconstructs the pair from these angle data and the corresponding partial isometry J_0'.  REOPENED 2026-09-04: the previous witness `theorem3_1_realization` consumes a `HalmosAngleDatum`, which packages cos/sin of both angles AND the intertwiner as fields, and `theorem3_1_realization_ofAngles` asks its caller for J together with its two partial-isometry identities.  J_0 is output of the printed proof, not input to the printed theorem, so both are weaker statements than the source's.  `theorem3_1_realization_ofSpectralMultiplicity_complex` now takes only the two self-adjoint operators, the two spectral confinements and the multiplicity hypothesis, and constructs J_0 internally through `operatorUnitaryEquiv_of_sameSpectralMultiplicity_complex`.  The clause is nevertheless OPEN, not established: `SameSpectralMultiplicity` is agreement everywhere, while the printed hypothesis permits disagreement at the spectral point 0.  Closing it needs the multiplicity comparison restricted to the closures of the ranges of the two angle operators, which is not written.  The freedom at 0 is realized unconditionally in the compact case by `corollary3_1_realization_zeroMultiplicity` (row DK-3.1-cor).  CLOSED 2026-09-04: the residual narrowing is gone.  `SameSpectralMultiplicityAwayFromZero` compares the two angle operators only on their NONZERO parts -- the orthogonal complement of the kernel of the sine, which on the printed spectrum [0, pi/2] is `closure (Ran Theta)`, the space the source's J_0 is required to carry across -- so the two null spaces are unconstrained, which is exactly 'except possibly at the eigenvalue 0'.  `theorem3_1_intertwiner_of_sameSpectralMultiplicity_awayFromZero` builds J_0 from that hypothesis: the unitary between the nonzero parts, extended by zero on the null space.  The two partial-isometry identities come out as the two star projections, and they hold on the ranges of the sines because a self-adjoint operator maps into the orthogonal complement of its own kernel.  The intertwining is read on the two invariant summands, using that `sin Theta` commutes with `Theta`.
 
-*OPEN — what is missing:* The printed hypothesis is that the two spectral multiplicity functions agree EXCEPT POSSIBLY AT the spectral point 0.  The witness uses `SameSpectralMultiplicity`, which is agreement everywhere, so it establishes the printed converse only when the two angle operators also have unitarily equivalent null spaces.  Missing: the multiplicity comparison restricted to the closures of the ranges of the two angle operators, from which the printed partial isometry J_0 would be rebuilt with the null spaces free.
+**`converse-angle-data.real`.** The printed converse gives arbitrary Hermitian Theta_0, Theta_1 with 0 <= Theta_j <= pi/2 whose spectral multiplicity functions agree EXCEPT POSSIBLY AT 0, and says 'the proof reconstructs the pair from these angle data and the corresponding partial isometry J_0'.  REOPENED 2026-09-04: the previous witness `theorem3_1_realization` consumes a `HalmosAngleDatum`, which packages cos/sin of both angles AND the intertwiner as fields, and `theorem3_1_realization_ofAngles` asks its caller for J together with its two partial-isometry identities.  J_0 is output of the printed proof, not input to the printed theorem, so both are weaker statements than the source's.  `theorem3_1_realization_ofSpectralMultiplicity_complex` now takes only the two self-adjoint operators, the two spectral confinements and the multiplicity hypothesis, and constructs J_0 internally through `operatorUnitaryEquiv_of_sameSpectralMultiplicity_complex`.  The clause is nevertheless OPEN, not established: `SameSpectralMultiplicity` is agreement everywhere, while the printed hypothesis permits disagreement at the spectral point 0.  Closing it needs the multiplicity comparison restricted to the closures of the ranges of the two angle operators, which is not written.  The freedom at 0 is realized unconditionally in the compact case by `corollary3_1_realization_zeroMultiplicity` (row DK-3.1-cor).  CLOSED 2026-09-04: the residual narrowing is gone.  `SameSpectralMultiplicityAwayFromZero` compares the two angle operators only on their NONZERO parts -- the orthogonal complement of the kernel of the sine, which on the printed spectrum [0, pi/2] is `closure (Ran Theta)`, the space the source's J_0 is required to carry across -- so the two null spaces are unconstrained, which is exactly 'except possibly at the eigenvalue 0'.  `theorem3_1_intertwiner_of_sameSpectralMultiplicity_awayFromZero` builds J_0 from that hypothesis: the unitary between the nonzero parts, extended by zero on the null space.  The two partial-isometry identities come out as the two star projections, and they hold on the ranges of the sines because a self-adjoint operator maps into the orthogonal complement of its own kernel.  The intertwining is read on the two invariant summands, using that `sin Theta` commutes with `Theta`.
 
 Result-wide scope every clause must carry: *(none)*
 
@@ -2591,13 +2655,21 @@ The declarations that carry this result's printed statement, with the source ato
 
 - `TauCeti.DavisKahan1970.theorem3_1_spectralMultiplicity_classification_complex` — primary_source_witness, complex scalars, proof; covers `DK-3.1-thm.complete-invariant`
 - `TauCeti.DavisKahan1970.theorem3_1_spectralMultiplicity_classification_real` — primary_source_witness, real scalars, proof; covers `DK-3.1-thm.complete-invariant`
-- `TauCeti.DavisKahan1970.theorem3_1_realization_ofSpectralMultiplicity_complex` — primary_source_witness, complex scalars, proof; covers 
+- `TauCeti.DavisKahan1970.theorem3_1_realization_ofSpectralMultiplicityAwayFromZero_complex` — primary_source_witness, complex scalars, proof; covers `DK-3.1-thm.converse-angle-data`
+- `TauCeti.DavisKahan1970.theorem3_1_realization_ofSpectralMultiplicityAwayFromZero_real` — primary_source_witness, real scalars, proof; covers `DK-3.1-thm.converse-angle-data`
 
 ### Other registered declarations
 
 - `TauCeti.DavisKahan1970.theorem3_1_realization` — generalization
 - `TauCeti.DavisKahan1970.theorem3_1_realization_ofAngles` — implementation_structure
 - `TauCeti.DavisKahan1970.theorem3_1_intertwiner_of_sameSpectralMultiplicity_complex` — source_correspondence
+- `TauCeti.DavisKahan1970.theorem3_1_realization_ofSpectralMultiplicity_complex` — specialization
+- `TauCeti.DavisKahan1970.theorem3_1_intertwiner_of_nonzeroPartsUnitaryEquiv` — source_correspondence
+- `TauCeti.DavisKahan1970.SameSpectralMultiplicityAwayFromZero` — source_correspondence
+- `TauCeti.DavisKahan1970.nonzeroPart` — source_correspondence
+- `TauCeti.DavisKahan1970.invariantFor_nonzeroPart` — source_correspondence
+- `TauCeti.DavisKahan1970.theorem3_1_realization_ofNonzeroPartsUnitaryEquiv` — source_correspondence
+- `TauCeti.DavisKahan1970.NonzeroPartsUnitaryEquiv` — source_correspondence
 
 ### Source-facing Lean declarations
 
@@ -2609,7 +2681,7 @@ Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.theorem3_1_realization`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section3Theorem31Realization.lean:81`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section3Theorem31Realization.lean:82`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
@@ -2621,19 +2693,73 @@ Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.theorem3_1_intertwiner_of_sameSpectralMultiplicity_complex`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section3Theorem31Realization.lean:292`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section3Theorem31Realization.lean:293`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.theorem3_1_realization_ofSpectralMultiplicity_complex`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section3Theorem31Realization.lean:324`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section3Theorem31Realization.lean:325`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.theorem3_1_realization_ofAngles`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section3Theorem31Realization.lean:153`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section3Theorem31Realization.lean:154`
+
+Compiler-printed type: *inserted when a compiler certificate is supplied.*
+
+#### `TauCeti.DavisKahan1970.theorem3_1_realization_ofSpectralMultiplicityAwayFromZero_complex`
+
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section3Theorem31Realization.lean:611`
+
+Compiler-printed type: *inserted when a compiler certificate is supplied.*
+
+#### `TauCeti.DavisKahan1970.theorem3_1_intertwiner_of_nonzeroPartsUnitaryEquiv`
+
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section3Theorem31Realization.lean:458`
+
+Compiler-printed type: *inserted when a compiler certificate is supplied.*
+
+#### `TauCeti.DavisKahan1970.SameSpectralMultiplicityAwayFromZero`
+
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section3Theorem31Realization.lean:423`
+
+Compiler-printed type: *inserted when a compiler certificate is supplied.*
+
+#### `TauCeti.DavisKahan1970.nonzeroPart`
+
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section3Theorem31Realization.lean:398`
+
+Compiler-printed type: *inserted when a compiler certificate is supplied.*
+
+#### `TauCeti.DavisKahan1970.invariantFor_nonzeroPart`
+
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section3Theorem31Realization.lean:403`
+
+Compiler-printed type: *inserted when a compiler certificate is supplied.*
+
+#### `TauCeti.DavisKahan1970.theorem3_1_realization_ofSpectralMultiplicityAwayFromZero_real`
+
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section3Theorem31Realization.lean:645`
+
+Compiler-printed type: *inserted when a compiler certificate is supplied.*
+
+#### `TauCeti.DavisKahan1970.theorem3_1_realization_ofNonzeroPartsUnitaryEquiv`
+
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section3Theorem31Realization.lean:567`
+
+Compiler-printed type: *inserted when a compiler certificate is supplied.*
+
+#### `TauCeti.DavisKahan1970.theorem3_1_intertwiner_of_nonzeroPartsUnitaryEquiv`
+
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section3Theorem31Realization.lean:458`
+
+Compiler-printed type: *inserted when a compiler certificate is supplied.*
+
+#### `TauCeti.DavisKahan1970.NonzeroPartsUnitaryEquiv`
+
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section3Theorem31Realization.lean:432`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
@@ -4009,7 +4135,7 @@ The declarations that carry this result's printed statement, with the source ato
 
 #### `TauCeti.DavisKahan.crossedDefectsEquivalent_of_isAcute`
 
-Source location candidates: `DavisKahan/Geometry/Halmos/CrossedDefectGap.lean:147`
+Source location candidates: `DavisKahan/Geometry/Halmos/CrossedDefectGap.lean:148`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
@@ -6302,8 +6428,8 @@ Every source atom remains visible here even when it is outside the 29-result den
 
 - **All 275 source-fidelity atoms reviewed for omission/classification:** yes / no
 - **All 29 counted DK-established results reviewed against their exact printed boundaries:** yes / no
-- **27 currently terminal results independently reconfirmed:** yes / no
-- **2 currently nonterminal/pending results resolved by this audit:** yes / no
+- **29 currently terminal results independently reconfirmed:** yes / no
+- **0 currently nonterminal/pending results resolved by this audit:** yes / no
 - **Any excluded fidelity atom that actually belongs to a counted result statement:** yes / no
 - **Any Davis--Kahan-established named/headline result missing from the 29-result inventory:** yes / no
 - **Any non-established/open/deferred material incorrectly included in the denominator:** yes / no
