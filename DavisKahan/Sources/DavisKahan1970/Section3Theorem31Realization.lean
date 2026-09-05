@@ -408,7 +408,7 @@ theorem invariantFor_nonzeroPart (hΘ : IsSelfAdjoint Θ₀) :
   have hky : cfc Real.sin Θ₀ y = 0 := by simpa using (LinearMap.mem_ker).1 hy
   have hy' : cfc Real.sin Θ₀ (Θ₀ y) = 0 := by
     have h := congrArg (fun T : G₀ →L[𝕜'] G₀ => T y) hcomm.eq
-    simp only [ContinuousLinearMap.mul_apply] at h
+    simp only [mul_apply_eq_comp] at h
     rw [h, hky, map_zero]
   have hmem : Θ₀ y ∈ LinearMap.ker ((cfc Real.sin Θ₀ : G₀ →L[𝕜'] G₀) : G₀ →ₗ[𝕜'] G₀) := by
     simpa using hy'
@@ -509,9 +509,8 @@ theorem theorem3_1_intertwiner_of_nonzeroPartsUnitaryEquiv
       rw [hperp] at hv ⊢
       have hSv : cfc Real.sin Θ₀ v = 0 := by simpa using (LinearMap.mem_ker).1 hv
       have h := congrArg (fun T : G₀ →L[𝕜'] G₀ => T v) hcomm.eq
-      simp only [ContinuousLinearMap.mul_apply] at h
-      simpa [h, hSv] using congrArg (fun z => z) (by rw [h, hSv, map_zero] :
-        cfc Real.sin Θ₀ (Θ₀ v) = 0)
+      simp only [mul_apply_eq_comp] at h
+      simp [h, hSv]
     -- hence the projection onto `K₀` commutes with `Θ₀`
     have hPcomm : ∀ x : G₀, K₀.starProjection (Θ₀ x) = Θ₀ (K₀.starProjection x) := by
       intro x

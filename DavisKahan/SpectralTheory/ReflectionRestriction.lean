@@ -135,6 +135,7 @@ The hypotheses are the two lemmas the spectral development already proves --
 `add_reflectionPerturbation_intertwines` over `ℂ`, and their real siblings -- so
 this lemma is scalar-generic even though those are not. -/
 
+omit [CompleteSpace H] in
 /-- **The reflected perturbation makes the operator the reflection conjugate.**
 
 `J` is an involutive isometry, so preserving `dom A` in one direction preserves
