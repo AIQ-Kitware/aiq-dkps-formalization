@@ -4,7 +4,7 @@
 
 **Census family:** `source-semantic-alignment`  
 **Items:** 12  
-**Unique cited Lean declarations:** 53
+**Unique cited Lean declarations:** 56
 
 Theorems 1--2, Appendix Assumptions 1--4, Equation (3), and the MDS-consistency dependency used to discharge Equation (3). Experimental claims are excluded.
 
@@ -290,14 +290,19 @@ Two source defects stand: Theorem 1 is not provable as printed without an envelo
 
 **Lean declarations:**
 
+- `Helm2025.DKPS.AcharyyaBridge.highProb_entrywiseClose_responseDist_of_tendsto`
 - `Acharyya2024.responseDist`
 - `Acharyya2025.Bridge.EntrywiseClose`
+- `Acharyya2025.Bridge.response_mean_close_hp_to_entrywise_hp`
+- `Acharyya2025.Bridge.responseEntrywiseRate`
 
 **Semantic alignment:** `by_composition` — The paper imports this convergence rather than proving it. Lean likewise obtains it from the Acharyya response-mean and entrywise-closeness layer; there is no single Helm declaration reproducing the displayed limit, which is why the row is by_composition rather than exact.
 
 **Notes.** This equation is the hypothesis the Helm risk-transfer theorems consume.
 
-**Next action.** Expose one Helm-facing statement of the displayed limit; it is also the input the eigengap-free bridge now consumes.
+STATED HELM-FACING 2026-09-05.  `highProb_entrywiseClose_responseDist_of_tendsto` is the displayed limit in the in-probability sense the rest of this development uses: if the response means converge uniformly in probability -- the Acharyya (2024) hypothesis Helm cites -- then for EVERY tolerance the sample dissimilarity matrix is entrywise within it of the population one at every late enough stage.  The finite step was already compiled as `Acharyya2025.Bridge.response_mean_close_hp_to_entrywise_hp`, at rate `responseEntrywiseRate m eta = 2 eta / m`; what the displayed line adds, and what this theorem supplies, is that the rate vanishes.  It is also the input the eigengap-free alignment bridge consumes, so a reader can now see where Helm's displayed line comes from without reconstructing the composition.
+
+**Next action.** None.
 
 **Gap refs:** `spectral-vs-rawstress-bridge`
 

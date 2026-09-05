@@ -594,4 +594,62 @@ theorem alignmentConsistency_of_pairwiseDist
     linarith
   simpa using key
 
+/-! ## Helm's displayed sample-to-population dissimilarity limit
+
+Helm 2025 writes, citing Acharyya et al. (2024), that
+
+`D_{ii'} = (1/m) ‖X̄_i − X̄_{i'}‖_F → Δ*_{ii'}`  as `m, r → ∞`,
+
+and then uses it as an input without proving it.  The Acharyya development supplies the
+finite step -- `Acharyya2025.Bridge.response_mean_close_hp_to_entrywise_hp` carries a
+high-probability response-mean event to a high-probability entrywise dissimilarity bound at
+rate `responseEntrywiseRate m η = 2η/m`.  What the displayed line additionally asserts is that
+the bound *vanishes*, which is what the theorem below states, in the in-probability sense the
+rest of this development uses: for every tolerance, the entrywise event holds with high
+probability at every late enough stage.
+
+This is the input `dkpsAlignmentConsistency_of_acharyya_estimation` and its siblings consume,
+so stating it here means a reader can see where Helm's Equation (2) comes from without
+reconstructing the composition. -/
+
+/-- **Helm 2025's displayed dissimilarity limit, in probability.**
+
+If the response means converge uniformly in probability -- the Acharyya (2024) hypothesis Helm
+cites -- then for every tolerance `ε > 0` the sample dissimilarity matrix is entrywise within
+`ε` of the population one with high probability at every late enough stage.
+
+`η` is the response-mean tolerance and `m` the response dimension; the finite rate the
+composition delivers is `2 η u / m`, and the hypothesis `hη` is exactly what makes it vanish. -/
+theorem highProb_entrywiseClose_responseDist_of_tendsto
+    {Ω : Type} [MeasurableSpace Ω]
+    (P : Nat → Measure Ω) {n m p : Nat}
+    (Xbar : Nat → Ω → Fin n → Mat m p) (μ : Fin n → Mat m p)
+    (η : Nat → Real)
+    (hclose : HighProbAtTop P
+      (fun u => {ω | Acharyya2025.Bridge.UniformResponseMeanClose (Xbar u ω) μ (η u)}))
+    (hη : Tendsto η atTop (𝓝 0))
+    {ε : Real} (hε : 0 < ε) :
+    HighProbAtTop P (fun u => {ω |
+      Acharyya2025.Bridge.EntrywiseClose
+        (responseDist (Xbar u ω)) (responseDist μ) ε}) := by
+  have hrate : Tendsto
+      (fun u => Acharyya2025.Bridge.responseEntrywiseRate m (η u)) atTop (𝓝 0) := by
+    have : Tendsto (fun u => (m : Real)⁻¹ * (2 * η u)) atTop (𝓝 ((m : Real)⁻¹ * (2 * 0))) :=
+      (hη.const_mul 2).const_mul ((m : Real)⁻¹)
+    simpa [Acharyya2025.Bridge.responseEntrywiseRate] using this
+  have hbase := Acharyya2025.Bridge.response_mean_close_hp_to_entrywise_hp
+    P Xbar μ η hclose
+  -- Beyond some stage the finite rate is below `ε`, and `HighProbAtTop` only asks for
+  -- late stages, so the two thresholds can be taken together.
+  obtain ⟨U, hU⟩ := Metric.tendsto_atTop.1 hrate ε hε
+  intro δ hδ
+  obtain ⟨N, hN⟩ := hbase δ hδ
+  refine ⟨max N U, fun u hu => ?_⟩
+  refine le_trans (hN u (lt_of_le_of_lt (le_max_left N U) hu)) (measure_mono ?_)
+  intro ω hω i j
+  refine (hω i j).trans (le_of_lt ?_)
+  have hdistu := hU u (le_of_lt (lt_of_le_of_lt (le_max_right N U) hu))
+  rw [Real.dist_eq, sub_zero] at hdistu
+  exact (abs_lt.1 hdistu).2
+
 end Helm2025.DKPS.AcharyyaBridge
