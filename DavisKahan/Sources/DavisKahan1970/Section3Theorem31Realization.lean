@@ -640,8 +640,15 @@ theorem theorem3_1_realization_ofSpectralMultiplicityAwayFromZero_complex
 
 /-- **Davis--Kahan 1970, Theorem 3.1, converse sentence over `ℝ`, at the printed hypotheses.**
 
-The real sibling.  Hahn--Hellinger over `ℝ` needs the source's own separability, which is why
-`A₀` carries it here and the complex statement does not. -/
+The real sibling, at the same strength: no separability hypothesis on either space.
+
+An earlier version of this docstring said `A₀` carries the source's separability.  It does not,
+and the signature never did -- the 2026-09-05 hostile follow-up review caught the sentence.
+Separability is needed for the *other* direction of the real multiplicity classification, where a
+model has to be built from a countable cyclic decomposition
+(`sameSpectralMultiplicity_of_unitaryEquiv_real`).  The direction used here,
+`operatorUnitaryEquiv_of_sameSpectralMultiplicity_real`, consumes a model that the hypothesis
+already supplies, so it needs none. -/
 theorem theorem3_1_realization_ofSpectralMultiplicityAwayFromZero_real
     {A₀ : Type u} [NormedAddCommGroup A₀] [InnerProductSpace ℝ A₀] [CompleteSpace A₀]
     {A₁ : Type v} [NormedAddCommGroup A₁] [InnerProductSpace ℝ A₁] [CompleteSpace A₁]
