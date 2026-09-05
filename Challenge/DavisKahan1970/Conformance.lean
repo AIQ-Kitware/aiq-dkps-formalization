@@ -64,13 +64,18 @@ open Module (finrank)
 
 universe u
 
-/-! ### Finite source-facing compatibility endpoints -/
-
-variable {𝕜 E : Type*} [RCLike 𝕜] [NormedAddCommGroup E]
-  [InnerProductSpace 𝕜 E] [FiniteDimensional 𝕜 E]
-
 section SinThetaFinite
 
+-- The binder order here is not the one the rest of this namespace uses, and it
+-- must not be changed to match.  `partIII_sinTheta_residual_uiNorm` is an alias
+-- for `TauCeti.sinTheta_residual_le`, whose module declares `𝕜` and `E` in
+-- separate `variable` lines, so `[RCLike 𝕜]` occupies an earlier telescope slot
+-- than it would under the combined `variable {𝕜 E : Type*}` below.  The
+-- comparator compares the fully explicit type, in which that slot is visible, so
+-- the two layouts are different statements to it.
+variable {𝕜 : Type*} [RCLike 𝕜]
+variable {E : Type*} [NormedAddCommGroup E] [InnerProductSpace 𝕜 E]
+  [FiniteDimensional 𝕜 E]
 variable {F : Type*} [NormedAddCommGroup F] [InnerProductSpace 𝕜 F]
   [FiniteDimensional 𝕜 F]
 
@@ -90,6 +95,11 @@ theorem partIII_sinTheta_residual_uiNorm
   sorry
 
 end SinThetaFinite
+
+/-! ### Finite source-facing compatibility endpoints -/
+
+variable {𝕜 E : Type*} [RCLike 𝕜] [NormedAddCommGroup E]
+  [InnerProductSpace 𝕜 E] [FiniteDimensional 𝕜 E]
 
 section SinThetaPerturbationFinite
 
@@ -309,12 +319,15 @@ theorem tanTheta_directed_bounded_spectralGap_symmetricNorming_complex
         delta * N.gauge tanTheta0 ≤ N.gauge (theorem63Residual T Z) := by
   sorry
 
+section AmbientWholeSpace
+
+variable {T A : E →L[ℂ] E} {U V : Submodule ℂ E}
+  [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
+
 /-- Ambient `tan Theta` theorem under the paper's standing crossed-defect
 condition (3.5), which supplies transversality rather than assuming it separately. -/
 theorem tanTheta_ambient_bounded_symmetricNorming_complex_of_crossedDefects
     (N : SymmetricNormingFunction)
-    {T A : E →L[ℂ] E} {U V : Submodule ℂ E}
-    [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
     (hT : T.IsSymmetric) (hA : IsSelfAdjoint A)
     (hV : T.Reduces V) (hAU : ∀ x ∈ U, A x ∈ U)
     {alpha delta : ℝ} (hdelta : 0 < delta)
@@ -324,9 +337,12 @@ theorem tanTheta_ambient_bounded_symmetricNorming_complex_of_crossedDefects
       (alpha + delta) * ‖y‖ ^ 2 ≤ RCLike.re ⟪T y, y⟫_ℂ)
     (h35 : DavisKahan.CrossedDefectsEquivalent U V)
     (hMem : N.Mem (T - A)) :
-    N.Mem (tanAngleOperatorC U V) ∧
+    ‖sinAngleOperatorC U V‖ < 1 ∧
+      N.Mem (tanAngleOperatorC U V) ∧
       delta * N.gauge (tanAngleOperatorC U V) ≤ N.gauge (T - A) := by
   sorry
+
+end AmbientWholeSpace
 
 /-- **Intentional red target: the omitted nonvacuity qualification of the printed
 ambient `tan Theta` statement is substantive.**
@@ -390,11 +406,14 @@ theorem sinTwoTheta_directed_boundedResidual_blockRepresentative_symmetricNormin
         2 * N.gauge (DavisKahan.residual A V.subtypeL M) := by
   sorry
 
+section SinTwoThetaWholeSpace
+
+variable {A B : E →L[ℂ] E} {U V : Submodule ℂ E}
+  [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
+
 /-- Full-Hilbert ambient `sin 2Theta` theorem for every source UI norm. -/
 theorem sinTwoTheta_ambient_bounded_symmetricNorming_complex
     (N : SymmetricNormingFunction)
-    {A B : E →L[ℂ] E} {U V : Submodule ℂ E}
-    [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
     (hA : IsSelfAdjoint A) (hB : IsSelfAdjoint B)
     (hU : Reduces A U) (hV : Reduces B V)
     {a b d : ℝ} (hd : 0 < d) (hab : a ≤ b)
@@ -406,6 +425,8 @@ theorem sinTwoTheta_ambient_bounded_symmetricNorming_complex
       d * N.gauge (sinTwoAngleOperatorC U V) ≤
         2 * N.gauge (B - A) := by
   sorry
+
+end SinTwoThetaWholeSpace
 
 /-- Current branch-free graph-coordinate `tan 2Theta` endpoint.
 

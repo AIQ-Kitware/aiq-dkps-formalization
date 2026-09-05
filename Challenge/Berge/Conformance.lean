@@ -129,25 +129,64 @@ theorem exists_modulus_isMinOn_family {P X : Type*} [PseudoMetricSpace P]
   obtain ⟨i, hi⟩ := hbad (φ t) x₀ hx₀K hx₀min
   exact absurd (ht i) (not_lt.mpr hi)
 
+/-- Uniform closeness on a compact set, from the tube lemma rather than from
+sequential compactness -- which is what keeps `X` free of
+`[FirstCountableTopology]`. -/
+private theorem eventually_forall_abs_sub_lt_of_isCompact' {X : Type*}
+    [TopologicalSpace X] {K : Set X} (hK : IsCompact K)
+    {g : P → X → ℝ} (hg : Continuous (Function.uncurry g)) (p₀ : P) {ε : ℝ}
+    (hε : 0 < ε) :
+    ∀ᶠ p in 𝓝 p₀, ∀ x ∈ K, |g p x - g p₀ x| < ε := by
+  refine hK.eventually_forall_of_forall_eventually fun x₀ _ => ?_
+  have hcont : ContinuousAt (fun z : P × X => |g z.1 z.2 - g p₀ z.2|) (p₀, x₀) :=
+    ((hg.continuousAt).sub
+      ((hg.comp (continuous_const.prodMk continuous_snd)).continuousAt)).abs
+  have hzero : |g p₀ x₀ - g p₀ x₀| = 0 := by simp
+  exact hcont (by simpa [hzero] using Iio_mem_nhds hε)
+
+/-- **Upper hemicontinuity of the argmin correspondence over a fixed compact set,
+with no countability or separation hypothesis.**
+
+Stated exactly as the library proves it.  `[FirstCountableTopology X]`,
+`[T2Space X]` and `[(𝓝 p₀).IsCountablyGenerated]` are artifacts of routing the
+proof through `UpperHemicontinuousAt.of_sequences`, not features of the
+mathematics, and this statement carries none of them.  The argument is the
+classical one through open `V` and the compact remainder `K \ V`. -/
 theorem upperHemicontinuousAt_isMinOn {X : Type*} [TopologicalSpace X]
-    [FirstCountableTopology X] [T2Space X]
     {K : Set X} (hK : IsCompact K)
-    {g : P → X → ℝ} (hg : Continuous (Function.uncurry g))
-    (p₀ : P) [(𝓝 p₀).IsCountablyGenerated] :
+    {g : P → X → ℝ} (hg : Continuous (Function.uncurry g)) (p₀ : P) :
     UpperHemicontinuousAt (fun p => {x ∈ K | IsMinOn (g p) K x}) p₀ := by
-  refine UpperHemicontinuousAt.of_sequences hK.isSeqCompact
-    (Eventually.of_forall fun p => Set.sep_subset _ _) ?_
-  intro p hp c hc c₀ hc₀
-  have hcK : ∀ n, c n ∈ K := fun n => (hc n).1
-  refine ⟨hK.isClosed.mem_of_tendsto hc₀ (Eventually.of_forall hcK), ?_⟩
-  rw [isMinOn_iff]
-  intro y hy
-  have hL : Tendsto (fun n => g (p n) (c n)) atTop (𝓝 (g p₀ c₀)) :=
-    (hg.tendsto (p₀, c₀)).comp (hp.prodMk_nhds hc₀)
-  have hR : Tendsto (fun n => g (p n) y) atTop (𝓝 (g p₀ y)) :=
-    (hg.tendsto (p₀, y)).comp (hp.prodMk_nhds tendsto_const_nhds)
-  exact le_of_tendsto_of_tendsto hL hR
-    (Eventually.of_forall fun n => (isMinOn_iff.mp (hc n).2) y hy)
+  refine UpperHemicontinuousAt.of_forall_isOpen fun V hV hsub => ?_
+  have hcont : ∀ q : P, ContinuousOn (g q) K := fun q =>
+    (hg.comp (continuous_const.prodMk continuous_id)).continuousOn
+  rcases K.eq_empty_or_nonempty with rfl | hKne
+  · filter_upwards with p using fun x hx => absurd hx.1 (Set.notMem_empty x)
+  by_cases hKV : K ⊆ V
+  · filter_upwards with p using fun x hx => hKV hx.1
+  have hKVc : IsCompact (K \ V) := hK.diff hV
+  have hKVne : (K \ V).Nonempty := by
+    obtain ⟨x, hxK, hxV⟩ := Set.not_subset.mp hKV
+    exact ⟨x, hxK, hxV⟩
+  obtain ⟨x₀, hx₀K, hx₀min⟩ := hK.exists_isMinOn hKne (hcont p₀)
+  obtain ⟨y₀, hy₀mem, hy₀min⟩ := hKVc.exists_isMinOn hKVne ((hcont p₀).mono Set.sdiff_subset)
+  have hgap : g p₀ x₀ < g p₀ y₀ := by
+    rcases lt_or_ge (g p₀ x₀) (g p₀ y₀) with h | h
+    · exact h
+    · exact absurd (hsub ⟨hy₀mem.1, fun z hz => le_trans h (hx₀min hz)⟩) hy₀mem.2
+  set ε := (g p₀ y₀ - g p₀ x₀) / 3 with hεdef
+  have hε : 0 < ε := by rw [hεdef]; linarith
+  filter_upwards [eventually_forall_abs_sub_lt_of_isCompact' hK hg p₀ hε] with p hp x hx
+  by_contra hxV
+  have hxKV : x ∈ K \ V := ⟨hx.1, hxV⟩
+  have h1 : g p₀ y₀ ≤ g p₀ x := hy₀min hxKV
+  have h2 : |g p x - g p₀ x| < ε := hp x hx.1
+  have h3 : |g p x₀ - g p₀ x₀| < ε := hp x₀ hx₀K
+  have h4 : g p x ≤ g p x₀ := hx.2 hx₀K
+  have e2 := abs_lt.mp h2
+  have e3 := abs_lt.mp h3
+  have : g p₀ y₀ - g p₀ x₀ < 2 * ε := by linarith
+  rw [hεdef] at this
+  linarith
 
 -- `[FirstCountableTopology X]` precedes `[FirstCountableTopology P]` to match the
 -- ForMathlib source, where the former is an accumulated section instance and the
