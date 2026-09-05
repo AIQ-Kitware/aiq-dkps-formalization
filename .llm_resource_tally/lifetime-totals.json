@@ -1,15 +1,15 @@
 {
   "schema": "llm-resource-tally/v3",
-  "through": "2026-09-05T01:42:48.256766+00:00",
-  "ledger_rows": 2019,
-  "commits_accounted": 1817,
-  "turns": 54485,
+  "through": "2026-09-05T02:26:34.871359+00:00",
+  "ledger_rows": 2021,
+  "commits_accounted": 1819,
+  "turns": 54526,
   "tokens": {
-    "input": 8228485,
-    "cache_write": 189736694,
-    "cache_read": 21075727051,
-    "output": 55542188,
-    "billable_input": 21273692230
+    "input": 8233131,
+    "cache_write": 190144523,
+    "cache_read": 21086482091,
+    "output": 55680475,
+    "billable_input": 21284859745
   },
   "by_model": {
     "claude-fable-5": {
@@ -37,10 +37,10 @@
       "output": 327440
     },
     "claude-opus-5": {
-      "input": 131595,
-      "cache_write": 103274570,
-      "cache_read": 15289066901,
-      "output": 30851599
+      "input": 131597,
+      "cache_write": 103275182,
+      "cache_read": 15289984505,
+      "output": 30852750
     },
     "gpt-5.6-terra": {
       "input": 3590620,
@@ -49,10 +49,10 @@
       "output": 539325
     },
     "claude-fable-5-1": {
-      "input": 20440,
-      "cache_write": 1200378,
-      "cache_read": 52947316,
-      "output": 342789
+      "input": 25084,
+      "cache_write": 1607595,
+      "cache_read": 62784752,
+      "output": 479925
     },
     "claude-sonnet-5": {
       "input": 78,
@@ -69,10 +69,10 @@
       "output": 10700449
     },
     "unlabeled": {
-      "input": 7379746,
-      "cache_write": 136178374,
-      "cache_read": 16160551236,
-      "output": 42552934
+      "input": 7384392,
+      "cache_write": 136586203,
+      "cache_read": 16171306276,
+      "output": 42691221
     },
     "implementation": {
       "input": 79782,
@@ -89,10 +89,10 @@
   },
   "by_agent": {
     "claude-code": {
-      "input": 1200393,
-      "cache_write": 189736694,
-      "cache_read": 20534965451,
-      "output": 54675423
+      "input": 1205039,
+      "cache_write": 190144523,
+      "cache_read": 20545720491,
+      "output": 54813710
     },
     "codex": {
       "input": 7028092,
@@ -106,7 +106,7 @@
     "web_fetch": 0
   },
   "time": {
-    "wall_clock_s": 4377758.6
+    "wall_clock_s": 4379485.0
   },
   "compaction_signals": {
     "events": 83,
