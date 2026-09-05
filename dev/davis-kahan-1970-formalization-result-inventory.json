@@ -3148,12 +3148,12 @@
         {
           "declaration": "TauCeti.DavisKahan1970.Corollary4_1_compact_nonacute_complex",
           "role": "generalization",
-          "note": "The same estimate at an arbitrary Fan-dominant unitarily invariant ideal gauge.  Stronger in its own quantifier, but not the printed one: the source says 'for every unitary-invariant norm', and `SymmetricNormingFunction` is this repository's model of that object.  `symmetricNorming_of_kyFanDominant` is the compiled bridge between them."
+          "note": "The same estimate at an arbitrary Fan-dominant unitarily invariant ideal gauge -- the axiomatic model of the source's norm class, as against the Gohberg--Krein `SymmetricNormingFunction` model the canonical witness uses.  Neither quantifier is stronger: `symmetricNorming_of_kyFanDominant` and `kyFanDominant_of_symmetricNorming` transport an estimate each way, and `symmetricNorming_iff_kyFanDominant` states the equivalence, because both are weak Ky Fan majorization -- the criterion Section 1 of the paper announces it will use.  Registered as an alternative route rather than as a narrowing or a strengthening."
         },
         {
           "declaration": "TauCeti.DavisKahan1970.Corollary4_1_compact_nonacute_real",
           "role": "generalization",
-          "note": "The same estimate at an arbitrary Fan-dominant unitarily invariant ideal gauge.  Stronger in its own quantifier, but not the printed one: the source says 'for every unitary-invariant norm', and `SymmetricNormingFunction` is this repository's model of that object.  `symmetricNorming_of_kyFanDominant` is the compiled bridge between them."
+          "note": "The same estimate at an arbitrary Fan-dominant unitarily invariant ideal gauge -- the axiomatic model of the source's norm class, as against the Gohberg--Krein `SymmetricNormingFunction` model the canonical witness uses.  Neither quantifier is stronger: `symmetricNorming_of_kyFanDominant` and `kyFanDominant_of_symmetricNorming` transport an estimate each way, and `symmetricNorming_iff_kyFanDominant` states the equivalence, because both are weak Ky Fan majorization -- the criterion Section 1 of the paper announces it will use.  Registered as an alternative route rather than as a narrowing or a strengthening."
         },
         {
           "declaration": "TauCeti.DavisKahan1970.symmetricNorming_of_kyFanDominant",
@@ -3445,12 +3445,12 @@
         {
           "declaration": "TauCeti.DavisKahan1970.Proposition4_3_compact_nonacute_idealGauge",
           "role": "generalization",
-          "note": "The same estimate at an arbitrary Fan-dominant unitarily invariant ideal gauge.  Stronger in its own quantifier, but not the printed one: the source says 'for every unitary-invariant norm', and `SymmetricNormingFunction` is this repository's model of that object.  `symmetricNorming_of_kyFanDominant` is the compiled bridge between them."
+          "note": "The same estimate at an arbitrary Fan-dominant unitarily invariant ideal gauge -- the axiomatic model of the source's norm class, as against the Gohberg--Krein `SymmetricNormingFunction` model the canonical witness uses.  Neither quantifier is stronger: `symmetricNorming_of_kyFanDominant` and `kyFanDominant_of_symmetricNorming` transport an estimate each way, and `symmetricNorming_iff_kyFanDominant` states the equivalence, because both are weak Ky Fan majorization -- the criterion Section 1 of the paper announces it will use.  Registered as an alternative route rather than as a narrowing or a strengthening."
         },
         {
           "declaration": "TauCeti.DavisKahan1970.Proposition4_3_compact_nonacute_real_idealGauge",
           "role": "generalization",
-          "note": "The same estimate at an arbitrary Fan-dominant unitarily invariant ideal gauge.  Stronger in its own quantifier, but not the printed one: the source says 'for every unitary-invariant norm', and `SymmetricNormingFunction` is this repository's model of that object.  `symmetricNorming_of_kyFanDominant` is the compiled bridge between them."
+          "note": "The same estimate at an arbitrary Fan-dominant unitarily invariant ideal gauge -- the axiomatic model of the source's norm class, as against the Gohberg--Krein `SymmetricNormingFunction` model the canonical witness uses.  Neither quantifier is stronger: `symmetricNorming_of_kyFanDominant` and `kyFanDominant_of_symmetricNorming` transport an estimate each way, and `symmetricNorming_iff_kyFanDominant` states the equivalence, because both are weak Ky Fan majorization -- the criterion Section 1 of the paper announces it will use.  Registered as an alternative route rather than as a narrowing or a strengthening."
         },
         {
           "declaration": "TauCeti.DavisKahan1970.symmetricNorming_of_kyFanDominant",
@@ -3810,12 +3810,12 @@
         {
           "declaration": "TauCeti.DavisKahan1970.Theorem5_2",
           "role": "generalization",
-          "note": "The same estimate at an arbitrary Fan-dominant unitarily invariant ideal gauge.  Stronger in its own quantifier, but not the printed one: the source says 'for every unitary-invariant norm', and `SymmetricNormingFunction` is this repository's model of that object.  `symmetricNorming_of_kyFanDominant` is the compiled bridge between them."
+          "note": "The same estimate at an arbitrary Fan-dominant unitarily invariant ideal gauge -- the axiomatic model of the source's norm class, as against the Gohberg--Krein `SymmetricNormingFunction` model the canonical witness uses.  Neither quantifier is stronger: `symmetricNorming_of_kyFanDominant` and `kyFanDominant_of_symmetricNorming` transport an estimate each way, and `symmetricNorming_iff_kyFanDominant` states the equivalence, because both are weak Ky Fan majorization -- the criterion Section 1 of the paper announces it will use.  Registered as an alternative route rather than as a narrowing or a strengthening."
         },
         {
           "declaration": "TauCeti.DavisKahan.Sylvester.davisKahan1970_sylvester_real",
           "role": "generalization",
-          "note": "The same estimate at an arbitrary Fan-dominant unitarily invariant ideal gauge.  Stronger in its own quantifier, but not the printed one: the source says 'for every unitary-invariant norm', and `SymmetricNormingFunction` is this repository's model of that object.  `symmetricNorming_of_kyFanDominant` is the compiled bridge between them."
+          "note": "The same estimate at an arbitrary Fan-dominant unitarily invariant ideal gauge -- the axiomatic model of the source's norm class, as against the Gohberg--Krein `SymmetricNormingFunction` model the canonical witness uses.  Neither quantifier is stronger: `symmetricNorming_of_kyFanDominant` and `kyFanDominant_of_symmetricNorming` transport an estimate each way, and `symmetricNorming_iff_kyFanDominant` states the equivalence, because both are weak Ky Fan majorization -- the criterion Section 1 of the paper announces it will use.  Registered as an alternative route rather than as a narrowing or a strengthening."
         },
         {
           "declaration": "TauCeti.DavisKahan1970.symmetricNorming_of_kyFanDominant",
@@ -4626,12 +4626,12 @@
         {
           "declaration": "TauCeti.DavisKahan.TanTheta.theorem6_3_unbounded_infiniteTrial_ideal_exists",
           "role": "generalization",
-          "note": "The same estimate at an arbitrary Fan-dominant unitarily invariant ideal gauge.  Stronger in its own quantifier, but not the printed one: the source says 'for every unitary-invariant norm', and `SymmetricNormingFunction` is this repository's model of that object.  `symmetricNorming_of_kyFanDominant` is the compiled bridge between them."
+          "note": "The same estimate at an arbitrary Fan-dominant unitarily invariant ideal gauge -- the axiomatic model of the source's norm class, as against the Gohberg--Krein `SymmetricNormingFunction` model the canonical witness uses.  Neither quantifier is stronger: `symmetricNorming_of_kyFanDominant` and `kyFanDominant_of_symmetricNorming` transport an estimate each way, and `symmetricNorming_iff_kyFanDominant` states the equivalence, because both are weak Ky Fan majorization -- the criterion Section 1 of the paper announces it will use.  Registered as an alternative route rather than as a narrowing or a strengthening."
         },
         {
           "declaration": "TauCeti.DavisKahan1970.theorem6_3_unbounded_infiniteTrial_ideal_exists_real",
           "role": "generalization",
-          "note": "The same estimate at an arbitrary Fan-dominant unitarily invariant ideal gauge.  Stronger in its own quantifier, but not the printed one: the source says 'for every unitary-invariant norm', and `SymmetricNormingFunction` is this repository's model of that object.  `symmetricNorming_of_kyFanDominant` is the compiled bridge between them."
+          "note": "The same estimate at an arbitrary Fan-dominant unitarily invariant ideal gauge -- the axiomatic model of the source's norm class, as against the Gohberg--Krein `SymmetricNormingFunction` model the canonical witness uses.  Neither quantifier is stronger: `symmetricNorming_of_kyFanDominant` and `kyFanDominant_of_symmetricNorming` transport an estimate each way, and `symmetricNorming_iff_kyFanDominant` states the equivalence, because both are weak Ky Fan majorization -- the criterion Section 1 of the paper announces it will use.  Registered as an alternative route rather than as a narrowing or a strengthening."
         }
       ],
       "result_wide_scope_atoms": [],
@@ -5695,8 +5695,8 @@
         "printed_object": "Davis--Kahan condition (3.5): the crossed defect spaces have equal Hilbert dimension.",
         "lean_representation": "TauCeti.DavisKahan.CrossedDefectsEquivalent, i.e. Nonempty (halmosSourceDefect U V ≃ₗᵢ halmosTargetDefect U V)",
         "rule": "Equality of Hilbert dimensions IS the existence of a linear isometric equivalence; the constructive form is the faithful reading of the printed condition, not a strengthening of it. It is also required rather than convenient: Proposition 3.2 must BUILD a direct rotation out of the condition, which an equality of cardinals cannot supply. This convention is therefore source-transparent and needs no per-row correspondence evidence.",
-        "witness": "TauCeti.DavisKahan.crossedDefectsEquivalent_iff_finrank_eq",
-        "witness_scope": "Proves the two readings are the same condition whenever the crossed defect spaces are finite-dimensional, which is the case where the printed phrase has an unambiguous elementary meaning. The infinite-dimensional case is the convention above, stated rather than proved.  MEASURED AGAINST THE PINNED MATHLIB 2026-09-04, because the previous wording ('Mathlib has no isometric classification of Hilbert spaces by dimension') was accurate but too vague to act on, and a hostile review reasonably asked why separability does not settle it.  What the pinned Mathlib has is `exists_hilbertBasis` and `HilbertBasis.repr`.  What it does NOT have, checked by grep over `Mathlib/Analysis/`: (i) invariance of the cardinality of a Hilbert basis, (ii) any statement that a separable Hilbert space has a countable orthonormal basis, and (iii) any isometric classification of Hilbert spaces.  Restricting to the paper's separable scope removes (i) but not (ii): the remaining obligation is 'an orthonormal family in a separable space is countable' -- true because distinct members are sqrt 2 apart -- and then 'two infinite-dimensional separable Hilbert spaces are isometrically isomorphic', via `HilbertBasis.repr` and an index equivalence.  Combined with the finite case already proved here, that yields the separable-scope correspondence `Nonempty (S ≃ₗᵢ T) ↔ finrank S = finrank T` for finite-dimensional crossed defects and unconditionally for infinite-dimensional ones.  That is a bounded piece of reusable Hilbert-space theory and belongs in `ForTauCeti`; it is not written, and until it is, the infinite-dimensional reading of (3.5) is a representation convention rather than a theorem.",
+        "witness": "TauCeti.DavisKahan.crossedDefectsEquivalent_iff_sameDimension",
+        "witness_scope": "CLOSED 2026-09-04; this paragraph was rewritten 2026-09-05 because it still described the obligation as open.  `crossedDefectsEquivalent_iff_sameDimension` proves, at the paper's own separable scope, that `CrossedDefectsEquivalent U V` holds exactly when the two crossed defect spaces have the same dimension in the source's sense -- equal `finrank` when they are finite-dimensional, both infinite-dimensional otherwise -- so the infinite-dimensional reading of (3.5) is a THEOREM here and no longer a convention stated without proof.  The Hilbert-space theory it needed and the pinned Mathlib did not have (an orthonormal family in a separable space is countable, and two infinite-dimensional separable Hilbert spaces are isometrically isomorphic) was written into `ForTauCeti` for the purpose; `TauCeti.nonempty_linearIsometryEquiv_of_separable_of_infiniteDimensional` is the isometric classification.  `crossedDefectsEquivalent_iff_finrank_eq` remains the finite-dimensional half and is retained.\n\nThe convention itself is unchanged and is still the right reading: the constructive form is what Proposition 3.2 must BUILD a direct rotation out of, which an equality of cardinals cannot supply.  What has changed is that the equivalence to the printed language is now checked rather than asserted.",
         "applies_to": [
           "S2-tan-theta",
           "DK-3.2-prop",
