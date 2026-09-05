@@ -333,7 +333,16 @@ every principal angle is strictly acute, a bounded operator with exactly the pap
 approximation numbers `tan θⱼ` exists, and it satisfies `δ N(tan Θ₀) ≤ N(R)` in every
 source unitarily invariant norm.  The Ritz compression is a densely defined self-adjoint
 partial operator, the ambient operator is an unbounded self-adjoint partial map, and only
-the residual is bounded. -/
+the residual is bounded.
+
+`R` is the paper's own residual of (1.8), named as an explicit bounded operator and tied
+to the Ritz data by `hR`; the source's `‖R‖` on the right of the estimate is then literally
+what the conclusion bounds against.
+
+This is the source-facing endpoint to cite for the directed clause.  The parameterized
+`tanTheta_directed_unboundedRitz_symmetricNorming_complex` asks the caller to supply the
+representative *and* a proof that its approximation numbers are the `tan θⱼ`; the source
+asks for no such thing, and here both are produced from the form bounds. -/
 theorem tanTheta_directed_unboundedRitz_symmetricNorming_exists_complex
     (N : SymmetricNormingFunction)
     {A : H →ₗ.[ℂ] H}
@@ -345,12 +354,14 @@ theorem tanTheta_directed_unboundedRitz_symmetricNorming_exists_complex
     (hupper : TauCeti.LinearPMap.SemiboundedAbove D.trial.compression alpha)
     (hUnwanted : ∀ y ∈ Vᗮ, ∀ hy : y ∈ A.domain,
       (alpha + delta) * ‖y‖ ^ 2 ≤ RCLike.re ⟪A ⟨y, hy⟩, y⟫_ℂ)
-    (hResidual : N.Mem D.trial.residual) :
+    (R : Z →L[ℂ] H) (hR : D.trial.residual = R)
+    (hResidual : N.Mem R) :
     (∀ n, approximationSingularValue n (theorem63DirectedSineBlock Z V) < 1) ∧
       ∃ tanTheta0 : Z →L[ℂ] H,
         HasTheorem63DirectedTangentApproximationNumbersInfinite Z V tanTheta0 ∧
         N.Mem tanTheta0 ∧
-        delta * N.gauge tanTheta0 ≤ N.gauge D.trial.residual := by
+        delta * N.gauge tanTheta0 ≤ N.gauge R := by
+  subst hR
   have hlt := approximationSingularValue_directedSineBlock_lt_one_unboundedRitz_complex
     D hV hdelta hupper hUnwanted
   obtain ⟨tanTheta0, htan⟩ :=
@@ -385,7 +396,11 @@ theorem approximationSingularValue_directedSineBlock_lt_one_unboundedRitz_real
       hV.mapsDomain hV.commutes hUnwanted) n
 
 /-- **The Section 2 `tan Θ` directed clause at the Appendix's scope, over `ℝ`, with the
-tangent representative exhibited and the pole excluded.** -/
+tangent representative exhibited and the pole excluded.**
+
+The real sibling of `tanTheta_directed_unboundedRitz_symmetricNorming_exists_complex`, and
+the source-facing endpoint to cite for the directed clause over `ℝ`.  `R` is the paper's
+residual of (1.8) as an explicit bounded operator. -/
 theorem tanTheta_directed_unboundedRitz_symmetricNorming_exists_real
     (N : SymmetricNormingFunction)
     {A : E →ₗ.[ℝ] E}
@@ -397,12 +412,14 @@ theorem tanTheta_directed_unboundedRitz_symmetricNorming_exists_real
     (hupper : TauCeti.LinearPMap.SemiboundedAbove D.trial.compression alpha)
     (hUnwanted : ∀ y ∈ Vᗮ, ∀ hy : y ∈ A.domain,
       (alpha + delta) * ‖y‖ ^ 2 ≤ ⟪A ⟨y, hy⟩, y⟫_ℝ)
-    (hResidual : N.Mem D.trial.residual) :
+    (R : Z →L[ℝ] E) (hR : D.trial.residual = R)
+    (hResidual : N.Mem R) :
     (∀ n, approximationSingularValue n (theorem63DirectedSineBlockReal Z V) < 1) ∧
       ∃ tanTheta0 : Z →L[ℝ] E,
         HasTheorem63DirectedTangentApproximationNumbersInfiniteReal Z V tanTheta0 ∧
         N.Mem tanTheta0 ∧
-        delta * N.gauge tanTheta0 ≤ N.gauge D.trial.residual := by
+        delta * N.gauge tanTheta0 ≤ N.gauge R := by
+  subst hR
   have hlt := approximationSingularValue_directedSineBlock_lt_one_unboundedRitz_real
     D hV hdelta hupper hUnwanted
   obtain ⟨tanTheta0, htan⟩ :=

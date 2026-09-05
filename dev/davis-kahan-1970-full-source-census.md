@@ -4,7 +4,7 @@
 
 **Census family:** `source-completion-census`  
 **Items:** 50  
-**Unique cited Lean declarations:** 1247
+**Unique cited Lean declarations:** 1253
 
 ## How to use this census
 
@@ -259,6 +259,9 @@ THREE NEW REUSABLE DECLARATIONS underwrite it, each grounding the next by `:=`, 
 - `DavisKahan1970.sinTheta_unbounded_formGap_symmetricNorming_real_ofRCLike_conforms`
 - `DavisKahan1970.isTrialResidual_iff`
 - `DavisKahan1970.isExactSpectralDecomposition_iff`
+- `TauCeti.DavisKahan1970.symmetricNorming_of_kyFanDominant`
+- `TauCeti.DavisKahan1970.kyFanDominant_of_symmetricNorming`
+- `TauCeti.DavisKahan1970.symmetricNorming_iff_kyFanDominant`
 
 **Curated source/Lean review:**
 
@@ -379,6 +382,13 @@ REOPENING WITHDRAWN 2026-08-31 and the rule corrected: a later source passage en
 - `TauCeti.DavisKahan1970.HasDefinedAmbientTangentReal`
 - `TauCeti.DavisKahan1970.crossedDefectsEquivalent_of_hasDefinedAmbientTangentReal`
 - `TauCeti.DavisKahan1970.hasDefinedAmbientTangent_iff_pi_div_two_notMem_spectrum`
+- `TauCeti.DavisKahan1970.tanTheta_directed_unboundedRitz_symmetricNorming_exists_complex`
+- `TauCeti.DavisKahan1970.tanTheta_directed_unboundedRitz_symmetricNorming_exists_real`
+- `TauCeti.DavisKahan1970.approximationSingularValue_directedSineBlock_lt_one_unboundedRitz_complex`
+- `TauCeti.DavisKahan1970.approximationSingularValue_directedSineBlock_lt_one_unboundedRitz_real`
+- `TauCeti.DavisKahan1970.symmetricNorming_of_kyFanDominant`
+- `TauCeti.DavisKahan1970.kyFanDominant_of_symmetricNorming`
+- `TauCeti.DavisKahan1970.symmetricNorming_iff_kyFanDominant`
 
 **Curated source/Lean review:**
 
@@ -572,6 +582,9 @@ The directed clause of the Section 2 tangent theorem at the printed scope, added
 - `TauCeti.DavisKahan.Angle.gauge_directedSinTwoAngleOperator_trialSide`
 - `TauCeti.DavisKahan1970.SectionTwo.sinTwoTheta_directed_blockRepresentative_complex`
 - `TauCeti.DavisKahan1970.SectionTwo.sinTwoTheta_directed_blockRepresentative_real`
+- `TauCeti.DavisKahan1970.symmetricNorming_of_kyFanDominant`
+- `TauCeti.DavisKahan1970.kyFanDominant_of_symmetricNorming`
+- `TauCeti.DavisKahan1970.symmetricNorming_iff_kyFanDominant`
 
 **Curated source/Lean review:**
 
@@ -855,6 +868,9 @@ AMBIENT CLAUSE REOPENED 2026-08-31 by the coherent-clause audit. The printed sin
 - `TauCeti.DavisKahan1970.complexifyReal_addBounded`
 - `TauCeti.DavisKahan1970.tanTwoTheta_directed_unboundedResidual_reducing_derivedReflection_symmetricNorming_complex`
 - `TauCeti.DavisKahan1970.tanTwoTheta_directed_unboundedResidual_reducing_sineSequence_symmetricNorming_real`
+- `TauCeti.DavisKahan1970.symmetricNorming_of_kyFanDominant`
+- `TauCeti.DavisKahan1970.kyFanDominant_of_symmetricNorming`
+- `TauCeti.DavisKahan1970.symmetricNorming_iff_kyFanDominant`
 
 **Curated source/Lean review:**
 
@@ -3617,6 +3633,12 @@ Residue, and not a gap: `[CompleteSpace Z]`, which `Theorem63InfiniteTrial.lean`
 - `TauCeti.DavisKahan1970.tanTheta_directed_unboundedTrial_symmetricNorming_complex`
 - `TauCeti.DavisKahan1970.tanTheta_directed_unboundedTrial_symmetricNorming_real`
 - `TauCeti.DavisKahan1970.symmetricNorming_of_kyFanDominant`
+- `TauCeti.DavisKahan1970.tanTheta_directed_unboundedRitz_symmetricNorming_exists_complex`
+- `TauCeti.DavisKahan1970.tanTheta_directed_unboundedRitz_symmetricNorming_exists_real`
+- `TauCeti.DavisKahan1970.approximationSingularValue_directedSineBlock_lt_one_unboundedRitz_complex`
+- `TauCeti.DavisKahan1970.approximationSingularValue_directedSineBlock_lt_one_unboundedRitz_real`
+- `TauCeti.DavisKahan1970.tanTheta_directed_unboundedRitz_symmetricNorming_complex`
+- `TauCeti.DavisKahan1970.tanTheta_directed_unboundedRitz_symmetricNorming_real`
 
 **Curated source/Lean review:**
 
