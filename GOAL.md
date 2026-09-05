@@ -114,6 +114,17 @@ The source census is complete; do not open a broad YWS proof campaign.
   state that condition explicitly and classify the wrapper `compiled_corrected`; it is an
   added hypothesis the printed display omits.
 
+- **Rectangular rank-one, printed hypothesis — done 2026-09-05.** The four rank-one
+  singular-vector corollaries all took `CorrespondingRightSingularBlock` /
+  `CorrespondingLeftSingularBlock`, which pin both singular vectors to Mathlib's chosen
+  Gram eigenbases, and the census called that `compiled_generalized`. The symmetric side
+  had been repaired on 2026-08-13; the rectangular side had not.
+  `yuWangSamworth_{right,left}SingularVector_frame_le` and their
+  `_opNormCoefficient_` siblings carry the printed hypothesis instead — an arbitrary
+  orthonormal pair at the same sorted Gram index, separated from the rest of the
+  population Gram spectrum, with no condition on the sample spectrum — at the same
+  coefficient.
+
 **Preserve** the corrected Equation (4), which is false as printed, and the corrected
 rank-boundary convention.
 
