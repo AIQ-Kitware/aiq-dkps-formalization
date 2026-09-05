@@ -4053,16 +4053,16 @@
         "statement_pins": [
           {
             "declaration": "TauCeti.DavisKahan1970.theorem5_2_sourceExact_complex",
-            "type_expr_hash": "1671207407",
-            "type_text_sha256": "17173ac30a1316375c4c3802cf96a2cf20fe98e9f28186087ada41e9af321a9a",
+            "type_expr_hash": "1371585035",
+            "type_text_sha256": "6cd81949a68601257c50a6d0ed213f300f42db18fd1d1aa0f5a3d2b9f0362107",
             "toolchain": "leanprover/lean4:v4.34.0-rc1",
             "pinned_on": "2026-09-05",
             "note": "Repinned 2026-09-05 onto the source-exact façades."
           },
           {
             "declaration": "TauCeti.DavisKahan1970.theorem5_2_sourceExact_real",
-            "type_expr_hash": "3121184233",
-            "type_text_sha256": "24531f7a7ee504664c44b3c882c67ed87a27f84f3fdb5c49db9784060bdf6684",
+            "type_expr_hash": "3254347741",
+            "type_text_sha256": "dde4e9917ac63662098db4cebd26dd480566be58830c3d2a9eee5b2da89d5b80",
             "toolchain": "leanprover/lean4:v4.34.0-rc1",
             "pinned_on": "2026-09-05",
             "note": "Repinned 2026-09-05 onto the source-exact façades."

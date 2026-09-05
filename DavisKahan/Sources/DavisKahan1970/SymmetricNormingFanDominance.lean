@@ -443,16 +443,20 @@ theorem theorem5_2_orderedGap_symmetricNorming_real
 
 /-- **Davis--Kahan 1970, Theorem 5.2 at the printed source scope over `ℂ`.**
 
-Separable Hilbert spaces on both sides -- the source's ambient assumption, carried
-on each of the two spaces its Sylvester equation names -- and the literal
-normalized unitarily invariant norm class.  The printed ordered separation
-`A ≥ c + δ > c ≥ B`, not the broader gap abstraction. -/
+Arbitrary complex Hilbert spaces, and the literal normalized unitarily invariant
+norm class.  The printed ordered separation `A ≥ c + δ > c ≥ B`, not the broader
+gap abstraction.
+
+**No separability**, and that is deliberate.  Section 5 announces that it is
+abandoning the earlier notation and working in a more general setting; Theorem
+5.2 says only that `X` and `Y` are Hilbert spaces.  The paper-wide separable
+ambient scope does not survive a local reset of scope, and a façade that
+reimposed it would state strictly less than the printed theorem.  Separability
+was carried here until 2026-09-05, when a source-first review caught it. -/
 theorem theorem5_2_sourceExact_complex
     {E F : Type v}
     [NormedAddCommGroup E] [InnerProductSpace ℂ E] [CompleteSpace E]
-    [TopologicalSpace.SeparableSpace E]
     [NormedAddCommGroup F] [InnerProductSpace ℂ F] [CompleteSpace F]
-    [TopologicalSpace.SeparableSpace F]
     (N : NormalizedUnitaryInvariantNorm.{0, v} ℂ) {A : E →ₗ.[ℂ] E} {B : F →ₗ.[ℂ] F}
     (hA : IsSelfAdjoint A) (hB : IsSelfAdjoint B)
     {X R : F →L[ℂ] E} {c δ : ℝ} (hδ : 0 < δ)
@@ -463,13 +467,13 @@ theorem theorem5_2_sourceExact_complex
     N.Mem X ∧ δ * N.gauge X ≤ N.gauge R :=
   theorem5_2 N.toKyFanDominantIdealFamily hA hB hδ hAlow hBhigh hsyl hR
 
-/-- **Davis--Kahan 1970, Theorem 5.2 at the printed source scope over `ℝ`.** -/
+/-- **Davis--Kahan 1970, Theorem 5.2 at the printed source scope over `ℝ`.**
+Arbitrary real Hilbert spaces; see the complex sibling on why separability is
+absent. -/
 theorem theorem5_2_sourceExact_real
     {E F : Type v}
     [NormedAddCommGroup E] [InnerProductSpace ℝ E] [CompleteSpace E]
-    [TopologicalSpace.SeparableSpace E]
     [NormedAddCommGroup F] [InnerProductSpace ℝ F] [CompleteSpace F]
-    [TopologicalSpace.SeparableSpace F]
     (N : NormalizedUnitaryInvariantNorm.{0, v} ℝ) {A : E →ₗ.[ℝ] E} {B : F →ₗ.[ℝ] F}
     (hA : IsSelfAdjoint A) (hB : IsSelfAdjoint B)
     {X R : F →L[ℝ] E} {c δ : ℝ} (hδ : 0 < δ)
