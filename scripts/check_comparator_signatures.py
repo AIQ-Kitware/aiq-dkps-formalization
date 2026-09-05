@@ -88,19 +88,24 @@ def main(argv: list[str] | None = None) -> int:
     print("=" * 70)
     print(f"{'STATUS':8} {'THEOREM':{width}}  CONFIG")
     failures = 0
+    skipped = 0
     for name, row in rows:
-        failures += row.status != "PASS"
+        # SKIP means the config declared the declaration absent from the solution
+        # module and it is absent.  Nothing was compared, and nothing is wrong.
+        failures += row.status not in ("PASS", "SKIP")
+        skipped += row.status == "SKIP"
         print(f"{row.status:8} {row.declaration:{width}}  {name}")
         for finding in row.findings:
             print(f"           {finding.code}: {finding.message}")
     for name, finding in extra:
         failures += finding.level == "error"
         print(f"{finding.level.upper():8} [{finding.code}] {finding.message}  {name}")
+    tail = f" ({skipped} declared absent from the solution module and skipped)" if skipped else ""
     if failures:
-        print(f"\n{failures} of {len(rows)} comparison(s) differ or could not be resolved. "
+        print(f"\n{failures} of {len(rows)} comparison(s) differ or could not be resolved{tail}. "
               "The comparator will reject these.")
         return 1
-    print("\nAll theorems match on universe signature and full type. "
+    print(f"\nAll compared theorems match on universe signature and full type{tail}. "
           "Safe to run the full comparator.")
     return 0
 

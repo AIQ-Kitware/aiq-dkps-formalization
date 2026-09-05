@@ -88,6 +88,7 @@ open scoped InnerProductSpace BigOperators
 
 open TauCeti.DavisKahan.ExactSinTheta
 open TauCeti.ApproximationNumber
+open scoped TauCeti.CompleteSubspace
 
 noncomputable section
 
@@ -95,14 +96,6 @@ universe u
 
 variable {H : Type u} [NormedAddCommGroup H] [InnerProductSpace ℂ H]
   [CompleteSpace H]
-
-/-- An orthogonally complemented subspace of a complete space is complete.  The
-instance is `local` in every module that declares it, so it does not propagate
-through imports and has to be reinstalled here; without it the adjoints inside
-`blockCompression` do not elaborate. -/
-local instance instCompleteSpaceCoeOfHasOrthogonalProjectionGramMiddle
-    (W : Submodule ℂ H) [W.HasOrthogonalProjection] : CompleteSpace W :=
-  (Submodule.isComplete_coe_of_hasOrthogonalProjection W).completeSpace_coe
 
 variable {U : Submodule ℂ H} [U.HasOrthogonalProjection]
 variable {A : H →ₗ.[ℂ] H} {B Z : H →L[ℂ] H} {a b τ : ℝ}
@@ -409,12 +402,6 @@ section ScalarGenericResidualCorner
 
 variable {𝕜 : Type*} [RCLike 𝕜] {G : Type u} [NormedAddCommGroup G]
   [InnerProductSpace 𝕜 G] [CompleteSpace G]
-
-/-- The scalar-generic form of the module's completeness instance for an
-orthogonally complemented subspace. -/
-local instance instCompleteSpaceCoeOfHasOrthogonalProjectionGramMiddleGeneric
-    (W : Submodule 𝕜 G) [W.HasOrthogonalProjection] : CompleteSpace W :=
-  (Submodule.isComplete_coe_of_hasOrthogonalProjection W).completeSpace_coe
 
 /-- The directed residual corner `R₀ : U → Uᗮ`, the companion of
 `reflectionSineCorner` and `reflectionTangentCorner`. -/
@@ -1130,12 +1117,6 @@ section ScalarGenericAmbientBound
 
 variable {𝕜 : Type*} [RCLike 𝕜] {G : Type u} [NormedAddCommGroup G]
   [InnerProductSpace 𝕜 G] [CompleteSpace G]
-
-/-- The scalar-generic form of the module's completeness instance for an
-orthogonally complemented subspace. -/
-local instance instCompleteSpaceCoeOfHasOrthogonalProjectionGramMiddleAmbient
-    (W : Submodule 𝕜 G) [W.HasOrthogonalProjection] : CompleteSpace W :=
-  (Submodule.isComplete_coe_of_hasOrthogonalProjection W).completeSpace_coe
 
 /-- The directed corner never has larger approximation numbers than the ambient
 operator: it is the ambient operator pre- and post-composed with contractions. -/

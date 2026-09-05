@@ -159,3 +159,31 @@ theorem isComplete_coe_of_hasOrthogonalProjection [CompleteSpace E]
 
 end Submodule
 
+namespace TauCeti.CompleteSubspace
+
+/-- A subspace admitting an orthogonal projection inside a complete ambient space
+is itself complete, as an instance.
+
+`scoped` rather than global, because the search `CompleteSpace ↥U` is one that
+fires on every subspace coercion and the cost of that is not worth paying in
+modules that do not need it.  Activate it with
+
+```
+open scoped TauCeti.CompleteSubspace
+```
+
+**Use this one.**  It exists because the same three-line `local instance` was
+written out forty-three times across `DavisKahan` and `ForTauCeti`, each under a
+different name.  That is not only duplication: the instance name is part of the
+*elaborated type* of every theorem whose statement compresses to a subspace, so
+two modules holding private copies state provably identical theorems that the
+comparator, and any exact signature comparison, reports as different.  A new
+copy would put that back. -/
+scoped instance instCompleteSpaceCoeOfHasOrthogonalProjection
+    {𝕜 : Type*} [RCLike 𝕜] {G : Type*} [NormedAddCommGroup G]
+    [InnerProductSpace 𝕜 G] [CompleteSpace G]
+    (U : Submodule 𝕜 G) [U.HasOrthogonalProjection] : CompleteSpace U :=
+  (Submodule.isComplete_coe_of_hasOrthogonalProjection U).completeSpace_coe
+
+end TauCeti.CompleteSubspace
+

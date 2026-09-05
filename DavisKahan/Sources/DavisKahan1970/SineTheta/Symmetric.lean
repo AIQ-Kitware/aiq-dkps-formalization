@@ -40,20 +40,10 @@ universe v
 
 open TauCeti.DavisKahanExt
 open TauCeti.DavisKahan
+open scoped TauCeti.CompleteSubspace
 
 variable {E : Type v}
   [NormedAddCommGroup E] [InnerProductSpace ℂ E] [CompleteSpace E]
-
-/-- A subspace admitting an orthogonal projection inside a complete ambient
-space is itself complete.  `local instance` does not propagate through imports,
-so it is reinstalled here.
-
-Proposition 6.1 works throughout in the coordinate spaces of `U`, `V` and their
-complements, so every adjoint and every reducing restriction below needs it. -/
-local instance instCompleteSpaceCoeOfHasOrthogonalProjectionSymmetric
-    {G : Type v} [NormedAddCommGroup G] [InnerProductSpace ℂ G] [CompleteSpace G]
-    (U : Submodule ℂ G) [U.HasOrthogonalProjection] : CompleteSpace U :=
-  (Submodule.isComplete_coe_of_hasOrthogonalProjection U).completeSpace_coe
 
 /-- Exact bounded inputs of Proposition 6.1.  The two gap hypotheses are the
 paper's two applications of the original sine theorem. -/

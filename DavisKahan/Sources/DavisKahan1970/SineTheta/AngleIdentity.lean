@@ -27,6 +27,7 @@ open scoped InnerProductSpace
 open TauCeti.RealComplexification
 -- the namespace is split across the two libraries: `Basic` is in `ForTauCeti`, `Subspace` here
 open TauCeti.DavisKahan.Foundation.RealComplexification
+open scoped TauCeti.CompleteSubspace
 
 noncomputable section
 
@@ -34,14 +35,6 @@ universe v
 
 variable {E : Type v}
   [NormedAddCommGroup E] [InnerProductSpace ℂ E] [CompleteSpace E]
-
-/-- A subspace admitting an orthogonal projection inside a complete ambient
-space is itself complete.  `local instance` does not propagate through imports,
-so it is reinstalled here. -/
-local instance instCompleteSpaceCoeOfHasOrthogonalProjectionAngleIdentity
-    {G : Type v} [NormedAddCommGroup G] [InnerProductSpace ℂ G] [CompleteSpace G]
-    (U : Submodule ℂ G) [U.HasOrthogonalProjection] : CompleteSpace U :=
-  (Submodule.isComplete_coe_of_hasOrthogonalProjection U).completeSpace_coe
 
 /-- The bounded operators on a subspace coordinate space, as a C⋆-algebra.
 

@@ -33,6 +33,7 @@ open scoped InnerProductSpace
 open Filter
 open TauCeti.DavisKahan.ExactSinTheta
 open TauCeti.ApproximationNumber
+open scoped TauCeti.CompleteSubspace
 
 noncomputable section
 
@@ -40,10 +41,6 @@ universe u
 
 variable {G : Type u} [NormedAddCommGroup G] [InnerProductSpace ℂ G]
   [CompleteSpace G]
-
-local instance instCompleteSpaceCoeOfHasOrthogonalProjectionUnboundedExact
-    (W : Submodule ℂ G) [W.HasOrthogonalProjection] : CompleteSpace W :=
-  (Submodule.isComplete_coe_of_hasOrthogonalProjection W).completeSpace_coe
 
 /-- The canonical one-sided spectral cutoffs, after compression to the source
 spectral subspace, converge strongly to the identity of that subspace. -/

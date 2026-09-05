@@ -86,13 +86,24 @@ invariance theorems.
 
 The source census is complete; do not open a broad YWS proof campaign.
 
-- Do one **current-state API/source review**: stale references after recent refactors,
-  hidden added hypotheses, quantifier order, rank-boundary corners, and local
-  implementation definitions leaking into public statements.
-- **`YWS-T1-eq1`** — optional literal indexed Equation (1) wrapper. The source display
-  omits the simplicity hypothesis needed to identify a single sample eigenvector line.
-  If added, make that hypothesis explicit and classify it; do not manufacture an
-  "exact" wrapper that hides it.
+- **Current-state API/source review — done 2026-09-05.** It found no wrong mathematics and
+  six ledger defects, all repaired: the equation (1) row cited a Theorem 2 index-block
+  specialization as its compiled witness; the three Theorem 3 rows and one Theorem 2 row
+  pinned narrower or frame-producing forms rather than the source-shaped ones; the whole
+  `Rectangular/SourceTheorem3.lean` surface was invisible to every ledger while the
+  standalone submission repository already cited it; the grounding contract guarded only
+  one of the three machine-checked refutations; the stated reason equation (1) has no
+  wrapper was wrong; and eight sentences across the module headers, `README.md`,
+  `GROUNDING.md`, `ELEGANCE_AUDIT.md`, `CitationSurface.lean` and the distilled source
+  were stale.
+- **`YWS-T1-eq1`** — optional literal indexed Equation (1) wrapper. **The obstruction is not
+  what this file said.** It is not simplicity of `λ̂_j`: a repeated `λ̂_j` equals `λ̂_{j−1}`
+  or `λ̂_{j+1}`, so `|λ̂_j − λ_j|` is already one of the two terms in the printed minimum.
+  The real side condition is the interval-position one, `λ̂_{j+1} ≤ λ_j ≤ λ̂_{j−1}`, under
+  which the printed two-neighbour minimum is exactly the exterior separation and the
+  wrapper is a direct instantiation of `yuWangSamworth_theorem1_opNorm_le`. If added,
+  state that condition explicitly and classify the wrapper `compiled_corrected`; it is an
+  added hypothesis the printed display omits.
 
 **Preserve** the corrected Equation (4), which is false as printed, and the corrected
 rank-boundary convention.

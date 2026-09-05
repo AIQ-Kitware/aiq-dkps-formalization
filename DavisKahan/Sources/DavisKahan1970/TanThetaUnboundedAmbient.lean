@@ -43,6 +43,7 @@ open TauCeti.DavisKahan
 open TauCeti.DavisKahan.TanTheta
 open TauCeti.DavisKahan.TanTheta
 open TauCeti.ApproximationNumber
+open scoped TauCeti.CompleteSubspace
 
 noncomputable section
 
@@ -67,10 +68,6 @@ theorem hasDefinedAmbientTangent_iff_norm_sinAngleOperatorC_lt_one
     (U V : Submodule ℂ E) [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] :
     HasDefinedAmbientTangent U V ↔ ‖sinAngleOperatorC U V‖ < 1 := by
   rw [HasDefinedAmbientTangent, norm_sinAngleOperatorC U V]
-
-local instance instCompleteSpaceCoeOfHasOrthogonalProjectionTanThetaUnboundedAmbient
-    (W : Submodule ℂ E) [W.HasOrthogonalProjection] : CompleteSpace W :=
-  (Submodule.isComplete_coe_of_hasOrthogonalProjection W).completeSpace_coe
 
 omit [CompleteSpace E] in
 private theorem comp_eq_mul_unboundedTanThetaAmbient

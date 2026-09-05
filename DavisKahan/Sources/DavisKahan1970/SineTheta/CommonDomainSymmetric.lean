@@ -109,20 +109,7 @@ noncomputable section
 universe u v
 
 open TauCeti.DavisKahan
-
-/-- A subspace admitting an orthogonal projection inside a complete ambient space is
-itself complete.  `local instance` does not propagate through imports, so it is
-reinstalled here, exactly as in the bounded Proposition 6.1 module.
-
-The common-domain proof works throughout in the coordinate spaces of `U`, `V` and their
-complements, so every reducing restriction below needs it.  Its binders are written out
-rather than taken from a `variable` block because the module has three scalar sections and
-all three need it. -/
-local instance instCompleteSpaceCoeOfHasOrthogonalProjectionCommonDomainSymmetric
-    {𝕜 : Type u} [RCLike 𝕜]
-    {G : Type v} [NormedAddCommGroup G] [InnerProductSpace 𝕜 G] [CompleteSpace G]
-    (U : Submodule 𝕜 G) [U.HasOrthogonalProjection] : CompleteSpace U :=
-  (Submodule.isComplete_coe_of_hasOrthogonalProjection U).completeSpace_coe
+open scoped TauCeti.CompleteSubspace
 
 section ScalarGeneric
 

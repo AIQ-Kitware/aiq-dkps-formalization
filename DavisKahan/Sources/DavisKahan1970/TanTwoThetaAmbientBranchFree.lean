@@ -142,6 +142,7 @@ open TauCeti.DavisKahan
 open TauCeti.DavisKahan.ExactSinTheta
 
 open scoped InnerProductSpace
+open scoped TauCeti.CompleteSubspace
 
 noncomputable section
 
@@ -149,11 +150,6 @@ universe v
 
 variable {E : Type v} [NormedAddCommGroup E] [InnerProductSpace ℂ E]
   [CompleteSpace E]
-
-local instance instCompleteSpaceCoeOfHasOrthogonalProjectionTanTwoThetaBranchFree
-    {G : Type v} [NormedAddCommGroup G] [InnerProductSpace ℂ G] [CompleteSpace G]
-    (U : Submodule ℂ G) [U.HasOrthogonalProjection] : CompleteSpace U :=
-  (Submodule.isComplete_coe_of_hasOrthogonalProjection U).completeSpace_coe
 
 /-! ## Branch-independent ambient assembly -/
 

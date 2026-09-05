@@ -93,6 +93,7 @@ open TauCeti.DavisKahan.ExactSinTheta
 open TauCeti.DavisKahan.ExactSinTheta.ComplexificationApproximation
 open TauCeti.RealComplexification
 open TauCeti.DavisKahan.Foundation.RealComplexification
+open scoped TauCeti.CompleteSubspace
 
 noncomputable section
 
@@ -100,15 +101,6 @@ universe v
 
 variable {E : Type v} [NormedAddCommGroup E] [InnerProductSpace ℝ E]
   [CompleteSpace E]
-
-/-- An orthogonally complemented subspace of a complete space is complete.  The
-instance is `local` in every module that declares it, so it does not propagate
-through imports and has to be reinstalled here. -/
-local instance instCompleteSpaceCoeOfHasOrthogonalProjectionGramReal
-    {k : Type*} [RCLike k] {G : Type v} [NormedAddCommGroup G]
-    [InnerProductSpace k G] [CompleteSpace G]
-    (W : Submodule k G) [W.HasOrthogonalProjection] : CompleteSpace W :=
-  (Submodule.isComplete_coe_of_hasOrthogonalProjection W).completeSpace_coe
 
 /-! ## The reflection blocks under complexification -/
 

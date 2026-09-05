@@ -41,6 +41,7 @@ namespace TanTheta
 
 open ExactSinTheta
 open Module (finrank)
+open scoped TauCeti.CompleteSubspace
 
 noncomputable section
 
@@ -48,12 +49,6 @@ universe u
 
 variable {H : Type u} [NormedAddCommGroup H] [InnerProductSpace ℂ H]
   [CompleteSpace H]
-
-/-- A projected subspace of a complete Hilbert space is complete.  The source
-angle and finite CFC bridge both need this instance on the coordinate space. -/
-local instance instCompleteSpaceCoeOfHasOrthogonalProjectionDirectedAngleBridge
-    (W : Submodule ℂ H) [W.HasOrthogonalProjection] : CompleteSpace W :=
-  (Submodule.isComplete_coe_of_hasOrthogonalProjection W).completeSpace_coe
 
 /-- The bounded endomorphisms of a projected coordinate subspace form the
 C-star algebra used by Mathlib's continuous functional calculus. -/
