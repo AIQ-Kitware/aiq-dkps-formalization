@@ -209,8 +209,8 @@
         "classification": "source_repair",
         "detail": "Quench uses the current Acharyya Frobenius concentration theorem plus the rowwise norm bound, which supplies exactly the max-row control needed by the Quench proof without claiming the disputed Acharyya v1 display literally."
       },
-      "notes": "The rate endpoint is proved but not consumed downstream: Quench needs the growing-sample, target-augmented regime. See gap theorem1-rate-not-instantiated.",
-      "next_action": "Either generalize the rate theorem to a growing sample with an augmented target, or keep the divergence recorded; the capstones do not depend on the choice."
+      "notes": "The rate endpoint is proved but not consumed downstream: Quench needs the growing-sample, target-augmented regime. See gap theorem1-rate-not-instantiated.\n\nTHE ACHARYYA 2024 CHECK IS DONE, 2026-09-05, AND THE ANSWER IS NO. `GOAL.md` asked to check first whether the strengthened Acharyya 2024 machinery closes this. It does not, and cannot as it stands. Quench references no Acharyya 2024 theorem at all: the complete qualified surface is the vocabulary `Mat`, `DisMat`, `Config`, `ConfigError`, `HighProbAtTop` and `responseDist` plus `HighProbAtTop.mono_eventually`, and nothing from `ContinuousMDS.lean`, `Consistency.lean`, `RawStress.lean`, `GrowingModels.lean` or `ProfileNonuniqueness.lean`. Beyond references, the two developments do not meet: Acharyya 2024's population route estimates by raw stress and measures error as an L^p(P x P) pairwise-distance discrepancy, while this chain estimates by classical MDS and measures a uniform per-model event. See gap `dkps-definition-raw-stress-vs-cmds`, which already records that `Acharyya2024.rawStress` is not connected to this chain. So the remaining choice is the one this row's next action offers, with no third option imported from outside.",
+      "next_action": "Either generalize the rate theorem to a growing sample with an augmented target, or keep the divergence recorded; the capstones do not depend on the choice. The Acharyya 2024 route was checked on 2026-09-05 and does not apply -- see notes."
     },
     {
       "id": "Q26-EQ1",
