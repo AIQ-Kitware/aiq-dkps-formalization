@@ -704,7 +704,26 @@ Pay particular attention to the Section 2 assertions currently treated as sharpn
 * direct sums attaining equality simultaneously for all UIN norms;
 * first-order asymptotic equivalence as the perturbation tends to zero.
 
-For maximal certainty, formalize these as **supplemental proved source assertions** even if they remain outside the named 29-result denominator.
+~~For maximal certainty, formalize these as **supplemental proved source assertions** even if they remain outside the named 29-result denominator.~~
+
+**SCOPE RULING, jon, 2026-09-05: this instruction is withdrawn.** We do not
+formalize non-theorem prose assertions, and we do not prove anything Davis and
+Kahan did not themselves prove in the paper. This section as written was
+overscoped and too hostile.
+
+What survives of it: the denominator stays the 29 counted results, and the
+source-fidelity inventory keeps every atom visible and classified so a reviewer
+can see what was excluded and why. What does *not* survive: any obligation to
+supply Lean evidence for proof-only equations, prose commentary, sharpness
+remarks, or worked numerical steps. A `reopened_mapping` row whose hole is "these
+prose claims are not individually certified" is closed by **classifying** the
+material, not by proving it.
+
+Work already done under the withdrawn instruction is kept where it is genuinely
+Davis--Kahan's own mathematics -- the four Section 2 sharpness assertions are
+things the paper asserts, and two of the four constant-optimality witnesses were
+missing -- and is not extended. The Section 9 and Section 5/6 rows closed above
+are re-bindings of existing evidence, not new proof obligations, and stand.
 
 Apply the same rule to any other nontrivial Davis–Kahan-established assertion currently excluded only because it appears in prose rather than a named theorem environment.
 
@@ -743,17 +762,18 @@ the same treatment for the rest of them.
 
 Do not turn proof steps, definitions, externally cited facts, historical remarks, or open questions into artificial result obligations.
 
-The eventual claim should distinguish:
+The eventual claim is:
 
 ```text
 29/29 designated result obligations resolved exactly
 
 plus
 
-all additional nontrivial DK-established source assertions
-tracked in the fidelity inventory are either formally proved/refuted
-or explicitly classified outside the formalization claim for a principled reason
+every other source atom explicitly classified, with its reason,
+outside the formalization claim
 ```
+
+Classification is the deliverable for the second line. Proof is not.
 
 ---
 
