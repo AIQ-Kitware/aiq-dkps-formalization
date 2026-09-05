@@ -87,15 +87,15 @@ variable {E F G H : Type v}
 inside `[β, α]`, the complementary spectrum outside `(β - δ, α + δ)`.
 
 `FormBoundedSylvesterGap.intervalExterior` turns that into the gap the theorem
-takes, and `_root_.DavisKahan1970.sinTheta_unbounded_intervalExterior_symmetricNorming_complex` packages
+takes, and `DavisKahan1970.sinTheta_unbounded_intervalExterior_symmetricNorming_complex` packages
 the same step; this spells it out so the seam is visible. -/
 theorem sinTheta_from_printed_separation
     (N : SymmetricNormingFunction)
     (A : E →ₗ.[ℂ] E) (A₀ : F →ₗ.[ℂ] F) (Λ₁ : G →ₗ.[ℂ] G)
     (E₀ : F →L[ℂ] E) (F₀ : H →L[ℂ] E) (F₁ : G →L[ℂ] E) (R : F →L[ℂ] E)
     (hA : IsSelfAdjoint A) (hA₀ : IsSelfAdjoint A₀) (hΛ₁ : IsSelfAdjoint Λ₁)
-    (htrial : _root_.DavisKahan1970.IsTrialResidual A A₀ E₀ R)
-    (hexact : _root_.DavisKahan1970.IsExactSpectralDecomposition A Λ₁ F₀ F₁)
+    (htrial : DavisKahan1970.IsTrialResidual A A₀ E₀ R)
+    (hexact : DavisKahan1970.IsExactSpectralDecomposition A Λ₁ F₀ F₁)
     {β α δ : ℝ} (hβα : β ≤ α) (hδ : 0 < δ)
     (htrialSpec : TauCeti.LinearPMap.realSpectrum A₀ ⊆ Set.Icc β α)
     (hcomplSpec : TauCeti.LinearPMap.realSpectrum Λ₁ ⊆
@@ -126,8 +126,8 @@ theorem sinTheta_from_printed_separation_rclike
     (A : E →ₗ.[𝕜] E) (A₀ : F →ₗ.[𝕜] F) (Λ₁ : G →ₗ.[𝕜] G)
     (E₀ : F →L[𝕜] E) (F₀ : H →L[𝕜] E) (F₁ : G →L[𝕜] E) (R : F →L[𝕜] E)
     (hA : IsSelfAdjoint A) (hA₀ : IsSelfAdjoint A₀) (hΛ₁ : IsSelfAdjoint Λ₁)
-    (htrial : _root_.DavisKahan1970.IsTrialResidual A A₀ E₀ R)
-    (hexact : _root_.DavisKahan1970.IsExactSpectralDecomposition A Λ₁ F₀ F₁)
+    (htrial : DavisKahan1970.IsTrialResidual A A₀ E₀ R)
+    (hexact : DavisKahan1970.IsExactSpectralDecomposition A Λ₁ F₀ F₁)
     {β α δ : ℝ} (hβα : β ≤ α) (hδ : 0 < δ)
     (htrialSpec : TauCeti.LinearPMap.realSpectrum A₀ ⊆ Set.Icc β α)
     (hcomplSpec : TauCeti.LinearPMap.realSpectrum Λ₁ ⊆

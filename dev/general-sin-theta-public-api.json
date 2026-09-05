@@ -11,7 +11,7 @@
   "endpoints": [
     {"name": "ForMathlib.DavisKahan1970.sinTheta", "scalar": "complex", "input": "source-record", "trial": "isometric", "scope": "unbounded-all-gap", "canonical": true, "status": "compiler-accepted"},
     {"name": "ForMathlib.DavisKahan1970.sinTheta_generalized_bundled_complex", "scalar": "complex", "input": "source-record", "trial": "lower-frame", "scope": "unbounded-all-gap", "canonical": true, "status": "compiler-accepted"},
-    {"name": "ForMathlib.DavisKahan1970.sinTheta_unbounded_formGap_symmetricNorming_real", "scalar": "real", "input": "source-record", "trial": "isometric", "scope": "unbounded-all-gap", "canonical": true, "status": "compiler-accepted"},
+    {"name": "ForMathlib.TauCeti.DavisKahan1970.sinTheta_unbounded_formGap_symmetricNorming_real", "scalar": "real", "input": "source-record", "trial": "isometric", "scope": "unbounded-all-gap", "canonical": true, "status": "compiler-accepted"},
     {"name": "ForMathlib.DavisKahan1970.sinTheta_generalized_bundled_real", "scalar": "real", "input": "source-record", "trial": "lower-frame", "scope": "unbounded-all-gap", "canonical": true, "status": "compiler-accepted"},
     {"name": "ForMathlib.DavisKahan1970.sinTheta_unbounded_spectralSubspace_real", "scalar": "real", "input": "measurable-spectral-set", "trial": "isometric", "scope": "unbounded-all-gap", "canonical": true, "status": "compiler-accepted"},
     {"name": "ForMathlib.DavisKahan1970.sinTheta_generalized_unbounded_spectralSubspace_real", "scalar": "real", "input": "measurable-spectral-set", "trial": "lower-frame", "scope": "unbounded-all-gap", "canonical": true, "status": "compiler-accepted"},

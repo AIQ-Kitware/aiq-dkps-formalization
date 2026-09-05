@@ -60,6 +60,7 @@ coordinates are grouped into named predicates.  Their characteristic theorems
 below expose every bundled clause to the semantic-alignment review.
 -/
 
+namespace TauCeti
 namespace DavisKahan1970
 
 open TauCeti.DavisKahanExt
@@ -73,9 +74,7 @@ noncomputable section
 
 universe u v
 
-open TauCeti
 open TauCeti.DavisKahan
-open TauCeti.DavisKahan1970
 
 variable {𝕜 : Type u} [RCLike 𝕜]
 variable {E F G H : Type v}
@@ -584,3 +583,4 @@ theorem sinTheta_unbounded_formGap_symmetricNorming_real_ofRCLike_conforms :
 end
 
 end DavisKahan1970
+end TauCeti

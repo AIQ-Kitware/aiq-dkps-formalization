@@ -297,8 +297,8 @@ angle scope, with no clause open.
 
   | clause | field | conclusion atom(s) | canonical witness | disposition |
   |---|---|---|---|---|
-  | `directed.complex` | complex | `S2-sin-theta.directed-conclusion` | `DavisKahan1970.sinTheta_unbounded_formGap_symmetricNorming_complex` | **PASS** |
-  | `directed.real` | real | `S2-sin-theta.directed-conclusion` | `DavisKahan1970.sinTheta_unbounded_formGap_symmetricNorming_real` | **PASS** |
+  | `directed.complex` | complex | `S2-sin-theta.directed-conclusion` | `TauCeti.DavisKahan1970.sinTheta_unbounded_formGap_symmetricNorming_complex` | **PASS** |
+  | `directed.real` | real | `S2-sin-theta.directed-conclusion` | `TauCeti.DavisKahan1970.sinTheta_unbounded_formGap_symmetricNorming_real` | **PASS** |
 
 - Result-wide scope atoms carried by every clause's own primary: `S2-sin-theta.ui-norm-scope`, `S2-sin-theta.gap-hypothesis`, `S2-unbounded-scope.infinite-dimensional-scope`, `S2-unbounded-scope.arbitrary-ui-scope`, `S2-unbounded-scope.unbounded-selfadjoint-scope`, `S2-unbounded-scope.bounded-residual-needed`, `S2-unbounded-scope.half-infinite-gap-intervals`
 

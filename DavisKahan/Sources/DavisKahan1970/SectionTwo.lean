@@ -287,7 +287,7 @@ supplied by instance search, so they do not appear in the signature.
 `sinTheta_complex` and `sinTheta_real` below are this statement at the two fields
 Davis and Kahan write about.  They are corroboration, and convenient when a fixed
 field is already in hand. -/
-alias sinTheta := _root_.DavisKahan1970.sinTheta_unbounded_formGap_symmetricNorming_rclike
+alias sinTheta := DavisKahan1970.sinTheta_unbounded_formGap_symmetricNorming_rclike
 
 /-- **Davis--Kahan 1970, the `sin Θ` theorem, over `ℂ`.**
 
@@ -298,14 +298,14 @@ branches, and an arbitrary source unitarily invariant norm.
 
 `DavisKahan1970.sinTheta_unbounded_intervalExterior_symmetricNorming_complex` states the same theorem with
 the gap written out as the printed interval/exterior separation. -/
-alias sinTheta_complex := _root_.DavisKahan1970.sinTheta_unbounded_formGap_symmetricNorming_complex
+alias sinTheta_complex := DavisKahan1970.sinTheta_unbounded_formGap_symmetricNorming_complex
 
 /-- **Davis--Kahan 1970, the `sin Θ` theorem, over `ℝ`.**
 
 The real sibling of `sinTheta`, with the same argument list, the same full gap
 scope and the same two conclusions.  The descent from the complex case happens
 inside the proof and is not visible in the statement. -/
-alias sinTheta_real := _root_.DavisKahan1970.sinTheta_unbounded_formGap_symmetricNorming_real
+alias sinTheta_real := DavisKahan1970.sinTheta_unbounded_formGap_symmetricNorming_real
 
 /-! ## `tan Θ` -/
 

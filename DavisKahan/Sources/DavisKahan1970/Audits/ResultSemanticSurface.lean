@@ -136,12 +136,12 @@ presentation declaration, the engine, and the scope companions. -/
 #check @TauCeti.DavisKahan1970.SectionTwo.sinTheta
 #check @TauCeti.DavisKahan1970.SectionTwo.sinTheta_complex
 #check @TauCeti.DavisKahan1970.SectionTwo.sinTheta_real
-#check @DavisKahan1970.sinTheta_unbounded_formGap_symmetricNorming_complex
-#check @DavisKahan1970.sinTheta_unbounded_formGap_symmetricNorming_real
-#check @DavisKahan1970.sinTheta_unbounded_intervalExterior_symmetricNorming_complex
-#check @DavisKahan1970.sinTheta_unbounded_intervalExterior_symmetricNorming_real
-#check @DavisKahan1970.sinTheta_unbounded_intervalExterior_characterizedWitness_rclike
-#check @DavisKahan1970.sinTheta_unbounded_formGap_symmetricNorming_rclike
+#check @TauCeti.DavisKahan1970.sinTheta_unbounded_formGap_symmetricNorming_complex
+#check @TauCeti.DavisKahan1970.sinTheta_unbounded_formGap_symmetricNorming_real
+#check @TauCeti.DavisKahan1970.sinTheta_unbounded_intervalExterior_symmetricNorming_complex
+#check @TauCeti.DavisKahan1970.sinTheta_unbounded_intervalExterior_symmetricNorming_real
+#check @TauCeti.DavisKahan1970.sinTheta_unbounded_intervalExterior_characterizedWitness_rclike
+#check @TauCeti.DavisKahan1970.sinTheta_unbounded_formGap_symmetricNorming_rclike
 #check @TauCeti.DavisKahan1970.sinTheta_unbounded_intervalExterior_symmetricNorming_rclike
 #check @TauCeti.DavisKahan1970.sinTheta_bundled_complex
 #check @TauCeti.DavisKahan1970.sinTheta_paperData_real
@@ -695,8 +695,8 @@ Status: **TERMINAL EXACT**.
 #check @TauCeti.DavisKahan1970.theorem6_1_complex
 #check @TauCeti.DavisKahan1970.theorem6_1_real
 #check @TauCeti.DavisKahan1970.Theorem6_1_commonDomain
-#check @DavisKahan1970.IsTrialResidualEquation
-#check @DavisKahan1970.isTrialResidual_iff_equation_and_isometry
+#check @TauCeti.DavisKahan1970.IsTrialResidualEquation
+#check @TauCeti.DavisKahan1970.isTrialResidual_iff_equation_and_isometry
 #check @TauCeti.DavisKahan1970.lowerFrameBound_iff_operator_inequality
 #check @TauCeti.DavisKahan1970.lowerFrameBound_of_operator_inequality
 #check @TauCeti.DavisKahan1970.Theorem6_1_complex
@@ -793,5 +793,5 @@ Status: **TERMINAL EXACT**.
 #check @TauCeti.DavisKahan1970.Section8.theorem8_2_sinTwoTheta_residual_real_symmetricNorming
 #check @TauCeti.DavisKahan1970.Section8.theorem8_2_branch_maximalAngle_lt_of_crossedDefects
 #check @TauCeti.DavisKahan1970.Section8.theorem8_2_branch_real_maximalAngle_lt_of_crossedDefects
-#check @DavisKahan1970.isTrialResidual_iff
-#check @DavisKahan1970.isExactSpectralDecomposition_iff
+#check @TauCeti.DavisKahan1970.isTrialResidual_iff
+#check @TauCeti.DavisKahan1970.isExactSpectralDecomposition_iff
