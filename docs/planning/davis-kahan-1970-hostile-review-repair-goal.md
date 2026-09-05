@@ -258,7 +258,7 @@ Follow ground rule 3 for every rename.
    The rule: a declaration registered as source evidence is either declared under
    `TauCeti.DavisKahan1970` in `Sources/DavisKahan1970/**`, or is aliased there and the alias
    is what the census names.
-5. Rename `UnboundedTrialBlock` to `BoundedCompressionTrialBlock` (its compression is bounded;
+5. Rename `BoundedCompressionTrialBlock` to `BoundedCompressionTrialBlock` (its compression is bounded;
    the current name has already misled one certificate, per the S2-tan-theta review note).
 6. Retire the unqualified clause aliases `SectionTwo.tanTheta_{complex,real}`,
    `SectionTwo.sinTwoTheta_{complex,real}`, `SectionTwo.tanTwoTheta_{complex,real}` in favour of

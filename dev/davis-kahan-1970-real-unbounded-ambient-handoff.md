@@ -64,7 +64,7 @@ theorem tanTheta_ambient_unboundedOperator_boundedRitz_paperUINorm_real
     (A : TauCeti.DavisKahanExt.ClosedOperator (𝕜 := ℝ) (E := E))
     {U V : Submodule ℝ E}
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
-    (D : UnboundedTrialBlock A U)
+    (D : BoundedCompressionTrialBlock A U)
     (H : E →L[ℝ] E) (hH : IsSelfAdjoint H)
     {alpha delta : ℝ} (hdelta : 0 < delta)
     (hVdom : ∀ x : A.domain, Vᗮ.starProjection ((x : E)) ∈ A.domain)
@@ -84,7 +84,7 @@ theorem tanTheta_ambient_unboundedOperator_boundedRitz_paperUINorm_real
 Note (superseded 2026-08-28): this paragraph named a `DKClosedOperator` abbreviation for
 the ℂ-only bundled record.  Both are deleted, as is the `ClosedOperator` carrier in the
 signature quoted above; the real carrier is now `E →ₗ.[ℝ] E`.  The signature is left as it
-was written so the record of the plan stays accurate to its date. `UnboundedTrialBlock`
+was written so the record of the plan stays accurate to its date. `BoundedCompressionTrialBlock`
 (`DavisKahan/TanTheta/UnboundedSpectrum.lean:44`) is already scalar-generic and its own
 docstring says so.
 
@@ -100,7 +100,7 @@ absent from the real unbounded directed setup, or a factor above one.
 `DavisKahan/Sources/DavisKahan1970/DirectedUnboundedReal.lean` already established the
 right route for the directed case, and its module docstring states it explicitly: the
 unbounded chain touches its ambient operator only through `Theorem63TrialData` — bounded
-data — plus the two printed form bounds. That bundle, `UnboundedTrialBlock`,
+data — plus the two printed form bounds. That bundle, `BoundedCompressionTrialBlock`,
 `Theorem63TrialData.ofUnbounded`, and `crossed_lower_of_reducing` are all scalar-generic.
 Exactly one link is ℂ-only: `all_kyFan_core_of_formBounds_infinite`, whose finite-projector
 selection rests on a projection-valued measure that exists only over `ℂ` in the pinned

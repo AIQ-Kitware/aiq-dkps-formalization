@@ -353,7 +353,7 @@ only Section 2 scope atom that carried none.  Repaired by
 `tanTheta_directed_unboundedRitz_paperUINorm_{complex,real}`, promoted from the
 Appendix-scope Ky Fan estimates that already existed on both fields; the atom now
 requires an `UnboundedRitzPair` and forbids the bounded-compression
-`UnboundedTrialBlock`; regressions both ways are in the checker tests.  29/29 is
+`BoundedCompressionTrialBlock`; regressions both ways are in the checker tests.  29/29 is
 restored on the repair, not on the argument.  The lesson is recorded because it
 generalizes: *a scope atom with no compiler-checkable requirement is not
 certified, it is asserted.*

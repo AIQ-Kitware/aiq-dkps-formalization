@@ -19,7 +19,7 @@ The Appendix to Section 6 is explicit that in the unbounded scope both `A₀ ≤
 `Λ₁ ≥ α + δ` "may now be unbounded", which is why the spectral resolution of `A₀` and the
 truncation `Ω(τ) A₀ Ω(τ)` appear in the printed proof at all.
 
-`Theorem63TrialData` and `UnboundedTrialBlock` permit unboundedness only in the *ambient*
+`Theorem63TrialData` and `BoundedCompressionTrialBlock` permit unboundedness only in the *ambient*
 operator: their `compression` is a `Z →L[𝕜] Z`, so the whole restriction of the ambient
 operator to the trial space is a hypothesis-level bounded operator.  This module removes
 that restriction on the tangent side.

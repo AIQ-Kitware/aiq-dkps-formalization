@@ -492,7 +492,7 @@ theorem tanTheta_ambient_unboundedOperator_boundedRitz_symmetricNorming_complex
     (A : E →ₗ.[ℂ] E)
     {U V : Submodule ℂ E}
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
-    (D : UnboundedTrialBlock A U)
+    (D : BoundedCompressionTrialBlock A U)
     (H : E →L[ℂ] E) (hH : IsSelfAdjoint H)
     {alpha delta : ℝ} (hdelta : 0 < delta)
     (hVdom : ∀ x : A.domain, Vᗮ.starProjection ((x : E)) ∈ A.domain)

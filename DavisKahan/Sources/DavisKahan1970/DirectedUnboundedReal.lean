@@ -25,7 +25,7 @@ unitarily invariant ideal gauge.
 The unbounded tangent chain consumes its ambient operator only through
 `Theorem63TrialData` -- the bounded triple (action, compression, Ritz residual) tied by the
 block identity -- together with the two printed form bounds.  That bundle, the closed
-operator carrying it (`UnboundedTrialBlock`), the reassembly
+operator carrying it (`BoundedCompressionTrialBlock`), the reassembly
 `Theorem63TrialData.ofUnbounded`, and the decoupling `crossed_lower_of_reducing` are all
 scalar-generic, and are stated over `RCLike` in their own modules.
 
@@ -373,7 +373,7 @@ level where approximation numbers are preserved exactly. -/
 theorem theorem6_3_unbounded_infiniteTrial_ideal_exists_of_reducing_real
     (N : KyFanDominantIdealFamily (𝕜 := ℝ))
     (A : E →ₗ.[ℝ] E)
-    (D : UnboundedTrialBlock A Z)
+    (D : BoundedCompressionTrialBlock A Z)
     {alpha delta : ℝ} (hdelta : 0 < delta)
     (hVdom : ∀ x : A.domain, Vᗮ.starProjection ((x : E)) ∈ A.domain)
     (hVcomm : ∀ x : A.domain,
@@ -399,7 +399,7 @@ approximation numbers is supplied by the caller. -/
 theorem theorem6_3_unbounded_infiniteTrial_ideal_of_reducing_real
     (N : KyFanDominantIdealFamily (𝕜 := ℝ))
     (A : E →ₗ.[ℝ] E)
-    (D : UnboundedTrialBlock A Z)
+    (D : BoundedCompressionTrialBlock A Z)
     {alpha delta : ℝ} (hdelta : 0 < delta)
     (hVdom : ∀ x : A.domain, Vᗮ.starProjection ((x : E)) ∈ A.domain)
     (hVcomm : ∀ x : A.domain,
@@ -538,7 +538,7 @@ space is an arbitrary complete real subspace of the operator domain and the gaug
 real Fan-dominant unitarily invariant ideal gauge. -/
 theorem theorem6_3_unbounded_infiniteTrial_ideal_exists_real
     (N : KyFanDominantIdealFamily (𝕜 := ℝ))
-    (D : UnboundedTrialBlock A Z)
+    (D : BoundedCompressionTrialBlock A Z)
     (hdelta : 0 < delta)
     (hgap : realSelfAdjointSpectralProjection A hA (Set.Ioo alpha (alpha + delta))
       measurableSet_Ioo = 0)
@@ -563,7 +563,7 @@ theorem theorem6_3_unbounded_infiniteTrial_ideal_exists_real
 approximation numbers is supplied by the caller. -/
 theorem theorem6_3_unbounded_infiniteTrial_ideal_real
     (N : KyFanDominantIdealFamily (𝕜 := ℝ))
-    (D : UnboundedTrialBlock A Z)
+    (D : BoundedCompressionTrialBlock A Z)
     (hdelta : 0 < delta)
     (hgap : realSelfAdjointSpectralProjection A hA (Set.Ioo alpha (alpha + delta))
       measurableSet_Ioo = 0)

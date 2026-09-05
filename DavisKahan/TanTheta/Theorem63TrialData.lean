@@ -61,7 +61,7 @@ the trial subspace, its compression back into the trial subspace, and the residu
 tied by the block identity.  For a bounded symmetric ambient operator these are
 `T ∘L Z.subtypeL`, `theorem63Compression T Z`, and `theorem63Residual T Z`; for an
 unbounded self-adjoint operator whose domain contains the trial subspace they are the
-bundled data of an `UnboundedTrialBlock`.
+bundled data of an `BoundedCompressionTrialBlock`.
 
 Every field is a bounded map, so the bundle is scalar-generic: it makes sense over a
 real Hilbert space exactly as it does over a complex one. -/

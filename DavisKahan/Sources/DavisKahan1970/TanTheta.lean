@@ -110,7 +110,7 @@ the paper's objects with the domain bookkeeping made explicit. -/
 /-- Bundled Rayleigh--Ritz trial block for an unbounded operator: domain
 inclusion, self-adjoint compression, and bounded residual. -/
 alias TanThetaTrialBlock :=
-  DavisKahan.TanTheta.UnboundedTrialBlock
+  DavisKahan.TanTheta.BoundedCompressionTrialBlock
 
 /-- Proof-carrying transversality: the orthogonal projection restricts to a
 bounded linear equivalence from the trial subspace onto the exact subspace. -/
