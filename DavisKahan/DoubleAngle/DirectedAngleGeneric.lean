@@ -47,6 +47,7 @@ variable {𝕂 : Type w} [RCLike 𝕂] {e : RCLikeIso 𝕜 𝕂}
 
 open TauCeti.ScalarTransport
 
+omit [CompleteSpace E] in
 /-- The scalar transport carries the ideal block. -/
 @[simp] theorem clm_sinTwoThetaIdealBlock :
     clm (e := e) (sinTwoThetaIdealBlock U V) =
