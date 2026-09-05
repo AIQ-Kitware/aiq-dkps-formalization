@@ -186,6 +186,7 @@ theorem addBounded_reflectionPerturbation_eq_unitaryConj
         hint ⟨V.reflection y, hJy⟩
     _ = (TauCeti.LinearPMap.unitaryConj V.reflection A) ⟨y, hz⟩ := rfl
 
+omit [CompleteSpace H] in
 /-- **The reflected perturbation intertwines whenever the reflection commutes with
 `A + E` on the domain.**
 
