@@ -673,6 +673,52 @@ theorem tanTwoTheta_ambient_unbounded_symmetricNorming_complex
   · unfold SymmetricNormingFunction.gauge at hle ⊢
     rwa [← hgauge]
 
+/-- **Davis--Kahan 1970, the ambient `tan 2Θ` theorem at the printed source scope
+over `ℂ`.**
+
+Separable ambient Hilbert space and normalized unitarily invariant norm.  The
+pole-exclusion conjunct does not mention the norm and is read off the Ky Fan
+norming function; the estimate goes through the Fan-dominance bridge with the
+source's constant 2. -/
+theorem tanTwoTheta_ambient_unbounded_sourceExact_complex
+    [TopologicalSpace.SeparableSpace G]
+    (N : NormalizedUnitaryInvariantNorm.{0, u} ℂ)
+    {A : G →ₗ.[ℂ] G} {B : G →L[ℂ] G} {a b c : ℝ}
+    (V : Submodule ℂ G) [V.HasOrthogonalProjection]
+    (hA : IsSelfAdjoint A)
+    (hBsa : IsSelfAdjoint B)
+    (hB : TauCeti.IsOddFor
+      (TauCeti.LinearPMap.specRange hA (Set.Iic c) measurableSet_Iic) B)
+    (hV : DavisKahan.ReflectionIntertwines A B V)
+    (hUa : ∀ x : A.domain,
+      (x : G) ∈ TauCeti.LinearPMap.specRange hA (Set.Iic c) measurableSet_Iic →
+      RCLike.re ⟪A x, (x : G)⟫_ℂ ≤ a * ‖(x : G)‖ ^ 2)
+    (hUb : ∀ x : A.domain,
+      (x : G) ∈
+        (TauCeti.LinearPMap.specRange hA (Set.Iic c) measurableSet_Iic)ᗮ →
+      b * ‖(x : G)‖ ^ 2 ≤ RCLike.re ⟪A x, (x : G)⟫_ℂ)
+    (hab : a < b) (hBmem : N.Mem B) :
+    (∀ t ∈ spectrum ℝ (TauCeti.DavisKahan.Angle.angleOperatorC
+        (TauCeti.LinearPMap.specRange hA (Set.Iic c) measurableSet_Iic) V),
+        Real.cos (2 * t) ≠ 0) ∧
+      N.Mem (TauCeti.DavisKahan.Angle.absTanTwoAngleOperatorC
+        (TauCeti.LinearPMap.specRange hA (Set.Iic c) measurableSet_Iic) V) ∧
+      (b - a) * N.gauge (TauCeti.DavisKahan.Angle.absTanTwoAngleOperatorC
+        (TauCeti.LinearPMap.specRange hA (Set.Iic c) measurableSet_Iic) V) ≤
+        2 * N.gauge B := by
+  obtain ⟨hcos, -, -⟩ :=
+    tanTwoTheta_ambient_unbounded_symmetricNorming_complex
+      (kyFanNormingFunction 1 one_pos) V hA hBsa hB hV hUa hUb hab
+      (kyFanNormingFunction_mem 1 one_pos _)
+  obtain ⟨hmem, hle⟩ :=
+    normalizedUnitaryInvariant_of_symmetricNorming_mul N (sub_pos.mpr hab) two_pos hBmem
+      fun M hM => by
+        obtain ⟨-, hm, hl⟩ :=
+          tanTwoTheta_ambient_unbounded_symmetricNorming_complex M V hA hBsa hB hV
+            hUa hUb hab hM
+        exact ⟨hm, hl⟩
+  exact ⟨hcos, hmem, hle⟩
+
 end
 
 section DirectedCornerCorrespondence
