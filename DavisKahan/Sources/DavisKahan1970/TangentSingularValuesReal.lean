@@ -56,6 +56,7 @@ section SingleAngleReal
 variable (U V : Submodule ℝ E)
   [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
 
+omit [CompleteSpace E] in
 /-- The complexified projector difference is the projector difference of the
 complexified subspaces. -/
 theorem complexify_projectorDifference :

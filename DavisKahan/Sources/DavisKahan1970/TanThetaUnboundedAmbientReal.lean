@@ -427,6 +427,7 @@ def HasDefinedAmbientTangentReal (U V : Submodule ℝ E)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] : Prop :=
   U.projectionGap V < 1
 
+omit [CompleteSpace E] in
 /-- A defined real tangent implies condition (3.5), for the same reason as over `ℂ`. -/
 theorem crossedDefectsEquivalent_of_hasDefinedAmbientTangentReal
     {U V : Submodule ℝ E} [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]

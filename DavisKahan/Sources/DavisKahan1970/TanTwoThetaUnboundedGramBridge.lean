@@ -284,8 +284,8 @@ theorem blockCompression_mul_reflectionOperator
     blockCompression Ω Γ (K * Γ.reflectionOperator)
       = blockCompression Ω Γ K := by
   ext x
-  simp only [blockCompression, ContinuousLinearMap.coe_comp', Function.comp_apply,
-    ContinuousLinearMap.mul_apply, Submodule.subtypeL_apply]
+  simp only [blockCompression, ContinuousLinearMap.coe_comp, Function.comp_apply,
+    mul_apply_eq_comp, Submodule.subtypeL_apply]
   rw [Submodule.reflectionOperator_apply_of_mem Γ x.2]
 
 /-- **A `Γ → Γᗮ` compression only sees the `Γᗮ ← Γ` block of a diagonal pair.**
@@ -307,8 +307,8 @@ theorem blockCompression_diagonalPair
     Submodule.starProjection_orthogonal_apply_eq_zero x.2
   have hself : Γ.starProjection (x : G) = (x : G) :=
     Submodule.starProjection_eq_self_iff.mpr x.2
-  simp only [blockCompression, diagonalPair, ContinuousLinearMap.coe_comp',
-    Function.comp_apply, ContinuousLinearMap.add_apply, Submodule.subtypeL_apply,
+  simp only [blockCompression, diagonalPair, ContinuousLinearMap.coe_comp,
+    Function.comp_apply, add_apply, Submodule.subtypeL_apply,
     hzero, hself, map_zero, add_zero, Submodule.adjoint_subtypeL]
   rw [← Submodule.starProjection_apply, ← Submodule.starProjection_apply]
   exact Submodule.starProjection_eq_self_iff.mpr (Γᗮ.starProjection_apply_mem _)
