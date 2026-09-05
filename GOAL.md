@@ -99,11 +99,46 @@ unchanged.
   `TauCeti.DavisKahan.twoSidedShiftedInverseBound_of_coercive_comp` are the two
   theorems, both axiom-clean. `J` need only preserve norms, so a reflection
   qualifies.
-* **§6.3 is the next step and is now unblocked.** Lift
-  `realSpectrum_add_offDiagonal_subset_exterior_of_form_gap` and
-  `isQuarterAcute_of_orderedFormGap` to `LinearPMap`, replacing their
-  `isUnit_of_coercive` step by the theorem above. Then §6.4 lifts the Theorem 8.1
-  argument itself.
+* **§6.3 is half done.** The repulsion half is lifted:
+  `notMem_spectrum_addBounded_of_offDiagonal_form_gap` is the source Section 8
+  repulsion statement for an unbounded self-adjoint `A` with a bounded
+  off-diagonal `H`, stated in exactly the shape
+  `twoSidedShiftedInverseBound_of_spectrum_gap` consumes. Its ingredient
+  `reflected_centered_form_lower_pmap` is the coercivity of the reflected
+  centered *partial* map; the bounded hypothesis "`U` is invariant" becomes "`U`
+  reduces `A`", which is what keeps `P x` and `P^⊥ x` in the domain. The
+  off-diagonal/skew half is reused verbatim, because `H` is still bounded.
+* **`isQuarterAcute_of_orderedFormGap` is the one genuinely open piece of §VI, and
+  the obstruction is now identified precisely.** It is not the coercive inverse —
+  that is §6.2 and it is done. The bounded proof forms `B = J(A−c)` and
+  `C = K(A+H−c)`, both `≥ δ`, uses the exact Lyapunov identity
+  `C W + W* C = 2B` with `W = KJ` unitary, and then conjugates `W` by `C^{1/2}`
+  to turn strict accretivity into a strict spectral half-plane bound, which for a
+  *unitary* `W` gives `W + W* > 0`, i.e. `‖P_U − P_V‖² < 1/2`.
+
+  With `A` unbounded, `C` is unbounded and `C^{1/2}` is not available as a
+  bounded operator. Two facts survive and should be the starting point:
+
+  1. `W = KJ` preserves `dom(A)`, because `J` reduces `A` and `K` reduces `A+H`,
+     and `dom(A+H) = dom(A)`;
+  2. the Lyapunov identity is *equivalent*, in form terms, to the single
+     inequality `re ⟪W x, C x⟫ ≥ δ‖x‖²` on `dom(A)`, and substituting `x = C⁻¹ y`
+     (legitimate: `C⁻¹` is bounded by §6.2 and maps `H` onto `dom(A)`) makes it a
+     statement about bounded operators only:
+     `re ⟪W C⁻¹ y, y⟫ ≥ δ ‖C⁻¹ y‖²`.
+
+  Two candidate routes:
+
+  * **(a) form-relative boundedness.** `B = W* C − J H` with `H` bounded, so
+     `Z = C^{-1/2} B C^{-1/2}` is bounded exactly when `W* C` is `C`-form
+     bounded. Establish that and the bounded argument transports.
+  * **(b) approximate eigenvectors.** `W` is unitary, so a spectral point has an
+     approximate eigenvector; the naive estimate fails because `‖C xₙ‖` is
+     unbounded. Choosing the approximating sequence inside a spectral subspace of
+     `A` on which `C` is bounded would repair it.
+
+  Neither is a formalization detail; this is real operator theory and should be
+  scoped as its own task.
 * **§VII–§VIII (Theorem 8.2 unbounded)** not started, and §VII remains the largest
   single piece. Note that §7.1's core already exists:
   `exists_norm_le_two_sided_shifted_inverse_of_spectrum_gap` is the unbounded
