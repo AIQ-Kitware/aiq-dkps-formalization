@@ -5,6 +5,7 @@ Authors: Jon Crall, OpenAI GPT-5.6 Thinking, Claude Opus 5
 -/
 
 import DavisKahan.Geometry.Halmos.Realization
+import DavisKahan.Geometry.Halmos.UnitaryEquivalence
 import ForTauCeti.Analysis.InnerProductSpace.RealContinuousFunctionalCalculus
 import ForTauCeti.Analysis.RCLike.ScalarTransportFunctionalCalculus
 import ForTauCeti.Analysis.InnerProductSpace.BorelCalculus.SpectralMultiplicityEquiv
@@ -38,7 +39,7 @@ namespace DavisKahan1970
 
 open TauCeti.DavisKahan
 
-universe u v
+universe u v w
 
 section Realization
 
@@ -678,6 +679,127 @@ theorem theorem3_1_realization_ofSpectralMultiplicityAwayFromZero_real
   theorem3_1_realization_ofNonzeroPartsUnitaryEquiv hΘ₀ hΘ₁ hspec₀ hspec₁
     (TauCeti.DavisKahan.RealSpectralRestriction.operatorUnitaryEquiv_of_sameSpectralMultiplicity_real
       _ _ hmult)
+
+/-! ### The printed ambient-dimension clause
+
+The printed converse reads: "the angle operators may be arbitrary Hermitian operators
+satisfying `0 ≤ Θⱼ ≤ π/2`, **their domain dimensions sum to `dim H`**, and their spectral
+multiplicity functions agree except possibly at the spectral point `0`".
+
+The realizations above build the pair on `WithLp 2 (A₀ × A₁)`, the orthogonal direct sum of
+the two angle-operator domains, so the dimension equation holds there by construction -- but
+there is no ambient `H` in their signatures at all, and so nothing in their types answers the
+printed clause.  The wrappers below put it back.
+
+The dimension hypothesis is supplied constructively, as a linear isometry equivalence
+`WithLp 2 (A₀ × A₁) ≃ₗᵢ[𝕜] H`.  That is the same hypothesis: two Hilbert spaces admit such an
+equivalence exactly when their Hilbert dimensions agree
+(`TauCeti.nonempty_linearIsometryEquiv_of_hilbertBasis`), and the Hilbert dimension of the
+orthogonal direct sum is the sum of the two.  Supplying the equivalence rather than a cardinal
+equation is the same choice the repository makes for condition (3.5), where the crossed-defect
+identification is carried by an explicit isometry.
+
+The realized pair inside `H` is the isometric image of the model pair, so
+`PairOfSubspacesUnitaryEquivalent` holds between them and the four Halmos identities of the
+model realization transfer along `e` -- which is exactly the sense in which Theorem 3.1
+classifies pairs, namely up to isometric equivalence. -/
+
+section AmbientDimension
+
+/-- **Davis--Kahan 1970, Theorem 3.1, converse sentence over `ℂ`, with the printed ambient
+space and its dimension clause.**
+
+Given an ambient Hilbert space `H` whose dimension is the sum of the two angle-operator
+domain dimensions -- supplied as the isometry `e` -- the realized pair lives in `H`: there are
+subspaces `P, Q ≤ H` that are the isometric image of the model pair, and the model pair carries
+the four Halmos identities the printed converse asserts.
+
+`P` and `Q` are exhibited, not merely asserted to exist, so the conclusion also records that
+`(P, Q)` is unitarily equivalent to the model pair as an ordered pair of subspaces. -/
+theorem theorem3_1_realization_inAmbient_ofSpectralMultiplicityAwayFromZero_complex
+    {A₀ : Type u} [NormedAddCommGroup A₀] [InnerProductSpace ℂ A₀] [CompleteSpace A₀]
+    {A₁ : Type v} [NormedAddCommGroup A₁] [InnerProductSpace ℂ A₁] [CompleteSpace A₁]
+    {H : Type w} [NormedAddCommGroup H] [InnerProductSpace ℂ H] [CompleteSpace H]
+    {Θ₀ : A₀ →L[ℂ] A₀} {Θ₁ : A₁ →L[ℂ] A₁}
+    (hΘ₀ : IsSelfAdjoint Θ₀) (hΘ₁ : IsSelfAdjoint Θ₁)
+    (hspec₀ : spectrum ℝ Θ₀ ⊆ Set.Icc 0 (Real.pi / 2))
+    (hspec₁ : spectrum ℝ Θ₁ ⊆ Set.Icc 0 (Real.pi / 2))
+    (hmult : SameSpectralMultiplicityAwayFromZero hΘ₀ hΘ₁)
+    (e : WithLp 2 (A₀ × A₁) ≃ₗᵢ[ℂ] H) :
+    ∃ (J : A₀ →L[ℂ] A₁) (hJ : J ∘L Θ₀ = Θ₁ ∘L J)
+      (hisom : ContinuousLinearMap.adjoint J ∘L J ∘L cfc Real.sin Θ₀ = cfc Real.sin Θ₀)
+      (hcoisom : J ∘L ContinuousLinearMap.adjoint J ∘L cfc Real.sin Θ₁ = cfc Real.sin Θ₁),
+      TauCeti.DavisKahan.PairOfSubspacesUnitaryEquivalent
+          (sourceSubspace ℂ A₀ A₁)
+          (HalmosAngleDatum.ofIntertwinedAngles hΘ₀ hΘ₁ J hJ hisom hcoisom).targetSubspace
+          (Submodule.map (e.toLinearEquiv : WithLp 2 (A₀ × A₁) →ₗ[ℂ] H)
+            (sourceSubspace ℂ A₀ A₁))
+          (Submodule.map (e.toLinearEquiv : WithLp 2 (A₀ × A₁) →ₗ[ℂ] H)
+            (HalmosAngleDatum.ofIntertwinedAngles hΘ₀ hΘ₁ J hJ hisom hcoisom).targetSubspace) ∧
+      halmosCommonPart (sourceSubspace ℂ A₀ A₁)
+          (HalmosAngleDatum.ofIntertwinedAngles hΘ₀ hΘ₁ J hJ hisom hcoisom).targetSubspace =
+        Submodule.map (modelInl ℂ A₀ A₁ : A₀ →ₗ[ℂ] WithLp 2 (A₀ × A₁))
+          (LinearMap.ker ((cfc Real.sin Θ₀ : A₀ →L[ℂ] A₀) : A₀ →ₗ[ℂ] A₀)) ∧
+        halmosExteriorPart (sourceSubspace ℂ A₀ A₁)
+            (HalmosAngleDatum.ofIntertwinedAngles hΘ₀ hΘ₁ J hJ hisom hcoisom).targetSubspace =
+          Submodule.map (modelInr ℂ A₀ A₁ : A₁ →ₗ[ℂ] WithLp 2 (A₀ × A₁))
+            (LinearMap.ker ((cfc Real.sin Θ₁ : A₁ →L[ℂ] A₁) : A₁ →ₗ[ℂ] A₁)) ∧
+        halmosSourceDefect (sourceSubspace ℂ A₀ A₁)
+            (HalmosAngleDatum.ofIntertwinedAngles hΘ₀ hΘ₁ J hJ hisom hcoisom).targetSubspace =
+          Submodule.map (modelInl ℂ A₀ A₁ : A₀ →ₗ[ℂ] WithLp 2 (A₀ × A₁))
+            (LinearMap.ker ((cfc Real.cos Θ₀ : A₀ →L[ℂ] A₀) : A₀ →ₗ[ℂ] A₀)) ∧
+        halmosTargetDefect (sourceSubspace ℂ A₀ A₁)
+            (HalmosAngleDatum.ofIntertwinedAngles hΘ₀ hΘ₁ J hJ hisom hcoisom).targetSubspace =
+          Submodule.map (modelInr ℂ A₀ A₁ : A₁ →ₗ[ℂ] WithLp 2 (A₀ × A₁))
+            (LinearMap.ker ((cfc Real.cos Θ₁ : A₁ →L[ℂ] A₁) : A₁ →ₗ[ℂ] A₁)) := by
+  obtain ⟨J, hJ, hisom, hcoisom, h₃, h₄, h₅, h₆⟩ :=
+    theorem3_1_realization_ofSpectralMultiplicityAwayFromZero_complex hΘ₀ hΘ₁ hspec₀ hspec₁ hmult
+  exact ⟨J, hJ, hisom, hcoisom, ⟨e, rfl, rfl⟩, h₃, h₄, h₅, h₆⟩
+
+/-- **Davis--Kahan 1970, Theorem 3.1, converse sentence over `ℝ`, with the printed ambient
+space and its dimension clause.**  The real sibling of
+`theorem3_1_realization_inAmbient_ofSpectralMultiplicityAwayFromZero_complex`. -/
+theorem theorem3_1_realization_inAmbient_ofSpectralMultiplicityAwayFromZero_real
+    {A₀ : Type u} [NormedAddCommGroup A₀] [InnerProductSpace ℝ A₀] [CompleteSpace A₀]
+    {A₁ : Type v} [NormedAddCommGroup A₁] [InnerProductSpace ℝ A₁] [CompleteSpace A₁]
+    {H : Type w} [NormedAddCommGroup H] [InnerProductSpace ℝ H] [CompleteSpace H]
+    {Θ₀ : A₀ →L[ℝ] A₀} {Θ₁ : A₁ →L[ℝ] A₁}
+    (hΘ₀ : IsSelfAdjoint Θ₀) (hΘ₁ : IsSelfAdjoint Θ₁)
+    (hspec₀ : spectrum ℝ Θ₀ ⊆ Set.Icc 0 (Real.pi / 2))
+    (hspec₁ : spectrum ℝ Θ₁ ⊆ Set.Icc 0 (Real.pi / 2))
+    (hmult : SameSpectralMultiplicityAwayFromZero hΘ₀ hΘ₁)
+    (e : WithLp 2 (A₀ × A₁) ≃ₗᵢ[ℝ] H) :
+    ∃ (J : A₀ →L[ℝ] A₁) (hJ : J ∘L Θ₀ = Θ₁ ∘L J)
+      (hisom : ContinuousLinearMap.adjoint J ∘L J ∘L cfc Real.sin Θ₀ = cfc Real.sin Θ₀)
+      (hcoisom : J ∘L ContinuousLinearMap.adjoint J ∘L cfc Real.sin Θ₁ = cfc Real.sin Θ₁),
+      TauCeti.DavisKahan.PairOfSubspacesUnitaryEquivalent
+          (sourceSubspace ℝ A₀ A₁)
+          (HalmosAngleDatum.ofIntertwinedAngles hΘ₀ hΘ₁ J hJ hisom hcoisom).targetSubspace
+          (Submodule.map (e.toLinearEquiv : WithLp 2 (A₀ × A₁) →ₗ[ℝ] H)
+            (sourceSubspace ℝ A₀ A₁))
+          (Submodule.map (e.toLinearEquiv : WithLp 2 (A₀ × A₁) →ₗ[ℝ] H)
+            (HalmosAngleDatum.ofIntertwinedAngles hΘ₀ hΘ₁ J hJ hisom hcoisom).targetSubspace) ∧
+      halmosCommonPart (sourceSubspace ℝ A₀ A₁)
+          (HalmosAngleDatum.ofIntertwinedAngles hΘ₀ hΘ₁ J hJ hisom hcoisom).targetSubspace =
+        Submodule.map (modelInl ℝ A₀ A₁ : A₀ →ₗ[ℝ] WithLp 2 (A₀ × A₁))
+          (LinearMap.ker ((cfc Real.sin Θ₀ : A₀ →L[ℝ] A₀) : A₀ →ₗ[ℝ] A₀)) ∧
+        halmosExteriorPart (sourceSubspace ℝ A₀ A₁)
+            (HalmosAngleDatum.ofIntertwinedAngles hΘ₀ hΘ₁ J hJ hisom hcoisom).targetSubspace =
+          Submodule.map (modelInr ℝ A₀ A₁ : A₁ →ₗ[ℝ] WithLp 2 (A₀ × A₁))
+            (LinearMap.ker ((cfc Real.sin Θ₁ : A₁ →L[ℝ] A₁) : A₁ →ₗ[ℝ] A₁)) ∧
+        halmosSourceDefect (sourceSubspace ℝ A₀ A₁)
+            (HalmosAngleDatum.ofIntertwinedAngles hΘ₀ hΘ₁ J hJ hisom hcoisom).targetSubspace =
+          Submodule.map (modelInl ℝ A₀ A₁ : A₀ →ₗ[ℝ] WithLp 2 (A₀ × A₁))
+            (LinearMap.ker ((cfc Real.cos Θ₀ : A₀ →L[ℝ] A₀) : A₀ →ₗ[ℝ] A₀)) ∧
+        halmosTargetDefect (sourceSubspace ℝ A₀ A₁)
+            (HalmosAngleDatum.ofIntertwinedAngles hΘ₀ hΘ₁ J hJ hisom hcoisom).targetSubspace =
+          Submodule.map (modelInr ℝ A₀ A₁ : A₁ →ₗ[ℝ] WithLp 2 (A₀ × A₁))
+            (LinearMap.ker ((cfc Real.cos Θ₁ : A₁ →L[ℝ] A₁) : A₁ →ₗ[ℝ] A₁)) := by
+  obtain ⟨J, hJ, hisom, hcoisom, h₃, h₄, h₅, h₆⟩ :=
+    theorem3_1_realization_ofSpectralMultiplicityAwayFromZero_real hΘ₀ hΘ₁ hspec₀ hspec₁ hmult
+  exact ⟨J, hJ, hisom, hcoisom, ⟨e, rfl, rfl⟩, h₃, h₄, h₅, h₆⟩
+
+end AmbientDimension
 
 end Fields
 

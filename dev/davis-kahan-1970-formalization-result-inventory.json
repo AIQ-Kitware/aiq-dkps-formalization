@@ -2410,9 +2410,12 @@
         "TauCeti.DavisKahan1970.theorem3_1_realization_ofSpectralMultiplicityAwayFromZero_real",
         "TauCeti.DavisKahan1970.theorem3_1_realization_ofNonzeroPartsUnitaryEquiv",
         "TauCeti.DavisKahan1970.theorem3_1_intertwiner_of_nonzeroPartsUnitaryEquiv",
-        "TauCeti.DavisKahan1970.NonzeroPartsUnitaryEquiv"
+        "TauCeti.DavisKahan1970.NonzeroPartsUnitaryEquiv",
+        "TauCeti.DavisKahan1970.theorem3_1_realization_inAmbient_ofSpectralMultiplicityAwayFromZero_complex",
+        "TauCeti.DavisKahan1970.theorem3_1_realization_inAmbient_ofSpectralMultiplicityAwayFromZero_real",
+        "TauCeti.nonempty_linearIsometryEquiv_of_hilbertBasis"
       ],
-      "review_note": "Accepted by the hostile audit at the stated-result level.\n\n**REOPENED 2026-09-04 (Claude Opus 5, on hostile review).**  The converse clause was certified against theorems that take the intertwining partial isometry J_0 as a hypothesis, while the checked-in source specification says the proof *reconstructs* the pair from the angle data and the corresponding J_0.  A new witness constructs J_0 from the multiplicity hypothesis and is strictly closer to the printed statement, but the printed hypothesis allows the multiplicity functions to differ at the spectral point 0 and the available classification is agreement everywhere, so the clause is recorded OPEN rather than established.\n\n**CLOSED 2026-09-04 (Claude Opus 5).**  The converse now takes only the printed data: two self-adjoint operators, the two printed spectral confinements, and agreement of the spectral multiplicity functions away from 0.  J_0 is constructed, not hypothesised, and the null spaces are free.",
+      "review_note": "Accepted by the hostile audit at the stated-result level.\n\n**REOPENED 2026-09-04 (Claude Opus 5, on hostile review).**  The converse clause was certified against theorems that take the intertwining partial isometry J_0 as a hypothesis, while the checked-in source specification says the proof *reconstructs* the pair from the angle data and the corresponding J_0.  A new witness constructs J_0 from the multiplicity hypothesis and is strictly closer to the printed statement, but the printed hypothesis allows the multiplicity functions to differ at the spectral point 0 and the available classification is agreement everywhere, so the clause is recorded OPEN rather than established.\n\n**CLOSED 2026-09-04 (Claude Opus 5).**  The converse now takes only the printed data: two self-adjoint operators, the two printed spectral confinements, and agreement of the spectral multiplicity functions away from 0.  J_0 is constructed, not hypothesised, and the null spaces are free.\n\n**AMBIENT DIMENSION CLAUSE ADDED 2026-09-05**, on the hostile follow-up review.  The printed converse says the angle operators may be arbitrary Hermitian operators with `0 <= Theta_j <= pi/2` whose multiplicity functions agree away from 0 AND whose domain dimensions sum to `dim H`.  The registered witnesses realized the pair on `WithLp 2 (A_0 x A_1)`, where the dimension equation holds by construction -- but no ambient `H` appeared in their signatures, so nothing in their types answered that clause.  The canonical witnesses are now the `_inAmbient_` wrappers, which take the dimension clause as a linear isometry equivalence from the model to `H` and exhibit the realized pair inside `H` as the isometric image of the model pair, together with `PairOfSubspacesUnitaryEquivalent` between them.  The ambient-free realizations are retained as `generalization`.",
       "parent_claim_id": "DK-3.1-thm",
       "boundary_review": {
         "status": "accepted",
@@ -2453,27 +2456,44 @@
           "capability_classes": []
         },
         {
-          "declaration": "TauCeti.DavisKahan1970.theorem3_1_realization_ofSpectralMultiplicityAwayFromZero_complex",
+          "declaration": "TauCeti.DavisKahan1970.theorem3_1_realization_inAmbient_ofSpectralMultiplicityAwayFromZero_complex",
           "role": "primary_source_witness",
           "scalar_scope": "complex",
           "evidence_kind": "proof",
           "covers_source_atoms": [
             "DK-3.1-thm.converse-angle-data"
           ],
-          "capability_classes": []
+          "capability_classes": [],
+          "note": "The printed converse with its ambient space and dimension clause present in the type."
         },
         {
-          "declaration": "TauCeti.DavisKahan1970.theorem3_1_realization_ofSpectralMultiplicityAwayFromZero_real",
+          "declaration": "TauCeti.DavisKahan1970.theorem3_1_realization_inAmbient_ofSpectralMultiplicityAwayFromZero_real",
           "role": "primary_source_witness",
           "scalar_scope": "real",
           "evidence_kind": "proof",
           "covers_source_atoms": [
             "DK-3.1-thm.converse-angle-data"
           ],
-          "capability_classes": []
+          "capability_classes": [],
+          "note": "The real sibling, likewise with the ambient dimension clause present."
         }
       ],
       "supporting_evidence": [
+        {
+          "declaration": "TauCeti.nonempty_linearIsometryEquiv_of_hilbertBasis",
+          "role": "source_correspondence",
+          "note": "The bridge that makes `e : WithLp 2 (A_0 x A_1) ~=_li H` the printed dimension clause: two Hilbert spaces with equinumerous Hilbert bases are linearly isometric.  Registered so the reading of `e` as 'their domain dimensions sum to dim H' rests on a compiled theorem rather than on a sentence."
+        },
+        {
+          "declaration": "TauCeti.DavisKahan1970.theorem3_1_realization_ofSpectralMultiplicityAwayFromZero_real",
+          "role": "generalization",
+          "note": "The real sibling of the ambient-free realization."
+        },
+        {
+          "declaration": "TauCeti.DavisKahan1970.theorem3_1_realization_ofSpectralMultiplicityAwayFromZero_complex",
+          "role": "generalization",
+          "note": "The same realization with no ambient space and no dimension hypothesis: it builds the pair on the orthogonal direct sum `WithLp 2 (A_0 x A_1)` unconditionally, which is strictly more than the printed converse asks.  The canonical witness is this theorem plus the ambient transport."
+        },
         {
           "declaration": "TauCeti.DavisKahan1970.theorem3_1_realization",
           "role": "generalization"
@@ -2552,7 +2572,7 @@
           ],
           "scalar_scope": "complex",
           "evidence": {
-            "primary": "TauCeti.DavisKahan1970.theorem3_1_realization_ofSpectralMultiplicityAwayFromZero_complex",
+            "primary": "TauCeti.DavisKahan1970.theorem3_1_realization_inAmbient_ofSpectralMultiplicityAwayFromZero_complex",
             "correspondence": [
               "TauCeti.DavisKahan1970.theorem3_1_realization_ofNonzeroPartsUnitaryEquiv",
               "TauCeti.DavisKahan1970.theorem3_1_intertwiner_of_nonzeroPartsUnitaryEquiv",
@@ -2564,7 +2584,7 @@
           },
           "status": "established",
           "evidence_kind": "proof",
-          "justification": "The printed converse gives arbitrary Hermitian Theta_0, Theta_1 with 0 <= Theta_j <= pi/2 whose spectral multiplicity functions agree EXCEPT POSSIBLY AT 0, and says 'the proof reconstructs the pair from these angle data and the corresponding partial isometry J_0'.  REOPENED 2026-09-04: the previous witness `theorem3_1_realization` consumes a `HalmosAngleDatum`, which packages cos/sin of both angles AND the intertwiner as fields, and `theorem3_1_realization_ofAngles` asks its caller for J together with its two partial-isometry identities.  J_0 is output of the printed proof, not input to the printed theorem, so both are weaker statements than the source's.  `theorem3_1_realization_ofSpectralMultiplicity_complex` now takes only the two self-adjoint operators, the two spectral confinements and the multiplicity hypothesis, and constructs J_0 internally through `operatorUnitaryEquiv_of_sameSpectralMultiplicity_complex`.  The clause is nevertheless OPEN, not established: `SameSpectralMultiplicity` is agreement everywhere, while the printed hypothesis permits disagreement at the spectral point 0.  Closing it needs the multiplicity comparison restricted to the closures of the ranges of the two angle operators, which is not written.  The freedom at 0 is realized unconditionally in the compact case by `corollary3_1_realization_zeroMultiplicity` (row DK-3.1-cor).  CLOSED 2026-09-04: the residual narrowing is gone.  `SameSpectralMultiplicityAwayFromZero` compares the two angle operators only on their NONZERO parts -- the orthogonal complement of the kernel of the sine, which on the printed spectrum [0, pi/2] is `closure (Ran Theta)`, the space the source's J_0 is required to carry across -- so the two null spaces are unconstrained, which is exactly 'except possibly at the eigenvalue 0'.  `theorem3_1_intertwiner_of_sameSpectralMultiplicity_awayFromZero` builds J_0 from that hypothesis: the unitary between the nonzero parts, extended by zero on the null space.  The two partial-isometry identities come out as the two star projections, and they hold on the ranges of the sines because a self-adjoint operator maps into the orthogonal complement of its own kernel.  The intertwining is read on the two invariant summands, using that `sin Theta` commutes with `Theta`."
+          "justification": "The printed converse: arbitrary self-adjoint Theta_0, Theta_1 with 0 <= Theta_j <= pi/2, spectral multiplicity functions agreeing except possibly at 0, AND their domain dimensions summing to dim H.  The dimension clause is the hypothesis `e : WithLp 2 (A_0 x A_1) ~=_li H`: two Hilbert spaces admit a linear isometry equivalence exactly when their Hilbert dimensions agree (`nonempty_linearIsometryEquiv_of_hilbertBasis`), and the Hilbert dimension of the orthogonal direct sum is the sum of the two, so `e` IS the printed equation, supplied constructively -- the same choice the repository makes for condition (3.5).  The conclusion constructs J_0, exhibits the realized pair inside the given ambient H as the isometric image of the model pair, records that the two pairs are unitarily equivalent as ORDERED pairs of subspaces, and gives the four Halmos identities.  ADDED 2026-09-05 on hostile follow-up review: the previous primary realized on `WithLp 2 (A_0 x A_1)` with no ambient space in its signature at all, so nothing in its type answered the printed dimension clause."
         },
         {
           "id": "converse-angle-data.real",
@@ -2573,7 +2593,7 @@
           ],
           "scalar_scope": "real",
           "evidence": {
-            "primary": "TauCeti.DavisKahan1970.theorem3_1_realization_ofSpectralMultiplicityAwayFromZero_real",
+            "primary": "TauCeti.DavisKahan1970.theorem3_1_realization_inAmbient_ofSpectralMultiplicityAwayFromZero_real",
             "correspondence": [
               "TauCeti.DavisKahan1970.theorem3_1_realization_ofNonzeroPartsUnitaryEquiv",
               "TauCeti.DavisKahan1970.theorem3_1_intertwiner_of_nonzeroPartsUnitaryEquiv",
@@ -2585,7 +2605,7 @@
           },
           "status": "established",
           "evidence_kind": "proof",
-          "justification": "The printed converse gives arbitrary Hermitian Theta_0, Theta_1 with 0 <= Theta_j <= pi/2 whose spectral multiplicity functions agree EXCEPT POSSIBLY AT 0, and says 'the proof reconstructs the pair from these angle data and the corresponding partial isometry J_0'.  REOPENED 2026-09-04: the previous witness `theorem3_1_realization` consumes a `HalmosAngleDatum`, which packages cos/sin of both angles AND the intertwiner as fields, and `theorem3_1_realization_ofAngles` asks its caller for J together with its two partial-isometry identities.  J_0 is output of the printed proof, not input to the printed theorem, so both are weaker statements than the source's.  `theorem3_1_realization_ofSpectralMultiplicity_complex` now takes only the two self-adjoint operators, the two spectral confinements and the multiplicity hypothesis, and constructs J_0 internally through `operatorUnitaryEquiv_of_sameSpectralMultiplicity_complex`.  The clause is nevertheless OPEN, not established: `SameSpectralMultiplicity` is agreement everywhere, while the printed hypothesis permits disagreement at the spectral point 0.  Closing it needs the multiplicity comparison restricted to the closures of the ranges of the two angle operators, which is not written.  The freedom at 0 is realized unconditionally in the compact case by `corollary3_1_realization_zeroMultiplicity` (row DK-3.1-cor).  CLOSED 2026-09-04: the residual narrowing is gone.  `SameSpectralMultiplicityAwayFromZero` compares the two angle operators only on their NONZERO parts -- the orthogonal complement of the kernel of the sine, which on the printed spectrum [0, pi/2] is `closure (Ran Theta)`, the space the source's J_0 is required to carry across -- so the two null spaces are unconstrained, which is exactly 'except possibly at the eigenvalue 0'.  `theorem3_1_intertwiner_of_sameSpectralMultiplicity_awayFromZero` builds J_0 from that hypothesis: the unitary between the nonzero parts, extended by zero on the null space.  The two partial-isometry identities come out as the two star projections, and they hold on the ranges of the sines because a self-adjoint operator maps into the orthogonal complement of its own kernel.  The intertwining is read on the two invariant summands, using that `sin Theta` commutes with `Theta`."
+          "justification": "The printed converse: arbitrary self-adjoint Theta_0, Theta_1 with 0 <= Theta_j <= pi/2, spectral multiplicity functions agreeing except possibly at 0, AND their domain dimensions summing to dim H.  The dimension clause is the hypothesis `e : WithLp 2 (A_0 x A_1) ~=_li H`: two Hilbert spaces admit a linear isometry equivalence exactly when their Hilbert dimensions agree (`nonempty_linearIsometryEquiv_of_hilbertBasis`), and the Hilbert dimension of the orthogonal direct sum is the sum of the two, so `e` IS the printed equation, supplied constructively -- the same choice the repository makes for condition (3.5).  The conclusion constructs J_0, exhibits the realized pair inside the given ambient H as the isometric image of the model pair, records that the two pairs are unitarily equivalent as ORDERED pairs of subspaces, and gives the four Halmos identities.  ADDED 2026-09-05 on hostile follow-up review: the previous primary realized on `WithLp 2 (A_0 x A_1)` with no ambient space in its signature at all, so nothing in its type answered the printed dimension clause."
         }
       ]
     },
@@ -5560,7 +5580,7 @@
     "terminal_results": 29,
     "remaining_results": [],
     "note": "The structured fields above are authoritative; this paragraph is regenerated whenever the count moves. 2026-09-02, closing: terminal_results is 29 and remaining_results is empty. `S2-tan-two-theta` was `hostile_review_blocked` under obligation `tan2theta-directed-correspondence` after a 2026-09-02 closure that did not compose; it is now accepted on canonical directed witnesses `tanTwoTheta_directed_unboundedResidual_symmetricNorming_{complex,real}`, which take the reducing subspace and conclude on the paper's directed corner (`tanTwoDirectedCornerR U V` over ℝ) with the singular-value identification in their types. The canonical-evidence digest changed accordingly and the statement pins were refreshed for the new canonical and bridging declarations. Earlier history of this field (the 2026-08-31 `S2-sin-two-theta` reopening, the `S2-tan-theta` Appendix-scope primaries, the paper-prefix rename with an unchanged digest) is in the human report.",
-    "canonical_evidence_sha256": "3136dddba75f58a135ad0ae04b88fd554a92365dcfbe8c31136188c08dca3938",
+    "canonical_evidence_sha256": "53e66962fab8bbc8d93cbf8b4c6e89d0626b23570315341be3bf929f22cad2c3",
     "hostile_review_status": "accepted",
     "hostile_review_note": "ACCEPTED 2026-09-02, after the day's reopening was closed by new mathematics rather than by metadata: the directed tan 2Theta clauses have source-shaped complex and real endpoints on the paper objects, with the correspondence composed in Lean and pinned. `open_hostile_review_obligations` is closed and lists the closure; the structured fields `terminal_results`, `remaining_results` and `hostile_review_status` are the authoritative statement."
   },
@@ -5689,6 +5709,20 @@
           "DK-8.2-thm"
         ],
         "blast_radius_note": "Listed explicitly because the decision is load-bearing well beyond the row where it was raised: (3.5) enters S2-tan-theta as a nonlocal condition, DK-3.4-prop as a discharge, DK-8.2-thm as an inherited hypothesis, the Section 4 rows as the classification half of their setup, and DK-4.4-prop as the scope its counterexample must satisfy. Reopening this convention reopens all of them."
+      },
+      {
+        "id": "theorem31-ambient-dimension",
+        "status": "accepted",
+        "accepted_on": "2026-09-05",
+        "printed_object": "Theorem 3.1, converse sentence: the two angle operators' \"domain dimensions sum to dim H\".",
+        "lean_representation": "A linear isometry equivalence `e : WithLp 2 (A_0 x A_1) ~=_li[k] H` from the orthogonal direct sum of the two angle-operator domains onto the ambient space.",
+        "rule": "Equality of Hilbert dimensions IS the existence of a linear isometry equivalence, and the Hilbert dimension of an orthogonal direct sum is the sum of the two, so `e` is the printed equation `dim A_0 + dim A_1 = dim H` read constructively.  This is the same convention already accepted for condition (3.5) under `crossed-defect-dimension-equality`, applied to the ambient space instead of the crossed defects, and for the same reason: the printed proof must BUILD the realized pair inside H, which an equality of cardinals cannot supply.",
+        "witness": "TauCeti.nonempty_linearIsometryEquiv_of_hilbertBasis",
+        "witness_scope": "`nonempty_linearIsometryEquiv_of_hilbertBasis` proves that two Hilbert spaces with equinumerous Hilbert bases are linearly isometric, which is the direction the reading needs: given the printed dimension equation, an `e` exists.  The converse direction -- that an `e` forces the dimension equation -- is immediate, since an isometry carries a Hilbert basis to a Hilbert basis.",
+        "consumers": [
+          "TauCeti.DavisKahan1970.theorem3_1_realization_inAmbient_ofSpectralMultiplicityAwayFromZero_complex",
+          "TauCeti.DavisKahan1970.theorem3_1_realization_inAmbient_ofSpectralMultiplicityAwayFromZero_real"
+        ]
       }
     ]
   },

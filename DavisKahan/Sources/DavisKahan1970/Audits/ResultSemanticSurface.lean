@@ -459,6 +459,9 @@ Status: **TERMINAL EXACT**.
 #check @TauCeti.DavisKahan1970.theorem3_1_spectralMultiplicity_classification_complex
 #check @TauCeti.DavisKahan1970.theorem3_1_realization
 #check @TauCeti.DavisKahan1970.theorem3_1_realization_ofSpectralMultiplicity_complex
+#check @TauCeti.DavisKahan1970.theorem3_1_realization_inAmbient_ofSpectralMultiplicityAwayFromZero_complex
+#check @TauCeti.DavisKahan1970.theorem3_1_realization_inAmbient_ofSpectralMultiplicityAwayFromZero_real
+#check @TauCeti.nonempty_linearIsometryEquiv_of_hilbertBasis
 #check @TauCeti.DavisKahan1970.theorem3_1_realization_ofSpectralMultiplicityAwayFromZero_complex
 #check @TauCeti.DavisKahan1970.theorem3_1_intertwiner_of_nonzeroPartsUnitaryEquiv
 #check @TauCeti.DavisKahan1970.theorem3_1_realization_ofNonzeroPartsUnitaryEquiv
