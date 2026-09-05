@@ -143,7 +143,6 @@ theorem DavisKahanExt.PartialMap.isSelfAdjoint_of_nonnegative_one_add_surjective
     (hsurj : ∀ h : H, ∃ x : A.domain,
       A x + (x : H) = h) :
     IsSelfAdjoint A := by
-  change _root_.IsSelfAdjoint A
   apply isSelfAdjoint_of_isFormalAdjoint_nonnegative_one_add_surjective
   · intro x y
     exact hsym x y

@@ -83,11 +83,11 @@ bundled into the operator, so the complementary restriction inherits both from
 the canonical `LinearPMap` reducing-restriction API. -/
 def unboundedSinThetaDataOfReducingSubspace
     (A : E →ₗ.[𝕜] E)
-    (hAdense : Dense (A.domain : Set E)) (hAclosed : A.IsClosed)
+    (_hAdense : Dense (A.domain : Set E)) (_hAclosed : A.IsClosed)
     (U : Submodule 𝕜 E) [U.HasOrthogonalProjection]
     (hred : TauCeti.LinearPMap.ReducesSubspace A U)
     (A0 : F →ₗ.[𝕜] F)
-    (hA0dense : Dense (A0.domain : Set F)) (hA0closed : A0.IsClosed)
+    (_hA0dense : Dense (A0.domain : Set F)) (_hA0closed : A0.IsClosed)
     (X Rop : F →L[𝕜] E)
     (hXdom : ∀ x : A0.domain, X (x : F) ∈ A.domain)
     (hReq : ∀ x : A0.domain,

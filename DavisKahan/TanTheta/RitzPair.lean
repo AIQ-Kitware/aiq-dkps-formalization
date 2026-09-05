@@ -108,6 +108,7 @@ noncomputable def ofTrialBlock (D : UnboundedTrialBlock A Z) :
     rw [D.residual_apply]
     abel
 
+omit [CompleteSpace H] in
 /-- The Ritz pair built from a trial block keeps the block's residual. -/
 @[simp]
 theorem ofTrialBlock_residual (D : UnboundedTrialBlock A Z) :
@@ -119,6 +120,7 @@ namespace ReducingComplement
 
 variable {A : H →ₗ.[𝕜] H} {V : Submodule 𝕜 H} [V.HasOrthogonalProjection]
 
+omit [CompleteSpace H] in
 /-- **A reducing subspace gives a reducing complement.**
 
 `TauCeti.LinearPMap.ReducesSubspace A V` is the repository's generic vocabulary
@@ -170,6 +172,7 @@ reflection in the chosen subspace, and self-adjointness and involutivity are the
 theorems rather than hypotheses.  What genuinely remains is that reflecting
 preserves the domain and commutes with `A + B` there. -/
 
+omit [CompleteSpace H] in
 /-- **A reducing subspace commutes with its own reflection.**
 
 If `V` reduces the partial map `T`, then `J_V = 2 P_V - 1` preserves `T`'s domain
@@ -265,6 +268,7 @@ namespace ReflectionIntertwines
 variable {A : H →ₗ.[𝕜] H} {B : H →L[𝕜] H} {V : Submodule 𝕜 H}
   [V.HasOrthogonalProjection]
 
+omit [CompleteSpace H] in
 /-- **A subspace that reduces the perturbed operator gives a reflection
 intertwiner.**
 
