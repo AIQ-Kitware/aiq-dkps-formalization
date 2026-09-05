@@ -576,10 +576,30 @@ closed left half-plane, by the contrapositive of `isUnit_of_coercive`) and
 compression to the spectral subspace `X ≤ -β` uses the existing
 `boundedPVM` half-line form bounds, so no new spectral machinery was built.
 
-What remains is the Davis--Kahan consumer: `G = C⁻¹` from §6.2, the Lyapunov identity
-`C W + W* C = 2B` multiplied by `G` on both sides, the conjugation by `W` that
-symmetrises it, and `W + W* = 2 − 4 (P_U − P_V)²` to land on
-`subspaceGap U V ≤ √2/2`, i.e. `maximalAngle U V ≤ π/4`.
+**The projector bridge at the other end is also done, 2026-09-05.**
+`reflectionProduct_add_swap_eq` states `K J + J K = 2 − 4 (P_U − P_V)²` as a
+standalone theorem, and
+
+```text
+subspaceGap_le_of_reflectionProduct_form_nonneg
+maximalAngle_le_pi_div_four_of_reflectionProduct_form_nonneg
+```
+
+take `K J + J K ≥ 0` to `‖P_U − P_V‖ ≤ √2/2` and to `Θ ≤ π/4`. No constant
+appears in either, which is exactly why they survive to unbounded scope where
+`isQuarterAcute_of_orderedFormGap`'s strict bound does not.
+
+**What is left is the middle.**  Both ends are built; the remaining work is to
+produce the hypothesis of the bridge from the unbounded ordered form gap:
+
+1. From §6.2, `C = K (A + H − c)` has a bounded inverse `G` with `‖G‖ ≤ δ⁻¹`.
+   Show `0 ≤ G` (from `⟪G y, y⟫ = ⟪G y, C (G y)⟫ ≥ δ ‖G y‖²`) and `G` injective
+   (`G y = 0 ⟹ y = C (G y) = 0`).
+2. The coercivity `re ⟪W x, C x⟫ ≥ δ ‖x‖²` on `dom A`, substituted at `x = G y`,
+   gives `W G + G W* ≥ 0`.
+3. Conjugating by `W` gives `G W + W* G ≥ 0`; adding, with `X = W + W*`,
+   `X G + G X ≥ 0`.
+4. `nonneg_of_lyapunov_nonneg` gives `0 ≤ X`, and the bridge finishes.
 
 Do not lift the bounded `IsQuarterAcute` statement; keep it as the stronger
 bounded theorem it is.
