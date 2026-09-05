@@ -818,7 +818,14 @@
         "TauCeti.DavisKahan1970.symmetricNorming_iff_kyFanDominant",
         "TauCeti.DavisKahan1970.sinTwoTheta_ambient_unbounded_reducing_symmetricNorming_complex",
         "TauCeti.DavisKahan1970.sinTwoTheta_ambient_unbounded_reducing_symmetricNorming_real",
-        "TauCeti.DavisKahan1970.sinTwoTheta_ambient_unbounded_reducing_symmetricNorming_rclike"
+        "TauCeti.DavisKahan1970.sinTwoTheta_ambient_unbounded_reducing_symmetricNorming_rclike",
+        "TauCeti.DavisKahan1970.sinTwoTheta_ambient_unbounded_perturbedGap_symmetricNorming_rclike",
+        "TauCeti.DavisKahan1970.sinTwoTheta_ambient_unbounded_perturbedGap_symmetricNorming_complex",
+        "TauCeti.DavisKahan1970.sinTwoTheta_ambient_unbounded_perturbedGap_symmetricNorming_real",
+        "TauCeti.LinearPMap.addBounded_neg_cancel",
+        "TauCeti.DavisKahan.Angle.sinTwoAngleOperator_comm",
+        "TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction.gauge_neg",
+        "TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction.mem_neg"
       ],
       "review_note": "RE-CLOSED 2026-08-12 after repair (reopened earlier the same day; the reopening is retained in git history).  The defect was real: the registered unbounded directed endpoint `sinTwoTheta_unbounded_reflectionResidual_arbitraryRepresentative_complex` bounds delta * N(sin 2Theta_0) by the norm of a self-adjoint REFLECTION residual satisfying (A + R) J_V = J_V A, which is not the printed residual (1.8).  The repair is `sinTwoTheta_directed_unboundedResidual_blockRepresentative_symmetricNorming_complex` and its real sibling `..._symmetricNorming_real`: an unbounded self-adjoint closed operator, an arbitrary closed trial subspace inside its domain, the trial operator M = A_0, the printed trial residual R = A E_0 - E_0 A_0 as the only right-hand side, arbitrary `SymmetricNormingFunction`, the directed angle Theta_0, and the printed conclusion delta * N(sin 2Theta_0) <= 2 N(R) with membership concluded rather than assumed.  There is no finite-dimensionality, compactness, acuteness, separability, self-adjointness-of-R or reflection hypothesis visible to the caller: the reflected comparison system D = -2 (X + X*) is constructed internally from the trial data by `trialReflection_intertwines`.  The sharp factor two is obtained blockwise from the scalar-generic doubling identity `kyFan_reflectionDefectBlock_le_two_mul`, not from a triangle inequality on the reflection defect, which would give four.  The complex spectral-separation hypotheses are the printed interval/exterior separation stated through semiboundedness plus resolvent-set avoidance; the real endpoint carries the scalar-generic `FormBoundedSylvesterGap`, which is the weaker predicate (hence the stronger theorem) and covers all three printed separation configurations, and `..._symmetricNorming_real_of_intervalExterior` restates it at the printed interval/exterior separation itself.  The ambient conclusion delta * N(sin 2Theta) <= 2 N(H) remains covered over both fields by `sinTwoTheta_ambient_bounded_symmetricNorming_complex` and `sinTwoTheta_ambient_bounded_symmetricNorming_real`. Audit-surface update 2026-08-13: `sinTwoTheta_directed_finiteDimensional_symmetricNorming_rclike` is now the canonical scalar-generic PaperUI directed facade with interval/exterior placement and the residual visible in its type; the full unbounded companions remain registered.\n\nRE-CLOSED 2026-08-31 at the full source gap.  The 2026-08-31 downgrade was correct: the complex endpoints took a bounded separating interval `[beta, alpha]` while the source allows half-infinite intervals, and only the real endpoints carried `FormBoundedSylvesterGap`.  The repair did NOT generalize the centred `TwoSidedShiftedInverseBound` engine the downgrade traced.  It adopted the REAL track's architecture over `C` instead: `sinTheta_unbounded_complex` already proved the complex single-angle theorem at the full form-bounded gap, so the missing pieces were its block form (`ExactSinTheta.sinTheta_unbounded_complex_block`), the bounded-perturbation adapter (`sinTheta_addBounded_gauge_complex_block_of_formGap`), and the reflected exact system (`sinTwoTheta_reflectionResidual_block_gauge_of_formGap`, `sinTwoTheta_reflectionResidual_gauge_of_formGap`, `sinTwoTheta_addBounded_gauge_of_formGap`).  The reflection geometry also simplifies: the spectrum-gap proof must unitarily conjugate the complementary restriction because its hypothesis is about that operator's SPECTRUM, whereas a form-bounded gap between `A_0` and `Lambda` lets the reflection go into the coordinate map `F_1 = J_V . U^c.subtypeL`, exactly as the real proof does.\n\nBoth printed conclusions are now at the printed gap scope over both fields: the directed residual endpoint `sinTwoTheta_directed_unboundedResidual_blockRepresentative_symmetricNorming_complex` and the directed perturbation endpoint `sinTwoTheta_directed_unbounded_addBounded_symmetricNorming_complex` both take `FormBoundedSylvesterGap`.  `SectionTwoUsage.sinTwoTheta_from_halfInfinite_separation` is the compiled witness that the half-infinite configuration can actually be called: it supplies only two form bounds, with no finite interval and no spectrum-avoidance certificate.  The earlier bounded-interval statements are retained under `spectrumGap` names as supporting evidence.  They are NOT derived from the new ones: `FormBoundedSylvesterGap.intervalExterior` wants `LinearPMap.realSpectrum A_0 subset Icc beta alpha`, and the tree proves only the converse direction, so the implication would need the `LinearPMap` analogue of `realSpectrum_subset_Ici_of_le_re_inner_generic`, which exists for bounded operators only.\n\nREOPENED 2026-08-31 by the scope-atom re-audit. The inventory's own statement_boundary policy says a later source passage that explicitly extends the proved scope of a counted result is part of that result's scope and must be covered. Several such passages were classified as generic post-result commentary on the grounds that they occur after the theorem environment -- which is exactly the condition the policy says does not exclude an explicit extension. See the newly attached scope atom(s) and `remaining_gap`.\n\nREOPENING WITHDRAWN 2026-08-31, and the rule that caused it corrected. The scope-atom re-audit attached a later source passage to this result under a `statement_boundary` clause saying that any passage explicitly extending a counted result's proved scope becomes part of that result. That clause contradicted the same field's `does_not_count` entry for scope remarks outside the printed result environment, and it let the atom ledger enlarge the denominator by reclassification. The corrected rule is that a later passage affects a counted result only when it is needed to determine what Davis and Kahan actually claim in that result; an extension, variant or consequence they mention without introducing and proving it as a result of its own does not. The passage is now `result_adjacent_extension` fidelity material. The Lean coverage produced while the result was reopened is kept as SUPPORTING evidence -- it is stronger than the counted statement requires, which is a good thing to hold and not a canonical obligation.\n\nREOPENED 2026-08-31 (third pass) by the coherent-clause audit, on the AMBIENT clause only. The directed clause is established at full scope over both fields and is unaffected. See `remaining_gap` and the two `source_clauses` entries marked `open`.\n\n**ORIENTATION DEFECT FOUND AND FIXED 2026-09-04 (Claude Opus 5, on hostile review).**  Two separate source-correspondence defects were open on the directed clause.  (a) The public alias `SectionTwo.sinTwoTheta_complex` was documented and registered as the printed directed residual clause `delta N(sin 2Theta_0) <= 2 N(R)` but named `sinTwoTheta_directed_unbounded_addBounded_symmetricNorming_complex`, whose right-hand side is `2 N(E)` for the full bounded perturbation -- a different source quantity.  It now names the residual theorem; the perturbation theorem is retained as `alternative_route` supporting evidence.  (b) The registered primary concluded on `sinTwoThetaIdealBlock U V` and the registered correspondence carried it to `directedSinTwoAngleOperator U V`, while the paper's `Theta_0` is the trial-side angle `directedSinTwoAngleOperator V U`.  Order matters: the two ordered directed sines have different approximation numbers in general.  The missing theorem, `Angle.directedSinTwoAngleOperator_hasSameApproximationNumbers_swap`, is now proved at every `RCLike` field by the polar decomposition of `T = P_U P_V`, and the primary is the angle-level theorem in the trial-side ordering.  The denominator is unchanged.\n\n**AMBIENT CLAUSE RE-REGISTERED 2026-09-05**, closing finding F5 of the 2026-09-04 hostile review.  The canonical ambient witnesses restricted both subspaces to spectral subspaces selected by measurable sets; the printed theorem requires only that `P` reduces `A` and `Q` reduces `A + H`.  The printed-shape endpoint existed in the tree (`sinTwoTheta_ambient_unbounded_reflectionPair_symmetricNorming_rclike`) but stated the reduction of the perturbed operator in reflection form.  `ReflectionIntertwines.ofReducesSubspace` and the new scalar-generic `addBounded_reflectionPerturbation_intertwines_of_commutes` show that form is exactly `ReducesSubspace (A + H) V`, so `sinTwoTheta_ambient_unbounded_reducing_symmetricNorming_{rclike,complex,real}` state the clause with the printed hypothesis and are the canonical evidence.  `SectionTwo.sinTwoTheta_ambient_*` and the ambient conjunct of `sinTwoTheta_bothConclusions_*` were retargeted at them; the latter now quantifies over a reducing subspace of the perturbed operator rather than over a measurable set.  The same review found that the canonical entry `sinTwoTheta_ambient_bounded_symmetricNorming_complex` carried an empty `covers_source_atoms` list; it and its real sibling are now supporting `specialization` entries.",
       "boundary_review": {
@@ -881,7 +888,7 @@
           "capability_classes": []
         },
         {
-          "declaration": "TauCeti.DavisKahan1970.sinTwoTheta_ambient_unbounded_reducing_symmetricNorming_complex",
+          "declaration": "TauCeti.DavisKahan1970.sinTwoTheta_ambient_unbounded_perturbedGap_symmetricNorming_complex",
           "role": "primary_source_witness",
           "scalar_scope": "complex",
           "evidence_kind": "proof",
@@ -896,10 +903,10 @@
             "S2-unbounded-scope.half-infinite-gap-intervals"
           ],
           "capability_classes": [],
-          "note": "The ambient clause at the printed hypothesis: an arbitrary reducing pair, not a spectral pair."
+          "note": "The ambient clause at the printed OPERATOR ROLES: `P` reduces the unperturbed `A`, `Q` reduces the perturbed `A + H`, and the gap is between the two blocks of `A + H` relative to `Q` -- the source's `Lambda_0, Lambda_1` of equation (1.3), not the unperturbed `A_0, A_1` of (1.2). Neither subspace need be spectral. Corrected 2026-09-05 from the `..._reducing_...` form, whose gap is on the unperturbed blocks."
         },
         {
-          "declaration": "TauCeti.DavisKahan1970.sinTwoTheta_ambient_unbounded_reducing_symmetricNorming_real",
+          "declaration": "TauCeti.DavisKahan1970.sinTwoTheta_ambient_unbounded_perturbedGap_symmetricNorming_real",
           "role": "primary_source_witness",
           "scalar_scope": "real",
           "evidence_kind": "proof",
@@ -914,7 +921,7 @@
             "S2-unbounded-scope.half-infinite-gap-intervals"
           ],
           "capability_classes": [],
-          "note": "The real sibling at the printed hypothesis."
+          "note": "The ambient clause at the printed OPERATOR ROLES: `P` reduces the unperturbed `A`, `Q` reduces the perturbed `A + H`, and the gap is between the two blocks of `A + H` relative to `Q` -- the source's `Lambda_0, Lambda_1` of equation (1.3), not the unperturbed `A_0, A_1` of (1.2). Neither subspace need be spectral. Corrected 2026-09-05 from the `..._reducing_...` form, whose gap is on the unperturbed blocks."
         }
       ],
       "supporting_evidence": [
@@ -1141,6 +1148,41 @@
           "declaration": "TauCeti.DavisKahan1970.symmetricNorming_iff_kyFanDominant",
           "role": "transport_lemma",
           "note": "The two transports read as one biconditional, so a reviewer asking which quantifier is the paper's does not have to choose: each is weak Ky Fan majorization."
+        },
+        {
+          "declaration": "TauCeti.DavisKahan1970.sinTwoTheta_ambient_unbounded_perturbedGap_symmetricNorming_rclike",
+          "role": "scalar_generic_facade",
+          "note": "The scalar-generic form of the canonical ambient witnesses; the complex and real forms are its instances."
+        },
+        {
+          "declaration": "TauCeti.DavisKahan1970.sinTwoTheta_ambient_unbounded_reducing_symmetricNorming_complex",
+          "role": "alternative_route",
+          "note": "The ambient estimate with the gap on the blocks of the UNPERTURBED operator. Correct and reusable, and it was this row's canonical witness until 2026-09-05, but it is not the printed hypothesis: Section 2's (1.3) puts Lambda_0, Lambda_1 on the perturbed operator. Retained because the ambient estimate is symmetric in the pair, so neither reading is stronger and a caller may hold either gap."
+        },
+        {
+          "declaration": "TauCeti.DavisKahan1970.sinTwoTheta_ambient_unbounded_reducing_symmetricNorming_real",
+          "role": "alternative_route",
+          "note": "The real sibling of the unperturbed-gap reading."
+        },
+        {
+          "declaration": "TauCeti.LinearPMap.addBounded_neg_cancel",
+          "role": "source_correspondence",
+          "note": "Step one of the role reversal: `(A + H) + (-H)` is `A` as a partial map, on the nose, so `P` reduces it without any domain bookkeeping."
+        },
+        {
+          "declaration": "TauCeti.DavisKahan.Angle.sinTwoAngleOperator_comm",
+          "role": "source_correspondence",
+          "note": "Step two: the ambient sin 2Theta is symmetric in its two subspaces, since |P_U - P_V| = |P_V - P_U|. This is what makes the two gap readings interchangeable."
+        },
+        {
+          "declaration": "TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction.gauge_neg",
+          "role": "source_correspondence",
+          "note": "Step three: the gauge does not see the sign of the perturbation."
+        },
+        {
+          "declaration": "TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction.mem_neg",
+          "role": "source_correspondence",
+          "note": "Step four: ideal membership does not see the sign of the perturbation."
         }
       ],
       "result_wide_scope_atoms": [
@@ -1204,12 +1246,20 @@
           ],
           "scalar_scope": "complex",
           "evidence": {
-            "primary": "TauCeti.DavisKahan1970.sinTwoTheta_ambient_unbounded_reducing_symmetricNorming_complex",
-            "correspondence": []
+            "primary": "TauCeti.DavisKahan1970.sinTwoTheta_ambient_unbounded_perturbedGap_symmetricNorming_complex",
+            "correspondence": [
+              "TauCeti.LinearPMap.addBounded_neg_cancel",
+              "TauCeti.DavisKahan.Angle.sinTwoAngleOperator_comm",
+              "TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction.gauge_neg",
+              "TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction.mem_neg"
+            ],
+            "supporting": [
+              "TauCeti.DavisKahan1970.sinTwoTheta_ambient_unbounded_reducing_symmetricNorming_complex"
+            ]
           },
           "status": "established",
-          "justification": "delta * N(sin 2Theta) <= 2 N(H) on the paper's ambient double-angle sine, at the PRINTED hypothesis: `U` is an arbitrary subspace reducing the unbounded self-adjoint ambient operator `A`, `V` is an arbitrary subspace reducing the perturbed operator `A + H`, and neither is required to be a spectral subspace.  Bounded self-adjoint perturbation, arbitrary Hilbert dimension, arbitrary SymmetricNormingFunction, the whole FormBoundedSylvesterGap between the two blocks of `A`, ideal membership concluded and the constant exactly 2.  The Section 2 statement assumes only that the two subspaces reduce their operators; the spectral selection is how a reader PRODUCES such a pair in the source, not a hypothesis of the theorem.",
-          "gap_scope_justification": "The primary takes `FormBoundedSylvesterGap` between the two reducing restrictions of the unperturbed operator, so both semibounded constructors -- the two half-infinite configurations -- are available to a caller, and `intervalExterior` is the bounded one. The reflection transport preserves the constructor: `FormBoundedSylvesterGap.unitaryConj_left` and `.unitaryConj_right` case on all three, so nothing collapses to the bounded interval on the way to Proposition 6.1's crossed gaps.",
+          "justification": "delta * N(sin 2Theta) <= 2 N(H) on the paper's ambient double-angle sine, at the printed OPERATOR ROLES. Section 2's setup fixes them: equation (1.2) has `P` reducing the unperturbed `A` with blocks `A_0, A_1`, and equation (1.3) has `Q` reducing the perturbed `A + H` with blocks `Lambda_0, Lambda_1`. The sin 2Theta theorem's gap is `spec(Lambda_0) subset [beta, alpha]` and `spec(Lambda_1) disjoint from (beta - delta, alpha + delta)` -- on the PERTURBED blocks. The primary takes exactly that: `hPred` says `P` reduces `A`, `hQred` says `Q` reduces `addBounded A H`, and the `FormBoundedSylvesterGap` is between the two reducing restrictions of `addBounded A H` relative to `Q`. Unbounded self-adjoint `A`, bounded self-adjoint perturbation, arbitrary Hilbert dimension, arbitrary SymmetricNormingFunction, ideal membership concluded, constant exactly 2. Neither subspace is required to be a spectral subspace; the spectral selection is how a reader PRODUCES such a pair in the source, not a hypothesis of the theorem.\n\nOPERATOR ROLE CORRECTED 2026-09-05, and the previous registration was wrong about the source. The primary was `sinTwoTheta_ambient_unbounded_reducing_symmetricNorming_*`, whose gap is between the two blocks of the UNPERTURBED operator, and this justification called that the printed hypothesis. It is the other reading. The correction is a role reversal rather than new mathematics -- the ambient estimate is symmetric in the pair, so neither reading is stronger -- and the retained theorem is now supporting evidence. The reversal is exact in all four places: `addBounded_neg_cancel` makes `(A + H) + (-H)` equal `A` on the nose rather than up to domain inclusion, `sinTwoAngleOperator_comm` exchanges the pair in the conclusion, `SymmetricNormingFunction.gauge_neg` and `.mem_neg` absorb the sign of the perturbation.",
+          "gap_scope_justification": "The primary takes `FormBoundedSylvesterGap` between the two reducing restrictions of the PERTURBED operator, which is where the source states it, so both semibounded constructors -- the two half-infinite configurations -- are available to a caller, and `intervalExterior` is the bounded one. The reflection transport preserves the constructor: `FormBoundedSylvesterGap.unitaryConj_left` and `.unitaryConj_right` case on all three, so nothing collapses to the bounded interval on the way to Proposition 6.1's crossed gaps.",
           "gap_scope_hypothesis_tokens": [
             "FormBoundedSylvesterGap"
           ]
@@ -1221,12 +1271,20 @@
           ],
           "scalar_scope": "real",
           "evidence": {
-            "primary": "TauCeti.DavisKahan1970.sinTwoTheta_ambient_unbounded_reducing_symmetricNorming_real",
-            "correspondence": []
+            "primary": "TauCeti.DavisKahan1970.sinTwoTheta_ambient_unbounded_perturbedGap_symmetricNorming_real",
+            "correspondence": [
+              "TauCeti.LinearPMap.addBounded_neg_cancel",
+              "TauCeti.DavisKahan.Angle.sinTwoAngleOperator_comm",
+              "TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction.gauge_neg",
+              "TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction.mem_neg"
+            ],
+            "supporting": [
+              "TauCeti.DavisKahan1970.sinTwoTheta_ambient_unbounded_reducing_symmetricNorming_real"
+            ]
           },
           "status": "established",
-          "justification": "delta * N(sin 2Theta) <= 2 N(H) on the paper's ambient double-angle sine, at the PRINTED hypothesis: `U` is an arbitrary subspace reducing the unbounded self-adjoint ambient operator `A`, `V` is an arbitrary subspace reducing the perturbed operator `A + H`, and neither is required to be a spectral subspace.  Bounded self-adjoint perturbation, arbitrary Hilbert dimension, arbitrary SymmetricNormingFunction, the whole FormBoundedSylvesterGap between the two blocks of `A`, ideal membership concluded and the constant exactly 2.  The Section 2 statement assumes only that the two subspaces reduce their operators; the spectral selection is how a reader PRODUCES such a pair in the source, not a hypothesis of the theorem.",
-          "gap_scope_justification": "The primary takes `FormBoundedSylvesterGap` between the two reducing restrictions of the unperturbed operator, so both semibounded constructors -- the two half-infinite configurations -- are available to a caller, and `intervalExterior` is the bounded one. The reflection transport preserves the constructor: `FormBoundedSylvesterGap.unitaryConj_left` and `.unitaryConj_right` case on all three, so nothing collapses to the bounded interval on the way to Proposition 6.1's crossed gaps.",
+          "justification": "delta * N(sin 2Theta) <= 2 N(H) on the paper's ambient double-angle sine, at the printed OPERATOR ROLES. Section 2's setup fixes them: equation (1.2) has `P` reducing the unperturbed `A` with blocks `A_0, A_1`, and equation (1.3) has `Q` reducing the perturbed `A + H` with blocks `Lambda_0, Lambda_1`. The sin 2Theta theorem's gap is `spec(Lambda_0) subset [beta, alpha]` and `spec(Lambda_1) disjoint from (beta - delta, alpha + delta)` -- on the PERTURBED blocks. The primary takes exactly that: `hPred` says `P` reduces `A`, `hQred` says `Q` reduces `addBounded A H`, and the `FormBoundedSylvesterGap` is between the two reducing restrictions of `addBounded A H` relative to `Q`. Unbounded self-adjoint `A`, bounded self-adjoint perturbation, arbitrary Hilbert dimension, arbitrary SymmetricNormingFunction, ideal membership concluded, constant exactly 2. Neither subspace is required to be a spectral subspace; the spectral selection is how a reader PRODUCES such a pair in the source, not a hypothesis of the theorem.\n\nOPERATOR ROLE CORRECTED 2026-09-05, and the previous registration was wrong about the source. The primary was `sinTwoTheta_ambient_unbounded_reducing_symmetricNorming_*`, whose gap is between the two blocks of the UNPERTURBED operator, and this justification called that the printed hypothesis. It is the other reading. The correction is a role reversal rather than new mathematics -- the ambient estimate is symmetric in the pair, so neither reading is stronger -- and the retained theorem is now supporting evidence. The reversal is exact in all four places: `addBounded_neg_cancel` makes `(A + H) + (-H)` equal `A` on the nose rather than up to domain inclusion, `sinTwoAngleOperator_comm` exchanges the pair in the conclusion, `SymmetricNormingFunction.gauge_neg` and `.mem_neg` absorb the sign of the perturbation.",
+          "gap_scope_justification": "The primary takes `FormBoundedSylvesterGap` between the two reducing restrictions of the PERTURBED operator, which is where the source states it, so both semibounded constructors -- the two half-infinite configurations -- are available to a caller, and `intervalExterior` is the bounded one. The reflection transport preserves the constructor: `FormBoundedSylvesterGap.unitaryConj_left` and `.unitaryConj_right` case on all three, so nothing collapses to the bounded interval on the way to Proposition 6.1's crossed gaps.",
           "gap_scope_hypothesis_tokens": [
             "FormBoundedSylvesterGap"
           ]
@@ -5509,7 +5567,7 @@
     "terminal_results": 29,
     "remaining_results": [],
     "note": "The structured fields above are authoritative; this paragraph is regenerated whenever the count moves. 2026-09-02, closing: terminal_results is 29 and remaining_results is empty. `S2-tan-two-theta` was `hostile_review_blocked` under obligation `tan2theta-directed-correspondence` after a 2026-09-02 closure that did not compose; it is now accepted on canonical directed witnesses `tanTwoTheta_directed_unboundedResidual_symmetricNorming_{complex,real}`, which take the reducing subspace and conclude on the paper's directed corner (`tanTwoDirectedCornerR U V` over ℝ) with the singular-value identification in their types. The canonical-evidence digest changed accordingly and the statement pins were refreshed for the new canonical and bridging declarations. Earlier history of this field (the 2026-08-31 `S2-sin-two-theta` reopening, the `S2-tan-theta` Appendix-scope primaries, the paper-prefix rename with an unchanged digest) is in the human report.",
-    "canonical_evidence_sha256": "16f9d953541d51f6d6a01865d615e3d15c68e0bb0436cb23753428529a320ae0",
+    "canonical_evidence_sha256": "eedc64cca9a495e11629d00c8b6ce3a51ec3147c763c31fbcdd7bd5418276e8f",
     "hostile_review_status": "accepted",
     "hostile_review_note": "ACCEPTED 2026-09-02, after the day's reopening was closed by new mathematics rather than by metadata: the directed tan 2Theta clauses have source-shaped complex and real endpoints on the paper objects, with the correspondence composed in Lean and pinned. `open_hostile_review_obligations` is closed and lists the closure; the structured fields `terminal_results`, `remaining_results` and `hostile_review_status` are the authoritative statement."
   },

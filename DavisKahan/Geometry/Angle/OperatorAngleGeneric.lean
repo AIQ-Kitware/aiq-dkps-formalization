@@ -80,6 +80,32 @@ def sinTwoAngleOperator (U V : Submodule 𝕜 E)
 
 variable (U V : Submodule 𝕜 E) [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
 
+/-- **`sin Θ` is symmetric in the two subspaces.**  `|P_U - P_V| = |P_V - P_U|`,
+because the modulus does not see a sign.
+
+This is the ambient (`ContinuousLinearMap`) companion of
+`TauCeti.DavisKahan.sinAngleOperator_comm`, which says the same for the
+`LinearMap` spelling.  It is what makes the *ambient* estimates indifferent to
+which of the two subspaces is named first -- unlike the directed quantities,
+which are genuinely asymmetric. -/
+theorem sinAngleOperator_comm : sinAngleOperator V U = sinAngleOperator U V := by
+  have hneg : (V.starProjection - U.starProjection : E →L[𝕜] E)
+      = -(U.starProjection - V.starProjection) := by abel
+  rw [sinAngleOperator, sinAngleOperator, hneg, ContinuousLinearMap.modulus_neg]
+
+/-- `Θ` is symmetric in the two subspaces. -/
+theorem angleOperator_comm : angleOperator V U = angleOperator U V := by
+  rw [angleOperator, angleOperator, sinAngleOperator_comm]
+
+/-- **The ambient `sin 2Θ` is symmetric in the two subspaces.**
+
+The source's ambient estimates are therefore indifferent to the order of the
+pair, which is what lets a theorem proved with the gap on one member's blocks be
+read with the roles exchanged. -/
+theorem sinTwoAngleOperator_comm :
+    sinTwoAngleOperator V U = sinTwoAngleOperator U V := by
+  rw [sinTwoAngleOperator, sinTwoAngleOperator, angleOperator_comm]
+
 /-- `sin Θ` is nonnegative, being a modulus. -/
 theorem sinAngleOperator_nonneg : 0 ≤ sinAngleOperator U V :=
   ContinuousLinearMap.modulus_nonneg _

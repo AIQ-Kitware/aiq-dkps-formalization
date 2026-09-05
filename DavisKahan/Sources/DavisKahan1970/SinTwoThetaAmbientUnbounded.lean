@@ -392,6 +392,100 @@ theorem sinTwoTheta_ambient_unbounded_reducing_symmetricNorming_complex
   sinTwoTheta_ambient_unbounded_reducing_symmetricNorming_rclike N hA Eop hEop hUred hVred
     hδ hgap hEmem
 
+/-! ### The printed operator roles
+
+The source's Section 2 setup fixes which operator each hypothesis is about.  `P`
+reduces the *unperturbed* `A`, with blocks `A₀, A₁`; `Q` reduces the *perturbed*
+`A + H`, with blocks `Λ₀, Λ₁` (equations (1.2) and (1.3)).  The `sin 2Θ` theorem's
+gap is on the perturbed blocks:
+
+  spec(Λ₀) ⊆ [β, α],   spec(Λ₁) ∩ (β − δ, α + δ) = ∅.
+
+The theorems above take the gap on the blocks of the *unperturbed* operator, which
+is the other reading.  They are correct and reusable -- the ambient estimate is
+symmetric in the pair, so neither reading is stronger -- but only one of them is
+the printed hypothesis, and the source-facing name belongs to that one.
+
+The bridge is a role reversal, and it is exact rather than approximate.  Applying
+the theorem above to the data
+
+  unperturbed := A + H,   perturbation := −H,   first subspace := Q,   second := P
+
+makes its gap hypothesis the printed one, because the blocks of `A + H` on `Q` are
+`Λ₀, Λ₁`; its perturbed operator is `(A + H) + (−H) = A`, which `P` reduces on the
+nose by `addBounded_neg_cancel`; its conclusion bounds `sin 2Θ(Q, P) = sin 2Θ(P, Q)`
+by `sinTwoAngleOperator_comm`; and its right-hand side is `2 N(−H) = 2 N(H)` by
+`gauge_neg`. -/
+
+/-- **Davis--Kahan 1970, Section 2, the ambient `sin 2Θ` theorem at the printed
+operator roles.**
+
+`P` reduces the unperturbed `A`; `Q` reduces the perturbed `A + H`; and the
+spectral gap is between the two blocks of `A + H` relative to `Q` -- the source's
+`Λ₀, Λ₁`, not the unperturbed `A₀, A₁`.  Unbounded self-adjoint `A`, bounded
+self-adjoint perturbation, arbitrary `SymmetricNormingFunction`. -/
+theorem sinTwoTheta_ambient_unbounded_perturbedGap_symmetricNorming_rclike
+    (N : SymmetricNormingFunction)
+    {A : H →ₗ.[𝕜] H} (hA : IsSelfAdjoint A)
+    (Hop : H →L[𝕜] H) (hHop : DavisKahan.IsSelfAdjointOperator Hop)
+    {P Q : Submodule 𝕜 H} [P.HasOrthogonalProjection] [Q.HasOrthogonalProjection]
+    (hPred : TauCeti.LinearPMap.ReducesSubspace A P)
+    (hQred : TauCeti.LinearPMap.ReducesSubspace
+      (TauCeti.LinearPMap.addBounded A Hop) Q)
+    {δ : ℝ} (hδ : 0 < δ)
+    (hgap : FormBoundedSylvesterGap
+      (TauCeti.LinearPMap.reducingRestriction
+        (TauCeti.LinearPMap.addBounded A Hop) Q hQred)
+      (TauCeti.LinearPMap.reducingRestriction
+        (TauCeti.LinearPMap.addBounded A Hop) Qᗮ hQred.orthogonal) δ)
+    (hHmem : N.Mem Hop) :
+    N.Mem (TauCeti.DavisKahan.Angle.sinTwoAngleOperator P Q) ∧
+      δ * N.gauge (TauCeti.DavisKahan.Angle.sinTwoAngleOperator P Q) ≤
+        2 * N.gauge Hop := by
+  -- The perturbed operator of the reversed problem is `A` itself, on the nose.
+  have hcancel : TauCeti.LinearPMap.addBounded
+      (TauCeti.LinearPMap.addBounded A Hop) (-Hop) = A :=
+    TauCeti.LinearPMap.addBounded_neg_cancel A Hop
+  have hAH : IsSelfAdjoint (TauCeti.LinearPMap.addBounded A Hop) :=
+    DavisKahan.addBounded_isSelfAdjoint A hA Hop hHop
+  have hnegHop : DavisKahan.IsSelfAdjointOperator (-Hop) := by
+    intro x y
+    simpa using congrArg Neg.neg (hHop x y)
+  have hPred' : TauCeti.LinearPMap.ReducesSubspace
+      (TauCeti.LinearPMap.addBounded (TauCeti.LinearPMap.addBounded A Hop) (-Hop)) P := by
+    rw [hcancel]; exact hPred
+  have hmemneg : N.Mem (-Hop) := SymmetricNormingFunction.mem_neg N |>.mpr hHmem
+  obtain ⟨hmem, hle⟩ :=
+    sinTwoTheta_ambient_unbounded_reducing_symmetricNorming_rclike N hAH (-Hop) hnegHop
+      hQred hPred' hδ hgap hmemneg
+  rw [TauCeti.DavisKahan.Angle.sinTwoAngleOperator_comm] at hmem hle
+  rw [SymmetricNormingFunction.gauge_neg] at hle
+  exact ⟨hmem, hle⟩
+
+/-- The complex fixed-field form of
+`sinTwoTheta_ambient_unbounded_perturbedGap_symmetricNorming_rclike`. -/
+theorem sinTwoTheta_ambient_unbounded_perturbedGap_symmetricNorming_complex
+    {Hc : Type v} [NormedAddCommGroup Hc] [InnerProductSpace ℂ Hc] [CompleteSpace Hc]
+    (N : SymmetricNormingFunction)
+    {A : Hc →ₗ.[ℂ] Hc} (hA : IsSelfAdjoint A)
+    (Hop : Hc →L[ℂ] Hc) (hHop : DavisKahan.IsSelfAdjointOperator Hop)
+    {P Q : Submodule ℂ Hc} [P.HasOrthogonalProjection] [Q.HasOrthogonalProjection]
+    (hPred : TauCeti.LinearPMap.ReducesSubspace A P)
+    (hQred : TauCeti.LinearPMap.ReducesSubspace
+      (TauCeti.LinearPMap.addBounded A Hop) Q)
+    {δ : ℝ} (hδ : 0 < δ)
+    (hgap : FormBoundedSylvesterGap
+      (TauCeti.LinearPMap.reducingRestriction
+        (TauCeti.LinearPMap.addBounded A Hop) Q hQred)
+      (TauCeti.LinearPMap.reducingRestriction
+        (TauCeti.LinearPMap.addBounded A Hop) Qᗮ hQred.orthogonal) δ)
+    (hHmem : N.Mem Hop) :
+    N.Mem (TauCeti.DavisKahan.Angle.sinTwoAngleOperator P Q) ∧
+      δ * N.gauge (TauCeti.DavisKahan.Angle.sinTwoAngleOperator P Q) ≤
+        2 * N.gauge Hop :=
+  sinTwoTheta_ambient_unbounded_perturbedGap_symmetricNorming_rclike N hA Hop hHop
+    hPred hQred hδ hgap hHmem
+
 /-- The real fixed-field form of
 `sinTwoTheta_ambient_unbounded_reducing_symmetricNorming_rclike`. -/
 theorem sinTwoTheta_ambient_unbounded_reducing_symmetricNorming_real
@@ -413,6 +507,31 @@ theorem sinTwoTheta_ambient_unbounded_reducing_symmetricNorming_real
         2 * N.gauge Eop :=
   sinTwoTheta_ambient_unbounded_reducing_symmetricNorming_rclike N hA Eop hEop hUred hVred
     hδ hgap hEmem
+
+/-- The real fixed-field form of
+`sinTwoTheta_ambient_unbounded_perturbedGap_symmetricNorming_rclike`: the gap is
+on the blocks of the perturbed operator, as printed. -/
+theorem sinTwoTheta_ambient_unbounded_perturbedGap_symmetricNorming_real
+    {Er : Type v} [NormedAddCommGroup Er] [InnerProductSpace ℝ Er] [CompleteSpace Er]
+    (N : SymmetricNormingFunction)
+    {A : Er →ₗ.[ℝ] Er} (hA : IsSelfAdjoint A)
+    (Hop : Er →L[ℝ] Er) (hHop : DavisKahan.IsSelfAdjointOperator Hop)
+    {P Q : Submodule ℝ Er} [P.HasOrthogonalProjection] [Q.HasOrthogonalProjection]
+    (hPred : TauCeti.LinearPMap.ReducesSubspace A P)
+    (hQred : TauCeti.LinearPMap.ReducesSubspace
+      (TauCeti.LinearPMap.addBounded A Hop) Q)
+    {δ : ℝ} (hδ : 0 < δ)
+    (hgap : FormBoundedSylvesterGap
+      (TauCeti.LinearPMap.reducingRestriction
+        (TauCeti.LinearPMap.addBounded A Hop) Q hQred)
+      (TauCeti.LinearPMap.reducingRestriction
+        (TauCeti.LinearPMap.addBounded A Hop) Qᗮ hQred.orthogonal) δ)
+    (hHmem : N.Mem Hop) :
+    N.Mem (TauCeti.DavisKahan.Angle.sinTwoAngleOperator P Q) ∧
+      δ * N.gauge (TauCeti.DavisKahan.Angle.sinTwoAngleOperator P Q) ≤
+        2 * N.gauge Hop :=
+  sinTwoTheta_ambient_unbounded_perturbedGap_symmetricNorming_rclike N hA Hop hHop
+    hPred hQred hδ hgap hHmem
 
 end ReducingAmbient
 

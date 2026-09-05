@@ -4,7 +4,7 @@
 
 **Census family:** `source-completion-census`  
 **Items:** 50  
-**Unique cited Lean declarations:** 1244
+**Unique cited Lean declarations:** 1251
 
 ## How to use this census
 
@@ -586,6 +586,13 @@ The directed clause of the Section 2 tangent theorem at the printed scope, added
 - `TauCeti.DavisKahan1970.sinTwoTheta_ambient_unbounded_reducing_symmetricNorming_complex`
 - `TauCeti.DavisKahan1970.sinTwoTheta_ambient_unbounded_reducing_symmetricNorming_real`
 - `TauCeti.DavisKahan1970.sinTwoTheta_ambient_unbounded_reducing_symmetricNorming_rclike`
+- `TauCeti.DavisKahan1970.sinTwoTheta_ambient_unbounded_perturbedGap_symmetricNorming_rclike`
+- `TauCeti.DavisKahan1970.sinTwoTheta_ambient_unbounded_perturbedGap_symmetricNorming_complex`
+- `TauCeti.DavisKahan1970.sinTwoTheta_ambient_unbounded_perturbedGap_symmetricNorming_real`
+- `TauCeti.LinearPMap.addBounded_neg_cancel`
+- `TauCeti.DavisKahan.Angle.sinTwoAngleOperator_comm`
+- `TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction.gauge_neg`
+- `TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction.mem_neg`
 
 **Curated source/Lean review:**
 
@@ -743,6 +750,8 @@ REOPENING WITHDRAWN 2026-08-31 and the rule corrected: a later source passage en
 AMBIENT CLAUSE REOPENED 2026-08-31 by the coherent-clause audit. The printed sin 2 Theta theorem has a directed and an ambient conclusion. The directed one is established at full unbounded scope over both fields. The ambient one is not: the only paper-norm ambient endpoints are stated for BOUNDED operators. This was masked by a checker that unioned source atoms across unrelated canonical declarations -- the directed theorems donated the unbounded scope and the bounded ambient theorem donated the ambient conclusion, and no theorem proved the conjunction. See the result inventory's `remaining_gap` for the three missing transport lemmas.
 
 **ORIENTATION CORRECTION 2026-09-04 (Claude Opus 5, on hostile review).**  The directed clause's canonical witness now concludes on the paper's own trial-side directed double-angle sine `Angle.directedSinTwoAngleOperator V U` (V the trial subspace, U the subspace whose two blocks the gap separates), not on `sinTwoThetaIdealBlock U V` and not on the other ordering `directedSinTwoAngleOperator U V`.  The bridge is `Angle.directedSinTwoAngleOperator_hasSameApproximationNumbers_swap`, a new theorem at every `RCLike` field: the two ordered directed *sines* have different approximation numbers in general, so the reordering is mathematics rather than renaming.  Separately, the public alias `SectionTwo.sinTwoTheta_complex` had named the bounded-perturbation theorem (right-hand side `2 N(E)`) while being documented as the printed residual clause (right-hand side `2 N(R)`); it now names the residual theorem.
+
+AMBIENT OPERATOR ROLES CORRECTED 2026-09-05. The registered ambient witnesses had the spectral gap between the two blocks of the UNPERTURBED operator, and the inventory called that the printed hypothesis. The source's Section 2 setup says otherwise: (1.2) has `P` reducing `A` with blocks `A_0, A_1`, (1.3) has `Q` reducing `A + H` with blocks `Lambda_0, Lambda_1`, and the sin 2Theta theorem's gap is `spec(Lambda_0) subset [beta, alpha]`, `spec(Lambda_1)` disjoint from `(beta - delta, alpha + delta)` -- the PERTURBED blocks. `sinTwoTheta_ambient_unbounded_perturbedGap_symmetricNorming_{rclike,complex,real}` take that hypothesis and are now canonical; the `..._reducing_...` forms are retained as supporting evidence. This is a role reversal, not new mathematics: the ambient estimate is symmetric in the pair. Its four steps are `addBounded_neg_cancel` (so `(A + H) + (-H)` is `A` on the nose), `sinTwoAngleOperator_comm`, `gauge_neg` and `mem_neg`.
 
 **Next action.** No hostile-review hole is currently recorded for this source passage. Preserve exact source scope and re-audit if the distributable source specification changes.
 
