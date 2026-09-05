@@ -14,17 +14,17 @@ This file begins the genuine spectral-restriction path needed to specialize the
 unbounded sine-theta theorem to spectral projections of an operator and its
 bounded perturbation.
 
-For a self-adjoint DK closed operator `A`, the canonical Spectra projection
-`E_A(B)` is packaged as a continuous linear map and its range as a closed
-orthogonally complemented subspace.  The main analytic facts proved here are:
+For a self-adjoint partial map `A : H →ₗ.[ℂ] H`, the canonical spectral
+projection `E_A(B)` is packaged as a continuous linear map and its range as a
+closed orthogonally complemented subspace.  The main analytic facts proved here are:
 
 * `E_A(B)` preserves `A.domain` for every measurable set `B`;
 * `A (E_A(B)x) = E_A(B) (A x)` on `A.domain`;
 * consequently the spectral range is invariant under the domain-aware action
   of `A`.
 
-These are the exact domain/intertwining obligations needed before the operator
-part on the spectral range can be bundled as a self-adjoint closed operator.
+These are the exact domain/intertwining obligations needed to exhibit the
+operator part on the spectral range as a self-adjoint partial map.
 
 ## Provenance
 
@@ -53,7 +53,7 @@ namespace DavisKahan
 variable {H : Type*} [NormedAddCommGroup H] [InnerProductSpace ℂ H]
   [CompleteSpace H]
 
-/-- The canonical spectral projection of a self-adjoint DK closed operator. -/
+/-- The canonical spectral projection of a self-adjoint partial map. -/
 noncomputable def selfAdjointSpectralProjection
     (A : H →ₗ.[ℂ] H) (hA : IsSelfAdjoint A)
     (B : Set ℝ) (hB : MeasurableSet B) : H →L[ℂ] H :=

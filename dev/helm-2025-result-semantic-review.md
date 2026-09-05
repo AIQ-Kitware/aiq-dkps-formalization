@@ -256,7 +256,7 @@ Compare the inference-transfer theorems and Appendix assumptions with their Lean
 
 **Notes.** This discrepancy belongs to the bridge, not the abstract Theorem1/Theorem2 transfer once Equation (3) is assumed.
 
-**Next action.** Fiber Acharyya2024.rawStress_mds_stability_set over the latent sample to discharge the distance-convergence hypothesis.
+**Next action.** Fiber Acharyya2024.rawStress_mds_stability over the latent sample to discharge the distance-convergence hypothesis.
 
 **Gap refs:** `bridge-distance-input-not-fibered`, `rigid-motion-engine-now-available`
 

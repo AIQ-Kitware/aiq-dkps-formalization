@@ -59,8 +59,8 @@ theorem toLinearPMap_addBounded_eq_perturbedOp
   intro x hx hy
   rfl
 
-/-- Bounded Kato--Rellich for the DK closed-operator wrapper, proved through
-its canonical `LinearPMap` representation. -/
+/-- Bounded Kato--Rellich: a bounded self-adjoint perturbation of a self-adjoint
+partial map is self-adjoint on the same domain. -/
 theorem addBounded_isSelfAdjoint
     (A : H →ₗ.[𝕜] H)
     (hA : IsSelfAdjoint A)

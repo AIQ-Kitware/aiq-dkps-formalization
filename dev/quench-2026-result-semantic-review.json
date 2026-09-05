@@ -755,7 +755,7 @@
         "theorem1-rate-not-instantiated",
         "tie-display-proof-mismatch"
       ],
-      "next_action": "Finite route: none, it runs at the source rate. Infinite route: remove the perspective net, which is the continuum treatment recorded on the Acharyya 2024 side.",
+      "next_action": "Finite route: none, it runs at the source rate. Infinite route: remove the perspective net, which is the continuum treatment recorded on the Acharyya 2024 side. Caveat added 2026-09-05: that treatment is now marked RESOLVED there, but it is raw-stress with an L^p(P x P) functional while this chain is classical MDS with a uniform per-model event, and no Quench module references any Acharyya 2024 theorem. A raw-stress-to-classical-MDS step would have to be proved first; naming it is part of this action. See gap replicate-schedule-exceeds-source-rate.",
       "statement_pins": [
         {
           "declaration": "DkpsQuench2026.NetReplicateRate",
@@ -944,7 +944,7 @@
         "technical-assumptions-are-acharyya-1-and-2",
         "theorem1-rate-not-instantiated"
       ],
-      "next_action": "Finite route: none, it runs at the source rate. Infinite route: remove the perspective net, which is the continuum treatment recorded on the Acharyya 2024 side.",
+      "next_action": "Finite route: none, it runs at the source rate. Infinite route: remove the perspective net, which is the continuum treatment recorded on the Acharyya 2024 side. Caveat added 2026-09-05: that treatment is now marked RESOLVED there, but it is raw-stress with an L^p(P x P) functional while this chain is classical MDS with a uniform per-model event, and no Quench module references any Acharyya 2024 theorem. A raw-stress-to-classical-MDS step would have to be proved first; naming it is part of this action. See gap replicate-schedule-exceeds-source-rate.",
       "statement_pins": [
         {
           "declaration": "DkpsQuench2026.NetReplicateRate",
@@ -1111,7 +1111,7 @@
         "technical-assumptions-are-acharyya-1-and-2",
         "theorem1-rate-not-instantiated"
       ],
-      "next_action": "Finite route: none, it runs at the source rate. Infinite route: remove the perspective net, which is the continuum treatment recorded on the Acharyya 2024 side.",
+      "next_action": "Finite route: none, it runs at the source rate. Infinite route: remove the perspective net, which is the continuum treatment recorded on the Acharyya 2024 side. Caveat added 2026-09-05: that treatment is now marked RESOLVED there, but it is raw-stress with an L^p(P x P) functional while this chain is classical MDS with a uniform per-model event, and no Quench module references any Acharyya 2024 theorem. A raw-stress-to-classical-MDS step would have to be proved first; naming it is part of this action. See gap replicate-schedule-exceeds-source-rate.",
       "statement_pins": [
         {
           "declaration": "DkpsQuench2026.NetReplicateRate",
@@ -1244,7 +1244,7 @@
         "technical-assumptions-are-acharyya-1-and-2",
         "theorem1-rate-not-instantiated"
       ],
-      "next_action": "Finite route: none, it runs at the source rate. Infinite route: remove the perspective net, which is the continuum treatment recorded on the Acharyya 2024 side.",
+      "next_action": "Finite route: none, it runs at the source rate. Infinite route: remove the perspective net, which is the continuum treatment recorded on the Acharyya 2024 side. Caveat added 2026-09-05: that treatment is now marked RESOLVED there, but it is raw-stress with an L^p(P x P) functional while this chain is classical MDS with a uniform per-model event, and no Quench module references any Acharyya 2024 theorem. A raw-stress-to-classical-MDS step would have to be proved first; naming it is part of this action. See gap replicate-schedule-exceeds-source-rate.",
       "statement_pins": [
         {
           "declaration": "DkpsQuench2026.NetReplicateRate",

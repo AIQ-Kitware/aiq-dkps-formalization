@@ -173,8 +173,9 @@ probability to zero, for every `p >= 1` and against the empirical measure of the
 Two differences from the printed lemma, both in the direction of strength: the conclusion holds
 along the full sequence rather than along a subsequence, and it is uniform in `p`.  The
 restriction is that `P` is the empirical measure of the sampled models rather than the
-population law they are drawn from; lifting that is the remaining content of Lemma 2, which the
-source attributes to the cited continuous-MDS literature.
+population law they are drawn from.  That lift is performed, not outstanding:
+`Acharyya2024.lp_consistency_of_gamma_population` concludes over `Pmod ⊗ₘ κ` with the models
+drawn from a population law.  This note used to call it "the remaining content of Lemma 2".
 -/
 theorem tendsto_measure_lpPairDistErr_gt
     {Ω : Type*} [MeasurableSpace Ω] (Q : Measure Ω)

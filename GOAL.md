@@ -55,9 +55,18 @@ refresh the standalone repository mechanically.
   probability gives, for every tolerance, entrywise closeness of the sample and population
   dissimilarity matrices at every late enough stage. The finite step was already compiled at
   rate `2η/m`; what this adds is that the rate vanishes.
-- **`H25-BRIDGE`** — fiber `Acharyya2024.rawStress_mds_stability_set` over the latent
+- **`H25-BRIDGE`** — fiber `Acharyya2024.rawStress_mds_stability` over the latent
   sample to discharge the bridge's distance-convergence hypothesis. If it works, the
-  Helm bridge weakens accordingly.
+  Helm bridge weakens accordingly. **Not the `_set` form**, which this file named until
+  2026-09-05: that one concludes an existential over the minimizer set, which is not the
+  shape of the bridge's `hdist`. The right one carries `huniq : RawStress.UniquePairProfile`.
+  Note also that the bridge's conclusion is qualitative in a second way the Helm census
+  used to leave out: the estimator it delivers is `TauCeti.alignedConfig` applied to the
+  **true latents**, so the alignment lives inside the estimator and the isometry
+  quantified outside the probability is the identity. Acharyya 2024's
+  `not_exists_deterministic_rigidMotion_of_pairDist_exact` machine-checks that the
+  outside-the-probability shape is not available; transferring it to Helm's setting is a
+  restatement, not an application, and is the other half of this item.
 
 **Preserve** the uniform-integrability / dominated-loss repair and the evidence that
 convergence in probability alone does not give expected-risk convergence.
@@ -119,18 +128,51 @@ rank-boundary convention.
   rows now disclose that, with the source evidence for reading Section 8 at the paper's
   main bounded setting and the competing reading stated in full
   (`nonlocal_source_interpretation.operator_scope_reading`). **The lift would make the
-  reading moot, which is why it is worth doing.** Targets:
-  `theorem8_1_maximalAngle_le_iff_spectrumIn`, `theorem8_1_canonicalBranch`, part (i)
-  (`theorem8_1_{upper,lower}CompressionRepulsion`), and
-  `theorem8_2_branch_maximalAngle_lt_of_crossedDefects` plus the two retained sin 2θ
-  bounds, at `A : E →ₗ.[𝕜] E` self-adjoint with bounded `H`, in the vocabulary the
-  unbounded Section 2 endpoints already use (`TauCeti.LinearPMap.ReducesSubspace`,
-  `IsOddFor`, form bounds on `dom A`, `FormBoundedSylvesterGap`, `specRange`). Parts
-  (ii) and (iii) stay as printed — the source restricts them to finite dimensions
-  itself. Keep the bounded theorems as specializations. Read `Section8/Theorem82Branch.lean`
-  and `Section8/Smallness.lean` first: the 8.2 homotopy argument may be bounded-specific.
-  This is real work — Section 8 is 6437 lines built on bounded `Reduces`, `SpectrumIn`
-  and `canonicalLowBranch`.
+  reading moot, which is why it is worth doing.**
+
+  **Scoped 2026-09-05, and the two halves are not alike. Do 8.1; 8.2 is blocked.**
+  Nothing under `Section8/` mentions `→ₗ.[𝕜]` or an unbounded spectral subspace today.
+
+  **8.1 is not blocked, and its consumer is already waiting.**
+  `Section7IdealBounds.section7_tanTwoTheta_ideal` is the unbounded Section 7 tangent
+  theorem and it takes `hquarter : IsQuarterAcute (selfAdjointSpectralSubspace A hA B hB)
+  (selfAdjointSpectralSubspace (addBounded A E) (addBounded_isSelfAdjoint A hA E hE) S hS)`
+  as a *hypothesis*. Discharging that under the printed spectral orientation is exactly
+  what Theorem 8.1 does, and `Theorem81.lean` already proves
+  `maximalAngle U V < π/4 ↔ IsQuarterAcute U V`. So the target signature is fixed by an
+  existing unbounded consumer rather than invented. Every foundation it needs exists:
+  `TauCeti.LinearPMap.specRange` / `selfAdjointSpectralSubspace` is the unbounded
+  `canonicalLowBranch`, with `reducesSubspace_specRange`, `specRange_compl`,
+  `specRestrict` and `isSelfAdjoint_specRestrict`; `addBounded_isSelfAdjoint` gives
+  `A + H` self-adjoint; and
+  `ForTauCeti/Analysis/InnerProductSpace/LinearPMap/SpectralFormBounds.lean` is the
+  spectrum-to-form bridge the `iff` needs in both directions
+  (`le_re_inner_of_specProjection_Iio_eq_zero`,
+  `re_inner_le_of_specProjection_Ioi_eq_zero`).
+  `theorem8_1_canonicalBranch` takes only form bounds on `P` and `Pᗮ` plus oddness of
+  `H`, all of which restrict to `x : A.domain` in the vocabulary `SectionTwoUsage.lean`
+  already uses. Start there, not at the angle forms.
+
+  **8.2's homotopy is bounded-specific in its Lean form — this is the answer to the
+  question this entry used to ask.** `Section8/Smallness.lean` reduces both printed
+  alternatives to `selectedBranchProjectionLipschitzConstant C.contour V C.margin <
+  √2/2` for a `SpectralContinuationWitness A V s`, and
+  `Theorem82Branch.theorem8_2_perturbationHalfGap_complex` runs the path `A0 + t•E`
+  through it. That whole stack under `DavisKahan/InfiniteDimensional/SinTheta/Continuation/`
+  is stated for `A V : H →L[ℂ] H`: `operatorPath A V t = A + t•V`, `SpectralSeparatingContour`,
+  and contour/Riesz-projection estimates. The mathematics does carry over — a bounded
+  perturbation of a self-adjoint operator is self-adjoint on the same domain, and the
+  resolvent bound `‖(z − T)⁻¹‖ ≤ 1/dist(z, σ(T))` holds unbounded — but the Lean
+  foundation does not exist: **the precise missing theorems are contour-integral Riesz
+  projections and resolvent norm bounds for `LinearPMap`**, which neither Mathlib nor
+  this repository has. `DavisKahan.SpectralTheory.CircleRieszProjection` is bounded.
+  The alternative 8.1 route through
+  `InfiniteDimensional/TanTwoTheta/QuarterAcuteFormGap.lean` hits a smaller version of
+  the same wall: it reaches `IsQuarterAcute` from coercivity of `J ∘L (A − c)`, and
+  `ForTauCeti/Analysis/InnerProductSpace/CoerciveUnit.lean` is `E →L[𝕜] E` throughout.
+
+  Parts (ii) and (iii) stay as printed — the source restricts them to finite dimensions
+  itself. Keep the bounded theorems as specializations.
 
 - **`DK-HR-NAMING`** — **closed 2026-09-05**, except one sub-item declined with a recorded
   reason. `SineTheta/Presentation.lean` and `Section2TanThetaPerturbation.lean` declare into

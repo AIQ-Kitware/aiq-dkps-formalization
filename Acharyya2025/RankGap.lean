@@ -68,9 +68,20 @@ Composition of `gap_of_rank_floor` with
 `ε ≤ α/2`), the squared overlap between leading population eigenvectors and
 trailing sample eigenvectors is at most `4 n ε² / α²`.
 
-This is the form of Davis–Kahan actually used downstream for Theorem 2: the
-eigenvector-alignment (sin²Θ) bound specialized to Assumption 1 (rank d) and
-Assumption 2 (floor α), substituting `gap = α/2`.
+**Superseded, and not used downstream.**  This docstring used to say it was
+"the form of Davis–Kahan actually used downstream for Theorem 2".  It is not:
+nothing in this repository consumes it, and the live route is
+`Acharyya2025.ConfigPerturbation`'s private `crossPop_yws_le`, which proves the
+same `4 d ε² / α²` bound through
+`YuWangSamworth2015.sq_gap_mul_sum_cross_le_of_population_gap_opNorm` **without
+the `hsmall : ε ≤ α/2` side condition** that every declaration in this module
+carries.  Yu, Wang and Samworth's whole point is that the population gap alone
+suffices, so `hsmall` is exactly the hypothesis their theorem removes.
+
+Retained for now because the statement is the recognizable specialization to
+Assumption 1 (rank `d`) and Assumption 2 (floor `α`) with `gap = α/2`.  It
+should be restated without `hsmall` and this module made the owner of the YWS
+route, rather than the route living privately inside `ConfigPerturbation`.
 
 Formalized by Claude Fable 5 (claude-fable-5[1m]).
 -/
@@ -98,8 +109,10 @@ Under the same rank-`d` population assumptions as
 Davis--Kahan gives the sharper low-rank estimate
 `sum cross <= 4 * d * epsilon^2 / alpha^2`.
 
-The older theorem with ambient factor `n` is retained for source fidelity; new
-low-rank consumers should prefer this declaration. -/
+The older theorem with ambient factor `n` is retained for source fidelity.
+Neither declaration has a consumer, and both carry `hsmall`; see the note on
+`sum_cross_inner_sq_le_of_rank_floor` above for the live route and what it
+does without. -/
 theorem sum_cross_inner_sq_le_of_rank_floor_opNorm
     (hT : T.IsSymmetric) (hS : S.IsSymmetric)
     (hn : finrank ℝ E = n)
