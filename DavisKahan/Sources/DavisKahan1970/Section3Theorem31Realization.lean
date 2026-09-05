@@ -8,6 +8,7 @@ import DavisKahan.Geometry.Halmos.Realization
 import ForTauCeti.Analysis.InnerProductSpace.RealContinuousFunctionalCalculus
 import ForTauCeti.Analysis.RCLike.ScalarTransportFunctionalCalculus
 import ForTauCeti.Analysis.InnerProductSpace.BorelCalculus.SpectralMultiplicityEquiv
+import DavisKahan.SpectralTheory.Real.SpectralMultiplicityClassification
 
 /-!
 # Davis--Kahan 1970, Theorem 3.1, the realization half
@@ -370,6 +371,311 @@ theorem theorem3_1_realization_ofSpectralMultiplicity_complex
       ContinuousLinearMap.id_comp]
   exact ⟨J, hJ, hisom, hcoisom,
     theorem3_1_realization_ofAngles hΘ₀ hΘ₁ hspec₀ hspec₁ J hJ hisom hcoisom⟩
+
+/-! ### The multiplicity hypothesis at the printed strength
+
+The printed converse lets the two multiplicity functions differ at the spectral point `0`.
+`SameSpectralMultiplicity Θ₀ Θ₁` is agreement everywhere, so the theorems above establish only
+the equal-null-space case.  What the source actually asks for is agreement on the *nonzero*
+part: `J₀` is required only to carry `closure (Ran Θ₀)` onto `closure (Ran Θ₁)`, and the null
+spaces are free.
+
+`closure (Ran Θ)` is `(ker Θ)ᗮ`, and on the printed spectrum `[0, π/2]` the kernel of `Θ` is the
+kernel of `sin Θ`, which is the operator the polar resolution `S₀ = J₀ sin Θ₀` actually uses.
+Restricting to `(ker (sin Θ))ᗮ` is therefore the printed hypothesis, and it is also the form
+that makes the two partial-isometry identities immediate: the range of a self-adjoint operator
+lies in the orthogonal complement of its kernel. -/
+
+section AwayFromZero
+
+variable {𝕜' : Type*} [RCLike 𝕜']
+variable {G₀ : Type u} [NormedAddCommGroup G₀] [InnerProductSpace 𝕜' G₀] [CompleteSpace G₀]
+variable {G₁ : Type v} [NormedAddCommGroup G₁] [InnerProductSpace 𝕜' G₁] [CompleteSpace G₁]
+variable {Θ₀ : G₀ →L[𝕜'] G₀} {Θ₁ : G₁ →L[𝕜'] G₁}
+
+/-- The nonzero part of an angle operator: the orthogonal complement of the kernel of its sine,
+which is `closure (Ran Θ)` on the printed spectrum. -/
+noncomputable abbrev nonzeroPart (Θ : G₀ →L[𝕜'] G₀) : Submodule 𝕜' G₀ :=
+  (LinearMap.ker ((cfc Real.sin Θ : G₀ →L[𝕜'] G₀) : G₀ →ₗ[𝕜'] G₀))ᗮ
+
+/-- The nonzero part is invariant: `sin Θ` commutes with `Θ`, so its kernel is `Θ`-invariant,
+and self-adjointness carries that to the orthogonal complement. -/
+theorem invariantFor_nonzeroPart (hΘ : IsSelfAdjoint Θ₀) :
+    ∀ x ∈ nonzeroPart Θ₀, Θ₀ x ∈ nonzeroPart Θ₀ := by
+  intro x hx
+  have hcomm : Commute (cfc Real.sin Θ₀) Θ₀ := (Commute.refl Θ₀).cfc_real Real.sin
+  refine (Submodule.mem_orthogonal _ _).2 fun y hy => ?_
+  have hky : cfc Real.sin Θ₀ y = 0 := by simpa using (LinearMap.mem_ker).1 hy
+  have hy' : cfc Real.sin Θ₀ (Θ₀ y) = 0 := by
+    have h := congrArg (fun T : G₀ →L[𝕜'] G₀ => T y) hcomm.eq
+    simp only [ContinuousLinearMap.mul_apply] at h
+    rw [h, hky, map_zero]
+  have hmem : Θ₀ y ∈ LinearMap.ker ((cfc Real.sin Θ₀ : G₀ →L[𝕜'] G₀) : G₀ →ₗ[𝕜'] G₀) := by
+    simpa using hy'
+  have hself : ContinuousLinearMap.adjoint Θ₀ = Θ₀ :=
+    ContinuousLinearMap.isSelfAdjoint_iff'.mp hΘ
+  have hthis := (Submodule.mem_orthogonal _ _).1 hx (Θ₀ y) hmem
+  rw [← ContinuousLinearMap.adjoint_inner_left, hself]
+  exact hthis
+
+/-- **The printed multiplicity hypothesis**: the two angle operators have the same spectral
+multiplicity data on their nonzero parts, with the null spaces unconstrained. -/
+def SameSpectralMultiplicityAwayFromZero
+    (hΘ₀ : IsSelfAdjoint Θ₀) (hΘ₁ : IsSelfAdjoint Θ₁) : Prop :=
+  TauCeti.SameSpectralMultiplicity
+    (Θ₀.restrict (invariantFor_nonzeroPart hΘ₀))
+    (Θ₁.restrict (invariantFor_nonzeroPart hΘ₁))
+
+/-- The unitary equivalence of the two nonzero parts, which is what the multiplicity hypothesis
+delivers.  Taking it as the hypothesis makes the construction below field-generic; the two
+classifications that produce it are stated one field at a time. -/
+def NonzeroPartsUnitaryEquiv (hΘ₀ : IsSelfAdjoint Θ₀) (hΘ₁ : IsSelfAdjoint Θ₁) : Prop :=
+  TauCeti.OperatorUnitaryEquiv
+    (Θ₀.restrict (invariantFor_nonzeroPart hΘ₀))
+    (Θ₁.restrict (invariantFor_nonzeroPart hΘ₁))
+
+/-- A self-adjoint operator maps into the orthogonal complement of its own kernel. -/
+private theorem apply_mem_ker_orthogonal {G : Type*} [NormedAddCommGroup G]
+    [InnerProductSpace 𝕜' G] [CompleteSpace G] {S : G →L[𝕜'] G} (hS : IsSelfAdjoint S) (x : G) :
+    S x ∈ (LinearMap.ker (S : G →ₗ[𝕜'] G))ᗮ := by
+  refine (Submodule.mem_orthogonal _ _).2 fun y hy => ?_
+  have hSy : S y = 0 := by simpa using (LinearMap.mem_ker).1 hy
+  have hself : ContinuousLinearMap.adjoint S = S := ContinuousLinearMap.isSelfAdjoint_iff'.mp hS
+  rw [← ContinuousLinearMap.adjoint_inner_left, hself, hSy, inner_zero_left]
+
+/-- **Davis--Kahan 1970, Theorem 3.1: the printed partial isometry `J₀`, constructed from the
+printed multiplicity hypothesis.**
+
+The null spaces are unconstrained: only the nonzero parts are compared, which is the source's
+"their spectral multiplicity functions agree except possibly at the eigenvalue `0`", and `J₀` is
+built rather than assumed.  It is the unitary between the nonzero parts, extended by zero on the
+null space -- the source's `J₀`, which "carries `closure (Ran Θ₀)` isometrically onto
+`closure (Ran Θ₁)`".
+
+The two partial-isometry identities come out as identities about the nonzero parts, and they
+hold on the ranges of the sines because a self-adjoint operator maps into the orthogonal
+complement of its own kernel. -/
+theorem theorem3_1_intertwiner_of_nonzeroPartsUnitaryEquiv
+    (hΘ₀ : IsSelfAdjoint Θ₀) (hΘ₁ : IsSelfAdjoint Θ₁)
+    (hmult : NonzeroPartsUnitaryEquiv hΘ₀ hΘ₁) :
+    ∃ J : G₀ →L[𝕜'] G₁, J ∘L Θ₀ = Θ₁ ∘L J ∧
+      ContinuousLinearMap.adjoint J ∘L J ∘L cfc Real.sin Θ₀ = cfc Real.sin Θ₀ ∧
+      J ∘L ContinuousLinearMap.adjoint J ∘L cfc Real.sin Θ₁ = cfc Real.sin Θ₁ := by
+  classical
+  set K₀ : Submodule 𝕜' G₀ := nonzeroPart Θ₀ with hK₀
+  set K₁ : Submodule 𝕜' G₁ := nonzeroPart Θ₁ with hK₁
+  obtain ⟨e, he⟩ := hmult
+  set J : G₀ →L[𝕜'] G₁ := K₁.subtypeL ∘L (e : K₀ →L[𝕜'] K₁) ∘L K₀.orthogonalProjectionOnto with hJ
+  -- the adjoint, computed once
+  have hadjJ : ContinuousLinearMap.adjoint J =
+      K₀.subtypeL ∘L (e.symm : K₁ →L[𝕜'] K₀) ∘L K₁.orthogonalProjectionOnto := by
+    rw [hJ, ContinuousLinearMap.adjoint_comp, ContinuousLinearMap.adjoint_comp,
+      Submodule.adjoint_subtypeL, e.adjoint_eq_symm,
+      Submodule.adjoint_orthogonalProjectionOnto]
+    rfl
+  -- the two projections, from the two triple cancellations
+  have hp₀ : ∀ u : K₀, K₀.orthogonalProjectionOnto (K₀.subtypeL u) = u := fun u =>
+    Submodule.orthogonalProjectionOnto_mem_subspace_eq_self u
+  have hp₁ : ∀ u : K₁, K₁.orthogonalProjectionOnto (K₁.subtypeL u) = u := fun u =>
+    Submodule.orthogonalProjectionOnto_mem_subspace_eq_self u
+  have hJJ : ContinuousLinearMap.adjoint J ∘L J = K₀.starProjection := by
+    ext x
+    rw [hadjJ]
+    show K₀.subtypeL ((e.symm : K₁ →L[𝕜'] K₀)
+        (K₁.orthogonalProjectionOnto (J x))) = K₀.starProjection x
+    have hJx : J x = K₁.subtypeL ((e : K₀ →L[𝕜'] K₁) (K₀.orthogonalProjectionOnto x)) := rfl
+    rw [hJx, hp₁]
+    show K₀.subtypeL (e.symm (e (K₀.orthogonalProjectionOnto x))) = _
+    rw [e.symm_apply_apply]
+    rfl
+  have hJJ' : J ∘L ContinuousLinearMap.adjoint J = K₁.starProjection := by
+    ext y
+    rw [hadjJ]
+    show K₁.subtypeL ((e : K₀ →L[𝕜'] K₁) (K₀.orthogonalProjectionOnto (K₀.subtypeL
+      ((e.symm : K₁ →L[𝕜'] K₀) (K₁.orthogonalProjectionOnto y))))) = K₁.starProjection y
+    rw [hp₀]
+    show K₁.subtypeL (e (e.symm (K₁.orthogonalProjectionOnto y))) = _
+    rw [e.apply_symm_apply]
+    rfl
+  refine ⟨J, ?_, ?_, ?_⟩
+  · -- the intertwining, read on the two `Θ₀`-invariant summands
+    -- `K₀ᗮ` is the kernel of `sin Θ₀`, which `Θ₀` preserves because the two commute
+    have hperp : K₀ᗮ = LinearMap.ker ((cfc Real.sin Θ₀ : G₀ →L[𝕜'] G₀) : G₀ →ₗ[𝕜'] G₀) := by
+      rw [hK₀]
+      exact Submodule.orthogonal_orthogonal _
+    have hcomm : Commute (cfc Real.sin Θ₀) Θ₀ := (Commute.refl Θ₀).cfc_real Real.sin
+    have hinvperp : ∀ v ∈ K₀ᗮ, Θ₀ v ∈ K₀ᗮ := by
+      intro v hv
+      rw [hperp] at hv ⊢
+      have hSv : cfc Real.sin Θ₀ v = 0 := by simpa using (LinearMap.mem_ker).1 hv
+      have h := congrArg (fun T : G₀ →L[𝕜'] G₀ => T v) hcomm.eq
+      simp only [ContinuousLinearMap.mul_apply] at h
+      simpa [h, hSv] using congrArg (fun z => z) (by rw [h, hSv, map_zero] :
+        cfc Real.sin Θ₀ (Θ₀ v) = 0)
+    -- hence the projection onto `K₀` commutes with `Θ₀`
+    have hPcomm : ∀ x : G₀, K₀.starProjection (Θ₀ x) = Θ₀ (K₀.starProjection x) := by
+      intro x
+      have hsplit : K₀.starProjection x + K₀ᗮ.starProjection x = x :=
+        Submodule.starProjection_add_starProjection_orthogonal (K := K₀) x
+      have hu : Θ₀ (K₀.starProjection x) ∈ K₀ :=
+        invariantFor_nonzeroPart hΘ₀ _ (K₀.starProjection_apply_mem x)
+      have hv : Θ₀ (K₀ᗮ.starProjection x) ∈ K₀ᗮ :=
+        hinvperp _ (K₀ᗮ.starProjection_apply_mem x)
+      calc K₀.starProjection (Θ₀ x)
+          = K₀.starProjection (Θ₀ (K₀.starProjection x) + Θ₀ (K₀ᗮ.starProjection x)) := by
+            rw [← map_add, hsplit]
+        _ = Θ₀ (K₀.starProjection x) := by
+            rw [map_add, Submodule.starProjection_eq_self_iff.mpr hu,
+              show K₀.starProjection (Θ₀ (K₀ᗮ.starProjection x)) = 0 from by
+                rw [Submodule.starProjection_apply, Submodule.coe_eq_zero]
+                exact Submodule.orthogonalProjectionOnto_apply_of_mem_orthogonal hv,
+              add_zero]
+    ext x
+    show K₁.subtypeL ((e : K₀ →L[𝕜'] K₁) (K₀.orthogonalProjectionOnto (Θ₀ x))) =
+      Θ₁ (K₁.subtypeL ((e : K₀ →L[𝕜'] K₁) (K₀.orthogonalProjectionOnto x)))
+    -- the projection commutes, so the argument is the restriction applied to `P₀ x`
+    have hrestr : K₀.orthogonalProjectionOnto (Θ₀ x)
+        = Θ₀.restrict (invariantFor_nonzeroPart hΘ₀) (K₀.orthogonalProjectionOnto x) := by
+      apply Subtype.ext
+      exact hPcomm x
+    calc K₁.subtypeL ((e : K₀ →L[𝕜'] K₁) (K₀.orthogonalProjectionOnto (Θ₀ x)))
+        = K₁.subtypeL (e (Θ₀.restrict (invariantFor_nonzeroPart hΘ₀)
+            (K₀.orthogonalProjectionOnto x))) := by rw [hrestr]; rfl
+      _ = K₁.subtypeL (Θ₁.restrict (invariantFor_nonzeroPart hΘ₁)
+            (e (K₀.orthogonalProjectionOnto x))) :=
+          congrArg K₁.subtypeL (he (K₀.orthogonalProjectionOnto x))
+      _ = Θ₁ (K₁.subtypeL ((e : K₀ →L[𝕜'] K₁) (K₀.orthogonalProjectionOnto x))) := rfl
+  · rw [← ContinuousLinearMap.comp_assoc, hJJ]
+    ext x
+    exact Submodule.starProjection_eq_self_iff.mpr
+      (apply_mem_ker_orthogonal (S := cfc Real.sin Θ₀) (cfc_predicate _ _) x)
+  · rw [← ContinuousLinearMap.comp_assoc, hJJ']
+    ext y
+    exact Submodule.starProjection_eq_self_iff.mpr
+      (apply_mem_ker_orthogonal (S := cfc Real.sin Θ₁) (cfc_predicate _ _) y)
+
+/-- **Davis--Kahan 1970, Theorem 3.1, converse sentence, at the printed hypotheses.**
+
+Two arbitrary self-adjoint operators with `0 ≤ Θⱼ ≤ π/2` whose spectral multiplicity functions
+agree *except possibly at `0`*, and nothing else.  The intertwining partial isometry `J₀` the
+printed proof reconstructs is produced here, and the pair it realizes has the printed
+invariants.
+
+This is the printed converse.  `theorem3_1_realization_ofSpectralMultiplicity_complex` is the
+special case in which the multiplicity functions also agree at `0`, and
+`theorem3_1_realization_ofAngles` is the lower-level surface that takes `J₀` as a hypothesis. -/
+theorem theorem3_1_realization_ofNonzeroPartsUnitaryEquiv
+    {Θ₀ : G₀ →L[𝕜'] G₀} {Θ₁ : G₁ →L[𝕜'] G₁}
+    (hΘ₀ : IsSelfAdjoint Θ₀) (hΘ₁ : IsSelfAdjoint Θ₁)
+    (hspec₀ : spectrum ℝ Θ₀ ⊆ Set.Icc 0 (Real.pi / 2))
+    (hspec₁ : spectrum ℝ Θ₁ ⊆ Set.Icc 0 (Real.pi / 2))
+    (hmult : NonzeroPartsUnitaryEquiv hΘ₀ hΘ₁) :
+    ∃ (J : G₀ →L[𝕜'] G₁) (hJ : J ∘L Θ₀ = Θ₁ ∘L J)
+      (hisom : ContinuousLinearMap.adjoint J ∘L J ∘L cfc Real.sin Θ₀ = cfc Real.sin Θ₀)
+      (hcoisom : J ∘L ContinuousLinearMap.adjoint J ∘L cfc Real.sin Θ₁ = cfc Real.sin Θ₁),
+      halmosCommonPart (sourceSubspace 𝕜' G₀ G₁)
+          (HalmosAngleDatum.ofIntertwinedAngles hΘ₀ hΘ₁ J hJ hisom hcoisom).targetSubspace =
+        Submodule.map (modelInl 𝕜' G₀ G₁ : G₀ →ₗ[𝕜'] WithLp 2 (G₀ × G₁))
+          (LinearMap.ker ((cfc Real.sin Θ₀ : G₀ →L[𝕜'] G₀) : G₀ →ₗ[𝕜'] G₀)) ∧
+        halmosExteriorPart (sourceSubspace 𝕜' G₀ G₁)
+            (HalmosAngleDatum.ofIntertwinedAngles hΘ₀ hΘ₁ J hJ hisom hcoisom).targetSubspace =
+          Submodule.map (modelInr 𝕜' G₀ G₁ : G₁ →ₗ[𝕜'] WithLp 2 (G₀ × G₁))
+            (LinearMap.ker ((cfc Real.sin Θ₁ : G₁ →L[𝕜'] G₁) : G₁ →ₗ[𝕜'] G₁)) ∧
+        halmosSourceDefect (sourceSubspace 𝕜' G₀ G₁)
+            (HalmosAngleDatum.ofIntertwinedAngles hΘ₀ hΘ₁ J hJ hisom hcoisom).targetSubspace =
+          Submodule.map (modelInl 𝕜' G₀ G₁ : G₀ →ₗ[𝕜'] WithLp 2 (G₀ × G₁))
+            (LinearMap.ker ((cfc Real.cos Θ₀ : G₀ →L[𝕜'] G₀) : G₀ →ₗ[𝕜'] G₀)) ∧
+        halmosTargetDefect (sourceSubspace 𝕜' G₀ G₁)
+            (HalmosAngleDatum.ofIntertwinedAngles hΘ₀ hΘ₁ J hJ hisom hcoisom).targetSubspace =
+          Submodule.map (modelInr 𝕜' G₀ G₁ : G₁ →ₗ[𝕜'] WithLp 2 (G₀ × G₁))
+            (LinearMap.ker ((cfc Real.cos Θ₁ : G₁ →L[𝕜'] G₁) : G₁ →ₗ[𝕜'] G₁)) := by
+  obtain ⟨J, hJ, hisom, hcoisom⟩ :=
+    theorem3_1_intertwiner_of_nonzeroPartsUnitaryEquiv hΘ₀ hΘ₁ hmult
+  obtain ⟨-, -, h₃, h₄, h₅, h₆, -⟩ :=
+    theorem3_1_realization_ofAngles hΘ₀ hΘ₁ hspec₀ hspec₁ J hJ hisom hcoisom
+  exact ⟨J, hJ, hisom, hcoisom, h₃, h₄, h₅, h₆⟩
+
+/-! ### The multiplicity classification, one field at a time
+
+The construction above is field-generic once the unitary equivalence of the nonzero parts is in
+hand.  Producing it from the printed multiplicity hypothesis is where the two fields separate,
+because Hahn--Hellinger is stated one field at a time.  These two wrappers are the printed
+converse over `ℂ` and over `ℝ`, which is the source's own scalar scope. -/
+
+section Fields
+
+/-- **Davis--Kahan 1970, Theorem 3.1, converse sentence over `ℂ`, at the printed hypotheses.**
+
+Two arbitrary self-adjoint operators with `0 ≤ Θⱼ ≤ π/2` whose spectral multiplicity functions
+agree *except possibly at `0`*, and nothing else.  `J₀` is constructed. -/
+theorem theorem3_1_realization_ofSpectralMultiplicityAwayFromZero_complex
+    {A₀ : Type u} [NormedAddCommGroup A₀] [InnerProductSpace ℂ A₀] [CompleteSpace A₀]
+    {A₁ : Type v} [NormedAddCommGroup A₁] [InnerProductSpace ℂ A₁] [CompleteSpace A₁]
+    {Θ₀ : A₀ →L[ℂ] A₀} {Θ₁ : A₁ →L[ℂ] A₁}
+    (hΘ₀ : IsSelfAdjoint Θ₀) (hΘ₁ : IsSelfAdjoint Θ₁)
+    (hspec₀ : spectrum ℝ Θ₀ ⊆ Set.Icc 0 (Real.pi / 2))
+    (hspec₁ : spectrum ℝ Θ₁ ⊆ Set.Icc 0 (Real.pi / 2))
+    (hmult : SameSpectralMultiplicityAwayFromZero hΘ₀ hΘ₁) :
+    ∃ (J : A₀ →L[ℂ] A₁) (hJ : J ∘L Θ₀ = Θ₁ ∘L J)
+      (hisom : ContinuousLinearMap.adjoint J ∘L J ∘L cfc Real.sin Θ₀ = cfc Real.sin Θ₀)
+      (hcoisom : J ∘L ContinuousLinearMap.adjoint J ∘L cfc Real.sin Θ₁ = cfc Real.sin Θ₁),
+      halmosCommonPart (sourceSubspace ℂ A₀ A₁)
+          (HalmosAngleDatum.ofIntertwinedAngles hΘ₀ hΘ₁ J hJ hisom hcoisom).targetSubspace =
+        Submodule.map (modelInl ℂ A₀ A₁ : A₀ →ₗ[ℂ] WithLp 2 (A₀ × A₁))
+          (LinearMap.ker ((cfc Real.sin Θ₀ : A₀ →L[ℂ] A₀) : A₀ →ₗ[ℂ] A₀)) ∧
+        halmosExteriorPart (sourceSubspace ℂ A₀ A₁)
+            (HalmosAngleDatum.ofIntertwinedAngles hΘ₀ hΘ₁ J hJ hisom hcoisom).targetSubspace =
+          Submodule.map (modelInr ℂ A₀ A₁ : A₁ →ₗ[ℂ] WithLp 2 (A₀ × A₁))
+            (LinearMap.ker ((cfc Real.sin Θ₁ : A₁ →L[ℂ] A₁) : A₁ →ₗ[ℂ] A₁)) ∧
+        halmosSourceDefect (sourceSubspace ℂ A₀ A₁)
+            (HalmosAngleDatum.ofIntertwinedAngles hΘ₀ hΘ₁ J hJ hisom hcoisom).targetSubspace =
+          Submodule.map (modelInl ℂ A₀ A₁ : A₀ →ₗ[ℂ] WithLp 2 (A₀ × A₁))
+            (LinearMap.ker ((cfc Real.cos Θ₀ : A₀ →L[ℂ] A₀) : A₀ →ₗ[ℂ] A₀)) ∧
+        halmosTargetDefect (sourceSubspace ℂ A₀ A₁)
+            (HalmosAngleDatum.ofIntertwinedAngles hΘ₀ hΘ₁ J hJ hisom hcoisom).targetSubspace =
+          Submodule.map (modelInr ℂ A₀ A₁ : A₁ →ₗ[ℂ] WithLp 2 (A₀ × A₁))
+            (LinearMap.ker ((cfc Real.cos Θ₁ : A₁ →L[ℂ] A₁) : A₁ →ₗ[ℂ] A₁)) :=
+  theorem3_1_realization_ofNonzeroPartsUnitaryEquiv hΘ₀ hΘ₁ hspec₀ hspec₁
+    (TauCeti.operatorUnitaryEquiv_of_sameSpectralMultiplicity_complex _ _ hmult)
+
+/-- **Davis--Kahan 1970, Theorem 3.1, converse sentence over `ℝ`, at the printed hypotheses.**
+
+The real sibling.  Hahn--Hellinger over `ℝ` needs the source's own separability, which is why
+`A₀` carries it here and the complex statement does not. -/
+theorem theorem3_1_realization_ofSpectralMultiplicityAwayFromZero_real
+    {A₀ : Type u} [NormedAddCommGroup A₀] [InnerProductSpace ℝ A₀] [CompleteSpace A₀]
+    {A₁ : Type v} [NormedAddCommGroup A₁] [InnerProductSpace ℝ A₁] [CompleteSpace A₁]
+    {Θ₀ : A₀ →L[ℝ] A₀} {Θ₁ : A₁ →L[ℝ] A₁}
+    (hΘ₀ : IsSelfAdjoint Θ₀) (hΘ₁ : IsSelfAdjoint Θ₁)
+    (hspec₀ : spectrum ℝ Θ₀ ⊆ Set.Icc 0 (Real.pi / 2))
+    (hspec₁ : spectrum ℝ Θ₁ ⊆ Set.Icc 0 (Real.pi / 2))
+    (hmult : SameSpectralMultiplicityAwayFromZero hΘ₀ hΘ₁) :
+    ∃ (J : A₀ →L[ℝ] A₁) (hJ : J ∘L Θ₀ = Θ₁ ∘L J)
+      (hisom : ContinuousLinearMap.adjoint J ∘L J ∘L cfc Real.sin Θ₀ = cfc Real.sin Θ₀)
+      (hcoisom : J ∘L ContinuousLinearMap.adjoint J ∘L cfc Real.sin Θ₁ = cfc Real.sin Θ₁),
+      halmosCommonPart (sourceSubspace ℝ A₀ A₁)
+          (HalmosAngleDatum.ofIntertwinedAngles hΘ₀ hΘ₁ J hJ hisom hcoisom).targetSubspace =
+        Submodule.map (modelInl ℝ A₀ A₁ : A₀ →ₗ[ℝ] WithLp 2 (A₀ × A₁))
+          (LinearMap.ker ((cfc Real.sin Θ₀ : A₀ →L[ℝ] A₀) : A₀ →ₗ[ℝ] A₀)) ∧
+        halmosExteriorPart (sourceSubspace ℝ A₀ A₁)
+            (HalmosAngleDatum.ofIntertwinedAngles hΘ₀ hΘ₁ J hJ hisom hcoisom).targetSubspace =
+          Submodule.map (modelInr ℝ A₀ A₁ : A₁ →ₗ[ℝ] WithLp 2 (A₀ × A₁))
+            (LinearMap.ker ((cfc Real.sin Θ₁ : A₁ →L[ℝ] A₁) : A₁ →ₗ[ℝ] A₁)) ∧
+        halmosSourceDefect (sourceSubspace ℝ A₀ A₁)
+            (HalmosAngleDatum.ofIntertwinedAngles hΘ₀ hΘ₁ J hJ hisom hcoisom).targetSubspace =
+          Submodule.map (modelInl ℝ A₀ A₁ : A₀ →ₗ[ℝ] WithLp 2 (A₀ × A₁))
+            (LinearMap.ker ((cfc Real.cos Θ₀ : A₀ →L[ℝ] A₀) : A₀ →ₗ[ℝ] A₀)) ∧
+        halmosTargetDefect (sourceSubspace ℝ A₀ A₁)
+            (HalmosAngleDatum.ofIntertwinedAngles hΘ₀ hΘ₁ J hJ hisom hcoisom).targetSubspace =
+          Submodule.map (modelInr ℝ A₀ A₁ : A₁ →ₗ[ℝ] WithLp 2 (A₀ × A₁))
+            (LinearMap.ker ((cfc Real.cos Θ₁ : A₁ →L[ℝ] A₁) : A₁ →ₗ[ℝ] A₁)) :=
+  theorem3_1_realization_ofNonzeroPartsUnitaryEquiv hΘ₀ hΘ₁ hspec₀ hspec₁
+    (TauCeti.DavisKahan.RealSpectralRestriction.operatorUnitaryEquiv_of_sameSpectralMultiplicity_real
+      _ _ hmult)
+
+end Fields
+
+end AwayFromZero
 
 end OfMultiplicity
 

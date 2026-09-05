@@ -4,7 +4,7 @@
 
 **Census family:** `source-completion-census`  
 **Items:** 50  
-**Unique cited Lean declarations:** 1230
+**Unique cited Lean declarations:** 1247
 
 ## How to use this census
 
@@ -1859,6 +1859,15 @@ One presentational caveat, unchanged from the complex form and already recorded:
 - `TauCeti.DavisKahan1970.remark3_2_bilateralShift_separates_dimensionHypotheses_real`
 - `TauCeti.DavisKahan.directedGap_asymmetric_coordinateHalfSpace`
 - `TauCeti.DavisKahan.coordinateHalfSpace_le_coordinateHalfSpace`
+- `TauCeti.DavisKahan.CrossedDefectsSameDimension`
+- `TauCeti.DavisKahan.crossedDefectsEquivalent_iff_sameDimension`
+- `TauCeti.nonempty_linearIsometryEquiv_of_separable_of_infiniteDimensional`
+- `TauCeti.nonempty_linearIsometryEquiv_of_countable_infinite_hilbertBasis`
+- `TauCeti.nonempty_linearIsometryEquiv_of_hilbertBasis`
+- `TauCeti.exists_countable_hilbertBasis`
+- `TauCeti.finiteDimensional_of_finite_hilbertBasis`
+- `TauCeti.lpIndexCongr`
+- `TauCeti.countable_of_orthonormal`
 
 **Notes.** No exact general Hilbert-space declaration was found.
 
@@ -2142,6 +2151,15 @@ CENSUS-GATE NOTE 2026-08-11: `TauCeti.MultiplicityDatum.retype` is deliberately 
 - `TauCeti.operatorUnitaryEquiv_retype_real_of_starOperatorUnitaryEquiv`
 - `TauCeti.DavisKahan1970.theorem3_1_intertwiner_of_sameSpectralMultiplicity_complex`
 - `TauCeti.DavisKahan1970.theorem3_1_realization_ofSpectralMultiplicity_complex`
+- `TauCeti.DavisKahan1970.theorem3_1_realization_ofSpectralMultiplicityAwayFromZero_complex`
+- `TauCeti.DavisKahan1970.theorem3_1_intertwiner_of_nonzeroPartsUnitaryEquiv`
+- `TauCeti.DavisKahan1970.SameSpectralMultiplicityAwayFromZero`
+- `TauCeti.DavisKahan1970.nonzeroPart`
+- `TauCeti.DavisKahan1970.invariantFor_nonzeroPart`
+- `TauCeti.DavisKahan1970.theorem3_1_realization_ofSpectralMultiplicityAwayFromZero_real`
+- `TauCeti.DavisKahan1970.theorem3_1_realization_ofNonzeroPartsUnitaryEquiv`
+- `TauCeti.DavisKahan1970.theorem3_1_intertwiner_of_nonzeroPartsUnitaryEquiv`
+- `TauCeti.DavisKahan1970.NonzeroPartsUnitaryEquiv`
 
 **Curated source/Lean review:**
 

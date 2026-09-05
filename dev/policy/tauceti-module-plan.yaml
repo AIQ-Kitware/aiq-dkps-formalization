@@ -365,6 +365,7 @@ topics:
   title: Cyclic subspaces, the multiplication model, and Hahn-Hellinger existence
   modules:
   - Analysis.InnerProductSpace.SeparableOrthonormal
+  - Analysis.InnerProductSpace.LpIndexCongr
   - Analysis.InnerProductSpace.BorelCalculus.AlmostInvariant
   - Analysis.InnerProductSpace.BorelCalculus.CyclicIsometry
   - Analysis.InnerProductSpace.BorelCalculus.CyclicModel
