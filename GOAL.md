@@ -166,6 +166,16 @@ Paper-facing wrappers earn their place through source correspondence.
 Treat the current checker output as authoritative; do not copy mutable counts into this
 file.
 
+- `check_comparator_signatures` is red on the Davis--Kahan config with **8 of 20 comparisons
+  differing**, measured 2026-09-05 and unchanged by that day's repair pass. Two are
+  `signature-right-unresolved` against `Challenge.DavisKahan1970.Leaderboard`
+  (`tanTwoTheta_poleExclusion_exactPaper`,
+  `tanTwoTheta_unbounded_directedResidual_symmetricNorming_exactPaper`); the rest are
+  `signature-type-mismatch` on library declarations whose Conformance statement drifted. Run
+  `python3 scripts/check_comparator_signatures.py --no-build comparator/davis-kahan-1970.json`
+  for the current list; without `--no-build` it re-runs a full build per invocation. The gate
+  runs in the suite, so a green suite is not available until these are repaired.
+
 - the `per-declaration-expose` ratchet in `dev/policy/ratchet.yaml` tracks upstream
   API-design debt. Do not lower its maximum to
   make it green.
