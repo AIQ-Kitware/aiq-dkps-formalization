@@ -171,7 +171,7 @@ theorem tanTheta_from_reducingSubspace
     (hMem : N.Mem Hop) :
     N.Mem (tanAngleOperatorC U V) ∧
       delta * N.gauge (tanAngleOperatorC U V) ≤ N.gauge Hop :=
-  SectionTwo.tanTheta_complex N D (DavisKahan.ReducingComplement.ofReducesSubspace hVred)
+  SectionTwo.tanTheta_ambient_complex N D (DavisKahan.ReducingComplement.ofReducesSubspace hVred)
     Hop hH hdelta hupper hUnwanted hdefined hResidual hMem
 
 /-- The same reading with a bounded Ritz compression, which is the common case.
@@ -197,7 +197,7 @@ theorem tanTheta_from_trialBlock
     (hMem : N.Mem Hop) :
     N.Mem (tanAngleOperatorC U V) ∧
       delta * N.gauge (tanAngleOperatorC U V) ≤ N.gauge Hop :=
-  SectionTwo.tanTheta_complex N (DavisKahan.UnboundedRitzPair.ofTrialBlock D)
+  SectionTwo.tanTheta_ambient_complex N (DavisKahan.UnboundedRitzPair.ofTrialBlock D)
     (DavisKahan.ReducingComplement.ofReducesSubspace hVred) Hop hH hdelta hupper
     hUnwanted hdefined hResidual hMem
 
@@ -325,7 +325,7 @@ theorem tanTwoTheta_from_reducingSubspace
       (b - a) * N.gauge (absTanTwoAngleOperatorC
         (TauCeti.LinearPMap.specRange hA (Set.Iic c) measurableSet_Iic) V) ≤
         2 * N.gauge B :=
-  SectionTwo.tanTwoTheta_complex N V hA hBsa hB
+  SectionTwo.tanTwoTheta_ambient_complex N V hA hBsa hB
     (DavisKahan.ReflectionIntertwines.ofReducesSubspace hVred) hUa hUb hab hBmem
 
 end TanTwoTheta

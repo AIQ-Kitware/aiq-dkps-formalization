@@ -131,19 +131,19 @@ The declarations that carry this result's printed statement, with the source ato
 
 #### `TauCeti.DavisKahan1970.SectionTwo.sinTheta`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/SectionTwo.lean:290`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/SectionTwo.lean:118`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.SectionTwo.sinTheta_complex`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/SectionTwo.lean:301`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/SectionTwo.lean:129`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.SectionTwo.sinTheta_real`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/SectionTwo.lean:308`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/SectionTwo.lean:136`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
@@ -774,8 +774,8 @@ The declarations that carry this result's printed statement, with the source ato
 - `TauCeti.DavisKahan1970.tanTheta_directed_unboundedRitz_symmetricNorming_real` — alternative_route
 - `TauCeti.DavisKahan1970.approximationSingularValue_directedSineBlock_lt_one_unboundedRitz_complex` — supporting_theorem
 - `TauCeti.DavisKahan1970.approximationSingularValue_directedSineBlock_lt_one_unboundedRitz_real` — supporting_theorem
-- `TauCeti.DavisKahan1970.SectionTwo.tanTheta_complex` — public_alias
-- `TauCeti.DavisKahan1970.SectionTwo.tanTheta_real` — public_alias
+- `TauCeti.DavisKahan1970.SectionTwo.tanTheta_ambient_complex` — public_alias
+- `TauCeti.DavisKahan1970.SectionTwo.tanTheta_ambient_real` — public_alias
 - `TauCeti.DavisKahan1970.tanTheta_directed_finiteDimensional_symmetricNorming_rclike` — scalar_generic_facade
 - `TauCeti.DavisKahan1970.tanTheta_ambient_bounded_symmetricNorming_complex_of_transversality` — supporting_theorem
 - `TauCeti.DavisKahan1970.tanTheta_ambient_bounded_symmetricNorming_real_of_transversality` — supporting_theorem
@@ -810,15 +810,15 @@ The declarations that carry this result's printed statement, with the source ato
 
 ### Source-facing Lean declarations
 
-#### `TauCeti.DavisKahan1970.SectionTwo.tanTheta_complex`
+#### `TauCeti.DavisKahan1970.SectionTwo.tanTheta_ambient_complex`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/SectionTwo.lean:327`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/SectionTwo.lean:222`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
-#### `TauCeti.DavisKahan1970.SectionTwo.tanTheta_real`
+#### `TauCeti.DavisKahan1970.SectionTwo.tanTheta_ambient_real`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/SectionTwo.lean:338`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/SectionTwo.lean:225`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
@@ -1173,8 +1173,8 @@ The declarations that carry this result's printed statement, with the source ato
 - `TauCeti.DavisKahan1970.sinTwoTheta_ambient_unbounded_addBounded_symmetricNorming_real` — specialization
 - `TauCeti.DavisKahan1970.sinTwoTheta_ambient_unbounded_addBounded_symmetricNorming_complex` — specialization
 - `TauCeti.DavisKahan1970.sinTwoTheta_ambient_unbounded_reducing_symmetricNorming_rclike` — generalization
-- `TauCeti.DavisKahan1970.SectionTwo.sinTwoTheta_complex` — public_alias
-- `TauCeti.DavisKahan1970.SectionTwo.sinTwoTheta_real` — public_alias
+- `TauCeti.DavisKahan1970.SectionTwo.sinTwoTheta_directed_complex` — public_alias
+- `TauCeti.DavisKahan1970.SectionTwo.sinTwoTheta_directed_real` — public_alias
 - `TauCeti.DavisKahan1970.sinTwoTheta_directed_finiteDimensional_symmetricNorming_rclike` — scalar_generic_facade
 - `TauCeti.DavisKahan1970.sinTwoTheta_unbounded_perturbation_arbitraryRepresentative_complex` — generalization
 - `TauCeti.DavisKahan1970.sinTwoTheta_unbounded_reflectionResidual_arbitraryRepresentative_complex` — generalization
@@ -1182,18 +1182,16 @@ The declarations that carry this result's printed statement, with the source ato
 - `TauCeti.DavisKahan1970.sinTwoTheta_unbounded_reflectionResidual_arbitraryRepresentative_real` — generalization
 - `TauCeti.DavisKahan1970.sinTwoTheta_directed_unboundedResidual_blockRepresentative_intervalExterior_symmetricNorming_real` — specialization
 - `TauCeti.DavisKahan1970.sinTwoTheta_directed_unbounded_addBounded_blockRepresentative_symmetricNorming_complex` — presentation_wrapper
-- `TauCeti.DavisKahan.directedSinAngleOperatorC_reflected_eq_directedSinTwoAngleOperatorC` — supporting_theorem
-- `TauCeti.DavisKahan.sinTwoThetaIdealBlock_hasSameApproximationNumbers` — supporting_theorem
-- `TauCeti.DavisKahan.extendedGauge_sinTwoThetaIdealBlock_complex` — supporting_theorem
-- `TauCeti.DavisKahan.approximationSingularValue_sinTwoThetaIdealBlock_real` — supporting_theorem
-- `TauCeti.DavisKahan.extendedGauge_sinTwoThetaIdealBlock_real` — supporting_theorem
-- `TauCeti.DavisKahan.mem_directedSinTwoAngleOperatorRC_iff` — supporting_theorem
-- `TauCeti.DavisKahan.gauge_directedSinTwoAngleOperatorRC` — supporting_theorem
+- `TauCeti.DavisKahan.directedSinAngleOperatorC_reflected_eq_directedSinTwoAngleOperatorC` — source_correspondence
+- `TauCeti.DavisKahan.sinTwoThetaIdealBlock_hasSameApproximationNumbers` — source_correspondence
+- `TauCeti.DavisKahan.extendedGauge_sinTwoThetaIdealBlock_complex` — source_correspondence
+- `TauCeti.DavisKahan.approximationSingularValue_sinTwoThetaIdealBlock_real` — source_correspondence
+- `TauCeti.DavisKahan.extendedGauge_sinTwoThetaIdealBlock_real` — source_correspondence
+- `TauCeti.DavisKahan.mem_directedSinTwoAngleOperatorRC_iff` — transport_lemma
+- `TauCeti.DavisKahan.gauge_directedSinTwoAngleOperatorRC` — transport_lemma
 - `TauCeti.DavisKahan1970.sinTwoTheta_directed_unboundedResidual_blockRepresentative_spectrumGap_symmetricNorming_complex` — specialization
 - `TauCeti.DavisKahan1970.sinTwoTheta_directed_unbounded_addBounded_spectrumGap_symmetricNorming_complex` — specialization
 - `TauCeti.DavisKahan1970.sinTwoTheta_directed_unbounded_addBounded_blockRepresentative_spectrumGap_symmetricNorming_complex` — specialization
-- `TauCeti.DavisKahan.sinTwoTheta_addBounded_gauge_of_formGap` — supporting_theorem
-- `TauCeti.DavisKahan.sinTwoTheta_reflectionResidual_gauge_of_formGap` — supporting_theorem
 - `TauCeti.DavisKahan1970.sinTwoTheta_directed_unbounded_addBounded_unequalDimension_symmetricNorming_complex` — generalization
 - `TauCeti.DavisKahan1970.sinTwoTheta_directed_unbounded_addBounded_unequalDimension_symmetricNorming_real` — generalization
 - `TauCeti.DavisKahan1970.sinTwoTheta_unbounded_perturbation_arbitraryRepresentative_unequalDimension_complex` — generalization
@@ -1223,15 +1221,15 @@ The declarations that carry this result's printed statement, with the source ato
 
 ### Source-facing Lean declarations
 
-#### `TauCeti.DavisKahan1970.SectionTwo.sinTwoTheta_complex`
+#### `TauCeti.DavisKahan1970.SectionTwo.sinTwoTheta_directed_complex`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/SectionTwo.lean:361`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/SectionTwo.lean:251`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
-#### `TauCeti.DavisKahan1970.SectionTwo.sinTwoTheta_real`
+#### `TauCeti.DavisKahan1970.SectionTwo.sinTwoTheta_directed_real`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/SectionTwo.lean:372`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/SectionTwo.lean:256`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
@@ -1373,18 +1371,6 @@ Source location candidates: `DavisKahan/Sources/DavisKahan1970/SinTwoTheta.lean:
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
-#### `TauCeti.DavisKahan.sinTwoTheta_addBounded_gauge_of_formGap`
-
-Source location candidates: `DavisKahan/DoubleAngle/UnboundedIdealFormGap.lean:505`
-
-Compiler-printed type: *inserted when a compiler certificate is supplied.*
-
-#### `TauCeti.DavisKahan.sinTwoTheta_reflectionResidual_gauge_of_formGap`
-
-Source location candidates: `DavisKahan/DoubleAngle/UnboundedIdealFormGap.lean:291`
-
-Compiler-printed type: *inserted when a compiler certificate is supplied.*
-
 #### `TauCeti.DavisKahan1970.sinTwoTheta_directed_unbounded_addBounded_unequalDimension_symmetricNorming_complex`
 
 Source location candidates: `DavisKahan/Sources/DavisKahan1970/SinTwoTheta.lean:934`
@@ -1423,13 +1409,13 @@ Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.SectionTwo.sinTwoTheta_ambient_complex`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/SectionTwo.lean:461`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/SectionTwo.lean:301`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.SectionTwo.sinTwoTheta_ambient_real`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/SectionTwo.lean:465`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/SectionTwo.lean:305`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
@@ -1513,13 +1499,13 @@ Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.SectionTwo.sinTwoTheta_directed_blockRepresentative_complex`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/SectionTwo.lean:422`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/SectionTwo.lean:262`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.SectionTwo.sinTwoTheta_directed_blockRepresentative_real`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/SectionTwo.lean:426`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/SectionTwo.lean:266`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
@@ -1680,8 +1666,8 @@ The declarations that carry this result's printed statement, with the source ato
 ### Other registered declarations
 
 - `TauCeti.DavisKahan1970.cos_two_ne_zero_of_isUnit_diagonalPart_reflection_sq_real` — supporting_theorem
-- `TauCeti.DavisKahan1970.SectionTwo.tanTwoTheta_complex` — public_alias
-- `TauCeti.DavisKahan1970.SectionTwo.tanTwoTheta_real` — public_alias
+- `TauCeti.DavisKahan1970.SectionTwo.tanTwoTheta_ambient_complex` — public_alias
+- `TauCeti.DavisKahan1970.SectionTwo.tanTwoTheta_ambient_real` — public_alias
 - `TauCeti.DavisKahan1970.tanTwoTheta_branchFree_bounded_finiteSubspace_symmetricNorming_rclike` — scalar_generic_facade
 - `TauCeti.DavisKahan1970.tanTwoTheta_directed_boundedResidual_blockRepresentative_spectralGap_symmetricNorming_complex` — specialization
 - `TauCeti.DavisKahan1970.tanTwoTheta_directed_boundedResidual_blockRepresentative_spectralGap_symmetricNorming_real` — specialization
@@ -1690,24 +1676,15 @@ The declarations that carry this result's printed statement, with the source ato
 - `TauCeti.DavisKahan1970.tanTwoTheta_ambient_unbounded_blockRepresentative_symmetricNorming_complex` — presentation_wrapper
 - `TauCeti.DavisKahan1970.tanTwoTheta_ambient_unbounded_blockRepresentative_symmetricNorming_real` — presentation_wrapper
 - `TauCeti.DavisKahan1970.tanTwoTheta_ambient_unbounded_blockRepresentative_derivedReflection_symmetricNorming_complex` — presentation_wrapper
-- `TauCeti.DavisKahan.diagonalPart_sq_add_offDiagonalPart_sq` — supporting_theorem
-- `TauCeti.DavisKahan.diagonalPart_anticommute_offDiagonalPart` — supporting_theorem
-- `TauCeti.DavisKahan.corner_offDiagonalPart_sq` — supporting_theorem
-- `TauCeti.DavisKahan.gram_unboundedReflectionTangent` — supporting_theorem
-- `TauCeti.DavisKahan.gram_unboundedReflectionTangent_eq_offDiagonal` — supporting_theorem
-- `TauCeti.DavisKahan.starProjection_offDiagonal_sq_reflection` — supporting_theorem
-- `TauCeti.DavisKahan.unboundedReflectionTangent_reflection_eq` — supporting_theorem
-- `TauCeti.DavisKahan.tanTwoBlockRepresentative_mul_signedCosTwo` — supporting_theorem
-- `TauCeti.DavisKahan.sameApproximationSingularValues_unboundedReflectionTangent` — supporting_theorem
-- `TauCeti.DavisKahan.extendedGauge_unboundedReflectionTangent_complex` — supporting_theorem
-- `TauCeti.DavisKahan.ReflectionIntertwines` — supporting_theorem
+- `TauCeti.DavisKahan.unboundedReflectionTangent_reflection_eq` — source_correspondence
+- `TauCeti.DavisKahan.sameApproximationSingularValues_unboundedReflectionTangent` — source_correspondence
+- `TauCeti.DavisKahan.extendedGauge_unboundedReflectionTangent_complex` — source_correspondence
+- `TauCeti.DavisKahan.ReflectionIntertwines` — implementation_structure
 - `TauCeti.DavisKahan.ReflectionIntertwines.ofReducesSubspace` — supporting_theorem
-- `TauCeti.DavisKahan.reflection_commutes_of_reducesSubspace` — supporting_theorem
-- `TauCeti.DavisKahan.isUnit_signedCosTwo_of_isUnit_diagonalPart_sq` — supporting_theorem
 - `TauCeti.DavisKahan.cos_two_ne_zero_of_isUnit_diagonalPart_reflection_sq` — supporting_theorem
-- `TauCeti.DavisKahan.extendedGauge_unboundedReflectionTangent_real` — supporting_theorem
-- `TauCeti.DavisKahan.Angle.absTanTwoAngleOperatorR` — supporting_theorem
-- `TauCeti.DavisKahan.Angle.complexify_absTanTwoAngleOperatorR` — supporting_theorem
+- `TauCeti.DavisKahan.extendedGauge_unboundedReflectionTangent_real` — source_correspondence
+- `TauCeti.DavisKahan.Angle.absTanTwoAngleOperatorR` — implementation_structure
+- `TauCeti.DavisKahan.Angle.complexify_absTanTwoAngleOperatorR` — transport_lemma
 - `TauCeti.DavisKahan1970.tanTwoTheta_ambient_unbounded_blockRepresentative_derivedReflection_symmetricNorming_real` — presentation_wrapper
 - `TauCeti.DavisKahan1970.approximationNumber_reflectionTangentCorner` — source_correspondence
 - `TauCeti.DavisKahan1970.reflectionTangentCorner_reflection_eq_tanTwoBlockCompression` — source_correspondence
@@ -1748,15 +1725,15 @@ The declarations that carry this result's printed statement, with the source ato
 
 ### Source-facing Lean declarations
 
-#### `TauCeti.DavisKahan1970.SectionTwo.tanTwoTheta_complex`
+#### `TauCeti.DavisKahan1970.SectionTwo.tanTwoTheta_ambient_complex`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/SectionTwo.lean:484`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/SectionTwo.lean:286`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
-#### `TauCeti.DavisKahan1970.SectionTwo.tanTwoTheta_real`
+#### `TauCeti.DavisKahan1970.SectionTwo.tanTwoTheta_ambient_real`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/SectionTwo.lean:493`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/SectionTwo.lean:289`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
@@ -1820,51 +1797,9 @@ Source location candidates: `DavisKahan/Sources/DavisKahan1970/TanTwoThetaUnboun
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
-#### `TauCeti.DavisKahan.diagonalPart_sq_add_offDiagonalPart_sq`
-
-Source location candidates: `DavisKahan/DoubleAngle/TangentTransport.lean:202`, `ForTauCeti/Analysis/InnerProductSpace/DoubleAngle/ReflectionBlocks.lean:177`
-
-Compiler-printed type: *inserted when a compiler certificate is supplied.*
-
-#### `TauCeti.DavisKahan.diagonalPart_anticommute_offDiagonalPart`
-
-Source location candidates: `DavisKahan/DoubleAngle/TangentTransport.lean:212`
-
-Compiler-printed type: *inserted when a compiler certificate is supplied.*
-
-#### `TauCeti.DavisKahan.corner_offDiagonalPart_sq`
-
-Source location candidates: `DavisKahan/DoubleAngle/TangentTransport.lean:241`
-
-Compiler-printed type: *inserted when a compiler certificate is supplied.*
-
-#### `TauCeti.DavisKahan.gram_unboundedReflectionTangent`
-
-Source location candidates: `DavisKahan/DoubleAngle/TangentTransport.lean:276`
-
-Compiler-printed type: *inserted when a compiler certificate is supplied.*
-
-#### `TauCeti.DavisKahan.gram_unboundedReflectionTangent_eq_offDiagonal`
-
-Source location candidates: `DavisKahan/DoubleAngle/TangentTransport.lean:348`
-
-Compiler-printed type: *inserted when a compiler certificate is supplied.*
-
-#### `TauCeti.DavisKahan.starProjection_offDiagonal_sq_reflection`
-
-Source location candidates: `DavisKahan/DoubleAngle/TangentTransport.lean:376`
-
-Compiler-printed type: *inserted when a compiler certificate is supplied.*
-
 #### `TauCeti.DavisKahan.unboundedReflectionTangent_reflection_eq`
 
 Source location candidates: `DavisKahan/DoubleAngle/TangentTransport.lean:473`
-
-Compiler-printed type: *inserted when a compiler certificate is supplied.*
-
-#### `TauCeti.DavisKahan.tanTwoBlockRepresentative_mul_signedCosTwo`
-
-Source location candidates: `DavisKahan/DoubleAngle/TangentTransport.lean:445`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
@@ -1895,18 +1830,6 @@ Compiler-printed type: *inserted when a compiler certificate is supplied.*
 #### `TauCeti.DavisKahan.ReflectionIntertwines.ofReducesSubspace`
 
 Source location candidates: `DavisKahan/TanTheta/RitzPair.lean:133`, `DavisKahan/TanTheta/RitzPair.lean:284`
-
-Compiler-printed type: *inserted when a compiler certificate is supplied.*
-
-#### `TauCeti.DavisKahan.reflection_commutes_of_reducesSubspace`
-
-Source location candidates: `DavisKahan/TanTheta/RitzPair.lean:185`
-
-Compiler-printed type: *inserted when a compiler certificate is supplied.*
-
-#### `TauCeti.DavisKahan.isUnit_signedCosTwo_of_isUnit_diagonalPart_sq`
-
-Source location candidates: `DavisKahan/DoubleAngle/TangentTransport.lean:557`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
@@ -2891,12 +2814,6 @@ Compiler-printed type: *inserted when a compiler certificate is supplied.*
 #### `TauCeti.DavisKahan1970.theorem3_1_realization_ofNonzeroPartsUnitaryEquiv`
 
 Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section3Theorem31Realization.lean:567`
-
-Compiler-printed type: *inserted when a compiler certificate is supplied.*
-
-#### `TauCeti.DavisKahan1970.theorem3_1_intertwiner_of_nonzeroPartsUnitaryEquiv`
-
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section3Theorem31Realization.lean:459`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
