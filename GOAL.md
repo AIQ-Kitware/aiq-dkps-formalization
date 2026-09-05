@@ -526,14 +526,54 @@ self-adjoint operator with spectrum in the closed right half-plane has spectrum
 in `[0, ∞)`. Invertible `G` is exactly bounded `A`, which is why the bounded
 theorem is easy.
 
-For `G` merely injective the similarity is unbounded and spectra need not agree.
-What is settled: the implication holds whenever `X` has an actual eigenvector for
-a negative eigenvalue (`2λ⟪Gv,v⟫ ≥ 0` with `⟪Gv,v⟫ > 0` forces `λ ≥ 0`), and
-hence in finite dimensions and for any `X` with pure point spectrum. What is open
-is the purely-continuous negative spectrum case, where approximate eigenvectors
-`vₙ` may have `⟪G vₙ, vₙ⟫ → 0` fast enough to absorb the defect. Settle that
-question -- either way -- and unbounded Theorem 8.1's headline conclusion
-follows or the statement needs a further hypothesis.
+**The implication is true for merely injective `G`, and the proof is short.**
+It does not need `G` to be invertible anywhere; it needs `X` to be invertible on
+the piece where it is negative, which is free.
+
+Let `β > 0` and let `E` be the spectral projection of `X` for `(−∞, −β]`. `E`
+commutes with `X`. Compress everything to `ran E`: for `v ∈ ran E`, `X v ∈ ran E`,
+so
+
+```text
+⟪(X G + G X) v, v⟫ = 2 re ⟪G v, X v⟫ = 2 re ⟪G_E v, X_E v⟫ ≥ 0,
+```
+
+where `X_E = X|ran E` and `G_E = (E G E)|ran E`. Now `A := −X_E ≥ β` is positive
+**and invertible on `ran E`**, and the displayed inequality is `A G_E + G_E A ≤ 0`.
+Conjugating by `A^(−1/2)` — legitimate, `A` is invertible here —
+
+```text
+Z + Z* ≤ 0,        Z := A^(1/2) G_E A^(−1/2),
+```
+
+so `Z` has numerical range in the closed left half-plane, hence spectrum there.
+`Z` is similar to `G_E`, so `spectrum G_E ⊆ {re ≤ 0}`; but `G_E ≥ 0`, so
+`spectrum G_E ⊆ [0, ∞)`. Therefore `spectrum G_E = {0}`, and a positive operator
+with spectral radius `0` is `0`.
+
+That contradicts injectivity: for `0 ≠ v ∈ ran E`,
+`⟪G_E v, v⟫ = ⟪G v, v⟫ = ‖G^(1/2) v‖² > 0`. Hence `ran E = 0`, so `X ≥ −β`, and
+`β > 0` was arbitrary: `X ≥ 0`. ∎
+
+The invertibility that the bounded proof got from `‖C‖ < ∞` is recovered from the
+*other* operator — `X` is bounded below by `β` on exactly the subspace where the
+argument runs — which is why nothing degenerates.
+
+### 10.3.2 What to build
+
+One reusable theorem, at the bounded-operator layer:
+
+```text
+X self-adjoint, G ≥ 0 injective, X G + G X ≥ 0  ⟹  0 ≤ X
+```
+
+then the Davis--Kahan consumer: `G = C⁻¹` from §6.2, the Lyapunov identity
+`C W + W* C = 2B` multiplied by `G` on both sides, the conjugation by `W` that
+symmetrises it, and `W + W* = 2 − 4 (P_U − P_V)²` to land on
+`subspaceGap U V ≤ √2/2`, i.e. `maximalAngle U V ≤ π/4`.
+
+Do not lift the bounded `IsQuarterAcute` statement; keep it as the stronger
+bounded theorem it is.
 
 Candidate proof routes recorded in the repository may be useful, but none is mandatory.
 
