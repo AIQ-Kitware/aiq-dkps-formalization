@@ -597,6 +597,51 @@ theorem tanTwoTheta_ambient_unbounded_symmetricNorming_real
     rwa [← hgauge]
 
 
+/-- **Davis--Kahan 1970, the ambient `tan 2Θ` theorem at the printed source scope
+over `ℝ`.**
+
+Separable ambient Hilbert space and normalized unitarily invariant norm.  Unlike
+the directed real clause, both sides of this estimate are real operators, so a
+single real source norm reaches them. -/
+theorem tanTwoTheta_ambient_unbounded_sourceExact_real
+    [TopologicalSpace.SeparableSpace E]
+    (N : NormalizedUnitaryInvariantNorm.{0, u} ℝ)
+    {A : E →ₗ.[ℝ] E} {B : E →L[ℝ] E} {a b c : ℝ}
+    (V : Submodule ℝ E) [V.HasOrthogonalProjection]
+    (hA : _root_.IsSelfAdjoint A)
+    (hBsa : IsSelfAdjoint B)
+    (hB : TauCeti.IsOddFor
+      (TauCeti.LinearPMap.realSpecRange hA (Set.Iic c) measurableSet_Iic) B)
+    (hV : DavisKahan.ReflectionIntertwines A B V)
+    (hUa : ∀ x : A.domain,
+      (x : E) ∈ TauCeti.LinearPMap.realSpecRange hA (Set.Iic c) measurableSet_Iic →
+      ⟪A x, (x : E)⟫_ℝ ≤ a * ‖(x : E)‖ ^ 2)
+    (hUb : ∀ x : A.domain,
+      (x : E) ∈
+        (TauCeti.LinearPMap.realSpecRange hA (Set.Iic c) measurableSet_Iic)ᗮ →
+      b * ‖(x : E)‖ ^ 2 ≤ ⟪A x, (x : E)⟫_ℝ)
+    (hab : a < b) (hBmem : N.Mem B) :
+    (∀ t ∈ spectrum ℝ (TauCeti.DavisKahan.Angle.angleOperatorR
+        (TauCeti.LinearPMap.realSpecRange hA (Set.Iic c) measurableSet_Iic) V),
+        Real.cos (2 * t) ≠ 0) ∧
+      N.Mem (TauCeti.DavisKahan.Angle.absTanTwoAngleOperatorR
+        (TauCeti.LinearPMap.realSpecRange hA (Set.Iic c) measurableSet_Iic) V) ∧
+      (b - a) * N.gauge (TauCeti.DavisKahan.Angle.absTanTwoAngleOperatorR
+        (TauCeti.LinearPMap.realSpecRange hA (Set.Iic c) measurableSet_Iic) V) ≤
+        2 * N.gauge B := by
+  obtain ⟨hcos, -, -⟩ :=
+    tanTwoTheta_ambient_unbounded_symmetricNorming_real
+      (kyFanNormingFunction 1 one_pos) V hA hBsa hB hV hUa hUb hab
+      (kyFanNormingFunction_mem 1 one_pos _)
+  obtain ⟨hmem, hle⟩ :=
+    normalizedUnitaryInvariant_of_symmetricNorming_mul N (sub_pos.mpr hab) two_pos hBmem
+      fun M hM => by
+        obtain ⟨-, hm, hl⟩ :=
+          tanTwoTheta_ambient_unbounded_symmetricNorming_real M V hA hBsa hB hV
+            hUa hUb hab hM
+        exact ⟨hm, hl⟩
+  exact ⟨hcos, hmem, hle⟩
+
 /-! ## The same endpoints at an arbitrary reducing subspace, over `ℝ`
 
 The complexification argument never needed the trial subspace to be spectral: it

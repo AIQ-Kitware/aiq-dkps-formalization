@@ -7,6 +7,7 @@ import DavisKahan.Sources.DavisKahan1970.TanThetaAmbient
 import DavisKahan.TanTheta.Theorem63UnboundedInfiniteTrial
 import DavisKahan.TanTheta.Theorem63UnboundedCompression
 import DavisKahan.TanTheta.RitzPair
+import DavisKahan.Sources.DavisKahan1970.SymmetricNormingFanDominance
 
 open TauCeti.DavisKahan.Angle
 
@@ -736,6 +737,34 @@ theorem tanTheta_ambient_unboundedRitz_definedTangent_symmetricNorming_complex
       delta * N.gauge (tanAngleOperatorC U V) ≤ N.gauge H :=
   (tanTheta_ambient_unboundedRitz_symmetricNorming_complex N D hV H hH hdelta hupper hUnwanted
     (crossedDefectsEquivalent_of_hasDefinedAmbientTangent hdefined) hResidual hMem).2
+
+/-- **Davis--Kahan 1970, the ambient `tan Θ` theorem at the printed source scope
+over `ℂ`.**
+
+Separable ambient Hilbert space and normalized unitarily invariant norm.  The
+definedness hypothesis stays exactly as printed; the estimate goes through the
+Fan-dominance bridge. -/
+theorem tanTheta_ambient_unboundedRitz_definedTangent_sourceExact_complex
+    [TopologicalSpace.SeparableSpace E]
+    (N : NormalizedUnitaryInvariantNorm.{0, u} ℂ)
+    {A : E →ₗ.[ℂ] E}
+    {U V : Submodule ℂ E}
+    [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] [CompleteSpace U]
+    (D : DavisKahan.UnboundedRitzPair A U)
+    (hV : DavisKahan.ReducingComplement A V)
+    (H : E →L[ℂ] E) (hH : IsSelfAdjoint H)
+    {alpha delta : ℝ} (hdelta : 0 < delta)
+    (hupper : TauCeti.LinearPMap.SemiboundedAbove D.trial.compression alpha)
+    (hUnwanted : ∀ y ∈ Vᗮ, ∀ hy : y ∈ A.domain,
+      (alpha + delta) * ‖y‖ ^ 2 ≤ RCLike.re ⟪A ⟨y, hy⟩, y⟫_ℂ)
+    (hdefined : HasDefinedAmbientTangent U V)
+    (hResidual : D.trial.residual = Uᗮ.starProjection ∘L H ∘L U.subtypeL)
+    (hMem : N.Mem H) :
+    N.Mem (tanAngleOperatorC U V) ∧
+      delta * N.gauge (tanAngleOperatorC U V) ≤ N.gauge H :=
+  normalizedUnitaryInvariant_of_symmetricNorming N hdelta hMem fun M hM =>
+    tanTheta_ambient_unboundedRitz_definedTangent_symmetricNorming_complex M D hV H hH
+      hdelta hupper hUnwanted hdefined hResidual hM
 
 end DefinedTangent
 
