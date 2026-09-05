@@ -8,7 +8,7 @@ The denominator contains exactly the four Section 2 headline theorems and every 
 - Result-boundary reviews accepted: **29/29**
 - Currently hostile-certified terminal: **29**
 - Awaiting closure: **0**
-- Printed statements that are NOT locally self-contained: **5**
+- Printed statements that are NOT locally self-contained: **6**
 - Result-only semantic sweep: `dev/davis-kahan-1970-result-semantic-review-2026-08-12.md`
 - Compiler-checkable theorem surface: `DavisKahan/Sources/DavisKahan1970/Audits/ResultSemanticSurface.lean`
 
@@ -49,7 +49,7 @@ Each result below explicitly partitions its primary source block into atoms insi
 | `DK-6.2-thm` | theorem | `locally_exact` | yes | `proved_exact` | `proved_in_build` | `accepted` | `accepted` |
 | `DK-6.3-thm` | theorem | `locally_exact` | yes | `proved_exact` | `proved_in_build` | `accepted` | `accepted` |
 | `DK-6.3-lem` | lemma | `locally_exact` | yes | `proved_exact` | `proved_in_build` | `accepted` | `accepted` |
-| `DK-8.1-thm` | theorem | `locally_exact` | yes | `proved_exact` | `proved_in_build` | `accepted` | `accepted` |
+| `DK-8.1-thm` | theorem | `paper_faithful_nonlocal_source_interpretation` | **no** | `proved_exact` | `proved_in_build` | `accepted` | `accepted` |
 | `DK-8.2-thm` | theorem | `paper_faithful_nonlocal_source_interpretation` | **no** | `proved_exact` | `proved_in_build` | `accepted` | `accepted` |
 
 ## Results whose printed statement is not locally self-contained
@@ -105,6 +105,27 @@ Each result below explicitly partitions its primary source block into atoms insi
 **Semantic conclusion.** S2-tan-theta is a true counted result whose exact formal representation requires nonlocal source semantics that the repository makes explicit rather than assumes silently. The interpretation is accepted. A later hostile scope audit found that the first pair of `unbounded ambient` endpoints still kept the Ritz compression bounded; the Appendix explicitly allows both `A_0` and `Lambda_1` to be unbounded. That stronger scope is now represented by `tanTheta_ambient_unboundedRitz_raw_paperUINorm_complex` and `tanTheta_ambient_unboundedRitz_raw_paperUINorm_real`.
 
 The accepted reading is hash-pinned to the distributable specification, the source-fidelity inventory, and the cited atoms; any edit to that material makes it stale and the result checker fails closed.
+
+### `DK-8.1-thm` — Branch selection and spectral repulsion
+
+- Interpretation review: **accepted** (paper_faithful_nonlocal_source_interpretation), reviewed 2026-09-05
+- Kept distinct from the canonical refutation `DK-4.4-prop`
+
+**The interpretive issue.** Theorem 8.1 states no hypotheses of its own. It opens "Assume the hypotheses of the tan 2θ theorem", so its scope is whatever that phrase imports. This repository certifies the tan 2θ theorem at unbounded self-adjoint scope; every registered Section 8 declaration takes bounded `A H : E →L[ℂ] E`. A reviewer must decide whether Section 8 inherits the announced unbounded extension along with the hypotheses it names — in which case the delivered evidence is a proper specialization — or is printed at the paper's main bounded setting, in which case it is exact. This is finding F2 of the 2026-09-04 hostile review, reopened by the 2026-09-05 follow-up review, which refused to close it by metadata alone.
+
+**Nonlocal source material used to read the statement.**
+
+- Section 1 setup: "In the main bounded setting `A = A*` and `A + H = (A + H)*` are bounded. The paper also allows self-adjoint unbounded `A` when the later domain conditions are met." Bounded is the setting; unbounded is an allowance.
+- Section 2 scope paragraph: the unbounded extension is announced for *the four main results*, and the additional analytic work is located precisely — "concentrated in Theorem 5.2 and the Appendix to Section 6". Section 8 is not on that list and has no counterpart there.
+- Section 8's own scope attentiveness: parts (ii) and (iii) of Theorem 8.1 are explicitly restricted to finite dimensions, and part (ii) explicitly promises "natural infinite-dimensional extensions".
+
+**Accepted reading.** Section 8 is printed at the paper's main bounded setting, and "the hypotheses of the tan 2θ theorem" imports that theorem as the main body states it. A section that qualifies its own parts, and says nothing about unbounded operators, is being read rather than silently narrowed.
+
+**Strongest competing literal reading.** Read the phrase as importing the tan 2θ theorem at its widest certified scope. Nothing in Section 8's printed text forbids it; the proof identities (8.1) and (8.2) are quadratic-form identities that survive an unbounded `A`, and the Theorem 8.2 homotopy `A(σ) = A + H − σH` with a continuously varying spectral projector is meaningful for unbounded `A` and bounded `H`. On that reading the registered evidence is a proper specialization and this row is NARROW, exactly as the 2026-09-04 review classified it. The repository does not claim that reading is wrong, only that the bounded one is better supported, and records both so a reviewer can disagree with an argument rather than with silence.
+
+**Why this is not a refutation.** Nothing here is false. The disagreement is about which hypotheses a phrase imports, not about the truth of any statement.
+
+**Open work regardless.** Lifting the iff, the canonical branch, part (i), and the Theorem 8.2 branch theorem to `A : E →ₗ.[𝕜] E` self-adjoint with bounded `H` would make the reading moot. It is tracked in `GOAL.md`. It is real work: Section 8 is 6437 lines built on bounded `Reduces`, `SpectrumIn` and `canonicalLowBranch`.
 
 ## Current closure queue
 

@@ -112,6 +112,14 @@
         "extends_results": [],
         "rationale": "Fixes the paper's ambient setting -- a separable real or complex Hilbert space, bounded in the main development with the unbounded extension announced. It governs every result rather than extending any one of them; the four Section 2 results carry that scope through their own `S2-unbounded-scope.*` atoms.",
         "source_paraphrase": "Separable real or complex Hilbert space; bounded main setting with stated unbounded extension."
+      },
+      "interpretation_support": {
+        "role": "paper_wide_convention",
+        "note": "This atom is the paper's own division of its setting: \"In the main bounded setting A = A* and A + H = (A + H)* are bounded.  The paper also allows self-adjoint unbounded A when the later domain conditions are met.\"  The bounded setting is the default and the unbounded one is an announced extension, not the ambient scope of every later theorem.  Section 8 states no unbounded hypotheses of its own and adds no unbounded machinery, so it is read at the main bounded setting.",
+        "result_ids": [
+          "DK-8.1-thm",
+          "DK-8.2-thm"
+        ]
       }
     },
     {
@@ -1418,6 +1426,14 @@
         ],
         "must_not_contain": [],
         "rationale": "The ambient operator must be a partial map. A theorem whose ambient operator is a bounded `→L[𝕜]` operator does not establish this scope, however true it is of the paper."
+      },
+      "interpretation_support": {
+        "role": "related_unqualified_claim",
+        "note": "The Section 2 scope paragraph announces the unbounded extension for THE FOUR MAIN RESULTS -- \"The paper states the four main results ... but the results are also intended for unbounded self-adjoint A\" -- and locates the additional analytic work in Theorem 5.2 and the Appendix to Section 6, naming no Section 8 counterpart.  Theorem 8.1 opens \"Assume the hypotheses of the tan 2theta theorem\", so a reader must decide whether it inherits the announced extension or the main-body statement.  This atom is the passage that makes the question live, and its own wording is what the accepted reading turns on.",
+        "result_ids": [
+          "DK-8.1-thm",
+          "DK-8.2-thm"
+        ]
       }
     },
     {

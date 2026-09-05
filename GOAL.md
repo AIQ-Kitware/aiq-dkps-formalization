@@ -83,15 +83,55 @@ rank-boundary convention.
 
 ## Davis--Kahan 1970
 
-- **`DK-HR-2026-09-04`** — close every finding of the hostile review
-  `dev/davis-kahan-1970-hostile-review-2026-09-04.md`. The execution contract, with
-  per-item files, declarations, order and acceptance criteria, is
-  [`docs/planning/davis-kahan-1970-hostile-review-repair-goal.md`](docs/planning/davis-kahan-1970-hostile-review-repair-goal.md).
-  Headline items: re-register DK-6.3-thm on the printed-shape unbounded-Ritz theorem,
-  record or lift Section 8's operator scope, add the pole-exclusion conjuncts to the
-  tangent endpoints, register Lemma 5.1's real proofs, the ambient sin 2θ clause at an
-  arbitrary reducing subspace, the namespace/casing cleanup, and a green
-  `certify_davis_kahan_1970.py --require-terminal` with no flags.
+- **`DK-S8-UNBOUNDED`** — lift Section 8 to unbounded ambient scope. Every registered
+  Section 8 declaration takes bounded `A H : E →L[𝕜] E`, while Theorem 8.1 opens
+  "Assume the hypotheses of the tan 2θ theorem" and Theorem 8.2 "Add to the hypotheses
+  of the sin 2θ theorem" — hypotheses this repository certifies at unbounded scope. The
+  rows now disclose that, with the source evidence for reading Section 8 at the paper's
+  main bounded setting and the competing reading stated in full
+  (`nonlocal_source_interpretation.operator_scope_reading`). **The lift would make the
+  reading moot, which is why it is worth doing.** Targets:
+  `theorem8_1_maximalAngle_le_iff_spectrumIn`, `theorem8_1_canonicalBranch`, part (i)
+  (`theorem8_1_{upper,lower}CompressionRepulsion`), and
+  `theorem8_2_branch_maximalAngle_lt_of_crossedDefects` plus the two retained sin 2θ
+  bounds, at `A : E →ₗ.[𝕜] E` self-adjoint with bounded `H`, in the vocabulary the
+  unbounded Section 2 endpoints already use (`TauCeti.LinearPMap.ReducesSubspace`,
+  `IsOddFor`, form bounds on `dom A`, `FormBoundedSylvesterGap`, `specRange`). Parts
+  (ii) and (iii) stay as printed — the source restricts them to finite dimensions
+  itself. Keep the bounded theorems as specializations. Read `Section8/Theorem82Branch.lean`
+  and `Section8/Smallness.lean` first: the 8.2 homotopy argument may be bounded-specific.
+  This is real work — Section 8 is 6437 lines built on bounded `Reduces`, `SpectrumIn`
+  and `canonicalLowBranch`.
+
+- **`DK-HR-NAMING`** — the naming and placement cleanup, item R6 of
+  [`docs/planning/davis-kahan-1970-hostile-review-repair-goal.md`](docs/planning/davis-kahan-1970-hostile-review-repair-goal.md),
+  is the one part of that contract still open. Eight sub-items: move
+  `SineTheta/Presentation.lean` under `namespace TauCeti.DavisKahan1970`; resolve the six
+  case-twin pairs on DK-6.1-prop, DK-6.1-thm and DK-6.2-thm; unify source-facing casing
+  to the lowercase `theoremN_M_*` form; give `TauCeti.DavisKahan1970` homes to the
+  registered witnesses declared outside the paper namespace; rename `UnboundedTrialBlock`
+  to `BoundedCompressionTrialBlock` (its compression is bounded, and the current name has
+  already misled one certificate); retire the unqualified `SectionTwo.{tanTheta,
+  sinTwoTheta, tanTwoTheta}_{complex,real}` clause aliases in favour of the
+  `_directed_`/`_ambient_` names; delete `Proposition4_2_compact_nonacute`; and prune
+  `lean_declarations` on `S2-sin-two-theta` and `S2-tan-two-theta` to canonical witnesses
+  plus explicitly-roled correspondence lemmas. Follow ground rule 3 of that contract for
+  every rename — grep `Challenge/` and `comparator/*.json`, run
+  `scripts/check_declaration_name_drift.py`, then `lake build Challenge`.
+
+- **`DK-HR-TANGENT-POLE`** — the registered *canonical* tangent endpoints now carry their
+  pole-exclusion conjunct, because the directed clause was re-registered on the `_exists_`
+  form. The remaining item from F3 is the ambient family: add `HasDefinedAmbientTangent U V`
+  (equivalently `‖sinAngleOperatorC U V‖ < 1`) to the conclusion of
+  `tanTheta_ambient_bounded_symmetricNorming_{complex,real}_of_crossedDefects`,
+  `tanTheta_ambient_unboundedRitz_symmetricNorming_{complex,real}`,
+  `tanTheta_ambient_unboundedRitz_explicitCompatibility_symmetricNorming_{complex,real}` and
+  `tanTheta_ambient_unboundedOperator_boundedRitz_symmetricNorming_{complex,real}`, and the
+  `∀ t ∈ spectrum ℝ (angleOperatorC P V), Real.cos (2 * t) ≠ 0` conjunct to
+  `tanTwoTheta_ambient_unbounded_symmetricNorming_{complex,real}`. Every conjunct is
+  already proved inside the corresponding proof; this is plumbing, and it makes the
+  `HasDefinedAmbientTangent` block comment's "non-vacuous corollary" claim a theorem
+  rather than a proof-internal fact.
 
 ---
 
