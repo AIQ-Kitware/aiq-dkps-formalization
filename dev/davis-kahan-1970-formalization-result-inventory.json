@@ -1944,7 +1944,7 @@
       "remaining_gap": {
         "category": "unproved_representation_reading",
         "missing_surface": "The equivalence between the source's equality of crossed-defect Hilbert dimensions and Lean's `CrossedDefectsEquivalent` in infinite dimension.  Only the finite-dimensional half is proved.",
-        "next_action": "At the paper's separable scope: prove that an orthonormal family in a separable space is countable (distinct members are sqrt 2 apart), hence that two infinite-dimensional separable Hilbert spaces are isometrically isomorphic through `HilbertBasis.repr` and an index equivalence, and combine with `crossedDefectsEquivalent_iff_finrank_eq`.",
+        "next_action": "PROGRESS 2026-09-04: the step recorded as the missing one is proved.  `TauCeti.countable_of_orthonormal` (ForTauCeti/Analysis/InnerProductSpace/SeparableOrthonormal.lean) shows an orthonormal set in a separable inner product space is countable, via `dist_eq_sqrt_two_of_orthonormal` and the uniform-separation lemma `countable_of_pairwise_dist_le`, which moved to the same module as its canonical owner.  REMAINING: (i) conclude that a Hilbert basis of a separable space has a countable index, from `exists_hilbertBasis` plus this lemma; (ii) build the index congruence `lp (fun _ : i => k) 2 ≃ₗᵢ lp (fun _ : i' => k) 2` from an `i ≃ i'`, which the pinned Mathlib does not have; (iii) conclude that two infinite-dimensional separable Hilbert spaces are isometric, and combine with `crossedDefectsEquivalent_iff_finrank_eq` for the finite branch; (iv) wire the result to `halmosSourceDefect`/`halmosTargetDefect` with their separability instances.",
         "strongest_existing_evidence": [
           "TauCeti.DavisKahan.crossedDefectsEquivalent_iff_finrank_eq",
           "TauCeti.DavisKahan1970.proposition3_2_exists_iff_crossedDefectsEquivalent"
@@ -5253,7 +5253,8 @@
           "DK-3.2-prop"
         ],
         "finding": "The source's (3.5) is equality of Hilbert dimensions of the two crossed defect spaces; Lean uses existence of a linear isometric equivalence.  Only the finite-dimensional equivalence is proved; the infinite-dimensional reading is a representation convention.  Every later row whose exact correspondence rests on (3.5) -- including DK-8.2-thm -- inherits it.",
-        "required_repair": "At the paper's separable scope: prove that an orthonormal family in a separable space is countable, hence that two infinite-dimensional separable Hilbert spaces are isometric, and combine with the existing finite-dimensional equivalence."
+        "required_repair": "At the paper's separable scope: prove that an orthonormal family in a separable space is countable, hence that two infinite-dimensional separable Hilbert spaces are isometric, and combine with the existing finite-dimensional equivalence.",
+        "progress_2026_09_04": "The lemma named as the missing Mathlib step is proved and lives in `ForTauCeti/Analysis/InnerProductSpace/SeparableOrthonormal.lean`: an orthonormal set in a separable inner product space is countable.  Three steps remain -- countable Hilbert basis index, `lp` index congruence, and the classification wired to the crossed defects -- so the obligation stays open."
       }
     ],
     "closed_obligations": [
