@@ -11,6 +11,7 @@ import DavisKahan.TanTheta.RitzPair
 import DavisKahan.Geometry.Angle.DoubleAngleFunctionalCalculus
 import DavisKahan.Geometry.Angle.OperatorAngleGeneric
 import DavisKahan.Sylvester.ScalarTransport
+import DavisKahan.Sources.DavisKahan1970.SymmetricNormingFanDominance
 import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.ScalarTransport
 
 open TauCeti.DavisKahan.Angle
@@ -532,6 +533,73 @@ theorem sinTwoTheta_ambient_unbounded_perturbedGap_symmetricNorming_real
         2 * N.gauge Hop :=
   sinTwoTheta_ambient_unbounded_perturbedGap_symmetricNorming_rclike N hA Hop hHop
     hPred hQred hδ hgap hHmem
+
+/-! ### The source-exact façades
+
+The theorems above are proved for an arbitrary Hilbert space and an arbitrary
+symmetric norming function.  Davis and Kahan work on a separable Hilbert space
+and quantify over normalized unitarily invariant norms.  The two façades below
+are the printed statement, and they are the canonical source evidence; the
+theorems that prove them are registered as generalizations.
+
+Only the ambient space carries separability, which is all the source assumes. -/
+
+/-- **Davis--Kahan 1970, the ambient `sin 2Θ` theorem at the printed source scope
+over `ℂ`.**
+
+Separable ambient Hilbert space, normalized unitarily invariant norm, unbounded
+self-adjoint `A`, bounded self-adjoint perturbation, and -- as Section 2 states
+it -- the spectral gap between the two blocks of the *perturbed* operator
+`A + H` relative to `Q`. -/
+theorem sinTwoTheta_ambient_unbounded_perturbedGap_sourceExact_complex
+    {Hc : Type v} [NormedAddCommGroup Hc] [InnerProductSpace ℂ Hc] [CompleteSpace Hc]
+    [TopologicalSpace.SeparableSpace Hc]
+    (N : NormalizedUnitaryInvariantNorm.{0, v} ℂ)
+    {A : Hc →ₗ.[ℂ] Hc} (hA : IsSelfAdjoint A)
+    (Hop : Hc →L[ℂ] Hc) (hHop : DavisKahan.IsSelfAdjointOperator Hop)
+    {P Q : Submodule ℂ Hc} [P.HasOrthogonalProjection] [Q.HasOrthogonalProjection]
+    (hPred : TauCeti.LinearPMap.ReducesSubspace A P)
+    (hQred : TauCeti.LinearPMap.ReducesSubspace
+      (TauCeti.LinearPMap.addBounded A Hop) Q)
+    {δ : ℝ} (hδ : 0 < δ)
+    (hgap : FormBoundedSylvesterGap
+      (TauCeti.LinearPMap.reducingRestriction
+        (TauCeti.LinearPMap.addBounded A Hop) Q hQred)
+      (TauCeti.LinearPMap.reducingRestriction
+        (TauCeti.LinearPMap.addBounded A Hop) Qᗮ hQred.orthogonal) δ)
+    (hHmem : N.Mem Hop) :
+    N.Mem (TauCeti.DavisKahan.Angle.sinTwoAngleOperator P Q) ∧
+      δ * N.gauge (TauCeti.DavisKahan.Angle.sinTwoAngleOperator P Q) ≤
+        2 * N.gauge Hop :=
+  normalizedUnitaryInvariant_of_symmetricNorming_mul N hδ two_pos hHmem fun M hM =>
+    sinTwoTheta_ambient_unbounded_perturbedGap_symmetricNorming_complex M hA Hop hHop
+      hPred hQred hδ hgap hM
+
+/-- **Davis--Kahan 1970, the ambient `sin 2Θ` theorem at the printed source scope
+over `ℝ`.** -/
+theorem sinTwoTheta_ambient_unbounded_perturbedGap_sourceExact_real
+    {Er : Type v} [NormedAddCommGroup Er] [InnerProductSpace ℝ Er] [CompleteSpace Er]
+    [TopologicalSpace.SeparableSpace Er]
+    (N : NormalizedUnitaryInvariantNorm.{0, v} ℝ)
+    {A : Er →ₗ.[ℝ] Er} (hA : IsSelfAdjoint A)
+    (Hop : Er →L[ℝ] Er) (hHop : DavisKahan.IsSelfAdjointOperator Hop)
+    {P Q : Submodule ℝ Er} [P.HasOrthogonalProjection] [Q.HasOrthogonalProjection]
+    (hPred : TauCeti.LinearPMap.ReducesSubspace A P)
+    (hQred : TauCeti.LinearPMap.ReducesSubspace
+      (TauCeti.LinearPMap.addBounded A Hop) Q)
+    {δ : ℝ} (hδ : 0 < δ)
+    (hgap : FormBoundedSylvesterGap
+      (TauCeti.LinearPMap.reducingRestriction
+        (TauCeti.LinearPMap.addBounded A Hop) Q hQred)
+      (TauCeti.LinearPMap.reducingRestriction
+        (TauCeti.LinearPMap.addBounded A Hop) Qᗮ hQred.orthogonal) δ)
+    (hHmem : N.Mem Hop) :
+    N.Mem (TauCeti.DavisKahan.Angle.sinTwoAngleOperator P Q) ∧
+      δ * N.gauge (TauCeti.DavisKahan.Angle.sinTwoAngleOperator P Q) ≤
+        2 * N.gauge Hop :=
+  normalizedUnitaryInvariant_of_symmetricNorming_mul N hδ two_pos hHmem fun M hM =>
+    sinTwoTheta_ambient_unbounded_perturbedGap_symmetricNorming_real M hA Hop hHop
+      hPred hQred hδ hgap hM
 
 end ReducingAmbient
 
