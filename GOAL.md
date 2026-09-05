@@ -15,10 +15,14 @@ refresh the standalone repository mechanically.
 
 ## Acharyya 2025
 
-- **`A25-T1`** — state the corrected finite concentration bound as one theorem with
-  the entrywise dissimilarity bound `R` explicit. The pieces are compiled and the
-  counterexample showing `R` is necessary already exists; this is the honest
-  source-facing endpoint, and the repair belongs in the name and docstring.
+- **`A25-T1`** — **done 2026-09-05.**
+  `GrowingResponse.prob_cmdsEntrywiseClose_ge_of_secondMoment` is the corrected finite bound
+  as one declaration: the paper's own Chebyshev-plus-union probability
+  `1 - n σ²/η²`, delivering entrywise closeness of the classical-MDS matrices at
+  `cmdsEntrywiseRate n m (responseDistBound m (B + η)) η`. The dissimilarity bound the
+  printed theorem omits is carried by `B`, a bound on the *population* response norms only;
+  the sample responses are controlled on the event itself. The printed form stays refuted by
+  `Theorem1Scale.prob_entrywiseClose_lt_paper_bound`.
 - **`A25-C1`** — one source-facing declaration for the spectral-norm `r = omega(n^3)`
   corollary, if it really is a single assembly step. Recognizability, not new
   mathematics.

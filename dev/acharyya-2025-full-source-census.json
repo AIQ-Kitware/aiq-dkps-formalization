@@ -91,6 +91,7 @@
         ]
       },
       "lean_declarations": [
+        "Acharyya2025.GrowingResponse.prob_cmdsEntrywiseClose_ge_of_secondMoment",
         "Acharyya2025.Bridge.EntrywiseClose",
         "Acharyya2025.Bridge.entrywise_close_to_cmds_entrywise_close_of_bounded",
         "Acharyya2025.GrowingResponse.highProb_uniformResponseMeanClose_of_growing_iid_replicates_paperScale",
@@ -108,8 +109,8 @@
         "classification": "source_repair",
         "detail": "The printed bound has no hypothesis on the scale of the population responses, and it needs one: B is the doubly centred SQUARE of the dissimilarity matrix, so a deviation of the sample response means enters Bhat - B multiplied by the population scale, while gamma measures only response variability. prob_entrywiseClose_lt_paper_bound refutes the statement at n = 2, m = 1, p = 1, r = 1, where the competing dissimilarity normalisations coincide. The repair is the entrywise dissimilarity bound R already carried by Bridge.entrywise_close_to_cmds_entrywise_close_of_bounded and disclosed there as an assumption beyond the paper; the counterexample shows it is necessary rather than convenient."
       },
-      "notes": "The finite probability step is prob_uniformResponseMeanClose_ge_of_secondMoment; the corrected chain is that step composed with the bounded entrywise bridge.",
-      "next_action": "Optionally state the corrected finite bound -- the printed one with the entrywise dissimilarity bound R inserted -- as one source-facing theorem."
+      "notes": "The finite probability step is prob_uniformResponseMeanClose_ge_of_secondMoment; the corrected chain is that step composed with the bounded entrywise bridge.\n\nSTATED AS ONE THEOREM 2026-09-05.  `prob_cmdsEntrywiseClose_ge_of_secondMoment` is the corrected finite bound as a single source-facing declaration: the paper's own Chebyshev-plus-union probability bound `1 - n sigma^2 / eta^2`, delivering entrywise closeness of the classical-MDS matrices at `cmdsEntrywiseRate n m (responseDistBound m (B + eta)) eta`.  The entrywise dissimilarity bound the printed theorem omits is carried by `B`, a bound on the POPULATION response norms only; the sample responses are controlled on the event itself by `norm_le_add_of_uniformResponseMeanClose`, so no all-outcomes hypothesis on the random sample is required.  `Theorem1Scale.prob_entrywiseClose_lt_paper_bound` remains the compiled refutation of the printed form, which is what makes this a repair and not a restatement.",
+      "next_action": "None. The corrected finite bound is one declaration; the printed form stays refuted. What is deliberately NOT claimed is the paper's constant 16 and its 1/(rm) scaling: those arise from a passage the printed proof does not justify without a dissimilarity bound, and the repair carries the bound instead of the constant."
     },
     {
       "id": "A25-R1",
