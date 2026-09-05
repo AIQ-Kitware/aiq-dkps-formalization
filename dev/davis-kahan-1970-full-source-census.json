@@ -901,20 +901,20 @@
             "note": "Pinned 2026-09-04 when the tan Theta ambient clause replaced condition (3.5) with the source's definedness convention."
           },
           {
-            "declaration": "TauCeti.DavisKahan1970.tanTheta_directed_unboundedRitz_symmetricNorming_complex",
-            "type_expr_hash": "2325256111",
-            "type_text_sha256": "a901f19827f6f8e467bcd5964b63faa1972a22e1a6f7a1127b79f3bbec357f66",
+            "declaration": "TauCeti.DavisKahan1970.tanTheta_directed_unboundedRitz_symmetricNorming_exists_complex",
+            "type_expr_hash": "1634318278",
+            "type_text_sha256": "cbc8760e8c78e80ddf05f37e19e3a0f51737172231f94880c6140fb17e8de1e9",
             "toolchain": "leanprover/lean4:v4.34.0-rc1",
-            "pinned_on": "2026-09-04",
-            "note": "Pinned 2026-09-04 when the tan Theta ambient clause replaced condition (3.5) with the source's definedness convention."
+            "pinned_on": "2026-09-05",
+            "note": "Re-pinned 2026-09-05.  New source-facing declarations from the 2026-09-04/09-05 hostile-review repair pass, and one drift: ReflectionIntertwines.ofReducesSubspace lost its [CompleteSpace H] instance binder to the omit-line warning cleanup, which is a strict generalization and no change of statement."
           },
           {
-            "declaration": "TauCeti.DavisKahan1970.tanTheta_directed_unboundedRitz_symmetricNorming_real",
-            "type_expr_hash": "2680951132",
-            "type_text_sha256": "e50b6b1077d11587e8e9a259fae6a489b2dc7a67ab6b49d7cd45ac4dc1b40b8b",
+            "declaration": "TauCeti.DavisKahan1970.tanTheta_directed_unboundedRitz_symmetricNorming_exists_real",
+            "type_expr_hash": "3613921276",
+            "type_text_sha256": "81845ac132e3b93ec4fdab54c332c585d9f82d448b1a587646b30253f9c1ba4b",
             "toolchain": "leanprover/lean4:v4.34.0-rc1",
-            "pinned_on": "2026-09-04",
-            "note": "Pinned 2026-09-04 when the tan Theta ambient clause replaced condition (3.5) with the source's definedness convention."
+            "pinned_on": "2026-09-05",
+            "note": "Re-pinned 2026-09-05.  New source-facing declarations from the 2026-09-04/09-05 hostile-review repair pass, and one drift: ReflectionIntertwines.ofReducesSubspace lost its [CompleteSpace H] instance binder to the omit-line warning cleanup, which is a strict generalization and no change of statement."
           }
         ],
         "source_fragments": [
@@ -1283,20 +1283,20 @@
             "note": "Re-pinned 2026-09-04 after the Theorem 5.1 norm-axiom repair and the S2-sin-two-theta census merge."
           },
           {
-            "declaration": "TauCeti.DavisKahan1970.sinTwoTheta_ambient_unbounded_addBounded_symmetricNorming_complex",
-            "type_expr_hash": "844499217",
-            "type_text_sha256": "83b245ddbf7af88d0ee5343807f36425747dc97f19b830b377923314887f9f5b",
+            "declaration": "TauCeti.DavisKahan1970.sinTwoTheta_ambient_unbounded_reducing_symmetricNorming_complex",
+            "type_expr_hash": "3064510648",
+            "type_text_sha256": "24e7e6a9cd900ebbc4c484e4ec591a9791627376bc3db61603044e5426eb7067",
             "toolchain": "leanprover/lean4:v4.34.0-rc1",
-            "pinned_on": "2026-09-04",
-            "note": "Re-pinned 2026-09-04 after the Theorem 5.1 norm-axiom repair and the S2-sin-two-theta census merge."
+            "pinned_on": "2026-09-05",
+            "note": "Re-pinned 2026-09-05.  New source-facing declarations from the 2026-09-04/09-05 hostile-review repair pass, and one drift: ReflectionIntertwines.ofReducesSubspace lost its [CompleteSpace H] instance binder to the omit-line warning cleanup, which is a strict generalization and no change of statement."
           },
           {
-            "declaration": "TauCeti.DavisKahan1970.sinTwoTheta_ambient_unbounded_addBounded_symmetricNorming_real",
-            "type_expr_hash": "4017633786",
-            "type_text_sha256": "669cee6ca92c70ded28ab54b05f84e84cfd10faaa82389358d65af541f190090",
+            "declaration": "TauCeti.DavisKahan1970.sinTwoTheta_ambient_unbounded_reducing_symmetricNorming_real",
+            "type_expr_hash": "2219176682",
+            "type_text_sha256": "70f731dd46fa280ff9babc76f0966504d68bdad3fff8a5ff3c60df59f2a4e3bc",
             "toolchain": "leanprover/lean4:v4.34.0-rc1",
-            "pinned_on": "2026-09-04",
-            "note": "Re-pinned 2026-09-04 after the Theorem 5.1 norm-axiom repair and the S2-sin-two-theta census merge."
+            "pinned_on": "2026-09-05",
+            "note": "Re-pinned 2026-09-05.  New source-facing declarations from the 2026-09-04/09-05 hostile-review repair pass, and one drift: ReflectionIntertwines.ofReducesSubspace lost its [CompleteSpace H] instance binder to the omit-line warning cleanup, which is a strict generalization and no change of statement."
           }
         ]
       }
@@ -1676,11 +1676,11 @@
           },
           {
             "declaration": "TauCeti.DavisKahan.ReflectionIntertwines.ofReducesSubspace",
-            "type_expr_hash": "3121153778",
-            "type_text_sha256": "d36bfde9d24a1ad211284a5121e15e4aa0b2b9d1dc2e184b6f9f9a857ed102e2",
+            "type_expr_hash": "2016333026",
+            "type_text_sha256": "8d2ef442626ee31d0c1e6826f745d24de799e3f213d1ed648d643fc0d3376761",
             "toolchain": "leanprover/lean4:v4.34.0-rc1",
-            "pinned_on": "2026-09-04",
-            "note": "Pinned 2026-09-04 with the seven Section 3-8 major reviews: their declarations and the passages they cite are now guarded like the four Section 2 headline rows."
+            "pinned_on": "2026-09-05",
+            "note": "Re-pinned 2026-09-05.  New source-facing declarations from the 2026-09-04/09-05 hostile-review repair pass, and one drift: ReflectionIntertwines.ofReducesSubspace lost its [CompleteSpace H] instance binder to the omit-line warning cleanup, which is a strict generalization and no change of statement."
           },
           {
             "declaration": "TauCeti.DavisKahan1970.reflectionTangentCorner_reflection_eq_tanTwoBlockCompression",
@@ -2625,20 +2625,20 @@
             "note": "Pinned 2026-09-04 when the Theorem 3.1 converse moved to the printed multiplicity hypothesis, free at 0."
           },
           {
-            "declaration": "TauCeti.DavisKahan1970.theorem3_1_realization_ofSpectralMultiplicityAwayFromZero_complex",
-            "type_expr_hash": "3480190925",
-            "type_text_sha256": "69e5cb1b4e4d66c846441518a4a4edafe5b3e5953db2dfe1414db49ddd148b0f",
+            "declaration": "TauCeti.DavisKahan1970.theorem3_1_realization_inAmbient_ofSpectralMultiplicityAwayFromZero_complex",
+            "type_expr_hash": "4133276684",
+            "type_text_sha256": "64e0f4363e006adf7ebe5a601583c5eb953f71ab44f555f91a5d6360847d2cd5",
             "toolchain": "leanprover/lean4:v4.34.0-rc1",
-            "pinned_on": "2026-09-04",
-            "note": "Pinned 2026-09-04 when the Theorem 3.1 converse moved to the printed multiplicity hypothesis, free at 0."
+            "pinned_on": "2026-09-05",
+            "note": "Re-pinned 2026-09-05.  New source-facing declarations from the 2026-09-04/09-05 hostile-review repair pass, and one drift: ReflectionIntertwines.ofReducesSubspace lost its [CompleteSpace H] instance binder to the omit-line warning cleanup, which is a strict generalization and no change of statement."
           },
           {
-            "declaration": "TauCeti.DavisKahan1970.theorem3_1_realization_ofSpectralMultiplicityAwayFromZero_real",
-            "type_expr_hash": "2347024279",
-            "type_text_sha256": "0ec64040542a79af55be2fcf0f4e19611a79e42126e0b9051c9e09153172abbb",
+            "declaration": "TauCeti.DavisKahan1970.theorem3_1_realization_inAmbient_ofSpectralMultiplicityAwayFromZero_real",
+            "type_expr_hash": "3130548526",
+            "type_text_sha256": "64b137118caa25b8eeec37ba08784053b7e50b1127ed5d256228093d46638690",
             "toolchain": "leanprover/lean4:v4.34.0-rc1",
-            "pinned_on": "2026-09-04",
-            "note": "Pinned 2026-09-04 when the Theorem 3.1 converse moved to the printed multiplicity hypothesis, free at 0."
+            "pinned_on": "2026-09-05",
+            "note": "Re-pinned 2026-09-05.  New source-facing declarations from the 2026-09-04/09-05 hostile-review repair pass, and one drift: ReflectionIntertwines.ofReducesSubspace lost its [CompleteSpace H] instance binder to the omit-line warning cleanup, which is a strict generalization and no change of statement."
           },
           {
             "declaration": "TauCeti.DavisKahan.HalmosAngleDatum.starProjection_targetSubspace_apply",
@@ -5094,20 +5094,20 @@
         "note": "This row is not a single theorem and the review does not pretend otherwise. Of the three kinds of material in the hashed block, two are fully carried and one is not. The generalized Theorem 6.3 is carried at or beyond the printed scope by `tanTheta_directed_bounded_spectralGap_symmetricNorming_complex` -- the printed spectral orientation, every source unitarily invariant norm, arbitrary Hilbert dimension and arbitrary complete trial subspace, tangent representative exhibited rather than assumed -- and by `tanTheta_directed_bounded_symmetricNorming_real` over the real field. Example 6.1 is carried by five compiled theorems, each printed number its own statement. The proof machinery (6.2)--(6.6) is NOT carried: four clauses above are marked `open`, because the compiled proof reaches the same conclusion by a different route (Rayleigh--Ritz compression, Sylvester lower bound, Ky Fan dominance) and no declaration registered here states those intermediate identities. The row's own `next_action` records the same boundary: it claims the generalized theorem and the example, not the derivation. Two other honest asymmetries: the printed strict dimension inequality is dropped by the canonical endpoints and retained only by the supporting ideal-family form, and the real endpoint is stated in the form-bound rather than the spectral orientation. CANONICAL WITNESSES FOLLOW THE RESULT INVENTORY, which names the unbounded-trial endpoints rather than the bounded ones. That is the stronger and more source-faithful choice: the passage itself says the boundedness and compactness it uses are temporary and removed by the Appendix, so the unbounded endpoints are the theorem the source is reaching for. The cost, recorded in the separation clause above, is that the printed spectral inclusions appear literally only on the supporting bounded endpoint; the canonical form states the half-infinite ordered configuration instead, which is weaker as a hypothesis and which the source's scope paragraph explicitly allows.",
         "statement_pins": [
           {
-            "declaration": "TauCeti.DavisKahan1970.tanTheta_directed_unboundedTrial_symmetricNorming_complex",
-            "type_expr_hash": "2295447959",
-            "type_text_sha256": "f0fb95f88b04a8bce58fa98a23859fc533d2d4b8744f937edc998527aa08a07d",
+            "declaration": "TauCeti.DavisKahan1970.tanTheta_directed_unboundedRitz_symmetricNorming_exists_complex",
+            "type_expr_hash": "1634318278",
+            "type_text_sha256": "cbc8760e8c78e80ddf05f37e19e3a0f51737172231f94880c6140fb17e8de1e9",
             "toolchain": "leanprover/lean4:v4.34.0-rc1",
-            "pinned_on": "2026-09-04",
-            "note": "Pinned 2026-09-04 with the seven Section 3-8 major reviews: their declarations and the passages they cite are now guarded like the four Section 2 headline rows."
+            "pinned_on": "2026-09-05",
+            "note": "Re-pinned 2026-09-05.  New source-facing declarations from the 2026-09-04/09-05 hostile-review repair pass, and one drift: ReflectionIntertwines.ofReducesSubspace lost its [CompleteSpace H] instance binder to the omit-line warning cleanup, which is a strict generalization and no change of statement."
           },
           {
-            "declaration": "TauCeti.DavisKahan1970.tanTheta_directed_unboundedTrial_symmetricNorming_real",
-            "type_expr_hash": "184388189",
-            "type_text_sha256": "bdbc5f8e11f1b2083e6f43d5db3e65060563d960cb23eb4ad19eaa502f3e0ca1",
+            "declaration": "TauCeti.DavisKahan1970.tanTheta_directed_unboundedRitz_symmetricNorming_exists_real",
+            "type_expr_hash": "3613921276",
+            "type_text_sha256": "81845ac132e3b93ec4fdab54c332c585d9f82d448b1a587646b30253f9c1ba4b",
             "toolchain": "leanprover/lean4:v4.34.0-rc1",
-            "pinned_on": "2026-09-04",
-            "note": "Pinned 2026-09-04 with the seven Section 3-8 major reviews: their declarations and the passages they cite are now guarded like the four Section 2 headline rows."
+            "pinned_on": "2026-09-05",
+            "note": "Re-pinned 2026-09-05.  New source-facing declarations from the 2026-09-04/09-05 hostile-review repair pass, and one drift: ReflectionIntertwines.ofReducesSubspace lost its [CompleteSpace H] instance binder to the omit-line warning cleanup, which is a strict generalization and no change of statement."
           }
         ],
         "source_pins": [
@@ -5596,7 +5596,7 @@
           },
           {
             "source_clause": "Assume the hypotheses of the tan 2 theta theorem.",
-            "lean_realization": "The Lean hypotheses are `A` self-adjoint, `P` reducing `A`, the `P`-block bounded above by alpha in form, the `P`-perp block bounded below by alpha + delta in form, and `H` self-adjoint and fully off-diagonal relative to `P`, which is the printed H_0 = H_1 = 0. The form bounds are the printed spectral placement with the lower endpoint beta dropped, so the Lean hypothesis is weaker than the printed one.",
+            "lean_realization": "The Lean hypotheses are `A` self-adjoint, `P` reducing `A`, the `P`-block bounded above by alpha in form, the `P`-perp block bounded below by alpha + delta in form, and `H` self-adjoint and fully off-diagonal relative to `P`, which is the printed H_0 = H_1 = 0. The form bounds are the printed spectral placement with the lower endpoint beta dropped, so the Lean hypothesis is weaker than the printed one.  This clause is INHERITED: Theorem 8.1 states no hypotheses of its own, so both its operator scope and its separation come from the tan 2 theta theorem as Section 2 prints it.  The registered Lean hypotheses take bounded `A H : E ->L[C] E`; see `nonlocal_source_interpretation.operator_scope_reading` in the result inventory for the source evidence that this is the imported scope, the competing unbounded reading, and the open lift.",
             "status": "claimed_exact",
             "kind": "hypothesis",
             "relation": "generalization",
@@ -5605,7 +5605,8 @@
             "lean_declarations": [
               "TauCeti.DavisKahan1970.Section8.theorem8_1_maximalAngle_le_iff_spectrumIn",
               "TauCeti.DavisKahan1970.Section8.theorem8_1_canonicalBranch"
-            ]
+            ],
+            "inherited": true
           },
           {
             "source_clause": "Then Theta <= pi/4 if and only if the chosen reducing blocks of A + H satisfy Lambda_1 >= alpha + delta and Lambda_0 <= alpha.",
@@ -5766,8 +5767,8 @@
           },
           {
             "id": "ambient",
-            "role": "context",
-            "why": "Fixes the ambient scope: a separable Hilbert space, real or complex, with finite dimensionality not assumed.",
+            "role": "convention",
+            "why": "Section 1 fixes the ambient setting Theorem 8.1 is read in: a separable Hilbert space, real or complex, finite dimensionality not assumed, and -- the clause this row's reading turns on -- \"In the main bounded setting A = A* and A + H = (A + H)* are bounded.  The paper also allows self-adjoint unbounded A when the later domain conditions are met.\"  Bounded is the setting; unbounded is an allowance the Section 2 scope paragraph attaches to the four main results.",
             "locator": {
               "document": "DavisKahan1970",
               "marker": "S1-block-residual",
@@ -6048,7 +6049,8 @@
             "pinned_on": "2026-09-04",
             "note": "Pinned 2026-09-04 with the seven Section 3-8 major reviews: their declarations and the passages they cite are now guarded like the four Section 2 headline rows."
           }
-        ]
+        ],
+        "nonlocal_rationale": "Theorem 8.1 states no hypotheses at all.  It opens \"Assume the hypotheses of the tan 2 theta theorem\", so everything -- the separation, the Rayleigh-Ritz condition, and the OPERATOR SCOPE -- is imported from a passage printed six sections earlier.  The passage is therefore not self-contained, and the question a reviewer has to settle is what the phrase imports.\n\nThe accepted reading is that it imports the tan 2 theta theorem as the main body states it, at the paper's bounded setting.  Three things support it.  Section 1 fixes bounded as the setting and unbounded as an allowance.  The Section 2 scope paragraph attaches that allowance to a named list -- \"The paper states the four main results ... but the results are also intended for unbounded self-adjoint A\" -- and then locates the extra analytic work exactly: \"concentrated in Theorem 5.2 and the Appendix to Section 6\".  Section 8 is not on that list and has no counterpart there.  And Section 8 restricts its own parts (ii) and (iii) to finite dimensions, so a section that qualifies what it means to qualify, and says nothing about unbounded operators, is being read rather than silently narrowed.\n\nA reviewer who rejects this reading is saying the phrase imports the tan 2 theta theorem at its widest certified scope.  Nothing in Section 8's text forbids that: (8.1) and (8.2) are quadratic-form identities that survive an unbounded A, and the Theorem 8.2 homotopy is meaningful for unbounded A with bounded H.  On that reading the registered evidence is a proper specialization.  The repository does not claim the second reading is wrong, only that the first is better supported, and the unbounded lift -- which would make the question moot -- is tracked as `DK-S8-UNBOUNDED` in GOAL.md."
       }
     },
     {

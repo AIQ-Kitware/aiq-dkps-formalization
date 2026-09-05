@@ -4449,7 +4449,7 @@ Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.theorem5_1_banach_sylvester_banachScope_ofProperties`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section5BanachSylvester.lean:351`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section5BanachSylvester.lean:362`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
