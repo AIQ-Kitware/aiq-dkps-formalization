@@ -4,7 +4,7 @@
 
 **Census family:** `source-completion-census`  
 **Items:** 50  
-**Unique cited Lean declarations:** 1258
+**Unique cited Lean declarations:** 1260
 
 ## How to use this census
 
@@ -2179,6 +2179,9 @@ CENSUS-GATE NOTE 2026-08-11: `TauCeti.MultiplicityDatum.retype` is deliberately 
 - `TauCeti.DavisKahan1970.theorem3_1_realization_ofNonzeroPartsUnitaryEquiv`
 - `TauCeti.DavisKahan1970.theorem3_1_intertwiner_of_nonzeroPartsUnitaryEquiv`
 - `TauCeti.DavisKahan1970.NonzeroPartsUnitaryEquiv`
+- `TauCeti.DavisKahan1970.theorem3_1_realization_inAmbient_ofSpectralMultiplicityAwayFromZero_complex`
+- `TauCeti.DavisKahan1970.theorem3_1_realization_inAmbient_ofSpectralMultiplicityAwayFromZero_real`
+- `TauCeti.nonempty_linearIsometryEquiv_of_hilbertBasis`
 
 **Curated source/Lean review:**
 
