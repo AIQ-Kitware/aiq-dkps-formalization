@@ -10,6 +10,7 @@ import DavisKahan.InfiniteDimensional.DoubleAngle
 import DavisKahan.Geometry.Polar.DirectRotation
 import DavisKahan.DoubleAngle.TangentTransport
 import DavisKahan.TanTheta.RitzPair
+import DavisKahan.Sources.DavisKahan1970.SymmetricNormingFanDominance
 
 open TauCeti.DavisKahan.Angle
 
@@ -968,6 +969,48 @@ theorem tanTwoTheta_directed_unboundedResidual_symmetricNorming_complex
   · rw [gauge_projectionBlock_eq_blockCompression, gauge_projectionBlock_eq_blockCompression,
       ← hcorner]
     exact hle
+
+/-- **Davis--Kahan 1970, the directed `tan 2Θ₀` theorem at the printed source
+scope over `ℂ`.**
+
+Separable ambient Hilbert space and normalized unitarily invariant norm.  The
+two pole-exclusion conjuncts do not mention the norm, so they are read off the
+Ky Fan norming function, whose ideal is everything; the estimate itself goes
+through the Fan-dominance bridge. -/
+theorem tanTwoTheta_directed_unboundedResidual_sourceExact_complex
+    [TopologicalSpace.SeparableSpace Ea]
+    (N : NormalizedUnitaryInvariantNorm.{0, _} ℂ)
+    {A : Ea →ₗ.[ℂ] Ea} {B : Ea →L[ℂ] Ea} {a b : ℝ}
+    (hA : IsSelfAdjoint A) (hred : TauCeti.LinearPMap.ReducesSubspace A U)
+    (hB : TauCeti.IsOddFor U B)
+    (hV : TauCeti.LinearPMap.ReducesSubspace (TauCeti.LinearPMap.addBounded A B) V)
+    (hUa : ∀ x : A.domain, (x : Ea) ∈ U →
+      RCLike.re ⟪A x, (x : Ea)⟫_ℂ ≤ a * ‖(x : Ea)‖ ^ 2)
+    (hUb : ∀ x : A.domain, (x : Ea) ∈ Uᗮ →
+      b * ‖(x : Ea)‖ ^ 2 ≤ RCLike.re ⟪A x, (x : Ea)⟫_ℂ)
+    (hab : a < b) (hRmem : N.Mem (projectionBlock Uᗮ U B)) :
+    (∀ n : ℕ, (DavisKahan.sinTwoThetaIdealBlock U V).approximationNumber n < 1) ∧
+      (∀ n : ℕ,
+        (projectionBlock Uᗮ U
+            (2 * (projectorDifference U V * doubleSecant U V))).approximationNumber n =
+          Real.tan (Real.arcsin
+            ((DavisKahan.sinTwoThetaIdealBlock U V).approximationNumber n))) ∧
+      N.Mem (projectionBlock Uᗮ U (2 * (projectorDifference U V * doubleSecant U V))) ∧
+      (b - a) * N.gauge
+          (projectionBlock Uᗮ U (2 * (projectorDifference U V * doubleSecant U V))) ≤
+        2 * N.gauge (projectionBlock Uᗮ U B) := by
+  obtain ⟨hpole, htan, -, -⟩ :=
+    tanTwoTheta_directed_unboundedResidual_symmetricNorming_complex U V
+      (kyFanNormingFunction 1 one_pos) hA hred hB hV hUa hUb hab
+      (kyFanNormingFunction_mem 1 one_pos _)
+  obtain ⟨hmem, hle⟩ :=
+    normalizedUnitaryInvariant_of_symmetricNorming_mul N (sub_pos.mpr hab) two_pos hRmem
+      fun M hM => by
+        obtain ⟨-, -, hm, hl⟩ :=
+          tanTwoTheta_directed_unboundedResidual_symmetricNorming_complex U V M
+            hA hred hB hV hUa hUb hab hM
+        exact ⟨hm, hl⟩
+  exact ⟨hpole, htan, hmem, hle⟩
 
 end DirectedSourceEndpoint
 

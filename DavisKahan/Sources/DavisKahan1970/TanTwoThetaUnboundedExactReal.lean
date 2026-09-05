@@ -11,6 +11,7 @@ import DavisKahan.Sources.DavisKahan1970.TanTwoThetaUnboundedGramReal
 import DavisKahan.Sources.DavisKahan1970.SineTheta.Norms.ComplexificationGauge
 import DavisKahan.DoubleAngle.TangentTransport
 import DavisKahan.Sources.DavisKahan1970.AmbientReal
+import DavisKahan.Sources.DavisKahan1970.SymmetricNormingFanDominance
 
 open TauCeti.DavisKahan.Angle
 
@@ -931,6 +932,36 @@ theorem tanTwoTheta_directed_unboundedResidual_symmetricNorming_real
   refine ⟨fun n => ?_, approximationNumber_tanTwoDirectedCornerR U V hS1, hmem, hle⟩
   rw [← hblock n]
   exact hlt n
+
+/-! ### Why there is no real source-exact façade here yet
+
+The complex sibling `tanTwoTheta_directed_unboundedResidual_sourceExact_complex`
+exists.  The real one does not, and the obstruction is a real design point rather
+than an accident.
+
+This theorem's two sides live over *different scalar fields*.  The tangent corner
+`tanTwoDirectedCornerR` exists only on the canonical complexification -- see its
+docstring in `AmbientReal.lean` for why -- while the residual
+`projectionBlock Uᗮ U B` is a real operator.  A `SymmetricNormingFunction`
+spans both, because that structure carries no scalar parameter and its `gauge` is
+applied at each operand's own field.  `NormalizedUnitaryInvariantNorm 𝕜` extends
+`KyFanDominantIdealFamily 𝕜`, which *is* indexed by one scalar field, so a single
+source norm cannot be applied to both sides.
+
+Two honest routes, neither taken here:
+
+* complexify the residual in the statement, so both sides are read at `ℂ`.  That
+  is faithful -- complexification preserves singular values exactly -- but
+  elaborating it currently diverges in `whnf`, and forcing it past a heartbeat
+  limit would not make it a good statement;
+* make `NormalizedUnitaryInvariantNorm` scalar-polymorphic, bundling a
+  Fan-dominant family for every `RCLike` field the way `SymmetricNormingFunction`
+  is implicitly polymorphic.  That is the structural fix and it is the one this
+  clause is waiting on.
+
+Until then this clause's canonical evidence stays the `SymmetricNormingFunction`
+theorem above, and the census records the gap rather than claiming the literal
+norm class for it. -/
 
 end DirectedSourceEndpointReal
 
