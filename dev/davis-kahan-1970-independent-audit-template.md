@@ -179,7 +179,7 @@ Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.sinTheta_generalized_paperData_real`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/SineThetaSourceInventory.lean:126`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/SineThetaSourceInventory.lean:125`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
@@ -4983,8 +4983,6 @@ The declarations that carry this result's printed statement, with the source ato
 
 ### Other registered declarations
 
-- `TauCeti.DavisKahan1970.Proposition6_1_complex` — implementation_structure
-- `TauCeti.DavisKahan1970.Proposition6_1_real` — implementation_structure
 - `TauCeti.DavisKahan1970.proposition6_1_projectorDifference_complex` — transport_lemma
 - `TauCeti.DavisKahan1970.Proposition6_1_real_representative` — transport_lemma
 - `TauCeti.DavisKahan1970.Proposition6_1_real_sinTheta_singularValues` — transport_lemma
@@ -4994,18 +4992,6 @@ The declarations that carry this result's printed statement, with the source ato
 - `TauCeti.DavisKahan1970.Proposition6_1_real_commonDomain` — generalization
 
 ### Source-facing Lean declarations
-
-#### `TauCeti.DavisKahan1970.Proposition6_1_complex`
-
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/SineThetaSourceInventory.lean:140`
-
-Compiler-printed type: *inserted when a compiler certificate is supplied.*
-
-#### `TauCeti.DavisKahan1970.Proposition6_1_real`
-
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/SineThetaSourceInventory.lean:152`
-
-Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.proposition6_1_complex`
 
@@ -5027,13 +5013,13 @@ Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.Proposition6_1_real_representative`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/SineThetaSourceInventory.lean:160`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/SineThetaSourceInventory.lean:156`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.Proposition6_1_real_sinTheta_singularValues`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/SineThetaSourceInventory.lean:156`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/SineThetaSourceInventory.lean:152`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
@@ -5051,13 +5037,13 @@ Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.Proposition6_1_commonDomain`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/SineThetaSourceInventory.lean:198`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/SineThetaSourceInventory.lean:194`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.Proposition6_1_real_commonDomain`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/SineThetaSourceInventory.lean:225`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/SineThetaSourceInventory.lean:221`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
@@ -5150,35 +5136,21 @@ The declarations that carry this result's printed statement, with the source ato
 
 - `TauCeti.DavisKahan1970.Theorem6_1_real_commonDomain` — supporting_theorem
 - `TauCeti.DavisKahan1970.Theorem6_1_real_commonCore` — supporting_theorem
-- `TauCeti.DavisKahan1970.Theorem6_1_complex` — implementation_structure
-- `TauCeti.DavisKahan1970.Theorem6_1_real` — implementation_structure
 - `TauCeti.DavisKahan1970.Theorem6_1_commonDomain` — generalization
 - `TauCeti.DavisKahan1970.lowerFrameBound_iff_operator_inequality` — transport_lemma
 - `TauCeti.DavisKahan1970.lowerFrameBound_of_operator_inequality` — transport_lemma
 
 ### Source-facing Lean declarations
 
-#### `TauCeti.DavisKahan1970.Theorem6_1_complex`
-
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/SineThetaSourceInventory.lean:119`
-
-Compiler-printed type: *inserted when a compiler certificate is supplied.*
-
-#### `TauCeti.DavisKahan1970.Theorem6_1_real`
-
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/SineThetaSourceInventory.lean:122`
-
-Compiler-printed type: *inserted when a compiler certificate is supplied.*
-
 #### `TauCeti.DavisKahan1970.Theorem6_1_real_commonDomain`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/SineThetaSourceInventory.lean:233`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/SineThetaSourceInventory.lean:229`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.Theorem6_1_real_commonCore`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/SineThetaSourceInventory.lean:254`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/SineThetaSourceInventory.lean:250`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
@@ -5196,7 +5168,7 @@ Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.Theorem6_1_commonDomain`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/SineThetaSourceInventory.lean:184`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/SineThetaSourceInventory.lean:180`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
@@ -5303,24 +5275,10 @@ The declarations that carry this result's printed statement, with the source ato
 
 ### Other registered declarations
 
-- `TauCeti.DavisKahan1970.Theorem6_2_complex` — implementation_structure
-- `TauCeti.DavisKahan1970.Theorem6_2_real` — implementation_structure
 - `TauCeti.DavisKahan1970.lowerFrameBound_iff_operator_inequality` — transport_lemma
 - `TauCeti.DavisKahan1970.lowerFrameBound_of_operator_inequality` — transport_lemma
 
 ### Source-facing Lean declarations
-
-#### `TauCeti.DavisKahan1970.Theorem6_2_complex`
-
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/SineThetaSourceInventory.lean:172`
-
-Compiler-printed type: *inserted when a compiler certificate is supplied.*
-
-#### `TauCeti.DavisKahan1970.Theorem6_2_real`
-
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/SineThetaSourceInventory.lean:176`
-
-Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.theorem6_2_complex`
 

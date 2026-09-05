@@ -4,6 +4,8 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
 import DavisKahan.Sources.DavisKahan1970.SineThetaSourceInventory
+import DavisKahan.Sources.DavisKahan1970.Theorem61
+import DavisKahan.Sources.DavisKahan1970.Proposition61
 
 /-!
 # Trusted-dependency audit for the literal paper sine-theta surface
@@ -31,11 +33,11 @@ dependencies in every result.
 #print axioms TauCeti.DavisKahan1970.sinTheta_generalized_paperData_complex
 #print axioms TauCeti.DavisKahan1970.sinTheta_paperData_real
 #print axioms TauCeti.DavisKahan1970.sinTheta_generalized_paperData_real
-#print axioms TauCeti.DavisKahan1970.Theorem6_1_complex
-#print axioms TauCeti.DavisKahan1970.Theorem6_1_real
-#print axioms TauCeti.DavisKahan1970.Proposition6_1_complex
-#print axioms TauCeti.DavisKahan1970.Theorem6_2_complex
-#print axioms TauCeti.DavisKahan1970.Theorem6_2_real
+#print axioms TauCeti.DavisKahan1970.theorem6_1_complex
+#print axioms TauCeti.DavisKahan1970.theorem6_1_real
+#print axioms TauCeti.DavisKahan1970.proposition6_1_complex
+#print axioms TauCeti.DavisKahan1970.theorem6_2_complex
+#print axioms TauCeti.DavisKahan1970.theorem6_2_real
 #print axioms TauCeti.DavisKahan1970.Theorem6_2_boundNorm_of_finiteRank
 #print axioms TauCeti.DavisKahan1970.Theorem6_2_real_boundNorm_of_finiteRank
 #print axioms TauCeti.DavisKahan1970.Theorem6_1_commonDomain

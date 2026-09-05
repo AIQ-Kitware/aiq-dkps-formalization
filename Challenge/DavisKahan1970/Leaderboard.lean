@@ -24,6 +24,7 @@ from only the printed unbounded hypotheses.
 -/
 import DavisKahan.Sources.DavisKahan1970.PartIII
 import DavisKahan.Sources.DavisKahan1970.SineThetaSourceInventory
+import DavisKahan.Sources.DavisKahan1970.Theorem61
 import DavisKahan.Sources.DavisKahan1970.Proposition61
 import DavisKahan.Sources.DavisKahan1970.Directed
 import DavisKahan.Sources.DavisKahan1970.DirectedReal
@@ -169,8 +170,8 @@ the false printed Proposition 4.4, Section 8 branch selection, and a source-
 numbered Section 9 numerical consequence.
 -/
 
-#print axioms TauCeti.DavisKahan1970.Theorem6_1_complex
-#print axioms TauCeti.DavisKahan1970.Theorem6_1_real
+#print axioms TauCeti.DavisKahan1970.theorem6_1_complex
+#print axioms TauCeti.DavisKahan1970.theorem6_1_real
 #print axioms TauCeti.DavisKahan1970.tanTheta_directed_bounded_symmetricNorming_real
 #print axioms TauCeti.DavisKahan1970.tanTheta_ambient_bounded_symmetricNorming_real_of_crossedDefects
 #print axioms TauCeti.DavisKahan1970.sinTwoTheta_ambient_bounded_symmetricNorming_real

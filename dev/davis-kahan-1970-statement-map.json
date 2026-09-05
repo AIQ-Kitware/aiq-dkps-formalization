@@ -1369,16 +1369,16 @@
       "expected_verification": "proved_in_build",
       "tex_marker": "DK-6.1-prop",
       "review_declarations": [
-        "TauCeti.DavisKahan1970.Proposition6_1_complex",
-        "TauCeti.DavisKahan1970.Proposition6_1_real"
+        "TauCeti.DavisKahan1970.proposition6_1_complex",
+        "TauCeti.DavisKahan1970.proposition6_1_real"
       ],
       "audit_clauses": [
         {
           "id": "DK-6.1-prop.whole",
           "description": "Audit the complete registered source passage as one semantic unit; split further if the independent reviewer finds separable mathematical clauses.",
           "review_declarations": [
-            "TauCeti.DavisKahan1970.Proposition6_1_complex",
-            "TauCeti.DavisKahan1970.Proposition6_1_real"
+            "TauCeti.DavisKahan1970.proposition6_1_complex",
+            "TauCeti.DavisKahan1970.proposition6_1_real"
           ]
         }
       ],
@@ -1409,8 +1409,8 @@
       "expected_verification": "proved_in_build",
       "tex_marker": "DK-6.1-thm",
       "review_declarations": [
-        "TauCeti.DavisKahan1970.Theorem6_1_complex",
-        "TauCeti.DavisKahan1970.Theorem6_1_real",
+        "TauCeti.DavisKahan1970.theorem6_1_complex",
+        "TauCeti.DavisKahan1970.theorem6_1_real",
         "TauCeti.DavisKahan1970.Theorem6_1_real_commonDomain",
         "TauCeti.DavisKahan1970.Theorem6_1_real_commonCore"
       ],
@@ -1419,8 +1419,8 @@
           "id": "DK-6.1-thm.whole",
           "description": "Audit the complete registered source passage as one semantic unit; split further if the independent reviewer finds separable mathematical clauses.",
           "review_declarations": [
-            "TauCeti.DavisKahan1970.Theorem6_1_complex",
-            "TauCeti.DavisKahan1970.Theorem6_1_real",
+            "TauCeti.DavisKahan1970.theorem6_1_complex",
+            "TauCeti.DavisKahan1970.theorem6_1_real",
             "TauCeti.DavisKahan1970.Theorem6_1_real_commonDomain",
             "TauCeti.DavisKahan1970.Theorem6_1_real_commonCore"
           ]
@@ -1446,8 +1446,8 @@
       "expected_verification": "proved_in_build",
       "tex_marker": "DK-6.2-thm",
       "review_declarations": [
-        "TauCeti.DavisKahan1970.Theorem6_2_complex",
-        "TauCeti.DavisKahan1970.Theorem6_2_real",
+        "TauCeti.DavisKahan1970.theorem6_2_complex",
+        "TauCeti.DavisKahan1970.theorem6_2_real",
         "TauCeti.DavisKahan1970.Theorem6_2_real_commonDomain",
         "TauCeti.DavisKahan1970.Theorem6_2_real_commonCore"
       ],
@@ -1456,8 +1456,8 @@
           "id": "DK-6.2-thm.whole",
           "description": "Audit the complete registered source passage as one semantic unit; split further if the independent reviewer finds separable mathematical clauses.",
           "review_declarations": [
-            "TauCeti.DavisKahan1970.Theorem6_2_complex",
-            "TauCeti.DavisKahan1970.Theorem6_2_real",
+            "TauCeti.DavisKahan1970.theorem6_2_complex",
+            "TauCeti.DavisKahan1970.theorem6_2_real",
             "TauCeti.DavisKahan1970.Theorem6_2_real_commonDomain",
             "TauCeti.DavisKahan1970.Theorem6_2_real_commonCore"
           ]
@@ -2193,14 +2193,14 @@
       "expected_verification": "proved_in_build",
       "tex_marker": "DK-10.1",
       "review_declarations": [
-        "TauCeti.DavisKahan1970.Theorem6_2_complex"
+        "TauCeti.DavisKahan1970.theorem6_2_complex"
       ],
       "audit_clauses": [
         {
           "id": "DK-10.1.whole",
           "description": "Audit the complete registered source passage as one semantic unit; split further if the independent reviewer finds separable mathematical clauses.",
           "review_declarations": [
-            "TauCeti.DavisKahan1970.Theorem6_2_complex"
+            "TauCeti.DavisKahan1970.theorem6_2_complex"
           ]
         }
       ],

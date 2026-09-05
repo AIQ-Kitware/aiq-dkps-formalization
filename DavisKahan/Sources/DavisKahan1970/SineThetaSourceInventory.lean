@@ -114,13 +114,12 @@ alias Theorem6_1Data := Theorem61Data
 -- and `..._real`** in `Sources/DavisKahan1970/Theorem61.lean`.  They take the
 -- components -- ambient/trial/complementary operators, coordinate maps, residual,
 -- `IsTrialResidualEquation`, `IsExactSpectralDecomposition`, the frame bound and
--- the gap -- rather than a `Theorem61Data` record.  The aliases below name
--- the record methods those theorems call.
-alias Theorem6_1_complex :=
-  Theorem61Data.result_every_unitarilyInvariantNorm_across
+-- the gap -- rather than a `Theorem61Data` record.  The capitalized
+-- `Theorem6_1_{complex,real}` aliases for the record methods were deleted on
+-- 2026-09-05: they differed from the canonical names only in case, which the
+-- 2026-09-04 hostile review flagged (F6.2) as a name a reader cannot tell apart
+-- from the theorem it is not.  Cite `Theorem61Data.result_*` for the record form.
 alias Theorem6_1RealData := RealTheorem61Data
-alias Theorem6_1_real :=
-  RealTheorem61Data.result_every_unitarilyInvariantNorm_across
 alias sinTheta_generalized_paperData_complex :=
   Theorem61Data.result_every_unitarilyInvariantNorm_across
 alias sinTheta_generalized_paperData_real :=
@@ -131,14 +130,13 @@ alias sinTheta_generalized_paperData_real :=
 **The canonical source theorems are `DavisKahan1970.proposition6_1_complex`
 and `..._real` in `Sources/DavisKahan1970/Proposition61.lean`.**  They take the
 operators, the reducing subspaces, the gap and the two separations directly.
-The aliases below name the record methods those theorems call, and are the
-implementation and compatibility API: a caller who already holds a
-`SymmetricSinThetaProblem` can still use them, but nobody should have to
-build one. -/
+The aliases below are the implementation and compatibility API: a caller who
+already holds a `SymmetricSinThetaProblem` can still use them, but nobody should
+have to build one.  The two capitalized `Proposition6_1_{complex,real}` aliases
+were deleted on 2026-09-05 as case twins of the canonical names (F6.2); cite
+`SymmetricSinThetaProblem.result_*` for the record form. -/
 
 alias SymmetricSinThetaProblem := SymmetricSinThetaProblem
-alias Proposition6_1_complex :=
-  SymmetricSinThetaProblem.result_every_unitarilyInvariantNorm
 
 -- The real-scalar form.  A unitarily invariant norm sees only the complete
 -- singular-value sequence, so the real conclusion is carried by
@@ -149,8 +147,6 @@ alias Proposition6_1_complex :=
 -- and `Proposition6_1_real_representative` states the estimate for an arbitrary
 -- operator with that sequence.
 alias RealSymmetricSinThetaProblem := RealSymmetricSinThetaProblem
-alias Proposition6_1_real :=
-  RealSymmetricSinThetaProblem.result_every_unitarilyInvariantNorm_real
 alias Proposition6_1_real_kyFan :=
   RealSymmetricSinThetaProblem.symmetric_all_kyFan_real
 alias Proposition6_1_real_sinTheta_singularValues :=
@@ -165,15 +161,15 @@ alias Proposition6_1_real_representative :=
 **The canonical source theorems are `DavisKahan1970.theorem6_2_complex`
 and `..._real`** in `Sources/DavisKahan1970/Theorem61.lean`, on the same
 component hypotheses as Theorem 6.1.  The aliases below are the record methods
-they call. -/
+they call; the two capitalized `Theorem6_2_{complex,real}` case twins were
+deleted on 2026-09-05 (F6.2), so cite `Theorem62Data.result_across` and
+`RealTheorem62Data.result_across` for the record form. -/
 
 alias PairwiseSpectrumGap := PairwiseSpectrumGap
 alias Theorem6_2Data := Theorem62Data
-alias Theorem6_2_complex := Theorem62Data.result_across
 alias Theorem6_2_boundNorm_of_finiteRank :=
   Theorem62Data.operatorNorm_result_across_of_rank_le
 alias Theorem6_2RealData := RealTheorem62Data
-alias Theorem6_2_real := RealTheorem62Data.result_across
 alias Theorem6_2_real_boundNorm_of_finiteRank :=
   RealTheorem62Data.operatorNorm_result_across_of_rank_le
 

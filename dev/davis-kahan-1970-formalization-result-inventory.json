@@ -4133,8 +4133,6 @@
       "verification": "proved_in_build",
       "semantic_certification": "accepted",
       "lean_declarations": [
-        "TauCeti.DavisKahan1970.Proposition6_1_complex",
-        "TauCeti.DavisKahan1970.Proposition6_1_real",
         "TauCeti.DavisKahan1970.proposition6_1_complex",
         "TauCeti.DavisKahan1970.proposition6_1_real",
         "TauCeti.DavisKahan1970.proposition6_1_projectorDifference_complex",
@@ -4145,7 +4143,7 @@
         "TauCeti.DavisKahan1970.Proposition6_1_commonDomain",
         "TauCeti.DavisKahan1970.Proposition6_1_real_commonDomain"
       ],
-      "review_note": "Accepted result-only semantic review 2026-08-12. The complex and real Proposition 6.1 aliases are direct source-facing PaperUI theorems for the two-sided spectral-placement hypothesis and the ambient sine bound `delta * N(sin Theta) <= N(H)` for every paper unitary-invariant norm. The Sylvester identity (6.1) and the source counterexample explaining why one-sided placement is insufficient are outside the counted proposition statement.\n\nREOPENED 2026-08-31 by the scope-atom re-audit. The inventory's own statement_boundary policy says a later source passage that explicitly extends the proved scope of a counted result is part of that result's scope and must be covered. Several such passages were classified as generic post-result commentary on the grounds that they occur after the theorem environment -- which is exactly the condition the policy says does not exclude an explicit extension. See the newly attached scope atom(s) and `remaining_gap`.\n\nREOPENING WITHDRAWN 2026-08-31, and the rule that caused it corrected. The scope-atom re-audit attached a later source passage to this result under a `statement_boundary` clause saying that any passage explicitly extending a counted result's proved scope becomes part of that result. That clause contradicted the same field's `does_not_count` entry for scope remarks outside the printed result environment, and it let the atom ledger enlarge the denominator by reclassification. The corrected rule is that a later passage affects a counted result only when it is needed to determine what Davis and Kahan actually claim in that result; an extension, variant or consequence they mention without introducing and proving it as a result of its own does not. The passage is now `result_adjacent_extension` fidelity material. The Lean coverage produced while the result was reopened is kept as SUPPORTING evidence -- it is stronger than the counted statement requires, which is a good thing to hold and not a canonical obligation.",
+      "review_note": "Accepted result-only semantic review 2026-08-12. The complex and real Proposition 6.1 aliases are direct source-facing PaperUI theorems for the two-sided spectral-placement hypothesis and the ambient sine bound `delta * N(sin Theta) <= N(H)` for every paper unitary-invariant norm. The Sylvester identity (6.1) and the source counterexample explaining why one-sided placement is insufficient are outside the counted proposition statement.\n\nREOPENED 2026-08-31 by the scope-atom re-audit. The inventory's own statement_boundary policy says a later source passage that explicitly extends the proved scope of a counted result is part of that result's scope and must be covered. Several such passages were classified as generic post-result commentary on the grounds that they occur after the theorem environment -- which is exactly the condition the policy says does not exclude an explicit extension. See the newly attached scope atom(s) and `remaining_gap`.\n\nREOPENING WITHDRAWN 2026-08-31, and the rule that caused it corrected. The scope-atom re-audit attached a later source passage to this result under a `statement_boundary` clause saying that any passage explicitly extending a counted result's proved scope becomes part of that result. That clause contradicted the same field's `does_not_count` entry for scope remarks outside the printed result environment, and it let the atom ledger enlarge the denominator by reclassification. The corrected rule is that a later passage affects a counted result only when it is needed to determine what Davis and Kahan actually claim in that result; an extension, variant or consequence they mention without introducing and proving it as a result of its own does not. The passage is now `result_adjacent_extension` fidelity material. The Lean coverage produced while the result was reopened is kept as SUPPORTING evidence -- it is stronger than the counted statement requires, which is a good thing to hold and not a canonical obligation.\n\n**CASE TWINS REMOVED 2026-09-05**, finding F6.2 of the 2026-09-04 hostile review.  The registered name set contained six pairs differing only in case -- `Theorem6_1_complex` beside `theorem6_1_complex`, and likewise for `Theorem6_1_real`, `Proposition6_1_{complex,real}` and `Theorem6_2_{complex,real}`.  The capitalized member of each pair was an `alias` for a record method, a different theorem from the lowercase canonical one, and no reader could tell them apart by name.  The aliases are deleted; the record methods keep their own descriptive names (`Theorem61Data.result_every_unitarilyInvariantNorm_across` and siblings) and are still citable.  The audit surfaces and `Challenge/DavisKahan1970/Leaderboard.lean` now name the canonical lowercase theorems.",
       "parent_claim_id": "DK-6.1-prop",
       "boundary_review": {
         "status": "accepted",
@@ -4187,16 +4185,6 @@
         }
       ],
       "supporting_evidence": [
-        {
-          "declaration": "TauCeti.DavisKahan1970.Proposition6_1_complex",
-          "role": "implementation_structure",
-          "note": "Superseded as canonical evidence 2026-08-31: it is a method on a `Paper*` record, so a caller had to build the record before invoking the theorem. The canonical declaration is now the component-hypothesis theorem, which builds the record internally. This one is retained as the implementation and compatibility API."
-        },
-        {
-          "declaration": "TauCeti.DavisKahan1970.Proposition6_1_real",
-          "role": "implementation_structure",
-          "note": "Superseded as canonical evidence 2026-08-31: it is a method on a `Paper*` record, so a caller had to build the record before invoking the theorem. The canonical declaration is now the component-hypothesis theorem, which builds the record internally. This one is retained as the implementation and compatibility API."
-        },
         {
           "declaration": "TauCeti.DavisKahan1970.proposition6_1_projectorDifference_complex",
           "role": "transport_lemma"
@@ -4278,8 +4266,6 @@
       "verification": "proved_in_build",
       "semantic_certification": "accepted",
       "lean_declarations": [
-        "TauCeti.DavisKahan1970.Theorem6_1_complex",
-        "TauCeti.DavisKahan1970.Theorem6_1_real",
         "TauCeti.DavisKahan1970.Theorem6_1_real_commonDomain",
         "TauCeti.DavisKahan1970.Theorem6_1_real_commonCore",
         "TauCeti.DavisKahan1970.theorem6_1_complex",
@@ -4288,7 +4274,7 @@
         "TauCeti.DavisKahan1970.lowerFrameBound_iff_operator_inequality",
         "TauCeti.DavisKahan1970.lowerFrameBound_of_operator_inequality"
       ],
-      "review_note": "Accepted by the hostile audit at the stated-result level.\n\nREOPENED 2026-08-31 by the scope-atom re-audit. The inventory's own statement_boundary policy says a later source passage that explicitly extends the proved scope of a counted result is part of that result's scope and must be covered. Several such passages were classified as generic post-result commentary on the grounds that they occur after the theorem environment -- which is exactly the condition the policy says does not exclude an explicit extension. See the newly attached scope atom(s) and `remaining_gap`.\n\nREOPENING WITHDRAWN 2026-08-31, and the rule that caused it corrected. The scope-atom re-audit attached a later source passage to this result under a `statement_boundary` clause saying that any passage explicitly extending a counted result's proved scope becomes part of that result. That clause contradicted the same field's `does_not_count` entry for scope remarks outside the printed result environment, and it let the atom ledger enlarge the denominator by reclassification. The corrected rule is that a later passage affects a counted result only when it is needed to determine what Davis and Kahan actually claim in that result; an extension, variant or consequence they mention without introducing and proving it as a result of its own does not. The passage is now `result_adjacent_extension` fidelity material. The Lean coverage produced while the result was reopened is kept as SUPPORTING evidence -- it is stronger than the counted statement requires, which is a good thing to hold and not a canonical obligation.",
+      "review_note": "Accepted by the hostile audit at the stated-result level.\n\nREOPENED 2026-08-31 by the scope-atom re-audit. The inventory's own statement_boundary policy says a later source passage that explicitly extends the proved scope of a counted result is part of that result's scope and must be covered. Several such passages were classified as generic post-result commentary on the grounds that they occur after the theorem environment -- which is exactly the condition the policy says does not exclude an explicit extension. See the newly attached scope atom(s) and `remaining_gap`.\n\nREOPENING WITHDRAWN 2026-08-31, and the rule that caused it corrected. The scope-atom re-audit attached a later source passage to this result under a `statement_boundary` clause saying that any passage explicitly extending a counted result's proved scope becomes part of that result. That clause contradicted the same field's `does_not_count` entry for scope remarks outside the printed result environment, and it let the atom ledger enlarge the denominator by reclassification. The corrected rule is that a later passage affects a counted result only when it is needed to determine what Davis and Kahan actually claim in that result; an extension, variant or consequence they mention without introducing and proving it as a result of its own does not. The passage is now `result_adjacent_extension` fidelity material. The Lean coverage produced while the result was reopened is kept as SUPPORTING evidence -- it is stronger than the counted statement requires, which is a good thing to hold and not a canonical obligation.\n\n**CASE TWINS REMOVED 2026-09-05**, finding F6.2 of the 2026-09-04 hostile review.  The registered name set contained six pairs differing only in case -- `Theorem6_1_complex` beside `theorem6_1_complex`, and likewise for `Theorem6_1_real`, `Proposition6_1_{complex,real}` and `Theorem6_2_{complex,real}`.  The capitalized member of each pair was an `alias` for a record method, a different theorem from the lowercase canonical one, and no reader could tell them apart by name.  The aliases are deleted; the record methods keep their own descriptive names (`Theorem61Data.result_every_unitarilyInvariantNorm_across` and siblings) and are still citable.  The audit surfaces and `Challenge/DavisKahan1970/Leaderboard.lean` now name the canonical lowercase theorems.",
       "parent_claim_id": "DK-6.1-thm",
       "boundary_review": {
         "status": "accepted",
@@ -4339,16 +4325,6 @@
         {
           "declaration": "TauCeti.DavisKahan1970.Theorem6_1_real_commonCore",
           "role": "supporting_theorem"
-        },
-        {
-          "declaration": "TauCeti.DavisKahan1970.Theorem6_1_complex",
-          "role": "implementation_structure",
-          "note": "Superseded as canonical evidence 2026-08-31: it is a method on a `Paper*` record, so a caller had to build the record before invoking the theorem. The canonical declaration is now the component-hypothesis theorem, which builds the record internally. This one is retained as the implementation and compatibility API."
-        },
-        {
-          "declaration": "TauCeti.DavisKahan1970.Theorem6_1_real",
-          "role": "implementation_structure",
-          "note": "Superseded as canonical evidence 2026-08-31: it is a method on a `Paper*` record, so a caller had to build the record before invoking the theorem. The canonical declaration is now the component-hypothesis theorem, which builds the record internally. This one is retained as the implementation and compatibility API."
         },
         {
           "declaration": "TauCeti.DavisKahan1970.Theorem6_1_commonDomain",
@@ -4415,14 +4391,12 @@
       "verification": "proved_in_build",
       "semantic_certification": "accepted",
       "lean_declarations": [
-        "TauCeti.DavisKahan1970.Theorem6_2_complex",
-        "TauCeti.DavisKahan1970.Theorem6_2_real",
         "TauCeti.DavisKahan1970.theorem6_2_complex",
         "TauCeti.DavisKahan1970.theorem6_2_real",
         "TauCeti.DavisKahan1970.lowerFrameBound_iff_operator_inequality",
         "TauCeti.DavisKahan1970.lowerFrameBound_of_operator_inequality"
       ],
-      "review_note": "Accepted result-only semantic review 2026-08-12. The complex and real Theorem 6.2 wrappers state the pairwise-gap Hilbert-Schmidt sine inequality with the source lower-frame factor epsilon at the unbounded/common-domain source scope. The rank-corrected operator-norm consequence is an immediate post-theorem consequence in the source and is explicitly outside the 29-result denominator.",
+      "review_note": "Accepted result-only semantic review 2026-08-12. The complex and real Theorem 6.2 wrappers state the pairwise-gap Hilbert-Schmidt sine inequality with the source lower-frame factor epsilon at the unbounded/common-domain source scope. The rank-corrected operator-norm consequence is an immediate post-theorem consequence in the source and is explicitly outside the 29-result denominator.\n\n**CASE TWINS REMOVED 2026-09-05**, finding F6.2 of the 2026-09-04 hostile review.  The registered name set contained six pairs differing only in case -- `Theorem6_1_complex` beside `theorem6_1_complex`, and likewise for `Theorem6_1_real`, `Proposition6_1_{complex,real}` and `Theorem6_2_{complex,real}`.  The capitalized member of each pair was an `alias` for a record method, a different theorem from the lowercase canonical one, and no reader could tell them apart by name.  The aliases are deleted; the record methods keep their own descriptive names (`Theorem61Data.result_every_unitarilyInvariantNorm_across` and siblings) and are still citable.  The audit surfaces and `Challenge/DavisKahan1970/Leaderboard.lean` now name the canonical lowercase theorems.",
       "parent_claim_id": "DK-6.2-thm",
       "boundary_review": {
         "status": "accepted",
@@ -4462,16 +4436,6 @@
         }
       ],
       "supporting_evidence": [
-        {
-          "declaration": "TauCeti.DavisKahan1970.Theorem6_2_complex",
-          "role": "implementation_structure",
-          "note": "Superseded as canonical evidence 2026-08-31: it is a method on a `Paper*` record, so a caller had to build the record before invoking the theorem. The canonical declaration is now the component-hypothesis theorem, which builds the record internally. This one is retained as the implementation and compatibility API."
-        },
-        {
-          "declaration": "TauCeti.DavisKahan1970.Theorem6_2_real",
-          "role": "implementation_structure",
-          "note": "Superseded as canonical evidence 2026-08-31: it is a method on a `Paper*` record, so a caller had to build the record before invoking the theorem. The canonical declaration is now the component-hypothesis theorem, which builds the record internally. This one is retained as the implementation and compatibility API."
-        },
         {
           "declaration": "TauCeti.DavisKahan1970.lowerFrameBound_iff_operator_inequality",
           "role": "transport_lemma",
