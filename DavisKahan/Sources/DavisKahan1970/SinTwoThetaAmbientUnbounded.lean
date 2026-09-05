@@ -7,6 +7,7 @@ import DavisKahan.Sources.DavisKahan1970.Proposition61
 import DavisKahan.Sources.DavisKahan1970.SinTwoTheta
 import DavisKahan.Sources.DavisKahan1970.AmbientReal
 import DavisKahan.SpectralTheory.ReflectionRestriction
+import DavisKahan.TanTheta.RitzPair
 import DavisKahan.Geometry.Angle.DoubleAngleFunctionalCalculus
 import DavisKahan.Geometry.Angle.OperatorAngleGeneric
 import DavisKahan.Sylvester.ScalarTransport
@@ -312,6 +313,108 @@ theorem sinTwoTheta_ambient_unbounded_reflectionPair_symmetricNorming_rclike
       (B := (U.map (V.reflection.toLinearEquiv : H →ₗ[𝕜] H)).starProjection - U.starProjection)
       (TauCeti.DavisKahan.Angle.sinTwoAngleOperator_hasSameApproximationNumbers U V)
   exact ⟨hiff.mpr hmemX, by rw [hgauge]; exact hleX⟩
+
+/-! ## The printed hypothesis: an arbitrary reducing subspace of the perturbed operator
+
+Printed Section 2 puts no spectral condition on the ambient subspaces: `P` reduces `A`
+and `Q` reduces `A + H`, and that is all.  The endpoint above takes the reduction of
+`A + H` in reflection form -- `V.reflectionOperator` preserves `dom A` and conjugates
+`A` into `A + reflectionPerturbation V Eop` -- because that is the shape its proof
+consumes.  The two are the same hypothesis: `ReflectionIntertwines.ofReducesSubspace`
+turns "`V` reduces `A + Eop`" into the reflection form, and
+`addBounded_reflectionPerturbation_intertwines_of_commutes` turns the commutation into
+the intertwining equation.
+
+The declaration below is therefore the printed statement with the printed hypothesis,
+and it is what the Section 2 ambient clause is registered on. -/
+
+section ReducingAmbient
+
+variable {𝕜 : Type u} [RCLike 𝕜]
+variable {H : Type v} [NormedAddCommGroup H] [InnerProductSpace 𝕜 H] [CompleteSpace H]
+
+/-- **Davis--Kahan 1970, the ambient conclusion of the `sin 2Θ` theorem, at an arbitrary
+reducing pair.**
+
+`δ N(sin 2Θ(U, V)) ≤ 2 N(H)` where `U` is an arbitrary subspace reducing the unbounded
+self-adjoint `A`, `V` is an arbitrary subspace reducing the perturbed operator `A + H`,
+`H` is a bounded self-adjoint perturbation, the Hilbert dimension is arbitrary, the
+separation is the whole `FormBoundedSylvesterGap` between the two blocks of `A`, and `N`
+is an arbitrary source unitarily invariant norm.  Membership of `sin 2Θ` in the norm's
+ideal is concluded, not assumed, and the constant is exactly `2`.
+
+Neither subspace is required to be a spectral subspace.  That is the printed scope: the
+Section 2 statement says only that the two subspaces reduce their operators, and the
+spectral selection appears in the source as the way a reader *produces* such a pair, not
+as a hypothesis of the theorem. -/
+theorem sinTwoTheta_ambient_unbounded_reducing_symmetricNorming_rclike
+    (N : SymmetricNormingFunction)
+    {A : H →ₗ.[𝕜] H} (hA : IsSelfAdjoint A)
+    (Eop : H →L[𝕜] H) (hEop : DavisKahan.IsSelfAdjointOperator Eop)
+    {U V : Submodule 𝕜 H} [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
+    (hUred : TauCeti.LinearPMap.ReducesSubspace A U)
+    (hVred : TauCeti.LinearPMap.ReducesSubspace
+      (TauCeti.LinearPMap.addBounded A Eop) V)
+    {δ : ℝ} (hδ : 0 < δ)
+    (hgap : FormBoundedSylvesterGap
+      (TauCeti.LinearPMap.reducingRestriction A U hUred)
+      (TauCeti.LinearPMap.reducingRestriction A Uᗮ hUred.orthogonal) δ)
+    (hEmem : N.Mem Eop) :
+    N.Mem (TauCeti.DavisKahan.Angle.sinTwoAngleOperator U V) ∧
+      δ * N.gauge (TauCeti.DavisKahan.Angle.sinTwoAngleOperator U V) ≤
+        2 * N.gauge Eop :=
+  let hV := DavisKahan.ReflectionIntertwines.ofReducesSubspace hVred
+  sinTwoTheta_ambient_unbounded_reflectionPair_symmetricNorming_rclike N hA Eop hEop hUred
+    hV.mapsDomain
+    (DavisKahan.addBounded_reflectionPerturbation_intertwines_of_commutes Eop V
+      hV.mapsDomain hV.commutes)
+    hδ hgap hEmem
+
+/-- The complex fixed-field form of
+`sinTwoTheta_ambient_unbounded_reducing_symmetricNorming_rclike`. -/
+theorem sinTwoTheta_ambient_unbounded_reducing_symmetricNorming_complex
+    {Hc : Type v} [NormedAddCommGroup Hc] [InnerProductSpace ℂ Hc] [CompleteSpace Hc]
+    (N : SymmetricNormingFunction)
+    {A : Hc →ₗ.[ℂ] Hc} (hA : IsSelfAdjoint A)
+    (Eop : Hc →L[ℂ] Hc) (hEop : DavisKahan.IsSelfAdjointOperator Eop)
+    {U V : Submodule ℂ Hc} [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
+    (hUred : TauCeti.LinearPMap.ReducesSubspace A U)
+    (hVred : TauCeti.LinearPMap.ReducesSubspace
+      (TauCeti.LinearPMap.addBounded A Eop) V)
+    {δ : ℝ} (hδ : 0 < δ)
+    (hgap : FormBoundedSylvesterGap
+      (TauCeti.LinearPMap.reducingRestriction A U hUred)
+      (TauCeti.LinearPMap.reducingRestriction A Uᗮ hUred.orthogonal) δ)
+    (hEmem : N.Mem Eop) :
+    N.Mem (TauCeti.DavisKahan.Angle.sinTwoAngleOperator U V) ∧
+      δ * N.gauge (TauCeti.DavisKahan.Angle.sinTwoAngleOperator U V) ≤
+        2 * N.gauge Eop :=
+  sinTwoTheta_ambient_unbounded_reducing_symmetricNorming_rclike N hA Eop hEop hUred hVred
+    hδ hgap hEmem
+
+/-- The real fixed-field form of
+`sinTwoTheta_ambient_unbounded_reducing_symmetricNorming_rclike`. -/
+theorem sinTwoTheta_ambient_unbounded_reducing_symmetricNorming_real
+    {Er : Type v} [NormedAddCommGroup Er] [InnerProductSpace ℝ Er] [CompleteSpace Er]
+    (N : SymmetricNormingFunction)
+    {A : Er →ₗ.[ℝ] Er} (hA : IsSelfAdjoint A)
+    (Eop : Er →L[ℝ] Er) (hEop : DavisKahan.IsSelfAdjointOperator Eop)
+    {U V : Submodule ℝ Er} [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
+    (hUred : TauCeti.LinearPMap.ReducesSubspace A U)
+    (hVred : TauCeti.LinearPMap.ReducesSubspace
+      (TauCeti.LinearPMap.addBounded A Eop) V)
+    {δ : ℝ} (hδ : 0 < δ)
+    (hgap : FormBoundedSylvesterGap
+      (TauCeti.LinearPMap.reducingRestriction A U hUred)
+      (TauCeti.LinearPMap.reducingRestriction A Uᗮ hUred.orthogonal) δ)
+    (hEmem : N.Mem Eop) :
+    N.Mem (TauCeti.DavisKahan.Angle.sinTwoAngleOperator U V) ∧
+      δ * N.gauge (TauCeti.DavisKahan.Angle.sinTwoAngleOperator U V) ≤
+        2 * N.gauge Eop :=
+  sinTwoTheta_ambient_unbounded_reducing_symmetricNorming_rclike N hA Eop hEop hUred hVred
+    hδ hgap hEmem
+
+end ReducingAmbient
 
 end Generic
 

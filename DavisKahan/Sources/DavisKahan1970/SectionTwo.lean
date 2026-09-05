@@ -449,19 +449,21 @@ alias tanTwoTheta_ambient_complex := tanTwoTheta_ambient_unbounded_symmetricNorm
 alias tanTwoTheta_ambient_real := tanTwoTheta_ambient_unbounded_symmetricNorming_real
 
 /-- **`sin 2Θ`, ambient clause, over `ℂ`**: `δ N(sin 2Θ) ≤ 2 N(H)` on the paper's
-*ambient* double-angle sine `sinTwoAngleOperatorC`, at this result's unbounded
-scope.
+*ambient* double-angle sine, at this result's unbounded scope and at the printed
+hypothesis -- `U` reduces `A`, `V` reduces `A + H`, and neither is required to be a
+spectral subspace.
 
-This alias was deliberately absent until 2026-08-31, because the only paper-norm
-ambient endpoint was `sinTwoTheta_ambient_bounded_symmetricNorming_complex`, whose
-ambient operator is bounded.  It now names the theorem at the printed scope; the
-bounded statement is retained as an alternative proof of its own specialization. -/
+Retargeted 2026-09-05, closing finding F5 of the 2026-09-04 hostile review.  Until
+then this alias named `sinTwoTheta_ambient_unbounded_addBounded_symmetricNorming_complex`,
+which forces both subspaces to be spectral subspaces selected by measurable sets.
+That is how a reader *produces* such a pair in the source, not what the printed
+theorem assumes.  The spectral endpoint is retained as a specialization. -/
 alias sinTwoTheta_ambient_complex :=
-  sinTwoTheta_ambient_unbounded_addBounded_symmetricNorming_complex
+  sinTwoTheta_ambient_unbounded_reducing_symmetricNorming_complex
 
-/-- **`sin 2Θ`, ambient clause, over `ℝ`**. -/
+/-- **`sin 2Θ`, ambient clause, over `ℝ`**, likewise at an arbitrary reducing pair. -/
 alias sinTwoTheta_ambient_real :=
-  sinTwoTheta_ambient_unbounded_addBounded_symmetricNorming_real
+  sinTwoTheta_ambient_unbounded_reducing_symmetricNorming_real
 
 /-! ## `tan 2Θ` -/
 
@@ -549,18 +551,25 @@ theorem sinTwoTheta_bothConclusions_complex
             δ * N.gauge (Angle.directedSinTwoAngleOperator V
                 (selfAdjointSpectralSubspace A hA B hB)) ≤ 2 * N.gauge R) ∧
       (∀ (Eop : Hc →L[ℂ] Hc) (hEop : IsSelfAdjointOperator Eop)
-        (S : Set ℝ) (hS : MeasurableSet S), N.Mem Eop →
-          N.Mem (sinTwoAngleOperatorC (selfAdjointSpectralSubspace A hA B hB)
-              (selfAdjointSpectralSubspace (TauCeti.LinearPMap.addBounded A Eop)
-                (addBounded_isSelfAdjoint A hA Eop hEop) S hS)) ∧
+        (W : Submodule ℂ Hc) [W.HasOrthogonalProjection]
+        (_hW : TauCeti.LinearPMap.ReducesSubspace
+          (TauCeti.LinearPMap.addBounded A Eop) W), N.Mem Eop →
+          N.Mem (sinTwoAngleOperatorC (selfAdjointSpectralSubspace A hA B hB) W) ∧
             δ * N.gauge (sinTwoAngleOperatorC
-                (selfAdjointSpectralSubspace A hA B hB)
-                (selfAdjointSpectralSubspace (TauCeti.LinearPMap.addBounded A Eop)
-                  (addBounded_isSelfAdjoint A hA Eop hEop) S hS)) ≤ 2 * N.gauge Eop) :=
+                (selfAdjointSpectralSubspace A hA B hB) W) ≤ 2 * N.gauge Eop) :=
   ⟨fun hVdom hres hR =>
       sinTwoTheta_directed_complex N hA B hB hVdom hres hδ hgap hR,
-    fun Eop hEop S hS hEmem =>
-      sinTwoTheta_ambient_complex N A hA Eop hEop B S hB hS hδ hgap hEmem⟩
+    fun Eop hEop W _ hW hEmem =>
+      sinTwoTheta_ambient_complex N hA Eop hEop
+        (selfAdjointSpectralSubspace_reducing A hA B hB) hW hδ
+        (by
+          rw [selfAdjointSpectralRestriction_eq_reducingRestriction A hA B hB,
+            selfAdjointSpectralRestriction_eq_reducingRestriction A hA Bᶜ hB.compl] at hgap
+          exact FormBoundedSylvesterGap.reducingRestriction_congr_right
+            (selfAdjointSpectralSubspace_compl_eq_orthogonal A hA B hB)
+            (selfAdjointSpectralSubspace_reducing A hA Bᶜ hB.compl)
+            (selfAdjointSpectralSubspace_reducing A hA B hB).orthogonal hgap)
+        hEmem⟩
 
 /-- **Davis--Kahan 1970, the `sin 2Θ` theorem over `ℝ`, both printed
 conclusions.**  The real sibling of `sinTwoTheta_bothConclusions_complex`, at the same
@@ -585,21 +594,26 @@ theorem sinTwoTheta_bothConclusions_real
                 (RealSpectralRestriction.realSelfAdjointSpectralSubspace A hA B hB)) ≤
               2 * N.gauge R) ∧
       (∀ (Eop : Er →L[ℝ] Er) (hEop : IsSelfAdjointOperator Eop)
-        (S : Set ℝ) (hS : MeasurableSet S), N.Mem Eop →
+        (W : Submodule ℝ Er) [W.HasOrthogonalProjection]
+        (_hW : TauCeti.LinearPMap.ReducesSubspace
+          (TauCeti.LinearPMap.addBounded A Eop) W), N.Mem Eop →
           N.Mem (sinTwoAngleOperatorR
-              (RealSpectralRestriction.realSelfAdjointSpectralSubspace A hA B hB)
-              (RealSpectralRestriction.realSelfAdjointSpectralSubspace
-                (TauCeti.LinearPMap.addBounded A Eop)
-                (addBounded_isSelfAdjoint A hA Eop hEop) S hS)) ∧
+              (RealSpectralRestriction.realSelfAdjointSpectralSubspace A hA B hB) W) ∧
             δ * N.gauge (sinTwoAngleOperatorR
-                (RealSpectralRestriction.realSelfAdjointSpectralSubspace A hA B hB)
-                (RealSpectralRestriction.realSelfAdjointSpectralSubspace
-                  (TauCeti.LinearPMap.addBounded A Eop)
-                  (addBounded_isSelfAdjoint A hA Eop hEop) S hS)) ≤ 2 * N.gauge Eop) :=
+                (RealSpectralRestriction.realSelfAdjointSpectralSubspace A hA B hB) W) ≤
+              2 * N.gauge Eop) :=
   ⟨fun hVdom hres hR =>
       sinTwoTheta_directed_real N hA B hB hVdom hres hδ hgap hR,
-    fun Eop hEop S hS hEmem =>
-      sinTwoTheta_ambient_real N A hA Eop hEop B S hB hS hδ hgap hEmem⟩
+    fun Eop hEop W _ hW hEmem => by
+      rw [← Angle.sinTwoAngleOperator_real]
+      exact sinTwoTheta_ambient_real N hA Eop hEop
+        (RealSpectralRestriction.realSelfAdjointSpectralSubspace_reducing A hA B hB) hW hδ
+        (FormBoundedSylvesterGap.reducingRestriction_congr_right
+          (RealSpectralRestriction.realSelfAdjointSpectralSubspace_compl A hA B hB)
+          (RealSpectralRestriction.realSelfAdjointSpectralSubspace_reducing A hA Bᶜ hB.compl)
+          (RealSpectralRestriction.realSelfAdjointSpectralSubspace_reducing A hA B hB).orthogonal
+          hgap)
+        hEmem⟩
 
 end SinTwoThetaSource
 
