@@ -126,9 +126,9 @@ is `‖sin Θ‖_F ≤ √n · ε / gap`, worse by a factor of the *ambient* dim
 because it starts from an operator-norm hypothesis and pays `‖S − T‖²_F ≤ n ε²`
 for it.  It is what the paper's prose invokes, so it stays as the source-facing
 reading; it is **not** what Theorem 2 uses -- nothing consumes it, and the live
-route is the Yu--Wang--Samworth population-gap residual bound applied in
-`Acharyya2025.ConfigPerturbation`, which needs no perturbative smallness side
-condition at all.  The sharp form is already available in this repository as
+route is
+`Acharyya2025.ConfigPerturbation.sum_cross_inner_sq_le_of_rank_floor_populationGap`,
+which needs no perturbative smallness side condition at all.  The sharp form is already available in this repository as
 `TauCeti.sum_cross_norm_inner_eigenvectorBasis_sq_le_hilbertSchmidt`
 (`DavisKahan/Alternative/FiniteDimensional/EigenbasisFrobenius.lean`), of which
 this is a corollary, and the arbitrary-unitarily-invariant-norm form as

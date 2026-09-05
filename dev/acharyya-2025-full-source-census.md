@@ -4,7 +4,7 @@
 
 **Census family:** `source-semantic-alignment`  
 **Items:** 19  
-**Unique cited Lean declarations:** 40
+**Unique cited Lean declarations:** 41
 
 Numbered main-text results and the numbered appendix perturbation propositions/lemmas. Empirical claims are excluded. Exact appendix wrappers are distinguished from a replacement proof so theorem coverage is not inflated.
 
@@ -260,10 +260,13 @@ The status moves from `compiled_by_composition` to `compiled_source_repair` beca
 - `Acharyya2025.ConfigPerturbation.exists_isometry_configFrobError_spectralConfig_le`
 - `Acharyya2025.AlignedPipeline.highProb_aligned_configFrobError_of_entrywise_close`
 - `Acharyya2025.RateChain.endToEndFrobQuadraticRate`
+- `Acharyya2025.ConfigPerturbation.sum_cross_inner_sq_le_of_rank_floor_populationGap`
 
 **Semantic alignment:** `source_repair` — The current theorem proves the Frobenius configuration bound supported by the paper discussion/appendix and obtains rowwise control as a consequence. It does not label the internally inconsistent v1 2,infinity display as literally proved.
 
 **Notes.** The active proof now uses the YWS population-only gap residual bound and YWS Procrustes alignment. It needs neither epsilon<=alpha/2 nor the former polar-factor smallness condition. Term 2 uses sqrt(alpha), improving the previous sqrt(alpha/2) envelope.
+
+PUBLIC ROUTE NAMED 2026-09-05. The eigenvector-perturbation step of this row went through a private helper, while the public `Acharyya2025.RankGap` module carried the same bound with an extra `hsmall : eps <= alpha/2` and a docstring claiming to be the route this row uses. It was not, and nothing consumed it. `sum_cross_inner_sq_le_of_rank_floor_populationGap` is now the public statement of what this row actually uses: the Yu--Wang--Samworth population-gap residual bound gives `4 d eps^2 / alpha^2` with no perturbative smallness condition and no condition on the sample spectrum, which is exactly the side condition their theorem exists to remove.
 
 **Next action.** None.
 

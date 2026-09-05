@@ -296,6 +296,35 @@ private theorem crossPop_yws_le (hd : d ≤ n) (hT : T.IsSymmetric) (hS : S.IsSy
   rw [crossPop_eq_crossSamp hd hT hS]
   exact crossSamp_yws_le hd hT hS hα_pos hα htail hε
 
+/-- **Rank-floor Davis--Kahan for the Acharyya configuration, with no smallness
+side condition.**
+
+Under Assumption 1 (population rank `d`, so the eigenvalues vanish from index `d`)
+and Assumption 2 (spectral floor `α` on the leading `d`), with the sample
+`ε`-operator-close, the squared overlap between leading population eigenvectors and
+trailing sample eigenvectors is at most `4 d ε² / α²`.
+
+This is the form the capstone below actually uses, and it is public because
+`Acharyya2025.RankGap` states the same bound with an extra hypothesis
+`hsmall : ε ≤ α / 2`.  Removing that side condition is the whole point of the
+Yu--Wang--Samworth population-gap residual estimate this goes through: the
+population separation alone controls the cross energy, with no perturbative
+smallness and no condition on the sample spectrum. -/
+theorem sum_cross_inner_sq_le_of_rank_floor_populationGap
+    (hd : d ≤ n) (hT : T.IsSymmetric) (hS : S.IsSymmetric)
+    {α ε : ℝ} (hα_pos : 0 < α)
+    (hα : ∀ i : Fin n, (i : ℕ) < d →
+      α ≤ hT.eigenvalues finrank_euclideanSpace_fin i)
+    (htail : ∀ j : Fin n, d ≤ (j : ℕ) →
+      hT.eigenvalues finrank_euclideanSpace_fin j = 0)
+    (hε : ∀ x, ‖(S - T) x‖ ≤ ε * ‖x‖) :
+    ∑ i ∈ Finset.univ.filter (fun i : Fin n => (i : ℕ) < d),
+      ∑ j ∈ Finset.univ.filter (fun j : Fin n => d ≤ (j : ℕ)),
+        (⟪hT.eigenvectorBasis finrank_euclideanSpace_fin i,
+          hS.eigenvectorBasis finrank_euclideanSpace_fin j⟫_ℝ)^2
+      ≤ 4 * (d : ℝ) * ε^2 / α^2 :=
+  crossPop_yws_le hd hT hS hα_pos hα htail hε
+
 /-- Internal helper / algebraic step. A single trailing-energy column of the
 `(overlap hS hT)ᵀ * (overlap hS hT)` deviation is bounded by the YWS
 leading-sample / trailing-population cross energy:
