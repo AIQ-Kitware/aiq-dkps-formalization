@@ -42,9 +42,12 @@ refresh the standalone repository mechanically.
 
 ## Helm 2025
 
-- **`H25-EQ2`** — expose one Helm-facing statement of the displayed
-  sample-dissimilarity-to-population limit. It exists by composition, and it is also
-  the input the eigengap-free bridge wants.
+- **`H25-EQ2`** — **done 2026-09-05.**
+  `AcharyyaBridge.highProb_entrywiseClose_responseDist_of_tendsto` states the displayed limit
+  in the in-probability sense this development uses: uniform response-mean convergence in
+  probability gives, for every tolerance, entrywise closeness of the sample and population
+  dissimilarity matrices at every late enough stage. The finite step was already compiled at
+  rate `2η/m`; what this adds is that the rate vanishes.
 - **`H25-BRIDGE`** — fiber `Acharyya2024.rawStress_mds_stability_set` over the latent
   sample to discharge the bridge's distance-convergence hypothesis. If it works, the
   Helm bridge weakens accordingly.
