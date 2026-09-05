@@ -5635,5 +5635,60 @@
         "blast_radius_note": "Listed explicitly because the decision is load-bearing well beyond the row where it was raised: (3.5) enters S2-tan-theta as a nonlocal condition, DK-3.4-prop as a discharge, DK-8.2-thm as an inherited hypothesis, the Section 4 rows as the classification half of their setup, and DK-4.4-prop as the scope its counterexample must satisfy. Reopening this convention reopens all of them."
       }
     ]
+  },
+  "ambient_scope_policy": {
+    "purpose": "Records, once and checkably, how the paper's SOURCE-WIDE ambient conventions are treated by canonical evidence.  A convention Davis and Kahan fix at the head of Section 1 and never restate is not a per-result hypothesis, so a Lean witness may or may not assume it; what is not acceptable is for different rows to be judged by different rules with nothing saying so. The 2026-09-05 hostile follow-up review raised exactly that: `theorem3_1_*` carries `[SeparableSpace H]` and `proposition3_2_exists_iff_crossedDefectsEquivalent` does not, and no field said which was intended.",
+    "separability": {
+      "source_text": "\"Let H be a separable Hilbert space, real or complex; finite dimensionality is not assumed.\" (Section 1 setup), and \"The paper states the four main results for infinite as well as finite dimensional separable Hilbert spaces\" (Section 2 scope paragraph).",
+      "source_atom": "S1-block-residual.setup-hilbert-scope",
+      "rule": "Separability is a SOURCE-WIDE ambient convention (`scope_classification.category: source_wide_setup`), not a hypothesis of any counted result.  A canonical witness that does NOT assume `[TopologicalSpace.SeparableSpace H]` proves the printed result at every separable Hilbert space and at every non-separable one as well; that is a strict generalization on an ambient convention and is accepted as canonical evidence.  A canonical witness that DOES assume it is at the printed scope exactly.  Neither is a defect; what would be a defect is a witness assuming MORE than the ambient convention, and the one case that matters -- finite-dimensionality -- is refused separately by `S2-unbounded-scope.infinite-dimensional-scope.type_requirements.must_not_contain`.",
+      "why_not_thin_separable_wrappers": "The alternative is a thin wrapper per source-facing endpoint whose only content is an unused `[SeparableSpace]` binder.  That buys a name that looks like the paper and a theorem strictly weaker than the one proved, and it would have to be maintained on roughly forty endpoints.  The repository's rule about retaining printed hypotheses exists so that a hypothesis the paper's MATHEMATICS uses is not silently dropped.  Separability is not such a hypothesis for these estimates: every one of them is a Sylvester/gap argument that never invokes a countable dense set.  Where separability IS load-bearing -- the Hahn--Hellinger multiplicity invariants of Theorem 3.1, and the identification of the constructive crossed-defect condition with the source's Hilbert-dimension language -- the witnesses carry it, and this table records that.",
+      "checked": "`scripts/check_davis_kahan_1970_result_inventory.py` derives, from the compiler-printed type of every canonical witness, whether the row is `generalized` (no witness assumes separability), `separable` (every witness does) or `mixed`, and fails if the value below disagrees.  A row cannot change its separability posture without this table changing.",
+      "results": {
+        "S2-sin-theta": "generalized",
+        "S2-tan-theta": "generalized",
+        "S2-sin-two-theta": "generalized",
+        "S2-tan-two-theta": "generalized",
+        "DK-3.1-prop": "generalized",
+        "DK-3.2-prop": "generalized",
+        "DK-3.3-prop": "generalized",
+        "DK-3.4-prop": "generalized",
+        "DK-3.1-thm": "mixed",
+        "DK-3.1-cor": "generalized",
+        "DK-3.5-prop": "generalized",
+        "DK-3.2-cor": "generalized",
+        "DK-4.1-prop": "generalized",
+        "DK-4.1-cor": "generalized",
+        "DK-4.2-prop": "generalized",
+        "DK-4.3-prop": "generalized",
+        "DK-4.4-prop": "generalized",
+        "DK-5.1-thm": "generalized",
+        "DK-5.2-thm": "generalized",
+        "DK-5.1-lem": "generalized",
+        "DK-6.1-lem": "generalized",
+        "DK-6.2-lem": "generalized",
+        "DK-6.1-prop": "generalized",
+        "DK-6.1-thm": "generalized",
+        "DK-6.2-thm": "generalized",
+        "DK-6.3-thm": "generalized",
+        "DK-6.3-lem": "generalized",
+        "DK-8.1-thm": "generalized",
+        "DK-8.2-thm": "generalized"
+      },
+      "load_bearing_witnesses": [
+        {
+          "declaration": "TauCeti.DavisKahan1970.theorem3_1_spectralMultiplicity_classification_complex",
+          "why": "The forward classification is stated in terms of spectral-multiplicity data of the generic cosine blocks.  That invariant is Hahn--Hellinger, and the multiplicity theory the repository builds on is stated for separable spaces; without separability the invariant is not the source's."
+        },
+        {
+          "declaration": "TauCeti.DavisKahan1970.theorem3_1_spectralMultiplicity_classification_real",
+          "why": "The real sibling, for the same reason."
+        },
+        {
+          "declaration": "TauCeti.DavisKahan1970.crossedDefectsEquivalent_iff_sameDimension",
+          "why": "This is the bridge from the repository's constructive crossed-defect predicate to the source's own Hilbert-dimension language for condition (3.5).  Equality of Hilbert dimensions is what the source writes, and the equivalence is proved at the source's separable scope.  It is registered as correspondence evidence, not as a canonical witness, precisely because the theorems it bridges are proved without separability."
+        }
+      ]
+    }
   }
 }

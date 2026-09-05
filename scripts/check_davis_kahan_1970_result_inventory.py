@@ -61,6 +61,9 @@ BLOCKED_SEMANTIC_CERTIFICATIONS = {
 SEMANTIC_CERTIFICATIONS = TERMINAL_SEMANTIC_CERTIFICATIONS | BLOCKED_SEMANTIC_CERTIFICATIONS
 TERMINAL_REPAIR_STATUSES = {"proved", "documented_no_satisfactory_repair"}
 CANONICAL_EVIDENCE_ROLES = {"primary_source_witness", "exact_refutation"}
+#: How a `[TopologicalSpace.SeparableSpace _]` binder prints; see
+#: `_validate_ambient_scope_policy` and `ambient_scope_policy` in the inventory.
+SEPARABLE_SPACE_TOKEN = "SeparableSpace"
 CANONICAL_EVIDENCE_KINDS = {"proof", "refutation"}
 CANONICAL_SCALAR_SCOPES = {
     "complex", "real", "rclike", "scalar_generic", "mixed", "not_visible_in_type",
@@ -2163,6 +2166,97 @@ def _census_interpretation_disagreements(items: list[dict[str, Any]]) -> list[st
     return out
 
 
+def _validate_ambient_scope_policy(
+    data: dict[str, Any],
+    items: list[dict[str, Any]],
+    probed_types: dict[str, str] | None,
+) -> None:
+    """Check the recorded separability posture of every row against the compiler.
+
+    Separability is a source-wide ambient convention, not a per-result hypothesis,
+    so a canonical witness may or may not assume it and both readings are honest.
+    What is not honest is judging different rows by different rules with nothing
+    saying which.  The 2026-09-05 hostile follow-up review found exactly that:
+    `theorem3_1_*` carries `[SeparableSpace H]`, the Section 2 endpoints do not, and
+    no field recorded the intent.
+
+    `ambient_scope_policy.separability.results` records, per result, one of
+    `generalized` (no canonical witness assumes it), `separable` (every one does) or
+    `mixed`.  The value is *derived here from the compiler-printed types* and
+    compared, so the table cannot drift away from the theorems.
+    """
+    policy = data.get("ambient_scope_policy")
+    if not isinstance(policy, dict):
+        fail("the inventory must record an ambient_scope_policy block")
+    sep = policy.get("separability")
+    if not isinstance(sep, dict):
+        fail("ambient_scope_policy must record a separability block")
+    for key in ("source_text", "rule", "why_not_thin_separable_wrappers", "checked"):
+        value = sep.get(key)
+        if not isinstance(value, str) or len(value.strip()) < 40:
+            fail(f"ambient_scope_policy.separability.{key} must be a substantive statement")
+    atom_id = sep.get("source_atom")
+    if not isinstance(atom_id, str) or not atom_id.strip():
+        fail("ambient_scope_policy.separability.source_atom must name the source atom it reads")
+    recorded = sep.get("results")
+    if not isinstance(recorded, dict):
+        fail("ambient_scope_policy.separability.results must map every result id to its posture")
+    expected_ids = {item["id"] for item in items}
+    extra = sorted(set(recorded) - expected_ids)
+    if extra:
+        fail(f"ambient_scope_policy.separability.results names unknown results {extra!r}")
+    missing = sorted(expected_ids - set(recorded))
+    if missing:
+        fail(
+            "ambient_scope_policy.separability.results must record every counted result; "
+            f"missing {missing!r}"
+        )
+    if probed_types is None:
+        return
+    load_bearing = {
+        entry.get("declaration")
+        for entry in sep.get("load_bearing_witnesses", []) or []
+        if isinstance(entry, dict)
+    }
+    for item in items:
+        result_id = item["id"]
+        assumed = []
+        for entry in item.get("canonical_evidence", []) or []:
+            declaration = entry.get("declaration")
+            printed = probed_types.get(declaration)
+            if printed is None:
+                continue
+            assumed.append(SEPARABLE_SPACE_TOKEN in printed)
+        if not assumed:
+            continue
+        if all(assumed):
+            derived = "separable"
+        elif any(assumed):
+            derived = "mixed"
+        else:
+            derived = "generalized"
+        if recorded[result_id] != derived:
+            fail(
+                f"{result_id}: ambient_scope_policy.separability.results says "
+                f"{recorded[result_id]!r}, but the compiler-printed types of its canonical "
+                f"evidence say {derived!r}.  Separability posture is derived, not asserted"
+            )
+        if derived in {"separable", "mixed"}:
+            named = [
+                entry.get("declaration")
+                for entry in item.get("canonical_evidence", []) or []
+                if SEPARABLE_SPACE_TOKEN in (probed_types.get(entry.get("declaration")) or "")
+            ]
+            unexplained = sorted(set(named) - load_bearing)
+            if unexplained:
+                fail(
+                    f"{result_id}: canonical evidence {unexplained!r} assumes separability, which "
+                    "the source fixes only as an ambient convention.  Either drop the hypothesis "
+                    "or record in ambient_scope_policy.separability.load_bearing_witnesses why "
+                    "the source's own statement needs it"
+                )
+
+
 def _validate_canonical_evidence(
     items: list[dict[str, Any]],
     census_declarations: set[str],
@@ -2730,6 +2824,7 @@ def completion_summary(
         items, census_declarations, audit_text, semantic_audit["compiler_audit_surface"],
         probed_types,
     )
+    _validate_ambient_scope_policy(data, items, probed_types)
     clause_opens = _validate_source_clauses(
         items, source_atoms, census_declarations, audit_text,
         semantic_audit["compiler_audit_surface"], probed_types,

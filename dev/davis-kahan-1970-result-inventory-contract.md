@@ -475,6 +475,46 @@ compiler-printed type**.  A justification can still be wrong about what those
 hypotheses mean; it can no longer claim a scope realized by hypotheses the
 theorem does not have.
 
+### Source-wide ambient conventions, and separability in particular
+
+A convention Davis and Kahan fix once at the head of Section 1 and never restate is
+not a hypothesis of any individual result. `ambient_scope_policy` in the inventory
+says how such conventions are treated, and the checker derives the answer from the
+compiler rather than reading an assertion.
+
+The live case is **separability**. The source setup is "Let `H` be a separable
+Hilbert space, real or complex; finite dimensionality is not assumed", and the
+Section 2 scope paragraph repeats "for infinite as well as finite dimensional
+separable Hilbert spaces". A canonical witness that does *not* assume
+`[TopologicalSpace.SeparableSpace H]` proves the printed result at every separable
+space and at every non-separable one too; that is a strict generalization on an
+ambient convention, and it is accepted. A witness that *does* assume it is at the
+printed scope exactly. Neither is a defect. What would be a defect is a witness
+assuming *more* than the ambient convention — and the case that matters,
+finite-dimensionality, is refused separately by
+`S2-unbounded-scope.infinite-dimensional-scope.type_requirements.must_not_contain`.
+
+The rule is not "add a thin `[SeparableSpace]` wrapper so the name matches the
+paper". Such a wrapper states a theorem strictly weaker than the one proved, buys
+nothing a reader can use, and would have to be maintained on roughly forty
+endpoints. The repository's rule about retaining printed hypotheses exists so that a
+hypothesis the paper's *mathematics* uses is not silently dropped; separability is
+not such a hypothesis for these Sylvester and gap estimates, none of which invokes a
+countable dense set.
+
+Where separability *is* load-bearing it must be carried and named. Those places are
+listed in `ambient_scope_policy.separability.load_bearing_witnesses` with the reason:
+the Hahn–Hellinger multiplicity invariants of Theorem 3.1, and the identification of
+the repository's constructive crossed-defect predicate with the source's
+Hilbert-dimension language for condition (3.5).
+
+`_validate_ambient_scope_policy` classifies each row `generalized`, `separable` or
+`mixed` from the printed types of its canonical evidence and fails when the recorded
+value disagrees, so the posture cannot drift. It also fails when a canonical witness
+assumes separability without an entry saying why. The 2026-09-05 hostile follow-up
+review raised this precisely because two rows were being judged by different rules
+with nothing recording which.
+
 ### Staleness
 
 `semantic_review_sweep.canonical_evidence_sha256` digests every result's canonical
