@@ -4,7 +4,7 @@
 
 **Census family:** `source-census`  
 **Items:** 24  
-**Unique cited Lean declarations:** 201
+**Unique cited Lean declarations:** 203
 
 **Audit revision:**  Revised 2026-09-05 after an independent current-state review: the equation (1) witness was corrected (it cited a Theorem 2 index-block specialization), the Theorem 3 review surface was repointed at the source-shaped SourceTheorem3 capstones, the two frame-producing aligned forms were replaced by the frame-fixing ones, the literal-index-wrapper obstruction was restated correctly, and three stale declaration locations were fixed.
 
@@ -18,9 +18,9 @@ The `importance` field is an external-review priority. `headline` selects the pa
 
 | value | items |
 | --- | ---: |
-| `compiled_generalized` | 11 |
+| `compiled_generalized` | 10 |
+| `compiled_corrected` | 7 |
 | `compiled_exact` | 6 |
-| `compiled_corrected` | 6 |
 | `not_proof_debt` | 1 |
 
 ## Verification summary
@@ -58,7 +58,7 @@ The `importance` field is an external-review priority. `headline` selects the pa
 
 ### `literal-index-wrappers`
 
-{'kind': 'mechanical', 'title': 'Equation (1) has no wrapper with a literal index j and a mixed gap', 'detail': "NARROWED 2026-08-13. This gap used to cover every source statement: the theorems took an index embedding `e : Fin d -> Fin n` and an intrinsic separation, and none took the paper's literal contiguous range `r <= j <= s` with the gap read off as `min(lambda_{r-1} - lambda_r, lambda_s - lambda_{s+1})`. That is now delivered for the POPULATION-gap results by `YuWangSamworth2015.consecutiveEmb` and `YuWangSamworth2015.OrderedBlockBoundaryGap` -- Theorem 2's two conclusions and both residual forms (`yuWangSamworth_sinTheta_block_le` and siblings), Corollary 1 (`yuWangSamworth_corollary1_sinTheta_le`, `..._real_le`), and Theorem 3 on both sides in singular-value notation (`yuWangSamworth_rightSingularSubspace_block_le` and siblings).\n\nWhat remains is equation (1), the `r = s = j` specialization of THEOREM 1, whose denominator is the MIXED separation `min(|lambda-hat_{j-1} - lambda_j|, |lambda-hat_{j+1} - lambda_j|)`. The boundary-gap machinery above does not apply to it: it converts a boundary condition on one sorted spectrum into an intrinsic separation of that same spectrum, whereas equation (1) compares the population eigenvalue against the SAMPLE spectrum. **Corrected 2026-09-05.** This gap used to say a literal wrapper needs a simplicity hypothesis on `lambda-hat_j`, because a repeated `lambda-hat_j` puts itself into `V-perp` and zeroes the mixed exterior gap. That reason is wrong. If `lambda-hat_j` is repeated it equals `lambda-hat_{j-1}` or `lambda-hat_{j+1}`, so `|lambda-hat_j - lambda_j|` is already one of the two terms in the printed minimum; the exterior gap is that minimum, and it is zero only when `lambda-hat_j = lambda_j`. Simplicity is not the obstruction. The real side condition is the INTERVAL-POSITION one, `lambda-hat_{j+1} <= lambda_j <= lambda-hat_{j-1}`. Under it, antitonicity makes the printed two-neighbour minimum exactly the exterior separation over all `k != j`, and the wrapper is a direct instantiation of `yuWangSamworth_theorem1_opNorm_le`. Without it the printed minimum can EXCEED the true exterior separation, so the derivation needs a case split -- though the printed display is not thereby false: if `lambda_j > lambda-hat_{j-1}` then `|lambda-hat_{j-1} - lambda_j| <= lambda_j - lambda-hat_j <= ||E||_op` by Weyl, and the printed bound is at least 1, hence holds trivially. A wrapper stating the position condition explicitly would be `compiled_corrected`, not `compiled_exact`: the condition is an added hypothesis the printed display omits. Since Theorem 1 is already proved here in a strictly more general unitarily invariant interval form, this is source recognizability for a baseline result the paper itself is arguing against, not a mathematical gap."}
+{'kind': 'mechanical', 'title': 'Equation (1) has no wrapper with a literal index j and a mixed gap', 'detail': "NARROWED 2026-08-13. This gap used to cover every source statement: the theorems took an index embedding `e : Fin d -> Fin n` and an intrinsic separation, and none took the paper's literal contiguous range `r <= j <= s` with the gap read off as `min(lambda_{r-1} - lambda_r, lambda_s - lambda_{s+1})`. That is now delivered for the POPULATION-gap results by `YuWangSamworth2015.consecutiveEmb` and `YuWangSamworth2015.OrderedBlockBoundaryGap` -- Theorem 2's two conclusions and both residual forms (`yuWangSamworth_sinTheta_block_le` and siblings), Corollary 1 (`yuWangSamworth_corollary1_sinTheta_le`, `..._real_le`), and Theorem 3 on both sides in singular-value notation (`yuWangSamworth_rightSingularSubspace_block_le` and siblings).\n\nWhat remains is equation (1), the `r = s = j` specialization of THEOREM 1, whose denominator is the MIXED separation `min(|lambda-hat_{j-1} - lambda_j|, |lambda-hat_{j+1} - lambda_j|)`. The boundary-gap machinery above does not apply to it: it converts a boundary condition on one sorted spectrum into an intrinsic separation of that same spectrum, whereas equation (1) compares the population eigenvalue against the SAMPLE spectrum. **Corrected 2026-09-05.** This gap used to say a literal wrapper needs a simplicity hypothesis on `lambda-hat_j`, because a repeated `lambda-hat_j` puts itself into `V-perp` and zeroes the mixed exterior gap. That reason is wrong. If `lambda-hat_j` is repeated it equals `lambda-hat_{j-1}` or `lambda-hat_{j+1}`, so `|lambda-hat_j - lambda_j|` is already one of the two terms in the printed minimum; the exterior gap is that minimum, and it is zero only when `lambda-hat_j = lambda_j`. Simplicity is not the obstruction. The real side condition is the INTERVAL-POSITION one, `lambda-hat_{j+1} <= lambda_j <= lambda-hat_{j-1}`. Under it, antitonicity makes the printed two-neighbour minimum exactly the exterior separation over all `k != j`, and the wrapper is a direct instantiation of `yuWangSamworth_theorem1_opNorm_le`. Without it the printed minimum can EXCEED the true exterior separation, so the derivation needs a case split -- though the printed display is not thereby false: if `lambda_j > lambda-hat_{j-1}` then `|lambda-hat_{j-1} - lambda_j| <= lambda_j - lambda-hat_j <= ||E||_op` by Weyl, and the printed bound is at least 1, hence holds trivially. A wrapper stating the position condition explicitly would be `compiled_corrected`, not `compiled_exact`: the condition is an added hypothesis the printed display omits. Since Theorem 1 is already proved here in a strictly more general unitarily invariant interval form, this is source recognizability for a baseline result the paper itself is arguing against, not a mathematical gap.\n\nDELIVERED 2026-09-05. `yuWangSamworth_equation1_opNorm_le` and `equation1_gap_of_interval_position` are the literal wrapper this gap described, classified `compiled_corrected` for the two omitted hypotheses named on row `YWS-T1-eq1`. The gap remains recorded because the classification is the interesting part."}
 
 ### `theorem1-sample-endpoint-conventions`
 
@@ -76,7 +76,7 @@ The `importance` field is an external-review priority. `headline` selects the pa
 | YWS-S1-complement-identity | technical | Section 1, orthogonal complement identity | compiled_generalized | proved_in_build |  |
 | YWS-S1-procrustes | supporting | Section 1, Procrustes alignment | compiled_generalized | proved_in_build |  |
 | YWS-T1-baseline | major | Theorem 1 | compiled_generalized | proved_in_build |  |
-| YWS-T1-eq1 | supporting | Section 1, equation (1) | compiled_generalized | proved_in_build |  |
+| YWS-T1-eq1 | supporting | Section 1, equation (1) | compiled_corrected | proved_in_build |  |
 | YWS-S1-toy-example | supporting | Section 1, numerical illustration that delta can vanish | compiled_exact | proved_in_build |  |
 | YWS-T2-sinTheta | headline | Theorem 2 | compiled_exact | proved_in_build |  |
 | YWS-T2-alignedBasis | headline | Theorem 2, aligned-basis conclusion | compiled_exact | proved_in_build |  |
@@ -180,19 +180,27 @@ Source note added 2026-08-13. The published article prints the mixed separation 
 
 ### `YWS-T1-eq1` — Equation (1) -- the eigenvector specialization of the baseline
 
-**importance:** `supporting`  **section:** 1  **source:** Section 1, equation (1)  **kind:** equation  **status:** `compiled_generalized`  **verification:** `proved_in_build`
+**importance:** `supporting`  **section:** 1  **source:** Section 1, equation (1)  **kind:** equation  **status:** `compiled_corrected`  **verification:** `proved_in_build`
 
 **Summary.** For r = s = j the baseline specializes to a single-eigenvector sine bound with a mixed gap, and after choosing the sign so v-hat^T v >= 0, ‖v-hat - v‖ <= sqrt 2 sin theta.
 
 **Lean declarations:**
 
+- `YuWangSamworth2015.DavisKahanTheory.yuWangSamworth_equation1_opNorm_le`
+- `YuWangSamworth2015.DavisKahanTheory.equation1_gap_of_interval_position`
 - `YuWangSamworth2015.DavisKahanTheory.yuWangSamworth_theorem1_opNorm_le`
 - `YuWangSamworth2015.DavisKahanTheory.yuWangSamworth_theorem1_uiNorm_le`
 - `YuWangSamworth2015.yuWangSamworth_eigenvector_real_le`
 
-**Notes.** Equation (1) is the `r = s = j` specialization of the baseline, followed by the remark that reversing the sign of `v-hat_j` gives `||v-hat_j - v_j|| <= sqrt 2 sin Theta`. **Witness corrected 2026-09-05.** The row previously cited only `yuWangSamworth_intervalBlock_le` as its compiled witness. That declaration is not equation (1) and is not a specialization of it: it carries a POPULATION-only `InternalGap`, the constant 2, a Frobenius conclusion, and an arbitrary block. It is an index-block specialization of Theorem 2. Citing it here let the row read `compiled_specialization` for a display it does not state. The row now cites `yuWangSamworth_theorem1_opNorm_le`, which is the honest ancestor: arbitrary invariant subspaces, an arbitrary population interval, the mixed `IntervalExteriorGap`, the constant 1, and the operator-norm conclusion. Equation (1) is its `U = span{v_j}`, `V = span{v-hat_j}`, `a = b = lambda_j` instance. That instance is NOT written as a declaration; the status is `compiled_generalized` for that reason and not `compiled_exact`. The sign-choice half is `yuWangSamworth_eigenvector_real_le`.
+**Notes.** Equation (1) is the `r = s = j` specialization of the baseline, followed by the remark that reversing the sign of `v-hat_j` gives `||v-hat_j - v_j|| <= sqrt 2 sin Theta`. The sign-choice half is `yuWangSamworth_eigenvector_real_le`.
 
-**Next action.** Optional: write the literal `r = s = j` instance of `yuWangSamworth_theorem1_opNorm_le` for source recognizability. It needs a hypothesis the printed display omits -- see gap `literal-index-wrappers` for what that hypothesis actually is.
+**WITNESS CORRECTED, THEN WRITTEN, 2026-09-05.** The row previously cited only `yuWangSamworth_intervalBlock_le`, which is not equation (1) and is not a specialization of it: population-only `InternalGap`, constant 2, Frobenius conclusion, arbitrary block. That is an index-block specialization of Theorem 2, and citing it let the row read `compiled_specialization` for a display it does not state.
+
+`yuWangSamworth_equation1_opNorm_le` is the display: a population unit eigenvector `v` at `lambda`, a sample eigenvector `bhat j` at `lamhat j`, the mixed exterior separation, the constant 1, and the operator-norm conclusion `||sin Theta|| <= ||Sighat - Sig||_op / delta`. `equation1_gap_of_interval_position` supplies `delta` from the printed two-neighbour minimum under the interval-position condition.
+
+**`compiled_corrected`, not `compiled_exact`, and both reasons are hypotheses the printed display omits.** (a) The sample side is given as an orthonormal EIGENBASIS, not a lone eigenvector: Theorem 1's separation constrains the spectrum of `Sighat` on `span{v-hat_j}` perp, and one eigenvector does not determine it. The paper indexes `lamhat_{j-1}`, `lamhat_j`, `lamhat_{j+1}` and so has the sorted sample spectrum in view. The population side needs no basis. (b) The interval-position condition `lamhat_{j+1} <= lambda_j <= lamhat_{j-1}` is stated explicitly; without it the printed minimum can exceed the true exterior separation. Simplicity of `lamhat_j` is NOT needed and never was -- a repeated `lamhat_j` equals a neighbour, so `|lamhat_j - lambda_j|` is already one of the printed terms. This census asserted the opposite until 2026-09-05; see gap `literal-index-wrappers`.
+
+**Next action.** None.
 
 **Gap refs:** `literal-index-wrappers`, `theorem1-sample-endpoint-conventions`
 
