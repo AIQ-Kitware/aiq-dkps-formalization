@@ -178,4 +178,99 @@ theorem sameSpectralMultiplicity_iff_operatorUnitaryEquiv_complex [CompleteSpace
 
 end ComplexClassification
 
+/-! ## Transporting the invariant along an invertible functional calculus
+
+A spectral invariant stated on `g(A)` says the same thing as the invariant stated
+on `A`, provided `g` is invertible on the spectrum.  This is what lets a
+classification proved with one spectral representative -- say `cos²Θ` -- be read
+off the representative the source names -- `Θ` itself.
+
+The argument is short because unitary equivalence is the real content:
+conjugation by a linear isometric equivalence is a star algebra equivalence, star
+algebra homomorphisms commute with the functional calculus, and multiplicity data
+classify self-adjoint operators up to unitary equivalence. -/
+
+section FunctionalCalculusTransport
+
+variable {H₁ : Type u} [NormedAddCommGroup H₁] [InnerProductSpace ℂ H₁] [CompleteSpace H₁]
+variable {H₂ : Type v} [NormedAddCommGroup H₂] [InnerProductSpace ℂ H₂] [CompleteSpace H₂]
+
+/-- Conjugation by a linear isometric equivalence is continuous on operators.
+
+It is `LinearIsometryEquiv.conjStarAlgEquiv`, and its continuity is the side
+condition `StarAlgHomClass.map_cfc` needs. -/
+theorem continuous_conjStarAlgEquiv (e : H₁ ≃ₗᵢ[ℂ] H₂) :
+    Continuous (e.conjStarAlgEquiv : (H₁ →L[ℂ] H₁) → (H₂ →L[ℂ] H₂)) := by
+  have hrw : (e.conjStarAlgEquiv : (H₁ →L[ℂ] H₁) → (H₂ →L[ℂ] H₂)) =
+      fun x => (e.toContinuousLinearEquiv : H₁ →L[ℂ] H₂) ∘L x ∘L
+        (e.symm.toContinuousLinearEquiv : H₂ →L[ℂ] H₁) := rfl
+  rw [hrw]
+  fun_prop
+
+/-- **Unitary equivalence survives the continuous functional calculus**, by the
+same unitary. -/
+theorem OperatorUnitaryEquiv.cfc_real {A : H₁ →L[ℂ] H₁} {B : H₂ →L[ℂ] H₂} (f : ℝ → ℝ)
+    (h : OperatorUnitaryEquiv A B)
+    (hf : ContinuousOn f (spectrum ℝ A) := by cfc_cont_tac)
+    (ha : IsSelfAdjoint A := by cfc_tac) :
+    OperatorUnitaryEquiv (_root_.cfc f A) (_root_.cfc f B) := by
+  obtain ⟨e, he⟩ := h.exists_intertwiner
+  have hB : B = e.conjStarAlgEquiv A := by
+    ext y
+    simp only [LinearIsometryEquiv.conjStarAlgEquiv_apply_apply]
+    rw [he (e.symm y)]
+    simp
+  refine operatorUnitaryEquiv_of_intertwines e fun x => ?_
+  have hmap := StarAlgHomClass.map_cfc e.conjStarAlgEquiv f A hf
+    (continuous_conjStarAlgEquiv e)
+  rw [hB, ← hmap]
+  simp
+
+/-- **The spectral multiplicity invariant transports along a functional calculus
+that is invertible on the spectrum.**
+
+`f` carries the invariant forwards and `g` carries it back, so the two statements
+of "same spectral multiplicity" -- on `A, B` and on `f A, f B` -- are equivalent.
+Both directions need the classification theorem, hence separability, which is the
+source's own ambient assumption.
+
+The hypotheses `hgf` say only that `g ∘ f` is the identity *on the spectrum*,
+which is all that a functional calculus sees. -/
+theorem sameSpectralMultiplicity_cfc_iff
+    [TopologicalSpace.SeparableSpace H₁] [TopologicalSpace.SeparableSpace H₂]
+    {A : H₁ →L[ℂ] H₁} {B : H₂ →L[ℂ] H₂}
+    (hA : IsSelfAdjoint A) (hB : IsSelfAdjoint B)
+    (f g : ℝ → ℝ)
+    (hf : ContinuousOn f (spectrum ℝ A)) (hf' : ContinuousOn f (spectrum ℝ B))
+    (hgA : ContinuousOn g (spectrum ℝ (_root_.cfc f A)))
+    (_hgB : ContinuousOn g (spectrum ℝ (_root_.cfc f B)))
+    (hgA' : ContinuousOn g (f '' spectrum ℝ A))
+    (hgB' : ContinuousOn g (f '' spectrum ℝ B))
+    (hgfA : ∀ t ∈ spectrum ℝ A, g (f t) = t)
+    (hgfB : ∀ t ∈ spectrum ℝ B, g (f t) = t) :
+    SameSpectralMultiplicity A B ↔
+      SameSpectralMultiplicity (_root_.cfc f A) (_root_.cfc f B) := by
+  have hfA : IsSelfAdjoint (_root_.cfc f A) := cfc_predicate f A
+  have hfB : IsSelfAdjoint (_root_.cfc f B) := cfc_predicate f B
+  have hbackA : _root_.cfc g (_root_.cfc f A) = A := by
+    rw [← cfc_comp g f A hA hgA' hf]
+    rw [cfc_congr (f := (g ∘ f : ℝ → ℝ)) (g := (id : ℝ → ℝ)) (fun t ht => hgfA t ht),
+      cfc_id ℝ A]
+  have hbackB : _root_.cfc g (_root_.cfc f B) = B := by
+    rw [← cfc_comp g f B hB hgB' hf']
+    rw [cfc_congr (f := (g ∘ f : ℝ → ℝ)) (g := (id : ℝ → ℝ)) (fun t ht => hgfB t ht),
+      cfc_id ℝ B]
+  constructor
+  · intro h
+    have hu := operatorUnitaryEquiv_of_sameSpectralMultiplicity_complex A B h
+    exact sameSpectralMultiplicity_of_operatorUnitaryEquiv_complex _ _ hfA
+      (hu.cfc_real f hf hA)
+  · intro h
+    have hu := operatorUnitaryEquiv_of_sameSpectralMultiplicity_complex _ _ h
+    have := hu.cfc_real g hgA hfA
+    rw [hbackA, hbackB] at this
+    exact sameSpectralMultiplicity_of_operatorUnitaryEquiv_complex _ _ hA this
+
+end FunctionalCalculusTransport
+
 end TauCeti

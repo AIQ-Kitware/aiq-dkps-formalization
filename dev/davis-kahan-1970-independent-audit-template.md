@@ -2750,12 +2750,16 @@ One row per printed source clause per scalar field.  A clause is `PASS` only whe
 
 | clause | scalar | witness | status |
 | --- | --- | --- | --- |
-| `complete-invariant.complex` | complex | `TauCeti.DavisKahan1970.theorem3_1_spectralMultiplicity_classification_complex` | **PASS** |
+| `complete-invariant.complex` | complex | `TauCeti.DavisKahan1970.theorem3_1_spectralMultiplicity_classification_sourceAngle_complex` + `TauCeti.sameSpectralMultiplicity_cfc_iff` + `TauCeti.OperatorUnitaryEquiv.cfc_real` + `TauCeti.DavisKahan1970.spectrum_genericCosineBlock_subset_Icc` + `TauCeti.DavisKahan1970.genericAngleBlock` | **PASS** |
 | `complete-invariant.real` | real | `TauCeti.DavisKahan1970.theorem3_1_spectralMultiplicity_classification_real` | **PASS** |
 | `converse-angle-data.complex` | complex | `TauCeti.DavisKahan1970.theorem3_1_realization_inAmbient_ofSpectralMultiplicityAwayFromZero_complex` + `TauCeti.DavisKahan1970.theorem3_1_realization_ofNonzeroPartsUnitaryEquiv` + `TauCeti.DavisKahan1970.theorem3_1_intertwiner_of_nonzeroPartsUnitaryEquiv` + `TauCeti.DavisKahan1970.SameSpectralMultiplicityAwayFromZero` + `TauCeti.DavisKahan1970.NonzeroPartsUnitaryEquiv` + `TauCeti.DavisKahan1970.nonzeroPart` + `TauCeti.DavisKahan1970.invariantFor_nonzeroPart` | **PASS** |
 | `converse-angle-data.real` | real | `TauCeti.DavisKahan1970.theorem3_1_realization_inAmbient_ofSpectralMultiplicityAwayFromZero_real` + `TauCeti.DavisKahan1970.theorem3_1_realization_ofNonzeroPartsUnitaryEquiv` + `TauCeti.DavisKahan1970.theorem3_1_intertwiner_of_nonzeroPartsUnitaryEquiv` + `TauCeti.DavisKahan1970.SameSpectralMultiplicityAwayFromZero` + `TauCeti.DavisKahan1970.NonzeroPartsUnitaryEquiv` + `TauCeti.DavisKahan1970.nonzeroPart` + `TauCeti.DavisKahan1970.invariantFor_nonzeroPart` | **PASS** |
 
-**`complete-invariant.complex`.** Canonical witness for complete-invariant at complex scalar scope, carried over from the pre-clause canonical evidence and re-checked against its compiler-printed type under the coherent model.
+**`complete-invariant.complex`.** A complete invariant for ordered pairs of subspaces, on THE SOURCE'S OWN INVARIANT. Theorem 3.1 names the spectral multiplicity functions of the angle operators Theta_0 and Theta_1; the primary is stated on `genericAngleBlock`, which IS Theta on the generic part, together with the four elementary multiplicities `SameHalmosTrivialDimensions` that the source counts separately.
+
+REPRESENTATION CORRECTED 2026-09-05. The primary was `theorem3_1_spectralMultiplicity_classification_complex`, whose invariant is the spectral multiplicity of `genericCosineBlock` -- Halmos's cos^2 Theta, not Theta -- and this row asserted that as the printed statement. The two are the same data, because t -> cos^2 t is injective on [0, pi/2], but that is a theorem and it was not proved. It is now: `sameSpectralMultiplicity_cfc_iff` transports the invariant along any functional calculus that is invertible on the spectrum, and `spectrum_genericCosineBlock_subset_Icc` discharges its hypothesis for t -> arccos(sqrt t) against t -> cos^2 t. The cos^2 form is retained as supporting evidence: it is the structural Halmos classification the source-facing statement is built on.
+
+Separability is carried on the generic halves as well as the ambient space, because the transport uses the Hahn--Hellinger classification in both directions. That is inside the source's own separable ambient scope.
 
 **`complete-invariant.real`.** Canonical witness for complete-invariant at real scalar scope, carried over from the pre-clause canonical evidence and re-checked against its compiler-printed type under the coherent model.
 
@@ -2769,7 +2773,7 @@ Result-wide scope every clause must carry: *(none)*
 
 The declarations that carry this result's printed statement, with the source atoms each one covers.  Everything under *Other registered declarations* below accompanies the result without establishing it.
 
-- `TauCeti.DavisKahan1970.theorem3_1_spectralMultiplicity_classification_complex` — primary_source_witness, complex scalars, proof; covers `DK-3.1-thm.complete-invariant`
+- `TauCeti.DavisKahan1970.theorem3_1_spectralMultiplicity_classification_sourceAngle_complex` — primary_source_witness, complex scalars, proof; covers `DK-3.1-thm.complete-invariant`
 - `TauCeti.DavisKahan1970.theorem3_1_spectralMultiplicity_classification_real` — primary_source_witness, real scalars, proof; covers `DK-3.1-thm.complete-invariant`
 - `TauCeti.DavisKahan1970.theorem3_1_realization_inAmbient_ofSpectralMultiplicityAwayFromZero_complex` — primary_source_witness, complex scalars, proof; covers `DK-3.1-thm.converse-angle-data`
 - `TauCeti.DavisKahan1970.theorem3_1_realization_inAmbient_ofSpectralMultiplicityAwayFromZero_real` — primary_source_witness, real scalars, proof; covers `DK-3.1-thm.converse-angle-data`
@@ -2789,6 +2793,17 @@ The declarations that carry this result's printed statement, with the source ato
 - `TauCeti.DavisKahan1970.invariantFor_nonzeroPart` — source_correspondence
 - `TauCeti.DavisKahan1970.theorem3_1_realization_ofNonzeroPartsUnitaryEquiv` — source_correspondence
 - `TauCeti.DavisKahan1970.NonzeroPartsUnitaryEquiv` — source_correspondence
+- `TauCeti.DavisKahan1970.theorem3_1_spectralMultiplicity_classification_complex` — implementation_structure
+- `TauCeti.DavisKahan1970.genericAngleBlock` — source_correspondence
+- `TauCeti.DavisKahan1970.spectrum_genericCosineBlock_subset_Icc` — source_correspondence
+- `TauCeti.DavisKahan1970.genericCosineBlock_nonneg` — supporting_theorem
+- `TauCeti.DavisKahan1970.genericCosineBlock_le_one` — supporting_theorem
+- `TauCeti.sameSpectralMultiplicity_cfc_iff` — source_correspondence
+- `TauCeti.OperatorUnitaryEquiv.cfc_real` — source_correspondence
+- `TauCeti.continuous_conjStarAlgEquiv` — transport_lemma
+- `TauCeti.DavisKahan1970.SameHilbertDimensionSum` — source_correspondence
+- `TauCeti.DavisKahan1970.theorem3_1_realization_inAmbient_ofSameHilbertDimension_complex` — source_correspondence
+- `TauCeti.DavisKahan1970.theorem3_1_realization_inAmbient_ofSameHilbertDimension_real` — source_correspondence
 
 ### Source-facing Lean declarations
 
@@ -2806,7 +2821,7 @@ Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.theorem3_1_spectralMultiplicity_classification_real`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section3Classification.lean:237`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section3Classification.lean:363`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
@@ -2891,6 +2906,72 @@ Compiler-printed type: *inserted when a compiler certificate is supplied.*
 #### `TauCeti.nonempty_linearIsometryEquiv_of_hilbertBasis`
 
 Source location candidates: `ForTauCeti/Analysis/InnerProductSpace/LpIndexCongr.lean:75`
+
+Compiler-printed type: *inserted when a compiler certificate is supplied.*
+
+#### `TauCeti.DavisKahan1970.theorem3_1_spectralMultiplicity_classification_sourceAngle_complex`
+
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section3Classification.lean:319`
+
+Compiler-printed type: *inserted when a compiler certificate is supplied.*
+
+#### `TauCeti.DavisKahan1970.genericAngleBlock`
+
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section3Classification.lean:295`
+
+Compiler-printed type: *inserted when a compiler certificate is supplied.*
+
+#### `TauCeti.DavisKahan1970.spectrum_genericCosineBlock_subset_Icc`
+
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section3Classification.lean:272`
+
+Compiler-printed type: *inserted when a compiler certificate is supplied.*
+
+#### `TauCeti.DavisKahan1970.genericCosineBlock_nonneg`
+
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section3Classification.lean:246`
+
+Compiler-printed type: *inserted when a compiler certificate is supplied.*
+
+#### `TauCeti.DavisKahan1970.genericCosineBlock_le_one`
+
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section3Classification.lean:254`
+
+Compiler-printed type: *inserted when a compiler certificate is supplied.*
+
+#### `TauCeti.DavisKahan1970.theorem3_1_realization_inAmbient_ofSameHilbertDimension_complex`
+
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section3Theorem31Realization.lean:832`
+
+Compiler-printed type: *inserted when a compiler certificate is supplied.*
+
+#### `TauCeti.DavisKahan1970.theorem3_1_realization_inAmbient_ofSameHilbertDimension_real`
+
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section3Theorem31Realization.lean:857`
+
+Compiler-printed type: *inserted when a compiler certificate is supplied.*
+
+#### `TauCeti.DavisKahan1970.SameHilbertDimensionSum`
+
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section3Theorem31Realization.lean:822`
+
+Compiler-printed type: *inserted when a compiler certificate is supplied.*
+
+#### `TauCeti.sameSpectralMultiplicity_cfc_iff`
+
+Source location candidates: `ForTauCeti/Analysis/InnerProductSpace/BorelCalculus/SpectralMultiplicityEquiv.lean:239`
+
+Compiler-printed type: *inserted when a compiler certificate is supplied.*
+
+#### `TauCeti.OperatorUnitaryEquiv.cfc_real`
+
+Source location candidates: `ForTauCeti/Analysis/InnerProductSpace/BorelCalculus/SpectralMultiplicityEquiv.lean:212`
+
+Compiler-printed type: *inserted when a compiler certificate is supplied.*
+
+#### `TauCeti.continuous_conjStarAlgEquiv`
+
+Source location candidates: `ForTauCeti/Analysis/InnerProductSpace/BorelCalculus/SpectralMultiplicityEquiv.lean:202`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 

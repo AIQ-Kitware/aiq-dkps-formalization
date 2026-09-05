@@ -468,6 +468,20 @@ Status: **TERMINAL EXACT**.
 Status: **TERMINAL EXACT**.
 -/
 
+-- The canonical witness: the invariant on the SOURCE'S OWN angle operators.
+#check @TauCeti.DavisKahan1970.theorem3_1_spectralMultiplicity_classification_sourceAngle_complex
+#check @TauCeti.DavisKahan1970.genericAngleBlock
+#check @TauCeti.DavisKahan1970.spectrum_genericCosineBlock_subset_Icc
+#check @TauCeti.sameSpectralMultiplicity_cfc_iff
+#check @TauCeti.OperatorUnitaryEquiv.cfc_real
+#check @TauCeti.continuous_conjStarAlgEquiv
+#check @TauCeti.DavisKahan1970.genericCosineBlock_nonneg
+#check @TauCeti.DavisKahan1970.genericCosineBlock_le_one
+-- The printed dimension clause as a proposition, and the realizations it produces.
+#check @TauCeti.DavisKahan1970.SameHilbertDimensionSum
+#check @TauCeti.DavisKahan1970.theorem3_1_realization_inAmbient_ofSameHilbertDimension_complex
+#check @TauCeti.DavisKahan1970.theorem3_1_realization_inAmbient_ofSameHilbertDimension_real
+-- The structural cos^2 Theta classification beneath the source-facing statement.
 #check @TauCeti.DavisKahan1970.theorem3_1_spectralMultiplicity_classification_complex
 #check @TauCeti.DavisKahan1970.theorem3_1_realization
 #check @TauCeti.DavisKahan1970.theorem3_1_realization_ofSpectralMultiplicity_complex
