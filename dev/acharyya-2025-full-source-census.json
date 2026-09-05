@@ -9,7 +9,7 @@
     ]
   },
   "scope": "Numbered main-text results and the numbered appendix perturbation propositions/lemmas. Empirical claims are excluded. Exact appendix wrappers are distinguished from a replacement proof so theorem coverage is not inflated.",
-  "audit_revision": "2026-08-27 working tree at commit 6f11665f; statuses, cited declarations and gap texts revised throughout this pass, including an adversarial self-review that corrected two overstated statuses and strengthened two counterexamples.",
+  "audit_revision": "2026-08-27 working tree at commit 6f11665f; statuses, cited declarations and gap texts revised throughout this pass, including an adversarial self-review that corrected two overstated statuses and strengthened two counterexamples. Revised 2026-09-05: the Proposition 1 repair obligation is discharged, and the classical-MDS identity it rests on is registered.",
   "status_definitions": {
     "compiled_exact": "The source claim is represented by a compiled source-facing theorem with the same mathematical content.",
     "compiled_equivalent": "The source claim is compiled under a semantically equivalent encoding; representation changes are documented.",
@@ -259,20 +259,26 @@
         "Acharyya2025.ManifoldCondition.classicalMDSMatrix_const_eq_zero",
         "Acharyya2025.ManifoldCondition.eigenvalues₀_classicalMDSMatrix_const_eq_zero",
         "Acharyya2025.ManifoldCondition.no_eigenvalue_floor_for_const_selection",
-        "Acharyya2025.ManifoldCondition.rank_classicalMDSMatrix_const_eq_zero"
-      ],
-      "planned_declarations": [
-        "Acharyya2025.Riemannian.proposition1"
+        "Acharyya2025.ManifoldCondition.rank_classicalMDSMatrix_const_eq_zero",
+        "Acharyya2025.ManifoldCondition.classicalMDSMatrix_dist_eq_inner_centered",
+        "Acharyya2025.ManifoldCondition.posSemidef_and_rank_le_classicalMDSMatrix_dist",
+        "Acharyya2025.ManifoldCondition.eigenvalues₀_classicalMDSMatrix_dist_eq_zero_of_le",
+        "Acharyya2025.ManifoldCondition.dotProduct_mulVec_classicalMDSMatrix_dist",
+        "Acharyya2025.ManifoldCondition.dotProduct_mulVec_classicalMDSMatrix_dist_le",
+        "Acharyya2025.ManifoldCondition.eigenvalues₀_classicalMDSMatrix_dist_le",
+        "Acharyya2025.ManifoldCondition.SpreadPlacement",
+        "Acharyya2025.ManifoldCondition.le_eigenvalues₀_classicalMDSMatrix_dist_of_spread",
+        "Acharyya2025.ManifoldCondition.proposition1_repair_of_spreadPlacement"
       ],
       "gap_refs": [
         "proposition1-omits-spread-condition"
       ],
       "semantic_alignment": {
         "classification": "source_repair",
-        "detail": "The proposition as printed is false, and the refutation is machine-checked: a constant model selection satisfies its hypothesis -- the pairwise geodesic distances of a compact geodesically convex set containing the point are the population dissimilarities -- while the doubly centred population matrix vanishes, so Assumption 1's rank d and Assumption 2's eigenvalue floor both fail. The hypothesis constrains the ambient manifold and the conclusion constrains the placement of the models within it. No repair is proved because the source supplies no spread condition on the selection and none is derivable from what it states; the obstruction is recorded explicitly instead."
+        "detail": "The proposition as printed is false, and the refutation is machine-checked: a constant model selection satisfies its hypothesis -- the pairwise geodesic distances of a compact geodesically convex set containing the point are the population dissimilarities -- while the doubly centred population matrix vanishes, so Assumption 1's rank d and Assumption 2's eigenvalue floor both fail. The hypothesis constrains the ambient manifold and the conclusion constrains the placement of the models within it. The repair is `proposition1_repair_of_spreadPlacement`, and it is a repair, not the printed proposition: it discards the ambient-manifold hypothesis, which the counterexample shows can never suffice, and replaces it by `SpreadPlacement`, an explicit condition on the placement asking that d of the n recentred model positions be mutually orthogonal with squared norm at least alpha. From that it proves both assumptions -- Assumption 1's vanishing tail beyond index d, and Assumption 2's eigenvalue floor alpha on the leading d and ceiling the total recentred energy. `SpreadPlacement` is sufficient, not necessary; any placement whose recentred configuration has d-th singular value at least sqrt(alpha) would do, and the orthogonal form is chosen because it is checkable and elementary. The underlying classical-MDS identity, that the doubly centred squared-distance matrix of a Euclidean placement is the Gram matrix of its recentred points, is `classicalMDSMatrix_dist_eq_inner_centered`."
       },
-      "notes": "The source states Proposition 1 without proof. Nothing downstream in Acharyya 2025 or Quench depends on it; the eigenvalue floor is assumed directly where it is used.",
-      "next_action": "If a repair is wanted, formulate a spread condition on the model selection strong enough to keep the doubly centred matrix nondegenerate as n grows, and prove Assumptions 1 and 2 from it."
+      "notes": "The source states Proposition 1 without proof. Nothing downstream in Acharyya 2025 or Quench depends on it; the eigenvalue floor is assumed directly where it is used. The printed statement remains refuted; the repair is registered separately and must never be cited as the printed proposition.",
+      "next_action": "None. The printed statement is refuted and the best-effort repair is proved. A sharper repair would replace `SpreadPlacement` by the necessary-and-sufficient singular-value condition on the recentred configuration; that is optional polish, not an open obligation."
     },
     {
       "id": "A25-T2",
@@ -710,5 +716,5 @@
       "next_action": "Optional source-fidelity wrapper only; no downstream theorem depends on this proof decomposition."
     }
   ],
-  "notes": "Two printed results are refuted with compiled counterexamples. Theorem 1's entrywise bound has no hypothesis on the scale of the population responses and needs one, since B is the doubly centred SQUARE of the dissimilarity matrix; this is why no literal finite wrapper exists, and the repair is the entrywise dissimilarity bound the compiled bridge already carries. Proposition 1's hypothesis constrains the ambient manifold while its conclusion constrains the placement of the models within it; no repair is proved, because the source supplies no spread condition from which a minimal one could be derived.\n\nTheorem 1's printed constant also settles the dissimilarity normalisation from inside the paper: only the 1/sqrt(m) reading matches its denominator. That removes the earlier dependence on a lossy PDF extraction.\n\nRetained from the earlier audit: the YWS population-gap and alignment theorems remove the former sample-smallness and polar-smallness premises while preserving the Frobenius bound, and the square-root term is sharpened from sqrt(alpha/2) to sqrt(alpha)."
+  "notes": "Two printed results are refuted with compiled counterexamples. Theorem 1's entrywise bound has no hypothesis on the scale of the population responses and needs one, since B is the doubly centred SQUARE of the dissimilarity matrix; this is why no literal finite wrapper exists, and the repair is the entrywise dissimilarity bound the compiled bridge already carries. Proposition 1's hypothesis constrains the ambient manifold while its conclusion constrains the placement of the models within it. Its repair supplies the missing spread condition directly: `SpreadPlacement` asks that d of the recentred model positions be mutually orthogonal with squared norm at least alpha, and `proposition1_repair_of_spreadPlacement` derives Assumption 1's vanishing eigenvalue tail and both bounds of Assumption 2 from it. The repair is not the printed proposition and must not be cited as one.\n\nTheorem 1's printed constant also settles the dissimilarity normalisation from inside the paper: only the 1/sqrt(m) reading matches its denominator. That removes the earlier dependence on a lossy PDF extraction.\n\nRetained from the earlier audit: the YWS population-gap and alignment theorems remove the former sample-smallness and polar-smallness premises while preserving the Frobenius bound, and the square-root term is sharpened from sqrt(alpha/2) to sqrt(alpha)."
 }

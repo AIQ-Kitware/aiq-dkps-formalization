@@ -7,7 +7,7 @@ Compare each retained source result in the 2025 concentration paper with the Lea
 **Companion census:** `dev/acharyya-2025-full-source-census.json`
 
 **Rows:** 19  
-**Unique cited Lean declarations:** 31
+**Unique cited Lean declarations:** 40
 
 ## Clause relation summary
 
@@ -15,7 +15,7 @@ Compare each retained source result in the 2025 concentration paper with the Lea
 | --- | ---: |
 | `derived_by_composition` | 5 |
 | `lean_weaker_conclusion` | 1 |
-| `source_repair` | 4 |
+| `source_repair` | 5 |
 | `equivalent_encoding` | 5 |
 | `exact` | 1 |
 | `lean_weaker_hypothesis` | 3 |
@@ -127,7 +127,7 @@ Compare each retained source result in the 2025 concentration paper with the Lea
 
 ### `A25-P1` — Compact Riemannian-manifold sufficient condition
 
-**source anchor:** Proposition 1  **source kind:** proposition  **importance:** major  **verdict:** GAP missing source result  **literal source covered:** False
+**source anchor:** Proposition 1  **source kind:** proposition  **importance:** major  **verdict:** REFUTED printed statement; repair proved  **literal source covered:** False
 
 **Source claim.** If model latent points lie on a d-dimensional compact Riemannian manifold and population dissimilarities equal geodesic distances, Assumptions 1 and 2 hold.
 
@@ -137,16 +137,26 @@ Compare each retained source result in the 2025 concentration paper with the Lea
 - `Acharyya2025.ManifoldCondition.eigenvalues₀_classicalMDSMatrix_const_eq_zero`
 - `Acharyya2025.ManifoldCondition.no_eigenvalue_floor_for_const_selection`
 - `Acharyya2025.ManifoldCondition.rank_classicalMDSMatrix_const_eq_zero`
+- `Acharyya2025.ManifoldCondition.classicalMDSMatrix_dist_eq_inner_centered`
+- `Acharyya2025.ManifoldCondition.posSemidef_and_rank_le_classicalMDSMatrix_dist`
+- `Acharyya2025.ManifoldCondition.eigenvalues₀_classicalMDSMatrix_dist_eq_zero_of_le`
+- `Acharyya2025.ManifoldCondition.dotProduct_mulVec_classicalMDSMatrix_dist`
+- `Acharyya2025.ManifoldCondition.dotProduct_mulVec_classicalMDSMatrix_dist_le`
+- `Acharyya2025.ManifoldCondition.eigenvalues₀_classicalMDSMatrix_dist_le`
+- `Acharyya2025.ManifoldCondition.SpreadPlacement`
+- `Acharyya2025.ManifoldCondition.le_eigenvalues₀_classicalMDSMatrix_dist_of_spread`
+- `Acharyya2025.ManifoldCondition.proposition1_repair_of_spreadPlacement`
 
 | source clause | Lean clause | relation | note |
 | --- | --- | --- | --- |
 | Assumption 1 and Assumption 2 hold when every model is associated with a vector on a d-dimensional compact Riemannian manifold whose pairwise geodesic distances equal the population dissimilarities. | no_eigenvalue_floor_for_const_selection and rank_classicalMDSMatrix_const_eq_zero refute both conclusions for a constant selection meeting the hypothesis. | source_repair | The hypothesis constrains the ambient manifold; the conclusion constrains the placement of the models within it. |
+| Assumption 1 and Assumption 2 hold when every model is associated with a vector on a d-dimensional compact Riemannian manifold whose pairwise geodesic distances equal the population dissimilarities. | proposition1_repair_of_spreadPlacement proves Assumption 1's vanishing eigenvalue tail beyond index d, Assumption 2's floor alpha on the leading d eigenvalues, and Assumption 2's ceiling, from SpreadPlacement. | source_repair | The repair replaces the printed ambient-manifold hypothesis, which the counterexample shows can never suffice, by an explicit condition on the placement: d of the recentred model positions are mutually orthogonal with squared norm at least alpha. It is sufficient, not necessary, and it is not the printed proposition. |
 
-**Review.** No manifold/geodesic sufficient-condition theorem was found in the Acharyya2025 package or its cited foundation modules.
+**Review.** No manifold/geodesic sufficient-condition theorem exists, and none can: the printed hypothesis constrains only the ambient space, and a constant selection satisfies it while making the population matrix zero. The printed statement is refuted. The best-effort repair obligation is discharged by proposition1_repair_of_spreadPlacement, built on the classical-MDS identity classicalMDSMatrix_dist_eq_inner_centered.
 
-**Notes.** This is the clearest remaining numbered-result coverage gap in the main text.
+**Notes.** The printed statement is refuted and separately repaired. Cite the repair as a repair; it is not the printed proposition and carries a different hypothesis.
 
-**Next action.** If a repair is wanted, formulate a spread condition on the model selection strong enough to keep the doubly centred matrix nondegenerate as n grows, and prove Assumptions 1 and 2 from it.
+**Next action.** None. A sharper repair would replace SpreadPlacement by the necessary-and-sufficient singular-value condition on the recentred configuration; that is optional polish, not an open obligation.
 
 **Gap refs:** `proposition1-omits-spread-condition`
 
