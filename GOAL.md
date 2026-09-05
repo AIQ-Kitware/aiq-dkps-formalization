@@ -251,8 +251,13 @@ file.
 - the `per-declaration-expose` ratchet in `dev/policy/ratchet.yaml` tracks upstream
   API-design debt. Do not lower its maximum to
   make it green.
+- **Suite state 2026-09-05: 29 passed, 3 failed, 0 unavailable, 0 skipped.** The three are
+  the ones below. `check_comparator_signatures` moved out of this list that day.
 - `check_tauceti_readiness` and `check_tauceti_roadmap_topics` include upstream-review
-  and roadmap-placement state. An unavailable optional checkout is not a pass, and an
+  and roadmap-placement state. Both currently report the same four unplaced modules,
+  `ForTauCeti.Probability.{AverageError, ProductConvergence, RigidAlignment, VStatistic}`,
+  plus six under `ForTauCeti.MeasureTheory`. Placing them is a roadmap edit, and the
+  roadmap is read-only without an explicit request. An unavailable optional checkout is not a pass, and an
   upstream review backlog is not a reason to invent local placement work.
 - If the roadmap checker still reports the `ApproximationNumber.GramSquare` to
   `ApproximationNumber.GramSpectralRank` forward-reference problem, treat that as a
