@@ -1,0 +1,183 @@
+# Tamper tests: the gates must reject the defects they were written for.
+#
+#     aiq-lean tamper run --config dev/policy/tamper-mutations.yaml
+#     aiq-lean tamper run --config dev/policy/tamper-mutations.yaml --list
+#     aiq-lean tamper run --config dev/policy/tamper-mutations.yaml --only <name>
+#
+# Each entry applies one textual defect and requires the named gate to FAIL.  A
+# gate that still passes is reported as `UNDETECTED`, which is a finding about
+# the gate, not about the mutation.  Every gate is first run on the clean tree,
+# so one that already fails cannot be credited with a detection.  The harness
+# restores the file from the bytes it read and refuses to start on a dirty tree.
+#
+# **These are narrow tests by design.**  Every mutation here is a *registration*
+# defect -- the class the three external hostile reviews actually found: a row
+# pointing at a statement that is not the one the paper prints.  Lean-source
+# mutations are deliberately absent: the type probes read compiled `olean`s, so a
+# Lean mutation only bites after a rebuild, and a tamper suite that costs a full
+# build per mutation would never be run.  The Lean side is covered instead by
+# `DavisKahan/Sources/DavisKahan1970/Audits/HostileReviewRegressions.lean`, which
+# restates each repaired invariant and proves it *by* the registered declaration,
+# so a statement that drifts stops compiling.
+
+description: >-
+  Registration-level tamper tests for the Davis--Kahan 1970 completion
+  certificate, one per defect class named in the hostile-review closure plan.
+
+mutations:
+  - name: source-passage-residual-swapped-for-perturbation
+    description: >-
+      The sin Theta bound is delta*N(sin Theta_0) <= N(R) on the *residual*.
+      Swapping R for the perturbation H on the right-hand side of the printed
+      passage must invalidate the accepted specification hash.
+    file: prose/distilled_literature/DavisKahan1970_part_III.tex
+    find: '\boxed{\delta\norm{\sin\Theta_0}\le\norm{R}.}'
+    replace: '\boxed{\delta\norm{\sin\Theta_0}\le\norm{H}.}'
+    detected_by: ["python3", "scripts/check_davis_kahan_1970_result_inventory.py"]
+
+  - name: source-uin-replaced-by-symmetric-norming-only
+    description: >-
+      The sin Theta clause is carried by the source-exact facade, which
+      quantifies over the literal normalized unitarily invariant norm class and
+      carries the paper's separable ambient scope.  Retargeting it at the
+      SymmetricNormingFunction theorem beneath drops both.
+    file: dev/davis-kahan-1970-formalization-result-inventory.json
+    find: '"primary": "TauCeti.DavisKahan1970.sinTheta_unbounded_formGap_sourceExact_complex"'
+    replace: '"primary": "TauCeti.DavisKahan1970.sinTheta_unbounded_formGap_symmetricNorming_complex"'
+    detected_by: ["python3", "scripts/check_davis_kahan_1970_result_inventory.py"]
+
+  - name: real-source-witness-replaced-by-complex
+    description: >-
+      Davis and Kahan state Section 2 over a real *or* complex space.  Pointing
+      the real clause at the complex witness must not be accepted as covering it.
+    file: dev/davis-kahan-1970-formalization-result-inventory.json
+    find: '"primary": "TauCeti.DavisKahan1970.sinTheta_unbounded_formGap_sourceExact_real"'
+    replace: '"primary": "TauCeti.DavisKahan1970.sinTheta_unbounded_formGap_sourceExact_complex"'
+    detected_by: ["python3", "scripts/check_davis_kahan_1970_result_inventory.py"]
+
+  - name: ambient-gap-moved-to-unperturbed-blocks
+    description: >-
+      The third hostile review's headline finding.  The source's Lambda_0 and
+      Lambda_1 are blocks of A+H on Q, so the ambient sin 2Theta gap is a
+      hypothesis about the *perturbed* operator.  Retargeting the ambient clause
+      at the reducing-block theorem puts the gap back on the unperturbed A.
+    file: dev/davis-kahan-1970-formalization-result-inventory.json
+    find: '"primary": "TauCeti.DavisKahan1970.sinTwoTheta_ambient_unbounded_perturbedGap_sourceExact_complex"'
+    replace: '"primary": "TauCeti.DavisKahan1970.sinTwoTheta_ambient_unbounded_reducing_symmetricNorming_complex"'
+    detected_by: ["python3", "scripts/check_davis_kahan_1970_result_inventory.py"]
+
+  - name: theorem-3-1-angle-multiplicity-replaced-by-cos-block
+    description: >-
+      Theorem 3.1's forward invariant is the multiplicity of the *angle*
+      operator, not of the generic cos^2 block.  Retargeting the clause at the
+      cos^2 statement drops the correspondence the source asserts.
+    file: dev/davis-kahan-1970-formalization-result-inventory.json
+    find: '"primary": "TauCeti.DavisKahan1970.theorem3_1_spectralMultiplicity_classification_sourceAngle_complex"'
+    replace: '"primary": "TauCeti.DavisKahan1970.theorem3_1_spectralMultiplicity_classification_complex"'
+    detected_by: ["python3", "scripts/check_davis_kahan_1970_result_inventory.py"]
+
+  - name: corollary-3-1-angle-list-replaced-by-eigenvalue-list
+    description: >-
+      Corollary 3.1's classification half is on the printed Theta eigenvalues.
+      Retargeting it at the implementation-level sin^2 eigenvalue list is the
+      second hostile-review finding.
+    file: dev/davis-kahan-1970-formalization-result-inventory.json
+    find: '"primary": "TauCeti.DavisKahan1970.corollary3_1_compact_defectBlock_sourceAngleList_classification"'
+    replace: '"primary": "TauCeti.DavisKahan1970.corollary3_1_compact_defectBlock_angleList_classification"'
+    detected_by: ["python3", "scripts/check_davis_kahan_1970_result_inventory.py"]
+
+  - name: ambient-realization-replaced-by-non-ambient
+    description: >-
+      Theorem 3.1's converse realizes the prescribed angle data *inside the
+      ambient space*.  The non-ambient realization is a weaker statement.
+    file: dev/davis-kahan-1970-formalization-result-inventory.json
+    find: '"primary": "TauCeti.DavisKahan1970.theorem3_1_realization_inAmbient_ofSpectralMultiplicityAwayFromZero_complex"'
+    replace: '"primary": "TauCeti.DavisKahan1970.theorem3_1_realization_ofSpectralMultiplicityAwayFromZero_complex"'
+    detected_by: ["python3", "scripts/check_davis_kahan_1970_result_inventory.py"]
+
+  - name: theorem-8-2-directed-angle-replaced-by-perturbation-form
+    description: >-
+      Theorem 8.2 retains a residual-form directed-angle bound and a
+      perturbation-form bound as separate clauses.  Collapsing the directed
+      clause onto the perturbation witness loses the directed statement.
+    file: dev/davis-kahan-1970-formalization-result-inventory.json
+    find: '"primary": "TauCeti.DavisKahan1970.Section8.theorem8_2_sinTwoTheta_residual_directedAngle_sourceExact"'
+    replace: '"primary": "TauCeti.DavisKahan1970.Section8.theorem8_2_sinTwoTheta_perturbation_sourceExact"'
+    detected_by: ["python3", "scripts/check_davis_kahan_1970_result_inventory.py"]
+
+  - name: extra-capability-binder-claimed
+    description: >-
+      Capability classes are derived from the compiler-expanded type, not
+      asserted.  Claiming one the canonical statement does not carry must fail.
+    file: dev/davis-kahan-1970-formalization-result-inventory.json
+    find: |-
+      "capability_classes": [],
+                "note": "The source-exact façade over C: separable ambient scope and the literal normalized unitarily invariant norm class."
+    replace: |-
+      "capability_classes": ["ContinuousLinearMap.HasMinMaxLowerBoundEverywhere"],
+                "note": "The source-exact façade over C: separable ambient scope and the literal normalized unitarily invariant norm class."
+    detected_by: ["python3", "scripts/check_davis_kahan_1970_result_inventory.py"]
+
+  - name: scalar-scope-mislabelled
+    description: >-
+      The scalar scope of a canonical witness is read off its type.  Labelling
+      the real witness complex must not be accepted.
+    file: dev/davis-kahan-1970-formalization-result-inventory.json
+    find: |-
+      "declaration": "TauCeti.DavisKahan1970.sinTheta_unbounded_formGap_sourceExact_real",
+                "role": "primary_source_witness",
+                "scalar_scope": "real",
+    replace: |-
+      "declaration": "TauCeti.DavisKahan1970.sinTheta_unbounded_formGap_sourceExact_real",
+                "role": "primary_source_witness",
+                "scalar_scope": "complex",
+    detected_by: ["python3", "scripts/check_davis_kahan_1970_result_inventory.py"]
+
+  - name: separability-posture-flipped
+    description: >-
+      The recorded separability posture of each result is checked against the
+      compiler.  Claiming the sin Theta row is separability-free when its
+      canonical witnesses assume separability must fail.
+    file: dev/davis-kahan-1970-formalization-result-inventory.json
+    find: '"S2-sin-theta": "separable"'
+    replace: '"S2-sin-theta": "generalized"'
+    detected_by: ["python3", "scripts/check_davis_kahan_1970_result_inventory.py"]
+
+  - name: result-denominator-shrunk
+    description: >-
+      The completion denominator is 29 counted results.  Quietly dropping one
+      would raise the completion percentage without proving anything.
+    file: dev/davis-kahan-1970-formalization-result-inventory.json
+    find: '"result_count": 29'
+    replace: '"result_count": 28'
+    detected_by: ["python3", "scripts/check_davis_kahan_1970_result_inventory.py"]
+
+  - name: boundary-review-atom-dropped
+    description: >-
+      Every atom of a counted result's primary source block is either in the
+      printed statement or explicitly classified out of it.  Silently dropping
+      one from the included list must not leave the partition accepted.
+    file: dev/davis-kahan-1970-formalization-result-inventory.json
+    find: |-
+      "included_same_block_atom_ids": [
+                "S2-sin-theta.ui-norm-scope",
+                "S2-sin-theta.gap-hypothesis",
+                "S2-sin-theta.directed-conclusion"
+              ],
+    replace: |-
+      "included_same_block_atom_ids": [
+                "S2-sin-theta.ui-norm-scope",
+                "S2-sin-theta.gap-hypothesis"
+              ],
+    detected_by: ["python3", "scripts/check_davis_kahan_1970_result_inventory.py"]
+
+  - name: statement-map-retargeted-at-missing-declaration
+    description: >-
+      A DK-CERT claim passage is bound to Lean declarations by name.  A name that
+      no longer resolves must be caught without a Lean build, which is the whole
+      point of the fast drift tripwire.
+    file: dev/davis-kahan-1970-statement-map.json
+    find: '"TauCeti.DavisKahan1970.Equation1_8",'
+    replace: '"TauCeti.DavisKahan1970.Equation1_8_renamed_away",'
+    occurrences: 2
+    detected_by: ["python3", "scripts/check_davis_kahan_1970_statement_map.py"]

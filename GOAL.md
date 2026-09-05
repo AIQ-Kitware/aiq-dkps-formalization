@@ -779,6 +779,27 @@ caller-supplied J₀ or tangent correspondence reintroduced
 
 These should be narrow tests. There is no need to run the entire heavy suite for each mutation.
 
+**Done, 2026-09-05.** `dev/policy/tamper-mutations.yaml` holds fourteen mutations
+and `aiq-lean tamper run` is a slow gate in the suite; all fourteen are rejected
+by the gate named against them, and the run refuses to start on a dirty tree,
+restores each file from the bytes it read, and fails if the tree is left
+modified. Two design points are worth keeping:
+
+* Every gate is first run on the *unmutated* tree. A gate that already fails
+  would otherwise "detect" every mutation put to it, which is the exact failure
+  mode this section exists to prevent.
+* Every mutation here is a **registration** defect -- a row pointing at a
+  statement that is not the one the paper prints -- because that is the class all
+  three external reviews actually found. Lean-source mutations are deliberately
+  absent: the type probes read compiled `olean`s, so a Lean mutation only bites
+  after a rebuild, and a suite costing a full build per mutation would never be
+  run. The Lean side is covered instead by `Audits/HostileReviewRegressions.lean`
+  (section V), which restates each repaired invariant and proves it *by* the
+  registered declaration, so a statement that drifts stops compiling.
+
+The list below maps onto the shipped mutations; where a line names a Lean-level
+swap, the entry retargets the row at the weaker statement that models it.
+
 ---
 
 # XIV. Validation policy during implementation
