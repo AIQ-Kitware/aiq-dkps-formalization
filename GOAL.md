@@ -141,10 +141,11 @@ rank-boundary convention.
   (`nonlocal_source_interpretation.operator_scope_reading`). **The lift would make the
   reading moot, which is why it is worth doing.**
 
-  **Scoped 2026-09-05, and the two halves are not alike. Do 8.1; 8.2 is blocked.**
-  Nothing under `Section8/` mentions `→ₗ.[𝕜]` or an unbounded spectral subspace today.
+  **Scoped 2026-09-05. Both halves are blocked, on two different missing
+  foundations, and 8.1's is much the smaller.** Nothing under `Section8/` mentions
+  `→ₗ.[𝕜]` or an unbounded spectral subspace today.
 
-  **8.1 is not blocked, and its consumer is already waiting.**
+  **8.1's statement is writable now and its consumer is already waiting.**
   `Section7IdealBounds.section7_tanTwoTheta_ideal` is the unbounded Section 7 tangent
   theorem and it takes `hquarter : IsQuarterAcute (selfAdjointSpectralSubspace A hA B hB)
   (selfAdjointSpectralSubspace (addBounded A E) (addBounded_isSelfAdjoint A hA E hE) S hS)`
@@ -162,7 +163,24 @@ rank-boundary convention.
   `re_inner_le_of_specProjection_Ioi_eq_zero`).
   `theorem8_1_canonicalBranch` takes only form bounds on `P` and `Pᗮ` plus oddness of
   `H`, all of which restrict to `x : A.domain` in the vocabulary `SectionTwoUsage.lean`
-  already uses. Start there, not at the angle forms.
+  already uses.
+
+  **What blocks 8.1 is its proof, not its statement, and the wall is one step.**
+  Two of the four ingredients lift and two do not. The branch and its form bounds lift:
+  `boundedSelfAdjointSpectralSubspace_reduces` becomes `reducesSubspace_specRange`, and
+  `re_inner_le_of_mem_boundedSelfAdjointSpectralSubspace_Iic` and its dual become the
+  `SpectralFormBounds` pair above. The other two are stated for `A H : E →L[ℂ] E`:
+  `realSpectrum_add_offDiagonal_subset_exterior_of_form_gap`
+  (`InfiniteDimensional/TanTwoTheta/OffDiagonalSpectralRepulsion.lean`) and, the real
+  obstruction, `isQuarterAcute_of_orderedFormGap`
+  (`InfiniteDimensional/TanTwoTheta/QuarterAcuteFormGap.lean`). That one reaches
+  `IsQuarterAcute` from coercivity of the bounded composites `J ∘L (A − c)` and
+  `K ∘L (A + H − c)`, and `ForTauCeti/Analysis/InnerProductSpace/CoerciveUnit.lean` is
+  `E →L[𝕜] E` throughout. **The precise missing theorem for 8.1 is therefore
+  invertibility of a coercive unbounded operator of the form `J(A − c)` on `dom A`, with
+  `A` self-adjoint and `J` a reflection** — a Lax--Milgram-shaped statement, and a
+  bounded, well-understood piece of analysis. Prove that first; everything else in 8.1
+  is restating hypotheses over `dom A`.
 
   **8.2's homotopy is bounded-specific in its Lean form — this is the answer to the
   question this entry used to ask.** `Section8/Smallness.lean` reduces both printed
@@ -177,10 +195,8 @@ rank-boundary convention.
   foundation does not exist: **the precise missing theorems are contour-integral Riesz
   projections and resolvent norm bounds for `LinearPMap`**, which neither Mathlib nor
   this repository has. `DavisKahan.SpectralTheory.CircleRieszProjection` is bounded.
-  The alternative 8.1 route through
-  `InfiniteDimensional/TanTwoTheta/QuarterAcuteFormGap.lean` hits a smaller version of
-  the same wall: it reaches `IsQuarterAcute` from coercivity of `J ∘L (A − c)`, and
-  `ForTauCeti/Analysis/InnerProductSpace/CoerciveUnit.lean` is `E →L[𝕜] E` throughout.
+  That is a strictly larger gap than 8.1's: an unbounded coercive inverse is a standard
+  argument, an unbounded holomorphic functional calculus along a homotopy is not.
 
   Parts (ii) and (iii) stay as printed — the source restricts them to finite dimensions
   itself. Keep the bounded theorems as specializations.
