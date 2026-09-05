@@ -788,9 +788,9 @@ The declarations that carry this result's printed statement, with the source ato
 - `TauCeti.DavisKahan.UnboundedRitzPair` — implementation_structure
 - `TauCeti.DavisKahan.ReducingComplement` — supporting_theorem
 - `TauCeti.DavisKahan.UnboundedRitzPair.ofTrialBlock` — supporting_theorem
-- `TauCeti.DavisKahan.Section2.theorem6_3_perturbation_infiniteTrial` — specialization
+- `TauCeti.DavisKahan1970.theorem6_3_perturbation_infiniteTrial` — specialization
 - `TauCeti.DavisKahan.FiniteDimensional.partIII_tanTheta_ritzResidual_uiNorm` — specialization
-- `TauCeti.DavisKahan.TanTheta.theorem6_3_unbounded_infiniteTrial_ideal` — supporting_theorem
+- `TauCeti.DavisKahan1970.theorem6_3_unbounded_infiniteTrial_ideal` — supporting_theorem
 - `TauCeti.DavisKahan1970.tanTheta_directed_unboundedTrial_symmetricNorming_complex` — specialization
 - `TauCeti.DavisKahan1970.tanTheta_directed_unboundedTrial_symmetricNorming_real` — specialization
 - `TauCeti.DavisKahan.TanTheta.UnboundedCompressionTrialData.ideal_of_formBounds` — supporting_theorem
@@ -834,7 +834,7 @@ Source location candidates: `DavisKahan/Sources/DavisKahan1970/PartIII.lean:119`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
-#### `TauCeti.DavisKahan.Section2.theorem6_3_perturbation_infiniteTrial`
+#### `TauCeti.DavisKahan1970.theorem6_3_perturbation_infiniteTrial`
 
 Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section2TanThetaPerturbation.lean:177`
 
@@ -942,9 +942,9 @@ Source location candidates: `DavisKahan/Sources/DavisKahan1970/TanThetaDirectedU
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
-#### `TauCeti.DavisKahan.TanTheta.theorem6_3_unbounded_infiniteTrial_ideal`
+#### `TauCeti.DavisKahan1970.theorem6_3_unbounded_infiniteTrial_ideal`
 
-Source location candidates: `DavisKahan/TanTheta/Theorem63UnboundedInfiniteTrial.lean:673`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/TanThetaDirectedUnbounded.lean:447`, `DavisKahan/TanTheta/Theorem63UnboundedInfiniteTrial.lean:673`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
@@ -3436,7 +3436,7 @@ The declarations that carry this result's printed statement, with the source ato
 
 #### `TauCeti.DavisKahan1970.proposition4_1_compact_nonacute_complex`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section4.lean:317`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section4.lean:318`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
@@ -3448,7 +3448,7 @@ Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.proposition4_1_compact_nonacute_directRotationValues_complex`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section4.lean:249`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section4.lean:250`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
@@ -3656,7 +3656,7 @@ The declarations that carry this result's printed statement, with the source ato
 
 #### `TauCeti.DavisKahan1970.corollary4_1_compact_nonacute_complex`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section4.lean:348`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section4.lean:349`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
@@ -3668,7 +3668,7 @@ Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.corollary4_1_infiniteDimensional_nonacute`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section4.lean:379`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section4.lean:380`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
@@ -3893,13 +3893,13 @@ Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.proposition4_2_compact_nonacute`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section4.lean:450`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section4.lean:451`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.proposition4_2_infiniteDimensional`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section4.lean:424`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section4.lean:425`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
@@ -4171,7 +4171,7 @@ The declarations that carry this result's printed statement, with the source ato
 
 #### `TauCeti.DavisKahan1970.proposition4_3_compact_nonacute_idealGauge`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section4.lean:554`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section4.lean:555`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
@@ -4274,7 +4274,7 @@ One row per printed source clause per scalar field.  A clause is `PASS` only whe
 
 | clause | scalar | witness | status |
 | --- | --- | --- | --- |
-| `whole.not_visible_in_type` | not_visible_in_type | `TauCeti.DavisKahan.FiniteDimensional.not_davisKahanProposition4_4_Finite` | **PASS** |
+| `whole.not_visible_in_type` | not_visible_in_type | `TauCeti.DavisKahan1970.proposition4_4_refuted` | **PASS** |
 
 **`whole.not_visible_in_type`.** Canonical witness for the whole printed statement at not_visible_in_type scalar scope, carried over from the pre-clause canonical evidence and re-checked against its compiler-printed type under the coherent model.
 
@@ -4284,12 +4284,12 @@ Result-wide scope every clause must carry: `DK-4.1-prop.section4-compact-classif
 
 The declarations that carry this result's printed statement, with the source atoms each one covers.  Everything under *Other registered declarations* below accompanies the result without establishing it.
 
-- `TauCeti.DavisKahan.FiniteDimensional.not_davisKahanProposition4_4_Finite` — exact_refutation, not_visible_in_type scalars, refutation; covers `DK-4.1-prop.section4-compact-classification-setup`, `DK-4.4-prop.printed-proposition4-4`
+- `TauCeti.DavisKahan1970.proposition4_4_refuted` — exact_refutation, not_visible_in_type scalars, refutation; covers `DK-4.1-prop.section4-compact-classification-setup`, `DK-4.4-prop.printed-proposition4-4`
 
 ### Other registered declarations
 
-- `TauCeti.DavisKahan.FiniteDimensional.DavisKahanProposition4_4_Finite` — supporting_theorem
-- `TauCeti.DavisKahan.FiniteDimensional.shortRotation_fullDisplacement_refuted` — supporting_theorem
+- `TauCeti.DavisKahan1970.proposition4_4_printedStatement` — supporting_theorem
+- `TauCeti.DavisKahan1970.proposition4_4_refutingPair` — supporting_theorem
 - `TauCeti.DavisKahan.crossedDefectsEquivalent_of_isAcute` — standing_assumption_discharge
 
 ### Source-facing Lean declarations
@@ -4300,21 +4300,21 @@ Source location candidates: `DavisKahan/Geometry/Halmos/CrossedDefectGap.lean:14
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
-#### `TauCeti.DavisKahan.FiniteDimensional.DavisKahanProposition4_4_Finite`
+#### `TauCeti.DavisKahan1970.proposition4_4_printedStatement`
 
-Source location candidates: `DavisKahan/FiniteDimensional/DirectRotation/ShortRotationCounterexample.lean:838`
-
-Compiler-printed type: *inserted when a compiler certificate is supplied.*
-
-#### `TauCeti.DavisKahan.FiniteDimensional.not_davisKahanProposition4_4_Finite`
-
-Source location candidates: `DavisKahan/FiniteDimensional/DirectRotation/ShortRotationCounterexample.lean:862`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section4.lean:683`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
-#### `TauCeti.DavisKahan.FiniteDimensional.shortRotation_fullDisplacement_refuted`
+#### `TauCeti.DavisKahan1970.proposition4_4_refuted`
 
-Source location candidates: `DavisKahan/FiniteDimensional/DirectRotation/ShortRotationCounterexample.lean:809`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section4.lean:688`
+
+Compiler-printed type: *inserted when a compiler certificate is supplied.*
+
+#### `TauCeti.DavisKahan1970.proposition4_4_refutingPair`
+
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section4.lean:695`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
@@ -4556,7 +4556,7 @@ The declarations that carry this result's printed statement, with the source ato
 ### Other registered declarations
 
 - `TauCeti.DavisKahan1970.theorem5_2` — generalization
-- `TauCeti.DavisKahan.Sylvester.davisKahan1970_sylvester_real` — generalization
+- `TauCeti.DavisKahan1970.theorem5_2_kyFanDominant_real` — generalization
 - `TauCeti.DavisKahan1970.symmetricNorming_of_kyFanDominant` — supporting_theorem
 - `TauCeti.DavisKahan1970.theorem5_2_symmetricNorming_real` — generalization
 
@@ -4564,13 +4564,13 @@ The declarations that carry this result's printed statement, with the source ato
 
 #### `TauCeti.DavisKahan1970.theorem5_2`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section5.lean:99`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section5.lean:100`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
-#### `TauCeti.DavisKahan.Sylvester.davisKahan1970_sylvester_real`
+#### `TauCeti.DavisKahan1970.theorem5_2_kyFanDominant_real`
 
-Source location candidates: `DavisKahan/Sylvester/RealUnbounded.lean:77`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section5.lean:134`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
@@ -4684,19 +4684,19 @@ The declarations that carry this result's printed statement, with the source ato
 
 #### `TauCeti.DavisKahan1970.lemma5_1`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section5.lean:35`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section5.lean:36`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.lemma5_1_complex`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section5.lean:56`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section5.lean:57`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.lemma5_1_real`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section5.lean:71`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section5.lean:72`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
@@ -5479,14 +5479,14 @@ The declarations that carry this result's printed statement, with the source ato
 - `TauCeti.DavisKahan1970.approximationSingularValue_directedSineBlock_lt_one_unboundedRitz_real` — supporting_theorem
 - `TauCeti.DavisKahan1970.tanTheta_directed_bounded_spectralGap_symmetricNorming_complex` — specialization
 - `TauCeti.DavisKahan1970.tanTheta_directed_bounded_spectralGap_symmetricNorming_real` — specialization
-- `TauCeti.DavisKahan.TanTheta.theorem6_3_unbounded_infiniteTrial_ideal_exists` — generalization
+- `TauCeti.DavisKahan1970.theorem6_3_unbounded_infiniteTrial_ideal_exists` — generalization
 - `TauCeti.DavisKahan1970.theorem6_3_unbounded_infiniteTrial_ideal_exists_real` — generalization
 
 ### Source-facing Lean declarations
 
-#### `TauCeti.DavisKahan.TanTheta.theorem6_3_unbounded_infiniteTrial_ideal_exists`
+#### `TauCeti.DavisKahan1970.theorem6_3_unbounded_infiniteTrial_ideal_exists`
 
-Source location candidates: `DavisKahan/TanTheta/Theorem63UnboundedInfiniteTrial.lean:645`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/TanThetaDirectedUnbounded.lean:454`, `DavisKahan/TanTheta/Theorem63UnboundedInfiniteTrial.lean:645`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 

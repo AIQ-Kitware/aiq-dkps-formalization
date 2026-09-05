@@ -49,11 +49,11 @@ actually controls.  It is the sharper statement in any case.
 open scoped InnerProductSpace BigOperators
 
 namespace TauCeti
-namespace DavisKahan
-namespace Section2
+namespace DavisKahan1970
 
-open ExactSinTheta
-open TanTheta
+open TauCeti.DavisKahan
+open TauCeti.DavisKahan.ExactSinTheta
+open TauCeti.DavisKahan.TanTheta
 open Module (finrank)
 
 universe u
@@ -216,6 +216,5 @@ theorem theorem6_3_perturbation_infiniteTrial
   rw [hKyTan]
   exact hcore.trans hRE
 
-end Section2
-end DavisKahan
+end DavisKahan1970
 end TauCeti

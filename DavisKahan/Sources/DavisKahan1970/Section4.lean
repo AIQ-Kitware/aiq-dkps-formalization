@@ -4,6 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, Claude Opus 5
 -/
 import DavisKahan.FiniteDimensional.DirectRotation
+import DavisKahan.FiniteDimensional.DirectRotation.ShortRotationCounterexample
 import DavisKahan.Geometry.Polar.RestrictedDisplacementExtremal
 import DavisKahan.Geometry.Polar.DisplacementSquareExtremal
 import DavisKahan.Geometry.Angle.BasisAngleEnergy
@@ -664,6 +665,35 @@ theorem Proposition4_3_infiniteDimensional_nonacute_fullDisplacement_hilbertSchm
   exact (ENNReal.rpow_le_rpow_iff (by norm_num)).mp hnuc
 
 end FullDisplacement
+
+
+/-! ## Proposition 4.4: source-facing names for the printed statement and its refutation
+
+The printed statement, its refutation and the witnessing pair are declared in
+`DavisKahan/FiniteDimensional/DirectRotation/ShortRotationCounterexample.lean`, their natural
+home next to the `ℝ⁴` construction.  A census row registers all three, and a registered source
+witness should be reachable under `TauCeti.DavisKahan1970`; these aliases give them that name.
+Finding F6.4 of the 2026-09-04 hostile review. -/
+
+/-- **Davis--Kahan 1970, Proposition 4.4 exactly as printed**, as a `Prop`: over every real
+finite-dimensional space, every acute pair with first principal angle at most `π/3`, every
+unitary carrying one subspace onto the other and every unitarily invariant seminorm, the direct
+rotation minimizes the full displacement.  It is a definition rather than a theorem because it
+is false. -/
+alias proposition4_4_printedStatement :=
+  DavisKahan.FiniteDimensional.DavisKahanProposition4_4_Finite
+
+/-- **Proposition 4.4 is false as printed.**  The source-facing name for
+`DavisKahan.FiniteDimensional.not_davisKahanProposition4_4_Finite`. -/
+alias proposition4_4_refuted :=
+  DavisKahan.FiniteDimensional.not_davisKahanProposition4_4_Finite
+
+/-- **The `ℝ⁴` witness behind the refutation**: an acute pair with both principal angles `π/4`
+and a unitary whose full displacement has strictly smaller trace norm than the direct
+rotation's.  The source-facing name for
+`DavisKahan.FiniteDimensional.shortRotation_fullDisplacement_refuted`. -/
+alias proposition4_4_refutingPair :=
+  DavisKahan.FiniteDimensional.shortRotation_fullDisplacement_refuted
 
 end DavisKahan1970
 end TauCeti

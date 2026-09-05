@@ -1545,7 +1545,7 @@ boundary: NormedAddCommGroup, InnerProductSpace, Real, CompleteSpace, LinearPMap
 - `TauCeti.DavisKahan1970.tanTheta_ambient_unboundedRitz_explicitCompatibility_symmetricNorming_complex` — elaborated; source located
 - `TauCeti.DavisKahan1970.tanTheta_ambient_unboundedRitz_explicitCompatibility_symmetricNorming_real` — elaborated; source located
 - `TauCeti.DavisKahan1970.tanTheta_directed_finiteDimensional_symmetricNorming_rclike` — elaborated; source located
-- `TauCeti.DavisKahan.Section2.theorem6_3_perturbation_infiniteTrial` — elaborated; source located
+- `TauCeti.DavisKahan1970.theorem6_3_perturbation_infiniteTrial` — elaborated; source located
 - `TauCeti.DavisKahan.FiniteDimensional.partIII_tanTheta_ritzResidual_uiNorm` — not in environment; source located
 - `TauCeti.DavisKahan1970.tanTheta_directed_unboundedTrial_symmetricNorming_complex` — elaborated; source located
 - `TauCeti.DavisKahan1970.tanTheta_directed_unboundedTrial_symmetricNorming_real` — elaborated; source located
@@ -1589,7 +1589,7 @@ The canonical complex ambient tan(Theta) operator used by the unbounded whole-sp
 
 2026-08-31: the canonical declaration list here is now the counted result's `canonical_evidence` in `dev/davis-kahan-1970-formalization-result-inventory.json`, and the checker enforces that. Demoted to supporting: TauCeti.DavisKahan1970.tanTheta_directed_finiteDimensional_symmetricNorming_rclike -- a finite-dimensional or capability-class facade cannot be the canonical witness for a result certified at unbounded infinite-dimensional scope.
 
-2026-08-31 (coherent-clause audit): demoted to supporting because the compiler-printed type does not carry the scope the declaration was credited with: TauCeti.DavisKahan.Section2.theorem6_3_perturbation_infiniteTrial, TauCeti.DavisKahan.FiniteDimensional.partIII_tanTheta_ritzResidual_uiNorm.
+2026-08-31 (coherent-clause audit): demoted to supporting because the compiler-printed type does not carry the scope the declaration was credited with: TauCeti.DavisKahan1970.theorem6_3_perturbation_infiniteTrial, TauCeti.DavisKahan.FiniteDimensional.partIII_tanTheta_ritzResidual_uiNorm.
 
 **Next action.** No counted-result gap remains. Preserve the accepted nonlocal source interpretation and the bounded/unbounded, real/complex source-facing endpoints; re-audit only if the distributable source specification changes.
 
