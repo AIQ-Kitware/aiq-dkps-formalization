@@ -80,6 +80,7 @@ section BlockAlgebra
 
 variable {p p' z : E →L[𝕜] E}
 
+omit [CompleteSpace E] in
 private theorem block_sq_add
     (hp : p * p = p) (hp' : p' * p' = p') (hpp' : p * p' = 0) (hp'p : p' * p = 0)
     (hsum : p + p' = 1) (hz : z * z = 1) :
@@ -101,6 +102,7 @@ private theorem block_sq_add
         rw [hsum, add_comm p' p, hsum]; simp
     _ = 1 := by rw [hzz, hzz, hp, hp', hsum]
 
+omit [CompleteSpace E] in
 private theorem block_anticomm
     (hp : p * p = p) (hp' : p' * p' = p') (hpp' : p * p' = 0) (hp'p : p' * p = 0)
     (hsum : p + p' = 1) (hz : z * z = 1) :
@@ -133,7 +135,7 @@ omit [CompleteSpace E] in
 private theorem orthogonal_eq :
     Uᗮ.starProjection = (1 : E →L[𝕜] E) - U.starProjection := by
   ext x
-  simp [Submodule.starProjection_orthogonal_apply]
+  simp
 
 omit [CompleteSpace E] in
 private theorem proj_sq : U.starProjection * U.starProjection = U.starProjection := by
@@ -164,6 +166,7 @@ private theorem proj_add_orthogonal :
     U.starProjection + Uᗮ.starProjection = (1 : E →L[𝕜] E) := by
   rw [orthogonal_eq]; abel
 
+omit [CompleteSpace E] in
 /-- The diagonal part written as the two corner products. -/
 theorem diagonalPart_eq_corners :
     U.diagonalPart Z
@@ -172,6 +175,7 @@ theorem diagonalPart_eq_corners :
   rw [Submodule.diagonalPart_eq]
   rfl
 
+omit [CompleteSpace E] in
 /-- The off-diagonal part written as the two corner products. -/
 theorem offDiagonalPart_eq_corners :
     U.offDiagonalPart Z
@@ -192,6 +196,7 @@ section Identities
 
 variable (U : Submodule 𝕜 E) [U.HasOrthogonalProjection] {Z : E →L[𝕜] E}
 
+omit [CompleteSpace E] in
 /-- **`C² + S² = 1`.**  The blocks of a self-adjoint involution relative to
 `U ⊕ Uᗮ` satisfy the Pythagorean identity: this is `Z² = 1` read on the diagonal. -/
 theorem diagonalPart_sq_add_offDiagonalPart_sq (hZ : Z * Z = 1) :
@@ -201,6 +206,7 @@ theorem diagonalPart_sq_add_offDiagonalPart_sq (hZ : Z * Z = 1) :
   exact block_sq_add (proj_sq U) (orthogonal_sq U) (proj_mul_orthogonal U)
     (orthogonal_mul_proj U) (proj_add_orthogonal U) hZ
 
+omit [CompleteSpace E] in
 /-- **`C S + S C = 0`.**  The same identity read off the diagonal: the two blocks
 of a self-adjoint involution anticommute. -/
 theorem diagonalPart_anticommute_offDiagonalPart (hZ : Z * Z = 1) :
@@ -210,6 +216,7 @@ theorem diagonalPart_anticommute_offDiagonalPart (hZ : Z * Z = 1) :
   exact block_anticomm (proj_sq U) (orthogonal_sq U) (proj_mul_orthogonal U)
     (orthogonal_mul_proj U) (proj_add_orthogonal U) hZ
 
+omit [CompleteSpace E] in
 /-- Anticommuting with `C` makes `S²` *commute* with `C`. -/
 theorem offDiagonalPart_sq_commute_diagonalPart (hZ : Z * Z = 1) :
     U.offDiagonalPart Z * U.offDiagonalPart Z * U.diagonalPart Z
@@ -229,6 +236,7 @@ theorem offDiagonalPart_sq_commute_diagonalPart (hZ : Z * Z = 1) :
         noncomm_ring
 
 
+omit [CompleteSpace E] in
 /-- The `U` corner of `S²`: only the `(1,2)(2,1)` product survives. -/
 theorem corner_offDiagonalPart_sq (Z : E →L[𝕜] E) :
     U.starProjection * (U.offDiagonalPart Z * U.offDiagonalPart Z) * U.starProjection
@@ -242,7 +250,7 @@ theorem corner_offDiagonalPart_sq (Z : E →L[𝕜] E) :
   have a4 : ∀ x : E →L[𝕜] E, Uᗮ.starProjection * (U.starProjection * x) = 0 :=
     fun x => by rw [← mul_assoc, orthogonal_mul_proj U, zero_mul]
   rw [offDiagonalPart_eq_corners]
-  simp only [add_mul, mul_add, mul_assoc, a1, a2, a3, a4, mul_zero, zero_mul,
+  simp only [add_mul, mul_add, mul_assoc, a1, a2, a3, a4, mul_zero,
     add_zero, zero_add, proj_sq U]
 
 private theorem commute_ring_inverse {A : Type*} [Ring A] {u x : A}
@@ -410,6 +418,7 @@ variable {Ec : Type v} [NormedAddCommGroup Ec] [InnerProductSpace ℂ Ec]
   [CompleteSpace Ec]
 variable (U V : Submodule ℂ Ec) [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
 
+omit [CompleteSpace Ec] in
 /-- The off-diagonal block of the reflection in `V`, in corner form. -/
 theorem offDiagonalPart_reflection_eq :
     U.offDiagonalPart V.reflectionOperator
@@ -426,6 +435,7 @@ theorem offDiagonalPart_reflection_eq :
   rw [hQ, ← ContinuousLinearMap.one_def]
   noncomm_ring [hp]
 
+omit [CompleteSpace Ec] in
 /-- **`Ξ · (1 - 2(P_V - P_U)²) = S`.**
 
 The paper's block representative, multiplied on the right by the signed doubled
@@ -452,6 +462,7 @@ theorem tanTwoBlockRepresentative_mul_signedCosTwo
               (doubleSecant U V * signedCosTwo U V)) := by noncomm_ring
     _ = _ := by rw [hsec, mul_one]
 
+omit [CompleteSpace Ec] in
 /-- **The unbounded reflection tangent is the paper's block representative, times
 a reflection.**
 
@@ -538,6 +549,7 @@ diagonal block *is* a unit signed doubled cosine, which is exactly what excludes
 the quarter-turn poles of `tan 2Θ`.  A caller therefore never has to certify
 `cos 2θ ≠ 0` separately. -/
 
+omit [CompleteSpace Ec] in
 /-- **A unit diagonal block is a unit signed doubled cosine.**
 
 `U.diagonalPart J_V = J_U · (1 - 2(P_V - P_U)²)` with `J_U` a self-adjoint

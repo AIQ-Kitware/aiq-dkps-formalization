@@ -138,7 +138,7 @@ theorem starProjection_orthogonal_eq (U : Submodule ℂ E)
     [U.HasOrthogonalProjection] :
     Uᗮ.starProjection = (1 : E →L[ℂ] E) - U.starProjection := by
   ext x
-  simp [Submodule.starProjection_orthogonal_apply]
+  simp
 
 
 
@@ -152,6 +152,7 @@ spectrum carries the squared principal cosines. -/
 private noncomputable def crossT : E →L[ℂ] E :=
   U.starProjection * V.starProjection * U.starProjection
 
+omit [CompleteSpace E] in
 private theorem starProjection_mul_crossT :
     U.starProjection * crossT U V = crossT U V := by
   rw [crossT, ← mul_assoc, ← mul_assoc, starProjection_mul_self]
@@ -210,6 +211,7 @@ subspace whose angle with `U` is twice the angle between `U` and `V`. -/
 noncomputable abbrev reflectedU : Submodule ℂ E :=
   U.map (V.reflection.toLinearEquiv : E →ₗ[ℂ] E)
 
+omit [CompleteSpace E] in
 /-- The projection onto the reflected subspace is the reflection conjugate of the
 projection, written out as `R P_U R`. -/
 theorem starProjection_reflectedU :
@@ -277,6 +279,7 @@ theorem directedSinAngleOperatorC_reflected_eq_directedSinTwoAngleOperatorC :
     _ = directedSinTwoAngleOperatorC U V :=
         CFC.sqrt_sq _ (directedSinTwoAngleOperatorC_nonneg U V)
 
+omit [CompleteSpace E] in
 /-- The reflected complement of `U` is the orthogonal complement of the reflected
 `U`, at the level of their projections. -/
 theorem starProjection_map_orthogonal_reflection :
