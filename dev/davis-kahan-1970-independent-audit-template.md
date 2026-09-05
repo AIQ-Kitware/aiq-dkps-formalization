@@ -715,16 +715,16 @@ One row per printed source clause per scalar field.  A clause is `PASS` only whe
 
 | clause | scalar | witness | status |
 | --- | --- | --- | --- |
-| `ambient.complex` | complex | `TauCeti.DavisKahan1970.tanTheta_ambient_unboundedRitz_definedTangent_symmetricNorming_complex` + `TauCeti.DavisKahan1970.crossedDefectsEquivalent_of_hasDefinedAmbientTangent` + `TauCeti.DavisKahan1970.continuousOn_tan_spectrum_of_hasDefinedAmbientTangent` | **PASS** |
-| `ambient.real` | real | `TauCeti.DavisKahan1970.tanTheta_ambient_unboundedRitz_definedTangent_symmetricNorming_real` + `TauCeti.DavisKahan1970.crossedDefectsEquivalent_of_hasDefinedAmbientTangent` + `TauCeti.DavisKahan1970.continuousOn_tan_spectrum_of_hasDefinedAmbientTangent` | **PASS** |
+| `ambient.complex` | complex | `TauCeti.DavisKahan1970.tanTheta_ambient_unboundedRitz_definedTangent_symmetricNorming_complex` + `TauCeti.DavisKahan1970.crossedDefectsEquivalent_of_hasDefinedAmbientTangent` + `TauCeti.DavisKahan1970.continuousOn_tan_spectrum_of_hasDefinedAmbientTangent` + `TauCeti.DavisKahan1970.hasDefinedAmbientTangent_iff_pi_div_two_notMem_spectrum` | **PASS** |
+| `ambient.real` | real | `TauCeti.DavisKahan1970.tanTheta_ambient_unboundedRitz_definedTangent_symmetricNorming_real` + `TauCeti.DavisKahan1970.crossedDefectsEquivalent_of_hasDefinedAmbientTangent` + `TauCeti.DavisKahan1970.continuousOn_tan_spectrum_of_hasDefinedAmbientTangent` + `TauCeti.DavisKahan1970.hasDefinedAmbientTangent_iff_pi_div_two_notMem_spectrum` | **PASS** |
 | `directed.complex` | complex | `TauCeti.DavisKahan1970.tanTheta_directed_unboundedRitz_symmetricNorming_complex` | **PASS** |
 | `directed.real` | real | `TauCeti.DavisKahan1970.tanTheta_directed_unboundedRitz_symmetricNorming_real` | **PASS** |
 
-**`ambient.complex`.** delta * N(tan Theta) <= N(H) on the ambient tanAngleOperatorC, with ideal membership, unbounded self-adjoint LinearPMap ambient operator and unbounded Ritz compression.  CONDITION (3.5) REMOVED 2026-09-04: the primary took `CrossedDefectsEquivalent U V`, which is (3.5), and the printed Section 2 theorem does not state it -- the paper introduces (3.5) in Section 3 after Proposition 3.2 and declares it to hold for the REMAINDER of the paper, so it cannot be a hypothesis of an earlier theorem.  In its place the primary now takes `HasDefinedAmbientTangent U V`, which is the Section 1 vacuity convention made explicit: `||P_U - P_V|| < 1` says no principal angle reaches pi/2, which is exactly when `||tan Theta||` exists.  Nothing is lost, because `crossedDefectsEquivalent_of_hasDefinedAmbientTangent` derives (3.5) from it -- an angle of pi/2 is a vector in one of the crossed defect spaces, so a defined tangent makes both trivial.  And the hypothesis does work in the conclusion: `continuousOn_tan_spectrum_of_hasDefinedAmbientTangent` shows the angle spectrum then misses pi/2, so `cfc Real.tan` is applied to a genuinely continuous function and is the paper's `tan Theta` rather than Mathlib's totalisation, which sets `tan (pi/2) = 0`.  The (3.5) theorems are retained as the non-vacuous specialization.
+**`ambient.complex`.** delta * N(tan Theta) <= N(H) on the ambient tanAngleOperatorC, with ideal membership, unbounded self-adjoint LinearPMap ambient operator and unbounded Ritz compression.  CONDITION (3.5) REMOVED 2026-09-04: the primary took `CrossedDefectsEquivalent U V`, which is (3.5), and the printed Section 2 theorem does not state it -- the paper introduces (3.5) in Section 3 after Proposition 3.2 and declares it to hold for the REMAINDER of the paper, so it cannot be a hypothesis of an earlier theorem.  In its place the primary now takes `HasDefinedAmbientTangent U V`, which is the Section 1 vacuity convention made explicit: `||P_U - P_V|| < 1` says no principal angle reaches pi/2, which is exactly when `||tan Theta||` exists.  Nothing is lost, because `crossedDefectsEquivalent_of_hasDefinedAmbientTangent` derives (3.5) from it -- an angle of pi/2 is a vector in one of the crossed defect spaces, so a defined tangent makes both trivial.  And the hypothesis does work in the conclusion: `continuousOn_tan_spectrum_of_hasDefinedAmbientTangent` shows the angle spectrum then misses pi/2, so `cfc Real.tan` is applied to a genuinely continuous function and is the paper's `tan Theta` rather than Mathlib's totalisation, which sets `tan (pi/2) = 0`.  The (3.5) theorems are retained as the non-vacuous specialization.  VACUITY MADE TWO-DIRECTIONAL 2026-09-04: `hasDefinedAmbientTangent_iff_pi_div_two_notMem_spectrum` proves the hypothesis holds EXACTLY when pi/2 is not an angle of the pair.  So it is not merely a sufficient condition chosen for convenience: when it fails, a nonnegative operator attains its norm in its spectrum, arcsin carries that to pi/2, and the paper's `tan Theta` genuinely does not exist -- which is the case Section 1 declares vacuous.  The hypothesis and the source's vacuity condition are the same condition.
 
 *Gap scope:* The printed tangent gap is the ORDERED one, and the Appendix drops the lower bound beta entirely, so both configurations are half-infinite: the primary takes `SemiboundedAbove D.trial.compression alpha` -- the trial compression bounded above by alpha, unbounded below -- against a coercivity bound `(alpha + delta) * |y|^2 <= re <A y, y>` on the reducing complement, which is bounded below by alpha + delta and unbounded above.  Neither side is confined to a finite interval.
 
-**`ambient.real`.** The real sibling of the complex ambient clause: delta * N(tan Theta) <= N(H) on the ambient tanAngleOperatorR, ideal membership concluded, unbounded self-adjoint ambient operator and unbounded Ritz compression, arbitrary SymmetricNormingFunction.  CONDITION (3.5) REMOVED 2026-09-04: the primary took `CrossedDefectsEquivalent U V`, which is (3.5), and the printed Section 2 theorem does not state it -- the paper introduces (3.5) in Section 3 after Proposition 3.2 and declares it to hold for the REMAINDER of the paper, so it cannot be a hypothesis of an earlier theorem.  In its place the primary now takes `HasDefinedAmbientTangent U V`, which is the Section 1 vacuity convention made explicit: `||P_U - P_V|| < 1` says no principal angle reaches pi/2, which is exactly when `||tan Theta||` exists.  Nothing is lost, because `crossedDefectsEquivalent_of_hasDefinedAmbientTangent` derives (3.5) from it -- an angle of pi/2 is a vector in one of the crossed defect spaces, so a defined tangent makes both trivial.  And the hypothesis does work in the conclusion: `continuousOn_tan_spectrum_of_hasDefinedAmbientTangent` shows the angle spectrum then misses pi/2, so `cfc Real.tan` is applied to a genuinely continuous function and is the paper's `tan Theta` rather than Mathlib's totalisation, which sets `tan (pi/2) = 0`.  The (3.5) theorems are retained as the non-vacuous specialization.
+**`ambient.real`.** The real sibling of the complex ambient clause: delta * N(tan Theta) <= N(H) on the ambient tanAngleOperatorR, ideal membership concluded, unbounded self-adjoint ambient operator and unbounded Ritz compression, arbitrary SymmetricNormingFunction.  CONDITION (3.5) REMOVED 2026-09-04: the primary took `CrossedDefectsEquivalent U V`, which is (3.5), and the printed Section 2 theorem does not state it -- the paper introduces (3.5) in Section 3 after Proposition 3.2 and declares it to hold for the REMAINDER of the paper, so it cannot be a hypothesis of an earlier theorem.  In its place the primary now takes `HasDefinedAmbientTangent U V`, which is the Section 1 vacuity convention made explicit: `||P_U - P_V|| < 1` says no principal angle reaches pi/2, which is exactly when `||tan Theta||` exists.  Nothing is lost, because `crossedDefectsEquivalent_of_hasDefinedAmbientTangent` derives (3.5) from it -- an angle of pi/2 is a vector in one of the crossed defect spaces, so a defined tangent makes both trivial.  And the hypothesis does work in the conclusion: `continuousOn_tan_spectrum_of_hasDefinedAmbientTangent` shows the angle spectrum then misses pi/2, so `cfc Real.tan` is applied to a genuinely continuous function and is the paper's `tan Theta` rather than Mathlib's totalisation, which sets `tan (pi/2) = 0`.  The (3.5) theorems are retained as the non-vacuous specialization.  VACUITY MADE TWO-DIRECTIONAL 2026-09-04: `hasDefinedAmbientTangent_iff_pi_div_two_notMem_spectrum` proves the hypothesis holds EXACTLY when pi/2 is not an angle of the pair.  So it is not merely a sufficient condition chosen for convenience: when it fails, a nonnegative operator attains its norm in its spectrum, arcsin carries that to pi/2, and the paper's `tan Theta` genuinely does not exist -- which is the case Section 1 declares vacuous.  The hypothesis and the source's vacuity condition are the same condition.
 
 *Gap scope:* The printed tangent gap is the ORDERED one, and the Appendix drops the lower bound beta entirely, so both configurations are half-infinite: the primary takes `SemiboundedAbove D.trial.compression alpha` -- the trial compression bounded above by alpha, unbounded below -- against a coercivity bound `(alpha + delta) * |y|^2 <= re <A y, y>` on the reducing complement, which is bounded below by alpha + delta and unbounded above.  Neither side is confined to a finite interval.
 
@@ -778,6 +778,7 @@ The declarations that carry this result's printed statement, with the source ato
 - `TauCeti.DavisKahan1970.crossedDefectsEquivalent_of_hasDefinedAmbientTangentReal` — source_correspondence
 - `TauCeti.DavisKahan1970.HasDefinedAmbientTangent` — source_correspondence
 - `TauCeti.DavisKahan1970.HasDefinedAmbientTangentReal` — source_correspondence
+- `TauCeti.DavisKahan1970.hasDefinedAmbientTangent_iff_pi_div_two_notMem_spectrum` — source_correspondence
 
 ### Source-facing Lean declarations
 
@@ -933,7 +934,7 @@ Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.tanTheta_ambient_unboundedRitz_definedTangent_symmetricNorming_complex`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/TanThetaUnboundedAmbient.lean:662`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/TanThetaUnboundedAmbient.lean:702`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
@@ -963,7 +964,7 @@ Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.continuousOn_tan_spectrum_of_hasDefinedAmbientTangent`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/TanThetaUnboundedAmbient.lean:641`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/TanThetaUnboundedAmbient.lean:681`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
@@ -976,6 +977,12 @@ Compiler-printed type: *inserted when a compiler certificate is supplied.*
 #### `TauCeti.DavisKahan1970.crossedDefectsEquivalent_of_hasDefinedAmbientTangentReal`
 
 Source location candidates: `DavisKahan/Sources/DavisKahan1970/TanThetaUnboundedAmbientReal.lean:431`
+
+Compiler-printed type: *inserted when a compiler certificate is supplied.*
+
+#### `TauCeti.DavisKahan1970.hasDefinedAmbientTangent_iff_pi_div_two_notMem_spectrum`
+
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/TanThetaUnboundedAmbient.lean:642`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
