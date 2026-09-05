@@ -232,6 +232,56 @@ theorem proposition4_3_compact_nonacute_symmetricNorming_complex
       exact ⟨h₁, by rw [one_mul]; exact h₂⟩)
   exact ⟨hmem, by rw [one_mul] at hle; exact hle⟩
 
+/-! ### Source-exact façades for the Section 4 and Section 5 results
+
+The same discipline as Section 2: each façade states its result at the printed
+scope -- separable Hilbert spaces, and the literal `NormalizedUnitaryInvariantNorm`
+class -- and the arbitrary-Hilbert `SymmetricNormingFunction` theorem above it is
+retained as a registered generalization.
+
+These are one step shorter than the Section 2 façades.  The theorems here were
+already proved from `KyFanDominantIdealFamily` statements, so a source norm
+reaches them by its own projection rather than through the Fan-dominance bridge;
+`normalizedUnitaryInvariant_toKyFanDominant` is that projection, and it is the
+statement that the source class sits inside the Fan-dominant one. -/
+
+/-- **Davis--Kahan 1970, Corollary 4.1 at the printed source scope over `ℂ`.** -/
+theorem corollary4_1_compact_nonacute_sourceExact_complex
+    [TopologicalSpace.SeparableSpace H]
+    (N : NormalizedUnitaryInvariantNorm.{0, v} ℂ)
+    (U V : Submodule ℂ H) [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
+    (hcompact : IsCompactOperator (TauCeti.principalSineOperator U V))
+    (J : DavisKahan.halmosSourceDefect U V ≃ₗᵢ[ℂ]
+      DavisKahan.halmosTargetDefect U V)
+    (W : H →L[ℂ] H) (hWunitary : W ∈ unitary (H →L[ℂ] H))
+    (hWmap : W * DavisKahan.projection U = DavisKahan.projection V * W)
+    (hWmem : N.Mem ((1 - W) ∘L DavisKahan.projection U)) :
+    N.Mem ((1 - DavisKahan.nonacuteDirectRotation U V J) ∘L DavisKahan.projection U) ∧
+      N.gauge ((1 - DavisKahan.nonacuteDirectRotation U V J) ∘L
+          DavisKahan.projection U) ≤
+        N.gauge ((1 - W) ∘L DavisKahan.projection U) :=
+  corollary4_1_compact_nonacute_complex N.toKyFanDominantIdealFamily U V hcompact J W
+    hWunitary hWmap hWmem
+
+/-- **Davis--Kahan 1970, Proposition 4.3 at the printed source scope over `ℂ`.** -/
+theorem proposition4_3_compact_nonacute_sourceExact_complex
+    [TopologicalSpace.SeparableSpace H]
+    (N : NormalizedUnitaryInvariantNorm.{0, v} ℂ)
+    (U V : Submodule ℂ H) [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
+    (hcompact : IsCompactOperator (TauCeti.principalSineOperator U V))
+    (J : DavisKahan.halmosSourceDefect U V ≃ₗᵢ[ℂ]
+      DavisKahan.halmosTargetDefect U V)
+    (W : H →L[ℂ] H) (hWunitary : W ∈ unitary (H →L[ℂ] H))
+    (hWmap : W * DavisKahan.projection U = DavisKahan.projection V * W)
+    (hWmem : N.Mem ((1 - star W) * (1 - W))) :
+    N.Mem ((1 - star (DavisKahan.nonacuteDirectRotation U V J)) *
+        (1 - DavisKahan.nonacuteDirectRotation U V J)) ∧
+      N.gauge ((1 - star (DavisKahan.nonacuteDirectRotation U V J)) *
+          (1 - DavisKahan.nonacuteDirectRotation U V J)) ≤
+        N.gauge ((1 - star W) * (1 - W)) :=
+  proposition4_3_compact_nonacute_idealGauge N.toKyFanDominantIdealFamily U V hcompact J W
+    hWunitary hWmap hWmem
+
 end Complex
 
 section Real
@@ -282,6 +332,43 @@ theorem proposition4_3_compact_nonacute_symmetricNorming_real
         proposition4_3_compact_nonacute_real_idealGauge U V M hcompact J W hWunitary hWmap hM
       exact ⟨h₁, by rw [one_mul]; exact h₂⟩)
   exact ⟨hmem, by rw [one_mul] at hle; exact hle⟩
+
+/-- **Davis--Kahan 1970, Corollary 4.1 at the printed source scope over `ℝ`.** -/
+theorem corollary4_1_compact_nonacute_sourceExact_real
+    [TopologicalSpace.SeparableSpace E]
+    (N : NormalizedUnitaryInvariantNorm.{0, v} ℝ)
+    (U V : Submodule ℝ E) [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
+    (hcompact : IsCompactOperator (TauCeti.principalSineOperator U V))
+    (J : DavisKahan.halmosSourceDefect U V ≃ₗᵢ[ℝ]
+      DavisKahan.halmosTargetDefect U V)
+    (W : E →L[ℝ] E) (hWunitary : W ∈ unitary (E →L[ℝ] E))
+    (hWmap : W * DavisKahan.projection U = DavisKahan.projection V * W)
+    (hWmem : N.Mem ((1 - W) ∘L DavisKahan.projection U)) :
+    N.Mem ((1 - DavisKahan.nonacuteDirectRotation U V J) ∘L DavisKahan.projection U) ∧
+      N.gauge ((1 - DavisKahan.nonacuteDirectRotation U V J) ∘L
+          DavisKahan.projection U) ≤
+        N.gauge ((1 - W) ∘L DavisKahan.projection U) :=
+  corollary4_1_compact_nonacute_real U V N.toKyFanDominantIdealFamily hcompact J W
+    hWunitary hWmap hWmem
+
+/-- **Davis--Kahan 1970, Proposition 4.3 at the printed source scope over `ℝ`.** -/
+theorem proposition4_3_compact_nonacute_sourceExact_real
+    [TopologicalSpace.SeparableSpace E]
+    (N : NormalizedUnitaryInvariantNorm.{0, v} ℝ)
+    (U V : Submodule ℝ E) [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
+    (hcompact : IsCompactOperator (TauCeti.principalSineOperator U V))
+    (J : DavisKahan.halmosSourceDefect U V ≃ₗᵢ[ℝ]
+      DavisKahan.halmosTargetDefect U V)
+    (W : E →L[ℝ] E) (hWunitary : W ∈ unitary (E →L[ℝ] E))
+    (hWmem : N.Mem ((1 - star W) * (1 - W)))
+    (hWmap : W * DavisKahan.projection U = DavisKahan.projection V * W) :
+    N.Mem ((1 - star (DavisKahan.nonacuteDirectRotation U V J)) *
+        (1 - DavisKahan.nonacuteDirectRotation U V J)) ∧
+      N.gauge ((1 - star (DavisKahan.nonacuteDirectRotation U V J)) *
+          (1 - DavisKahan.nonacuteDirectRotation U V J)) ≤
+        N.gauge ((1 - star W) * (1 - W)) :=
+  proposition4_3_compact_nonacute_real_idealGauge U V N.toKyFanDominantIdealFamily hcompact
+    J W hWunitary hWmap hWmem
 
 end Real
 
@@ -353,6 +440,48 @@ theorem theorem5_2_orderedGap_symmetricNorming_real
     N.Mem X ∧ δ * N.gauge X ≤ N.gauge R :=
   theorem5_2_symmetricNorming_real N hA hB hδ
     (DavisKahan.Sylvester.FormBoundedSylvesterGap.leftAboveRightBelow c hAlow hBhigh) hsyl hR
+
+/-- **Davis--Kahan 1970, Theorem 5.2 at the printed source scope over `ℂ`.**
+
+Separable Hilbert spaces on both sides -- the source's ambient assumption, carried
+on each of the two spaces its Sylvester equation names -- and the literal
+normalized unitarily invariant norm class.  The printed ordered separation
+`A ≥ c + δ > c ≥ B`, not the broader gap abstraction. -/
+theorem theorem5_2_sourceExact_complex
+    {E F : Type v}
+    [NormedAddCommGroup E] [InnerProductSpace ℂ E] [CompleteSpace E]
+    [TopologicalSpace.SeparableSpace E]
+    [NormedAddCommGroup F] [InnerProductSpace ℂ F] [CompleteSpace F]
+    [TopologicalSpace.SeparableSpace F]
+    (N : NormalizedUnitaryInvariantNorm.{0, v} ℂ) {A : E →ₗ.[ℂ] E} {B : F →ₗ.[ℂ] F}
+    (hA : IsSelfAdjoint A) (hB : IsSelfAdjoint B)
+    {X R : F →L[ℂ] E} {c δ : ℝ} (hδ : 0 < δ)
+    (hAlow : TauCeti.LinearPMap.SemiboundedBelow A (c + δ))
+    (hBhigh : TauCeti.LinearPMap.SemiboundedAbove B c)
+    (hsyl : TauCeti.LinearPMap.SylvesterEquation A B X R)
+    (hR : N.Mem R) :
+    N.Mem X ∧ δ * N.gauge X ≤ N.gauge R :=
+  theorem5_2 N.toKyFanDominantIdealFamily hA hB hδ hAlow hBhigh hsyl hR
+
+/-- **Davis--Kahan 1970, Theorem 5.2 at the printed source scope over `ℝ`.** -/
+theorem theorem5_2_sourceExact_real
+    {E F : Type v}
+    [NormedAddCommGroup E] [InnerProductSpace ℝ E] [CompleteSpace E]
+    [TopologicalSpace.SeparableSpace E]
+    [NormedAddCommGroup F] [InnerProductSpace ℝ F] [CompleteSpace F]
+    [TopologicalSpace.SeparableSpace F]
+    (N : NormalizedUnitaryInvariantNorm.{0, v} ℝ) {A : E →ₗ.[ℝ] E} {B : F →ₗ.[ℝ] F}
+    (hA : IsSelfAdjoint A) (hB : IsSelfAdjoint B)
+    {X R : F →L[ℝ] E} {c δ : ℝ} (hδ : 0 < δ)
+    (hAlow : TauCeti.LinearPMap.SemiboundedBelow A (c + δ))
+    (hBhigh : TauCeti.LinearPMap.SemiboundedAbove B c)
+    (hsyl : TauCeti.LinearPMap.SylvesterEquation A B X R)
+    (hR : N.Mem R) :
+    N.Mem X ∧ δ * N.gauge X ≤ N.gauge R :=
+  DavisKahan.Sylvester.davisKahan1970_sylvester_real
+    N.toKyFanDominantIdealFamily hA hB hδ
+    (DavisKahan.Sylvester.FormBoundedSylvesterGap.leftAboveRightBelow c hAlow hBhigh)
+    hsyl hR
 
 end Sylvester
 

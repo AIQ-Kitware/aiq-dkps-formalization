@@ -8,6 +8,7 @@ import DavisKahan.DoubleAngle.RealAngleIdentification
 import DavisKahan.Sources.DavisKahan1970.AmbientReal
 import DavisKahan.Sources.DavisKahan1970.SineTheta.Norms.SingularValueTransport
 import DavisKahan.SpectralTheory.Complexification.SubmoduleEquiv
+import DavisKahan.Sources.DavisKahan1970.SymmetricNormingFanDominance
 
 open TauCeti.DavisKahan.Angle
 
@@ -717,6 +718,47 @@ theorem theorem8_2_real [FiniteDimensional ℝ E]
     theorem8_2_sinTwoTheta_residual_real hA hK hdelta hab hQ hQperp hPred,
     theorem8_2_branch_real_maximalAngle_lt hA hK hdelta hab hQ hQperp hPred
       hP hrank hsmall⟩
+
+/-! ### Source-exact façades over `ℝ` -/
+
+/-- **Theorem 8.2's retained perturbation bound at the printed source scope over
+`ℝ`.** -/
+theorem theorem8_2_sinTwoTheta_perturbation_real_sourceExact
+    [TopologicalSpace.SeparableSpace E]
+    (N : ExactSinTheta.NormalizedUnitaryInvariantNorm.{0, _} ℝ)
+    {A K : E →L[ℝ] E} (hA : IsSelfAdjointOperator A) (hK : IsSelfAdjointOperator K)
+    {P Q : Submodule ℝ E} [P.HasOrthogonalProjection] [Q.HasOrthogonalProjection]
+    {alpha beta delta : ℝ} (hdelta : 0 < delta) (hab : beta ≤ alpha)
+    (hQ : Foundation.SpectrumIn (A + K) Q (Set.Icc beta alpha))
+    (hQperp : Foundation.SpectrumIn (A + K) Qᗮ (gapExterior beta alpha delta))
+    (hPred : A.Reduces P)
+    (hKmem : N.Mem K) :
+    N.Mem (sinTwoAngleOperatorR Q P) ∧
+      delta * N.gauge (sinTwoAngleOperatorR Q P) ≤ 2 * N.gauge K :=
+  TauCeti.DavisKahan1970.normalizedUnitaryInvariant_of_symmetricNorming_mul N hdelta two_pos
+    hKmem fun M hM =>
+      theorem8_2_sinTwoTheta_perturbation_real_symmetricNorming M hA hK hdelta hab hQ
+        hQperp hPred hM
+
+/-- **Theorem 8.2's retained residual bound on the directed angle, at the printed
+source scope over `ℝ`.** -/
+theorem theorem8_2_sinTwoTheta_residual_directedAngle_real_sourceExact
+    [TopologicalSpace.SeparableSpace E]
+    (N : ExactSinTheta.NormalizedUnitaryInvariantNorm.{0, _} ℝ)
+    {A K : E →L[ℝ] E} (hA : IsSelfAdjointOperator A) (hK : IsSelfAdjointOperator K)
+    {P Q : Submodule ℝ E} [P.HasOrthogonalProjection] [Q.HasOrthogonalProjection]
+    {alpha beta delta : ℝ} (hdelta : 0 < delta) (hab : beta ≤ alpha)
+    (hQ : Foundation.SpectrumIn (A + K) Q (Set.Icc beta alpha))
+    (hQperp : Foundation.SpectrumIn (A + K) Qᗮ (gapExterior beta alpha delta))
+    (hPred : A.Reduces P)
+    (hRmem : N.Mem (residual (A + K) P.subtypeL (compressOperator P A))) :
+    N.Mem (Angle.directedSinTwoAngleOperator P Q) ∧
+      delta * N.gauge (Angle.directedSinTwoAngleOperator P Q) ≤
+        2 * N.gauge (residual (A + K) P.subtypeL (compressOperator P A)) :=
+  TauCeti.DavisKahan1970.normalizedUnitaryInvariant_of_symmetricNorming_mul N hdelta two_pos
+    hRmem fun M hM =>
+      theorem8_2_sinTwoTheta_residual_directedAngle_real_symmetricNorming M hA hK hdelta
+        hab hQ hQperp hPred hM
 
 end
 

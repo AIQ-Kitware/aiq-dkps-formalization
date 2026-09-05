@@ -4,7 +4,7 @@
 
 **Census family:** `source-completion-census`  
 **Items:** 50  
-**Unique cited Lean declarations:** 1284
+**Unique cited Lean declarations:** 1294
 
 ## How to use this census
 
@@ -2908,6 +2908,9 @@ Equations (4.1) and (4.2), the closest-`Q`-vector step and the `V = UZ` factoris
 - `TauCeti.DavisKahan1970.corollary4_1_compact_nonacute_symmetricNorming_complex`
 - `TauCeti.DavisKahan1970.corollary4_1_compact_nonacute_symmetricNorming_real`
 - `TauCeti.DavisKahan1970.symmetricNorming_of_kyFanDominant`
+- `TauCeti.DavisKahan1970.corollary4_1_compact_nonacute_sourceExact_complex`
+- `TauCeti.DavisKahan1970.corollary4_1_compact_nonacute_sourceExact_real`
+- `TauCeti.DavisKahan.ExactSinTheta.NormalizedUnitaryInvariantNorm`
 
 **Notes.** Compiled without any angle restriction, for every unitarily invariant norm, over every RCLike field (finite dimension).  The earlier note conflating this row with Proposition 4.4 is resolved: the corollary concerns the restricted displacement and needs no angle hypothesis.
 
@@ -2930,6 +2933,8 @@ THE RECORDED OBSTRUCTION DOES NOT APPLY HERE.  The blocker's obstruction (1) say
 SOURCE-FIDELITY REFRESH 2026-08-11.  Status lowered to `compiled_specialization` because the arbitrary-dimensional endpoints recorded here were acute while the paper inherits the matched-crossed-defect nonacute case.
 
 SECTION 4 STAGING RETIRED 2026-08-27.  `DavisKahan/Frontier/Section4.lean` is deleted; every declaration it carried was a wrapper grounded by `:=` on a stable Geometry/OperatorIdeal theorem. The acute arbitrary-dimensional ideal-gauge endpoint recorded on this row was the one statement with no complex source-facing owner -- the nonacute scope had `corollary4_1_infiniteDimensional_nonacute` and the real scope had `corollary4_1_real`, but the acute complex composite existed only in the staging module.  It is now `TauCeti.DavisKahan1970.corollary4_1_infiniteDimensional` in `DavisKahan/Sources/DavisKahan1970/Section4.lean`, the same one-line composition of `infinite_restrictedDisplacementDominance` with `restrictedDisplacement_idealGauge_le`, so the row's scope is unchanged.
+
+SOURCE-EXACT FAÇADE REGISTERED 2026-09-05. Canonical evidence is now the printed-scope façade -- separable Hilbert space and the literal `NormalizedUnitaryInvariantNorm` class -- with the arbitrary-Hilbert `SymmetricNormingFunction` theorem retained beneath it as a registered generalization. See GOAL.md sections I, III.3 and IV.
 
 **Next action.** No hostile-review hole is currently recorded for this source passage. Preserve exact source scope and re-audit if the distributable source specification changes.
 
@@ -3067,6 +3072,9 @@ REOPENING WITHDRAWN 2026-08-31 and the rule corrected: a later source passage en
 - `TauCeti.DavisKahan1970.proposition4_3_compact_nonacute_symmetricNorming_complex`
 - `TauCeti.DavisKahan1970.proposition4_3_compact_nonacute_symmetricNorming_real`
 - `TauCeti.DavisKahan1970.symmetricNorming_of_kyFanDominant`
+- `TauCeti.DavisKahan1970.proposition4_3_compact_nonacute_sourceExact_complex`
+- `TauCeti.DavisKahan1970.proposition4_3_compact_nonacute_sourceExact_real`
+- `TauCeti.DavisKahan.ExactSinTheta.NormalizedUnitaryInvariantNorm`
 
 **Curated source/Lean review:**
 
@@ -3153,6 +3161,8 @@ SOURCE-FIDELITY REFRESH 2026-08-11.  Status lowered to `compiled_specialization`
 SECTION 4 STAGING RETIRED 2026-08-27.  `DavisKahan/Frontier/Section4.lean` is deleted, together with the compatibility-only directory `DavisKahan/MathAhead/Section4/` whose three modules declared nothing and only re-imported `DavisKahan.Geometry.Polar.RestrictedDisplacementExtremal` and `DavisKahan.Geometry.Polar.DisplacementSquareExtremal`.  The dated notes above describing those paths are the historical record.  Current ownership: the Ky Fan theorem is `TauCeti.DavisKahan.Section4.proposition4_3_squaredDisplacement_kyFan` in `DavisKahan/Geometry/Polar/DisplacementSquareExtremal.lean`, aliased source-facing as `proposition4_3_infiniteDimensional`; the refuting configuration for the pointwise reading is now recorded in that module's docstring rather than in the retired staging file.
 
 REOPENING WITHDRAWN 2026-08-31 and the rule corrected: a later source passage enlarges a counted result only when it is needed to determine what Davis and Kahan actually claim in it. An extension, variant or consequence they mention without introducing and proving it as a result of its own is `result_adjacent_extension` fidelity material. The Lean coverage produced during the reopening is kept as supporting evidence.
+
+SOURCE-EXACT FAÇADE REGISTERED 2026-09-05. Canonical evidence is now the printed-scope façade -- separable Hilbert space and the literal `NormalizedUnitaryInvariantNorm` class -- with the arbitrary-Hilbert `SymmetricNormingFunction` theorem retained beneath it as a registered generalization. See GOAL.md sections I, III.3 and IV.
 
 **Next action.** Hostile re-audit reopened this row. Broader nonacute and real source theorems exist, but the primary row evidence is narrower and the hashed block contains equations (4.3)-(4.6) plus the precise UI-norm limitation. Rebind/atomize the complete source scope.
 
@@ -3364,6 +3374,9 @@ The first hole asked for a source-facing theorem for "(5.2) is not best possible
 - `TauCeti.DavisKahan1970.theorem5_2_symmetricNorming_real`
 - `TauCeti.DavisKahan1970.symmetricNorming_of_kyFanDominant`
 - `TauCeti.DavisKahan1970.theorem5_2_orderedGap_symmetricNorming_real`
+- `TauCeti.DavisKahan1970.theorem5_2_sourceExact_complex`
+- `TauCeti.DavisKahan1970.theorem5_2_sourceExact_real`
+- `TauCeti.DavisKahan.ExactSinTheta.NormalizedUnitaryInvariantNorm`
 
 **Curated source/Lean review:**
 
@@ -3420,6 +3433,8 @@ Fan level.  That is printed Theorem 5.2 over a real Hilbert space of arbitrary d
 is not part of the real-scalar gap the blocker describes.
 
 REOPENING WITHDRAWN 2026-08-31 and the rule corrected: a later source passage enlarges a counted result only when it is needed to determine what Davis and Kahan actually claim in it. An extension, variant or consequence they mention without introducing and proving it as a result of its own is `result_adjacent_extension` fidelity material. The Lean coverage produced during the reopening is kept as supporting evidence.
+
+SOURCE-EXACT FAÇADE REGISTERED 2026-09-05. Canonical evidence is now the printed-scope façade -- separable Hilbert space and the literal `NormalizedUnitaryInvariantNorm` class -- with the arbitrary-Hilbert `SymmetricNormingFunction` theorem retained beneath it as a registered generalization. See GOAL.md sections I, III.3 and IV.
 
 **Next action.** Hostile re-audit reopened this row. The theorem appears available in both scalar fields, but primary evidence is not explicitly bound clause-by-clause to the paper's full real/complex source scope.
 
@@ -3700,6 +3715,9 @@ Residue, and not a gap: `[CompleteSpace Z]`, which `Theorem63InfiniteTrial.lean`
 - `TauCeti.DavisKahan1970.approximationSingularValue_directedSineBlock_lt_one_unboundedRitz_real`
 - `TauCeti.DavisKahan1970.tanTheta_directed_unboundedRitz_symmetricNorming_complex`
 - `TauCeti.DavisKahan1970.tanTheta_directed_unboundedRitz_symmetricNorming_real`
+- `TauCeti.DavisKahan1970.tanTheta_directed_unboundedRitz_sourceExact_complex`
+- `TauCeti.DavisKahan1970.tanTheta_directed_unboundedRitz_sourceExact_real`
+- `TauCeti.DavisKahan.ExactSinTheta.NormalizedUnitaryInvariantNorm`
 
 **Curated source/Lean review:**
 
@@ -3795,6 +3813,8 @@ The generalized tangent theorem was already covered; the hole was the worked exa
 The spectral mass is on the wrong side exactly as the source allows: `alpha = 0` and `delta = 1` would demand the complementary spectrum lie in `[1, ∞)`, and both eigenvalues of `T` are `± 1/sqrt 2`, below `1`. That is what the theorem's second hypothesis forbids, and removing it is what breaks the bound.
 
 The tangent is recorded as the equality of the two components rather than through an arctangent: they are both `1/sqrt 2`, so the ratio defining `tan Theta_0` is `1`, which is the printed quantity without needing the angle API.
+
+SOURCE-EXACT FAÇADE REGISTERED 2026-09-05. Canonical evidence is now the printed-scope façade -- separable Hilbert space and the literal `NormalizedUnitaryInvariantNorm` class -- with the arbitrary-Hilbert `SymmetricNormingFunction` theorem retained beneath it as a registered generalization. See GOAL.md sections I, III.3 and IV.
 
 **Next action.** None. The generalized tangent theorem and Example 6.1 are both compiled, the example's four printed numbers each as their own theorem, and the module is reachable from the curated root (`check_library_structure` rule 4).
 
@@ -4508,6 +4528,11 @@ At the OPERATOR norm the compiled residual statement is sound and in fact STRONG
 - `TauCeti.DavisKahan.Angle.directedSinTwoAngleOperator_hasSameApproximationNumbers_swap`
 - `TauCeti.DavisKahan.Angle.mem_directedSinTwoAngleOperator_trialSide_iff`
 - `TauCeti.DavisKahan.Angle.gauge_directedSinTwoAngleOperator_trialSide`
+- `TauCeti.DavisKahan1970.Section8.theorem8_2_sinTwoTheta_perturbation_sourceExact`
+- `TauCeti.DavisKahan1970.Section8.theorem8_2_sinTwoTheta_residual_directedAngle_sourceExact`
+- `TauCeti.DavisKahan1970.Section8.theorem8_2_sinTwoTheta_perturbation_real_sourceExact`
+- `TauCeti.DavisKahan1970.Section8.theorem8_2_sinTwoTheta_residual_directedAngle_real_sourceExact`
+- `TauCeti.DavisKahan.ExactSinTheta.NormalizedUnitaryInvariantNorm`
 
 **Curated source/Lean review:**
 
@@ -4722,6 +4747,8 @@ THE FILE WAS SELF-CONTRADICTING, NOT MERELY STALE: the same module docstring alr
 REOPENING WITHDRAWN 2026-08-31 and the rule corrected: a later source passage enlarges a counted result only when it is needed to determine what Davis and Kahan actually claim in it. An extension, variant or consequence they mention without introducing and proving it as a result of its own is `result_adjacent_extension` fidelity material. The Lean coverage produced during the reopening is kept as supporting evidence.
 
 **ORIENTATION CORRECTION 2026-09-04 (Claude Opus 5, on hostile review).**  The printed residual alternative is now certified on `Angle.directedSinTwoAngleOperator P Q`, the paper's trial-side directed angle, rather than on `sinTwoThetaIdealBlock Q P`.  Same defect class as the `S2-sin-two-theta` repair earlier the same day; the bridge is `Angle.sinTwoThetaIdealBlock_hasSameApproximationNumbers_trialSide`.
+
+SOURCE-EXACT FAÇADE REGISTERED 2026-09-05. Canonical evidence is now the printed-scope façade -- separable Hilbert space and the literal `NormalizedUnitaryInvariantNorm` class -- with the arbitrary-Hilbert `SymmetricNormingFunction` theorem retained beneath it as a registered generalization. See GOAL.md sections I, III.3 and IV.
 
 **Next action.** Hostile re-audit reopened this row. A single `.whole` clause covers two alternative half-gap hypotheses, branch selection, homotopy, perturbation and residual forms, unequal-dimensional extension, and the source statement that no analogous tan(2 Theta) extension is known. These need atomic evidence/dispositions.
 

@@ -275,13 +275,13 @@ Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.normalizedUnitaryInvariant_of_symmetricNorming`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/SymmetricNormingFanDominance.lean:379`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/SymmetricNormingFanDominance.lean:508`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.normalizedUnitaryInvariant_of_symmetricNorming_mul`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/SymmetricNormingFanDominance.lean:398`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/SymmetricNormingFanDominance.lean:527`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
@@ -1145,13 +1145,13 @@ Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.normalizedUnitaryInvariant_of_symmetricNorming`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/SymmetricNormingFanDominance.lean:379`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/SymmetricNormingFanDominance.lean:508`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.normalizedUnitaryInvariant_of_symmetricNorming_mul`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/SymmetricNormingFanDominance.lean:398`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/SymmetricNormingFanDominance.lean:527`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
@@ -1744,13 +1744,13 @@ Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.normalizedUnitaryInvariant_of_symmetricNorming`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/SymmetricNormingFanDominance.lean:379`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/SymmetricNormingFanDominance.lean:508`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.normalizedUnitaryInvariant_of_symmetricNorming_mul`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/SymmetricNormingFanDominance.lean:398`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/SymmetricNormingFanDominance.lean:527`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
@@ -2340,13 +2340,13 @@ Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.normalizedUnitaryInvariant_of_symmetricNorming`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/SymmetricNormingFanDominance.lean:379`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/SymmetricNormingFanDominance.lean:508`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.normalizedUnitaryInvariant_of_symmetricNorming_mul`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/SymmetricNormingFanDominance.lean:398`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/SymmetricNormingFanDominance.lean:527`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
@@ -3936,12 +3936,16 @@ One row per printed source clause per scalar field.  A clause is `PASS` only whe
 
 | clause | scalar | witness | status |
 | --- | --- | --- | --- |
-| `ui-minimality-on-p.complex` | complex | `TauCeti.DavisKahan1970.corollary4_1_compact_nonacute_symmetricNorming_complex` | **PASS** |
-| `ui-minimality-on-p.real` | real | `TauCeti.DavisKahan1970.corollary4_1_compact_nonacute_symmetricNorming_real` | **PASS** |
+| `ui-minimality-on-p.complex` | complex | `TauCeti.DavisKahan1970.corollary4_1_compact_nonacute_sourceExact_complex` + `TauCeti.DavisKahan.ExactSinTheta.NormalizedUnitaryInvariantNorm` | **PASS** |
+| `ui-minimality-on-p.real` | real | `TauCeti.DavisKahan1970.corollary4_1_compact_nonacute_sourceExact_real` + `TauCeti.DavisKahan.ExactSinTheta.NormalizedUnitaryInvariantNorm` | **PASS** |
 
 **`ui-minimality-on-p.complex`.** For every source unitarily invariant norm, N((1 - V)P) is minimized among unitaries carrying P H onto Q H by the direct rotation.  This is the printed Corollary 4.1 quantifier: SymmetricNormingFunction, not an implementation ideal family.
 
+SOURCE-EXACT FAÇADE REGISTERED 2026-09-05 (GOAL.md sections I, III.3 and IV). The canonical witness is the façade at the PRINTED scope: separable Hilbert space, and `NormalizedUnitaryInvariantNorm` -- the Lean type for the norm class Section 1 fixes. The arbitrary-Hilbert `SymmetricNormingFunction` theorem that proves it is retained as supporting evidence with role `generalization`, and is stronger on both axes.
+
 **`ui-minimality-on-p.real`.** For every source unitarily invariant norm, N((1 - V)P) is minimized among unitaries carrying P H onto Q H by the direct rotation.  This is the printed Corollary 4.1 quantifier: SymmetricNormingFunction, not an implementation ideal family.
+
+SOURCE-EXACT FAÇADE REGISTERED 2026-09-05 (GOAL.md sections I, III.3 and IV). The canonical witness is the façade at the PRINTED scope: separable Hilbert space, and `NormalizedUnitaryInvariantNorm` -- the Lean type for the norm class Section 1 fixes. The arbitrary-Hilbert `SymmetricNormingFunction` theorem that proves it is retained as supporting evidence with role `generalization`, and is stronger on both axes.
 
 Result-wide scope every clause must carry: `DK-4.1-prop.section4-compact-classification-setup`
 
@@ -3949,8 +3953,8 @@ Result-wide scope every clause must carry: `DK-4.1-prop.section4-compact-classif
 
 The declarations that carry this result's printed statement, with the source atoms each one covers.  Everything under *Other registered declarations* below accompanies the result without establishing it.
 
-- `TauCeti.DavisKahan1970.corollary4_1_compact_nonacute_symmetricNorming_complex` — primary_source_witness, complex scalars, proof; covers `DK-4.1-cor.ui-minimality-on-p`, `DK-4.1-prop.section4-compact-classification-setup`
-- `TauCeti.DavisKahan1970.corollary4_1_compact_nonacute_symmetricNorming_real` — primary_source_witness, real scalars, proof; covers `DK-4.1-cor.ui-minimality-on-p`, `DK-4.1-prop.section4-compact-classification-setup`
+- `TauCeti.DavisKahan1970.corollary4_1_compact_nonacute_sourceExact_complex` — primary_source_witness, complex scalars, proof; covers `DK-4.1-cor.ui-minimality-on-p`, `DK-4.1-prop.section4-compact-classification-setup`
+- `TauCeti.DavisKahan1970.corollary4_1_compact_nonacute_sourceExact_real` — primary_source_witness, real scalars, proof; covers `DK-4.1-cor.ui-minimality-on-p`, `DK-4.1-prop.section4-compact-classification-setup`
 
 ### Other registered declarations
 
@@ -3958,6 +3962,9 @@ The declarations that carry this result's printed statement, with the source ato
 - `TauCeti.DavisKahan1970.corollary4_1_compact_nonacute_complex` — generalization
 - `TauCeti.DavisKahan1970.corollary4_1_compact_nonacute_real` — generalization
 - `TauCeti.DavisKahan1970.symmetricNorming_of_kyFanDominant` — supporting_theorem
+- `TauCeti.DavisKahan1970.corollary4_1_compact_nonacute_symmetricNorming_complex` — generalization
+- `TauCeti.DavisKahan1970.corollary4_1_compact_nonacute_symmetricNorming_real` — generalization
+- `TauCeti.DavisKahan.ExactSinTheta.NormalizedUnitaryInvariantNorm` — source_correspondence
 
 ### Source-facing Lean declarations
 
@@ -3987,13 +3994,31 @@ Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.corollary4_1_compact_nonacute_symmetricNorming_real`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/SymmetricNormingFanDominance.lean:243`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/SymmetricNormingFanDominance.lean:293`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.symmetricNorming_of_kyFanDominant`
 
 Source location candidates: `DavisKahan/Sources/DavisKahan1970/SymmetricNormingFanDominance.lean:97`
+
+Compiler-printed type: *inserted when a compiler certificate is supplied.*
+
+#### `TauCeti.DavisKahan1970.corollary4_1_compact_nonacute_sourceExact_complex`
+
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/SymmetricNormingFanDominance.lean:249`
+
+Compiler-printed type: *inserted when a compiler certificate is supplied.*
+
+#### `TauCeti.DavisKahan1970.corollary4_1_compact_nonacute_sourceExact_real`
+
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/SymmetricNormingFanDominance.lean:337`
+
+Compiler-printed type: *inserted when a compiler certificate is supplied.*
+
+#### `TauCeti.DavisKahan.ExactSinTheta.NormalizedUnitaryInvariantNorm`
+
+Source location candidates: `DavisKahan/OperatorIdeal/NormalizedUnitaryInvariantNorm.lean:87`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
@@ -4452,12 +4477,16 @@ One row per printed source clause per scalar field.  A clause is `PASS` only whe
 
 | clause | scalar | witness | status |
 | --- | --- | --- | --- |
-| `squared-displacement-global-minimum.complex` | complex | `TauCeti.DavisKahan1970.proposition4_3_compact_nonacute_symmetricNorming_complex` | **PASS** |
-| `squared-displacement-global-minimum.real` | real | `TauCeti.DavisKahan1970.proposition4_3_compact_nonacute_symmetricNorming_real` | **PASS** |
+| `squared-displacement-global-minimum.complex` | complex | `TauCeti.DavisKahan1970.proposition4_3_compact_nonacute_sourceExact_complex` + `TauCeti.DavisKahan.ExactSinTheta.NormalizedUnitaryInvariantNorm` | **PASS** |
+| `squared-displacement-global-minimum.real` | real | `TauCeti.DavisKahan1970.proposition4_3_compact_nonacute_sourceExact_real` + `TauCeti.DavisKahan.ExactSinTheta.NormalizedUnitaryInvariantNorm` | **PASS** |
 
 **`squared-displacement-global-minimum.complex`.** For every source unitarily invariant norm, the squared displacement N((1 - V*)(1 - V)) is minimized by the direct rotation.  The printed Proposition 4.3 conclusion at the printed norm quantifier.
 
+SOURCE-EXACT FAÇADE REGISTERED 2026-09-05 (GOAL.md sections I, III.3 and IV). The canonical witness is the façade at the PRINTED scope: separable Hilbert space, and `NormalizedUnitaryInvariantNorm` -- the Lean type for the norm class Section 1 fixes. The arbitrary-Hilbert `SymmetricNormingFunction` theorem that proves it is retained as supporting evidence with role `generalization`, and is stronger on both axes.
+
 **`squared-displacement-global-minimum.real`.** For every source unitarily invariant norm, the squared displacement N((1 - V*)(1 - V)) is minimized by the direct rotation.  The printed Proposition 4.3 conclusion at the printed norm quantifier.
+
+SOURCE-EXACT FAÇADE REGISTERED 2026-09-05 (GOAL.md sections I, III.3 and IV). The canonical witness is the façade at the PRINTED scope: separable Hilbert space, and `NormalizedUnitaryInvariantNorm` -- the Lean type for the norm class Section 1 fixes. The arbitrary-Hilbert `SymmetricNormingFunction` theorem that proves it is retained as supporting evidence with role `generalization`, and is stronger on both axes.
 
 Result-wide scope every clause must carry: `DK-4.1-prop.section4-compact-classification-setup`
 
@@ -4465,14 +4494,17 @@ Result-wide scope every clause must carry: `DK-4.1-prop.section4-compact-classif
 
 The declarations that carry this result's printed statement, with the source atoms each one covers.  Everything under *Other registered declarations* below accompanies the result without establishing it.
 
-- `TauCeti.DavisKahan1970.proposition4_3_compact_nonacute_symmetricNorming_complex` — primary_source_witness, complex scalars, proof; covers `DK-4.1-prop.section4-compact-classification-setup`, `DK-4.3-prop.squared-displacement-global-minimum`
-- `TauCeti.DavisKahan1970.proposition4_3_compact_nonacute_symmetricNorming_real` — primary_source_witness, real scalars, proof; covers `DK-4.1-prop.section4-compact-classification-setup`, `DK-4.3-prop.squared-displacement-global-minimum`
+- `TauCeti.DavisKahan1970.proposition4_3_compact_nonacute_sourceExact_complex` — primary_source_witness, complex scalars, proof; covers `DK-4.1-prop.section4-compact-classification-setup`, `DK-4.3-prop.squared-displacement-global-minimum`
+- `TauCeti.DavisKahan1970.proposition4_3_compact_nonacute_sourceExact_real` — primary_source_witness, real scalars, proof; covers `DK-4.1-prop.section4-compact-classification-setup`, `DK-4.3-prop.squared-displacement-global-minimum`
 
 ### Other registered declarations
 
 - `TauCeti.DavisKahan1970.proposition4_3_compact_nonacute_idealGauge` — generalization
 - `TauCeti.DavisKahan1970.proposition4_3_compact_nonacute_real_idealGauge` — generalization
 - `TauCeti.DavisKahan1970.symmetricNorming_of_kyFanDominant` — supporting_theorem
+- `TauCeti.DavisKahan1970.proposition4_3_compact_nonacute_symmetricNorming_complex` — generalization
+- `TauCeti.DavisKahan1970.proposition4_3_compact_nonacute_symmetricNorming_real` — generalization
+- `TauCeti.DavisKahan.ExactSinTheta.NormalizedUnitaryInvariantNorm` — source_correspondence
 
 ### Source-facing Lean declarations
 
@@ -4496,13 +4528,31 @@ Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.proposition4_3_compact_nonacute_symmetricNorming_real`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/SymmetricNormingFanDominance.lean:265`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/SymmetricNormingFanDominance.lean:315`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.symmetricNorming_of_kyFanDominant`
 
 Source location candidates: `DavisKahan/Sources/DavisKahan1970/SymmetricNormingFanDominance.lean:97`
+
+Compiler-printed type: *inserted when a compiler certificate is supplied.*
+
+#### `TauCeti.DavisKahan1970.proposition4_3_compact_nonacute_sourceExact_complex`
+
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/SymmetricNormingFanDominance.lean:267`
+
+Compiler-printed type: *inserted when a compiler certificate is supplied.*
+
+#### `TauCeti.DavisKahan1970.proposition4_3_compact_nonacute_sourceExact_real`
+
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/SymmetricNormingFanDominance.lean:355`
+
+Compiler-printed type: *inserted when a compiler certificate is supplied.*
+
+#### `TauCeti.DavisKahan.ExactSinTheta.NormalizedUnitaryInvariantNorm`
+
+Source location candidates: `DavisKahan/OperatorIdeal/NormalizedUnitaryInvariantNorm.lean:87`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
@@ -4844,12 +4894,16 @@ One row per printed source clause per scalar field.  A clause is `PASS` only whe
 
 | clause | scalar | witness | status |
 | --- | --- | --- | --- |
-| `hilbert-unbounded-conclusion.complex` | complex | `TauCeti.DavisKahan1970.theorem5_2_symmetricNorming_complex` | **PASS** |
-| `hilbert-unbounded-conclusion.real` | real | `TauCeti.DavisKahan1970.theorem5_2_orderedGap_symmetricNorming_real` | **PASS** |
+| `hilbert-unbounded-conclusion.complex` | complex | `TauCeti.DavisKahan1970.theorem5_2_sourceExact_complex` + `TauCeti.DavisKahan.ExactSinTheta.NormalizedUnitaryInvariantNorm` | **PASS** |
+| `hilbert-unbounded-conclusion.real` | real | `TauCeti.DavisKahan1970.theorem5_2_sourceExact_real` + `TauCeti.DavisKahan.ExactSinTheta.NormalizedUnitaryInvariantNorm` | **PASS** |
 
 **`hilbert-unbounded-conclusion.complex`.** delta * N(X) <= N(R) for a bounded solution of A X = X B + R with closed self-adjoint A >= c + delta > c >= B, at every source unitarily invariant norm, with ideal membership concluded.
 
+SOURCE-EXACT FAÇADE REGISTERED 2026-09-05 (GOAL.md sections I, III.3 and IV). The canonical witness is the façade at the PRINTED scope: separable Hilbert space, and `NormalizedUnitaryInvariantNorm` -- the Lean type for the norm class Section 1 fixes. The arbitrary-Hilbert `SymmetricNormingFunction` theorem that proves it is retained as supporting evidence with role `generalization`, and is stronger on both axes.
+
 **`hilbert-unbounded-conclusion.real`.** delta * N(X) <= N(R) for a bounded solution of A X = X B + R with closed self-adjoint A >= c + delta > c >= B, at every source unitarily invariant norm, with ideal membership concluded.  SCOPE CORRECTED 2026-09-04: the real primary took `FormBoundedSylvesterGap`, which also covers the interval/exterior and reversed configurations and is therefore broader than the printed `A >= gamma + delta > gamma >= B`.  The primary is now the instance at the printed ordered semibounds, matching the complex endpoint, which was already in that shape; the `FormBoundedSylvesterGap` theorem is retained as a generalization.
+
+SOURCE-EXACT FAÇADE REGISTERED 2026-09-05 (GOAL.md sections I, III.3 and IV). The canonical witness is the façade at the PRINTED scope: separable Hilbert space, and `NormalizedUnitaryInvariantNorm` -- the Lean type for the norm class Section 1 fixes. The arbitrary-Hilbert `SymmetricNormingFunction` theorem that proves it is retained as supporting evidence with role `generalization`, and is stronger on both axes.
 
 Result-wide scope every clause must carry: `DK-5.2-thm.hilbert-unbounded-hypotheses`
 
@@ -4857,8 +4911,8 @@ Result-wide scope every clause must carry: `DK-5.2-thm.hilbert-unbounded-hypothe
 
 The declarations that carry this result's printed statement, with the source atoms each one covers.  Everything under *Other registered declarations* below accompanies the result without establishing it.
 
-- `TauCeti.DavisKahan1970.theorem5_2_symmetricNorming_complex` — primary_source_witness, complex scalars, proof; covers `DK-5.2-thm.hilbert-unbounded-hypotheses`, `DK-5.2-thm.hilbert-unbounded-conclusion`
-- `TauCeti.DavisKahan1970.theorem5_2_orderedGap_symmetricNorming_real` — primary_source_witness, real scalars, proof; covers `DK-5.2-thm.hilbert-unbounded-hypotheses`, `DK-5.2-thm.hilbert-unbounded-conclusion`
+- `TauCeti.DavisKahan1970.theorem5_2_sourceExact_complex` — primary_source_witness, complex scalars, proof; covers `DK-5.2-thm.hilbert-unbounded-hypotheses`, `DK-5.2-thm.hilbert-unbounded-conclusion`
+- `TauCeti.DavisKahan1970.theorem5_2_sourceExact_real` — primary_source_witness, real scalars, proof; covers `DK-5.2-thm.hilbert-unbounded-hypotheses`, `DK-5.2-thm.hilbert-unbounded-conclusion`
 
 ### Other registered declarations
 
@@ -4866,6 +4920,9 @@ The declarations that carry this result's printed statement, with the source ato
 - `TauCeti.DavisKahan1970.theorem5_2_kyFanDominant_real` — generalization
 - `TauCeti.DavisKahan1970.symmetricNorming_of_kyFanDominant` — supporting_theorem
 - `TauCeti.DavisKahan1970.theorem5_2_symmetricNorming_real` — generalization
+- `TauCeti.DavisKahan1970.theorem5_2_symmetricNorming_complex` — generalization
+- `TauCeti.DavisKahan1970.theorem5_2_orderedGap_symmetricNorming_real` — generalization
+- `TauCeti.DavisKahan.ExactSinTheta.NormalizedUnitaryInvariantNorm` — source_correspondence
 
 ### Source-facing Lean declarations
 
@@ -4883,13 +4940,13 @@ Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.theorem5_2_symmetricNorming_complex`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/SymmetricNormingFanDominance.lean:296`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/SymmetricNormingFanDominance.lean:383`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.theorem5_2_symmetricNorming_real`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/SymmetricNormingFanDominance.lean:317`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/SymmetricNormingFanDominance.lean:404`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
@@ -4901,7 +4958,25 @@ Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.theorem5_2_orderedGap_symmetricNorming_real`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/SymmetricNormingFanDominance.lean:342`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/SymmetricNormingFanDominance.lean:429`
+
+Compiler-printed type: *inserted when a compiler certificate is supplied.*
+
+#### `TauCeti.DavisKahan1970.theorem5_2_sourceExact_complex`
+
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/SymmetricNormingFanDominance.lean:450`
+
+Compiler-printed type: *inserted when a compiler certificate is supplied.*
+
+#### `TauCeti.DavisKahan1970.theorem5_2_sourceExact_real`
+
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/SymmetricNormingFanDominance.lean:467`
+
+Compiler-printed type: *inserted when a compiler certificate is supplied.*
+
+#### `TauCeti.DavisKahan.ExactSinTheta.NormalizedUnitaryInvariantNorm`
+
+Source location candidates: `DavisKahan/OperatorIdeal/NormalizedUnitaryInvariantNorm.lean:87`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
@@ -5760,12 +5835,16 @@ One row per printed source clause per scalar field.  A clause is `PASS` only whe
 
 | clause | scalar | witness | status |
 | --- | --- | --- | --- |
-| `generalized-tangent-theorem.complex` | complex | `TauCeti.DavisKahan1970.tanTheta_directed_unboundedRitz_symmetricNorming_exists_complex` | **PASS** |
-| `generalized-tangent-theorem.real` | real | `TauCeti.DavisKahan1970.tanTheta_directed_unboundedRitz_symmetricNorming_exists_real` | **PASS** |
+| `generalized-tangent-theorem.complex` | complex | `TauCeti.DavisKahan1970.tanTheta_directed_unboundedRitz_sourceExact_complex` + `TauCeti.DavisKahan.ExactSinTheta.NormalizedUnitaryInvariantNorm` | **PASS** |
+| `generalized-tangent-theorem.real` | real | `TauCeti.DavisKahan1970.tanTheta_directed_unboundedRitz_sourceExact_real` + `TauCeti.DavisKahan.ExactSinTheta.NormalizedUnitaryInvariantNorm` | **PASS** |
 
 **`generalized-tangent-theorem.complex`.** delta * N(tan Theta_0) <= N(R) with the representative CONSTRUCTED, not assumed: the theorem takes only the source data -- an unbounded self-adjoint ambient LinearPMap A, an UnboundedRitzPair whose Ritz compression A_0 is itself a densely defined self-adjoint partial operator on the trial subspace Z, an arbitrary reducing complement V (ReducingComplement A V, no spectral-subspace and no spectral-gap hypothesis), the ordered form bounds A_0 <= alpha and A >= alpha + delta on V-perp within dom A, arbitrary trial dimension, a bounded residual R tied to the Ritz data by hR, and an arbitrary SymmetricNormingFunction -- and CONCLUDES (i) that no principal angle between Z and V is a right angle, so the paper's tan theta_j are genuine tangents and not the value Lean's totalised Real.tan takes at the pole, (ii) that a bounded operator whose approximation numbers are exactly tan(arcsin a_n(P_{V-perp}|_Z)) exists, and (iii) that it satisfies the printed estimate and lies in the norm's ideal.
 
+SOURCE-EXACT FAÇADE REGISTERED 2026-09-05 (GOAL.md sections I, III.3 and IV). The canonical witness is the façade at the PRINTED scope: separable Hilbert space, and `NormalizedUnitaryInvariantNorm` -- the Lean type for the norm class Section 1 fixes. The arbitrary-Hilbert `SymmetricNormingFunction` theorem that proves it is retained as supporting evidence with role `generalization`, and is stronger on both axes.
+
 **`generalized-tangent-theorem.real`.** delta * N(tan Theta_0) <= N(R) with the representative CONSTRUCTED, not assumed: the theorem takes only the source data -- an unbounded self-adjoint ambient LinearPMap A, an UnboundedRitzPair whose Ritz compression A_0 is itself a densely defined self-adjoint partial operator on the trial subspace Z, an arbitrary reducing complement V (ReducingComplement A V, no spectral-subspace and no spectral-gap hypothesis), the ordered form bounds A_0 <= alpha and A >= alpha + delta on V-perp within dom A, arbitrary trial dimension, a bounded residual R tied to the Ritz data by hR, and an arbitrary SymmetricNormingFunction -- and CONCLUDES (i) that no principal angle between Z and V is a right angle, so the paper's tan theta_j are genuine tangents and not the value Lean's totalised Real.tan takes at the pole, (ii) that a bounded operator whose approximation numbers are exactly tan(arcsin a_n(P_{V-perp}|_Z)) exists, and (iii) that it satisfies the printed estimate and lies in the norm's ideal.
+
+SOURCE-EXACT FAÇADE REGISTERED 2026-09-05 (GOAL.md sections I, III.3 and IV). The canonical witness is the façade at the PRINTED scope: separable Hilbert space, and `NormalizedUnitaryInvariantNorm` -- the Lean type for the norm class Section 1 fixes. The arbitrary-Hilbert `SymmetricNormingFunction` theorem that proves it is retained as supporting evidence with role `generalization`, and is stronger on both axes.
 
 Result-wide scope every clause must carry: *(none)*
 
@@ -5773,8 +5852,8 @@ Result-wide scope every clause must carry: *(none)*
 
 The declarations that carry this result's printed statement, with the source atoms each one covers.  Everything under *Other registered declarations* below accompanies the result without establishing it.
 
-- `TauCeti.DavisKahan1970.tanTheta_directed_unboundedRitz_symmetricNorming_exists_complex` — primary_source_witness, complex scalars, proof; covers `DK-6.3-thm.generalized-tangent-theorem`
-- `TauCeti.DavisKahan1970.tanTheta_directed_unboundedRitz_symmetricNorming_exists_real` — primary_source_witness, real scalars, proof; covers `DK-6.3-thm.generalized-tangent-theorem`
+- `TauCeti.DavisKahan1970.tanTheta_directed_unboundedRitz_sourceExact_complex` — primary_source_witness, complex scalars, proof; covers `DK-6.3-thm.generalized-tangent-theorem`
+- `TauCeti.DavisKahan1970.tanTheta_directed_unboundedRitz_sourceExact_real` — primary_source_witness, real scalars, proof; covers `DK-6.3-thm.generalized-tangent-theorem`
 
 ### Other registered declarations
 
@@ -5788,6 +5867,9 @@ The declarations that carry this result's printed statement, with the source ato
 - `TauCeti.DavisKahan1970.tanTheta_directed_bounded_spectralGap_symmetricNorming_real` — specialization
 - `TauCeti.DavisKahan1970.theorem6_3_unbounded_infiniteTrial_ideal_exists` — generalization
 - `TauCeti.DavisKahan1970.theorem6_3_unbounded_infiniteTrial_ideal_exists_real` — generalization
+- `TauCeti.DavisKahan1970.tanTheta_directed_unboundedRitz_symmetricNorming_exists_complex` — generalization
+- `TauCeti.DavisKahan1970.tanTheta_directed_unboundedRitz_symmetricNorming_exists_real` — generalization
+- `TauCeti.DavisKahan.ExactSinTheta.NormalizedUnitaryInvariantNorm` — source_correspondence
 
 ### Source-facing Lean declarations
 
@@ -5860,6 +5942,24 @@ Compiler-printed type: *inserted when a compiler certificate is supplied.*
 #### `TauCeti.DavisKahan1970.tanTheta_directed_unboundedRitz_symmetricNorming_real`
 
 Source location candidates: `DavisKahan/Sources/DavisKahan1970/TanThetaDirectedUnbounded.lean:262`
+
+Compiler-printed type: *inserted when a compiler certificate is supplied.*
+
+#### `TauCeti.DavisKahan1970.tanTheta_directed_unboundedRitz_sourceExact_complex`
+
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/TanThetaDirectedUnbounded.lean:381`
+
+Compiler-printed type: *inserted when a compiler certificate is supplied.*
+
+#### `TauCeti.DavisKahan1970.tanTheta_directed_unboundedRitz_sourceExact_real`
+
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/TanThetaDirectedUnbounded.lean:471`
+
+Compiler-printed type: *inserted when a compiler certificate is supplied.*
+
+#### `TauCeti.DavisKahan.ExactSinTheta.NormalizedUnitaryInvariantNorm`
+
+Source location candidates: `DavisKahan/OperatorIdeal/NormalizedUnitaryInvariantNorm.lean:87`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
@@ -6717,10 +6817,10 @@ One row per printed source clause per scalar field.  A clause is `PASS` only whe
 | --- | --- | --- | --- |
 | `acute-branch-conclusion.complex` | complex | `TauCeti.DavisKahan1970.Section8.theorem8_2_branch_maximalAngle_lt_of_crossedDefects` | **PASS** |
 | `acute-branch-conclusion.real` | real | `TauCeti.DavisKahan1970.Section8.theorem8_2_branch_real_maximalAngle_lt_of_crossedDefects` | **PASS** |
-| `double-angle-bound-retained.complex` | complex | `TauCeti.DavisKahan1970.Section8.theorem8_2_sinTwoTheta_perturbation_symmetricNorming` | **PASS** |
-| `double-angle-bound-retained.complex.2` | complex | `TauCeti.DavisKahan1970.Section8.theorem8_2_sinTwoTheta_residual_directedAngle_symmetricNorming` + `TauCeti.DavisKahan.Angle.sinTwoThetaIdealBlock_hasSameApproximationNumbers_trialSide` + `TauCeti.DavisKahan.Angle.directedSinTwoAngleOperator_hasSameApproximationNumbers_swap` + `TauCeti.DavisKahan.Angle.mem_directedSinTwoAngleOperator_trialSide_iff` + `TauCeti.DavisKahan.Angle.gauge_directedSinTwoAngleOperator_trialSide` | **PASS** |
-| `double-angle-bound-retained.real` | real | `TauCeti.DavisKahan1970.Section8.theorem8_2_sinTwoTheta_perturbation_real_symmetricNorming` | **PASS** |
-| `double-angle-bound-retained.real.2` | real | `TauCeti.DavisKahan1970.Section8.theorem8_2_sinTwoTheta_residual_directedAngle_real_symmetricNorming` + `TauCeti.DavisKahan.Angle.sinTwoThetaIdealBlock_hasSameApproximationNumbers_trialSide` + `TauCeti.DavisKahan.Angle.directedSinTwoAngleOperator_hasSameApproximationNumbers_swap` + `TauCeti.DavisKahan.Angle.mem_directedSinTwoAngleOperator_trialSide_iff` + `TauCeti.DavisKahan.Angle.gauge_directedSinTwoAngleOperator_trialSide` | **PASS** |
+| `double-angle-bound-retained.complex` | complex | `TauCeti.DavisKahan1970.Section8.theorem8_2_sinTwoTheta_perturbation_sourceExact` + `TauCeti.DavisKahan.ExactSinTheta.NormalizedUnitaryInvariantNorm` | **PASS** |
+| `double-angle-bound-retained.complex.2` | complex | `TauCeti.DavisKahan1970.Section8.theorem8_2_sinTwoTheta_residual_directedAngle_sourceExact` + `TauCeti.DavisKahan.Angle.sinTwoThetaIdealBlock_hasSameApproximationNumbers_trialSide` + `TauCeti.DavisKahan.Angle.directedSinTwoAngleOperator_hasSameApproximationNumbers_swap` + `TauCeti.DavisKahan.Angle.mem_directedSinTwoAngleOperator_trialSide_iff` + `TauCeti.DavisKahan.Angle.gauge_directedSinTwoAngleOperator_trialSide` + `TauCeti.DavisKahan.ExactSinTheta.NormalizedUnitaryInvariantNorm` | **PASS** |
+| `double-angle-bound-retained.real` | real | `TauCeti.DavisKahan1970.Section8.theorem8_2_sinTwoTheta_perturbation_real_sourceExact` + `TauCeti.DavisKahan.ExactSinTheta.NormalizedUnitaryInvariantNorm` | **PASS** |
+| `double-angle-bound-retained.real.2` | real | `TauCeti.DavisKahan1970.Section8.theorem8_2_sinTwoTheta_residual_directedAngle_real_sourceExact` + `TauCeti.DavisKahan.Angle.sinTwoThetaIdealBlock_hasSameApproximationNumbers_trialSide` + `TauCeti.DavisKahan.Angle.directedSinTwoAngleOperator_hasSameApproximationNumbers_swap` + `TauCeti.DavisKahan.Angle.mem_directedSinTwoAngleOperator_trialSide_iff` + `TauCeti.DavisKahan.Angle.gauge_directedSinTwoAngleOperator_trialSide` + `TauCeti.DavisKahan.ExactSinTheta.NormalizedUnitaryInvariantNorm` | **PASS** |
 
 **`acute-branch-conclusion.complex`.** Canonical witness for acute-branch-conclusion at complex scalar scope, carried over from the pre-clause canonical evidence and re-checked against its compiler-printed type under the coherent model.
 
@@ -6728,11 +6828,19 @@ One row per printed source clause per scalar field.  A clause is `PASS` only whe
 
 **`double-angle-bound-retained.complex`.** Canonical witness for double-angle-bound-retained at complex scalar scope, carried over from the pre-clause canonical evidence and re-checked against its compiler-printed type under the coherent model.
 
+SOURCE-EXACT FAÇADE REGISTERED 2026-09-05 (GOAL.md sections I, III.3 and IV). The canonical witness is the façade at the PRINTED scope: separable Hilbert space, and `NormalizedUnitaryInvariantNorm` -- the Lean type for the norm class Section 1 fixes. The arbitrary-Hilbert `SymmetricNormingFunction` theorem that proves it is retained as supporting evidence with role `generalization`, and is stronger on both axes.
+
 **`double-angle-bound-retained.complex.2`.** Canonical witness for double-angle-bound-retained at complex scalar scope, carried over from the pre-clause canonical evidence and re-checked against its compiler-printed type under the coherent model.  ORIENTATION CORRECTED 2026-09-04: the primary was the block theorem, whose conclusion is on `sinTwoThetaIdealBlock Q P` -- the proof's one-sided block, and in the ordering (gap-carrying, trial) rather than the paper's.  Section 1 reads the directed angle as `||sin Theta_0|| = ||Q^perp P|| = ||Q^perp E_0||`, the cross-projection with the TRIAL subspace on the right, so the printed object is `Angle.directedSinTwoAngleOperator P Q`.  The two ordered directed sines have different approximation numbers in general, so this is a theorem and not a renaming; the bridge is `..._trialSide`, which composes the block correspondence with `directedSinTwoAngleOperator_hasSameApproximationNumbers_swap`.  This is the same defect class that was repaired on `S2-sin-two-theta` earlier the same day, and this row stayed green through it -- which is why the conclusion-object invariant now covers both rows.
+
+SOURCE-EXACT FAÇADE REGISTERED 2026-09-05 (GOAL.md sections I, III.3 and IV). The canonical witness is the façade at the PRINTED scope: separable Hilbert space, and `NormalizedUnitaryInvariantNorm` -- the Lean type for the norm class Section 1 fixes. The arbitrary-Hilbert `SymmetricNormingFunction` theorem that proves it is retained as supporting evidence with role `generalization`, and is stronger on both axes.
 
 **`double-angle-bound-retained.real`.** Canonical witness for double-angle-bound-retained at real scalar scope, carried over from the pre-clause canonical evidence and re-checked against its compiler-printed type under the coherent model.
 
+SOURCE-EXACT FAÇADE REGISTERED 2026-09-05 (GOAL.md sections I, III.3 and IV). The canonical witness is the façade at the PRINTED scope: separable Hilbert space, and `NormalizedUnitaryInvariantNorm` -- the Lean type for the norm class Section 1 fixes. The arbitrary-Hilbert `SymmetricNormingFunction` theorem that proves it is retained as supporting evidence with role `generalization`, and is stronger on both axes.
+
 **`double-angle-bound-retained.real.2`.** Canonical witness for double-angle-bound-retained at real scalar scope, carried over from the pre-clause canonical evidence and re-checked against its compiler-printed type under the coherent model.  ORIENTATION CORRECTED 2026-09-04: the primary was the block theorem, whose conclusion is on `sinTwoThetaIdealBlock Q P` -- the proof's one-sided block, and in the ordering (gap-carrying, trial) rather than the paper's.  Section 1 reads the directed angle as `||sin Theta_0|| = ||Q^perp P|| = ||Q^perp E_0||`, the cross-projection with the TRIAL subspace on the right, so the printed object is `Angle.directedSinTwoAngleOperator P Q`.  The two ordered directed sines have different approximation numbers in general, so this is a theorem and not a renaming; the bridge is `..._trialSide`, which composes the block correspondence with `directedSinTwoAngleOperator_hasSameApproximationNumbers_swap`.  This is the same defect class that was repaired on `S2-sin-two-theta` earlier the same day, and this row stayed green through it -- which is why the conclusion-object invariant now covers both rows.
+
+SOURCE-EXACT FAÇADE REGISTERED 2026-09-05 (GOAL.md sections I, III.3 and IV). The canonical witness is the façade at the PRINTED scope: separable Hilbert space, and `NormalizedUnitaryInvariantNorm` -- the Lean type for the norm class Section 1 fixes. The arbitrary-Hilbert `SymmetricNormingFunction` theorem that proves it is retained as supporting evidence with role `generalization`, and is stronger on both axes.
 
 Result-wide scope every clause must carry: `DK-8.2-thm.smallness-alternative`, `S3-standing-scope.crossed-dimension-standing-assumption`
 
@@ -6742,10 +6850,10 @@ The declarations that carry this result's printed statement, with the source ato
 
 - `TauCeti.DavisKahan1970.Section8.theorem8_2_branch_maximalAngle_lt_of_crossedDefects` — primary_source_witness, complex scalars, proof; covers `DK-8.2-thm.smallness-alternative`, `DK-8.2-thm.acute-branch-conclusion`, `S3-standing-scope.crossed-dimension-standing-assumption`
 - `TauCeti.DavisKahan1970.Section8.theorem8_2_branch_real_maximalAngle_lt_of_crossedDefects` — primary_source_witness, real scalars, proof; covers `DK-8.2-thm.smallness-alternative`, `DK-8.2-thm.acute-branch-conclusion`, `S3-standing-scope.crossed-dimension-standing-assumption`
-- `TauCeti.DavisKahan1970.Section8.theorem8_2_sinTwoTheta_perturbation_symmetricNorming` — primary_source_witness, complex scalars, proof; covers `DK-8.2-thm.smallness-alternative`, `DK-8.2-thm.double-angle-bound-retained`, `S3-standing-scope.crossed-dimension-standing-assumption`
-- `TauCeti.DavisKahan1970.Section8.theorem8_2_sinTwoTheta_residual_directedAngle_symmetricNorming` — primary_source_witness, complex scalars, proof; covers `DK-8.2-thm.smallness-alternative`, `DK-8.2-thm.double-angle-bound-retained`, `S3-standing-scope.crossed-dimension-standing-assumption`
-- `TauCeti.DavisKahan1970.Section8.theorem8_2_sinTwoTheta_perturbation_real_symmetricNorming` — primary_source_witness, real scalars, proof; covers `DK-8.2-thm.smallness-alternative`, `DK-8.2-thm.double-angle-bound-retained`, `S3-standing-scope.crossed-dimension-standing-assumption`
-- `TauCeti.DavisKahan1970.Section8.theorem8_2_sinTwoTheta_residual_directedAngle_real_symmetricNorming` — primary_source_witness, real scalars, proof; covers `DK-8.2-thm.smallness-alternative`, `DK-8.2-thm.double-angle-bound-retained`, `S3-standing-scope.crossed-dimension-standing-assumption`
+- `TauCeti.DavisKahan1970.Section8.theorem8_2_sinTwoTheta_perturbation_sourceExact` — primary_source_witness, complex scalars, proof; covers `DK-8.2-thm.smallness-alternative`, `DK-8.2-thm.double-angle-bound-retained`, `S3-standing-scope.crossed-dimension-standing-assumption`
+- `TauCeti.DavisKahan1970.Section8.theorem8_2_sinTwoTheta_residual_directedAngle_sourceExact` — primary_source_witness, complex scalars, proof; covers `DK-8.2-thm.smallness-alternative`, `DK-8.2-thm.double-angle-bound-retained`, `S3-standing-scope.crossed-dimension-standing-assumption`
+- `TauCeti.DavisKahan1970.Section8.theorem8_2_sinTwoTheta_perturbation_real_sourceExact` — primary_source_witness, real scalars, proof; covers `DK-8.2-thm.smallness-alternative`, `DK-8.2-thm.double-angle-bound-retained`, `S3-standing-scope.crossed-dimension-standing-assumption`
+- `TauCeti.DavisKahan1970.Section8.theorem8_2_sinTwoTheta_residual_directedAngle_real_sourceExact` — primary_source_witness, real scalars, proof; covers `DK-8.2-thm.smallness-alternative`, `DK-8.2-thm.double-angle-bound-retained`, `S3-standing-scope.crossed-dimension-standing-assumption`
 
 ### Other registered declarations
 
@@ -6757,6 +6865,11 @@ The declarations that carry this result's printed statement, with the source ato
 - `TauCeti.DavisKahan.Angle.directedSinTwoAngleOperator_hasSameApproximationNumbers_swap` — source_correspondence
 - `TauCeti.DavisKahan.Angle.mem_directedSinTwoAngleOperator_trialSide_iff` — source_correspondence
 - `TauCeti.DavisKahan.Angle.gauge_directedSinTwoAngleOperator_trialSide` — source_correspondence
+- `TauCeti.DavisKahan1970.Section8.theorem8_2_sinTwoTheta_perturbation_symmetricNorming` — generalization
+- `TauCeti.DavisKahan1970.Section8.theorem8_2_sinTwoTheta_residual_directedAngle_symmetricNorming` — generalization
+- `TauCeti.DavisKahan1970.Section8.theorem8_2_sinTwoTheta_perturbation_real_symmetricNorming` — generalization
+- `TauCeti.DavisKahan1970.Section8.theorem8_2_sinTwoTheta_residual_directedAngle_real_symmetricNorming` — generalization
+- `TauCeti.DavisKahan.ExactSinTheta.NormalizedUnitaryInvariantNorm` — source_correspondence
 
 ### Source-facing Lean declarations
 
@@ -6768,55 +6881,55 @@ Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.Section8.theorem8_2_sinTwoTheta_perturbation_symmetricNorming`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section8/Theorem82.lean:433`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section8/Theorem82.lean:434`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.Section8.theorem8_2_sinTwoTheta_residual_symmetricNorming`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section8/Theorem82.lean:511`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section8/Theorem82.lean:512`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.Section8.theorem8_2_branch_directed_real`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section8/Theorem82Real.lean:316`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section8/Theorem82Real.lean:317`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.Section8.theorem8_2_sinTwoTheta_perturbation_real_symmetricNorming`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section8/Theorem82Real.lean:550`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section8/Theorem82Real.lean:551`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.Section8.theorem8_2_sinTwoTheta_residual_real_symmetricNorming`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section8/Theorem82Real.lean:607`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section8/Theorem82Real.lean:608`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.Section8.theorem8_2_branch_maximalAngle_lt_of_crossedDefects`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section8/Theorem82.lean:633`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section8/Theorem82.lean:680`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.Section8.theorem8_2_branch_real_maximalAngle_lt_of_crossedDefects`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section8/Theorem82Real.lean:377`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section8/Theorem82Real.lean:378`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.Section8.theorem8_2_sinTwoTheta_residual_directedAngle_symmetricNorming`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section8/Theorem82.lean:555`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section8/Theorem82.lean:556`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.Section8.theorem8_2_sinTwoTheta_residual_directedAngle_real_symmetricNorming`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section8/Theorem82Real.lean:667`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section8/Theorem82Real.lean:668`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
@@ -6841,6 +6954,36 @@ Compiler-printed type: *inserted when a compiler certificate is supplied.*
 #### `TauCeti.DavisKahan.Angle.gauge_directedSinTwoAngleOperator_trialSide`
 
 Source location candidates: `DavisKahan/DoubleAngle/DirectedAngleGeneric.lean:191`
+
+Compiler-printed type: *inserted when a compiler certificate is supplied.*
+
+#### `TauCeti.DavisKahan1970.Section8.theorem8_2_sinTwoTheta_perturbation_sourceExact`
+
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section8/Theorem82.lean:582`
+
+Compiler-printed type: *inserted when a compiler certificate is supplied.*
+
+#### `TauCeti.DavisKahan1970.Section8.theorem8_2_sinTwoTheta_residual_directedAngle_sourceExact`
+
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section8/Theorem82.lean:601`
+
+Compiler-printed type: *inserted when a compiler certificate is supplied.*
+
+#### `TauCeti.DavisKahan1970.Section8.theorem8_2_sinTwoTheta_perturbation_real_sourceExact`
+
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section8/Theorem82Real.lean:726`
+
+Compiler-printed type: *inserted when a compiler certificate is supplied.*
+
+#### `TauCeti.DavisKahan1970.Section8.theorem8_2_sinTwoTheta_residual_directedAngle_real_sourceExact`
+
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section8/Theorem82Real.lean:745`
+
+Compiler-printed type: *inserted when a compiler certificate is supplied.*
+
+#### `TauCeti.DavisKahan.ExactSinTheta.NormalizedUnitaryInvariantNorm`
+
+Source location candidates: `DavisKahan/OperatorIdeal/NormalizedUnitaryInvariantNorm.lean:87`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 

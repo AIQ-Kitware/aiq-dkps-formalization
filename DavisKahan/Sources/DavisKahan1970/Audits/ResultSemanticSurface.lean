@@ -103,6 +103,16 @@ than the arbitrary-Hilbert `SymmetricNormingFunction` theorems that prove them,
 which are registered separately as generalizations.  The discharge is the source's
 own Fan-dominance reduction at (1.11)-(1.13). -/
 
+#check @TauCeti.DavisKahan1970.corollary4_1_compact_nonacute_sourceExact_complex
+#check @TauCeti.DavisKahan1970.corollary4_1_compact_nonacute_sourceExact_real
+#check @TauCeti.DavisKahan1970.proposition4_3_compact_nonacute_sourceExact_complex
+#check @TauCeti.DavisKahan1970.proposition4_3_compact_nonacute_sourceExact_real
+#check @TauCeti.DavisKahan1970.theorem5_2_sourceExact_complex
+#check @TauCeti.DavisKahan1970.theorem5_2_sourceExact_real
+#check @TauCeti.DavisKahan1970.Section8.theorem8_2_sinTwoTheta_perturbation_sourceExact
+#check @TauCeti.DavisKahan1970.Section8.theorem8_2_sinTwoTheta_residual_directedAngle_sourceExact
+#check @TauCeti.DavisKahan1970.Section8.theorem8_2_sinTwoTheta_perturbation_real_sourceExact
+#check @TauCeti.DavisKahan1970.Section8.theorem8_2_sinTwoTheta_residual_directedAngle_real_sourceExact
 #check @TauCeti.DavisKahan1970.sinTheta_unbounded_formGap_sourceExact_complex
 #check @TauCeti.DavisKahan1970.sinTheta_unbounded_formGap_sourceExact_real
 #check @TauCeti.DavisKahan1970.tanTheta_ambient_unboundedRitz_definedTangent_sourceExact_complex
