@@ -81,6 +81,20 @@ rank-boundary convention.
 
 ---
 
+## Davis--Kahan 1970
+
+- **`DK-HR-2026-09-04`** — close every finding of the hostile review
+  `dev/davis-kahan-1970-hostile-review-2026-09-04.md`. The execution contract, with
+  per-item files, declarations, order and acceptance criteria, is
+  [`docs/planning/davis-kahan-1970-hostile-review-repair-goal.md`](docs/planning/davis-kahan-1970-hostile-review-repair-goal.md).
+  Headline items: re-register DK-6.3-thm on the printed-shape unbounded-Ritz theorem,
+  record or lift Section 8's operator scope, add the pole-exclusion conjuncts to the
+  tangent endpoints, register Lemma 5.1's real proofs, the ambient sin 2θ clause at an
+  arbitrary reducing subspace, the namespace/casing cleanup, and a green
+  `certify_davis_kahan_1970.py --require-terminal` with no flags.
+
+---
+
 ## Cross-paper coherence
 
 Do one pass after the per-paper work for places where a stronger theorem landed without
