@@ -105,14 +105,18 @@ The source census is complete; do not open a broad YWS proof campaign.
   wrapper was wrong; and eight sentences across the module headers, `README.md`,
   `GROUNDING.md`, `ELEGANCE_AUDIT.md`, `CitationSurface.lean` and the distilled source
   were stale.
-- **`YWS-T1-eq1`** — optional literal indexed Equation (1) wrapper. **The obstruction is not
-  what this file said.** It is not simplicity of `λ̂_j`: a repeated `λ̂_j` equals `λ̂_{j−1}`
-  or `λ̂_{j+1}`, so `|λ̂_j − λ_j|` is already one of the two terms in the printed minimum.
-  The real side condition is the interval-position one, `λ̂_{j+1} ≤ λ_j ≤ λ̂_{j−1}`, under
-  which the printed two-neighbour minimum is exactly the exterior separation and the
-  wrapper is a direct instantiation of `yuWangSamworth_theorem1_opNorm_le`. If added,
-  state that condition explicitly and classify the wrapper `compiled_corrected`; it is an
-  added hypothesis the printed display omits.
+- **`YWS-T1-eq1` — done 2026-09-05.** Equation (1) was the one displayed result of this
+  paper with no literal wrapper. `yuWangSamworth_equation1_opNorm_le` is now that wrapper:
+  a population unit eigenvector at `λ_j`, a sample eigenvector at `λ̂_j`, the mixed
+  exterior separation, constant 1, operator norm. `equation1_gap_of_interval_position`
+  supplies its `δ` from the printed two-neighbour minimum. It is registered
+  `compiled_corrected`, for two hypotheses the printed display omits: the sample side is
+  given as an orthonormal eigenbasis, because Theorem 1's separation constrains the
+  spectrum on `span{v̂_j}ᗮ` and one eigenvector does not determine that; and the
+  interval-position condition `λ̂_{j+1} ≤ λ_j ≤ λ̂_{j−1}` is stated explicitly. **The
+  obstruction this file used to name was not real.** It is not simplicity of `λ̂_j`: a
+  repeated `λ̂_j` equals a neighbour, so `|λ̂_j − λ_j|` is already one of the two printed
+  terms.
 
 - **Rectangular rank-one, printed hypothesis — done 2026-09-05.** The four rank-one
   singular-vector corollaries all took `CorrespondingRightSingularBlock` /

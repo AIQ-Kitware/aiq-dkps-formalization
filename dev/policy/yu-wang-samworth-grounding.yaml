@@ -53,6 +53,9 @@ required_declarations:
   - yuWangSamworth_theorem1_uiNorm_le
   - yuWangSamworth_theorem1_frobenius_le
   - yuWangSamworth_theorem1_opNorm_le
+  # Equation (1), the one displayed result of this paper that had no wrapper.
+  - yuWangSamworth_equation1_opNorm_le
+  - equation1_gap_of_interval_position
   YuWangSamworth2015/YuWangSamworth2015/Symmetric/AngleIdentity.lean:
   - yuWangSamworth_equation4
   - yuWangSamworth_equation4_printed_counterexample
