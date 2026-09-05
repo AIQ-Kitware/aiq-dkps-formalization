@@ -32,7 +32,7 @@ filtered net rather than a sequence, and the scalar field is generic rather than
 (the strong-cutoff hypothesis is carried as the class
 `HasApproximationNumberStrongCutoff`).  The paper's statement is the specialization to a
 sequence over `ℂ`. -/
-alias Lemma5_1 :=
+alias lemma5_1 :=
   DavisKahan.ExactSinTheta.approximationSingularValue_comp_strongProjection_tendsto
 
 section Lemma51
@@ -48,7 +48,7 @@ complex Hilbert space converges strongly to the identity, then for each index `n
 `n`-th approximation singular value of `K ∘ P i` converges to that of `K`.
 
 This is the printed lemma's own scalar field, with **no capability class in the
-signature**.  `Lemma5_1` above is generic over `RCLike 𝕜` and carries
+signature**.  `lemma5_1` above is generic over `RCLike 𝕜` and carries
 `HasApproximationNumberStrongCutoff 𝕜`, whose single field *is* this lemma; a reviewer
 comparing the printed statement with a Lean type is entitled to see the lemma proved
 rather than assumed, which is what this declaration and its real sibling do.  The index is
@@ -96,7 +96,7 @@ invariant norm -- and the operators are unbounded closed self-adjoint rather tha
 This is the *ordered* branch.  The interval/exterior separation hypothesis is a different
 theorem, `unbounded_sylvester_intervalExterior_uiNorm_of_spectra`; do not substitute
 one for the other. -/
-alias Theorem5_2 :=
+alias theorem5_2 :=
   DavisKahan.Sylvester.directOrderedSylvesterEngine_lowerUpper
 
 /-- **Davis--Kahan 1970, inequality (5.1).**  With `C = AX - XB` and the spectra of the

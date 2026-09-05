@@ -536,7 +536,7 @@ For every orthogonal `W` on a real Hilbert space carrying `U` onto `V`, every
 approximation number of the displacement restricted to `U` is minimized by the
 real direct rotation.  Approximation numbers stand in for singular values, which
 is the correct reading past the compact case. -/
-theorem Proposition4_1_real (hacute : IsUniformlyAcute U V)
+theorem proposition4_1_real (hacute : IsUniformlyAcute U V)
     (W : E →L[ℝ] E) (hWunitary : W ∈ unitary (E →L[ℝ] E))
     (hWmap : W * DavisKahan.projection U = DavisKahan.projection V * W) (n : ℕ) :
     ContinuousLinearMap.approximationNumber
@@ -559,7 +559,7 @@ theorem restrictedDisplacementDominance_real (hacute : IsUniformlyAcute U V)
     TauCeti.DavisKahan.Section4.RestrictedDisplacementApproximationDominance
       ((1 - TauCeti.DavisKahan.directRotationR U V hacute) ∘L DavisKahan.projection U)
       ((1 - W) ∘L DavisKahan.projection U) where
-  approximation_le n := Proposition4_1_real U V hacute W hWunitary hWmap n
+  approximation_le n := proposition4_1_real U V hacute W hWunitary hWmap n
 
 /-! ### Corollary 4.1 -/
 
@@ -570,7 +570,7 @@ For every Ky-Fan-dominant symmetric ideal family of operators on real Hilbert
 spaces, the real direct rotation's restricted displacement lies in the ideal and
 its gauge is least among all orthogonal `W` carrying `U` onto `V`.  Membership is
 concluded. -/
-theorem Corollary4_1_real (N : KyFanDominantIdealFamily (𝕜 := ℝ))
+theorem corollary4_1_real (N : KyFanDominantIdealFamily (𝕜 := ℝ))
     (hacute : IsUniformlyAcute U V)
     (W : E →L[ℝ] E) (hWunitary : W ∈ unitary (E →L[ℝ] E))
     (hWmap : W * DavisKahan.projection U = DavisKahan.projection V * W)
@@ -582,7 +582,7 @@ theorem Corollary4_1_real (N : KyFanDominantIdealFamily (𝕜 := ℝ))
     (restrictedDisplacementDominance_real U V hacute W hWunitary hWmap) hWmem
 
 /-- The operator-norm specialization of Corollary 4.1 over `ℝ`. -/
-theorem Corollary4_1_opNorm_real (hacute : IsUniformlyAcute U V)
+theorem corollary4_1_opNorm_real (hacute : IsUniformlyAcute U V)
     (W : E →L[ℝ] E) (hWunitary : W ∈ unitary (E →L[ℝ] E))
     (hWmap : W * DavisKahan.projection U = DavisKahan.projection V * W) :
     ‖(1 - TauCeti.DavisKahan.directRotationR U V hacute) ∘L DavisKahan.projection U‖ ≤
@@ -803,13 +803,13 @@ theorem tsum_displacementAngleSineSqR_ge_tsum_sq_sin_principalAngleSequence
 /-- **Davis--Kahan 1970, Proposition 4.2, real scalars, carrying the Section 4
 setup it is printed under.**
 
-The real analogue of `Proposition4_2_compact_nonacute`.  Section 4 opens
+The real analogue of `proposition4_2_compact_nonacute`.  Section 4 opens
 by fixing the compact/classification setup, and Proposition 4.2 is printed under
 it without restating it; the inherited hypotheses are carried here explicitly and
 discharged by the stronger theorem, which needs neither.  They are underscored
 because the proof does not consume them, following this tree's convention for
 retained source hypotheses. -/
-theorem Proposition4_2_compact_nonacute_real
+theorem proposition4_2_compact_nonacute_real
     (_hcompact : IsCompactOperator (TauCeti.principalSineOperator U V))
     (_J : halmosSourceDefect U V ≃ₗᵢ[ℝ] halmosTargetDefect U V)
     {ι : Type v} (b : HilbertBasis ι ℝ U) (W : E →L[ℝ] E)
@@ -981,7 +981,7 @@ private theorem diagonalPart_nonacuteDirectRotation_displacementSquare_real
     _ = A := by rw [hJJ, one_mul]
 
 /-- **Proposition 4.3 over `ℝ` at the exact matched-defect, nonacute scope.** -/
-theorem Proposition4_3_nonacute_real
+theorem proposition4_3_nonacute_real
     (J : halmosSourceDefect U V ≃ₗᵢ[ℝ] halmosTargetDefect U V)
     (W : E →L[ℝ] E) (hWunitary : W ∈ unitary (E →L[ℝ] E))
     (hWmap : W * DavisKahan.projection U = DavisKahan.projection V * W) (k : ℕ) :
@@ -1059,7 +1059,7 @@ theorem Proposition4_3_nonacute_real
 
 /-- Proposition 4.3 over `ℝ`, promoted to every real unitarily invariant ideal gauge at the
 matched-defect nonacute scope. -/
-theorem Proposition4_3_nonacute_real_idealGauge
+theorem proposition4_3_nonacute_real_idealGauge
     (N : KyFanDominantIdealFamily (𝕜 := ℝ))
     (J : halmosSourceDefect U V ≃ₗᵢ[ℝ] halmosTargetDefect U V)
     (W : E →L[ℝ] E) (hWunitary : W ∈ unitary (E →L[ℝ] E))
@@ -1071,15 +1071,15 @@ theorem Proposition4_3_nonacute_real_idealGauge
           (1 - TauCeti.DavisKahan.nonacuteDirectRotation U V J)) ≤
         N.gauge ((1 - star W) * (1 - W)) :=
   N.majorization_mem_and_gauge_le hWmem
-    (Proposition4_3_nonacute_real U V J W hWunitary hWmap)
+    (proposition4_3_nonacute_real U V J W hWunitary hWmap)
 
 /-- **Davis--Kahan 1970, Proposition 4.1, first formulation over `ℝ`.**
 
 At the compact source scope, an arbitrary real orthogonal competitor carrying `U` onto `V`
 admits an orthonormal family of source vectors whose displacement angles dominate every
 nonzero principal angle.  This is the real counterpart of
-`Proposition4_1_compact_orthonormalVectors_complex`; zero angles have a vacuous lower bound. -/
-theorem Proposition4_1_compact_orthonormalVectors_real
+`proposition4_1_compact_orthonormalVectors_complex`; zero angles have a vacuous lower bound. -/
+theorem proposition4_1_compact_orthonormalVectors_real
     (hcompact : IsCompactOperator (TauCeti.principalSineOperator U V))
     (W : E →L[ℝ] E) (hWunitary : W ∈ unitary (E →L[ℝ] E))
     (hWmap : W * DavisKahan.projection U = DavisKahan.projection V * W) :
@@ -1203,7 +1203,7 @@ theorem principalSineOperator_norm_sq_eq_one_sub_sourceCosineR_norm_sq
 
 /-- **The exact real singular-value value in Proposition 4.1 at the inherited
 compact, matched-defect scope.** -/
-theorem Proposition4_1_compact_nonacute_directRotationValues_real
+theorem proposition4_1_compact_nonacute_directRotationValues_real
     (_hcompact : IsCompactOperator (TauCeti.principalSineOperator U V))
     (J : halmosSourceDefect U V ≃ₗᵢ[ℝ] halmosTargetDefect U V)
     (W : E →L[ℝ] E) (hWunitary : W ∈ unitary (E →L[ℝ] E))
@@ -1281,7 +1281,7 @@ theorem Proposition4_1_compact_nonacute_directRotationValues_real
 
 /-- **Proposition 4.1 over `ℝ` with both printed formulations and the inherited
 compact, matched-defect scope in one declaration.** -/
-theorem Proposition4_1_compact_nonacute_real
+theorem proposition4_1_compact_nonacute_real
     (hcompact : IsCompactOperator (TauCeti.principalSineOperator U V))
     (J : halmosSourceDefect U V ≃ₗᵢ[ℝ] halmosTargetDefect U V)
     (W : E →L[ℝ] E) (hWunitary : W ∈ unitary (E →L[ℝ] E))
@@ -1302,13 +1302,13 @@ theorem Proposition4_1_compact_nonacute_real
               DavisKahan.projection U) n ≤
           ContinuousLinearMap.approximationNumber
             ((1 - W) ∘L DavisKahan.projection U) n :=
-  ⟨Proposition4_1_compact_orthonormalVectors_real U V hcompact W hWunitary hWmap,
-    Proposition4_1_compact_nonacute_directRotationValues_real
+  ⟨proposition4_1_compact_orthonormalVectors_real U V hcompact W hWunitary hWmap,
+    proposition4_1_compact_nonacute_directRotationValues_real
       U V hcompact J W hWunitary hWmap,
     Proposition4_1_nonacute_real U V J W hWunitary hWmap⟩
 
 /-- **Corollary 4.1 over `ℝ` at the inherited compact, matched-defect scope.** -/
-theorem Corollary4_1_compact_nonacute_real
+theorem corollary4_1_compact_nonacute_real
     (N : KyFanDominantIdealFamily (𝕜 := ℝ))
     (_hcompact : IsCompactOperator (TauCeti.principalSineOperator U V))
     (J : halmosSourceDefect U V ≃ₗᵢ[ℝ] halmosTargetDefect U V)
@@ -1323,7 +1323,7 @@ theorem Corollary4_1_compact_nonacute_real
   Corollary4_1_nonacute_real U V N J W hWunitary hWmap hWmem
 
 /-- **Proposition 4.3 over `ℝ` at the inherited compact, matched-defect scope.** -/
-theorem Proposition4_3_compact_nonacute_real_idealGauge
+theorem proposition4_3_compact_nonacute_real_idealGauge
     (N : KyFanDominantIdealFamily (𝕜 := ℝ))
     (_hcompact : IsCompactOperator (TauCeti.principalSineOperator U V))
     (J : halmosSourceDefect U V ≃ₗᵢ[ℝ] halmosTargetDefect U V)
@@ -1335,7 +1335,7 @@ theorem Proposition4_3_compact_nonacute_real_idealGauge
       N.gauge ((1 - star (TauCeti.DavisKahan.nonacuteDirectRotation U V J)) *
           (1 - TauCeti.DavisKahan.nonacuteDirectRotation U V J)) ≤
         N.gauge ((1 - star W) * (1 - W)) :=
-  Proposition4_3_nonacute_real_idealGauge U V N J W hWunitary hWmap hWmem
+  proposition4_3_nonacute_real_idealGauge U V N J W hWunitary hWmap hWmem
 
 /-- **Davis--Kahan 1970, Proposition 4.3, over a real Hilbert space of arbitrary
 dimension.**
@@ -1344,7 +1344,7 @@ Every Ky Fan sum of the approximation numbers of the squared full displacement
 `(1 - Wᵀ)(1 - W)` is minimized by the real direct rotation.  Ky Fan level is the
 honest scope: the individual approximation numbers are *not* dominated, which is
 what the repository's refutation of Proposition 4.4 records. -/
-theorem Proposition4_3_real (hacute : IsUniformlyAcute U V)
+theorem proposition4_3_real (hacute : IsUniformlyAcute U V)
     (W : E →L[ℝ] E) (hWunitary : W ∈ unitary (E →L[ℝ] E))
     (hWmap : W * DavisKahan.projection U = DavisKahan.projection V * W) (k : ℕ) :
     kyFanApproximationGauge k
@@ -1367,13 +1367,13 @@ For every Ky-Fan-dominant symmetric ideal family of operators on real Hilbert
 spaces, the squared full displacement `(1 − W)ᵀ(1 − W)` of the real direct
 rotation lies in the ideal and its gauge is least among all real orthogonal `W`
 carrying `U` onto `V`.  Membership of the minimizer is **concluded**, not
-assumed, matching `Corollary4_1_real`.
+assumed, matching `corollary4_1_real`.
 
 The family is real, not a transported complex one, for the reason given in the
 module docstring.  The promotion consumes Ky Fan prefix sums only: the
 individual approximation numbers are *not* dominated, which is what the
 repository's refutation of Proposition 4.4 records. -/
-theorem Proposition4_3_real_idealGauge (N : KyFanDominantIdealFamily (𝕜 := ℝ))
+theorem proposition4_3_real_idealGauge (N : KyFanDominantIdealFamily (𝕜 := ℝ))
     (hacute : IsUniformlyAcute U V)
     (W : E →L[ℝ] E) (hWunitary : W ∈ unitary (E →L[ℝ] E))
     (hWmap : W * DavisKahan.projection U = DavisKahan.projection V * W)
@@ -1384,7 +1384,7 @@ theorem Proposition4_3_real_idealGauge (N : KyFanDominantIdealFamily (𝕜 := �
           (1 - TauCeti.DavisKahan.directRotationR U V hacute)) ≤
         N.gauge ((1 - star W) * (1 - W)) :=
   N.majorization_mem_and_gauge_le hWmem
-    (Proposition4_3_real U V hacute W hWunitary hWmap)
+    (proposition4_3_real U V hacute W hWunitary hWmap)
 
 /-! ### The two full-displacement consequences over `ℝ`
 
@@ -1435,7 +1435,7 @@ theorem Proposition4_3_nonacute_real_fullDisplacement_opNorm
     (W : E →L[ℝ] E) (hWunitary : W ∈ unitary (E →L[ℝ] E))
     (hWmap : W * DavisKahan.projection U = DavisKahan.projection V * W) :
     ‖1 - TauCeti.DavisKahan.nonacuteDirectRotation U V J‖ ≤ ‖1 - W‖ := by
-  have hk := Proposition4_3_nonacute_real U V J W hWunitary hWmap 1
+  have hk := proposition4_3_nonacute_real U V J W hWunitary hWmap 1
   rw [displacementSquare_eq_gramOperatorR, displacementSquare_eq_gramOperatorR] at hk
   simp only [TauCeti.ApproximationNumber.kyFanApproximationGauge_eq_kyFanGauge,
     ContinuousLinearMap.kyFanGauge_one, gramOperatorR,
@@ -1460,7 +1460,7 @@ theorem Proposition4_3_nonacute_real_fullDisplacement_hilbertSchmidt
     rw [ContinuousLinearMap.nuclearENorm_eq_iSup_kyFanGauge,
       ContinuousLinearMap.nuclearENorm_eq_iSup_kyFanGauge]
     refine iSup_mono fun k => ENNReal.ofReal_le_ofReal ?_
-    have hk := Proposition4_3_nonacute_real U V J W hWunitary hWmap k
+    have hk := proposition4_3_nonacute_real U V J W hWunitary hWmap k
     rw [displacementSquare_eq_gramOperatorR, displacementSquare_eq_gramOperatorR] at hk
     simpa only [TauCeti.ApproximationNumber.kyFanApproximationGauge_eq_kyFanGauge] using hk
   rw [nuclearENorm_gramOperatorR, nuclearENorm_gramOperatorR] at hnuc

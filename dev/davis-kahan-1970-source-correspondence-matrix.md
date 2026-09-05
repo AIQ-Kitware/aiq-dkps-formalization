@@ -112,15 +112,15 @@ rows below show cannot be weakened to a single gap.
 
 | paper item | source name | target |
 | --- | --- | --- |
-| Theorem 6.1, common domain, complex | `Theorem6_1_commonDomain` | `CommonDomainTheorem61Data.result_every_unitarilyInvariantNorm_across` |
-| Theorem 6.1, common domain, real | `Theorem6_1_real_commonDomain` | `RealCommonDomainTheorem61Data.result_every_unitarilyInvariantNorm_across` |
+| Theorem 6.1, common domain, complex | `theorem6_1_commonDomain` | `CommonDomainTheorem61Data.result_every_unitarilyInvariantNorm_across` |
+| Theorem 6.1, common domain, real | `theorem6_1_real_commonDomain` | `RealCommonDomainTheorem61Data.result_every_unitarilyInvariantNorm_across` |
 | Theorem 6.2, common domain, complex | `Theorem6_2_commonDomain` | `CommonDomainTheorem62Data.result_across` |
-| Theorem 6.2, common domain, real | `Theorem6_2_real_commonDomain` | `RealCommonDomainTheorem62Data.result_across` |
+| Theorem 6.2, common domain, real | `theorem6_2_real_commonDomain` | `RealCommonDomainTheorem62Data.result_across` |
 | the core residual extends to the whole domain | `commonCoreResidual_extends_to_domain` | `CommonCoreResidualData.extends_to_domain` |
-| Theorem 6.1, common core, complex | `Theorem6_1_commonCore` | `CommonCoreTheorem61Data.result_every_unitarilyInvariantNorm_across` |
-| Theorem 6.1, common core, real | `Theorem6_1_real_commonCore` | `RealCommonCoreTheorem61Data.result_every_unitarilyInvariantNorm_across` |
+| Theorem 6.1, common core, complex | `theorem6_1_commonCore` | `CommonCoreTheorem61Data.result_every_unitarilyInvariantNorm_across` |
+| Theorem 6.1, common core, real | `theorem6_1_real_commonCore` | `RealCommonCoreTheorem61Data.result_every_unitarilyInvariantNorm_across` |
 | Theorem 6.2, common core, complex | `Theorem6_2_commonCore` | `CommonCoreTheorem62Data.result_across` |
-| Theorem 6.2, common core, real | `Theorem6_2_real_commonCore` | `RealCommonCoreTheorem62Data.result_across` |
+| Theorem 6.2, common core, real | `theorem6_2_real_commonCore` | `RealCommonCoreTheorem62Data.result_across` |
 
 ## Equality, optimality, and the one-gap counterexample
 

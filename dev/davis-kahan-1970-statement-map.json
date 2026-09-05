@@ -921,12 +921,12 @@
       "expected_verification": "proved_in_build",
       "tex_marker": "DK-4.1-prop",
       "review_declarations": [
-        "TauCeti.DavisKahan1970.Proposition4_1_compact_orthonormalVectors_complex",
-        "TauCeti.DavisKahan1970.Proposition4_1_compact_orthonormalVectors_real",
-        "TauCeti.DavisKahan1970.Proposition4_1_compact_nonacute_complex",
-        "TauCeti.DavisKahan1970.Proposition4_1_compact_nonacute_real",
-        "TauCeti.DavisKahan1970.Proposition4_1_directRotationValues",
-        "TauCeti.DavisKahan1970.Proposition4_1",
+        "TauCeti.DavisKahan1970.proposition4_1_compact_orthonormalVectors_complex",
+        "TauCeti.DavisKahan1970.proposition4_1_compact_orthonormalVectors_real",
+        "TauCeti.DavisKahan1970.proposition4_1_compact_nonacute_complex",
+        "TauCeti.DavisKahan1970.proposition4_1_compact_nonacute_real",
+        "TauCeti.DavisKahan1970.proposition4_1_directRotationValues",
+        "TauCeti.DavisKahan1970.proposition4_1",
         "TauCeti.DavisKahan.FiniteDimensional.singularValues_restrictedDisplacement_le",
         "TauCeti.DavisKahan.FiniteDimensional.singularValues_restrictedDisplacement_directRotation",
         "TauCeti.DavisKahan.FiniteDimensional.principalPlaneChord_eq_two_mul_sin_half"
@@ -936,20 +936,20 @@
           "id": "DK-4.1-prop.vector",
           "description": "First printed formulation: an orthonormal principal-vector family v_k in P H with angle(v_k, V v_k) >= theta_k.",
           "review_declarations": [
-            "TauCeti.DavisKahan1970.Proposition4_1_compact_orthonormalVectors_complex",
-            "TauCeti.DavisKahan1970.Proposition4_1_compact_orthonormalVectors_real"
+            "TauCeti.DavisKahan1970.proposition4_1_compact_orthonormalVectors_complex",
+            "TauCeti.DavisKahan1970.proposition4_1_compact_orthonormalVectors_real"
           ]
         },
         {
           "id": "DK-4.1-prop.singular",
-          "description": "Equivalent singular-value/approximation-number minimality formulation, including the direct-rotation value 2 sin(theta_k/2). Minimality over all intertwining isometries is Proposition4_1 / singularValues_restrictedDisplacement_le; the attained value is singularValues_restrictedDisplacement_directRotation, which gives it as the principal-plane chord; and principalPlaneChord_eq_two_mul_sin_half is the half-angle identity making that chord the printed 2 sin(theta_k/2) rather than a docstring claim.",
+          "description": "Equivalent singular-value/approximation-number minimality formulation, including the direct-rotation value 2 sin(theta_k/2). Minimality over all intertwining isometries is proposition4_1 / singularValues_restrictedDisplacement_le; the attained value is singularValues_restrictedDisplacement_directRotation, which gives it as the principal-plane chord; and principalPlaneChord_eq_two_mul_sin_half is the half-angle identity making that chord the printed 2 sin(theta_k/2) rather than a docstring claim.",
           "review_declarations": [
-            "TauCeti.DavisKahan1970.Proposition4_1_compact_orthonormalVectors_complex",
-            "TauCeti.DavisKahan1970.Proposition4_1_compact_orthonormalVectors_real",
-            "TauCeti.DavisKahan1970.Proposition4_1_compact_nonacute_complex",
-            "TauCeti.DavisKahan1970.Proposition4_1_compact_nonacute_real",
-            "TauCeti.DavisKahan1970.Proposition4_1_directRotationValues",
-            "TauCeti.DavisKahan1970.Proposition4_1",
+            "TauCeti.DavisKahan1970.proposition4_1_compact_orthonormalVectors_complex",
+            "TauCeti.DavisKahan1970.proposition4_1_compact_orthonormalVectors_real",
+            "TauCeti.DavisKahan1970.proposition4_1_compact_nonacute_complex",
+            "TauCeti.DavisKahan1970.proposition4_1_compact_nonacute_real",
+            "TauCeti.DavisKahan1970.proposition4_1_directRotationValues",
+            "TauCeti.DavisKahan1970.proposition4_1",
             "TauCeti.DavisKahan.FiniteDimensional.singularValues_restrictedDisplacement_le",
             "TauCeti.DavisKahan.FiniteDimensional.singularValues_restrictedDisplacement_directRotation",
             "TauCeti.DavisKahan.FiniteDimensional.principalPlaneChord_eq_two_mul_sin_half"
@@ -981,18 +981,18 @@
       "expected_verification": "proved_in_build",
       "tex_marker": "DK-4.1-cor",
       "review_declarations": [
-        "TauCeti.DavisKahan1970.Corollary4_1_compact_nonacute_complex",
-        "TauCeti.DavisKahan1970.Corollary4_1_compact_nonacute_real",
-        "TauCeti.DavisKahan1970.Corollary4_1_infiniteDimensional_nonacute"
+        "TauCeti.DavisKahan1970.corollary4_1_compact_nonacute_complex",
+        "TauCeti.DavisKahan1970.corollary4_1_compact_nonacute_real",
+        "TauCeti.DavisKahan1970.corollary4_1_infiniteDimensional_nonacute"
       ],
       "audit_clauses": [
         {
           "id": "DK-4.1-cor.whole",
           "description": "Audit the complete registered source passage as one semantic unit; split further if the independent reviewer finds separable mathematical clauses.",
           "review_declarations": [
-            "TauCeti.DavisKahan1970.Corollary4_1_compact_nonacute_complex",
-            "TauCeti.DavisKahan1970.Corollary4_1_compact_nonacute_real",
-            "TauCeti.DavisKahan1970.Corollary4_1_infiniteDimensional_nonacute"
+            "TauCeti.DavisKahan1970.corollary4_1_compact_nonacute_complex",
+            "TauCeti.DavisKahan1970.corollary4_1_compact_nonacute_real",
+            "TauCeti.DavisKahan1970.corollary4_1_infiniteDimensional_nonacute"
           ]
         }
       ],
@@ -1014,7 +1014,7 @@
       "expected_verification": "proved_in_build",
       "tex_marker": "DK-4.2-prop",
       "review_declarations": [
-        "TauCeti.DavisKahan1970.Proposition4_2_infiniteDimensional",
+        "TauCeti.DavisKahan1970.proposition4_2_infiniteDimensional",
         "TauCeti.DavisKahan1970.tsum_displacementAngleSineSqR_ge_tsum_sq_sin_principalAngleSequence"
       ],
       "audit_clauses": [
@@ -1022,7 +1022,7 @@
           "id": "DK-4.2-prop.whole",
           "description": "Audit the complete registered source passage as one semantic unit; split further if the independent reviewer finds separable mathematical clauses.",
           "review_declarations": [
-            "TauCeti.DavisKahan1970.Proposition4_2_infiniteDimensional",
+            "TauCeti.DavisKahan1970.proposition4_2_infiniteDimensional",
             "TauCeti.DavisKahan1970.tsum_displacementAngleSineSqR_ge_tsum_sq_sin_principalAngleSequence"
           ]
         }
@@ -1052,14 +1052,14 @@
       "expected_verification": "proved_in_build",
       "tex_marker": "DK-4.3-prop",
       "review_declarations": [
-        "TauCeti.DavisKahan1970.Proposition4_3_infiniteDimensional_idealGauge"
+        "TauCeti.DavisKahan1970.proposition4_3_infiniteDimensional_idealGauge"
       ],
       "audit_clauses": [
         {
           "id": "DK-4.3-prop.whole",
           "description": "Audit the complete registered source passage as one semantic unit; split further if the independent reviewer finds separable mathematical clauses.",
           "review_declarations": [
-            "TauCeti.DavisKahan1970.Proposition4_3_infiniteDimensional_idealGauge"
+            "TauCeti.DavisKahan1970.proposition4_3_infiniteDimensional_idealGauge"
           ]
         }
       ],
@@ -1241,7 +1241,7 @@
       "expected_verification": "proved_in_build",
       "tex_marker": "DK-5.2-thm",
       "review_declarations": [
-        "TauCeti.DavisKahan1970.Theorem5_2",
+        "TauCeti.DavisKahan1970.theorem5_2",
         "TauCeti.DavisKahan1970.unbounded_sylvester_intervalExterior_uiNorm_of_spectra"
       ],
       "audit_clauses": [
@@ -1249,7 +1249,7 @@
           "id": "DK-5.2-thm.whole",
           "description": "Audit the complete registered source passage as one semantic unit; split further if the independent reviewer finds separable mathematical clauses.",
           "review_declarations": [
-            "TauCeti.DavisKahan1970.Theorem5_2",
+            "TauCeti.DavisKahan1970.theorem5_2",
             "TauCeti.DavisKahan1970.unbounded_sylvester_intervalExterior_uiNorm_of_spectra"
           ]
         }
@@ -1279,14 +1279,14 @@
       "expected_verification": "proved_in_build",
       "tex_marker": "DK-5.1-lem",
       "review_declarations": [
-        "TauCeti.DavisKahan1970.Lemma5_1"
+        "TauCeti.DavisKahan1970.lemma5_1"
       ],
       "audit_clauses": [
         {
           "id": "DK-5.1-lem.whole",
           "description": "Audit the complete registered source passage as one semantic unit; split further if the independent reviewer finds separable mathematical clauses.",
           "review_declarations": [
-            "TauCeti.DavisKahan1970.Lemma5_1"
+            "TauCeti.DavisKahan1970.lemma5_1"
           ]
         }
       ],
@@ -1411,8 +1411,8 @@
       "review_declarations": [
         "TauCeti.DavisKahan1970.theorem6_1_complex",
         "TauCeti.DavisKahan1970.theorem6_1_real",
-        "TauCeti.DavisKahan1970.Theorem6_1_real_commonDomain",
-        "TauCeti.DavisKahan1970.Theorem6_1_real_commonCore"
+        "TauCeti.DavisKahan1970.theorem6_1_real_commonDomain",
+        "TauCeti.DavisKahan1970.theorem6_1_real_commonCore"
       ],
       "audit_clauses": [
         {
@@ -1421,8 +1421,8 @@
           "review_declarations": [
             "TauCeti.DavisKahan1970.theorem6_1_complex",
             "TauCeti.DavisKahan1970.theorem6_1_real",
-            "TauCeti.DavisKahan1970.Theorem6_1_real_commonDomain",
-            "TauCeti.DavisKahan1970.Theorem6_1_real_commonCore"
+            "TauCeti.DavisKahan1970.theorem6_1_real_commonDomain",
+            "TauCeti.DavisKahan1970.theorem6_1_real_commonCore"
           ]
         }
       ],
@@ -1448,8 +1448,8 @@
       "review_declarations": [
         "TauCeti.DavisKahan1970.theorem6_2_complex",
         "TauCeti.DavisKahan1970.theorem6_2_real",
-        "TauCeti.DavisKahan1970.Theorem6_2_real_commonDomain",
-        "TauCeti.DavisKahan1970.Theorem6_2_real_commonCore"
+        "TauCeti.DavisKahan1970.theorem6_2_real_commonDomain",
+        "TauCeti.DavisKahan1970.theorem6_2_real_commonCore"
       ],
       "audit_clauses": [
         {
@@ -1458,8 +1458,8 @@
           "review_declarations": [
             "TauCeti.DavisKahan1970.theorem6_2_complex",
             "TauCeti.DavisKahan1970.theorem6_2_real",
-            "TauCeti.DavisKahan1970.Theorem6_2_real_commonDomain",
-            "TauCeti.DavisKahan1970.Theorem6_2_real_commonCore"
+            "TauCeti.DavisKahan1970.theorem6_2_real_commonDomain",
+            "TauCeti.DavisKahan1970.theorem6_2_real_commonCore"
           ]
         }
       ],
@@ -1488,7 +1488,7 @@
       "expected_verification": "proved_in_build",
       "tex_marker": "DK-6.3-thm",
       "review_declarations": [
-        "TauCeti.DavisKahan1970.Theorem6_3",
+        "TauCeti.DavisKahan1970.theorem6_3",
         "TauCeti.DavisKahan1970.theorem6_3_all_kyFan_core_infiniteTrial_real",
         "TauCeti.DavisKahan1970.tanTheta_directed_bounded_symmetricNorming_complex",
         "TauCeti.DavisKahan1970.tanTheta_directed_bounded_symmetricNorming_real",
@@ -1500,7 +1500,7 @@
           "id": "DK-6.3-thm.whole",
           "description": "Audit the complete registered source passage as one semantic unit; split further if the independent reviewer finds separable mathematical clauses.",
           "review_declarations": [
-            "TauCeti.DavisKahan1970.Theorem6_3",
+            "TauCeti.DavisKahan1970.theorem6_3",
             "TauCeti.DavisKahan1970.theorem6_3_all_kyFan_core_infiniteTrial_real",
             "TauCeti.DavisKahan1970.tanTheta_directed_bounded_symmetricNorming_complex",
             "TauCeti.DavisKahan1970.tanTheta_directed_bounded_symmetricNorming_real",
@@ -1537,12 +1537,12 @@
       "expected_verification": "proved_in_build",
       "tex_marker": "DK-6-appendix",
       "review_declarations": [
-        "TauCeti.DavisKahan1970.Theorem6_1_commonDomain",
-        "TauCeti.DavisKahan1970.Theorem6_1_commonCore",
-        "TauCeti.DavisKahan1970.Theorem6_1_real_commonDomain",
-        "TauCeti.DavisKahan1970.Theorem6_1_real_commonCore",
-        "TauCeti.DavisKahan1970.Theorem6_2_real_commonDomain",
-        "TauCeti.DavisKahan1970.Theorem6_2_real_commonCore",
+        "TauCeti.DavisKahan1970.theorem6_1_commonDomain",
+        "TauCeti.DavisKahan1970.theorem6_1_commonCore",
+        "TauCeti.DavisKahan1970.theorem6_1_real_commonDomain",
+        "TauCeti.DavisKahan1970.theorem6_1_real_commonCore",
+        "TauCeti.DavisKahan1970.theorem6_2_real_commonDomain",
+        "TauCeti.DavisKahan1970.theorem6_2_real_commonCore",
         "TauCeti.DavisKahan1970.tanTheta_ambient_unboundedRitz_explicitCompatibility_symmetricNorming_complex",
         "TauCeti.DavisKahan1970.tanTheta_ambient_unboundedRitz_explicitCompatibility_symmetricNorming_real"
       ],
@@ -1551,12 +1551,12 @@
           "id": "DK-6-appendix.whole",
           "description": "Audit the complete registered source passage as one semantic unit; split further if the independent reviewer finds separable mathematical clauses.",
           "review_declarations": [
-            "TauCeti.DavisKahan1970.Theorem6_1_commonDomain",
-            "TauCeti.DavisKahan1970.Theorem6_1_commonCore",
-            "TauCeti.DavisKahan1970.Theorem6_1_real_commonDomain",
-            "TauCeti.DavisKahan1970.Theorem6_1_real_commonCore",
-            "TauCeti.DavisKahan1970.Theorem6_2_real_commonDomain",
-            "TauCeti.DavisKahan1970.Theorem6_2_real_commonCore",
+            "TauCeti.DavisKahan1970.theorem6_1_commonDomain",
+            "TauCeti.DavisKahan1970.theorem6_1_commonCore",
+            "TauCeti.DavisKahan1970.theorem6_1_real_commonDomain",
+            "TauCeti.DavisKahan1970.theorem6_1_real_commonCore",
+            "TauCeti.DavisKahan1970.theorem6_2_real_commonDomain",
+            "TauCeti.DavisKahan1970.theorem6_2_real_commonCore",
             "TauCeti.DavisKahan1970.tanTheta_ambient_unboundedRitz_explicitCompatibility_symmetricNorming_complex",
             "TauCeti.DavisKahan1970.tanTheta_ambient_unboundedRitz_explicitCompatibility_symmetricNorming_real"
           ]

@@ -24,7 +24,7 @@ not a hypothesis.
 
 ## What is compiled, at which scope
 
-* `Theorem6_3` — the finite-dimensional theorem in the source's literal
+* `theorem6_3` — the finite-dimensional theorem in the source's literal
   orientation (Ritz spectrum in `[β, α]`, unwanted exact spectrum in
   `[α + δ, ∞)`, strict-lower-rank trial space), for **every rectangular
   unitarily invariant norm**, with the paper's freedom in the choice of the
@@ -87,10 +87,10 @@ alias Theorem6_3_transversality :=
 space, Rayleigh--Ritz residual, one-sided spectral gap; the bound holds for
 every rectangular unitarily invariant norm and any `tan Θ₀` representative
 with the principal-tangent singular values. -/
-alias Theorem6_3 :=
+alias theorem6_3 :=
   DavisKahan.FiniteDimensional.davisKahan1970_generalizedTanTheta0_ritzResidual_le
 
-/-- Equal-rank companion of `Theorem6_3`; this is the Section 2 `tan Θ`
+/-- Equal-rank companion of `theorem6_3`; this is the Section 2 `tan Θ`
 statement in Ritz-residual form. -/
 alias Theorem6_3_equalRank :=
   DavisKahan.FiniteDimensional.davisKahan1970_tanTheta0_ritzResidual_le

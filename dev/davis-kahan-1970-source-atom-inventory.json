@@ -3345,7 +3345,7 @@
         "extends_results": [],
         "rationale": "RECLASSIFIED 2026-08-31 (second pass), as for the Proposition 6.1 sentence: an extension remark, not a separately proved result, and not required to read Theorem 6.1's own claim. `result_adjacent_extension`. The common-domain Theorem 6.1 declarations remain compiled and are registered as supporting evidence.",
         "source_quote": "Proposition~6.1 and Theorem~6.1 admit the analogous relaxation.",
-        "stronger_lean_coverage": "TauCeti.DavisKahan1970.Theorem6_1_commonDomain"
+        "stronger_lean_coverage": "TauCeti.DavisKahan1970.theorem6_1_commonDomain"
       }
     },
     {

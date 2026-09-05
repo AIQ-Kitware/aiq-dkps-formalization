@@ -3411,8 +3411,8 @@ One row per printed source clause per scalar field.  A clause is `PASS` only whe
 
 | clause | scalar | witness | status |
 | --- | --- | --- | --- |
-| `orthonormal-angle-lower-bounds.complex` | complex | `TauCeti.DavisKahan1970.Proposition4_1_compact_nonacute_complex` | **PASS** |
-| `orthonormal-angle-lower-bounds.real` | real | `TauCeti.DavisKahan1970.Proposition4_1_compact_nonacute_real` | **PASS** |
+| `orthonormal-angle-lower-bounds.complex` | complex | `TauCeti.DavisKahan1970.proposition4_1_compact_nonacute_complex` | **PASS** |
+| `orthonormal-angle-lower-bounds.real` | real | `TauCeti.DavisKahan1970.proposition4_1_compact_nonacute_real` | **PASS** |
 
 **`orthonormal-angle-lower-bounds.complex`.** Canonical witness for orthonormal-angle-lower-bounds, singular-value-minimality at complex scalar scope, carried over from the pre-clause canonical evidence and re-checked against its compiler-printed type under the coherent model.
 
@@ -3424,35 +3424,35 @@ Result-wide scope every clause must carry: `DK-4.1-prop.section4-compact-classif
 
 The declarations that carry this result's printed statement, with the source atoms each one covers.  Everything under *Other registered declarations* below accompanies the result without establishing it.
 
-- `TauCeti.DavisKahan1970.Proposition4_1_compact_nonacute_complex` — primary_source_witness, complex scalars, proof; covers `DK-4.1-prop.orthonormal-angle-lower-bounds`, `DK-4.1-prop.section4-compact-classification-setup`, `DK-4.1-prop.singular-value-minimality`
-- `TauCeti.DavisKahan1970.Proposition4_1_compact_nonacute_real` — primary_source_witness, real scalars, proof; covers `DK-4.1-prop.orthonormal-angle-lower-bounds`, `DK-4.1-prop.section4-compact-classification-setup`, `DK-4.1-prop.singular-value-minimality`
+- `TauCeti.DavisKahan1970.proposition4_1_compact_nonacute_complex` — primary_source_witness, complex scalars, proof; covers `DK-4.1-prop.orthonormal-angle-lower-bounds`, `DK-4.1-prop.section4-compact-classification-setup`, `DK-4.1-prop.singular-value-minimality`
+- `TauCeti.DavisKahan1970.proposition4_1_compact_nonacute_real` — primary_source_witness, real scalars, proof; covers `DK-4.1-prop.orthonormal-angle-lower-bounds`, `DK-4.1-prop.section4-compact-classification-setup`, `DK-4.1-prop.singular-value-minimality`
 
 ### Other registered declarations
 
-- `TauCeti.DavisKahan1970.Proposition4_1_compact_nonacute_directRotationValues_complex` — supporting_theorem
-- `TauCeti.DavisKahan1970.Proposition4_1_compact_nonacute_directRotationValues_real` — supporting_theorem
+- `TauCeti.DavisKahan1970.proposition4_1_compact_nonacute_directRotationValues_complex` — supporting_theorem
+- `TauCeti.DavisKahan1970.proposition4_1_compact_nonacute_directRotationValues_real` — supporting_theorem
 
 ### Source-facing Lean declarations
 
-#### `TauCeti.DavisKahan1970.Proposition4_1_compact_nonacute_complex`
+#### `TauCeti.DavisKahan1970.proposition4_1_compact_nonacute_complex`
 
 Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section4.lean:317`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
-#### `TauCeti.DavisKahan1970.Proposition4_1_compact_nonacute_real`
+#### `TauCeti.DavisKahan1970.proposition4_1_compact_nonacute_real`
 
 Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section4Real.lean:1284`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
-#### `TauCeti.DavisKahan1970.Proposition4_1_compact_nonacute_directRotationValues_complex`
+#### `TauCeti.DavisKahan1970.proposition4_1_compact_nonacute_directRotationValues_complex`
 
 Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section4.lean:249`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
-#### `TauCeti.DavisKahan1970.Proposition4_1_compact_nonacute_directRotationValues_real`
+#### `TauCeti.DavisKahan1970.proposition4_1_compact_nonacute_directRotationValues_real`
 
 Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section4Real.lean:1206`
 
@@ -3559,9 +3559,9 @@ Until 2026-09-02 the Section 4 setup was represented by no source atom at all, s
 
 #### 5. What Lean says, and exactly where the implicit semantics became explicit
 
-- `TauCeti.DavisKahan1970.Corollary4_1_compact_nonacute_symmetricNorming_complex`
+- `TauCeti.DavisKahan1970.corollary4_1_compact_nonacute_symmetricNorming_complex`
   - The hypotheses `hcompact : IsCompactOperator (principalSineOperator U V)` and the crossed-defect equivalence `J` carry the inherited Section 4 setup that the printed corollary does not restate.
-- `TauCeti.DavisKahan1970.Corollary4_1_compact_nonacute_symmetricNorming_real`
+- `TauCeti.DavisKahan1970.corollary4_1_compact_nonacute_symmetricNorming_real`
   - The real-scalar analogue carries the same inherited compactness and classification hypotheses explicitly, again absent from the printed display.
 
 #### 6. The repository's accepted reading
@@ -3629,8 +3629,8 @@ One row per printed source clause per scalar field.  A clause is `PASS` only whe
 
 | clause | scalar | witness | status |
 | --- | --- | --- | --- |
-| `ui-minimality-on-p.complex` | complex | `TauCeti.DavisKahan1970.Corollary4_1_compact_nonacute_symmetricNorming_complex` | **PASS** |
-| `ui-minimality-on-p.real` | real | `TauCeti.DavisKahan1970.Corollary4_1_compact_nonacute_symmetricNorming_real` | **PASS** |
+| `ui-minimality-on-p.complex` | complex | `TauCeti.DavisKahan1970.corollary4_1_compact_nonacute_symmetricNorming_complex` | **PASS** |
+| `ui-minimality-on-p.real` | real | `TauCeti.DavisKahan1970.corollary4_1_compact_nonacute_symmetricNorming_real` | **PASS** |
 
 **`ui-minimality-on-p.complex`.** For every source unitarily invariant norm, N((1 - V)P) is minimized among unitaries carrying P H onto Q H by the direct rotation.  This is the printed Corollary 4.1 quantifier: SymmetricNormingFunction, not an implementation ideal family.
 
@@ -3642,43 +3642,43 @@ Result-wide scope every clause must carry: `DK-4.1-prop.section4-compact-classif
 
 The declarations that carry this result's printed statement, with the source atoms each one covers.  Everything under *Other registered declarations* below accompanies the result without establishing it.
 
-- `TauCeti.DavisKahan1970.Corollary4_1_compact_nonacute_symmetricNorming_complex` — primary_source_witness, complex scalars, proof; covers `DK-4.1-cor.ui-minimality-on-p`, `DK-4.1-prop.section4-compact-classification-setup`
-- `TauCeti.DavisKahan1970.Corollary4_1_compact_nonacute_symmetricNorming_real` — primary_source_witness, real scalars, proof; covers `DK-4.1-cor.ui-minimality-on-p`, `DK-4.1-prop.section4-compact-classification-setup`
+- `TauCeti.DavisKahan1970.corollary4_1_compact_nonacute_symmetricNorming_complex` — primary_source_witness, complex scalars, proof; covers `DK-4.1-cor.ui-minimality-on-p`, `DK-4.1-prop.section4-compact-classification-setup`
+- `TauCeti.DavisKahan1970.corollary4_1_compact_nonacute_symmetricNorming_real` — primary_source_witness, real scalars, proof; covers `DK-4.1-cor.ui-minimality-on-p`, `DK-4.1-prop.section4-compact-classification-setup`
 
 ### Other registered declarations
 
-- `TauCeti.DavisKahan1970.Corollary4_1_infiniteDimensional_nonacute` — specialization
-- `TauCeti.DavisKahan1970.Corollary4_1_compact_nonacute_complex` — generalization
-- `TauCeti.DavisKahan1970.Corollary4_1_compact_nonacute_real` — generalization
+- `TauCeti.DavisKahan1970.corollary4_1_infiniteDimensional_nonacute` — specialization
+- `TauCeti.DavisKahan1970.corollary4_1_compact_nonacute_complex` — generalization
+- `TauCeti.DavisKahan1970.corollary4_1_compact_nonacute_real` — generalization
 - `TauCeti.DavisKahan1970.symmetricNorming_of_kyFanDominant` — supporting_theorem
 
 ### Source-facing Lean declarations
 
-#### `TauCeti.DavisKahan1970.Corollary4_1_compact_nonacute_complex`
+#### `TauCeti.DavisKahan1970.corollary4_1_compact_nonacute_complex`
 
 Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section4.lean:348`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
-#### `TauCeti.DavisKahan1970.Corollary4_1_compact_nonacute_real`
+#### `TauCeti.DavisKahan1970.corollary4_1_compact_nonacute_real`
 
 Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section4Real.lean:1311`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
-#### `TauCeti.DavisKahan1970.Corollary4_1_infiniteDimensional_nonacute`
+#### `TauCeti.DavisKahan1970.corollary4_1_infiniteDimensional_nonacute`
 
 Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section4.lean:379`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
-#### `TauCeti.DavisKahan1970.Corollary4_1_compact_nonacute_symmetricNorming_complex`
+#### `TauCeti.DavisKahan1970.corollary4_1_compact_nonacute_symmetricNorming_complex`
 
 Source location candidates: `DavisKahan/Sources/DavisKahan1970/SymmetricNormingFanDominance.lean:186`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
-#### `TauCeti.DavisKahan1970.Corollary4_1_compact_nonacute_symmetricNorming_real`
+#### `TauCeti.DavisKahan1970.corollary4_1_compact_nonacute_symmetricNorming_real`
 
 Source location candidates: `DavisKahan/Sources/DavisKahan1970/SymmetricNormingFanDominance.lean:238`
 
@@ -3791,7 +3791,7 @@ Until 2026-09-02 the Section 4 setup was represented by no source atom at all, s
 
 #### 5. What Lean says, and exactly where the implicit semantics became explicit
 
-- `TauCeti.DavisKahan1970.Proposition4_2_compact_nonacute`
+- `TauCeti.DavisKahan1970.proposition4_2_compact_nonacute`
   - The source-shaped wrapper takes `_hcompact` and `_J`, which are exactly the Section 4 setup the printed proposition inherits and does not restate.
 
 #### 6. The repository's accepted reading
@@ -3862,10 +3862,10 @@ One row per printed source clause per scalar field.  A clause is `PASS` only whe
 
 | clause | scalar | witness | status |
 | --- | --- | --- | --- |
-| `basis-sine-square-lower-bound.complex` | complex | `TauCeti.DavisKahan1970.Proposition4_2_compact_nonacute` | **PASS** |
-| `basis-sine-square-lower-bound.real` | real | `TauCeti.DavisKahan1970.Proposition4_2_compact_nonacute_real` | **PASS** |
+| `basis-sine-square-lower-bound.complex` | complex | `TauCeti.DavisKahan1970.proposition4_2_compact_nonacute` | **PASS** |
+| `basis-sine-square-lower-bound.real` | real | `TauCeti.DavisKahan1970.proposition4_2_compact_nonacute_real` | **PASS** |
 
-**`basis-sine-square-lower-bound.complex`.** Source-shaped witness carrying the Section 4 compact/classification setup the printed proposition inherits. The previous primary, `Proposition4_2_infiniteDimensional`, proves the same inequality without that setup: stronger and correct, retained as supporting evidence, but not an exact witness for a statement printed under the section's hypotheses.
+**`basis-sine-square-lower-bound.complex`.** Source-shaped witness carrying the Section 4 compact/classification setup the printed proposition inherits. The previous primary, `proposition4_2_infiniteDimensional`, proves the same inequality without that setup: stronger and correct, retained as supporting evidence, but not an exact witness for a statement printed under the section's hypotheses.
 
 **`basis-sine-square-lower-bound.real`.** Source-shaped witness carrying the Section 4 compact/classification setup the printed proposition inherits. The previous primary, `tsum_displacementAngleSineSqR_ge_tsum_sq_sin_principalAngleSequence`, proves the same inequality without that setup: stronger and correct, retained as supporting evidence, but not an exact witness for a statement printed under the section's hypotheses.
 
@@ -3875,29 +3875,29 @@ Result-wide scope every clause must carry: `DK-4.1-prop.section4-compact-classif
 
 The declarations that carry this result's printed statement, with the source atoms each one covers.  Everything under *Other registered declarations* below accompanies the result without establishing it.
 
-- `TauCeti.DavisKahan1970.Proposition4_2_compact_nonacute` — primary_source_witness, complex scalars, proof; covers `DK-4.1-prop.section4-compact-classification-setup`, `DK-4.2-prop.basis-sine-square-lower-bound`
-- `TauCeti.DavisKahan1970.Proposition4_2_compact_nonacute_real` — primary_source_witness, real scalars, proof; covers `DK-4.1-prop.section4-compact-classification-setup`, `DK-4.2-prop.basis-sine-square-lower-bound`
+- `TauCeti.DavisKahan1970.proposition4_2_compact_nonacute` — primary_source_witness, complex scalars, proof; covers `DK-4.1-prop.section4-compact-classification-setup`, `DK-4.2-prop.basis-sine-square-lower-bound`
+- `TauCeti.DavisKahan1970.proposition4_2_compact_nonacute_real` — primary_source_witness, real scalars, proof; covers `DK-4.1-prop.section4-compact-classification-setup`, `DK-4.2-prop.basis-sine-square-lower-bound`
 
 ### Other registered declarations
 
-- `TauCeti.DavisKahan1970.Proposition4_2_infiniteDimensional` — generalization
+- `TauCeti.DavisKahan1970.proposition4_2_infiniteDimensional` — generalization
 - `TauCeti.DavisKahan1970.tsum_displacementAngleSineSqR_ge_tsum_sq_sin_principalAngleSequence` — generalization
 
 ### Source-facing Lean declarations
 
-#### `TauCeti.DavisKahan1970.Proposition4_2_compact_nonacute_real`
+#### `TauCeti.DavisKahan1970.proposition4_2_compact_nonacute_real`
 
 Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section4Real.lean:812`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
-#### `TauCeti.DavisKahan1970.Proposition4_2_compact_nonacute`
+#### `TauCeti.DavisKahan1970.proposition4_2_compact_nonacute`
 
 Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section4.lean:450`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
-#### `TauCeti.DavisKahan1970.Proposition4_2_infiniteDimensional`
+#### `TauCeti.DavisKahan1970.proposition4_2_infiniteDimensional`
 
 Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section4.lean:424`
 
@@ -4010,9 +4010,9 @@ Until 2026-09-02 the Section 4 setup was represented by no source atom at all, s
 
 #### 5. What Lean says, and exactly where the implicit semantics became explicit
 
-- `TauCeti.DavisKahan1970.Proposition4_3_compact_nonacute_symmetricNorming_complex`
+- `TauCeti.DavisKahan1970.proposition4_3_compact_nonacute_symmetricNorming_complex`
   - The hypotheses `hcompact` and the crossed-defect equivalence `J` carry the inherited Section 4 setup the printed proposition does not restate.
-- `TauCeti.DavisKahan1970.Proposition4_3_compact_nonacute_symmetricNorming_real`
+- `TauCeti.DavisKahan1970.proposition4_3_compact_nonacute_symmetricNorming_real`
   - The real-scalar analogue carries the same inherited compactness and classification hypotheses explicitly.
 
 #### 6. The repository's accepted reading
@@ -4145,8 +4145,8 @@ One row per printed source clause per scalar field.  A clause is `PASS` only whe
 
 | clause | scalar | witness | status |
 | --- | --- | --- | --- |
-| `squared-displacement-global-minimum.complex` | complex | `TauCeti.DavisKahan1970.Proposition4_3_compact_nonacute_symmetricNorming_complex` | **PASS** |
-| `squared-displacement-global-minimum.real` | real | `TauCeti.DavisKahan1970.Proposition4_3_compact_nonacute_symmetricNorming_real` | **PASS** |
+| `squared-displacement-global-minimum.complex` | complex | `TauCeti.DavisKahan1970.proposition4_3_compact_nonacute_symmetricNorming_complex` | **PASS** |
+| `squared-displacement-global-minimum.real` | real | `TauCeti.DavisKahan1970.proposition4_3_compact_nonacute_symmetricNorming_real` | **PASS** |
 
 **`squared-displacement-global-minimum.complex`.** For every source unitarily invariant norm, the squared displacement N((1 - V*)(1 - V)) is minimized by the direct rotation.  The printed Proposition 4.3 conclusion at the printed norm quantifier.
 
@@ -4158,36 +4158,36 @@ Result-wide scope every clause must carry: `DK-4.1-prop.section4-compact-classif
 
 The declarations that carry this result's printed statement, with the source atoms each one covers.  Everything under *Other registered declarations* below accompanies the result without establishing it.
 
-- `TauCeti.DavisKahan1970.Proposition4_3_compact_nonacute_symmetricNorming_complex` — primary_source_witness, complex scalars, proof; covers `DK-4.1-prop.section4-compact-classification-setup`, `DK-4.3-prop.squared-displacement-global-minimum`
-- `TauCeti.DavisKahan1970.Proposition4_3_compact_nonacute_symmetricNorming_real` — primary_source_witness, real scalars, proof; covers `DK-4.1-prop.section4-compact-classification-setup`, `DK-4.3-prop.squared-displacement-global-minimum`
+- `TauCeti.DavisKahan1970.proposition4_3_compact_nonacute_symmetricNorming_complex` — primary_source_witness, complex scalars, proof; covers `DK-4.1-prop.section4-compact-classification-setup`, `DK-4.3-prop.squared-displacement-global-minimum`
+- `TauCeti.DavisKahan1970.proposition4_3_compact_nonacute_symmetricNorming_real` — primary_source_witness, real scalars, proof; covers `DK-4.1-prop.section4-compact-classification-setup`, `DK-4.3-prop.squared-displacement-global-minimum`
 
 ### Other registered declarations
 
-- `TauCeti.DavisKahan1970.Proposition4_3_compact_nonacute_idealGauge` — generalization
-- `TauCeti.DavisKahan1970.Proposition4_3_compact_nonacute_real_idealGauge` — generalization
+- `TauCeti.DavisKahan1970.proposition4_3_compact_nonacute_idealGauge` — generalization
+- `TauCeti.DavisKahan1970.proposition4_3_compact_nonacute_real_idealGauge` — generalization
 - `TauCeti.DavisKahan1970.symmetricNorming_of_kyFanDominant` — supporting_theorem
 
 ### Source-facing Lean declarations
 
-#### `TauCeti.DavisKahan1970.Proposition4_3_compact_nonacute_idealGauge`
+#### `TauCeti.DavisKahan1970.proposition4_3_compact_nonacute_idealGauge`
 
 Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section4.lean:554`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
-#### `TauCeti.DavisKahan1970.Proposition4_3_compact_nonacute_real_idealGauge`
+#### `TauCeti.DavisKahan1970.proposition4_3_compact_nonacute_real_idealGauge`
 
 Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section4Real.lean:1326`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
-#### `TauCeti.DavisKahan1970.Proposition4_3_compact_nonacute_symmetricNorming_complex`
+#### `TauCeti.DavisKahan1970.proposition4_3_compact_nonacute_symmetricNorming_complex`
 
 Source location candidates: `DavisKahan/Sources/DavisKahan1970/SymmetricNormingFanDominance.lean:209`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
-#### `TauCeti.DavisKahan1970.Proposition4_3_compact_nonacute_symmetricNorming_real`
+#### `TauCeti.DavisKahan1970.proposition4_3_compact_nonacute_symmetricNorming_real`
 
 Source location candidates: `DavisKahan/Sources/DavisKahan1970/SymmetricNormingFanDominance.lean:260`
 
@@ -4555,14 +4555,14 @@ The declarations that carry this result's printed statement, with the source ato
 
 ### Other registered declarations
 
-- `TauCeti.DavisKahan1970.Theorem5_2` — generalization
+- `TauCeti.DavisKahan1970.theorem5_2` — generalization
 - `TauCeti.DavisKahan.Sylvester.davisKahan1970_sylvester_real` — generalization
 - `TauCeti.DavisKahan1970.symmetricNorming_of_kyFanDominant` — supporting_theorem
 - `TauCeti.DavisKahan1970.theorem5_2_symmetricNorming_real` — generalization
 
 ### Source-facing Lean declarations
 
-#### `TauCeti.DavisKahan1970.Theorem5_2`
+#### `TauCeti.DavisKahan1970.theorem5_2`
 
 Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section5.lean:99`
 
@@ -4678,11 +4678,11 @@ The declarations that carry this result's printed statement, with the source ato
 
 ### Other registered declarations
 
-- `TauCeti.DavisKahan1970.Lemma5_1` — scalar_generic_facade
+- `TauCeti.DavisKahan1970.lemma5_1` — scalar_generic_facade
 
 ### Source-facing Lean declarations
 
-#### `TauCeti.DavisKahan1970.Lemma5_1`
+#### `TauCeti.DavisKahan1970.lemma5_1`
 
 Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section5.lean:35`
 
@@ -4984,12 +4984,12 @@ The declarations that carry this result's printed statement, with the source ato
 ### Other registered declarations
 
 - `TauCeti.DavisKahan1970.proposition6_1_projectorDifference_complex` — transport_lemma
-- `TauCeti.DavisKahan1970.Proposition6_1_real_representative` — transport_lemma
-- `TauCeti.DavisKahan1970.Proposition6_1_real_sinTheta_singularValues` — transport_lemma
+- `TauCeti.DavisKahan1970.proposition6_1_real_representative` — transport_lemma
+- `TauCeti.DavisKahan1970.proposition6_1_real_sinTheta_singularValues` — transport_lemma
 - `TauCeti.DavisKahan1970.proposition6_1_commonDomain_complex` — generalization
 - `TauCeti.DavisKahan1970.proposition6_1_commonDomain_real` — generalization
-- `TauCeti.DavisKahan1970.Proposition6_1_commonDomain` — generalization
-- `TauCeti.DavisKahan1970.Proposition6_1_real_commonDomain` — generalization
+- `TauCeti.DavisKahan1970.proposition6_1_commonDomain` — generalization
+- `TauCeti.DavisKahan1970.proposition6_1_real_commonDomain` — generalization
 
 ### Source-facing Lean declarations
 
@@ -5011,13 +5011,13 @@ Source location candidates: `DavisKahan/Sources/DavisKahan1970/Proposition61.lea
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
-#### `TauCeti.DavisKahan1970.Proposition6_1_real_representative`
+#### `TauCeti.DavisKahan1970.proposition6_1_real_representative`
 
 Source location candidates: `DavisKahan/Sources/DavisKahan1970/SineThetaSourceInventory.lean:156`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
-#### `TauCeti.DavisKahan1970.Proposition6_1_real_sinTheta_singularValues`
+#### `TauCeti.DavisKahan1970.proposition6_1_real_sinTheta_singularValues`
 
 Source location candidates: `DavisKahan/Sources/DavisKahan1970/SineThetaSourceInventory.lean:152`
 
@@ -5035,13 +5035,13 @@ Source location candidates: `DavisKahan/Sources/DavisKahan1970/Proposition61.lea
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
-#### `TauCeti.DavisKahan1970.Proposition6_1_commonDomain`
+#### `TauCeti.DavisKahan1970.proposition6_1_commonDomain`
 
 Source location candidates: `DavisKahan/Sources/DavisKahan1970/SineThetaSourceInventory.lean:194`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
-#### `TauCeti.DavisKahan1970.Proposition6_1_real_commonDomain`
+#### `TauCeti.DavisKahan1970.proposition6_1_real_commonDomain`
 
 Source location candidates: `DavisKahan/Sources/DavisKahan1970/SineThetaSourceInventory.lean:221`
 
@@ -5134,21 +5134,21 @@ The declarations that carry this result's printed statement, with the source ato
 
 ### Other registered declarations
 
-- `TauCeti.DavisKahan1970.Theorem6_1_real_commonDomain` — supporting_theorem
-- `TauCeti.DavisKahan1970.Theorem6_1_real_commonCore` — supporting_theorem
-- `TauCeti.DavisKahan1970.Theorem6_1_commonDomain` — generalization
+- `TauCeti.DavisKahan1970.theorem6_1_real_commonDomain` — supporting_theorem
+- `TauCeti.DavisKahan1970.theorem6_1_real_commonCore` — supporting_theorem
+- `TauCeti.DavisKahan1970.theorem6_1_commonDomain` — generalization
 - `TauCeti.DavisKahan1970.lowerFrameBound_iff_operator_inequality` — transport_lemma
 - `TauCeti.DavisKahan1970.lowerFrameBound_of_operator_inequality` — transport_lemma
 
 ### Source-facing Lean declarations
 
-#### `TauCeti.DavisKahan1970.Theorem6_1_real_commonDomain`
+#### `TauCeti.DavisKahan1970.theorem6_1_real_commonDomain`
 
 Source location candidates: `DavisKahan/Sources/DavisKahan1970/SineThetaSourceInventory.lean:229`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
-#### `TauCeti.DavisKahan1970.Theorem6_1_real_commonCore`
+#### `TauCeti.DavisKahan1970.theorem6_1_real_commonCore`
 
 Source location candidates: `DavisKahan/Sources/DavisKahan1970/SineThetaSourceInventory.lean:250`
 
@@ -5166,7 +5166,7 @@ Source location candidates: `DavisKahan/Sources/DavisKahan1970/Theorem61.lean:24
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
-#### `TauCeti.DavisKahan1970.Theorem6_1_commonDomain`
+#### `TauCeti.DavisKahan1970.theorem6_1_commonDomain`
 
 Source location candidates: `DavisKahan/Sources/DavisKahan1970/SineThetaSourceInventory.lean:180`
 
