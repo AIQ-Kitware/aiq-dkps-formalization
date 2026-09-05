@@ -4188,7 +4188,9 @@
       "blocked_by": [],
       "lean_declarations": [
         "TauCeti.DavisKahan.ExactSinTheta.approximationSingularValue_comp_strongProjection_tendsto",
-        "TauCeti.DavisKahan1970.Lemma5_1"
+        "TauCeti.DavisKahan1970.Lemma5_1",
+        "TauCeti.DavisKahan1970.lemma5_1_complex",
+        "TauCeti.DavisKahan1970.lemma5_1_real"
       ],
       "notes": "The modern approximation-number theorem is stronger and scalar-generic.\n\n**SOURCE WRAPPER ADDED 2026-08-05**: `Lemma5_1`, in `DavisKahan/Sources/DavisKahan1970/Section5.lean`.  The compiled statement is stronger than the printed one on two axes, and the wrapper's docstring says which: the index is an arbitrary filtered net rather than a sequence, and the scalar field is generic rather than complex.  The paper's lemma is the specialization to a sequence over the complex field.",
       "next_action": "No hostile-review hole is currently recorded for this source passage. Preserve exact source scope and re-audit if the distributable source specification changes.",

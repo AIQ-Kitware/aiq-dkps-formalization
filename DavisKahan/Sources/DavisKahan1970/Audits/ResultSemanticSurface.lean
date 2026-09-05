@@ -636,8 +636,16 @@ Status: **TERMINAL EXACT**.
 /-! ## DK-5.1-lem: Strong-cutoff convergence of singular values
 
 Status: **TERMINAL EXACT**.
+
+The canonical witnesses are the two fixed-field statements.  `Lemma5_1` is generic
+over `RCLike 𝕜` and carries `HasApproximationNumberStrongCutoff 𝕜`, a capability
+class whose single field is Lemma 5.1 itself; it is a facade over the two proofs
+below and is kept as supporting evidence so the generic development can cite one
+name.  A registered witness for a printed lemma should not assume that lemma.
 -/
 
+#check @TauCeti.DavisKahan1970.lemma5_1_complex
+#check @TauCeti.DavisKahan1970.lemma5_1_real
 #check @TauCeti.DavisKahan1970.Lemma5_1
 
 /-! ## DK-6.1-lem: Direct-sum UI-norm comparison and converse

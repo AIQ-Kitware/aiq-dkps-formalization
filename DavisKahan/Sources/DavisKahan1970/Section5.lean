@@ -35,6 +35,54 @@ sequence over `ℂ`. -/
 alias Lemma5_1 :=
   DavisKahan.ExactSinTheta.approximationSingularValue_comp_strongProjection_tendsto
 
+section Lemma51
+
+open Filter Topology
+open TauCeti.ApproximationNumber
+open TauCeti.DavisKahan.ExactSinTheta
+
+universe v w
+
+/-- **Davis--Kahan 1970, Lemma 5.1, over `ℂ`.**  If a net of orthogonal projections on a
+complex Hilbert space converges strongly to the identity, then for each index `n` the
+`n`-th approximation singular value of `K ∘ P i` converges to that of `K`.
+
+This is the printed lemma's own scalar field, with **no capability class in the
+signature**.  `Lemma5_1` above is generic over `RCLike 𝕜` and carries
+`HasApproximationNumberStrongCutoff 𝕜`, whose single field *is* this lemma; a reviewer
+comparing the printed statement with a Lean type is entitled to see the lemma proved
+rather than assumed, which is what this declaration and its real sibling do.  The index is
+still an arbitrary filtered net rather than a sequence, which is a strengthening. -/
+theorem lemma5_1_complex
+    {E F : Type v}
+    [NormedAddCommGroup E] [InnerProductSpace ℂ E] [CompleteSpace E]
+    [NormedAddCommGroup F] [InnerProductSpace ℂ F] [CompleteSpace F]
+    {ι : Type w} {P : ι → E →L[ℂ] E} {l : Filter ι}
+    (hPproj : ∀ i, IsOrthogonalProjectionMap (P i))
+    (hP : StronglyTendsto P l (ContinuousLinearMap.id ℂ E))
+    (n : ℕ) (K : E →L[ℂ] F) :
+    Tendsto (fun i => approximationSingularValue n (K ∘L P i))
+      l (𝓝 (approximationSingularValue n K)) :=
+  DavisKahan.ExactSinTheta.approximationSingularValue_comp_strongProjection_tendsto_complex
+    hPproj hP n K
+
+/-- **Davis--Kahan 1970, Lemma 5.1, over `ℝ`.**  The real sibling of `lemma5_1_complex`,
+likewise with no capability class in the signature. -/
+theorem lemma5_1_real
+    {E F : Type v}
+    [NormedAddCommGroup E] [InnerProductSpace ℝ E] [CompleteSpace E]
+    [NormedAddCommGroup F] [InnerProductSpace ℝ F] [CompleteSpace F]
+    {ι : Type w} {P : ι → E →L[ℝ] E} {l : Filter ι}
+    (hPproj : ∀ i, IsOrthogonalProjectionMap (P i))
+    (hP : StronglyTendsto P l (ContinuousLinearMap.id ℝ E))
+    (n : ℕ) (K : E →L[ℝ] F) :
+    Tendsto (fun i => approximationSingularValue n (K ∘L P i))
+      l (𝓝 (approximationSingularValue n K)) :=
+  DavisKahan.ExactSinTheta.approximationSingularValue_comp_strongProjection_tendsto_real
+    hPproj hP n K
+
+end Lemma51
+
 /-- **Davis--Kahan 1970, Theorem 5.2.**  For self-adjoint closed operators with the
 source's ordering `A ≥ c + δ > c ≥ B`, a bounded solution of the Sylvester equation
 `A X = X B + R` satisfies the sharp inequality `δ · N(X) ≤ N(R)` in every Fan-dominant
