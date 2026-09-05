@@ -30,10 +30,17 @@ refresh the standalone repository mechanically.
   independent of `n`, with the paper's own constant `16` in it. It carries the dissimilarity
   bound `R` that Theorem 1 needs and the printed corollary omits, so the row moved from
   `compiled_by_composition` to `compiled_source_repair`.
-- **`A25-P1`** — the printed compact-Riemannian condition does not force the
-  nondegeneracy the argument needs. If a repair is wanted, formulate a meaningful
-  spread condition and prove Assumptions 1 and 2 from it. **Label it a repair; it is
-  not the printed proposition.** Lower priority than T1 and C1.
+- **`A25-P1`** — **done, 2026-09-05.** The printed compact-Riemannian condition does not
+  force the nondegeneracy the argument needs, and no condition on the ambient space can:
+  a constant placement satisfies every such condition and has population matrix `0`.
+  The repair replaces it by `SpreadPlacement`, an explicit condition on the *placement*
+  asking that `d` of the recentred model positions be mutually orthogonal with squared
+  norm at least `α`. `proposition1_repair_of_spreadPlacement` derives Assumption 1's
+  vanishing eigenvalue tail beyond index `d` and both bounds of Assumption 2 from it.
+  It is registered as a repair, not as the printed proposition. The missing mathematical
+  ingredient was the classical-MDS identity `classicalMDSMatrix_dist_eq_inner_centered`
+  — the doubly centred squared-distance matrix of a Euclidean placement is the Gram
+  matrix of its recentred points — which the tree did not have.
 - **`A25-PA1`-`PA6`, `L1`-`L5`** — optional source-fidelity wrappers, role-replaced by
   cleaner perturbation machinery. Lowest priority; add them only when they improve
   the paper-facing API for a reader.

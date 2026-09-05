@@ -120,6 +120,14 @@
       ],
       "statement_pins": [
         {
+          "declaration": "Acharyya2025.GrowingResponse.prob_cmdsEntrywiseClose_ge_of_secondMoment",
+          "type_expr_hash": "3634211807",
+          "type_text_sha256": "9f7289f0f4a41f87d19ed6e680405182b6e4cfbf49cb9d8e041a9345d14ea6dd",
+          "toolchain": "leanprover/lean4:v4.34.0-rc1",
+          "pinned_on": "2026-09-05",
+          "note": "Corrected Theorem 1 second-moment form and the paper-scaling Corollary 1 pinned 2026-09-05."
+        },
+        {
           "declaration": "Acharyya2025.Bridge.EntrywiseClose",
           "type_expr_hash": "1659826171",
           "type_text_sha256": "bab7758df4fb3b16392a2d37f976f851a9b01eb8302d1abd9c3e6877e8b20707",
@@ -253,6 +261,14 @@
         }
       ],
       "statement_pins": [
+        {
+          "declaration": "Acharyya2025.PaperRate.highProb_operatorNormClose_paperDeltaScale",
+          "type_expr_hash": "2800886000",
+          "type_text_sha256": "888aaf3021cc90c0368dc9c4751d425673ab96f56c3c1526b6c36d2ea4e2e5bc",
+          "toolchain": "leanprover/lean4:v4.34.0-rc1",
+          "pinned_on": "2026-09-05",
+          "note": "Corrected Theorem 1 second-moment form and the paper-scaling Corollary 1 pinned 2026-09-05."
+        },
         {
           "declaration": "Acharyya2025.MathlibBridge.MatrixOperatorNormClose",
           "type_expr_hash": "1828846634",
@@ -475,7 +491,7 @@
       "source_kind": "proposition",
       "title": "Compact Riemannian-manifold sufficient condition",
       "importance": "major",
-      "verdict": "GAP missing source result",
+      "verdict": "REFUTED printed statement; repair proved",
       "literal_source_covered": false,
       "source_claim": "If model latent points lie on a d-dimensional compact Riemannian manifold and population dissimilarities equal geodesic distances, Assumptions 1 and 2 hold.",
       "source_locator": {
@@ -490,7 +506,16 @@
         "Acharyya2025.ManifoldCondition.classicalMDSMatrix_const_eq_zero",
         "Acharyya2025.ManifoldCondition.eigenvalues₀_classicalMDSMatrix_const_eq_zero",
         "Acharyya2025.ManifoldCondition.no_eigenvalue_floor_for_const_selection",
-        "Acharyya2025.ManifoldCondition.rank_classicalMDSMatrix_const_eq_zero"
+        "Acharyya2025.ManifoldCondition.rank_classicalMDSMatrix_const_eq_zero",
+        "Acharyya2025.ManifoldCondition.classicalMDSMatrix_dist_eq_inner_centered",
+        "Acharyya2025.ManifoldCondition.posSemidef_and_rank_le_classicalMDSMatrix_dist",
+        "Acharyya2025.ManifoldCondition.eigenvalues₀_classicalMDSMatrix_dist_eq_zero_of_le",
+        "Acharyya2025.ManifoldCondition.dotProduct_mulVec_classicalMDSMatrix_dist",
+        "Acharyya2025.ManifoldCondition.dotProduct_mulVec_classicalMDSMatrix_dist_le",
+        "Acharyya2025.ManifoldCondition.eigenvalues₀_classicalMDSMatrix_dist_le",
+        "Acharyya2025.ManifoldCondition.SpreadPlacement",
+        "Acharyya2025.ManifoldCondition.le_eigenvalues₀_classicalMDSMatrix_dist_of_spread",
+        "Acharyya2025.ManifoldCondition.proposition1_repair_of_spreadPlacement"
       ],
       "clauses": [
         {
@@ -498,14 +523,20 @@
           "lean_clause": "no_eigenvalue_floor_for_const_selection and rank_classicalMDSMatrix_const_eq_zero refute both conclusions for a constant selection meeting the hypothesis.",
           "relation": "source_repair",
           "note": "The hypothesis constrains the ambient manifold; the conclusion constrains the placement of the models within it."
+        },
+        {
+          "source_clause": "Assumption 1 and Assumption 2 hold when every model is associated with a vector on a d-dimensional compact Riemannian manifold whose pairwise geodesic distances equal the population dissimilarities.",
+          "lean_clause": "proposition1_repair_of_spreadPlacement proves Assumption 1's vanishing eigenvalue tail beyond index d, Assumption 2's floor alpha on the leading d eigenvalues, and Assumption 2's ceiling, from SpreadPlacement.",
+          "relation": "source_repair",
+          "note": "The repair replaces the printed ambient-manifold hypothesis, which the counterexample shows can never suffice, by an explicit condition on the placement: d of the recentred model positions are mutually orthogonal with squared norm at least alpha. It is sufficient, not necessary, and it is not the printed proposition."
         }
       ],
-      "review": "No manifold/geodesic sufficient-condition theorem was found in the Acharyya2025 package or its cited foundation modules.",
-      "notes": "This is the clearest remaining numbered-result coverage gap in the main text.",
+      "review": "No manifold/geodesic sufficient-condition theorem exists, and none can: the printed hypothesis constrains only the ambient space, and a constant selection satisfies it while making the population matrix zero. The printed statement is refuted. The best-effort repair obligation is discharged by proposition1_repair_of_spreadPlacement, built on the classical-MDS identity classicalMDSMatrix_dist_eq_inner_centered.",
+      "notes": "The printed statement is refuted and separately repaired. Cite the repair as a repair; it is not the printed proposition and carries a different hypothesis.",
       "gap_refs": [
         "proposition1-omits-spread-condition"
       ],
-      "next_action": "If a repair is wanted, formulate a spread condition on the model selection strong enough to keep the doubly centred matrix nondegenerate as n grows, and prove Assumptions 1 and 2 from it.",
+      "next_action": "None. A sharper repair would replace SpreadPlacement by the necessary-and-sufficient singular-value condition on the recentred configuration; that is optional polish, not an open obligation.",
       "source_fragments": [
         {
           "id": "source",
@@ -570,6 +601,78 @@
           "toolchain": "leanprover/lean4:v4.34.0-rc1",
           "pinned_on": "2026-09-03",
           "note": "Statement pins recorded 2026-09-03: the review's declarations are now guarded against elaborated-type drift, as Quench's already were."
+        },
+        {
+          "declaration": "Acharyya2025.ManifoldCondition.classicalMDSMatrix_dist_eq_inner_centered",
+          "type_expr_hash": "1750113449",
+          "type_text_sha256": "24207dcb09a73c707b7b8bc716e79657d7ff06a980c0fe0ffe564f07979860e1",
+          "toolchain": "leanprover/lean4:v4.34.0-rc1",
+          "pinned_on": "2026-09-05",
+          "note": "Repair declarations for the refuted Proposition 1 pinned 2026-09-05: SpreadPlacement and the classical-MDS route that derives Assumptions 1 and 2 from it."
+        },
+        {
+          "declaration": "Acharyya2025.ManifoldCondition.posSemidef_and_rank_le_classicalMDSMatrix_dist",
+          "type_expr_hash": "2974091384",
+          "type_text_sha256": "b3739fe557781f4be9d4d0549cf182ab0fd5e465c85bf22431594e599760d07e",
+          "toolchain": "leanprover/lean4:v4.34.0-rc1",
+          "pinned_on": "2026-09-05",
+          "note": "Repair declarations for the refuted Proposition 1 pinned 2026-09-05: SpreadPlacement and the classical-MDS route that derives Assumptions 1 and 2 from it."
+        },
+        {
+          "declaration": "Acharyya2025.ManifoldCondition.eigenvalues₀_classicalMDSMatrix_dist_eq_zero_of_le",
+          "type_expr_hash": "1605558916",
+          "type_text_sha256": "4cae5725ba391fce81fce559174f56f7b3a1d80035eeb0b044bf20a86829c547",
+          "toolchain": "leanprover/lean4:v4.34.0-rc1",
+          "pinned_on": "2026-09-05",
+          "note": "Repair declarations for the refuted Proposition 1 pinned 2026-09-05: SpreadPlacement and the classical-MDS route that derives Assumptions 1 and 2 from it."
+        },
+        {
+          "declaration": "Acharyya2025.ManifoldCondition.dotProduct_mulVec_classicalMDSMatrix_dist",
+          "type_expr_hash": "2425515785",
+          "type_text_sha256": "11aa579442d6f59be303fa03a63cdb03987ddb91f2e8045ac382aec74aa8a1b5",
+          "toolchain": "leanprover/lean4:v4.34.0-rc1",
+          "pinned_on": "2026-09-05",
+          "note": "Repair declarations for the refuted Proposition 1 pinned 2026-09-05: SpreadPlacement and the classical-MDS route that derives Assumptions 1 and 2 from it."
+        },
+        {
+          "declaration": "Acharyya2025.ManifoldCondition.dotProduct_mulVec_classicalMDSMatrix_dist_le",
+          "type_expr_hash": "489799416",
+          "type_text_sha256": "3e405a8d0fec5b5c70e751be576e367bfb3c9601918a388e9a87a2b9d0ee862c",
+          "toolchain": "leanprover/lean4:v4.34.0-rc1",
+          "pinned_on": "2026-09-05",
+          "note": "Repair declarations for the refuted Proposition 1 pinned 2026-09-05: SpreadPlacement and the classical-MDS route that derives Assumptions 1 and 2 from it."
+        },
+        {
+          "declaration": "Acharyya2025.ManifoldCondition.eigenvalues₀_classicalMDSMatrix_dist_le",
+          "type_expr_hash": "4111645940",
+          "type_text_sha256": "af0dcef3cb72b776fbbd76e251809392972e209b2ea72eefb884fa5a5851d585",
+          "toolchain": "leanprover/lean4:v4.34.0-rc1",
+          "pinned_on": "2026-09-05",
+          "note": "Repair declarations for the refuted Proposition 1 pinned 2026-09-05: SpreadPlacement and the classical-MDS route that derives Assumptions 1 and 2 from it."
+        },
+        {
+          "declaration": "Acharyya2025.ManifoldCondition.SpreadPlacement",
+          "type_expr_hash": "2358194130",
+          "type_text_sha256": "965c44619fa0af52d34b97c4c6775b62ddef525d8934bf49ffde1173cb321ef4",
+          "toolchain": "leanprover/lean4:v4.34.0-rc1",
+          "pinned_on": "2026-09-05",
+          "note": "Repair declarations for the refuted Proposition 1 pinned 2026-09-05: SpreadPlacement and the classical-MDS route that derives Assumptions 1 and 2 from it."
+        },
+        {
+          "declaration": "Acharyya2025.ManifoldCondition.le_eigenvalues₀_classicalMDSMatrix_dist_of_spread",
+          "type_expr_hash": "2485163358",
+          "type_text_sha256": "ff1932a2ae216d423a820916201546861586aa9f191ac1274925131a2a8616c0",
+          "toolchain": "leanprover/lean4:v4.34.0-rc1",
+          "pinned_on": "2026-09-05",
+          "note": "Repair declarations for the refuted Proposition 1 pinned 2026-09-05: SpreadPlacement and the classical-MDS route that derives Assumptions 1 and 2 from it."
+        },
+        {
+          "declaration": "Acharyya2025.ManifoldCondition.proposition1_repair_of_spreadPlacement",
+          "type_expr_hash": "2322392074",
+          "type_text_sha256": "a8602ac92791ad248e4b998017bf1cd2fd33b1120465c04583becda13f5cbfba",
+          "toolchain": "leanprover/lean4:v4.34.0-rc1",
+          "pinned_on": "2026-09-05",
+          "note": "Repair declarations for the refuted Proposition 1 pinned 2026-09-05: SpreadPlacement and the classical-MDS route that derives Assumptions 1 and 2 from it."
         }
       ]
     },
