@@ -698,7 +698,8 @@
         "Acharyya2025.ConfigPerturbation.configFrobBound",
         "Acharyya2025.ConfigPerturbation.exists_isometry_configFrobError_spectralConfig_le",
         "Acharyya2025.AlignedPipeline.highProb_aligned_configFrobError_of_entrywise_close",
-        "Acharyya2025.RateChain.endToEndFrobQuadraticRate"
+        "Acharyya2025.RateChain.endToEndFrobQuadraticRate",
+        "Acharyya2025.ConfigPerturbation.sum_cross_inner_sq_le_of_rank_floor_populationGap"
       ],
       "clauses": [
         {
@@ -745,7 +746,7 @@
         }
       ],
       "review": "The current theorem proves the Frobenius configuration bound supported by the paper discussion/appendix and obtains rowwise control as a consequence. It does not label the internally inconsistent v1 2,infinity display as literally proved.",
-      "notes": "The active proof now uses the YWS population-only gap residual bound and YWS Procrustes alignment. It needs neither epsilon<=alpha/2 nor the former polar-factor smallness condition. Term 2 uses sqrt(alpha), improving the previous sqrt(alpha/2) envelope.",
+      "notes": "The active proof now uses the YWS population-only gap residual bound and YWS Procrustes alignment. It needs neither epsilon<=alpha/2 nor the former polar-factor smallness condition. Term 2 uses sqrt(alpha), improving the previous sqrt(alpha/2) envelope. Public route named 2026-09-05: the eigenvector-perturbation step is `sum_cross_inner_sq_le_of_rank_floor_populationGap`, which carries no perturbative smallness condition, where the public `Acharyya2025.RankGap` forms carry `hsmall` and have no consumer.",
       "gap_refs": [
         "dissimilarity-normalisation-divergence",
         "v1-norm-inconsistency"
@@ -823,6 +824,14 @@
           "toolchain": "leanprover/lean4:v4.34.0-rc1",
           "pinned_on": "2026-09-03",
           "note": "Statement pins recorded 2026-09-03: the review's declarations are now guarded against elaborated-type drift, as Quench's already were."
+        },
+        {
+          "declaration": "Acharyya2025.ConfigPerturbation.sum_cross_inner_sq_le_of_rank_floor_populationGap",
+          "type_expr_hash": "3024462307",
+          "type_text_sha256": "d38766e07ed4c533ccce54c0fc54f4af32a4eb694913187f657fe01c8dd8c0be",
+          "toolchain": "leanprover/lean4:v4.34.0-rc1",
+          "pinned_on": "2026-09-05",
+          "note": "Public population-gap rank-floor bound pinned 2026-09-05."
         }
       ]
     },
