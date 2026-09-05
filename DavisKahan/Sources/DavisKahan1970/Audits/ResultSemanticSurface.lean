@@ -426,6 +426,14 @@ Status: **TERMINAL EXACT**.
 #check @TauCeti.DavisKahan1970.theorem3_1_spectralMultiplicity_classification_complex
 #check @TauCeti.DavisKahan1970.theorem3_1_realization
 #check @TauCeti.DavisKahan1970.theorem3_1_realization_ofSpectralMultiplicity_complex
+#check @TauCeti.DavisKahan1970.theorem3_1_realization_ofSpectralMultiplicityAwayFromZero_complex
+#check @TauCeti.DavisKahan1970.theorem3_1_intertwiner_of_nonzeroPartsUnitaryEquiv
+#check @TauCeti.DavisKahan1970.theorem3_1_realization_ofNonzeroPartsUnitaryEquiv
+#check @TauCeti.DavisKahan1970.NonzeroPartsUnitaryEquiv
+#check @TauCeti.DavisKahan1970.theorem3_1_realization_ofSpectralMultiplicityAwayFromZero_real
+#check @TauCeti.DavisKahan1970.SameSpectralMultiplicityAwayFromZero
+#check @TauCeti.DavisKahan1970.nonzeroPart
+#check @TauCeti.DavisKahan1970.invariantFor_nonzeroPart
 #check @TauCeti.DavisKahan1970.theorem3_1_intertwiner_of_sameSpectralMultiplicity_complex
 #check @TauCeti.DavisKahan1970.theorem3_1_realization_ofAngles
 #check @TauCeti.DavisKahan1970.theorem3_1_spectralMultiplicity_classification_real
