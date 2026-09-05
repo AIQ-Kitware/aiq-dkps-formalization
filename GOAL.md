@@ -119,19 +119,24 @@ rank-boundary convention.
   every rename — grep `Challenge/` and `comparator/*.json`, run
   `scripts/check_declaration_name_drift.py`, then `lake build Challenge`.
 
-- **`DK-HR-TANGENT-POLE`** — the registered *canonical* tangent endpoints now carry their
-  pole-exclusion conjunct, because the directed clause was re-registered on the `_exists_`
-  form. The remaining item from F3 is the ambient family: add `HasDefinedAmbientTangent U V`
-  (equivalently `‖sinAngleOperatorC U V‖ < 1`) to the conclusion of
-  `tanTheta_ambient_bounded_symmetricNorming_{complex,real}_of_crossedDefects`,
-  `tanTheta_ambient_unboundedRitz_symmetricNorming_{complex,real}`,
-  `tanTheta_ambient_unboundedRitz_explicitCompatibility_symmetricNorming_{complex,real}` and
-  `tanTheta_ambient_unboundedOperator_boundedRitz_symmetricNorming_{complex,real}`, and the
-  `∀ t ∈ spectrum ℝ (angleOperatorC P V), Real.cos (2 * t) ≠ 0` conjunct to
-  `tanTwoTheta_ambient_unbounded_symmetricNorming_{complex,real}`. Every conjunct is
-  already proved inside the corresponding proof; this is plumbing, and it makes the
-  `HasDefinedAmbientTangent` block comment's "non-vacuous corollary" claim a theorem
-  rather than a proof-internal fact.
+- **`DK-HR-TANGENT-POLE`** — mostly closed; one pair remains. The directed clause's canonical
+  witnesses derive their pole exclusion, and all eight ambient `tan Θ` endpoints stated under
+  condition (3.5) now conclude `HasDefinedAmbientTangent U V` (over `ℝ`,
+  `HasDefinedAmbientTangentReal`), so no registered `tan Θ` endpoint concludes on a
+  `cfc Real.tan` that could silently be Lean's totalised value at a right angle.
+
+  What remains is the ambient `tan 2Θ` pair
+  `tanTwoTheta_ambient_unbounded_symmetricNorming_{complex,real}`: add
+  `∀ t ∈ spectrum ℝ (angleOperatorC P V), Real.cos (2 * t) ≠ 0`, which the complex proof
+  already has as `hcos` from
+  `cos_two_ne_zero_of_isUnit_diagonalPart_reflection_sq`. The sibling
+  `..._blockRepresentative_derivedReflection_symmetricNorming_complex` already concludes it, so
+  the complex side is plumbing. **The real side needs one lemma first**: the pole exclusion at
+  `spectrum ℝ (angleOperatorR U V)`, since the real chain carries the `IsUnit` form and
+  `cos_two_ne_zero_of_isUnit_diagonalPart_reflection_sq` is stated for `angleOperatorC`.
+  `complexify_angleOperatorR` and `angleOperator_real` are the bridge. Note these two are
+  *canonical* evidence, so the change costs a statement re-pin, a canonical-evidence digest
+  refresh, and a certificate re-run.
 
 ---
 
