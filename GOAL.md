@@ -97,13 +97,25 @@ convergence in probability alone does not give expected-risk convergence.
 
 - **`Q26-T2A` / `T2B` / `RAW-FIN` / `RAW-INF` — remove the finite perspective net on
   the compact-infinite route.** The finite route already runs at the source rate; the
-  infinite route carries an extra finite perspective net, and Acharyya 2024 now has a
-  continuum/population-law route that may replace it. Do not force this past a real
-  compactness or measurability obstruction; if it fails, name the precise missing
-  theorem.
-- **`Q26-T1`** — inherited embedding concentration. Either generalize the rate theorem
-  to a growing sample with an augmented target, or keep the divergence explicit.
-  Check first whether the strengthened Acharyya 2024 machinery closes it.
+  infinite route carries an extra finite perspective net. **The Acharyya 2024 continuum
+  route that this item hoped would replace it does not apply, checked 2026-09-05**, for
+  the same reason as `Q26-T1`: it is raw stress under an `L^p(P × P)` discrepancy, this
+  chain is classical MDS under a uniform per-model event, and Quench references no
+  Acharyya 2024 theorem. **The precise missing theorem, per this item's own instruction,
+  is a raw-stress-to-classical-MDS transfer**: a statement carrying an `L^p` pairwise
+  distance guarantee for raw-stress minimizers over to the classical-MDS estimator's
+  uniform per-model event. Until that exists, removing the net has to be done inside the
+  Quench chain or not at all. The four rows and the gap
+  `replicate-schedule-exceeds-source-rate` say this.
+- **`Q26-T1`** — inherited embedding concentration. **The Acharyya 2024 check this item
+  asked for is done, 2026-09-05, and the answer is no.** Quench references no Acharyya
+  2024 theorem at all, only six vocabulary names and one monotonicity lemma, and the two
+  developments do not meet: that population route estimates by raw stress under an
+  `L^p(P × P)` discrepancy where this chain estimates by classical MDS under a uniform
+  per-model event. The remaining choice is the original one, with no third option
+  imported from outside: generalize the rate theorem to a growing sample with an
+  augmented target, or keep the divergence recorded. The capstones do not depend on
+  which.
 
 **Preserve** the tie-averaged nearest-neighbour estimator, the correction of the false
 all-compact-subsets assumption, and the adjudicated `1/m` normalization with its two
