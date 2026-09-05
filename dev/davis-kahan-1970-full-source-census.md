@@ -403,6 +403,7 @@ SOURCE-EXACT FAÇADES REGISTERED 2026-09-05. Canonical evidence for this row is 
 - `TauCeti.DavisKahan1970.normalizedUnitaryInvariant_of_symmetricNorming`
 - `TauCeti.DavisKahan1970.normalizedUnitaryInvariant_of_symmetricNorming_mul`
 - `TauCeti.DavisKahan.ExactSinTheta.NormalizedUnitaryInvariantNorm`
+- `TauCeti.DavisKahan.crossedDefectsEquivalent_iff_sameDimension`
 
 **Curated source/Lean review:**
 
