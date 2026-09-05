@@ -4,7 +4,7 @@
 
 **Census family:** `source-semantic-alignment`  
 **Items:** 19  
-**Unique cited Lean declarations:** 30
+**Unique cited Lean declarations:** 31
 
 Numbered main-text results and the numbered appendix perturbation propositions/lemmas. Empirical claims are excluded. Exact appendix wrappers are distinguished from a replacement proof so theorem coverage is not inflated.
 
@@ -22,9 +22,8 @@ Retained from the earlier audit: the YWS population-gap and alignment theorems r
 
 | value | items |
 | --- | ---: |
-| `compiled_source_repair` | 4 |
+| `compiled_source_repair` | 5 |
 | `not_proof_debt` | 1 |
-| `compiled_by_composition` | 1 |
 | `compiled_equivalent` | 2 |
 | `compiled_role_replaced` | 11 |
 
@@ -86,7 +85,7 @@ Retained from the earlier audit: the YWS population-gap and alignment theorems r
 | --- | --- | --- | --- | --- | --- |
 | A25-T1 | headline | Theorem 1 | compiled_source_repair | proved_in_build | source_repair |
 | A25-R1 | supporting | Remark 1 | not_proof_debt | not_applicable | out_of_scope |
-| A25-C1 | major | Corollary 1 | compiled_by_composition | proved_in_build | by_composition |
+| A25-C1 | major | Corollary 1 | compiled_source_repair | proved_in_build | by_composition |
 | A25-A1 | major | Assumption 1 | compiled_equivalent | proved_in_build | equivalent_encoding |
 | A25-A2 | major | Assumption 2 | compiled_equivalent | proved_in_build | equivalent_encoding |
 | A25-P1 | major | Proposition 1 | compiled_source_repair | proved_in_build | source_repair |
@@ -151,7 +150,7 @@ STATED AS ONE THEOREM 2026-09-05.  `prob_cmdsEntrywiseClose_ge_of_secondMoment` 
 
 ### `A25-C1` — Spectral-norm rate under r = omega(n^3)
 
-**importance:** `major`  **section:** 4  **source:** Corollary 1  **kind:** corollary  **status:** `compiled_by_composition`  **verification:** `proved_in_build`
+**importance:** `major`  **section:** 4  **source:** Corollary 1  **kind:** corollary  **status:** `compiled_source_repair`  **verification:** `proved_in_build`
 
 **Source claim.** Under uniformly bounded response variance and r growing faster than n^3, ||Bhat-B|| is below (n^3/r)^(1/2-delta) with high probability for delta in (0,1/2).
 
@@ -159,6 +158,7 @@ STATED AS ONE THEOREM 2026-09-05.  `prob_cmdsEntrywiseClose_ge_of_secondMoment` 
 
 **Lean declarations:**
 
+- `Acharyya2025.PaperRate.highProb_operatorNormClose_paperDeltaScale`
 - `Acharyya2025.MathlibBridge.MatrixOperatorNormClose`
 - `Acharyya2025.SpectralPipeline.operatorNormClose_of_entrywiseClose`
 - `Acharyya2025.PaperRate.paperBaseRatio`
@@ -169,7 +169,11 @@ STATED AS ONE THEOREM 2026-09-05.  `prob_cmdsEntrywiseClose_ge_of_secondMoment` 
 
 **Notes.** The paper-scale module was added specifically to close the source exponent rather than leave only a generic rate parameter.
 
-**Next action.** Optional: expose one source-facing declaration stating the corollary verbatim. The pieces are compiled and the assembly is one step, so this is presentational rather than mathematical -- recorded so the by_composition status is a choice on the record rather than a silent one.
+STATED AS ONE DECLARATION 2026-09-05.  `highProb_operatorNormClose_paperDeltaScale` is the corollary at the literal source scale: with high probability as the stage index grows, the sample and population classical-MDS matrices are operator-norm close at `paperOperatorScale m R ((n^3/r)^(1/2 - delta))`, which is `16 R / m` times the printed scale and independent of `n`.  The paper's own constant 16 appears in it.  The assembly is the response-mean event at `(n^3/r)^(1/2 - delta)/n`, the entrywise CMDS bridge, and the entrywise-to-operator comparison, whose factor `n` cancels the divided tolerance -- that cancellation is `scaled_cmdsEntrywiseRate_eq_paperOperatorScale`.
+
+The status moves from `compiled_by_composition` to `compiled_source_repair` because the statement carries a hypothesis the printed corollary does not: the dissimilarity bound `R`. That is the same correction Theorem 1 needs, and `Theorem1Scale.prob_entrywiseClose_lt_paper_bound` is why it is necessary rather than convenient.
+
+**Next action.** None. The corollary is one declaration at the source scale, with the dissimilarity bound the printed form omits made explicit.
 
 ### `A25-A1` — Eventually fixed embedding rank d
 

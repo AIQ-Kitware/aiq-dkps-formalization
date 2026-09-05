@@ -148,7 +148,7 @@
       "source_kind": "corollary",
       "title": "Spectral-norm rate under r = omega(n^3)",
       "source_claim": "Under uniformly bounded response variance and r growing faster than n^3, ||Bhat-B|| is below (n^3/r)^(1/2-delta) with high probability for delta in (0,1/2).",
-      "status": "compiled_by_composition",
+      "status": "compiled_source_repair",
       "verification": "proved_in_build",
       "source_locator": {
         "document": "AcharyyaAgterbergParkPriebe2025",
@@ -159,6 +159,7 @@
         ]
       },
       "lean_declarations": [
+        "Acharyya2025.PaperRate.highProb_operatorNormClose_paperDeltaScale",
         "Acharyya2025.MathlibBridge.MatrixOperatorNormClose",
         "Acharyya2025.SpectralPipeline.operatorNormClose_of_entrywiseClose",
         "Acharyya2025.PaperRate.paperBaseRatio",
@@ -171,8 +172,8 @@
         "classification": "by_composition",
         "detail": "The literal n^3/r real-power scale, its vanishing under r=omega(n^3), and entrywise-to-operator transport are compiled. The source corollary is assembled rather than wrapped verbatim."
       },
-      "notes": "The paper-scale module was added specifically to close the source exponent rather than leave only a generic rate parameter.",
-      "next_action": "Optional: expose one source-facing declaration stating the corollary verbatim. The pieces are compiled and the assembly is one step, so this is presentational rather than mathematical -- recorded so the by_composition status is a choice on the record rather than a silent one."
+      "notes": "The paper-scale module was added specifically to close the source exponent rather than leave only a generic rate parameter.\n\nSTATED AS ONE DECLARATION 2026-09-05.  `highProb_operatorNormClose_paperDeltaScale` is the corollary at the literal source scale: with high probability as the stage index grows, the sample and population classical-MDS matrices are operator-norm close at `paperOperatorScale m R ((n^3/r)^(1/2 - delta))`, which is `16 R / m` times the printed scale and independent of `n`.  The paper's own constant 16 appears in it.  The assembly is the response-mean event at `(n^3/r)^(1/2 - delta)/n`, the entrywise CMDS bridge, and the entrywise-to-operator comparison, whose factor `n` cancels the divided tolerance -- that cancellation is `scaled_cmdsEntrywiseRate_eq_paperOperatorScale`.\n\nThe status moves from `compiled_by_composition` to `compiled_source_repair` because the statement carries a hypothesis the printed corollary does not: the dissimilarity bound `R`. That is the same correction Theorem 1 needs, and `Theorem1Scale.prob_entrywiseClose_lt_paper_bound` is why it is necessary rather than convenient.",
+      "next_action": "None. The corollary is one declaration at the source scale, with the dissimilarity bound the printed form omits made explicit."
     },
     {
       "id": "A25-A1",
