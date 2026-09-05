@@ -431,6 +431,79 @@ The remaining open mathematical point is the quarter-acute conclusion represente
 
 Work directly on that implication.
 
+### 10.3.1 What that implication should actually say (finding, 2026-09-05)
+
+Reading the printed statement changes this target, and the change is the whole
+difficulty.
+
+**The paper's conclusion is `Θ ≤ π/4`, non-strict**, and it is an *iff* with the
+spectral placement `Λ₁ ≥ α + δ`, `Λ₀ ≤ α`. The proof it gives is scalar and
+pointwise: equation (8.2),
+
+```text
+x₀* B* y₁ (tan θ − cot θ) = y₁* A₁ y₁ − x₀* A₀ x₀ ≥ δ > 0,
+```
+
+"excludes `θ = π/4` and then `θ > π/4`" — i.e. **every principal angle is
+strictly below `π/4`, so their supremum is at most `π/4`.**
+
+**The repository currently concludes the strictly stronger statement.**
+`IsQuarterAcute U V` unfolds to `subspaceGap U V < √2/2` and
+`maximalAngle U V < π/4` is the same thing through `arcsin`: both are strict on
+the *supremum*, not per angle. That is more than Davis and Kahan claim.
+
+**And the supremum-strict form is what does not survive to unbounded scope.**
+The bounded proof (`isQuarterAcute_of_orderedFormGap`) ends with
+
+```text
+α = δ / (1 + ‖C^(1/2)‖²) = δ / (1 + ‖C‖),      C = K (A + H − c),
+```
+
+and every later step consumes that `α` uniformly. As `‖A‖ → ∞` it goes to zero.
+This is not a formalization artifact: in the commuting model `W = diag(wₙ)`,
+`C = diag(cₙ)`, the hypothesis is exactly `re wₙ ≥ δ/cₙ`, so with `cₙ → ∞` the
+angles may increase to `π/4` without reaching it. An orthogonal sum of planar
+blocks with a fixed gap `δ` and outer scale `cₙ → ∞` realises that: each block
+satisfies the bounded theorem, the sum has unbounded `A`, and
+`subspaceGap = √2/2` exactly. `IsQuarterAcute` fails there; `Θ ≤ π/4` holds.
+
+**So the target is the printed statement**, and it should be stated the way the
+paper proves it:
+
+```text
+every principal angle < π/4        (pointwise strict)
+    ⟹  subspaceGap U V ≤ √2 / 2   (supremum, non-strict)
+    ⟹  maximalAngle U V ≤ π/4
+```
+
+Two consequences for the plan:
+
+* Do not try to lift `isQuarterAcute_of_orderedFormGap` as stated. Its conclusion
+  is stronger than the source and is not available unbounded.
+* The bounded `IsQuarterAcute` result stays, as a genuinely stronger theorem
+  under the extra hypothesis that `A` is bounded, and should be registered as a
+  generalization rather than deleted.
+
+The Lyapunov structure survives the change of scope and is the place to start.
+Writing `G = C⁻¹` (bounded by §6.2, `‖G‖ ≤ δ⁻¹`, positive, injective), the
+identity `C W + W* C = 2B` becomes, after multiplying by `G` on both sides, a
+statement about bounded operators only:
+
+```text
+W G + G W* = 2 G B G ≥ 2 δ G²,      and      W G = Y − S
+```
+
+with `Y = G B G ≥ δ G²` self-adjoint and `S = G J H G` skew-adjoint (`H` is
+bounded, and `J H = − H J`). Since `W` is unitary, `|W G| = G`, so `W` is the
+polar unitary of an accretive operator whose modulus is `G`. The conclusion
+`W + W* ≥ 0` — which is exactly `Θ ≤ π/4` — is then the bounded question
+
+> if `G ≥ 0` is injective and `W G + G W* ≥ 0` with `W` unitary, is
+> `W + W* ≥ 0`?
+
+which is true by a trace argument on any finite-dimensional spectral subspace of
+`W` where `re < 0`, and needs one more step in infinite dimensions.
+
 Candidate proof routes recorded in the repository may be useful, but none is mandatory.
 
 In particular, do not build a large general unbounded form calculus unless the theorem actually needs it.
