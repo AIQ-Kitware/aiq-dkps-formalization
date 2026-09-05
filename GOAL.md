@@ -708,6 +708,39 @@ For maximal certainty, formalize these as **supplemental proved source assertion
 
 Apply the same rule to any other nontrivial Davis–Kahan-established assertion currently excluded only because it appears in prose rather than a named theorem environment.
 
+**Section 2 sharpness: done, 2026-09-05.** The four assertions are now individually
+bound to compiled declarations, and `S2-sharpness` moved from
+`reopened_mapping` to `accepted` in both the census and the statement map, with
+its `audit_clauses` split one per assertion. What was actually missing turned out
+to be smaller than the row's warning implied, but it was real:
+
+* **optimal constants** — only the two *sine* families had their constants
+  pinned. The source asserts optimality for all four, so
+  `tanTheta_constant_optimal` and `tanTwoTheta_constant_optimal` were added; the
+  tangent equality models already existed, only the optimality corollaries were
+  missing.
+* **two-dimensional equality** and **direct sums** — already proved for all four
+  families over `UnitarilyInvariantSeminorm`, but only finite-dimensionally.
+  `SectionTwoSharpness.lean` restates the sine case on an arbitrary Hilbert space
+  over `NormalizedUnitaryInvariantNorm`, so the "simultaneously for all
+  unitary-invariant norms" clause is carried by the literal class of section III
+  rather than by one model of it.
+* **first-order asymptotics** — the existing witness gave the two sine/tangent
+  ratios; `sectionTwo_firstOrder_asymptotics` gives the first-order constants of
+  all four functionals, `1, 1, 2, 2`.
+
+One scope limit is stated rather than papered over: the *infinite-dimensional*
+constant-optimality is proved for the `sin Theta` family only. In the planar
+model the residual has norm `delta * sin theta` while the tangent block has norm
+`tan theta`, so the `tan Theta` bound simply fails there — its `delta` is the
+distance to the whole complementary spectrum, not to one eigenvalue — and each
+family needs its own extremal configuration. The finite-dimensional witnesses do
+cover all four.
+
+Every atom keeps `formalization_role: non_result`; the denominator stays 29.
+Fourteen census rows remain `reopened_mapping`; this section's remaining work is
+the same treatment for the rest of them.
+
 Do not turn proof steps, definitions, externally cited facts, historical remarks, or open questions into artificial result obligations.
 
 The eventual claim should distinguish:

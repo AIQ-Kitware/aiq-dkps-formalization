@@ -1260,7 +1260,7 @@
       "present_in_distributable_spec": true,
       "restored_in_2026_08_12_pdf_reaudit": false,
       "formalization_role": "non_result",
-      "formalization_role_reason": "This is sharpness/equality commentary outside a designated result statement. It remains visible for fidelity but does not create an additional result obligation.",
+      "formalization_role_reason": "Sharpness commentary outside a designated result environment, so it creates no additional result obligation and the completion denominator stays at 29.  It is nevertheless PROVED, for all four theorem families, so that no reader can ask whether the repository dropped an assertion Davis and Kahan actually make: `TauCeti.DavisKahan.FiniteDimensional.sinTheta_constant_optimal`, `...sinTwoTheta_constant_optimal`, `...tanTheta_constant_optimal` and `...tanTwoTheta_constant_optimal` each exhibit an admissible planar configuration violating the inequality with any smaller constant.  The two tangent witnesses were added 2026-09-05; before that only the sine families were covered.",
       "formalization_role_reason_code": "sharpness_commentary_not_designated_result",
       "formalization_result_ids": []
     },
@@ -1276,7 +1276,7 @@
       "present_in_distributable_spec": true,
       "restored_in_2026_08_12_pdf_reaudit": false,
       "formalization_role": "non_result",
-      "formalization_role_reason": "This is sharpness/equality commentary outside a designated result statement. It remains visible for fidelity but does not create an additional result obligation.",
+      "formalization_role_reason": "Sharpness commentary outside a designated result environment, so it creates no additional result obligation and the completion denominator stays at 29.  PROVED by `TauCeti.DavisKahan.FiniteDimensional.model_all_four_equalities`: one planar pair of lines saturates all four families for every unitarily invariant seminorm, each family by its own extremal residual, which is what four independent printed inequalities require.  `TauCeti.DavisKahan1970.SectionTwoSharpness.planar_equality_every_normalizedUnitaryInvariantNorm` restates the sine case on an arbitrary Hilbert space over the literal source norm class.",
       "formalization_role_reason_code": "sharpness_commentary_not_designated_result",
       "formalization_result_ids": []
     },
@@ -1292,7 +1292,7 @@
       "present_in_distributable_spec": true,
       "restored_in_2026_08_12_pdf_reaudit": false,
       "formalization_role": "non_result",
-      "formalization_role_reason": "This is sharpness/equality commentary outside a designated result statement. It remains visible for fidelity but does not create an additional result obligation.",
+      "formalization_role_reason": "Sharpness commentary outside a designated result environment, so it creates no additional result obligation and the completion denominator stays at 29.  PROVED by `TauCeti.DavisKahan.FiniteDimensional.directSum_model_all_four_equalities` -- two orthogonal blocks at independent angles, all four families, every unitarily invariant seminorm -- and by `TauCeti.DavisKahan1970.SectionTwoSharpness.finiteMultiplicity_equality_every_normalizedUnitaryInvariantNorm`, the orthogonal sum of `m` copies over the literal source norm class.  The equality is simultaneous in the norm because in these models the residual IS the gap times the directed sine block as operators, an identity orthogonal sums preserve; `finiteMultiplicitySineBlock_injective` shows the model is genuinely multiplicity-`m`.",
       "formalization_role_reason_code": "sharpness_commentary_not_designated_result",
       "formalization_result_ids": []
     },
@@ -1308,7 +1308,7 @@
       "present_in_distributable_spec": true,
       "restored_in_2026_08_12_pdf_reaudit": false,
       "formalization_role": "non_result",
-      "formalization_role_reason": "This is sharpness/equality commentary outside a designated result statement. It remains visible for fidelity but does not create an additional result obligation.",
+      "formalization_role_reason": "Sharpness commentary outside a designated result environment, so it creates no additional result obligation and the completion denominator stays at 29.  PROVED by `TauCeti.DavisKahan.FiniteDimensional.single_double_sine_tangent_ratios_tendsto_one` and `TauCeti.DavisKahan1970.SectionTwoSharpness.sectionTwo_firstOrder_asymptotics`.  The four families differ exactly in which angle functional they bound, so whatever drives the angle to zero, the four estimates agree to first order precisely when the functionals do: the latter theorem gives all four first-order constants, `1, 1, 2, 2`.",
       "formalization_role_reason_code": "sharpness_commentary_not_designated_result",
       "formalization_result_ids": []
     },

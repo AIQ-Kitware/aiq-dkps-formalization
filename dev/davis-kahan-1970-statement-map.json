@@ -379,36 +379,64 @@
       "expected_verification": "proved_in_build",
       "tex_marker": "S2-sharpness",
       "review_declarations": [
+        "TauCeti.DavisKahan.FiniteDimensional.sinTheta_constant_optimal",
+        "TauCeti.DavisKahan.FiniteDimensional.tanTheta_constant_optimal",
+        "TauCeti.DavisKahan.FiniteDimensional.sinTwoTheta_constant_optimal",
+        "TauCeti.DavisKahan.FiniteDimensional.tanTwoTheta_constant_optimal",
+        "TauCeti.DavisKahan.FiniteDimensional.model_all_four_equalities",
+        "TauCeti.DavisKahan.FiniteDimensional.sinTheta_model_equality",
         "TauCeti.DavisKahan.FiniteDimensional.tanTheta_model_sourceSharpness",
         "TauCeti.DavisKahan.FiniteDimensional.tanTwoTheta_model_sourceSharpness",
-        "TauCeti.DavisKahan.FiniteDimensional.sinTheta_constant_optimal",
-        "TauCeti.DavisKahan.FiniteDimensional.sinTwoTheta_constant_optimal",
+        "TauCeti.DavisKahan1970.SectionTwoSharpness.planar_equality_every_normalizedUnitaryInvariantNorm",
+        "TauCeti.DavisKahan.FiniteDimensional.directSum_model_all_four_equalities",
+        "TauCeti.DavisKahan1970.SectionTwoSharpness.finiteMultiplicity_equality_every_normalizedUnitaryInvariantNorm",
+        "TauCeti.DavisKahan1970.finiteMultiplicitySineBlock_injective",
         "TauCeti.DavisKahan.FiniteDimensional.single_double_sine_tangent_ratios_tendsto_one",
-        "TauCeti.DavisKahan.FiniteDimensional.sinTheta_model_equality"
+        "TauCeti.DavisKahan1970.SectionTwoSharpness.sectionTwo_firstOrder_asymptotics"
       ],
       "audit_clauses": [
         {
-          "id": "S2-sharpness.whole",
-          "description": "Audit the complete registered source passage as one semantic unit; split further if the independent reviewer finds separable mathematical clauses.",
+          "id": "S2-sharpness.constants",
+          "description": "The constants in all four theorem families are best possible: no smaller constant survives an admissible planar configuration.",
           "review_declarations": [
+            "TauCeti.DavisKahan.FiniteDimensional.sinTheta_constant_optimal",
+            "TauCeti.DavisKahan.FiniteDimensional.tanTheta_constant_optimal",
+            "TauCeti.DavisKahan.FiniteDimensional.sinTwoTheta_constant_optimal",
+            "TauCeti.DavisKahan.FiniteDimensional.tanTwoTheta_constant_optimal"
+          ]
+        },
+        {
+          "id": "S2-sharpness.two-dimensional",
+          "description": "Two-dimensional examples attain the constants -- one planar configuration saturating all four families for every unitarily invariant seminorm, and the sine case on an arbitrary Hilbert space over the literal source norm class.",
+          "review_declarations": [
+            "TauCeti.DavisKahan.FiniteDimensional.model_all_four_equalities",
+            "TauCeti.DavisKahan.FiniteDimensional.sinTheta_model_equality",
             "TauCeti.DavisKahan.FiniteDimensional.tanTheta_model_sourceSharpness",
             "TauCeti.DavisKahan.FiniteDimensional.tanTwoTheta_model_sourceSharpness",
-            "TauCeti.DavisKahan.FiniteDimensional.sinTheta_constant_optimal",
-            "TauCeti.DavisKahan.FiniteDimensional.sinTwoTheta_constant_optimal",
+            "TauCeti.DavisKahan1970.SectionTwoSharpness.planar_equality_every_normalizedUnitaryInvariantNorm"
+          ]
+        },
+        {
+          "id": "S2-sharpness.direct-sum",
+          "description": "Orthogonal direct sums of such examples can be arranged so that equality occurs simultaneously for all unitary-invariant norms.",
+          "review_declarations": [
+            "TauCeti.DavisKahan.FiniteDimensional.directSum_model_all_four_equalities",
+            "TauCeti.DavisKahan1970.SectionTwoSharpness.finiteMultiplicity_equality_every_normalizedUnitaryInvariantNorm",
+            "TauCeti.DavisKahan1970.finiteMultiplicitySineBlock_injective"
+          ]
+        },
+        {
+          "id": "S2-sharpness.first-order",
+          "description": "The four estimates share their first-order behaviour as the perturbation parameter tends to zero: the four angle functionals have first-order constants 1, 1, 2, 2.",
+          "review_declarations": [
             "TauCeti.DavisKahan.FiniteDimensional.single_double_sine_tangent_ratios_tendsto_one",
-            "TauCeti.DavisKahan.FiniteDimensional.sinTheta_model_equality"
+            "TauCeti.DavisKahan1970.SectionTwoSharpness.sectionTwo_firstOrder_asymptotics"
           ]
         }
       ],
       "source_specification_sha256": "fb0eaba8db2c7f46d5005c12d734b0dad4f4ad83097696e71a3954e68ffb8efb",
-      "expected_completion_certification": "reopened_mapping",
-      "known_completion_holes": [
-        {
-          "kind": "audit_atomization",
-          "detail": "The hashed passage asserts optimal constants, two-dimensional equality models, direct-sum simultaneous equality for all unitary-invariant norms, and first-order sharpness. Existing sharpness machinery is richer than the current review mapping, but these separable claims are not individually certified."
-        }
-      ],
-      "audit_warning": "HOSTILE RE-AUDIT REOPENED: The hashed passage asserts optimal constants, two-dimensional equality models, direct-sum simultaneous equality for all unitary-invariant norms, and first-order sharpness. Existing sharpness machinery is richer than the current review mapping, but these separable claims are not individually certified.",
+      "expected_completion_certification": "accepted",
+      "known_completion_holes": [],
       "source_atom_ids": [
         "S2-sharpness.constants-best-possible",
         "S2-sharpness.two-dimensional-equality",

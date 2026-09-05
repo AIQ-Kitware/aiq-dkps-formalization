@@ -1103,6 +1103,71 @@ theorem sinTwoTheta_constant_optimal :
     nlinarith
   nlinarith
 
+set_option maxHeartbeats 1000000 in
+/-- **The constant one in the `tan Theta` theorem cannot be decreased.**
+
+The `sin Theta` and `sin 2Theta` families had their constants pinned above; this
+and the next theorem complete the source's assertion that the constants in *all
+four* families are best possible.  The route is the same: instantiate the
+tangent equality model at one explicit admissible angle, where the residual has
+strictly positive operator norm, and multiply the strict inequality `c < 1`
+through. -/
+theorem tanTheta_constant_optimal :
+    ∀ c : ℝ, c < 1 → ∃ (a b θ : ℝ), a < b ∧ 0 < θ ∧
+      c * ‖(modelTanThetaPerturbation (𝕜 := 𝕜) a b θ).toContinuousLinearMap‖ <
+        (b - a) * ‖(tanAngleOperator (modelSubspace (𝕜 := 𝕜))
+          (rotatedModelSubspace (𝕜 := 𝕜) θ)).toContinuousLinearMap‖ := by
+  intro c hc
+  refine ⟨0, 1, Real.pi / 6, by norm_num, by positivity, ?_⟩
+  have hpi : (0 : ℝ) < Real.pi := Real.pi_pos
+  have heq := tanTheta_model_equality
+    (UnitarilyInvariantSeminorm.opNorm 𝕜 (Plane 𝕜))
+    (𝕜 := 𝕜) (a := 0) (b := 1) (θ := Real.pi / 6)
+    (by norm_num) (by positivity) (by linarith)
+  have htan : 0 < Real.tan (Real.pi / 6) :=
+    Real.tan_pos_of_pos_of_lt_pi_div_two (by positivity) (by linarith)
+  have hpos : 0 < ‖(modelTanThetaPerturbation (𝕜 := 𝕜) 0 1
+      (Real.pi / 6)).toContinuousLinearMap‖ := by
+    rw [opNorm_eq_singularValues_zero _ finrank_euclideanSpace_fin (by norm_num),
+      singularValues_modelTanThetaPerturbation (𝕜 := 𝕜) (by norm_num) htan.le,
+      pairSingularValues_zero]
+    nlinarith
+  have hgoal : (1 - 0 : ℝ) * ‖(tanAngleOperator (modelSubspace (𝕜 := 𝕜))
+      (rotatedModelSubspace (𝕜 := 𝕜) (Real.pi / 6))).toContinuousLinearMap‖
+      = ‖(modelTanThetaPerturbation (𝕜 := 𝕜) 0 1
+        (Real.pi / 6)).toContinuousLinearMap‖ := heq
+  rw [hgoal]
+  exact mul_lt_of_lt_one_left hpos hc
+
+set_option maxHeartbeats 1000000 in
+/-- **The factor two in the `tan 2Theta` theorem cannot be decreased.** -/
+theorem tanTwoTheta_constant_optimal :
+    ∀ c : ℝ, c < 2 → ∃ (a b θ : ℝ), a < b ∧ 0 < θ ∧
+      c * ‖(modelTanTwoThetaPerturbation (𝕜 := 𝕜) a b θ).toContinuousLinearMap‖ <
+        (b - a) * ‖(tanTwoAngleOperator (modelSubspace (𝕜 := 𝕜))
+          (rotatedModelSubspace (𝕜 := 𝕜) θ)).toContinuousLinearMap‖ := by
+  intro c hc
+  refine ⟨0, 1, Real.pi / 8, by norm_num, by positivity, ?_⟩
+  have hpi : (0 : ℝ) < Real.pi := Real.pi_pos
+  have heq := tanTwoTheta_model_equality
+    (UnitarilyInvariantSeminorm.opNorm 𝕜 (Plane 𝕜))
+    (𝕜 := 𝕜) (a := 0) (b := 1) (θ := Real.pi / 8)
+    (by norm_num) (by positivity) (by linarith)
+  have htan : 0 < Real.tan (2 * (Real.pi / 8)) :=
+    Real.tan_pos_of_pos_of_lt_pi_div_two (by positivity) (by linarith)
+  have hpos : 0 < ‖(modelTanTwoThetaPerturbation (𝕜 := 𝕜) 0 1
+      (Real.pi / 8)).toContinuousLinearMap‖ := by
+    rw [opNorm_eq_singularValues_zero _ finrank_euclideanSpace_fin (by norm_num),
+      singularValues_modelTanTwoThetaPerturbation (𝕜 := 𝕜) (by norm_num) htan.le,
+      pairSingularValues_zero]
+    nlinarith
+  have hgoal : (1 - 0 : ℝ) * ‖(tanTwoAngleOperator (modelSubspace (𝕜 := 𝕜))
+      (rotatedModelSubspace (𝕜 := 𝕜) (Real.pi / 8))).toContinuousLinearMap‖
+      = 2 * ‖(modelTanTwoThetaPerturbation (𝕜 := 𝕜) 0 1
+        (Real.pi / 8)).toContinuousLinearMap‖ := heq
+  rw [hgoal]
+  nlinarith
+
 /-!
 The former `directSum_models_simultaneous_equality` declaration was false: the
 one-sided `sinTwoAngleOperator` contributes one nonzero singular value per
