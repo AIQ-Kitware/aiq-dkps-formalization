@@ -1,15 +1,15 @@
 {
   "schema": "llm-resource-tally/v3",
-  "through": "2026-09-05T02:26:34.871359+00:00",
-  "ledger_rows": 2021,
-  "commits_accounted": 1819,
-  "turns": 54526,
+  "through": "2026-09-05T03:10:41.855756+00:00",
+  "ledger_rows": 2023,
+  "commits_accounted": 1821,
+  "turns": 54536,
   "tokens": {
-    "input": 8233131,
-    "cache_write": 190144523,
-    "cache_read": 21086482091,
-    "output": 55680475,
-    "billable_input": 21284859745
+    "input": 8233892,
+    "cache_write": 190164685,
+    "cache_read": 21090886948,
+    "output": 55698756,
+    "billable_input": 21289285525
   },
   "by_model": {
     "claude-fable-5": {
@@ -49,10 +49,10 @@
       "output": 539325
     },
     "claude-fable-5-1": {
-      "input": 25084,
-      "cache_write": 1607595,
-      "cache_read": 62784752,
-      "output": 479925
+      "input": 25845,
+      "cache_write": 1627757,
+      "cache_read": 67189609,
+      "output": 498206
     },
     "claude-sonnet-5": {
       "input": 78,
@@ -69,10 +69,10 @@
       "output": 10700449
     },
     "unlabeled": {
-      "input": 7384392,
-      "cache_write": 136586203,
-      "cache_read": 16171306276,
-      "output": 42691221
+      "input": 7385153,
+      "cache_write": 136606365,
+      "cache_read": 16175711133,
+      "output": 42709502
     },
     "implementation": {
       "input": 79782,
@@ -89,10 +89,10 @@
   },
   "by_agent": {
     "claude-code": {
-      "input": 1205039,
-      "cache_write": 190144523,
-      "cache_read": 20545720491,
-      "output": 54813710
+      "input": 1205800,
+      "cache_write": 190164685,
+      "cache_read": 20550125348,
+      "output": 54831991
     },
     "codex": {
       "input": 7028092,
@@ -106,7 +106,7 @@
     "web_fetch": 0
   },
   "time": {
-    "wall_clock_s": 4379485.0
+    "wall_clock_s": 4382125.8
   },
   "compaction_signals": {
     "events": 83,
