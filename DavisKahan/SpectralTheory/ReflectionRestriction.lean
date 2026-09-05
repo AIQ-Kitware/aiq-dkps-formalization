@@ -185,6 +185,52 @@ theorem addBounded_reflectionPerturbation_eq_unitaryConj
         hint ⟨V.reflection y, hJy⟩
     _ = (TauCeti.LinearPMap.unitaryConj V.reflection A) ⟨y, hz⟩ := rfl
 
+/-- **The reflected perturbation intertwines whenever the reflection commutes with
+`A + E` on the domain.**
+
+`reflectionPerturbation V E = E − J E J` with `J = 2 P_V − 1`.  If `J` preserves
+`dom A` and `A + E` commutes with `J` there -- which is what "`V` reduces `A + E`"
+gives -- then `A + (E − J E J)` is the conjugate of `A` by `J`, so it carries
+`J x` to `J (A x)`.
+
+This is the scalar-generic core of `add_reflectionPerturbation_intertwines`, which
+is the special case where `V` is a spectral subspace of `A + E` over `ℂ`.  Stated
+from the commutation hypothesis directly so that a caller holding any reducing
+subspace of the perturbed operator, spectral or not, can use it. -/
+theorem addBounded_reflectionPerturbation_intertwines_of_commutes
+    {A : H →ₗ.[𝕜] H} (E : H →L[𝕜] H)
+    (V : Submodule 𝕜 H) [V.HasOrthogonalProjection]
+    (hmem : ∀ x : A.domain, V.reflectionOperator (x : H) ∈ A.domain)
+    (hcomm : ∀ x : A.domain,
+      A ⟨V.reflectionOperator (x : H), hmem x⟩ + E (V.reflectionOperator (x : H)) =
+        V.reflectionOperator (A x) + V.reflectionOperator (E (x : H)))
+    (x : A.domain) :
+    (TauCeti.LinearPMap.addBounded A (reflectionPerturbation V E))
+        ⟨V.reflectionOperator (x : H), hmem x⟩ = V.reflectionOperator (A x) := by
+  set J : H →L[𝕜] H := V.reflectionOperator with hJ
+  have hreflection (y : H) : V.reflection y = J y := rfl
+  have hJJ : J (J (x : H)) = (x : H) := by
+    change V.reflection (V.reflection (x : H)) = (x : H)
+    exact V.reflection_reflection (x : H)
+  have hDapply : reflectionPerturbation V E (J (x : H)) =
+      E (J (x : H)) - J (E (x : H)) := by
+    calc
+      reflectionPerturbation V E (J (x : H)) =
+          E (J (x : H)) - V.reflection (E (V.reflection.symm (J (x : H)))) := rfl
+      _ = E (J (x : H)) - V.reflection (E (V.reflection (J (x : H)))) := by
+        rw [Submodule.reflection_symm]
+      _ = E (J (x : H)) - J (E (J (J (x : H)))) := by
+        rw [hreflection (J (x : H)), hreflection (E (J (J (x : H))))]
+      _ = E (J (x : H)) - J (E (x : H)) := by rw [hJJ]
+  calc
+    (TauCeti.LinearPMap.addBounded A (reflectionPerturbation V E))
+        ⟨J (x : H), hmem x⟩
+        = A ⟨J (x : H), hmem x⟩ + reflectionPerturbation V E (J (x : H)) := rfl
+    _ = A ⟨J (x : H), hmem x⟩ + (E (J (x : H)) - J (E (x : H))) := by rw [hDapply]
+    _ = (A ⟨J (x : H), hmem x⟩ + E (J (x : H))) - J (E (x : H)) := by abel
+    _ = (J (A x) + J (E (x : H))) - J (E (x : H)) := by rw [hcomm x]
+    _ = J (A x) := add_sub_cancel_right _ _
+
 end ScalarGeneric
 
 variable {H : Type v}
