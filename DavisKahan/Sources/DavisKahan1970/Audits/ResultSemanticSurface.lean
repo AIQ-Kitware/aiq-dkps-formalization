@@ -87,7 +87,7 @@ theorem theorem5_2_real_ordered_sourceAudit
     (hEq : TauCeti.LinearPMap.SylvesterEquation A B X C)
     (hC : N.Mem C) :
     N.Mem X ∧ δ * N.gauge X ≤ N.gauge C := by
-  exact TauCeti.DavisKahan.Sylvester.davisKahan1970_sylvester_real
+  exact TauCeti.DavisKahan1970.theorem5_2_kyFanDominant_real
     N hA hB hδ
       (TauCeti.DavisKahan.Sylvester.FormBoundedSylvesterGap.leftAboveRightBelow
         c hAc hBc)
@@ -184,7 +184,7 @@ than (3.5); they are registered as specializations, not as the source-shaped for
 #check @TauCeti.DavisKahan1970.tanTheta_directed_unboundedRitz_symmetricNorming_real
 #check @TauCeti.DavisKahan1970.tanTheta_directed_unboundedTrial_symmetricNorming_complex
 #check @TauCeti.DavisKahan1970.tanTheta_directed_unboundedTrial_symmetricNorming_real
-#check @TauCeti.DavisKahan.TanTheta.theorem6_3_unbounded_infiniteTrial_ideal
+#check @TauCeti.DavisKahan1970.theorem6_3_unbounded_infiniteTrial_ideal
 #check @TauCeti.DavisKahan.TanTheta.UnboundedCompressionTrialData.ideal_of_formBounds
 #check @TauCeti.DavisKahan1970.theorem6_3_unboundedCompression_ideal_real
 #check @TauCeti.DavisKahan.UnboundedRitzPair
@@ -192,7 +192,7 @@ than (3.5); they are registered as specializations, not as the source-shaped for
 #check @TauCeti.DavisKahan.UnboundedRitzPair.ofTrialBlock
 #check @TauCeti.DavisKahan.ReducingComplement.ofReducesSubspace
 #check @TauCeti.DavisKahan.FiniteDimensional.partIII_tanTheta_ritzResidual_uiNorm
-#check @TauCeti.DavisKahan.Section2.theorem6_3_perturbation_infiniteTrial
+#check @TauCeti.DavisKahan1970.theorem6_3_perturbation_infiniteTrial
 #check @TauCeti.DavisKahan1970.tanTheta_ambient_bounded_symmetricNorming_complex_of_transversality
 #check @TauCeti.DavisKahan1970.tanTheta_ambient_bounded_symmetricNorming_real_of_transversality
 #check @TauCeti.DavisKahan1970.tanTheta_ambient_bounded_symmetricNorming_complex_of_crossedDefects
@@ -205,7 +205,7 @@ than (3.5); they are registered as specializations, not as the source-shaped for
 #check @TauCeti.DavisKahan1970.remark3_2_bilateralShift_separates_dimensionHypotheses
 #check @TauCeti.DavisKahan1970.tanTheta_directed_bounded_spectralGap_symmetricNorming_complex
 #check @TauCeti.DavisKahan1970.tanTheta_directed_bounded_spectralGap_symmetricNorming_real
-#check @TauCeti.DavisKahan.TanTheta.theorem6_3_unbounded_infiniteTrial_ideal_exists
+#check @TauCeti.DavisKahan1970.theorem6_3_unbounded_infiniteTrial_ideal_exists
 #check @TauCeti.DavisKahan1970.theorem6_3_unbounded_infiniteTrial_ideal_exists_real
 #check @TauCeti.DavisKahan1970.tanTheta_directed_unboundedRitz_symmetricNorming_exists_complex
 #check @TauCeti.DavisKahan1970.tanTheta_directed_unboundedRitz_symmetricNorming_exists_real
@@ -566,8 +566,8 @@ Status: **TERMINAL EXACT**.
 Status: **TERMINAL REFUTED + REPAIR**.
 -/
 
-#check @TauCeti.DavisKahan.FiniteDimensional.DavisKahanProposition4_4_Finite
-#check @TauCeti.DavisKahan.FiniteDimensional.not_davisKahanProposition4_4_Finite
+#check @TauCeti.DavisKahan1970.proposition4_4_printedStatement
+#check @TauCeti.DavisKahan1970.proposition4_4_refuted
 #check @TauCeti.DavisKahan.crossedDefectsEquivalent_of_isAcute
 #check @TauCeti.DavisKahan.crossedDefectsEquivalent_iff_finrank_eq
 #check @TauCeti.DavisKahan.CrossedDefectsSameDimension
@@ -611,7 +611,7 @@ Status: **TERMINAL REFUTED + REPAIR**.
 #check @TauCeti.DavisKahan.ExactSinTheta.projectionBlock_same_compression
 #check @TauCeti.DavisKahan1970.hasSameApproximationNumbers_reflectionSineCorner_sinTwoThetaIdealBlock
 #check @TauCeti.DavisKahan1970.tanTwoDirectedCornerR
-#check @TauCeti.DavisKahan.FiniteDimensional.shortRotation_fullDisplacement_refuted
+#check @TauCeti.DavisKahan1970.proposition4_4_refutingPair
 #check @TauCeti.DavisKahan.FiniteDimensional.directRotation_fullDisplacement_qnorm
 
 /-! ## DK-5.1-thm: Banach-space Sylvester lower bound
@@ -637,7 +637,7 @@ Status: **TERMINAL EXACT**.
 #check @TauCeti.DavisKahan1970.theorem5_2_symmetricNorming_real
 #check @TauCeti.DavisKahan1970.theorem5_2_orderedGap_symmetricNorming_real
 #check @TauCeti.DavisKahan1970.theorem5_2
-#check @TauCeti.DavisKahan.Sylvester.davisKahan1970_sylvester_real
+#check @TauCeti.DavisKahan1970.theorem5_2_kyFanDominant_real
 #check @TauCeti.DavisKahan1970.Audits.theorem5_2_real_ordered_sourceAudit
 
 /-! ## DK-5.1-lem: Strong-cutoff convergence of singular values
@@ -740,8 +740,8 @@ spectral subspace below `α` -- and is a specialization, not a witness.
 #check @TauCeti.DavisKahan1970.tanTheta_directed_unboundedRitz_symmetricNorming_real
 #check @TauCeti.DavisKahan1970.tanTheta_directed_unboundedTrial_symmetricNorming_complex
 #check @TauCeti.DavisKahan1970.tanTheta_directed_unboundedTrial_symmetricNorming_real
-#check @TauCeti.DavisKahan.TanTheta.theorem6_3_unbounded_infiniteTrial_ideal
-#check @TauCeti.DavisKahan.TanTheta.theorem6_3_unbounded_infiniteTrial_ideal_exists
+#check @TauCeti.DavisKahan1970.theorem6_3_unbounded_infiniteTrial_ideal
+#check @TauCeti.DavisKahan1970.theorem6_3_unbounded_infiniteTrial_ideal_exists
 #check @TauCeti.DavisKahan1970.theorem6_3_unbounded_infiniteTrial_ideal_exists_real
 #check @TauCeti.DavisKahan1970.tanTheta_directed_bounded_spectralGap_symmetricNorming_complex
 #check @TauCeti.DavisKahan1970.tanTheta_directed_bounded_spectralGap_symmetricNorming_real

@@ -250,11 +250,11 @@ Follow ground rule 3 for every rename.
    `lemma5_1`, `Theorem6_1_*`, `Theorem6_2_*`, `Proposition6_1_*`. Keep deprecated aliases only
    where ground rule 3 says so.
 4. Give source-facing homes and `TauCeti.DavisKahan1970` names to the registered witnesses
-   that live outside the paper namespace: `TauCeti.DavisKahan.TanTheta.theorem6_3_unbounded_infiniteTrial_ideal_exists`
-   (`DavisKahan/TanTheta/`), `TauCeti.DavisKahan.Section2.theorem6_3_perturbation_infiniteTrial`
+   that live outside the paper namespace: `TauCeti.DavisKahan1970.theorem6_3_unbounded_infiniteTrial_ideal_exists`
+   (`DavisKahan/TanTheta/`), `TauCeti.DavisKahan1970.theorem6_3_perturbation_infiniteTrial`
    (`Sources/DavisKahan1970/Section2TanThetaPerturbation.lean`, wrong namespace),
-   `TauCeti.DavisKahan.Sylvester.davisKahan1970_sylvester_real` (`DavisKahan/Sylvester/RealUnbounded.lean`),
-   `TauCeti.DavisKahan.FiniteDimensional.DavisKahanProposition4_4_Finite` and its two companions.
+   `TauCeti.DavisKahan1970.theorem5_2_kyFanDominant_real` (`DavisKahan/Sylvester/RealUnbounded.lean`),
+   `TauCeti.DavisKahan1970.proposition4_4_printedStatement` and its two companions.
    The rule: a declaration registered as source evidence is either declared under
    `TauCeti.DavisKahan1970` in `Sources/DavisKahan1970/**`, or is aliased there and the alias
    is what the census names.

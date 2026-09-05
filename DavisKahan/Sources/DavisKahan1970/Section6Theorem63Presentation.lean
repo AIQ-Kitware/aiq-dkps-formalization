@@ -177,7 +177,7 @@ alias theorem6_3_equalDimension_tanTheta_ideal_formBounds :=
 /-- Section 2 tangent theorem, perturbation half, at arbitrary trial dimension and
 ideal-gauge scope. -/
 alias theorem6_3_equalDimension_tanTheta_perturbation :=
-  TauCeti.DavisKahan.Section2.theorem6_3_perturbation_infiniteTrial
+  TauCeti.DavisKahan1970.theorem6_3_perturbation_infiniteTrial
 
 end GeneralizedTangent
 end DavisKahan1970

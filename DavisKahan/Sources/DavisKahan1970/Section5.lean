@@ -5,6 +5,7 @@ Authors: Jon Crall, Claude Opus 5
 -/
 import DavisKahan.OperatorIdeal.ApproximationNumbers.ScalarGeneric
 import DavisKahan.Sylvester.Unbounded.OrderedEngineDirect
+import DavisKahan.Sylvester.RealUnbounded
 -- the section's two displayed inequalities, (5.1) and (5.2)
 import DavisKahan.Sources.DavisKahan1970.Sylvester.OperatorNormEstimate
 
@@ -122,6 +123,16 @@ constant `1` cannot replace `√(rank C)` is compiled as `sharp52_constant_one_t
 Whether `rank C` may be replaced by a constant is the source's open question. -/
 alias Inequality5_2 :=
   DavisKahan.ExactSinTheta.opNorm_sylvester_le_of_pairwiseSpectrumGap
+
+
+/-- **Davis--Kahan 1970, Theorem 5.2 over `ℝ`, at an arbitrary Fan-dominant ideal gauge.**
+
+The source-facing name for `TauCeti.DavisKahan.Sylvester.davisKahan1970_sylvester_real`, whose
+own name carries the paper's number while living in the reusable Sylvester namespace.  It takes
+the whole `FormBoundedSylvesterGap`, so both half-line orientations and the interval/exterior
+branch are available, with the sharp constant.  Finding F6.4 of the 2026-09-04 hostile review. -/
+alias theorem5_2_kyFanDominant_real :=
+  DavisKahan.Sylvester.davisKahan1970_sylvester_real
 
 end DavisKahan1970
 end TauCeti

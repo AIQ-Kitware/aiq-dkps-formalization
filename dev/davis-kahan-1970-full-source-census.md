@@ -320,12 +320,12 @@ REOPENING WITHDRAWN 2026-08-31 and the rule corrected: a later source passage en
 - `TauCeti.DavisKahanExt.tanTheta_spectrum`
 - `TauCeti.DavisKahan.TanTheta.theorem6_3_generalizedTanTheta_of_formBounds_equalRank`
 - `TauCeti.DavisKahan.TanTheta.theorem6_3_generalizedTanTheta_equalRank_spectral`
-- `TauCeti.DavisKahan.Section2.theorem63Residual_eq_neg_of_invariant`
-- `TauCeti.DavisKahan.Section2.theorem6_3_perturbation_equalRank`
+- `TauCeti.DavisKahan1970.theorem63Residual_eq_neg_of_invariant`
+- `TauCeti.DavisKahan1970.theorem6_3_perturbation_equalRank`
 - `TauCeti.DavisKahan.TanTheta.theorem6_3_infiniteTrial_spectral_exists`
 - `TauCeti.DavisKahan.TanTheta.theorem6_3_infiniteTrial_of_formBounds_exists`
 - `TauCeti.DavisKahan.TanTheta.theorem6_3_all_kyFan_core_infiniteTrial`
-- `TauCeti.DavisKahan.Section2.theorem6_3_perturbation_infiniteTrial`
+- `TauCeti.DavisKahan1970.theorem6_3_perturbation_infiniteTrial`
 - `TauCeti.DavisKahan.Angle.tanAngleOperatorC`
 - `TauCeti.DavisKahan.Angle.directedCosAngleOperatorC_mul_directedTanAngleOperatorC`
 - `TauCeti.ApproximationNumber.approximationNumber_le_of_gramResolvent`
@@ -368,7 +368,7 @@ REOPENING WITHDRAWN 2026-08-31 and the rule corrected: a later source passage en
 - `TauCeti.DavisKahan1970.tanTheta_ambient_unboundedRitz_symmetricNorming_real`
 - `TauCeti.DavisKahan1970.tanTheta_directed_unboundedTrial_symmetricNorming_complex`
 - `TauCeti.DavisKahan1970.tanTheta_directed_unboundedTrial_symmetricNorming_real`
-- `TauCeti.DavisKahan.TanTheta.theorem6_3_unbounded_infiniteTrial_ideal`
+- `TauCeti.DavisKahan1970.theorem6_3_unbounded_infiniteTrial_ideal`
 - `TauCeti.DavisKahan1970.tanTheta_directed_unboundedRitz_symmetricNorming_complex`
 - `TauCeti.DavisKahan1970.tanTheta_directed_unboundedRitz_symmetricNorming_real`
 - `TauCeti.DavisKahan.TanTheta.UnboundedCompressionTrialData.ideal_of_formBounds`
@@ -1436,7 +1436,7 @@ NEW SUPPORT: `diagonalPart_congr` / `offDiagonalPart_congr`, needed because `rw`
 - `TauCeti.DavisKahan.TanTheta.Theorem63TrialData.all_kyFan_core_of_formBounds`
 - `TauCeti.DavisKahan.TanTheta.theorem6_3_unbounded_infiniteTrial_ideal_exists_of_reducing`
 - `TauCeti.DavisKahan.TanTheta.theorem6_3_unbounded_infiniteTrial_ideal_of_reducing`
-- `TauCeti.DavisKahan.TanTheta.theorem6_3_unbounded_infiniteTrial_ideal_exists`
+- `TauCeti.DavisKahan1970.theorem6_3_unbounded_infiniteTrial_ideal_exists`
 - `TauCeti.DavisKahan1970.sinTwoTheta_unbounded_perturbation_arbitraryRepresentative_complex`
 - `TauCeti.DavisKahan1970.tanTwoTheta_unbounded_residual_opNorm_complex`
 - `TauCeti.DavisKahan.ExactSinTheta.sinTheta_unbounded_real`
@@ -3113,9 +3113,9 @@ REOPENING WITHDRAWN 2026-08-31 and the rule corrected: a later source passage en
 **Lean declarations:**
 
 - `TauCeti.DavisKahan.crossedDefectsEquivalent_of_isAcute`
-- `TauCeti.DavisKahan.FiniteDimensional.shortRotation_fullDisplacement_refuted`
-- `TauCeti.DavisKahan.FiniteDimensional.DavisKahanProposition4_4_Finite`
-- `TauCeti.DavisKahan.FiniteDimensional.not_davisKahanProposition4_4_Finite`
+- `TauCeti.DavisKahan1970.proposition4_4_refutingPair`
+- `TauCeti.DavisKahan1970.proposition4_4_printedStatement`
+- `TauCeti.DavisKahan1970.proposition4_4_refuted`
 - `TauCeti.DavisKahan.FiniteDimensional.directRotation_fullDisplacement_qnorm`
 
 **Curated source/Lean review:**
@@ -3300,7 +3300,7 @@ The first hole asked for a source-facing theorem for "(5.2) is not best possible
 - `TauCeti.DavisKahan.Sylvester.directOrderedSylvesterEngine_lowerUpper`
 - `TauCeti.DavisKahan1970.unbounded_sylvester_intervalExterior_uiNorm_of_spectra`
 - `TauCeti.DavisKahan1970.theorem5_2`
-- `TauCeti.DavisKahan.Sylvester.davisKahan1970_sylvester_real`
+- `TauCeti.DavisKahan1970.theorem5_2_kyFanDominant_real`
 - `TauCeti.DavisKahan.Sylvester.real_unbounded_sylvester_kyFan`
 - `TauCeti.DavisKahan1970.theorem5_2_symmetricNorming_complex`
 - `TauCeti.DavisKahan1970.theorem5_2_symmetricNorming_real`
@@ -3830,7 +3830,7 @@ THE CAUSE WAS MANIFEST GRANULARITY, NOT A STALE NUMBER, so the fix was to split 
 - `TauCeti.DavisKahan1970.theorem6_2_real_commonCore`
 - `TauCeti.DavisKahan.TanTheta.theorem6_3_unbounded_infiniteTrial_ideal_exists_of_reducing`
 - `TauCeti.DavisKahan.TanTheta.theorem6_3_unbounded_infiniteTrial_ideal_of_reducing`
-- `TauCeti.DavisKahan.TanTheta.theorem6_3_unbounded_infiniteTrial_ideal_exists`
+- `TauCeti.DavisKahan1970.theorem6_3_unbounded_infiniteTrial_ideal_exists`
 - `TauCeti.DavisKahan1970.theorem6_3_all_kyFan_core_infiniteData_real`
 - `TauCeti.DavisKahan1970.theorem6_3_unbounded_infiniteTrial_ideal_exists_of_reducing_real`
 - `TauCeti.DavisKahan1970.theorem6_3_unbounded_infiniteTrial_ideal_exists_real`

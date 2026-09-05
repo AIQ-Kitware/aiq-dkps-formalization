@@ -39,7 +39,7 @@ right.  What did not exist was the promotion to the paper's universal norm
 quantifier, and the result inventory had registered in its place two declarations
 that do not carry the scope they were credited with:
 
-* `Section2.theorem6_3_perturbation_infiniteTrial` -- a **bounded** ambient
+* `theorem6_3_perturbation_infiniteTrial` -- a **bounded** ambient
   operator (`T E : H →L[ℂ] H`) at a Ky Fan family;
 * `partIII_tanTheta_ritzResidual_uiNorm` -- **finite-dimensional**
   (`[FiniteDimensional 𝕜 E]`, `[FiniteDimensional 𝕜 F]`) at a rectangular
@@ -431,6 +431,28 @@ theorem tanTheta_directed_unboundedRitz_symmetricNorming_exists_real
 end AppendixExistsReal
 
 end
+
+
+/-! ## Source-facing names for the ideal-gauge forms
+
+The two Ky-Fan-dominant ideal-gauge endpoints behind the directed clause are declared in
+`DavisKahan/TanTheta/`, their natural reusable home, but they carry *source numbering* in
+their names.  A source-numbered declaration that a census row registers should be reachable
+under `TauCeti.DavisKahan1970`, so these aliases give them that name; the reusable
+declarations are unchanged.  Finding F6.4 of the 2026-09-04 hostile review. -/
+
+/-- **Theorem 6.3 at an arbitrary Fan-dominant ideal gauge**, with the tangent representative
+supplied by the caller.  The source-facing name for
+`TauCeti.DavisKahan.TanTheta.theorem6_3_unbounded_infiniteTrial_ideal`. -/
+alias theorem6_3_unbounded_infiniteTrial_ideal :=
+  DavisKahan.TanTheta.theorem6_3_unbounded_infiniteTrial_ideal
+
+/-- **Theorem 6.3 at an arbitrary Fan-dominant ideal gauge**, with the representative
+existentially quantified.  The source-facing name for
+`TauCeti.DavisKahan.TanTheta.theorem6_3_unbounded_infiniteTrial_ideal_exists`, and the complex
+partner of `theorem6_3_unbounded_infiniteTrial_ideal_exists_real`. -/
+alias theorem6_3_unbounded_infiniteTrial_ideal_exists :=
+  DavisKahan.TanTheta.theorem6_3_unbounded_infiniteTrial_ideal_exists
 
 end DavisKahan1970
 end TauCeti
