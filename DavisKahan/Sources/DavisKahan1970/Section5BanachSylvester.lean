@@ -341,13 +341,24 @@ theorem theorem5_1_banach_sylvester_banachScope
   theorem5_1_banach_sylvester_exact N A Ainv B T C hgamma hdelta hB
     hAinv_left hAinv_right hAinv_norm hEq
 
-/-- **Davis--Kahan 1970, Theorem 5.1 at the printed Banach scope, with the compatible norm
-spelled out as its three printed properties**, over an arbitrary scalar field.
+/-- **Theorem 5.1's estimate under the four properties its proof actually consumes**, over an
+arbitrary scalar field.
 
-The source's "any norm compatible with those bound norms" is exactly subadditivity together
-with the two one-sided bounds by the operator norm, which is what a symmetric-norm ideal gauge
-supplies.  This is the same content as the bundled `CompatibleCrossOperatorNorm` wrapper above
-with the bundle unfolded, and it is not restricted to `ℂ`. -/
+`N` here is not required to be a norm.  The hypotheses are subadditivity, the two one-sided
+bounds by the operator norm, and nonnegativity -- exactly what the rearrangement of the
+Sylvester identity uses, and nothing more.  A `CompatibleCrossOperatorNorm` supplies all four
+and is genuinely a norm besides: it also has absolute homogeneity, `N T = 0 → T = 0`, and
+two-sided contraction compatibility rather than the ideal bounds.  So this theorem is a
+**generalization** of `theorem5_1_banach_sylvester_banachScope`, not the same statement with a
+bundle unfolded, and the source's "any norm compatible with those bound norms" is the bundled
+one.
+
+An earlier version of this docstring called the four properties "the compatible norm spelled
+out" and "the same content" as the bundle.  Both were wrong, and the 2026-09-05 hostile
+follow-up review caught them; the row's registration had already been corrected to
+`generalization` by then, so only the prose was stale.  Cite
+`theorem5_1_banach_sylvester_banachScope` for Theorem 5.1; cite this when the object in hand is
+a bare ideal gauge rather than a norm. -/
 theorem theorem5_1_banach_sylvester_banachScope_ofProperties
     {𝕜 : Type*} [NontriviallyNormedField 𝕜]
     {E F : Type*} [NormedAddCommGroup E] [NormedSpace 𝕜 E] [CompleteSpace E]
