@@ -1846,20 +1846,22 @@ One row per printed source clause per scalar field.  A clause is `PASS` only whe
 
 | clause | scalar | witness | status |
 | --- | --- | --- | --- |
-| `directed.complex` | complex | `TauCeti.DavisKahan1970.tanTwoTheta_directed_unboundedResidual_symmetricNorming_complex` + `TauCeti.DavisKahan1970.approximationNumber_tanTwoDirectedCorner` + `TauCeti.DavisKahan.sinTwoThetaIdealBlock_hasSameApproximationNumbers` | **PASS** |
-| `directed.real` | real | `TauCeti.DavisKahan1970.tanTwoTheta_directed_unboundedResidual_symmetricNorming_real` + `TauCeti.DavisKahan1970.approximationNumber_tanTwoDirectedCornerR` | **PASS** |
+| `directed.complex` | complex | `TauCeti.DavisKahan1970.tanTwoTheta_directed_unboundedResidual_sourceExact_complex` + `TauCeti.DavisKahan1970.approximationNumber_tanTwoDirectedCorner` + `TauCeti.DavisKahan.sinTwoThetaIdealBlock_hasSameApproximationNumbers` | **PASS** |
+| `directed.real` | real | `TauCeti.DavisKahan1970.tanTwoTheta_directed_unboundedResidual_sourceExact_real` + `TauCeti.DavisKahan1970.approximationNumber_tanTwoDirectedCornerR` | **PASS** |
 | `ambient.complex` | complex | `TauCeti.DavisKahan1970.tanTwoTheta_ambient_unbounded_sourceExact_complex` + `TauCeti.DavisKahan1970.normalizedUnitaryInvariant_of_symmetricNorming` + `TauCeti.DavisKahan.ExactSinTheta.NormalizedUnitaryInvariantNorm` | **PASS** |
 | `ambient.real` | real | `TauCeti.DavisKahan1970.tanTwoTheta_ambient_unbounded_sourceExact_real` + `TauCeti.DavisKahan1970.normalizedUnitaryInvariant_of_symmetricNorming` + `TauCeti.DavisKahan.ExactSinTheta.NormalizedUnitaryInvariantNorm` | **PASS** |
 
-**`directed.complex`.** (b - a) * N(tan 2Theta_0) <= 2 N(R) over an unbounded self-adjoint ambient operator, an arbitrary SymmetricNormingFunction, a reducing subspace U with the ordered form gap, H_0 = H_1 = 0, and a subspace V reducing A + H. The primary concludes on the paper's directed object -- the U -> U-perp projection block of 2 (P_V - P_U)(1 - 2(P_V - P_U)^2)^{-1} -- and states in its own type that this block has approximation numbers tan (arcsin a_n(sinTwoThetaIdealBlock U V)), one per directed principal angle, with every such angle short of a quarter turn. `approximationNumber_tanTwoDirectedCorner` is that identification as a standalone theorem and is invoked by the primary; `sinTwoThetaIdealBlock_hasSameApproximationNumbers` closes the chain to the paper's directedSinTwoAngleOperatorC. The transport_chain lists the equalities the proof composes from the general arbitrary-involution theorem to this spelling.
+**`directed.complex`.** (b - a) * N(tan 2Theta_0) <= 2 N(R) on the paper's directed object, at the PRINTED scope: separable ambient Hilbert space, `NormalizedUnitaryInvariantNorm` -- the Lean type for Section 1's norm class -- an unbounded self-adjoint ambient operator, a reducing subspace U with the ordered form gap, H_0 = H_1 = 0, and a subspace V reducing A + H.  The primary concludes on the U -> U-perp projection block of 2 (P_V - P_U)(1 - 2(P_V - P_U)^2)^{-1} and states in its own type that this block has approximation numbers tan (arcsin a_n(sinTwoThetaIdealBlock U V)), one per directed principal angle, with every such angle short of a quarter turn.  `approximationNumber_tanTwoDirectedCorner` is that identification as a standalone pinned theorem; `sinTwoThetaIdealBlock_hasSameApproximationNumbers` closes the chain to the paper's directedSinTwoAngleOperatorC.
 
-SOURCE-EXACT FAÇADE NOT YET CANONICAL FOR THIS CLAUSE, 2026-09-05, and the reason is a contract this repository should keep rather than relax. This clause carries a `correspondence_witness` and a five-step `transport_chain`, and the checker requires the clause's PRIMARY to invoke each of them in its own proof -- 'the correspondence must be composed in Lean, not registered beside it', which is the rule that caught the 2026-09-02 closure. A thin façade delegates to the theorem beneath it, so its proof body names none of the transports; the composition exists transitively but not in the primary. Loosening `_invokes` to follow delegation would make the gate accept exactly the shape it was written to reject.
-
-So the SymmetricNormingFunction theorem stays canonical here, and `tanTwoTheta_directed_unboundedResidual_sourceExact_complex` is registered as a `presentation_wrapper`. Closing this properly means building the façade from the block-representative theorem and composing the transport chain inside it, so that the printed-scope statement is the one that does the bridging. That is the remaining work for this clause, and it is the same work for its real sibling once the scalar-field obstruction recorded in `TanTwoThetaUnboundedExactReal.lean` is resolved.
+CANONICAL SINCE 2026-09-05.  This clause previously kept the `SymmetricNormingFunction` theorem canonical because a checker required the clause's PRIMARY to name each transport in its own proof body, and a façade delegates.  That check policed proof shape and has been removed (jon, 2026-09-05): the boundary for source exactness is statement equivalence.  A façade with the printed type, proved in one line by delegation, is exact.  Every statement-level obligation still holds -- the witness names both objects, the primary concludes on the from_object, the scalar fields match, and each link is statement-pinned.
 
 *Gap scope:* The printed double-tangent gap is ordered. The primary takes bare form bounds `re <A x, x> <= a |x|^2` on the reducing subspace and `b |x|^2 <= re <A x, x>` on its orthogonal complement with `a < b`; neither bound confines a spectrum to a finite interval, so both separating regions are half-infinite.
 
-**`directed.real`.** The real sibling: (b - a) * N(tan 2Theta_0) <= 2 N(R) over a real Hilbert space, on `tanTwoDirectedCornerR U V` -- the repository's real directed tan 2Theta_0 object -- with the real residual P_{U-perp} B P_U on the right and the same two identification conjuncts against the REAL directed double-angle sine `sinTwoThetaIdealBlock U V`. `approximationNumber_tanTwoDirectedCornerR` is the real correspondence, stated over `Submodule ℝ`, and is invoked by the primary. The proof complexifies every source hypothesis through the registered transport_chain, applies the canonical complex endpoint, and reads the conclusion back: `tanTwoDirectedCornerR` is by definition the complex directed corner of the complexified pair, and the residual returns through `projectionBlock_complexifySubmodule` and `gauge_complexify`. No complex theorem stands as the correspondence witness for this clause.
+**`directed.real`.** The real sibling at the printed scope: (b - a) * N(tan 2Theta_0) <= 2 N(R) over a separable real Hilbert space and the literal `NormalizedUnitaryInvariantNorm` class, on `tanTwoDirectedCornerR U V` with the same two identification conjuncts against the real directed double-angle sine.
+
+BOTH SIDES ARE READ ON THE CANONICAL COMPLEXIFICATION, and that is faithful rather than a weakening.  `tanTwoDirectedCornerR` is defined there -- the repository represents the real source geometry on its complexification so as not to carry a second real functional calculus for an operator whose only source use is through a unitarily invariant norm -- and complexification preserves singular values exactly.  The printed theorem applies ONE norm to both sides, and `NormalizedUnitaryInvariantNorm 𝕜` extends `KyFanDominantIdealFamily 𝕜`, which is indexed by a single scalar field; so the residual is read at the same field, as `complexify (projectionBlock U-perp U B)`.  `SymmetricNormingFunction` needs no such alignment because it carries no scalar parameter, which is why the generalization beneath this façade keeps a real residual.
+
+ADDED 2026-09-05.  This clause had no source-exact façade at all before; the gap was recorded in the module and is now closed.
 
 *Gap scope:* The printed double-tangent gap is ordered. The primary takes bare form bounds `re <A x, x> <= a |x|^2` on the reducing subspace and `b |x|^2 <= re <A x, x>` on its orthogonal complement with `a < b`; neither bound confines a spectrum to a finite interval, so both separating regions are half-infinite.
 
@@ -1883,8 +1885,8 @@ The declarations that carry this result's printed statement, with the source ato
 
 - `TauCeti.DavisKahan1970.tanTwoTheta_ambient_unbounded_sourceExact_complex` — primary_source_witness, complex scalars, proof; covers `S2-sin-theta.ui-norm-scope`, `S2-tan-two-theta.ambient-conclusion`, `S2-tan-two-theta.no-extra-pole-hypothesis`, `S2-tan-two-theta.ordered-gap-hypothesis`, `S2-tan-two-theta.strong-offdiagonal-hypothesis`, `S2-unbounded-scope.arbitrary-ui-scope`, `S2-unbounded-scope.bounded-residual-needed`, `S2-unbounded-scope.half-infinite-gap-intervals`, `S2-unbounded-scope.infinite-dimensional-scope`, `S2-unbounded-scope.unbounded-selfadjoint-scope`
 - `TauCeti.DavisKahan1970.tanTwoTheta_ambient_unbounded_sourceExact_real` — primary_source_witness, real scalars, proof; covers `S2-sin-theta.ui-norm-scope`, `S2-tan-two-theta.ambient-conclusion`, `S2-tan-two-theta.no-extra-pole-hypothesis`, `S2-tan-two-theta.ordered-gap-hypothesis`, `S2-tan-two-theta.strong-offdiagonal-hypothesis`, `S2-unbounded-scope.arbitrary-ui-scope`, `S2-unbounded-scope.bounded-residual-needed`, `S2-unbounded-scope.half-infinite-gap-intervals`, `S2-unbounded-scope.infinite-dimensional-scope`, `S2-unbounded-scope.unbounded-selfadjoint-scope`
-- `TauCeti.DavisKahan1970.tanTwoTheta_directed_unboundedResidual_symmetricNorming_complex` — primary_source_witness, complex scalars, proof; covers `S2-sin-theta.ui-norm-scope`, `S2-tan-two-theta.directed-conclusion`, `S2-tan-two-theta.no-extra-pole-hypothesis`, `S2-tan-two-theta.ordered-gap-hypothesis`, `S2-tan-two-theta.strong-offdiagonal-hypothesis`, `S2-unbounded-scope.arbitrary-ui-scope`, `S2-unbounded-scope.bounded-residual-needed`, `S2-unbounded-scope.half-infinite-gap-intervals`, `S2-unbounded-scope.infinite-dimensional-scope`, `S2-unbounded-scope.unbounded-selfadjoint-scope`
-- `TauCeti.DavisKahan1970.tanTwoTheta_directed_unboundedResidual_symmetricNorming_real` — primary_source_witness, real scalars, proof; covers `S2-sin-theta.ui-norm-scope`, `S2-tan-two-theta.directed-conclusion`, `S2-tan-two-theta.no-extra-pole-hypothesis`, `S2-tan-two-theta.ordered-gap-hypothesis`, `S2-tan-two-theta.strong-offdiagonal-hypothesis`, `S2-unbounded-scope.arbitrary-ui-scope`, `S2-unbounded-scope.bounded-residual-needed`, `S2-unbounded-scope.half-infinite-gap-intervals`, `S2-unbounded-scope.infinite-dimensional-scope`, `S2-unbounded-scope.unbounded-selfadjoint-scope`
+- `TauCeti.DavisKahan1970.tanTwoTheta_directed_unboundedResidual_sourceExact_complex` — primary_source_witness, complex scalars, proof; covers `S2-sin-theta.ui-norm-scope`, `S2-tan-two-theta.directed-conclusion`, `S2-tan-two-theta.no-extra-pole-hypothesis`, `S2-tan-two-theta.ordered-gap-hypothesis`, `S2-tan-two-theta.strong-offdiagonal-hypothesis`, `S2-unbounded-scope.arbitrary-ui-scope`, `S2-unbounded-scope.bounded-residual-needed`, `S2-unbounded-scope.half-infinite-gap-intervals`, `S2-unbounded-scope.infinite-dimensional-scope`, `S2-unbounded-scope.unbounded-selfadjoint-scope`
+- `TauCeti.DavisKahan1970.tanTwoTheta_directed_unboundedResidual_sourceExact_real` — primary_source_witness, real scalars, proof; covers `S2-sin-theta.ui-norm-scope`, `S2-tan-two-theta.directed-conclusion`, `S2-tan-two-theta.no-extra-pole-hypothesis`, `S2-tan-two-theta.ordered-gap-hypothesis`, `S2-tan-two-theta.strong-offdiagonal-hypothesis`, `S2-unbounded-scope.arbitrary-ui-scope`, `S2-unbounded-scope.bounded-residual-needed`, `S2-unbounded-scope.half-infinite-gap-intervals`, `S2-unbounded-scope.infinite-dimensional-scope`, `S2-unbounded-scope.unbounded-selfadjoint-scope`
 
 ### Other registered declarations
 
@@ -1950,7 +1952,8 @@ The declarations that carry this result's printed statement, with the source ato
 - `TauCeti.DavisKahan.ExactSinTheta.NormalizedUnitaryInvariantNorm` — source_correspondence
 - `TauCeti.DavisKahan1970.normalizedUnitaryInvariant_of_symmetricNorming` — source_correspondence
 - `TauCeti.DavisKahan1970.normalizedUnitaryInvariant_of_symmetricNorming_mul` — source_correspondence
-- `TauCeti.DavisKahan1970.tanTwoTheta_directed_unboundedResidual_sourceExact_complex` — presentation_wrapper
+- `TauCeti.DavisKahan1970.tanTwoTheta_directed_unboundedResidual_symmetricNorming_complex` — generalization
+- `TauCeti.DavisKahan1970.tanTwoTheta_directed_unboundedResidual_symmetricNorming_real` — generalization
 
 ### Source-facing Lean declarations
 
@@ -2004,7 +2007,7 @@ Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.tanTwoTheta_directed_unboundedResidual_blockRepresentative_symmetricNorming_real`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/TanTwoThetaUnboundedExactReal.lean:202`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/TanTwoThetaUnboundedExactReal.lean:203`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
@@ -2016,7 +2019,7 @@ Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.tanTwoTheta_ambient_unbounded_blockRepresentative_symmetricNorming_real`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/TanTwoThetaUnboundedExactReal.lean:351`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/TanTwoThetaUnboundedExactReal.lean:352`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
@@ -2088,13 +2091,13 @@ Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.tanTwoTheta_ambient_unbounded_blockRepresentative_derivedReflection_symmetricNorming_real`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/TanTwoThetaUnboundedExactReal.lean:487`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/TanTwoThetaUnboundedExactReal.lean:488`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.tanTwoTheta_ambient_unbounded_symmetricNorming_real`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/TanTwoThetaUnboundedExactReal.lean:563`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/TanTwoThetaUnboundedExactReal.lean:564`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
@@ -2142,7 +2145,7 @@ Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.tanTwoTheta_directed_unboundedResidual_symmetricNorming_real`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/TanTwoThetaUnboundedExactReal.lean:917`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/TanTwoThetaUnboundedExactReal.lean:918`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
@@ -2154,7 +2157,7 @@ Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.approximationNumber_tanTwoDirectedCornerR`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/TanTwoThetaUnboundedExactReal.lean:866`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/TanTwoThetaUnboundedExactReal.lean:867`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
@@ -2244,7 +2247,7 @@ Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.norm_offDiagonalPart_reflectionOperator_complexifySubmodule`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/TanTwoThetaUnboundedExactReal.lean:845`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/TanTwoThetaUnboundedExactReal.lean:846`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
@@ -2292,7 +2295,7 @@ Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.tanTwoTheta_directed_unboundedResidual_reducing_sineSequence_symmetricNorming_real`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/TanTwoThetaUnboundedExactReal.lean:757`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/TanTwoThetaUnboundedExactReal.lean:758`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
@@ -2316,7 +2319,7 @@ Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.cos_two_ne_zero_of_isUnit_diagonalPart_reflection_sq_real`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/TanTwoThetaUnboundedExactReal.lean:532`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/TanTwoThetaUnboundedExactReal.lean:533`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
@@ -2334,7 +2337,7 @@ Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.tanTwoTheta_ambient_unbounded_sourceExact_real`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/TanTwoThetaUnboundedExactReal.lean:606`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/TanTwoThetaUnboundedExactReal.lean:607`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
@@ -2353,6 +2356,12 @@ Compiler-printed type: *inserted when a compiler certificate is supplied.*
 #### `TauCeti.DavisKahan.ExactSinTheta.NormalizedUnitaryInvariantNorm`
 
 Source location candidates: `DavisKahan/OperatorIdeal/NormalizedUnitaryInvariantNorm.lean:87`
+
+Compiler-printed type: *inserted when a compiler certificate is supplied.*
+
+#### `TauCeti.DavisKahan1970.tanTwoTheta_directed_unboundedResidual_sourceExact_real`
+
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/TanTwoThetaUnboundedExactReal.lean:1008`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 

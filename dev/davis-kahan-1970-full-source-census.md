@@ -4,7 +4,7 @@
 
 **Census family:** `source-completion-census`  
 **Items:** 50  
-**Unique cited Lean declarations:** 1313
+**Unique cited Lean declarations:** 1314
 
 ## How to use this census
 
@@ -904,6 +904,7 @@ SOURCE-EXACT FAÇADES REGISTERED 2026-09-05. Canonical evidence for this row is 
 - `TauCeti.DavisKahan1970.normalizedUnitaryInvariant_of_symmetricNorming`
 - `TauCeti.DavisKahan1970.normalizedUnitaryInvariant_of_symmetricNorming_mul`
 - `TauCeti.DavisKahan.ExactSinTheta.NormalizedUnitaryInvariantNorm`
+- `TauCeti.DavisKahan1970.tanTwoTheta_directed_unboundedResidual_sourceExact_real`
 
 **Curated source/Lean review:**
 

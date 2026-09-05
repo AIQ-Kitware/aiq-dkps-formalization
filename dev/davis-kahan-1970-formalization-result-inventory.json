@@ -1581,7 +1581,8 @@
         "TauCeti.DavisKahan1970.tanTwoTheta_ambient_unbounded_sourceExact_real",
         "TauCeti.DavisKahan1970.normalizedUnitaryInvariant_of_symmetricNorming",
         "TauCeti.DavisKahan1970.normalizedUnitaryInvariant_of_symmetricNorming_mul",
-        "TauCeti.DavisKahan.ExactSinTheta.NormalizedUnitaryInvariantNorm"
+        "TauCeti.DavisKahan.ExactSinTheta.NormalizedUnitaryInvariantNorm",
+        "TauCeti.DavisKahan1970.tanTwoTheta_directed_unboundedResidual_sourceExact_real"
       ],
       "review_note": "Accepted result-only semantic review 2026-08-12. The bounded complex and real source wrappers already expose both directed and ambient arbitrary-PaperUI conclusions from the printed Section 2 hypotheses with pole exclusion derived internally. The unbounded source surface now closes the advertised global scope as well: `tanTwoTheta_directed_unboundedResidual_blockRepresentative_symmetricNorming_complex` and its real counterpart give the sharp directed residual inequality, while `tanTwoTheta_ambient_unbounded_blockRepresentative_symmetricNorming_complex` and its real counterpart give the sharp ambient factor-two inequality for unbounded self-adjoint A in arbitrary Hilbert dimension. The ambient proof assembles the two reflection-tangent corners using the existing Section 7 directed estimate, skew-adjoint symmetry, Lemma 6.1 block assembly, and Fan dominance; the real endpoints descend exactly through the maintained complexification layer. No quarter-angle assumption, caller-supplied pole certificate, finite-dimensional restriction, compactness premise, or perturbed-Q spectral-placement hypothesis is added. The final implementation was compiler-verified by the user on the 7cc049b4 baseline before this census promotion. Audit-surface update 2026-08-13: the already scalar-generic branch-free PaperUI theorem is promoted under the canonical alias `tanTwoTheta_branchFree_bounded_finiteSubspace_symmetricNorming_rclike`; source-shaped directed and unbounded endpoints remain registered separately. Directed clauses closed 2026-09-02: the canonical directed witnesses are now the source-shaped endpoints `tanTwoTheta_directed_unboundedResidual_symmetricNorming_complex` (on the paper's directed projection block) and `tanTwoTheta_directed_unboundedResidual_symmetricNorming_real` (on `tanTwoDirectedCornerR U V`), each taking the reducing subspace `V` and stating the singular-value identification against `sinTwoThetaIdealBlock U V` in its own type. The arbitrary-involution theorems are retained as generalizations.\n\n**POLE EXCLUSION EXPOSED 2026-09-05**, closing the last part of finding F3 of the 2026-09-04 hostile review.  `absTanTwoAngleOperatorC/R` is `cfc (|tan (2 .)|)` of the angle operator, and Mathlib's `cfc` returns `0` off continuity, so a bound on it is trivially true at a quarter turn -- exactly the case the paper's proof excludes.  Both ambient canonical witnesses now conclude the exclusion.  The real side needed one new lemma, `cos_two_ne_zero_of_isUnit_diagonalPart_reflection_sq_real`, because the real chain carries the `IsUnit` form of the fact while the existing exclusion lemma is stated for `angleOperatorC`; it is proved by complexification through `spectrum_complexify`.",
       "boundary_review": {
@@ -1656,7 +1657,7 @@
         },
         {
           "id": "S2-tan-two-theta.2",
-          "declaration": "TauCeti.DavisKahan1970.tanTwoTheta_directed_unboundedResidual_symmetricNorming_complex",
+          "declaration": "TauCeti.DavisKahan1970.tanTwoTheta_directed_unboundedResidual_sourceExact_complex",
           "role": "primary_source_witness",
           "scalar_scope": "complex",
           "evidence_kind": "proof",
@@ -1673,11 +1674,11 @@
             "S2-unbounded-scope.unbounded-selfadjoint-scope"
           ],
           "capability_classes": [],
-          "note": "Source-exact façade as of 2026-09-05: separable ambient scope and the literal normalized unitarily invariant norm class."
+          "note": "The source-exact façade over C: separable ambient scope and the literal normalized unitarily invariant norm class.  Its proof delegates to the SymmetricNormingFunction theorem beneath it through the Fan-dominance bridge; the boundary for source exactness is statement equivalence, not proof shape."
         },
         {
           "id": "S2-tan-two-theta.3",
-          "declaration": "TauCeti.DavisKahan1970.tanTwoTheta_directed_unboundedResidual_symmetricNorming_real",
+          "declaration": "TauCeti.DavisKahan1970.tanTwoTheta_directed_unboundedResidual_sourceExact_real",
           "role": "primary_source_witness",
           "scalar_scope": "real",
           "evidence_kind": "proof",
@@ -1693,7 +1694,8 @@
             "S2-unbounded-scope.infinite-dimensional-scope",
             "S2-unbounded-scope.unbounded-selfadjoint-scope"
           ],
-          "capability_classes": []
+          "capability_classes": [],
+          "note": "The source-exact façade over R.  Both sides are read on the canonical complexification because `tanTwoDirectedCornerR` is defined there and the printed theorem applies ONE norm to both sides; `NormalizedUnitaryInvariantNorm 𝕜` is indexed by a single field, unlike `SymmetricNormingFunction`.  Complexification preserves singular values exactly, so no source information is lost."
         }
       ],
       "supporting_evidence": [
@@ -1997,9 +1999,16 @@
           "note": "The same reduction with the source's constant on the right, which the double-angle conclusions need."
         },
         {
-          "declaration": "TauCeti.DavisKahan1970.tanTwoTheta_directed_unboundedResidual_sourceExact_complex",
-          "role": "presentation_wrapper",
-          "note": "The printed-scope statement -- separable ambient space, literal normalized unitarily invariant norm -- but not yet canonical for this clause: a thin façade delegates, so it does not itself compose the clause's transport chain, which the correspondence contract requires of a primary. See the clause justification."
+          "declaration": "TauCeti.DavisKahan1970.tanTwoTheta_directed_unboundedResidual_symmetricNorming_complex",
+          "role": "generalization",
+          "scalar_scope": "complex",
+          "note": "The theorem the complex façade delegates to: strictly more general, over an arbitrary `SymmetricNormingFunction` and with no separability hypothesis."
+        },
+        {
+          "declaration": "TauCeti.DavisKahan1970.tanTwoTheta_directed_unboundedResidual_symmetricNorming_real",
+          "role": "generalization",
+          "scalar_scope": "real",
+          "note": "The real sibling of the above, and what the real façade delegates to.  It keeps the residual real because `SymmetricNormingFunction` carries no scalar parameter."
         }
       ],
       "result_wide_scope_atoms": [
@@ -2021,24 +2030,24 @@
           ],
           "scalar_scope": "complex",
           "evidence": {
-            "primary": "TauCeti.DavisKahan1970.tanTwoTheta_directed_unboundedResidual_symmetricNorming_complex",
+            "primary": "TauCeti.DavisKahan1970.tanTwoTheta_directed_unboundedResidual_sourceExact_complex",
             "correspondence": [
               "TauCeti.DavisKahan1970.approximationNumber_tanTwoDirectedCorner",
               "TauCeti.DavisKahan.sinTwoThetaIdealBlock_hasSameApproximationNumbers"
             ],
             "supporting": [
-              "TauCeti.DavisKahan1970.tanTwoTheta_directed_unboundedResidual_sourceExact_complex"
+              "TauCeti.DavisKahan1970.tanTwoTheta_directed_unboundedResidual_symmetricNorming_complex"
             ]
           },
           "status": "established",
-          "justification": "(b - a) * N(tan 2Theta_0) <= 2 N(R) over an unbounded self-adjoint ambient operator, an arbitrary SymmetricNormingFunction, a reducing subspace U with the ordered form gap, H_0 = H_1 = 0, and a subspace V reducing A + H. The primary concludes on the paper's directed object -- the U -> U-perp projection block of 2 (P_V - P_U)(1 - 2(P_V - P_U)^2)^{-1} -- and states in its own type that this block has approximation numbers tan (arcsin a_n(sinTwoThetaIdealBlock U V)), one per directed principal angle, with every such angle short of a quarter turn. `approximationNumber_tanTwoDirectedCorner` is that identification as a standalone theorem and is invoked by the primary; `sinTwoThetaIdealBlock_hasSameApproximationNumbers` closes the chain to the paper's directedSinTwoAngleOperatorC. The transport_chain lists the equalities the proof composes from the general arbitrary-involution theorem to this spelling.\n\nSOURCE-EXACT FAÇADE NOT YET CANONICAL FOR THIS CLAUSE, 2026-09-05, and the reason is a contract this repository should keep rather than relax. This clause carries a `correspondence_witness` and a five-step `transport_chain`, and the checker requires the clause's PRIMARY to invoke each of them in its own proof -- 'the correspondence must be composed in Lean, not registered beside it', which is the rule that caught the 2026-09-02 closure. A thin façade delegates to the theorem beneath it, so its proof body names none of the transports; the composition exists transitively but not in the primary. Loosening `_invokes` to follow delegation would make the gate accept exactly the shape it was written to reject.\n\nSo the SymmetricNormingFunction theorem stays canonical here, and `tanTwoTheta_directed_unboundedResidual_sourceExact_complex` is registered as a `presentation_wrapper`. Closing this properly means building the façade from the block-representative theorem and composing the transport chain inside it, so that the printed-scope statement is the one that does the bridging. That is the remaining work for this clause, and it is the same work for its real sibling once the scalar-field obstruction recorded in `TanTwoThetaUnboundedExactReal.lean` is resolved.",
+          "justification": "(b - a) * N(tan 2Theta_0) <= 2 N(R) on the paper's directed object, at the PRINTED scope: separable ambient Hilbert space, `NormalizedUnitaryInvariantNorm` -- the Lean type for Section 1's norm class -- an unbounded self-adjoint ambient operator, a reducing subspace U with the ordered form gap, H_0 = H_1 = 0, and a subspace V reducing A + H.  The primary concludes on the U -> U-perp projection block of 2 (P_V - P_U)(1 - 2(P_V - P_U)^2)^{-1} and states in its own type that this block has approximation numbers tan (arcsin a_n(sinTwoThetaIdealBlock U V)), one per directed principal angle, with every such angle short of a quarter turn.  `approximationNumber_tanTwoDirectedCorner` is that identification as a standalone pinned theorem; `sinTwoThetaIdealBlock_hasSameApproximationNumbers` closes the chain to the paper's directedSinTwoAngleOperatorC.\n\nCANONICAL SINCE 2026-09-05.  This clause previously kept the `SymmetricNormingFunction` theorem canonical because a checker required the clause's PRIMARY to name each transport in its own proof body, and a façade delegates.  That check policed proof shape and has been removed (jon, 2026-09-05): the boundary for source exactness is statement equivalence.  A façade with the printed type, proved in one line by delegation, is exact.  Every statement-level obligation still holds -- the witness names both objects, the primary concludes on the from_object, the scalar fields match, and each link is statement-pinned.",
           "gap_scope_justification": "The printed double-tangent gap is ordered. The primary takes bare form bounds `re <A x, x> <= a |x|^2` on the reducing subspace and `b |x|^2 <= re <A x, x>` on its orthogonal complement with `a < b`; neither bound confines a spectrum to a finite interval, so both separating regions are half-infinite.",
           "gap_scope_hypothesis_tokens": [
             "a < b",
             "a * ‖↑x‖ ^ 2",
             "b * ‖↑x‖ ^ 2"
           ],
-          "correspondence_sufficiency": "composed_in_primary",
+          "correspondence_sufficiency": "statement_pinned",
           "correspondence_required": true,
           "correspondence_witness": {
             "declaration": "TauCeti.DavisKahan1970.approximationNumber_tanTwoDirectedCorner",
@@ -2061,20 +2070,23 @@
           ],
           "scalar_scope": "real",
           "evidence": {
-            "primary": "TauCeti.DavisKahan1970.tanTwoTheta_directed_unboundedResidual_symmetricNorming_real",
+            "primary": "TauCeti.DavisKahan1970.tanTwoTheta_directed_unboundedResidual_sourceExact_real",
             "correspondence": [
               "TauCeti.DavisKahan1970.approximationNumber_tanTwoDirectedCornerR"
+            ],
+            "supporting": [
+              "TauCeti.DavisKahan1970.tanTwoTheta_directed_unboundedResidual_symmetricNorming_real"
             ]
           },
           "status": "established",
-          "justification": "The real sibling: (b - a) * N(tan 2Theta_0) <= 2 N(R) over a real Hilbert space, on `tanTwoDirectedCornerR U V` -- the repository's real directed tan 2Theta_0 object -- with the real residual P_{U-perp} B P_U on the right and the same two identification conjuncts against the REAL directed double-angle sine `sinTwoThetaIdealBlock U V`. `approximationNumber_tanTwoDirectedCornerR` is the real correspondence, stated over `Submodule ℝ`, and is invoked by the primary. The proof complexifies every source hypothesis through the registered transport_chain, applies the canonical complex endpoint, and reads the conclusion back: `tanTwoDirectedCornerR` is by definition the complex directed corner of the complexified pair, and the residual returns through `projectionBlock_complexifySubmodule` and `gauge_complexify`. No complex theorem stands as the correspondence witness for this clause.",
+          "justification": "The real sibling at the printed scope: (b - a) * N(tan 2Theta_0) <= 2 N(R) over a separable real Hilbert space and the literal `NormalizedUnitaryInvariantNorm` class, on `tanTwoDirectedCornerR U V` with the same two identification conjuncts against the real directed double-angle sine.\n\nBOTH SIDES ARE READ ON THE CANONICAL COMPLEXIFICATION, and that is faithful rather than a weakening.  `tanTwoDirectedCornerR` is defined there -- the repository represents the real source geometry on its complexification so as not to carry a second real functional calculus for an operator whose only source use is through a unitarily invariant norm -- and complexification preserves singular values exactly.  The printed theorem applies ONE norm to both sides, and `NormalizedUnitaryInvariantNorm 𝕜` extends `KyFanDominantIdealFamily 𝕜`, which is indexed by a single scalar field; so the residual is read at the same field, as `complexify (projectionBlock U-perp U B)`.  `SymmetricNormingFunction` needs no such alignment because it carries no scalar parameter, which is why the generalization beneath this façade keeps a real residual.\n\nADDED 2026-09-05.  This clause had no source-exact façade at all before; the gap was recorded in the module and is now closed.",
           "gap_scope_justification": "The printed double-tangent gap is ordered. The primary takes bare form bounds `re <A x, x> <= a |x|^2` on the reducing subspace and `b |x|^2 <= re <A x, x>` on its orthogonal complement with `a < b`; neither bound confines a spectrum to a finite interval, so both separating regions are half-infinite.",
           "gap_scope_hypothesis_tokens": [
             "a < b",
             "a * ‖↑x‖ ^ 2",
             "b * ‖↑x‖ ^ 2"
           ],
-          "correspondence_sufficiency": "composed_in_primary",
+          "correspondence_sufficiency": "statement_pinned",
           "correspondence_required": true,
           "correspondence_witness": {
             "declaration": "TauCeti.DavisKahan1970.approximationNumber_tanTwoDirectedCornerR",
@@ -6110,8 +6122,8 @@
     "human_report": "dev/davis-kahan-1970-result-semantic-review-2026-08-31.md",
     "terminal_results": 29,
     "remaining_results": [],
-    "note": "The structured fields above are authoritative; this paragraph is regenerated whenever the count moves. 2026-09-02, closing: terminal_results is 29 and remaining_results is empty. `S2-tan-two-theta` was `hostile_review_blocked` under obligation `tan2theta-directed-correspondence` after a 2026-09-02 closure that did not compose; it is now accepted on canonical directed witnesses `tanTwoTheta_directed_unboundedResidual_symmetricNorming_{complex,real}`, which take the reducing subspace and conclude on the paper's directed corner (`tanTwoDirectedCornerR U V` over ℝ) with the singular-value identification in their types. The canonical-evidence digest changed accordingly and the statement pins were refreshed for the new canonical and bridging declarations. Earlier history of this field (the 2026-08-31 `S2-sin-two-theta` reopening, the `S2-tan-theta` Appendix-scope primaries, the paper-prefix rename with an unchanged digest) is in the human report.",
-    "canonical_evidence_sha256": "ae17fc277d7e4cf8c5700380a74dec3fec6e09ce4a452d451ef6fb086b51cdf9",
+    "note": "The structured fields above are authoritative; this paragraph is regenerated whenever the count moves. 2026-09-02, closing: terminal_results is 29 and remaining_results is empty. `S2-tan-two-theta` was `hostile_review_blocked` under obligation `tan2theta-directed-correspondence` after a 2026-09-02 closure that did not compose; it is now accepted on canonical directed witnesses `tanTwoTheta_directed_unboundedResidual_symmetricNorming_{complex,real}`, which take the reducing subspace and conclude on the paper's directed corner (`tanTwoDirectedCornerR U V` over ℝ) with the singular-value identification in their types. The canonical-evidence digest changed accordingly and the statement pins were refreshed for the new canonical and bridging declarations. Earlier history of this field (the 2026-08-31 `S2-sin-two-theta` reopening, the `S2-tan-theta` Appendix-scope primaries, the paper-prefix rename with an unchanged digest) is in the human report.  2026-09-05: recomputed after the two directed `tan 2Theta` clauses of S2-tan-two-theta were retargeted at their source-exact façades.  The canonical statements are strictly closer to the printed ones -- separable ambient scope and the literal normalized unitarily invariant norm class -- and the theorems they delegate to are retained as registered generalizations, so nothing that was reviewed has been withdrawn.",
+    "canonical_evidence_sha256": "965105c52fcc00d7a0f81884f46c67b327d3c830d0b3c64fec1a942f148a845e",
     "hostile_review_status": "accepted",
     "hostile_review_note": "REOPENED 2026-09-05 by the third hostile review. Its three blockers are CLOSED -- the ambient sin 2Theta operator roles, Theorem 3.1's forward invariant on the source's angle operators, and Corollary 3.1's classification invariant on the angles -- along with Theorem 3.1's ambient dimension clause, which is now a proposition rather than a supplied isometric equivalence. No defect remains open. Two POLICY questions do, and they are recorded in `hostile_review_policy_questions` rather than as obligations, because the checker treats an obligation as evidence that a named row is NOT terminal and these ten rows are: whether to add thin separable wrappers at the printed scope, which is a project decision the repository has an explicit recorded position on and which an agent must not settle; and whether the printed unitarily invariant norm class must exist as a Lean type, where the estimate coverage is compiled and closed but the type-level representation is not. The 29/29 certificate is unaffected by either. When reporting it, say that these two questions are open, because a reviewer who resolves them differently would want different declarations to be canonical.\n\nPrevious note: ACCEPTED 2026-09-02, after the day's reopening was closed by new mathematics rather than by metadata: the directed tan 2Theta clauses have source-shaped complex and real endpoints on the paper objects, with the correspondence composed in Lean and pinned. `open_hostile_review_obligations` is closed and lists the closure; the structured fields `terminal_results`, `remaining_results` and `hostile_review_status` are the authoritative statement."
   },
@@ -6308,7 +6320,7 @@
         "S2-sin-theta": "separable",
         "S2-tan-theta": "separable",
         "S2-sin-two-theta": "separable",
-        "S2-tan-two-theta": "mixed",
+        "S2-tan-two-theta": "separable",
         "DK-3.1-prop": "generalized",
         "DK-3.2-prop": "generalized",
         "DK-3.3-prop": "generalized",
@@ -6445,6 +6457,10 @@
         {
           "declaration": "TauCeti.DavisKahan1970.Section8.theorem8_2_sinTwoTheta_residual_directedAngle_real_sourceExact",
           "why": "Source-exact façade: carries separability because the paper's ambient scope does, not because the mathematics needs it. The theorem beneath it holds on an arbitrary Hilbert space and is registered as a generalization."
+        },
+        {
+          "declaration": "TauCeti.DavisKahan1970.tanTwoTheta_directed_unboundedResidual_sourceExact_real",
+          "why": "Source-exact façade: carries separability because the paper's ambient scope does, not because the mathematics needs it.  `tanTwoTheta_directed_unboundedResidual_symmetricNorming_real` is the theorem beneath it, holds on an arbitrary real Hilbert space, and is registered as a generalization."
         }
       ]
     }

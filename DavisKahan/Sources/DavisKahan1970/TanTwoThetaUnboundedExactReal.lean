@@ -12,6 +12,7 @@ import DavisKahan.Sources.DavisKahan1970.SineTheta.Norms.ComplexificationGauge
 import DavisKahan.DoubleAngle.TangentTransport
 import DavisKahan.Sources.DavisKahan1970.AmbientReal
 import DavisKahan.Sources.DavisKahan1970.SymmetricNormingFanDominance
+import DavisKahan.SpectralTheory.Real.RealCyclicDecomposition
 
 open TauCeti.DavisKahan.Angle
 
@@ -978,35 +979,96 @@ theorem tanTwoTheta_directed_unboundedResidual_symmetricNorming_real
   rw [← hblock n]
   exact hlt n
 
-/-! ### Why there is no real source-exact façade here yet
+/-- **Davis--Kahan 1970, the directed `tan 2Θ₀` theorem at the printed source
+scope over `ℝ`.**
 
-The complex sibling `tanTwoTheta_directed_unboundedResidual_sourceExact_complex`
-exists.  The real one does not, and the obstruction is a real design point rather
-than an accident.
+Separable ambient real Hilbert space and the literal normalized unitarily
+invariant norm class.
 
-This theorem's two sides live over *different scalar fields*.  The tangent corner
-`tanTwoDirectedCornerR` exists only on the canonical complexification -- see its
-docstring in `AmbientReal.lean` for why -- while the residual
-`projectionBlock Uᗮ U B` is a real operator.  A `SymmetricNormingFunction`
-spans both, because that structure carries no scalar parameter and its `gauge` is
-applied at each operand's own field.  `NormalizedUnitaryInvariantNorm 𝕜` extends
-`KyFanDominantIdealFamily 𝕜`, which *is* indexed by one scalar field, so a single
-source norm cannot be applied to both sides.
+**Why both sides are read on the complexification.**  `tanTwoDirectedCornerR` is
+*defined* on the canonical complexification -- see its docstring in
+`AmbientReal.lean`: the real source geometry is represented there so that the
+repository does not carry a second real functional calculus for an operator whose
+only source use is through a unitarily invariant norm, and nothing is lost
+because complexification preserves singular values exactly.  The printed theorem
+applies **one** norm to both sides, so the residual is read at the same field,
+as `complexify (projectionBlock Uᗮ U B)`.
 
-Two honest routes, neither taken here:
+That is why this façade could not simply reuse the shape of the
+`SymmetricNormingFunction` theorem above.  `SymmetricNormingFunction` carries no
+scalar parameter, so its `gauge` may be applied at each operand's own field and a
+real residual sits happily beside a complex corner.  `NormalizedUnitaryInvariantNorm 𝕜`
+extends `KyFanDominantIdealFamily 𝕜`, which is indexed by one field; a single
+source norm therefore cannot straddle the two, and the honest fix is to state
+both sides at `ℂ`.
 
-* complexify the residual in the statement, so both sides are read at `ℂ`.  That
-  is faithful -- complexification preserves singular values exactly -- but
-  elaborating it currently diverges in `whnf`, and forcing it past a heartbeat
-  limit would not make it a good statement;
-* make `NormalizedUnitaryInvariantNorm` scalar-polymorphic, bundling a
-  Fan-dominant family for every `RCLike` field the way `SymmetricNormingFunction`
-  is implicitly polymorphic.  That is the structural fix and it is the one this
-  clause is waiting on.
-
-Until then this clause's canonical evidence stays the `SymmetricNormingFunction`
-theorem above, and the census records the gap rather than claiming the literal
-norm class for it. -/
+Nothing new is proved here: every hypothesis is carried to the complexification
+by the transports the real `SymmetricNormingFunction` theorem already uses, and
+the estimate is the complex source-exact endpoint. -/
+theorem tanTwoTheta_directed_unboundedResidual_sourceExact_real
+    [TopologicalSpace.SeparableSpace E]
+    (N : NormalizedUnitaryInvariantNorm.{0, _} ℂ)
+    (U V : Submodule ℝ E) [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
+    (hA : _root_.IsSelfAdjoint A)
+    (hred : TauCeti.LinearPMap.ReducesSubspace A U)
+    (hB : TauCeti.IsOddFor U B)
+    (hV : TauCeti.LinearPMap.ReducesSubspace (TauCeti.LinearPMap.addBounded A B) V)
+    (hUa : ∀ x : A.domain, (x : E) ∈ U → ⟪A x, (x : E)⟫_ℝ ≤ a * ‖(x : E)‖ ^ 2)
+    (hUb : ∀ x : A.domain, (x : E) ∈ Uᗮ → b * ‖(x : E)‖ ^ 2 ≤ ⟪A x, (x : E)⟫_ℝ)
+    (hab : a < b)
+    (hRmem : N.Mem (complexify (projectionBlock Uᗮ U B))) :
+    (∀ n : ℕ, (DavisKahan.sinTwoThetaIdealBlock U V).approximationNumber n < 1) ∧
+      (∀ n : ℕ,
+        (tanTwoDirectedCornerR U V).approximationNumber n =
+          Real.tan (Real.arcsin
+            ((DavisKahan.sinTwoThetaIdealBlock U V).approximationNumber n))) ∧
+      N.Mem (tanTwoDirectedCornerR U V) ∧
+      (b - a) * N.gauge (tanTwoDirectedCornerR U V) ≤
+        2 * N.gauge (complexify (projectionBlock Uᗮ U B)) := by
+  classical
+  have hsep : TopologicalSpace.SeparableSpace (RealComplexification E) :=
+    TauCeti.DavisKahan.RealSpectralRestriction.separableSpace_realComplexification (E := E)
+  have hAc : _root_.IsSelfAdjoint (TauCeti.LinearPMap.complexifyReal A) :=
+    TauCeti.LinearPMap.isSelfAdjoint_complexifyReal hA
+  have hRblock :
+      projectionBlock (complexifySubmodule U)ᗮ (complexifySubmodule U) (complexify B) =
+        complexify (projectionBlock Uᗮ U B) :=
+    projectionBlock_complexifySubmodule U B
+  have hRmemC : N.Mem
+      (projectionBlock (complexifySubmodule U)ᗮ (complexifySubmodule U) (complexify B)) := by
+    rw [hRblock]; exact hRmem
+  have hredC := reducesSubspace_complexifyReal hred
+  have hBC := isOddFor_complexifySubmodule hB
+  have hVC := reducesSubspace_addBounded_complexifyReal hV
+  have hUaC := re_inner_complexifyReal_le_of_forall_mem hUa
+  have hUbC := le_re_inner_complexifyReal_of_forall_mem_orthogonal hUb
+  obtain ⟨hlt, -, hmem, hle⟩ :=
+    tanTwoTheta_directed_unboundedResidual_sourceExact_complex
+      (complexifySubmodule U) (complexifySubmodule V) N hAc hredC hBC hVC hUaC hUbC hab hRmemC
+  -- the pole exclusion, read back over `ℝ`
+  have hV' := DavisKahan.ReflectionIntertwines.ofReducesSubspace hVC
+  have hS1 : ‖U.offDiagonalPart V.reflectionOperator‖ < 1 := by
+    rw [← norm_offDiagonalPart_reflectionOperator_complexifySubmodule]
+    exact norm_offDiagonalPart_lt_one_reducing_exact hAc hredC hBC
+      (TauCeti.DavisKahanExt.isSelfAdjoint_reflectionOperator _)
+      (TauCeti.DavisKahan.reflectionOperator_mul_self_complex _)
+      hV'.mapsDomain hV'.commutes hUaC hUbC hab
+  have hblock : ∀ n : ℕ,
+      (DavisKahan.sinTwoThetaIdealBlock (complexifySubmodule U)
+          (complexifySubmodule V)).approximationNumber n =
+        (DavisKahan.sinTwoThetaIdealBlock U V).approximationNumber n := by
+    intro n
+    rw [← DavisKahan.complexify_sinTwoThetaIdealBlock U V]
+    exact ComplexificationApproximation.approximationSingularValue_complexify
+      (DavisKahan.sinTwoThetaIdealBlock U V) n
+  change N.Mem (tanTwoDirectedCornerR U V) at hmem
+  change (b - a) * N.gauge (tanTwoDirectedCornerR U V) ≤
+    2 * N.gauge (projectionBlock (complexifySubmodule U)ᗮ (complexifySubmodule U)
+      (complexify B)) at hle
+  rw [hRblock] at hle
+  refine ⟨fun n => ?_, approximationNumber_tanTwoDirectedCornerR U V hS1, hmem, hle⟩
+  rw [← hblock n]
+  exact hlt n
 
 end DirectedSourceEndpointReal
 
