@@ -501,8 +501,39 @@ polar unitary of an accretive operator whose modulus is `G`. The conclusion
 > if `G ≥ 0` is injective and `W G + G W* ≥ 0` with `W` unitary, is
 > `W + W* ≥ 0`?
 
-which is true by a trace argument on any finite-dimensional spectral subspace of
-`W` where `re < 0`, and needs one more step in infinite dimensions.
+This simplifies further, and the simplified form is the right handoff.
+Conjugating the hypothesis by the unitary `W` gives a second one,
+
+```text
+W* (W G + G W*) W = G W + W* G ≥ 0,
+```
+
+and adding the two collapses `W` into its real part: writing `X = W + W*`,
+
+```text
+X G + G X ≥ 0,        G ≥ 0 injective,       X self-adjoint.
+```
+
+`Θ ≤ π/4` is exactly `X ≥ 0`. So the whole unbounded quarter-angle question is
+the classical Lyapunov implication
+
+> `X` self-adjoint, `G ≥ 0` injective, `X G + G X ≥ 0`  ⟹  `X ≥ 0`?
+
+**For invertible `G` this is a theorem**, and its proof is two lines:
+`G^(−1/2)(XG + GX)G^(−1/2) = Z + Z*` with `Z = G^(1/2) X G^(−1/2)`, so `Z` is
+accretive; `Z` is similar to `X`, so they have the same spectrum; and a
+self-adjoint operator with spectrum in the closed right half-plane has spectrum
+in `[0, ∞)`. Invertible `G` is exactly bounded `A`, which is why the bounded
+theorem is easy.
+
+For `G` merely injective the similarity is unbounded and spectra need not agree.
+What is settled: the implication holds whenever `X` has an actual eigenvector for
+a negative eigenvalue (`2λ⟪Gv,v⟫ ≥ 0` with `⟪Gv,v⟫ > 0` forces `λ ≥ 0`), and
+hence in finite dimensions and for any `X` with pure point spectrum. What is open
+is the purely-continuous negative spectrum case, where approximate eigenvectors
+`vₙ` may have `⟪G vₙ, vₙ⟫ → 0` fast enough to absorb the defect. Settle that
+question -- either way -- and unbounded Theorem 8.1's headline conclusion
+follows or the statement needs a further hypothesis.
 
 Candidate proof routes recorded in the repository may be useful, but none is mandatory.
 
