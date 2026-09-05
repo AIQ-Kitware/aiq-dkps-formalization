@@ -218,6 +218,39 @@ theorem gauge_comp_isometryEquiv (e : F ≃ₗᵢ[𝕜] G) (f : H ≃ₗᵢ[𝕜
       _ ≤ N.gauge B :=
           S.gaugeReal_comp_right_le _ hBmem (norm_isometryEquiv_le_one f.symm)
 
+/-- **A norm-one rank-one operator lies in the ideal.**
+
+This is not a separate assumption: the structure's one normalization field says
+the *real* gauge of such an operator is `1`, and the real gauge reads the stored
+`ℝ≥0∞` gauge through `toReal`, which sends `∞` to `0`.  A value of `1` therefore
+already rules out `∞`.
+
+It is what makes the class usable on the Section 2 equality models, whose
+residual and directed sine block are scalar multiples of a norm-one rank-one
+coordinate inclusion. -/
+theorem mem_rankOne {V : E →L[𝕜] F} (hVnorm : ‖V‖ = 1)
+    (hVrank : V.rank ≤ (1 : Cardinal)) : N.Mem V := by
+  intro htop
+  have h1 : N.gauge V = 1 := N.gauge_rankOne_eq_one hVnorm hVrank
+  rw [show N.gauge V
+      = (N.toKyFanDominantIdealFamily.toSymmetricOperatorIdealFamily.toOperatorIdealFamily.gauge
+          V).toReal from rfl, htop] at h1
+  simp at h1
+
+/-- Finite sums of members are members. -/
+theorem mem_finset_sum {ι : Type*} (s : Finset ι) {A : ι → E →L[𝕜] F}
+    (hA : ∀ i ∈ s, N.Mem (A i)) : N.Mem (∑ i ∈ s, A i) := by
+  classical
+  induction s using Finset.induction with
+  | empty =>
+      simp only [Finset.sum_empty]
+      exact N.toKyFanDominantIdealFamily.toSymmetricOperatorIdealFamily.zero_mem
+  | insert i s hi ih =>
+      rw [Finset.sum_insert hi]
+      exact N.toKyFanDominantIdealFamily.toSymmetricOperatorIdealFamily.add_mem
+        (hA i (Finset.mem_insert_self i s))
+        (ih fun j hj => hA j (Finset.mem_insert_of_mem hj))
+
 end NormalizedUnitaryInvariantNorm
 
 end

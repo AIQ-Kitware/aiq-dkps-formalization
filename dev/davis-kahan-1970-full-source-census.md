@@ -4,7 +4,7 @@
 
 **Census family:** `source-completion-census`  
 **Items:** 50  
-**Unique cited Lean declarations:** 1294
+**Unique cited Lean declarations:** 1308
 
 ## How to use this census
 
@@ -1252,7 +1252,7 @@ SOURCE-EXACT FAÇADES REGISTERED 2026-09-05. Canonical evidence for this row is 
 
 ### `S2-sharpness` — Best constants and simultaneous equality
 
-**importance:** `supporting`  **section:** 2  **source:** Section 2, paragraph after four theorems  **kind:** source_claim  **status:** `compiled_exact`  **verification:** `proved_in_build`  **completion:** `reopened_mapping`
+**importance:** `supporting`  **section:** 2  **source:** Section 2, paragraph after four theorems  **kind:** source_claim  **status:** `compiled_exact`  **verification:** `proved_in_build`  **completion:** `accepted`
 
 **Summary.** Each of the four Section 2 constants has an explicit admissible two-dimensional equality configuration.  For each theorem family independently, orthogonal direct sums are connected to the actual canonical subspace angle operators, giving simultaneous equality for every unitarily invariant seminorm as asserted by the source.
 
@@ -1320,6 +1320,20 @@ SOURCE-EXACT FAÇADES REGISTERED 2026-09-05. Canonical evidence for this row is 
 - `TauCeti.DavisKahan1970.normalizedUnitaryInvariant_of_symmetricNorming`
 - `TauCeti.DavisKahan1970.normalizedUnitaryInvariant_of_symmetricNorming_mul`
 - `TauCeti.DavisKahan.ExactSinTheta.NormalizedUnitaryInvariantNorm`
+- `TauCeti.DavisKahan.FiniteDimensional.tanTheta_constant_optimal`
+- `TauCeti.DavisKahan.FiniteDimensional.tanTwoTheta_constant_optimal`
+- `TauCeti.DavisKahan1970.SectionTwoSharpness.planar_equality_every_normalizedUnitaryInvariantNorm`
+- `TauCeti.DavisKahan1970.SectionTwoSharpness.planarSineBlock_gauge_pos_normalizedUnitaryInvariantNorm`
+- `TauCeti.DavisKahan1970.SectionTwoSharpness.sinTheta_constant_one_optimal_normalizedUnitaryInvariantNorm`
+- `TauCeti.DavisKahan1970.SectionTwoSharpness.finiteMultiplicityComplementMap_mem_normalizedUnitaryInvariantNorm`
+- `TauCeti.DavisKahan1970.SectionTwoSharpness.finiteMultiplicity_equality_every_normalizedUnitaryInvariantNorm`
+- `TauCeti.DavisKahan1970.SectionTwoSharpness.tendsto_sin_div_self`
+- `TauCeti.DavisKahan1970.SectionTwoSharpness.tendsto_tan_div_self`
+- `TauCeti.DavisKahan1970.SectionTwoSharpness.tendsto_sin_two_div_self`
+- `TauCeti.DavisKahan1970.SectionTwoSharpness.tendsto_tan_two_div_self`
+- `TauCeti.DavisKahan1970.SectionTwoSharpness.sectionTwo_firstOrder_asymptotics`
+- `TauCeti.DavisKahan.ExactSinTheta.NormalizedUnitaryInvariantNorm.mem_rankOne`
+- `TauCeti.DavisKahan1970.finiteMultiplicitySineBlock_injective`
 
 **Notes.** Sine sharpness and finite multiplicity are compiled; full quartet simultaneous equality remains in the Part III campaign.
 
@@ -1369,13 +1383,16 @@ AUDIT, corrected in place: `modelTanTwoThetaPerturbation`'s docstring stated the
 
 **COMPILER CERTIFIED 2026-08-10 (GPT-5.6 Sol; coordinator-confirmed).**  The remaining mechanical source wiring is compiled.  The planar tangent models are packaged as genuine admissible source-equality configurations; the stronger reflection-residual sin(2 Theta) bound is instantiated at its model; and orthogonal-block-sum compatibility is lifted from projectors and operator modulus through finite self-adjoint functional calculus to the canonical angle/tangent operators.  The resulting four direct-sum equality declarations are about explicit subspace pairs.  The row is now `compiled_exact` / `proved_in_build`.
 
-**Next action.** Hostile re-audit reopened this row. The hashed passage asserts optimal constants, two-dimensional equality models, direct-sum simultaneous equality for all unitary-invariant norms, and first-order sharpness. Existing sharpness machinery is richer than the current review mapping, but these separable claims are not individually certified.
+**ATOMIZATION CLOSED 2026-09-05.** The reopened hole asked for the four separable assertions of this passage to be certified individually rather than covered by a general appeal to the sharpness machinery.  They now are, and each is a compiled, axiom-clean declaration:
 
-**Blocked by:** `hostile-audit-atomization`
+* *optimal constants, all four families* -- `sinTheta_constant_optimal`, `sinTwoTheta_constant_optimal`, and the two added here, `tanTheta_constant_optimal` and `tanTwoTheta_constant_optimal`.  Only the two sine families had their constants pinned before; the source asserts optimality for all four, so the tangent families were a real gap rather than a mapping gap.
+* *two-dimensional equality* -- `model_all_four_equalities`, one planar configuration saturating all four families for every unitarily invariant seminorm, together with `planar_equality_every_normalizedUnitaryInvariantNorm`, which restates the sine case on an arbitrary Hilbert space over `NormalizedUnitaryInvariantNorm`, the Lean type for the source's literal norm class.
+* *direct sums, simultaneously for all unitary-invariant norms* -- `directSum_model_all_four_equalities` (two blocks, two independent angles, all four families) and `finiteMultiplicity_equality_every_normalizedUnitaryInvariantNorm` (`m` blocks over the literal norm class; `finiteMultiplicitySineBlock_injective` shows the model is genuinely multiplicity-`m` and not scalar homogeneity in disguise).
+* *first-order asymptotics* -- `single_double_sine_tangent_ratios_tendsto_one` and `sectionTwo_firstOrder_asymptotics`, which gives the first-order constants of all four angle functionals (`1, 1, 2, 2`) rather than only the two sine/tangent ratios.
 
-**Completion holes:**
+The passage remains **outside the 29-result denominator**: it is sharpness commentary, not a designated theorem environment, and every atom keeps `formalization_role: non_result`.  Proving it changes no completion arithmetic; it answers the reviewer question of whether mathematics Davis and Kahan actually assert was quietly dropped.
 
-- {'kind': 'audit_atomization', 'detail': 'The hashed passage asserts optimal constants, two-dimensional equality models, direct-sum simultaneous equality for all unitary-invariant norms, and first-order sharpness. Existing sharpness machinery is richer than the current review mapping, but these separable claims are not individually certified.'}
+**Next action.** None. The four assertions of the hashed passage are individually bound to compiled declarations; see the atom inventory's `formalization_role_reason` for the per-assertion map.
 
 ### `S2-unbounded-scope` — Unbounded self-adjoint scope
 
