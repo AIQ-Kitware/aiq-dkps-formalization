@@ -4,7 +4,7 @@
 
 **Census family:** `source-completion-census`  
 **Items:** 50  
-**Unique cited Lean declarations:** 1308
+**Unique cited Lean declarations:** 1311
 
 ## How to use this census
 
@@ -3236,7 +3236,7 @@ SOURCE-EXACT FAÇADE REGISTERED 2026-09-05. Canonical evidence is now the printe
 
 ### `DK-5.1-thm` — Banach-space Sylvester lower bound
 
-**importance:** `major`  **section:** 5  **source:** Theorem 5.1  **kind:** theorem  **status:** `compiled_exact`  **verification:** `proved_in_build`  **completion:** `reopened_mapping`
+**importance:** `major`  **section:** 5  **source:** Theorem 5.1  **kind:** theorem  **status:** `compiled_exact`  **verification:** `proved_in_build`  **completion:** `accepted`
 
 **Summary.** Under a norm bound on B and an inverse norm bound on A, AX-XB=C implies ||C|| >= delta ||X|| for any compatible operator norm.
 
@@ -3320,13 +3320,9 @@ REOPENED 2026-08-31 by the scope-atom re-audit: a source passage that explicitly
 
 REOPENING WITHDRAWN 2026-08-31 and the rule corrected: a later source passage enlarges a counted result only when it is needed to determine what Davis and Kahan actually claim in it. An extension, variant or consequence they mention without introducing and proving it as a result of its own is `result_adjacent_extension` fidelity material. The Lean coverage produced during the reopening is kept as supporting evidence.
 
-**Next action.** Hostile re-audit reopened this row. The source block includes the Banach-space inverse-norm form, A/B interchange, and unbounded-left extension. The repository contains strong infrastructure and literal wrappers, but the audit row does not atomically show that every printed clause is represented at real/complex source scope.
+**MAPPING CLOSED 2026-09-05.** The hole read: the source block includes the Banach-space inverse-norm form, A/B interchange, and unbounded-left extension, and the audit row did not atomically show that every printed clause is represented.  The row's single `.whole` clause is now split into exactly those three, each bound to the declarations that already carried it.  On scalar scope: these statements are generic over `RCLike 𝕜`, which is stronger than the real-and-complex reading the source needs, so no separate real and complex clauses are warranted -- a fixed-field pair would state strictly less than what is proved.  The passage's closing sentence, pointing forward to a result allowing unbounded behaviour on both sides, is a forward reference to Theorem 5.2 and is certified on row DK-5.2-thm rather than duplicated here.
 
-**Blocked by:** `hostile-audit-atomization`
-
-**Completion holes:**
-
-- {'kind': 'audit_mapping', 'detail': 'The source block includes the Banach-space inverse-norm form, A/B interchange, and unbounded-left extension. The repository contains strong infrastructure and literal wrappers, but the audit row does not atomically show that every printed clause is represented at real/complex source scope.'}
+**Next action.** None. The three printed clauses -- bound, interchange, unbounded left -- are bound individually in the statement map.
 
 ### `DK-5-hermitian-inequalities` — Square-norm and rank-corrected Sylvester inequalities
 
@@ -3377,7 +3373,7 @@ The first hole asked for a source-facing theorem for "(5.2) is not best possible
 
 ### `DK-5.2-thm` — Semibounded self-adjoint Sylvester theorem
 
-**importance:** `major`  **section:** 5  **source:** Theorem 5.2  **kind:** theorem  **status:** `compiled_exact`  **verification:** `proved_in_build`  **completion:** `reopened_mapping`
+**importance:** `major`  **section:** 5  **source:** Theorem 5.2  **kind:** theorem  **status:** `compiled_exact`  **verification:** `proved_in_build`  **completion:** `accepted`
 
 **Summary.** For A >= gamma+delta > gamma >= B, a bounded solution of AX=XB+C satisfies the sharp UI-norm inequality.
 
@@ -3454,13 +3450,9 @@ REOPENING WITHDRAWN 2026-08-31 and the rule corrected: a later source passage en
 
 SOURCE-EXACT FAÇADE REGISTERED 2026-09-05. Canonical evidence is now the printed-scope façade -- separable Hilbert space and the literal `NormalizedUnitaryInvariantNorm` class -- with the arbitrary-Hilbert `SymmetricNormingFunction` theorem retained beneath it as a registered generalization. See GOAL.md sections I, III.3 and IV.
 
-**Next action.** Hostile re-audit reopened this row. The theorem appears available in both scalar fields, but primary evidence is not explicitly bound clause-by-clause to the paper's full real/complex source scope.
+**MAPPING CLOSED 2026-09-05.** The hole read: the theorem appears available in both scalar fields, but primary evidence is not explicitly bound clause-by-clause to the paper's full real/complex source scope.  The row now carries one clause per scalar field plus a clause for the printed norm quantifier, so a reviewer can check the real branch without inferring it from the complex one.  The real branch is not an instance of the complex statement: `NormalizedUnitaryInvariantNorm 𝕜` is per-scalar.
 
-**Blocked by:** `hostile-audit-atomization`
-
-**Completion holes:**
-
-- {'kind': 'audit_mapping', 'detail': "The theorem appears available in both scalar fields, but primary evidence is not explicitly bound clause-by-clause to the paper's full real/complex source scope."}
+**Next action.** None. Real and complex branches and the norm class are bound separately.
 
 ### `DK-5.1-lem` — Strong-cutoff convergence of singular values
 
@@ -3521,7 +3513,7 @@ with no finite-dimensionality hypothesis.  `HasMinMaxLowerBoundEverywhere` has i
 
 ### `DK-6.1-prop` — Sine proof, ambient limitation, and symmetric sine theorem
 
-**importance:** `supporting`  **section:** 6  **source:** Section 6 sine proof and Proposition 6.1  **kind:** proposition  **status:** `compiled_exact`  **verification:** `proved_in_build`  **completion:** `reopened_mapping`
+**importance:** `supporting`  **section:** 6  **source:** Section 6 sine proof and Proposition 6.1  **kind:** proposition  **status:** `compiled_exact`  **verification:** `proved_in_build`  **completion:** `accepted`
 
 **Summary.** Two complementary source gap hypotheses give the full sine-angle inequality with perturbation H.
 
@@ -3541,6 +3533,11 @@ with no finite-dimensionality hypothesis.  `HasMinMaxLowerBoundEverywhere` has i
 - `TauCeti.DavisKahan1970.proposition6_1_commonDomain_real`
 - `TauCeti.DavisKahan1970.proposition6_1_commonDomain`
 - `TauCeti.DavisKahan1970.proposition6_1_real_commonDomain`
+- `TauCeti.DavisKahan.ExactSinTheta.counterexample_sine_square_norm`
+- `TauCeti.DavisKahan.ExactSinTheta.counterexample_perturbation_square_norm`
+- `TauCeti.DavisKahan.ExactSinTheta.oneGap_does_not_imply_symmetric_square_estimate`
+- `TauCeti.DavisKahan1970.theorem5_2_sourceExact_complex`
+- `TauCeti.DavisKahan1970.theorem5_2_sourceExact_real`
 
 **Notes.** Complex and real source forms are compiled.
 
@@ -3561,13 +3558,9 @@ REOPENED 2026-08-31 by the scope-atom re-audit: a source passage that explicitly
 
 REOPENING WITHDRAWN 2026-08-31 and the rule corrected: a later source passage enlarges a counted result only when it is needed to determine what Davis and Kahan actually claim in it. An extension, variant or consequence they mention without introducing and proving it as a result of its own is `result_adjacent_extension` fidelity material. The Lean coverage produced during the reopening is kept as supporting evidence.
 
-**Next action.** Hostile re-audit reopened this row. The source block contains the Sylvester identity (6.1), Proposition 6.1, and an explicit 2x2 counterexample showing the ambient one-sided sine conclusion fails. The counterexample exists elsewhere but is not registered as evidence for this row.
+**ATOMIZATION CLOSED 2026-09-05.** The hole read: the source block contains the Sylvester identity (6.1), Proposition 6.1, and an explicit 2x2 counterexample showing the ambient one-sided sine conclusion fails; the counterexample exists elsewhere but is not registered as evidence for this row.  It is registered now.  `counterexample_sine_square_norm` gives the printed `2 * ||sin Theta||_sq = 2`, `counterexample_perturbation_square_norm` gives `||H||_sq = sqrt 3`, and `oneGap_does_not_imply_symmetric_square_estimate` is the printed strict inequality: one directional gap of width 2 does NOT give the symmetric square-norm estimate.  The Sylvester step is proof-only -- classified `proof_only` at the atom level -- and its content is Theorem 5.2 applied to the residual block, so the clause cites the Theorem 5.2 source-exact witnesses rather than manufacturing a separate obligation for a proof equation.
 
-**Blocked by:** `hostile-audit-atomization`
-
-**Completion holes:**
-
-- {'kind': 'audit_mapping', 'detail': 'The source block contains the Sylvester identity (6.1), Proposition 6.1, and an explicit 2x2 counterexample showing the ambient one-sided sine conclusion fails. The counterexample exists elsewhere but is not registered as evidence for this row.'}
+**Next action.** None. The passage is split into three clauses -- the proof's Sylvester step, the printed 2x2 counterexample, and Proposition 6.1 -- each bound to evidence in the statement map.
 
 ### `DK-6.1-thm` — Generalized sine theorem
 
@@ -3637,7 +3630,7 @@ REOPENING WITHDRAWN 2026-08-31 and the rule corrected: a later source passage en
 
 ### `DK-6.2-thm` — Pairwise-gap square-norm sine theorem
 
-**importance:** `supporting`  **section:** 6  **source:** Theorem 6.2  **kind:** theorem  **status:** `compiled_exact`  **verification:** `proved_in_build`  **completion:** `reopened_mapping`
+**importance:** `supporting`  **section:** 6  **source:** Theorem 6.2  **kind:** theorem  **status:** `compiled_exact`  **verification:** `proved_in_build`  **completion:** `accepted`
 
 **Summary.** Arbitrary pairwise spectral distance gives the sharp Hilbert–Schmidt/square-norm residual bound.
 
@@ -3675,13 +3668,9 @@ CANONICAL SURFACE MOVED OFF THE RECORD 2026-08-31. As for Theorem 6.1, with the 
 
 REOPENING WITHDRAWN 2026-08-31 and the rule corrected: a later source passage enlarges a counted result only when it is needed to determine what Davis and Kahan actually claim in it. An extension, variant or consequence they mention without introducing and proving it as a result of its own is `result_adjacent_extension` fidelity material. The Lean coverage produced during the reopening is kept as supporting evidence.
 
-**Next action.** Hostile re-audit reopened this row. The source passage contains both the Hilbert--Schmidt theorem and its rank-corrected operator-norm consequence. Exact rank-consequence declarations exist but are not mapped into the row's semantic audit clauses.
+**MAPPING CLOSED 2026-09-05.** The hole read: the source passage contains both the Hilbert--Schmidt theorem and its rank-corrected operator-norm consequence, and exact rank-consequence declarations exist but are not mapped into the row's semantic audit clauses.  They are mapped now.  `Theorem62Data.operatorNorm_result_across_of_rank_le` and its real sibling state exactly the printed consequence -- `gap * frameLowerBound * ||sin Theta|| <= ||R|| * sqrt r` under `rank R <= r` -- and were already registered on the row's `lean_declarations` while carrying no audit clause of their own.  A declaration listed but not bound to a clause is invisible to a clause-by-clause reviewer, which is what the hole was about.
 
-**Blocked by:** `hostile-audit-atomization`
-
-**Completion holes:**
-
-- {'kind': 'audit_mapping', 'detail': "The source passage contains both the Hilbert--Schmidt theorem and its rank-corrected operator-norm consequence. Exact rank-consequence declarations exist but are not mapped into the row's semantic audit clauses."}
+**Next action.** None. The passage is split into its two printed conclusions -- the Hilbert--Schmidt bound and the rank-corrected operator-norm consequence -- each bound to evidence in the statement map.
 
 ### `DK-6.3-thm` — Tangent proof machinery, Example 6.1, and generalized tangent theorem
 
