@@ -256,7 +256,7 @@ Compare the inference-transfer theorems and Appendix assumptions with their Lean
 
 **Notes.** This discrepancy belongs to the bridge, not the abstract Theorem1/Theorem2 transfer once Equation (3) is assumed.
 
-**Next action.** Fiber Acharyya2024.rawStress_mds_stability over the latent sample to discharge the distance-convergence hypothesis.
+**Next action.** Prove a random-target form of `Acharyya2024.fixed_models_fixed_queries_consistency_of_exactRealization`: the same statement with `DeltaInf` measurable in the latent coordinate and the conclusion taken in the product measure. Diagnosed 2026-09-05: all eleven Acharyya 2024 stability theorems take a deterministic `DeltaInf`, so the fibering is the missing theorem rather than a step. The exact-realization ancestor is the right one because its realizability hypothesis is free when the target is the latent configuration's own distance matrix, which discharges the profile-uniqueness premise for nothing.
 
 **Gap refs:** `bridge-distance-input-not-fibered`, `rigid-motion-engine-now-available`
 
