@@ -4,7 +4,7 @@
 
 **Census family:** `source-semantic-alignment`  
 **Items:** 19  
-**Unique cited Lean declarations:** 29
+**Unique cited Lean declarations:** 30
 
 Numbered main-text results and the numbered appendix perturbation propositions/lemmas. Empirical claims are excluded. Exact appendix wrappers are distinguished from a replacement proof so theorem coverage is not inflated.
 
@@ -116,6 +116,7 @@ Retained from the earlier audit: the YWS population-gap and alignment theorems r
 
 **Lean declarations:**
 
+- `Acharyya2025.GrowingResponse.prob_cmdsEntrywiseClose_ge_of_secondMoment`
 - `Acharyya2025.Bridge.EntrywiseClose`
 - `Acharyya2025.Bridge.entrywise_close_to_cmds_entrywise_close_of_bounded`
 - `Acharyya2025.GrowingResponse.highProb_uniformResponseMeanClose_of_growing_iid_replicates_paperScale`
@@ -128,7 +129,9 @@ Retained from the earlier audit: the YWS population-gap and alignment theorems r
 
 **Notes.** The finite probability step is prob_uniformResponseMeanClose_ge_of_secondMoment; the corrected chain is that step composed with the bounded entrywise bridge.
 
-**Next action.** Optionally state the corrected finite bound -- the printed one with the entrywise dissimilarity bound R inserted -- as one source-facing theorem.
+STATED AS ONE THEOREM 2026-09-05.  `prob_cmdsEntrywiseClose_ge_of_secondMoment` is the corrected finite bound as a single source-facing declaration: the paper's own Chebyshev-plus-union probability bound `1 - n sigma^2 / eta^2`, delivering entrywise closeness of the classical-MDS matrices at `cmdsEntrywiseRate n m (responseDistBound m (B + eta)) eta`.  The entrywise dissimilarity bound the printed theorem omits is carried by `B`, a bound on the POPULATION response norms only; the sample responses are controlled on the event itself by `norm_le_add_of_uniformResponseMeanClose`, so no all-outcomes hypothesis on the random sample is required.  `Theorem1Scale.prob_entrywiseClose_lt_paper_bound` remains the compiled refutation of the printed form, which is what makes this a repair and not a restatement.
+
+**Next action.** None. The corrected finite bound is one declaration; the printed form stays refuted. What is deliberately NOT claimed is the paper's constant 16 and its 1/(rm) scaling: those arise from a passage the printed proof does not justify without a dissimilarity bound, and the repair carries the bound instead of the constant.
 
 **Gap refs:** `normalisation-pinned-by-theorem1-constant`, `t1-literal-finite-wrapper`
 

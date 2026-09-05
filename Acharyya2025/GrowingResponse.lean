@@ -481,6 +481,62 @@ theorem cmdsEntrywise_of_responseMeanClose_of_population_norm
   · exact fun i => norm_le_add_of_uniformResponseMeanClose hmean hμ i
   · exact fun i => (hμ i).trans (le_add_of_nonneg_right hη)
 
+/-! ## Theorem 1, corrected: the finite bound with the dissimilarity bound explicit
+
+Acharyya 2025 Theorem 1 prints a finite lower bound on the probability that every entry of
+the sample doubly centred matrix is within a tolerance of its population counterpart, with no
+hypothesis bounding the dissimilarities.  **As printed it is false**:
+`Theorem1Scale.prob_entrywiseClose_lt_paper_bound` exhibits `n = 2`, `m = p = r = 1`, two
+population means `0` and `20`, and response variability `1`, where the printed bound claims
+probability at least `9/25` and the event is empty.  Pushing the two models apart makes every
+sample value of the diagonal entry at least `9.75` away from the population value, at a
+tolerance of `5`; nothing in the printed hypotheses forbids that.
+
+The correction is not a smaller constant.  It is that the passage from response means to
+entries of the doubly centred matrix costs a factor proportional to the **size of the
+dissimilarities**, because squaring is Lipschitz only on a bounded range.  The theorem below
+is the printed statement with that bound carried: the probability bound is the paper's
+Chebyshev-plus-union bound unchanged, and the tolerance it delivers is
+`cmdsEntrywiseRate n m (responseDistBound m (B + η)) η`, in which `B` bounds the population
+response norms and `η` is the response-mean tolerance the probability bound is stated at.
+
+`B` is a bound on the *population* responses only.  The sample responses are controlled on the
+event itself, by `norm_le_add_of_uniformResponseMeanClose`, so no all-outcomes hypothesis on
+the random sample is needed -- which matters, because such a hypothesis would not be available
+in the source's own setting. -/
+
+/-- **Acharyya 2025, Theorem 1, corrected.**
+
+With probability at least `1 - n σ² / η²`, every entry of the sample classical-MDS matrix is
+within `cmdsEntrywiseRate n m (responseDistBound m (B + η)) η` of its population counterpart.
+
+The probability bound is the paper's own: Chebyshev on each model's squared response error,
+union-bounded over the `n` models.  What the paper omits, and what makes its printed statement
+false, is the dependence of the entrywise tolerance on a bound for the dissimilarities;
+`B` supplies it, through the response-norm bound it gives on the event.
+
+`Theorem1Scale.prob_entrywiseClose_lt_paper_bound` is the compiled refutation of the printed
+form, and is what makes this a repair rather than a restatement. -/
+theorem prob_cmdsEntrywiseClose_ge_of_secondMoment
+    (P : Measure Ω) [IsProbabilityMeasure P]
+    {n m p : Nat} (hn : 0 < n)
+    (Xbar μ : Ω → Fin n → Mat m p)
+    {σ2 η B : Real} (hη : 0 < η)
+    (hint : ∀ i, Integrable (fun ω => ‖Xbar ω i - μ ω i‖ ^ 2) P)
+    (hσ2 : ∀ i, ∫ ω, ‖Xbar ω i - μ ω i‖ ^ 2 ∂P ≤ σ2)
+    (hμ : ∀ ω i, ‖μ ω i‖ ≤ B) :
+    1 - ENNReal.ofReal ((n : Real) * σ2 / η ^ 2)
+      ≤ P {ω | EntrywiseClose
+          (classicalMDSMatrix (responseDist (Xbar ω)))
+          (classicalMDSMatrix (responseDist (μ ω)))
+          (cmdsEntrywiseRate n m (responseDistBound m (B + η)) η)} := by
+  refine le_trans
+    (prob_uniformResponseMeanClose_ge_of_secondMoment P Xbar μ σ2 η hη hint hσ2) ?_
+  refine measure_mono ?_
+  intro ω hω
+  exact cmdsEntrywise_of_responseMeanClose_of_population_norm hn (Xbar ω) (μ ω)
+    hη.le hω (hμ ω)
+
 /-- High-probability stage-dependent response-mean concentration propagates to
 stage-dependent CMDS-entrywise concentration. -/
 theorem highProb_cmdsEntrywise_of_growing_response_mean
