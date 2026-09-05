@@ -360,8 +360,7 @@ theorem truncatedTrial_sub_geometricTrial_apply {μ : ℝ} (hμ0 : 0 ≤ μ) (h�
       = if n < N then 0 else -(μ ^ n) := by
   rw [lp.coeFn_sub]
   by_cases hn : n < N <;>
-    simp [hn, truncatedTrial_apply, geometricTrial_apply, truncatedTrialSequence,
-      geometricTrialSequence]
+    simp [hn, truncatedTrial_apply, geometricTrial_apply, truncatedTrialSequence]
 
 /-- The truncation error has squared norm the geometric tail `μ^{2N}/(1-μ²)`. -/
 theorem truncatedTrial_sub_geometricTrial_hasSum_sq {μ : ℝ} (hμ0 : 0 ≤ μ) (hμ1 : μ < 1)
@@ -379,13 +378,13 @@ theorem truncatedTrial_sub_geometricTrial_hasSum_sq {μ : ℝ} (hμ0 : 0 ≤ μ)
     rw [truncatedTrial_sub_geometricTrial_apply hμ0 hμ1 N n, hd]
     by_cases hn : n < N
     · simp [hn]
-    · simp [hn, neg_pow, ← pow_mul, ← pow_mul, mul_comm]
+    · simp [hn, ← pow_mul, ← pow_mul, mul_comm]
   rw [hcoord]
   have hshift : HasSum (fun n => d (n + N)) ((μ ^ 2) ^ N * (1 - μ ^ 2)⁻¹) := by
     have hgeo := (hasSum_geometric_of_lt_one hnn hlt).mul_left ((μ ^ 2) ^ N)
     refine hgeo.congr_fun fun n => ?_
     rw [hd]
-    simp only [add_lt_iff_neg_left, not_lt, Nat.not_lt, if_neg (by omega : ¬ n + N < N)]
+    simp only [ite_eq_right (by omega : ¬ n + N < N)]
     rw [pow_add, mul_comm]
   have hzero : ∑ i ∈ Finset.range N, d i = 0 := by
     refine Finset.sum_eq_zero fun i hi => ?_
