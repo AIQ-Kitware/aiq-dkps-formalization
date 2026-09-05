@@ -9,6 +9,7 @@ import DavisKahan.InfiniteDimensional.Riccati.BoundedSpectralTransport
 import DavisKahan.SinTheta.FrameFactorization
 import ForTauCeti.Analysis.InnerProductSpace.CoerciveUnit
 import ForTauCeti.Analysis.InnerProductSpace.BorelCalculus.DiagonalMeasure
+import DavisKahan.SpectralTheory.OperatorAngle
 
 open TauCeti.DavisKahan.Angle
 
@@ -698,6 +699,127 @@ theorem isQuarterAcute_of_orderedFormGap
     have hsqle := pow_le_pow_left₀ hthresholdPos.le hle 2
     rw [hthresholdSq] at hsqle
     exact (not_le_of_gt hDsq) hsqle
+
+/-! ### The non-strict quarter angle, and why it is stated separately
+
+`isQuarterAcute_of_orderedFormGap` concludes `subspaceGap U V < √2/2`, strictly.
+That is stronger than Davis and Kahan's printed `Θ ≤ π/4`, and the strictness is
+paid for with the constant `α = δ / (1 + ‖C‖)`, which degenerates as `‖A‖ → ∞`.
+
+The printed conclusion needs only the *non-strict* bound, and that follows from
+the reflection product being positive with no constant at all.  Everything below
+is the last third of the bounded proof with `α = 0`, extracted so that an
+unbounded argument can reach the source conclusion without reproducing the part
+that does not survive. -/
+
+omit [CompleteSpace E] in
+/-- **The reflection product's real part, in terms of the projector
+difference.**  `K J + J K = 2 - 4 (P_U - P_V)²`. -/
+theorem reflectionProduct_add_swap_eq
+    (U V : Submodule ℂ E)
+    [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] :
+    reflectionOperator V * reflectionOperator U
+        + reflectionOperator U * reflectionOperator V =
+      (2 : ℂ) • (1 : E →L[ℂ] E) -
+        (4 : ℂ) • ((U.starProjection - V.starProjection) *
+          (U.starProjection - V.starProjection)) := by
+  apply ContinuousLinearMap.ext
+  intro x
+  simp only [add_apply, sub_apply, smul_apply, one_apply_eq_self,
+    mul_apply_eq_comp]
+  have hKJ :
+      reflectionOperator V (reflectionOperator U x) =
+        (4 : ℂ) • V.starProjection (U.starProjection x) -
+          (2 : ℂ) • V.starProjection x -
+          (2 : ℂ) • U.starProjection x + x := by
+    rw [reflectionOperator_apply V, reflectionOperator_apply U]
+    simp only [map_sub, map_smul]
+    module
+  have hJK :
+      reflectionOperator U (reflectionOperator V x) =
+        (4 : ℂ) • U.starProjection (V.starProjection x) -
+          (2 : ℂ) • U.starProjection x -
+          (2 : ℂ) • V.starProjection x + x := by
+    rw [reflectionOperator_apply U, reflectionOperator_apply V]
+    simp only [map_sub, map_smul]
+    module
+  have hPU : U.starProjection (U.starProjection x) = U.starProjection x :=
+    Submodule.starProjection_eq_self_iff.mpr (U.starProjection_apply_mem x)
+  have hPV : V.starProjection (V.starProjection x) = V.starProjection x :=
+    Submodule.starProjection_eq_self_iff.mpr (V.starProjection_apply_mem x)
+  have hDDx :
+      U.starProjection (U.starProjection x - V.starProjection x) -
+          V.starProjection (U.starProjection x - V.starProjection x) =
+        U.starProjection x - U.starProjection (V.starProjection x) -
+          V.starProjection (U.starProjection x) + V.starProjection x := by
+    simp only [map_sub, hPU, hPV]
+    abel
+  rw [hKJ, hJK, hDDx]
+  module
+
+/-- **`Θ ≤ π/4` from a positive reflection product.**
+
+Davis--Kahan's printed Section 8 conclusion, in projector form: if the real part
+of `K J` is nonnegative -- equivalently `K J + J K ≥ 0` -- then
+`‖P_U − P_V‖ ≤ √2/2`.
+
+No constant appears anywhere, which is exactly why this survives to unbounded
+scope where `isQuarterAcute_of_orderedFormGap`'s strict bound does not. -/
+theorem subspaceGap_le_of_reflectionProduct_form_nonneg
+    (U V : Submodule ℂ E)
+    [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
+    (h : ∀ x : E, 0 ≤ RCLike.re ⟪(reflectionOperator V * reflectionOperator U
+      + reflectionOperator U * reflectionOperator V) x, x⟫_ℂ) :
+    subspaceGap U V ≤ Real.sqrt 2 / 2 := by
+  obtain ⟨D, hDdef⟩ : ∃ D : E →L[ℂ] E, D = U.starProjection - V.starProjection := ⟨_, rfl⟩
+  have hDstar : IsSelfAdjoint D := by
+    rw [hDdef]
+    exact (isSelfAdjoint_starProjection U).sub (isSelfAdjoint_starProjection V)
+  have hpoint : ∀ x : E, ‖D x‖ ^ 2 ≤ (1 / 2 : ℝ) * ‖x‖ ^ 2 := by
+    intro x
+    have hx := h x
+    rw [reflectionProduct_add_swap_eq U V, ← hDdef] at hx
+    have hval : ((2 : ℂ) • (1 : E →L[ℂ] E) - (4 : ℂ) • (D * D)) x
+        = (2 : ℂ) • x - (4 : ℂ) • D (D x) := by
+      simp only [sub_apply, smul_apply, one_apply_eq_self, mul_apply_eq_comp]
+    rw [hval, inner_sub_left, map_sub, inner_smul_left, inner_smul_left] at hx
+    have hDsq : RCLike.re ⟪D (D x), x⟫_ℂ = ‖D x‖ ^ 2 := by
+      calc RCLike.re ⟪D (D x), x⟫_ℂ = RCLike.re ⟪(star D) (D x), x⟫_ℂ := by
+            rw [hDstar.star_eq]
+        _ = RCLike.re ⟪D x, D x⟫_ℂ := by
+            rw [ContinuousLinearMap.star_eq_adjoint,
+              ContinuousLinearMap.adjoint_inner_left]
+        _ = ‖D x‖ ^ 2 := by rw [inner_self_eq_norm_sq]
+    have htwo : RCLike.re ((starRingEnd ℂ) (2 : ℂ) * ⟪x, x⟫_ℂ) = 2 * ‖x‖ ^ 2 := by
+      simpa using re_conj_real_mul_inner_self (E := E) 2 x
+    have hfour : RCLike.re ((starRingEnd ℂ) (4 : ℂ) * ⟪D (D x), x⟫_ℂ) =
+        4 * RCLike.re ⟪D (D x), x⟫_ℂ := re_conj_real_mul 4 ⟪D (D x), x⟫_ℂ
+    rw [htwo, hfour, hDsq] at hx
+    linarith
+  have hDnorm : ‖D‖ ≤ Real.sqrt (1 / 2 : ℝ) :=
+    opNorm_le_sqrt_of_sq_apply_le D (by norm_num) hpoint
+  have hsqrt : Real.sqrt (1 / 2 : ℝ) = Real.sqrt 2 / 2 := by
+    rw [show (1 / 2 : ℝ) = 2 / 2 ^ 2 by norm_num, Real.sqrt_div' 2 (by norm_num),
+      Real.sqrt_sq (by norm_num : (0 : ℝ) ≤ 2)]
+  change ‖U.starProjection - V.starProjection‖ ≤ Real.sqrt 2 / 2
+  rw [← hDdef, ← hsqrt]
+  exact hDnorm
+
+/-- **`Θ ≤ π/4` in the printed angle form.** -/
+theorem maximalAngle_le_pi_div_four_of_reflectionProduct_form_nonneg
+    (U V : Submodule ℂ E)
+    [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
+    (h : ∀ x : E, 0 ≤ RCLike.re ⟪(reflectionOperator V * reflectionOperator U
+      + reflectionOperator U * reflectionOperator V) x, x⟫_ℂ) :
+    TauCeti.DavisKahanExt.maximalAngle U V ≤ Real.pi / 4 := by
+  have hle := subspaceGap_le_of_reflectionProduct_form_nonneg U V h
+  have hpi : Real.arcsin (Real.sqrt 2 / 2) = Real.pi / 4 := by
+    rw [← Real.sin_pi_div_four]
+    exact Real.arcsin_sin (by linarith [Real.pi_pos]) (by linarith [Real.pi_pos])
+  calc TauCeti.DavisKahanExt.maximalAngle U V
+      = Real.arcsin (subspaceGap U V) := rfl
+    _ ≤ Real.arcsin (Real.sqrt 2 / 2) := Real.arcsin_le_arcsin hle
+    _ = Real.pi / 4 := hpi
 
 end
 
