@@ -112,6 +112,7 @@ open TauCeti.DavisKahan
 open TauCeti.RealComplexification
 open TauCeti.DavisKahan.Foundation
 open TauCeti.DavisKahan.Foundation.RealComplexification
+open scoped TauCeti.CompleteSubspace
 
 noncomputable section
 
@@ -119,15 +120,6 @@ universe v
 
 variable {E : Type v} [NormedAddCommGroup E] [InnerProductSpace ℝ E]
   [CompleteSpace E]
-
-/-- A projected subspace of a complete Hilbert space is complete.  The real
-Theorem 8.2 residual is rectangular, so the source norm API needs this both for
-the real trial space and for its complexified image. -/
-local instance instCompleteSpaceCoeOfHasOrthogonalProjectionSection8SourceReal
-    {𝕜 : Type*} [RCLike 𝕜] {G : Type*} [NormedAddCommGroup G]
-    [InnerProductSpace 𝕜 G] [CompleteSpace G]
-    (U : Submodule 𝕜 G) [U.HasOrthogonalProjection] : CompleteSpace U :=
-  (Submodule.isComplete_coe_of_hasOrthogonalProjection U).completeSpace_coe
 
 /-! ### 1. The printed residual complexifies -/
 

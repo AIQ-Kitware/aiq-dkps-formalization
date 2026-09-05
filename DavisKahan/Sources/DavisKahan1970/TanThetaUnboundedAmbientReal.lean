@@ -69,6 +69,7 @@ open TauCeti.DavisKahan.TanTheta
 open TauCeti.ApproximationNumber
 open TauCeti.RealComplexification
 open TauCeti.DavisKahan.Foundation.RealComplexification
+open scoped TauCeti.CompleteSubspace
 
 noncomputable section
 
@@ -76,12 +77,6 @@ universe v
 
 variable {E : Type v} [NormedAddCommGroup E] [InnerProductSpace ℝ E]
   [CompleteSpace E]
-
-local instance instCompleteSpaceCoeOfHasOrthogonalProjectionUnboundedAmbientReal
-    {k : Type*} [RCLike k] {G : Type v} [NormedAddCommGroup G]
-    [InnerProductSpace k G] [CompleteSpace G]
-    (Z : Submodule k G) [Z.HasOrthogonalProjection] : CompleteSpace Z :=
-  (Submodule.isComplete_coe_of_hasOrthogonalProjection Z).completeSpace_coe
 
 variable {U V : Submodule ℝ E} [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
 

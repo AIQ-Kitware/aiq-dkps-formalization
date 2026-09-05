@@ -43,6 +43,7 @@ open TauCeti.DavisKahan
 open TauCeti.DavisKahan.ExactSinTheta
 
 open scoped InnerProductSpace
+open scoped TauCeti.CompleteSubspace
 
 noncomputable section
 
@@ -51,14 +52,6 @@ universe u v
 variable {𝕜 : Type u} [RCLike 𝕜]
 variable {H : Type v} [NormedAddCommGroup H] [InnerProductSpace 𝕜 H]
   [CompleteSpace H]
-
-/-- A subspace admitting an orthogonal projection inside a complete ambient
-space is itself complete.  `local instance` does not propagate through imports,
-so it is reinstalled here. -/
-local instance instCompleteSpaceCoeOfHasOrthogonalProjectionTrialReflection
-    {G : Type v} [NormedAddCommGroup G] [InnerProductSpace 𝕜 G] [CompleteSpace G]
-    (U : Submodule 𝕜 G) [U.HasOrthogonalProjection] : CompleteSpace U :=
-  (Submodule.isComplete_coe_of_hasOrthogonalProjection U).completeSpace_coe
 
 section TrialReflection
 

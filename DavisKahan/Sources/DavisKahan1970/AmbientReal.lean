@@ -83,6 +83,7 @@ open TauCeti.DavisKahan.Foundation
 open TauCeti.DavisKahan.Foundation.RealComplexification
 
 open scoped InnerProductSpace
+open scoped TauCeti.CompleteSubspace
 
 noncomputable section
 
@@ -90,15 +91,6 @@ universe v
 
 variable {E : Type v} [NormedAddCommGroup E] [InnerProductSpace ℝ E]
   [CompleteSpace E]
-
-/-- A subspace admitting an orthogonal projection inside a complete ambient
-space is itself complete.  `local instance` does not propagate through imports,
-so it is reinstalled here, on both scalar fields. -/
-local instance instCompleteSpaceCoeOfHasOrthogonalProjectionRealWholeSpace
-    {𝕜 : Type*} [RCLike 𝕜] {G : Type v} [NormedAddCommGroup G]
-    [InnerProductSpace 𝕜 G] [CompleteSpace G]
-    (Z : Submodule 𝕜 G) [Z.HasOrthogonalProjection] : CompleteSpace Z :=
-  (Submodule.isComplete_coe_of_hasOrthogonalProjection Z).completeSpace_coe
 
 /-! ### Transporting the compression hypotheses -/
 

@@ -64,6 +64,7 @@ open TauCeti.DavisKahan.TanTheta
 open TauCeti.DavisKahan.TanTheta
 open TauCeti.RealComplexification
 open TauCeti.DavisKahan.Foundation.RealComplexification
+open scoped TauCeti.CompleteSubspace
 
 noncomputable section
 
@@ -71,12 +72,6 @@ universe v
 
 variable {E : Type v} [NormedAddCommGroup E] [InnerProductSpace ℝ E]
   [CompleteSpace E]
-
-local instance instCompleteSpaceCoeOfHasOrthogonalProjectionUnboundedCompressionReal
-    {k : Type*} [RCLike k] {G : Type v} [NormedAddCommGroup G]
-    [InnerProductSpace k G] [CompleteSpace G]
-    (Z : Submodule k G) [Z.HasOrthogonalProjection] : CompleteSpace Z :=
-  (Submodule.isComplete_coe_of_hasOrthogonalProjection Z).completeSpace_coe
 
 /-! ## An upper form bound survives unitary conjugation -/
 

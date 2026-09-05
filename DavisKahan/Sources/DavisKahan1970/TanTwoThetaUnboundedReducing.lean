@@ -59,6 +59,7 @@ open scoped InnerProductSpace
 open Filter
 open TauCeti.DavisKahan.ExactSinTheta
 open TauCeti.ApproximationNumber
+open scoped TauCeti.CompleteSubspace
 
 noncomputable section
 
@@ -66,13 +67,6 @@ universe u
 
 variable {G : Type u} [NormedAddCommGroup G] [InnerProductSpace ℂ G]
   [CompleteSpace G]
-
-/-- A subspace admitting an orthogonal projection inside a complete ambient space
-is itself complete.  `local instance` does not propagate through imports, so it
-is reinstalled here. -/
-local instance instCompleteSpaceCoeOfHasOrthogonalProjectionTanTwoReducing
-    (W : Submodule ℂ G) [W.HasOrthogonalProjection] : CompleteSpace W :=
-  (Submodule.isComplete_coe_of_hasOrthogonalProjection W).completeSpace_coe
 
 /-- The cutoffs of a reducing subspace, compressed to that subspace, converge
 strongly to its identity. -/

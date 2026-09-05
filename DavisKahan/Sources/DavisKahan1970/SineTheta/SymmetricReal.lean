@@ -74,29 +74,10 @@ universe v
 
 open TauCeti.DavisKahanExt
 open TauCeti.DavisKahan
+open scoped TauCeti.CompleteSubspace
 
 variable {E : Type v}
   [NormedAddCommGroup E] [InnerProductSpace ℝ E] [CompleteSpace E]
-
-/-- A subspace admitting an orthogonal projection inside a complete ambient
-space is itself complete.  `local instance` does not propagate through imports,
-so it is reinstalled here.
-
-As in the complex file, Proposition 6.1 works throughout in the coordinate
-spaces of `U`, `V` and their complements, so every adjoint and every reducing
-restriction below needs it. -/
-local instance instCompleteSpaceCoeOfHasOrthogonalProjectionSymmetricReal
-    {G : Type v} [NormedAddCommGroup G] [InnerProductSpace ℝ G] [CompleteSpace G]
-    (U : Submodule ℝ G) [U.HasOrthogonalProjection] : CompleteSpace U :=
-  (Submodule.isComplete_coe_of_hasOrthogonalProjection U).completeSpace_coe
-
-/-- The same reinstallation over `ℂ`.  The complexified coordinates that
-`sourceFullSinR` is defined on are complex subspaces, so the dictionary
-lemma below needs this as well as the real version above. -/
-local instance instCompleteSpaceCoeOfHasOrthogonalProjectionSymmetricRealC
-    {G : Type v} [NormedAddCommGroup G] [InnerProductSpace ℂ G] [CompleteSpace G]
-    (U : Submodule ℂ G) [U.HasOrthogonalProjection] : CompleteSpace U :=
-  (Submodule.isComplete_coe_of_hasOrthogonalProjection U).completeSpace_coe
 
 /-! ### The source dictionary for the real whole-space sine
 

@@ -52,17 +52,11 @@ open TauCeti.DavisKahan.ExactSinTheta
 open TauCeti.DavisKahan.RealSpectralRestriction
 
 open scoped InnerProductSpace
+open scoped TauCeti.CompleteSubspace
 
 noncomputable section
 
 universe v
-
-/-- A subspace admitting an orthogonal projection inside a complete ambient space is itself
-complete.  `local instance` does not propagate through imports, so it is reinstalled here. -/
-local instance instCompleteSpaceCoeOfHasOrthogonalProjectionDirectedAngle
-    {𝕜 : Type*} [RCLike 𝕜] {G : Type v} [NormedAddCommGroup G] [InnerProductSpace 𝕜 G]
-    [CompleteSpace G] (U : Submodule 𝕜 G) [U.HasOrthogonalProjection] : CompleteSpace U :=
-  (Submodule.isComplete_coe_of_hasOrthogonalProjection U).completeSpace_coe
 
 section Complex
 

@@ -43,6 +43,7 @@ open TauCeti.ApproximationNumber
 open TauCeti.RealComplexification
 open TauCeti.DavisKahan.Foundation.RealComplexification
 open RealComplexification
+open scoped TauCeti.CompleteSubspace
 
 noncomputable section
 
@@ -50,12 +51,6 @@ universe u
 
 variable {E : Type u} [NormedAddCommGroup E] [InnerProductSpace ℝ E]
   [CompleteSpace E]
-
-local instance instCompleteSpaceCoeOfHasOrthogonalProjectionUnboundedExactReal
-    {k : Type*} [RCLike k] {G : Type u} [NormedAddCommGroup G]
-    [InnerProductSpace k G] [CompleteSpace G]
-    (W : Submodule k G) [W.HasOrthogonalProjection] : CompleteSpace W :=
-  (Submodule.isComplete_coe_of_hasOrthogonalProjection W).completeSpace_coe
 
 /-! ## Lightweight norm transport for directed corners -/
 

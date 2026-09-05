@@ -174,19 +174,12 @@ open DavisKahanExt
 open TauCeti.DavisKahan
 open TauCeti.DavisKahan.Foundation
 open TauCeti.ApproximationNumber
+open scoped TauCeti.CompleteSubspace
 
 universe u
 
 variable {H : Type u} [NormedAddCommGroup H] [InnerProductSpace ℂ H]
   [CompleteSpace H]
-
-/-- A subspace with an orthogonal projection in a complete Hilbert space is
-itself complete.  The source-facing residual theorems use `P` as the domain of
-a rectangular operator, so the source norm API needs this local instance. -/
-local instance instCompleteSpaceCoeOfHasOrthogonalProjectionSection8Source
-    {G : Type u} [NormedAddCommGroup G] [InnerProductSpace ℂ G] [CompleteSpace G]
-    (U : Submodule ℂ G) [U.HasOrthogonalProjection] : CompleteSpace U :=
-  (Submodule.isComplete_coe_of_hasOrthogonalProjection U).completeSpace_coe
 
 /-! ### 1. Equation (1.5), and what it buys -/
 

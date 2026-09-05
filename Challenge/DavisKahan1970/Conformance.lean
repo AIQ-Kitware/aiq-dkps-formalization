@@ -233,6 +233,7 @@ open TauCeti.DavisKahan.Sylvester
 open TauCeti.DavisKahan.TanTheta
 
 open scoped InnerProductSpace
+open scoped TauCeti.CompleteSubspace
 
 noncomputable section
 
@@ -240,14 +241,6 @@ universe u v w
 
 variable {E : Type v} [NormedAddCommGroup E] [InnerProductSpace ℂ E]
   [CompleteSpace E]
-
-/-- Orthogonally complemented subspaces of a complete Hilbert space are
-complete.  The source theorem signatures use compressions to such subspaces,
-so the challenge installs the same local instance as the production modules. -/
-local instance instCompleteSpaceCoeOfHasOrthogonalProjectionChallenge
-    {G : Type w} [NormedAddCommGroup G] [InnerProductSpace ℂ G] [CompleteSpace G]
-    (W : Submodule ℂ G) [W.HasOrthogonalProjection] : CompleteSpace W :=
-  (Submodule.isComplete_coe_of_hasOrthogonalProjection W).completeSpace_coe
 
 /-! ### Full Hilbert-space headline surfaces -/
 
@@ -453,18 +446,18 @@ theorem tanTwoTheta_directed_boundedResidual_blockRepresentative_spectralGap_sym
     (N : SymmetricNormingFunction)
     {A H : E →L[ℂ] E} {U V : Submodule ℂ E}
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
-    {beta alpha delta : ℝ}
+    {β α δ : ℝ}
     (hA : IsSelfAdjoint A) (hH : IsSelfAdjoint H)
     (hAU : ∀ x ∈ U, A x ∈ U) (hAplusH_V : ∀ x ∈ V, (A + H) x ∈ V)
-    (hdelta : 0 < delta)
-    (hA0spec : spectrum ℝ (compressOperator U A) ⊆ Set.Icc beta alpha)
-    (hA1spec : spectrum ℝ (compressOperator Uᗮ A) ⊆ Set.Ici (alpha + delta))
+    (hδ : 0 < δ)
+    (hA0spec : spectrum ℝ (compressOperator U A) ⊆ Set.Icc β α)
+    (hA1spec : spectrum ℝ (compressOperator Uᗮ A) ⊆ Set.Ici (α + δ))
     (hHU : ∀ x ∈ U, H x ∈ Uᗮ) (hHUperp : ∀ x ∈ Uᗮ, H x ∈ U)
     (hRmem : N.Mem (projectionBlock Uᗮ U H)) :
     N.Mem
         (projectionBlock Uᗮ U
           (2 * (projectorDifference U V * doubleSecant U V))) ∧
-      delta * N.gauge
+      δ * N.gauge
           (projectionBlock Uᗮ U
             (2 * (projectorDifference U V * doubleSecant U V))) ≤
         2 * N.gauge (projectionBlock Uᗮ U H) := by

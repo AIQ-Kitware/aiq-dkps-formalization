@@ -86,6 +86,7 @@ open scoped InnerProductSpace
 
 open TauCeti.DavisKahanExt
 open TauCeti.DavisKahan
+open scoped TauCeti.CompleteSubspace
 
 noncomputable section
 
@@ -96,13 +97,6 @@ variable {E : Type v} [NormedAddCommGroup E] [InnerProductSpace ℂ E] [Complete
 -- The continuous functional calculus on a block `↥U →L[ℂ] ↥U` needs `CStarAlgebra` of that
 -- algebra, which needs `CompleteSpace ↥U`; that is one nesting level past the default budget.
 set_option maxSynthPendingDepth 3
-
-/-- A subspace admitting an orthogonal projection is complete, so its bounded operators are a
-C⋆-algebra and carry the functional calculus.  Local, because the statements below apply `cfc`
-to a block and therefore need the instance already at elaboration time. -/
-local instance instCompleteSpaceCoeOfHasOrthogonalProjection
-    (U : Submodule ℂ E) [U.HasOrthogonalProjection] : CompleteSpace (U : Type v) :=
-  (Submodule.isComplete_coe_of_hasOrthogonalProjection U).completeSpace_coe
 
 /-! ### The block presentation the gap theorem consumes -/
 
@@ -310,12 +304,6 @@ operator evaluated in the canonical complexification. -/
 section RealScalars
 
 variable {E : Type v} [NormedAddCommGroup E] [InnerProductSpace ℝ E] [CompleteSpace E]
-
-/-- A real subspace admitting an orthogonal projection is complete; local for the same reason
-as the complex instance above. -/
-local instance instCompleteSpaceCoeOfHasOrthogonalProjectionReal
-    (U : Submodule ℝ E) [U.HasOrthogonalProjection] : CompleteSpace (U : Type v) :=
-  (Submodule.isComplete_coe_of_hasOrthogonalProjection U).completeSpace_coe
 
 /-- **The gap step function of a reduced real self-adjoint operator is its reducing
 projection.**  Real twin of `cfc_gapStep_eq_starProjection_complex`. -/

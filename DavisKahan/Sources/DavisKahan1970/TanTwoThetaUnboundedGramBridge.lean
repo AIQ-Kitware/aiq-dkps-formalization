@@ -78,6 +78,7 @@ open scoped InnerProductSpace
 
 open TauCeti.DavisKahan.ExactSinTheta
 open TauCeti.ApproximationNumber
+open scoped TauCeti.CompleteSubspace
 
 noncomputable section
 
@@ -85,14 +86,6 @@ universe u
 
 variable {H : Type u} [NormedAddCommGroup H] [InnerProductSpace ℂ H]
   [CompleteSpace H]
-
-/-- An orthogonally complemented subspace of a complete space is complete.  The
-instance is `local` in every module that declares it, so it does not propagate
-through imports and has to be reinstalled here; without it the adjoints inside
-`blockCompression` do not elaborate. -/
-local instance instCompleteSpaceCoeOfHasOrthogonalProjectionGramBridge
-    (W : Submodule ℂ H) [W.HasOrthogonalProjection] : CompleteSpace W :=
-  (Submodule.isComplete_coe_of_hasOrthogonalProjection W).completeSpace_coe
 
 variable {U : Submodule ℂ H} [U.HasOrthogonalProjection] {Z : H →L[ℂ] H}
 
@@ -261,12 +254,6 @@ section ScalarGenericCorners
 
 variable {𝕜 : Type*} [RCLike 𝕜] {G : Type u} [NormedAddCommGroup G]
   [InnerProductSpace 𝕜 G] [CompleteSpace G]
-
-/-- The scalar-generic form of the module's completeness instance for an
-orthogonally complemented subspace. -/
-local instance instCompleteSpaceCoeOfHasOrthogonalProjectionGramBridgeGeneric
-    (W : Submodule 𝕜 G) [W.HasOrthogonalProjection] : CompleteSpace W :=
-  (Submodule.isComplete_coe_of_hasOrthogonalProjection W).completeSpace_coe
 
 /-- The directed sine corner `S₀ : U → Uᗮ`. -/
 abbrev reflectionSineCorner (U : Submodule 𝕜 G) [U.HasOrthogonalProjection]
@@ -638,12 +625,6 @@ section ScalarGenericCutoff
 
 variable {𝕜 : Type*} [RCLike 𝕜] {G : Type u} [NormedAddCommGroup G]
   [InnerProductSpace 𝕜 G] [CompleteSpace G]
-
-/-- The scalar-generic form of the module's completeness instance for an
-orthogonally complemented subspace. -/
-local instance instCompleteSpaceCoeOfHasOrthogonalProjectionGramBridgeCutoff
-    (W : Submodule 𝕜 G) [W.HasOrthogonalProjection] : CompleteSpace W :=
-  (Submodule.isComplete_coe_of_hasOrthogonalProjection W).completeSpace_coe
 
 variable {U : Submodule 𝕜 G} [U.HasOrthogonalProjection]
 variable {A : G →ₗ.[𝕜] G} {τ : ℝ}
