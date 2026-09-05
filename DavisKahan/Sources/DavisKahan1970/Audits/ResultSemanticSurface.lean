@@ -524,31 +524,31 @@ Status: **TERMINAL EXACT**.
 Status: **TERMINAL EXACT**.
 -/
 
-#check @TauCeti.DavisKahan1970.Proposition4_1_compact_nonacute_complex
-#check @TauCeti.DavisKahan1970.Proposition4_1_compact_nonacute_real
-#check @TauCeti.DavisKahan1970.Proposition4_1_compact_nonacute_directRotationValues_complex
-#check @TauCeti.DavisKahan1970.Proposition4_1_compact_nonacute_directRotationValues_real
+#check @TauCeti.DavisKahan1970.proposition4_1_compact_nonacute_complex
+#check @TauCeti.DavisKahan1970.proposition4_1_compact_nonacute_real
+#check @TauCeti.DavisKahan1970.proposition4_1_compact_nonacute_directRotationValues_complex
+#check @TauCeti.DavisKahan1970.proposition4_1_compact_nonacute_directRotationValues_real
 
 /-! ## DK-4.1-cor: UI-norm minimality of direct rotation displacement
 
 Status: **TERMINAL EXACT**.
 -/
 
-#check @TauCeti.DavisKahan1970.Corollary4_1_compact_nonacute_symmetricNorming_complex
-#check @TauCeti.DavisKahan1970.Corollary4_1_compact_nonacute_symmetricNorming_real
+#check @TauCeti.DavisKahan1970.corollary4_1_compact_nonacute_symmetricNorming_complex
+#check @TauCeti.DavisKahan1970.corollary4_1_compact_nonacute_symmetricNorming_real
 #check @TauCeti.DavisKahan1970.symmetricNorming_of_kyFanDominant
-#check @TauCeti.DavisKahan1970.Corollary4_1_compact_nonacute_complex
-#check @TauCeti.DavisKahan1970.Corollary4_1_compact_nonacute_real
-#check @TauCeti.DavisKahan1970.Corollary4_1_infiniteDimensional_nonacute
+#check @TauCeti.DavisKahan1970.corollary4_1_compact_nonacute_complex
+#check @TauCeti.DavisKahan1970.corollary4_1_compact_nonacute_real
+#check @TauCeti.DavisKahan1970.corollary4_1_infiniteDimensional_nonacute
 
 /-! ## DK-4.2-prop: Basis-angle square-sum extremality
 
 Status: **TERMINAL EXACT**.
 -/
 
-#check @TauCeti.DavisKahan1970.Proposition4_2_infiniteDimensional
-#check @TauCeti.DavisKahan1970.Proposition4_2_compact_nonacute
-#check @TauCeti.DavisKahan1970.Proposition4_2_compact_nonacute_real
+#check @TauCeti.DavisKahan1970.proposition4_2_infiniteDimensional
+#check @TauCeti.DavisKahan1970.proposition4_2_compact_nonacute
+#check @TauCeti.DavisKahan1970.proposition4_2_compact_nonacute_real
 #check @TauCeti.DavisKahan1970.tsum_displacementAngleSineSqR_ge_tsum_sq_sin_principalAngleSequence
 
 /-! ## DK-4.3-prop: Squared displacement UI-norm minimality
@@ -556,10 +556,10 @@ Status: **TERMINAL EXACT**.
 Status: **TERMINAL EXACT**.
 -/
 
-#check @TauCeti.DavisKahan1970.Proposition4_3_compact_nonacute_symmetricNorming_complex
-#check @TauCeti.DavisKahan1970.Proposition4_3_compact_nonacute_symmetricNorming_real
-#check @TauCeti.DavisKahan1970.Proposition4_3_compact_nonacute_idealGauge
-#check @TauCeti.DavisKahan1970.Proposition4_3_compact_nonacute_real_idealGauge
+#check @TauCeti.DavisKahan1970.proposition4_3_compact_nonacute_symmetricNorming_complex
+#check @TauCeti.DavisKahan1970.proposition4_3_compact_nonacute_symmetricNorming_real
+#check @TauCeti.DavisKahan1970.proposition4_3_compact_nonacute_idealGauge
+#check @TauCeti.DavisKahan1970.proposition4_3_compact_nonacute_real_idealGauge
 
 /-! ## DK-4.4-prop: Full-displacement counterexamples and Proposition 4.4 as printed
 
@@ -636,7 +636,7 @@ Status: **TERMINAL EXACT**.
 #check @TauCeti.DavisKahan1970.theorem5_2_symmetricNorming_complex
 #check @TauCeti.DavisKahan1970.theorem5_2_symmetricNorming_real
 #check @TauCeti.DavisKahan1970.theorem5_2_orderedGap_symmetricNorming_real
-#check @TauCeti.DavisKahan1970.Theorem5_2
+#check @TauCeti.DavisKahan1970.theorem5_2
 #check @TauCeti.DavisKahan.Sylvester.davisKahan1970_sylvester_real
 #check @TauCeti.DavisKahan1970.Audits.theorem5_2_real_ordered_sourceAudit
 
@@ -644,7 +644,7 @@ Status: **TERMINAL EXACT**.
 
 Status: **TERMINAL EXACT**.
 
-The canonical witnesses are the two fixed-field statements.  `Lemma5_1` is generic
+The canonical witnesses are the two fixed-field statements.  `lemma5_1` is generic
 over `RCLike 𝕜` and carries `HasApproximationNumberStrongCutoff 𝕜`, a capability
 class whose single field is Lemma 5.1 itself; it is a facade over the two proofs
 below and is kept as supporting evidence so the generic development can cite one
@@ -653,7 +653,7 @@ name.  A registered witness for a printed lemma should not assume that lemma.
 
 #check @TauCeti.DavisKahan1970.lemma5_1_complex
 #check @TauCeti.DavisKahan1970.lemma5_1_real
-#check @TauCeti.DavisKahan1970.Lemma5_1
+#check @TauCeti.DavisKahan1970.lemma5_1
 
 /-! ## DK-6.1-lem: Direct-sum UI-norm comparison and converse
 
@@ -680,12 +680,12 @@ Status: **TERMINAL EXACT**.
 #check @TauCeti.DavisKahan1970.proposition6_1_real
 #check @TauCeti.DavisKahan1970.proposition6_1_commonDomain_complex
 #check @TauCeti.DavisKahan1970.proposition6_1_commonDomain_real
-#check @TauCeti.DavisKahan1970.Proposition6_1_commonDomain
-#check @TauCeti.DavisKahan1970.Proposition6_1_real_commonDomain
+#check @TauCeti.DavisKahan1970.proposition6_1_commonDomain
+#check @TauCeti.DavisKahan1970.proposition6_1_real_commonDomain
 #check @TauCeti.DavisKahan1970.proposition6_1_complex
 #check @TauCeti.DavisKahan1970.proposition6_1_real
-#check @TauCeti.DavisKahan1970.Proposition6_1_real_representative
-#check @TauCeti.DavisKahan1970.Proposition6_1_real_sinTheta_singularValues
+#check @TauCeti.DavisKahan1970.proposition6_1_real_representative
+#check @TauCeti.DavisKahan1970.proposition6_1_real_sinTheta_singularValues
 
 /-! ## DK-6.1-thm: Generalized sine theorem
 
@@ -694,15 +694,15 @@ Status: **TERMINAL EXACT**.
 
 #check @TauCeti.DavisKahan1970.theorem6_1_complex
 #check @TauCeti.DavisKahan1970.theorem6_1_real
-#check @TauCeti.DavisKahan1970.Theorem6_1_commonDomain
+#check @TauCeti.DavisKahan1970.theorem6_1_commonDomain
 #check @TauCeti.DavisKahan1970.IsTrialResidualEquation
 #check @TauCeti.DavisKahan1970.isTrialResidual_iff_equation_and_isometry
 #check @TauCeti.DavisKahan1970.lowerFrameBound_iff_operator_inequality
 #check @TauCeti.DavisKahan1970.lowerFrameBound_of_operator_inequality
 #check @TauCeti.DavisKahan1970.theorem6_1_complex
 #check @TauCeti.DavisKahan1970.theorem6_1_real
-#check @TauCeti.DavisKahan1970.Theorem6_1_real_commonDomain
-#check @TauCeti.DavisKahan1970.Theorem6_1_real_commonCore
+#check @TauCeti.DavisKahan1970.theorem6_1_real_commonDomain
+#check @TauCeti.DavisKahan1970.theorem6_1_real_commonCore
 
 /-! ## DK-6.2-thm: Pairwise-gap square-norm sine theorem
 

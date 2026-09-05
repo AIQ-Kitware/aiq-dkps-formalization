@@ -142,18 +142,18 @@ alias SymmetricSinThetaProblem := SymmetricSinThetaProblem
 -- singular-value sequence, so the real conclusion is carried by
 -- `crossSineSum U V` rather than by a functional-calculus sine: no real
 -- continuous functional calculus is needed, and none is assumed.
--- `Proposition6_1_real_sinTheta_singularValues` is the compiled certificate that
+-- `proposition6_1_real_sinTheta_singularValues` is the compiled certificate that
 -- this operator carries exactly the paper's whole-space `sin Theta` sequence,
--- and `Proposition6_1_real_representative` states the estimate for an arbitrary
+-- and `proposition6_1_real_representative` states the estimate for an arbitrary
 -- operator with that sequence.
 alias RealSymmetricSinThetaProblem := RealSymmetricSinThetaProblem
-alias Proposition6_1_real_kyFan :=
+alias proposition6_1_real_kyFan :=
   RealSymmetricSinThetaProblem.symmetric_all_kyFan_real
-alias Proposition6_1_real_sinTheta_singularValues :=
+alias proposition6_1_real_sinTheta_singularValues :=
   RealSymmetricSinThetaProblem.crossSineSum_normingMem_iff_and_gauge_eq
-alias Proposition6_1_real_sinTheta_eq_literalFullSinAngle :=
+alias proposition6_1_real_sinTheta_eq_literalFullSinAngle :=
   approximationNumber_sourceFullSinR_eq_crossSineSum
-alias Proposition6_1_real_representative :=
+alias proposition6_1_real_representative :=
   RealSymmetricSinThetaProblem.result_every_unitarilyInvariantNorm_representative_real
 
 /-! ## Theorem 6.2 and its printed finite-rank consequence
@@ -177,7 +177,7 @@ alias Theorem6_2_real_boundNorm_of_finiteRank :=
 
 alias CommonDomainSinThetaData := CommonDomainSinThetaData
 alias CommonDomainTheorem6_1Data := CommonDomainTheorem61Data
-alias Theorem6_1_commonDomain :=
+alias theorem6_1_commonDomain :=
   CommonDomainTheorem61Data.result_every_unitarilyInvariantNorm_across
 alias CommonDomainTheorem6_2Data := CommonDomainTheorem62Data
 alias Theorem6_2_commonDomain := CommonDomainTheorem62Data.result_across
@@ -186,16 +186,16 @@ alias Theorem6_2_commonDomain_boundNorm_of_finiteRank :=
 -- The Appendix says "the hypotheses of Proposition 6.1 and Theorem 6.1 may be
 -- relaxed similarly".  This is that relaxation of Proposition 6.1: two closed
 -- self-adjoint operators on one dense domain, whose difference there is the
--- paper's bounded `H`.  `Proposition6_1_commonDomain_ofBounded` records that the
+-- paper's bounded `H`.  `proposition6_1_commonDomain_ofBounded` records that the
 -- bounded inputs are an instance, so nothing is assumed that Proposition 6.1 did
 -- not already assume.
 alias CommonDomainSymmetricSinThetaProblem :=
   CommonDomainSymmetricSinThetaProblem
-alias Proposition6_1_commonDomain :=
+alias proposition6_1_commonDomain :=
   CommonDomainSymmetricSinThetaProblem.result_every_unitarilyInvariantNorm
-alias Proposition6_1_commonDomain_kyFan :=
+alias proposition6_1_commonDomain_kyFan :=
   CommonDomainSymmetricSinThetaProblem.symmetric_all_kyFan
-alias Proposition6_1_commonDomain_ofBounded :=
+alias proposition6_1_commonDomain_ofBounded :=
   CommonDomainSymmetricSinThetaProblem.ofBounded
 -- The common-domain Proposition 6.1 is stated over any `RCLike` field.  Its
 -- scalar-generic conclusion is carried by `crossSineSum U V` rather than by
@@ -206,31 +206,31 @@ alias Proposition6_1_commonDomain_ofBounded :=
 -- `RCLike` field, so `TauCeti.DavisKahan.Angle.sinAngleOperator` could name the
 -- conclusion directly.  Restating it that way is a separate change and would move
 -- this theorem's statement pin.
--- `Proposition6_1_commonDomain_sinTheta_singularValues` is the compiled
+-- `proposition6_1_commonDomain_sinTheta_singularValues` is the compiled
 -- certificate that this operator carries exactly the paper's whole-space
--- `sin Theta` sequence.  Over `ℂ` the literal form is `Proposition6_1_commonDomain`
--- itself.  `Proposition6_1_real_commonDomain_ofBounded` records that the real
+-- `sin Theta` sequence.  Over `ℂ` the literal form is `proposition6_1_commonDomain`
+-- itself.  `proposition6_1_real_commonDomain_ofBounded` records that the real
 -- bounded inputs are an instance, so the real form is a relaxation of the real
 -- Proposition 6.1 rather than a statement parallel to it.
-alias Proposition6_1_commonDomain_crossSineSum :=
+alias proposition6_1_commonDomain_crossSineSum :=
   CommonDomainSymmetricSinThetaProblem.result_every_unitarilyInvariantNorm_crossSineSum
-alias Proposition6_1_commonDomain_crossSineSum_kyFan :=
+alias proposition6_1_commonDomain_crossSineSum_kyFan :=
   CommonDomainSymmetricSinThetaProblem.symmetric_all_kyFan_crossSineSum
-alias Proposition6_1_commonDomain_sinTheta_singularValues :=
+alias proposition6_1_commonDomain_sinTheta_singularValues :=
   CommonDomainSymmetricSinThetaProblem.crossSineSum_normingMem_iff_and_gauge_eq
-alias Proposition6_1_real_commonDomain :=
+alias proposition6_1_real_commonDomain :=
   CommonDomainSymmetricSinThetaProblem.result_every_unitarilyInvariantNorm_real
-alias Proposition6_1_real_commonDomain_kyFan :=
+alias proposition6_1_real_commonDomain_kyFan :=
   CommonDomainSymmetricSinThetaProblem.symmetric_all_kyFan_real
-alias Proposition6_1_real_commonDomain_ofBounded :=
+alias proposition6_1_real_commonDomain_ofBounded :=
   CommonDomainSymmetricSinThetaProblem.ofBoundedReal
 alias RealCommonDomainTheorem6_1Data :=
   RealCommonDomainTheorem61Data
-alias Theorem6_1_real_commonDomain :=
+alias theorem6_1_real_commonDomain :=
   RealCommonDomainTheorem61Data.result_every_unitarilyInvariantNorm_across
 alias RealCommonDomainTheorem6_2Data :=
   RealCommonDomainTheorem62Data
-alias Theorem6_2_real_commonDomain :=
+alias theorem6_2_real_commonDomain :=
   RealCommonDomainTheorem62Data.result_across
 alias Theorem6_2_real_commonDomain_boundNorm_of_finiteRank :=
   RealCommonDomainTheorem62Data.operatorNorm_result_of_rank_le
@@ -242,15 +242,15 @@ alias CommonCoreResidualData := CommonCoreResidualData
 alias commonCoreResidual_extends_to_domain :=
   CommonCoreResidualData.extends_to_domain
 alias CommonCoreTheorem6_1Data := CommonCoreTheorem61Data
-alias Theorem6_1_commonCore :=
+alias theorem6_1_commonCore :=
   CommonCoreTheorem61Data.result_every_unitarilyInvariantNorm_across
 alias CommonCoreTheorem6_2Data := CommonCoreTheorem62Data
 alias Theorem6_2_commonCore := CommonCoreTheorem62Data.result_across
 alias RealCommonCoreTheorem6_1Data := RealCommonCoreTheorem61Data
-alias Theorem6_1_real_commonCore :=
+alias theorem6_1_real_commonCore :=
   RealCommonCoreTheorem61Data.result_every_unitarilyInvariantNorm_across
 alias RealCommonCoreTheorem6_2Data := RealCommonCoreTheorem62Data
-alias Theorem6_2_real_commonCore :=
+alias theorem6_2_real_commonCore :=
   RealCommonCoreTheorem62Data.result_across
 
 /-! ## Sharpness and necessity -/

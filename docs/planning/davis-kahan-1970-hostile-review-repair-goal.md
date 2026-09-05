@@ -185,7 +185,7 @@ conjunct in the same type that excludes the pole.
 
 ### R4 — DK-5.1-lem: register the proofs, not the wrapper (*census* + tiny Lean, hours)
 
-**Problem.** `TauCeti.DavisKahan1970.Lemma5_1` (`Sources/DavisKahan1970/Section5.lean:35`) is
+**Problem.** `TauCeti.DavisKahan1970.lemma5_1` (`Sources/DavisKahan1970/Section5.lean:35`) is
 generic over `[HasApproximationNumberStrongCutoff 𝕜]`, a class whose single field is Lemma 5.1
 (`DavisKahan/OperatorIdeal/ApproximationNumbers/ScalarGeneric.lean:60`).
 
@@ -197,7 +197,7 @@ generic over `[HasApproximationNumberStrongCutoff 𝕜]`, a class whose single f
    theorems those instances wrap. Docstrings: Lemma 5.1, scalar scope in the name per the
    naming classification.
 2. Register them as canonical evidence (scalar scope `complex`/`real`) on `DK-5.1-lem`. Keep
-   `Lemma5_1` only as a `supporting_evidence` facade, renamed `lemma5_1` for casing (see R6),
+   `lemma5_1` only as a `supporting_evidence` facade, renamed `lemma5_1` for casing (see R6),
    with a docstring saying the class is discharged at both fields — or delete it if nothing
    consumes it (`leanq` will tell you).
 
@@ -246,8 +246,8 @@ Follow ground rule 3 for every rename.
    case — check with the review's one-liner over `lean_declarations`.
 3. Unify source-facing casing to the lowercase `theoremN_M_*` / `propositionN_M_*` /
    `corollaryN_M_*` / `lemmaN_M_*` form the naming classification commits to:
-   `Proposition4_1_*`, `Proposition4_2_*`, `Proposition4_3_*`, `Corollary4_1_*`, `Theorem5_2`,
-   `Lemma5_1`, `Theorem6_1_*`, `Theorem6_2_*`, `Proposition6_1_*`. Keep deprecated aliases only
+   `Proposition4_1_*`, `Proposition4_2_*`, `Proposition4_3_*`, `Corollary4_1_*`, `theorem5_2`,
+   `lemma5_1`, `Theorem6_1_*`, `Theorem6_2_*`, `Proposition6_1_*`. Keep deprecated aliases only
    where ground rule 3 says so.
 4. Give source-facing homes and `TauCeti.DavisKahan1970` names to the registered witnesses
    that live outside the paper namespace: `TauCeti.DavisKahan.TanTheta.theorem6_3_unbounded_infiniteTrial_ideal_exists`
@@ -265,8 +265,8 @@ Follow ground rule 3 for every rename.
    the `_directed_`/`_ambient_` names; keep `@[deprecated]` aliases one release, then delete.
    Rewrite the module docstring of `SectionTwo.lean` — most of its length is history of
    mistakes; a reader needs the table of clauses and witnesses, not the diary.
-7. Delete `Proposition4_2_compact_nonacute` (unused `_J`, strictly weaker than
-   `Proposition4_2_infiniteDimensional`) and deregister it.
+7. Delete `proposition4_2_compact_nonacute` (unused `_J`, strictly weaker than
+   `proposition4_2_infiniteDimensional`) and deregister it.
 8. Prune `lean_declarations` on `S2-sin-two-theta` and `S2-tan-two-theta` to canonical
    witnesses plus explicitly-roled `source_correspondence` lemmas; proof structure such as
    `diagonalPart_sq_add_offDiagonalPart_sq` and `complexifyReal_addBounded` does not belong on

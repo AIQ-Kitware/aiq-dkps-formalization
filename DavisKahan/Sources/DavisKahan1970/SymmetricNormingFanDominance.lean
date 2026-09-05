@@ -57,8 +57,8 @@ already proved ideal-gauge theorem, read at the source's norm.
 ## Main results
 
 * `symmetricNorming_of_kyFanDominant` and `kyFanDominant_of_symmetricNorming`;
-* `Corollary4_1_compact_nonacute_symmetricNorming_complex` and `..._real`;
-* `Proposition4_3_compact_nonacute_symmetricNorming_complex` and `..._real`;
+* `corollary4_1_compact_nonacute_symmetricNorming_complex` and `..._real`;
+* `proposition4_3_compact_nonacute_symmetricNorming_complex` and `..._real`;
 * `theorem5_2_symmetricNorming_complex` and `theorem5_2_symmetricNorming_real`.
 
 ## References
@@ -180,10 +180,10 @@ variable {H : Type v} [NormedAddCommGroup H] [InnerProductSpace ℂ H] [Complete
 norm**: `N((1 − V)P)` is minimized, among unitaries carrying `P H` onto `Q H`, by
 the direct rotation.
 
-`Corollary4_1_compact_nonacute_complex` is the same statement at an arbitrary
+`corollary4_1_compact_nonacute_complex` is the same statement at an arbitrary
 Fan-dominant ideal gauge; this is it read at the paper's norm object, which is the
 quantifier the printed corollary uses. -/
-theorem Corollary4_1_compact_nonacute_symmetricNorming_complex
+theorem corollary4_1_compact_nonacute_symmetricNorming_complex
     (N : SymmetricNormingFunction)
     (U V : Submodule ℂ H) [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
     (hcompact : IsCompactOperator (TauCeti.principalSineOperator U V))
@@ -199,14 +199,14 @@ theorem Corollary4_1_compact_nonacute_symmetricNorming_complex
   obtain ⟨hmem, hle⟩ := symmetricNorming_of_kyFanDominant N one_pos hWmem
     (fun M hM => by
       obtain ⟨h₁, h₂⟩ :=
-        Corollary4_1_compact_nonacute_complex M U V hcompact J W hWunitary hWmap hM
+        corollary4_1_compact_nonacute_complex M U V hcompact J W hWunitary hWmap hM
       exact ⟨h₁, by rw [one_mul]; exact h₂⟩)
   exact ⟨hmem, by rw [one_mul] at hle; exact hle⟩
 
 /-- **Davis--Kahan 1970, Proposition 4.3, at every source unitarily invariant
 norm**: the squared displacement `N((1 − V⋆)(1 − V))` is minimized by the direct
 rotation. -/
-theorem Proposition4_3_compact_nonacute_symmetricNorming_complex
+theorem proposition4_3_compact_nonacute_symmetricNorming_complex
     (N : SymmetricNormingFunction)
     (U V : Submodule ℂ H) [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
     (hcompact : IsCompactOperator (TauCeti.principalSineOperator U V))
@@ -223,7 +223,7 @@ theorem Proposition4_3_compact_nonacute_symmetricNorming_complex
   obtain ⟨hmem, hle⟩ := symmetricNorming_of_kyFanDominant N one_pos hWmem
     (fun M hM => by
       obtain ⟨h₁, h₂⟩ :=
-        Proposition4_3_compact_nonacute_idealGauge M U V hcompact J W hWunitary hWmap hM
+        proposition4_3_compact_nonacute_idealGauge M U V hcompact J W hWunitary hWmap hM
       exact ⟨h₁, by rw [one_mul]; exact h₂⟩)
   exact ⟨hmem, by rw [one_mul] at hle; exact hle⟩
 
@@ -235,7 +235,7 @@ variable {E : Type v} [NormedAddCommGroup E] [InnerProductSpace ℝ E] [Complete
 
 /-- **Davis--Kahan 1970, Corollary 4.1 over `ℝ`, at every source unitarily
 invariant norm.** -/
-theorem Corollary4_1_compact_nonacute_symmetricNorming_real
+theorem corollary4_1_compact_nonacute_symmetricNorming_real
     (N : SymmetricNormingFunction)
     (U V : Submodule ℝ E) [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
     (hcompact : IsCompactOperator (TauCeti.principalSineOperator U V))
@@ -251,13 +251,13 @@ theorem Corollary4_1_compact_nonacute_symmetricNorming_real
   obtain ⟨hmem, hle⟩ := symmetricNorming_of_kyFanDominant N one_pos hWmem
     (fun M hM => by
       obtain ⟨h₁, h₂⟩ :=
-        Corollary4_1_compact_nonacute_real U V M hcompact J W hWunitary hWmap hM
+        corollary4_1_compact_nonacute_real U V M hcompact J W hWunitary hWmap hM
       exact ⟨h₁, by rw [one_mul]; exact h₂⟩)
   exact ⟨hmem, by rw [one_mul] at hle; exact hle⟩
 
 /-- **Davis--Kahan 1970, Proposition 4.3 over `ℝ`, at every source unitarily
 invariant norm.** -/
-theorem Proposition4_3_compact_nonacute_symmetricNorming_real
+theorem proposition4_3_compact_nonacute_symmetricNorming_real
     (N : SymmetricNormingFunction)
     (U V : Submodule ℝ E) [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
     (hcompact : IsCompactOperator (TauCeti.principalSineOperator U V))
@@ -274,7 +274,7 @@ theorem Proposition4_3_compact_nonacute_symmetricNorming_real
   obtain ⟨hmem, hle⟩ := symmetricNorming_of_kyFanDominant N one_pos hWmem
     (fun M hM => by
       obtain ⟨h₁, h₂⟩ :=
-        Proposition4_3_compact_nonacute_real_idealGauge U V M hcompact J W hWunitary hWmap hM
+        proposition4_3_compact_nonacute_real_idealGauge U V M hcompact J W hWunitary hWmap hM
       exact ⟨h₁, by rw [one_mul]; exact h₂⟩)
   exact ⟨hmem, by rw [one_mul] at hle; exact hle⟩
 
@@ -301,7 +301,7 @@ theorem theorem5_2_symmetricNorming_complex
     (hR : N.Mem R) :
     N.Mem X ∧ δ * N.gauge X ≤ N.gauge R :=
   symmetricNorming_of_kyFanDominant N hδ hR
-    (fun M hM => Theorem5_2 M hA hB hδ hAlow hBhigh hsyl hM)
+    (fun M hM => theorem5_2 M hA hB hδ hAlow hBhigh hsyl hM)
 
 /-- **Davis--Kahan 1970, Theorem 5.2 over a real Hilbert space, at every source
 unitarily invariant norm.**

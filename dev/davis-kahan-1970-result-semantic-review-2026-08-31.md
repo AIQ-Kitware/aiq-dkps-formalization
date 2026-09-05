@@ -456,8 +456,8 @@ angle scope, with no clause open.
 
   | clause | field | conclusion atom(s) | canonical witness | disposition |
   |---|---|---|---|---|
-  | `orthonormal-angle-lower-bounds.complex` | complex | `DK-4.1-prop.orthonormal-angle-lower-bounds`, `DK-4.1-prop.singular-value-minimality` | `TauCeti.DavisKahan1970.Proposition4_1_compact_nonacute_complex` | **PASS** |
-  | `orthonormal-angle-lower-bounds.real` | real | `DK-4.1-prop.orthonormal-angle-lower-bounds`, `DK-4.1-prop.singular-value-minimality` | `TauCeti.DavisKahan1970.Proposition4_1_compact_nonacute_real` | **PASS** |
+  | `orthonormal-angle-lower-bounds.complex` | complex | `DK-4.1-prop.orthonormal-angle-lower-bounds`, `DK-4.1-prop.singular-value-minimality` | `TauCeti.DavisKahan1970.proposition4_1_compact_nonacute_complex` | **PASS** |
+  | `orthonormal-angle-lower-bounds.real` | real | `DK-4.1-prop.orthonormal-angle-lower-bounds`, `DK-4.1-prop.singular-value-minimality` | `TauCeti.DavisKahan1970.proposition4_1_compact_nonacute_real` | **PASS** |
 
 
 ### `DK-4.1-cor` — UI-norm minimality of direct rotation displacement
@@ -468,8 +468,8 @@ angle scope, with no clause open.
 
   | clause | field | conclusion atom(s) | canonical witness | disposition |
   |---|---|---|---|---|
-  | `ui-minimality-on-p.complex` | complex | `DK-4.1-cor.ui-minimality-on-p` | `TauCeti.DavisKahan1970.Corollary4_1_compact_nonacute_symmetricNorming_complex` | **PASS** |
-  | `ui-minimality-on-p.real` | real | `DK-4.1-cor.ui-minimality-on-p` | `TauCeti.DavisKahan1970.Corollary4_1_compact_nonacute_symmetricNorming_real` | **PASS** |
+  | `ui-minimality-on-p.complex` | complex | `DK-4.1-cor.ui-minimality-on-p` | `TauCeti.DavisKahan1970.corollary4_1_compact_nonacute_symmetricNorming_complex` | **PASS** |
+  | `ui-minimality-on-p.real` | real | `DK-4.1-cor.ui-minimality-on-p` | `TauCeti.DavisKahan1970.corollary4_1_compact_nonacute_symmetricNorming_real` | **PASS** |
 
 
 ### `DK-4.2-prop` — Basis-angle square-sum extremality
@@ -480,7 +480,7 @@ angle scope, with no clause open.
 
   | clause | field | conclusion atom(s) | canonical witness | disposition |
   |---|---|---|---|---|
-  | `basis-sine-square-lower-bound.complex` | complex | `DK-4.2-prop.basis-sine-square-lower-bound` | `TauCeti.DavisKahan1970.Proposition4_2_infiniteDimensional` | **PASS** |
+  | `basis-sine-square-lower-bound.complex` | complex | `DK-4.2-prop.basis-sine-square-lower-bound` | `TauCeti.DavisKahan1970.proposition4_2_infiniteDimensional` | **PASS** |
   | `basis-sine-square-lower-bound.real` | real | `DK-4.2-prop.basis-sine-square-lower-bound` | `TauCeti.DavisKahan1970.tsum_displacementAngleSineSqR_ge_tsum_sq_sin_principalAngleSequence` | **PASS** |
 
 
@@ -492,8 +492,8 @@ angle scope, with no clause open.
 
   | clause | field | conclusion atom(s) | canonical witness | disposition |
   |---|---|---|---|---|
-  | `squared-displacement-global-minimum.complex` | complex | `DK-4.3-prop.squared-displacement-global-minimum` | `TauCeti.DavisKahan1970.Proposition4_3_compact_nonacute_symmetricNorming_complex` | **PASS** |
-  | `squared-displacement-global-minimum.real` | real | `DK-4.3-prop.squared-displacement-global-minimum` | `TauCeti.DavisKahan1970.Proposition4_3_compact_nonacute_symmetricNorming_real` | **PASS** |
+  | `squared-displacement-global-minimum.complex` | complex | `DK-4.3-prop.squared-displacement-global-minimum` | `TauCeti.DavisKahan1970.proposition4_3_compact_nonacute_symmetricNorming_complex` | **PASS** |
+  | `squared-displacement-global-minimum.real` | real | `DK-4.3-prop.squared-displacement-global-minimum` | `TauCeti.DavisKahan1970.proposition4_3_compact_nonacute_symmetricNorming_real` | **PASS** |
 
 
 ### `DK-4.4-prop` — Full-displacement counterexamples and Proposition 4.4 as printed
@@ -542,7 +542,7 @@ angle scope, with no clause open.
 
   | clause | field | conclusion atom(s) | canonical witness | disposition |
   |---|---|---|---|---|
-  | `whole.rclike` | rclike | `DK-5.1-lem.strong-cutoff-convergence` | `TauCeti.DavisKahan1970.Lemma5_1` | **PASS** |
+  | `whole.rclike` | rclike | `DK-5.1-lem.strong-cutoff-convergence` | `TauCeti.DavisKahan1970.lemma5_1` | **PASS** |
 
 - Result-wide scope atoms carried by every clause's own primary: `DK-5.1-lem.strong-cutoff-convergence`
 
