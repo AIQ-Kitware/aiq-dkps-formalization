@@ -52,15 +52,13 @@ the source's contribution and it survives the change of hypothesis.
   `YuWangSamworth2015.OrderedBlockBoundaryGap.indexGap`: the source's two-sided boundary
   hypothesis `Δ ≤ min(λ_{r-1} − λ_r, λ_s − λ_{s+1})`, and its propagation to the
   intrinsic separation.
-* `YuWangSamworth2015.yuWangSamworth_sinTheta_block_le`,
-  `YuWangSamworth2015.yuWangSamworth_alignedFrame_block_le`: Theorem 2's two conclusions
-  with the source's indexing and gap.
-* `YuWangSamworth2015.yuWangSamworth_sinTheta_block_le_residual`,
-  `YuWangSamworth2015.yuWangSamworth_alignedFrame_block_le_residual`: the sharper residual
-  forms with the same indexing.
-* `YuWangSamworth2015.yuWangSamworth_alignedFrame_block_real_le`: over `ℝ`, the same
-  conclusion with `Ô` an element of `Matrix.orthogonalGroup (Fin d) ℝ` — every
-  symbol of the printed second conclusion.
+* `YuWangSamworth2015.indexGap` and `YuWangSamworth2015.gap_of_singleton`: the separation
+  read off the boundary hypothesis, and the singleton-block case.
+
+This module is the indexing layer only.  The theorems that consume it —
+`yuWangSamworth_sinTheta_block_le`, `yuWangSamworth_alignedFrame_block_le`, their residual
+forms, and the real orthogonal-group form `yuWangSamworth_alignedFrame_block_real_le` — live
+in `YuWangSamworth2015/Symmetric/Theorem2.lean`.
 -/
 
 public section
