@@ -682,8 +682,8 @@ Status: **TERMINAL EXACT**.
 #check @TauCeti.DavisKahan1970.proposition6_1_commonDomain_real
 #check @TauCeti.DavisKahan1970.Proposition6_1_commonDomain
 #check @TauCeti.DavisKahan1970.Proposition6_1_real_commonDomain
-#check @TauCeti.DavisKahan1970.Proposition6_1_complex
-#check @TauCeti.DavisKahan1970.Proposition6_1_real
+#check @TauCeti.DavisKahan1970.proposition6_1_complex
+#check @TauCeti.DavisKahan1970.proposition6_1_real
 #check @TauCeti.DavisKahan1970.Proposition6_1_real_representative
 #check @TauCeti.DavisKahan1970.Proposition6_1_real_sinTheta_singularValues
 
@@ -699,8 +699,8 @@ Status: **TERMINAL EXACT**.
 #check @TauCeti.DavisKahan1970.isTrialResidual_iff_equation_and_isometry
 #check @TauCeti.DavisKahan1970.lowerFrameBound_iff_operator_inequality
 #check @TauCeti.DavisKahan1970.lowerFrameBound_of_operator_inequality
-#check @TauCeti.DavisKahan1970.Theorem6_1_complex
-#check @TauCeti.DavisKahan1970.Theorem6_1_real
+#check @TauCeti.DavisKahan1970.theorem6_1_complex
+#check @TauCeti.DavisKahan1970.theorem6_1_real
 #check @TauCeti.DavisKahan1970.Theorem6_1_real_commonDomain
 #check @TauCeti.DavisKahan1970.Theorem6_1_real_commonCore
 
@@ -711,8 +711,8 @@ Status: **TERMINAL EXACT**.
 
 #check @TauCeti.DavisKahan1970.theorem6_2_complex
 #check @TauCeti.DavisKahan1970.theorem6_2_real
-#check @TauCeti.DavisKahan1970.Theorem6_2_complex
-#check @TauCeti.DavisKahan1970.Theorem6_2_real
+#check @TauCeti.DavisKahan1970.theorem6_2_complex
+#check @TauCeti.DavisKahan1970.theorem6_2_real
 
 /-! ## DK-6.3-thm: Tangent proof machinery, Example 6.1, and generalized tangent theorem
 

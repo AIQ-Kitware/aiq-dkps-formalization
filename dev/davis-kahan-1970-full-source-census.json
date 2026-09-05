@@ -4265,9 +4265,7 @@
         "hostile-audit-atomization"
       ],
       "lean_declarations": [
-        "TauCeti.DavisKahan1970.Proposition6_1_complex",
         "TauCeti.DavisKahan1970.RealSymmetricSinThetaProblem",
-        "TauCeti.DavisKahan1970.Proposition6_1_real",
         "TauCeti.DavisKahan1970.Proposition6_1_real_kyFan",
         "TauCeti.DavisKahan1970.Proposition6_1_real_sinTheta_singularValues",
         "TauCeti.DavisKahan1970.Proposition6_1_real_sinTheta_eq_literalFullSinAngle",
@@ -4305,8 +4303,6 @@
       "verification": "proved_in_build",
       "blocked_by": [],
       "lean_declarations": [
-        "TauCeti.DavisKahan1970.Theorem6_1_complex",
-        "TauCeti.DavisKahan1970.Theorem6_1_real",
         "TauCeti.DavisKahan1970.Theorem6_1_real_commonDomain",
         "TauCeti.DavisKahan1970.Theorem6_1_real_commonCore",
         "TauCeti.DavisKahan1970.theorem6_1_complex",
@@ -4351,8 +4347,6 @@
           "TauCeti.DavisKahan1970.theorem6_1_real"
         ],
         "supporting_declarations": [
-          "TauCeti.DavisKahan1970.Theorem6_1_complex",
-          "TauCeti.DavisKahan1970.Theorem6_1_real",
           "TauCeti.DavisKahan1970.Theorem6_1_commonDomain",
           "TauCeti.DavisKahan1970.Theorem6_1_real_commonDomain",
           "TauCeti.DavisKahan1970.Theorem6_1_real_commonCore",
@@ -4705,8 +4699,6 @@
         "hostile-audit-atomization"
       ],
       "lean_declarations": [
-        "TauCeti.DavisKahan1970.Theorem6_2_complex",
-        "TauCeti.DavisKahan1970.Theorem6_2_real",
         "TauCeti.DavisKahan1970.Theorem6_2_real_commonDomain",
         "TauCeti.DavisKahan1970.Theorem6_2_real_commonCore",
         "TauCeti.DavisKahan.ExactSinTheta.Theorem62Data.operatorNorm_result_across_of_rank_le",
@@ -6879,7 +6871,7 @@
       "verification": "proved_in_build",
       "blocked_by": [],
       "lean_declarations": [
-        "TauCeti.DavisKahan1970.Theorem6_2_complex"
+        "TauCeti.DavisKahan1970.theorem6_2_complex"
       ],
       "notes": "The paper resolves the square norm; the repository has the sharp pairwise Hilbert–Schmidt theorem. The all-UI-norm version remains a distinct question.\n\n**NORM CLASSES RECORDED 2026-08-07 (Opus 5), closing this row's standing next_action.**\n\n* RESOLVED, under the weak hypothesis Question 10.1 actually asks about (the two spectra\n  only known to be at pairwise distance `delta`, with no interval/exterior separation):\n  the **Hilbert--Schmidt / Frobenius** class.  `DavisKahan/Sources/DavisKahan1970/SineTheta/Theorem62.lean`\n  states Theorem 6.2 with exactly that weaker pairwise spectral-distance hypothesis and\n  concludes `frameLowerBound * ContinuousLinearMap.hilbertSchmidtNorm (canonicalSinTheta) <= ...`, over\n  `hilbertSchmidt_sylvester_le_of_pairwiseSpectrumGap_direct`; the real-scalar form is\n  `RealTheorem62Data.result_across`.\n* RESOLVED, but under the *stronger* interval/exterior hypothesis, hence not an answer to\n  this question: **every** unitarily invariant norm, with constant one -- that is Theorem 6.1\n  and its ideal-gauge forms (rows DK-6.1-thm and S2-*).\n* OPEN, and this is precisely Question 10.1: any unitarily invariant norm other than the\n  Hilbert--Schmidt one under the pairwise-distance hypothesis alone.  The paper poses it and\n  the repository does not answer it; the Hilbert--Schmidt proof is a Sylvester/Frobenius\n  argument that does not transfer to a general gauge.\n\nThis row stays `resolved_by_modern_development`: one norm class is answered, the general\nquestion is not, and it is the paper's own open question rather than proof debt.\n\n**M18 ADJUDICATION 2026-08-09 (Claude Opus 5), against `dev/davis-kahan-1970-final-audit-2026-08-09.md`.**  Disagreement 27 is UPHELD as a CLASSIFICATION point,\nand it is worth stating precisely because the status word is `resolved_by_modern_development`.\nTheorem 6.2 and inequality (5.1) are IN THE PAPER, so they cannot themselves resolve the paper's own\nopen question -- Davis and Kahan knew them when they posed Question 10.1, which asks for the best\nunitarily-invariant-norm estimate under pairwise spectral distance alone.  What is genuinely modern\nhere is the SCOPE at which the repository proves the Hilbert--Schmidt answer: over self-adjoint CLOSED\n(hence possibly unbounded) operators on arbitrary complete inner product spaces, over real as well as\ncomplex scalars, with Hilbert--Schmidt membership concluded rather than assumed -- see the new row\n`DK-5-hermitian-inequalities`, which now claims (5.1) itself.  The status therefore stands, on that\nreading and not on the reading the notes above invite.  Either way this row is NOT proof debt: the\ngeneral-UI-norm question is the paper's own open question.",
       "next_action": "Retain as a source open-question record. It is not theorem proof debt; do not use it to hide established mathematical clauses from mixed neighboring/source blocks.",

@@ -4,7 +4,7 @@
 
 **Census family:** `source-completion-census`  
 **Items:** 50  
-**Unique cited Lean declarations:** 1261
+**Unique cited Lean declarations:** 1255
 
 ## How to use this census
 
@@ -3436,9 +3436,7 @@ with no finite-dimensionality hypothesis.  `HasMinMaxLowerBoundEverywhere` has i
 
 **Lean declarations:**
 
-- `TauCeti.DavisKahan1970.Proposition6_1_complex`
 - `TauCeti.DavisKahan1970.RealSymmetricSinThetaProblem`
-- `TauCeti.DavisKahan1970.Proposition6_1_real`
 - `TauCeti.DavisKahan1970.Proposition6_1_real_kyFan`
 - `TauCeti.DavisKahan1970.Proposition6_1_real_sinTheta_singularValues`
 - `TauCeti.DavisKahan1970.Proposition6_1_real_sinTheta_eq_literalFullSinAngle`
@@ -3488,8 +3486,6 @@ REOPENING WITHDRAWN 2026-08-31 and the rule corrected: a later source passage en
 
 **Lean declarations:**
 
-- `TauCeti.DavisKahan1970.Theorem6_1_complex`
-- `TauCeti.DavisKahan1970.Theorem6_1_real`
 - `TauCeti.DavisKahan1970.Theorem6_1_real_commonDomain`
 - `TauCeti.DavisKahan1970.Theorem6_1_real_commonCore`
 - `TauCeti.DavisKahan1970.theorem6_1_complex`
@@ -3556,8 +3552,6 @@ REOPENING WITHDRAWN 2026-08-31 and the rule corrected: a later source passage en
 
 **Lean declarations:**
 
-- `TauCeti.DavisKahan1970.Theorem6_2_complex`
-- `TauCeti.DavisKahan1970.Theorem6_2_real`
 - `TauCeti.DavisKahan1970.Theorem6_2_real_commonDomain`
 - `TauCeti.DavisKahan1970.Theorem6_2_real_commonCore`
 - `TauCeti.DavisKahan.ExactSinTheta.Theorem62Data.operatorNorm_result_across_of_rank_le`
@@ -5646,7 +5640,7 @@ which say what the record cannot.  What still blocks the four remaining Section 
 
 **Lean declarations:**
 
-- `TauCeti.DavisKahan1970.Theorem6_2_complex`
+- `TauCeti.DavisKahan1970.theorem6_2_complex`
 
 **Notes.** The paper resolves the square norm; the repository has the sharp pairwise Hilbert–Schmidt theorem. The all-UI-norm version remains a distinct question.
 
