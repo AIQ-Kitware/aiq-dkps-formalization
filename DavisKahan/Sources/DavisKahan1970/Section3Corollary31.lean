@@ -180,6 +180,131 @@ theorem corollary3_1_compact_defectBlock_angleList_classification
     ← sameHalmosTrivialDimensions_orthogonal_right_iff U₁ V₁ U₂ V₂]
   exact corollary3_1_compact_angleList_classification U₁ V₁ᗮ U₂ V₂ᗮ h₁ h₂
 
+/-! ### The source's own invariant: the angles, not their sines squared
+
+Corollary 3.1 says the complete invariants reduce to *the eigenvalues of `Θ₀` and
+`Θ₁`, counted with multiplicity*.  `compactAngleEigenvalueList` is the eigenvalue
+list of the sine-square block, so the classification above is stated on `sin²θ`,
+not on `θ`.  The two determine each other, because `θ ↦ sin²θ` is injective on
+`[0, π/2]` -- that is `angleSequence_eq_of_angleList_eq`, already proved for the
+realization half -- but the classification half was never restated on the angles.
+
+`compactAngleList` is the angle list itself, and the theorem below is the printed
+statement on it.  The `sin²` form remains as the structural theorem beneath. -/
+
+section SourceAngleList
+
+variable {𝕜 : Type*} [RCLike 𝕜]
+variable {K₁ : Type u} [NormedAddCommGroup K₁] [InnerProductSpace 𝕜 K₁] [CompleteSpace K₁]
+variable {K₂ : Type v} [NormedAddCommGroup K₂] [InnerProductSpace 𝕜 K₂] [CompleteSpace K₂]
+
+/-- **The source's angle list**: the principal angles themselves, counted with
+multiplicity, recovered from the eigenvalue list of the sine-square block by
+`θ = arcsin √(sin²θ)`. -/
+noncomputable def compactAngleList (A : K₁ →L[𝕜] K₁) : ℕ → ℝ :=
+  fun n => Real.arcsin (Real.sqrt (compactAngleEigenvalueList A n))
+
+/-- The angle list lands in the principal-angle range `[0, π/2]`. -/
+theorem compactAngleList_mem_Icc (A : K₁ →L[𝕜] K₁) (n : ℕ) :
+    compactAngleList A n ∈ Set.Icc 0 (Real.pi / 2) :=
+  ⟨Real.arcsin_nonneg.mpr (Real.sqrt_nonneg _), Real.arcsin_le_pi_div_two _⟩
+
+/-- **The angle list determines the sine-square list, and conversely**, given that
+the sine-square values lie in `[0, 1]`.
+
+This is the exact sense in which the two spellings of Corollary 3.1's invariant are
+the same data. -/
+theorem compactAngleList_inj_iff {A : K₁ →L[𝕜] K₁} {B : K₂ →L[𝕜] K₂}
+    (hA : ∀ n, compactAngleEigenvalueList A n ≤ 1)
+    (hB : ∀ n, compactAngleEigenvalueList B n ≤ 1) :
+    compactAngleEigenvalueList A = compactAngleEigenvalueList B ↔
+      compactAngleList A = compactAngleList B := by
+  constructor
+  · intro h; unfold compactAngleList; rw [h]
+  · intro h
+    funext n
+    have hsin : ∀ (x : ℝ), 0 ≤ x → x ≤ 1 →
+        Real.sin (Real.arcsin (Real.sqrt x)) ^ 2 = x := by
+      intro x h0 h1
+      have hs0 : 0 ≤ Real.sqrt x := Real.sqrt_nonneg x
+      have hs1 : Real.sqrt x ≤ 1 := by
+        rw [show (1 : ℝ) = Real.sqrt 1 by simp]; exact Real.sqrt_le_sqrt h1
+      rw [Real.sin_arcsin (by linarith) hs1]
+      exact Real.sq_sqrt h0
+    have h0A : 0 ≤ compactAngleEigenvalueList A n :=
+      ContinuousLinearMap.approximationNumber_nonneg _ _
+    have h0B : 0 ≤ compactAngleEigenvalueList B n :=
+      ContinuousLinearMap.approximationNumber_nonneg _ _
+    calc compactAngleEigenvalueList A n
+        = Real.sin (compactAngleList A n) ^ 2 := (hsin _ h0A (hA n)).symm
+      _ = Real.sin (compactAngleList B n) ^ 2 := by rw [h]
+      _ = compactAngleEigenvalueList B n := hsin _ h0B (hB n)
+
+/-- **Halmos's cosine block is a contraction.**  It is the compression of the
+orthogonal projection `P_V`, and both the compression and `P_V` have norm at most
+one. -/
+theorem norm_genericCosineBlock_le_one
+    {H : Type u} [NormedAddCommGroup H] [InnerProductSpace 𝕜 H] [CompleteSpace H]
+    (U V : Submodule 𝕜 H) [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] :
+    ‖genericCosineBlock U V‖ ≤ 1 := by
+  rw [genericCosineBlock, Sylvester.compressOperator]
+  refine le_trans (ContinuousLinearMap.opNorm_comp_le _ _) ?_
+  have h1 : ‖(genericLeftHalf U V).orthogonalProjectionOnto‖ ≤ 1 :=
+    Submodule.orthogonalProjectionOnto_norm_le _
+  have h2 : ‖V.starProjection ∘L (genericLeftHalf U V).subtypeL‖ ≤ 1 := by
+    refine le_trans (ContinuousLinearMap.opNorm_comp_le _ _) ?_
+    have hp : ‖V.starProjection‖ ≤ 1 := by
+      refine ContinuousLinearMap.opNorm_le_bound _ zero_le_one fun x => ?_
+      simpa using V.norm_starProjection_apply_le x
+    have hs : ‖(genericLeftHalf U V).subtypeL‖ ≤ 1 := by
+      exact_mod_cast (genericLeftHalf U V).norm_subtypeL_le
+    nlinarith [norm_nonneg V.starProjection, norm_nonneg (genericLeftHalf U V).subtypeL]
+  nlinarith [norm_nonneg ((genericLeftHalf U V).orthogonalProjectionOnto),
+    norm_nonneg (V.starProjection ∘L (genericLeftHalf U V).subtypeL)]
+
+/-- The sine-square eigenvalue list of Halmos's block never exceeds `1`, since the
+block is a contraction. -/
+theorem compactAngleEigenvalueList_genericCosineBlock_le_one
+    {H : Type u} [NormedAddCommGroup H] [InnerProductSpace 𝕜 H] [CompleteSpace H]
+    (U V : Submodule 𝕜 H) [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
+    (n : ℕ) :
+    compactAngleEigenvalueList (genericCosineBlock U V) n ≤ 1 :=
+  le_trans (ContinuousLinearMap.approximationNumber_le_norm _ n)
+    (norm_genericCosineBlock_le_one U V)
+
+/-- **Davis--Kahan 1970, Corollary 3.1, on the source's own invariant.**
+
+The complete invariants reduce to the *eigenvalues of `Θ₀` and `Θ₁`, counted with
+multiplicity* -- the angles themselves, which is what the corollary says -- together
+with the elementary multiplicities.
+
+`corollary3_1_compact_defectBlock_angleList_classification` is the same
+classification carried on the `sin²θ` list; the two agree by
+`compactAngleList_inj_iff`, whose hypothesis is discharged here by
+`compactAngleEigenvalueList_genericCosineBlock_le_one`. -/
+theorem corollary3_1_compact_defectBlock_sourceAngleList_classification
+    {H₁ : Type u} [NormedAddCommGroup H₁] [InnerProductSpace 𝕜 H₁] [CompleteSpace H₁]
+    {H₂ : Type v} [NormedAddCommGroup H₂] [InnerProductSpace 𝕜 H₂] [CompleteSpace H₂]
+    (W₁ X₁ : Submodule 𝕜 H₁) [W₁.HasOrthogonalProjection] [X₁.HasOrthogonalProjection]
+    (W₂ X₂ : Submodule 𝕜 H₂) [W₂.HasOrthogonalProjection] [X₂.HasOrthogonalProjection]
+    (hcompact₁ : IsCompactOperator
+      (projection W₁ ∘L
+        (ContinuousLinearMap.id 𝕜 H₁ - projection X₁) ∘L projection W₁))
+    (hcompact₂ : IsCompactOperator
+      (projection W₂ ∘L
+        (ContinuousLinearMap.id 𝕜 H₂ - projection X₂) ∘L projection W₂)) :
+    PairOfSubspacesUnitaryEquivalent W₁ X₁ W₂ X₂ ↔
+      SameHalmosTrivialDimensions W₁ X₁ W₂ X₂ ∧
+      compactAngleList (genericCosineBlock W₁ X₁ᗮ) =
+        compactAngleList (genericCosineBlock W₂ X₂ᗮ) := by
+  rw [corollary3_1_compact_defectBlock_angleList_classification
+        W₁ X₁ W₂ X₂ hcompact₁ hcompact₂,
+    compactAngleList_inj_iff
+      (compactAngleEigenvalueList_genericCosineBlock_le_one W₁ X₁ᗮ)
+      (compactAngleEigenvalueList_genericCosineBlock_le_one W₂ X₂ᗮ)]
+
+end SourceAngleList
+
 end DefectBlockClassification
 section Classification
 

@@ -2729,7 +2729,13 @@
         "TauCeti.DavisKahan1970.angleSequence_eq_of_angleList_eq",
         "TauCeti.DavisKahan1970.angle_eq_of_sin_sq_eq",
         "TauCeti.DavisKahan1970.corollary3_1_prescribedAngleSequence_classification",
-        "TauCeti.DavisKahan1970.corollary3_1_prescribedAngleSequence_classification_real"
+        "TauCeti.DavisKahan1970.corollary3_1_prescribedAngleSequence_classification_real",
+        "TauCeti.DavisKahan1970.corollary3_1_compact_defectBlock_sourceAngleList_classification",
+        "TauCeti.DavisKahan1970.compactAngleList",
+        "TauCeti.DavisKahan1970.compactAngleList_mem_Icc",
+        "TauCeti.DavisKahan1970.compactAngleList_inj_iff",
+        "TauCeti.DavisKahan1970.compactAngleEigenvalueList_genericCosineBlock_le_one",
+        "TauCeti.DavisKahan1970.norm_genericCosineBlock_le_one"
       ],
       "review_note": "Accepted by the hostile audit at the stated-result level.\n\n**UNDER-CERTIFICATION FOUND AND FIXED 2026-09-04 (Claude Opus 5, on hostile review).**  The realization clause was canonicalized on `corollary3_1_realization`, whose own docstring records that the two angle-zero multiplicities come out equal.  The printed sentence allows them to differ -- that is the whole content of 'except perhaps for the multiplicity of 0' -- and the repository already contained `corollary3_1_realization_zeroMultiplicity`, which prescribes them independently.  The row was under-certified against a theorem it already had.  Canonical evidence moved to the stronger realization, and the classification half (`corollary3_1_prescribedAngleSequence_classification`) is registered beside it.  Two new correspondence theorems record that the eigenvalue list this development stores, `n |-> sin^2 theta_n`, determines the printed angle sequence.",
       "parent_claim_id": "DK-3.1-cor",
@@ -2750,7 +2756,7 @@
       "local_statement_self_contained": true,
       "canonical_evidence": [
         {
-          "declaration": "TauCeti.DavisKahan1970.corollary3_1_compact_defectBlock_angleList_classification",
+          "declaration": "TauCeti.DavisKahan1970.corollary3_1_compact_defectBlock_sourceAngleList_classification",
           "role": "primary_source_witness",
           "scalar_scope": "rclike",
           "evidence_kind": "proof",
@@ -2758,7 +2764,8 @@
             "DK-3.1-cor.compact-complete-invariants",
             "DK-3.1-cor.theta1-match"
           ],
-          "capability_classes": []
+          "capability_classes": [],
+          "note": "The complete invariant on the SOURCE'S OWN angles, counted with multiplicity, scalar-generic over RCLike. Corrected 2026-09-05 from the sin^2 list."
         },
         {
           "declaration": "TauCeti.DavisKahan1970.corollary3_1_realization_zeroMultiplicity",
@@ -2796,6 +2803,36 @@
         {
           "declaration": "TauCeti.DavisKahan1970.corollary3_1_prescribedAngleSequence_classification_real",
           "role": "supporting_theorem"
+        },
+        {
+          "declaration": "TauCeti.DavisKahan1970.corollary3_1_compact_defectBlock_angleList_classification",
+          "role": "implementation_structure",
+          "note": "The same classification carried on the sin^2 eigenvalue list. It is the structural theorem the source-facing statement is built on, and it was this clause's canonical witness until 2026-09-05."
+        },
+        {
+          "declaration": "TauCeti.DavisKahan1970.compactAngleList",
+          "role": "source_correspondence",
+          "note": "The source's own invariant: the principal angles counted with multiplicity, recovered as arcsin of the square root of the sine-square list."
+        },
+        {
+          "declaration": "TauCeti.DavisKahan1970.compactAngleList_mem_Icc",
+          "role": "supporting_theorem",
+          "note": "The angle list lands in the principal-angle range [0, pi/2]."
+        },
+        {
+          "declaration": "TauCeti.DavisKahan1970.compactAngleList_inj_iff",
+          "role": "source_correspondence",
+          "note": "The exact sense in which the two spellings of the invariant are the same data: equality of angle lists and equality of sine-square lists are equivalent when the latter lie in [0,1]."
+        },
+        {
+          "declaration": "TauCeti.DavisKahan1970.compactAngleEigenvalueList_genericCosineBlock_le_one",
+          "role": "supporting_theorem",
+          "note": "The sine-square list of Halmos's block never exceeds 1, since the block is a positive contraction; this discharges the hypothesis of compactAngleList_inj_iff."
+        },
+        {
+          "declaration": "TauCeti.DavisKahan1970.norm_genericCosineBlock_le_one",
+          "role": "supporting_theorem",
+          "note": "Halmos's cosine block is a contraction: it is the compression of the orthogonal projection P_V, and compression and P_V both have norm at most one."
         }
       ],
       "result_wide_scope_atoms": [],
@@ -2808,12 +2845,20 @@
           ],
           "scalar_scope": "rclike",
           "evidence": {
-            "primary": "TauCeti.DavisKahan1970.corollary3_1_compact_defectBlock_angleList_classification",
-            "correspondence": []
+            "primary": "TauCeti.DavisKahan1970.corollary3_1_compact_defectBlock_sourceAngleList_classification",
+            "correspondence": [
+              "TauCeti.DavisKahan1970.compactAngleList",
+              "TauCeti.DavisKahan1970.compactAngleList_inj_iff",
+              "TauCeti.DavisKahan1970.compactAngleEigenvalueList_genericCosineBlock_le_one",
+              "TauCeti.DavisKahan1970.angleSequence_eq_of_angleList_eq"
+            ],
+            "supporting": [
+              "TauCeti.DavisKahan1970.corollary3_1_compact_defectBlock_angleList_classification"
+            ]
           },
           "status": "established",
           "evidence_kind": "proof",
-          "justification": "Canonical witness for compact-complete-invariants, theta1-match at rclike scalar scope, carried over from the pre-clause canonical evidence and re-checked against its compiler-printed type under the coherent model."
+          "justification": "The complete invariants of a compact-defect pair, ON THE SOURCE'S OWN INVARIANT. Corollary 3.1 says they reduce to the eigenvalues of Theta_0 and Theta_1, counted with multiplicity -- the ANGLES. The primary is stated on `compactAngleList`, which is that list.\n\nREPRESENTATION CORRECTED 2026-09-05. The primary was the `angleList` form, whose invariant is `compactAngleEigenvalueList` -- the eigenvalue list of the SINE-SQUARE block, not of the angle operator -- and this clause asserted it as the printed statement. The two determine each other because t -> sin^2 t is injective on [0, pi/2], which the row already proved for the realization half as `angleSequence_eq_of_angleList_eq`; the classification half had never been restated on the angles. `compactAngleList_inj_iff` is that restatement, and `compactAngleEigenvalueList_genericCosineBlock_le_one` discharges its hypothesis by way of the spectrum bound on Halmos's block. The sin^2 form is retained as the structural theorem beneath."
         },
         {
           "id": "allowed-angle-sequence.rclike",
@@ -5642,7 +5687,7 @@
     "terminal_results": 29,
     "remaining_results": [],
     "note": "The structured fields above are authoritative; this paragraph is regenerated whenever the count moves. 2026-09-02, closing: terminal_results is 29 and remaining_results is empty. `S2-tan-two-theta` was `hostile_review_blocked` under obligation `tan2theta-directed-correspondence` after a 2026-09-02 closure that did not compose; it is now accepted on canonical directed witnesses `tanTwoTheta_directed_unboundedResidual_symmetricNorming_{complex,real}`, which take the reducing subspace and conclude on the paper's directed corner (`tanTwoDirectedCornerR U V` over ℝ) with the singular-value identification in their types. The canonical-evidence digest changed accordingly and the statement pins were refreshed for the new canonical and bridging declarations. Earlier history of this field (the 2026-08-31 `S2-sin-two-theta` reopening, the `S2-tan-theta` Appendix-scope primaries, the paper-prefix rename with an unchanged digest) is in the human report.",
-    "canonical_evidence_sha256": "8574f171d81b1d94a10f4f8e20049751e716e7bceb81869632b51d63615058d1",
+    "canonical_evidence_sha256": "c9d92e99e88eaa6b6813dcf0d0a6ccb0b609a87c894968b1a662b91a9309d9a4",
     "hostile_review_status": "accepted",
     "hostile_review_note": "ACCEPTED 2026-09-02, after the day's reopening was closed by new mathematics rather than by metadata: the directed tan 2Theta clauses have source-shaped complex and real endpoints on the paper objects, with the correspondence composed in Lean and pinned. `open_hostile_review_obligations` is closed and lists the closure; the structured fields `terminal_results`, `remaining_results` and `hostile_review_status` are the authoritative statement."
   },
