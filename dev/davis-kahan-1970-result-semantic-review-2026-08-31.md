@@ -145,7 +145,7 @@ The registered primaries were
 `tanTheta_directed_unboundedTrial_symmetricNorming_{complex,real}`.  They take
 
 ```lean
-TanTheta.UnboundedTrialBlock A Z   -- with   operator : Z →L[𝕜] Z
+TanTheta.BoundedCompressionTrialBlock A Z   -- with   operator : Z →L[𝕜] Z
 ```
 
 whose Ritz compression is **bounded and everywhere defined on the trial space**.
@@ -180,7 +180,7 @@ The bounded-compression declarations are retained as specializations.
 
 ```json
 "must_contain":     ["UnboundedRitzPair"],
-"must_not_contain": ["UnboundedTrialBlock"]
+"must_not_contain": ["BoundedCompressionTrialBlock"]
 ```
 
 so a bounded-compression bundle can no longer satisfy an Appendix-scope
@@ -199,7 +199,7 @@ The two `FAIL` rows are the point: they satisfy both older axes.  A single
 generic `unbounded` token would have called them compliant, which is what
 happened.  `scripts/tests/test_davis_kahan_coherent_evidence.py` carries the
 negative regression (`unbounded ambient` + bounded compression must be rejected,
-naming `UnboundedTrialBlock`) and the positive one.
+naming `BoundedCompressionTrialBlock`) and the positive one.
 
 ### The narrow seven-clause audit on this axis
 
@@ -227,7 +227,7 @@ spectrality assumption -- its fields are two complementary isometries and an
 intertwining, i.e. an arbitrary reducing decomposition.
 
 *`tan 2Θ` has no hidden bounded compression.*  The suspicion was worth checking
-and does not apply: nothing plays the role `UnboundedTrialBlock.operator` played
+and does not apply: nothing plays the role `BoundedCompressionTrialBlock.operator` played
 for `tan Θ`.  Its exact subspace is spectral (`specRange hA (Set.Iic c)`), but
 for the **ordered** families that is forced rather than assumed: `spec(A₀) ⊆
 [β,α]` and `spec(A₁) ⊆ [α+δ,∞)` leave `A` no spectrum in `(α, α+δ)`, so `P` is

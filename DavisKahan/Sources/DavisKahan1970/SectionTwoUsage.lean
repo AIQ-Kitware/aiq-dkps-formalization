@@ -177,14 +177,14 @@ theorem tanTheta_from_reducingSubspace
 /-- The same reading with a bounded Ritz compression, which is the common case.
 
 `DavisKahan.UnboundedRitzPair.ofTrialBlock` builds the Ritz pair from the
-`UnboundedTrialBlock` bundle, so neither of the two structural objects has to be
+`BoundedCompressionTrialBlock` bundle, so neither of the two structural objects has to be
 assembled by hand. -/
 theorem tanTheta_from_trialBlock
     (N : SymmetricNormingFunction)
     {A : E →ₗ.[ℂ] E}
     {U V : Submodule ℂ E}
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] [CompleteSpace U]
-    (D : DavisKahan.TanTheta.UnboundedTrialBlock A U)
+    (D : DavisKahan.TanTheta.BoundedCompressionTrialBlock A U)
     (hVred : TauCeti.LinearPMap.ReducesSubspace A V)
     (Hop : E →L[ℂ] E) (hH : IsSelfAdjoint Hop)
     {alpha delta : ℝ} (hdelta : 0 < delta)

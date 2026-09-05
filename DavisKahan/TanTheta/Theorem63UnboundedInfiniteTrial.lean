@@ -25,7 +25,7 @@ argument already existed separately:
 
 The finite-projector passage only uses bounded trial-block data: the self-adjoint Ritz
 compression, the residual, and the action on the trial space.  Those are precisely the
-fields of `Theorem63TrialData`, including for an `UnboundedTrialBlock`.  This module lifts
+fields of `Theorem63TrialData`, including for an `BoundedCompressionTrialBlock`.  This module lifts
 the Appendix argument to that data abstraction and then instantiates it at the unbounded
 trial block.
 
@@ -594,7 +594,7 @@ theorem theorem6_3_unbounded_infiniteTrial_ideal_exists_of_reducing
     (N : ExactSinTheta.KyFanDominantIdealFamily (𝕜 := ℂ))
     (A : H →ₗ.[ℂ] H)
     {Z : Submodule ℂ H} [Z.HasOrthogonalProjection] [CompleteSpace Z]
-    (D : UnboundedTrialBlock A Z)
+    (D : BoundedCompressionTrialBlock A Z)
     (V : Submodule ℂ H) [V.HasOrthogonalProjection]
     {alpha delta : ℝ} (hdelta : 0 < delta)
     (hVdom : ∀ x : A.domain, Vᗮ.starProjection ((x : H)) ∈ A.domain)
@@ -620,7 +620,7 @@ theorem theorem6_3_unbounded_infiniteTrial_ideal_of_reducing
     (N : ExactSinTheta.KyFanDominantIdealFamily (𝕜 := ℂ))
     (A : H →ₗ.[ℂ] H)
     {Z : Submodule ℂ H} [Z.HasOrthogonalProjection] [CompleteSpace Z]
-    (D : UnboundedTrialBlock A Z)
+    (D : BoundedCompressionTrialBlock A Z)
     (V : Submodule ℂ H) [V.HasOrthogonalProjection]
     {alpha delta : ℝ} (hdelta : 0 < delta)
     (hVdom : ∀ x : A.domain, Vᗮ.starProjection ((x : H)) ∈ A.domain)
@@ -646,7 +646,7 @@ theorem theorem6_3_unbounded_infiniteTrial_ideal_exists
     (N : ExactSinTheta.KyFanDominantIdealFamily (𝕜 := ℂ))
     (A : H →ₗ.[ℂ] H) (hA : IsSelfAdjoint A)
     {Z : Submodule ℂ H} [Z.HasOrthogonalProjection] [CompleteSpace Z]
-    (D : UnboundedTrialBlock A Z)
+    (D : BoundedCompressionTrialBlock A Z)
     {alpha delta : ℝ} (hdelta : 0 < delta)
     (hgap : TauCeti.LinearPMap.specProjection hA (Set.Ioo alpha (alpha + delta))
       measurableSet_Ioo = 0)
@@ -674,7 +674,7 @@ theorem theorem6_3_unbounded_infiniteTrial_ideal
     (N : ExactSinTheta.KyFanDominantIdealFamily (𝕜 := ℂ))
     (A : H →ₗ.[ℂ] H) (hA : IsSelfAdjoint A)
     {Z : Submodule ℂ H} [Z.HasOrthogonalProjection] [CompleteSpace Z]
-    (D : UnboundedTrialBlock A Z)
+    (D : BoundedCompressionTrialBlock A Z)
     {alpha delta : ℝ} (hdelta : 0 < delta)
     (hgap : TauCeti.LinearPMap.specProjection hA (Set.Ioo alpha (alpha + delta))
       measurableSet_Ioo = 0)

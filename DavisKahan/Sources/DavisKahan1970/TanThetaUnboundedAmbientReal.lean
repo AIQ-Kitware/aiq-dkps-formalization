@@ -235,7 +235,7 @@ approximation numbers are preserved exactly. -/
 theorem tanTheta_ambient_unboundedOperator_boundedRitz_symmetricNorming_real
     (N : SymmetricNormingFunction)
     (A : E →ₗ.[ℝ] E)
-    (D : UnboundedTrialBlock A U)
+    (D : BoundedCompressionTrialBlock A U)
     (H : E →L[ℝ] E) (hH : IsSelfAdjoint H)
     {alpha delta : ℝ} (hdelta : 0 < delta)
     (hVdom : ∀ x : A.domain, Vᗮ.starProjection ((x : E)) ∈ A.domain)

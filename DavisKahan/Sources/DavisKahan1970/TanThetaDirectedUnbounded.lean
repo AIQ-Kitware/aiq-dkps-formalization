@@ -100,7 +100,7 @@ theorem tanTheta_directed_unboundedTrial_symmetricNorming_complex
     (N : SymmetricNormingFunction)
     (A : H →ₗ.[ℂ] H) (hA : IsSelfAdjoint A)
     {Z : Submodule ℂ H} [Z.HasOrthogonalProjection] [CompleteSpace Z]
-    (D : TanTheta.UnboundedTrialBlock A Z)
+    (D : TanTheta.BoundedCompressionTrialBlock A Z)
     {alpha delta : ℝ} (hdelta : 0 < delta)
     (hgap : TauCeti.LinearPMap.specProjection hA (Set.Ioo alpha (alpha + delta))
       measurableSet_Ioo = 0)
@@ -143,7 +143,7 @@ theorem tanTheta_directed_unboundedTrial_symmetricNorming_real
     (N : SymmetricNormingFunction)
     (A : E →ₗ.[ℝ] E) (hA : IsSelfAdjoint A)
     {Z : Submodule ℝ E} [Z.HasOrthogonalProjection] [CompleteSpace Z]
-    (D : TanTheta.UnboundedTrialBlock A Z)
+    (D : TanTheta.BoundedCompressionTrialBlock A Z)
     {alpha delta : ℝ} (hdelta : 0 < delta)
     (hgap : realSelfAdjointSpectralProjection A hA (Set.Ioo alpha (alpha + delta))
       measurableSet_Ioo = 0)
@@ -172,7 +172,7 @@ end Real
 
 /-! ## The Appendix scope: the Ritz compression may itself be unbounded
 
-The two endpoints above take a `TanTheta.UnboundedTrialBlock`, whose Ritz
+The two endpoints above take a `TanTheta.BoundedCompressionTrialBlock`, whose Ritz
 compression `operator : Z →L[𝕜] Z` is **bounded and everywhere defined on the
 trial space**.  Its name records only that the *ambient* operator is unbounded.
 

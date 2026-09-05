@@ -31,7 +31,7 @@ properties of ordinary mathematical objects and belong in the objects.
 * `ReducingComplement A V` is the domain-aware statement that `Vᗮ` reduces `A`.
 
 `UnboundedRitzPair.ofTrialBlock` builds the first from an
-`UnboundedTrialBlock`, so a caller who already has the bounded-compression
+`BoundedCompressionTrialBlock`, so a caller who already has the bounded-compression
 bundle -- the common case -- constructs nothing by hand.
 
 What deliberately does *not* move into these objects is the mathematics: the
@@ -87,11 +87,11 @@ variable {A : H →ₗ.[𝕜] H} {Z : Submodule 𝕜 H}
 
 /-- **Every bounded trial block is an unbounded Ritz pair.**
 
-The common case: the caller holds an `UnboundedTrialBlock`, whose compression is
+The common case: the caller holds an `BoundedCompressionTrialBlock`, whose compression is
 a bounded self-adjoint operator on the trial subspace and whose residual is the
 ambient action's orthogonal part.  Nothing is assumed beyond what that bundle
 already carries. -/
-noncomputable def ofTrialBlock (D : UnboundedTrialBlock A Z) :
+noncomputable def ofTrialBlock (D : BoundedCompressionTrialBlock A Z) :
     UnboundedRitzPair A Z where
   trial :=
     { compression := D.operator.toLinearMap.toPMap ⊤
@@ -111,7 +111,7 @@ noncomputable def ofTrialBlock (D : UnboundedTrialBlock A Z) :
 omit [CompleteSpace H] in
 /-- The Ritz pair built from a trial block keeps the block's residual. -/
 @[simp]
-theorem ofTrialBlock_residual (D : UnboundedTrialBlock A Z) :
+theorem ofTrialBlock_residual (D : BoundedCompressionTrialBlock A Z) :
     (ofTrialBlock D).trial.residual = D.residual := rfl
 
 end UnboundedRitzPair

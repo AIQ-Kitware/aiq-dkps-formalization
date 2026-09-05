@@ -20,7 +20,7 @@ open TauCeti.DavisKahan.Sylvester
 the compression form bound `beamRitz_form_le`, the residual norm
 `norm_beamRitzResidual_le`, and the perturbed spectral gap
 `beamPerturbed_specProjection_Ioo_eq_zero`.  This module bundles them into the
-`UnboundedTrialBlock` the unbounded Theorem 6.3 consumes and reads off the
+`BoundedCompressionTrialBlock` the unbounded Theorem 6.3 consumes and reads off the
 paper's tangent envelope.
 
 The endpoint is `beamTanTheta_le`:
@@ -93,7 +93,7 @@ theorem beamRitzCompression_isSelfAdjoint (ε : ℝ) :
 /-- **The Rayleigh--Ritz trial block of the Section 9 example.**  The trial subspace
 is the affine plane, the compression is `beamRitzCompression`, and the residual is
 the part of `(A + ε t)|_Z` orthogonal to `Z`. -/
-def beamTrialBlock (ε : ℝ) : UnboundedTrialBlock (beamPerturbed ε) beamTrial where
+def beamTrialBlock (ε : ℝ) : BoundedCompressionTrialBlock (beamPerturbed ε) beamTrial where
   domain_le := fun _ hy => beamTrial_le_domain hy
   operator := beamRitzCompression ε
   operator_selfAdjoint := beamRitzCompression_isSelfAdjoint ε
@@ -592,7 +592,7 @@ theorem beamPerturbed_apply_of_mem_beamTrial (ε : ℝ) {x : BeamL2} (hx : x ∈
 compression is the scalar `a = ⟪v, ε t v⟫` and the residual is the single Ritz column. -/
 def beamColumnBlock (ε : ℝ) (v : BeamL2) (hv : v ∈ beamTrial) (hvnorm : ‖v‖ = 1)
     (a : ℝ) (hform : ⟪v, beamPerturbation ε v⟫_ℂ = ((a : ℝ) : ℂ)) :
-    UnboundedTrialBlock (beamPerturbed ε) (ℂ ∙ v) where
+    BoundedCompressionTrialBlock (beamPerturbed ε) (ℂ ∙ v) where
   domain_le := fun _ hx => beamTrial_le_domain (span_singleton_le_beamTrial hv hx)
   operator := ((a : ℝ) : ℂ) • ContinuousLinearMap.id ℂ (ℂ ∙ v)
   operator_selfAdjoint := by
