@@ -51,6 +51,23 @@ universe u
 variable {E : Type u} [NormedAddCommGroup E] [InnerProductSpace ℂ E]
   [CompleteSpace E]
 
+/-- **The paper's `tan Θ` exists as a bounded operator.**
+
+`‖P_U − P_V‖ < 1`: no principal angle of the pair reaches `π/2`.  This is the Section 1
+vacuity convention made explicit for the tangent -- when it fails, `‖tan Θ‖` does not exist and
+the printed statement says nothing -- and it is *not* condition (3.5), which the paper
+introduces only in Section 3. -/
+def HasDefinedAmbientTangent (U V : Submodule ℂ E)
+    [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] : Prop :=
+  U.projectionGap V < 1
+
+/-- `HasDefinedAmbientTangent` is exactly `‖sin Θ‖ < 1`; the gap and the ambient sine are the
+same number by `norm_sinAngleOperatorC`. -/
+theorem hasDefinedAmbientTangent_iff_norm_sinAngleOperatorC_lt_one
+    (U V : Submodule ℂ E) [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] :
+    HasDefinedAmbientTangent U V ↔ ‖sinAngleOperatorC U V‖ < 1 := by
+  rw [HasDefinedAmbientTangent, norm_sinAngleOperatorC U V]
+
 local instance instCompleteSpaceCoeOfHasOrthogonalProjectionTanThetaUnboundedAmbient
     (W : Submodule ℂ E) [W.HasOrthogonalProjection] : CompleteSpace W :=
   (Submodule.isComplete_coe_of_hasOrthogonalProjection W).completeSpace_coe
@@ -296,7 +313,8 @@ theorem tanTheta_ambient_unboundedOperator_boundedRitzData_symmetricNorming_comp
     (hResidual :
       data.residual = Uᗮ.starProjection ∘L H ∘L U.subtypeL)
     (hMem : N.Mem H) :
-    N.Mem (tanAngleOperatorC U V) ∧
+    HasDefinedAmbientTangent U V ∧
+      N.Mem (tanAngleOperatorC U V) ∧
       delta * N.gauge (tanAngleOperatorC U V) ≤ N.gauge H := by
   have hdirected :
       approximationSingularValue 0 (theorem63DirectedSineBlock U V) < 1 :=
@@ -311,8 +329,9 @@ theorem tanTheta_ambient_unboundedOperator_boundedRitzData_symmetricNorming_comp
       DavisKahan.subspaceGap_eq_directedGap_of_crossedDefectsEquivalent
         U V h35]
     exact hambient
-  exact tanTheta_ambient_unboundedOperator_boundedRitzData_symmetricNorming_complex_of_transversality N data H hH
-    hdelta hCompression hcross htr hResidual hMem
+  exact ⟨(hasDefinedAmbientTangent_iff_norm_sinAngleOperatorC_lt_one U V).2 htr,
+    tanTheta_ambient_unboundedOperator_boundedRitzData_symmetricNorming_complex_of_transversality N data H hH
+      hdelta hCompression hcross htr hResidual hMem⟩
 
 /-! ## Appendix scope: the Ritz compression itself may be unbounded -/
 
@@ -407,7 +426,8 @@ theorem tanTheta_ambient_unboundedRitzData_symmetricNorming_complex
     (hResidual :
       D.residual = Uᗮ.starProjection ∘L H ∘L U.subtypeL)
     (hMem : N.Mem H) :
-    N.Mem (tanAngleOperatorC U V) ∧
+    HasDefinedAmbientTangent U V ∧
+      N.Mem (tanAngleOperatorC U V) ∧
       delta * N.gauge (tanAngleOperatorC U V) ≤ N.gauge H := by
   have hdirected :
       approximationSingularValue 0 (theorem63DirectedSineBlock U V) < 1 :=
@@ -421,8 +441,9 @@ theorem tanTheta_ambient_unboundedRitzData_symmetricNorming_complex
       DavisKahan.subspaceGap_eq_directedGap_of_crossedDefectsEquivalent
         U V h35]
     exact hambient
-  exact tanTheta_ambient_unboundedRitzData_symmetricNorming_complex_of_transversality
-    N D H hH hdelta hupper hcross htr hResidual hMem
+  exact ⟨(hasDefinedAmbientTangent_iff_norm_sinAngleOperatorC_lt_one U V).2 htr,
+    tanTheta_ambient_unboundedRitzData_symmetricNorming_complex_of_transversality
+      N D H hH hdelta hupper hcross htr hResidual hMem⟩
 
 /-- **Davis--Kahan 1970, Appendix-complete ambient `tan Theta` theorem.**
 
@@ -455,7 +476,8 @@ theorem tanTheta_ambient_unboundedRitz_explicitCompatibility_symmetricNorming_co
     (h35 : DavisKahan.CrossedDefectsEquivalent U V)
     (hResidual : D.residual = Uᗮ.starProjection ∘L H ∘L U.subtypeL)
     (hMem : N.Mem H) :
-    N.Mem (tanAngleOperatorC U V) ∧
+    HasDefinedAmbientTangent U V ∧
+      N.Mem (tanAngleOperatorC U V) ∧
       delta * N.gauge (tanAngleOperatorC U V) ≤ N.gauge H := by
   refine tanTheta_ambient_unboundedRitzData_symmetricNorming_complex
     N D H hH hdelta hupper ?_ h35 hResidual hMem
@@ -485,7 +507,8 @@ theorem tanTheta_ambient_unboundedOperator_boundedRitz_symmetricNorming_complex
     (h35 : DavisKahan.CrossedDefectsEquivalent U V)
     (hResidual : D.residual = Uᗮ.starProjection ∘L H ∘L U.subtypeL)
     (hMem : N.Mem H) :
-    N.Mem (tanAngleOperatorC U V) ∧
+    HasDefinedAmbientTangent U V ∧
+      N.Mem (tanAngleOperatorC U V) ∧
       delta * N.gauge (tanAngleOperatorC U V) ≤ N.gauge H := by
   let data := Theorem63TrialData.ofUnbounded D V
   refine tanTheta_ambient_unboundedOperator_boundedRitzData_symmetricNorming_complex N data H hH hdelta
@@ -564,7 +587,8 @@ theorem tanTheta_ambient_unboundedRitz_symmetricNorming_complex
     (h35 : DavisKahan.CrossedDefectsEquivalent U V)
     (hResidual : D.trial.residual = Uᗮ.starProjection ∘L H ∘L U.subtypeL)
     (hMem : N.Mem H) :
-    N.Mem (tanAngleOperatorC U V) ∧
+    HasDefinedAmbientTangent U V ∧
+      N.Mem (tanAngleOperatorC U V) ∧
       delta * N.gauge (tanAngleOperatorC U V) ≤ N.gauge H :=
   tanTheta_ambient_unboundedRitz_explicitCompatibility_symmetricNorming_complex N D.trial A H hH hdelta
     D.mem_domain D.action_eq hV.mapsDomain hV.commutes hupper hUnwanted h35
@@ -592,20 +616,16 @@ rather than false.
 `HasDefinedAmbientTangent` names that condition, and the endpoints below take it in place of
 (3.5).  Nothing is lost: definedness *implies* (3.5), because an angle of `π/2` is exactly a
 vector in one of the two crossed defect spaces, so a defined tangent forces both of them to be
-trivial and the identification (3.5) asks for is the one between two zero spaces.  The (3.5)
-endpoints above remain as the non-vacuous corollary. -/
+trivial and the identification (3.5) asks for is the one between two zero spaces.
+
+The (3.5) endpoints above are non-vacuous, and since 2026-09-05 they *say so*: each one
+concludes `HasDefinedAmbientTangent U V` alongside the estimate.  That conjunct was always
+proved inside those proofs -- the tangent bound needs it -- but until it was exposed a reader
+had to open a proof to learn that the conclusion is not about Lean's totalised
+`cfc Real.tan` at a right angle.  Finding F3.1 of the 2026-09-04 hostile review.  The
+endpoints below need no such conjunct: they take the condition as a hypothesis. -/
 
 section DefinedTangent
-
-/-- **The paper's `tan Θ` exists as a bounded operator.**
-
-`‖P_U − P_V‖ < 1`: no principal angle of the pair reaches `π/2`.  This is the Section 1
-vacuity convention made explicit for the tangent -- when it fails, `‖tan Θ‖` does not exist and
-the printed statement says nothing -- and it is *not* condition (3.5), which the paper
-introduces only in Section 3. -/
-def HasDefinedAmbientTangent (U V : Submodule ℂ E)
-    [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] : Prop :=
-  U.projectionGap V < 1
 
 omit [CompleteSpace E] in
 /-- **A defined tangent implies condition (3.5).**
@@ -717,8 +737,8 @@ theorem tanTheta_ambient_unboundedRitz_definedTangent_symmetricNorming_complex
     (hMem : N.Mem H) :
     N.Mem (tanAngleOperatorC U V) ∧
       delta * N.gauge (tanAngleOperatorC U V) ≤ N.gauge H :=
-  tanTheta_ambient_unboundedRitz_symmetricNorming_complex N D hV H hH hdelta hupper hUnwanted
-    (crossedDefectsEquivalent_of_hasDefinedAmbientTangent hdefined) hResidual hMem
+  (tanTheta_ambient_unboundedRitz_symmetricNorming_complex N D hV H hH hdelta hupper hUnwanted
+    (crossedDefectsEquivalent_of_hasDefinedAmbientTangent hdefined) hResidual hMem).2
 
 end DefinedTangent
 

@@ -704,12 +704,15 @@ theorem tanTheta_ambient_bounded_symmetricNorming_real_of_crossedDefects
     (hUnwantedLower : ∀ y ∈ Vᗮ, (alpha + delta) * ‖y‖ ^ 2 ≤ ⟪T y, y⟫_ℝ)
     (h35 : DavisKahan.CrossedDefectsEquivalent U V)
     (hMem : N.Mem (T - A)) :
-    N.Mem (tanAngleOperatorR U V) ∧
+    ‖sinAngleOperatorR U V‖ < 1 ∧
+      N.Mem (tanAngleOperatorR U V) ∧
       delta * N.gauge (tanAngleOperatorR U V) ≤ N.gauge (T - A) :=
-  tanTheta_ambient_bounded_symmetricNorming_real_of_transversality N hT hA hV hAU hdelta hCompressionUpper
-    hUnwantedLower
-    (norm_sinAngleOperatorR_lt_one_of_crossedDefectsEquivalent T hT U V hV hdelta
-      hCompressionUpper hUnwantedLower h35) hMem
+  ⟨norm_sinAngleOperatorR_lt_one_of_crossedDefectsEquivalent T hT U V hV hdelta
+      hCompressionUpper hUnwantedLower h35,
+    tanTheta_ambient_bounded_symmetricNorming_real_of_transversality N hT hA hV hAU hdelta hCompressionUpper
+      hUnwantedLower
+      (norm_sinAngleOperatorR_lt_one_of_crossedDefectsEquivalent T hT U V hV hdelta
+        hCompressionUpper hUnwantedLower h35) hMem⟩
 
 end
 end DavisKahan1970

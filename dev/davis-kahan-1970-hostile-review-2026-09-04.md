@@ -576,16 +576,22 @@ clause's registered primaries.
 
 ### Not closed
 
-**F3 for the *ambient* tangent family.** The canonical ambient witnesses are the
-`_definedTangent_` endpoints, which take `HasDefinedAmbientTangent U V` as a hypothesis
-with `hasDefinedAmbientTangent_iff_pi_div_two_notMem_spectrum` proving it is exactly
-"π/2 ∉ spectrum Θ", so the canonical surface is honest already. What remains is the
-report's F3.1 and F3.2: adding the definedness conjunct to the (3.5)-form ambient
-endpoints and the cosine conjunct to the ambient `tan 2Θ` endpoints, both of which are
-supporting evidence. The unbounded-Ritz case needs the unbounded analogue of
-`norm_sinAngleOperatorC_lt_one_of_crossedDefectsEquivalent`, which does not exist yet;
-`approximationSingularValue_directedSineBlock_lt_one_unboundedRitz_complex` is the
-quantitative half. Tracked as `DK-HR-TANGENT-POLE` in `GOAL.md`.
+**F3.2 — the ambient `tan 2Θ` conjunct.** F3.1 is closed: all eight ambient `tan Θ`
+endpoints stated under condition (3.5) now conclude `HasDefinedAmbientTangent U V`
+(`HasDefinedAmbientTangentReal` over `ℝ`), a conjunct their proofs already had. The
+unbounded-Ritz case turned out to need no new lemma —
+`norm_sinAngleOperatorC_lt_one_of_unboundedRitz` and
+`norm_sinAngleOperatorR_lt_one_of_unboundedCompression_crossedDefectsEquivalent` were
+already in the tree. The `HasDefinedAmbientTangent` block comment, which called those
+endpoints a non-vacuous corollary, now records that they state it.
+
+What is left is the cosine conjunct on
+`tanTwoTheta_ambient_unbounded_symmetricNorming_{complex,real}`. The complex proof already
+computes it as `hcos`, and the sibling
+`..._blockRepresentative_derivedReflection_symmetricNorming_complex` already concludes it;
+the real side needs the pole exclusion at `spectrum ℝ (angleOperatorR U V)` first, because
+its chain carries the `IsUnit` form. These two are canonical evidence, so the change also
+costs a re-pin and a certificate re-run. Tracked as `DK-HR-TANGENT-POLE` in `GOAL.md`.
 
 **F6 — naming and placement.** Not started. All eight sub-items are tracked as
 `DK-HR-NAMING` in `GOAL.md`. Doing them meant renaming declarations this pass was
