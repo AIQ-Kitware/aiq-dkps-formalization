@@ -9,6 +9,7 @@ import DavisKahan.DoubleAngle.UnboundedIdeal
 import DavisKahan.OperatorIdeal.ApproximationNumbers.ScalarGeneric
 import DavisKahan.SinTheta.BoundedPerturbation
 import DavisKahan.Sources.DavisKahan1970.Section9.ExactData
+import DavisKahan.Sources.DavisKahan1970.Section9.NumericalBounds
 import DavisKahan.Sources.DavisKahan1970.Section9.TrialSubspace
 import ForTauCeti.Analysis.InnerProductSpace.CompactSelfAdjointClassification
 import ForTauCeti.Analysis.InnerProductSpace.LinearPMap.SpectralSupport
@@ -2122,6 +2123,24 @@ theorem beamPerturbed_specProjection_Ioo_eq_zero (ε : ℝ) (hε : 0 ≤ ε) :
     (fun y hy => beamPerturbed_form_ge_of_mem_orthogonal ε hε y hy)
 
 end
+
+open DavisKahan1970.Section9 in
+/-- **Equation (9.1) for the beam, in the printed numerals.**
+
+`beamSinTheta_le` bounds the angle by the residual's exact top singular value over
+the gap; `equation_9_1` turns that exact value into the source's decimal.  Composing
+them is what makes the row's evidence *unconditional*: the numeric wrapper alone is
+conditional on an analytic bound the reader has to supply, and this supplies it. -/
+theorem beamSinTheta_lt_printed (ε : ℝ) (hε : 0 < ε) :
+    beamSinTheta ε < (811 : ℝ) / 500000 * ε :=
+  equation_9_1 ε (beamSinTheta ε) hε (beamSinTheta_le ε)
+
+open DavisKahan1970.Section9 in
+/-- **Equation (9.3) for the beam, in the printed numerals.**  The two-term Ky Fan
+norm version of the previous theorem. -/
+theorem beamSinThetaSum_lt_printed (ε : ℝ) (hε : 0 < ε) :
+    beamSinThetaSum ε < (109 : ℝ) / 50000 * ε :=
+  equation_9_3 ε (beamSinThetaSum ε) hε (beamSinThetaSum_le ε)
 
 end Model
 end FreeBeam
