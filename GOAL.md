@@ -103,21 +103,17 @@ rank-boundary convention.
   This is real work — Section 8 is 6437 lines built on bounded `Reduces`, `SpectrumIn`
   and `canonicalLowBranch`.
 
-- **`DK-HR-NAMING`** — the naming and placement cleanup, item R6 of
-  [`docs/planning/davis-kahan-1970-hostile-review-repair-goal.md`](docs/planning/davis-kahan-1970-hostile-review-repair-goal.md),
-  is the one part of that contract still open. Eight sub-items: move
-  `SineTheta/Presentation.lean` under `namespace TauCeti.DavisKahan1970`; resolve the six
-  case-twin pairs on DK-6.1-prop, DK-6.1-thm and DK-6.2-thm; unify source-facing casing
-  to the lowercase `theoremN_M_*` form; give `TauCeti.DavisKahan1970` homes to the
-  registered witnesses declared outside the paper namespace; rename `UnboundedTrialBlock`
-  to `BoundedCompressionTrialBlock` (its compression is bounded, and the current name has
-  already misled one certificate); retire the unqualified `SectionTwo.{tanTheta,
-  sinTwoTheta, tanTwoTheta}_{complex,real}` clause aliases in favour of the
-  `_directed_`/`_ambient_` names; delete `Proposition4_2_compact_nonacute`; and prune
-  `lean_declarations` on `S2-sin-two-theta` and `S2-tan-two-theta` to canonical witnesses
-  plus explicitly-roled correspondence lemmas. Follow ground rule 3 of that contract for
-  every rename — grep `Challenge/` and `comparator/*.json`, run
-  `scripts/check_declaration_name_drift.py`, then `lake build Challenge`.
+- **`DK-HR-NAMING`** — **closed 2026-09-05**, except one sub-item declined with a recorded
+  reason. `SineTheta/Presentation.lean` and `Section2TanThetaPerturbation.lean` declare into
+  `TauCeti.DavisKahan1970`; the six case twins are gone; sixty-one source-facing declarations
+  use the lowercase `theoremN_M_*` form; the six registered witnesses outside the paper
+  namespace are reachable under it; `UnboundedTrialBlock` is `BoundedCompressionTrialBlock`;
+  the six unqualified clause aliases are deprecated in favour of the `_directed_`/`_ambient_`
+  names and the `SectionTwo.lean` docstring is a table rather than a diary; and eleven
+  proof-structure entries left the two double-angle rows. F6.7 -- deleting
+  `proposition4_2_compact_nonacute` for its unused `_J` binder -- is declined on `DK-4.2-prop`,
+  because that binder is the Section 4 setup the row's own accepted reading says the
+  proposition is printed under.
 
 - **`DK-HR-TANGENT-POLE`** — **closed 2026-09-05.** No registered tangent endpoint concludes
   on a totalised functional calculus without a conjunct in the same type excluding the pole.

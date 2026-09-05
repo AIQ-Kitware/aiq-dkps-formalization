@@ -151,6 +151,18 @@ def source_tree_hash() -> tuple[str, list[dict]]:
     return package_source_tree_hash(ROOT, source_file_list())
 
 
+def path_arg(path: pathlib.Path) -> str:
+    """A path as a subprocess argument, relative to the repository when it is inside it.
+
+    Every command this script spawns runs with `ROOT` as its working directory, so a
+    path inside the tree reads better relative and a path outside it must be absolute.
+    Calling `relative_to(ROOT)` unconditionally is what made `--output-dir <path outside
+    the repository>` crash with a `ValueError` after nine successful steps -- finding
+    F7.2 of the 2026-09-04 hostile review.
+    """
+    return str(path.relative_to(ROOT)) if path.is_relative_to(ROOT) else str(path.resolve())
+
+
 def tool_version(argv: list[str]) -> dict:
     rc, output = command_output(argv)
     return {"command": argv, "returncode": rc, "output": output}
@@ -494,7 +506,7 @@ def main() -> int:
     # perfectly ordinary Lean source file for `lake env lean`.
     probe_result = tee_command(
         "11-review-signature-probe",
-        ["lake", "env", "lean", str(probe_path.relative_to(ROOT))],
+        ["lake", "env", "lean", path_arg(probe_path)],
         outdir,
     )
     results.append(probe_result)
@@ -591,7 +603,12 @@ def main() -> int:
     audit_path = outdir / "statement-audit.md"
     render_result = tee_command(
         "12-render-audit-packet",
-        [sys.executable, str(renderer.relative_to(ROOT)), "--certificate", str(cert_path.relative_to(ROOT)), "--output", str(audit_path.relative_to(ROOT))],
+        [
+            sys.executable,
+            str(renderer.relative_to(ROOT)),
+            "--certificate", path_arg(cert_path),
+            "--output", path_arg(audit_path),
+        ],
         outdir,
     )
     # Add renderer evidence to the certificate and rewrite it before checksums.
@@ -613,9 +630,9 @@ def main() -> int:
     print(f"  registered declaration signatures: {len(signatures) - len(unresolved_signatures)}/{len(signatures)}")
     print(f"  stated-result terminality: {source_coverage['terminal_completion_obligations']}/{source_coverage['completion_obligations']}")
     print(f"  source stable during run: {source_stable}")
-    print(f"  certificate: {cert_path.relative_to(ROOT)}")
-    print(f"  audit packet: {audit_path.relative_to(ROOT)}")
-    print(f"  bundle: {archive.relative_to(ROOT)}")
+    print(f"  certificate: {path_arg(cert_path)}")
+    print(f"  audit packet: {path_arg(audit_path)}")
+    print(f"  bundle: {path_arg(archive)}")
     return 0 if certificate["overall_status"] == "PASS" else 1
 
 

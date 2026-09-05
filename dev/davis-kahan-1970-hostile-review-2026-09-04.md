@@ -577,6 +577,38 @@ the `IsUnit` form of the fact while the existing exclusion lemma is stated for
 The `HasDefinedAmbientTangent` block comment, which called the (3.5) endpoints a non-vacuous
 corollary, now records that they state it.
 
+**F6 — naming and placement.** Seven of the eight sub-items are done.
+
+* F6.1 `SineTheta/Presentation.lean` declares into `TauCeti.DavisKahan1970`, so its
+  seventeen registered declarations, including the canonical `sin Θ` witness and the
+  `IsTrialResidual` / `IsExactSpectralDecomposition` predicates, are no longer in the root
+  namespace.
+* F6.2 the six case-twin pairs are gone: the capitalized member of each was an alias for a
+  *record method*, a different theorem from the lowercase canonical one. No two registered
+  names now differ only in case.
+* F6.3 sixty-one source-facing declarations moved to the lowercase `theoremN_M_*` form.
+  Structures and namespaces keep their CamelCase.
+* F6.4 the six registered witnesses outside the paper namespace are reachable under it:
+  `Section2TanThetaPerturbation.lean` declares into `TauCeti.DavisKahan1970`, and the
+  Theorem 6.3 ideal-gauge pair, the real Sylvester generalization and the three
+  Proposition 4.4 declarations gained source-facing aliases.
+* F6.5 `UnboundedTrialBlock` is `BoundedCompressionTrialBlock`; its compression is bounded,
+  and the old name had already misled one certificate.
+* F6.6 the six unqualified clause aliases are `@[deprecated]`, pointing at the
+  `_directed_`/`_ambient_` name that says which conclusion they are. The `SectionTwo.lean`
+  module docstring went from 246 lines to 74.
+* F6.8 eleven proof-structure entries are deregistered from the two double-angle rows, and
+  the fifteen remaining un-noted `supporting_theorem` entries gained a role and a sentence.
+
+**F6.7 is declined, with the reason recorded on `DK-4.2-prop`.** The review asked for
+`proposition4_2_compact_nonacute` to be deleted because its `_J` binder is unused. It is
+unused deliberately: Section 4 fixes the compact/matched-defect setup inside the
+Proposition 4.1 block and prints 4.2 under it, `AGENTS.md` says a source-facing statement
+retains the paper's hypotheses even where the proof does not consume them, and the
+unconditional theorem is already registered as a `generalization`. Deleting it would make the
+canonical witness stop carrying the setup this row's own accepted nonlocal reading says it is
+printed under.
+
 **F8 — the 81 production warnings.** Commits `551ebe1a`, `3fe37b1f`, `60c442f2`,
 `1b6ca96c` (merged as `70c367e6`) and `33e257f9`. `lake build DavisKahan.All` is
 warning-free, so `certify_davis_kahan_1970.py --require-terminal` runs without
@@ -592,12 +624,19 @@ clause's registered primaries.
 
 **F10.** A positive finding; nothing to close.
 
+**F7's `--output-dir` bug.** Fixed. `certify_davis_kahan_1970.py` called
+`relative_to(ROOT)` on five paths that the option can move outside the tree, and crashed on
+the first of them after nine successful steps. A `path_arg` helper now returns a repository-
+relative path when the target is inside the tree and an absolute one otherwise, which is what
+every spawned command needs, since they all run with the repository as their working
+directory. Verified: `--require-terminal --output-dir <path outside the repository>` now
+reports `status: PASS`, 29/29.
+
 ### Not closed
 
-**F6 — naming and placement.** Not started. All eight sub-items are tracked as
-`DK-HR-NAMING` in `GOAL.md`. Doing them meant renaming declarations this pass was
-simultaneously re-registering, and the repair contract's own ordering puts the renames
-last for that reason.
-
-**F7's `--output-dir` bug.** `certify_davis_kahan_1970.py` still crashes at
-`probe_path.relative_to(ROOT)` for an output directory outside the repository. Not fixed.
+Nothing from this report. Three things remain open and are tracked in `GOAL.md`, none of them
+a finding of this review: the Section 8 unbounded lift (`DK-S8-UNBOUNDED`), which would make
+the operator-scope reading recorded under F2 moot; the comparator signature check, red on
+eight of twenty Davis--Kahan comparisons since before this pass and untouched by it; and the
+`per-declaration-expose` ratchet and the two Tau Ceti readiness gates, which the repository
+already tracked as known non-blocking debt.
