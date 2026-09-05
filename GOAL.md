@@ -1,348 +1,773 @@
-# Outstanding work
+# Davis–Kahan 1970 — Final 100% Completion and Hostile-Review Closure Plan
 
-This file contains only live work. Completed campaigns belong in Git history, and
-paper-completion status belongs in the maintained source censuses and result
-inventories. Read `AGENTS.md` before starting work.
+**Baseline:** repository state at `2613ae44` or later, incorporating the completed repairs through the latest hostile-review cycle.
 
-Submission packaging and Challenge maintenance are intentionally **not** tracked here. The standalone
-submission repositories under `submodules/` own their Challenge/Solution files,
-metadata, submission checks, and submission-specific planning. This repository is
-the source of truth for the mathematics: if submission preparation exposes a
-mathematical, proof, or public-API defect, fix and validate it here first, then
-refresh the standalone repository mechanically.
+## Objective
 
----
+Finish the Davis–Kahan 1970 formalization under the strongest defensible source-correspondence standard:
 
-## Acharyya 2025
+1. Every designated Davis–Kahan result has a **source-exact Lean façade** whose expanded type matches the paper's mathematical statement and standing scope.
+2. Stronger theorems remain available and are explicitly registered as **generalizations**, rather than being substituted for the paper theorem.
+3. The census can answer both questions independently:
 
-- **`A25-T1`** — **done 2026-09-05.**
-  `GrowingResponse.prob_cmdsEntrywiseClose_ge_of_secondMoment` is the corrected finite bound
-  as one declaration: the paper's own Chebyshev-plus-union probability
-  `1 - n σ²/η²`, delivering entrywise closeness of the classical-MDS matrices at
-  `cmdsEntrywiseRate n m (responseDistBound m (B + η)) η`. The dissimilarity bound the
-  printed theorem omits is carried by `B`, a bound on the *population* response norms only;
-  the sample responses are controlled on the event itself. The printed form stays refuted by
-  `Theorem1Scale.prob_entrywiseClose_lt_paper_bound`.
-- **`A25-C1`** — **done 2026-09-05.**
-  `PaperRate.highProb_operatorNormClose_paperDeltaScale` states the corollary at the literal
-  source scale: with high probability the two classical-MDS matrices are operator-norm close
-  at `paperOperatorScale m R ((n³/r)^(1/2−δ))`, which is `16 R/m` times the printed scale and
-  independent of `n`, with the paper's own constant `16` in it. It carries the dissimilarity
-  bound `R` that Theorem 1 needs and the printed corollary omits, so the row moved from
-  `compiled_by_composition` to `compiled_source_repair`.
-- **`A25-P1`** — **done, 2026-09-05.** The printed compact-Riemannian condition does not
-  force the nondegeneracy the argument needs, and no condition on the ambient space can:
-  a constant placement satisfies every such condition and has population matrix `0`.
-  The repair replaces it by `SpreadPlacement`, an explicit condition on the *placement*
-  asking that `d` of the recentred model positions be mutually orthogonal with squared
-  norm at least `α`. `proposition1_repair_of_spreadPlacement` derives Assumption 1's
-  vanishing eigenvalue tail beyond index `d` and both bounds of Assumption 2 from it.
-  It is registered as a repair, not as the printed proposition. The missing mathematical
-  ingredient was the classical-MDS identity `classicalMDSMatrix_dist_eq_inner_centered`
-  — the doubly centred squared-distance matrix of a Euclidean placement is the Gram
-  matrix of its recentred points — which the tree did not have.
-- **`A25-PA1`-`PA6`, `L1`-`L5` — closed as not-debt, 2026-09-05.** All eleven rows are
-  `compiled_role_replaced` with their declarations cited, and each records that no
-  downstream theorem depends on that proof decomposition. They are the six-term appendix
-  bookkeeping of a perturbation argument this repository proves by a cleaner route. A
-  literal wrapper for each would add eleven declarations that nothing consumes and that
-  no reader of the paper-facing API would reach for, which is the failure mode `AGENTS.md`
-  names. Add one only if a specific reader need appears; do not treat the list as an
-  open obligation.
+   * **Did the project formalize exactly what Davis–Kahan state?**
+   * **What stronger forms have also been proved?**
+4. No semantic claim rests only on declaration names, comments, conventions, or reviewer interpretation when a compiled correspondence theorem can be supplied.
+5. The final hostile review should be able to begin with the original paper, ignore the repository's previous conclusions, and reconstruct the same 29/29 result.
+
+A temporary loss of `29/29` while the remaining source-exact surfaces are being completed is acceptable. Do not preserve a green number by treating an unresolved scope question as a policy exception.
 
 ---
 
-## Helm 2025
+# I. Final source-correspondence policy
 
-- **`H25-EQ2`** — **done 2026-09-05.**
-  `AcharyyaBridge.highProb_entrywiseClose_responseDist_of_tendsto` states the displayed limit
-  in the in-probability sense this development uses: uniform response-mean convergence in
-  probability gives, for every tolerance, entrywise closeness of the sample and population
-  dissimilarity matrices at every late enough stage. The finite step was already compiled at
-  rate `2η/m`; what this adds is that the rate vanishes.
-- **`H25-BRIDGE` — diagnosed 2026-09-05, and it needs one new theorem.** The bridge's
-  `hdist` asks that the estimated pairwise distances converge in probability to the
-  **true latent** distances, where the latents are themselves random: they are part of
-  `ω`, drawn under `Measure.pi`. Every Acharyya 2024 stability theorem takes a
-  **deterministic** limiting matrix `DeltaInf : DisMat n`. All eleven of them, checked.
-  So there is nothing to fiber: the fibering is the missing theorem, not a step in a
-  proof.
+Adopt the following rule globally:
 
-  The right ancestor is `fixed_models_fixed_queries_consistency_of_exactRealization`,
-  not the `_set` form and not the bare `rawStress_mds_stability`. Its exact-realizability
-  hypothesis `∃ ψ, RealizesDissimilarity ψ DeltaInf` is **free** when `DeltaInf` is the
-  latent configuration's own distance matrix, and it discharges the profile-uniqueness
-  premise that the other forms make the caller prove. **The missing theorem is that one
-  with `DeltaInf` a random matrix measurable in the latent coordinate, concluding
-  convergence in the product measure.** That needs measurability of the conditional bad
-  event in the latent sample plus dominated convergence, and the paper does not address
-  the fibering either.
+> **Canonical source evidence must state the paper theorem at the paper's actual scope. Stronger mathematics belongs immediately underneath or beside it and is registered separately as a generalization.**
 
-  Two smaller facts to fix on the way in. `Helm2025/AcharyyaBridge.lean` imports neither
-  `Acharyya2024.RawStress` nor `.Consistency`, so no raw-stress theorem is currently in
-  scope there. And the bridge's conclusion is qualitative in a second sense the Helm
-  census recorded only on 2026-09-05: the estimator it delivers is `TauCeti.alignedConfig`
-  applied to the true latents, so the alignment lives inside the estimator and the
-  isometry quantified outside the probability is the identity.
-  `Acharyya2024.not_exists_deterministic_rigidMotion_of_pairDist_exact` machine-checks
-  that the outside-the-probability shape is unavailable; transferring it to Helm's
-  `Measure.pi` setting is a restatement, not an application.
+This resolves the previous policy questions.
 
-**Preserve** the uniform-integrability / dominated-loss repair and the evidence that
-convergence in probability alone does not give expected-risk convergence.
+For Hilbert-space results, a source-exact façade must therefore carry the source-wide separability assumption.
 
----
+For the paper's real/complex scalar scope, the exact evidence should expose the real and complex instances as the source witnesses. Arbitrary `RCLike` theorems are valuable stronger variants and should remain available.
 
-## Quench 2026
+For unitary-invariant norms, the exact source façade must quantify over a Lean abstraction that actually represents the source's normalized unitary-invariant norm class.
 
-- **`Q26-T2A` / `T2B` / `RAW-FIN` / `RAW-INF` — remove the finite perspective net on
-  the compact-infinite route.** The finite route already runs at the source rate; the
-  infinite route carries an extra finite perspective net. **The Acharyya 2024 continuum
-  route that this item hoped would replace it does not apply, checked 2026-09-05**, for
-  the same reason as `Q26-T1`: it is raw stress under an `L^p(P × P)` discrepancy, this
-  chain is classical MDS under a uniform per-model event, and Quench references no
-  Acharyya 2024 theorem. **The precise missing theorem, per this item's own instruction,
-  is a raw-stress-to-classical-MDS transfer**: a statement carrying an `L^p` pairwise
-  distance guarantee for raw-stress minimizers over to the classical-MDS estimator's
-  uniform per-model event. Until that exists, removing the net has to be done inside the
-  Quench chain or not at all. The four rows and the gap
-  `replicate-schedule-exceeds-source-rate` say this.
-- **`Q26-T1`** — inherited embedding concentration. **The Acharyya 2024 check this item
-  asked for is done, 2026-09-05, and the answer is no.** Quench references no Acharyya
-  2024 theorem at all, only six vocabulary names and one monotonicity lemma, and the two
-  developments do not meet: that population route estimates by raw stress under an
-  `L^p(P × P)` discrepancy where this chain estimates by classical MDS under a uniform
-  per-model event. The remaining choice is the original one, with no third option
-  imported from outside: generalize the rate theorem to a growing sample with an
-  augmented target, or keep the divergence recorded. The capstones do not depend on
-  which.
+Do not weaken existing general theorems to achieve this. Add thin source façades around stronger results.
 
-**Preserve** the tie-averaged nearest-neighbour estimator, the correction of the false
-all-compact-subsets assumption, and the adjudicated `1/m` normalization with its two
-invariance theorems.
+## Required census distinction
+
+Every result/clause should have two independently machine-readable evidence classes:
+
+```text
+source-exact evidence
+    exact paper field
+    exact paper separability/dimension scope
+    exact source hypotheses
+    exact source mathematical object
+    exact source norm abstraction
+    exact constant and conclusion
+
+stronger evidence
+    broader scalar class
+    nonseparable Hilbert spaces
+    weaker hypotheses / broader gap abstractions
+    more general norm model
+    stronger conclusion
+    other genuine mathematical extension
+```
+
+The census must never use a stronger theorem as a replacement for missing source-exact evidence.
 
 ---
 
-## Yu--Wang--Samworth 2015
+# II. Correct the Section 8 scope decision
 
-The source census is complete; do not open a broad YWS proof campaign.
+## Decision
 
-- **Current-state API/source review — done 2026-09-05.** It found no wrong mathematics and
-  six ledger defects, all repaired: the equation (1) row cited a Theorem 2 index-block
-  specialization as its compiled witness; the three Theorem 3 rows and one Theorem 2 row
-  pinned narrower or frame-producing forms rather than the source-shaped ones; the whole
-  `Rectangular/SourceTheorem3.lean` surface was invisible to every ledger while the
-  standalone submission repository already cited it; the grounding contract guarded only
-  one of the three machine-checked refutations; the stated reason equation (1) has no
-  wrapper was wrong; and eight sentences across the module headers, `README.md`,
-  `GROUNDING.md`, `ELEGANCE_AUDIT.md`, `CitationSurface.lean` and the distilled source
-  were stale.
-- **`YWS-T1-eq1` — done 2026-09-05.** Equation (1) was the one displayed result of this
-  paper with no literal wrapper. `yuWangSamworth_equation1_opNorm_le` is now that wrapper:
-  a population unit eigenvector at `λ_j`, a sample eigenvector at `λ̂_j`, the mixed
-  exterior separation, constant 1, operator norm. `equation1_gap_of_interval_position`
-  supplies its `δ` from the printed two-neighbour minimum. It is registered
-  `compiled_corrected`, for two hypotheses the printed display omits: the sample side is
-  given as an orthonormal eigenbasis, because Theorem 1's separation constrains the
-  spectrum on `span{v̂_j}ᗮ` and one eigenvector does not determine that; and the
-  interval-position condition `λ̂_{j+1} ≤ λ_j ≤ λ̂_{j−1}` is stated explicitly. **The
-  obstruction this file used to name was not real.** It is not simplicity of `λ̂_j`: a
-  repeated `λ̂_j` equals a neighbour, so `|λ̂_j − λ_j|` is already one of the two printed
-  terms.
+**Theorem 8.1 and Theorem 8.2 must be formalized for unbounded self-adjoint ambient \(A\), at the scope inherited from the double-angle theorems.**
 
-- **Rectangular rank-one, printed hypothesis — done 2026-09-05.** The four rank-one
-  singular-vector corollaries all took `CorrespondingRightSingularBlock` /
-  `CorrespondingLeftSingularBlock`, which pin both singular vectors to Mathlib's chosen
-  Gram eigenbases, and the census called that `compiled_generalized`. The symmetric side
-  had been repaired on 2026-08-13; the rectangular side had not.
-  `yuWangSamworth_{right,left}SingularVector_frame_le` and their
-  `_opNormCoefficient_` siblings carry the printed hypothesis instead — an arbitrary
-  orthonormal pair at the same sorted Gram index, separated from the rest of the
-  population Gram spectrum, with no condition on the sample spectrum — at the same
-  coefficient.
+The original paper establishes this scope strongly enough that the current bounded-only interpretation should be retired.
 
-**Preserve** the corrected Equation (4), which is false as printed, and the corrected
-rank-boundary convention.
+The source gives several mutually reinforcing signals:
+
+* The opening setup says that the results and proofs apply to unbounded self-adjoint \(A\) under the stated domain condition.
+* Immediately after the four Section 2 theorems, Davis–Kahan say the theorems cover unbounded self-adjoint operators, that the relevant spectral blocks may otherwise be unbounded, and that the technical modifications needed for this generality are concentrated in Theorem 5.2 and the Appendix to Section 6.
+* Section 7 explicitly says the `tan 2θ` proof shown for bounded operators and compact \(S_0\) extends to the general case by the same method used for `tan θ`.
+* Theorem 8.1 says to assume the hypotheses of the `tan 2θ` theorem, and Theorem 8.2 says to add hypotheses to the `sin 2θ` theorem. Neither introduces a bounded-\(A\) reset.
+* Theorem 8.1 explicitly marks only some subordinate statements as finite-dimensional, showing that the authors were distinguishing scope locally when they intended to.
+
+Therefore delete the bounded-only policy exception once the unbounded endpoints land. `DK-S8-UNBOUNDED` is a real completion obligation.
 
 ---
 
-## Davis--Kahan 1970
+# III. Introduce the literal source unitary-invariant norm abstraction
 
-- **`DK-S8-UNBOUNDED`** — lift Section 8 to unbounded ambient scope. Every registered
-  Section 8 declaration takes bounded `A H : E →L[𝕜] E`, while Theorem 8.1 opens
-  "Assume the hypotheses of the tan 2θ theorem" and Theorem 8.2 "Add to the hypotheses
-  of the sin 2θ theorem" — hypotheses this repository certifies at unbounded scope. The
-  rows now disclose that, with the source evidence for reading Section 8 at the paper's
-  main bounded setting and the competing reading stated in full
-  (`nonlocal_source_interpretation.operator_scope_reading`). **The lift would make the
-  reading moot, which is why it is worth doing.**
+The paper quantifies over arbitrary normalized unitary-invariant norms, and explicitly invokes Ky Fan dominance to reduce inequalities for all such norms to the finite Ky Fan norms.
 
-  **Scoped 2026-09-05. Both halves are blocked, on two different missing
-  foundations, and 8.1's is much the smaller.** Nothing under `Section8/` mentions
-  `→ₗ.[𝕜]` or an unbounded spectral subspace today.
+The development currently has excellent stronger/analytic abstractions such as:
 
-  **8.1's statement is writable now and its consumer is already waiting.**
-  `Section7IdealBounds.section7_tanTwoTheta_ideal` is the unbounded Section 7 tangent
-  theorem and it takes `hquarter : IsQuarterAcute (selfAdjointSpectralSubspace A hA B hB)
-  (selfAdjointSpectralSubspace (addBounded A E) (addBounded_isSelfAdjoint A hA E hE) S hS)`
-  as a *hypothesis*. Discharging that under the printed spectral orientation is exactly
-  what Theorem 8.1 does, and `Theorem81.lean` already proves
-  `maximalAngle U V < π/4 ↔ IsQuarterAcute U V`. So the target signature is fixed by an
-  existing unbounded consumer rather than invented. Every foundation it needs exists:
-  `TauCeti.LinearPMap.specRange` / `selfAdjointSpectralSubspace` is the unbounded
-  `canonicalLowBranch`, with `reducesSubspace_specRange`, `specRange_compl`,
-  `specRestrict` and `isSelfAdjoint_specRestrict`; `addBounded_isSelfAdjoint` gives
-  `A + H` self-adjoint; and
-  `ForTauCeti/Analysis/InnerProductSpace/LinearPMap/SpectralFormBounds.lean` is the
-  spectrum-to-form bridge the `iff` needs in both directions
-  (`le_re_inner_of_specProjection_Iio_eq_zero`,
-  `re_inner_le_of_specProjection_Ioi_eq_zero`).
-  `theorem8_1_canonicalBranch` takes only form bounds on `P` and `Pᗮ` plus oddness of
-  `H`, all of which restrict to `x : A.domain` in the vocabulary `SectionTwoUsage.lean`
-  already uses.
+```text
+SymmetricNormingFunction
+KyFanDominantIdealFamily
+```
 
-  **What blocks 8.1 is its proof, not its statement, and the wall is one step.**
-  Two of the four ingredients lift and two do not. The branch and its form bounds lift:
-  `boundedSelfAdjointSpectralSubspace_reduces` becomes `reducesSubspace_specRange`, and
-  `re_inner_le_of_mem_boundedSelfAdjointSpectralSubspace_Iic` and its dual become the
-  `SpectralFormBounds` pair above. The other two are stated for `A H : E →L[ℂ] E`:
-  `realSpectrum_add_offDiagonal_subset_exterior_of_form_gap`
-  (`InfiniteDimensional/TanTwoTheta/OffDiagonalSpectralRepulsion.lean`) and, the real
-  obstruction, `isQuarterAcute_of_orderedFormGap`
-  (`InfiniteDimensional/TanTwoTheta/QuarterAcuteFormGap.lean`). That one reaches
-  `IsQuarterAcute` from coercivity of the bounded composites `J ∘L (A − c)` and
-  `K ∘L (A + H − c)`, and `ForTauCeti/Analysis/InnerProductSpace/CoerciveUnit.lean` is
-  `E →L[𝕜] E` throughout. **The precise missing theorem for 8.1 is therefore
-  invertibility of a coercive unbounded operator of the form `J(A − c)` on `dom A`, with
-  `A` self-adjoint and `J` a reflection** — a Lax--Milgram-shaped statement, and a
-  bounded, well-understood piece of analysis. Prove that first; everything else in 8.1
-  is restating hypotheses over `dom A`.
+The recent equivalence work shows that the relevant estimates reduce to the same Ky Fan inequalities. Preserve all of that.
 
-  **8.2's homotopy is bounded-specific in its Lean form — this is the answer to the
-  question this entry used to ask.** `Section8/Smallness.lean` reduces both printed
-  alternatives to `selectedBranchProjectionLipschitzConstant C.contour V C.margin <
-  √2/2` for a `SpectralContinuationWitness A V s`, and
-  `Theorem82Branch.theorem8_2_perturbationHalfGap_complex` runs the path `A0 + t•E`
-  through it. That whole stack under `DavisKahan/InfiniteDimensional/SinTheta/Continuation/`
-  is stated for `A V : H →L[ℂ] H`: `operatorPath A V t = A + t•V`, `SpectralSeparatingContour`,
-  and contour/Riesz-projection estimates. The mathematics does carry over — a bounded
-  perturbation of a self-adjoint operator is self-adjoint on the same domain, and the
-  resolvent bound `‖(z − T)⁻¹‖ ≤ 1/dist(z, σ(T))` holds unbounded — but the Lean
-  foundation does not exist: **the precise missing theorems are contour-integral Riesz
-  projections and resolvent norm bounds for `LinearPMap`**, which neither Mathlib nor
-  this repository has. `DavisKahan.SpectralTheory.CircleRieszProjection` is bounded.
-  That is a strictly larger gap than 8.1's: an unbounded coercive inverse is a standard
-  argument, an unbounded holomorphic functional calculus along a homotopy is not.
+What is still required for maximal source exactness is an actual Lean representation of the norm object Davis–Kahan quantify over.
 
-  Parts (ii) and (iii) stay as printed — the source restricts them to finite dimensions
-  itself. Keep the bounded theorems as specializations.
+## 3.1 Define the source mathematical abstraction
 
-- **`DK-HR-NAMING`** — **closed 2026-09-05**, except one sub-item declined with a recorded
-  reason. `SineTheta/Presentation.lean` and `Section2TanThetaPerturbation.lean` declare into
-  `TauCeti.DavisKahan1970`; the six case twins are gone; sixty-one source-facing declarations
-  use the lowercase `theoremN_M_*` form; the six registered witnesses outside the paper
-  namespace are reachable under it; `UnboundedTrialBlock` is `BoundedCompressionTrialBlock`;
-  the six unqualified clause aliases are deprecated in favour of the `_directed_`/`_ambient_`
-  names and the `SectionTwo.lean` docstring is a table rather than a diary; and eleven
-  proof-structure entries left the two double-angle rows. F6.7 -- deleting
-  `proposition4_2_compact_nonacute` for its unused `_J` binder -- is declined on `DK-4.2-prop`,
-  because that binder is the Section 4 setup the row's own accepted reading says the
-  proposition is printed under.
+Add a general mathematical type with a non-provenance name such as:
 
-- **`DK-HR-TANGENT-POLE`** — **closed 2026-09-05.** No registered tangent endpoint concludes
-  on a totalised functional calculus without a conjunct in the same type excluding the pole.
-  The directed clause's canonical witnesses derive their exclusion; the eight ambient `tan Θ`
-  endpoints stated under (3.5) conclude `HasDefinedAmbientTangent`; and both ambient `tan 2Θ`
-  endpoints conclude `∀ t ∈ spectrum ℝ (angleOperator…), Real.cos (2 * t) ≠ 0`. The real side
-  needed one new lemma, `cos_two_ne_zero_of_isUnit_diagonalPart_reflection_sq_real`, proved by
-  complexification through `spectrum_complexify`.
+```text
+NormalizedUnitaryInvariantNorm
+```
+
+or, if the partial-domain nature requires it,
+
+```text
+UnitaryInvariantNormFamily
+```
+
+Do not call the mathematical type `Paper...` or `Source...`.
+
+It must model the source's actual Section 1 notion, including:
+
+* the ideal/domain on which the norm exists;
+* norm nonnegativity and definiteness;
+* homogeneity;
+* triangle inequality;
+* invariance under unitary multiplication on either side;
+* normalized rank-one value;
+* contraction compatibility / ideal monotonicity.
+
+Do **not** model it as a finite real-valued function on every bounded operator. The paper explicitly allows cases where the norm in a result does not exist; the formal type must preserve that partial/ideal character.
+
+## 3.2 Prove the Fan-dominance bridge
+
+Prove a compiled bridge from the literal UIN object into the existing Ky-Fan machinery:
+
+```text
+NormalizedUnitaryInvariantNorm
+        ↓
+finite Ky Fan dominance
+        ↓
+KyFanDominantIdealFamily / existing estimate machinery
+```
+
+Reuse the newly proved equivalence between the symmetric-norm and Ky-Fan estimate schemes.
+
+The goal is to formalize the source's own reduction, not rebuild the analytic proofs.
+
+A formal Calkin-algebra example is **not required** for completion. Do not expand scope into Calkin theory merely to exhibit a norm outside `SymmetricNormingFunction`.
+
+## 3.3 Add exact UIN façades to every relevant source result
+
+Any canonical Davis–Kahan witness whose printed conclusion says “for every unitary-invariant norm” must ultimately quantify over the literal UIN abstraction.
+
+The existing `SymmetricNormingFunction` and `KyFanDominantIdealFamily` theorems become registered stronger/analytic variants.
+
+This applies at minimum to the four Section 2 families and all later results whose statements use the same UIN quantifier.
+
+## Acceptance criterion
+
+A compiler-expanded canonical theorem should visibly quantify over the literal UIN abstraction. The proof body may immediately reduce it through Fan dominance.
 
 ---
 
-## Cross-paper coherence
+# IV. Add exact separable source façades
 
-Do one pass after the per-paper work for places where a stronger theorem landed without
-all consumers moving:
+The paper globally works in a separable real or complex Hilbert space.
 
-- Does Acharyya 2025 consume the strongest YWS population-gap theorem, or an older
-  specialization?
-- Are obsolete eigengap or perturbation assumptions still sitting on source-facing
-  capstones after the YWS integration?
-- Does Quench consume the strongest current Acharyya 2024 result rather than a
-  fixed-sample specialization?
-- Can Helm consume the improved Acharyya raw-stress bridge?
-- Did any duplicate temporary theorem surface survive a stronger theorem landing?
-- Are source-facing names and docstrings still accurate after the `ClosedOperator` to
-  `LinearPMap` and continuum-probability migrations?
+Adopt exact separability for canonical source evidence even where the underlying theorem proves a stronger arbitrary-Hilbert result.
 
-Do not over-abstract across papers merely because implementations look similar.
-Paper-facing wrappers earn their place through source correspondence.
+## 4.1 Add thin wrappers only at the source boundary
 
----
+Do not add separability assumptions to reusable analytic infrastructure.
 
-## Known non-blocking gate debt
+For each source-facing Hilbert-space result:
 
-Treat the current checker output as authoritative; do not copy mutable counts into this
-file.
+```text
+general theorem
+    arbitrary Hilbert space
+        ↓
+thin DavisKahan1970 façade
+    separable Hilbert space
+```
 
-- `check_comparator_signatures` is **green, 2026-09-05**: 45 of 45 comparisons match across
-  every config, three of them `SKIP` because the config declares them absent from the
-  Leaderboard. It had been red with 8 differing on Davis--Kahan alone. Five causes, none a
-  wrong theorem: the pre-flight ignored the config's own
-  `expected_missing_solution_theorems`; a `local instance` name leaks into the elaborated
-  type and 43 module-local copies of the complete-subspace instance made it unmatchable from
-  a challenge module; `variable {𝕜 E : Type*}` puts `[RCLike 𝕜]` in a different telescope
-  slot than two separate `variable` lines; two Conformance statements had not followed a
-  library change; and `Set.restrict` became `Set.domRestrict` upstream on the library side
-  only. **Never write a new module-local `CompleteSpace` instance** — use
-  `TauCeti.CompleteSubspace.instCompleteSpaceCoeOfHasOrthogonalProjection`. Run
-  `python3 scripts/check_comparator_signatures.py --no-build` after any rename, any
-  `variable`-block edit, and any library signature change; without `--no-build` it re-runs a
-  full build per invocation.
+The general theorem remains the preferred reusable theorem outside the source package.
 
-- the `per-declaration-expose` ratchet in `dev/policy/ratchet.yaml` tracks upstream
-  API-design debt. Do not lower its maximum to
-  make it green.
-- **Suite state 2026-09-05: 29 passed, 3 failed, 0 unavailable, 0 skipped.** The three are
-  the ones below. `check_comparator_signatures` moved out of this list that day.
-- `check_tauceti_readiness` and `check_tauceti_roadmap_topics` include upstream-review
-  and roadmap-placement state. Both currently report the same four unplaced modules,
-  `ForTauCeti.Probability.{AverageError, ProductConvergence, RigidAlignment, VStatistic}`,
-  plus six under `ForTauCeti.MeasureTheory`. Placing them is a roadmap edit, and the
-  roadmap is read-only without an explicit request. An unavailable optional checkout is not a pass, and an
-  upstream review backlog is not a reason to invent local placement work.
-- If the roadmap checker still reports the `ApproximationNumber.GramSquare` to
-  `ApproximationNumber.GramSpectralRank` forward-reference problem, treat that as a
-  real ordering/design issue. Re-check the live roadmap before acting on this note.
+## 4.2 Do not expose derived component assumptions
 
----
+If the source only assumes that the ambient Hilbert space is separable, do not ask the source-facing caller separately for separability of every reducing subspace or coordinate space.
 
-## Presentation
+Derive those instances internally from:
 
-Only after higher-value mathematical/source-facing work:
+* subspace separability;
+* isometric embeddings/equivalences;
+* the already proved Hilbert-dimension correspondences.
 
-- `leanq` HTML dependency visualization. Preserve its package-first compound layout,
-  summarized Mathlib boundary, hidden Mathlib-internal edges by default, and explicit
-  initialization behavior.
-- `doc-gen4` improvements are optional documentation infrastructure, not a substitute
-  for source-facing theorem work.
+In particular, the exact Theorem 3.1 surface should derive whatever component-space separability it needs from the source data rather than exposing additional assumptions absent from the paper.
+
+## 4.3 Scalar policy
+
+Canonical source evidence should cover:
+
+```text
+𝕜 = ℝ
+𝕜 = ℂ
+```
+
+because those are the source scalar fields.
+
+Existing or new arbitrary
+
+```lean
+{𝕜 : Type*} [RCLike 𝕜]
+```
+
+results should be retained and registered as stronger scalar-generic variants.
+
+Do not discard the `RCLike` work.
 
 ---
 
-## Standing rules
+# V. Preserve and lock the source-correspondence repairs already completed
 
-Do not weaken a theorem, hide a hypothesis inside a definition, or substitute an
-implementation-specific surrogate for a recognizable mathematical notion to make a
-checker or census green. Do not convert a documented source repair back into a claimed
-exact theorem. Do not delete a counterexample that shows a printed statement false.
+Before starting new foundations, add a short regression checklist covering the defects found during hostile review.
 
-No `sorry` in production mathematics and no custom axioms. Prefer ordinary kernel-
-checked proof routes over mechanisms that introduce extra proof axioms when an ordinary
-proof is available.
+These are currently considered repaired and must not regress:
 
-Do not add a new `scripts/check_*.py` without a concrete invariant that is not already
-enforced elsewhere.
+* directed `sin 2Θ₀` uses the source residual rather than the full perturbation;
+* directed `sin 2Θ₀` is on the trial-side ordered angle;
+* Theorem 8.2 uses the same correct trial-side orientation;
+* ambient `sin 2Θ` puts the spectral gap on the source's \(\Lambda_0,\Lambda_1\) blocks of \(A+H\);
+* Theorem 3.1's forward invariant is stated on the paper's angle-operator multiplicity invariant rather than only `genericCosineBlock`;
+* Corollary 3.1's classification is stated on the actual angle sequence/eigenvalue data;
+* Theorem 3.1 derives \(J_0\) from multiplicity data instead of requiring it as caller-supplied proof data;
+* Theorem 3.1's ambient-dimension clause is a proposition rather than a chosen equivalence;
+* condition `(3.5)` is connected by theorem to the paper's Hilbert-dimension statement at separable scope;
+* `tan Θ` source semantics use the paper's definedness/vacuity convention rather than importing `(3.5)` backward into Section 2;
+* tangent endpoints disclose pole exclusion/definedness in their conclusions;
+* Theorem 5.1 carries Banach scope and an actual compatible norm;
+* Theorem 5.2 real and complex source endpoints use the printed ordered gap;
+* Lemma 5.1 canonical evidence is an actual proof, not a capability facade;
+* source-facing theorem signatures contain no CFC or other proof-capability typeclasses.
 
-Report status in terms of the mathematics. A green build certifies compilation and
-declaration resolution, never source fidelity; the censuses and semantic reviews are
-the authorities for source correspondence.
+Add focused invariants for these when cheap. Do not run a broad comparator on every edit.
+
+---
+
+# VI. Complete unbounded Theorem 8.1
+
+This is the smaller of the two remaining analytic foundations.
+
+## 6.1 Target the exact source theorem first
+
+Write the target theorem signature before implementing infrastructure.
+
+It should inherit the already source-exact **unbounded** `tan 2θ` hypotheses and state all of Theorem 8.1's printed conclusions.
+
+Do not invent additional boundedness hypotheses just because the current proof infrastructure is bounded.
+
+Respect the source's existing vacuity/definedness handling where a norm must exist.
+
+The exact theorem must include the source's scope distinctions:
+
+* the principal `Θ ≤ π/4` characterization at general scope;
+* existence of the appropriate reducing projector \(Q\);
+* operator inequality (i) at its actual scope;
+* the finite-dimensional statement in (ii), together with the source's stated natural infinite-dimensional extension if that is represented as a source atom;
+* the explicitly finite-dimensional symmetric-gauge statement (iii).
+
+Do not generalize the finite-dimensional clauses in the canonical source theorem merely because a stronger version can be proved.
+
+## 6.2 Prove the minimal unbounded coercive inverse theorem
+
+The current obstruction is the bounded `CoerciveUnit` route used by:
+
+```text
+isQuarterAcute_of_orderedFormGap
+```
+
+The missing reusable theorem is essentially:
+
+```text
+A self-adjoint, possibly unbounded
+J a bounded reflection
+ordered/coercive form gap for J(A - c)
+        ↓
+J(A - c) has a bounded inverse on its natural domain
+with the required inverse norm/coercivity estimate
+```
+
+Implement this in `ForTauCeti`, at the `LinearPMap`/closed-operator layer, rather than inside the Section 8 source module.
+
+Keep the result as narrow as the actual consumer permits. Do not build a broad unbounded-operator library unless the proof requires it.
+
+A likely route is:
+
+1. closedness/dense domain of the shifted self-adjoint operator;
+2. coercivity gives injectivity and closed range;
+3. the adjoint/kernel argument gives dense or full range;
+4. construct the bounded inverse;
+5. obtain the \(1/\delta\)-type norm estimate.
+
+## 6.3 Lift the two bounded-specific Section 8.1 ingredients
+
+Generalize:
+
+```text
+realSpectrum_add_offDiagonal_subset_exterior_of_form_gap
+isQuarterAcute_of_orderedFormGap
+```
+
+to the unbounded `LinearPMap` setting using:
+
+```text
+specRange
+selfAdjointSpectralSubspace
+reducesSubspace_specRange
+SpectralFormBounds
+addBounded_isSelfAdjoint
+```
+
+Reuse existing bounded theorems as specializations.
+
+## 6.4 Prove the unbounded source theorem
+
+Once `IsQuarterAcute` follows from the ordered unbounded form gap, lift the existing Theorem 8.1 argument.
+
+Provide exact real and complex source façades with separability and the literal UIN norm abstraction where relevant.
+
+Then retain:
+
+* bounded Theorem 8.1 as a specialization;
+* arbitrary-Hilbert form as a stronger variant when available;
+* `RCLike` form as a stronger variant when available.
+
+At this point remove the bounded-only Section 8 interpretation from canonical certification.
+
+---
+
+# VII. Build the minimal unbounded resolvent/Riesz layer needed by Theorem 8.2
+
+This is the largest remaining piece.
+
+Do not attempt a general-purpose holomorphic functional calculus unless forced by the proof. Build the smallest reusable self-adjoint resolvent/contour layer that supports the existing continuation argument.
+
+## 7.1 Unbounded self-adjoint resolvent
+
+For self-adjoint `LinearPMap A`, provide a bounded resolvent object for \(z\notin\sigma(A)\):
+
+```text
+(A - z)⁻¹ : H →L[ℂ] H
+```
+
+with:
+
+* left/right inverse statements on the appropriate domain;
+* self-adjoint spectral-theorem grounding;
+* the standard bound
+
+  $$
+  \|(A-z)^{-1}\| \le 1/\operatorname{dist}(z,\sigma(A));
+  $$
+* compatibility with `addBounded`;
+* the second resolvent identity for bounded perturbations.
+
+Prefer complex-first implementation followed by the repository's established real-complexification transport.
+
+## 7.2 Gap stability under bounded perturbation
+
+For
+
+```text
+A(t) = A + tH
+```
+
+with self-adjoint unbounded \(A\) and bounded self-adjoint \(H\):
+
+* prove self-adjointness on the common domain;
+* prove the source-required spectral gap remains open under the half-gap norm condition;
+* expose the distance-to-spectrum estimate needed by the contour.
+
+## 7.3 Unbounded Riesz/spectral projection
+
+Lift the bounded `CircleRieszProjection` / continuation machinery only as far as needed to prove norm continuity of the isolated spectral branch.
+
+Required properties:
+
+* contour integral of the unbounded resolvent produces a bounded projection;
+* it agrees with the self-adjoint spectral projection / `specRange` for the isolated interval;
+* it varies continuously, preferably Lipschitz with the same estimate used by the bounded continuation proof;
+* the projection is compatible with the bounded perturbation path.
+
+If there is a shorter proof directly for `specRange` using the spectral theorem and resolvent identity, prefer that over constructing a broad new functional calculus.
+
+## 7.4 Lift the continuation stack
+
+Generalize the bounded objects currently used by Theorem 8.2:
+
+```text
+SpectralSeparatingContour
+SpectralContinuationWitness
+selectedBranchProjectionLipschitzConstant
+operatorPath
+```
+
+to the unbounded-self-adjoint-plus-bounded-perturbation setting.
+
+The bounded implementation should become a specialization of the more general infrastructure where practical.
+
+---
+
+# VIII. Complete unbounded Theorem 8.2
+
+## 8.1 Perturbation-norm branch
+
+Prove the exact source theorem for:
+
+$$
+\|H\| < \delta/2
+$$
+
+with unbounded self-adjoint \(A\) and bounded self-adjoint \(H\), using the lifted continuation path
+
+$$
+A(\sigma)=A+H-\sigma H.
+$$
+
+The theorem must conclude both:
+
+* the source `sin 2Θ` inequality already inherited from the source theorem;
+* the acute conclusion \(\Theta < \pi/4\).
+
+Do not substitute a nearby angle representation.
+
+## 8.2 Residual-norm branch
+
+Prove the source alternative
+
+$$
+\|R\| < \delta/2
+$$
+
+using the source's Krein reduction/choice of perturbation exactly as the bounded proof does, now over the unbounded ambient operator.
+
+Do not assume \(\|H\|<\delta/2\) in the public residual theorem.
+
+## 8.3 Unequal-dimension extension
+
+The source immediately states an unequal-dimension extension of the `sin 2θ` theorem.
+
+Ensure its registered scope is consistent with the same unbounded interpretation rather than leaving the extension bounded merely because the existing proof happens to be bounded.
+
+## 8.4 Exact real/complex façades
+
+End with source-exact:
+
+```text
+real + separable + literal UIN
+complex + separable + literal UIN
+```
+
+as canonical evidence.
+
+Register the bounded and arbitrary-Hilbert/RCLike forms as stronger or specialized variants as appropriate.
+
+After this phase `DK-S8-UNBOUNDED` is closed and the old Section 8 scope-policy exception is deleted.
+
+---
+
+# IX. Finish and preserve the stronger theorem layer
+
+Once every source result has an exact façade, make the stronger mathematics easy to discover.
+
+For each source result, register every meaningful existing generalization, including where applicable:
+
+* arbitrary Hilbert space instead of separable;
+* arbitrary `RCLike` instead of fixed real/complex;
+* broader form-gap abstractions;
+* arbitrary reducing subspaces;
+* source theorem as a specialization of more general residual data;
+* `KyFanDominantIdealFamily`;
+* `SymmetricNormingFunction`;
+* stronger domain/general operator forms.
+
+Do not manufacture artificial “stronger” theorems solely to populate a table. Register genuine mathematical extensions.
+
+## Finish the remaining scalar-generic Section 2 API
+
+If `SectionTwo.sinTwoTheta` or another short `RCLike` endpoint is still awaiting scalar-transport work, finish it after the source-exact layer is complete.
+
+The final generic directed theorem must reach:
+
+```text
+Angle.directedSinTwoAngleOperator
+```
+
+and not stop at:
+
+```text
+sinTwoThetaIdealBlock
+```
+
+or another proof representative.
+
+The exact source census does **not** depend on the short generic name once real and complex source façades are complete. The generic theorem is a stronger API result.
+
+---
+
+# X. Make exactness and generalization first-class census data
+
+The current evidence schema should be extended so a reader does not have to infer whether a declaration is the exact paper theorem or a stronger replacement.
+
+A useful conceptual shape is:
+
+```json
+{
+  "source_exact_evidence": [
+    {
+      "scalar": "real",
+      "declaration": "...",
+      "expanded_type_checked": true
+    },
+    {
+      "scalar": "complex",
+      "declaration": "...",
+      "expanded_type_checked": true
+    }
+  ],
+  "stronger_variants": [
+    {
+      "declaration": "...",
+      "generalization_axes": [
+        "drops_separability",
+        "rclike_scalar_generic",
+        "broader_gap"
+      ],
+      "source_specialization": "compiled theorem or wrapper showing the source case"
+    }
+  ]
+}
+```
+
+Reuse the current `canonical_evidence` / `supporting_evidence` schema if it can express this just as clearly; avoid gratuitous schema churn.
+
+## Machine-check the distinction
+
+For source-exact evidence, verify from the compiler-expanded type:
+
+* correct fixed scalar field;
+* separability where the paper assumes it;
+* source UIN norm abstraction;
+* arbitrary versus finite dimension exactly as printed;
+* bounded/unbounded operator scope exactly as printed;
+* correct trial/exact/reducing subspace roles;
+* correct angle orientation;
+* correct residual versus perturbation RHS;
+* correct operator carrying the spectral gap;
+* exact source constants;
+* no implementation-capability classes;
+* no caller-provided correspondence witness that the source derives internally.
+
+For stronger evidence, require a concrete specialization/correspondence route back to the exact source façade whenever practical.
+
+A declaration should never be labeled “stronger” merely because its name or prose says so.
+
+---
+
+# XI. Re-audit the denominator and supplemental source assertions
+
+Keep the **29-result denominator** stable unless the original-source audit proves it is wrong.
+
+However, the final public claim should survive the objection:
+
+> “You proved 29 named results but omitted other mathematical claims Davis–Kahan explicitly establish.”
+
+Before final sign-off, re-audit all source atoms against the original PDF.
+
+Pay particular attention to the Section 2 assertions currently treated as sharpness commentary:
+
+* optimality of the constants;
+* two-dimensional equality examples;
+* direct sums attaining equality simultaneously for all UIN norms;
+* first-order asymptotic equivalence as the perturbation tends to zero.
+
+For maximal certainty, formalize these as **supplemental proved source assertions** even if they remain outside the named 29-result denominator.
+
+Apply the same rule to any other nontrivial Davis–Kahan-established assertion currently excluded only because it appears in prose rather than a named theorem environment.
+
+Do not turn proof steps, definitions, externally cited facts, historical remarks, or open questions into artificial result obligations.
+
+The eventual claim should distinguish:
+
+```text
+29/29 designated result obligations resolved exactly
+
+plus
+
+all additional nontrivial DK-established source assertions
+tracked in the fidelity inventory are either formally proved/refuted
+or explicitly classified outside the formalization claim for a principled reason
+```
+
+---
+
+# XII. Perform a fresh source-first hostile review before the heavy gates
+
+Once implementation is complete, stop modifying the certificate and conduct a fresh semantic review.
+
+The reviewer should start from the **original PDF**, not from `canonical_evidence`.
+
+For each of the 29 result rows:
+
+1. transcribe the mathematical statement independently;
+2. identify inherited source-wide and section-wide assumptions;
+3. inspect the compiler-expanded canonical theorem type;
+4. compare every quantified object;
+5. compare scalar field;
+6. compare separability and dimension scope;
+7. compare bounded/unbounded scope and domains;
+8. compare all gap assumptions and which operator carries them;
+9. compare trial/exact/reducing roles;
+10. compare ordered directed angles;
+11. compare residual versus perturbation quantities;
+12. compare norm abstraction and ideal membership;
+13. compare constants;
+14. compare conclusions;
+15. verify every source-to-internal representation step has a compiled theorem.
+
+Do the same for every explicit result-scope extension attached to those rows.
+
+Do not mark a row exact because a source-shaped wrapper exists. Inspect its expanded type.
+
+---
+
+# XIII. Add targeted semantic tamper tests
+
+The certificate should deliberately fail under mutations corresponding to every serious bug previously found.
+
+At minimum tamper-test:
+
+```text
+R ↔ H on the RHS
+P/Q or trial/exact order swap
+gap moved from Λ-blocks to A-blocks
+directed angle replaced by proof block
+source UIN replaced by SymmetricNormingFunction only
+separability removed from exact façade
+unbounded A replaced by bounded-only witness
+real/complex source witness replaced by fixed complex only
+extra CFC capability binder
+extra crossed-defect hypothesis in Section 2 tan Θ
+finite-dimensional specialization substituted for arbitrary-dimensional theorem
+Theorem 3.1 Θ multiplicity replaced by generic cos² block without correspondence
+zero-multiplicity restriction reintroduced in Corollary 3.1
+caller-supplied J₀ or tangent correspondence reintroduced
+```
+
+These should be narrow tests. There is no need to run the entire heavy suite for each mutation.
+
+---
+
+# XIV. Validation policy during implementation
+
+Until all semantic work above is finished, use only targeted validation:
+
+* compile the touched theorem/module;
+* compile its direct source-facing wrapper;
+* run `DavisKahan.Audits.All` when shared source infrastructure changes;
+* run `Challenge` when generic scalar/operator infrastructure changes;
+* run the affected inventory/census static checker;
+* run the specific statement pins or tamper tests relevant to the edit.
+
+**Do not run comparator-scale or full clean certification repeatedly.**
+
+Do not delete `.lake`.
+
+Do not run `certify_davis_kahan_1970.py --clean` during ordinary implementation.
+
+A green full certificate is not evidence that a source-semantic change is correct.
+
+---
+
+# XV. One final expensive certification pass
+
+Only after the fresh hostile semantic review reports no findings:
+
+1. freeze the source specification and source-atom inventory;
+2. ensure the tree is clean;
+3. run the full incremental build;
+4. run all source audit aggregates;
+5. run `Challenge`;
+6. run declaration-name drift;
+7. run all statement pins;
+8. run source census;
+9. run result inventory;
+10. run statement map;
+11. run semantic-review coherence;
+12. run the complete tamper suite;
+13. run comparator/canonical-evidence checks;
+14. run the final clean certification **once**, if a clean-root build is part of the release certificate;
+15. verify zero production warnings;
+16. verify every compiler-probed canonical declaration resolves;
+17. verify the source files did not change during certification.
+
+No semantic fix should be made after this pass without invalidating the final certificate and rerunning the relevant final checks.
+
+---
+
+# XVI. Final publication/census presentation
+
+The generated result report should make the distinction between source exactness and stronger mathematics obvious.
+
+For each result, show something equivalent to:
+
+```text
+DK-… — PASS
+
+Printed scope:
+  separable real or complex Hilbert space
+  [other source hypotheses]
+  arbitrary normalized unitary-invariant norm
+
+Exact Lean evidence:
+  ℝ: ...
+  ℂ: ...
+
+Stronger variants:
+  arbitrary RCLike: ...
+  nonseparable Hilbert space: ...
+  broader gap form: ...
+  SymmetricNormingFunction: ...
+  KyFanDominantIdealFamily: ...
+```
+
+Do not describe the stronger variants as necessary to establish source coverage.
+
+## Final top-level claim
+
+Once every step above is complete, the defensible claim is:
+
+> **All 29 designated Davis–Kahan 1970 result obligations have been formally resolved at their printed source scope over separable real and complex Hilbert spaces, including the paper's unbounded-operator scope and arbitrary normalized unitary-invariant norms. The false transcribed assertion is formally refuted rather than counted as proved. The census separately records stronger generalizations proved by the development.**
+
+If the supplemental source-assertion pass is also complete, add:
+
+> **The source-fidelity census also tracks the paper's additional established sharpness, equality, asymptotic, and scope assertions outside the 29 named result obligations.**
+
+Do not say merely “29/29 proved,” because the formally refuted source assertion must remain distinguishable.
+
+---
+
+# Definition of 100% complete
+
+Do not stop because:
+
+```text
+lake build is green
+29/29 is green
+the certificate passes
+all declarations resolve
+```
+
+Stop only when all of the following are simultaneously true:
+
+* exact real and complex source façades exist for every result clause;
+* source separability is present on canonical Hilbert-space evidence;
+* the literal source UIN norm abstraction is present on every relevant canonical theorem;
+* all stronger variants are preserved and separately identified;
+* Theorems 8.1 and 8.2 are complete at unbounded source scope;
+* every known source/internal representation difference has a compiled correspondence theorem;
+* the source census distinguishes exact evidence from stronger evidence;
+* supplemental nontrivial DK assertions have been audited and, where appropriate, formalized;
+* a fresh PDF-first hostile review has zero open findings;
+* semantic tamper tests reject every major historical regression class;
+* the final expensive certification pass is green;
+* production build warnings are zero;
+* the repository tree is clean and the final source/certificate hashes are frozen.
+
+That is the finish line.
+

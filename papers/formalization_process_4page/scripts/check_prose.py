@@ -9,8 +9,13 @@ patterns = {
     'banned word silently': r'\bsilently\b',
     'banned word quietly': r'\bquietly\b',
     'banned word unusually': r'\bunusually\b',
+    'banned worth phrasing': r'\bworth\b',
     'repo phrase source-faithful': r'source-faithful',
     'repo phrase project-local': r'project-local',
+    'internal census jargon': r'\bcensus\b',
+    'internal inventory jargon': r'\binventory\b',
+    'internal reopening jargon': r'\breopen(?:ed|ing|s)?\b',
+    'terminal-status jargon': r'terminal status',
     'stock contrast not-X-but-Y': r'\bnot\b[^.\n]{0,100}\bbut\b',
 }
 failed = False

@@ -1,8 +1,7 @@
 # Workshop-paper writing constraints
 
-This directory contains the workshop paper **Who Checks the Formalization?
-Human Supervision in LLM-Assisted Lean** and the source notes behind its public
-practitioner-account snapshot.
+This directory contains the workshop paper **Did We Really Formalize
+Davis--Kahan?** and the source notes used while drafting it.
 
 Before editing prose, read and follow:
 
@@ -16,34 +15,50 @@ Additional constraints:
 2. Ground claims about human practice in the public source notes or the
    Davis--Kahan case study. Avoid generic advice generated from what an LLM
    would like a reviewer to do.
-3. Call the source collection a **snapshot of public first-person accounts**.
-   Avoid `corpus`, `survey`, `systematic review`, and invented methodology
-   labels in the paper.
+3. Describe `data/practitioner_accounts.csv` plainly as public first-person
+   accounts found through search and citation chasing. Do not call this small
+   collection a corpus, survey, systematic review, or methodology.
 4. Record only practices and events the source actually reports. Preserve
    `not_reported`, `unclear`, and `qualified`.
-5. `data/practitioner_accounts.csv` is the editable account table. Run
-   `make sources` to regenerate `notes/practitioner_accounts.md` and
+5. Run `make sources` after editing the account table to regenerate
+   `notes/practitioner_accounts.md` and
    `generated/practitioner_account_macros.tex`.
 6. `data/lean_publication_activity.csv` contains the monthly Papers With Lean
    counts used for the short growth statistic in the introduction.
 7. Keep disagreements between practitioners visible. Some read generated Lean
    closely; some use another model to translate or challenge it; some let the
    prover run ahead and study the result later.
-8. Treat Git-history counts as a description of this project. Semantic-review
-   reversals record reopened correspondence judgments.
-9. Keep both author-provided figures and include them with `\includegraphics`.
-   The dashboard image may be cropped using LaTeX `trim` / `clip`.
-10. Figure 1 names Tau Ceti as a possible destination for reusable foundations,
+8. Treat the Git chronology as a description of this project. In the main paper,
+   describe concrete source-to-Lean mismatches and repairs rather than internal
+   status transitions or ledger vocabulary.
+9. The current 29/29 state is provisional. Say that we think all 29 Davis--Kahan
+   source results are covered at the intended scope, or are very close. Do not
+   turn the current accepted rows into a certainty claim.
+10. Keep the author-provided workflow figure as Figure 1 using ordinary
+    `\includegraphics`. The main text uses a typeset historical Lean signature
+    instead of the dashboard as its semantic-mismatch example. The current
+    dashboard screenshot is included only in the appendix with
+    `\includegraphics`.
+11. Figure 1 names Tau Ceti as a possible destination for reusable foundations,
     so retain a brief accurate explanation and citation.
-11. Present EconCSLib, Lean Atlas, ShadowBench, LeanMarathon, FormaTheoria, and
+12. The historical `sin 2 Theta` false finish must remain tied to the actual
+    repository history: the bounded complex endpoint had the printed trial
+    residual but missed real/unbounded scope; the separate unbounded endpoint
+    used a different reflection residual.
+13. Present EconCSLib, Lean Atlas, ShadowBench, LeanMarathon, FormaTheoria, and
     related systems as adjacent work without priority claims for the local
     dashboard.
-12. Keep detailed Davis--Kahan mathematics in `../formalization_draft2/`.
-13. Use numeric citations.
-14. Main text must fit four workshop pages under the submission template;
+14. Keep detailed Davis--Kahan mathematics in `../formalization_draft2/`.
+15. Use numeric citations.
+16. Main text must fit four workshop pages under the submission template;
     references may follow.
-15. The live project repository identifies the authors. Keep
-    `\showartifacturlfalse` for double-blind review; switch it on for a public
-    preprint or camera-ready copy.
-16. Avoid LLM stock contrasts such as “X is not Y; it is Z,” generic taxonomies,
-    checklist prose, and rhetorical claims of novelty.
+17. The live project repository identifies the authors. Keep the default
+    `paper.tex` build anonymous; use `paper_public.tex` for a public preprint or
+    camera-ready copy.
+18. `brainstorm.md` preserves the original notes and a verbatim human prompt
+    log. Never clean up spelling, punctuation, capitalization, or wording inside
+    those prompt blocks. Add only short bracketed context when the prompt would
+    otherwise be unintelligible. Do not reconstruct missing prompts from
+    summaries.
+19. Avoid LLM stock contrasts such as “X is not Y; it is Z,” generic taxonomies,
+    checklist prose, slogans, and rhetorical claims of novelty.

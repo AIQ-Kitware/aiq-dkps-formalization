@@ -1,27 +1,60 @@
-\section{Related work and where to start}
+\section{Related work and a practical map}
 \label{sec:related}
 
-Semantic alignment now has several dedicated approaches.  Beyond Compilation
-measures the gap between compilation and judged faithfulness; CriticLean trains
-a semantic critic; BEq/BEq+ tests equivalence against a trusted formal
-reference; and ShadowBench checks a target against auxiliary ``shadow''
-statements in both directions
-\citep{zhang2026beyondcompilation,peng2025criticlean,liu2025beq,poiroux2025reliable,han2026shadowbench}.
-These are useful when the main question is whether one formal statement captures
-an intended theorem.
+Semantic agreement between informal mathematics and formal statements is now an
+explicit target across several lines of work.  Statement-level methods include
+learned or LLM-based critics such as FormalAlign, CriticLean, and Beyond
+Compilation \citep{lu2025formalalign,peng2025criticlean,zhang2026beyondcompilation};
+reference-based equivalence checks such as BEq/BEq+
+\citep{liu2025beq,poiroux2025reliable}; and compiler-grounded tests such as
+Theorem Testing and ShadowBench/SA-Pass
+\citep{kim2026theoremtesting,han2026shadowbench}.  These methods help test
+whether a generated statement agrees with a target when an appropriate
+reference, critic, dependent theorem set, or family of shadow statements is
+available.
 
-Project-scale tools address different parts of the review burden.  EconCSLib
-provides a paper-facing review dashboard with source statements, Lean statements,
-LLM assistance, and human judgments \citep{garg2026econcs}.  Lean Atlas / Lean
-Compass identifies the declarations whose semantics can affect a selected target,
-reducing what a reviewer needs to read \citep{yanahama2026leanatlas}.
-ATLAS / AutoformBot pairs source/formal browsing and dependency graphs with
-automated faithfulness assessment \citep{rammal2026scale}.  LeanMarathon,
-FormaTheoria, and LeanArchitect integrate target review, provenance, or
-informal/formal synchronization into longer developments
+Project-scale systems address additional questions once the source and the Lean
+development both evolve.  EconCSLib provides paper-facing Lean interfaces,
+dependency graphs, validation reports, and a human review dashboard
+\citep{garg2026econcs}.  Lean Atlas/Lean Compass identifies project declarations
+whose semantics can affect selected target theorems and presents them in an
+interactive review environment \citep{yanahama2026leanatlas}.  ATLAS/AutoformBot
+supports comparison of textbook statements with Lean formalizations, dependency
+inspection, and automated faithfulness assessments \citep{rammal2026scale}.
+LeanMarathon, FormaTheoria, and LeanArchitect address target review,
+long-horizon literature formalization, provenance, and synchronization between
+informal and formal project descriptions
 \citep{zhang2026leanmarathon,nie2026formatheoria,zhu2026leanarchitect}.
 
-For a new project, these systems are better starting points than rebuilding our
-workflow from scratch.  Our tooling is useful here as a case study: it grew from
-problems encountered during one formalization and ended up resembling several of
-these independently developed systems.
+Agent-facing Lean infrastructure sits underneath these review systems.  LeanDojo
+provides programmatic interaction and retrieval infrastructure for theorem
+proving agents \citep{yang2023leandojo}.  Our open-source \texttt{leanq} tool
+queries the elaborated Lean environment for declarations, theorem types, axioms,
+dependencies, reverse dependencies, and graph slices
+\citep{aiqlean2026tools}.  In our workflow, these tools reduce the amount of Lean
+state an LLM or human must recover from source text alone; they do not decide
+whether the resulting theorem matches a paper.
+
+\begin{table}[t]
+\centering
+\small
+\caption{A practical map for newcomers.  The systems overlap; each row names a
+question for which the cited work provides a useful starting point.}
+\label{tab:tool-map}
+\begin{tabularx}{\linewidth}{@{}P{0.25\linewidth}P{0.35\linewidth}Y@{}}
+\toprule
+Question & Representative work & Main aid \\
+\midrule
+Does this statement match the intended theorem? & BEq/BEq+, CriticLean, ShadowBench & equivalence tests, semantic critics, shadow statements \\
+What should a human inspect? & Lean Atlas / Compass & review cone and interactive dependency view \\
+How can an author review a paper translation? & EconCSLib & paper-to-Lean dashboard and human judgments \\
+How do agents query Lean? & LeanDojo, \texttt{leanq} & interaction, retrieval, elaborated statements, dependencies \\
+How should review fit into a long project? & LeanMarathon, FormaTheoria, LeanArchitect & target review, provenance, reconciliation, blueprint maintenance \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+The local dashboard in this paper grew from one Davis--Kahan formalization and
+overlaps with several of these systems.  We use the comparison to organize
+practical lessons and to point newcomers toward existing tools rather than to
+make a priority claim for semantic review or review dashboards.

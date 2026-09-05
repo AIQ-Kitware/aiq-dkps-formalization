@@ -1,12 +1,13 @@
-# Who Checks the Formalization?
+# Did We Really Formalize Davis--Kahan?
 
-This directory contains a four-page workshop draft about human supervision in
-LLM-assisted Lean formalization. The paper uses a snapshot of public
-first-person accounts together with the Davis--Kahan project as a case study.
+This directory contains a four-page workshop draft about one LLM-assisted Lean
+formalization and the problem of deciding whether the checked declarations
+match the source mathematics. The paper places that experience beside public
+first-person reports from other researchers.
 
-## Public source notes
+## Source notes
 
-The editable account table is:
+The public-account table is:
 
 - `data/practitioner_accounts.csv`
 
@@ -20,16 +21,34 @@ Running:
 make sources
 ```
 
-regenerates:
+validates the structured source snapshot and Git chronology and regenerates:
 
-- `notes/practitioner_accounts.md` - one source record per account plus the
-  counts quoted in the paper;
+- `notes/practitioner_accounts.md` - one source record per public account plus
+  the descriptive counts quoted in the paper;
 - `generated/practitioner_account_macros.tex` - TeX macros consumed by
-  `paper.tex`.
+  `paper.tex`;
+- `generated/lean_activity_timeline_tikz.tex` - the appendix timeline figure;
+- `generated/review_timeline_table.tex` and `generated/resource_snapshot_table.tex`;
+- `generated/materials_manifest.json` and its aggregate SHA-256.
 
-The notes keep unreported and ambiguous fields explicit. Source URLs and short
-evidence notes are stored with every record so the numerical statements in the
-paper can be checked against the underlying public accounts.
+`brainstorm.md` contains the original informal notes and a verbatim log of the
+human prompts available from the retained paper-revision transcript. Earlier
+prompts that are not available verbatim are not reconstructed from summaries.
+
+## Historical false finish
+
+The paper replaces the old dashboard screenshot figure with a typeset Lean
+signature from a real earlier state of the Davis--Kahan formalization. The
+historical endpoint had the printed directed `sin 2 Theta` trial-residual bound
+for bounded complex operators. A separate unbounded theorem used a different
+reflection residual. A source comparison on 12 August 2026 showed that the existing endpoints did
+not yet combine the printed residual with the full scalar and operator scope.
+The later repair exposed unbounded trial-residual endpoints for real and complex
+scalars.
+
+The manuscript currently reports checked evidence for all 29 tracked
+Davis--Kahan results while treating that conclusion as provisional: we think all
+29 are covered at the intended source scope, or are very close.
 
 ## Public project repository
 
@@ -37,28 +56,32 @@ The live project repository is:
 
 `https://github.com/AIQ-Kitware/aiq-dkps-formalization`
 
-That URL identifies the authors. `paper.tex` therefore keeps
-`\showartifacturlfalse` in the double-blind review build. Set it to true for a
-public preprint or camera-ready version.
+That URL identifies the authors. The default `paper.tex` build is anonymous.
+`paper_public.tex` sets `\PublicVersion` to expose the authors and public links
+for a preprint or camera-ready version.
 
-## Figures
+## Figure
 
-Both author-provided figures are included with ordinary LaTeX
+The paper keeps the author-provided workflow figure with ordinary LaTeX
 `\includegraphics`:
 
 - `figures/formalization_workflow.png`
-- `figures/semantic-alignment-sine-theta-row.png`
 
-The dashboard screenshot is cropped only at typesetting time with `trim` /
-`clip`; the PNG is unchanged. Figure 1 mentions Tau Ceti, so its caption
-explains and cites it.
+The workflow figure remains in the four-page body.  The semantic-alignment
+screenshot is included in the appendix with ordinary `\includegraphics` so the
+reader can see the current source/correspondence/Lean review interface.
 
 ## Build
 
 ```bash
 make -C papers/formalization_process_4page
+make -C papers/formalization_process_4page public
 make -C papers/formalization_process_4page check-prose
 ```
+
+`make` builds the anonymous review version. `make public` builds
+`paper_public.pdf` with Jonathan Crall and Brian Hu as authors and exposes the
+public GitHub URLs.
 
 `draft_neurips_2026.sty` is a local page-budget approximation. Replace it with
 the official workshop template before submission and recheck the four-page
