@@ -180,15 +180,20 @@ Paper-facing wrappers earn their place through source correspondence.
 Treat the current checker output as authoritative; do not copy mutable counts into this
 file.
 
-- `check_comparator_signatures` is red on the Davis--Kahan config with **8 of 20 comparisons
-  differing**, measured 2026-09-05 and unchanged by that day's repair pass. Two are
-  `signature-right-unresolved` against `Challenge.DavisKahan1970.Leaderboard`
-  (`tanTwoTheta_poleExclusion_exactPaper`,
-  `tanTwoTheta_unbounded_directedResidual_symmetricNorming_exactPaper`); the rest are
-  `signature-type-mismatch` on library declarations whose Conformance statement drifted. Run
-  `python3 scripts/check_comparator_signatures.py --no-build comparator/davis-kahan-1970.json`
-  for the current list; without `--no-build` it re-runs a full build per invocation. The gate
-  runs in the suite, so a green suite is not available until these are repaired.
+- `check_comparator_signatures` is **green, 2026-09-05**: 45 of 45 comparisons match across
+  every config, three of them `SKIP` because the config declares them absent from the
+  Leaderboard. It had been red with 8 differing on Davis--Kahan alone. Five causes, none a
+  wrong theorem: the pre-flight ignored the config's own
+  `expected_missing_solution_theorems`; a `local instance` name leaks into the elaborated
+  type and 43 module-local copies of the complete-subspace instance made it unmatchable from
+  a challenge module; `variable {𝕜 E : Type*}` puts `[RCLike 𝕜]` in a different telescope
+  slot than two separate `variable` lines; two Conformance statements had not followed a
+  library change; and `Set.restrict` became `Set.domRestrict` upstream on the library side
+  only. **Never write a new module-local `CompleteSpace` instance** — use
+  `TauCeti.CompleteSubspace.instCompleteSpaceCoeOfHasOrthogonalProjection`. Run
+  `python3 scripts/check_comparator_signatures.py --no-build` after any rename, any
+  `variable`-block edit, and any library signature change; without `--no-build` it re-runs a
+  full build per invocation.
 
 - the `per-declaration-expose` ratchet in `dev/policy/ratchet.yaml` tracks upstream
   API-design debt. Do not lower its maximum to
