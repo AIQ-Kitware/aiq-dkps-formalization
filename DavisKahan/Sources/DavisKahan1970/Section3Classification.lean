@@ -211,6 +211,132 @@ theorem theorem3_1_spectralMultiplicity_classification_complex
 
 end ComplexClassification
 
+/-! ## The source's own invariant: the angle operators themselves
+
+Theorem 3.1 says that *the spectral multiplicity functions of `Θ₀` and `Θ₁`* are a
+complete invariant.  The classifications above are stated on `genericCosineBlock`,
+which is Halmos's `cos²Θ` on the generic part, together with the four elementary
+multiplicities.  Those are the same data -- on `[0, π/2]` the map `θ ↦ cos²θ` is
+injective -- but "the same data" is a theorem, not a spelling, and until it is
+proved the source-facing statement is about a different operator from the printed
+one.
+
+This section proves it.  `genericAngleBlock` is `Θ` on the generic part, obtained
+from `cos²Θ` by the functional calculus of `t ↦ arccos √t`; the classification is
+then restated on it.  The transport is
+`TauCeti.sameSpectralMultiplicity_cfc_iff`, whose hypotheses are discharged here
+by the spectrum bound `spectrum_genericCosineBlock_subset_Icc`.
+
+The four elementary multiplicities stay where they are: they are the multiplicities
+at the two endpoints `0` and `π/2`, which the generic part does not see, and the
+source counts them separately too. -/
+
+section SourceAngleInvariant
+
+variable {H₁ : Type u} [NormedAddCommGroup H₁] [InnerProductSpace ℂ H₁] [CompleteSpace H₁]
+variable {H₂ : Type v} [NormedAddCommGroup H₂] [InnerProductSpace ℂ H₂] [CompleteSpace H₂]
+variable (U₁ V₁ : Submodule ℂ H₁) [U₁.HasOrthogonalProjection] [V₁.HasOrthogonalProjection]
+variable (U₂ V₂ : Submodule ℂ H₂) [U₂.HasOrthogonalProjection] [V₂.HasOrthogonalProjection]
+
+open scoped Pointwise
+
+set_option maxSynthPendingDepth 3
+
+/-- Halmos's `cos²Θ` block is a positive operator: its quadratic form is `‖P_V m‖²`. -/
+theorem genericCosineBlock_nonneg : 0 ≤ genericCosineBlock U₁ V₁ := by
+  rw [ContinuousLinearMap.nonneg_iff_isPositive]
+  refine ⟨(isSelfAdjoint_genericCosineBlock U₁ V₁).isSymmetric, fun m => ?_⟩
+  rw [ContinuousLinearMap.reApplyInnerSelf, re_inner_genericCosineBlock]
+  positivity
+
+/-- Halmos's `cos²Θ` block is a contraction in the order sense: `P_V` is a
+projection, so `‖P_V m‖ ≤ ‖m‖`. -/
+theorem genericCosineBlock_le_one : genericCosineBlock U₁ V₁ ≤ 1 := by
+  rw [← sub_nonneg, ContinuousLinearMap.nonneg_iff_isPositive]
+  refine ⟨((IsSelfAdjoint.one _).sub (isSelfAdjoint_genericCosineBlock U₁ V₁)).isSymmetric,
+    fun m => ?_⟩
+  rw [ContinuousLinearMap.reApplyInnerSelf]
+  simp only [sub_apply, one_apply_eq_self, inner_sub_left, map_sub]
+  rw [re_inner_genericCosineBlock]
+  have h1 : RCLike.re (inner ℂ m m) = ‖m‖ ^ 2 := by
+    have := inner_self_eq_norm_sq_to_K (𝕜 := ℂ) m
+    rw [this, ← RCLike.ofReal_pow, RCLike.ofReal_re]
+  rw [h1]
+  have hle : ‖V₁.starProjection (m : H₁)‖ ≤ ‖(m : H₁)‖ :=
+    V₁.norm_starProjection_apply_le _
+  have hm : ‖(m : H₁)‖ = ‖m‖ := rfl
+  nlinarith [norm_nonneg (V₁.starProjection (m : H₁)), norm_nonneg (m : H₁)]
+
+/-- **The spectrum of `cos²Θ` lies in `[0, 1]`**, which is what makes
+`t ↦ arccos √t` invertible on it. -/
+theorem spectrum_genericCosineBlock_subset_Icc :
+    spectrum ℝ (genericCosineBlock U₁ V₁) ⊆ Set.Icc 0 1 := by
+  intro t ht
+  refine ⟨(StarOrderedRing.nonneg_iff_spectrum_nonneg (R := ℝ) _
+    (isSelfAdjoint_genericCosineBlock U₁ V₁)).mp
+    (genericCosineBlock_nonneg U₁ V₁) t ht, ?_⟩
+  have hsub : 0 ≤ 1 - genericCosineBlock U₁ V₁ :=
+    sub_nonneg.mpr (genericCosineBlock_le_one U₁ V₁)
+  have hnn := (StarOrderedRing.nonneg_iff_spectrum_nonneg (R := ℝ) _
+    ((IsSelfAdjoint.one _).sub (isSelfAdjoint_genericCosineBlock U₁ V₁))).mp hsub
+  have hmem : (1 : ℝ) - t ∈ spectrum ℝ (1 - genericCosineBlock U₁ V₁) := by
+    have hset := spectrum.singleton_sub_eq (R := ℝ) (genericCosineBlock U₁ V₁) 1
+    have hin : (1 : ℝ) - t ∈
+        ({(1 : ℝ)} : Set ℝ) - spectrum ℝ (genericCosineBlock U₁ V₁) := ⟨1, rfl, t, ht, rfl⟩
+    rw [hset] at hin
+    simpa using hin
+  linarith [hnn _ hmem]
+
+/-- **The source's angle operator on the generic part.**
+
+`Θ` itself, not `cos²Θ`: the functional calculus of `t ↦ arccos √t` applied to
+Halmos's cosine block.  Its spectrum lies in `[0, π/2]`, and applying `t ↦ cos²t`
+recovers `genericCosineBlock`. -/
+noncomputable def genericAngleBlock : genericLeftHalf U₁ V₁ →L[ℂ] genericLeftHalf U₁ V₁ :=
+  cfc (fun t : ℝ => Real.arccos (Real.sqrt t)) (genericCosineBlock U₁ V₁)
+
+/-- `cos²` undoes `arccos ∘ √` on `[0, 1]`. -/
+private theorem cos_sq_arccos_sqrt {t : ℝ} (ht : t ∈ Set.Icc (0 : ℝ) 1) :
+    (Real.cos (Real.arccos (Real.sqrt t))) ^ 2 = t := by
+  obtain ⟨h0, h1⟩ := ht
+  have hs0 : 0 ≤ Real.sqrt t := Real.sqrt_nonneg t
+  have hs1 : Real.sqrt t ≤ 1 := by
+    rw [show (1 : ℝ) = Real.sqrt 1 by simp]
+    exact Real.sqrt_le_sqrt h1
+  rw [Real.cos_arccos (by linarith) hs1]
+  exact Real.sq_sqrt h0
+
+/-- **Davis--Kahan 1970, Theorem 3.1, on the source's own invariant.**
+
+The spectral multiplicity data of the *angle operators* `Θ₀`, `Θ₁` -- which is what
+the paper names -- together with the four elementary multiplicities, are a complete
+invariant for ordered pairs of subspaces.
+
+This is the printed statement.  `theorem3_1_spectralMultiplicity_classification_complex`
+above is the same classification carried on `cos²Θ`; the two agree because
+`t ↦ arccos √t` is invertible on the spectrum of `cos²Θ`, which is
+`spectrum_genericCosineBlock_subset_Icc`. -/
+theorem theorem3_1_spectralMultiplicity_classification_sourceAngle_complex
+    [TopologicalSpace.SeparableSpace H₁]
+    [TopologicalSpace.SeparableSpace (genericLeftHalf U₁ V₁)]
+    [TopologicalSpace.SeparableSpace (genericLeftHalf U₂ V₂)] :
+    PairOfSubspacesUnitaryEquivalent U₁ V₁ U₂ V₂ ↔
+      SameHalmosTrivialDimensions U₁ V₁ U₂ V₂ ∧
+      SameSpectralMultiplicity
+        (genericAngleBlock U₁ V₁)
+        (genericAngleBlock U₂ V₂) := by
+  have hbridge := TauCeti.sameSpectralMultiplicity_cfc_iff
+    (A := genericCosineBlock U₁ V₁) (B := genericCosineBlock U₂ V₂)
+    (isSelfAdjoint_genericCosineBlock U₁ V₁) (isSelfAdjoint_genericCosineBlock U₂ V₂)
+    (fun t : ℝ => Real.arccos (Real.sqrt t)) (fun t : ℝ => (Real.cos t) ^ 2)
+    (by fun_prop) (by fun_prop) (by fun_prop) (by fun_prop) (by fun_prop) (by fun_prop)
+    (fun t ht => cos_sq_arccos_sqrt (spectrum_genericCosineBlock_subset_Icc U₁ V₁ ht))
+    (fun t ht => cos_sq_arccos_sqrt (spectrum_genericCosineBlock_subset_Icc U₂ V₂ ht))
+  rw [theorem3_1_spectralMultiplicity_classification_complex, genericAngleBlock,
+    genericAngleBlock, ← hbridge]
+
+end SourceAngleInvariant
+
 section RealClassification
 
 variable {H₁ : Type u} [NormedAddCommGroup H₁] [InnerProductSpace ℝ H₁]

@@ -2436,7 +2436,18 @@
         "TauCeti.DavisKahan1970.NonzeroPartsUnitaryEquiv",
         "TauCeti.DavisKahan1970.theorem3_1_realization_inAmbient_ofSpectralMultiplicityAwayFromZero_complex",
         "TauCeti.DavisKahan1970.theorem3_1_realization_inAmbient_ofSpectralMultiplicityAwayFromZero_real",
-        "TauCeti.nonempty_linearIsometryEquiv_of_hilbertBasis"
+        "TauCeti.nonempty_linearIsometryEquiv_of_hilbertBasis",
+        "TauCeti.DavisKahan1970.theorem3_1_spectralMultiplicity_classification_sourceAngle_complex",
+        "TauCeti.DavisKahan1970.genericAngleBlock",
+        "TauCeti.DavisKahan1970.spectrum_genericCosineBlock_subset_Icc",
+        "TauCeti.DavisKahan1970.genericCosineBlock_nonneg",
+        "TauCeti.DavisKahan1970.genericCosineBlock_le_one",
+        "TauCeti.DavisKahan1970.theorem3_1_realization_inAmbient_ofSameHilbertDimension_complex",
+        "TauCeti.DavisKahan1970.theorem3_1_realization_inAmbient_ofSameHilbertDimension_real",
+        "TauCeti.DavisKahan1970.SameHilbertDimensionSum",
+        "TauCeti.sameSpectralMultiplicity_cfc_iff",
+        "TauCeti.OperatorUnitaryEquiv.cfc_real",
+        "TauCeti.continuous_conjStarAlgEquiv"
       ],
       "review_note": "Accepted by the hostile audit at the stated-result level.\n\n**REOPENED 2026-09-04 (Claude Opus 5, on hostile review).**  The converse clause was certified against theorems that take the intertwining partial isometry J_0 as a hypothesis, while the checked-in source specification says the proof *reconstructs* the pair from the angle data and the corresponding J_0.  A new witness constructs J_0 from the multiplicity hypothesis and is strictly closer to the printed statement, but the printed hypothesis allows the multiplicity functions to differ at the spectral point 0 and the available classification is agreement everywhere, so the clause is recorded OPEN rather than established.\n\n**CLOSED 2026-09-04 (Claude Opus 5).**  The converse now takes only the printed data: two self-adjoint operators, the two printed spectral confinements, and agreement of the spectral multiplicity functions away from 0.  J_0 is constructed, not hypothesised, and the null spaces are free.\n\n**AMBIENT DIMENSION CLAUSE ADDED 2026-09-05**, on the hostile follow-up review.  The printed converse says the angle operators may be arbitrary Hermitian operators with `0 <= Theta_j <= pi/2` whose multiplicity functions agree away from 0 AND whose domain dimensions sum to `dim H`.  The registered witnesses realized the pair on `WithLp 2 (A_0 x A_1)`, where the dimension equation holds by construction -- but no ambient `H` appeared in their signatures, so nothing in their types answered that clause.  The canonical witnesses are now the `_inAmbient_` wrappers, which take the dimension clause as a linear isometry equivalence from the model to `H` and exhibit the realized pair inside `H` as the isometric image of the model pair, together with `PairOfSubspacesUnitaryEquivalent` between them.  The ambient-free realizations are retained as `generalization`.",
       "parent_claim_id": "DK-3.1-thm",
@@ -2459,14 +2470,15 @@
       "local_statement_self_contained": true,
       "canonical_evidence": [
         {
-          "declaration": "TauCeti.DavisKahan1970.theorem3_1_spectralMultiplicity_classification_complex",
+          "declaration": "TauCeti.DavisKahan1970.theorem3_1_spectralMultiplicity_classification_sourceAngle_complex",
           "role": "primary_source_witness",
           "scalar_scope": "complex",
           "evidence_kind": "proof",
           "covers_source_atoms": [
             "DK-3.1-thm.complete-invariant"
           ],
-          "capability_classes": []
+          "capability_classes": [],
+          "note": "The complete invariant on the SOURCE'S OWN operators: the spectral multiplicity of the angle operator Theta on the generic part, plus the four elementary multiplicities. Corrected 2026-09-05 from the cos^2 Theta form."
         },
         {
           "declaration": "TauCeti.DavisKahan1970.theorem3_1_spectralMultiplicity_classification_real",
@@ -2556,6 +2568,61 @@
         {
           "declaration": "TauCeti.DavisKahan1970.NonzeroPartsUnitaryEquiv",
           "role": "source_correspondence"
+        },
+        {
+          "declaration": "TauCeti.DavisKahan1970.theorem3_1_spectralMultiplicity_classification_complex",
+          "role": "implementation_structure",
+          "note": "The same classification carried on Halmos's cos^2 Theta block. It is the structural theorem the source-facing statement is built on, and it was this clause's canonical witness until 2026-09-05."
+        },
+        {
+          "declaration": "TauCeti.DavisKahan1970.genericAngleBlock",
+          "role": "source_correspondence",
+          "note": "Theta itself on the generic part: the functional calculus of t -> arccos(sqrt t) applied to Halmos's cosine block."
+        },
+        {
+          "declaration": "TauCeti.DavisKahan1970.spectrum_genericCosineBlock_subset_Icc",
+          "role": "source_correspondence",
+          "note": "The spectrum of cos^2 Theta lies in [0,1], which is what makes t -> arccos(sqrt t) invertible on it and so discharges the transport hypothesis."
+        },
+        {
+          "declaration": "TauCeti.DavisKahan1970.genericCosineBlock_nonneg",
+          "role": "supporting_theorem",
+          "note": "Positivity of Halmos's cosine block; its quadratic form is ||P_V m||^2."
+        },
+        {
+          "declaration": "TauCeti.DavisKahan1970.genericCosineBlock_le_one",
+          "role": "supporting_theorem",
+          "note": "The cosine block is a contraction in the order sense, since P_V is a projection."
+        },
+        {
+          "declaration": "TauCeti.sameSpectralMultiplicity_cfc_iff",
+          "role": "source_correspondence",
+          "note": "The reusable transport: the spectral multiplicity invariant is the same whether read on A or on f(A), for f invertible on the spectrum. This is what makes a classification proved on cos^2 Theta a classification on Theta."
+        },
+        {
+          "declaration": "TauCeti.OperatorUnitaryEquiv.cfc_real",
+          "role": "source_correspondence",
+          "note": "Unitary equivalence survives the functional calculus, by the same unitary; the content beneath the transport."
+        },
+        {
+          "declaration": "TauCeti.continuous_conjStarAlgEquiv",
+          "role": "transport_lemma",
+          "note": "Continuity of conjugation by a linear isometric equivalence, the side condition StarAlgHomClass.map_cfc needs."
+        },
+        {
+          "declaration": "TauCeti.DavisKahan1970.SameHilbertDimensionSum",
+          "role": "source_correspondence",
+          "note": "The printed ambient dimension clause dim A_0 + dim A_1 = dim H as a proposition about the three spaces."
+        },
+        {
+          "declaration": "TauCeti.DavisKahan1970.theorem3_1_realization_inAmbient_ofSameHilbertDimension_complex",
+          "role": "source_correspondence",
+          "note": "The converse taking the dimension clause as a proposition and PRODUCING the realization, rather than taking a chosen isometric equivalence from the caller."
+        },
+        {
+          "declaration": "TauCeti.DavisKahan1970.theorem3_1_realization_inAmbient_ofSameHilbertDimension_real",
+          "role": "source_correspondence",
+          "note": "The real sibling."
         }
       ],
       "result_wide_scope_atoms": [],
@@ -2567,12 +2634,20 @@
           ],
           "scalar_scope": "complex",
           "evidence": {
-            "primary": "TauCeti.DavisKahan1970.theorem3_1_spectralMultiplicity_classification_complex",
-            "correspondence": []
+            "primary": "TauCeti.DavisKahan1970.theorem3_1_spectralMultiplicity_classification_sourceAngle_complex",
+            "correspondence": [
+              "TauCeti.sameSpectralMultiplicity_cfc_iff",
+              "TauCeti.OperatorUnitaryEquiv.cfc_real",
+              "TauCeti.DavisKahan1970.spectrum_genericCosineBlock_subset_Icc",
+              "TauCeti.DavisKahan1970.genericAngleBlock"
+            ],
+            "supporting": [
+              "TauCeti.DavisKahan1970.theorem3_1_spectralMultiplicity_classification_complex"
+            ]
           },
           "status": "established",
           "evidence_kind": "proof",
-          "justification": "Canonical witness for complete-invariant at complex scalar scope, carried over from the pre-clause canonical evidence and re-checked against its compiler-printed type under the coherent model."
+          "justification": "A complete invariant for ordered pairs of subspaces, on THE SOURCE'S OWN INVARIANT. Theorem 3.1 names the spectral multiplicity functions of the angle operators Theta_0 and Theta_1; the primary is stated on `genericAngleBlock`, which IS Theta on the generic part, together with the four elementary multiplicities `SameHalmosTrivialDimensions` that the source counts separately.\n\nREPRESENTATION CORRECTED 2026-09-05. The primary was `theorem3_1_spectralMultiplicity_classification_complex`, whose invariant is the spectral multiplicity of `genericCosineBlock` -- Halmos's cos^2 Theta, not Theta -- and this row asserted that as the printed statement. The two are the same data, because t -> cos^2 t is injective on [0, pi/2], but that is a theorem and it was not proved. It is now: `sameSpectralMultiplicity_cfc_iff` transports the invariant along any functional calculus that is invertible on the spectrum, and `spectrum_genericCosineBlock_subset_Icc` discharges its hypothesis for t -> arccos(sqrt t) against t -> cos^2 t. The cos^2 form is retained as supporting evidence: it is the structural Halmos classification the source-facing statement is built on.\n\nSeparability is carried on the generic halves as well as the ambient space, because the transport uses the Hahn--Hellinger classification in both directions. That is inside the source's own separable ambient scope."
         },
         {
           "id": "complete-invariant.real",
@@ -5567,7 +5642,7 @@
     "terminal_results": 29,
     "remaining_results": [],
     "note": "The structured fields above are authoritative; this paragraph is regenerated whenever the count moves. 2026-09-02, closing: terminal_results is 29 and remaining_results is empty. `S2-tan-two-theta` was `hostile_review_blocked` under obligation `tan2theta-directed-correspondence` after a 2026-09-02 closure that did not compose; it is now accepted on canonical directed witnesses `tanTwoTheta_directed_unboundedResidual_symmetricNorming_{complex,real}`, which take the reducing subspace and conclude on the paper's directed corner (`tanTwoDirectedCornerR U V` over ℝ) with the singular-value identification in their types. The canonical-evidence digest changed accordingly and the statement pins were refreshed for the new canonical and bridging declarations. Earlier history of this field (the 2026-08-31 `S2-sin-two-theta` reopening, the `S2-tan-theta` Appendix-scope primaries, the paper-prefix rename with an unchanged digest) is in the human report.",
-    "canonical_evidence_sha256": "eedc64cca9a495e11629d00c8b6ce3a51ec3147c763c31fbcdd7bd5418276e8f",
+    "canonical_evidence_sha256": "8574f171d81b1d94a10f4f8e20049751e716e7bceb81869632b51d63615058d1",
     "hostile_review_status": "accepted",
     "hostile_review_note": "ACCEPTED 2026-09-02, after the day's reopening was closed by new mathematics rather than by metadata: the directed tan 2Theta clauses have source-shaped complex and real endpoints on the paper objects, with the correspondence composed in Lean and pinned. `open_hostile_review_obligations` is closed and lists the closure; the structured fields `terminal_results`, `remaining_results` and `hostile_review_status` are the authoritative statement."
   },
@@ -5753,6 +5828,10 @@
         "DK-8.2-thm": "generalized"
       },
       "load_bearing_witnesses": [
+        {
+          "declaration": "TauCeti.DavisKahan1970.theorem3_1_spectralMultiplicity_classification_sourceAngle_complex",
+          "why": "The forward classification is stated on the spectral-multiplicity data of the source's own angle operators. That invariant is Hahn--Hellinger, and the multiplicity theory the repository builds on is stated for separable spaces; without separability the invariant is not the source's. This witness carries separability on the generic halves as well as on the ambient space, because the transport from the cos^2 Theta form to the Theta form -- `TauCeti.sameSpectralMultiplicity_cfc_iff` -- uses the classification in BOTH directions, and the operators being classified live on the generic halves. That is a genuine use of the hypothesis, not an artifact: without it the two spellings of the invariant are not known to agree."
+        },
         {
           "declaration": "TauCeti.DavisKahan1970.theorem3_1_spectralMultiplicity_classification_complex",
           "why": "The forward classification is stated in terms of spectral-multiplicity data of the generic cosine blocks.  That invariant is Hahn--Hellinger, and the multiplicity theory the repository builds on is stated for separable spaces; without separability the invariant is not the source's."

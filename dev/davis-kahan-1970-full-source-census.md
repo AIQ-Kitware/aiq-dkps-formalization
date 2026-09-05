@@ -4,7 +4,7 @@
 
 **Census family:** `source-completion-census`  
 **Items:** 50  
-**Unique cited Lean declarations:** 1251
+**Unique cited Lean declarations:** 1262
 
 ## How to use this census
 
@@ -2179,6 +2179,17 @@ CENSUS-GATE NOTE 2026-08-11: `TauCeti.MultiplicityDatum.retype` is deliberately 
 - `TauCeti.DavisKahan1970.theorem3_1_realization_inAmbient_ofSpectralMultiplicityAwayFromZero_complex`
 - `TauCeti.DavisKahan1970.theorem3_1_realization_inAmbient_ofSpectralMultiplicityAwayFromZero_real`
 - `TauCeti.nonempty_linearIsometryEquiv_of_hilbertBasis`
+- `TauCeti.DavisKahan1970.theorem3_1_spectralMultiplicity_classification_sourceAngle_complex`
+- `TauCeti.DavisKahan1970.genericAngleBlock`
+- `TauCeti.DavisKahan1970.spectrum_genericCosineBlock_subset_Icc`
+- `TauCeti.DavisKahan1970.genericCosineBlock_nonneg`
+- `TauCeti.DavisKahan1970.genericCosineBlock_le_one`
+- `TauCeti.DavisKahan1970.theorem3_1_realization_inAmbient_ofSameHilbertDimension_complex`
+- `TauCeti.DavisKahan1970.theorem3_1_realization_inAmbient_ofSameHilbertDimension_real`
+- `TauCeti.DavisKahan1970.SameHilbertDimensionSum`
+- `TauCeti.sameSpectralMultiplicity_cfc_iff`
+- `TauCeti.OperatorUnitaryEquiv.cfc_real`
+- `TauCeti.continuous_conjStarAlgEquiv`
 
 **Curated source/Lean review:**
 
@@ -2429,6 +2440,10 @@ TWO CORRECTIONS TO THIS ROW'S OWN CLAIMS.  (i) "`ofIntertwinedAngles` has no con
 AN ELABORATION TRAP WORTH KEEPING: `(cfc Real.sin Theta_0 : E ->l[k] E)` does NOT elaborate -- `cfc` is generic in the ambient algebra, so the ascription makes Lean try to build the calculus inside `E ->l[k] E` and it fails at `TopologicalSpace`.  The DOUBLE ascription `((cfc Real.sin Theta_0 : E ->L[k] E) : E ->l[k] E)` is required.  The datum form never hits this because `d.sin_0` already has a type.
 
 **REOPENED 2026-09-04 (hostile review).**  The converse clause's witness now takes only the printed angle data and constructs the intertwining partial isometry J_0 internally, instead of asking the caller for it.  The clause is still OPEN: the printed hypothesis allows the two spectral multiplicity functions to differ at 0, and the available classification is agreement everywhere.  See the result inventory's open hostile-review obligations.
+
+SOURCE INVARIANT CORRECTED 2026-09-05. Theorem 3.1 names the spectral multiplicity functions of the ANGLE operators Theta_0 and Theta_1. The registered witness was stated on `genericCosineBlock`, Halmos's cos^2 Theta, and this row asserted that as the printed statement. They are the same data because t -> cos^2 t is injective on [0, pi/2], but that is a theorem and it had not been proved. It is now. `TauCeti.sameSpectralMultiplicity_cfc_iff` transports the invariant along any functional calculus invertible on the spectrum -- proved from the Hahn--Hellinger classification plus `OperatorUnitaryEquiv.cfc_real`, which says unitary equivalence survives the functional calculus because conjugation is a star algebra equivalence -- and `spectrum_genericCosineBlock_subset_Icc` discharges its hypothesis for arccos . sqrt against cos^2. `genericAngleBlock` is Theta itself on the generic part, and `theorem3_1_spectralMultiplicity_classification_sourceAngle_complex` is the printed statement on it. The cos^2 form is retained as the structural theorem beneath it.
+
+Separately, the converse's ambient dimension clause is now a PROPOSITION. The printed converse assumes dim A_0 + dim A_1 = dim H; the registered theorems took a chosen isometric equivalence as a caller argument. `SameHilbertDimensionSum` is the proposition, and `theorem3_1_realization_inAmbient_ofSameHilbertDimension_{complex,real}` PRODUCE the realization from it -- the same discipline already applied to J_0.
 
 **Next action.** No hostile-review hole is currently recorded for this source passage. Preserve exact source scope and re-audit if the distributable source specification changes.
 

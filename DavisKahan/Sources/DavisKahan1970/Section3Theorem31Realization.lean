@@ -799,6 +799,84 @@ theorem theorem3_1_realization_inAmbient_ofSpectralMultiplicityAwayFromZero_real
     theorem3_1_realization_ofSpectralMultiplicityAwayFromZero_real hΘ₀ hΘ₁ hspec₀ hspec₁ hmult
   exact ⟨J, hJ, hisom, hcoisom, ⟨e, rfl, rfl⟩, h₃, h₄, h₅, h₆⟩
 
+/-! ### The dimension clause as a proposition
+
+The printed converse assumes `dim A₀ + dim A₁ = dim H`.  That is a *proposition*
+about the three spaces, not a chosen isometric equivalence, and the two theorems
+above take the equivalence as an explicit argument.  For Hilbert spaces the two
+are interchangeable -- equality of Hilbert dimensions is exactly the existence of
+a linear isometric equivalence -- but the source-facing statement should take the
+proposition and produce the equivalence, not demand it from the caller.
+
+`SameHilbertDimensionSum` is that proposition, and the two theorems below are the
+printed converse: from the dimension clause they *produce* a realization inside
+`H`, rather than asking which realization to use.  This is the same discipline
+already applied to `J₀`: construction data follows from the source hypothesis and
+so does not belong in the source-facing signature. -/
+
+/-- **The source's ambient dimension clause**, `dim A₀ + dim A₁ = dim H`, as a
+proposition about the three spaces.
+
+For Hilbert spaces, equality of Hilbert dimensions is equivalent to the existence
+of a linear isometric equivalence, and this is the form the realization consumes. -/
+def SameHilbertDimensionSum (𝕜 : Type*) [RCLike 𝕜]
+    (A₀ : Type u) [NormedAddCommGroup A₀] [InnerProductSpace 𝕜 A₀]
+    (A₁ : Type v) [NormedAddCommGroup A₁] [InnerProductSpace 𝕜 A₁]
+    (H : Type w) [NormedAddCommGroup H] [InnerProductSpace 𝕜 H] : Prop :=
+  Nonempty (WithLp 2 (A₀ × A₁) ≃ₗᵢ[𝕜] H)
+
+/-- **Davis--Kahan 1970, Theorem 3.1, converse sentence over `ℂ`, taking the
+printed dimension clause as a proposition.**
+
+The realization inside the ambient `H` is produced, not supplied. -/
+theorem theorem3_1_realization_inAmbient_ofSameHilbertDimension_complex
+    {A₀ : Type u} [NormedAddCommGroup A₀] [InnerProductSpace ℂ A₀] [CompleteSpace A₀]
+    {A₁ : Type v} [NormedAddCommGroup A₁] [InnerProductSpace ℂ A₁] [CompleteSpace A₁]
+    {H : Type w} [NormedAddCommGroup H] [InnerProductSpace ℂ H] [CompleteSpace H]
+    {Θ₀ : A₀ →L[ℂ] A₀} {Θ₁ : A₁ →L[ℂ] A₁}
+    (hΘ₀ : IsSelfAdjoint Θ₀) (hΘ₁ : IsSelfAdjoint Θ₁)
+    (hspec₀ : spectrum ℝ Θ₀ ⊆ Set.Icc 0 (Real.pi / 2))
+    (hspec₁ : spectrum ℝ Θ₁ ⊆ Set.Icc 0 (Real.pi / 2))
+    (hmult : SameSpectralMultiplicityAwayFromZero hΘ₀ hΘ₁)
+    (hdim : SameHilbertDimensionSum ℂ A₀ A₁ H) :
+    ∃ (P Q : Submodule ℂ H) (J : A₀ →L[ℂ] A₁) (hJ : J ∘L Θ₀ = Θ₁ ∘L J)
+      (hisom : ContinuousLinearMap.adjoint J ∘L J ∘L cfc Real.sin Θ₀ = cfc Real.sin Θ₀)
+      (hcoisom : J ∘L ContinuousLinearMap.adjoint J ∘L cfc Real.sin Θ₁ = cfc Real.sin Θ₁),
+      TauCeti.DavisKahan.PairOfSubspacesUnitaryEquivalent
+        (sourceSubspace ℂ A₀ A₁)
+        (HalmosAngleDatum.ofIntertwinedAngles hΘ₀ hΘ₁ J hJ hisom hcoisom).targetSubspace
+        P Q := by
+  obtain ⟨e⟩ := hdim
+  obtain ⟨J, hJ, hisom, hcoisom, hpair, -, -, -, -⟩ :=
+    theorem3_1_realization_inAmbient_ofSpectralMultiplicityAwayFromZero_complex
+      hΘ₀ hΘ₁ hspec₀ hspec₁ hmult e
+  exact ⟨_, _, J, hJ, hisom, hcoisom, hpair⟩
+
+/-- **Davis--Kahan 1970, Theorem 3.1, converse sentence over `ℝ`, taking the
+printed dimension clause as a proposition.** -/
+theorem theorem3_1_realization_inAmbient_ofSameHilbertDimension_real
+    {A₀ : Type u} [NormedAddCommGroup A₀] [InnerProductSpace ℝ A₀] [CompleteSpace A₀]
+    {A₁ : Type v} [NormedAddCommGroup A₁] [InnerProductSpace ℝ A₁] [CompleteSpace A₁]
+    {H : Type w} [NormedAddCommGroup H] [InnerProductSpace ℝ H] [CompleteSpace H]
+    {Θ₀ : A₀ →L[ℝ] A₀} {Θ₁ : A₁ →L[ℝ] A₁}
+    (hΘ₀ : IsSelfAdjoint Θ₀) (hΘ₁ : IsSelfAdjoint Θ₁)
+    (hspec₀ : spectrum ℝ Θ₀ ⊆ Set.Icc 0 (Real.pi / 2))
+    (hspec₁ : spectrum ℝ Θ₁ ⊆ Set.Icc 0 (Real.pi / 2))
+    (hmult : SameSpectralMultiplicityAwayFromZero hΘ₀ hΘ₁)
+    (hdim : SameHilbertDimensionSum ℝ A₀ A₁ H) :
+    ∃ (P Q : Submodule ℝ H) (J : A₀ →L[ℝ] A₁) (hJ : J ∘L Θ₀ = Θ₁ ∘L J)
+      (hisom : ContinuousLinearMap.adjoint J ∘L J ∘L cfc Real.sin Θ₀ = cfc Real.sin Θ₀)
+      (hcoisom : J ∘L ContinuousLinearMap.adjoint J ∘L cfc Real.sin Θ₁ = cfc Real.sin Θ₁),
+      TauCeti.DavisKahan.PairOfSubspacesUnitaryEquivalent
+        (sourceSubspace ℝ A₀ A₁)
+        (HalmosAngleDatum.ofIntertwinedAngles hΘ₀ hΘ₁ J hJ hisom hcoisom).targetSubspace
+        P Q := by
+  obtain ⟨e⟩ := hdim
+  obtain ⟨J, hJ, hisom, hcoisom, hpair, -, -, -, -⟩ :=
+    theorem3_1_realization_inAmbient_ofSpectralMultiplicityAwayFromZero_real
+      hΘ₀ hΘ₁ hspec₀ hspec₁ hmult e
+  exact ⟨_, _, J, hJ, hisom, hcoisom, hpair⟩
+
 end AmbientDimension
 
 end Fields
