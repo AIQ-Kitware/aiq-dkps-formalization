@@ -3493,7 +3493,10 @@
         "TauCeti.DavisKahan1970.corollary4_1_infiniteDimensional_nonacute",
         "TauCeti.DavisKahan1970.corollary4_1_compact_nonacute_symmetricNorming_complex",
         "TauCeti.DavisKahan1970.corollary4_1_compact_nonacute_symmetricNorming_real",
-        "TauCeti.DavisKahan1970.symmetricNorming_of_kyFanDominant"
+        "TauCeti.DavisKahan1970.symmetricNorming_of_kyFanDominant",
+        "TauCeti.DavisKahan1970.corollary4_1_compact_nonacute_sourceExact_complex",
+        "TauCeti.DavisKahan1970.corollary4_1_compact_nonacute_sourceExact_real",
+        "TauCeti.DavisKahan.ExactSinTheta.NormalizedUnitaryInvariantNorm"
       ],
       "review_note": "Accepted by the hostile audit at the stated-result level.",
       "parent_claim_id": "DK-4.1-cor",
@@ -3515,7 +3518,7 @@
       "local_statement_self_contained": false,
       "canonical_evidence": [
         {
-          "declaration": "TauCeti.DavisKahan1970.corollary4_1_compact_nonacute_symmetricNorming_complex",
+          "declaration": "TauCeti.DavisKahan1970.corollary4_1_compact_nonacute_sourceExact_complex",
           "role": "primary_source_witness",
           "scalar_scope": "complex",
           "evidence_kind": "proof",
@@ -3523,10 +3526,11 @@
             "DK-4.1-cor.ui-minimality-on-p",
             "DK-4.1-prop.section4-compact-classification-setup"
           ],
-          "capability_classes": []
+          "capability_classes": [],
+          "note": "Source-exact façade as of 2026-09-05."
         },
         {
-          "declaration": "TauCeti.DavisKahan1970.corollary4_1_compact_nonacute_symmetricNorming_real",
+          "declaration": "TauCeti.DavisKahan1970.corollary4_1_compact_nonacute_sourceExact_real",
           "role": "primary_source_witness",
           "scalar_scope": "real",
           "evidence_kind": "proof",
@@ -3534,7 +3538,8 @@
             "DK-4.1-cor.ui-minimality-on-p",
             "DK-4.1-prop.section4-compact-classification-setup"
           ],
-          "capability_classes": []
+          "capability_classes": [],
+          "note": "Source-exact façade as of 2026-09-05."
         }
       ],
       "supporting_evidence": [
@@ -3556,6 +3561,21 @@
           "declaration": "TauCeti.DavisKahan1970.symmetricNorming_of_kyFanDominant",
           "role": "supporting_theorem",
           "note": "Fan dominance: an estimate holding in every Fan-dominant ideal gauge holds at every source unitarily invariant norm, because the finite Ky Fan gauges are such families."
+        },
+        {
+          "declaration": "TauCeti.DavisKahan1970.corollary4_1_compact_nonacute_symmetricNorming_complex",
+          "role": "generalization",
+          "note": "Arbitrary Hilbert space and arbitrary SymmetricNormingFunction: stronger than the source statement on both axes, and what proves the source-exact façade."
+        },
+        {
+          "declaration": "TauCeti.DavisKahan1970.corollary4_1_compact_nonacute_symmetricNorming_real",
+          "role": "generalization",
+          "note": "Arbitrary Hilbert space and arbitrary SymmetricNormingFunction: stronger than the source statement on both axes, and what proves the source-exact façade."
+        },
+        {
+          "declaration": "TauCeti.DavisKahan.ExactSinTheta.NormalizedUnitaryInvariantNorm",
+          "role": "source_correspondence",
+          "note": "The Lean type for the norm object Section 1 fixes."
         }
       ],
       "result_wide_scope_atoms": [
@@ -3569,12 +3589,17 @@
           ],
           "scalar_scope": "complex",
           "evidence": {
-            "primary": "TauCeti.DavisKahan1970.corollary4_1_compact_nonacute_symmetricNorming_complex",
-            "correspondence": []
+            "primary": "TauCeti.DavisKahan1970.corollary4_1_compact_nonacute_sourceExact_complex",
+            "correspondence": [
+              "TauCeti.DavisKahan.ExactSinTheta.NormalizedUnitaryInvariantNorm"
+            ],
+            "supporting": [
+              "TauCeti.DavisKahan1970.corollary4_1_compact_nonacute_symmetricNorming_complex"
+            ]
           },
           "status": "established",
           "evidence_kind": "proof",
-          "justification": "For every source unitarily invariant norm, N((1 - V)P) is minimized among unitaries carrying P H onto Q H by the direct rotation.  This is the printed Corollary 4.1 quantifier: SymmetricNormingFunction, not an implementation ideal family."
+          "justification": "For every source unitarily invariant norm, N((1 - V)P) is minimized among unitaries carrying P H onto Q H by the direct rotation.  This is the printed Corollary 4.1 quantifier: SymmetricNormingFunction, not an implementation ideal family.\n\nSOURCE-EXACT FAÇADE REGISTERED 2026-09-05 (GOAL.md sections I, III.3 and IV). The canonical witness is the façade at the PRINTED scope: separable Hilbert space, and `NormalizedUnitaryInvariantNorm` -- the Lean type for the norm class Section 1 fixes. The arbitrary-Hilbert `SymmetricNormingFunction` theorem that proves it is retained as supporting evidence with role `generalization`, and is stronger on both axes."
         },
         {
           "id": "ui-minimality-on-p.real",
@@ -3583,12 +3608,17 @@
           ],
           "scalar_scope": "real",
           "evidence": {
-            "primary": "TauCeti.DavisKahan1970.corollary4_1_compact_nonacute_symmetricNorming_real",
-            "correspondence": []
+            "primary": "TauCeti.DavisKahan1970.corollary4_1_compact_nonacute_sourceExact_real",
+            "correspondence": [
+              "TauCeti.DavisKahan.ExactSinTheta.NormalizedUnitaryInvariantNorm"
+            ],
+            "supporting": [
+              "TauCeti.DavisKahan1970.corollary4_1_compact_nonacute_symmetricNorming_real"
+            ]
           },
           "status": "established",
           "evidence_kind": "proof",
-          "justification": "For every source unitarily invariant norm, N((1 - V)P) is minimized among unitaries carrying P H onto Q H by the direct rotation.  This is the printed Corollary 4.1 quantifier: SymmetricNormingFunction, not an implementation ideal family."
+          "justification": "For every source unitarily invariant norm, N((1 - V)P) is minimized among unitaries carrying P H onto Q H by the direct rotation.  This is the printed Corollary 4.1 quantifier: SymmetricNormingFunction, not an implementation ideal family.\n\nSOURCE-EXACT FAÇADE REGISTERED 2026-09-05 (GOAL.md sections I, III.3 and IV). The canonical witness is the façade at the PRINTED scope: separable Hilbert space, and `NormalizedUnitaryInvariantNorm` -- the Lean type for the norm class Section 1 fixes. The arbitrary-Hilbert `SymmetricNormingFunction` theorem that proves it is retained as supporting evidence with role `generalization`, and is stronger on both axes."
         }
       ],
       "nonlocal_source_interpretation": {
@@ -3785,7 +3815,10 @@
         "TauCeti.DavisKahan1970.proposition4_3_compact_nonacute_real_idealGauge",
         "TauCeti.DavisKahan1970.proposition4_3_compact_nonacute_symmetricNorming_complex",
         "TauCeti.DavisKahan1970.proposition4_3_compact_nonacute_symmetricNorming_real",
-        "TauCeti.DavisKahan1970.symmetricNorming_of_kyFanDominant"
+        "TauCeti.DavisKahan1970.symmetricNorming_of_kyFanDominant",
+        "TauCeti.DavisKahan1970.proposition4_3_compact_nonacute_sourceExact_complex",
+        "TauCeti.DavisKahan1970.proposition4_3_compact_nonacute_sourceExact_real",
+        "TauCeti.DavisKahan.ExactSinTheta.NormalizedUnitaryInvariantNorm"
       ],
       "review_note": "Accepted result-only semantic review 2026-08-12. The compact nonacute complex and real wrappers state Proposition 4.3 at the paper's inherited matched-defect scope and show that the direct rotation minimizes every Ky-Fan-dominant unitary-invariant ideal gauge of the squared full displacement `(1-W*) (1-W)`. The underlying proof is dimension-free; the compact premise is kept in the wrapper solely to match the source setting. Equations (4.3)-(4.6) and the later warning about unsquared displacement are outside the counted proposition boundary.",
       "parent_claim_id": "DK-4.3-prop",
@@ -3816,7 +3849,7 @@
       "local_statement_self_contained": false,
       "canonical_evidence": [
         {
-          "declaration": "TauCeti.DavisKahan1970.proposition4_3_compact_nonacute_symmetricNorming_complex",
+          "declaration": "TauCeti.DavisKahan1970.proposition4_3_compact_nonacute_sourceExact_complex",
           "role": "primary_source_witness",
           "scalar_scope": "complex",
           "evidence_kind": "proof",
@@ -3824,10 +3857,11 @@
             "DK-4.1-prop.section4-compact-classification-setup",
             "DK-4.3-prop.squared-displacement-global-minimum"
           ],
-          "capability_classes": []
+          "capability_classes": [],
+          "note": "Source-exact façade as of 2026-09-05."
         },
         {
-          "declaration": "TauCeti.DavisKahan1970.proposition4_3_compact_nonacute_symmetricNorming_real",
+          "declaration": "TauCeti.DavisKahan1970.proposition4_3_compact_nonacute_sourceExact_real",
           "role": "primary_source_witness",
           "scalar_scope": "real",
           "evidence_kind": "proof",
@@ -3835,7 +3869,8 @@
             "DK-4.1-prop.section4-compact-classification-setup",
             "DK-4.3-prop.squared-displacement-global-minimum"
           ],
-          "capability_classes": []
+          "capability_classes": [],
+          "note": "Source-exact façade as of 2026-09-05."
         }
       ],
       "supporting_evidence": [
@@ -3853,6 +3888,21 @@
           "declaration": "TauCeti.DavisKahan1970.symmetricNorming_of_kyFanDominant",
           "role": "supporting_theorem",
           "note": "Fan dominance: an estimate holding in every Fan-dominant ideal gauge holds at every source unitarily invariant norm, because the finite Ky Fan gauges are such families."
+        },
+        {
+          "declaration": "TauCeti.DavisKahan1970.proposition4_3_compact_nonacute_symmetricNorming_complex",
+          "role": "generalization",
+          "note": "Arbitrary Hilbert space and arbitrary SymmetricNormingFunction: stronger than the source statement on both axes, and what proves the source-exact façade."
+        },
+        {
+          "declaration": "TauCeti.DavisKahan1970.proposition4_3_compact_nonacute_symmetricNorming_real",
+          "role": "generalization",
+          "note": "Arbitrary Hilbert space and arbitrary SymmetricNormingFunction: stronger than the source statement on both axes, and what proves the source-exact façade."
+        },
+        {
+          "declaration": "TauCeti.DavisKahan.ExactSinTheta.NormalizedUnitaryInvariantNorm",
+          "role": "source_correspondence",
+          "note": "The Lean type for the norm object Section 1 fixes."
         }
       ],
       "result_wide_scope_atoms": [
@@ -3866,12 +3916,17 @@
           ],
           "scalar_scope": "complex",
           "evidence": {
-            "primary": "TauCeti.DavisKahan1970.proposition4_3_compact_nonacute_symmetricNorming_complex",
-            "correspondence": []
+            "primary": "TauCeti.DavisKahan1970.proposition4_3_compact_nonacute_sourceExact_complex",
+            "correspondence": [
+              "TauCeti.DavisKahan.ExactSinTheta.NormalizedUnitaryInvariantNorm"
+            ],
+            "supporting": [
+              "TauCeti.DavisKahan1970.proposition4_3_compact_nonacute_symmetricNorming_complex"
+            ]
           },
           "status": "established",
           "evidence_kind": "proof",
-          "justification": "For every source unitarily invariant norm, the squared displacement N((1 - V*)(1 - V)) is minimized by the direct rotation.  The printed Proposition 4.3 conclusion at the printed norm quantifier."
+          "justification": "For every source unitarily invariant norm, the squared displacement N((1 - V*)(1 - V)) is minimized by the direct rotation.  The printed Proposition 4.3 conclusion at the printed norm quantifier.\n\nSOURCE-EXACT FAÇADE REGISTERED 2026-09-05 (GOAL.md sections I, III.3 and IV). The canonical witness is the façade at the PRINTED scope: separable Hilbert space, and `NormalizedUnitaryInvariantNorm` -- the Lean type for the norm class Section 1 fixes. The arbitrary-Hilbert `SymmetricNormingFunction` theorem that proves it is retained as supporting evidence with role `generalization`, and is stronger on both axes."
         },
         {
           "id": "squared-displacement-global-minimum.real",
@@ -3880,12 +3935,17 @@
           ],
           "scalar_scope": "real",
           "evidence": {
-            "primary": "TauCeti.DavisKahan1970.proposition4_3_compact_nonacute_symmetricNorming_real",
-            "correspondence": []
+            "primary": "TauCeti.DavisKahan1970.proposition4_3_compact_nonacute_sourceExact_real",
+            "correspondence": [
+              "TauCeti.DavisKahan.ExactSinTheta.NormalizedUnitaryInvariantNorm"
+            ],
+            "supporting": [
+              "TauCeti.DavisKahan1970.proposition4_3_compact_nonacute_symmetricNorming_real"
+            ]
           },
           "status": "established",
           "evidence_kind": "proof",
-          "justification": "For every source unitarily invariant norm, the squared displacement N((1 - V*)(1 - V)) is minimized by the direct rotation.  The printed Proposition 4.3 conclusion at the printed norm quantifier."
+          "justification": "For every source unitarily invariant norm, the squared displacement N((1 - V*)(1 - V)) is minimized by the direct rotation.  The printed Proposition 4.3 conclusion at the printed norm quantifier.\n\nSOURCE-EXACT FAÇADE REGISTERED 2026-09-05 (GOAL.md sections I, III.3 and IV). The canonical witness is the façade at the PRINTED scope: separable Hilbert space, and `NormalizedUnitaryInvariantNorm` -- the Lean type for the norm class Section 1 fixes. The arbitrary-Hilbert `SymmetricNormingFunction` theorem that proves it is retained as supporting evidence with role `generalization`, and is stronger on both axes."
         }
       ],
       "nonlocal_source_interpretation": {
@@ -4161,7 +4221,10 @@
         "TauCeti.DavisKahan1970.theorem5_2_symmetricNorming_complex",
         "TauCeti.DavisKahan1970.theorem5_2_symmetricNorming_real",
         "TauCeti.DavisKahan1970.symmetricNorming_of_kyFanDominant",
-        "TauCeti.DavisKahan1970.theorem5_2_orderedGap_symmetricNorming_real"
+        "TauCeti.DavisKahan1970.theorem5_2_orderedGap_symmetricNorming_real",
+        "TauCeti.DavisKahan1970.theorem5_2_sourceExact_complex",
+        "TauCeti.DavisKahan1970.theorem5_2_sourceExact_real",
+        "TauCeti.DavisKahan.ExactSinTheta.NormalizedUnitaryInvariantNorm"
       ],
       "review_note": "Accepted result-only semantic review 2026-08-12. `theorem5_2` is the source-facing complex ordered unbounded theorem for `A >= c+delta > c >= B`, arbitrary unitary-invariant ideal gauge, and the exact domain-aware Sylvester equation. `davisKahan1970_sylvester_real` is the real unbounded theorem under `FormBoundedSylvesterGap`; that predicate has an explicit `leftAboveRightBelow` constructor with exactly the printed ordered semibounded hypotheses, so this theorem is a strictly more general real statement and specializes immediately to Theorem 5.2. The compiler audit surface records that specialization explicitly.\n\n**SCOPE WRAPPER ADDED 2026-09-04 (Claude Opus 5, on hostile review).**  The real endpoint was canonicalized on the `FormBoundedSylvesterGap` abstraction while the complex endpoint carried the printed ordered semibounds; the two now agree, and the broader theorem is supporting evidence.",
       "parent_claim_id": "DK-5.2-thm",
@@ -4181,7 +4244,7 @@
       "local_statement_self_contained": true,
       "canonical_evidence": [
         {
-          "declaration": "TauCeti.DavisKahan1970.theorem5_2_symmetricNorming_complex",
+          "declaration": "TauCeti.DavisKahan1970.theorem5_2_sourceExact_complex",
           "role": "primary_source_witness",
           "scalar_scope": "complex",
           "evidence_kind": "proof",
@@ -4189,10 +4252,11 @@
             "DK-5.2-thm.hilbert-unbounded-hypotheses",
             "DK-5.2-thm.hilbert-unbounded-conclusion"
           ],
-          "capability_classes": []
+          "capability_classes": [],
+          "note": "Source-exact façade as of 2026-09-05."
         },
         {
-          "declaration": "TauCeti.DavisKahan1970.theorem5_2_orderedGap_symmetricNorming_real",
+          "declaration": "TauCeti.DavisKahan1970.theorem5_2_sourceExact_real",
           "role": "primary_source_witness",
           "scalar_scope": "real",
           "evidence_kind": "proof",
@@ -4200,7 +4264,8 @@
             "DK-5.2-thm.hilbert-unbounded-hypotheses",
             "DK-5.2-thm.hilbert-unbounded-conclusion"
           ],
-          "capability_classes": []
+          "capability_classes": [],
+          "note": "Source-exact façade as of 2026-09-05."
         }
       ],
       "supporting_evidence": [
@@ -4222,6 +4287,21 @@
         {
           "declaration": "TauCeti.DavisKahan1970.theorem5_2_symmetricNorming_real",
           "role": "generalization"
+        },
+        {
+          "declaration": "TauCeti.DavisKahan1970.theorem5_2_symmetricNorming_complex",
+          "role": "generalization",
+          "note": "Arbitrary Hilbert space and arbitrary SymmetricNormingFunction: stronger than the source statement on both axes, and what proves the source-exact façade."
+        },
+        {
+          "declaration": "TauCeti.DavisKahan1970.theorem5_2_orderedGap_symmetricNorming_real",
+          "role": "generalization",
+          "note": "Arbitrary Hilbert space and arbitrary SymmetricNormingFunction: stronger than the source statement on both axes, and what proves the source-exact façade."
+        },
+        {
+          "declaration": "TauCeti.DavisKahan.ExactSinTheta.NormalizedUnitaryInvariantNorm",
+          "role": "source_correspondence",
+          "note": "The Lean type for the norm object Section 1 fixes."
         }
       ],
       "result_wide_scope_atoms": [
@@ -4235,12 +4315,17 @@
           ],
           "scalar_scope": "complex",
           "evidence": {
-            "primary": "TauCeti.DavisKahan1970.theorem5_2_symmetricNorming_complex",
-            "correspondence": []
+            "primary": "TauCeti.DavisKahan1970.theorem5_2_sourceExact_complex",
+            "correspondence": [
+              "TauCeti.DavisKahan.ExactSinTheta.NormalizedUnitaryInvariantNorm"
+            ],
+            "supporting": [
+              "TauCeti.DavisKahan1970.theorem5_2_symmetricNorming_complex"
+            ]
           },
           "status": "established",
           "evidence_kind": "proof",
-          "justification": "delta * N(X) <= N(R) for a bounded solution of A X = X B + R with closed self-adjoint A >= c + delta > c >= B, at every source unitarily invariant norm, with ideal membership concluded."
+          "justification": "delta * N(X) <= N(R) for a bounded solution of A X = X B + R with closed self-adjoint A >= c + delta > c >= B, at every source unitarily invariant norm, with ideal membership concluded.\n\nSOURCE-EXACT FAÇADE REGISTERED 2026-09-05 (GOAL.md sections I, III.3 and IV). The canonical witness is the façade at the PRINTED scope: separable Hilbert space, and `NormalizedUnitaryInvariantNorm` -- the Lean type for the norm class Section 1 fixes. The arbitrary-Hilbert `SymmetricNormingFunction` theorem that proves it is retained as supporting evidence with role `generalization`, and is stronger on both axes."
         },
         {
           "id": "hilbert-unbounded-conclusion.real",
@@ -4249,12 +4334,17 @@
           ],
           "scalar_scope": "real",
           "evidence": {
-            "primary": "TauCeti.DavisKahan1970.theorem5_2_orderedGap_symmetricNorming_real",
-            "correspondence": []
+            "primary": "TauCeti.DavisKahan1970.theorem5_2_sourceExact_real",
+            "correspondence": [
+              "TauCeti.DavisKahan.ExactSinTheta.NormalizedUnitaryInvariantNorm"
+            ],
+            "supporting": [
+              "TauCeti.DavisKahan1970.theorem5_2_orderedGap_symmetricNorming_real"
+            ]
           },
           "status": "established",
           "evidence_kind": "proof",
-          "justification": "delta * N(X) <= N(R) for a bounded solution of A X = X B + R with closed self-adjoint A >= c + delta > c >= B, at every source unitarily invariant norm, with ideal membership concluded.  SCOPE CORRECTED 2026-09-04: the real primary took `FormBoundedSylvesterGap`, which also covers the interval/exterior and reversed configurations and is therefore broader than the printed `A >= gamma + delta > gamma >= B`.  The primary is now the instance at the printed ordered semibounds, matching the complex endpoint, which was already in that shape; the `FormBoundedSylvesterGap` theorem is retained as a generalization."
+          "justification": "delta * N(X) <= N(R) for a bounded solution of A X = X B + R with closed self-adjoint A >= c + delta > c >= B, at every source unitarily invariant norm, with ideal membership concluded.  SCOPE CORRECTED 2026-09-04: the real primary took `FormBoundedSylvesterGap`, which also covers the interval/exterior and reversed configurations and is therefore broader than the printed `A >= gamma + delta > gamma >= B`.  The primary is now the instance at the printed ordered semibounds, matching the complex endpoint, which was already in that shape; the `FormBoundedSylvesterGap` theorem is retained as a generalization.\n\nSOURCE-EXACT FAÇADE REGISTERED 2026-09-05 (GOAL.md sections I, III.3 and IV). The canonical witness is the façade at the PRINTED scope: separable Hilbert space, and `NormalizedUnitaryInvariantNorm` -- the Lean type for the norm class Section 1 fixes. The arbitrary-Hilbert `SymmetricNormingFunction` theorem that proves it is retained as supporting evidence with role `generalization`, and is stronger on both axes."
         }
       ]
     },
@@ -4894,7 +4984,10 @@
         "TauCeti.DavisKahan1970.approximationSingularValue_directedSineBlock_lt_one_unboundedRitz_complex",
         "TauCeti.DavisKahan1970.approximationSingularValue_directedSineBlock_lt_one_unboundedRitz_real",
         "TauCeti.DavisKahan1970.tanTheta_directed_unboundedRitz_symmetricNorming_complex",
-        "TauCeti.DavisKahan1970.tanTheta_directed_unboundedRitz_symmetricNorming_real"
+        "TauCeti.DavisKahan1970.tanTheta_directed_unboundedRitz_symmetricNorming_real",
+        "TauCeti.DavisKahan1970.tanTheta_directed_unboundedRitz_sourceExact_complex",
+        "TauCeti.DavisKahan1970.tanTheta_directed_unboundedRitz_sourceExact_real",
+        "TauCeti.DavisKahan.ExactSinTheta.NormalizedUnitaryInvariantNorm"
       ],
       "review_note": "Re-registered 2026-09-05 to close finding F1 of the 2026-09-04 hostile review, and the follow-up review's objection that the parameterized form still asks the caller for the representative.  The canonical witnesses were `tanTheta_directed_unboundedTrial_symmetricNorming_{complex,real}`, which assume the perturbed operator has no spectrum in (alpha, alpha + delta) and compare against the spectral subspace below alpha; printed Theorem 6.3 assumes neither, and a 4x4 instance separating them is in the review.  They are now `specialization`.  The canonical witnesses are the `_exists_` unbounded-Ritz endpoints, which take only the source data and derive the pole exclusion and the tangent representative; the parameterized `_unboundedRitz_` pair they compose is `alternative_route`.  Equations (6.2)-(6.6) and Example 6.1 are proof/example material and are not part of the counted Theorem 6.3 statement.",
       "parent_claim_id": "DK-6.3-thm",
@@ -4923,7 +5016,7 @@
       "local_statement_self_contained": true,
       "canonical_evidence": [
         {
-          "declaration": "TauCeti.DavisKahan1970.tanTheta_directed_unboundedRitz_symmetricNorming_exists_complex",
+          "declaration": "TauCeti.DavisKahan1970.tanTheta_directed_unboundedRitz_sourceExact_complex",
           "role": "primary_source_witness",
           "scalar_scope": "complex",
           "evidence_kind": "proof",
@@ -4931,10 +5024,10 @@
             "DK-6.3-thm.generalized-tangent-theorem"
           ],
           "capability_classes": [],
-          "note": "Printed Theorem 6.3 at its printed hypothesis shape: an arbitrary reducing complement, no spectral gap of the perturbed operator, arbitrary trial dimension (so `dim X(E_0) < dim X(F_0)` is covered), an unbounded Ritz compression as the Appendix to Section 6 requires, and the tangent representative and its pole exclusion derived rather than assumed."
+          "note": "Printed Theorem 6.3 at its printed hypothesis shape: an arbitrary reducing complement, no spectral gap of the perturbed operator, arbitrary trial dimension (so `dim X(E_0) < dim X(F_0)` is covered), an unbounded Ritz compression as the Appendix to Section 6 requires, and the tangent representative and its pole exclusion derived rather than assumed. Source-exact façade as of 2026-09-05."
         },
         {
-          "declaration": "TauCeti.DavisKahan1970.tanTheta_directed_unboundedRitz_symmetricNorming_exists_real",
+          "declaration": "TauCeti.DavisKahan1970.tanTheta_directed_unboundedRitz_sourceExact_real",
           "role": "primary_source_witness",
           "scalar_scope": "real",
           "evidence_kind": "proof",
@@ -4942,7 +5035,7 @@
             "DK-6.3-thm.generalized-tangent-theorem"
           ],
           "capability_classes": [],
-          "note": "The real sibling of the complex witness, at the same hypothesis shape."
+          "note": "The real sibling of the complex witness, at the same hypothesis shape. Source-exact façade as of 2026-09-05."
         }
       ],
       "supporting_evidence": [
@@ -4993,6 +5086,21 @@
           "declaration": "TauCeti.DavisKahan1970.theorem6_3_unbounded_infiniteTrial_ideal_exists_real",
           "role": "generalization",
           "note": "The same estimate at an arbitrary Fan-dominant unitarily invariant ideal gauge -- the axiomatic model of the source's norm class, as against the Gohberg--Krein `SymmetricNormingFunction` model the canonical witness uses.  Neither quantifier is stronger: `symmetricNorming_of_kyFanDominant` and `kyFanDominant_of_symmetricNorming` transport an estimate each way, and `symmetricNorming_iff_kyFanDominant` states the equivalence, because both are weak Ky Fan majorization -- the criterion Section 1 of the paper announces it will use.  Registered as an alternative route rather than as a narrowing or a strengthening."
+        },
+        {
+          "declaration": "TauCeti.DavisKahan1970.tanTheta_directed_unboundedRitz_symmetricNorming_exists_complex",
+          "role": "generalization",
+          "note": "Arbitrary Hilbert space and arbitrary SymmetricNormingFunction: stronger than the source statement on both axes, and what proves the source-exact façade."
+        },
+        {
+          "declaration": "TauCeti.DavisKahan1970.tanTheta_directed_unboundedRitz_symmetricNorming_exists_real",
+          "role": "generalization",
+          "note": "Arbitrary Hilbert space and arbitrary SymmetricNormingFunction: stronger than the source statement on both axes, and what proves the source-exact façade."
+        },
+        {
+          "declaration": "TauCeti.DavisKahan.ExactSinTheta.NormalizedUnitaryInvariantNorm",
+          "role": "source_correspondence",
+          "note": "The Lean type for the norm object Section 1 fixes."
         }
       ],
       "result_wide_scope_atoms": [],
@@ -5004,12 +5112,17 @@
           ],
           "scalar_scope": "complex",
           "evidence": {
-            "primary": "TauCeti.DavisKahan1970.tanTheta_directed_unboundedRitz_symmetricNorming_exists_complex",
-            "correspondence": []
+            "primary": "TauCeti.DavisKahan1970.tanTheta_directed_unboundedRitz_sourceExact_complex",
+            "correspondence": [
+              "TauCeti.DavisKahan.ExactSinTheta.NormalizedUnitaryInvariantNorm"
+            ],
+            "supporting": [
+              "TauCeti.DavisKahan1970.tanTheta_directed_unboundedRitz_symmetricNorming_exists_complex"
+            ]
           },
           "status": "established",
           "evidence_kind": "proof",
-          "justification": "delta * N(tan Theta_0) <= N(R) with the representative CONSTRUCTED, not assumed: the theorem takes only the source data -- an unbounded self-adjoint ambient LinearPMap A, an UnboundedRitzPair whose Ritz compression A_0 is itself a densely defined self-adjoint partial operator on the trial subspace Z, an arbitrary reducing complement V (ReducingComplement A V, no spectral-subspace and no spectral-gap hypothesis), the ordered form bounds A_0 <= alpha and A >= alpha + delta on V-perp within dom A, arbitrary trial dimension, a bounded residual R tied to the Ritz data by hR, and an arbitrary SymmetricNormingFunction -- and CONCLUDES (i) that no principal angle between Z and V is a right angle, so the paper's tan theta_j are genuine tangents and not the value Lean's totalised Real.tan takes at the pole, (ii) that a bounded operator whose approximation numbers are exactly tan(arcsin a_n(P_{V-perp}|_Z)) exists, and (iii) that it satisfies the printed estimate and lies in the norm's ideal."
+          "justification": "delta * N(tan Theta_0) <= N(R) with the representative CONSTRUCTED, not assumed: the theorem takes only the source data -- an unbounded self-adjoint ambient LinearPMap A, an UnboundedRitzPair whose Ritz compression A_0 is itself a densely defined self-adjoint partial operator on the trial subspace Z, an arbitrary reducing complement V (ReducingComplement A V, no spectral-subspace and no spectral-gap hypothesis), the ordered form bounds A_0 <= alpha and A >= alpha + delta on V-perp within dom A, arbitrary trial dimension, a bounded residual R tied to the Ritz data by hR, and an arbitrary SymmetricNormingFunction -- and CONCLUDES (i) that no principal angle between Z and V is a right angle, so the paper's tan theta_j are genuine tangents and not the value Lean's totalised Real.tan takes at the pole, (ii) that a bounded operator whose approximation numbers are exactly tan(arcsin a_n(P_{V-perp}|_Z)) exists, and (iii) that it satisfies the printed estimate and lies in the norm's ideal.\n\nSOURCE-EXACT FAÇADE REGISTERED 2026-09-05 (GOAL.md sections I, III.3 and IV). The canonical witness is the façade at the PRINTED scope: separable Hilbert space, and `NormalizedUnitaryInvariantNorm` -- the Lean type for the norm class Section 1 fixes. The arbitrary-Hilbert `SymmetricNormingFunction` theorem that proves it is retained as supporting evidence with role `generalization`, and is stronger on both axes."
         },
         {
           "id": "generalized-tangent-theorem.real",
@@ -5018,12 +5131,17 @@
           ],
           "scalar_scope": "real",
           "evidence": {
-            "primary": "TauCeti.DavisKahan1970.tanTheta_directed_unboundedRitz_symmetricNorming_exists_real",
-            "correspondence": []
+            "primary": "TauCeti.DavisKahan1970.tanTheta_directed_unboundedRitz_sourceExact_real",
+            "correspondence": [
+              "TauCeti.DavisKahan.ExactSinTheta.NormalizedUnitaryInvariantNorm"
+            ],
+            "supporting": [
+              "TauCeti.DavisKahan1970.tanTheta_directed_unboundedRitz_symmetricNorming_exists_real"
+            ]
           },
           "status": "established",
           "evidence_kind": "proof",
-          "justification": "delta * N(tan Theta_0) <= N(R) with the representative CONSTRUCTED, not assumed: the theorem takes only the source data -- an unbounded self-adjoint ambient LinearPMap A, an UnboundedRitzPair whose Ritz compression A_0 is itself a densely defined self-adjoint partial operator on the trial subspace Z, an arbitrary reducing complement V (ReducingComplement A V, no spectral-subspace and no spectral-gap hypothesis), the ordered form bounds A_0 <= alpha and A >= alpha + delta on V-perp within dom A, arbitrary trial dimension, a bounded residual R tied to the Ritz data by hR, and an arbitrary SymmetricNormingFunction -- and CONCLUDES (i) that no principal angle between Z and V is a right angle, so the paper's tan theta_j are genuine tangents and not the value Lean's totalised Real.tan takes at the pole, (ii) that a bounded operator whose approximation numbers are exactly tan(arcsin a_n(P_{V-perp}|_Z)) exists, and (iii) that it satisfies the printed estimate and lies in the norm's ideal."
+          "justification": "delta * N(tan Theta_0) <= N(R) with the representative CONSTRUCTED, not assumed: the theorem takes only the source data -- an unbounded self-adjoint ambient LinearPMap A, an UnboundedRitzPair whose Ritz compression A_0 is itself a densely defined self-adjoint partial operator on the trial subspace Z, an arbitrary reducing complement V (ReducingComplement A V, no spectral-subspace and no spectral-gap hypothesis), the ordered form bounds A_0 <= alpha and A >= alpha + delta on V-perp within dom A, arbitrary trial dimension, a bounded residual R tied to the Ritz data by hR, and an arbitrary SymmetricNormingFunction -- and CONCLUDES (i) that no principal angle between Z and V is a right angle, so the paper's tan theta_j are genuine tangents and not the value Lean's totalised Real.tan takes at the pole, (ii) that a bounded operator whose approximation numbers are exactly tan(arcsin a_n(P_{V-perp}|_Z)) exists, and (iii) that it satisfies the printed estimate and lies in the norm's ideal.\n\nSOURCE-EXACT FAÇADE REGISTERED 2026-09-05 (GOAL.md sections I, III.3 and IV). The canonical witness is the façade at the PRINTED scope: separable Hilbert space, and `NormalizedUnitaryInvariantNorm` -- the Lean type for the norm class Section 1 fixes. The arbitrary-Hilbert `SymmetricNormingFunction` theorem that proves it is retained as supporting evidence with role `generalization`, and is stronger on both axes."
         }
       ]
     },
@@ -5649,7 +5767,12 @@
         "TauCeti.DavisKahan.Angle.sinTwoThetaIdealBlock_hasSameApproximationNumbers_trialSide",
         "TauCeti.DavisKahan.Angle.directedSinTwoAngleOperator_hasSameApproximationNumbers_swap",
         "TauCeti.DavisKahan.Angle.mem_directedSinTwoAngleOperator_trialSide_iff",
-        "TauCeti.DavisKahan.Angle.gauge_directedSinTwoAngleOperator_trialSide"
+        "TauCeti.DavisKahan.Angle.gauge_directedSinTwoAngleOperator_trialSide",
+        "TauCeti.DavisKahan1970.Section8.theorem8_2_sinTwoTheta_perturbation_sourceExact",
+        "TauCeti.DavisKahan1970.Section8.theorem8_2_sinTwoTheta_residual_directedAngle_sourceExact",
+        "TauCeti.DavisKahan1970.Section8.theorem8_2_sinTwoTheta_perturbation_real_sourceExact",
+        "TauCeti.DavisKahan1970.Section8.theorem8_2_sinTwoTheta_residual_directedAngle_real_sourceExact",
+        "TauCeti.DavisKahan.ExactSinTheta.NormalizedUnitaryInvariantNorm"
       ],
       "review_note": "RE-CLOSED 2026-08-12 after repair (reopened earlier the same day; the reopening is retained in git history).  Both defects were real.  (a) Source scope: immediately after the proof of Proposition 3.2 the paper fixes the standing convention that (3.5) is assumed as well as (1.5) except where the contrary is stated, and Theorem 8.2 does not state otherwise.  That convention is now inventoried as the source SCOPE atom `S3-standing-scope.crossed-dimension-standing-assumption` and linked, as scope, to exactly the two counted results it governs -- Theorem 8.2 and Proposition 3.4.  It is not a counted result and the denominator remains 29.  Theorem 8.1's ambient quarter-angle characterization `theorem8_1_maximalAngle_le_iff_spectrumIn` is proved with no dimension hypothesis at all, so it is deliberately not linked.  (b) Evidence: the printed quarter-angle conclusion is the AMBIENT Theta < pi/4, and the row previously selected a directed-gap theorem.  The selected evidence is now `theorem8_2_branch_maximalAngle_lt_of_crossedDefects` and `theorem8_2_branch_real_maximalAngle_lt_of_crossedDefects`, which conclude `maximalAngle P Q < pi/4` from either printed smallness alternative under (3.5) in its constructive `CrossedDefectsEquivalent` form, with no finite-dimensionality and no rank hypothesis, over both scalar fields.  Together with the four retained `sin 2Theta` endpoints (perturbation and residual, complex and real, arbitrary `SymmetricNormingFunction`) the evidence jointly establishes the printed result at the printed dimensional scope.  No new Lean mathematics was required once the source scope was corrected.\n\n**ORIENTATION DEFECT FOUND AND FIXED 2026-09-04 (Claude Opus 5, on hostile review).**  The printed residual alternative was certified on `sinTwoThetaIdealBlock Q P` rather than on the paper's directed angle, and in the wrong ordering of the pair.  This is exactly the defect repaired on `S2-sin-two-theta` earlier the same day; the repair was not propagated here, and the row read terminal throughout.  The canonical evidence is now `theorem8_2_sinTwoTheta_residual_directedAngle_symmetricNorming` and its real sibling, on `Angle.directedSinTwoAngleOperator P Q` with `P` the trial subspace; the block theorems remain as `implementation_structure`.  The perturbation alternative needed no change: it is the AMBIENT clause, and `sinAngleOperatorC` is the modulus of a projector difference, hence insensitive to the order of the pair.\n\n**OPERATOR SCOPE DISCLOSED 2026-09-05.**  The same disclosure as `DK-8.1-thm`, added as a second reading on this row's existing nonlocal interpretation: the registered Section 8 evidence is bounded, the Section 2 hypotheses it imports are certified unbounded, and the source evidence for reading Section 8 at the main bounded setting, the competing reading, and the open lift are recorded in `nonlocal_source_interpretation.operator_scope_reading`.",
       "boundary_review": {
@@ -5700,7 +5823,7 @@
           "capability_classes": []
         },
         {
-          "declaration": "TauCeti.DavisKahan1970.Section8.theorem8_2_sinTwoTheta_perturbation_symmetricNorming",
+          "declaration": "TauCeti.DavisKahan1970.Section8.theorem8_2_sinTwoTheta_perturbation_sourceExact",
           "role": "primary_source_witness",
           "scalar_scope": "complex",
           "evidence_kind": "proof",
@@ -5709,10 +5832,11 @@
             "DK-8.2-thm.double-angle-bound-retained",
             "S3-standing-scope.crossed-dimension-standing-assumption"
           ],
-          "capability_classes": []
+          "capability_classes": [],
+          "note": "Source-exact façade as of 2026-09-05."
         },
         {
-          "declaration": "TauCeti.DavisKahan1970.Section8.theorem8_2_sinTwoTheta_residual_directedAngle_symmetricNorming",
+          "declaration": "TauCeti.DavisKahan1970.Section8.theorem8_2_sinTwoTheta_residual_directedAngle_sourceExact",
           "role": "primary_source_witness",
           "scalar_scope": "complex",
           "evidence_kind": "proof",
@@ -5721,10 +5845,11 @@
             "DK-8.2-thm.double-angle-bound-retained",
             "S3-standing-scope.crossed-dimension-standing-assumption"
           ],
-          "capability_classes": []
+          "capability_classes": [],
+          "note": "Source-exact façade as of 2026-09-05."
         },
         {
-          "declaration": "TauCeti.DavisKahan1970.Section8.theorem8_2_sinTwoTheta_perturbation_real_symmetricNorming",
+          "declaration": "TauCeti.DavisKahan1970.Section8.theorem8_2_sinTwoTheta_perturbation_real_sourceExact",
           "role": "primary_source_witness",
           "scalar_scope": "real",
           "evidence_kind": "proof",
@@ -5733,10 +5858,11 @@
             "DK-8.2-thm.double-angle-bound-retained",
             "S3-standing-scope.crossed-dimension-standing-assumption"
           ],
-          "capability_classes": []
+          "capability_classes": [],
+          "note": "Source-exact façade as of 2026-09-05."
         },
         {
-          "declaration": "TauCeti.DavisKahan1970.Section8.theorem8_2_sinTwoTheta_residual_directedAngle_real_symmetricNorming",
+          "declaration": "TauCeti.DavisKahan1970.Section8.theorem8_2_sinTwoTheta_residual_directedAngle_real_sourceExact",
           "role": "primary_source_witness",
           "scalar_scope": "real",
           "evidence_kind": "proof",
@@ -5745,7 +5871,8 @@
             "DK-8.2-thm.double-angle-bound-retained",
             "S3-standing-scope.crossed-dimension-standing-assumption"
           ],
-          "capability_classes": []
+          "capability_classes": [],
+          "note": "Source-exact façade as of 2026-09-05."
         }
       ],
       "supporting_evidence": [
@@ -5780,6 +5907,31 @@
         {
           "declaration": "TauCeti.DavisKahan.Angle.gauge_directedSinTwoAngleOperator_trialSide",
           "role": "source_correspondence"
+        },
+        {
+          "declaration": "TauCeti.DavisKahan1970.Section8.theorem8_2_sinTwoTheta_perturbation_symmetricNorming",
+          "role": "generalization",
+          "note": "Arbitrary Hilbert space and arbitrary SymmetricNormingFunction: stronger than the source statement on both axes, and what proves the source-exact façade."
+        },
+        {
+          "declaration": "TauCeti.DavisKahan1970.Section8.theorem8_2_sinTwoTheta_residual_directedAngle_symmetricNorming",
+          "role": "generalization",
+          "note": "Arbitrary Hilbert space and arbitrary SymmetricNormingFunction: stronger than the source statement on both axes, and what proves the source-exact façade."
+        },
+        {
+          "declaration": "TauCeti.DavisKahan1970.Section8.theorem8_2_sinTwoTheta_perturbation_real_symmetricNorming",
+          "role": "generalization",
+          "note": "Arbitrary Hilbert space and arbitrary SymmetricNormingFunction: stronger than the source statement on both axes, and what proves the source-exact façade."
+        },
+        {
+          "declaration": "TauCeti.DavisKahan1970.Section8.theorem8_2_sinTwoTheta_residual_directedAngle_real_symmetricNorming",
+          "role": "generalization",
+          "note": "Arbitrary Hilbert space and arbitrary SymmetricNormingFunction: stronger than the source statement on both axes, and what proves the source-exact façade."
+        },
+        {
+          "declaration": "TauCeti.DavisKahan.ExactSinTheta.NormalizedUnitaryInvariantNorm",
+          "role": "source_correspondence",
+          "note": "The Lean type for the norm object Section 1 fixes."
         }
       ],
       "result_wide_scope_atoms": [
@@ -5822,12 +5974,17 @@
           ],
           "scalar_scope": "complex",
           "evidence": {
-            "primary": "TauCeti.DavisKahan1970.Section8.theorem8_2_sinTwoTheta_perturbation_symmetricNorming",
-            "correspondence": []
+            "primary": "TauCeti.DavisKahan1970.Section8.theorem8_2_sinTwoTheta_perturbation_sourceExact",
+            "correspondence": [
+              "TauCeti.DavisKahan.ExactSinTheta.NormalizedUnitaryInvariantNorm"
+            ],
+            "supporting": [
+              "TauCeti.DavisKahan1970.Section8.theorem8_2_sinTwoTheta_perturbation_symmetricNorming"
+            ]
           },
           "status": "established",
           "evidence_kind": "proof",
-          "justification": "Canonical witness for double-angle-bound-retained at complex scalar scope, carried over from the pre-clause canonical evidence and re-checked against its compiler-printed type under the coherent model."
+          "justification": "Canonical witness for double-angle-bound-retained at complex scalar scope, carried over from the pre-clause canonical evidence and re-checked against its compiler-printed type under the coherent model.\n\nSOURCE-EXACT FAÇADE REGISTERED 2026-09-05 (GOAL.md sections I, III.3 and IV). The canonical witness is the façade at the PRINTED scope: separable Hilbert space, and `NormalizedUnitaryInvariantNorm` -- the Lean type for the norm class Section 1 fixes. The arbitrary-Hilbert `SymmetricNormingFunction` theorem that proves it is retained as supporting evidence with role `generalization`, and is stronger on both axes."
         },
         {
           "id": "double-angle-bound-retained.complex.2",
@@ -5836,17 +5993,21 @@
           ],
           "scalar_scope": "complex",
           "evidence": {
-            "primary": "TauCeti.DavisKahan1970.Section8.theorem8_2_sinTwoTheta_residual_directedAngle_symmetricNorming",
+            "primary": "TauCeti.DavisKahan1970.Section8.theorem8_2_sinTwoTheta_residual_directedAngle_sourceExact",
             "correspondence": [
               "TauCeti.DavisKahan.Angle.sinTwoThetaIdealBlock_hasSameApproximationNumbers_trialSide",
               "TauCeti.DavisKahan.Angle.directedSinTwoAngleOperator_hasSameApproximationNumbers_swap",
               "TauCeti.DavisKahan.Angle.mem_directedSinTwoAngleOperator_trialSide_iff",
-              "TauCeti.DavisKahan.Angle.gauge_directedSinTwoAngleOperator_trialSide"
+              "TauCeti.DavisKahan.Angle.gauge_directedSinTwoAngleOperator_trialSide",
+              "TauCeti.DavisKahan.ExactSinTheta.NormalizedUnitaryInvariantNorm"
+            ],
+            "supporting": [
+              "TauCeti.DavisKahan1970.Section8.theorem8_2_sinTwoTheta_residual_directedAngle_symmetricNorming"
             ]
           },
           "status": "established",
           "evidence_kind": "proof",
-          "justification": "Canonical witness for double-angle-bound-retained at complex scalar scope, carried over from the pre-clause canonical evidence and re-checked against its compiler-printed type under the coherent model.  ORIENTATION CORRECTED 2026-09-04: the primary was the block theorem, whose conclusion is on `sinTwoThetaIdealBlock Q P` -- the proof's one-sided block, and in the ordering (gap-carrying, trial) rather than the paper's.  Section 1 reads the directed angle as `||sin Theta_0|| = ||Q^perp P|| = ||Q^perp E_0||`, the cross-projection with the TRIAL subspace on the right, so the printed object is `Angle.directedSinTwoAngleOperator P Q`.  The two ordered directed sines have different approximation numbers in general, so this is a theorem and not a renaming; the bridge is `..._trialSide`, which composes the block correspondence with `directedSinTwoAngleOperator_hasSameApproximationNumbers_swap`.  This is the same defect class that was repaired on `S2-sin-two-theta` earlier the same day, and this row stayed green through it -- which is why the conclusion-object invariant now covers both rows."
+          "justification": "Canonical witness for double-angle-bound-retained at complex scalar scope, carried over from the pre-clause canonical evidence and re-checked against its compiler-printed type under the coherent model.  ORIENTATION CORRECTED 2026-09-04: the primary was the block theorem, whose conclusion is on `sinTwoThetaIdealBlock Q P` -- the proof's one-sided block, and in the ordering (gap-carrying, trial) rather than the paper's.  Section 1 reads the directed angle as `||sin Theta_0|| = ||Q^perp P|| = ||Q^perp E_0||`, the cross-projection with the TRIAL subspace on the right, so the printed object is `Angle.directedSinTwoAngleOperator P Q`.  The two ordered directed sines have different approximation numbers in general, so this is a theorem and not a renaming; the bridge is `..._trialSide`, which composes the block correspondence with `directedSinTwoAngleOperator_hasSameApproximationNumbers_swap`.  This is the same defect class that was repaired on `S2-sin-two-theta` earlier the same day, and this row stayed green through it -- which is why the conclusion-object invariant now covers both rows.\n\nSOURCE-EXACT FAÇADE REGISTERED 2026-09-05 (GOAL.md sections I, III.3 and IV). The canonical witness is the façade at the PRINTED scope: separable Hilbert space, and `NormalizedUnitaryInvariantNorm` -- the Lean type for the norm class Section 1 fixes. The arbitrary-Hilbert `SymmetricNormingFunction` theorem that proves it is retained as supporting evidence with role `generalization`, and is stronger on both axes."
         },
         {
           "id": "double-angle-bound-retained.real",
@@ -5855,12 +6016,17 @@
           ],
           "scalar_scope": "real",
           "evidence": {
-            "primary": "TauCeti.DavisKahan1970.Section8.theorem8_2_sinTwoTheta_perturbation_real_symmetricNorming",
-            "correspondence": []
+            "primary": "TauCeti.DavisKahan1970.Section8.theorem8_2_sinTwoTheta_perturbation_real_sourceExact",
+            "correspondence": [
+              "TauCeti.DavisKahan.ExactSinTheta.NormalizedUnitaryInvariantNorm"
+            ],
+            "supporting": [
+              "TauCeti.DavisKahan1970.Section8.theorem8_2_sinTwoTheta_perturbation_real_symmetricNorming"
+            ]
           },
           "status": "established",
           "evidence_kind": "proof",
-          "justification": "Canonical witness for double-angle-bound-retained at real scalar scope, carried over from the pre-clause canonical evidence and re-checked against its compiler-printed type under the coherent model."
+          "justification": "Canonical witness for double-angle-bound-retained at real scalar scope, carried over from the pre-clause canonical evidence and re-checked against its compiler-printed type under the coherent model.\n\nSOURCE-EXACT FAÇADE REGISTERED 2026-09-05 (GOAL.md sections I, III.3 and IV). The canonical witness is the façade at the PRINTED scope: separable Hilbert space, and `NormalizedUnitaryInvariantNorm` -- the Lean type for the norm class Section 1 fixes. The arbitrary-Hilbert `SymmetricNormingFunction` theorem that proves it is retained as supporting evidence with role `generalization`, and is stronger on both axes."
         },
         {
           "id": "double-angle-bound-retained.real.2",
@@ -5869,17 +6035,21 @@
           ],
           "scalar_scope": "real",
           "evidence": {
-            "primary": "TauCeti.DavisKahan1970.Section8.theorem8_2_sinTwoTheta_residual_directedAngle_real_symmetricNorming",
+            "primary": "TauCeti.DavisKahan1970.Section8.theorem8_2_sinTwoTheta_residual_directedAngle_real_sourceExact",
             "correspondence": [
               "TauCeti.DavisKahan.Angle.sinTwoThetaIdealBlock_hasSameApproximationNumbers_trialSide",
               "TauCeti.DavisKahan.Angle.directedSinTwoAngleOperator_hasSameApproximationNumbers_swap",
               "TauCeti.DavisKahan.Angle.mem_directedSinTwoAngleOperator_trialSide_iff",
-              "TauCeti.DavisKahan.Angle.gauge_directedSinTwoAngleOperator_trialSide"
+              "TauCeti.DavisKahan.Angle.gauge_directedSinTwoAngleOperator_trialSide",
+              "TauCeti.DavisKahan.ExactSinTheta.NormalizedUnitaryInvariantNorm"
+            ],
+            "supporting": [
+              "TauCeti.DavisKahan1970.Section8.theorem8_2_sinTwoTheta_residual_directedAngle_real_symmetricNorming"
             ]
           },
           "status": "established",
           "evidence_kind": "proof",
-          "justification": "Canonical witness for double-angle-bound-retained at real scalar scope, carried over from the pre-clause canonical evidence and re-checked against its compiler-printed type under the coherent model.  ORIENTATION CORRECTED 2026-09-04: the primary was the block theorem, whose conclusion is on `sinTwoThetaIdealBlock Q P` -- the proof's one-sided block, and in the ordering (gap-carrying, trial) rather than the paper's.  Section 1 reads the directed angle as `||sin Theta_0|| = ||Q^perp P|| = ||Q^perp E_0||`, the cross-projection with the TRIAL subspace on the right, so the printed object is `Angle.directedSinTwoAngleOperator P Q`.  The two ordered directed sines have different approximation numbers in general, so this is a theorem and not a renaming; the bridge is `..._trialSide`, which composes the block correspondence with `directedSinTwoAngleOperator_hasSameApproximationNumbers_swap`.  This is the same defect class that was repaired on `S2-sin-two-theta` earlier the same day, and this row stayed green through it -- which is why the conclusion-object invariant now covers both rows."
+          "justification": "Canonical witness for double-angle-bound-retained at real scalar scope, carried over from the pre-clause canonical evidence and re-checked against its compiler-printed type under the coherent model.  ORIENTATION CORRECTED 2026-09-04: the primary was the block theorem, whose conclusion is on `sinTwoThetaIdealBlock Q P` -- the proof's one-sided block, and in the ordering (gap-carrying, trial) rather than the paper's.  Section 1 reads the directed angle as `||sin Theta_0|| = ||Q^perp P|| = ||Q^perp E_0||`, the cross-projection with the TRIAL subspace on the right, so the printed object is `Angle.directedSinTwoAngleOperator P Q`.  The two ordered directed sines have different approximation numbers in general, so this is a theorem and not a renaming; the bridge is `..._trialSide`, which composes the block correspondence with `directedSinTwoAngleOperator_hasSameApproximationNumbers_swap`.  This is the same defect class that was repaired on `S2-sin-two-theta` earlier the same day, and this row stayed green through it -- which is why the conclusion-object invariant now covers both rows.\n\nSOURCE-EXACT FAÇADE REGISTERED 2026-09-05 (GOAL.md sections I, III.3 and IV). The canonical witness is the façade at the PRINTED scope: separable Hilbert space, and `NormalizedUnitaryInvariantNorm` -- the Lean type for the norm class Section 1 fixes. The arbitrary-Hilbert `SymmetricNormingFunction` theorem that proves it is retained as supporting evidence with role `generalization`, and is stronger on both axes."
         }
       ],
       "nonlocal_source_interpretation": {
@@ -5941,7 +6111,7 @@
     "terminal_results": 29,
     "remaining_results": [],
     "note": "The structured fields above are authoritative; this paragraph is regenerated whenever the count moves. 2026-09-02, closing: terminal_results is 29 and remaining_results is empty. `S2-tan-two-theta` was `hostile_review_blocked` under obligation `tan2theta-directed-correspondence` after a 2026-09-02 closure that did not compose; it is now accepted on canonical directed witnesses `tanTwoTheta_directed_unboundedResidual_symmetricNorming_{complex,real}`, which take the reducing subspace and conclude on the paper's directed corner (`tanTwoDirectedCornerR U V` over ℝ) with the singular-value identification in their types. The canonical-evidence digest changed accordingly and the statement pins were refreshed for the new canonical and bridging declarations. Earlier history of this field (the 2026-08-31 `S2-sin-two-theta` reopening, the `S2-tan-theta` Appendix-scope primaries, the paper-prefix rename with an unchanged digest) is in the human report.",
-    "canonical_evidence_sha256": "a30cdd0a68884e52cc24fae0b788a16bd27c8658b3c0330f233608a6d836bdb7",
+    "canonical_evidence_sha256": "ae17fc277d7e4cf8c5700380a74dec3fec6e09ce4a452d451ef6fb086b51cdf9",
     "hostile_review_status": "accepted",
     "hostile_review_note": "REOPENED 2026-09-05 by the third hostile review. Its three blockers are CLOSED -- the ambient sin 2Theta operator roles, Theorem 3.1's forward invariant on the source's angle operators, and Corollary 3.1's classification invariant on the angles -- along with Theorem 3.1's ambient dimension clause, which is now a proposition rather than a supplied isometric equivalence. No defect remains open. Two POLICY questions do, and they are recorded in `hostile_review_policy_questions` rather than as obligations, because the checker treats an obligation as evidence that a named row is NOT terminal and these ten rows are: whether to add thin separable wrappers at the printed scope, which is a project decision the repository has an explicit recorded position on and which an agent must not settle; and whether the printed unitarily invariant norm class must exist as a Lean type, where the estimate coverage is compiled and closed but the type-level representation is not. The 29/29 certificate is unaffected by either. When reporting it, say that these two questions are open, because a reviewer who resolves them differently would want different declarations to be canonical.\n\nPrevious note: ACCEPTED 2026-09-02, after the day's reopening was closed by new mathematics rather than by metadata: the directed tan 2Theta clauses have source-shaped complex and real endpoints on the paper objects, with the correspondence composed in Lean and pinned. `open_hostile_review_obligations` is closed and lists the closure; the structured fields `terminal_results`, `remaining_results` and `hostile_review_status` are the authoritative statement."
   },
@@ -6148,22 +6318,22 @@
         "DK-3.5-prop": "generalized",
         "DK-3.2-cor": "generalized",
         "DK-4.1-prop": "generalized",
-        "DK-4.1-cor": "generalized",
+        "DK-4.1-cor": "separable",
         "DK-4.2-prop": "generalized",
-        "DK-4.3-prop": "generalized",
+        "DK-4.3-prop": "separable",
         "DK-4.4-prop": "generalized",
         "DK-5.1-thm": "generalized",
-        "DK-5.2-thm": "generalized",
+        "DK-5.2-thm": "separable",
         "DK-5.1-lem": "generalized",
         "DK-6.1-lem": "generalized",
         "DK-6.2-lem": "generalized",
         "DK-6.1-prop": "generalized",
         "DK-6.1-thm": "generalized",
         "DK-6.2-thm": "generalized",
-        "DK-6.3-thm": "generalized",
+        "DK-6.3-thm": "separable",
         "DK-6.3-lem": "generalized",
         "DK-8.1-thm": "generalized",
-        "DK-8.2-thm": "generalized"
+        "DK-8.2-thm": "mixed"
       },
       "load_bearing_witnesses": [
         {
@@ -6234,6 +6404,46 @@
         },
         {
           "declaration": "TauCeti.DavisKahan1970.tanTwoTheta_ambient_unbounded_sourceExact_real",
+          "why": "Source-exact façade: carries separability because the paper's ambient scope does, not because the mathematics needs it. The theorem beneath it holds on an arbitrary Hilbert space and is registered as a generalization."
+        },
+        {
+          "declaration": "TauCeti.DavisKahan1970.corollary4_1_compact_nonacute_sourceExact_complex",
+          "why": "Source-exact façade: carries separability because the paper's ambient scope does, not because the mathematics needs it. The theorem beneath it holds on an arbitrary Hilbert space and is registered as a generalization."
+        },
+        {
+          "declaration": "TauCeti.DavisKahan1970.corollary4_1_compact_nonacute_sourceExact_real",
+          "why": "Source-exact façade: carries separability because the paper's ambient scope does, not because the mathematics needs it. The theorem beneath it holds on an arbitrary Hilbert space and is registered as a generalization."
+        },
+        {
+          "declaration": "TauCeti.DavisKahan1970.proposition4_3_compact_nonacute_sourceExact_complex",
+          "why": "Source-exact façade: carries separability because the paper's ambient scope does, not because the mathematics needs it. The theorem beneath it holds on an arbitrary Hilbert space and is registered as a generalization."
+        },
+        {
+          "declaration": "TauCeti.DavisKahan1970.proposition4_3_compact_nonacute_sourceExact_real",
+          "why": "Source-exact façade: carries separability because the paper's ambient scope does, not because the mathematics needs it. The theorem beneath it holds on an arbitrary Hilbert space and is registered as a generalization."
+        },
+        {
+          "declaration": "TauCeti.DavisKahan1970.theorem5_2_sourceExact_complex",
+          "why": "Source-exact façade: carries separability because the paper's ambient scope does, not because the mathematics needs it. The theorem beneath it holds on an arbitrary Hilbert space and is registered as a generalization."
+        },
+        {
+          "declaration": "TauCeti.DavisKahan1970.theorem5_2_sourceExact_real",
+          "why": "Source-exact façade: carries separability because the paper's ambient scope does, not because the mathematics needs it. The theorem beneath it holds on an arbitrary Hilbert space and is registered as a generalization."
+        },
+        {
+          "declaration": "TauCeti.DavisKahan1970.Section8.theorem8_2_sinTwoTheta_perturbation_sourceExact",
+          "why": "Source-exact façade: carries separability because the paper's ambient scope does, not because the mathematics needs it. The theorem beneath it holds on an arbitrary Hilbert space and is registered as a generalization."
+        },
+        {
+          "declaration": "TauCeti.DavisKahan1970.Section8.theorem8_2_sinTwoTheta_residual_directedAngle_sourceExact",
+          "why": "Source-exact façade: carries separability because the paper's ambient scope does, not because the mathematics needs it. The theorem beneath it holds on an arbitrary Hilbert space and is registered as a generalization."
+        },
+        {
+          "declaration": "TauCeti.DavisKahan1970.Section8.theorem8_2_sinTwoTheta_perturbation_real_sourceExact",
+          "why": "Source-exact façade: carries separability because the paper's ambient scope does, not because the mathematics needs it. The theorem beneath it holds on an arbitrary Hilbert space and is registered as a generalization."
+        },
+        {
+          "declaration": "TauCeti.DavisKahan1970.Section8.theorem8_2_sinTwoTheta_residual_directedAngle_real_sourceExact",
           "why": "Source-exact façade: carries separability because the paper's ambient scope does, not because the mathematics needs it. The theorem beneath it holds on an arbitrary Hilbert space and is registered as a generalization."
         }
       ]

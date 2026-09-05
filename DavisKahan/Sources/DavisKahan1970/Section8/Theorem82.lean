@@ -8,6 +8,7 @@ import DavisKahan.Geometry.Halmos.CrossedDefectGap
 import DavisKahan.Sources.DavisKahan1970.SinTwoThetaAmbient
 import ForTauCeti.Analysis.InnerProductSpace.AngleGeometry
 import DavisKahan.DoubleAngle.DirectedAngleGeneric
+import DavisKahan.Sources.DavisKahan1970.SymmetricNormingFanDominance
 
 open TauCeti.DavisKahan.Angle
 
@@ -568,6 +569,52 @@ theorem theorem8_2_sinTwoTheta_residual_directedAngle_symmetricNorming
     theorem8_2_sinTwoTheta_residual_symmetricNorming N hA hK hdelta hab hQ hQperp hPred hRmem
   refine ⟨(Angle.mem_directedSinTwoAngleOperator_trialSide_iff _ _ N).mpr hmem, ?_⟩
   rwa [Angle.gauge_directedSinTwoAngleOperator_trialSide]
+
+/-! ### Source-exact façades
+
+The two theorems above are proved for an arbitrary Hilbert space and an arbitrary
+symmetric norming function.  The façades below are the printed statement --
+separable ambient Hilbert space and the literal `NormalizedUnitaryInvariantNorm`
+class -- and are the canonical source evidence for this row's retained
+double-angle bounds. -/
+
+/-- **Theorem 8.2's retained perturbation bound, at the printed source scope.** -/
+theorem theorem8_2_sinTwoTheta_perturbation_sourceExact
+    [TopologicalSpace.SeparableSpace H]
+    (N : ExactSinTheta.NormalizedUnitaryInvariantNorm.{0, _} ℂ)
+    {A K : H →L[ℂ] H} (hA : IsSelfAdjointOperator A) (hK : IsSelfAdjointOperator K)
+    {P Q : Submodule ℂ H} [P.HasOrthogonalProjection] [Q.HasOrthogonalProjection]
+    {alpha beta delta : ℝ} (hdelta : 0 < delta) (hab : beta ≤ alpha)
+    (hQ : Foundation.SpectrumIn (A + K) Q (Set.Icc beta alpha))
+    (hQperp : Foundation.SpectrumIn (A + K) Qᗮ (gapExterior beta alpha delta))
+    (hPred : Reduces A P)
+    (hKmem : N.Mem K) :
+    N.Mem (sinTwoAngleOperatorC Q P) ∧
+      delta * N.gauge (sinTwoAngleOperatorC Q P) ≤ 2 * N.gauge K :=
+  TauCeti.DavisKahan1970.normalizedUnitaryInvariant_of_symmetricNorming_mul N hdelta two_pos
+    hKmem fun M hM =>
+      theorem8_2_sinTwoTheta_perturbation_symmetricNorming M hA hK hdelta hab hQ hQperp
+        hPred hM
+
+/-- **Theorem 8.2's retained residual bound on the directed angle, at the printed
+source scope.** -/
+theorem theorem8_2_sinTwoTheta_residual_directedAngle_sourceExact
+    [TopologicalSpace.SeparableSpace H]
+    (N : ExactSinTheta.NormalizedUnitaryInvariantNorm.{0, _} ℂ)
+    {A K : H →L[ℂ] H} (hA : IsSelfAdjointOperator A) (hK : IsSelfAdjointOperator K)
+    {P Q : Submodule ℂ H} [P.HasOrthogonalProjection] [Q.HasOrthogonalProjection]
+    {alpha beta delta : ℝ} (hdelta : 0 < delta) (hab : beta ≤ alpha)
+    (hQ : Foundation.SpectrumIn (A + K) Q (Set.Icc beta alpha))
+    (hQperp : Foundation.SpectrumIn (A + K) Qᗮ (gapExterior beta alpha delta))
+    (hPred : Reduces A P)
+    (hRmem : N.Mem (residual (A + K) P.subtypeL (compressOperator P A))) :
+    N.Mem (Angle.directedSinTwoAngleOperator P Q) ∧
+      delta * N.gauge (Angle.directedSinTwoAngleOperator P Q) ≤
+        2 * N.gauge (residual (A + K) P.subtypeL (compressOperator P A)) :=
+  TauCeti.DavisKahan1970.normalizedUnitaryInvariant_of_symmetricNorming_mul N hdelta two_pos
+    hRmem fun M hM =>
+      theorem8_2_sinTwoTheta_residual_directedAngle_symmetricNorming M hA hK hdelta hab
+        hQ hQperp hPred hM
 
 /-! ### 3. The printed conclusion `Θ < π/4` -/
 
