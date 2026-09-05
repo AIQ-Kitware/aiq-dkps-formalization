@@ -3039,10 +3039,12 @@ One row per printed source clause per scalar field.  A clause is `PASS` only whe
 
 | clause | scalar | witness | status |
 | --- | --- | --- | --- |
-| `compact-complete-invariants.rclike` | rclike | `TauCeti.DavisKahan1970.corollary3_1_compact_defectBlock_angleList_classification` | **PASS** |
+| `compact-complete-invariants.rclike` | rclike | `TauCeti.DavisKahan1970.corollary3_1_compact_defectBlock_sourceAngleList_classification` + `TauCeti.DavisKahan1970.compactAngleList` + `TauCeti.DavisKahan1970.compactAngleList_inj_iff` + `TauCeti.DavisKahan1970.compactAngleEigenvalueList_genericCosineBlock_le_one` + `TauCeti.DavisKahan1970.angleSequence_eq_of_angleList_eq` | **PASS** |
 | `allowed-angle-sequence.rclike` | rclike | `TauCeti.DavisKahan1970.corollary3_1_realization_zeroMultiplicity` + `TauCeti.DavisKahan1970.angleSequence_eq_of_angleList_eq` + `TauCeti.DavisKahan1970.angle_eq_of_sin_sq_eq` | **PASS** |
 
-**`compact-complete-invariants.rclike`.** Canonical witness for compact-complete-invariants, theta1-match at rclike scalar scope, carried over from the pre-clause canonical evidence and re-checked against its compiler-printed type under the coherent model.
+**`compact-complete-invariants.rclike`.** The complete invariants of a compact-defect pair, ON THE SOURCE'S OWN INVARIANT. Corollary 3.1 says they reduce to the eigenvalues of Theta_0 and Theta_1, counted with multiplicity -- the ANGLES. The primary is stated on `compactAngleList`, which is that list.
+
+REPRESENTATION CORRECTED 2026-09-05. The primary was the `angleList` form, whose invariant is `compactAngleEigenvalueList` -- the eigenvalue list of the SINE-SQUARE block, not of the angle operator -- and this clause asserted it as the printed statement. The two determine each other because t -> sin^2 t is injective on [0, pi/2], which the row already proved for the realization half as `angleSequence_eq_of_angleList_eq`; the classification half had never been restated on the angles. `compactAngleList_inj_iff` is that restatement, and `compactAngleEigenvalueList_genericCosineBlock_le_one` discharges its hypothesis by way of the spectrum bound on Halmos's block. The sin^2 form is retained as the structural theorem beneath.
 
 **`allowed-angle-sequence.rclike`.** The printed sentence: the eigenvalues of Theta_0 are an arbitrary sequence pi/2 >= theta_1 >= theta_2 >= ... -> 0 together with a possible eigenvalue 0, and those of Theta_1 are the same EXCEPT PERHAPS FOR THE MULTIPLICITY OF 0.  UNDER-CERTIFICATION CORRECTED 2026-09-04: the primary was `corollary3_1_realization`, which realizes the sequence but forces the two angle-zero multiplicities to coincide, so it does not witness the clause that distinguishes Theta_0 from Theta_1.  `corollary3_1_realization_zeroMultiplicity` prescribes them as two arbitrary Hilbert spaces Z_0 and Z_1, chosen independently of each other and of theta, which is the printed freedom; the weaker realization stays as supporting evidence.  The recorded invariant is the approximation-number list `n |-> sin^2 theta_n` rather than a list of angles; `angleSequence_eq_of_angleList_eq` proves that recording it records the angles, since `theta |-> sin^2 theta` is injective on the printed range [0, pi/2].
 
@@ -3052,7 +3054,7 @@ Result-wide scope every clause must carry: *(none)*
 
 The declarations that carry this result's printed statement, with the source atoms each one covers.  Everything under *Other registered declarations* below accompanies the result without establishing it.
 
-- `TauCeti.DavisKahan1970.corollary3_1_compact_defectBlock_angleList_classification` — primary_source_witness, rclike scalars, proof; covers `DK-3.1-cor.compact-complete-invariants`, `DK-3.1-cor.theta1-match`
+- `TauCeti.DavisKahan1970.corollary3_1_compact_defectBlock_sourceAngleList_classification` — primary_source_witness, rclike scalars, proof; covers `DK-3.1-cor.compact-complete-invariants`, `DK-3.1-cor.theta1-match`
 - `TauCeti.DavisKahan1970.corollary3_1_realization_zeroMultiplicity` — primary_source_witness, rclike scalars, proof; covers `DK-3.1-cor.allowed-angle-sequence`
 
 ### Other registered declarations
@@ -3063,6 +3065,12 @@ The declarations that carry this result's printed statement, with the source ato
 - `TauCeti.DavisKahan1970.angle_eq_of_sin_sq_eq` — source_correspondence
 - `TauCeti.DavisKahan1970.corollary3_1_prescribedAngleSequence_classification` — supporting_theorem
 - `TauCeti.DavisKahan1970.corollary3_1_prescribedAngleSequence_classification_real` — supporting_theorem
+- `TauCeti.DavisKahan1970.corollary3_1_compact_defectBlock_angleList_classification` — implementation_structure
+- `TauCeti.DavisKahan1970.compactAngleList` — source_correspondence
+- `TauCeti.DavisKahan1970.compactAngleList_mem_Icc` — supporting_theorem
+- `TauCeti.DavisKahan1970.compactAngleList_inj_iff` — source_correspondence
+- `TauCeti.DavisKahan1970.compactAngleEigenvalueList_genericCosineBlock_le_one` — supporting_theorem
+- `TauCeti.DavisKahan1970.norm_genericCosineBlock_le_one` — supporting_theorem
 
 ### Source-facing Lean declarations
 
@@ -3074,43 +3082,79 @@ Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.corollary3_1_compact_classification_real`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section3Corollary31.lean:514`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section3Corollary31.lean:639`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.corollary3_1_realization`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section3Corollary31.lean:280`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section3Corollary31.lean:405`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.corollary3_1_realization_zeroMultiplicity`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section3Corollary31.lean:330`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section3Corollary31.lean:455`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.angleSequence_eq_of_angleList_eq`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section3Corollary31.lean:416`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section3Corollary31.lean:541`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.angle_eq_of_sin_sq_eq`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section3Corollary31.lean:402`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section3Corollary31.lean:527`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.corollary3_1_prescribedAngleSequence_classification`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section3Corollary31.lean:462`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section3Corollary31.lean:587`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.corollary3_1_prescribedAngleSequence_classification_real`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section3Corollary31.lean:593`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section3Corollary31.lean:718`
+
+Compiler-printed type: *inserted when a compiler certificate is supplied.*
+
+#### `TauCeti.DavisKahan1970.corollary3_1_compact_defectBlock_sourceAngleList_classification`
+
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section3Corollary31.lean:285`
+
+Compiler-printed type: *inserted when a compiler certificate is supplied.*
+
+#### `TauCeti.DavisKahan1970.compactAngleList`
+
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section3Corollary31.lean:204`
+
+Compiler-printed type: *inserted when a compiler certificate is supplied.*
+
+#### `TauCeti.DavisKahan1970.compactAngleList_mem_Icc`
+
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section3Corollary31.lean:208`
+
+Compiler-printed type: *inserted when a compiler certificate is supplied.*
+
+#### `TauCeti.DavisKahan1970.compactAngleList_inj_iff`
+
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section3Corollary31.lean:217`
+
+Compiler-printed type: *inserted when a compiler certificate is supplied.*
+
+#### `TauCeti.DavisKahan1970.compactAngleEigenvalueList_genericCosineBlock_le_one`
+
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section3Corollary31.lean:267`
+
+Compiler-printed type: *inserted when a compiler certificate is supplied.*
+
+#### `TauCeti.DavisKahan1970.norm_genericCosineBlock_le_one`
+
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section3Corollary31.lean:246`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 

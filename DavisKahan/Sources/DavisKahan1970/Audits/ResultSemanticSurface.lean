@@ -511,6 +511,13 @@ Status: **TERMINAL EXACT**.
 #check @TauCeti.DavisKahan1970.corollary3_1_realization_zeroMultiplicity
 #check @TauCeti.DavisKahan1970.corollary3_1_prescribedAngleSequence_classification
 #check @TauCeti.DavisKahan1970.corollary3_1_prescribedAngleSequence_classification_real
+-- The canonical Corollary 3.1 witness: the invariant on the source's own ANGLES.
+#check @TauCeti.DavisKahan1970.corollary3_1_compact_defectBlock_sourceAngleList_classification
+#check @TauCeti.DavisKahan1970.norm_genericCosineBlock_le_one
+#check @TauCeti.DavisKahan1970.compactAngleList
+#check @TauCeti.DavisKahan1970.compactAngleList_mem_Icc
+#check @TauCeti.DavisKahan1970.compactAngleList_inj_iff
+#check @TauCeti.DavisKahan1970.compactAngleEigenvalueList_genericCosineBlock_le_one
 #check @TauCeti.DavisKahan1970.angleSequence_eq_of_angleList_eq
 #check @TauCeti.DavisKahan1970.angle_eq_of_sin_sq_eq
 

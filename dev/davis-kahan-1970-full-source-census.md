@@ -4,7 +4,7 @@
 
 **Census family:** `source-completion-census`  
 **Items:** 50  
-**Unique cited Lean declarations:** 1262
+**Unique cited Lean declarations:** 1268
 
 ## How to use this census
 
@@ -2481,6 +2481,12 @@ Separately, the converse's ambient dimension clause is now a PROPOSITION. The pr
 - `TauCeti.DavisKahan1970.corollary3_1_prescribedAngleSequence_classification_real`
 - `TauCeti.DavisKahan1970.angleSequence_eq_of_angleList_eq`
 - `TauCeti.DavisKahan1970.angle_eq_of_sin_sq_eq`
+- `TauCeti.DavisKahan1970.corollary3_1_compact_defectBlock_sourceAngleList_classification`
+- `TauCeti.DavisKahan1970.compactAngleList`
+- `TauCeti.DavisKahan1970.compactAngleList_mem_Icc`
+- `TauCeti.DavisKahan1970.compactAngleList_inj_iff`
+- `TauCeti.DavisKahan1970.compactAngleEigenvalueList_genericCosineBlock_le_one`
+- `TauCeti.DavisKahan1970.norm_genericCosineBlock_le_one`
 
 **Notes.** **PROVED 2026-08-04, both directions, admission-free.**
 
@@ -2560,6 +2566,8 @@ STALE CITATION CORRECTED: this row's notes cited `corollary3_1_compact_defectBlo
 The recorded strictness narrowing `0 < theta n < pi/2` sits ONLY on `corollary3_1_prescribedAngleSequence_classification`, a convenience composite that is not printed; both printed halves are separately at full generality.  And the printed "`Theta_1`'s eigenvalues are the same except perhaps the multiplicity of 0" is SUBSUMED rather than missing: the compiled invariant is `SameHalmosTrivialDimensions` plus ONE generic angle list, so the classification proves `Theta_1` contributes no independent invariant -- strictly more than the printed sentence.
 
 **UNDER-CERTIFICATION CORRECTED 2026-09-04.**  The realization clause now uses `corollary3_1_realization_zeroMultiplicity`, which prescribes the two angle-zero multiplicities independently as the printed sentence allows; `corollary3_1_realization` forces them equal and is retained as a specialization.
+
+SOURCE INVARIANT CORRECTED 2026-09-05. Corollary 3.1 says the complete invariants reduce to the eigenvalues of Theta_0 and Theta_1 counted with multiplicity -- the ANGLES. The registered classification witness was stated on `compactAngleEigenvalueList`, the eigenvalue list of the SINE-SQUARE block, and this row asserted it as the printed statement. The two determine each other because t -> sin^2 t is injective on [0, pi/2] -- which this row already proved for the REALIZATION half, as `angleSequence_eq_of_angleList_eq` -- but the classification half had never been restated on the angles. `compactAngleList` is the angle list, `compactAngleList_inj_iff` is the equivalence of the two spellings, and `compactAngleEigenvalueList_genericCosineBlock_le_one` discharges its hypothesis from the spectrum bound on Halmos's block. The sin^2 form is retained as the structural theorem.
 
 **Next action.** No hostile-review hole is currently recorded for this source passage. Preserve exact source scope and re-audit if the distributable source specification changes.
 
