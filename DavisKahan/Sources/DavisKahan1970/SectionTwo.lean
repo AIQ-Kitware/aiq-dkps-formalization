@@ -550,7 +550,7 @@ theorem sinTwoTheta_bothConclusions_complex
               (selfAdjointSpectralSubspace A hA B hB)) ∧
             δ * N.gauge (Angle.directedSinTwoAngleOperator V
                 (selfAdjointSpectralSubspace A hA B hB)) ≤ 2 * N.gauge R) ∧
-      (∀ (Eop : Hc →L[ℂ] Hc) (hEop : IsSelfAdjointOperator Eop)
+      (∀ (Eop : Hc →L[ℂ] Hc) (_hEop : IsSelfAdjointOperator Eop)
         (W : Submodule ℂ Hc) [W.HasOrthogonalProjection]
         (_hW : TauCeti.LinearPMap.ReducesSubspace
           (TauCeti.LinearPMap.addBounded A Eop) W), N.Mem Eop →
@@ -593,7 +593,7 @@ theorem sinTwoTheta_bothConclusions_real
             δ * N.gauge (Angle.directedSinTwoAngleOperator V
                 (RealSpectralRestriction.realSelfAdjointSpectralSubspace A hA B hB)) ≤
               2 * N.gauge R) ∧
-      (∀ (Eop : Er →L[ℝ] Er) (hEop : IsSelfAdjointOperator Eop)
+      (∀ (Eop : Er →L[ℝ] Er) (_hEop : IsSelfAdjointOperator Eop)
         (W : Submodule ℝ Er) [W.HasOrthogonalProjection]
         (_hW : TauCeti.LinearPMap.ReducesSubspace
           (TauCeti.LinearPMap.addBounded A Eop) W), N.Mem Eop →
