@@ -44,6 +44,7 @@
         ]
       },
       "lean_declarations": [
+        "Acharyya2025.GrowingResponse.prob_cmdsEntrywiseClose_ge_of_secondMoment",
         "Acharyya2025.Bridge.EntrywiseClose",
         "Acharyya2025.Bridge.entrywise_close_to_cmds_entrywise_close_of_bounded",
         "Acharyya2025.GrowingResponse.highProb_uniformResponseMeanClose_of_growing_iid_replicates_paperScale",
@@ -194,6 +195,7 @@
         ]
       },
       "lean_declarations": [
+        "Acharyya2025.PaperRate.highProb_operatorNormClose_paperDeltaScale",
         "Acharyya2025.MathlibBridge.MatrixOperatorNormClose",
         "Acharyya2025.SpectralPipeline.operatorNormClose_of_entrywiseClose",
         "Acharyya2025.PaperRate.paperBaseRatio",

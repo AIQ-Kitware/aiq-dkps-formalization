@@ -7,7 +7,7 @@ Compare the inference-transfer theorems and Appendix assumptions with their Lean
 **Companion census:** `dev/helm-2025-full-source-census.json`
 
 **Rows:** 12  
-**Unique cited Lean declarations:** 53
+**Unique cited Lean declarations:** 56
 
 ## Clause relation summary
 
@@ -289,8 +289,11 @@ Compare the inference-transfer theorems and Appendix assumptions with their Lean
 
 **Lean declarations:**
 
+- `Helm2025.DKPS.AcharyyaBridge.highProb_entrywiseClose_responseDist_of_tendsto`
 - `Acharyya2024.responseDist`
 - `Acharyya2025.Bridge.EntrywiseClose`
+- `Acharyya2025.Bridge.response_mean_close_hp_to_entrywise_hp`
+- `Acharyya2025.Bridge.responseEntrywiseRate`
 
 | source clause | Lean clause | relation | note |
 | --- | --- | --- | --- |

@@ -7,7 +7,7 @@ Compare each retained source result in the 2025 concentration paper with the Lea
 **Companion census:** `dev/acharyya-2025-full-source-census.json`
 
 **Rows:** 19  
-**Unique cited Lean declarations:** 29
+**Unique cited Lean declarations:** 31
 
 ## Clause relation summary
 
@@ -32,6 +32,7 @@ Compare each retained source result in the 2025 concentration paper with the Lea
 
 **Lean declarations:**
 
+- `Acharyya2025.GrowingResponse.prob_cmdsEntrywiseClose_ge_of_secondMoment`
 - `Acharyya2025.Bridge.EntrywiseClose`
 - `Acharyya2025.Bridge.entrywise_close_to_cmds_entrywise_close_of_bounded`
 - `Acharyya2025.GrowingResponse.highProb_uniformResponseMeanClose_of_growing_iid_replicates_paperScale`
@@ -63,6 +64,7 @@ Compare each retained source result in the 2025 concentration paper with the Lea
 
 **Lean declarations:**
 
+- `Acharyya2025.PaperRate.highProb_operatorNormClose_paperDeltaScale`
 - `Acharyya2025.MathlibBridge.MatrixOperatorNormClose`
 - `Acharyya2025.SpectralPipeline.operatorNormClose_of_entrywiseClose`
 - `Acharyya2025.PaperRate.paperBaseRatio`
