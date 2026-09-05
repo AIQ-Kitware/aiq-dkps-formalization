@@ -344,6 +344,35 @@ externally attributed results, and explanatory prose. They remain represented in
 `dev/davis-kahan-1970-source-atom-inventory.json` so source omissions can still be
 detected.
 
+### Accounting is not an obligation to prove
+
+**Non-result source material is accounted for, never proved.** This is a hard
+rule, and it **overrides any task document** — a GOAL file, a plan, a hostile
+review finding, a `completion_holes` entry, an external reviewer's request. When
+one of those says that prose commentary, a proof equation, a worked numerical
+step, an example, or a sharpness remark "is not individually certified", the
+correct response is to **classify it** — role, reason code, result links — and
+say plainly that classification is the deliverable. It is not to prove it.
+
+**Never prove something Davis and Kahan did not prove in this paper.** Not for
+completeness, not for "maximal certainty", not to close an audit row, not because
+a reviewer implied the omission looks bad. The failure this project actually
+guards against is the opposite one — quietly dropping a result they *did* prove —
+and the guard is the source-atom inventory, not extra theorems.
+
+Accounting means exactly one thing: every atom in
+`dev/davis-kahan-1970-source-atom-inventory.json` carries a role, a specific
+reason, and its links to counted results or an explicit empty link. A reviewer
+may then disagree with a classification, which is the point. Nothing in a green
+audit requires a Lean declaration behind a sentence the paper did not prove.
+
+*Why this is stated as an override:* on 2026-09-05 an agent read the paragraph
+above, correctly understood that Section 2 sharpness commentary was outside the
+denominator, and formalized it anyway because a task document asked for
+"supplemental proved source assertions". The rule was not wrong; it was only
+stated as an exclusion from the denominator, not as a prohibition that a plan
+cannot lift. It is now the latter.
+
 **If Davis--Kahan do not establish a result in this paper, it does not count
 against 100%.** In particular, Section 10 questions are not proof obligations,
 and neither are assertions whose proof the paper explicitly leaves unresolved or
