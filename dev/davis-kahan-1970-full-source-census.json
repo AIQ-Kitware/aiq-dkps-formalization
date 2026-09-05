@@ -854,11 +854,11 @@
           },
           {
             "declaration": "TauCeti.DavisKahan1970.tanTheta_ambient_unboundedRitz_definedTangent_symmetricNorming_real",
-            "type_expr_hash": "1759556960",
+            "type_expr_hash": "2136083250",
             "type_text_sha256": "a783088b0fa976e20ff5e5414fcab651888f41acff0f45779a4b5036d019e52b",
             "toolchain": "leanprover/lean4:v4.34.0-rc1",
-            "pinned_on": "2026-09-04",
-            "note": "Pinned 2026-09-04 when the tan Theta ambient clause replaced condition (3.5) with the source's definedness convention."
+            "pinned_on": "2026-09-05",
+            "note": "Re-pinned 2026-09-05: the elaborated types changed only in the name of the complete-subspace instance, which was converged from forty-three module-local copies onto TauCeti.CompleteSubspace.instCompleteSpaceCoeOfHasOrthogonalProjection. No mathematical hypothesis or conclusion changed."
           },
           {
             "declaration": "TauCeti.DavisKahan1970.tanTheta_directed_unboundedRitz_symmetricNorming_exists_complex",
@@ -1210,19 +1210,19 @@
         "statement_pins": [
           {
             "declaration": "TauCeti.DavisKahan1970.sinTwoTheta_directed_unboundedResidual_symmetricNorming_complex",
-            "type_expr_hash": "1140725809",
+            "type_expr_hash": "3426398270",
             "type_text_sha256": "61edc841024df6fcba3ea15c87466ee4a86017eb1886c69ec7fc70d84749329b",
             "toolchain": "leanprover/lean4:v4.34.0-rc1",
-            "pinned_on": "2026-09-04",
-            "note": "Re-pinned 2026-09-04 after the Theorem 5.1 norm-axiom repair and the S2-sin-two-theta census merge."
+            "pinned_on": "2026-09-05",
+            "note": "Re-pinned 2026-09-05: the elaborated types changed only in the name of the complete-subspace instance, which was converged from forty-three module-local copies onto TauCeti.CompleteSubspace.instCompleteSpaceCoeOfHasOrthogonalProjection. No mathematical hypothesis or conclusion changed."
           },
           {
             "declaration": "TauCeti.DavisKahan1970.sinTwoTheta_directed_unboundedResidual_symmetricNorming_real",
-            "type_expr_hash": "677598793",
+            "type_expr_hash": "1161211384",
             "type_text_sha256": "00dc846bc09f3bb2896b8f17cd040a14929a588095ff4c689d0328115b825e7e",
             "toolchain": "leanprover/lean4:v4.34.0-rc1",
-            "pinned_on": "2026-09-04",
-            "note": "Re-pinned 2026-09-04 after the Theorem 5.1 norm-axiom repair and the S2-sin-two-theta census merge."
+            "pinned_on": "2026-09-05",
+            "note": "Re-pinned 2026-09-05: the elaborated types changed only in the name of the complete-subspace instance, which was converged from forty-three module-local copies onto TauCeti.CompleteSubspace.instCompleteSpaceCoeOfHasOrthogonalProjection. No mathematical hypothesis or conclusion changed."
           },
           {
             "declaration": "TauCeti.DavisKahan1970.sinTwoTheta_ambient_unbounded_reducing_symmetricNorming_complex",
@@ -6218,11 +6218,11 @@
           },
           {
             "declaration": "TauCeti.DavisKahan1970.Section8.theorem8_2_sinTwoTheta_residual_directedAngle_symmetricNorming",
-            "type_expr_hash": "619771882",
+            "type_expr_hash": "3159759361",
             "type_text_sha256": "52956a38abee83d6b845ec7d27ab4fa3534052d19aad0d68894c9de65c6b2469",
             "toolchain": "leanprover/lean4:v4.34.0-rc1",
-            "pinned_on": "2026-09-04",
-            "note": "Pinned 2026-09-04 when the Theorem 8.2 residual clause was recanonicalized on the paper's trial-side directed angle."
+            "pinned_on": "2026-09-05",
+            "note": "Re-pinned 2026-09-05: the elaborated types changed only in the name of the complete-subspace instance, which was converged from forty-three module-local copies onto TauCeti.CompleteSubspace.instCompleteSpaceCoeOfHasOrthogonalProjection. No mathematical hypothesis or conclusion changed."
           },
           {
             "declaration": "TauCeti.DavisKahan1970.Section8.subspaceGap_eq_directedGap_of_crossedDefects",
