@@ -23,6 +23,7 @@ unavailable_exit_code: 3
 
 slow:
   - check_comparator_signatures
+  - tamper
   - foundations
   - statement-pins-dk
   - statement-pins-yws
@@ -139,6 +140,10 @@ gates:
     command: ["aiq-lean", "alignment", "check",
               "dev/helm-2025-result-semantic-review.json"]
     description: "the same for the Helm 2025 standalone review"
+
+  - name: tamper
+    command: ["aiq-lean", "tamper", "run", "--config", "dev/policy/tamper-mutations.yaml"]
+    description: "the certification gates still reject every registration defect the hostile reviews found -- a gate that stopped looking is indistinguishable from a passing one until something tampers with what it claims to check"
 
   - name: grounding-yws
     command: ["aiq-lean", "source", "grounding", "dev/policy/yu-wang-samworth-grounding.yaml"]
