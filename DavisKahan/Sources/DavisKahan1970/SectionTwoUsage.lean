@@ -166,13 +166,13 @@ theorem tanTheta_from_reducingSubspace
     (hupper : TauCeti.LinearPMap.SemiboundedAbove D.trial.compression alpha)
     (hUnwanted : ∀ y ∈ Vᗮ, ∀ hy : y ∈ A.domain,
       (alpha + delta) * ‖y‖ ^ 2 ≤ RCLike.re ⟪A ⟨y, hy⟩, y⟫_ℂ)
-    (h35 : DavisKahan.CrossedDefectsEquivalent U V)
+    (hdefined : HasDefinedAmbientTangent U V)
     (hResidual : D.trial.residual = Uᗮ.starProjection ∘L Hop ∘L U.subtypeL)
     (hMem : N.Mem Hop) :
     N.Mem (tanAngleOperatorC U V) ∧
       delta * N.gauge (tanAngleOperatorC U V) ≤ N.gauge Hop :=
   SectionTwo.tanTheta_complex N D (DavisKahan.ReducingComplement.ofReducesSubspace hVred)
-    Hop hH hdelta hupper hUnwanted h35 hResidual hMem
+    Hop hH hdelta hupper hUnwanted hdefined hResidual hMem
 
 /-- The same reading with a bounded Ritz compression, which is the common case.
 
@@ -192,14 +192,14 @@ theorem tanTheta_from_trialBlock
       (DavisKahan.UnboundedRitzPair.ofTrialBlock D).trial.compression alpha)
     (hUnwanted : ∀ y ∈ Vᗮ, ∀ hy : y ∈ A.domain,
       (alpha + delta) * ‖y‖ ^ 2 ≤ RCLike.re ⟪A ⟨y, hy⟩, y⟫_ℂ)
-    (h35 : DavisKahan.CrossedDefectsEquivalent U V)
+    (hdefined : HasDefinedAmbientTangent U V)
     (hResidual : D.residual = Uᗮ.starProjection ∘L Hop ∘L U.subtypeL)
     (hMem : N.Mem Hop) :
     N.Mem (tanAngleOperatorC U V) ∧
       delta * N.gauge (tanAngleOperatorC U V) ≤ N.gauge Hop :=
   SectionTwo.tanTheta_complex N (DavisKahan.UnboundedRitzPair.ofTrialBlock D)
     (DavisKahan.ReducingComplement.ofReducesSubspace hVred) Hop hH hdelta hupper
-    hUnwanted h35 hResidual hMem
+    hUnwanted hdefined hResidual hMem
 
 end TanTheta
 

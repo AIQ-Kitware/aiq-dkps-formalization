@@ -570,6 +570,117 @@ theorem tanTheta_ambient_unboundedRitz_symmetricNorming_complex
     D.mem_domain D.action_eq hV.mapsDomain hV.commutes hupper hUnwanted h35
     hResidual hMem
 
+/-! ## The printed `tan Θ` hypotheses, with the source's own vacuity convention
+
+The Section 2 tangent theorem assumes the ordered spectral gap, `δ > 0` and `H₀ = 0`, and
+nothing else.  The endpoints above additionally take `CrossedDefectsEquivalent U V`, which is
+condition (3.5) -- and (3.5) is introduced in Section 3, *after* Proposition 3.2, where the
+source announces it will be assumed for the **remainder** of the paper.  A convention
+introduced after a theorem is not a hypothesis of it, so reading (3.5) back into Section 2 is
+not source-exact.
+
+What Section 1 does give, before any of this, is a semantic convention: some of the paper's
+results are vacuous when a norm occurring in them fails to exist, and the source says it will
+not remark on this at the individual statements.  For the tangent that case is concrete.
+`tan` is unbounded at `π/2`, so `‖tan Θ‖` exists exactly when no principal angle reaches
+`π/2` -- equivalently when `‖P_U − P_V‖ < 1`, since `‖sin Θ‖` is that gap and the angle
+spectrum is a compact subset of `[0, π/2]`.  Mathlib's `Real.tan` is total, with
+`tan (π/2) = 0`, so `cfc Real.tan Θ` is *always* a bounded operator: when an angle does reach
+`π/2` that object silently is not the paper's `tan Θ`, and the printed statement is vacuous
+rather than false.
+
+`HasDefinedAmbientTangent` names that condition, and the endpoints below take it in place of
+(3.5).  Nothing is lost: definedness *implies* (3.5), because an angle of `π/2` is exactly a
+vector in one of the two crossed defect spaces, so a defined tangent forces both of them to be
+trivial and the identification (3.5) asks for is the one between two zero spaces.  The (3.5)
+endpoints above remain as the non-vacuous corollary. -/
+
+section DefinedTangent
+
+/-- **The paper's `tan Θ` exists as a bounded operator.**
+
+`‖P_U − P_V‖ < 1`: no principal angle of the pair reaches `π/2`.  This is the Section 1
+vacuity convention made explicit for the tangent -- when it fails, `‖tan Θ‖` does not exist and
+the printed statement says nothing -- and it is *not* condition (3.5), which the paper
+introduces only in Section 3. -/
+def HasDefinedAmbientTangent (U V : Submodule ℂ E)
+    [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] : Prop :=
+  U.projectionGap V < 1
+
+/-- **A defined tangent implies condition (3.5).**
+
+An angle of `π/2` is a vector of `U` killed by `P_V`, or of `V` killed by `P_U`; a gap strictly
+below one excludes both, so the two crossed defect spaces are trivial and the identification
+(3.5) demands is the one between two zero spaces.  This is why the endpoints below lose nothing
+by replacing (3.5) with definedness. -/
+theorem crossedDefectsEquivalent_of_hasDefinedAmbientTangent
+    {U V : Submodule ℂ E} [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
+    (h : HasDefinedAmbientTangent U V) : DavisKahan.CrossedDefectsEquivalent U V :=
+  DavisKahan.crossedDefectsEquivalent_of_isAcute U V (TauCeti.isAcute_of_projectionGap_lt_one h)
+
+/-- **Under a defined tangent the angle spectrum misses `π/2`.**
+
+This is what makes the hypothesis a *definedness* condition rather than a convenient
+inequality: `Real.tan` is finite exactly on the spectrum this permits. -/
+theorem spectrum_angleOperator_lt_pi_div_two_of_hasDefinedAmbientTangent
+    {U V : Submodule ℂ E} [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
+    (h : HasDefinedAmbientTangent U V) {t : ℝ}
+    (ht : t ∈ spectrum ℝ (angleOperatorC U V)) : 0 ≤ t ∧ t < Real.pi / 2 :=
+  spectrum_angleOperatorC_lt_pi_div_two U V (by rwa [norm_sinAngleOperatorC]) ht
+
+/-- **Under a defined tangent, `cfc Real.tan` is the paper's `tan Θ` and not Mathlib's
+totalisation.**
+
+`Real.tan` is total in Lean, with `tan (π/2) = 0`, so `tanAngleOperatorC` is a bounded operator
+whether or not the paper's `tan Θ` exists.  This says that when the tangent *is* defined the
+totalisation is never reached: `tan` is genuinely continuous on the angle spectrum, so the
+functional calculus is applied to an honest function and the object is the printed one.
+
+Without this the definedness hypothesis would be doing no work in the conclusion; with it, the
+endpoint below is about `tan Θ` in the source's sense. -/
+theorem continuousOn_tan_spectrum_of_hasDefinedAmbientTangent
+    {U V : Submodule ℂ E} [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
+    (h : HasDefinedAmbientTangent U V) :
+    ContinuousOn Real.tan (spectrum ℝ (angleOperatorC U V)) := by
+  intro t ht
+  obtain ⟨ht0, ht2⟩ := spectrum_angleOperator_lt_pi_div_two_of_hasDefinedAmbientTangent h ht
+  have hpi : 0 < Real.pi := Real.pi_pos
+  have hcos : Real.cos t ≠ 0 :=
+    ne_of_gt (Real.cos_pos_of_mem_Ioo ⟨by linarith, ht2⟩)
+  exact (Real.continuousAt_tan.mpr hcos).continuousWithinAt
+
+/-- **Davis--Kahan 1970, the `tan Θ` theorem, ambient clause, over `ℂ`, at the printed
+hypotheses.**
+
+`δ N(tan Θ) ≤ N(H)` with the printed ordered gap, `δ > 0` and the Rayleigh--Ritz condition,
+and with no condition (3.5): in its place is the source's own requirement that the norm
+occurring in the statement exists.  When it does not, `HasDefinedAmbientTangent` fails and the
+statement is vacuous, which is exactly what Section 1 says to read into it.
+
+`tanTheta_ambient_unboundedRitz_symmetricNorming_complex` is the same conclusion under (3.5);
+it is now the corollary rather than the source statement. -/
+theorem tanTheta_ambient_unboundedRitz_definedTangent_symmetricNorming_complex
+    (N : SymmetricNormingFunction)
+    {A : E →ₗ.[ℂ] E}
+    {U V : Submodule ℂ E}
+    [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] [CompleteSpace U]
+    (D : DavisKahan.UnboundedRitzPair A U)
+    (hV : DavisKahan.ReducingComplement A V)
+    (H : E →L[ℂ] E) (hH : IsSelfAdjoint H)
+    {alpha delta : ℝ} (hdelta : 0 < delta)
+    (hupper : TauCeti.LinearPMap.SemiboundedAbove D.trial.compression alpha)
+    (hUnwanted : ∀ y ∈ Vᗮ, ∀ hy : y ∈ A.domain,
+      (alpha + delta) * ‖y‖ ^ 2 ≤ RCLike.re ⟪A ⟨y, hy⟩, y⟫_ℂ)
+    (hdefined : HasDefinedAmbientTangent U V)
+    (hResidual : D.trial.residual = Uᗮ.starProjection ∘L H ∘L U.subtypeL)
+    (hMem : N.Mem H) :
+    N.Mem (tanAngleOperatorC U V) ∧
+      delta * N.gauge (tanAngleOperatorC U V) ≤ N.gauge H :=
+  tanTheta_ambient_unboundedRitz_symmetricNorming_complex N D hV H hH hdelta hupper hUnwanted
+    (crossedDefectsEquivalent_of_hasDefinedAmbientTangent hdefined) hResidual hMem
+
+end DefinedTangent
+
 end
 
 end DavisKahan1970

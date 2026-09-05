@@ -413,6 +413,48 @@ theorem tanTheta_ambient_unboundedRitz_symmetricNorming_real
     hdelta D.mem_domain D.action_eq hV.mapsDomain hV.commutes hupper hUnwanted h35
     hResidual hMem
 
+/-! ## The printed `tan Θ` hypotheses over `ℝ`, with the source's own vacuity convention
+
+The real mirror of the `DefinedTangent` section in `TanThetaUnboundedAmbient.lean`; see its
+note for why condition (3.5) is not a hypothesis of the Section 2 theorem and what replaces
+it. -/
+
+section DefinedTangent
+
+/-- **The paper's real `tan Θ` exists as a bounded operator**: no principal angle reaches
+`π/2`.  The real reading of `HasDefinedAmbientTangent`. -/
+def HasDefinedAmbientTangentReal (U V : Submodule ℝ E)
+    [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] : Prop :=
+  U.projectionGap V < 1
+
+/-- A defined real tangent implies condition (3.5), for the same reason as over `ℂ`. -/
+theorem crossedDefectsEquivalent_of_hasDefinedAmbientTangentReal
+    {U V : Submodule ℝ E} [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
+    (h : HasDefinedAmbientTangentReal U V) : DavisKahan.CrossedDefectsEquivalent U V :=
+  DavisKahan.crossedDefectsEquivalent_of_isAcute U V (TauCeti.isAcute_of_projectionGap_lt_one h)
+
+/-- **Davis--Kahan 1970, the `tan Θ` theorem, ambient clause, over `ℝ`, at the printed
+hypotheses**, with the source's vacuity convention in place of condition (3.5). -/
+theorem tanTheta_ambient_unboundedRitz_definedTangent_symmetricNorming_real
+    (N : SymmetricNormingFunction)
+    {A : E →ₗ.[ℝ] E}
+    (D : DavisKahan.UnboundedRitzPair A U)
+    (hV : DavisKahan.ReducingComplement A V)
+    (H : E →L[ℝ] E) (hH : IsSelfAdjoint H)
+    {alpha delta : ℝ} (hdelta : 0 < delta)
+    (hupper : TauCeti.LinearPMap.SemiboundedAbove D.trial.compression alpha)
+    (hUnwanted : ∀ y ∈ Vᗮ, ∀ hy : y ∈ A.domain,
+      (alpha + delta) * ‖y‖ ^ 2 ≤ ⟪A ⟨y, hy⟩, y⟫_ℝ)
+    (hdefined : HasDefinedAmbientTangentReal U V)
+    (hResidual : D.trial.residual = Uᗮ.starProjection ∘L H ∘L U.subtypeL)
+    (hMem : N.Mem H) :
+    N.Mem (tanAngleOperatorR U V) ∧
+      delta * N.gauge (tanAngleOperatorR U V) ≤ N.gauge H :=
+  tanTheta_ambient_unboundedRitz_symmetricNorming_real N D hV H hH hdelta hupper hUnwanted
+    (crossedDefectsEquivalent_of_hasDefinedAmbientTangentReal hdefined) hResidual hMem
+
+end DefinedTangent
+
 end
 
 end DavisKahan1970

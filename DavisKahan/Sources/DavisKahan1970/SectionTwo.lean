@@ -199,7 +199,7 @@ belong.  The implementations they select are, in order:
 | --- | --- | --- | --- |
 | `sin Θ` | directed (only) | `DavisKahan1970.sinTheta_unbounded_formGap_symmetricNorming_complex` | `…_real` |
 | `tan Θ` | directed | `tanTheta_directed_unboundedTrial_symmetricNorming_complex` | `…_real` |
-| `tan Θ` | ambient | `tanTheta_ambient_unboundedRitz_symmetricNorming_complex` | `…_real` |
+| `tan Θ` | ambient | `tanTheta_ambient_unboundedRitz_definedTangent_symmetricNorming_complex` | `…_real` |
 | `sin 2Θ` | directed | `sinTwoTheta_directed_unboundedResidual_symmetricNorming_complex` | `…_real` |
 | `sin 2Θ` | ambient | `sinTwoTheta_ambient_unbounded_addBounded_symmetricNorming_complex` | `…_real` |
 | `tan 2Θ` | directed | `tanTwoTheta_directed_unboundedResidual_symmetricNorming_complex` | `…_real` |
@@ -324,7 +324,7 @@ The caller supplies the mathematics -- semiboundedness of the compression above
 condition (3.5) of Section 3, and the Rayleigh--Ritz residual identity -- and
 nothing else: the structural facts live in `DavisKahan.UnboundedRitzPair` and
 `DavisKahan.ReducingComplement`. -/
-alias tanTheta_complex := tanTheta_ambient_unboundedRitz_symmetricNorming_complex
+alias tanTheta_complex := tanTheta_ambient_unboundedRitz_definedTangent_symmetricNorming_complex
 
 /-- **Davis--Kahan 1970, the `tan Θ` theorem, over `ℝ` -- the AMBIENT clause.**
 
@@ -335,7 +335,7 @@ The real sibling of `tanTheta_ambient_complex`, on the real ambient tangent
 gauge are all real; only the Appendix Ky Fan passage is proved by
 complexification, at the level where approximation numbers are preserved
 exactly. -/
-alias tanTheta_real := tanTheta_ambient_unboundedRitz_symmetricNorming_real
+alias tanTheta_real := tanTheta_ambient_unboundedRitz_definedTangent_symmetricNorming_real
 
 /-! ## `sin 2Θ` -/
 
@@ -386,10 +386,10 @@ because they are cited elsewhere; the `_directed_` and `_ambient_` names below a
 what new code should use. -/
 
 /-- **`tan Θ`, ambient clause, over `ℂ`**: `δ N(tan Θ) ≤ N(H)`. -/
-alias tanTheta_ambient_complex := tanTheta_ambient_unboundedRitz_symmetricNorming_complex
+alias tanTheta_ambient_complex := tanTheta_ambient_unboundedRitz_definedTangent_symmetricNorming_complex
 
 /-- **`tan Θ`, ambient clause, over `ℝ`**. -/
-alias tanTheta_ambient_real := tanTheta_ambient_unboundedRitz_symmetricNorming_real
+alias tanTheta_ambient_real := tanTheta_ambient_unboundedRitz_definedTangent_symmetricNorming_real
 
 /-- **`tan Θ`, directed clause, over `ℂ`**: `δ N(tan Θ₀) ≤ N(R)`, with the trial
 residual on the right and the representative characterized by its approximation

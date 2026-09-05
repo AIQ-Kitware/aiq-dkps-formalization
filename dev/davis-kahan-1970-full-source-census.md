@@ -4,7 +4,7 @@
 
 **Census family:** `source-completion-census`  
 **Items:** 50  
-**Unique cited Lean declarations:** 1221
+**Unique cited Lean declarations:** 1229
 
 ## How to use this census
 
@@ -370,6 +370,14 @@ REOPENING WITHDRAWN 2026-08-31 and the rule corrected: a later source passage en
 - `TauCeti.DavisKahan1970.tanTheta_directed_unboundedRitz_symmetricNorming_real`
 - `TauCeti.DavisKahan.TanTheta.UnboundedCompressionTrialData.ideal_of_formBounds`
 - `TauCeti.DavisKahan1970.theorem6_3_unboundedCompression_ideal_real`
+- `TauCeti.DavisKahan1970.tanTheta_ambient_unboundedRitz_definedTangent_symmetricNorming_complex`
+- `TauCeti.DavisKahan1970.tanTheta_ambient_unboundedRitz_definedTangent_symmetricNorming_real`
+- `TauCeti.DavisKahan1970.HasDefinedAmbientTangent`
+- `TauCeti.DavisKahan1970.crossedDefectsEquivalent_of_hasDefinedAmbientTangent`
+- `TauCeti.DavisKahan1970.spectrum_angleOperator_lt_pi_div_two_of_hasDefinedAmbientTangent`
+- `TauCeti.DavisKahan1970.continuousOn_tan_spectrum_of_hasDefinedAmbientTangent`
+- `TauCeti.DavisKahan1970.HasDefinedAmbientTangentReal`
+- `TauCeti.DavisKahan1970.crossedDefectsEquivalent_of_hasDefinedAmbientTangentReal`
 
 **Curated source/Lean review:**
 

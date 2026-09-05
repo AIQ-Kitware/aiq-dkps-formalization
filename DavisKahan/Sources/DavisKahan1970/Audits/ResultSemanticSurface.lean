@@ -144,6 +144,14 @@ than (3.5); they are registered as specializations, not as the source-shaped for
 #check @TauCeti.DavisKahan1970.SectionTwo.tanTheta_real
 #check @TauCeti.DavisKahan1970.tanTheta_directed_finiteDimensional_symmetricNorming_rclike
 #check @TauCeti.DavisKahan1970.tanTheta_ambient_unboundedRitz_symmetricNorming_complex
+#check @TauCeti.DavisKahan1970.tanTheta_ambient_unboundedRitz_definedTangent_symmetricNorming_complex
+#check @TauCeti.DavisKahan1970.tanTheta_ambient_unboundedRitz_definedTangent_symmetricNorming_real
+#check @TauCeti.DavisKahan1970.HasDefinedAmbientTangent
+#check @TauCeti.DavisKahan1970.HasDefinedAmbientTangentReal
+#check @TauCeti.DavisKahan1970.crossedDefectsEquivalent_of_hasDefinedAmbientTangent
+#check @TauCeti.DavisKahan1970.crossedDefectsEquivalent_of_hasDefinedAmbientTangentReal
+#check @TauCeti.DavisKahan1970.spectrum_angleOperator_lt_pi_div_two_of_hasDefinedAmbientTangent
+#check @TauCeti.DavisKahan1970.continuousOn_tan_spectrum_of_hasDefinedAmbientTangent
 #check @TauCeti.DavisKahan1970.tanTheta_ambient_unboundedRitz_symmetricNorming_real
 #check @TauCeti.DavisKahan1970.tanTheta_directed_unboundedRitz_symmetricNorming_complex
 #check @TauCeti.DavisKahan1970.tanTheta_directed_unboundedRitz_symmetricNorming_real
