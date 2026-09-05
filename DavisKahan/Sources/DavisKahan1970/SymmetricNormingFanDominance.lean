@@ -139,7 +139,11 @@ theorem kyFanDominant_of_symmetricNorming
     {E F : Type v}
     [NormedAddCommGroup E] [InnerProductSpace 𝕜 E] [CompleteSpace E]
     [NormedAddCommGroup F] [InnerProductSpace 𝕜 F] [CompleteSpace F]
-    (M : KyFanDominantIdealFamily.{u, v} 𝕜) {X Y : E →L[𝕜] F} {d : ℝ} (hd : 0 < d)
+    {E' F' : Type v}
+    [NormedAddCommGroup E'] [InnerProductSpace 𝕜 E'] [CompleteSpace E']
+    [NormedAddCommGroup F'] [InnerProductSpace 𝕜 F'] [CompleteSpace F']
+    (M : KyFanDominantIdealFamily.{u, v} 𝕜) {X : E' →L[𝕜] F'} {Y : E →L[𝕜] F}
+    {d : ℝ} (hd : 0 < d)
     (hY : M.Mem Y)
     (h : ∀ N : SymmetricNormingFunction, N.Mem Y → N.Mem X ∧ d * N.gauge X ≤ N.gauge Y) :
     M.Mem X ∧ d * M.gauge X ≤ M.gauge Y := by
@@ -377,11 +381,43 @@ theorem normalizedUnitaryInvariant_of_symmetricNorming
     {E F : Type v}
     [NormedAddCommGroup E] [InnerProductSpace 𝕜 E] [CompleteSpace E]
     [NormedAddCommGroup F] [InnerProductSpace 𝕜 F] [CompleteSpace F]
-    (N : NormalizedUnitaryInvariantNorm.{u, v} 𝕜) {X Y : E →L[𝕜] F} {d : ℝ}
+    {E' F' : Type v}
+    [NormedAddCommGroup E'] [InnerProductSpace 𝕜 E'] [CompleteSpace E']
+    [NormedAddCommGroup F'] [InnerProductSpace 𝕜 F'] [CompleteSpace F']
+    (N : NormalizedUnitaryInvariantNorm.{u, v} 𝕜) {X : E' →L[𝕜] F'} {Y : E →L[𝕜] F} {d : ℝ}
     (hd : 0 < d) (hY : N.Mem Y)
     (h : ∀ M : SymmetricNormingFunction, M.Mem Y → M.Mem X ∧ d * M.gauge X ≤ M.gauge Y) :
     N.Mem X ∧ d * N.gauge X ≤ N.gauge Y :=
   kyFanDominant_of_symmetricNorming N.toKyFanDominantIdealFamily hd hY h
+
+/-- **The Fan-dominance bridge with the source's constant on the right.**
+
+Several Section 2 conclusions read `δ ‖X‖ ≤ c ‖Y‖` with `c` the printed constant
+(2 for the double-angle theorems).  Dividing by `c` puts them in the shape the
+base bridge takes, so this is the form the façades for those families use. -/
+theorem normalizedUnitaryInvariant_of_symmetricNorming_mul
+    {𝕜 : Type u} [RCLike 𝕜]
+    {E F : Type v}
+    [NormedAddCommGroup E] [InnerProductSpace 𝕜 E] [CompleteSpace E]
+    [NormedAddCommGroup F] [InnerProductSpace 𝕜 F] [CompleteSpace F]
+    {E' F' : Type v}
+    [NormedAddCommGroup E'] [InnerProductSpace 𝕜 E'] [CompleteSpace E']
+    [NormedAddCommGroup F'] [InnerProductSpace 𝕜 F'] [CompleteSpace F']
+    (N : NormalizedUnitaryInvariantNorm.{u, v} 𝕜) {X : E' →L[𝕜] F'} {Y : E →L[𝕜] F} {d c : ℝ}
+    (hd : 0 < d) (hc : 0 < c) (hY : N.Mem Y)
+    (h : ∀ M : SymmetricNormingFunction, M.Mem Y →
+      M.Mem X ∧ d * M.gauge X ≤ c * M.gauge Y) :
+    N.Mem X ∧ d * N.gauge X ≤ c * N.gauge Y := by
+  have hdc : 0 < d / c := div_pos hd hc
+  obtain ⟨hmem, hle⟩ :=
+    normalizedUnitaryInvariant_of_symmetricNorming N hdc hY fun M hM => by
+      obtain ⟨hm, hl⟩ := h M hM
+      refine ⟨hm, ?_⟩
+      rw [div_mul_eq_mul_div, div_le_iff₀ hc]
+      linarith
+  refine ⟨hmem, ?_⟩
+  rw [div_mul_eq_mul_div, div_le_iff₀ hc] at hle
+  linarith
 
 /-- The converse direction, for completeness: an estimate proved for every
 normalized unitarily invariant norm says nothing weaker than one proved for every
@@ -396,7 +432,10 @@ theorem normalizedUnitaryInvariant_toKyFanDominant
     {E F : Type v}
     [NormedAddCommGroup E] [InnerProductSpace 𝕜 E] [CompleteSpace E]
     [NormedAddCommGroup F] [InnerProductSpace 𝕜 F] [CompleteSpace F]
-    (N : NormalizedUnitaryInvariantNorm.{u, v} 𝕜) {X Y : E →L[𝕜] F} {d : ℝ}
+    {E' F' : Type v}
+    [NormedAddCommGroup E'] [InnerProductSpace 𝕜 E'] [CompleteSpace E']
+    [NormedAddCommGroup F'] [InnerProductSpace 𝕜 F'] [CompleteSpace F']
+    (N : NormalizedUnitaryInvariantNorm.{u, v} 𝕜) {X : E' →L[𝕜] F'} {Y : E →L[𝕜] F} {d : ℝ}
     (h : ∀ M : KyFanDominantIdealFamily.{u, v} 𝕜,
       M.Mem Y → M.Mem X ∧ d * M.gauge X ≤ M.gauge Y)
     (hY : N.Mem Y) :

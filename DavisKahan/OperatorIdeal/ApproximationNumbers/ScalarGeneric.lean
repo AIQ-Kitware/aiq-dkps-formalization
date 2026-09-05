@@ -321,10 +321,12 @@ structure KyFanDominantIdealFamily (𝕜 : Type u) [RCLike 𝕜] where
   /-- **Fan dominance.**  Majorization of every finite Ky Fan gauge forces the
   ideal gauge to be dominated too. -/
   gauge_le_of_forall_kyFanApproximationGauge_le :
-    ∀ {E F : Type v}
+    ∀ {E F E' F' : Type v}
       [NormedAddCommGroup E] [InnerProductSpace 𝕜 E] [CompleteSpace E]
       [NormedAddCommGroup F] [InnerProductSpace 𝕜 F] [CompleteSpace F]
-      {A B : E →L[𝕜] F},
+      [NormedAddCommGroup E'] [InnerProductSpace 𝕜 E'] [CompleteSpace E']
+      [NormedAddCommGroup F'] [InnerProductSpace 𝕜 F'] [CompleteSpace F']
+      {A : E →L[𝕜] F} {B : E' →L[𝕜] F'},
       (∀ k, kyFanApproximationGauge k A ≤ kyFanApproximationGauge k B) →
       toSymmetricOperatorIdealFamily.gauge A ≤
         toSymmetricOperatorIdealFamily.gauge B
@@ -417,7 +419,10 @@ Ky Fan gauge carries membership *and* the gauge bound.
 
 Both halves now follow from the single canonical inequality — in `ℝ≥0∞`,
 `gauge A ≤ gauge B` already implies `A` is a member as soon as `B` is. -/
-theorem majorization_mem_and_gauge_le {A B : E →L[𝕜] F} (hB : N.Mem B)
+theorem majorization_mem_and_gauge_le {E' F' : Type v}
+    [NormedAddCommGroup E'] [InnerProductSpace 𝕜 E'] [CompleteSpace E']
+    [NormedAddCommGroup F'] [InnerProductSpace 𝕜 F'] [CompleteSpace F']
+    {A : E →L[𝕜] F} {B : E' →L[𝕜] F'} (hB : N.Mem B)
     (h : ∀ k, kyFanApproximationGauge k A ≤ kyFanApproximationGauge k B) :
     N.Mem A ∧ N.gauge A ≤ N.gauge B := by
   have hle := N.gauge_le_of_forall_kyFanApproximationGauge_le h
@@ -429,7 +434,7 @@ noncomputable def operatorNorm :
   toSymmetricOperatorIdealFamily := TauCeti.operatorNormFamily 𝕜
   isComplete := inferInstance
   gauge_le_of_forall_kyFanApproximationGauge_le := by
-    intro E F _ _ _ _ _ _ A B hmajor
+    intro E F E' F' _ _ _ _ _ _ _ _ _ _ _ _ A B hmajor
     have h : ‖A‖ ≤ ‖B‖ := by simpa using hmajor 1
     simpa [TauCeti.gauge_operatorNormFamily, ← ofReal_norm] using
       ENNReal.ofReal_le_ofReal h
@@ -444,7 +449,7 @@ noncomputable def kyFan [ContinuousLinearMap.HasMinMaxLowerBoundEverywhere.{u, v
   toSymmetricOperatorIdealFamily := kyFanSymmetricIdealFamily k hk
   isComplete := inferInstance
   gauge_le_of_forall_kyFanApproximationGauge_le := by
-    intro E F _ _ _ _ _ _ A B hmajor
+    intro E F E' F' _ _ _ _ _ _ _ _ _ _ _ _ A B hmajor
     exact ENNReal.ofReal_le_ofReal (hmajor k)
 
 /-! The next two are stated through `Mem`/`gauge`, the accessors.
@@ -489,7 +494,10 @@ theorem mem_and_gauge_le_of_all_kyFanApproximationGauge_le
 /-- Scaled Fan dominance in the exact form consumed by the Sylvester theorem. -/
 theorem mem_and_scaled_gauge_le_of_all_scaled_kyFan_le
     (N : KyFanDominantIdealFamily (𝕜 := 𝕜))
-    {A B : E →L[𝕜] F} {δ : ℝ}
+    {E' F' : Type v}
+    [NormedAddCommGroup E'] [InnerProductSpace 𝕜 E'] [CompleteSpace E']
+    [NormedAddCommGroup F'] [InnerProductSpace 𝕜 F'] [CompleteSpace F']
+    {A : E →L[𝕜] F} {B : E' →L[𝕜] F'} {δ : ℝ}
     (hδ : 0 < δ)
     (hB : N.Mem B)
     (h : ∀ k, δ * kyFanApproximationGauge k A ≤

@@ -6,6 +6,7 @@ Authors: Jon Crall, Claude Opus 5
 import DavisKahan.Sources.DavisKahan1970.SinTwoThetaUnboundedDirectedResidual
 import DavisKahan.Sources.DavisKahan1970.SinTwoThetaUnboundedDirectedResidualReal
 import DavisKahan.DoubleAngle.DirectedAngleGeneric
+import DavisKahan.Sources.DavisKahan1970.SymmetricNormingFanDominance
 
 open TauCeti.DavisKahan.Sylvester
 
@@ -127,6 +128,32 @@ theorem sinTwoTheta_directed_unboundedResidual_reducing_symmetricNorming_complex
   refine ⟨(Angle.mem_directedSinTwoAngleOperator_trialSide_iff _ _ N).mpr hmem, ?_⟩
   rwa [Angle.gauge_directedSinTwoAngleOperator_trialSide]
 
+/-- **Davis--Kahan 1970, the directed `sin 2Θ₀` theorem at the printed source
+scope over `ℂ`.**
+
+Separable ambient Hilbert space and normalized unitarily invariant norm.  The
+theorem it is proved from is stated for an arbitrary Hilbert space and an
+arbitrary symmetric norming function, and is registered as a generalization. -/
+theorem sinTwoTheta_directed_unboundedResidual_sourceExact_complex
+    [TopologicalSpace.SeparableSpace H]
+    (N : NormalizedUnitaryInvariantNorm.{0, v} ℂ)
+    (hA : IsSelfAdjoint A)
+    (B : Set ℝ) (hB : MeasurableSet B)
+    (hVdom : ∀ v : V, (v : H) ∈ A.domain)
+    (hres : ∀ v : V, A ⟨(v : H), hVdom v⟩ = R v + ((M v : V) : H))
+    {δ : ℝ} (hδ : 0 < δ)
+    (hgap : FormBoundedSylvesterGap
+      (selfAdjointSpectralRestriction A hA B hB)
+      (selfAdjointSpectralRestriction A hA Bᶜ hB.compl) δ)
+    (hRmem : N.Mem R) :
+    N.Mem (Angle.directedSinTwoAngleOperator V
+        (selfAdjointSpectralSubspace A hA B hB)) ∧
+      δ * N.gauge (Angle.directedSinTwoAngleOperator V
+        (selfAdjointSpectralSubspace A hA B hB)) ≤ 2 * N.gauge R :=
+  normalizedUnitaryInvariant_of_symmetricNorming_mul N hδ two_pos hRmem fun Msnf hM =>
+    sinTwoTheta_directed_unboundedResidual_symmetricNorming_complex Msnf hA B hB
+      hVdom hres hδ hgap hM
+
 end Complex
 
 section Real
@@ -188,6 +215,28 @@ theorem sinTwoTheta_directed_unboundedResidual_reducing_symmetricNorming_real
       N hA hred hVdom hres hδ hgap hRmem
   refine ⟨(Angle.mem_directedSinTwoAngleOperator_trialSide_iff _ _ N).mpr hmem, ?_⟩
   rwa [Angle.gauge_directedSinTwoAngleOperator_trialSide]
+
+/-- **Davis--Kahan 1970, the directed `sin 2Θ₀` theorem at the printed source
+scope over `ℝ`.** -/
+theorem sinTwoTheta_directed_unboundedResidual_sourceExact_real
+    [TopologicalSpace.SeparableSpace E]
+    (N : NormalizedUnitaryInvariantNorm.{0, v} ℝ)
+    (hA : IsSelfAdjoint A)
+    (B : Set ℝ) (hB : MeasurableSet B)
+    (hVdom : ∀ v : V, (v : E) ∈ A.domain)
+    (hres : ∀ v : V, A ⟨(v : E), hVdom v⟩ = R v + ((M v : V) : E))
+    {δ : ℝ} (hδ : 0 < δ)
+    (hgap : FormBoundedSylvesterGap
+      (realSelfAdjointSpectralRestriction A hA B hB)
+      (realSelfAdjointSpectralRestriction A hA Bᶜ hB.compl) δ)
+    (hRmem : N.Mem R) :
+    N.Mem (Angle.directedSinTwoAngleOperator V
+        (realSelfAdjointSpectralSubspace A hA B hB)) ∧
+      δ * N.gauge (Angle.directedSinTwoAngleOperator V
+        (realSelfAdjointSpectralSubspace A hA B hB)) ≤ 2 * N.gauge R :=
+  normalizedUnitaryInvariant_of_symmetricNorming_mul N hδ two_pos hRmem fun Msnf hM =>
+    sinTwoTheta_directed_unboundedResidual_symmetricNorming_real Msnf hA B hB
+      hVdom hres hδ hgap hM
 
 end Real
 
