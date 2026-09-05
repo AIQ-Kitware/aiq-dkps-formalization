@@ -41,9 +41,14 @@ refresh the standalone repository mechanically.
   ingredient was the classical-MDS identity `classicalMDSMatrix_dist_eq_inner_centered`
   — the doubly centred squared-distance matrix of a Euclidean placement is the Gram
   matrix of its recentred points — which the tree did not have.
-- **`A25-PA1`-`PA6`, `L1`-`L5`** — optional source-fidelity wrappers, role-replaced by
-  cleaner perturbation machinery. Lowest priority; add them only when they improve
-  the paper-facing API for a reader.
+- **`A25-PA1`-`PA6`, `L1`-`L5` — closed as not-debt, 2026-09-05.** All eleven rows are
+  `compiled_role_replaced` with their declarations cited, and each records that no
+  downstream theorem depends on that proof decomposition. They are the six-term appendix
+  bookkeeping of a perturbation argument this repository proves by a cleaner route. A
+  literal wrapper for each would add eleven declarations that nothing consumes and that
+  no reader of the paper-facing API would reach for, which is the failure mode `AGENTS.md`
+  names. Add one only if a specific reader need appears; do not treat the list as an
+  open obligation.
 
 ---
 
@@ -55,18 +60,33 @@ refresh the standalone repository mechanically.
   probability gives, for every tolerance, entrywise closeness of the sample and population
   dissimilarity matrices at every late enough stage. The finite step was already compiled at
   rate `2η/m`; what this adds is that the rate vanishes.
-- **`H25-BRIDGE`** — fiber `Acharyya2024.rawStress_mds_stability` over the latent
-  sample to discharge the bridge's distance-convergence hypothesis. If it works, the
-  Helm bridge weakens accordingly. **Not the `_set` form**, which this file named until
-  2026-09-05: that one concludes an existential over the minimizer set, which is not the
-  shape of the bridge's `hdist`. The right one carries `huniq : RawStress.UniquePairProfile`.
-  Note also that the bridge's conclusion is qualitative in a second way the Helm census
-  used to leave out: the estimator it delivers is `TauCeti.alignedConfig` applied to the
-  **true latents**, so the alignment lives inside the estimator and the isometry
-  quantified outside the probability is the identity. Acharyya 2024's
-  `not_exists_deterministic_rigidMotion_of_pairDist_exact` machine-checks that the
-  outside-the-probability shape is not available; transferring it to Helm's setting is a
-  restatement, not an application, and is the other half of this item.
+- **`H25-BRIDGE` — diagnosed 2026-09-05, and it needs one new theorem.** The bridge's
+  `hdist` asks that the estimated pairwise distances converge in probability to the
+  **true latent** distances, where the latents are themselves random: they are part of
+  `ω`, drawn under `Measure.pi`. Every Acharyya 2024 stability theorem takes a
+  **deterministic** limiting matrix `DeltaInf : DisMat n`. All eleven of them, checked.
+  So there is nothing to fiber: the fibering is the missing theorem, not a step in a
+  proof.
+
+  The right ancestor is `fixed_models_fixed_queries_consistency_of_exactRealization`,
+  not the `_set` form and not the bare `rawStress_mds_stability`. Its exact-realizability
+  hypothesis `∃ ψ, RealizesDissimilarity ψ DeltaInf` is **free** when `DeltaInf` is the
+  latent configuration's own distance matrix, and it discharges the profile-uniqueness
+  premise that the other forms make the caller prove. **The missing theorem is that one
+  with `DeltaInf` a random matrix measurable in the latent coordinate, concluding
+  convergence in the product measure.** That needs measurability of the conditional bad
+  event in the latent sample plus dominated convergence, and the paper does not address
+  the fibering either.
+
+  Two smaller facts to fix on the way in. `Helm2025/AcharyyaBridge.lean` imports neither
+  `Acharyya2024.RawStress` nor `.Consistency`, so no raw-stress theorem is currently in
+  scope there. And the bridge's conclusion is qualitative in a second sense the Helm
+  census recorded only on 2026-09-05: the estimator it delivers is `TauCeti.alignedConfig`
+  applied to the true latents, so the alignment lives inside the estimator and the
+  isometry quantified outside the probability is the identity.
+  `Acharyya2024.not_exists_deterministic_rigidMotion_of_pairDist_exact` machine-checks
+  that the outside-the-probability shape is unavailable; transferring it to Helm's
+  `Measure.pi` setting is a restatement, not an application.
 
 **Preserve** the uniform-integrability / dominated-loss repair and the evidence that
 convergence in probability alone does not give expected-risk convergence.
