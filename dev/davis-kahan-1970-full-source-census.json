@@ -2393,8 +2393,8 @@
         "canonical_declarations": [
           "TauCeti.DavisKahan1970.theorem3_1_spectralMultiplicity_classification_sourceAngle_complex",
           "TauCeti.DavisKahan1970.theorem3_1_spectralMultiplicity_classification_real",
-          "TauCeti.DavisKahan1970.theorem3_1_realization_inAmbient_ofSpectralMultiplicityAwayFromZero_complex",
-          "TauCeti.DavisKahan1970.theorem3_1_realization_inAmbient_ofSpectralMultiplicityAwayFromZero_real"
+          "TauCeti.DavisKahan1970.theorem3_1_realization_inAmbient_ofSameHilbertDimension_complex",
+          "TauCeti.DavisKahan1970.theorem3_1_realization_inAmbient_ofSameHilbertDimension_real"
         ],
         "supporting_declarations": [
           "TauCeti.DavisKahan1970.theorem3_1_realization_ofAngles",
@@ -2632,20 +2632,18 @@
             "note": "Pinned 2026-09-04 when the Theorem 3.1 converse moved to the printed multiplicity hypothesis, free at 0."
           },
           {
-            "declaration": "TauCeti.DavisKahan1970.theorem3_1_realization_inAmbient_ofSpectralMultiplicityAwayFromZero_complex",
-            "type_expr_hash": "4133276684",
-            "type_text_sha256": "64e0f4363e006adf7ebe5a601583c5eb953f71ab44f555f91a5d6360847d2cd5",
+            "declaration": "TauCeti.DavisKahan1970.theorem3_1_realization_inAmbient_ofSameHilbertDimension_complex",
+            "type_expr_hash": "2929097998",
+            "type_text_sha256": "2501ba5a1c03b188bd6cc1be6a3d9e0baf7ca331bb9774aa49fe5afb6bfc596c",
             "toolchain": "leanprover/lean4:v4.34.0-rc1",
-            "pinned_on": "2026-09-05",
-            "note": "Re-pinned 2026-09-05.  New source-facing declarations from the 2026-09-04/09-05 hostile-review repair pass, and one drift: ReflectionIntertwines.ofReducesSubspace lost its [CompleteSpace H] instance binder to the omit-line warning cleanup, which is a strict generalization and no change of statement."
+            "pinned_on": "2026-09-05"
           },
           {
-            "declaration": "TauCeti.DavisKahan1970.theorem3_1_realization_inAmbient_ofSpectralMultiplicityAwayFromZero_real",
-            "type_expr_hash": "3130548526",
-            "type_text_sha256": "64b137118caa25b8eeec37ba08784053b7e50b1127ed5d256228093d46638690",
+            "declaration": "TauCeti.DavisKahan1970.theorem3_1_realization_inAmbient_ofSameHilbertDimension_real",
+            "type_expr_hash": "4039918750",
+            "type_text_sha256": "0af5024c787a1d92b33df990bf840f61c67d5cb60f21eaaff8d78877d04f4e1f",
             "toolchain": "leanprover/lean4:v4.34.0-rc1",
-            "pinned_on": "2026-09-05",
-            "note": "Re-pinned 2026-09-05.  New source-facing declarations from the 2026-09-04/09-05 hostile-review repair pass, and one drift: ReflectionIntertwines.ofReducesSubspace lost its [CompleteSpace H] instance binder to the omit-line warning cleanup, which is a strict generalization and no change of statement."
+            "pinned_on": "2026-09-05"
           },
           {
             "declaration": "TauCeti.DavisKahan.HalmosAngleDatum.starProjection_targetSubspace_apply",
