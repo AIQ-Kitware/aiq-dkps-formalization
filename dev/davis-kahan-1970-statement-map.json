@@ -1159,42 +1159,58 @@
       "expected_verification": "proved_in_build",
       "tex_marker": "DK-5.1-thm",
       "review_declarations": [
+        "TauCeti.DavisKahan1970.theorem5_1_banach_sylvester",
+        "TauCeti.DavisKahan1970.banach_sylvester_lower_bound",
+        "TauCeti.DavisKahan1970.banach_sylvester_lower_bound_uiNorm",
+        "TauCeti.DavisKahan1970.theorem5_1_banach_sylvester_exact",
         "TauCeti.DavisKahan1970.banach_sylvester_lower_bound_exact",
+        "TauCeti.DavisKahan1970.theorem5_1_banach_sylvester_banachScope",
+        "TauCeti.DavisKahan1970.theorem5_1_banach_sylvester_banachScope_ofProperties",
+        "TauCeti.DavisKahan1970.bounded_sylvester_neumann_solution",
+        "TauCeti.DavisKahan1970.theorem5_1_banach_sylvester_interchanged",
+        "TauCeti.DavisKahan1970.banach_sylvester_lower_bound_interchanged",
+        "TauCeti.DavisKahan1970.theorem5_1_banach_sylvester_interchanged_exact",
         "TauCeti.DavisKahan1970.banach_sylvester_lower_bound_interchanged_exact",
+        "TauCeti.DavisKahan1970.theorem5_1_banach_sylvester_unboundedA",
         "TauCeti.DavisKahan1970.banach_sylvester_lower_bound_unboundedA"
       ],
       "audit_clauses": [
         {
-          "id": "DK-5.1-thm.bounded",
-          "description": "Printed bounded Banach-space theorem with a genuine inverse A^{-1}, its norm bound, an arbitrary compatible cross-operator norm, AX-XB=C, and delta ||X|| <= ||C||.",
+          "id": "DK-5.1-thm.bound",
+          "description": "The printed theorem on Banach spaces: with ||B|| <= alpha, ||A^{-1}|| <= (alpha + delta)^{-1}, alpha >= 0, delta > 0, and a cross norm compatible with the two bound norms, A X - X B = C implies ||C|| >= delta ||X||.  The Lean statements are scalar-generic over `RCLike`, hence cover the real and complex source scope at once, and `CompatibleCrossOperatorNorm` is the printed compatibility hypothesis.",
           "review_declarations": [
-            "TauCeti.DavisKahan1970.banach_sylvester_lower_bound_exact"
+            "TauCeti.DavisKahan1970.theorem5_1_banach_sylvester",
+            "TauCeti.DavisKahan1970.banach_sylvester_lower_bound",
+            "TauCeti.DavisKahan1970.banach_sylvester_lower_bound_uiNorm",
+            "TauCeti.DavisKahan1970.theorem5_1_banach_sylvester_exact",
+            "TauCeti.DavisKahan1970.banach_sylvester_lower_bound_exact",
+            "TauCeti.DavisKahan1970.theorem5_1_banach_sylvester_banachScope",
+            "TauCeti.DavisKahan1970.theorem5_1_banach_sylvester_banachScope_ofProperties",
+            "TauCeti.DavisKahan1970.bounded_sylvester_neumann_solution"
           ]
         },
         {
           "id": "DK-5.1-thm.interchange",
-          "description": "Printed prose remark interchanging the roles/hypotheses of A and B.",
+          "description": "The source's first scope remark: the roles and hypotheses of A and B may be interchanged, so the bound also follows from ||A|| <= alpha together with a bounded right inverse of B.",
           "review_declarations": [
+            "TauCeti.DavisKahan1970.theorem5_1_banach_sylvester_interchanged",
+            "TauCeti.DavisKahan1970.banach_sylvester_lower_bound_interchanged",
+            "TauCeti.DavisKahan1970.theorem5_1_banach_sylvester_interchanged_exact",
             "TauCeti.DavisKahan1970.banach_sylvester_lower_bound_interchanged_exact"
           ]
         },
         {
-          "id": "DK-5.1-thm.unboundedA",
-          "description": "Printed prose extension allowing densely-defined unbounded A while B and X remain bounded.",
+          "id": "DK-5.1-thm.unbounded-left",
+          "description": "The source's second scope remark: the same proof covers densely-defined unbounded A provided the inverse hypothesis is meaningful and bounded, with B and X bounded.  `A` is a `LinearPMap` with dense domain and closed graph as hypotheses, and the Sylvester equation is the bounded-right form.",
           "review_declarations": [
+            "TauCeti.DavisKahan1970.theorem5_1_banach_sylvester_unboundedA",
             "TauCeti.DavisKahan1970.banach_sylvester_lower_bound_unboundedA"
           ]
         }
       ],
       "source_specification_sha256": "38590318e770b1eddea8bb6e6a45126b57c9652588f5e1c6991078f3dd8a6c4a",
-      "expected_completion_certification": "reopened_mapping",
-      "known_completion_holes": [
-        {
-          "kind": "audit_mapping",
-          "detail": "The source block includes the Banach-space inverse-norm form, A/B interchange, and unbounded-left extension. The repository contains strong infrastructure and literal wrappers, but the audit row does not atomically show that every printed clause is represented at real/complex source scope."
-        }
-      ],
-      "audit_warning": "HOSTILE RE-AUDIT REOPENED: The source block includes the Banach-space inverse-norm form, A/B interchange, and unbounded-left extension. The repository contains strong infrastructure and literal wrappers, but the audit row does not atomically show that every printed clause is represented at real/complex source scope.",
+      "expected_completion_certification": "accepted",
+      "known_completion_holes": [],
       "source_atom_ids": [
         "DK-5.1-thm.banach-hypotheses",
         "DK-5.1-thm.sylvester-lower-bound",
@@ -1269,28 +1285,54 @@
       "expected_verification": "proved_in_build",
       "tex_marker": "DK-5.2-thm",
       "review_declarations": [
+        "TauCeti.DavisKahan1970.theorem5_2_sourceExact_complex",
+        "TauCeti.DavisKahan1970.theorem5_2_symmetricNorming_complex",
         "TauCeti.DavisKahan1970.theorem5_2",
-        "TauCeti.DavisKahan1970.unbounded_sylvester_intervalExterior_uiNorm_of_spectra"
+        "TauCeti.DavisKahan1970.unbounded_sylvester_intervalExterior_uiNorm_of_spectra",
+        "TauCeti.DavisKahan1970.theorem5_2_sourceExact_real",
+        "TauCeti.DavisKahan1970.theorem5_2_symmetricNorming_real",
+        "TauCeti.DavisKahan1970.theorem5_2_kyFanDominant_real",
+        "TauCeti.DavisKahan1970.theorem5_2_orderedGap_symmetricNorming_real",
+        "TauCeti.DavisKahan.Sylvester.real_unbounded_sylvester_kyFan",
+        "TauCeti.DavisKahan1970.symmetricNorming_of_kyFanDominant",
+        "TauCeti.DavisKahan.ExactSinTheta.NormalizedUnitaryInvariantNorm",
+        "TauCeti.DavisKahan.Sylvester.directOrderedSylvesterEngine_lowerUpper"
       ],
       "audit_clauses": [
         {
-          "id": "DK-5.2-thm.whole",
-          "description": "Audit the complete registered source passage as one semantic unit; split further if the independent reviewer finds separable mathematical clauses.",
+          "id": "DK-5.2-thm.bound.complex",
+          "description": "Theorem 5.2 over a complex Hilbert space: for semibounded self-adjoint A, B with A >= gamma + delta > gamma >= B and bounded X, C satisfying A X = X B + C, ||C|| >= delta ||X|| for every unitary-invariant norm.  The `_sourceExact_` witness carries the paper's separable ambient scope and the literal normalized unitarily-invariant norm class.",
           "review_declarations": [
+            "TauCeti.DavisKahan1970.theorem5_2_sourceExact_complex",
+            "TauCeti.DavisKahan1970.theorem5_2_symmetricNorming_complex",
             "TauCeti.DavisKahan1970.theorem5_2",
             "TauCeti.DavisKahan1970.unbounded_sylvester_intervalExterior_uiNorm_of_spectra"
+          ]
+        },
+        {
+          "id": "DK-5.2-thm.bound.real",
+          "description": "The same theorem over a real Hilbert space, which the source's real-or-complex ambient scope requires and which is not an instance of the complex statement.",
+          "review_declarations": [
+            "TauCeti.DavisKahan1970.theorem5_2_sourceExact_real",
+            "TauCeti.DavisKahan1970.theorem5_2_symmetricNorming_real",
+            "TauCeti.DavisKahan1970.theorem5_2_kyFanDominant_real",
+            "TauCeti.DavisKahan1970.theorem5_2_orderedGap_symmetricNorming_real",
+            "TauCeti.DavisKahan.Sylvester.real_unbounded_sylvester_kyFan"
+          ]
+        },
+        {
+          "id": "DK-5.2-thm.norm-class",
+          "description": "The printed quantifier is over every unitary-invariant norm as Section 1 defines it.  These declarations connect the `SymmetricNormingFunction` engine to the literal `NormalizedUnitaryInvariantNorm` class the source-exact witnesses quantify over.",
+          "review_declarations": [
+            "TauCeti.DavisKahan1970.symmetricNorming_of_kyFanDominant",
+            "TauCeti.DavisKahan.ExactSinTheta.NormalizedUnitaryInvariantNorm",
+            "TauCeti.DavisKahan.Sylvester.directOrderedSylvesterEngine_lowerUpper"
           ]
         }
       ],
       "source_specification_sha256": "2078bb97672c50ca247554b198c575e381bd776725924f1333057a2a10fc3d8c",
-      "expected_completion_certification": "reopened_mapping",
-      "known_completion_holes": [
-        {
-          "kind": "audit_mapping",
-          "detail": "The theorem appears available in both scalar fields, but primary evidence is not explicitly bound clause-by-clause to the paper's full real/complex source scope."
-        }
-      ],
-      "audit_warning": "HOSTILE RE-AUDIT REOPENED: The theorem appears available in both scalar fields, but primary evidence is not explicitly bound clause-by-clause to the paper's full real/complex source scope.",
+      "expected_completion_certification": "accepted",
+      "known_completion_holes": [],
       "source_atom_ids": [
         "DK-5.2-thm.hilbert-unbounded-hypotheses",
         "DK-5.2-thm.hilbert-unbounded-conclusion"
@@ -1397,28 +1439,48 @@
       "expected_verification": "proved_in_build",
       "tex_marker": "DK-6.1-prop",
       "review_declarations": [
+        "TauCeti.DavisKahan1970.theorem5_2_sourceExact_complex",
+        "TauCeti.DavisKahan1970.theorem5_2_sourceExact_real",
+        "TauCeti.DavisKahan.ExactSinTheta.counterexample_sine_square_norm",
+        "TauCeti.DavisKahan.ExactSinTheta.counterexample_perturbation_square_norm",
+        "TauCeti.DavisKahan.ExactSinTheta.oneGap_does_not_imply_symmetric_square_estimate",
         "TauCeti.DavisKahan1970.proposition6_1_complex",
-        "TauCeti.DavisKahan1970.proposition6_1_real"
+        "TauCeti.DavisKahan1970.proposition6_1_real",
+        "TauCeti.DavisKahan1970.proposition6_1_commonDomain_complex",
+        "TauCeti.DavisKahan1970.proposition6_1_commonDomain_real"
       ],
       "audit_clauses": [
         {
-          "id": "DK-6.1-prop.whole",
-          "description": "Audit the complete registered source passage as one semantic unit; split further if the independent reviewer finds separable mathematical clauses.",
+          "id": "DK-6.1-prop.sylvester-step",
+          "description": "Proof step, not a printed result: projecting the residual relation on the complementary exact subspace gives a Sylvester equation, and the sine-theorem interval/exterior gap turns it into (6.1), ||R* F_1|| >= delta ||E_0* F_1||, whose singular values are the directed sines.  The atoms are classified `proof_only` and `non_result`; the mathematics invoked is Theorem 5.2, certified on row DK-5.2-thm, and cited here so the step is not left dangling.",
+          "review_declarations": [
+            "TauCeti.DavisKahan1970.theorem5_2_sourceExact_complex",
+            "TauCeti.DavisKahan1970.theorem5_2_sourceExact_real"
+          ]
+        },
+        {
+          "id": "DK-6.1-prop.one-sided-counterexample",
+          "description": "The source's explicit warning, with its 2x2 example: the one-sided hypotheses do NOT give delta ||sin Theta|| <= ||H|| for every unitary-invariant norm.  At delta = 2 and theta = pi/4 the square norms are 2 > sqrt 3.",
+          "review_declarations": [
+            "TauCeti.DavisKahan.ExactSinTheta.counterexample_sine_square_norm",
+            "TauCeti.DavisKahan.ExactSinTheta.counterexample_perturbation_square_norm",
+            "TauCeti.DavisKahan.ExactSinTheta.oneGap_does_not_imply_symmetric_square_estimate"
+          ]
+        },
+        {
+          "id": "DK-6.1-prop.symmetric-replacement",
+          "description": "Proposition 6.1 itself: under the sine-theorem separation of width delta for A_0 against Lambda_1 AND the analogous separation for A_1 against Lambda_0, delta ||sin Theta|| <= ||H|| for every unitary-invariant norm.",
           "review_declarations": [
             "TauCeti.DavisKahan1970.proposition6_1_complex",
-            "TauCeti.DavisKahan1970.proposition6_1_real"
+            "TauCeti.DavisKahan1970.proposition6_1_real",
+            "TauCeti.DavisKahan1970.proposition6_1_commonDomain_complex",
+            "TauCeti.DavisKahan1970.proposition6_1_commonDomain_real"
           ]
         }
       ],
       "source_specification_sha256": "ec802eefcfa341b4268ff3fd35bdb06d38211ec9cf5c72138d53e1ffdf5d11ce",
-      "expected_completion_certification": "reopened_mapping",
-      "known_completion_holes": [
-        {
-          "kind": "audit_mapping",
-          "detail": "The source block contains the Sylvester identity (6.1), Proposition 6.1, and an explicit 2x2 counterexample showing the ambient one-sided sine conclusion fails. The counterexample exists elsewhere but is not registered as evidence for this row."
-        }
-      ],
-      "audit_warning": "HOSTILE RE-AUDIT REOPENED: The source block contains the Sylvester identity (6.1), Proposition 6.1, and an explicit 2x2 counterexample showing the ambient one-sided sine conclusion fails. The counterexample exists elsewhere but is not registered as evidence for this row.",
+      "expected_completion_certification": "accepted",
+      "known_completion_holes": [],
       "source_atom_ids": [
         "DK-6.1-prop.sine-proof-residual-identity",
         "DK-6.1-prop.symmetric-sine-theorem",
@@ -1477,29 +1539,37 @@
         "TauCeti.DavisKahan1970.theorem6_2_complex",
         "TauCeti.DavisKahan1970.theorem6_2_real",
         "TauCeti.DavisKahan1970.theorem6_2_real_commonDomain",
-        "TauCeti.DavisKahan1970.theorem6_2_real_commonCore"
+        "TauCeti.DavisKahan1970.theorem6_2_real_commonCore",
+        "TauCeti.DavisKahan1970.lowerFrameBound_iff_operator_inequality",
+        "TauCeti.DavisKahan1970.lowerFrameBound_of_operator_inequality",
+        "TauCeti.DavisKahan.ExactSinTheta.Theorem62Data.operatorNorm_result_across_of_rank_le",
+        "TauCeti.DavisKahan.ExactSinTheta.RealTheorem62Data.operatorNorm_result_across_of_rank_le"
       ],
       "audit_clauses": [
         {
-          "id": "DK-6.2-thm.whole",
-          "description": "Audit the complete registered source passage as one semantic unit; split further if the independent reviewer finds separable mathematical clauses.",
+          "id": "DK-6.2-thm.hilbert-schmidt",
+          "description": "The printed theorem: under the Theorem 6.1 lower-frame and range assumptions with the interval/exterior separation weakened to the pairwise distance condition |lambda - a| >= delta, the guaranteed norm is the Hilbert--Schmidt norm, delta * epsilon * ||sin Theta_0||_sq <= ||R||_sq.",
           "review_declarations": [
             "TauCeti.DavisKahan1970.theorem6_2_complex",
             "TauCeti.DavisKahan1970.theorem6_2_real",
             "TauCeti.DavisKahan1970.theorem6_2_real_commonDomain",
-            "TauCeti.DavisKahan1970.theorem6_2_real_commonCore"
+            "TauCeti.DavisKahan1970.theorem6_2_real_commonCore",
+            "TauCeti.DavisKahan1970.lowerFrameBound_iff_operator_inequality",
+            "TauCeti.DavisKahan1970.lowerFrameBound_of_operator_inequality"
+          ]
+        },
+        {
+          "id": "DK-6.2-thm.rank-corrected-operator-norm",
+          "description": "The immediate consequence the source also prints, obtained by combining the theorem with (5.2): delta * epsilon * ||sin Theta_0||_1 <= ||R||_1 * sqrt(rank R).",
+          "review_declarations": [
+            "TauCeti.DavisKahan.ExactSinTheta.Theorem62Data.operatorNorm_result_across_of_rank_le",
+            "TauCeti.DavisKahan.ExactSinTheta.RealTheorem62Data.operatorNorm_result_across_of_rank_le"
           ]
         }
       ],
       "source_specification_sha256": "3d339a183924f39cbfd71c81f3745c69442b26a631b3a25921093e05277bb58d",
-      "expected_completion_certification": "reopened_mapping",
-      "known_completion_holes": [
-        {
-          "kind": "audit_mapping",
-          "detail": "The source passage contains both the Hilbert--Schmidt theorem and its rank-corrected operator-norm consequence. Exact rank-consequence declarations exist but are not mapped into the row's semantic audit clauses."
-        }
-      ],
-      "audit_warning": "HOSTILE RE-AUDIT REOPENED: The source passage contains both the Hilbert--Schmidt theorem and its rank-corrected operator-norm consequence. Exact rank-consequence declarations exist but are not mapped into the row's semantic audit clauses.",
+      "expected_completion_certification": "accepted",
+      "known_completion_holes": [],
       "source_atom_ids": [
         "DK-6.2-thm.second-generalized-sine",
         "DK-6.2-thm.rank-corrected-operator-consequence"
