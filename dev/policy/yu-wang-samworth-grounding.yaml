@@ -22,6 +22,11 @@ required_files:
 - YuWangSamworth2015/YuWangSamworth2015/Rectangular/FrobeniusGram.lean
 - YuWangSamworth2015/YuWangSamworth2015/Rectangular/Theorem4.lean
 - YuWangSamworth2015/YuWangSamworth2015/Rectangular/RankOne.lean
+- YuWangSamworth2015/YuWangSamworth2015/Rectangular/SingularBlock.lean
+- YuWangSamworth2015/YuWangSamworth2015/Rectangular/RankBoundary.lean
+- YuWangSamworth2015/YuWangSamworth2015/Rectangular/SourceTheorem3.lean
+- YuWangSamworth2015/YuWangSamworth2015/Symmetric/Corollary1.lean
+- YuWangSamworth2015/YuWangSamworth2015/Symmetric/MixedGap.lean
 - YuWangSamworth2015/YuWangSamworth2015/Appendix/Lemma5.lean
 required_declarations:
   YuWangSamworth2015/YuWangSamworth2015/Core/Statistics.lean:
@@ -59,6 +64,29 @@ required_declarations:
   YuWangSamworth2015/YuWangSamworth2015/Rectangular/RankOne.lean:
   - yuWangSamworth_rightSingularVector_le
   - yuWangSamworth_leftSingularVector_le
+  # The source-shaped Theorem 3: arbitrary orthonormal singular blocks, the
+  # printed rank condition, and the corrected ambient endpoint convention.
+  YuWangSamworth2015/YuWangSamworth2015/Rectangular/SourceTheorem3.lean:
+  - IsRightSingularBlock
+  - IsLeftSingularBlock
+  - SourceSingularGap
+  - theorem3_rightSinTheta
+  - theorem3_leftSinTheta
+  - theorem3_rightAlignedFrame
+  - theorem3_leftAlignedFrame
+  YuWangSamworth2015/YuWangSamworth2015/Rectangular/SingularBlock.lean:
+  - sq_singularValues_eq_eigenvalues_rightGram
+  - sq_singularValues_eq_eigenvalues_leftGram
+  - singularBoundaryGap_of_rank_le
+  # The other two machine-checked refutations of printed statements.  Without
+  # these entries the contract guarded only equation (4), and either could have
+  # been deleted without this gate noticing.
+  YuWangSamworth2015/YuWangSamworth2015/Rectangular/RankBoundary.lean:
+  - yuWangSamworth_theorem3_printed_rankBoundary_refutation
+  YuWangSamworth2015/YuWangSamworth2015/Symmetric/Corollary1.lean:
+  - corollary1_sinTheta
+  - corollary1_alignedVector
+  - corollary1_printed_unnormalized_counterexample
   YuWangSamworth2015/YuWangSamworth2015/Appendix/Lemma5.lean:
   - yuWangSamworth_lemma5_columns
   - yuWangSamworth_lemma5_isometricColumns

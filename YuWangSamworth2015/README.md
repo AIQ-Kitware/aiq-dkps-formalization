@@ -85,6 +85,11 @@ none is silently corrected.
   `Rectangular/RankBoundary.lean` refutes it with two rank-one orthogonal
   projections.  The repair is the ambient-dimension convention the paper's own
   proof uses, and is what the theorems here already carry.
+* **Corollary 1's second display** omits the unit normalization its derivation
+  as the `d = 1` case of Theorem 2 supplies, and is false without it.
+  `corollary1_printed_unnormalized_counterexample` in `Symmetric/Corollary1.lean`
+  refutes the printed form; `corollary1_sinTheta` and `corollary1_alignedVector`
+  carry the normalization explicitly.
 
 ## Architecture
 
@@ -148,9 +153,11 @@ example cannot do.
 
 Building the first of them required the first-ever *constructor* for
 `CorrespondingEigenblock` (`YuWangSamworth2015/Core/TopEigenblock.lean`):
-that hypothesis is consumed by every theorem in the package and had no instance
-anywhere in the repository, so no concrete pair of covariance operators had ever
-been checked against it.
+at the time that hypothesis was consumed by every theorem in the package and had
+no instance anywhere in the repository, so no concrete pair of covariance
+operators had ever been checked against it.  It is now consumed only by the
+superseded index-block forms; the paper-facing theorems take the frame
+predicates instead.
 
 This is a root Lake library with no nested workspace, and a **default** build
 target since 2026-08-02.

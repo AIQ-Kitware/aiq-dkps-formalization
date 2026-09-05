@@ -47,7 +47,7 @@
     "literal-index-wrappers": {
       "kind": "mechanical",
       "title": "Equation (1) has no wrapper with a literal index j and a mixed gap",
-      "detail": "NARROWED 2026-08-13. This gap used to cover every source statement: the theorems took an index embedding `e : Fin d -> Fin n` and an intrinsic separation, and none took the paper's literal contiguous range `r <= j <= s` with the gap read off as `min(lambda_{r-1} - lambda_r, lambda_s - lambda_{s+1})`. That is now delivered for the POPULATION-gap results by `YuWangSamworth2015.consecutiveEmb` and `YuWangSamworth2015.OrderedBlockBoundaryGap` -- Theorem 2's two conclusions and both residual forms (`yuWangSamworth_sinTheta_block_le` and siblings), Corollary 1 (`yuWangSamworth_corollary1_sinTheta_le`, `..._real_le`), and Theorem 3 on both sides in singular-value notation (`yuWangSamworth_rightSingularSubspace_block_le` and siblings).\n\nWhat remains is equation (1), the `r = s = j` specialization of THEOREM 1, whose denominator is the MIXED separation `min(|lambda-hat_{j-1} - lambda_j|, |lambda-hat_{j+1} - lambda_j|)`. The boundary-gap machinery above does not apply to it: it converts a boundary condition on one sorted spectrum into an intrinsic separation of that same spectrum, whereas equation (1) compares the population eigenvalue against the SAMPLE spectrum. A literal index wrapper for it would also need the sample eigenline to be determined -- with `lambda-hat_j` repeated, `V-perp` carries `lambda-hat_j` itself and the mixed exterior gap is zero -- so it needs a simplicity hypothesis the source does not print at that display. Since Theorem 1 is already proved here in a strictly more general unitarily invariant interval form, this is source recognizability for a baseline result the paper itself is arguing against, not a mathematical gap."
+      "detail": "NARROWED 2026-08-13. This gap used to cover every source statement: the theorems took an index embedding `e : Fin d -> Fin n` and an intrinsic separation, and none took the paper's literal contiguous range `r <= j <= s` with the gap read off as `min(lambda_{r-1} - lambda_r, lambda_s - lambda_{s+1})`. That is now delivered for the POPULATION-gap results by `YuWangSamworth2015.consecutiveEmb` and `YuWangSamworth2015.OrderedBlockBoundaryGap` -- Theorem 2's two conclusions and both residual forms (`yuWangSamworth_sinTheta_block_le` and siblings), Corollary 1 (`yuWangSamworth_corollary1_sinTheta_le`, `..._real_le`), and Theorem 3 on both sides in singular-value notation (`yuWangSamworth_rightSingularSubspace_block_le` and siblings).\n\nWhat remains is equation (1), the `r = s = j` specialization of THEOREM 1, whose denominator is the MIXED separation `min(|lambda-hat_{j-1} - lambda_j|, |lambda-hat_{j+1} - lambda_j|)`. The boundary-gap machinery above does not apply to it: it converts a boundary condition on one sorted spectrum into an intrinsic separation of that same spectrum, whereas equation (1) compares the population eigenvalue against the SAMPLE spectrum. **Corrected 2026-09-05.** This gap used to say a literal wrapper needs a simplicity hypothesis on `lambda-hat_j`, because a repeated `lambda-hat_j` puts itself into `V-perp` and zeroes the mixed exterior gap. That reason is wrong. If `lambda-hat_j` is repeated it equals `lambda-hat_{j-1}` or `lambda-hat_{j+1}`, so `|lambda-hat_j - lambda_j|` is already one of the two terms in the printed minimum; the exterior gap is that minimum, and it is zero only when `lambda-hat_j = lambda_j`. Simplicity is not the obstruction. The real side condition is the INTERVAL-POSITION one, `lambda-hat_{j+1} <= lambda_j <= lambda-hat_{j-1}`. Under it, antitonicity makes the printed two-neighbour minimum exactly the exterior separation over all `k != j`, and the wrapper is a direct instantiation of `yuWangSamworth_theorem1_opNorm_le`. Without it the printed minimum can EXCEED the true exterior separation, so the derivation needs a case split -- though the printed display is not thereby false: if `lambda_j > lambda-hat_{j-1}` then `|lambda-hat_{j-1} - lambda_j| <= lambda_j - lambda-hat_j <= ||E||_op` by Weyl, and the printed bound is at least 1, hence holds trivially. A wrapper stating the position condition explicitly would be `compiled_corrected`, not `compiled_exact`: the condition is an added hypothesis the printed display omits. Since Theorem 1 is already proved here in a strictly more general unitarily invariant interval form, this is source recognizability for a baseline result the paper itself is arguing against, not a mathematical gap."
     },
     "theorem1-sample-endpoint-conventions": {
       "kind": "source_audit",
@@ -272,17 +272,19 @@
       "source_anchor": "Section 1, equation (1)",
       "title": "Equation (1) -- the eigenvector specialization of the baseline",
       "summary": "For r = s = j the baseline specializes to a single-eigenvector sine bound with a mixed gap, and after choosing the sign so v-hat^T v >= 0, ‖v-hat - v‖ <= sqrt 2 sin theta.",
-      "status": "compiled_specialization",
+      "status": "compiled_generalized",
       "verification": "proved_in_build",
       "lean_declarations": [
-        "YuWangSamworth2015.yuWangSamworth_intervalBlock_le"
+        "YuWangSamworth2015.DavisKahanTheory.yuWangSamworth_theorem1_opNorm_le",
+        "YuWangSamworth2015.DavisKahanTheory.yuWangSamworth_theorem1_uiNorm_le",
+        "YuWangSamworth2015.yuWangSamworth_eigenvector_real_le"
       ],
       "gap_refs": [
         "literal-index-wrappers",
         "theorem1-sample-endpoint-conventions"
       ],
-      "notes": "Equation (1) is the `r = s = j` specialization of the baseline, followed by the remark that reversing the sign of `v-hat_j` gives `||v-hat_j - v_j|| <= sqrt 2 sin Theta`. The sign-choice half is available as the rank-one case of the aligned-basis machinery; the census does not claim a source-shaped wrapper for equation (1) itself.",
-      "next_action": "Optional: state equation (1) with a literal index j and a mixed gap, for source recognizability. It needs a simplicity hypothesis on lambda-hat_j that the source does not print at that display; see gap literal-index-wrappers.",
+      "notes": "Equation (1) is the `r = s = j` specialization of the baseline, followed by the remark that reversing the sign of `v-hat_j` gives `||v-hat_j - v_j|| <= sqrt 2 sin Theta`. **Witness corrected 2026-09-05.** The row previously cited only `yuWangSamworth_intervalBlock_le` as its compiled witness. That declaration is not equation (1) and is not a specialization of it: it carries a POPULATION-only `InternalGap`, the constant 2, a Frobenius conclusion, and an arbitrary block. It is an index-block specialization of Theorem 2. Citing it here let the row read `compiled_specialization` for a display it does not state. The row now cites `yuWangSamworth_theorem1_opNorm_le`, which is the honest ancestor: arbitrary invariant subspaces, an arbitrary population interval, the mixed `IntervalExteriorGap`, the constant 1, and the operator-norm conclusion. Equation (1) is its `U = span{v_j}`, `V = span{v-hat_j}`, `a = b = lambda_j` instance. That instance is NOT written as a declaration; the status is `compiled_generalized` for that reason and not `compiled_exact`. The sign-choice half is `yuWangSamworth_eigenvector_real_le`.",
+      "next_action": "Optional: write the literal `r = s = j` instance of `yuWangSamworth_theorem1_opNorm_le` for source recognizability. It needs a hypothesis the printed display omits -- see gap `literal-index-wrappers` for what that hypothesis actually is.",
       "importance": "supporting"
     },
     {
@@ -447,6 +449,10 @@
           {
             "name": "TauCeti.singularValues_sinThetaMap",
             "mathematical_role": "Identifies the singular values of the sine/cross-projection operator with Tau Ceti principalSines, the principal-angle sine sequence."
+          },
+          {
+            "name": "TauCeti.principalSines_comm",
+            "mathematical_role": "Closes the argument-order step. `sinThetaMap U V` is the composite `P_{V-perp} . P_U`, so this row's conclusion is `||P_{Vhat-perp} P_V||_F`, while the paper's `||sin Theta(Vhat, V)||_F = ||V_1^T Vhat||_F` is `||P_{V-perp} P_Vhat||_F`. They agree because the two blocks have equal dimension, and this is the theorem that says so; `singularValues_sinThetaMap` alone is itself order-dependent, and `AngleGeometry.lean` warns explicitly that the sines are not symmetric when the dimensions differ."
           }
         ],
         "clause_map": [
@@ -686,6 +692,10 @@
           {
             "name": "YuWangSamworth2015.frobeniusNorm",
             "mathematical_role": "Reducible source-facing abbreviation for the existing Frobenius seminorm, applied directly to SigmaHat-Sigma in the aligned-frame bound."
+          },
+          {
+            "name": "TauCeti.principalSines_comm",
+            "mathematical_role": "Closes the argument-order step. `sinThetaMap U V` is the composite `P_{V-perp} . P_U`, so this row's conclusion is `||P_{Vhat-perp} P_V||_F`, while the paper's `||sin Theta(Vhat, V)||_F = ||V_1^T Vhat||_F` is `||P_{V-perp} P_Vhat||_F`. They agree because the two blocks have equal dimension, and this is the theorem that says so; `singularValues_sinThetaMap` alone is itself order-dependent, and `AngleGeometry.lean` warns explicitly that the sines are not symmetric when the dimensions differ."
           }
         ],
         "clause_map": [
@@ -822,7 +832,7 @@
         "YuWangSamworth2015.yuWangSamworth_alignedFrame_block_le_residual"
       ],
       "gap_refs": [],
-      "notes": "The paper says explicitly that its proof gives the sharper numerator: `||sin Theta||_F <= ||V-hat Lambda - Sigma V-hat||_F / Delta`, and `2^{1/2} ||V-hat Lambda - Sigma V-hat||_F` in the aligned bound. Closed 2026-08-13: `yuWangSamworth_sinTheta_le_residual` and `yuWangSamworth_alignedBasis_le_residual` state exactly those two inequalities, at frame generality, and the printed Theorem 2 is obtained from them by bounding the residual. Previously the machinery existed but no theorem concluded the sharper inequality, so a reader could not cite it.\n\nExtended 2026-08-13: the residual forms are now also available with the source's consecutive indexing and boundary gap (`yuWangSamworth_sinTheta_block_le_residual`, `yuWangSamworth_alignedFrame_block_le_residual`), and the aligned residual form exhibits the orthogonal alignment (`yuWangSamworth_alignedFrame_le_residual`). A reader who wants the sharper numerator no longer has to translate the block hypothesis themselves.",
+      "notes": "The paper says explicitly that its proof gives the sharper numerator: `||sin Theta||_F <= ||V-hat Lambda - Sigma V-hat||_F / Delta`, and `2^{1/2} ||V-hat Lambda - Sigma V-hat||_F` in the aligned bound. Closed 2026-08-13: `yuWangSamworth_sinTheta_le_residual` and `yuWangSamworth_alignedBasis_le_residual` state exactly those two inequalities, at frame generality, and the printed Theorem 2 is obtained from them by bounding the residual. Previously the machinery existed but no theorem concluded the sharper inequality, so a reader could not cite it.\n\nExtended 2026-08-13: the residual forms are now also available with the source's consecutive indexing and boundary gap (`yuWangSamworth_sinTheta_block_le_residual`, `yuWangSamworth_alignedFrame_block_le_residual`), and the aligned residual form exhibits the orthogonal alignment (`yuWangSamworth_alignedFrame_le_residual`). A reader who wants the sharper numerator no longer has to translate the block hypothesis themselves.\n\n**Review surface corrected 2026-09-05.** The row cited `yuWangSamworth_alignedBasis_le_residual`, whose conclusion replaces BOTH frames with frames the proof produces, where the paper fixes `V` and rotates only `Vhat`. `yuWangSamworth_alignedFrame_le_residual` is the corrected form and is now the witness.",
       "next_action": "None.",
       "importance": "supporting",
       "semantic_review": {
@@ -865,7 +875,7 @@
         ],
         "declarations": [
           "YuWangSamworth2015.yuWangSamworth_sinTheta_le_residual",
-          "YuWangSamworth2015.yuWangSamworth_alignedBasis_le_residual"
+          "YuWangSamworth2015.yuWangSamworth_alignedFrame_le_residual"
         ],
         "note": "This row is one clause or proof-strength refinement of the paper's central Theorem 2; the renderer groups all headline Theorem 2 rows into one review section.",
         "statement_pins": [
@@ -874,14 +884,16 @@
             "type_expr_hash": "123395032",
             "type_text_sha256": "f5efdb63322d64ca5adeebc78f9bde66b4ce6d7d050afff13fb32d4115da8197",
             "toolchain": "leanprover/lean4:v4.34.0-rc1",
-            "pinned_on": "2026-09-01"
+            "pinned_on": "2026-09-05",
+            "note": "Repinned 2026-09-05 onto the source-shaped witnesses: the SourceTheorem3 capstones for Theorem 3, the frame-fixing aligned forms, and the Theorem 1 operator-norm ancestor for equation (1)."
           },
           {
-            "declaration": "YuWangSamworth2015.yuWangSamworth_alignedBasis_le_residual",
-            "type_expr_hash": "1017917795",
-            "type_text_sha256": "bd0bcd8febbaa578fbfdae7aeefec4b9a945a7d83529b9ed37da16c4a854479a",
+            "declaration": "YuWangSamworth2015.yuWangSamworth_alignedFrame_le_residual",
+            "type_expr_hash": "135762203",
+            "type_text_sha256": "5779cb5da99bc3fec43b49b82b255006fb6bb1eca8e2f3a5d863f8fa9514e407",
             "toolchain": "leanprover/lean4:v4.34.0-rc1",
-            "pinned_on": "2026-09-01"
+            "pinned_on": "2026-09-05",
+            "note": "Repinned 2026-09-05 onto the source-shaped witnesses: the SourceTheorem3 capstones for Theorem 3, the frame-fixing aligned forms, and the Theorem 1 operator-norm ancestor for equation (1)."
           }
         ],
         "source_pins": [
@@ -942,6 +954,12 @@
             "pinned_on": "2026-09-03",
             "note": "Source passages marked and bound 2026-09-03: the reconstruction gained YWS-CERT markers and each reviewed row now cites the printed passage its Lean statement answers."
           }
+        ],
+        "context_declarations": [
+          {
+            "name": "TauCeti.principalSines_comm",
+            "mathematical_role": "Closes the argument-order step. `sinThetaMap U V` is the composite `P_{V-perp} . P_U`, so this row's conclusion is `||P_{Vhat-perp} P_V||_F`, while the paper's `||sin Theta(Vhat, V)||_F = ||V_1^T Vhat||_F` is `||P_{V-perp} P_Vhat||_F`. They agree because the two blocks have equal dimension, and this is the theorem that says so; `singularValues_sinThetaMap` alone is itself order-dependent, and `AngleGeometry.lean` warns explicitly that the sines are not symmetric when the dimensions differ."
+          }
         ]
       }
     },
@@ -964,7 +982,15 @@
       "gap_refs": [],
       "notes": "This is the half of the proof that produces the `d^{1/2}`, and therefore the half that explains why the paper's numerator is a minimum rather than a single norm. At frame generality the two ingredients are Weyl at the selected INDEX (`e i`, not the chosen eigenvector) and the orthonormal-compression estimate `sum_sq_norm_apply_orthonormal_le`, which is Lemma A1's inequality half stated basis-free in `ForTauCeti`.",
       "next_action": "None.",
-      "importance": "technical"
+      "importance": "technical",
+      "semantic_review": {
+        "context_declarations": [
+          {
+            "name": "TauCeti.principalSines_comm",
+            "mathematical_role": "Closes the argument-order step. `sinThetaMap U V` is the composite `P_{V-perp} . P_U`, so this row's conclusion is `||P_{Vhat-perp} P_V||_F`, while the paper's `||sin Theta(Vhat, V)||_F = ||V_1^T Vhat||_F` is `||P_{V-perp} P_Vhat||_F`. They agree because the two blocks have equal dimension, and this is the theorem that says so; `singularValues_sinThetaMap` alone is itself order-dependent, and `AngleGeometry.lean` warns explicitly that the sines are not symmetric when the dimensions differ."
+          }
+        ]
+      }
     },
     {
       "id": "YWS-S2-sharpness-orthogonal",
@@ -1241,13 +1267,21 @@
         "YuWangSamworth2015.DavisKahanTheory.sq_singularValues_eq_eigenvalues_rightGram",
         "YuWangSamworth2015.DavisKahanTheory.orderedBlockBoundaryGap_rightGram",
         "YuWangSamworth2015.DavisKahanTheory.singularBoundaryGap_of_rank_le",
-        "YuWangSamworth2015.DavisKahanTheory.yuWangSamworth_rightSingularSubspace_block_le"
+        "YuWangSamworth2015.DavisKahanTheory.yuWangSamworth_rightSingularSubspace_block_le",
+        "YuWangSamworth2015.SingularBoundaryGap",
+        "YuWangSamworth2015.SourceSingularGap",
+        "YuWangSamworth2015.sourceSingularGap_iff",
+        "YuWangSamworth2015.SourceSingularGap.toSingularBoundaryGap",
+        "YuWangSamworth2015.IsRightSingularBlock",
+        "YuWangSamworth2015.isRightSingularBlock_iff_pairedSingularVectors",
+        "YuWangSamworth2015.IsRightSingularBlock.toOrderedFrame",
+        "YuWangSamworth2015.theorem3_rightSinTheta"
       ],
       "gap_refs": [
         "preprint-numbering-aliases",
         "theorem3-rank-boundary"
       ],
-      "notes": "The route is the paper's own: transport to the squared Gram operators, then apply Theorem 2. The coefficient `(2 sigma_1 + ||D||_op)` and the `min` numerator are proved as printed.\n\n**Status changed to `compiled_corrected` on 2026-08-13, twice over.**\n\n(a) SCOPE. `CorrespondingRightSingularBlock` inherits the `CorrespondingEigenblock` restriction of `YWS-T2-sinTheta` and is therefore narrower than the printed hypothesis `A v_j = sigma_j u_j` with `V` merely orthonormal. `yuWangSamworth_rightSingularSubspace_frame_le` is the printed statement: an arbitrary ordered right singular frame on each side.\n\n(b) THE PRINTED CONVENTION IS FALSE. Theorem 3 defines `sigma_{rank(A)+1}^2 = -inf`, which makes the denominator infinite whenever `s = rank(A)` and so asserts a zero angle between subspaces that can be orthogonal. This is refuted by `yuWangSamworth_theorem3_printed_rankBoundary_refutation`; see gap `theorem3-rank-boundary` and row `YWS-T3-rankBoundary`. The Lean gap hypothesis is the intrinsic separation of the sorted spectrum of `A*A`, which counts the zero eigenvalues, so what is proved here is the corrected theorem. Calling it 'exact Theorem 4', as the module header did, was not source-faithful.\n\n**Singular-value notation added 2026-08-13, and the row stays `compiled_corrected`.** `YuWangSamworth2015/YuWangSamworth2015/Rectangular/SingularBlock.lean` restates the theorem with consecutive singular indices `r, ..., s` and the squared boundary gap `Delta_sv <= min(sigma_{r-1}^2 - sigma_r^2, sigma_s^2 - sigma_{s+1}^2)`, so a reader can compare it to the printed statement term by term. The bridge is `sq_singularValues_eq_eigenvalues_rightGram`, and it is exactly where the correction lives: `LinearMap.singularValues` is zero past the rank by construction, so squared singular values and the sorted spectrum of `A*A` agree at EVERY ambient index, zeros included -- the corrected convention `sigma_{q+1}^2 = -inf` with `sigma_j = 0` for `j` past the rank, not the printed `sigma_{rank(A)+1}^2 = -inf`. `singularBoundaryGap_of_rank_le` makes the difference concrete: when the block ends at or past `rank(A)` the correct lower boundary gap is `sigma_s^2 - 0`, a finite positive number the caller must supply, where the printed convention offered a vacuous one. The singular-value statements use the same `r`, `s`, `r + d = s + 1` variables.",
+      "notes": "The route is the paper's own: transport to the squared Gram operators, then apply Theorem 2. The coefficient `(2 sigma_1 + ||D||_op)` and the `min` numerator are proved as printed.\n\n**Status changed to `compiled_corrected` on 2026-08-13, twice over.**\n\n(a) SCOPE. `CorrespondingRightSingularBlock` inherits the `CorrespondingEigenblock` restriction of `YWS-T2-sinTheta` and is therefore narrower than the printed hypothesis `A v_j = sigma_j u_j` with `V` merely orthonormal. `yuWangSamworth_rightSingularSubspace_frame_le` is the printed statement: an arbitrary ordered right singular frame on each side.\n\n(b) THE PRINTED CONVENTION IS FALSE. Theorem 3 defines `sigma_{rank(A)+1}^2 = -inf`, which makes the denominator infinite whenever `s = rank(A)` and so asserts a zero angle between subspaces that can be orthogonal. This is refuted by `yuWangSamworth_theorem3_printed_rankBoundary_refutation`; see gap `theorem3-rank-boundary` and row `YWS-T3-rankBoundary`. The Lean gap hypothesis is the intrinsic separation of the sorted spectrum of `A*A`, which counts the zero eigenvalues, so what is proved here is the corrected theorem. Calling it 'exact Theorem 4', as the module header did, was not source-faithful.\n\n**Singular-value notation added 2026-08-13, and the row stays `compiled_corrected`.** `YuWangSamworth2015/YuWangSamworth2015/Rectangular/SingularBlock.lean` restates the theorem with consecutive singular indices `r, ..., s` and the squared boundary gap `Delta_sv <= min(sigma_{r-1}^2 - sigma_r^2, sigma_s^2 - sigma_{s+1}^2)`, so a reader can compare it to the printed statement term by term. The bridge is `sq_singularValues_eq_eigenvalues_rightGram`, and it is exactly where the correction lives: `LinearMap.singularValues` is zero past the rank by construction, so squared singular values and the sorted spectrum of `A*A` agree at EVERY ambient index, zeros included -- the corrected convention `sigma_{q+1}^2 = -inf` with `sigma_j = 0` for `j` past the rank, not the printed `sigma_{rank(A)+1}^2 = -inf`. `singularBoundaryGap_of_rank_le` makes the difference concrete: when the block ends at or past `rank(A)` the correct lower boundary gap is `sigma_s^2 - 0`, a finite positive number the caller must supply, where the printed convention offered a vacuous one. The singular-value statements use the same `r`, `s`, `r + d = s + 1` variables.\n\n**Source-facing surface registered 2026-09-05.** `YuWangSamworth2015/YuWangSamworth2015/Rectangular/SourceTheorem3.lean` landed on 2026-08-29 and was invisible to this census, to `dev/policy/yu-wang-samworth-grounding.yaml`, and to the distilled source, while the standalone submission repository already cited it. That is the inverse of the rule that this repository is authoritative and the standalone is a mechanical extraction. The capstones are now the row's review witnesses. They carry the printed hypothesis: `IsRightSingularBlock` / `IsLeftSingularBlock` ask only that the frame be an orthonormal block of singular vectors at the consecutive indices, with no separation assumed among the singular values of `Ahat`, and `hrank : s < finrank (range A)` is the printed `1 <= r <= s <= rank(A)` in zero-based form. The superseded `CorrespondingRightSingularBlock` / `CorrespondingLeftSingularBlock` forms remain cited as supporting declarations and must not be used as the row's review surface: they pin both blocks to Mathlib's chosen Gram eigenbases, which assumes away the sample degeneracy the paper's contribution is about.",
       "next_action": "None.",
       "importance": "major",
       "semantic_review": {
@@ -1289,16 +1323,17 @@
           }
         ],
         "declarations": [
-          "YuWangSamworth2015.DavisKahanTheory.yuWangSamworth_rightSingularSubspace_le"
+          "YuWangSamworth2015.theorem3_rightSinTheta"
         ],
         "note": "Theorem 3 is grouped across its right, left, aligned-frame, and printed-rank-boundary rows; the rank-boundary row is a machine-checked refutation of the printed convention rather than a silent repair.",
         "statement_pins": [
           {
-            "declaration": "YuWangSamworth2015.DavisKahanTheory.yuWangSamworth_rightSingularSubspace_le",
-            "type_expr_hash": "4116281150",
-            "type_text_sha256": "12d5a138d10aa196a3a8aec6aaeb39ae542485e55b10c041ffe511900852936a",
+            "declaration": "YuWangSamworth2015.theorem3_rightSinTheta",
+            "type_expr_hash": "2909991186",
+            "type_text_sha256": "bcba3be52f65bcc5a1287eb88e6858cb4d154ddc1955bc21c28e2c8d0b94cb8c",
             "toolchain": "leanprover/lean4:v4.34.0-rc1",
-            "pinned_on": "2026-09-01"
+            "pinned_on": "2026-09-05",
+            "note": "Repinned 2026-09-05 onto the source-shaped witnesses: the SourceTheorem3 capstones for Theorem 3, the frame-fixing aligned forms, and the Theorem 1 operator-norm ancestor for equation (1)."
           }
         ],
         "source_pins": [
@@ -1382,9 +1417,17 @@
         "YuWangSamworth2015.DavisKahanTheory.yuWangSamworth_leftSingularSubspace_opNormCoefficient_le",
         "YuWangSamworth2015.DavisKahanTheory.sq_singularValues_eq_eigenvalues_leftGram",
         "YuWangSamworth2015.DavisKahanTheory.orderedBlockBoundaryGap_leftGram",
-        "YuWangSamworth2015.DavisKahanTheory.yuWangSamworth_leftSingularSubspace_block_le"
+        "YuWangSamworth2015.DavisKahanTheory.yuWangSamworth_leftSingularSubspace_block_le",
+        "YuWangSamworth2015.SingularBoundaryGap",
+        "YuWangSamworth2015.SourceSingularGap",
+        "YuWangSamworth2015.sourceSingularGap_iff",
+        "YuWangSamworth2015.SourceSingularGap.toSingularBoundaryGap",
+        "YuWangSamworth2015.IsLeftSingularBlock",
+        "YuWangSamworth2015.isLeftSingularBlock_iff_pairedSingularVectors",
+        "YuWangSamworth2015.IsLeftSingularBlock.toOrderedFrame",
+        "YuWangSamworth2015.theorem3_leftSinTheta"
       ],
-      "notes": "Proved as its own statement rather than by an adjoint-symmetry argument from the right-hand case, so the two are independently checkable. Both corrections recorded on `YWS-T3-right` apply verbatim, with the ambient dimension on the left being the codomain dimension: the corrected convention is `sigma_{p+1}^2 = -inf`, not `sigma_{rank(A)+1}^2 = -inf`.\n\n**Singular-value notation added 2026-08-13, and the row stays `compiled_corrected`.** `YuWangSamworth2015/YuWangSamworth2015/Rectangular/SingularBlock.lean` restates the theorem with consecutive singular indices `r, ..., s` and the squared boundary gap `Delta_sv <= min(sigma_{r-1}^2 - sigma_r^2, sigma_s^2 - sigma_{s+1}^2)`, so a reader can compare it to the printed statement term by term. The bridge is `sq_singularValues_eq_eigenvalues_rightGram`, and it is exactly where the correction lives: `LinearMap.singularValues` is zero past the rank by construction, so squared singular values and the sorted spectrum of `A*A` agree at EVERY ambient index, zeros included -- the corrected convention `sigma_{q+1}^2 = -inf` with `sigma_j = 0` for `j` past the rank, not the printed `sigma_{rank(A)+1}^2 = -inf`. `singularBoundaryGap_of_rank_le` makes the difference concrete: when the block ends at or past `rank(A)` the correct lower boundary gap is `sigma_s^2 - 0`, a finite positive number the caller must supply, where the printed convention offered a vacuous one. The singular-value statements use the same `r`, `s`, `r + d = s + 1` variables.",
+      "notes": "Proved as its own statement rather than by an adjoint-symmetry argument from the right-hand case, so the two are independently checkable. Both corrections recorded on `YWS-T3-right` apply verbatim, with the ambient dimension on the left being the codomain dimension: the corrected convention is `sigma_{p+1}^2 = -inf`, not `sigma_{rank(A)+1}^2 = -inf`.\n\n**Singular-value notation added 2026-08-13, and the row stays `compiled_corrected`.** `YuWangSamworth2015/YuWangSamworth2015/Rectangular/SingularBlock.lean` restates the theorem with consecutive singular indices `r, ..., s` and the squared boundary gap `Delta_sv <= min(sigma_{r-1}^2 - sigma_r^2, sigma_s^2 - sigma_{s+1}^2)`, so a reader can compare it to the printed statement term by term. The bridge is `sq_singularValues_eq_eigenvalues_rightGram`, and it is exactly where the correction lives: `LinearMap.singularValues` is zero past the rank by construction, so squared singular values and the sorted spectrum of `A*A` agree at EVERY ambient index, zeros included -- the corrected convention `sigma_{q+1}^2 = -inf` with `sigma_j = 0` for `j` past the rank, not the printed `sigma_{rank(A)+1}^2 = -inf`. `singularBoundaryGap_of_rank_le` makes the difference concrete: when the block ends at or past `rank(A)` the correct lower boundary gap is `sigma_s^2 - 0`, a finite positive number the caller must supply, where the printed convention offered a vacuous one. The singular-value statements use the same `r`, `s`, `r + d = s + 1` variables.\n\n**Source-facing surface registered 2026-09-05.** `YuWangSamworth2015/YuWangSamworth2015/Rectangular/SourceTheorem3.lean` landed on 2026-08-29 and was invisible to this census, to `dev/policy/yu-wang-samworth-grounding.yaml`, and to the distilled source, while the standalone submission repository already cited it. That is the inverse of the rule that this repository is authoritative and the standalone is a mechanical extraction. The capstones are now the row's review witnesses. They carry the printed hypothesis: `IsRightSingularBlock` / `IsLeftSingularBlock` ask only that the frame be an orthonormal block of singular vectors at the consecutive indices, with no separation assumed among the singular values of `Ahat`, and `hrank : s < finrank (range A)` is the printed `1 <= r <= s <= rank(A)` in zero-based form. The superseded `CorrespondingRightSingularBlock` / `CorrespondingLeftSingularBlock` forms remain cited as supporting declarations and must not be used as the row's review surface: they pin both blocks to Mathlib's chosen Gram eigenbases, which assumes away the sample degeneracy the paper's contribution is about.",
       "next_action": "None.",
       "gap_refs": [
         "preprint-numbering-aliases",
@@ -1430,16 +1473,17 @@
           }
         ],
         "declarations": [
-          "YuWangSamworth2015.DavisKahanTheory.yuWangSamworth_leftSingularSubspace_le"
+          "YuWangSamworth2015.theorem3_leftSinTheta"
         ],
         "note": "Theorem 3 is grouped across its right, left, aligned-frame, and printed-rank-boundary rows; the rank-boundary row is a machine-checked refutation of the printed convention rather than a silent repair.",
         "statement_pins": [
           {
-            "declaration": "YuWangSamworth2015.DavisKahanTheory.yuWangSamworth_leftSingularSubspace_le",
-            "type_expr_hash": "2233517435",
-            "type_text_sha256": "7372d51ce48898e19e20ca77d2b11068114bd431188492b035184924b7162d9d",
+            "declaration": "YuWangSamworth2015.theorem3_leftSinTheta",
+            "type_expr_hash": "2989942998",
+            "type_text_sha256": "d8d0b14c143893d126e2017b8790432cd09cbd706b530f2e45c73f070dc72963",
             "toolchain": "leanprover/lean4:v4.34.0-rc1",
-            "pinned_on": "2026-09-01"
+            "pinned_on": "2026-09-05",
+            "note": "Repinned 2026-09-05 onto the source-shaped witnesses: the SourceTheorem3 capstones for Theorem 3, the frame-fixing aligned forms, and the Theorem 1 operator-norm ancestor for equation (1)."
           }
         ],
         "source_pins": [
@@ -1522,13 +1566,15 @@
         "YuWangSamworth2015.exists_unitary_sqrt_sum_sq_norm_frameComp_sub_le",
         "YuWangSamworth2015.exists_orthogonal_sqrt_sum_sq_norm_sub_le",
         "YuWangSamworth2015.DavisKahanTheory.yuWangSamworth_rightSingularAlignedFrame_block_le",
-        "YuWangSamworth2015.DavisKahanTheory.yuWangSamworth_leftSingularAlignedFrame_block_le"
+        "YuWangSamworth2015.DavisKahanTheory.yuWangSamworth_leftSingularAlignedFrame_block_le",
+        "YuWangSamworth2015.theorem3_rightAlignedFrame",
+        "YuWangSamworth2015.theorem3_leftAlignedFrame"
       ],
       "gap_refs": [
         "private-helper-only",
         "theorem3-rank-boundary"
       ],
-      "notes": "Factored through a single generic Gram transport result so that no perturbation argument is duplicated between the symmetric and rectangular cases; that transport result is `private`, which is the right call for an internal factoring step. The frame-generality and rank-boundary corrections recorded on `YWS-T3-right` apply here too.\n\n**Singular-value notation added 2026-08-13, and the row stays `compiled_corrected`.** `YuWangSamworth2015/YuWangSamworth2015/Rectangular/SingularBlock.lean` restates the theorem with consecutive singular indices `r, ..., s` and the squared boundary gap `Delta_sv <= min(sigma_{r-1}^2 - sigma_r^2, sigma_s^2 - sigma_{s+1}^2)`, so a reader can compare it to the printed statement term by term. The bridge is `sq_singularValues_eq_eigenvalues_rightGram`, and it is exactly where the correction lives: `LinearMap.singularValues` is zero past the rank by construction, so squared singular values and the sorted spectrum of `A*A` agree at EVERY ambient index, zeros included -- the corrected convention `sigma_{q+1}^2 = -inf` with `sigma_j = 0` for `j` past the rank, not the printed `sigma_{rank(A)+1}^2 = -inf`. `singularBoundaryGap_of_rank_le` makes the difference concrete: when the block ends at or past `rank(A)` the correct lower boundary gap is `sigma_s^2 - 0`, a finite positive number the caller must supply, where the printed convention offered a vacuous one. The singular-value statements use the same `r`, `s`, `r + d = s + 1` variables.  **Printed shape closed 2026-08-29.** Until then the only statements carrying this row concluded that SOME pair of orthonormal frames spanning the two blocks achieves the bound. That is the basis-free content and it proves the numerical claim, but the paper rotates V-hat by an orthogonal O-hat and compares against THE SUPPLIED V. This is the same defect found and closed for Theorem 2 on 2026-08-13, when the alignedBasis statements were superseded by alignedFrame; the correction had never been propagated to Theorem 3, and no declaration for singular blocks produced an element of the orthogonal group. `yuWangSamworth_rightSingularAlignedFrame_block_le` and its left twin now conclude the printed shape. The alignment half was factored out first as `exists_unitary_sqrt_sum_sq_norm_frameComp_sub_le` and its real matrix form `exists_orthogonal_sqrt_sum_sq_norm_sub_le`, which take two orthonormal frames and ANY Frobenius sine bound, so no perturbation argument is repeated between the symmetric and rectangular cases. The row stays `compiled_corrected`: the rank-boundary defect is unaffected by this and remains the reason.",
+      "notes": "Factored through a single generic Gram transport result so that no perturbation argument is duplicated between the symmetric and rectangular cases; that transport result is `private`, which is the right call for an internal factoring step. The frame-generality and rank-boundary corrections recorded on `YWS-T3-right` apply here too.\n\n**Singular-value notation added 2026-08-13, and the row stays `compiled_corrected`.** `YuWangSamworth2015/YuWangSamworth2015/Rectangular/SingularBlock.lean` restates the theorem with consecutive singular indices `r, ..., s` and the squared boundary gap `Delta_sv <= min(sigma_{r-1}^2 - sigma_r^2, sigma_s^2 - sigma_{s+1}^2)`, so a reader can compare it to the printed statement term by term. The bridge is `sq_singularValues_eq_eigenvalues_rightGram`, and it is exactly where the correction lives: `LinearMap.singularValues` is zero past the rank by construction, so squared singular values and the sorted spectrum of `A*A` agree at EVERY ambient index, zeros included -- the corrected convention `sigma_{q+1}^2 = -inf` with `sigma_j = 0` for `j` past the rank, not the printed `sigma_{rank(A)+1}^2 = -inf`. `singularBoundaryGap_of_rank_le` makes the difference concrete: when the block ends at or past `rank(A)` the correct lower boundary gap is `sigma_s^2 - 0`, a finite positive number the caller must supply, where the printed convention offered a vacuous one. The singular-value statements use the same `r`, `s`, `r + d = s + 1` variables.  **Printed shape closed 2026-08-29.** Until then the only statements carrying this row concluded that SOME pair of orthonormal frames spanning the two blocks achieves the bound. That is the basis-free content and it proves the numerical claim, but the paper rotates V-hat by an orthogonal O-hat and compares against THE SUPPLIED V. This is the same defect found and closed for Theorem 2 on 2026-08-13, when the alignedBasis statements were superseded by alignedFrame; the correction had never been propagated to Theorem 3, and no declaration for singular blocks produced an element of the orthogonal group. `yuWangSamworth_rightSingularAlignedFrame_block_le` and its left twin now conclude the printed shape. The alignment half was factored out first as `exists_unitary_sqrt_sum_sq_norm_frameComp_sub_le` and its real matrix form `exists_orthogonal_sqrt_sum_sq_norm_sub_le`, which take two orthonormal frames and ANY Frobenius sine bound, so no perturbation argument is repeated between the symmetric and rectangular cases. The row stays `compiled_corrected`: the rank-boundary defect is unaffected by this and remains the reason.\n\n**Source-facing surface registered 2026-09-05.** `YuWangSamworth2015/YuWangSamworth2015/Rectangular/SourceTheorem3.lean` landed on 2026-08-29 and was invisible to this census, to `dev/policy/yu-wang-samworth-grounding.yaml`, and to the distilled source, while the standalone submission repository already cited it. That is the inverse of the rule that this repository is authoritative and the standalone is a mechanical extraction. The capstones are now the row's review witnesses. They carry the printed hypothesis: `IsRightSingularBlock` / `IsLeftSingularBlock` ask only that the frame be an orthonormal block of singular vectors at the consecutive indices, with no separation assumed among the singular values of `Ahat`, and `hrank : s < finrank (range A)` is the printed `1 <= r <= s <= rank(A)` in zero-based form. The superseded `CorrespondingRightSingularBlock` / `CorrespondingLeftSingularBlock` forms remain cited as supporting declarations and must not be used as the row's review surface: they pin both blocks to Mathlib's chosen Gram eigenbases, which assumes away the sample degeneracy the paper's contribution is about.\n\n**Quantifier order corrected on the review surface, 2026-09-05.** The row's review declarations were `yuWangSamworth_rightSingularAlignedBasis_le` and its left twin, whose conclusion produces BOTH frames (`exists u' v', ... span u' = span u ...`). The paper fixes `V` and rotates only `Vhat`: `||Vhat Ohat - V||_F <= ...`. The corrected forms have existed since 2026-08-29 and the row's own note said so, but the review surface still pointed at the superseded ones. It now points at `theorem3_rightAlignedFrame` and `theorem3_leftAlignedFrame`, which hold the supplied `V` fixed and exhibit `Ohat` in `O(d)`.",
       "next_action": "None.",
       "importance": "major",
       "semantic_review": {
@@ -1570,24 +1616,26 @@
           }
         ],
         "declarations": [
-          "YuWangSamworth2015.DavisKahanTheory.yuWangSamworth_rightSingularAlignedBasis_le",
-          "YuWangSamworth2015.DavisKahanTheory.yuWangSamworth_leftSingularAlignedBasis_le"
+          "YuWangSamworth2015.theorem3_rightAlignedFrame",
+          "YuWangSamworth2015.theorem3_leftAlignedFrame"
         ],
         "note": "Theorem 3 is grouped across its right, left, aligned-frame, and printed-rank-boundary rows; the rank-boundary row is a machine-checked refutation of the printed convention rather than a silent repair.",
         "statement_pins": [
           {
-            "declaration": "YuWangSamworth2015.DavisKahanTheory.yuWangSamworth_rightSingularAlignedBasis_le",
-            "type_expr_hash": "1666893734",
-            "type_text_sha256": "18de9226c582e1630ded550c55f56810724854ce536e924273d9986ca0943d24",
+            "declaration": "YuWangSamworth2015.theorem3_rightAlignedFrame",
+            "type_expr_hash": "3723825272",
+            "type_text_sha256": "4d9eea1c346c85f91d6f2af24dcdeb73b95f35a117c17ed4a442295d18ada0c2",
             "toolchain": "leanprover/lean4:v4.34.0-rc1",
-            "pinned_on": "2026-09-01"
+            "pinned_on": "2026-09-05",
+            "note": "Repinned 2026-09-05 onto the source-shaped witnesses: the SourceTheorem3 capstones for Theorem 3, the frame-fixing aligned forms, and the Theorem 1 operator-norm ancestor for equation (1)."
           },
           {
-            "declaration": "YuWangSamworth2015.DavisKahanTheory.yuWangSamworth_leftSingularAlignedBasis_le",
-            "type_expr_hash": "3295553349",
-            "type_text_sha256": "89b706ea2411e3c53dcfd9fbd0213bd5c9cb09a0ca79a02532c3c720c99e2b2d",
+            "declaration": "YuWangSamworth2015.theorem3_leftAlignedFrame",
+            "type_expr_hash": "3335481827",
+            "type_text_sha256": "33bca2ff455a245c4ec2295fea686d40be0abc35338ae7032484831142cef387",
             "toolchain": "leanprover/lean4:v4.34.0-rc1",
-            "pinned_on": "2026-09-01"
+            "pinned_on": "2026-09-05",
+            "note": "Repinned 2026-09-05 onto the source-shaped witnesses: the SourceTheorem3 capstones for Theorem 3, the frame-fixing aligned forms, and the Theorem 1 operator-norm ancestor for equation (1)."
           }
         ],
         "source_pins": [
@@ -1839,7 +1887,7 @@
       "gap_refs": [
         "preprint-numbering-aliases"
       ],
-      "notes": "Restated as a two-sided ideal estimate for the rectangular Frobenius norm rather than copied as a matrix-only helper, with bundled linear-isometry wrappers exposing the paper's orthonormal-column hypothesis directly. `sum_sq_norm_apply_orthonormal_le` (added 2026-08-13, in `ForTauCeti`) is the column-sum form the Theorem 2 proof actually consumes: `sum_i ||M w_i||^2 <= ||M||_F^2` for an orthonormal family `w`. The published article numbers this Lemma A1; the preprint numbers it Lemma 5, which is what the Lean names predate.",
+      "notes": "Restated as a two-sided ideal estimate for the rectangular Frobenius norm rather than copied as a matrix-only helper, with bundled linear-isometry wrappers exposing the paper's orthonormal-column hypothesis directly. `YuWangSamworth2015.sum_sq_norm_apply_orthonormal_le` (added 2026-08-13, in `YuWangSamworth2015/YuWangSamworth2015/Core/Residual.lean`, not in `ForTauCeti` as this note said until 2026-09-05) is the column-sum form the Theorem 2 proof actually consumes: `sum_i ||M w_i||^2 <= ||M||_F^2` for an orthonormal family `w`. The published article numbers this Lemma A1; the preprint numbers it Lemma 5, which is what the Lean names predate.",
       "next_action": "None.",
       "importance": "technical"
     },
@@ -1869,5 +1917,6 @@
     "major": "Important named theorem or major consequence, included when requesting a broader review than the default headline surface.",
     "supporting": "Mathematically substantive supporting result, example, corollary, or structural statement, normally omitted from the concise external packet.",
     "technical": "Definition, proof ingredient, numerical working, appendix machinery, or other source item retained for full-paper completeness rather than the concise semantic-alignment packet."
-  }
+  },
+  "audit_revision": " Revised 2026-09-05 after an independent current-state review: the equation (1) witness was corrected (it cited a Theorem 2 index-block specialization), the Theorem 3 review surface was repointed at the source-shaped SourceTheorem3 capstones, the two frame-producing aligned forms were replaced by the frame-fixing ones, the literal-index-wrapper obstruction was restated correctly, and three stale declaration locations were fixed."
 }

@@ -39,7 +39,10 @@ theorem yuWangSamworth_theorem1_uiNorm_le
   simpa only [mul_comm] using
     sinTheta_perturbation_le N hA hB hU hV hδ hgap
 
-/-- The Frobenius statement displayed as equation (1) in the paper. -/
+/-- The printed Theorem 1 conclusion, in Frobenius norm.
+
+Not equation (1): that display is the `r = s = j` single-eigenvector operator-norm
+specialization of this theorem, and no declaration writes it literally. -/
 theorem yuWangSamworth_theorem1_frobenius_le
     {A B : E →ₗ[𝕜] E} (hA : A.IsSymmetric) (hB : B.IsSymmetric)
     {U V : Submodule 𝕜 E} [U.HasOrthogonalProjection]

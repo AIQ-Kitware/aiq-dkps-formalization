@@ -25,9 +25,11 @@ built with warnings treated as errors.
 
 ## Intentionally deferred
 
-* Literal contiguous-index `r..s` wrappers remain optional source-fidelity
-  work; the intrinsic corresponding-block predicates are the cleaner theorem
-  foundation.
+* Equation (1) has no literal `r = s = j` wrapper.  Every other contiguous-index
+  `r..s` wrapper landed between 2026-08-13 and 2026-08-29, and the
+  corresponding-block predicates they replaced are no longer the foundation: they
+  pin both blocks to Mathlib's chosen eigenbases, which is narrower than the
+  printed hypothesis.  The frame predicates carry the printed hypothesis.
 * Reusable lemmas have not yet been migrated out of the paper package.
 * The public theorem names have not been shortened before production
   integration, avoiding premature compatibility aliases.

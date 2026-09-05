@@ -52,10 +52,24 @@ a contiguous block `r..s` with the two-sided boundary gap
   `YuWangSamworth2015.yuWangSamworth_alignedFrame_block_le_residual` for the sharper
   residual numerators the paper says its proof establishes,
   `‖V̂Λ − ΣV̂‖_F` in place of the perturbation norm;
-* `yuWangSamworth_corollary1_sinTheta_le` and
-  `yuWangSamworth_corollary1_real_le` for Corollary 1;
-* `yuWangSamworth_rightSingularSubspace_block_le` and its three siblings for
-  Theorem 3, in singular-value notation with the corrected boundary convention.
+* `YuWangSamworth2015.corollary1_sinTheta` and
+  `YuWangSamworth2015.corollary1_alignedVector` are the canonical paper-facing
+  Corollary 1 declarations; the printed second display, which omits the unit
+  normalization, is refuted by
+  `corollary1_printed_unnormalized_counterexample`.  The `RCLike` forms
+  `yuWangSamworth_corollary1_sinTheta_le` and `yuWangSamworth_corollary1_real_le`
+  remain beneath them;
+* `YuWangSamworth2015.theorem3_rightSinTheta`,
+  `YuWangSamworth2015.theorem3_leftSinTheta`,
+  `YuWangSamworth2015.theorem3_rightAlignedFrame` and
+  `YuWangSamworth2015.theorem3_leftAlignedFrame` are the canonical paper-facing
+  Theorem 3 declarations.  They take arbitrary orthonormal singular blocks at the
+  printed indices — `IsRightSingularBlock`, `IsLeftSingularBlock` — with no
+  separation assumed among the singular values of `Â`, the printed rank condition
+  `1 ≤ r ≤ s ≤ rank(A)` written zero-based as `s < finrank (range A)`, and the
+  exact source gap `SourceSingularGap` under the corrected boundary convention.
+  `yuWangSamworth_rightSingularSubspace_block_le` and its three siblings remain
+  the implementation-oriented singular-value forms beneath them.
 
 The surface also includes direct rank-one singular-vector corollaries, the
 rank-one algebraic identity recorded as equation (4), all three Section 2
