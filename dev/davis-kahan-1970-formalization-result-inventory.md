@@ -6,8 +6,8 @@ The denominator contains exactly the four Section 2 headline theorems and every 
 
 - Counted results: **29**
 - Result-boundary reviews accepted: **29/29**
-- Currently hostile-certified terminal: **27**
-- Awaiting closure: **2**
+- Currently hostile-certified terminal: **28**
+- Awaiting closure: **1**
 - Printed statements that are NOT locally self-contained: **5**
 - Result-only semantic sweep: `dev/davis-kahan-1970-result-semantic-review-2026-08-12.md`
 - Compiler-checkable theorem surface: `DavisKahan/Sources/DavisKahan1970/Audits/ResultSemanticSurface.lean`
@@ -27,7 +27,7 @@ Each result below explicitly partitions its primary source block into atoms insi
 | `S2-sin-two-theta` | unnumbered_theorem | `locally_exact` | yes | `proved_exact` | `proved_in_build` | `accepted` | `accepted` |
 | `S2-tan-two-theta` | unnumbered_theorem | `locally_exact` | yes | `proved_exact` | `proved_in_build` | `accepted` | `accepted` |
 | `DK-3.1-prop` | proposition | `locally_exact` | yes | `proved_exact` | `proved_in_build` | `accepted` | `accepted` |
-| `DK-3.2-prop` | proposition | `locally_exact` | yes | `proved_exact` | `proved_in_build` | `hostile_review_blocked` | `accepted` |
+| `DK-3.2-prop` | proposition | `locally_exact` | yes | `proved_exact` | `proved_in_build` | `accepted` | `accepted` |
 | `DK-3.3-prop` | proposition | `locally_exact` | yes | `proved_exact` | `proved_in_build` | `accepted` | `accepted` |
 | `DK-3.4-prop` | proposition | `locally_exact` | yes | `proved_exact` | `proved_in_build` | `accepted` | `accepted` |
 | `DK-3.1-thm` | theorem | `locally_exact` | yes | `proved_exact` | `proved_in_build` | `hostile_review_blocked` | `accepted` |
@@ -108,7 +108,7 @@ The accepted reading is hash-pinned to the distributable specification, the sour
 
 ## Current closure queue
 
-Two results are open, reopened 2026-09-04 by a hostile review of the Section 2
+One result is open, reopened 2026-09-04 by a hostile review of the Section 2
 and Theorem 8.2 ordered-angle repairs. Each is a source-hypothesis mismatch, not
 a doubt about the mathematics, and each has an entry in
 `open_hostile_review_obligations` naming the repair it needs.
@@ -119,16 +119,15 @@ a doubt about the mathematics, and each has an entry in
   now constructs it from the multiplicity hypothesis, but that hypothesis is
   agreement everywhere and the printed one permits disagreement at the spectral
   point `0`, so the clause is open.
-- `DK-3.2-prop` — the source's (3.5) is equality of the crossed defects' Hilbert
-  dimensions; Lean uses existence of a linear isometric equivalence. Only the
-  finite-dimensional half is proved. Every later row whose exact correspondence
-  rests on (3.5), including `DK-8.2-thm`, inherits this.
-
 This section lists exactly the results the machine state reports as
 nonterminal; the checker rejects it when the two disagree, and rejects an
 emptiness claim while any row is open.
 
-Closed since the reopening: `S2-tan-theta`, on 2026-09-04.  Condition (3.5) is gone
+Closed since the reopening: `DK-3.2-prop`, on 2026-09-04 — the infinite-dimensional
+reading of (3.5) is now a theorem at the paper's separable scope
+(`crossedDefectsEquivalent_iff_sameDimension`) rather than a representation
+convention, so every later row resting on (3.5) inherits a theorem.  And
+`S2-tan-theta`, on 2026-09-04.  Condition (3.5) is gone
 from its canonical endpoints, replaced by `HasDefinedAmbientTangent` — the Section 1
 vacuity convention made explicit — from which (3.5) is derived.  One reservation is
 recorded on the closed obligation: vacuity is modelled in one direction only.

@@ -525,6 +525,15 @@ Status: **TERMINAL REFUTED + REPAIR**.
 #check @TauCeti.DavisKahan.FiniteDimensional.not_davisKahanProposition4_4_Finite
 #check @TauCeti.DavisKahan.crossedDefectsEquivalent_of_isAcute
 #check @TauCeti.DavisKahan.crossedDefectsEquivalent_iff_finrank_eq
+#check @TauCeti.DavisKahan.CrossedDefectsSameDimension
+#check @TauCeti.DavisKahan.crossedDefectsEquivalent_iff_sameDimension
+#check @TauCeti.nonempty_linearIsometryEquiv_of_separable_of_infiniteDimensional
+#check @TauCeti.nonempty_linearIsometryEquiv_of_countable_infinite_hilbertBasis
+#check @TauCeti.nonempty_linearIsometryEquiv_of_hilbertBasis
+#check @TauCeti.exists_countable_hilbertBasis
+#check @TauCeti.finiteDimensional_of_finite_hilbertBasis
+#check @TauCeti.lpIndexCongr
+#check @TauCeti.countable_of_orthonormal
 #check @TauCeti.DavisKahan1970.approximationNumber_reflectionTangentCorner
 #check @TauCeti.DavisKahan1970.reflectionTangentCorner_reflection_eq_tanTwoBlockCompression
 #check @TauCeti.DavisKahan1970.tanTwoDirectedCornerC_sameApproximationSingularSequence_reflectionTangentCorner

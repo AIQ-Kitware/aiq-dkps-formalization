@@ -4,7 +4,7 @@
 
 **Census family:** `source-completion-census`  
 **Items:** 50  
-**Unique cited Lean declarations:** 1230
+**Unique cited Lean declarations:** 1239
 
 ## How to use this census
 
@@ -1859,6 +1859,15 @@ One presentational caveat, unchanged from the complex form and already recorded:
 - `TauCeti.DavisKahan1970.remark3_2_bilateralShift_separates_dimensionHypotheses_real`
 - `TauCeti.DavisKahan.directedGap_asymmetric_coordinateHalfSpace`
 - `TauCeti.DavisKahan.coordinateHalfSpace_le_coordinateHalfSpace`
+- `TauCeti.DavisKahan.CrossedDefectsSameDimension`
+- `TauCeti.DavisKahan.crossedDefectsEquivalent_iff_sameDimension`
+- `TauCeti.nonempty_linearIsometryEquiv_of_separable_of_infiniteDimensional`
+- `TauCeti.nonempty_linearIsometryEquiv_of_countable_infinite_hilbertBasis`
+- `TauCeti.nonempty_linearIsometryEquiv_of_hilbertBasis`
+- `TauCeti.exists_countable_hilbertBasis`
+- `TauCeti.finiteDimensional_of_finite_hilbertBasis`
+- `TauCeti.lpIndexCongr`
+- `TauCeti.countable_of_orthonormal`
 
 **Notes.** No exact general Hilbert-space declaration was found.
 

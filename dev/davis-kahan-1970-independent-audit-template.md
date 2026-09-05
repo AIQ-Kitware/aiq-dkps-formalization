@@ -19,7 +19,7 @@ Each counted result carries a **source-alignment classification**, and the three
 
 Category 2 is never a softened category 3. If a reviewer concludes that a category 2 result is actually false as printed, that is a FAIL and the repository is asking to be told.
 
-Current result-level status: **27/29 terminal**, **2 awaiting semantic closure**.
+Current result-level status: **28/29 terminal**, **1 awaiting semantic closure**.
 Result-selection/boundary review: **accepted** under policy `dk_established_results_only`.
 
 A hostile reviewer should challenge both layers independently: (1) whether the fidelity inventory omitted source material or misclassified an exclusion, and (2) whether each of the 29 counted result statements is represented exactly in Lean.
@@ -2138,7 +2138,7 @@ Compiler-printed type: *inserted when a compiler certificate is supplied.*
 - **Exact source anchor:** Proposition 3.2
 - **Result disposition:** `proved_exact`
 - **Compiler verification:** `proved_in_build`
-- **Hostile semantic certification:** `hostile_review_blocked`
+- **Hostile semantic certification:** `accepted`
 - **Boundary review:** `accepted`
 - **Source alignment:** `locally_exact`
 - **Printed statement locally self-contained:** `True`
@@ -2202,12 +2202,21 @@ The declarations that carry this result's printed statement, with the source ato
 - `TauCeti.DavisKahan1970.proposition3_2_exists_iff_crossedDefectsEquivalent_real` — specialization
 - `TauCeti.DavisKahan1970.proposition3_2_not_unique_real` — specialization
 - `TauCeti.DavisKahan.crossedDefectsEquivalent_iff_finrank_eq` — source_correspondence
+- `TauCeti.DavisKahan.CrossedDefectsSameDimension` — source_correspondence
+- `TauCeti.DavisKahan.crossedDefectsEquivalent_iff_sameDimension` — source_correspondence
+- `TauCeti.nonempty_linearIsometryEquiv_of_separable_of_infiniteDimensional` — source_correspondence
+- `TauCeti.nonempty_linearIsometryEquiv_of_countable_infinite_hilbertBasis` — source_correspondence
+- `TauCeti.nonempty_linearIsometryEquiv_of_hilbertBasis` — source_correspondence
+- `TauCeti.exists_countable_hilbertBasis` — source_correspondence
+- `TauCeti.finiteDimensional_of_finite_hilbertBasis` — source_correspondence
+- `TauCeti.lpIndexCongr` — source_correspondence
+- `TauCeti.countable_of_orthonormal` — source_correspondence
 
 ### Source-facing Lean declarations
 
 #### `TauCeti.DavisKahan.crossedDefectsEquivalent_iff_finrank_eq`
 
-Source location candidates: `DavisKahan/Geometry/Halmos/CrossedDefectGap.lean:184`
+Source location candidates: `DavisKahan/Geometry/Halmos/CrossedDefectGap.lean:185`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
@@ -2232,6 +2241,60 @@ Compiler-printed type: *inserted when a compiler certificate is supplied.*
 #### `TauCeti.DavisKahan1970.proposition3_2_not_unique_real`
 
 Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section3Proposition32.lean:290`
+
+Compiler-printed type: *inserted when a compiler certificate is supplied.*
+
+#### `TauCeti.DavisKahan.CrossedDefectsSameDimension`
+
+Source location candidates: `DavisKahan/Geometry/Halmos/CrossedDefectGap.lean:222`
+
+Compiler-printed type: *inserted when a compiler certificate is supplied.*
+
+#### `TauCeti.DavisKahan.crossedDefectsEquivalent_iff_sameDimension`
+
+Source location candidates: `DavisKahan/Geometry/Halmos/CrossedDefectGap.lean:238`
+
+Compiler-printed type: *inserted when a compiler certificate is supplied.*
+
+#### `TauCeti.nonempty_linearIsometryEquiv_of_separable_of_infiniteDimensional`
+
+Source location candidates: `ForTauCeti/Analysis/InnerProductSpace/SeparableOrthonormal.lean:180`
+
+Compiler-printed type: *inserted when a compiler certificate is supplied.*
+
+#### `TauCeti.nonempty_linearIsometryEquiv_of_countable_infinite_hilbertBasis`
+
+Source location candidates: `ForTauCeti/Analysis/InnerProductSpace/SeparableOrthonormal.lean:135`
+
+Compiler-printed type: *inserted when a compiler certificate is supplied.*
+
+#### `TauCeti.nonempty_linearIsometryEquiv_of_hilbertBasis`
+
+Source location candidates: `ForTauCeti/Analysis/InnerProductSpace/LpIndexCongr.lean:75`
+
+Compiler-printed type: *inserted when a compiler certificate is supplied.*
+
+#### `TauCeti.exists_countable_hilbertBasis`
+
+Source location candidates: `ForTauCeti/Analysis/InnerProductSpace/SeparableOrthonormal.lean:122`
+
+Compiler-printed type: *inserted when a compiler certificate is supplied.*
+
+#### `TauCeti.finiteDimensional_of_finite_hilbertBasis`
+
+Source location candidates: `ForTauCeti/Analysis/InnerProductSpace/SeparableOrthonormal.lean:166`
+
+Compiler-printed type: *inserted when a compiler certificate is supplied.*
+
+#### `TauCeti.lpIndexCongr`
+
+Source location candidates: `ForTauCeti/Analysis/InnerProductSpace/LpIndexCongr.lean:50`
+
+Compiler-printed type: *inserted when a compiler certificate is supplied.*
+
+#### `TauCeti.countable_of_orthonormal`
+
+Source location candidates: `ForTauCeti/Analysis/InnerProductSpace/SeparableOrthonormal.lean:95`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
@@ -4009,7 +4072,7 @@ The declarations that carry this result's printed statement, with the source ato
 
 #### `TauCeti.DavisKahan.crossedDefectsEquivalent_of_isAcute`
 
-Source location candidates: `DavisKahan/Geometry/Halmos/CrossedDefectGap.lean:147`
+Source location candidates: `DavisKahan/Geometry/Halmos/CrossedDefectGap.lean:148`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
@@ -6302,8 +6365,8 @@ Every source atom remains visible here even when it is outside the 29-result den
 
 - **All 275 source-fidelity atoms reviewed for omission/classification:** yes / no
 - **All 29 counted DK-established results reviewed against their exact printed boundaries:** yes / no
-- **27 currently terminal results independently reconfirmed:** yes / no
-- **2 currently nonterminal/pending results resolved by this audit:** yes / no
+- **28 currently terminal results independently reconfirmed:** yes / no
+- **1 currently nonterminal/pending results resolved by this audit:** yes / no
 - **Any excluded fidelity atom that actually belongs to a counted result statement:** yes / no
 - **Any Davis--Kahan-established named/headline result missing from the 29-result inventory:** yes / no
 - **Any non-established/open/deferred material incorrectly included in the denominator:** yes / no

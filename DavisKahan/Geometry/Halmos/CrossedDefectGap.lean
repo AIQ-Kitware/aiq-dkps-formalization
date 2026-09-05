@@ -6,6 +6,7 @@ Authors: Jon Crall, Claude Opus 5
 import DavisKahan.BoundedOperator.Compat
 import DavisKahan.Geometry.Halmos.GenericRotationPredicates
 import ForTauCeti.Analysis.InnerProductSpace.AngleGeometry
+import ForTauCeti.Analysis.InnerProductSpace.SeparableOrthonormal
 
 open TauCeti.DavisKahan.Sylvester
 
@@ -197,6 +198,73 @@ theorem crossedDefectsEquivalent_iff_finrank_eq
       (((stdOrthonormalBasis 𝕜 (halmosTargetDefect U V)).reindex
         (finCongr h.symm)).repr).symm
 
+
+/-! ## Condition (3.5) at the paper's separable scope
+
+`crossedDefectsEquivalent_iff_finrank_eq` settles the finite-dimensional case, and the
+repository has carried the infinite-dimensional reading as a representation convention: the
+source says the two crossed defect spaces have equal Hilbert dimension, and Lean asserts a
+linear isometric equivalence.
+
+Davis and Kahan work throughout on a *separable* Hilbert space, and at that scope the reading
+is a theorem rather than a convention.  Two infinite-dimensional separable Hilbert spaces are
+isometric outright (`TauCeti.nonempty_linearIsometryEquiv_of_separable_of_infiniteDimensional`),
+so "equal Hilbert dimension" for a separable pair means exactly: both finite-dimensional with
+equal `finrank`, or both infinite-dimensional. -/
+
+section Separable
+
+/-- **Equal Hilbert dimension for a separable pair, spelled without cardinals.**
+
+Both crossed defects finite-dimensional with the same `finrank`, or both
+infinite-dimensional.  On a separable space this is what "the two crossed defect spaces have
+equal Hilbert dimension" says. -/
+def CrossedDefectsSameDimension (U V : Submodule 𝕜 H)
+    [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] : Prop :=
+  (FiniteDimensional 𝕜 (halmosSourceDefect U V) ∧
+      FiniteDimensional 𝕜 (halmosTargetDefect U V) ∧
+      Module.finrank 𝕜 (halmosSourceDefect U V)
+        = Module.finrank 𝕜 (halmosTargetDefect U V)) ∨
+    (¬ FiniteDimensional 𝕜 (halmosSourceDefect U V) ∧
+      ¬ FiniteDimensional 𝕜 (halmosTargetDefect U V))
+
+/-- **Condition (3.5) is exactly equality of the crossed defects' Hilbert dimensions, on a
+separable space.**
+
+This closes the reading the repository had been carrying as a convention.  The forward
+direction splits on whether the source defect is finite-dimensional and transports that across
+the isometry; the converse is `crossedDefectsEquivalent_iff_finrank_eq` in the finite branch
+and the separable classification in the infinite one. -/
+theorem crossedDefectsEquivalent_iff_sameDimension [TopologicalSpace.SeparableSpace H]
+    (U V : Submodule 𝕜 H) [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] :
+    CrossedDefectsEquivalent U V ↔ CrossedDefectsSameDimension U V := by
+  classical
+  constructor
+  · rintro ⟨e⟩
+    by_cases hfin : FiniteDimensional 𝕜 (halmosSourceDefect U V)
+    · have hfin' : FiniteDimensional 𝕜 (halmosTargetDefect U V) :=
+        e.toLinearEquiv.finiteDimensional
+      exact Or.inl ⟨hfin, hfin', e.toLinearEquiv.finrank_eq⟩
+    · refine Or.inr ⟨hfin, fun hfin' => hfin ?_⟩
+      exact e.toLinearEquiv.symm.finiteDimensional
+  · rintro (⟨hfin, hfin', hrank⟩ | ⟨hinf, hinf'⟩)
+    · exact (crossedDefectsEquivalent_iff_finrank_eq U V).2 hrank
+    · have hUcl : IsClosed ((U : Submodule 𝕜 H) : Set H) :=
+        (Submodule.isComplete_coe_of_hasOrthogonalProjection U).isClosed
+      have hVcl : IsClosed ((V : Submodule 𝕜 H) : Set H) :=
+        (Submodule.isComplete_coe_of_hasOrthogonalProjection V).isClosed
+      have hs : IsClosed ((halmosSourceDefect U V : Submodule 𝕜 H) : Set H) := by
+        simpa [halmosSourceDefect] using
+          hUcl.inter (Submodule.isClosed_orthogonal V)
+      have ht : IsClosed ((halmosTargetDefect U V : Submodule 𝕜 H) : Set H) := by
+        simpa [halmosTargetDefect] using
+          (Submodule.isClosed_orthogonal U).inter hVcl
+      have _ : CompleteSpace (halmosSourceDefect U V) := hs.completeSpace_coe
+      have _ : CompleteSpace (halmosTargetDefect U V) := ht.completeSpace_coe
+      have _ : SecondCountableTopology H := UniformSpace.secondCountable_of_separable H
+      exact TauCeti.nonempty_linearIsometryEquiv_of_separable_of_infiniteDimensional hinf hinf'
+
+end Separable
 
 end DavisKahan
 end TauCeti
