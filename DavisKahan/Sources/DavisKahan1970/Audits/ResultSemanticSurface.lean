@@ -93,6 +93,32 @@ theorem theorem5_2_real_ordered_sourceAudit
         c hAc hBc)
       hEq hC
 
+
+/-! ## Source-exact Section 2 façades
+
+Each of these states its Section 2 clause at the PRINTED scope: separable ambient
+Hilbert space, and `NormalizedUnitaryInvariantNorm` -- the Lean type for the norm
+class Davis and Kahan quantify over in Section 1.  They are deliberately weaker
+than the arbitrary-Hilbert `SymmetricNormingFunction` theorems that prove them,
+which are registered separately as generalizations.  The discharge is the source's
+own Fan-dominance reduction at (1.11)-(1.13). -/
+
+#check @TauCeti.DavisKahan1970.sinTheta_unbounded_formGap_sourceExact_complex
+#check @TauCeti.DavisKahan1970.sinTheta_unbounded_formGap_sourceExact_real
+#check @TauCeti.DavisKahan1970.tanTheta_ambient_unboundedRitz_definedTangent_sourceExact_complex
+#check @TauCeti.DavisKahan1970.tanTheta_ambient_unboundedRitz_definedTangent_sourceExact_real
+#check @TauCeti.DavisKahan1970.tanTheta_directed_unboundedRitz_sourceExact_complex
+#check @TauCeti.DavisKahan1970.tanTheta_directed_unboundedRitz_sourceExact_real
+#check @TauCeti.DavisKahan1970.sinTwoTheta_directed_unboundedResidual_sourceExact_complex
+#check @TauCeti.DavisKahan1970.sinTwoTheta_directed_unboundedResidual_sourceExact_real
+#check @TauCeti.DavisKahan1970.sinTwoTheta_ambient_unbounded_perturbedGap_sourceExact_complex
+#check @TauCeti.DavisKahan1970.sinTwoTheta_ambient_unbounded_perturbedGap_sourceExact_real
+#check @TauCeti.DavisKahan1970.tanTwoTheta_directed_unboundedResidual_sourceExact_complex
+#check @TauCeti.DavisKahan1970.tanTwoTheta_ambient_unbounded_sourceExact_complex
+#check @TauCeti.DavisKahan1970.tanTwoTheta_ambient_unbounded_sourceExact_real
+#check @TauCeti.DavisKahan1970.normalizedUnitaryInvariant_of_symmetricNorming
+#check @TauCeti.DavisKahan1970.normalizedUnitaryInvariant_of_symmetricNorming_mul
+#check @TauCeti.DavisKahan.ExactSinTheta.NormalizedUnitaryInvariantNorm
 end TauCeti.DavisKahan1970.Audits
 
 /-! ## The source's norm class: the two Lean quantifiers are equivalent

@@ -106,8 +106,20 @@ IMPLEMENTATION_STRUCTURE_CLASSES = {
     "IsScalarTower ℝ",
     "StarOrderedRing",
 }
-# Counted results whose canonical witness has reached the paper's own scalar
-# scope, mapped to the public `SectionTwo` short name that must alias it.
+# Counted results that have a scalar-generic `RCLike` witness, mapped to the
+# public `SectionTwo` short name that must alias it.
+#
+# **The verdict here was reversed on 2026-09-05 by GOAL.md section 4.3, and the
+# tripwire was kept.**  The paper's scalar fields are `ℝ` and `ℂ`, so canonical
+# source evidence is now the pair of fixed-field façades, and the generic theorem
+# is a stronger scalar-generic variant registered beside them.  What this table
+# still enforces -- unchanged -- is that the generic witness has not quietly
+# disappeared: it must be registered as supporting evidence on the row, and the
+# public short name must be `#check`ed by the audit surface.  Removing a row is
+# still a claim that the generic witness is gone, and needs the same review as
+# any other evidence change.
+#
+# The history below is why the tripwire exists at all and is kept verbatim.
 #
 # Davis and Kahan state Section 2 for a real *or* complex separable Hilbert
 # space.  A result whose canonical evidence is a pair of fixed-field theorems is
@@ -794,11 +806,31 @@ def _validate_source_clauses(
                         continue
                     missing = [t for t in requirement.get("must_contain", []) if t not in printed]
                     forbidden = [t for t in requirement.get("must_not_contain", []) if t in printed]
-                    if missing or forbidden:
+                    # `must_contain_any` is a DISJUNCTION, for a scope an endpoint may
+                    # realize through more than one modelling of the same source notion.
+                    # The arbitrary-unitarily-invariant-norm scope is the case that forced
+                    # it: `SymmetricNormingFunction` and `NormalizedUnitaryInvariantNorm`
+                    # are two models of Section 1's norm class, the second being the
+                    # literal one, and an endpoint quantifying over either realizes the
+                    # printed scope.  It is deliberately separate from `must_contain`,
+                    # which stays conjunctive, so a disjunction can never be written by
+                    # accident.
+                    alternatives = requirement.get("must_contain_any")
+                    unmet_any = (
+                        isinstance(alternatives, list)
+                        and alternatives
+                        and not any(t in printed for t in alternatives)
+                    )
+                    if missing or forbidden or unmet_any:
                         fail(
                             f"{where}: the clause's primary {primary} does not establish its conclusion at "
                             f"the scope of {atom_id}: "
                             + (f"its printed type lacks {missing!r}; " if missing else "")
+                            + (
+                                f"its printed type contains none of {alternatives!r}; "
+                                if unmet_any
+                                else ""
+                            )
                             + (f"its printed type contains the disqualifying {forbidden!r}; " if forbidden else "")
                             + "a sibling declaration may not donate this scope"
                         )
@@ -2218,6 +2250,22 @@ def _validate_ambient_scope_policy(
         for entry in sep.get("load_bearing_witnesses", []) or []
         if isinstance(entry, dict)
     }
+    # GOAL.md section I reversed the project policy: a source-exact facade MUST
+    # carry the source-wide separability assumption, because the paper works on a
+    # separable Hilbert space and canonical evidence must state the paper theorem
+    # at the paper's actual scope.  Carrying separability is therefore no longer a
+    # defect needing an exception.
+    #
+    # The discipline the old rule enforced is kept, and only its verdict changes:
+    # every separable canonical witness must still be CLASSIFIED, as either
+    # mathematically load-bearing or a source-scope facade.  What is refused is an
+    # unclassified one, so a separability hypothesis can never appear silently.
+    source_scope_facades = {
+        entry.get("declaration")
+        for entry in sep.get("source_scope_facades", []) or []
+        if isinstance(entry, dict)
+    }
+    classified = load_bearing | source_scope_facades
     for item in items:
         result_id = item["id"]
         assumed = []
@@ -2247,13 +2295,16 @@ def _validate_ambient_scope_policy(
                 for entry in item.get("canonical_evidence", []) or []
                 if SEPARABLE_SPACE_TOKEN in (probed_types.get(entry.get("declaration")) or "")
             ]
-            unexplained = sorted(set(named) - load_bearing)
+            unexplained = sorted(set(named) - classified)
             if unexplained:
                 fail(
-                    f"{result_id}: canonical evidence {unexplained!r} assumes separability, which "
-                    "the source fixes only as an ambient convention.  Either drop the hypothesis "
-                    "or record in ambient_scope_policy.separability.load_bearing_witnesses why "
-                    "the source's own statement needs it"
+                    f"{result_id}: canonical evidence {unexplained!r} carries separability but is "
+                    "not classified.  Record it in "
+                    "ambient_scope_policy.separability.load_bearing_witnesses when the "
+                    "mathematics needs it, or in "
+                    "ambient_scope_policy.separability.source_scope_facades when it carries the "
+                    "hypothesis only because the paper's ambient scope does.  A separability "
+                    "hypothesis must never appear on canonical evidence unclassified"
                 )
 
 
@@ -2399,13 +2450,12 @@ def _validate_canonical_evidence(
                         f"compiler-printed type carries {derived_caps!r}"
                     )
             if result_id in SCALAR_GENERIC_CANONICAL_RESULTS:
-                if scope != "rclike":
+                if scope not in {"rclike", "complex", "real"}:
                     fail(
                         f"{result_id}: canonical evidence {declaration} has scalar_scope "
-                        f"{scope!r}, but this result has a witness generic in `RCLike 𝕜` "
-                        "and the paper states it for a real or complex Hilbert space; the "
-                        "generic theorem is the canonical evidence, and the fixed-field "
-                        "statements are supporting"
+                        f"{scope!r}; the paper states this result over a real or complex "
+                        "Hilbert space, so canonical evidence must be fixed at one of those "
+                        "fields or generic over both"
                     )
                 if recorded_caps:
                     fail(
