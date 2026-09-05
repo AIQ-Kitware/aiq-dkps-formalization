@@ -6,6 +6,7 @@ Authors: Jon Crall, OpenAI GPT-5.6 Sol
 import DavisKahan.Sources.DavisKahan1970.SineThetaSourceInventory
 import DavisKahan.SinTheta.Canonical
 import DavisKahan.SinTheta.Real.Canonical
+import DavisKahan.Sources.DavisKahan1970.SymmetricNormingFanDominance
 
 open TauCeti.DavisKahan.Sylvester
 
@@ -445,6 +446,46 @@ theorem sinTheta_unbounded_intervalExterior_symmetricNorming_complex
   sinTheta_unbounded_formGap_symmetricNorming_complex N A A₀ Λ₁ E₀ F₀ F₁ R hA hA₀ hΛ₁ htrial hexact hδ
     (FormBoundedSylvesterGap.intervalExterior hβα hspectral) hR
 
+/-! ### The source-exact façade
+
+Davis and Kahan work on a separable Hilbert space and quantify over normalized
+unitarily invariant norms.  The theorem above is proved at strictly greater
+generality: any Hilbert space, and any symmetric norming function.  The façade
+below is the printed statement, and it is the canonical source evidence.
+
+It is deliberately weaker than the theorem that proves it.  That is the point:
+a reader comparing it with the paper should find the paper's own scope, and the
+generalizations are registered separately rather than substituted for it.
+
+Only the *ambient* space carries separability, because that is all the source
+assumes; nothing here asks the caller for separability of a coordinate space. -/
+
+/-- **Davis--Kahan 1970, the sine-theta theorem, at the printed source scope over
+`ℂ`.**
+
+Separable ambient Hilbert space, normalized unitarily invariant norm, unbounded
+self-adjoint ambient operator, the full form-bounded gap:
+
+`δ · N(sin Θ₀) ≤ N(R)`, with `sin Θ₀ = (1 − F₀F₀*) E₀`, together with
+membership of `sin Θ₀` in the norm's ideal. -/
+theorem sinTheta_unbounded_formGap_sourceExact_complex
+    [TopologicalSpace.SeparableSpace E]
+    (N : NormalizedUnitaryInvariantNorm.{0, v} ℂ)
+    (A : E →ₗ.[ℂ] E) (A₀ : F →ₗ.[ℂ] F) (Λ₁ : G →ₗ.[ℂ] G)
+    (E₀ : F →L[ℂ] E) (F₀ : H →L[ℂ] E) (F₁ : G →L[ℂ] E) (R : F →L[ℂ] E)
+    (hA : IsSelfAdjoint A) (hA₀ : IsSelfAdjoint A₀) (hΛ₁ : IsSelfAdjoint Λ₁)
+    (htrial : IsTrialResidual A A₀ E₀ R)
+    (hexact : IsExactSpectralDecomposition A Λ₁ F₀ F₁)
+    {δ : ℝ} (hδ : 0 < δ)
+    (hgap : FormBoundedSylvesterGap A₀ Λ₁ δ)
+    (hR : N.Mem R) :
+    N.Mem ((ContinuousLinearMap.id ℂ E - F₀ ∘L F₀.adjoint) ∘L E₀) ∧
+      δ * N.gauge ((ContinuousLinearMap.id ℂ E - F₀ ∘L F₀.adjoint) ∘L E₀) ≤
+        N.gauge R :=
+  normalizedUnitaryInvariant_of_symmetricNorming N hδ hR fun M hM =>
+    sinTheta_unbounded_formGap_symmetricNorming_complex M A A₀ Λ₁ E₀ F₀ F₁ R
+      hA hA₀ hΛ₁ htrial hexact hδ hgap hM
+
 end FixedField
 
 section FixedFieldReal
@@ -555,6 +596,30 @@ theorem sinTheta_unbounded_formGap_symmetricNorming_real_ofRCLike
         N.gauge R :=
   sinTheta_unbounded_formGap_symmetricNorming_rclike N A A₀ Λ₁ E₀ F₀ F₁ R
     hA hA₀ hΛ₁ htrial hexact hδ hgap hR
+
+/-- **Davis--Kahan 1970, the sine-theta theorem, at the printed source scope over
+`ℝ`.**
+
+The real sibling of `sinTheta_unbounded_formGap_sourceExact_complex`; see its
+docstring for why the façade is deliberately weaker than the theorem that proves
+it. -/
+theorem sinTheta_unbounded_formGap_sourceExact_real
+    [TopologicalSpace.SeparableSpace E]
+    (N : NormalizedUnitaryInvariantNorm.{0, v} ℝ)
+    (A : E →ₗ.[ℝ] E) (A₀ : F →ₗ.[ℝ] F) (Λ₁ : G →ₗ.[ℝ] G)
+    (E₀ : F →L[ℝ] E) (F₀ : H →L[ℝ] E) (F₁ : G →L[ℝ] E) (R : F →L[ℝ] E)
+    (hA : IsSelfAdjoint A) (hA₀ : IsSelfAdjoint A₀) (hΛ₁ : IsSelfAdjoint Λ₁)
+    (htrial : IsTrialResidual A A₀ E₀ R)
+    (hexact : IsExactSpectralDecomposition A Λ₁ F₀ F₁)
+    {δ : ℝ} (hδ : 0 < δ)
+    (hgap : FormBoundedSylvesterGap A₀ Λ₁ δ)
+    (hR : N.Mem R) :
+    N.Mem ((ContinuousLinearMap.id ℝ E - F₀ ∘L F₀.adjoint) ∘L E₀) ∧
+      δ * N.gauge ((ContinuousLinearMap.id ℝ E - F₀ ∘L F₀.adjoint) ∘L E₀) ≤
+        N.gauge R :=
+  normalizedUnitaryInvariant_of_symmetricNorming N hδ hR fun M hM =>
+    sinTheta_unbounded_formGap_symmetricNorming_real M A A₀ Λ₁ E₀ F₀ F₁ R
+      hA hA₀ hΛ₁ htrial hexact hδ hgap hM
 
 end FixedFieldReal
 

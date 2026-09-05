@@ -9,6 +9,7 @@ import DavisKahan.Sources.DavisKahan1970.Section5
 import DavisKahan.Sources.DavisKahan1970.SineTheta.Norms.UnitaryInvariantNormLaws
 import DavisKahan.Sylvester.ScalarTransport
 import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.ScalarTransport
+import DavisKahan.OperatorIdeal.NormalizedUnitaryInvariantNorm
 
 open TauCeti.DavisKahan.Angle
 
@@ -350,6 +351,57 @@ theorem theorem5_2_orderedGap_symmetricNorming_real
     (DavisKahan.Sylvester.FormBoundedSylvesterGap.leftAboveRightBelow c hAlow hBhigh) hsyl hR
 
 end Sylvester
+
+/-! ## The source's own norm class
+
+`NormalizedUnitaryInvariantNorm` is the Lean type for the object Davis--Kahan
+quantify over in Section 1.  The theorem below is the source's own reduction,
+formalized: an estimate established for every `SymmetricNormingFunction` holds
+for every normalized unitarily invariant norm.
+
+The route is exactly the one the paper announces at (1.11)-(1.13).  A source norm
+is Fan dominant by construction, so it is a `KyFanDominantIdealFamily`; and
+`kyFanDominant_of_symmetricNorming` transports an estimate across that class by
+instantiating at the Ky Fan gauges.  Nothing analytic is rebuilt here.
+
+This is what lets a source-facing façade quantify over the literal source class
+while its proof discharges through the existing machinery in one step. -/
+
+/-- **The Fan-dominance bridge into the source's norm class.**
+
+An estimate `d ‖X‖ ≤ ‖Y‖` proved for every symmetric norming function holds for
+every normalized unitarily invariant norm -- which is the class Davis--Kahan
+actually quantify over. -/
+theorem normalizedUnitaryInvariant_of_symmetricNorming
+    {𝕜 : Type u} [RCLike 𝕜]
+    {E F : Type v}
+    [NormedAddCommGroup E] [InnerProductSpace 𝕜 E] [CompleteSpace E]
+    [NormedAddCommGroup F] [InnerProductSpace 𝕜 F] [CompleteSpace F]
+    (N : NormalizedUnitaryInvariantNorm.{u, v} 𝕜) {X Y : E →L[𝕜] F} {d : ℝ}
+    (hd : 0 < d) (hY : N.Mem Y)
+    (h : ∀ M : SymmetricNormingFunction, M.Mem Y → M.Mem X ∧ d * M.gauge X ≤ M.gauge Y) :
+    N.Mem X ∧ d * N.gauge X ≤ N.gauge Y :=
+  kyFanDominant_of_symmetricNorming N.toKyFanDominantIdealFamily hd hY h
+
+/-- The converse direction, for completeness: an estimate proved for every
+normalized unitarily invariant norm says nothing weaker than one proved for every
+Fan-dominant family, provided the family is normalized.
+
+Stated as the projection it is, so a reader can see that the source class sits
+*inside* the Fan-dominant one and the façades are therefore genuinely weaker
+statements than the theorems that prove them -- which is the point of registering
+them separately. -/
+theorem normalizedUnitaryInvariant_toKyFanDominant
+    {𝕜 : Type u} [RCLike 𝕜]
+    {E F : Type v}
+    [NormedAddCommGroup E] [InnerProductSpace 𝕜 E] [CompleteSpace E]
+    [NormedAddCommGroup F] [InnerProductSpace 𝕜 F] [CompleteSpace F]
+    (N : NormalizedUnitaryInvariantNorm.{u, v} 𝕜) {X Y : E →L[𝕜] F} {d : ℝ}
+    (h : ∀ M : KyFanDominantIdealFamily.{u, v} 𝕜,
+      M.Mem Y → M.Mem X ∧ d * M.gauge X ≤ M.gauge Y)
+    (hY : N.Mem Y) :
+    N.Mem X ∧ d * N.gauge X ≤ N.gauge Y :=
+  h N.toKyFanDominantIdealFamily hY
 
 end
 
