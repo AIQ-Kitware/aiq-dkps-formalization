@@ -26,6 +26,19 @@ are not started.
 
 ## Done
 
+**§V — the regression invariants.** `Audits/HostileReviewRegressions.lean`
+restates each repair and proves it by the declaration, so a drift stops the module
+elaborating. It exists because statement pins follow *canonical* declarations: when
+the source-exact façades became canonical, eight repaired theorems dropped out of
+the pinned set and could have drifted back unnoticed. No new checker and no new
+data file.
+
+**§III.3 beyond Section 2 — done.** Corollary 4.1, Proposition 4.3, Theorem 5.2,
+Theorem 6.3 and Theorem 8.2's two retained double-angle bounds all have façades
+over both scalar fields. Theorem 6.3 reuses Section 2's directed-tangent façades;
+the Section 4 and Theorem 5.2 results were already proved from
+`KyFanDominantIdealFamily`, so a source norm reaches them by its own projection.
+
 **§III — the literal source norm class.** `NormalizedUnitaryInvariantNorm`
 (`DavisKahan/OperatorIdeal/NormalizedUnitaryInvariantNorm.lean`) is the Lean type
 for Section 1's object. It extends `KyFanDominantIdealFamily`, so the ideal domain
@@ -69,10 +82,11 @@ unchanged.
   five-step transport chain; a thin façade delegates. Loosening that check would
   defeat its purpose. Closing it means building the façade from the
   block-representative theorem with the transport composed inside.
-* **§III.3 beyond Section 2** — `DK-4.1-cor`, `DK-4.3-prop`, `DK-5.2-thm`,
-  `DK-6.3-thm`, `DK-8.1-thm`, `DK-8.2-thm` use the same UIN quantifier and have no
-  façades yet. §IV likewise beyond Section 2.
-* **§V, §XI, §XII, §XIII, §XV** not started.
+* **`DK-8.1-thm`** has no UIN-quantified clause to give a façade to: its parts (i)
+  and (ii) are compression and eigenvalue repulsion, and part (iii) is the
+  explicitly finite-dimensional symmetric-gauge statement. §IV separability for its
+  clauses is not done.
+* **§XI, §XII, §XIII, §XV** not started.
 * **§VI–§VIII (Section 8 unbounded)** not started. §VI needs the unbounded
   coercive inverse of §6.2; §VII is the resolvent/Riesz layer and remains the
   largest single piece in this plan.
