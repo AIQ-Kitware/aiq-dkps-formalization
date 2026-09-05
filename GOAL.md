@@ -561,13 +561,22 @@ argument runs — which is why nothing degenerates.
 
 ### 10.3.2 What to build
 
-One reusable theorem, at the bounded-operator layer:
+**The reusable theorem is done, 2026-09-05.**
+`TauCeti.ContinuousLinearMap.nonneg_of_lyapunov_nonneg` in
+`ForTauCeti/Analysis/InnerProductSpace/LyapunovPositivity.lean` is exactly
 
 ```text
 X self-adjoint, G ≥ 0 injective, X G + G X ≥ 0  ⟹  0 ≤ X
 ```
 
-then the Davis--Kahan consumer: `G = C⁻¹` from §6.2, the Lyapunov identity
+axiom-clean, with the two supporting theorems it needed:
+`spectrum_re_nonpos_of_dissipative` (a dissipative operator has spectrum in the
+closed left half-plane, by the contrapositive of `isUnit_of_coercive`) and
+`eq_zero_of_anticommutator_nonpos` (the classical invertible case). The
+compression to the spectral subspace `X ≤ -β` uses the existing
+`boundedPVM` half-line form bounds, so no new spectral machinery was built.
+
+What remains is the Davis--Kahan consumer: `G = C⁻¹` from §6.2, the Lyapunov identity
 `C W + W* C = 2B` multiplied by `G` on both sides, the conjugation by `W` that
 symmetrises it, and `W + W* = 2 − 4 (P_U − P_V)²` to land on
 `subspaceGap U V ≤ √2/2`, i.e. `maximalAngle U V ≤ π/4`.
