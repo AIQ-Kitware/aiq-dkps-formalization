@@ -2022,32 +2022,86 @@
       "expected_verification": "proved_in_build",
       "tex_marker": "DK-9.1-9.4",
       "review_declarations": [
+        "TauCeti.DavisKahan.FreeBeam.Model.beamSinTheta_lt_printed",
+        "TauCeti.DavisKahan.FreeBeam.Model.beamSinTheta_le",
         "TauCeti.DavisKahan1970.Section9.equation_9_1",
+        "TauCeti.DavisKahan1970.Section9.initial_residual_gram_from_affine_moments",
+        "TauCeti.DavisKahan1970.Section9.residualGram_eigenvalueHigh_charAt",
+        "TauCeti.DavisKahan.FreeBeam.Model.beamResidual_gram",
+        "TauCeti.DavisKahan.FreeBeam.Model.norm_beamPerturbation_comp_trialIncl_le",
+        "TauCeti.DavisKahan.FreeBeam.Model.beamSinTwoTheta_lt",
         "TauCeti.DavisKahan1970.Section9.equation_9_2",
+        "TauCeti.DavisKahan.FreeBeam.Model.beamSpecProjection_lowSet_eq_singleton",
+        "TauCeti.DavisKahan.FreeBeam.Model.beamSinThetaSum_lt_printed",
+        "TauCeti.DavisKahan.FreeBeam.Model.beamSinThetaSum_le",
         "TauCeti.DavisKahan1970.Section9.equation_9_3",
-        "TauCeti.DavisKahan1970.Section9.equation_9_4"
+        "TauCeti.DavisKahan.FreeBeam.Model.kyFanTwo_beamResidual_le",
+        "TauCeti.DavisKahan.FreeBeam.Model.beamKyFanTwo_gaugeReal_le",
+        "TauCeti.DavisKahan.FreeBeam.Model.approximationSingularValue_one_beamResidual_le",
+        "TauCeti.DavisKahan.FreeBeam.Model.beamResidualRankOne_rank_le",
+        "TauCeti.DavisKahan.FreeBeam.Model.beamResidual_sub_rankOne_apply",
+        "TauCeti.DavisKahan.FreeBeam.Model.norm_beamResidual_sub_rankOne_le",
+        "TauCeti.DavisKahan.FreeBeam.Model.beamResidual_orthogonal_norm_sq",
+        "TauCeti.DavisKahan.FreeBeam.Model.beamGram_orthogonal_direction",
+        "TauCeti.DavisKahan.FreeBeam.Model.beamSinTwoThetaSum_lt",
+        "TauCeti.DavisKahan1970.Section9.equation_9_4",
+        "TauCeti.DavisKahan.FreeBeam.Model.beamTrialVec_span_eq_top",
+        "TauCeti.DavisKahan.FreeBeam.Model.exists_beamTrialVec_repr"
       ],
       "audit_clauses": [
         {
-          "id": "DK-9.1-9.4.whole",
-          "description": "Audit the complete registered source passage as one semantic unit; split further if the independent reviewer finds separable mathematical clauses.",
+          "id": "DK-9.1-9.4.eq-9-1",
+          "description": "(9.1): with the gap 500, the operator-norm sin Theta theorem gives sin theta_1 < 0.001622 eps.  `beamSinTheta_lt_printed` is the unconditional beam statement in the printed numerals (811/500000 = 0.001622); `equation_9_1` is the arithmetic step from the residual's exact top singular value to that decimal.",
           "review_declarations": [
+            "TauCeti.DavisKahan.FreeBeam.Model.beamSinTheta_lt_printed",
+            "TauCeti.DavisKahan.FreeBeam.Model.beamSinTheta_le",
             "TauCeti.DavisKahan1970.Section9.equation_9_1",
+            "TauCeti.DavisKahan1970.Section9.initial_residual_gram_from_affine_moments",
+            "TauCeti.DavisKahan1970.Section9.residualGram_eigenvalueHigh_charAt",
+            "TauCeti.DavisKahan.FreeBeam.Model.beamResidual_gram",
+            "TauCeti.DavisKahan.FreeBeam.Model.norm_beamPerturbation_comp_trialIncl_le"
+          ]
+        },
+        {
+          "id": "DK-9.1-9.4.eq-9-2",
+          "description": "(9.2): the sin 2Theta theorem gives sin 2theta_1 < 0.004 eps.  `beamSinTwoTheta_lt` states exactly that -- 2/500 is 0.004 -- unconditionally.",
+          "review_declarations": [
+            "TauCeti.DavisKahan.FreeBeam.Model.beamSinTwoTheta_lt",
             "TauCeti.DavisKahan1970.Section9.equation_9_2",
+            "TauCeti.DavisKahan.FreeBeam.Model.beamSpecProjection_lowSet_eq_singleton"
+          ]
+        },
+        {
+          "id": "DK-9.1-9.4.eq-9-3",
+          "description": "(9.3): the two-term Ky Fan norm gives the simultaneous subspace estimate sin theta_1 + sin theta_2 < 0.00218 eps.  `beamSinThetaSum_lt_printed` is the unconditional form (109/50000 = 0.00218).",
+          "review_declarations": [
+            "TauCeti.DavisKahan.FreeBeam.Model.beamSinThetaSum_lt_printed",
+            "TauCeti.DavisKahan.FreeBeam.Model.beamSinThetaSum_le",
             "TauCeti.DavisKahan1970.Section9.equation_9_3",
-            "TauCeti.DavisKahan1970.Section9.equation_9_4"
+            "TauCeti.DavisKahan.FreeBeam.Model.kyFanTwo_beamResidual_le",
+            "TauCeti.DavisKahan.FreeBeam.Model.beamKyFanTwo_gaugeReal_le",
+            "TauCeti.DavisKahan.FreeBeam.Model.approximationSingularValue_one_beamResidual_le",
+            "TauCeti.DavisKahan.FreeBeam.Model.beamResidualRankOne_rank_le",
+            "TauCeti.DavisKahan.FreeBeam.Model.beamResidual_sub_rankOne_apply",
+            "TauCeti.DavisKahan.FreeBeam.Model.norm_beamResidual_sub_rankOne_le",
+            "TauCeti.DavisKahan.FreeBeam.Model.beamResidual_orthogonal_norm_sq",
+            "TauCeti.DavisKahan.FreeBeam.Model.beamGram_orthogonal_direction"
+          ]
+        },
+        {
+          "id": "DK-9.1-9.4.eq-9-4",
+          "description": "(9.4): sin 2theta_1 + sin 2theta_2 < 0.008 eps in the two-term Ky Fan norm.  `beamSinTwoThetaSum_lt` states exactly that -- 4/500 is 0.008 -- unconditionally.",
+          "review_declarations": [
+            "TauCeti.DavisKahan.FreeBeam.Model.beamSinTwoThetaSum_lt",
+            "TauCeti.DavisKahan1970.Section9.equation_9_4",
+            "TauCeti.DavisKahan.FreeBeam.Model.beamTrialVec_span_eq_top",
+            "TauCeti.DavisKahan.FreeBeam.Model.exists_beamTrialVec_repr"
           ]
         }
       ],
       "source_specification_sha256": "57ea978cfdbd641bfe2c257f686d449a42baa10cfba67fa9d593be8ca2ab9bf9",
-      "expected_completion_certification": "reopened_mapping",
-      "known_completion_holes": [
-        {
-          "kind": "audit_mapping",
-          "detail": "The primary mapped `equation_9_*` declarations are largely arithmetic wrappers conditional on analytic bounds. Genuine unconditional beam-model sine/sin(2 Theta) theorems exist elsewhere and should be the source evidence for the actual Section 9 conclusions."
-        }
-      ],
-      "audit_warning": "HOSTILE RE-AUDIT REOPENED: The primary mapped `equation_9_*` declarations are largely arithmetic wrappers conditional on analytic bounds. Genuine unconditional beam-model sine/sin(2 Theta) theorems exist elsewhere and should be the source evidence for the actual Section 9 conclusions.",
+      "expected_completion_certification": "accepted",
+      "known_completion_holes": [],
       "source_atom_ids": [
         "DK-9.1-9.4.sin-bound-comparison",
         "DK-9.1-9.4.kyfan-two-term-scope",
@@ -2068,32 +2122,98 @@
       "expected_verification": "proved_in_build",
       "tex_marker": "DK-9.5-9.7",
       "review_declarations": [
+        "TauCeti.DavisKahan1970.Section9.recentered_residual_gram_from_affine_moments",
+        "TauCeti.DavisKahan.FreeBeam.Model.beamResidual_inner_trial",
+        "TauCeti.DavisKahan.FreeBeam.Model.norm_beamRitzResidual_le",
+        "TauCeti.DavisKahan.FreeBeam.Model.norm_beamRitzResidual_sq_le",
+        "TauCeti.DavisKahan.FreeBeam.Model.beamRitzResidual_vecOne_add_vecTwo_eq_zero",
         "TauCeti.DavisKahan1970.Section9.equation_9_5_low",
         "TauCeti.DavisKahan1970.Section9.equation_9_5_high",
+        "TauCeti.DavisKahan.FreeBeam.Model.beamRitz_form_le",
+        "TauCeti.DavisKahan.FreeBeam.Model.beamPerturbed_specProjection_Ioo_eq_zero",
+        "TauCeti.DavisKahan.FreeBeam.Model.beamTanTheta_lt_printed",
+        "TauCeti.DavisKahan.FreeBeam.Model.beamTanThetaSum_lt_printed",
+        "TauCeti.DavisKahan.FreeBeam.Model.beamTanTheta_le",
+        "TauCeti.DavisKahan.FreeBeam.Model.beamTanThetaSum_le",
         "TauCeti.DavisKahan1970.Section9.equation_9_6",
-        "TauCeti.DavisKahan1970.Section9.equation_9_7"
+        "TauCeti.DavisKahan.FreeBeam.Model.beamTrialBlock_residual_rank_le",
+        "TauCeti.DavisKahan.FreeBeam.Model.approximationSingularValue_one_beamTrialBlock_residual_le",
+        "TauCeti.DavisKahan.FreeBeam.Model.kyFanTwo_beamTrialBlock_residual_le",
+        "TauCeti.DavisKahan.FreeBeam.Model.beamTrialBlock_residual_vecOne_add_vecTwo",
+        "TauCeti.DavisKahan.FreeBeam.Model.beamTrialBlock_residual_vecTwo",
+        "TauCeti.DavisKahan.FreeBeam.Model.beamTanTwoTheta_lt_printed",
+        "TauCeti.DavisKahan.FreeBeam.Model.beamTanTwoThetaSum_lt_printed",
+        "TauCeti.DavisKahan.FreeBeam.Model.beamTanTwoTheta_le",
+        "TauCeti.DavisKahan.FreeBeam.Model.beamTanTwoThetaSum_le",
+        "TauCeti.DavisKahan.FreeBeam.Model.beamTanTwoThetaSum",
+        "TauCeti.DavisKahan1970.Section9.equation_9_7",
+        "TauCeti.DavisKahan.FreeBeam.Model.beamComparison_reduces",
+        "TauCeti.DavisKahan.FreeBeam.Model.beamRitzOffDiagonal_isOddFor",
+        "TauCeti.DavisKahan.FreeBeam.Model.norm_beamRitzOffDiagonal_le",
+        "TauCeti.DavisKahan.FreeBeam.Model.beamComparison_form_le_of_mem_beamTrial",
+        "TauCeti.DavisKahan.FreeBeam.Model.beamComparison_form_ge_of_mem_orthogonal",
+        "TauCeti.DavisKahan.FreeBeam.Model.beamLowReflection_comm"
       ],
       "audit_clauses": [
         {
-          "id": "DK-9.5-9.7.whole",
-          "description": "Audit the complete registered source passage as one semantic unit; split further if the independent reviewer finds separable mathematical clauses.",
+          "id": "DK-9.5-9.7.ritz-data",
+          "description": "The Rayleigh--Ritz refinement itself: the Ritz matrix A_0 = E_0*(A+H)E_0, its residual R = (A+H)E_0 - E_0 A_0, the Gram identity R* R = (eps^2/30) [[1,-1],[-1,1]], and the resulting norms ||R||_1 = ||R||_2 = eps/sqrt 15.",
+          "review_declarations": [
+            "TauCeti.DavisKahan1970.Section9.recentered_residual_gram_from_affine_moments",
+            "TauCeti.DavisKahan.FreeBeam.Model.beamResidual_inner_trial",
+            "TauCeti.DavisKahan.FreeBeam.Model.norm_beamRitzResidual_le",
+            "TauCeti.DavisKahan.FreeBeam.Model.norm_beamRitzResidual_sq_le",
+            "TauCeti.DavisKahan.FreeBeam.Model.beamRitzResidual_vecOne_add_vecTwo_eq_zero"
+          ]
+        },
+        {
+          "id": "DK-9.5-9.7.eq-9-5",
+          "description": "(9.5): the Ritz eigenvalues are alpha_k = (eps/2)(1 + (-1)^k/sqrt 3), hence A_0 < 0.7887 eps and the tangent gap may be taken as 500 - 0.7887 eps.",
           "review_declarations": [
             "TauCeti.DavisKahan1970.Section9.equation_9_5_low",
             "TauCeti.DavisKahan1970.Section9.equation_9_5_high",
+            "TauCeti.DavisKahan.FreeBeam.Model.beamRitz_form_le",
+            "TauCeti.DavisKahan.FreeBeam.Model.beamPerturbed_specProjection_Ioo_eq_zero"
+          ]
+        },
+        {
+          "id": "DK-9.5-9.7.eq-9-6",
+          "description": "(9.6): the operator-norm tangent estimate tan theta_1 < 0.0005164 eps / (1 - 0.0015774 eps), and the source's second sentence, the same right-hand side for tan theta_1 + tan theta_2 in the two-term Ky Fan norm.  Both `_lt_printed` witnesses are unconditional in eps on the printed range.",
+          "review_declarations": [
+            "TauCeti.DavisKahan.FreeBeam.Model.beamTanTheta_lt_printed",
+            "TauCeti.DavisKahan.FreeBeam.Model.beamTanThetaSum_lt_printed",
+            "TauCeti.DavisKahan.FreeBeam.Model.beamTanTheta_le",
+            "TauCeti.DavisKahan.FreeBeam.Model.beamTanThetaSum_le",
             "TauCeti.DavisKahan1970.Section9.equation_9_6",
-            "TauCeti.DavisKahan1970.Section9.equation_9_7"
+            "TauCeti.DavisKahan.FreeBeam.Model.beamTrialBlock_residual_rank_le",
+            "TauCeti.DavisKahan.FreeBeam.Model.approximationSingularValue_one_beamTrialBlock_residual_le",
+            "TauCeti.DavisKahan.FreeBeam.Model.kyFanTwo_beamTrialBlock_residual_le",
+            "TauCeti.DavisKahan.FreeBeam.Model.beamTrialBlock_residual_vecOne_add_vecTwo",
+            "TauCeti.DavisKahan.FreeBeam.Model.beamTrialBlock_residual_vecTwo"
+          ]
+        },
+        {
+          "id": "DK-9.5-9.7.eq-9-7",
+          "description": "(9.7): replacing the complementary comparison block by A_1 = E_1*(A+H)E_1 > 500 gives tan 2theta_1 < 0.0010328 eps / (1 - 0.0015774 eps), again with the same right-hand side for the two-term Ky Fan sum.",
+          "review_declarations": [
+            "TauCeti.DavisKahan.FreeBeam.Model.beamTanTwoTheta_lt_printed",
+            "TauCeti.DavisKahan.FreeBeam.Model.beamTanTwoThetaSum_lt_printed",
+            "TauCeti.DavisKahan.FreeBeam.Model.beamTanTwoTheta_le",
+            "TauCeti.DavisKahan.FreeBeam.Model.beamTanTwoThetaSum_le",
+            "TauCeti.DavisKahan.FreeBeam.Model.beamTanTwoThetaSum",
+            "TauCeti.DavisKahan1970.Section9.equation_9_7",
+            "TauCeti.DavisKahan.FreeBeam.Model.beamComparison_reduces",
+            "TauCeti.DavisKahan.FreeBeam.Model.beamRitzOffDiagonal_isOddFor",
+            "TauCeti.DavisKahan.FreeBeam.Model.norm_beamRitzOffDiagonal_le",
+            "TauCeti.DavisKahan.FreeBeam.Model.beamComparison_form_le_of_mem_beamTrial",
+            "TauCeti.DavisKahan.FreeBeam.Model.beamComparison_form_ge_of_mem_orthogonal",
+            "TauCeti.DavisKahan.FreeBeam.Model.beamLowReflection_comm"
           ]
         }
       ],
       "source_specification_sha256": "dfcd77c495e43593fcd6cd52f5719eacdda94902526d1117ca61dba086500774",
-      "expected_completion_certification": "reopened_mapping",
-      "known_completion_holes": [
-        {
-          "kind": "audit_mapping",
-          "detail": "The current primary mapping emphasizes numerical wrappers rather than the genuine beam tangent/double-tangent theorems that discharge the analytic hypotheses. Rebind the row to the unconditional source-facing model results."
-        }
-      ],
-      "audit_warning": "HOSTILE RE-AUDIT REOPENED: The current primary mapping emphasizes numerical wrappers rather than the genuine beam tangent/double-tangent theorems that discharge the analytic hypotheses. Rebind the row to the unconditional source-facing model results.",
+      "expected_completion_certification": "accepted",
+      "known_completion_holes": [],
       "source_atom_ids": [
         "DK-9.5-9.7.rayleigh-ritz-matrix",
         "DK-9.5-9.7.refined-residual-gram",

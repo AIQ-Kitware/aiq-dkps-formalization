@@ -4,7 +4,7 @@
 
 **Census family:** `source-completion-census`  
 **Items:** 50  
-**Unique cited Lean declarations:** 1311
+**Unique cited Lean declarations:** 1313
 
 ## How to use this census
 
@@ -5045,7 +5045,7 @@ What was genuinely missing was a single place to read it. `real_freeBeam_eigenva
 
 ### `DK-9.1-9.4` — Initial sine and sine-double-angle bounds
 
-**importance:** `technical`  **section:** 9  **source:** Equations (9.1)–(9.4)  **kind:** numerical_claims  **status:** `compiled_exact`  **verification:** `proved_in_build`  **completion:** `reopened_mapping`
+**importance:** `technical`  **section:** 9  **source:** Equations (9.1)–(9.4)  **kind:** numerical_claims  **status:** `compiled_exact`  **verification:** `proved_in_build`  **completion:** `accepted`
 
 **Summary.** Compute R*R and derive the operator- and two-singular-value bounds for sin Theta and sin(2 Theta).
 
@@ -5074,6 +5074,8 @@ What was genuinely missing was a single place to read it. `real_freeBeam_eigenva
 - `TauCeti.DavisKahan.FreeBeam.Model.beamSinThetaSum_le`
 - `TauCeti.DavisKahan1970.Section9.equation_9_2`
 - `TauCeti.DavisKahan1970.Section9.equation_9_3`
+- `TauCeti.DavisKahan.FreeBeam.Model.beamSinTheta_lt_printed`
+- `TauCeti.DavisKahan.FreeBeam.Model.beamSinThetaSum_lt_printed`
 
 **Notes.** The residual Gram matrix, its two characteristic roots, exact radical bounds, and the printed rational relaxations are represented. The actual sine and double-angle theorem outputs are still bridge hypotheses pending integration with the maintained theorem APIs.
 
@@ -5165,17 +5167,13 @@ both resolve from `DavisKahan.All`; verified by elaboration 2026-08-09 and now l
 change: the beam-side derivations `beamSinTwoTheta_lt` and `beamSinThetaSum_le` were already on the row
 and the row's judgement was already correct.
 
-**Next action.** Hostile re-audit reopened this row. The primary mapped `equation_9_*` declarations are largely arithmetic wrappers conditional on analytic bounds. Genuine unconditional beam-model sine/sin(2 Theta) theorems exist elsewhere and should be the source evidence for the actual Section 9 conclusions.
+**MAPPING CLOSED 2026-09-05.** The hole read: the primary mapped `equation_9_*` declarations are largely arithmetic wrappers conditional on analytic bounds, and genuine unconditional beam-model theorems exist elsewhere and should be the source evidence.  Each equation now has its own clause led by the unconditional beam theorem, with the arithmetic wrapper cited as the step from the exact residual data to the printed decimal.  Two of the four unconditional forms did not exist and were added: `beamSinTheta_lt_printed` and `beamSinThetaSum_lt_printed`, composing the beam bound with the arithmetic step exactly as the tangent side already did.  (9.2) and (9.4) needed nothing: `beamSinTwoTheta_lt` and `beamSinTwoThetaSum_lt` already state `2 eps/500` and `4 eps/500`, which are the printed 0.004 and 0.008 exactly.
 
-**Blocked by:** `hostile-audit-atomization`
-
-**Completion holes:**
-
-- {'kind': 'audit_mapping', 'detail': 'The primary mapped `equation_9_*` declarations are largely arithmetic wrappers conditional on analytic bounds. Genuine unconditional beam-model sine/sin(2 Theta) theorems exist elsewhere and should be the source evidence for the actual Section 9 conclusions.'}
+**Next action.** None. Each of (9.1)--(9.4) has its own clause led by an unconditional beam theorem.
 
 ### `DK-9.5-9.7` — Rayleigh–Ritz tangent refinements
 
-**importance:** `technical`  **section:** 9  **source:** Equations (9.5)–(9.7)  **kind:** numerical_claims  **status:** `compiled_exact`  **verification:** `proved_in_build`  **completion:** `reopened_mapping`
+**importance:** `technical`  **section:** 9  **source:** Equations (9.5)–(9.7)  **kind:** numerical_claims  **status:** `compiled_exact`  **verification:** `proved_in_build`  **completion:** `accepted`
 
 **Summary.** Use the compressed trial operator and orthogonal residual to obtain sharper tan Theta and tan(2 Theta) bounds.  (9.5), both sentences of (9.6), and the bound-norm sentence of (9.7) are now unconditional theorems about the genuine perturbed beam, with no certificate record in any statement.  What is absent is the 2-norm sentence of (9.7) -- `tan 2theta_1 + tan 2theta_2` -- which needs the arbitrary-unitarily-invariant-ideal form of the unbounded residual tan(2 Theta) theorem; that endpoint is not proved anywhere in the repository (see DK-6-appendix).  The row is therefore a specialization, not conditional.
 
@@ -5355,13 +5353,9 @@ FOR THIS ROW: does not close, and it is now the CLOSEST of the three.  `mem_and_
 
 FOR THIS ROW: does not close.  Its 2-norm sentence of (9.7) needs the same arbitrary-UI-ideal unbounded residual endpoint, still conditional on attainment.
 
-**Next action.** Hostile re-audit reopened this row. The current primary mapping emphasizes numerical wrappers rather than the genuine beam tangent/double-tangent theorems that discharge the analytic hypotheses. Rebind the row to the unconditional source-facing model results.
+**MAPPING CLOSED 2026-09-05.** The hole read: the primary mapping emphasises numerical wrappers rather than the genuine beam tangent/double-tangent theorems that discharge the analytic hypotheses.  The row is now four clauses -- the Ritz data, (9.5), (9.6), (9.7) -- each led by the unconditional `beam*_lt_printed` witness, with the `equation_9_*` wrapper cited as the arithmetic step it is.  Nothing new had to be proved here: unlike the sine side, all four tangent printed forms already existed.
 
-**Blocked by:** `hostile-audit-atomization`
-
-**Completion holes:**
-
-- {'kind': 'audit_mapping', 'detail': 'The current primary mapping emphasizes numerical wrappers rather than the genuine beam tangent/double-tangent theorems that discharge the analytic hypotheses. Rebind the row to the unconditional source-facing model results.'}
+**Next action.** None. Each of (9.5)--(9.7) plus the Ritz data has its own clause.
 
 ### `DK-9.8` — Comparison with Weinberger bounds
 
