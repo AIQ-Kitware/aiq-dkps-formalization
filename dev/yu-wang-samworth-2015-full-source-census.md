@@ -4,7 +4,7 @@
 
 **Census family:** `source-census`  
 **Items:** 24  
-**Unique cited Lean declarations:** 197
+**Unique cited Lean declarations:** 201
 
 **Audit revision:**  Revised 2026-09-05 after an independent current-state review: the equation (1) witness was corrected (it cited a Theorem 2 index-block specialization), the Theorem 3 review surface was repointed at the source-shaped SourceTheorem3 capstones, the two frame-producing aligned forms were replaced by the frame-fixing ones, the literal-index-wrapper obstruction was restated correctly, and three stale declaration locations were fixed.
 
@@ -18,10 +18,9 @@ The `importance` field is an external-review priority. `headline` selects the pa
 
 | value | items |
 | --- | ---: |
-| `compiled_generalized` | 10 |
+| `compiled_generalized` | 11 |
 | `compiled_exact` | 6 |
 | `compiled_corrected` | 6 |
-| `compiled_specialization` | 1 |
 | `not_proof_debt` | 1 |
 
 ## Verification summary
@@ -92,7 +91,7 @@ The `importance` field is an external-review priority. `headline` selects the pa
 | YWS-T3-left | major | Theorem 3, left singular blocks | compiled_corrected | proved_in_build |  |
 | YWS-T3-aligned | major | Theorem 3, aligned-frame conclusion | compiled_corrected | proved_in_build |  |
 | YWS-T3-rankBoundary | major | Theorem 3, rank-boundary convention | compiled_corrected | proved_in_build |  |
-| YWS-T3-rankone | supporting | Theorem 3, rank-one singular-vector consequence | compiled_specialization | proved_in_build |  |
+| YWS-T3-rankone | supporting | Theorem 3, rank-one singular-vector consequence | compiled_generalized | proved_in_build |  |
 | YWS-A-gram-transport | technical | Appendix, equations (A7)-(A8) | compiled_exact | proved_in_build |  |
 | YWS-A-dilation-alternative | technical | Appendix, self-adjoint dilation route | not_proof_debt | proved_in_build |  |
 | YWS-LA1-inequality | technical | Lemma A1 | compiled_generalized | proved_in_build |  |
@@ -701,7 +700,7 @@ Strengthened 2026-08-13: the refutation now also concludes `||sin Theta||_F = 1`
 
 ### `YWS-T3-rankone` — Rank-one singular-vector corollaries (beyond the printed paper)
 
-**importance:** `supporting`  **section:** 4  **source:** Theorem 3, rank-one singular-vector consequence  **kind:** corollary  **status:** `compiled_specialization`  **verification:** `proved_in_build`
+**importance:** `supporting`  **section:** 4  **source:** Theorem 3, rank-one singular-vector consequence  **kind:** corollary  **status:** `compiled_generalized`  **verification:** `proved_in_build`
 
 **Summary.** Direct right and left single-singular-vector bounds, obtained by reusing the symmetric rank-one theorem on Gram operators.
 
@@ -711,14 +710,18 @@ Strengthened 2026-08-13: the refutation now also concludes `||sin Theta||_F = 1`
 - `YuWangSamworth2015.DavisKahanTheory.yuWangSamworth_leftSingularVector_le`
 - `YuWangSamworth2015.DavisKahanTheory.yuWangSamworth_rightSingularVector_opNormCoefficient_le`
 - `YuWangSamworth2015.DavisKahanTheory.yuWangSamworth_leftSingularVector_opNormCoefficient_le`
+- `YuWangSamworth2015.DavisKahanTheory.yuWangSamworth_rightSingularVector_frame_le`
+- `YuWangSamworth2015.DavisKahanTheory.yuWangSamworth_leftSingularVector_frame_le`
+- `YuWangSamworth2015.DavisKahanTheory.yuWangSamworth_rightSingularVector_frame_opNormCoefficient_le`
+- `YuWangSamworth2015.DavisKahanTheory.yuWangSamworth_leftSingularVector_frame_opNormCoefficient_le`
 
 **Notes.** The paper does not print these; the lane adds them because the rectangular rank-one case is what applications actually use. Recorded so that the census is not read as claiming they are source items.
 
-**Status corrected 2026-09-05 from `compiled_generalized` to `compiled_specialization`, and this is a real defect the row was hiding.** All four declarations take `CorrespondingRightSingularBlock` / `CorrespondingLeftSingularBlock` and route through `yuWangSamworth_eigenvector_le`. `Rectangular/Theorem4.lean`'s own header says those predicates are *narrower than the printed hypothesis* -- they pin both blocks to Mathlib's chosen Gram eigenbases, whereas the paper takes the singular frames to be arbitrary orthonormal ones with no sample separation -- and `Core/Statistics.lean` documents `yuWangSamworth_eigenvector_le` as narrower than Corollary 1. Row `YWS-C1-rankone` spells out exactly why that narrowing matters: at a repeated sample eigenvalue, a statement pinning the sample vector to a chosen eigenbasis covers one choice out of a continuum. So calling these `compiled_generalized` was backwards: the symmetric side was repaired on 2026-08-13 and the rectangular rank-one side was not.
+**REPAIRED 2026-09-05, and the row was hiding a real defect.** Until that date the row was `compiled_generalized` on the strength of four declarations that all take `CorrespondingRightSingularBlock` / `CorrespondingLeftSingularBlock` and route through `yuWangSamworth_eigenvector_le`. `Rectangular/Theorem4.lean`'s own header calls those predicates *narrower than the printed hypothesis* -- they pin both blocks to Mathlib's chosen Gram eigenbases, whereas the paper takes the singular vectors to be an arbitrary orthonormal pair with no separation assumed among the singular values of `Ahat` -- and `Core/Statistics.lean` documents `yuWangSamworth_eigenvector_le` as narrower than Corollary 1. Row `YWS-C1-rankone` spells out why that matters: at a repeated sample singular value, pinning to a chosen eigenbasis covers one point of a continuum. Calling the narrow forms `generalized` was backwards; the symmetric side was repaired on 2026-08-13 and the rectangular rank-one side had not been.
 
-The repair is mechanical and is the row's open action. `Rectangular/Theorem4.lean` defines `IsOrderedRightSingularFrame A hn e v := IsOrderedEigenframe (isSymmetric_rightGram A) hn e v`, so `yuWangSamworth_eigenvector_frame_le` applies verbatim to `rightGram A` / `rightGram Ahat` at a chosen index, with the same singular-coefficient transport the present proofs already perform after `hbase`.
+The four `..._frame_...` declarations carry the printed hypothesis: unit eigenvectors of the two Gram operators at the same sorted index, separated from the rest of the population Gram spectrum, with no condition on the sample spectrum. They go through `yuWangSamworth_eigenvector_frame_le` on `rightGram` / `leftGram` and the same `opNorm_{right,left}Gram_sub_le_paperCoefficient` transport the narrow forms already used, so the coefficient `2 sqrt 2 (2 sigma_1 + ||D||_op) ||D||_op / Delta` is unchanged. The `CorrespondingEigenblock` forms are retained for callers who already hold that datum, matching the disposition the symmetric side settled on. The row is `compiled_generalized` again, now truthfully.
 
-**Next action.** Restate the four rank-one corollaries with an arbitrary orthonormal singular pair at a chosen index, via `yuWangSamworth_eigenvector_frame_le` on the Gram operators, and keep the `CorrespondingEigenblock` forms only for callers that already hold that datum -- the same shape the symmetric side settled on.
+**Next action.** None.
 
 **Gap refs:** `preprint-numbering-aliases`
 
