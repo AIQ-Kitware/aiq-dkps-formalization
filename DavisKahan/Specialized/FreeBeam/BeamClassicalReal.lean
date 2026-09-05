@@ -926,7 +926,6 @@ theorem classicalFreeBeamGraph_subset_graph :
     _root_.LinearPMap.adjoint_apply_eq beamOperator_isSelfAdjoint.dense_domain
       ⟨z.1, hmemAdj⟩ hEq
   have hB : beamOperator ⟨z.1, hmem⟩ = z.2 := by
-    change beamOperator ⟨z.1, hmem⟩ = z.2
     have htrans := (_root_.LinearPMap.ext_iff.mp hsa).2
       (x := z.1) (hf := hmemAdj) (hg := hmem)
     rw [← htrans, hadj]
