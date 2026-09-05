@@ -163,5 +163,63 @@ theorem mem_resolventSet_of_lower_bound (hA : IsSelfAdjoint A)
     rw [← hsym]
     exact congrArg Subtype.val (e.symm_apply_apply ψ)
 
+/-! ## Coercivity against a bounded isometry
+
+The bounded development reaches invertibility of `J (A - c)` -- `J` a reflection
+-- from coercivity of its quadratic form, by the operator Lax--Milgram lemma
+`TauCeti.isUnit_of_coercive`.  That route is closed to an unbounded `A`: it needs
+the operator to be everywhere defined.
+
+The route below is shorter and needs no new analysis.  Coercivity of `J (A - c)`
+already forces the *norm* lower bound `δ ‖x‖ ≤ ‖A x - c x‖`, because `J` is an
+isometry and Cauchy--Schwarz gives
+
+`δ ‖x‖² ≤ re ⟪J (A x - c x), x⟫ ≤ ‖J (A x - c x)‖ ‖x‖ = ‖A x - c x‖ ‖x‖`,
+
+and a norm lower bound is exactly what `mem_resolventSet_of_lower_bound`
+consumes.  So the shifted operator has a bounded inverse at the same constant,
+and the reflection is inverted by applying `J` again.
+
+This is the unbounded replacement for the `CoerciveUnit` step, and it is what an
+unbounded Theorem 8.1 needs. -/
+
+omit [CompleteSpace E] in
+/-- **A norm lower bound follows from coercivity against a bounded isometry.**
+
+`J` need not be a reflection here -- norm preservation is all that is used. -/
+theorem norm_sub_smul_ge_of_coercive_comp
+    {J : E →L[ℂ] E} (hJ : ∀ y : E, ‖J y‖ = ‖y‖)
+    {c δ : ℝ}
+    (hcoer : ∀ x : A.domain,
+      δ * ‖(x : E)‖ ^ 2 ≤ (⟪J (A x - (c : ℂ) • (x : E)), (x : E)⟫_ℂ).re)
+    (x : A.domain) :
+    δ * ‖(x : E)‖ ≤ ‖A x - (c : ℂ) • (x : E)‖ := by
+  have hcs : (⟪J (A x - (c : ℂ) • (x : E)), (x : E)⟫_ℂ).re
+      ≤ ‖A x - (c : ℂ) • (x : E)‖ * ‖(x : E)‖ := by
+    refine le_trans (RCLike.re_le_norm (K := ℂ) _) ?_
+    refine le_trans (norm_inner_le_norm _ _) ?_
+    rw [hJ]
+  have hb := hcoer x
+  rcases eq_or_lt_of_le (norm_nonneg ((x : E))) with h0 | h0
+  · rw [← h0, mul_zero]
+    exact norm_nonneg _
+  · nlinarith
+
+/-- **A real point is a resolvent point when the shifted operator is coercive
+against a bounded isometry.**
+
+The unbounded companion of `TauCeti.isUnit_of_coercive`: where that concludes
+invertibility of a bounded `J (A - c)` from its quadratic form, this concludes
+that `c` lies in the resolvent set of a self-adjoint partial map `A`, which is
+the same statement for an operator that is not everywhere defined. -/
+theorem mem_resolventSet_of_coercive_comp (hA : IsSelfAdjoint A)
+    {J : E →L[ℂ] E} (hJ : ∀ y : E, ‖J y‖ = ‖y‖)
+    {c δ : ℝ} (hδ : 0 < δ)
+    (hcoer : ∀ x : A.domain,
+      δ * ‖(x : E)‖ ^ 2 ≤ (⟪J (A x - (c : ℂ) • (x : E)), (x : E)⟫_ℂ).re) :
+    ((c : ℝ) : ℂ) ∈ resolventSet A :=
+  mem_resolventSet_of_lower_bound hA (Complex.conj_ofReal c) hδ
+    (norm_sub_smul_ge_of_coercive_comp hJ hcoer)
+
 end LinearPMap
 end TauCeti

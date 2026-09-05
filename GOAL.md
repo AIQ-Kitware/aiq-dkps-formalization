@@ -87,9 +87,28 @@ unchanged.
   explicitly finite-dimensional symmetric-gauge statement. §IV separability for its
   clauses is not done.
 * **§XI, §XII, §XIII, §XV** not started.
-* **§VI–§VIII (Section 8 unbounded)** not started. §VI needs the unbounded
-  coercive inverse of §6.2; §VII is the resolvent/Riesz layer and remains the
-  largest single piece in this plan.
+* **§6.2 is DONE**, and it turned out much smaller than the plan assumed. The plan
+  expected a new unbounded Lax--Milgram: closedness, coercivity, closed range, an
+  adjoint/kernel argument, then the bounded inverse. None of that was needed.
+  Coercivity of `J (A − c)` against an *isometry* already forces the norm lower
+  bound `δ‖x‖ ≤ ‖A x − c x‖` by Cauchy--Schwarz, the triangle inequality spreads
+  it over `(c − δ, c + δ)` with constant `δ − |lam − c|`, each point is then a
+  resolvent point by the existing `mem_resolventSet_of_lower_bound`, and the
+  existing gap resolvent gives the two-sided bounded inverse of norm `≤ δ⁻¹`.
+  `TauCeti.LinearPMap.mem_resolventSet_of_coercive_comp` and
+  `TauCeti.DavisKahan.twoSidedShiftedInverseBound_of_coercive_comp` are the two
+  theorems, both axiom-clean. `J` need only preserve norms, so a reflection
+  qualifies.
+* **§6.3 is the next step and is now unblocked.** Lift
+  `realSpectrum_add_offDiagonal_subset_exterior_of_form_gap` and
+  `isQuarterAcute_of_orderedFormGap` to `LinearPMap`, replacing their
+  `isUnit_of_coercive` step by the theorem above. Then §6.4 lifts the Theorem 8.1
+  argument itself.
+* **§VII–§VIII (Theorem 8.2 unbounded)** not started, and §VII remains the largest
+  single piece. Note that §7.1's core already exists:
+  `exists_norm_le_two_sided_shifted_inverse_of_spectrum_gap` is the unbounded
+  self-adjoint resolvent with the `1/dist` bound. What is missing is §7.3, the
+  contour/Riesz layer, and §7.4.
 
 ---
 

@@ -6,6 +6,7 @@ Authors: Jon Crall, Claude Fable 5, Claude Opus 5
 import DavisKahan.SpectralTheory.PartialMap.Basic
 import DavisKahan.Sylvester.ShiftedInverseGauge
 import ForTauCeti.Analysis.InnerProductSpace.LinearPMap.SelfAdjointResolvent
+import ForTauCeti.Analysis.InnerProductSpace.LinearPMap.RealLowerBound
 
 open TauCeti.DavisKahan.Sylvester
 
@@ -102,6 +103,58 @@ theorem twoSidedShiftedInverseBound_of_spectrum_gap
     exists_norm_le_two_sided_shifted_inverse_of_spectrum_gap hA hs hgap
   exact ⟨R, fun z => (hright z).choose,
     fun x => hleft x, fun z => (hright z).choose_spec, hnorm⟩
+
+/-- **The bounded shifted inverse from coercivity against a reflection.**
+
+This is the theorem GOAL.md section 6.2 asks for, in the form Theorem 8.1
+consumes.  The bounded Section 8 argument reaches invertibility of `J (A - c)`
+through `TauCeti.isUnit_of_coercive`, which needs `A` everywhere defined; that is
+what blocks lifting `isQuarterAcute_of_orderedFormGap` to an unbounded ambient
+operator.
+
+No new Lax--Milgram is needed.  Coercivity against an isometry already forces the
+norm lower bound `δ ‖x‖ ≤ ‖A x - c x‖`; the triangle inequality spreads it across
+the whole interval `(c - δ, c + δ)` with constant `δ - |lam - c|`; each point is
+then a resolvent point by `mem_resolventSet_of_lower_bound`; and the existing gap
+resolvent supplies the two-sided bounded inverse of norm at most `δ⁻¹`.
+
+`J` is only required to preserve norms, so a reflection qualifies. -/
+theorem twoSidedShiftedInverseBound_of_coercive_comp
+    {A : H →ₗ.[ℂ] H} (hA : IsSelfAdjoint A)
+    {J : H →L[ℂ] H} (hJ : ∀ y : H, ‖J y‖ = ‖y‖)
+    {c δ : ℝ} (hδ : 0 < δ)
+    (hcoer : ∀ x : A.domain,
+      δ * ‖(x : H)‖ ^ 2 ≤ (⟪J (A x - (c : ℂ) • (x : H)), (x : H)⟫_ℂ).re) :
+    TauCeti.DavisKahan.Sylvester.TwoSidedShiftedInverseBound A c δ := by
+  refine twoSidedShiftedInverseBound_of_spectrum_gap hA hδ ?_
+  intro lam hlam
+  have hbase := TauCeti.LinearPMap.norm_sub_smul_ge_of_coercive_comp hJ hcoer
+  obtain ⟨h1, h2⟩ := hlam
+  have hpos : 0 < δ - |lam - c| := by
+    rcases abs_cases (lam - c) with ⟨he, _⟩ | ⟨he, _⟩ <;> rw [he] <;> linarith
+  have hnorm : ∀ x : A.domain,
+      (δ - |lam - c|) * ‖(x : H)‖ ≤ ‖A x - ((lam : ℝ) : ℂ) • (x : H)‖ := by
+    intro x
+    have hsplit : A x - ((lam : ℝ) : ℂ) • (x : H)
+        = (A x - ((c : ℝ) : ℂ) • (x : H)) + (((c - lam : ℝ)) : ℂ) • (x : H) := by
+      push_cast
+      module
+    have htri : ‖A x - ((c : ℝ) : ℂ) • (x : H)‖ - ‖(((c - lam : ℝ)) : ℂ) • (x : H)‖
+        ≤ ‖A x - ((lam : ℝ) : ℂ) • (x : H)‖ := by
+      rw [hsplit]
+      simpa using
+        norm_sub_norm_le (A x - ((c : ℝ) : ℂ) • (x : H)) (-((((c - lam : ℝ)) : ℂ) • (x : H)))
+    have hsm : ‖(((c - lam : ℝ)) : ℂ) • (x : H)‖ = |c - lam| * ‖(x : H)‖ := by
+      rw [norm_smul]
+      congr 1
+      exact Complex.norm_real (c - lam)
+    have habs : |c - lam| = |lam - c| := abs_sub_comm c lam
+    have hb := hbase x
+    rw [hsm, habs] at htri
+    nlinarith [norm_nonneg ((x : H))]
+  have hres := TauCeti.LinearPMap.mem_resolventSet_of_lower_bound hA
+    (Complex.conj_ofReal lam) hpos hnorm
+  simpa [TauCeti.LinearPMap.spectrum] using hres
 
 end DavisKahan
 end TauCeti
