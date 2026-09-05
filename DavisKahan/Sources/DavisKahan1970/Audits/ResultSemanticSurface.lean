@@ -124,6 +124,7 @@ own Fan-dominance reduction at (1.11)-(1.13). -/
 #check @TauCeti.DavisKahan1970.sinTwoTheta_ambient_unbounded_perturbedGap_sourceExact_complex
 #check @TauCeti.DavisKahan1970.sinTwoTheta_ambient_unbounded_perturbedGap_sourceExact_real
 #check @TauCeti.DavisKahan1970.tanTwoTheta_directed_unboundedResidual_sourceExact_complex
+#check @TauCeti.DavisKahan1970.tanTwoTheta_directed_unboundedResidual_sourceExact_real
 #check @TauCeti.DavisKahan1970.tanTwoTheta_ambient_unbounded_sourceExact_complex
 #check @TauCeti.DavisKahan1970.tanTwoTheta_ambient_unbounded_sourceExact_real
 #check @TauCeti.DavisKahan1970.normalizedUnitaryInvariant_of_symmetricNorming

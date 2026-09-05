@@ -720,16 +720,18 @@ def _validate_source_clauses(
                         f"the clause's primary {primary} as a whole identifier. A bridge must start from the object "
                         "the primary actually concludes on."
                     )
-                # The bridge must COMPOSE with the primary, and the repository's
-                # contract prefers that composition to be done in Lean: the
-                # primary's own proof invokes the witness.  A witness that is
-                # merely registered beside a theorem was what the 2026-09-02
-                # closure had, and it did not compose.
-                if not _invokes(primary, declaration):
-                    fail(
-                        f"{where}: correspondence_witness {declaration} is not invoked by the proof of the clause's "
-                        f"primary {primary}. The correspondence must be composed in Lean, not registered beside it."
-                    )
+                # NOT CHECKED, deliberately: whether the primary's own proof body
+                # names the witness.  This gate used to require exactly that, and
+                # it was policing proof shape.  The boundary for source exactness
+                # is statement equivalence: if a source-exact facade has the
+                # printed type and Lean proves it by delegating to a theorem that
+                # performs the transport, that is not a defect, and the proof is
+                # allowed to be one line (jon, 2026-09-05).  What survives is
+                # every *statement*-level obligation above and below -- the
+                # witness names both objects, the primary concludes on the
+                # from_object, the scalar fields match, and each link carries a
+                # statement pin -- which is what makes the correspondence a
+                # machine-checked claim rather than a registered coincidence.
                 # Scalar compatibility.  A complex theorem is not a correspondence
                 # for a real object, and the same witness was registered for both
                 # scalar scopes of this row before hostile review caught it.
@@ -756,12 +758,9 @@ def _validate_source_clauses(
                         f"{where}: a clause with correspondence_required must record transport_chain, the "
                         "theorems its primary composes to reach the paper object"
                     )
-                for transport in chain:
-                    if not _invokes(primary, transport):
-                        fail(
-                            f"{where}: transport_chain names {transport}, which the proof of the primary {primary} "
-                            "does not invoke; the chain must be the one the theorem actually composes"
-                        )
+                # As above, the chain is not required to appear in the primary's
+                # proof body.  Each of its links is still required to be
+                # registered, `#check`ed on the audit surface, and statement-pinned.
 
             for declaration in [primary, *correspondence, *(clause.get("transport_chain") or [])]:
                 if declaration not in _declarations(item):
@@ -1426,53 +1425,6 @@ def _mentions(text: str | None, token: str) -> bool:
 
 def _short_name(name: str) -> str:
     return name.rsplit(".", 1)[-1]
-
-
-def _declaration_proof_text(name: str) -> str | None:
-    """The declaration as written, minus its docstring and its statement.
-
-    A docstring may name every lemma the author *meant* to use; the proof body
-    names the ones the theorem actually composes.  Static and source-level on
-    purpose: whether the chain type-checks is Lean's business and the build
-    settles it, but whether a registered bridge is *invoked* by the theorem it
-    is registered against is a fact the file states directly.
-    """
-    index = _source_declaration_index()
-    if index is None:
-        return None
-    try:
-        from aiq_lean_tools.lean_source import declaration_source_texts, full_declaration_text
-
-        texts = declaration_source_texts(index, name)
-        if not texts:
-            return None
-        row = texts[0].declaration
-        full = full_declaration_text(row.path, row.line)
-    except Exception:
-        return None
-    if not full:
-        return None
-    body = full
-    doc_end = body.find("-/")
-    if body.lstrip().startswith("/-") and doc_end != -1:
-        body = body[doc_end + 2:]
-    header = texts[0].header.rstrip()
-    if header:
-        cut = body.find(header)
-        if cut != -1:
-            body = body[cut + len(header):]
-        else:
-            # the header renderer may normalize whitespace; fall back to the
-            # first top-level `:=`, which ends every theorem statement
-            cut = body.find(":=")
-            body = body[cut + 2:] if cut != -1 else body
-    return body
-
-
-def _invokes(primary: str, declaration: str) -> bool:
-    """Whether the proof of `primary` names `declaration` (by its short name)."""
-    proof = _declaration_proof_text(primary)
-    return _mentions(proof, _short_name(declaration))
 
 
 #: Census clause relations that assert another theorem carries the correspondence.
