@@ -235,9 +235,7 @@ noncomputable def hilbertSchmidtReal :
         intro E F _ _ _ _ _ _ c A hA
         by_cases hc : c = 0
         · subst c
-          simpa using (show approximationNumberEnergy (0 : E →L[ℝ] F) ≠ ⊤ from by
-            rw [approximationNumberEnergy_zero]
-            exact ENNReal.zero_ne_top)
+          simp
         · exact (approximationNumberEnergy_ne_top_smul_iff c hc A).2 hA
       adjoint_mem := by
         intro E F _ _ _ _ _ _ A hA

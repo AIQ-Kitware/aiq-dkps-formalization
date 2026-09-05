@@ -607,6 +607,7 @@ def HasDefinedAmbientTangent (U V : Submodule ℂ E)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] : Prop :=
   U.projectionGap V < 1
 
+omit [CompleteSpace E] in
 /-- **A defined tangent implies condition (3.5).**
 
 An angle of `π/2` is a vector of `U` killed by `P_V`, or of `V` killed by `P_U`; a gap strictly
