@@ -3,6 +3,7 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, OpenAI GPT-5.6 Sol
 -/
+import ForTauCeti.Analysis.InnerProductSpace.Complexification.Spectrum
 import DavisKahan.Sources.DavisKahan1970.TanTwoThetaUnboundedAmbientExact
 import DavisKahan.Sources.DavisKahan1970.TanTwoThetaUnboundedReducing
 import DavisKahan.DoubleAngle.RealAngleIdentification
@@ -306,7 +307,8 @@ theorem tanTwoTheta_directed_unboundedResidual_blockRepresentative_symmetricNorm
           (complexify Z) = complexify (U.diagonalPart Z) := by
     rw [← diagonalPart_congr hUeq (complexify Z)]
     exact diagonalPart_complexifySubmodule U Z
-  rw [hdiag, ← complexify_mul, isUnit_complexify_iff] at hCCc
+  rw [hdiag, ← complexify_mul,
+    TauCeti.DavisKahan.Foundation.RealComplexification.isUnit_complexify_iff] at hCCc
   have hCC : IsUnit (U.diagonalPart Z * U.diagonalPart Z) := hCCc
   have hTmemc : N.Mem
       (reflectionTangentCorner (complexifySubmodule U) (complexify Z)) :=
@@ -446,7 +448,8 @@ theorem tanTwoTheta_ambient_unbounded_blockRepresentative_symmetricNorming_real
           (complexify Z) = complexify (U.diagonalPart Z) := by
     rw [← diagonalPart_congr hUeq (complexify Z)]
     exact diagonalPart_complexifySubmodule U Z
-  rw [hdiag, ← complexify_mul, isUnit_complexify_iff] at hCCc
+  rw [hdiag, ← complexify_mul,
+    TauCeti.DavisKahan.Foundation.RealComplexification.isUnit_complexify_iff] at hCCc
   have hCC : IsUnit (U.diagonalPart Z * U.diagonalPart Z) := hCCc
   have hTsub :
       unboundedReflectionTangent
@@ -519,6 +522,36 @@ theorem tanTwoTheta_ambient_unbounded_blockRepresentative_derivedReflection_symm
     (TauCeti.DavisKahan.reflectionOperator_mul_self_complex V)
     hV.mapsDomain hV.commutes hUa hUb hab hBmem
 
+/-- **The real pole exclusion.**
+
+Invertibility of the reflection's diagonal block excludes `cos 2θ = 0` on the spectrum of the
+real angle operator, which is what makes `|tan 2Θ|` the paper's object rather than the value
+Mathlib's totalised functional calculus assigns at a quarter turn.
+
+The real twin of `DavisKahan.cos_two_ne_zero_of_isUnit_diagonalPart_reflection_sq`, proved by
+complexification: a unit stays a unit under `complexify`, the complexified diagonal block is
+the diagonal block of the complexified data, and `spectrum_complexify` says the real angle
+operator and its complexification have the same real spectrum, so the complex statement
+transfers verbatim. -/
+theorem cos_two_ne_zero_of_isUnit_diagonalPart_reflection_sq_real
+    (U V : Submodule ℝ E) [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
+    (h : IsUnit (U.diagonalPart V.reflectionOperator *
+      U.diagonalPart V.reflectionOperator)) :
+    ∀ t ∈ spectrum ℝ (angleOperatorR U V), Real.cos (2 * t) ≠ 0 := by
+  have hC : IsUnit ((complexifySubmodule U).diagonalPart
+      (complexifySubmodule V).reflectionOperator *
+      (complexifySubmodule U).diagonalPart
+        (complexifySubmodule V).reflectionOperator) := by
+    rw [← TauCeti.DavisKahan.complexify_reflectionOperator, diagonalPart_complexifySubmodule,
+      ← TauCeti.DavisKahan.complexify_mul,
+      TauCeti.DavisKahan.Foundation.RealComplexification.isUnit_complexify_iff]
+    exact h
+  intro t ht
+  refine DavisKahan.cos_two_ne_zero_of_isUnit_diagonalPart_reflection_sq
+    (complexifySubmodule U) (complexifySubmodule V) hC t ?_
+  rwa [← TauCeti.DavisKahan.Angle.complexify_angleOperatorR U V,
+    TauCeti.RealComplexification.spectrum_complexify]
+
 /-- **Davis--Kahan 1970, `tan 2Θ`, unbounded ambient form over `ℝ`, on the paper's
 angle operator.**
 
@@ -548,7 +581,10 @@ theorem tanTwoTheta_ambient_unbounded_symmetricNorming_real
         (TauCeti.LinearPMap.realSpecRange hA (Set.Iic c) measurableSet_Iic)ᗮ →
       b * ‖(x : E)‖ ^ 2 ≤ ⟪A x, (x : E)⟫_ℝ)
     (hab : a < b) (hBmem : N.Mem B) :
-    N.Mem (TauCeti.DavisKahan.Angle.absTanTwoAngleOperatorR
+    (∀ t ∈ spectrum ℝ (TauCeti.DavisKahan.Angle.angleOperatorR
+        (TauCeti.LinearPMap.realSpecRange hA (Set.Iic c) measurableSet_Iic) V),
+        Real.cos (2 * t) ≠ 0) ∧
+      N.Mem (TauCeti.DavisKahan.Angle.absTanTwoAngleOperatorR
         (TauCeti.LinearPMap.realSpecRange hA (Set.Iic c) measurableSet_Iic) V) ∧
       (b - a) * N.gauge (TauCeti.DavisKahan.Angle.absTanTwoAngleOperatorR
         (TauCeti.LinearPMap.realSpecRange hA (Set.Iic c) measurableSet_Iic) V) ≤
@@ -558,7 +594,7 @@ theorem tanTwoTheta_ambient_unbounded_symmetricNorming_real
       hUb hab hBmem
   have hgauge := DavisKahan.extendedGauge_unboundedReflectionTangent_real
     (TauCeti.LinearPMap.realSpecRange hA (Set.Iic c) measurableSet_Iic) V N hunit
-  refine ⟨?_, ?_⟩
+  refine ⟨cos_two_ne_zero_of_isUnit_diagonalPart_reflection_sq_real _ V hunit, ?_, ?_⟩
   · unfold SymmetricNormingFunction.Mem at hmem ⊢
     rwa [← hgauge]
   · unfold SymmetricNormingFunction.gauge at hle ⊢
@@ -612,7 +648,7 @@ theorem tanTwoTheta_ambient_unbounded_blockRepresentative_reducing_symmetricNorm
     hab N ((complexify_isSelfAdjoint_iff B).2 hBsa) ((N.mem_complexify_iff B).2 hBmem)
   have hCCc := hc.1
   rw [diagonalPart_complexifySubmodule U Z, ← complexify_mul,
-    isUnit_complexify_iff] at hCCc
+    TauCeti.DavisKahan.Foundation.RealComplexification.isUnit_complexify_iff] at hCCc
   have hCC : IsUnit (U.diagonalPart Z * U.diagonalPart Z) := hCCc
   have hTcomplex : unboundedReflectionTangent (complexifySubmodule U) (complexify Z) =
       complexify (unboundedReflectionTangent U Z) :=
@@ -646,7 +682,7 @@ theorem tanTwoTheta_directed_unboundedResidual_reducing_symmetricNorming_real
     hab N ((directedCorner_mem_complexify_iff N U B).2 hRmem)
   have hCCc := hc.1
   rw [diagonalPart_complexifySubmodule U Z, ← complexify_mul,
-    isUnit_complexify_iff] at hCCc
+    TauCeti.DavisKahan.Foundation.RealComplexification.isUnit_complexify_iff] at hCCc
   have hCC : IsUnit (U.diagonalPart Z * U.diagonalPart Z) := hCCc
   have hTcorner : reflectionTangentCorner (complexifySubmodule U) (complexify Z) =
       blockCompression (complexifySubmodule U)ᗮ (complexifySubmodule U)

@@ -624,14 +624,19 @@ with `J_U` a self-adjoint unitary, and `|Ξ| = |tan 2Θ|` -- so every source
 unitarily invariant norm sees them identically; see
 `DavisKahan.extendedGauge_unboundedReflectionTangent_complex`.
 
-**No pole hypothesis is asked of the caller.**  The transport needs `cos 2θ ≠ 0`
-on the angle spectrum, but that is not an independent assumption here: the
-ordered gap already forces the reflection's diagonal block to be invertible --
-that is the first component of
-`tanTwoTheta_ambient_unbounded_blockRepresentative_derivedReflection_symmetricNorming_complex` -- and
-`DavisKahan.cos_two_ne_zero_of_isUnit_diagonalPart_reflection_sq` turns that unit
-into pole exclusion.  No branch is chosen either: principal angles may exceed
-`π/4`, and `|tan 2Θ|` is what a norm sees there. -/
+**No pole hypothesis is asked of the caller, and the conclusion says so.**  The
+transport needs `cos 2θ ≠ 0` on the angle spectrum, and that is not an independent
+assumption here: the ordered gap already forces the reflection's diagonal block to be
+invertible -- the first component of
+`tanTwoTheta_ambient_unbounded_blockRepresentative_derivedReflection_symmetricNorming_complex`
+-- and `DavisKahan.cos_two_ne_zero_of_isUnit_diagonalPart_reflection_sq` turns that unit
+into pole exclusion.  Since 2026-09-05 that exclusion is a *conjunct of the conclusion*
+rather than a fact buried in the proof, which is what stops a reader having to open the
+proof to learn that `|tan 2Θ|` here is the paper's object and not the value Mathlib's
+totalised `cfc` assigns at a quarter turn.  Finding F3.2 of the 2026-09-04 hostile review.
+
+No branch is chosen either: principal angles may exceed `π/4`, and `|tan 2Θ|` is what a
+norm sees there. -/
 theorem tanTwoTheta_ambient_unbounded_symmetricNorming_complex
     (N : SymmetricNormingFunction)
     {A : G →ₗ.[ℂ] G} {B : G →L[ℂ] G} {a b c : ℝ}
@@ -649,7 +654,10 @@ theorem tanTwoTheta_ambient_unbounded_symmetricNorming_complex
         (TauCeti.LinearPMap.specRange hA (Set.Iic c) measurableSet_Iic)ᗮ →
       b * ‖(x : G)‖ ^ 2 ≤ RCLike.re ⟪A x, (x : G)⟫_ℂ)
     (hab : a < b) (hBmem : N.Mem B) :
-    N.Mem (TauCeti.DavisKahan.Angle.absTanTwoAngleOperatorC
+    (∀ t ∈ spectrum ℝ (TauCeti.DavisKahan.Angle.angleOperatorC
+        (TauCeti.LinearPMap.specRange hA (Set.Iic c) measurableSet_Iic) V),
+        Real.cos (2 * t) ≠ 0) ∧
+      N.Mem (TauCeti.DavisKahan.Angle.absTanTwoAngleOperatorC
         (TauCeti.LinearPMap.specRange hA (Set.Iic c) measurableSet_Iic) V) ∧
       (b - a) * N.gauge (TauCeti.DavisKahan.Angle.absTanTwoAngleOperatorC
         (TauCeti.LinearPMap.specRange hA (Set.Iic c) measurableSet_Iic) V) ≤
@@ -661,7 +669,7 @@ theorem tanTwoTheta_ambient_unbounded_symmetricNorming_complex
     (TauCeti.LinearPMap.specRange hA (Set.Iic c) measurableSet_Iic) V hunit
   have hgauge := DavisKahan.extendedGauge_unboundedReflectionTangent_complex
     (TauCeti.LinearPMap.specRange hA (Set.Iic c) measurableSet_Iic) V N hcos
-  refine ⟨?_, ?_⟩
+  refine ⟨hcos, ?_, ?_⟩
   · unfold SymmetricNormingFunction.Mem at hmem ⊢
     rwa [← hgauge]
   · unfold SymmetricNormingFunction.gauge at hle ⊢

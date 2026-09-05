@@ -559,6 +559,24 @@ full, including that (8.1)/(8.2) survive an unbounded `A`. `DK-8.1-thm` moves fr
 `locally_exact` to `paper_faithful_nonlocal_source_interpretation`. **The lift is the
 honest end state and remains open**, tracked as `DK-S8-UNBOUNDED` in `GOAL.md`.
 
+**F3 — junk-valued functional calculus in conclusions.** Closed in two commits. The directed
+clause's canonical witnesses derive their pole exclusion and conclude it. The eight ambient
+`tan Θ` endpoints stated under condition (3.5) now conclude `HasDefinedAmbientTangent U V`
+(`HasDefinedAmbientTangentReal` over `ℝ`; the two bounded ones, whose files sit below the
+definition, conclude the equivalent `‖sin Θ‖ < 1`). Both ambient `tan 2Θ` endpoints now
+conclude `∀ t ∈ spectrum ℝ (angleOperator…), Real.cos (2 * t) ≠ 0`.
+
+Every conjunct was already proved inside the corresponding proof. The unbounded-Ritz tangent
+case needed no new lemma — `norm_sinAngleOperatorC_lt_one_of_unboundedRitz` and
+`norm_sinAngleOperatorR_lt_one_of_unboundedCompression_crossedDefectsEquivalent` were already
+in the tree. The real `tan 2Θ` case needed one:
+`cos_two_ne_zero_of_isUnit_diagonalPart_reflection_sq_real`, because the real chain carries
+the `IsUnit` form of the fact while the existing exclusion lemma is stated for
+`angleOperatorC`; it is proved by complexification through `spectrum_complexify`.
+
+The `HasDefinedAmbientTangent` block comment, which called the (3.5) endpoints a non-vacuous
+corollary, now records that they state it.
+
 **F8 — the 81 production warnings.** Commits `551ebe1a`, `3fe37b1f`, `60c442f2`,
 `1b6ca96c` (merged as `70c367e6`) and `33e257f9`. `lake build DavisKahan.All` is
 warning-free, so `certify_davis_kahan_1970.py --require-terminal` runs without
@@ -575,23 +593,6 @@ clause's registered primaries.
 **F10.** A positive finding; nothing to close.
 
 ### Not closed
-
-**F3.2 — the ambient `tan 2Θ` conjunct.** F3.1 is closed: all eight ambient `tan Θ`
-endpoints stated under condition (3.5) now conclude `HasDefinedAmbientTangent U V`
-(`HasDefinedAmbientTangentReal` over `ℝ`), a conjunct their proofs already had. The
-unbounded-Ritz case turned out to need no new lemma —
-`norm_sinAngleOperatorC_lt_one_of_unboundedRitz` and
-`norm_sinAngleOperatorR_lt_one_of_unboundedCompression_crossedDefectsEquivalent` were
-already in the tree. The `HasDefinedAmbientTangent` block comment, which called those
-endpoints a non-vacuous corollary, now records that they state it.
-
-What is left is the cosine conjunct on
-`tanTwoTheta_ambient_unbounded_symmetricNorming_{complex,real}`. The complex proof already
-computes it as `hcos`, and the sibling
-`..._blockRepresentative_derivedReflection_symmetricNorming_complex` already concludes it;
-the real side needs the pole exclusion at `spectrum ℝ (angleOperatorR U V)` first, because
-its chain carries the `IsUnit` form. These two are canonical evidence, so the change also
-costs a re-pin and a certificate re-run. Tracked as `DK-HR-TANGENT-POLE` in `GOAL.md`.
 
 **F6 — naming and placement.** Not started. All eight sub-items are tracked as
 `DK-HR-NAMING` in `GOAL.md`. Doing them meant renaming declarations this pass was

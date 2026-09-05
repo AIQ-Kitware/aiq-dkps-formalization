@@ -4,7 +4,7 @@
 
 **Census family:** `source-completion-census`  
 **Items:** 50  
-**Unique cited Lean declarations:** 1260
+**Unique cited Lean declarations:** 1261
 
 ## How to use this census
 
@@ -874,6 +874,7 @@ AMBIENT CLAUSE REOPENED 2026-08-31 by the coherent-clause audit. The printed sin
 - `TauCeti.DavisKahan1970.symmetricNorming_of_kyFanDominant`
 - `TauCeti.DavisKahan1970.kyFanDominant_of_symmetricNorming`
 - `TauCeti.DavisKahan1970.symmetricNorming_iff_kyFanDominant`
+- `TauCeti.DavisKahan1970.cos_two_ne_zero_of_isUnit_diagonalPart_reflection_sq_real`
 
 **Curated source/Lean review:**
 

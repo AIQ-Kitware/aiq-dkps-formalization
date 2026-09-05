@@ -1658,11 +1658,11 @@ One row per printed source clause per scalar field.  A clause is `PASS` only whe
 
 *Gap scope:* The printed double-tangent gap is ordered. The primary takes bare form bounds `re <A x, x> <= a |x|^2` on the reducing subspace and `b |x|^2 <= re <A x, x>` on its orthogonal complement with `a < b`; neither bound confines a spectrum to a finite interval, so both separating regions are half-infinite.
 
-**`ambient.complex`.** (b - a) * N(|tan 2Theta|) <= 2 N(B) on the ambient branch-free absTanTwoAngleOperatorC, unbounded self-adjoint ambient operator, arbitrary SymmetricNormingFunction.
+**`ambient.complex`.** (b - a) * N(|tan 2Theta|) <= 2 N(B) on the ambient branch-free absTanTwoAngleOperatorC, unbounded self-adjoint ambient operator, arbitrary SymmetricNormingFunction.  POLE EXCLUSION EXPOSED 2026-09-05, closing finding F3.2: the conclusion now also states `for all t in spectrum R (angleOperator...), cos (2 t) != 0`, so the `absTanTwoAngleOperator` the estimate bounds is the paper's object and not the value Mathlib's totalised `cfc` assigns at a quarter turn.  The conjunct was always proved inside the proof; the ordered gap forces the reflection's diagonal block to be a unit and that unit is the exclusion.
 
 *Gap scope:* The printed double-tangent gap is ordered. The primary takes bare form bounds `re <A x, x> <= a |x|^2` on the selected spectral range and `b |x|^2 <= re <A x, x>` on its complement with `a < b`; neither bound confines a spectrum to a finite interval, so both separating regions are half-infinite.
 
-**`ambient.real`.** The real sibling of the complex ambient clause: (b - a) * N(|tan 2Theta|) <= 2 N(B) on the ambient branch-free real double-angle tangent, unbounded self-adjoint ambient operator, arbitrary SymmetricNormingFunction.
+**`ambient.real`.** The real sibling of the complex ambient clause: (b - a) * N(|tan 2Theta|) <= 2 N(B) on the ambient branch-free real double-angle tangent, unbounded self-adjoint ambient operator, arbitrary SymmetricNormingFunction.  POLE EXCLUSION EXPOSED 2026-09-05, closing finding F3.2: the conclusion now also states `for all t in spectrum R (angleOperator...), cos (2 t) != 0`, so the `absTanTwoAngleOperator` the estimate bounds is the paper's object and not the value Mathlib's totalised `cfc` assigns at a quarter turn.  The conjunct was always proved inside the proof; the ordered gap forces the reflection's diagonal block to be a unit and that unit is the exclusion.
 
 *Gap scope:* The printed double-tangent gap is ordered. The primary takes bare form bounds `re <A x, x> <= a |x|^2` on the selected spectral range and `b |x|^2 <= re <A x, x>` on its complement with `a < b`; neither bound confines a spectrum to a finite interval, so both separating regions are half-infinite.
 
@@ -1679,6 +1679,7 @@ The declarations that carry this result's printed statement, with the source ato
 
 ### Other registered declarations
 
+- `TauCeti.DavisKahan1970.cos_two_ne_zero_of_isUnit_diagonalPart_reflection_sq_real` — supporting_theorem
 - `TauCeti.DavisKahan1970.SectionTwo.tanTwoTheta_complex` — public_alias
 - `TauCeti.DavisKahan1970.SectionTwo.tanTwoTheta_real` — public_alias
 - `TauCeti.DavisKahan1970.tanTwoTheta_branchFree_bounded_finiteSubspace_symmetricNorming_rclike` — scalar_generic_facade
@@ -1797,7 +1798,7 @@ Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.tanTwoTheta_directed_unboundedResidual_blockRepresentative_symmetricNorming_real`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/TanTwoThetaUnboundedExactReal.lean:205`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/TanTwoThetaUnboundedExactReal.lean:206`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
@@ -1809,7 +1810,7 @@ Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.tanTwoTheta_ambient_unbounded_blockRepresentative_symmetricNorming_real`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/TanTwoThetaUnboundedExactReal.lean:353`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/TanTwoThetaUnboundedExactReal.lean:355`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
@@ -1881,7 +1882,7 @@ Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.tanTwoTheta_ambient_unbounded_symmetricNorming_complex`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/TanTwoThetaUnboundedAmbientExact.lean:635`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/TanTwoThetaUnboundedAmbientExact.lean:640`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
@@ -1935,13 +1936,13 @@ Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.tanTwoTheta_ambient_unbounded_blockRepresentative_derivedReflection_symmetricNorming_real`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/TanTwoThetaUnboundedExactReal.lean:488`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/TanTwoThetaUnboundedExactReal.lean:491`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.tanTwoTheta_ambient_unbounded_symmetricNorming_real`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/TanTwoThetaUnboundedExactReal.lean:534`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/TanTwoThetaUnboundedExactReal.lean:567`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
@@ -1953,7 +1954,7 @@ Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.reflectionTangentCorner_reflection_eq_tanTwoBlockCompression`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/TanTwoThetaUnboundedAmbientExact.lean:702`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/TanTwoThetaUnboundedAmbientExact.lean:710`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
@@ -1965,7 +1966,7 @@ Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.tanTwoDirectedCornerC_sameApproximationSingularSequence_reflectionTangentCorner`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/TanTwoThetaUnboundedAmbientExact.lean:730`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/TanTwoThetaUnboundedAmbientExact.lean:738`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
@@ -1977,31 +1978,31 @@ Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.tanTwoTheta_directed_unboundedResidual_reducing_blockCompression_symmetricNorming_complex`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/TanTwoThetaUnboundedAmbientExact.lean:754`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/TanTwoThetaUnboundedAmbientExact.lean:762`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.tanTwoTheta_directed_unboundedResidual_symmetricNorming_complex`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/TanTwoThetaUnboundedAmbientExact.lean:916`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/TanTwoThetaUnboundedAmbientExact.lean:924`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.tanTwoTheta_directed_unboundedResidual_symmetricNorming_real`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/TanTwoThetaUnboundedExactReal.lean:840`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/TanTwoThetaUnboundedExactReal.lean:876`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.approximationNumber_tanTwoDirectedCorner`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/TanTwoThetaUnboundedAmbientExact.lean:869`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/TanTwoThetaUnboundedAmbientExact.lean:877`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.approximationNumber_tanTwoDirectedCornerR`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/TanTwoThetaUnboundedExactReal.lean:789`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/TanTwoThetaUnboundedExactReal.lean:825`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
@@ -2013,13 +2014,13 @@ Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.mem_projectionBlock_iff_mem_blockCompression`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/TanTwoThetaUnboundedAmbientExact.lean:818`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/TanTwoThetaUnboundedAmbientExact.lean:826`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.gauge_projectionBlock_eq_blockCompression`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/TanTwoThetaUnboundedAmbientExact.lean:825`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/TanTwoThetaUnboundedAmbientExact.lean:833`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
@@ -2091,13 +2092,13 @@ Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.norm_offDiagonalPart_reflectionOperator_complexifySubmodule`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/TanTwoThetaUnboundedExactReal.lean:768`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/TanTwoThetaUnboundedExactReal.lean:804`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.extendedGauge_projectionBlock_eq_blockCompression`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/TanTwoThetaUnboundedAmbientExact.lean:812`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/TanTwoThetaUnboundedAmbientExact.lean:820`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
@@ -2139,7 +2140,7 @@ Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.tanTwoTheta_directed_unboundedResidual_reducing_sineSequence_symmetricNorming_real`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/TanTwoThetaUnboundedExactReal.lean:680`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/TanTwoThetaUnboundedExactReal.lean:716`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
@@ -2158,6 +2159,12 @@ Compiler-printed type: *inserted when a compiler certificate is supplied.*
 #### `TauCeti.DavisKahan1970.symmetricNorming_iff_kyFanDominant`
 
 Source location candidates: `DavisKahan/Sources/DavisKahan1970/SymmetricNormingFanDominance.lean:161`
+
+Compiler-printed type: *inserted when a compiler certificate is supplied.*
+
+#### `TauCeti.DavisKahan1970.cos_two_ne_zero_of_isUnit_diagonalPart_reflection_sq_real`
+
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/TanTwoThetaUnboundedExactReal.lean:536`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 

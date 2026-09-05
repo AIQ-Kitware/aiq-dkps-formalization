@@ -119,24 +119,13 @@ rank-boundary convention.
   every rename — grep `Challenge/` and `comparator/*.json`, run
   `scripts/check_declaration_name_drift.py`, then `lake build Challenge`.
 
-- **`DK-HR-TANGENT-POLE`** — mostly closed; one pair remains. The directed clause's canonical
-  witnesses derive their pole exclusion, and all eight ambient `tan Θ` endpoints stated under
-  condition (3.5) now conclude `HasDefinedAmbientTangent U V` (over `ℝ`,
-  `HasDefinedAmbientTangentReal`), so no registered `tan Θ` endpoint concludes on a
-  `cfc Real.tan` that could silently be Lean's totalised value at a right angle.
-
-  What remains is the ambient `tan 2Θ` pair
-  `tanTwoTheta_ambient_unbounded_symmetricNorming_{complex,real}`: add
-  `∀ t ∈ spectrum ℝ (angleOperatorC P V), Real.cos (2 * t) ≠ 0`, which the complex proof
-  already has as `hcos` from
-  `cos_two_ne_zero_of_isUnit_diagonalPart_reflection_sq`. The sibling
-  `..._blockRepresentative_derivedReflection_symmetricNorming_complex` already concludes it, so
-  the complex side is plumbing. **The real side needs one lemma first**: the pole exclusion at
-  `spectrum ℝ (angleOperatorR U V)`, since the real chain carries the `IsUnit` form and
-  `cos_two_ne_zero_of_isUnit_diagonalPart_reflection_sq` is stated for `angleOperatorC`.
-  `complexify_angleOperatorR` and `angleOperator_real` are the bridge. Note these two are
-  *canonical* evidence, so the change costs a statement re-pin, a canonical-evidence digest
-  refresh, and a certificate re-run.
+- **`DK-HR-TANGENT-POLE`** — **closed 2026-09-05.** No registered tangent endpoint concludes
+  on a totalised functional calculus without a conjunct in the same type excluding the pole.
+  The directed clause's canonical witnesses derive their exclusion; the eight ambient `tan Θ`
+  endpoints stated under (3.5) conclude `HasDefinedAmbientTangent`; and both ambient `tan 2Θ`
+  endpoints conclude `∀ t ∈ spectrum ℝ (angleOperator…), Real.cos (2 * t) ≠ 0`. The real side
+  needed one new lemma, `cos_two_ne_zero_of_isUnit_diagonalPart_reflection_sq_real`, proved by
+  complexification through `spectrum_complexify`.
 
 ---
 

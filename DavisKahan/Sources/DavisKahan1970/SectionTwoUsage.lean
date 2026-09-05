@@ -317,7 +317,10 @@ theorem tanTwoTheta_from_reducingSubspace
         (TauCeti.LinearPMap.specRange hA (Set.Iic c) measurableSet_Iic)ᗮ →
       b * ‖(x : E)‖ ^ 2 ≤ RCLike.re ⟪A x, (x : E)⟫_ℂ)
     (hab : a < b) (hBmem : N.Mem B) :
-    N.Mem (absTanTwoAngleOperatorC
+    (∀ t ∈ spectrum ℝ (angleOperatorC
+        (TauCeti.LinearPMap.specRange hA (Set.Iic c) measurableSet_Iic) V),
+        Real.cos (2 * t) ≠ 0) ∧
+      N.Mem (absTanTwoAngleOperatorC
         (TauCeti.LinearPMap.specRange hA (Set.Iic c) measurableSet_Iic) V) ∧
       (b - a) * N.gauge (absTanTwoAngleOperatorC
         (TauCeti.LinearPMap.specRange hA (Set.Iic c) measurableSet_Iic) V) ≤
