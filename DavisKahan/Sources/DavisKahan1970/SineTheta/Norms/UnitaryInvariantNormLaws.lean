@@ -291,6 +291,29 @@ theorem gauge_smul (N : SymmetricNormingFunction)
   rw [N.extendedGauge_smul, ENNReal.toReal_mul,
     ENNReal.toReal_ofReal (norm_nonneg c)]
 
+/-- **The extended gauge does not see a sign.** -/
+theorem extendedGauge_neg (N : SymmetricNormingFunction) (A : E →L[𝕜] F) :
+    N.extendedGauge (-A) = N.extendedGauge A := by
+  have hA : (-A : E →L[𝕜] F) = (-1 : 𝕜) • A := by
+    ext x; simp
+  rw [hA, N.extendedGauge_smul]
+  simp
+
+/-- **Ideal membership does not see a sign.**
+
+Needed wherever a source theorem is read with the perturbation's sign reversed --
+for instance when the ambient estimates are applied along `A + H` with
+perturbation `-H` to put the spectral gap on the perturbed blocks, which is where
+the source states it. -/
+theorem mem_neg (N : SymmetricNormingFunction) {A : E →L[𝕜] F} :
+    N.Mem (-A) ↔ N.Mem A := by
+  simp only [Mem, N.extendedGauge_neg]
+
+/-- **The real gauge does not see a sign.** -/
+theorem gauge_neg (N : SymmetricNormingFunction) (A : E →L[𝕜] F) :
+    N.gauge (-A) = N.gauge A := by
+  simp only [gauge, N.extendedGauge_neg]
+
 /-- The real gauge is subadditive on its canonical ideal. -/
 theorem gauge_add_le
     (N : SymmetricNormingFunction)

@@ -259,9 +259,20 @@ calculus: the real calculus on `E →L[𝕜] E` is a theorem at every `RCLike` f
 #check @TauCeti.DavisKahan.gauge_directedSinTwoAngleOperatorC
 #check @TauCeti.DavisKahan.mem_directedSinTwoAngleOperatorRC_iff
 #check @TauCeti.DavisKahan.gauge_directedSinTwoAngleOperatorRC
+-- The canonical ambient witnesses: the gap is on the blocks of the PERTURBED
+-- operator relative to `Q`, which is where Section 2 states it.
+#check @TauCeti.DavisKahan1970.sinTwoTheta_ambient_unbounded_perturbedGap_symmetricNorming_rclike
+#check @TauCeti.DavisKahan1970.sinTwoTheta_ambient_unbounded_perturbedGap_symmetricNorming_complex
+#check @TauCeti.DavisKahan1970.sinTwoTheta_ambient_unbounded_perturbedGap_symmetricNorming_real
+-- The unperturbed-gap reading, retained as supporting evidence.
 #check @TauCeti.DavisKahan1970.sinTwoTheta_ambient_unbounded_reducing_symmetricNorming_rclike
 #check @TauCeti.DavisKahan1970.sinTwoTheta_ambient_unbounded_reducing_symmetricNorming_complex
 #check @TauCeti.DavisKahan1970.sinTwoTheta_ambient_unbounded_reducing_symmetricNorming_real
+-- The four steps of the role reversal.
+#check @TauCeti.LinearPMap.addBounded_neg_cancel
+#check @TauCeti.DavisKahan.Angle.sinTwoAngleOperator_comm
+#check @TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction.gauge_neg
+#check @TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction.mem_neg
 #check @TauCeti.DavisKahan1970.sinTwoTheta_ambient_unbounded_reflectionPair_symmetricNorming_rclike
 #check @TauCeti.DavisKahan1970.sinTwoTheta_ambient_unbounded_addBounded_symmetricNorming_complex
 #check @TauCeti.DavisKahan1970.sinTwoTheta_ambient_unbounded_addBounded_symmetricNorming_real

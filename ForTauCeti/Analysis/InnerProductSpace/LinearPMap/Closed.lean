@@ -891,6 +891,18 @@ inclusion. -/
 @[simp] theorem addBounded_apply (A : E →ₗ.[𝕜] E) (V : E →L[𝕜] E)
     (x : (TauCeti.LinearPMap.addBounded A V).domain) :
     TauCeti.LinearPMap.addBounded A V x = A x + V (x : E) := (rfl)
+/-- **A bounded perturbation is undone by its negation, on the nose.**
+
+`addBounded` leaves the domain alone, so `(A + V) + (-V)` is `A` as a partial map
+rather than merely an extension of it.  This is what lets a theorem stated with
+the roles of the unperturbed and perturbed operators exchanged be applied without
+any domain bookkeeping. -/
+@[simp] theorem addBounded_neg_cancel (A : E →ₗ.[𝕜] E) (V : E →L[𝕜] E) :
+    TauCeti.LinearPMap.addBounded (TauCeti.LinearPMap.addBounded A V) (-V) = A := by
+  refine LinearPMap.ext rfl fun x hf hg => ?_
+  change A ⟨x, hf⟩ + V x + (-V) x = A ⟨x, hg⟩
+  simp
+
 /-- A bounded left inverse for the real shift of a partial map. -/
 def LeftShiftedInverseBound (A : E →ₗ.[𝕜] E) (c s : ℝ) : Prop :=
   ∃ J : E →L[𝕜] E,
