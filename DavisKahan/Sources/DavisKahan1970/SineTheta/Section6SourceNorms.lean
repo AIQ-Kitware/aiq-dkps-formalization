@@ -268,6 +268,7 @@ theorem lemma6_1_converse_sourceExact_real
       N.gauge (projectionBlock Ω Γ K) ≤ N.gauge (projectionBlock Ω Γ L) :=
   lemma6_1_converse_sourceExact N Ω Γ K Ktilde L Ltilde hK hL hsum hLmem
 
+
 end FixedScalar
 
 end DavisKahan1970

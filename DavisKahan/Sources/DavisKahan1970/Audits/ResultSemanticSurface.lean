@@ -754,6 +754,8 @@ Status: **TERMINAL EXACT**.
 #check @TauCeti.DavisKahan1970.proposition6_1_complex
 #check @TauCeti.DavisKahan1970.proposition6_1_projectorDifference_complex
 #check @TauCeti.DavisKahan1970.proposition6_1_real
+#check @TauCeti.DavisKahan1970.proposition6_1_sourceExact_complex
+#check @TauCeti.DavisKahan1970.proposition6_1_sourceExact_real
 #check @TauCeti.DavisKahan1970.proposition6_1_commonDomain_complex
 #check @TauCeti.DavisKahan1970.proposition6_1_commonDomain_real
 #check @TauCeti.DavisKahan1970.proposition6_1_commonDomain
@@ -770,6 +772,8 @@ Status: **TERMINAL EXACT**.
 
 #check @TauCeti.DavisKahan1970.theorem6_1_complex
 #check @TauCeti.DavisKahan1970.theorem6_1_real
+#check @TauCeti.DavisKahan1970.theorem6_1_sourceExact_complex
+#check @TauCeti.DavisKahan1970.theorem6_1_sourceExact_real
 #check @TauCeti.DavisKahan1970.theorem6_1_commonDomain
 #check @TauCeti.DavisKahan1970.IsTrialResidualEquation
 #check @TauCeti.DavisKahan1970.isTrialResidual_iff_equation_and_isometry

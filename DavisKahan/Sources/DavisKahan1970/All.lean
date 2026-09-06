@@ -48,6 +48,7 @@ import DavisKahan.Sources.DavisKahan1970.Section5BanachSylvester
 import DavisKahan.Sources.DavisKahan1970.Section6AppendixLeakage
 import DavisKahan.Sources.DavisKahan1970.Section6AppendixLeakageReal
 import DavisKahan.Sources.DavisKahan1970.Section6Example61
+import DavisKahan.Sources.DavisKahan1970.Section6SourceNormClass
 import DavisKahan.Sources.DavisKahan1970.Section6Theorem63Presentation
 import DavisKahan.Sources.DavisKahan1970.Section7IdealBounds
 import DavisKahan.Sources.DavisKahan1970.Section7SwapAsymmetry
