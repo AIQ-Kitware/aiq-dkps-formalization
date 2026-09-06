@@ -760,6 +760,17 @@ needs is derived from the two block placements by the unbounded
 the two block resolvents; the separation is the same two placements read as an
 interval/exterior gap.
 
+**The real port is done, 2026-09-06.**
+`theorem8_2_perturbationHalfGap_unbounded_real` and
+`theorem8_2_residualHalfGap_unbounded_real`, with their printed `Θ < π/4`
+siblings, run the complex theorems on complexified data and read the conclusion
+back.  `SpectralTheory/Complexification/ReducingRestrictionDescent.lean` carries
+the transports: the block of a complexified partial map on a complexified
+reducing subspace **is** the complexification of the real block, so the printed
+spectral placements survive; the directed gap and the residual norm survive
+because `complexify` is isometric; separability survives because the
+complexification is homeomorphic to a product.
+
 **The residual branch is done too, 2026-09-05.**
 `theorem8_2_residualHalfGap_unbounded_complex` and its printed `Θ < π/4` sibling
 carry `‖R‖ < δ/2` and do **not** acquire `‖H‖ < δ/2`, which was the acceptance
@@ -1207,10 +1218,10 @@ Theorem 3.1 invariant:
 7. the residual branch, by the self-adjoint-completion reduction the bounded
    proof already uses — **done**; its public type carries `‖R‖ < δ/2` and does
    not acquire `‖H‖ < δ/2`;
-8. the real port, through the existing partial-map complexification layer, as
-   `Theorem81Real.lean` does.  Separate exact real and complex endpoints are
-   enough — this is not another `RCLike` project;
-9. resolve the UIN completeness question below;
+8. the real port, through the existing partial-map complexification layer —
+   **done**; separate exact real and complex endpoints, not an `RCLike`
+   generalization;
+9. resolve the UIN completeness question below — **answered, §4c**;
 10. hand back a source-exact snapshot for hostile review.
 
 **Validation discipline for this stretch.**  Do not run the whole

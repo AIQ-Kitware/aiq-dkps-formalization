@@ -4,7 +4,7 @@
 
 **Census family:** `source-completion-census`  
 **Items:** 50  
-**Unique cited Lean declarations:** 1359
+**Unique cited Lean declarations:** 1368
 
 ## How to use this census
 
@@ -4592,6 +4592,15 @@ At the OPERATOR norm the compiled residual statement is sound and in fact STRONG
 - `TauCeti.DavisKahan1970.Section8.theorem8_2_perturbationHalfGap_maximalAngle_lt_unbounded_complex`
 - `TauCeti.DavisKahan1970.Section8.theorem8_2_residualHalfGap_unbounded_complex`
 - `TauCeti.DavisKahan1970.Section8.theorem8_2_residualHalfGap_maximalAngle_lt_unbounded_complex`
+- `TauCeti.DavisKahan.Foundation.RealComplexification.unitaryConj_complexifyReal_reducingRestriction`
+- `TauCeti.DavisKahan.Foundation.RealComplexification.realSpectrum_reducingRestriction_complexifyReal`
+- `TauCeti.DavisKahan.Foundation.RealComplexification.realSpectrum_reducingRestriction_complexifyReal_of_eq`
+- `TauCeti.DavisKahan.Foundation.RealComplexification.norm_complexify_comp_subtypeL`
+- `TauCeti.DavisKahan.Foundation.RealComplexification.separableSpace_realComplexification`
+- `TauCeti.DavisKahan1970.Section8.theorem8_2_perturbationHalfGap_unbounded_real`
+- `TauCeti.DavisKahan1970.Section8.theorem8_2_residualHalfGap_unbounded_real`
+- `TauCeti.DavisKahan1970.Section8.theorem8_2_perturbationHalfGap_maximalAngle_lt_unbounded_real`
+- `TauCeti.DavisKahan1970.Section8.theorem8_2_residualHalfGap_maximalAngle_lt_unbounded_real`
 
 **Curated source/Lean review:**
 

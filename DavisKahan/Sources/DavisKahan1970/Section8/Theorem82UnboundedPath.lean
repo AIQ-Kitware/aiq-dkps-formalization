@@ -7,6 +7,7 @@ import DavisKahan.SpectralTheory.UnboundedBandLipschitz
 import DavisKahan.Sources.DavisKahan1970.Section8.Theorem82Unbounded
 import DavisKahan.Geometry.Angle.DoubleAngleGapBound
 import DavisKahan.SpectralTheory.ReducingSpectrumUnion
+import DavisKahan.SpectralTheory.Complexification.ReducingRestrictionDescent
 import ForTauCeti.Analysis.InnerProductSpace.Polar.SelfAdjointCompletion
 
 /-!
@@ -607,6 +608,245 @@ theorem theorem8_2_residualHalfGap_maximalAngle_lt_unbounded_complex
   show DavisKahan.subspaceGap P Q < Real.sqrt 2 / 2
   rw [DavisKahan.subspaceGap_eq_directedGap_of_crossedDefectsEquivalent P Q hcross]
   exact theorem8_2_residualHalfGap_unbounded_complex hA Hop hHop hdelta hab
+    hPred hQred hQspec hQperp hPspec hRsmall
+
+/-! ### The real endpoints, by complexification
+
+The real theorems are the complex ones run on complexified data.  Every datum
+transports: the operator by `complexifyReal`, the perturbation by `complexify`,
+the subspaces by `complexifySubmodule`, the printed spectral placements by
+`realSpectrum_reducingRestriction_complexifyReal`, and the conclusion back by
+`directedGap_complexifySubmodule`.  Separate exact real and complex endpoints,
+not an `RCLike` generalization: the moving band lives in the complex spectral
+measure. -/
+
+open TauCeti.RealComplexification in
+/-- **Davis--Kahan 1970, Theorem 8.2, perturbation alternative, at unbounded
+ambient scope over a real Hilbert space, directed form.** -/
+theorem theorem8_2_perturbationHalfGap_unbounded_real
+    {Er : Type v} [NormedAddCommGroup Er] [InnerProductSpace ℝ Er] [CompleteSpace Er]
+    [TopologicalSpace.SeparableSpace Er]
+    {A : Er →ₗ.[ℝ] Er} (hA : IsSelfAdjoint A)
+    (Hop : Er →L[ℝ] Er) (hHop : DavisKahan.IsSelfAdjointOperator Hop)
+    {P Q : Submodule ℝ Er} [P.HasOrthogonalProjection] [Q.HasOrthogonalProjection]
+    {alpha beta delta : ℝ} (hdelta : 0 < delta) (hab : beta ≤ alpha)
+    (hPred : TauCeti.LinearPMap.ReducesSubspace A P)
+    (hQred : TauCeti.LinearPMap.ReducesSubspace
+      (TauCeti.LinearPMap.addBounded A Hop) Q)
+    (hQspec : TauCeti.LinearPMap.realSpectrum
+      (TauCeti.LinearPMap.reducingRestriction (TauCeti.LinearPMap.addBounded A Hop) Q hQred)
+      ⊆ Set.Icc beta alpha)
+    (hQperp : TauCeti.LinearPMap.realSpectrum
+      (TauCeti.LinearPMap.reducingRestriction (TauCeti.LinearPMap.addBounded A Hop) Qᗮ
+        hQred.orthogonal) ⊆ bandExterior beta alpha delta)
+    (hPspec : TauCeti.LinearPMap.realSpectrum
+      (TauCeti.LinearPMap.reducingRestriction A P hPred)
+      ⊆ Set.Icc (beta - delta / 2) (alpha + delta / 2))
+    (hsmall : ‖Hop‖ < delta / 2) :
+    DavisKahan.directedGap P Q < Real.sqrt 2 / 2 := by
+  classical
+  have hsep : TopologicalSpace.SeparableSpace (TauCeti.RealComplexification Er) :=
+    DavisKahan.Foundation.RealComplexification.separableSpace_realComplexification
+  have hAC : IsSelfAdjoint (TauCeti.LinearPMap.complexifyReal A) :=
+    TauCeti.LinearPMap.isSelfAdjoint_complexifyReal hA
+  have hHC : DavisKahan.IsSelfAdjointOperator (complexify Hop) :=
+    (TauCeti.RealComplexification.complexify_isSymmetric_iff Hop).mpr hHop
+  have hPredC : TauCeti.LinearPMap.ReducesSubspace (TauCeti.LinearPMap.complexifyReal A)
+      (DavisKahan.Foundation.RealComplexification.complexifySubmodule P) :=
+    TauCeti.DavisKahan1970.reducesSubspace_complexifyReal hPred
+  have hsum : TauCeti.LinearPMap.addBounded (TauCeti.LinearPMap.complexifyReal A)
+      (complexify Hop)
+      = TauCeti.LinearPMap.complexifyReal (TauCeti.LinearPMap.addBounded A Hop) :=
+    (TauCeti.DavisKahan1970.complexifyReal_addBounded A Hop).symm
+  have hQredC : TauCeti.LinearPMap.ReducesSubspace
+      (TauCeti.LinearPMap.addBounded (TauCeti.LinearPMap.complexifyReal A) (complexify Hop))
+      (DavisKahan.Foundation.RealComplexification.complexifySubmodule Q) := by
+    rw [hsum]
+    exact TauCeti.DavisKahan1970.reducesSubspace_complexifyReal hQred
+  have hQspecC : TauCeti.LinearPMap.realSpectrum
+      (TauCeti.LinearPMap.reducingRestriction
+        (TauCeti.LinearPMap.addBounded (TauCeti.LinearPMap.complexifyReal A) (complexify Hop))
+        (DavisKahan.Foundation.RealComplexification.complexifySubmodule Q) hQredC)
+      ⊆ Set.Icc beta alpha := by
+    rw [realSpectrum_reducingRestriction_congr hsum hQredC
+      (TauCeti.DavisKahan1970.reducesSubspace_complexifyReal hQred),
+      DavisKahan.Foundation.RealComplexification.realSpectrum_reducingRestriction_complexifyReal
+        hQred _]
+    exact hQspec
+  have hQperpC : TauCeti.LinearPMap.realSpectrum
+      (TauCeti.LinearPMap.reducingRestriction
+        (TauCeti.LinearPMap.addBounded (TauCeti.LinearPMap.complexifyReal A) (complexify Hop))
+        (DavisKahan.Foundation.RealComplexification.complexifySubmodule Q)ᗮ
+        hQredC.orthogonal) ⊆ bandExterior beta alpha delta := by
+    rw [realSpectrum_reducingRestriction_congr hsum hQredC.orthogonal
+      ((TauCeti.DavisKahan1970.reducesSubspace_complexifyReal
+        hQred).orthogonal)]
+    rw [DavisKahan.Foundation.RealComplexification.realSpectrum_reducingRestriction_complexifyReal_of_eq
+      (DavisKahan.Foundation.RealComplexification.complexifySubmodule_orthogonal Q).symm
+      hQred.orthogonal _]
+    exact hQperp
+  have hPspecC : TauCeti.LinearPMap.realSpectrum
+      (TauCeti.LinearPMap.reducingRestriction (TauCeti.LinearPMap.complexifyReal A)
+        (DavisKahan.Foundation.RealComplexification.complexifySubmodule P) hPredC)
+      ⊆ Set.Icc (beta - delta / 2) (alpha + delta / 2) := by
+    rw [DavisKahan.Foundation.RealComplexification.realSpectrum_reducingRestriction_complexifyReal
+      hPred hPredC]
+    exact hPspec
+  have hsmallC : ‖complexify Hop‖ < delta / 2 := by
+    rw [TauCeti.RealComplexification.norm_complexify]
+    exact hsmall
+  have hmain := theorem8_2_perturbationHalfGap_unbounded_complex hAC (complexify Hop) hHC
+    hdelta hab hPredC hQredC hQspecC hQperpC hPspecC hsmallC
+  rwa [DavisKahan.Foundation.RealComplexification.directedGap_complexifySubmodule] at hmain
+
+/-- A real subspace admitting an orthogonal projection inside a complete ambient
+space is itself complete. -/
+noncomputable local instance instCompleteSpaceCoeRealResidual
+    {Er : Type v} [NormedAddCommGroup Er] [InnerProductSpace ℝ Er] [CompleteSpace Er]
+    (U : Submodule ℝ Er) [U.HasOrthogonalProjection] : CompleteSpace U :=
+  (Submodule.isComplete_coe_of_hasOrthogonalProjection U).completeSpace_coe
+
+open TauCeti.RealComplexification in
+/-- **Davis--Kahan 1970, Theorem 8.2, residual alternative, at unbounded ambient
+scope over a real Hilbert space, directed form.**
+
+The public type carries `‖R‖ < δ/2` and does not acquire `‖H‖ < δ/2`. -/
+theorem theorem8_2_residualHalfGap_unbounded_real
+    {Er : Type v} [NormedAddCommGroup Er] [InnerProductSpace ℝ Er] [CompleteSpace Er]
+    [TopologicalSpace.SeparableSpace Er]
+    {A : Er →ₗ.[ℝ] Er} (hA : IsSelfAdjoint A)
+    (Hop : Er →L[ℝ] Er) (hHop : DavisKahan.IsSelfAdjointOperator Hop)
+    {P Q : Submodule ℝ Er} [P.HasOrthogonalProjection] [Q.HasOrthogonalProjection]
+    {alpha beta delta : ℝ} (hdelta : 0 < delta) (hab : beta ≤ alpha)
+    (hPred : TauCeti.LinearPMap.ReducesSubspace A P)
+    (hQred : TauCeti.LinearPMap.ReducesSubspace
+      (TauCeti.LinearPMap.addBounded A Hop) Q)
+    (hQspec : TauCeti.LinearPMap.realSpectrum
+      (TauCeti.LinearPMap.reducingRestriction (TauCeti.LinearPMap.addBounded A Hop) Q hQred)
+      ⊆ Set.Icc beta alpha)
+    (hQperp : TauCeti.LinearPMap.realSpectrum
+      (TauCeti.LinearPMap.reducingRestriction (TauCeti.LinearPMap.addBounded A Hop) Qᗮ
+        hQred.orthogonal) ⊆ bandExterior beta alpha delta)
+    (hPspec : TauCeti.LinearPMap.realSpectrum
+      (TauCeti.LinearPMap.reducingRestriction A P hPred)
+      ⊆ Set.Icc (beta - delta / 2) (alpha + delta / 2))
+    (hRsmall : ‖Hop ∘L (P.subtypeL : P →L[ℝ] Er)‖ < delta / 2) :
+    DavisKahan.directedGap P Q < Real.sqrt 2 / 2 := by
+  classical
+  have hsep : TopologicalSpace.SeparableSpace (TauCeti.RealComplexification Er) :=
+    DavisKahan.Foundation.RealComplexification.separableSpace_realComplexification
+  have hAC : IsSelfAdjoint (TauCeti.LinearPMap.complexifyReal A) :=
+    TauCeti.LinearPMap.isSelfAdjoint_complexifyReal hA
+  have hHC : DavisKahan.IsSelfAdjointOperator (complexify Hop) :=
+    (TauCeti.RealComplexification.complexify_isSymmetric_iff Hop).mpr hHop
+  have hPredC : TauCeti.LinearPMap.ReducesSubspace (TauCeti.LinearPMap.complexifyReal A)
+      (DavisKahan.Foundation.RealComplexification.complexifySubmodule P) :=
+    TauCeti.DavisKahan1970.reducesSubspace_complexifyReal hPred
+  have hsum : TauCeti.LinearPMap.addBounded (TauCeti.LinearPMap.complexifyReal A)
+      (complexify Hop)
+      = TauCeti.LinearPMap.complexifyReal (TauCeti.LinearPMap.addBounded A Hop) :=
+    (TauCeti.DavisKahan1970.complexifyReal_addBounded A Hop).symm
+  have hQredC : TauCeti.LinearPMap.ReducesSubspace
+      (TauCeti.LinearPMap.addBounded (TauCeti.LinearPMap.complexifyReal A) (complexify Hop))
+      (DavisKahan.Foundation.RealComplexification.complexifySubmodule Q) := by
+    rw [hsum]
+    exact TauCeti.DavisKahan1970.reducesSubspace_complexifyReal hQred
+  have hQspecC : TauCeti.LinearPMap.realSpectrum
+      (TauCeti.LinearPMap.reducingRestriction
+        (TauCeti.LinearPMap.addBounded (TauCeti.LinearPMap.complexifyReal A) (complexify Hop))
+        (DavisKahan.Foundation.RealComplexification.complexifySubmodule Q) hQredC)
+      ⊆ Set.Icc beta alpha := by
+    rw [realSpectrum_reducingRestriction_congr hsum hQredC
+      (TauCeti.DavisKahan1970.reducesSubspace_complexifyReal hQred),
+      DavisKahan.Foundation.RealComplexification.realSpectrum_reducingRestriction_complexifyReal
+        hQred _]
+    exact hQspec
+  have hQperpC : TauCeti.LinearPMap.realSpectrum
+      (TauCeti.LinearPMap.reducingRestriction
+        (TauCeti.LinearPMap.addBounded (TauCeti.LinearPMap.complexifyReal A) (complexify Hop))
+        (DavisKahan.Foundation.RealComplexification.complexifySubmodule Q)ᗮ
+        hQredC.orthogonal) ⊆ bandExterior beta alpha delta := by
+    rw [realSpectrum_reducingRestriction_congr hsum hQredC.orthogonal
+      ((TauCeti.DavisKahan1970.reducesSubspace_complexifyReal hQred).orthogonal)]
+    rw [DavisKahan.Foundation.RealComplexification.realSpectrum_reducingRestriction_complexifyReal_of_eq
+      (DavisKahan.Foundation.RealComplexification.complexifySubmodule_orthogonal Q).symm
+      hQred.orthogonal _]
+    exact hQperp
+  have hPspecC : TauCeti.LinearPMap.realSpectrum
+      (TauCeti.LinearPMap.reducingRestriction (TauCeti.LinearPMap.complexifyReal A)
+        (DavisKahan.Foundation.RealComplexification.complexifySubmodule P) hPredC)
+      ⊆ Set.Icc (beta - delta / 2) (alpha + delta / 2) := by
+    rw [DavisKahan.Foundation.RealComplexification.realSpectrum_reducingRestriction_complexifyReal
+      hPred hPredC]
+    exact hPspec
+  have hRsmallC : ‖complexify Hop ∘L
+      ((DavisKahan.Foundation.RealComplexification.complexifySubmodule P).subtypeL :
+        DavisKahan.Foundation.RealComplexification.complexifySubmodule P →L[ℂ]
+          TauCeti.RealComplexification Er)‖ < delta / 2 := by
+    rw [DavisKahan.Foundation.RealComplexification.norm_complexify_comp_subtypeL]
+    exact hRsmall
+  have hmain := theorem8_2_residualHalfGap_unbounded_complex hAC (complexify Hop) hHC
+    hdelta hab hPredC hQredC hQspecC hQperpC hPspecC hRsmallC
+  rwa [DavisKahan.Foundation.RealComplexification.directedGap_complexifySubmodule] at hmain
+
+/-- **Theorem 8.2's printed conclusion `Θ < π/4` at unbounded ambient scope over
+a real Hilbert space, perturbation alternative.** -/
+theorem theorem8_2_perturbationHalfGap_maximalAngle_lt_unbounded_real
+    {Er : Type v} [NormedAddCommGroup Er] [InnerProductSpace ℝ Er] [CompleteSpace Er]
+    [TopologicalSpace.SeparableSpace Er]
+    {A : Er →ₗ.[ℝ] Er} (hA : IsSelfAdjoint A)
+    (Hop : Er →L[ℝ] Er) (hHop : DavisKahan.IsSelfAdjointOperator Hop)
+    {P Q : Submodule ℝ Er} [P.HasOrthogonalProjection] [Q.HasOrthogonalProjection]
+    {alpha beta delta : ℝ} (hdelta : 0 < delta) (hab : beta ≤ alpha)
+    (hPred : TauCeti.LinearPMap.ReducesSubspace A P)
+    (hQred : TauCeti.LinearPMap.ReducesSubspace
+      (TauCeti.LinearPMap.addBounded A Hop) Q)
+    (hQspec : TauCeti.LinearPMap.realSpectrum
+      (TauCeti.LinearPMap.reducingRestriction (TauCeti.LinearPMap.addBounded A Hop) Q hQred)
+      ⊆ Set.Icc beta alpha)
+    (hQperp : TauCeti.LinearPMap.realSpectrum
+      (TauCeti.LinearPMap.reducingRestriction (TauCeti.LinearPMap.addBounded A Hop) Qᗮ
+        hQred.orthogonal) ⊆ bandExterior beta alpha delta)
+    (hPspec : TauCeti.LinearPMap.realSpectrum
+      (TauCeti.LinearPMap.reducingRestriction A P hPred)
+      ⊆ Set.Icc (beta - delta / 2) (alpha + delta / 2))
+    (hcross : DavisKahan.CrossedDefectsEquivalent P Q)
+    (hsmall : ‖Hop‖ < delta / 2) :
+    TauCeti.DavisKahanExt.maximalAngle P Q < Real.pi / 4 := by
+  refine (maximalAngle_lt_pi_div_four_iff P Q).2 ?_
+  show DavisKahan.subspaceGap P Q < Real.sqrt 2 / 2
+  rw [DavisKahan.subspaceGap_eq_directedGap_of_crossedDefectsEquivalent P Q hcross]
+  exact theorem8_2_perturbationHalfGap_unbounded_real hA Hop hHop hdelta hab
+    hPred hQred hQspec hQperp hPspec hsmall
+
+/-- **Theorem 8.2's printed conclusion `Θ < π/4` at unbounded ambient scope over
+a real Hilbert space, residual alternative.** -/
+theorem theorem8_2_residualHalfGap_maximalAngle_lt_unbounded_real
+    {Er : Type v} [NormedAddCommGroup Er] [InnerProductSpace ℝ Er] [CompleteSpace Er]
+    [TopologicalSpace.SeparableSpace Er]
+    {A : Er →ₗ.[ℝ] Er} (hA : IsSelfAdjoint A)
+    (Hop : Er →L[ℝ] Er) (hHop : DavisKahan.IsSelfAdjointOperator Hop)
+    {P Q : Submodule ℝ Er} [P.HasOrthogonalProjection] [Q.HasOrthogonalProjection]
+    {alpha beta delta : ℝ} (hdelta : 0 < delta) (hab : beta ≤ alpha)
+    (hPred : TauCeti.LinearPMap.ReducesSubspace A P)
+    (hQred : TauCeti.LinearPMap.ReducesSubspace
+      (TauCeti.LinearPMap.addBounded A Hop) Q)
+    (hQspec : TauCeti.LinearPMap.realSpectrum
+      (TauCeti.LinearPMap.reducingRestriction (TauCeti.LinearPMap.addBounded A Hop) Q hQred)
+      ⊆ Set.Icc beta alpha)
+    (hQperp : TauCeti.LinearPMap.realSpectrum
+      (TauCeti.LinearPMap.reducingRestriction (TauCeti.LinearPMap.addBounded A Hop) Qᗮ
+        hQred.orthogonal) ⊆ bandExterior beta alpha delta)
+    (hPspec : TauCeti.LinearPMap.realSpectrum
+      (TauCeti.LinearPMap.reducingRestriction A P hPred)
+      ⊆ Set.Icc (beta - delta / 2) (alpha + delta / 2))
+    (hcross : DavisKahan.CrossedDefectsEquivalent P Q)
+    (hRsmall : ‖Hop ∘L (P.subtypeL : P →L[ℝ] Er)‖ < delta / 2) :
+    TauCeti.DavisKahanExt.maximalAngle P Q < Real.pi / 4 := by
+  refine (maximalAngle_lt_pi_div_four_iff P Q).2 ?_
+  show DavisKahan.subspaceGap P Q < Real.sqrt 2 / 2
+  rw [DavisKahan.subspaceGap_eq_directedGap_of_crossedDefectsEquivalent P Q hcross]
+  exact theorem8_2_residualHalfGap_unbounded_real hA Hop hHop hdelta hab
     hPred hQred hQspec hQperp hPspec hRsmall
 
 end
