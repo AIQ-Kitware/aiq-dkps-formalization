@@ -48,6 +48,8 @@ inventory called that the printed hypothesis.
 
 The restatement below is what fails if the gap argument moves back to `A` and `P`:
 `hgap` is built from `reducingRestriction (addBounded A Hop) Q`. -/
+/-- The ambient `sin 2Θ` gap hypothesis is read on the *perturbed* blocks of
+`A + H` at `Q`, which is where (1.3) puts it. -/
 theorem ambient_sinTwoTheta_gap_is_on_the_perturbed_blocks
     {H : Type v} [NormedAddCommGroup H] [InnerProductSpace ℂ H] [CompleteSpace H]
     (N : SymmetricNormingFunction)
@@ -74,6 +76,8 @@ theorem ambient_sinTwoTheta_gap_is_on_the_perturbed_blocks
 
 Each is exact rather than approximate, which is what makes the reversal a
 correspondence and not an appeal to symmetry. -/
+/-- Adding a bounded perturbation and then subtracting it returns the original
+partial map on the nose, domains included. -/
 theorem addBounded_cancellation_is_on_the_nose
     {𝕜 : Type*} [RCLike 𝕜] {H : Type v}
     [NormedAddCommGroup H] [InnerProductSpace 𝕜 H] [CompleteSpace H]
@@ -81,6 +85,7 @@ theorem addBounded_cancellation_is_on_the_nose
     TauCeti.LinearPMap.addBounded (TauCeti.LinearPMap.addBounded A V) (-V) = A :=
   TauCeti.LinearPMap.addBounded_neg_cancel A V
 
+/-- The ambient `sin 2Θ` operator is symmetric in its pair of subspaces. -/
 theorem ambient_sinTwoTheta_is_symmetric_in_the_pair
     {𝕜 : Type*} [RCLike 𝕜] {H : Type v}
     [NormedAddCommGroup H] [InnerProductSpace 𝕜 H] [CompleteSpace H]
@@ -89,6 +94,8 @@ theorem ambient_sinTwoTheta_is_symmetric_in_the_pair
       TauCeti.DavisKahan.Angle.sinTwoAngleOperator U V :=
   TauCeti.DavisKahan.Angle.sinTwoAngleOperator_comm U V
 
+/-- A symmetric gauge is blind to the sign of the perturbation, in both its
+membership and its value. -/
 theorem source_gauge_does_not_see_the_perturbation_sign
     {𝕜 : Type*} [RCLike 𝕜] {E F : Type v}
     [NormedAddCommGroup E] [InnerProductSpace 𝕜 E] [CompleteSpace E]
@@ -102,6 +109,8 @@ theorem source_gauge_does_not_see_the_perturbation_sign
 The classification was stated on `genericCosineBlock` -- Halmos's `cos²Θ` -- and
 the row asserted that as the printed invariant.  The restatement names
 `genericAngleBlock`, which is `Θ`. -/
+/-- Theorem 3.1's forward invariant is the source's angle operator `Θ`, not
+Halmos's `cos²Θ`. -/
 theorem theorem3_1_invariant_is_the_angle_operator
     {H₁ : Type v} [NormedAddCommGroup H₁] [InnerProductSpace ℂ H₁] [CompleteSpace H₁]
     {H₂ : Type v} [NormedAddCommGroup H₂] [InnerProductSpace ℂ H₂] [CompleteSpace H₂]
@@ -122,6 +131,8 @@ theorem theorem3_1_invariant_is_the_angle_operator
 
 It was on `compactAngleEigenvalueList`, the *sine-square* list.  The restatement
 names `compactAngleList`, the angles counted with multiplicity. -/
+/-- Corollary 3.1 classifies by the list of angles counted with multiplicity,
+not by the sine-square list. -/
 theorem corollary3_1_invariant_is_the_angle_list
     {𝕜 : Type*} [RCLike 𝕜]
     {H₁ : Type v} [NormedAddCommGroup H₁] [InnerProductSpace 𝕜 H₁] [CompleteSpace H₁]
@@ -150,6 +161,8 @@ theorem corollary3_1_invariant_is_the_angle_list
 The printed converse assumes `dim A₀ + dim A₁ = dim H`.  It once took a chosen
 isometric equivalence from the caller, which is construction data rather than the
 hypothesis. -/
+/-- Theorem 3.1's printed dimension clause is a proposition about the pair, not
+chosen construction data. -/
 theorem theorem3_1_dimension_clause_is_a_proposition
     {𝕜 : Type*} [RCLike 𝕜]
     {A₀ : Type v} [NormedAddCommGroup A₀] [InnerProductSpace 𝕜 A₀]
