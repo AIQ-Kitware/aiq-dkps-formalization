@@ -103,6 +103,7 @@ theorem specProjection_gaps_eq_zero
 /-- The exterior of the band, as a set. -/
 def bandExterior (l r d : ℝ) : Set ℝ := {x : ℝ | x ≤ l - d ∨ r + d ≤ x}
 
+/-- The exterior of the band is measurable, being a union of two closed rays. -/
 theorem measurableSet_bandExterior (l r d : ℝ) : MeasurableSet (bandExterior l r d) := by
   have : bandExterior l r d = Set.Iic (l - d) ∪ Set.Ici (r + d) := rfl
   rw [this]

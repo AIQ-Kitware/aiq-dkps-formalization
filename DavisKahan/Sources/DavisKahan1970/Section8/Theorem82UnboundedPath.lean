@@ -4,6 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, Claude Opus 5
 -/
 import DavisKahan.SpectralTheory.UnboundedBandLipschitz
+import DavisKahan.Sources.DavisKahan1970.Section8.Theorem82Unbounded
 import DavisKahan.Geometry.Angle.DoubleAngleGapBound
 import DavisKahan.SpectralTheory.ReducingSpectrumUnion
 import ForTauCeti.Analysis.InnerProductSpace.Polar.SelfAdjointCompletion
@@ -79,6 +80,7 @@ theorem norm_realSmul (V : Hc →L[ℂ] Hc) (c : ℝ) :
 def pathOperator (A : Hc →ₗ.[ℂ] Hc) (Hop : Hc →L[ℂ] Hc) (t : ℝ) : Hc →ₗ.[ℂ] Hc :=
   TauCeti.LinearPMap.addBounded A (((1 : ℝ) - t : ℝ) • Hop)
 
+/-- Every operator on the path is self-adjoint. -/
 theorem isSelfAdjoint_pathOperator {A : Hc →ₗ.[ℂ] Hc} (hA : IsSelfAdjoint A)
     {Hop : Hc →L[ℂ] Hc} (hHop : DavisKahan.IsSelfAdjointOperator Hop) (t : ℝ) :
     IsSelfAdjoint (pathOperator A Hop t) :=
@@ -110,16 +112,19 @@ def pathBand {A : Hc →ₗ.[ℂ] Hc} (hA : IsSelfAdjoint A) {Hop : Hc →L[ℂ]
     (hHop : DavisKahan.IsSelfAdjointOperator Hop) (l r : ℝ) (t : ℝ) : Submodule ℂ Hc :=
   DavisKahan.bandSubspace (isSelfAdjoint_pathOperator hA hHop t) l r
 
+/-- The path band, unfolded. -/
 theorem pathBand_def {A : Hc →ₗ.[ℂ] Hc} (hA : IsSelfAdjoint A) {Hop : Hc →L[ℂ] Hc}
     (hHop : DavisKahan.IsSelfAdjointOperator Hop) (l r : ℝ) (t : ℝ) :
     pathBand hA hHop l r t
       = DavisKahan.bandSubspace (isSelfAdjoint_pathOperator hA hHop t) l r := rfl
 
+/-- The path band is a spectral range, hence orthogonally complemented. -/
 instance pathBand_hasOrthogonalProjection {A : Hc →ₗ.[ℂ] Hc} (hA : IsSelfAdjoint A)
     {Hop : Hc →L[ℂ] Hc} (hHop : DavisKahan.IsSelfAdjointOperator Hop) (l r : ℝ) (t : ℝ) :
     (pathBand hA hHop l r t).HasOrthogonalProjection :=
   DavisKahan.bandSubspace_hasOrthogonalProjection _ _ _
 
+/-- The path band reduces the operator at its own parameter. -/
 theorem reducesSubspace_pathBand {A : Hc →ₗ.[ℂ] Hc} (hA : IsSelfAdjoint A)
     {Hop : Hc →L[ℂ] Hc} (hHop : DavisKahan.IsSelfAdjointOperator Hop) (l r : ℝ) (t : ℝ) :
     TauCeti.LinearPMap.ReducesSubspace (pathOperator A Hop t) (pathBand hA hHop l r t) :=
@@ -462,6 +467,8 @@ theorem theorem8_2_perturbationHalfGap_maximalAngle_lt_unbounded_complex
 
 /-! ### Theorem 8.2's residual branch at unbounded scope -/
 
+/-- A subspace admitting an orthogonal projection inside a complete ambient
+space is itself complete. -/
 noncomputable local instance instCompleteSpaceCoeResidual
     (U : Submodule ℂ Hc) [U.HasOrthogonalProjection] : CompleteSpace U :=
   (Submodule.isComplete_coe_of_hasOrthogonalProjection U).completeSpace_coe

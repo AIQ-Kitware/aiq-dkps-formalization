@@ -3027,15 +3027,16 @@ The declarations that carry this result's printed statement, with the source ato
 - `TauCeti.DavisKahan1970.theorem3_1_realization_inAmbient_ofSpectralMultiplicityAwayFromZero_real` — implementation_structure
 - `TauCeti.DavisKahan1970.theorem3_1_spectralMultiplicity_classification_real` — supporting_theorem
 - `TauCeti.DavisKahan1970.spectrum_genericCosineBlock_subset_Icc_real` — supporting_theorem
-- `TauCeti.ContinuousLinearMap.spectrum_subset_Icc_of_re_inner_bounds` — supporting_theorem
 - `TauCeti.DavisKahan.RealSpectralRestriction.sameSpectralMultiplicity_cfc_iff_real` — supporting_theorem
 - `TauCeti.DavisKahan1970.genericAngleBlockReal` — implementation_structure
+- `TauCeti.DavisKahan1970.genericCosineBlock_nonneg_real` — supporting_theorem
+- `TauCeti.DavisKahan1970.genericCosineBlock_le_one_real` — supporting_theorem
 
 ### Source-facing Lean declarations
 
 #### `TauCeti.DavisKahan1970.theorem3_1_spectralMultiplicity_classification_complex`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section3Classification.lean:196`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section3Classification.lean:195`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
@@ -3047,7 +3048,7 @@ Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.theorem3_1_spectralMultiplicity_classification_real`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section3Classification.lean:374`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section3Classification.lean:373`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
@@ -3137,31 +3138,31 @@ Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.theorem3_1_spectralMultiplicity_classification_sourceAngle_complex`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section3Classification.lean:325`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section3Classification.lean:324`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.genericAngleBlock`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section3Classification.lean:307`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section3Classification.lean:306`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.spectrum_genericCosineBlock_subset_Icc`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section3Classification.lean:284`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section3Classification.lean:283`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.genericCosineBlock_nonneg`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section3Classification.lean:258`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section3Classification.lean:257`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.genericCosineBlock_le_one`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section3Classification.lean:266`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section3Classification.lean:265`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
@@ -3203,19 +3204,19 @@ Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.spectrum_genericCosineBlock_subset_Icc_real`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section3Classification.lean:429`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section3Classification.lean:455`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.genericAngleBlockReal`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section3Classification.lean:444`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section3Classification.lean:475`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.theorem3_1_spectralMultiplicity_classification_sourceAngle_real`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section3Classification.lean:462`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section3Classification.lean:493`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
@@ -3225,9 +3226,15 @@ Source location candidates: `DavisKahan/SpectralTheory/Real/SpectralMultiplicity
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
-#### `TauCeti.ContinuousLinearMap.spectrum_subset_Icc_of_re_inner_bounds`
+#### `TauCeti.DavisKahan1970.genericCosineBlock_nonneg_real`
 
-Source location candidates: `ForTauCeti/Analysis/InnerProductSpace/CoerciveUnit.lean:454`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section3Classification.lean:428`
+
+Compiler-printed type: *inserted when a compiler certificate is supplied.*
+
+#### `TauCeti.DavisKahan1970.genericCosineBlock_le_one_real`
+
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section3Classification.lean:435`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
@@ -7097,6 +7104,20 @@ The declarations that carry this result's printed statement, with the source ato
 - `TauCeti.DavisKahan1970.Section8.directedGap_le_of_reducingGap_unbounded_complex` — generalization
 - `TauCeti.DavisKahan1970.Section8.theorem8_2_branch_maximalAngle_lt_unbounded_smallPerturbation_complex` — generalization
 - `TauCeti.DavisKahan.CrossedDefectsEquivalent.symm` — generalization
+- `TauCeti.DavisKahan.notMem_spectrum_addBounded_of_spectrum_gap` — generalization
+- `TauCeti.DavisKahan.spectrum_addBounded_subset_of_gap` — generalization
+- `TauCeti.DavisKahan.realSpectrum_addBounded_subset_of_gap` — generalization
+- `TauCeti.DavisKahan.specRange_bandExterior_eq_orthogonal` — generalization
+- `TauCeti.DavisKahan.formBoundedSylvesterGap_band_exterior` — generalization
+- `TauCeti.DavisKahan.subspaceGap_bandSubspace_le` — generalization
+- `TauCeti.DavisKahan.abs_directedGap_sub_directedGap_le` — generalization
+- `TauCeti.DavisKahan.le_of_band_exterior_spectra` — generalization
+- `TauCeti.DavisKahan.realSpectrum_subset_union_of_reduces` — generalization
+- `TauCeti.DavisKahan.reducesSubspace_of_isSelfAdjoint_of_invariant` — generalization
+- `TauCeti.DavisKahan1970.Section8.theorem8_2_perturbationHalfGap_unbounded_complex` — generalization
+- `TauCeti.DavisKahan1970.Section8.theorem8_2_perturbationHalfGap_maximalAngle_lt_unbounded_complex` — generalization
+- `TauCeti.DavisKahan1970.Section8.theorem8_2_residualHalfGap_unbounded_complex` — generalization
+- `TauCeti.DavisKahan1970.Section8.theorem8_2_residualHalfGap_maximalAngle_lt_unbounded_complex` — generalization
 
 ### Source-facing Lean declarations
 
@@ -7216,19 +7237,103 @@ Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.Section8.directedGap_le_of_reducingGap_unbounded_complex`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section8/Theorem82UnboundedBranchBound.lean:62`
+Source location candidates: `DavisKahan/SpectralTheory/UnboundedDirectedGapBound.lean:52`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.Section8.theorem8_2_branch_maximalAngle_lt_unbounded_smallPerturbation_complex`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section8/Theorem82UnboundedBranchBound.lean:142`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section8/Theorem82UnboundedBranchBound.lean:64`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan.CrossedDefectsEquivalent.symm`
 
 Source location candidates: `DavisKahan/Geometry/Halmos/GenericRotationPredicates.lean:77`, `DavisKahan/Geometry/Polar/DirectRotationReal.lean:81`, `DavisKahan/Geometry/Polar/DirectRotationSquare.lean:292`, `DavisKahan/Sources/DavisKahan1970/SineTheta/Norms/SingularValueTransport.lean:226`, `DavisKahan/Sources/DavisKahan1970/SineTheta/Norms/SingularValueTransport.lean:64`, `DavisKahan/SpectralTheory/AbstractSpectrum.lean:239`, `DavisKahan/Sylvester/PairwiseSpectrumGap.lean:103`, `DavisKahan/Sylvester/PairwiseSpectrumGap.lean:53`
+
+Compiler-printed type: *inserted when a compiler certificate is supplied.*
+
+#### `TauCeti.DavisKahan.notMem_spectrum_addBounded_of_spectrum_gap`
+
+Source location candidates: `DavisKahan/SpectralTheory/GapResolvent.lean:126`
+
+Compiler-printed type: *inserted when a compiler certificate is supplied.*
+
+#### `TauCeti.DavisKahan.spectrum_addBounded_subset_of_gap`
+
+Source location candidates: `DavisKahan/SpectralTheory/GapResolvent.lean:205`
+
+Compiler-printed type: *inserted when a compiler certificate is supplied.*
+
+#### `TauCeti.DavisKahan.realSpectrum_addBounded_subset_of_gap`
+
+Source location candidates: `DavisKahan/SpectralTheory/UnboundedCentralBand.lean:279`
+
+Compiler-printed type: *inserted when a compiler certificate is supplied.*
+
+#### `TauCeti.DavisKahan.specRange_bandExterior_eq_orthogonal`
+
+Source location candidates: `DavisKahan/SpectralTheory/UnboundedCentralBand.lean:117`
+
+Compiler-printed type: *inserted when a compiler certificate is supplied.*
+
+#### `TauCeti.DavisKahan.formBoundedSylvesterGap_band_exterior`
+
+Source location candidates: `DavisKahan/SpectralTheory/UnboundedCentralBand.lean:259`
+
+Compiler-printed type: *inserted when a compiler certificate is supplied.*
+
+#### `TauCeti.DavisKahan.subspaceGap_bandSubspace_le`
+
+Source location candidates: `DavisKahan/SpectralTheory/UnboundedBandLipschitz.lean:88`
+
+Compiler-printed type: *inserted when a compiler certificate is supplied.*
+
+#### `TauCeti.DavisKahan.abs_directedGap_sub_directedGap_le`
+
+Source location candidates: `DavisKahan/SpectralTheory/UnboundedBandLipschitz.lean:126`
+
+Compiler-printed type: *inserted when a compiler certificate is supplied.*
+
+#### `TauCeti.DavisKahan.le_of_band_exterior_spectra`
+
+Source location candidates: `DavisKahan/SpectralTheory/UnboundedBandLipschitz.lean:236`
+
+Compiler-printed type: *inserted when a compiler certificate is supplied.*
+
+#### `TauCeti.DavisKahan.realSpectrum_subset_union_of_reduces`
+
+Source location candidates: `DavisKahan/InfiniteDimensional/SinTheta/Continuation/CircleWitness.lean:512`, `DavisKahan/SpectralTheory/ReducingSpectrumUnion.lean:68`
+
+Compiler-printed type: *inserted when a compiler certificate is supplied.*
+
+#### `TauCeti.DavisKahan.reducesSubspace_of_isSelfAdjoint_of_invariant`
+
+Source location candidates: `DavisKahan/SpectralTheory/ReducingSpectrumUnion.lean:207`
+
+Compiler-printed type: *inserted when a compiler certificate is supplied.*
+
+#### `TauCeti.DavisKahan1970.Section8.theorem8_2_perturbationHalfGap_unbounded_complex`
+
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section8/Theorem82UnboundedPath.lean:190`
+
+Compiler-printed type: *inserted when a compiler certificate is supplied.*
+
+#### `TauCeti.DavisKahan1970.Section8.theorem8_2_perturbationHalfGap_maximalAngle_lt_unbounded_complex`
+
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section8/Theorem82UnboundedPath.lean:441`
+
+Compiler-printed type: *inserted when a compiler certificate is supplied.*
+
+#### `TauCeti.DavisKahan1970.Section8.theorem8_2_residualHalfGap_unbounded_complex`
+
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section8/Theorem82UnboundedPath.lean:491`
+
+Compiler-printed type: *inserted when a compiler certificate is supplied.*
+
+#### `TauCeti.DavisKahan1970.Section8.theorem8_2_residualHalfGap_maximalAngle_lt_unbounded_complex`
+
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section8/Theorem82UnboundedPath.lean:585`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 

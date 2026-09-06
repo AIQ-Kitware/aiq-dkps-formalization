@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, Claude Opus 5
 -/
 import DavisKahan.SpectralTheory.UnboundedCentralBand
-import DavisKahan.Sources.DavisKahan1970.Section8.Theorem82UnboundedBranchBound
+import DavisKahan.SpectralTheory.UnboundedDirectedGapBound
 
 /-!
 # The moving band is Lipschitz in the perturbation, with no Riesz projector
@@ -42,10 +42,12 @@ def bandSubspace {A : H →ₗ.[ℂ] H} (hA : IsSelfAdjoint A) (l r : ℝ) :
     Submodule ℂ H :=
   TauCeti.LinearPMap.specRange hA (Set.Icc l r) measurableSet_Icc
 
+/-- The band subspace is a spectral range, hence orthogonally complemented. -/
 instance bandSubspace_hasOrthogonalProjection {A : H →ₗ.[ℂ] H} (hA : IsSelfAdjoint A)
     (l r : ℝ) : (bandSubspace hA l r).HasOrthogonalProjection :=
   TauCeti.LinearPMap.instHasOrthogonalProjection_specRange hA _ _
 
+/-- The band subspace reduces the operator. -/
 theorem reducesSubspace_bandSubspace {A : H →ₗ.[ℂ] H} (hA : IsSelfAdjoint A) (l r : ℝ) :
     TauCeti.LinearPMap.ReducesSubspace A (bandSubspace hA l r) :=
   TauCeti.LinearPMap.reducesSubspace_specRange hA _ _
