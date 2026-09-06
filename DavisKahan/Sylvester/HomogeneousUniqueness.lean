@@ -50,7 +50,7 @@ theorem closedSylvester_homogeneous_eq_zero_complex
     X = 0 := by
   let N := KyFanDominantIdealFamily.operatorNorm (𝕜 := ℂ)
   have hzero : N.Mem (0 : F →L[ℂ] E) := by
-    rw [KyFanDominantIdealFamily.mem_iff]
+    rw [FanDominantIdealFamily.mem_iff]
     simp [N]
   have hbound :=
     (davisKahan1970_sylvester_complex N hA hB hδ hgap hEq hzero).2
@@ -103,7 +103,7 @@ theorem closedSylvester_homogeneous_eq_zero_real
     X = 0 := by
   let N := KyFanDominantIdealFamily.operatorNorm (𝕜 := ℝ)
   have hzero : N.Mem (0 : F →L[ℝ] E) := by
-    rw [KyFanDominantIdealFamily.mem_iff]
+    rw [FanDominantIdealFamily.mem_iff]
     simp [N]
   have hbound :=
     (davisKahan1970_sylvester_real N hA hB hδ hgap hEq hzero).2

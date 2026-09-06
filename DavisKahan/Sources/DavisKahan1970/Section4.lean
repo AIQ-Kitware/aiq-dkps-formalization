@@ -347,7 +347,7 @@ theorem proposition4_1_compact_nonacute_complex
 
 /-- **Corollary 4.1 at the inherited compact, matched-defect scope.** -/
 theorem corollary4_1_compact_nonacute_complex
-    (N : KyFanDominantIdealFamily (𝕜 := ℂ))
+    (N : DavisKahan.ExactSinTheta.FanDominantIdealFamily (𝕜 := ℂ))
     (U V : Submodule ℂ H) [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
     (_hcompact : IsCompactOperator (TauCeti.principalSineOperator U V))
     (J : DavisKahan.halmosSourceDefect U V ≃ₗᵢ[ℂ]
@@ -492,7 +492,7 @@ The alias above stops at Ky Fan, which is where its proof stops.  The printed
 clause is about every unitarily invariant norm, and in infinite dimensions the
 carrier of that phrase is an arbitrary Ky-Fan-dominant symmetric operator ideal
 family, exactly as for Corollary 4.1.  The promotion is
-`KyFanDominantIdealFamily.majorization_mem_and_gauge_le`, whose hypothesis is
+`FanDominantIdealFamily.majorization_mem_and_gauge_le`, whose hypothesis is
 the Ky Fan domination this alias supplies.
 
 Fan dominance constrains the prefix sums of the approximation numbers.  This is
@@ -520,7 +520,7 @@ carrying `U` onto `V`.  Membership of the minimizer is **concluded**, not
 assumed; only the competitor is assumed to lie in the ideal.
 
 This is `proposition4_3_infiniteDimensional` promoted through
-`KyFanDominantIdealFamily.majorization_mem_and_gauge_le`.  The promotion consumes
+`FanDominantIdealFamily.majorization_mem_and_gauge_le`.  The promotion consumes
 Ky Fan prefix sums only: no pointwise approximation-number domination is claimed
 here, and none is true. -/
 theorem proposition4_3_infiniteDimensional_idealGauge
@@ -541,7 +541,7 @@ theorem proposition4_3_infiniteDimensional_idealGauge
 /-- Proposition 4.3 promoted from Ky Fan sums to every ideal gauge at the full
 matched-crossed-defect scope inherited by Section 4. -/
 theorem proposition4_3_infiniteDimensional_nonacute_idealGauge
-    (N : KyFanDominantIdealFamily (𝕜 := ℂ))
+    (N : DavisKahan.ExactSinTheta.FanDominantIdealFamily (𝕜 := ℂ))
     (U V : Submodule ℂ H) [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
     (J : DavisKahan.halmosSourceDefect U V ≃ₗᵢ[ℂ]
       DavisKahan.halmosTargetDefect U V)
@@ -560,7 +560,7 @@ theorem proposition4_3_infiniteDimensional_nonacute_idealGauge
 The compactness hypothesis records the paper's Section 3 setting; the Ky Fan proof is valid
 without it. -/
 theorem proposition4_3_compact_nonacute_idealGauge
-    (N : KyFanDominantIdealFamily (𝕜 := ℂ))
+    (N : DavisKahan.ExactSinTheta.FanDominantIdealFamily (𝕜 := ℂ))
     (U V : Submodule ℂ H) [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
     (_hcompact : IsCompactOperator (TauCeti.principalSineOperator U V))
     (J : DavisKahan.halmosSourceDefect U V ≃ₗᵢ[ℂ]

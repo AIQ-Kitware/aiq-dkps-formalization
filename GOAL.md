@@ -1280,47 +1280,40 @@ hostile regression involved, and statement pins only when a public theorem
 changed.  Save the expensive aggregate and certification run for semantic
 closure.
 
-## 4c. The UIN completeness question: answered, with a specified refactor
+## 4c. The UIN completeness question: answered and implemented
 
-**It is not an open mathematical question.**  Measured 2026-09-05:
+**It was never an open mathematical question, and it is now closed in the code.**
+
+The measurement, 2026-09-05:
 
 * Completeness is **not** derivable from the properties Davis and Kahan print.  A
   symmetric gauge determines an ideal that need not be complete for its gauge;
-  completeness is Gohberg--Krein's theorem about the *closed* class, not a
-  consequence of the axioms in `SymmetricNormingFunction`, which is DK's own
-  class and carries no completeness field.  So option (1) is unavailable.
-* Completeness **is** genuinely used by the analytic layer.  Ten theorem families
-  take `[N.toOperatorIdealFamily.IsComplete]` explicitly — `SinTwoThetaAmbient`,
-  `Section7IdealBounds`, `SineTheta/ProjectionBlocks`, `DoubleAngleSpectrum`,
-  `InfiniteDimensional/Ideals/Symmetric`, `InfiniteDimensional/SinTheta/Bounded`
-  among them — because the limiting arguments need the ideal to be a Banach
-  space.
-* Completeness is **not** used by the Fan-dominance bridge.
-  `kyFanDominant_of_symmetricNorming` and
-  `mem_and_scaled_gauge_le_of_all_scaled_kyFan_le` go through
-  `majorization_mem_and_gauge_le`, which reads only the Fan-dominance field.
+  `SymmetricNormingFunction`, which is DK's own class, carries no completeness
+  field.  So option (1) is unavailable.
+* Completeness **is** genuinely needed by part of the analytic layer: about ten
+  theorem families take `[N.toOperatorIdealFamily.IsComplete]` explicitly,
+  because their limiting arguments need the ideal to be a Banach space.
+* Completeness is **not** used by the Fan-dominance bridge, nor — as the
+  implementation then proved — by any theorem the source-facing façades route
+  through.
 
-**So the answer is option (2), and the refactor is specified.**  Split
-`KyFanDominantIdealFamily` into a completeness-free `FanDominantIdealFamily`
-(symmetric family + Fan dominance) and `KyFanDominantIdealFamily extends` it with
-`isComplete`, and give `NormalizedUnitaryInvariantNorm` the completeness-free
-base.  A trial run on 2026-09-05 got the structure split, the namespace move and
-the bridge through cleanly; what it exposed is the blast radius, which is the
-thing to plan for:
+**Option (2), implemented 2026-09-06.**  `KyFanDominantIdealFamily` is split:
 
-* 153 binder occurrences of `KyFanDominantIdealFamily` across about 40 modules;
-* the Section 4 and Section 5 façades route through analytic theorems stated over
-  `KyFanDominantIdealFamily` (`theorem5_2`, `corollary4_1_compact_nonacute_*`,
-  `proposition4_3_compact_nonacute_*`, `davisKahan1970_sylvester_real`), each of
-  which must be re-examined for whether it actually uses completeness before it
-  is generalized;
-* `Mem` and `gauge` must move to the base, and the fully-qualified spellings
-  `KyFanDominantIdealFamily.Mem/.gauge/.mem_iff/.gauge_eq_toReal/.toSymmetric_*`
-  need aliases, because `rw` keys on the head symbol and reducibility does not
-  save it.
+```text
+FanDominantIdealFamily     -- symmetric ideal family + Fan dominance
+KyFanDominantIdealFamily   -- extends it, and adds `isComplete`
+```
 
-The trial was reverted rather than left half-applied.  Do this as its own change,
-not inside a mathematics commit, and do not stop a Section 8 proof for it.
+`NormalizedUnitaryInvariantNorm` — the source-facing norm quantifier — now
+extends the **completeness-free** base, so a source theorem quantified over it no
+longer implicitly restricts the norm class.  `Mem`, `gauge` and the small bridges
+moved to the base; a `CoeOut` from the complete family to the base is what let
+the roughly 150 existing binder sites keep passing the stronger structure without
+being touched.
+
+The refactor is the empirical answer to the question the analysis left open:
+**every theorem the source façades depend on went through unchanged**, so none of
+them used completeness.  The families that do need it keep it.
 
 ## 5. Fresh hostile review of all designated results
 

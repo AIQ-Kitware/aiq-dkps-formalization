@@ -60,7 +60,7 @@ example
   have hmain := sinTheta_unbounded_spectralSubspace_of_spectrumGap
     (KyFanDominantIdealFamily.operatorNorm (𝕜 := ℂ))
       A hA S hS A0 hA0 X Rop hX hXdom hReq hδ hgap (by
-        rw [KyFanDominantIdealFamily.mem_iff]
+        rw [FanDominantIdealFamily.mem_iff]
         simp [KyFanDominantIdealFamily.operatorNorm])
   exact hmain.2
 
@@ -117,7 +117,7 @@ example
   have hmain := sinTheta_unbounded_real_spectralSubspace
     (KyFanDominantIdealFamily.operatorNorm (𝕜 := ℝ))
       A hA S hS A0 hA0 X Rop hX hXdom hReq hδ hgap (by
-        rw [KyFanDominantIdealFamily.mem_iff]
+        rw [FanDominantIdealFamily.mem_iff]
         simp [KyFanDominantIdealFamily.operatorNorm])
   exact hmain.2
 
@@ -150,7 +150,7 @@ example
   have hmain := sinTheta_bounded_spectralSubspace_of_spectrumGap
     (KyFanDominantIdealFamily.operatorNorm (𝕜 := ℂ))
       A hA S hS A0 hA0 X hX hδ hgap (by
-        rw [KyFanDominantIdealFamily.mem_iff]
+        rw [FanDominantIdealFamily.mem_iff]
         simp [KyFanDominantIdealFamily.operatorNorm])
   exact hmain.2
 
@@ -223,7 +223,7 @@ theorem realPlane_zeroResidual_model :
   case hδ => exact zero_lt_one
   case hgap => exact hgap
   case hR =>
-    rw [KyFanDominantIdealFamily.mem_iff]
+    rw [FanDominantIdealFamily.mem_iff]
     simp
 
 end FiniteRealModel

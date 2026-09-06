@@ -544,7 +544,7 @@ theorem tanTwoTheta0_offDiagonal_mem_and_gauge_le_of_finiteDimensional_invariant
       hHUperp hTmem hTzero hUb hUa hinv hT1 tanTwoTheta0 htan k
     linarith
   obtain ⟨hmem, hgauge⟩ :=
-    mem_and_scaled_gauge_le_of_all_scaled_kyFan_le N hδ hHmem hscaled
+    mem_and_scaled_gauge_le_of_all_scaled_kyFan_le N.toFanDominantIdealFamily hδ hHmem hscaled
   exact ⟨hmem, by linarith⟩
 
 /-- Representative packaging of the branch-free Ky Fan root: any operator
@@ -629,7 +629,7 @@ theorem absTanTwoTheta_offDiagonal_mem_and_gauge_le_of_finiteDimensional_invaria
       hA hH hAU hHU hHUperp hTmem hTzero hUb hUa hinv hab tanTwoTheta π htan k
     linarith
   obtain ⟨hmem, hgauge⟩ :=
-    mem_and_scaled_gauge_le_of_all_scaled_kyFan_le N hδ hHmem hscaled
+    mem_and_scaled_gauge_le_of_all_scaled_kyFan_le N.toFanDominantIdealFamily hδ hHmem hscaled
   exact ⟨hmem, by linarith⟩
 
 end Main

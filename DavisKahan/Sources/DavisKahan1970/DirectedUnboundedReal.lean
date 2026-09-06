@@ -310,7 +310,7 @@ theorem theorem6_3_ideal_infiniteData_exists_real
     rw [htanKy]
     exact hcore
   obtain ⟨hmem, hbound⟩ :=
-    mem_and_scaled_gauge_le_of_all_scaled_kyFan_le N hdelta hResidual hky
+    mem_and_scaled_gauge_le_of_all_scaled_kyFan_le N.toFanDominantIdealFamily hdelta hResidual hky
   exact ⟨tanTheta0, htan, hmem, hbound⟩
 
 /-- The same endpoint when a real tangent representative with the paper's approximation
@@ -326,7 +326,7 @@ theorem theorem6_3_ideal_infiniteData_real
     (htan : HasTheorem63DirectedTangentApproximationNumbersInfiniteReal Z V tanTheta0)
     (hResidual : N.Mem data.residual) :
     N.Mem tanTheta0 ∧ delta * N.gauge tanTheta0 ≤ N.gauge data.residual := by
-  refine mem_and_scaled_gauge_le_of_all_scaled_kyFan_le N hdelta hResidual fun k => ?_
+  refine mem_and_scaled_gauge_le_of_all_scaled_kyFan_le N.toFanDominantIdealFamily hdelta hResidual fun k => ?_
   have hcore := theorem6_3_all_kyFan_core_infiniteData_real data hdelta hMupper hcross k
   have htanKy : kyFanApproximationGauge k tanTheta0 =
       ∑ n ∈ Finset.range k, Real.tan (Real.arcsin

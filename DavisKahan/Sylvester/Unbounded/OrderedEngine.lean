@@ -36,7 +36,7 @@ structure OrderedSylvesterEngine : Prop where
     ∀ {E F : Type v}
       [NormedAddCommGroup E] [InnerProductSpace ℂ E] [CompleteSpace E]
       [NormedAddCommGroup F] [InnerProductSpace ℂ F] [CompleteSpace F]
-      (N : KyFanDominantIdealFamily (𝕜 := ℂ))
+      (N : FanDominantIdealFamily (𝕜 := ℂ))
       {A : E →ₗ.[ℂ] E}
       {B : F →ₗ.[ℂ] F}
       (_hA : IsSelfAdjoint A) (_hB : IsSelfAdjoint B)
@@ -53,7 +53,7 @@ structure OrderedSylvesterEngine : Prop where
     ∀ {E F : Type v}
       [NormedAddCommGroup E] [InnerProductSpace ℂ E] [CompleteSpace E]
       [NormedAddCommGroup F] [InnerProductSpace ℂ F] [CompleteSpace F]
-      (N : KyFanDominantIdealFamily (𝕜 := ℂ))
+      (N : FanDominantIdealFamily (𝕜 := ℂ))
       {A : E →ₗ.[ℂ] E}
       {B : F →ₗ.[ℂ] F}
       (_hA : IsSelfAdjoint A) (_hB : IsSelfAdjoint B)

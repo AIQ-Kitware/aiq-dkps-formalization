@@ -109,7 +109,7 @@ theorem generalizedSinTheta_unbounded_exact_real
       directedSinThetaOperatorReal D.X F₀ hframe hε =
         directedSinThetaOperatorOfPolarData P F₀ := rfl
   refine ⟨hDirectedDef ▸ hAngle.1, ?_⟩
-  simp only [KyFanDominantIdealFamily.toSymmetric_gaugeReal] at hAngle
+  simp only [FanDominantIdealFamily.toSymmetric_gaugeReal] at hAngle
   rw [hDirectedDef, hAngle.2, ← hBlockDef]
   exact hBlock.2
 
