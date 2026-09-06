@@ -282,6 +282,35 @@ theorem proposition4_3_compact_nonacute_sourceExact_complex
   proposition4_3_compact_nonacute_idealGauge N.toKyFanDominantIdealFamily U V hcompact J W
     hWunitary hWmap hWmem
 
+/-- **Proposition 4.3 from the source's own hypothesis, over `ℂ`.**
+
+Davis and Kahan inherit the *condition* under which the direct rotation exists --
+the crossed defects are equivalent -- and speak of "the" direct rotation.  A
+caller should therefore supply that condition, not a chosen identification.
+
+The theorem above quantifies over every identification `J`, which is the stronger
+reading and the one to use when a particular rotation is in hand.  This
+corollary is for the caller who has only the source's hypothesis: it names a
+direct rotation and asserts the minimality for it. -/
+theorem proposition4_3_compact_nonacute_sourceExact_ofCrossedDefects_complex
+    [TopologicalSpace.SeparableSpace H]
+    (N : NormalizedUnitaryInvariantNorm.{0, v} ℂ)
+    (U V : Submodule ℂ H) [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
+    (hcompact : IsCompactOperator (TauCeti.principalSineOperator U V))
+    (hcrossed : DavisKahan.CrossedDefectsEquivalent U V)
+    (W : H →L[ℂ] H) (hWunitary : W ∈ unitary (H →L[ℂ] H))
+    (hWmap : W * DavisKahan.projection U = DavisKahan.projection V * W)
+    (hWmem : N.Mem ((1 - star W) * (1 - W))) :
+    ∃ J : DavisKahan.halmosSourceDefect U V ≃ₗᵢ[ℂ] DavisKahan.halmosTargetDefect U V,
+      N.Mem ((1 - star (DavisKahan.nonacuteDirectRotation U V J)) *
+          (1 - DavisKahan.nonacuteDirectRotation U V J)) ∧
+        N.gauge ((1 - star (DavisKahan.nonacuteDirectRotation U V J)) *
+            (1 - DavisKahan.nonacuteDirectRotation U V J)) ≤
+          N.gauge ((1 - star W) * (1 - W)) :=
+  hcrossed.elim fun J =>
+    ⟨J, proposition4_3_compact_nonacute_sourceExact_complex N U V hcompact J W
+      hWunitary hWmap hWmem⟩
+
 end Complex
 
 section Real
@@ -369,6 +398,28 @@ theorem proposition4_3_compact_nonacute_sourceExact_real
         N.gauge ((1 - star W) * (1 - W)) :=
   proposition4_3_compact_nonacute_real_idealGauge U V N.toKyFanDominantIdealFamily hcompact
     J W hWunitary hWmap hWmem
+
+/-- **Proposition 4.3 from the source's own hypothesis, over `ℝ`.**  See the
+complex sibling for why the crossed-defect condition, not a chosen
+identification, is what a caller should supply. -/
+theorem proposition4_3_compact_nonacute_sourceExact_ofCrossedDefects_real
+    [TopologicalSpace.SeparableSpace E]
+    (N : NormalizedUnitaryInvariantNorm.{0, v} ℝ)
+    (U V : Submodule ℝ E) [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
+    (hcompact : IsCompactOperator (TauCeti.principalSineOperator U V))
+    (hcrossed : DavisKahan.CrossedDefectsEquivalent U V)
+    (W : E →L[ℝ] E) (hWunitary : W ∈ unitary (E →L[ℝ] E))
+    (hWmem : N.Mem ((1 - star W) * (1 - W)))
+    (hWmap : W * DavisKahan.projection U = DavisKahan.projection V * W) :
+    ∃ J : DavisKahan.halmosSourceDefect U V ≃ₗᵢ[ℝ] DavisKahan.halmosTargetDefect U V,
+      N.Mem ((1 - star (DavisKahan.nonacuteDirectRotation U V J)) *
+          (1 - DavisKahan.nonacuteDirectRotation U V J)) ∧
+        N.gauge ((1 - star (DavisKahan.nonacuteDirectRotation U V J)) *
+            (1 - DavisKahan.nonacuteDirectRotation U V J)) ≤
+          N.gauge ((1 - star W) * (1 - W)) :=
+  hcrossed.elim fun J =>
+    ⟨J, proposition4_3_compact_nonacute_sourceExact_real N U V hcompact J W
+      hWunitary hWmem hWmap⟩
 
 end Real
 

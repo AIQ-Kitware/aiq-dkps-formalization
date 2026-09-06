@@ -107,6 +107,8 @@ own Fan-dominance reduction at (1.11)-(1.13). -/
 #check @TauCeti.DavisKahan1970.corollary4_1_compact_nonacute_sourceExact_real
 #check @TauCeti.DavisKahan1970.proposition4_3_compact_nonacute_sourceExact_complex
 #check @TauCeti.DavisKahan1970.proposition4_3_compact_nonacute_sourceExact_real
+#check @TauCeti.DavisKahan1970.proposition4_3_compact_nonacute_sourceExact_ofCrossedDefects_complex
+#check @TauCeti.DavisKahan1970.proposition4_3_compact_nonacute_sourceExact_ofCrossedDefects_real
 #check @TauCeti.DavisKahan1970.theorem5_2_sourceExact_complex
 #check @TauCeti.DavisKahan1970.theorem5_2_sourceExact_real
 #check @TauCeti.DavisKahan1970.Section8.theorem8_2_sinTwoTheta_perturbation_sourceExact

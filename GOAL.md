@@ -932,6 +932,28 @@ than the printed one. Two honest resolutions, in order of preference:
 Until one of those lands, a façade over this class is *not* known to be
 exhaustive, and the final claim should say so.
 
+## 3d. Section 4's `J` (resolved with a distinction, 2026-09-05)
+
+The review asked for the chosen defect isometry `J` to be hidden inside the
+Section 4 façades. Doing that uniformly would be wrong, and the two cases have to
+be separated:
+
+* **Proposition 4.2's `J` was genuinely proof data** -- the wrapper accepted it
+  and never used it, as the underscore said. It is now the *proposition*
+  `CrossedDefectsEquivalent U V`, which is the condition Section 4 actually
+  inherits.
+* **Propositions 4.1, 4.3 and Corollary 4.1's `J` is not proof data.** It names
+  the direct rotation the conclusion is *about*. Quantifying over every `J`, as
+  those theorems do, is the stronger reading and is what a caller holding a
+  particular rotation wants. Replacing it by an existential would weaken the
+  theorem, and in the non-acute case there is no canonical choice to substitute.
+
+So the canonical statements keep their `J`, and
+`proposition4_3_compact_nonacute_sourceExact_ofCrossedDefects_{complex,real}`
+serve the caller who has only the source's hypothesis: they take
+`CrossedDefectsEquivalent` and name a direct rotation for which the minimality
+holds. The same wrapper should be added for Proposition 4.1 and Corollary 4.1.
+
 ## 4. Finish unbounded Theorem 8.2
 
 Write the final source theorem types first.

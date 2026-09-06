@@ -3838,7 +3838,9 @@
         "TauCeti.DavisKahan1970.symmetricNorming_of_kyFanDominant",
         "TauCeti.DavisKahan1970.proposition4_3_compact_nonacute_sourceExact_complex",
         "TauCeti.DavisKahan1970.proposition4_3_compact_nonacute_sourceExact_real",
-        "TauCeti.DavisKahan.ExactSinTheta.NormalizedUnitaryInvariantNorm"
+        "TauCeti.DavisKahan.ExactSinTheta.NormalizedUnitaryInvariantNorm",
+        "TauCeti.DavisKahan1970.proposition4_3_compact_nonacute_sourceExact_ofCrossedDefects_complex",
+        "TauCeti.DavisKahan1970.proposition4_3_compact_nonacute_sourceExact_ofCrossedDefects_real"
       ],
       "review_note": "Accepted result-only semantic review 2026-08-12. The compact nonacute complex and real wrappers state Proposition 4.3 at the paper's inherited matched-defect scope and show that the direct rotation minimizes every Ky-Fan-dominant unitary-invariant ideal gauge of the squared full displacement `(1-W*) (1-W)`. The underlying proof is dimension-free; the compact premise is kept in the wrapper solely to match the source setting. Equations (4.3)-(4.6) and the later warning about unsquared displacement are outside the counted proposition boundary.",
       "parent_claim_id": "DK-4.3-prop",
@@ -3923,6 +3925,16 @@
           "declaration": "TauCeti.DavisKahan.ExactSinTheta.NormalizedUnitaryInvariantNorm",
           "role": "source_correspondence",
           "note": "The Lean type for the norm object Section 1 fixes."
+        },
+        {
+          "declaration": "TauCeti.DavisKahan1970.proposition4_3_compact_nonacute_sourceExact_ofCrossedDefects_complex",
+          "role": "presentation_wrapper",
+          "note": "The source's own hypothesis: the crossed defects are equivalent, rather than a chosen identification of them.  Davis and Kahan inherit the *condition* under which the direct rotation exists and then speak of 'the' direct rotation, so a caller should supply the condition.  The canonical theorem quantifies over every identification, which is the stronger reading and the one to use when a particular rotation is in hand; this names one and asserts the minimality for it."
+        },
+        {
+          "declaration": "TauCeti.DavisKahan1970.proposition4_3_compact_nonacute_sourceExact_ofCrossedDefects_real",
+          "role": "presentation_wrapper",
+          "note": "The source's own hypothesis: the crossed defects are equivalent, rather than a chosen identification of them.  Davis and Kahan inherit the *condition* under which the direct rotation exists and then speak of 'the' direct rotation, so a caller should supply the condition.  The canonical theorem quantifies over every identification, which is the stronger reading and the one to use when a particular rotation is in hand; this names one and asserts the minimality for it."
         }
       ],
       "result_wide_scope_atoms": [
