@@ -101,8 +101,8 @@ mutations:
       perturbation-form bound as separate clauses.  Collapsing the directed
       clause onto the perturbation witness loses the directed statement.
     file: dev/davis-kahan-1970-formalization-result-inventory.json
-    find: '"primary": "TauCeti.DavisKahan1970.Section8.theorem8_2_sinTwoTheta_residual_directedAngle_sourceExact"'
-    replace: '"primary": "TauCeti.DavisKahan1970.Section8.theorem8_2_sinTwoTheta_perturbation_sourceExact"'
+    find: '"primary": "TauCeti.DavisKahan1970.Section8.theorem8_2_residual_sourceExact_unbounded_complex"'
+    replace: '"primary": "TauCeti.DavisKahan1970.Section8.theorem8_2_perturbation_sourceExact_unbounded_complex"'
     detected_by: ["python3", "scripts/check_davis_kahan_1970_result_inventory.py"]
 
   - name: extra-capability-binder-claimed
