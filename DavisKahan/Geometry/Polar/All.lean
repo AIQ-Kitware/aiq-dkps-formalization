@@ -17,6 +17,7 @@ import DavisKahan.Geometry.Polar.PrincipalSquareRoot
 import DavisKahan.Geometry.Polar.RestrictedDisplacementExtremal
 import DavisKahan.Geometry.Polar.Section3Elementary
 import DavisKahan.Geometry.Polar.Section3Nonacute
+import DavisKahan.Geometry.Polar.SourceDirectRotation
 import DavisKahan.Geometry.Polar.TwoProjectionOperatorClassification
 
 /-! # `DavisKahan/Geometry/Polar` -/
