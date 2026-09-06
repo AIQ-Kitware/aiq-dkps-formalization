@@ -1,8 +1,17 @@
 \PassOptionsToPackage{numbers,sort&compress}{natbib}
 \documentclass{article}
 
-\usepackage{draft_neurips_2026}
+% paper_public.tex defines \PublicVersion before loading this file.
+\providecommand{\PublicVersion}{0}
+\ifnum\PublicVersion=1\relax
+  \usepackage[dblblindworkshop,nonanonymous]{neurips_2026}
+\else
+  \usepackage[dblblindworkshop]{neurips_2026}
+\fi
+\workshoptitle{The 6th Workshop on Mathematical Reasoning and AI}
+
 \usepackage{amsmath,amssymb}
+\usepackage{microtype}
 \usepackage{booktabs,tabularx,array}
 \usepackage{float}
 \usepackage{graphicx}
@@ -21,7 +30,6 @@
 \input{generated/evidence_macros.tex}
 
 % Set \PublicVersion to 1 in paper_public.tex for author names and public URLs.
-\providecommand{\PublicVersion}{0}
 \newif\ifshowartifacturl
 \ifnum\PublicVersion=1\relax
   \showartifacturltrue
@@ -59,7 +67,7 @@
   language=lean,
   columns=fullflexible,
   backgroundcolor=\color{leanbackground},
-  basicstyle=\ttfamily\scriptsize,
+  basicstyle=\ttfamily\footnotesize,
   commentstyle=\color{leancomment}\itshape,
   keywordstyle=[1]\color{leankeyword}\bfseries,
   keywordstyle=[2]\color{leantactic},
@@ -70,8 +78,7 @@
   breaklines=true,
   captionpos=b,
   keepspaces=true,
-  numbers=left,
-  numbersep=6pt,
+  numbers=none,
   showspaces=false,
   showstringspaces=false,
   showtabs=false,
@@ -79,23 +86,35 @@
   aboveskip=0.6em,
   belowskip=0.6em,
   literate=
+    {→ₗ.[ℂ]}{{$\mathrel{\to}_{\!\ell.}[\mathbb{C}]$}}6
+    {→ₗ.[ℝ]}{{$\mathrel{\to}_{\!\ell.}[\mathbb{R}]$}}6
+    {→L[ℂ]}{{$\mathrel{\to}\!L[\mathbb{C}]$}}5
+    {→L[ℝ]}{{$\mathrel{\to}\!L[\mathbb{R}]$}}5
+    {→ₗ[ℂ]}{{$\mathrel{\to}_{\!\ell}[\mathbb{C}]$}}5
+    {→ₗ[ℝ]}{{$\mathrel{\to}_{\!\ell}[\mathbb{R}]$}}5
     {ℂ}{{$\mathbb{C}$}}1
     {ℝ}{{$\mathbb{R}$}}1
+    {𝕜}{{$\Bbbk$}}1
     {₀}{{$_0$}}1
     {₁}{{$_1$}}1
+    {ₗ}{{$_\ell$}}1
     {Λ}{{$\Lambda$}}1
     {α}{{$\alpha$}}1
     {β}{{$\beta$}}1
     {δ}{{$\delta$}}1
-    {→L}{{$\to_L$}}2
     {→}{{$\to$}}1
     {∘}{{$\circ$}}1
     {∧}{{$\land$}}1
     {∨}{{$\lor$}}1
     {≤}{{$\le$}}1
+    {≥}{{$\ge$}}1
     {⊆}{{$\subseteq$}}1
     {∈}{{$\in$}}1
     {∀}{{$\forall$}}1
+    {∃}{{$\exists$}}1
+    {‖}{{$\Vert$}}1
+    {⟨}{{$\langle$}}1
+    {⟩}{{$\rangle$}}1
     {ᗮ}{{$^{\perp}$}}1
 }
 \crefname{lstlisting}{formalization}{formalizations}
@@ -103,11 +122,19 @@
 \renewcommand{\lstlistingname}{Formalization}
 
 \title{Did We Really Formalize Davis--Kahan?}
-\ifshowartifacturl
-  \author{Jonathan Crall \quad Brian Hu\\[-1pt]\small Kitware, Inc.}
-\else
-  \author{Anonymous Authors}
-\fi
+\author{%
+  Jonathan Crall \\
+  Kitware, Inc.
+  \And
+  Brian Hu \\
+  Kitware, Inc.
+  \AND
+  Edward Wang \\
+  Johns Hopkins University
+  \And
+  Carey E. Priebe \\
+  Johns Hopkins University
+}
 \date{}
 
 \begin{document}
@@ -115,62 +142,106 @@
 
 \begin{abstract}
 Coding agents can now produce substantial Lean developments for researchers who
-are still learning to read Lean.  We ran into the resulting supervision problem
-while trying to formalize all 29 mathematical results in Davis and Kahan's 1970
-paper.  We put our experience beside \PractitionerAccountCount{} public
+are still learning to read Lean.  We ran into the resulting semantic-alignment
+problem while trying to formalize all 29 mathematical results in Davis and
+Kahan's 1970 paper.  We put our experience beside \PractitionerAccountCount{} public
 first-person accounts of AI-assisted Lean work, where people report very
 different answers to a basic question: how much Lean does the human need to
-read?  We show one historical false finish from our repository: a checked
-$\sin 2\Theta$ inequality with the right residual and constant, but only for
-bounded complex operators, while the source also covers real and unbounded
-settings.  Our current checks cover all 29 tracked results at the scope we presently
-understand the source to require; Proposition~4.4 is false as printed and is
-formally refuted and repaired.  The structured data, source notes,
-paper-revision prompts, and reproduction scripts accompany the paper.
+read?  We show one historical mismatch from our repository: a checked Section~2
+$\tan\Theta$ theorem required condition~(3.5), which Davis and Kahan introduce
+only in Section~3.  The repair replaces that caller-supplied condition with the
+source's earlier definedness convention and derives (3.5) internally.  The
+mathematical ledger resolves all 29 tracked results---28 by proof and
+Proposition~4.4 by refutation plus repair.  A final signature-level review then
+found seven public-signature/source-scope mismatches; those seven were repaired
+on 6 September, with the final signature/context re-review still pending.  The
+structured data, source notes, paper-revision prompts, and
+reproduction scripts accompany the paper.
 \ifshowartifacturl\space Public materials: \url{\artifacturl}.\fi
 \end{abstract}
 
 \section{Introduction}
 
-A Lean proof checker answers a precise question: does this proof inhabit this
-formal proposition? \citep{demoura2021lean4,mathlib2020}  The difficult question
-for a source-driven formalization can come one step earlier: is that proposition
-the mathematical claim we intended?  Timothy Chow gives the problem an
-intentionally silly formulation.  If the intended theorem says that all
-``doohickeys'' are excellent, while the formal statement only says that special
-doohickeys are quasi-excellent, a checked proof certifies the weaker statement
-\citep{chow2026mindreading}.  The kernel has done its job.
+Formalization adds another layer of trust to a mathematical argument: Lean
+checks that a proof term establishes the proposition encoded in its theorem
+statement \citep{demoura2021lean4,mathlib2020}.  That guarantee reaches the
+source theorem only when the formal proposition has the intended hypotheses,
+objects, and scope.  In our project, formalizing Davis and Kahan's
+Proposition~4.4 exposed that it is false as printed; we obtained a
+finite-dimensional counterexample and a repaired statement.  Source comparison
+later found a different problem in our own development: a
+checked Section~2 $\tan\Theta$ theorem required a condition that Davis and Kahan
+introduce only in Section~3.
+
+Following FormalAlign \citep{lu2025formalalign}, we use \emph{semantic alignment}
+for agreement between a formal proposition and the intended mathematical claim;
+the same problem is also studied by ShadowBench \citep{han2026shadowbench}.  In
+our case, the intended claim is expressed by Davis and Kahan's 1970 paper
+together with the definitions, inherited assumptions, notation, and mathematical
+context needed to read it.  Timothy Chow illustrates the distinction with
+``doohickeys'': if the source says that all doohickeys are excellent while the
+formal statement says only that special doohickeys are quasi-excellent, a checked
+proof establishes only the latter statement \citep{chow2026mindreading}.
+
+Effective formalization depends on reusable foundations: later projects can
+build on checked definitions and theorems instead of reconstructing their
+prerequisites.  Mathlib already provides a broad common base \citep{mathlib2020},
+and Tau Ceti is one effort to
+expand that base with AI-authored Lean \citep{tauceti2026}.  We wanted to test
+whether coding agents could accelerate this kind of foundational development
+while the first author was still learning Lean.  Davis--Kahan was a useful
+target: we wanted reusable spectral-perturbation results for downstream
+applications, and the 1970 paper ranges from matrices to Hilbert-space
+operators \citep{davis1970rotation}.  We therefore set out to formalize all 29
+mathematical results in the paper while developing reusable operator-theoretic
+foundations along the way.
+
+Once agents could produce Lean beyond the first author's unaided ability, a
+successful compile established that Lean had proved the submitted statement.
+We still had to determine whether the
+submitted statement expressed the mathematics in the source.  \Cref{fig:workflow}
+summarizes the workflow that grew around this problem: the source theorem and
+its scope stay visible while agents decompose, formalize, compile, and review
+candidate formalizations.
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.80\linewidth]{figures/formalization_workflow.png}
+  \caption{Workflow that emerged during the \DK{} formalization.  The source
+  theorem and its mathematical scope remain visible while agents decompose,
+  formalize, compile, and review the result.}
+  \label{fig:workflow}
+\end{figure}
 
 This question has become practical very quickly.  Papers With Lean indexed 174
 Lean-related arXiv papers during 2025 and 410 during January--July 2026; July
 alone contained 101 \citep{paperswithlean2026stats}.  The mean monthly rate over
 those first seven months of 2026 was about \LeanPublicationRateRatio{} times the
-2025 rate.  \Cref{fig:lean-activity} in the appendix plots the monthly counts and
-marks 13 July 2026, when the dedicated \DK{} development in our Git history
-began.
+2025 rate.  \Cref{fig:lean-activity} marks 10 July 2026, when a commit explicitly
+scaffolded a ``full paper faithful DK theory.''  Davis--Kahan-specific work is
+visible earlier; the 13 July commit was a later repository reorganization.
+\Cref{fig:project-chronology,tab:review-timeline} separates these milestones and
+extends the project history through 6 September 2026.
 
-We started with a broad request to formalize Davis and Kahan's paper
-\citep{davis1970rotation}.  At first we knew the source mathematics better than
-Lean, and we did not yet know the paper well enough to specify what ``all of
-Davis--Kahan'' meant.  As the agents improved, proof production stopped being
-the main bottleneck.  We could reach checked endpoints faster than we could
-build confidence that the endpoints had the right hypotheses, objects, scalar
-field, dimension, and bounded or unbounded scope.
+This paper studies how researchers supervise that source-to-formal-statement
+correspondence when agents can write Lean beyond the human's own fluency.  We
+compare our experience with public first-person reports and examine the
+historical Section~2 mismatch above in detail.  The structured account notes
+retain the public source, observation, qualification, and fields used for the
+descriptive counts; the Git events used here are kept in a separate dated table
+keyed by commit.  \Cref{app:data} describes the sources, validation checks, and
+material hashes.
 
-This paper records that experience and a snapshot of public reports from other
-researchers.  We use one concrete historical mismatch to keep the discussion
-anchored to something that actually happened.  The structured notes behind the
-public-account snapshot record a source URL, citation key, observation, and the
-fields used for the descriptive counts; the Git events used here are kept in a
-separate dated table keyed by commit.  \Cref{app:data} describes the files and
-their hashes.
-
-\section{How people are supervising AI-assisted Lean}
+\section{Related Work}
 \label{sec:related}
 
-We read \PractitionerAccountCount{} public first-person accounts from blogs,
-project transcripts, social posts, forums, Zulip, and formal case studies.  We
-found them by web search and citation chasing; representativeness is unknown.
+We asked: when agents produce Lean beyond the user's own Lean fluency, what does
+the human inspect or delegate before accepting that the formalization matches
+the intended mathematics?  We read \PractitionerAccountCount{} public
+first-person accounts from blogs, project transcripts, social posts, forums,
+Zulip, and formal case studies.  We found them by web search and citation
+chasing; representativeness is unknown.  \Cref{app:data} gives the per-account
+source records, categorical-field schema, and build-time validation checks.
 Collins et al. separately report a human-subject study of initial AI-assisted
 formalization workflows \citep{collins2026workflows}.
 
@@ -222,182 +293,142 @@ source locations, axioms, and dependency information.
 \href{\leanqurl}{\texttt{aiq-lean-formalization-tools}}.\else\space It is included
 in the supplementary code.\fi
 
-Other tools focus on the correspondence problem itself.  EconCSLib places
-source text, Lean statements, generated mathematical renderings, and human
-match/mismatch judgments together \citep{garg2026econcs}.  Lean Atlas and Lean
-Compass prune proof-only dependencies to expose a smaller set of declarations
-whose meanings can affect a target theorem \citep{yanahama2026leanatlas}.
-ShadowBench probes a formal statement with auxiliary shadow statements and
-implication checks \citep{han2026shadowbench}.  These systems are especially
-interesting for users who cannot audit a large generated development line by
-line.
+Other tools focus on semantic alignment itself.  FormalAlign evaluates whether
+an informal mathematical statement and its formalization agree in meaning
+\citep{lu2025formalalign}.  EconCSLib places source text, Lean statements,
+generated mathematical renderings, and human match/mismatch judgments together
+\citep{garg2026econcs}.  Lean Atlas and Lean Compass prune proof-only dependencies
+to expose a smaller set of declarations whose meanings can affect a target
+theorem \citep{yanahama2026leanatlas}.  ShadowBench probes a formal statement
+with auxiliary shadow statements and implication checks
+\citep{han2026shadowbench}.  These systems are especially interesting for users
+who cannot audit a large generated development line by line.
 
 \section{The Davis--Kahan case}
 \label{sec:dk}
 
-\paragraph{What is the theorem about?}
-At the matrix level, imagine a symmetric matrix whose eigenvalues contain a
-cluster separated from the rest by a gap $\delta$.  A trial subspace is nearly
-invariant when the residual
+\paragraph{Statement of the problem.}
+At the matrix level, let $T=T^*$ be a Hermitian matrix and let $E_0$ have
+orthonormal columns spanning a candidate (or trial) subspace $P$ for an invariant subspace
+of $T$.  The Rayleigh--Ritz matrix
 \[
-  R = A E_0 - E_0 A_0
+  A_0 = E_0^* T E_0
 \]
-is small: applying $A$ to a vector represented by $E_0$ almost agrees with
-staying inside the trial coordinates and applying $A_0$.  Davis--Kahan bounds
-how far that trial subspace can tilt away from the exact spectral subspace.
-The operator $\sin\Theta_0$ measures that angular error, and one headline bound
-has the form $\delta\,N(\sin\Theta_0)\le N(R)$ for a unitarily invariant norm
-$N$.  The related directed $\sin 2\Theta$ theorem doubles the angle and gives
+is the action of $T$ compressed to those coordinates.  The residual
+\[
+  R = T E_0 - E_0 A_0
+\]
+measures failure of invariance: $R=0$ exactly when applying $T$ to the trial
+vectors stays inside their span.  If an exact spectral subspace $Q$ corresponds
+to eigenvalues separated from the unwanted spectrum by a gap $\delta$, the
+principal-angle operators $\Theta_0$ and $\Theta$ measure the rotation from $P$
+to $Q$ in directed and ambient forms.
+
+Davis and Kahan write the perturbed operator as $T=A+H$.  Under the ordered gap
+and the Rayleigh--Ritz condition $H_0=0$, their Section~2 $\tan\Theta$ theorem
+gives, for every unitary-invariant norm $N$,
 \begin{equation}
-  \delta\,N(\sin(2\Theta_0)) \le 2N(R).
-  \label{eq:sin2theta}
+  \delta N(\tan\Theta_0) \le N(R),
+  \qquad
+  \delta N(\tan\Theta) \le N(H).
+  \label{eq:tantheta}
 \end{equation}
-The paper states these results beyond finite matrices: real or complex
-separable Hilbert spaces, infinite dimension, and appropriate unbounded
-self-adjoint cases are part of the source scope \citep{davis1970rotation}.
+The paper then carries this matrix picture to separable Hilbert spaces: matrices
+become bounded or densely defined self-adjoint operators, $E_0$ becomes an
+isometric embedding of the trial coordinates, and the same compression,
+residual, spectral-gap, and angle relations are expressed without choosing an
+ambient basis \citep{davis1970rotation}.
 
-The 1970 paper contains four headline angle theorems and 25 additional named
-results that we track as 29 mathematical results.  \Cref{fig:workflow} shows the
-workflow that emerged while trying to cover them.  Source tracking, separate
-review, and reusable foundation work were added as the project grew.  Some
-paper-independent operator theory is being prepared for possible contribution
-to Tau Ceti \citep{tauceti2026}.
-
-\begin{figure}[t]
-  \centering
-  \includegraphics[width=0.80\linewidth]{figures/formalization_workflow.png}
-  \caption{Workflow that emerged during the \DK{} formalization.  The source
-  theorem and its mathematical scope remain visible while agents decompose,
-  formalize, compile, and review the result.}
-  \label{fig:workflow}
-\end{figure}
+Our denominator of 29 results is explicit: the four unnumbered Section~2
+headline theorems plus every named theorem, proposition, lemma, and corollary
+that Davis and Kahan actually prove in the paper.  Definitions, proof steps,
+examples, immediate consequences, and open or deferred claims are not separate
+items in that count.  Some paper-independent operator theory developed along the
+way is being prepared for possible contribution to Tau Ceti \citep{tauceti2026}.
 
 The formalization also exposed a problem in the source itself.  Davis and
 Kahan's Proposition~4.4 is false as printed.  The repository contains a
 finite-dimensional counterexample and a repaired statement; the longer
 formalization manuscript develops that result in detail \citep{aiqdkps2026repo}.
 
-\subsection{A checked theorem that was still too narrow}
+\subsection{Example of a semantically misaligned formalization}
 \label{sec:false-finish}
 
-The source statement behind \cref{eq:sin2theta} uses the trial residual
-$R=AE_0-E_0A_0$ and applies to every unitarily invariant norm.  A historical
-Lean theorem in our repository had the right residual, factor~2, and norm
-family.  Its signature looked like this:
+The ambient conclusion in \cref{eq:tantheta} appears in Section~2.  Its printed
+hypotheses are the ordered spectral gap, $\delta>0$, and the Rayleigh--Ritz
+condition $H_0=0$.  At one point our canonical Lean endpoint additionally asked
+the caller for
+\texttt{h35 : CrossedDefectsEquivalent U V}.  That predicate formalizes
+condition~(3.5), which Davis and Kahan introduce in Section~3 and then assume for
+the remainder of the paper.  Requiring it in the Section~2 endpoint changed the
+statement being formalized.
 
-\begin{lstlisting}[style=leanpaper,
-  caption={Historical Lean signature for the directed $\sin 2\Theta$ result.
-  The proof compiled.  Surrounding Lean context is omitted.},
-  label={lst:false-finish}]
-variable {E : Type v}
-  [NormedAddCommGroup E] [InnerProductSpace ℂ E] [CompleteSpace E]
+\lstinputlisting[style=leanpaper,
+  caption={The relevant lines from the historical and repaired Section~2
+  $\tan\Theta$ endpoints.  Full verbatim signatures, commit hashes, paths, and
+  line ranges are included in the supplement.},
+  label={lst:false-finish}]{generated/historical_false_finish.lean}
 
-theorem sinTwoTheta_directedResidual_paperUINorm
-    (N : PaperUnitaryInvariantNorm)
-    {A : E →L[ℂ] E} (hA : IsSelfAdjoint A)
-    {U V : Submodule ℂ E}
-    [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
-    (hU : Reduces A U)
-    {a b d : ℝ} (hd : 0 < d) (hab : a ≤ b)
-    (hUspec : spectrum ℝ (compressOperator U A) ⊆ Set.Icc a b)
-    (hUspec' : ∀ x ∈ spectrum ℝ (compressOperator Uᗮ A),
-      x ≤ a - d ∨ b + d ≤ x)
-    (M : V →L[ℂ] V)
-    (hMem : N.Mem (residual A V.subtypeL M)) :
-    N.Mem (sinTwoThetaIdealBlock U V) ∧
-      d * N.gauge (sinTwoThetaIdealBlock U V) ≤
-        2 * N.gauge (residual A V.subtypeL M) := by
-  -- proof omitted
-\end{lstlisting}
-
-The restriction is visible near the top: the ambient space is complex and
-$A:E\to_L[\mathbb C]E$ is bounded.  The source also covers the real case and
-unbounded self-adjoint operators under its domain and bounded-residual
-conditions.  At the same time we had an unbounded $\sin 2\Theta$ theorem whose
-right-hand side used a reflection residual, a different operator from the
-printed trial residual.  A source-to-Lean comparison on 12 August 2026 identified the gap: one checked
-theorem had the right residual with incomplete scope, while another carried the
-unbounded scope with the wrong residual for this source statement.  The repair
-constructed the reflection argument internally and exposed real and complex
-unbounded endpoints with the source's trial residual.
-
-The Lean theorem above was valid.  The overclaim was the correspondence from the
-paper to that theorem.  This is close to Chow's doohickey parable, except that
-the difference was hidden in scalar field, boundedness, and the identity of the
-residual rather than in deliberately silly names.
+The repair uses an earlier convention from Section~1.  Davis and Kahan state
+that a result is vacuous when a norm occurring in it does not exist.  For the
+ambient tangent, existence means that no principal angle reaches $\pi/2$; the
+formalization names this condition \texttt{HasDefinedAmbientTangent}.  From that
+condition the repository proves
+\texttt{crossedDefectsEquivalent\_of\_hasDefinedAmbientTangent}, so (3.5) can be
+constructed inside the proof instead of appearing as a source hypothesis.  The
+point is specific: the ordered gap and $H_0=0$ do not themselves supply
+\texttt{h35}; the source's definedness convention supplies the premise from
+which it is derived.
 
 \section{Discussion}
 
-Our current review page places the source passage, inherited source context,
-correspondence notes, and compiler-derived Lean statement together.  It is
-backed by \texttt{leanq} queries against the pinned environment and by hashes of
-the source and statement used for a review.  \Cref{fig:dashboard} shows the
-sine-theta page in the appendix.  The interface still asks a lot from a reader
-who barely knows Lean: it exposes the theorem more readily than the meanings of
-the structures, predicates, coercions, and typeclasses appearing inside it.  A
-useful next step is theorem-centered definition inspection, using the exact
-project and Mathlib revisions, together with a Compass-like reduction to the
-semantic vocabulary that can affect the statement.
+Our review page places the source passage, inherited source context,
+correspondence notes, and compiler-derived Lean statement together, backed by
+\texttt{leanq} queries against the pinned environment and hashes of the reviewed
+source and statement.  \Cref{fig:dashboard} shows the sine-theta page in the
+appendix.  A reader who barely knows Lean still has to understand the structures,
+predicates, coercions, and typeclasses in the signature.  The next step is
+therefore theorem-centered definition inspection against the exact project and
+Mathlib revisions, together with a Compass-like reduction to the vocabulary that
+can affect the statement.
 
 \paragraph{How much Lean did we actually read?}
-At the start of this project, the first author could not reliably audit a Lean
-theorem signature.  By the time of this paper, we could recognize many of the
-scope decisions that had caused trouble---real versus complex scalars,
-finite-dimensional assumptions, bounded maps, and the shape of a residual---and
-follow definitions when something looked suspicious.  We still used LLMs and
-small query tools to explain unfamiliar structures, walk through bundled
-predicates, and compare a Lean statement with the source.  The historical
-\(\sin 2\Theta\) example in \cref{lst:false-finish} is easy to diagnose once
-one knows that \texttt{\ensuremath{\mathbb C}} fixes the scalar field and
-\texttt{ContinuousLinearMap} gives a bounded operator.  Other scope choices can
-sit several definitions away from the displayed theorem.  That gap between
-``able to produce Lean'' and ``able to read every semantic dependency'' is the
-reason we built the review page in the first place.
+At the start, the first author could not reliably audit a Lean theorem signature.
+By the time of this paper, we could recognize several scope choices that had
+caused trouble---real versus complex scalars, finite-dimensional assumptions,
+bounded maps, and residual definitions---but still used LLMs and small query
+tools to explain unfamiliar structures and follow definitions.  In the
+Section~2 example in \cref{lst:false-finish}, the extra input is visible in the
+signature; the harder part is checking that condition~(3.5) belongs only to the
+later Section~3 scope and that the source's earlier definedness convention is
+enough to derive it.  This gap between reading Lean syntax and reconstructing
+source context motivated the review page.
 
 \paragraph{What does 29/29 mean here?}
-The denominator comes directly from the paper: four unnumbered theorems in
-Section~2 plus every named theorem, proposition, lemma, and corollary, for 29
-tracked results.  For each one, the repository records the source location and
-the Lean declaration used as evidence.  The tooling checks that the declaration
-still exists and compiles, and it hashes the source passage and Lean statement
-that were reviewed so later edits are visible.  The source-to-Lean
-correspondence itself remains a review judgment.  At the current snapshot, the
-project has no known unresolved mismatch in those 29 records: 28 printed
-results have checked proofs, and Proposition~4.4 has a checked counterexample
-and repaired theorem.  So 29/29 is our current coverage count.  It carries
-no calibrated probability that another review will fail to find a mistake.
-
-\paragraph{Can repeated review buy statistical confidence?}
-Repeated attempts to find a correspondence defect should change our confidence,
-but our historical reviews were not standardized.  A simple model makes the
-missing measurement explicit.  If discoveries followed a Poisson process with
-rate $\lambda$ per unit of comparable review exposure, then the probability of
-no discovery during an additional exposure $h$ would be
-\[
-  \Pr(\text{no new defect in }h\mid\lambda)=e^{-\lambda h}.
-\]
-Our old logs record dates, commits, and findings; they do not provide comparable
-reviewer-hours or fixed review passes, and the models, prompts, tooling, and our
-own understanding changed.  We therefore do not estimate $\lambda$.  The
-Bayesian version of the stopping calculation is given in \cref{app:stopping}.
-A future study could record fixed review passes or reviewer-hours from the
-start.
-
-As of the snapshot used for this paper, our tooling associates all 29 tracked
-\DK{} results with checked Lean evidence at the scope we currently believe the
-source requires.  Twenty-eight are proved as printed and Proposition~4.4 is
-refuted and repaired.  Did we really formalize Davis--Kahan?  And the honest
-answer at this point is: I don't know, probably. If not, it's pretty close.
-
-The drafting of this paper also used an LLM.  The supplementary prompt log keeps
-the human inputs verbatim, including corrections that rejected earlier
-LLM-generated framings about what a novice Lean user would realistically do.
-The same directory contains the account snapshot, publication counts, Git
-timeline, resource snapshot, and material hashes.  Those records are the basis
-for the factual claims above.
+Our ledger tracks four unnumbered Section~2 theorems plus every named theorem,
+proposition, lemma, and corollary.  Mathematically, 28 printed results have checked
+proofs; Proposition~4.4 has a checked counterexample and repaired theorem.  A final
+signature/context review found seven mismatches between public theorem signatures
+and source scope, including extra caller hypotheses in a Theorem~8.2 residual
+statement.  Those seven findings were subsequently repaired, but the final
+signature/context re-review remained pending at the time of this revision.  Thus
+29/29 mathematical resolution does not by itself establish 29/29 semantic
+alignment.  Did we really formalize Davis--Kahan?  I don't know, probably. If not,
+it's pretty close.  The
+supplement preserves the human paper-revision prompts verbatim.
 \ifshowartifacturl\space Public materials: \url{\artifacturl}.\fi
 
+\ifnum\PublicVersion=1\relax
+\acksection
+This material is based upon work supported by the Defense Advanced Research
+Projects Agency (DARPA) under Contract No. HR001125CE017. Any opinions, findings,
+and conclusions or recommendations expressed in this material are those of the
+author(s) and do not necessarily reflect the views of the Defense Advanced
+Research Projects Agency (DARPA).
+\else
 \clearpage
+\fi
+
 \begingroup
 \sloppy
 \bibliographystyle{unsrtnat}

@@ -27,6 +27,13 @@ https://paperswithlean.com/stat/, as displayed on the snapshot updated
 2026-08-24.  The paper uses complete months from January 2025 through July
 2026, avoiding the then-incomplete August 2026 count.
 
+The tracked CSV is intentionally frozen with the paper's reporting window.
+`make check-publication-activity` fetches the current statistics page, verifies
+that those 19 historical month/count pairs still agree, and reports newer live
+months without changing the tracked snapshot or the normal `make sources`
+build.  Use `scripts/check_lean_publication_activity.py --emit-csv` to print the
+live series when reviewing a future reporting-window update.
+
 ## `review_timeline.csv`
 
 Selected public Git events used in the paper and appendix.  Every event is keyed

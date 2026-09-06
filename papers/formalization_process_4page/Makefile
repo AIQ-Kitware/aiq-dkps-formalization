@@ -1,10 +1,11 @@
 SHELL := /bin/bash
-.PHONY: all sources paper public clean check-prose
+.PHONY: all sources paper public clean check-prose check-publication-activity
 
 all: paper
 
 sources:
 	python3 scripts/build_practitioner_accounts.py
+	python3 scripts/build_semantic_alignment_candidates.py
 	python3 scripts/build_evidence.py
 
 paper: sources
@@ -31,6 +32,9 @@ public: sources
 
 check-prose:
 	python3 scripts/check_prose.py
+
+check-publication-activity:
+	python3 scripts/check_lean_publication_activity.py
 
 clean:
 	latexmk -C paper.tex || true
