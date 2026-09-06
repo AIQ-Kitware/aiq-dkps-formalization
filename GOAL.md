@@ -472,19 +472,52 @@ printed scope, and the dimension-free approximation-number form already
 registered covers (ii)'s extension remark.  §XVII's "finite versus
 infinite-dimensional scope matches each printed result" is satisfied for them.
 
-**What is left on this row is one thing:** the **converse half of the printed
-*iff***.  The bounded converse goes through uniqueness — `M` equals the canonical
-branch — and that argument rests on `IsQuarterAcute P Q`, a **uniform** strict
-bound.  That is exactly what does not transcribe: the paper prints only the
-non-strict `Θ ≤ π/4`, and the strict bounded sibling's constant is
-`δ/(1 + ‖C‖)`, which degenerates as `‖A‖` grows (§10.3.1).  Concretely, with only
-the non-strict bound the contradiction step collapses to an *equality*
-`‖P_P u‖ = ‖P_{Pᗮ} u‖ = ‖u‖/√2` rather than an absurdity, and the paper's own
-exclusion of `θ = π/4` runs through equations (8.1)–(8.2), which are stated in
-the canonical-angle (CS) decomposition rather than in the projection algebra the
-repository uses here.  Whether the uniform strict bound holds at all at unbounded
-scope is an **open mathematical question**, not a porting gap.  Do not treat it as
-a transcription task.
+### 10.3.3 The converse half: what is actually in the way (analysis, 2026-09-06)
+
+**One item is left on this row: the converse half of the printed *iff*.**  It is
+not a porting gap, and the analysis below is meant to stop the next attempt from
+re-treading a route that is closed.
+
+*The bounded mechanism.*  The bounded converse goes through uniqueness — `M`
+equals the canonical branch — and rests on `IsQuarterAcute P Q`, a **uniform**
+strict bound `subspaceGap P Q < √2/2`.  The bounded proof's margin is
+`δ/(1 + ‖C‖)`, which degenerates as `‖A‖` grows (§10.3.1), so it does not survive
+to unbounded scope.
+
+*The projection-algebra route is closed.*  Suppose one has only the non-strict
+`Θ(P, Q) ≤ π/4` and `Θ(P, M) ≤ π/4`, and a nonzero `u ∈ M ∩ Qᗮ`.  Then
+`‖P_P u‖ ≤ ‖u‖/√2` (from `P_Q u = 0` and the `Q` bound) and
+`‖P_{Pᗮ} u‖ ≤ ‖u‖/√2` (from the `M` bound), and the two squares sum to `‖u‖²`.
+So both are *equalities*: `u` makes angle exactly `π/4` with `P`.  The step that
+was a contradiction in the bounded proof becomes a consistent configuration.  The
+same computation on the other corner, `w ∈ Mᗮ ∩ Q`, gives exactly `π/4` again.
+Adding the energy identity does not help: expanding
+`re⟪B u, u⟫ = re⟪A p, p⟫ + re⟪A q, q⟫ + 2 re⟪H p, q⟫` leaves two unknowns —
+`re⟪A q, q⟫` is unbounded above on `Pᗮ` — and one inequality.
+
+*Why commutation alone does not rescue it.*  A unitary commuting with `B`
+commutes with its spectral projections, so `P_M` and `P_Q` commute and `M` splits
+along `Q`.  That is what produces the vector `u` above — and `u` is then exactly
+the configuration the projection algebra cannot exclude.  Adding the commutation
+lemma without a way to exclude `u` would be machinery that carries no weight.
+
+*What the paper actually does.*  Its equations (8.1)–(8.2) exclude `θ = π/4` by
+`x₀^* B^* y₁ (tan θ − cot θ) = y₁^* A₁ y₁ − x₀^* A₀ x₀ ≥ δ > 0`, whose left side
+vanishes at `θ = π/4`.  That is a statement about a *principal angle* and its
+partner vector — the canonical-angle (CS) decomposition — not about the
+projection algebra.  Note also that excluding every principal angle `θ_j = π/4`
+does **not** give a uniform sup bound in infinite dimensions, which is consistent
+with the paper printing only the non-strict `Θ ≤ π/4`.
+
+*The two candidate routes,* neither a transcription:
+
+1. prove the uniform strict bound `subspaceGap P Q < √2/2` at unbounded scope, or
+   exhibit a counterexample — its status is genuinely open; or
+2. build the canonical-angle decomposition for the unbounded pair and run
+   (8.1)–(8.2) there.
+
+Until one of them is done, DK-8.1-thm's canonical evidence for the converse stays
+bounded, and the inventory says so.
 
 The machinery built for Theorem 8.2 is what a next attempt should use rather than
 starting again: `SpectralTheory/UnboundedCentralBand.lean` already selects a
