@@ -444,14 +444,25 @@ limit — a vector of the branch has no spectral mass above `α`, so its form is
 most `c ‖x‖²` for *every* `c > α` — with the open gap `(α, α + δ)` removed by the
 already-proved unbounded repulsion.
 
+**The characterization's forward direction is done too, 2026-09-06.**
+`theorem8_1_maximalAngle_le_of_spectrumIn_unbounded` takes the printed *spectral*
+placements — `Λ₀ ⊆ (−∞, α]`, `Λ₁ ⊆ [α + δ, ∞)`, and the same for `A` across `P` —
+and concludes `Θ ≤ π/4` at unbounded scope.  The bridge is
+`re_inner_le_of_reducingRestriction_realSpectrum_subset_Iic` and its dual: a point
+outside the closed half-line is a resolvent point, so its spectral projection
+vanishes, and the half-line energy bounds of the spectral measure give the form
+bound the quarter-angle theorem wants.
+
 **What is left on this row:**
 
-* **the uniqueness half of the printed *iff*.**  This is not a transcription: the
-  bounded argument rests on the *strict* quarter bound for the canonical branch,
-  and that is exactly what does not survive to unbounded scope — the paper prints
-  the non-strict `Θ ≤ π/4`, and the strict bounded sibling's constant
-  `δ/(1 + ‖C‖)` degenerates as `‖A‖` grows (§10.3.1).  A different argument is
-  needed.
+* **the converse half of the printed *iff*.**  The bounded converse goes through
+  uniqueness — `M` equals the canonical branch — and that argument rests on
+  `IsQuarterAcute P Q`, a **uniform** strict bound.  That is exactly what does not
+  transcribe: the paper prints only the non-strict `Θ ≤ π/4`, and the strict
+  bounded sibling's constant is `δ/(1 + ‖C‖)`, which degenerates as `‖A‖` grows
+  (§10.3.1).  Whether the uniform strict bound holds at all at unbounded scope is
+  an **open mathematical question**, not a porting gap, and a converse there needs
+  a different argument.  Do not treat it as a transcription task.
 * **parts (i)–(iii)** — the compression inequality, the eigenvalue form in finite
   dimensions, and the symmetric-gauge form.
 

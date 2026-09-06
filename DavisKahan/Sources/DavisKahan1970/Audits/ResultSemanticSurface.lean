@@ -863,6 +863,11 @@ Status: **TERMINAL EXACT**.
 #check @TauCeti.DavisKahan1970.Section8.le_re_inner_of_mem_canonicalLowBranchUnbounded_orthogonal
 #check @TauCeti.DavisKahan1970.Section8.theorem8_1_canonicalBranchUnbounded_form
 #check @TauCeti.DavisKahan1970.Section8.theorem8_1_canonicalBranchUnbounded_printed
+#check @TauCeti.DavisKahan.re_inner_le_of_realSpectrum_subset_Iic
+#check @TauCeti.DavisKahan.le_re_inner_of_realSpectrum_subset_Ici
+#check @TauCeti.DavisKahan.re_inner_le_of_reducingRestriction_realSpectrum_subset_Iic
+#check @TauCeti.DavisKahan.le_re_inner_of_reducingRestriction_realSpectrum_subset_Ici
+#check @TauCeti.DavisKahan1970.Section8.theorem8_1_maximalAngle_le_of_spectrumIn_unbounded
 #check @TauCeti.DavisKahan.subspaceGap_le_of_reflectionProduct_form_nonneg
 #check @TauCeti.DavisKahan.maximalAngle_le_pi_div_four_of_reflectionProduct_form_nonneg
 #check @TauCeti.DavisKahan.reflectionProduct_add_swap_eq

@@ -6611,6 +6611,11 @@ The declarations that carry this result's printed statement, with the source ato
 - `TauCeti.DavisKahan1970.Section8.le_re_inner_of_mem_canonicalLowBranchUnbounded_orthogonal` — generalization
 - `TauCeti.DavisKahan1970.Section8.theorem8_1_canonicalBranchUnbounded_form` — generalization
 - `TauCeti.DavisKahan1970.Section8.theorem8_1_canonicalBranchUnbounded_printed` — generalization
+- `TauCeti.DavisKahan.re_inner_le_of_realSpectrum_subset_Iic` — generalization
+- `TauCeti.DavisKahan.le_re_inner_of_realSpectrum_subset_Ici` — generalization
+- `TauCeti.DavisKahan.re_inner_le_of_reducingRestriction_realSpectrum_subset_Iic` — generalization
+- `TauCeti.DavisKahan.le_re_inner_of_reducingRestriction_realSpectrum_subset_Ici` — generalization
+- `TauCeti.DavisKahan1970.Section8.theorem8_1_maximalAngle_le_of_spectrumIn_unbounded` — generalization
 
 ### Source-facing Lean declarations
 
@@ -6809,6 +6814,36 @@ Compiler-printed type: *inserted when a compiler certificate is supplied.*
 #### `TauCeti.DavisKahan1970.Section8.theorem8_1_canonicalBranchUnbounded_printed`
 
 Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section8/Theorem81UnboundedBranch.lean:255`
+
+Compiler-printed type: *inserted when a compiler certificate is supplied.*
+
+#### `TauCeti.DavisKahan.re_inner_le_of_realSpectrum_subset_Iic`
+
+Source location candidates: `DavisKahan/SpectralTheory/UnboundedCentralBand.lean:303`
+
+Compiler-printed type: *inserted when a compiler certificate is supplied.*
+
+#### `TauCeti.DavisKahan.le_re_inner_of_realSpectrum_subset_Ici`
+
+Source location candidates: `DavisKahan/SpectralTheory/UnboundedCentralBand.lean:323`
+
+Compiler-printed type: *inserted when a compiler certificate is supplied.*
+
+#### `TauCeti.DavisKahan.re_inner_le_of_reducingRestriction_realSpectrum_subset_Iic`
+
+Source location candidates: `DavisKahan/SpectralTheory/UnboundedCentralBand.lean:347`
+
+Compiler-printed type: *inserted when a compiler certificate is supplied.*
+
+#### `TauCeti.DavisKahan.le_re_inner_of_reducingRestriction_realSpectrum_subset_Ici`
+
+Source location candidates: `DavisKahan/SpectralTheory/UnboundedCentralBand.lean:365`
+
+Compiler-printed type: *inserted when a compiler certificate is supplied.*
+
+#### `TauCeti.DavisKahan1970.Section8.theorem8_1_maximalAngle_le_of_spectrumIn_unbounded`
+
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section8/Theorem81UnboundedBranch.lean:303`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 

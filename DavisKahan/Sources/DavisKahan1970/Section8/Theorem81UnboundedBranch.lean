@@ -286,6 +286,58 @@ theorem theorem8_1_canonicalBranchUnbounded_printed
     (canonicalLowBranchUnbounded_reduces (isSelfAdjoint_perturbed hA hH) alpha).orthogonal
     hPlow hPhigh hform.1 hform.2 hHP hHPperp hdelta
 
+/-! ### The printed characterization, forward direction
+
+Davis and Kahan state Theorem 8.1's characterization with the *spectral*
+placements `Λ₀ ≤ α` and `Λ₁ ≥ α + δ`.  The direction that says those force
+`Θ ≤ π/4` is available at unbounded scope: half-line spectrum gives the form
+bound, and the form bound is what the unbounded quarter-angle theorem takes. -/
+
+/-- **Theorem 8.1's characterization, the direction from the spectral placement,
+at unbounded scope.**
+
+For a reducing subspace `M` of `A + H` whose blocks are placed as the paper
+prescribes — `Λ₀ ⊆ (-∞, α]` and `Λ₁ ⊆ [α + δ, ∞)` — the pair is inside the
+closed quarter turn.  The hypotheses on `A` and `H` are the `tan 2θ` theorem's,
+which Theorem 8.1 inherits, and they too are given spectrally. -/
+theorem theorem8_1_maximalAngle_le_of_spectrumIn_unbounded
+    (hA : IsSelfAdjoint A) (hHsa : IsSelfAdjoint Hop)
+    (hredPperp : TauCeti.LinearPMap.ReducesSubspace A Pᗮ)
+    (hPspec : TauCeti.LinearPMap.realSpectrum
+      (TauCeti.LinearPMap.reducingRestriction A P
+        (by simpa only [Submodule.orthogonal_orthogonal] using hredPperp.orthogonal))
+      ⊆ Set.Iic alpha)
+    (hPperpSpec : TauCeti.LinearPMap.realSpectrum
+      (TauCeti.LinearPMap.reducingRestriction A Pᗮ hredPperp)
+      ⊆ Set.Ici (alpha + delta))
+    {M : Submodule ℂ H} [M.HasOrthogonalProjection]
+    (hM : TauCeti.LinearPMap.ReducesSubspace (TauCeti.LinearPMap.addBounded A Hop) M)
+    (hMspec : TauCeti.LinearPMap.realSpectrum
+      (TauCeti.LinearPMap.reducingRestriction (TauCeti.LinearPMap.addBounded A Hop) M hM)
+      ⊆ Set.Iic alpha)
+    (hMperpSpec : TauCeti.LinearPMap.realSpectrum
+      (TauCeti.LinearPMap.reducingRestriction (TauCeti.LinearPMap.addBounded A Hop) Mᗮ
+        hM.orthogonal) ⊆ Set.Ici (alpha + delta))
+    (hHP : ∀ x ∈ P, Hop x ∈ Pᗮ) (hHPperp : ∀ x ∈ Pᗮ, Hop x ∈ P)
+    (hdelta : 0 < delta) :
+    TauCeti.DavisKahanExt.maximalAngle P M ≤ Real.pi / 4 := by
+  have hredP : TauCeti.LinearPMap.ReducesSubspace A P := by
+    simpa only [Submodule.orthogonal_orthogonal] using hredPperp.orthogonal
+  have hB : IsSelfAdjoint (TauCeti.LinearPMap.addBounded A Hop) :=
+    DavisKahan.addBounded_isSelfAdjoint A hA Hop
+      (ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mp hHsa)
+  exact DavisKahan.maximalAngle_le_pi_div_four_of_orderedFormGap_unbounded_printed
+    A Hop P M hA hHsa hredPperp hM.orthogonal
+    (fun x hx => DavisKahan.re_inner_le_of_reducingRestriction_realSpectrum_subset_Iic
+      hA hredP hPspec x hx)
+    (fun x hx => DavisKahan.le_re_inner_of_reducingRestriction_realSpectrum_subset_Ici
+      hA hredPperp hPperpSpec x hx)
+    (fun x hx => DavisKahan.re_inner_le_of_reducingRestriction_realSpectrum_subset_Iic
+      hB hM hMspec x hx)
+    (fun x hx => DavisKahan.le_re_inner_of_reducingRestriction_realSpectrum_subset_Ici
+      hB hM.orthogonal hMperpSpec x hx)
+    hHP hHPperp hdelta
+
 end
 
 end Section8
