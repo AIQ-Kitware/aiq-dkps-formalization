@@ -18,13 +18,15 @@ Until 2026-09-05 the repository never constructed one.  This module does: the
 `k`-th Ky Fan norm is a member for every `k ≥ 1`, and those are the norms Davis
 and Kahan's own Fan-dominance argument runs over.
 
-The three obligations are cheap once the Ky Fan ideal family is in hand.
-Completeness is `isComplete_kyFanSymmetricIdealFamily` -- the Ky Fan `k` norm is
-equivalent to the operator norm, so the ideal is all of `E →L[𝕜] F` and inherits
-completeness.  Fan dominance is immediate: the hypothesis is a Ky Fan inequality
-at *every* level, and the gauge is the one at level `k`.  Normalization is
+**What was and was not missing.**  The layer beneath,
+`KyFanDominantIdealFamily`, was already inhabited by
+`KyFanDominantIdealFamily.kyFan`, so this module builds on that rather than
+repeating it.  What had no witness was the *normalized* class: the single extra
+field `gauge_rankOne_eq_one`, which is the source's `‖u v*‖ = ‖u‖ ‖v‖` after
+scaling both vectors to norm one.  It is discharged by
 `approximationSingularValue_rankOne`, which says a norm-one rank-one operator has
-singular values `1, 0, 0, …`.
+singular values `1, 0, 0, …`, so the Ky Fan sum of the first `k ≥ 1` of them is
+`1`.
 -/
 
 namespace TauCeti
@@ -41,12 +43,7 @@ variable {𝕜 : Type u} [RCLike 𝕜]
 noncomputable def kyFanNormalizedUnitaryInvariantNorm
     [ContinuousLinearMap.HasMinMaxLowerBoundEverywhere.{u, v} 𝕜] (k : ℕ) (hk : 0 < k) :
     NormalizedUnitaryInvariantNorm.{u, v} 𝕜 where
-  toKyFanDominantIdealFamily :=
-    { toSymmetricOperatorIdealFamily := kyFanSymmetricIdealFamily k hk
-      isComplete := isComplete_kyFanSymmetricIdealFamily k hk
-      gauge_le_of_forall_kyFanApproximationGauge_le := by
-        intro E F E' F' _ _ _ _ _ _ _ _ _ _ _ _ A B h
-        exact ENNReal.ofReal_le_ofReal (h k) }
+  toKyFanDominantIdealFamily := KyFanDominantIdealFamily.kyFan k hk
   gauge_rankOne_eq_one := by
     intro E F _ _ _ _ _ _ V hVnorm hVrank
     show ((kyFanSymmetricIdealFamily (𝕜 := 𝕜) k hk).gauge V).toReal = 1

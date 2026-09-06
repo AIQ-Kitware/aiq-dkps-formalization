@@ -908,6 +908,11 @@ constructed a single term of the type.** Every occurrence was a universally
 quantified hypothesis. A `∀ N : C, …` statement over an empty `C` is vacuous, so
 every source-exact façade could have been true for the wrong reason.
 
+To be precise about what was missing: the layer beneath,
+`KyFanDominantIdealFamily`, *was* already inhabited, by
+`KyFanDominantIdealFamily.kyFan`. What had no witness was the one extra field of
+the normalized class, `gauge_rankOne_eq_one`.
+
 `kyFanNormalizedUnitaryInvariantNorm k hk` now exhibits the `k`-th Ky Fan norm as
 a member, with `nonempty_normalizedUnitaryInvariantNorm_complex` and its real
 sibling as the corollaries that matter. Those are exactly the norms Davis and
