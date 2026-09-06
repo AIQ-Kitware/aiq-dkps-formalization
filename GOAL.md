@@ -656,13 +656,26 @@ one *does* survive to unbounded scope, which is why the paper writes `<` here an
 `≤` there.
 
 `subspaceGap_lt_of_le_of_norm_sinTwoAngle_lt_one` and its angle form are proved
-and axiom-clean. What remains for the row:
+and axiom-clean, and `Section8/Theorem82Unbounded.lean` holds the assembly so far:
+
+* `norm_sinTwoAngleOperator_le_of_perturbedGap_unbounded_complex` — the unbounded
+  `sin 2Θ` estimate read at the **operator norm**. That instantiation is possible
+  only because the operator norm is the first Ky Fan norm and therefore a member
+  of the source norm class, which is the inhabitation result above.
+* `theorem8_2_branch_maximalAngle_lt_unbounded_complex` — the acute conclusion
+  from the closed branch and a strict contraction.
+
+Three assembly steps remain, none of them new mathematics:
 
 1. derive the ordered form bounds Theorem 8.1 wants from Theorem 8.2's printed
    `SpectrumIn` hypotheses at unbounded scope;
-2. instantiate the unbounded `sin 2Θ` estimate to get `‖sin 2Θ‖ < 1` from
-   `‖H‖ < δ/2`, and the residual variant from `‖R‖ < δ/2`;
-3. assemble, keeping the residual branch free of the perturbation hypothesis.
+2. identify `‖cfc (sin 2·) Θ‖` with `‖2 P_{P⊥} P_Q P_P‖` — the estimate is proved
+   for the first and the bootstrap comparison consumes the second. They have the
+   same approximation numbers (`sinTwoAngleOperator_hasSameApproximationNumbers`
+   plus `HasSameApproximationNumbers.opNorm_eq`), so this is a bridge, not a
+   theorem;
+3. the residual branch, keeping it free of the perturbation hypothesis, and the
+   real siblings.
 
 ### Implementation policy
 
