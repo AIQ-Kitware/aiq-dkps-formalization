@@ -5511,7 +5511,14 @@
         "TauCeti.ContinuousLinearMap.nonneg_of_lyapunov_nonneg",
         "TauCeti.DavisKahan.reflectionProduct_form_nonneg_of_orderedFormGap_unbounded",
         "TauCeti.DavisKahan.subspaceGap_le_of_orderedFormGap_unbounded",
-        "TauCeti.DavisKahan.subspaceGap_le_of_orderedFormGap_unbounded_printed"
+        "TauCeti.DavisKahan.subspaceGap_le_of_orderedFormGap_unbounded_printed",
+        "TauCeti.DavisKahan1970.Section8.canonicalLowBranchUnbounded",
+        "TauCeti.DavisKahan1970.Section8.canonicalLowBranchUnbounded_reduces",
+        "TauCeti.DavisKahan1970.Section8.canonicalLowBranchUnbounded_orthogonal",
+        "TauCeti.DavisKahan1970.Section8.re_inner_le_of_mem_canonicalLowBranchUnbounded",
+        "TauCeti.DavisKahan1970.Section8.le_re_inner_of_mem_canonicalLowBranchUnbounded_orthogonal",
+        "TauCeti.DavisKahan1970.Section8.theorem8_1_canonicalBranchUnbounded_form",
+        "TauCeti.DavisKahan1970.Section8.theorem8_1_canonicalBranchUnbounded_printed"
       ],
       "review_note": "Result-only hostile review accepted 2026-08-12. The compiled source surface covers every counted Theorem 8.1 clause under the printed hypotheses: branch existence and the closed-quarter-angle iff; part (i) on both blocks; part (ii) in dimension-free approximation-number form with the compiled positive-operator eigenvalue dictionary and real counterparts; and part (iii) for every symmetric gauge in the printed finite-dimensional scope, including increasing-index-order wrappers, over both complex and real Hilbert spaces. The previously recorded blocker was stale evidence selection, not missing mathematics.\n\n**OPERATOR SCOPE DISCLOSED 2026-09-05**, closing finding F2 of the 2026-09-04 hostile review and the follow-up review's objection to closing it by metadata alone.  Every registered Section 8 declaration is bounded; the row said nothing about it while the Section 2 hypotheses it imports are certified at unbounded scope.  The row now carries an accepted nonlocal source interpretation with the source evidence for the bounded reading, the competing unbounded reading stated in full, and the lift named as open work in `GOAL.md`.  The row's alignment moved from `locally_exact` to `paper_faithful_nonlocal_source_interpretation`, so the reviewer packet now lists it with the other interpreted rows instead of presenting it as locally exact.",
       "parent_claim_id": "DK-8.1-thm",
@@ -5749,6 +5756,41 @@
           "declaration": "TauCeti.DavisKahan.subspaceGap_le_of_orderedFormGap_unbounded_printed",
           "role": "generalization",
           "note": "Unbounded-scope work toward this row's actual source scope.  The canonical evidence below is still bounded; these are the pieces that will replace it."
+        },
+        {
+          "declaration": "TauCeti.DavisKahan1970.Section8.canonicalLowBranchUnbounded",
+          "role": "generalization",
+          "note": "Unbounded-scope work toward this row's actual source scope: branch existence with its printed ordered form bounds, and the printed `Theta <= pi/4` for that branch.  The canonical evidence below is still bounded."
+        },
+        {
+          "declaration": "TauCeti.DavisKahan1970.Section8.canonicalLowBranchUnbounded_reduces",
+          "role": "generalization",
+          "note": "Unbounded-scope work toward this row's actual source scope: branch existence with its printed ordered form bounds, and the printed `Theta <= pi/4` for that branch.  The canonical evidence below is still bounded."
+        },
+        {
+          "declaration": "TauCeti.DavisKahan1970.Section8.canonicalLowBranchUnbounded_orthogonal",
+          "role": "generalization",
+          "note": "Unbounded-scope work toward this row's actual source scope: branch existence with its printed ordered form bounds, and the printed `Theta <= pi/4` for that branch.  The canonical evidence below is still bounded."
+        },
+        {
+          "declaration": "TauCeti.DavisKahan1970.Section8.re_inner_le_of_mem_canonicalLowBranchUnbounded",
+          "role": "generalization",
+          "note": "Unbounded-scope work toward this row's actual source scope: branch existence with its printed ordered form bounds, and the printed `Theta <= pi/4` for that branch.  The canonical evidence below is still bounded."
+        },
+        {
+          "declaration": "TauCeti.DavisKahan1970.Section8.le_re_inner_of_mem_canonicalLowBranchUnbounded_orthogonal",
+          "role": "generalization",
+          "note": "Unbounded-scope work toward this row's actual source scope: branch existence with its printed ordered form bounds, and the printed `Theta <= pi/4` for that branch.  The canonical evidence below is still bounded."
+        },
+        {
+          "declaration": "TauCeti.DavisKahan1970.Section8.theorem8_1_canonicalBranchUnbounded_form",
+          "role": "generalization",
+          "note": "Unbounded-scope work toward this row's actual source scope: branch existence with its printed ordered form bounds, and the printed `Theta <= pi/4` for that branch.  The canonical evidence below is still bounded."
+        },
+        {
+          "declaration": "TauCeti.DavisKahan1970.Section8.theorem8_1_canonicalBranchUnbounded_printed",
+          "role": "generalization",
+          "note": "Unbounded-scope work toward this row's actual source scope: branch existence with its printed ordered form bounds, and the printed `Theta <= pi/4` for that branch.  The canonical evidence below is still bounded."
         }
       ],
       "result_wide_scope_atoms": [],
@@ -6021,7 +6063,7 @@
         "source_fidelity_inventory_sha256": "a35c9158f5fab388494d59393f2c49343e0810cb0c5a864abc383e955542564c",
         "supporting_atom_digest_sha256": "9d2013e666da3d323c1a2351a7d52cf4c878868c048a296656164cce5accb447"
       },
-      "notes": "\n\nUNBOUNDED SCOPE, PROGRESS 2026-09-05.  The angle conclusion Davis and Kahan print -- `Theta <= pi/4`, non-strict -- is now proved at unbounded ambient scope by `maximalAngle_le_pi_div_four_of_orderedFormGap_unbounded_printed`, in the paper's own orientation on `P` and `Q`.  Reading the printed statement mattered: the bounded canonical evidence concludes the strictly stronger supremum bound `subspaceGap < sqrt 2 / 2`, whose constant is `delta / (1 + ‖C‖)` and therefore degenerates as `‖A‖ -> infinity`.  The paper does not claim it, and it is not available unbounded.\n\nWhat is still bounded on this row: the existence of the branch `Q` as a spectral subspace of `A + H`, the form bounds on it, and parts (i)-(iii).  The canonical evidence is therefore unchanged and the row is not yet at its source scope.\n\nThe unbounded core is now exported as reflection-product positivity (`reflectionProduct_form_nonneg_of_orderedFormGap_unbounded`), with the angle conclusion and the projector-gap conclusion `subspaceGap P Q <= sqrt 2 / 2` as thin consumers of it in the paper's own orientation."
+      "notes": "\n\nUNBOUNDED SCOPE, PROGRESS 2026-09-05.  The angle conclusion Davis and Kahan print -- `Theta <= pi/4`, non-strict -- is now proved at unbounded ambient scope by `maximalAngle_le_pi_div_four_of_orderedFormGap_unbounded_printed`, in the paper's own orientation on `P` and `Q`.  Reading the printed statement mattered: the bounded canonical evidence concludes the strictly stronger supremum bound `subspaceGap < sqrt 2 / 2`, whose constant is `delta / (1 + ‖C‖)` and therefore degenerates as `‖A‖ -> infinity`.  The paper does not claim it, and it is not available unbounded.\n\nWhat is still bounded on this row: the existence of the branch `Q` as a spectral subspace of `A + H`, the form bounds on it, and parts (i)-(iii).  The canonical evidence is therefore unchanged and the row is not yet at its source scope.\n\nThe unbounded core is now exported as reflection-product positivity (`reflectionProduct_form_nonneg_of_orderedFormGap_unbounded`), with the angle conclusion and the projector-gap conclusion `subspaceGap P Q <= sqrt 2 / 2` as thin consumers of it in the paper's own orientation.\n\nBRANCH EXISTENCE AT UNBOUNDED SCOPE, 2026-09-06.  `theorem8_1_canonicalBranchUnbounded_printed` supplies, at the printed hypotheses and at unbounded scope, the branch `Q = specRange (A + H) (Iic alpha)` together with all three printed facts about it: it reduces `A + H`, it carries `Lambda_0 <= alpha` and `Lambda_1 >= alpha + delta`, and `Theta(P, Q) <= pi/4`.  The two form bounds are the half-line energy bounds of the spectral measure applied through a one-sided limit, with the open gap removed by the already-proved unbounded repulsion `notMem_spectrum_addBounded_of_offDiagonal_form_gap`.\n\nStill bounded on this row: the UNIQUENESS half of the printed iff, and parts (i)-(iii).  The bounded uniqueness argument rests on the STRICT quarter bound for the canonical branch, which is not available at unbounded scope -- the paper prints the non-strict `Theta <= pi/4` and its strict bounded sibling has a constant that degenerates as ‖A‖ grows -- so that half needs a different argument, not a transcription."
     },
     {
       "id": "DK-8.2-thm",

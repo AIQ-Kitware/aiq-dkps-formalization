@@ -433,13 +433,25 @@ spectral-repulsion half
 (`notMem_spectrum_addBounded_of_offDiagonal_form_gap`) and the coercive/inverse
 ingredient (§6.2) were already there.
 
-**What is actually left on this row** is the rest of the printed theorem at
-unbounded scope:
+**Branch existence is done, 2026-09-06.**
+`Section8/Theorem81UnboundedBranch.lean` supplies, at the printed hypotheses and
+at unbounded scope, the branch `Q = specRange (A + H) (Iic α)` with all three
+printed facts about it: it reduces `A + H`, it carries `Λ₀ ≤ α` and
+`Λ₁ ≥ α + δ`, and `Θ(P, Q) ≤ π/4`
+(`theorem8_1_canonicalBranchUnbounded_printed`).  The two form bounds are the
+half-line energy bounds of the spectral measure applied through a one-sided
+limit — a vector of the branch has no spectral mass above `α`, so its form is at
+most `c ‖x‖²` for *every* `c > α` — with the open gap `(α, α + δ)` removed by the
+already-proved unbounded repulsion.
 
-* **branch existence** — `Q` as the spectral subspace of `A + H` for `Iic α`,
-  with the ordered form bounds on `Q` and `Qᗮ`;
-* **the printed characterization**, which is an *iff* with the spectral
-  placement, so the uniqueness half as well;
+**What is left on this row:**
+
+* **the uniqueness half of the printed *iff*.**  This is not a transcription: the
+  bounded argument rests on the *strict* quarter bound for the canonical branch,
+  and that is exactly what does not survive to unbounded scope — the paper prints
+  the non-strict `Θ ≤ π/4`, and the strict bounded sibling's constant
+  `δ/(1 + ‖C‖)` degenerates as `‖A‖` grows (§10.3.1).  A different argument is
+  needed.
 * **parts (i)–(iii)** — the compression inequality, the eigenvalue form in finite
   dimensions, and the symmetric-gauge form.
 
