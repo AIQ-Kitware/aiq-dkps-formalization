@@ -5452,7 +5452,13 @@
         "TauCeti.DavisKahan1970.Section8.theorem8_1_upperSymmetricGaugeRepulsion_angle_rev",
         "TauCeti.DavisKahan1970.Section8.theorem8_1_lowerSymmetricGaugeRepulsion_angle_rev",
         "TauCeti.DavisKahan1970.Section8.theorem8_1_upperSymmetricGaugeRepulsion_angle_rev_real",
-        "TauCeti.DavisKahan1970.Section8.theorem8_1_lowerSymmetricGaugeRepulsion_angle_rev_real"
+        "TauCeti.DavisKahan1970.Section8.theorem8_1_lowerSymmetricGaugeRepulsion_angle_rev_real",
+        "TauCeti.DavisKahan.maximalAngle_le_pi_div_four_of_orderedFormGap_unbounded",
+        "TauCeti.DavisKahan.maximalAngle_le_pi_div_four_of_orderedFormGap_unbounded_printed",
+        "TauCeti.DavisKahan.subspaceGap_le_of_reflectionProduct_form_nonneg",
+        "TauCeti.DavisKahan.maximalAngle_le_pi_div_four_of_reflectionProduct_form_nonneg",
+        "TauCeti.DavisKahan.reflectionProduct_add_swap_eq",
+        "TauCeti.ContinuousLinearMap.nonneg_of_lyapunov_nonneg"
       ],
       "review_note": "Result-only hostile review accepted 2026-08-12. The compiled source surface covers every counted Theorem 8.1 clause under the printed hypotheses: branch existence and the closed-quarter-angle iff; part (i) on both blocks; part (ii) in dimension-free approximation-number form with the compiled positive-operator eigenvalue dictionary and real counterparts; and part (iii) for every symmetric gauge in the printed finite-dimensional scope, including increasing-index-order wrappers, over both complex and real Hilbert spaces. The previously recorded blocker was stale evidence selection, not missing mathematics.\n\n**OPERATOR SCOPE DISCLOSED 2026-09-05**, closing finding F2 of the 2026-09-04 hostile review and the follow-up review's objection to closing it by metadata alone.  Every registered Section 8 declaration is bounded; the row said nothing about it while the Section 2 hypotheses it imports are certified at unbounded scope.  The row now carries an accepted nonlocal source interpretation with the source evidence for the bounded reading, the competing unbounded reading stated in full, and the lift named as open work in `GOAL.md`.  The row's alignment moved from `locally_exact` to `paper_faithful_nonlocal_source_interpretation`, so the reviewer packet now lists it with the other interpreted rows instead of presenting it as locally exact.",
       "parent_claim_id": "DK-8.1-thm",
@@ -5645,6 +5651,36 @@
         {
           "declaration": "TauCeti.DavisKahan1970.Section8.approximationNumber_eq_eigenvalues_of_isPositive",
           "role": "supporting_theorem"
+        },
+        {
+          "declaration": "TauCeti.DavisKahan.maximalAngle_le_pi_div_four_of_orderedFormGap_unbounded",
+          "role": "generalization",
+          "note": "Unbounded-scope work toward this row's actual source scope.  The canonical evidence below is still bounded; these are the pieces that will replace it."
+        },
+        {
+          "declaration": "TauCeti.DavisKahan.maximalAngle_le_pi_div_four_of_orderedFormGap_unbounded_printed",
+          "role": "generalization",
+          "note": "Unbounded-scope work toward this row's actual source scope.  The canonical evidence below is still bounded; these are the pieces that will replace it."
+        },
+        {
+          "declaration": "TauCeti.DavisKahan.subspaceGap_le_of_reflectionProduct_form_nonneg",
+          "role": "generalization",
+          "note": "Unbounded-scope work toward this row's actual source scope.  The canonical evidence below is still bounded; these are the pieces that will replace it."
+        },
+        {
+          "declaration": "TauCeti.DavisKahan.maximalAngle_le_pi_div_four_of_reflectionProduct_form_nonneg",
+          "role": "generalization",
+          "note": "Unbounded-scope work toward this row's actual source scope.  The canonical evidence below is still bounded; these are the pieces that will replace it."
+        },
+        {
+          "declaration": "TauCeti.DavisKahan.reflectionProduct_add_swap_eq",
+          "role": "generalization",
+          "note": "Unbounded-scope work toward this row's actual source scope.  The canonical evidence below is still bounded; these are the pieces that will replace it."
+        },
+        {
+          "declaration": "TauCeti.ContinuousLinearMap.nonneg_of_lyapunov_nonneg",
+          "role": "generalization",
+          "note": "Unbounded-scope work toward this row's actual source scope.  The canonical evidence below is still bounded; these are the pieces that will replace it."
         }
       ],
       "result_wide_scope_atoms": [],
@@ -5916,7 +5952,8 @@
         "distributable_specification_sha256": "05ef66dd33b497329f745505d3a04b0100f2a0052202a3b7a188d76a545e71fd",
         "source_fidelity_inventory_sha256": "a35c9158f5fab388494d59393f2c49343e0810cb0c5a864abc383e955542564c",
         "supporting_atom_digest_sha256": "9d2013e666da3d323c1a2351a7d52cf4c878868c048a296656164cce5accb447"
-      }
+      },
+      "notes": "\n\nUNBOUNDED SCOPE, PROGRESS 2026-09-05.  The angle conclusion Davis and Kahan print -- `Theta <= pi/4`, non-strict -- is now proved at unbounded ambient scope by `maximalAngle_le_pi_div_four_of_orderedFormGap_unbounded_printed`, in the paper's own orientation on `P` and `Q`.  Reading the printed statement mattered: the bounded canonical evidence concludes the strictly stronger supremum bound `subspaceGap < sqrt 2 / 2`, whose constant is `delta / (1 + ‖C‖)` and therefore degenerates as `‖A‖ -> infinity`.  The paper does not claim it, and it is not available unbounded.\n\nWhat is still bounded on this row: the existence of the branch `Q` as a spectral subspace of `A + H`, the form bounds on it, and parts (i)-(iii).  The canonical evidence is therefore unchanged and the row is not yet at its source scope."
     },
     {
       "id": "DK-8.2-thm",
