@@ -545,6 +545,47 @@ vanishes at `θ = π/4`.  That is the canonical-angle (CS) decomposition.  The r
 above reaches the same exclusion through the Lyapunov positivity of `K J + J K`
 instead, and never builds a CS decomposition for the unbounded pair.
 
+### 10.3.4 The source surface, and what a signature-only review found (2026-09-06)
+
+A hostile review restricted its criterion to one question — *does the canonical
+public theorem signature, read in the paper's standing context, state the
+Davis–Kahan result with no stronger restriction and no weaker conclusion?* — and
+found two defects that the mathematics had not caused and the registration had
+not caught.
+
+**Theorem 8.2's retained estimates were still bounded.**  The acute conclusion
+was canonical at the inherited unbounded scope while
+`theorem8_2_sinTwoTheta_perturbation_sourceExact` and its three siblings, the
+canonical witnesses for "the corresponding double-angle estimate remains valid",
+still took `A K : H →L[𝕜] H`.  One row therefore advertised two different
+operator scopes.  `Theorem82SourceUnbounded.lean` states Theorem 8.2 the way the
+source states it — one theorem per alternative and scalar field, under the
+inherited `sin 2θ` context plus the new central-spectrum and smallness
+assumptions, concluding **both** the retained estimate and `Θ < π/4` — with `A` a
+possibly unbounded self-adjoint partial map.  Nothing new is proved: the retained
+estimates are the Section 2 unbounded endpoints, and the printed spectral
+placement becomes the `FormBoundedSylvesterGap` they take by `intervalExterior`.
+The residual branch keeps the printed `‖R‖ < δ/2` on the residual itself; `R` is
+the `sin 2θ` theorem's own residual datum, pinned to the source's identification
+of the Ritz block as `A₀`, which forces `R = H|_P`.
+
+**Theorem 8.1's canonical declarations were too general-purpose to be a source
+boundary.**  `theorem8_1_maximalAngle_le_iff_orderedFormGap_unbounded` stated the
+placements as form inequalities over the ambient domain rather than as `Λ₀ ≤ α`,
+`Λ₁ ≥ α + δ` on the blocks; `theorem8_1_upperCompressionRepulsion_unbounded` was
+about an arbitrary partial map `B` and reducing subspace `Q` and never mentioned
+`A₁`, `Λ₁`, `C₁`.  `Theorem81SourceUnbounded.lean` restates them on the source's
+objects: the blocks are `reducingRestriction (A + H) Q` and its complement with
+the placements as `SemiboundedAbove`/`SemiboundedBelow` on them, the existence
+clause is the existential the source asserts rather than a named-branch
+conjunction, and part (i) is `A₁ − α ≤ C₁(Λ₁ − α)C₁` read on `Pᗮ` with `C₁` the
+cosine block.  The bridge `semiboundedAbove_reducingRestriction_iff` and its three
+siblings are unfolding in both directions.
+
+Both are façade work.  No proof of any underlying theorem changed, and every
+displaced declaration is retained — as a bounded specialization on 8.2, as the
+general theorem underneath on 8.1.
+
 ### 10.3.1 What that implication should actually say (finding, 2026-09-05)
 
 Reading the printed statement changes this target, and the change is the whole
@@ -1528,21 +1569,27 @@ than collapsed into "all theorems proved":
 These are not caveats added after the fact; each is an accepted classification
 already carried by the inventory, and a reader of the certificate sees them.
 
-1. **Seven rows are accepted as `paper_faithful_nonlocal_source_interpretation`,
+1. **Six rows are accepted as `paper_faithful_nonlocal_source_interpretation`,
    not as locally exact statements**: `S2-tan-theta`, `DK-4.1-cor`,
-   `DK-4.2-prop`, `DK-4.3-prop`, `DK-4.4-prop`, `DK-8.1-thm`, `DK-8.2-thm`.
-   Their printed statements are not self-contained — Theorem 8.1 states no
-   hypotheses of its own, Theorem 8.2 states its own only as an addition, and the
-   Section 4 rows and the `tan Θ` theorem lean on standing conventions — so the
-   Lean statement necessarily makes something explicit that the page leaves
-   implicit.  The record states both readings for each and says which one was
-   accepted, so a reviewer can disagree with a specific argument rather than with
-   silence.
+   `DK-4.2-prop`, `DK-4.3-prop`, `DK-8.1-thm`, `DK-8.2-thm`.  Their printed
+   statements are not self-contained — Theorem 8.1 states no hypotheses of its
+   own, Theorem 8.2 states its own only as an addition, and the Section 4 rows and
+   the `tan Θ` theorem lean on standing conventions — so the Lean statement
+   necessarily makes something explicit that the page leaves implicit.  The record
+   states both readings for each and says which one was accepted, so a reviewer
+   can disagree with a specific argument rather than with silence.
+
+   `DK-4.4-prop` is **not** one of the six.  Its `semantic_alignment` is
+   `refuted_as_transcribed`, which is a category of its own, and an earlier
+   revision of this section wrongly counted it among the interpreted rows.
 2. **The operator-scope half of that question is moot as of 2026-09-06.**  Both
    Section 8 rows are delivered at unbounded self-adjoint ambient scope with
    bounded `H`, in complex and real scalar scope, so the evidence is exact under
    the alternative literal reading and a proper generalization under the accepted
-   bounded one.
+   bounded one.  This holds of **every** canonical clause on both rows, the
+   retained `sin 2Θ` estimates of Theorem 8.2 included: those were still canonical
+   at bounded operator scope until the source-façade promotion later the same day
+   (§10.3.4).
 3. **Parts (ii) and (iii) of Theorem 8.1 are finite-dimensional because the
    source prints them so** — "in finite dimensions" — not because the repository
    narrowed them.  Part (ii)'s promised "natural infinite-dimensional extensions"

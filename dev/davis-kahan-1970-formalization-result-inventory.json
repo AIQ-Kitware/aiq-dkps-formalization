@@ -5553,7 +5553,19 @@
         "TauCeti.DavisKahan1970.Section8.theorem8_1_eq_canonicalBranchUnbounded_of_maximalAngle_le_real",
         "TauCeti.DavisKahan1970.Section8.re_inner_split_of_reduces_real",
         "TauCeti.DavisKahan1970.Section8.theorem8_1_upperCompressionRepulsion_unbounded_real",
-        "TauCeti.DavisKahan1970.Section8.theorem8_1_lowerCompressionRepulsion_unbounded_real"
+        "TauCeti.DavisKahan1970.Section8.theorem8_1_lowerCompressionRepulsion_unbounded_real",
+        "TauCeti.DavisKahan1970.Section8.theorem8_1_exists_branch_blockPlacement_unbounded_complex",
+        "TauCeti.DavisKahan1970.Section8.theorem8_1_exists_branch_blockPlacement_unbounded_real",
+        "TauCeti.DavisKahan1970.Section8.theorem8_1_maximalAngle_le_iff_blockPlacement_unbounded_complex",
+        "TauCeti.DavisKahan1970.Section8.theorem8_1_maximalAngle_le_iff_blockPlacement_unbounded_real",
+        "TauCeti.DavisKahan1970.Section8.theorem8_1_upperCompressionRepulsion_sourceExact_unbounded_complex",
+        "TauCeti.DavisKahan1970.Section8.theorem8_1_lowerCompressionRepulsion_sourceExact_unbounded_complex",
+        "TauCeti.DavisKahan1970.Section8.theorem8_1_upperCompressionRepulsion_sourceExact_unbounded_real",
+        "TauCeti.DavisKahan1970.Section8.theorem8_1_lowerCompressionRepulsion_sourceExact_unbounded_real",
+        "TauCeti.DavisKahan1970.Section8.semiboundedAbove_reducingRestriction_iff",
+        "TauCeti.DavisKahan1970.Section8.semiboundedBelow_reducingRestriction_iff",
+        "TauCeti.DavisKahan1970.Section8.semiboundedAbove_reducingRestriction_real_iff",
+        "TauCeti.DavisKahan1970.Section8.semiboundedBelow_reducingRestriction_real_iff"
       ],
       "review_note": "Result-only hostile review accepted 2026-08-12. The compiled source surface covers every counted Theorem 8.1 clause under the printed hypotheses: branch existence and the closed-quarter-angle iff; part (i) on both blocks; part (ii) in dimension-free approximation-number form with the compiled positive-operator eigenvalue dictionary and real counterparts; and part (iii) for every symmetric gauge in the printed finite-dimensional scope, including increasing-index-order wrappers, over both complex and real Hilbert spaces. The previously recorded blocker was stale evidence selection, not missing mathematics.\n\n**OPERATOR SCOPE DISCLOSED 2026-09-05**, closing finding F2 of the 2026-09-04 hostile review and the follow-up review's objection to closing it by metadata alone.  Every registered Section 8 declaration is bounded; the row said nothing about it while the Section 2 hypotheses it imports are certified at unbounded scope.  The row now carries an accepted nonlocal source interpretation with the source evidence for the bounded reading, the competing unbounded reading stated in full, and the lift named as open work in `GOAL.md`.  The row's alignment moved from `locally_exact` to `paper_faithful_nonlocal_source_interpretation`, so the reviewer packet now lists it with the other interpreted rows instead of presenting it as locally exact.",
       "parent_claim_id": "DK-8.1-thm",
@@ -5582,7 +5594,7 @@
       "local_statement_self_contained": false,
       "canonical_evidence": [
         {
-          "declaration": "TauCeti.DavisKahan1970.Section8.theorem8_1_canonicalBranchUnbounded_printed",
+          "declaration": "TauCeti.DavisKahan1970.Section8.theorem8_1_exists_branch_blockPlacement_unbounded_complex",
           "role": "primary_source_witness",
           "scalar_scope": "complex",
           "evidence_kind": "proof",
@@ -5592,7 +5604,7 @@
           "capability_classes": []
         },
         {
-          "declaration": "TauCeti.DavisKahan1970.Section8.theorem8_1_canonicalBranchUnbounded_printed_real",
+          "declaration": "TauCeti.DavisKahan1970.Section8.theorem8_1_exists_branch_blockPlacement_unbounded_real",
           "role": "primary_source_witness",
           "scalar_scope": "real",
           "evidence_kind": "proof",
@@ -5602,7 +5614,7 @@
           "capability_classes": []
         },
         {
-          "declaration": "TauCeti.DavisKahan1970.Section8.theorem8_1_maximalAngle_le_iff_orderedFormGap_unbounded",
+          "declaration": "TauCeti.DavisKahan1970.Section8.theorem8_1_maximalAngle_le_iff_blockPlacement_unbounded_complex",
           "role": "primary_source_witness",
           "scalar_scope": "complex",
           "evidence_kind": "proof",
@@ -5612,7 +5624,7 @@
           "capability_classes": []
         },
         {
-          "declaration": "TauCeti.DavisKahan1970.Section8.theorem8_1_maximalAngle_le_iff_orderedFormGap_unbounded_real",
+          "declaration": "TauCeti.DavisKahan1970.Section8.theorem8_1_maximalAngle_le_iff_blockPlacement_unbounded_real",
           "role": "primary_source_witness",
           "scalar_scope": "real",
           "evidence_kind": "proof",
@@ -5622,7 +5634,7 @@
           "capability_classes": []
         },
         {
-          "declaration": "TauCeti.DavisKahan1970.Section8.theorem8_1_upperCompressionRepulsion_unbounded",
+          "declaration": "TauCeti.DavisKahan1970.Section8.theorem8_1_upperCompressionRepulsion_sourceExact_unbounded_complex",
           "role": "primary_source_witness",
           "scalar_scope": "complex",
           "evidence_kind": "proof",
@@ -5632,7 +5644,7 @@
           "capability_classes": []
         },
         {
-          "declaration": "TauCeti.DavisKahan1970.Section8.theorem8_1_lowerCompressionRepulsion_unbounded",
+          "declaration": "TauCeti.DavisKahan1970.Section8.theorem8_1_lowerCompressionRepulsion_sourceExact_unbounded_complex",
           "role": "primary_source_witness",
           "scalar_scope": "complex",
           "evidence_kind": "proof",
@@ -5642,7 +5654,7 @@
           "capability_classes": []
         },
         {
-          "declaration": "TauCeti.DavisKahan1970.Section8.theorem8_1_upperCompressionRepulsion_unbounded_real",
+          "declaration": "TauCeti.DavisKahan1970.Section8.theorem8_1_upperCompressionRepulsion_sourceExact_unbounded_real",
           "role": "primary_source_witness",
           "scalar_scope": "real",
           "evidence_kind": "proof",
@@ -5652,7 +5664,7 @@
           "capability_classes": []
         },
         {
-          "declaration": "TauCeti.DavisKahan1970.Section8.theorem8_1_lowerCompressionRepulsion_unbounded_real",
+          "declaration": "TauCeti.DavisKahan1970.Section8.theorem8_1_lowerCompressionRepulsion_sourceExact_unbounded_real",
           "role": "primary_source_witness",
           "scalar_scope": "real",
           "evidence_kind": "proof",
@@ -6001,6 +6013,66 @@
           "declaration": "TauCeti.DavisKahan1970.Section8.re_inner_split_of_reduces_real",
           "role": "transport_lemma",
           "note": "Real unbounded endpoints, transported by complexification; the descent lemmas are listed with them.  Registered as supporting evidence where they are not the canonical witness for a clause."
+        },
+        {
+          "declaration": "TauCeti.DavisKahan1970.Section8.theorem8_1_canonicalBranchUnbounded_printed",
+          "role": "generalization",
+          "note": "The general theorem underneath the source-facing canonical witness for this clause.  It states the placements as form inequalities over the ambient domain, or is about an arbitrary partial map and reducing subspace; both are the right shapes for the mathematics and neither is the source boundary.  It was the canonical evidence between the 2026-09-06 unbounded promotion and the source-façade promotion later the same day."
+        },
+        {
+          "declaration": "TauCeti.DavisKahan1970.Section8.theorem8_1_canonicalBranchUnbounded_printed_real",
+          "role": "generalization",
+          "note": "The general theorem underneath the source-facing canonical witness for this clause.  It states the placements as form inequalities over the ambient domain, or is about an arbitrary partial map and reducing subspace; both are the right shapes for the mathematics and neither is the source boundary.  It was the canonical evidence between the 2026-09-06 unbounded promotion and the source-façade promotion later the same day."
+        },
+        {
+          "declaration": "TauCeti.DavisKahan1970.Section8.theorem8_1_maximalAngle_le_iff_orderedFormGap_unbounded",
+          "role": "generalization",
+          "note": "The general theorem underneath the source-facing canonical witness for this clause.  It states the placements as form inequalities over the ambient domain, or is about an arbitrary partial map and reducing subspace; both are the right shapes for the mathematics and neither is the source boundary.  It was the canonical evidence between the 2026-09-06 unbounded promotion and the source-façade promotion later the same day."
+        },
+        {
+          "declaration": "TauCeti.DavisKahan1970.Section8.theorem8_1_maximalAngle_le_iff_orderedFormGap_unbounded_real",
+          "role": "generalization",
+          "note": "The general theorem underneath the source-facing canonical witness for this clause.  It states the placements as form inequalities over the ambient domain, or is about an arbitrary partial map and reducing subspace; both are the right shapes for the mathematics and neither is the source boundary.  It was the canonical evidence between the 2026-09-06 unbounded promotion and the source-façade promotion later the same day."
+        },
+        {
+          "declaration": "TauCeti.DavisKahan1970.Section8.theorem8_1_upperCompressionRepulsion_unbounded",
+          "role": "generalization",
+          "note": "The general theorem underneath the source-facing canonical witness for this clause.  It states the placements as form inequalities over the ambient domain, or is about an arbitrary partial map and reducing subspace; both are the right shapes for the mathematics and neither is the source boundary.  It was the canonical evidence between the 2026-09-06 unbounded promotion and the source-façade promotion later the same day."
+        },
+        {
+          "declaration": "TauCeti.DavisKahan1970.Section8.theorem8_1_lowerCompressionRepulsion_unbounded",
+          "role": "generalization",
+          "note": "The general theorem underneath the source-facing canonical witness for this clause.  It states the placements as form inequalities over the ambient domain, or is about an arbitrary partial map and reducing subspace; both are the right shapes for the mathematics and neither is the source boundary.  It was the canonical evidence between the 2026-09-06 unbounded promotion and the source-façade promotion later the same day."
+        },
+        {
+          "declaration": "TauCeti.DavisKahan1970.Section8.theorem8_1_upperCompressionRepulsion_unbounded_real",
+          "role": "generalization",
+          "note": "The general theorem underneath the source-facing canonical witness for this clause.  It states the placements as form inequalities over the ambient domain, or is about an arbitrary partial map and reducing subspace; both are the right shapes for the mathematics and neither is the source boundary.  It was the canonical evidence between the 2026-09-06 unbounded promotion and the source-façade promotion later the same day."
+        },
+        {
+          "declaration": "TauCeti.DavisKahan1970.Section8.theorem8_1_lowerCompressionRepulsion_unbounded_real",
+          "role": "generalization",
+          "note": "The general theorem underneath the source-facing canonical witness for this clause.  It states the placements as form inequalities over the ambient domain, or is about an arbitrary partial map and reducing subspace; both are the right shapes for the mathematics and neither is the source boundary.  It was the canonical evidence between the 2026-09-06 unbounded promotion and the source-façade promotion later the same day."
+        },
+        {
+          "declaration": "TauCeti.DavisKahan1970.Section8.semiboundedAbove_reducingRestriction_iff",
+          "role": "transport_lemma",
+          "note": "The block/ambient bridge the source-facing façades are built on: `Lambda <= c` on a reducing block is the ambient form bound on that block, in both directions.  Unfolding only."
+        },
+        {
+          "declaration": "TauCeti.DavisKahan1970.Section8.semiboundedBelow_reducingRestriction_iff",
+          "role": "transport_lemma",
+          "note": "The block/ambient bridge the source-facing façades are built on: `Lambda <= c` on a reducing block is the ambient form bound on that block, in both directions.  Unfolding only."
+        },
+        {
+          "declaration": "TauCeti.DavisKahan1970.Section8.semiboundedAbove_reducingRestriction_real_iff",
+          "role": "transport_lemma",
+          "note": "The block/ambient bridge the source-facing façades are built on: `Lambda <= c` on a reducing block is the ambient form bound on that block, in both directions.  Unfolding only."
+        },
+        {
+          "declaration": "TauCeti.DavisKahan1970.Section8.semiboundedBelow_reducingRestriction_real_iff",
+          "role": "transport_lemma",
+          "note": "The block/ambient bridge the source-facing façades are built on: `Lambda <= c` on a reducing block is the ambient form bound on that block, in both directions.  Unfolding only."
         }
       ],
       "result_wide_scope_atoms": [],
@@ -6012,12 +6084,12 @@
           ],
           "scalar_scope": "complex",
           "evidence": {
-            "primary": "TauCeti.DavisKahan1970.Section8.theorem8_1_canonicalBranchUnbounded_printed",
+            "primary": "TauCeti.DavisKahan1970.Section8.theorem8_1_exists_branch_blockPlacement_unbounded_complex",
             "correspondence": []
           },
           "status": "established",
           "evidence_kind": "proof",
-          "justification": "Canonical witness for existence-correct-q at the row's inherited UNBOUNDED ambient scope: `A` is a possibly unbounded self-adjoint partial map, the branch is the spectral subspace `specRange (A + H) (Iic alpha)`, and the theorem delivers the paper's three facts about it -- it reduces `A + H`, it carries `Lambda_0 <= alpha` and `Lambda_1 >= alpha + delta`, and `Theta(P, Q) <= pi/4`.  The bounded witness it replaces is retained as a specialization."
+          "justification": "Canonical witness for existence-correct-q at unbounded ambient scope, stated as the EXISTENTIAL the source asserts: there is a reducing projector `Q` of `A + H` with `Lambda_0 <= alpha`, `Lambda_1 >= alpha + delta` and `Theta(P, Q) <= pi/4`.  `Lambda_0` and `Lambda_1` are the two reducing restrictions of `A + H` and the placements are operator inequalities on them.  The spectral projector of `A + H` on the side of `alpha` is the internal witness; it is not part of the public type."
         },
         {
           "id": "existence-correct-q.real",
@@ -6026,12 +6098,12 @@
           ],
           "scalar_scope": "real",
           "evidence": {
-            "primary": "TauCeti.DavisKahan1970.Section8.theorem8_1_canonicalBranchUnbounded_printed_real",
+            "primary": "TauCeti.DavisKahan1970.Section8.theorem8_1_exists_branch_blockPlacement_unbounded_real",
             "correspondence": []
           },
           "status": "established",
           "evidence_kind": "proof",
-          "justification": "Canonical witness for existence-correct-q at the row's inherited UNBOUNDED ambient scope: `A` is a possibly unbounded self-adjoint partial map, the branch is the spectral subspace `specRange (A + H) (Iic alpha)`, and the theorem delivers the paper's three facts about it -- it reduces `A + H`, it carries `Lambda_0 <= alpha` and `Lambda_1 >= alpha + delta`, and `Theta(P, Q) <= pi/4`.  The bounded witness it replaces is retained as a specialization."
+          "justification": "Canonical witness for existence-correct-q at unbounded ambient scope, stated as the EXISTENTIAL the source asserts: there is a reducing projector `Q` of `A + H` with `Lambda_0 <= alpha`, `Lambda_1 >= alpha + delta` and `Theta(P, Q) <= pi/4`.  `Lambda_0` and `Lambda_1` are the two reducing restrictions of `A + H` and the placements are operator inequalities on them.  The spectral projector of `A + H` on the side of `alpha` is the internal witness; it is not part of the public type."
         },
         {
           "id": "acute-iff-spectral-placement.complex",
@@ -6040,12 +6112,12 @@
           ],
           "scalar_scope": "complex",
           "evidence": {
-            "primary": "TauCeti.DavisKahan1970.Section8.theorem8_1_maximalAngle_le_iff_orderedFormGap_unbounded",
+            "primary": "TauCeti.DavisKahan1970.Section8.theorem8_1_maximalAngle_le_iff_blockPlacement_unbounded_complex",
             "correspondence": []
           },
           "status": "established",
           "evidence_kind": "proof",
-          "justification": "Canonical witness for acute-iff-spectral-placement at the row's inherited UNBOUNDED ambient scope, both halves of the printed iff.  The placement is read as the ordered form bounds `Lambda_0 <= alpha` and `Lambda_1 >= alpha + delta`, which is how Davis and Kahan write it: `Lambda_0` and `Lambda_1` are the blocks of `A + H` and the printed relations are operator inequalities.  The bounded spectrum-inclusion witness it replaces is retained as a specialization."
+          "justification": "Canonical witness for acute-iff-spectral-placement at unbounded ambient scope, on the source's own blocks: `Theta(P, Q) <= pi/4` if and only if `Lambda_0 <= alpha` and `Lambda_1 >= alpha + delta`, with `Lambda_0`, `Lambda_1` the reducing restrictions of `A + H` and the hypotheses likewise on the blocks `A_0`, `A_1`.  The general form-inequality version sits underneath it and is registered as the generalization it is."
         },
         {
           "id": "acute-iff-spectral-placement.real",
@@ -6054,12 +6126,12 @@
           ],
           "scalar_scope": "real",
           "evidence": {
-            "primary": "TauCeti.DavisKahan1970.Section8.theorem8_1_maximalAngle_le_iff_orderedFormGap_unbounded_real",
+            "primary": "TauCeti.DavisKahan1970.Section8.theorem8_1_maximalAngle_le_iff_blockPlacement_unbounded_real",
             "correspondence": []
           },
           "status": "established",
           "evidence_kind": "proof",
-          "justification": "Canonical witness for acute-iff-spectral-placement at the row's inherited UNBOUNDED ambient scope, both halves of the printed iff.  The placement is read as the ordered form bounds `Lambda_0 <= alpha` and `Lambda_1 >= alpha + delta`, which is how Davis and Kahan write it: `Lambda_0` and `Lambda_1` are the blocks of `A + H` and the printed relations are operator inequalities.  The bounded spectrum-inclusion witness it replaces is retained as a specialization."
+          "justification": "Canonical witness for acute-iff-spectral-placement at unbounded ambient scope, on the source's own blocks: `Theta(P, Q) <= pi/4` if and only if `Lambda_0 <= alpha` and `Lambda_1 >= alpha + delta`, with `Lambda_0`, `Lambda_1` the reducing restrictions of `A + H` and the hypotheses likewise on the blocks `A_0`, `A_1`.  The general form-inequality version sits underneath it and is registered as the generalization it is."
         },
         {
           "id": "part-i-compression.complex",
@@ -6068,12 +6140,12 @@
           ],
           "scalar_scope": "complex",
           "evidence": {
-            "primary": "TauCeti.DavisKahan1970.Section8.theorem8_1_upperCompressionRepulsion_unbounded",
+            "primary": "TauCeti.DavisKahan1970.Section8.theorem8_1_upperCompressionRepulsion_sourceExact_unbounded_complex",
             "correspondence": []
           },
           "status": "established",
           "evidence_kind": "proof",
-          "justification": "Canonical witness for part (i) at the row's inherited UNBOUNDED ambient scope, in its form reading: the alpha-shifted energy of a domain vector is at most that of its component in the branch's complement.  Part (i) carries no dimension qualifier in the source, unlike (ii) and (iii).  The bounded witness it replaces is retained as a specialization."
+          "justification": "Canonical witness for part (i) at unbounded ambient scope, in the source's own `A/H/P/Q` context: `A_1 - alpha <= C_1 (Lambda_1 - alpha) C_1` as a form inequality read on `P^perp`, with `C_1` the cosine block `P_{Q^perp}`.  The left side is the form of `A`, not of `A + H`, because `H` is fully off-diagonal and so has no form on `P^perp`.  The general statement about an arbitrary partial map and reducing subspace sits underneath it."
         },
         {
           "id": "part-i-compression.complex.2",
@@ -6082,12 +6154,12 @@
           ],
           "scalar_scope": "complex",
           "evidence": {
-            "primary": "TauCeti.DavisKahan1970.Section8.theorem8_1_lowerCompressionRepulsion_unbounded",
+            "primary": "TauCeti.DavisKahan1970.Section8.theorem8_1_lowerCompressionRepulsion_sourceExact_unbounded_complex",
             "correspondence": []
           },
           "status": "established",
           "evidence_kind": "proof",
-          "justification": "Canonical witness for part (i) at the row's inherited UNBOUNDED ambient scope, in its form reading: the alpha-shifted energy of a domain vector is at most that of its component in the branch's complement.  Part (i) carries no dimension qualifier in the source, unlike (ii) and (iii).  The bounded witness it replaces is retained as a specialization."
+          "justification": "Canonical witness for part (i) at unbounded ambient scope, in the source's own `A/H/P/Q` context: `A_1 - alpha <= C_1 (Lambda_1 - alpha) C_1` as a form inequality read on `P^perp`, with `C_1` the cosine block `P_{Q^perp}`.  The left side is the form of `A`, not of `A + H`, because `H` is fully off-diagonal and so has no form on `P^perp`.  The general statement about an arbitrary partial map and reducing subspace sits underneath it."
         },
         {
           "id": "part-i-compression.real",
@@ -6096,12 +6168,12 @@
           ],
           "scalar_scope": "real",
           "evidence": {
-            "primary": "TauCeti.DavisKahan1970.Section8.theorem8_1_upperCompressionRepulsion_unbounded_real",
+            "primary": "TauCeti.DavisKahan1970.Section8.theorem8_1_upperCompressionRepulsion_sourceExact_unbounded_real",
             "correspondence": []
           },
           "status": "established",
           "evidence_kind": "proof",
-          "justification": "Canonical witness for part (i) at the row's inherited UNBOUNDED ambient scope, in its form reading: the alpha-shifted energy of a domain vector is at most that of its component in the branch's complement.  Part (i) carries no dimension qualifier in the source, unlike (ii) and (iii).  The bounded witness it replaces is retained as a specialization."
+          "justification": "Canonical witness for part (i) at unbounded ambient scope, in the source's own `A/H/P/Q` context: `A_1 - alpha <= C_1 (Lambda_1 - alpha) C_1` as a form inequality read on `P^perp`, with `C_1` the cosine block `P_{Q^perp}`.  The left side is the form of `A`, not of `A + H`, because `H` is fully off-diagonal and so has no form on `P^perp`.  The general statement about an arbitrary partial map and reducing subspace sits underneath it."
         },
         {
           "id": "part-i-compression.real.2",
@@ -6110,12 +6182,12 @@
           ],
           "scalar_scope": "real",
           "evidence": {
-            "primary": "TauCeti.DavisKahan1970.Section8.theorem8_1_lowerCompressionRepulsion_unbounded_real",
+            "primary": "TauCeti.DavisKahan1970.Section8.theorem8_1_lowerCompressionRepulsion_sourceExact_unbounded_real",
             "correspondence": []
           },
           "status": "established",
           "evidence_kind": "proof",
-          "justification": "Canonical witness for part (i) at the row's inherited UNBOUNDED ambient scope, in its form reading: the alpha-shifted energy of a domain vector is at most that of its component in the branch's complement.  Part (i) carries no dimension qualifier in the source, unlike (ii) and (iii).  The bounded witness it replaces is retained as a specialization."
+          "justification": "Canonical witness for part (i) at unbounded ambient scope, in the source's own `A/H/P/Q` context: `A_1 - alpha <= C_1 (Lambda_1 - alpha) C_1` as a form inequality read on `P^perp`, with `C_1` the cosine block `P_{Q^perp}`.  The left side is the form of `A`, not of `A + H`, because `H` is fully off-diagonal and so has no form on `P^perp`.  The general statement about an arbitrary partial map and reducing subspace sits underneath it."
         },
         {
           "id": "part-ii-eigenvalue.complex",
@@ -6337,7 +6409,11 @@
         "TauCeti.DavisKahan1970.Section8.theorem8_2_perturbationHalfGap_maximalAngle_lt_unbounded_real",
         "TauCeti.DavisKahan1970.Section8.theorem8_2_residualHalfGap_maximalAngle_lt_unbounded_real",
         "TauCeti.DavisKahan1970.Section8.theorem8_2_branch_maximalAngle_lt_unbounded_source_complex",
-        "TauCeti.DavisKahan1970.Section8.theorem8_2_branch_maximalAngle_lt_unbounded_source_real"
+        "TauCeti.DavisKahan1970.Section8.theorem8_2_branch_maximalAngle_lt_unbounded_source_real",
+        "TauCeti.DavisKahan1970.Section8.theorem8_2_perturbation_sourceExact_unbounded_complex",
+        "TauCeti.DavisKahan1970.Section8.theorem8_2_residual_sourceExact_unbounded_complex",
+        "TauCeti.DavisKahan1970.Section8.theorem8_2_perturbation_sourceExact_unbounded_real",
+        "TauCeti.DavisKahan1970.Section8.theorem8_2_residual_sourceExact_unbounded_real"
       ],
       "review_note": "RE-CLOSED 2026-08-12 after repair (reopened earlier the same day; the reopening is retained in git history).  Both defects were real.  (a) Source scope: immediately after the proof of Proposition 3.2 the paper fixes the standing convention that (3.5) is assumed as well as (1.5) except where the contrary is stated, and Theorem 8.2 does not state otherwise.  That convention is now inventoried as the source SCOPE atom `S3-standing-scope.crossed-dimension-standing-assumption` and linked, as scope, to exactly the two counted results it governs -- Theorem 8.2 and Proposition 3.4.  It is not a counted result and the denominator remains 29.  Theorem 8.1's ambient quarter-angle characterization `theorem8_1_maximalAngle_le_iff_spectrumIn` is proved with no dimension hypothesis at all, so it is deliberately not linked.  (b) Evidence: the printed quarter-angle conclusion is the AMBIENT Theta < pi/4, and the row previously selected a directed-gap theorem.  The selected evidence is now `theorem8_2_branch_maximalAngle_lt_of_crossedDefects` and `theorem8_2_branch_real_maximalAngle_lt_of_crossedDefects`, which conclude `maximalAngle P Q < pi/4` from either printed smallness alternative under (3.5) in its constructive `CrossedDefectsEquivalent` form, with no finite-dimensionality and no rank hypothesis, over both scalar fields.  Together with the four retained `sin 2Theta` endpoints (perturbation and residual, complex and real, arbitrary `SymmetricNormingFunction`) the evidence jointly establishes the printed result at the printed dimensional scope.  No new Lean mathematics was required once the source scope was corrected.\n\n**ORIENTATION DEFECT FOUND AND FIXED 2026-09-04 (Claude Opus 5, on hostile review).**  The printed residual alternative was certified on `sinTwoThetaIdealBlock Q P` rather than on the paper's directed angle, and in the wrong ordering of the pair.  This is exactly the defect repaired on `S2-sin-two-theta` earlier the same day; the repair was not propagated here, and the row read terminal throughout.  The canonical evidence is now `theorem8_2_sinTwoTheta_residual_directedAngle_symmetricNorming` and its real sibling, on `Angle.directedSinTwoAngleOperator P Q` with `P` the trial subspace; the block theorems remain as `implementation_structure`.  The perturbation alternative needed no change: it is the AMBIENT clause, and `sinAngleOperatorC` is the modulus of a projector difference, hence insensitive to the order of the pair.\n\n**OPERATOR SCOPE DISCLOSED 2026-09-05.**  The same disclosure as `DK-8.1-thm`, added as a second reading on this row's existing nonlocal interpretation: the registered Section 8 evidence is bounded, the Section 2 hypotheses it imports are certified unbounded, and the source evidence for reading Section 8 at the main bounded setting, the competing reading, and the open lift are recorded in `nonlocal_source_interpretation.operator_scope_reading`.",
       "boundary_review": {
@@ -6390,7 +6466,7 @@
           "note": "The acute branch at the paper's own unbounded ambient scope, from the printed hypotheses and the printed disjunction.  The bounded sibling is retained as supporting evidence; it is a specialization, not a weaker reading."
         },
         {
-          "declaration": "TauCeti.DavisKahan1970.Section8.theorem8_2_sinTwoTheta_perturbation_sourceExact",
+          "declaration": "TauCeti.DavisKahan1970.Section8.theorem8_2_perturbation_sourceExact_unbounded_complex",
           "role": "primary_source_witness",
           "scalar_scope": "complex",
           "evidence_kind": "proof",
@@ -6403,7 +6479,7 @@
           "note": "Source-exact façade as of 2026-09-05."
         },
         {
-          "declaration": "TauCeti.DavisKahan1970.Section8.theorem8_2_sinTwoTheta_residual_directedAngle_sourceExact",
+          "declaration": "TauCeti.DavisKahan1970.Section8.theorem8_2_residual_sourceExact_unbounded_complex",
           "role": "primary_source_witness",
           "scalar_scope": "complex",
           "evidence_kind": "proof",
@@ -6416,7 +6492,7 @@
           "note": "Source-exact façade as of 2026-09-05."
         },
         {
-          "declaration": "TauCeti.DavisKahan1970.Section8.theorem8_2_sinTwoTheta_perturbation_real_sourceExact",
+          "declaration": "TauCeti.DavisKahan1970.Section8.theorem8_2_perturbation_sourceExact_unbounded_real",
           "role": "primary_source_witness",
           "scalar_scope": "real",
           "evidence_kind": "proof",
@@ -6429,7 +6505,7 @@
           "note": "Source-exact façade as of 2026-09-05."
         },
         {
-          "declaration": "TauCeti.DavisKahan1970.Section8.theorem8_2_sinTwoTheta_residual_directedAngle_real_sourceExact",
+          "declaration": "TauCeti.DavisKahan1970.Section8.theorem8_2_residual_sourceExact_unbounded_real",
           "role": "primary_source_witness",
           "scalar_scope": "real",
           "evidence_kind": "proof",
@@ -6639,6 +6715,26 @@
           "declaration": "TauCeti.DavisKahan1970.Section8.theorem8_2_branch_real_maximalAngle_lt_of_crossedDefects",
           "role": "specialization",
           "note": "The bounded specialization of the acute branch, real."
+        },
+        {
+          "declaration": "TauCeti.DavisKahan1970.Section8.theorem8_2_sinTwoTheta_perturbation_sourceExact",
+          "role": "specialization",
+          "note": "Bounded specialization of the unbounded canonical witness for this clause.  It takes `A K : H ->L[k] H` and was the canonical evidence until 2026-09-06, when the source-facing unbounded façade replaced it; it is retained because it is a genuine specialization and a useful regression surface."
+        },
+        {
+          "declaration": "TauCeti.DavisKahan1970.Section8.theorem8_2_sinTwoTheta_residual_directedAngle_sourceExact",
+          "role": "specialization",
+          "note": "Bounded specialization of the unbounded canonical witness for this clause.  It takes `A K : H ->L[k] H` and was the canonical evidence until 2026-09-06, when the source-facing unbounded façade replaced it; it is retained because it is a genuine specialization and a useful regression surface."
+        },
+        {
+          "declaration": "TauCeti.DavisKahan1970.Section8.theorem8_2_sinTwoTheta_perturbation_real_sourceExact",
+          "role": "specialization",
+          "note": "Bounded specialization of the unbounded canonical witness for this clause.  It takes `A K : H ->L[k] H` and was the canonical evidence until 2026-09-06, when the source-facing unbounded façade replaced it; it is retained because it is a genuine specialization and a useful regression surface."
+        },
+        {
+          "declaration": "TauCeti.DavisKahan1970.Section8.theorem8_2_sinTwoTheta_residual_directedAngle_real_sourceExact",
+          "role": "specialization",
+          "note": "Bounded specialization of the unbounded canonical witness for this clause.  It takes `A K : H ->L[k] H` and was the canonical evidence until 2026-09-06, when the source-facing unbounded façade replaced it; it is retained because it is a genuine specialization and a useful regression surface."
         }
       ],
       "result_wide_scope_atoms": [
@@ -6681,7 +6777,7 @@
           ],
           "scalar_scope": "complex",
           "evidence": {
-            "primary": "TauCeti.DavisKahan1970.Section8.theorem8_2_sinTwoTheta_perturbation_sourceExact",
+            "primary": "TauCeti.DavisKahan1970.Section8.theorem8_2_perturbation_sourceExact_unbounded_complex",
             "correspondence": [
               "TauCeti.DavisKahan.ExactSinTheta.NormalizedUnitaryInvariantNorm"
             ],
@@ -6691,7 +6787,7 @@
           },
           "status": "established",
           "evidence_kind": "proof",
-          "justification": "Canonical witness for double-angle-bound-retained at complex scalar scope, carried over from the pre-clause canonical evidence and re-checked against its compiler-printed type under the coherent model.\n\nSOURCE-EXACT FAÇADE REGISTERED 2026-09-05 (GOAL.md sections I, III.3 and IV). The canonical witness is the façade at the PRINTED scope: separable Hilbert space, and `NormalizedUnitaryInvariantNorm` -- the Lean type for the norm class Section 1 fixes. The arbitrary-Hilbert `SymmetricNormingFunction` theorem that proves it is retained as supporting evidence with role `generalization`, and is stronger on both axes."
+          "justification": "Canonical witness for the retained double-angle estimate at the row's inherited UNBOUNDED ambient scope: `A` is a possibly unbounded self-adjoint partial map and `H` a bounded self-adjoint perturbation.  The declaration is Theorem 8.2 as the source states it -- one theorem under the inherited `sin 2theta` context plus the new central-spectrum and smallness assumptions, concluding BOTH the retained estimate and `Theta < pi/4`.  The bounded witness it replaces, which took `A K : H ->L[k] H`, is retained as a registered specialization."
         },
         {
           "id": "double-angle-bound-retained.complex.2",
@@ -6700,7 +6796,7 @@
           ],
           "scalar_scope": "complex",
           "evidence": {
-            "primary": "TauCeti.DavisKahan1970.Section8.theorem8_2_sinTwoTheta_residual_directedAngle_sourceExact",
+            "primary": "TauCeti.DavisKahan1970.Section8.theorem8_2_residual_sourceExact_unbounded_complex",
             "correspondence": [
               "TauCeti.DavisKahan.Angle.sinTwoThetaIdealBlock_hasSameApproximationNumbers_trialSide",
               "TauCeti.DavisKahan.Angle.directedSinTwoAngleOperator_hasSameApproximationNumbers_swap",
@@ -6714,7 +6810,7 @@
           },
           "status": "established",
           "evidence_kind": "proof",
-          "justification": "Canonical witness for double-angle-bound-retained at complex scalar scope, carried over from the pre-clause canonical evidence and re-checked against its compiler-printed type under the coherent model.  ORIENTATION CORRECTED 2026-09-04: the primary was the block theorem, whose conclusion is on `sinTwoThetaIdealBlock Q P` -- the proof's one-sided block, and in the ordering (gap-carrying, trial) rather than the paper's.  Section 1 reads the directed angle as `||sin Theta_0|| = ||Q^perp P|| = ||Q^perp E_0||`, the cross-projection with the TRIAL subspace on the right, so the printed object is `Angle.directedSinTwoAngleOperator P Q`.  The two ordered directed sines have different approximation numbers in general, so this is a theorem and not a renaming; the bridge is `..._trialSide`, which composes the block correspondence with `directedSinTwoAngleOperator_hasSameApproximationNumbers_swap`.  This is the same defect class that was repaired on `S2-sin-two-theta` earlier the same day, and this row stayed green through it -- which is why the conclusion-object invariant now covers both rows.\n\nSOURCE-EXACT FAÇADE REGISTERED 2026-09-05 (GOAL.md sections I, III.3 and IV). The canonical witness is the façade at the PRINTED scope: separable Hilbert space, and `NormalizedUnitaryInvariantNorm` -- the Lean type for the norm class Section 1 fixes. The arbitrary-Hilbert `SymmetricNormingFunction` theorem that proves it is retained as supporting evidence with role `generalization`, and is stronger on both axes."
+          "justification": "Canonical witness for the retained double-angle estimate at the row's inherited UNBOUNDED ambient scope: `A` is a possibly unbounded self-adjoint partial map and `H` a bounded self-adjoint perturbation.  The declaration is Theorem 8.2 as the source states it -- one theorem under the inherited `sin 2theta` context plus the new central-spectrum and smallness assumptions, concluding BOTH the retained estimate and `Theta < pi/4`.  The bounded witness it replaces, which took `A K : H ->L[k] H`, is retained as a registered specialization."
         },
         {
           "id": "double-angle-bound-retained.real",
@@ -6723,7 +6819,7 @@
           ],
           "scalar_scope": "real",
           "evidence": {
-            "primary": "TauCeti.DavisKahan1970.Section8.theorem8_2_sinTwoTheta_perturbation_real_sourceExact",
+            "primary": "TauCeti.DavisKahan1970.Section8.theorem8_2_perturbation_sourceExact_unbounded_real",
             "correspondence": [
               "TauCeti.DavisKahan.ExactSinTheta.NormalizedUnitaryInvariantNorm"
             ],
@@ -6733,7 +6829,7 @@
           },
           "status": "established",
           "evidence_kind": "proof",
-          "justification": "Canonical witness for double-angle-bound-retained at real scalar scope, carried over from the pre-clause canonical evidence and re-checked against its compiler-printed type under the coherent model.\n\nSOURCE-EXACT FAÇADE REGISTERED 2026-09-05 (GOAL.md sections I, III.3 and IV). The canonical witness is the façade at the PRINTED scope: separable Hilbert space, and `NormalizedUnitaryInvariantNorm` -- the Lean type for the norm class Section 1 fixes. The arbitrary-Hilbert `SymmetricNormingFunction` theorem that proves it is retained as supporting evidence with role `generalization`, and is stronger on both axes."
+          "justification": "Canonical witness for the retained double-angle estimate at the row's inherited UNBOUNDED ambient scope: `A` is a possibly unbounded self-adjoint partial map and `H` a bounded self-adjoint perturbation.  The declaration is Theorem 8.2 as the source states it -- one theorem under the inherited `sin 2theta` context plus the new central-spectrum and smallness assumptions, concluding BOTH the retained estimate and `Theta < pi/4`.  The bounded witness it replaces, which took `A K : H ->L[k] H`, is retained as a registered specialization."
         },
         {
           "id": "double-angle-bound-retained.real.2",
@@ -6742,7 +6838,7 @@
           ],
           "scalar_scope": "real",
           "evidence": {
-            "primary": "TauCeti.DavisKahan1970.Section8.theorem8_2_sinTwoTheta_residual_directedAngle_real_sourceExact",
+            "primary": "TauCeti.DavisKahan1970.Section8.theorem8_2_residual_sourceExact_unbounded_real",
             "correspondence": [
               "TauCeti.DavisKahan.Angle.sinTwoThetaIdealBlock_hasSameApproximationNumbers_trialSide",
               "TauCeti.DavisKahan.Angle.directedSinTwoAngleOperator_hasSameApproximationNumbers_swap",
@@ -6756,7 +6852,7 @@
           },
           "status": "established",
           "evidence_kind": "proof",
-          "justification": "Canonical witness for double-angle-bound-retained at real scalar scope, carried over from the pre-clause canonical evidence and re-checked against its compiler-printed type under the coherent model.  ORIENTATION CORRECTED 2026-09-04: the primary was the block theorem, whose conclusion is on `sinTwoThetaIdealBlock Q P` -- the proof's one-sided block, and in the ordering (gap-carrying, trial) rather than the paper's.  Section 1 reads the directed angle as `||sin Theta_0|| = ||Q^perp P|| = ||Q^perp E_0||`, the cross-projection with the TRIAL subspace on the right, so the printed object is `Angle.directedSinTwoAngleOperator P Q`.  The two ordered directed sines have different approximation numbers in general, so this is a theorem and not a renaming; the bridge is `..._trialSide`, which composes the block correspondence with `directedSinTwoAngleOperator_hasSameApproximationNumbers_swap`.  This is the same defect class that was repaired on `S2-sin-two-theta` earlier the same day, and this row stayed green through it -- which is why the conclusion-object invariant now covers both rows.\n\nSOURCE-EXACT FAÇADE REGISTERED 2026-09-05 (GOAL.md sections I, III.3 and IV). The canonical witness is the façade at the PRINTED scope: separable Hilbert space, and `NormalizedUnitaryInvariantNorm` -- the Lean type for the norm class Section 1 fixes. The arbitrary-Hilbert `SymmetricNormingFunction` theorem that proves it is retained as supporting evidence with role `generalization`, and is stronger on both axes."
+          "justification": "Canonical witness for the retained double-angle estimate at the row's inherited UNBOUNDED ambient scope: `A` is a possibly unbounded self-adjoint partial map and `H` a bounded self-adjoint perturbation.  The declaration is Theorem 8.2 as the source states it -- one theorem under the inherited `sin 2theta` context plus the new central-spectrum and smallness assumptions, concluding BOTH the retained estimate and `Theta < pi/4`.  The bounded witness it replaces, which took `A K : H ->L[k] H`, is retained as a registered specialization."
         }
       ],
       "nonlocal_source_interpretation": {
@@ -6818,10 +6914,10 @@
     "human_report": "dev/davis-kahan-1970-result-semantic-review-2026-08-31.md",
     "terminal_results": 29,
     "remaining_results": [],
-    "note": "The structured fields above are authoritative; this paragraph is regenerated whenever the count moves. 2026-09-02, closing: terminal_results is 29 and remaining_results is empty. `S2-tan-two-theta` was `hostile_review_blocked` under obligation `tan2theta-directed-correspondence` after a 2026-09-02 closure that did not compose; it is now accepted on canonical directed witnesses `tanTwoTheta_directed_unboundedResidual_symmetricNorming_{complex,real}`, which take the reducing subspace and conclude on the paper's directed corner (`tanTwoDirectedCornerR U V` over ℝ) with the singular-value identification in their types. The canonical-evidence digest changed accordingly and the statement pins were refreshed for the new canonical and bridging declarations. Earlier history of this field (the 2026-08-31 `S2-sin-two-theta` reopening, the `S2-tan-theta` Appendix-scope primaries, the paper-prefix rename with an unchanged digest) is in the human report.  2026-09-05: recomputed after the two directed `tan 2Theta` clauses of S2-tan-two-theta were retargeted at their source-exact façades.  The canonical statements are strictly closer to the printed ones -- separable ambient scope and the literal normalized unitarily invariant norm class -- and the theorems they delegate to are retained as registered generalizations, so nothing that was reviewed has been withdrawn.  2026-09-05: recomputed after DK-3.1-thm's converse clauses were repointed from the model-level theorem, which takes the isometric identification as caller data, to the source-shaped one that takes the dimension condition as a proposition.  The model-level theorem is retained as registered implementation structure, so nothing reviewed has been withdrawn.  2026-09-05: recomputed after Lemmas 6.1 and 6.2 were given source-exact façades over the literal normalized unitarily invariant norm class.  The SymmetricNormingFunction endpoints they delegate to are retained as registered generalizations -- for Lemma 6.1 the retained theorem is genuinely stronger, taking Ky Fan inequalities as its premise where the paper assumes the bound for every unitarily invariant norm.\n\n2026-09-06, CANONICAL EVIDENCE PROMOTED ON DK-8.1-thm, AND RE-REVIEWED.  The unbounded lift of Section 8 completed: with the converse half of Theorem 8.1's printed iff proved at unbounded scope and the real endpoints transported by complexification, every clause of Theorem 8.1 that inherits ambient scope has a compiled unbounded witness in BOTH scalar fields.  The canonical evidence for `existence-correct-q`, `acute-iff-spectral-placement` and `part-i-compression` therefore moved to those witnesses; the bounded declarations that were canonical are retained as registered specializations, and parts (ii) and (iii) keep their finite-dimensional evidence, which is the source's own restriction.\n\nThe eight promoted witnesses were re-read at their COMPILER-PRINTED types against the printed statement, not at their names.  Findings: (a) the printed placements `Lambda_1 >= alpha + delta` and `Lambda_0 <= alpha` are delivered in their ORDERED FORM reading -- operator inequalities on the blocks of `A + H` over `dom (A + H)` -- which is how Davis and Kahan write them; the bounded spectrum-inclusion reading is retained as the specialization, and the two are equivalent for a self-adjoint reducing block.  (b) Part (i) is delivered on the WHOLE domain, where the paper reads it on `P^perp`; nothing about `P` enters the proof, and on `P^perp` the `A + H` form equals the `A` form because `H` is fully off-diagonal, so the delivered inequality specialises to the printed `A_1 - alpha <= C_1 (Lambda_1 - alpha) C_1`.  (c) One defect found and repaired in the same pass: `theorem8_1_canonicalBranchUnbounded_form`, `..._printed`, `theorem8_1_eq_canonicalBranchUnbounded_of_maximalAngle_le` and `theorem8_1_maximalAngle_le_iff_orderedFormGap_unbounded` each carried BOTH `IsSelfAdjointOperator Hop` and `IsSelfAdjoint Hop` in the public type -- two spellings of one hypothesis.  The second is now derived inside each proof, so the promoted types carry each hypothesis once.  No other mismatch of scalar field, operator scope, domain assumption, dimension, constant, orientation or angle convention was found.",
-    "canonical_evidence_sha256": "34d39759eea97baaa5aa162169a869d870f348351e489a4098df493761e844fd",
+    "note": "The structured fields above are authoritative; this paragraph is regenerated whenever the count moves. 2026-09-02, closing: terminal_results is 29 and remaining_results is empty. `S2-tan-two-theta` was `hostile_review_blocked` under obligation `tan2theta-directed-correspondence` after a 2026-09-02 closure that did not compose; it is now accepted on canonical directed witnesses `tanTwoTheta_directed_unboundedResidual_symmetricNorming_{complex,real}`, which take the reducing subspace and conclude on the paper's directed corner (`tanTwoDirectedCornerR U V` over ℝ) with the singular-value identification in their types. The canonical-evidence digest changed accordingly and the statement pins were refreshed for the new canonical and bridging declarations. Earlier history of this field (the 2026-08-31 `S2-sin-two-theta` reopening, the `S2-tan-theta` Appendix-scope primaries, the paper-prefix rename with an unchanged digest) is in the human report.  2026-09-05: recomputed after the two directed `tan 2Theta` clauses of S2-tan-two-theta were retargeted at their source-exact façades.  The canonical statements are strictly closer to the printed ones -- separable ambient scope and the literal normalized unitarily invariant norm class -- and the theorems they delegate to are retained as registered generalizations, so nothing that was reviewed has been withdrawn.  2026-09-05: recomputed after DK-3.1-thm's converse clauses were repointed from the model-level theorem, which takes the isometric identification as caller data, to the source-shaped one that takes the dimension condition as a proposition.  The model-level theorem is retained as registered implementation structure, so nothing reviewed has been withdrawn.  2026-09-05: recomputed after Lemmas 6.1 and 6.2 were given source-exact façades over the literal normalized unitarily invariant norm class.  The SymmetricNormingFunction endpoints they delegate to are retained as registered generalizations -- for Lemma 6.1 the retained theorem is genuinely stronger, taking Ky Fan inequalities as its premise where the paper assumes the bound for every unitarily invariant norm.\n\n2026-09-06, CANONICAL EVIDENCE PROMOTED ON DK-8.1-thm, AND RE-REVIEWED.  The unbounded lift of Section 8 completed: with the converse half of Theorem 8.1's printed iff proved at unbounded scope and the real endpoints transported by complexification, every clause of Theorem 8.1 that inherits ambient scope has a compiled unbounded witness in BOTH scalar fields.  The canonical evidence for `existence-correct-q`, `acute-iff-spectral-placement` and `part-i-compression` therefore moved to those witnesses; the bounded declarations that were canonical are retained as registered specializations, and parts (ii) and (iii) keep their finite-dimensional evidence, which is the source's own restriction.\n\nThe eight promoted witnesses were re-read at their COMPILER-PRINTED types against the printed statement, not at their names.  Findings: (a) the printed placements `Lambda_1 >= alpha + delta` and `Lambda_0 <= alpha` are delivered in their ORDERED FORM reading -- operator inequalities on the blocks of `A + H` over `dom (A + H)` -- which is how Davis and Kahan write them; the bounded spectrum-inclusion reading is retained as the specialization, and the two are equivalent for a self-adjoint reducing block.  (b) Part (i) is delivered on the WHOLE domain, where the paper reads it on `P^perp`; nothing about `P` enters the proof, and on `P^perp` the `A + H` form equals the `A` form because `H` is fully off-diagonal, so the delivered inequality specialises to the printed `A_1 - alpha <= C_1 (Lambda_1 - alpha) C_1`.  (c) One defect found and repaired in the same pass: `theorem8_1_canonicalBranchUnbounded_form`, `..._printed`, `theorem8_1_eq_canonicalBranchUnbounded_of_maximalAngle_le` and `theorem8_1_maximalAngle_le_iff_orderedFormGap_unbounded` each carried BOTH `IsSelfAdjointOperator Hop` and `IsSelfAdjoint Hop` in the public type -- two spellings of one hypothesis.  The second is now derived inside each proof, so the promoted types carry each hypothesis once.  No other mismatch of scalar field, operator scope, domain assumption, dimension, constant, orientation or angle convention was found.\n\n2026-09-06, SECOND PASS: SOURCE-SURFACE PROMOTION ON BOTH SECTION 8 ROWS, RE-REVIEWED.  A hostile reviewer restricted the criterion to one question -- does the canonical public theorem signature, read in the paper's standing context, state the Davis--Kahan result with no stronger restriction and no weaker conclusion? -- and found two signature defects that the first pass had left.\n\n(1) DK-8.2-thm.  The acute conclusion was canonical at the inherited UNBOUNDED scope while the retained double-angle estimates were still canonical at BOUNDED operator scope, `A K : H ->L[k] H`.  Four façades now state Theorem 8.2 the way the source states it -- one theorem per alternative and scalar field, under the inherited `sin 2theta` context plus the new central-spectrum and smallness assumptions, concluding BOTH the retained estimate and `Theta < pi/4` -- with `A` a possibly unbounded self-adjoint partial map: `theorem8_2_{perturbation,residual}_sourceExact_unbounded_{complex,real}`.  Read at compiler-printed types: the perturbation branch takes `‖H‖ < delta/2` and the residual branch takes `‖R‖ < delta/2` on the residual itself and does NOT acquire `‖H‖ < delta/2`; the residual is the `sin 2theta` theorem's own `(M, R)` data with the source's identification of `M` as the block `A_0`, which forces `R = H|_P`.\n\n(2) DK-8.1-thm.  The canonical declarations were the general unbounded theorems: the block placements stated as form inequalities over the ambient domain, and part (i) stated for an arbitrary partial map `B` and reducing subspace `Q` with no `A/H/P/Q` context.  `Theorem81SourceUnbounded.lean` restates them on the source's objects -- `Lambda_0`, `Lambda_1` as the two reducing restrictions of `A + H` with the placements as operator inequalities on them, the existence clause as the existential the source asserts rather than a named-branch conjunction, and part (i) as `A_1 - alpha <= C_1 (Lambda_1 - alpha) C_1` read on `P^perp` with `C_1` the cosine block.  Read at compiler-printed types, each states its clause with no hypothesis the paper does not carry and no conclusion weaker than printed.\n\nBoth promotions are façade work: no proof of any underlying theorem changed, and every displaced declaration is retained as a registered specialization or generalization.  The bridge `semiboundedAbove_reducingRestriction_iff` and its three siblings are unfolding in both directions.",
+    "canonical_evidence_sha256": "f00cfd090a21e186ab48941d20986ea50af2c03d9e622155113d6b9671c22433",
     "hostile_review_status": "accepted",
-    "hostile_review_note": "REOPENED 2026-09-05 by the third hostile review. Its three blockers are CLOSED -- the ambient sin 2Theta operator roles, Theorem 3.1's forward invariant on the source's angle operators, and Corollary 3.1's classification invariant on the angles -- along with Theorem 3.1's ambient dimension clause, which is now a proposition rather than a supplied isometric equivalence. No defect remains open. Two POLICY questions do, and they are recorded in `hostile_review_policy_questions` rather than as obligations, because the checker treats an obligation as evidence that a named row is NOT terminal and these ten rows are: whether to add thin separable wrappers at the printed scope, which is a project decision the repository has an explicit recorded position on and which an agent must not settle; and whether the printed unitarily invariant norm class must exist as a Lean type, where the estimate coverage is compiled and closed but the type-level representation is not. The 29/29 certificate is unaffected by either. When reporting it, say that these two questions are open, because a reviewer who resolves them differently would want different declarations to be canonical.\n\nPrevious note: ACCEPTED 2026-09-02, after the day's reopening was closed by new mathematics rather than by metadata: the directed tan 2Theta clauses have source-shaped complex and real endpoints on the paper objects, with the correspondence composed in Lean and pinned. `open_hostile_review_obligations` is closed and lists the closure; the structured fields `terminal_results`, `remaining_results` and `hostile_review_status` are the authoritative statement.\n\n2026-09-06: canonical evidence on DK-8.1-thm promoted to the unbounded witnesses after the unbounded lift completed in both scalar fields, and re-reviewed at compiler-printed types; one duplicate-hypothesis defect found and repaired.  See the sweep note.  No blocker opened."
+    "hostile_review_note": "REOPENED 2026-09-05 by the third hostile review. Its three blockers are CLOSED -- the ambient sin 2Theta operator roles, Theorem 3.1's forward invariant on the source's angle operators, and Corollary 3.1's classification invariant on the angles -- along with Theorem 3.1's ambient dimension clause, which is now a proposition rather than a supplied isometric equivalence. No defect remains open. Two POLICY questions do, and they are recorded in `hostile_review_policy_questions` rather than as obligations, because the checker treats an obligation as evidence that a named row is NOT terminal and these ten rows are: whether to add thin separable wrappers at the printed scope, which is a project decision the repository has an explicit recorded position on and which an agent must not settle; and whether the printed unitarily invariant norm class must exist as a Lean type, where the estimate coverage is compiled and closed but the type-level representation is not. The 29/29 certificate is unaffected by either. When reporting it, say that these two questions are open, because a reviewer who resolves them differently would want different declarations to be canonical.\n\nPrevious note: ACCEPTED 2026-09-02, after the day's reopening was closed by new mathematics rather than by metadata: the directed tan 2Theta clauses have source-shaped complex and real endpoints on the paper objects, with the correspondence composed in Lean and pinned. `open_hostile_review_obligations` is closed and lists the closure; the structured fields `terminal_results`, `remaining_results` and `hostile_review_status` are the authoritative statement.\n\n2026-09-06: canonical evidence on DK-8.1-thm promoted to the unbounded witnesses after the unbounded lift completed in both scalar fields, and re-reviewed at compiler-printed types; one duplicate-hypothesis defect found and repaired.  See the sweep note.  No blocker opened.\n\n2026-09-06, second pass: canonical evidence on BOTH Section 8 rows moved to source-shaped unbounded façades after a signature-only hostile review found the retained 8.2 estimates still bounded and the 8.1 canonical declarations too general-purpose to be a source boundary.  Both defects repaired by façade; no proof changed.  See the sweep note.  No blocker opened."
   },
   "section_two_short_names": {
     "purpose": "The four unqualified `TauCeti.DavisKahan1970.SectionTwo.*` names, and what each is bound to. A short name is bound only to a declaration that is scalar-generic over `RCLike` AND at the printed source scope; `null` means deliberately unbound. This is the single owner of that fact: `check_davis_kahan_1970_result_inventory.py` reads `SectionTwo.lean`'s own `alias` lines and fails if they disagree.",
@@ -7071,6 +7167,22 @@
         {
           "declaration": "TauCeti.DavisKahan1970.Section8.theorem8_2_branch_maximalAngle_lt_unbounded_source_real",
           "why": "The real sibling, for the same reason; it runs the complex theorem on the complexification, whose separability follows from the ambient one."
+        },
+        {
+          "declaration": "TauCeti.DavisKahan1970.Section8.theorem8_2_perturbation_sourceExact_unbounded_complex",
+          "why": "Theorem 8.2 as one theorem at the paper's inherited unbounded ambient scope: the retained double-angle estimate and the acute branch together.  Separability is the paper's own assumption and is load-bearing here for the same reason it is on the acute witness -- both conjuncts run on the spectral measure of the Cayley transform, whose construction is stated for separable spaces."
+        },
+        {
+          "declaration": "TauCeti.DavisKahan1970.Section8.theorem8_2_residual_sourceExact_unbounded_complex",
+          "why": "Theorem 8.2 as one theorem at the paper's inherited unbounded ambient scope: the retained double-angle estimate and the acute branch together.  Separability is the paper's own assumption and is load-bearing here for the same reason it is on the acute witness -- both conjuncts run on the spectral measure of the Cayley transform, whose construction is stated for separable spaces."
+        },
+        {
+          "declaration": "TauCeti.DavisKahan1970.Section8.theorem8_2_perturbation_sourceExact_unbounded_real",
+          "why": "The real sibling, for the same reason; it runs the complex theorems on the complexification, whose separability follows from the ambient one."
+        },
+        {
+          "declaration": "TauCeti.DavisKahan1970.Section8.theorem8_2_residual_sourceExact_unbounded_real",
+          "why": "The real sibling, for the same reason; it runs the complex theorems on the complexification, whose separability follows from the ambient one."
         }
       ],
       "source_scope_facades": [
