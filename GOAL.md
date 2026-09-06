@@ -635,51 +635,90 @@ Prove the source alternative under the printed residual-size hypothesis.
 
 The residual theorem must **not** acquire the perturbation-size hypothesis merely because a convenient proof route uses it.
 
-### The route is much shorter than the plan assumed (finding, 2026-09-05)
+### The short route does not exist (correction, 2026-09-05)
 
-Theorem 8.2's acute conclusion `Θ < π/4` does **not** need the homotopy, the
-Riesz projection, or the continuation stack. It is Theorem 8.1's `Θ ≤ π/4` plus
-the double-angle bound:
+An earlier finding here claimed Theorem 8.2's acute conclusion is Theorem 8.1's
+`Θ ≤ π/4` plus the double-angle bound, and listed "derive the ordered form bounds
+Theorem 8.1 wants from Theorem 8.2's printed `SpectrumIn` hypotheses" as an
+assembly step. **That is wrong.** The two theorems inherit different hypothesis
+sets from Section 2:
+
+* Theorem 8.1 assumes *the hypotheses of the `tan 2θ` theorem*, which include the
+  strong off-diagonal hypothesis `H₀ = H₁ = 0`;
+* Theorem 8.2 assumes *the hypotheses of the `sin 2θ` theorem*, which include no
+  off-diagonality at all.
+
+So Theorem 8.1 is simply unavailable at Theorem 8.2's hypotheses, and no
+translation of spectral containments into form bounds changes that. The closed
+branch has to be established by the paper's own connectedness argument.
+
+### How far the static route actually reaches
+
+Write `γ = ‖H‖`, `κ = 2γ/δ < 1`. The printed estimate `δ‖sin 2Θ‖ ≤ 2‖H‖` gives
+the dichotomy
 
 ```text
-Theorem 8.1 (unbounded)          ⟹  subspaceGap ≤ √2/2          -- the CLOSED branch
-sin 2Θ theorem (unbounded)       ⟹  ‖sin 2Θ‖ ≤ 2‖H‖/δ < 1       -- printed smallness
-sqrt_two_mul_directedGap_le_…    ⟹  √2 · directedGap ≤ ‖sin 2Θ‖
-                                 ⟹  subspaceGap < √2/2           -- the OPEN branch
+g ≤ σ₋(κ) = sin(½ arcsin κ)   or   g ≥ σ₊(κ) = cos(½ arcsin κ)
 ```
 
-The middle inequality is the repository's existing bootstrap comparison, whose
-hypothesis is exactly "on the closed quarter branch" — which is what Theorem 8.1
-supplies and what the homotopy was there to establish. Its constant depends on
-`γ/δ` only, never on `‖A‖`, so unlike Theorem 8.1's strict supremum bound this
-one *does* survive to unbounded scope, which is why the paper writes `<` here and
-`≤` there.
+for `g = subspaceGap P Q`, with `σ₋ < √2/2 ≤ σ₊`; the printed conclusion is the
+low branch. Two static bounds exclude the high branch only partially:
 
-`subspaceGap_lt_of_le_of_norm_sinTwoAngle_lt_one` and its angle form are proved
-and axiom-clean, and `Section8/Theorem82Unbounded.lean` holds the assembly so far:
+* the `sin Θ` theorem between `A` on `P` and `A + H` on `Qᗮ`, separation `δ/2`,
+  gives `g ≤ κ`;
+* routing through `Q₀ = E_A([β − γ, α + γ])`, which **contains** `P` — because
+  `spec(A) ⊆ [β − γ, α + γ] ∪ exterior(β − δ + γ, α + δ − γ)` and
+  `spec(A₀) ⊆ [β − δ/2, α + δ/2]` cannot meet that exterior when `γ < δ/2` —
+  separation `δ − γ`, gives `g ≤ γ/(δ − γ)`.
+
+`κ < σ₊(κ)` iff `κ < √3/2`, and `γ/(δ − γ) < √2/2` iff `γ < (2 − √2)δ/2`. So the
+static route proves the printed conclusion for `γ < (√3/4)δ ≈ 0.433 δ` and the
+printed hypothesis is `γ < δ/2`. The shortfall is genuine.
+
+### The connectedness step, stated exactly
+
+It does **not** need Riesz integrals, contours, or a general unbounded resolvent
+API. Along `A_s = A + sH`, `s ∈ [0,1]`, with band
+`B_s = [β − (1 − s)γ, α + (1 − s)γ]` and `Q_s = E_{A_s}(B_s)`:
+
+* every `A_s` has gap `δ_s = δ − 2(1 − s)γ > 0`, since `2γ < δ`;
+* `P ⊆ Q₀` and `Q₁ = Q`;
+* the `sin 2Θ` estimate at parameter `s` gives
+  `‖sin 2Θ(Q₀, Q_s)‖ ≤ κ_s = 2sγ/(δ − 2(1 − s)γ)`, and `κ_s < 1` for every `s`
+  precisely because `2γ < δ`;
+* `s ↦ ‖P_{Q₀} − P_{Q_s}‖` is Lipschitz with constant `γ/(δ − 2γ)`, from the
+  `sin Θ` theorem between consecutive parameters plus the triangle inequality for
+  the projection distance (`subspaceGap` *is* a norm distance, so this is free);
+* `{s ∈ [0,1] | subspaceGap Q₀ Q_s ≤ σ₋(κ_s)}` is clopen and nonempty, hence
+  everything, and `s = 1` is the printed conclusion.
+
+The two missing ingredients are the parametrized unbounded band subspace `Q_s`
+with its gap — `ForTauCeti/Analysis/InnerProductSpace/LinearPMap/SpectralMeasure/`
+already has `specProjection` and `specRange`, so this is construction rather than
+new theory — and an **unbounded ambient `sin Θ` theorem** for the consecutive
+step. Neither is the "general unbounded resolvent / Riesz / continuation" stack.
+
+### What is proved now
+
+`Section8/Theorem82Unbounded.lean` holds:
 
 * `norm_sinTwoAngleOperator_le_of_perturbedGap_unbounded_complex` — the unbounded
   `sin 2Θ` estimate read at the **operator norm**. That instantiation is possible
   only because the operator norm is the first Ky Fan norm and therefore a member
   of the source norm class, which is the inhabitation result above.
-* `theorem8_2_branch_maximalAngle_lt_unbounded_complex` — the acute conclusion
-  from the closed branch and a strict contraction.
+* `norm_sinTwoAngleOperator_eq_norm_block` — `‖cfc (sin 2·) Θ‖ = ‖2 P_{P⊥} P_Q P_P‖`.
+  Both are the norm of the directed double-angle sine, which is symmetric in the
+  pair because the *doubled* sines have the same complete approximation-number
+  sequence even though the undoubled ones do not.
+* `theorem8_2_branch_maximalAngle_lt_unbounded_complex` and
+  `theorem8_2_branch_maximalAngle_lt_of_small_perturbation_unbounded_complex` —
+  the acute conclusion from the closed branch, the second one straight from the
+  printed `‖H‖ < δ/2`.
 
-* `norm_sinTwoAngleOperator_eq_norm_block` — **step 2, done.**
-  `‖cfc (sin 2·) Θ‖ = ‖2 P_{P⊥} P_Q P_P‖`. Both are the norm of the directed
-  double-angle sine, which is symmetric in the pair because the *doubled* sines
-  have the same complete approximation-number sequence even though the undoubled
-  ones do not.
-* `theorem8_2_branch_maximalAngle_lt_of_small_perturbation_unbounded_complex` —
-  the acute conclusion straight from the printed `‖H‖ < δ/2`.
-
-Two assembly steps remain, neither of them new mathematics:
-
-1. derive the ordered form bounds Theorem 8.1 wants from Theorem 8.2's printed
-   `SpectrumIn` hypotheses at unbounded scope, so that `hclosed` becomes an
-   appeal rather than a hypothesis;
-2. the residual branch, keeping it free of the perturbation hypothesis, and the
-   real siblings.
+The closed branch is an explicit hypothesis and is labelled as the connectedness
+step in both the module docstring and the theorem docstrings. It is the only
+thing between this module and the printed perturbation branch. The residual
+branch, and the real siblings, come after it.
 
 ### Implementation policy
 
@@ -1002,11 +1041,17 @@ holds. The same wrapper should be added for Proposition 4.1 and Corollary 4.1.
 
 ## 4. Finish unbounded Theorem 8.2
 
-Write the final source theorem types first.
+The source theorem types are written and the estimate halves are proved; see
+§10.4. What is left is exactly one thing, and §10.4 states it precisely: the
+closed quarter branch `‖P_P − P_Q‖ ≤ √2/2` under the printed hypotheses.
 
-Determine the smallest missing operator-theoretic ingredients from those targets.
-
-Do not assume the large Riesz/continuation roadmap is necessary until the proof forces it.
+* **Theorem 8.1 does not supply it.** 8.1 inherits the `tan 2θ` theorem's
+  off-diagonality `H₀ = H₁ = 0`; 8.2 inherits the `sin 2θ` theorem's hypotheses,
+  which have none. The earlier claim to the contrary is corrected in §10.4.
+* The static bounds reach `‖H‖ < (√3/4)δ`, not the printed `‖H‖ < δ/2`.
+* The connectedness argument that closes it needs the parametrized unbounded band
+  subspace `Q_s = E_{A + sH}(B_s)` and an unbounded ambient `sin Θ` theorem, and
+  nothing from the general Riesz/continuation roadmap.
 
 Protect the residual alternative from accidental extra perturbation hypotheses.
 
