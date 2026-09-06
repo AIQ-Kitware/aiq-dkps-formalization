@@ -275,13 +275,13 @@ Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.normalizedUnitaryInvariant_of_symmetricNorming`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/SymmetricNormingFanDominance.lean:512`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/SymmetricNormingFanDominance.lean:563`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.normalizedUnitaryInvariant_of_symmetricNorming_mul`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/SymmetricNormingFanDominance.lean:531`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/SymmetricNormingFanDominance.lean:582`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
@@ -1145,13 +1145,13 @@ Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.normalizedUnitaryInvariant_of_symmetricNorming`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/SymmetricNormingFanDominance.lean:512`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/SymmetricNormingFanDominance.lean:563`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.normalizedUnitaryInvariant_of_symmetricNorming_mul`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/SymmetricNormingFanDominance.lean:531`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/SymmetricNormingFanDominance.lean:582`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
@@ -1744,13 +1744,13 @@ Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.normalizedUnitaryInvariant_of_symmetricNorming`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/SymmetricNormingFanDominance.lean:512`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/SymmetricNormingFanDominance.lean:563`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.normalizedUnitaryInvariant_of_symmetricNorming_mul`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/SymmetricNormingFanDominance.lean:531`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/SymmetricNormingFanDominance.lean:582`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
@@ -2343,13 +2343,13 @@ Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.normalizedUnitaryInvariant_of_symmetricNorming`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/SymmetricNormingFanDominance.lean:512`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/SymmetricNormingFanDominance.lean:563`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.normalizedUnitaryInvariant_of_symmetricNorming_mul`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/SymmetricNormingFanDominance.lean:531`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/SymmetricNormingFanDominance.lean:582`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
@@ -4003,7 +4003,7 @@ Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.corollary4_1_compact_nonacute_symmetricNorming_real`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/SymmetricNormingFanDominance.lean:293`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/SymmetricNormingFanDominance.lean:322`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
@@ -4021,7 +4021,7 @@ Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.corollary4_1_compact_nonacute_sourceExact_real`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/SymmetricNormingFanDominance.lean:337`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/SymmetricNormingFanDominance.lean:366`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
@@ -4514,6 +4514,8 @@ The declarations that carry this result's printed statement, with the source ato
 - `TauCeti.DavisKahan1970.proposition4_3_compact_nonacute_symmetricNorming_complex` — generalization
 - `TauCeti.DavisKahan1970.proposition4_3_compact_nonacute_symmetricNorming_real` — generalization
 - `TauCeti.DavisKahan.ExactSinTheta.NormalizedUnitaryInvariantNorm` — source_correspondence
+- `TauCeti.DavisKahan1970.proposition4_3_compact_nonacute_sourceExact_ofCrossedDefects_complex` — presentation_wrapper
+- `TauCeti.DavisKahan1970.proposition4_3_compact_nonacute_sourceExact_ofCrossedDefects_real` — presentation_wrapper
 
 ### Source-facing Lean declarations
 
@@ -4537,7 +4539,7 @@ Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.proposition4_3_compact_nonacute_symmetricNorming_real`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/SymmetricNormingFanDominance.lean:315`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/SymmetricNormingFanDominance.lean:344`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
@@ -4555,13 +4557,25 @@ Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.proposition4_3_compact_nonacute_sourceExact_real`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/SymmetricNormingFanDominance.lean:355`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/SymmetricNormingFanDominance.lean:384`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan.ExactSinTheta.NormalizedUnitaryInvariantNorm`
 
 Source location candidates: `DavisKahan/OperatorIdeal/NormalizedUnitaryInvariantNorm.lean:87`
+
+Compiler-printed type: *inserted when a compiler certificate is supplied.*
+
+#### `TauCeti.DavisKahan1970.proposition4_3_compact_nonacute_sourceExact_ofCrossedDefects_complex`
+
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/SymmetricNormingFanDominance.lean:295`
+
+Compiler-printed type: *inserted when a compiler certificate is supplied.*
+
+#### `TauCeti.DavisKahan1970.proposition4_3_compact_nonacute_sourceExact_ofCrossedDefects_real`
+
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/SymmetricNormingFanDominance.lean:405`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
@@ -4949,13 +4963,13 @@ Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.theorem5_2_symmetricNorming_complex`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/SymmetricNormingFanDominance.lean:383`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/SymmetricNormingFanDominance.lean:434`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.theorem5_2_symmetricNorming_real`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/SymmetricNormingFanDominance.lean:404`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/SymmetricNormingFanDominance.lean:455`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
@@ -4967,19 +4981,19 @@ Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.theorem5_2_orderedGap_symmetricNorming_real`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/SymmetricNormingFanDominance.lean:429`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/SymmetricNormingFanDominance.lean:480`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.theorem5_2_sourceExact_complex`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/SymmetricNormingFanDominance.lean:456`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/SymmetricNormingFanDominance.lean:507`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.theorem5_2_sourceExact_real`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/SymmetricNormingFanDominance.lean:473`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/SymmetricNormingFanDominance.lean:524`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 

@@ -4,7 +4,7 @@
 
 **Census family:** `source-completion-census`  
 **Items:** 50  
-**Unique cited Lean declarations:** 1331
+**Unique cited Lean declarations:** 1333
 
 ## How to use this census
 
@@ -3094,6 +3094,8 @@ REOPENING WITHDRAWN 2026-08-31 and the rule corrected: a later source passage en
 - `TauCeti.DavisKahan1970.proposition4_3_compact_nonacute_sourceExact_complex`
 - `TauCeti.DavisKahan1970.proposition4_3_compact_nonacute_sourceExact_real`
 - `TauCeti.DavisKahan.ExactSinTheta.NormalizedUnitaryInvariantNorm`
+- `TauCeti.DavisKahan1970.proposition4_3_compact_nonacute_sourceExact_ofCrossedDefects_complex`
+- `TauCeti.DavisKahan1970.proposition4_3_compact_nonacute_sourceExact_ofCrossedDefects_real`
 
 **Curated source/Lean review:**
 
