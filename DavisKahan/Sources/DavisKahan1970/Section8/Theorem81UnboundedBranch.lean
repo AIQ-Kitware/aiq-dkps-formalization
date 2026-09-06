@@ -213,7 +213,6 @@ The repulsion is `notMem_spectrum_addBounded_of_offDiagonal_form_gap`; the two
 bounds are the half-line energy bounds of the spectral measure. -/
 theorem theorem8_1_canonicalBranchUnbounded_form
     (hA : IsSelfAdjoint A) (hH : DavisKahan.IsSelfAdjointOperator Hop)
-    (hHsa : IsSelfAdjoint Hop)
     (hredP : TauCeti.LinearPMap.ReducesSubspace A P)
     (hPhigh : ∀ x : A.domain, (x : H) ∈ P →
       (alpha + delta) * ‖(x : H)‖ ^ 2 ≤ RCLike.re ⟪A x, (x : H)⟫_ℂ)
@@ -229,6 +228,8 @@ theorem theorem8_1_canonicalBranchUnbounded_form
         (x : H) ∈ (canonicalLowBranchUnbounded (isSelfAdjoint_perturbed hA hH) alpha)ᗮ →
         (alpha + delta) * ‖(x : H)‖ ^ 2 ≤
           RCLike.re ⟪TauCeti.LinearPMap.addBounded A Hop x, (x : H)⟫_ℂ := by
+  have hHsa : IsSelfAdjoint Hop :=
+    ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mpr hH
   have hrep : ∀ lam ∈ Set.Ioo alpha (alpha + delta),
       ((lam : ℝ) : ℂ) ∉ TauCeti.LinearPMap.spectrum
         (TauCeti.LinearPMap.addBounded A Hop) := by
@@ -254,7 +255,6 @@ off-diagonal.  The branch `Q` reduces `A + H`, carries `Λ₀ ≤ α` and
 `Λ₁ ≥ α + δ`, and satisfies the printed `Θ(P, Q) ≤ π/4`. -/
 theorem theorem8_1_canonicalBranchUnbounded_printed
     (hA : IsSelfAdjoint A) (hH : DavisKahan.IsSelfAdjointOperator Hop)
-    (hHsa : IsSelfAdjoint Hop)
     (hredPperp : TauCeti.LinearPMap.ReducesSubspace A Pᗮ)
     (hPlow : ∀ x : A.domain, (x : H) ∈ P →
       RCLike.re ⟪A x, (x : H)⟫_ℂ ≤ alpha * ‖(x : H)‖ ^ 2)
@@ -275,9 +275,11 @@ theorem theorem8_1_canonicalBranchUnbounded_printed
       TauCeti.DavisKahanExt.maximalAngle P
         (canonicalLowBranchUnbounded (isSelfAdjoint_perturbed hA hH) alpha)
         ≤ Real.pi / 4 := by
+  have hHsa : IsSelfAdjoint Hop :=
+    ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mpr hH
   have hPP : (Pᗮ)ᗮ = P := Submodule.orthogonal_orthogonal P
   have hform := theorem8_1_canonicalBranchUnbounded_form (A := A) (Hop := Hop) (P := Pᗮ)
-    (alpha := alpha) (delta := delta) hA hH hHsa hredPperp hPhigh
+    (alpha := alpha) (delta := delta) hA hH hredPperp hPhigh
     (by rw [hPP]; exact hPlow)
     (by rw [hPP]; exact hHPperp) (by rw [hPP]; exact hHP) hdelta
   refine ⟨canonicalLowBranchUnbounded_reduces _ _, hform.1, hform.2, ?_⟩

@@ -6396,8 +6396,8 @@ Until 2026-09-05 both rows were `locally_exact` and `proved_exact` with no scope
 
 #### 5. What Lean says, and exactly where the implicit semantics became explicit
 
-- `TauCeti.DavisKahan1970.Section8.theorem8_1_maximalAngle_le_iff_spectrumIn`
-  - Its `A H : E ->L[C] E` binders make the imported operator scope explicit in the type: the quarter-angle characterization is delivered for bounded self-adjoint A and H, which is the scope the accepted reading says the phrase imports.
+- `TauCeti.DavisKahan1970.Section8.theorem8_1_maximalAngle_le_iff_orderedFormGap_unbounded`
+  - Its `A : H ->_l.[C] H` binder makes the imported operator scope explicit in the type: the quarter-angle characterization is delivered for a possibly unbounded self-adjoint partial map with bounded off-diagonal `H`, which is the widest scope the phrase could import.  The bounded sibling `theorem8_1_maximalAngle_le_iff_spectrumIn` is retained as the specialization matching the accepted narrower reading.
 - `TauCeti.DavisKahan1970.Section8.theorem8_1_upperSymmetricGaugeRepulsion_angle_rev`
   - Part (iii) carries `[FiniteDimensional]`, which is the SOURCE's own restriction on that part -- "for every symmetric gauge function Phi in finite dimensions" -- and shows the section restricting its own parts where it means to.
 
@@ -6416,6 +6416,8 @@ Nothing here is false.  The registered bounded theorems are true and are exactly
 #### 9. Semantic conclusion recorded by the repository
 
 DK-8.1-thm and DK-8.2-thm are true counted results delivered at bounded operator scope under an accepted, argued reading of what "the hypotheses of the tan 2theta / sin 2theta theorem" imports.  They are terminal as accepted nonlocal source interpretations, not as locally exact statements, and the certificate reports them in that category alongside S2-tan-theta and the Section 4 rows.  The unbounded lift remains open work regardless, because it would make the reading moot.
+
+ON OPERATOR SCOPE, updated 2026-09-06.  The reading question is now MOOT for what is delivered, exactly as this record predicted it would be if the lift landed.  Both rows are delivered at UNBOUNDED self-adjoint ambient scope with bounded `H`, in complex and real scalar scope, so the evidence is exact under the alternative literal reading and a proper generalization of the printed statement under the accepted bounded reading.  Either way nothing is claimed that is not proved, and no reviewer decision about what "the hypotheses of the tan 2theta / sin 2theta theorem" imports changes what the repository has.  The rows stay classified as nonlocal source interpretations for the OTHER reason the record gives -- Theorem 8.1 states no hypotheses of its own, and Theorem 8.2 states its own only as an addition -- which no amount of scope work removes.
 
 #### Independent interpretation checklist
 
@@ -6520,14 +6522,14 @@ One row per printed source clause per scalar field.  A clause is `PASS` only whe
 
 | clause | scalar | witness | status |
 | --- | --- | --- | --- |
-| `existence-correct-q.complex` | complex | `TauCeti.DavisKahan1970.Section8.theorem8_1_canonicalBranch` | **PASS** |
-| `existence-correct-q.real` | real | `TauCeti.DavisKahan1970.Section8.theorem8_1_canonicalBranch_real` | **PASS** |
-| `acute-iff-spectral-placement.complex` | complex | `TauCeti.DavisKahan1970.Section8.theorem8_1_maximalAngle_le_iff_spectrumIn` | **PASS** |
-| `acute-iff-spectral-placement.real` | real | `TauCeti.DavisKahan1970.Section8.theorem8_1_maximalAngle_le_iff_spectrumIn_real` | **PASS** |
-| `part-i-compression.complex` | complex | `TauCeti.DavisKahan1970.Section8.theorem8_1_upperCompressionRepulsion` | **PASS** |
-| `part-i-compression.complex.2` | complex | `TauCeti.DavisKahan1970.Section8.theorem8_1_lowerCompressionRepulsion` | **PASS** |
-| `part-i-compression.real` | real | `TauCeti.DavisKahan1970.Section8.theorem8_1_upperCompressionRepulsion_real` | **PASS** |
-| `part-i-compression.real.2` | real | `TauCeti.DavisKahan1970.Section8.theorem8_1_lowerCompressionRepulsion_real` | **PASS** |
+| `existence-correct-q.complex` | complex | `TauCeti.DavisKahan1970.Section8.theorem8_1_canonicalBranchUnbounded_printed` | **PASS** |
+| `existence-correct-q.real` | real | `TauCeti.DavisKahan1970.Section8.theorem8_1_canonicalBranchUnbounded_printed_real` | **PASS** |
+| `acute-iff-spectral-placement.complex` | complex | `TauCeti.DavisKahan1970.Section8.theorem8_1_maximalAngle_le_iff_orderedFormGap_unbounded` | **PASS** |
+| `acute-iff-spectral-placement.real` | real | `TauCeti.DavisKahan1970.Section8.theorem8_1_maximalAngle_le_iff_orderedFormGap_unbounded_real` | **PASS** |
+| `part-i-compression.complex` | complex | `TauCeti.DavisKahan1970.Section8.theorem8_1_upperCompressionRepulsion_unbounded` | **PASS** |
+| `part-i-compression.complex.2` | complex | `TauCeti.DavisKahan1970.Section8.theorem8_1_lowerCompressionRepulsion_unbounded` | **PASS** |
+| `part-i-compression.real` | real | `TauCeti.DavisKahan1970.Section8.theorem8_1_upperCompressionRepulsion_unbounded_real` | **PASS** |
+| `part-i-compression.real.2` | real | `TauCeti.DavisKahan1970.Section8.theorem8_1_lowerCompressionRepulsion_unbounded_real` | **PASS** |
 | `part-ii-eigenvalue.complex` | complex | `TauCeti.DavisKahan1970.Section8.theorem8_1_upperApproximationRepulsion` | **PASS** |
 | `part-ii-eigenvalue.complex.2` | complex | `TauCeti.DavisKahan1970.Section8.theorem8_1_lowerApproximationRepulsion` | **PASS** |
 | `part-ii-eigenvalue.real` | real | `TauCeti.DavisKahan1970.Section8.theorem8_1_upperApproximationRepulsion_real` | **PASS** |
@@ -6537,21 +6539,21 @@ One row per printed source clause per scalar field.  A clause is `PASS` only whe
 | `part-iii-gauge.real` | real | `TauCeti.DavisKahan1970.Section8.theorem8_1_upperSymmetricGaugeRepulsion_angle_rev_real` | **PASS** |
 | `part-iii-gauge.real.2` | real | `TauCeti.DavisKahan1970.Section8.theorem8_1_lowerSymmetricGaugeRepulsion_angle_rev_real` | **PASS** |
 
-**`existence-correct-q.complex`.** Canonical witness for existence-correct-q at complex scalar scope, carried over from the pre-clause canonical evidence and re-checked against its compiler-printed type under the coherent model.
+**`existence-correct-q.complex`.** Canonical witness for existence-correct-q at the row's inherited UNBOUNDED ambient scope: `A` is a possibly unbounded self-adjoint partial map, the branch is the spectral subspace `specRange (A + H) (Iic alpha)`, and the theorem delivers the paper's three facts about it -- it reduces `A + H`, it carries `Lambda_0 <= alpha` and `Lambda_1 >= alpha + delta`, and `Theta(P, Q) <= pi/4`.  The bounded witness it replaces is retained as a specialization.
 
-**`existence-correct-q.real`.** Canonical witness for existence-correct-q at real scalar scope, carried over from the pre-clause canonical evidence and re-checked against its compiler-printed type under the coherent model.
+**`existence-correct-q.real`.** Canonical witness for existence-correct-q at the row's inherited UNBOUNDED ambient scope: `A` is a possibly unbounded self-adjoint partial map, the branch is the spectral subspace `specRange (A + H) (Iic alpha)`, and the theorem delivers the paper's three facts about it -- it reduces `A + H`, it carries `Lambda_0 <= alpha` and `Lambda_1 >= alpha + delta`, and `Theta(P, Q) <= pi/4`.  The bounded witness it replaces is retained as a specialization.
 
-**`acute-iff-spectral-placement.complex`.** Canonical witness for acute-iff-spectral-placement at complex scalar scope, carried over from the pre-clause canonical evidence and re-checked against its compiler-printed type under the coherent model.
+**`acute-iff-spectral-placement.complex`.** Canonical witness for acute-iff-spectral-placement at the row's inherited UNBOUNDED ambient scope, both halves of the printed iff.  The placement is read as the ordered form bounds `Lambda_0 <= alpha` and `Lambda_1 >= alpha + delta`, which is how Davis and Kahan write it: `Lambda_0` and `Lambda_1` are the blocks of `A + H` and the printed relations are operator inequalities.  The bounded spectrum-inclusion witness it replaces is retained as a specialization.
 
-**`acute-iff-spectral-placement.real`.** Canonical witness for acute-iff-spectral-placement at real scalar scope, carried over from the pre-clause canonical evidence and re-checked against its compiler-printed type under the coherent model.
+**`acute-iff-spectral-placement.real`.** Canonical witness for acute-iff-spectral-placement at the row's inherited UNBOUNDED ambient scope, both halves of the printed iff.  The placement is read as the ordered form bounds `Lambda_0 <= alpha` and `Lambda_1 >= alpha + delta`, which is how Davis and Kahan write it: `Lambda_0` and `Lambda_1` are the blocks of `A + H` and the printed relations are operator inequalities.  The bounded spectrum-inclusion witness it replaces is retained as a specialization.
 
-**`part-i-compression.complex`.** Canonical witness for part-i-compression at complex scalar scope, carried over from the pre-clause canonical evidence and re-checked against its compiler-printed type under the coherent model.
+**`part-i-compression.complex`.** Canonical witness for part (i) at the row's inherited UNBOUNDED ambient scope, in its form reading: the alpha-shifted energy of a domain vector is at most that of its component in the branch's complement.  Part (i) carries no dimension qualifier in the source, unlike (ii) and (iii).  The bounded witness it replaces is retained as a specialization.
 
-**`part-i-compression.complex.2`.** Canonical witness for part-i-compression at complex scalar scope, carried over from the pre-clause canonical evidence and re-checked against its compiler-printed type under the coherent model.
+**`part-i-compression.complex.2`.** Canonical witness for part (i) at the row's inherited UNBOUNDED ambient scope, in its form reading: the alpha-shifted energy of a domain vector is at most that of its component in the branch's complement.  Part (i) carries no dimension qualifier in the source, unlike (ii) and (iii).  The bounded witness it replaces is retained as a specialization.
 
-**`part-i-compression.real`.** Canonical witness for part-i-compression at real scalar scope, carried over from the pre-clause canonical evidence and re-checked against its compiler-printed type under the coherent model.
+**`part-i-compression.real`.** Canonical witness for part (i) at the row's inherited UNBOUNDED ambient scope, in its form reading: the alpha-shifted energy of a domain vector is at most that of its component in the branch's complement.  Part (i) carries no dimension qualifier in the source, unlike (ii) and (iii).  The bounded witness it replaces is retained as a specialization.
 
-**`part-i-compression.real.2`.** Canonical witness for part-i-compression at real scalar scope, carried over from the pre-clause canonical evidence and re-checked against its compiler-printed type under the coherent model.
+**`part-i-compression.real.2`.** Canonical witness for part (i) at the row's inherited UNBOUNDED ambient scope, in its form reading: the alpha-shifted energy of a domain vector is at most that of its component in the branch's complement.  Part (i) carries no dimension qualifier in the source, unlike (ii) and (iii).  The bounded witness it replaces is retained as a specialization.
 
 **`part-ii-eigenvalue.complex`.** Canonical witness for part-ii-eigenvalue at complex scalar scope, carried over from the pre-clause canonical evidence and re-checked against its compiler-printed type under the coherent model.
 
@@ -6575,14 +6577,14 @@ Result-wide scope every clause must carry: *(none)*
 
 The declarations that carry this result's printed statement, with the source atoms each one covers.  Everything under *Other registered declarations* below accompanies the result without establishing it.
 
-- `TauCeti.DavisKahan1970.Section8.theorem8_1_canonicalBranch` — primary_source_witness, complex scalars, proof; covers `DK-8.1-thm.existence-correct-q`
-- `TauCeti.DavisKahan1970.Section8.theorem8_1_canonicalBranch_real` — primary_source_witness, real scalars, proof; covers `DK-8.1-thm.existence-correct-q`
-- `TauCeti.DavisKahan1970.Section8.theorem8_1_maximalAngle_le_iff_spectrumIn` — primary_source_witness, complex scalars, proof; covers `DK-8.1-thm.acute-iff-spectral-placement`
-- `TauCeti.DavisKahan1970.Section8.theorem8_1_maximalAngle_le_iff_spectrumIn_real` — primary_source_witness, real scalars, proof; covers `DK-8.1-thm.acute-iff-spectral-placement`
-- `TauCeti.DavisKahan1970.Section8.theorem8_1_upperCompressionRepulsion` — primary_source_witness, complex scalars, proof; covers `DK-8.1-thm.part-i-compression`
-- `TauCeti.DavisKahan1970.Section8.theorem8_1_lowerCompressionRepulsion` — primary_source_witness, complex scalars, proof; covers `DK-8.1-thm.part-i-compression`
-- `TauCeti.DavisKahan1970.Section8.theorem8_1_upperCompressionRepulsion_real` — primary_source_witness, real scalars, proof; covers `DK-8.1-thm.part-i-compression`
-- `TauCeti.DavisKahan1970.Section8.theorem8_1_lowerCompressionRepulsion_real` — primary_source_witness, real scalars, proof; covers `DK-8.1-thm.part-i-compression`
+- `TauCeti.DavisKahan1970.Section8.theorem8_1_canonicalBranchUnbounded_printed` — primary_source_witness, complex scalars, proof; covers `DK-8.1-thm.existence-correct-q`
+- `TauCeti.DavisKahan1970.Section8.theorem8_1_canonicalBranchUnbounded_printed_real` — primary_source_witness, real scalars, proof; covers `DK-8.1-thm.existence-correct-q`
+- `TauCeti.DavisKahan1970.Section8.theorem8_1_maximalAngle_le_iff_orderedFormGap_unbounded` — primary_source_witness, complex scalars, proof; covers `DK-8.1-thm.acute-iff-spectral-placement`
+- `TauCeti.DavisKahan1970.Section8.theorem8_1_maximalAngle_le_iff_orderedFormGap_unbounded_real` — primary_source_witness, real scalars, proof; covers `DK-8.1-thm.acute-iff-spectral-placement`
+- `TauCeti.DavisKahan1970.Section8.theorem8_1_upperCompressionRepulsion_unbounded` — primary_source_witness, complex scalars, proof; covers `DK-8.1-thm.part-i-compression`
+- `TauCeti.DavisKahan1970.Section8.theorem8_1_lowerCompressionRepulsion_unbounded` — primary_source_witness, complex scalars, proof; covers `DK-8.1-thm.part-i-compression`
+- `TauCeti.DavisKahan1970.Section8.theorem8_1_upperCompressionRepulsion_unbounded_real` — primary_source_witness, real scalars, proof; covers `DK-8.1-thm.part-i-compression`
+- `TauCeti.DavisKahan1970.Section8.theorem8_1_lowerCompressionRepulsion_unbounded_real` — primary_source_witness, real scalars, proof; covers `DK-8.1-thm.part-i-compression`
 - `TauCeti.DavisKahan1970.Section8.theorem8_1_upperApproximationRepulsion` — primary_source_witness, complex scalars, proof; covers `DK-8.1-thm.part-ii-eigenvalue`
 - `TauCeti.DavisKahan1970.Section8.theorem8_1_lowerApproximationRepulsion` — primary_source_witness, complex scalars, proof; covers `DK-8.1-thm.part-ii-eigenvalue`
 - `TauCeti.DavisKahan1970.Section8.theorem8_1_upperApproximationRepulsion_real` — primary_source_witness, real scalars, proof; covers `DK-8.1-thm.part-ii-eigenvalue`
@@ -6610,15 +6612,12 @@ The declarations that carry this result's printed statement, with the source ato
 - `TauCeti.DavisKahan1970.Section8.re_inner_le_of_mem_canonicalLowBranchUnbounded` — generalization
 - `TauCeti.DavisKahan1970.Section8.le_re_inner_of_mem_canonicalLowBranchUnbounded_orthogonal` — generalization
 - `TauCeti.DavisKahan1970.Section8.theorem8_1_canonicalBranchUnbounded_form` — generalization
-- `TauCeti.DavisKahan1970.Section8.theorem8_1_canonicalBranchUnbounded_printed` — generalization
 - `TauCeti.DavisKahan.re_inner_le_of_realSpectrum_subset_Iic` — generalization
 - `TauCeti.DavisKahan.le_re_inner_of_realSpectrum_subset_Ici` — generalization
 - `TauCeti.DavisKahan.re_inner_le_of_reducingRestriction_realSpectrum_subset_Iic` — generalization
 - `TauCeti.DavisKahan.le_re_inner_of_reducingRestriction_realSpectrum_subset_Ici` — generalization
 - `TauCeti.DavisKahan1970.Section8.theorem8_1_maximalAngle_le_of_spectrumIn_unbounded` — generalization
 - `TauCeti.DavisKahan1970.Section8.re_inner_split_of_reduces` — generalization
-- `TauCeti.DavisKahan1970.Section8.theorem8_1_upperCompressionRepulsion_unbounded` — generalization
-- `TauCeti.DavisKahan1970.Section8.theorem8_1_lowerCompressionRepulsion_unbounded` — generalization
 - `TauCeti.LinearPMap.specProjection_apply_of_unitary_intertwines` — generalization
 - `TauCeti.LinearPMap.specProjection_eq_specProjC` — generalization
 - `TauCeti.DavisKahan.reflectionProduct_form_pos_of_orderedFormGap_unbounded` — generalization
@@ -6629,7 +6628,26 @@ The declarations that carry this result's printed statement, with the source ato
 - `TauCeti.DavisKahan1970.Section8.eq_of_starProjection_comm_of_crossed_trivial` — generalization
 - `TauCeti.DavisKahan1970.Section8.norm_starProjection_lt_of_mem_orthogonal_of_sq_lt` — generalization
 - `TauCeti.DavisKahan1970.Section8.theorem8_1_eq_canonicalBranchUnbounded_of_maximalAngle_le` — generalization
-- `TauCeti.DavisKahan1970.Section8.theorem8_1_maximalAngle_le_iff_orderedFormGap_unbounded` — generalization
+- `TauCeti.DavisKahan1970.Section8.theorem8_1_canonicalBranch` — specialization
+- `TauCeti.DavisKahan1970.Section8.theorem8_1_canonicalBranch_real` — specialization
+- `TauCeti.DavisKahan1970.Section8.theorem8_1_maximalAngle_le_iff_spectrumIn` — specialization
+- `TauCeti.DavisKahan1970.Section8.theorem8_1_maximalAngle_le_iff_spectrumIn_real` — specialization
+- `TauCeti.DavisKahan1970.Section8.theorem8_1_upperCompressionRepulsion` — specialization
+- `TauCeti.DavisKahan1970.Section8.theorem8_1_lowerCompressionRepulsion` — specialization
+- `TauCeti.DavisKahan1970.Section8.theorem8_1_upperCompressionRepulsion_real` — specialization
+- `TauCeti.DavisKahan1970.Section8.theorem8_1_lowerCompressionRepulsion_real` — specialization
+- `TauCeti.DavisKahan1970.Section8.canonicalLowBranchUnboundedReal` — transport_lemma
+- `TauCeti.DavisKahan1970.Section8.canonicalLowBranchUnboundedReal_reduces` — transport_lemma
+- `TauCeti.DavisKahan1970.Section8.complexifySubmodule_canonicalLowBranchUnboundedReal` — transport_lemma
+- `TauCeti.DavisKahan1970.Section8.canonicalLowBranchUnbounded_congr` — transport_lemma
+- `TauCeti.DavisKahan1970.Section8.re_inner_le_of_complexifyReal_le` — transport_lemma
+- `TauCeti.DavisKahan1970.Section8.le_re_inner_of_le_complexifyReal` — transport_lemma
+- `TauCeti.DavisKahan1970.Section8.maximalAngle_complexifySubmodule` — transport_lemma
+- `TauCeti.DavisKahan1970.Section8.re_inner_le_of_complexifyReal_le_of_eq` — transport_lemma
+- `TauCeti.DavisKahan1970.Section8.le_re_inner_of_le_complexifyReal_of_eq` — transport_lemma
+- `TauCeti.DavisKahan1970.Section8.maximalAngle_le_of_complexifySubmodule_le` — transport_lemma
+- `TauCeti.DavisKahan1970.Section8.theorem8_1_eq_canonicalBranchUnbounded_of_maximalAngle_le_real` — transport_lemma
+- `TauCeti.DavisKahan1970.Section8.re_inner_split_of_reduces_real` — transport_lemma
 
 ### Source-facing Lean declarations
 
@@ -6827,7 +6845,7 @@ Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.Section8.theorem8_1_canonicalBranchUnbounded_printed`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section8/Theorem81UnboundedBranch.lean:255`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section8/Theorem81UnboundedBranch.lean:256`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
@@ -6857,25 +6875,25 @@ Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.Section8.theorem8_1_maximalAngle_le_of_spectrumIn_unbounded`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section8/Theorem81UnboundedBranch.lean:303`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section8/Theorem81UnboundedBranch.lean:305`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.Section8.re_inner_split_of_reduces`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section8/Theorem81UnboundedCompression.lean:41`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section8/Theorem81UnboundedCompression.lean:42`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.Section8.theorem8_1_upperCompressionRepulsion_unbounded`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section8/Theorem81UnboundedCompression.lean:90`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section8/Theorem81UnboundedCompression.lean:92`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.Section8.theorem8_1_lowerCompressionRepulsion_unbounded`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section8/Theorem81UnboundedCompression.lean:112`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section8/Theorem81UnboundedCompression.lean:115`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
@@ -6923,25 +6941,121 @@ Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.Section8.eq_of_starProjection_comm_of_crossed_trivial`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section8/Theorem81UnboundedConverse.lean:132`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section8/Theorem81UnboundedConverse.lean:135`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.Section8.norm_starProjection_lt_of_mem_orthogonal_of_sq_lt`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section8/Theorem81UnboundedConverse.lean:102`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section8/Theorem81UnboundedConverse.lean:103`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.Section8.theorem8_1_eq_canonicalBranchUnbounded_of_maximalAngle_le`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section8/Theorem81UnboundedConverse.lean:170`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section8/Theorem81UnboundedConverse.lean:173`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.Section8.theorem8_1_maximalAngle_le_iff_orderedFormGap_unbounded`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section8/Theorem81UnboundedConverse.lean:232`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section8/Theorem81UnboundedConverse.lean:236`
+
+Compiler-printed type: *inserted when a compiler certificate is supplied.*
+
+#### `TauCeti.DavisKahan1970.Section8.canonicalLowBranchUnboundedReal`
+
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section8/Theorem81UnboundedReal.lean:227`
+
+Compiler-printed type: *inserted when a compiler certificate is supplied.*
+
+#### `TauCeti.DavisKahan1970.Section8.canonicalLowBranchUnboundedReal_reduces`
+
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section8/Theorem81UnboundedReal.lean:238`
+
+Compiler-printed type: *inserted when a compiler certificate is supplied.*
+
+#### `TauCeti.DavisKahan1970.Section8.complexifySubmodule_canonicalLowBranchUnboundedReal`
+
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section8/Theorem81UnboundedReal.lean:244`
+
+Compiler-printed type: *inserted when a compiler certificate is supplied.*
+
+#### `TauCeti.DavisKahan1970.Section8.canonicalLowBranchUnbounded_congr`
+
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section8/Theorem81UnboundedReal.lean:254`
+
+Compiler-printed type: *inserted when a compiler certificate is supplied.*
+
+#### `TauCeti.DavisKahan1970.Section8.re_inner_le_of_complexifyReal_le`
+
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section8/Theorem81UnboundedReal.lean:55`
+
+Compiler-printed type: *inserted when a compiler certificate is supplied.*
+
+#### `TauCeti.DavisKahan1970.Section8.le_re_inner_of_le_complexifyReal`
+
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section8/Theorem81UnboundedReal.lean:77`
+
+Compiler-printed type: *inserted when a compiler certificate is supplied.*
+
+#### `TauCeti.DavisKahan1970.Section8.maximalAngle_complexifySubmodule`
+
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section8/Theorem81UnboundedReal.lean:100`
+
+Compiler-printed type: *inserted when a compiler certificate is supplied.*
+
+#### `TauCeti.DavisKahan1970.Section8.re_inner_le_of_complexifyReal_le_of_eq`
+
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section8/Theorem81UnboundedReal.lean:109`
+
+Compiler-printed type: *inserted when a compiler certificate is supplied.*
+
+#### `TauCeti.DavisKahan1970.Section8.le_re_inner_of_le_complexifyReal_of_eq`
+
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section8/Theorem81UnboundedReal.lean:125`
+
+Compiler-printed type: *inserted when a compiler certificate is supplied.*
+
+#### `TauCeti.DavisKahan1970.Section8.maximalAngle_le_of_complexifySubmodule_le`
+
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section8/Theorem81UnboundedReal.lean:141`
+
+Compiler-printed type: *inserted when a compiler certificate is supplied.*
+
+#### `TauCeti.DavisKahan1970.Section8.theorem8_1_canonicalBranchUnbounded_printed_real`
+
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section8/Theorem81UnboundedReal.lean:267`
+
+Compiler-printed type: *inserted when a compiler certificate is supplied.*
+
+#### `TauCeti.DavisKahan1970.Section8.theorem8_1_maximalAngle_le_iff_orderedFormGap_unbounded_real`
+
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section8/Theorem81UnboundedReal.lean:160`
+
+Compiler-printed type: *inserted when a compiler certificate is supplied.*
+
+#### `TauCeti.DavisKahan1970.Section8.theorem8_1_eq_canonicalBranchUnbounded_of_maximalAngle_le_real`
+
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section8/Theorem81UnboundedReal.lean:337`
+
+Compiler-printed type: *inserted when a compiler certificate is supplied.*
+
+#### `TauCeti.DavisKahan1970.Section8.re_inner_split_of_reduces_real`
+
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section8/Theorem81UnboundedReal.lean:400`
+
+Compiler-printed type: *inserted when a compiler certificate is supplied.*
+
+#### `TauCeti.DavisKahan1970.Section8.theorem8_1_upperCompressionRepulsion_unbounded_real`
+
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section8/Theorem81UnboundedReal.lean:440`
+
+Compiler-printed type: *inserted when a compiler certificate is supplied.*
+
+#### `TauCeti.DavisKahan1970.Section8.theorem8_1_lowerCompressionRepulsion_unbounded_real`
+
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section8/Theorem81UnboundedReal.lean:462`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
@@ -7143,7 +7257,7 @@ The printed claim is not false, but the repository states elsewhere -- in the fu
 
 DK-8.2-thm is a true counted result whose exact formal representation requires the Section 3 standing convention to be made explicit. It is terminal as an accepted nonlocal source interpretation, not as a locally exact statement, and the certificate must report it in that category.
 
-ON OPERATOR SCOPE: DK-8.1-thm and DK-8.2-thm are true counted results delivered at bounded operator scope under an accepted, argued reading of what "the hypotheses of the tan 2theta / sin 2theta theorem" imports.  They are terminal as accepted nonlocal source interpretations, not as locally exact statements, and the certificate reports them in that category alongside S2-tan-theta and the Section 4 rows.  The unbounded lift remains open work regardless, because it would make the reading moot.
+ON OPERATOR SCOPE, updated 2026-09-06.  The reading question is now MOOT for what is delivered, exactly as this record predicted it would be if the lift landed.  Both rows are delivered at UNBOUNDED self-adjoint ambient scope with bounded `H`, in complex and real scalar scope, so the evidence is exact under the alternative literal reading and a proper generalization of the printed statement under the accepted bounded reading.  Either way nothing is claimed that is not proved, and no reviewer decision about what "the hypotheses of the tan 2theta / sin 2theta theorem" imports changes what the repository has.  The rows stay classified as nonlocal source interpretations for the OTHER reason the record gives -- Theorem 8.1 states no hypotheses of its own, and Theorem 8.2 states its own only as an addition -- which no amount of scope work removes.
 
 #### Independent interpretation checklist
 
@@ -7442,7 +7556,7 @@ Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan.CrossedDefectsEquivalent.symm`
 
-Source location candidates: `DavisKahan/Geometry/Halmos/GenericRotationPredicates.lean:77`, `DavisKahan/Geometry/Polar/DirectRotationReal.lean:81`, `DavisKahan/Geometry/Polar/DirectRotationSquare.lean:292`, `DavisKahan/Sources/DavisKahan1970/SineTheta/Norms/SingularValueTransport.lean:226`, `DavisKahan/Sources/DavisKahan1970/SineTheta/Norms/SingularValueTransport.lean:64`, `DavisKahan/SpectralTheory/AbstractSpectrum.lean:239`, `DavisKahan/Sylvester/PairwiseSpectrumGap.lean:103`, `DavisKahan/Sylvester/PairwiseSpectrumGap.lean:53`
+Source location candidates: `DavisKahan/Geometry/Halmos/GenericRotationPredicates.lean:78`, `DavisKahan/Geometry/Polar/DirectRotationReal.lean:81`, `DavisKahan/Geometry/Polar/DirectRotationSquare.lean:292`, `DavisKahan/Sources/DavisKahan1970/SineTheta/Norms/SingularValueTransport.lean:226`, `DavisKahan/Sources/DavisKahan1970/SineTheta/Norms/SingularValueTransport.lean:64`, `DavisKahan/SpectralTheory/AbstractSpectrum.lean:239`, `DavisKahan/Sylvester/PairwiseSpectrumGap.lean:103`, `DavisKahan/Sylvester/PairwiseSpectrumGap.lean:53`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
@@ -7484,115 +7598,115 @@ Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan.abs_directedGap_sub_directedGap_le`
 
-Source location candidates: `DavisKahan/SpectralTheory/UnboundedBandLipschitz.lean:126`
+Source location candidates: `DavisKahan/SpectralTheory/UnboundedBandLipschitz.lean:127`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan.le_of_band_exterior_spectra`
 
-Source location candidates: `DavisKahan/SpectralTheory/UnboundedBandLipschitz.lean:236`
+Source location candidates: `DavisKahan/SpectralTheory/UnboundedBandLipschitz.lean:239`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan.realSpectrum_subset_union_of_reduces`
 
-Source location candidates: `DavisKahan/InfiniteDimensional/SinTheta/Continuation/CircleWitness.lean:512`, `DavisKahan/SpectralTheory/ReducingSpectrumUnion.lean:68`
+Source location candidates: `DavisKahan/InfiniteDimensional/SinTheta/Continuation/CircleWitness.lean:512`, `DavisKahan/SpectralTheory/ReducingSpectrumUnion.lean:70`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan.reducesSubspace_of_isSelfAdjoint_of_invariant`
 
-Source location candidates: `DavisKahan/SpectralTheory/ReducingSpectrumUnion.lean:207`
+Source location candidates: `DavisKahan/SpectralTheory/ReducingSpectrumUnion.lean:209`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.Section8.theorem8_2_perturbationHalfGap_unbounded_complex`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section8/Theorem82UnboundedPath.lean:191`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section8/Theorem82UnboundedPath.lean:198`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.Section8.theorem8_2_perturbationHalfGap_maximalAngle_lt_unbounded_complex`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section8/Theorem82UnboundedPath.lean:442`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section8/Theorem82UnboundedPath.lean:449`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.Section8.theorem8_2_residualHalfGap_unbounded_complex`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section8/Theorem82UnboundedPath.lean:492`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section8/Theorem82UnboundedPath.lean:499`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.Section8.theorem8_2_residualHalfGap_maximalAngle_lt_unbounded_complex`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section8/Theorem82UnboundedPath.lean:586`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section8/Theorem82UnboundedPath.lean:593`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan.Foundation.RealComplexification.unitaryConj_complexifyReal_reducingRestriction`
 
-Source location candidates: `DavisKahan/SpectralTheory/Complexification/ReducingRestrictionDescent.lean:41`
+Source location candidates: `DavisKahan/SpectralTheory/Complexification/ReducingRestrictionDescent.lean:42`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan.Foundation.RealComplexification.realSpectrum_reducingRestriction_complexifyReal`
 
-Source location candidates: `DavisKahan/SpectralTheory/Complexification/ReducingRestrictionDescent.lean:62`
+Source location candidates: `DavisKahan/SpectralTheory/Complexification/ReducingRestrictionDescent.lean:64`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan.Foundation.RealComplexification.realSpectrum_reducingRestriction_complexifyReal_of_eq`
 
-Source location candidates: `DavisKahan/SpectralTheory/Complexification/ReducingRestrictionDescent.lean:80`
+Source location candidates: `DavisKahan/SpectralTheory/Complexification/ReducingRestrictionDescent.lean:83`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan.Foundation.RealComplexification.norm_complexify_comp_subtypeL`
 
-Source location candidates: `DavisKahan/SpectralTheory/Complexification/ReducingRestrictionDescent.lean:96`
+Source location candidates: `DavisKahan/SpectralTheory/Complexification/ReducingRestrictionDescent.lean:100`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan.Foundation.RealComplexification.separableSpace_realComplexification`
 
-Source location candidates: `DavisKahan/SpectralTheory/Complexification/ReducingRestrictionDescent.lean:114`, `DavisKahan/SpectralTheory/Real/RealCyclicDecomposition.lean:285`
+Source location candidates: `DavisKahan/SpectralTheory/Complexification/ReducingRestrictionDescent.lean:119`, `DavisKahan/SpectralTheory/Real/RealCyclicDecomposition.lean:285`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.Section8.theorem8_2_perturbationHalfGap_unbounded_real`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section8/Theorem82UnboundedPath.lean:626`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section8/Theorem82UnboundedPath.lean:633`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.Section8.theorem8_2_residualHalfGap_unbounded_real`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section8/Theorem82UnboundedPath.lean:714`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section8/Theorem82UnboundedPath.lean:721`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.Section8.theorem8_2_perturbationHalfGap_maximalAngle_lt_unbounded_real`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section8/Theorem82UnboundedPath.lean:794`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section8/Theorem82UnboundedPath.lean:801`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.Section8.theorem8_2_residualHalfGap_maximalAngle_lt_unbounded_real`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section8/Theorem82UnboundedPath.lean:824`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section8/Theorem82UnboundedPath.lean:831`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.Section8.theorem8_2_branch_maximalAngle_lt_unbounded_source_complex`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section8/Theorem82UnboundedPath.lean:860`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section8/Theorem82UnboundedPath.lean:867`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.Section8.theorem8_2_branch_maximalAngle_lt_unbounded_source_real`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section8/Theorem82UnboundedPath.lean:889`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section8/Theorem82UnboundedPath.lean:896`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
