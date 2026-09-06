@@ -49,7 +49,7 @@ theorem kyFanApproximationGauge_le_of_approximationSingularValue_le
 /-- Correct infinite-dimensional ideal-dominance bridge for Corollary 4.1.
 The stronger family contains precisely the missing monotonicity principle. -/
 theorem mem_and_gauge_le_of_approximationSingularValue_le
-    (N : KyFanDominantIdealFamily (𝕜 := 𝕜))
+    (N : FanDominantIdealFamily (𝕜 := 𝕜))
     {A B : E →L[𝕜] F}
     (hB : N.Mem B)
     (h : ∀ n, approximationSingularValue n A ≤
@@ -71,7 +71,7 @@ structure RestrictedDisplacementApproximationDominance
 /-- Corollary 4.1 follows formally from a Proposition 4.1 certificate for every
 Fan-dominant ideal family. -/
 theorem restrictedDisplacement_idealGauge_le
-    (N : KyFanDominantIdealFamily (𝕜 := 𝕜))
+    (N : FanDominantIdealFamily (𝕜 := 𝕜))
     {A B : E →L[𝕜] F}
     (D : RestrictedDisplacementApproximationDominance A B)
     (hB : N.Mem B) :

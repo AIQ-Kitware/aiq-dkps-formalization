@@ -101,7 +101,7 @@ theorem symmetricNorming_of_kyFanDominant
     [NormedAddCommGroup F] [InnerProductSpace 𝕜 F] [CompleteSpace F]
     (N : SymmetricNormingFunction) {X Y : E →L[𝕜] F} {d : ℝ} (hd : 0 < d)
     (hY : N.Mem Y)
-    (h : ∀ M : KyFanDominantIdealFamily.{u, v} 𝕜,
+    (h : ∀ M : FanDominantIdealFamily.{u, v} 𝕜,
       M.Mem Y → M.Mem X ∧ d * M.gauge X ≤ M.gauge Y) :
     N.Mem X ∧ d * N.gauge X ≤ N.gauge Y := by
   refine N.mul_gauge_le_of_all_mul_kyFan_le hd hY (fun k => ?_)
@@ -142,7 +142,7 @@ theorem kyFanDominant_of_symmetricNorming
     {E' F' : Type v}
     [NormedAddCommGroup E'] [InnerProductSpace 𝕜 E'] [CompleteSpace E']
     [NormedAddCommGroup F'] [InnerProductSpace 𝕜 F'] [CompleteSpace F']
-    (M : KyFanDominantIdealFamily.{u, v} 𝕜) {X : E' →L[𝕜] F'} {Y : E →L[𝕜] F}
+    (M : FanDominantIdealFamily.{u, v} 𝕜) {X : E' →L[𝕜] F'} {Y : E →L[𝕜] F}
     {d : ℝ} (hd : 0 < d)
     (hY : M.Mem Y)
     (h : ∀ N : SymmetricNormingFunction, N.Mem Y → N.Mem X ∧ d * N.gauge X ≤ N.gauge Y) :
@@ -170,7 +170,7 @@ theorem symmetricNorming_iff_kyFanDominant
     [NormedAddCommGroup F] [InnerProductSpace 𝕜 F] [CompleteSpace F]
     {X Y : E →L[𝕜] F} {d : ℝ} (hd : 0 < d) :
     (∀ N : SymmetricNormingFunction, N.Mem Y → N.Mem X ∧ d * N.gauge X ≤ N.gauge Y) ↔
-      (∀ M : KyFanDominantIdealFamily.{u, v} 𝕜,
+      (∀ M : FanDominantIdealFamily.{u, v} 𝕜,
         M.Mem Y → M.Mem X ∧ d * M.gauge X ≤ M.gauge Y) :=
   ⟨fun h M hY => kyFanDominant_of_symmetricNorming M hd hY h,
     fun h N hY => symmetricNorming_of_kyFanDominant N hd hY (fun M hM => h M hM)⟩
@@ -260,7 +260,7 @@ theorem corollary4_1_compact_nonacute_sourceExact_complex
       N.gauge ((1 - DavisKahan.nonacuteDirectRotation U V J) ∘L
           DavisKahan.projection U) ≤
         N.gauge ((1 - W) ∘L DavisKahan.projection U) :=
-  corollary4_1_compact_nonacute_complex N.toKyFanDominantIdealFamily U V hcompact J W
+  corollary4_1_compact_nonacute_complex N.toFanDominantIdealFamily U V hcompact J W
     hWunitary hWmap hWmem
 
 /-- **Davis--Kahan 1970, Proposition 4.3 at the printed source scope over `ℂ`.** -/
@@ -279,7 +279,7 @@ theorem proposition4_3_compact_nonacute_sourceExact_complex
       N.gauge ((1 - star (DavisKahan.nonacuteDirectRotation U V J)) *
           (1 - DavisKahan.nonacuteDirectRotation U V J)) ≤
         N.gauge ((1 - star W) * (1 - W)) :=
-  proposition4_3_compact_nonacute_idealGauge N.toKyFanDominantIdealFamily U V hcompact J W
+  proposition4_3_compact_nonacute_idealGauge N.toFanDominantIdealFamily U V hcompact J W
     hWunitary hWmap hWmem
 
 /-- **Proposition 4.3 from the source's own hypothesis, over `ℂ`.**
@@ -377,7 +377,7 @@ theorem corollary4_1_compact_nonacute_sourceExact_real
       N.gauge ((1 - DavisKahan.nonacuteDirectRotation U V J) ∘L
           DavisKahan.projection U) ≤
         N.gauge ((1 - W) ∘L DavisKahan.projection U) :=
-  corollary4_1_compact_nonacute_real U V N.toKyFanDominantIdealFamily hcompact J W
+  corollary4_1_compact_nonacute_real U V N.toFanDominantIdealFamily hcompact J W
     hWunitary hWmap hWmem
 
 /-- **Davis--Kahan 1970, Proposition 4.3 at the printed source scope over `ℝ`.** -/
@@ -396,7 +396,7 @@ theorem proposition4_3_compact_nonacute_sourceExact_real
       N.gauge ((1 - star (DavisKahan.nonacuteDirectRotation U V J)) *
           (1 - DavisKahan.nonacuteDirectRotation U V J)) ≤
         N.gauge ((1 - star W) * (1 - W)) :=
-  proposition4_3_compact_nonacute_real_idealGauge U V N.toKyFanDominantIdealFamily hcompact
+  proposition4_3_compact_nonacute_real_idealGauge U V N.toFanDominantIdealFamily hcompact
     J W hWunitary hWmap hWmem
 
 /-- **Proposition 4.3 from the source's own hypothesis, over `ℝ`.**  See the
@@ -516,7 +516,7 @@ theorem theorem5_2_sourceExact_complex
     (hsyl : TauCeti.LinearPMap.SylvesterEquation A B X R)
     (hR : N.Mem R) :
     N.Mem X ∧ δ * N.gauge X ≤ N.gauge R :=
-  theorem5_2 N.toKyFanDominantIdealFamily hA hB hδ hAlow hBhigh hsyl hR
+  theorem5_2 N.toFanDominantIdealFamily hA hB hδ hAlow hBhigh hsyl hR
 
 /-- **Davis--Kahan 1970, Theorem 5.2 at the printed source scope over `ℝ`.**
 Arbitrary real Hilbert spaces; see the complex sibling on why separability is
@@ -534,7 +534,7 @@ theorem theorem5_2_sourceExact_real
     (hR : N.Mem R) :
     N.Mem X ∧ δ * N.gauge X ≤ N.gauge R :=
   DavisKahan.Sylvester.davisKahan1970_sylvester_real
-    N.toKyFanDominantIdealFamily hA hB hδ
+    N.toFanDominantIdealFamily hA hB hδ
     (DavisKahan.Sylvester.FormBoundedSylvesterGap.leftAboveRightBelow c hAlow hBhigh)
     hsyl hR
 
@@ -572,7 +572,7 @@ theorem normalizedUnitaryInvariant_of_symmetricNorming
     (hd : 0 < d) (hY : N.Mem Y)
     (h : ∀ M : SymmetricNormingFunction, M.Mem Y → M.Mem X ∧ d * M.gauge X ≤ M.gauge Y) :
     N.Mem X ∧ d * N.gauge X ≤ N.gauge Y :=
-  kyFanDominant_of_symmetricNorming N.toKyFanDominantIdealFamily hd hY h
+  kyFanDominant_of_symmetricNorming N.toFanDominantIdealFamily hd hY h
 
 /-- **The Fan-dominance bridge with the source's constant on the right.**
 
@@ -620,11 +620,11 @@ theorem normalizedUnitaryInvariant_toKyFanDominant
     [NormedAddCommGroup E'] [InnerProductSpace 𝕜 E'] [CompleteSpace E']
     [NormedAddCommGroup F'] [InnerProductSpace 𝕜 F'] [CompleteSpace F']
     (N : NormalizedUnitaryInvariantNorm.{u, v} 𝕜) {X : E' →L[𝕜] F'} {Y : E →L[𝕜] F} {d : ℝ}
-    (h : ∀ M : KyFanDominantIdealFamily.{u, v} 𝕜,
+    (h : ∀ M : FanDominantIdealFamily.{u, v} 𝕜,
       M.Mem Y → M.Mem X ∧ d * M.gauge X ≤ M.gauge Y)
     (hY : N.Mem Y) :
     N.Mem X ∧ d * N.gauge X ≤ N.gauge Y :=
-  h N.toKyFanDominantIdealFamily hY
+  h N.toFanDominantIdealFamily hY
 
 end
 

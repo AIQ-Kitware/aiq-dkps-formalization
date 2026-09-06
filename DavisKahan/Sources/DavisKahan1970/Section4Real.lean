@@ -486,7 +486,7 @@ theorem restrictedDisplacementDominance_nonacute_real
   approximation_le n := Proposition4_1_nonacute_real U V J W hWunitary hWmap n
 
 /-- **Corollary 4.1 over `ℝ` at the exact matched-defect, nonacute scope.** -/
-theorem Corollary4_1_nonacute_real (N : KyFanDominantIdealFamily (𝕜 := ℝ))
+theorem Corollary4_1_nonacute_real (N : FanDominantIdealFamily (𝕜 := ℝ))
     (J : halmosSourceDefect U V ≃ₗᵢ[ℝ] halmosTargetDefect U V)
     (W : E →L[ℝ] E) (hWunitary : W ∈ unitary (E →L[ℝ] E))
     (hWmap : W * DavisKahan.projection U = DavisKahan.projection V * W)
@@ -1060,7 +1060,7 @@ theorem proposition4_3_nonacute_real
 /-- Proposition 4.3 over `ℝ`, promoted to every real unitarily invariant ideal gauge at the
 matched-defect nonacute scope. -/
 theorem proposition4_3_nonacute_real_idealGauge
-    (N : KyFanDominantIdealFamily (𝕜 := ℝ))
+    (N : FanDominantIdealFamily (𝕜 := ℝ))
     (J : halmosSourceDefect U V ≃ₗᵢ[ℝ] halmosTargetDefect U V)
     (W : E →L[ℝ] E) (hWunitary : W ∈ unitary (E →L[ℝ] E))
     (hWmap : W * DavisKahan.projection U = DavisKahan.projection V * W)
@@ -1309,7 +1309,7 @@ theorem proposition4_1_compact_nonacute_real
 
 /-- **Corollary 4.1 over `ℝ` at the inherited compact, matched-defect scope.** -/
 theorem corollary4_1_compact_nonacute_real
-    (N : KyFanDominantIdealFamily (𝕜 := ℝ))
+    (N : FanDominantIdealFamily (𝕜 := ℝ))
     (_hcompact : IsCompactOperator (TauCeti.principalSineOperator U V))
     (J : halmosSourceDefect U V ≃ₗᵢ[ℝ] halmosTargetDefect U V)
     (W : E →L[ℝ] E) (hWunitary : W ∈ unitary (E →L[ℝ] E))
@@ -1324,7 +1324,7 @@ theorem corollary4_1_compact_nonacute_real
 
 /-- **Proposition 4.3 over `ℝ` at the inherited compact, matched-defect scope.** -/
 theorem proposition4_3_compact_nonacute_real_idealGauge
-    (N : KyFanDominantIdealFamily (𝕜 := ℝ))
+    (N : FanDominantIdealFamily (𝕜 := ℝ))
     (_hcompact : IsCompactOperator (TauCeti.principalSineOperator U V))
     (J : halmosSourceDefect U V ≃ₗᵢ[ℝ] halmosTargetDefect U V)
     (W : E →L[ℝ] E) (hWunitary : W ∈ unitary (E →L[ℝ] E))

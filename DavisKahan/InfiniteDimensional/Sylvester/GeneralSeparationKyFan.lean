@@ -223,7 +223,7 @@ theorem idealGauge_sylvester_le_of_generalSeparation_real
     rw [kyFanApproximationGauge_smul, Real.norm_eq_abs, abs_of_pos hc]
     exact kyFan_sylvester_le_of_generalSeparation_real hA hB hd hsep hEq k
   obtain ⟨hX, hg⟩ :=
-    mem_and_scaled_gauge_le_of_all_scaled_kyFan_le N hd hCscaled hfan
+    mem_and_scaled_gauge_le_of_all_scaled_kyFan_le N.toFanDominantIdealFamily hd hCscaled hfan
   refine ⟨hX, ?_⟩
   have hhom : N.gauge ((Real.pi / 2 : ℝ) • C) = (Real.pi / 2) * N.gauge C := by
     have h := N.toSymmetricOperatorIdealFamily.gaugeReal_smul (Real.pi / 2 : ℝ) hC

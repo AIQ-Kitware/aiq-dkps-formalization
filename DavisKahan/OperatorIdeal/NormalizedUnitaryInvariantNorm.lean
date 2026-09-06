@@ -54,7 +54,7 @@ hypotheses.
 
 ```text
 NormalizedUnitaryInvariantNorm      the source's own class
-        │  toKyFanDominantIdealFamily
+        │  toFanDominantIdealFamily
         ▼
 KyFanDominantIdealFamily            Fan dominance as a field
         │  the estimate bridges in Ideals/SymmetricNormingFanDominance
@@ -86,8 +86,14 @@ normalization on rank-one operators.  See the module docstring for which of the
 source's listed properties are fields here and which are derived. -/
 structure NormalizedUnitaryInvariantNorm (𝕜 : Type u) [RCLike 𝕜] where
   /-- The Fan-dominant symmetric ideal family supplying the gauge, its domain,
-  and all the norm and ideal laws. -/
-  toKyFanDominantIdealFamily : KyFanDominantIdealFamily.{u, v} 𝕜
+  and all the norm and ideal laws.
+
+  **Completeness is deliberately not here.**  It is a property of the ideal that
+  the analytic development needs and that Gohberg--Krein prove about the closed
+  class; Davis and Kahan do not print it, so it must not restrict the
+  source-facing quantifier.  It lives one layer up, on
+  `KyFanDominantIdealFamily`. -/
+  toFanDominantIdealFamily : FanDominantIdealFamily.{u, v} 𝕜
   /-- **The source normalization.**  A rank-one operator of norm one has norm
   one -- the Lean spelling of `‖u v*‖ = ‖u‖ ‖v‖` after scaling both vectors to
   norm one. -/
@@ -95,7 +101,7 @@ structure NormalizedUnitaryInvariantNorm (𝕜 : Type u) [RCLike 𝕜] where
       [NormedAddCommGroup E] [InnerProductSpace 𝕜 E] [CompleteSpace E]
       [NormedAddCommGroup F] [InnerProductSpace 𝕜 F] [CompleteSpace F]
       {V : E →L[𝕜] F}, ‖V‖ = 1 → V.rank ≤ (1 : Cardinal) →
-      toKyFanDominantIdealFamily.gauge V = 1
+      toFanDominantIdealFamily.gauge V = 1
 
 namespace NormalizedUnitaryInvariantNorm
 
@@ -108,20 +114,20 @@ variable [NormedAddCommGroup H] [InnerProductSpace 𝕜 H] [CompleteSpace H]
 variable (N : NormalizedUnitaryInvariantNorm.{u, v} 𝕜)
 
 /-- Membership in the norm's ideal: the source's "the norm exists here". -/
-abbrev Mem (A : E →L[𝕜] F) : Prop := N.toKyFanDominantIdealFamily.Mem A
+abbrev Mem (A : E →L[𝕜] F) : Prop := N.toFanDominantIdealFamily.Mem A
 
 /-- The real-valued norm, meaningful on its ideal. -/
 noncomputable abbrev gauge (A : E →L[𝕜] F) : ℝ :=
-  N.toKyFanDominantIdealFamily.gauge A
+  N.toFanDominantIdealFamily.gauge A
 
 /-- Membership and the gauge are read off the underlying family; this is the
 bridge a façade proof uses. -/
-theorem mem_iff_kyFanDominant (A : E →L[𝕜] F) :
-    N.Mem A ↔ N.toKyFanDominantIdealFamily.Mem A := Iff.rfl
+theorem mem_iff_fanDominant (A : E →L[𝕜] F) :
+    N.Mem A ↔ N.toFanDominantIdealFamily.Mem A := Iff.rfl
 
 /-- The gauge is the underlying family's gauge. -/
-theorem gauge_eq_kyFanDominant (A : E →L[𝕜] F) :
-    N.gauge A = N.toKyFanDominantIdealFamily.gauge A := rfl
+theorem gauge_eq_fanDominant (A : E →L[𝕜] F) :
+    N.gauge A = N.toFanDominantIdealFamily.gauge A := rfl
 
 /-! ### The source's listed properties, derived
 
@@ -131,48 +137,48 @@ carries, and proving them here is what makes the structure's data irredundant. -
 
 /-- **Nonnegativity.** -/
 theorem gauge_nonneg {A : E →L[𝕜] F} (hA : N.Mem A) : 0 ≤ N.gauge A :=
-  N.toKyFanDominantIdealFamily.toSymmetricOperatorIdealFamily.gaugeReal_nonneg hA
+  N.toFanDominantIdealFamily.toSymmetricOperatorIdealFamily.gaugeReal_nonneg hA
 
 /-- **Definiteness.**  The norm vanishes only on the zero operator. -/
 theorem gauge_eq_zero_iff {A : E →L[𝕜] F} (hA : N.Mem A) :
     N.gauge A = 0 ↔ A = 0 := by
   constructor
   · intro h
-    exact N.toKyFanDominantIdealFamily.toSymmetricOperatorIdealFamily.gaugeReal_eq_zero hA h
+    exact N.toFanDominantIdealFamily.toSymmetricOperatorIdealFamily.gaugeReal_eq_zero hA h
   · rintro rfl
-    exact N.toKyFanDominantIdealFamily.toSymmetricOperatorIdealFamily.gaugeReal_zero
+    exact N.toFanDominantIdealFamily.toSymmetricOperatorIdealFamily.gaugeReal_zero
 
 /-- **The triangle inequality.** -/
 theorem gauge_add_le {A B : E →L[𝕜] F} (hA : N.Mem A) (hB : N.Mem B) :
     N.gauge (A + B) ≤ N.gauge A + N.gauge B :=
-  N.toKyFanDominantIdealFamily.toSymmetricOperatorIdealFamily.gaugeReal_add_le hA hB
+  N.toFanDominantIdealFamily.toSymmetricOperatorIdealFamily.gaugeReal_add_le hA hB
 
 /-- **Absolute homogeneity.** -/
 theorem gauge_smul (c : 𝕜) {A : E →L[𝕜] F} (hA : N.Mem A) :
     N.gauge (c • A) = ‖c‖ * N.gauge A :=
-  N.toKyFanDominantIdealFamily.toSymmetricOperatorIdealFamily.gaugeReal_smul c hA
+  N.toFanDominantIdealFamily.toSymmetricOperatorIdealFamily.gaugeReal_smul c hA
 
 /-- **Contraction compatibility on the left.**  Composing with an operator of
 norm at most one does not increase the norm. -/
 theorem gauge_comp_left_le (L : F →L[𝕜] G) {A : E →L[𝕜] F} (hA : N.Mem A)
     (hL : ‖L‖ ≤ 1) : N.gauge (L ∘L A) ≤ N.gauge A :=
-  N.toKyFanDominantIdealFamily.toSymmetricOperatorIdealFamily.gaugeReal_comp_left_le L hA hL
+  N.toFanDominantIdealFamily.toSymmetricOperatorIdealFamily.gaugeReal_comp_left_le L hA hL
 
 /-- **Contraction compatibility on the right.** -/
 theorem gauge_comp_right_le {A : E →L[𝕜] F} (R : H →L[𝕜] E) (hA : N.Mem A)
     (hR : ‖R‖ ≤ 1) : N.gauge (A ∘L R) ≤ N.gauge A :=
-  N.toKyFanDominantIdealFamily.toSymmetricOperatorIdealFamily.gaugeReal_comp_right_le R hA hR
+  N.toFanDominantIdealFamily.toSymmetricOperatorIdealFamily.gaugeReal_comp_right_le R hA hR
 
 /-- **The norm dominates the operator norm**, so it is a norm and not a
 seminorm on its ideal. -/
 theorem opNorm_le_gauge {A : E →L[𝕜] F} (hA : N.Mem A) : ‖A‖ ≤ N.gauge A :=
-  N.toKyFanDominantIdealFamily.toSymmetricOperatorIdealFamily.opNorm_le_gaugeReal hA
+  N.toFanDominantIdealFamily.toSymmetricOperatorIdealFamily.opNorm_le_gaugeReal hA
 
 /-- **Adjoint invariance**, which the source uses whenever it transposes a
 block. -/
 theorem gauge_adjoint {A : E →L[𝕜] F} (hA : N.Mem A) :
     N.gauge A.adjoint = N.gauge A :=
-  N.toKyFanDominantIdealFamily.toSymmetricOperatorIdealFamily.gaugeReal_adjoint hA
+  N.toFanDominantIdealFamily.toSymmetricOperatorIdealFamily.gaugeReal_adjoint hA
 
 /-- A linear isometric equivalence is a contraction. -/
 private theorem norm_isometryEquiv_le_one {X Y : Type v}
@@ -192,7 +198,7 @@ theorem gauge_comp_isometryEquiv (e : F ≃ₗᵢ[𝕜] G) (f : H ≃ₗᵢ[𝕜
     {A : E →L[𝕜] F} (hA : N.Mem A) :
     N.gauge ((e.toContinuousLinearEquiv : F →L[𝕜] G) ∘L A ∘L
       (f.toContinuousLinearEquiv : H →L[𝕜] E)) = N.gauge A := by
-  set S := N.toKyFanDominantIdealFamily.toSymmetricOperatorIdealFamily with hS
+  set S := N.toFanDominantIdealFamily.toSymmetricOperatorIdealFamily with hS
   set B := (e.toContinuousLinearEquiv : F →L[𝕜] G) ∘L A ∘L
     (f.toContinuousLinearEquiv : H →L[𝕜] E) with hB
   have hBmem : N.Mem B := S.comp_mem _ _ hA
@@ -233,7 +239,7 @@ theorem mem_rankOne {V : E →L[𝕜] F} (hVnorm : ‖V‖ = 1)
   intro htop
   have h1 : N.gauge V = 1 := N.gauge_rankOne_eq_one hVnorm hVrank
   rw [show N.gauge V
-      = (N.toKyFanDominantIdealFamily.toSymmetricOperatorIdealFamily.toOperatorIdealFamily.gauge
+      = (N.toFanDominantIdealFamily.toSymmetricOperatorIdealFamily.toOperatorIdealFamily.gauge
           V).toReal from rfl, htop] at h1
   simp at h1
 
@@ -244,10 +250,10 @@ theorem mem_finset_sum {ι : Type*} (s : Finset ι) {A : ι → E →L[𝕜] F}
   induction s using Finset.induction with
   | empty =>
       simp only [Finset.sum_empty]
-      exact N.toKyFanDominantIdealFamily.toSymmetricOperatorIdealFamily.zero_mem
+      exact N.toFanDominantIdealFamily.toSymmetricOperatorIdealFamily.zero_mem
   | insert i s hi ih =>
       rw [Finset.sum_insert hi]
-      exact N.toKyFanDominantIdealFamily.toSymmetricOperatorIdealFamily.add_mem
+      exact N.toFanDominantIdealFamily.toSymmetricOperatorIdealFamily.add_mem
         (hA i (Finset.mem_insert_self i s))
         (ih fun j hj => hA j (Finset.mem_insert_of_mem hj))
 

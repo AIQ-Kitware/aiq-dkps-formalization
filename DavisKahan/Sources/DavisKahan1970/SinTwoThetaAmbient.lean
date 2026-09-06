@@ -170,8 +170,8 @@ theorem sinTheta_spectrum_block_all_kyFan
       (KyFanDominantIdealFamily.kyFan (𝕜 := ℂ) k hk).toSymmetricOperatorIdealFamily
       hA hB hU hV hd hab hUspec hVspec
       (KyFanDominantIdealFamily.kyFan_mem (𝕜 := ℂ) k hk (B - A))
-    rw [KyFanDominantIdealFamily.toSymmetric_gaugeReal,
-      KyFanDominantIdealFamily.toSymmetric_gaugeReal,
+    rw [FanDominantIdealFamily.toSymmetric_gaugeReal,
+      FanDominantIdealFamily.toSymmetric_gaugeReal,
       KyFanDominantIdealFamily.kyFan_gauge,
       KyFanDominantIdealFamily.kyFan_gauge] at hraw
     have hone := (projectionBlock_same_compression Vᗮ U

@@ -339,6 +339,8 @@ theorem le_re_inner_of_realSpectrum_subset_Ici
   rw [TauCeti.LinearPMap.mem_realSpectrum_iff] at this
   exact this hnot
 
+/-- A subspace admitting an orthogonal projection inside a complete ambient space
+is itself complete. -/
 noncomputable local instance instCompleteSpaceCoeBandForm
     (U : Submodule ℂ H) [U.HasOrthogonalProjection] : CompleteSpace U :=
   (Submodule.isComplete_coe_of_hasOrthogonalProjection U).completeSpace_coe

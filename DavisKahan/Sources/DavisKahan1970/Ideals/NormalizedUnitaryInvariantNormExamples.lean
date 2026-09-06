@@ -43,7 +43,7 @@ variable {𝕜 : Type u} [RCLike 𝕜]
 noncomputable def kyFanNormalizedUnitaryInvariantNorm
     [ContinuousLinearMap.HasMinMaxLowerBoundEverywhere.{u, v} 𝕜] (k : ℕ) (hk : 0 < k) :
     NormalizedUnitaryInvariantNorm.{u, v} 𝕜 where
-  toKyFanDominantIdealFamily := KyFanDominantIdealFamily.kyFan k hk
+  toFanDominantIdealFamily := (KyFanDominantIdealFamily.kyFan k hk).toFanDominantIdealFamily
   gauge_rankOne_eq_one := by
     intro E F _ _ _ _ _ _ V hVnorm hVrank
     show ((kyFanSymmetricIdealFamily (𝕜 := 𝕜) k hk).gauge V).toReal = 1

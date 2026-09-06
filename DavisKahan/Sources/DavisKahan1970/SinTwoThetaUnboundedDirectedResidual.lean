@@ -123,8 +123,8 @@ theorem sinTwoTheta_directed_unboundedResidual_blockRepresentative_spectrumGap_k
     hBlow hBhigh hBcomplSpec (reflectionOperator_mem_domain hVdom)
     (trialReflection_intertwines hA hVdom hres)
     (KyFanDominantIdealFamily.kyFan_mem (𝕜 := ℂ) k hk _)
-  rw [KyFanDominantIdealFamily.toSymmetric_gaugeReal,
-    KyFanDominantIdealFamily.toSymmetric_gaugeReal,
+  rw [FanDominantIdealFamily.toSymmetric_gaugeReal,
+    FanDominantIdealFamily.toSymmetric_gaugeReal,
     KyFanDominantIdealFamily.kyFan_gauge,
     KyFanDominantIdealFamily.kyFan_gauge] at hraw
   -- flip the block to the orientation of the doubling identity

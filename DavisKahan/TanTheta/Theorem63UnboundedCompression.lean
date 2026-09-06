@@ -776,7 +776,7 @@ theorem ideal_of_formBounds
     (htan : HasTheorem63DirectedTangentApproximationNumbersInfinite Z V tanTheta0)
     (hResidual : N.Mem D.residual) :
     N.Mem tanTheta0 ∧ δ * N.gauge tanTheta0 ≤ N.gauge D.residual := by
-  refine ExactSinTheta.mem_and_scaled_gauge_le_of_all_scaled_kyFan_le N hδ
+  refine ExactSinTheta.mem_and_scaled_gauge_le_of_all_scaled_kyFan_le N.toFanDominantIdealFamily hδ
     hResidual fun k => ?_
   have hcore := D.all_kyFan_core V hδ hupper hcross k
   have hKyTan : kyFanApproximationGauge k tanTheta0 =

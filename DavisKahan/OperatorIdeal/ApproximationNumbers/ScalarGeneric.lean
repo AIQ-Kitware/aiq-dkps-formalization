@@ -313,11 +313,9 @@ unconditional.  Dominance no longer needs `B` to be a member as a *hypothesis*,
 and no longer has to conclude that `A` is one: `gauge A ≤ gauge B` already gives
 `gauge B ≠ ∞ → gauge A ≠ ∞`.  The historical two-part form survives as the
 theorem `majorization_mem_and_gauge_le`. -/
-structure KyFanDominantIdealFamily (𝕜 : Type u) [RCLike 𝕜] where
+structure FanDominantIdealFamily (𝕜 : Type u) [RCLike 𝕜] where
   /-- The canonical symmetric ideal family supplying the gauge and its laws. -/
   toSymmetricOperatorIdealFamily : TauCeti.SymmetricOperatorIdealFamily.{u, v} 𝕜
-  /-- The ideal is complete for its own norm. -/
-  isComplete : toSymmetricOperatorIdealFamily.toOperatorIdealFamily.IsComplete
   /-- **Fan dominance.**  Majorization of every finite Ky Fan gauge forces the
   ideal gauge to be dominated too. -/
   gauge_le_of_forall_kyFanApproximationGauge_le :
@@ -331,9 +329,28 @@ structure KyFanDominantIdealFamily (𝕜 : Type u) [RCLike 𝕜] where
       toSymmetricOperatorIdealFamily.gauge A ≤
         toSymmetricOperatorIdealFamily.gauge B
 
+/-- **The Fan-dominant family together with the ideal's completeness.**
+
+Completeness is a theorem of Gohberg--Krein about the *closed* class, not one of
+the properties Davis and Kahan print, and the analytic layer genuinely needs it:
+the limiting arguments in the `sin Θ` and `sin 2Θ` development ask for the ideal
+to be a Banach space.  It therefore sits here, above the source-facing norm
+quantifier, and not in `FanDominantIdealFamily`, which carries exactly the laws
+the paper states. -/
+structure KyFanDominantIdealFamily (𝕜 : Type u) [RCLike 𝕜]
+    extends FanDominantIdealFamily.{u, v} 𝕜 where
+  /-- The ideal is complete for its own norm. -/
+  isComplete : toSymmetricOperatorIdealFamily.toOperatorIdealFamily.IsComplete
+
 attribute [instance] KyFanDominantIdealFamily.isComplete
 
-namespace KyFanDominantIdealFamily
+/-- A complete Fan-dominant family is in particular a Fan-dominant one; the
+coercion is what lets the existing call sites keep passing the stronger
+structure to statements that only need the weaker one. -/
+instance : CoeOut (KyFanDominantIdealFamily.{u, v} 𝕜) (FanDominantIdealFamily.{u, v} 𝕜) :=
+  ⟨KyFanDominantIdealFamily.toFanDominantIdealFamily⟩
+
+namespace FanDominantIdealFamily
 
 /-! ### The ideal interface
 
@@ -350,7 +367,7 @@ of the historical record is a theorem about the canonical gauge, proved in
 
 `Mem` and `gauge` remain the whole public surface the sin-Θ development uses. -/
 
-variable (N : KyFanDominantIdealFamily.{u, v} 𝕜)
+variable (N : FanDominantIdealFamily.{u, v} 𝕜)
 
 /-! Both accessors below read the **canonical** family directly.  They used to
 route through a view onto the historical rectangular record, which made every one
@@ -365,7 +382,7 @@ abbrev Mem (A : E →L[𝕜] F) : Prop :=
   N.toSymmetricOperatorIdealFamily.gauge A ≠ ∞
 
 /-- The ideal gauge, real-valued and meaningful only on members
-(`KyFanDominantIdealFamily.Mem`). -/
+(`FanDominantIdealFamily.Mem`). -/
 noncomputable abbrev gauge (A : E →L[𝕜] F) : ℝ :=
   (N.toSymmetricOperatorIdealFamily.gauge A).toReal
 
@@ -428,6 +445,12 @@ theorem majorization_mem_and_gauge_le {E' F' : Type v}
   have hle := N.gauge_le_of_forall_kyFanApproximationGauge_le h
   exact ⟨ne_top_of_le_ne_top hB hle, ENNReal.toReal_mono hB hle⟩
 
+end FanDominantIdealFamily
+
+namespace KyFanDominantIdealFamily
+
+variable (N : KyFanDominantIdealFamily.{u, v} 𝕜)
+
 /-- The ordinary operator norm with its finite-Ky-Fan dominance property. -/
 noncomputable def operatorNorm :
     KyFanDominantIdealFamily.{u, v} 𝕜 where
@@ -481,7 +504,7 @@ end KyFanDominantIdealFamily
 
 /-- Infinite-dimensional Fan dominance, exposed from the stronger family. -/
 theorem mem_and_gauge_le_of_all_kyFanApproximationGauge_le
-    (N : KyFanDominantIdealFamily (𝕜 := 𝕜))
+    (N : FanDominantIdealFamily (𝕜 := 𝕜))
     {A B : E →L[𝕜] F}
     (hB : N.Mem B)
     (h : ∀ k, kyFanApproximationGauge k A ≤
@@ -493,7 +516,7 @@ theorem mem_and_gauge_le_of_all_kyFanApproximationGauge_le
 
 /-- Scaled Fan dominance in the exact form consumed by the Sylvester theorem. -/
 theorem mem_and_scaled_gauge_le_of_all_scaled_kyFan_le
-    (N : KyFanDominantIdealFamily (𝕜 := 𝕜))
+    (N : FanDominantIdealFamily (𝕜 := 𝕜))
     {E' F' : Type v}
     [NormedAddCommGroup E'] [InnerProductSpace 𝕜 E'] [CompleteSpace E']
     [NormedAddCommGroup F'] [InnerProductSpace 𝕜 F'] [CompleteSpace F']

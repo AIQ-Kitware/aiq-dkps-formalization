@@ -656,8 +656,8 @@ theorem theorem6_3_infiniteTrial_of_formBounds
     (hResidual : N.Mem (theorem63Residual T Z)) :
     N.Mem tanTheta0 ∧
       delta * N.gauge tanTheta0 ≤ N.gauge (theorem63Residual T Z) := by
-  refine ExactSinTheta.mem_and_scaled_gauge_le_of_all_scaled_kyFan_le N hdelta
-    hResidual fun k => ?_
+  refine ExactSinTheta.mem_and_scaled_gauge_le_of_all_scaled_kyFan_le
+    N.toFanDominantIdealFamily hdelta hResidual fun k => ?_
   have hcore := theorem6_3_all_kyFan_core_infiniteTrial T V Z hT hV hdelta
     hCompressionUpper hUnwantedLower k
   have hKyTan : kyFanApproximationGauge k tanTheta0 =

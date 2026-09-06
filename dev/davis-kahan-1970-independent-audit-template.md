@@ -899,7 +899,7 @@ Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.theorem6_3_perturbation_infiniteTrial`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section2TanThetaPerturbation.lean:177`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section2TanThetaPerturbation.lean:178`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
@@ -6831,13 +6831,13 @@ Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan.re_inner_le_of_reducingRestriction_realSpectrum_subset_Iic`
 
-Source location candidates: `DavisKahan/SpectralTheory/UnboundedCentralBand.lean:347`
+Source location candidates: `DavisKahan/SpectralTheory/UnboundedCentralBand.lean:349`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan.le_re_inner_of_reducingRestriction_realSpectrum_subset_Ici`
 
-Source location candidates: `DavisKahan/SpectralTheory/UnboundedCentralBand.lean:365`
+Source location candidates: `DavisKahan/SpectralTheory/UnboundedCentralBand.lean:367`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 

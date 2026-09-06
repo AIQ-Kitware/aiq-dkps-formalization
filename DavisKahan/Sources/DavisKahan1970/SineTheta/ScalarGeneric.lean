@@ -78,12 +78,12 @@ theorem sinTheta_unbounded_formGap_idealFamily_rclike
       N.Mem (D.X.adjoint ∘L D.F₁) ∧
         δ * N.gauge (D.X.adjoint ∘L D.F₁) ≤
           N.gauge (-(D.residual.adjoint ∘L D.F₁)) := by
-    apply mem_and_scaled_gauge_le_of_all_scaled_kyFan_le N hδ hC.1
+    apply mem_and_scaled_gauge_le_of_all_scaled_kyFan_le N.toFanDominantIdealFamily hδ hC.1
     intro k
     exact unbounded_sylvester_kyFan hA₀ hΛ₁ hδ hgap hEq k
   have hC' :
       N.gauge (-(D.residual.adjoint ∘L D.F₁)) ≤ N.gauge D.residual := by
-    simpa only [KyFanDominantIdealFamily.toSymmetric_gaugeReal] using hC.2
+    simpa only [FanDominantIdealFamily.toSymmetric_gaugeReal] using hC.2
   have hBlock :
       N.Mem (D.X.adjoint ∘L D.F₁) ∧
         δ * N.gauge (D.X.adjoint ∘L D.F₁) ≤ N.gauge D.residual :=
@@ -91,7 +91,7 @@ theorem sinTheta_unbounded_formGap_idealFamily_rclike
   have hAngle := isometricComplementaryBlock_mem_and_gauge_eq_directed
     N.toSymmetricOperatorIdealFamily D.X F₀ D.F₁ hX hdecomp hBlock.1
   refine ⟨hAngle.1, ?_⟩
-  rw [KyFanDominantIdealFamily.toSymmetric_gaugeReal] at hAngle
+  rw [FanDominantIdealFamily.toSymmetric_gaugeReal] at hAngle
   rw [hAngle.2]
   exact hBlock.2
 

@@ -166,8 +166,8 @@ theorem result
         ≤ N.gauge P.data.residual :=
   by
     simpa only [UnboundedSinThetaData,
-      KyFanDominantIdealFamily.toSymmetric_mem,
-      KyFanDominantIdealFamily.toSymmetric_gaugeReal] using
+      FanDominantIdealFamily.toSymmetric_mem,
+      FanDominantIdealFamily.toSymmetric_gaugeReal] using
       generalizedSinTheta_unbounded_exact_of_intervalExteriorGap
         N.toSymmetricOperatorIdealFamily P.data P.exactMap
         P.ambient_selfAdjoint
@@ -192,8 +192,8 @@ theorem complementaryBlock_result
         ≤ N.gauge P.data.residual :=
   by
     simpa only [UnboundedSinThetaData,
-      KyFanDominantIdealFamily.toSymmetric_mem,
-      KyFanDominantIdealFamily.toSymmetric_gaugeReal] using
+      FanDominantIdealFamily.toSymmetric_mem,
+      FanDominantIdealFamily.toSymmetric_gaugeReal] using
       generalizedSinTheta_unbounded_of_intervalExteriorGap
         N.toSymmetricOperatorIdealFamily P.data
         P.ambient_selfAdjoint

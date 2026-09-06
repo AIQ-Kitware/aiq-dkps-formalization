@@ -207,8 +207,8 @@ theorem reflectionPerturbation_normingMem_and_gauge_le
     · have h := DavisKahan.reflectionPerturbation_mem_and_gauge_le
         (KyFanDominantIdealFamily.kyFan (𝕜 := 𝕜) k hk).toSymmetricOperatorIdealFamily
         V Eop (KyFanDominantIdealFamily.kyFan_mem k hk Eop)
-      rw [KyFanDominantIdealFamily.toSymmetric_gaugeReal,
-        KyFanDominantIdealFamily.toSymmetric_gaugeReal,
+      rw [FanDominantIdealFamily.toSymmetric_gaugeReal,
+        FanDominantIdealFamily.toSymmetric_gaugeReal,
         KyFanDominantIdealFamily.kyFan_gauge,
         KyFanDominantIdealFamily.kyFan_gauge] at h
       exact h.2
