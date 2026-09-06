@@ -1,0 +1,7 @@
+category,quantity,value,unit,interpretation,source_path
+observed_lower_bound,retained_model_turns,42090,turns,"Retained measured model turns; incomplete telemetry means this is a lower bound.",papers/formalization_draft2/snapshots/accounting_macros.tex
+observed_lower_bound,output_tokens,44950936,tokens,"Retained measured output tokens; lower bound.",papers/formalization_draft2/snapshots/accounting_macros.tex
+observed_lower_bound,billable_input_accounting_measure,15750533373,tokens,"Input accounting measure combining ordinary input and cache quantities under the ledger schema; lower bound.",papers/formalization_draft2/snapshots/accounting_macros.tex
+coverage,exact_commit_attribution,933/4637,commits,"Primary-repository commits with exact commit-attributed resource measurements; 20.1 percent.",papers/formalization_draft2/snapshots/accounting_macros.tex
+modeled_from_observed,api_equivalent_list_price,10871,USD,"Historical API list prices applied to observed lower-bound telemetry.",papers/formalization_draft2/snapshots/resource_valuation_macros.tex
+modeled_from_observed,operational_serving_energy,416.1,kWh,"Central serving-model estimate applied to observed lower-bound telemetry; excludes training, embodied hardware, clients, and network energy.",papers/formalization_draft2/snapshots/resource_valuation_macros.tex

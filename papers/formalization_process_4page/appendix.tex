@@ -1,0 +1,176 @@
+\section{Data and reproducibility}
+\label{app:data}
+
+The structured inputs for this paper live under \texttt{data/}.  The
+first-person-account snapshot records the public source URL, bibliography key,
+a concise observation, a qualification note, and the categorical fields used
+for the descriptive counts.  A JSON schema documents the fields and allowed
+values, and the build checks the schema, unique identifiers, citation keys, and
+URLs.  The monthly Lean-publication series and the selected Git timeline are
+kept in separate CSV files.  The Git rows are checked against the repository
+history during the build.  Representativeness of the public-account snapshot is
+unknown.  We use the rows for observations attributed to the cited authors and
+make no prevalence estimates.
+
+\ifshowartifacturl
+Project materials: \href{\artifacturl}{public GitHub repository}.\\
+Lean helper tooling, including \texttt{leanq}: \href{\leanqurl}{aiq-lean-formalization-tools}.
+\else
+Identifying repository URLs are suppressed in this double-blind build and are
+included in the supplementary artifact.
+\fi
+
+The build writes \texttt{generated/materials\_manifest.json}.  Each listed
+artifact has a SHA-256 digest and byte count.  The manifest also records the
+primary Git revision and the formalization-tools submodule revision.  For
+\cref{lst:false-finish}, the build extracts the historical signature directly
+from commit \texttt{7001ed05}; \texttt{generated/historical\_false\_finish.json}
+records the original path, line ranges, historical file digest, and extracted
+signature digest.  The aggregate digest below is the SHA-256 of the sorted
+\texttt{path<TAB>sha256<NEWLINE>} records for all present artifacts.
+
+\begin{center}
+\small
+\begin{tabularx}{\linewidth}{@{}>{\raggedright\arraybackslash}Xll@{}}
+\toprule
+Material & SHA-256 prefix & bytes \\
+\midrule
+\MaterialHashRows
+\bottomrule
+\end{tabularx}
+\end{center}
+
+\noindent\textbf{Primary Git revision:} \texttt{\EvidenceSnapshotCommit}\\
+\textbf{Formalization-tools revision:} \texttt{\FormalizationToolsCommit}\\
+\textbf{Material-set SHA-256:}\\
+{\scriptsize\ttfamily\MaterialsAggregateSHA\par}
+
+The prompt history used while drafting this paper is preserved verbatim in
+\texttt{brainstorm.md}.  Text pasted by the first author but written by another
+agent is labeled as such.  This is a provenance record for the manuscript.  We make no reconstruction of
+model conversations that were never retained.
+
+\section{Lean activity and project chronology}
+
+\begin{figure}[H]
+  \centering
+  \input{generated/lean_activity_timeline_tikz.tex}
+  \caption{Monthly Lean-related arXiv papers indexed by Papers With Lean from
+  January 2025 through July 2026 \citep{paperswithlean2026stats}.  The vertical
+  marker is the first commit in the dedicated Davis--Kahan tree used here.  The
+  index measures public Lean-related publication activity; the fraction that
+  used AI is unknown.}
+  \label{fig:lean-activity}
+\end{figure}
+
+\begin{table}[H]
+\centering
+\small
+\caption{Selected public Git events used to anchor the chronology.  The CSV
+stores the full commit identifiers and evidence paths; the build validates both.}
+\label{tab:review-timeline}
+\begin{tabularx}{\linewidth}{@{}ll>{\raggedright\arraybackslash}X@{}}
+\toprule
+Date & commit & event \\
+\midrule
+\input{generated/review_timeline_table.tex}
+\end{tabularx}
+\end{table}
+
+\section{Semantic-review page}
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=\linewidth,trim=0 250 0 0,clip]{figures/semantic-alignment-sine-theta-row.png}
+  \caption{The current review page for the single-angle sine-theta theorem.
+  The source passage and inherited context appear at left, the claimed
+  source-to-Lean correspondence in the middle, and compiler-derived Lean
+  evidence at right.  The interface records a review judgment alongside
+  mechanical evidence.  Source/statement identity and Lean compilation are
+  mechanical checks; the mathematical correspondence remains a review judgment.}
+  \label{fig:dashboard}
+\end{figure}
+
+The page makes the checked declaration easy to retrieve, but a reader learning
+Lean may still need help understanding the vocabulary inside that declaration.
+For example, the meaning of \texttt{ClosedOperator}, \texttt{IsSelfAdjoint},
+coercions, and typeclass assumptions can be spread across project code and
+Mathlib.  Lean Compass's theorem-centered semantic dependency view suggests a
+useful direction for this interface: make those definitions inspectable from
+the statement while keeping proof-only dependencies out of the way
+\citep{yanahama2026leanatlas}.
+
+\section{Glossary}
+
+\begin{center}
+\small
+\begin{tabularx}{\linewidth}{@{}>{\raggedright\arraybackslash}p{0.24\linewidth}>{\raggedright\arraybackslash}X@{}}
+\toprule
+Term & Meaning here \\
+\midrule
+Lean kernel & The small checker that validates an elaborated proof term against its formal type. \\
+Lean signature & The theorem declaration: parameters and hypotheses followed by the proposition being proved. \\
+Elaboration & Lean's resolution of notation, implicit arguments, coercions, namespaces, and typeclass inference into a fully typed term. \\
+Self-adjoint operator & An operator equal to its adjoint; for real finite-dimensional matrices this corresponds to a symmetric matrix. \\
+Spectral subspace & A subspace associated with a selected part of an operator's spectrum; eigenspaces are the finite-matrix example. \\
+Residual & A quantity measuring how far a trial subspace or frame fails to satisfy the exact invariant relation; here $R=AE_0-E_0A_0$. \\
+Spectral gap & Separation between the target spectral region and competing spectrum. \\
+$\sin\Theta$ & An operator whose singular values encode sines of principal angles between subspaces. \\
+Unitarily invariant norm & A norm unchanged by unitary changes of coordinates; examples include spectral, Frobenius/Hilbert--Schmidt, and trace norms in finite dimensions. \\
+Source correspondence & The judgment that a formal declaration has the hypotheses, objects, scope, and conclusion intended by a particular mathematical source. \\
+\bottomrule
+\end{tabularx}
+\end{center}
+
+\section{A stopping model for repeated review}
+\label{app:stopping}
+
+A prospective review process could make the statistical idea in the main text
+precise.  Suppose discoveries of new source-correspondence defects follow a
+Poisson process with rate $\lambda$ per unit of standardized review exposure.
+If $k$ defects are found during exposure $E$ and
+$\lambda\sim\operatorname{Gamma}(a,b)$ under the rate parameterization, then
+\[
+  \lambda\mid k,E\sim\operatorname{Gamma}(a+k,b+E),
+\]
+and the posterior predictive probability of no discovery in an additional
+exposure $h$ is
+\[
+  \Pr\{K(E+h)-K(E)=0\mid k,E\}
+  =\left(\frac{b+E}{b+E+h}\right)^{a+k}.
+\]
+This gives a stopping statistic for future discoveries under the assumed
+process.  A probability that the formal theorem is semantically correct would
+also require a model connecting remaining defects to their chance of being
+detected.  The historical project lacks standardized exposure, so we do not
+fit these parameters to calendar time or to the existing Git events.
+
+\section{Resource transparency}
+\label{app:resources}
+
+The longer formalization manuscript keeps a fuller resource-accounting record.
+The compact snapshot below has an accounting cutoff of 13 August 2026.  Model
+turns and token quantities are retained measurements and incomplete lower
+bounds.  The price and energy rows apply explicit models to those observed
+quantities.  The serving-energy estimate excludes training, embodied hardware,
+client devices, and network energy.  These values are included for transparency.
+
+\begin{table}[H]
+\centering
+\scriptsize
+\caption{Resource snapshot carried over from the longer formalization manuscript.}
+\begin{tabularx}{\linewidth}{@{}p{0.28\linewidth}p{0.17\linewidth}>{\raggedright\arraybackslash}X@{}}
+\toprule
+quantity & value & basis / interpretation \\
+\midrule
+\input{generated/resource_snapshot_table.tex}
+\end{tabularx}
+\end{table}
+
+\section*{Acknowledgments}
+
+This material is based upon work supported by the Defense Advanced Research
+Project Agency (DARPA) under Contract No. HR001125CE017. Any opinions, findings
+and conclusions or recommendations expressed in this material are those of the
+author(s) and do not necessarily reflect the views of the Defense Advanced
+Research Project Agency (DARPA).

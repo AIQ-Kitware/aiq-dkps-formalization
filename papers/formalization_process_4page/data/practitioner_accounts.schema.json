@@ -1,0 +1,66 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Fields in practitioner_accounts.csv",
+  "description": "Documentation for the structured snapshot of public first-person AI-assisted Lean accounts.",
+  "columns": {
+    "id": "Stable local identifier; unique and nonempty.",
+    "date": "Publication date when known; may be a year or year-month when the source does not expose a full date.",
+    "author": "Named author(s) of the public account.",
+    "title": "Title or concise public description of the source.",
+    "source_type": "blog, paper, repository_transcript, social_post, forum_post, essay, zulip, or human_study.",
+    "target": "Mathematical or formal target described by the source.",
+    "reported_lean_experience": "none, novice, learning, some, expert, mixed, or not_reported; recorded only when supported by the source.",
+    "reads_generated_lean": "none, selective, substantial, varied, or not_reported.",
+    "multiple_ai_tools": "yes/no/unclear based on the account.",
+    "separate_ai_review": "yes/no/unclear: whether a distinct AI review role is explicitly described.",
+    "semantic_mismatch": "yes/no/qualified/unclear: explicit statement, definition, scope, or correspondence mismatch.",
+    "source_defect_found": "yes/no/unclear: formalization exposed a defect in the informal mathematical source.",
+    "counterexample_used": "yes/no/unclear: a counterexample was used to diagnose or communicate a problem.",
+    "persistent_project_state": "yes/no/unclear: TODOs, plans, Git records, correspondence documents, or comparable state outside chat.",
+    "posthoc_understanding": "yes/no/unclear: the account explicitly describes human mathematical understanding after formal verification.",
+    "human_role": "Source-grounded short description of the reported human activity.",
+    "observation": "Concise paraphrase of the observation used by the paper.",
+    "source_note": "Qualification or provenance note, especially where a categorical field could be misread.",
+    "source_url": "Public source URL.",
+    "citation_key": "BibTeX key in references.bib."
+  },
+  "categorical_values": {
+    "source_type": [
+      "blog",
+      "paper",
+      "repository_transcript",
+      "social_post",
+      "forum_post",
+      "essay",
+      "zulip",
+      "human_study"
+    ],
+    "reported_lean_experience": [
+      "none",
+      "novice",
+      "learning",
+      "some",
+      "expert",
+      "mixed",
+      "not_reported"
+    ],
+    "reads_generated_lean": [
+      "none",
+      "selective",
+      "substantial",
+      "varied",
+      "not_reported"
+    ],
+    "boolean_like": [
+      "yes",
+      "no",
+      "unclear"
+    ],
+    "semantic_mismatch": [
+      "yes",
+      "no",
+      "qualified",
+      "unclear"
+    ]
+  }
+}
