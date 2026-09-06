@@ -34,5 +34,6 @@ import DavisKahan.SpectralTheory.SpectralRestriction
 import DavisKahan.SpectralTheory.SpectralRestrictionLocalization
 import DavisKahan.SpectralTheory.SpectralRestrictionOperator
 import ForTauCeti.Analysis.InnerProductSpace.ProjValMeasure.Subspace
+import DavisKahan.SpectralTheory.UnboundedCentralBand
 
 /-! # `DavisKahan/SpectralTheory` -/
