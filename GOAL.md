@@ -519,6 +519,26 @@ open; it is open for a *general bounded* intertwiner, and was already available 
 a **unitary** one, which is the only case a reducing subspace needs — a subspace
 reduces `B` exactly when its reflection is a unitary commuting with `B`.
 
+*The real endpoints, and the promotion.*  `Theorem81UnboundedReal.lean` gives the
+real siblings of every unbounded Section 8 endpoint — branch existence, the
+printed `iff`, uniqueness, and part (i) — by complexification.  The branch is not
+transported: `TauCeti.LinearPMap.realSpecRange` already descends the complex
+spectral projection, so the real branch is defined directly and
+`complexifySubmodule_realSpecRange` says the two agree.  Hypotheses go up
+(`re_inner_complexifyReal_le_of_forall_mem`, `isOddFor_complexifySubmodule`,
+`reducesSubspace_complexifyReal`) and conclusions come down — form bounds by
+evaluating on the real copy, the angle by `subspaceGap_complexifySubmodule`, the
+branch identity by injectivity of `complexifySubmodule`.
+
+With complex and real unbounded witnesses for every clause of Theorem 8.1 that
+inherits ambient scope, DK-8.1-thm's canonical evidence moved to them on
+2026-09-06; the bounded declarations that were canonical are retained as
+registered specializations, and parts (ii) and (iii) keep their
+finite-dimensional evidence, which is the source's own restriction.  The
+promotion was re-reviewed at compiler-printed types and found one defect, now
+repaired: four of the unbounded theorems carried both `IsSelfAdjointOperator Hop`
+and `IsSelfAdjoint Hop` in the public type — two spellings of one hypothesis.
+
 *What the paper does, for the record.*  Equations (8.1)–(8.2) exclude `θ = π/4` via
 `x₀^* B^* y₁ (tan θ − cot θ) = y₁^* A₁ y₁ − x₀^* A₀ x₀ ≥ δ > 0`, whose left side
 vanishes at `θ = π/4`.  That is the canonical-angle (CS) decomposition.  The route
@@ -1435,36 +1455,41 @@ Measured, not asserted.  Every line below is checkable from
 
 | Condition | Status |
 | --- | --- |
-| every designated result has canonical Lean evidence at its actual source scope | **28 of 29**; DK-8.1-thm's canonical evidence is bounded, and its unbounded development is complex-only (§10.3.3) |
+| every designated result has canonical Lean evidence at its actual source scope | **29 of 29** as of 2026-09-06; DK-8.1-thm's canonical evidence was promoted to the unbounded witnesses once they existed in both scalar fields |
 | real/complex coverage for every result | met |
 | canonical façades expose the paper's separability scope | met, and every separable canonical witness is classified in `ambient_scope_policy.separability` |
 | finite vs infinite-dimensional scope matches each printed result | met — including Theorem 8.1 (ii) and (iii), which the source prints *in finite dimensions* (§10.3) |
-| bounded vs unbounded scope matches each printed result | **all but DK-8.1-thm's canonical evidence selection**; every printed clause of 8.1 that inherits unbounded scope now has a compiled unbounded complex proof |
+| bounded vs unbounded scope matches each printed result | met — Theorem 8.1's branch existence, both halves of its printed *iff*, and part (i) are canonical at unbounded scope in complex and real scalar scope; (ii) and (iii) stay finite because the source prints them so |
 | every UIN-quantified theorem uses the literal source abstraction at its boundary | met, and as of §4c that abstraction no longer carries completeness |
 | no canonical theorem asks for a hypothesis absent from the paper | met |
 | source objects, gaps, ordered angles, residuals, constants, conclusions agree | met, re-checked by the tamper suite and the 95 statement pins |
-| **Theorems 8.1 and 8.2 cover their inherited unbounded scope** | **8.2 yes, complex and real; 8.1 yes at complex scalar scope, including both halves of the printed *iff*; 8.1's real unbounded ports are not written** |
+| **Theorems 8.1 and 8.2 cover their inherited unbounded scope** | met — both, in complex and real scalar scope, 8.1 including both halves of the printed *iff* |
 | the exact/stronger distinction stays visible in the census | met |
 | a fresh source-first review finds no material statement mismatch | run; it found two defects, both fixed (§XVI.6) |
 | the final certification pass succeeds | run 2026-09-06, green apart from three failures that are not Davis--Kahan |
 
-**So the finish line is not crossed, and the claim in §XVIII must not be made
-yet.**  What stands between the repository and it is no longer a mathematical
-gap.  As of 2026-09-06 every printed clause of Theorem 8.1 that inherits unbounded
-scope has a compiled unbounded proof, both halves of the printed *iff* included
-(§10.3.3); parts (ii) and (iii) are printed *in finite dimensions* and are at
-their printed scope already.  What remains on DK-8.1-thm is:
+**Every line above is now met.**  The last mathematical gap — the converse half of
+Theorem 8.1's printed characterization at unbounded scope — closed on 2026-09-06
+(§10.3.3), the real unbounded endpoints followed by complexification, and
+DK-8.1-thm's canonical evidence was promoted to the unbounded witnesses in both
+scalar fields.  `scripts/certify_davis_kahan_1970.py` reports `status: PASS` with
+29/29 terminal, 1412/1412 registered declaration signatures, and zero production
+build warnings.
 
-1. the **real** unbounded ports.  The Section 8 unbounded development is
-   complex-only, and this row's real scalar coverage is carried entirely by its
-   bounded canonical evidence.  Theorem 8.2 has both (`..._unbounded_source_complex`
-   and `..._real`); Theorem 8.1 does not yet.
-2. **promoting the canonical evidence** once (1) exists.  Until then the promotion
-   would trade a scope gain for a scalar-scope loss, so the row keeps its bounded
-   canonical selection and its accepted
-   `nonlocal_source_interpretation` disclosing exactly that.
+Two things a reader should not over-read in that.  First, the certificate proves
+compilation, declaration resolution and pin stability; it does not prove that a
+Lean statement says what the paper says, which is what the hostile semantic review
+is for and why the canonical-evidence digest gates it.  Second, promotion is a
+judgement the record exposes rather than hides: DK-8.1-thm and DK-8.2-thm remain
+classified as accepted **nonlocal source interpretations**, because Theorem 8.1
+states no hypotheses of its own and Theorem 8.2 states its own only as an
+addition.  What the unbounded lift changed is that the scope half of that
+question is now moot — the delivered evidence is exact under the alternative
+literal reading and a proper generalization under the accepted bounded one, so no
+reviewer decision about what "the hypotheses of the tan 2θ theorem" imports
+changes what the repository has.
 
-Everything else on the list is met.
+The remaining call is a human one: whether to make the §XVIII claim.
 
 ---
 

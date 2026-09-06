@@ -172,7 +172,6 @@ A reducing subspace of `A + H` inside the closed quarter turn from `P` is the
 canonical spectral branch. -/
 theorem theorem8_1_eq_canonicalBranchUnbounded_of_maximalAngle_le
     (hA : IsSelfAdjoint A) (hH : DavisKahan.IsSelfAdjointOperator Hop)
-    (hHsa : IsSelfAdjoint Hop)
     (hredPperp : TauCeti.LinearPMap.ReducesSubspace A Pᗮ)
     (hPlow : ∀ x : A.domain, (x : H) ∈ P →
       RCLike.re ⟪A x, (x : H)⟫_ℂ ≤ alpha * ‖(x : H)‖ ^ 2)
@@ -184,12 +183,14 @@ theorem theorem8_1_eq_canonicalBranchUnbounded_of_maximalAngle_le
     (hM : TauCeti.LinearPMap.ReducesSubspace (TauCeti.LinearPMap.addBounded A Hop) M)
     (hMangle : maximalAngle P M ≤ Real.pi / 4) :
     M = canonicalLowBranchUnbounded (isSelfAdjoint_perturbed hA hH) alpha := by
+  have hHsa : IsSelfAdjoint Hop :=
+    ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mpr hH
   have hPP : (Pᗮ)ᗮ = P := Submodule.orthogonal_orthogonal P
   have hB : IsSelfAdjoint (TauCeti.LinearPMap.addBounded A Hop) :=
     isSelfAdjoint_perturbed hA hH
   have hQred := canonicalLowBranchUnbounded_reduces hB alpha
   have hform := theorem8_1_canonicalBranchUnbounded_form (A := A) (Hop := Hop) (P := Pᗮ)
-    (alpha := alpha) (delta := delta) hA hH hHsa hredPperp hPhigh
+    (alpha := alpha) (delta := delta) hA hH hredPperp hPhigh
     (by rw [hPP]; exact hPlow)
     (by rw [hPP]; exact hHPperp) (by rw [hPP]; exact hHP) hdelta
   have hstrict := DavisKahan.norm_starProjection_sub_sq_lt_of_orderedFormGap_unbounded_printed
@@ -234,7 +235,6 @@ ordered form bounds on the domain, which is the reading the unbounded quarter-an
 theorem and the spectral branch both use. -/
 theorem theorem8_1_maximalAngle_le_iff_orderedFormGap_unbounded
     (hA : IsSelfAdjoint A) (hH : DavisKahan.IsSelfAdjointOperator Hop)
-    (hHsa : IsSelfAdjoint Hop)
     (hredPperp : TauCeti.LinearPMap.ReducesSubspace A Pᗮ)
     (hPlow : ∀ x : A.domain, (x : H) ∈ P →
       RCLike.re ⟪A x, (x : H)⟫_ℂ ≤ alpha * ‖(x : H)‖ ^ 2)
@@ -251,15 +251,17 @@ theorem theorem8_1_maximalAngle_le_iff_orderedFormGap_unbounded
         ∀ x : (TauCeti.LinearPMap.addBounded A Hop).domain, (x : H) ∈ Mᗮ →
           (alpha + delta) * ‖(x : H)‖ ^ 2 ≤
             RCLike.re ⟪TauCeti.LinearPMap.addBounded A Hop x, (x : H)⟫_ℂ) := by
+  have hHsa : IsSelfAdjoint Hop :=
+    ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mpr hH
   have hPP : (Pᗮ)ᗮ = P := Submodule.orthogonal_orthogonal P
   have hB : IsSelfAdjoint (TauCeti.LinearPMap.addBounded A Hop) :=
     isSelfAdjoint_perturbed hA hH
   constructor
   · intro hangle
     have hMQ := theorem8_1_eq_canonicalBranchUnbounded_of_maximalAngle_le
-      hA hH hHsa hredPperp hPlow hPhigh hHP hHPperp hdelta M hM hangle
+      hA hH hredPperp hPlow hPhigh hHP hHPperp hdelta M hM hangle
     have hform := theorem8_1_canonicalBranchUnbounded_form (A := A) (Hop := Hop) (P := Pᗮ)
-      (alpha := alpha) (delta := delta) hA hH hHsa hredPperp hPhigh
+      (alpha := alpha) (delta := delta) hA hH hredPperp hPhigh
       (by rw [hPP]; exact hPlow)
       (by rw [hPP]; exact hHPperp) (by rw [hPP]; exact hHP) hdelta
     refine ⟨fun x hx => hform.1 x ?_, fun x hx => hform.2 x ?_⟩
