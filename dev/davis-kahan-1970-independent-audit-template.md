@@ -4234,7 +4234,7 @@ Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.proposition4_2_compact_nonacute`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section4.lean:451`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section4.lean:458`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
@@ -4519,7 +4519,7 @@ The declarations that carry this result's printed statement, with the source ato
 
 #### `TauCeti.DavisKahan1970.proposition4_3_compact_nonacute_idealGauge`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section4.lean:555`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section4.lean:562`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
@@ -4668,19 +4668,19 @@ Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.proposition4_4_printedStatement`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section4.lean:683`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section4.lean:690`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.proposition4_4_refuted`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section4.lean:688`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section4.lean:695`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.proposition4_4_refutingPair`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section4.lean:695`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section4.lean:702`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
