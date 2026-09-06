@@ -760,8 +760,23 @@ needs is derived from the two block placements by the unbounded
 the two block resolvents; the separation is the same two placements read as an
 interval/exterior gap.
 
-What remains on this row: the **residual** branch, which must carry `‖R‖ < δ/2`
-and must not acquire `‖H‖ < δ/2`, and the **real** port.
+**The residual branch is done too, 2026-09-05.**
+`theorem8_2_residualHalfGap_unbounded_complex` and its printed `Θ < π/4` sibling
+carry `‖R‖ < δ/2` and do **not** acquire `‖H‖ < δ/2`, which was the acceptance
+test.  The proof is the printed reduction: Krein's completion
+(`exists_selfAdjoint_completion_eq_norm_restriction`) replaces `H` by a
+self-adjoint `H'` with the same first column and `‖H'‖ = ‖R‖`, and
+`A' := A + (H − H')` leaves `A' + H' = A + H` and `A'|P = A|P`.
+
+Two supporting facts were needed and are in
+`SpectralTheory/ReducingSpectrumUnion.lean`:
+`invariantSubspace_orthogonal_of_isSelfAdjoint` and
+`reducesSubspace_of_isSelfAdjoint_of_invariant` — the unbounded counterpart of
+`reduces_orthogonalComplement`.  The complement's invariance is not assumed; it
+follows from symmetry, because the projection preserves the domain and therefore
+`U.starProjection '' dom A` is dense in `U`.
+
+What remains on this row: the **real** port.
 
 No variable root, no clopen family indexed by `κ_t`, no Riesz projector.  This
 closes the **full** printed range `‖H‖ < δ/2`, not the `(√2/4)δ` sub-range the
@@ -1188,10 +1203,10 @@ Theorem 3.1 invariant:
 5. the bounded proof's constant-`√2/2` IVT bootstrap; its endpoint inclusions are
    done (`le_of_band_exterior_spectra`), so what is left is the moving family,
    the continuity of `t ↦ directedGap R_t Q`, and the connectedness step;
-6. the complex perturbation source theorem;
+6. the complex perturbation source theorem — **done**;
 7. the residual branch, by the self-adjoint-completion reduction the bounded
-   proof already uses.  Its public type must carry `‖R‖ < δ/2` and must **not**
-   acquire `‖H‖ < δ/2`; that is the acceptance test;
+   proof already uses — **done**; its public type carries `‖R‖ < δ/2` and does
+   not acquire `‖H‖ < δ/2`;
 8. the real port, through the existing partial-map complexification layer, as
    `Theorem81Real.lean` does.  Separate exact real and complex endpoints are
    enough — this is not another `RCLike` project;
