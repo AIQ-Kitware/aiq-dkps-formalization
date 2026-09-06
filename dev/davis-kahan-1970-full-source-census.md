@@ -4,7 +4,7 @@
 
 **Census family:** `source-completion-census`  
 **Items:** 50  
-**Unique cited Lean declarations:** 1344
+**Unique cited Lean declarations:** 1359
 
 ## How to use this census
 
@@ -2243,7 +2243,6 @@ CENSUS-GATE NOTE 2026-08-11: `TauCeti.MultiplicityDatum.retype` is deliberately 
 - `TauCeti.DavisKahan1970.genericAngleBlockReal`
 - `TauCeti.DavisKahan1970.theorem3_1_spectralMultiplicity_classification_sourceAngle_real`
 - `TauCeti.DavisKahan.RealSpectralRestriction.sameSpectralMultiplicity_cfc_iff_real`
-- `TauCeti.ContinuousLinearMap.spectrum_subset_Icc_of_re_inner_bounds`
 - `TauCeti.DavisKahan1970.spectrum_genericCosineBlock_subset_Icc`
 - `TauCeti.DavisKahan1970.genericCosineBlock_nonneg`
 - `TauCeti.DavisKahan1970.genericCosineBlock_le_one`
@@ -2253,6 +2252,8 @@ CENSUS-GATE NOTE 2026-08-11: `TauCeti.MultiplicityDatum.retype` is deliberately 
 - `TauCeti.sameSpectralMultiplicity_cfc_iff`
 - `TauCeti.OperatorUnitaryEquiv.cfc_real`
 - `TauCeti.continuous_conjStarAlgEquiv`
+- `TauCeti.DavisKahan1970.genericCosineBlock_nonneg_real`
+- `TauCeti.DavisKahan1970.genericCosineBlock_le_one_real`
 
 **Curated source/Lean review:**
 
@@ -4577,6 +4578,20 @@ At the OPERATOR norm the compiled residual statement is sound and in fact STRONG
 - `TauCeti.DavisKahan1970.Section8.directedGap_le_of_reducingGap_unbounded_complex`
 - `TauCeti.DavisKahan1970.Section8.theorem8_2_branch_maximalAngle_lt_unbounded_smallPerturbation_complex`
 - `TauCeti.DavisKahan.CrossedDefectsEquivalent.symm`
+- `TauCeti.DavisKahan.notMem_spectrum_addBounded_of_spectrum_gap`
+- `TauCeti.DavisKahan.spectrum_addBounded_subset_of_gap`
+- `TauCeti.DavisKahan.realSpectrum_addBounded_subset_of_gap`
+- `TauCeti.DavisKahan.specRange_bandExterior_eq_orthogonal`
+- `TauCeti.DavisKahan.formBoundedSylvesterGap_band_exterior`
+- `TauCeti.DavisKahan.subspaceGap_bandSubspace_le`
+- `TauCeti.DavisKahan.abs_directedGap_sub_directedGap_le`
+- `TauCeti.DavisKahan.le_of_band_exterior_spectra`
+- `TauCeti.DavisKahan.realSpectrum_subset_union_of_reduces`
+- `TauCeti.DavisKahan.reducesSubspace_of_isSelfAdjoint_of_invariant`
+- `TauCeti.DavisKahan1970.Section8.theorem8_2_perturbationHalfGap_unbounded_complex`
+- `TauCeti.DavisKahan1970.Section8.theorem8_2_perturbationHalfGap_maximalAngle_lt_unbounded_complex`
+- `TauCeti.DavisKahan1970.Section8.theorem8_2_residualHalfGap_unbounded_complex`
+- `TauCeti.DavisKahan1970.Section8.theorem8_2_residualHalfGap_maximalAngle_lt_unbounded_complex`
 
 **Curated source/Lean review:**
 

@@ -54,6 +54,8 @@ theorem starProjection_apply_eq_of_reduces
   congr 1
   exact Subtype.ext hadef
 
+/-- A subspace admitting an orthogonal projection inside a complete ambient
+space is itself complete. -/
 noncomputable local instance instCompleteSpaceCoeReducing
     (U : Submodule 𝕜 E) [U.HasOrthogonalProjection] : CompleteSpace U :=
   (Submodule.isComplete_coe_of_hasOrthogonalProjection U).completeSpace_coe
