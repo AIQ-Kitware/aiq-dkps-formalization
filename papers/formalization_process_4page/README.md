@@ -15,8 +15,10 @@ The monthly activity counts used in the introduction are:
 
 - `data/lean_publication_activity.csv`
 
-The tracked CSV is a frozen transcription of the Papers With Lean statistics
-chart.  Before extending Figure 2 back to January 2024, run the separate survey:
+The tracked CSV records the audited January 2024--September 2026 series.
+Figure 2 shows complete months through August 2026; the partial September value
+is retained only for audit provenance.
+To reproduce or re-audit the source definition, run the separate survey:
 
 ```bash
 make survey-publication-activity
@@ -34,8 +36,9 @@ the parser and comparison logic.
 
 The survey never changes the tracked CSV by default.  An explicit
 `scripts/refresh_lean_publication_activity.py survey --write-tracked` is guarded
-by the overlap validation and refuses to write if the candidate metric does not
-match.  `make sources` remains network-free.
+by the January 2025--July 2026 overlap validation and refuses to write if the
+candidate metric does not match.  This is the frozen chart interval that was
+known before the 2024 extension.  `make sources` remains network-free.
 
 Running:
 
@@ -59,20 +62,18 @@ prompts that are not available verbatim are not reconstructed from summaries.
 
 ## Worked semantic-alignment example
 
-The four-page paper uses the historical Section 2 `tan Theta` mismatch involving
-condition (3.5). `scripts/build_evidence.py` extracts the full historical and
-repaired theorem signatures from Git and writes
-`generated/historical_false_finish.json`. The PDF displays only the relevant
-ASCII-safe lines in `generated/historical_false_finish.lean`; the full verbatim
-Lean is also retained in `notes/SEMANTIC_ALIGNMENT_CANDIDATES.md`.
+The four-page paper uses the historical Theorem 8.2 bounded/unbounded scope
+mismatch. `scripts/build_evidence.py` extracts the full historical and repaired
+theorem signatures from Git and writes `generated/historical_scope_mismatch.json`.
+The PDF displays only the operator-type lines needed for the comparison in
+`generated/historical_scope_mismatch.lean`; the full verbatim Lean is also
+retained in `notes/SEMANTIC_ALIGNMENT_CANDIDATES.md`.
 
-The historical endpoint exposed
-`h35 : CrossedDefectsEquivalent U V` as a caller hypothesis even though Davis
-and Kahan introduce condition (3.5) only in Section 3. The repaired Section 2
-endpoint instead takes `HasDefinedAmbientTangent`, which represents the source's
-earlier convention that the tangent norm must exist, and derives the crossed-
-defect condition internally. Alternative repository-backed examples remain in
-`notes/SEMANTIC_ALIGNMENT_CANDIDATES.md`.
+The earlier witness typed both the ambient self-adjoint operator and the
+perturbation as bounded continuous linear maps. Section 8 inherits a possibly
+unbounded ambient operator scope while keeping the perturbation bounded. The
+repaired source-facing endpoint restores that distinction. Alternative
+repository-backed examples remain in `notes/SEMANTIC_ALIGNMENT_CANDIDATES.md`.
 
 The manuscript reports mathematical resolution of all 29 tracked Davis--Kahan
 results while keeping semantic alignment separate: the latest signature/context

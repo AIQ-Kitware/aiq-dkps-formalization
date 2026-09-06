@@ -1,19 +1,23 @@
 \section{Data and reproducibility}
 \label{app:data}
 
-The structured inputs for this paper live under \texttt{data/}.  The 21
-first-person accounts were found by web search and citation chasing.  Each row
-retains the public source URL, bibliography key, the observation used in this
-paper, a qualification note, and the categorical fields used for the
-descriptive counts.  The checked-in \texttt{notes/practitioner\_accounts.md}
-renders these rows as per-account source records so each observation can be
-checked against its public source.  A JSON schema documents the fields and
-allowed values; \texttt{make sources} validates the schema, unique identifiers,
-citation keys, and URLs and regenerates the source notes and paper macros.  The
-monthly Lean-publication series and selected Git timeline are kept in separate
-CSV files, and the Git rows are checked against repository history during the
-build.  Representativeness of the account snapshot is unknown, so we make no
-prevalence estimates from it.
+Using LLM-assisted web search, we collected the \PractitionerAccountCount{}
+public first-person accounts used in this paper.  Each row retains the public
+source URL, bibliography key, observation used here, a qualification note, and
+the categorical fields used for the descriptive counts.  The checked-in source
+notes render these rows as per-account records so each observation can be
+checked against its public source.  The collection is not necessarily
+representative, so we make no prevalence estimates from it.
+
+\texttt{make sources} validates the account schema, identifiers, citation keys,
+and URLs and regenerates the paper macros.  The monthly Lean-publication series
+and selected Git timeline are kept separately.  For the publication series, a
+networked survey captured the exact Papers With Lean statistics page and
+\texttt{site\_papers.json} corpus on 6 September 2026 and recorded hashes of both.
+Grouping the corpus by its \texttt{published} calendar month reproduced every
+frozen January 2025--July 2026 chart value and the live August value.  The
+tracked CSV retains the partial September count for provenance; the figure below
+shows complete months only, through August 2026.
 
 \ifshowartifacturl
 Project materials: \href{\artifacturl}{public GitHub repository}.\\
@@ -23,50 +27,31 @@ Identifying repository URLs are suppressed in this double-blind build and are
 included in the supplementary artifact.
 \fi
 
-The build writes \texttt{generated/materials\_manifest.json}.  Each listed
-artifact has a SHA-256 digest and byte count.  The manifest also records the
-primary Git revision and the formalization-tools submodule revision.  For
-\cref{lst:false-finish}, the build extracts the historical Section~2
-$\tan\Theta$ signature from commit \texttt{c3de4988} and the repair plus bridge
-theorem from \texttt{3abcc839}.  \texttt{generated/historical\_false\_finish.json}
-records the paths, line ranges, historical file digests, and extracted signature
-digests.  The aggregate digest below is the SHA-256 of the sorted
-\texttt{path<TAB>sha256<NEWLINE>} records for all present artifacts.
+The build records SHA-256 digests and Git revisions for the manuscript inputs
+and generated evidence in \texttt{generated/materials\_manifest.json}.  For
+\cref{lst:scope-mismatch}, it extracts the historical bounded Theorem~8.2
+signature from commit \texttt{59f37a20} and the unbounded source-facing endpoint
+from \texttt{064df8d3}; the full signatures, paths, line ranges, and digests are
+retained in the generated semantic-alignment candidate notes.  The prompt
+history used while drafting this paper is preserved verbatim in
+\texttt{brainstorm.md}; retained pasted text written by another agent is labeled
+as such.
 
-\begin{center}
-\small
-\begin{tabularx}{\linewidth}{@{}>{\raggedright\arraybackslash}Xll@{}}
-\toprule
-Material & SHA-256 prefix & bytes \\
-\midrule
-\MaterialHashRows
-\bottomrule
-\end{tabularx}
-\end{center}
-
-\noindent\textbf{Primary Git revision:} \texttt{\EvidenceSnapshotCommit}\\
-\textbf{Formalization-tools revision:} \texttt{\FormalizationToolsCommit}\\
-\textbf{Material-set SHA-256:}\\
-{\scriptsize\ttfamily\MaterialsAggregateSHA\par}
-
-The prompt history used while drafting this paper is preserved verbatim in
-\texttt{brainstorm.md}.  Text pasted by the first author but written by another
-agent is labeled as such.  This is a provenance record for the manuscript.  We make no reconstruction of
-model conversations that were never retained.
-
-\section{Lean activity and project chronology}
+\section{Lean publication activity}
 
 \begin{figure}[H]
   \centering
   \input{generated/lean_activity_timeline_tikz.tex}
-  \caption{Monthly Lean-related arXiv papers indexed by Papers With Lean from
-  January 2025 through July 2026 \citep{paperswithlean2026stats}.  The vertical
-  marker is the 10 July 2026 commit whose message explicitly scaffolds a ``full
-  paper faithful DK theory.''  Earlier Davis--Kahan work and the 13 July tree
-  reorganization are listed separately below.  The index measures public
-  Lean-related publication activity; the fraction that used AI is unknown.}
+  \caption{Monthly Lean-related arXiv papers represented in Papers With Lean,
+  grouped by the corpus \texttt{published} month, from January 2024 through
+  August 2026 \citep{paperswithlean2026stats}.  The public statistics chart
+  begins in January 2025; the 2024 extension uses the audited corpus after its
+  date field reproduced the chart overlap.  Only complete months are shown.  The
+  fraction that used AI is unknown.}
   \label{fig:lean-activity}
 \end{figure}
+
+\section{Project chronology}
 
 \begin{table}[H]
 \centering
@@ -87,23 +72,20 @@ Date & commit & event \\
 \begin{figure}[H]
   \centering
   \includegraphics[width=\linewidth,trim=0 250 0 0,clip]{figures/semantic-alignment-sine-theta-row.png}
-  \caption{The current review page for the single-angle sine-theta theorem.
-  The source passage and inherited context appear at left, the claimed
-  source-to-Lean correspondence in the middle, and compiler-derived Lean
-  evidence at right.  The interface records a review judgment alongside
-  mechanical evidence.  Source/statement identity and Lean compilation are
-  mechanical checks; the mathematical correspondence remains a review judgment.}
+  \caption{A review interface developed late in the project.  The source passage
+  and inherited context appear at left, the claimed source-to-Lean
+  correspondence in the middle, and compiler-derived Lean evidence at right.
+  The reviews reported in the main paper were performed primarily through LLM
+  source/signature comparison rather than through this interface.}
   \label{fig:dashboard}
 \end{figure}
 
-The page makes the checked declaration easy to retrieve, but a reader learning
-Lean may still need help understanding the vocabulary inside that declaration.
-For example, the meaning of \texttt{ClosedOperator}, \texttt{IsSelfAdjoint},
-coercions, and typeclass assumptions can be spread across project code and
-Mathlib.  Lean Compass's theorem-centered semantic dependency view suggests a
-useful direction for this interface: make those definitions inspectable from
-the statement while keeping proof-only dependencies out of the way
-\citep{yanahama2026leanatlas}.
+The interface consolidates evidence that had previously been inspected through
+source files, LLM reviews, and small Lean queries.  A reader learning Lean may
+still need help understanding structures, predicates, coercions, and typeclass
+assumptions in a signature.  Lean Compass's theorem-centered semantic dependency
+view suggests a useful extension: make those definitions inspectable from the
+statement while omitting proof-only dependencies \citep{yanahama2026leanatlas}.
 
 \section{Glossary}
 
@@ -130,12 +112,12 @@ Semantic alignment & Agreement between a formal declaration and the mathematical
 \section{Resource transparency}
 \label{app:resources}
 
-The longer formalization manuscript keeps a fuller resource-accounting record.
-The compact snapshot below has an accounting cutoff of 13 August 2026.  Model
-turns and token quantities are retained measurements and incomplete lower
-bounds.  The price and energy rows apply explicit models to those observed
-quantities.  The serving-energy estimate excludes training, embodied hardware,
-client devices, and network energy.  These values are included for transparency.
+To estimate the cost of the formalization effort, we maintained a resource
+accounting record.  The compact snapshot below has an accounting cutoff of
+13 August 2026.  Retained model turns and token quantities are incomplete
+measured lower bounds; price and serving-energy rows are estimates derived from
+those observations.  The energy estimate excludes training, embodied hardware,
+client devices, and network energy.
 
 \begin{table}[H]
 \centering
@@ -175,8 +157,5 @@ appear here were still used.}
 \resizebox{\linewidth}{!}{\input{generated/model_token_table.tex}}
 \end{table}
 
-Historical commit metadata also contains raw \texttt{GPT-5.6 High} and
-\texttt{GPT-5.6 Thinking} labels.  The longer accounting record retains those
-raw labels and, for the bounded period where exact ledger attribution is absent,
-uses the documented historical interpretation that they refer to GPT-5.6 Sol
-chat-interface work.  Exact ledger attribution takes precedence when available.
+The longer accounting record retains historical model labels verbatim and uses
+exact recovered telemetry when it is available.

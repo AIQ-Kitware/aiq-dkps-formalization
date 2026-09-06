@@ -94,14 +94,22 @@ def main():
 
     activity = load_csv(ACTIVITY_CSV)
     by_month = {r['month']: int(r['papers_indexed']) for r in activity}
-    expected_months = [f'2025-{m:02d}' for m in range(1, 13)] + [f'2026-{m:02d}' for m in range(1, 8)]
+    expected_months = (
+        [f'2024-{m:02d}' for m in range(1, 13)]
+        + [f'2025-{m:02d}' for m in range(1, 13)]
+        + [f'2026-{m:02d}' for m in range(1, 10)]
+    )
     if list(by_month) != expected_months:
-        raise SystemExit('lean_publication_activity.csv must contain complete Jan 2025--Jul 2026 months in order')
+        raise SystemExit(
+            'lean_publication_activity.csv must contain Jan 2024--Sep 2026 months in order'
+        )
+    total_2024 = sum(v for k, v in by_month.items() if k.startswith('2024-'))
     total_2025 = sum(v for k, v in by_month.items() if k.startswith('2025-'))
     jan_jul_2026 = sum(v for k, v in by_month.items() if '2026-01' <= k <= '2026-07')
+    jan_aug_2026 = sum(v for k, v in by_month.items() if '2026-01' <= k <= '2026-08')
     mean_2025 = total_2025 / 12
-    mean_jan_jul_2026 = jan_jul_2026 / 7
-    rate_ratio = mean_jan_jul_2026 / mean_2025
+    mean_jan_aug_2026 = jan_aug_2026 / 8
+    rate_ratio = mean_jan_aug_2026 / mean_2025
 
     macros = {
         'PractitionerAccountCount': len(accounts),
@@ -114,9 +122,13 @@ def main():
         'AccountPersistentStateCount': yes_count(accounts, 'persistent_project_state'),
         'AccountPosthocUnderstandingCount': yes_count(accounts, 'posthoc_understanding'),
         'AccountNoLeanReadCount': sum(r['reads_generated_lean'] == 'none' for r in accounts),
+        'LeanPapersTwentyFour': total_2024,
         'LeanPapersTwentyFive': total_2025,
         'LeanPapersJanJulTwentySix': jan_jul_2026,
         'LeanPapersJulyTwentySix': by_month['2026-07'],
+        'LeanPapersJanAugTwentySix': jan_aug_2026,
+        'LeanPapersAugustTwentySix': by_month['2026-08'],
+        'LeanPapersSeptemberPartialTwentySix': by_month['2026-09'],
         'LeanPublicationRateRatio': f'{rate_ratio:.1f}',
     }
 
@@ -130,7 +142,7 @@ def main():
     with OUT_MD.open('w', encoding='utf8') as f:
         f.write('# Public first-person accounts of AI-assisted Lean work\n\n')
         f.write('This document is generated from `data/practitioner_accounts.csv`.  It keeps the public sources behind the workshop paper easy to inspect and corroborate.  The categorical fields are documented in `data/practitioner_accounts.schema.json`.\n\n')
-        f.write('The accounts were found through web search and citation chasing.  Representativeness is unknown, so the rows should not be used to estimate prevalence.  `yes` records an event or practice explicitly described by the source; `qualified`, `unclear`, and `not_reported` preserve uncertainty instead of filling it in.\n\n')
+        f.write('The accounts were found through LLM-assisted web search.  Representativeness is unknown, so the rows should not be used to estimate prevalence.  `yes` records an event or practice explicitly described by the source; `qualified`, `unclear`, and `not_reported` preserve uncertainty instead of filling it in.\n\n')
 
         f.write('## Descriptive counts\n\n')
         f.write(f'- Public first-person accounts: **{len(accounts)}**\n')
@@ -144,11 +156,13 @@ def main():
         f.write(f'- Generated Lean explicitly not read in the described workflow: **{macros["AccountNoLeanReadCount"]}**\n\n')
 
         f.write('## Lean publication activity used for context\n\n')
-        f.write('`data/lean_publication_activity.csv` transcribes the complete-month counts shown by Papers With Lean on the statistics snapshot updated 2026-08-24.\n\n')
-        f.write(f'- 2025: **{total_2025}** indexed papers\n')
-        f.write(f'- January--July 2026: **{jan_jul_2026}** indexed papers\n')
-        f.write(f'- Mean monthly rate ratio: **{rate_ratio:.1f}x**\n')
-        f.write(f'- July 2026: **{by_month["2026-07"]}** indexed papers\n\n')
+        f.write('`data/lean_publication_activity.csv` records the audited Papers With Lean series through the paper cutoff of 2026-09-06. The January 2024 extension groups the captured `site_papers.json` corpus by its `published` month after that definition reproduced the frozen January 2025--July 2026 statistics-chart overlap. September 2026 is partial.\n\n')
+        f.write(f'- 2024: **{total_2024}** papers by `published` month\n')
+        f.write(f'- 2025: **{total_2025}** papers by `published` month\n')
+        f.write(f'- January--August 2026: **{jan_aug_2026}** papers by `published` month\n')
+        f.write(f'- Mean monthly rate ratio, Jan--Aug 2026 versus 2025: **{rate_ratio:.1f}x**\n')
+        f.write(f'- August 2026: **{by_month["2026-08"]}** papers\n')
+        f.write(f'- September 2026 through the cutoff: **{by_month["2026-09"]}** papers (partial)\n\n')
 
         f.write('## Account matrix\n\n')
         f.write('| ID | Author | Lean experience | Reads generated Lean | Separate AI review | Semantic mismatch | Source defect | Persistent state |\n')
