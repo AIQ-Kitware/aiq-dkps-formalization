@@ -605,6 +605,12 @@ Status: **TERMINAL EXACT**.
 
 #check @TauCeti.DavisKahan1970.proposition4_1_compact_nonacute_complex
 #check @TauCeti.DavisKahan1970.proposition4_1_compact_nonacute_real
+#check @TauCeti.DavisKahan1970.proposition4_1_directRotation_sourceExact_complex
+#check @TauCeti.DavisKahan1970.proposition4_1_directRotation_sourceExact_real
+#check @TauCeti.DavisKahan1970.corollary4_1_directRotation_sourceExact_complex
+#check @TauCeti.DavisKahan1970.corollary4_1_directRotation_sourceExact_real
+#check @TauCeti.DavisKahan1970.proposition4_3_directRotation_sourceExact_complex
+#check @TauCeti.DavisKahan1970.proposition4_3_directRotation_sourceExact_real
 #check @TauCeti.DavisKahan1970.proposition4_1_compact_nonacute_directRotationValues_complex
 #check @TauCeti.DavisKahan1970.proposition4_1_compact_nonacute_directRotationValues_real
 
@@ -907,6 +913,18 @@ Status: **TERMINAL EXACT**.
 #check @TauCeti.DavisKahan1970.Section8.theorem8_1_lowerCompressionRepulsion_sourceExact_unbounded_complex
 #check @TauCeti.DavisKahan1970.Section8.theorem8_1_upperCompressionRepulsion_sourceExact_unbounded_real
 #check @TauCeti.DavisKahan1970.Section8.theorem8_1_lowerCompressionRepulsion_sourceExact_unbounded_real
+#check @TauCeti.DavisKahan1970.Section8.theorem8_1_upperCompressionRepulsion_ofBlockPlacement_unbounded_complex
+#check @TauCeti.DavisKahan1970.Section8.theorem8_1_lowerCompressionRepulsion_ofBlockPlacement_unbounded_complex
+#check @TauCeti.DavisKahan1970.Section8.theorem8_1_upperCompressionRepulsion_ofBlockPlacement_unbounded_real
+#check @TauCeti.DavisKahan1970.Section8.theorem8_1_lowerCompressionRepulsion_ofBlockPlacement_unbounded_real
+#check @TauCeti.DavisKahan1970.Section8.theorem8_1_upperEigenvalueRepulsion_sourceExact
+#check @TauCeti.DavisKahan1970.Section8.theorem8_1_lowerEigenvalueRepulsion_sourceExact
+#check @TauCeti.DavisKahan1970.Section8.theorem8_1_upperEigenvalueRepulsion_sourceExact_real
+#check @TauCeti.DavisKahan1970.Section8.theorem8_1_lowerEigenvalueRepulsion_sourceExact_real
+#check @TauCeti.DavisKahan1970.Section8.theorem8_1_upperSymmetricGaugeEigenvalue_sourceExact
+#check @TauCeti.DavisKahan1970.Section8.theorem8_1_lowerSymmetricGaugeEigenvalue_sourceExact
+#check @TauCeti.DavisKahan1970.Section8.theorem8_1_upperSymmetricGaugeEigenvalue_sourceExact_real
+#check @TauCeti.DavisKahan1970.Section8.theorem8_1_lowerSymmetricGaugeEigenvalue_sourceExact_real
 #check @TauCeti.DavisKahan1970.Section8.re_inner_split_of_reduces
 #check @TauCeti.DavisKahan1970.Section8.theorem8_1_upperCompressionRepulsion_unbounded
 #check @TauCeti.DavisKahan1970.Section8.theorem8_1_lowerCompressionRepulsion_unbounded
@@ -975,6 +993,10 @@ Status: **TERMINAL EXACT**.
 #check @TauCeti.DavisKahan1970.Section8.theorem8_2_perturbation_sourceExact_unbounded_real
 #check @TauCeti.DavisKahan1970.Section8.theorem8_2_residual_sourceExact_unbounded_complex
 #check @TauCeti.DavisKahan1970.Section8.theorem8_2_residual_sourceExact_unbounded_real
+#check @TauCeti.DavisKahan1970.Section8.sourceResidual
+#check @TauCeti.DavisKahan1970.Section8.sourceResidual_eq_sub_ritzBlock
+#check @TauCeti.DavisKahan1970.Section8.exists_ritzBlock_of_realSpectrum_subset_Icc_complex
+#check @TauCeti.DavisKahan1970.Section8.exists_ritzBlock_of_realSpectrum_subset_Icc_real
 #check @TauCeti.DavisKahan1970.Section8.theorem8_2_sinTwoTheta_residual_real_symmetricNorming
 #check @TauCeti.DavisKahan1970.Section8.theorem8_2_branch_maximalAngle_lt_of_crossedDefects
 #check @TauCeti.DavisKahan1970.Section8.theorem8_2_branch_real_maximalAngle_lt_of_crossedDefects

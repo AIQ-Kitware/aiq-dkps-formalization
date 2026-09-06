@@ -39,6 +39,7 @@ import DavisKahan.Sources.DavisKahan1970.Section3Proposition35
 import DavisKahan.Sources.DavisKahan1970.Section3Theorem31Realization
 import DavisKahan.Sources.DavisKahan1970.Section4
 import DavisKahan.Sources.DavisKahan1970.Section4BasisAngleEnergy
+import DavisKahan.Sources.DavisKahan1970.Section4DirectRotationSource
 import DavisKahan.Sources.DavisKahan1970.Section4Dominance
 import DavisKahan.Sources.DavisKahan1970.Section4Examples
 import DavisKahan.Sources.DavisKahan1970.Section4FiniteSurface
