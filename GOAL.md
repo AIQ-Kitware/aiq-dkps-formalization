@@ -422,14 +422,39 @@ The canonical Theorem 8.1 must match the source's inherited unbounded self-adjoi
 
 Do not prescribe in advance how to prove it.
 
-Existing progress already supplies;
+**Status, corrected 2026-09-06.**  The sentence that used to stand here — "the
+remaining open mathematical point is the quarter-acute conclusion" — is out of
+date.  That conclusion is proved: §10.3.1 and §10.3.2 record the reading of the
+printed statement and the Lyapunov route, and
+`maximalAngle_le_pi_div_four_of_orderedFormGap_unbounded_printed` and
+`subspaceGap_le_of_orderedFormGap_unbounded_printed` are the unbounded angle and
+projector-gap conclusions in the paper's own orientation.  The unbounded
+spectral-repulsion half
+(`notMem_spectrum_addBounded_of_offDiagonal_form_gap`) and the coercive/inverse
+ingredient (§6.2) were already there.
 
-* the required coercive/inverse ingredient:
-* the unbounded spectral-repulsion half.
+**What is actually left on this row** is the rest of the printed theorem at
+unbounded scope:
 
-The remaining open mathematical point is the quarter-acute conclusion represented by the current `isQuarterAcute_of_orderedFormGap` obstruction.
+* **branch existence** — `Q` as the spectral subspace of `A + H` for `Iic α`,
+  with the ordered form bounds on `Q` and `Qᗮ`;
+* **the printed characterization**, which is an *iff* with the spectral
+  placement, so the uniqueness half as well;
+* **parts (i)–(iii)** — the compression inequality, the eigenvalue form in finite
+  dimensions, and the symmetric-gauge form.
 
-Work directly on that implication.
+The machinery built for Theorem 8.2 is what a next attempt should use rather than
+starting again: `SpectralTheory/UnboundedCentralBand.lean` already selects a
+spectral range on a closed interval and removes a null part of the selecting set
+(`specProjection_eq_of_diff_eq_zero`), which is the shape the `Iic α` branch and
+its exterior need; `SpectralTheory/ReducingSpectrumUnion.lean` has the
+block-to-ambient spectrum bridge and the unbounded `reduces_orthogonalComplement`;
+and the form bounds are `re_inner_le_of_specProjection_Ioi_eq_zero` and
+`le_re_inner_of_specProjection_Iio_eq_zero`.
+
+**This is the one row that is not at its source scope.**  DK-8.2-thm's canonical
+evidence is now unbounded (§XVI.6); DK-8.1-thm's is not, and the inventory says so
+rather than claiming otherwise.
 
 ### 10.3.1 What that implication should actually say (finding, 2026-09-05)
 
