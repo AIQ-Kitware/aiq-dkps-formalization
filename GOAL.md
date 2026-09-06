@@ -740,34 +740,24 @@ argument applied to `Qᗮ` and to `P`.
 continuation API.  `abs_directedGap_sub_directedGap_le` is the 1-Lipschitz
 comparison that turns it into continuity of the tracked quantity.
 
-**(d) The bounded proof's constant-threshold bootstrap — remaining.**  At a fixed
-`t`, instantiate the unbounded `sin 2Θ` estimate at `A := B_t`, `Hop := tH`,
-`P := R_t`, `Q := Q` — legitimate because `B_t + tH = B₀`, so the `δ` in the gap
-stays the *fixed printed gap at `Q`* rather than shrinking with `t`.  That gives
-`δ ‖sin 2Θ (R_t, Q)‖ ≤ 2tγ`.  Under `f t ≤ √2/2`,
-`sqrt_two_mul_directedGap_le_norm_sinTwoAngleOperator` gives
-`√2 · f t ≤ ‖sin 2Θ (Q, R_t)‖`, hence `√2 · f t · δ ≤ 2tγ ≤ 2γ < δ` and
-`f t < √2/2`.  With `f 0 = 0` and `f` continuous, the bounded theorem's own IVT
-step gives `f t < √2/2` for every `t`, and `P ≤ R₁` turns `f 1` into
+**(d) is done, 2026-09-05.**
+`Section8/Theorem82UnboundedPath.lean` carries the bootstrap.  At a fixed `t` the
+`sin 2Θ` estimate is instantiated at `A := B t`, `Hop := tH`, `P := R t`, which
+keeps the *printed* gap `δ` at `Q` because `B t + tH = A + H`; that gives
+`δ ‖sin 2Θ (Q, R t)‖ ≤ 2tγ`, and under `f t ≤ √2/2` the double-angle comparison
+turns it into `f t < √2/2`.  `f 0 = 0`, `f` is continuous by the Lipschitz
+estimate, and `intermediate_value_Icc` closes it; `P ≤ R₁` transports `f 1` to
 `directedGap P Q`.
 
-**The endpoint inclusions are done, 2026-09-05, and needed no new spectral API.**
-An earlier note here named the commutation of `specProjection` with the
-projection onto a reducing subspace as the missing prerequisite.  It is not
-needed: two reducing subspaces of *one* self-adjoint partial map, one carrying
-band spectrum and the other's complement carrying exterior spectrum, are already
-a `FormBoundedSylvesterGap` configuration, so the `sin Θ` estimate at `K = 0`
-gives `d · directedGap ≤ ‖0‖`, hence `0`.  The uniqueness of the spectral
-splitting is delivered by the `sin Θ` theorem itself.
-`le_of_band_exterior_spectra` in `UnboundedBandLipschitz.lean` is that argument,
-with `le_of_directedGap_eq_zero` and `addBounded_zero` beside it.
+`theorem8_2_perturbationHalfGap_unbounded_complex` is the directed conclusion and
+`theorem8_2_perturbationHalfGap_maximalAngle_lt_unbounded_complex` the printed
+`Θ < π/4`, over the **whole** printed range `‖H‖ < δ/2`.
 
-It applies to both endpoints:
-
-* `R₀ ≤ Q`, since `Qᗮ` carries exterior spectrum and `R₀` band spectrum;
-* `P ≤ R₁`, since the printed `spec(A₀) ⊆ [β − δ/2, α + δ/2]` meets the exterior
-  `{x ≤ β − δ + γ} ∪ {x ≥ α + δ − γ}` nowhere when `γ < δ/2`, so `spec(A₀)` lies
-  in `[l, r]` automatically.
+**One hypothesis is still carried rather than derived:** the ambient placement
+`realSpectrum (A + H) ⊆ [β, α] ∪ exterior(β, α, δ)`.  It is a consequence of the
+two printed block placements — that is `realSpectrum_subset_union_of_reduces` in
+the bounded development, and the unbounded counterpart of that bridge is the one
+thing outstanding.  The proof is the direct sum of the two block resolvents.
 
 No variable root, no clopen family indexed by `κ_t`, no Riesz projector.  This
 closes the **full** printed range `‖H‖ < δ/2`, not the `(√2/4)δ` sub-range the

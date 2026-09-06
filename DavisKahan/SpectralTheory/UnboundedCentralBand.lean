@@ -271,5 +271,25 @@ theorem formBoundedSylvesterGap_band_exterior
     (Or.inl ⟨realSpectrum_reducingRestriction_band_subset hA hW hredA,
       realSpectrum_reducingRestriction_bandExterior_subset hB hW' hredB⟩)
 
+/-- **The real-spectrum reading of `spectrum_addBounded_subset_of_gap`.**
+
+The same stability statement with `realSpectrum` on both sides, which is the
+spelling the band machinery and `FormBoundedSylvesterGap` use. -/
+theorem realSpectrum_addBounded_subset_of_gap
+    {A : H →ₗ.[ℂ] H} (hA : IsSelfAdjoint A) (K : H →L[ℂ] H)
+    {alpha beta delta gam : ℝ} (hab : beta ≤ alpha) (hdelta : 0 < delta)
+    (hgam : ‖K‖ ≤ gam) (hgamlt : 2 * gam < delta)
+    (hgap : TauCeti.LinearPMap.realSpectrum A ⊆
+      Set.Icc beta alpha ∪ bandExterior beta alpha delta) :
+    TauCeti.LinearPMap.realSpectrum (TauCeti.LinearPMap.addBounded A K) ⊆
+      Set.Icc (beta - gam) (alpha + gam) ∪
+        bandExterior (beta - gam) (alpha + gam) (delta - 2 * gam) := by
+  intro lam hlam
+  refine spectrum_addBounded_subset_of_gap hA K hab hdelta hgam hgamlt ?_ lam ?_
+  · intro mu hmu
+    exact hgap (by rw [realSpectrum_eq_spectraSpectrum]; exact hmu)
+  · rw [realSpectrum_eq_spectraSpectrum] at hlam
+    exact hlam
+
 end DavisKahan
 end TauCeti
