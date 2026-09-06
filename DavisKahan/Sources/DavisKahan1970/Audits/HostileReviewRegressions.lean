@@ -116,9 +116,7 @@ theorem theorem3_1_invariant_is_the_angle_operator
     {H₂ : Type v} [NormedAddCommGroup H₂] [InnerProductSpace ℂ H₂] [CompleteSpace H₂]
     (U₁ V₁ : Submodule ℂ H₁) [U₁.HasOrthogonalProjection] [V₁.HasOrthogonalProjection]
     (U₂ V₂ : Submodule ℂ H₂) [U₂.HasOrthogonalProjection] [V₂.HasOrthogonalProjection]
-    [TopologicalSpace.SeparableSpace H₁]
-    [TopologicalSpace.SeparableSpace (DavisKahan.genericLeftHalf U₁ V₁)]
-    [TopologicalSpace.SeparableSpace (DavisKahan.genericLeftHalf U₂ V₂)] :
+    [TopologicalSpace.SeparableSpace H₁] [TopologicalSpace.SeparableSpace H₂] :
     DavisKahan.PairOfSubspacesUnitaryEquivalent U₁ V₁ U₂ V₂ ↔
       DavisKahan.SameHalmosTrivialDimensions U₁ V₁ U₂ V₂ ∧
       TauCeti.SameSpectralMultiplicity

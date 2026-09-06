@@ -4,7 +4,7 @@
 
 **Census family:** `source-completion-census`  
 **Items:** 50  
-**Unique cited Lean declarations:** 1339
+**Unique cited Lean declarations:** 1344
 
 ## How to use this census
 
@@ -2239,6 +2239,11 @@ CENSUS-GATE NOTE 2026-08-11: `TauCeti.MultiplicityDatum.retype` is deliberately 
 - `TauCeti.nonempty_linearIsometryEquiv_of_hilbertBasis`
 - `TauCeti.DavisKahan1970.theorem3_1_spectralMultiplicity_classification_sourceAngle_complex`
 - `TauCeti.DavisKahan1970.genericAngleBlock`
+- `TauCeti.DavisKahan1970.spectrum_genericCosineBlock_subset_Icc_real`
+- `TauCeti.DavisKahan1970.genericAngleBlockReal`
+- `TauCeti.DavisKahan1970.theorem3_1_spectralMultiplicity_classification_sourceAngle_real`
+- `TauCeti.DavisKahan.RealSpectralRestriction.sameSpectralMultiplicity_cfc_iff_real`
+- `TauCeti.ContinuousLinearMap.spectrum_subset_Icc_of_re_inner_bounds`
 - `TauCeti.DavisKahan1970.spectrum_genericCosineBlock_subset_Icc`
 - `TauCeti.DavisKahan1970.genericCosineBlock_nonneg`
 - `TauCeti.DavisKahan1970.genericCosineBlock_le_one`
