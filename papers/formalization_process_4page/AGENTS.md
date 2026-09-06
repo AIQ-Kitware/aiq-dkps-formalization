@@ -16,7 +16,7 @@ Additional constraints:
    Davis--Kahan case study. Avoid generic advice generated from what an LLM
    would like a reviewer to do.
 3. Describe `data/practitioner_accounts.csv` plainly as public first-person
-   accounts found through search and citation chasing. Do not call this small
+   accounts found through LLM-assisted web search. Do not call this small
    collection a corpus, survey, systematic review, or methodology.
 4. Record only practices and events the source actually reports. Preserve
    `not_reported`, `unclear`, and `qualified`.
@@ -40,11 +40,12 @@ Additional constraints:
     example; the dashboard screenshot is an untracked appendix render.
 11. Figure 1 names Tau Ceti as a possible destination for reusable foundations,
     so retain a brief accurate explanation and citation.
-12. The worked example is the Section 2 `tan Theta` endpoint that exposed
-    condition (3.5) as `h35 : CrossedDefectsEquivalent U V`. Keep it tied to
-    commits `c3de4988` (historical endpoint) and `3abcc839` (definedness repair).
-    State precisely that `h35` is derived from `HasDefinedAmbientTangent`; do not
-    claim it follows from the spectral-gap and Rayleigh--Ritz hypotheses alone.
+12. The worked example is the Theorem 8.2 bounded/unbounded scope mismatch.
+    Keep it tied to commits `59f37a20` (earlier bounded witness) and `064df8d3`
+    (unbounded source-facing endpoint). State precisely that the earlier witness
+    typed both the ambient operator and perturbation as bounded continuous linear
+    maps, while Section 8 inherits a possibly unbounded ambient self-adjoint
+    operator and a bounded perturbation.
 13. Present EconCSLib, Lean Atlas, ShadowBench, LeanMarathon, FormaTheoria, and
     related systems as adjacent work without priority claims for the local
     dashboard.
@@ -67,8 +68,9 @@ Additional constraints:
     support fitting that model to this project.
 21. Chow's doohickey example is illustrative. Do not describe it as silly or
     otherwise belittle the example.
-22. Formalization 1 is historical evidence. Keep the displayed lines tied to
-    the Git extraction and keep full verbatim signatures in the candidate note.
+22. Formalization 1 is historical evidence. Keep the displayed Theorem 8.2
+    operator-type lines tied to the Git extraction and keep full verbatim
+    signatures in the candidate note.
     The PDF listing may use an ASCII-safe excerpt solely to avoid `listings`
     corrupting Lean Unicode glyphs.
 23. Section titles should describe their contents directly. Avoid evaluative or

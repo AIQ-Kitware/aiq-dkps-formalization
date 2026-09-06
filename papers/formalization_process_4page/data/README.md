@@ -14,7 +14,7 @@ values and field meanings are documented in
 `practitioner_accounts.schema.json`.  `scripts/build_practitioner_accounts.py`
 validates the file and regenerates `notes/practitioner_accounts.md`.
 
-The snapshot was assembled by web search and citation chasing.  Its
+The snapshot was assembled with LLM-assisted web search.  Its
 representativeness is unknown.  The source URL, citation key, observation, and
 qualification note are retained so another reader can check each row against
 the public account.  The categorical fields should not be used to estimate
@@ -22,41 +22,38 @@ prevalence among Lean users.
 
 ## `lean_publication_activity.csv`
 
-Monthly counts transcribed from the Papers With Lean statistics page,
-https://paperswithlean.com/stat/, as displayed on the snapshot updated
-2026-08-24.  The paper uses complete months from January 2025 through July
-2026, avoiding the then-incomplete August 2026 count.
+Monthly Lean-related arXiv-paper counts derived from Papers With Lean for the
+paper's 6 September 2026 cutoff.  The tracked range is January 2024 through
+September 2026, with September explicitly partial.
 
-The tracked CSV is intentionally frozen with the paper's reporting window.
-`make check-publication-activity` fetches the current statistics page, verifies
-that those 19 historical month/count pairs still agree, and reports newer live
-months without changing the tracked snapshot or the normal `make sources`
-build.  Use `scripts/check_lean_publication_activity.py --emit-csv` to print the
-live series when reviewing a future reporting-window update.
+The public statistics chart begins in January 2025.  To extend the figure back
+to 2024 without changing metrics, `scripts/refresh_lean_publication_activity.py`
+captures both the exact statistics-page HTML and the upstream
+`site_papers.json` corpus, records source hashes, and groups corpus records by
+their `published` calendar month.  Before the tracked CSV was extended, that
+grouping reproduced every frozen January 2025--July 2026 chart value; the
+6 September run also reproduced the displayed August 2026 value of 108 and
+partial September value of 3.
 
-For the January 2024 extension, do not infer older values or splice a different
-date definition onto this chart series.  Run:
+Run:
 
 ```bash
 make survey-publication-activity
 ```
 
-`scripts/refresh_lean_publication_activity.py` downloads and archives both the
-Papers With Lean `site_papers.json` corpus and the statistics-page HTML, along
-with the exact tracked CSV used for comparison.  It records SHA-256 hashes,
-computes the Git-blob SHA-1 of the corpus bytes, saves the parsed live chart and
-the corpus series separately, and writes a comparison report and JSON manifest
-under the ignored `generated/lean_publication_survey/` directory.
+to create a timestamped audit under the ignored
+`generated/lean_publication_survey/` directory.  The raw corpus, raw statistics
+HTML, exact tracked CSV, SHA-256 hashes, Git-blob SHA-1s, parsed series, overlap
+comparison, machine-readable manifest, and human-readable report are retained
+there.  `make check-publication-survey` makes a failed candidate-definition
+validation nonzero.  Offline captures can be replayed with `--corpus-file` and
+`--stats-file`.
 
-The corpus candidate is defined only as the corpus record's `published` field
-grouped by calendar month.  The survey does not assume that this is the date
-definition behind the statistics chart.  It tests that hypothesis against the
-tracked January 2025--July 2026 overlap.  A tracked-data write is permitted only
-if the live chart still matches the frozen overlap and the corpus `published`
-grouping independently reproduces it.  `make check-publication-survey` makes a
-failed validation a nonzero exit; the ordinary survey still leaves a complete
-audit report for inspection.  Offline captures can be replayed with
-`--corpus-file` and `--stats-file`.
+An explicit `survey --write-tracked` is guarded by the original January
+2025--July 2026 chart overlap.  Normal `make sources` never performs network
+access.  `make check-publication-activity` checks the complete chart months
+available in both the tracked snapshot and the live page; it excludes the
+cutoff month's partial September count from that live-drift check.
 
 ## `review_timeline.csv`
 

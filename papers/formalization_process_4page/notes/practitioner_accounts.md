@@ -2,7 +2,7 @@
 
 This document is generated from `data/practitioner_accounts.csv`.  It keeps the public sources behind the workshop paper easy to inspect and corroborate.  The categorical fields are documented in `data/practitioner_accounts.schema.json`.
 
-The accounts were found through web search and citation chasing.  Representativeness is unknown, so the rows should not be used to estimate prevalence.  `yes` records an event or practice explicitly described by the source; `qualified`, `unclear`, and `not_reported` preserve uncertainty instead of filling it in.
+The accounts were found through LLM-assisted web search.  Representativeness is unknown, so the rows should not be used to estimate prevalence.  `yes` records an event or practice explicitly described by the source; `qualified`, `unclear`, and `not_reported` preserve uncertainty instead of filling it in.
 
 ## Descriptive counts
 
@@ -18,12 +18,14 @@ The accounts were found through web search and citation chasing.  Representative
 
 ## Lean publication activity used for context
 
-`data/lean_publication_activity.csv` transcribes the complete-month counts shown by Papers With Lean on the statistics snapshot updated 2026-08-24.
+`data/lean_publication_activity.csv` records the audited Papers With Lean series through the paper cutoff of 2026-09-06. The January 2024 extension groups the captured `site_papers.json` corpus by its `published` month after that definition reproduced the frozen January 2025--July 2026 statistics-chart overlap. September 2026 is partial.
 
-- 2025: **174** indexed papers
-- January--July 2026: **410** indexed papers
-- Mean monthly rate ratio: **4.0x**
-- July 2026: **101** indexed papers
+- 2024: **9** papers by `published` month
+- 2025: **174** papers by `published` month
+- January--August 2026: **518** papers by `published` month
+- Mean monthly rate ratio, Jan--Aug 2026 versus 2025: **4.5x**
+- August 2026: **108** papers
+- September 2026 through the cutoff: **3** papers (partial)
 
 ## Account matrix
 
