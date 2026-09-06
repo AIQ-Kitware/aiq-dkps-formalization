@@ -15,6 +15,28 @@ The monthly activity counts used in the introduction are:
 
 - `data/lean_publication_activity.csv`
 
+The tracked CSV is a frozen transcription of the Papers With Lean statistics
+chart.  Before extending Figure 2 back to January 2024, run the separate survey:
+
+```bash
+make survey-publication-activity
+```
+
+This networked command captures the exact `site_papers.json` corpus and
+statistics-page HTML, records content hashes and source metadata, parses the
+live chart, groups the corpus by its `published` field, and compares both
+series against the tracked overlap.  Each run writes a timestamped audit under
+`generated/lean_publication_survey/`, which is ignored by Git.  The report is
+produced even when the candidate corpus date definition fails to reproduce the
+chart.  Use `make check-publication-survey` when that mismatch should also make
+the command fail, and `make self-test-publication-survey` for an offline test of
+the parser and comparison logic.
+
+The survey never changes the tracked CSV by default.  An explicit
+`scripts/refresh_lean_publication_activity.py survey --write-tracked` is guarded
+by the overlap validation and refuses to write if the candidate metric does not
+match.  `make sources` remains network-free.
+
 Running:
 
 ```bash

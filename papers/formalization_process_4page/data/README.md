@@ -34,6 +34,30 @@ months without changing the tracked snapshot or the normal `make sources`
 build.  Use `scripts/check_lean_publication_activity.py --emit-csv` to print the
 live series when reviewing a future reporting-window update.
 
+For the January 2024 extension, do not infer older values or splice a different
+date definition onto this chart series.  Run:
+
+```bash
+make survey-publication-activity
+```
+
+`scripts/refresh_lean_publication_activity.py` downloads and archives both the
+Papers With Lean `site_papers.json` corpus and the statistics-page HTML, along
+with the exact tracked CSV used for comparison.  It records SHA-256 hashes,
+computes the Git-blob SHA-1 of the corpus bytes, saves the parsed live chart and
+the corpus series separately, and writes a comparison report and JSON manifest
+under the ignored `generated/lean_publication_survey/` directory.
+
+The corpus candidate is defined only as the corpus record's `published` field
+grouped by calendar month.  The survey does not assume that this is the date
+definition behind the statistics chart.  It tests that hypothesis against the
+tracked January 2025--July 2026 overlap.  A tracked-data write is permitted only
+if the live chart still matches the frozen overlap and the corpus `published`
+grouping independently reproduces it.  `make check-publication-survey` makes a
+failed validation a nonzero exit; the ordinary survey still leaves a complete
+audit report for inspection.  Offline captures can be replayed with
+`--corpus-file` and `--stats-file`.
+
 ## `review_timeline.csv`
 
 Selected public Git events used in the paper and appendix.  Every event is keyed
