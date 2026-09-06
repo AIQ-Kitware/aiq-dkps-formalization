@@ -95,6 +95,7 @@ theorem starProjection_specProjection_comm_of_reduces
 
 /-! ### Two pieces of projection geometry -/
 
+omit [CompleteSpace H] in
 /-- **The pointwise strict bound, read on the orthogonal complement.**
 
 A vector of `Qᗮ` on which the projector difference is strictly inside the `√2/2`
@@ -116,6 +117,7 @@ theorem norm_starProjection_lt_of_mem_orthogonal_of_sq_lt
   rw [hsq]
   exact hlt
 
+omit [CompleteSpace H] in
 /-- The projector difference does not see orthogonal complementation. -/
 theorem norm_starProjection_orthogonal_sub_eq (U V : Submodule ℂ H)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] (y : H) :
@@ -125,6 +127,7 @@ theorem norm_starProjection_orthogonal_sub_eq (U V : Submodule ℂ H)
     show y - U.starProjection y - (y - V.starProjection y)
       = V.starProjection y - U.starProjection y by abel, norm_sub_rev]
 
+omit [CompleteSpace H] in
 /-- **Commuting projections with trivial crossed intersections coincide.**
 
 If `P_M` and `P_Q` commute and neither subspace meets the other's complement, then

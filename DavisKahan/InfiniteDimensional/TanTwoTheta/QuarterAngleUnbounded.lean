@@ -311,7 +311,7 @@ theorem reflectionProduct_form_pos_of_orderedFormGap_unbounded
     · exfalso
       have hre : ∀ (r : ℝ) (z : ℂ), RCLike.re ((r : ℂ) * z) = r * RCLike.re z := by
         intro r z
-        simpa using RCLike.re_ofReal_mul (K := ℂ) r z
+        simp
       have hzero : ∀ v : E, RCLike.re ⟪X v, y⟫_ℂ = 0 := by
         intro v
         by_contra hne

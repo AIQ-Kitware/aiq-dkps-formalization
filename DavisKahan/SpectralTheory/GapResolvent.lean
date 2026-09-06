@@ -171,7 +171,7 @@ theorem notMem_spectrum_addBounded_of_spectrum_gap
     have hstep : ((c : ℝ) : ℂ) • R (V y) - A ⟨R (V y), hmem⟩ = V y := hsolve
     have : ((c : ℝ) : ℂ) • R (V y) - (A ⟨R (V y), hmem⟩ + K (R (V y)))
         = (1 - K ∘L R) (V y) := by
-      simp only [sub_apply, ContinuousLinearMap.one_apply,
+      simp only [sub_apply, one_apply_eq_self,
         ContinuousLinearMap.comp_apply]
       linear_combination (norm := module) hstep
     rw [this, hUV y]
@@ -185,7 +185,7 @@ theorem notMem_spectrum_addBounded_of_spectrum_gap
       hleft ⟨(x : H), hxA⟩
     have hsplit : ((c : ℝ) : ℂ) • (x : H) - (A ⟨(x : H), hxA⟩ + K (x : H))
         = (1 - K ∘L R) (((c : ℝ) : ℂ) • (x : H) - A ⟨(x : H), hxA⟩) := by
-      simp only [sub_apply, ContinuousLinearMap.one_apply,
+      simp only [sub_apply, one_apply_eq_self,
         ContinuousLinearMap.comp_apply]
       rw [hw]
       abel
@@ -204,8 +204,8 @@ the two open gaps is at distance more than `γ` from the spectrum of `A`, so
 `notMem_spectrum_addBounded_of_spectrum_gap` removes it. -/
 theorem spectrum_addBounded_subset_of_gap
     {A : H →ₗ.[ℂ] H} (hA : IsSelfAdjoint A) (K : H →L[ℂ] H)
-    {alpha beta delta gam : ℝ} (hab : beta ≤ alpha) (hdelta : 0 < delta)
-    (hgam : ‖K‖ ≤ gam) (hgamlt : 2 * gam < delta)
+    {alpha beta delta gam : ℝ} (hab : beta ≤ alpha) (_hdelta : 0 < delta)
+    (hgam : ‖K‖ ≤ gam) (_hgamlt : 2 * gam < delta)
     (hgap : ∀ lam : ℝ, (lam : ℂ) ∈ TauCeti.LinearPMap.spectrum A →
       lam ∈ Set.Icc beta alpha ∪ {x : ℝ | x ≤ beta - delta ∨ alpha + delta ≤ x}) :
     ∀ lam : ℝ,

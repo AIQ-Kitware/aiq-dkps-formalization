@@ -37,6 +37,7 @@ universe v
 variable {H : Type v} [NormedAddCommGroup H] [InnerProductSpace ℂ H]
   [CompleteSpace H]
 
+omit [CompleteSpace H] in
 /-- **The energy splits along a reducing subspace.** -/
 theorem re_inner_split_of_reduces {B : H →ₗ.[ℂ] H} {Q : Submodule ℂ H}
     [Q.HasOrthogonalProjection] (hred : TauCeti.LinearPMap.ReducesSubspace B Q)
@@ -82,6 +83,7 @@ theorem re_inner_split_of_reduces {B : H →ₗ.[ℂ] H} {Q : Submodule ℂ H}
     ring
   rw [hexpand, Complex.add_re]
 
+omit [CompleteSpace H] in
 /-- **Davis--Kahan 1970, Theorem 8.1 part (i), upper block, at unbounded scope.**
 
 `A₁ − α ≤ C₁(Λ₁ − α)C₁` as a form inequality: the `α`-shifted energy of a vector
@@ -106,6 +108,7 @@ theorem theorem8_1_upperCompressionRepulsion_unbounded
   rw [hsplit, hnorm]
   nlinarith [hlow]
 
+omit [CompleteSpace H] in
 /-- **Theorem 8.1 part (i), lower block, at unbounded scope.**
 
 The dual reading, against the complement's lower form bound. -/
