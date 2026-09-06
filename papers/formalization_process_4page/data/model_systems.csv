@@ -1,0 +1,4 @@
+system,models,typical_use
+ChatGPT chat interface,"GPT-5.6 Sol","Mathematical planning, source comparison, review, and generation of proposed repository changes."
+Claude Code,"Claude Opus 4.8; Claude Opus 5; Claude Fable 5","Repository search, Lean implementation, compilation, proof repair, and long-running formalization tasks."
+Codex,"GPT-5.6 Sol; GPT-5.6 Terra; GPT-5 Codex; GPT-5.6 Codex","Repository search, Lean implementation, compilation, repair, and review."

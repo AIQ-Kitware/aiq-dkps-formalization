@@ -1,16 +1,19 @@
 \section{Data and reproducibility}
 \label{app:data}
 
-The structured inputs for this paper live under \texttt{data/}.  The
-first-person-account snapshot records the public source URL, bibliography key,
-a concise observation, a qualification note, and the categorical fields used
-for the descriptive counts.  A JSON schema documents the fields and allowed
-values, and the build checks the schema, unique identifiers, citation keys, and
-URLs.  The monthly Lean-publication series and the selected Git timeline are
-kept in separate CSV files.  The Git rows are checked against the repository
-history during the build.  Representativeness of the public-account snapshot is
-unknown.  We use the rows for observations attributed to the cited authors and
-make no prevalence estimates.
+The structured inputs for this paper live under \texttt{data/}.  The 21
+first-person accounts were found by web search and citation chasing.  Each row
+retains the public source URL, bibliography key, the observation used in this
+paper, a qualification note, and the categorical fields used for the
+descriptive counts.  The checked-in \texttt{notes/practitioner\_accounts.md}
+renders these rows as per-account source records so each observation can be
+checked against its public source.  A JSON schema documents the fields and
+allowed values; \texttt{make sources} validates the schema, unique identifiers,
+citation keys, and URLs and regenerates the source notes and paper macros.  The
+monthly Lean-publication series and selected Git timeline are kept in separate
+CSV files, and the Git rows are checked against repository history during the
+build.  Representativeness of the account snapshot is unknown, so we make no
+prevalence estimates from it.
 
 \ifshowartifacturl
 Project materials: \href{\artifacturl}{public GitHub repository}.\\
@@ -23,10 +26,11 @@ included in the supplementary artifact.
 The build writes \texttt{generated/materials\_manifest.json}.  Each listed
 artifact has a SHA-256 digest and byte count.  The manifest also records the
 primary Git revision and the formalization-tools submodule revision.  For
-\cref{lst:false-finish}, the build extracts the historical signature directly
-from commit \texttt{7001ed05}; \texttt{generated/historical\_false\_finish.json}
-records the original path, line ranges, historical file digest, and extracted
-signature digest.  The aggregate digest below is the SHA-256 of the sorted
+\cref{lst:false-finish}, the build extracts the historical Section~2
+$\tan\Theta$ signature from commit \texttt{c3de4988} and the repair plus bridge
+theorem from \texttt{3abcc839}.  \texttt{generated/historical\_false\_finish.json}
+records the paths, line ranges, historical file digests, and extracted signature
+digests.  The aggregate digest below is the SHA-256 of the sorted
 \texttt{path<TAB>sha256<NEWLINE>} records for all present artifacts.
 
 \begin{center}
@@ -57,9 +61,10 @@ model conversations that were never retained.
   \input{generated/lean_activity_timeline_tikz.tex}
   \caption{Monthly Lean-related arXiv papers indexed by Papers With Lean from
   January 2025 through July 2026 \citep{paperswithlean2026stats}.  The vertical
-  marker is the first commit in the dedicated Davis--Kahan tree used here.  The
-  index measures public Lean-related publication activity; the fraction that
-  used AI is unknown.}
+  marker is the 10 July 2026 commit whose message explicitly scaffolds a ``full
+  paper faithful DK theory.''  Earlier Davis--Kahan work and the 13 July tree
+  reorganization are listed separately below.  The index measures public
+  Lean-related publication activity; the fraction that used AI is unknown.}
   \label{fig:lean-activity}
 \end{figure}
 
@@ -117,33 +122,10 @@ Residual & A quantity measuring how far a trial subspace or frame fails to satis
 Spectral gap & Separation between the target spectral region and competing spectrum. \\
 $\sin\Theta$ & An operator whose singular values encode sines of principal angles between subspaces. \\
 Unitarily invariant norm & A norm unchanged by unitary changes of coordinates; examples include spectral, Frobenius/Hilbert--Schmidt, and trace norms in finite dimensions. \\
-Source correspondence & The judgment that a formal declaration has the hypotheses, objects, scope, and conclusion intended by a particular mathematical source. \\
+Semantic alignment & Agreement between a formal declaration and the mathematical claim intended by its source, including inherited context and scope. \\
 \bottomrule
 \end{tabularx}
 \end{center}
-
-\section{A stopping model for repeated review}
-\label{app:stopping}
-
-A prospective review process could make the statistical idea in the main text
-precise.  Suppose discoveries of new source-correspondence defects follow a
-Poisson process with rate $\lambda$ per unit of standardized review exposure.
-If $k$ defects are found during exposure $E$ and
-$\lambda\sim\operatorname{Gamma}(a,b)$ under the rate parameterization, then
-\[
-  \lambda\mid k,E\sim\operatorname{Gamma}(a+k,b+E),
-\]
-and the posterior predictive probability of no discovery in an additional
-exposure $h$ is
-\[
-  \Pr\{K(E+h)-K(E)=0\mid k,E\}
-  =\left(\frac{b+E}{b+E+h}\right)^{a+k}.
-\]
-This gives a stopping statistic for future discoveries under the assumed
-process.  A probability that the formal theorem is semantically correct would
-also require a model connecting remaining defects to their chance of being
-detected.  The historical project lacks standardized exposure, so we do not
-fit these parameters to calendar time or to the existing Git events.
 
 \section{Resource transparency}
 \label{app:resources}
@@ -167,10 +149,34 @@ quantity & value & basis / interpretation \\
 \end{tabularx}
 \end{table}
 
-\section*{Acknowledgments}
 
-This material is based upon work supported by the Defense Advanced Research
-Project Agency (DARPA) under Contract No. HR001125CE017. Any opinions, findings
-and conclusions or recommendations expressed in this material are those of the
-author(s) and do not necessarily reflect the views of the Defense Advanced
-Research Project Agency (DARPA).
+\begin{table}[H]
+\centering
+\scriptsize
+\caption{AI systems and model families used during the formalization.  This is
+usage provenance, not a claim that every model has complete token telemetry.}
+\label{tab:formalization-systems}
+\begin{tabularx}{\linewidth}{@{}p{0.20\linewidth}p{0.27\linewidth}>{\raggedright\arraybackslash}X@{}}
+\toprule
+System & Models used & Typical use \\
+\midrule
+\input{generated/model_systems_table.tex}
+\end{tabularx}
+\end{table}
+
+\begin{table}[H]
+\centering
+\scriptsize
+\caption{Recovered model-resolved token measurements at the 13 August 2026
+accounting cutoff.  These are measured lower bounds for the five labels with
+recovered telemetry; models in \cref{tab:formalization-systems} that do not
+appear here were still used.}
+\label{tab:model-tokens-appendix}
+\resizebox{\linewidth}{!}{\input{generated/model_token_table.tex}}
+\end{table}
+
+Historical commit metadata also contains raw \texttt{GPT-5.6 High} and
+\texttt{GPT-5.6 Thinking} labels.  The longer accounting record retains those
+raw labels and, for the bounded period where exact ledger attribution is absent,
+uses the documented historical interpretation that they refer to GPT-5.6 Sol
+chat-interface work.  Exact ledger attribution takes precedence when available.

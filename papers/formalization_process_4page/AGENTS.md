@@ -34,17 +34,17 @@ Additional constraints:
 9. The current 29/29 state is provisional. Say that we think all 29 Davis--Kahan
    source results are covered at the intended scope, or are very close. Do not
    turn the current accepted rows into a certainty claim.
-10. Keep the author-provided workflow figure as Figure 1 using ordinary
-    `\includegraphics`. The main text uses a typeset historical Lean signature
-    instead of the dashboard as its semantic-mismatch example. The current
-    dashboard screenshot is included only in the appendix with
-    `\includegraphics`.
+10. Keep the workflow figure as Figure 1. Binary render outputs (PNG, PDF,
+    ZIP, etc.) are local artifacts only and must never be staged or committed.
+    The main text uses a generated text listing for its semantic-mismatch
+    example; the dashboard screenshot is an untracked appendix render.
 11. Figure 1 names Tau Ceti as a possible destination for reusable foundations,
     so retain a brief accurate explanation and citation.
-12. The historical `sin 2 Theta` false finish must remain tied to the actual
-    repository history: the bounded complex endpoint had the printed trial
-    residual but missed real/unbounded scope; the separate unbounded endpoint
-    used a different reflection residual.
+12. The worked example is the Section 2 `tan Theta` endpoint that exposed
+    condition (3.5) as `h35 : CrossedDefectsEquivalent U V`. Keep it tied to
+    commits `c3de4988` (historical endpoint) and `3abcc839` (definedness repair).
+    State precisely that `h35` is derived from `HasDefinedAmbientTangent`; do not
+    claim it follows from the spectral-gap and Rayleigh--Ritz hypotheses alone.
 13. Present EconCSLib, Lean Atlas, ShadowBench, LeanMarathon, FormaTheoria, and
     related systems as adjacent work without priority claims for the local
     dashboard.
@@ -62,3 +62,16 @@ Additional constraints:
     summaries.
 19. Avoid LLM stock contrasts such as “X is not Y; it is Z,” generic taxonomies,
     checklist prose, slogans, and rhetorical claims of novelty.
+20. Do not include the review-stopping Poisson/Bayesian model unless a future
+    study records comparable review exposure. The current historical logs do not
+    support fitting that model to this project.
+21. Chow's doohickey example is illustrative. Do not describe it as silly or
+    otherwise belittle the example.
+22. Formalization 1 is historical evidence. Keep the displayed lines tied to
+    the Git extraction and keep full verbatim signatures in the candidate note.
+    The PDF listing may use an ASCII-safe excerpt solely to avoid `listings`
+    corrupting Lean Unicode glyphs.
+23. Section titles should describe their contents directly. Avoid evaluative or
+    slogan-like headings such as "still too narrow" and rhetorical mini-lessons.
+
+- `notes/SEMANTIC_ALIGNMENT_CANDIDATES.md` is generated evidence. Do not hand-edit its Lean snippets; update `scripts/build_semantic_alignment_candidates.py` and run `make sources`.

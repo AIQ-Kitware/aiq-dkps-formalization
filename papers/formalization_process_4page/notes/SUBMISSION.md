@@ -19,6 +19,7 @@
   `neurips_2026_vericode.sty`; changing margins or font sizes is grounds for
   desk rejection.
 
-The checked-in `draft_neurips_2026.sty` is only a local approximation for
-page-counting while drafting.  Do not submit it.  Port the shared manuscript
-content to each workshop's official template before submission.
+The MATH-AI paper now builds against the official `neurips_2026.sty` with
+`dblblindworkshop`; `draft_neurips_2026.sty` is retained only as the old local
+page-count approximation and must not be submitted. VeriCodeGen still requires
+its separate workshop template before that submission.
