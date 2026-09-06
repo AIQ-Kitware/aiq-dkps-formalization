@@ -2624,33 +2624,35 @@
         "statement_pins": [
           {
             "declaration": "TauCeti.DavisKahan1970.theorem3_1_spectralMultiplicity_classification_sourceAngle_complex",
-            "type_expr_hash": "1036834489",
-            "type_text_sha256": "5af18ed96dd0116708896cf423a45a07ce3eca877799ce42f8a1a528da80a578",
+            "type_expr_hash": "793316829",
+            "type_text_sha256": "c1b604d432afc8a1c8f96711575630a7112f9bb963bb4af1ed5d55231d5ae4cb",
             "toolchain": "leanprover/lean4:v4.34.0-rc1",
-            "pinned_on": "2026-09-05",
-            "note": "Theorem 3.1 repinned 2026-09-05 onto the source's own angle-operator invariant."
+            "pinned_on": "2026-09-06",
+            "note": "Re-pinned 2026-09-06: the two derived [SeparableSpace (genericLeftHalf ...)] instance binders were removed from the complex source-angle statement, and the real source-angle statement is new.  Separability of a subspace of a separable space is a consequence, not a hypothesis the source makes; both statements now carry only the paper's ambient separability."
           },
           {
-            "declaration": "TauCeti.DavisKahan1970.theorem3_1_spectralMultiplicity_classification_real",
-            "type_expr_hash": "1761433419",
-            "type_text_sha256": "dbc2c22531a94bbde4ca7110612ed2d502a72535f73bf492436e316a1124fa01",
+            "declaration": "TauCeti.DavisKahan1970.theorem3_1_spectralMultiplicity_classification_sourceAngle_real",
+            "type_expr_hash": "2744600895",
+            "type_text_sha256": "d3139ea22f123a5d3b12d1b818cdf8bef91ddbed1d5122894e6da7c18a5b744b",
             "toolchain": "leanprover/lean4:v4.34.0-rc1",
-            "pinned_on": "2026-09-04",
-            "note": "Pinned 2026-09-04 when the Theorem 3.1 converse moved to the printed multiplicity hypothesis, free at 0."
+            "pinned_on": "2026-09-06",
+            "note": "Re-pinned 2026-09-06: the two derived [SeparableSpace (genericLeftHalf ...)] instance binders were removed from the complex source-angle statement, and the real source-angle statement is new.  Separability of a subspace of a separable space is a consequence, not a hypothesis the source makes; both statements now carry only the paper's ambient separability."
           },
           {
             "declaration": "TauCeti.DavisKahan1970.theorem3_1_realization_inAmbient_ofSameHilbertDimension_complex",
             "type_expr_hash": "2929097998",
             "type_text_sha256": "2501ba5a1c03b188bd6cc1be6a3d9e0baf7ca331bb9774aa49fe5afb6bfc596c",
             "toolchain": "leanprover/lean4:v4.34.0-rc1",
-            "pinned_on": "2026-09-05"
+            "pinned_on": "2026-09-05",
+            "note": null
           },
           {
             "declaration": "TauCeti.DavisKahan1970.theorem3_1_realization_inAmbient_ofSameHilbertDimension_real",
             "type_expr_hash": "4039918750",
             "type_text_sha256": "0af5024c787a1d92b33df990bf840f61c67d5cb60f21eaaff8d78877d04f4e1f",
             "toolchain": "leanprover/lean4:v4.34.0-rc1",
-            "pinned_on": "2026-09-05"
+            "pinned_on": "2026-09-05",
+            "note": null
           },
           {
             "declaration": "TauCeti.DavisKahan.HalmosAngleDatum.starProjection_targetSubspace_apply",
