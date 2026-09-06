@@ -1021,3 +1021,45 @@ Status: **TERMINAL EXACT**.
 #check @TauCeti.DavisKahan1970.corollary3_2_separable
 #check @TauCeti.DavisKahan1970.proposition4_2_compact_nonacute_separable
 #check @TauCeti.DavisKahan1970.proposition4_2_compact_nonacute_real_separable
+
+/-! ## 2026-09-07 fourth-hostile-review source-scope façades
+
+Theorem 8.1's existence-with-part-(i) clause and the derived block symmetry;
+Section 4 on Davis--Kahan's Definition 3.1 direct rotation; Theorem 3.1's
+converse and Corollary 3.1's realization at the paper's separable scope; and
+Section 6 on the printed separation, the paper's ambient scope, and the
+source's definedness convention. -/
+
+#check @TauCeti.DavisKahan1970.Section8.theorem8_1_exists_branch_withCompression_unbounded_complex
+#check @TauCeti.DavisKahan1970.Section8.theorem8_1_exists_branch_withCompression_unbounded_real
+#check @TauCeti.DavisKahan1970.Section8.isSymmetric_upperBlockShift
+#check @TauCeti.DavisKahan1970.Section8.isSymmetric_lowerBlockShift
+
+#check @TauCeti.DavisKahan.IsSourceDirectRotation
+#check @TauCeti.DavisKahan.IsSourceDirectRotation.add_star_eq_two_absoluteValue
+#check @TauCeti.DavisKahan.norm_one_sub_apply_eq_of_isSourceDirectRotation
+#check @TauCeti.DavisKahan.sq_eq_reflectionProduct
+#check @TauCeti.DavisKahan1970.crossedDefectsEquivalent_of_isSourceDirectRotation
+
+#check @TauCeti.DavisKahan1970.theorem3_1_realization_sourceExact_complex
+#check @TauCeti.DavisKahan1970.theorem3_1_realization_sourceExact_real
+#check @TauCeti.DavisKahan1970.corollary3_1_realization_zeroMultiplicity_sourceScope
+
+#check @TauCeti.DavisKahan1970.lemma6_1_separable_complex
+#check @TauCeti.DavisKahan1970.lemma6_1_separable_real
+#check @TauCeti.DavisKahan1970.lemma6_1_converse_separable_complex
+#check @TauCeti.DavisKahan1970.lemma6_1_converse_separable_real
+#check @TauCeti.DavisKahan1970.lemma6_2_separable
+#check @TauCeti.DavisKahan1970.proposition6_1_printedGap_sourceExact_complex
+#check @TauCeti.DavisKahan1970.proposition6_1_printedGap_sourceExact_real
+#check @TauCeti.DavisKahan1970.theorem6_1_printedGap_sourceExact_complex
+#check @TauCeti.DavisKahan1970.theorem6_1_printedGap_sourceExact_real
+#check @TauCeti.DavisKahan1970.theorem6_2_vacuity_sourceExact_complex
+#check @TauCeti.DavisKahan1970.theorem6_2_vacuity_sourceExact_real
+#check @TauCeti.DavisKahan1970.lemma6_3_leakage_separable_complex
+#check @TauCeti.DavisKahan1970.lemma6_3_leakage_separable_real
+
+#check @TauCeti.DavisKahan.ExactSinTheta.SourceUnitaryInvariantNorm
+#check @TauCeti.DavisKahan.ExactSinTheta.SourceUnitaryInvariantNorm.HasFanDominance
+#check @TauCeti.DavisKahan.ExactSinTheta.SourceUnitaryInvariantNorm.toNormalized
+#check @TauCeti.DavisKahan.ExactSinTheta.NormalizedUnitaryInvariantNorm.toSource_toNormalized

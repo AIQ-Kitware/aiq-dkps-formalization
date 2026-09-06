@@ -6,8 +6,8 @@ The denominator contains exactly the four Section 2 headline theorems and every 
 
 - Counted results: **29**
 - Result-boundary reviews accepted: **29/29**
-- Currently hostile-certified terminal: **29**
-- Awaiting closure: **0**
+- Currently hostile-certified terminal: **28**
+- Awaiting closure: **1** (`DK-8.1-thm`, reopened 2026-09-07)
 - Printed statements that are NOT locally self-contained: **6**
 - Result-only semantic sweep: `dev/davis-kahan-1970-result-semantic-review-2026-08-12.md`
 - Compiler-checkable theorem surface: `DavisKahan/Sources/DavisKahan1970/Audits/ResultSemanticSurface.lean`
@@ -49,7 +49,7 @@ Each result below explicitly partitions its primary source block into atoms insi
 | `DK-6.2-thm` | theorem | `locally_exact` | yes | `proved_exact` | `proved_in_build` | `accepted` | `accepted` |
 | `DK-6.3-thm` | theorem | `locally_exact` | yes | `proved_exact` | `proved_in_build` | `accepted` | `accepted` |
 | `DK-6.3-lem` | lemma | `locally_exact` | yes | `proved_exact` | `proved_in_build` | `accepted` | `accepted` |
-| `DK-8.1-thm` | theorem | `paper_faithful_nonlocal_source_interpretation` | **no** | `proved_exact` | `proved_in_build` | `accepted` | `accepted` |
+| `DK-8.1-thm` | theorem | `paper_faithful_nonlocal_source_interpretation` | **no** | `proved_exact` | `proved_in_build` | `hostile_review_blocked` | `accepted` |
 | `DK-8.2-thm` | theorem | `paper_faithful_nonlocal_source_interpretation` | **no** | `proved_exact` | `proved_in_build` | `accepted` | `accepted` |
 
 ## Results whose printed statement is not locally self-contained
@@ -129,8 +129,24 @@ The accepted reading is hash-pinned to the distributable specification, the sour
 
 ## Current closure queue
 
-Empty. All 29 counted results are terminal on all three axes, and no
-hostile-review obligation is open.
+`DK-8.1-thm` — Theorem 8.1. Reopened 2026-09-07 by the fourth hostile review.
+Parts (ii) and (iii) are printed on the ordered eigenvalues of the **blocks**
+`A₁` and `Λ₁`, with part (iii)'s symmetric gauge on the block dimension. The
+registered witnesses index `Fin (finrank H)` and take a gauge on `finrank H`,
+reading the eigenvalue lists of `upperBlockShift`/`lowerBlockShift` — the blocks
+extended by zero to the ambient space. Zero-padding changes the public object and
+the gauge dimension, and neither reading implies the other.
+
+The same review's other half of that finding **is** repaired: the witnesses no
+longer ask the caller for the blocks' symmetry, which is a derived fact;
+`isSymmetric_upperBlockShift` and `isSymmetric_lowerBlockShift` supply it.
+
+What the repair needs, and why it is not a wrapper, is written out in
+`open_hostile_review_obligations.obligations` in the JSON: an ambient/block
+approximation-number bridge, the block-dimension equality
+`finrank Pᗮ = finrank Qᗮ` from the acute angle, and — for (iii) — either the
+majorization at block dimension or the decreasing-rearrangement extension of a
+block gauge to the ambient one.
 
 This section lists exactly the results the machine state reports as
 nonterminal; the checker rejects it when the two disagree, and rejects an
