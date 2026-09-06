@@ -4,7 +4,7 @@
 
 **Census family:** `source-completion-census`  
 **Items:** 50  
-**Unique cited Lean declarations:** 1325
+**Unique cited Lean declarations:** 1331
 
 ## How to use this census
 
@@ -4338,6 +4338,12 @@ ROW WAS STALE; CORRECTED 2026-08-07 (Fable 5).  The requested 'exact source norm
 - `TauCeti.DavisKahan1970.Section8.theorem8_1_lowerSymmetricGaugeRepulsion_angle_rev_real`
 - `TauCeti.DavisKahan1970.Section8.theorem8_1_upperCompressionRepulsion_real`
 - `TauCeti.DavisKahan1970.Section8.theorem8_1_lowerCompressionRepulsion_real`
+- `TauCeti.DavisKahan.maximalAngle_le_pi_div_four_of_orderedFormGap_unbounded`
+- `TauCeti.DavisKahan.maximalAngle_le_pi_div_four_of_orderedFormGap_unbounded_printed`
+- `TauCeti.DavisKahan.subspaceGap_le_of_reflectionProduct_form_nonneg`
+- `TauCeti.DavisKahan.maximalAngle_le_pi_div_four_of_reflectionProduct_form_nonneg`
+- `TauCeti.DavisKahan.reflectionProduct_add_swap_eq`
+- `TauCeti.ContinuousLinearMap.nonneg_of_lyapunov_nonneg`
 
 **Curated source/Lean review:**
 
@@ -4482,6 +4488,10 @@ both sides each, and Krein's completion PROVED rather than assumed.
 The uniqueness proof does NOT replay the complex cfc argument: it complexifies both candidate reducing subspaces, applies the dimension-free complex uniqueness theorem to identify each with the same canonical branch, and descends the equality through injectivity of `complexifySubmodule`.  The form-bound-to-spectrum implications were factored out into `DavisKahan/SpectralTheory/FormSpectrumBounds.lean` as four `RCLike`-generic lemmas rather than duplicated over R, and both the real and complex source theorems consume them; those four are now listed on this row.
 
 STATUS LEFT AT `compiled_exact` PENDING A HUMAN CALL on whether the surviving complex-only (ii)/(iii) family is a narrowing worth recording in the status field.  The row carried `compiled_exact` with a real-scalar gap BEFORE this work, which the completion handoff cites as its example of a status that overstates; the gap is now strictly smaller but not empty.
+
+UNBOUNDED SCOPE, PROGRESS 2026-09-05.  The angle conclusion Davis and Kahan print -- `Theta <= pi/4`, non-strict -- is now proved at unbounded ambient scope by `maximalAngle_le_pi_div_four_of_orderedFormGap_unbounded_printed`, in the paper's own orientation on `P` and `Q`.  Reading the printed statement mattered: the bounded canonical evidence concludes the strictly stronger supremum bound `subspaceGap < sqrt 2 / 2`, whose constant is `delta / (1 + ‖C‖)` and therefore degenerates as `‖A‖ -> infinity`.  The paper does not claim it, and it is not available unbounded.
+
+What is still bounded on this row: the existence of the branch `Q` as a spectral subspace of `A + H`, the form bounds on it, and parts (i)-(iii).  The canonical evidence is therefore unchanged and the row is not yet at its source scope.
 
 **Next action.** No result-level hole remains for Theorem 8.1. Preserve the accepted exact source-facing evidence set and re-audit only if the source specification or theorem signatures change.
 

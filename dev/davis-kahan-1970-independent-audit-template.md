@@ -6539,6 +6539,12 @@ The declarations that carry this result's printed statement, with the source ato
 ### Other registered declarations
 
 - `TauCeti.DavisKahan1970.Section8.approximationNumber_eq_eigenvalues_of_isPositive` — supporting_theorem
+- `TauCeti.DavisKahan.maximalAngle_le_pi_div_four_of_orderedFormGap_unbounded` — generalization
+- `TauCeti.DavisKahan.maximalAngle_le_pi_div_four_of_orderedFormGap_unbounded_printed` — generalization
+- `TauCeti.DavisKahan.subspaceGap_le_of_reflectionProduct_form_nonneg` — generalization
+- `TauCeti.DavisKahan.maximalAngle_le_pi_div_four_of_reflectionProduct_form_nonneg` — generalization
+- `TauCeti.DavisKahan.reflectionProduct_add_swap_eq` — generalization
+- `TauCeti.ContinuousLinearMap.nonneg_of_lyapunov_nonneg` — generalization
 
 ### Source-facing Lean declarations
 
@@ -6641,6 +6647,42 @@ Compiler-printed type: *inserted when a compiler certificate is supplied.*
 #### `TauCeti.DavisKahan1970.Section8.theorem8_1_lowerSymmetricGaugeRepulsion_angle_rev_real`
 
 Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section8/Theorem81AngleForms.lean:774`
+
+Compiler-printed type: *inserted when a compiler certificate is supplied.*
+
+#### `TauCeti.DavisKahan.maximalAngle_le_pi_div_four_of_orderedFormGap_unbounded`
+
+Source location candidates: `DavisKahan/InfiniteDimensional/TanTwoTheta/QuarterAngleUnbounded.lean:67`
+
+Compiler-printed type: *inserted when a compiler certificate is supplied.*
+
+#### `TauCeti.DavisKahan.maximalAngle_le_pi_div_four_of_orderedFormGap_unbounded_printed`
+
+Source location candidates: `DavisKahan/InfiniteDimensional/TanTwoTheta/QuarterAngleUnbounded.lean:304`
+
+Compiler-printed type: *inserted when a compiler certificate is supplied.*
+
+#### `TauCeti.DavisKahan.subspaceGap_le_of_reflectionProduct_form_nonneg`
+
+Source location candidates: `DavisKahan/InfiniteDimensional/TanTwoTheta/QuarterAcuteFormGap.lean:768`
+
+Compiler-printed type: *inserted when a compiler certificate is supplied.*
+
+#### `TauCeti.DavisKahan.maximalAngle_le_pi_div_four_of_reflectionProduct_form_nonneg`
+
+Source location candidates: `DavisKahan/InfiniteDimensional/TanTwoTheta/QuarterAcuteFormGap.lean:809`
+
+Compiler-printed type: *inserted when a compiler certificate is supplied.*
+
+#### `TauCeti.DavisKahan.reflectionProduct_add_swap_eq`
+
+Source location candidates: `DavisKahan/InfiniteDimensional/TanTwoTheta/QuarterAcuteFormGap.lean:718`
+
+Compiler-printed type: *inserted when a compiler certificate is supplied.*
+
+#### `TauCeti.ContinuousLinearMap.nonneg_of_lyapunov_nonneg`
+
+Source location candidates: `ForTauCeti/Analysis/InnerProductSpace/LyapunovPositivity.lean:223`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 

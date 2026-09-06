@@ -292,6 +292,62 @@ theorem maximalAngle_le_pi_div_four_of_orderedFormGap_unbounded
   have := this.2 y
   rwa [ContinuousLinearMap.reApplyInnerSelf_apply] at this
 
+/-- **Theorem 8.1's angle conclusion in the paper's own orientation, at unbounded
+scope.**
+
+Davis and Kahan write the hypotheses on `P` and `Q` themselves -- the form of `A`
+at most `alpha` on `P` and at least `alpha + delta` on `P^perp`, and the same for
+`A + H` on `Q` -- and conclude `Theta <= pi/4` for the pair `(P, Q)`.  The
+previous theorem is stated on the complements, which is where the reflection
+argument runs; the projector gap does not see the flip, so the two are the same
+statement. -/
+theorem maximalAngle_le_pi_div_four_of_orderedFormGap_unbounded_printed
+    (A : E →ₗ.[ℂ] E) (Hop : E →L[ℂ] E)
+    (P Q : Submodule ℂ E) [P.HasOrthogonalProjection] [Q.HasOrthogonalProjection]
+    {alpha delta : ℝ}
+    (hA : IsSelfAdjoint A) (hH : IsSelfAdjoint Hop)
+    (hredP : TauCeti.LinearPMap.ReducesSubspace A Pᗮ)
+    (hQ : TauCeti.LinearPMap.ReducesSubspace (TauCeti.LinearPMap.addBounded A Hop) Qᗮ)
+    (hPlow : ∀ x : A.domain, (x : E) ∈ P →
+      RCLike.re ⟪A x, (x : E)⟫_ℂ ≤ alpha * ‖(x : E)‖ ^ 2)
+    (hPhigh : ∀ x : A.domain, (x : E) ∈ Pᗮ →
+      (alpha + delta) * ‖(x : E)‖ ^ 2 ≤ RCLike.re ⟪A x, (x : E)⟫_ℂ)
+    (hQlow : ∀ x : (TauCeti.LinearPMap.addBounded A Hop).domain, (x : E) ∈ Q →
+      RCLike.re ⟪TauCeti.LinearPMap.addBounded A Hop x, (x : E)⟫_ℂ ≤
+        alpha * ‖(x : E)‖ ^ 2)
+    (hQhigh : ∀ x : (TauCeti.LinearPMap.addBounded A Hop).domain, (x : E) ∈ Qᗮ →
+      (alpha + delta) * ‖(x : E)‖ ^ 2 ≤
+        RCLike.re ⟪TauCeti.LinearPMap.addBounded A Hop x, (x : E)⟫_ℂ)
+    (hHP : ∀ x ∈ P, Hop x ∈ Pᗮ) (hHPperp : ∀ x ∈ Pᗮ, Hop x ∈ P)
+    (hdelta : 0 < delta) :
+    TauCeti.DavisKahanExt.maximalAngle P Q ≤ Real.pi / 4 := by
+  have hPperpperp : (Pᗮ)ᗮ = P := Submodule.orthogonal_orthogonal P
+  have hQperpperp : (Qᗮ)ᗮ = Q := Submodule.orthogonal_orthogonal Q
+  have hcompl := maximalAngle_le_pi_div_four_of_orderedFormGap_unbounded A Hop Pᗮ Qᗮ
+    (a := alpha) (b := alpha + delta) hA hH hredP hQ
+    hPhigh (by
+      intro x hx
+      rw [hPperpperp] at hx
+      exact hPlow x hx)
+    hQhigh (by
+      intro x hx
+      rw [hQperpperp] at hx
+      exact hQlow x hx)
+    (by
+      intro x hx
+      rw [hPperpperp]
+      exact hHPperp x hx)
+    (by
+      intro x hx
+      rw [hPperpperp] at hx
+      exact hHP x hx)
+    (by linarith)
+  have hgap : subspaceGap Pᗮ Qᗮ = subspaceGap P Q :=
+    TauCeti.DavisKahan.subspaceGap_orthogonal P Q
+  change Real.arcsin (subspaceGap P Q) ≤ Real.pi / 4
+  rw [← hgap]
+  exact hcompl
+
 end
 
 end DavisKahan
