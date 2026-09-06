@@ -805,6 +805,46 @@ theorem subspaceGap_le_of_reflectionProduct_form_nonneg
   rw [← hDdef, ← hsqrt]
   exact hDnorm
 
+/-- **The pointwise strict form.**  Where the reflection product's real part is
+strictly positive on a vector, the projector difference is strictly below the
+`√2/2` threshold *at that vector*.
+
+This is the same computation as `hpoint` inside
+`subspaceGap_le_of_reflectionProduct_form_nonneg`, kept strict.  A supremum
+bound does not follow -- the strictness is pointwise and need not be uniform --
+which is exactly the distinction Section 8 turns on at unbounded scope. -/
+theorem norm_starProjection_sub_sq_lt_of_reflectionProduct_form_pos
+    (U V : Submodule ℂ E)
+    [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] {x : E}
+    (h : 0 < RCLike.re ⟪(reflectionOperator V * reflectionOperator U
+      + reflectionOperator U * reflectionOperator V) x, x⟫_ℂ) :
+    ‖U.starProjection x - V.starProjection x‖ ^ 2 < (1 / 2 : ℝ) * ‖x‖ ^ 2 := by
+  obtain ⟨D, hDdef⟩ : ∃ D : E →L[ℂ] E, D = U.starProjection - V.starProjection := ⟨_, rfl⟩
+  have hDstar : IsSelfAdjoint D := by
+    rw [hDdef]
+    exact (isSelfAdjoint_starProjection U).sub (isSelfAdjoint_starProjection V)
+  have hDx : D x = U.starProjection x - V.starProjection x := by rw [hDdef]; rfl
+  have hx := h
+  rw [reflectionProduct_add_swap_eq U V, ← hDdef] at hx
+  have hval : ((2 : ℂ) • (1 : E →L[ℂ] E) - (4 : ℂ) • (D * D)) x
+      = (2 : ℂ) • x - (4 : ℂ) • D (D x) := by
+    simp only [sub_apply, smul_apply, one_apply_eq_self, mul_apply_eq_comp]
+  rw [hval, inner_sub_left, map_sub, inner_smul_left, inner_smul_left] at hx
+  have hDsq : RCLike.re ⟪D (D x), x⟫_ℂ = ‖D x‖ ^ 2 := by
+    calc RCLike.re ⟪D (D x), x⟫_ℂ = RCLike.re ⟪(star D) (D x), x⟫_ℂ := by
+          rw [hDstar.star_eq]
+      _ = RCLike.re ⟪D x, D x⟫_ℂ := by
+          rw [ContinuousLinearMap.star_eq_adjoint,
+            ContinuousLinearMap.adjoint_inner_left]
+      _ = ‖D x‖ ^ 2 := by rw [inner_self_eq_norm_sq]
+  have htwo : RCLike.re ((starRingEnd ℂ) (2 : ℂ) * ⟪x, x⟫_ℂ) = 2 * ‖x‖ ^ 2 := by
+    simpa using re_conj_real_mul_inner_self (E := E) 2 x
+  have hfour : RCLike.re ((starRingEnd ℂ) (4 : ℂ) * ⟪D (D x), x⟫_ℂ) =
+      4 * RCLike.re ⟪D (D x), x⟫_ℂ := re_conj_real_mul 4 ⟪D (D x), x⟫_ℂ
+  rw [htwo, hfour, hDsq] at hx
+  rw [← hDx]
+  linarith
+
 /-- **`Θ ≤ π/4` in the printed angle form.** -/
 theorem maximalAngle_le_pi_div_four_of_reflectionProduct_form_nonneg
     (U V : Submodule ℂ E)

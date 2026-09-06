@@ -6619,6 +6619,17 @@ The declarations that carry this result's printed statement, with the source ato
 - `TauCeti.DavisKahan1970.Section8.re_inner_split_of_reduces` — generalization
 - `TauCeti.DavisKahan1970.Section8.theorem8_1_upperCompressionRepulsion_unbounded` — generalization
 - `TauCeti.DavisKahan1970.Section8.theorem8_1_lowerCompressionRepulsion_unbounded` — generalization
+- `TauCeti.LinearPMap.specProjection_apply_of_unitary_intertwines` — generalization
+- `TauCeti.LinearPMap.specProjection_eq_specProjC` — generalization
+- `TauCeti.DavisKahan.reflectionProduct_form_pos_of_orderedFormGap_unbounded` — generalization
+- `TauCeti.DavisKahan.norm_starProjection_sub_sq_lt_of_reflectionProduct_form_pos` — generalization
+- `TauCeti.DavisKahan.norm_starProjection_sub_sq_lt_of_orderedFormGap_unbounded` — generalization
+- `TauCeti.DavisKahan.norm_starProjection_sub_sq_lt_of_orderedFormGap_unbounded_printed` — generalization
+- `TauCeti.DavisKahan1970.Section8.starProjection_specProjection_comm_of_reduces` — generalization
+- `TauCeti.DavisKahan1970.Section8.eq_of_starProjection_comm_of_crossed_trivial` — generalization
+- `TauCeti.DavisKahan1970.Section8.norm_starProjection_lt_of_mem_orthogonal_of_sq_lt` — generalization
+- `TauCeti.DavisKahan1970.Section8.theorem8_1_eq_canonicalBranchUnbounded_of_maximalAngle_le` — generalization
+- `TauCeti.DavisKahan1970.Section8.theorem8_1_maximalAngle_le_iff_orderedFormGap_unbounded` — generalization
 
 ### Source-facing Lean declarations
 
@@ -6726,13 +6737,13 @@ Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan.maximalAngle_le_pi_div_four_of_orderedFormGap_unbounded`
 
-Source location candidates: `DavisKahan/InfiniteDimensional/TanTwoTheta/QuarterAngleUnbounded.lean:300`
+Source location candidates: `DavisKahan/InfiniteDimensional/TanTwoTheta/QuarterAngleUnbounded.lean:435`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan.maximalAngle_le_pi_div_four_of_orderedFormGap_unbounded_printed`
 
-Source location candidates: `DavisKahan/InfiniteDimensional/TanTwoTheta/QuarterAngleUnbounded.lean:409`
+Source location candidates: `DavisKahan/InfiniteDimensional/TanTwoTheta/QuarterAngleUnbounded.lean:544`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
@@ -6744,7 +6755,7 @@ Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan.maximalAngle_le_pi_div_four_of_reflectionProduct_form_nonneg`
 
-Source location candidates: `DavisKahan/InfiniteDimensional/TanTwoTheta/QuarterAcuteFormGap.lean:809`
+Source location candidates: `DavisKahan/InfiniteDimensional/TanTwoTheta/QuarterAcuteFormGap.lean:849`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
@@ -6762,19 +6773,19 @@ Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan.reflectionProduct_form_nonneg_of_orderedFormGap_unbounded`
 
-Source location candidates: `DavisKahan/InfiniteDimensional/TanTwoTheta/QuarterAngleUnbounded.lean:70`
+Source location candidates: `DavisKahan/InfiniteDimensional/TanTwoTheta/QuarterAngleUnbounded.lean:406`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan.subspaceGap_le_of_orderedFormGap_unbounded`
 
-Source location candidates: `DavisKahan/InfiniteDimensional/TanTwoTheta/QuarterAngleUnbounded.lean:327`
+Source location candidates: `DavisKahan/InfiniteDimensional/TanTwoTheta/QuarterAngleUnbounded.lean:462`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan.subspaceGap_le_of_orderedFormGap_unbounded_printed`
 
-Source location candidates: `DavisKahan/InfiniteDimensional/TanTwoTheta/QuarterAngleUnbounded.lean:354`
+Source location candidates: `DavisKahan/InfiniteDimensional/TanTwoTheta/QuarterAngleUnbounded.lean:489`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
@@ -6865,6 +6876,72 @@ Compiler-printed type: *inserted when a compiler certificate is supplied.*
 #### `TauCeti.DavisKahan1970.Section8.theorem8_1_lowerCompressionRepulsion_unbounded`
 
 Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section8/Theorem81UnboundedCompression.lean:112`
+
+Compiler-printed type: *inserted when a compiler certificate is supplied.*
+
+#### `TauCeti.LinearPMap.specProjection_apply_of_unitary_intertwines`
+
+Source location candidates: `ForTauCeti/Analysis/InnerProductSpace/LinearPMap/SpectralProjectionNaturality.lean:97`
+
+Compiler-printed type: *inserted when a compiler certificate is supplied.*
+
+#### `TauCeti.LinearPMap.specProjection_eq_specProjC`
+
+Source location candidates: `ForTauCeti/Analysis/InnerProductSpace/LinearPMap/SpectralProjectionNaturality.lean:73`
+
+Compiler-printed type: *inserted when a compiler certificate is supplied.*
+
+#### `TauCeti.DavisKahan.reflectionProduct_form_pos_of_orderedFormGap_unbounded`
+
+Source location candidates: `DavisKahan/InfiniteDimensional/TanTwoTheta/QuarterAngleUnbounded.lean:78`
+
+Compiler-printed type: *inserted when a compiler certificate is supplied.*
+
+#### `TauCeti.DavisKahan.norm_starProjection_sub_sq_lt_of_reflectionProduct_form_pos`
+
+Source location candidates: `DavisKahan/InfiniteDimensional/TanTwoTheta/QuarterAcuteFormGap.lean:816`
+
+Compiler-printed type: *inserted when a compiler certificate is supplied.*
+
+#### `TauCeti.DavisKahan.norm_starProjection_sub_sq_lt_of_orderedFormGap_unbounded`
+
+Source location candidates: `DavisKahan/InfiniteDimensional/TanTwoTheta/QuarterAngleUnbounded.lean:370`
+
+Compiler-printed type: *inserted when a compiler certificate is supplied.*
+
+#### `TauCeti.DavisKahan.norm_starProjection_sub_sq_lt_of_orderedFormGap_unbounded_printed`
+
+Source location candidates: `DavisKahan/InfiniteDimensional/TanTwoTheta/QuarterAngleUnbounded.lean:595`
+
+Compiler-printed type: *inserted when a compiler certificate is supplied.*
+
+#### `TauCeti.DavisKahan1970.Section8.starProjection_specProjection_comm_of_reduces`
+
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section8/Theorem81UnboundedConverse.lean:66`
+
+Compiler-printed type: *inserted when a compiler certificate is supplied.*
+
+#### `TauCeti.DavisKahan1970.Section8.eq_of_starProjection_comm_of_crossed_trivial`
+
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section8/Theorem81UnboundedConverse.lean:132`
+
+Compiler-printed type: *inserted when a compiler certificate is supplied.*
+
+#### `TauCeti.DavisKahan1970.Section8.norm_starProjection_lt_of_mem_orthogonal_of_sq_lt`
+
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section8/Theorem81UnboundedConverse.lean:102`
+
+Compiler-printed type: *inserted when a compiler certificate is supplied.*
+
+#### `TauCeti.DavisKahan1970.Section8.theorem8_1_eq_canonicalBranchUnbounded_of_maximalAngle_le`
+
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section8/Theorem81UnboundedConverse.lean:170`
+
+Compiler-printed type: *inserted when a compiler certificate is supplied.*
+
+#### `TauCeti.DavisKahan1970.Section8.theorem8_1_maximalAngle_le_iff_orderedFormGap_unbounded`
+
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section8/Theorem81UnboundedConverse.lean:232`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 

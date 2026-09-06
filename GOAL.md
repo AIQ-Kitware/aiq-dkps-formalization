@@ -472,65 +472,58 @@ printed scope, and the dimension-free approximation-number form already
 registered covers (ii)'s extension remark.  §XVII's "finite versus
 infinite-dimensional scope matches each printed result" is satisfied for them.
 
-### 10.3.3 The converse half: what is actually in the way (analysis, 2026-09-06)
+### 10.3.3 The converse half: closed (2026-09-06)
 
-**One item is left on this row: the converse half of the printed *iff*.**  It is
-not a porting gap, and the analysis below is meant to stop the next attempt from
-re-treading a route that is closed.
+**Both halves of Theorem 8.1's printed *iff* are now proved at unbounded scope.**
+`theorem8_1_maximalAngle_le_iff_orderedFormGap_unbounded` is the printed
+equivalence; `theorem8_1_eq_canonicalBranchUnbounded_of_maximalAngle_le` is the
+uniqueness of the branch that carries its `only if` half.
 
-*The bounded mechanism.*  The bounded converse goes through uniqueness — `M`
-equals the canonical branch — and rests on `IsQuarterAcute P Q`, a **uniform**
-strict bound `subspaceGap P Q < √2/2`.  The bounded proof's margin is
-`δ/(1 + ‖C‖)`, which degenerates as `‖A‖` grows (§10.3.1), so it does not survive
-to unbounded scope.
+An earlier revision of this section argued the converse was an open mathematical
+question.  That argument was wrong, and the error is worth recording because it is
+the kind that closes a route prematurely.
 
-*The projection-algebra route is closed.*  Suppose one has only the non-strict
-`Θ(P, Q) ≤ π/4` and `Θ(P, M) ≤ π/4`, and a nonzero `u ∈ M ∩ Qᗮ`.  Then
-`‖P_P u‖ ≤ ‖u‖/√2` (from `P_Q u = 0` and the `Q` bound) and
-`‖P_{Pᗮ} u‖ ≤ ‖u‖/√2` (from the `M` bound), and the two squares sum to `‖u‖²`.
-So both are *equalities*: `u` makes angle exactly `π/4` with `P`.  The step that
-was a contradiction in the bounded proof becomes a consistent configuration.  The
-same computation on the other corner, `w ∈ Mᗮ ∩ Q`, gives exactly `π/4` again.
-Adding the energy identity does not help: expanding
-`re⟪B u, u⟫ = re⟪A p, p⟫ + re⟪A q, q⟫ + 2 re⟪H p, q⟫` leaves two unknowns —
-`re⟪A q, q⟫` is unbounded above on `Pᗮ` — and one inequality.
+*The wrong step.*  It assumed the pair `(P, Q)` — `Q` the canonical branch —
+supplies only the non-strict `Θ ≤ π/4`, on the grounds that the strict bounded
+statement `IsQuarterAcute P Q` costs the constant `δ/(1 + ‖C‖)`, which degenerates
+as `‖A‖ → ∞`.  With only non-strict bounds on both pairs a nonzero
+`u ∈ M ∩ Qᗮ` is forced to make angle *exactly* `π/4` with `P`, and the bounded
+proof's contradiction becomes a consistent configuration.
 
-*Why commutation alone does not rescue it.*  A unitary commuting with `B`
-commutes with its spectral projections, so `P_M` and `P_Q` commute and `M` splits
-along `Q`.  That is what produces the vector `u` above — and `u` is then exactly
-the configuration the projection algebra cannot exclude.  Adding the commutation
-lemma without a way to exclude `u` would be machinery that carries no weight.
+*What was actually available.*  The degenerating constant is the price of a
+**uniform** bound.  The uniqueness argument never uses one: it tests a single
+vector at a time, and **pointwise** strictness is enough.  Pointwise strictness was
+already inside the unbounded quarter-angle proof and was being thrown away.
+`reflectionProduct_form_nonneg_of_orderedFormGap_unbounded` reached
+`0 ≤ ⟪(K J + J K) y, y⟫` by discarding the `δ‖G y‖²` margin that the coercivity
+`hWG` supplies; retaining it gives `⟪(X G + G X) y, y⟫ ≥ 2δ(‖G y‖² + ‖G (W y)‖²)`,
+which is strictly positive for `y ≠ 0` because `G` is injective.  A positive
+operator whose form vanishes at `u` is orthogonal to the whole range of `X` at `u`
+— an elementary one-variable argument on `re⟪X(v + t u), v + t u⟫` — so
+`⟪X u, u⟫ = 0` would kill that margin at `v = G u`.  Hence `⟪X u, u⟫ > 0` for every
+`u ≠ 0`, i.e. `‖P_P u − P_Q u‖ < ‖u‖/√2` pointwise:
+`norm_starProjection_sub_sq_lt_of_orderedFormGap_unbounded_printed`.
 
-*What the paper actually does.*  Its equations (8.1)–(8.2) exclude `θ = π/4` by
+No uniform bound follows, and none is claimed: `‖G y‖` has no positive lower bound
+on the unit sphere when `A` is unbounded.  That is exactly consistent with the
+paper printing only the non-strict `Θ ≤ π/4` as its conclusion.
+
+*The second ingredient.*  `P_M` commutes with `P_Q`, so `M` splits along `Q` and
+the two trivial crossed intersections `M ∩ Qᗮ = 0`, `Q ∩ Mᗮ = 0` give `M = Q`.
+The commutation is `LinearPMap.specProjection_apply_of_unitary_intertwines`: a
+unitary preserving `dom B` and commuting with `B` commutes with every
+`specProjection`, since `cayley_intertwines` carries the relation to the Cayley
+transform and `BorelCalculus.borelCalculus_comp_val_of_intertwines` carries it
+through the Borel calculus.  `SeparatedIntertwiner` recorded the Borel step as
+open; it is open for a *general bounded* intertwiner, and was already available for
+a **unitary** one, which is the only case a reducing subspace needs — a subspace
+reduces `B` exactly when its reflection is a unitary commuting with `B`.
+
+*What the paper does, for the record.*  Equations (8.1)–(8.2) exclude `θ = π/4` via
 `x₀^* B^* y₁ (tan θ − cot θ) = y₁^* A₁ y₁ − x₀^* A₀ x₀ ≥ δ > 0`, whose left side
-vanishes at `θ = π/4`.  That is a statement about a *principal angle* and its
-partner vector — the canonical-angle (CS) decomposition — not about the
-projection algebra.  Note also that excluding every principal angle `θ_j = π/4`
-does **not** give a uniform sup bound in infinite dimensions, which is consistent
-with the paper printing only the non-strict `Θ ≤ π/4`.
-
-*The two candidate routes,* neither a transcription:
-
-1. prove the uniform strict bound `subspaceGap P Q < √2/2` at unbounded scope, or
-   exhibit a counterexample — its status is genuinely open; or
-2. build the canonical-angle decomposition for the unbounded pair and run
-   (8.1)–(8.2) there.
-
-Until one of them is done, DK-8.1-thm's canonical evidence for the converse stays
-bounded, and the inventory says so.
-
-The machinery built for Theorem 8.2 is what a next attempt should use rather than
-starting again: `SpectralTheory/UnboundedCentralBand.lean` already selects a
-spectral range on a closed interval and removes a null part of the selecting set
-(`specProjection_eq_of_diff_eq_zero`), which is the shape the `Iic α` branch and
-its exterior need; `SpectralTheory/ReducingSpectrumUnion.lean` has the
-block-to-ambient spectrum bridge and the unbounded `reduces_orthogonalComplement`;
-and the form bounds are `re_inner_le_of_specProjection_Ioi_eq_zero` and
-`le_re_inner_of_specProjection_Iio_eq_zero`.
-
-**This is the one row that is not at its source scope.**  DK-8.2-thm's canonical
-evidence is now unbounded (§XVI.6); DK-8.1-thm's is not, and the inventory says so
-rather than claiming otherwise.
+vanishes at `θ = π/4`.  That is the canonical-angle (CS) decomposition.  The route
+above reaches the same exclusion through the Lyapunov positivity of `K J + J K`
+instead, and never builds a CS decomposition for the unbounded pair.
 
 ### 10.3.1 What that implication should actually say (finding, 2026-09-05)
 
@@ -1442,24 +1435,36 @@ Measured, not asserted.  Every line below is checkable from
 
 | Condition | Status |
 | --- | --- |
-| every designated result has canonical Lean evidence at its actual source scope | **28 of 29**; DK-8.1-thm's converse clause is the exception |
+| every designated result has canonical Lean evidence at its actual source scope | **28 of 29**; DK-8.1-thm's canonical evidence is bounded, and its unbounded development is complex-only (§10.3.3) |
 | real/complex coverage for every result | met |
 | canonical façades expose the paper's separability scope | met, and every separable canonical witness is classified in `ambient_scope_policy.separability` |
 | finite vs infinite-dimensional scope matches each printed result | met — including Theorem 8.1 (ii) and (iii), which the source prints *in finite dimensions* (§10.3) |
-| bounded vs unbounded scope matches each printed result | **all but DK-8.1-thm's converse** |
+| bounded vs unbounded scope matches each printed result | **all but DK-8.1-thm's canonical evidence selection**; every printed clause of 8.1 that inherits unbounded scope now has a compiled unbounded complex proof |
 | every UIN-quantified theorem uses the literal source abstraction at its boundary | met, and as of §4c that abstraction no longer carries completeness |
 | no canonical theorem asks for a hypothesis absent from the paper | met |
 | source objects, gaps, ordered angles, residuals, constants, conclusions agree | met, re-checked by the tamper suite and the 95 statement pins |
-| **Theorems 8.1 and 8.2 cover their inherited unbounded scope** | **8.2 yes; 8.1 all but the converse of the printed *iff*** |
+| **Theorems 8.1 and 8.2 cover their inherited unbounded scope** | **8.2 yes, complex and real; 8.1 yes at complex scalar scope, including both halves of the printed *iff*; 8.1's real unbounded ports are not written** |
 | the exact/stronger distinction stays visible in the census | met |
 | a fresh source-first review finds no material statement mismatch | run; it found two defects, both fixed (§XVI.6) |
 | the final certification pass succeeds | run 2026-09-06, green apart from three failures that are not Davis--Kahan |
 
 **So the finish line is not crossed, and the claim in §XVIII must not be made
-yet.**  Exactly one thing stands between the repository and it: the converse half
-of Theorem 8.1's printed characterization at unbounded scope.  §10.3.3 records
-why it is a mathematical gap rather than a porting gap, which route is closed and
-which two remain open.  Everything else on the list is met.
+yet.**  What stands between the repository and it is no longer a mathematical
+gap.  As of 2026-09-06 every printed clause of Theorem 8.1 that inherits unbounded
+scope has a compiled unbounded proof, both halves of the printed *iff* included
+(§10.3.3); parts (ii) and (iii) are printed *in finite dimensions* and are at
+their printed scope already.  What remains on DK-8.1-thm is:
+
+1. the **real** unbounded ports.  The Section 8 unbounded development is
+   complex-only, and this row's real scalar coverage is carried entirely by its
+   bounded canonical evidence.  Theorem 8.2 has both (`..._unbounded_source_complex`
+   and `..._real`); Theorem 8.1 does not yet.
+2. **promoting the canonical evidence** once (1) exists.  Until then the promotion
+   would trade a scope gain for a scalar-scope loss, so the row keeps its bounded
+   canonical selection and its accepted
+   `nonlocal_source_interpretation` disclosing exactly that.
+
+Everything else on the list is met.
 
 ---
 

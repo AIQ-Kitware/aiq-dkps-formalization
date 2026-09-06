@@ -4,7 +4,7 @@
 
 **Census family:** `source-completion-census`  
 **Items:** 50  
-**Unique cited Lean declarations:** 1385
+**Unique cited Lean declarations:** 1396
 
 ## How to use this census
 
@@ -4370,6 +4370,17 @@ ROW WAS STALE; CORRECTED 2026-08-07 (Fable 5).  The requested 'exact source norm
 - `TauCeti.DavisKahan1970.Section8.re_inner_split_of_reduces`
 - `TauCeti.DavisKahan1970.Section8.theorem8_1_upperCompressionRepulsion_unbounded`
 - `TauCeti.DavisKahan1970.Section8.theorem8_1_lowerCompressionRepulsion_unbounded`
+- `TauCeti.LinearPMap.specProjection_eq_specProjC`
+- `TauCeti.LinearPMap.specProjection_apply_of_unitary_intertwines`
+- `TauCeti.DavisKahan.reflectionProduct_form_pos_of_orderedFormGap_unbounded`
+- `TauCeti.DavisKahan.norm_starProjection_sub_sq_lt_of_reflectionProduct_form_pos`
+- `TauCeti.DavisKahan.norm_starProjection_sub_sq_lt_of_orderedFormGap_unbounded`
+- `TauCeti.DavisKahan.norm_starProjection_sub_sq_lt_of_orderedFormGap_unbounded_printed`
+- `TauCeti.DavisKahan1970.Section8.starProjection_specProjection_comm_of_reduces`
+- `TauCeti.DavisKahan1970.Section8.eq_of_starProjection_comm_of_crossed_trivial`
+- `TauCeti.DavisKahan1970.Section8.norm_starProjection_lt_of_mem_orthogonal_of_sq_lt`
+- `TauCeti.DavisKahan1970.Section8.theorem8_1_eq_canonicalBranchUnbounded_of_maximalAngle_le`
+- `TauCeti.DavisKahan1970.Section8.theorem8_1_maximalAngle_le_iff_orderedFormGap_unbounded`
 
 **Curated source/Lean review:**
 
@@ -4518,6 +4529,12 @@ STATUS LEFT AT `compiled_exact` PENDING A HUMAN CALL on whether the surviving co
 UNBOUNDED SCOPE, PROGRESS 2026-09-05.  The angle conclusion Davis and Kahan print -- `Theta <= pi/4`, non-strict -- is now proved at unbounded ambient scope by `maximalAngle_le_pi_div_four_of_orderedFormGap_unbounded_printed`, in the paper's own orientation on `P` and `Q`.  Reading the printed statement mattered: the bounded canonical evidence concludes the strictly stronger supremum bound `subspaceGap < sqrt 2 / 2`, whose constant is `delta / (1 + ‖C‖)` and therefore degenerates as `‖A‖ -> infinity`.  The paper does not claim it, and it is not available unbounded.
 
 What is still bounded on this row: the existence of the branch `Q` as a spectral subspace of `A + H`, the form bounds on it, and parts (i)-(iii).  The canonical evidence is therefore unchanged and the row is not yet at its source scope.
+
+UNBOUNDED SCOPE, 2026-09-06.  The paragraph above is superseded.  Branch existence with its printed ordered form bounds (`theorem8_1_canonicalBranchUnbounded_printed`), part (i) (`theorem8_1_upperCompressionRepulsion_unbounded` and its lower dual), the direction of the printed characterization from the spectral placement (`theorem8_1_maximalAngle_le_of_spectrumIn_unbounded`) and the CONVERSE direction -- uniqueness of the branch, `theorem8_1_eq_canonicalBranchUnbounded_of_maximalAngle_le`, packaged as the printed `iff` in `theorem8_1_maximalAngle_le_iff_orderedFormGap_unbounded` -- are all proved at unbounded ambient scope.  Parts (ii) and (iii) are printed IN FINITE DIMENSIONS and are at their printed scope already.
+
+The converse turned on POINTWISE rather than uniform strictness: `reflectionProduct_form_pos_of_orderedFormGap_unbounded` retains the `delta ‖G y‖^2` margin the non-strict statement discards, giving `‖P_P y - P_Q y‖ < ‖y‖/sqrt 2` for every nonzero `y` with no constant that degenerates.  The commuting-projection step is `TauCeti.LinearPMap.specProjection_apply_of_unitary_intertwines`.
+
+WHAT IS STILL BOUNDED: only the canonical evidence selection, because the unbounded Section 8 development is complex-only and this row's real scalar coverage is carried by its bounded canonical evidence.  Promoting now would trade a scope gain for a scalar-scope loss; the real unbounded ports are the remaining work.
 
 **Next action.** No result-level hole remains for Theorem 8.1. Preserve the accepted exact source-facing evidence set and re-audit only if the source specification or theorem signatures change.
 

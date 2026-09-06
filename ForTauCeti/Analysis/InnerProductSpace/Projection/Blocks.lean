@@ -130,6 +130,16 @@ theorem reflectionOperator_apply_of_mem (U : Submodule 𝕜 E)
   change U.reflection x = x
   exact Submodule.reflection_mem_subspace_eq_self hx
 
+/-- The bundled reflection operator is Mathlib's `Submodule.reflection`.  Stated
+because `reflectionOperator` is not exposed across module boundaries, so a
+consumer that needs the `LinearIsometryEquiv` -- to feed a naturality theorem
+that quantifies over unitaries, say -- cannot see that the two agree. -/
+theorem reflectionOperator_apply_eq_reflection (U : Submodule 𝕜 E)
+    [U.HasOrthogonalProjection] (x : E) :
+    U.reflectionOperator x = U.reflection x := by
+  change U.reflection x = U.reflection x
+  rfl
+
 /-- Reflection is involutive. -/
 theorem reflectionOperator_involutive (U : Submodule 𝕜 E)
     [U.HasOrthogonalProjection] :

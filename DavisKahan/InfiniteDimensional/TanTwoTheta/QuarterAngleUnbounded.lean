@@ -66,8 +66,16 @@ ambient scope.**
 `A` is self-adjoint and possibly unbounded, `U` reduces `A`, the bounded
 self-adjoint `H` is fully off-diagonal for `U`, and `V` reduces `A + H`.  Both
 subspaces carry the printed ordered form gap with the same `a < b`.  Then the
-maximal principal angle between `U` and `V` is at most `π/4`. -/
-theorem reflectionProduct_form_nonneg_of_orderedFormGap_unbounded
+reflection product `K J + J K` has *strictly* positive form on every nonzero
+vector.
+
+Strictness is pointwise, and deliberately not uniform: `hXGquant` keeps the
+`δ ‖G y‖²` margin that the non-strict statement discards, and `‖G y‖` has no
+positive lower bound over the unit sphere when `A` is unbounded.  This is the
+distinction Section 8 turns on -- the printed `Θ ≤ π/4` is the supremum
+statement, and the converse half of the printed `iff` needs exactly this
+pointwise strictness and nothing stronger. -/
+theorem reflectionProduct_form_pos_of_orderedFormGap_unbounded
     (A : E →ₗ.[ℂ] E) (Hop : E →L[ℂ] E)
     (U V : Submodule ℂ E) [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
     {a b : ℝ}
@@ -86,7 +94,7 @@ theorem reflectionProduct_form_nonneg_of_orderedFormGap_unbounded
         a * ‖(x : E)‖ ^ 2)
     (hHU : ∀ x ∈ U, Hop x ∈ Uᗮ) (hHUperp : ∀ x ∈ Uᗮ, Hop x ∈ U)
     (hab : a < b) :
-    ∀ y : E, 0 ≤ RCLike.re ⟪(V.reflectionOperator * U.reflectionOperator
+    ∀ y : E, y ≠ 0 → 0 < RCLike.re ⟪(V.reflectionOperator * U.reflectionOperator
       + U.reflectionOperator * V.reflectionOperator) y, y⟫_ℂ := by
   classical
   set Aop : E →ₗ.[ℂ] E := TauCeti.LinearPMap.addBounded A Hop with hAopdef
@@ -250,6 +258,32 @@ theorem reflectionProduct_form_nonneg_of_orderedFormGap_unbounded
     intro u z
     change ⟪K (J u), K (J z)⟫_ℂ = _
     rw [hKiso, hJiso]
+  -- the two halves of the Lyapunov form are equal
+  have hswap : ∀ y : E, RCLike.re ⟪G (X y), y⟫_ℂ = RCLike.re ⟪X (G y), y⟫_ℂ := by
+    intro y
+    rw [hGsa (X y) y, hXadj y (G y)]
+    exact inner_re_symm y (X (G y))
+  have hXG : ∀ y : E, RCLike.re ⟪X (G y), y⟫_ℂ
+      = RCLike.re ⟪W (G y), y⟫_ℂ + RCLike.re ⟪W (G (W y)), W y⟫_ℂ := by
+    intro y
+    have hXu : X (G y) = W (G y) + ContinuousLinearMap.adjoint W (G y) := rfl
+    rw [hXu, inner_add_left, map_add]
+    congr 1
+    rw [ContinuousLinearMap.adjoint_inner_left, hWiso2 (G (W y)) y, hGsa (W y) y]
+    exact inner_re_symm _ _
+  -- the Lyapunov bound, with the `δ` margin retained rather than discarded
+  have hXGquant : ∀ y : E, δ * ‖G y‖ ^ 2 ≤ RCLike.re ⟪X (G y), y⟫_ℂ := by
+    intro y
+    rw [hXG y]
+    have h1 := hWG y
+    have h2 := hWG (W y)
+    nlinarith [sq_nonneg ‖G (W y)‖, hδpos]
+  have hform : ∀ y : E, RCLike.re ⟪(X * G + G * X) y, y⟫_ℂ
+      = 2 * RCLike.re ⟪X (G y), y⟫_ℂ := by
+    intro y
+    have hsplit : (X * G + G * X) y = X (G y) + G (X y) := rfl
+    rw [hsplit, inner_add_left, map_add, hswap y]
+    ring
   have hlyap : (0 : E →L[ℂ] E) ≤ X * G + G * X := by
     rw [ContinuousLinearMap.nonneg_iff_isPositive]
     constructor
@@ -259,27 +293,60 @@ theorem reflectionProduct_form_nonneg_of_orderedFormGap_unbounded
         hGsa (X y) z, hXadj y (G z)]
       ring
     · intro y
-      rw [ContinuousLinearMap.reApplyInnerSelf_apply]
-      have hsplit : (X * G + G * X) y = X (G y) + G (X y) := rfl
-      rw [hsplit, inner_add_left, map_add]
-      -- the two halves are equal, and each is a sum of two nonnegative terms
-      have hswap : RCLike.re ⟪G (X y), y⟫_ℂ = RCLike.re ⟪X (G y), y⟫_ℂ := by
-        rw [hGsa (X y) y, hXadj y (G y)]
-        exact inner_re_symm y (X (G y))
-      have hXG : RCLike.re ⟪X (G y), y⟫_ℂ
-          = RCLike.re ⟪W (G y), y⟫_ℂ + RCLike.re ⟪W (G (W y)), W y⟫_ℂ := by
-        have hXu : X (G y) = W (G y) + ContinuousLinearMap.adjoint W (G y) := rfl
-        rw [hXu, inner_add_left, map_add]
-        congr 1
-        rw [ContinuousLinearMap.adjoint_inner_left, hWiso2 (G (W y)) y, hGsa (W y) y]
-        exact inner_re_symm _ _
-      rw [hswap, hXG]
-      have h1 := hWG y
-      have h2 := hWG (W y)
-      nlinarith [h1, h2, sq_nonneg ‖G y‖, sq_nonneg ‖G (W y)‖, hδpos]
+      rw [ContinuousLinearMap.reApplyInnerSelf_apply, hform y]
+      nlinarith [hXGquant y, sq_nonneg ‖G y‖, hδpos]
   have hXnonneg : (0 : E →L[ℂ] E) ≤ X :=
     TauCeti.ContinuousLinearMap.nonneg_of_lyapunov_nonneg hXsa hGnonneg hGinj hlyap
-  intro y
+  have hXnn : ∀ z : E, 0 ≤ RCLike.re ⟪X z, z⟫_ℂ := by
+    intro z
+    have h := ((ContinuousLinearMap.nonneg_iff_isPositive X).mp hXnonneg).2 z
+    rwa [ContinuousLinearMap.reApplyInnerSelf_apply] at h
+  -- **Pointwise strictness.**  A null vector of the form `⟪X ·, ·⟫` would be
+  -- orthogonal to the whole range of `X`, and in particular would annihilate
+  -- the `δ ‖G y‖²` margin that `hXGquant` keeps.
+  have hXstrict : ∀ y : E, y ≠ 0 → 0 < RCLike.re ⟪X y, y⟫_ℂ := by
+    intro y hy
+    rcases (hXnn y).lt_or_eq with hlt | heq
+    · exact hlt
+    · exfalso
+      have hre : ∀ (r : ℝ) (z : ℂ), RCLike.re ((r : ℂ) * z) = r * RCLike.re z := by
+        intro r z
+        simpa using RCLike.re_ofReal_mul (K := ℂ) r z
+      have hzero : ∀ v : E, RCLike.re ⟪X v, y⟫_ℂ = 0 := by
+        intro v
+        by_contra hne
+        have hquad : ∀ t : ℝ,
+            0 ≤ RCLike.re ⟪X v, v⟫_ℂ + 2 * t * RCLike.re ⟪X v, y⟫_ℂ := by
+          intro t
+          have hexp : ⟪X (v + (t : ℂ) • y), v + (t : ℂ) • y⟫_ℂ
+              = ⟪X v, v⟫_ℂ + (t : ℂ) * ⟪X v, y⟫_ℂ + (t : ℂ) * ⟪X y, v⟫_ℂ
+                + (t : ℂ) * ((t : ℂ) * ⟪X y, y⟫_ℂ) := by
+            simp only [map_add, ContinuousLinearMap.map_smul, inner_add_left,
+              inner_add_right, inner_smul_left, inner_smul_right,
+              Complex.conj_ofReal]
+            ring
+          have hsymm : RCLike.re ⟪X y, v⟫_ℂ = RCLike.re ⟪X v, y⟫_ℂ := by
+            rw [hXadj y v]
+            exact inner_re_symm y (X v)
+          have hb := hXnn (v + (t : ℂ) • y)
+          rw [hexp] at hb
+          simp only [map_add, hre] at hb
+          rw [hsymm, ← heq] at hb
+          simp only [mul_zero, add_zero] at hb
+          linarith
+        have hval : RCLike.re ⟪X v, v⟫_ℂ
+            + 2 * (-(RCLike.re ⟪X v, v⟫_ℂ + 1) / (2 * RCLike.re ⟪X v, y⟫_ℂ))
+              * RCLike.re ⟪X v, y⟫_ℂ = -1 := by
+          field_simp
+          ring
+        linarith [hquad (-(RCLike.re ⟪X v, v⟫_ℂ + 1) / (2 * RCLike.re ⟪X v, y⟫_ℂ)), hval]
+      have hGy : G y ≠ 0 := by
+        intro hcon
+        exact hy (hGinj (by rw [hcon, map_zero]))
+      have hpos : 0 < δ * ‖G y‖ ^ 2 :=
+        mul_pos hδpos (pow_pos (norm_pos_iff.mpr hGy) 2)
+      linarith [hXGquant y, hzero (G y)]
+  intro y hy
   have hXeq : V.reflectionOperator * U.reflectionOperator
       + U.reflectionOperator * V.reflectionOperator = X := by
     rw [hXdef, hWdef, hJdef, hKdef]
@@ -291,9 +358,77 @@ theorem reflectionProduct_form_nonneg_of_orderedFormGap_unbounded
       = ⟪z, V.reflectionOperator (U.reflectionOperator w)⟫_ℂ
     rw [← hJdef, ← hKdef, hJadj (K z) w, hKadj z (J w)]
   rw [hXeq]
-  have := (ContinuousLinearMap.nonneg_iff_isPositive X).mp hXnonneg
-  have := this.2 y
-  rwa [ContinuousLinearMap.reApplyInnerSelf_apply] at this
+  exact hXstrict y hy
+
+/-- **The pointwise strict quarter-angle bound at unbounded scope.**
+
+Under the printed ordered form gap on both subspaces, every nonzero vector
+satisfies `‖P_U y − P_V y‖ < ‖y‖/√2` *strictly*.  No supremum bound follows --
+`isQuarterAcute_of_orderedFormGap`'s uniform version costs the constant
+`δ / (1 + ‖C‖)`, which degenerates as `‖A‖ → ∞` -- and none is needed: the
+uniqueness half of Theorem 8.1's printed `iff` tests one vector at a time. -/
+theorem norm_starProjection_sub_sq_lt_of_orderedFormGap_unbounded
+    (A : E →ₗ.[ℂ] E) (Hop : E →L[ℂ] E)
+    (U V : Submodule ℂ E) [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
+    {a b : ℝ}
+    (hA : IsSelfAdjoint A) (hH : IsSelfAdjoint Hop)
+    (hred : TauCeti.LinearPMap.ReducesSubspace A U)
+    (hV : TauCeti.LinearPMap.ReducesSubspace (TauCeti.LinearPMap.addBounded A Hop) V)
+    (hUhigh : ∀ x : A.domain, (x : E) ∈ U →
+      b * ‖(x : E)‖ ^ 2 ≤ RCLike.re ⟪A x, (x : E)⟫_ℂ)
+    (hUperpLow : ∀ x : A.domain, (x : E) ∈ Uᗮ →
+      RCLike.re ⟪A x, (x : E)⟫_ℂ ≤ a * ‖(x : E)‖ ^ 2)
+    (hVhigh : ∀ x : (TauCeti.LinearPMap.addBounded A Hop).domain, (x : E) ∈ V →
+      b * ‖(x : E)‖ ^ 2 ≤
+        RCLike.re ⟪TauCeti.LinearPMap.addBounded A Hop x, (x : E)⟫_ℂ)
+    (hVperpLow : ∀ x : (TauCeti.LinearPMap.addBounded A Hop).domain, (x : E) ∈ Vᗮ →
+      RCLike.re ⟪TauCeti.LinearPMap.addBounded A Hop x, (x : E)⟫_ℂ ≤
+        a * ‖(x : E)‖ ^ 2)
+    (hHU : ∀ x ∈ U, Hop x ∈ Uᗮ) (hHUperp : ∀ x ∈ Uᗮ, Hop x ∈ U)
+    (hab : a < b) :
+    ∀ y : E, y ≠ 0 →
+      ‖U.starProjection y - V.starProjection y‖ ^ 2 < (1 / 2 : ℝ) * ‖y‖ ^ 2 := by
+  intro y hy
+  exact norm_starProjection_sub_sq_lt_of_reflectionProduct_form_pos U V
+    (reflectionProduct_form_pos_of_orderedFormGap_unbounded A Hop U V
+      hA hH hred hV hUhigh hUperpLow hVhigh hVperpLow hHU hHUperp hab y hy)
+
+/-- **Davis--Kahan 1970, Theorem 8.1's printed angle conclusion, at unbounded
+ambient scope.**
+
+`A` is self-adjoint and possibly unbounded, `U` reduces `A`, the bounded
+self-adjoint `H` is fully off-diagonal for `U`, and `V` reduces `A + H`.  Both
+subspaces carry the printed ordered form gap with the same `a < b`.  Then the
+maximal principal angle between `U` and `V` is at most `π/4`.
+
+The non-strict form, which is what the supremum bound `‖P_U − P_V‖ ≤ √2/2` and
+the printed `Θ ≤ π/4` consume. -/
+theorem reflectionProduct_form_nonneg_of_orderedFormGap_unbounded
+    (A : E →ₗ.[ℂ] E) (Hop : E →L[ℂ] E)
+    (U V : Submodule ℂ E) [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
+    {a b : ℝ}
+    (hA : IsSelfAdjoint A) (hH : IsSelfAdjoint Hop)
+    (hred : TauCeti.LinearPMap.ReducesSubspace A U)
+    (hV : TauCeti.LinearPMap.ReducesSubspace (TauCeti.LinearPMap.addBounded A Hop) V)
+    (hUhigh : ∀ x : A.domain, (x : E) ∈ U →
+      b * ‖(x : E)‖ ^ 2 ≤ RCLike.re ⟪A x, (x : E)⟫_ℂ)
+    (hUperpLow : ∀ x : A.domain, (x : E) ∈ Uᗮ →
+      RCLike.re ⟪A x, (x : E)⟫_ℂ ≤ a * ‖(x : E)‖ ^ 2)
+    (hVhigh : ∀ x : (TauCeti.LinearPMap.addBounded A Hop).domain, (x : E) ∈ V →
+      b * ‖(x : E)‖ ^ 2 ≤
+        RCLike.re ⟪TauCeti.LinearPMap.addBounded A Hop x, (x : E)⟫_ℂ)
+    (hVperpLow : ∀ x : (TauCeti.LinearPMap.addBounded A Hop).domain, (x : E) ∈ Vᗮ →
+      RCLike.re ⟪TauCeti.LinearPMap.addBounded A Hop x, (x : E)⟫_ℂ ≤
+        a * ‖(x : E)‖ ^ 2)
+    (hHU : ∀ x ∈ U, Hop x ∈ Uᗮ) (hHUperp : ∀ x ∈ Uᗮ, Hop x ∈ U)
+    (hab : a < b) :
+    ∀ y : E, 0 ≤ RCLike.re ⟪(V.reflectionOperator * U.reflectionOperator
+      + U.reflectionOperator * V.reflectionOperator) y, y⟫_ℂ := by
+  intro y
+  rcases eq_or_ne y 0 with rfl | hy
+  · simp
+  · exact le_of_lt (reflectionProduct_form_pos_of_orderedFormGap_unbounded A Hop U V
+      hA hH hred hV hUhigh hUperpLow hVhigh hVperpLow hHU hHUperp hab y hy)
 
 /-- **Theorem 8.1's angle conclusion at unbounded scope.**  `Theta <= pi/4` for
 the pair carrying the ordered form gap. -/
@@ -452,6 +587,61 @@ theorem maximalAngle_le_pi_div_four_of_orderedFormGap_unbounded_printed
   change Real.arcsin (subspaceGap P Q) ≤ Real.pi / 4
   rw [← hgap]
   exact hcompl
+
+/-- **The pointwise strict quarter-angle bound in the paper's own orientation.**
+
+The complement statement restated on `P` and `Q` themselves: the projector
+difference does not see the flip, so the two are the same inequality. -/
+theorem norm_starProjection_sub_sq_lt_of_orderedFormGap_unbounded_printed
+    (A : E →ₗ.[ℂ] E) (Hop : E →L[ℂ] E)
+    (P Q : Submodule ℂ E) [P.HasOrthogonalProjection] [Q.HasOrthogonalProjection]
+    {alpha delta : ℝ}
+    (hA : IsSelfAdjoint A) (hH : IsSelfAdjoint Hop)
+    (hredP : TauCeti.LinearPMap.ReducesSubspace A Pᗮ)
+    (hQ : TauCeti.LinearPMap.ReducesSubspace (TauCeti.LinearPMap.addBounded A Hop) Qᗮ)
+    (hPlow : ∀ x : A.domain, (x : E) ∈ P →
+      RCLike.re ⟪A x, (x : E)⟫_ℂ ≤ alpha * ‖(x : E)‖ ^ 2)
+    (hPhigh : ∀ x : A.domain, (x : E) ∈ Pᗮ →
+      (alpha + delta) * ‖(x : E)‖ ^ 2 ≤ RCLike.re ⟪A x, (x : E)⟫_ℂ)
+    (hQlow : ∀ x : (TauCeti.LinearPMap.addBounded A Hop).domain, (x : E) ∈ Q →
+      RCLike.re ⟪TauCeti.LinearPMap.addBounded A Hop x, (x : E)⟫_ℂ ≤
+        alpha * ‖(x : E)‖ ^ 2)
+    (hQhigh : ∀ x : (TauCeti.LinearPMap.addBounded A Hop).domain, (x : E) ∈ Qᗮ →
+      (alpha + delta) * ‖(x : E)‖ ^ 2 ≤
+        RCLike.re ⟪TauCeti.LinearPMap.addBounded A Hop x, (x : E)⟫_ℂ)
+    (hHP : ∀ x ∈ P, Hop x ∈ Pᗮ) (hHPperp : ∀ x ∈ Pᗮ, Hop x ∈ P)
+    (hdelta : 0 < delta) :
+    ∀ y : E, y ≠ 0 →
+      ‖P.starProjection y - Q.starProjection y‖ ^ 2 < (1 / 2 : ℝ) * ‖y‖ ^ 2 := by
+  intro y hy
+  have hPperpperp : (Pᗮ)ᗮ = P := Submodule.orthogonal_orthogonal P
+  have hQperpperp : (Qᗮ)ᗮ = Q := Submodule.orthogonal_orthogonal Q
+  have hcompl := norm_starProjection_sub_sq_lt_of_orderedFormGap_unbounded A Hop Pᗮ Qᗮ
+    (a := alpha) (b := alpha + delta) hA hH hredP hQ
+    hPhigh (by
+      intro x hx
+      rw [hPperpperp] at hx
+      exact hPlow x hx)
+    hQhigh (by
+      intro x hx
+      rw [hQperpperp] at hx
+      exact hQlow x hx)
+    (by
+      intro x hx
+      rw [hPperpperp]
+      exact hHPperp x hx)
+    (by
+      intro x hx
+      rw [hPperpperp] at hx
+      exact hHP x hx)
+    (by linarith) y hy
+  have hnorm : ‖Pᗮ.starProjection y - Qᗮ.starProjection y‖
+      = ‖P.starProjection y - Q.starProjection y‖ := by
+    rw [Submodule.starProjection_orthogonal_apply,
+      Submodule.starProjection_orthogonal_apply,
+      show y - P.starProjection y - (y - Q.starProjection y)
+        = Q.starProjection y - P.starProjection y by abel, norm_sub_rev]
+  rwa [hnorm] at hcompl
 
 /-- **From the closed quarter branch to the open one.**
 
