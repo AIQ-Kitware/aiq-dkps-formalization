@@ -6083,7 +6083,9 @@
         "TauCeti.DavisKahan1970.Section8.theorem8_2_perturbationHalfGap_unbounded_real",
         "TauCeti.DavisKahan1970.Section8.theorem8_2_residualHalfGap_unbounded_real",
         "TauCeti.DavisKahan1970.Section8.theorem8_2_perturbationHalfGap_maximalAngle_lt_unbounded_real",
-        "TauCeti.DavisKahan1970.Section8.theorem8_2_residualHalfGap_maximalAngle_lt_unbounded_real"
+        "TauCeti.DavisKahan1970.Section8.theorem8_2_residualHalfGap_maximalAngle_lt_unbounded_real",
+        "TauCeti.DavisKahan1970.Section8.theorem8_2_branch_maximalAngle_lt_unbounded_source_complex",
+        "TauCeti.DavisKahan1970.Section8.theorem8_2_branch_maximalAngle_lt_unbounded_source_real"
       ],
       "review_note": "RE-CLOSED 2026-08-12 after repair (reopened earlier the same day; the reopening is retained in git history).  Both defects were real.  (a) Source scope: immediately after the proof of Proposition 3.2 the paper fixes the standing convention that (3.5) is assumed as well as (1.5) except where the contrary is stated, and Theorem 8.2 does not state otherwise.  That convention is now inventoried as the source SCOPE atom `S3-standing-scope.crossed-dimension-standing-assumption` and linked, as scope, to exactly the two counted results it governs -- Theorem 8.2 and Proposition 3.4.  It is not a counted result and the denominator remains 29.  Theorem 8.1's ambient quarter-angle characterization `theorem8_1_maximalAngle_le_iff_spectrumIn` is proved with no dimension hypothesis at all, so it is deliberately not linked.  (b) Evidence: the printed quarter-angle conclusion is the AMBIENT Theta < pi/4, and the row previously selected a directed-gap theorem.  The selected evidence is now `theorem8_2_branch_maximalAngle_lt_of_crossedDefects` and `theorem8_2_branch_real_maximalAngle_lt_of_crossedDefects`, which conclude `maximalAngle P Q < pi/4` from either printed smallness alternative under (3.5) in its constructive `CrossedDefectsEquivalent` form, with no finite-dimensionality and no rank hypothesis, over both scalar fields.  Together with the four retained `sin 2Theta` endpoints (perturbation and residual, complex and real, arbitrary `SymmetricNormingFunction`) the evidence jointly establishes the printed result at the printed dimensional scope.  No new Lean mathematics was required once the source scope was corrected.\n\n**ORIENTATION DEFECT FOUND AND FIXED 2026-09-04 (Claude Opus 5, on hostile review).**  The printed residual alternative was certified on `sinTwoThetaIdealBlock Q P` rather than on the paper's directed angle, and in the wrong ordering of the pair.  This is exactly the defect repaired on `S2-sin-two-theta` earlier the same day; the repair was not propagated here, and the row read terminal throughout.  The canonical evidence is now `theorem8_2_sinTwoTheta_residual_directedAngle_symmetricNorming` and its real sibling, on `Angle.directedSinTwoAngleOperator P Q` with `P` the trial subspace; the block theorems remain as `implementation_structure`.  The perturbation alternative needed no change: it is the AMBIENT clause, and `sinAngleOperatorC` is the modulus of a projector difference, hence insensitive to the order of the pair.\n\n**OPERATOR SCOPE DISCLOSED 2026-09-05.**  The same disclosure as `DK-8.1-thm`, added as a second reading on this row's existing nonlocal interpretation: the registered Section 8 evidence is bounded, the Section 2 hypotheses it imports are certified unbounded, and the source evidence for reading Section 8 at the main bounded setting, the competing reading, and the open lift are recorded in `nonlocal_source_interpretation.operator_scope_reading`.",
       "boundary_review": {
@@ -6110,7 +6112,7 @@
       "local_statement_self_contained": false,
       "canonical_evidence": [
         {
-          "declaration": "TauCeti.DavisKahan1970.Section8.theorem8_2_branch_maximalAngle_lt_of_crossedDefects",
+          "declaration": "TauCeti.DavisKahan1970.Section8.theorem8_2_branch_maximalAngle_lt_unbounded_source_complex",
           "role": "primary_source_witness",
           "scalar_scope": "complex",
           "evidence_kind": "proof",
@@ -6119,10 +6121,11 @@
             "DK-8.2-thm.acute-branch-conclusion",
             "S3-standing-scope.crossed-dimension-standing-assumption"
           ],
-          "capability_classes": []
+          "capability_classes": [],
+          "note": "The acute branch at the paper's own unbounded ambient scope, from the printed hypotheses and the printed disjunction.  The bounded sibling is retained as supporting evidence; it is a specialization, not a weaker reading."
         },
         {
-          "declaration": "TauCeti.DavisKahan1970.Section8.theorem8_2_branch_real_maximalAngle_lt_of_crossedDefects",
+          "declaration": "TauCeti.DavisKahan1970.Section8.theorem8_2_branch_maximalAngle_lt_unbounded_source_real",
           "role": "primary_source_witness",
           "scalar_scope": "real",
           "evidence_kind": "proof",
@@ -6131,7 +6134,8 @@
             "DK-8.2-thm.acute-branch-conclusion",
             "S3-standing-scope.crossed-dimension-standing-assumption"
           ],
-          "capability_classes": []
+          "capability_classes": [],
+          "note": "The acute branch at the paper's own unbounded ambient scope, from the printed hypotheses and the printed disjunction.  The bounded sibling is retained as supporting evidence; it is a specialization, not a weaker reading."
         },
         {
           "declaration": "TauCeti.DavisKahan1970.Section8.theorem8_2_sinTwoTheta_perturbation_sourceExact",
@@ -6373,6 +6377,16 @@
           "declaration": "TauCeti.DavisKahan1970.Section8.theorem8_2_residualHalfGap_maximalAngle_lt_unbounded_real",
           "role": "generalization",
           "note": "Unbounded-scope work toward this row's actual source scope.  The real port of the unbounded Theorem 8.2, by complexification, with the transports it needed."
+        },
+        {
+          "declaration": "TauCeti.DavisKahan1970.Section8.theorem8_2_branch_maximalAngle_lt_of_crossedDefects",
+          "role": "specialization",
+          "note": "The bounded specialization of the acute branch, complex."
+        },
+        {
+          "declaration": "TauCeti.DavisKahan1970.Section8.theorem8_2_branch_real_maximalAngle_lt_of_crossedDefects",
+          "role": "specialization",
+          "note": "The bounded specialization of the acute branch, real."
         }
       ],
       "result_wide_scope_atoms": [
@@ -6387,12 +6401,12 @@
           ],
           "scalar_scope": "complex",
           "evidence": {
-            "primary": "TauCeti.DavisKahan1970.Section8.theorem8_2_branch_maximalAngle_lt_of_crossedDefects",
+            "primary": "TauCeti.DavisKahan1970.Section8.theorem8_2_branch_maximalAngle_lt_unbounded_source_complex",
             "correspondence": []
           },
           "status": "established",
           "evidence_kind": "proof",
-          "justification": "Canonical witness for acute-branch-conclusion at complex scalar scope, carried over from the pre-clause canonical evidence and re-checked against its compiler-printed type under the coherent model."
+          "justification": "Canonical witness for the acute branch at complex scalar scope and at the paper's inherited UNBOUNDED ambient scope: `A` a self-adjoint partial map, `H` a bounded self-adjoint perturbation, the printed spectral placements on the blocks, the printed disjunction `‖H‖ < delta/2 or ‖R‖ < delta/2`, and (3.5) for the symmetric conclusion."
         },
         {
           "id": "acute-branch-conclusion.real",
@@ -6401,12 +6415,12 @@
           ],
           "scalar_scope": "real",
           "evidence": {
-            "primary": "TauCeti.DavisKahan1970.Section8.theorem8_2_branch_real_maximalAngle_lt_of_crossedDefects",
+            "primary": "TauCeti.DavisKahan1970.Section8.theorem8_2_branch_maximalAngle_lt_unbounded_source_real",
             "correspondence": []
           },
           "status": "established",
           "evidence_kind": "proof",
-          "justification": "Canonical witness for acute-branch-conclusion at real scalar scope, carried over from the pre-clause canonical evidence and re-checked against its compiler-printed type under the coherent model."
+          "justification": "The real sibling, by complexification; same statement, same scope."
         },
         {
           "id": "double-angle-bound-retained.complex",
@@ -6553,7 +6567,7 @@
     "terminal_results": 29,
     "remaining_results": [],
     "note": "The structured fields above are authoritative; this paragraph is regenerated whenever the count moves. 2026-09-02, closing: terminal_results is 29 and remaining_results is empty. `S2-tan-two-theta` was `hostile_review_blocked` under obligation `tan2theta-directed-correspondence` after a 2026-09-02 closure that did not compose; it is now accepted on canonical directed witnesses `tanTwoTheta_directed_unboundedResidual_symmetricNorming_{complex,real}`, which take the reducing subspace and conclude on the paper's directed corner (`tanTwoDirectedCornerR U V` over ℝ) with the singular-value identification in their types. The canonical-evidence digest changed accordingly and the statement pins were refreshed for the new canonical and bridging declarations. Earlier history of this field (the 2026-08-31 `S2-sin-two-theta` reopening, the `S2-tan-theta` Appendix-scope primaries, the paper-prefix rename with an unchanged digest) is in the human report.  2026-09-05: recomputed after the two directed `tan 2Theta` clauses of S2-tan-two-theta were retargeted at their source-exact façades.  The canonical statements are strictly closer to the printed ones -- separable ambient scope and the literal normalized unitarily invariant norm class -- and the theorems they delegate to are retained as registered generalizations, so nothing that was reviewed has been withdrawn.  2026-09-05: recomputed after DK-3.1-thm's converse clauses were repointed from the model-level theorem, which takes the isometric identification as caller data, to the source-shaped one that takes the dimension condition as a proposition.  The model-level theorem is retained as registered implementation structure, so nothing reviewed has been withdrawn.  2026-09-05: recomputed after Lemmas 6.1 and 6.2 were given source-exact façades over the literal normalized unitarily invariant norm class.  The SymmetricNormingFunction endpoints they delegate to are retained as registered generalizations -- for Lemma 6.1 the retained theorem is genuinely stronger, taking Ky Fan inequalities as its premise where the paper assumes the bound for every unitarily invariant norm.",
-    "canonical_evidence_sha256": "28a84c48fe2615b9099a9240917822671d0f95cf44cc016c93549730fc95584e",
+    "canonical_evidence_sha256": "1f4a6cc68bdfb486548eeaec9af381e0b709d3112bf4243bb1818dc1c6bc665b",
     "hostile_review_status": "accepted",
     "hostile_review_note": "REOPENED 2026-09-05 by the third hostile review. Its three blockers are CLOSED -- the ambient sin 2Theta operator roles, Theorem 3.1's forward invariant on the source's angle operators, and Corollary 3.1's classification invariant on the angles -- along with Theorem 3.1's ambient dimension clause, which is now a proposition rather than a supplied isometric equivalence. No defect remains open. Two POLICY questions do, and they are recorded in `hostile_review_policy_questions` rather than as obligations, because the checker treats an obligation as evidence that a named row is NOT terminal and these ten rows are: whether to add thin separable wrappers at the printed scope, which is a project decision the repository has an explicit recorded position on and which an agent must not settle; and whether the printed unitarily invariant norm class must exist as a Lean type, where the estimate coverage is compiled and closed but the type-level representation is not. The 29/29 certificate is unaffected by either. When reporting it, say that these two questions are open, because a reviewer who resolves them differently would want different declarations to be canonical.\n\nPrevious note: ACCEPTED 2026-09-02, after the day's reopening was closed by new mathematics rather than by metadata: the directed tan 2Theta clauses have source-shaped complex and real endpoints on the paper objects, with the correspondence composed in Lean and pinned. `open_hostile_review_obligations` is closed and lists the closure; the structured fields `terminal_results`, `remaining_results` and `hostile_review_status` are the authoritative statement."
   },
@@ -6775,7 +6789,7 @@
         "DK-6.3-thm": "separable",
         "DK-6.3-lem": "generalized",
         "DK-8.1-thm": "generalized",
-        "DK-8.2-thm": "mixed"
+        "DK-8.2-thm": "separable"
       },
       "load_bearing_witnesses": [
         {
@@ -6797,6 +6811,14 @@
         {
           "declaration": "TauCeti.DavisKahan1970.theorem3_1_spectralMultiplicity_classification_sourceAngle_real",
           "why": "The real sibling of the source-angle witness, for the same reason: the invariant is Hahn--Hellinger, which the repository has at separable scope.  It carries separability of the two ambient spaces only."
+        },
+        {
+          "declaration": "TauCeti.DavisKahan1970.Section8.theorem8_2_branch_maximalAngle_lt_unbounded_source_complex",
+          "why": "Theorem 8.2's acute branch at the paper's inherited unbounded ambient scope.  Separability is the paper's own assumption and is load-bearing here: the unbounded `sin 2Theta` estimate the bootstrap consumes is built on the spectral measure of the Cayley transform, whose construction is stated for separable spaces."
+        },
+        {
+          "declaration": "TauCeti.DavisKahan1970.Section8.theorem8_2_branch_maximalAngle_lt_unbounded_source_real",
+          "why": "The real sibling, for the same reason; it runs the complex theorem on the complexification, whose separability follows from the ambient one."
         }
       ],
       "source_scope_facades": [

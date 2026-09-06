@@ -4,7 +4,7 @@
 
 **Census family:** `source-completion-census`  
 **Items:** 50  
-**Unique cited Lean declarations:** 1368
+**Unique cited Lean declarations:** 1370
 
 ## How to use this census
 
@@ -4601,6 +4601,8 @@ At the OPERATOR norm the compiled residual statement is sound and in fact STRONG
 - `TauCeti.DavisKahan1970.Section8.theorem8_2_residualHalfGap_unbounded_real`
 - `TauCeti.DavisKahan1970.Section8.theorem8_2_perturbationHalfGap_maximalAngle_lt_unbounded_real`
 - `TauCeti.DavisKahan1970.Section8.theorem8_2_residualHalfGap_maximalAngle_lt_unbounded_real`
+- `TauCeti.DavisKahan1970.Section8.theorem8_2_branch_maximalAngle_lt_unbounded_source_complex`
+- `TauCeti.DavisKahan1970.Section8.theorem8_2_branch_maximalAngle_lt_unbounded_source_real`
 
 **Curated source/Lean review:**
 
