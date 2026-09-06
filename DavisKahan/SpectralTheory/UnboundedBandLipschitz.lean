@@ -113,6 +113,78 @@ theorem subspaceGap_bandSubspace_le
   · rw [he]; exact h1
   · rw [he]; exact h2
 
+/-! ## The directed gap to a fixed subspace is 1-Lipschitz in the moving one -/
+
+/-- **Moving one subspace moves the directed gap by no more.**
+
+`|directedGap U W − directedGap V W| ≤ subspaceGap U V`, because both are the
+norm of the same contraction composed with the moving projection.  This is what
+turns the band's Lipschitz estimate into continuity of the quantity the
+bootstrap tracks. -/
+theorem abs_directedGap_sub_directedGap_le
+    (U V W : Submodule ℂ H) [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
+    [W.HasOrthogonalProjection] :
+    |DavisKahan.directedGap U W - DavisKahan.directedGap V W| ≤
+      DavisKahan.subspaceGap U V := by
+  have hX : ‖(Wᗮ.starProjection : H →L[ℂ] H)‖ ≤ 1 := by
+    refine ContinuousLinearMap.opNorm_le_bound _ zero_le_one fun y => ?_
+    simpa using Wᗮ.norm_starProjection_apply_le y
+  have hsub : ‖Wᗮ.starProjection ∘L U.starProjection‖ -
+      ‖Wᗮ.starProjection ∘L V.starProjection‖ ≤
+      ‖U.starProjection - V.starProjection‖ := by
+    have h1 : ‖Wᗮ.starProjection ∘L U.starProjection‖ -
+        ‖Wᗮ.starProjection ∘L V.starProjection‖ ≤
+        ‖Wᗮ.starProjection ∘L U.starProjection -
+          Wᗮ.starProjection ∘L V.starProjection‖ := by
+      have := norm_sub_norm_le (Wᗮ.starProjection ∘L U.starProjection)
+        (Wᗮ.starProjection ∘L V.starProjection)
+      linarith
+    have h2 : Wᗮ.starProjection ∘L U.starProjection -
+        Wᗮ.starProjection ∘L V.starProjection
+        = Wᗮ.starProjection ∘L (U.starProjection - V.starProjection) := by
+      ext y
+      simp
+    rw [h2] at h1
+    refine h1.trans ?_
+    calc ‖Wᗮ.starProjection ∘L (U.starProjection - V.starProjection)‖
+        ≤ ‖(Wᗮ.starProjection : H →L[ℂ] H)‖ * ‖U.starProjection - V.starProjection‖ :=
+          ContinuousLinearMap.opNorm_comp_le _ _
+      _ ≤ 1 * ‖U.starProjection - V.starProjection‖ := by
+          refine mul_le_mul_of_nonneg_right hX (norm_nonneg _)
+      _ = ‖U.starProjection - V.starProjection‖ := one_mul _
+  have hsub' : ‖Wᗮ.starProjection ∘L V.starProjection‖ -
+      ‖Wᗮ.starProjection ∘L U.starProjection‖ ≤
+      ‖V.starProjection - U.starProjection‖ := by
+    have h1 : ‖Wᗮ.starProjection ∘L V.starProjection‖ -
+        ‖Wᗮ.starProjection ∘L U.starProjection‖ ≤
+        ‖Wᗮ.starProjection ∘L V.starProjection -
+          Wᗮ.starProjection ∘L U.starProjection‖ := by
+      have := norm_sub_norm_le (Wᗮ.starProjection ∘L V.starProjection)
+        (Wᗮ.starProjection ∘L U.starProjection)
+      linarith
+    have h2 : Wᗮ.starProjection ∘L V.starProjection -
+        Wᗮ.starProjection ∘L U.starProjection
+        = Wᗮ.starProjection ∘L (V.starProjection - U.starProjection) := by
+      ext y
+      simp
+    rw [h2] at h1
+    refine h1.trans ?_
+    calc ‖Wᗮ.starProjection ∘L (V.starProjection - U.starProjection)‖
+        ≤ ‖(Wᗮ.starProjection : H →L[ℂ] H)‖ * ‖V.starProjection - U.starProjection‖ :=
+          ContinuousLinearMap.opNorm_comp_le _ _
+      _ ≤ 1 * ‖V.starProjection - U.starProjection‖ := by
+          refine mul_le_mul_of_nonneg_right hX (norm_nonneg _)
+      _ = ‖V.starProjection - U.starProjection‖ := one_mul _
+  have hsymm : ‖V.starProjection - U.starProjection‖ =
+      ‖U.starProjection - V.starProjection‖ := by
+    rw [show V.starProjection - U.starProjection =
+      -(U.starProjection - V.starProjection) by abel, norm_neg]
+  rw [hsymm] at hsub'
+  show |‖Wᗮ.starProjection ∘L U.starProjection‖ -
+    ‖Wᗮ.starProjection ∘L V.starProjection‖| ≤ ‖U.starProjection - V.starProjection‖
+  rw [abs_sub_le_iff]
+  exact ⟨hsub, by linarith [hsub']⟩
+
 end
 
 end DavisKahan
