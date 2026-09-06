@@ -732,16 +732,16 @@ That pair is exactly `FormBoundedSylvesterGap.intervalExterior` with `β = l`,
 The endpoint inclusions `R₀ ≤ Q` and `P ≤ R₁` come from the same vanishing
 argument applied to `Qᗮ` and to `P`.
 
-**(c) Lipschitz continuity without Riesz projections.**  `B_t = B_s + (s − t) H`,
-so `directedGap_le_of_reducingGap_unbounded_complex` applies in each orientation
-and gives `d · directedGap R_s R_t ≤ |s − t| γ` both ways; then
-`projectionGap_eq_max_directedProjectionGap` gives
-`d · subspaceGap R_s R_t ≤ |s − t| γ`.  Continuity of
-`f t = directedGap R_t Q = ‖Qᗮ.starProjection ∘L (R_t).starProjection‖` follows,
-because the only thing moving is `(R_t).starProjection`.
+**(c) is done, 2026-09-05.**  `SpectralTheory/UnboundedBandLipschitz.lean` has
+`bandSubspace`, `directedGap_bandSubspace_le` and `subspaceGap_bandSubspace_le`:
+`d · ‖P_{band A} − P_{band B}‖ ≤ ‖K‖` when `B = A + K`, from the unbounded
+`sin Θ` theorem in each orientation with
+`formBoundedSylvesterGap_band_exterior` supplying the separation.  No contour, no
+continuation API.  `abs_directedGap_sub_directedGap_le` is the 1-Lipschitz
+comparison that turns it into continuity of the tracked quantity.
 
-**(d) The bounded proof's constant-threshold bootstrap.**  At a fixed `t`,
-instantiate the unbounded `sin 2Θ` estimate at `A := B_t`, `Hop := tH`,
+**(d) The bounded proof's constant-threshold bootstrap — remaining.**  At a fixed
+`t`, instantiate the unbounded `sin 2Θ` estimate at `A := B_t`, `Hop := tH`,
 `P := R_t`, `Q := Q` — legitimate because `B_t + tH = B₀`, so the `δ` in the gap
 stays the *fixed printed gap at `Q`* rather than shrinking with `t`.  That gives
 `δ ‖sin 2Θ (R_t, Q)‖ ≤ 2tγ`.  Under `f t ≤ √2/2`,
@@ -750,6 +750,18 @@ stays the *fixed printed gap at `Q`* rather than shrinking with `t`.  That gives
 `f t < √2/2`.  With `f 0 = 0` and `f` continuous, the bounded theorem's own IVT
 step gives `f t < √2/2` for every `t`, and `P ≤ R₁` turns `f 1` into
 `directedGap P Q`.
+
+Two identifications are what is left, and both are the same argument:
+
+* `R₀ ≤ Q`.  `Q` is only *assumed* to reduce `B₀` with spectrum in `[β, α]` on
+  `Q` and in the exterior on `Qᗮ`; that determines it, so `Q` is the spectral
+  range `specRange hB₀ (Icc β α)`, and `[β, α] ⊆ [l, r]` gives the inclusion.
+  The step that needs API is the uniqueness: a vector of `R₀` splits along `Q`,
+  its `Qᗮ` part has spectrum in the exterior and therefore no spectral mass on
+  `[l, r]`, so it vanishes.  What that needs is the commutation of
+  `specProjection` with `P_Q` for a reducing `Q`.
+* `P ≤ R₁`, the same argument at `t = 1` with the printed containment
+  `spec(A₀) ⊆ [β − δ/2, α + δ/2] ⊆ [l, r]`.
 
 No variable root, no clopen family indexed by `κ_t`, no Riesz projector.  This
 closes the **full** printed range `‖H‖ < δ/2`, not the `(√2/4)δ` sub-range the
@@ -1171,9 +1183,11 @@ Theorem 3.1 invariant:
 
 1. real Theorem 3.1 by the direct local-instance route — **done**;
 2. the spectral-stability lemma for the path — **done**;
-3. `R_t := specRange B_t (Icc l r)` with its band and exterior spectra;
-4. the two-direction `sin Θ` Lipschitz estimate for `R_s`, `R_t`;
-5. the bounded proof's constant-`√2/2` IVT bootstrap;
+3. `R_t := specRange B_t (Icc l r)` with its band and exterior spectra — **done**;
+4. the two-direction `sin Θ` Lipschitz estimate for `R_s`, `R_t` — **done**;
+5. the bounded proof's constant-`√2/2` IVT bootstrap, whose remaining
+   prerequisite is the commutation of `specProjection` with the projection onto a
+   reducing subspace, which gives both endpoint inclusions;
 6. the complex perturbation source theorem;
 7. the residual branch, by the self-adjoint-completion reduction the bounded
    proof already uses.  Its public type must carry `‖R‖ < δ/2` and must **not**
