@@ -19,5 +19,6 @@ import DavisKahan.Sources.DavisKahan1970.Section8.Theorem81Real
 import DavisKahan.Sources.DavisKahan1970.Section8.Theorem82
 import DavisKahan.Sources.DavisKahan1970.Section8.Theorem82Branch
 import DavisKahan.Sources.DavisKahan1970.Section8.Theorem82Real
+import DavisKahan.Sources.DavisKahan1970.Section8.Theorem82Unbounded
 
 /-! # `DavisKahan/Sources/DavisKahan1970/Section8` -/
