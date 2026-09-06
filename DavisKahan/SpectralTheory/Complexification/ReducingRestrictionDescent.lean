@@ -37,6 +37,7 @@ universe v
 variable {E : Type v} [NormedAddCommGroup E] [InnerProductSpace ℝ E]
   [CompleteSpace E]
 
+omit [CompleteSpace E] in
 /-- **The complexified block is the block of the complexification.** -/
 theorem unitaryConj_complexifyReal_reducingRestriction
     {A : E →ₗ.[ℝ] E} {P : Submodule ℝ E} [P.HasOrthogonalProjection]
@@ -58,6 +59,7 @@ theorem unitaryConj_complexifyReal_reducingRestriction
   · intro x y hxy
     rfl
 
+omit [CompleteSpace E] in
 /-- **The printed spectral placement survives complexification.** -/
 theorem realSpectrum_reducingRestriction_complexifyReal
     {A : E →ₗ.[ℝ] E} {P : Submodule ℝ E} [P.HasOrthogonalProjection]
@@ -73,6 +75,7 @@ theorem realSpectrum_reducingRestriction_complexifyReal
     TauCeti.LinearPMap.realSpectrum_unitaryConj,
     TauCeti.LinearPMap.realSpectrum_complexifyReal]
 
+omit [CompleteSpace E] in
 /-- The same, for a subspace merely *presented* as a complexification.  The
 equation is on a variable so that `subst` handles it; that is what lets a caller
 use `(complexifySubmodule Q)ᗮ` without transporting a partial map along an
@@ -92,6 +95,7 @@ theorem realSpectrum_reducingRestriction_complexifyReal_of_eq
   subst hW
   exact realSpectrum_reducingRestriction_complexifyReal hred hredC
 
+omit [CompleteSpace E] in
 /-- **The residual norm survives complexification.** -/
 theorem norm_complexify_comp_subtypeL (T : E →L[ℝ] E) (P : Submodule ℝ E)
     [P.HasOrthogonalProjection] [CompleteSpace P]
@@ -106,6 +110,7 @@ theorem norm_complexify_comp_subtypeL (T : E →L[ℝ] E) (P : Submodule ℝ E)
     ← TauCeti.RealComplexification.complexify_comp,
     TauCeti.RealComplexification.norm_complexify]
 
+omit [InnerProductSpace ℝ E] [CompleteSpace E] in
 /-- **Separability survives complexification.**
 
 The complexification is `WithLp 2 (E × E)`, homeomorphic to the product; a

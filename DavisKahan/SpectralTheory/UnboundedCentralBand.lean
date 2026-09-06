@@ -127,7 +127,7 @@ theorem specRange_bandExterior_eq_orthogonal
       = bandExterior l r d := by
     ext x
     simp only [Set.mem_inter_iff, Set.mem_compl_iff, Set.mem_Icc, Set.mem_union,
-      Set.mem_Ioo, bandExterior, Set.mem_setOf_eq]
+      Set.mem_Ioo, bandExterior, Set.mem_ofPred_eq]
     constructor
     · rintro ⟨h1, h2⟩
       rcases le_or_gt x (l - d) with h | h
@@ -202,11 +202,11 @@ theorem realSpectrum_specRestrict_bandExterior_subset
       ⊆ bandExterior l r d := by
   intro lam hlam
   by_contra hcon
-  simp only [bandExterior, Set.mem_setOf_eq] at hcon
+  simp only [bandExterior, Set.mem_ofPred_eq] at hcon
   push Not at hcon
   have hdisj : bandExterior l r d ∩ Set.Ioo (l - d) (r + d) = ∅ := by
     ext x
-    simp only [bandExterior, Set.mem_inter_iff, Set.mem_setOf_eq, Set.mem_Ioo,
+    simp only [bandExterior, Set.mem_inter_iff, Set.mem_ofPred_eq, Set.mem_Ioo,
       Set.mem_empty_iff_false, iff_false]
     rintro ⟨h | h, hx1, hx2⟩
     · linarith

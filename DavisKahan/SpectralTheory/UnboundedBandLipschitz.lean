@@ -61,7 +61,7 @@ theorem directedGap_bandSubspace_le
     (K : H →L[ℂ] H) (hK : DavisKahan.IsSelfAdjointOperator K)
     (hAB : B = TauCeti.LinearPMap.addBounded A K)
     {l r d : ℝ} (hlr : l ≤ r) (hd : 0 < d)
-    (hAspec : TauCeti.LinearPMap.realSpectrum A ⊆
+    (_hAspec : TauCeti.LinearPMap.realSpectrum A ⊆
       Set.Icc l r ∪ bandExterior l r d)
     (hBspec : TauCeti.LinearPMap.realSpectrum B ⊆
       Set.Icc l r ∪ bandExterior l r d) :
@@ -117,6 +117,7 @@ theorem subspaceGap_bandSubspace_le
 
 /-! ## The directed gap to a fixed subspace is 1-Lipschitz in the moving one -/
 
+omit [CompleteSpace H] in
 /-- **Moving one subspace moves the directed gap by no more.**
 
 `|directedGap U W − directedGap V W| ≤ subspaceGap U V`, because both are the
@@ -200,14 +201,16 @@ reducing subspace -- which an earlier plan named as the missing prerequisite --
 is not needed: the uniqueness of the spectral splitting is delivered by the
 `sin Θ` theorem itself. -/
 
+omit [CompleteSpace H] in
 /-- Adding the zero perturbation changes nothing. -/
 theorem addBounded_zero (A : H →ₗ.[ℂ] H) :
     TauCeti.LinearPMap.addBounded A (0 : H →L[ℂ] H) = A := by
   refine LinearPMap.ext rfl ?_
   intro x y hxy
-  simp only [TauCeti.LinearPMap.addBounded_apply, ContinuousLinearMap.zero_apply, add_zero]
+  simp only [TauCeti.LinearPMap.addBounded_apply, zero_apply, add_zero]
   rfl
 
+omit [CompleteSpace H] in
 /-- A vanishing directed gap is a subspace inclusion. -/
 theorem le_of_directedGap_eq_zero (U V : Submodule ℂ H)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]

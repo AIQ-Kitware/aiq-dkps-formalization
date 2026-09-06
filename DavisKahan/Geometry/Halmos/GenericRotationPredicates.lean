@@ -67,6 +67,7 @@ def CrossedDefectsEquivalent
   Nonempty
     (halmosSourceDefect U V ≃ₗᵢ[𝕜] halmosTargetDefect U V)
 
+omit [CompleteSpace H] in
 /-- **(3.5) is symmetric in the pair.**
 
 The crossed defects swap when the pair does: `halmosSourceDefect V U` is

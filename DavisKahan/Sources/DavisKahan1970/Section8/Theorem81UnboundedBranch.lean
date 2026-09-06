@@ -129,7 +129,7 @@ The complement carries no spectral mass at or below `α`, and the spectral
 repulsion of an off-diagonal perturbation removes the open gap `(α, α + δ)` as
 well, so the form is at least `c ‖x‖²` for every `c < α + δ`. -/
 theorem le_re_inner_of_mem_canonicalLowBranchUnbounded_orthogonal
-    {B : H →ₗ.[ℂ] H} (hB : IsSelfAdjoint B) {alpha delta : ℝ} (hdelta : 0 < delta)
+    {B : H →ₗ.[ℂ] H} (hB : IsSelfAdjoint B) {alpha delta : ℝ} (_hdelta : 0 < delta)
     (hrep : ∀ lam ∈ Set.Ioo alpha (alpha + delta),
       ((lam : ℝ) : ℂ) ∉ TauCeti.LinearPMap.spectrum B)
     (x : B.domain) (hx : (x : H) ∈ (canonicalLowBranchUnbounded hB alpha)ᗮ) :

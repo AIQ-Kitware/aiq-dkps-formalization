@@ -50,6 +50,7 @@ variable {Hc : Type v} [NormedAddCommGroup Hc] [InnerProductSpace ℂ Hc]
 
 /-! ### Two bookkeeping facts about bounded perturbations -/
 
+omit [CompleteSpace Hc] in
 /-- Two successive bounded perturbations add. -/
 theorem addBounded_addBounded (A : Hc →ₗ.[ℂ] Hc) (V W : Hc →L[ℂ] Hc) :
     TauCeti.LinearPMap.addBounded (TauCeti.LinearPMap.addBounded A V) W
@@ -60,6 +61,7 @@ theorem addBounded_addBounded (A : Hc →ₗ.[ℂ] Hc) (V W : Hc →L[ℂ] Hc) :
   show (A ⟨x, y⟩ : Hc) + V x + W x = (A ⟨x, hxy⟩ : Hc) + (V x + W x)
   abel
 
+omit [CompleteSpace Hc] in
 /-- A real multiple of a self-adjoint operator is self-adjoint. -/
 theorem isSelfAdjointOperator_realSmul {V : Hc →L[ℂ] Hc}
     (hV : DavisKahan.IsSelfAdjointOperator V) (c : ℝ) :
@@ -69,6 +71,7 @@ theorem isSelfAdjointOperator_realSmul {V : Hc →L[ℂ] Hc}
   rw [inner_smul_left, inner_smul_right, Complex.conj_ofReal]
   exact congrArg (fun z : ℂ => (c : ℂ) * z) (hV x y)
 
+omit [CompleteSpace Hc] in
 /-- The norm of a real multiple. -/
 theorem norm_realSmul (V : Hc →L[ℂ] Hc) (c : ℝ) :
     ‖(c : ℝ) • V‖ = |c| * ‖V‖ := by
@@ -87,6 +90,7 @@ theorem isSelfAdjoint_pathOperator {A : Hc →ₗ.[ℂ] Hc} (hA : IsSelfAdjoint 
     IsSelfAdjoint (pathOperator A Hop t) :=
   DavisKahan.addBounded_isSelfAdjoint A hA _ (isSelfAdjointOperator_realSmul hHop _)
 
+omit [CompleteSpace Hc] in
 /-- Completing the path perturbation returns the perturbed operator. -/
 theorem addBounded_pathOperator (A : Hc →ₗ.[ℂ] Hc) (Hop : Hc →L[ℂ] Hc) (t : ℝ) :
     TauCeti.LinearPMap.addBounded (pathOperator A Hop t) (((t : ℝ)) • Hop)
@@ -95,12 +99,14 @@ theorem addBounded_pathOperator (A : Hc →ₗ.[ℂ] Hc) (Hop : Hc →L[ℂ] Hc)
   congr 1
   module
 
+omit [CompleteSpace Hc] in
 /-- At the far endpoint the path is the unperturbed operator. -/
 theorem pathOperator_one (A : Hc →ₗ.[ℂ] Hc) (Hop : Hc →L[ℂ] Hc) :
     pathOperator A Hop 1 = A := by
   rw [pathOperator, show ((1 : ℝ) - (1 : ℝ) : ℝ) • Hop = 0 by simp]
   exact addBounded_zero A
 
+omit [CompleteSpace Hc] in
 /-- At the near endpoint the path is the perturbed operator. -/
 theorem pathOperator_zero (A : Hc →ₗ.[ℂ] Hc) (Hop : Hc →L[ℂ] Hc) :
     pathOperator A Hop 0 = TauCeti.LinearPMap.addBounded A Hop := by
@@ -131,6 +137,7 @@ theorem reducesSubspace_pathBand {A : Hc →ₗ.[ℂ] Hc} (hA : IsSelfAdjoint A)
     TauCeti.LinearPMap.ReducesSubspace (pathOperator A Hop t) (pathBand hA hHop l r t) :=
   DavisKahan.reducesSubspace_bandSubspace _ _ _
 
+omit [CompleteSpace Hc] in
 /-- Equal operators have the same reducing-restriction spectrum.  The proof
 arguments differ, and proof irrelevance is what makes this `rfl` after `subst`. -/
 theorem realSpectrum_reducingRestriction_congr {A B : Hc →ₗ.[ℂ] Hc} (h : A = B)

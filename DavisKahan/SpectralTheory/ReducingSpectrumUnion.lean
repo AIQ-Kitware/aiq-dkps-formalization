@@ -26,6 +26,7 @@ namespace DavisKahan
 variable {𝕜 : Type*} [RCLike 𝕜]
 variable {E : Type*} [NormedAddCommGroup E] [InnerProductSpace 𝕜 E] [CompleteSpace E]
 
+omit [CompleteSpace E] in
 /-- **A reducing projection commutes with the operator on its domain.** -/
 theorem starProjection_apply_eq_of_reduces
     {A : E →ₗ.[𝕜] E} {U : Submodule 𝕜 E} [U.HasOrthogonalProjection]
@@ -60,6 +61,7 @@ noncomputable local instance instCompleteSpaceCoeReducing
     (U : Submodule 𝕜 E) [U.HasOrthogonalProjection] : CompleteSpace U :=
   (Submodule.isComplete_coe_of_hasOrthogonalProjection U).completeSpace_coe
 
+omit [CompleteSpace E] in
 /-- **The real spectrum of a reduced partial map is covered by its two blocks.**
 
 The unbounded counterpart of the bounded `realSpectrum_subset_union_of_reduces`.
