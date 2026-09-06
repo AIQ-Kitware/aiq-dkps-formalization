@@ -19,7 +19,7 @@ Each counted result carries a **source-alignment classification**, and the three
 
 Category 2 is never a softened category 3. If a reviewer concludes that a category 2 result is actually false as printed, that is a FAIL and the repository is asking to be told.
 
-Current result-level status: **29/29 terminal**, **0 awaiting semantic closure**.
+Current result-level status: **28/29 terminal**, **1 awaiting semantic closure**.
 Result-selection/boundary review: **accepted** under policy `dk_established_results_only`.
 
 A hostile reviewer should challenge both layers independently: (1) whether the fidelity inventory omitted source material or misclassified an exclusion, and (2) whether each of the 29 counted result statements is represented exactly in Lean.
@@ -3042,8 +3042,8 @@ One row per printed source clause per scalar field.  A clause is `PASS` only whe
 | --- | --- | --- | --- |
 | `complete-invariant.complex` | complex | `TauCeti.DavisKahan1970.theorem3_1_spectralMultiplicity_classification_sourceAngle_complex` + `TauCeti.sameSpectralMultiplicity_cfc_iff` + `TauCeti.OperatorUnitaryEquiv.cfc_real` + `TauCeti.DavisKahan1970.spectrum_genericCosineBlock_subset_Icc` + `TauCeti.DavisKahan1970.genericAngleBlock` | **PASS** |
 | `complete-invariant.real` | real | `TauCeti.DavisKahan1970.theorem3_1_spectralMultiplicity_classification_sourceAngle_real` | **PASS** |
-| `converse-angle-data.complex` | complex | `TauCeti.DavisKahan1970.theorem3_1_realization_inAmbient_ofSameHilbertDimension_complex` + `TauCeti.DavisKahan1970.theorem3_1_realization_ofNonzeroPartsUnitaryEquiv` + `TauCeti.DavisKahan1970.theorem3_1_intertwiner_of_nonzeroPartsUnitaryEquiv` + `TauCeti.DavisKahan1970.SameSpectralMultiplicityAwayFromZero` + `TauCeti.DavisKahan1970.NonzeroPartsUnitaryEquiv` + `TauCeti.DavisKahan1970.nonzeroPart` + `TauCeti.DavisKahan1970.invariantFor_nonzeroPart` | **PASS** |
-| `converse-angle-data.real` | real | `TauCeti.DavisKahan1970.theorem3_1_realization_inAmbient_ofSameHilbertDimension_real` + `TauCeti.DavisKahan1970.theorem3_1_realization_ofNonzeroPartsUnitaryEquiv` + `TauCeti.DavisKahan1970.theorem3_1_intertwiner_of_nonzeroPartsUnitaryEquiv` + `TauCeti.DavisKahan1970.SameSpectralMultiplicityAwayFromZero` + `TauCeti.DavisKahan1970.NonzeroPartsUnitaryEquiv` + `TauCeti.DavisKahan1970.nonzeroPart` + `TauCeti.DavisKahan1970.invariantFor_nonzeroPart` | **PASS** |
+| `converse-angle-data.complex` | complex | `TauCeti.DavisKahan1970.theorem3_1_realization_sourceExact_complex` + `TauCeti.DavisKahan1970.theorem3_1_realization_ofNonzeroPartsUnitaryEquiv` + `TauCeti.DavisKahan1970.theorem3_1_intertwiner_of_nonzeroPartsUnitaryEquiv` + `TauCeti.DavisKahan1970.SameSpectralMultiplicityAwayFromZero` + `TauCeti.DavisKahan1970.NonzeroPartsUnitaryEquiv` + `TauCeti.DavisKahan1970.nonzeroPart` + `TauCeti.DavisKahan1970.invariantFor_nonzeroPart` | **PASS** |
+| `converse-angle-data.real` | real | `TauCeti.DavisKahan1970.theorem3_1_realization_sourceExact_real` + `TauCeti.DavisKahan1970.theorem3_1_realization_ofNonzeroPartsUnitaryEquiv` + `TauCeti.DavisKahan1970.theorem3_1_intertwiner_of_nonzeroPartsUnitaryEquiv` + `TauCeti.DavisKahan1970.SameSpectralMultiplicityAwayFromZero` + `TauCeti.DavisKahan1970.NonzeroPartsUnitaryEquiv` + `TauCeti.DavisKahan1970.nonzeroPart` + `TauCeti.DavisKahan1970.invariantFor_nonzeroPart` | **PASS** |
 
 **`complete-invariant.complex`.** A complete invariant for ordered pairs of subspaces, on THE SOURCE'S OWN INVARIANT. Theorem 3.1 names the spectral multiplicity functions of the angle operators Theta_0 and Theta_1; the primary is stated on `genericAngleBlock`, which IS Theta on the generic part, together with the four elementary multiplicities `SameHalmosTrivialDimensions` that the source counts separately.
 
@@ -3053,9 +3053,9 @@ Separability is carried on the generic halves as well as the ambient space, beca
 
 **`complete-invariant.real`.** Canonical witness for complete-invariant at real scalar scope, on the source's own angle operator.  The cos^2 Theta form is retained as supporting evidence; the two agree because `t -> arccos sqrt t` is invertible on the spectrum of cos^2 Theta, which is `spectrum_genericCosineBlock_subset_Icc_real`.
 
-**`converse-angle-data.complex`.** The printed converse: arbitrary self-adjoint Theta_0, Theta_1 with 0 <= Theta_j <= pi/2, spectral multiplicity functions agreeing except possibly at 0, AND their domain dimensions summing to dim H.  The dimension clause is the hypothesis `e : WithLp 2 (A_0 x A_1) ~=_li H`: two Hilbert spaces admit a linear isometry equivalence exactly when their Hilbert dimensions agree (`nonempty_linearIsometryEquiv_of_hilbertBasis`), and the Hilbert dimension of the orthogonal direct sum is the sum of the two, so `e` IS the printed equation, supplied constructively -- the same choice the repository makes for condition (3.5).  The conclusion constructs J_0, exhibits the realized pair inside the given ambient H as the isometric image of the model pair, records that the two pairs are unitarily equivalent as ORDERED pairs of subspaces, and gives the four Halmos identities.  ADDED 2026-09-05 on hostile follow-up review: the previous primary realized on `WithLp 2 (A_0 x A_1)` with no ambient space in its signature at all, so nothing in its type answered the printed dimension clause.  REPOINTED 2026-09-05.  The clause previously cited the model-level converse, which takes an isometric identification `e : WithLp 2 (A₀ × A₁) ≃ₗᵢ H` as an argument.  That is proof data: the source's converse hypothesis is the *dimension* condition, and the identification is something the proof produces from it.  `..._ofSameHilbertDimension_*` takes `SameHilbertDimensionSum` as a proposition, derives the identification internally, and existentially quantifies the two ambient subspaces, which is the printed shape.  The stronger model-level theorem is retained as registered implementation structure.
+**`converse-angle-data.complex`.** The printed converse: arbitrary self-adjoint Theta_0, Theta_1 with 0 <= Theta_j <= pi/2, spectral multiplicity functions agreeing except possibly at 0, AND their domain dimensions summing to dim H.  The dimension clause is the hypothesis `e : WithLp 2 (A_0 x A_1) ~=_li H`: two Hilbert spaces admit a linear isometry equivalence exactly when their Hilbert dimensions agree (`nonempty_linearIsometryEquiv_of_hilbertBasis`), and the Hilbert dimension of the orthogonal direct sum is the sum of the two, so `e` IS the printed equation, supplied constructively -- the same choice the repository makes for condition (3.5).  The conclusion constructs J_0, exhibits the realized pair inside the given ambient H as the isometric image of the model pair, records that the two pairs are unitarily equivalent as ORDERED pairs of subspaces, and gives the four Halmos identities.  ADDED 2026-09-05 on hostile follow-up review: the previous primary realized on `WithLp 2 (A_0 x A_1)` with no ambient space in its signature at all, so nothing in its type answered the printed dimension clause.  REPOINTED 2026-09-05.  The clause previously cited the model-level converse, which takes an isometric identification `e : WithLp 2 (A₀ × A₁) ≃ₗᵢ H` as an argument.  That is proof data: the source's converse hypothesis is the *dimension* condition, and the identification is something the proof produces from it.  `..._ofSameHilbertDimension_*` takes `SameHilbertDimensionSum` as a proposition, derives the identification internally, and existentially quantifies the two ambient subspaces, which is the printed shape.  The stronger model-level theorem is retained as registered implementation structure.  SOURCE SCOPE 2026-09-06.  Repointed at the source-scope facade after the fourth hostile review; the previous primary is retained as supporting evidence and is the stronger theorem.
 
-**`converse-angle-data.real`.** The printed converse: arbitrary self-adjoint Theta_0, Theta_1 with 0 <= Theta_j <= pi/2, spectral multiplicity functions agreeing except possibly at 0, AND their domain dimensions summing to dim H.  The dimension clause is the hypothesis `e : WithLp 2 (A_0 x A_1) ~=_li H`: two Hilbert spaces admit a linear isometry equivalence exactly when their Hilbert dimensions agree (`nonempty_linearIsometryEquiv_of_hilbertBasis`), and the Hilbert dimension of the orthogonal direct sum is the sum of the two, so `e` IS the printed equation, supplied constructively -- the same choice the repository makes for condition (3.5).  The conclusion constructs J_0, exhibits the realized pair inside the given ambient H as the isometric image of the model pair, records that the two pairs are unitarily equivalent as ORDERED pairs of subspaces, and gives the four Halmos identities.  ADDED 2026-09-05 on hostile follow-up review: the previous primary realized on `WithLp 2 (A_0 x A_1)` with no ambient space in its signature at all, so nothing in its type answered the printed dimension clause.  REPOINTED 2026-09-05.  The clause previously cited the model-level converse, which takes an isometric identification `e : WithLp 2 (A₀ × A₁) ≃ₗᵢ H` as an argument.  That is proof data: the source's converse hypothesis is the *dimension* condition, and the identification is something the proof produces from it.  `..._ofSameHilbertDimension_*` takes `SameHilbertDimensionSum` as a proposition, derives the identification internally, and existentially quantifies the two ambient subspaces, which is the printed shape.  The stronger model-level theorem is retained as registered implementation structure.
+**`converse-angle-data.real`.** The printed converse: arbitrary self-adjoint Theta_0, Theta_1 with 0 <= Theta_j <= pi/2, spectral multiplicity functions agreeing except possibly at 0, AND their domain dimensions summing to dim H.  The dimension clause is the hypothesis `e : WithLp 2 (A_0 x A_1) ~=_li H`: two Hilbert spaces admit a linear isometry equivalence exactly when their Hilbert dimensions agree (`nonempty_linearIsometryEquiv_of_hilbertBasis`), and the Hilbert dimension of the orthogonal direct sum is the sum of the two, so `e` IS the printed equation, supplied constructively -- the same choice the repository makes for condition (3.5).  The conclusion constructs J_0, exhibits the realized pair inside the given ambient H as the isometric image of the model pair, records that the two pairs are unitarily equivalent as ORDERED pairs of subspaces, and gives the four Halmos identities.  ADDED 2026-09-05 on hostile follow-up review: the previous primary realized on `WithLp 2 (A_0 x A_1)` with no ambient space in its signature at all, so nothing in its type answered the printed dimension clause.  REPOINTED 2026-09-05.  The clause previously cited the model-level converse, which takes an isometric identification `e : WithLp 2 (A₀ × A₁) ≃ₗᵢ H` as an argument.  That is proof data: the source's converse hypothesis is the *dimension* condition, and the identification is something the proof produces from it.  `..._ofSameHilbertDimension_*` takes `SameHilbertDimensionSum` as a proposition, derives the identification internally, and existentially quantifies the two ambient subspaces, which is the printed shape.  The stronger model-level theorem is retained as registered implementation structure.  SOURCE SCOPE 2026-09-06.  Repointed at the source-scope facade after the fourth hostile review; the previous primary is retained as supporting evidence and is the stronger theorem.
 
 Result-wide scope every clause must carry: *(none)*
 
@@ -3065,8 +3065,8 @@ The declarations that carry this result's printed statement, with the source ato
 
 - `TauCeti.DavisKahan1970.theorem3_1_spectralMultiplicity_classification_sourceAngle_complex` — primary_source_witness, complex scalars, proof; covers `DK-3.1-thm.complete-invariant`
 - `TauCeti.DavisKahan1970.theorem3_1_spectralMultiplicity_classification_sourceAngle_real` — primary_source_witness, real scalars, proof; covers `DK-3.1-thm.complete-invariant`
-- `TauCeti.DavisKahan1970.theorem3_1_realization_inAmbient_ofSameHilbertDimension_complex` — primary_source_witness, complex scalars, proof; covers `DK-3.1-thm.converse-angle-data`
-- `TauCeti.DavisKahan1970.theorem3_1_realization_inAmbient_ofSameHilbertDimension_real` — primary_source_witness, real scalars, proof; covers `DK-3.1-thm.converse-angle-data`
+- `TauCeti.DavisKahan1970.theorem3_1_realization_sourceExact_complex` — primary_source_witness, complex scalars, proof; covers `DK-3.1-thm.converse-angle-data`
+- `TauCeti.DavisKahan1970.theorem3_1_realization_sourceExact_real` — primary_source_witness, real scalars, proof; covers `DK-3.1-thm.converse-angle-data`
 
 ### Other registered declarations
 
@@ -3100,6 +3100,8 @@ The declarations that carry this result's printed statement, with the source ato
 - `TauCeti.DavisKahan1970.genericAngleBlockReal` — implementation_structure
 - `TauCeti.DavisKahan1970.genericCosineBlock_nonneg_real` — supporting_theorem
 - `TauCeti.DavisKahan1970.genericCosineBlock_le_one_real` — supporting_theorem
+- `TauCeti.DavisKahan1970.theorem3_1_realization_inAmbient_ofSameHilbertDimension_complex` — generalization
+- `TauCeti.DavisKahan1970.theorem3_1_realization_inAmbient_ofSameHilbertDimension_real` — generalization
 
 ### Source-facing Lean declarations
 
@@ -3307,6 +3309,18 @@ Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section3Classific
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
+#### `TauCeti.DavisKahan1970.theorem3_1_realization_sourceExact_complex`
+
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section3Theorem31Realization.lean:905`
+
+Compiler-printed type: *inserted when a compiler certificate is supplied.*
+
+#### `TauCeti.DavisKahan1970.theorem3_1_realization_sourceExact_real`
+
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section3Theorem31Realization.lean:926`
+
+Compiler-printed type: *inserted when a compiler certificate is supplied.*
+
 ### Independent result audit checklist
 
 - [ ] The selected source atoms are exactly the hypotheses, conclusions, and scope of the printed result statement.
@@ -3372,11 +3386,11 @@ One row per printed source clause per scalar field.  A clause is `PASS` only whe
 | clause | scalar | witness | status |
 | --- | --- | --- | --- |
 | `compact-complete-invariants.rclike` | rclike | `TauCeti.DavisKahan1970.corollary3_1_compact_defectBlock_sourceAngleList_classification_separable` + `TauCeti.DavisKahan1970.compactAngleList` + `TauCeti.DavisKahan1970.compactAngleList_inj_iff` + `TauCeti.DavisKahan1970.compactAngleEigenvalueList_genericCosineBlock_le_one` + `TauCeti.DavisKahan1970.angleSequence_eq_of_angleList_eq` | **PASS** |
-| `allowed-angle-sequence.rclike` | rclike | `TauCeti.DavisKahan1970.corollary3_1_realization_zeroMultiplicity` + `TauCeti.DavisKahan1970.angleSequence_eq_of_angleList_eq` + `TauCeti.DavisKahan1970.angle_eq_of_sin_sq_eq` | **PASS** |
+| `allowed-angle-sequence.rclike` | rclike | `TauCeti.DavisKahan1970.corollary3_1_realization_zeroMultiplicity_sourceScope` + `TauCeti.DavisKahan1970.angleSequence_eq_of_angleList_eq` + `TauCeti.DavisKahan1970.angle_eq_of_sin_sq_eq` | **PASS** |
 
 **`compact-complete-invariants.rclike`.** Canonical witness at the paper's separable ambient scope, which is Section 1's setting: "Let H be a separable Hilbert space, real or complex; finite dimensionality is not assumed."  The arbitrary-Hilbert theorem it wraps is strictly stronger and is retained as the generalization it is; the wrapper adds the ambient hypothesis and nothing else.
 
-**`allowed-angle-sequence.rclike`.** The printed sentence: the eigenvalues of Theta_0 are an arbitrary sequence pi/2 >= theta_1 >= theta_2 >= ... -> 0 together with a possible eigenvalue 0, and those of Theta_1 are the same EXCEPT PERHAPS FOR THE MULTIPLICITY OF 0.  UNDER-CERTIFICATION CORRECTED 2026-09-04: the primary was `corollary3_1_realization`, which realizes the sequence but forces the two angle-zero multiplicities to coincide, so it does not witness the clause that distinguishes Theta_0 from Theta_1.  `corollary3_1_realization_zeroMultiplicity` prescribes them as two arbitrary Hilbert spaces Z_0 and Z_1, chosen independently of each other and of theta, which is the printed freedom; the weaker realization stays as supporting evidence.  The recorded invariant is the approximation-number list `n |-> sin^2 theta_n` rather than a list of angles; `angleSequence_eq_of_angleList_eq` proves that recording it records the angles, since `theta |-> sin^2 theta` is injective on the printed range [0, pi/2].
+**`allowed-angle-sequence.rclike`.** The printed sentence: the eigenvalues of Theta_0 are an arbitrary sequence pi/2 >= theta_1 >= theta_2 >= ... -> 0 together with a possible eigenvalue 0, and those of Theta_1 are the same EXCEPT PERHAPS FOR THE MULTIPLICITY OF 0.  UNDER-CERTIFICATION CORRECTED 2026-09-04: the primary was `corollary3_1_realization`, which realizes the sequence but forces the two angle-zero multiplicities to coincide, so it does not witness the clause that distinguishes Theta_0 from Theta_1.  `corollary3_1_realization_zeroMultiplicity` prescribes them as two arbitrary Hilbert spaces Z_0 and Z_1, chosen independently of each other and of theta, which is the printed freedom; the weaker realization stays as supporting evidence.  The recorded invariant is the approximation-number list `n |-> sin^2 theta_n` rather than a list of angles; `angleSequence_eq_of_angleList_eq` proves that recording it records the angles, since `theta |-> sin^2 theta` is injective on the printed range [0, pi/2].  SOURCE SCOPE 2026-09-06.  Repointed at the source-scope facade after the fourth hostile review; the previous primary is retained as supporting evidence and is the stronger theorem.
 
 Result-wide scope every clause must carry: *(none)*
 
@@ -3385,7 +3399,7 @@ Result-wide scope every clause must carry: *(none)*
 The declarations that carry this result's printed statement, with the source atoms each one covers.  Everything under *Other registered declarations* below accompanies the result without establishing it.
 
 - `TauCeti.DavisKahan1970.corollary3_1_compact_defectBlock_sourceAngleList_classification_separable` — primary_source_witness, rclike scalars, proof; covers `DK-3.1-cor.compact-complete-invariants`, `DK-3.1-cor.theta1-match`
-- `TauCeti.DavisKahan1970.corollary3_1_realization_zeroMultiplicity` — primary_source_witness, rclike scalars, proof; covers `DK-3.1-cor.allowed-angle-sequence`
+- `TauCeti.DavisKahan1970.corollary3_1_realization_zeroMultiplicity_sourceScope` — primary_source_witness, rclike scalars, proof; covers `DK-3.1-cor.allowed-angle-sequence`
 
 ### Other registered declarations
 
@@ -3402,6 +3416,7 @@ The declarations that carry this result's printed statement, with the source ato
 - `TauCeti.DavisKahan1970.compactAngleEigenvalueList_genericCosineBlock_le_one` — supporting_theorem
 - `TauCeti.DavisKahan1970.norm_genericCosineBlock_le_one` — supporting_theorem
 - `TauCeti.DavisKahan1970.corollary3_1_compact_defectBlock_sourceAngleList_classification` — generalization
+- `TauCeti.DavisKahan1970.corollary3_1_realization_zeroMultiplicity` — generalization
 
 ### Source-facing Lean declarations
 
@@ -3413,7 +3428,7 @@ Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.corollary3_1_compact_classification_real`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section3Corollary31.lean:639`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section3Corollary31.lean:705`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
@@ -3431,25 +3446,25 @@ Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.angleSequence_eq_of_angleList_eq`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section3Corollary31.lean:541`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section3Corollary31.lean:607`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.angle_eq_of_sin_sq_eq`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section3Corollary31.lean:527`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section3Corollary31.lean:593`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.corollary3_1_prescribedAngleSequence_classification`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section3Corollary31.lean:587`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section3Corollary31.lean:653`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.corollary3_1_prescribedAngleSequence_classification_real`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section3Corollary31.lean:718`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section3Corollary31.lean:784`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
@@ -3492,6 +3507,12 @@ Compiler-printed type: *inserted when a compiler certificate is supplied.*
 #### `TauCeti.DavisKahan1970.corollary3_1_compact_defectBlock_sourceAngleList_classification_separable`
 
 Source location candidates: `DavisKahan/Sources/DavisKahan1970/SeparableSourceScope.lean:313`
+
+Compiler-printed type: *inserted when a compiler certificate is supplied.*
+
+#### `TauCeti.DavisKahan1970.corollary3_1_realization_zeroMultiplicity_sourceScope`
+
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section3Corollary31.lean:523`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
@@ -3893,6 +3914,11 @@ The declarations that carry this result's printed statement, with the source ato
 - `TauCeti.DavisKahan1970.proposition4_1_compact_nonacute_directRotationValues_real` — supporting_theorem
 - `TauCeti.DavisKahan1970.proposition4_1_compact_nonacute_complex` — implementation_structure
 - `TauCeti.DavisKahan1970.proposition4_1_compact_nonacute_real` — implementation_structure
+- `TauCeti.DavisKahan.IsSourceDirectRotation` — supporting_theorem
+- `TauCeti.DavisKahan.IsSourceDirectRotation.add_star_eq_two_absoluteValue` — supporting_theorem
+- `TauCeti.DavisKahan.norm_one_sub_apply_eq_of_isSourceDirectRotation` — supporting_theorem
+- `TauCeti.DavisKahan.sq_eq_reflectionProduct` — supporting_theorem
+- `TauCeti.DavisKahan1970.crossedDefectsEquivalent_of_isSourceDirectRotation` — supporting_theorem
 
 ### Source-facing Lean declarations
 
@@ -3922,13 +3948,43 @@ Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.proposition4_1_directRotation_sourceExact_complex`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section4DirectRotationSource.lean:58`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section4DirectRotationSource.lean:113`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.proposition4_1_directRotation_sourceExact_real`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section4DirectRotationSource.lean:138`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section4DirectRotationSource.lean:194`
+
+Compiler-printed type: *inserted when a compiler certificate is supplied.*
+
+#### `TauCeti.DavisKahan.IsSourceDirectRotation`
+
+Source location candidates: `DavisKahan/Geometry/Polar/SourceDirectRotation.lean:76`
+
+Compiler-printed type: *inserted when a compiler certificate is supplied.*
+
+#### `TauCeti.DavisKahan.IsSourceDirectRotation.add_star_eq_two_absoluteValue`
+
+Source location candidates: `DavisKahan/Geometry/Polar/SourceDirectRotation.lean:186`
+
+Compiler-printed type: *inserted when a compiler certificate is supplied.*
+
+#### `TauCeti.DavisKahan.norm_one_sub_apply_eq_of_isSourceDirectRotation`
+
+Source location candidates: `DavisKahan/Geometry/Polar/SourceDirectRotation.lean:240`
+
+Compiler-printed type: *inserted when a compiler certificate is supplied.*
+
+#### `TauCeti.DavisKahan.sq_eq_reflectionProduct`
+
+Source location candidates: `DavisKahan/Geometry/Polar/PrincipalSquareRoot.lean:140`
+
+Compiler-printed type: *inserted when a compiler certificate is supplied.*
+
+#### `TauCeti.DavisKahan1970.crossedDefectsEquivalent_of_isSourceDirectRotation`
+
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section4DirectRotationSource.lean:94`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
@@ -4130,6 +4186,11 @@ The declarations that carry this result's printed statement, with the source ato
 - `TauCeti.DavisKahan.ExactSinTheta.NormalizedUnitaryInvariantNorm` — source_correspondence
 - `TauCeti.DavisKahan1970.corollary4_1_compact_nonacute_sourceExact_complex` — implementation_structure
 - `TauCeti.DavisKahan1970.corollary4_1_compact_nonacute_sourceExact_real` — implementation_structure
+- `TauCeti.DavisKahan.IsSourceDirectRotation` — supporting_theorem
+- `TauCeti.DavisKahan.IsSourceDirectRotation.add_star_eq_two_absoluteValue` — supporting_theorem
+- `TauCeti.DavisKahan.norm_one_sub_apply_eq_of_isSourceDirectRotation` — supporting_theorem
+- `TauCeti.DavisKahan.sq_eq_reflectionProduct` — supporting_theorem
+- `TauCeti.DavisKahan1970.crossedDefectsEquivalent_of_isSourceDirectRotation` — supporting_theorem
 
 ### Source-facing Lean declarations
 
@@ -4189,13 +4250,43 @@ Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.corollary4_1_directRotation_sourceExact_complex`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section4DirectRotationSource.lean:89`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section4DirectRotationSource.lean:144`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.corollary4_1_directRotation_sourceExact_real`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section4DirectRotationSource.lean:167`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section4DirectRotationSource.lean:223`
+
+Compiler-printed type: *inserted when a compiler certificate is supplied.*
+
+#### `TauCeti.DavisKahan.IsSourceDirectRotation`
+
+Source location candidates: `DavisKahan/Geometry/Polar/SourceDirectRotation.lean:76`
+
+Compiler-printed type: *inserted when a compiler certificate is supplied.*
+
+#### `TauCeti.DavisKahan.IsSourceDirectRotation.add_star_eq_two_absoluteValue`
+
+Source location candidates: `DavisKahan/Geometry/Polar/SourceDirectRotation.lean:186`
+
+Compiler-printed type: *inserted when a compiler certificate is supplied.*
+
+#### `TauCeti.DavisKahan.norm_one_sub_apply_eq_of_isSourceDirectRotation`
+
+Source location candidates: `DavisKahan/Geometry/Polar/SourceDirectRotation.lean:240`
+
+Compiler-printed type: *inserted when a compiler certificate is supplied.*
+
+#### `TauCeti.DavisKahan.sq_eq_reflectionProduct`
+
+Source location candidates: `DavisKahan/Geometry/Polar/PrincipalSquareRoot.lean:140`
+
+Compiler-printed type: *inserted when a compiler certificate is supplied.*
+
+#### `TauCeti.DavisKahan1970.crossedDefectsEquivalent_of_isSourceDirectRotation`
+
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section4DirectRotationSource.lean:94`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
@@ -4696,6 +4787,11 @@ The declarations that carry this result's printed statement, with the source ato
 - `TauCeti.DavisKahan1970.proposition4_3_compact_nonacute_sourceExact_ofCrossedDefects_real` — presentation_wrapper
 - `TauCeti.DavisKahan1970.proposition4_3_compact_nonacute_sourceExact_complex` — implementation_structure
 - `TauCeti.DavisKahan1970.proposition4_3_compact_nonacute_sourceExact_real` — implementation_structure
+- `TauCeti.DavisKahan.IsSourceDirectRotation` — supporting_theorem
+- `TauCeti.DavisKahan.IsSourceDirectRotation.add_star_eq_two_absoluteValue` — supporting_theorem
+- `TauCeti.DavisKahan.norm_one_sub_apply_eq_of_isSourceDirectRotation` — supporting_theorem
+- `TauCeti.DavisKahan.sq_eq_reflectionProduct` — supporting_theorem
+- `TauCeti.DavisKahan1970.crossedDefectsEquivalent_of_isSourceDirectRotation` — supporting_theorem
 
 ### Source-facing Lean declarations
 
@@ -4761,13 +4857,43 @@ Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.proposition4_3_directRotation_sourceExact_complex`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section4DirectRotationSource.lean:109`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section4DirectRotationSource.lean:167`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.proposition4_3_directRotation_sourceExact_real`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section4DirectRotationSource.lean:188`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section4DirectRotationSource.lean:247`
+
+Compiler-printed type: *inserted when a compiler certificate is supplied.*
+
+#### `TauCeti.DavisKahan.IsSourceDirectRotation`
+
+Source location candidates: `DavisKahan/Geometry/Polar/SourceDirectRotation.lean:76`
+
+Compiler-printed type: *inserted when a compiler certificate is supplied.*
+
+#### `TauCeti.DavisKahan.IsSourceDirectRotation.add_star_eq_two_absoluteValue`
+
+Source location candidates: `DavisKahan/Geometry/Polar/SourceDirectRotation.lean:186`
+
+Compiler-printed type: *inserted when a compiler certificate is supplied.*
+
+#### `TauCeti.DavisKahan.norm_one_sub_apply_eq_of_isSourceDirectRotation`
+
+Source location candidates: `DavisKahan/Geometry/Polar/SourceDirectRotation.lean:240`
+
+Compiler-printed type: *inserted when a compiler certificate is supplied.*
+
+#### `TauCeti.DavisKahan.sq_eq_reflectionProduct`
+
+Source location candidates: `DavisKahan/Geometry/Polar/PrincipalSquareRoot.lean:140`
+
+Compiler-printed type: *inserted when a compiler certificate is supplied.*
+
+#### `TauCeti.DavisKahan1970.crossedDefectsEquivalent_of_isSourceDirectRotation`
+
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section4DirectRotationSource.lean:94`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
@@ -5368,18 +5494,18 @@ One row per printed source clause per scalar field.  A clause is `PASS` only whe
 
 | clause | scalar | witness | status |
 | --- | --- | --- | --- |
-| `forward.complex` | complex | `TauCeti.DavisKahan1970.lemma6_1_sourceExact_complex` | **PASS** |
-| `forward.real` | real | `TauCeti.DavisKahan1970.lemma6_1_sourceExact_real` | **PASS** |
-| `converse.complex` | complex | `TauCeti.DavisKahan1970.lemma6_1_converse_sourceExact_complex` | **PASS** |
-| `converse.real` | real | `TauCeti.DavisKahan1970.lemma6_1_converse_sourceExact_real` | **PASS** |
+| `forward.complex` | complex | `TauCeti.DavisKahan1970.lemma6_1_separable_complex` | **PASS** |
+| `forward.real` | real | `TauCeti.DavisKahan1970.lemma6_1_separable_real` | **PASS** |
+| `converse.complex` | complex | `TauCeti.DavisKahan1970.lemma6_1_converse_separable_complex` | **PASS** |
+| `converse.real` | real | `TauCeti.DavisKahan1970.lemma6_1_converse_separable_real` | **PASS** |
 
-**`forward.complex`.** Canonical witness for the whole printed statement at rclike scalar scope, carried over from the pre-clause canonical evidence and re-checked against its compiler-printed type under the coherent model.  SOURCE NORM CLASS 2026-09-05.  BOTH the premise and the conclusion now quantify over `NormalizedUnitaryInvariantNorm`, as the paper prints them.  The retained `SymmetricNormingFunction` theorem is strictly stronger -- it takes Ky Fan inequalities as its premise -- and the printed premise reaches it because the Ky Fan norms are members of the source class, which is what `kyFanNormalizedUnitaryInvariantNorm` supplies.
+**`forward.complex`.** Canonical witness for the whole printed statement at rclike scalar scope, carried over from the pre-clause canonical evidence and re-checked against its compiler-printed type under the coherent model.  SOURCE NORM CLASS 2026-09-05.  BOTH the premise and the conclusion now quantify over `NormalizedUnitaryInvariantNorm`, as the paper prints them.  The retained `SymmetricNormingFunction` theorem is strictly stronger -- it takes Ky Fan inequalities as its premise -- and the printed premise reaches it because the Ky Fan norms are members of the source class, which is what `kyFanNormalizedUnitaryInvariantNorm` supplies.  SOURCE SCOPE 2026-09-06.  Repointed at the source-scope facade after the fourth hostile review; the previous primary is retained as supporting evidence and is the stronger theorem.
 
-**`forward.real`.** Canonical witness for the whole printed statement at rclike scalar scope, carried over from the pre-clause canonical evidence and re-checked against its compiler-printed type under the coherent model.  SOURCE NORM CLASS 2026-09-05.  BOTH the premise and the conclusion now quantify over `NormalizedUnitaryInvariantNorm`, as the paper prints them.  The retained `SymmetricNormingFunction` theorem is strictly stronger -- it takes Ky Fan inequalities as its premise -- and the printed premise reaches it because the Ky Fan norms are members of the source class, which is what `kyFanNormalizedUnitaryInvariantNorm` supplies.
+**`forward.real`.** Canonical witness for the whole printed statement at rclike scalar scope, carried over from the pre-clause canonical evidence and re-checked against its compiler-printed type under the coherent model.  SOURCE NORM CLASS 2026-09-05.  BOTH the premise and the conclusion now quantify over `NormalizedUnitaryInvariantNorm`, as the paper prints them.  The retained `SymmetricNormingFunction` theorem is strictly stronger -- it takes Ky Fan inequalities as its premise -- and the printed premise reaches it because the Ky Fan norms are members of the source class, which is what `kyFanNormalizedUnitaryInvariantNorm` supplies.  SOURCE SCOPE 2026-09-06.  Repointed at the source-scope facade after the fourth hostile review; the previous primary is retained as supporting evidence and is the stronger theorem.
 
-**`converse.complex`.** Canonical witness for the whole printed statement at rclike scalar scope, carried over from the pre-clause canonical evidence and re-checked against its compiler-printed type under the coherent model.  SOURCE NORM CLASS 2026-09-05.  The printed converse, with its two equisingularity hypotheses, over the literal norm class on both sides.
+**`converse.complex`.** Canonical witness for the whole printed statement at rclike scalar scope, carried over from the pre-clause canonical evidence and re-checked against its compiler-printed type under the coherent model.  SOURCE NORM CLASS 2026-09-05.  The printed converse, with its two equisingularity hypotheses, over the literal norm class on both sides.  SOURCE SCOPE 2026-09-06.  Repointed at the source-scope facade after the fourth hostile review; the previous primary is retained as supporting evidence and is the stronger theorem.
 
-**`converse.real`.** Canonical witness for the whole printed statement at rclike scalar scope, carried over from the pre-clause canonical evidence and re-checked against its compiler-printed type under the coherent model.  SOURCE NORM CLASS 2026-09-05.  The printed converse, with its two equisingularity hypotheses, over the literal norm class on both sides.
+**`converse.real`.** Canonical witness for the whole printed statement at rclike scalar scope, carried over from the pre-clause canonical evidence and re-checked against its compiler-printed type under the coherent model.  SOURCE NORM CLASS 2026-09-05.  The printed converse, with its two equisingularity hypotheses, over the literal norm class on both sides.  SOURCE SCOPE 2026-09-06.  Repointed at the source-scope facade after the fourth hostile review; the previous primary is retained as supporting evidence and is the stronger theorem.
 
 Result-wide scope every clause must carry: `DK-6.1-lem.ordered-sylvester-forward`, `DK-6.1-lem.ordered-sylvester-converse`
 
@@ -5387,10 +5513,10 @@ Result-wide scope every clause must carry: `DK-6.1-lem.ordered-sylvester-forward
 
 The declarations that carry this result's printed statement, with the source atoms each one covers.  Everything under *Other registered declarations* below accompanies the result without establishing it.
 
-- `TauCeti.DavisKahan1970.lemma6_1_sourceExact_complex` — primary_source_witness, complex scalars, proof; covers `DK-6.1-lem.ordered-sylvester-converse`, `DK-6.1-lem.ordered-sylvester-forward`
-- `TauCeti.DavisKahan1970.lemma6_1_sourceExact_real` — primary_source_witness, real scalars, proof; covers `DK-6.1-lem.ordered-sylvester-converse`, `DK-6.1-lem.ordered-sylvester-forward`
-- `TauCeti.DavisKahan1970.lemma6_1_converse_sourceExact_complex` — primary_source_witness, complex scalars, proof; covers `DK-6.1-lem.ordered-sylvester-converse`, `DK-6.1-lem.ordered-sylvester-forward`
-- `TauCeti.DavisKahan1970.lemma6_1_converse_sourceExact_real` — primary_source_witness, real scalars, proof; covers `DK-6.1-lem.ordered-sylvester-converse`, `DK-6.1-lem.ordered-sylvester-forward`
+- `TauCeti.DavisKahan1970.lemma6_1_separable_complex` — primary_source_witness, complex scalars, proof; covers `DK-6.1-lem.ordered-sylvester-converse`, `DK-6.1-lem.ordered-sylvester-forward`
+- `TauCeti.DavisKahan1970.lemma6_1_separable_real` — primary_source_witness, real scalars, proof; covers `DK-6.1-lem.ordered-sylvester-converse`, `DK-6.1-lem.ordered-sylvester-forward`
+- `TauCeti.DavisKahan1970.lemma6_1_converse_separable_complex` — primary_source_witness, complex scalars, proof; covers `DK-6.1-lem.ordered-sylvester-converse`, `DK-6.1-lem.ordered-sylvester-forward`
+- `TauCeti.DavisKahan1970.lemma6_1_converse_separable_real` — primary_source_witness, real scalars, proof; covers `DK-6.1-lem.ordered-sylvester-converse`, `DK-6.1-lem.ordered-sylvester-forward`
 
 ### Other registered declarations
 
@@ -5398,6 +5524,10 @@ The declarations that carry this result's printed statement, with the source ato
 - `TauCeti.DavisKahan1970.lemma6_1_converse` — generalization
 - `TauCeti.DavisKahan1970.lemma6_1_sourceExact` — generalization
 - `TauCeti.DavisKahan1970.lemma6_1_converse_sourceExact` — generalization
+- `TauCeti.DavisKahan1970.lemma6_1_sourceExact_complex` — generalization
+- `TauCeti.DavisKahan1970.lemma6_1_sourceExact_real` — generalization
+- `TauCeti.DavisKahan1970.lemma6_1_converse_sourceExact_complex` — generalization
+- `TauCeti.DavisKahan1970.lemma6_1_converse_sourceExact_real` — generalization
 
 ### Source-facing Lean declarations
 
@@ -5446,6 +5576,30 @@ Compiler-printed type: *inserted when a compiler certificate is supplied.*
 #### `TauCeti.DavisKahan1970.lemma6_1_converse_sourceExact`
 
 Source location candidates: `DavisKahan/Sources/DavisKahan1970/SineTheta/Section6SourceNorms.lean:132`
+
+Compiler-printed type: *inserted when a compiler certificate is supplied.*
+
+#### `TauCeti.DavisKahan1970.lemma6_1_separable_complex`
+
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section6SourceScope.lean:62`
+
+Compiler-printed type: *inserted when a compiler certificate is supplied.*
+
+#### `TauCeti.DavisKahan1970.lemma6_1_separable_real`
+
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section6SourceScope.lean:84`
+
+Compiler-printed type: *inserted when a compiler certificate is supplied.*
+
+#### `TauCeti.DavisKahan1970.lemma6_1_converse_separable_complex`
+
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section6SourceScope.lean:106`
+
+Compiler-printed type: *inserted when a compiler certificate is supplied.*
+
+#### `TauCeti.DavisKahan1970.lemma6_1_converse_separable_real`
+
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section6SourceScope.lean:127`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
@@ -5511,9 +5665,9 @@ One row per printed source clause per scalar field.  A clause is `PASS` only whe
 
 | clause | scalar | witness | status |
 | --- | --- | --- | --- |
-| `whole.rclike` | rclike | `TauCeti.DavisKahan1970.lemma6_2_sourceExact` | **PASS** |
+| `whole.rclike` | rclike | `TauCeti.DavisKahan1970.lemma6_2_separable` | **PASS** |
 
-**`whole.rclike`.** Canonical witness for the whole printed statement at rclike scalar scope, carried over from the pre-clause canonical evidence and re-checked against its compiler-printed type under the coherent model.  SOURCE NORM CLASS 2026-09-05.  The clause now cites `lemma6_2_sourceExact`, which quantifies over `NormalizedUnitaryInvariantNorm` -- the Lean type for Section 1's class -- rather than over `SymmetricNormingFunction`, one model of it.  It is scalar-generic and carries no capability class, so it covers the paper's real and complex scope at once.
+**`whole.rclike`.** Canonical witness for the whole printed statement at rclike scalar scope, carried over from the pre-clause canonical evidence and re-checked against its compiler-printed type under the coherent model.  SOURCE NORM CLASS 2026-09-05.  The clause now cites `lemma6_2_sourceExact`, which quantifies over `NormalizedUnitaryInvariantNorm` -- the Lean type for Section 1's class -- rather than over `SymmetricNormingFunction`, one model of it.  It is scalar-generic and carries no capability class, so it covers the paper's real and complex scope at once.  SOURCE SCOPE 2026-09-06.  Repointed at the source-scope facade after the fourth hostile review; the previous primary is retained as supporting evidence and is the stronger theorem.
 
 Result-wide scope every clause must carry: `DK-6.2-lem.pinching-contraction`
 
@@ -5521,13 +5675,14 @@ Result-wide scope every clause must carry: `DK-6.2-lem.pinching-contraction`
 
 The declarations that carry this result's printed statement, with the source atoms each one covers.  Everything under *Other registered declarations* below accompanies the result without establishing it.
 
-- `TauCeti.DavisKahan1970.lemma6_2_sourceExact` — primary_source_witness, rclike scalars, proof; covers `DK-6.2-lem.pinching-contraction`
+- `TauCeti.DavisKahan1970.lemma6_2_separable` — primary_source_witness, rclike scalars, proof; covers `DK-6.2-lem.pinching-contraction`
 
 ### Other registered declarations
 
 - `TauCeti.DavisKahan1970.lemma6_2` — generalization
 - `TauCeti.DavisKahan1970.lemma6_1_sourceExact` — generalization
 - `TauCeti.DavisKahan1970.lemma6_1_converse_sourceExact` — generalization
+- `TauCeti.DavisKahan1970.lemma6_2_sourceExact` — generalization
 
 ### Source-facing Lean declarations
 
@@ -5552,6 +5707,12 @@ Compiler-printed type: *inserted when a compiler certificate is supplied.*
 #### `TauCeti.DavisKahan1970.lemma6_1_converse_sourceExact`
 
 Source location candidates: `DavisKahan/Sources/DavisKahan1970/SineTheta/Section6SourceNorms.lean:132`
+
+Compiler-printed type: *inserted when a compiler certificate is supplied.*
+
+#### `TauCeti.DavisKahan1970.lemma6_2_separable`
+
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section6SourceScope.lean:148`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
@@ -5637,12 +5798,12 @@ One row per printed source clause per scalar field.  A clause is `PASS` only whe
 
 | clause | scalar | witness | status |
 | --- | --- | --- | --- |
-| `symmetric-sine-theorem.complex` | complex | `TauCeti.DavisKahan1970.proposition6_1_sourceExact_complex` | **PASS** |
-| `symmetric-sine-theorem.real` | real | `TauCeti.DavisKahan1970.proposition6_1_sourceExact_real` | **PASS** |
+| `symmetric-sine-theorem.complex` | complex | `TauCeti.DavisKahan1970.proposition6_1_printedGap_sourceExact_complex` | **PASS** |
+| `symmetric-sine-theorem.real` | real | `TauCeti.DavisKahan1970.proposition6_1_printedGap_sourceExact_real` | **PASS** |
 
-**`symmetric-sine-theorem.complex`.** Canonical witness for symmetric-sine-theorem at complex scalar scope, carried over from the pre-clause canonical evidence and re-checked against its compiler-printed type under the coherent model.  SOURCE NORM CLASS 2026-09-05.  The clause now cites the façade over `NormalizedUnitaryInvariantNorm`, the Lean type for Section 1's class, rather than the `SymmetricNormingFunction` theorem, which is one model of it and is retained as a registered generalization.
+**`symmetric-sine-theorem.complex`.** Canonical witness for symmetric-sine-theorem at complex scalar scope, carried over from the pre-clause canonical evidence and re-checked against its compiler-printed type under the coherent model.  SOURCE NORM CLASS 2026-09-05.  The clause now cites the façade over `NormalizedUnitaryInvariantNorm`, the Lean type for Section 1's class, rather than the `SymmetricNormingFunction` theorem, which is one model of it and is retained as a registered generalization.  SOURCE SCOPE 2026-09-06.  Repointed at the source-scope facade after the fourth hostile review; the previous primary is retained as supporting evidence and is the stronger theorem.
 
-**`symmetric-sine-theorem.real`.** Canonical witness for symmetric-sine-theorem at real scalar scope, carried over from the pre-clause canonical evidence and re-checked against its compiler-printed type under the coherent model.  SOURCE NORM CLASS 2026-09-05.  The clause now cites the façade over `NormalizedUnitaryInvariantNorm`, the Lean type for Section 1's class, rather than the `SymmetricNormingFunction` theorem, which is one model of it and is retained as a registered generalization.
+**`symmetric-sine-theorem.real`.** Canonical witness for symmetric-sine-theorem at real scalar scope, carried over from the pre-clause canonical evidence and re-checked against its compiler-printed type under the coherent model.  SOURCE NORM CLASS 2026-09-05.  The clause now cites the façade over `NormalizedUnitaryInvariantNorm`, the Lean type for Section 1's class, rather than the `SymmetricNormingFunction` theorem, which is one model of it and is retained as a registered generalization.  SOURCE SCOPE 2026-09-06.  Repointed at the source-scope facade after the fourth hostile review; the previous primary is retained as supporting evidence and is the stronger theorem.
 
 Result-wide scope every clause must carry: *(none)*
 
@@ -5650,8 +5811,8 @@ Result-wide scope every clause must carry: *(none)*
 
 The declarations that carry this result's printed statement, with the source atoms each one covers.  Everything under *Other registered declarations* below accompanies the result without establishing it.
 
-- `TauCeti.DavisKahan1970.proposition6_1_sourceExact_complex` — primary_source_witness, complex scalars, proof; covers `DK-6.1-prop.symmetric-sine-theorem`
-- `TauCeti.DavisKahan1970.proposition6_1_sourceExact_real` — primary_source_witness, real scalars, proof; covers `DK-6.1-prop.symmetric-sine-theorem`
+- `TauCeti.DavisKahan1970.proposition6_1_printedGap_sourceExact_complex` — primary_source_witness, complex scalars, proof; covers `DK-6.1-prop.symmetric-sine-theorem`
+- `TauCeti.DavisKahan1970.proposition6_1_printedGap_sourceExact_real` — primary_source_witness, real scalars, proof; covers `DK-6.1-prop.symmetric-sine-theorem`
 
 ### Other registered declarations
 
@@ -5664,6 +5825,8 @@ The declarations that carry this result's printed statement, with the source ato
 - `TauCeti.DavisKahan1970.proposition6_1_real_commonDomain` — generalization
 - `TauCeti.DavisKahan1970.proposition6_1_complex` — generalization
 - `TauCeti.DavisKahan1970.proposition6_1_real` — generalization
+- `TauCeti.DavisKahan1970.proposition6_1_sourceExact_complex` — generalization
+- `TauCeti.DavisKahan1970.proposition6_1_sourceExact_real` — generalization
 
 ### Source-facing Lean declarations
 
@@ -5730,6 +5893,18 @@ Compiler-printed type: *inserted when a compiler certificate is supplied.*
 #### `TauCeti.DavisKahan1970.proposition6_1_sourceExact_real`
 
 Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section6SourceNormClass.lean:68`
+
+Compiler-printed type: *inserted when a compiler certificate is supplied.*
+
+#### `TauCeti.DavisKahan1970.proposition6_1_printedGap_sourceExact_complex`
+
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section6SourceScope.lean:167`
+
+Compiler-printed type: *inserted when a compiler certificate is supplied.*
+
+#### `TauCeti.DavisKahan1970.proposition6_1_printedGap_sourceExact_real`
+
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section6SourceScope.lean:189`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
@@ -5802,12 +5977,12 @@ One row per printed source clause per scalar field.  A clause is `PASS` only whe
 
 | clause | scalar | witness | status |
 | --- | --- | --- | --- |
-| `generalized-sine-conclusion.complex` | complex | `TauCeti.DavisKahan1970.theorem6_1_sourceExact_complex` | **PASS** |
-| `generalized-sine-conclusion.real` | real | `TauCeti.DavisKahan1970.theorem6_1_sourceExact_real` | **PASS** |
+| `generalized-sine-conclusion.complex` | complex | `TauCeti.DavisKahan1970.theorem6_1_printedGap_sourceExact_complex` | **PASS** |
+| `generalized-sine-conclusion.real` | real | `TauCeti.DavisKahan1970.theorem6_1_printedGap_sourceExact_real` | **PASS** |
 
-**`generalized-sine-conclusion.complex`.** Canonical witness for generalized-sine-conclusion at complex scalar scope, carried over from the pre-clause canonical evidence and re-checked against its compiler-printed type under the coherent model.  SOURCE NORM CLASS 2026-09-05.  The clause now cites the façade over `NormalizedUnitaryInvariantNorm`, the Lean type for Section 1's class, rather than the `SymmetricNormingFunction` theorem, which is one model of it and is retained as a registered generalization.
+**`generalized-sine-conclusion.complex`.** Canonical witness for generalized-sine-conclusion at complex scalar scope, carried over from the pre-clause canonical evidence and re-checked against its compiler-printed type under the coherent model.  SOURCE NORM CLASS 2026-09-05.  The clause now cites the façade over `NormalizedUnitaryInvariantNorm`, the Lean type for Section 1's class, rather than the `SymmetricNormingFunction` theorem, which is one model of it and is retained as a registered generalization.  SOURCE SCOPE 2026-09-06.  Repointed at the source-scope facade after the fourth hostile review; the previous primary is retained as supporting evidence and is the stronger theorem.
 
-**`generalized-sine-conclusion.real`.** Canonical witness for generalized-sine-conclusion at real scalar scope, carried over from the pre-clause canonical evidence and re-checked against its compiler-printed type under the coherent model.  SOURCE NORM CLASS 2026-09-05.  The clause now cites the façade over `NormalizedUnitaryInvariantNorm`, the Lean type for Section 1's class, rather than the `SymmetricNormingFunction` theorem, which is one model of it and is retained as a registered generalization.
+**`generalized-sine-conclusion.real`.** Canonical witness for generalized-sine-conclusion at real scalar scope, carried over from the pre-clause canonical evidence and re-checked against its compiler-printed type under the coherent model.  SOURCE NORM CLASS 2026-09-05.  The clause now cites the façade over `NormalizedUnitaryInvariantNorm`, the Lean type for Section 1's class, rather than the `SymmetricNormingFunction` theorem, which is one model of it and is retained as a registered generalization.  SOURCE SCOPE 2026-09-06.  Repointed at the source-scope facade after the fourth hostile review; the previous primary is retained as supporting evidence and is the stronger theorem.
 
 Result-wide scope every clause must carry: `DK-6.1-thm.generalized-sine-hypotheses`, `DK-6.1-thm.unequal-dimension-scope`
 
@@ -5815,8 +5990,8 @@ Result-wide scope every clause must carry: `DK-6.1-thm.generalized-sine-hypothes
 
 The declarations that carry this result's printed statement, with the source atoms each one covers.  Everything under *Other registered declarations* below accompanies the result without establishing it.
 
-- `TauCeti.DavisKahan1970.theorem6_1_sourceExact_complex` — primary_source_witness, complex scalars, proof; covers `DK-6.1-thm.generalized-sine-conclusion`, `DK-6.1-thm.generalized-sine-hypotheses`, `DK-6.1-thm.unequal-dimension-scope`
-- `TauCeti.DavisKahan1970.theorem6_1_sourceExact_real` — primary_source_witness, real scalars, proof; covers `DK-6.1-thm.generalized-sine-conclusion`, `DK-6.1-thm.generalized-sine-hypotheses`, `DK-6.1-thm.unequal-dimension-scope`
+- `TauCeti.DavisKahan1970.theorem6_1_printedGap_sourceExact_complex` — primary_source_witness, complex scalars, proof; covers `DK-6.1-thm.generalized-sine-conclusion`, `DK-6.1-thm.generalized-sine-hypotheses`, `DK-6.1-thm.unequal-dimension-scope`
+- `TauCeti.DavisKahan1970.theorem6_1_printedGap_sourceExact_real` — primary_source_witness, real scalars, proof; covers `DK-6.1-thm.generalized-sine-conclusion`, `DK-6.1-thm.generalized-sine-hypotheses`, `DK-6.1-thm.unequal-dimension-scope`
 
 ### Other registered declarations
 
@@ -5827,6 +6002,8 @@ The declarations that carry this result's printed statement, with the source ato
 - `TauCeti.DavisKahan1970.lowerFrameBound_of_operator_inequality` — transport_lemma
 - `TauCeti.DavisKahan1970.theorem6_1_complex` — generalization
 - `TauCeti.DavisKahan1970.theorem6_1_real` — generalization
+- `TauCeti.DavisKahan1970.theorem6_1_sourceExact_complex` — generalization
+- `TauCeti.DavisKahan1970.theorem6_1_sourceExact_real` — generalization
 
 ### Source-facing Lean declarations
 
@@ -5881,6 +6058,18 @@ Compiler-printed type: *inserted when a compiler certificate is supplied.*
 #### `TauCeti.DavisKahan1970.theorem6_1_sourceExact_real`
 
 Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section6SourceNormClass.lean:125`
+
+Compiler-printed type: *inserted when a compiler certificate is supplied.*
+
+#### `TauCeti.DavisKahan1970.theorem6_1_printedGap_sourceExact_complex`
+
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section6SourceScope.lean:223`
+
+Compiler-printed type: *inserted when a compiler certificate is supplied.*
+
+#### `TauCeti.DavisKahan1970.theorem6_1_printedGap_sourceExact_real`
+
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section6SourceScope.lean:248`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
@@ -5957,12 +6146,12 @@ One row per printed source clause per scalar field.  A clause is `PASS` only whe
 
 | clause | scalar | witness | status |
 | --- | --- | --- | --- |
-| `second-generalized-sine.complex` | complex | `TauCeti.DavisKahan1970.theorem6_2_complex` | **PASS** |
-| `second-generalized-sine.real` | real | `TauCeti.DavisKahan1970.theorem6_2_real` | **PASS** |
+| `second-generalized-sine.complex` | complex | `TauCeti.DavisKahan1970.theorem6_2_vacuity_sourceExact_complex` | **PASS** |
+| `second-generalized-sine.real` | real | `TauCeti.DavisKahan1970.theorem6_2_vacuity_sourceExact_real` | **PASS** |
 
-**`second-generalized-sine.complex`.** Canonical witness for second-generalized-sine at complex scalar scope, carried over from the pre-clause canonical evidence and re-checked against its compiler-printed type under the coherent model.
+**`second-generalized-sine.complex`.** Canonical witness for second-generalized-sine at complex scalar scope, carried over from the pre-clause canonical evidence and re-checked against its compiler-printed type under the coherent model.  SOURCE SCOPE 2026-09-06.  Repointed at the source-scope facade after the fourth hostile review; the previous primary is retained as supporting evidence and is the stronger theorem.
 
-**`second-generalized-sine.real`.** Canonical witness for second-generalized-sine at real scalar scope, carried over from the pre-clause canonical evidence and re-checked against its compiler-printed type under the coherent model.
+**`second-generalized-sine.real`.** Canonical witness for second-generalized-sine at real scalar scope, carried over from the pre-clause canonical evidence and re-checked against its compiler-printed type under the coherent model.  SOURCE SCOPE 2026-09-06.  Repointed at the source-scope facade after the fourth hostile review; the previous primary is retained as supporting evidence and is the stronger theorem.
 
 Result-wide scope every clause must carry: *(none)*
 
@@ -5970,13 +6159,15 @@ Result-wide scope every clause must carry: *(none)*
 
 The declarations that carry this result's printed statement, with the source atoms each one covers.  Everything under *Other registered declarations* below accompanies the result without establishing it.
 
-- `TauCeti.DavisKahan1970.theorem6_2_complex` — primary_source_witness, complex scalars, proof; covers `DK-6.2-thm.second-generalized-sine`
-- `TauCeti.DavisKahan1970.theorem6_2_real` — primary_source_witness, real scalars, proof; covers `DK-6.2-thm.second-generalized-sine`
+- `TauCeti.DavisKahan1970.theorem6_2_vacuity_sourceExact_complex` — primary_source_witness, complex scalars, proof; covers `DK-6.2-thm.second-generalized-sine`
+- `TauCeti.DavisKahan1970.theorem6_2_vacuity_sourceExact_real` — primary_source_witness, real scalars, proof; covers `DK-6.2-thm.second-generalized-sine`
 
 ### Other registered declarations
 
 - `TauCeti.DavisKahan1970.lowerFrameBound_iff_operator_inequality` — transport_lemma
 - `TauCeti.DavisKahan1970.lowerFrameBound_of_operator_inequality` — transport_lemma
+- `TauCeti.DavisKahan1970.theorem6_2_complex` — generalization
+- `TauCeti.DavisKahan1970.theorem6_2_real` — generalization
 
 ### Source-facing Lean declarations
 
@@ -6001,6 +6192,18 @@ Compiler-printed type: *inserted when a compiler certificate is supplied.*
 #### `TauCeti.DavisKahan1970.lowerFrameBound_of_operator_inequality`
 
 Source location candidates: `DavisKahan/Sources/DavisKahan1970/Theorem61.lean:170`
+
+Compiler-printed type: *inserted when a compiler certificate is supplied.*
+
+#### `TauCeti.DavisKahan1970.theorem6_2_vacuity_sourceExact_complex`
+
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section6SourceScope.lean:320`
+
+Compiler-printed type: *inserted when a compiler certificate is supplied.*
+
+#### `TauCeti.DavisKahan1970.theorem6_2_vacuity_sourceExact_real`
+
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section6SourceScope.lean:347`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
@@ -6347,12 +6550,12 @@ One row per printed source clause per scalar field.  A clause is `PASS` only whe
 
 | clause | scalar | witness | status |
 | --- | --- | --- | --- |
-| `whole.complex` | complex | `TauCeti.DavisKahan1970.Section6Appendix.lemma6_3_approximationNumber_leakage_complex` | **PASS** |
-| `whole.real` | real | `TauCeti.DavisKahan1970.Section6Appendix.lemma6_3_approximationNumber_leakage_real` | **PASS** |
+| `whole.complex` | complex | `TauCeti.DavisKahan1970.lemma6_3_leakage_separable_complex` | **PASS** |
+| `whole.real` | real | `TauCeti.DavisKahan1970.lemma6_3_leakage_separable_real` | **PASS** |
 
-**`whole.complex`.** Canonical witness for the whole printed statement at complex scalar scope, carried over from the pre-clause canonical evidence and re-checked against its compiler-printed type under the coherent model.
+**`whole.complex`.** Canonical witness for the whole printed statement at complex scalar scope, carried over from the pre-clause canonical evidence and re-checked against its compiler-printed type under the coherent model.  SOURCE SCOPE 2026-09-06.  Repointed at the source-scope facade after the fourth hostile review; the previous primary is retained as supporting evidence and is the stronger theorem.
 
-**`whole.real`.** Canonical witness for the whole printed statement at real scalar scope, carried over from the pre-clause canonical evidence and re-checked against its compiler-printed type under the coherent model.
+**`whole.real`.** Canonical witness for the whole printed statement at real scalar scope, carried over from the pre-clause canonical evidence and re-checked against its compiler-printed type under the coherent model.  SOURCE SCOPE 2026-09-06.  Repointed at the source-scope facade after the fourth hostile review; the previous primary is retained as supporting evidence and is the stronger theorem.
 
 Result-wide scope every clause must carry: `DK-6.3-lem.approximation-number-leakage`
 
@@ -6360,12 +6563,14 @@ Result-wide scope every clause must carry: `DK-6.3-lem.approximation-number-leak
 
 The declarations that carry this result's printed statement, with the source atoms each one covers.  Everything under *Other registered declarations* below accompanies the result without establishing it.
 
-- `TauCeti.DavisKahan1970.Section6Appendix.lemma6_3_approximationNumber_leakage_complex` — primary_source_witness, complex scalars, proof; covers `DK-6.3-lem.approximation-number-leakage`
-- `TauCeti.DavisKahan1970.Section6Appendix.lemma6_3_approximationNumber_leakage_real` — primary_source_witness, real scalars, proof; covers `DK-6.3-lem.approximation-number-leakage`
+- `TauCeti.DavisKahan1970.lemma6_3_leakage_separable_complex` — primary_source_witness, complex scalars, proof; covers `DK-6.3-lem.approximation-number-leakage`
+- `TauCeti.DavisKahan1970.lemma6_3_leakage_separable_real` — primary_source_witness, real scalars, proof; covers `DK-6.3-lem.approximation-number-leakage`
 
 ### Other registered declarations
 
 - `TauCeti.DavisKahan1970.Section6Appendix.lemma6_3_singularValue_leakage_complex` — supporting_theorem
+- `TauCeti.DavisKahan1970.Section6Appendix.lemma6_3_approximationNumber_leakage_complex` — generalization
+- `TauCeti.DavisKahan1970.Section6Appendix.lemma6_3_approximationNumber_leakage_real` — generalization
 
 ### Source-facing Lean declarations
 
@@ -6384,6 +6589,18 @@ Compiler-printed type: *inserted when a compiler certificate is supplied.*
 #### `TauCeti.DavisKahan1970.Section6Appendix.lemma6_3_approximationNumber_leakage_real`
 
 Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section6AppendixLeakageReal.lean:116`
+
+Compiler-printed type: *inserted when a compiler certificate is supplied.*
+
+#### `TauCeti.DavisKahan1970.lemma6_3_leakage_separable_complex`
+
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section6SourceScope.lean:381`
+
+Compiler-printed type: *inserted when a compiler certificate is supplied.*
+
+#### `TauCeti.DavisKahan1970.lemma6_3_leakage_separable_real`
+
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section6SourceScope.lean:400`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
@@ -6417,7 +6634,7 @@ Compiler-printed type: *inserted when a compiler certificate is supplied.*
 - **Exact source anchor:** Theorem 8.1
 - **Result disposition:** `proved_exact`
 - **Compiler verification:** `proved_in_build`
-- **Hostile semantic certification:** `accepted`
+- **Hostile semantic certification:** `hostile_review_blocked`
 - **Boundary review:** `accepted`
 - **Source alignment:** `paper_faithful_nonlocal_source_interpretation`
 - **Printed statement locally self-contained:** `False`
@@ -6822,6 +7039,10 @@ The declarations that carry this result's printed statement, with the source ato
 - `TauCeti.DavisKahan1970.Section8.theorem8_1_lowerCompressionRepulsion_ofBlockPlacement_unbounded_complex` — generalization
 - `TauCeti.DavisKahan1970.Section8.theorem8_1_upperCompressionRepulsion_ofBlockPlacement_unbounded_real` — generalization
 - `TauCeti.DavisKahan1970.Section8.theorem8_1_lowerCompressionRepulsion_ofBlockPlacement_unbounded_real` — generalization
+- `TauCeti.DavisKahan1970.Section8.theorem8_1_exists_branch_withCompression_unbounded_complex` — supporting_theorem
+- `TauCeti.DavisKahan1970.Section8.theorem8_1_exists_branch_withCompression_unbounded_real` — supporting_theorem
+- `TauCeti.DavisKahan1970.Section8.isSymmetric_upperBlockShift` — supporting_theorem
+- `TauCeti.DavisKahan1970.Section8.isSymmetric_lowerBlockShift` — supporting_theorem
 
 ### Source-facing Lean declarations
 
@@ -7241,7 +7462,7 @@ Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.Section8.theorem8_1_exists_branch_blockPlacement_unbounded_real`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section8/Theorem81SourceUnbounded.lean:421`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section8/Theorem81SourceUnbounded.lean:482`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
@@ -7253,31 +7474,31 @@ Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.Section8.theorem8_1_maximalAngle_le_iff_blockPlacement_unbounded_real`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section8/Theorem81SourceUnbounded.lean:391`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section8/Theorem81SourceUnbounded.lean:452`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.Section8.theorem8_1_upperCompressionRepulsion_sourceExact_unbounded_complex`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section8/Theorem81SourceUnbounded.lean:291`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section8/Theorem81SourceUnbounded.lean:297`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.Section8.theorem8_1_lowerCompressionRepulsion_sourceExact_unbounded_complex`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section8/Theorem81SourceUnbounded.lean:324`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section8/Theorem81SourceUnbounded.lean:331`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.Section8.theorem8_1_upperCompressionRepulsion_sourceExact_unbounded_real`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section8/Theorem81SourceUnbounded.lean:533`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section8/Theorem81SourceUnbounded.lean:592`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.Section8.theorem8_1_lowerCompressionRepulsion_sourceExact_unbounded_real`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section8/Theorem81SourceUnbounded.lean:566`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section8/Theorem81SourceUnbounded.lean:624`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
@@ -7295,61 +7516,61 @@ Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.Section8.semiboundedAbove_reducingRestriction_real_iff`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section8/Theorem81SourceUnbounded.lean:369`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section8/Theorem81SourceUnbounded.lean:430`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.Section8.semiboundedBelow_reducingRestriction_real_iff`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section8/Theorem81SourceUnbounded.lean:380`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section8/Theorem81SourceUnbounded.lean:441`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.Section8.theorem8_1_upperEigenvalueRepulsion_sourceExact`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section8/Theorem81EigenvalueSource.lean:56`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section8/Theorem81EigenvalueSource.lean:84`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.Section8.theorem8_1_lowerEigenvalueRepulsion_sourceExact`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section8/Theorem81EigenvalueSource.lean:83`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section8/Theorem81EigenvalueSource.lean:109`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.Section8.theorem8_1_upperEigenvalueRepulsion_sourceExact_real`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section8/Theorem81EigenvalueSource.lean:205`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section8/Theorem81EigenvalueSource.lean:227`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.Section8.theorem8_1_lowerEigenvalueRepulsion_sourceExact_real`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section8/Theorem81EigenvalueSource.lean:231`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section8/Theorem81EigenvalueSource.lean:251`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.Section8.theorem8_1_upperSymmetricGaugeEigenvalue_sourceExact`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section8/Theorem81EigenvalueSource.lean:113`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section8/Theorem81EigenvalueSource.lean:137`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.Section8.theorem8_1_lowerSymmetricGaugeEigenvalue_sourceExact`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section8/Theorem81EigenvalueSource.lean:156`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section8/Theorem81EigenvalueSource.lean:179`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.Section8.theorem8_1_upperSymmetricGaugeEigenvalue_sourceExact_real`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section8/Theorem81EigenvalueSource.lean:258`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section8/Theorem81EigenvalueSource.lean:276`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.Section8.theorem8_1_lowerSymmetricGaugeEigenvalue_sourceExact_real`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section8/Theorem81EigenvalueSource.lean:297`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section8/Theorem81EigenvalueSource.lean:313`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
@@ -7367,13 +7588,37 @@ Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.Section8.theorem8_1_upperCompressionRepulsion_ofBlockPlacement_unbounded_real`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section8/Theorem81SourceUnbounded.lean:459`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section8/Theorem81SourceUnbounded.lean:520`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.Section8.theorem8_1_lowerCompressionRepulsion_ofBlockPlacement_unbounded_real`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section8/Theorem81SourceUnbounded.lean:492`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section8/Theorem81SourceUnbounded.lean:553`
+
+Compiler-printed type: *inserted when a compiler certificate is supplied.*
+
+#### `TauCeti.DavisKahan1970.Section8.theorem8_1_exists_branch_withCompression_unbounded_complex`
+
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section8/Theorem81SourceUnbounded.lean:367`
+
+Compiler-printed type: *inserted when a compiler certificate is supplied.*
+
+#### `TauCeti.DavisKahan1970.Section8.theorem8_1_exists_branch_withCompression_unbounded_real`
+
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section8/Theorem81SourceUnbounded.lean:656`
+
+Compiler-printed type: *inserted when a compiler certificate is supplied.*
+
+#### `TauCeti.DavisKahan1970.Section8.isSymmetric_upperBlockShift`
+
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section8/Theorem81EigenvalueSource.lean:62`
+
+Compiler-printed type: *inserted when a compiler certificate is supplied.*
+
+#### `TauCeti.DavisKahan1970.Section8.isSymmetric_lowerBlockShift`
+
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section8/Theorem81EigenvalueSource.lean:69`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
@@ -8414,8 +8659,8 @@ Every source atom remains visible here even when it is outside the 29-result den
 
 - **All 275 source-fidelity atoms reviewed for omission/classification:** yes / no
 - **All 29 counted DK-established results reviewed against their exact printed boundaries:** yes / no
-- **29 currently terminal results independently reconfirmed:** yes / no
-- **0 currently nonterminal/pending results resolved by this audit:** yes / no
+- **28 currently terminal results independently reconfirmed:** yes / no
+- **1 currently nonterminal/pending results resolved by this audit:** yes / no
 - **Any excluded fidelity atom that actually belongs to a counted result statement:** yes / no
 - **Any Davis--Kahan-established named/headline result missing from the 29-result inventory:** yes / no
 - **Any non-established/open/deferred material incorrectly included in the denominator:** yes / no
