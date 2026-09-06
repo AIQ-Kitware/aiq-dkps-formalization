@@ -2713,7 +2713,13 @@
         "TauCeti.DavisKahan1970.SameHilbertDimensionSum",
         "TauCeti.sameSpectralMultiplicity_cfc_iff",
         "TauCeti.OperatorUnitaryEquiv.cfc_real",
-        "TauCeti.continuous_conjStarAlgEquiv"
+        "TauCeti.continuous_conjStarAlgEquiv",
+        "TauCeti.DavisKahan1970.spectrum_genericCosineBlock_subset_Icc_real",
+        "TauCeti.DavisKahan1970.genericAngleBlockReal",
+        "TauCeti.DavisKahan1970.theorem3_1_spectralMultiplicity_classification_sourceAngle_real",
+        "TauCeti.DavisKahan.RealSpectralRestriction.sameSpectralMultiplicity_cfc_iff_real",
+        "TauCeti.DavisKahan1970.genericCosineBlock_nonneg_real",
+        "TauCeti.DavisKahan1970.genericCosineBlock_le_one_real"
       ],
       "review_note": "Accepted by the hostile audit at the stated-result level.\n\n**REOPENED 2026-09-04 (Claude Opus 5, on hostile review).**  The converse clause was certified against theorems that take the intertwining partial isometry J_0 as a hypothesis, while the checked-in source specification says the proof *reconstructs* the pair from the angle data and the corresponding J_0.  A new witness constructs J_0 from the multiplicity hypothesis and is strictly closer to the printed statement, but the printed hypothesis allows the multiplicity functions to differ at the spectral point 0 and the available classification is agreement everywhere, so the clause is recorded OPEN rather than established.\n\n**CLOSED 2026-09-04 (Claude Opus 5).**  The converse now takes only the printed data: two self-adjoint operators, the two printed spectral confinements, and agreement of the spectral multiplicity functions away from 0.  J_0 is constructed, not hypothesised, and the null spaces are free.\n\n**AMBIENT DIMENSION CLAUSE ADDED 2026-09-05**, on the hostile follow-up review.  The printed converse says the angle operators may be arbitrary Hermitian operators with `0 <= Theta_j <= pi/2` whose multiplicity functions agree away from 0 AND whose domain dimensions sum to `dim H`.  The registered witnesses realized the pair on `WithLp 2 (A_0 x A_1)`, where the dimension equation holds by construction -- but no ambient `H` appeared in their signatures, so nothing in their types answered that clause.  The canonical witnesses are now the `_inAmbient_` wrappers, which take the dimension clause as a linear isometry equivalence from the model to `H` and exhibit the realized pair inside `H` as the isometric image of the model pair, together with `PairOfSubspacesUnitaryEquivalent` between them.  The ambient-free realizations are retained as `generalization`.",
       "parent_claim_id": "DK-3.1-thm",
@@ -2747,14 +2753,15 @@
           "note": "The complete invariant on the SOURCE'S OWN operators: the spectral multiplicity of the angle operator Theta on the generic part, plus the four elementary multiplicities. Corrected 2026-09-05 from the cos^2 Theta form."
         },
         {
-          "declaration": "TauCeti.DavisKahan1970.theorem3_1_spectralMultiplicity_classification_real",
+          "declaration": "TauCeti.DavisKahan1970.theorem3_1_spectralMultiplicity_classification_sourceAngle_real",
           "role": "primary_source_witness",
           "scalar_scope": "real",
           "evidence_kind": "proof",
           "covers_source_atoms": [
             "DK-3.1-thm.complete-invariant"
           ],
-          "capability_classes": []
+          "capability_classes": [],
+          "note": "The complete invariant on the SOURCE'S OWN operator over a real Hilbert space: the spectral multiplicity of the angle operator Theta on the generic part, not of Halmos's cos^2 Theta.  The cos^2 Theta form is `theorem3_1_spectralMultiplicity_classification_real`, retained as supporting evidence."
         },
         {
           "declaration": "TauCeti.DavisKahan1970.theorem3_1_realization_inAmbient_ofSameHilbertDimension_complex",
@@ -2891,6 +2898,36 @@
           "role": "implementation_structure",
           "scalar_scope": "real",
           "note": "The model-level converse the source façade delegates to.  It is stronger in its block conjuncts -- common part, exterior part, source and target defects -- but it takes the isometric identification `e` as caller data, which is proof data rather than a printed hypothesis, so it is not the source-facing statement."
+        },
+        {
+          "declaration": "TauCeti.DavisKahan1970.theorem3_1_spectralMultiplicity_classification_real",
+          "role": "supporting_theorem",
+          "note": "The same classification carried on Halmos's cos^2 Theta; the source-angle real theorem is derived from it."
+        },
+        {
+          "declaration": "TauCeti.DavisKahan1970.spectrum_genericCosineBlock_subset_Icc_real",
+          "role": "supporting_theorem",
+          "note": "What makes `t -> arccos sqrt t` invertible on the spectrum, over a real Hilbert space."
+        },
+        {
+          "declaration": "TauCeti.DavisKahan.RealSpectralRestriction.sameSpectralMultiplicity_cfc_iff_real",
+          "role": "supporting_theorem",
+          "note": "The multiplicity transport across the functional calculus, over a real Hilbert space."
+        },
+        {
+          "declaration": "TauCeti.DavisKahan1970.genericAngleBlockReal",
+          "role": "implementation_structure",
+          "note": "The source's angle operator Theta on the generic part, over a real Hilbert space.  A separate definition from `genericAngleBlock` only because `Algebra R (E ->L[k] E)` is unavailable for a bare `RCLike k`."
+        },
+        {
+          "declaration": "TauCeti.DavisKahan1970.genericCosineBlock_nonneg_real",
+          "role": "supporting_theorem",
+          "note": "The two-sided operator bound on Halmos's cos^2 Theta over a real Hilbert space, with `ContinuousLinearMap.instStarOrderedRingRCLike` installed locally."
+        },
+        {
+          "declaration": "TauCeti.DavisKahan1970.genericCosineBlock_le_one_real",
+          "role": "supporting_theorem",
+          "note": "The two-sided operator bound on Halmos's cos^2 Theta over a real Hilbert space, with `ContinuousLinearMap.instStarOrderedRingRCLike` installed locally."
         }
       ],
       "result_wide_scope_atoms": [],
@@ -2924,12 +2961,12 @@
           ],
           "scalar_scope": "real",
           "evidence": {
-            "primary": "TauCeti.DavisKahan1970.theorem3_1_spectralMultiplicity_classification_real",
+            "primary": "TauCeti.DavisKahan1970.theorem3_1_spectralMultiplicity_classification_sourceAngle_real",
             "correspondence": []
           },
           "status": "established",
           "evidence_kind": "proof",
-          "justification": "Canonical witness for complete-invariant at real scalar scope, carried over from the pre-clause canonical evidence and re-checked against its compiler-printed type under the coherent model."
+          "justification": "Canonical witness for complete-invariant at real scalar scope, on the source's own angle operator.  The cos^2 Theta form is retained as supporting evidence; the two agree because `t -> arccos sqrt t` is invertible on the spectrum of cos^2 Theta, which is `spectrum_genericCosineBlock_subset_Icc_real`."
         },
         {
           "id": "converse-angle-data.complex",
@@ -2979,7 +3016,8 @@
           "evidence_kind": "proof",
           "justification": "The printed converse: arbitrary self-adjoint Theta_0, Theta_1 with 0 <= Theta_j <= pi/2, spectral multiplicity functions agreeing except possibly at 0, AND their domain dimensions summing to dim H.  The dimension clause is the hypothesis `e : WithLp 2 (A_0 x A_1) ~=_li H`: two Hilbert spaces admit a linear isometry equivalence exactly when their Hilbert dimensions agree (`nonempty_linearIsometryEquiv_of_hilbertBasis`), and the Hilbert dimension of the orthogonal direct sum is the sum of the two, so `e` IS the printed equation, supplied constructively -- the same choice the repository makes for condition (3.5).  The conclusion constructs J_0, exhibits the realized pair inside the given ambient H as the isometric image of the model pair, records that the two pairs are unitarily equivalent as ORDERED pairs of subspaces, and gives the four Halmos identities.  ADDED 2026-09-05 on hostile follow-up review: the previous primary realized on `WithLp 2 (A_0 x A_1)` with no ambient space in its signature at all, so nothing in its type answered the printed dimension clause.  REPOINTED 2026-09-05.  The clause previously cited the model-level converse, which takes an isometric identification `e : WithLp 2 (A₀ × A₁) ≃ₗᵢ H` as an argument.  That is proof data: the source's converse hypothesis is the *dimension* condition, and the identification is something the proof produces from it.  `..._ofSameHilbertDimension_*` takes `SameHilbertDimensionSum` as a proposition, derives the identification internally, and existentially quantifies the two ambient subspaces, which is the printed shape.  The stronger model-level theorem is retained as registered implementation structure."
         }
-      ]
+      ],
+      "notes": "REAL SOURCE INVARIANT, 2026-09-05.  The real canonical evidence was on Halmos's cos^2 Theta while the invariant Davis and Kahan name is Theta.  It is now `theorem3_1_spectralMultiplicity_classification_sourceAngle_real`, matching the complex row.  The complex proof transcribes directly once `ContinuousLinearMap.instStarOrderedRingRCLike` is installed as a local instance -- Mathlib proves it for a general RCLike field and declines to register it, and ForTauCeti's real continuous functional calculus is what makes it available.  The one thing built is the real twin of the functional-calculus multiplicity transport.  The two derived `SeparableSpace (genericLeftHalf ...)` instance hypotheses were also removed from the complex statement: separability of a subspace of a separable space is a consequence, not a hypothesis the source makes."
     },
     {
       "id": "DK-3.1-cor",
@@ -6377,7 +6415,7 @@
     "terminal_results": 29,
     "remaining_results": [],
     "note": "The structured fields above are authoritative; this paragraph is regenerated whenever the count moves. 2026-09-02, closing: terminal_results is 29 and remaining_results is empty. `S2-tan-two-theta` was `hostile_review_blocked` under obligation `tan2theta-directed-correspondence` after a 2026-09-02 closure that did not compose; it is now accepted on canonical directed witnesses `tanTwoTheta_directed_unboundedResidual_symmetricNorming_{complex,real}`, which take the reducing subspace and conclude on the paper's directed corner (`tanTwoDirectedCornerR U V` over ℝ) with the singular-value identification in their types. The canonical-evidence digest changed accordingly and the statement pins were refreshed for the new canonical and bridging declarations. Earlier history of this field (the 2026-08-31 `S2-sin-two-theta` reopening, the `S2-tan-theta` Appendix-scope primaries, the paper-prefix rename with an unchanged digest) is in the human report.  2026-09-05: recomputed after the two directed `tan 2Theta` clauses of S2-tan-two-theta were retargeted at their source-exact façades.  The canonical statements are strictly closer to the printed ones -- separable ambient scope and the literal normalized unitarily invariant norm class -- and the theorems they delegate to are retained as registered generalizations, so nothing that was reviewed has been withdrawn.  2026-09-05: recomputed after DK-3.1-thm's converse clauses were repointed from the model-level theorem, which takes the isometric identification as caller data, to the source-shaped one that takes the dimension condition as a proposition.  The model-level theorem is retained as registered implementation structure, so nothing reviewed has been withdrawn.  2026-09-05: recomputed after Lemmas 6.1 and 6.2 were given source-exact façades over the literal normalized unitarily invariant norm class.  The SymmetricNormingFunction endpoints they delegate to are retained as registered generalizations -- for Lemma 6.1 the retained theorem is genuinely stronger, taking Ky Fan inequalities as its premise where the paper assumes the bound for every unitarily invariant norm.",
-    "canonical_evidence_sha256": "75d7233cfca4ff4a01122d74a3ac4f874771abc7d9e00a7f0c1aec5a8474e0e1",
+    "canonical_evidence_sha256": "28a84c48fe2615b9099a9240917822671d0f95cf44cc016c93549730fc95584e",
     "hostile_review_status": "accepted",
     "hostile_review_note": "REOPENED 2026-09-05 by the third hostile review. Its three blockers are CLOSED -- the ambient sin 2Theta operator roles, Theorem 3.1's forward invariant on the source's angle operators, and Corollary 3.1's classification invariant on the angles -- along with Theorem 3.1's ambient dimension clause, which is now a proposition rather than a supplied isometric equivalence. No defect remains open. Two POLICY questions do, and they are recorded in `hostile_review_policy_questions` rather than as obligations, because the checker treats an obligation as evidence that a named row is NOT terminal and these ten rows are: whether to add thin separable wrappers at the printed scope, which is a project decision the repository has an explicit recorded position on and which an agent must not settle; and whether the printed unitarily invariant norm class must exist as a Lean type, where the estimate coverage is compiled and closed but the type-level representation is not. The 29/29 certificate is unaffected by either. When reporting it, say that these two questions are open, because a reviewer who resolves them differently would want different declarations to be canonical.\n\nPrevious note: ACCEPTED 2026-09-02, after the day's reopening was closed by new mathematics rather than by metadata: the directed tan 2Theta clauses have source-shaped complex and real endpoints on the paper objects, with the correspondence composed in Lean and pinned. `open_hostile_review_obligations` is closed and lists the closure; the structured fields `terminal_results`, `remaining_results` and `hostile_review_status` are the authoritative statement."
   },
@@ -6604,7 +6642,7 @@
       "load_bearing_witnesses": [
         {
           "declaration": "TauCeti.DavisKahan1970.theorem3_1_spectralMultiplicity_classification_sourceAngle_complex",
-          "why": "The forward classification is stated on the spectral-multiplicity data of the source's own angle operators. That invariant is Hahn--Hellinger, and the multiplicity theory the repository builds on is stated for separable spaces; without separability the invariant is not the source's. This witness carries separability on the generic halves as well as on the ambient space, because the transport from the cos^2 Theta form to the Theta form -- `TauCeti.sameSpectralMultiplicity_cfc_iff` -- uses the classification in BOTH directions, and the operators being classified live on the generic halves. That is a genuine use of the hypothesis, not an artifact: without it the two spellings of the invariant are not known to agree."
+          "why": "The forward classification is stated on the spectral-multiplicity data of the source's own angle operators.  That invariant is Hahn--Hellinger, and the multiplicity theory the repository builds on is stated for separable spaces; without separability the invariant is not the source's.  It carries separability of the two AMBIENT spaces only: separability of the generic halves follows and is derived in the proof."
         },
         {
           "declaration": "TauCeti.DavisKahan1970.theorem3_1_spectralMultiplicity_classification_complex",
@@ -6617,6 +6655,10 @@
         {
           "declaration": "TauCeti.DavisKahan1970.crossedDefectsEquivalent_iff_sameDimension",
           "why": "This is the bridge from the repository's constructive crossed-defect predicate to the source's own Hilbert-dimension language for condition (3.5).  Equality of Hilbert dimensions is what the source writes, and the equivalence is proved at the source's separable scope.  It is registered as correspondence evidence, not as a canonical witness, precisely because the theorems it bridges are proved without separability."
+        },
+        {
+          "declaration": "TauCeti.DavisKahan1970.theorem3_1_spectralMultiplicity_classification_sourceAngle_real",
+          "why": "The real sibling of the source-angle witness, for the same reason: the invariant is Hahn--Hellinger, which the repository has at separable scope.  It carries separability of the two ambient spaces only."
         }
       ],
       "source_scope_facades": [

@@ -2972,7 +2972,7 @@ One row per printed source clause per scalar field.  A clause is `PASS` only whe
 | clause | scalar | witness | status |
 | --- | --- | --- | --- |
 | `complete-invariant.complex` | complex | `TauCeti.DavisKahan1970.theorem3_1_spectralMultiplicity_classification_sourceAngle_complex` + `TauCeti.sameSpectralMultiplicity_cfc_iff` + `TauCeti.OperatorUnitaryEquiv.cfc_real` + `TauCeti.DavisKahan1970.spectrum_genericCosineBlock_subset_Icc` + `TauCeti.DavisKahan1970.genericAngleBlock` | **PASS** |
-| `complete-invariant.real` | real | `TauCeti.DavisKahan1970.theorem3_1_spectralMultiplicity_classification_real` | **PASS** |
+| `complete-invariant.real` | real | `TauCeti.DavisKahan1970.theorem3_1_spectralMultiplicity_classification_sourceAngle_real` | **PASS** |
 | `converse-angle-data.complex` | complex | `TauCeti.DavisKahan1970.theorem3_1_realization_inAmbient_ofSameHilbertDimension_complex` + `TauCeti.DavisKahan1970.theorem3_1_realization_ofNonzeroPartsUnitaryEquiv` + `TauCeti.DavisKahan1970.theorem3_1_intertwiner_of_nonzeroPartsUnitaryEquiv` + `TauCeti.DavisKahan1970.SameSpectralMultiplicityAwayFromZero` + `TauCeti.DavisKahan1970.NonzeroPartsUnitaryEquiv` + `TauCeti.DavisKahan1970.nonzeroPart` + `TauCeti.DavisKahan1970.invariantFor_nonzeroPart` | **PASS** |
 | `converse-angle-data.real` | real | `TauCeti.DavisKahan1970.theorem3_1_realization_inAmbient_ofSameHilbertDimension_real` + `TauCeti.DavisKahan1970.theorem3_1_realization_ofNonzeroPartsUnitaryEquiv` + `TauCeti.DavisKahan1970.theorem3_1_intertwiner_of_nonzeroPartsUnitaryEquiv` + `TauCeti.DavisKahan1970.SameSpectralMultiplicityAwayFromZero` + `TauCeti.DavisKahan1970.NonzeroPartsUnitaryEquiv` + `TauCeti.DavisKahan1970.nonzeroPart` + `TauCeti.DavisKahan1970.invariantFor_nonzeroPart` | **PASS** |
 
@@ -2982,7 +2982,7 @@ REPRESENTATION CORRECTED 2026-09-05. The primary was `theorem3_1_spectralMultipl
 
 Separability is carried on the generic halves as well as the ambient space, because the transport uses the Hahn--Hellinger classification in both directions. That is inside the source's own separable ambient scope.
 
-**`complete-invariant.real`.** Canonical witness for complete-invariant at real scalar scope, carried over from the pre-clause canonical evidence and re-checked against its compiler-printed type under the coherent model.
+**`complete-invariant.real`.** Canonical witness for complete-invariant at real scalar scope, on the source's own angle operator.  The cos^2 Theta form is retained as supporting evidence; the two agree because `t -> arccos sqrt t` is invertible on the spectrum of cos^2 Theta, which is `spectrum_genericCosineBlock_subset_Icc_real`.
 
 **`converse-angle-data.complex`.** The printed converse: arbitrary self-adjoint Theta_0, Theta_1 with 0 <= Theta_j <= pi/2, spectral multiplicity functions agreeing except possibly at 0, AND their domain dimensions summing to dim H.  The dimension clause is the hypothesis `e : WithLp 2 (A_0 x A_1) ~=_li H`: two Hilbert spaces admit a linear isometry equivalence exactly when their Hilbert dimensions agree (`nonempty_linearIsometryEquiv_of_hilbertBasis`), and the Hilbert dimension of the orthogonal direct sum is the sum of the two, so `e` IS the printed equation, supplied constructively -- the same choice the repository makes for condition (3.5).  The conclusion constructs J_0, exhibits the realized pair inside the given ambient H as the isometric image of the model pair, records that the two pairs are unitarily equivalent as ORDERED pairs of subspaces, and gives the four Halmos identities.  ADDED 2026-09-05 on hostile follow-up review: the previous primary realized on `WithLp 2 (A_0 x A_1)` with no ambient space in its signature at all, so nothing in its type answered the printed dimension clause.  REPOINTED 2026-09-05.  The clause previously cited the model-level converse, which takes an isometric identification `e : WithLp 2 (A₀ × A₁) ≃ₗᵢ H` as an argument.  That is proof data: the source's converse hypothesis is the *dimension* condition, and the identification is something the proof produces from it.  `..._ofSameHilbertDimension_*` takes `SameHilbertDimensionSum` as a proposition, derives the identification internally, and existentially quantifies the two ambient subspaces, which is the printed shape.  The stronger model-level theorem is retained as registered implementation structure.
 
@@ -2995,7 +2995,7 @@ Result-wide scope every clause must carry: *(none)*
 The declarations that carry this result's printed statement, with the source atoms each one covers.  Everything under *Other registered declarations* below accompanies the result without establishing it.
 
 - `TauCeti.DavisKahan1970.theorem3_1_spectralMultiplicity_classification_sourceAngle_complex` — primary_source_witness, complex scalars, proof; covers `DK-3.1-thm.complete-invariant`
-- `TauCeti.DavisKahan1970.theorem3_1_spectralMultiplicity_classification_real` — primary_source_witness, real scalars, proof; covers `DK-3.1-thm.complete-invariant`
+- `TauCeti.DavisKahan1970.theorem3_1_spectralMultiplicity_classification_sourceAngle_real` — primary_source_witness, real scalars, proof; covers `DK-3.1-thm.complete-invariant`
 - `TauCeti.DavisKahan1970.theorem3_1_realization_inAmbient_ofSameHilbertDimension_complex` — primary_source_witness, complex scalars, proof; covers `DK-3.1-thm.converse-angle-data`
 - `TauCeti.DavisKahan1970.theorem3_1_realization_inAmbient_ofSameHilbertDimension_real` — primary_source_witness, real scalars, proof; covers `DK-3.1-thm.converse-angle-data`
 
@@ -3025,12 +3025,17 @@ The declarations that carry this result's printed statement, with the source ato
 - `TauCeti.DavisKahan1970.SameHilbertDimensionSum` — source_correspondence
 - `TauCeti.DavisKahan1970.theorem3_1_realization_inAmbient_ofSpectralMultiplicityAwayFromZero_complex` — implementation_structure
 - `TauCeti.DavisKahan1970.theorem3_1_realization_inAmbient_ofSpectralMultiplicityAwayFromZero_real` — implementation_structure
+- `TauCeti.DavisKahan1970.theorem3_1_spectralMultiplicity_classification_real` — supporting_theorem
+- `TauCeti.DavisKahan1970.spectrum_genericCosineBlock_subset_Icc_real` — supporting_theorem
+- `TauCeti.ContinuousLinearMap.spectrum_subset_Icc_of_re_inner_bounds` — supporting_theorem
+- `TauCeti.DavisKahan.RealSpectralRestriction.sameSpectralMultiplicity_cfc_iff_real` — supporting_theorem
+- `TauCeti.DavisKahan1970.genericAngleBlockReal` — implementation_structure
 
 ### Source-facing Lean declarations
 
 #### `TauCeti.DavisKahan1970.theorem3_1_spectralMultiplicity_classification_complex`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section3Classification.lean:195`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section3Classification.lean:196`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
@@ -3042,7 +3047,7 @@ Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.theorem3_1_spectralMultiplicity_classification_real`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section3Classification.lean:363`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section3Classification.lean:374`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
@@ -3132,31 +3137,31 @@ Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.theorem3_1_spectralMultiplicity_classification_sourceAngle_complex`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section3Classification.lean:319`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section3Classification.lean:325`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.genericAngleBlock`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section3Classification.lean:295`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section3Classification.lean:307`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.spectrum_genericCosineBlock_subset_Icc`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section3Classification.lean:272`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section3Classification.lean:284`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.genericCosineBlock_nonneg`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section3Classification.lean:246`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section3Classification.lean:258`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.genericCosineBlock_le_one`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section3Classification.lean:254`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section3Classification.lean:266`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
@@ -3193,6 +3198,36 @@ Compiler-printed type: *inserted when a compiler certificate is supplied.*
 #### `TauCeti.continuous_conjStarAlgEquiv`
 
 Source location candidates: `ForTauCeti/Analysis/InnerProductSpace/BorelCalculus/SpectralMultiplicityEquiv.lean:203`
+
+Compiler-printed type: *inserted when a compiler certificate is supplied.*
+
+#### `TauCeti.DavisKahan1970.spectrum_genericCosineBlock_subset_Icc_real`
+
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section3Classification.lean:429`
+
+Compiler-printed type: *inserted when a compiler certificate is supplied.*
+
+#### `TauCeti.DavisKahan1970.genericAngleBlockReal`
+
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section3Classification.lean:444`
+
+Compiler-printed type: *inserted when a compiler certificate is supplied.*
+
+#### `TauCeti.DavisKahan1970.theorem3_1_spectralMultiplicity_classification_sourceAngle_real`
+
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section3Classification.lean:462`
+
+Compiler-printed type: *inserted when a compiler certificate is supplied.*
+
+#### `TauCeti.DavisKahan.RealSpectralRestriction.sameSpectralMultiplicity_cfc_iff_real`
+
+Source location candidates: `DavisKahan/SpectralTheory/Real/SpectralMultiplicityClassification.lean:108`
+
+Compiler-printed type: *inserted when a compiler certificate is supplied.*
+
+#### `TauCeti.ContinuousLinearMap.spectrum_subset_Icc_of_re_inner_bounds`
+
+Source location candidates: `ForTauCeti/Analysis/InnerProductSpace/CoerciveUnit.lean:454`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 

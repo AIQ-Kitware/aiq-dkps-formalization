@@ -58,26 +58,28 @@ short of excluding it:
 printed hypothesis is `γ < δ/2`.  The gap is real, not an artefact of a lossy
 step.
 
-## The remaining step, stated exactly
+## The remaining step
 
-The connectedness argument that closes it does **not** need Riesz integrals.
-Along `A_s = A + sH` with band `B_s = [β − (1 − s)γ, α + (1 − s)γ]` and
-`Q_s = E_{A_s}(B_s)`:
+The connectedness argument that closes the rest of the range does **not** need
+Riesz integrals or a continuation framework: the bounded proof
+`theorem8_2_perturbationHalfGap_complex` already has the right bootstrap, at the
+*constant* threshold `√2/2`, and only its bounded Riesz continuity has to be
+replaced.  With `γ = ‖H‖`, `l = β − γ`, `r = α + γ`, `d = δ − 2γ > 0`, and the
+path `B_t = (A + H) − tH` carrying `R_t = specRange B_t (centralBand l r d)`:
 
-* every `A_s` has the gap `δ_s = δ − 2(1 − s)γ > 0`, so `Q_s` is defined;
-* `Q_0 ⊇ P` and `Q_1 = Q`;
-* the double-angle estimate at parameter `s` gives
-  `‖sin 2Θ(Q₀, Q_s)‖ ≤ κ_s = 2sγ/(δ − 2(1 − s)γ)`, and `κ_s < 1` for every `s`
-  precisely because `2γ < δ`;
-* `s ↦ ‖P_{Q₀} − P_{Q_s}‖` is Lipschitz with constant `γ/(δ − 2γ)`, by the
-  `sin Θ` theorem between consecutive parameters and the triangle inequality for
-  the projection distance.
+* `centralBand l r d = Ioo (β − δ/2) (α + δ/2)` is exactly the extra interval
+  Theorem 8.2 prints, so the band is not a second moving datum;
+* `d · subspaceGap R_s R_t ≤ |s − t| γ`, from
+  `directedGap_le_of_reducingGap_unbounded_complex` in each orientation, is the
+  continuity — no Riesz projector appears;
+* at each `t` the `sin 2Θ` estimate instantiated at `A := B_t`, `Hop := tH`
+  keeps the *fixed printed gap* `δ` at `Q`, because `B_t + tH = A + H`, and gives
+  `δ ‖sin 2Θ (R_t, Q)‖ ≤ 2tγ`, hence `f t < √2/2` whenever `f t ≤ √2/2`;
+* `f 0 = 0`, `f` continuous, and `P ≤ R₁` finish it.
 
-`{s | subspaceGap Q₀ Q_s ≤ σ₋(κ_s)}` is then clopen and nonempty in `[0, 1]`, so
-it is everything, and `s = 1` is the printed conclusion.  What that needs and
-this repository does not yet have is the parametrized unbounded band subspace
-`Q_s` with its gap, and an *unbounded ambient* `sin Θ` theorem for the
-consecutive step.
+What is missing is one narrow lemma: the unbounded analogue of
+`realSpectrum_add_subset_of_gap`, that `spectrum B_t ⊆ Icc l r ∪ gapExterior l r d`
+for `t ∈ [0,1]`.  `GOAL.md` §10.4 carries the full plan.
 
 ## What this module does prove
 

@@ -675,28 +675,66 @@ low branch. Two static bounds exclude the high branch only partially:
 static route proves the printed conclusion for `γ < (√3/4)δ ≈ 0.433 δ` and the
 printed hypothesis is `γ < δ/2`. The shortfall is genuine.
 
-### The connectedness step, stated exactly
+### The connectedness step: port the bounded proof's topology
 
-It does **not** need Riesz integrals, contours, or a general unbounded resolvent
-API. Along `A_s = A + sH`, `s ∈ [0,1]`, with band
-`B_s = [β − (1 − s)γ, α + (1 − s)γ]` and `Q_s = E_{A_s}(B_s)`:
+**Plan revised 2026-09-05 (human review).**  An earlier version of this section
+proposed a clopen argument with the variable roots `σ₋(κ_s)`.  That is more
+complicated than necessary.  The bounded proof
+`theorem8_2_perturbationHalfGap_complex` already has the right bootstrap, at the
+*constant* threshold `√2/2`; what has to be replaced is its bounded Riesz
+continuity, not its topology.
 
-* every `A_s` has gap `δ_s = δ − 2(1 − s)γ > 0`, since `2γ < δ`;
-* `P ⊆ Q₀` and `Q₁ = Q`;
-* the `sin 2Θ` estimate at parameter `s` gives
-  `‖sin 2Θ(Q₀, Q_s)‖ ≤ κ_s = 2sγ/(δ − 2(1 − s)γ)`, and `κ_s < 1` for every `s`
-  precisely because `2γ < δ`;
-* `s ↦ ‖P_{Q₀} − P_{Q_s}‖` is Lipschitz with constant `γ/(δ − 2γ)`, from the
-  `sin Θ` theorem between consecutive parameters plus the triangle inequality for
-  the projection distance (`subspaceGap` *is* a norm distance, so this is free);
-* `{s ∈ [0,1] | subspaceGap Q₀ Q_s ≤ σ₋(κ_s)}` is clopen and nonempty, hence
-  everything, and `s = 1` is the printed conclusion.
+Write `γ = ‖H‖`, `l = β − γ`, `r = α + γ`, `d = δ − 2γ > 0`, and orient the path
+as the bounded proof does, so that the fixed printed gap at `Q` lives at the
+start:
 
-The two missing ingredients are the parametrized unbounded band subspace `Q_s`
-with its gap — `ForTauCeti/Analysis/InnerProductSpace/LinearPMap/SpectralMeasure/`
-already has `specProjection` and `specRange`, so this is construction rather than
-new theory — and an **unbounded ambient `sin Θ` theorem** for the consecutive
-step. Neither is the "general unbounded resolvent / Riesz / continuation" stack.
+```text
+B₀ = A + H,   B_t = B₀ − tH,   B₁ = A
+R_t = specRange (B_t) (centralBand l r d)
+```
+
+The band is not a second moving interval:
+`centralBand l r d = Ioo (l − d/2) (r + d/2) = Ioo (β − δ/2, α + δ/2)`, which is
+exactly the extra interval Theorem 8.2 prints.
+
+**(a) One narrow spectral-stability lemma.**  The unbounded analogue of
+`realSpectrum_add_subset_of_gap`: for `t ∈ [0,1]`,
+`spectrum B_t ⊆ Icc l r ∪ gapExterior l r d`.  This is bounded-perturbation
+stability for an unbounded self-adjoint operator, from the existing unbounded
+resolvent and inverse-norm machinery plus a Neumann step — **not** a general
+continuation framework.  This is the one place real theorem work is expected.
+
+**(b) `R_t` from `specRange`.**  The unbounded spectral-measure layer already has
+`specRange`, `specProjection`, `reducesSubspace_specRange`,
+`specProjection_eq_starProjection_specRange`,
+`specProjection_eq_zero_of_subset_resolventSet`, and the form/support bounds
+`re_inner_specProjection_Icc_bounds`, `le_re_inner_of_specProjection_Iio_eq_zero`,
+`re_inner_le_of_specProjection_Ioi_eq_zero`.  Use them for: `R_t` reduces `B_t`,
+`B_t` on `R_t` has spectrum in the central interval and on `R_tᗮ` in the
+exterior, and the endpoint inclusions `R₀ ≤ Q` and `P ≤ R₁`.
+
+**(c) Lipschitz continuity without Riesz projections.**  `B_t = B_s + (s − t) H`,
+so `directedGap_le_of_reducingGap_unbounded_complex` applies in each orientation
+and gives `d · directedGap R_s R_t ≤ |s − t| γ` both ways; then
+`projectionGap_eq_max_directedProjectionGap` gives
+`d · subspaceGap R_s R_t ≤ |s − t| γ`.  Continuity of
+`f t = directedGap R_t Q = ‖Qᗮ.starProjection ∘L (R_t).starProjection‖` follows,
+because the only thing moving is `(R_t).starProjection`.
+
+**(d) The bounded proof's constant-threshold bootstrap.**  At a fixed `t`,
+instantiate the unbounded `sin 2Θ` estimate at `A := B_t`, `Hop := tH`,
+`P := R_t`, `Q := Q` — legitimate because `B_t + tH = B₀`, so the `δ` in the gap
+stays the *fixed printed gap at `Q`* rather than shrinking with `t`.  That gives
+`δ ‖sin 2Θ (R_t, Q)‖ ≤ 2tγ`.  Under `f t ≤ √2/2`,
+`sqrt_two_mul_directedGap_le_norm_sinTwoAngleOperator` gives
+`√2 · f t ≤ ‖sin 2Θ (Q, R_t)‖`, hence `√2 · f t · δ ≤ 2tγ ≤ 2γ < δ` and
+`f t < √2/2`.  With `f 0 = 0` and `f` continuous, the bounded theorem's own IVT
+step gives `f t < √2/2` for every `t`, and `P ≤ R₁` turns `f 1` into
+`directedGap P Q`.
+
+No variable root, no clopen family indexed by `κ_t`, no Riesz projector.  This
+closes the **full** printed range `‖H‖ < δ/2`, not the `(√2/4)δ` sub-range the
+static bound reaches.
 
 ### What is proved now
 
@@ -1068,37 +1106,43 @@ closed quarter branch `‖P_P − P_Q‖ ≤ √2/2` under the printed hypothese
 
 Protect the residual alternative from accidental extra perturbation hypotheses.
 
-## 3b. Theorem 3.1's real forward invariant
+## 3b. Theorem 3.1's real forward invariant — **done, 2026-09-05**
 
 The complex forward theorem states the classification on the source's angle
-operator (`genericAngleBlock`). The real one is still on `genericCosineBlock`,
-and that is a genuine scalar-parity defect: the invariant Davis and Kahan name is
-`Θ`, not `cos²Θ`.
+operator (`genericAngleBlock`); the real one was on `genericCosineBlock`, which
+is the wrong invariant. It is now
+`theorem3_1_spectralMultiplicity_classification_sourceAngle_real`, canonical on
+the `complete-invariant.real` clause.
 
-**The obvious route does not work, and the obstruction is worth recording.** The
-complex proof gets `spectrum ℝ (cos²Θ) ⊆ [0,1]` from
-`StarOrderedRing.nonneg_iff_spectrum_nonneg`, then transports the multiplicity
-invariant along `t ↦ arccos √t`. Transcribing it over `ℝ` fails at the first
-step: Mathlib's C⋆-order theory is complex, and
-`StarOrderedRing (E →L[ℝ] E)` / `AddRightMono (E →L[ℝ] E)` do not exist. Making
-the section `RCLike`-generic fails earlier still, at
-`Algebra ℝ (E →L[𝕜] E)`.
+**The Mathlib blocker recorded here was not real.** The note said
+`StarOrderedRing (E →L[ℝ] E)` does not exist, so the complex proof could not be
+transcribed and complexification was required. In fact Mathlib proves
+`ContinuousLinearMap.instStarOrderedRingRCLike` for a general `RCLike` field and
+declines to *register* it, because it takes the continuous functional calculus
+as an argument and Mathlib has that only at `𝕜 = ℂ`;
+`ForTauCeti.Analysis.InnerProductSpace.RealContinuousFunctionalCalculus` supplies
+the real calculus and demonstrates the instance, and
+`Section3Classification.lean` already imported it. Installing it with
+`attribute [local instance]` — which is how the rest of the repository uses it —
+lets the complex proofs transcribe line for line.
 
-So the real forward invariant has to go through complexification, the way the
-real directed `tan 2Θ` endpoint does: complexify the pair, apply the complex
-angle-invariant theorem, and read the multiplicity statement back. The pieces for
-the *transport* half now exist -- `OperatorUnitaryEquiv.cfc_ofReal`,
-`continuous_conjStarAlgEquiv_real` and `cfc_cfc_eq_self_of_leftInverse_real` in
-`SpectralMultiplicityEquiv.lean`, together with the real classification pair
-`operatorUnitaryEquiv_of_sameSpectralMultiplicity_real` /
-`sameSpectralMultiplicity_of_operatorUnitaryEquiv_real`. What is missing is the
-bridge identifying the real generic cosine block's spectrum, and that is where
-complexification enters.
+What was actually built:
 
-While doing this, drop the two derived `[SeparableSpace (genericLeftHalf …)]`
-instances the complex statement currently exposes: the source assumes
-separability of the ambient space, and separability of a closed subspace of a
-separable space is a consequence, not a hypothesis a caller should supply.
+* `genericCosineBlock_nonneg_real`, `genericCosineBlock_le_one_real`,
+  `spectrum_genericCosineBlock_subset_Icc_real` — the complex proofs with the
+  local instance;
+* `genericAngleBlockReal` — a separate definition only because
+  `Algebra ℝ (E →L[𝕜] E)` is unavailable for a bare `RCLike 𝕜`;
+* `RealSpectralRestriction.sameSpectralMultiplicity_cfc_iff_real` — the complex
+  transport with `OperatorUnitaryEquiv.cfc_ofReal`,
+  `cfc_cfc_eq_self_of_leftInverse_real` and the real classification pair
+  substituted;
+* `theorem3_1_spectralMultiplicity_classification_sourceAngle_real`.
+
+The two derived `[SeparableSpace (genericLeftHalf …)]` instances were also
+removed from the complex statement: separability of a subspace of a separable
+space is a consequence, and both statements now carry only the source's own
+ambient separability.
 
 ## 5. Fresh hostile review of all designated results
 

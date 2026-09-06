@@ -231,6 +231,17 @@ The four elementary multiplicities stay where they are: they are the multiplicit
 at the two endpoints `0` and `π/2`, which the generic part does not see, and the
 source counts them separately too. -/
 
+/-- `cos²` undoes `arccos ∘ √` on `[0, 1]`. -/
+private theorem cos_sq_arccos_sqrt {t : ℝ} (ht : t ∈ Set.Icc (0 : ℝ) 1) :
+    (Real.cos (Real.arccos (Real.sqrt t))) ^ 2 = t := by
+  obtain ⟨h0, h1⟩ := ht
+  have hs0 : 0 ≤ Real.sqrt t := Real.sqrt_nonneg t
+  have hs1 : Real.sqrt t ≤ 1 := by
+    rw [show (1 : ℝ) = Real.sqrt 1 by simp]
+    exact Real.sqrt_le_sqrt h1
+  rw [Real.cos_arccos (by linarith) hs1]
+  exact Real.sq_sqrt h0
+
 section SourceAngleInvariant
 
 variable {H₁ : Type u} [NormedAddCommGroup H₁] [InnerProductSpace ℂ H₁] [CompleteSpace H₁]
@@ -295,17 +306,6 @@ recovers `genericCosineBlock`. -/
 noncomputable def genericAngleBlock : genericLeftHalf U₁ V₁ →L[ℂ] genericLeftHalf U₁ V₁ :=
   cfc (fun t : ℝ => Real.arccos (Real.sqrt t)) (genericCosineBlock U₁ V₁)
 
-/-- `cos²` undoes `arccos ∘ √` on `[0, 1]`. -/
-private theorem cos_sq_arccos_sqrt {t : ℝ} (ht : t ∈ Set.Icc (0 : ℝ) 1) :
-    (Real.cos (Real.arccos (Real.sqrt t))) ^ 2 = t := by
-  obtain ⟨h0, h1⟩ := ht
-  have hs0 : 0 ≤ Real.sqrt t := Real.sqrt_nonneg t
-  have hs1 : Real.sqrt t ≤ 1 := by
-    rw [show (1 : ℝ) = Real.sqrt 1 by simp]
-    exact Real.sqrt_le_sqrt h1
-  rw [Real.cos_arccos (by linarith) hs1]
-  exact Real.sq_sqrt h0
-
 /-- **Davis--Kahan 1970, Theorem 3.1, on the source's own invariant.**
 
 The spectral multiplicity data of the *angle operators* `Θ₀`, `Θ₁` -- which is what
@@ -315,16 +315,25 @@ invariant for ordered pairs of subspaces.
 This is the printed statement.  `theorem3_1_spectralMultiplicity_classification_complex`
 above is the same classification carried on `cos²Θ`; the two agree because
 `t ↦ arccos √t` is invertible on the spectrum of `cos²Θ`, which is
-`spectrum_genericCosineBlock_subset_Icc`. -/
+`spectrum_genericCosineBlock_subset_Icc`.
+
+The only separability hypotheses are the source's own, on the two ambient
+spaces.  Separability of the generic halves follows and is derived in the proof;
+exposing it as an instance argument would have been an extra public hypothesis
+that the paper does not make. -/
 theorem theorem3_1_spectralMultiplicity_classification_sourceAngle_complex
-    [TopologicalSpace.SeparableSpace H₁]
-    [TopologicalSpace.SeparableSpace (genericLeftHalf U₁ V₁)]
-    [TopologicalSpace.SeparableSpace (genericLeftHalf U₂ V₂)] :
+    [TopologicalSpace.SeparableSpace H₁] [TopologicalSpace.SeparableSpace H₂] :
     PairOfSubspacesUnitaryEquivalent U₁ V₁ U₂ V₂ ↔
       SameHalmosTrivialDimensions U₁ V₁ U₂ V₂ ∧
       SameSpectralMultiplicity
         (genericAngleBlock U₁ V₁)
         (genericAngleBlock U₂ V₂) := by
+  -- Separability of the generic halves is a *consequence* of the source's
+  -- separability assumption on the ambient spaces, not a hypothesis a caller
+  -- supplies: a separable metric space is second countable, and every subspace
+  -- of a second countable space is.
+  let _ : SecondCountableTopology H₁ := UniformSpace.secondCountable_of_separable H₁
+  let _ : SecondCountableTopology H₂ := UniformSpace.secondCountable_of_separable H₂
   have hbridge := TauCeti.sameSpectralMultiplicity_cfc_iff
     (A := genericCosineBlock U₁ V₁) (B := genericCosineBlock U₂ V₂)
     (isSelfAdjoint_genericCosineBlock U₁ V₁) (isSelfAdjoint_genericCosineBlock U₂ V₂)
@@ -336,6 +345,7 @@ theorem theorem3_1_spectralMultiplicity_classification_sourceAngle_complex
     genericAngleBlock, ← hbridge]
 
 end SourceAngleInvariant
+
 
 section RealClassification
 
@@ -378,6 +388,126 @@ theorem theorem3_1_spectralMultiplicity_classification_real
       (operatorUnitaryEquiv_of_sameSpectralMultiplicity_real _ _ hmult)⟩
 
 end RealClassification
+
+/-! ## The source's own invariant, over a real Hilbert space
+
+The real classification above is stated on `cos²Θ`.  The invariant Davis and
+Kahan name is `Θ`, and this section carries the classification onto it, exactly
+as `SourceAngleInvariant` does over `ℂ`.
+
+The complex proofs transcribe directly.  The one thing they need that is not a
+global instance is `StarOrderedRing (E →L[ℝ] E)`: Mathlib proves
+`ContinuousLinearMap.instStarOrderedRingRCLike` for a general `RCLike` field and
+declines to register it, because it takes the continuous functional calculus as
+an argument and Mathlib has that only at `𝕜 = ℂ`.
+`ForTauCeti.Analysis.InnerProductSpace.RealContinuousFunctionalCalculus` supplies
+the real calculus, so the instance is available here for the asking; it is
+installed locally below, which is how the rest of this repository uses it.
+
+The angle operator itself needs its own real definition: `cfc` on `E →L[𝕜] E`
+asks for `Algebra ℝ (E →L[𝕜] E)`, which is unavailable for a bare `RCLike 𝕜`,
+so `genericAngleBlock` and `genericAngleBlockReal` are two spellings of one
+concept for an instance reason, exactly as `sameSpectralMultiplicity_cfc_iff`
+and its real twin are. -/
+
+section SourceAngleInvariantReal
+
+open scoped Pointwise
+
+variable {H₁ : Type u} [NormedAddCommGroup H₁] [InnerProductSpace ℝ H₁] [CompleteSpace H₁]
+variable {H₂ : Type v} [NormedAddCommGroup H₂] [InnerProductSpace ℝ H₂] [CompleteSpace H₂]
+variable (U₁ V₁ : Submodule ℝ H₁) [U₁.HasOrthogonalProjection] [V₁.HasOrthogonalProjection]
+variable (U₂ V₂ : Submodule ℝ H₂) [U₂.HasOrthogonalProjection] [V₂.HasOrthogonalProjection]
+
+set_option maxSynthPendingDepth 3
+
+attribute [local instance] ContinuousLinearMap.instStarOrderedRingRCLike
+
+/-- Halmos's `cos²Θ` block is a positive operator over `ℝ` too: its quadratic
+form is `‖P_V m‖²`. -/
+theorem genericCosineBlock_nonneg_real : 0 ≤ genericCosineBlock U₁ V₁ := by
+  rw [ContinuousLinearMap.nonneg_iff_isPositive]
+  refine ⟨(isSelfAdjoint_genericCosineBlock U₁ V₁).isSymmetric, fun m => ?_⟩
+  rw [ContinuousLinearMap.reApplyInnerSelf, re_inner_genericCosineBlock]
+  positivity
+
+/-- Halmos's `cos²Θ` block is an order contraction over `ℝ` too. -/
+theorem genericCosineBlock_le_one_real : genericCosineBlock U₁ V₁ ≤ 1 := by
+  rw [← sub_nonneg, ContinuousLinearMap.nonneg_iff_isPositive]
+  refine ⟨((IsSelfAdjoint.one _).sub (isSelfAdjoint_genericCosineBlock U₁ V₁)).isSymmetric,
+    fun m => ?_⟩
+  rw [ContinuousLinearMap.reApplyInnerSelf]
+  simp only [sub_apply, one_apply_eq_self, inner_sub_left, map_sub]
+  rw [re_inner_genericCosineBlock]
+  have h1 : RCLike.re (inner ℝ m m) = ‖m‖ ^ 2 := by
+    have := inner_self_eq_norm_sq_to_K (𝕜 := ℝ) m
+    rw [this, ← RCLike.ofReal_pow, RCLike.ofReal_re]
+  rw [h1]
+  have hle : ‖V₁.starProjection (m : H₁)‖ ≤ ‖(m : H₁)‖ :=
+    V₁.norm_starProjection_apply_le _
+  have hm : ‖(m : H₁)‖ = ‖m‖ := rfl
+  nlinarith [norm_nonneg (V₁.starProjection (m : H₁)), norm_nonneg (m : H₁)]
+
+/-- **The spectrum of `cos²Θ` lies in `[0, 1]`, over a real Hilbert space.**
+
+The complex argument, with the real `StarOrderedRing` instance installed
+locally. -/
+theorem spectrum_genericCosineBlock_subset_Icc_real :
+    spectrum ℝ (genericCosineBlock U₁ V₁) ⊆ Set.Icc 0 1 := by
+  intro t ht
+  refine ⟨(StarOrderedRing.nonneg_iff_spectrum_nonneg (R := ℝ) _
+    (isSelfAdjoint_genericCosineBlock U₁ V₁)).mp
+    (genericCosineBlock_nonneg_real U₁ V₁) t ht, ?_⟩
+  have hsub : 0 ≤ 1 - genericCosineBlock U₁ V₁ :=
+    sub_nonneg.mpr (genericCosineBlock_le_one_real U₁ V₁)
+  have hnn := (StarOrderedRing.nonneg_iff_spectrum_nonneg (R := ℝ) _
+    ((IsSelfAdjoint.one _).sub (isSelfAdjoint_genericCosineBlock U₁ V₁))).mp hsub
+  have hmem : (1 : ℝ) - t ∈ spectrum ℝ (1 - genericCosineBlock U₁ V₁) := by
+    have hset := spectrum.singleton_sub_eq (R := ℝ) (genericCosineBlock U₁ V₁) 1
+    have hin : (1 : ℝ) - t ∈
+        ({(1 : ℝ)} : Set ℝ) - spectrum ℝ (genericCosineBlock U₁ V₁) := ⟨1, rfl, t, ht, rfl⟩
+    rw [hset] at hin
+    simpa using hin
+  linarith [hnn _ hmem]
+
+/-- **The source's angle operator on the generic part, over a real Hilbert
+space.**  `Θ` itself, not `cos²Θ`. -/
+noncomputable def genericAngleBlockReal :
+    genericLeftHalf U₁ V₁ →L[ℝ] genericLeftHalf U₁ V₁ :=
+  cfc (fun t : ℝ => Real.arccos (Real.sqrt t)) (genericCosineBlock U₁ V₁)
+
+/-- **Davis--Kahan 1970, Theorem 3.1, on the source's own invariant, over a real
+Hilbert space.**
+
+The spectral multiplicity data of the *angle operators* `Θ₀`, `Θ₁` -- which is
+what the paper names -- together with the four elementary multiplicities, are a
+complete invariant for ordered pairs of subspaces.
+
+`theorem3_1_spectralMultiplicity_classification_real` above is the same
+classification carried on `cos²Θ`; the two agree because `t ↦ arccos √t` is
+invertible on the spectrum of `cos²Θ`, which is
+`spectrum_genericCosineBlock_subset_Icc_real`.
+
+The only separability hypotheses are the source's own, on the two ambient
+spaces. -/
+theorem theorem3_1_spectralMultiplicity_classification_sourceAngle_real
+    [TopologicalSpace.SeparableSpace H₁] [TopologicalSpace.SeparableSpace H₂] :
+    PairOfSubspacesUnitaryEquivalent U₁ V₁ U₂ V₂ ↔
+      SameHalmosTrivialDimensions U₁ V₁ U₂ V₂ ∧
+      SameSpectralMultiplicity
+        (genericAngleBlockReal U₁ V₁)
+        (genericAngleBlockReal U₂ V₂) := by
+  have hbridge := DavisKahan.RealSpectralRestriction.sameSpectralMultiplicity_cfc_iff_real
+    (A := genericCosineBlock U₁ V₁) (B := genericCosineBlock U₂ V₂)
+    (isSelfAdjoint_genericCosineBlock U₁ V₁) (isSelfAdjoint_genericCosineBlock U₂ V₂)
+    (fun t : ℝ => Real.arccos (Real.sqrt t)) (fun t : ℝ => (Real.cos t) ^ 2)
+    (by fun_prop) (by fun_prop) (by fun_prop) (by fun_prop) (by fun_prop)
+    (fun t ht => cos_sq_arccos_sqrt (spectrum_genericCosineBlock_subset_Icc_real U₁ V₁ ht))
+    (fun t ht => cos_sq_arccos_sqrt (spectrum_genericCosineBlock_subset_Icc_real U₂ V₂ ht))
+  rw [theorem3_1_spectralMultiplicity_classification_real, genericAngleBlockReal,
+    genericAngleBlockReal, ← hbridge]
+
+end SourceAngleInvariantReal
 
 end DavisKahan1970
 end TauCeti

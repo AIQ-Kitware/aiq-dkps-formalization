@@ -516,6 +516,14 @@ Status: **TERMINAL EXACT**.
 #check @TauCeti.continuous_conjStarAlgEquiv
 #check @TauCeti.DavisKahan1970.genericCosineBlock_nonneg
 #check @TauCeti.DavisKahan1970.genericCosineBlock_le_one
+-- The same, over a real Hilbert space, on the source's own angle operator.
+#check @TauCeti.DavisKahan1970.theorem3_1_spectralMultiplicity_classification_sourceAngle_real
+#check @TauCeti.DavisKahan1970.genericAngleBlockReal
+#check @TauCeti.DavisKahan1970.spectrum_genericCosineBlock_subset_Icc_real
+#check @TauCeti.DavisKahan.RealSpectralRestriction.sameSpectralMultiplicity_cfc_iff_real
+#check @TauCeti.DavisKahan1970.genericCosineBlock_nonneg_real
+#check @TauCeti.DavisKahan1970.genericCosineBlock_le_one_real
+#check @TauCeti.DavisKahan1970.theorem3_1_spectralMultiplicity_classification_real
 -- The printed dimension clause as a proposition, and the realizations it produces.
 #check @TauCeti.DavisKahan1970.SameHilbertDimensionSum
 #check @TauCeti.DavisKahan1970.theorem3_1_realization_inAmbient_ofSameHilbertDimension_complex
