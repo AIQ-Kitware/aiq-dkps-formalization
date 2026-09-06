@@ -5470,7 +5470,10 @@
         "TauCeti.DavisKahan.subspaceGap_le_of_reflectionProduct_form_nonneg",
         "TauCeti.DavisKahan.maximalAngle_le_pi_div_four_of_reflectionProduct_form_nonneg",
         "TauCeti.DavisKahan.reflectionProduct_add_swap_eq",
-        "TauCeti.ContinuousLinearMap.nonneg_of_lyapunov_nonneg"
+        "TauCeti.ContinuousLinearMap.nonneg_of_lyapunov_nonneg",
+        "TauCeti.DavisKahan.reflectionProduct_form_nonneg_of_orderedFormGap_unbounded",
+        "TauCeti.DavisKahan.subspaceGap_le_of_orderedFormGap_unbounded",
+        "TauCeti.DavisKahan.subspaceGap_le_of_orderedFormGap_unbounded_printed"
       ],
       "review_note": "Result-only hostile review accepted 2026-08-12. The compiled source surface covers every counted Theorem 8.1 clause under the printed hypotheses: branch existence and the closed-quarter-angle iff; part (i) on both blocks; part (ii) in dimension-free approximation-number form with the compiled positive-operator eigenvalue dictionary and real counterparts; and part (iii) for every symmetric gauge in the printed finite-dimensional scope, including increasing-index-order wrappers, over both complex and real Hilbert spaces. The previously recorded blocker was stale evidence selection, not missing mathematics.\n\n**OPERATOR SCOPE DISCLOSED 2026-09-05**, closing finding F2 of the 2026-09-04 hostile review and the follow-up review's objection to closing it by metadata alone.  Every registered Section 8 declaration is bounded; the row said nothing about it while the Section 2 hypotheses it imports are certified at unbounded scope.  The row now carries an accepted nonlocal source interpretation with the source evidence for the bounded reading, the competing unbounded reading stated in full, and the lift named as open work in `GOAL.md`.  The row's alignment moved from `locally_exact` to `paper_faithful_nonlocal_source_interpretation`, so the reviewer packet now lists it with the other interpreted rows instead of presenting it as locally exact.",
       "parent_claim_id": "DK-8.1-thm",
@@ -5691,6 +5694,21 @@
         },
         {
           "declaration": "TauCeti.ContinuousLinearMap.nonneg_of_lyapunov_nonneg",
+          "role": "generalization",
+          "note": "Unbounded-scope work toward this row's actual source scope.  The canonical evidence below is still bounded; these are the pieces that will replace it."
+        },
+        {
+          "declaration": "TauCeti.DavisKahan.reflectionProduct_form_nonneg_of_orderedFormGap_unbounded",
+          "role": "generalization",
+          "note": "Unbounded-scope work toward this row's actual source scope.  The canonical evidence below is still bounded; these are the pieces that will replace it."
+        },
+        {
+          "declaration": "TauCeti.DavisKahan.subspaceGap_le_of_orderedFormGap_unbounded",
+          "role": "generalization",
+          "note": "Unbounded-scope work toward this row's actual source scope.  The canonical evidence below is still bounded; these are the pieces that will replace it."
+        },
+        {
+          "declaration": "TauCeti.DavisKahan.subspaceGap_le_of_orderedFormGap_unbounded_printed",
           "role": "generalization",
           "note": "Unbounded-scope work toward this row's actual source scope.  The canonical evidence below is still bounded; these are the pieces that will replace it."
         }
@@ -5965,7 +5983,7 @@
         "source_fidelity_inventory_sha256": "a35c9158f5fab388494d59393f2c49343e0810cb0c5a864abc383e955542564c",
         "supporting_atom_digest_sha256": "9d2013e666da3d323c1a2351a7d52cf4c878868c048a296656164cce5accb447"
       },
-      "notes": "\n\nUNBOUNDED SCOPE, PROGRESS 2026-09-05.  The angle conclusion Davis and Kahan print -- `Theta <= pi/4`, non-strict -- is now proved at unbounded ambient scope by `maximalAngle_le_pi_div_four_of_orderedFormGap_unbounded_printed`, in the paper's own orientation on `P` and `Q`.  Reading the printed statement mattered: the bounded canonical evidence concludes the strictly stronger supremum bound `subspaceGap < sqrt 2 / 2`, whose constant is `delta / (1 + ‖C‖)` and therefore degenerates as `‖A‖ -> infinity`.  The paper does not claim it, and it is not available unbounded.\n\nWhat is still bounded on this row: the existence of the branch `Q` as a spectral subspace of `A + H`, the form bounds on it, and parts (i)-(iii).  The canonical evidence is therefore unchanged and the row is not yet at its source scope."
+      "notes": "\n\nUNBOUNDED SCOPE, PROGRESS 2026-09-05.  The angle conclusion Davis and Kahan print -- `Theta <= pi/4`, non-strict -- is now proved at unbounded ambient scope by `maximalAngle_le_pi_div_four_of_orderedFormGap_unbounded_printed`, in the paper's own orientation on `P` and `Q`.  Reading the printed statement mattered: the bounded canonical evidence concludes the strictly stronger supremum bound `subspaceGap < sqrt 2 / 2`, whose constant is `delta / (1 + ‖C‖)` and therefore degenerates as `‖A‖ -> infinity`.  The paper does not claim it, and it is not available unbounded.\n\nWhat is still bounded on this row: the existence of the branch `Q` as a spectral subspace of `A + H`, the form bounds on it, and parts (i)-(iii).  The canonical evidence is therefore unchanged and the row is not yet at its source scope.\n\nThe unbounded core is now exported as reflection-product positivity (`reflectionProduct_form_nonneg_of_orderedFormGap_unbounded`), with the angle conclusion and the projector-gap conclusion `subspaceGap P Q <= sqrt 2 / 2` as thin consumers of it in the paper's own orientation."
     },
     {
       "id": "DK-8.2-thm",
@@ -6328,7 +6346,8 @@
           "delivered_evidence_shape": "Every registered Section 8 declaration takes `A H : E ->L[k] E`; none takes a `LinearPMap`.  Parts (ii) and (iii) of Theorem 8.1 additionally carry the printed finite-dimensional restriction, which is the source's own and is not part of this reading.",
           "open_work": "Lifting `theorem8_1_maximalAngle_le_iff_spectrumIn`, `theorem8_1_canonicalBranch`, part (i), and `theorem8_2_branch_maximalAngle_lt_of_crossedDefects` plus the two retained sin 2theta bounds to `A : E ->_l.[k] E` self-adjoint with bounded `H`, in the vocabulary the unbounded Section 2 endpoints already use (`ReducesSubspace`, `IsOddFor`, form bounds on `dom A`, `FormBoundedSylvesterGap`, `specRange`).  Tracked in `GOAL.md`.  It is real work: Section 8 is 6437 lines built on bounded `Reduces`, `SpectrumIn` and `canonicalLowBranch`."
         }
-      }
+      },
+      "notes": "UNBOUNDED SCOPE, STATUS 2026-09-05.  The `sin 2Theta` estimate is proved at unbounded ambient scope and read at the operator norm (`norm_sinTwoAngleOperator_le_of_perturbedGap_unbounded_complex`), and the acute conclusion `Theta < pi/4` follows from the closed quarter branch (`theorem8_2_branch_maximalAngle_lt_of_small_perturbation_unbounded_complex`).  The closed branch is still an explicit hypothesis there.\n\nCORRECTION 2026-09-05.  An earlier note claimed unbounded Theorem 8.1 supplies that branch.  It does not: Theorem 8.1 assumes the hypotheses of the tan 2theta theorem, which carry the strong off-diagonal hypothesis H_0 = H_1 = 0, while Theorem 8.2 assumes the hypotheses of the sin 2theta theorem, which carry none.  The static bounds available at Theorem 8.2's hypotheses -- the sin Theta theorem directly, and the sharper route through Q_0 = E_A([beta - gamma, alpha + gamma]), which contains P -- prove the printed conclusion only for ‖H‖ < (sqrt 3 / 4) delta, short of the printed ‖H‖ < delta / 2.  Closing it needs the paper's connectedness argument; the exact form it takes, and its two missing ingredients, are recorded in the module docstring of Section8/Theorem82Unbounded.lean.  The canonical evidence on this row is bounded and unchanged."
     }
   ],
   "semantic_review_sweep": {
