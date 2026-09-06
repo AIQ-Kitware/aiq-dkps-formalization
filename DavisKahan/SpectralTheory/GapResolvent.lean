@@ -104,6 +104,171 @@ theorem twoSidedShiftedInverseBound_of_spectrum_gap
   exact ⟨R, fun z => (hright z).choose,
     fun x => hleft x, fun z => (hright z).choose_spec, hnorm⟩
 
+/-! ### A bounded perturbation cannot close a gap it is smaller than
+
+This is the unbounded analogue of `realSpectrum_add_subset_of_gap`, and the only
+genuinely new ingredient the unbounded Theorem 8.2 path needs.  The argument is
+the Neumann one: a spectral gap of half-width `s` around `c` gives a bounded
+inverse `R` of `c - A` with `‖R‖ ≤ s⁻¹`, and for `‖K‖ < s` the factorization
+
+```text
+c - (A + K) = (1 - K R) (c - A)   on dom A
+```
+
+has an invertible first factor, so the product is invertible too.
+-/
+
+/-- **A bounded perturbation of norm below the gap half-width leaves the centre
+in the resolvent set.**
+
+If the spectrum of the self-adjoint `A` avoids `(c - s, c + s)` and `‖K‖ < s`,
+then `c` is not in the spectrum of `A + K`. -/
+theorem notMem_spectrum_addBounded_of_spectrum_gap
+    {A : H →ₗ.[ℂ] H} (hA : IsSelfAdjoint A) (K : H →L[ℂ] H)
+    {c s : ℝ} (hs : 0 < s) (hK : ‖K‖ < s)
+    (hgap : ∀ lam ∈ Set.Ioo (c - s) (c + s),
+      (lam : ℂ) ∉ TauCeti.LinearPMap.spectrum A) :
+    ((c : ℝ) : ℂ) ∉
+      TauCeti.LinearPMap.spectrum (TauCeti.LinearPMap.addBounded A K) := by
+  rw [TauCeti.LinearPMap.notMem_spectrum_iff]
+  obtain ⟨R, hnorm, hleft, hright⟩ :=
+    TauCeti.LinearPMap.exists_norm_le_two_sided_shifted_inverse_of_spectrum_gap hA hs hgap
+  have hKR : ‖K ∘L R‖ < 1 := by
+    have h1 : ‖K ∘L R‖ ≤ ‖K‖ * ‖R‖ := ContinuousLinearMap.opNorm_comp_le _ _
+    have h2 : ‖K‖ * ‖R‖ ≤ ‖K‖ * s⁻¹ :=
+      mul_le_mul_of_nonneg_left hnorm (norm_nonneg K)
+    have h3 : ‖K‖ * s⁻¹ < 1 := by
+      rw [mul_inv_lt_iff₀ hs, one_mul]
+      exact hK
+    linarith
+  obtain ⟨u, hu⟩ := isUnit_one_sub_of_norm_lt_one hKR
+  set V : H →L[ℂ] H := (↑u⁻¹ : H →L[ℂ] H) with hV
+  have hUV : ∀ y : H, (1 - K ∘L R) (V y) = y := by
+    intro y
+    have : ((u : H →L[ℂ] H) * (↑u⁻¹ : H →L[ℂ] H)) y = y := by
+      rw [← Units.val_mul, mul_inv_cancel]
+      rfl
+    rw [hV, ← hu]
+    exact this
+  have hVU : ∀ y : H, V ((1 - K ∘L R) y) = y := by
+    intro y
+    have : ((↑u⁻¹ : H →L[ℂ] H) * (u : H →L[ℂ] H)) y = y := by
+      rw [← Units.val_mul, inv_mul_cancel]
+      rfl
+    rw [hV, ← hu]
+    exact this
+  refine ⟨R ∘L V, fun y => ?_, fun y => ?_, fun x => ?_⟩
+  · exact (hright (V y)).choose
+  · obtain ⟨hmem, hsolve⟩ := hright (V y)
+    show ((c : ℝ) : ℂ) • (R ∘L V) y -
+      (TauCeti.LinearPMap.addBounded A K) ⟨(R ∘L V) y, _⟩ = y
+    have hadd : (TauCeti.LinearPMap.addBounded A K)
+        (⟨R (V y), hmem⟩ : (TauCeti.LinearPMap.addBounded A K).domain)
+        = A ⟨R (V y), hmem⟩ + K (R (V y)) := rfl
+    show ((c : ℝ) : ℂ) • R (V y) -
+      (TauCeti.LinearPMap.addBounded A K) ⟨R (V y), hmem⟩ = y
+    rw [hadd]
+    have hstep : ((c : ℝ) : ℂ) • R (V y) - A ⟨R (V y), hmem⟩ = V y := hsolve
+    have : ((c : ℝ) : ℂ) • R (V y) - (A ⟨R (V y), hmem⟩ + K (R (V y)))
+        = (1 - K ∘L R) (V y) := by
+      simp only [sub_apply, ContinuousLinearMap.one_apply,
+        ContinuousLinearMap.comp_apply]
+      linear_combination (norm := module) hstep
+    rw [this, hUV y]
+  · have hxA : ((x : H)) ∈ A.domain := x.2
+    have hadd : (TauCeti.LinearPMap.addBounded A K) x
+        = A ⟨(x : H), hxA⟩ + K (x : H) := rfl
+    show (R ∘L V) (((c : ℝ) : ℂ) • (x : H) -
+      (TauCeti.LinearPMap.addBounded A K) x) = (x : H)
+    rw [hadd]
+    have hw : R (((c : ℝ) : ℂ) • (x : H) - A ⟨(x : H), hxA⟩) = (x : H) :=
+      hleft ⟨(x : H), hxA⟩
+    have hsplit : ((c : ℝ) : ℂ) • (x : H) - (A ⟨(x : H), hxA⟩ + K (x : H))
+        = (1 - K ∘L R) (((c : ℝ) : ℂ) • (x : H) - A ⟨(x : H), hxA⟩) := by
+      simp only [sub_apply, ContinuousLinearMap.one_apply,
+        ContinuousLinearMap.comp_apply]
+      rw [hw]
+      abel
+    simp only [ContinuousLinearMap.comp_apply]
+    rw [hsplit, hVU, hw]
+
+/-- **The unbounded analogue of `realSpectrum_add_subset_of_gap`.**
+
+If the real spectrum of a self-adjoint `A` lies in `[β, α] ∪ exterior(β, α, δ)`
+and `‖K‖ ≤ γ` with `2γ < δ`, then the real spectrum of `A + K` lies in the
+`γ`-fattened band and the `2γ`-narrowed exterior.
+
+This is the spectral-stability step the unbounded Theorem 8.2 path needs, and it
+is a bounded-perturbation statement, not a continuation framework: each point of
+the two open gaps is at distance more than `γ` from the spectrum of `A`, so
+`notMem_spectrum_addBounded_of_spectrum_gap` removes it. -/
+theorem spectrum_addBounded_subset_of_gap
+    {A : H →ₗ.[ℂ] H} (hA : IsSelfAdjoint A) (K : H →L[ℂ] H)
+    {alpha beta delta gam : ℝ} (hab : beta ≤ alpha) (hdelta : 0 < delta)
+    (hgam : ‖K‖ ≤ gam) (hgamlt : 2 * gam < delta)
+    (hgap : ∀ lam : ℝ, (lam : ℂ) ∈ TauCeti.LinearPMap.spectrum A →
+      lam ∈ Set.Icc beta alpha ∪ {x : ℝ | x ≤ beta - delta ∨ alpha + delta ≤ x}) :
+    ∀ lam : ℝ,
+      (lam : ℂ) ∈ TauCeti.LinearPMap.spectrum (TauCeti.LinearPMap.addBounded A K) →
+      lam ∈ Set.Icc (beta - gam) (alpha + gam) ∪
+        {x : ℝ | x ≤ beta - gam - (delta - 2 * gam) ∨
+          alpha + gam + (delta - 2 * gam) ≤ x} := by
+  have hgam0 : 0 ≤ gam := le_trans (norm_nonneg K) hgam
+  intro lam hlam
+  by_contra hnot
+  rw [Set.mem_union] at hnot
+  have h1 : lam ∉ Set.Icc (beta - gam) (alpha + gam) := fun h => hnot (Or.inl h)
+  have h2 : lam ∉ {x : ℝ | x ≤ beta - gam - (delta - 2 * gam) ∨
+      alpha + gam + (delta - 2 * gam) ≤ x} := fun h => hnot (Or.inr h)
+  have h2' : beta - delta + gam < lam ∧ lam < alpha + delta - gam := by
+    constructor
+    · by_contra hcon
+      exact h2 (Or.inl (by simp only [not_lt] at hcon; linarith))
+    · by_contra hcon
+      exact h2 (Or.inr (by simp only [not_lt] at hcon; linarith))
+  have h1' : lam < beta - gam ∨ alpha + gam < lam := by
+    rcases lt_or_ge lam (beta - gam) with h | h
+    · exact Or.inl h
+    · exact Or.inr (by
+        by_contra hcon
+        exact h1 ⟨h, le_of_not_gt hcon⟩)
+  -- in either open gap, choose the half-width and apply the perturbation lemma
+  have hkey : ∀ s : ℝ, gam < s →
+      (∀ mu ∈ Set.Ioo (lam - s) (lam + s), (mu : ℂ) ∉ TauCeti.LinearPMap.spectrum A) →
+      False := by
+    intro s hs hmiss
+    exact notMem_spectrum_addBounded_of_spectrum_gap hA K
+      (lt_of_le_of_lt hgam0 hs) (lt_of_le_of_lt hgam hs) hmiss hlam
+  rcases h1' with hlow | hhigh
+  · refine hkey (min (beta - lam) (lam - beta + delta)) (by
+      refine lt_min ?_ ?_ <;> linarith [h2'.1]) ?_
+    intro mu hmu hmem
+    have hb : lam + min (beta - lam) (lam - beta + delta) ≤ beta := by
+      have := min_le_left (beta - lam) (lam - beta + delta); linarith
+    have hl : beta - delta ≤ lam - min (beta - lam) (lam - beta + delta) := by
+      have := min_le_right (beta - lam) (lam - beta + delta); linarith
+    have hmulo : beta - delta < mu := lt_of_le_of_lt hl hmu.1
+    have hmuhi : mu < beta := lt_of_lt_of_le hmu.2 hb
+    rcases hgap mu hmem with h | h
+    · linarith [h.1]
+    · rcases h with h | h
+      · linarith
+      · linarith
+  · refine hkey (min (lam - alpha) (alpha + delta - lam)) (by
+      refine lt_min ?_ ?_ <;> linarith [h2'.2]) ?_
+    intro mu hmu hmem
+    have ha : alpha ≤ lam - min (lam - alpha) (alpha + delta - lam) := by
+      have := min_le_left (lam - alpha) (alpha + delta - lam); linarith
+    have hr : lam + min (lam - alpha) (alpha + delta - lam) ≤ alpha + delta := by
+      have := min_le_right (lam - alpha) (alpha + delta - lam); linarith
+    have hmulo : alpha < mu := lt_of_le_of_lt ha hmu.1
+    have hmuhi : mu < alpha + delta := lt_of_lt_of_le hmu.2 hr
+    rcases hgap mu hmem with h | h
+    · linarith [h.2]
+    · rcases h with h | h
+      · linarith
+      · linarith
+
 /-- **The bounded shifted inverse from coercivity against a reflection.**
 
 This is the theorem GOAL.md section 6.2 asks for, in the form Theorem 8.1
