@@ -86,10 +86,12 @@ consecutive step.
   therefore a member of the source norm class;
 * that the two spellings of `sin 2Θ` have the same norm;
 * the acute conclusion **from** the closed branch, which is where the branch
-  selection above would plug in.
+  selection above plugs in.
 
-The closed branch is carried as an explicit hypothesis, and it is the paper's
-connectedness step, not a missing translation.
+The closed branch is carried as an explicit hypothesis here, and it is the
+paper's connectedness step, not a missing translation.
+`Theorem82UnboundedBranchBound.lean` discharges it from the printed hypotheses
+alone on `2‖H‖ ≤ (√2/2) δ`, using the first of the two static bounds above.
 -/
 
 namespace TauCeti

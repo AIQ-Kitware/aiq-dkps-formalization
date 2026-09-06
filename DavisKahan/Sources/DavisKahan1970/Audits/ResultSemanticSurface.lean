@@ -881,6 +881,9 @@ Status: **TERMINAL EXACT**.
 #check @TauCeti.DavisKahan1970.Section8.theorem8_2_sinTwoTheta_residual_directedAngle_real_symmetricNorming
 #check @TauCeti.DavisKahan1970.Section8.theorem8_2_branch_directed_real
 #check @TauCeti.DavisKahan1970.Section8.theorem8_2_sinTwoTheta_perturbation_real_symmetricNorming
+#check @TauCeti.DavisKahan1970.Section8.directedGap_le_of_reducingGap_unbounded_complex
+#check @TauCeti.DavisKahan1970.Section8.theorem8_2_branch_maximalAngle_lt_unbounded_smallPerturbation_complex
+#check @TauCeti.DavisKahan.CrossedDefectsEquivalent.symm
 #check @TauCeti.DavisKahan1970.Section8.theorem8_2_sinTwoTheta_residual_real_symmetricNorming
 #check @TauCeti.DavisKahan1970.Section8.theorem8_2_branch_maximalAngle_lt_of_crossedDefects
 #check @TauCeti.DavisKahan1970.Section8.theorem8_2_branch_real_maximalAngle_lt_of_crossedDefects

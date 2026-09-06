@@ -67,6 +67,20 @@ def CrossedDefectsEquivalent
   Nonempty
     (halmosSourceDefect U V ≃ₗᵢ[𝕜] halmosTargetDefect U V)
 
+/-- **(3.5) is symmetric in the pair.**
+
+The crossed defects swap when the pair does: `halmosSourceDefect V U` is
+`halmosTargetDefect U V` and `halmosTargetDefect V U` is `halmosSourceDefect U V`,
+both by `inf_comm`.  So an identification in one orientation transports to the
+other, and a consumer may state the hypothesis in whichever orientation its
+conclusion is written. -/
+theorem CrossedDefectsEquivalent.symm {U V : Submodule 𝕜 H}
+    [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
+    (h : CrossedDefectsEquivalent U V) : CrossedDefectsEquivalent V U := by
+  obtain ⟨e⟩ := h
+  refine ⟨((LinearIsometryEquiv.ofEq (V ⊓ Uᗮ) (Uᗮ ⊓ V) (inf_comm _ _)).trans
+    (e.symm.trans (LinearIsometryEquiv.ofEq (U ⊓ Vᗮ) (Vᗮ ⊓ U) (inf_comm _ _))))⟩
+
 /-- Restriction of the Halmos cosine square to the reducing generic summand,
 realized as the compression to the generic part.  The generic part reduces
 both projections, hence every word in them, so the compression is the honest
