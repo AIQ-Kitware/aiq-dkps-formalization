@@ -56,6 +56,7 @@ Under the standing convention (3.5) a direct rotation exists, and for it both
 printed formulations hold: the pointwise angle bound against an arbitrary
 competitor `W`, and the singular-value identity and domination. -/
 theorem proposition4_1_directRotation_sourceExact_complex
+    [TopologicalSpace.SeparableSpace H]
     (U V : Submodule ℂ H) [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
     (hcompact : IsCompactOperator (TauCeti.principalSineOperator U V))
     (hcrossed : DavisKahan.CrossedDefectsEquivalent U V)
@@ -135,6 +136,7 @@ variable {E : Type v} [NormedAddCommGroup E] [InnerProductSpace ℝ E]
 /-- **Davis--Kahan 1970, Proposition 4.1 over `ℝ`, on the source's own direct
 rotation.** -/
 theorem proposition4_1_directRotation_sourceExact_real
+    [TopologicalSpace.SeparableSpace E]
     (U V : Submodule ℝ E) [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
     (hcompact : IsCompactOperator (TauCeti.principalSineOperator U V))
     (hcrossed : DavisKahan.CrossedDefectsEquivalent U V)
