@@ -897,6 +897,36 @@ Use the already completed coercive inverse and spectral-repulsion work.
 
 Concentrate on the genuinely missing quarter-acute implication and then expose the exact source theorem.
 
+## 3c. The source norm class is inhabited (resolved, 2026-09-05)
+
+The hostile review asked whether `NormalizedUnitaryInvariantNorm` is really as
+broad as Davis--Kahan's Section 1 class, since it extends
+`KyFanDominantIdealFamily`, which carries a completeness requirement.
+
+Checking that turned up something sharper, and worse: **the repository had never
+constructed a single term of the type.** Every occurrence was a universally
+quantified hypothesis. A `∀ N : C, …` statement over an empty `C` is vacuous, so
+every source-exact façade could have been true for the wrong reason.
+
+`kyFanNormalizedUnitaryInvariantNorm k hk` now exhibits the `k`-th Ky Fan norm as
+a member, with `nonempty_normalizedUnitaryInvariantNorm_complex` and its real
+sibling as the corollaries that matter. Those are exactly the norms Davis and
+Kahan's own Fan-dominance argument quantifies over, so the class contains the
+ones the paper actually uses.
+
+What remains open, and should be recorded rather than argued away: the class
+requires its ideal to be **complete**, and I have not shown that every norm in
+the printed class supplies that. So the Lean quantifier may still be narrower
+than the printed one. Two honest resolutions, in order of preference:
+
+1. show completeness is automatic for a normalized unitarily invariant norm in
+   the source's sense (it is for every classical example -- Ky Fan, Schatten,
+   Hilbert--Schmidt, trace class), and document the theorem; or
+2. weaken the structure, requiring completeness only where a proof needs it.
+
+Until one of those lands, a façade over this class is *not* known to be
+exhaustive, and the final claim should say so.
+
 ## 4. Finish unbounded Theorem 8.2
 
 Write the final source theorem types first.
