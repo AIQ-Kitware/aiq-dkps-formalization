@@ -157,5 +157,65 @@ theorem realSpectrum_subset_union_of_reduces
       rw [Submodule.starProjection_orthogonal_apply]; abel
     linear_combination (norm := module) hueq' + hveq' + hsum
 
+/-! ## Invariance plus self-adjointness gives reduction
+
+The unbounded counterpart of `reduces_orthogonalComplement`.  The complement's
+invariance is not assumed: it follows from symmetry, because the projection
+preserves the domain and therefore `U.starProjection '' dom A` is dense in `U`. -/
+
+/-- **The complement of an invariant subspace of a self-adjoint partial map is
+invariant**, provided the projection preserves the domain. -/
+theorem invariantSubspace_orthogonal_of_isSelfAdjoint
+    {A : E →ₗ.[𝕜] E} (hA : IsSelfAdjoint A) {U : Submodule 𝕜 E}
+    [U.HasOrthogonalProjection]
+    (hproj : ∀ x : A.domain, U.starProjection (x : E) ∈ A.domain)
+    (hinv : TauCeti.LinearPMap.InvariantSubspace A U) :
+    TauCeti.LinearPMap.InvariantSubspace A Uᗮ := by
+  have hsym : A.IsFormalAdjoint A := by
+    have h := _root_.LinearPMap.adjoint_isFormalAdjoint (T := A) hA.dense_domain
+    rwa [_root_.LinearPMap.isSelfAdjoint_def.mp hA] at h
+  intro x hx
+  rw [Submodule.mem_orthogonal]
+  intro u hu
+  have hcont : Continuous fun w : E => (inner 𝕜 w (A x) : 𝕜) := by fun_prop
+  have hzero : Set.EqOn (fun w : E => (inner 𝕜 w (A x) : 𝕜)) (fun _ => (0 : 𝕜))
+      (U.starProjection '' (A.domain : Set E)) := by
+    rintro _ ⟨y, hy, rfl⟩
+    have hyd : U.starProjection y ∈ A.domain := hproj ⟨y, hy⟩
+    have hval := hsym ⟨U.starProjection y, hyd⟩ x
+    have hmemU : A (⟨U.starProjection y, hyd⟩ : A.domain) ∈ U :=
+      hinv ⟨U.starProjection y, hyd⟩ (U.starProjection_apply_mem y)
+    have hperp : (inner 𝕜 (A (⟨U.starProjection y, hyd⟩ : A.domain)) (x : E) : 𝕜) = 0 :=
+      (Submodule.mem_orthogonal U (x : E)).mp hx _ hmemU
+    show (inner 𝕜 (U.starProjection y) (A x) : 𝕜) = 0
+    rw [← hval]
+    exact hperp
+  have hsub : (U : Set E) ⊆ closure (U.starProjection '' (A.domain : Set E)) := by
+    intro w hw
+    have himg : U.starProjection '' (closure (A.domain : Set E)) ⊆
+        closure (U.starProjection '' (A.domain : Set E)) :=
+      image_closure_subset_closure_image (U.starProjection.continuous)
+    rw [hA.dense_domain.closure_eq] at himg
+    refine himg ⟨w, Set.mem_univ w, ?_⟩
+    exact Submodule.starProjection_eq_self_iff.mpr hw
+  have := (hzero.closure hcont continuous_const) (hsub hu)
+  exact this
+
+/-- **Invariance plus self-adjointness gives reduction.** -/
+theorem reducesSubspace_of_isSelfAdjoint_of_invariant
+    {A : E →ₗ.[𝕜] E} (hA : IsSelfAdjoint A) {U : Submodule 𝕜 E}
+    [U.HasOrthogonalProjection]
+    (hproj : ∀ x : A.domain, U.starProjection (x : E) ∈ A.domain)
+    (hinv : TauCeti.LinearPMap.InvariantSubspace A U) :
+    TauCeti.LinearPMap.ReducesSubspace A U := by
+  have hperp : ∀ x : A.domain, Uᗮ.starProjection (x : E) ∈ A.domain := by
+    intro x
+    have h : Uᗮ.starProjection (x : E) = (x : E) - U.starProjection (x : E) :=
+      Submodule.starProjection_orthogonal_apply U (x : E)
+    rw [h]
+    exact A.domain.sub_mem x.2 (hproj x)
+  exact TauCeti.LinearPMap.ReducesSubspace.of_components hproj hperp hinv
+    (invariantSubspace_orthogonal_of_isSelfAdjoint hA hproj hinv)
+
 end DavisKahan
 end TauCeti

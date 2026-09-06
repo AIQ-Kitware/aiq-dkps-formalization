@@ -6,6 +6,7 @@ Authors: Jon Crall, Claude Opus 5
 import DavisKahan.SpectralTheory.UnboundedBandLipschitz
 import DavisKahan.Geometry.Angle.DoubleAngleGapBound
 import DavisKahan.SpectralTheory.ReducingSpectrumUnion
+import ForTauCeti.Analysis.InnerProductSpace.Polar.SelfAdjointCompletion
 
 /-!
 # The homotopy path for Theorem 8.2 at unbounded scope
@@ -458,6 +459,148 @@ theorem theorem8_2_perturbationHalfGap_maximalAngle_lt_unbounded_complex
   rw [DavisKahan.subspaceGap_eq_directedGap_of_crossedDefectsEquivalent P Q hcross]
   exact theorem8_2_perturbationHalfGap_unbounded_complex hA Hop hHop hdelta hab
     hPred hQred hQspec hQperp hPspec hsmall
+
+/-! ### Theorem 8.2's residual branch at unbounded scope -/
+
+noncomputable local instance instCompleteSpaceCoeResidual
+    (U : Submodule ℂ Hc) [U.HasOrthogonalProjection] : CompleteSpace U :=
+  (Submodule.isComplete_coe_of_hasOrthogonalProjection U).completeSpace_coe
+
+/-- **Davis--Kahan 1970, Theorem 8.2, residual alternative, at unbounded ambient
+scope, in its directed form.**
+
+The hypotheses are the printed ones, identical to the perturbation branch except
+that the smallness assumption is the printed residual condition `‖R‖ < δ/2` in
+place of `‖H‖ < δ/2`.  `R` is the source residual (1.8), which for a reducing `P`
+is the first block column `H E₀` of the perturbation.
+
+The proof is the printed reduction.  Krein's theorem
+(`exists_selfAdjoint_completion_eq_norm_restriction`) replaces `H` by a
+self-adjoint `H'` with the same first column and `‖H'‖ = ‖R‖`; setting
+`A' := A + (H − H')` leaves `A' + H' = A + H` and `A'|P = A|P`, so every printed
+hypothesis transfers and the perturbation branch applies to `(A', H')`.
+
+The public type carries `‖R‖ < δ/2` and does **not** acquire `‖H‖ < δ/2`. -/
+theorem theorem8_2_residualHalfGap_unbounded_complex
+    [TopologicalSpace.SeparableSpace Hc]
+    {A : Hc →ₗ.[ℂ] Hc} (hA : IsSelfAdjoint A)
+    (Hop : Hc →L[ℂ] Hc) (hHop : DavisKahan.IsSelfAdjointOperator Hop)
+    {P Q : Submodule ℂ Hc} [P.HasOrthogonalProjection] [Q.HasOrthogonalProjection]
+    {alpha beta delta : ℝ} (hdelta : 0 < delta) (hab : beta ≤ alpha)
+    (hPred : TauCeti.LinearPMap.ReducesSubspace A P)
+    (hQred : TauCeti.LinearPMap.ReducesSubspace
+      (TauCeti.LinearPMap.addBounded A Hop) Q)
+    (hQspec : TauCeti.LinearPMap.realSpectrum
+      (TauCeti.LinearPMap.reducingRestriction (TauCeti.LinearPMap.addBounded A Hop) Q hQred)
+      ⊆ Set.Icc beta alpha)
+    (hQperp : TauCeti.LinearPMap.realSpectrum
+      (TauCeti.LinearPMap.reducingRestriction (TauCeti.LinearPMap.addBounded A Hop) Qᗮ
+        hQred.orthogonal) ⊆ bandExterior beta alpha delta)
+    (hPspec : TauCeti.LinearPMap.realSpectrum
+      (TauCeti.LinearPMap.reducingRestriction A P hPred)
+      ⊆ Set.Icc (beta - delta / 2) (alpha + delta / 2))
+    (hRsmall : ‖Hop ∘L (P.subtypeL : P →L[ℂ] Hc)‖ < delta / 2) :
+    DavisKahan.directedGap P Q < Real.sqrt 2 / 2 := by
+  classical
+  rw [TauCeti.norm_comp_subtypeL_eq_norm_comp_starProjection] at hRsmall
+  obtain ⟨K', hK'sa, hK'col, hK'norm⟩ :=
+    TauCeti.exists_selfAdjoint_completion_eq_norm_restriction Hop
+      (ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mpr hHop) P
+  have hK'sym : DavisKahan.IsSelfAdjointOperator K' :=
+    ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mp hK'sa
+  have hK'small : ‖K'‖ < delta / 2 := by rw [hK'norm]; exact hRsmall
+  have hK'P : ∀ x ∈ P, K' x = Hop x := by
+    intro x hx
+    have hfix : P.starProjection x = x := Submodule.starProjection_eq_self_iff.mpr hx
+    have h := congrArg (fun M : Hc →L[ℂ] Hc => M x) hK'col
+    simpa only [ContinuousLinearMap.comp_apply, hfix] using h
+  obtain ⟨D, hDdef⟩ : ∃ D : Hc →L[ℂ] Hc, D = Hop - K' := ⟨_, rfl⟩
+  have hDsym : DavisKahan.IsSelfAdjointOperator D := by
+    intro x y
+    have h1 : ⟪Hop x, y⟫_ℂ = ⟪x, Hop y⟫_ℂ := hHop x y
+    have h2 : ⟪K' x, y⟫_ℂ = ⟪x, K' y⟫_ℂ := hK'sym x y
+    rw [hDdef]
+    show ⟪Hop x - K' x, y⟫_ℂ = ⟪x, Hop y - K' y⟫_ℂ
+    rw [inner_sub_left, inner_sub_right, h1, h2]
+  have hDP : ∀ x ∈ P, D x = 0 := by
+    intro x hx
+    rw [hDdef]
+    show Hop x - K' x = 0
+    rw [hK'P x hx, sub_self]
+  have hA'sa : IsSelfAdjoint (TauCeti.LinearPMap.addBounded A D) :=
+    DavisKahan.addBounded_isSelfAdjoint A hA D hDsym
+  have hPred' : TauCeti.LinearPMap.ReducesSubspace (TauCeti.LinearPMap.addBounded A D) P := by
+    refine DavisKahan.reducesSubspace_of_isSelfAdjoint_of_invariant hA'sa
+      (fun x => hPred.projection_mem_domain x) ?_
+    intro x hx
+    show (A ⟨(x : Hc), x.2⟩ : Hc) + D (x : Hc) ∈ P
+    rw [hDP _ hx, add_zero]
+    exact hPred.invariant ⟨(x : Hc), x.2⟩ hx
+  have hrestr : TauCeti.LinearPMap.reducingRestriction A P hPred
+      = TauCeti.LinearPMap.reducingRestriction (TauCeti.LinearPMap.addBounded A D) P
+        hPred' := by
+    refine LinearPMap.ext rfl ?_
+    intro x y hxy
+    refine Subtype.ext ?_
+    show (A ⟨((x : P) : Hc), y⟩ : Hc)
+      = (A ⟨((x : P) : Hc), hxy⟩ : Hc) + D ((x : P) : Hc)
+    rw [hDP ((x : P) : Hc) x.2, add_zero]
+  have htotal : TauCeti.LinearPMap.addBounded (TauCeti.LinearPMap.addBounded A D) K'
+      = TauCeti.LinearPMap.addBounded A Hop := by
+    rw [addBounded_addBounded, hDdef]
+    congr 1
+    abel
+  have hQred' : TauCeti.LinearPMap.ReducesSubspace
+      (TauCeti.LinearPMap.addBounded (TauCeti.LinearPMap.addBounded A D) K') Q := by
+    rw [htotal]; exact hQred
+  have hQspec' : TauCeti.LinearPMap.realSpectrum
+      (TauCeti.LinearPMap.reducingRestriction
+        (TauCeti.LinearPMap.addBounded (TauCeti.LinearPMap.addBounded A D) K') Q hQred')
+      ⊆ Set.Icc beta alpha := by
+    rw [realSpectrum_reducingRestriction_congr htotal hQred' hQred]
+    exact hQspec
+  have hQperp' : TauCeti.LinearPMap.realSpectrum
+      (TauCeti.LinearPMap.reducingRestriction
+        (TauCeti.LinearPMap.addBounded (TauCeti.LinearPMap.addBounded A D) K') Qᗮ
+        hQred'.orthogonal) ⊆ bandExterior beta alpha delta := by
+    rw [realSpectrum_reducingRestriction_congr htotal hQred'.orthogonal hQred.orthogonal]
+    exact hQperp
+  have hPspec' : TauCeti.LinearPMap.realSpectrum
+      (TauCeti.LinearPMap.reducingRestriction (TauCeti.LinearPMap.addBounded A D) P hPred')
+      ⊆ Set.Icc (beta - delta / 2) (alpha + delta / 2) := by
+    rw [← hrestr]
+    exact hPspec
+  exact theorem8_2_perturbationHalfGap_unbounded_complex hA'sa K' hK'sym hdelta hab
+    hPred' hQred' hQspec' hQperp' hPspec' hK'small
+
+/-- **Theorem 8.2's printed conclusion `Θ < π/4` at unbounded ambient scope,
+residual alternative.** -/
+theorem theorem8_2_residualHalfGap_maximalAngle_lt_unbounded_complex
+    [TopologicalSpace.SeparableSpace Hc]
+    {A : Hc →ₗ.[ℂ] Hc} (hA : IsSelfAdjoint A)
+    (Hop : Hc →L[ℂ] Hc) (hHop : DavisKahan.IsSelfAdjointOperator Hop)
+    {P Q : Submodule ℂ Hc} [P.HasOrthogonalProjection] [Q.HasOrthogonalProjection]
+    {alpha beta delta : ℝ} (hdelta : 0 < delta) (hab : beta ≤ alpha)
+    (hPred : TauCeti.LinearPMap.ReducesSubspace A P)
+    (hQred : TauCeti.LinearPMap.ReducesSubspace
+      (TauCeti.LinearPMap.addBounded A Hop) Q)
+    (hQspec : TauCeti.LinearPMap.realSpectrum
+      (TauCeti.LinearPMap.reducingRestriction (TauCeti.LinearPMap.addBounded A Hop) Q hQred)
+      ⊆ Set.Icc beta alpha)
+    (hQperp : TauCeti.LinearPMap.realSpectrum
+      (TauCeti.LinearPMap.reducingRestriction (TauCeti.LinearPMap.addBounded A Hop) Qᗮ
+        hQred.orthogonal) ⊆ bandExterior beta alpha delta)
+    (hPspec : TauCeti.LinearPMap.realSpectrum
+      (TauCeti.LinearPMap.reducingRestriction A P hPred)
+      ⊆ Set.Icc (beta - delta / 2) (alpha + delta / 2))
+    (hcross : DavisKahan.CrossedDefectsEquivalent P Q)
+    (hRsmall : ‖Hop ∘L (P.subtypeL : P →L[ℂ] Hc)‖ < delta / 2) :
+    TauCeti.DavisKahanExt.maximalAngle P Q < Real.pi / 4 := by
+  refine (maximalAngle_lt_pi_div_four_iff P Q).2 ?_
+  show DavisKahan.subspaceGap P Q < Real.sqrt 2 / 2
+  rw [DavisKahan.subspaceGap_eq_directedGap_of_crossedDefectsEquivalent P Q hcross]
+  exact theorem8_2_residualHalfGap_unbounded_complex hA Hop hHop hdelta hab
+    hPred hQred hQspec hQperp hPspec hRsmall
 
 end
 
