@@ -5,6 +5,7 @@ Authors: Jon Crall, Claude Opus 5
 -/
 import DavisKahan.SpectralTheory.UnboundedBandLipschitz
 import DavisKahan.Geometry.Angle.DoubleAngleGapBound
+import DavisKahan.SpectralTheory.ReducingSpectrumUnion
 
 /-!
 # The homotopy path for Theorem 8.2 at unbounded scope
@@ -176,10 +177,10 @@ reducing and block spectrum in `[β − δ/2, α + δ/2]`; `A + H` with `Q` redu
 block spectrum in `[β, α]` and complementary block spectrum off
 `(β − δ, α + δ)`; and `‖H‖ < δ/2`.
 
-The ambient placement of `A + H` is carried explicitly.  It is a consequence of
-the two printed block placements -- that is `realSpectrum_subset_union_of_reduces`
-in the bounded development -- and the unbounded counterpart of that bridge is the
-one thing still outstanding on this row. -/
+Every hypothesis is printed.  The ambient placement of `A + H` that the proof
+needs is derived from the two block placements by
+`realSpectrum_subset_union_of_reduces`, and the separation `hQgap` is the two
+block placements read as an interval/exterior gap. -/
 theorem theorem8_2_perturbationHalfGap_unbounded_complex
     [TopologicalSpace.SeparableSpace Hc]
     {A : Hc →ₗ.[ℂ] Hc} (hA : IsSelfAdjoint A)
@@ -189,21 +190,29 @@ theorem theorem8_2_perturbationHalfGap_unbounded_complex
     (hPred : TauCeti.LinearPMap.ReducesSubspace A P)
     (hQred : TauCeti.LinearPMap.ReducesSubspace
       (TauCeti.LinearPMap.addBounded A Hop) Q)
-    (hQgap : FormBoundedSylvesterGap
+    (hQspec : TauCeti.LinearPMap.realSpectrum
       (TauCeti.LinearPMap.reducingRestriction (TauCeti.LinearPMap.addBounded A Hop) Q hQred)
-      (TauCeti.LinearPMap.reducingRestriction (TauCeti.LinearPMap.addBounded A Hop) Qᗮ
-        hQred.orthogonal) delta)
+      ⊆ Set.Icc beta alpha)
     (hQperp : TauCeti.LinearPMap.realSpectrum
       (TauCeti.LinearPMap.reducingRestriction (TauCeti.LinearPMap.addBounded A Hop) Qᗮ
         hQred.orthogonal) ⊆ bandExterior beta alpha delta)
     (hPspec : TauCeti.LinearPMap.realSpectrum
       (TauCeti.LinearPMap.reducingRestriction A P hPred)
       ⊆ Set.Icc (beta - delta / 2) (alpha + delta / 2))
-    (hB0spec : TauCeti.LinearPMap.realSpectrum (TauCeti.LinearPMap.addBounded A Hop)
-      ⊆ Set.Icc beta alpha ∪ bandExterior beta alpha delta)
     (hsmall : ‖Hop‖ < delta / 2) :
     DavisKahan.directedGap P Q < Real.sqrt 2 / 2 := by
   classical
+  have hQgap : FormBoundedSylvesterGap
+      (TauCeti.LinearPMap.reducingRestriction (TauCeti.LinearPMap.addBounded A Hop) Q hQred)
+      (TauCeti.LinearPMap.reducingRestriction (TauCeti.LinearPMap.addBounded A Hop) Qᗮ
+        hQred.orthogonal) delta :=
+    .intervalExterior hab (Or.inl ⟨hQspec, hQperp⟩)
+  have hB0spec : TauCeti.LinearPMap.realSpectrum (TauCeti.LinearPMap.addBounded A Hop)
+      ⊆ Set.Icc beta alpha ∪ bandExterior beta alpha delta := by
+    intro x hx
+    rcases DavisKahan.realSpectrum_subset_union_of_reduces hQred hx with h | h
+    · exact Or.inl (hQspec h)
+    · exact Or.inr (hQperp h)
   obtain ⟨gam, hgamdef⟩ : ∃ g, g = ‖Hop‖ := ⟨_, rfl⟩
   have hgam0 : 0 ≤ gam := hgamdef ▸ norm_nonneg Hop
   have hgamlt : 2 * gam < delta := by rw [hgamdef]; linarith
@@ -432,18 +441,15 @@ theorem theorem8_2_perturbationHalfGap_maximalAngle_lt_unbounded_complex
     (hPred : TauCeti.LinearPMap.ReducesSubspace A P)
     (hQred : TauCeti.LinearPMap.ReducesSubspace
       (TauCeti.LinearPMap.addBounded A Hop) Q)
-    (hQgap : FormBoundedSylvesterGap
+    (hQspec : TauCeti.LinearPMap.realSpectrum
       (TauCeti.LinearPMap.reducingRestriction (TauCeti.LinearPMap.addBounded A Hop) Q hQred)
-      (TauCeti.LinearPMap.reducingRestriction (TauCeti.LinearPMap.addBounded A Hop) Qᗮ
-        hQred.orthogonal) delta)
+      ⊆ Set.Icc beta alpha)
     (hQperp : TauCeti.LinearPMap.realSpectrum
       (TauCeti.LinearPMap.reducingRestriction (TauCeti.LinearPMap.addBounded A Hop) Qᗮ
         hQred.orthogonal) ⊆ bandExterior beta alpha delta)
     (hPspec : TauCeti.LinearPMap.realSpectrum
       (TauCeti.LinearPMap.reducingRestriction A P hPred)
       ⊆ Set.Icc (beta - delta / 2) (alpha + delta / 2))
-    (hB0spec : TauCeti.LinearPMap.realSpectrum (TauCeti.LinearPMap.addBounded A Hop)
-      ⊆ Set.Icc beta alpha ∪ bandExterior beta alpha delta)
     (hcross : DavisKahan.CrossedDefectsEquivalent P Q)
     (hsmall : ‖Hop‖ < delta / 2) :
     TauCeti.DavisKahanExt.maximalAngle P Q < Real.pi / 4 := by
@@ -451,7 +457,7 @@ theorem theorem8_2_perturbationHalfGap_maximalAngle_lt_unbounded_complex
   show DavisKahan.subspaceGap P Q < Real.sqrt 2 / 2
   rw [DavisKahan.subspaceGap_eq_directedGap_of_crossedDefectsEquivalent P Q hcross]
   exact theorem8_2_perturbationHalfGap_unbounded_complex hA Hop hHop hdelta hab
-    hPred hQred hQgap hQperp hPspec hB0spec hsmall
+    hPred hQred hQspec hQperp hPspec hsmall
 
 end
 

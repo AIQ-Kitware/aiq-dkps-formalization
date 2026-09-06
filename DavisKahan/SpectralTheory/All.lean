@@ -25,6 +25,7 @@ import DavisKahan.SpectralTheory.GapResolvent
 import DavisKahan.SpectralTheory.GraphSubspace
 import DavisKahan.SpectralTheory.OperatorAngle
 import DavisKahan.SpectralTheory.OrderedHalfLine
+import DavisKahan.SpectralTheory.ReducingSpectrumUnion
 import DavisKahan.SpectralTheory.ReflectionRestriction
 import DavisKahan.SpectralTheory.ResolventOperator
 import DavisKahan.SpectralTheory.SelfAdjointBorelCalculus
