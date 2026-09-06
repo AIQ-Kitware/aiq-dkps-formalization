@@ -4,7 +4,7 @@
 
 **Census family:** `source-completion-census`  
 **Items:** 50  
-**Unique cited Lean declarations:** 1333
+**Unique cited Lean declarations:** 1336
 
 ## How to use this census
 
@@ -4342,6 +4342,9 @@ ROW WAS STALE; CORRECTED 2026-08-07 (Fable 5).  The requested 'exact source norm
 - `TauCeti.DavisKahan1970.Section8.theorem8_1_lowerCompressionRepulsion_real`
 - `TauCeti.DavisKahan.maximalAngle_le_pi_div_four_of_orderedFormGap_unbounded`
 - `TauCeti.DavisKahan.maximalAngle_le_pi_div_four_of_orderedFormGap_unbounded_printed`
+- `TauCeti.DavisKahan.reflectionProduct_form_nonneg_of_orderedFormGap_unbounded`
+- `TauCeti.DavisKahan.subspaceGap_le_of_orderedFormGap_unbounded`
+- `TauCeti.DavisKahan.subspaceGap_le_of_orderedFormGap_unbounded_printed`
 - `TauCeti.DavisKahan.subspaceGap_le_of_reflectionProduct_form_nonneg`
 - `TauCeti.DavisKahan.maximalAngle_le_pi_div_four_of_reflectionProduct_form_nonneg`
 - `TauCeti.DavisKahan.reflectionProduct_add_swap_eq`
