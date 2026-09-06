@@ -67,7 +67,7 @@ ambient scope.**
 self-adjoint `H` is fully off-diagonal for `U`, and `V` reduces `A + H`.  Both
 subspaces carry the printed ordered form gap with the same `a < b`.  Then the
 maximal principal angle between `U` and `V` is at most `π/4`. -/
-theorem maximalAngle_le_pi_div_four_of_orderedFormGap_unbounded
+theorem reflectionProduct_form_nonneg_of_orderedFormGap_unbounded
     (A : E →ₗ.[ℂ] E) (Hop : E →L[ℂ] E)
     (U V : Submodule ℂ E) [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
     {a b : ℝ}
@@ -86,7 +86,8 @@ theorem maximalAngle_le_pi_div_four_of_orderedFormGap_unbounded
         a * ‖(x : E)‖ ^ 2)
     (hHU : ∀ x ∈ U, Hop x ∈ Uᗮ) (hHUperp : ∀ x ∈ Uᗮ, Hop x ∈ U)
     (hab : a < b) :
-    TauCeti.DavisKahanExt.maximalAngle U V ≤ Real.pi / 4 := by
+    ∀ y : E, 0 ≤ RCLike.re ⟪(V.reflectionOperator * U.reflectionOperator
+      + U.reflectionOperator * V.reflectionOperator) y, y⟫_ℂ := by
   classical
   set Aop : E →ₗ.[ℂ] E := TauCeti.LinearPMap.addBounded A Hop with hAopdef
   set J : E →L[ℂ] E := U.reflectionOperator with hJdef
@@ -278,7 +279,6 @@ theorem maximalAngle_le_pi_div_four_of_orderedFormGap_unbounded
       nlinarith [h1, h2, sq_nonneg ‖G y‖, sq_nonneg ‖G (W y)‖, hδpos]
   have hXnonneg : (0 : E →L[ℂ] E) ≤ X :=
     TauCeti.ContinuousLinearMap.nonneg_of_lyapunov_nonneg hXsa hGnonneg hGinj hlyap
-  refine maximalAngle_le_pi_div_four_of_reflectionProduct_form_nonneg U V ?_
   intro y
   have hXeq : V.reflectionOperator * U.reflectionOperator
       + U.reflectionOperator * V.reflectionOperator = X := by
@@ -294,6 +294,108 @@ theorem maximalAngle_le_pi_div_four_of_orderedFormGap_unbounded
   have := (ContinuousLinearMap.nonneg_iff_isPositive X).mp hXnonneg
   have := this.2 y
   rwa [ContinuousLinearMap.reApplyInnerSelf_apply] at this
+
+/-- **Theorem 8.1's angle conclusion at unbounded scope.**  `Theta <= pi/4` for
+the pair carrying the ordered form gap. -/
+theorem maximalAngle_le_pi_div_four_of_orderedFormGap_unbounded
+    (A : E →ₗ.[ℂ] E) (Hop : E →L[ℂ] E)
+    (U V : Submodule ℂ E) [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
+    {a b : ℝ}
+    (hA : IsSelfAdjoint A) (hH : IsSelfAdjoint Hop)
+    (hred : TauCeti.LinearPMap.ReducesSubspace A U)
+    (hV : TauCeti.LinearPMap.ReducesSubspace (TauCeti.LinearPMap.addBounded A Hop) V)
+    (hUhigh : ∀ x : A.domain, (x : E) ∈ U →
+      b * ‖(x : E)‖ ^ 2 ≤ RCLike.re ⟪A x, (x : E)⟫_ℂ)
+    (hUperpLow : ∀ x : A.domain, (x : E) ∈ Uᗮ →
+      RCLike.re ⟪A x, (x : E)⟫_ℂ ≤ a * ‖(x : E)‖ ^ 2)
+    (hVhigh : ∀ x : (TauCeti.LinearPMap.addBounded A Hop).domain, (x : E) ∈ V →
+      b * ‖(x : E)‖ ^ 2 ≤
+        RCLike.re ⟪TauCeti.LinearPMap.addBounded A Hop x, (x : E)⟫_ℂ)
+    (hVperpLow : ∀ x : (TauCeti.LinearPMap.addBounded A Hop).domain, (x : E) ∈ Vᗮ →
+      RCLike.re ⟪TauCeti.LinearPMap.addBounded A Hop x, (x : E)⟫_ℂ ≤
+        a * ‖(x : E)‖ ^ 2)
+    (hHU : ∀ x ∈ U, Hop x ∈ Uᗮ) (hHUperp : ∀ x ∈ Uᗮ, Hop x ∈ U)
+    (hab : a < b) :
+    TauCeti.DavisKahanExt.maximalAngle U V ≤ Real.pi / 4 :=
+  maximalAngle_le_pi_div_four_of_reflectionProduct_form_nonneg U V
+    (reflectionProduct_form_nonneg_of_orderedFormGap_unbounded A Hop U V hA hH hred hV
+      hUhigh hUperpLow hVhigh hVperpLow hHU hHUperp hab)
+
+/-- **Theorem 8.1's projector-gap conclusion at unbounded scope**, the same
+statement before `arcsin`.  This is the shape Theorem 8.2's bootstrap comparison
+consumes. -/
+theorem subspaceGap_le_of_orderedFormGap_unbounded
+    (A : E →ₗ.[ℂ] E) (Hop : E →L[ℂ] E)
+    (U V : Submodule ℂ E) [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
+    {a b : ℝ}
+    (hA : IsSelfAdjoint A) (hH : IsSelfAdjoint Hop)
+    (hred : TauCeti.LinearPMap.ReducesSubspace A U)
+    (hV : TauCeti.LinearPMap.ReducesSubspace (TauCeti.LinearPMap.addBounded A Hop) V)
+    (hUhigh : ∀ x : A.domain, (x : E) ∈ U →
+      b * ‖(x : E)‖ ^ 2 ≤ RCLike.re ⟪A x, (x : E)⟫_ℂ)
+    (hUperpLow : ∀ x : A.domain, (x : E) ∈ Uᗮ →
+      RCLike.re ⟪A x, (x : E)⟫_ℂ ≤ a * ‖(x : E)‖ ^ 2)
+    (hVhigh : ∀ x : (TauCeti.LinearPMap.addBounded A Hop).domain, (x : E) ∈ V →
+      b * ‖(x : E)‖ ^ 2 ≤
+        RCLike.re ⟪TauCeti.LinearPMap.addBounded A Hop x, (x : E)⟫_ℂ)
+    (hVperpLow : ∀ x : (TauCeti.LinearPMap.addBounded A Hop).domain, (x : E) ∈ Vᗮ →
+      RCLike.re ⟪TauCeti.LinearPMap.addBounded A Hop x, (x : E)⟫_ℂ ≤
+        a * ‖(x : E)‖ ^ 2)
+    (hHU : ∀ x ∈ U, Hop x ∈ Uᗮ) (hHUperp : ∀ x ∈ Uᗮ, Hop x ∈ U)
+    (hab : a < b) :
+    subspaceGap U V ≤ Real.sqrt 2 / 2 :=
+  subspaceGap_le_of_reflectionProduct_form_nonneg U V
+    (reflectionProduct_form_nonneg_of_orderedFormGap_unbounded A Hop U V hA hH hred hV
+      hUhigh hUperpLow hVhigh hVperpLow hHU hHUperp hab)
+
+/-- **Theorem 8.1's projector-gap conclusion in the paper's own orientation, at
+unbounded scope.**  The angle form below, before `arcsin`; this is what Theorem
+8.2's bootstrap comparison consumes. -/
+theorem subspaceGap_le_of_orderedFormGap_unbounded_printed
+    (A : E →ₗ.[ℂ] E) (Hop : E →L[ℂ] E)
+    (P Q : Submodule ℂ E) [P.HasOrthogonalProjection] [Q.HasOrthogonalProjection]
+    {alpha delta : ℝ}
+    (hA : IsSelfAdjoint A) (hH : IsSelfAdjoint Hop)
+    (hredP : TauCeti.LinearPMap.ReducesSubspace A Pᗮ)
+    (hQ : TauCeti.LinearPMap.ReducesSubspace (TauCeti.LinearPMap.addBounded A Hop) Qᗮ)
+    (hPlow : ∀ x : A.domain, (x : E) ∈ P →
+      RCLike.re ⟪A x, (x : E)⟫_ℂ ≤ alpha * ‖(x : E)‖ ^ 2)
+    (hPhigh : ∀ x : A.domain, (x : E) ∈ Pᗮ →
+      (alpha + delta) * ‖(x : E)‖ ^ 2 ≤ RCLike.re ⟪A x, (x : E)⟫_ℂ)
+    (hQlow : ∀ x : (TauCeti.LinearPMap.addBounded A Hop).domain, (x : E) ∈ Q →
+      RCLike.re ⟪TauCeti.LinearPMap.addBounded A Hop x, (x : E)⟫_ℂ ≤
+        alpha * ‖(x : E)‖ ^ 2)
+    (hQhigh : ∀ x : (TauCeti.LinearPMap.addBounded A Hop).domain, (x : E) ∈ Qᗮ →
+      (alpha + delta) * ‖(x : E)‖ ^ 2 ≤
+        RCLike.re ⟪TauCeti.LinearPMap.addBounded A Hop x, (x : E)⟫_ℂ)
+    (hHP : ∀ x ∈ P, Hop x ∈ Pᗮ) (hHPperp : ∀ x ∈ Pᗮ, Hop x ∈ P)
+    (hdelta : 0 < delta) :
+    subspaceGap P Q ≤ Real.sqrt 2 / 2 := by
+  have hPperpperp : (Pᗮ)ᗮ = P := Submodule.orthogonal_orthogonal P
+  have hQperpperp : (Qᗮ)ᗮ = Q := Submodule.orthogonal_orthogonal Q
+  have hcompl := subspaceGap_le_of_orderedFormGap_unbounded A Hop Pᗮ Qᗮ
+    (a := alpha) (b := alpha + delta) hA hH hredP hQ
+    hPhigh (by
+      intro x hx
+      rw [hPperpperp] at hx
+      exact hPlow x hx)
+    hQhigh (by
+      intro x hx
+      rw [hQperpperp] at hx
+      exact hQlow x hx)
+    (by
+      intro x hx
+      rw [hPperpperp]
+      exact hHPperp x hx)
+    (by
+      intro x hx
+      rw [hPperpperp] at hx
+      exact hHP x hx)
+    (by linarith)
+  have hgap : subspaceGap Pᗮ Qᗮ = subspaceGap P Q :=
+    TauCeti.DavisKahan.subspaceGap_orthogonal P Q
+  rw [← hgap]
+  exact hcompl
 
 /-- **Theorem 8.1's angle conclusion in the paper's own orientation, at unbounded
 scope.**
