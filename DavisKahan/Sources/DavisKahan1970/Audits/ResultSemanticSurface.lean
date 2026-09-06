@@ -731,6 +731,13 @@ Status: **TERMINAL EXACT**.
 
 #check @TauCeti.DavisKahan1970.lemma6_1
 #check @TauCeti.DavisKahan1970.lemma6_1_converse
+#check @TauCeti.DavisKahan1970.lemma6_2_sourceExact
+#check @TauCeti.DavisKahan1970.lemma6_1_sourceExact_complex
+#check @TauCeti.DavisKahan1970.lemma6_1_sourceExact_real
+#check @TauCeti.DavisKahan1970.lemma6_1_converse_sourceExact_complex
+#check @TauCeti.DavisKahan1970.lemma6_1_converse_sourceExact_real
+#check @TauCeti.DavisKahan1970.lemma6_1_sourceExact
+#check @TauCeti.DavisKahan1970.lemma6_1_converse_sourceExact
 
 /-! ## DK-6.2-lem: Reflection-pinch contraction
 

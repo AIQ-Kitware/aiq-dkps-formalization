@@ -4,7 +4,7 @@
 
 **Census family:** `source-completion-census`  
 **Items:** 50  
-**Unique cited Lean declarations:** 1314
+**Unique cited Lean declarations:** 1321
 
 ## How to use this census
 
@@ -3484,6 +3484,12 @@ SOURCE-EXACT FAÇADE REGISTERED 2026-09-05. Canonical evidence is now the printe
 
 - `TauCeti.DavisKahan1970.lemma6_1`
 - `TauCeti.DavisKahan1970.lemma6_1_converse`
+- `TauCeti.DavisKahan1970.lemma6_1_sourceExact_complex`
+- `TauCeti.DavisKahan1970.lemma6_1_sourceExact_real`
+- `TauCeti.DavisKahan1970.lemma6_1_converse_sourceExact_complex`
+- `TauCeti.DavisKahan1970.lemma6_1_converse_sourceExact_real`
+- `TauCeti.DavisKahan1970.lemma6_1_sourceExact`
+- `TauCeti.DavisKahan1970.lemma6_1_converse_sourceExact`
 
 **Notes.** Both directions are proved; the converse should be added to the exact audit manifest.
 
@@ -3507,6 +3513,9 @@ with no finite-dimensionality hypothesis.  `HasMinMaxLowerBoundEverywhere` has i
 **Lean declarations:**
 
 - `TauCeti.DavisKahan1970.lemma6_2`
+- `TauCeti.DavisKahan1970.lemma6_2_sourceExact`
+- `TauCeti.DavisKahan1970.lemma6_1_sourceExact`
+- `TauCeti.DavisKahan1970.lemma6_1_converse_sourceExact`
 
 **Notes.** Part of the clean Section 6 surface.
 
