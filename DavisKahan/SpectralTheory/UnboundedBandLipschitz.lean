@@ -185,6 +185,82 @@ theorem abs_directedGap_sub_directedGap_le
   rw [abs_sub_le_iff]
   exact ⟨hsub, by linarith [hsub']⟩
 
+/-! ## The endpoints, from the `sin Θ` estimate at zero perturbation
+
+The two endpoint inclusions the bootstrap needs are the *same* estimate with
+`K = 0`.  Two reducing subspaces of one self-adjoint partial map, one carrying
+band spectrum and the other's complement carrying exterior spectrum, are already
+a `FormBoundedSylvesterGap` configuration, so the directed gap between them is at
+most `‖0‖ / d`, hence zero.
+
+This is why the commutation of `specProjection` with the projection onto a
+reducing subspace -- which an earlier plan named as the missing prerequisite --
+is not needed: the uniqueness of the spectral splitting is delivered by the
+`sin Θ` theorem itself. -/
+
+/-- Adding the zero perturbation changes nothing. -/
+theorem addBounded_zero (A : H →ₗ.[ℂ] H) :
+    TauCeti.LinearPMap.addBounded A (0 : H →L[ℂ] H) = A := by
+  refine LinearPMap.ext rfl ?_
+  intro x y hxy
+  simp only [TauCeti.LinearPMap.addBounded_apply, ContinuousLinearMap.zero_apply, add_zero]
+  rfl
+
+/-- A vanishing directed gap is a subspace inclusion. -/
+theorem le_of_directedGap_eq_zero (U V : Submodule ℂ H)
+    [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
+    (h : DavisKahan.directedGap U V = 0) : U ≤ V := by
+  intro u hu
+  have h0 : Vᗮ.starProjection ((U.starProjection) u) = 0 := by
+    have hle : ‖(Vᗮ.starProjection ∘L U.starProjection) u‖ ≤
+        ‖Vᗮ.starProjection ∘L U.starProjection‖ * ‖u‖ :=
+      ContinuousLinearMap.le_opNorm _ _
+    have hz : ‖Vᗮ.starProjection ∘L U.starProjection‖ = 0 := h
+    rw [hz, zero_mul] at hle
+    simpa using norm_le_zero_iff.mp hle
+  rw [Submodule.starProjection_eq_self_iff.mpr hu] at h0
+  rw [Submodule.starProjection_orthogonal_apply, sub_eq_zero] at h0
+  exact h0 ▸ V.starProjection_apply_mem u
+
+/-- **Band spectrum and exterior spectrum on one operator force an inclusion.**
+
+`P` reduces `A` with band spectrum, `W` reduces `A` with exterior spectrum on its
+complement; then `P ≤ W`.  The proof is the unbounded `sin Θ` theorem at zero
+perturbation.
+
+`B` and `hAB` are the standard device for feeding `A` to a theorem stated about
+`addBounded A K`: a caller passes `B := A` and `(addBounded_zero A).symm`, and
+`subst` puts the goal in the shape the estimate consumes. -/
+theorem le_of_band_exterior_spectra
+    {A B : H →ₗ.[ℂ] H} (hA : IsSelfAdjoint A)
+    (hAB : B = TauCeti.LinearPMap.addBounded A (0 : H →L[ℂ] H))
+    {P W : Submodule ℂ H} [P.HasOrthogonalProjection] [W.HasOrthogonalProjection]
+    (hPred : TauCeti.LinearPMap.ReducesSubspace A P)
+    (hWred : TauCeti.LinearPMap.ReducesSubspace B W)
+    {l r d : ℝ} (hlr : l ≤ r) (hd : 0 < d)
+    (hPspec : TauCeti.LinearPMap.realSpectrum
+      (TauCeti.LinearPMap.reducingRestriction A P hPred) ⊆ Set.Icc l r)
+    (hWspec : TauCeti.LinearPMap.realSpectrum
+      (TauCeti.LinearPMap.reducingRestriction B Wᗮ hWred.orthogonal)
+      ⊆ bandExterior l r d) :
+    P ≤ W := by
+  subst hAB
+  have hzero : DavisKahan.IsSelfAdjointOperator (0 : H →L[ℂ] H) := by
+    intro x y
+    simp
+  have hgap : TauCeti.DavisKahan.Sylvester.FormBoundedSylvesterGap
+      (TauCeti.LinearPMap.reducingRestriction A P hPred)
+      (TauCeti.LinearPMap.reducingRestriction
+        (TauCeti.LinearPMap.addBounded A (0 : H →L[ℂ] H)) Wᗮ hWred.orthogonal) d :=
+    .intervalExterior hlr (Or.inl ⟨hPspec, hWspec⟩)
+  have hle := TauCeti.DavisKahan1970.Section8.directedGap_le_of_reducingGap_unbounded_complex
+    hA (0 : H →L[ℂ] H) hzero hPred hWred hd hgap
+  rw [norm_zero] at hle
+  have hnn : (0 : ℝ) ≤ DavisKahan.directedGap P W :=
+    norm_nonneg (Wᗮ.starProjection ∘L P.starProjection)
+  refine le_of_directedGap_eq_zero P W (le_antisymm ?_ hnn)
+  nlinarith [hle, hd, hnn]
+
 end
 
 end DavisKahan

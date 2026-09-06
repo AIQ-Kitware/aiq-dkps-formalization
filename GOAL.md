@@ -751,17 +751,23 @@ stays the *fixed printed gap at `Q`* rather than shrinking with `t`.  That gives
 step gives `f t < √2/2` for every `t`, and `P ≤ R₁` turns `f 1` into
 `directedGap P Q`.
 
-Two identifications are what is left, and both are the same argument:
+**The endpoint inclusions are done, 2026-09-05, and needed no new spectral API.**
+An earlier note here named the commutation of `specProjection` with the
+projection onto a reducing subspace as the missing prerequisite.  It is not
+needed: two reducing subspaces of *one* self-adjoint partial map, one carrying
+band spectrum and the other's complement carrying exterior spectrum, are already
+a `FormBoundedSylvesterGap` configuration, so the `sin Θ` estimate at `K = 0`
+gives `d · directedGap ≤ ‖0‖`, hence `0`.  The uniqueness of the spectral
+splitting is delivered by the `sin Θ` theorem itself.
+`le_of_band_exterior_spectra` in `UnboundedBandLipschitz.lean` is that argument,
+with `le_of_directedGap_eq_zero` and `addBounded_zero` beside it.
 
-* `R₀ ≤ Q`.  `Q` is only *assumed* to reduce `B₀` with spectrum in `[β, α]` on
-  `Q` and in the exterior on `Qᗮ`; that determines it, so `Q` is the spectral
-  range `specRange hB₀ (Icc β α)`, and `[β, α] ⊆ [l, r]` gives the inclusion.
-  The step that needs API is the uniqueness: a vector of `R₀` splits along `Q`,
-  its `Qᗮ` part has spectrum in the exterior and therefore no spectral mass on
-  `[l, r]`, so it vanishes.  What that needs is the commutation of
-  `specProjection` with `P_Q` for a reducing `Q`.
-* `P ≤ R₁`, the same argument at `t = 1` with the printed containment
-  `spec(A₀) ⊆ [β − δ/2, α + δ/2] ⊆ [l, r]`.
+It applies to both endpoints:
+
+* `R₀ ≤ Q`, since `Qᗮ` carries exterior spectrum and `R₀` band spectrum;
+* `P ≤ R₁`, since the printed `spec(A₀) ⊆ [β − δ/2, α + δ/2]` meets the exterior
+  `{x ≤ β − δ + γ} ∪ {x ≥ α + δ − γ}` nowhere when `γ < δ/2`, so `spec(A₀)` lies
+  in `[l, r]` automatically.
 
 No variable root, no clopen family indexed by `κ_t`, no Riesz projector.  This
 closes the **full** printed range `‖H‖ < δ/2`, not the `(√2/4)δ` sub-range the
@@ -1185,9 +1191,9 @@ Theorem 3.1 invariant:
 2. the spectral-stability lemma for the path — **done**;
 3. `R_t := specRange B_t (Icc l r)` with its band and exterior spectra — **done**;
 4. the two-direction `sin Θ` Lipschitz estimate for `R_s`, `R_t` — **done**;
-5. the bounded proof's constant-`√2/2` IVT bootstrap, whose remaining
-   prerequisite is the commutation of `specProjection` with the projection onto a
-   reducing subspace, which gives both endpoint inclusions;
+5. the bounded proof's constant-`√2/2` IVT bootstrap; its endpoint inclusions are
+   done (`le_of_band_exterior_spectra`), so what is left is the moving family,
+   the continuity of `t ↦ directedGap R_t Q`, and the connectedness step;
 6. the complex perturbation source theorem;
 7. the residual branch, by the self-adjoint-completion reduction the bounded
    proof already uses.  Its public type must carry `‖R‖ < δ/2` and must **not**
