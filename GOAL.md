@@ -1489,20 +1489,86 @@ literal reading and a proper generalization under the accepted bounded one, so n
 reviewer decision about what "the hypotheses of the tan 2θ theorem" imports
 changes what the repository has.
 
-The remaining call is a human one: whether to make the §XVIII claim.
+The §XVIII claim is therefore made, in §XVIII, with its refutation row and its
+accepted interpretation classifications stated alongside it rather than folded
+into it.
 
 ---
 
 # XVIII. Final public claim
 
-When the conditions above are satisfied, the repository may claim;
+## Made, 2026-09-06
+
+The conditions of §XVII.1 are satisfied, and a trusted-dependency audit was run
+for this section specifically: all **84** canonical witnesses across the 29
+counted results depend on exactly `propext`, `Classical.choice` and `Quot.sound`,
+with no `sorryAx` anywhere; `lake build` is green on every default target;
+`lake build Challenge` is green; `check_declaration_name_drift.py` reports 0
+findings over 17 comparator configs and 13381 declarations; and
+`check_comparator_signatures.py` reports every compared theorem matching on
+universe signature and full type.  The claim is therefore made:
 
 > **The designated Davis–Kahan 1970 results have been formally resolved in Lean at the mathematical scope of their original statements, including the applicable real and complex, separable-Hilbert-space, unbounded-operator, and arbitrary normalized unitary-invariant norm scope. Stronger generalizations are recorded separately and are not used to conceal missing source-exact evidence.**
 
-If the designated inventory contains a source or transcription assertion that is formally refuted rather than proved, state that separately and do not collapse it into the phrase “all theorems proved.”
+### What "resolved" covers, exactly
 
-Supplemental sharpness, examples, asymptotics, extensions, and stronger APIs may be described separately.
+Twenty-eight of the twenty-nine counted results are `proved_exact`.  The
+twenty-ninth is **not**, and §XVIII requires it to be stated separately rather
+than collapsed into "all theorems proved":
 
-The formalization claim is about **the Davis–Kahan results themselves**.
+* **`DK-4.4-prop` (Proposition 4.4) is `refuted_as_transcribed`.**  Its printed
+  statement is FALSE, and the repository's canonical evidence for the row is a
+  machine-checked refutation satisfying the printed hypotheses,
+  `proposition4_4_refuted` — not a proof.  The separate repair obligation is
+  discharged: `directRotation_fullDisplacement_qnorm` proves the strongest
+  natural corrected theorem, the `Q`-norm form.
 
-That is the finish line.
+### The qualifications that travel with the claim
+
+These are not caveats added after the fact; each is an accepted classification
+already carried by the inventory, and a reader of the certificate sees them.
+
+1. **Seven rows are accepted as `paper_faithful_nonlocal_source_interpretation`,
+   not as locally exact statements**: `S2-tan-theta`, `DK-4.1-cor`,
+   `DK-4.2-prop`, `DK-4.3-prop`, `DK-4.4-prop`, `DK-8.1-thm`, `DK-8.2-thm`.
+   Their printed statements are not self-contained — Theorem 8.1 states no
+   hypotheses of its own, Theorem 8.2 states its own only as an addition, and the
+   Section 4 rows and the `tan Θ` theorem lean on standing conventions — so the
+   Lean statement necessarily makes something explicit that the page leaves
+   implicit.  The record states both readings for each and says which one was
+   accepted, so a reviewer can disagree with a specific argument rather than with
+   silence.
+2. **The operator-scope half of that question is moot as of 2026-09-06.**  Both
+   Section 8 rows are delivered at unbounded self-adjoint ambient scope with
+   bounded `H`, in complex and real scalar scope, so the evidence is exact under
+   the alternative literal reading and a proper generalization under the accepted
+   bounded one.
+3. **Parts (ii) and (iii) of Theorem 8.1 are finite-dimensional because the
+   source prints them so** — "in finite dimensions" — not because the repository
+   narrowed them.  Part (ii)'s promised "natural infinite-dimensional extensions"
+   are discharged by the dimension-free approximation-number form.
+4. **The certificate proves compilation, declaration resolution and pin
+   stability.**  It does not prove that a Lean statement says what the paper
+   says.  That is the hostile semantic review's job, which is why
+   `semantic_review_sweep.canonical_evidence_sha256` gates the review against the
+   canonical selection and goes stale the moment the selection moves.
+5. **Non-result source material is accounted for, never proved.**  The 275 source
+   atoms carry roles, reason codes and result links; sharpness commentary, proof
+   equations, worked numerical steps, examples and the Section 10 open questions
+   are classified, not formalized.  The claim above is about the Davis–Kahan
+   *results*.
+
+Supplemental sharpness, examples, asymptotics, extensions, and stronger APIs are
+described separately and are not part of this claim.
+
+### Reproducing it
+
+```bash
+lake build                                            # every default target
+python3 scripts/certify_davis_kahan_1970.py --clean    # PASS, 29/29 terminal
+aiq-lean gates run --config dev/policy/gate-suite.yaml
+```
+
+The certificate bundle and the reviewer packet are written to
+`build/davis-kahan-1970-certificate/`; the standing re-audit prompt is
+`dev/davis-kahan-1970-independent-audit-prompt.md`.
