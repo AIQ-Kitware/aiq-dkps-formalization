@@ -1,5 +1,7 @@
 SHELL := /bin/bash
-.PHONY: all sources paper public clean check-prose check-publication-activity
+.PHONY: all sources paper public clean check-prose check-publication-activity \
+	survey-publication-activity check-publication-survey \
+	self-test-publication-survey
 
 all: paper
 
@@ -35,6 +37,15 @@ check-prose:
 
 check-publication-activity:
 	python3 scripts/check_lean_publication_activity.py
+
+survey-publication-activity:
+	python3 scripts/refresh_lean_publication_activity.py survey
+
+check-publication-survey:
+	python3 scripts/refresh_lean_publication_activity.py survey --require-alignment
+
+self-test-publication-survey:
+	python3 scripts/refresh_lean_publication_activity.py self-test
 
 clean:
 	latexmk -C paper.tex || true
