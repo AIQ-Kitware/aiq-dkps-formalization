@@ -13,6 +13,7 @@ import DavisKahan.Sources.DavisKahan1970.Section8.Theorem81
 import DavisKahan.Sources.DavisKahan1970.Section8.Theorem81AngleForms
 import DavisKahan.Sources.DavisKahan1970.Section8.Theorem81Approximation
 import DavisKahan.Sources.DavisKahan1970.Section8.Theorem81ApproximationReal
+import DavisKahan.Sources.DavisKahan1970.Section8.Theorem81EigenvalueSource
 import DavisKahan.Sources.DavisKahan1970.Section8.Theorem81Majorization
 import DavisKahan.Sources.DavisKahan1970.Section8.Theorem81MajorizationReal
 import DavisKahan.Sources.DavisKahan1970.Section8.Theorem81Real

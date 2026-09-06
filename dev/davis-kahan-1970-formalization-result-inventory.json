@@ -2176,7 +2176,8 @@
       "verification": "proved_in_build",
       "semantic_certification": "accepted",
       "lean_declarations": [
-        "TauCeti.DavisKahan1970.proposition3_1"
+        "TauCeti.DavisKahan1970.proposition3_1",
+        "TauCeti.DavisKahan1970.proposition3_1_separable"
       ],
       "review_note": "Accepted result-only semantic review 2026-08-12. The exact generic RCLike wrapper `proposition3_1` uses the paper's printed `TauCeti.IsAcute` hypothesis, works in arbitrary dimension over real or complex Hilbert spaces, proves the Definition 3.1 crossed-block identity for the canonical direct rotation, and states that positivity of the two diagonal blocks alone characterizes it among unitary intertwiners. It assumes neither `IsUniformlyAcute`, equation (3.8), nor standing dimension assumption (1.5).",
       "parent_claim_id": "DK-3.1-prop",
@@ -2197,7 +2198,7 @@
       "local_statement_self_contained": true,
       "canonical_evidence": [
         {
-          "declaration": "TauCeti.DavisKahan1970.proposition3_1",
+          "declaration": "TauCeti.DavisKahan1970.proposition3_1_separable",
           "role": "primary_source_witness",
           "scalar_scope": "rclike",
           "evidence_kind": "proof",
@@ -2209,7 +2210,13 @@
           "capability_classes": []
         }
       ],
-      "supporting_evidence": [],
+      "supporting_evidence": [
+        {
+          "declaration": "TauCeti.DavisKahan1970.proposition3_1",
+          "role": "generalization",
+          "note": "The arbitrary-Hilbert theorem underneath the separable source façade.  It is strictly stronger than the paper's statement, and was the canonical evidence until 2026-09-06, when the separability sweep made the printed-scope wrapper canonical."
+        }
+      ],
       "result_wide_scope_atoms": [],
       "source_clauses": [
         {
@@ -2221,12 +2228,12 @@
           ],
           "scalar_scope": "rclike",
           "evidence": {
-            "primary": "TauCeti.DavisKahan1970.proposition3_1",
+            "primary": "TauCeti.DavisKahan1970.proposition3_1_separable",
             "correspondence": []
           },
           "status": "established",
           "evidence_kind": "proof",
-          "justification": "Canonical witness for existence, uniqueness, positive-diagonal-characterization at rclike scalar scope, carried over from the pre-clause canonical evidence and re-checked against its compiler-printed type under the coherent model."
+          "justification": "Canonical witness at the paper's separable ambient scope, which is Section 1's setting: \"Let H be a separable Hilbert space, real or complex; finite dimensionality is not assumed.\"  The arbitrary-Hilbert theorem it wraps is strictly stronger and is retained as the generalization it is; the wrapper adds the ambient hypothesis and nothing else."
         }
       ]
     },
@@ -2258,7 +2265,9 @@
         "TauCeti.exists_countable_hilbertBasis",
         "TauCeti.finiteDimensional_of_finite_hilbertBasis",
         "TauCeti.lpIndexCongr",
-        "TauCeti.countable_of_orthonormal"
+        "TauCeti.countable_of_orthonormal",
+        "TauCeti.DavisKahan1970.proposition3_2_not_unique_separable",
+        "TauCeti.DavisKahan1970.proposition3_2_exists_iff_crossedDefectsEquivalent_separable"
       ],
       "review_note": "Accepted result-only semantic review 2026-08-12. The generic Section 3 source surface states existence of a paper direct rotation iff the two crossed defect spaces are equivalent and separately proves nonuniqueness whenever the pair is nonacute. The explicit real aliases expose the same two printed clauses over `ℝ`; the generic theorem covers `ℂ` and arbitrary Hilbert dimension. The crossing-subspace square identity and bilateral-shift example are adjacent source material and are not part of the counted Proposition 3.2 boundary.\n\n**REOPENED 2026-09-04 (Claude Opus 5, on hostile review).**  The source condition (3.5) is equality of the Hilbert dimensions of the two crossed defect spaces; Lean uses `CrossedDefectsEquivalent`, the existence of a linear isometric equivalence.  These agree, but only the finite-dimensional half is proved (`crossedDefectsEquivalent_iff_finrank_eq`); the infinite-dimensional half has been carried as a representation convention.  Measured against the pinned Mathlib, closing it needs one missing lemma -- an orthonormal family in a separable space is countable -- after which `HilbertBasis.repr` and an index equivalence give the separable classification.  Until that exists this row, and every later row whose exact correspondence rests on (3.5), inherits an unproved reading of a printed hypothesis.\n\n**CLOSED 2026-09-04 (Claude Opus 5).**  The infinite-dimensional reading of (3.5) is no longer a representation convention.  `crossedDefectsEquivalent_iff_sameDimension` proves, at the paper's separable scope, that `CrossedDefectsEquivalent U V` holds exactly when the two crossed defect spaces have the same Hilbert dimension, spelled without cardinals as `CrossedDefectsSameDimension`: both finite-dimensional with equal `finrank`, or both infinite-dimensional.  The finite branch is the existing `crossedDefectsEquivalent_iff_finrank_eq`; the infinite branch is the separable classification built for this, whose chain is `countable_of_orthonormal` -> `exists_countable_hilbertBasis` -> `lpIndexCongr` -> `nonempty_linearIsometryEquiv_of_hilbertBasis` -> `nonempty_linearIsometryEquiv_of_separable_of_infiniteDimensional`, with `finiteDimensional_of_finite_hilbertBasis` supplying the dichotomy.  `lpIndexCongr` -- an equivalence of index sets induces an isometry of the `l^2` models -- and the countability of an orthonormal set in a separable space are both absent from the pinned Mathlib and are new `ForTauCeti` mathematics.",
       "parent_claim_id": "DK-3.2-prop",
@@ -2283,7 +2292,7 @@
       "local_statement_self_contained": true,
       "canonical_evidence": [
         {
-          "declaration": "TauCeti.DavisKahan1970.proposition3_2_exists_iff_crossedDefectsEquivalent",
+          "declaration": "TauCeti.DavisKahan1970.proposition3_2_exists_iff_crossedDefectsEquivalent_separable",
           "role": "primary_source_witness",
           "scalar_scope": "rclike",
           "evidence_kind": "proof",
@@ -2294,7 +2303,7 @@
           "capability_classes": []
         },
         {
-          "declaration": "TauCeti.DavisKahan1970.proposition3_2_not_unique",
+          "declaration": "TauCeti.DavisKahan1970.proposition3_2_not_unique_separable",
           "role": "primary_source_witness",
           "scalar_scope": "rclike",
           "evidence_kind": "proof",
@@ -2356,6 +2365,16 @@
         {
           "declaration": "TauCeti.countable_of_orthonormal",
           "role": "source_correspondence"
+        },
+        {
+          "declaration": "TauCeti.DavisKahan1970.proposition3_2_exists_iff_crossedDefectsEquivalent",
+          "role": "generalization",
+          "note": "The arbitrary-Hilbert theorem underneath the separable source façade.  It is strictly stronger than the paper's statement, and was the canonical evidence until 2026-09-06, when the separability sweep made the printed-scope wrapper canonical."
+        },
+        {
+          "declaration": "TauCeti.DavisKahan1970.proposition3_2_not_unique",
+          "role": "generalization",
+          "note": "The arbitrary-Hilbert theorem underneath the separable source façade.  It is strictly stronger than the paper's statement, and was the canonical evidence until 2026-09-06, when the separability sweep made the printed-scope wrapper canonical."
         }
       ],
       "result_wide_scope_atoms": [
@@ -2369,12 +2388,12 @@
           ],
           "scalar_scope": "rclike",
           "evidence": {
-            "primary": "TauCeti.DavisKahan1970.proposition3_2_exists_iff_crossedDefectsEquivalent",
+            "primary": "TauCeti.DavisKahan1970.proposition3_2_exists_iff_crossedDefectsEquivalent_separable",
             "correspondence": []
           },
           "status": "established",
           "evidence_kind": "proof",
-          "justification": "Canonical witness for existence-iff-crossing-dimensions at rclike scalar scope, carried over from the pre-clause canonical evidence and re-checked against its compiler-printed type under the coherent model."
+          "justification": "Canonical witness at the paper's separable ambient scope, which is Section 1's setting: \"Let H be a separable Hilbert space, real or complex; finite dimensionality is not assumed.\"  The arbitrary-Hilbert theorem it wraps is strictly stronger and is retained as the generalization it is; the wrapper adds the ambient hypothesis and nothing else."
         },
         {
           "id": "nonuniqueness.rclike",
@@ -2383,12 +2402,12 @@
           ],
           "scalar_scope": "rclike",
           "evidence": {
-            "primary": "TauCeti.DavisKahan1970.proposition3_2_not_unique",
+            "primary": "TauCeti.DavisKahan1970.proposition3_2_not_unique_separable",
             "correspondence": []
           },
           "status": "established",
           "evidence_kind": "proof",
-          "justification": "Canonical witness for nonuniqueness at rclike scalar scope, carried over from the pre-clause canonical evidence and re-checked against its compiler-printed type under the coherent model."
+          "justification": "Canonical witness at the paper's separable ambient scope, which is Section 1's setting: \"Let H be a separable Hilbert space, real or complex; finite dimensionality is not assumed.\"  The arbitrary-Hilbert theorem it wraps is strictly stronger and is retained as the generalization it is; the wrapper adds the ambient hypothesis and nothing else."
         }
       ],
       "semantic_certification_note": "Reviewer decision made 2026-09-02 and witnessed rather than asserted. The paper states (3.5) as equality of the Hilbert dimensions of the crossed defect spaces; this repository represents it constructively as `CrossedDefectsEquivalent`, a linear isometric equivalence between them. `crossedDefectsEquivalent_iff_finrank_eq` proves the two are the same condition in finite dimension. The rule for the general case is stated: dimension equality of Hilbert spaces IS the existence of an isometry between them, and the constructive form is required rather than convenient, because Proposition 3.2 must BUILD a direct rotation from the condition, which an equality of cardinals cannot supply. The same rule is what the tan 2Theta block representation is being held to -- there the objects are genuinely different and the correspondence is owed."
@@ -2410,7 +2429,11 @@
         "TauCeti.DavisKahan1970.proposition3_3_complex_forward",
         "TauCeti.DavisKahan1970.proposition3_3_complex_converse",
         "TauCeti.DavisKahan1970.proposition3_3_real_forward",
-        "TauCeti.DavisKahan1970.proposition3_3_real_converse"
+        "TauCeti.DavisKahan1970.proposition3_3_real_converse",
+        "TauCeti.DavisKahan1970.proposition3_3_real_forward_separable",
+        "TauCeti.DavisKahan1970.proposition3_3_real_converse_separable",
+        "TauCeti.DavisKahan1970.proposition3_3_complex_converse_separable",
+        "TauCeti.DavisKahan1970.proposition3_3_complex_forward_separable"
       ],
       "review_note": "Accepted result-only semantic review 2026-08-12. The full nonacute complex forward/converse characterization was already proved in `DavisKahan.Frontier.Section3`. The source-facing complex wrappers expose exactly those printed clauses. The real forward/converse wrappers transport the same arbitrary-dimensional nonacute statement through canonical real complexification: the principal branch is defined by the spectrum of the complexification, crossed-defect transport is coordinatewise, and unitarity/intertwining/positive diagonal blocks/crossed blocks descend through the established complexification API. No `IsUniformlyAcute`, finite-dimensional, separability, compactness, or extra branch hypothesis is added. Equations (3.6)--(3.8) and reflection conjugacy remain adjacent fidelity/proof material outside the counted proposition boundary.",
       "parent_claim_id": "DK-3.3-prop",
@@ -2435,7 +2458,7 @@
       "local_statement_self_contained": true,
       "canonical_evidence": [
         {
-          "declaration": "TauCeti.DavisKahan1970.proposition3_3_complex_forward",
+          "declaration": "TauCeti.DavisKahan1970.proposition3_3_complex_forward_separable",
           "role": "primary_source_witness",
           "scalar_scope": "complex",
           "evidence_kind": "proof",
@@ -2445,7 +2468,7 @@
           "capability_classes": []
         },
         {
-          "declaration": "TauCeti.DavisKahan1970.proposition3_3_complex_converse",
+          "declaration": "TauCeti.DavisKahan1970.proposition3_3_complex_converse_separable",
           "role": "primary_source_witness",
           "scalar_scope": "complex",
           "evidence_kind": "proof",
@@ -2455,7 +2478,7 @@
           "capability_classes": []
         },
         {
-          "declaration": "TauCeti.DavisKahan1970.proposition3_3_real_forward",
+          "declaration": "TauCeti.DavisKahan1970.proposition3_3_real_forward_separable",
           "role": "primary_source_witness",
           "scalar_scope": "real",
           "evidence_kind": "proof",
@@ -2465,7 +2488,7 @@
           "capability_classes": []
         },
         {
-          "declaration": "TauCeti.DavisKahan1970.proposition3_3_real_converse",
+          "declaration": "TauCeti.DavisKahan1970.proposition3_3_real_converse_separable",
           "role": "primary_source_witness",
           "scalar_scope": "real",
           "evidence_kind": "proof",
@@ -2475,7 +2498,28 @@
           "capability_classes": []
         }
       ],
-      "supporting_evidence": [],
+      "supporting_evidence": [
+        {
+          "declaration": "TauCeti.DavisKahan1970.proposition3_3_complex_forward",
+          "role": "generalization",
+          "note": "The arbitrary-Hilbert theorem underneath the separable source façade.  It is strictly stronger than the paper's statement, and was the canonical evidence until 2026-09-06, when the separability sweep made the printed-scope wrapper canonical."
+        },
+        {
+          "declaration": "TauCeti.DavisKahan1970.proposition3_3_complex_converse",
+          "role": "generalization",
+          "note": "The arbitrary-Hilbert theorem underneath the separable source façade.  It is strictly stronger than the paper's statement, and was the canonical evidence until 2026-09-06, when the separability sweep made the printed-scope wrapper canonical."
+        },
+        {
+          "declaration": "TauCeti.DavisKahan1970.proposition3_3_real_forward",
+          "role": "generalization",
+          "note": "The arbitrary-Hilbert theorem underneath the separable source façade.  It is strictly stronger than the paper's statement, and was the canonical evidence until 2026-09-06, when the separability sweep made the printed-scope wrapper canonical."
+        },
+        {
+          "declaration": "TauCeti.DavisKahan1970.proposition3_3_real_converse",
+          "role": "generalization",
+          "note": "The arbitrary-Hilbert theorem underneath the separable source façade.  It is strictly stronger than the paper's statement, and was the canonical evidence until 2026-09-06, when the separability sweep made the printed-scope wrapper canonical."
+        }
+      ],
       "result_wide_scope_atoms": [],
       "source_clauses": [
         {
@@ -2485,12 +2529,12 @@
           ],
           "scalar_scope": "complex",
           "evidence": {
-            "primary": "TauCeti.DavisKahan1970.proposition3_3_complex_forward",
+            "primary": "TauCeti.DavisKahan1970.proposition3_3_complex_forward_separable",
             "correspondence": []
           },
           "status": "established",
           "evidence_kind": "proof",
-          "justification": "Canonical witness for principal-square-root at complex scalar scope, carried over from the pre-clause canonical evidence and re-checked against its compiler-printed type under the coherent model."
+          "justification": "Canonical witness at the paper's separable ambient scope, which is Section 1's setting: \"Let H be a separable Hilbert space, real or complex; finite dimensionality is not assumed.\"  The arbitrary-Hilbert theorem it wraps is strictly stronger and is retained as the generalization it is; the wrapper adds the ambient hypothesis and nothing else."
         },
         {
           "id": "square-root-converse.complex",
@@ -2499,12 +2543,12 @@
           ],
           "scalar_scope": "complex",
           "evidence": {
-            "primary": "TauCeti.DavisKahan1970.proposition3_3_complex_converse",
+            "primary": "TauCeti.DavisKahan1970.proposition3_3_complex_converse_separable",
             "correspondence": []
           },
           "status": "established",
           "evidence_kind": "proof",
-          "justification": "Canonical witness for square-root-converse at complex scalar scope, carried over from the pre-clause canonical evidence and re-checked against its compiler-printed type under the coherent model."
+          "justification": "Canonical witness at the paper's separable ambient scope, which is Section 1's setting: \"Let H be a separable Hilbert space, real or complex; finite dimensionality is not assumed.\"  The arbitrary-Hilbert theorem it wraps is strictly stronger and is retained as the generalization it is; the wrapper adds the ambient hypothesis and nothing else."
         },
         {
           "id": "principal-square-root.real",
@@ -2513,12 +2557,12 @@
           ],
           "scalar_scope": "real",
           "evidence": {
-            "primary": "TauCeti.DavisKahan1970.proposition3_3_real_forward",
+            "primary": "TauCeti.DavisKahan1970.proposition3_3_real_forward_separable",
             "correspondence": []
           },
           "status": "established",
           "evidence_kind": "proof",
-          "justification": "Canonical witness for principal-square-root at real scalar scope, carried over from the pre-clause canonical evidence and re-checked against its compiler-printed type under the coherent model."
+          "justification": "Canonical witness at the paper's separable ambient scope, which is Section 1's setting: \"Let H be a separable Hilbert space, real or complex; finite dimensionality is not assumed.\"  The arbitrary-Hilbert theorem it wraps is strictly stronger and is retained as the generalization it is; the wrapper adds the ambient hypothesis and nothing else."
         },
         {
           "id": "square-root-converse.real",
@@ -2527,12 +2571,12 @@
           ],
           "scalar_scope": "real",
           "evidence": {
-            "primary": "TauCeti.DavisKahan1970.proposition3_3_real_converse",
+            "primary": "TauCeti.DavisKahan1970.proposition3_3_real_converse_separable",
             "correspondence": []
           },
           "status": "established",
           "evidence_kind": "proof",
-          "justification": "Canonical witness for square-root-converse at real scalar scope, carried over from the pre-clause canonical evidence and re-checked against its compiler-printed type under the coherent model."
+          "justification": "Canonical witness at the paper's separable ambient scope, which is Section 1's setting: \"Let H be a separable Hilbert space, real or complex; finite dimensionality is not assumed.\"  The arbitrary-Hilbert theorem it wraps is strictly stronger and is retained as the generalization it is; the wrapper adds the ambient hypothesis and nothing else."
         }
       ]
     },
@@ -2555,7 +2599,9 @@
         "TauCeti.DavisKahan1970.proposition3_4_isDirectRotation_complex",
         "TauCeti.DavisKahan1970.proposition3_4_eq_directRotation",
         "TauCeti.DavisKahan1970.proposition3_4_crossedDefectsEquivalent_complex",
-        "TauCeti.DavisKahan1970.proposition3_4_crossedDefectsEquivalent_real"
+        "TauCeti.DavisKahan1970.proposition3_4_crossedDefectsEquivalent_real",
+        "TauCeti.DavisKahan1970.proposition3_4_full_real_separable",
+        "TauCeti.DavisKahan1970.proposition3_4_full_complex_separable"
       ],
       "review_note": "RE-CLOSED 2026-08-12 after repair (reopened earlier the same day; the reopening is retained in git history).  The defect was real: `proposition3_4_isDirectRotation_complex` concludes only `IsDirectRotation`, whose diagonal clauses are `0 <= re inner x (P T P) x`, which over C does not even force self-adjointness of the compression, whereas Definition 3.1 asks for genuine operator positivity.  The repair is `proposition3_4_full_complex`: printed hypothesis C_0^2 >= 1/2 together with the Definition 3.1 data for U, concluding the genuine Definition 3.1 statement for U^2 from Q_- to Q -- unitarity, intertwining Q_- to Q, `IsPositive` for both diagonal compressions, and the crossed-block adjoint/sign relation.  No acuteness, compactness, finite-dimensional or separability hypothesis is added, and the positivity upgrade reuses the real development's `positiveDiagonalBlocks_of_sq` (promoted to a public declaration) rather than reproving it.  Evidence for the row is now the new complex theorem together with `proposition3_4_full_real`; the `IsDirectRotation` statements are retained as supporting material, not as primary evidence.  The row also now carries the standing Section 3 scope atom (3.5).",
       "boundary_review": {
@@ -2575,7 +2621,7 @@
       "local_statement_self_contained": true,
       "canonical_evidence": [
         {
-          "declaration": "TauCeti.DavisKahan1970.proposition3_4_full_complex",
+          "declaration": "TauCeti.DavisKahan1970.proposition3_4_full_complex_separable",
           "role": "primary_source_witness",
           "scalar_scope": "complex",
           "evidence_kind": "proof",
@@ -2586,7 +2632,7 @@
           "capability_classes": []
         },
         {
-          "declaration": "TauCeti.DavisKahan1970.proposition3_4_full_real",
+          "declaration": "TauCeti.DavisKahan1970.proposition3_4_full_real_separable",
           "role": "primary_source_witness",
           "scalar_scope": "real",
           "evidence_kind": "proof",
@@ -2613,6 +2659,16 @@
         {
           "declaration": "TauCeti.DavisKahan1970.proposition3_4_crossedDefectsEquivalent_real",
           "role": "standing_assumption_discharge"
+        },
+        {
+          "declaration": "TauCeti.DavisKahan1970.proposition3_4_full_complex",
+          "role": "generalization",
+          "note": "The arbitrary-Hilbert theorem underneath the separable source façade.  It is strictly stronger than the paper's statement, and was the canonical evidence until 2026-09-06, when the separability sweep made the printed-scope wrapper canonical."
+        },
+        {
+          "declaration": "TauCeti.DavisKahan1970.proposition3_4_full_real",
+          "role": "generalization",
+          "note": "The arbitrary-Hilbert theorem underneath the separable source façade.  It is strictly stronger than the paper's statement, and was the canonical evidence until 2026-09-06, when the separability sweep made the printed-scope wrapper canonical."
         }
       ],
       "result_wide_scope_atoms": [
@@ -2626,12 +2682,12 @@
           ],
           "scalar_scope": "complex",
           "evidence": {
-            "primary": "TauCeti.DavisKahan1970.proposition3_4_full_complex",
+            "primary": "TauCeti.DavisKahan1970.proposition3_4_full_complex_separable",
             "correspondence": []
           },
           "status": "established",
           "evidence_kind": "proof",
-          "justification": "Canonical witness for u-square-direct-rotation at complex scalar scope, carried over from the pre-clause canonical evidence and re-checked against its compiler-printed type under the coherent model."
+          "justification": "Canonical witness at the paper's separable ambient scope, which is Section 1's setting: \"Let H be a separable Hilbert space, real or complex; finite dimensionality is not assumed.\"  The arbitrary-Hilbert theorem it wraps is strictly stronger and is retained as the generalization it is; the wrapper adds the ambient hypothesis and nothing else."
         },
         {
           "id": "u-square-direct-rotation.real",
@@ -2640,12 +2696,12 @@
           ],
           "scalar_scope": "real",
           "evidence": {
-            "primary": "TauCeti.DavisKahan1970.proposition3_4_full_real",
+            "primary": "TauCeti.DavisKahan1970.proposition3_4_full_real_separable",
             "correspondence": []
           },
           "status": "established",
           "evidence_kind": "proof",
-          "justification": "Canonical witness for u-square-direct-rotation at real scalar scope, carried over from the pre-clause canonical evidence and re-checked against its compiler-printed type under the coherent model."
+          "justification": "Canonical witness at the paper's separable ambient scope, which is Section 1's setting: \"Let H be a separable Hilbert space, real or complex; finite dimensionality is not assumed.\"  The arbitrary-Hilbert theorem it wraps is strictly stronger and is retained as the generalization it is; the wrapper adds the ambient hypothesis and nothing else."
         }
       ],
       "standing_assumption_discharge": {
@@ -3047,7 +3103,8 @@
         "TauCeti.DavisKahan1970.compactAngleList_mem_Icc",
         "TauCeti.DavisKahan1970.compactAngleList_inj_iff",
         "TauCeti.DavisKahan1970.compactAngleEigenvalueList_genericCosineBlock_le_one",
-        "TauCeti.DavisKahan1970.norm_genericCosineBlock_le_one"
+        "TauCeti.DavisKahan1970.norm_genericCosineBlock_le_one",
+        "TauCeti.DavisKahan1970.corollary3_1_compact_defectBlock_sourceAngleList_classification_separable"
       ],
       "review_note": "Accepted by the hostile audit at the stated-result level.\n\n**UNDER-CERTIFICATION FOUND AND FIXED 2026-09-04 (Claude Opus 5, on hostile review).**  The realization clause was canonicalized on `corollary3_1_realization`, whose own docstring records that the two angle-zero multiplicities come out equal.  The printed sentence allows them to differ -- that is the whole content of 'except perhaps for the multiplicity of 0' -- and the repository already contained `corollary3_1_realization_zeroMultiplicity`, which prescribes them independently.  The row was under-certified against a theorem it already had.  Canonical evidence moved to the stronger realization, and the classification half (`corollary3_1_prescribedAngleSequence_classification`) is registered beside it.  Two new correspondence theorems record that the eigenvalue list this development stores, `n |-> sin^2 theta_n`, determines the printed angle sequence.",
       "parent_claim_id": "DK-3.1-cor",
@@ -3068,7 +3125,7 @@
       "local_statement_self_contained": true,
       "canonical_evidence": [
         {
-          "declaration": "TauCeti.DavisKahan1970.corollary3_1_compact_defectBlock_sourceAngleList_classification",
+          "declaration": "TauCeti.DavisKahan1970.corollary3_1_compact_defectBlock_sourceAngleList_classification_separable",
           "role": "primary_source_witness",
           "scalar_scope": "rclike",
           "evidence_kind": "proof",
@@ -3145,6 +3202,11 @@
           "declaration": "TauCeti.DavisKahan1970.norm_genericCosineBlock_le_one",
           "role": "supporting_theorem",
           "note": "Halmos's cosine block is a contraction: it is the compression of the orthogonal projection P_V, and compression and P_V both have norm at most one."
+        },
+        {
+          "declaration": "TauCeti.DavisKahan1970.corollary3_1_compact_defectBlock_sourceAngleList_classification",
+          "role": "generalization",
+          "note": "The arbitrary-Hilbert theorem underneath the separable source façade.  It is strictly stronger than the paper's statement, and was the canonical evidence until 2026-09-06, when the separability sweep made the printed-scope wrapper canonical."
         }
       ],
       "result_wide_scope_atoms": [],
@@ -3157,7 +3219,7 @@
           ],
           "scalar_scope": "rclike",
           "evidence": {
-            "primary": "TauCeti.DavisKahan1970.corollary3_1_compact_defectBlock_sourceAngleList_classification",
+            "primary": "TauCeti.DavisKahan1970.corollary3_1_compact_defectBlock_sourceAngleList_classification_separable",
             "correspondence": [
               "TauCeti.DavisKahan1970.compactAngleList",
               "TauCeti.DavisKahan1970.compactAngleList_inj_iff",
@@ -3170,7 +3232,7 @@
           },
           "status": "established",
           "evidence_kind": "proof",
-          "justification": "The complete invariants of a compact-defect pair, ON THE SOURCE'S OWN INVARIANT. Corollary 3.1 says they reduce to the eigenvalues of Theta_0 and Theta_1, counted with multiplicity -- the ANGLES. The primary is stated on `compactAngleList`, which is that list.\n\nREPRESENTATION CORRECTED 2026-09-05. The primary was the `angleList` form, whose invariant is `compactAngleEigenvalueList` -- the eigenvalue list of the SINE-SQUARE block, not of the angle operator -- and this clause asserted it as the printed statement. The two determine each other because t -> sin^2 t is injective on [0, pi/2], which the row already proved for the realization half as `angleSequence_eq_of_angleList_eq`; the classification half had never been restated on the angles. `compactAngleList_inj_iff` is that restatement, and `compactAngleEigenvalueList_genericCosineBlock_le_one` discharges its hypothesis by way of the spectrum bound on Halmos's block. The sin^2 form is retained as the structural theorem beneath."
+          "justification": "Canonical witness at the paper's separable ambient scope, which is Section 1's setting: \"Let H be a separable Hilbert space, real or complex; finite dimensionality is not assumed.\"  The arbitrary-Hilbert theorem it wraps is strictly stronger and is retained as the generalization it is; the wrapper adds the ambient hypothesis and nothing else."
         },
         {
           "id": "allowed-angle-sequence.rclike",
@@ -3212,7 +3274,10 @@
         "TauCeti.DavisKahan1970.proposition3_5_angleEigenspace_uniqueMaximal",
         "TauCeti.DavisKahan1970.proposition3_5_commutations_acute",
         "TauCeti.DavisKahan1970.proposition3_5_eigenvector_angle_acute",
-        "TauCeti.DavisKahan.Proposition35.vectorAngle_nonacuteDirectRotation_eq_of_angleOperator_apply"
+        "TauCeti.DavisKahan.Proposition35.vectorAngle_nonacuteDirectRotation_eq_of_angleOperator_apply",
+        "TauCeti.DavisKahan1970.proposition3_5_eigenvector_angle_separable",
+        "TauCeti.DavisKahan1970.proposition3_5_commutations_separable",
+        "TauCeti.DavisKahan1970.proposition3_5_angleEigenspace_uniqueMaximal_separable"
       ],
       "review_note": "Accepted after independent hostile re-audit on 2026-08-13.  Proposition 3.5 has three printed clauses with different scope: the commutation and eigenvector-angle clauses are under the standing Section 3 hypotheses and do not assume acuteness, while only the maximal-eigenspace clause is introduced \"in the acute case\".  The repaired source-facing declarations match that structure: `proposition3_5_commutations` and `proposition3_5_eigenvector_angle` quantify over the completed direct rotation selected by a crossed-defect isometry and carry no acuteness or finite-dimensionality hypothesis; the eigenvector theorem includes the right-angle eigenspace theta = pi/2.  `proposition3_5_angleEigenspace_eq_fixedCosineSubspace` and `proposition3_5_angleEigenspace_uniqueMaximal` retain the acute restriction.  No conclusion is weakened.",
       "parent_claim_id": "DK-3.5-prop",
@@ -3236,7 +3301,7 @@
       "local_statement_self_contained": true,
       "canonical_evidence": [
         {
-          "declaration": "TauCeti.DavisKahan1970.proposition3_5_commutations",
+          "declaration": "TauCeti.DavisKahan1970.proposition3_5_commutations_separable",
           "role": "primary_source_witness",
           "scalar_scope": "rclike",
           "evidence_kind": "proof",
@@ -3246,7 +3311,7 @@
           "capability_classes": []
         },
         {
-          "declaration": "TauCeti.DavisKahan1970.proposition3_5_eigenvector_angle",
+          "declaration": "TauCeti.DavisKahan1970.proposition3_5_eigenvector_angle_separable",
           "role": "primary_source_witness",
           "scalar_scope": "rclike",
           "evidence_kind": "proof",
@@ -3256,7 +3321,7 @@
           "capability_classes": []
         },
         {
-          "declaration": "TauCeti.DavisKahan1970.proposition3_5_angleEigenspace_uniqueMaximal",
+          "declaration": "TauCeti.DavisKahan1970.proposition3_5_angleEigenspace_uniqueMaximal_separable",
           "role": "primary_source_witness",
           "scalar_scope": "rclike",
           "evidence_kind": "proof",
@@ -3282,6 +3347,21 @@
         {
           "declaration": "TauCeti.DavisKahan.Proposition35.vectorAngle_nonacuteDirectRotation_eq_of_angleOperator_apply",
           "role": "supporting_theorem"
+        },
+        {
+          "declaration": "TauCeti.DavisKahan1970.proposition3_5_commutations",
+          "role": "generalization",
+          "note": "The arbitrary-Hilbert theorem underneath the separable source façade.  It is strictly stronger than the paper's statement, and was the canonical evidence until 2026-09-06, when the separability sweep made the printed-scope wrapper canonical."
+        },
+        {
+          "declaration": "TauCeti.DavisKahan1970.proposition3_5_eigenvector_angle",
+          "role": "generalization",
+          "note": "The arbitrary-Hilbert theorem underneath the separable source façade.  It is strictly stronger than the paper's statement, and was the canonical evidence until 2026-09-06, when the separability sweep made the printed-scope wrapper canonical."
+        },
+        {
+          "declaration": "TauCeti.DavisKahan1970.proposition3_5_angleEigenspace_uniqueMaximal",
+          "role": "generalization",
+          "note": "The arbitrary-Hilbert theorem underneath the separable source façade.  It is strictly stronger than the paper's statement, and was the canonical evidence until 2026-09-06, when the separability sweep made the printed-scope wrapper canonical."
         }
       ],
       "result_wide_scope_atoms": [],
@@ -3293,12 +3373,12 @@
           ],
           "scalar_scope": "rclike",
           "evidence": {
-            "primary": "TauCeti.DavisKahan1970.proposition3_5_commutations",
+            "primary": "TauCeti.DavisKahan1970.proposition3_5_commutations_separable",
             "correspondence": []
           },
           "status": "established",
           "evidence_kind": "proof",
-          "justification": "Canonical witness for commutation at rclike scalar scope, carried over from the pre-clause canonical evidence and re-checked against its compiler-printed type under the coherent model."
+          "justification": "Canonical witness at the paper's separable ambient scope, which is Section 1's setting: \"Let H be a separable Hilbert space, real or complex; finite dimensionality is not assumed.\"  The arbitrary-Hilbert theorem it wraps is strictly stronger and is retained as the generalization it is; the wrapper adds the ambient hypothesis and nothing else."
         },
         {
           "id": "eigenvector-rotation-angle.rclike",
@@ -3307,12 +3387,12 @@
           ],
           "scalar_scope": "rclike",
           "evidence": {
-            "primary": "TauCeti.DavisKahan1970.proposition3_5_eigenvector_angle",
+            "primary": "TauCeti.DavisKahan1970.proposition3_5_eigenvector_angle_separable",
             "correspondence": []
           },
           "status": "established",
           "evidence_kind": "proof",
-          "justification": "Canonical witness for eigenvector-rotation-angle at rclike scalar scope, carried over from the pre-clause canonical evidence and re-checked against its compiler-printed type under the coherent model."
+          "justification": "Canonical witness at the paper's separable ambient scope, which is Section 1's setting: \"Let H be a separable Hilbert space, real or complex; finite dimensionality is not assumed.\"  The arbitrary-Hilbert theorem it wraps is strictly stronger and is retained as the generalization it is; the wrapper adds the ambient hypothesis and nothing else."
         },
         {
           "id": "acute-maximal-characterization.rclike",
@@ -3321,12 +3401,12 @@
           ],
           "scalar_scope": "rclike",
           "evidence": {
-            "primary": "TauCeti.DavisKahan1970.proposition3_5_angleEigenspace_uniqueMaximal",
+            "primary": "TauCeti.DavisKahan1970.proposition3_5_angleEigenspace_uniqueMaximal_separable",
             "correspondence": []
           },
           "status": "established",
           "evidence_kind": "proof",
-          "justification": "Canonical witness for acute-maximal-characterization at rclike scalar scope, carried over from the pre-clause canonical evidence and re-checked against its compiler-printed type under the coherent model."
+          "justification": "Canonical witness at the paper's separable ambient scope, which is Section 1's setting: \"Let H be a separable Hilbert space, real or complex; finite dimensionality is not assumed.\"  The arbitrary-Hilbert theorem it wraps is strictly stronger and is retained as the generalization it is; the wrapper adds the ambient hypothesis and nothing else."
         }
       ]
     },
@@ -3348,7 +3428,8 @@
         "TauCeti.DavisKahan1970.corollary3_2_nonacute_directRotation_resolution",
         "TauCeti.DavisKahan1970.complex_directRotation_reversal",
         "TauCeti.DavisKahan1970.real_directRotation_reversal",
-        "TauCeti.DavisKahan1970.corollary3_2_reversal_form"
+        "TauCeti.DavisKahan1970.corollary3_2_reversal_form",
+        "TauCeti.DavisKahan1970.corollary3_2_separable"
       ],
       "review_note": "Accepted by the hostile audit at the stated-result level.",
       "parent_claim_id": "DK-3.2-cor",
@@ -3367,7 +3448,7 @@
       "local_statement_self_contained": true,
       "canonical_evidence": [
         {
-          "declaration": "TauCeti.DavisKahan1970.corollary3_2",
+          "declaration": "TauCeti.DavisKahan1970.corollary3_2_separable",
           "role": "primary_source_witness",
           "scalar_scope": "rclike",
           "evidence_kind": "proof",
@@ -3397,6 +3478,11 @@
         {
           "declaration": "TauCeti.DavisKahan1970.corollary3_2_reversal_form",
           "role": "supporting_theorem"
+        },
+        {
+          "declaration": "TauCeti.DavisKahan1970.corollary3_2",
+          "role": "generalization",
+          "note": "The arbitrary-Hilbert theorem underneath the separable source façade.  It is strictly stronger than the paper's statement, and was the canonical evidence until 2026-09-06, when the separability sweep made the printed-scope wrapper canonical."
         }
       ],
       "result_wide_scope_atoms": [],
@@ -3408,12 +3494,12 @@
           ],
           "scalar_scope": "rclike",
           "evidence": {
-            "primary": "TauCeti.DavisKahan1970.corollary3_2",
+            "primary": "TauCeti.DavisKahan1970.corollary3_2_separable",
             "correspondence": []
           },
           "status": "established",
           "evidence_kind": "proof",
-          "justification": "Canonical witness for swap-invariance at rclike scalar scope, carried over from the pre-clause canonical evidence and re-checked against its compiler-printed type under the coherent model."
+          "justification": "Canonical witness at the paper's separable ambient scope, which is Section 1's setting: \"Let H be a separable Hilbert space, real or complex; finite dimensionality is not assumed.\"  The arbitrary-Hilbert theorem it wraps is strictly stronger and is retained as the generalization it is; the wrapper adds the ambient hypothesis and nothing else."
         }
       ]
     },
@@ -3435,7 +3521,9 @@
         "TauCeti.DavisKahan1970.proposition4_1_compact_nonacute_complex",
         "TauCeti.DavisKahan1970.proposition4_1_compact_nonacute_real",
         "TauCeti.DavisKahan1970.proposition4_1_compact_nonacute_directRotationValues_complex",
-        "TauCeti.DavisKahan1970.proposition4_1_compact_nonacute_directRotationValues_real"
+        "TauCeti.DavisKahan1970.proposition4_1_compact_nonacute_directRotationValues_real",
+        "TauCeti.DavisKahan1970.proposition4_1_directRotation_sourceExact_complex",
+        "TauCeti.DavisKahan1970.proposition4_1_directRotation_sourceExact_real"
       ],
       "review_note": "Accepted result-only semantic review 2026-08-12, contingent only on compiler validation of the candidate source bridge. The complex and real compact/nonacute Proposition 4.1 wrappers now bundle both counted printed conclusions: the orthonormal-vector pointwise angle lower bounds and approximation-number extremality of the direct rotation. The new directRotationValues declarations expose the printed exact value a_k((1-U)P) = 2*sin(theta_k/2) at that same arbitrary-dimensional compact matched-defect scope. Equations (4.1), (4.2), the VZ factorization, and the closest-vector proof step remain fidelity-only material outside the counted proposition statement.",
       "parent_claim_id": "DK-4.1-prop",
@@ -3462,7 +3550,7 @@
       "local_statement_self_contained": true,
       "canonical_evidence": [
         {
-          "declaration": "TauCeti.DavisKahan1970.proposition4_1_compact_nonacute_complex",
+          "declaration": "TauCeti.DavisKahan1970.proposition4_1_directRotation_sourceExact_complex",
           "role": "primary_source_witness",
           "scalar_scope": "complex",
           "evidence_kind": "proof",
@@ -3474,7 +3562,7 @@
           "capability_classes": []
         },
         {
-          "declaration": "TauCeti.DavisKahan1970.proposition4_1_compact_nonacute_real",
+          "declaration": "TauCeti.DavisKahan1970.proposition4_1_directRotation_sourceExact_real",
           "role": "primary_source_witness",
           "scalar_scope": "real",
           "evidence_kind": "proof",
@@ -3494,6 +3582,16 @@
         {
           "declaration": "TauCeti.DavisKahan1970.proposition4_1_compact_nonacute_directRotationValues_real",
           "role": "supporting_theorem"
+        },
+        {
+          "declaration": "TauCeti.DavisKahan1970.proposition4_1_compact_nonacute_complex",
+          "role": "implementation_structure",
+          "note": "The `J`-parameterised construction underneath the source façade: it names a chosen isometry between the crossed defect spaces, which Proposition 3.2 shows is a genuine choice and which the paper never mentions.  It was the canonical evidence until 2026-09-06."
+        },
+        {
+          "declaration": "TauCeti.DavisKahan1970.proposition4_1_compact_nonacute_real",
+          "role": "implementation_structure",
+          "note": "The `J`-parameterised construction underneath the source façade: it names a chosen isometry between the crossed defect spaces, which Proposition 3.2 shows is a genuine choice and which the paper never mentions.  It was the canonical evidence until 2026-09-06."
         }
       ],
       "result_wide_scope_atoms": [
@@ -3508,12 +3606,12 @@
           ],
           "scalar_scope": "complex",
           "evidence": {
-            "primary": "TauCeti.DavisKahan1970.proposition4_1_compact_nonacute_complex",
+            "primary": "TauCeti.DavisKahan1970.proposition4_1_directRotation_sourceExact_complex",
             "correspondence": []
           },
           "status": "established",
           "evidence_kind": "proof",
-          "justification": "Canonical witness for orthonormal-angle-lower-bounds, singular-value-minimality at complex scalar scope, carried over from the pre-clause canonical evidence and re-checked against its compiler-printed type under the coherent model."
+          "justification": "Canonical witness on the source's own object.  Davis and Kahan enter Section 4 with THE direct rotation established by Section 3 and compare it against an arbitrary competitor; the statement therefore takes the standing convention (3.5) and produces a `D` satisfying the paper's `IsDirectRotation` predicate, instead of exposing a chosen isometry between the two crossed defect spaces.  The `J`-parameterised theorem is retained underneath, where the choice belongs."
         },
         {
           "id": "orthonormal-angle-lower-bounds.real",
@@ -3523,12 +3621,12 @@
           ],
           "scalar_scope": "real",
           "evidence": {
-            "primary": "TauCeti.DavisKahan1970.proposition4_1_compact_nonacute_real",
+            "primary": "TauCeti.DavisKahan1970.proposition4_1_directRotation_sourceExact_real",
             "correspondence": []
           },
           "status": "established",
           "evidence_kind": "proof",
-          "justification": "Canonical witness for orthonormal-angle-lower-bounds, singular-value-minimality at real scalar scope, carried over from the pre-clause canonical evidence and re-checked against its compiler-printed type under the coherent model."
+          "justification": "Canonical witness on the source's own object.  Davis and Kahan enter Section 4 with THE direct rotation established by Section 3 and compare it against an arbitrary competitor; the statement therefore takes the standing convention (3.5) and produces a `D` satisfying the paper's `IsDirectRotation` predicate, instead of exposing a chosen isometry between the two crossed defect spaces.  The `J`-parameterised theorem is retained underneath, where the choice belongs."
         }
       ]
     },
@@ -3554,7 +3652,9 @@
         "TauCeti.DavisKahan1970.symmetricNorming_of_kyFanDominant",
         "TauCeti.DavisKahan1970.corollary4_1_compact_nonacute_sourceExact_complex",
         "TauCeti.DavisKahan1970.corollary4_1_compact_nonacute_sourceExact_real",
-        "TauCeti.DavisKahan.ExactSinTheta.NormalizedUnitaryInvariantNorm"
+        "TauCeti.DavisKahan.ExactSinTheta.NormalizedUnitaryInvariantNorm",
+        "TauCeti.DavisKahan1970.corollary4_1_directRotation_sourceExact_complex",
+        "TauCeti.DavisKahan1970.corollary4_1_directRotation_sourceExact_real"
       ],
       "review_note": "Accepted by the hostile audit at the stated-result level.",
       "parent_claim_id": "DK-4.1-cor",
@@ -3576,7 +3676,7 @@
       "local_statement_self_contained": false,
       "canonical_evidence": [
         {
-          "declaration": "TauCeti.DavisKahan1970.corollary4_1_compact_nonacute_sourceExact_complex",
+          "declaration": "TauCeti.DavisKahan1970.corollary4_1_directRotation_sourceExact_complex",
           "role": "primary_source_witness",
           "scalar_scope": "complex",
           "evidence_kind": "proof",
@@ -3588,7 +3688,7 @@
           "note": "Source-exact façade as of 2026-09-05."
         },
         {
-          "declaration": "TauCeti.DavisKahan1970.corollary4_1_compact_nonacute_sourceExact_real",
+          "declaration": "TauCeti.DavisKahan1970.corollary4_1_directRotation_sourceExact_real",
           "role": "primary_source_witness",
           "scalar_scope": "real",
           "evidence_kind": "proof",
@@ -3634,6 +3734,16 @@
           "declaration": "TauCeti.DavisKahan.ExactSinTheta.NormalizedUnitaryInvariantNorm",
           "role": "source_correspondence",
           "note": "The Lean type for the norm object Section 1 fixes."
+        },
+        {
+          "declaration": "TauCeti.DavisKahan1970.corollary4_1_compact_nonacute_sourceExact_complex",
+          "role": "implementation_structure",
+          "note": "The `J`-parameterised theorem underneath the source façade.  It was the canonical evidence until 2026-09-06."
+        },
+        {
+          "declaration": "TauCeti.DavisKahan1970.corollary4_1_compact_nonacute_sourceExact_real",
+          "role": "implementation_structure",
+          "note": "The `J`-parameterised theorem underneath the source façade.  It was the canonical evidence until 2026-09-06."
         }
       ],
       "result_wide_scope_atoms": [
@@ -3647,7 +3757,7 @@
           ],
           "scalar_scope": "complex",
           "evidence": {
-            "primary": "TauCeti.DavisKahan1970.corollary4_1_compact_nonacute_sourceExact_complex",
+            "primary": "TauCeti.DavisKahan1970.corollary4_1_directRotation_sourceExact_complex",
             "correspondence": [
               "TauCeti.DavisKahan.ExactSinTheta.NormalizedUnitaryInvariantNorm"
             ],
@@ -3657,7 +3767,7 @@
           },
           "status": "established",
           "evidence_kind": "proof",
-          "justification": "For every source unitarily invariant norm, N((1 - V)P) is minimized among unitaries carrying P H onto Q H by the direct rotation.  This is the printed Corollary 4.1 quantifier: SymmetricNormingFunction, not an implementation ideal family.\n\nSOURCE-EXACT FAÇADE REGISTERED 2026-09-05 (GOAL.md sections I, III.3 and IV). The canonical witness is the façade at the PRINTED scope: separable Hilbert space, and `NormalizedUnitaryInvariantNorm` -- the Lean type for the norm class Section 1 fixes. The arbitrary-Hilbert `SymmetricNormingFunction` theorem that proves it is retained as supporting evidence with role `generalization`, and is stronger on both axes."
+          "justification": "Canonical witness on the source's own object: the standing convention (3.5) in, a `D` with `IsDirectRotation` out, and the printed unitarily-invariant minimality for it.  The `J`-parameterised theorem is retained underneath."
         },
         {
           "id": "ui-minimality-on-p.real",
@@ -3666,7 +3776,7 @@
           ],
           "scalar_scope": "real",
           "evidence": {
-            "primary": "TauCeti.DavisKahan1970.corollary4_1_compact_nonacute_sourceExact_real",
+            "primary": "TauCeti.DavisKahan1970.corollary4_1_directRotation_sourceExact_real",
             "correspondence": [
               "TauCeti.DavisKahan.ExactSinTheta.NormalizedUnitaryInvariantNorm"
             ],
@@ -3676,7 +3786,7 @@
           },
           "status": "established",
           "evidence_kind": "proof",
-          "justification": "For every source unitarily invariant norm, N((1 - V)P) is minimized among unitaries carrying P H onto Q H by the direct rotation.  This is the printed Corollary 4.1 quantifier: SymmetricNormingFunction, not an implementation ideal family.\n\nSOURCE-EXACT FAÇADE REGISTERED 2026-09-05 (GOAL.md sections I, III.3 and IV). The canonical witness is the façade at the PRINTED scope: separable Hilbert space, and `NormalizedUnitaryInvariantNorm` -- the Lean type for the norm class Section 1 fixes. The arbitrary-Hilbert `SymmetricNormingFunction` theorem that proves it is retained as supporting evidence with role `generalization`, and is stronger on both axes."
+          "justification": "Canonical witness on the source's own object: the standing convention (3.5) in, a `D` with `IsDirectRotation` out, and the printed unitarily-invariant minimality for it.  The `J`-parameterised theorem is retained underneath."
         }
       ],
       "nonlocal_source_interpretation": {
@@ -3731,7 +3841,9 @@
         "TauCeti.DavisKahan1970.proposition4_2_compact_nonacute_real",
         "TauCeti.DavisKahan1970.proposition4_2_compact_nonacute",
         "TauCeti.DavisKahan1970.proposition4_2_infiniteDimensional",
-        "TauCeti.DavisKahan1970.tsum_displacementAngleSineSqR_ge_tsum_sq_sin_principalAngleSequence"
+        "TauCeti.DavisKahan1970.tsum_displacementAngleSineSqR_ge_tsum_sq_sin_principalAngleSequence",
+        "TauCeti.DavisKahan1970.proposition4_2_compact_nonacute_separable",
+        "TauCeti.DavisKahan1970.proposition4_2_compact_nonacute_real_separable"
       ],
       "review_note": "Accepted result-only semantic review 2026-08-12. `proposition4_2_infiniteDimensional` proves the paper's infinite-series basis-angle lower bound over `ℂ`, including the divergent right-hand side through the extended summation formulation; the real theorem gives the literal `ℝ` counterpart. The trace identification used in the source proof is proof-only material and is not part of the counted proposition statement.\n\n2026-08-31: the real counterpart was promoted from supporting to canonical evidence. The source states its results for a real OR complex Hilbert space, and the coherent-clause model requires each printed conclusion to be established at both fields (or once, scalar-generically).\n\n**F6.7 DECLINED 2026-09-05, with the reason.**  The 2026-09-04 hostile review asked for `proposition4_2_compact_nonacute` to be deleted and deregistered, on the ground that it takes `(_J : halmosSourceDefect ≃ₗᵢ halmosTargetDefect)` and never uses it, while `proposition4_2_infiniteDimensional` proves the inequality without it.  That is a correct observation and the wrong conclusion for this repository.  Section 4 opens, inside the Proposition 4.1 block, by fixing the compact/matched-defect setup, and Proposition 4.2 is printed under it without restating it -- which is exactly why this row is an accepted nonlocal source interpretation.  `AGENTS.md` says a source-facing statement retains the paper's hypotheses even where the Lean proof does not consume them.  Dropping `hcompact` and `J` would make the canonical witness stop carrying the setup the row's own accepted reading says it is printed under, and the unconditional theorem is already registered as a `generalization`.  The declaration's docstring has said this deliberately since it was written.  A reviewer who disagrees should attack the accepted reading, not the unused binder.",
       "parent_claim_id": "DK-4.2-prop",
@@ -3763,6 +3875,16 @@
           "declaration": "TauCeti.DavisKahan1970.tsum_displacementAngleSineSqR_ge_tsum_sq_sin_principalAngleSequence",
           "role": "generalization",
           "note": "Proves the inequality without the Section 4 compact/classification setup. Stronger and correct; retained as the reusable theorem while the canonical source endpoint carries the inherited hypotheses."
+        },
+        {
+          "declaration": "TauCeti.DavisKahan1970.proposition4_2_compact_nonacute",
+          "role": "generalization",
+          "note": "The arbitrary-Hilbert theorem underneath the separable source façade.  It is strictly stronger than the paper's statement, and was the canonical evidence until 2026-09-06, when the separability sweep made the printed-scope wrapper canonical."
+        },
+        {
+          "declaration": "TauCeti.DavisKahan1970.proposition4_2_compact_nonacute_real",
+          "role": "generalization",
+          "note": "The arbitrary-Hilbert theorem underneath the separable source façade.  It is strictly stronger than the paper's statement, and was the canonical evidence until 2026-09-06, when the separability sweep made the printed-scope wrapper canonical."
         }
       ],
       "result_wide_scope_atoms": [
@@ -3776,12 +3898,12 @@
           ],
           "scalar_scope": "complex",
           "evidence": {
-            "primary": "TauCeti.DavisKahan1970.proposition4_2_compact_nonacute",
+            "primary": "TauCeti.DavisKahan1970.proposition4_2_compact_nonacute_separable",
             "correspondence": []
           },
           "status": "established",
           "evidence_kind": "proof",
-          "justification": "Source-shaped witness carrying the Section 4 compact/classification setup the printed proposition inherits. The previous primary, `proposition4_2_infiniteDimensional`, proves the same inequality without that setup: stronger and correct, retained as supporting evidence, but not an exact witness for a statement printed under the section's hypotheses."
+          "justification": "Canonical witness at the paper's separable ambient scope, which is Section 1's setting: \"Let H be a separable Hilbert space, real or complex; finite dimensionality is not assumed.\"  The arbitrary-Hilbert theorem it wraps is strictly stronger and is retained as the generalization it is; the wrapper adds the ambient hypothesis and nothing else."
         },
         {
           "id": "basis-sine-square-lower-bound.real",
@@ -3790,12 +3912,12 @@
           ],
           "scalar_scope": "real",
           "evidence": {
-            "primary": "TauCeti.DavisKahan1970.proposition4_2_compact_nonacute_real",
+            "primary": "TauCeti.DavisKahan1970.proposition4_2_compact_nonacute_real_separable",
             "correspondence": []
           },
           "status": "established",
           "evidence_kind": "proof",
-          "justification": "Source-shaped witness carrying the Section 4 compact/classification setup the printed proposition inherits. The previous primary, `tsum_displacementAngleSineSqR_ge_tsum_sq_sin_principalAngleSequence`, proves the same inequality without that setup: stronger and correct, retained as supporting evidence, but not an exact witness for a statement printed under the section's hypotheses."
+          "justification": "Canonical witness at the paper's separable ambient scope, which is Section 1's setting: \"Let H be a separable Hilbert space, real or complex; finite dimensionality is not assumed.\"  The arbitrary-Hilbert theorem it wraps is strictly stronger and is retained as the generalization it is; the wrapper adds the ambient hypothesis and nothing else."
         }
       ],
       "nonlocal_source_interpretation": {
@@ -3831,7 +3953,7 @@
       "canonical_evidence": [
         {
           "id": "DK-4.2-prop.complex",
-          "declaration": "TauCeti.DavisKahan1970.proposition4_2_compact_nonacute",
+          "declaration": "TauCeti.DavisKahan1970.proposition4_2_compact_nonacute_separable",
           "role": "primary_source_witness",
           "scalar_scope": "complex",
           "evidence_kind": "proof",
@@ -3843,7 +3965,7 @@
         },
         {
           "id": "DK-4.2-prop.real",
-          "declaration": "TauCeti.DavisKahan1970.proposition4_2_compact_nonacute_real",
+          "declaration": "TauCeti.DavisKahan1970.proposition4_2_compact_nonacute_real_separable",
           "role": "primary_source_witness",
           "scalar_scope": "real",
           "evidence_kind": "proof",
@@ -3878,7 +4000,9 @@
         "TauCeti.DavisKahan1970.proposition4_3_compact_nonacute_sourceExact_real",
         "TauCeti.DavisKahan.ExactSinTheta.NormalizedUnitaryInvariantNorm",
         "TauCeti.DavisKahan1970.proposition4_3_compact_nonacute_sourceExact_ofCrossedDefects_complex",
-        "TauCeti.DavisKahan1970.proposition4_3_compact_nonacute_sourceExact_ofCrossedDefects_real"
+        "TauCeti.DavisKahan1970.proposition4_3_compact_nonacute_sourceExact_ofCrossedDefects_real",
+        "TauCeti.DavisKahan1970.proposition4_3_directRotation_sourceExact_complex",
+        "TauCeti.DavisKahan1970.proposition4_3_directRotation_sourceExact_real"
       ],
       "review_note": "Accepted result-only semantic review 2026-08-12. The compact nonacute complex and real wrappers state Proposition 4.3 at the paper's inherited matched-defect scope and show that the direct rotation minimizes every Ky-Fan-dominant unitary-invariant ideal gauge of the squared full displacement `(1-W*) (1-W)`. The underlying proof is dimension-free; the compact premise is kept in the wrapper solely to match the source setting. Equations (4.3)-(4.6) and the later warning about unsquared displacement are outside the counted proposition boundary.",
       "parent_claim_id": "DK-4.3-prop",
@@ -3909,7 +4033,7 @@
       "local_statement_self_contained": false,
       "canonical_evidence": [
         {
-          "declaration": "TauCeti.DavisKahan1970.proposition4_3_compact_nonacute_sourceExact_complex",
+          "declaration": "TauCeti.DavisKahan1970.proposition4_3_directRotation_sourceExact_complex",
           "role": "primary_source_witness",
           "scalar_scope": "complex",
           "evidence_kind": "proof",
@@ -3921,7 +4045,7 @@
           "note": "Source-exact façade as of 2026-09-05."
         },
         {
-          "declaration": "TauCeti.DavisKahan1970.proposition4_3_compact_nonacute_sourceExact_real",
+          "declaration": "TauCeti.DavisKahan1970.proposition4_3_directRotation_sourceExact_real",
           "role": "primary_source_witness",
           "scalar_scope": "real",
           "evidence_kind": "proof",
@@ -3973,6 +4097,16 @@
           "declaration": "TauCeti.DavisKahan1970.proposition4_3_compact_nonacute_sourceExact_ofCrossedDefects_real",
           "role": "presentation_wrapper",
           "note": "The source's own hypothesis: the crossed defects are equivalent, rather than a chosen identification of them.  Davis and Kahan inherit the *condition* under which the direct rotation exists and then speak of 'the' direct rotation, so a caller should supply the condition.  The canonical theorem quantifies over every identification, which is the stronger reading and the one to use when a particular rotation is in hand; this names one and asserts the minimality for it."
+        },
+        {
+          "declaration": "TauCeti.DavisKahan1970.proposition4_3_compact_nonacute_sourceExact_complex",
+          "role": "implementation_structure",
+          "note": "The `J`-parameterised theorem underneath the source façade.  It was the canonical evidence until 2026-09-06."
+        },
+        {
+          "declaration": "TauCeti.DavisKahan1970.proposition4_3_compact_nonacute_sourceExact_real",
+          "role": "implementation_structure",
+          "note": "The `J`-parameterised theorem underneath the source façade.  It was the canonical evidence until 2026-09-06."
         }
       ],
       "result_wide_scope_atoms": [
@@ -3986,7 +4120,7 @@
           ],
           "scalar_scope": "complex",
           "evidence": {
-            "primary": "TauCeti.DavisKahan1970.proposition4_3_compact_nonacute_sourceExact_complex",
+            "primary": "TauCeti.DavisKahan1970.proposition4_3_directRotation_sourceExact_complex",
             "correspondence": [
               "TauCeti.DavisKahan.ExactSinTheta.NormalizedUnitaryInvariantNorm"
             ],
@@ -3996,7 +4130,7 @@
           },
           "status": "established",
           "evidence_kind": "proof",
-          "justification": "For every source unitarily invariant norm, the squared displacement N((1 - V*)(1 - V)) is minimized by the direct rotation.  The printed Proposition 4.3 conclusion at the printed norm quantifier.\n\nSOURCE-EXACT FAÇADE REGISTERED 2026-09-05 (GOAL.md sections I, III.3 and IV). The canonical witness is the façade at the PRINTED scope: separable Hilbert space, and `NormalizedUnitaryInvariantNorm` -- the Lean type for the norm class Section 1 fixes. The arbitrary-Hilbert `SymmetricNormingFunction` theorem that proves it is retained as supporting evidence with role `generalization`, and is stronger on both axes."
+          "justification": "Canonical witness on the source's own object: the standing convention (3.5) in, a `D` with `IsDirectRotation` out, and the printed squared-displacement minimality for it.  The `J`-parameterised theorem is retained underneath."
         },
         {
           "id": "squared-displacement-global-minimum.real",
@@ -4005,7 +4139,7 @@
           ],
           "scalar_scope": "real",
           "evidence": {
-            "primary": "TauCeti.DavisKahan1970.proposition4_3_compact_nonacute_sourceExact_real",
+            "primary": "TauCeti.DavisKahan1970.proposition4_3_directRotation_sourceExact_real",
             "correspondence": [
               "TauCeti.DavisKahan.ExactSinTheta.NormalizedUnitaryInvariantNorm"
             ],
@@ -4015,7 +4149,7 @@
           },
           "status": "established",
           "evidence_kind": "proof",
-          "justification": "For every source unitarily invariant norm, the squared displacement N((1 - V*)(1 - V)) is minimized by the direct rotation.  The printed Proposition 4.3 conclusion at the printed norm quantifier.\n\nSOURCE-EXACT FAÇADE REGISTERED 2026-09-05 (GOAL.md sections I, III.3 and IV). The canonical witness is the façade at the PRINTED scope: separable Hilbert space, and `NormalizedUnitaryInvariantNorm` -- the Lean type for the norm class Section 1 fixes. The arbitrary-Hilbert `SymmetricNormingFunction` theorem that proves it is retained as supporting evidence with role `generalization`, and is stronger on both axes."
+          "justification": "Canonical witness on the source's own object: the standing convention (3.5) in, a `D` with `IsDirectRotation` out, and the printed squared-displacement minimality for it.  The `J`-parameterised theorem is retained underneath."
         }
       ],
       "nonlocal_source_interpretation": {
@@ -5565,7 +5699,19 @@
         "TauCeti.DavisKahan1970.Section8.semiboundedAbove_reducingRestriction_iff",
         "TauCeti.DavisKahan1970.Section8.semiboundedBelow_reducingRestriction_iff",
         "TauCeti.DavisKahan1970.Section8.semiboundedAbove_reducingRestriction_real_iff",
-        "TauCeti.DavisKahan1970.Section8.semiboundedBelow_reducingRestriction_real_iff"
+        "TauCeti.DavisKahan1970.Section8.semiboundedBelow_reducingRestriction_real_iff",
+        "TauCeti.DavisKahan1970.Section8.theorem8_1_upperEigenvalueRepulsion_sourceExact",
+        "TauCeti.DavisKahan1970.Section8.theorem8_1_lowerEigenvalueRepulsion_sourceExact",
+        "TauCeti.DavisKahan1970.Section8.theorem8_1_upperEigenvalueRepulsion_sourceExact_real",
+        "TauCeti.DavisKahan1970.Section8.theorem8_1_lowerEigenvalueRepulsion_sourceExact_real",
+        "TauCeti.DavisKahan1970.Section8.theorem8_1_upperSymmetricGaugeEigenvalue_sourceExact",
+        "TauCeti.DavisKahan1970.Section8.theorem8_1_lowerSymmetricGaugeEigenvalue_sourceExact",
+        "TauCeti.DavisKahan1970.Section8.theorem8_1_upperSymmetricGaugeEigenvalue_sourceExact_real",
+        "TauCeti.DavisKahan1970.Section8.theorem8_1_lowerSymmetricGaugeEigenvalue_sourceExact_real",
+        "TauCeti.DavisKahan1970.Section8.theorem8_1_upperCompressionRepulsion_ofBlockPlacement_unbounded_complex",
+        "TauCeti.DavisKahan1970.Section8.theorem8_1_lowerCompressionRepulsion_ofBlockPlacement_unbounded_complex",
+        "TauCeti.DavisKahan1970.Section8.theorem8_1_upperCompressionRepulsion_ofBlockPlacement_unbounded_real",
+        "TauCeti.DavisKahan1970.Section8.theorem8_1_lowerCompressionRepulsion_ofBlockPlacement_unbounded_real"
       ],
       "review_note": "Result-only hostile review accepted 2026-08-12. The compiled source surface covers every counted Theorem 8.1 clause under the printed hypotheses: branch existence and the closed-quarter-angle iff; part (i) on both blocks; part (ii) in dimension-free approximation-number form with the compiled positive-operator eigenvalue dictionary and real counterparts; and part (iii) for every symmetric gauge in the printed finite-dimensional scope, including increasing-index-order wrappers, over both complex and real Hilbert spaces. The previously recorded blocker was stale evidence selection, not missing mathematics.\n\n**OPERATOR SCOPE DISCLOSED 2026-09-05**, closing finding F2 of the 2026-09-04 hostile review and the follow-up review's objection to closing it by metadata alone.  Every registered Section 8 declaration is bounded; the row said nothing about it while the Section 2 hypotheses it imports are certified at unbounded scope.  The row now carries an accepted nonlocal source interpretation with the source evidence for the bounded reading, the competing unbounded reading stated in full, and the lift named as open work in `GOAL.md`.  The row's alignment moved from `locally_exact` to `paper_faithful_nonlocal_source_interpretation`, so the reviewer packet now lists it with the other interpreted rows instead of presenting it as locally exact.",
       "parent_claim_id": "DK-8.1-thm",
@@ -5674,7 +5820,7 @@
           "capability_classes": []
         },
         {
-          "declaration": "TauCeti.DavisKahan1970.Section8.theorem8_1_upperApproximationRepulsion",
+          "declaration": "TauCeti.DavisKahan1970.Section8.theorem8_1_upperEigenvalueRepulsion_sourceExact",
           "role": "primary_source_witness",
           "scalar_scope": "complex",
           "evidence_kind": "proof",
@@ -5684,7 +5830,7 @@
           "capability_classes": []
         },
         {
-          "declaration": "TauCeti.DavisKahan1970.Section8.theorem8_1_lowerApproximationRepulsion",
+          "declaration": "TauCeti.DavisKahan1970.Section8.theorem8_1_lowerEigenvalueRepulsion_sourceExact",
           "role": "primary_source_witness",
           "scalar_scope": "complex",
           "evidence_kind": "proof",
@@ -5694,7 +5840,7 @@
           "capability_classes": []
         },
         {
-          "declaration": "TauCeti.DavisKahan1970.Section8.theorem8_1_upperApproximationRepulsion_real",
+          "declaration": "TauCeti.DavisKahan1970.Section8.theorem8_1_upperEigenvalueRepulsion_sourceExact_real",
           "role": "primary_source_witness",
           "scalar_scope": "real",
           "evidence_kind": "proof",
@@ -5704,7 +5850,7 @@
           "capability_classes": []
         },
         {
-          "declaration": "TauCeti.DavisKahan1970.Section8.theorem8_1_lowerApproximationRepulsion_real",
+          "declaration": "TauCeti.DavisKahan1970.Section8.theorem8_1_lowerEigenvalueRepulsion_sourceExact_real",
           "role": "primary_source_witness",
           "scalar_scope": "real",
           "evidence_kind": "proof",
@@ -5714,7 +5860,7 @@
           "capability_classes": []
         },
         {
-          "declaration": "TauCeti.DavisKahan1970.Section8.theorem8_1_upperSymmetricGaugeRepulsion_angle_rev",
+          "declaration": "TauCeti.DavisKahan1970.Section8.theorem8_1_upperSymmetricGaugeEigenvalue_sourceExact",
           "role": "primary_source_witness",
           "scalar_scope": "complex",
           "evidence_kind": "proof",
@@ -5724,7 +5870,7 @@
           "capability_classes": []
         },
         {
-          "declaration": "TauCeti.DavisKahan1970.Section8.theorem8_1_lowerSymmetricGaugeRepulsion_angle_rev",
+          "declaration": "TauCeti.DavisKahan1970.Section8.theorem8_1_lowerSymmetricGaugeEigenvalue_sourceExact",
           "role": "primary_source_witness",
           "scalar_scope": "complex",
           "evidence_kind": "proof",
@@ -5734,7 +5880,7 @@
           "capability_classes": []
         },
         {
-          "declaration": "TauCeti.DavisKahan1970.Section8.theorem8_1_upperSymmetricGaugeRepulsion_angle_rev_real",
+          "declaration": "TauCeti.DavisKahan1970.Section8.theorem8_1_upperSymmetricGaugeEigenvalue_sourceExact_real",
           "role": "primary_source_witness",
           "scalar_scope": "real",
           "evidence_kind": "proof",
@@ -5744,7 +5890,7 @@
           "capability_classes": []
         },
         {
-          "declaration": "TauCeti.DavisKahan1970.Section8.theorem8_1_lowerSymmetricGaugeRepulsion_angle_rev_real",
+          "declaration": "TauCeti.DavisKahan1970.Section8.theorem8_1_lowerSymmetricGaugeEigenvalue_sourceExact_real",
           "role": "primary_source_witness",
           "scalar_scope": "real",
           "evidence_kind": "proof",
@@ -5757,162 +5903,163 @@
       "supporting_evidence": [
         {
           "declaration": "TauCeti.DavisKahan1970.Section8.approximationNumber_eq_eigenvalues_of_isPositive",
-          "role": "supporting_theorem"
+          "role": "supporting_theorem",
+          "note": ""
         },
         {
           "declaration": "TauCeti.DavisKahan.maximalAngle_le_pi_div_four_of_orderedFormGap_unbounded",
           "role": "generalization",
-          "note": "Unbounded-scope work toward this row's actual source scope.  The canonical evidence below is still bounded; these are the pieces that will replace it."
+          "note": "Unbounded-scope work toward this row's actual source scope.  These became the canonical evidence on 2026-09-06 or sit directly underneath it."
         },
         {
           "declaration": "TauCeti.DavisKahan.maximalAngle_le_pi_div_four_of_orderedFormGap_unbounded_printed",
           "role": "generalization",
-          "note": "Unbounded-scope work toward this row's actual source scope.  The canonical evidence below is still bounded; these are the pieces that will replace it."
+          "note": "Unbounded-scope work toward this row's actual source scope.  These became the canonical evidence on 2026-09-06 or sit directly underneath it."
         },
         {
           "declaration": "TauCeti.DavisKahan.subspaceGap_le_of_reflectionProduct_form_nonneg",
           "role": "generalization",
-          "note": "Unbounded-scope work toward this row's actual source scope.  The canonical evidence below is still bounded; these are the pieces that will replace it."
+          "note": "Unbounded-scope work toward this row's actual source scope.  These became the canonical evidence on 2026-09-06 or sit directly underneath it."
         },
         {
           "declaration": "TauCeti.DavisKahan.maximalAngle_le_pi_div_four_of_reflectionProduct_form_nonneg",
           "role": "generalization",
-          "note": "Unbounded-scope work toward this row's actual source scope.  The canonical evidence below is still bounded; these are the pieces that will replace it."
+          "note": "Unbounded-scope work toward this row's actual source scope.  These became the canonical evidence on 2026-09-06 or sit directly underneath it."
         },
         {
           "declaration": "TauCeti.DavisKahan.reflectionProduct_add_swap_eq",
           "role": "generalization",
-          "note": "Unbounded-scope work toward this row's actual source scope.  The canonical evidence below is still bounded; these are the pieces that will replace it."
+          "note": "Unbounded-scope work toward this row's actual source scope.  These became the canonical evidence on 2026-09-06 or sit directly underneath it."
         },
         {
           "declaration": "TauCeti.ContinuousLinearMap.nonneg_of_lyapunov_nonneg",
           "role": "generalization",
-          "note": "Unbounded-scope work toward this row's actual source scope.  The canonical evidence below is still bounded; these are the pieces that will replace it."
+          "note": "Unbounded-scope work toward this row's actual source scope.  These became the canonical evidence on 2026-09-06 or sit directly underneath it."
         },
         {
           "declaration": "TauCeti.DavisKahan.reflectionProduct_form_nonneg_of_orderedFormGap_unbounded",
           "role": "generalization",
-          "note": "Unbounded-scope work toward this row's actual source scope.  The canonical evidence below is still bounded; these are the pieces that will replace it."
+          "note": "Unbounded-scope work toward this row's actual source scope.  These became the canonical evidence on 2026-09-06 or sit directly underneath it."
         },
         {
           "declaration": "TauCeti.DavisKahan.subspaceGap_le_of_orderedFormGap_unbounded",
           "role": "generalization",
-          "note": "Unbounded-scope work toward this row's actual source scope.  The canonical evidence below is still bounded; these are the pieces that will replace it."
+          "note": "Unbounded-scope work toward this row's actual source scope.  These became the canonical evidence on 2026-09-06 or sit directly underneath it."
         },
         {
           "declaration": "TauCeti.DavisKahan.subspaceGap_le_of_orderedFormGap_unbounded_printed",
           "role": "generalization",
-          "note": "Unbounded-scope work toward this row's actual source scope.  The canonical evidence below is still bounded; these are the pieces that will replace it."
+          "note": "Unbounded-scope work toward this row's actual source scope.  These became the canonical evidence on 2026-09-06 or sit directly underneath it."
         },
         {
           "declaration": "TauCeti.DavisKahan1970.Section8.canonicalLowBranchUnbounded",
           "role": "generalization",
-          "note": "Unbounded-scope work toward this row's actual source scope: branch existence with its printed ordered form bounds, and the printed `Theta <= pi/4` for that branch.  The canonical evidence below is still bounded."
+          "note": "Unbounded-scope work toward this row's actual source scope: branch existence with its printed ordered form bounds, and the printed `Theta <= pi/4` for that branch.  These became the canonical evidence on 2026-09-06 or sit directly underneath it."
         },
         {
           "declaration": "TauCeti.DavisKahan1970.Section8.canonicalLowBranchUnbounded_reduces",
           "role": "generalization",
-          "note": "Unbounded-scope work toward this row's actual source scope: branch existence with its printed ordered form bounds, and the printed `Theta <= pi/4` for that branch.  The canonical evidence below is still bounded."
+          "note": "Unbounded-scope work toward this row's actual source scope: branch existence with its printed ordered form bounds, and the printed `Theta <= pi/4` for that branch.  These became the canonical evidence on 2026-09-06 or sit directly underneath it."
         },
         {
           "declaration": "TauCeti.DavisKahan1970.Section8.canonicalLowBranchUnbounded_orthogonal",
           "role": "generalization",
-          "note": "Unbounded-scope work toward this row's actual source scope: branch existence with its printed ordered form bounds, and the printed `Theta <= pi/4` for that branch.  The canonical evidence below is still bounded."
+          "note": "Unbounded-scope work toward this row's actual source scope: branch existence with its printed ordered form bounds, and the printed `Theta <= pi/4` for that branch.  These became the canonical evidence on 2026-09-06 or sit directly underneath it."
         },
         {
           "declaration": "TauCeti.DavisKahan1970.Section8.re_inner_le_of_mem_canonicalLowBranchUnbounded",
           "role": "generalization",
-          "note": "Unbounded-scope work toward this row's actual source scope: branch existence with its printed ordered form bounds, and the printed `Theta <= pi/4` for that branch.  The canonical evidence below is still bounded."
+          "note": "Unbounded-scope work toward this row's actual source scope: branch existence with its printed ordered form bounds, and the printed `Theta <= pi/4` for that branch.  These became the canonical evidence on 2026-09-06 or sit directly underneath it."
         },
         {
           "declaration": "TauCeti.DavisKahan1970.Section8.le_re_inner_of_mem_canonicalLowBranchUnbounded_orthogonal",
           "role": "generalization",
-          "note": "Unbounded-scope work toward this row's actual source scope: branch existence with its printed ordered form bounds, and the printed `Theta <= pi/4` for that branch.  The canonical evidence below is still bounded."
+          "note": "Unbounded-scope work toward this row's actual source scope: branch existence with its printed ordered form bounds, and the printed `Theta <= pi/4` for that branch.  These became the canonical evidence on 2026-09-06 or sit directly underneath it."
         },
         {
           "declaration": "TauCeti.DavisKahan1970.Section8.theorem8_1_canonicalBranchUnbounded_form",
           "role": "generalization",
-          "note": "Unbounded-scope work toward this row's actual source scope: branch existence with its printed ordered form bounds, and the printed `Theta <= pi/4` for that branch.  The canonical evidence below is still bounded."
+          "note": "Unbounded-scope work toward this row's actual source scope: branch existence with its printed ordered form bounds, and the printed `Theta <= pi/4` for that branch.  These became the canonical evidence on 2026-09-06 or sit directly underneath it."
         },
         {
           "declaration": "TauCeti.DavisKahan.re_inner_le_of_realSpectrum_subset_Iic",
           "role": "generalization",
-          "note": "Unbounded-scope work toward this row's actual source scope: the printed characterization's direction from the spectral placement, with the half-line spectrum to form-bound bridge it needs.  The canonical evidence below is still bounded."
+          "note": "Unbounded-scope work toward this row's actual source scope: the printed characterization's direction from the spectral placement, with the half-line spectrum to form-bound bridge it needs.  These became the canonical evidence on 2026-09-06 or sit directly underneath it."
         },
         {
           "declaration": "TauCeti.DavisKahan.le_re_inner_of_realSpectrum_subset_Ici",
           "role": "generalization",
-          "note": "Unbounded-scope work toward this row's actual source scope: the printed characterization's direction from the spectral placement, with the half-line spectrum to form-bound bridge it needs.  The canonical evidence below is still bounded."
+          "note": "Unbounded-scope work toward this row's actual source scope: the printed characterization's direction from the spectral placement, with the half-line spectrum to form-bound bridge it needs.  These became the canonical evidence on 2026-09-06 or sit directly underneath it."
         },
         {
           "declaration": "TauCeti.DavisKahan.re_inner_le_of_reducingRestriction_realSpectrum_subset_Iic",
           "role": "generalization",
-          "note": "Unbounded-scope work toward this row's actual source scope: the printed characterization's direction from the spectral placement, with the half-line spectrum to form-bound bridge it needs.  The canonical evidence below is still bounded."
+          "note": "Unbounded-scope work toward this row's actual source scope: the printed characterization's direction from the spectral placement, with the half-line spectrum to form-bound bridge it needs.  These became the canonical evidence on 2026-09-06 or sit directly underneath it."
         },
         {
           "declaration": "TauCeti.DavisKahan.le_re_inner_of_reducingRestriction_realSpectrum_subset_Ici",
           "role": "generalization",
-          "note": "Unbounded-scope work toward this row's actual source scope: the printed characterization's direction from the spectral placement, with the half-line spectrum to form-bound bridge it needs.  The canonical evidence below is still bounded."
+          "note": "Unbounded-scope work toward this row's actual source scope: the printed characterization's direction from the spectral placement, with the half-line spectrum to form-bound bridge it needs.  These became the canonical evidence on 2026-09-06 or sit directly underneath it."
         },
         {
           "declaration": "TauCeti.DavisKahan1970.Section8.theorem8_1_maximalAngle_le_of_spectrumIn_unbounded",
           "role": "generalization",
-          "note": "Unbounded-scope work toward this row's actual source scope: the printed characterization's direction from the spectral placement, with the half-line spectrum to form-bound bridge it needs.  The canonical evidence below is still bounded."
+          "note": "Unbounded-scope work toward this row's actual source scope: the printed characterization's direction from the spectral placement, with the half-line spectrum to form-bound bridge it needs.  These became the canonical evidence on 2026-09-06 or sit directly underneath it."
         },
         {
           "declaration": "TauCeti.DavisKahan1970.Section8.re_inner_split_of_reduces",
           "role": "generalization",
-          "note": "Unbounded-scope work toward this row's actual source scope: part (i), the compression inequality, in its form reading, both blocks.  The canonical evidence below is still bounded."
+          "note": "Unbounded-scope work toward this row's actual source scope: part (i), the compression inequality, in its form reading, both blocks.  These became the canonical evidence on 2026-09-06 or sit directly underneath it."
         },
         {
           "declaration": "TauCeti.LinearPMap.specProjection_apply_of_unitary_intertwines",
           "role": "generalization",
-          "note": "Unbounded-scope work toward this row's actual source scope: the CONVERSE half of the printed characterization -- uniqueness of the branch -- and with it the printed `iff` at unbounded scope, in the ordered-form reading of `Lambda_0 <= alpha` and `Lambda_1 >= alpha + delta`. The two ingredients are the POINTWISE strict quarter-angle bound (the uniform bound's constant degenerates as ‖A‖ grows, and the uniqueness argument never needed it) and the commutation of a reducing projection with a spectral projection. The canonical evidence below is still bounded, and is also the only place this row's real scalar scope is carried: this unbounded work is complex-only."
+          "note": "Unbounded-scope work toward this row's actual source scope: the CONVERSE half of the printed characterization -- uniqueness of the branch -- and with it the printed `iff` at unbounded scope, in the ordered-form reading of `Lambda_0 <= alpha` and `Lambda_1 >= alpha + delta`. The two ingredients are the POINTWISE strict quarter-angle bound (the uniform bound's constant degenerates as ‖A‖ grows, and the uniqueness argument never needed it) and the commutation of a reducing projection with a spectral projection. The real unbounded ports followed the same day, and the canonical evidence moved to the unbounded witnesses."
         },
         {
           "declaration": "TauCeti.LinearPMap.specProjection_eq_specProjC",
           "role": "generalization",
-          "note": "Unbounded-scope work toward this row's actual source scope: the CONVERSE half of the printed characterization -- uniqueness of the branch -- and with it the printed `iff` at unbounded scope, in the ordered-form reading of `Lambda_0 <= alpha` and `Lambda_1 >= alpha + delta`. The two ingredients are the POINTWISE strict quarter-angle bound (the uniform bound's constant degenerates as ‖A‖ grows, and the uniqueness argument never needed it) and the commutation of a reducing projection with a spectral projection. The canonical evidence below is still bounded, and is also the only place this row's real scalar scope is carried: this unbounded work is complex-only."
+          "note": "Unbounded-scope work toward this row's actual source scope: the CONVERSE half of the printed characterization -- uniqueness of the branch -- and with it the printed `iff` at unbounded scope, in the ordered-form reading of `Lambda_0 <= alpha` and `Lambda_1 >= alpha + delta`. The two ingredients are the POINTWISE strict quarter-angle bound (the uniform bound's constant degenerates as ‖A‖ grows, and the uniqueness argument never needed it) and the commutation of a reducing projection with a spectral projection. The real unbounded ports followed the same day, and the canonical evidence moved to the unbounded witnesses."
         },
         {
           "declaration": "TauCeti.DavisKahan.reflectionProduct_form_pos_of_orderedFormGap_unbounded",
           "role": "generalization",
-          "note": "Unbounded-scope work toward this row's actual source scope: the CONVERSE half of the printed characterization -- uniqueness of the branch -- and with it the printed `iff` at unbounded scope, in the ordered-form reading of `Lambda_0 <= alpha` and `Lambda_1 >= alpha + delta`. The two ingredients are the POINTWISE strict quarter-angle bound (the uniform bound's constant degenerates as ‖A‖ grows, and the uniqueness argument never needed it) and the commutation of a reducing projection with a spectral projection. The canonical evidence below is still bounded, and is also the only place this row's real scalar scope is carried: this unbounded work is complex-only."
+          "note": "Unbounded-scope work toward this row's actual source scope: the CONVERSE half of the printed characterization -- uniqueness of the branch -- and with it the printed `iff` at unbounded scope, in the ordered-form reading of `Lambda_0 <= alpha` and `Lambda_1 >= alpha + delta`. The two ingredients are the POINTWISE strict quarter-angle bound (the uniform bound's constant degenerates as ‖A‖ grows, and the uniqueness argument never needed it) and the commutation of a reducing projection with a spectral projection. The real unbounded ports followed the same day, and the canonical evidence moved to the unbounded witnesses."
         },
         {
           "declaration": "TauCeti.DavisKahan.norm_starProjection_sub_sq_lt_of_reflectionProduct_form_pos",
           "role": "generalization",
-          "note": "Unbounded-scope work toward this row's actual source scope: the CONVERSE half of the printed characterization -- uniqueness of the branch -- and with it the printed `iff` at unbounded scope, in the ordered-form reading of `Lambda_0 <= alpha` and `Lambda_1 >= alpha + delta`. The two ingredients are the POINTWISE strict quarter-angle bound (the uniform bound's constant degenerates as ‖A‖ grows, and the uniqueness argument never needed it) and the commutation of a reducing projection with a spectral projection. The canonical evidence below is still bounded, and is also the only place this row's real scalar scope is carried: this unbounded work is complex-only."
+          "note": "Unbounded-scope work toward this row's actual source scope: the CONVERSE half of the printed characterization -- uniqueness of the branch -- and with it the printed `iff` at unbounded scope, in the ordered-form reading of `Lambda_0 <= alpha` and `Lambda_1 >= alpha + delta`. The two ingredients are the POINTWISE strict quarter-angle bound (the uniform bound's constant degenerates as ‖A‖ grows, and the uniqueness argument never needed it) and the commutation of a reducing projection with a spectral projection. The real unbounded ports followed the same day, and the canonical evidence moved to the unbounded witnesses."
         },
         {
           "declaration": "TauCeti.DavisKahan.norm_starProjection_sub_sq_lt_of_orderedFormGap_unbounded",
           "role": "generalization",
-          "note": "Unbounded-scope work toward this row's actual source scope: the CONVERSE half of the printed characterization -- uniqueness of the branch -- and with it the printed `iff` at unbounded scope, in the ordered-form reading of `Lambda_0 <= alpha` and `Lambda_1 >= alpha + delta`. The two ingredients are the POINTWISE strict quarter-angle bound (the uniform bound's constant degenerates as ‖A‖ grows, and the uniqueness argument never needed it) and the commutation of a reducing projection with a spectral projection. The canonical evidence below is still bounded, and is also the only place this row's real scalar scope is carried: this unbounded work is complex-only."
+          "note": "Unbounded-scope work toward this row's actual source scope: the CONVERSE half of the printed characterization -- uniqueness of the branch -- and with it the printed `iff` at unbounded scope, in the ordered-form reading of `Lambda_0 <= alpha` and `Lambda_1 >= alpha + delta`. The two ingredients are the POINTWISE strict quarter-angle bound (the uniform bound's constant degenerates as ‖A‖ grows, and the uniqueness argument never needed it) and the commutation of a reducing projection with a spectral projection. The real unbounded ports followed the same day, and the canonical evidence moved to the unbounded witnesses."
         },
         {
           "declaration": "TauCeti.DavisKahan.norm_starProjection_sub_sq_lt_of_orderedFormGap_unbounded_printed",
           "role": "generalization",
-          "note": "Unbounded-scope work toward this row's actual source scope: the CONVERSE half of the printed characterization -- uniqueness of the branch -- and with it the printed `iff` at unbounded scope, in the ordered-form reading of `Lambda_0 <= alpha` and `Lambda_1 >= alpha + delta`. The two ingredients are the POINTWISE strict quarter-angle bound (the uniform bound's constant degenerates as ‖A‖ grows, and the uniqueness argument never needed it) and the commutation of a reducing projection with a spectral projection. The canonical evidence below is still bounded, and is also the only place this row's real scalar scope is carried: this unbounded work is complex-only."
+          "note": "Unbounded-scope work toward this row's actual source scope: the CONVERSE half of the printed characterization -- uniqueness of the branch -- and with it the printed `iff` at unbounded scope, in the ordered-form reading of `Lambda_0 <= alpha` and `Lambda_1 >= alpha + delta`. The two ingredients are the POINTWISE strict quarter-angle bound (the uniform bound's constant degenerates as ‖A‖ grows, and the uniqueness argument never needed it) and the commutation of a reducing projection with a spectral projection. The real unbounded ports followed the same day, and the canonical evidence moved to the unbounded witnesses."
         },
         {
           "declaration": "TauCeti.DavisKahan1970.Section8.starProjection_specProjection_comm_of_reduces",
           "role": "generalization",
-          "note": "Unbounded-scope work toward this row's actual source scope: the CONVERSE half of the printed characterization -- uniqueness of the branch -- and with it the printed `iff` at unbounded scope, in the ordered-form reading of `Lambda_0 <= alpha` and `Lambda_1 >= alpha + delta`. The two ingredients are the POINTWISE strict quarter-angle bound (the uniform bound's constant degenerates as ‖A‖ grows, and the uniqueness argument never needed it) and the commutation of a reducing projection with a spectral projection. The canonical evidence below is still bounded, and is also the only place this row's real scalar scope is carried: this unbounded work is complex-only."
+          "note": "Unbounded-scope work toward this row's actual source scope: the CONVERSE half of the printed characterization -- uniqueness of the branch -- and with it the printed `iff` at unbounded scope, in the ordered-form reading of `Lambda_0 <= alpha` and `Lambda_1 >= alpha + delta`. The two ingredients are the POINTWISE strict quarter-angle bound (the uniform bound's constant degenerates as ‖A‖ grows, and the uniqueness argument never needed it) and the commutation of a reducing projection with a spectral projection. The real unbounded ports followed the same day, and the canonical evidence moved to the unbounded witnesses."
         },
         {
           "declaration": "TauCeti.DavisKahan1970.Section8.eq_of_starProjection_comm_of_crossed_trivial",
           "role": "generalization",
-          "note": "Unbounded-scope work toward this row's actual source scope: the CONVERSE half of the printed characterization -- uniqueness of the branch -- and with it the printed `iff` at unbounded scope, in the ordered-form reading of `Lambda_0 <= alpha` and `Lambda_1 >= alpha + delta`. The two ingredients are the POINTWISE strict quarter-angle bound (the uniform bound's constant degenerates as ‖A‖ grows, and the uniqueness argument never needed it) and the commutation of a reducing projection with a spectral projection. The canonical evidence below is still bounded, and is also the only place this row's real scalar scope is carried: this unbounded work is complex-only."
+          "note": "Unbounded-scope work toward this row's actual source scope: the CONVERSE half of the printed characterization -- uniqueness of the branch -- and with it the printed `iff` at unbounded scope, in the ordered-form reading of `Lambda_0 <= alpha` and `Lambda_1 >= alpha + delta`. The two ingredients are the POINTWISE strict quarter-angle bound (the uniform bound's constant degenerates as ‖A‖ grows, and the uniqueness argument never needed it) and the commutation of a reducing projection with a spectral projection. The real unbounded ports followed the same day, and the canonical evidence moved to the unbounded witnesses."
         },
         {
           "declaration": "TauCeti.DavisKahan1970.Section8.norm_starProjection_lt_of_mem_orthogonal_of_sq_lt",
           "role": "generalization",
-          "note": "Unbounded-scope work toward this row's actual source scope: the CONVERSE half of the printed characterization -- uniqueness of the branch -- and with it the printed `iff` at unbounded scope, in the ordered-form reading of `Lambda_0 <= alpha` and `Lambda_1 >= alpha + delta`. The two ingredients are the POINTWISE strict quarter-angle bound (the uniform bound's constant degenerates as ‖A‖ grows, and the uniqueness argument never needed it) and the commutation of a reducing projection with a spectral projection. The canonical evidence below is still bounded, and is also the only place this row's real scalar scope is carried: this unbounded work is complex-only."
+          "note": "Unbounded-scope work toward this row's actual source scope: the CONVERSE half of the printed characterization -- uniqueness of the branch -- and with it the printed `iff` at unbounded scope, in the ordered-form reading of `Lambda_0 <= alpha` and `Lambda_1 >= alpha + delta`. The two ingredients are the POINTWISE strict quarter-angle bound (the uniform bound's constant degenerates as ‖A‖ grows, and the uniqueness argument never needed it) and the commutation of a reducing projection with a spectral projection. The real unbounded ports followed the same day, and the canonical evidence moved to the unbounded witnesses."
         },
         {
           "declaration": "TauCeti.DavisKahan1970.Section8.theorem8_1_eq_canonicalBranchUnbounded_of_maximalAngle_le",
           "role": "generalization",
-          "note": "Unbounded-scope work toward this row's actual source scope: the CONVERSE half of the printed characterization -- uniqueness of the branch -- and with it the printed `iff` at unbounded scope, in the ordered-form reading of `Lambda_0 <= alpha` and `Lambda_1 >= alpha + delta`. The two ingredients are the POINTWISE strict quarter-angle bound (the uniform bound's constant degenerates as ‖A‖ grows, and the uniqueness argument never needed it) and the commutation of a reducing projection with a spectral projection. The canonical evidence below is still bounded, and is also the only place this row's real scalar scope is carried: this unbounded work is complex-only."
+          "note": "Unbounded-scope work toward this row's actual source scope: the CONVERSE half of the printed characterization -- uniqueness of the branch -- and with it the printed `iff` at unbounded scope, in the ordered-form reading of `Lambda_0 <= alpha` and `Lambda_1 >= alpha + delta`. The two ingredients are the POINTWISE strict quarter-angle bound (the uniform bound's constant degenerates as ‖A‖ grows, and the uniqueness argument never needed it) and the commutation of a reducing projection with a spectral projection. The real unbounded ports followed the same day, and the canonical evidence moved to the unbounded witnesses."
         },
         {
           "declaration": "TauCeti.DavisKahan1970.Section8.theorem8_1_canonicalBranch",
@@ -6073,6 +6220,66 @@
           "declaration": "TauCeti.DavisKahan1970.Section8.semiboundedBelow_reducingRestriction_real_iff",
           "role": "transport_lemma",
           "note": "The block/ambient bridge the source-facing façades are built on: `Lambda <= c` on a reducing block is the ambient form bound on that block, in both directions.  Unfolding only."
+        },
+        {
+          "declaration": "TauCeti.DavisKahan1970.Section8.theorem8_1_upperApproximationRepulsion",
+          "role": "generalization",
+          "note": "The dimension-free approximation-number reading of this clause, which the source announces as its natural infinite-dimensional extension.  It was the canonical evidence until 2026-09-06, when the printed eigenvalue façade replaced it at the source boundary."
+        },
+        {
+          "declaration": "TauCeti.DavisKahan1970.Section8.theorem8_1_lowerApproximationRepulsion",
+          "role": "generalization",
+          "note": "The dimension-free approximation-number reading of this clause, which the source announces as its natural infinite-dimensional extension.  It was the canonical evidence until 2026-09-06, when the printed eigenvalue façade replaced it at the source boundary."
+        },
+        {
+          "declaration": "TauCeti.DavisKahan1970.Section8.theorem8_1_upperApproximationRepulsion_real",
+          "role": "generalization",
+          "note": "The dimension-free approximation-number reading of this clause, which the source announces as its natural infinite-dimensional extension.  It was the canonical evidence until 2026-09-06, when the printed eigenvalue façade replaced it at the source boundary."
+        },
+        {
+          "declaration": "TauCeti.DavisKahan1970.Section8.theorem8_1_lowerApproximationRepulsion_real",
+          "role": "generalization",
+          "note": "The dimension-free approximation-number reading of this clause, which the source announces as its natural infinite-dimensional extension.  It was the canonical evidence until 2026-09-06, when the printed eigenvalue façade replaced it at the source boundary."
+        },
+        {
+          "declaration": "TauCeti.DavisKahan1970.Section8.theorem8_1_upperSymmetricGaugeRepulsion_angle_rev",
+          "role": "generalization",
+          "note": "The dimension-free approximation-number reading of this clause, which the source announces as its natural infinite-dimensional extension.  It was the canonical evidence until 2026-09-06, when the printed eigenvalue façade replaced it at the source boundary."
+        },
+        {
+          "declaration": "TauCeti.DavisKahan1970.Section8.theorem8_1_lowerSymmetricGaugeRepulsion_angle_rev",
+          "role": "generalization",
+          "note": "The dimension-free approximation-number reading of this clause, which the source announces as its natural infinite-dimensional extension.  It was the canonical evidence until 2026-09-06, when the printed eigenvalue façade replaced it at the source boundary."
+        },
+        {
+          "declaration": "TauCeti.DavisKahan1970.Section8.theorem8_1_upperSymmetricGaugeRepulsion_angle_rev_real",
+          "role": "generalization",
+          "note": "The dimension-free approximation-number reading of this clause, which the source announces as its natural infinite-dimensional extension.  It was the canonical evidence until 2026-09-06, when the printed eigenvalue façade replaced it at the source boundary."
+        },
+        {
+          "declaration": "TauCeti.DavisKahan1970.Section8.theorem8_1_lowerSymmetricGaugeRepulsion_angle_rev_real",
+          "role": "generalization",
+          "note": "The dimension-free approximation-number reading of this clause, which the source announces as its natural infinite-dimensional extension.  It was the canonical evidence until 2026-09-06, when the printed eigenvalue façade replaced it at the source boundary."
+        },
+        {
+          "declaration": "TauCeti.DavisKahan1970.Section8.theorem8_1_upperCompressionRepulsion_ofBlockPlacement_unbounded_complex",
+          "role": "generalization",
+          "note": "Part (i) for an ARBITRARY reducing subspace carrying the block placement, rather than for the branch the existence half asserts.  The source states the clause for that branch; this is the general theorem underneath the source façade."
+        },
+        {
+          "declaration": "TauCeti.DavisKahan1970.Section8.theorem8_1_lowerCompressionRepulsion_ofBlockPlacement_unbounded_complex",
+          "role": "generalization",
+          "note": "The lower companion of the general part (i) statement."
+        },
+        {
+          "declaration": "TauCeti.DavisKahan1970.Section8.theorem8_1_upperCompressionRepulsion_ofBlockPlacement_unbounded_real",
+          "role": "generalization",
+          "note": "The real sibling of the general part (i) statement."
+        },
+        {
+          "declaration": "TauCeti.DavisKahan1970.Section8.theorem8_1_lowerCompressionRepulsion_ofBlockPlacement_unbounded_real",
+          "role": "generalization",
+          "note": "The real lower companion of the general part (i) statement."
         }
       ],
       "result_wide_scope_atoms": [],
@@ -6196,12 +6403,12 @@
           ],
           "scalar_scope": "complex",
           "evidence": {
-            "primary": "TauCeti.DavisKahan1970.Section8.theorem8_1_upperApproximationRepulsion",
+            "primary": "TauCeti.DavisKahan1970.Section8.theorem8_1_upperEigenvalueRepulsion_sourceExact",
             "correspondence": []
           },
           "status": "established",
           "evidence_kind": "proof",
-          "justification": "Canonical witness for part-ii-eigenvalue at complex scalar scope, carried over from the pre-clause canonical evidence and re-checked against its compiler-printed type under the coherent model."
+          "justification": "Canonical witness on the PRINTED sequences: `alpha_k` and `lambda_k` are the ordered eigenvalues of the blocks, named through `LinearMap.IsSymmetric.eigenvalues`, and the clause is the printed inequality between them in finite dimensions.  The approximation-number theorem it replaces is dimension-free and is retained as the generalization the source announces as the \"natural infinite-dimensional extensions\"; `approximationNumber_eq_eigenvalues_of_isPositive` is the compiled correspondence between the two readings."
         },
         {
           "id": "part-ii-eigenvalue.complex.2",
@@ -6210,12 +6417,12 @@
           ],
           "scalar_scope": "complex",
           "evidence": {
-            "primary": "TauCeti.DavisKahan1970.Section8.theorem8_1_lowerApproximationRepulsion",
+            "primary": "TauCeti.DavisKahan1970.Section8.theorem8_1_lowerEigenvalueRepulsion_sourceExact",
             "correspondence": []
           },
           "status": "established",
           "evidence_kind": "proof",
-          "justification": "Canonical witness for part-ii-eigenvalue at complex scalar scope, carried over from the pre-clause canonical evidence and re-checked against its compiler-printed type under the coherent model."
+          "justification": "Canonical witness on the PRINTED sequences: `alpha_k` and `lambda_k` are the ordered eigenvalues of the blocks, named through `LinearMap.IsSymmetric.eigenvalues`, and the clause is the printed inequality between them in finite dimensions.  The approximation-number theorem it replaces is dimension-free and is retained as the generalization the source announces as the \"natural infinite-dimensional extensions\"; `approximationNumber_eq_eigenvalues_of_isPositive` is the compiled correspondence between the two readings."
         },
         {
           "id": "part-ii-eigenvalue.real",
@@ -6224,12 +6431,12 @@
           ],
           "scalar_scope": "real",
           "evidence": {
-            "primary": "TauCeti.DavisKahan1970.Section8.theorem8_1_upperApproximationRepulsion_real",
+            "primary": "TauCeti.DavisKahan1970.Section8.theorem8_1_upperEigenvalueRepulsion_sourceExact_real",
             "correspondence": []
           },
           "status": "established",
           "evidence_kind": "proof",
-          "justification": "Canonical witness for part-ii-eigenvalue at real scalar scope, carried over from the pre-clause canonical evidence and re-checked against its compiler-printed type under the coherent model."
+          "justification": "Canonical witness on the PRINTED sequences: `alpha_k` and `lambda_k` are the ordered eigenvalues of the blocks, named through `LinearMap.IsSymmetric.eigenvalues`, and the clause is the printed inequality between them in finite dimensions.  The approximation-number theorem it replaces is dimension-free and is retained as the generalization the source announces as the \"natural infinite-dimensional extensions\"; `approximationNumber_eq_eigenvalues_of_isPositive` is the compiled correspondence between the two readings."
         },
         {
           "id": "part-ii-eigenvalue.real.2",
@@ -6238,12 +6445,12 @@
           ],
           "scalar_scope": "real",
           "evidence": {
-            "primary": "TauCeti.DavisKahan1970.Section8.theorem8_1_lowerApproximationRepulsion_real",
+            "primary": "TauCeti.DavisKahan1970.Section8.theorem8_1_lowerEigenvalueRepulsion_sourceExact_real",
             "correspondence": []
           },
           "status": "established",
           "evidence_kind": "proof",
-          "justification": "Canonical witness for part-ii-eigenvalue at real scalar scope, carried over from the pre-clause canonical evidence and re-checked against its compiler-printed type under the coherent model."
+          "justification": "Canonical witness on the PRINTED sequences: `alpha_k` and `lambda_k` are the ordered eigenvalues of the blocks, named through `LinearMap.IsSymmetric.eigenvalues`, and the clause is the printed inequality between them in finite dimensions.  The approximation-number theorem it replaces is dimension-free and is retained as the generalization the source announces as the \"natural infinite-dimensional extensions\"; `approximationNumber_eq_eigenvalues_of_isPositive` is the compiled correspondence between the two readings."
         },
         {
           "id": "part-iii-gauge.complex",
@@ -6252,12 +6459,12 @@
           ],
           "scalar_scope": "complex",
           "evidence": {
-            "primary": "TauCeti.DavisKahan1970.Section8.theorem8_1_upperSymmetricGaugeRepulsion_angle_rev",
+            "primary": "TauCeti.DavisKahan1970.Section8.theorem8_1_upperSymmetricGaugeEigenvalue_sourceExact",
             "correspondence": []
           },
           "status": "established",
           "evidence_kind": "proof",
-          "justification": "Canonical witness for part-iii-gauge at complex scalar scope, carried over from the pre-clause canonical evidence and re-checked against its compiler-printed type under the coherent model."
+          "justification": "Canonical witness on the PRINTED sequences: `alpha_k` and `lambda_k` are the ordered eigenvalues of the blocks, named through `LinearMap.IsSymmetric.eigenvalues`, and the clause is the printed inequality between them in finite dimensions.  The approximation-number theorem it replaces is dimension-free and is retained as the generalization the source announces as the \"natural infinite-dimensional extensions\"; `approximationNumber_eq_eigenvalues_of_isPositive` is the compiled correspondence between the two readings."
         },
         {
           "id": "part-iii-gauge.complex.2",
@@ -6266,12 +6473,12 @@
           ],
           "scalar_scope": "complex",
           "evidence": {
-            "primary": "TauCeti.DavisKahan1970.Section8.theorem8_1_lowerSymmetricGaugeRepulsion_angle_rev",
+            "primary": "TauCeti.DavisKahan1970.Section8.theorem8_1_lowerSymmetricGaugeEigenvalue_sourceExact",
             "correspondence": []
           },
           "status": "established",
           "evidence_kind": "proof",
-          "justification": "Canonical witness for part-iii-gauge at complex scalar scope, carried over from the pre-clause canonical evidence and re-checked against its compiler-printed type under the coherent model."
+          "justification": "Canonical witness on the PRINTED sequences: `alpha_k` and `lambda_k` are the ordered eigenvalues of the blocks, named through `LinearMap.IsSymmetric.eigenvalues`, and the clause is the printed inequality between them in finite dimensions.  The approximation-number theorem it replaces is dimension-free and is retained as the generalization the source announces as the \"natural infinite-dimensional extensions\"; `approximationNumber_eq_eigenvalues_of_isPositive` is the compiled correspondence between the two readings."
         },
         {
           "id": "part-iii-gauge.real",
@@ -6280,12 +6487,12 @@
           ],
           "scalar_scope": "real",
           "evidence": {
-            "primary": "TauCeti.DavisKahan1970.Section8.theorem8_1_upperSymmetricGaugeRepulsion_angle_rev_real",
+            "primary": "TauCeti.DavisKahan1970.Section8.theorem8_1_upperSymmetricGaugeEigenvalue_sourceExact_real",
             "correspondence": []
           },
           "status": "established",
           "evidence_kind": "proof",
-          "justification": "Canonical witness for part-iii-gauge at real scalar scope, carried over from the pre-clause canonical evidence and re-checked against its compiler-printed type under the coherent model."
+          "justification": "Canonical witness on the PRINTED sequences: `alpha_k` and `lambda_k` are the ordered eigenvalues of the blocks, named through `LinearMap.IsSymmetric.eigenvalues`, and the clause is the printed inequality between them in finite dimensions.  The approximation-number theorem it replaces is dimension-free and is retained as the generalization the source announces as the \"natural infinite-dimensional extensions\"; `approximationNumber_eq_eigenvalues_of_isPositive` is the compiled correspondence between the two readings."
         },
         {
           "id": "part-iii-gauge.real.2",
@@ -6294,12 +6501,12 @@
           ],
           "scalar_scope": "real",
           "evidence": {
-            "primary": "TauCeti.DavisKahan1970.Section8.theorem8_1_lowerSymmetricGaugeRepulsion_angle_rev_real",
+            "primary": "TauCeti.DavisKahan1970.Section8.theorem8_1_lowerSymmetricGaugeEigenvalue_sourceExact_real",
             "correspondence": []
           },
           "status": "established",
           "evidence_kind": "proof",
-          "justification": "Canonical witness for part-iii-gauge at real scalar scope, carried over from the pre-clause canonical evidence and re-checked against its compiler-printed type under the coherent model."
+          "justification": "Canonical witness on the PRINTED sequences: `alpha_k` and `lambda_k` are the ordered eigenvalues of the blocks, named through `LinearMap.IsSymmetric.eigenvalues`, and the clause is the printed inequality between them in finite dimensions.  The approximation-number theorem it replaces is dimension-free and is retained as the generalization the source announces as the \"natural infinite-dimensional extensions\"; `approximationNumber_eq_eigenvalues_of_isPositive` is the compiled correspondence between the two readings."
         }
       ],
       "nonlocal_source_interpretation": {
@@ -6345,7 +6552,7 @@
         "source_fidelity_inventory_sha256": "a35c9158f5fab388494d59393f2c49343e0810cb0c5a864abc383e955542564c",
         "supporting_atom_digest_sha256": "9d2013e666da3d323c1a2351a7d52cf4c878868c048a296656164cce5accb447"
       },
-      "notes": "\n\nUNBOUNDED SCOPE, PROGRESS 2026-09-05.  The angle conclusion Davis and Kahan print -- `Theta <= pi/4`, non-strict -- is now proved at unbounded ambient scope by `maximalAngle_le_pi_div_four_of_orderedFormGap_unbounded_printed`, in the paper's own orientation on `P` and `Q`.  Reading the printed statement mattered: the bounded canonical evidence concludes the strictly stronger supremum bound `subspaceGap < sqrt 2 / 2`, whose constant is `delta / (1 + ‖C‖)` and therefore degenerates as `‖A‖ -> infinity`.  The paper does not claim it, and it is not available unbounded.\n\nWhat is still bounded on this row: the existence of the branch `Q` as a spectral subspace of `A + H`, the form bounds on it, and parts (i)-(iii).  The canonical evidence is therefore unchanged and the row is not yet at its source scope.\n\nThe unbounded core is now exported as reflection-product positivity (`reflectionProduct_form_nonneg_of_orderedFormGap_unbounded`), with the angle conclusion and the projector-gap conclusion `subspaceGap P Q <= sqrt 2 / 2` as thin consumers of it in the paper's own orientation.\n\nBRANCH EXISTENCE AT UNBOUNDED SCOPE, 2026-09-06.  `theorem8_1_canonicalBranchUnbounded_printed` supplies, at the printed hypotheses and at unbounded scope, the branch `Q = specRange (A + H) (Iic alpha)` together with all three printed facts about it: it reduces `A + H`, it carries `Lambda_0 <= alpha` and `Lambda_1 >= alpha + delta`, and `Theta(P, Q) <= pi/4`.  The two form bounds are the half-line energy bounds of the spectral measure applied through a one-sided limit, with the open gap removed by the already-proved unbounded repulsion `notMem_spectrum_addBounded_of_offDiagonal_form_gap`.\n\nThe printed characterization's direction FROM the spectral placement is also proved at unbounded scope, from the printed half-line placements themselves: `theorem8_1_maximalAngle_le_of_spectrumIn_unbounded`, with `re_inner_le_of_reducingRestriction_realSpectrum_subset_Iic` and its dual as the bridge from half-line spectrum to form bound.\n\nPART (i) AT UNBOUNDED SCOPE, 2026-09-06.  `theorem8_1_upperCompressionRepulsion_unbounded` and its lower-block dual give part (i) in its form reading -- the alpha-shifted energy of a domain vector is at most that of its component in the branch's complement.  The proof is `re_inner_split_of_reduces` (a reducing subspace splits the energy, the cross terms vanishing by invariance) plus the branch's own ordered form bound; nothing about `P` is used, so it holds on the whole domain and the paper's `P^perp` is only where it is read.\n\nPRINTED SCOPE OF PARTS (ii) AND (iii), measured 2026-09-06.  Neither is an unbounded obligation.  The source prints (ii) `in finite dimensions ... with ... natural infinite-dimensional extensions` and (iii) `for every symmetric gauge function Phi in finite dimensions`.  Part (i), by contrast, carries no dimension qualifier and so inherits the ambient unbounded scope.  The existing finite/bounded evidence for (ii) and (iii) is therefore AT the printed scope, and the dimension-free approximation-number form already registered covers (ii)'s extension remark.\n\nCONVERSE AT UNBOUNDED SCOPE, 2026-09-06.  The converse half of the printed iff is proved at unbounded scope by `theorem8_1_eq_canonicalBranchUnbounded_of_maximalAngle_le` (uniqueness of the branch) and packaged with the forward direction as `theorem8_1_maximalAngle_le_iff_orderedFormGap_unbounded`, in the ordered-form reading of the printed placements `Lambda_0 <= alpha` and `Lambda_1 >= alpha + delta`.\n\nAn earlier revision of this note recorded the converse as an open mathematical question, on the grounds that the bounded proof rests on the UNIFORM strict bound `IsQuarterAcute P Q` whose constant `delta / (1 + ‖C‖)` degenerates as ‖A‖ grows.  That reasoning was wrong.  The uniqueness argument tests one vector at a time, so POINTWISE strictness suffices, and pointwise strictness was already inside the unbounded quarter-angle proof: retaining the `delta ‖G y‖^2` margin that `reflectionProduct_form_nonneg_of_orderedFormGap_unbounded` discarded gives `reflectionProduct_form_pos_of_orderedFormGap_unbounded`, hence `‖P_P y - P_Q y‖ < ‖y‖/sqrt 2` for every nonzero `y`.  No uniform bound follows and none is claimed, which is consistent with the paper printing only the non-strict `Theta <= pi/4`.  The second ingredient is `TauCeti.LinearPMap.specProjection_apply_of_unitary_intertwines`: a unitary preserving the domain and commuting with the operator commutes with every spectral projection, so the reflection of a reducing subspace makes `P_M` and `P_Q` commute.\n\nWHAT IS STILL BOUNDED ON THIS ROW.  Only the canonical evidence selection, and the real scalar scope of the unbounded work.  Every printed clause of Theorem 8.1 that inherits unbounded scope -- branch existence with its form bounds, both directions of the characterization, and part (i) -- now has a compiled unbounded COMPLEX proof registered as supporting evidence.  Parts (ii) and (iii) are printed in finite dimensions and are at their printed scope already.  Promoting the canonical evidence would drop this row's real coverage, since the unbounded Section 8 development is complex-only; the real unbounded ports are the remaining work, and `GOAL.md` says so."
+      "notes": "\n\nUNBOUNDED SCOPE, PROGRESS 2026-09-05.  The angle conclusion Davis and Kahan print -- `Theta <= pi/4`, non-strict -- is now proved at unbounded ambient scope by `maximalAngle_le_pi_div_four_of_orderedFormGap_unbounded_printed`, in the paper's own orientation on `P` and `Q`.  Reading the printed statement mattered: the bounded canonical evidence concludes the strictly stronger supremum bound `subspaceGap < sqrt 2 / 2`, whose constant is `delta / (1 + ‖C‖)` and therefore degenerates as `‖A‖ -> infinity`.  The paper does not claim it, and it is not available unbounded.\n\nSUPERSEDED THE SAME DAY -- the sentence that stood here said the canonical evidence was unchanged and the row not yet at its source scope.  Both stopped being true on 2026-09-06: see the entries below.\n\nThe unbounded core is now exported as reflection-product positivity (`reflectionProduct_form_nonneg_of_orderedFormGap_unbounded`), with the angle conclusion and the projector-gap conclusion `subspaceGap P Q <= sqrt 2 / 2` as thin consumers of it in the paper's own orientation.\n\nBRANCH EXISTENCE AT UNBOUNDED SCOPE, 2026-09-06.  `theorem8_1_canonicalBranchUnbounded_printed` supplies, at the printed hypotheses and at unbounded scope, the branch `Q = specRange (A + H) (Iic alpha)` together with all three printed facts about it: it reduces `A + H`, it carries `Lambda_0 <= alpha` and `Lambda_1 >= alpha + delta`, and `Theta(P, Q) <= pi/4`.  The two form bounds are the half-line energy bounds of the spectral measure applied through a one-sided limit, with the open gap removed by the already-proved unbounded repulsion `notMem_spectrum_addBounded_of_offDiagonal_form_gap`.\n\nThe printed characterization's direction FROM the spectral placement is also proved at unbounded scope, from the printed half-line placements themselves: `theorem8_1_maximalAngle_le_of_spectrumIn_unbounded`, with `re_inner_le_of_reducingRestriction_realSpectrum_subset_Iic` and its dual as the bridge from half-line spectrum to form bound.\n\nPART (i) AT UNBOUNDED SCOPE, 2026-09-06.  `theorem8_1_upperCompressionRepulsion_unbounded` and its lower-block dual give part (i) in its form reading -- the alpha-shifted energy of a domain vector is at most that of its component in the branch's complement.  The proof is `re_inner_split_of_reduces` (a reducing subspace splits the energy, the cross terms vanishing by invariance) plus the branch's own ordered form bound; nothing about `P` is used, so it holds on the whole domain and the paper's `P^perp` is only where it is read.\n\nPRINTED SCOPE OF PARTS (ii) AND (iii), measured 2026-09-06.  Neither is an unbounded obligation.  The source prints (ii) `in finite dimensions ... with ... natural infinite-dimensional extensions` and (iii) `for every symmetric gauge function Phi in finite dimensions`.  Part (i), by contrast, carries no dimension qualifier and so inherits the ambient unbounded scope.  The existing finite/bounded evidence for (ii) and (iii) is therefore AT the printed scope, and the dimension-free approximation-number form already registered covers (ii)'s extension remark.\n\nCONVERSE AT UNBOUNDED SCOPE, 2026-09-06.  The converse half of the printed iff is proved at unbounded scope by `theorem8_1_eq_canonicalBranchUnbounded_of_maximalAngle_le` (uniqueness of the branch) and packaged with the forward direction as `theorem8_1_maximalAngle_le_iff_orderedFormGap_unbounded`, in the ordered-form reading of the printed placements `Lambda_0 <= alpha` and `Lambda_1 >= alpha + delta`.\n\nAn earlier revision of this note recorded the converse as an open mathematical question, on the grounds that the bounded proof rests on the UNIFORM strict bound `IsQuarterAcute P Q` whose constant `delta / (1 + ‖C‖)` degenerates as ‖A‖ grows.  That reasoning was wrong.  The uniqueness argument tests one vector at a time, so POINTWISE strictness suffices, and pointwise strictness was already inside the unbounded quarter-angle proof: retaining the `delta ‖G y‖^2` margin that `reflectionProduct_form_nonneg_of_orderedFormGap_unbounded` discarded gives `reflectionProduct_form_pos_of_orderedFormGap_unbounded`, hence `‖P_P y - P_Q y‖ < ‖y‖/sqrt 2` for every nonzero `y`.  No uniform bound follows and none is claimed, which is consistent with the paper printing only the non-strict `Theta <= pi/4`.  The second ingredient is `TauCeti.LinearPMap.specProjection_apply_of_unitary_intertwines`: a unitary preserving the domain and commuting with the operator commutes with every spectral projection, so the reflection of a reducing subspace makes `P_M` and `P_Q` commute.\n\nWHAT IS STILL BOUNDED ON THIS ROW.  Only the canonical evidence selection, and the real scalar scope of the unbounded work.  Every printed clause of Theorem 8.1 that inherits unbounded scope -- branch existence with its form bounds, both directions of the characterization, and part (i) -- now has a compiled unbounded COMPLEX proof registered as supporting evidence.  Parts (ii) and (iii) are printed in finite dimensions and are at their printed scope already.  Promoting the canonical evidence would drop this row's real coverage, since the unbounded Section 8 development is complex-only; the real unbounded ports are the remaining work, and `GOAL.md` says so."
     },
     {
       "id": "DK-8.2-thm",
@@ -6413,7 +6620,11 @@
         "TauCeti.DavisKahan1970.Section8.theorem8_2_perturbation_sourceExact_unbounded_complex",
         "TauCeti.DavisKahan1970.Section8.theorem8_2_residual_sourceExact_unbounded_complex",
         "TauCeti.DavisKahan1970.Section8.theorem8_2_perturbation_sourceExact_unbounded_real",
-        "TauCeti.DavisKahan1970.Section8.theorem8_2_residual_sourceExact_unbounded_real"
+        "TauCeti.DavisKahan1970.Section8.theorem8_2_residual_sourceExact_unbounded_real",
+        "TauCeti.DavisKahan1970.Section8.sourceResidual",
+        "TauCeti.DavisKahan1970.Section8.sourceResidual_eq_sub_ritzBlock",
+        "TauCeti.DavisKahan1970.Section8.exists_ritzBlock_of_realSpectrum_subset_Icc_complex",
+        "TauCeti.DavisKahan1970.Section8.exists_ritzBlock_of_realSpectrum_subset_Icc_real"
       ],
       "review_note": "RE-CLOSED 2026-08-12 after repair (reopened earlier the same day; the reopening is retained in git history).  Both defects were real.  (a) Source scope: immediately after the proof of Proposition 3.2 the paper fixes the standing convention that (3.5) is assumed as well as (1.5) except where the contrary is stated, and Theorem 8.2 does not state otherwise.  That convention is now inventoried as the source SCOPE atom `S3-standing-scope.crossed-dimension-standing-assumption` and linked, as scope, to exactly the two counted results it governs -- Theorem 8.2 and Proposition 3.4.  It is not a counted result and the denominator remains 29.  Theorem 8.1's ambient quarter-angle characterization `theorem8_1_maximalAngle_le_iff_spectrumIn` is proved with no dimension hypothesis at all, so it is deliberately not linked.  (b) Evidence: the printed quarter-angle conclusion is the AMBIENT Theta < pi/4, and the row previously selected a directed-gap theorem.  The selected evidence is now `theorem8_2_branch_maximalAngle_lt_of_crossedDefects` and `theorem8_2_branch_real_maximalAngle_lt_of_crossedDefects`, which conclude `maximalAngle P Q < pi/4` from either printed smallness alternative under (3.5) in its constructive `CrossedDefectsEquivalent` form, with no finite-dimensionality and no rank hypothesis, over both scalar fields.  Together with the four retained `sin 2Theta` endpoints (perturbation and residual, complex and real, arbitrary `SymmetricNormingFunction`) the evidence jointly establishes the printed result at the printed dimensional scope.  No new Lean mathematics was required once the source scope was corrected.\n\n**ORIENTATION DEFECT FOUND AND FIXED 2026-09-04 (Claude Opus 5, on hostile review).**  The printed residual alternative was certified on `sinTwoThetaIdealBlock Q P` rather than on the paper's directed angle, and in the wrong ordering of the pair.  This is exactly the defect repaired on `S2-sin-two-theta` earlier the same day; the repair was not propagated here, and the row read terminal throughout.  The canonical evidence is now `theorem8_2_sinTwoTheta_residual_directedAngle_symmetricNorming` and its real sibling, on `Angle.directedSinTwoAngleOperator P Q` with `P` the trial subspace; the block theorems remain as `implementation_structure`.  The perturbation alternative needed no change: it is the AMBIENT clause, and `sinAngleOperatorC` is the modulus of a projector difference, hence insensitive to the order of the pair.\n\n**OPERATOR SCOPE DISCLOSED 2026-09-05.**  The same disclosure as `DK-8.1-thm`, added as a second reading on this row's existing nonlocal interpretation: the registered Section 8 evidence is bounded, the Section 2 hypotheses it imports are certified unbounded, and the source evidence for reading Section 8 at the main bounded setting, the competing reading, and the open lift are recorded in `nonlocal_source_interpretation.operator_scope_reading`.",
       "boundary_review": {
@@ -6735,6 +6946,26 @@
           "declaration": "TauCeti.DavisKahan1970.Section8.theorem8_2_sinTwoTheta_residual_directedAngle_real_sourceExact",
           "role": "specialization",
           "note": "Bounded specialization of the unbounded canonical witness for this clause.  It takes `A K : H ->L[k] H` and was the canonical evidence until 2026-09-06, when the source-facing unbounded façade replaced it; it is retained because it is a genuine specialization and a useful regression surface."
+        },
+        {
+          "declaration": "TauCeti.DavisKahan1970.Section8.sourceResidual",
+          "role": "source_correspondence",
+          "note": "Davis--Kahan's residual (1.8) for the trial subspace `P` in Section 8's context, `R = H|_P`."
+        },
+        {
+          "declaration": "TauCeti.DavisKahan1970.Section8.sourceResidual_eq_sub_ritzBlock",
+          "role": "source_correspondence",
+          "note": "Certifies that `sourceResidual` is the printed residual `R = (A + H)|_P - A_0`, for any bounded realization of the Ritz block; the reading is proved, not assumed."
+        },
+        {
+          "declaration": "TauCeti.DavisKahan1970.Section8.exists_ritzBlock_of_realSpectrum_subset_Icc_complex",
+          "role": "transport_lemma",
+          "note": "Theorem 8.2's central-spectrum condition supplies the Ritz block: a self-adjoint partial map with spectrum in a compact interval has an everywhere-defined bounded realization.  This is why the residual façade needs no Ritz data in its signature."
+        },
+        {
+          "declaration": "TauCeti.DavisKahan1970.Section8.exists_ritzBlock_of_realSpectrum_subset_Icc_real",
+          "role": "transport_lemma",
+          "note": "The real sibling, through the complexification."
         }
       ],
       "result_wide_scope_atoms": [
@@ -6914,10 +7145,10 @@
     "human_report": "dev/davis-kahan-1970-result-semantic-review-2026-08-31.md",
     "terminal_results": 29,
     "remaining_results": [],
-    "note": "The structured fields above are authoritative; this paragraph is regenerated whenever the count moves. 2026-09-02, closing: terminal_results is 29 and remaining_results is empty. `S2-tan-two-theta` was `hostile_review_blocked` under obligation `tan2theta-directed-correspondence` after a 2026-09-02 closure that did not compose; it is now accepted on canonical directed witnesses `tanTwoTheta_directed_unboundedResidual_symmetricNorming_{complex,real}`, which take the reducing subspace and conclude on the paper's directed corner (`tanTwoDirectedCornerR U V` over ℝ) with the singular-value identification in their types. The canonical-evidence digest changed accordingly and the statement pins were refreshed for the new canonical and bridging declarations. Earlier history of this field (the 2026-08-31 `S2-sin-two-theta` reopening, the `S2-tan-theta` Appendix-scope primaries, the paper-prefix rename with an unchanged digest) is in the human report.  2026-09-05: recomputed after the two directed `tan 2Theta` clauses of S2-tan-two-theta were retargeted at their source-exact façades.  The canonical statements are strictly closer to the printed ones -- separable ambient scope and the literal normalized unitarily invariant norm class -- and the theorems they delegate to are retained as registered generalizations, so nothing that was reviewed has been withdrawn.  2026-09-05: recomputed after DK-3.1-thm's converse clauses were repointed from the model-level theorem, which takes the isometric identification as caller data, to the source-shaped one that takes the dimension condition as a proposition.  The model-level theorem is retained as registered implementation structure, so nothing reviewed has been withdrawn.  2026-09-05: recomputed after Lemmas 6.1 and 6.2 were given source-exact façades over the literal normalized unitarily invariant norm class.  The SymmetricNormingFunction endpoints they delegate to are retained as registered generalizations -- for Lemma 6.1 the retained theorem is genuinely stronger, taking Ky Fan inequalities as its premise where the paper assumes the bound for every unitarily invariant norm.\n\n2026-09-06, CANONICAL EVIDENCE PROMOTED ON DK-8.1-thm, AND RE-REVIEWED.  The unbounded lift of Section 8 completed: with the converse half of Theorem 8.1's printed iff proved at unbounded scope and the real endpoints transported by complexification, every clause of Theorem 8.1 that inherits ambient scope has a compiled unbounded witness in BOTH scalar fields.  The canonical evidence for `existence-correct-q`, `acute-iff-spectral-placement` and `part-i-compression` therefore moved to those witnesses; the bounded declarations that were canonical are retained as registered specializations, and parts (ii) and (iii) keep their finite-dimensional evidence, which is the source's own restriction.\n\nThe eight promoted witnesses were re-read at their COMPILER-PRINTED types against the printed statement, not at their names.  Findings: (a) the printed placements `Lambda_1 >= alpha + delta` and `Lambda_0 <= alpha` are delivered in their ORDERED FORM reading -- operator inequalities on the blocks of `A + H` over `dom (A + H)` -- which is how Davis and Kahan write them; the bounded spectrum-inclusion reading is retained as the specialization, and the two are equivalent for a self-adjoint reducing block.  (b) Part (i) is delivered on the WHOLE domain, where the paper reads it on `P^perp`; nothing about `P` enters the proof, and on `P^perp` the `A + H` form equals the `A` form because `H` is fully off-diagonal, so the delivered inequality specialises to the printed `A_1 - alpha <= C_1 (Lambda_1 - alpha) C_1`.  (c) One defect found and repaired in the same pass: `theorem8_1_canonicalBranchUnbounded_form`, `..._printed`, `theorem8_1_eq_canonicalBranchUnbounded_of_maximalAngle_le` and `theorem8_1_maximalAngle_le_iff_orderedFormGap_unbounded` each carried BOTH `IsSelfAdjointOperator Hop` and `IsSelfAdjoint Hop` in the public type -- two spellings of one hypothesis.  The second is now derived inside each proof, so the promoted types carry each hypothesis once.  No other mismatch of scalar field, operator scope, domain assumption, dimension, constant, orientation or angle convention was found.\n\n2026-09-06, SECOND PASS: SOURCE-SURFACE PROMOTION ON BOTH SECTION 8 ROWS, RE-REVIEWED.  A hostile reviewer restricted the criterion to one question -- does the canonical public theorem signature, read in the paper's standing context, state the Davis--Kahan result with no stronger restriction and no weaker conclusion? -- and found two signature defects that the first pass had left.\n\n(1) DK-8.2-thm.  The acute conclusion was canonical at the inherited UNBOUNDED scope while the retained double-angle estimates were still canonical at BOUNDED operator scope, `A K : H ->L[k] H`.  Four façades now state Theorem 8.2 the way the source states it -- one theorem per alternative and scalar field, under the inherited `sin 2theta` context plus the new central-spectrum and smallness assumptions, concluding BOTH the retained estimate and `Theta < pi/4` -- with `A` a possibly unbounded self-adjoint partial map: `theorem8_2_{perturbation,residual}_sourceExact_unbounded_{complex,real}`.  Read at compiler-printed types: the perturbation branch takes `‖H‖ < delta/2` and the residual branch takes `‖R‖ < delta/2` on the residual itself and does NOT acquire `‖H‖ < delta/2`; the residual is the `sin 2theta` theorem's own `(M, R)` data with the source's identification of `M` as the block `A_0`, which forces `R = H|_P`.\n\n(2) DK-8.1-thm.  The canonical declarations were the general unbounded theorems: the block placements stated as form inequalities over the ambient domain, and part (i) stated for an arbitrary partial map `B` and reducing subspace `Q` with no `A/H/P/Q` context.  `Theorem81SourceUnbounded.lean` restates them on the source's objects -- `Lambda_0`, `Lambda_1` as the two reducing restrictions of `A + H` with the placements as operator inequalities on them, the existence clause as the existential the source asserts rather than a named-branch conjunction, and part (i) as `A_1 - alpha <= C_1 (Lambda_1 - alpha) C_1` read on `P^perp` with `C_1` the cosine block.  Read at compiler-printed types, each states its clause with no hypothesis the paper does not carry and no conclusion weaker than printed.\n\nBoth promotions are façade work: no proof of any underlying theorem changed, and every displaced declaration is retained as a registered specialization or generalization.  The bridge `semiboundedAbove_reducingRestriction_iff` and its three siblings are unfolding in both directions.",
-    "canonical_evidence_sha256": "f00cfd090a21e186ab48941d20986ea50af2c03d9e622155113d6b9671c22433",
+    "note": "The structured fields above are authoritative; this paragraph is regenerated whenever the count moves. 2026-09-02, closing: terminal_results is 29 and remaining_results is empty. `S2-tan-two-theta` was `hostile_review_blocked` under obligation `tan2theta-directed-correspondence` after a 2026-09-02 closure that did not compose; it is now accepted on canonical directed witnesses `tanTwoTheta_directed_unboundedResidual_symmetricNorming_{complex,real}`, which take the reducing subspace and conclude on the paper's directed corner (`tanTwoDirectedCornerR U V` over ℝ) with the singular-value identification in their types. The canonical-evidence digest changed accordingly and the statement pins were refreshed for the new canonical and bridging declarations. Earlier history of this field (the 2026-08-31 `S2-sin-two-theta` reopening, the `S2-tan-theta` Appendix-scope primaries, the paper-prefix rename with an unchanged digest) is in the human report.  2026-09-05: recomputed after the two directed `tan 2Theta` clauses of S2-tan-two-theta were retargeted at their source-exact façades.  The canonical statements are strictly closer to the printed ones -- separable ambient scope and the literal normalized unitarily invariant norm class -- and the theorems they delegate to are retained as registered generalizations, so nothing that was reviewed has been withdrawn.  2026-09-05: recomputed after DK-3.1-thm's converse clauses were repointed from the model-level theorem, which takes the isometric identification as caller data, to the source-shaped one that takes the dimension condition as a proposition.  The model-level theorem is retained as registered implementation structure, so nothing reviewed has been withdrawn.  2026-09-05: recomputed after Lemmas 6.1 and 6.2 were given source-exact façades over the literal normalized unitarily invariant norm class.  The SymmetricNormingFunction endpoints they delegate to are retained as registered generalizations -- for Lemma 6.1 the retained theorem is genuinely stronger, taking Ky Fan inequalities as its premise where the paper assumes the bound for every unitarily invariant norm.\n\n2026-09-06, CANONICAL EVIDENCE PROMOTED ON DK-8.1-thm, AND RE-REVIEWED.  The unbounded lift of Section 8 completed: with the converse half of Theorem 8.1's printed iff proved at unbounded scope and the real endpoints transported by complexification, every clause of Theorem 8.1 that inherits ambient scope has a compiled unbounded witness in BOTH scalar fields.  The canonical evidence for `existence-correct-q`, `acute-iff-spectral-placement` and `part-i-compression` therefore moved to those witnesses; the bounded declarations that were canonical are retained as registered specializations, and parts (ii) and (iii) keep their finite-dimensional evidence, which is the source's own restriction.\n\nThe eight promoted witnesses were re-read at their COMPILER-PRINTED types against the printed statement, not at their names.  Findings: (a) the printed placements `Lambda_1 >= alpha + delta` and `Lambda_0 <= alpha` are delivered in their ORDERED FORM reading -- operator inequalities on the blocks of `A + H` over `dom (A + H)` -- which is how Davis and Kahan write them; the bounded spectrum-inclusion reading is retained as the specialization, and the two are equivalent for a self-adjoint reducing block.  (b) Part (i) is delivered on the WHOLE domain, where the paper reads it on `P^perp`; nothing about `P` enters the proof, and on `P^perp` the `A + H` form equals the `A` form because `H` is fully off-diagonal, so the delivered inequality specialises to the printed `A_1 - alpha <= C_1 (Lambda_1 - alpha) C_1`.  (c) One defect found and repaired in the same pass: `theorem8_1_canonicalBranchUnbounded_form`, `..._printed`, `theorem8_1_eq_canonicalBranchUnbounded_of_maximalAngle_le` and `theorem8_1_maximalAngle_le_iff_orderedFormGap_unbounded` each carried BOTH `IsSelfAdjointOperator Hop` and `IsSelfAdjoint Hop` in the public type -- two spellings of one hypothesis.  The second is now derived inside each proof, so the promoted types carry each hypothesis once.  No other mismatch of scalar field, operator scope, domain assumption, dimension, constant, orientation or angle convention was found.\n\n2026-09-06, SECOND PASS: SOURCE-SURFACE PROMOTION ON BOTH SECTION 8 ROWS, RE-REVIEWED.  A hostile reviewer restricted the criterion to one question -- does the canonical public theorem signature, read in the paper's standing context, state the Davis--Kahan result with no stronger restriction and no weaker conclusion? -- and found two signature defects that the first pass had left.\n\n(1) DK-8.2-thm.  The acute conclusion was canonical at the inherited UNBOUNDED scope while the retained double-angle estimates were still canonical at BOUNDED operator scope, `A K : H ->L[k] H`.  Four façades now state Theorem 8.2 the way the source states it -- one theorem per alternative and scalar field, under the inherited `sin 2theta` context plus the new central-spectrum and smallness assumptions, concluding BOTH the retained estimate and `Theta < pi/4` -- with `A` a possibly unbounded self-adjoint partial map: `theorem8_2_{perturbation,residual}_sourceExact_unbounded_{complex,real}`.  Read at compiler-printed types: the perturbation branch takes `‖H‖ < delta/2` and the residual branch takes `‖R‖ < delta/2` on the residual itself and does NOT acquire `‖H‖ < delta/2`; the residual is the `sin 2theta` theorem's own `(M, R)` data with the source's identification of `M` as the block `A_0`, which forces `R = H|_P`.\n\n(2) DK-8.1-thm.  The canonical declarations were the general unbounded theorems: the block placements stated as form inequalities over the ambient domain, and part (i) stated for an arbitrary partial map `B` and reducing subspace `Q` with no `A/H/P/Q` context.  `Theorem81SourceUnbounded.lean` restates them on the source's objects -- `Lambda_0`, `Lambda_1` as the two reducing restrictions of `A + H` with the placements as operator inequalities on them, the existence clause as the existential the source asserts rather than a named-branch conjunction, and part (i) as `A_1 - alpha <= C_1 (Lambda_1 - alpha) C_1` read on `P^perp` with `C_1` the cosine block.  Read at compiler-printed types, each states its clause with no hypothesis the paper does not carry and no conclusion weaker than printed.\n\nBoth promotions are façade work: no proof of any underlying theorem changed, and every displaced declaration is retained as a registered specialization or generalization.  The bridge `semiboundedAbove_reducingRestriction_iff` and its three siblings are unfolding in both directions.\n\n2026-09-06, THIRD PASS: SEVEN SOURCE-BOUNDARY DEFECTS FROM A SIGNATURE-ONLY REVIEW.  The review accepted the mathematics outright and rejected the surface on one criterion: does the canonical public signature, read in the paper's standing context, state the result with no stronger restriction and no weaker conclusion?  All seven repairs are façades; no proof changed.\n\n(1) Theorem 8.2's residual branch exposed `M`, `hPdom`, `hRitz` and `hres` as caller hypotheses.  Davis--Kahan add only the central-spectrum condition and `‖R‖ < delta/2`, and the Ritz block FOLLOWS from the central-spectrum condition, so those four moved inside (`exists_ritzBlock_of_realSpectrum_subset_Icc_{complex,real}`).  `sourceResidual` names the printed residual and `sourceResidual_eq_sub_ritzBlock` proves the reading.\n\n(2) and (3) Theorem 8.1's source façades carried neither the ambient `SeparableSpace` nor the standing post-Proposition-3.2 convention (3.5).  Both are now on the public types.  The existence clause cannot carry (3.5), which is a condition on a given pair, and the module docstring records that.\n\n(4) Theorem 8.1(i) was stated for an arbitrary reducing subspace with only the half of the hypotheses it needs; the printed clause is about THE branch the existence half asserts, under the full context.  It now is, with `hQbranch` pinning the branch; the arbitrary-subspace versions are renamed `..._ofBlockPlacement_unbounded_*` and retained.\n\n(5) Theorem 8.1(ii) and (iii) were canonical on `approximationNumber`.  The printed clauses are finite-dimensional ordered-EIGENVALUE statements.  Eight façades now state them on `LinearMap.IsSymmetric.eigenvalues`, composing `approximationNumber_eq_eigenvalues_of_isPositive`; the dimension-free approximation-number readings are retained as the generalizations the source itself announces.\n\n(6) Section 4 exposed the internal defect isometry `J` and `nonacuteDirectRotation … J`.  The source object is the direct rotation.  Propositions 4.1, 4.3 and Corollary 4.1 now take the standing (3.5) and produce a `D` with `IsDirectRotation U V D`.  Proposition 4.2 needed no façade.\n\n(7) The separability sweep.  The policy says an exact façade carries the paper's separable ambient scope; the table said `generalized` for twenty rows.  Sixteen new wrappers in `SeparableSourceScope.lean` plus the Section 4 and Section 8 façades close the gap where the paper's single ambient space corresponds to a Lean type variable.  The rows that remain `generalized` now each carry a specific reason in `generalized_reasons` -- Section 5 changes the setting to Banach spaces, the Section 6 transfer statements quantify over several spaces at once with no single ambient, and two rows construct their space rather than assume it.  The reasons are stated so a reviewer can disagree with a specific argument.",
+    "canonical_evidence_sha256": "a390a2289108719126d6d630acec021fe47740b49762511f820ca274824c6c27",
     "hostile_review_status": "accepted",
-    "hostile_review_note": "REOPENED 2026-09-05 by the third hostile review. Its three blockers are CLOSED -- the ambient sin 2Theta operator roles, Theorem 3.1's forward invariant on the source's angle operators, and Corollary 3.1's classification invariant on the angles -- along with Theorem 3.1's ambient dimension clause, which is now a proposition rather than a supplied isometric equivalence. No defect remains open. Two POLICY questions do, and they are recorded in `hostile_review_policy_questions` rather than as obligations, because the checker treats an obligation as evidence that a named row is NOT terminal and these ten rows are: whether to add thin separable wrappers at the printed scope, which is a project decision the repository has an explicit recorded position on and which an agent must not settle; and whether the printed unitarily invariant norm class must exist as a Lean type, where the estimate coverage is compiled and closed but the type-level representation is not. The 29/29 certificate is unaffected by either. When reporting it, say that these two questions are open, because a reviewer who resolves them differently would want different declarations to be canonical.\n\nPrevious note: ACCEPTED 2026-09-02, after the day's reopening was closed by new mathematics rather than by metadata: the directed tan 2Theta clauses have source-shaped complex and real endpoints on the paper objects, with the correspondence composed in Lean and pinned. `open_hostile_review_obligations` is closed and lists the closure; the structured fields `terminal_results`, `remaining_results` and `hostile_review_status` are the authoritative statement.\n\n2026-09-06: canonical evidence on DK-8.1-thm promoted to the unbounded witnesses after the unbounded lift completed in both scalar fields, and re-reviewed at compiler-printed types; one duplicate-hypothesis defect found and repaired.  See the sweep note.  No blocker opened.\n\n2026-09-06, second pass: canonical evidence on BOTH Section 8 rows moved to source-shaped unbounded façades after a signature-only hostile review found the retained 8.2 estimates still bounded and the 8.1 canonical declarations too general-purpose to be a source boundary.  Both defects repaired by façade; no proof changed.  See the sweep note.  No blocker opened."
+    "hostile_review_note": "REOPENED 2026-09-05 by the third hostile review. Its three blockers are CLOSED -- the ambient sin 2Theta operator roles, Theorem 3.1's forward invariant on the source's angle operators, and Corollary 3.1's classification invariant on the angles -- along with Theorem 3.1's ambient dimension clause, which is now a proposition rather than a supplied isometric equivalence. No defect remains open. Two POLICY questions do, and they are recorded in `hostile_review_policy_questions` rather than as obligations, because the checker treats an obligation as evidence that a named row is NOT terminal and these ten rows are: whether to add thin separable wrappers at the printed scope, which is a project decision the repository has an explicit recorded position on and which an agent must not settle; and whether the printed unitarily invariant norm class must exist as a Lean type, where the estimate coverage is compiled and closed but the type-level representation is not. The 29/29 certificate is unaffected by either. When reporting it, say that these two questions are open, because a reviewer who resolves them differently would want different declarations to be canonical.\n\nPrevious note: ACCEPTED 2026-09-02, after the day's reopening was closed by new mathematics rather than by metadata: the directed tan 2Theta clauses have source-shaped complex and real endpoints on the paper objects, with the correspondence composed in Lean and pinned. `open_hostile_review_obligations` is closed and lists the closure; the structured fields `terminal_results`, `remaining_results` and `hostile_review_status` are the authoritative statement.\n\n2026-09-06: canonical evidence on DK-8.1-thm promoted to the unbounded witnesses after the unbounded lift completed in both scalar fields, and re-reviewed at compiler-printed types; one duplicate-hypothesis defect found and repaired.  See the sweep note.  No blocker opened.\n\n2026-09-06, second pass: canonical evidence on BOTH Section 8 rows moved to source-shaped unbounded façades after a signature-only hostile review found the retained 8.2 estimates still bounded and the 8.1 canonical declarations too general-purpose to be a source boundary.  Both defects repaired by façade; no proof changed.  See the sweep note.  No blocker opened.\n\n2026-09-06, third pass: seven source-boundary defects from a signature-only hostile review, all repaired by façade, plus the separability sweep and the §XVIII bookkeeping.  The §XVIII claim was WITHDRAWN while this work was open.  See the sweep note."
   },
   "section_two_short_names": {
     "purpose": "The four unqualified `TauCeti.DavisKahan1970.SectionTwo.*` names, and what each is bound to. A short name is bound only to a declaration that is scalar-generic over `RCLike` AND at the printed source scope; `null` means deliberately unbound. This is the single owner of that fact: `check_davis_kahan_1970_result_inventory.py` reads `SectionTwo.lean`'s own `alias` lines and fails if they disagree.",
@@ -7105,7 +7336,7 @@
     "separability": {
       "source_text": "\"Let H be a separable Hilbert space, real or complex; finite dimensionality is not assumed.\" (Section 1 setup), and \"The paper states the four main results for infinite as well as finite dimensional separable Hilbert spaces\" (Section 2 scope paragraph).",
       "source_atom": "S1-block-residual.setup-hilbert-scope",
-      "rule": "**POLICY REVERSED 2026-09-05 by GOAL.md section I.** Canonical source evidence must state the paper theorem at the paper's actual scope, and the paper works on a separable real or complex Hilbert space. A source-exact façade therefore CARRIES the separability assumption; carrying it is correct, not an exception needing justification.\n\nStronger theorems that hold on an arbitrary Hilbert space are retained and registered as generalizations rather than substituted for the source statement. That is the previous policy's content, kept: nothing was weakened, and the general theorems are what prove the façades.\n\nThe discipline the old rule enforced survives with its verdict inverted. Every separable canonical witness must still be CLASSIFIED -- as `load_bearing_witnesses` when the mathematics genuinely needs separability, or as `source_scope_facades` when it carries the hypothesis only because the paper's ambient scope does. The checker refuses an unclassified one, so a separability hypothesis can never appear on canonical evidence silently. Posture per result is still DERIVED from compiler-printed types, never asserted.",
+      "rule": "**POLICY REVERSED 2026-09-05 by GOAL.md section I, and swept 2026-09-06.** Canonical source evidence must state the paper theorem at the paper's actual scope, and the paper works on a separable real or complex Hilbert space. A source-exact façade therefore CARRIES the separability assumption wherever the paper's single ambient space corresponds to a Lean type variable; carrying it is correct, not an exception needing justification.\n\nStronger theorems that hold on an arbitrary Hilbert space are retained and registered as generalizations rather than substituted for the source statement. That is the previous policy's content, kept: nothing was weakened, and the general theorems are what prove the façades.\n\nThe rule has exactly three kinds of exception, and every row taking one carries its reason in `generalized_reasons` so a reviewer can disagree with a specific argument rather than with silence: the source explicitly CHANGES the setting for that result (Section 5's Banach scope); the result quantifies over SEVERAL spaces at once with no single ambient to carry the hypothesis (Section 6's transfer statements); or the result CONSTRUCTS its space rather than assuming one, so that separability is a computed property and not a hypothesis.\n\nThe discipline the old rule enforced survives with its verdict inverted. Every separable canonical witness must still be CLASSIFIED -- as `load_bearing_witnesses` when the mathematics genuinely needs separability, or as `source_scope_facades` when it carries the hypothesis only because the paper's ambient scope does. The checker refuses an unclassified one, so a separability hypothesis can never appear on canonical evidence silently. Posture per result is still DERIVED from compiler-printed types, never asserted.",
       "why_not_thin_separable_wrappers": "SUPERSEDED 2026-09-05. This field argued against thin separable wrappers on the grounds that they buy a name and a strictly weaker theorem. GOAL.md section I decided the other way, for the reason the third hostile review gave: under the project's own exactness criterion, arbitrary-Hilbert versus separable-Hilbert should be treated the way normed-space versus Banach-space was treated for Theorem 5.1 -- retain the general theorem and make the printed-scope wrapper canonical. The wrappers now exist for the Section 2 families and the argument is closed rather than defended.",
       "checked": "`scripts/check_davis_kahan_1970_result_inventory.py` derives, from the compiler-printed type of every canonical witness, whether the row is `generalized` (no witness assumes separability), `separable` (every witness does) or `mixed`, and fails if the value below disagrees.  A row cannot change its separability posture without this table changing.",
       "results": {
@@ -7113,17 +7344,17 @@
         "S2-tan-theta": "separable",
         "S2-sin-two-theta": "separable",
         "S2-tan-two-theta": "separable",
-        "DK-3.1-prop": "generalized",
-        "DK-3.2-prop": "generalized",
-        "DK-3.3-prop": "generalized",
-        "DK-3.4-prop": "generalized",
+        "DK-3.1-prop": "separable",
+        "DK-3.2-prop": "separable",
+        "DK-3.3-prop": "separable",
+        "DK-3.4-prop": "separable",
         "DK-3.1-thm": "mixed",
-        "DK-3.1-cor": "generalized",
-        "DK-3.5-prop": "generalized",
-        "DK-3.2-cor": "generalized",
-        "DK-4.1-prop": "generalized",
+        "DK-3.1-cor": "mixed",
+        "DK-3.5-prop": "separable",
+        "DK-3.2-cor": "separable",
+        "DK-4.1-prop": "separable",
         "DK-4.1-cor": "separable",
-        "DK-4.2-prop": "generalized",
+        "DK-4.2-prop": "separable",
         "DK-4.3-prop": "separable",
         "DK-4.4-prop": "generalized",
         "DK-5.1-thm": "generalized",
@@ -7136,7 +7367,7 @@
         "DK-6.2-thm": "generalized",
         "DK-6.3-thm": "separable",
         "DK-6.3-lem": "generalized",
-        "DK-8.1-thm": "generalized",
+        "DK-8.1-thm": "mixed",
         "DK-8.2-thm": "separable"
       },
       "load_bearing_witnesses": [
@@ -7273,8 +7504,143 @@
         {
           "declaration": "TauCeti.DavisKahan1970.tanTwoTheta_directed_unboundedResidual_sourceExact_real",
           "why": "Source-exact façade: carries separability because the paper's ambient scope does, not because the mathematics needs it.  `tanTwoTheta_directed_unboundedResidual_symmetricNorming_real` is the theorem beneath it, holds on an arbitrary real Hilbert space, and is registered as a generalization."
+        },
+        {
+          "declaration": "TauCeti.DavisKahan1970.proposition3_1_separable",
+          "why": "Source-exact façade: carries separability because the paper's ambient scope does, not because the mathematics needs it.  The theorem beneath it holds on an arbitrary Hilbert space and is registered as a generalization."
+        },
+        {
+          "declaration": "TauCeti.DavisKahan1970.proposition3_2_exists_iff_crossedDefectsEquivalent_separable",
+          "why": "Source-exact façade: carries separability because the paper's ambient scope does, not because the mathematics needs it.  The theorem beneath it holds on an arbitrary Hilbert space and is registered as a generalization."
+        },
+        {
+          "declaration": "TauCeti.DavisKahan1970.proposition3_2_not_unique_separable",
+          "why": "Source-exact façade: carries separability because the paper's ambient scope does, not because the mathematics needs it.  The theorem beneath it holds on an arbitrary Hilbert space and is registered as a generalization."
+        },
+        {
+          "declaration": "TauCeti.DavisKahan1970.proposition3_3_complex_forward_separable",
+          "why": "Source-exact façade: carries separability because the paper's ambient scope does, not because the mathematics needs it.  The theorem beneath it holds on an arbitrary Hilbert space and is registered as a generalization."
+        },
+        {
+          "declaration": "TauCeti.DavisKahan1970.proposition3_3_complex_converse_separable",
+          "why": "Source-exact façade: carries separability because the paper's ambient scope does, not because the mathematics needs it.  The theorem beneath it holds on an arbitrary Hilbert space and is registered as a generalization."
+        },
+        {
+          "declaration": "TauCeti.DavisKahan1970.proposition3_3_real_forward_separable",
+          "why": "Source-exact façade: carries separability because the paper's ambient scope does, not because the mathematics needs it.  The theorem beneath it holds on an arbitrary Hilbert space and is registered as a generalization."
+        },
+        {
+          "declaration": "TauCeti.DavisKahan1970.proposition3_3_real_converse_separable",
+          "why": "Source-exact façade: carries separability because the paper's ambient scope does, not because the mathematics needs it.  The theorem beneath it holds on an arbitrary Hilbert space and is registered as a generalization."
+        },
+        {
+          "declaration": "TauCeti.DavisKahan1970.proposition3_4_full_complex_separable",
+          "why": "Source-exact façade: carries separability because the paper's ambient scope does, not because the mathematics needs it.  The theorem beneath it holds on an arbitrary Hilbert space and is registered as a generalization."
+        },
+        {
+          "declaration": "TauCeti.DavisKahan1970.proposition3_4_full_real_separable",
+          "why": "Source-exact façade: carries separability because the paper's ambient scope does, not because the mathematics needs it.  The theorem beneath it holds on an arbitrary Hilbert space and is registered as a generalization."
+        },
+        {
+          "declaration": "TauCeti.DavisKahan1970.corollary3_1_compact_defectBlock_sourceAngleList_classification_separable",
+          "why": "Source-exact façade: carries separability because the paper's ambient scope does, not because the mathematics needs it.  The theorem beneath it holds on an arbitrary Hilbert space and is registered as a generalization."
+        },
+        {
+          "declaration": "TauCeti.DavisKahan1970.proposition3_5_commutations_separable",
+          "why": "Source-exact façade: carries separability because the paper's ambient scope does, not because the mathematics needs it.  The theorem beneath it holds on an arbitrary Hilbert space and is registered as a generalization."
+        },
+        {
+          "declaration": "TauCeti.DavisKahan1970.proposition3_5_eigenvector_angle_separable",
+          "why": "Source-exact façade: carries separability because the paper's ambient scope does, not because the mathematics needs it.  The theorem beneath it holds on an arbitrary Hilbert space and is registered as a generalization."
+        },
+        {
+          "declaration": "TauCeti.DavisKahan1970.proposition3_5_angleEigenspace_uniqueMaximal_separable",
+          "why": "Source-exact façade: carries separability because the paper's ambient scope does, not because the mathematics needs it.  The theorem beneath it holds on an arbitrary Hilbert space and is registered as a generalization."
+        },
+        {
+          "declaration": "TauCeti.DavisKahan1970.corollary3_2_separable",
+          "why": "Source-exact façade: carries separability because the paper's ambient scope does, not because the mathematics needs it.  The theorem beneath it holds on an arbitrary Hilbert space and is registered as a generalization."
+        },
+        {
+          "declaration": "TauCeti.DavisKahan1970.proposition4_2_compact_nonacute_separable",
+          "why": "Source-exact façade: carries separability because the paper's ambient scope does, not because the mathematics needs it.  The theorem beneath it holds on an arbitrary Hilbert space and is registered as a generalization."
+        },
+        {
+          "declaration": "TauCeti.DavisKahan1970.proposition4_2_compact_nonacute_real_separable",
+          "why": "Source-exact façade: carries separability because the paper's ambient scope does, not because the mathematics needs it.  The theorem beneath it holds on an arbitrary Hilbert space and is registered as a generalization."
+        },
+        {
+          "declaration": "TauCeti.DavisKahan1970.proposition4_1_directRotation_sourceExact_complex",
+          "why": "Source-exact façade: carries separability because the paper's ambient scope does, not because the mathematics needs it.  The theorem beneath it holds on an arbitrary Hilbert space and is registered as a generalization."
+        },
+        {
+          "declaration": "TauCeti.DavisKahan1970.proposition4_1_directRotation_sourceExact_real",
+          "why": "Source-exact façade: carries separability because the paper's ambient scope does, not because the mathematics needs it.  The theorem beneath it holds on an arbitrary Hilbert space and is registered as a generalization."
+        },
+        {
+          "declaration": "TauCeti.DavisKahan1970.corollary4_1_directRotation_sourceExact_complex",
+          "why": "Source-exact façade: carries separability because the paper's ambient scope does, not because the mathematics needs it.  The theorem beneath it holds on an arbitrary Hilbert space and is registered as a generalization."
+        },
+        {
+          "declaration": "TauCeti.DavisKahan1970.corollary4_1_directRotation_sourceExact_real",
+          "why": "Source-exact façade: carries separability because the paper's ambient scope does, not because the mathematics needs it.  The theorem beneath it holds on an arbitrary Hilbert space and is registered as a generalization."
+        },
+        {
+          "declaration": "TauCeti.DavisKahan1970.proposition4_3_directRotation_sourceExact_complex",
+          "why": "Source-exact façade: carries separability because the paper's ambient scope does, not because the mathematics needs it.  The theorem beneath it holds on an arbitrary Hilbert space and is registered as a generalization."
+        },
+        {
+          "declaration": "TauCeti.DavisKahan1970.proposition4_3_directRotation_sourceExact_real",
+          "why": "Source-exact façade: carries separability because the paper's ambient scope does, not because the mathematics needs it.  The theorem beneath it holds on an arbitrary Hilbert space and is registered as a generalization."
+        },
+        {
+          "declaration": "TauCeti.DavisKahan1970.Section8.theorem8_1_exists_branch_blockPlacement_unbounded_complex",
+          "why": "Source-exact façade for a Theorem 8.1 clause at the paper's inherited unbounded scope: carries separability because Section 1's setting does, not because the mathematics needs it.  The general form-inequality and arbitrary-reducing-subspace theorems beneath it hold on an arbitrary Hilbert space and are registered as generalizations."
+        },
+        {
+          "declaration": "TauCeti.DavisKahan1970.Section8.theorem8_1_exists_branch_blockPlacement_unbounded_real",
+          "why": "Source-exact façade for a Theorem 8.1 clause at the paper's inherited unbounded scope: carries separability because Section 1's setting does, not because the mathematics needs it.  The general form-inequality and arbitrary-reducing-subspace theorems beneath it hold on an arbitrary Hilbert space and are registered as generalizations."
+        },
+        {
+          "declaration": "TauCeti.DavisKahan1970.Section8.theorem8_1_maximalAngle_le_iff_blockPlacement_unbounded_complex",
+          "why": "Source-exact façade for a Theorem 8.1 clause at the paper's inherited unbounded scope: carries separability because Section 1's setting does, not because the mathematics needs it.  The general form-inequality and arbitrary-reducing-subspace theorems beneath it hold on an arbitrary Hilbert space and are registered as generalizations."
+        },
+        {
+          "declaration": "TauCeti.DavisKahan1970.Section8.theorem8_1_maximalAngle_le_iff_blockPlacement_unbounded_real",
+          "why": "Source-exact façade for a Theorem 8.1 clause at the paper's inherited unbounded scope: carries separability because Section 1's setting does, not because the mathematics needs it.  The general form-inequality and arbitrary-reducing-subspace theorems beneath it hold on an arbitrary Hilbert space and are registered as generalizations."
+        },
+        {
+          "declaration": "TauCeti.DavisKahan1970.Section8.theorem8_1_upperCompressionRepulsion_sourceExact_unbounded_complex",
+          "why": "Source-exact façade for a Theorem 8.1 clause at the paper's inherited unbounded scope: carries separability because Section 1's setting does, not because the mathematics needs it.  The general form-inequality and arbitrary-reducing-subspace theorems beneath it hold on an arbitrary Hilbert space and are registered as generalizations."
+        },
+        {
+          "declaration": "TauCeti.DavisKahan1970.Section8.theorem8_1_lowerCompressionRepulsion_sourceExact_unbounded_complex",
+          "why": "Source-exact façade for a Theorem 8.1 clause at the paper's inherited unbounded scope: carries separability because Section 1's setting does, not because the mathematics needs it.  The general form-inequality and arbitrary-reducing-subspace theorems beneath it hold on an arbitrary Hilbert space and are registered as generalizations."
+        },
+        {
+          "declaration": "TauCeti.DavisKahan1970.Section8.theorem8_1_upperCompressionRepulsion_sourceExact_unbounded_real",
+          "why": "Source-exact façade for a Theorem 8.1 clause at the paper's inherited unbounded scope: carries separability because Section 1's setting does, not because the mathematics needs it.  The general form-inequality and arbitrary-reducing-subspace theorems beneath it hold on an arbitrary Hilbert space and are registered as generalizations."
+        },
+        {
+          "declaration": "TauCeti.DavisKahan1970.Section8.theorem8_1_lowerCompressionRepulsion_sourceExact_unbounded_real",
+          "why": "Source-exact façade for a Theorem 8.1 clause at the paper's inherited unbounded scope: carries separability because Section 1's setting does, not because the mathematics needs it.  The general form-inequality and arbitrary-reducing-subspace theorems beneath it hold on an arbitrary Hilbert space and are registered as generalizations."
         }
-      ]
+      ],
+      "generalized_reasons": {
+        "DK-3.1-thm": "MIXED.  The two forward source-angle witnesses carry separability and are `load_bearing_witnesses`: the spectral-multiplicity invariant is Hahn--Hellinger, which the multiplicity theory is stated for separable spaces.  The two ambient-dimension realization witnesses CONSTRUCT the realizing space, so separability there is a computed property of the construction rather than a hypothesis on a given ambient.",
+        "DK-3.1-cor": "MIXED.  The defect-block classification carries separability on both ambient spaces (`..._separable`).  `corollary3_1_realization_zeroMultiplicity` CONSTRUCTS its space (`WithLp 2 (AngleSequenceSpace 𝕜 × Z)`), so there is no ambient hypothesis to carry.",
+        "DK-4.4-prop": "The row is a REFUTATION, not a proof: `proposition4_4_refuted` exhibits a counterexample satisfying the printed hypotheses in a concrete space.  A counterexample is strongest when its space is as small as possible, and the space it uses is separable already; adding an unused ambient hypothesis to a concrete-space statement would say nothing.",
+        "DK-5.1-thm": "Section 5 explicitly CHANGES the setting: Theorem 5.1 is the Banach-space Sylvester theorem, and the canonical witness is named for that scope.  Carrying a Hilbert-space separability hypothesis would contradict the section's own stated generality.",
+        "DK-5.2-thm": "Same as DK-5.1-thm: Section 5's setting is the one the source broadens to, and the canonical witnesses are stated there.",
+        "DK-5.1-lem": "Same as DK-5.1-thm.",
+        "DK-6.1-lem": "Section 6's statements are TRANSFER statements between several spaces at once -- trial space, spectral space, ambient space and the two representative spaces -- so the paper's single ambient separable Hilbert space does not correspond to one Lean type variable and there is no well-defined place to attach the hypothesis.",
+        "DK-6.2-lem": "Same as DK-6.1-lem.",
+        "DK-6.1-prop": "Same as DK-6.1-lem.",
+        "DK-6.1-thm": "Same as DK-6.1-lem; `theorem6_1_sourceExact_complex` alone quantifies over six Hilbert spaces.",
+        "DK-6.2-thm": "Same as DK-6.1-lem.",
+        "DK-6.3-lem": "Same as DK-6.1-lem.",
+        "DK-8.1-thm": "MIXED, and by the source's own reading.  Branch existence, both halves of the printed iff and part (i) carry separability at the paper's inherited unbounded scope.  Parts (ii) and (iii) are printed IN FINITE DIMENSIONS, and a finite-dimensional space is separable, so their witnesses carry `[FiniteDimensional]` and not a redundant second hypothesis."
+      }
     }
   }
 }

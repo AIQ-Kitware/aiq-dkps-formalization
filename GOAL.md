@@ -370,9 +370,15 @@ Do not reopen any of these merely to obtain a more uniform internal API unless a
 
 # X. Remaining source-exactness blockers
 
-The critical path should now be narrow.
+**Historical from here to §XVI unless a subsection says otherwise.**  §10.1,
+§10.2, §10.3 and §10.4 were the live queue when they were written; every one of
+them has since closed, and the closing entries are dated inside each.  They are
+kept because the analysis in them — especially §10.3.3's record of a wrong
+"open question" verdict and §10.3.4's record of what a signature-only review
+found — is the archive of how the work went, not a list of open items.  The
+current queue is §XVI.
 
-## 10.1 Directed real `S2-tan-two-theta`
+## 10.1 Directed real `S2-tan-two-theta` — closed
 
 Provide the missing exact real source façade.
 
@@ -1233,17 +1239,19 @@ If it is exact, stop requiring a prescribed transport chain in the proof body.
 
 This may remove a reported gap without any new mathematics.
 
-## 2. Add the directed real `tan 2Θ` source façade
+## 2. Add the directed real `tan 2Θ` source façade — **done**
 
-Solve only the real/complex norm transport necessary to obtain the exact real statement.
+`tanTwoTheta_directed_unboundedResidual_sourceExact_real` is canonical evidence
+on `S2-tan-two-theta`, which is terminal.
 
-Do not turn this into a requirement for a fully generic scalar API.
+## 3. Finish unbounded Theorem 8.1 — **done, 2026-09-06**
 
-## 3. Finish unbounded Theorem 8.1
-
-Use the already completed coercive inverse and spectral-repulsion work.
-
-Concentrate on the genuinely missing quarter-acute implication and then expose the exact source theorem.
+Both halves of the printed *iff*, branch existence and part (i) are proved at
+unbounded ambient scope in both scalar fields, and the canonical evidence states
+them on the source's own blocks `Λ₀`, `Λ₁` under the paper's separable ambient
+scope and standing convention (3.5).  Parts (ii) and (iii) are canonical on the
+printed eigenvalue sequences, in the finite dimensions the source prints them
+for.  §10.3.3 and §10.3.4 record how.
 
 ## 3c. The source norm class is inhabited (resolved, 2026-09-05)
 
@@ -1280,43 +1288,38 @@ than the printed one. Two honest resolutions, in order of preference:
 Until one of those lands, a façade over this class is *not* known to be
 exhaustive, and the final claim should say so.
 
-## 3d. Section 4's `J` (resolved with a distinction, 2026-09-05)
+## 3d. Section 4's `J` — the 2026-09-05 distinction was overruled, 2026-09-06
 
-The review asked for the chosen defect isometry `J` to be hidden inside the
-Section 4 façades. Doing that uniformly would be wrong, and the two cases have to
-be separated:
+The 2026-09-05 entry here argued that Propositions 4.1, 4.3 and Corollary 4.1
+should *keep* their `J`, because quantifying over every defect isometry is the
+stronger reading and an existential would weaken the theorem.  A
+signature-only hostile review overruled that on 2026-09-06, and the overrule is
+right:
 
-* **Proposition 4.2's `J` was genuinely proof data** -- the wrapper accepted it
-  and never used it, as the underscore said. It is now the *proposition*
-  `CrossedDefectsEquivalent U V`, which is the condition Section 4 actually
-  inherits.
-* **Propositions 4.1, 4.3 and Corollary 4.1's `J` is not proof data.** It names
-  the direct rotation the conclusion is *about*. Quantifying over every `J`, as
-  those theorems do, is the stronger reading and is what a caller holding a
-  particular rotation wants. Replacing it by an existential would weaken the
-  theorem, and in the non-acute case there is no canonical choice to substitute.
+> Davis--Kahan's source object is the already-chosen **direct rotation** `U`.
+> The repository even has `IsDirectRotation`, so this internal representative
+> need not leak through the source boundary.
 
-So the canonical statements keep their `J`, and
-`proposition4_3_compact_nonacute_sourceExact_ofCrossedDefects_{complex,real}`
-serve the caller who has only the source's hypothesis: they take
-`CrossedDefectsEquivalent` and name a direct rotation for which the minimality
-holds. The same wrapper should be added for Proposition 4.1 and Corollary 4.1.
+The stronger `J`-quantified reading is not wrong — it is simply not the source
+statement.  `Section4DirectRotationSource.lean` now carries the canonical
+witnesses: they take the standing convention (3.5) and produce a `D` with
+`IsDirectRotation U V D` for which the printed extremality holds.  The
+`J`-parameterised theorems are retained as `implementation_structure`, which is
+what they are.  Proposition 4.2 was already right.
 
-## 4. Finish unbounded Theorem 8.2
+## 4. Finish unbounded Theorem 8.2 — **done, 2026-09-06**
 
-The source theorem types are written and the estimate halves are proved; see
-§10.4. What is left is exactly one thing, and §10.4 states it precisely: the
-closed quarter branch `‖P_P − P_Q‖ ≤ √2/2` under the printed hypotheses.
+The acute conclusion is proved over the whole printed range, in both scalar
+fields, by the connectedness argument §10.4 prescribes; the four canonical
+witnesses `theorem8_2_{perturbation,residual}_sourceExact_unbounded_{complex,real}`
+state Theorem 8.2 as one theorem per alternative, concluding both the retained
+double-angle estimate and `Θ < π/4` with `A` a possibly unbounded self-adjoint
+partial map.
 
-* **Theorem 8.1 does not supply it.** 8.1 inherits the `tan 2θ` theorem's
-  off-diagonality `H₀ = H₁ = 0`; 8.2 inherits the `sin 2θ` theorem's hypotheses,
-  which have none. The earlier claim to the contrary is corrected in §10.4.
-* The static bounds reach `‖H‖ < (√3/4)δ`, not the printed `‖H‖ < δ/2`.
-* The connectedness argument that closes it needs the parametrized unbounded band
-  subspace `Q_s = E_{A + sH}(B_s)` and an unbounded ambient `sin Θ` theorem, and
-  nothing from the general Riesz/continuation roadmap.
-
-Protect the residual alternative from accidental extra perturbation hypotheses.
+The residual alternative was protected from an accidental perturbation
+hypothesis, and, after a signature-only review, from accidental *Ritz* data as
+well: `M`, `hPdom`, `hRitz` and `hres` are derived from the printed
+central-spectrum condition rather than demanded from the caller (§10.3.4).
 
 ## 3b. Theorem 3.1's real forward invariant — **done, 2026-09-05**
 
@@ -1498,7 +1501,7 @@ Measured, not asserted.  Every line below is checkable from
 | --- | --- |
 | every designated result has canonical Lean evidence at its actual source scope | **29 of 29** as of 2026-09-06, and stated on the source's own objects: both Section 8 rows were promoted twice that day, first to unbounded witnesses and then to source-shaped façades over them (§10.3.4) |
 | real/complex coverage for every result | met |
-| canonical façades expose the paper's separability scope | **not met**; every separable canonical witness *is* classified, but `DK-8.1-thm` and several §3/§4 rows are `generalized`, which the policy says an exact façade must not be |
+| canonical façades expose the paper's separability scope | met as of the 2026-09-06 sweep: sixteen rows `separable`, three `mixed`, and every remaining `generalized` row carries a specific reason in `generalized_reasons` rather than contradicting the policy |
 | finite vs infinite-dimensional scope matches each printed result | met — including Theorem 8.1 (ii) and (iii), which the source prints *in finite dimensions* (§10.3) |
 | bounded vs unbounded scope matches each printed result | met — Theorem 8.1's branch existence, both halves of its printed *iff*, and part (i) are canonical at unbounded scope in complex and real scalar scope; (ii) and (iii) stay finite because the source prints them so |
 | every UIN-quantified theorem uses the literal source abstraction at its boundary | met, and as of §4c that abstraction no longer carries completeness |
@@ -1509,71 +1512,54 @@ Measured, not asserted.  Every line below is checkable from
 | a fresh source-first review finds no material statement mismatch | run; it found two defects, both fixed (§XVI.6) |
 | the final certification pass succeeds | `certify_davis_kahan_1970.py` **PASS** 2026-09-06 (29/29 terminal, 1428/1428 signatures, 0 production warnings); `aiq-lean gates run` 30 passed / 3 failed, the three being the two Tau Ceti readiness/roadmap gates and the documented `per-declaration-expose` ratchet, none of them Davis--Kahan |
 
-**The mathematical lines above are met; the surface lines are not, and §XVIII is
-withdrawn.**  A signature/context-only hostile review of `3d6991a5` accepted the
-mathematics and rejected the surface: seven source-boundary defects, all façade
-or bookkeeping, listed in §XVIII.  In particular the row
-"canonical façades expose the paper's separability scope" is **not** met — the
-separability table classifies `DK-8.1-thm` and several §3 and §4 rows as
-`generalized` while the policy immediately above it says an exact façade carries
-separability.  That line is corrected below rather than left asserting the
-opposite of the table it points at.
-
+**Every line above is met, and §XVIII stays withdrawn until the reviewer's final
+signature/context-only pass grants it.**  The seven source-boundary findings and two
+certification defects of that review are repaired and listed in §XVIII with their
+repairs.  The remaining step is not work: it is the reviewer's verdict.
 ---
 
 # XVIII. Final public claim
 
-## WITHDRAWN 2026-09-06, pending source-surface cleanup
+## WITHDRAWN 2026-09-06.  All seven findings repaired; awaiting the reviewer's pass
 
-The claim below was made earlier on 2026-09-06 and is **withdrawn**.  A
-signature/context-only hostile review of `3d6991a5` accepted the mathematics —
-"I see no reason to reopen any proof", "the large unbounded Section 8 development
-does not need to be redone" — and rejected the *surface*.  Its criterion is the
-only one that matters at this point:
+The claim below was made earlier on 2026-09-06 and **withdrawn** the same day
+when a signature/context-only hostile review of `3d6991a5` accepted the
+mathematics — "I see no reason to reopen any proof", "the large unbounded
+Section 8 development does not need to be redone" — and rejected the *surface*,
+on the only criterion that matters at this point:
 
 > Does the canonical public theorem signature, interpreted in the paper's
 > standing context, state the Davis--Kahan result with no stronger restriction and
 > no weaker conclusion?
 
-Seven findings stand between the repository and the claim.  None is a proof
-obligation; all are façade or bookkeeping.
+All seven findings and both certification defects are now repaired.  **The claim
+stays withdrawn until the reviewer's final signature/context-only pass**, because
+it is theirs to grant, not ours to reassert.
 
-1. **Theorem 8.2 residual branch** exposes `M`, `hPdom`, `hRitz`, `hres` as
-   caller hypotheses.  Davis--Kahan add only residual smallness and the
-   central-spectrum condition to the inherited `sin 2θ` hypotheses.  The Ritz
-   block is *derivable* from the central-spectrum condition —
-   `exists_boundedRealization_of_spectrum_subset_Icc` — so those four must move
-   inside.
-2. **Theorem 8.1's source façades carry no ambient `SeparableSpace`.**  The
-   project's own policy (§ambient_scope_policy) says an exact façade carries the
-   paper's separable ambient scope; the inventory classifies `DK-8.1-thm` as
-   `generalized`, which agrees with the code and disagrees with the policy.
-3. **Theorem 8.1's façades omit the standing post-§3 context.**  Davis--Kahan
-   assume (3.5) and (1.5) after Proposition 3.2 unless stated otherwise, and §8
-   does not reset that.
-4. **Theorem 8.1(i)** is stated for an arbitrary reducing `Q` carrying only the
-   half of the hypotheses it needs.  The printed clause is about *the* `Q` the
-   existence half asserts, under the full Theorem 8.1 context.
-5. **Theorem 8.1(ii)** is canonical at the dimension-free approximation-number
-   form.  The printed clause is a finite-dimensional ordered *eigenvalue*
-   inequality, with the infinite-dimensional extension as a following remark.
-6. **Theorem 8.1(iii)** has the right dimension scope but speaks
-   `approximationNumber` and `principalCosines` where the source speaks
-   eigenvalue shifts and `cos² θ_k`.
-7. **Section 4** canonical declarations expose the internal defect isometry `J`
-   and `nonacuteDirectRotation … J`.  The source object is the direct rotation
-   itself, and the repository already has `IsDirectRotation`.
+| # | Finding | Repair |
+| --- | --- | --- |
+| 1 | Theorem 8.2's residual branch exposed `M`, `hPdom`, `hRitz`, `hres` | derived inside from the printed central-spectrum condition; `sourceResidual` names the printed `R` and `sourceResidual_eq_sub_ritzBlock` proves the reading (§10.3.4) |
+| 2 | Theorem 8.1's façades were arbitrary-Hilbert | they carry the ambient `SeparableSpace`; the general theorems are registered as generalizations |
+| 3 | Theorem 8.1's façades omitted the standing post-§3 context | they carry (3.5) `CrossedDefectsEquivalent`; the existence clause cannot, and says why |
+| 4 | Theorem 8.1(i) was stated for an arbitrary reducing `Q` | stated for *the* branch the existence half asserts, under the full context |
+| 5 | Theorem 8.1(ii) was canonical on `approximationNumber` | canonical on the printed ordered **eigenvalue** sequences, in finite dimensions |
+| 6 | Theorem 8.1(iii) spoke `approximationNumber` | same, with `cos²θ_k` unchanged — it was already the printed object |
+| 7 | Section 4 exposed the internal defect isometry `J` | canonical on a `D` with `IsDirectRotation U V D`, produced from (3.5) |
+| 8 | the separability table contradicted the separability policy | sixteen wrappers; every remaining `generalized` row carries a specific reason |
+| 9 | stale text: Section 8 "still bounded", §3d's overruled `J` decision, §X/§XVI queues | corrected in place, with the superseded sentences named rather than deleted |
 
-Plus two certification defects: the separability table disagrees with the
-separability policy while §XVII.1 calls that condition met, and stale text in the
-inventory and in this file still says Section 8's canonical evidence is bounded
-and that the literal UIN type is open, both of which were repaired.
+Evidence, re-run after the repairs: `certify_davis_kahan_1970.py` **PASS**, 29/29
+terminal, 1466/1466 registered declaration signatures, zero production build
+warnings; all **84** canonical witnesses depend on exactly `propext`,
+`Classical.choice` and `Quot.sound` with no `sorryAx`; `lake build` green on every
+default target; 95 statement pins clean.
 
-**The mathematics is not in question.**  29 of 29 designated results are resolved
-— 28 proved exactly, `DK-4.4-prop` refuted as transcribed with its repair proved.
-What is not yet true is that every canonical *signature* sits exactly at
-Davis--Kahan's statement and context scope.  Until it does, the sentence below is
-not to be used.
+One decision is recorded rather than repaired, and a reviewer may disagree with
+it: the separability sweep wraps where the paper's single ambient space
+corresponds to a Lean type variable, and records a reason where it does not —
+Section 5 changes the setting, Section 6's transfer statements quantify over
+several spaces at once, and three rows construct their space instead of assuming
+one.  The reasons are in `ambient_scope_policy.separability.generalized_reasons`.
 
 ## The claim, when the conditions are met
 
