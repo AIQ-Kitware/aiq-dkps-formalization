@@ -7046,16 +7046,16 @@ One row per printed source clause per scalar field.  A clause is `PASS` only whe
 
 | clause | scalar | witness | status |
 | --- | --- | --- | --- |
-| `acute-branch-conclusion.complex` | complex | `TauCeti.DavisKahan1970.Section8.theorem8_2_branch_maximalAngle_lt_of_crossedDefects` | **PASS** |
-| `acute-branch-conclusion.real` | real | `TauCeti.DavisKahan1970.Section8.theorem8_2_branch_real_maximalAngle_lt_of_crossedDefects` | **PASS** |
+| `acute-branch-conclusion.complex` | complex | `TauCeti.DavisKahan1970.Section8.theorem8_2_branch_maximalAngle_lt_unbounded_source_complex` | **PASS** |
+| `acute-branch-conclusion.real` | real | `TauCeti.DavisKahan1970.Section8.theorem8_2_branch_maximalAngle_lt_unbounded_source_real` | **PASS** |
 | `double-angle-bound-retained.complex` | complex | `TauCeti.DavisKahan1970.Section8.theorem8_2_sinTwoTheta_perturbation_sourceExact` + `TauCeti.DavisKahan.ExactSinTheta.NormalizedUnitaryInvariantNorm` | **PASS** |
 | `double-angle-bound-retained.complex.2` | complex | `TauCeti.DavisKahan1970.Section8.theorem8_2_sinTwoTheta_residual_directedAngle_sourceExact` + `TauCeti.DavisKahan.Angle.sinTwoThetaIdealBlock_hasSameApproximationNumbers_trialSide` + `TauCeti.DavisKahan.Angle.directedSinTwoAngleOperator_hasSameApproximationNumbers_swap` + `TauCeti.DavisKahan.Angle.mem_directedSinTwoAngleOperator_trialSide_iff` + `TauCeti.DavisKahan.Angle.gauge_directedSinTwoAngleOperator_trialSide` + `TauCeti.DavisKahan.ExactSinTheta.NormalizedUnitaryInvariantNorm` | **PASS** |
 | `double-angle-bound-retained.real` | real | `TauCeti.DavisKahan1970.Section8.theorem8_2_sinTwoTheta_perturbation_real_sourceExact` + `TauCeti.DavisKahan.ExactSinTheta.NormalizedUnitaryInvariantNorm` | **PASS** |
 | `double-angle-bound-retained.real.2` | real | `TauCeti.DavisKahan1970.Section8.theorem8_2_sinTwoTheta_residual_directedAngle_real_sourceExact` + `TauCeti.DavisKahan.Angle.sinTwoThetaIdealBlock_hasSameApproximationNumbers_trialSide` + `TauCeti.DavisKahan.Angle.directedSinTwoAngleOperator_hasSameApproximationNumbers_swap` + `TauCeti.DavisKahan.Angle.mem_directedSinTwoAngleOperator_trialSide_iff` + `TauCeti.DavisKahan.Angle.gauge_directedSinTwoAngleOperator_trialSide` + `TauCeti.DavisKahan.ExactSinTheta.NormalizedUnitaryInvariantNorm` | **PASS** |
 
-**`acute-branch-conclusion.complex`.** Canonical witness for acute-branch-conclusion at complex scalar scope, carried over from the pre-clause canonical evidence and re-checked against its compiler-printed type under the coherent model.
+**`acute-branch-conclusion.complex`.** Canonical witness for the acute branch at complex scalar scope and at the paper's inherited UNBOUNDED ambient scope: `A` a self-adjoint partial map, `H` a bounded self-adjoint perturbation, the printed spectral placements on the blocks, the printed disjunction `‖H‖ < delta/2 or ‖R‖ < delta/2`, and (3.5) for the symmetric conclusion.
 
-**`acute-branch-conclusion.real`.** Canonical witness for acute-branch-conclusion at real scalar scope, carried over from the pre-clause canonical evidence and re-checked against its compiler-printed type under the coherent model.
+**`acute-branch-conclusion.real`.** The real sibling, by complexification; same statement, same scope.
 
 **`double-angle-bound-retained.complex`.** Canonical witness for double-angle-bound-retained at complex scalar scope, carried over from the pre-clause canonical evidence and re-checked against its compiler-printed type under the coherent model.
 
@@ -7079,8 +7079,8 @@ Result-wide scope every clause must carry: `DK-8.2-thm.smallness-alternative`, `
 
 The declarations that carry this result's printed statement, with the source atoms each one covers.  Everything under *Other registered declarations* below accompanies the result without establishing it.
 
-- `TauCeti.DavisKahan1970.Section8.theorem8_2_branch_maximalAngle_lt_of_crossedDefects` — primary_source_witness, complex scalars, proof; covers `DK-8.2-thm.smallness-alternative`, `DK-8.2-thm.acute-branch-conclusion`, `S3-standing-scope.crossed-dimension-standing-assumption`
-- `TauCeti.DavisKahan1970.Section8.theorem8_2_branch_real_maximalAngle_lt_of_crossedDefects` — primary_source_witness, real scalars, proof; covers `DK-8.2-thm.smallness-alternative`, `DK-8.2-thm.acute-branch-conclusion`, `S3-standing-scope.crossed-dimension-standing-assumption`
+- `TauCeti.DavisKahan1970.Section8.theorem8_2_branch_maximalAngle_lt_unbounded_source_complex` — primary_source_witness, complex scalars, proof; covers `DK-8.2-thm.smallness-alternative`, `DK-8.2-thm.acute-branch-conclusion`, `S3-standing-scope.crossed-dimension-standing-assumption`
+- `TauCeti.DavisKahan1970.Section8.theorem8_2_branch_maximalAngle_lt_unbounded_source_real` — primary_source_witness, real scalars, proof; covers `DK-8.2-thm.smallness-alternative`, `DK-8.2-thm.acute-branch-conclusion`, `S3-standing-scope.crossed-dimension-standing-assumption`
 - `TauCeti.DavisKahan1970.Section8.theorem8_2_sinTwoTheta_perturbation_sourceExact` — primary_source_witness, complex scalars, proof; covers `DK-8.2-thm.smallness-alternative`, `DK-8.2-thm.double-angle-bound-retained`, `S3-standing-scope.crossed-dimension-standing-assumption`
 - `TauCeti.DavisKahan1970.Section8.theorem8_2_sinTwoTheta_residual_directedAngle_sourceExact` — primary_source_witness, complex scalars, proof; covers `DK-8.2-thm.smallness-alternative`, `DK-8.2-thm.double-angle-bound-retained`, `S3-standing-scope.crossed-dimension-standing-assumption`
 - `TauCeti.DavisKahan1970.Section8.theorem8_2_sinTwoTheta_perturbation_real_sourceExact` — primary_source_witness, real scalars, proof; covers `DK-8.2-thm.smallness-alternative`, `DK-8.2-thm.double-angle-bound-retained`, `S3-standing-scope.crossed-dimension-standing-assumption`
@@ -7127,6 +7127,8 @@ The declarations that carry this result's printed statement, with the source ato
 - `TauCeti.DavisKahan1970.Section8.theorem8_2_residualHalfGap_unbounded_real` — generalization
 - `TauCeti.DavisKahan1970.Section8.theorem8_2_perturbationHalfGap_maximalAngle_lt_unbounded_real` — generalization
 - `TauCeti.DavisKahan1970.Section8.theorem8_2_residualHalfGap_maximalAngle_lt_unbounded_real` — generalization
+- `TauCeti.DavisKahan1970.Section8.theorem8_2_branch_maximalAngle_lt_of_crossedDefects` — specialization
+- `TauCeti.DavisKahan1970.Section8.theorem8_2_branch_real_maximalAngle_lt_of_crossedDefects` — specialization
 
 ### Source-facing Lean declarations
 
@@ -7397,6 +7399,18 @@ Compiler-printed type: *inserted when a compiler certificate is supplied.*
 #### `TauCeti.DavisKahan1970.Section8.theorem8_2_residualHalfGap_maximalAngle_lt_unbounded_real`
 
 Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section8/Theorem82UnboundedPath.lean:824`
+
+Compiler-printed type: *inserted when a compiler certificate is supplied.*
+
+#### `TauCeti.DavisKahan1970.Section8.theorem8_2_branch_maximalAngle_lt_unbounded_source_complex`
+
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section8/Theorem82UnboundedPath.lean:860`
+
+Compiler-printed type: *inserted when a compiler certificate is supplied.*
+
+#### `TauCeti.DavisKahan1970.Section8.theorem8_2_branch_maximalAngle_lt_unbounded_source_real`
+
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section8/Theorem82UnboundedPath.lean:889`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 

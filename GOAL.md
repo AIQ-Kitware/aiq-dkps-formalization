@@ -1222,7 +1222,8 @@ Theorem 3.1 invariant:
    **done**; separate exact real and complex endpoints, not an `RCLike`
    generalization;
 9. resolve the UIN completeness question below — **answered, §4c**;
-10. hand back a source-exact snapshot for hostile review.
+10. hand back a source-exact snapshot for hostile review — **the certification
+    pass ran green on 2026-09-06**; see §XVI.6 for what it found and fixed.
 
 **Validation discipline for this stretch.**  Do not run the whole
 inventory/census/statement-map/name-drift/pin suite after ordinary commits.  Use
@@ -1279,9 +1280,37 @@ Review source statements against compiler-expanded theorem types.
 
 Fix only actual source mismatches.
 
-## 6. One final certification pass
+## 6. One final certification pass — run 2026-09-06
 
-After semantic closure, run the expensive gates once.
+The full (non-`--fast`) suite ran and is green except three failures that are not
+Davis--Kahan and not new: the two TauCeti readiness/roadmap gates, which are about
+unplaced `ForTauCeti.Probability.*` modules, and the `per-declaration-expose`
+ratchet, which `dev/policy/ratchet.yaml` says in as many words is above its
+maximum today and must not be made green by raising it.
+
+It found two real things that `--fast` cannot see, and both are fixed:
+
+* **Statement-pin drift** on `theorem3_1_spectralMultiplicity_classification_sourceAngle_complex`,
+  from removing its two derived separability instances, plus the new real
+  source-angle statement being unpinned.  Both re-pinned with the reason.
+* **A tamper mutation that had stopped biting.**
+  `ambient-realization-replaced-by-non-ambient` keyed on a `"primary"` the
+  Theorem 3.1 converse stopped using when it moved to the printed multiplicity
+  hypothesis.  Retargeted.  This is the failure mode the tamper suite exists to
+  catch in itself, and only a full run makes it visible.
+
+**DK-8.2-thm's canonical evidence was promoted to unbounded scope** in the same
+pass: `theorem8_2_branch_maximalAngle_lt_unbounded_source_complex` and its real
+sibling state the printed disjunction — either `‖H‖ < δ/2` or `‖R‖ < δ/2` — at
+the paper's inherited unbounded ambient scope, and the bounded siblings are
+retained as specializations.  The separability posture for the row moves from
+`mixed` to `separable`, with both witnesses classified as load-bearing: the
+unbounded `sin 2Θ` estimate the bootstrap consumes is built on the spectral
+measure of the Cayley transform, which is stated for separable spaces.
+
+**DK-8.1-thm is the row that is still not at its source scope.**  Its unbounded
+angle conclusion exists (§10.3), but branch existence and parts (i)--(iii) remain
+bounded, so its canonical evidence is unchanged.
 
 ---
 

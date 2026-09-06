@@ -849,6 +849,72 @@ theorem theorem8_2_residualHalfGap_maximalAngle_lt_unbounded_real
   exact theorem8_2_residualHalfGap_unbounded_real hA Hop hHop hdelta hab
     hPred hQred hQspec hQperp hPspec hRsmall
 
+/-! ### Theorem 8.2's printed disjunction -/
+
+/-- **Davis--Kahan 1970, Theorem 8.2, at unbounded ambient scope over `ℂ`.**
+
+The printed statement: add to the `sin 2Θ` theorem's hypotheses *either*
+`‖H‖ < δ/2` *or* `‖R‖ < δ/2`, together with `spec(A₀) ⊆ [β − δ/2, α + δ/2]`, and
+conclude `Θ < π/4`.  Section 3's standing assumption (3.5) is what turns the
+directed conclusion into the printed symmetric one. -/
+theorem theorem8_2_branch_maximalAngle_lt_unbounded_source_complex
+    [TopologicalSpace.SeparableSpace Hc]
+    {A : Hc →ₗ.[ℂ] Hc} (hA : IsSelfAdjoint A)
+    (Hop : Hc →L[ℂ] Hc) (hHop : DavisKahan.IsSelfAdjointOperator Hop)
+    {P Q : Submodule ℂ Hc} [P.HasOrthogonalProjection] [Q.HasOrthogonalProjection]
+    {alpha beta delta : ℝ} (hdelta : 0 < delta) (hab : beta ≤ alpha)
+    (hPred : TauCeti.LinearPMap.ReducesSubspace A P)
+    (hQred : TauCeti.LinearPMap.ReducesSubspace
+      (TauCeti.LinearPMap.addBounded A Hop) Q)
+    (hQspec : TauCeti.LinearPMap.realSpectrum
+      (TauCeti.LinearPMap.reducingRestriction (TauCeti.LinearPMap.addBounded A Hop) Q hQred)
+      ⊆ Set.Icc beta alpha)
+    (hQperp : TauCeti.LinearPMap.realSpectrum
+      (TauCeti.LinearPMap.reducingRestriction (TauCeti.LinearPMap.addBounded A Hop) Qᗮ
+        hQred.orthogonal) ⊆ bandExterior beta alpha delta)
+    (hPspec : TauCeti.LinearPMap.realSpectrum
+      (TauCeti.LinearPMap.reducingRestriction A P hPred)
+      ⊆ Set.Icc (beta - delta / 2) (alpha + delta / 2))
+    (hcross : DavisKahan.CrossedDefectsEquivalent P Q)
+    (hsmall : ‖Hop‖ < delta / 2 ∨
+      ‖Hop ∘L (P.subtypeL : P →L[ℂ] Hc)‖ < delta / 2) :
+    TauCeti.DavisKahanExt.maximalAngle P Q < Real.pi / 4 := by
+  rcases hsmall with h | h
+  · exact theorem8_2_perturbationHalfGap_maximalAngle_lt_unbounded_complex hA Hop hHop
+      hdelta hab hPred hQred hQspec hQperp hPspec hcross h
+  · exact theorem8_2_residualHalfGap_maximalAngle_lt_unbounded_complex hA Hop hHop
+      hdelta hab hPred hQred hQspec hQperp hPspec hcross h
+
+/-- **Davis--Kahan 1970, Theorem 8.2, at unbounded ambient scope over `ℝ`.** -/
+theorem theorem8_2_branch_maximalAngle_lt_unbounded_source_real
+    {Er : Type v} [NormedAddCommGroup Er] [InnerProductSpace ℝ Er] [CompleteSpace Er]
+    [TopologicalSpace.SeparableSpace Er]
+    {A : Er →ₗ.[ℝ] Er} (hA : IsSelfAdjoint A)
+    (Hop : Er →L[ℝ] Er) (hHop : DavisKahan.IsSelfAdjointOperator Hop)
+    {P Q : Submodule ℝ Er} [P.HasOrthogonalProjection] [Q.HasOrthogonalProjection]
+    {alpha beta delta : ℝ} (hdelta : 0 < delta) (hab : beta ≤ alpha)
+    (hPred : TauCeti.LinearPMap.ReducesSubspace A P)
+    (hQred : TauCeti.LinearPMap.ReducesSubspace
+      (TauCeti.LinearPMap.addBounded A Hop) Q)
+    (hQspec : TauCeti.LinearPMap.realSpectrum
+      (TauCeti.LinearPMap.reducingRestriction (TauCeti.LinearPMap.addBounded A Hop) Q hQred)
+      ⊆ Set.Icc beta alpha)
+    (hQperp : TauCeti.LinearPMap.realSpectrum
+      (TauCeti.LinearPMap.reducingRestriction (TauCeti.LinearPMap.addBounded A Hop) Qᗮ
+        hQred.orthogonal) ⊆ bandExterior beta alpha delta)
+    (hPspec : TauCeti.LinearPMap.realSpectrum
+      (TauCeti.LinearPMap.reducingRestriction A P hPred)
+      ⊆ Set.Icc (beta - delta / 2) (alpha + delta / 2))
+    (hcross : DavisKahan.CrossedDefectsEquivalent P Q)
+    (hsmall : ‖Hop‖ < delta / 2 ∨
+      ‖Hop ∘L (P.subtypeL : P →L[ℝ] Er)‖ < delta / 2) :
+    TauCeti.DavisKahanExt.maximalAngle P Q < Real.pi / 4 := by
+  rcases hsmall with h | h
+  · exact theorem8_2_perturbationHalfGap_maximalAngle_lt_unbounded_real hA Hop hHop
+      hdelta hab hPred hQred hQspec hQperp hPspec hcross h
+  · exact theorem8_2_residualHalfGap_maximalAngle_lt_unbounded_real hA Hop hHop
+      hdelta hab hPred hQred hQspec hQperp hPspec hcross h
+
 end
 
 end Section8
