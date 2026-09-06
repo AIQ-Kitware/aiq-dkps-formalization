@@ -292,5 +292,91 @@ theorem realSpectrum_addBounded_subset_of_gap
   · rw [realSpectrum_eq_spectraSpectrum] at hlam
     exact hlam
 
+/-! ## Half-line spectrum gives a form bound
+
+The printed spectral placements of Section 8 are half-line containments; the
+theorems that consume them want form bounds.  A point outside the closed
+half-line is a resolvent point, so its spectral projection vanishes, and the
+half-line energy bounds of the spectral measure do the rest. -/
+
+/-- **Spectrum in `Iic c` gives the upper form bound.** -/
+theorem re_inner_le_of_realSpectrum_subset_Iic
+    {A : H →ₗ.[ℂ] H} (hA : IsSelfAdjoint A) {c : ℝ}
+    (h : TauCeti.LinearPMap.realSpectrum A ⊆ Set.Iic c) (x : A.domain) :
+    (⟪A x, (x : H)⟫_ℂ).re ≤ c * ‖(x : H)‖ ^ 2 := by
+  refine TauCeti.LinearPMap.re_inner_le_of_specProjection_Ioi_eq_zero hA ?_ x
+  refine TauCeti.LinearPMap.specProjection_eq_zero_of_subset_resolventSet hA _ _ ?_
+  intro lam hlam
+  have hnot : lam ∉ TauCeti.LinearPMap.realSpectrum A := fun hmem => absurd (h hmem) (by
+    simp only [Set.mem_Iic, not_le]
+    exact hlam)
+  rw [TauCeti.LinearPMap.mem_realSpectrum_iff, not_not] at hnot
+  by_contra hcon
+  have : lam ∈ TauCeti.LinearPMap.realSpectrum A := by
+    rw [realSpectrum_eq_spectraSpectrum, Set.mem_preimage,
+      TauCeti.LinearPMap.mem_spectrum_iff]
+    exact hcon
+  rw [TauCeti.LinearPMap.mem_realSpectrum_iff] at this
+  exact this hnot
+
+/-- **Spectrum in `Ici c` gives the lower form bound.** -/
+theorem le_re_inner_of_realSpectrum_subset_Ici
+    {A : H →ₗ.[ℂ] H} (hA : IsSelfAdjoint A) {c : ℝ}
+    (h : TauCeti.LinearPMap.realSpectrum A ⊆ Set.Ici c) (x : A.domain) :
+    c * ‖(x : H)‖ ^ 2 ≤ (⟪A x, (x : H)⟫_ℂ).re := by
+  refine TauCeti.LinearPMap.le_re_inner_of_specProjection_Iio_eq_zero hA ?_ x
+  refine TauCeti.LinearPMap.specProjection_eq_zero_of_subset_resolventSet hA _ _ ?_
+  intro lam hlam
+  have hnot : lam ∉ TauCeti.LinearPMap.realSpectrum A := fun hmem => absurd (h hmem) (by
+    simp only [Set.mem_Ici, not_le]
+    exact hlam)
+  rw [TauCeti.LinearPMap.mem_realSpectrum_iff, not_not] at hnot
+  by_contra hcon
+  have : lam ∈ TauCeti.LinearPMap.realSpectrum A := by
+    rw [realSpectrum_eq_spectraSpectrum, Set.mem_preimage,
+      TauCeti.LinearPMap.mem_spectrum_iff]
+    exact hcon
+  rw [TauCeti.LinearPMap.mem_realSpectrum_iff] at this
+  exact this hnot
+
+noncomputable local instance instCompleteSpaceCoeBandForm
+    (U : Submodule ℂ H) [U.HasOrthogonalProjection] : CompleteSpace U :=
+  (Submodule.isComplete_coe_of_hasOrthogonalProjection U).completeSpace_coe
+
+/-- **A block placed in `Iic c` bounds the ambient form on that block.** -/
+theorem re_inner_le_of_reducingRestriction_realSpectrum_subset_Iic
+    {A : H →ₗ.[ℂ] H} (hA : IsSelfAdjoint A) {U : Submodule ℂ H}
+    [U.HasOrthogonalProjection] (hred : TauCeti.LinearPMap.ReducesSubspace A U) {c : ℝ}
+    (h : TauCeti.LinearPMap.realSpectrum
+      (TauCeti.LinearPMap.reducingRestriction A U hred) ⊆ Set.Iic c)
+    (x : A.domain) (hx : (x : H) ∈ U) :
+    (⟪A x, (x : H)⟫_ℂ).re ≤ c * ‖(x : H)‖ ^ 2 := by
+  have hres : IsSelfAdjoint (TauCeti.LinearPMap.reducingRestriction A U hred) :=
+    TauCeti.LinearPMap.reducingRestriction_isSelfAdjoint A U hred hA.dense_domain hA
+  have hxdom : (⟨(x : H), hx⟩ : U) ∈
+      (TauCeti.LinearPMap.reducingRestriction A U hred).domain := x.2
+  have hb := re_inner_le_of_realSpectrum_subset_Iic hres h
+    (⟨⟨(x : H), hx⟩, hxdom⟩ :
+      (TauCeti.LinearPMap.reducingRestriction A U hred).domain)
+  exact hb
+
+/-- **A block placed in `Ici c` bounds the ambient form on that block from
+below.** -/
+theorem le_re_inner_of_reducingRestriction_realSpectrum_subset_Ici
+    {A : H →ₗ.[ℂ] H} (hA : IsSelfAdjoint A) {U : Submodule ℂ H}
+    [U.HasOrthogonalProjection] (hred : TauCeti.LinearPMap.ReducesSubspace A U) {c : ℝ}
+    (h : TauCeti.LinearPMap.realSpectrum
+      (TauCeti.LinearPMap.reducingRestriction A U hred) ⊆ Set.Ici c)
+    (x : A.domain) (hx : (x : H) ∈ U) :
+    c * ‖(x : H)‖ ^ 2 ≤ (⟪A x, (x : H)⟫_ℂ).re := by
+  have hres : IsSelfAdjoint (TauCeti.LinearPMap.reducingRestriction A U hred) :=
+    TauCeti.LinearPMap.reducingRestriction_isSelfAdjoint A U hred hA.dense_domain hA
+  have hxdom : (⟨(x : H), hx⟩ : U) ∈
+      (TauCeti.LinearPMap.reducingRestriction A U hred).domain := x.2
+  have hb := le_re_inner_of_realSpectrum_subset_Ici hres h
+    (⟨⟨(x : H), hx⟩, hxdom⟩ :
+      (TauCeti.LinearPMap.reducingRestriction A U hred).domain)
+  exact hb
+
 end DavisKahan
 end TauCeti
