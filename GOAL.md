@@ -665,16 +665,20 @@ and axiom-clean, and `Section8/Theorem82Unbounded.lean` holds the assembly so fa
 * `theorem8_2_branch_maximalAngle_lt_unbounded_complex` — the acute conclusion
   from the closed branch and a strict contraction.
 
-Three assembly steps remain, none of them new mathematics:
+* `norm_sinTwoAngleOperator_eq_norm_block` — **step 2, done.**
+  `‖cfc (sin 2·) Θ‖ = ‖2 P_{P⊥} P_Q P_P‖`. Both are the norm of the directed
+  double-angle sine, which is symmetric in the pair because the *doubled* sines
+  have the same complete approximation-number sequence even though the undoubled
+  ones do not.
+* `theorem8_2_branch_maximalAngle_lt_of_small_perturbation_unbounded_complex` —
+  the acute conclusion straight from the printed `‖H‖ < δ/2`.
+
+Two assembly steps remain, neither of them new mathematics:
 
 1. derive the ordered form bounds Theorem 8.1 wants from Theorem 8.2's printed
-   `SpectrumIn` hypotheses at unbounded scope;
-2. identify `‖cfc (sin 2·) Θ‖` with `‖2 P_{P⊥} P_Q P_P‖` — the estimate is proved
-   for the first and the bootstrap comparison consumes the second. They have the
-   same approximation numbers (`sinTwoAngleOperator_hasSameApproximationNumbers`
-   plus `HasSameApproximationNumbers.opNorm_eq`), so this is a bridge, not a
-   theorem;
-3. the residual branch, keeping it free of the perturbation hypothesis, and the
+   `SpectrumIn` hypotheses at unbounded scope, so that `hclosed` becomes an
+   appeal rather than a hypothesis;
+2. the residual branch, keeping it free of the perturbation hypothesis, and the
    real siblings.
 
 ### Implementation policy

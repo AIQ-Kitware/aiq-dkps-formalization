@@ -6,6 +6,8 @@ Authors: Jon Crall, Claude Opus 5
 import DavisKahan.Sources.DavisKahan1970.SinTwoThetaAmbientUnbounded
 import DavisKahan.InfiniteDimensional.TanTwoTheta.QuarterAngleUnbounded
 import DavisKahan.Sources.DavisKahan1970.Ideals.NormalizedUnitaryInvariantNormExamples
+import DavisKahan.DoubleAngle.RealAngleIdentification
+import DavisKahan.Geometry.Angle.DoubleAngleGapBound
 
 /-!
 # Theorem 8.2's acute branch at unbounded scope
@@ -108,6 +110,57 @@ theorem theorem8_2_branch_maximalAngle_lt_unbounded_complex
     TauCeti.DavisKahanExt.maximalAngle P Q < Real.pi / 4 :=
   DavisKahan.maximalAngle_lt_pi_div_four_of_le_of_norm_sinTwoAngle_lt_one
     P Q hcross hclosed hblock
+
+/-- **The two spellings of `sin 2Theta` have the same norm.**
+
+The unbounded estimate is proved for the functional-calculus `sin 2Theta`; the
+bootstrap comparison that turns the closed branch into the open one consumes the
+one-sided block `2 P_{U^perp} P_V P_U`.  Both have the norm of the directed
+double-angle sine, which is symmetric in the pair because the *doubled* sines
+have the same complete approximation-number sequence even though the undoubled
+ones do not. -/
+theorem norm_sinTwoAngleOperator_eq_norm_block
+    {Hc : Type v} [NormedAddCommGroup Hc] [InnerProductSpace ℂ Hc] [CompleteSpace Hc]
+    (U V : Submodule ℂ Hc) [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] :
+    ‖TauCeti.DavisKahan.Angle.sinTwoAngleOperator U V‖ =
+      ‖TauCeti.DavisKahanExt.sinTwoAngleOperator U V‖ := by
+  rw [TauCeti.DavisKahan.Angle.sinTwoAngleOperator_complex,
+    TauCeti.DavisKahanExt.norm_sinTwoAngleOperatorC_eq_norm_directedSinTwoAngleOperatorC,
+    TauCeti.DavisKahan.Angle.norm_sinTwoAngleOperator_eq_norm_directedSinTwoAngleOperatorC_swap]
+  exact (TauCeti.DavisKahan.Angle.directedSinTwoAngleOperator_hasSameApproximationNumbers_swap
+    U V).norm_eq
+
+/-- **The acute conclusion from the printed smallness hypothesis.**
+
+`‖H‖ < delta/2` and the closed branch give `Theta < pi/4`.  This is the
+perturbation branch of Theorem 8.2 at unbounded ambient scope, with the closed
+branch -- which unbounded Theorem 8.1 supplies -- still carried as a hypothesis. -/
+theorem theorem8_2_branch_maximalAngle_lt_of_small_perturbation_unbounded_complex
+    {Hc : Type v} [NormedAddCommGroup Hc] [InnerProductSpace ℂ Hc] [CompleteSpace Hc]
+    [TopologicalSpace.SeparableSpace Hc]
+    {A : Hc →ₗ.[ℂ] Hc} (hA : IsSelfAdjoint A)
+    (Hop : Hc →L[ℂ] Hc) (hHop : DavisKahan.IsSelfAdjointOperator Hop)
+    {P Q : Submodule ℂ Hc} [P.HasOrthogonalProjection] [Q.HasOrthogonalProjection]
+    (hPred : TauCeti.LinearPMap.ReducesSubspace A P)
+    (hQred : TauCeti.LinearPMap.ReducesSubspace
+      (TauCeti.LinearPMap.addBounded A Hop) Q)
+    {δ : ℝ} (hδ : 0 < δ)
+    (hgap : FormBoundedSylvesterGap
+      (TauCeti.LinearPMap.reducingRestriction
+        (TauCeti.LinearPMap.addBounded A Hop) Q hQred)
+      (TauCeti.LinearPMap.reducingRestriction
+        (TauCeti.LinearPMap.addBounded A Hop) Qᗮ hQred.orthogonal) δ)
+    (hclosed : DavisKahan.subspaceGap P Q ≤ Real.sqrt 2 / 2)
+    (hcross : DavisKahan.CrossedDefectsEquivalent Q P)
+    (hsmall : ‖Hop‖ < δ / 2) :
+    TauCeti.DavisKahanExt.maximalAngle P Q < Real.pi / 4 := by
+  have hbound := norm_sinTwoAngleOperator_le_of_perturbedGap_unbounded_complex
+    hA Hop hHop hPred hQred hδ hgap
+  rw [norm_sinTwoAngleOperator_eq_norm_block] at hbound
+  have hblock : ‖TauCeti.DavisKahanExt.sinTwoAngleOperator P Q‖ < 1 := by
+    nlinarith [hbound, hsmall, hδ,
+      norm_nonneg (TauCeti.DavisKahanExt.sinTwoAngleOperator P Q)]
+  exact theorem8_2_branch_maximalAngle_lt_unbounded_complex hclosed hcross hblock
 
 end
 
