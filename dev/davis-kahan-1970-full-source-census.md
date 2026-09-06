@@ -4,7 +4,7 @@
 
 **Census family:** `source-completion-census`  
 **Items:** 50  
-**Unique cited Lean declarations:** 1382
+**Unique cited Lean declarations:** 1385
 
 ## How to use this census
 
@@ -4367,6 +4367,9 @@ ROW WAS STALE; CORRECTED 2026-08-07 (Fable 5).  The requested 'exact source norm
 - `TauCeti.DavisKahan.re_inner_le_of_reducingRestriction_realSpectrum_subset_Iic`
 - `TauCeti.DavisKahan.le_re_inner_of_reducingRestriction_realSpectrum_subset_Ici`
 - `TauCeti.DavisKahan1970.Section8.theorem8_1_maximalAngle_le_of_spectrumIn_unbounded`
+- `TauCeti.DavisKahan1970.Section8.re_inner_split_of_reduces`
+- `TauCeti.DavisKahan1970.Section8.theorem8_1_upperCompressionRepulsion_unbounded`
+- `TauCeti.DavisKahan1970.Section8.theorem8_1_lowerCompressionRepulsion_unbounded`
 
 **Curated source/Lean review:**
 

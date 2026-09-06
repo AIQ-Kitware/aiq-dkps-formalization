@@ -453,18 +453,38 @@ outside the closed half-line is a resolvent point, so its spectral projection
 vanishes, and the half-line energy bounds of the spectral measure give the form
 bound the quarter-angle theorem wants.
 
-**What is left on this row:**
+**Part (i) is done, 2026-09-06.**
+`theorem8_1_upperCompressionRepulsion_unbounded` and its lower-block dual give
+part (i) in its form reading: the `α`-shifted energy of a domain vector is at
+most that of its component in the branch's complement.  The proof is
+`re_inner_split_of_reduces` — a reducing subspace splits the energy, the cross
+terms vanishing by invariance — plus the branch's own ordered form bound.
+Nothing about `P` is used, so it holds on the whole domain; the paper's `Pᗮ` is
+only where it is read.
 
-* **the converse half of the printed *iff*.**  The bounded converse goes through
-  uniqueness — `M` equals the canonical branch — and that argument rests on
-  `IsQuarterAcute P Q`, a **uniform** strict bound.  That is exactly what does not
-  transcribe: the paper prints only the non-strict `Θ ≤ π/4`, and the strict
-  bounded sibling's constant is `δ/(1 + ‖C‖)`, which degenerates as `‖A‖` grows
-  (§10.3.1).  Whether the uniform strict bound holds at all at unbounded scope is
-  an **open mathematical question**, not a porting gap, and a converse there needs
-  a different argument.  Do not treat it as a transcription task.
-* **parts (i)–(iii)** — the compression inequality, the eigenvalue form in finite
-  dimensions, and the symmetric-gauge form.
+**Parts (ii) and (iii) are not unbounded obligations at all.**  Measured against
+the source, 2026-09-06: the paper prints (ii) *"in finite dimensions … with the
+analogous lower-block statement and natural infinite-dimensional extensions"* and
+(iii) *"for every symmetric gauge function `Φ` in finite dimensions"*.  Part (i),
+by contrast, carries no dimension qualifier and so inherits the ambient unbounded
+scope.  So the existing finite/bounded evidence for (ii) and (iii) is **at** the
+printed scope, and the dimension-free approximation-number form already
+registered covers (ii)'s extension remark.  §XVII's "finite versus
+infinite-dimensional scope matches each printed result" is satisfied for them.
+
+**What is left on this row is one thing:** the **converse half of the printed
+*iff***.  The bounded converse goes through uniqueness — `M` equals the canonical
+branch — and that argument rests on `IsQuarterAcute P Q`, a **uniform** strict
+bound.  That is exactly what does not transcribe: the paper prints only the
+non-strict `Θ ≤ π/4`, and the strict bounded sibling's constant is
+`δ/(1 + ‖C‖)`, which degenerates as `‖A‖` grows (§10.3.1).  Concretely, with only
+the non-strict bound the contradiction step collapses to an *equality*
+`‖P_P u‖ = ‖P_{Pᗮ} u‖ = ‖u‖/√2` rather than an absurdity, and the paper's own
+exclusion of `θ = π/4` runs through equations (8.1)–(8.2), which are stated in
+the canonical-angle (CS) decomposition rather than in the projection algebra the
+repository uses here.  Whether the uniform strict bound holds at all at unbounded
+scope is an **open mathematical question**, not a porting gap.  Do not treat it as
+a transcription task.
 
 The machinery built for Theorem 8.2 is what a next attempt should use rather than
 starting again: `SpectralTheory/UnboundedCentralBand.lean` already selects a

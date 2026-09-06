@@ -6616,6 +6616,9 @@ The declarations that carry this result's printed statement, with the source ato
 - `TauCeti.DavisKahan.re_inner_le_of_reducingRestriction_realSpectrum_subset_Iic` — generalization
 - `TauCeti.DavisKahan.le_re_inner_of_reducingRestriction_realSpectrum_subset_Ici` — generalization
 - `TauCeti.DavisKahan1970.Section8.theorem8_1_maximalAngle_le_of_spectrumIn_unbounded` — generalization
+- `TauCeti.DavisKahan1970.Section8.re_inner_split_of_reduces` — generalization
+- `TauCeti.DavisKahan1970.Section8.theorem8_1_upperCompressionRepulsion_unbounded` — generalization
+- `TauCeti.DavisKahan1970.Section8.theorem8_1_lowerCompressionRepulsion_unbounded` — generalization
 
 ### Source-facing Lean declarations
 
@@ -6844,6 +6847,24 @@ Compiler-printed type: *inserted when a compiler certificate is supplied.*
 #### `TauCeti.DavisKahan1970.Section8.theorem8_1_maximalAngle_le_of_spectrumIn_unbounded`
 
 Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section8/Theorem81UnboundedBranch.lean:303`
+
+Compiler-printed type: *inserted when a compiler certificate is supplied.*
+
+#### `TauCeti.DavisKahan1970.Section8.re_inner_split_of_reduces`
+
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section8/Theorem81UnboundedCompression.lean:41`
+
+Compiler-printed type: *inserted when a compiler certificate is supplied.*
+
+#### `TauCeti.DavisKahan1970.Section8.theorem8_1_upperCompressionRepulsion_unbounded`
+
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section8/Theorem81UnboundedCompression.lean:90`
+
+Compiler-printed type: *inserted when a compiler certificate is supplied.*
+
+#### `TauCeti.DavisKahan1970.Section8.theorem8_1_lowerCompressionRepulsion_unbounded`
+
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section8/Theorem81UnboundedCompression.lean:112`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
