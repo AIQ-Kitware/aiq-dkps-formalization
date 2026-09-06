@@ -635,6 +635,35 @@ Prove the source alternative under the printed residual-size hypothesis.
 
 The residual theorem must **not** acquire the perturbation-size hypothesis merely because a convenient proof route uses it.
 
+### The route is much shorter than the plan assumed (finding, 2026-09-05)
+
+Theorem 8.2's acute conclusion `Θ < π/4` does **not** need the homotopy, the
+Riesz projection, or the continuation stack. It is Theorem 8.1's `Θ ≤ π/4` plus
+the double-angle bound:
+
+```text
+Theorem 8.1 (unbounded)          ⟹  subspaceGap ≤ √2/2          -- the CLOSED branch
+sin 2Θ theorem (unbounded)       ⟹  ‖sin 2Θ‖ ≤ 2‖H‖/δ < 1       -- printed smallness
+sqrt_two_mul_directedGap_le_…    ⟹  √2 · directedGap ≤ ‖sin 2Θ‖
+                                 ⟹  subspaceGap < √2/2           -- the OPEN branch
+```
+
+The middle inequality is the repository's existing bootstrap comparison, whose
+hypothesis is exactly "on the closed quarter branch" — which is what Theorem 8.1
+supplies and what the homotopy was there to establish. Its constant depends on
+`γ/δ` only, never on `‖A‖`, so unlike Theorem 8.1's strict supremum bound this
+one *does* survive to unbounded scope, which is why the paper writes `<` here and
+`≤` there.
+
+`subspaceGap_lt_of_le_of_norm_sinTwoAngle_lt_one` and its angle form are proved
+and axiom-clean. What remains for the row:
+
+1. derive the ordered form bounds Theorem 8.1 wants from Theorem 8.2's printed
+   `SpectrumIn` hypotheses at unbounded scope;
+2. instantiate the unbounded `sin 2Θ` estimate to get `‖sin 2Θ‖ < 1` from
+   `‖H‖ < δ/2`, and the residual variant from `‖R‖ < δ/2`;
+3. assemble, keeping the residual branch free of the perturbation hypothesis.
+
 ### Implementation policy
 
 Start from the source-exact theorem signature.

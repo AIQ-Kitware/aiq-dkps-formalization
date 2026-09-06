@@ -6,6 +6,9 @@ Authors: Jon Crall, Claude Opus 5
 import DavisKahan.InfiniteDimensional.TanTwoTheta.OffDiagonalSpectralRepulsionUnbounded
 import DavisKahan.TanTheta.RitzPair
 import ForTauCeti.Analysis.InnerProductSpace.LyapunovPositivity
+import DavisKahan.Geometry.Angle.DoubleAngleGapBound
+import DavisKahan.Geometry.Halmos.CrossedDefectGap
+import DavisKahan.Sources.DavisKahan1970.Section8.Theorem81
 
 /-!
 # The quarter angle for an unbounded ambient operator
@@ -347,6 +350,54 @@ theorem maximalAngle_le_pi_div_four_of_orderedFormGap_unbounded_printed
   change Real.arcsin (subspaceGap P Q) ≤ Real.pi / 4
   rw [← hgap]
   exact hcompl
+
+/-- **From the closed quarter branch to the open one.**
+
+Davis--Kahan's Theorem 8.2 concludes `Theta < pi/4`, strictly, where Theorem 8.1
+concludes `Theta <= pi/4`.  The strictness comes from the double-angle bound, not
+from a second branch argument: on the *closed* branch the double-angle sine
+dominates `sqrt 2` times the directed gap, so a strict contraction there forces
+the gap strictly below `sqrt 2 / 2`.
+
+This is why unbounded Theorem 8.2's acute conclusion does not need a homotopy or
+a Riesz projection.  Theorem 8.1 at unbounded scope supplies the closed branch;
+the unbounded `sin 2Theta` estimate supplies `‖sin 2Theta‖ <= 2‖H‖/delta < 1`
+under the printed smallness hypothesis; and this lemma closes the gap. -/
+theorem subspaceGap_lt_of_le_of_norm_sinTwoAngle_lt_one
+    (U V : Submodule ℂ E)
+    [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
+    (hcross : TauCeti.DavisKahan.CrossedDefectsEquivalent V U)
+    (hle : subspaceGap U V ≤ Real.sqrt 2 / 2)
+    (hsin : ‖DavisKahanExt.sinTwoAngleOperator U V‖ < 1) :
+    subspaceGap U V < Real.sqrt 2 / 2 := by
+  have hsym : subspaceGap U V = subspaceGap V U := by
+    change ‖U.starProjection - V.starProjection‖ = ‖V.starProjection - U.starProjection‖
+    rw [← norm_neg]
+    congr 1
+    abel
+  have hdir : subspaceGap V U = directedGap V U :=
+    TauCeti.DavisKahan.subspaceGap_eq_directedGap_of_crossedDefectsEquivalent V U hcross
+  have hclose : directedGap V U ≤ Real.sqrt 2 / 2 := by
+    rw [← hdir, ← hsym]
+    exact hle
+  have hboot := TauCeti.DavisKahan.Angle.sqrt_two_mul_directedGap_le_norm_sinTwoAngleOperator
+    U V hclose
+  have hs2 : (0 : ℝ) < Real.sqrt 2 := Real.sqrt_pos.mpr (by norm_num)
+  have h2 : Real.sqrt 2 * Real.sqrt 2 = 2 := Real.mul_self_sqrt (by norm_num)
+  have hstrict : directedGap V U < Real.sqrt 2 / 2 := by nlinarith [hboot, hsin, hs2]
+  rw [hsym, hdir]
+  exact hstrict
+
+/-- The same, in the printed angle form. -/
+theorem maximalAngle_lt_pi_div_four_of_le_of_norm_sinTwoAngle_lt_one
+    (U V : Submodule ℂ E)
+    [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
+    (hcross : TauCeti.DavisKahan.CrossedDefectsEquivalent V U)
+    (hle : subspaceGap U V ≤ Real.sqrt 2 / 2)
+    (hsin : ‖DavisKahanExt.sinTwoAngleOperator U V‖ < 1) :
+    TauCeti.DavisKahanExt.maximalAngle U V < Real.pi / 4 :=
+  (TauCeti.DavisKahan1970.Section8.maximalAngle_lt_pi_div_four_iff U V).2
+    (subspaceGap_lt_of_le_of_norm_sinTwoAngle_lt_one U V hcross hle hsin)
 
 end
 
