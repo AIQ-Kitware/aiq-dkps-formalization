@@ -4,7 +4,7 @@
 
 **Census family:** `source-completion-census`  
 **Items:** 50  
-**Unique cited Lean declarations:** 1466
+**Unique cited Lean declarations:** 1491
 
 ## How to use this census
 
@@ -2263,6 +2263,8 @@ CENSUS-GATE NOTE 2026-08-11: `TauCeti.MultiplicityDatum.retype` is deliberately 
 - `TauCeti.continuous_conjStarAlgEquiv`
 - `TauCeti.DavisKahan1970.genericCosineBlock_nonneg_real`
 - `TauCeti.DavisKahan1970.genericCosineBlock_le_one_real`
+- `TauCeti.DavisKahan1970.theorem3_1_realization_sourceExact_complex`
+- `TauCeti.DavisKahan1970.theorem3_1_realization_sourceExact_real`
 
 **Curated source/Lean review:**
 
@@ -2561,6 +2563,7 @@ Separately, the converse's ambient dimension clause is now a PROPOSITION. The pr
 - `TauCeti.DavisKahan1970.compactAngleEigenvalueList_genericCosineBlock_le_one`
 - `TauCeti.DavisKahan1970.norm_genericCosineBlock_le_one`
 - `TauCeti.DavisKahan1970.corollary3_1_compact_defectBlock_sourceAngleList_classification_separable`
+- `TauCeti.DavisKahan1970.corollary3_1_realization_zeroMultiplicity_sourceScope`
 
 **Notes.** **PROVED 2026-08-04, both directions, admission-free.**
 
@@ -2884,6 +2887,11 @@ SOURCE-FIDELITY REFRESH 2026-08-11.  The former finite-dimensional J gap is clos
 - `TauCeti.DavisKahan.FiniteDimensional.principalPlaneChord_eq_two_mul_sin_half`
 - `TauCeti.DavisKahan1970.proposition4_1_directRotation_sourceExact_complex`
 - `TauCeti.DavisKahan1970.proposition4_1_directRotation_sourceExact_real`
+- `TauCeti.DavisKahan.IsSourceDirectRotation`
+- `TauCeti.DavisKahan.IsSourceDirectRotation.add_star_eq_two_absoluteValue`
+- `TauCeti.DavisKahan.norm_one_sub_apply_eq_of_isSourceDirectRotation`
+- `TauCeti.DavisKahan.sq_eq_reflectionProduct`
+- `TauCeti.DavisKahan1970.crossedDefectsEquivalent_of_isSourceDirectRotation`
 
 **Notes.** The finite pointwise singular-value theorem is compiled: every singular value of the restricted displacement (1-V)P is minimized by the direct rotation, whose values are the doubled half-angle sines 2 sin(theta_k/2).  A source-numbered wrapper and the infinite-dimensional scope remain open.
 
@@ -2954,6 +2962,11 @@ Equations (4.1) and (4.2), the closest-`Q`-vector step and the `V = UZ` factoris
 - `TauCeti.DavisKahan.ExactSinTheta.NormalizedUnitaryInvariantNorm`
 - `TauCeti.DavisKahan1970.corollary4_1_directRotation_sourceExact_complex`
 - `TauCeti.DavisKahan1970.corollary4_1_directRotation_sourceExact_real`
+- `TauCeti.DavisKahan.IsSourceDirectRotation`
+- `TauCeti.DavisKahan.IsSourceDirectRotation.add_star_eq_two_absoluteValue`
+- `TauCeti.DavisKahan.norm_one_sub_apply_eq_of_isSourceDirectRotation`
+- `TauCeti.DavisKahan.sq_eq_reflectionProduct`
+- `TauCeti.DavisKahan1970.crossedDefectsEquivalent_of_isSourceDirectRotation`
 
 **Notes.** Compiled without any angle restriction, for every unitarily invariant norm, over every RCLike field (finite dimension).  The earlier note conflating this row with Proposition 4.4 is resolved: the corollary concerns the restricted displacement and needs no angle hypothesis.
 
@@ -3124,6 +3137,11 @@ REOPENING WITHDRAWN 2026-08-31 and the rule corrected: a later source passage en
 - `TauCeti.DavisKahan1970.proposition4_3_compact_nonacute_sourceExact_ofCrossedDefects_real`
 - `TauCeti.DavisKahan1970.proposition4_3_directRotation_sourceExact_complex`
 - `TauCeti.DavisKahan1970.proposition4_3_directRotation_sourceExact_real`
+- `TauCeti.DavisKahan.IsSourceDirectRotation`
+- `TauCeti.DavisKahan.IsSourceDirectRotation.add_star_eq_two_absoluteValue`
+- `TauCeti.DavisKahan.norm_one_sub_apply_eq_of_isSourceDirectRotation`
+- `TauCeti.DavisKahan.sq_eq_reflectionProduct`
+- `TauCeti.DavisKahan1970.crossedDefectsEquivalent_of_isSourceDirectRotation`
 
 **Curated source/Lean review:**
 
@@ -3520,6 +3538,10 @@ SOURCE-EXACT FAÇADE REGISTERED 2026-09-05. Canonical evidence is now the printe
 - `TauCeti.DavisKahan1970.lemma6_1_converse_sourceExact_real`
 - `TauCeti.DavisKahan1970.lemma6_1_sourceExact`
 - `TauCeti.DavisKahan1970.lemma6_1_converse_sourceExact`
+- `TauCeti.DavisKahan1970.lemma6_1_separable_complex`
+- `TauCeti.DavisKahan1970.lemma6_1_separable_real`
+- `TauCeti.DavisKahan1970.lemma6_1_converse_separable_complex`
+- `TauCeti.DavisKahan1970.lemma6_1_converse_separable_real`
 
 **Notes.** Both directions are proved; the converse should be added to the exact audit manifest.
 
@@ -3546,6 +3568,7 @@ with no finite-dimensionality hypothesis.  `HasMinMaxLowerBoundEverywhere` has i
 - `TauCeti.DavisKahan1970.lemma6_2_sourceExact`
 - `TauCeti.DavisKahan1970.lemma6_1_sourceExact`
 - `TauCeti.DavisKahan1970.lemma6_1_converse_sourceExact`
+- `TauCeti.DavisKahan1970.lemma6_2_separable`
 
 **Notes.** Part of the clean Section 6 surface.
 
@@ -3580,6 +3603,8 @@ with no finite-dimensionality hypothesis.  `HasMinMaxLowerBoundEverywhere` has i
 - `TauCeti.DavisKahan1970.theorem5_2_sourceExact_real`
 - `TauCeti.DavisKahan1970.proposition6_1_sourceExact_complex`
 - `TauCeti.DavisKahan1970.proposition6_1_sourceExact_real`
+- `TauCeti.DavisKahan1970.proposition6_1_printedGap_sourceExact_complex`
+- `TauCeti.DavisKahan1970.proposition6_1_printedGap_sourceExact_real`
 
 **Notes.** Complex and real source forms are compiled.
 
@@ -3623,6 +3648,8 @@ REOPENING WITHDRAWN 2026-08-31 and the rule corrected: a later source passage en
 - `TauCeti.DavisKahan1970.lowerFrameBound_of_operator_inequality`
 - `TauCeti.DavisKahan1970.theorem6_1_sourceExact_complex`
 - `TauCeti.DavisKahan1970.theorem6_1_sourceExact_real`
+- `TauCeti.DavisKahan1970.theorem6_1_printedGap_sourceExact_complex`
+- `TauCeti.DavisKahan1970.theorem6_1_printedGap_sourceExact_real`
 
 **Curated source/Lean review:**
 
@@ -3688,6 +3715,8 @@ REOPENING WITHDRAWN 2026-08-31 and the rule corrected: a later source passage en
 - `TauCeti.DavisKahan1970.theorem6_2_real`
 - `TauCeti.DavisKahan1970.lowerFrameBound_iff_operator_inequality`
 - `TauCeti.DavisKahan1970.lowerFrameBound_of_operator_inequality`
+- `TauCeti.DavisKahan1970.theorem6_2_vacuity_sourceExact_complex`
+- `TauCeti.DavisKahan1970.theorem6_2_vacuity_sourceExact_real`
 
 **Notes.** The defect-first pairwise tensor proof is compiled.
 
@@ -3769,6 +3798,9 @@ Residue, and not a gap: `[CompleteSpace Z]`, which `Theorem63InfiniteTrial.lean`
 - `TauCeti.DavisKahan1970.tanTheta_directed_unboundedRitz_sourceExact_complex`
 - `TauCeti.DavisKahan1970.tanTheta_directed_unboundedRitz_sourceExact_real`
 - `TauCeti.DavisKahan.ExactSinTheta.NormalizedUnitaryInvariantNorm`
+- `TauCeti.DavisKahan1970.theorem6_3_unbounded_infiniteTrial_ideal_exists`
+- `TauCeti.DavisKahan1970.theorem6_3_unbounded_infiniteTrial_ideal_exists_real`
+- `TauCeti.DavisKahan1970.tanTheta_directed_bounded_spectralGap_symmetricNorming_real`
 
 **Curated source/Lean review:**
 
@@ -4193,6 +4225,8 @@ FOR THIS ROW: item (b) does not close.  Its obstruction is now the attainment cl
 - `TauCeti.DavisKahan1970.Section6Appendix.hilbertSchmidtEnergy_domain_projection_add_real`
 - `TauCeti.DavisKahan1970.Section6Appendix.lemma6_3_approximationNumber_leakage_real`
 - `TauCeti.DavisKahan1970.Section6Appendix.lemma6_3_singularValue_leakage_real`
+- `TauCeti.DavisKahan1970.lemma6_3_leakage_separable_complex`
+- `TauCeti.DavisKahan1970.lemma6_3_leakage_separable_real`
 
 **Notes.** The surrounding approximation-number infrastructure exists, but no exact source declaration was found.
 
@@ -4443,6 +4477,10 @@ ROW WAS STALE; CORRECTED 2026-08-07 (Fable 5).  The requested 'exact source norm
 - `TauCeti.DavisKahan1970.Section8.theorem8_1_lowerCompressionRepulsion_ofBlockPlacement_unbounded_complex`
 - `TauCeti.DavisKahan1970.Section8.theorem8_1_upperCompressionRepulsion_ofBlockPlacement_unbounded_real`
 - `TauCeti.DavisKahan1970.Section8.theorem8_1_lowerCompressionRepulsion_ofBlockPlacement_unbounded_real`
+- `TauCeti.DavisKahan1970.Section8.theorem8_1_exists_branch_withCompression_unbounded_complex`
+- `TauCeti.DavisKahan1970.Section8.theorem8_1_exists_branch_withCompression_unbounded_real`
+- `TauCeti.DavisKahan1970.Section8.isSymmetric_upperBlockShift`
+- `TauCeti.DavisKahan1970.Section8.isSymmetric_lowerBlockShift`
 
 **Curated source/Lean review:**
 

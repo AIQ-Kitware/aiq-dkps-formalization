@@ -506,6 +506,72 @@ theorem corollary3_1_realization_zeroMultiplicity (𝕜 : Type*) [RCLike 𝕜] (
     rw [angleSequenceZeroDatum_sin₀, ker_blockMap_angleSinOp 𝕜 θ hθ0 hθ2 hne Z₀]
   · refine (angleSequenceZeroDatum 𝕜 θ Z₀ Z₁).halmosExteriorPart_eq.trans ?_
     rw [angleSequenceZeroDatum_sin₁, ker_blockMap_angleSinOp 𝕜 θ hθ0 hθ2 hne Z₁]
+/-- **Davis--Kahan 1970, Corollary 3.1's realization clause, at the paper's own
+ambient scope.**
+
+Davis and Kahan work throughout on a separable Hilbert space, and the angle-`0`
+multiplicity spaces `Z₀`, `Z₁` of the corollary are the null spaces of `Θ₀`,
+`Θ₁` *inside* that space, so they are separable.  This is
+`corollary3_1_realization_zeroMultiplicity` with that restriction imposed; the
+unrestricted statement above is the stronger arbitrary-Hilbert realization and
+stays.
+
+The restriction is on the free data of the clause, which is where the source
+places it.  Separability of the `ℓ²` model the construction builds from that
+data is not itself a Lean instance in the pinned Mathlib — there is no
+`SeparableSpace` instance for `lp` — and no statement here asserts it. -/
+theorem corollary3_1_realization_zeroMultiplicity_sourceScope (𝕜 : Type*) [RCLike 𝕜]
+    (θ : ℕ → ℝ)
+    (Z₀ : Type*) [NormedAddCommGroup Z₀] [InnerProductSpace 𝕜 Z₀] [CompleteSpace Z₀]
+    [TopologicalSpace.SeparableSpace Z₀]
+    (Z₁ : Type*) [NormedAddCommGroup Z₁] [InnerProductSpace 𝕜 Z₁] [CompleteSpace Z₁]
+    [TopologicalSpace.SeparableSpace Z₁]
+    (hθ0 : ∀ n, 0 ≤ θ n) (hθ2 : ∀ n, θ n ≤ Real.pi / 2) (hanti : Antitone θ)
+    (hlim : Filter.Tendsto θ Filter.atTop (nhds 0)) (hne : ∀ n, θ n ≠ 0) :
+    IsCompactOperator
+        ((sourceSubspace 𝕜 (WithLp 2 (AngleSequenceSpace 𝕜 × Z₀))
+              (WithLp 2 (AngleSequenceSpace 𝕜 × Z₁))).starProjection ∘L
+          (ContinuousLinearMap.id 𝕜
+              (WithLp 2 (WithLp 2 (AngleSequenceSpace 𝕜 × Z₀) ×
+                WithLp 2 (AngleSequenceSpace 𝕜 × Z₁))) -
+            (angleSequenceZeroDatum 𝕜 θ Z₀ Z₁).targetSubspace.starProjection) ∘L
+          (sourceSubspace 𝕜 (WithLp 2 (AngleSequenceSpace 𝕜 × Z₀))
+              (WithLp 2 (AngleSequenceSpace 𝕜 × Z₁))).starProjection) ∧
+      compactAngleEigenvalueList
+          ((sourceSubspace 𝕜 (WithLp 2 (AngleSequenceSpace 𝕜 × Z₀))
+                (WithLp 2 (AngleSequenceSpace 𝕜 × Z₁))).starProjection ∘L
+            (ContinuousLinearMap.id 𝕜
+                (WithLp 2 (WithLp 2 (AngleSequenceSpace 𝕜 × Z₀) ×
+                  WithLp 2 (AngleSequenceSpace 𝕜 × Z₁))) -
+              (angleSequenceZeroDatum 𝕜 θ Z₀ Z₁).targetSubspace.starProjection) ∘L
+            (sourceSubspace 𝕜 (WithLp 2 (AngleSequenceSpace 𝕜 × Z₀))
+                (WithLp 2 (AngleSequenceSpace 𝕜 × Z₁))).starProjection) =
+        (fun n => Real.sin (θ n) ^ 2) ∧
+      halmosCommonPart
+          (sourceSubspace 𝕜 (WithLp 2 (AngleSequenceSpace 𝕜 × Z₀))
+            (WithLp 2 (AngleSequenceSpace 𝕜 × Z₁)))
+          (angleSequenceZeroDatum 𝕜 θ Z₀ Z₁).targetSubspace =
+        Submodule.map
+          (modelInl 𝕜 (WithLp 2 (AngleSequenceSpace 𝕜 × Z₀))
+              (WithLp 2 (AngleSequenceSpace 𝕜 × Z₁)) :
+            WithLp 2 (AngleSequenceSpace 𝕜 × Z₀) →ₗ[𝕜] _)
+          (Submodule.map
+            (modelInr 𝕜 (AngleSequenceSpace 𝕜) Z₀ :
+              Z₀ →ₗ[𝕜] WithLp 2 (AngleSequenceSpace 𝕜 × Z₀)) ⊤) ∧
+      halmosExteriorPart
+          (sourceSubspace 𝕜 (WithLp 2 (AngleSequenceSpace 𝕜 × Z₀))
+            (WithLp 2 (AngleSequenceSpace 𝕜 × Z₁)))
+          (angleSequenceZeroDatum 𝕜 θ Z₀ Z₁).targetSubspace =
+        Submodule.map
+          (modelInr 𝕜 (WithLp 2 (AngleSequenceSpace 𝕜 × Z₀))
+              (WithLp 2 (AngleSequenceSpace 𝕜 × Z₁)) :
+            WithLp 2 (AngleSequenceSpace 𝕜 × Z₁) →ₗ[𝕜] _)
+          (Submodule.map
+            (modelInr 𝕜 (AngleSequenceSpace 𝕜) Z₁ :
+              Z₁ →ₗ[𝕜] WithLp 2 (AngleSequenceSpace 𝕜 × Z₁)) ⊤) :=
+  corollary3_1_realization_zeroMultiplicity 𝕜 θ Z₀ Z₁ hθ0 hθ2 hanti hlim hne
+
+
 end Realization
 
 /-! ## The recorded invariant is the printed one

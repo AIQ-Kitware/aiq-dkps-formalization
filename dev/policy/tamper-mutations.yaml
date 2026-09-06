@@ -89,9 +89,10 @@ mutations:
   - name: ambient-realization-replaced-by-non-ambient
     description: >-
       Theorem 3.1's converse realizes the prescribed angle data *inside the
-      ambient space*.  The non-ambient realization is a weaker statement.
+      ambient space*, at the paper's separable scope.  The non-ambient
+      realization is a weaker statement.
     file: dev/davis-kahan-1970-formalization-result-inventory.json
-    find: '"primary": "TauCeti.DavisKahan1970.theorem3_1_realization_inAmbient_ofSameHilbertDimension_complex"'
+    find: '"primary": "TauCeti.DavisKahan1970.theorem3_1_realization_sourceExact_complex"'
     replace: '"primary": "TauCeti.DavisKahan1970.theorem3_1_realization_ofSpectralMultiplicityAwayFromZero_complex"'
     detected_by: ["python3", "scripts/check_davis_kahan_1970_result_inventory.py"]
 

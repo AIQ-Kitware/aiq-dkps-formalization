@@ -62,12 +62,20 @@ namespace DavisKahan
 
 universe u
 
-variable {H : Type u} [NormedAddCommGroup H] [InnerProductSpace ℂ H]
-  [CompleteSpace H]
-variable (U V : Submodule ℂ H) [U.HasOrthogonalProjection]
-  [V.HasOrthogonalProjection]
-
 section BlockCalculus
+
+/-! The block calculus, and the square identity it feeds, use no property of the
+scalars beyond `RCLike`: they are projection algebra and the `star` operation.
+They are stated at that generality so that the real Davis--Kahan endpoints can
+use them directly rather than through complexification.  The rest of the module
+is genuinely complex — it runs on the spectrum and the continuous functional
+calculus. -/
+
+variable {𝕜 : Type*} [RCLike 𝕜]
+variable {H : Type u} [NormedAddCommGroup H] [InnerProductSpace 𝕜 H]
+  [CompleteSpace H]
+variable (U V : Submodule 𝕜 H) [U.HasOrthogonalProjection]
+  [V.HasOrthogonalProjection]
 
 /-! ### The `U`-block calculus of a unitary intertwiner
 
@@ -75,11 +83,11 @@ These four identities are what both Proposition 3.1 and Proposition 3.3 run on, 
 no acuteness.  They were originally inlined in Proposition 3.1's proof; Proposition 3.3's
 forward direction needs the same seventy-five lines, so they live here once. -/
 
-variable (T : H →L[ℂ] H)
+variable (T : H →L[𝕜] H)
 
 omit [CompleteSpace H] in
 /-- **Block decomposition of an operator relative to `U ⊕ Uᗮ`.** -/
-theorem eq_sum_blocks (A : H →L[ℂ] H) :
+theorem eq_sum_blocks (A : H →L[𝕜] H) :
     A = projection U * A * projection U + projection U * A * complementaryProjection U
       + complementaryProjection U * A * projection U
       + complementaryProjection U * A * complementaryProjection U := by
@@ -124,19 +132,20 @@ theorem star_blocks_eq
       (isSelfAdjoint_starProjection Uᗮ).star_eq, ← mul_assoc] at h
     rw [h, neg_neg]
 
-/-- **A direct rotation squares to the reflection product**, with no acuteness hypothesis.
+/-- **A direct rotation squares to the reflection product**, with no acuteness hypothesis and
+at every `RCLike` field.
 
 The reflection through `U` conjugates `star T` back to `T` -- the diagonal blocks survive and the
 off-diagonal ones are negated twice -- and the intertwining turns that into `T * T = J_V J_U`. -/
-theorem sq_eq_spectraReflectionProduct
-    (hunitary : T ∈ unitary (H →L[ℂ] H))
+theorem sq_eq_reflectionProduct
+    (hunitary : T ∈ unitary (H →L[𝕜] H))
     (hintertwines : T * projection U = projection V * T)
     (hsource_sa : IsSelfAdjoint (projection U * T * projection U))
     (hcomplement_sa :
       IsSelfAdjoint (complementaryProjection U * T * complementaryProjection U))
     (hcrossed : complementaryProjection U * T * projection U =
       -star (projection U * T * complementaryProjection U)) :
-    T * T = spectraReflectionProduct U V := by
+    T * T = reflectionOperator V * reflectionOperator U := by
   obtain ⟨e11, e22, e12, e21⟩ := star_blocks_eq U T hsource_sa hcomplement_sa hcrossed
   have hRsub : reflectionOperator U = projection U - complementaryProjection U := by
     rw [reflectionOperator_eq_projection_add_projection_sub_one U,
@@ -165,9 +174,8 @@ theorem sq_eq_spectraReflectionProduct
         = reflectionOperator V * (T * star T) := by rw [hTsT, mul_one]
       _ = reflectionOperator V * T * star T := by rw [mul_assoc]
       _ = T * reflectionOperator U * star T := by rw [← hTR]
-  have hexp : spectraReflectionProduct U V
+  have hexp : reflectionOperator V * reflectionOperator U
       = T * (reflectionOperator U * star T * reflectionOperator U) := by
-    change reflectionOperator V * reflectionOperator U = _
     rw [hRV]; noncomm_ring
   rw [hexp, hkey]
 
@@ -198,6 +206,26 @@ theorem add_star_eq_two_diagonal
     _ = _ := by rw [e11, e12, e21, e22]; abel
 
 end BlockCalculus
+
+variable {H : Type u} [NormedAddCommGroup H] [InnerProductSpace ℂ H]
+  [CompleteSpace H]
+variable (U V : Submodule ℂ H) [U.HasOrthogonalProjection]
+  [V.HasOrthogonalProjection]
+variable (T : H →L[ℂ] H)
+
+/-- **A direct rotation squares to the reflection product**, at the complex
+scalars and phrased with `spectraReflectionProduct`.  This is
+`sq_eq_reflectionProduct`; `spectraReflectionProduct U V` *is* `J_V J_U`. -/
+theorem sq_eq_spectraReflectionProduct
+    (hunitary : T ∈ unitary (H →L[ℂ] H))
+    (hintertwines : T * projection U = projection V * T)
+    (hsource_sa : IsSelfAdjoint (projection U * T * projection U))
+    (hcomplement_sa :
+      IsSelfAdjoint (complementaryProjection U * T * complementaryProjection U))
+    (hcrossed : complementaryProjection U * T * projection U =
+      -star (projection U * T * complementaryProjection U)) :
+    T * T = spectraReflectionProduct U V :=
+  sq_eq_reflectionProduct U V T hunitary hintertwines hsource_sa hcomplement_sa hcrossed
 
 /-- A unitary principal square root of the reflection product. -/
 structure IsPrincipalUnitarySquareRoot

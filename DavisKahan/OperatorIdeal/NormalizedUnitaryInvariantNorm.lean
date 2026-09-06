@@ -259,6 +259,112 @@ theorem mem_finset_sum {ι : Type*} (s : Finset ι) {A : ι → E →L[𝕜] F}
 
 end NormalizedUnitaryInvariantNorm
 
+/-! ## The printed law list, with Fan dominance held apart
+
+`NormalizedUnitaryInvariantNorm` extends `FanDominantIdealFamily`, and Fan
+dominance is a *field* of that structure.  Davis and Kahan do not define the norm
+class that way: their definition is the norm axioms, unitary invariance (1.9),
+contraction monotonicity, and the rank-one normalization, and Fan dominance is a
+separate sentence at (1.11)--(1.13) about that class —
+
+> Fan dominance is used in the strong form: `‖K‖ ≤ ‖L‖` for every
+> unitary-invariant norm iff the inequality holds for every Ky Fan norm.
+
+`SourceUnitaryInvariantNorm` is the definition without the sentence, and
+`SourceUnitaryInvariantNorm.HasFanDominance` is the sentence, named and stated
+about a norm rather than built into it.  `toNormalized` is the bridge, and
+`NormalizedUnitaryInvariantNorm.toSource` with `toSource_hasFanDominance` and
+`toSource_toNormalized` show the split is exact: the two records carry the same
+data, with one property moved out of the definition and into a hypothesis.
+
+**What is *not* here is a derivation of Fan dominance from the other laws.**
+Davis and Kahan do not prove it either; they announce that they use it, and it is
+Ky Fan's theorem, cited rather than established in this paper.  Deriving it would
+be proving something the paper does not prove, which this repository does not do;
+and for an arbitrary unitarily invariant norm on an arbitrary ideal, without a
+lower-semicontinuity or symmetric-norming hypothesis, it is not a theorem this
+tree has.  The classical class where it *is* derived is the symmetric norming
+functions, and `kyFanDominant_of_symmetricNorming` is that derivation.
+-/
+
+/-- **Davis--Kahan 1970, Section 1's norm class as the source defines it.**
+
+A symmetric operator ideal family — the norm axioms, the domain on which the
+norm exists, the two-sided ideal law that gives (1.9) and contraction
+monotonicity — together with the rank-one normalization `‖u v*‖ = ‖u‖ ‖v‖`.
+
+Fan dominance is deliberately absent; see the section docstring above. -/
+structure SourceUnitaryInvariantNorm (𝕜 : Type u) [RCLike 𝕜] where
+  /-- The symmetric ideal family supplying the gauge, its domain, and all the
+  norm and ideal laws. -/
+  toSymmetricOperatorIdealFamily : TauCeti.SymmetricOperatorIdealFamily.{u, v} 𝕜
+  /-- **The source normalization**, `‖u v*‖ = ‖u‖ ‖v‖` after scaling both vectors
+  to norm one. -/
+  gauge_rankOne_eq_one : ∀ {E F : Type v}
+      [NormedAddCommGroup E] [InnerProductSpace 𝕜 E] [CompleteSpace E]
+      [NormedAddCommGroup F] [InnerProductSpace 𝕜 F] [CompleteSpace F]
+      {V : E →L[𝕜] F}, ‖V‖ = 1 → V.rank ≤ (1 : Cardinal) →
+      (toSymmetricOperatorIdealFamily.gauge V).toReal = 1
+
+namespace SourceUnitaryInvariantNorm
+
+variable {𝕜 : Type u} [RCLike 𝕜]
+
+/-- **The Fan-dominance sentence of Section 1**, as a property of a norm.
+
+`‖A‖ ≤ ‖B‖` whenever every Ky Fan norm of `A` is at most the corresponding Ky
+Fan norm of `B`.  Davis and Kahan announce this for their whole class; it is
+stated here about one norm so that it can be a hypothesis rather than part of
+the definition. -/
+def HasFanDominance (N : SourceUnitaryInvariantNorm.{u, v} 𝕜) : Prop :=
+  ∀ {E F E' F' : Type v}
+    [NormedAddCommGroup E] [InnerProductSpace 𝕜 E] [CompleteSpace E]
+    [NormedAddCommGroup F] [InnerProductSpace 𝕜 F] [CompleteSpace F]
+    [NormedAddCommGroup E'] [InnerProductSpace 𝕜 E'] [CompleteSpace E']
+    [NormedAddCommGroup F'] [InnerProductSpace 𝕜 F'] [CompleteSpace F']
+    {A : E →L[𝕜] F} {B : E' →L[𝕜] F'},
+    (∀ k, kyFanApproximationGauge k A ≤ kyFanApproximationGauge k B) →
+      N.toSymmetricOperatorIdealFamily.gauge A ≤
+        N.toSymmetricOperatorIdealFamily.gauge B
+
+/-- **The bridge.**  A source norm with the printed Fan-dominance property is a
+`NormalizedUnitaryInvariantNorm`, so every estimate the development proves for
+the latter is an estimate about the former. -/
+def toNormalized (N : SourceUnitaryInvariantNorm.{u, v} 𝕜) (h : N.HasFanDominance) :
+    NormalizedUnitaryInvariantNorm.{u, v} 𝕜 where
+  toFanDominantIdealFamily :=
+    { toSymmetricOperatorIdealFamily := N.toSymmetricOperatorIdealFamily
+      gauge_le_of_forall_kyFanApproximationGauge_le := h }
+  gauge_rankOne_eq_one := fun hV hr => N.gauge_rankOne_eq_one hV hr
+
+end SourceUnitaryInvariantNorm
+
+namespace NormalizedUnitaryInvariantNorm
+
+variable {𝕜 : Type u} [RCLike 𝕜]
+
+/-- The printed-law part of a normalized unitarily invariant norm. -/
+def toSource (N : NormalizedUnitaryInvariantNorm.{u, v} 𝕜) :
+    SourceUnitaryInvariantNorm.{u, v} 𝕜 where
+  toSymmetricOperatorIdealFamily :=
+    N.toFanDominantIdealFamily.toSymmetricOperatorIdealFamily
+  gauge_rankOne_eq_one := fun hV hr => N.gauge_rankOne_eq_one hV hr
+
+/-- The Fan-dominance sentence holds of it, by the field it carries. -/
+theorem toSource_hasFanDominance (N : NormalizedUnitaryInvariantNorm.{u, v} 𝕜) :
+    N.toSource.HasFanDominance :=
+  N.toFanDominantIdealFamily.gauge_le_of_forall_kyFanApproximationGauge_le
+
+/-- **The split is exact.**  Taking the printed laws out and putting the printed
+Fan-dominance sentence back returns the same norm, so nothing is lost or gained
+by separating them. -/
+theorem toSource_toNormalized (N : NormalizedUnitaryInvariantNorm.{u, v} 𝕜) :
+    N.toSource.toNormalized N.toSource_hasFanDominance = N := by
+  cases N with
+  | mk fam _ => cases fam; rfl
+
+end NormalizedUnitaryInvariantNorm
+
 end
 
 end ExactSinTheta
