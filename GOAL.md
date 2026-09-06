@@ -1496,7 +1496,7 @@ Measured, not asserted.  Every line below is checkable from
 
 | Condition | Status |
 | --- | --- |
-| every designated result has canonical Lean evidence at its actual source scope | **29 of 29** as of 2026-09-06; DK-8.1-thm's canonical evidence was promoted to the unbounded witnesses once they existed in both scalar fields |
+| every designated result has canonical Lean evidence at its actual source scope | **29 of 29** as of 2026-09-06, and stated on the source's own objects: both Section 8 rows were promoted twice that day, first to unbounded witnesses and then to source-shaped façades over them (§10.3.4) |
 | real/complex coverage for every result | met |
 | canonical façades expose the paper's separability scope | met, and every separable canonical witness is classified in `ambient_scope_policy.separability` |
 | finite vs infinite-dimensional scope matches each printed result | met — including Theorem 8.1 (ii) and (iii), which the source prints *in finite dimensions* (§10.3) |
@@ -1507,7 +1507,7 @@ Measured, not asserted.  Every line below is checkable from
 | **Theorems 8.1 and 8.2 cover their inherited unbounded scope** | met — both, in complex and real scalar scope, 8.1 including both halves of the printed *iff* |
 | the exact/stronger distinction stays visible in the census | met |
 | a fresh source-first review finds no material statement mismatch | run; it found two defects, both fixed (§XVI.6) |
-| the final certification pass succeeds | `certify_davis_kahan_1970.py` **PASS** 2026-09-06 (29/29 terminal, 1412/1412 signatures, 0 production warnings); `aiq-lean gates run` 30 passed / 3 failed, the three being the two Tau Ceti readiness/roadmap gates and the documented `per-declaration-expose` ratchet, none of them Davis--Kahan |
+| the final certification pass succeeds | `certify_davis_kahan_1970.py` **PASS** 2026-09-06 (29/29 terminal, 1428/1428 signatures, 0 production warnings); `aiq-lean gates run` 30 passed / 3 failed, the three being the two Tau Ceti readiness/roadmap gates and the documented `per-declaration-expose` ratchet, none of them Davis--Kahan |
 
 **Every line above is now met.**  The last mathematical gap — the converse half of
 Theorem 8.1's printed characterization at unbounded scope — closed on 2026-09-06
@@ -1541,13 +1541,16 @@ into it.
 ## Made, 2026-09-06
 
 The conditions of §XVII.1 are satisfied, and a trusted-dependency audit was run
-for this section specifically: all **84** canonical witnesses across the 29
-counted results depend on exactly `propext`, `Classical.choice` and `Quot.sound`,
-with no `sorryAx` anywhere; `lake build` is green on every default target;
+for this section specifically, then re-run after the 2026-09-06 source-surface
+promotion (§10.3.4): all **84** canonical witnesses across the 29 counted results
+depend on exactly `propext`, `Classical.choice` and `Quot.sound`, with no
+`sorryAx` anywhere; `lake build` is green on every default target;
 `lake build Challenge` is green; `check_declaration_name_drift.py` reports 0
-findings over 17 comparator configs and 13381 declarations; and
+findings over 17 comparator configs and 13381 declarations;
 `check_comparator_signatures.py` reports every compared theorem matching on
-universe signature and full type.  The claim is therefore made:
+universe signature and full type; and `certify_davis_kahan_1970.py` reports
+`status: PASS` with 29/29 terminal and 1428/1428 registered declaration
+signatures.  The claim is therefore made:
 
 > **The designated Davis–Kahan 1970 results have been formally resolved in Lean at the mathematical scope of their original statements, including the applicable real and complex, separable-Hilbert-space, unbounded-operator, and arbitrary normalized unitary-invariant norm scope. Stronger generalizations are recorded separately and are not used to conceal missing source-exact evidence.**
 
