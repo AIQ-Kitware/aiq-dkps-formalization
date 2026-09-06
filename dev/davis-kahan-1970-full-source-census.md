@@ -4,7 +4,7 @@
 
 **Census family:** `source-completion-census`  
 **Items:** 50  
-**Unique cited Lean declarations:** 1336
+**Unique cited Lean declarations:** 1339
 
 ## How to use this census
 
@@ -4569,6 +4569,9 @@ At the OPERATOR norm the compiled residual statement is sound and in fact STRONG
 - `TauCeti.DavisKahan1970.Section8.theorem8_2_sinTwoTheta_perturbation_real_sourceExact`
 - `TauCeti.DavisKahan1970.Section8.theorem8_2_sinTwoTheta_residual_directedAngle_real_sourceExact`
 - `TauCeti.DavisKahan.ExactSinTheta.NormalizedUnitaryInvariantNorm`
+- `TauCeti.DavisKahan1970.Section8.directedGap_le_of_reducingGap_unbounded_complex`
+- `TauCeti.DavisKahan1970.Section8.theorem8_2_branch_maximalAngle_lt_unbounded_smallPerturbation_complex`
+- `TauCeti.DavisKahan.CrossedDefectsEquivalent.symm`
 
 **Curated source/Lean review:**
 

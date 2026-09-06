@@ -7059,6 +7059,9 @@ The declarations that carry this result's printed statement, with the source ato
 - `TauCeti.DavisKahan1970.Section8.theorem8_2_sinTwoTheta_perturbation_real_symmetricNorming` — generalization
 - `TauCeti.DavisKahan1970.Section8.theorem8_2_sinTwoTheta_residual_directedAngle_real_symmetricNorming` — generalization
 - `TauCeti.DavisKahan.ExactSinTheta.NormalizedUnitaryInvariantNorm` — source_correspondence
+- `TauCeti.DavisKahan1970.Section8.directedGap_le_of_reducingGap_unbounded_complex` — generalization
+- `TauCeti.DavisKahan1970.Section8.theorem8_2_branch_maximalAngle_lt_unbounded_smallPerturbation_complex` — generalization
+- `TauCeti.DavisKahan.CrossedDefectsEquivalent.symm` — generalization
 
 ### Source-facing Lean declarations
 
@@ -7173,6 +7176,24 @@ Compiler-printed type: *inserted when a compiler certificate is supplied.*
 #### `TauCeti.DavisKahan.ExactSinTheta.NormalizedUnitaryInvariantNorm`
 
 Source location candidates: `DavisKahan/OperatorIdeal/NormalizedUnitaryInvariantNorm.lean:87`
+
+Compiler-printed type: *inserted when a compiler certificate is supplied.*
+
+#### `TauCeti.DavisKahan1970.Section8.directedGap_le_of_reducingGap_unbounded_complex`
+
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section8/Theorem82UnboundedBranchBound.lean:62`
+
+Compiler-printed type: *inserted when a compiler certificate is supplied.*
+
+#### `TauCeti.DavisKahan1970.Section8.theorem8_2_branch_maximalAngle_lt_unbounded_smallPerturbation_complex`
+
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section8/Theorem82UnboundedBranchBound.lean:142`
+
+Compiler-printed type: *inserted when a compiler certificate is supplied.*
+
+#### `TauCeti.DavisKahan.CrossedDefectsEquivalent.symm`
+
+Source location candidates: `DavisKahan/Geometry/Halmos/GenericRotationPredicates.lean:77`, `DavisKahan/Geometry/Polar/DirectRotationReal.lean:81`, `DavisKahan/Geometry/Polar/DirectRotationSquare.lean:292`, `DavisKahan/Sources/DavisKahan1970/SineTheta/Norms/SingularValueTransport.lean:226`, `DavisKahan/Sources/DavisKahan1970/SineTheta/Norms/SingularValueTransport.lean:64`, `DavisKahan/SpectralTheory/AbstractSpectrum.lean:239`, `DavisKahan/Sylvester/PairwiseSpectrumGap.lean:103`, `DavisKahan/Sylvester/PairwiseSpectrumGap.lean:53`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 

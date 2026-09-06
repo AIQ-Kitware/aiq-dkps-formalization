@@ -715,10 +715,23 @@ step. Neither is the "general unbounded resolvent / Riesz / continuation" stack.
   the acute conclusion from the closed branch, the second one straight from the
   printed `‖H‖ < δ/2`.
 
-The closed branch is an explicit hypothesis and is labelled as the connectedness
-step in both the module docstring and the theorem docstrings. It is the only
-thing between this module and the printed perturbation branch. The residual
-branch, and the real siblings, come after it.
+`Section8/Theorem82UnboundedBranchBound.lean` then discharges the closed branch
+from the printed hypotheses alone on a sub-range of the printed one:
+
+* `directedGap_le_of_reducingGap_unbounded_complex` — the unbounded `sin Θ`
+  theorem at the operator norm, directed form: `δ · directedGap P Q ≤ ‖H‖` from
+  the separation between the unperturbed block on `P` and the perturbed block on
+  `Qᗮ`. At Theorem 8.2's hypotheses that separation is `δ/2`.
+* `theorem8_2_branch_maximalAngle_lt_unbounded_smallPerturbation_complex` —
+  `Θ < π/4` with **no** closed-branch hypothesis, under Theorem 8.2's printed
+  hypotheses plus (3.5) and `2‖H‖ ≤ (√2/2)δ`.
+
+`CrossedDefectsEquivalent.symm` was added for it: (3.5) is symmetric in the pair,
+so a consumer may state it in whichever orientation its conclusion is written.
+
+What remains is the rest of the printed range, `(√2/4)δ < ‖H‖ < δ/2`, which is
+the connectedness argument above. The residual branch, and the real siblings,
+come after it.
 
 ### Implementation policy
 
