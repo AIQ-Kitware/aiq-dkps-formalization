@@ -7118,6 +7118,15 @@ The declarations that carry this result's printed statement, with the source ato
 - `TauCeti.DavisKahan1970.Section8.theorem8_2_perturbationHalfGap_maximalAngle_lt_unbounded_complex` — generalization
 - `TauCeti.DavisKahan1970.Section8.theorem8_2_residualHalfGap_unbounded_complex` — generalization
 - `TauCeti.DavisKahan1970.Section8.theorem8_2_residualHalfGap_maximalAngle_lt_unbounded_complex` — generalization
+- `TauCeti.DavisKahan.Foundation.RealComplexification.unitaryConj_complexifyReal_reducingRestriction` — generalization
+- `TauCeti.DavisKahan.Foundation.RealComplexification.realSpectrum_reducingRestriction_complexifyReal` — generalization
+- `TauCeti.DavisKahan.Foundation.RealComplexification.realSpectrum_reducingRestriction_complexifyReal_of_eq` — generalization
+- `TauCeti.DavisKahan.Foundation.RealComplexification.norm_complexify_comp_subtypeL` — generalization
+- `TauCeti.DavisKahan.Foundation.RealComplexification.separableSpace_realComplexification` — generalization
+- `TauCeti.DavisKahan1970.Section8.theorem8_2_perturbationHalfGap_unbounded_real` — generalization
+- `TauCeti.DavisKahan1970.Section8.theorem8_2_residualHalfGap_unbounded_real` — generalization
+- `TauCeti.DavisKahan1970.Section8.theorem8_2_perturbationHalfGap_maximalAngle_lt_unbounded_real` — generalization
+- `TauCeti.DavisKahan1970.Section8.theorem8_2_residualHalfGap_maximalAngle_lt_unbounded_real` — generalization
 
 ### Source-facing Lean declarations
 
@@ -7315,25 +7324,79 @@ Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.Section8.theorem8_2_perturbationHalfGap_unbounded_complex`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section8/Theorem82UnboundedPath.lean:190`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section8/Theorem82UnboundedPath.lean:191`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.Section8.theorem8_2_perturbationHalfGap_maximalAngle_lt_unbounded_complex`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section8/Theorem82UnboundedPath.lean:441`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section8/Theorem82UnboundedPath.lean:442`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.Section8.theorem8_2_residualHalfGap_unbounded_complex`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section8/Theorem82UnboundedPath.lean:491`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section8/Theorem82UnboundedPath.lean:492`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.Section8.theorem8_2_residualHalfGap_maximalAngle_lt_unbounded_complex`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section8/Theorem82UnboundedPath.lean:585`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section8/Theorem82UnboundedPath.lean:586`
+
+Compiler-printed type: *inserted when a compiler certificate is supplied.*
+
+#### `TauCeti.DavisKahan.Foundation.RealComplexification.unitaryConj_complexifyReal_reducingRestriction`
+
+Source location candidates: `DavisKahan/SpectralTheory/Complexification/ReducingRestrictionDescent.lean:41`
+
+Compiler-printed type: *inserted when a compiler certificate is supplied.*
+
+#### `TauCeti.DavisKahan.Foundation.RealComplexification.realSpectrum_reducingRestriction_complexifyReal`
+
+Source location candidates: `DavisKahan/SpectralTheory/Complexification/ReducingRestrictionDescent.lean:62`
+
+Compiler-printed type: *inserted when a compiler certificate is supplied.*
+
+#### `TauCeti.DavisKahan.Foundation.RealComplexification.realSpectrum_reducingRestriction_complexifyReal_of_eq`
+
+Source location candidates: `DavisKahan/SpectralTheory/Complexification/ReducingRestrictionDescent.lean:80`
+
+Compiler-printed type: *inserted when a compiler certificate is supplied.*
+
+#### `TauCeti.DavisKahan.Foundation.RealComplexification.norm_complexify_comp_subtypeL`
+
+Source location candidates: `DavisKahan/SpectralTheory/Complexification/ReducingRestrictionDescent.lean:96`
+
+Compiler-printed type: *inserted when a compiler certificate is supplied.*
+
+#### `TauCeti.DavisKahan.Foundation.RealComplexification.separableSpace_realComplexification`
+
+Source location candidates: `DavisKahan/SpectralTheory/Complexification/ReducingRestrictionDescent.lean:114`, `DavisKahan/SpectralTheory/Real/RealCyclicDecomposition.lean:285`
+
+Compiler-printed type: *inserted when a compiler certificate is supplied.*
+
+#### `TauCeti.DavisKahan1970.Section8.theorem8_2_perturbationHalfGap_unbounded_real`
+
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section8/Theorem82UnboundedPath.lean:626`
+
+Compiler-printed type: *inserted when a compiler certificate is supplied.*
+
+#### `TauCeti.DavisKahan1970.Section8.theorem8_2_residualHalfGap_unbounded_real`
+
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section8/Theorem82UnboundedPath.lean:714`
+
+Compiler-printed type: *inserted when a compiler certificate is supplied.*
+
+#### `TauCeti.DavisKahan1970.Section8.theorem8_2_perturbationHalfGap_maximalAngle_lt_unbounded_real`
+
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section8/Theorem82UnboundedPath.lean:794`
+
+Compiler-printed type: *inserted when a compiler certificate is supplied.*
+
+#### `TauCeti.DavisKahan1970.Section8.theorem8_2_residualHalfGap_maximalAngle_lt_unbounded_real`
+
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section8/Theorem82UnboundedPath.lean:824`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
