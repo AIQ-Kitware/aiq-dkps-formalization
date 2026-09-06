@@ -3180,19 +3180,19 @@ Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.sameSpectralMultiplicity_cfc_iff`
 
-Source location candidates: `ForTauCeti/Analysis/InnerProductSpace/BorelCalculus/SpectralMultiplicityEquiv.lean:239`
+Source location candidates: `ForTauCeti/Analysis/InnerProductSpace/BorelCalculus/SpectralMultiplicityEquiv.lean:240`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.OperatorUnitaryEquiv.cfc_real`
 
-Source location candidates: `ForTauCeti/Analysis/InnerProductSpace/BorelCalculus/SpectralMultiplicityEquiv.lean:212`
+Source location candidates: `ForTauCeti/Analysis/InnerProductSpace/BorelCalculus/SpectralMultiplicityEquiv.lean:213`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.continuous_conjStarAlgEquiv`
 
-Source location candidates: `ForTauCeti/Analysis/InnerProductSpace/BorelCalculus/SpectralMultiplicityEquiv.lean:202`
+Source location candidates: `ForTauCeti/Analysis/InnerProductSpace/BorelCalculus/SpectralMultiplicityEquiv.lean:203`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
@@ -5162,12 +5162,18 @@ One row per printed source clause per scalar field.  A clause is `PASS` only whe
 
 | clause | scalar | witness | status |
 | --- | --- | --- | --- |
-| `whole.rclike` | rclike | `TauCeti.DavisKahan1970.lemma6_1` | **PASS** |
-| `whole.rclike.2` | rclike | `TauCeti.DavisKahan1970.lemma6_1_converse` | **PASS** |
+| `forward.complex` | complex | `TauCeti.DavisKahan1970.lemma6_1_sourceExact_complex` | **PASS** |
+| `forward.real` | real | `TauCeti.DavisKahan1970.lemma6_1_sourceExact_real` | **PASS** |
+| `converse.complex` | complex | `TauCeti.DavisKahan1970.lemma6_1_converse_sourceExact_complex` | **PASS** |
+| `converse.real` | real | `TauCeti.DavisKahan1970.lemma6_1_converse_sourceExact_real` | **PASS** |
 
-**`whole.rclike`.** Canonical witness for the whole printed statement at rclike scalar scope, carried over from the pre-clause canonical evidence and re-checked against its compiler-printed type under the coherent model.
+**`forward.complex`.** Canonical witness for the whole printed statement at rclike scalar scope, carried over from the pre-clause canonical evidence and re-checked against its compiler-printed type under the coherent model.  SOURCE NORM CLASS 2026-09-05.  BOTH the premise and the conclusion now quantify over `NormalizedUnitaryInvariantNorm`, as the paper prints them.  The retained `SymmetricNormingFunction` theorem is strictly stronger -- it takes Ky Fan inequalities as its premise -- and the printed premise reaches it because the Ky Fan norms are members of the source class, which is what `kyFanNormalizedUnitaryInvariantNorm` supplies.
 
-**`whole.rclike.2`.** Canonical witness for the whole printed statement at rclike scalar scope, carried over from the pre-clause canonical evidence and re-checked against its compiler-printed type under the coherent model.
+**`forward.real`.** Canonical witness for the whole printed statement at rclike scalar scope, carried over from the pre-clause canonical evidence and re-checked against its compiler-printed type under the coherent model.  SOURCE NORM CLASS 2026-09-05.  BOTH the premise and the conclusion now quantify over `NormalizedUnitaryInvariantNorm`, as the paper prints them.  The retained `SymmetricNormingFunction` theorem is strictly stronger -- it takes Ky Fan inequalities as its premise -- and the printed premise reaches it because the Ky Fan norms are members of the source class, which is what `kyFanNormalizedUnitaryInvariantNorm` supplies.
+
+**`converse.complex`.** Canonical witness for the whole printed statement at rclike scalar scope, carried over from the pre-clause canonical evidence and re-checked against its compiler-printed type under the coherent model.  SOURCE NORM CLASS 2026-09-05.  The printed converse, with its two equisingularity hypotheses, over the literal norm class on both sides.
+
+**`converse.real`.** Canonical witness for the whole printed statement at rclike scalar scope, carried over from the pre-clause canonical evidence and re-checked against its compiler-printed type under the coherent model.  SOURCE NORM CLASS 2026-09-05.  The printed converse, with its two equisingularity hypotheses, over the literal norm class on both sides.
 
 Result-wide scope every clause must carry: `DK-6.1-lem.ordered-sylvester-forward`, `DK-6.1-lem.ordered-sylvester-converse`
 
@@ -5175,8 +5181,17 @@ Result-wide scope every clause must carry: `DK-6.1-lem.ordered-sylvester-forward
 
 The declarations that carry this result's printed statement, with the source atoms each one covers.  Everything under *Other registered declarations* below accompanies the result without establishing it.
 
-- `TauCeti.DavisKahan1970.lemma6_1` — primary_source_witness, rclike scalars, proof; covers `DK-6.1-lem.ordered-sylvester-forward`, `DK-6.1-lem.ordered-sylvester-converse`
-- `TauCeti.DavisKahan1970.lemma6_1_converse` — primary_source_witness, rclike scalars, proof; covers `DK-6.1-lem.ordered-sylvester-forward`, `DK-6.1-lem.ordered-sylvester-converse`
+- `TauCeti.DavisKahan1970.lemma6_1_sourceExact_complex` — primary_source_witness, complex scalars, proof; covers `DK-6.1-lem.ordered-sylvester-converse`, `DK-6.1-lem.ordered-sylvester-forward`
+- `TauCeti.DavisKahan1970.lemma6_1_sourceExact_real` — primary_source_witness, real scalars, proof; covers `DK-6.1-lem.ordered-sylvester-converse`, `DK-6.1-lem.ordered-sylvester-forward`
+- `TauCeti.DavisKahan1970.lemma6_1_converse_sourceExact_complex` — primary_source_witness, complex scalars, proof; covers `DK-6.1-lem.ordered-sylvester-converse`, `DK-6.1-lem.ordered-sylvester-forward`
+- `TauCeti.DavisKahan1970.lemma6_1_converse_sourceExact_real` — primary_source_witness, real scalars, proof; covers `DK-6.1-lem.ordered-sylvester-converse`, `DK-6.1-lem.ordered-sylvester-forward`
+
+### Other registered declarations
+
+- `TauCeti.DavisKahan1970.lemma6_1` — generalization
+- `TauCeti.DavisKahan1970.lemma6_1_converse` — generalization
+- `TauCeti.DavisKahan1970.lemma6_1_sourceExact` — generalization
+- `TauCeti.DavisKahan1970.lemma6_1_converse_sourceExact` — generalization
 
 ### Source-facing Lean declarations
 
@@ -5189,6 +5204,42 @@ Compiler-printed type: *inserted when a compiler certificate is supplied.*
 #### `TauCeti.DavisKahan1970.lemma6_1_converse`
 
 Source location candidates: `DavisKahan/Sources/DavisKahan1970/SineThetaSourceInventory.lean:89`
+
+Compiler-printed type: *inserted when a compiler certificate is supplied.*
+
+#### `TauCeti.DavisKahan1970.lemma6_1_sourceExact_complex`
+
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/SineTheta/Section6SourceNorms.lean:186`
+
+Compiler-printed type: *inserted when a compiler certificate is supplied.*
+
+#### `TauCeti.DavisKahan1970.lemma6_1_sourceExact_real`
+
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/SineTheta/Section6SourceNorms.lean:208`
+
+Compiler-printed type: *inserted when a compiler certificate is supplied.*
+
+#### `TauCeti.DavisKahan1970.lemma6_1_converse_sourceExact_complex`
+
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/SineTheta/Section6SourceNorms.lean:230`
+
+Compiler-printed type: *inserted when a compiler certificate is supplied.*
+
+#### `TauCeti.DavisKahan1970.lemma6_1_converse_sourceExact_real`
+
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/SineTheta/Section6SourceNorms.lean:251`
+
+Compiler-printed type: *inserted when a compiler certificate is supplied.*
+
+#### `TauCeti.DavisKahan1970.lemma6_1_sourceExact`
+
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/SineTheta/Section6SourceNorms.lean:90`
+
+Compiler-printed type: *inserted when a compiler certificate is supplied.*
+
+#### `TauCeti.DavisKahan1970.lemma6_1_converse_sourceExact`
+
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/SineTheta/Section6SourceNorms.lean:132`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
@@ -5254,9 +5305,9 @@ One row per printed source clause per scalar field.  A clause is `PASS` only whe
 
 | clause | scalar | witness | status |
 | --- | --- | --- | --- |
-| `whole.rclike` | rclike | `TauCeti.DavisKahan1970.lemma6_2` | **PASS** |
+| `whole.rclike` | rclike | `TauCeti.DavisKahan1970.lemma6_2_sourceExact` | **PASS** |
 
-**`whole.rclike`.** Canonical witness for the whole printed statement at rclike scalar scope, carried over from the pre-clause canonical evidence and re-checked against its compiler-printed type under the coherent model.
+**`whole.rclike`.** Canonical witness for the whole printed statement at rclike scalar scope, carried over from the pre-clause canonical evidence and re-checked against its compiler-printed type under the coherent model.  SOURCE NORM CLASS 2026-09-05.  The clause now cites `lemma6_2_sourceExact`, which quantifies over `NormalizedUnitaryInvariantNorm` -- the Lean type for Section 1's class -- rather than over `SymmetricNormingFunction`, one model of it.  It is scalar-generic and carries no capability class, so it covers the paper's real and complex scope at once.
 
 Result-wide scope every clause must carry: `DK-6.2-lem.pinching-contraction`
 
@@ -5264,13 +5315,37 @@ Result-wide scope every clause must carry: `DK-6.2-lem.pinching-contraction`
 
 The declarations that carry this result's printed statement, with the source atoms each one covers.  Everything under *Other registered declarations* below accompanies the result without establishing it.
 
-- `TauCeti.DavisKahan1970.lemma6_2` — primary_source_witness, rclike scalars, proof; covers `DK-6.2-lem.pinching-contraction`
+- `TauCeti.DavisKahan1970.lemma6_2_sourceExact` — primary_source_witness, rclike scalars, proof; covers `DK-6.2-lem.pinching-contraction`
+
+### Other registered declarations
+
+- `TauCeti.DavisKahan1970.lemma6_2` — generalization
+- `TauCeti.DavisKahan1970.lemma6_1_sourceExact` — generalization
+- `TauCeti.DavisKahan1970.lemma6_1_converse_sourceExact` — generalization
 
 ### Source-facing Lean declarations
 
 #### `TauCeti.DavisKahan1970.lemma6_2`
 
 Source location candidates: `DavisKahan/Sources/DavisKahan1970/SineThetaSourceInventory.lean:90`
+
+Compiler-printed type: *inserted when a compiler certificate is supplied.*
+
+#### `TauCeti.DavisKahan1970.lemma6_2_sourceExact`
+
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/SineTheta/Section6SourceNorms.lean:50`
+
+Compiler-printed type: *inserted when a compiler certificate is supplied.*
+
+#### `TauCeti.DavisKahan1970.lemma6_1_sourceExact`
+
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/SineTheta/Section6SourceNorms.lean:90`
+
+Compiler-printed type: *inserted when a compiler certificate is supplied.*
+
+#### `TauCeti.DavisKahan1970.lemma6_1_converse_sourceExact`
+
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/SineTheta/Section6SourceNorms.lean:132`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 

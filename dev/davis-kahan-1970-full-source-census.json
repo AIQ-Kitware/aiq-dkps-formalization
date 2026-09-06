@@ -4188,7 +4188,13 @@
       "blocked_by": [],
       "lean_declarations": [
         "TauCeti.DavisKahan1970.lemma6_1",
-        "TauCeti.DavisKahan1970.lemma6_1_converse"
+        "TauCeti.DavisKahan1970.lemma6_1_converse",
+        "TauCeti.DavisKahan1970.lemma6_1_sourceExact_complex",
+        "TauCeti.DavisKahan1970.lemma6_1_sourceExact_real",
+        "TauCeti.DavisKahan1970.lemma6_1_converse_sourceExact_complex",
+        "TauCeti.DavisKahan1970.lemma6_1_converse_sourceExact_real",
+        "TauCeti.DavisKahan1970.lemma6_1_sourceExact",
+        "TauCeti.DavisKahan1970.lemma6_1_converse_sourceExact"
       ],
       "notes": "Both directions are proved; the converse should be added to the exact audit manifest.\n\n**STATUS LOWERED 2026-08-07 (Claude Opus 5): `compiled_exact` -> `compiled_specialization`, on scalar scope, not on any doubt about the mathematics.**  Every declaration on this row is stated for `InnerProductSpace ℂ`.  Standing assumption 1 of the transcription says the space is real OR complex and assumption 4 says the headline theorems apply in infinite as well as finite dimension, so the compiled statement is a specialization of the printed one.  `compiled_specialization` is defined as exactly that: 'a useful compiled specialization exists, but not the full source scope'.  The remedy is a real wrapper through the complexification route, not a reproof; see blocker `real-scalar-infinite-dimensional-scope`.\n\n**STATUS RESTORED 2026-08-08 (Claude Opus 5): `compiled_specialization` -> `compiled_exact`; blocker `real-scalar-infinite-dimensional-scope` removed from this row.**  The 2026-08-07 scope_gap claim that 'every declaration is `InnerProductSpace ℂ` only' is FALSE at this HEAD: the mathematics was generalized to `RCLike` in commit 83e1b854, and both declarations on this row elaborate to\n\n    {𝕜 : Type u} [RCLike 𝕜] {E : Type v} [NormedAddCommGroup E] [InnerProductSpace 𝕜 E]\n      [CompleteSpace E] [ContinuousLinearMap.HasMinMaxLowerBoundEverywhere 𝕜]\n\nwith no finite-dimensionality hypothesis.  `HasMinMaxLowerBoundEverywhere` has instances for both `ℝ` (`TauCeti.ApproximationNumber.hasMinMaxLowerBoundEverywhere_real`) and `ℂ`, so real infinite-dimensional Hilbert spaces are covered.  VERIFIED BY ELABORATION 2026-08-08 (`#check @TauCeti.DavisKahan1970.lemma6_1`, `lemma6_1_converse`) rather than by reading the file, per the method the blocker itself prescribes.  No code change was needed on this row -- only the audit record was stale.",
       "next_action": "No hostile-review hole is currently recorded for this source passage. Preserve exact source scope and re-audit if the distributable source specification changes.",
@@ -4208,7 +4214,10 @@
       "verification": "proved_in_build",
       "blocked_by": [],
       "lean_declarations": [
-        "TauCeti.DavisKahan1970.lemma6_2"
+        "TauCeti.DavisKahan1970.lemma6_2",
+        "TauCeti.DavisKahan1970.lemma6_2_sourceExact",
+        "TauCeti.DavisKahan1970.lemma6_1_sourceExact",
+        "TauCeti.DavisKahan1970.lemma6_1_converse_sourceExact"
       ],
       "notes": "Part of the clean Section 6 surface.",
       "next_action": "No hostile-review hole is currently recorded for this source passage. Preserve exact source scope and re-audit if the distributable source specification changes.",
