@@ -753,11 +753,15 @@ estimate, and `intermediate_value_Icc` closes it; `P ≤ R₁` transports `f 1` 
 `theorem8_2_perturbationHalfGap_maximalAngle_lt_unbounded_complex` the printed
 `Θ < π/4`, over the **whole** printed range `‖H‖ < δ/2`.
 
-**One hypothesis is still carried rather than derived:** the ambient placement
-`realSpectrum (A + H) ⊆ [β, α] ∪ exterior(β, α, δ)`.  It is a consequence of the
-two printed block placements — that is `realSpectrum_subset_union_of_reduces` in
-the bounded development, and the unbounded counterpart of that bridge is the one
-thing outstanding.  The proof is the direct sum of the two block resolvents.
+**Every hypothesis is printed.**  The ambient placement of `A + H` that the proof
+needs is derived from the two block placements by the unbounded
+`realSpectrum_subset_union_of_reduces`
+(`SpectralTheory/ReducingSpectrumUnion.lean`), whose proof is the direct sum of
+the two block resolvents; the separation is the same two placements read as an
+interval/exterior gap.
+
+What remains on this row: the **residual** branch, which must carry `‖R‖ < δ/2`
+and must not acquire `‖H‖ < δ/2`, and the **real** port.
 
 No variable root, no clopen family indexed by `κ_t`, no Riesz projector.  This
 closes the **full** printed range `‖H‖ < δ/2`, not the `(√2/4)δ` sub-range the
