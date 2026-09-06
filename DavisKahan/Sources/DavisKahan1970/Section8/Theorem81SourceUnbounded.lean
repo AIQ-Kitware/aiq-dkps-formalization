@@ -283,45 +283,88 @@ theorem theorem8_1_lowerCompressionRepulsion_ofBlockPlacement_unbounded_complex
 /-- **Davis--Kahan 1970, Theorem 8.1 part (i), upper block, at the printed source
 scope over `ℂ`.**
 
-The printed clause is about *the* `Q` the existence half asserts, under the full
-Theorem 8.1 context, so that is what this states: `hQbranch` pins `Q` to the
-spectral branch and the placements are derived from the context rather than
-assumed.  `A₁ − α ≤ C₁(Λ₁ − α)C₁` as a form inequality read on `Pᗮ`, with `C₁`
-the cosine block `P_{Qᗮ}`. -/
+The printed clause is about *the* `Q` the existence half asserts, so `Q` carries
+here exactly the properties that clause asserts of it — it reduces `A + H`, its
+two blocks sit on the printed sides of `α`, and the angle is acute — and no
+equality with a particular Lean spectral construction.
+`theorem8_1_exists_branch_withCompression_unbounded_complex` below is the same
+mathematics with the existential in front, which is the source's own word order.
+
+`A₁ − α ≤ C₁(Λ₁ − α)C₁` as a form inequality read on `Pᗮ`, with `C₁` the cosine
+block `P_{Qᗮ}`.  A `_`-prefixed binder is a hypothesis Davis and Kahan print
+and this particular inequality does not consume; it is carried so that the Lean
+context is the source's. -/
 theorem theorem8_1_upperCompressionRepulsion_sourceExact_unbounded_complex
     [TopologicalSpace.SeparableSpace Hc]
-    (hA : IsSelfAdjoint A) (hH : DavisKahan.IsSelfAdjointOperator Hop)
+    (_hA : IsSelfAdjoint A) (_hH : DavisKahan.IsSelfAdjointOperator Hop)
     (hPred : TauCeti.LinearPMap.ReducesSubspace A P)
-    (hPlow : TauCeti.LinearPMap.SemiboundedAbove
+    (_hPlow : TauCeti.LinearPMap.SemiboundedAbove
       (TauCeti.LinearPMap.reducingRestriction A P hPred) alpha)
-    (hPhigh : TauCeti.LinearPMap.SemiboundedBelow
+    (_hPhigh : TauCeti.LinearPMap.SemiboundedBelow
       (TauCeti.LinearPMap.reducingRestriction A Pᗮ hPred.orthogonal) (alpha + delta))
-    (hHP : ∀ x ∈ P, Hop x ∈ Pᗮ) (hHPperp : ∀ x ∈ Pᗮ, Hop x ∈ P)
-    (hdelta : 0 < delta)
+    (_hHP : ∀ x ∈ P, Hop x ∈ Pᗮ) (hHPperp : ∀ x ∈ Pᗮ, Hop x ∈ P)
+    (_hdelta : 0 < delta)
     (Q : Submodule ℂ Hc) [Q.HasOrthogonalProjection]
-    (hQbranch : Q = canonicalLowBranchUnbounded (isSelfAdjoint_perturbed hA hH) alpha)
-    (_hcross : DavisKahan.CrossedDefectsEquivalent P Q)
     (hQred : TauCeti.LinearPMap.ReducesSubspace (TauCeti.LinearPMap.addBounded A Hop) Q)
+    (hQlow : TauCeti.LinearPMap.SemiboundedAbove
+      (TauCeti.LinearPMap.reducingRestriction
+        (TauCeti.LinearPMap.addBounded A Hop) Q hQred) alpha)
+    (_hQhigh : TauCeti.LinearPMap.SemiboundedBelow
+      (TauCeti.LinearPMap.reducingRestriction
+        (TauCeti.LinearPMap.addBounded A Hop) Qᗮ hQred.orthogonal) (alpha + delta))
+    (_hQangle : TauCeti.DavisKahanExt.maximalAngle P Q ≤ Real.pi / 4)
+    (_hcross : DavisKahan.CrossedDefectsEquivalent P Q)
     (x : (TauCeti.LinearPMap.addBounded A Hop).domain) (hx : (x : Hc) ∈ Pᗮ) :
     RCLike.re ⟪A ⟨(x : Hc), x.2⟩, (x : Hc)⟫_ℂ - alpha * ‖(x : Hc)‖ ^ 2 ≤
       RCLike.re ⟪TauCeti.LinearPMap.addBounded A Hop
           ⟨Qᗮ.starProjection (x : Hc), hQred.orthogonalProjection_mem_domain x⟩,
         Qᗮ.starProjection (x : Hc)⟫_ℂ
-        - alpha * ‖Qᗮ.starProjection (x : Hc)‖ ^ 2 := by
-  subst hQbranch
-  obtain ⟨-, hlow, -, -⟩ :=
-    theorem8_1_canonicalBranchUnbounded_printed (A := A) (Hop := Hop) (P := P)
-      (alpha := alpha) (delta := delta) hA hH hPred.orthogonal
-      ((semiboundedAbove_reducingRestriction_iff hPred alpha).mp hPlow)
-      ((semiboundedBelow_reducingRestriction_iff hPred.orthogonal (alpha + delta)).mp hPhigh)
-      hHP hHPperp hdelta
-  exact theorem8_1_upperCompressionRepulsion_ofBlockPlacement_unbounded_complex hHPperp _ hQred
-    ((semiboundedAbove_reducingRestriction_iff hQred alpha).mpr hlow) x hx
+        - alpha * ‖Qᗮ.starProjection (x : Hc)‖ ^ 2 :=
+  theorem8_1_upperCompressionRepulsion_ofBlockPlacement_unbounded_complex hHPperp Q hQred
+    hQlow x hx
 
 /-- **Davis--Kahan 1970, Theorem 8.1 part (i), lower block, at the printed source
 scope over `ℂ`.**  The analogous lower-block inequality, read on `P` with the
-cosine block `P_Q`. -/
+cosine block `P_Q`.  A `_`-prefixed binder is a hypothesis Davis and Kahan
+print and this particular inequality does not consume; it is carried so that the
+Lean context is the source's. -/
 theorem theorem8_1_lowerCompressionRepulsion_sourceExact_unbounded_complex
+    [TopologicalSpace.SeparableSpace Hc]
+    (_hA : IsSelfAdjoint A) (_hH : DavisKahan.IsSelfAdjointOperator Hop)
+    (hPred : TauCeti.LinearPMap.ReducesSubspace A P)
+    (_hPlow : TauCeti.LinearPMap.SemiboundedAbove
+      (TauCeti.LinearPMap.reducingRestriction A P hPred) alpha)
+    (_hPhigh : TauCeti.LinearPMap.SemiboundedBelow
+      (TauCeti.LinearPMap.reducingRestriction A Pᗮ hPred.orthogonal) (alpha + delta))
+    (hHP : ∀ x ∈ P, Hop x ∈ Pᗮ) (_hHPperp : ∀ x ∈ Pᗮ, Hop x ∈ P)
+    (_hdelta : 0 < delta)
+    (Q : Submodule ℂ Hc) [Q.HasOrthogonalProjection]
+    (hQred : TauCeti.LinearPMap.ReducesSubspace (TauCeti.LinearPMap.addBounded A Hop) Q)
+    (_hQlow : TauCeti.LinearPMap.SemiboundedAbove
+      (TauCeti.LinearPMap.reducingRestriction
+        (TauCeti.LinearPMap.addBounded A Hop) Q hQred) alpha)
+    (hQhigh : TauCeti.LinearPMap.SemiboundedBelow
+      (TauCeti.LinearPMap.reducingRestriction
+        (TauCeti.LinearPMap.addBounded A Hop) Qᗮ hQred.orthogonal) (alpha + delta))
+    (_hQangle : TauCeti.DavisKahanExt.maximalAngle P Q ≤ Real.pi / 4)
+    (_hcross : DavisKahan.CrossedDefectsEquivalent P Q)
+    (x : (TauCeti.LinearPMap.addBounded A Hop).domain) (hx : (x : Hc) ∈ P) :
+    (alpha + delta) * ‖(x : Hc)‖ ^ 2 - RCLike.re ⟪A ⟨(x : Hc), x.2⟩, (x : Hc)⟫_ℂ ≤
+      (alpha + delta) * ‖Q.starProjection (x : Hc)‖ ^ 2
+        - RCLike.re ⟪TauCeti.LinearPMap.addBounded A Hop
+            ⟨Q.starProjection (x : Hc), hQred.projection_mem_domain x⟩,
+          Q.starProjection (x : Hc)⟫_ℂ :=
+  theorem8_1_lowerCompressionRepulsion_ofBlockPlacement_unbounded_complex hHP Q hQred
+    hQhigh x hx
+
+/-- **Davis--Kahan 1970, Theorem 8.1's existence clause together with part (i),
+over `ℂ`.**
+
+"For fixed `A`, `P`, `H` there exists a reducing projector `Q` with these
+properties … For this `Q`: (i) …".  This is that sentence: one existential
+carrying the placement, the acute angle, and both compression inequalities, so
+that "this `Q`" is the `Q` the clause just produced and nothing else. -/
+theorem theorem8_1_exists_branch_withCompression_unbounded_complex
     [TopologicalSpace.SeparableSpace Hc]
     (hA : IsSelfAdjoint A) (hH : DavisKahan.IsSelfAdjointOperator Hop)
     (hPred : TauCeti.LinearPMap.ReducesSubspace A P)
@@ -330,27 +373,45 @@ theorem theorem8_1_lowerCompressionRepulsion_sourceExact_unbounded_complex
     (hPhigh : TauCeti.LinearPMap.SemiboundedBelow
       (TauCeti.LinearPMap.reducingRestriction A Pᗮ hPred.orthogonal) (alpha + delta))
     (hHP : ∀ x ∈ P, Hop x ∈ Pᗮ) (hHPperp : ∀ x ∈ Pᗮ, Hop x ∈ P)
-    (hdelta : 0 < delta)
-    (Q : Submodule ℂ Hc) [Q.HasOrthogonalProjection]
-    (hQbranch : Q = canonicalLowBranchUnbounded (isSelfAdjoint_perturbed hA hH) alpha)
-    (_hcross : DavisKahan.CrossedDefectsEquivalent P Q)
-    (hQred : TauCeti.LinearPMap.ReducesSubspace (TauCeti.LinearPMap.addBounded A Hop) Q)
-    (x : (TauCeti.LinearPMap.addBounded A Hop).domain) (hx : (x : Hc) ∈ P) :
-    (alpha + delta) * ‖(x : Hc)‖ ^ 2 - RCLike.re ⟪A ⟨(x : Hc), x.2⟩, (x : Hc)⟫_ℂ ≤
-      (alpha + delta) * ‖Q.starProjection (x : Hc)‖ ^ 2
-        - RCLike.re ⟪TauCeti.LinearPMap.addBounded A Hop
-            ⟨Q.starProjection (x : Hc), hQred.projection_mem_domain x⟩,
-          Q.starProjection (x : Hc)⟫_ℂ := by
-  subst hQbranch
-  obtain ⟨-, -, hhigh, -⟩ :=
+    (hdelta : 0 < delta) :
+    ∃ (Q : Submodule ℂ Hc) (hQinst : Q.HasOrthogonalProjection),
+      haveI := hQinst
+      ∃ hQred : TauCeti.LinearPMap.ReducesSubspace
+          (TauCeti.LinearPMap.addBounded A Hop) Q,
+        (TauCeti.LinearPMap.SemiboundedAbove
+            (TauCeti.LinearPMap.reducingRestriction
+              (TauCeti.LinearPMap.addBounded A Hop) Q hQred) alpha ∧
+          TauCeti.LinearPMap.SemiboundedBelow
+            (TauCeti.LinearPMap.reducingRestriction
+              (TauCeti.LinearPMap.addBounded A Hop) Qᗮ hQred.orthogonal)
+            (alpha + delta) ∧
+          TauCeti.DavisKahanExt.maximalAngle P Q ≤ Real.pi / 4) ∧
+        (∀ x : (TauCeti.LinearPMap.addBounded A Hop).domain, (x : Hc) ∈ Pᗮ →
+          RCLike.re ⟪A ⟨(x : Hc), x.2⟩, (x : Hc)⟫_ℂ - alpha * ‖(x : Hc)‖ ^ 2 ≤
+            RCLike.re ⟪TauCeti.LinearPMap.addBounded A Hop
+                ⟨Qᗮ.starProjection (x : Hc), hQred.orthogonalProjection_mem_domain x⟩,
+              Qᗮ.starProjection (x : Hc)⟫_ℂ
+              - alpha * ‖Qᗮ.starProjection (x : Hc)‖ ^ 2) ∧
+        (∀ x : (TauCeti.LinearPMap.addBounded A Hop).domain, (x : Hc) ∈ P →
+          (alpha + delta) * ‖(x : Hc)‖ ^ 2 - RCLike.re ⟪A ⟨(x : Hc), x.2⟩, (x : Hc)⟫_ℂ ≤
+            (alpha + delta) * ‖Q.starProjection (x : Hc)‖ ^ 2
+              - RCLike.re ⟪TauCeti.LinearPMap.addBounded A Hop
+                  ⟨Q.starProjection (x : Hc), hQred.projection_mem_domain x⟩,
+                Q.starProjection (x : Hc)⟫_ℂ) := by
+  obtain ⟨hred, hlow, hhigh, hangle⟩ :=
     theorem8_1_canonicalBranchUnbounded_printed (A := A) (Hop := Hop) (P := P)
       (alpha := alpha) (delta := delta) hA hH hPred.orthogonal
       ((semiboundedAbove_reducingRestriction_iff hPred alpha).mp hPlow)
       ((semiboundedBelow_reducingRestriction_iff hPred.orthogonal (alpha + delta)).mp hPhigh)
       hHP hHPperp hdelta
-  exact theorem8_1_lowerCompressionRepulsion_ofBlockPlacement_unbounded_complex hHP _ hQred
-    ((semiboundedBelow_reducingRestriction_iff hQred.orthogonal (alpha + delta)).mpr hhigh)
-    x hx
+  refine ⟨canonicalLowBranchUnbounded (isSelfAdjoint_perturbed hA hH) alpha, _, hred,
+    ⟨(semiboundedAbove_reducingRestriction_iff hred alpha).mpr hlow,
+      (semiboundedBelow_reducingRestriction_iff hred.orthogonal (alpha + delta)).mpr hhigh,
+      hangle⟩, fun x hx => ?_, fun x hx => ?_⟩
+  · exact theorem8_1_upperCompressionRepulsion_ofBlockPlacement_unbounded_complex hHPperp _ hred
+      ((semiboundedAbove_reducingRestriction_iff hred alpha).mpr hlow) x hx
+  · exact theorem8_1_lowerCompressionRepulsion_ofBlockPlacement_unbounded_complex hHP _ hred
+      ((semiboundedBelow_reducingRestriction_iff hred.orthogonal (alpha + delta)).mpr hhigh) x hx
 
 end Complex
 
@@ -525,46 +586,75 @@ theorem theorem8_1_lowerCompressionRepulsion_ofBlockPlacement_unbounded_real
 /-- **Davis--Kahan 1970, Theorem 8.1 part (i), upper block, at the printed source
 scope over `ℝ`.**
 
-The printed clause is about *the* `Q` the existence half asserts, under the full
-Theorem 8.1 context, so that is what this states: `hQbranch` pins `Q` to the
-spectral branch and the placements are derived from the context rather than
-assumed.  `A₁ − α ≤ C₁(Λ₁ − α)C₁` as a form inequality read on `Pᗮ`, with `C₁`
-the cosine block `P_{Qᗮ}`. -/
+As over `ℂ`: `Q` carries the properties the existence half asserts of it, not an
+equality with a Lean construction.  A `_`-prefixed binder is a hypothesis Davis
+and Kahan print and this particular inequality does not consume. -/
 theorem theorem8_1_upperCompressionRepulsion_sourceExact_unbounded_real
     [TopologicalSpace.SeparableSpace Er]
-    (hA : IsSelfAdjoint A) (hH : DavisKahan.IsSelfAdjointOperator Hop)
+    (_hA : IsSelfAdjoint A) (_hH : DavisKahan.IsSelfAdjointOperator Hop)
     (hPred : TauCeti.LinearPMap.ReducesSubspace A P)
-    (hPlow : TauCeti.LinearPMap.SemiboundedAbove
+    (_hPlow : TauCeti.LinearPMap.SemiboundedAbove
       (TauCeti.LinearPMap.reducingRestriction A P hPred) alpha)
-    (hPhigh : TauCeti.LinearPMap.SemiboundedBelow
+    (_hPhigh : TauCeti.LinearPMap.SemiboundedBelow
       (TauCeti.LinearPMap.reducingRestriction A Pᗮ hPred.orthogonal) (alpha + delta))
-    (hHP : ∀ x ∈ P, Hop x ∈ Pᗮ) (hHPperp : ∀ x ∈ Pᗮ, Hop x ∈ P)
-    (hdelta : 0 < delta)
+    (_hHP : ∀ x ∈ P, Hop x ∈ Pᗮ) (hHPperp : ∀ x ∈ Pᗮ, Hop x ∈ P)
+    (_hdelta : 0 < delta)
     (Q : Submodule ℝ Er) [Q.HasOrthogonalProjection]
-    (hQbranch : Q = canonicalLowBranchUnboundedReal (DavisKahan.addBounded_isSelfAdjoint A hA Hop hH) alpha)
-    (_hcross : DavisKahan.CrossedDefectsEquivalent P Q)
     (hQred : TauCeti.LinearPMap.ReducesSubspace (TauCeti.LinearPMap.addBounded A Hop) Q)
+    (hQlow : TauCeti.LinearPMap.SemiboundedAbove
+      (TauCeti.LinearPMap.reducingRestriction
+        (TauCeti.LinearPMap.addBounded A Hop) Q hQred) alpha)
+    (_hQhigh : TauCeti.LinearPMap.SemiboundedBelow
+      (TauCeti.LinearPMap.reducingRestriction
+        (TauCeti.LinearPMap.addBounded A Hop) Qᗮ hQred.orthogonal) (alpha + delta))
+    (_hQangle : TauCeti.DavisKahanExt.maximalAngle P Q ≤ Real.pi / 4)
+    (_hcross : DavisKahan.CrossedDefectsEquivalent P Q)
     (x : (TauCeti.LinearPMap.addBounded A Hop).domain) (hx : (x : Er) ∈ Pᗮ) :
     ⟪A ⟨(x : Er), x.2⟩, (x : Er)⟫_ℝ - alpha * ‖(x : Er)‖ ^ 2 ≤
       ⟪TauCeti.LinearPMap.addBounded A Hop
           ⟨Qᗮ.starProjection (x : Er), hQred.orthogonalProjection_mem_domain x⟩,
         Qᗮ.starProjection (x : Er)⟫_ℝ
-        - alpha * ‖Qᗮ.starProjection (x : Er)‖ ^ 2 := by
-  subst hQbranch
-  obtain ⟨-, hlow, -, -⟩ :=
-    theorem8_1_canonicalBranchUnbounded_printed_real (A := A) (Hop := Hop) (P := P)
-      (alpha := alpha) (delta := delta) hA hH hPred.orthogonal
-      ((semiboundedAbove_reducingRestriction_real_iff hPred alpha).mp hPlow)
-      ((semiboundedBelow_reducingRestriction_real_iff hPred.orthogonal (alpha + delta)).mp hPhigh)
-      hHP hHPperp hdelta
-  exact theorem8_1_upperCompressionRepulsion_ofBlockPlacement_unbounded_real hHPperp _ hQred
-    ((semiboundedAbove_reducingRestriction_real_iff hQred alpha).mpr hlow) x hx
+        - alpha * ‖Qᗮ.starProjection (x : Er)‖ ^ 2 :=
+  theorem8_1_upperCompressionRepulsion_ofBlockPlacement_unbounded_real hHPperp Q hQred
+    hQlow x hx
 
 /-- **Davis--Kahan 1970, Theorem 8.1 part (i), lower block, at the printed source
 scope over `ℝ`.**  The analogous lower-block inequality, read on `P` with the
 cosine block `P_Q`. -/
 theorem theorem8_1_lowerCompressionRepulsion_sourceExact_unbounded_real
     [TopologicalSpace.SeparableSpace Er]
+    (_hA : IsSelfAdjoint A) (_hH : DavisKahan.IsSelfAdjointOperator Hop)
+    (hPred : TauCeti.LinearPMap.ReducesSubspace A P)
+    (_hPlow : TauCeti.LinearPMap.SemiboundedAbove
+      (TauCeti.LinearPMap.reducingRestriction A P hPred) alpha)
+    (_hPhigh : TauCeti.LinearPMap.SemiboundedBelow
+      (TauCeti.LinearPMap.reducingRestriction A Pᗮ hPred.orthogonal) (alpha + delta))
+    (hHP : ∀ x ∈ P, Hop x ∈ Pᗮ) (_hHPperp : ∀ x ∈ Pᗮ, Hop x ∈ P)
+    (_hdelta : 0 < delta)
+    (Q : Submodule ℝ Er) [Q.HasOrthogonalProjection]
+    (hQred : TauCeti.LinearPMap.ReducesSubspace (TauCeti.LinearPMap.addBounded A Hop) Q)
+    (_hQlow : TauCeti.LinearPMap.SemiboundedAbove
+      (TauCeti.LinearPMap.reducingRestriction
+        (TauCeti.LinearPMap.addBounded A Hop) Q hQred) alpha)
+    (hQhigh : TauCeti.LinearPMap.SemiboundedBelow
+      (TauCeti.LinearPMap.reducingRestriction
+        (TauCeti.LinearPMap.addBounded A Hop) Qᗮ hQred.orthogonal) (alpha + delta))
+    (_hQangle : TauCeti.DavisKahanExt.maximalAngle P Q ≤ Real.pi / 4)
+    (_hcross : DavisKahan.CrossedDefectsEquivalent P Q)
+    (x : (TauCeti.LinearPMap.addBounded A Hop).domain) (hx : (x : Er) ∈ P) :
+    (alpha + delta) * ‖(x : Er)‖ ^ 2 - ⟪A ⟨(x : Er), x.2⟩, (x : Er)⟫_ℝ ≤
+      (alpha + delta) * ‖Q.starProjection (x : Er)‖ ^ 2
+        - ⟪TauCeti.LinearPMap.addBounded A Hop
+            ⟨Q.starProjection (x : Er), hQred.projection_mem_domain x⟩,
+          Q.starProjection (x : Er)⟫_ℝ :=
+  theorem8_1_lowerCompressionRepulsion_ofBlockPlacement_unbounded_real hHP Q hQred
+    hQhigh x hx
+
+/-- **Davis--Kahan 1970, Theorem 8.1's existence clause together with part (i),
+over `ℝ`.**  The source's own word order: one existential carrying the placement,
+the acute angle, and both compression inequalities for the `Q` it produces. -/
+theorem theorem8_1_exists_branch_withCompression_unbounded_real
+    [TopologicalSpace.SeparableSpace Er]
     (hA : IsSelfAdjoint A) (hH : DavisKahan.IsSelfAdjointOperator Hop)
     (hPred : TauCeti.LinearPMap.ReducesSubspace A P)
     (hPlow : TauCeti.LinearPMap.SemiboundedAbove
@@ -572,27 +662,49 @@ theorem theorem8_1_lowerCompressionRepulsion_sourceExact_unbounded_real
     (hPhigh : TauCeti.LinearPMap.SemiboundedBelow
       (TauCeti.LinearPMap.reducingRestriction A Pᗮ hPred.orthogonal) (alpha + delta))
     (hHP : ∀ x ∈ P, Hop x ∈ Pᗮ) (hHPperp : ∀ x ∈ Pᗮ, Hop x ∈ P)
-    (hdelta : 0 < delta)
-    (Q : Submodule ℝ Er) [Q.HasOrthogonalProjection]
-    (hQbranch : Q = canonicalLowBranchUnboundedReal (DavisKahan.addBounded_isSelfAdjoint A hA Hop hH) alpha)
-    (_hcross : DavisKahan.CrossedDefectsEquivalent P Q)
-    (hQred : TauCeti.LinearPMap.ReducesSubspace (TauCeti.LinearPMap.addBounded A Hop) Q)
-    (x : (TauCeti.LinearPMap.addBounded A Hop).domain) (hx : (x : Er) ∈ P) :
-    (alpha + delta) * ‖(x : Er)‖ ^ 2 - ⟪A ⟨(x : Er), x.2⟩, (x : Er)⟫_ℝ ≤
-      (alpha + delta) * ‖Q.starProjection (x : Er)‖ ^ 2
-        - ⟪TauCeti.LinearPMap.addBounded A Hop
-            ⟨Q.starProjection (x : Er), hQred.projection_mem_domain x⟩,
-          Q.starProjection (x : Er)⟫_ℝ := by
-  subst hQbranch
-  obtain ⟨-, -, hhigh, -⟩ :=
+    (hdelta : 0 < delta) :
+    ∃ (Q : Submodule ℝ Er) (hQinst : Q.HasOrthogonalProjection),
+      haveI := hQinst
+      ∃ hQred : TauCeti.LinearPMap.ReducesSubspace
+          (TauCeti.LinearPMap.addBounded A Hop) Q,
+        (TauCeti.LinearPMap.SemiboundedAbove
+            (TauCeti.LinearPMap.reducingRestriction
+              (TauCeti.LinearPMap.addBounded A Hop) Q hQred) alpha ∧
+          TauCeti.LinearPMap.SemiboundedBelow
+            (TauCeti.LinearPMap.reducingRestriction
+              (TauCeti.LinearPMap.addBounded A Hop) Qᗮ hQred.orthogonal)
+            (alpha + delta) ∧
+          TauCeti.DavisKahanExt.maximalAngle P Q ≤ Real.pi / 4) ∧
+        (∀ x : (TauCeti.LinearPMap.addBounded A Hop).domain, (x : Er) ∈ Pᗮ →
+          ⟪A ⟨(x : Er), x.2⟩, (x : Er)⟫_ℝ - alpha * ‖(x : Er)‖ ^ 2 ≤
+            ⟪TauCeti.LinearPMap.addBounded A Hop
+                ⟨Qᗮ.starProjection (x : Er), hQred.orthogonalProjection_mem_domain x⟩,
+              Qᗮ.starProjection (x : Er)⟫_ℝ
+              - alpha * ‖Qᗮ.starProjection (x : Er)‖ ^ 2) ∧
+        (∀ x : (TauCeti.LinearPMap.addBounded A Hop).domain, (x : Er) ∈ P →
+          (alpha + delta) * ‖(x : Er)‖ ^ 2 - ⟪A ⟨(x : Er), x.2⟩, (x : Er)⟫_ℝ ≤
+            (alpha + delta) * ‖Q.starProjection (x : Er)‖ ^ 2
+              - ⟪TauCeti.LinearPMap.addBounded A Hop
+                  ⟨Q.starProjection (x : Er), hQred.projection_mem_domain x⟩,
+                Q.starProjection (x : Er)⟫_ℝ) := by
+  obtain ⟨hred, hlow, hhigh, hangle⟩ :=
     theorem8_1_canonicalBranchUnbounded_printed_real (A := A) (Hop := Hop) (P := P)
       (alpha := alpha) (delta := delta) hA hH hPred.orthogonal
       ((semiboundedAbove_reducingRestriction_real_iff hPred alpha).mp hPlow)
-      ((semiboundedBelow_reducingRestriction_real_iff hPred.orthogonal (alpha + delta)).mp hPhigh)
+      ((semiboundedBelow_reducingRestriction_real_iff hPred.orthogonal (alpha + delta)).mp
+        hPhigh)
       hHP hHPperp hdelta
-  exact theorem8_1_lowerCompressionRepulsion_ofBlockPlacement_unbounded_real hHP _ hQred
-    ((semiboundedBelow_reducingRestriction_real_iff hQred.orthogonal (alpha + delta)).mpr hhigh)
-    x hx
+  refine ⟨canonicalLowBranchUnboundedReal
+      (DavisKahan.addBounded_isSelfAdjoint A hA Hop hH) alpha, _, hred,
+    ⟨(semiboundedAbove_reducingRestriction_real_iff hred alpha).mpr hlow,
+      (semiboundedBelow_reducingRestriction_real_iff hred.orthogonal (alpha + delta)).mpr
+        hhigh,
+      hangle⟩, fun x hx => ?_, fun x hx => ?_⟩
+  · exact theorem8_1_upperCompressionRepulsion_ofBlockPlacement_unbounded_real hHPperp _ hred
+      ((semiboundedAbove_reducingRestriction_real_iff hred alpha).mpr hlow) x hx
+  · exact theorem8_1_lowerCompressionRepulsion_ofBlockPlacement_unbounded_real hHP _ hred
+      ((semiboundedBelow_reducingRestriction_real_iff hred.orthogonal (alpha + delta)).mpr
+        hhigh) x hx
 
 end Real
 

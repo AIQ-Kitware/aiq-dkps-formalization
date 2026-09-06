@@ -877,6 +877,73 @@ theorem theorem3_1_realization_inAmbient_ofSameHilbertDimension_real
       hΘ₀ hΘ₁ hspec₀ hspec₁ hmult e
   exact ⟨_, _, J, hJ, hisom, hcoisom, hpair⟩
 
+/-! ### The converse at the paper's own ambient scope
+
+Davis and Kahan work throughout on a separable Hilbert space, and the converse
+sentence reconstructs a pair *in that space*.  The two declarations below are the
+converse at that scope, with the partial isometry `J₀` — which the source
+introduces inside the *proof*, after the theorem's data have been specified —
+existentially internal to the angle datum rather than exposed in the conclusion.
+
+`theorem3_1_realization_inAmbient_ofSameHilbertDimension_*` above are the same
+mathematics on an arbitrary ambient Hilbert space and with the datum's pieces
+spelled out; they are the general form, not the printed one. -/
+
+section SourceScope
+
+variable {A₀ : Type u} [NormedAddCommGroup A₀] [CompleteSpace A₀]
+variable {A₁ : Type v} [NormedAddCommGroup A₁] [CompleteSpace A₁]
+variable {H : Type w} [NormedAddCommGroup H] [CompleteSpace H]
+
+/-- **Davis--Kahan 1970, Theorem 3.1, converse sentence, at the printed source
+scope over `ℂ`.**
+
+Admissible angle data — Hermitian, spectrum in `[0, π/2]`, matching spectral
+multiplicity away from `0`, domain dimensions summing to `dim H` — are realized
+by a pair of subspaces of the paper's separable ambient space, up to isometric
+equivalence with the model pair carrying exactly those angle data. -/
+theorem theorem3_1_realization_sourceExact_complex
+    [InnerProductSpace ℂ A₀] [InnerProductSpace ℂ A₁] [InnerProductSpace ℂ H]
+    [TopologicalSpace.SeparableSpace H]
+    {Θ₀ : A₀ →L[ℂ] A₀} {Θ₁ : A₁ →L[ℂ] A₁}
+    (hΘ₀ : IsSelfAdjoint Θ₀) (hΘ₁ : IsSelfAdjoint Θ₁)
+    (hspec₀ : spectrum ℝ Θ₀ ⊆ Set.Icc 0 (Real.pi / 2))
+    (hspec₁ : spectrum ℝ Θ₁ ⊆ Set.Icc 0 (Real.pi / 2))
+    (hmult : SameSpectralMultiplicityAwayFromZero hΘ₀ hΘ₁)
+    (hdim : SameHilbertDimensionSum ℂ A₀ A₁ H) :
+    ∃ (P Q : Submodule ℂ H) (d : TauCeti.DavisKahan.HalmosAngleDatum ℂ A₀ A₁),
+      d.cos₀ = cfc Real.cos Θ₀ ∧ d.sin₀ = cfc Real.sin Θ₀ ∧
+        d.cos₁ = cfc Real.cos Θ₁ ∧ d.sin₁ = cfc Real.sin Θ₁ ∧
+        TauCeti.DavisKahan.PairOfSubspacesUnitaryEquivalent
+          (sourceSubspace ℂ A₀ A₁) d.targetSubspace P Q := by
+  obtain ⟨P, Q, J, hJ, hisom, hcoisom, hpair⟩ :=
+    theorem3_1_realization_inAmbient_ofSameHilbertDimension_complex hΘ₀ hΘ₁ hspec₀
+      hspec₁ hmult hdim
+  exact ⟨P, Q, _, rfl, rfl, rfl, rfl, hpair⟩
+
+/-- **Davis--Kahan 1970, Theorem 3.1, converse sentence, at the printed source
+scope over `ℝ`.** -/
+theorem theorem3_1_realization_sourceExact_real
+    [InnerProductSpace ℝ A₀] [InnerProductSpace ℝ A₁] [InnerProductSpace ℝ H]
+    [TopologicalSpace.SeparableSpace H]
+    {Θ₀ : A₀ →L[ℝ] A₀} {Θ₁ : A₁ →L[ℝ] A₁}
+    (hΘ₀ : IsSelfAdjoint Θ₀) (hΘ₁ : IsSelfAdjoint Θ₁)
+    (hspec₀ : spectrum ℝ Θ₀ ⊆ Set.Icc 0 (Real.pi / 2))
+    (hspec₁ : spectrum ℝ Θ₁ ⊆ Set.Icc 0 (Real.pi / 2))
+    (hmult : SameSpectralMultiplicityAwayFromZero hΘ₀ hΘ₁)
+    (hdim : SameHilbertDimensionSum ℝ A₀ A₁ H) :
+    ∃ (P Q : Submodule ℝ H) (d : TauCeti.DavisKahan.HalmosAngleDatum ℝ A₀ A₁),
+      d.cos₀ = cfc Real.cos Θ₀ ∧ d.sin₀ = cfc Real.sin Θ₀ ∧
+        d.cos₁ = cfc Real.cos Θ₁ ∧ d.sin₁ = cfc Real.sin Θ₁ ∧
+        TauCeti.DavisKahan.PairOfSubspacesUnitaryEquivalent
+          (sourceSubspace ℝ A₀ A₁) d.targetSubspace P Q := by
+  obtain ⟨P, Q, J, hJ, hisom, hcoisom, hpair⟩ :=
+    theorem3_1_realization_inAmbient_ofSameHilbertDimension_real hΘ₀ hΘ₁ hspec₀
+      hspec₁ hmult hdim
+  exact ⟨P, Q, _, rfl, rfl, rfl, rfl, hpair⟩
+
+end SourceScope
+
 end AmbientDimension
 
 end Fields
