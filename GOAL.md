@@ -1498,7 +1498,7 @@ Measured, not asserted.  Every line below is checkable from
 | --- | --- |
 | every designated result has canonical Lean evidence at its actual source scope | **29 of 29** as of 2026-09-06, and stated on the source's own objects: both Section 8 rows were promoted twice that day, first to unbounded witnesses and then to source-shaped façades over them (§10.3.4) |
 | real/complex coverage for every result | met |
-| canonical façades expose the paper's separability scope | met, and every separable canonical witness is classified in `ambient_scope_policy.separability` |
+| canonical façades expose the paper's separability scope | **not met**; every separable canonical witness *is* classified, but `DK-8.1-thm` and several §3/§4 rows are `generalized`, which the policy says an exact façade must not be |
 | finite vs infinite-dimensional scope matches each printed result | met — including Theorem 8.1 (ii) and (iii), which the source prints *in finite dimensions* (§10.3) |
 | bounded vs unbounded scope matches each printed result | met — Theorem 8.1's branch existence, both halves of its printed *iff*, and part (i) are canonical at unbounded scope in complex and real scalar scope; (ii) and (iii) stay finite because the source prints them so |
 | every UIN-quantified theorem uses the literal source abstraction at its boundary | met, and as of §4c that abstraction no longer carries completeness |
@@ -1509,52 +1509,77 @@ Measured, not asserted.  Every line below is checkable from
 | a fresh source-first review finds no material statement mismatch | run; it found two defects, both fixed (§XVI.6) |
 | the final certification pass succeeds | `certify_davis_kahan_1970.py` **PASS** 2026-09-06 (29/29 terminal, 1428/1428 signatures, 0 production warnings); `aiq-lean gates run` 30 passed / 3 failed, the three being the two Tau Ceti readiness/roadmap gates and the documented `per-declaration-expose` ratchet, none of them Davis--Kahan |
 
-**Every line above is now met.**  The last mathematical gap — the converse half of
-Theorem 8.1's printed characterization at unbounded scope — closed on 2026-09-06
-(§10.3.3), the real unbounded endpoints followed by complexification, and
-DK-8.1-thm's canonical evidence was promoted to the unbounded witnesses in both
-scalar fields.  `scripts/certify_davis_kahan_1970.py` reports `status: PASS` with
-29/29 terminal, 1412/1412 registered declaration signatures, and zero production
-build warnings.
-
-Two things a reader should not over-read in that.  First, the certificate proves
-compilation, declaration resolution and pin stability; it does not prove that a
-Lean statement says what the paper says, which is what the hostile semantic review
-is for and why the canonical-evidence digest gates it.  Second, promotion is a
-judgement the record exposes rather than hides: DK-8.1-thm and DK-8.2-thm remain
-classified as accepted **nonlocal source interpretations**, because Theorem 8.1
-states no hypotheses of its own and Theorem 8.2 states its own only as an
-addition.  What the unbounded lift changed is that the scope half of that
-question is now moot — the delivered evidence is exact under the alternative
-literal reading and a proper generalization under the accepted bounded one, so no
-reviewer decision about what "the hypotheses of the tan 2θ theorem" imports
-changes what the repository has.
-
-The §XVIII claim is therefore made, in §XVIII, with its refutation row and its
-accepted interpretation classifications stated alongside it rather than folded
-into it.
+**The mathematical lines above are met; the surface lines are not, and §XVIII is
+withdrawn.**  A signature/context-only hostile review of `3d6991a5` accepted the
+mathematics and rejected the surface: seven source-boundary defects, all façade
+or bookkeeping, listed in §XVIII.  In particular the row
+"canonical façades expose the paper's separability scope" is **not** met — the
+separability table classifies `DK-8.1-thm` and several §3 and §4 rows as
+`generalized` while the policy immediately above it says an exact façade carries
+separability.  That line is corrected below rather than left asserting the
+opposite of the table it points at.
 
 ---
 
 # XVIII. Final public claim
 
-## Made, 2026-09-06
+## WITHDRAWN 2026-09-06, pending source-surface cleanup
 
-The conditions of §XVII.1 are satisfied, and a trusted-dependency audit was run
-for this section specifically, then re-run after the 2026-09-06 source-surface
-promotion (§10.3.4): all **84** canonical witnesses across the 29 counted results
-depend on exactly `propext`, `Classical.choice` and `Quot.sound`, with no
-`sorryAx` anywhere; `lake build` is green on every default target;
-`lake build Challenge` is green; `check_declaration_name_drift.py` reports 0
-findings over 17 comparator configs and 13381 declarations;
-`check_comparator_signatures.py` reports every compared theorem matching on
-universe signature and full type; and `certify_davis_kahan_1970.py` reports
-`status: PASS` with 29/29 terminal and 1428/1428 registered declaration
-signatures.  The claim is therefore made:
+The claim below was made earlier on 2026-09-06 and is **withdrawn**.  A
+signature/context-only hostile review of `3d6991a5` accepted the mathematics —
+"I see no reason to reopen any proof", "the large unbounded Section 8 development
+does not need to be redone" — and rejected the *surface*.  Its criterion is the
+only one that matters at this point:
+
+> Does the canonical public theorem signature, interpreted in the paper's
+> standing context, state the Davis--Kahan result with no stronger restriction and
+> no weaker conclusion?
+
+Seven findings stand between the repository and the claim.  None is a proof
+obligation; all are façade or bookkeeping.
+
+1. **Theorem 8.2 residual branch** exposes `M`, `hPdom`, `hRitz`, `hres` as
+   caller hypotheses.  Davis--Kahan add only residual smallness and the
+   central-spectrum condition to the inherited `sin 2θ` hypotheses.  The Ritz
+   block is *derivable* from the central-spectrum condition —
+   `exists_boundedRealization_of_spectrum_subset_Icc` — so those four must move
+   inside.
+2. **Theorem 8.1's source façades carry no ambient `SeparableSpace`.**  The
+   project's own policy (§ambient_scope_policy) says an exact façade carries the
+   paper's separable ambient scope; the inventory classifies `DK-8.1-thm` as
+   `generalized`, which agrees with the code and disagrees with the policy.
+3. **Theorem 8.1's façades omit the standing post-§3 context.**  Davis--Kahan
+   assume (3.5) and (1.5) after Proposition 3.2 unless stated otherwise, and §8
+   does not reset that.
+4. **Theorem 8.1(i)** is stated for an arbitrary reducing `Q` carrying only the
+   half of the hypotheses it needs.  The printed clause is about *the* `Q` the
+   existence half asserts, under the full Theorem 8.1 context.
+5. **Theorem 8.1(ii)** is canonical at the dimension-free approximation-number
+   form.  The printed clause is a finite-dimensional ordered *eigenvalue*
+   inequality, with the infinite-dimensional extension as a following remark.
+6. **Theorem 8.1(iii)** has the right dimension scope but speaks
+   `approximationNumber` and `principalCosines` where the source speaks
+   eigenvalue shifts and `cos² θ_k`.
+7. **Section 4** canonical declarations expose the internal defect isometry `J`
+   and `nonacuteDirectRotation … J`.  The source object is the direct rotation
+   itself, and the repository already has `IsDirectRotation`.
+
+Plus two certification defects: the separability table disagrees with the
+separability policy while §XVII.1 calls that condition met, and stale text in the
+inventory and in this file still says Section 8's canonical evidence is bounded
+and that the literal UIN type is open, both of which were repaired.
+
+**The mathematics is not in question.**  29 of 29 designated results are resolved
+— 28 proved exactly, `DK-4.4-prop` refuted as transcribed with its repair proved.
+What is not yet true is that every canonical *signature* sits exactly at
+Davis--Kahan's statement and context scope.  Until it does, the sentence below is
+not to be used.
+
+## The claim, when the conditions are met
 
 > **The designated Davis–Kahan 1970 results have been formally resolved in Lean at the mathematical scope of their original statements, including the applicable real and complex, separable-Hilbert-space, unbounded-operator, and arbitrary normalized unitary-invariant norm scope. Stronger generalizations are recorded separately and are not used to conceal missing source-exact evidence.**
 
-### What "resolved" covers, exactly
+### What "resolved" would cover, exactly
 
 Twenty-eight of the twenty-nine counted results are `proved_exact`.  The
 twenty-ninth is **not**, and §XVIII requires it to be stated separately rather
@@ -1569,9 +1594,6 @@ than collapsed into "all theorems proved":
 
 ### The qualifications that travel with the claim
 
-These are not caveats added after the fact; each is an accepted classification
-already carried by the inventory, and a reader of the certificate sees them.
-
 1. **Six rows are accepted as `paper_faithful_nonlocal_source_interpretation`,
    not as locally exact statements**: `S2-tan-theta`, `DK-4.1-cor`,
    `DK-4.2-prop`, `DK-4.3-prop`, `DK-8.1-thm`, `DK-8.2-thm`.  Their printed
@@ -1583,39 +1605,26 @@ already carried by the inventory, and a reader of the certificate sees them.
    can disagree with a specific argument rather than with silence.
 
    `DK-4.4-prop` is **not** one of the six.  Its `semantic_alignment` is
-   `refuted_as_transcribed`, which is a category of its own, and an earlier
-   revision of this section wrongly counted it among the interpreted rows.
-2. **The operator-scope half of that question is moot as of 2026-09-06.**  Both
-   Section 8 rows are delivered at unbounded self-adjoint ambient scope with
-   bounded `H`, in complex and real scalar scope, so the evidence is exact under
-   the alternative literal reading and a proper generalization under the accepted
-   bounded one.  This holds of **every** canonical clause on both rows, the
-   retained `sin 2Θ` estimates of Theorem 8.2 included: those were still canonical
-   at bounded operator scope until the source-façade promotion later the same day
-   (§10.3.4).
+   `refuted_as_transcribed`, which is a category of its own.
+2. **The operator-scope question is moot as of 2026-09-06.**  Both Section 8 rows
+   are delivered at unbounded self-adjoint ambient scope with bounded `H`, in
+   complex and real scalar scope, every canonical clause included.
 3. **Parts (ii) and (iii) of Theorem 8.1 are finite-dimensional because the
    source prints them so** — "in finite dimensions" — not because the repository
-   narrowed them.  Part (ii)'s promised "natural infinite-dimensional extensions"
-   are discharged by the dimension-free approximation-number form.
+   narrowed them.
 4. **The certificate proves compilation, declaration resolution and pin
    stability.**  It does not prove that a Lean statement says what the paper
-   says.  That is the hostile semantic review's job, which is why
-   `semantic_review_sweep.canonical_evidence_sha256` gates the review against the
-   canonical selection and goes stale the moment the selection moves.
-5. **Non-result source material is accounted for, never proved.**  The 275 source
-   atoms carry roles, reason codes and result links; sharpness commentary, proof
-   equations, worked numerical steps, examples and the Section 10 open questions
-   are classified, not formalized.  The claim above is about the Davis–Kahan
-   *results*.
+   says.  That is the hostile semantic review's job.
+5. **Non-result source material is accounted for, never proved.**
 
 Supplemental sharpness, examples, asymptotics, extensions, and stronger APIs are
 described separately and are not part of this claim.
 
-### Reproducing it
+### Reproducing the evidence
 
 ```bash
-lake build                                            # every default target
-python3 scripts/certify_davis_kahan_1970.py --clean    # PASS, 29/29 terminal
+lake build                                             # every default target
+python3 scripts/certify_davis_kahan_1970.py --clean     # PASS, 29/29 terminal
 aiq-lean gates run --config dev/policy/gate-suite.yaml
 ```
 
