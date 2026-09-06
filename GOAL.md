@@ -1466,7 +1466,7 @@ Measured, not asserted.  Every line below is checkable from
 | **Theorems 8.1 and 8.2 cover their inherited unbounded scope** | met — both, in complex and real scalar scope, 8.1 including both halves of the printed *iff* |
 | the exact/stronger distinction stays visible in the census | met |
 | a fresh source-first review finds no material statement mismatch | run; it found two defects, both fixed (§XVI.6) |
-| the final certification pass succeeds | run 2026-09-06, green apart from three failures that are not Davis--Kahan |
+| the final certification pass succeeds | `certify_davis_kahan_1970.py` **PASS** 2026-09-06 (29/29 terminal, 1412/1412 signatures, 0 production warnings); `aiq-lean gates run` 30 passed / 3 failed, the three being the two Tau Ceti readiness/roadmap gates and the documented `per-declaration-expose` ratchet, none of them Davis--Kahan |
 
 **Every line above is now met.**  The last mathematical gap — the converse half of
 Theorem 8.1's printed characterization at unbounded scope — closed on 2026-09-06
