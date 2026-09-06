@@ -6604,6 +6604,13 @@ The declarations that carry this result's printed statement, with the source ato
 - `TauCeti.DavisKahan.reflectionProduct_form_nonneg_of_orderedFormGap_unbounded` — generalization
 - `TauCeti.DavisKahan.subspaceGap_le_of_orderedFormGap_unbounded` — generalization
 - `TauCeti.DavisKahan.subspaceGap_le_of_orderedFormGap_unbounded_printed` — generalization
+- `TauCeti.DavisKahan1970.Section8.canonicalLowBranchUnbounded` — generalization
+- `TauCeti.DavisKahan1970.Section8.canonicalLowBranchUnbounded_reduces` — generalization
+- `TauCeti.DavisKahan1970.Section8.canonicalLowBranchUnbounded_orthogonal` — generalization
+- `TauCeti.DavisKahan1970.Section8.re_inner_le_of_mem_canonicalLowBranchUnbounded` — generalization
+- `TauCeti.DavisKahan1970.Section8.le_re_inner_of_mem_canonicalLowBranchUnbounded_orthogonal` — generalization
+- `TauCeti.DavisKahan1970.Section8.theorem8_1_canonicalBranchUnbounded_form` — generalization
+- `TauCeti.DavisKahan1970.Section8.theorem8_1_canonicalBranchUnbounded_printed` — generalization
 
 ### Source-facing Lean declarations
 
@@ -6760,6 +6767,48 @@ Compiler-printed type: *inserted when a compiler certificate is supplied.*
 #### `TauCeti.DavisKahan.subspaceGap_le_of_orderedFormGap_unbounded_printed`
 
 Source location candidates: `DavisKahan/InfiniteDimensional/TanTwoTheta/QuarterAngleUnbounded.lean:354`
+
+Compiler-printed type: *inserted when a compiler certificate is supplied.*
+
+#### `TauCeti.DavisKahan1970.Section8.canonicalLowBranchUnbounded`
+
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section8/Theorem81UnboundedBranch.lean:50`
+
+Compiler-printed type: *inserted when a compiler certificate is supplied.*
+
+#### `TauCeti.DavisKahan1970.Section8.canonicalLowBranchUnbounded_reduces`
+
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section8/Theorem81UnboundedBranch.lean:61`
+
+Compiler-printed type: *inserted when a compiler certificate is supplied.*
+
+#### `TauCeti.DavisKahan1970.Section8.canonicalLowBranchUnbounded_orthogonal`
+
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section8/Theorem81UnboundedBranch.lean:68`
+
+Compiler-printed type: *inserted when a compiler certificate is supplied.*
+
+#### `TauCeti.DavisKahan1970.Section8.re_inner_le_of_mem_canonicalLowBranchUnbounded`
+
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section8/Theorem81UnboundedBranch.lean:78`
+
+Compiler-printed type: *inserted when a compiler certificate is supplied.*
+
+#### `TauCeti.DavisKahan1970.Section8.le_re_inner_of_mem_canonicalLowBranchUnbounded_orthogonal`
+
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section8/Theorem81UnboundedBranch.lean:131`
+
+Compiler-printed type: *inserted when a compiler certificate is supplied.*
+
+#### `TauCeti.DavisKahan1970.Section8.theorem8_1_canonicalBranchUnbounded_form`
+
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section8/Theorem81UnboundedBranch.lean:214`
+
+Compiler-printed type: *inserted when a compiler certificate is supplied.*
+
+#### `TauCeti.DavisKahan1970.Section8.theorem8_1_canonicalBranchUnbounded_printed`
+
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section8/Theorem81UnboundedBranch.lean:255`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 

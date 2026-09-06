@@ -4,7 +4,7 @@
 
 **Census family:** `source-completion-census`  
 **Items:** 50  
-**Unique cited Lean declarations:** 1370
+**Unique cited Lean declarations:** 1377
 
 ## How to use this census
 
@@ -4355,6 +4355,13 @@ ROW WAS STALE; CORRECTED 2026-08-07 (Fable 5).  The requested 'exact source norm
 - `TauCeti.DavisKahan.maximalAngle_le_pi_div_four_of_reflectionProduct_form_nonneg`
 - `TauCeti.DavisKahan.reflectionProduct_add_swap_eq`
 - `TauCeti.ContinuousLinearMap.nonneg_of_lyapunov_nonneg`
+- `TauCeti.DavisKahan1970.Section8.canonicalLowBranchUnbounded`
+- `TauCeti.DavisKahan1970.Section8.canonicalLowBranchUnbounded_reduces`
+- `TauCeti.DavisKahan1970.Section8.canonicalLowBranchUnbounded_orthogonal`
+- `TauCeti.DavisKahan1970.Section8.re_inner_le_of_mem_canonicalLowBranchUnbounded`
+- `TauCeti.DavisKahan1970.Section8.le_re_inner_of_mem_canonicalLowBranchUnbounded_orthogonal`
+- `TauCeti.DavisKahan1970.Section8.theorem8_1_canonicalBranchUnbounded_form`
+- `TauCeti.DavisKahan1970.Section8.theorem8_1_canonicalBranchUnbounded_printed`
 
 **Curated source/Lean review:**
 
