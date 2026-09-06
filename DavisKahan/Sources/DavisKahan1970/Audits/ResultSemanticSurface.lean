@@ -1002,3 +1002,22 @@ Status: **TERMINAL EXACT**.
 #check @TauCeti.DavisKahan1970.Section8.theorem8_2_branch_real_maximalAngle_lt_of_crossedDefects
 #check @TauCeti.DavisKahan1970.isTrialResidual_iff
 #check @TauCeti.DavisKahan1970.isExactSpectralDecomposition_iff
+
+/-! ## 2026-09-06 source-surface façades and the separability sweep -/
+
+#check @TauCeti.DavisKahan1970.proposition3_1_separable
+#check @TauCeti.DavisKahan1970.proposition3_2_exists_iff_crossedDefectsEquivalent_separable
+#check @TauCeti.DavisKahan1970.proposition3_2_not_unique_separable
+#check @TauCeti.DavisKahan1970.proposition3_3_complex_forward_separable
+#check @TauCeti.DavisKahan1970.proposition3_3_complex_converse_separable
+#check @TauCeti.DavisKahan1970.proposition3_3_real_forward_separable
+#check @TauCeti.DavisKahan1970.proposition3_3_real_converse_separable
+#check @TauCeti.DavisKahan1970.proposition3_4_full_complex_separable
+#check @TauCeti.DavisKahan1970.proposition3_4_full_real_separable
+#check @TauCeti.DavisKahan1970.corollary3_1_compact_defectBlock_sourceAngleList_classification_separable
+#check @TauCeti.DavisKahan1970.proposition3_5_commutations_separable
+#check @TauCeti.DavisKahan1970.proposition3_5_eigenvector_angle_separable
+#check @TauCeti.DavisKahan1970.proposition3_5_angleEigenspace_uniqueMaximal_separable
+#check @TauCeti.DavisKahan1970.corollary3_2_separable
+#check @TauCeti.DavisKahan1970.proposition4_2_compact_nonacute_separable
+#check @TauCeti.DavisKahan1970.proposition4_2_compact_nonacute_real_separable

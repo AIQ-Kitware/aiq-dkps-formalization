@@ -370,9 +370,15 @@ Do not reopen any of these merely to obtain a more uniform internal API unless a
 
 # X. Remaining source-exactness blockers
 
-The critical path should now be narrow.
+**Historical from here to §XVI unless a subsection says otherwise.**  §10.1,
+§10.2, §10.3 and §10.4 were the live queue when they were written; every one of
+them has since closed, and the closing entries are dated inside each.  They are
+kept because the analysis in them — especially §10.3.3's record of a wrong
+"open question" verdict and §10.3.4's record of what a signature-only review
+found — is the archive of how the work went, not a list of open items.  The
+current queue is §XVI.
 
-## 10.1 Directed real `S2-tan-two-theta`
+## 10.1 Directed real `S2-tan-two-theta` — closed
 
 Provide the missing exact real source façade.
 
@@ -1233,17 +1239,19 @@ If it is exact, stop requiring a prescribed transport chain in the proof body.
 
 This may remove a reported gap without any new mathematics.
 
-## 2. Add the directed real `tan 2Θ` source façade
+## 2. Add the directed real `tan 2Θ` source façade — **done**
 
-Solve only the real/complex norm transport necessary to obtain the exact real statement.
+`tanTwoTheta_directed_unboundedResidual_sourceExact_real` is canonical evidence
+on `S2-tan-two-theta`, which is terminal.
 
-Do not turn this into a requirement for a fully generic scalar API.
+## 3. Finish unbounded Theorem 8.1 — **done, 2026-09-06**
 
-## 3. Finish unbounded Theorem 8.1
-
-Use the already completed coercive inverse and spectral-repulsion work.
-
-Concentrate on the genuinely missing quarter-acute implication and then expose the exact source theorem.
+Both halves of the printed *iff*, branch existence and part (i) are proved at
+unbounded ambient scope in both scalar fields, and the canonical evidence states
+them on the source's own blocks `Λ₀`, `Λ₁` under the paper's separable ambient
+scope and standing convention (3.5).  Parts (ii) and (iii) are canonical on the
+printed eigenvalue sequences, in the finite dimensions the source prints them
+for.  §10.3.3 and §10.3.4 record how.
 
 ## 3c. The source norm class is inhabited (resolved, 2026-09-05)
 
@@ -1280,43 +1288,38 @@ than the printed one. Two honest resolutions, in order of preference:
 Until one of those lands, a façade over this class is *not* known to be
 exhaustive, and the final claim should say so.
 
-## 3d. Section 4's `J` (resolved with a distinction, 2026-09-05)
+## 3d. Section 4's `J` — the 2026-09-05 distinction was overruled, 2026-09-06
 
-The review asked for the chosen defect isometry `J` to be hidden inside the
-Section 4 façades. Doing that uniformly would be wrong, and the two cases have to
-be separated:
+The 2026-09-05 entry here argued that Propositions 4.1, 4.3 and Corollary 4.1
+should *keep* their `J`, because quantifying over every defect isometry is the
+stronger reading and an existential would weaken the theorem.  A
+signature-only hostile review overruled that on 2026-09-06, and the overrule is
+right:
 
-* **Proposition 4.2's `J` was genuinely proof data** -- the wrapper accepted it
-  and never used it, as the underscore said. It is now the *proposition*
-  `CrossedDefectsEquivalent U V`, which is the condition Section 4 actually
-  inherits.
-* **Propositions 4.1, 4.3 and Corollary 4.1's `J` is not proof data.** It names
-  the direct rotation the conclusion is *about*. Quantifying over every `J`, as
-  those theorems do, is the stronger reading and is what a caller holding a
-  particular rotation wants. Replacing it by an existential would weaken the
-  theorem, and in the non-acute case there is no canonical choice to substitute.
+> Davis--Kahan's source object is the already-chosen **direct rotation** `U`.
+> The repository even has `IsDirectRotation`, so this internal representative
+> need not leak through the source boundary.
 
-So the canonical statements keep their `J`, and
-`proposition4_3_compact_nonacute_sourceExact_ofCrossedDefects_{complex,real}`
-serve the caller who has only the source's hypothesis: they take
-`CrossedDefectsEquivalent` and name a direct rotation for which the minimality
-holds. The same wrapper should be added for Proposition 4.1 and Corollary 4.1.
+The stronger `J`-quantified reading is not wrong — it is simply not the source
+statement.  `Section4DirectRotationSource.lean` now carries the canonical
+witnesses: they take the standing convention (3.5) and produce a `D` with
+`IsDirectRotation U V D` for which the printed extremality holds.  The
+`J`-parameterised theorems are retained as `implementation_structure`, which is
+what they are.  Proposition 4.2 was already right.
 
-## 4. Finish unbounded Theorem 8.2
+## 4. Finish unbounded Theorem 8.2 — **done, 2026-09-06**
 
-The source theorem types are written and the estimate halves are proved; see
-§10.4. What is left is exactly one thing, and §10.4 states it precisely: the
-closed quarter branch `‖P_P − P_Q‖ ≤ √2/2` under the printed hypotheses.
+The acute conclusion is proved over the whole printed range, in both scalar
+fields, by the connectedness argument §10.4 prescribes; the four canonical
+witnesses `theorem8_2_{perturbation,residual}_sourceExact_unbounded_{complex,real}`
+state Theorem 8.2 as one theorem per alternative, concluding both the retained
+double-angle estimate and `Θ < π/4` with `A` a possibly unbounded self-adjoint
+partial map.
 
-* **Theorem 8.1 does not supply it.** 8.1 inherits the `tan 2θ` theorem's
-  off-diagonality `H₀ = H₁ = 0`; 8.2 inherits the `sin 2θ` theorem's hypotheses,
-  which have none. The earlier claim to the contrary is corrected in §10.4.
-* The static bounds reach `‖H‖ < (√3/4)δ`, not the printed `‖H‖ < δ/2`.
-* The connectedness argument that closes it needs the parametrized unbounded band
-  subspace `Q_s = E_{A + sH}(B_s)` and an unbounded ambient `sin Θ` theorem, and
-  nothing from the general Riesz/continuation roadmap.
-
-Protect the residual alternative from accidental extra perturbation hypotheses.
+The residual alternative was protected from an accidental perturbation
+hypothesis, and, after a signature-only review, from accidental *Ritz* data as
+well: `M`, `hPdom`, `hRitz` and `hres` are derived from the printed
+central-spectrum condition rather than demanded from the caller (§10.3.4).
 
 ## 3b. Theorem 3.1's real forward invariant — **done, 2026-09-05**
 

@@ -56,6 +56,7 @@ import DavisKahan.Sources.DavisKahan1970.Section7SwapAsymmetry
 import DavisKahan.Sources.DavisKahan1970.SectionTwo
 import DavisKahan.Sources.DavisKahan1970.SectionTwoSharpness
 import DavisKahan.Sources.DavisKahan1970.SectionTwoUsage
+import DavisKahan.Sources.DavisKahan1970.SeparableSourceScope
 import DavisKahan.Sources.DavisKahan1970.SharpIdeal
 import DavisKahan.Sources.DavisKahan1970.SharpKyFan
 import DavisKahan.Sources.DavisKahan1970.SinTwoTheta
