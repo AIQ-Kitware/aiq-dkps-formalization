@@ -1435,6 +1435,32 @@ The following are **not** prerequisites;
 * formalizing every mathematical prose sentence:
 * making every stronger theorem part of a perfectly uniform API.
 
+## XVII.1 Scoreboard, 2026-09-06
+
+Measured, not asserted.  Every line below is checkable from
+`dev/davis-kahan-1970-formalization-result-inventory.json` and a build.
+
+| Condition | Status |
+| --- | --- |
+| every designated result has canonical Lean evidence at its actual source scope | **28 of 29**; DK-8.1-thm's converse clause is the exception |
+| real/complex coverage for every result | met |
+| canonical façades expose the paper's separability scope | met, and every separable canonical witness is classified in `ambient_scope_policy.separability` |
+| finite vs infinite-dimensional scope matches each printed result | met — including Theorem 8.1 (ii) and (iii), which the source prints *in finite dimensions* (§10.3) |
+| bounded vs unbounded scope matches each printed result | **all but DK-8.1-thm's converse** |
+| every UIN-quantified theorem uses the literal source abstraction at its boundary | met, and as of §4c that abstraction no longer carries completeness |
+| no canonical theorem asks for a hypothesis absent from the paper | met |
+| source objects, gaps, ordered angles, residuals, constants, conclusions agree | met, re-checked by the tamper suite and the 95 statement pins |
+| **Theorems 8.1 and 8.2 cover their inherited unbounded scope** | **8.2 yes; 8.1 all but the converse of the printed *iff*** |
+| the exact/stronger distinction stays visible in the census | met |
+| a fresh source-first review finds no material statement mismatch | run; it found two defects, both fixed (§XVI.6) |
+| the final certification pass succeeds | run 2026-09-06, green apart from three failures that are not Davis--Kahan |
+
+**So the finish line is not crossed, and the claim in §XVIII must not be made
+yet.**  Exactly one thing stands between the repository and it: the converse half
+of Theorem 8.1's printed characterization at unbounded scope.  §10.3.3 records
+why it is a mathematical gap rather than a porting gap, which route is closed and
+which two remain open.  Everything else on the list is met.
+
 ---
 
 # XVIII. Final public claim
