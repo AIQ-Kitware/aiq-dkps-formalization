@@ -1,8 +1,13 @@
 datetime,commit,event,summary,evidence_path
-2026-07-13T22:25:24-04:00,f44d9667,dk_work_begins,"First commit in the dedicated DavisKahan tree used by this paper's timeline.",DavisKahan/
+2026-06-11T05:32:25+00:00,d8d6a2d6,dk_specific_work_visible,"First Davis--Kahan-specific Lean commit found in this repository; it arose inside the Acharyya2025 development.",Acharyya2025/DavisKahan.lean
+2026-07-03T18:30:08+00:00,49ed44f7,formalization_literature_note,"Added an expert-readable note explicitly comparing a formalized Davis--Kahan theorem with the literature.",ForMathlib/prose/DavisKahan-formalized-vs-literature.tex
+2026-07-10T21:39:40-04:00,39427796,full_paper_faithful_scaffold,"Commit message: 'Scafold out full paper faithful DK theory'; this is the clearest start of the explicit full-paper-faithful push.",ForMathlib/Analysis/InnerProductSpace/DavisKahanTheory.lean
+2026-07-13T22:25:24-04:00,f44d9667,dedicated_tree_reorganization,"Repository reorganization that introduced/moved work into the dedicated DavisKahan tree.",DavisKahan/
 2026-08-12T18:50:36-04:00,7001ed05,source_comparison_finds_mismatch,"Review found that three claimed source correspondences were incomplete; the sin 2Theta case mixed a bounded trial-residual theorem with a separate unbounded reflection-residual theorem.",dev/davis-kahan-1970-formalization-result-inventory.json
 2026-08-31T20:03:01-04:00,cc824790,broad_review,"A full pass over the 29 tracked results found remaining statement/correspondence and checker defects and repaired them.",dev/davis-kahan-1970-result-semantic-review-2026-08-31.md
 2026-09-02T14:15:24-04:00,2a027968,apparent_completion,"The tracked source comparison reached 29 of 29.",dev/davis-kahan-1970-formalization-result-inventory.json
 2026-09-02T14:48:18-04:00,de65f4fc,new_gap_found,"A follow-up review found that the directed tan 2Theta correspondence did not compose at the claimed real/complex scope.",dev/davis-kahan-1970-formalization-result-inventory.json
 2026-09-02T22:01:56-04:00,aee127d0,gap_repaired,"New source-shaped real and complex endpoints closed the directed tan 2Theta gap; tracking returned to 29 of 29.",dev/davis-kahan-1970-formalization-result-inventory.json
-2026-09-04T12:59:42-04:00,5f339b74,paper_snapshot,"Repository snapshot used as the evidence baseline for this draft; all 29 tracked results are currently accepted by the project's checks.",dev/davis-kahan-1970-formalization-result-inventory.json
+2026-09-06T11:12:05-04:00,064df8d3,section8_unbounded_source_facades,"Theorem 8.1 and 8.2 were promoted to source-shaped unbounded endpoints.",DavisKahan/Sources/DavisKahan1970/Section8/Theorem82SourceUnbounded.lean
+2026-09-06T12:42:20-04:00,bcf94e16,source_surface_reopened,"A signature/context-only hostile review withdrew the final source-exactness claim and listed seven remaining source-surface defects.",GOAL.md
+2026-09-06T12:57:52-04:00,e9517c4a,paper_snapshot,"Repository snapshot used by this workshop-paper revision.",GOAL.md

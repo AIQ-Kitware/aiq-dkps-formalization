@@ -469,3 +469,121 @@ Add Brian Hu as an author. A timeline figure, if we have real data for it would 
 
 We should have an appendix that gives the cost of the formalization, taken mostly from draft2, I don't want to make a big deal of it here though. Not a contribution. Just transparency. Need the DARPA acknowledgment too. 
 ````
+
+### Prompt 17
+
+````text
+I don't think that we should include the stopping model if it doesn't really apply to what we did. It was a nice idea, but not necessary. Remember we are also keeping verbatim logs of prompts I'm using to refine the paper in the repo itself. It looks like this is maintained in brainstorm.md which is fine.
+
+I'm also noting that the lean listing in formalization 1 has incorrect symbols in it, and it also looks like it uses an older form of the theorem, but maybe that is fine for this particular.
+
+We should not call "doohickeys" silly. It's quite illustrative. We have to be very careful about LLMisms. I also feel like: 
+
+>  The difficult question for a source-driven formalization can come one step earlier: is that
+>
+> proposition the mathematical claim we intended? 
+
+Can be stated more concisely and clearly. The entire first paragraph can be. "The kernel has done its job" is an LLMism, although I don't know how to categorize it. Section 2 needs to simply be called "Related Work". We also need to introduce the question we are answering by studing the 21 public first person accounts. Also point to the appendix with details on where the accounts came from and how to validate them in supplemental material. 
+
+I don't think "As the agents improved, proof production stopped being the main bottleneck" is a justified line, because without the agents we have no ability to write the lean formalizations. The agents are allowing us to accomplish tasks beyond our current skill levels.
+
+Back on the sine 2 theta example, it might be good to build a list of candidate examples from the repo that we could use so I can decide which one I like the most. Because i need to work to understand well whichever one I choose to present here. 
+
+> The Lean theorem above was valid. The overclaim was the correspondence
+
+This is an LLMism. The X was Y. The Z was W. 
+````
+
+### Prompt 18
+
+````text
+I heard the term semantic alignment in a talk, and I forget by who. Is there any work that introduces the term semantic alignment wrt to lean statements that I can reference, because that is the term I want to use. 
+````
+
+### Prompt 19
+
+````text
+Yes, that is a good paper to cite wrt to the term. We can just say semantic alignment as defined by \cite{} and also discussed in \cite{...}. We just need to cite the earliest use of "semantic alignment" that we can find in terms of a correspondence for what we think we are proving and what we actually proved, and in this case what we think we are proving is defined by the prose of the DK 1970 paper, as well as the mathematical contextual knowledge needed to even read that paper. 
+````
+
+### Prompt 20
+
+````text
+Also figure 1 needs to be closer to the beginning, and probably referenced in the introduction. Based on the previous feedback give me the new overlay. 
+````
+
+### Prompt 21
+
+````text
+Also I think the acknowledgement needs to be in the main paper, but can't be part of double blind review. So we need to gate that with an if condition. 
+````
+
+### Prompt 22
+
+````text
+Why don't we have the table with the breakdown of the different models that we did use? And also I think the dedicated DK work on july 13th  is the wrong start date. That might be when we made the dedicated DK package, but now when we started work on it. Correct me if you have evidence suggesting that I'm wrong about this.
+
+Did you add the other candidate formalization semantic misalignment cases to the overlay? I need to be able to read them reliably. Probably make a markdown document with the verbatim lean, so I can see it. Also the listings render is still incorrect. I believe the draft2 paper shows how to do it correctly, but maybe the scope doesn't cover the issues here. But what I see literally on the page is: 
+
+
+
+```
+variable {E : Type v} [NormedAddCommGroup E] [InnerProductSpace
+
+ E]
+
+[CompleteSpace E]
+
+theorem sinTwoTheta_directedResidual_paperUINorm
+
+(N : PaperUnitaryInvariantNorm)
+
+{A : E L[] E} (hA : IsSelfAdjoint A)
+
+{U V : Submodule E}
+
+[U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
+
+(hU : Reduces A U)
+
+{a b d : } (hd : 0 < d) (hab : a b)
+
+(hUspec : spectrum (compressOperator U A) Set.Icc a b)
+
+(hUspec’ : x spectrum (compressOperator U A),
+
+x a - d b + d x)
+
+(M : V L[] V)
+
+(hMem : N.Mem (residual A V.subtypeL M)) :
+
+N.Mem (sinTwoThetaIdealBlock U V)
+
+d * N.gauge (sinTwoThetaIdealBlock U V)
+
+2 * N.gauge (residual A V.subtypeL 
+```
+
+Pretty sure those L[] are meant to be linear map arrows.
+
+My hesitation with this theorem is the usage of the structure PaperUnitaryInvariantNorm. We went through some work to remove those non-mathematical names. So I might want to favor an example of misalignment post that rename? I think section 8 might have had some, where the actual paper scope is unbounded, but we cited a bounded theorem as the example? There might also have been cases where we had too many hypotheses? Provide small writeups in the markdown doc, but the candidates need to be committed to the repo. 
+````
+
+### Prompt 23
+
+````text
+We NEVER add pngs or binary files to the git repo. 
+````
+
+### Prompt 24
+
+````text
+"A checked theorem that was still too narrow" is a bad title, it's an llm-ism. I'm not even sure how to describe what the problem is, but I see LLMs do this all the time, they use some sloganlike psuedo-wisdom statement that has some judgement about being narrow or wrong or still so there is some historical.  It should state what the section is something like: "Example of a semantically misaligned proof". 
+
+Similarly: "What is the theorem about?" should just be: "Statement of the problem". And I don't think we do a good enough job at explaining it. "trial subspace" is not explained. We could talk about a perturbed operator. I want to introduce it in matrix terms, and then briefly explain how it generalizes to the coordinate free hilbert spaces, which I think the current sentence on 96 does ok at. And I think we need to be very clear on what the 29 statements mean: it is any main result that davis and kahan provide a proof for in their paper. 
+
+But going back to the residual, teh reader doesn't know what A, E0, or A0 is.
+
+We also still have the issue where line 122 is rendered as `(M : V L[] V)` we have to register the latex way of expressing the symbols with listings. But actually, let's choose a different result. Maybe let's do 5. section 2 tan-theta.  The issue here is that h35 was something we could prove from the premise, but we added it in as a required input? 
+````

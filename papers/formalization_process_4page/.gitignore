@@ -6,3 +6,6 @@
 *.log
 *.out
 paper.pdf
+paper_public.pdf
+figures/*.png
+generated/

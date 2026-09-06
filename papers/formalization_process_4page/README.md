@@ -35,20 +35,26 @@ validates the structured source snapshot and Git chronology and regenerates:
 human prompts available from the retained paper-revision transcript. Earlier
 prompts that are not available verbatim are not reconstructed from summaries.
 
-## Historical false finish
+## Worked semantic-alignment example
 
-The paper replaces the old dashboard screenshot figure with a typeset Lean
-signature from a real earlier state of the Davis--Kahan formalization. The
-historical endpoint had the printed directed `sin 2 Theta` trial-residual bound
-for bounded complex operators. A separate unbounded theorem used a different
-reflection residual. A source comparison on 12 August 2026 showed that the existing endpoints did
-not yet combine the printed residual with the full scalar and operator scope.
-The later repair exposed unbounded trial-residual endpoints for real and complex
-scalars.
+The four-page paper uses the historical Section 2 `tan Theta` mismatch involving
+condition (3.5). `scripts/build_evidence.py` extracts the full historical and
+repaired theorem signatures from Git and writes
+`generated/historical_false_finish.json`. The PDF displays only the relevant
+ASCII-safe lines in `generated/historical_false_finish.lean`; the full verbatim
+Lean is also retained in `notes/SEMANTIC_ALIGNMENT_CANDIDATES.md`.
 
-The manuscript currently reports checked evidence for all 29 tracked
-Davis--Kahan results while treating that conclusion as provisional: we think all
-29 are covered at the intended source scope, or are very close.
+The historical endpoint exposed
+`h35 : CrossedDefectsEquivalent U V` as a caller hypothesis even though Davis
+and Kahan introduce condition (3.5) only in Section 3. The repaired Section 2
+endpoint instead takes `HasDefinedAmbientTangent`, which represents the source's
+earlier convention that the tangent norm must exist, and derives the crossed-
+defect condition internally. Alternative repository-backed examples remain in
+`notes/SEMANTIC_ALIGNMENT_CANDIDATES.md`.
+
+The manuscript reports mathematical resolution of all 29 tracked Davis--Kahan
+results while keeping semantic alignment separate: the latest signature/context
+review in the paper snapshot still records source-surface issues to repair.
 
 ## Public project repository
 
@@ -62,14 +68,7 @@ for a preprint or camera-ready version.
 
 ## Figure
 
-The paper keeps the author-provided workflow figure with ordinary LaTeX
-`\includegraphics`:
-
-- `figures/formalization_workflow.png`
-
-The workflow figure remains in the four-page body.  The semantic-alignment
-screenshot is included in the appendix with ordinary `\includegraphics` so the
-reader can see the current source/correspondence/Lean review interface.
+The paper uses local rendered PNGs for the workflow figure and appendix screenshot, but binary render outputs are never staged or committed. The source repository keeps only text/code inputs; rendered figures remain local build artifacts. The workflow figure remains in the four-page body and the semantic-alignment screenshot remains in the appendix.
 
 ## Build
 
@@ -79,13 +78,22 @@ make -C papers/formalization_process_4page public
 make -C papers/formalization_process_4page check-prose
 ```
 
-`make` builds the anonymous review version. `make public` builds
-`paper_public.pdf` with Jonathan Crall and Brian Hu as authors and exposes the
-public GitHub URLs.
+`make` builds the anonymous review version with the official NeurIPS 2026
+MATH-AI double-blind workshop style. `make public` builds `paper_public.pdf`
+with Jonathan Crall, Brian Hu, Edward Wang, and Carey E. Priebe as authors,
+exposes the public GitHub URLs, and includes the DARPA acknowledgment in the main
+paper.  The anonymous review build omits that acknowledgment.
 
-`draft_neurips_2026.sty` is a local page-budget approximation. Replace it with
-the official workshop template before submission and recheck the four-page
-content limit.
+`neurips_2026.sty` is the official workshop style supplied with the MATH-AI
+2026 template. `draft_neurips_2026.sty` is retained only as the earlier local
+page-budget approximation and is not used by either build.
 
 Detailed Davis--Kahan and Yu--Wang--Samworth mathematics remain in
 `../formalization_draft2/` for the longer formalization paper.
+
+## Semantic-alignment candidate cases
+
+`notes/SEMANTIC_ALIGNMENT_CANDIDATES.md` is generated from pinned Git revisions by
+`make sources`.  It contains short candidate writeups plus verbatim Lean signatures,
+commit/path/line provenance, and snippet hashes.  The Section 8 bounded/unbounded and
+extra-hypothesis cases are included explicitly.

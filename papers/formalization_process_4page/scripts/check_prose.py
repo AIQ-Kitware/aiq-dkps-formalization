@@ -17,6 +17,12 @@ patterns = {
     'internal reopening jargon': r'\breopen(?:ed|ing|s)?\b',
     'terminal-status jargon': r'terminal status',
     'stock contrast not-X-but-Y': r'\bnot\b[^.\n]{0,100}\bbut\b',
+    'stock kernel phrase': r'the kernel has done its job',
+    'belittles doohickey example': r'intentionally silly|deliberately silly',
+    'paired theorem overclaim phrasing': r'the lean theorem above was valid|the overclaim was',
+    'unsupported proof bottleneck claim': r'proof production stopped being the main bottleneck',
+    'slogan section title too narrow': r'a checked theorem that was still too narrow',
+    'rhetorical theorem heading': r'what is the theorem about\?',
 }
 failed = False
 for path in paths:
