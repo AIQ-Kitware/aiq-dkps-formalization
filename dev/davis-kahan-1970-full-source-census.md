@@ -4,7 +4,7 @@
 
 **Census family:** `source-completion-census`  
 **Items:** 50  
-**Unique cited Lean declarations:** 1321
+**Unique cited Lean declarations:** 1325
 
 ## How to use this census
 
@@ -3548,6 +3548,8 @@ with no finite-dimensionality hypothesis.  `HasMinMaxLowerBoundEverywhere` has i
 - `TauCeti.DavisKahan.ExactSinTheta.oneGap_does_not_imply_symmetric_square_estimate`
 - `TauCeti.DavisKahan1970.theorem5_2_sourceExact_complex`
 - `TauCeti.DavisKahan1970.theorem5_2_sourceExact_real`
+- `TauCeti.DavisKahan1970.proposition6_1_sourceExact_complex`
+- `TauCeti.DavisKahan1970.proposition6_1_sourceExact_real`
 
 **Notes.** Complex and real source forms are compiled.
 
@@ -3589,6 +3591,8 @@ REOPENING WITHDRAWN 2026-08-31 and the rule corrected: a later source passage en
 - `TauCeti.DavisKahan1970.theorem6_1_commonDomain`
 - `TauCeti.DavisKahan1970.lowerFrameBound_iff_operator_inequality`
 - `TauCeti.DavisKahan1970.lowerFrameBound_of_operator_inequality`
+- `TauCeti.DavisKahan1970.theorem6_1_sourceExact_complex`
+- `TauCeti.DavisKahan1970.theorem6_1_sourceExact_real`
 
 **Curated source/Lean review:**
 

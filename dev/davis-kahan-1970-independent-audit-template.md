@@ -5431,12 +5431,12 @@ One row per printed source clause per scalar field.  A clause is `PASS` only whe
 
 | clause | scalar | witness | status |
 | --- | --- | --- | --- |
-| `symmetric-sine-theorem.complex` | complex | `TauCeti.DavisKahan1970.proposition6_1_complex` | **PASS** |
-| `symmetric-sine-theorem.real` | real | `TauCeti.DavisKahan1970.proposition6_1_real` | **PASS** |
+| `symmetric-sine-theorem.complex` | complex | `TauCeti.DavisKahan1970.proposition6_1_sourceExact_complex` | **PASS** |
+| `symmetric-sine-theorem.real` | real | `TauCeti.DavisKahan1970.proposition6_1_sourceExact_real` | **PASS** |
 
-**`symmetric-sine-theorem.complex`.** Canonical witness for symmetric-sine-theorem at complex scalar scope, carried over from the pre-clause canonical evidence and re-checked against its compiler-printed type under the coherent model.
+**`symmetric-sine-theorem.complex`.** Canonical witness for symmetric-sine-theorem at complex scalar scope, carried over from the pre-clause canonical evidence and re-checked against its compiler-printed type under the coherent model.  SOURCE NORM CLASS 2026-09-05.  The clause now cites the façade over `NormalizedUnitaryInvariantNorm`, the Lean type for Section 1's class, rather than the `SymmetricNormingFunction` theorem, which is one model of it and is retained as a registered generalization.
 
-**`symmetric-sine-theorem.real`.** Canonical witness for symmetric-sine-theorem at real scalar scope, carried over from the pre-clause canonical evidence and re-checked against its compiler-printed type under the coherent model.
+**`symmetric-sine-theorem.real`.** Canonical witness for symmetric-sine-theorem at real scalar scope, carried over from the pre-clause canonical evidence and re-checked against its compiler-printed type under the coherent model.  SOURCE NORM CLASS 2026-09-05.  The clause now cites the façade over `NormalizedUnitaryInvariantNorm`, the Lean type for Section 1's class, rather than the `SymmetricNormingFunction` theorem, which is one model of it and is retained as a registered generalization.
 
 Result-wide scope every clause must carry: *(none)*
 
@@ -5444,8 +5444,8 @@ Result-wide scope every clause must carry: *(none)*
 
 The declarations that carry this result's printed statement, with the source atoms each one covers.  Everything under *Other registered declarations* below accompanies the result without establishing it.
 
-- `TauCeti.DavisKahan1970.proposition6_1_complex` — primary_source_witness, complex scalars, proof; covers `DK-6.1-prop.symmetric-sine-theorem`
-- `TauCeti.DavisKahan1970.proposition6_1_real` — primary_source_witness, real scalars, proof; covers `DK-6.1-prop.symmetric-sine-theorem`
+- `TauCeti.DavisKahan1970.proposition6_1_sourceExact_complex` — primary_source_witness, complex scalars, proof; covers `DK-6.1-prop.symmetric-sine-theorem`
+- `TauCeti.DavisKahan1970.proposition6_1_sourceExact_real` — primary_source_witness, real scalars, proof; covers `DK-6.1-prop.symmetric-sine-theorem`
 
 ### Other registered declarations
 
@@ -5456,6 +5456,8 @@ The declarations that carry this result's printed statement, with the source ato
 - `TauCeti.DavisKahan1970.proposition6_1_commonDomain_real` — generalization
 - `TauCeti.DavisKahan1970.proposition6_1_commonDomain` — generalization
 - `TauCeti.DavisKahan1970.proposition6_1_real_commonDomain` — generalization
+- `TauCeti.DavisKahan1970.proposition6_1_complex` — generalization
+- `TauCeti.DavisKahan1970.proposition6_1_real` — generalization
 
 ### Source-facing Lean declarations
 
@@ -5510,6 +5512,18 @@ Compiler-printed type: *inserted when a compiler certificate is supplied.*
 #### `TauCeti.DavisKahan1970.proposition6_1_real_commonDomain`
 
 Source location candidates: `DavisKahan/Sources/DavisKahan1970/SineThetaSourceInventory.lean:221`
+
+Compiler-printed type: *inserted when a compiler certificate is supplied.*
+
+#### `TauCeti.DavisKahan1970.proposition6_1_sourceExact_complex`
+
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section6SourceNormClass.lean:42`
+
+Compiler-printed type: *inserted when a compiler certificate is supplied.*
+
+#### `TauCeti.DavisKahan1970.proposition6_1_sourceExact_real`
+
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section6SourceNormClass.lean:68`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
@@ -5582,12 +5596,12 @@ One row per printed source clause per scalar field.  A clause is `PASS` only whe
 
 | clause | scalar | witness | status |
 | --- | --- | --- | --- |
-| `generalized-sine-conclusion.complex` | complex | `TauCeti.DavisKahan1970.theorem6_1_complex` | **PASS** |
-| `generalized-sine-conclusion.real` | real | `TauCeti.DavisKahan1970.theorem6_1_real` | **PASS** |
+| `generalized-sine-conclusion.complex` | complex | `TauCeti.DavisKahan1970.theorem6_1_sourceExact_complex` | **PASS** |
+| `generalized-sine-conclusion.real` | real | `TauCeti.DavisKahan1970.theorem6_1_sourceExact_real` | **PASS** |
 
-**`generalized-sine-conclusion.complex`.** Canonical witness for generalized-sine-conclusion at complex scalar scope, carried over from the pre-clause canonical evidence and re-checked against its compiler-printed type under the coherent model.
+**`generalized-sine-conclusion.complex`.** Canonical witness for generalized-sine-conclusion at complex scalar scope, carried over from the pre-clause canonical evidence and re-checked against its compiler-printed type under the coherent model.  SOURCE NORM CLASS 2026-09-05.  The clause now cites the façade over `NormalizedUnitaryInvariantNorm`, the Lean type for Section 1's class, rather than the `SymmetricNormingFunction` theorem, which is one model of it and is retained as a registered generalization.
 
-**`generalized-sine-conclusion.real`.** Canonical witness for generalized-sine-conclusion at real scalar scope, carried over from the pre-clause canonical evidence and re-checked against its compiler-printed type under the coherent model.
+**`generalized-sine-conclusion.real`.** Canonical witness for generalized-sine-conclusion at real scalar scope, carried over from the pre-clause canonical evidence and re-checked against its compiler-printed type under the coherent model.  SOURCE NORM CLASS 2026-09-05.  The clause now cites the façade over `NormalizedUnitaryInvariantNorm`, the Lean type for Section 1's class, rather than the `SymmetricNormingFunction` theorem, which is one model of it and is retained as a registered generalization.
 
 Result-wide scope every clause must carry: `DK-6.1-thm.generalized-sine-hypotheses`, `DK-6.1-thm.unequal-dimension-scope`
 
@@ -5595,8 +5609,8 @@ Result-wide scope every clause must carry: `DK-6.1-thm.generalized-sine-hypothes
 
 The declarations that carry this result's printed statement, with the source atoms each one covers.  Everything under *Other registered declarations* below accompanies the result without establishing it.
 
-- `TauCeti.DavisKahan1970.theorem6_1_complex` — primary_source_witness, complex scalars, proof; covers `DK-6.1-thm.generalized-sine-hypotheses`, `DK-6.1-thm.generalized-sine-conclusion`, `DK-6.1-thm.unequal-dimension-scope`
-- `TauCeti.DavisKahan1970.theorem6_1_real` — primary_source_witness, real scalars, proof; covers `DK-6.1-thm.generalized-sine-hypotheses`, `DK-6.1-thm.generalized-sine-conclusion`, `DK-6.1-thm.unequal-dimension-scope`
+- `TauCeti.DavisKahan1970.theorem6_1_sourceExact_complex` — primary_source_witness, complex scalars, proof; covers `DK-6.1-thm.generalized-sine-conclusion`, `DK-6.1-thm.generalized-sine-hypotheses`, `DK-6.1-thm.unequal-dimension-scope`
+- `TauCeti.DavisKahan1970.theorem6_1_sourceExact_real` — primary_source_witness, real scalars, proof; covers `DK-6.1-thm.generalized-sine-conclusion`, `DK-6.1-thm.generalized-sine-hypotheses`, `DK-6.1-thm.unequal-dimension-scope`
 
 ### Other registered declarations
 
@@ -5605,6 +5619,8 @@ The declarations that carry this result's printed statement, with the source ato
 - `TauCeti.DavisKahan1970.theorem6_1_commonDomain` — generalization
 - `TauCeti.DavisKahan1970.lowerFrameBound_iff_operator_inequality` — transport_lemma
 - `TauCeti.DavisKahan1970.lowerFrameBound_of_operator_inequality` — transport_lemma
+- `TauCeti.DavisKahan1970.theorem6_1_complex` — generalization
+- `TauCeti.DavisKahan1970.theorem6_1_real` — generalization
 
 ### Source-facing Lean declarations
 
@@ -5647,6 +5663,18 @@ Compiler-printed type: *inserted when a compiler certificate is supplied.*
 #### `TauCeti.DavisKahan1970.lowerFrameBound_of_operator_inequality`
 
 Source location candidates: `DavisKahan/Sources/DavisKahan1970/Theorem61.lean:170`
+
+Compiler-printed type: *inserted when a compiler certificate is supplied.*
+
+#### `TauCeti.DavisKahan1970.theorem6_1_sourceExact_complex`
+
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section6SourceNormClass.lean:94`
+
+Compiler-printed type: *inserted when a compiler certificate is supplied.*
+
+#### `TauCeti.DavisKahan1970.theorem6_1_sourceExact_real`
+
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section6SourceNormClass.lean:125`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 

@@ -4762,7 +4762,9 @@
         "TauCeti.DavisKahan1970.proposition6_1_commonDomain_complex",
         "TauCeti.DavisKahan1970.proposition6_1_commonDomain_real",
         "TauCeti.DavisKahan1970.proposition6_1_commonDomain",
-        "TauCeti.DavisKahan1970.proposition6_1_real_commonDomain"
+        "TauCeti.DavisKahan1970.proposition6_1_real_commonDomain",
+        "TauCeti.DavisKahan1970.proposition6_1_sourceExact_complex",
+        "TauCeti.DavisKahan1970.proposition6_1_sourceExact_real"
       ],
       "review_note": "Accepted result-only semantic review 2026-08-12. The complex and real Proposition 6.1 aliases are direct source-facing PaperUI theorems for the two-sided spectral-placement hypothesis and the ambient sine bound `delta * N(sin Theta) <= N(H)` for every paper unitary-invariant norm. The Sylvester identity (6.1) and the source counterexample explaining why one-sided placement is insufficient are outside the counted proposition statement.\n\nREOPENED 2026-08-31 by the scope-atom re-audit. The inventory's own statement_boundary policy says a later source passage that explicitly extends the proved scope of a counted result is part of that result's scope and must be covered. Several such passages were classified as generic post-result commentary on the grounds that they occur after the theorem environment -- which is exactly the condition the policy says does not exclude an explicit extension. See the newly attached scope atom(s) and `remaining_gap`.\n\nREOPENING WITHDRAWN 2026-08-31, and the rule that caused it corrected. The scope-atom re-audit attached a later source passage to this result under a `statement_boundary` clause saying that any passage explicitly extending a counted result's proved scope becomes part of that result. That clause contradicted the same field's `does_not_count` entry for scope remarks outside the printed result environment, and it let the atom ledger enlarge the denominator by reclassification. The corrected rule is that a later passage affects a counted result only when it is needed to determine what Davis and Kahan actually claim in that result; an extension, variant or consequence they mention without introducing and proving it as a result of its own does not. The passage is now `result_adjacent_extension` fidelity material. The Lean coverage produced while the result was reopened is kept as SUPPORTING evidence -- it is stronger than the counted statement requires, which is a good thing to hold and not a canonical obligation.\n\n**CASE TWINS REMOVED 2026-09-05**, finding F6.2 of the 2026-09-04 hostile review.  The registered name set contained six pairs differing only in case -- `Theorem6_1_complex` beside `theorem6_1_complex`, and likewise for `Theorem6_1_real`, `Proposition6_1_{complex,real}` and `Theorem6_2_{complex,real}`.  The capitalized member of each pair was an `alias` for a record method, a different theorem from the lowercase canonical one, and no reader could tell them apart by name.  The aliases are deleted; the record methods keep their own descriptive names (`Theorem61Data.result_every_unitarilyInvariantNorm_across` and siblings) and are still citable.  The audit surfaces and `Challenge/DavisKahan1970/Leaderboard.lean` now name the canonical lowercase theorems.",
       "parent_claim_id": "DK-6.1-prop",
@@ -4785,24 +4787,26 @@
       "local_statement_self_contained": true,
       "canonical_evidence": [
         {
-          "declaration": "TauCeti.DavisKahan1970.proposition6_1_complex",
+          "declaration": "TauCeti.DavisKahan1970.proposition6_1_sourceExact_complex",
           "role": "primary_source_witness",
           "scalar_scope": "complex",
           "evidence_kind": "proof",
           "covers_source_atoms": [
             "DK-6.1-prop.symmetric-sine-theorem"
           ],
-          "capability_classes": []
+          "capability_classes": [],
+          "note": "Proposition 6.1 over the literal normalized unitarily invariant norm class, which is the paper's quantifier.  A single application of the Fan-dominance bridge with the printed constant `δ`; the `SymmetricNormingFunction` theorem beneath is retained as a generalization. Over ℂ."
         },
         {
-          "declaration": "TauCeti.DavisKahan1970.proposition6_1_real",
+          "declaration": "TauCeti.DavisKahan1970.proposition6_1_sourceExact_real",
           "role": "primary_source_witness",
           "scalar_scope": "real",
           "evidence_kind": "proof",
           "covers_source_atoms": [
             "DK-6.1-prop.symmetric-sine-theorem"
           ],
-          "capability_classes": []
+          "capability_classes": [],
+          "note": "Proposition 6.1 over the literal normalized unitarily invariant norm class, which is the paper's quantifier.  A single application of the Fan-dominance bridge with the printed constant `δ`; the `SymmetricNormingFunction` theorem beneath is retained as a generalization. Over ℝ."
         }
       ],
       "supporting_evidence": [
@@ -4837,6 +4841,16 @@
           "declaration": "TauCeti.DavisKahan1970.proposition6_1_real_commonDomain",
           "role": "generalization",
           "note": "Coverage of a `result_adjacent_extension` the source mentions around this result. It is stronger than the counted statement requires and is deliberately supporting rather than canonical evidence."
+        },
+        {
+          "declaration": "TauCeti.DavisKahan1970.proposition6_1_complex",
+          "role": "generalization",
+          "note": "The analytic endpoint the source façade delegates to, over `SymmetricNormingFunction`."
+        },
+        {
+          "declaration": "TauCeti.DavisKahan1970.proposition6_1_real",
+          "role": "generalization",
+          "note": "The analytic endpoint the source façade delegates to, over `SymmetricNormingFunction`."
         }
       ],
       "expected_status": "compiled_exact",
@@ -4849,12 +4863,15 @@
           ],
           "scalar_scope": "complex",
           "evidence": {
-            "primary": "TauCeti.DavisKahan1970.proposition6_1_complex",
-            "correspondence": []
+            "primary": "TauCeti.DavisKahan1970.proposition6_1_sourceExact_complex",
+            "correspondence": [],
+            "supporting": [
+              "TauCeti.DavisKahan1970.proposition6_1_complex"
+            ]
           },
           "status": "established",
           "evidence_kind": "proof",
-          "justification": "Canonical witness for symmetric-sine-theorem at complex scalar scope, carried over from the pre-clause canonical evidence and re-checked against its compiler-printed type under the coherent model."
+          "justification": "Canonical witness for symmetric-sine-theorem at complex scalar scope, carried over from the pre-clause canonical evidence and re-checked against its compiler-printed type under the coherent model.  SOURCE NORM CLASS 2026-09-05.  The clause now cites the façade over `NormalizedUnitaryInvariantNorm`, the Lean type for Section 1's class, rather than the `SymmetricNormingFunction` theorem, which is one model of it and is retained as a registered generalization."
         },
         {
           "id": "symmetric-sine-theorem.real",
@@ -4863,12 +4880,15 @@
           ],
           "scalar_scope": "real",
           "evidence": {
-            "primary": "TauCeti.DavisKahan1970.proposition6_1_real",
-            "correspondence": []
+            "primary": "TauCeti.DavisKahan1970.proposition6_1_sourceExact_real",
+            "correspondence": [],
+            "supporting": [
+              "TauCeti.DavisKahan1970.proposition6_1_real"
+            ]
           },
           "status": "established",
           "evidence_kind": "proof",
-          "justification": "Canonical witness for symmetric-sine-theorem at real scalar scope, carried over from the pre-clause canonical evidence and re-checked against its compiler-printed type under the coherent model."
+          "justification": "Canonical witness for symmetric-sine-theorem at real scalar scope, carried over from the pre-clause canonical evidence and re-checked against its compiler-printed type under the coherent model.  SOURCE NORM CLASS 2026-09-05.  The clause now cites the façade over `NormalizedUnitaryInvariantNorm`, the Lean type for Section 1's class, rather than the `SymmetricNormingFunction` theorem, which is one model of it and is retained as a registered generalization."
         }
       ]
     },
@@ -4893,7 +4913,9 @@
         "TauCeti.DavisKahan1970.theorem6_1_real",
         "TauCeti.DavisKahan1970.theorem6_1_commonDomain",
         "TauCeti.DavisKahan1970.lowerFrameBound_iff_operator_inequality",
-        "TauCeti.DavisKahan1970.lowerFrameBound_of_operator_inequality"
+        "TauCeti.DavisKahan1970.lowerFrameBound_of_operator_inequality",
+        "TauCeti.DavisKahan1970.theorem6_1_sourceExact_complex",
+        "TauCeti.DavisKahan1970.theorem6_1_sourceExact_real"
       ],
       "review_note": "Accepted by the hostile audit at the stated-result level.\n\nREOPENED 2026-08-31 by the scope-atom re-audit. The inventory's own statement_boundary policy says a later source passage that explicitly extends the proved scope of a counted result is part of that result's scope and must be covered. Several such passages were classified as generic post-result commentary on the grounds that they occur after the theorem environment -- which is exactly the condition the policy says does not exclude an explicit extension. See the newly attached scope atom(s) and `remaining_gap`.\n\nREOPENING WITHDRAWN 2026-08-31, and the rule that caused it corrected. The scope-atom re-audit attached a later source passage to this result under a `statement_boundary` clause saying that any passage explicitly extending a counted result's proved scope becomes part of that result. That clause contradicted the same field's `does_not_count` entry for scope remarks outside the printed result environment, and it let the atom ledger enlarge the denominator by reclassification. The corrected rule is that a later passage affects a counted result only when it is needed to determine what Davis and Kahan actually claim in that result; an extension, variant or consequence they mention without introducing and proving it as a result of its own does not. The passage is now `result_adjacent_extension` fidelity material. The Lean coverage produced while the result was reopened is kept as SUPPORTING evidence -- it is stronger than the counted statement requires, which is a good thing to hold and not a canonical obligation.\n\n**CASE TWINS REMOVED 2026-09-05**, finding F6.2 of the 2026-09-04 hostile review.  The registered name set contained six pairs differing only in case -- `Theorem6_1_complex` beside `theorem6_1_complex`, and likewise for `Theorem6_1_real`, `Proposition6_1_{complex,real}` and `Theorem6_2_{complex,real}`.  The capitalized member of each pair was an `alias` for a record method, a different theorem from the lowercase canonical one, and no reader could tell them apart by name.  The aliases are deleted; the record methods keep their own descriptive names (`Theorem61Data.result_every_unitarilyInvariantNorm_across` and siblings) and are still citable.  The audit surfaces and `Challenge/DavisKahan1970/Leaderboard.lean` now name the canonical lowercase theorems.",
       "parent_claim_id": "DK-6.1-thm",
@@ -4914,28 +4936,30 @@
       "local_statement_self_contained": true,
       "canonical_evidence": [
         {
-          "declaration": "TauCeti.DavisKahan1970.theorem6_1_complex",
+          "declaration": "TauCeti.DavisKahan1970.theorem6_1_sourceExact_complex",
           "role": "primary_source_witness",
           "scalar_scope": "complex",
           "evidence_kind": "proof",
           "covers_source_atoms": [
-            "DK-6.1-thm.generalized-sine-hypotheses",
             "DK-6.1-thm.generalized-sine-conclusion",
+            "DK-6.1-thm.generalized-sine-hypotheses",
             "DK-6.1-thm.unequal-dimension-scope"
           ],
-          "capability_classes": []
+          "capability_classes": [],
+          "note": "Theorem 6.1 over the literal normalized unitarily invariant norm class.  The Fan-dominance bridge with the printed constant `δ ε`; the `SymmetricNormingFunction` theorem beneath is retained as a generalization. Over ℂ."
         },
         {
-          "declaration": "TauCeti.DavisKahan1970.theorem6_1_real",
+          "declaration": "TauCeti.DavisKahan1970.theorem6_1_sourceExact_real",
           "role": "primary_source_witness",
           "scalar_scope": "real",
           "evidence_kind": "proof",
           "covers_source_atoms": [
-            "DK-6.1-thm.generalized-sine-hypotheses",
             "DK-6.1-thm.generalized-sine-conclusion",
+            "DK-6.1-thm.generalized-sine-hypotheses",
             "DK-6.1-thm.unequal-dimension-scope"
           ],
-          "capability_classes": []
+          "capability_classes": [],
+          "note": "Theorem 6.1 over the literal normalized unitarily invariant norm class.  The Fan-dominance bridge with the printed constant `δ ε`; the `SymmetricNormingFunction` theorem beneath is retained as a generalization. Over ℝ."
         }
       ],
       "supporting_evidence": [
@@ -4961,6 +4985,16 @@
           "declaration": "TauCeti.DavisKahan1970.lowerFrameBound_of_operator_inequality",
           "role": "transport_lemma",
           "note": "The source prints the Theorem 6.1 lower-frame hypothesis as the operator inequality `E_0^* E_0 >= epsilon^2 I`; the canonical theorem takes `LowerFrameBound E_0 epsilon`. This is the correspondence lemma the contract's `equivalence_lemmas` clause requires, so a source auditor does not have to supply the equivalence informally."
+        },
+        {
+          "declaration": "TauCeti.DavisKahan1970.theorem6_1_complex",
+          "role": "generalization",
+          "note": "The analytic endpoint the source façade delegates to, over `SymmetricNormingFunction`."
+        },
+        {
+          "declaration": "TauCeti.DavisKahan1970.theorem6_1_real",
+          "role": "generalization",
+          "note": "The analytic endpoint the source façade delegates to, over `SymmetricNormingFunction`."
         }
       ],
       "expected_status": "compiled_exact",
@@ -4976,12 +5010,15 @@
           ],
           "scalar_scope": "complex",
           "evidence": {
-            "primary": "TauCeti.DavisKahan1970.theorem6_1_complex",
-            "correspondence": []
+            "primary": "TauCeti.DavisKahan1970.theorem6_1_sourceExact_complex",
+            "correspondence": [],
+            "supporting": [
+              "TauCeti.DavisKahan1970.theorem6_1_complex"
+            ]
           },
           "status": "established",
           "evidence_kind": "proof",
-          "justification": "Canonical witness for generalized-sine-conclusion at complex scalar scope, carried over from the pre-clause canonical evidence and re-checked against its compiler-printed type under the coherent model."
+          "justification": "Canonical witness for generalized-sine-conclusion at complex scalar scope, carried over from the pre-clause canonical evidence and re-checked against its compiler-printed type under the coherent model.  SOURCE NORM CLASS 2026-09-05.  The clause now cites the façade over `NormalizedUnitaryInvariantNorm`, the Lean type for Section 1's class, rather than the `SymmetricNormingFunction` theorem, which is one model of it and is retained as a registered generalization."
         },
         {
           "id": "generalized-sine-conclusion.real",
@@ -4990,12 +5027,15 @@
           ],
           "scalar_scope": "real",
           "evidence": {
-            "primary": "TauCeti.DavisKahan1970.theorem6_1_real",
-            "correspondence": []
+            "primary": "TauCeti.DavisKahan1970.theorem6_1_sourceExact_real",
+            "correspondence": [],
+            "supporting": [
+              "TauCeti.DavisKahan1970.theorem6_1_real"
+            ]
           },
           "status": "established",
           "evidence_kind": "proof",
-          "justification": "Canonical witness for generalized-sine-conclusion at real scalar scope, carried over from the pre-clause canonical evidence and re-checked against its compiler-printed type under the coherent model."
+          "justification": "Canonical witness for generalized-sine-conclusion at real scalar scope, carried over from the pre-clause canonical evidence and re-checked against its compiler-printed type under the coherent model.  SOURCE NORM CLASS 2026-09-05.  The clause now cites the façade over `NormalizedUnitaryInvariantNorm`, the Lean type for Section 1's class, rather than the `SymmetricNormingFunction` theorem, which is one model of it and is retained as a registered generalization."
         }
       ]
     },
@@ -6251,7 +6291,7 @@
     "terminal_results": 29,
     "remaining_results": [],
     "note": "The structured fields above are authoritative; this paragraph is regenerated whenever the count moves. 2026-09-02, closing: terminal_results is 29 and remaining_results is empty. `S2-tan-two-theta` was `hostile_review_blocked` under obligation `tan2theta-directed-correspondence` after a 2026-09-02 closure that did not compose; it is now accepted on canonical directed witnesses `tanTwoTheta_directed_unboundedResidual_symmetricNorming_{complex,real}`, which take the reducing subspace and conclude on the paper's directed corner (`tanTwoDirectedCornerR U V` over ℝ) with the singular-value identification in their types. The canonical-evidence digest changed accordingly and the statement pins were refreshed for the new canonical and bridging declarations. Earlier history of this field (the 2026-08-31 `S2-sin-two-theta` reopening, the `S2-tan-theta` Appendix-scope primaries, the paper-prefix rename with an unchanged digest) is in the human report.  2026-09-05: recomputed after the two directed `tan 2Theta` clauses of S2-tan-two-theta were retargeted at their source-exact façades.  The canonical statements are strictly closer to the printed ones -- separable ambient scope and the literal normalized unitarily invariant norm class -- and the theorems they delegate to are retained as registered generalizations, so nothing that was reviewed has been withdrawn.  2026-09-05: recomputed after DK-3.1-thm's converse clauses were repointed from the model-level theorem, which takes the isometric identification as caller data, to the source-shaped one that takes the dimension condition as a proposition.  The model-level theorem is retained as registered implementation structure, so nothing reviewed has been withdrawn.  2026-09-05: recomputed after Lemmas 6.1 and 6.2 were given source-exact façades over the literal normalized unitarily invariant norm class.  The SymmetricNormingFunction endpoints they delegate to are retained as registered generalizations -- for Lemma 6.1 the retained theorem is genuinely stronger, taking Ky Fan inequalities as its premise where the paper assumes the bound for every unitarily invariant norm.",
-    "canonical_evidence_sha256": "df93e6562303ad4c1b681c60683a6068c807b62889bbdd426f353a11cf50b4b4",
+    "canonical_evidence_sha256": "75d7233cfca4ff4a01122d74a3ac4f874771abc7d9e00a7f0c1aec5a8474e0e1",
     "hostile_review_status": "accepted",
     "hostile_review_note": "REOPENED 2026-09-05 by the third hostile review. Its three blockers are CLOSED -- the ambient sin 2Theta operator roles, Theorem 3.1's forward invariant on the source's angle operators, and Corollary 3.1's classification invariant on the angles -- along with Theorem 3.1's ambient dimension clause, which is now a proposition rather than a supplied isometric equivalence. No defect remains open. Two POLICY questions do, and they are recorded in `hostile_review_policy_questions` rather than as obligations, because the checker treats an obligation as evidence that a named row is NOT terminal and these ten rows are: whether to add thin separable wrappers at the printed scope, which is a project decision the repository has an explicit recorded position on and which an agent must not settle; and whether the printed unitarily invariant norm class must exist as a Lean type, where the estimate coverage is compiled and closed but the type-level representation is not. The 29/29 certificate is unaffected by either. When reporting it, say that these two questions are open, because a reviewer who resolves them differently would want different declarations to be canonical.\n\nPrevious note: ACCEPTED 2026-09-02, after the day's reopening was closed by new mathematics rather than by metadata: the directed tan 2Theta clauses have source-shaped complex and real endpoints on the paper objects, with the correspondence composed in Lean and pinned. `open_hostile_review_obligations` is closed and lists the closure; the structured fields `terminal_results`, `remaining_results` and `hostile_review_status` are the authoritative statement."
   },

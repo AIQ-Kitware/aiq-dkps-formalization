@@ -4254,7 +4254,9 @@
         "TauCeti.DavisKahan.ExactSinTheta.counterexample_perturbation_square_norm",
         "TauCeti.DavisKahan.ExactSinTheta.oneGap_does_not_imply_symmetric_square_estimate",
         "TauCeti.DavisKahan1970.theorem5_2_sourceExact_complex",
-        "TauCeti.DavisKahan1970.theorem5_2_sourceExact_real"
+        "TauCeti.DavisKahan1970.theorem5_2_sourceExact_real",
+        "TauCeti.DavisKahan1970.proposition6_1_sourceExact_complex",
+        "TauCeti.DavisKahan1970.proposition6_1_sourceExact_real"
       ],
       "notes": "Complex and real source forms are compiled.\n\n**STATUS LOWERED 2026-08-07 (Claude Opus 5): `compiled_exact` -> `compiled_specialization`, on scalar scope, not on any doubt about the mathematics.**  Every declaration on this row is stated for `InnerProductSpace ℂ`.  Standing assumption 1 of the transcription says the space is real OR complex and assumption 4 says the headline theorems apply in infinite as well as finite dimension, so the compiled statement is a specialization of the printed one.  `compiled_specialization` is defined as exactly that: 'a useful compiled specialization exists, but not the full source scope'.  The remedy is a real wrapper through the complexification route, not a reproof; see blocker `real-scalar-infinite-dimensional-scope`.\n\n**STATUS RESTORED 2026-08-08 (Claude Opus 5): `compiled_specialization` -> `compiled_exact`; blocker `real-scalar-infinite-dimensional-scope` removed from this row.**  The real-scalar form is now compiled, for an arbitrary real Hilbert space with no finite-dimensionality hypothesis: `DavisKahan/Sources/DavisKahan1970/SineTheta/SymmetricReal.lean`, surfaced as `TauCeti.DavisKahan1970.Proposition6_1_real`.  The proof MIRRORS the complex one step for step -- same two directed applications of the one-sided sine theorem, same Lemma 6.1 coupling on the scaled identity, same Lemma 6.2 contraction -- with exactly one substitution: `davisKahan1970_sylvester_complex` becomes `real_unbounded_sylvester_kyFan`.  No new mathematics was needed; `lemma61_all_kyFan`, `diagonalPair_all_kyFan_le`, the ambient/subspace singular-value transport, and `SymmetricNormingFunction` were already `RCLike`-generic.\n\n**How the conclusion avoids a real functional calculus.**  The complex row's conclusion is phrased through `sinAngleOperatorC`, i.e. `cfc Real.sin` of the operator angle, which is why the complex file cannot be generalized as written.  The real theorem is instead stated on `crossSineSum U V`, and that this is the paper's whole-space `sin Theta` is COMPILED, not asserted:\n* `proposition6_1_real_sinTheta_singularValues` (from the `RCLike` `crossSineSum_same_projectionDiff`) gives every source norm the same membership and value on `crossSineSum U V` as on the projector difference `P_V - P_U`;\n* `proposition6_1_real_sinTheta_eq_literalFullSinAngle` matches its complete approximation-singular-value sequence to that of the repository's LITERAL real full sine angle `sourceFullSinR`;\n* `proposition6_1_real_representative` states the estimate for an ARBITRARY operator carrying that sequence, which is the precise sense in which only the source singular sequence matters.\n\nThe theorem's own statement mentions no complexification, no functional calculus, and no caller-supplied inequality.  Axiom audit on all five real declarations plus the structure: exactly `propext`, `Classical.choice`, `Quot.sound`.  Full `lake build` green (9487 jobs), plus the non-default `FinishTanTwoTheta` and `Challenge` libraries.\n\nCANONICAL SURFACE MOVED OFF THE RECORD 2026-08-31. `Proposition6_1_complex` and `Proposition6_1_real` are methods on `SymmetricSinThetaProblem` / its real sibling: a caller had to build the record to invoke the theorem. `proposition6_1_complex` and `proposition6_1_real` take the mathematics directly -- two bounded self-adjoint operators, two reducing subspaces, the gap, the two separations, membership of `B - A` -- and build the record inside the proof. `DavisKahanExt.PartialMap.boundedReducingBlock` and its complement partner are what made the separation hypotheses readable; the four-line inline composite they replace is most of why the record existed. The complex conclusion is the paper's literal `cfc Real.sin (angleOperatorC U V)`; the real one is the projector difference `P_V - P_U`, whose approximation numbers are the sines of the principal angles, and `proposition6_1_projectorDifference_complex` states the complex theorem in that same shape so the two fields are visibly one theorem. `crossSineSum` no longer appears in any Proposition 6.1 statement; it remains what the real proof computes with, and `proposition6_1_real_sinTheta_singularValues` is the compiled transport off it. The Challenge wrapper `sinTheta_wholeSpace_symmetricNorming` is now an alias of the production declaration rather than a second theorem with the same statement.\n\nREOPENED 2026-08-31 by the scope-atom re-audit: a source passage that explicitly extends this result's proved scope had been classified as generic post-result commentary. See the result inventory's `remaining_gap` for the exact atom and the evidence that must be registered.\n\nREOPENING WITHDRAWN 2026-08-31 and the rule corrected: a later source passage enlarges a counted result only when it is needed to determine what Davis and Kahan actually claim in it. An extension, variant or consequence they mention without introducing and proving it as a result of its own is `result_adjacent_extension` fidelity material. The Lean coverage produced during the reopening is kept as supporting evidence.\n\n**ATOMIZATION CLOSED 2026-09-05.** The hole read: the source block contains the Sylvester identity (6.1), Proposition 6.1, and an explicit 2x2 counterexample showing the ambient one-sided sine conclusion fails; the counterexample exists elsewhere but is not registered as evidence for this row.  It is registered now.  `counterexample_sine_square_norm` gives the printed `2 * ||sin Theta||_sq = 2`, `counterexample_perturbation_square_norm` gives `||H||_sq = sqrt 3`, and `oneGap_does_not_imply_symmetric_square_estimate` is the printed strict inequality: one directional gap of width 2 does NOT give the symmetric square-norm estimate.  The Sylvester step is proof-only -- classified `proof_only` at the atom level -- and its content is Theorem 5.2 applied to the residual block, so the clause cites the Theorem 5.2 source-exact witnesses rather than manufacturing a separate obligation for a proof equation.",
       "next_action": "None. The passage is split into three clauses -- the proof's Sylvester step, the printed 2x2 counterexample, and Proposition 6.1 -- each bound to evidence in the statement map.",
@@ -4282,7 +4284,9 @@
         "TauCeti.DavisKahan1970.isTrialResidual_iff_equation_and_isometry",
         "TauCeti.DavisKahan1970.theorem6_1_commonDomain",
         "TauCeti.DavisKahan1970.lowerFrameBound_iff_operator_inequality",
-        "TauCeti.DavisKahan1970.lowerFrameBound_of_operator_inequality"
+        "TauCeti.DavisKahan1970.lowerFrameBound_of_operator_inequality",
+        "TauCeti.DavisKahan1970.theorem6_1_sourceExact_complex",
+        "TauCeti.DavisKahan1970.theorem6_1_sourceExact_real"
       ],
       "notes": "This is the canonical source-general sine theorem.\n\n**STATUS LOWERED 2026-08-07 (Claude Opus 5): `compiled_exact` -> `compiled_specialization`, on scalar scope, not on any doubt about the mathematics.**  Every declaration on this row is stated for `InnerProductSpace ℂ`.  Standing assumption 1 of the transcription says the space is real OR complex and assumption 4 says the headline theorems apply in infinite as well as finite dimension, so the compiled statement is a specialization of the printed one.  `compiled_specialization` is defined as exactly that: 'a useful compiled specialization exists, but not the full source scope'.  The remedy is a real wrapper through the complexification route, not a reproof; see blocker `real-scalar-infinite-dimensional-scope`.\n\n**AUDIT METHOD CORRECTED 2026-08-07 (Claude Opus 5).**  The scalar-scope audit earlier the same day inspected only the declarations already LISTED on this row, which answers \"does this row list a real theorem?\" and not \"does the repository HAVE one?\".  Re-audited by searching the whole stable repo and elaborating candidate signatures.  FALSE POSITIVE, restored to `compiled_exact`.  Theorem 6.1 has a real infinite-dimensional source theorem already: `Theorem6_1_real` elaborates over `[InnerProductSpace ℝ]`, `[CompleteSpace]`, no `[FiniteDimensional]`, and the common-domain and common-core unbounded variants `theorem6_1_real_commonDomain` / `theorem6_1_real_commonCore` do too.  The row's declaration list simply omitted them; the mathematics was never missing.\n\n**M32, THE SECTION 6 SCALAR TRANCHE, 2026-08-09 (Claude Opus 5).**  THE `real-scalar-infinite-dimensional-scope` ENTRY IN `blocked_by` WAS STALE AND IS REMOVED.  The 2026-08-07 note above already recorded the false positive and restored the status, but the blocker was left on the row, so the blocker's own tally counted this row.  RE-MEASURED 2026-08-09 by elaborating the signature: `Theorem6_1_real` is `[InnerProductSpace ℝ]` on four spaces with `[CompleteSpace]` and NO `[FiniteDimensional]` anywhere, over `RealTheorem61Data` and an arbitrary `SymmetricNormingFunction`, concluding `N.Mem S.operator ∧ gap * frameLowerBound * N.gauge S.operator ≤ N.gauge P.data.residual` -- membership CONCLUDED, constant intact.  `theorem6_1_real_commonDomain` and `theorem6_1_real_commonCore` likewise.  All axiom-clean (`[propext, Classical.choice, Quot.sound]`).  Nothing was proved for this row today; the row was already correct.\n\nCANONICAL SURFACE MOVED OFF THE RECORD 2026-08-31. `Theorem6_1_complex` and `Theorem6_1_real` are methods on `Theorem61Data`, which bundles an `UnboundedSinThetaData` -- itself a record -- with the exact map, three self-adjointness fields, the exact decomposition, the gap and the frame bound. `theorem6_1_complex` and `theorem6_1_real` take the components. They reuse the Section 2 vocabulary rather than inventing a second one: `TauCeti.DavisKahan1970.IsExactSpectralDecomposition` unchanged, and `TauCeti.DavisKahan1970.IsTrialResidualEquation` -- `IsTrialResidual` with the isometry removed, tied by `isTrialResidual_iff_equation_and_isometry`. That split is the actual difference between Section 2 and Section 6: Section 2 asks for an isometric trial map, Theorems 6.1 and 6.2 ask only for `LowerFrameBound E_0 epsilon`, and epsilon is the factor the printed generalized bound carries. Hypotheses and conclusion are unchanged -- same lower-frame factor, same representative freedom, same arbitrary source UI norm.\n\nREOPENED 2026-08-31 by the scope-atom re-audit: a source passage that explicitly extends this result's proved scope had been classified as generic post-result commentary. See the result inventory's `remaining_gap` for the exact atom and the evidence that must be registered.\n\nREOPENING WITHDRAWN 2026-08-31 and the rule corrected: a later source passage enlarges a counted result only when it is needed to determine what Davis and Kahan actually claim in it. An extension, variant or consequence they mention without introducing and proving it as a result of its own is `result_adjacent_extension` fidelity material. The Lean coverage produced during the reopening is kept as supporting evidence.",
       "next_action": "No hostile-review hole is currently recorded for this source passage. Preserve exact source scope and re-audit if the distributable source specification changes.",
@@ -4314,8 +4318,8 @@
           ]
         },
         "canonical_declarations": [
-          "TauCeti.DavisKahan1970.theorem6_1_complex",
-          "TauCeti.DavisKahan1970.theorem6_1_real"
+          "TauCeti.DavisKahan1970.theorem6_1_sourceExact_complex",
+          "TauCeti.DavisKahan1970.theorem6_1_sourceExact_real"
         ],
         "supporting_declarations": [
           "TauCeti.DavisKahan1970.theorem6_1_commonDomain",
@@ -4363,8 +4367,8 @@
             "source_fragment": "printed",
             "source_excerpt": "E_0^*E_0\\ge\\varepsilon^2 I",
             "lean_declarations": [
-              "TauCeti.DavisKahan1970.theorem6_1_complex",
-              "TauCeti.DavisKahan1970.theorem6_1_real"
+              "TauCeti.DavisKahan1970.theorem6_1_sourceExact_complex",
+              "TauCeti.DavisKahan1970.theorem6_1_sourceExact_real"
             ],
             "correspondence_declarations": [
               "TauCeti.DavisKahan1970.lowerFrameBound_iff_operator_inequality",
@@ -4398,8 +4402,8 @@
             "source_fragment": "printed",
             "source_excerpt": "If one of A_0,\\Lambda_1 has spectrum in [\\beta,\\alpha] and the other has spectrum outside (\\beta-\\delta,\\alpha+\\delta)",
             "lean_declarations": [
-              "TauCeti.DavisKahan1970.theorem6_1_complex",
-              "TauCeti.DavisKahan1970.theorem6_1_real"
+              "TauCeti.DavisKahan1970.theorem6_1_sourceExact_complex",
+              "TauCeti.DavisKahan1970.theorem6_1_sourceExact_real"
             ]
           },
           {
@@ -4411,8 +4415,8 @@
             "source_fragment": "printed",
             "source_excerpt": "\\delta\\varepsilon\\norm{\\sin\\Theta_0}\\le\\norm{R}.",
             "lean_declarations": [
-              "TauCeti.DavisKahan1970.theorem6_1_complex",
-              "TauCeti.DavisKahan1970.theorem6_1_real"
+              "TauCeti.DavisKahan1970.theorem6_1_sourceExact_complex",
+              "TauCeti.DavisKahan1970.theorem6_1_sourceExact_real"
             ]
           },
           {
@@ -4502,20 +4506,18 @@
         "note": "The canonical declarations are the component-hypothesis forms `theorem6_1_complex` and `theorem6_1_real`, not the record methods `Theorem6_1_complex` / `Theorem6_1_real`. The record forms are methods on `Theorem61Data`, which bundles an `UnboundedSinThetaData` together with the exact map, three self-adjointness fields, the exact decomposition, the gap and the frame bound; the component forms take those as arguments, so a reader sees the printed hypothesis list. Nothing about the proof's organisation appears in either canonical signature: no data record, no Ky Fan family, no ideal family, no proof-capability class. Two clauses are stated at a scope wider than the print, and both are weakenings of hypotheses rather than strengthenings: the separation is the whole `FormBoundedSylvesterGap` rather than only the printed interval/exterior branch, and the lower frame bound is bridged to the printed operator inequality by a compiled biconditional rather than assumed to be the same thing. The row's own notes record that this row's earlier complex-only reading was a false positive; the real endpoints have been present and axiom-clean since 2026-08-07 and are canonical here alongside the complex ones.",
         "statement_pins": [
           {
-            "declaration": "TauCeti.DavisKahan1970.theorem6_1_complex",
-            "type_expr_hash": "251164478",
-            "type_text_sha256": "0d1fd251682d2cca3b60629211c0f9108d5c04a074e39a7436cfab9e880c24a9",
+            "declaration": "TauCeti.DavisKahan1970.theorem6_1_sourceExact_complex",
+            "type_expr_hash": "830518558",
+            "type_text_sha256": "d160d52021540812a6e4a393ef188979f5bddbba86a5784a0f72e42f72be0eb1",
             "toolchain": "leanprover/lean4:v4.34.0-rc1",
-            "pinned_on": "2026-09-05",
-            "note": "Re-pinned 2026-09-05: `SineTheta/Presentation.lean` moved from the root namespace `DavisKahan1970` into `TauCeti.DavisKahan1970` (finding F6.1), so these declarations changed name.  No statement changed; the elaborated types are identical up to the namespace of the declarations they mention."
+            "pinned_on": "2026-09-05"
           },
           {
-            "declaration": "TauCeti.DavisKahan1970.theorem6_1_real",
-            "type_expr_hash": "1899186188",
-            "type_text_sha256": "3c0e022c29ac111351c62d0423248635a3121527457a46badfd89f9a38cc99a3",
+            "declaration": "TauCeti.DavisKahan1970.theorem6_1_sourceExact_real",
+            "type_expr_hash": "4135908322",
+            "type_text_sha256": "85702ab23d84b05b5842f90a092db86816cf9460d1973e94b40cdb0dbb51f2b1",
             "toolchain": "leanprover/lean4:v4.34.0-rc1",
-            "pinned_on": "2026-09-05",
-            "note": "Re-pinned 2026-09-05: `SineTheta/Presentation.lean` moved from the root namespace `DavisKahan1970` into `TauCeti.DavisKahan1970` (finding F6.1), so these declarations changed name.  No statement changed; the elaborated types are identical up to the namespace of the declarations they mention."
+            "pinned_on": "2026-09-05"
           },
           {
             "declaration": "TauCeti.DavisKahan1970.isTrialResidual_iff_equation_and_isometry",
