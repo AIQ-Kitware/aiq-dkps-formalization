@@ -4,7 +4,7 @@
 
 **Census family:** `source-completion-census`  
 **Items:** 50  
-**Unique cited Lean declarations:** 1428
+**Unique cited Lean declarations:** 1466
 
 ## How to use this census
 
@@ -1830,6 +1830,7 @@ results are at the printed hypothesis exactly.
 - `TauCeti.DavisKahan1970.acute_directRotation_iff_positiveDiagonalBlocks`
 - `TauCeti.DavisKahan1970.complex_acute_directRotation_iff_positiveDiagonalBlocks`
 - `TauCeti.DavisKahan1970.real_directRotation_eq_acute_directRotation`
+- `TauCeti.DavisKahan1970.proposition3_1_separable`
 
 **Notes.** The main acute construction and uniqueness are present; the exact characterization by positivity needs source-level verification.
 
@@ -1943,6 +1944,8 @@ One presentational caveat, unchanged from the complex form and already recorded:
 - `TauCeti.finiteDimensional_of_finite_hilbertBasis`
 - `TauCeti.lpIndexCongr`
 - `TauCeti.countable_of_orthonormal`
+- `TauCeti.DavisKahan1970.proposition3_2_exists_iff_crossedDefectsEquivalent_separable`
+- `TauCeti.DavisKahan1970.proposition3_2_not_unique_separable`
 
 **Notes.** No exact general Hilbert-space declaration was found.
 
@@ -2041,6 +2044,10 @@ No new mathematics was written for this. The theorem already existed; what was m
 - `TauCeti.DavisKahan1970.proposition3_3_real_converse`
 - `TauCeti.DavisKahan.proposition3_3_principalSquareRoot_forward_of_nonneg_blocks`
 - `TauCeti.DavisKahan.proposition3_3_principalSquareRoot_converse`
+- `TauCeti.DavisKahan1970.proposition3_3_complex_forward_separable`
+- `TauCeti.DavisKahan1970.proposition3_3_complex_converse_separable`
+- `TauCeti.DavisKahan1970.proposition3_3_real_forward_separable`
+- `TauCeti.DavisKahan1970.proposition3_3_real_converse_separable`
 
 **Notes.** The square identity and acute spectral branch exist; the source converse with the crossed-intersection mapping condition is not exposed.
 
@@ -2097,6 +2104,8 @@ The self-adjointness hypotheses on the two diagonal compressions are *not* a spe
 - `TauCeti.DavisKahan1970.proposition3_4_full_complex`
 - `TauCeti.DavisKahan1970.proposition3_4_crossedDefectsEquivalent_complex`
 - `TauCeti.DavisKahan1970.proposition3_4_crossedDefectsEquivalent_real`
+- `TauCeti.DavisKahan1970.proposition3_4_full_complex_separable`
+- `TauCeti.DavisKahan1970.proposition3_4_full_real_separable`
 
 **Notes.** REPAIRED AND RE-CLOSED 2026-08-12 (result inventory row `DK-3.4-prop`).  The reopening was correct: the complex endpoint concluded only the `IsDirectRotation` numerical-range predicate.  Repaired by `proposition3_4_full_complex`, which takes exactly the printed hypothesis C_0^2 >= 1/2 together with the Definition 3.1 direct-rotation data for U, and concludes the genuine Definition 3.1 statement for U^2 from Q_- to Q: unitarity, intertwining, `IsPositive` for both diagonal compressions, and the crossed-block adjoint/sign relation.  It adds no acuteness, compactness, finite-dimensional or separability hypothesis, and reuses the real development's `positiveDiagonalBlocks_of_sq` rather than reproving the positivity upgrade.
 
@@ -2551,6 +2560,7 @@ Separately, the converse's ambient dimension clause is now a PROPOSITION. The pr
 - `TauCeti.DavisKahan1970.compactAngleList_inj_iff`
 - `TauCeti.DavisKahan1970.compactAngleEigenvalueList_genericCosineBlock_le_one`
 - `TauCeti.DavisKahan1970.norm_genericCosineBlock_le_one`
+- `TauCeti.DavisKahan1970.corollary3_1_compact_defectBlock_sourceAngleList_classification_separable`
 
 **Notes.** **PROVED 2026-08-04, both directions, admission-free.**
 
@@ -2711,6 +2721,9 @@ SOURCE INVARIANT CORRECTED 2026-09-05. Corollary 3.1 says the complete invariant
 - `TauCeti.DavisKahan.Proposition35.re_inner_nonacuteDirectRotation_sub_cosine_apply_self`
 - `TauCeti.DavisKahan.Proposition35.section3AngleOperator_comm_nonacuteDirectRotation`
 - `TauCeti.DavisKahan.Proposition35.section3AngleOperator_comm_nonacuteQuarterTurn`
+- `TauCeti.DavisKahan1970.proposition3_5_commutations_separable`
+- `TauCeti.DavisKahan1970.proposition3_5_eigenvector_angle_separable`
+- `TauCeti.DavisKahan1970.proposition3_5_angleEigenspace_uniqueMaximal_separable`
 
 **Notes.** Commutation identities are present, but the maximal eigenspace characterization is not represented.
 
@@ -2815,6 +2828,7 @@ RESIDUAL FIDELITY NOTE: `fixedCosineSubspace` is `ker (cos^2 Theta - c^2)`, and 
 - `TauCeti.DavisKahan1970.corollary3_2`
 - `TauCeti.DavisKahan1970.corollary3_2_nonacute_directRotation_resolution`
 - `TauCeti.DavisKahan1970.corollary3_2_nonacuteQuarterTurn_symm`
+- `TauCeti.DavisKahan1970.corollary3_2_separable`
 
 **Notes.** Direct-rotation reversal is represented; the exact angle/J statement needs a source wrapper.
 
@@ -2868,6 +2882,8 @@ SOURCE-FIDELITY REFRESH 2026-08-11.  The former finite-dimensional J gap is clos
 - `TauCeti.DavisKahan1970.proposition4_1_compact_nonacute_directRotationValues_complex`
 - `TauCeti.DavisKahan1970.proposition4_1_compact_nonacute_directRotationValues_real`
 - `TauCeti.DavisKahan.FiniteDimensional.principalPlaneChord_eq_two_mul_sin_half`
+- `TauCeti.DavisKahan1970.proposition4_1_directRotation_sourceExact_complex`
+- `TauCeti.DavisKahan1970.proposition4_1_directRotation_sourceExact_real`
 
 **Notes.** The finite pointwise singular-value theorem is compiled: every singular value of the restricted displacement (1-V)P is minimized by the direct rotation, whose values are the doubled half-angle sines 2 sin(theta_k/2).  A source-numbered wrapper and the infinite-dimensional scope remain open.
 
@@ -2936,6 +2952,8 @@ Equations (4.1) and (4.2), the closest-`Q`-vector step and the `V = UZ` factoris
 - `TauCeti.DavisKahan1970.corollary4_1_compact_nonacute_sourceExact_complex`
 - `TauCeti.DavisKahan1970.corollary4_1_compact_nonacute_sourceExact_real`
 - `TauCeti.DavisKahan.ExactSinTheta.NormalizedUnitaryInvariantNorm`
+- `TauCeti.DavisKahan1970.corollary4_1_directRotation_sourceExact_complex`
+- `TauCeti.DavisKahan1970.corollary4_1_directRotation_sourceExact_real`
 
 **Notes.** Compiled without any angle restriction, for every unitarily invariant norm, over every RCLike field (finite dimension).  The earlier note conflating this row with Proposition 4.4 is resolved: the corollary concerns the restricted displacement and needs no angle hypothesis.
 
@@ -2997,6 +3015,8 @@ SOURCE-EXACT FAÇADE REGISTERED 2026-09-05. Canonical evidence is now the printe
 - `TauCeti.sin_principalAngleSequence`
 - `TauCeti.DavisKahan.Section4.tsum_displacementAngleSineSq_ge_tsum_sq_sin_principalAngleSequence`
 - `TauCeti.DavisKahan1970.tsum_displacementAngleSineSqR_ge_tsum_sq_sin_principalAngleSequence`
+- `TauCeti.DavisKahan1970.proposition4_2_compact_nonacute_separable`
+- `TauCeti.DavisKahan1970.proposition4_2_compact_nonacute_real_separable`
 
 **Notes.** The finite orthonormal-basis displacement-energy extremality is compiled via the nuclear-norm specialization of the displacement-square majorization.
 
@@ -3102,6 +3122,8 @@ REOPENING WITHDRAWN 2026-08-31 and the rule corrected: a later source passage en
 - `TauCeti.DavisKahan.ExactSinTheta.NormalizedUnitaryInvariantNorm`
 - `TauCeti.DavisKahan1970.proposition4_3_compact_nonacute_sourceExact_ofCrossedDefects_complex`
 - `TauCeti.DavisKahan1970.proposition4_3_compact_nonacute_sourceExact_ofCrossedDefects_real`
+- `TauCeti.DavisKahan1970.proposition4_3_directRotation_sourceExact_complex`
+- `TauCeti.DavisKahan1970.proposition4_3_directRotation_sourceExact_real`
 
 **Curated source/Lean review:**
 
@@ -4409,6 +4431,18 @@ ROW WAS STALE; CORRECTED 2026-08-07 (Fable 5).  The requested 'exact source norm
 - `TauCeti.DavisKahan1970.Section8.semiboundedBelow_reducingRestriction_iff`
 - `TauCeti.DavisKahan1970.Section8.semiboundedAbove_reducingRestriction_real_iff`
 - `TauCeti.DavisKahan1970.Section8.semiboundedBelow_reducingRestriction_real_iff`
+- `TauCeti.DavisKahan1970.Section8.theorem8_1_upperEigenvalueRepulsion_sourceExact`
+- `TauCeti.DavisKahan1970.Section8.theorem8_1_lowerEigenvalueRepulsion_sourceExact`
+- `TauCeti.DavisKahan1970.Section8.theorem8_1_upperEigenvalueRepulsion_sourceExact_real`
+- `TauCeti.DavisKahan1970.Section8.theorem8_1_lowerEigenvalueRepulsion_sourceExact_real`
+- `TauCeti.DavisKahan1970.Section8.theorem8_1_upperSymmetricGaugeEigenvalue_sourceExact`
+- `TauCeti.DavisKahan1970.Section8.theorem8_1_lowerSymmetricGaugeEigenvalue_sourceExact`
+- `TauCeti.DavisKahan1970.Section8.theorem8_1_upperSymmetricGaugeEigenvalue_sourceExact_real`
+- `TauCeti.DavisKahan1970.Section8.theorem8_1_lowerSymmetricGaugeEigenvalue_sourceExact_real`
+- `TauCeti.DavisKahan1970.Section8.theorem8_1_upperCompressionRepulsion_ofBlockPlacement_unbounded_complex`
+- `TauCeti.DavisKahan1970.Section8.theorem8_1_lowerCompressionRepulsion_ofBlockPlacement_unbounded_complex`
+- `TauCeti.DavisKahan1970.Section8.theorem8_1_upperCompressionRepulsion_ofBlockPlacement_unbounded_real`
+- `TauCeti.DavisKahan1970.Section8.theorem8_1_lowerCompressionRepulsion_ofBlockPlacement_unbounded_real`
 
 **Curated source/Lean review:**
 
@@ -4556,7 +4590,7 @@ STATUS LEFT AT `compiled_exact` PENDING A HUMAN CALL on whether the surviving co
 
 UNBOUNDED SCOPE, PROGRESS 2026-09-05.  The angle conclusion Davis and Kahan print -- `Theta <= pi/4`, non-strict -- is now proved at unbounded ambient scope by `maximalAngle_le_pi_div_four_of_orderedFormGap_unbounded_printed`, in the paper's own orientation on `P` and `Q`.  Reading the printed statement mattered: the bounded canonical evidence concludes the strictly stronger supremum bound `subspaceGap < sqrt 2 / 2`, whose constant is `delta / (1 + ‖C‖)` and therefore degenerates as `‖A‖ -> infinity`.  The paper does not claim it, and it is not available unbounded.
 
-What is still bounded on this row: the existence of the branch `Q` as a spectral subspace of `A + H`, the form bounds on it, and parts (i)-(iii).  The canonical evidence is therefore unchanged and the row is not yet at its source scope.
+SUPERSEDED THE SAME DAY -- see the 2026-09-06 entries below.
 
 UNBOUNDED SCOPE, 2026-09-06.  The paragraph above is superseded.  Branch existence with its printed ordered form bounds (`theorem8_1_canonicalBranchUnbounded_printed`), part (i) (`theorem8_1_upperCompressionRepulsion_unbounded` and its lower dual), the direction of the printed characterization from the spectral placement (`theorem8_1_maximalAngle_le_of_spectrumIn_unbounded`) and the CONVERSE direction -- uniqueness of the branch, `theorem8_1_eq_canonicalBranchUnbounded_of_maximalAngle_le`, packaged as the printed `iff` in `theorem8_1_maximalAngle_le_iff_orderedFormGap_unbounded` -- are all proved at unbounded ambient scope.  Parts (ii) and (iii) are printed IN FINITE DIMENSIONS and are at their printed scope already.
 
@@ -4671,6 +4705,10 @@ At the OPERATOR norm the compiled residual statement is sound and in fact STRONG
 - `TauCeti.DavisKahan1970.Section8.theorem8_2_residual_sourceExact_unbounded_complex`
 - `TauCeti.DavisKahan1970.Section8.theorem8_2_perturbation_sourceExact_unbounded_real`
 - `TauCeti.DavisKahan1970.Section8.theorem8_2_residual_sourceExact_unbounded_real`
+- `TauCeti.DavisKahan1970.Section8.sourceResidual`
+- `TauCeti.DavisKahan1970.Section8.sourceResidual_eq_sub_ritzBlock`
+- `TauCeti.DavisKahan1970.Section8.exists_ritzBlock_of_realSpectrum_subset_Icc_complex`
+- `TauCeti.DavisKahan1970.Section8.exists_ritzBlock_of_realSpectrum_subset_Icc_real`
 
 **Curated source/Lean review:**
 

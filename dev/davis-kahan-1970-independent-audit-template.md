@@ -2425,9 +2425,9 @@ One row per printed source clause per scalar field.  A clause is `PASS` only whe
 
 | clause | scalar | witness | status |
 | --- | --- | --- | --- |
-| `existence.rclike` | rclike | `TauCeti.DavisKahan1970.proposition3_1` | **PASS** |
+| `existence.rclike` | rclike | `TauCeti.DavisKahan1970.proposition3_1_separable` | **PASS** |
 
-**`existence.rclike`.** Canonical witness for existence, uniqueness, positive-diagonal-characterization at rclike scalar scope, carried over from the pre-clause canonical evidence and re-checked against its compiler-printed type under the coherent model.
+**`existence.rclike`.** Canonical witness at the paper's separable ambient scope, which is Section 1's setting: "Let H be a separable Hilbert space, real or complex; finite dimensionality is not assumed."  The arbitrary-Hilbert theorem it wraps is strictly stronger and is retained as the generalization it is; the wrapper adds the ambient hypothesis and nothing else.
 
 Result-wide scope every clause must carry: *(none)*
 
@@ -2435,13 +2435,23 @@ Result-wide scope every clause must carry: *(none)*
 
 The declarations that carry this result's printed statement, with the source atoms each one covers.  Everything under *Other registered declarations* below accompanies the result without establishing it.
 
-- `TauCeti.DavisKahan1970.proposition3_1` — primary_source_witness, rclike scalars, proof; covers `DK-3.1-prop.existence`, `DK-3.1-prop.uniqueness`, `DK-3.1-prop.positive-diagonal-characterization`
+- `TauCeti.DavisKahan1970.proposition3_1_separable` — primary_source_witness, rclike scalars, proof; covers `DK-3.1-prop.existence`, `DK-3.1-prop.uniqueness`, `DK-3.1-prop.positive-diagonal-characterization`
+
+### Other registered declarations
+
+- `TauCeti.DavisKahan1970.proposition3_1` — generalization
 
 ### Source-facing Lean declarations
 
 #### `TauCeti.DavisKahan1970.proposition3_1`
 
 Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section3AcuteDirectRotation.lean:182`
+
+Compiler-printed type: *inserted when a compiler certificate is supplied.*
+
+#### `TauCeti.DavisKahan1970.proposition3_1_separable`
+
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/SeparableSourceScope.lean:62`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
@@ -2518,12 +2528,12 @@ One row per printed source clause per scalar field.  A clause is `PASS` only whe
 
 | clause | scalar | witness | status |
 | --- | --- | --- | --- |
-| `existence-iff-crossing-dimensions.rclike` | rclike | `TauCeti.DavisKahan1970.proposition3_2_exists_iff_crossedDefectsEquivalent` | **PASS** |
-| `nonuniqueness.rclike` | rclike | `TauCeti.DavisKahan1970.proposition3_2_not_unique` | **PASS** |
+| `existence-iff-crossing-dimensions.rclike` | rclike | `TauCeti.DavisKahan1970.proposition3_2_exists_iff_crossedDefectsEquivalent_separable` | **PASS** |
+| `nonuniqueness.rclike` | rclike | `TauCeti.DavisKahan1970.proposition3_2_not_unique_separable` | **PASS** |
 
-**`existence-iff-crossing-dimensions.rclike`.** Canonical witness for existence-iff-crossing-dimensions at rclike scalar scope, carried over from the pre-clause canonical evidence and re-checked against its compiler-printed type under the coherent model.
+**`existence-iff-crossing-dimensions.rclike`.** Canonical witness at the paper's separable ambient scope, which is Section 1's setting: "Let H be a separable Hilbert space, real or complex; finite dimensionality is not assumed."  The arbitrary-Hilbert theorem it wraps is strictly stronger and is retained as the generalization it is; the wrapper adds the ambient hypothesis and nothing else.
 
-**`nonuniqueness.rclike`.** Canonical witness for nonuniqueness at rclike scalar scope, carried over from the pre-clause canonical evidence and re-checked against its compiler-printed type under the coherent model.
+**`nonuniqueness.rclike`.** Canonical witness at the paper's separable ambient scope, which is Section 1's setting: "Let H be a separable Hilbert space, real or complex; finite dimensionality is not assumed."  The arbitrary-Hilbert theorem it wraps is strictly stronger and is retained as the generalization it is; the wrapper adds the ambient hypothesis and nothing else.
 
 Result-wide scope every clause must carry: `DK-3.2-prop.eq-3-5`
 
@@ -2531,8 +2541,8 @@ Result-wide scope every clause must carry: `DK-3.2-prop.eq-3-5`
 
 The declarations that carry this result's printed statement, with the source atoms each one covers.  Everything under *Other registered declarations* below accompanies the result without establishing it.
 
-- `TauCeti.DavisKahan1970.proposition3_2_exists_iff_crossedDefectsEquivalent` — primary_source_witness, rclike scalars, proof; covers `DK-3.2-prop.existence-iff-crossing-dimensions`, `DK-3.2-prop.eq-3-5`
-- `TauCeti.DavisKahan1970.proposition3_2_not_unique` — primary_source_witness, rclike scalars, proof; covers `DK-3.2-prop.nonuniqueness`, `DK-3.2-prop.eq-3-5`
+- `TauCeti.DavisKahan1970.proposition3_2_exists_iff_crossedDefectsEquivalent_separable` — primary_source_witness, rclike scalars, proof; covers `DK-3.2-prop.existence-iff-crossing-dimensions`, `DK-3.2-prop.eq-3-5`
+- `TauCeti.DavisKahan1970.proposition3_2_not_unique_separable` — primary_source_witness, rclike scalars, proof; covers `DK-3.2-prop.nonuniqueness`, `DK-3.2-prop.eq-3-5`
 
 ### Other registered declarations
 
@@ -2548,6 +2558,8 @@ The declarations that carry this result's printed statement, with the source ato
 - `TauCeti.finiteDimensional_of_finite_hilbertBasis` — source_correspondence
 - `TauCeti.lpIndexCongr` — source_correspondence
 - `TauCeti.countable_of_orthonormal` — source_correspondence
+- `TauCeti.DavisKahan1970.proposition3_2_exists_iff_crossedDefectsEquivalent` — generalization
+- `TauCeti.DavisKahan1970.proposition3_2_not_unique` — generalization
 
 ### Source-facing Lean declarations
 
@@ -2632,6 +2644,18 @@ Compiler-printed type: *inserted when a compiler certificate is supplied.*
 #### `TauCeti.countable_of_orthonormal`
 
 Source location candidates: `ForTauCeti/Analysis/InnerProductSpace/SeparableOrthonormal.lean:95`
+
+Compiler-printed type: *inserted when a compiler certificate is supplied.*
+
+#### `TauCeti.DavisKahan1970.proposition3_2_not_unique_separable`
+
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/SeparableSourceScope.lean:101`
+
+Compiler-printed type: *inserted when a compiler certificate is supplied.*
+
+#### `TauCeti.DavisKahan1970.proposition3_2_exists_iff_crossedDefectsEquivalent_separable`
+
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/SeparableSourceScope.lean:94`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
@@ -2723,18 +2747,18 @@ One row per printed source clause per scalar field.  A clause is `PASS` only whe
 
 | clause | scalar | witness | status |
 | --- | --- | --- | --- |
-| `principal-square-root.complex` | complex | `TauCeti.DavisKahan1970.proposition3_3_complex_forward` | **PASS** |
-| `square-root-converse.complex` | complex | `TauCeti.DavisKahan1970.proposition3_3_complex_converse` | **PASS** |
-| `principal-square-root.real` | real | `TauCeti.DavisKahan1970.proposition3_3_real_forward` | **PASS** |
-| `square-root-converse.real` | real | `TauCeti.DavisKahan1970.proposition3_3_real_converse` | **PASS** |
+| `principal-square-root.complex` | complex | `TauCeti.DavisKahan1970.proposition3_3_complex_forward_separable` | **PASS** |
+| `square-root-converse.complex` | complex | `TauCeti.DavisKahan1970.proposition3_3_complex_converse_separable` | **PASS** |
+| `principal-square-root.real` | real | `TauCeti.DavisKahan1970.proposition3_3_real_forward_separable` | **PASS** |
+| `square-root-converse.real` | real | `TauCeti.DavisKahan1970.proposition3_3_real_converse_separable` | **PASS** |
 
-**`principal-square-root.complex`.** Canonical witness for principal-square-root at complex scalar scope, carried over from the pre-clause canonical evidence and re-checked against its compiler-printed type under the coherent model.
+**`principal-square-root.complex`.** Canonical witness at the paper's separable ambient scope, which is Section 1's setting: "Let H be a separable Hilbert space, real or complex; finite dimensionality is not assumed."  The arbitrary-Hilbert theorem it wraps is strictly stronger and is retained as the generalization it is; the wrapper adds the ambient hypothesis and nothing else.
 
-**`square-root-converse.complex`.** Canonical witness for square-root-converse at complex scalar scope, carried over from the pre-clause canonical evidence and re-checked against its compiler-printed type under the coherent model.
+**`square-root-converse.complex`.** Canonical witness at the paper's separable ambient scope, which is Section 1's setting: "Let H be a separable Hilbert space, real or complex; finite dimensionality is not assumed."  The arbitrary-Hilbert theorem it wraps is strictly stronger and is retained as the generalization it is; the wrapper adds the ambient hypothesis and nothing else.
 
-**`principal-square-root.real`.** Canonical witness for principal-square-root at real scalar scope, carried over from the pre-clause canonical evidence and re-checked against its compiler-printed type under the coherent model.
+**`principal-square-root.real`.** Canonical witness at the paper's separable ambient scope, which is Section 1's setting: "Let H be a separable Hilbert space, real or complex; finite dimensionality is not assumed."  The arbitrary-Hilbert theorem it wraps is strictly stronger and is retained as the generalization it is; the wrapper adds the ambient hypothesis and nothing else.
 
-**`square-root-converse.real`.** Canonical witness for square-root-converse at real scalar scope, carried over from the pre-clause canonical evidence and re-checked against its compiler-printed type under the coherent model.
+**`square-root-converse.real`.** Canonical witness at the paper's separable ambient scope, which is Section 1's setting: "Let H be a separable Hilbert space, real or complex; finite dimensionality is not assumed."  The arbitrary-Hilbert theorem it wraps is strictly stronger and is retained as the generalization it is; the wrapper adds the ambient hypothesis and nothing else.
 
 Result-wide scope every clause must carry: *(none)*
 
@@ -2742,10 +2766,17 @@ Result-wide scope every clause must carry: *(none)*
 
 The declarations that carry this result's printed statement, with the source atoms each one covers.  Everything under *Other registered declarations* below accompanies the result without establishing it.
 
-- `TauCeti.DavisKahan1970.proposition3_3_complex_forward` — primary_source_witness, complex scalars, proof; covers `DK-3.3-prop.principal-square-root`
-- `TauCeti.DavisKahan1970.proposition3_3_complex_converse` — primary_source_witness, complex scalars, proof; covers `DK-3.3-prop.square-root-converse`
-- `TauCeti.DavisKahan1970.proposition3_3_real_forward` — primary_source_witness, real scalars, proof; covers `DK-3.3-prop.principal-square-root`
-- `TauCeti.DavisKahan1970.proposition3_3_real_converse` — primary_source_witness, real scalars, proof; covers `DK-3.3-prop.square-root-converse`
+- `TauCeti.DavisKahan1970.proposition3_3_complex_forward_separable` — primary_source_witness, complex scalars, proof; covers `DK-3.3-prop.principal-square-root`
+- `TauCeti.DavisKahan1970.proposition3_3_complex_converse_separable` — primary_source_witness, complex scalars, proof; covers `DK-3.3-prop.square-root-converse`
+- `TauCeti.DavisKahan1970.proposition3_3_real_forward_separable` — primary_source_witness, real scalars, proof; covers `DK-3.3-prop.principal-square-root`
+- `TauCeti.DavisKahan1970.proposition3_3_real_converse_separable` — primary_source_witness, real scalars, proof; covers `DK-3.3-prop.square-root-converse`
+
+### Other registered declarations
+
+- `TauCeti.DavisKahan1970.proposition3_3_complex_forward` — generalization
+- `TauCeti.DavisKahan1970.proposition3_3_complex_converse` — generalization
+- `TauCeti.DavisKahan1970.proposition3_3_real_forward` — generalization
+- `TauCeti.DavisKahan1970.proposition3_3_real_converse` — generalization
 
 ### Source-facing Lean declarations
 
@@ -2770,6 +2801,30 @@ Compiler-printed type: *inserted when a compiler certificate is supplied.*
 #### `TauCeti.DavisKahan1970.proposition3_3_real_converse`
 
 Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section3PrincipalSquareRoot.lean:307`
+
+Compiler-printed type: *inserted when a compiler certificate is supplied.*
+
+#### `TauCeti.DavisKahan1970.proposition3_3_real_forward_separable`
+
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/SeparableSourceScope.lean:210`
+
+Compiler-printed type: *inserted when a compiler certificate is supplied.*
+
+#### `TauCeti.DavisKahan1970.proposition3_3_real_converse_separable`
+
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/SeparableSourceScope.lean:224`
+
+Compiler-printed type: *inserted when a compiler certificate is supplied.*
+
+#### `TauCeti.DavisKahan1970.proposition3_3_complex_converse_separable`
+
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/SeparableSourceScope.lean:188`
+
+Compiler-printed type: *inserted when a compiler certificate is supplied.*
+
+#### `TauCeti.DavisKahan1970.proposition3_3_complex_forward_separable`
+
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/SeparableSourceScope.lean:174`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
@@ -2836,12 +2891,12 @@ One row per printed source clause per scalar field.  A clause is `PASS` only whe
 
 | clause | scalar | witness | status |
 | --- | --- | --- | --- |
-| `u-square-direct-rotation.complex` | complex | `TauCeti.DavisKahan1970.proposition3_4_full_complex` | **PASS** |
-| `u-square-direct-rotation.real` | real | `TauCeti.DavisKahan1970.proposition3_4_full_real` | **PASS** |
+| `u-square-direct-rotation.complex` | complex | `TauCeti.DavisKahan1970.proposition3_4_full_complex_separable` | **PASS** |
+| `u-square-direct-rotation.real` | real | `TauCeti.DavisKahan1970.proposition3_4_full_real_separable` | **PASS** |
 
-**`u-square-direct-rotation.complex`.** Canonical witness for u-square-direct-rotation at complex scalar scope, carried over from the pre-clause canonical evidence and re-checked against its compiler-printed type under the coherent model.
+**`u-square-direct-rotation.complex`.** Canonical witness at the paper's separable ambient scope, which is Section 1's setting: "Let H be a separable Hilbert space, real or complex; finite dimensionality is not assumed."  The arbitrary-Hilbert theorem it wraps is strictly stronger and is retained as the generalization it is; the wrapper adds the ambient hypothesis and nothing else.
 
-**`u-square-direct-rotation.real`.** Canonical witness for u-square-direct-rotation at real scalar scope, carried over from the pre-clause canonical evidence and re-checked against its compiler-printed type under the coherent model.
+**`u-square-direct-rotation.real`.** Canonical witness at the paper's separable ambient scope, which is Section 1's setting: "Let H be a separable Hilbert space, real or complex; finite dimensionality is not assumed."  The arbitrary-Hilbert theorem it wraps is strictly stronger and is retained as the generalization it is; the wrapper adds the ambient hypothesis and nothing else.
 
 Result-wide scope every clause must carry: `S3-standing-scope.crossed-dimension-standing-assumption`
 
@@ -2849,8 +2904,8 @@ Result-wide scope every clause must carry: `S3-standing-scope.crossed-dimension-
 
 The declarations that carry this result's printed statement, with the source atoms each one covers.  Everything under *Other registered declarations* below accompanies the result without establishing it.
 
-- `TauCeti.DavisKahan1970.proposition3_4_full_complex` — primary_source_witness, complex scalars, proof; covers `DK-3.4-prop.u-square-direct-rotation`, `S3-standing-scope.crossed-dimension-standing-assumption`
-- `TauCeti.DavisKahan1970.proposition3_4_full_real` — primary_source_witness, real scalars, proof; covers `DK-3.4-prop.u-square-direct-rotation`, `S3-standing-scope.crossed-dimension-standing-assumption`
+- `TauCeti.DavisKahan1970.proposition3_4_full_complex_separable` — primary_source_witness, complex scalars, proof; covers `DK-3.4-prop.u-square-direct-rotation`, `S3-standing-scope.crossed-dimension-standing-assumption`
+- `TauCeti.DavisKahan1970.proposition3_4_full_real_separable` — primary_source_witness, real scalars, proof; covers `DK-3.4-prop.u-square-direct-rotation`, `S3-standing-scope.crossed-dimension-standing-assumption`
 
 ### Other registered declarations
 
@@ -2858,6 +2913,8 @@ The declarations that carry this result's printed statement, with the source ato
 - `TauCeti.DavisKahan1970.proposition3_4_eq_directRotation` — supporting_theorem
 - `TauCeti.DavisKahan1970.proposition3_4_crossedDefectsEquivalent_complex` — standing_assumption_discharge
 - `TauCeti.DavisKahan1970.proposition3_4_crossedDefectsEquivalent_real` — standing_assumption_discharge
+- `TauCeti.DavisKahan1970.proposition3_4_full_complex` — generalization
+- `TauCeti.DavisKahan1970.proposition3_4_full_real` — generalization
 
 ### Source-facing Lean declarations
 
@@ -2894,6 +2951,18 @@ Compiler-printed type: *inserted when a compiler certificate is supplied.*
 #### `TauCeti.DavisKahan1970.proposition3_4_crossedDefectsEquivalent_real`
 
 Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section3Proposition34Real.lean:119`
+
+Compiler-printed type: *inserted when a compiler certificate is supplied.*
+
+#### `TauCeti.DavisKahan1970.proposition3_4_full_real_separable`
+
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/SeparableSourceScope.lean:280`
+
+Compiler-printed type: *inserted when a compiler certificate is supplied.*
+
+#### `TauCeti.DavisKahan1970.proposition3_4_full_complex_separable`
+
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/SeparableSourceScope.lean:247`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
@@ -3302,12 +3371,10 @@ One row per printed source clause per scalar field.  A clause is `PASS` only whe
 
 | clause | scalar | witness | status |
 | --- | --- | --- | --- |
-| `compact-complete-invariants.rclike` | rclike | `TauCeti.DavisKahan1970.corollary3_1_compact_defectBlock_sourceAngleList_classification` + `TauCeti.DavisKahan1970.compactAngleList` + `TauCeti.DavisKahan1970.compactAngleList_inj_iff` + `TauCeti.DavisKahan1970.compactAngleEigenvalueList_genericCosineBlock_le_one` + `TauCeti.DavisKahan1970.angleSequence_eq_of_angleList_eq` | **PASS** |
+| `compact-complete-invariants.rclike` | rclike | `TauCeti.DavisKahan1970.corollary3_1_compact_defectBlock_sourceAngleList_classification_separable` + `TauCeti.DavisKahan1970.compactAngleList` + `TauCeti.DavisKahan1970.compactAngleList_inj_iff` + `TauCeti.DavisKahan1970.compactAngleEigenvalueList_genericCosineBlock_le_one` + `TauCeti.DavisKahan1970.angleSequence_eq_of_angleList_eq` | **PASS** |
 | `allowed-angle-sequence.rclike` | rclike | `TauCeti.DavisKahan1970.corollary3_1_realization_zeroMultiplicity` + `TauCeti.DavisKahan1970.angleSequence_eq_of_angleList_eq` + `TauCeti.DavisKahan1970.angle_eq_of_sin_sq_eq` | **PASS** |
 
-**`compact-complete-invariants.rclike`.** The complete invariants of a compact-defect pair, ON THE SOURCE'S OWN INVARIANT. Corollary 3.1 says they reduce to the eigenvalues of Theta_0 and Theta_1, counted with multiplicity -- the ANGLES. The primary is stated on `compactAngleList`, which is that list.
-
-REPRESENTATION CORRECTED 2026-09-05. The primary was the `angleList` form, whose invariant is `compactAngleEigenvalueList` -- the eigenvalue list of the SINE-SQUARE block, not of the angle operator -- and this clause asserted it as the printed statement. The two determine each other because t -> sin^2 t is injective on [0, pi/2], which the row already proved for the realization half as `angleSequence_eq_of_angleList_eq`; the classification half had never been restated on the angles. `compactAngleList_inj_iff` is that restatement, and `compactAngleEigenvalueList_genericCosineBlock_le_one` discharges its hypothesis by way of the spectrum bound on Halmos's block. The sin^2 form is retained as the structural theorem beneath.
+**`compact-complete-invariants.rclike`.** Canonical witness at the paper's separable ambient scope, which is Section 1's setting: "Let H be a separable Hilbert space, real or complex; finite dimensionality is not assumed."  The arbitrary-Hilbert theorem it wraps is strictly stronger and is retained as the generalization it is; the wrapper adds the ambient hypothesis and nothing else.
 
 **`allowed-angle-sequence.rclike`.** The printed sentence: the eigenvalues of Theta_0 are an arbitrary sequence pi/2 >= theta_1 >= theta_2 >= ... -> 0 together with a possible eigenvalue 0, and those of Theta_1 are the same EXCEPT PERHAPS FOR THE MULTIPLICITY OF 0.  UNDER-CERTIFICATION CORRECTED 2026-09-04: the primary was `corollary3_1_realization`, which realizes the sequence but forces the two angle-zero multiplicities to coincide, so it does not witness the clause that distinguishes Theta_0 from Theta_1.  `corollary3_1_realization_zeroMultiplicity` prescribes them as two arbitrary Hilbert spaces Z_0 and Z_1, chosen independently of each other and of theta, which is the printed freedom; the weaker realization stays as supporting evidence.  The recorded invariant is the approximation-number list `n |-> sin^2 theta_n` rather than a list of angles; `angleSequence_eq_of_angleList_eq` proves that recording it records the angles, since `theta |-> sin^2 theta` is injective on the printed range [0, pi/2].
 
@@ -3317,7 +3384,7 @@ Result-wide scope every clause must carry: *(none)*
 
 The declarations that carry this result's printed statement, with the source atoms each one covers.  Everything under *Other registered declarations* below accompanies the result without establishing it.
 
-- `TauCeti.DavisKahan1970.corollary3_1_compact_defectBlock_sourceAngleList_classification` — primary_source_witness, rclike scalars, proof; covers `DK-3.1-cor.compact-complete-invariants`, `DK-3.1-cor.theta1-match`
+- `TauCeti.DavisKahan1970.corollary3_1_compact_defectBlock_sourceAngleList_classification_separable` — primary_source_witness, rclike scalars, proof; covers `DK-3.1-cor.compact-complete-invariants`, `DK-3.1-cor.theta1-match`
 - `TauCeti.DavisKahan1970.corollary3_1_realization_zeroMultiplicity` — primary_source_witness, rclike scalars, proof; covers `DK-3.1-cor.allowed-angle-sequence`
 
 ### Other registered declarations
@@ -3334,6 +3401,7 @@ The declarations that carry this result's printed statement, with the source ato
 - `TauCeti.DavisKahan1970.compactAngleList_inj_iff` — source_correspondence
 - `TauCeti.DavisKahan1970.compactAngleEigenvalueList_genericCosineBlock_le_one` — supporting_theorem
 - `TauCeti.DavisKahan1970.norm_genericCosineBlock_le_one` — supporting_theorem
+- `TauCeti.DavisKahan1970.corollary3_1_compact_defectBlock_sourceAngleList_classification` — generalization
 
 ### Source-facing Lean declarations
 
@@ -3421,6 +3489,12 @@ Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section3Corollary
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
+#### `TauCeti.DavisKahan1970.corollary3_1_compact_defectBlock_sourceAngleList_classification_separable`
+
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/SeparableSourceScope.lean:313`
+
+Compiler-printed type: *inserted when a compiler certificate is supplied.*
+
 ### Independent result audit checklist
 
 - [ ] The selected source atoms are exactly the hypotheses, conclusions, and scope of the printed result statement.
@@ -3492,15 +3566,15 @@ One row per printed source clause per scalar field.  A clause is `PASS` only whe
 
 | clause | scalar | witness | status |
 | --- | --- | --- | --- |
-| `commutation.rclike` | rclike | `TauCeti.DavisKahan1970.proposition3_5_commutations` | **PASS** |
-| `eigenvector-rotation-angle.rclike` | rclike | `TauCeti.DavisKahan1970.proposition3_5_eigenvector_angle` | **PASS** |
-| `acute-maximal-characterization.rclike` | rclike | `TauCeti.DavisKahan1970.proposition3_5_angleEigenspace_uniqueMaximal` | **PASS** |
+| `commutation.rclike` | rclike | `TauCeti.DavisKahan1970.proposition3_5_commutations_separable` | **PASS** |
+| `eigenvector-rotation-angle.rclike` | rclike | `TauCeti.DavisKahan1970.proposition3_5_eigenvector_angle_separable` | **PASS** |
+| `acute-maximal-characterization.rclike` | rclike | `TauCeti.DavisKahan1970.proposition3_5_angleEigenspace_uniqueMaximal_separable` | **PASS** |
 
-**`commutation.rclike`.** Canonical witness for commutation at rclike scalar scope, carried over from the pre-clause canonical evidence and re-checked against its compiler-printed type under the coherent model.
+**`commutation.rclike`.** Canonical witness at the paper's separable ambient scope, which is Section 1's setting: "Let H be a separable Hilbert space, real or complex; finite dimensionality is not assumed."  The arbitrary-Hilbert theorem it wraps is strictly stronger and is retained as the generalization it is; the wrapper adds the ambient hypothesis and nothing else.
 
-**`eigenvector-rotation-angle.rclike`.** Canonical witness for eigenvector-rotation-angle at rclike scalar scope, carried over from the pre-clause canonical evidence and re-checked against its compiler-printed type under the coherent model.
+**`eigenvector-rotation-angle.rclike`.** Canonical witness at the paper's separable ambient scope, which is Section 1's setting: "Let H be a separable Hilbert space, real or complex; finite dimensionality is not assumed."  The arbitrary-Hilbert theorem it wraps is strictly stronger and is retained as the generalization it is; the wrapper adds the ambient hypothesis and nothing else.
 
-**`acute-maximal-characterization.rclike`.** Canonical witness for acute-maximal-characterization at rclike scalar scope, carried over from the pre-clause canonical evidence and re-checked against its compiler-printed type under the coherent model.
+**`acute-maximal-characterization.rclike`.** Canonical witness at the paper's separable ambient scope, which is Section 1's setting: "Let H be a separable Hilbert space, real or complex; finite dimensionality is not assumed."  The arbitrary-Hilbert theorem it wraps is strictly stronger and is retained as the generalization it is; the wrapper adds the ambient hypothesis and nothing else.
 
 Result-wide scope every clause must carry: *(none)*
 
@@ -3508,9 +3582,9 @@ Result-wide scope every clause must carry: *(none)*
 
 The declarations that carry this result's printed statement, with the source atoms each one covers.  Everything under *Other registered declarations* below accompanies the result without establishing it.
 
-- `TauCeti.DavisKahan1970.proposition3_5_commutations` — primary_source_witness, rclike scalars, proof; covers `DK-3.5-prop.commutation`
-- `TauCeti.DavisKahan1970.proposition3_5_eigenvector_angle` — primary_source_witness, rclike scalars, proof; covers `DK-3.5-prop.eigenvector-rotation-angle`
-- `TauCeti.DavisKahan1970.proposition3_5_angleEigenspace_uniqueMaximal` — primary_source_witness, rclike scalars, proof; covers `DK-3.5-prop.acute-maximal-characterization`
+- `TauCeti.DavisKahan1970.proposition3_5_commutations_separable` — primary_source_witness, rclike scalars, proof; covers `DK-3.5-prop.commutation`
+- `TauCeti.DavisKahan1970.proposition3_5_eigenvector_angle_separable` — primary_source_witness, rclike scalars, proof; covers `DK-3.5-prop.eigenvector-rotation-angle`
+- `TauCeti.DavisKahan1970.proposition3_5_angleEigenspace_uniqueMaximal_separable` — primary_source_witness, rclike scalars, proof; covers `DK-3.5-prop.acute-maximal-characterization`
 
 ### Other registered declarations
 
@@ -3518,6 +3592,9 @@ The declarations that carry this result's printed statement, with the source ato
 - `TauCeti.DavisKahan1970.proposition3_5_commutations_acute` — supporting_theorem
 - `TauCeti.DavisKahan1970.proposition3_5_eigenvector_angle_acute` — supporting_theorem
 - `TauCeti.DavisKahan.Proposition35.vectorAngle_nonacuteDirectRotation_eq_of_angleOperator_apply` — supporting_theorem
+- `TauCeti.DavisKahan1970.proposition3_5_commutations` — generalization
+- `TauCeti.DavisKahan1970.proposition3_5_eigenvector_angle` — generalization
+- `TauCeti.DavisKahan1970.proposition3_5_angleEigenspace_uniqueMaximal` — generalization
 
 ### Source-facing Lean declarations
 
@@ -3560,6 +3637,24 @@ Compiler-printed type: *inserted when a compiler certificate is supplied.*
 #### `TauCeti.DavisKahan.Proposition35.vectorAngle_nonacuteDirectRotation_eq_of_angleOperator_apply`
 
 Source location candidates: `DavisKahan/Geometry/Angle/Proposition35Nonacute.lean:283`
+
+Compiler-printed type: *inserted when a compiler certificate is supplied.*
+
+#### `TauCeti.DavisKahan1970.proposition3_5_eigenvector_angle_separable`
+
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/SeparableSourceScope.lean:132`
+
+Compiler-printed type: *inserted when a compiler certificate is supplied.*
+
+#### `TauCeti.DavisKahan1970.proposition3_5_commutations_separable`
+
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/SeparableSourceScope.lean:122`
+
+Compiler-printed type: *inserted when a compiler certificate is supplied.*
+
+#### `TauCeti.DavisKahan1970.proposition3_5_angleEigenspace_uniqueMaximal_separable`
+
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/SeparableSourceScope.lean:141`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
@@ -3621,9 +3716,9 @@ One row per printed source clause per scalar field.  A clause is `PASS` only whe
 
 | clause | scalar | witness | status |
 | --- | --- | --- | --- |
-| `swap-invariance.rclike` | rclike | `TauCeti.DavisKahan1970.corollary3_2` | **PASS** |
+| `swap-invariance.rclike` | rclike | `TauCeti.DavisKahan1970.corollary3_2_separable` | **PASS** |
 
-**`swap-invariance.rclike`.** Canonical witness for swap-invariance at rclike scalar scope, carried over from the pre-clause canonical evidence and re-checked against its compiler-printed type under the coherent model.
+**`swap-invariance.rclike`.** Canonical witness at the paper's separable ambient scope, which is Section 1's setting: "Let H be a separable Hilbert space, real or complex; finite dimensionality is not assumed."  The arbitrary-Hilbert theorem it wraps is strictly stronger and is retained as the generalization it is; the wrapper adds the ambient hypothesis and nothing else.
 
 Result-wide scope every clause must carry: *(none)*
 
@@ -3631,7 +3726,7 @@ Result-wide scope every clause must carry: *(none)*
 
 The declarations that carry this result's printed statement, with the source atoms each one covers.  Everything under *Other registered declarations* below accompanies the result without establishing it.
 
-- `TauCeti.DavisKahan1970.corollary3_2` — primary_source_witness, rclike scalars, proof; covers `DK-3.2-cor.swap-invariance`
+- `TauCeti.DavisKahan1970.corollary3_2_separable` — primary_source_witness, rclike scalars, proof; covers `DK-3.2-cor.swap-invariance`
 
 ### Other registered declarations
 
@@ -3640,6 +3735,7 @@ The declarations that carry this result's printed statement, with the source ato
 - `TauCeti.DavisKahan1970.complex_directRotation_reversal` — supporting_theorem
 - `TauCeti.DavisKahan1970.real_directRotation_reversal` — supporting_theorem
 - `TauCeti.DavisKahan1970.corollary3_2_reversal_form` — supporting_theorem
+- `TauCeti.DavisKahan1970.corollary3_2` — generalization
 
 ### Source-facing Lean declarations
 
@@ -3676,6 +3772,12 @@ Compiler-printed type: *inserted when a compiler certificate is supplied.*
 #### `TauCeti.DavisKahan1970.corollary3_2_reversal_form`
 
 Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section3Corollary32.lean:39`
+
+Compiler-printed type: *inserted when a compiler certificate is supplied.*
+
+#### `TauCeti.DavisKahan1970.corollary3_2_separable`
+
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/SeparableSourceScope.lean:154`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
@@ -3769,12 +3871,12 @@ One row per printed source clause per scalar field.  A clause is `PASS` only whe
 
 | clause | scalar | witness | status |
 | --- | --- | --- | --- |
-| `orthonormal-angle-lower-bounds.complex` | complex | `TauCeti.DavisKahan1970.proposition4_1_compact_nonacute_complex` | **PASS** |
-| `orthonormal-angle-lower-bounds.real` | real | `TauCeti.DavisKahan1970.proposition4_1_compact_nonacute_real` | **PASS** |
+| `orthonormal-angle-lower-bounds.complex` | complex | `TauCeti.DavisKahan1970.proposition4_1_directRotation_sourceExact_complex` | **PASS** |
+| `orthonormal-angle-lower-bounds.real` | real | `TauCeti.DavisKahan1970.proposition4_1_directRotation_sourceExact_real` | **PASS** |
 
-**`orthonormal-angle-lower-bounds.complex`.** Canonical witness for orthonormal-angle-lower-bounds, singular-value-minimality at complex scalar scope, carried over from the pre-clause canonical evidence and re-checked against its compiler-printed type under the coherent model.
+**`orthonormal-angle-lower-bounds.complex`.** Canonical witness on the source's own object.  Davis and Kahan enter Section 4 with THE direct rotation established by Section 3 and compare it against an arbitrary competitor; the statement therefore takes the standing convention (3.5) and produces a `D` satisfying the paper's `IsDirectRotation` predicate, instead of exposing a chosen isometry between the two crossed defect spaces.  The `J`-parameterised theorem is retained underneath, where the choice belongs.
 
-**`orthonormal-angle-lower-bounds.real`.** Canonical witness for orthonormal-angle-lower-bounds, singular-value-minimality at real scalar scope, carried over from the pre-clause canonical evidence and re-checked against its compiler-printed type under the coherent model.
+**`orthonormal-angle-lower-bounds.real`.** Canonical witness on the source's own object.  Davis and Kahan enter Section 4 with THE direct rotation established by Section 3 and compare it against an arbitrary competitor; the statement therefore takes the standing convention (3.5) and produces a `D` satisfying the paper's `IsDirectRotation` predicate, instead of exposing a chosen isometry between the two crossed defect spaces.  The `J`-parameterised theorem is retained underneath, where the choice belongs.
 
 Result-wide scope every clause must carry: `DK-4.1-prop.section4-compact-classification-setup`
 
@@ -3782,13 +3884,15 @@ Result-wide scope every clause must carry: `DK-4.1-prop.section4-compact-classif
 
 The declarations that carry this result's printed statement, with the source atoms each one covers.  Everything under *Other registered declarations* below accompanies the result without establishing it.
 
-- `TauCeti.DavisKahan1970.proposition4_1_compact_nonacute_complex` — primary_source_witness, complex scalars, proof; covers `DK-4.1-prop.orthonormal-angle-lower-bounds`, `DK-4.1-prop.section4-compact-classification-setup`, `DK-4.1-prop.singular-value-minimality`
-- `TauCeti.DavisKahan1970.proposition4_1_compact_nonacute_real` — primary_source_witness, real scalars, proof; covers `DK-4.1-prop.orthonormal-angle-lower-bounds`, `DK-4.1-prop.section4-compact-classification-setup`, `DK-4.1-prop.singular-value-minimality`
+- `TauCeti.DavisKahan1970.proposition4_1_directRotation_sourceExact_complex` — primary_source_witness, complex scalars, proof; covers `DK-4.1-prop.orthonormal-angle-lower-bounds`, `DK-4.1-prop.section4-compact-classification-setup`, `DK-4.1-prop.singular-value-minimality`
+- `TauCeti.DavisKahan1970.proposition4_1_directRotation_sourceExact_real` — primary_source_witness, real scalars, proof; covers `DK-4.1-prop.orthonormal-angle-lower-bounds`, `DK-4.1-prop.section4-compact-classification-setup`, `DK-4.1-prop.singular-value-minimality`
 
 ### Other registered declarations
 
 - `TauCeti.DavisKahan1970.proposition4_1_compact_nonacute_directRotationValues_complex` — supporting_theorem
 - `TauCeti.DavisKahan1970.proposition4_1_compact_nonacute_directRotationValues_real` — supporting_theorem
+- `TauCeti.DavisKahan1970.proposition4_1_compact_nonacute_complex` — implementation_structure
+- `TauCeti.DavisKahan1970.proposition4_1_compact_nonacute_real` — implementation_structure
 
 ### Source-facing Lean declarations
 
@@ -3813,6 +3917,18 @@ Compiler-printed type: *inserted when a compiler certificate is supplied.*
 #### `TauCeti.DavisKahan1970.proposition4_1_compact_nonacute_directRotationValues_real`
 
 Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section4Real.lean:1206`
+
+Compiler-printed type: *inserted when a compiler certificate is supplied.*
+
+#### `TauCeti.DavisKahan1970.proposition4_1_directRotation_sourceExact_complex`
+
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section4DirectRotationSource.lean:58`
+
+Compiler-printed type: *inserted when a compiler certificate is supplied.*
+
+#### `TauCeti.DavisKahan1970.proposition4_1_directRotation_sourceExact_real`
+
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section4DirectRotationSource.lean:138`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
@@ -3987,16 +4103,12 @@ One row per printed source clause per scalar field.  A clause is `PASS` only whe
 
 | clause | scalar | witness | status |
 | --- | --- | --- | --- |
-| `ui-minimality-on-p.complex` | complex | `TauCeti.DavisKahan1970.corollary4_1_compact_nonacute_sourceExact_complex` + `TauCeti.DavisKahan.ExactSinTheta.NormalizedUnitaryInvariantNorm` | **PASS** |
-| `ui-minimality-on-p.real` | real | `TauCeti.DavisKahan1970.corollary4_1_compact_nonacute_sourceExact_real` + `TauCeti.DavisKahan.ExactSinTheta.NormalizedUnitaryInvariantNorm` | **PASS** |
+| `ui-minimality-on-p.complex` | complex | `TauCeti.DavisKahan1970.corollary4_1_directRotation_sourceExact_complex` + `TauCeti.DavisKahan.ExactSinTheta.NormalizedUnitaryInvariantNorm` | **PASS** |
+| `ui-minimality-on-p.real` | real | `TauCeti.DavisKahan1970.corollary4_1_directRotation_sourceExact_real` + `TauCeti.DavisKahan.ExactSinTheta.NormalizedUnitaryInvariantNorm` | **PASS** |
 
-**`ui-minimality-on-p.complex`.** For every source unitarily invariant norm, N((1 - V)P) is minimized among unitaries carrying P H onto Q H by the direct rotation.  This is the printed Corollary 4.1 quantifier: SymmetricNormingFunction, not an implementation ideal family.
+**`ui-minimality-on-p.complex`.** Canonical witness on the source's own object: the standing convention (3.5) in, a `D` with `IsDirectRotation` out, and the printed unitarily-invariant minimality for it.  The `J`-parameterised theorem is retained underneath.
 
-SOURCE-EXACT FAÇADE REGISTERED 2026-09-05 (GOAL.md sections I, III.3 and IV). The canonical witness is the façade at the PRINTED scope: separable Hilbert space, and `NormalizedUnitaryInvariantNorm` -- the Lean type for the norm class Section 1 fixes. The arbitrary-Hilbert `SymmetricNormingFunction` theorem that proves it is retained as supporting evidence with role `generalization`, and is stronger on both axes.
-
-**`ui-minimality-on-p.real`.** For every source unitarily invariant norm, N((1 - V)P) is minimized among unitaries carrying P H onto Q H by the direct rotation.  This is the printed Corollary 4.1 quantifier: SymmetricNormingFunction, not an implementation ideal family.
-
-SOURCE-EXACT FAÇADE REGISTERED 2026-09-05 (GOAL.md sections I, III.3 and IV). The canonical witness is the façade at the PRINTED scope: separable Hilbert space, and `NormalizedUnitaryInvariantNorm` -- the Lean type for the norm class Section 1 fixes. The arbitrary-Hilbert `SymmetricNormingFunction` theorem that proves it is retained as supporting evidence with role `generalization`, and is stronger on both axes.
+**`ui-minimality-on-p.real`.** Canonical witness on the source's own object: the standing convention (3.5) in, a `D` with `IsDirectRotation` out, and the printed unitarily-invariant minimality for it.  The `J`-parameterised theorem is retained underneath.
 
 Result-wide scope every clause must carry: `DK-4.1-prop.section4-compact-classification-setup`
 
@@ -4004,8 +4116,8 @@ Result-wide scope every clause must carry: `DK-4.1-prop.section4-compact-classif
 
 The declarations that carry this result's printed statement, with the source atoms each one covers.  Everything under *Other registered declarations* below accompanies the result without establishing it.
 
-- `TauCeti.DavisKahan1970.corollary4_1_compact_nonacute_sourceExact_complex` — primary_source_witness, complex scalars, proof; covers `DK-4.1-cor.ui-minimality-on-p`, `DK-4.1-prop.section4-compact-classification-setup`
-- `TauCeti.DavisKahan1970.corollary4_1_compact_nonacute_sourceExact_real` — primary_source_witness, real scalars, proof; covers `DK-4.1-cor.ui-minimality-on-p`, `DK-4.1-prop.section4-compact-classification-setup`
+- `TauCeti.DavisKahan1970.corollary4_1_directRotation_sourceExact_complex` — primary_source_witness, complex scalars, proof; covers `DK-4.1-cor.ui-minimality-on-p`, `DK-4.1-prop.section4-compact-classification-setup`
+- `TauCeti.DavisKahan1970.corollary4_1_directRotation_sourceExact_real` — primary_source_witness, real scalars, proof; covers `DK-4.1-cor.ui-minimality-on-p`, `DK-4.1-prop.section4-compact-classification-setup`
 
 ### Other registered declarations
 
@@ -4016,6 +4128,8 @@ The declarations that carry this result's printed statement, with the source ato
 - `TauCeti.DavisKahan1970.corollary4_1_compact_nonacute_symmetricNorming_complex` — generalization
 - `TauCeti.DavisKahan1970.corollary4_1_compact_nonacute_symmetricNorming_real` — generalization
 - `TauCeti.DavisKahan.ExactSinTheta.NormalizedUnitaryInvariantNorm` — source_correspondence
+- `TauCeti.DavisKahan1970.corollary4_1_compact_nonacute_sourceExact_complex` — implementation_structure
+- `TauCeti.DavisKahan1970.corollary4_1_compact_nonacute_sourceExact_real` — implementation_structure
 
 ### Source-facing Lean declarations
 
@@ -4070,6 +4184,18 @@ Compiler-printed type: *inserted when a compiler certificate is supplied.*
 #### `TauCeti.DavisKahan.ExactSinTheta.NormalizedUnitaryInvariantNorm`
 
 Source location candidates: `DavisKahan/OperatorIdeal/NormalizedUnitaryInvariantNorm.lean:87`
+
+Compiler-printed type: *inserted when a compiler certificate is supplied.*
+
+#### `TauCeti.DavisKahan1970.corollary4_1_directRotation_sourceExact_complex`
+
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section4DirectRotationSource.lean:89`
+
+Compiler-printed type: *inserted when a compiler certificate is supplied.*
+
+#### `TauCeti.DavisKahan1970.corollary4_1_directRotation_sourceExact_real`
+
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section4DirectRotationSource.lean:167`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
@@ -4245,12 +4371,12 @@ One row per printed source clause per scalar field.  A clause is `PASS` only whe
 
 | clause | scalar | witness | status |
 | --- | --- | --- | --- |
-| `basis-sine-square-lower-bound.complex` | complex | `TauCeti.DavisKahan1970.proposition4_2_compact_nonacute` | **PASS** |
-| `basis-sine-square-lower-bound.real` | real | `TauCeti.DavisKahan1970.proposition4_2_compact_nonacute_real` | **PASS** |
+| `basis-sine-square-lower-bound.complex` | complex | `TauCeti.DavisKahan1970.proposition4_2_compact_nonacute_separable` | **PASS** |
+| `basis-sine-square-lower-bound.real` | real | `TauCeti.DavisKahan1970.proposition4_2_compact_nonacute_real_separable` | **PASS** |
 
-**`basis-sine-square-lower-bound.complex`.** Source-shaped witness carrying the Section 4 compact/classification setup the printed proposition inherits. The previous primary, `proposition4_2_infiniteDimensional`, proves the same inequality without that setup: stronger and correct, retained as supporting evidence, but not an exact witness for a statement printed under the section's hypotheses.
+**`basis-sine-square-lower-bound.complex`.** Canonical witness at the paper's separable ambient scope, which is Section 1's setting: "Let H be a separable Hilbert space, real or complex; finite dimensionality is not assumed."  The arbitrary-Hilbert theorem it wraps is strictly stronger and is retained as the generalization it is; the wrapper adds the ambient hypothesis and nothing else.
 
-**`basis-sine-square-lower-bound.real`.** Source-shaped witness carrying the Section 4 compact/classification setup the printed proposition inherits. The previous primary, `tsum_displacementAngleSineSqR_ge_tsum_sq_sin_principalAngleSequence`, proves the same inequality without that setup: stronger and correct, retained as supporting evidence, but not an exact witness for a statement printed under the section's hypotheses.
+**`basis-sine-square-lower-bound.real`.** Canonical witness at the paper's separable ambient scope, which is Section 1's setting: "Let H be a separable Hilbert space, real or complex; finite dimensionality is not assumed."  The arbitrary-Hilbert theorem it wraps is strictly stronger and is retained as the generalization it is; the wrapper adds the ambient hypothesis and nothing else.
 
 Result-wide scope every clause must carry: `DK-4.1-prop.section4-compact-classification-setup`
 
@@ -4258,13 +4384,15 @@ Result-wide scope every clause must carry: `DK-4.1-prop.section4-compact-classif
 
 The declarations that carry this result's printed statement, with the source atoms each one covers.  Everything under *Other registered declarations* below accompanies the result without establishing it.
 
-- `TauCeti.DavisKahan1970.proposition4_2_compact_nonacute` — primary_source_witness, complex scalars, proof; covers `DK-4.1-prop.section4-compact-classification-setup`, `DK-4.2-prop.basis-sine-square-lower-bound`
-- `TauCeti.DavisKahan1970.proposition4_2_compact_nonacute_real` — primary_source_witness, real scalars, proof; covers `DK-4.1-prop.section4-compact-classification-setup`, `DK-4.2-prop.basis-sine-square-lower-bound`
+- `TauCeti.DavisKahan1970.proposition4_2_compact_nonacute_separable` — primary_source_witness, complex scalars, proof; covers `DK-4.1-prop.section4-compact-classification-setup`, `DK-4.2-prop.basis-sine-square-lower-bound`
+- `TauCeti.DavisKahan1970.proposition4_2_compact_nonacute_real_separable` — primary_source_witness, real scalars, proof; covers `DK-4.1-prop.section4-compact-classification-setup`, `DK-4.2-prop.basis-sine-square-lower-bound`
 
 ### Other registered declarations
 
 - `TauCeti.DavisKahan1970.proposition4_2_infiniteDimensional` — generalization
 - `TauCeti.DavisKahan1970.tsum_displacementAngleSineSqR_ge_tsum_sq_sin_principalAngleSequence` — generalization
+- `TauCeti.DavisKahan1970.proposition4_2_compact_nonacute` — generalization
+- `TauCeti.DavisKahan1970.proposition4_2_compact_nonacute_real` — generalization
 
 ### Source-facing Lean declarations
 
@@ -4289,6 +4417,18 @@ Compiler-printed type: *inserted when a compiler certificate is supplied.*
 #### `TauCeti.DavisKahan1970.tsum_displacementAngleSineSqR_ge_tsum_sq_sin_principalAngleSequence`
 
 Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section4Real.lean:792`
+
+Compiler-printed type: *inserted when a compiler certificate is supplied.*
+
+#### `TauCeti.DavisKahan1970.proposition4_2_compact_nonacute_separable`
+
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/SeparableSourceScope.lean:343`
+
+Compiler-printed type: *inserted when a compiler certificate is supplied.*
+
+#### `TauCeti.DavisKahan1970.proposition4_2_compact_nonacute_real_separable`
+
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/SeparableSourceScope.lean:360`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
@@ -4528,16 +4668,12 @@ One row per printed source clause per scalar field.  A clause is `PASS` only whe
 
 | clause | scalar | witness | status |
 | --- | --- | --- | --- |
-| `squared-displacement-global-minimum.complex` | complex | `TauCeti.DavisKahan1970.proposition4_3_compact_nonacute_sourceExact_complex` + `TauCeti.DavisKahan.ExactSinTheta.NormalizedUnitaryInvariantNorm` | **PASS** |
-| `squared-displacement-global-minimum.real` | real | `TauCeti.DavisKahan1970.proposition4_3_compact_nonacute_sourceExact_real` + `TauCeti.DavisKahan.ExactSinTheta.NormalizedUnitaryInvariantNorm` | **PASS** |
+| `squared-displacement-global-minimum.complex` | complex | `TauCeti.DavisKahan1970.proposition4_3_directRotation_sourceExact_complex` + `TauCeti.DavisKahan.ExactSinTheta.NormalizedUnitaryInvariantNorm` | **PASS** |
+| `squared-displacement-global-minimum.real` | real | `TauCeti.DavisKahan1970.proposition4_3_directRotation_sourceExact_real` + `TauCeti.DavisKahan.ExactSinTheta.NormalizedUnitaryInvariantNorm` | **PASS** |
 
-**`squared-displacement-global-minimum.complex`.** For every source unitarily invariant norm, the squared displacement N((1 - V*)(1 - V)) is minimized by the direct rotation.  The printed Proposition 4.3 conclusion at the printed norm quantifier.
+**`squared-displacement-global-minimum.complex`.** Canonical witness on the source's own object: the standing convention (3.5) in, a `D` with `IsDirectRotation` out, and the printed squared-displacement minimality for it.  The `J`-parameterised theorem is retained underneath.
 
-SOURCE-EXACT FAÇADE REGISTERED 2026-09-05 (GOAL.md sections I, III.3 and IV). The canonical witness is the façade at the PRINTED scope: separable Hilbert space, and `NormalizedUnitaryInvariantNorm` -- the Lean type for the norm class Section 1 fixes. The arbitrary-Hilbert `SymmetricNormingFunction` theorem that proves it is retained as supporting evidence with role `generalization`, and is stronger on both axes.
-
-**`squared-displacement-global-minimum.real`.** For every source unitarily invariant norm, the squared displacement N((1 - V*)(1 - V)) is minimized by the direct rotation.  The printed Proposition 4.3 conclusion at the printed norm quantifier.
-
-SOURCE-EXACT FAÇADE REGISTERED 2026-09-05 (GOAL.md sections I, III.3 and IV). The canonical witness is the façade at the PRINTED scope: separable Hilbert space, and `NormalizedUnitaryInvariantNorm` -- the Lean type for the norm class Section 1 fixes. The arbitrary-Hilbert `SymmetricNormingFunction` theorem that proves it is retained as supporting evidence with role `generalization`, and is stronger on both axes.
+**`squared-displacement-global-minimum.real`.** Canonical witness on the source's own object: the standing convention (3.5) in, a `D` with `IsDirectRotation` out, and the printed squared-displacement minimality for it.  The `J`-parameterised theorem is retained underneath.
 
 Result-wide scope every clause must carry: `DK-4.1-prop.section4-compact-classification-setup`
 
@@ -4545,8 +4681,8 @@ Result-wide scope every clause must carry: `DK-4.1-prop.section4-compact-classif
 
 The declarations that carry this result's printed statement, with the source atoms each one covers.  Everything under *Other registered declarations* below accompanies the result without establishing it.
 
-- `TauCeti.DavisKahan1970.proposition4_3_compact_nonacute_sourceExact_complex` — primary_source_witness, complex scalars, proof; covers `DK-4.1-prop.section4-compact-classification-setup`, `DK-4.3-prop.squared-displacement-global-minimum`
-- `TauCeti.DavisKahan1970.proposition4_3_compact_nonacute_sourceExact_real` — primary_source_witness, real scalars, proof; covers `DK-4.1-prop.section4-compact-classification-setup`, `DK-4.3-prop.squared-displacement-global-minimum`
+- `TauCeti.DavisKahan1970.proposition4_3_directRotation_sourceExact_complex` — primary_source_witness, complex scalars, proof; covers `DK-4.1-prop.section4-compact-classification-setup`, `DK-4.3-prop.squared-displacement-global-minimum`
+- `TauCeti.DavisKahan1970.proposition4_3_directRotation_sourceExact_real` — primary_source_witness, real scalars, proof; covers `DK-4.1-prop.section4-compact-classification-setup`, `DK-4.3-prop.squared-displacement-global-minimum`
 
 ### Other registered declarations
 
@@ -4558,6 +4694,8 @@ The declarations that carry this result's printed statement, with the source ato
 - `TauCeti.DavisKahan.ExactSinTheta.NormalizedUnitaryInvariantNorm` — source_correspondence
 - `TauCeti.DavisKahan1970.proposition4_3_compact_nonacute_sourceExact_ofCrossedDefects_complex` — presentation_wrapper
 - `TauCeti.DavisKahan1970.proposition4_3_compact_nonacute_sourceExact_ofCrossedDefects_real` — presentation_wrapper
+- `TauCeti.DavisKahan1970.proposition4_3_compact_nonacute_sourceExact_complex` — implementation_structure
+- `TauCeti.DavisKahan1970.proposition4_3_compact_nonacute_sourceExact_real` — implementation_structure
 
 ### Source-facing Lean declarations
 
@@ -4618,6 +4756,18 @@ Compiler-printed type: *inserted when a compiler certificate is supplied.*
 #### `TauCeti.DavisKahan1970.proposition4_3_compact_nonacute_sourceExact_ofCrossedDefects_real`
 
 Source location candidates: `DavisKahan/Sources/DavisKahan1970/SymmetricNormingFanDominance.lean:405`
+
+Compiler-printed type: *inserted when a compiler certificate is supplied.*
+
+#### `TauCeti.DavisKahan1970.proposition4_3_directRotation_sourceExact_complex`
+
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section4DirectRotationSource.lean:109`
+
+Compiler-printed type: *inserted when a compiler certificate is supplied.*
+
+#### `TauCeti.DavisKahan1970.proposition4_3_directRotation_sourceExact_real`
+
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section4DirectRotationSource.lean:188`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
@@ -6530,14 +6680,14 @@ One row per printed source clause per scalar field.  A clause is `PASS` only whe
 | `part-i-compression.complex.2` | complex | `TauCeti.DavisKahan1970.Section8.theorem8_1_lowerCompressionRepulsion_sourceExact_unbounded_complex` | **PASS** |
 | `part-i-compression.real` | real | `TauCeti.DavisKahan1970.Section8.theorem8_1_upperCompressionRepulsion_sourceExact_unbounded_real` | **PASS** |
 | `part-i-compression.real.2` | real | `TauCeti.DavisKahan1970.Section8.theorem8_1_lowerCompressionRepulsion_sourceExact_unbounded_real` | **PASS** |
-| `part-ii-eigenvalue.complex` | complex | `TauCeti.DavisKahan1970.Section8.theorem8_1_upperApproximationRepulsion` | **PASS** |
-| `part-ii-eigenvalue.complex.2` | complex | `TauCeti.DavisKahan1970.Section8.theorem8_1_lowerApproximationRepulsion` | **PASS** |
-| `part-ii-eigenvalue.real` | real | `TauCeti.DavisKahan1970.Section8.theorem8_1_upperApproximationRepulsion_real` | **PASS** |
-| `part-ii-eigenvalue.real.2` | real | `TauCeti.DavisKahan1970.Section8.theorem8_1_lowerApproximationRepulsion_real` | **PASS** |
-| `part-iii-gauge.complex` | complex | `TauCeti.DavisKahan1970.Section8.theorem8_1_upperSymmetricGaugeRepulsion_angle_rev` | **PASS** |
-| `part-iii-gauge.complex.2` | complex | `TauCeti.DavisKahan1970.Section8.theorem8_1_lowerSymmetricGaugeRepulsion_angle_rev` | **PASS** |
-| `part-iii-gauge.real` | real | `TauCeti.DavisKahan1970.Section8.theorem8_1_upperSymmetricGaugeRepulsion_angle_rev_real` | **PASS** |
-| `part-iii-gauge.real.2` | real | `TauCeti.DavisKahan1970.Section8.theorem8_1_lowerSymmetricGaugeRepulsion_angle_rev_real` | **PASS** |
+| `part-ii-eigenvalue.complex` | complex | `TauCeti.DavisKahan1970.Section8.theorem8_1_upperEigenvalueRepulsion_sourceExact` | **PASS** |
+| `part-ii-eigenvalue.complex.2` | complex | `TauCeti.DavisKahan1970.Section8.theorem8_1_lowerEigenvalueRepulsion_sourceExact` | **PASS** |
+| `part-ii-eigenvalue.real` | real | `TauCeti.DavisKahan1970.Section8.theorem8_1_upperEigenvalueRepulsion_sourceExact_real` | **PASS** |
+| `part-ii-eigenvalue.real.2` | real | `TauCeti.DavisKahan1970.Section8.theorem8_1_lowerEigenvalueRepulsion_sourceExact_real` | **PASS** |
+| `part-iii-gauge.complex` | complex | `TauCeti.DavisKahan1970.Section8.theorem8_1_upperSymmetricGaugeEigenvalue_sourceExact` | **PASS** |
+| `part-iii-gauge.complex.2` | complex | `TauCeti.DavisKahan1970.Section8.theorem8_1_lowerSymmetricGaugeEigenvalue_sourceExact` | **PASS** |
+| `part-iii-gauge.real` | real | `TauCeti.DavisKahan1970.Section8.theorem8_1_upperSymmetricGaugeEigenvalue_sourceExact_real` | **PASS** |
+| `part-iii-gauge.real.2` | real | `TauCeti.DavisKahan1970.Section8.theorem8_1_lowerSymmetricGaugeEigenvalue_sourceExact_real` | **PASS** |
 
 **`existence-correct-q.complex`.** Canonical witness for existence-correct-q at unbounded ambient scope, stated as the EXISTENTIAL the source asserts: there is a reducing projector `Q` of `A + H` with `Lambda_0 <= alpha`, `Lambda_1 >= alpha + delta` and `Theta(P, Q) <= pi/4`.  `Lambda_0` and `Lambda_1` are the two reducing restrictions of `A + H` and the placements are operator inequalities on them.  The spectral projector of `A + H` on the side of `alpha` is the internal witness; it is not part of the public type.
 
@@ -6555,21 +6705,21 @@ One row per printed source clause per scalar field.  A clause is `PASS` only whe
 
 **`part-i-compression.real.2`.** Canonical witness for part (i) at unbounded ambient scope, in the source's own `A/H/P/Q` context: `A_1 - alpha <= C_1 (Lambda_1 - alpha) C_1` as a form inequality read on `P^perp`, with `C_1` the cosine block `P_{Q^perp}`.  The left side is the form of `A`, not of `A + H`, because `H` is fully off-diagonal and so has no form on `P^perp`.  The general statement about an arbitrary partial map and reducing subspace sits underneath it.
 
-**`part-ii-eigenvalue.complex`.** Canonical witness for part-ii-eigenvalue at complex scalar scope, carried over from the pre-clause canonical evidence and re-checked against its compiler-printed type under the coherent model.
+**`part-ii-eigenvalue.complex`.** Canonical witness on the PRINTED sequences: `alpha_k` and `lambda_k` are the ordered eigenvalues of the blocks, named through `LinearMap.IsSymmetric.eigenvalues`, and the clause is the printed inequality between them in finite dimensions.  The approximation-number theorem it replaces is dimension-free and is retained as the generalization the source announces as the "natural infinite-dimensional extensions"; `approximationNumber_eq_eigenvalues_of_isPositive` is the compiled correspondence between the two readings.
 
-**`part-ii-eigenvalue.complex.2`.** Canonical witness for part-ii-eigenvalue at complex scalar scope, carried over from the pre-clause canonical evidence and re-checked against its compiler-printed type under the coherent model.
+**`part-ii-eigenvalue.complex.2`.** Canonical witness on the PRINTED sequences: `alpha_k` and `lambda_k` are the ordered eigenvalues of the blocks, named through `LinearMap.IsSymmetric.eigenvalues`, and the clause is the printed inequality between them in finite dimensions.  The approximation-number theorem it replaces is dimension-free and is retained as the generalization the source announces as the "natural infinite-dimensional extensions"; `approximationNumber_eq_eigenvalues_of_isPositive` is the compiled correspondence between the two readings.
 
-**`part-ii-eigenvalue.real`.** Canonical witness for part-ii-eigenvalue at real scalar scope, carried over from the pre-clause canonical evidence and re-checked against its compiler-printed type under the coherent model.
+**`part-ii-eigenvalue.real`.** Canonical witness on the PRINTED sequences: `alpha_k` and `lambda_k` are the ordered eigenvalues of the blocks, named through `LinearMap.IsSymmetric.eigenvalues`, and the clause is the printed inequality between them in finite dimensions.  The approximation-number theorem it replaces is dimension-free and is retained as the generalization the source announces as the "natural infinite-dimensional extensions"; `approximationNumber_eq_eigenvalues_of_isPositive` is the compiled correspondence between the two readings.
 
-**`part-ii-eigenvalue.real.2`.** Canonical witness for part-ii-eigenvalue at real scalar scope, carried over from the pre-clause canonical evidence and re-checked against its compiler-printed type under the coherent model.
+**`part-ii-eigenvalue.real.2`.** Canonical witness on the PRINTED sequences: `alpha_k` and `lambda_k` are the ordered eigenvalues of the blocks, named through `LinearMap.IsSymmetric.eigenvalues`, and the clause is the printed inequality between them in finite dimensions.  The approximation-number theorem it replaces is dimension-free and is retained as the generalization the source announces as the "natural infinite-dimensional extensions"; `approximationNumber_eq_eigenvalues_of_isPositive` is the compiled correspondence between the two readings.
 
-**`part-iii-gauge.complex`.** Canonical witness for part-iii-gauge at complex scalar scope, carried over from the pre-clause canonical evidence and re-checked against its compiler-printed type under the coherent model.
+**`part-iii-gauge.complex`.** Canonical witness on the PRINTED sequences: `alpha_k` and `lambda_k` are the ordered eigenvalues of the blocks, named through `LinearMap.IsSymmetric.eigenvalues`, and the clause is the printed inequality between them in finite dimensions.  The approximation-number theorem it replaces is dimension-free and is retained as the generalization the source announces as the "natural infinite-dimensional extensions"; `approximationNumber_eq_eigenvalues_of_isPositive` is the compiled correspondence between the two readings.
 
-**`part-iii-gauge.complex.2`.** Canonical witness for part-iii-gauge at complex scalar scope, carried over from the pre-clause canonical evidence and re-checked against its compiler-printed type under the coherent model.
+**`part-iii-gauge.complex.2`.** Canonical witness on the PRINTED sequences: `alpha_k` and `lambda_k` are the ordered eigenvalues of the blocks, named through `LinearMap.IsSymmetric.eigenvalues`, and the clause is the printed inequality between them in finite dimensions.  The approximation-number theorem it replaces is dimension-free and is retained as the generalization the source announces as the "natural infinite-dimensional extensions"; `approximationNumber_eq_eigenvalues_of_isPositive` is the compiled correspondence between the two readings.
 
-**`part-iii-gauge.real`.** Canonical witness for part-iii-gauge at real scalar scope, carried over from the pre-clause canonical evidence and re-checked against its compiler-printed type under the coherent model.
+**`part-iii-gauge.real`.** Canonical witness on the PRINTED sequences: `alpha_k` and `lambda_k` are the ordered eigenvalues of the blocks, named through `LinearMap.IsSymmetric.eigenvalues`, and the clause is the printed inequality between them in finite dimensions.  The approximation-number theorem it replaces is dimension-free and is retained as the generalization the source announces as the "natural infinite-dimensional extensions"; `approximationNumber_eq_eigenvalues_of_isPositive` is the compiled correspondence between the two readings.
 
-**`part-iii-gauge.real.2`.** Canonical witness for part-iii-gauge at real scalar scope, carried over from the pre-clause canonical evidence and re-checked against its compiler-printed type under the coherent model.
+**`part-iii-gauge.real.2`.** Canonical witness on the PRINTED sequences: `alpha_k` and `lambda_k` are the ordered eigenvalues of the blocks, named through `LinearMap.IsSymmetric.eigenvalues`, and the clause is the printed inequality between them in finite dimensions.  The approximation-number theorem it replaces is dimension-free and is retained as the generalization the source announces as the "natural infinite-dimensional extensions"; `approximationNumber_eq_eigenvalues_of_isPositive` is the compiled correspondence between the two readings.
 
 Result-wide scope every clause must carry: *(none)*
 
@@ -6585,14 +6735,14 @@ The declarations that carry this result's printed statement, with the source ato
 - `TauCeti.DavisKahan1970.Section8.theorem8_1_lowerCompressionRepulsion_sourceExact_unbounded_complex` — primary_source_witness, complex scalars, proof; covers `DK-8.1-thm.part-i-compression`
 - `TauCeti.DavisKahan1970.Section8.theorem8_1_upperCompressionRepulsion_sourceExact_unbounded_real` — primary_source_witness, real scalars, proof; covers `DK-8.1-thm.part-i-compression`
 - `TauCeti.DavisKahan1970.Section8.theorem8_1_lowerCompressionRepulsion_sourceExact_unbounded_real` — primary_source_witness, real scalars, proof; covers `DK-8.1-thm.part-i-compression`
-- `TauCeti.DavisKahan1970.Section8.theorem8_1_upperApproximationRepulsion` — primary_source_witness, complex scalars, proof; covers `DK-8.1-thm.part-ii-eigenvalue`
-- `TauCeti.DavisKahan1970.Section8.theorem8_1_lowerApproximationRepulsion` — primary_source_witness, complex scalars, proof; covers `DK-8.1-thm.part-ii-eigenvalue`
-- `TauCeti.DavisKahan1970.Section8.theorem8_1_upperApproximationRepulsion_real` — primary_source_witness, real scalars, proof; covers `DK-8.1-thm.part-ii-eigenvalue`
-- `TauCeti.DavisKahan1970.Section8.theorem8_1_lowerApproximationRepulsion_real` — primary_source_witness, real scalars, proof; covers `DK-8.1-thm.part-ii-eigenvalue`
-- `TauCeti.DavisKahan1970.Section8.theorem8_1_upperSymmetricGaugeRepulsion_angle_rev` — primary_source_witness, complex scalars, proof; covers `DK-8.1-thm.part-iii-gauge`
-- `TauCeti.DavisKahan1970.Section8.theorem8_1_lowerSymmetricGaugeRepulsion_angle_rev` — primary_source_witness, complex scalars, proof; covers `DK-8.1-thm.part-iii-gauge`
-- `TauCeti.DavisKahan1970.Section8.theorem8_1_upperSymmetricGaugeRepulsion_angle_rev_real` — primary_source_witness, real scalars, proof; covers `DK-8.1-thm.part-iii-gauge`
-- `TauCeti.DavisKahan1970.Section8.theorem8_1_lowerSymmetricGaugeRepulsion_angle_rev_real` — primary_source_witness, real scalars, proof; covers `DK-8.1-thm.part-iii-gauge`
+- `TauCeti.DavisKahan1970.Section8.theorem8_1_upperEigenvalueRepulsion_sourceExact` — primary_source_witness, complex scalars, proof; covers `DK-8.1-thm.part-ii-eigenvalue`
+- `TauCeti.DavisKahan1970.Section8.theorem8_1_lowerEigenvalueRepulsion_sourceExact` — primary_source_witness, complex scalars, proof; covers `DK-8.1-thm.part-ii-eigenvalue`
+- `TauCeti.DavisKahan1970.Section8.theorem8_1_upperEigenvalueRepulsion_sourceExact_real` — primary_source_witness, real scalars, proof; covers `DK-8.1-thm.part-ii-eigenvalue`
+- `TauCeti.DavisKahan1970.Section8.theorem8_1_lowerEigenvalueRepulsion_sourceExact_real` — primary_source_witness, real scalars, proof; covers `DK-8.1-thm.part-ii-eigenvalue`
+- `TauCeti.DavisKahan1970.Section8.theorem8_1_upperSymmetricGaugeEigenvalue_sourceExact` — primary_source_witness, complex scalars, proof; covers `DK-8.1-thm.part-iii-gauge`
+- `TauCeti.DavisKahan1970.Section8.theorem8_1_lowerSymmetricGaugeEigenvalue_sourceExact` — primary_source_witness, complex scalars, proof; covers `DK-8.1-thm.part-iii-gauge`
+- `TauCeti.DavisKahan1970.Section8.theorem8_1_upperSymmetricGaugeEigenvalue_sourceExact_real` — primary_source_witness, real scalars, proof; covers `DK-8.1-thm.part-iii-gauge`
+- `TauCeti.DavisKahan1970.Section8.theorem8_1_lowerSymmetricGaugeEigenvalue_sourceExact_real` — primary_source_witness, real scalars, proof; covers `DK-8.1-thm.part-iii-gauge`
 
 ### Other registered declarations
 
@@ -6660,6 +6810,18 @@ The declarations that carry this result's printed statement, with the source ato
 - `TauCeti.DavisKahan1970.Section8.semiboundedBelow_reducingRestriction_iff` — transport_lemma
 - `TauCeti.DavisKahan1970.Section8.semiboundedAbove_reducingRestriction_real_iff` — transport_lemma
 - `TauCeti.DavisKahan1970.Section8.semiboundedBelow_reducingRestriction_real_iff` — transport_lemma
+- `TauCeti.DavisKahan1970.Section8.theorem8_1_upperApproximationRepulsion` — generalization
+- `TauCeti.DavisKahan1970.Section8.theorem8_1_lowerApproximationRepulsion` — generalization
+- `TauCeti.DavisKahan1970.Section8.theorem8_1_upperApproximationRepulsion_real` — generalization
+- `TauCeti.DavisKahan1970.Section8.theorem8_1_lowerApproximationRepulsion_real` — generalization
+- `TauCeti.DavisKahan1970.Section8.theorem8_1_upperSymmetricGaugeRepulsion_angle_rev` — generalization
+- `TauCeti.DavisKahan1970.Section8.theorem8_1_lowerSymmetricGaugeRepulsion_angle_rev` — generalization
+- `TauCeti.DavisKahan1970.Section8.theorem8_1_upperSymmetricGaugeRepulsion_angle_rev_real` — generalization
+- `TauCeti.DavisKahan1970.Section8.theorem8_1_lowerSymmetricGaugeRepulsion_angle_rev_real` — generalization
+- `TauCeti.DavisKahan1970.Section8.theorem8_1_upperCompressionRepulsion_ofBlockPlacement_unbounded_complex` — generalization
+- `TauCeti.DavisKahan1970.Section8.theorem8_1_lowerCompressionRepulsion_ofBlockPlacement_unbounded_complex` — generalization
+- `TauCeti.DavisKahan1970.Section8.theorem8_1_upperCompressionRepulsion_ofBlockPlacement_unbounded_real` — generalization
+- `TauCeti.DavisKahan1970.Section8.theorem8_1_lowerCompressionRepulsion_ofBlockPlacement_unbounded_real` — generalization
 
 ### Source-facing Lean declarations
 
@@ -7073,73 +7235,145 @@ Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.Section8.theorem8_1_exists_branch_blockPlacement_unbounded_complex`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section8/Theorem81SourceUnbounded.lean:156`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section8/Theorem81SourceUnbounded.lean:175`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.Section8.theorem8_1_exists_branch_blockPlacement_unbounded_real`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section8/Theorem81SourceUnbounded.lean:327`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section8/Theorem81SourceUnbounded.lean:421`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.Section8.theorem8_1_maximalAngle_le_iff_blockPlacement_unbounded_complex`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section8/Theorem81SourceUnbounded.lean:125`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section8/Theorem81SourceUnbounded.lean:142`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.Section8.theorem8_1_maximalAngle_le_iff_blockPlacement_unbounded_real`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section8/Theorem81SourceUnbounded.lean:299`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section8/Theorem81SourceUnbounded.lean:391`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.Section8.theorem8_1_upperCompressionRepulsion_sourceExact_unbounded_complex`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section8/Theorem81SourceUnbounded.lean:195`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section8/Theorem81SourceUnbounded.lean:291`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.Section8.theorem8_1_lowerCompressionRepulsion_sourceExact_unbounded_complex`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section8/Theorem81SourceUnbounded.lean:231`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section8/Theorem81SourceUnbounded.lean:324`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.Section8.theorem8_1_upperCompressionRepulsion_sourceExact_unbounded_real`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section8/Theorem81SourceUnbounded.lean:364`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section8/Theorem81SourceUnbounded.lean:533`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.Section8.theorem8_1_lowerCompressionRepulsion_sourceExact_unbounded_real`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section8/Theorem81SourceUnbounded.lean:397`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section8/Theorem81SourceUnbounded.lean:566`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.Section8.semiboundedAbove_reducingRestriction_iff`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section8/Theorem81SourceUnbounded.lean:54`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section8/Theorem81SourceUnbounded.lean:71`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.Section8.semiboundedBelow_reducingRestriction_iff`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section8/Theorem81SourceUnbounded.lean:82`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section8/Theorem81SourceUnbounded.lean:99`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.Section8.semiboundedAbove_reducingRestriction_real_iff`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section8/Theorem81SourceUnbounded.lean:277`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section8/Theorem81SourceUnbounded.lean:369`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.Section8.semiboundedBelow_reducingRestriction_real_iff`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section8/Theorem81SourceUnbounded.lean:288`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section8/Theorem81SourceUnbounded.lean:380`
+
+Compiler-printed type: *inserted when a compiler certificate is supplied.*
+
+#### `TauCeti.DavisKahan1970.Section8.theorem8_1_upperEigenvalueRepulsion_sourceExact`
+
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section8/Theorem81EigenvalueSource.lean:56`
+
+Compiler-printed type: *inserted when a compiler certificate is supplied.*
+
+#### `TauCeti.DavisKahan1970.Section8.theorem8_1_lowerEigenvalueRepulsion_sourceExact`
+
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section8/Theorem81EigenvalueSource.lean:83`
+
+Compiler-printed type: *inserted when a compiler certificate is supplied.*
+
+#### `TauCeti.DavisKahan1970.Section8.theorem8_1_upperEigenvalueRepulsion_sourceExact_real`
+
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section8/Theorem81EigenvalueSource.lean:205`
+
+Compiler-printed type: *inserted when a compiler certificate is supplied.*
+
+#### `TauCeti.DavisKahan1970.Section8.theorem8_1_lowerEigenvalueRepulsion_sourceExact_real`
+
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section8/Theorem81EigenvalueSource.lean:231`
+
+Compiler-printed type: *inserted when a compiler certificate is supplied.*
+
+#### `TauCeti.DavisKahan1970.Section8.theorem8_1_upperSymmetricGaugeEigenvalue_sourceExact`
+
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section8/Theorem81EigenvalueSource.lean:113`
+
+Compiler-printed type: *inserted when a compiler certificate is supplied.*
+
+#### `TauCeti.DavisKahan1970.Section8.theorem8_1_lowerSymmetricGaugeEigenvalue_sourceExact`
+
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section8/Theorem81EigenvalueSource.lean:156`
+
+Compiler-printed type: *inserted when a compiler certificate is supplied.*
+
+#### `TauCeti.DavisKahan1970.Section8.theorem8_1_upperSymmetricGaugeEigenvalue_sourceExact_real`
+
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section8/Theorem81EigenvalueSource.lean:258`
+
+Compiler-printed type: *inserted when a compiler certificate is supplied.*
+
+#### `TauCeti.DavisKahan1970.Section8.theorem8_1_lowerSymmetricGaugeEigenvalue_sourceExact_real`
+
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section8/Theorem81EigenvalueSource.lean:297`
+
+Compiler-printed type: *inserted when a compiler certificate is supplied.*
+
+#### `TauCeti.DavisKahan1970.Section8.theorem8_1_upperCompressionRepulsion_ofBlockPlacement_unbounded_complex`
+
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section8/Theorem81SourceUnbounded.lean:215`
+
+Compiler-printed type: *inserted when a compiler certificate is supplied.*
+
+#### `TauCeti.DavisKahan1970.Section8.theorem8_1_lowerCompressionRepulsion_ofBlockPlacement_unbounded_complex`
+
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section8/Theorem81SourceUnbounded.lean:251`
+
+Compiler-printed type: *inserted when a compiler certificate is supplied.*
+
+#### `TauCeti.DavisKahan1970.Section8.theorem8_1_upperCompressionRepulsion_ofBlockPlacement_unbounded_real`
+
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section8/Theorem81SourceUnbounded.lean:459`
+
+Compiler-printed type: *inserted when a compiler certificate is supplied.*
+
+#### `TauCeti.DavisKahan1970.Section8.theorem8_1_lowerCompressionRepulsion_ofBlockPlacement_unbounded_real`
+
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section8/Theorem81SourceUnbounded.lean:492`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
@@ -7505,6 +7739,10 @@ The declarations that carry this result's printed statement, with the source ato
 - `TauCeti.DavisKahan1970.Section8.theorem8_2_sinTwoTheta_residual_directedAngle_sourceExact` — specialization
 - `TauCeti.DavisKahan1970.Section8.theorem8_2_sinTwoTheta_perturbation_real_sourceExact` — specialization
 - `TauCeti.DavisKahan1970.Section8.theorem8_2_sinTwoTheta_residual_directedAngle_real_sourceExact` — specialization
+- `TauCeti.DavisKahan1970.Section8.sourceResidual` — source_correspondence
+- `TauCeti.DavisKahan1970.Section8.sourceResidual_eq_sub_ritzBlock` — source_correspondence
+- `TauCeti.DavisKahan1970.Section8.exists_ritzBlock_of_realSpectrum_subset_Icc_complex` — transport_lemma
+- `TauCeti.DavisKahan1970.Section8.exists_ritzBlock_of_realSpectrum_subset_Icc_real` — transport_lemma
 
 ### Source-facing Lean declarations
 
@@ -7792,25 +8030,49 @@ Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.Section8.theorem8_2_perturbation_sourceExact_unbounded_complex`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section8/Theorem82SourceUnbounded.lean:68`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section8/Theorem82SourceUnbounded.lean:198`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.Section8.theorem8_2_residual_sourceExact_unbounded_complex`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section8/Theorem82SourceUnbounded.lean:141`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section8/Theorem82SourceUnbounded.lean:271`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.Section8.theorem8_2_perturbation_sourceExact_unbounded_real`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section8/Theorem82SourceUnbounded.lean:102`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section8/Theorem82SourceUnbounded.lean:232`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.Section8.theorem8_2_residual_sourceExact_unbounded_real`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section8/Theorem82SourceUnbounded.lean:200`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section8/Theorem82SourceUnbounded.lean:323`
+
+Compiler-printed type: *inserted when a compiler certificate is supplied.*
+
+#### `TauCeti.DavisKahan1970.Section8.sourceResidual`
+
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section8/Theorem82SourceUnbounded.lean:83`
+
+Compiler-printed type: *inserted when a compiler certificate is supplied.*
+
+#### `TauCeti.DavisKahan1970.Section8.sourceResidual_eq_sub_ritzBlock`
+
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section8/Theorem82SourceUnbounded.lean:90`
+
+Compiler-printed type: *inserted when a compiler certificate is supplied.*
+
+#### `TauCeti.DavisKahan1970.Section8.exists_ritzBlock_of_realSpectrum_subset_Icc_complex`
+
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section8/Theorem82SourceUnbounded.lean:112`
+
+Compiler-printed type: *inserted when a compiler certificate is supplied.*
+
+#### `TauCeti.DavisKahan1970.Section8.exists_ritzBlock_of_realSpectrum_subset_Icc_real`
+
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section8/Theorem82SourceUnbounded.lean:147`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
