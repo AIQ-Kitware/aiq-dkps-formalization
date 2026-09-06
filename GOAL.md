@@ -704,14 +704,33 @@ stability for an unbounded self-adjoint operator, from the existing unbounded
 resolvent and inverse-norm machinery plus a Neumann step — **not** a general
 continuation framework.  This is the one place real theorem work is expected.
 
-**(b) `R_t` from `specRange`.**  The unbounded spectral-measure layer already has
-`specRange`, `specProjection`, `reducesSubspace_specRange`,
-`specProjection_eq_starProjection_specRange`,
-`specProjection_eq_zero_of_subset_resolventSet`, and the form/support bounds
-`re_inner_specProjection_Icc_bounds`, `le_re_inner_of_specProjection_Iio_eq_zero`,
-`re_inner_le_of_specProjection_Ioi_eq_zero`.  Use them for: `R_t` reduces `B_t`,
-`B_t` on `R_t` has spectrum in the central interval and on `R_tᗮ` in the
-exterior, and the endpoint inclusions `R₀ ≤ Q` and `P ≤ R₁`.
+**(a) is done, 2026-09-05.**  `GapResolvent.lean` now has
+`notMem_spectrum_addBounded_of_spectrum_gap` — a gap of half-width `s` around `c`
+gives a bounded inverse `R` of `c - A` with `‖R‖ ≤ s⁻¹`, and
+`c - (A + K) = (1 - K R)(c - A)` on `dom A` has an invertible first factor when
+`‖K‖ < s` — and its set form `spectrum_addBounded_subset_of_gap`.
+
+**(b) `R_t` from `specRange`.**  Take the band set to be the **closed interval**
+`Icc l r`, not `centralBand l r d`.  With `R_t = specRange B_t (Icc l r)`:
+
+* the band side is immediate: `mem_resolventSet_specRestrict_of_gap` gives
+  `realSpectrum (specRestrict B_t (Icc l r)) ⊆ Icc l r`, because every `lam`
+  outside keeps a positive distance from the set;
+* the complement side needs one step, and the tool for it is
+  `specProjection_eq_zero_of_subset_resolventSet`: the two open gaps
+  `(l - d, l) ∪ (r, r + d)` lie in the resolvent set of `B_t` by (a), so their
+  spectral projection vanishes, hence
+  `specRange B_t ((Icc l r)ᶜ) = specRange B_t (gapExterior l r d)` and the same
+  resolvent lemma gives `realSpectrum ⊆ gapExterior l r d`, which is closed.
+  `specProjection_add_compl_apply` and `specProjection_apply_specProjection` are
+  the pieces that combine the two sets; there is **no** general
+  `specProjection (S ∪ T)` additivity lemma, so this is where the assembly work
+  is.
+
+That pair is exactly `FormBoundedSylvesterGap.intervalExterior` with `β = l`,
+`α = r` and gap `d`, which is what the `sin Θ` and `sin 2Θ` endpoints consume.
+The endpoint inclusions `R₀ ≤ Q` and `P ≤ R₁` come from the same vanishing
+argument applied to `Qᗮ` and to `P`.
 
 **(c) Lipschitz continuity without Riesz projections.**  `B_t = B_s + (s − t) H`,
 so `directedGap_le_of_reducingGap_unbounded_complex` applies in each orientation
@@ -1143,6 +1162,48 @@ The two derived `[SeparableSpace (genericLeftHalf …)]` instances were also
 removed from the complex statement: separability of a subspace of a separable
 space is a consequence, and both statements now carry only the source's own
 ambient separability.
+
+## 4b. Reviewed working order and validation discipline (human, 2026-09-05)
+
+Do these in this order, and do not spend time on `8.1 → 8.2`, variable-root
+algebra, generic Riesz-continuation infrastructure, or complexifying the real
+Theorem 3.1 invariant:
+
+1. real Theorem 3.1 by the direct local-instance route — **done**;
+2. the spectral-stability lemma for the path — **done**;
+3. `R_t := specRange B_t (Icc l r)` with its band and exterior spectra;
+4. the two-direction `sin Θ` Lipschitz estimate for `R_s`, `R_t`;
+5. the bounded proof's constant-`√2/2` IVT bootstrap;
+6. the complex perturbation source theorem;
+7. the residual branch, by the self-adjoint-completion reduction the bounded
+   proof already uses.  Its public type must carry `‖R‖ < δ/2` and must **not**
+   acquire `‖H‖ < δ/2`; that is the acceptance test;
+8. the real port, through the existing partial-map complexification layer, as
+   `Theorem81Real.lean` does.  Separate exact real and complex endpoints are
+   enough — this is not another `RCLike` project;
+9. resolve the UIN completeness question below;
+10. hand back a source-exact snapshot for hostile review.
+
+**Validation discipline for this stretch.**  Do not run the whole
+inventory/census/statement-map/name-drift/pin suite after ordinary commits.  Use
+a targeted build of the touched modules, the relevant `#check`s, the specific
+hostile regression involved, and statement pins only when a public theorem
+changed.  Save the expensive aggregate and certification run for semantic
+closure.
+
+## 4c. The UIN completeness question needs a binary answer
+
+`NormalizedUnitaryInvariantNorm` extends `KyFanDominantIdealFamily`, which
+carries `isComplete`.  The source's own list of unitary-invariant-norm properties
+does not state completeness.  Before source-exact signoff, do exactly one of:
+
+1. prove that completeness follows from the norm class Davis--Kahan quantify
+   over; or
+2. remove completeness from the source-facing abstraction and keep it on the
+   stronger internal `KyFanDominantIdealFamily` layer.
+
+Do not leave it labelled an open question, and do not stop the Section 8 proof to
+redesign the norm layer unless it actually blocks it.
 
 ## 5. Fresh hostile review of all designated results
 
