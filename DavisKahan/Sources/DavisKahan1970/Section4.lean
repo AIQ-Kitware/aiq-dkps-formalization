@@ -443,15 +443,22 @@ ordered.  Proposition 4.2 is printed under that setup and does not restate it.
 hypothesis, which is a stronger and correct theorem but not, by this
 repository's contract, automatically an exact witness for the printed one.  This
 wrapper is the source-shaped statement: it carries the inherited hypotheses
-`hcompact` and `J` exactly as Section 4 imposes them, and discharges them by
-invoking the stronger result, which needs neither.
+exactly as Section 4 imposes them, and discharges them by invoking the stronger
+result, which needs neither.
+
+**The crossed-defect hypothesis is a proposition, not an isometry.**  Section 4
+inherits the *condition* under which the direct rotation exists; the identifying
+isometry is something Theorem 3.1 produces from it, not something a caller
+supplies.  `CrossedDefectsEquivalent` is that condition -- `Nonempty` of the
+isometry -- and taking it instead of a chosen `J` keeps proof data out of the
+public statement.  Corrected 2026-09-05 after a source-first review.
 
 Keeping both is deliberate.  The reusable theorem stays as strong as it is, and
 the canonical source endpoint stays faithful to what Davis and Kahan printed. -/
 theorem proposition4_2_compact_nonacute
     (U V : Submodule ℂ H) [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
     (_hcompact : IsCompactOperator (TauCeti.principalSineOperator U V))
-    (_J : DavisKahan.halmosSourceDefect U V ≃ₗᵢ[ℂ] DavisKahan.halmosTargetDefect U V)
+    (_hcrossed : DavisKahan.CrossedDefectsEquivalent U V)
     {ι : Type u4} (b : HilbertBasis ι ℂ U)
     (W : H →L[ℂ] H) (hWunitary : W ∈ unitary (H →L[ℂ] H))
     (hWmap : W * DavisKahan.projection U = DavisKahan.projection V * W) :

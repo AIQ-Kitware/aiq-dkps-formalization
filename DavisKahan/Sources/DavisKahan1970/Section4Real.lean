@@ -811,7 +811,7 @@ because the proof does not consume them, following this tree's convention for
 retained source hypotheses. -/
 theorem proposition4_2_compact_nonacute_real
     (_hcompact : IsCompactOperator (TauCeti.principalSineOperator U V))
-    (_J : halmosSourceDefect U V ≃ₗᵢ[ℝ] halmosTargetDefect U V)
+    (_hcrossed : CrossedDefectsEquivalent U V)
     {ι : Type v} (b : HilbertBasis ι ℝ U) (W : E →L[ℝ] E)
     (hWunitary : W ∈ unitary (E →L[ℝ] E))
     (hWmap : W * DavisKahan.projection U = DavisKahan.projection V * W) :
