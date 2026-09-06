@@ -6899,13 +6899,13 @@ Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.LinearPMap.specProjection_apply_of_unitary_intertwines`
 
-Source location candidates: `ForTauCeti/Analysis/InnerProductSpace/LinearPMap/SpectralProjectionNaturality.lean:97`
+Source location candidates: `ForTauCeti/Analysis/InnerProductSpace/LinearPMap/SpectralProjectionNaturality.lean:102`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.LinearPMap.specProjection_eq_specProjC`
 
-Source location candidates: `ForTauCeti/Analysis/InnerProductSpace/LinearPMap/SpectralProjectionNaturality.lean:73`
+Source location candidates: `ForTauCeti/Analysis/InnerProductSpace/LinearPMap/SpectralProjectionNaturality.lean:78`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 

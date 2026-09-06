@@ -57,12 +57,17 @@ handed to two operators' spectral projections.  On the spectrum of a Cayley
 transform it agrees with `cayleyInv` by definition. -/
 noncomputable def cayleyCoordPlane (z : ℂ) : ℝ := (Complex.I * (1 + z) / (1 - z)).re
 
+/-- The plane-level inverse Cayley map is Borel measurable, which is all a spectral
+projection needs of it: the singularity at `w = 1` is a single point. -/
 theorem measurable_cayleyCoordPlane : Measurable cayleyCoordPlane := by
   unfold cayleyCoordPlane
   fun_prop
 
 variable {A : H →ₗ.[ℂ] H} (hA : IsSelfAdjoint A)
 
+/-- On the spectrum of a Cayley transform the plane-level map agrees with `cayleyInv`.
+This is the equation that lets one Borel subset of `ℝ` be fed to `specProjection` and
+its `ℂ`-indexed spelling `specProjC` at the same time. -/
 theorem cayleyInv_eq_cayleyCoordPlane (w : _root_.spectrum ℂ (cayley hA)) :
     cayleyInv hA w = cayleyCoordPlane (w : ℂ) := by
   rw [cayleyInv_def, cayleyCoordPlane]

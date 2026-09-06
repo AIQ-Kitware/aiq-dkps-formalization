@@ -3333,11 +3333,11 @@
           },
           {
             "declaration": "TauCeti.DavisKahan1970.symmetricNorming_of_kyFanDominant",
-            "type_expr_hash": "1353657526",
-            "type_text_sha256": "1b48cee9e602d445c2d28d833f4434a479fb5d1572c7ed3099cf769d2699e643",
+            "type_expr_hash": "606794360",
+            "type_text_sha256": "953bf02bcce285e0c146620ce3e9cf37ff0a9cf4399c711d961c454549239d52",
             "toolchain": "leanprover/lean4:v4.34.0-rc1",
-            "pinned_on": "2026-09-04",
-            "note": "Pinned 2026-09-04 with the seven Section 3-8 major reviews: their declarations and the passages they cite are now guarded like the four Section 2 headline rows."
+            "pinned_on": "2026-09-06",
+            "note": "Re-pinned 2026-09-06: the UIN abstraction split, so the hypothesis quantifies over FanDominantIdealFamily, which does not carry completeness, instead of KyFanDominantIdealFamily, which does.  The theorem is strictly weaker in hypothesis and identical in conclusion."
           }
         ],
         "source_pins": [
@@ -4078,11 +4078,11 @@
           },
           {
             "declaration": "TauCeti.DavisKahan1970.symmetricNorming_of_kyFanDominant",
-            "type_expr_hash": "1353657526",
-            "type_text_sha256": "1b48cee9e602d445c2d28d833f4434a479fb5d1572c7ed3099cf769d2699e643",
+            "type_expr_hash": "606794360",
+            "type_text_sha256": "953bf02bcce285e0c146620ce3e9cf37ff0a9cf4399c711d961c454549239d52",
             "toolchain": "leanprover/lean4:v4.34.0-rc1",
-            "pinned_on": "2026-09-04",
-            "note": "Pinned 2026-09-04 when Theorems 5.1 and 5.2 were recanonicalized on printed-scope wrappers."
+            "pinned_on": "2026-09-06",
+            "note": "Re-pinned 2026-09-06: the UIN abstraction split, so the hypothesis quantifies over FanDominantIdealFamily, which does not carry completeness, instead of KyFanDominantIdealFamily, which does.  The theorem is strictly weaker in hypothesis and identical in conclusion."
           }
         ],
         "source_pins": [
