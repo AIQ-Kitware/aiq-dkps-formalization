@@ -797,6 +797,140 @@ theorem theorem8_1_lowerSymmetricGaugeEigenvalue_blockSourceExact_real
 
 end Real
 
+/-! ### Part (ii)'s printed infinite-dimensional extension
+
+Part (ii) is printed "in finite dimensions … with the analogous lower-block
+statement **and natural infinite-dimensional extensions**".  Part (iii), by
+contrast, is printed for finite dimensions with no such clause.  So the extension
+is part of what (ii) asserts, and it has a determinate reading: Davis and Kahan
+fix the replacement for "ordered eigenvalues" themselves, at (1.10), as the
+minimax singular-value sequence
+
+  `κ_k = inf_{dim S = k−1} sup_{‖x‖=1, x ⊥ S} ‖K x‖`,
+
+and say in as many words that "the same minimax expression makes sense for
+general bounded operators".  For a positive operator on a finite-dimensional
+space that sequence *is* the decreasing eigenvalue list
+(`approximationNumber_eq_eigenvalues_of_isPositive`), and the blocks appearing in
+(ii) are positive under Theorem 8.1's hypotheses, so the two readings agree where
+both are defined.
+
+The extension is therefore to infinite-dimensional **bounded** operators, which
+is exactly the scope at which the paper defines the object it extends.  It is not
+to unbounded `A`: with `A₁ ≥ α + δ` unbounded there is no decreasing enumeration
+to compare, and the paper's own minimax is stated for bounded operators.
+
+`‖C₁‖₁` is read as the operator norm of the cosine block, which is its largest
+singular value; `norm_cosineBlock_eq_principalCosines_zero` is the identification
+with the largest principal cosine, and it needs finite dimension. -/
+
+section InfiniteDimensionalPartTwo
+
+variable {H : Type u} [NormedAddCommGroup H] [InnerProductSpace ℂ H] [CompleteSpace H]
+variable (A K : H →L[ℂ] H) (P : Submodule ℂ H)
+
+/-- **Davis--Kahan 1970, Theorem 8.1 (ii)'s infinite-dimensional extension, upper
+block, over `ℂ`.**
+
+The printed inequality on the blocks themselves, with the ordered eigenvalue
+lists replaced by the paper's own minimax sequence (1.10), and no dimension
+hypothesis.  In finite dimensions this is
+`theorem8_1_upperEigenvalueRepulsion_blockSourceExact`. -/
+theorem theorem8_1_upperApproximationRepulsion_blockSourceExact
+    [TopologicalSpace.SeparableSpace H] [P.HasOrthogonalProjection]
+    {alpha delta : ℝ} (hdelta : 0 < delta)
+    (hA : IsSelfAdjoint A) (hK : IsSelfAdjoint K)
+    (hAP : ∀ x ∈ P, A x ∈ P)
+    (hPlow : ∀ x ∈ P, RCLike.re ⟪A x, x⟫_ℂ ≤ alpha * ‖x‖ ^ 2)
+    (hPhigh : ∀ x ∈ Pᗮ, (alpha + delta) * ‖x‖ ^ 2 ≤ RCLike.re ⟪A x, x⟫_ℂ)
+    (hKP : ∀ x ∈ P, K x ∈ Pᗮ) (hKPperp : ∀ x ∈ Pᗮ, K x ∈ P)
+    (n : ℕ) :
+    (upperBlockCompression A P alpha).approximationNumber n ≤
+      ‖cosineBlock P (branch A K alpha hA hK)‖ ^ 2 *
+        (upperBlockCompression (A + K) (branch A K alpha hA hK) alpha
+          ).approximationNumber n := by
+  rw [approximationNumber_upperBlockCompression A P alpha,
+    approximationNumber_upperBlockCompression (A + K) (branch A K alpha hA hK) alpha]
+  exact theorem8_1_upperApproximationRepulsion A K P hdelta hA hK hAP hPlow hPhigh
+    hKP hKPperp n
+
+/-- **Theorem 8.1 (ii)'s infinite-dimensional extension, lower block, over
+`ℂ`.** -/
+theorem theorem8_1_lowerApproximationRepulsion_blockSourceExact
+    [TopologicalSpace.SeparableSpace H] [P.HasOrthogonalProjection]
+    {alpha delta : ℝ} (hdelta : 0 < delta)
+    (hA : IsSelfAdjoint A) (hK : IsSelfAdjoint K)
+    (hAP : ∀ x ∈ P, A x ∈ P)
+    (hPlow : ∀ x ∈ P, RCLike.re ⟪A x, x⟫_ℂ ≤ alpha * ‖x‖ ^ 2)
+    (hPhigh : ∀ x ∈ Pᗮ, (alpha + delta) * ‖x‖ ^ 2 ≤ RCLike.re ⟪A x, x⟫_ℂ)
+    (hKP : ∀ x ∈ P, K x ∈ Pᗮ) (hKPperp : ∀ x ∈ Pᗮ, K x ∈ P)
+    (n : ℕ) :
+    (lowerBlockCompression A P alpha delta).approximationNumber n ≤
+      ‖lowerCosineBlock P (branch A K alpha hA hK)‖ ^ 2 *
+        (lowerBlockCompression (A + K) (branch A K alpha hA hK) alpha delta
+          ).approximationNumber n := by
+  rw [approximationNumber_lowerBlockCompression A P alpha delta,
+    approximationNumber_lowerBlockCompression (A + K) (branch A K alpha hA hK)
+      alpha delta]
+  exact theorem8_1_lowerApproximationRepulsion A K P hdelta hA hK hAP hPlow hPhigh
+    hKP hKPperp n
+
+end InfiniteDimensionalPartTwo
+
+section InfiniteDimensionalPartTwoReal
+
+variable {E : Type u} [NormedAddCommGroup E] [InnerProductSpace ℝ E] [CompleteSpace E]
+variable (A K : E →L[ℝ] E) (P : Submodule ℝ E)
+
+/-- **Theorem 8.1 (ii)'s infinite-dimensional extension, upper block, over
+`ℝ`.** -/
+theorem theorem8_1_upperApproximationRepulsion_blockSourceExact_real
+    [TopologicalSpace.SeparableSpace E] [P.HasOrthogonalProjection]
+    {alpha delta : ℝ} (hdelta : 0 < delta)
+    (hA : IsSelfAdjoint A) (hK : IsSelfAdjoint K)
+    (hAP : ∀ x ∈ P, A x ∈ P)
+    (hPlow : ∀ x ∈ P, ⟪A x, x⟫_ℝ ≤ alpha * ‖x‖ ^ 2)
+    (hPhigh : ∀ x ∈ Pᗮ, (alpha + delta) * ‖x‖ ^ 2 ≤ ⟪A x, x⟫_ℝ)
+    (hKP : ∀ x ∈ P, K x ∈ Pᗮ) (hKPperp : ∀ x ∈ Pᗮ, K x ∈ P)
+    (n : ℕ) :
+    (upperBlockCompression A P alpha).approximationNumber n ≤
+      ‖cosineBlock P (canonicalLowBranchReal A K P hdelta hA hK hAP hPlow hPhigh
+        hKP hKPperp)‖ ^ 2 *
+        (upperBlockCompression (A + K)
+          (canonicalLowBranchReal A K P hdelta hA hK hAP hPlow hPhigh hKP hKPperp)
+          alpha).approximationNumber n := by
+  rw [approximationNumber_upperBlockCompression A P alpha,
+    approximationNumber_upperBlockCompression (A + K)
+      (canonicalLowBranchReal A K P hdelta hA hK hAP hPlow hPhigh hKP hKPperp) alpha]
+  exact theorem8_1_upperApproximationRepulsion_real A K P hdelta hA hK hAP hPlow
+    hPhigh hKP hKPperp n
+
+/-- **Theorem 8.1 (ii)'s infinite-dimensional extension, lower block, over
+`ℝ`.** -/
+theorem theorem8_1_lowerApproximationRepulsion_blockSourceExact_real
+    [TopologicalSpace.SeparableSpace E] [P.HasOrthogonalProjection]
+    {alpha delta : ℝ} (hdelta : 0 < delta)
+    (hA : IsSelfAdjoint A) (hK : IsSelfAdjoint K)
+    (hAP : ∀ x ∈ P, A x ∈ P)
+    (hPlow : ∀ x ∈ P, ⟪A x, x⟫_ℝ ≤ alpha * ‖x‖ ^ 2)
+    (hPhigh : ∀ x ∈ Pᗮ, (alpha + delta) * ‖x‖ ^ 2 ≤ ⟪A x, x⟫_ℝ)
+    (hKP : ∀ x ∈ P, K x ∈ Pᗮ) (hKPperp : ∀ x ∈ Pᗮ, K x ∈ P)
+    (n : ℕ) :
+    (lowerBlockCompression A P alpha delta).approximationNumber n ≤
+      ‖lowerCosineBlock P (canonicalLowBranchReal A K P hdelta hA hK hAP hPlow
+        hPhigh hKP hKPperp)‖ ^ 2 *
+        (lowerBlockCompression (A + K)
+          (canonicalLowBranchReal A K P hdelta hA hK hAP hPlow hPhigh hKP hKPperp)
+          alpha delta).approximationNumber n := by
+  rw [approximationNumber_lowerBlockCompression A P alpha delta,
+    approximationNumber_lowerBlockCompression (A + K)
+      (canonicalLowBranchReal A K P hdelta hA hK hAP hPlow hPhigh hKP hKPperp)
+      alpha delta]
+  exact theorem8_1_lowerApproximationRepulsion_real A K P hdelta hA hK hAP hPlow
+    hPhigh hKP hKPperp n
+
+end InfiniteDimensionalPartTwoReal
+
 end
 
 end Section8
