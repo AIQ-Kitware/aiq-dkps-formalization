@@ -60,7 +60,7 @@
     ext,funext,cases,rcases,obtain,constructor,left,right,classical,by_contra,
     contrapose,convert,using,suffices,calc},
   morekeywords=[3]{Prop,Type,Nat,Int,Real,Fin,Set,Submodule,Matrix,EuclideanSpace,
-    LinearMap,ContinuousLinearMap,PaperUnitaryInvariantNorm,IsSelfAdjoint,Reduces},
+    LinearMap,ContinuousLinearMap,SymmetricNormingFunction,IsSelfAdjoint,Reduces},
 }
 \lstdefinestyle{leanpaper}{%
   language=lean,
@@ -141,16 +141,17 @@
 
 \begin{abstract}
 Large language models (LLMs) can now produce substantial Lean developments for
-researchers who are still learning Lean.  We used these tools to formalize all
-29 mathematical results in Davis and Kahan's 1970 paper and present the project
-as a case study in semantic alignment: whether checked Lean statements express
-the mathematics in their source.  Alongside our experience, we collect
-\PractitionerAccountCount{} public first-person accounts of AI-assisted Lean
-work, which report very different levels of human Lean inspection.
-We observe that LLMs often reported completion prematurely.  At the
-mathematical-result level, we resolve all 29 tracked results---28 by proof and
-Proposition~4.4 by refutation plus repair.  The structured data, source notes, paper-revision prompts, and reproduction scripts
-accompany the paper.
+researchers who are still learning Lean.  We used these tools to formalize the
+29 mathematical results tracked from Davis and Kahan's 1970 paper and present
+the project as a case study in semantic alignment: whether checked Lean
+statements express the mathematics in their source.  Alongside our experience,
+we collect \PractitionerAccountCount{} public first-person accounts of AI-assisted
+Lean work, which report very different levels of human Lean inspection.  We
+observe that LLMs often reported completion prematurely.  All 29 tracked results
+now have checked formal treatments: 28 printed results have Lean proofs, while
+Proposition~4.4 is certified false as printed and has a repaired theorem.
+Source-level correspondence review remains ongoing.  The structured data,
+source notes, and reproduction scripts accompany the paper.
 \ifshowartifacturl\space Public materials: \url{\artifacturl}.\fi
 \end{abstract}
 
@@ -188,28 +189,44 @@ ranges from matrices to Hilbert-space operators \citep{davis1970rotation}.  We
 therefore set out to formalize all 29 mathematical results in the paper while
 developing reusable operator-theoretic foundations along the way.
 
-During formalization, we repeatedly compared generated theorem statements with
-the source.  \Cref{fig:workflow} summarizes the workflow that grew around this
-process: the source theorem and its scope stay visible while LLMs decompose,
-formalize, compile, and review candidate formalizations.
+Our process became more explicit as source-level discrepancies appeared.
+We first fixed the target by recording each counted result, its source location,
+and the scope that a faithful formalization had to retain.  For each target,
+LLMs decomposed missing mathematics into intermediate obligations, searched
+Mathlib, local theory, and the literature for reusable foundations, implemented
+Lean, and used compiler feedback to repair proofs.  A successful compile then
+entered a separate source-to-signature review, often with a different model and
+human inspection of the source.  That review checked scalar field, dimension,
+bounded or unbounded operator scope, norm class, gap assumptions, and whether
+objects such as residuals and angle operators were the ones used by the paper.
+A mismatch sent the result back through review and could trigger another round
+of decomposition or foundation work.  The model roles were separated loosely:
+Claude Code handled most Lean implementation and compiler-driven repair,
+ChatGPT was used heavily for mathematical planning, source comparison, and
+review, and Codex participated in both.  A persistent result register kept the
+source target, claimed scope, Lean witness, and review state outside the model
+conversations.  We later developed \texttt{leanq} to query the pinned Lean
+environment for elaborated types, source locations, axioms, and dependencies
+when a correspondence question required exact compiler-derived evidence.
+\Cref{fig:workflow} summarizes this cycle.
 
 \begin{figure}[H]
   \centering
   \includegraphics[width=0.80\linewidth]{figures/formalization_workflow.png}
-  \caption{Workflow that emerged during the \DK{} formalization.  The source
-  theorem and its mathematical scope remain visible while LLMs decompose,
-  formalize, compile, and review the result.}
+  \caption{Workflow that emerged during the \DK{} formalization.  A source
+  theorem and its fidelity criteria remain visible through decomposition,
+  foundation search, Lean implementation, compilation, and skeptical
+  source-level review; a failed review returns the result to the loop.}
   \label{fig:workflow}
 \end{figure}
 
-To place this case study in context, we collect monthly counts of Lean-related
-arXiv papers from the Papers With Lean corpus, grouped by its
-\texttt{published} month.  The series contains \LeanPapersTwentyFive{} papers in
-2025 and \LeanPapersJanAugTwentySix{} in January--August 2026; August alone has
-\LeanPapersAugustTwentySix{} \citep{paperswithlean2026stats}.  The mean monthly
-count over those eight complete months is about \LeanPublicationRateRatio{}
-times the 2025 rate.  \Cref{fig:lean-activity} shows complete months from January
-2024 through August 2026.
+Lean formalization activity is growing rapidly.  Papers With Lean is a curated
+index of Lean-related arXiv papers; its public monthly statistics provide one
+view of that growth \citep{paperswithlean2026stats}.  The index contains
+\LeanPapersTwentyFive{} papers in all of 2025 and already
+\LeanPapersJanAugTwentySix{} in January--August 2026, corresponding to a mean
+monthly rate about \LeanPublicationRateRatio{} times higher.  \Cref{fig:lean-activity}
+reproduces the 2025--2026 series through the last complete month.
 
 This paper studies how researchers supervise source-to-formal-statement
 correspondence when LLMs can produce Lean beyond the human's own fluency.  We
@@ -244,11 +261,8 @@ very different distances from the formal code.
 
 Some researchers use another model to mediate the semantic check.  Nowak and
 F\"ugger used Claude to review Codex formalizations for added hypotheses,
-weakening, and proof holes \citep{nowak2026workflow}.  Our workflow used a
-similar separation: Claude Code was used primarily for Lean implementation,
-while ChatGPT/GPT was used heavily for mathematical planning, source comparison,
-and review; Codex participated in both implementation and review.
-Kova\v{c} asked another model to translate generated Lean back into English
+weakening, and proof holes \citep{nowak2026workflow}; our producer/reviewer split
+was similar.  Kova\v{c} asked another model to translate generated Lean back into English
 because he could not read it directly \citep{kovac2025erdos189}.  Ilin reports adversarial review among
 multiple systems \citep{ilin2026vml}.  Counterexamples often provide a more
 human-readable failure signal: Saiki used them to diagnose an underspecified
@@ -316,11 +330,11 @@ appropriate unbounded self-adjoint cases \citep{davis1970rotation}.
 
 We set out to formalize the four unnumbered Section~2 headline theorems plus
 every named theorem, proposition, lemma, and corollary that Davis and Kahan
-prove, for 29 results total.  Definitions, proof steps, examples, immediate
-consequences, and open or deferred claims are not counted separately.  We kept a
-result ledger with one row per counted result, recording the source location and
-scope, the Lean declaration used as evidence, and its review status.  The ledger
-defined what counted as complete and provided a finite checklist for source review.
+establish, for 29 results total.  Definitions, proof steps, examples, immediate
+consequences, and open or deferred claims are not counted separately.  We used a
+persistent result register with one row per counted result, recording the source
+location and scope, the Lean declaration used as evidence, and its review status.
+This gave the project a finite checklist for implementation and later source review.
 
 The formalization required foundational layers beyond the final perturbation
 inequalities: projection and principal-angle geometry, unitarily invariant norms
@@ -339,78 +353,72 @@ and a repaired theorem \citep{aiqdkps2026repo}.
 The directed $\sin 2\Theta$ statement in \cref{eq:sin2theta} uses the trial
 residual $R=AE_0-E_0A_0$ and includes real and complex, potentially unbounded
 self-adjoint settings under the paper's domain and bounded-residual conditions.
-At one stage the result was marked covered because a checked Lean theorem had
-the printed residual and factor~2, with the norm representation then used for
-this theorem family.  Its scope was narrower: it used
-only bounded operators over a complex Hilbert space.  A separate theorem covered
-unbounded operators but used a reflection residual rather than the printed
-trial residual.
+At one stage the checked theorem below was used as the ledger witness for this
+source result.  It has the printed residual and factor~2, but the signature fixes
+the scalar field to $\mathbb{C}$ and represents the ambient operator $A$ as a
+bounded \texttt{ContinuousLinearMap}.
 
-\begin{table}[H]
-\centering
-\small
-\caption{Scope comparison for the historical directed $\sin 2\Theta$ witness.
-The table is generated from the historical and current Lean signatures; full
-verbatim signatures and source locations are retained in the supplement.}
-\label{tab:sin2theta-mismatch}
-\input{generated/historical_scope_mismatch_table.tex}
-\end{table}
+% Presentation note (not rendered): scripts/build_evidence.py extracts this
+% historical declaration from Git and verifies the PaperUnitaryInvariantNorm ->
+% SymmetricNormingFunction rename before generating the display. The display
+% also ASCII-normalizes notation that produced unreliable PDF text extraction.
+% These are presentation changes only; the mismatch being shown is the
+% historical bounded-complex scope of the checked theorem.
+\lstinputlisting[
+  style=leanpaper,
+  basicstyle=\ttfamily\scriptsize,
+  caption={Historical checked theorem statement used for the directed
+  $\sin 2\Theta$ result. Names are adjusted for presentation.},
+  label={lst:sin2theta-mismatch}
+]{generated/historical_scope_mismatch_presentation.lean}
 
-The historical \texttt{PaperUnitaryInvariantNorm} type in
-\cref{tab:sin2theta-mismatch} is now called \texttt{SymmetricNormingFunction}.
-It is the singular-value representation used in the proof layer.  Current
-source-exact endpoints quantify over \texttt{NormalizedUnitaryInvariantNorm},
-the Lean type for the full Section~1 norm class, and reduce that quantifier to
-symmetric norming functions through Fan dominance.
+A separate checked theorem at the time covered unbounded operators but used a
+reflection residual rather than the printed trial residual.  Thus no single
+checked theorem matched both the residual and scope of the source statement.
+The repair supplied real and complex unbounded endpoints with the printed trial
+residual.  Appendix~\ref{app:formalization1} maps the Lean structures in
+Formalization~1 back to the Davis--Kahan notation and mathematical statement.
 
-Source-level comparison exposed that the two checked theorems covered different
-parts of the source claim.  The repair constructed the reflection argument
-internally and provided real and complex unbounded endpoints with the printed
-trial residual.
+\clearpage
+\section{Conclusion}
 
-\section{Discussion}
+\paragraph{Did we formalize all 29 tracked results?}
+Yes, in the sense that every tracked source result now has a checked formal
+resolution.  Twenty-eight printed results have Lean proofs.  Proposition~4.4
+also counts as formalized: the development certifies that the printed claim is
+false, gives a finite-dimensional counterexample, and proves a repaired theorem.
+This is theorem-level coverage, however, and does not by itself certify that
+every source-to-Lean correspondence has been reviewed correctly.  LLM reviewers
+have continued to find scope and representation problems in formalizations that
+had previously been marked complete.
 
-Most semantic review reported here came from repeated LLM comparisons of the
-source text with theorem signatures, with human checks of the mathematical
-source and small queries against the pinned Lean environment when exact
-elaborated statements or definitions were needed.  We built \texttt{leanq} to
-retrieve declarations, source locations, axioms, and dependency information.
-Later, we also built a review page that places source text, inherited context,
-correspondence notes, and compiler-derived Lean statements together.
-\Cref{fig:dashboard} shows the interface in the appendix.
+\paragraph{What helped during the process?}
+A persistent source-to-Lean result register made completion claims inspectable:
+for each target we kept the source location, intended scope, Lean declaration,
+and current review status.  Similar author-facing correspondence workflows now
+appear in EconCSLib, while Lean Atlas/Compass helps identify the declarations
+whose semantics can affect a target, and FormaTheoria and LeanArchitect address
+longer-horizon source/formal reconciliation \citep{garg2026econcs,yanahama2026leanatlas,nie2026formatheoria,zhu2026leanarchitect}.
+During this project we also developed \texttt{leanq}, a small query tool for the
+pinned Lean environment.  It made it easy to ask for elaborated theorem types,
+source locations, declaration kinds, axioms, and dependencies while comparing a
+formal statement with the paper.  In practice, the most useful review loop was
+to review apparently completed results again with a falsification objective and inspect
+exactly the dimensions along which source scope can drift: scalar field,
+dimension, operator domain, norm class, gap assumptions, and the identity of the
+residual and angle objects.
 
-\paragraph{Practical lessons for human review.}
-The result ledger was useful because it fixed the mathematical target before a
-completion claim: every counted source result had an explicit scope and a Lean
-declaration to inspect.  Review then focused on the elaborated theorem signature
-and the definitions that determine its meaning---scalar field, dimension,
-boundedness and domain, norm class, gap hypotheses, inherited conventions, and
-the identity of mathematical objects such as residuals.  \texttt{leanq} made
-those checks easier by returning compiler-derived declarations and source
-locations instead of relying on remembered or paraphrased types.  We also found
-it useful to revisit apparently completed rows with the explicit goal of finding
-a source mismatch and to retain the source passage and formal statement that had
-actually been reviewed.
-
-\paragraph{How much Lean did we actually read?}
-Human review of Lean signatures was limited at the start of the project.  By the
-time of this paper, we could recognize several scope choices that had caused
-problems---real versus complex scalars, finite-dimensional assumptions, bounded
-maps, and residual definitions---but still used LLMs and small query tools to
-explain unfamiliar structures and follow definitions.  The $\sin 2\Theta$
-example shows why the check extends beyond proof validity: the relevant
-information was split across scalar field, operator scope, norm representation,
-and the identity of the residual.
-
-\paragraph{What does 29/29 mean here?}
-The ledger currently records mathematical resolution of all 29 counted results.
-Twenty-eight printed results have checked proofs.  Proposition~4.4 is false as
-printed and instead has a checked counterexample and repaired theorem.
-Source/signature review found seven source-scope mismatches in statements that
-had previously been marked covered; all seven were repaired.  Correspondence
-review remains ongoing, so 29/29 denotes resolution of the tracked mathematical
-results rather than completed semantic validation.  The supplement preserves
-the human paper-revision prompts verbatim.
+\paragraph{Did we formalize Davis--Kahan?}
+At the level of covering the paper's 29 tracked mathematical results, yes.  At
+the stronger level we ultimately care about---formalization faithful to the source
+for every result at its intended scope---not yet.  As of this revision, LLM reviewers
+are still identifying issues in some formalizations, although the remaining
+problems appear to be source-correspondence defects rather than missing headline
+results.  We therefore believe the development is very close, but we are not yet
+ready to declare every correspondence closed.  The experience changed what a
+completion claim means for us: a theorem should not count as finished merely
+because Lean accepts it or an LLM reports success; its formal statement and the
+source claim also need to survive explicit semantic review.
 \ifshowartifacturl\space Public materials: \url{\artifacturl}.\fi
 
 \ifnum\PublicVersion=1\relax
