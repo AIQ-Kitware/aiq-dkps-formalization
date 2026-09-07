@@ -1063,3 +1063,35 @@ source's definedness convention. -/
 #check @TauCeti.DavisKahan.ExactSinTheta.SourceUnitaryInvariantNorm.HasFanDominance
 #check @TauCeti.DavisKahan.ExactSinTheta.SourceUnitaryInvariantNorm.toNormalized
 #check @TauCeti.DavisKahan.ExactSinTheta.NormalizedUnitaryInvariantNorm.toSource_toNormalized
+
+/-! ## 2026-09-07 fifth-hostile-review repairs
+
+Lemma 6.1 on the source's own two operators; Theorem 8.1's existence clause and
+part (i) as one printed sentence; and parts (ii) and (iii) on the blocks
+themselves, with the symmetric gauge at the block dimension. -/
+
+#check @TauCeti.DavisKahan1970.lemma6_1_sourceOperators_separable_complex
+#check @TauCeti.DavisKahan1970.lemma6_1_sourceOperators_separable_real
+#check @TauCeti.DavisKahan1970.lemma6_1_converse_sourceOperators_separable_complex
+#check @TauCeti.DavisKahan1970.lemma6_1_converse_sourceOperators_separable_real
+
+#check @TauCeti.DavisKahan1970.Section8.upperBlockCompression
+#check @TauCeti.DavisKahan1970.Section8.lowerBlockCompression
+#check @TauCeti.DavisKahan1970.Section8.approximationNumber_upperBlockCompression
+#check @TauCeti.DavisKahan1970.Section8.approximationNumber_lowerBlockCompression
+#check @TauCeti.DavisKahan1970.Section8.finrank_eq_of_isAcute
+#check @TauCeti.DavisKahan1970.Section8.finrank_orthogonal_eq_of_isAcute
+#check @TauCeti.DavisKahan1970.Section8.weaklyMajorized_comp_castLE
+#check @TauCeti.DavisKahan1970.Section8.theorem8_1_finrank_orthogonal_branch_eq
+#check @TauCeti.DavisKahan1970.Section8.theorem8_1_finrank_branch_eq
+#check @TauCeti.DavisKahan1970.Section8.theorem8_1_finrank_orthogonal_branch_eq_real
+#check @TauCeti.DavisKahan1970.Section8.theorem8_1_finrank_branch_eq_real
+
+#check @TauCeti.DavisKahan1970.Section8.theorem8_1_upperEigenvalueRepulsion_blockSourceExact
+#check @TauCeti.DavisKahan1970.Section8.theorem8_1_lowerEigenvalueRepulsion_blockSourceExact
+#check @TauCeti.DavisKahan1970.Section8.theorem8_1_upperEigenvalueRepulsion_blockSourceExact_real
+#check @TauCeti.DavisKahan1970.Section8.theorem8_1_lowerEigenvalueRepulsion_blockSourceExact_real
+#check @TauCeti.DavisKahan1970.Section8.theorem8_1_upperSymmetricGaugeEigenvalue_blockSourceExact
+#check @TauCeti.DavisKahan1970.Section8.theorem8_1_lowerSymmetricGaugeEigenvalue_blockSourceExact
+#check @TauCeti.DavisKahan1970.Section8.theorem8_1_upperSymmetricGaugeEigenvalue_blockSourceExact_real
+#check @TauCeti.DavisKahan1970.Section8.theorem8_1_lowerSymmetricGaugeEigenvalue_blockSourceExact_real
