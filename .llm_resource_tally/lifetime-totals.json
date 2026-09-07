@@ -1,15 +1,15 @@
 {
   "schema": "llm-resource-tally/v3",
-  "through": "2026-09-07T02:50:57.525854+00:00",
-  "ledger_rows": 2174,
-  "commits_accounted": 1967,
-  "turns": 58289,
+  "through": "2026-09-07T03:30:45.085961+00:00",
+  "ledger_rows": 2176,
+  "commits_accounted": 1969,
+  "turns": 58299,
   "tokens": {
-    "input": 8241394,
-    "cache_write": 202128730,
-    "cache_read": 23032164188,
-    "output": 58906223,
-    "billable_input": 23242534312
+    "input": 8241414,
+    "cache_write": 202135830,
+    "cache_read": 23040629754,
+    "output": 58908775,
+    "billable_input": 23251006998
   },
   "by_model": {
     "claude-fable-5": {
@@ -37,10 +37,10 @@
       "output": 327440
     },
     "claude-opus-5": {
-      "input": 139099,
-      "cache_write": 115239227,
-      "cache_read": 17231261745,
-      "output": 34060217
+      "input": 139119,
+      "cache_write": 115246327,
+      "cache_read": 17239727311,
+      "output": 34062769
     },
     "gpt-5.6-terra": {
       "input": 3590620,
@@ -69,10 +69,10 @@
       "output": 10700449
     },
     "unlabeled": {
-      "input": 7392655,
-      "cache_write": 148570410,
-      "cache_read": 18116988373,
-      "output": 45916969
+      "input": 7392675,
+      "cache_write": 148577510,
+      "cache_read": 18125453939,
+      "output": 45919521
     },
     "implementation": {
       "input": 79782,
@@ -89,10 +89,10 @@
   },
   "by_agent": {
     "claude-code": {
-      "input": 1213302,
-      "cache_write": 202128730,
-      "cache_read": 22491402588,
-      "output": 58039458
+      "input": 1213322,
+      "cache_write": 202135830,
+      "cache_read": 22499868154,
+      "output": 58042010
     },
     "codex": {
       "input": 7028092,
@@ -106,7 +106,7 @@
     "web_fetch": 0
   },
   "time": {
-    "wall_clock_s": 4545931.4
+    "wall_clock_s": 4548153.8
   },
   "compaction_signals": {
     "events": 88,
