@@ -358,26 +358,48 @@ def build_historical_scope_mismatch():
     # membership/subset, conjunction/disjunction, and orthogonal complement so
     # PDF text extraction does not drop mathematical glyphs. This normalization
     # is for presentation only; it does not alter the historical scope mismatch.
-    presentation = '''theorem sinTwoTheta_directedResidual
-    (N : SymmetricNormingFunction)
-    {A : ContinuousLinearMap Complex E E} (hA : IsSelfAdjoint A)
-    {U V : Submodule Complex E}
-    [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
-    (hU : Reduces A U)
-    {a b delta : Real} (hdelta : 0 < delta) (hab : a <= b)
-    (hUspec : Set.Subset
-      (spectrum Real (compressOperator U A)) (Set.Icc a b))
-    (hUspec' : forall x,
-      Membership.mem x
-        (spectrum Real (compressOperator (Submodule.orthogonal U) A)) ->
-      Or (x <= a - delta) (b + delta <= x))
-    (M : ContinuousLinearMap Complex V V)
-    (hMem : N.Mem (residual A V.subtypeL M)) :
-    And (N.Mem (sinTwoThetaIdealBlock U V))
-      (delta * N.gauge (sinTwoThetaIdealBlock U V) <=
-        2 * N.gauge (residual A V.subtypeL M)) := by
-  -- proof omitted
-'''
+    # Spell out the identity scalar homomorphism in ContinuousLinearMap:
+    # E ->L[Complex] E expands to ContinuousLinearMap (RingHom.id Complex) E E.
+    # Membership.mem takes the container first, then the element. Reversing
+    # these arguments would change the meaning of the displayed hypothesis.
+    # The exact historical signature is retained separately in the JSON/note.
+    # Apply explicit rewrites to the extracted signature instead of maintaining
+    # an independent transcription. Each source fragment must occur once.
+    presentation = historical['signature']
+    rewrites = [
+        ('sinTwoTheta_directedResidual_paperUINorm',
+         'sinTwoTheta_directedResidual'),
+        ('PaperUnitaryInvariantNorm', 'SymmetricNormingFunction'),
+        ('{A : E \u2192L[\u2102] E}',
+         '{A : ContinuousLinearMap (RingHom.id Complex) E E}'),
+        ('{U V : Submodule \u2102 E}', '{U V : Submodule Complex E}'),
+        ('{a b d : \u211d} (hd : 0 < d) (hab : a \u2264 b)',
+         '{a b delta : Real} (hdelta : 0 < delta) (hab : a <= b)'),
+        ('(hUspec : spectrum \u211d (compressOperator U A) \u2286 Set.Icc a b)',
+         '(hUspec : Set.Subset\n'
+         '      (spectrum Real (compressOperator U A)) (Set.Icc a b))'),
+        ("(hUspec' : \u2200 x \u2208 spectrum \u211d (compressOperator U\u15ee A),\n"
+         '      x \u2264 a - d \u2228 b + d \u2264 x)',
+         "(hUspec' : forall x,\n"
+         '      Membership.mem\n'
+         '        (spectrum Real (compressOperator (Submodule.orthogonal U) A)) x ->\n'
+         '      Or (x <= a - delta) (b + delta <= x))'),
+        ('(M : V \u2192L[\u2102] V)',
+         '(M : ContinuousLinearMap (RingHom.id Complex) V V)'),
+        ('    N.Mem (sinTwoThetaIdealBlock U V) \u2227\n'
+         '      d * N.gauge (sinTwoThetaIdealBlock U V) \u2264\n'
+         '        2 * N.gauge (residual A V.subtypeL M) := by\n',
+         '    And (N.Mem (sinTwoThetaIdealBlock U V))\n'
+         '      (delta * N.gauge (sinTwoThetaIdealBlock U V) <=\n'
+         '        2 * N.gauge (residual A V.subtypeL M)) := by\n'),
+    ]
+    for before, after in rewrites:
+        if presentation.count(before) != 1:
+            raise RuntimeError(f'historical display rewrite is ambiguous: {before!r}')
+        presentation = presentation.replace(before, after)
+    presentation += '  -- proof omitted\n'
+    if not presentation.isascii():
+        raise RuntimeError('historical display contains unhandled Unicode notation')
     (
         PAPER / 'generated' / 'historical_scope_mismatch_presentation.lean'
     ).write_text(presentation, encoding='utf8')

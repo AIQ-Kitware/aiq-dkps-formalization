@@ -1,7 +1,7 @@
 SHELL := /bin/bash
 .PHONY: all sources paper public clean check-prose check-publication-activity \
 	survey-publication-activity check-publication-survey \
-	self-test-publication-survey
+	self-test-publication-survey check-layout
 
 all: paper
 
@@ -31,6 +31,9 @@ public: sources
 		pdflatex -interaction=nonstopmode -halt-on-error paper_public.tex; \
 		pdflatex -interaction=nonstopmode -halt-on-error paper_public.tex; \
 	fi
+
+check-layout: paper public
+	python3 scripts/check_layout.py
 
 check-prose:
 	python3 scripts/check_prose.py

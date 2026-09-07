@@ -3,7 +3,7 @@ from pathlib import Path
 import re
 
 root = Path(__file__).resolve().parent.parent
-paths = [root / 'paper.tex']
+paths = [root / 'paper.tex', root / 'appendix.tex']
 patterns = {
     'banned word matters': r'\bmatters\b',
     'banned word silently': r'\bsilently\b',
