@@ -36,16 +36,17 @@ Additional constraints:
    turn the current accepted rows into a certainty claim.
 10. Keep the workflow figure as Figure 1. Binary render outputs (PNG, PDF,
     ZIP, etc.) are local artifacts only and must never be staged or committed.
-    The main text uses a generated text listing for its semantic-mismatch
-    example; the dashboard screenshot is an untracked appendix render.
+    The dashboard screenshot is an untracked appendix render.
 11. Figure 1 names Tau Ceti as a possible destination for reusable foundations,
     so retain a brief accurate explanation and citation.
-12. The worked example is the Theorem 8.2 bounded/unbounded scope mismatch.
-    Keep it tied to commits `59f37a20` (earlier bounded witness) and `064df8d3`
-    (unbounded source-facing endpoint). State precisely that the earlier witness
-    typed both the ambient operator and perturbation as bounded continuous linear
-    maps, while Section 8 inherits a possibly unbounded ambient self-adjoint
-    operator and a bounded perturbation.
+12. The worked example is the historical directed sin-2-Theta correspondence
+    failure: one checked theorem had the printed trial residual but only bounded
+    complex scope, while another had unbounded scope but a reflection residual
+    rather than the printed trial residual. The main text may show a compact
+    generated scope comparison, but full historical Lean signatures stay in the
+    candidate note. The historical witness comes from commit `7001ed05`; current
+    source-facing endpoints use `NormalizedUnitaryInvariantNorm`, while internal
+    proof theorems may use `SymmetricNormingFunction`.
 13. Present EconCSLib, Lean Atlas, ShadowBench, LeanMarathon, FormaTheoria, and
     related systems as adjacent work without priority claims for the local
     dashboard.
@@ -68,11 +69,10 @@ Additional constraints:
     support fitting that model to this project.
 21. Chow's doohickey example is illustrative. Do not describe it as silly or
     otherwise belittle the example.
-22. Formalization 1 is historical evidence. Keep the displayed Theorem 8.2
-    operator-type lines tied to the Git extraction and keep full verbatim
-    signatures in the candidate note.
-    The PDF listing may use an ASCII-safe excerpt solely to avoid `listings`
-    corrupting Lean Unicode glyphs.
+22. Keep full historical Lean signatures in the generated candidate note rather
+    than forcing a large Unicode-heavy listing into the four-page PDF. A compact
+    generated scope table is acceptable in the main text when it makes the
+    mismatch visible without fragile Lean notation.
 23. Section titles should describe their contents directly. Avoid evaluative or
     slogan-like headings such as "still too narrow" and rhetorical mini-lessons.
 

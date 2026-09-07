@@ -39,7 +39,6 @@
 \newcommand{\artifacturl}{https://github.com/AIQ-Kitware/aiq-dkps-formalization}
 \newcommand{\leanqurl}{https://github.com/AIQ-Kitware/aiq-lean-formalization-tools}
 
-% Match the Lean treatment used in the longer formalization manuscript.
 \definecolor{leankeyword}{HTML}{243B6B}
 \definecolor{leantactic}{HTML}{70477A}
 \definecolor{leantype}{HTML}{1F6473}
@@ -148,14 +147,10 @@ as a case study in semantic alignment: whether checked Lean statements express
 the mathematics in their source.  Alongside our experience, we collect
 \PractitionerAccountCount{} public first-person accounts of AI-assisted Lean
 work, which report very different levels of human Lean inspection.
-LLMs sometimes reported completion before source-level review
-exposed scope mismatches; for Theorem~8.2, an earlier witness covered only
-bounded ambient operators although the source inherits an unbounded scope.  We
-resolve all 29 tracked results---28 by proof and Proposition~4.4 by refutation
-plus repair.  A final signature/context review found seven source-scope
-mismatches, which were subsequently repaired; final re-review remained pending
-at this revision.  The structured data, source notes, paper-revision prompts,
-and reproduction scripts accompany the paper.
+We observe that LLMs often reported completion prematurely.  At the
+mathematical-result level, we resolve all 29 tracked results---28 by proof and
+Proposition~4.4 by refutation plus repair.  The structured data, source notes, paper-revision prompts, and reproduction scripts
+accompany the paper.
 \ifshowartifacturl\space Public materials: \url{\artifacturl}.\fi
 \end{abstract}
 
@@ -171,17 +166,17 @@ between an informal mathematical statement and its formalization
 \citep{han2026shadowbench}.  Here the intended claim is the mathematics expressed
 by Davis and Kahan's 1970 paper together with the definitions, inherited
 assumptions, notation, and mathematical context needed to read it.  Timothy
-Chow illustrates the distinction with ``doohickeys'': if the source says that
-all doohickeys are excellent while the formal statement says only that special
-doohickeys are quasi-excellent, a checked proof establishes only the latter
-statement \citep{chow2026mindreading}.
+Chow's ``doohickeys'' parable captures the issue: a researcher may intend to
+formalize the statement that all doohickeys are excellent, while an agent
+formalizes instead that all special doohickeys are quasi-excellent.  The review
+question is whether the agent formalized the claim the researcher intended
+\citep{chow2026mindreading}.
 
 The distinction appeared in both directions during this project.  Formalizing
 Davis and Kahan's Proposition~4.4 exposed that the printed proposition is false;
 we obtained a finite-dimensional counterexample and a repaired statement.
-Later source-to-signature comparison exposed errors in our own formalization,
-including a Theorem~8.2 endpoint that restricted the ambient operator to the
-bounded case although the paper inherits an unbounded setting.
+Source-to-signature comparison also exposed cases where our checked Lean results
+did not yet cover the full source statement.
 
 Effective formalization depends on reusable foundations: later projects can
 build on checked definitions and theorems instead of reconstructing their
@@ -193,11 +188,10 @@ ranges from matrices to Hilbert-space operators \citep{davis1970rotation}.  We
 therefore set out to formalize all 29 mathematical results in the paper while
 developing reusable operator-theoretic foundations along the way.
 
-Once LLMs authored the Lean, compilation still left a separate question: did
-the theorem statements say what the source said?  \Cref{fig:workflow} summarizes
-the workflow that grew around this problem: the source theorem and its scope
-stay visible while LLMs decompose, formalize, compile, and review candidate
-formalizations.
+During formalization, we repeatedly compared generated theorem statements with
+the source.  \Cref{fig:workflow} summarizes the workflow that grew around this
+process: the source theorem and its scope stay visible while LLMs decompose,
+formalize, compile, and review candidate formalizations.
 
 \begin{figure}[H]
   \centering
@@ -208,23 +202,21 @@ formalizations.
   \label{fig:workflow}
 \end{figure}
 
-This supervision problem is appearing against rapid growth in Lean
-formalization activity.  Grouping the Papers With Lean corpus by its
-\texttt{published} month gives \LeanPapersTwentyFive{} Lean-related arXiv papers
-for 2025 and \LeanPapersJanAugTwentySix{} for January--August 2026; August alone
-has \LeanPapersAugustTwentySix{} \citep{paperswithlean2026stats}.  The mean
-monthly count over those eight complete months is about
-\LeanPublicationRateRatio{} times the 2025 rate.  \Cref{fig:lean-activity} shows
-complete months from January 2024 through August 2026.
+To place this case study in context, we collect monthly counts of Lean-related
+arXiv papers from the Papers With Lean corpus, grouped by its
+\texttt{published} month.  The series contains \LeanPapersTwentyFive{} papers in
+2025 and \LeanPapersJanAugTwentySix{} in January--August 2026; August alone has
+\LeanPapersAugustTwentySix{} \citep{paperswithlean2026stats}.  The mean monthly
+count over those eight complete months is about \LeanPublicationRateRatio{}
+times the 2025 rate.  \Cref{fig:lean-activity} shows complete months from January
+2024 through August 2026.
 
 This paper studies how researchers supervise source-to-formal-statement
 correspondence when LLMs can produce Lean beyond the human's own fluency.  We
-compare our experience with public first-person reports and examine the
-Theorem~8.2 bounded/unbounded scope mismatch in detail.  The structured account
-notes retain the public source, observation, qualification, and fields used for
-the descriptive counts; the Git events used here are kept in a separate dated
-table keyed by commit.  \Cref{app:data} describes the sources and validation
-checks.
+compare our experience with public first-person reports and examine a historical
+$\sin 2\Theta$ correspondence failure in detail.  The structured account notes
+retain the public source, observation, qualification, and fields used for the
+descriptive counts.  \Cref{app:data} describes the sources and validation checks.
 
 \section{Related Work}
 \label{sec:related}
@@ -301,75 +293,80 @@ with auxiliary shadow statements and implication checks
 \citep{han2026shadowbench}.  These systems are especially interesting for users
 who cannot audit a large generated development line by line.
 
-\section{The Davis--Kahan case}
+\section{What we formalized}
 \label{sec:dk}
 
-\paragraph{Statement of the problem.}
-At the matrix level, let $T=T^*$ be a Hermitian matrix and let $E_0$ have
-orthonormal columns spanning a candidate (or trial) subspace $P$ for an invariant
-subspace of $T$.  The Rayleigh--Ritz matrix
+Davis and Kahan study how invariant spectral subspaces of a self-adjoint
+operator change under perturbation.  In matrix terms, let $A=A^*$ and let $E_0$
+have orthonormal columns spanning a trial subspace.  The Rayleigh--Ritz matrix
+$A_0=E_0^*AE_0$ describes the action of $A$ within that subspace, while
 \[
-  A_0 = E_0^* T E_0
+  R = A E_0 - E_0 A_0
 \]
-is the action of $T$ compressed to those coordinates.  The residual
-\[
-  R = T E_0 - E_0 A_0
-\]
-measures failure of invariance: $R=0$ exactly when applying $T$ to the trial
-vectors stays inside their span.  Davis and Kahan bound principal-angle
-operators between $P$ and an exact spectral subspace $Q$ under spectral
-separation.
-
-Theorem~8.2 inherits the earlier $\sin 2\Theta$ setting and adds a central-spectrum
-condition together with either a small perturbation or a small residual.  In the
-perturbation alternative, among its conclusions are
+measures its failure to be invariant.  Under spectral separation, the paper
+bounds the principal angles between the trial subspace and an exact spectral
+subspace.  One directed $\sin 2\Theta$ result has the form
 \begin{equation}
-  \delta N(\sin 2\Theta) \le 2N(H),
-  \qquad \Theta_{\max} < \pi/4,
-  \label{eq:theorem82}
+  \delta\,N(\sin 2\Theta_0) \le 2N(R),
+  \label{eq:sin2theta}
 \end{equation}
-for a unitarily invariant norm $N$.  The paper carries this matrix picture to
-separable Hilbert spaces, where the ambient self-adjoint operator may be
-unbounded while the perturbation $H$ remains bounded
-\citep{davis1970rotation}.
+for a unitarily invariant norm $N$.  The paper carries this picture beyond
+finite matrices to real or complex separable Hilbert spaces, including
+appropriate unbounded self-adjoint cases \citep{davis1970rotation}.
 
-We tracked the four unnumbered Section~2 headline theorems plus every named
-theorem, proposition, lemma, and corollary that Davis and Kahan prove, for 29
-results total.  Definitions, proof steps, examples, immediate consequences, and
-open or deferred claims are not counted separately.  Some paper-independent
-operator theory developed along the way is being prepared for possible
+We set out to formalize the four unnumbered Section~2 headline theorems plus
+every named theorem, proposition, lemma, and corollary that Davis and Kahan
+prove, for 29 results total.  Definitions, proof steps, examples, immediate
+consequences, and open or deferred claims are not counted separately.  We kept a
+result ledger with one row per counted result, recording the source location and
+scope, the Lean declaration used as evidence, and its review status.  The ledger
+defined what counted as complete and provided a finite checklist for source review.
+
+The formalization required foundational layers beyond the final perturbation
+inequalities: projection and principal-angle geometry, unitarily invariant norms
+and operator ideals, Borel spectral calculus and unbounded self-adjoint operator
+theory, real/complex transfer, direct rotations and operator angles, and
+Sylvester equations.  These reusable components are being prepared for
 contribution to Tau Ceti \citep{tauceti2026}.
 
-The formalization also exposed a problem in the source itself.  Davis and
-Kahan's Proposition~4.4 is false as printed.  We have a finite-dimensional
-counterexample and a repaired theorem; the longer formalization manuscript
-develops that result in detail \citep{aiqdkps2026repo}.
+Formalization also exposed a problem in the source itself: Proposition~4.4 is
+false as printed.  The repository contains a finite-dimensional counterexample
+and a repaired theorem \citep{aiqdkps2026repo}.
 
 \subsection{Example of a semantically misaligned formalization}
 \label{sec:scope-mismatch}
 
-Section~8 inherits the operator scope of the earlier $\sin 2\Theta$ theorem: the
-ambient self-adjoint operator may be unbounded, while the perturbation is
-bounded.  At one stage, however, our source-coverage tracking accepted a
-Theorem~8.2 witness whose signature used bounded continuous linear maps for both
-operators.  That theorem proves a valid bounded case of \cref{eq:theorem82}, but
-it does not cover the inherited unbounded scope.
+The directed $\sin 2\Theta$ statement in \cref{eq:sin2theta} uses the trial
+residual $R=AE_0-E_0A_0$ and includes real and complex, potentially unbounded
+self-adjoint settings under the paper's domain and bounded-residual conditions.
+At one stage the result was marked covered because a checked Lean theorem had
+the printed residual and factor~2, with the norm representation then used for
+this theorem family.  Its scope was narrower: it used
+only bounded operators over a complex Hilbert space.  A separate theorem covered
+unbounded operators but used a reflection residual rather than the printed
+trial residual.
 
-\lstinputlisting[style=leanpaper,
-  caption={The type distinction that exposed the Theorem~8.2 scope mismatch.
-  In the historical endpoint, both $A$ and $K$ are continuous linear maps and
-  therefore bounded.  The repaired source-facing endpoint represents $A$ as a
-  possibly unbounded partial linear map while keeping the perturbation bounded.
-  Full verbatim signatures, commit hashes, paths, and line ranges are included
-  in the supplement.},
-  label={lst:scope-mismatch}]{generated/historical_scope_mismatch.lean}
+\begin{table}[H]
+\centering
+\small
+\caption{Scope comparison for the historical directed $\sin 2\Theta$ witness.
+The table is generated from the historical and current Lean signatures; full
+verbatim signatures and source locations are retained in the supplement.}
+\label{tab:sin2theta-mismatch}
+\input{generated/historical_scope_mismatch_table.tex}
+\end{table}
 
-The bounded theorem has the expected mathematical conclusion and compiles.  The
-scope mismatch appears only when its signature is compared with the setting that
-Section~8 inherits from the earlier theorem.  The repaired endpoint
-restores that inherited scope by changing the type of $A$, while retaining a
-bounded perturbation.  Source-level signature review identified the gap after the theorem had already
-been counted as covered.
+The historical \texttt{PaperUnitaryInvariantNorm} type in
+\cref{tab:sin2theta-mismatch} is now called \texttt{SymmetricNormingFunction}.
+It is the singular-value representation used in the proof layer.  Current
+source-exact endpoints quantify over \texttt{NormalizedUnitaryInvariantNorm},
+the Lean type for the full Section~1 norm class, and reduce that quantifier to
+symmetric norming functions through Fan dominance.
+
+Source-level comparison exposed that the two checked theorems covered different
+parts of the source claim.  The repair constructed the reflection argument
+internally and provided real and complex unbounded endpoints with the printed
+trial residual.
 
 \section{Discussion}
 
@@ -379,34 +376,41 @@ source and small queries against the pinned Lean environment when exact
 elaborated statements or definitions were needed.  We built \texttt{leanq} to
 retrieve declarations, source locations, axioms, and dependency information.
 Later, we also built a review page that places source text, inherited context,
-correspondence notes, and compiler-derived Lean statements together.  That page
-was developed to make subsequent inspection and audit trails easier; it was not
-the mechanism that produced the review findings reported here.
+correspondence notes, and compiler-derived Lean statements together.
 \Cref{fig:dashboard} shows the interface in the appendix.
+
+\paragraph{Practical lessons for human review.}
+The result ledger was useful because it fixed the mathematical target before a
+completion claim: every counted source result had an explicit scope and a Lean
+declaration to inspect.  Review then focused on the elaborated theorem signature
+and the definitions that determine its meaning---scalar field, dimension,
+boundedness and domain, norm class, gap hypotheses, inherited conventions, and
+the identity of mathematical objects such as residuals.  \texttt{leanq} made
+those checks easier by returning compiler-derived declarations and source
+locations instead of relying on remembered or paraphrased types.  We also found
+it useful to revisit apparently completed rows with the explicit goal of finding
+a source mismatch and to retain the source passage and formal statement that had
+actually been reviewed.
 
 \paragraph{How much Lean did we actually read?}
 Human review of Lean signatures was limited at the start of the project.  By the
 time of this paper, we could recognize several scope choices that had caused
 problems---real versus complex scalars, finite-dimensional assumptions, bounded
 maps, and residual definitions---but still used LLMs and small query tools to
-explain unfamiliar structures and follow definitions.  In the Theorem~8.2
-example in \cref{lst:scope-mismatch}, the local type distinction is visible in
-the signature; determining which type is correct requires reading the scope
-inherited from the source paper.  This gap between reading Lean syntax and
-reconstructing source context motivated the review tooling.
+explain unfamiliar structures and follow definitions.  The $\sin 2\Theta$
+example shows why the check extends beyond proof validity: the relevant
+information was split across scalar field, operator scope, norm representation,
+and the identity of the residual.
 
 \paragraph{What does 29/29 mean here?}
-We tracked the 29 proved results described above and their correspondence to Lean
-statements.  Twenty-eight printed results now have checked proofs.
-Proposition~4.4 is the exception because the printed claim is false; it has a
-checked counterexample and a repaired theorem.  A final signature/context
-review found seven mismatches between public theorem signatures and source
-scope.  Those seven findings were subsequently repaired, but the final
-signature/context re-review remained pending at the time of this revision.  We
-therefore treat 29/29 as mathematical resolution of the tracked source results,
-with semantic-alignment review still provisional.  We think the intended source
-results are now covered, or very close to it.  The supplement preserves the
-human paper-revision prompts verbatim.
+The ledger currently records mathematical resolution of all 29 counted results.
+Twenty-eight printed results have checked proofs.  Proposition~4.4 is false as
+printed and instead has a checked counterexample and repaired theorem.
+Source/signature review found seven source-scope mismatches in statements that
+had previously been marked covered; all seven were repaired.  Correspondence
+review remains ongoing, so 29/29 denotes resolution of the tracked mathematical
+results rather than completed semantic validation.  The supplement preserves
+the human paper-revision prompts verbatim.
 \ifshowartifacturl\space Public materials: \url{\artifacturl}.\fi
 
 \ifnum\PublicVersion=1\relax
