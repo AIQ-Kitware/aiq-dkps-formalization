@@ -1709,12 +1709,13 @@
           ]
         }
       ],
-      "source_specification_sha256": "6709c9fbf240ea7fc10d68b73cd0c746c59536127a66d13108ba14d114d52a45",
+      "source_specification_sha256": "4071b861808a158854b773b5ead73c32eda6a069a622594c8dda7ff746111707",
       "expected_completion_certification": "accepted",
       "known_completion_holes": [],
       "source_atom_ids": [
         "DK-6.3-lem.approximation-number-leakage"
-      ]
+      ],
+      "source_specification_note": "Re-pinned 2026-09-07.  The reconstruction printed the leakage bound as `||Gamma K Psi-perp||_1 <= eta`; Davis and Kahan print the strict `< eta`, their proof derives a squared norm strictly below eta^2, and their applications use the strict form.  The TeX is corrected against the original; the Lean theorem already concluded `< eta` and did not change."
     },
     {
       "id": "DK-7-sin2-proof",

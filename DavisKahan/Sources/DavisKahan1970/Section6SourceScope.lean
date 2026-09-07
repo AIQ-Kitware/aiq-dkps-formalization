@@ -417,6 +417,108 @@ theorem lemma6_3_leakage_separable_real {E' F' : Type v}
 
 end Lemma63
 
+/-! ### Lemma 6.1 with the source's own two operators
+
+Davis and Kahan's Lemma 6.1 compares **one** `K` with **one** `L`: the hypothesis
+is `‖Ω K Υ‖ ≤ ‖Ω L Υ‖` together with `‖Ωᗮ K Υᗮ‖ ≤ ‖Ωᗮ L Υᗮ‖`, and the conclusion
+is the same inequality for the sum of the two diagonal blocks *of those two
+operators*.  The four-operator statements above let the two blocks come from
+different operators; that is a strictly stronger theorem and the wrong signature
+for a source boundary.  These are the printed ones. -/
+
+section LemmaSixOneTwoOperators
+
+variable {E : Type v}
+
+/-- **Davis--Kahan 1970, Lemma 6.1 on the source's two operators, over `ℂ`.** -/
+theorem lemma6_1_sourceOperators_separable_complex
+    [NormedAddCommGroup E] [InnerProductSpace ℂ E] [CompleteSpace E]
+    [TopologicalSpace.SeparableSpace E]
+    (N : NormalizedUnitaryInvariantNorm.{0, v} ℂ)
+    (Ω Γ : Submodule ℂ E) [Ω.HasOrthogonalProjection] [Γ.HasOrthogonalProjection]
+    (K L : E →L[ℂ] E)
+    (h₀ : ∀ M : NormalizedUnitaryInvariantNorm.{0, v} ℂ,
+      M.Mem (projectionBlock Ω Γ L) →
+        M.Mem (projectionBlock Ω Γ K) ∧
+          M.gauge (projectionBlock Ω Γ K) ≤ M.gauge (projectionBlock Ω Γ L))
+    (h₁ : ∀ M : NormalizedUnitaryInvariantNorm.{0, v} ℂ,
+      M.Mem (projectionBlock Ωᗮ Γᗮ L) →
+        M.Mem (projectionBlock Ωᗮ Γᗮ K) ∧
+          M.gauge (projectionBlock Ωᗮ Γᗮ K) ≤ M.gauge (projectionBlock Ωᗮ Γᗮ L))
+    (hL : N.Mem (projectionBlock Ω Γ L + projectionBlock Ωᗮ Γᗮ L)) :
+    N.Mem (projectionBlock Ω Γ K + projectionBlock Ωᗮ Γᗮ K) ∧
+      N.gauge (projectionBlock Ω Γ K + projectionBlock Ωᗮ Γᗮ K) ≤
+        N.gauge (projectionBlock Ω Γ L + projectionBlock Ωᗮ Γᗮ L) :=
+  lemma6_1_separable_complex N Ω Γ K K L L h₀ h₁ hL
+
+/-- **Davis--Kahan 1970, Lemma 6.1 on the source's two operators, over `ℝ`.** -/
+theorem lemma6_1_sourceOperators_separable_real
+    [NormedAddCommGroup E] [InnerProductSpace ℝ E] [CompleteSpace E]
+    [TopologicalSpace.SeparableSpace E]
+    (N : NormalizedUnitaryInvariantNorm.{0, v} ℝ)
+    (Ω Γ : Submodule ℝ E) [Ω.HasOrthogonalProjection] [Γ.HasOrthogonalProjection]
+    (K L : E →L[ℝ] E)
+    (h₀ : ∀ M : NormalizedUnitaryInvariantNorm.{0, v} ℝ,
+      M.Mem (projectionBlock Ω Γ L) →
+        M.Mem (projectionBlock Ω Γ K) ∧
+          M.gauge (projectionBlock Ω Γ K) ≤ M.gauge (projectionBlock Ω Γ L))
+    (h₁ : ∀ M : NormalizedUnitaryInvariantNorm.{0, v} ℝ,
+      M.Mem (projectionBlock Ωᗮ Γᗮ L) →
+        M.Mem (projectionBlock Ωᗮ Γᗮ K) ∧
+          M.gauge (projectionBlock Ωᗮ Γᗮ K) ≤ M.gauge (projectionBlock Ωᗮ Γᗮ L))
+    (hL : N.Mem (projectionBlock Ω Γ L + projectionBlock Ωᗮ Γᗮ L)) :
+    N.Mem (projectionBlock Ω Γ K + projectionBlock Ωᗮ Γᗮ K) ∧
+      N.gauge (projectionBlock Ω Γ K + projectionBlock Ωᗮ Γᗮ K) ≤
+        N.gauge (projectionBlock Ω Γ L + projectionBlock Ωᗮ Γᗮ L) :=
+  lemma6_1_separable_real N Ω Γ K K L L h₀ h₁ hL
+
+/-- **Lemma 6.1's converse on the source's two operators, over `ℂ`.**
+
+The printed converse compares the two diagonal blocks *of `K`* and *of `L`*: each
+operator's two blocks are equisingular, and the sum inequality is assumed. -/
+theorem lemma6_1_converse_sourceOperators_separable_complex
+    [NormedAddCommGroup E] [InnerProductSpace ℂ E] [CompleteSpace E]
+    [TopologicalSpace.SeparableSpace E]
+    (N : NormalizedUnitaryInvariantNorm.{0, v} ℂ)
+    (Ω Γ : Submodule ℂ E) [Ω.HasOrthogonalProjection] [Γ.HasOrthogonalProjection]
+    (K L : E →L[ℂ] E)
+    (hK : SameApproximationSingularValues
+      (projectionBlock Ω Γ K) (projectionBlock Ωᗮ Γᗮ K))
+    (hL : SameApproximationSingularValues
+      (projectionBlock Ω Γ L) (projectionBlock Ωᗮ Γᗮ L))
+    (hsum : ∀ M : NormalizedUnitaryInvariantNorm.{0, v} ℂ,
+      M.Mem (projectionBlock Ω Γ L + projectionBlock Ωᗮ Γᗮ L) →
+        M.Mem (projectionBlock Ω Γ K + projectionBlock Ωᗮ Γᗮ K) ∧
+          M.gauge (projectionBlock Ω Γ K + projectionBlock Ωᗮ Γᗮ K) ≤
+            M.gauge (projectionBlock Ω Γ L + projectionBlock Ωᗮ Γᗮ L))
+    (hLmem : N.Mem (projectionBlock Ω Γ L)) :
+    N.Mem (projectionBlock Ω Γ K) ∧
+      N.gauge (projectionBlock Ω Γ K) ≤ N.gauge (projectionBlock Ω Γ L) :=
+  lemma6_1_converse_separable_complex N Ω Γ K K L L hK hL hsum hLmem
+
+/-- **Lemma 6.1's converse on the source's two operators, over `ℝ`.** -/
+theorem lemma6_1_converse_sourceOperators_separable_real
+    [NormedAddCommGroup E] [InnerProductSpace ℝ E] [CompleteSpace E]
+    [TopologicalSpace.SeparableSpace E]
+    (N : NormalizedUnitaryInvariantNorm.{0, v} ℝ)
+    (Ω Γ : Submodule ℝ E) [Ω.HasOrthogonalProjection] [Γ.HasOrthogonalProjection]
+    (K L : E →L[ℝ] E)
+    (hK : SameApproximationSingularValues
+      (projectionBlock Ω Γ K) (projectionBlock Ωᗮ Γᗮ K))
+    (hL : SameApproximationSingularValues
+      (projectionBlock Ω Γ L) (projectionBlock Ωᗮ Γᗮ L))
+    (hsum : ∀ M : NormalizedUnitaryInvariantNorm.{0, v} ℝ,
+      M.Mem (projectionBlock Ω Γ L + projectionBlock Ωᗮ Γᗮ L) →
+        M.Mem (projectionBlock Ω Γ K + projectionBlock Ωᗮ Γᗮ K) ∧
+          M.gauge (projectionBlock Ω Γ K + projectionBlock Ωᗮ Γᗮ K) ≤
+            M.gauge (projectionBlock Ω Γ L + projectionBlock Ωᗮ Γᗮ L))
+    (hLmem : N.Mem (projectionBlock Ω Γ L)) :
+    N.Mem (projectionBlock Ω Γ K) ∧
+      N.gauge (projectionBlock Ω Γ K) ≤ N.gauge (projectionBlock Ω Γ L) :=
+  lemma6_1_converse_separable_real N Ω Γ K K L L hK hL hsum hLmem
+
+end LemmaSixOneTwoOperators
+
 end
 
 end DavisKahan1970
