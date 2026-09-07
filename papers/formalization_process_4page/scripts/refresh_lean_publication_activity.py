@@ -1,10 +1,11 @@
 #!/usr/bin/env python3
 """Capture and audit the data candidate for the Lean-paper growth figure.
 
-The tracked CSV was transcribed from the Papers With Lean statistics chart.
-This script tests whether grouping ``site_papers.json`` by its ``published``
-field reproduces the tracked overlap before that field is used to extend the
-series back to January 2024.
+The original tracked series came from the Papers With Lean statistics chart.
+Before extending it back to January 2024, this script established that grouping
+``site_papers.json`` by its ``published`` field reproduced the frozen
+January 2025--July 2026 chart interval.  That interval remains the validation
+anchor after the tracked CSV is extended.
 """
 
 from __future__ import annotations
@@ -32,6 +33,8 @@ DEFAULT_STATS_URL = "https://paperswithlean.com/stat/"
 DEFAULT_SNAPSHOT = PAPER_ROOT / "data" / "lean_publication_activity.csv"
 DEFAULT_AUDIT_ROOT = PAPER_ROOT / "generated" / "lean_publication_survey"
 DEFAULT_CUTOFF = date(2026, 9, 6)
+VALIDATION_START_MONTH = "2025-01"
+VALIDATION_END_MONTH = "2026-07"
 USER_AGENT = "aiq-dkps-formalization-lean-publication-survey/1"
 
 
@@ -195,9 +198,24 @@ def compare(expected: list[tuple[str, int]], actual: dict[str, int]) -> list[dic
     ]
 
 
+def validation_overlap(rows: list[tuple[str, int]]) -> list[tuple[str, int]]:
+    selected = [
+        (month, count)
+        for month, count in rows
+        if VALIDATION_START_MONTH <= month <= VALIDATION_END_MONTH
+    ]
+    expected_months = month_range(VALIDATION_START_MONTH, VALIDATION_END_MONTH)
+    if [month for month, _ in selected] != expected_months:
+        raise ValueError(
+            "tracked snapshot must contain the complete "
+            f"{VALIDATION_START_MONTH}--{VALIDATION_END_MONTH} validation interval"
+        )
+    return selected
+
+
 def write_series(path: Path, field: str, rows: list[tuple[str, int]]) -> None:
     with path.open("w", newline="", encoding="utf-8") as file:
-        writer = csv.writer(file)
+        writer = csv.writer(file, lineterminator="\n")
         writer.writerow(["month", field])
         writer.writerows(rows)
 
@@ -259,14 +277,15 @@ def run_survey(args: argparse.Namespace) -> int:
         (run_dir / "tracked_snapshot.csv").write_bytes(snapshot_data)
 
         frozen = load_snapshot(snapshot_path)
+        validation = validation_overlap(frozen)
         live_rows, live_meta = parse_live_series(stats_data.decode("utf-8"))
         live = dict(live_rows)
         if len(live) != len(live_rows):
             raise ValueError("live chart contains duplicate months")
         published, corpus_info = analyze_corpus(corpus_data, args.cutoff)
 
-        chart_mismatches = compare(frozen, live)
-        published_mismatches = compare(frozen, published)
+        chart_mismatches = compare(validation, live)
+        published_mismatches = compare(validation, published)
         validated = not chart_mismatches and not published_mismatches
         end_month = month_of(args.cutoff)
         candidate_rows = [
@@ -278,7 +297,7 @@ def run_survey(args: argparse.Namespace) -> int:
         write_series(
             run_dir / "corpus_published_series.csv", "papers_published", candidate_rows
         )
-        write_comparison(run_dir / "overlap_comparison.csv", frozen, live, published)
+        write_comparison(run_dir / "overlap_comparison.csv", validation, live, published)
 
         wrote = False
         if args.write_tracked:
@@ -291,7 +310,11 @@ def run_survey(args: argparse.Namespace) -> int:
                     file=sys.stderr,
                 )
 
-        newer = [(month, count) for month, count in live_rows if month > frozen[-1][0]]
+        newer = [
+            (month, count)
+            for month, count in live_rows
+            if month > VALIDATION_END_MONTH
+        ]
         manifest = {
             "schema_version": 1,
             "run_utc": now.isoformat(),
@@ -314,6 +337,8 @@ def run_survey(args: argparse.Namespace) -> int:
                 "newer_than_snapshot": newer,
             },
             "validation": {
+                "start_month": VALIDATION_START_MONTH,
+                "end_month": VALIDATION_END_MONTH,
                 "live_chart_matches_frozen": not chart_mismatches,
                 "corpus_published_matches_frozen": not published_mismatches,
                 "candidate_metric_validated": validated,
@@ -348,7 +373,7 @@ tracked snapshot are retained in this directory before comparison.
 
 ## Validation
 
-- Live chart vs tracked {frozen[0][0]}--{frozen[-1][0]} overlap: **{'PASS' if not chart_mismatches else 'FAIL'}**
+- Live chart vs tracked {VALIDATION_START_MONTH}--{VALIDATION_END_MONTH} validation overlap: **{'PASS' if not chart_mismatches else 'FAIL'}**
 - Corpus `published` grouping vs the same overlap: **{'PASS' if not published_mismatches else 'FAIL'}**
 - Candidate definition safe for tracked update: **{'PASS' if validated else 'FAIL'}**
 
@@ -419,6 +444,11 @@ def run_self_test() -> int:
     counts, info = analyze_corpus(json.dumps(corpus).encode(), date(2026, 9, 6))
     assert compare(live, counts) == []
     assert compare([("2025-01", 3)], counts)[0]["actual"] == 2
+    fixture_snapshot = [
+        (month, 0)
+        for month in month_range(VALIDATION_START_MONTH, VALIDATION_END_MONTH)
+    ]
+    assert len(validation_overlap(fixture_snapshot)) == 19
     assert info["published_before_2025"] == 1
     assert info["published_after_cutoff"] == 1
     assert month_range("2024-11", "2025-02") == [

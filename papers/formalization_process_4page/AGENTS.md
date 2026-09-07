@@ -28,9 +28,10 @@ Additional constraints:
 7. Keep disagreements between practitioners visible. Some read generated Lean
    closely; some use another model to translate or challenge it; some let the
    prover run ahead and study the result later.
-8. Treat the Git chronology as a description of this project. In the main paper,
-   describe concrete source-to-Lean mismatches and repairs rather than internal
-   status transitions or ledger vocabulary.
+8. Treat the Git chronology as a description of this project and keep it out of
+   the main paper. The result ledger may be introduced as an organizational tool
+   for fixing the counted source targets, their intended scope, Lean evidence,
+   and review status; avoid internal Git status transitions.
 9. The current 29/29 state is provisional. Say that we think all 29 Davis--Kahan
    source results are covered at the intended scope, or are very close. Do not
    turn the current accepted rows into a certainty claim.
@@ -42,11 +43,13 @@ Additional constraints:
 12. The worked example is the historical directed sin-2-Theta correspondence
     failure: one checked theorem had the printed trial residual but only bounded
     complex scope, while another had unbounded scope but a reflection residual
-    rather than the printed trial residual. The main text may show a compact
-    generated scope comparison, but full historical Lean signatures stay in the
-    candidate note. The historical witness comes from commit `7001ed05`; current
-    source-facing endpoints use `NormalizedUnitaryInvariantNorm`, while internal
-    proof theorems may use `SymmetricNormingFunction`.
+    rather than the printed trial residual. Show the historical theorem statement
+    in the paper, generated from commit `7001ed05`; names may be adjusted for
+    readability when the transformation is verified and documented in the
+    generator. Full exact historical signatures stay in the candidate note.
+    `PaperUnitaryInvariantNorm` was renamed to `SymmetricNormingFunction` in
+    commit `a905bd4c`; current source-facing endpoints use
+    `NormalizedUnitaryInvariantNorm`.
 13. Present EconCSLib, Lean Atlas, ShadowBench, LeanMarathon, FormaTheoria, and
     related systems as adjacent work without priority claims for the local
     dashboard.
@@ -69,10 +72,10 @@ Additional constraints:
     support fitting that model to this project.
 21. Chow's doohickey example is illustrative. Do not describe it as silly or
     otherwise belittle the example.
-22. Keep full historical Lean signatures in the generated candidate note rather
-    than forcing a large Unicode-heavy listing into the four-page PDF. A compact
-    generated scope table is acceptable in the main text when it makes the
-    mismatch visible without fragile Lean notation.
+22. Keep the exact historical Lean signature in the generated candidate note and
+    generate the shorter theorem statement shown in the paper from that evidence.
+    Avoid fragile Unicode notation in the PDF by using verified readability-only
+    identifier/notation adjustments in the generated display.
 23. Section titles should describe their contents directly. Avoid evaluative or
     slogan-like headings such as "still too narrow" and rhetorical mini-lessons.
 
