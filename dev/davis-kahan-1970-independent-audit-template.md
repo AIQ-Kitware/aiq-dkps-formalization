@@ -6933,6 +6933,10 @@ One row per printed source clause per scalar field.  A clause is `PASS` only whe
 | `part-iii-gauge.complex.2` | complex | `TauCeti.DavisKahan1970.Section8.theorem8_1_lowerSymmetricGaugeEigenvalue_blockSourceExact` | **PASS** |
 | `part-iii-gauge.real` | real | `TauCeti.DavisKahan1970.Section8.theorem8_1_upperSymmetricGaugeEigenvalue_blockSourceExact_real` | **PASS** |
 | `part-iii-gauge.real.2` | real | `TauCeti.DavisKahan1970.Section8.theorem8_1_lowerSymmetricGaugeEigenvalue_blockSourceExact_real` | **PASS** |
+| `part-ii-eigenvalue.infinite.complex` | complex | `TauCeti.DavisKahan1970.Section8.theorem8_1_upperApproximationRepulsion_blockSourceExact` | **PASS** |
+| `part-ii-eigenvalue.infinite.complex.2` | complex | `TauCeti.DavisKahan1970.Section8.theorem8_1_lowerApproximationRepulsion_blockSourceExact` | **PASS** |
+| `part-ii-eigenvalue.infinite.real` | real | `TauCeti.DavisKahan1970.Section8.theorem8_1_upperApproximationRepulsion_blockSourceExact_real` | **PASS** |
+| `part-ii-eigenvalue.infinite.real.2` | real | `TauCeti.DavisKahan1970.Section8.theorem8_1_lowerApproximationRepulsion_blockSourceExact_real` | **PASS** |
 
 **`existence-correct-q.complex`.** Canonical witness for existence-correct-q at unbounded ambient scope, stated as the EXISTENTIAL the source asserts: there is a reducing projector `Q` of `A + H` with `Lambda_0 <= alpha`, `Lambda_1 >= alpha + delta` and `Theta(P, Q) <= pi/4`.  `Lambda_0` and `Lambda_1` are the two reducing restrictions of `A + H` and the placements are operator inequalities on them.  The spectral projector of `A + H` on the side of `alpha` is the internal witness; it is not part of the public type.  SOURCE SHAPE 2026-09-07 (fifth hostile review).  Repointed at the source-shaped witness; the previous primary is retained as supporting evidence.
 
@@ -6966,6 +6970,14 @@ One row per printed source clause per scalar field.  A clause is `PASS` only whe
 
 **`part-iii-gauge.real.2`.** Canonical witness on the PRINTED sequences: `alpha_k` and `lambda_k` are the ordered eigenvalues of the blocks, named through `LinearMap.IsSymmetric.eigenvalues`, and the clause is the printed inequality between them in finite dimensions.  The approximation-number theorem it replaces is dimension-free and is retained as the generalization the source announces as the "natural infinite-dimensional extensions"; `approximationNumber_eq_eigenvalues_of_isPositive` is the compiled correspondence between the two readings.  SOURCE SHAPE 2026-09-07 (fifth hostile review).  Repointed at the source-shaped witness; the previous primary is retained as supporting evidence.
 
+**`part-ii-eigenvalue.infinite.complex`.** Canonical witness for part (ii)'s PRINTED infinite-dimensional extension.  The finite clauses above carry the printed eigenvalue formula; this clause carries the phrase 'and natural infinite-dimensional extensions' that the printed statement adds to (ii) and does not add to (iii).  Registered 2026-09-08 after the sixth hostile review observed that the source atom's own summary carries the phrase while the canonical evidence had become purely finite-dimensional.
+
+**`part-ii-eigenvalue.infinite.complex.2`.** Canonical witness for part (ii)'s PRINTED infinite-dimensional extension.  The finite clauses above carry the printed eigenvalue formula; this clause carries the phrase 'and natural infinite-dimensional extensions' that the printed statement adds to (ii) and does not add to (iii).  Registered 2026-09-08 after the sixth hostile review observed that the source atom's own summary carries the phrase while the canonical evidence had become purely finite-dimensional.
+
+**`part-ii-eigenvalue.infinite.real`.** Canonical witness for part (ii)'s PRINTED infinite-dimensional extension.  The finite clauses above carry the printed eigenvalue formula; this clause carries the phrase 'and natural infinite-dimensional extensions' that the printed statement adds to (ii) and does not add to (iii).  Registered 2026-09-08 after the sixth hostile review observed that the source atom's own summary carries the phrase while the canonical evidence had become purely finite-dimensional.
+
+**`part-ii-eigenvalue.infinite.real.2`.** Canonical witness for part (ii)'s PRINTED infinite-dimensional extension.  The finite clauses above carry the printed eigenvalue formula; this clause carries the phrase 'and natural infinite-dimensional extensions' that the printed statement adds to (ii) and does not add to (iii).  Registered 2026-09-08 after the sixth hostile review observed that the source atom's own summary carries the phrase while the canonical evidence had become purely finite-dimensional.
+
 Result-wide scope every clause must carry: *(none)*
 
 ### Canonical evidence
@@ -6986,6 +6998,10 @@ The declarations that carry this result's printed statement, with the source ato
 - `TauCeti.DavisKahan1970.Section8.theorem8_1_lowerSymmetricGaugeEigenvalue_blockSourceExact` — primary_source_witness, complex scalars, proof; covers `DK-8.1-thm.part-iii-gauge`
 - `TauCeti.DavisKahan1970.Section8.theorem8_1_upperSymmetricGaugeEigenvalue_blockSourceExact_real` — primary_source_witness, real scalars, proof; covers `DK-8.1-thm.part-iii-gauge`
 - `TauCeti.DavisKahan1970.Section8.theorem8_1_lowerSymmetricGaugeEigenvalue_blockSourceExact_real` — primary_source_witness, real scalars, proof; covers `DK-8.1-thm.part-iii-gauge`
+- `TauCeti.DavisKahan1970.Section8.theorem8_1_upperApproximationRepulsion_blockSourceExact` — primary_source_witness, complex scalars, proof; covers `DK-8.1-thm.part-ii-eigenvalue`
+- `TauCeti.DavisKahan1970.Section8.theorem8_1_lowerApproximationRepulsion_blockSourceExact` — primary_source_witness, complex scalars, proof; covers `DK-8.1-thm.part-ii-eigenvalue`
+- `TauCeti.DavisKahan1970.Section8.theorem8_1_upperApproximationRepulsion_blockSourceExact_real` — primary_source_witness, real scalars, proof; covers `DK-8.1-thm.part-ii-eigenvalue`
+- `TauCeti.DavisKahan1970.Section8.theorem8_1_lowerApproximationRepulsion_blockSourceExact_real` — primary_source_witness, real scalars, proof; covers `DK-8.1-thm.part-ii-eigenvalue`
 
 ### Other registered declarations
 
@@ -7703,6 +7719,30 @@ Compiler-printed type: *inserted when a compiler certificate is supplied.*
 #### `TauCeti.DavisKahan1970.Section8.theorem8_1_lowerSymmetricGaugeEigenvalue_blockSourceExact_real`
 
 Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section8/Theorem81BlockEigenvalue.lean:737`
+
+Compiler-printed type: *inserted when a compiler certificate is supplied.*
+
+#### `TauCeti.DavisKahan1970.Section8.theorem8_1_upperApproximationRepulsion_blockSourceExact`
+
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section8/Theorem81BlockEigenvalue.lean:839`
+
+Compiler-printed type: *inserted when a compiler certificate is supplied.*
+
+#### `TauCeti.DavisKahan1970.Section8.theorem8_1_lowerApproximationRepulsion_blockSourceExact`
+
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section8/Theorem81BlockEigenvalue.lean:859`
+
+Compiler-printed type: *inserted when a compiler certificate is supplied.*
+
+#### `TauCeti.DavisKahan1970.Section8.theorem8_1_upperApproximationRepulsion_blockSourceExact_real`
+
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section8/Theorem81BlockEigenvalue.lean:887`
+
+Compiler-printed type: *inserted when a compiler certificate is supplied.*
+
+#### `TauCeti.DavisKahan1970.Section8.theorem8_1_lowerApproximationRepulsion_blockSourceExact_real`
+
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section8/Theorem81BlockEigenvalue.lean:910`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
