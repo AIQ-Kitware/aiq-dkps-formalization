@@ -27,20 +27,48 @@ included in the supplementary artifact.
 The build records SHA-256 digests for manuscript inputs and generated evidence
 in \texttt{generated/materials\_manifest.json}.
 
-\section{Reading Formalization 1}
+\section{Davis--Kahan background and Formalization 1}
 \label{app:formalization1}
 
-Formalization~1 is a historical bounded-complex version of the directed
-$\sin 2\Theta$ residual estimate.  In the notation of the source, $U$ is the
-separated exact subspace and $V$ is the trial subspace.  The inclusion
-\texttt{V.subtypeL} plays the role of $E_0$, while the operator \texttt{M} on
-$V$ plays the role of $A_0$.  Consequently
-\texttt{residual A V.subtypeL M} is exactly the operator
-$AE_0-E_0A_0$.  The two spectral hypotheses place the spectrum of $A$ on $U$
-inside $[a,b]$ and the spectrum on $U^\perp$ at least $\delta$ away.  The
-conclusion says that the directed $\sin 2\Theta$ object belongs to the same norm
-ideal as the residual and satisfies
-$\delta N(\sin 2\Theta) \le 2N(R)$.
+The mathematical setup behind Formalization~1 asks how a chosen subspace
+compares with an exact spectral subspace of a self-adjoint operator.  At the
+finite-dimensional level,
+let $A=A^*$ and let $E_0$ have orthonormal columns spanning a candidate subspace
+$P$.  Here ``candidate'' simply means the subspace being compared with an exact
+invariant spectral subspace.  The matrix
+\[
+  A_0 = E_0^* A E_0
+\]
+records what $A$ does after a vector is represented in the $E_0$ coordinates,
+acted on by $A$, and projected back into those coordinates.  The residual
+\[
+  R = A E_0 - E_0 A_0
+\]
+is the part of $AE_0$ that this within-$P$ action does not explain.  In
+particular, $R=0$ when $P$ is invariant under $A$.
+
+The comparison becomes stable when the relevant spectral cluster is separated
+from the rest of the spectrum.  If the exact reducing subspace $U$ corresponds
+to spectrum in an interval $[a,b]$, the hypotheses in Formalization~1 require
+the spectrum on $U^\perp$ to lie at least $\delta>0$ away from that interval.
+Principal angles are canonical angles between two subspaces: they are zero
+when the corresponding directions coincide and grow as those directions rotate
+apart.  The directed $\sin 2\Theta$ construction applies
+$\sin(2\theta)$ to those angles while retaining the orientation associated with
+the chosen exact subspace.  The source estimate represented by
+Formalization~1 has the form
+\[
+  \delta\,N(\sin 2\Theta_0) \le 2N(R),
+\]
+where $N$ is a unitarily invariant norm.  Thus the residual controls subspace
+misalignment relative to the spectral gap.
+
+Formalization~1 is a historical bounded-complex version of this estimate.  In
+its Lean statement, $U$ is the exact reducing subspace and $V$ is the candidate
+subspace.  The inclusion \texttt{V.subtypeL} plays the role of $E_0$, and the
+operator \texttt{M} on $V$ plays the role of $A_0$.  Consequently
+\texttt{residual A V.subtypeL M} is the formal counterpart of
+$AE_0-E_0A_0$.
 
 \begin{table}[H]
 \centering
@@ -59,7 +87,7 @@ Lean expression & Mathematical role \\
   & $A=A^*$, the self-adjointness assumption. \\
 \texttt{Submodule Complex E}
   & A complex linear subspace of the ambient Hilbert space.  Here $U$ is the
-    separated exact/reducing subspace and $V$ is the trial subspace. \\
+    exact reducing subspace and $V$ is the candidate subspace. \\
 \texttt{U.HasOrthogonalProjection}
   & The orthogonal projection onto $U$ is available; likewise for $V$.  This
     supports $U^\perp$, compressions, and the angle constructions. \\
@@ -73,9 +101,10 @@ Lean expression & Mathematical role \\
     interval and gap hypotheses. \\
 \texttt{V.subtypeL}
   & The bounded inclusion $V\hookrightarrow E$, corresponding to the source's
-    trial-basis map $E_0$. \\
+    coordinate map $E_0$. \\
 \texttt{M : ContinuousLinearMap Complex V V}
-  & The operator on the trial coordinates, corresponding to $A_0$. \\
+  & The operator acting in the candidate-subspace coordinates, corresponding
+    to $A_0$. \\
 \texttt{residual A V.subtypeL M}
   & $A\circ E_0-E_0\circ A_0$, the source residual $R$. \\
 \texttt{SymmetricNormingFunction}
@@ -100,8 +129,8 @@ Formalization~1 are the intended mathematical objects.  The mismatch is in
 scope: the declaration fixes the scalar field to $\mathbb C$ and takes $A$ to
 be bounded, while the source also covers real and appropriate unbounded
 self-adjoint settings.  The scalar field and the type of $A$ in the signature
-therefore show why this theorem could not by itself serve as the source-exact
-witness.
+therefore show why this theorem could not represent the full source statement on
+its own.
 
 \section{Lean publication activity}
 
