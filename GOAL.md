@@ -469,15 +469,20 @@ terms vanishing by invariance — plus the branch's own ordered form bound.
 Nothing about `P` is used, so it holds on the whole domain; the paper's `Pᗮ` is
 only where it is read.
 
-**Parts (ii) and (iii) are not unbounded obligations at all.**  Measured against
-the source, 2026-09-06: the paper prints (ii) *"in finite dimensions … with the
-analogous lower-block statement and natural infinite-dimensional extensions"* and
-(iii) *"for every symmetric gauge function `Φ` in finite dimensions"*.  Part (i),
-by contrast, carries no dimension qualifier and so inherits the ambient unbounded
-scope.  So the existing finite/bounded evidence for (ii) and (iii) is **at** the
-printed scope, and the dimension-free approximation-number form already
-registered covers (ii)'s extension remark.  §XVII's "finite versus
-infinite-dimensional scope matches each printed result" is satisfied for them.
+**Parts (ii) and (iii) are not unbounded obligations, and they are not the same
+obligation as each other.**  Measured against the source: the paper prints (ii)
+*"in finite dimensions … with the analogous lower-block statement **and natural
+infinite-dimensional extensions**"* and (iii) *"for every symmetric gauge
+function `Φ` in finite dimensions"* — with no extension clause.  Part (i), by
+contrast, carries no dimension qualifier at all and so inherits the ambient
+unbounded scope.
+
+So (iii) is finite and that is the whole of it, while (ii) has **two** printed
+readings and needs canonical evidence for both.  The 2026-09-06 revision of this
+paragraph said the dimension-free approximation-number form "already registered
+covers (ii)'s extension remark" — it existed, but it was registered as a
+*generalization*, which is not coverage.  §10.3.6 records what the extension
+commits to and the four witnesses that now carry it.
 
 ### 10.3.3 The converse half: closed (2026-09-06)
 
@@ -833,6 +838,63 @@ The ambient-padded statements are retained as generalizations.
 The same finding's other half was repaired on 2026-09-06: the witnesses no longer
 ask the caller for the blocks' symmetry, which is derived from `A` Hermitian and
 which Davis and Kahan do not assume.
+
+## 10.3.6 Part (ii)'s printed infinite-dimensional extension — closed 2026-09-08
+
+Davis and Kahan print (ii) as
+
+> in finite dimensions, if `λ_k` are the ordered eigenvalues of `Λ₁` and `α_k`
+> those of `A₁`, `α_k − α ≤ ‖C₁‖₁²(λ_k − α)`, with the analogous lower-block
+> statement **and natural infinite-dimensional extensions**
+
+and print (iii) with no such clause.  The sixth hostile review observed that the
+repository's own source atom carries the phrase —
+
+```text
+DK-8.1-thm.part-ii-eigenvalue:
+"The finite-dimensional eigenvalue displacement inequalities of part (ii),
+ with natural infinite-dimensional extensions."
+```
+
+— while the canonical evidence, after the block-eigenvalue repair, had become
+purely finite-dimensional.  Repointing alone would not have settled it: the
+question is what the phrase commits the formalization to.
+
+**It has a determinate reading, and the paper fixes it itself.**  Section 1
+defines the replacement for "ordered eigenvalues" at (1.10), the minimax
+sequence
+
+```text
+κ_k = inf_{dim S = k−1} sup_{‖x‖ = 1, x ⊥ S} ‖K x‖,
+```
+
+and says in as many words that *"the same minimax expression makes sense for
+general bounded operators"*.  For a positive operator on a finite-dimensional
+space that sequence **is** the decreasing eigenvalue list
+(`approximationNumber_eq_eigenvalues_of_isPositive`), and every block appearing
+in (ii) is positive under Theorem 8.1's hypotheses.  So the two readings agree
+wherever both are defined, and the extension is the same inequality on the
+minimax sequence with the dimension hypothesis dropped.
+
+**The extension is to infinite-dimensional bounded operators, not to unbounded
+`A`.**  That is the scope at which the paper defines the object being extended,
+and it is forced: with `A₁ ≥ α + δ` unbounded there is no decreasing enumeration
+to compare — the natural unbounded reading would be the *increasing* min-max
+from the bottom, which is a different sequence and not what (ii) states.  Part
+(i), which carries no dimension qualifier, is where Theorem 8.1's inherited
+unbounded scope lives, and it is delivered there.
+
+**The witnesses**, in `Theorem81BlockEigenvalue.lean`, are
+`theorem8_1_{upper,lower}ApproximationRepulsion_blockSourceExact{,_real}`: the
+printed inequality on the blocks themselves — `upperBlockCompression` on `Pᗮ`,
+not the ambient zero-padded operator — on `ContinuousLinearMap.approximationNumber`,
+with `‖C₁‖₁` read as the operator norm of the cosine block (its largest singular
+value), at the paper's separable ambient scope and with no dimension hypothesis.
+Each is one rewrite over the dimension-free theorems that already existed; the
+mathematics was there, the source correspondence was not.
+
+Four new clauses, `part-ii-eigenvalue.infinite.{complex,complex.2,real,real.2}`,
+carry them.  The finite clauses keep the printed eigenvalue formula.
 
 ## 10.4 Unbounded Theorem 8.2
 
@@ -1336,18 +1398,24 @@ sibling as the corollaries that matter. Those are exactly the norms Davis and
 Kahan's own Fan-dominance argument quantifies over, so the class contains the
 ones the paper actually uses.
 
-What remains open, and should be recorded rather than argued away: the class
-requires its ideal to be **complete**, and I have not shown that every norm in
-the printed class supplies that. So the Lean quantifier may still be narrower
-than the printed one. Two honest resolutions, in order of preference:
+**SUPERSEDED 2026-09-06 by §4c, which closed this.**  The paragraph below was
+the open question as it stood on 2026-09-05, and it is kept because §4c is the
+answer to it and reads oddly without the question.  Resolution (2) is what
+landed: `NormalizedUnitaryInvariantNorm` now extends the completeness-free
+`FanDominantIdealFamily`, so nothing here is open.
 
-1. show completeness is automatic for a normalized unitarily invariant norm in
-   the source's sense (it is for every classical example -- Ky Fan, Schatten,
-   Hilbert--Schmidt, trace class), and document the theorem; or
-2. weaken the structure, requiring completeness only where a proof needs it.
-
-Until one of those lands, a façade over this class is *not* known to be
-exhaustive, and the final claim should say so.
+> What remains open, and should be recorded rather than argued away: the class
+> requires its ideal to be **complete**, and I have not shown that every norm in
+> the printed class supplies that. So the Lean quantifier may still be narrower
+> than the printed one. Two honest resolutions, in order of preference:
+>
+> 1. show completeness is automatic for a normalized unitarily invariant norm in
+>    the source's sense (it is for every classical example -- Ky Fan, Schatten,
+>    Hilbert--Schmidt, trace class), and document the theorem; or
+> 2. weaken the structure, requiring completeness only where a proof needs it.
+>
+> Until one of those lands, a façade over this class is *not* known to be
+> exhaustive, and the final claim should say so.
 
 ## 3d. Section 4's `J` — the 2026-09-05 distinction was overruled, 2026-09-06
 
@@ -1629,7 +1697,7 @@ Measured, not asserted.  Every line below is checkable from
 | every designated result has canonical Lean evidence at its actual source scope | **29 of 29**.  `DK-8.1-thm` was reopened on 2026-09-06 over parts (ii)/(iii) and closed on 2026-09-07 by putting them on the blocks themselves (§10.3.5) |
 | real/complex coverage for every result | met |
 | canonical façades expose the paper's separability scope | met, and widened 2026-09-06: Theorem 3.1's converse, Corollary 3.1's realization and all six Section 6 rows carry it too.  Only Section 5, which the source explicitly broadens, and Proposition 4.4's concrete counterexample remain `generalized`, each with its reason |
-| finite vs infinite-dimensional scope matches each printed result | met — Theorem 8.1 (ii) and (iii) stay finite, which the source prints, and are now indexed by the *block* dimension, which the source also prints |
+| finite vs infinite-dimensional scope matches each printed result | met, and the two parts are no longer conflated: (iii) is finite because the source prints only that; (ii) is printed in finite dimensions **and with natural infinite-dimensional extensions**, and carries canonical evidence for both readings (§10.3.6).  Both are indexed by the *block* dimension, which the source also prints |
 | bounded vs unbounded scope matches each printed result | met — Theorem 8.1's branch existence, both halves of its printed *iff*, and part (i) are canonical at unbounded scope in complex and real scalar scope |
 | every UIN-quantified theorem uses the literal source abstraction at its boundary | met.  §4d records the Fan-dominance split and why the derivation is not ours to do; the fifth review closed that concern |
 | no canonical theorem asks for a hypothesis absent from the paper | met.  8.1(i) no longer pins `Q` to a Lean construction; (ii)/(iii) no longer ask for the blocks' symmetry; Theorem 6.2 no longer asks `R` to be Hilbert--Schmidt; Proposition 6.1 and Theorem 6.1 take the printed separation; Lemma 6.1 compares one `K` with one `L` as the source does |
@@ -1646,35 +1714,45 @@ is now known to be unmet; that is not the same as a reviewer having said so.
 
 # XVIII. Final public claim
 
-## WITHDRAWN, and now with nothing recorded as unmet — 2026-09-07
+## WITHDRAWN — 2026-09-08
 
-Five hostile reviews have run against this tree.  The third (2026-09-06) is
-recorded in §XVIII.2 below; the fourth (2026-09-06) in §XVIII.1; the fifth
-(2026-09-07) is here.  All applied the same criterion:
+Six hostile reviews have run against this tree.  The third (2026-09-06) is in
+§XVIII.3 below, the fourth (2026-09-06) in §XVIII.2, the fifth (2026-09-07) in
+§XVIII.1, and the sixth (2026-09-08) is here.  All applied the same criterion:
 
 > Does the canonical public theorem signature, interpreted in the paper's
 > standing context, state the Davis--Kahan result with no stronger restriction and
 > no weaker conclusion?
 
-The fifth review accepted every previously reopened item, closed its own
-Fan-dominance concern, and found four things.  All four are repaired.
+The sixth review closed every one of the fifth's four repairs, and found one
+remaining scope defect, now repaired.
 
 | # | Finding | Repair |
 | --- | --- | --- |
-| 1 | **Theorem 8.1 (ii)/(iii)** still indexed `Fin (finrank ℂ H)` on the zero-padded blocks, with part (iii)'s gauge on `finrank ℂ H`, where the source reads the blocks' own eigenvalue lists at the block dimension | `Theorem81BlockEigenvalue.lean`.  The blocks as operators on `Pᗮ` and `P`; extending by zero moves no approximation number; the block dimensions agree by Theorem 8.1's own acuteness conclusion; and the ambient majorization restricts to the block indices, so the arbitrary gauge is quantified where the source quantifies it.  Eight canonical witnesses (§10.3.5) |
-| 2 | **Lemma 6.1** had no exact façade: the canonical statement took four operators `K, K̃, L, L̃` where the paper compares **one** `K` with **one** `L` | `lemma6_1_sourceOperators_separable_*` and the converse, instantiating `K̃ := K`, `L̃ := L`.  The four-operator statement is retained as the generalization it is |
-| 3 | **Theorem 8.1's existence + part (i)**: the combined statement matching the printed word order already existed, but the inventory canonicalized the separate existence and per-`Q` compression theorems | registration only.  `theorem8_1_exists_branch_withCompression_unbounded_*` is now the canonical evidence for both clauses |
-| 4 | **The repository's own reconstruction of Lemma 6.3 was wrong.**  `DavisKahan1970_part_III.tex` printed the leakage bound as `‖Γ K Ψᗮ‖₁ ≤ η`; Davis and Kahan print `< η`, their proof derives a squared norm strictly below `η²`, and their applications use the strict form | the **TeX** is corrected, not the Lean.  `lemma6_3_approximationNumber_leakage_complex` already concluded `< η` and is unchanged.  The specification hash, the DK-6.3-lem source pin, and the statement-map passage hash all moved, each with the reason recorded.  This is the case the repository's rule anticipates: the original paper is authoritative over the reconstruction |
+| 1 | The repository said "(ii) and (iii) are finite-dimensional because the source prints them so".  That is true of (iii) and **false of (ii)**: the source prints (ii) *"in finite dimensions … and natural infinite-dimensional extensions"*.  The repository's own source atom carried the phrase; the canonical evidence did not.  The dimension-free approximation-number theorems existed but were registered as generalizations | `theorem8_1_{upper,lower}ApproximationRepulsion_blockSourceExact{,_real}` — the printed inequality on the blocks themselves, on the paper's own minimax sequence (1.10), at the paper's separable ambient scope, with no dimension hypothesis.  Four new clauses carry them.  §10.3.6 records what the phrase commits to, and why the extension is to infinite-dimensional *bounded* operators rather than to unbounded `A` |
+
+The review also noted a documentation inconsistency: §3c still read as though the
+norm-class completeness question were open, although §4c closed it on 2026-09-06.
+§3c now marks that paragraph superseded and quotes it rather than asserting it.
 
 Evidence after the repairs: `certify_davis_kahan_1970.py` PASS at 29/29 terminal;
-`lake build` green on every default target with zero production warnings; 93
-statement pins and 43 source pins clean; the tamper suite green.
+`lake build` green on every default target with zero production warnings;
+statement and source pins clean; the tamper suite green.
 
-**The claim below stays withdrawn.**  Every line of the §XVII.1 scoreboard is met
-and no obligation is recorded open, but five reviews have each found something
-the previous one did not, and the verdict is the reviewer's to give.
+**The claim below stays withdrawn.**  Six reviews have each found something the
+previous one did not — the sixth found a sentence in this very file that
+misdescribed the source — and the verdict is the reviewer's to give.
 
-## §XVIII.1 The fourth review's six findings (2026-09-06)
+## §XVIII.1 The fifth review's four findings (2026-09-07)
+
+| # | Finding | Repair |
+| --- | --- | --- |
+| 1 | Theorem 8.1 (ii)/(iii) still indexed `Fin (finrank ℂ H)` on the zero-padded blocks, with part (iii)'s gauge on `finrank ℂ H` | the blocks as operators on `Pᗮ` and `P`; extension by zero moves no approximation number; the block dimensions agree by Theorem 8.1's own acuteness conclusion; and the ambient majorization restricts to the block indices (§10.3.5) |
+| 2 | Lemma 6.1 had no exact façade: the canonical statement took four operators where the paper compares one `K` with one `L` | `lemma6_1_sourceOperators_separable_*` and the converse; the four-operator statements retained as generalizations |
+| 3 | Theorem 8.1's existence + part (i): the combined statement matching the printed word order already existed but was not canonical | registration only |
+| 4 | **The repository's own reconstruction of Lemma 6.3 was wrong** — it printed `≤ η` where the paper prints `< η` | the TeX is corrected, not the Lean, which already concluded the strict form.  Three hashes moved, each with the reason recorded |
+
+## §XVIII.2 The fourth review's six findings (2026-09-06)
 
 | # | Finding | Repair |
 | --- | --- | --- |
@@ -1685,7 +1763,7 @@ the previous one did not, and the verdict is the reviewer's to give.
 | 5 | Section 6's separability exception was too broad; Proposition 6.1/Theorem 6.1 used `FormBoundedSylvesterGap` where the source prints an interval/exterior separation; Theorem 6.2 added `R` Hilbert--Schmidt | `Section6SourceScope.lean`: separable-ambient wrappers for Lemmas 6.1, 6.2, 6.3; `..._printedGap_sourceExact_*`; and `theorem6_2_vacuity_sourceExact_*` in `ℝ≥0∞`, which *is* the source's "vacuous when the norm does not exist" |
 | 6 | Fan dominance is a field of `FanDominantIdealFamily`, so the public quantifier is "every UIN norm supplied with a Fan-dominance certificate" | split, not derived: `SourceUnitaryInvariantNorm` is the printed law list, `HasFanDominance` the printed sentence, `toNormalized` the bridge, `toSource_toNormalized` the exactness of the split.  §4d says why the derivation is not ours to do; the fifth review accepted this and closed the concern |
 
-## §XVIII.2 The third review's nine findings (2026-09-06), all repaired
+## §XVIII.3 The third review's nine findings (2026-09-06), all repaired
 
 | # | Finding | Repair |
 | --- | --- | --- |
@@ -1733,9 +1811,11 @@ than collapsed into "all theorems proved":
 2. **The operator-scope question is moot as of 2026-09-06.**  Both Section 8 rows
    are delivered at unbounded self-adjoint ambient scope with bounded `H`, in
    complex and real scalar scope, every canonical clause included.
-3. **Parts (ii) and (iii) of Theorem 8.1 are finite-dimensional because the
-   source prints them so** — "in finite dimensions" — not because the repository
-   narrowed them.
+3. **Part (iii) of Theorem 8.1 is finite-dimensional because the source prints
+   it so** — "for every symmetric gauge function `Φ` in finite dimensions" — not
+   because the repository narrowed it.  **Part (ii) is not**: the source prints it
+   in finite dimensions *"and natural infinite-dimensional extensions"*, and both
+   readings carry canonical evidence (§10.3.6).
 4. **The certificate proves compilation, declaration resolution and pin
    stability.**  It does not prove that a Lean statement says what the paper
    says.  That is the hostile semantic review's job.
