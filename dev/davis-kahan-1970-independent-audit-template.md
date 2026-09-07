@@ -19,7 +19,7 @@ Each counted result carries a **source-alignment classification**, and the three
 
 Category 2 is never a softened category 3. If a reviewer concludes that a category 2 result is actually false as printed, that is a FAIL and the repository is asking to be told.
 
-Current result-level status: **28/29 terminal**, **1 awaiting semantic closure**.
+Current result-level status: **29/29 terminal**, **0 awaiting semantic closure**.
 Result-selection/boundary review: **accepted** under policy `dk_established_results_only`.
 
 A hostile reviewer should challenge both layers independently: (1) whether the fidelity inventory omitted source material or misclassified an exclusion, and (2) whether each of the 29 counted result statements is represented exactly in Lean.
@@ -5494,18 +5494,18 @@ One row per printed source clause per scalar field.  A clause is `PASS` only whe
 
 | clause | scalar | witness | status |
 | --- | --- | --- | --- |
-| `forward.complex` | complex | `TauCeti.DavisKahan1970.lemma6_1_separable_complex` | **PASS** |
-| `forward.real` | real | `TauCeti.DavisKahan1970.lemma6_1_separable_real` | **PASS** |
-| `converse.complex` | complex | `TauCeti.DavisKahan1970.lemma6_1_converse_separable_complex` | **PASS** |
-| `converse.real` | real | `TauCeti.DavisKahan1970.lemma6_1_converse_separable_real` | **PASS** |
+| `forward.complex` | complex | `TauCeti.DavisKahan1970.lemma6_1_sourceOperators_separable_complex` | **PASS** |
+| `forward.real` | real | `TauCeti.DavisKahan1970.lemma6_1_sourceOperators_separable_real` | **PASS** |
+| `converse.complex` | complex | `TauCeti.DavisKahan1970.lemma6_1_converse_sourceOperators_separable_complex` | **PASS** |
+| `converse.real` | real | `TauCeti.DavisKahan1970.lemma6_1_converse_sourceOperators_separable_real` | **PASS** |
 
-**`forward.complex`.** Canonical witness for the whole printed statement at rclike scalar scope, carried over from the pre-clause canonical evidence and re-checked against its compiler-printed type under the coherent model.  SOURCE NORM CLASS 2026-09-05.  BOTH the premise and the conclusion now quantify over `NormalizedUnitaryInvariantNorm`, as the paper prints them.  The retained `SymmetricNormingFunction` theorem is strictly stronger -- it takes Ky Fan inequalities as its premise -- and the printed premise reaches it because the Ky Fan norms are members of the source class, which is what `kyFanNormalizedUnitaryInvariantNorm` supplies.  SOURCE SCOPE 2026-09-06.  Repointed at the source-scope facade after the fourth hostile review; the previous primary is retained as supporting evidence and is the stronger theorem.
+**`forward.complex`.** Canonical witness for the whole printed statement at rclike scalar scope, carried over from the pre-clause canonical evidence and re-checked against its compiler-printed type under the coherent model.  SOURCE NORM CLASS 2026-09-05.  BOTH the premise and the conclusion now quantify over `NormalizedUnitaryInvariantNorm`, as the paper prints them.  The retained `SymmetricNormingFunction` theorem is strictly stronger -- it takes Ky Fan inequalities as its premise -- and the printed premise reaches it because the Ky Fan norms are members of the source class, which is what `kyFanNormalizedUnitaryInvariantNorm` supplies.  SOURCE SCOPE 2026-09-06.  Repointed at the source-scope facade after the fourth hostile review; the previous primary is retained as supporting evidence and is the stronger theorem.  SOURCE SHAPE 2026-09-07 (fifth hostile review).  Repointed at the source-shaped witness; the previous primary is retained as supporting evidence.
 
-**`forward.real`.** Canonical witness for the whole printed statement at rclike scalar scope, carried over from the pre-clause canonical evidence and re-checked against its compiler-printed type under the coherent model.  SOURCE NORM CLASS 2026-09-05.  BOTH the premise and the conclusion now quantify over `NormalizedUnitaryInvariantNorm`, as the paper prints them.  The retained `SymmetricNormingFunction` theorem is strictly stronger -- it takes Ky Fan inequalities as its premise -- and the printed premise reaches it because the Ky Fan norms are members of the source class, which is what `kyFanNormalizedUnitaryInvariantNorm` supplies.  SOURCE SCOPE 2026-09-06.  Repointed at the source-scope facade after the fourth hostile review; the previous primary is retained as supporting evidence and is the stronger theorem.
+**`forward.real`.** Canonical witness for the whole printed statement at rclike scalar scope, carried over from the pre-clause canonical evidence and re-checked against its compiler-printed type under the coherent model.  SOURCE NORM CLASS 2026-09-05.  BOTH the premise and the conclusion now quantify over `NormalizedUnitaryInvariantNorm`, as the paper prints them.  The retained `SymmetricNormingFunction` theorem is strictly stronger -- it takes Ky Fan inequalities as its premise -- and the printed premise reaches it because the Ky Fan norms are members of the source class, which is what `kyFanNormalizedUnitaryInvariantNorm` supplies.  SOURCE SCOPE 2026-09-06.  Repointed at the source-scope facade after the fourth hostile review; the previous primary is retained as supporting evidence and is the stronger theorem.  SOURCE SHAPE 2026-09-07 (fifth hostile review).  Repointed at the source-shaped witness; the previous primary is retained as supporting evidence.
 
-**`converse.complex`.** Canonical witness for the whole printed statement at rclike scalar scope, carried over from the pre-clause canonical evidence and re-checked against its compiler-printed type under the coherent model.  SOURCE NORM CLASS 2026-09-05.  The printed converse, with its two equisingularity hypotheses, over the literal norm class on both sides.  SOURCE SCOPE 2026-09-06.  Repointed at the source-scope facade after the fourth hostile review; the previous primary is retained as supporting evidence and is the stronger theorem.
+**`converse.complex`.** Canonical witness for the whole printed statement at rclike scalar scope, carried over from the pre-clause canonical evidence and re-checked against its compiler-printed type under the coherent model.  SOURCE NORM CLASS 2026-09-05.  The printed converse, with its two equisingularity hypotheses, over the literal norm class on both sides.  SOURCE SCOPE 2026-09-06.  Repointed at the source-scope facade after the fourth hostile review; the previous primary is retained as supporting evidence and is the stronger theorem.  SOURCE SHAPE 2026-09-07 (fifth hostile review).  Repointed at the source-shaped witness; the previous primary is retained as supporting evidence.
 
-**`converse.real`.** Canonical witness for the whole printed statement at rclike scalar scope, carried over from the pre-clause canonical evidence and re-checked against its compiler-printed type under the coherent model.  SOURCE NORM CLASS 2026-09-05.  The printed converse, with its two equisingularity hypotheses, over the literal norm class on both sides.  SOURCE SCOPE 2026-09-06.  Repointed at the source-scope facade after the fourth hostile review; the previous primary is retained as supporting evidence and is the stronger theorem.
+**`converse.real`.** Canonical witness for the whole printed statement at rclike scalar scope, carried over from the pre-clause canonical evidence and re-checked against its compiler-printed type under the coherent model.  SOURCE NORM CLASS 2026-09-05.  The printed converse, with its two equisingularity hypotheses, over the literal norm class on both sides.  SOURCE SCOPE 2026-09-06.  Repointed at the source-scope facade after the fourth hostile review; the previous primary is retained as supporting evidence and is the stronger theorem.  SOURCE SHAPE 2026-09-07 (fifth hostile review).  Repointed at the source-shaped witness; the previous primary is retained as supporting evidence.
 
 Result-wide scope every clause must carry: `DK-6.1-lem.ordered-sylvester-forward`, `DK-6.1-lem.ordered-sylvester-converse`
 
@@ -5513,10 +5513,10 @@ Result-wide scope every clause must carry: `DK-6.1-lem.ordered-sylvester-forward
 
 The declarations that carry this result's printed statement, with the source atoms each one covers.  Everything under *Other registered declarations* below accompanies the result without establishing it.
 
-- `TauCeti.DavisKahan1970.lemma6_1_separable_complex` — primary_source_witness, complex scalars, proof; covers `DK-6.1-lem.ordered-sylvester-converse`, `DK-6.1-lem.ordered-sylvester-forward`
-- `TauCeti.DavisKahan1970.lemma6_1_separable_real` — primary_source_witness, real scalars, proof; covers `DK-6.1-lem.ordered-sylvester-converse`, `DK-6.1-lem.ordered-sylvester-forward`
-- `TauCeti.DavisKahan1970.lemma6_1_converse_separable_complex` — primary_source_witness, complex scalars, proof; covers `DK-6.1-lem.ordered-sylvester-converse`, `DK-6.1-lem.ordered-sylvester-forward`
-- `TauCeti.DavisKahan1970.lemma6_1_converse_separable_real` — primary_source_witness, real scalars, proof; covers `DK-6.1-lem.ordered-sylvester-converse`, `DK-6.1-lem.ordered-sylvester-forward`
+- `TauCeti.DavisKahan1970.lemma6_1_sourceOperators_separable_complex` — primary_source_witness, complex scalars, proof; covers `DK-6.1-lem.ordered-sylvester-converse`, `DK-6.1-lem.ordered-sylvester-forward`
+- `TauCeti.DavisKahan1970.lemma6_1_sourceOperators_separable_real` — primary_source_witness, real scalars, proof; covers `DK-6.1-lem.ordered-sylvester-converse`, `DK-6.1-lem.ordered-sylvester-forward`
+- `TauCeti.DavisKahan1970.lemma6_1_converse_sourceOperators_separable_complex` — primary_source_witness, complex scalars, proof; covers `DK-6.1-lem.ordered-sylvester-converse`, `DK-6.1-lem.ordered-sylvester-forward`
+- `TauCeti.DavisKahan1970.lemma6_1_converse_sourceOperators_separable_real` — primary_source_witness, real scalars, proof; covers `DK-6.1-lem.ordered-sylvester-converse`, `DK-6.1-lem.ordered-sylvester-forward`
 
 ### Other registered declarations
 
@@ -5528,6 +5528,10 @@ The declarations that carry this result's printed statement, with the source ato
 - `TauCeti.DavisKahan1970.lemma6_1_sourceExact_real` — generalization
 - `TauCeti.DavisKahan1970.lemma6_1_converse_sourceExact_complex` — generalization
 - `TauCeti.DavisKahan1970.lemma6_1_converse_sourceExact_real` — generalization
+- `TauCeti.DavisKahan1970.lemma6_1_separable_complex` — generalization
+- `TauCeti.DavisKahan1970.lemma6_1_separable_real` — generalization
+- `TauCeti.DavisKahan1970.lemma6_1_converse_separable_complex` — generalization
+- `TauCeti.DavisKahan1970.lemma6_1_converse_separable_real` — generalization
 
 ### Source-facing Lean declarations
 
@@ -5600,6 +5604,30 @@ Compiler-printed type: *inserted when a compiler certificate is supplied.*
 #### `TauCeti.DavisKahan1970.lemma6_1_converse_separable_real`
 
 Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section6SourceScope.lean:127`
+
+Compiler-printed type: *inserted when a compiler certificate is supplied.*
+
+#### `TauCeti.DavisKahan1970.lemma6_1_sourceOperators_separable_complex`
+
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section6SourceScope.lean:434`
+
+Compiler-printed type: *inserted when a compiler certificate is supplied.*
+
+#### `TauCeti.DavisKahan1970.lemma6_1_sourceOperators_separable_real`
+
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section6SourceScope.lean:455`
+
+Compiler-printed type: *inserted when a compiler certificate is supplied.*
+
+#### `TauCeti.DavisKahan1970.lemma6_1_converse_sourceOperators_separable_complex`
+
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section6SourceScope.lean:479`
+
+Compiler-printed type: *inserted when a compiler certificate is supplied.*
+
+#### `TauCeti.DavisKahan1970.lemma6_1_converse_sourceOperators_separable_real`
+
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section6SourceScope.lean:500`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
@@ -6518,7 +6546,7 @@ Compiler-printed type: *inserted when a compiler certificate is supplied.*
 - **Boundary review:** `accepted`
 - **Source alignment:** `locally_exact`
 - **Printed statement locally self-contained:** `True`
-- **Organizational source-block hash:** `6709c9fbf240ea7fc10d68b73cd0c746c59536127a66d13108ba14d114d52a45`
+- **Organizational source-block hash:** `4071b861808a158854b773b5ead73c32eda6a069a622594c8dda7ff746111707`
 
 ### Atoms inside the counted printed result
 
@@ -6540,7 +6568,7 @@ Let $K$ have singular values $\kappa_1\ge\kappa_2\ge\cdots$, let $\Gamma,\Psi$ b
 \]
 then the leakage outside $\Psi$ obeys
 \[
- \boxed{\norm{\Gamma K\Psi^\perp}_1\le\eta.}
+ \boxed{\norm{\Gamma K\Psi^\perp}_1<\eta.}
 \]
 ~~~~
 
@@ -6634,7 +6662,7 @@ Compiler-printed type: *inserted when a compiler certificate is supplied.*
 - **Exact source anchor:** Theorem 8.1
 - **Result disposition:** `proved_exact`
 - **Compiler verification:** `proved_in_build`
-- **Hostile semantic certification:** `hostile_review_blocked`
+- **Hostile semantic certification:** `accepted`
 - **Boundary review:** `accepted`
 - **Source alignment:** `paper_faithful_nonlocal_source_interpretation`
 - **Printed statement locally self-contained:** `False`
@@ -6889,54 +6917,54 @@ One row per printed source clause per scalar field.  A clause is `PASS` only whe
 
 | clause | scalar | witness | status |
 | --- | --- | --- | --- |
-| `existence-correct-q.complex` | complex | `TauCeti.DavisKahan1970.Section8.theorem8_1_exists_branch_blockPlacement_unbounded_complex` | **PASS** |
-| `existence-correct-q.real` | real | `TauCeti.DavisKahan1970.Section8.theorem8_1_exists_branch_blockPlacement_unbounded_real` | **PASS** |
+| `existence-correct-q.complex` | complex | `TauCeti.DavisKahan1970.Section8.theorem8_1_exists_branch_withCompression_unbounded_complex` | **PASS** |
+| `existence-correct-q.real` | real | `TauCeti.DavisKahan1970.Section8.theorem8_1_exists_branch_withCompression_unbounded_real` | **PASS** |
 | `acute-iff-spectral-placement.complex` | complex | `TauCeti.DavisKahan1970.Section8.theorem8_1_maximalAngle_le_iff_blockPlacement_unbounded_complex` | **PASS** |
 | `acute-iff-spectral-placement.real` | real | `TauCeti.DavisKahan1970.Section8.theorem8_1_maximalAngle_le_iff_blockPlacement_unbounded_real` | **PASS** |
-| `part-i-compression.complex` | complex | `TauCeti.DavisKahan1970.Section8.theorem8_1_upperCompressionRepulsion_sourceExact_unbounded_complex` | **PASS** |
+| `part-i-compression.complex` | complex | `TauCeti.DavisKahan1970.Section8.theorem8_1_exists_branch_withCompression_unbounded_complex` | **PASS** |
 | `part-i-compression.complex.2` | complex | `TauCeti.DavisKahan1970.Section8.theorem8_1_lowerCompressionRepulsion_sourceExact_unbounded_complex` | **PASS** |
-| `part-i-compression.real` | real | `TauCeti.DavisKahan1970.Section8.theorem8_1_upperCompressionRepulsion_sourceExact_unbounded_real` | **PASS** |
+| `part-i-compression.real` | real | `TauCeti.DavisKahan1970.Section8.theorem8_1_exists_branch_withCompression_unbounded_real` | **PASS** |
 | `part-i-compression.real.2` | real | `TauCeti.DavisKahan1970.Section8.theorem8_1_lowerCompressionRepulsion_sourceExact_unbounded_real` | **PASS** |
-| `part-ii-eigenvalue.complex` | complex | `TauCeti.DavisKahan1970.Section8.theorem8_1_upperEigenvalueRepulsion_sourceExact` | **PASS** |
-| `part-ii-eigenvalue.complex.2` | complex | `TauCeti.DavisKahan1970.Section8.theorem8_1_lowerEigenvalueRepulsion_sourceExact` | **PASS** |
-| `part-ii-eigenvalue.real` | real | `TauCeti.DavisKahan1970.Section8.theorem8_1_upperEigenvalueRepulsion_sourceExact_real` | **PASS** |
-| `part-ii-eigenvalue.real.2` | real | `TauCeti.DavisKahan1970.Section8.theorem8_1_lowerEigenvalueRepulsion_sourceExact_real` | **PASS** |
-| `part-iii-gauge.complex` | complex | `TauCeti.DavisKahan1970.Section8.theorem8_1_upperSymmetricGaugeEigenvalue_sourceExact` | **PASS** |
-| `part-iii-gauge.complex.2` | complex | `TauCeti.DavisKahan1970.Section8.theorem8_1_lowerSymmetricGaugeEigenvalue_sourceExact` | **PASS** |
-| `part-iii-gauge.real` | real | `TauCeti.DavisKahan1970.Section8.theorem8_1_upperSymmetricGaugeEigenvalue_sourceExact_real` | **PASS** |
-| `part-iii-gauge.real.2` | real | `TauCeti.DavisKahan1970.Section8.theorem8_1_lowerSymmetricGaugeEigenvalue_sourceExact_real` | **PASS** |
+| `part-ii-eigenvalue.complex` | complex | `TauCeti.DavisKahan1970.Section8.theorem8_1_upperEigenvalueRepulsion_blockSourceExact` | **PASS** |
+| `part-ii-eigenvalue.complex.2` | complex | `TauCeti.DavisKahan1970.Section8.theorem8_1_lowerEigenvalueRepulsion_blockSourceExact` | **PASS** |
+| `part-ii-eigenvalue.real` | real | `TauCeti.DavisKahan1970.Section8.theorem8_1_upperEigenvalueRepulsion_blockSourceExact_real` | **PASS** |
+| `part-ii-eigenvalue.real.2` | real | `TauCeti.DavisKahan1970.Section8.theorem8_1_lowerEigenvalueRepulsion_blockSourceExact_real` | **PASS** |
+| `part-iii-gauge.complex` | complex | `TauCeti.DavisKahan1970.Section8.theorem8_1_upperSymmetricGaugeEigenvalue_blockSourceExact` | **PASS** |
+| `part-iii-gauge.complex.2` | complex | `TauCeti.DavisKahan1970.Section8.theorem8_1_lowerSymmetricGaugeEigenvalue_blockSourceExact` | **PASS** |
+| `part-iii-gauge.real` | real | `TauCeti.DavisKahan1970.Section8.theorem8_1_upperSymmetricGaugeEigenvalue_blockSourceExact_real` | **PASS** |
+| `part-iii-gauge.real.2` | real | `TauCeti.DavisKahan1970.Section8.theorem8_1_lowerSymmetricGaugeEigenvalue_blockSourceExact_real` | **PASS** |
 
-**`existence-correct-q.complex`.** Canonical witness for existence-correct-q at unbounded ambient scope, stated as the EXISTENTIAL the source asserts: there is a reducing projector `Q` of `A + H` with `Lambda_0 <= alpha`, `Lambda_1 >= alpha + delta` and `Theta(P, Q) <= pi/4`.  `Lambda_0` and `Lambda_1` are the two reducing restrictions of `A + H` and the placements are operator inequalities on them.  The spectral projector of `A + H` on the side of `alpha` is the internal witness; it is not part of the public type.
+**`existence-correct-q.complex`.** Canonical witness for existence-correct-q at unbounded ambient scope, stated as the EXISTENTIAL the source asserts: there is a reducing projector `Q` of `A + H` with `Lambda_0 <= alpha`, `Lambda_1 >= alpha + delta` and `Theta(P, Q) <= pi/4`.  `Lambda_0` and `Lambda_1` are the two reducing restrictions of `A + H` and the placements are operator inequalities on them.  The spectral projector of `A + H` on the side of `alpha` is the internal witness; it is not part of the public type.  SOURCE SHAPE 2026-09-07 (fifth hostile review).  Repointed at the source-shaped witness; the previous primary is retained as supporting evidence.
 
-**`existence-correct-q.real`.** Canonical witness for existence-correct-q at unbounded ambient scope, stated as the EXISTENTIAL the source asserts: there is a reducing projector `Q` of `A + H` with `Lambda_0 <= alpha`, `Lambda_1 >= alpha + delta` and `Theta(P, Q) <= pi/4`.  `Lambda_0` and `Lambda_1` are the two reducing restrictions of `A + H` and the placements are operator inequalities on them.  The spectral projector of `A + H` on the side of `alpha` is the internal witness; it is not part of the public type.
+**`existence-correct-q.real`.** Canonical witness for existence-correct-q at unbounded ambient scope, stated as the EXISTENTIAL the source asserts: there is a reducing projector `Q` of `A + H` with `Lambda_0 <= alpha`, `Lambda_1 >= alpha + delta` and `Theta(P, Q) <= pi/4`.  `Lambda_0` and `Lambda_1` are the two reducing restrictions of `A + H` and the placements are operator inequalities on them.  The spectral projector of `A + H` on the side of `alpha` is the internal witness; it is not part of the public type.  SOURCE SHAPE 2026-09-07 (fifth hostile review).  Repointed at the source-shaped witness; the previous primary is retained as supporting evidence.
 
 **`acute-iff-spectral-placement.complex`.** Canonical witness for acute-iff-spectral-placement at unbounded ambient scope, on the source's own blocks: `Theta(P, Q) <= pi/4` if and only if `Lambda_0 <= alpha` and `Lambda_1 >= alpha + delta`, with `Lambda_0`, `Lambda_1` the reducing restrictions of `A + H` and the hypotheses likewise on the blocks `A_0`, `A_1`.  The general form-inequality version sits underneath it and is registered as the generalization it is.
 
 **`acute-iff-spectral-placement.real`.** Canonical witness for acute-iff-spectral-placement at unbounded ambient scope, on the source's own blocks: `Theta(P, Q) <= pi/4` if and only if `Lambda_0 <= alpha` and `Lambda_1 >= alpha + delta`, with `Lambda_0`, `Lambda_1` the reducing restrictions of `A + H` and the hypotheses likewise on the blocks `A_0`, `A_1`.  The general form-inequality version sits underneath it and is registered as the generalization it is.
 
-**`part-i-compression.complex`.** Canonical witness for part (i) at unbounded ambient scope, in the source's own `A/H/P/Q` context: `A_1 - alpha <= C_1 (Lambda_1 - alpha) C_1` as a form inequality read on `P^perp`, with `C_1` the cosine block `P_{Q^perp}`.  The left side is the form of `A`, not of `A + H`, because `H` is fully off-diagonal and so has no form on `P^perp`.  The general statement about an arbitrary partial map and reducing subspace sits underneath it.
+**`part-i-compression.complex`.** Canonical witness for part (i) at unbounded ambient scope, in the source's own `A/H/P/Q` context: `A_1 - alpha <= C_1 (Lambda_1 - alpha) C_1` as a form inequality read on `P^perp`, with `C_1` the cosine block `P_{Q^perp}`.  The left side is the form of `A`, not of `A + H`, because `H` is fully off-diagonal and so has no form on `P^perp`.  The general statement about an arbitrary partial map and reducing subspace sits underneath it.  SOURCE SHAPE 2026-09-07 (fifth hostile review).  Repointed at the source-shaped witness; the previous primary is retained as supporting evidence.
 
 **`part-i-compression.complex.2`.** Canonical witness for part (i) at unbounded ambient scope, in the source's own `A/H/P/Q` context: `A_1 - alpha <= C_1 (Lambda_1 - alpha) C_1` as a form inequality read on `P^perp`, with `C_1` the cosine block `P_{Q^perp}`.  The left side is the form of `A`, not of `A + H`, because `H` is fully off-diagonal and so has no form on `P^perp`.  The general statement about an arbitrary partial map and reducing subspace sits underneath it.
 
-**`part-i-compression.real`.** Canonical witness for part (i) at unbounded ambient scope, in the source's own `A/H/P/Q` context: `A_1 - alpha <= C_1 (Lambda_1 - alpha) C_1` as a form inequality read on `P^perp`, with `C_1` the cosine block `P_{Q^perp}`.  The left side is the form of `A`, not of `A + H`, because `H` is fully off-diagonal and so has no form on `P^perp`.  The general statement about an arbitrary partial map and reducing subspace sits underneath it.
+**`part-i-compression.real`.** Canonical witness for part (i) at unbounded ambient scope, in the source's own `A/H/P/Q` context: `A_1 - alpha <= C_1 (Lambda_1 - alpha) C_1` as a form inequality read on `P^perp`, with `C_1` the cosine block `P_{Q^perp}`.  The left side is the form of `A`, not of `A + H`, because `H` is fully off-diagonal and so has no form on `P^perp`.  The general statement about an arbitrary partial map and reducing subspace sits underneath it.  SOURCE SHAPE 2026-09-07 (fifth hostile review).  Repointed at the source-shaped witness; the previous primary is retained as supporting evidence.
 
 **`part-i-compression.real.2`.** Canonical witness for part (i) at unbounded ambient scope, in the source's own `A/H/P/Q` context: `A_1 - alpha <= C_1 (Lambda_1 - alpha) C_1` as a form inequality read on `P^perp`, with `C_1` the cosine block `P_{Q^perp}`.  The left side is the form of `A`, not of `A + H`, because `H` is fully off-diagonal and so has no form on `P^perp`.  The general statement about an arbitrary partial map and reducing subspace sits underneath it.
 
-**`part-ii-eigenvalue.complex`.** Canonical witness on the PRINTED sequences: `alpha_k` and `lambda_k` are the ordered eigenvalues of the blocks, named through `LinearMap.IsSymmetric.eigenvalues`, and the clause is the printed inequality between them in finite dimensions.  The approximation-number theorem it replaces is dimension-free and is retained as the generalization the source announces as the "natural infinite-dimensional extensions"; `approximationNumber_eq_eigenvalues_of_isPositive` is the compiled correspondence between the two readings.
+**`part-ii-eigenvalue.complex`.** Canonical witness on the PRINTED sequences: `alpha_k` and `lambda_k` are the ordered eigenvalues of the blocks, named through `LinearMap.IsSymmetric.eigenvalues`, and the clause is the printed inequality between them in finite dimensions.  The approximation-number theorem it replaces is dimension-free and is retained as the generalization the source announces as the "natural infinite-dimensional extensions"; `approximationNumber_eq_eigenvalues_of_isPositive` is the compiled correspondence between the two readings.  SOURCE SHAPE 2026-09-07 (fifth hostile review).  Repointed at the source-shaped witness; the previous primary is retained as supporting evidence.
 
-**`part-ii-eigenvalue.complex.2`.** Canonical witness on the PRINTED sequences: `alpha_k` and `lambda_k` are the ordered eigenvalues of the blocks, named through `LinearMap.IsSymmetric.eigenvalues`, and the clause is the printed inequality between them in finite dimensions.  The approximation-number theorem it replaces is dimension-free and is retained as the generalization the source announces as the "natural infinite-dimensional extensions"; `approximationNumber_eq_eigenvalues_of_isPositive` is the compiled correspondence between the two readings.
+**`part-ii-eigenvalue.complex.2`.** Canonical witness on the PRINTED sequences: `alpha_k` and `lambda_k` are the ordered eigenvalues of the blocks, named through `LinearMap.IsSymmetric.eigenvalues`, and the clause is the printed inequality between them in finite dimensions.  The approximation-number theorem it replaces is dimension-free and is retained as the generalization the source announces as the "natural infinite-dimensional extensions"; `approximationNumber_eq_eigenvalues_of_isPositive` is the compiled correspondence between the two readings.  SOURCE SHAPE 2026-09-07 (fifth hostile review).  Repointed at the source-shaped witness; the previous primary is retained as supporting evidence.
 
-**`part-ii-eigenvalue.real`.** Canonical witness on the PRINTED sequences: `alpha_k` and `lambda_k` are the ordered eigenvalues of the blocks, named through `LinearMap.IsSymmetric.eigenvalues`, and the clause is the printed inequality between them in finite dimensions.  The approximation-number theorem it replaces is dimension-free and is retained as the generalization the source announces as the "natural infinite-dimensional extensions"; `approximationNumber_eq_eigenvalues_of_isPositive` is the compiled correspondence between the two readings.
+**`part-ii-eigenvalue.real`.** Canonical witness on the PRINTED sequences: `alpha_k` and `lambda_k` are the ordered eigenvalues of the blocks, named through `LinearMap.IsSymmetric.eigenvalues`, and the clause is the printed inequality between them in finite dimensions.  The approximation-number theorem it replaces is dimension-free and is retained as the generalization the source announces as the "natural infinite-dimensional extensions"; `approximationNumber_eq_eigenvalues_of_isPositive` is the compiled correspondence between the two readings.  SOURCE SHAPE 2026-09-07 (fifth hostile review).  Repointed at the source-shaped witness; the previous primary is retained as supporting evidence.
 
-**`part-ii-eigenvalue.real.2`.** Canonical witness on the PRINTED sequences: `alpha_k` and `lambda_k` are the ordered eigenvalues of the blocks, named through `LinearMap.IsSymmetric.eigenvalues`, and the clause is the printed inequality between them in finite dimensions.  The approximation-number theorem it replaces is dimension-free and is retained as the generalization the source announces as the "natural infinite-dimensional extensions"; `approximationNumber_eq_eigenvalues_of_isPositive` is the compiled correspondence between the two readings.
+**`part-ii-eigenvalue.real.2`.** Canonical witness on the PRINTED sequences: `alpha_k` and `lambda_k` are the ordered eigenvalues of the blocks, named through `LinearMap.IsSymmetric.eigenvalues`, and the clause is the printed inequality between them in finite dimensions.  The approximation-number theorem it replaces is dimension-free and is retained as the generalization the source announces as the "natural infinite-dimensional extensions"; `approximationNumber_eq_eigenvalues_of_isPositive` is the compiled correspondence between the two readings.  SOURCE SHAPE 2026-09-07 (fifth hostile review).  Repointed at the source-shaped witness; the previous primary is retained as supporting evidence.
 
-**`part-iii-gauge.complex`.** Canonical witness on the PRINTED sequences: `alpha_k` and `lambda_k` are the ordered eigenvalues of the blocks, named through `LinearMap.IsSymmetric.eigenvalues`, and the clause is the printed inequality between them in finite dimensions.  The approximation-number theorem it replaces is dimension-free and is retained as the generalization the source announces as the "natural infinite-dimensional extensions"; `approximationNumber_eq_eigenvalues_of_isPositive` is the compiled correspondence between the two readings.
+**`part-iii-gauge.complex`.** Canonical witness on the PRINTED sequences: `alpha_k` and `lambda_k` are the ordered eigenvalues of the blocks, named through `LinearMap.IsSymmetric.eigenvalues`, and the clause is the printed inequality between them in finite dimensions.  The approximation-number theorem it replaces is dimension-free and is retained as the generalization the source announces as the "natural infinite-dimensional extensions"; `approximationNumber_eq_eigenvalues_of_isPositive` is the compiled correspondence between the two readings.  SOURCE SHAPE 2026-09-07 (fifth hostile review).  Repointed at the source-shaped witness; the previous primary is retained as supporting evidence.
 
-**`part-iii-gauge.complex.2`.** Canonical witness on the PRINTED sequences: `alpha_k` and `lambda_k` are the ordered eigenvalues of the blocks, named through `LinearMap.IsSymmetric.eigenvalues`, and the clause is the printed inequality between them in finite dimensions.  The approximation-number theorem it replaces is dimension-free and is retained as the generalization the source announces as the "natural infinite-dimensional extensions"; `approximationNumber_eq_eigenvalues_of_isPositive` is the compiled correspondence between the two readings.
+**`part-iii-gauge.complex.2`.** Canonical witness on the PRINTED sequences: `alpha_k` and `lambda_k` are the ordered eigenvalues of the blocks, named through `LinearMap.IsSymmetric.eigenvalues`, and the clause is the printed inequality between them in finite dimensions.  The approximation-number theorem it replaces is dimension-free and is retained as the generalization the source announces as the "natural infinite-dimensional extensions"; `approximationNumber_eq_eigenvalues_of_isPositive` is the compiled correspondence between the two readings.  SOURCE SHAPE 2026-09-07 (fifth hostile review).  Repointed at the source-shaped witness; the previous primary is retained as supporting evidence.
 
-**`part-iii-gauge.real`.** Canonical witness on the PRINTED sequences: `alpha_k` and `lambda_k` are the ordered eigenvalues of the blocks, named through `LinearMap.IsSymmetric.eigenvalues`, and the clause is the printed inequality between them in finite dimensions.  The approximation-number theorem it replaces is dimension-free and is retained as the generalization the source announces as the "natural infinite-dimensional extensions"; `approximationNumber_eq_eigenvalues_of_isPositive` is the compiled correspondence between the two readings.
+**`part-iii-gauge.real`.** Canonical witness on the PRINTED sequences: `alpha_k` and `lambda_k` are the ordered eigenvalues of the blocks, named through `LinearMap.IsSymmetric.eigenvalues`, and the clause is the printed inequality between them in finite dimensions.  The approximation-number theorem it replaces is dimension-free and is retained as the generalization the source announces as the "natural infinite-dimensional extensions"; `approximationNumber_eq_eigenvalues_of_isPositive` is the compiled correspondence between the two readings.  SOURCE SHAPE 2026-09-07 (fifth hostile review).  Repointed at the source-shaped witness; the previous primary is retained as supporting evidence.
 
-**`part-iii-gauge.real.2`.** Canonical witness on the PRINTED sequences: `alpha_k` and `lambda_k` are the ordered eigenvalues of the blocks, named through `LinearMap.IsSymmetric.eigenvalues`, and the clause is the printed inequality between them in finite dimensions.  The approximation-number theorem it replaces is dimension-free and is retained as the generalization the source announces as the "natural infinite-dimensional extensions"; `approximationNumber_eq_eigenvalues_of_isPositive` is the compiled correspondence between the two readings.
+**`part-iii-gauge.real.2`.** Canonical witness on the PRINTED sequences: `alpha_k` and `lambda_k` are the ordered eigenvalues of the blocks, named through `LinearMap.IsSymmetric.eigenvalues`, and the clause is the printed inequality between them in finite dimensions.  The approximation-number theorem it replaces is dimension-free and is retained as the generalization the source announces as the "natural infinite-dimensional extensions"; `approximationNumber_eq_eigenvalues_of_isPositive` is the compiled correspondence between the two readings.  SOURCE SHAPE 2026-09-07 (fifth hostile review).  Repointed at the source-shaped witness; the previous primary is retained as supporting evidence.
 
 Result-wide scope every clause must carry: *(none)*
 
@@ -6944,22 +6972,20 @@ Result-wide scope every clause must carry: *(none)*
 
 The declarations that carry this result's printed statement, with the source atoms each one covers.  Everything under *Other registered declarations* below accompanies the result without establishing it.
 
-- `TauCeti.DavisKahan1970.Section8.theorem8_1_exists_branch_blockPlacement_unbounded_complex` — primary_source_witness, complex scalars, proof; covers `DK-8.1-thm.existence-correct-q`
-- `TauCeti.DavisKahan1970.Section8.theorem8_1_exists_branch_blockPlacement_unbounded_real` — primary_source_witness, real scalars, proof; covers `DK-8.1-thm.existence-correct-q`
+- `TauCeti.DavisKahan1970.Section8.theorem8_1_exists_branch_withCompression_unbounded_complex` — primary_source_witness, complex scalars, proof; covers `DK-8.1-thm.existence-correct-q`, `DK-8.1-thm.part-i-compression`
+- `TauCeti.DavisKahan1970.Section8.theorem8_1_exists_branch_withCompression_unbounded_real` — primary_source_witness, real scalars, proof; covers `DK-8.1-thm.existence-correct-q`, `DK-8.1-thm.part-i-compression`
 - `TauCeti.DavisKahan1970.Section8.theorem8_1_maximalAngle_le_iff_blockPlacement_unbounded_complex` — primary_source_witness, complex scalars, proof; covers `DK-8.1-thm.acute-iff-spectral-placement`
 - `TauCeti.DavisKahan1970.Section8.theorem8_1_maximalAngle_le_iff_blockPlacement_unbounded_real` — primary_source_witness, real scalars, proof; covers `DK-8.1-thm.acute-iff-spectral-placement`
-- `TauCeti.DavisKahan1970.Section8.theorem8_1_upperCompressionRepulsion_sourceExact_unbounded_complex` — primary_source_witness, complex scalars, proof; covers `DK-8.1-thm.part-i-compression`
 - `TauCeti.DavisKahan1970.Section8.theorem8_1_lowerCompressionRepulsion_sourceExact_unbounded_complex` — primary_source_witness, complex scalars, proof; covers `DK-8.1-thm.part-i-compression`
-- `TauCeti.DavisKahan1970.Section8.theorem8_1_upperCompressionRepulsion_sourceExact_unbounded_real` — primary_source_witness, real scalars, proof; covers `DK-8.1-thm.part-i-compression`
 - `TauCeti.DavisKahan1970.Section8.theorem8_1_lowerCompressionRepulsion_sourceExact_unbounded_real` — primary_source_witness, real scalars, proof; covers `DK-8.1-thm.part-i-compression`
-- `TauCeti.DavisKahan1970.Section8.theorem8_1_upperEigenvalueRepulsion_sourceExact` — primary_source_witness, complex scalars, proof; covers `DK-8.1-thm.part-ii-eigenvalue`
-- `TauCeti.DavisKahan1970.Section8.theorem8_1_lowerEigenvalueRepulsion_sourceExact` — primary_source_witness, complex scalars, proof; covers `DK-8.1-thm.part-ii-eigenvalue`
-- `TauCeti.DavisKahan1970.Section8.theorem8_1_upperEigenvalueRepulsion_sourceExact_real` — primary_source_witness, real scalars, proof; covers `DK-8.1-thm.part-ii-eigenvalue`
-- `TauCeti.DavisKahan1970.Section8.theorem8_1_lowerEigenvalueRepulsion_sourceExact_real` — primary_source_witness, real scalars, proof; covers `DK-8.1-thm.part-ii-eigenvalue`
-- `TauCeti.DavisKahan1970.Section8.theorem8_1_upperSymmetricGaugeEigenvalue_sourceExact` — primary_source_witness, complex scalars, proof; covers `DK-8.1-thm.part-iii-gauge`
-- `TauCeti.DavisKahan1970.Section8.theorem8_1_lowerSymmetricGaugeEigenvalue_sourceExact` — primary_source_witness, complex scalars, proof; covers `DK-8.1-thm.part-iii-gauge`
-- `TauCeti.DavisKahan1970.Section8.theorem8_1_upperSymmetricGaugeEigenvalue_sourceExact_real` — primary_source_witness, real scalars, proof; covers `DK-8.1-thm.part-iii-gauge`
-- `TauCeti.DavisKahan1970.Section8.theorem8_1_lowerSymmetricGaugeEigenvalue_sourceExact_real` — primary_source_witness, real scalars, proof; covers `DK-8.1-thm.part-iii-gauge`
+- `TauCeti.DavisKahan1970.Section8.theorem8_1_upperEigenvalueRepulsion_blockSourceExact` — primary_source_witness, complex scalars, proof; covers `DK-8.1-thm.part-ii-eigenvalue`
+- `TauCeti.DavisKahan1970.Section8.theorem8_1_lowerEigenvalueRepulsion_blockSourceExact` — primary_source_witness, complex scalars, proof; covers `DK-8.1-thm.part-ii-eigenvalue`
+- `TauCeti.DavisKahan1970.Section8.theorem8_1_upperEigenvalueRepulsion_blockSourceExact_real` — primary_source_witness, real scalars, proof; covers `DK-8.1-thm.part-ii-eigenvalue`
+- `TauCeti.DavisKahan1970.Section8.theorem8_1_lowerEigenvalueRepulsion_blockSourceExact_real` — primary_source_witness, real scalars, proof; covers `DK-8.1-thm.part-ii-eigenvalue`
+- `TauCeti.DavisKahan1970.Section8.theorem8_1_upperSymmetricGaugeEigenvalue_blockSourceExact` — primary_source_witness, complex scalars, proof; covers `DK-8.1-thm.part-iii-gauge`
+- `TauCeti.DavisKahan1970.Section8.theorem8_1_lowerSymmetricGaugeEigenvalue_blockSourceExact` — primary_source_witness, complex scalars, proof; covers `DK-8.1-thm.part-iii-gauge`
+- `TauCeti.DavisKahan1970.Section8.theorem8_1_upperSymmetricGaugeEigenvalue_blockSourceExact_real` — primary_source_witness, real scalars, proof; covers `DK-8.1-thm.part-iii-gauge`
+- `TauCeti.DavisKahan1970.Section8.theorem8_1_lowerSymmetricGaugeEigenvalue_blockSourceExact_real` — primary_source_witness, real scalars, proof; covers `DK-8.1-thm.part-iii-gauge`
 
 ### Other registered declarations
 
@@ -7039,10 +7065,20 @@ The declarations that carry this result's printed statement, with the source ato
 - `TauCeti.DavisKahan1970.Section8.theorem8_1_lowerCompressionRepulsion_ofBlockPlacement_unbounded_complex` — generalization
 - `TauCeti.DavisKahan1970.Section8.theorem8_1_upperCompressionRepulsion_ofBlockPlacement_unbounded_real` — generalization
 - `TauCeti.DavisKahan1970.Section8.theorem8_1_lowerCompressionRepulsion_ofBlockPlacement_unbounded_real` — generalization
-- `TauCeti.DavisKahan1970.Section8.theorem8_1_exists_branch_withCompression_unbounded_complex` — supporting_theorem
-- `TauCeti.DavisKahan1970.Section8.theorem8_1_exists_branch_withCompression_unbounded_real` — supporting_theorem
 - `TauCeti.DavisKahan1970.Section8.isSymmetric_upperBlockShift` — supporting_theorem
 - `TauCeti.DavisKahan1970.Section8.isSymmetric_lowerBlockShift` — supporting_theorem
+- `TauCeti.DavisKahan1970.Section8.theorem8_1_exists_branch_blockPlacement_unbounded_complex` — generalization
+- `TauCeti.DavisKahan1970.Section8.theorem8_1_exists_branch_blockPlacement_unbounded_real` — generalization
+- `TauCeti.DavisKahan1970.Section8.theorem8_1_upperCompressionRepulsion_sourceExact_unbounded_complex` — generalization
+- `TauCeti.DavisKahan1970.Section8.theorem8_1_upperCompressionRepulsion_sourceExact_unbounded_real` — generalization
+- `TauCeti.DavisKahan1970.Section8.theorem8_1_upperEigenvalueRepulsion_sourceExact` — generalization
+- `TauCeti.DavisKahan1970.Section8.theorem8_1_lowerEigenvalueRepulsion_sourceExact` — generalization
+- `TauCeti.DavisKahan1970.Section8.theorem8_1_upperEigenvalueRepulsion_sourceExact_real` — generalization
+- `TauCeti.DavisKahan1970.Section8.theorem8_1_lowerEigenvalueRepulsion_sourceExact_real` — generalization
+- `TauCeti.DavisKahan1970.Section8.theorem8_1_upperSymmetricGaugeEigenvalue_sourceExact` — generalization
+- `TauCeti.DavisKahan1970.Section8.theorem8_1_lowerSymmetricGaugeEigenvalue_sourceExact` — generalization
+- `TauCeti.DavisKahan1970.Section8.theorem8_1_upperSymmetricGaugeEigenvalue_sourceExact_real` — generalization
+- `TauCeti.DavisKahan1970.Section8.theorem8_1_lowerSymmetricGaugeEigenvalue_sourceExact_real` — generalization
 
 ### Source-facing Lean declarations
 
@@ -7619,6 +7655,54 @@ Compiler-printed type: *inserted when a compiler certificate is supplied.*
 #### `TauCeti.DavisKahan1970.Section8.isSymmetric_lowerBlockShift`
 
 Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section8/Theorem81EigenvalueSource.lean:69`
+
+Compiler-printed type: *inserted when a compiler certificate is supplied.*
+
+#### `TauCeti.DavisKahan1970.Section8.theorem8_1_upperEigenvalueRepulsion_blockSourceExact`
+
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section8/Theorem81BlockEigenvalue.lean:352`
+
+Compiler-printed type: *inserted when a compiler certificate is supplied.*
+
+#### `TauCeti.DavisKahan1970.Section8.theorem8_1_lowerEigenvalueRepulsion_blockSourceExact`
+
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section8/Theorem81BlockEigenvalue.lean:385`
+
+Compiler-printed type: *inserted when a compiler certificate is supplied.*
+
+#### `TauCeti.DavisKahan1970.Section8.theorem8_1_upperEigenvalueRepulsion_blockSourceExact_real`
+
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section8/Theorem81BlockEigenvalue.lean:599`
+
+Compiler-printed type: *inserted when a compiler certificate is supplied.*
+
+#### `TauCeti.DavisKahan1970.Section8.theorem8_1_lowerEigenvalueRepulsion_blockSourceExact_real`
+
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section8/Theorem81BlockEigenvalue.lean:637`
+
+Compiler-printed type: *inserted when a compiler certificate is supplied.*
+
+#### `TauCeti.DavisKahan1970.Section8.theorem8_1_upperSymmetricGaugeEigenvalue_blockSourceExact`
+
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section8/Theorem81BlockEigenvalue.lean:426`
+
+Compiler-printed type: *inserted when a compiler certificate is supplied.*
+
+#### `TauCeti.DavisKahan1970.Section8.theorem8_1_lowerSymmetricGaugeEigenvalue_blockSourceExact`
+
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section8/Theorem81BlockEigenvalue.lean:477`
+
+Compiler-printed type: *inserted when a compiler certificate is supplied.*
+
+#### `TauCeti.DavisKahan1970.Section8.theorem8_1_upperSymmetricGaugeEigenvalue_blockSourceExact_real`
+
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section8/Theorem81BlockEigenvalue.lean:674`
+
+Compiler-printed type: *inserted when a compiler certificate is supplied.*
+
+#### `TauCeti.DavisKahan1970.Section8.theorem8_1_lowerSymmetricGaugeEigenvalue_blockSourceExact_real`
+
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section8/Theorem81BlockEigenvalue.lean:737`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
@@ -8659,8 +8743,8 @@ Every source atom remains visible here even when it is outside the 29-result den
 
 - **All 275 source-fidelity atoms reviewed for omission/classification:** yes / no
 - **All 29 counted DK-established results reviewed against their exact printed boundaries:** yes / no
-- **28 currently terminal results independently reconfirmed:** yes / no
-- **1 currently nonterminal/pending results resolved by this audit:** yes / no
+- **29 currently terminal results independently reconfirmed:** yes / no
+- **0 currently nonterminal/pending results resolved by this audit:** yes / no
 - **Any excluded fidelity atom that actually belongs to a counted result statement:** yes / no
 - **Any Davis--Kahan-established named/headline result missing from the 29-result inventory:** yes / no
 - **Any non-established/open/deferred material incorrectly included in the denominator:** yes / no

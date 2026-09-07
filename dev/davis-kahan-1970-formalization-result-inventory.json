@@ -45,8 +45,8 @@
     "status": "accepted",
     "policy": "dk_established_results_only",
     "source_fidelity_inventory_sha256": "a35c9158f5fab388494d59393f2c49343e0810cb0c5a864abc383e955542564c",
-    "distributable_specification_sha256": "05ef66dd33b497329f745505d3a04b0100f2a0052202a3b7a188d76a545e71fd",
-    "method": "Reviewed the source-fidelity inventory and the exact theorem/proposition/lemma/corollary environments in paper order. Selected exactly the four Section 2 headline theorems plus all named results Davis--Kahan actually establish; for every counted result, partitioned the primary source block into statement atoms versus adjacent setup/proof/example/consequence/remark atoms, and classified every fidelity atom with an explicit inclusion/exclusion reason.  RE-AUDITED 2026-08-12 for the standing post-Proposition-3.2 convention: the source states, immediately after the proof of Proposition 3.2, that (3.5) is assumed as well as (1.5) except where the contrary is stated.  That convention is carried as the source SCOPE atom `S3-standing-scope.crossed-dimension-standing-assumption`.  It is deliberately NOT a new counted result and the denominator stays at 29.  RE-AUDITED AGAIN 2026-08-12 for nonlocal source semantics: the distributable specification now also carries the Section 1 norm-existence/vacuity convention, the finite-dimensional automatic case of (3.5) from the Proposition 3.2 remark, the Section 3 angle-operator/J_0 construction, and the Section 6 whole-space assembly step of the tangent proof, with five new source-fidelity atoms.  None of that material is a counted result; it is interpretation and proof-context evidence, reverse-linked through `interpretation_support` rather than through the printed-statement boundary.  The denominator stays at 29. HOSTILE APPENDIX SCOPE RE-AUDIT 2026-08-12: the Appendix explicitly says the tangent theorem is treated with A_0 <= alpha and Lambda_1 >= alpha + delta while both may now be unbounded. `DK-6-appendix.unbounded-tangent-extension` is therefore result scope for `S2-tan-theta`, not expository commentary. The denominator remains 29; the scope obligation is discharged by the new complex and real unboundedCompression ambient endpoints.  RE-ACCEPTED 2026-08-29 after a reason-only edit to five Section 10 fidelity atoms. The five `DK-10.4.*` atoms around Question 10.4 carried the generic boilerplate reasons the boundary rule forbids, so a reviewer could not tell why each was excluded. Each now says what it is: the two `restatement_of_counted_result` atoms name the double-angle tangent theorem they restate and the exact wrapper that carries it, and the three motivation atoms say that the step-function identification and the two norm readings are definitional consequences asserted in passing while setting up the question, not results established there. Their empty reverse links are now explained rather than merely present: a reverse link marks membership of a counted result's own source block, and this Section 10 passage is not in the Section 2 block. MEASURED: no atom added or removed, no `formalization_role` changed, no `formalization_result_ids` changed, and no counted result touched. The denominator stays at 29.  RE-ACCEPTED 2026-08-29 (second) after a reason-only edit to the two `S1-block-residual.residual-eigenvalue-*` atoms. They carried the generic `introductory_background_not_designated_result` reason, which does not explain why material this substantive is outside the denominator. The reason now states it: the source introduces these bounds as \"the standard residual-to-eigenvalue consequence\" that the paper \"also records\", so they are classical Rayleigh--Ritz error theory quoted for the numerical-approximation reading rather than results Davis and Kahan establish, and no later result of theirs depends on them. MEASURED: role unchanged, reverse links unchanged and still empty, no atom added or removed, no counted result touched, denominator still 29. RE-ACCEPTED 2026-08-30 after the Section 2 declaration-naming campaign. The source-fidelity inventory changed in exactly two `formalization_role_reason` strings, both under Question 10.4, and in both the change is the Lean declaration name quoted inside the rationale: `tanTwoTheta_wholeSpace_symmetricNorming_exact` became `tanTwoTheta_ambient_bounded_spectralGap_symmetricNorming_complex`, and `tanTwoTheta_directedCorner_residual_symmetricNorming_exact` became `tanTwoTheta_directed_boundedResidual_blockRepresentative_spectralGap_symmetricNorming_complex`. MEASURED against the previous accepted revision: no atom added or removed, no `atom_id`, `formalization_role`, `formalization_role_reason_code`, or `formalization_result_ids` changed, no source text touched, and the distributable specification is byte-identical (its hash is unchanged). No counted result was touched and the denominator stays at 29.  SCOPE-ATOM RE-AUDIT 2026-08-31. All 24 source atoms with `kind: \"scope\"` were re-audited against the distributable specification, their surrounding source blocks, the counted-result inventory and the compiled declarations. This is NOT a reason-only edit: four atoms changed role from `non_result` to `result_scope`, one was split into three, and every scope atom now carries a structured `scope_classification` giving one of five categories with a verbatim source quotation. THE DENOMINATOR IS UNCHANGED AT 29: every reclassified atom is scope of an EXISTING counted result, not a new result. MEASURED: atoms 272 -> 274, both additions being the split of `DK-6-appendix.unbounded-sine-extension` into its headline-sine clause and the two sentences naming Proposition 6.1 and Theorem 6.1; no atom removed; no source text touched; the distributable specification is byte-identical. The reclassifications were forced by the inventory's own statement_boundary policy: `DK-5.1-thm.roles-interchange`, `DK-5.1-thm.one-sided-unbounded-extension`, `DK-6-appendix.unbounded-sine-extension` and `DK-8.2-thm.sin2-unequal-dimension-extension` each state an explicit extension of a counted result's proved scope, and each had been excluded with a reason code whose grounds were that it occurs after the theorem environment -- the exact condition the policy says does not exclude an explicit extension. The internal inconsistency was visible: the Appendix's unbounded TANGENT sentence was already `result_scope` for `S2-tan-theta` while the adjacent SINE sentence was `expository_commentary_not_result`.  RE-ACCEPTED 2026-08-31 after a requirement-only edit to one fidelity atom.  `DK-6-appendix.unbounded-tangent-extension` carried no `type_requirements`, so the coherence check could not tell an Appendix-scope tangent witness (Ritz compression itself unbounded) from a witness with an unbounded ambient operator and a BOUNDED Ritz compression -- and the registered directed primaries were the latter.  The atom now requires `UnboundedRitzPair` and forbids `BoundedCompressionTrialBlock`, which makes the third unbounded-scope axis compiler-checkable and distinct from the ambient-operator axis (`→ₗ.[`) and the bounded-residual axis (`→L[`).  No result was added, removed, or reclassified; the denominator remains 29 and no boundary review changed. RE-ACCEPTED 2026-09-01 after the norm-abstraction rename. The source-fidelity inventory changed in exactly six atoms, and in every one the change is the Lean type or declaration name quoted inside a rationale or `type_requirements` entry: `PaperUnitaryInvariantNorm` became `SymmetricNormingFunction` and the `_paperUINorm` declaration-name token became `_symmetricNorming`. The affected atoms are `S2-sin-theta.ui-norm-scope`, `S2-unbounded-scope.arbitrary-ui-scope`, `DK-6-appendix.unbounded-tangent-extension`, `DK-8.2-thm.sin2-unequal-dimension-extension`, `DK-10.4.ambient-tan2-bound` and `DK-10.4.directed-tan2-bound`. MEASURED against the previous accepted revision by applying the inverse substitution and comparing structurally: 274 atoms before and after, none added or removed, no `formalization_role`, `formalization_role_reason_code` or `formalization_result_ids` changed, and zero atoms differing beyond the renamed identifier. No source text was touched and the distributable specification is byte-identical (its hash is unchanged). The type requirement on `DK-6-appendix.unbounded-tangent-extension` still requires `UnboundedRitzPair` and still forbids `BoundedCompressionTrialBlock`; only the norm type's name inside it moved. No counted result was touched and the denominator stays at 29.  RE-ACCEPTED 2026-09-02 after the source-fidelity `coverage_summary` was regenerated from the atom records: the checked-in aggregate had drifted from the data it summarises (result_support_atoms 75 vs 69, fidelity_only_atoms 199 vs 205, counted_result_scope 16 vs 10, post_result_consequence_not_in_printed_statement 4 vs 9, proof_or_derivation_not_result 68 vs 69) and only two of its fields were checked, so the drift was invisible.  MEASURED, not asserted: all 274 atom records are byte-identical to the previous revision and `coverage_summary` is the only top-level key that changed, so no atom classification, result link, or boundary decision was touched and the selection this review accepted is unchanged.  The aggregate is now derived by `scripts/check_davis_kahan_1970_statement_map.py --write-coverage-summary` and every field is recomputed and compared on each run.  This re-acceptance covers the selection review only; it is not a semantic acceptance.  RE-ACCEPTED 2026-09-02 (second change this date) after the Section 3 standing-scope atom gained an `interpretation_support` backlink to DK-8.2-thm. MEASURED: exactly one atom record changed, only by adding `DK-8.2-thm` to `interpretation_support.result_ids` and extending its note; no atom's role, reason code, `formalization_result_ids`, or scope classification changed, so the 29-result selection this review accepted is untouched. The edit records that Theorem 8.2 sits inside the same standing convention, which is the fact its reclassification rests on.  RE-ACCEPTED 2026-09-02 (third change this date) after the scope quotations were checked against the distributable specification for the first time: 9 of the 26 `scope_classification.source_quote` values were not literal passages of it, so the certificate described paraphrase as verbatim evidence. Those nine moved to `scope_classification.source_paraphrase` and every remaining `source_quote` is now verified to occur in the specification after whitespace normalization. MEASURED: the only atom-record change is that field rename; no atom's role, reason code, result links, or scope category moved, so the accepted selection is unchanged.  RE-ACCEPTED 2026-09-02 (fourth change this date) for a SUBSTANTIVE addition, not a derived one: the source-atom inventory gains `DK-4.1-prop.section4-compact-classification-setup`, taking it from 274 to 275 atoms. The Section 4 opening sentence -- 'Under the compact/classification setup ... the principal angles are ordered' -- is printed inside the Proposition 4.1 block and governs the extremal results that follow, but was represented by no atom, so the Section 4 rows could each declare themselves locally self-contained without contradicting anything. Its quote is verified verbatim against the specification. MEASURED: exactly one atom added, none removed, and no existing atom changed apart from source-order renumbering. The 29-result selection is unchanged -- this adds fidelity scope, not a completion obligation. The existing Section 3 standing atom additionally gained a `scope_inheritance` record so the checker can find inherited scope from the schema instead of matching atom ids.  RE-ACCEPTED 2026-09-02 (fifth change this date): the new Section 4 setup atom gained an `interpretation_support` backlink to DK-4.1-cor, DK-4.2-prop and DK-4.3-prop, which is the evidence their nonlocal readings rest on. MEASURED: that backlink is the only change since the previous hash; no atom was added or removed and no role, reason code, result link or scope category moved.  RE-ACCEPTED 2026-09-02 (sixth change this date): DK-4.4-prop added to the Section 4 setup atom's inheritance, on hostile-review advice that the refuted row must sit inside the scope model too. MEASURED: the only change is that result-id addition on one atom.  RE-AFFIRMED 2026-09-05 after the Section 2 sharpness atoms were bound to their proofs.  That edit changed only the `formalization_role_reason` prose of the four `S2-sharpness.*` atoms, which keep `formalization_role: non_result`; no atom was added, removed, or reclassified, and the selection of 29 counted results is unchanged.  The hashes below were recomputed, not re-reviewed from scratch, because the selection they attest to did not move.",
+    "distributable_specification_sha256": "2143e6cf2d27662e2556500405cc4bdd121a267027a60944a3f13fd8afb83c3d",
+    "method": "Reviewed the source-fidelity inventory and the exact theorem/proposition/lemma/corollary environments in paper order. Selected exactly the four Section 2 headline theorems plus all named results Davis--Kahan actually establish; for every counted result, partitioned the primary source block into statement atoms versus adjacent setup/proof/example/consequence/remark atoms, and classified every fidelity atom with an explicit inclusion/exclusion reason.  RE-AUDITED 2026-08-12 for the standing post-Proposition-3.2 convention: the source states, immediately after the proof of Proposition 3.2, that (3.5) is assumed as well as (1.5) except where the contrary is stated.  That convention is carried as the source SCOPE atom `S3-standing-scope.crossed-dimension-standing-assumption`.  It is deliberately NOT a new counted result and the denominator stays at 29.  RE-AUDITED AGAIN 2026-08-12 for nonlocal source semantics: the distributable specification now also carries the Section 1 norm-existence/vacuity convention, the finite-dimensional automatic case of (3.5) from the Proposition 3.2 remark, the Section 3 angle-operator/J_0 construction, and the Section 6 whole-space assembly step of the tangent proof, with five new source-fidelity atoms.  None of that material is a counted result; it is interpretation and proof-context evidence, reverse-linked through `interpretation_support` rather than through the printed-statement boundary.  The denominator stays at 29. HOSTILE APPENDIX SCOPE RE-AUDIT 2026-08-12: the Appendix explicitly says the tangent theorem is treated with A_0 <= alpha and Lambda_1 >= alpha + delta while both may now be unbounded. `DK-6-appendix.unbounded-tangent-extension` is therefore result scope for `S2-tan-theta`, not expository commentary. The denominator remains 29; the scope obligation is discharged by the new complex and real unboundedCompression ambient endpoints.  RE-ACCEPTED 2026-08-29 after a reason-only edit to five Section 10 fidelity atoms. The five `DK-10.4.*` atoms around Question 10.4 carried the generic boilerplate reasons the boundary rule forbids, so a reviewer could not tell why each was excluded. Each now says what it is: the two `restatement_of_counted_result` atoms name the double-angle tangent theorem they restate and the exact wrapper that carries it, and the three motivation atoms say that the step-function identification and the two norm readings are definitional consequences asserted in passing while setting up the question, not results established there. Their empty reverse links are now explained rather than merely present: a reverse link marks membership of a counted result's own source block, and this Section 10 passage is not in the Section 2 block. MEASURED: no atom added or removed, no `formalization_role` changed, no `formalization_result_ids` changed, and no counted result touched. The denominator stays at 29.  RE-ACCEPTED 2026-08-29 (second) after a reason-only edit to the two `S1-block-residual.residual-eigenvalue-*` atoms. They carried the generic `introductory_background_not_designated_result` reason, which does not explain why material this substantive is outside the denominator. The reason now states it: the source introduces these bounds as \"the standard residual-to-eigenvalue consequence\" that the paper \"also records\", so they are classical Rayleigh--Ritz error theory quoted for the numerical-approximation reading rather than results Davis and Kahan establish, and no later result of theirs depends on them. MEASURED: role unchanged, reverse links unchanged and still empty, no atom added or removed, no counted result touched, denominator still 29. RE-ACCEPTED 2026-08-30 after the Section 2 declaration-naming campaign. The source-fidelity inventory changed in exactly two `formalization_role_reason` strings, both under Question 10.4, and in both the change is the Lean declaration name quoted inside the rationale: `tanTwoTheta_wholeSpace_symmetricNorming_exact` became `tanTwoTheta_ambient_bounded_spectralGap_symmetricNorming_complex`, and `tanTwoTheta_directedCorner_residual_symmetricNorming_exact` became `tanTwoTheta_directed_boundedResidual_blockRepresentative_spectralGap_symmetricNorming_complex`. MEASURED against the previous accepted revision: no atom added or removed, no `atom_id`, `formalization_role`, `formalization_role_reason_code`, or `formalization_result_ids` changed, no source text touched, and the distributable specification is byte-identical (its hash is unchanged). No counted result was touched and the denominator stays at 29.  SCOPE-ATOM RE-AUDIT 2026-08-31. All 24 source atoms with `kind: \"scope\"` were re-audited against the distributable specification, their surrounding source blocks, the counted-result inventory and the compiled declarations. This is NOT a reason-only edit: four atoms changed role from `non_result` to `result_scope`, one was split into three, and every scope atom now carries a structured `scope_classification` giving one of five categories with a verbatim source quotation. THE DENOMINATOR IS UNCHANGED AT 29: every reclassified atom is scope of an EXISTING counted result, not a new result. MEASURED: atoms 272 -> 274, both additions being the split of `DK-6-appendix.unbounded-sine-extension` into its headline-sine clause and the two sentences naming Proposition 6.1 and Theorem 6.1; no atom removed; no source text touched; the distributable specification is byte-identical. The reclassifications were forced by the inventory's own statement_boundary policy: `DK-5.1-thm.roles-interchange`, `DK-5.1-thm.one-sided-unbounded-extension`, `DK-6-appendix.unbounded-sine-extension` and `DK-8.2-thm.sin2-unequal-dimension-extension` each state an explicit extension of a counted result's proved scope, and each had been excluded with a reason code whose grounds were that it occurs after the theorem environment -- the exact condition the policy says does not exclude an explicit extension. The internal inconsistency was visible: the Appendix's unbounded TANGENT sentence was already `result_scope` for `S2-tan-theta` while the adjacent SINE sentence was `expository_commentary_not_result`.  RE-ACCEPTED 2026-08-31 after a requirement-only edit to one fidelity atom.  `DK-6-appendix.unbounded-tangent-extension` carried no `type_requirements`, so the coherence check could not tell an Appendix-scope tangent witness (Ritz compression itself unbounded) from a witness with an unbounded ambient operator and a BOUNDED Ritz compression -- and the registered directed primaries were the latter.  The atom now requires `UnboundedRitzPair` and forbids `BoundedCompressionTrialBlock`, which makes the third unbounded-scope axis compiler-checkable and distinct from the ambient-operator axis (`→ₗ.[`) and the bounded-residual axis (`→L[`).  No result was added, removed, or reclassified; the denominator remains 29 and no boundary review changed. RE-ACCEPTED 2026-09-01 after the norm-abstraction rename. The source-fidelity inventory changed in exactly six atoms, and in every one the change is the Lean type or declaration name quoted inside a rationale or `type_requirements` entry: `PaperUnitaryInvariantNorm` became `SymmetricNormingFunction` and the `_paperUINorm` declaration-name token became `_symmetricNorming`. The affected atoms are `S2-sin-theta.ui-norm-scope`, `S2-unbounded-scope.arbitrary-ui-scope`, `DK-6-appendix.unbounded-tangent-extension`, `DK-8.2-thm.sin2-unequal-dimension-extension`, `DK-10.4.ambient-tan2-bound` and `DK-10.4.directed-tan2-bound`. MEASURED against the previous accepted revision by applying the inverse substitution and comparing structurally: 274 atoms before and after, none added or removed, no `formalization_role`, `formalization_role_reason_code` or `formalization_result_ids` changed, and zero atoms differing beyond the renamed identifier. No source text was touched and the distributable specification is byte-identical (its hash is unchanged). The type requirement on `DK-6-appendix.unbounded-tangent-extension` still requires `UnboundedRitzPair` and still forbids `BoundedCompressionTrialBlock`; only the norm type's name inside it moved. No counted result was touched and the denominator stays at 29.  RE-ACCEPTED 2026-09-02 after the source-fidelity `coverage_summary` was regenerated from the atom records: the checked-in aggregate had drifted from the data it summarises (result_support_atoms 75 vs 69, fidelity_only_atoms 199 vs 205, counted_result_scope 16 vs 10, post_result_consequence_not_in_printed_statement 4 vs 9, proof_or_derivation_not_result 68 vs 69) and only two of its fields were checked, so the drift was invisible.  MEASURED, not asserted: all 274 atom records are byte-identical to the previous revision and `coverage_summary` is the only top-level key that changed, so no atom classification, result link, or boundary decision was touched and the selection this review accepted is unchanged.  The aggregate is now derived by `scripts/check_davis_kahan_1970_statement_map.py --write-coverage-summary` and every field is recomputed and compared on each run.  This re-acceptance covers the selection review only; it is not a semantic acceptance.  RE-ACCEPTED 2026-09-02 (second change this date) after the Section 3 standing-scope atom gained an `interpretation_support` backlink to DK-8.2-thm. MEASURED: exactly one atom record changed, only by adding `DK-8.2-thm` to `interpretation_support.result_ids` and extending its note; no atom's role, reason code, `formalization_result_ids`, or scope classification changed, so the 29-result selection this review accepted is untouched. The edit records that Theorem 8.2 sits inside the same standing convention, which is the fact its reclassification rests on.  RE-ACCEPTED 2026-09-02 (third change this date) after the scope quotations were checked against the distributable specification for the first time: 9 of the 26 `scope_classification.source_quote` values were not literal passages of it, so the certificate described paraphrase as verbatim evidence. Those nine moved to `scope_classification.source_paraphrase` and every remaining `source_quote` is now verified to occur in the specification after whitespace normalization. MEASURED: the only atom-record change is that field rename; no atom's role, reason code, result links, or scope category moved, so the accepted selection is unchanged.  RE-ACCEPTED 2026-09-02 (fourth change this date) for a SUBSTANTIVE addition, not a derived one: the source-atom inventory gains `DK-4.1-prop.section4-compact-classification-setup`, taking it from 274 to 275 atoms. The Section 4 opening sentence -- 'Under the compact/classification setup ... the principal angles are ordered' -- is printed inside the Proposition 4.1 block and governs the extremal results that follow, but was represented by no atom, so the Section 4 rows could each declare themselves locally self-contained without contradicting anything. Its quote is verified verbatim against the specification. MEASURED: exactly one atom added, none removed, and no existing atom changed apart from source-order renumbering. The 29-result selection is unchanged -- this adds fidelity scope, not a completion obligation. The existing Section 3 standing atom additionally gained a `scope_inheritance` record so the checker can find inherited scope from the schema instead of matching atom ids.  RE-ACCEPTED 2026-09-02 (fifth change this date): the new Section 4 setup atom gained an `interpretation_support` backlink to DK-4.1-cor, DK-4.2-prop and DK-4.3-prop, which is the evidence their nonlocal readings rest on. MEASURED: that backlink is the only change since the previous hash; no atom was added or removed and no role, reason code, result link or scope category moved.  RE-ACCEPTED 2026-09-02 (sixth change this date): DK-4.4-prop added to the Section 4 setup atom's inheritance, on hostile-review advice that the refuted row must sit inside the scope model too. MEASURED: the only change is that result-id addition on one atom.  RE-AFFIRMED 2026-09-05 after the Section 2 sharpness atoms were bound to their proofs.  That edit changed only the `formalization_role_reason` prose of the four `S2-sharpness.*` atoms, which keep `formalization_role: non_result`; no atom was added, removed, or reclassified, and the selection of 29 counted results is unchanged.  The hashes below were recomputed, not re-reviewed from scratch, because the selection they attest to did not move.  RE-AFFIRMED 2026-09-07 after a SOURCE CORRECTION, which is why the specification hash moved. The fifth hostile review compared the reconstructed Lemma 6.3 with the original and found the reconstruction had weakened a strict inequality: it printed the leakage bound as `||Gamma K Psi-perp||_1 <= eta` where Davis and Kahan print `< eta`, and their own proof derives a squared norm strictly below eta^2 and their applications use the strict form.  The TeX is corrected; the Lean theorem already concluded the strict inequality and is unchanged.  MEASURED: one character of the distributable specification changed, no atom was added, removed or reclassified, and no counted result moved.  The denominator stays at 29.  This is the case the repository's own rule anticipates -- the original paper is authoritative over the reconstruction.",
     "boundary_review_status": "accepted"
   },
   "result_count": 29,
@@ -484,7 +484,7 @@
           }
         ],
         "distinct_from_refutation": "DK-4.4-prop",
-        "distributable_specification_sha256": "05ef66dd33b497329f745505d3a04b0100f2a0052202a3b7a188d76a545e71fd",
+        "distributable_specification_sha256": "2143e6cf2d27662e2556500405cc4bdd121a267027a60944a3f13fd8afb83c3d",
         "source_fidelity_inventory_sha256": "a35c9158f5fab388494d59393f2c49343e0810cb0c5a864abc383e955542564c",
         "supporting_atom_digest_sha256": "a23733f61834f1ffa15a2c13641396999af05a6fbe680ba87281f330b20b843d",
         "reaudit_note": "RE-ACCEPTED 2026-08-31 after the scope-atom re-audit. The atoms this reading rests on are unchanged in text and role: `S1-block-residual.norm-existence-vacuity-convention` remains a paper-wide convention and `DK-3.2-prop.finite-crossing-automatic` remains automaticity used to read the statement -- both were given substantive reason codes in place of generic ones, with no change to their exclusion from the denominator."
@@ -3902,7 +3902,7 @@
           }
         ],
         "distinct_from_refutation": "DK-4.4-prop",
-        "distributable_specification_sha256": "05ef66dd33b497329f745505d3a04b0100f2a0052202a3b7a188d76a545e71fd",
+        "distributable_specification_sha256": "2143e6cf2d27662e2556500405cc4bdd121a267027a60944a3f13fd8afb83c3d",
         "source_fidelity_inventory_sha256": "a35c9158f5fab388494d59393f2c49343e0810cb0c5a864abc383e955542564c",
         "supporting_atom_digest_sha256": "4af52bf63c72a54131d5a60ddebaa841a2637d9dd1d1814e5b1b651c25dea82c",
         "reaudit_note": "ACCEPTED 2026-09-02 on hostile review (Blocker 3). Verified against the Section 4 opening in the distributable specification and against the canonical witnesses' signatures, not inferred from the row."
@@ -4029,7 +4029,7 @@
           }
         ],
         "distinct_from_refutation": "DK-4.4-prop",
-        "distributable_specification_sha256": "05ef66dd33b497329f745505d3a04b0100f2a0052202a3b7a188d76a545e71fd",
+        "distributable_specification_sha256": "2143e6cf2d27662e2556500405cc4bdd121a267027a60944a3f13fd8afb83c3d",
         "source_fidelity_inventory_sha256": "a35c9158f5fab388494d59393f2c49343e0810cb0c5a864abc383e955542564c",
         "supporting_atom_digest_sha256": "4af52bf63c72a54131d5a60ddebaa841a2637d9dd1d1814e5b1b651c25dea82c",
         "reaudit_note": "ACCEPTED 2026-09-02 on hostile review (Blocker 3). Verified against the Section 4 opening in the distributable specification and against the canonical witnesses' signatures, not inferred from the row."
@@ -4295,7 +4295,7 @@
           }
         ],
         "distinct_from_refutation": "DK-4.4-prop",
-        "distributable_specification_sha256": "05ef66dd33b497329f745505d3a04b0100f2a0052202a3b7a188d76a545e71fd",
+        "distributable_specification_sha256": "2143e6cf2d27662e2556500405cc4bdd121a267027a60944a3f13fd8afb83c3d",
         "source_fidelity_inventory_sha256": "a35c9158f5fab388494d59393f2c49343e0810cb0c5a864abc383e955542564c",
         "supporting_atom_digest_sha256": "4af52bf63c72a54131d5a60ddebaa841a2637d9dd1d1814e5b1b651c25dea82c",
         "reaudit_note": "ACCEPTED 2026-09-02 on hostile review (Blocker 3). Verified against the Section 4 opening in the distributable specification and against the canonical witnesses' signatures, not inferred from the row."
@@ -4788,7 +4788,11 @@
         "TauCeti.DavisKahan1970.lemma6_1_separable_complex",
         "TauCeti.DavisKahan1970.lemma6_1_separable_real",
         "TauCeti.DavisKahan1970.lemma6_1_converse_separable_complex",
-        "TauCeti.DavisKahan1970.lemma6_1_converse_separable_real"
+        "TauCeti.DavisKahan1970.lemma6_1_converse_separable_real",
+        "TauCeti.DavisKahan1970.lemma6_1_sourceOperators_separable_complex",
+        "TauCeti.DavisKahan1970.lemma6_1_sourceOperators_separable_real",
+        "TauCeti.DavisKahan1970.lemma6_1_converse_sourceOperators_separable_complex",
+        "TauCeti.DavisKahan1970.lemma6_1_converse_sourceOperators_separable_real"
       ],
       "review_note": "Accepted by the hostile audit at the stated-result level.",
       "parent_claim_id": "DK-6.1-lem",
@@ -4808,7 +4812,7 @@
       "local_statement_self_contained": true,
       "canonical_evidence": [
         {
-          "declaration": "TauCeti.DavisKahan1970.lemma6_1_separable_complex",
+          "declaration": "TauCeti.DavisKahan1970.lemma6_1_sourceOperators_separable_complex",
           "role": "primary_source_witness",
           "scalar_scope": "complex",
           "evidence_kind": "proof",
@@ -4817,10 +4821,10 @@
             "DK-6.1-lem.ordered-sylvester-forward"
           ],
           "capability_classes": [],
-          "note": "Lemma 6.1 at the paper's separable ambient scope, over the complex field."
+          "note": "Lemma 6.1 on the source's TWO operators over the complex field: one K and one L, with the hypothesis on each of their two diagonal blocks and the conclusion on the sum of those blocks.  The four-operator statement lets the two blocks come from different operators and is retained as the generalization it is.  Separable ambient scope."
         },
         {
-          "declaration": "TauCeti.DavisKahan1970.lemma6_1_separable_real",
+          "declaration": "TauCeti.DavisKahan1970.lemma6_1_sourceOperators_separable_real",
           "role": "primary_source_witness",
           "scalar_scope": "real",
           "evidence_kind": "proof",
@@ -4829,10 +4833,10 @@
             "DK-6.1-lem.ordered-sylvester-forward"
           ],
           "capability_classes": [],
-          "note": "Lemma 6.1 at the paper's separable ambient scope, over the real field."
+          "note": "The real sibling of the two-operator Lemma 6.1."
         },
         {
-          "declaration": "TauCeti.DavisKahan1970.lemma6_1_converse_separable_complex",
+          "declaration": "TauCeti.DavisKahan1970.lemma6_1_converse_sourceOperators_separable_complex",
           "role": "primary_source_witness",
           "scalar_scope": "complex",
           "evidence_kind": "proof",
@@ -4841,10 +4845,10 @@
             "DK-6.1-lem.ordered-sylvester-forward"
           ],
           "capability_classes": [],
-          "note": "Lemma 6.1's converse at the paper's separable ambient scope, over the complex field."
+          "note": "Lemma 6.1's converse on the source's two operators over the complex field: the two diagonal blocks compared are those OF K and those OF L."
         },
         {
-          "declaration": "TauCeti.DavisKahan1970.lemma6_1_converse_separable_real",
+          "declaration": "TauCeti.DavisKahan1970.lemma6_1_converse_sourceOperators_separable_real",
           "role": "primary_source_witness",
           "scalar_scope": "real",
           "evidence_kind": "proof",
@@ -4853,7 +4857,7 @@
             "DK-6.1-lem.ordered-sylvester-forward"
           ],
           "capability_classes": [],
-          "note": "Lemma 6.1's converse at the paper's separable ambient scope, over the real field."
+          "note": "The real sibling of the two-operator converse."
         }
       ],
       "supporting_evidence": [
@@ -4896,6 +4900,26 @@
           "declaration": "TauCeti.DavisKahan1970.lemma6_1_converse_sourceExact_real",
           "role": "generalization",
           "note": "The statement the source-scope facade delegates to: the same mathematics without the paper's scope restriction, hence strictly stronger.  The same over ℝ."
+        },
+        {
+          "declaration": "TauCeti.DavisKahan1970.lemma6_1_separable_complex",
+          "role": "generalization",
+          "note": "Superseded as canonical evidence 2026-09-07 and retained: Lemma 6.1 at the paper's separable ambient scope, over the complex field."
+        },
+        {
+          "declaration": "TauCeti.DavisKahan1970.lemma6_1_separable_real",
+          "role": "generalization",
+          "note": "Superseded as canonical evidence 2026-09-07 and retained: Lemma 6.1 at the paper's separable ambient scope, over the real field."
+        },
+        {
+          "declaration": "TauCeti.DavisKahan1970.lemma6_1_converse_separable_complex",
+          "role": "generalization",
+          "note": "Superseded as canonical evidence 2026-09-07 and retained: Lemma 6.1's converse at the paper's separable ambient scope, over the complex field."
+        },
+        {
+          "declaration": "TauCeti.DavisKahan1970.lemma6_1_converse_separable_real",
+          "role": "generalization",
+          "note": "Superseded as canonical evidence 2026-09-07 and retained: Lemma 6.1's converse at the paper's separable ambient scope, over the real field."
         }
       ],
       "result_wide_scope_atoms": [
@@ -4910,17 +4934,18 @@
           ],
           "scalar_scope": "complex",
           "evidence": {
-            "primary": "TauCeti.DavisKahan1970.lemma6_1_separable_complex",
+            "primary": "TauCeti.DavisKahan1970.lemma6_1_sourceOperators_separable_complex",
             "correspondence": [],
             "supporting": [
               "TauCeti.DavisKahan1970.lemma6_1_sourceExact",
               "TauCeti.DavisKahan1970.lemma6_1",
-              "TauCeti.DavisKahan1970.lemma6_1_sourceExact_complex"
+              "TauCeti.DavisKahan1970.lemma6_1_sourceExact_complex",
+              "TauCeti.DavisKahan1970.lemma6_1_separable_complex"
             ]
           },
           "status": "established",
           "evidence_kind": "proof",
-          "justification": "Canonical witness for the whole printed statement at rclike scalar scope, carried over from the pre-clause canonical evidence and re-checked against its compiler-printed type under the coherent model.  SOURCE NORM CLASS 2026-09-05.  BOTH the premise and the conclusion now quantify over `NormalizedUnitaryInvariantNorm`, as the paper prints them.  The retained `SymmetricNormingFunction` theorem is strictly stronger -- it takes Ky Fan inequalities as its premise -- and the printed premise reaches it because the Ky Fan norms are members of the source class, which is what `kyFanNormalizedUnitaryInvariantNorm` supplies.  SOURCE SCOPE 2026-09-06.  Repointed at the source-scope facade after the fourth hostile review; the previous primary is retained as supporting evidence and is the stronger theorem."
+          "justification": "Canonical witness for the whole printed statement at rclike scalar scope, carried over from the pre-clause canonical evidence and re-checked against its compiler-printed type under the coherent model.  SOURCE NORM CLASS 2026-09-05.  BOTH the premise and the conclusion now quantify over `NormalizedUnitaryInvariantNorm`, as the paper prints them.  The retained `SymmetricNormingFunction` theorem is strictly stronger -- it takes Ky Fan inequalities as its premise -- and the printed premise reaches it because the Ky Fan norms are members of the source class, which is what `kyFanNormalizedUnitaryInvariantNorm` supplies.  SOURCE SCOPE 2026-09-06.  Repointed at the source-scope facade after the fourth hostile review; the previous primary is retained as supporting evidence and is the stronger theorem.  SOURCE SHAPE 2026-09-07 (fifth hostile review).  Repointed at the source-shaped witness; the previous primary is retained as supporting evidence."
         },
         {
           "id": "forward.real",
@@ -4929,17 +4954,18 @@
           ],
           "scalar_scope": "real",
           "evidence": {
-            "primary": "TauCeti.DavisKahan1970.lemma6_1_separable_real",
+            "primary": "TauCeti.DavisKahan1970.lemma6_1_sourceOperators_separable_real",
             "correspondence": [],
             "supporting": [
               "TauCeti.DavisKahan1970.lemma6_1_sourceExact",
               "TauCeti.DavisKahan1970.lemma6_1",
-              "TauCeti.DavisKahan1970.lemma6_1_sourceExact_real"
+              "TauCeti.DavisKahan1970.lemma6_1_sourceExact_real",
+              "TauCeti.DavisKahan1970.lemma6_1_separable_real"
             ]
           },
           "status": "established",
           "evidence_kind": "proof",
-          "justification": "Canonical witness for the whole printed statement at rclike scalar scope, carried over from the pre-clause canonical evidence and re-checked against its compiler-printed type under the coherent model.  SOURCE NORM CLASS 2026-09-05.  BOTH the premise and the conclusion now quantify over `NormalizedUnitaryInvariantNorm`, as the paper prints them.  The retained `SymmetricNormingFunction` theorem is strictly stronger -- it takes Ky Fan inequalities as its premise -- and the printed premise reaches it because the Ky Fan norms are members of the source class, which is what `kyFanNormalizedUnitaryInvariantNorm` supplies.  SOURCE SCOPE 2026-09-06.  Repointed at the source-scope facade after the fourth hostile review; the previous primary is retained as supporting evidence and is the stronger theorem."
+          "justification": "Canonical witness for the whole printed statement at rclike scalar scope, carried over from the pre-clause canonical evidence and re-checked against its compiler-printed type under the coherent model.  SOURCE NORM CLASS 2026-09-05.  BOTH the premise and the conclusion now quantify over `NormalizedUnitaryInvariantNorm`, as the paper prints them.  The retained `SymmetricNormingFunction` theorem is strictly stronger -- it takes Ky Fan inequalities as its premise -- and the printed premise reaches it because the Ky Fan norms are members of the source class, which is what `kyFanNormalizedUnitaryInvariantNorm` supplies.  SOURCE SCOPE 2026-09-06.  Repointed at the source-scope facade after the fourth hostile review; the previous primary is retained as supporting evidence and is the stronger theorem.  SOURCE SHAPE 2026-09-07 (fifth hostile review).  Repointed at the source-shaped witness; the previous primary is retained as supporting evidence."
         },
         {
           "id": "converse.complex",
@@ -4948,17 +4974,18 @@
           ],
           "scalar_scope": "complex",
           "evidence": {
-            "primary": "TauCeti.DavisKahan1970.lemma6_1_converse_separable_complex",
+            "primary": "TauCeti.DavisKahan1970.lemma6_1_converse_sourceOperators_separable_complex",
             "correspondence": [],
             "supporting": [
               "TauCeti.DavisKahan1970.lemma6_1_converse_sourceExact",
               "TauCeti.DavisKahan1970.lemma6_1_converse",
-              "TauCeti.DavisKahan1970.lemma6_1_converse_sourceExact_complex"
+              "TauCeti.DavisKahan1970.lemma6_1_converse_sourceExact_complex",
+              "TauCeti.DavisKahan1970.lemma6_1_converse_separable_complex"
             ]
           },
           "status": "established",
           "evidence_kind": "proof",
-          "justification": "Canonical witness for the whole printed statement at rclike scalar scope, carried over from the pre-clause canonical evidence and re-checked against its compiler-printed type under the coherent model.  SOURCE NORM CLASS 2026-09-05.  The printed converse, with its two equisingularity hypotheses, over the literal norm class on both sides.  SOURCE SCOPE 2026-09-06.  Repointed at the source-scope facade after the fourth hostile review; the previous primary is retained as supporting evidence and is the stronger theorem."
+          "justification": "Canonical witness for the whole printed statement at rclike scalar scope, carried over from the pre-clause canonical evidence and re-checked against its compiler-printed type under the coherent model.  SOURCE NORM CLASS 2026-09-05.  The printed converse, with its two equisingularity hypotheses, over the literal norm class on both sides.  SOURCE SCOPE 2026-09-06.  Repointed at the source-scope facade after the fourth hostile review; the previous primary is retained as supporting evidence and is the stronger theorem.  SOURCE SHAPE 2026-09-07 (fifth hostile review).  Repointed at the source-shaped witness; the previous primary is retained as supporting evidence."
         },
         {
           "id": "converse.real",
@@ -4967,17 +4994,18 @@
           ],
           "scalar_scope": "real",
           "evidence": {
-            "primary": "TauCeti.DavisKahan1970.lemma6_1_converse_separable_real",
+            "primary": "TauCeti.DavisKahan1970.lemma6_1_converse_sourceOperators_separable_real",
             "correspondence": [],
             "supporting": [
               "TauCeti.DavisKahan1970.lemma6_1_converse_sourceExact",
               "TauCeti.DavisKahan1970.lemma6_1_converse",
-              "TauCeti.DavisKahan1970.lemma6_1_converse_sourceExact_real"
+              "TauCeti.DavisKahan1970.lemma6_1_converse_sourceExact_real",
+              "TauCeti.DavisKahan1970.lemma6_1_converse_separable_real"
             ]
           },
           "status": "established",
           "evidence_kind": "proof",
-          "justification": "Canonical witness for the whole printed statement at rclike scalar scope, carried over from the pre-clause canonical evidence and re-checked against its compiler-printed type under the coherent model.  SOURCE NORM CLASS 2026-09-05.  The printed converse, with its two equisingularity hypotheses, over the literal norm class on both sides.  SOURCE SCOPE 2026-09-06.  Repointed at the source-scope facade after the fourth hostile review; the previous primary is retained as supporting evidence and is the stronger theorem."
+          "justification": "Canonical witness for the whole printed statement at rclike scalar scope, carried over from the pre-clause canonical evidence and re-checked against its compiler-printed type under the coherent model.  SOURCE NORM CLASS 2026-09-05.  The printed converse, with its two equisingularity hypotheses, over the literal norm class on both sides.  SOURCE SCOPE 2026-09-06.  Repointed at the source-scope facade after the fourth hostile review; the previous primary is retained as supporting evidence and is the stronger theorem.  SOURCE SHAPE 2026-09-07 (fifth hostile review).  Repointed at the source-shaped witness; the previous primary is retained as supporting evidence."
         }
       ]
     },
@@ -5835,7 +5863,7 @@
       ],
       "disposition": "proved_exact",
       "verification": "proved_in_build",
-      "semantic_certification": "hostile_review_blocked",
+      "semantic_certification": "accepted",
       "lean_declarations": [
         "TauCeti.DavisKahan1970.Section8.theorem8_1_canonicalBranch",
         "TauCeti.DavisKahan1970.Section8.theorem8_1_maximalAngle_le_iff_spectrumIn",
@@ -5932,7 +5960,15 @@
         "TauCeti.DavisKahan1970.Section8.theorem8_1_exists_branch_withCompression_unbounded_complex",
         "TauCeti.DavisKahan1970.Section8.theorem8_1_exists_branch_withCompression_unbounded_real",
         "TauCeti.DavisKahan1970.Section8.isSymmetric_upperBlockShift",
-        "TauCeti.DavisKahan1970.Section8.isSymmetric_lowerBlockShift"
+        "TauCeti.DavisKahan1970.Section8.isSymmetric_lowerBlockShift",
+        "TauCeti.DavisKahan1970.Section8.theorem8_1_upperEigenvalueRepulsion_blockSourceExact",
+        "TauCeti.DavisKahan1970.Section8.theorem8_1_lowerEigenvalueRepulsion_blockSourceExact",
+        "TauCeti.DavisKahan1970.Section8.theorem8_1_upperEigenvalueRepulsion_blockSourceExact_real",
+        "TauCeti.DavisKahan1970.Section8.theorem8_1_lowerEigenvalueRepulsion_blockSourceExact_real",
+        "TauCeti.DavisKahan1970.Section8.theorem8_1_upperSymmetricGaugeEigenvalue_blockSourceExact",
+        "TauCeti.DavisKahan1970.Section8.theorem8_1_lowerSymmetricGaugeEigenvalue_blockSourceExact",
+        "TauCeti.DavisKahan1970.Section8.theorem8_1_upperSymmetricGaugeEigenvalue_blockSourceExact_real",
+        "TauCeti.DavisKahan1970.Section8.theorem8_1_lowerSymmetricGaugeEigenvalue_blockSourceExact_real"
       ],
       "review_note": "Result-only hostile review accepted 2026-08-12. The compiled source surface covers every counted Theorem 8.1 clause under the printed hypotheses: branch existence and the closed-quarter-angle iff; part (i) on both blocks; part (ii) in dimension-free approximation-number form with the compiled positive-operator eigenvalue dictionary and real counterparts; and part (iii) for every symmetric gauge in the printed finite-dimensional scope, including increasing-index-order wrappers, over both complex and real Hilbert spaces. The previously recorded blocker was stale evidence selection, not missing mathematics.\n\n**OPERATOR SCOPE DISCLOSED 2026-09-05**, closing finding F2 of the 2026-09-04 hostile review and the follow-up review's objection to closing it by metadata alone.  Every registered Section 8 declaration is bounded; the row said nothing about it while the Section 2 hypotheses it imports are certified at unbounded scope.  The row now carries an accepted nonlocal source interpretation with the source evidence for the bounded reading, the competing unbounded reading stated in full, and the lift named as open work in `GOAL.md`.  The row's alignment moved from `locally_exact` to `paper_faithful_nonlocal_source_interpretation`, so the reviewer packet now lists it with the other interpreted rows instead of presenting it as locally exact.",
       "parent_claim_id": "DK-8.1-thm",
@@ -5961,24 +5997,28 @@
       "local_statement_self_contained": false,
       "canonical_evidence": [
         {
-          "declaration": "TauCeti.DavisKahan1970.Section8.theorem8_1_exists_branch_blockPlacement_unbounded_complex",
+          "declaration": "TauCeti.DavisKahan1970.Section8.theorem8_1_exists_branch_withCompression_unbounded_complex",
           "role": "primary_source_witness",
           "scalar_scope": "complex",
           "evidence_kind": "proof",
           "covers_source_atoms": [
-            "DK-8.1-thm.existence-correct-q"
+            "DK-8.1-thm.existence-correct-q",
+            "DK-8.1-thm.part-i-compression"
           ],
-          "capability_classes": []
+          "capability_classes": [],
+          "note": "Theorem 8.1's existence clause and part (i) in one statement, in the source's own word order: for fixed A, P, H there exists a reducing Q with the printed placement and an acute angle, and for THAT Q both compression inequalities hold.  Unbounded ambient scope, separable, over the complex field."
         },
         {
-          "declaration": "TauCeti.DavisKahan1970.Section8.theorem8_1_exists_branch_blockPlacement_unbounded_real",
+          "declaration": "TauCeti.DavisKahan1970.Section8.theorem8_1_exists_branch_withCompression_unbounded_real",
           "role": "primary_source_witness",
           "scalar_scope": "real",
           "evidence_kind": "proof",
           "covers_source_atoms": [
-            "DK-8.1-thm.existence-correct-q"
+            "DK-8.1-thm.existence-correct-q",
+            "DK-8.1-thm.part-i-compression"
           ],
-          "capability_classes": []
+          "capability_classes": [],
+          "note": "The real sibling of the combined existence-and-part-(i) statement."
         },
         {
           "declaration": "TauCeti.DavisKahan1970.Section8.theorem8_1_maximalAngle_le_iff_blockPlacement_unbounded_complex",
@@ -6001,29 +6041,9 @@
           "capability_classes": []
         },
         {
-          "declaration": "TauCeti.DavisKahan1970.Section8.theorem8_1_upperCompressionRepulsion_sourceExact_unbounded_complex",
-          "role": "primary_source_witness",
-          "scalar_scope": "complex",
-          "evidence_kind": "proof",
-          "covers_source_atoms": [
-            "DK-8.1-thm.part-i-compression"
-          ],
-          "capability_classes": []
-        },
-        {
           "declaration": "TauCeti.DavisKahan1970.Section8.theorem8_1_lowerCompressionRepulsion_sourceExact_unbounded_complex",
           "role": "primary_source_witness",
           "scalar_scope": "complex",
-          "evidence_kind": "proof",
-          "covers_source_atoms": [
-            "DK-8.1-thm.part-i-compression"
-          ],
-          "capability_classes": []
-        },
-        {
-          "declaration": "TauCeti.DavisKahan1970.Section8.theorem8_1_upperCompressionRepulsion_sourceExact_unbounded_real",
-          "role": "primary_source_witness",
-          "scalar_scope": "real",
           "evidence_kind": "proof",
           "covers_source_atoms": [
             "DK-8.1-thm.part-i-compression"
@@ -6041,84 +6061,92 @@
           "capability_classes": []
         },
         {
-          "declaration": "TauCeti.DavisKahan1970.Section8.theorem8_1_upperEigenvalueRepulsion_sourceExact",
+          "declaration": "TauCeti.DavisKahan1970.Section8.theorem8_1_upperEigenvalueRepulsion_blockSourceExact",
           "role": "primary_source_witness",
           "scalar_scope": "complex",
           "evidence_kind": "proof",
           "covers_source_atoms": [
             "DK-8.1-thm.part-ii-eigenvalue"
           ],
-          "capability_classes": []
+          "capability_classes": [],
+          "note": "Theorem 8.1 (ii), upper block, on the eigenvalues of the BLOCKS themselves: A_1 on P-perp and Lambda_1 on Q-perp, indexed by the block dimension.  Not the ambient zero-padded operators, whose lists are these followed by zeros.  The two block dimensions agree by theorem8_1_finrank_orthogonal_branch_eq, which is Theorem 8.1's own acuteness conclusion.  Finite dimensions, over the complex field."
         },
         {
-          "declaration": "TauCeti.DavisKahan1970.Section8.theorem8_1_lowerEigenvalueRepulsion_sourceExact",
+          "declaration": "TauCeti.DavisKahan1970.Section8.theorem8_1_lowerEigenvalueRepulsion_blockSourceExact",
           "role": "primary_source_witness",
           "scalar_scope": "complex",
           "evidence_kind": "proof",
           "covers_source_atoms": [
             "DK-8.1-thm.part-ii-eigenvalue"
           ],
-          "capability_classes": []
+          "capability_classes": [],
+          "note": "Theorem 8.1 (ii), lower block, on the block eigenvalue lists.  Over the complex field."
         },
         {
-          "declaration": "TauCeti.DavisKahan1970.Section8.theorem8_1_upperEigenvalueRepulsion_sourceExact_real",
+          "declaration": "TauCeti.DavisKahan1970.Section8.theorem8_1_upperEigenvalueRepulsion_blockSourceExact_real",
           "role": "primary_source_witness",
           "scalar_scope": "real",
           "evidence_kind": "proof",
           "covers_source_atoms": [
             "DK-8.1-thm.part-ii-eigenvalue"
           ],
-          "capability_classes": []
+          "capability_classes": [],
+          "note": "Theorem 8.1 (ii), upper block, on the block eigenvalue lists.  Over the real field."
         },
         {
-          "declaration": "TauCeti.DavisKahan1970.Section8.theorem8_1_lowerEigenvalueRepulsion_sourceExact_real",
+          "declaration": "TauCeti.DavisKahan1970.Section8.theorem8_1_lowerEigenvalueRepulsion_blockSourceExact_real",
           "role": "primary_source_witness",
           "scalar_scope": "real",
           "evidence_kind": "proof",
           "covers_source_atoms": [
             "DK-8.1-thm.part-ii-eigenvalue"
           ],
-          "capability_classes": []
+          "capability_classes": [],
+          "note": "Theorem 8.1 (ii), lower block, on the block eigenvalue lists.  Over the real field."
         },
         {
-          "declaration": "TauCeti.DavisKahan1970.Section8.theorem8_1_upperSymmetricGaugeEigenvalue_sourceExact",
+          "declaration": "TauCeti.DavisKahan1970.Section8.theorem8_1_upperSymmetricGaugeEigenvalue_blockSourceExact",
           "role": "primary_source_witness",
           "scalar_scope": "complex",
           "evidence_kind": "proof",
           "covers_source_atoms": [
             "DK-8.1-thm.part-iii-gauge"
           ],
-          "capability_classes": []
+          "capability_classes": [],
+          "note": "Theorem 8.1 (iii), upper block, with the arbitrary symmetric gauge quantified at the BLOCK dimension, applied to the block eigenvalue lists.  The majorization the proof runs on is established at the ambient dimension and restricted, which is exact because the block sequences are the ambient ones on an initial segment.  Finite dimensions, over the complex field."
         },
         {
-          "declaration": "TauCeti.DavisKahan1970.Section8.theorem8_1_lowerSymmetricGaugeEigenvalue_sourceExact",
+          "declaration": "TauCeti.DavisKahan1970.Section8.theorem8_1_lowerSymmetricGaugeEigenvalue_blockSourceExact",
           "role": "primary_source_witness",
           "scalar_scope": "complex",
           "evidence_kind": "proof",
           "covers_source_atoms": [
             "DK-8.1-thm.part-iii-gauge"
           ],
-          "capability_classes": []
+          "capability_classes": [],
+          "note": "Theorem 8.1 (iii), lower block, gauge at the block dimension.  Over the complex field."
         },
         {
-          "declaration": "TauCeti.DavisKahan1970.Section8.theorem8_1_upperSymmetricGaugeEigenvalue_sourceExact_real",
+          "declaration": "TauCeti.DavisKahan1970.Section8.theorem8_1_upperSymmetricGaugeEigenvalue_blockSourceExact_real",
           "role": "primary_source_witness",
           "scalar_scope": "real",
           "evidence_kind": "proof",
           "covers_source_atoms": [
             "DK-8.1-thm.part-iii-gauge"
           ],
-          "capability_classes": []
+          "capability_classes": [],
+          "note": "Theorem 8.1 (iii), upper block, gauge at the block dimension.  Over the real field."
         },
         {
-          "declaration": "TauCeti.DavisKahan1970.Section8.theorem8_1_lowerSymmetricGaugeEigenvalue_sourceExact_real",
+          "declaration": "TauCeti.DavisKahan1970.Section8.theorem8_1_lowerSymmetricGaugeEigenvalue_blockSourceExact_real",
           "role": "primary_source_witness",
           "scalar_scope": "real",
           "evidence_kind": "proof",
           "covers_source_atoms": [
             "DK-8.1-thm.part-iii-gauge"
           ],
-          "capability_classes": []
+          "capability_classes": [],
+          "note": "Theorem 8.1 (iii), lower block, gauge at the block dimension.  Over the real field."
         }
       ],
       "supporting_evidence": [
@@ -6503,16 +6531,6 @@
           "note": "The real lower companion of the general part (i) statement."
         },
         {
-          "declaration": "TauCeti.DavisKahan1970.Section8.theorem8_1_exists_branch_withCompression_unbounded_complex",
-          "role": "supporting_theorem",
-          "note": "The existence clause and part (i) in one statement, in the source's own word order: there exists a reducing Q with the printed placement and an acute angle, and for THAT Q both compression inequalities hold.  Over the complex field."
-        },
-        {
-          "declaration": "TauCeti.DavisKahan1970.Section8.theorem8_1_exists_branch_withCompression_unbounded_real",
-          "role": "supporting_theorem",
-          "note": "The real sibling."
-        },
-        {
           "declaration": "TauCeti.DavisKahan1970.Section8.isSymmetric_upperBlockShift",
           "role": "supporting_theorem",
           "note": "Symmetry of `A_1 - alpha`, derived from `A` Hermitian.  Parts (ii) and (iii) name their eigenvalue sequences through this lemma rather than through a caller-supplied symmetry hypothesis, which Davis and Kahan do not assume."
@@ -6521,6 +6539,66 @@
           "declaration": "TauCeti.DavisKahan1970.Section8.isSymmetric_lowerBlockShift",
           "role": "supporting_theorem",
           "note": "Symmetry of `(alpha + delta) - A_0`, likewise."
+        },
+        {
+          "declaration": "TauCeti.DavisKahan1970.Section8.theorem8_1_exists_branch_blockPlacement_unbounded_complex",
+          "role": "generalization",
+          "note": "Superseded as canonical evidence 2026-09-07 and retained: "
+        },
+        {
+          "declaration": "TauCeti.DavisKahan1970.Section8.theorem8_1_exists_branch_blockPlacement_unbounded_real",
+          "role": "generalization",
+          "note": "Superseded as canonical evidence 2026-09-07 and retained: "
+        },
+        {
+          "declaration": "TauCeti.DavisKahan1970.Section8.theorem8_1_upperCompressionRepulsion_sourceExact_unbounded_complex",
+          "role": "generalization",
+          "note": "Superseded as canonical evidence 2026-09-07 and retained: "
+        },
+        {
+          "declaration": "TauCeti.DavisKahan1970.Section8.theorem8_1_upperCompressionRepulsion_sourceExact_unbounded_real",
+          "role": "generalization",
+          "note": "Superseded as canonical evidence 2026-09-07 and retained: "
+        },
+        {
+          "declaration": "TauCeti.DavisKahan1970.Section8.theorem8_1_upperEigenvalueRepulsion_sourceExact",
+          "role": "generalization",
+          "note": "Superseded as canonical evidence 2026-09-07 and retained: "
+        },
+        {
+          "declaration": "TauCeti.DavisKahan1970.Section8.theorem8_1_lowerEigenvalueRepulsion_sourceExact",
+          "role": "generalization",
+          "note": "Superseded as canonical evidence 2026-09-07 and retained: "
+        },
+        {
+          "declaration": "TauCeti.DavisKahan1970.Section8.theorem8_1_upperEigenvalueRepulsion_sourceExact_real",
+          "role": "generalization",
+          "note": "Superseded as canonical evidence 2026-09-07 and retained: "
+        },
+        {
+          "declaration": "TauCeti.DavisKahan1970.Section8.theorem8_1_lowerEigenvalueRepulsion_sourceExact_real",
+          "role": "generalization",
+          "note": "Superseded as canonical evidence 2026-09-07 and retained: "
+        },
+        {
+          "declaration": "TauCeti.DavisKahan1970.Section8.theorem8_1_upperSymmetricGaugeEigenvalue_sourceExact",
+          "role": "generalization",
+          "note": "Superseded as canonical evidence 2026-09-07 and retained: "
+        },
+        {
+          "declaration": "TauCeti.DavisKahan1970.Section8.theorem8_1_lowerSymmetricGaugeEigenvalue_sourceExact",
+          "role": "generalization",
+          "note": "Superseded as canonical evidence 2026-09-07 and retained: "
+        },
+        {
+          "declaration": "TauCeti.DavisKahan1970.Section8.theorem8_1_upperSymmetricGaugeEigenvalue_sourceExact_real",
+          "role": "generalization",
+          "note": "Superseded as canonical evidence 2026-09-07 and retained: "
+        },
+        {
+          "declaration": "TauCeti.DavisKahan1970.Section8.theorem8_1_lowerSymmetricGaugeEigenvalue_sourceExact_real",
+          "role": "generalization",
+          "note": "Superseded as canonical evidence 2026-09-07 and retained: "
         }
       ],
       "result_wide_scope_atoms": [],
@@ -6532,12 +6610,15 @@
           ],
           "scalar_scope": "complex",
           "evidence": {
-            "primary": "TauCeti.DavisKahan1970.Section8.theorem8_1_exists_branch_blockPlacement_unbounded_complex",
-            "correspondence": []
+            "primary": "TauCeti.DavisKahan1970.Section8.theorem8_1_exists_branch_withCompression_unbounded_complex",
+            "correspondence": [],
+            "supporting": [
+              "TauCeti.DavisKahan1970.Section8.theorem8_1_exists_branch_blockPlacement_unbounded_complex"
+            ]
           },
           "status": "established",
           "evidence_kind": "proof",
-          "justification": "Canonical witness for existence-correct-q at unbounded ambient scope, stated as the EXISTENTIAL the source asserts: there is a reducing projector `Q` of `A + H` with `Lambda_0 <= alpha`, `Lambda_1 >= alpha + delta` and `Theta(P, Q) <= pi/4`.  `Lambda_0` and `Lambda_1` are the two reducing restrictions of `A + H` and the placements are operator inequalities on them.  The spectral projector of `A + H` on the side of `alpha` is the internal witness; it is not part of the public type."
+          "justification": "Canonical witness for existence-correct-q at unbounded ambient scope, stated as the EXISTENTIAL the source asserts: there is a reducing projector `Q` of `A + H` with `Lambda_0 <= alpha`, `Lambda_1 >= alpha + delta` and `Theta(P, Q) <= pi/4`.  `Lambda_0` and `Lambda_1` are the two reducing restrictions of `A + H` and the placements are operator inequalities on them.  The spectral projector of `A + H` on the side of `alpha` is the internal witness; it is not part of the public type.  SOURCE SHAPE 2026-09-07 (fifth hostile review).  Repointed at the source-shaped witness; the previous primary is retained as supporting evidence."
         },
         {
           "id": "existence-correct-q.real",
@@ -6546,12 +6627,15 @@
           ],
           "scalar_scope": "real",
           "evidence": {
-            "primary": "TauCeti.DavisKahan1970.Section8.theorem8_1_exists_branch_blockPlacement_unbounded_real",
-            "correspondence": []
+            "primary": "TauCeti.DavisKahan1970.Section8.theorem8_1_exists_branch_withCompression_unbounded_real",
+            "correspondence": [],
+            "supporting": [
+              "TauCeti.DavisKahan1970.Section8.theorem8_1_exists_branch_blockPlacement_unbounded_real"
+            ]
           },
           "status": "established",
           "evidence_kind": "proof",
-          "justification": "Canonical witness for existence-correct-q at unbounded ambient scope, stated as the EXISTENTIAL the source asserts: there is a reducing projector `Q` of `A + H` with `Lambda_0 <= alpha`, `Lambda_1 >= alpha + delta` and `Theta(P, Q) <= pi/4`.  `Lambda_0` and `Lambda_1` are the two reducing restrictions of `A + H` and the placements are operator inequalities on them.  The spectral projector of `A + H` on the side of `alpha` is the internal witness; it is not part of the public type."
+          "justification": "Canonical witness for existence-correct-q at unbounded ambient scope, stated as the EXISTENTIAL the source asserts: there is a reducing projector `Q` of `A + H` with `Lambda_0 <= alpha`, `Lambda_1 >= alpha + delta` and `Theta(P, Q) <= pi/4`.  `Lambda_0` and `Lambda_1` are the two reducing restrictions of `A + H` and the placements are operator inequalities on them.  The spectral projector of `A + H` on the side of `alpha` is the internal witness; it is not part of the public type.  SOURCE SHAPE 2026-09-07 (fifth hostile review).  Repointed at the source-shaped witness; the previous primary is retained as supporting evidence."
         },
         {
           "id": "acute-iff-spectral-placement.complex",
@@ -6588,12 +6672,15 @@
           ],
           "scalar_scope": "complex",
           "evidence": {
-            "primary": "TauCeti.DavisKahan1970.Section8.theorem8_1_upperCompressionRepulsion_sourceExact_unbounded_complex",
-            "correspondence": []
+            "primary": "TauCeti.DavisKahan1970.Section8.theorem8_1_exists_branch_withCompression_unbounded_complex",
+            "correspondence": [],
+            "supporting": [
+              "TauCeti.DavisKahan1970.Section8.theorem8_1_upperCompressionRepulsion_sourceExact_unbounded_complex"
+            ]
           },
           "status": "established",
           "evidence_kind": "proof",
-          "justification": "Canonical witness for part (i) at unbounded ambient scope, in the source's own `A/H/P/Q` context: `A_1 - alpha <= C_1 (Lambda_1 - alpha) C_1` as a form inequality read on `P^perp`, with `C_1` the cosine block `P_{Q^perp}`.  The left side is the form of `A`, not of `A + H`, because `H` is fully off-diagonal and so has no form on `P^perp`.  The general statement about an arbitrary partial map and reducing subspace sits underneath it."
+          "justification": "Canonical witness for part (i) at unbounded ambient scope, in the source's own `A/H/P/Q` context: `A_1 - alpha <= C_1 (Lambda_1 - alpha) C_1` as a form inequality read on `P^perp`, with `C_1` the cosine block `P_{Q^perp}`.  The left side is the form of `A`, not of `A + H`, because `H` is fully off-diagonal and so has no form on `P^perp`.  The general statement about an arbitrary partial map and reducing subspace sits underneath it.  SOURCE SHAPE 2026-09-07 (fifth hostile review).  Repointed at the source-shaped witness; the previous primary is retained as supporting evidence."
         },
         {
           "id": "part-i-compression.complex.2",
@@ -6616,12 +6703,15 @@
           ],
           "scalar_scope": "real",
           "evidence": {
-            "primary": "TauCeti.DavisKahan1970.Section8.theorem8_1_upperCompressionRepulsion_sourceExact_unbounded_real",
-            "correspondence": []
+            "primary": "TauCeti.DavisKahan1970.Section8.theorem8_1_exists_branch_withCompression_unbounded_real",
+            "correspondence": [],
+            "supporting": [
+              "TauCeti.DavisKahan1970.Section8.theorem8_1_upperCompressionRepulsion_sourceExact_unbounded_real"
+            ]
           },
           "status": "established",
           "evidence_kind": "proof",
-          "justification": "Canonical witness for part (i) at unbounded ambient scope, in the source's own `A/H/P/Q` context: `A_1 - alpha <= C_1 (Lambda_1 - alpha) C_1` as a form inequality read on `P^perp`, with `C_1` the cosine block `P_{Q^perp}`.  The left side is the form of `A`, not of `A + H`, because `H` is fully off-diagonal and so has no form on `P^perp`.  The general statement about an arbitrary partial map and reducing subspace sits underneath it."
+          "justification": "Canonical witness for part (i) at unbounded ambient scope, in the source's own `A/H/P/Q` context: `A_1 - alpha <= C_1 (Lambda_1 - alpha) C_1` as a form inequality read on `P^perp`, with `C_1` the cosine block `P_{Q^perp}`.  The left side is the form of `A`, not of `A + H`, because `H` is fully off-diagonal and so has no form on `P^perp`.  The general statement about an arbitrary partial map and reducing subspace sits underneath it.  SOURCE SHAPE 2026-09-07 (fifth hostile review).  Repointed at the source-shaped witness; the previous primary is retained as supporting evidence."
         },
         {
           "id": "part-i-compression.real.2",
@@ -6644,12 +6734,15 @@
           ],
           "scalar_scope": "complex",
           "evidence": {
-            "primary": "TauCeti.DavisKahan1970.Section8.theorem8_1_upperEigenvalueRepulsion_sourceExact",
-            "correspondence": []
+            "primary": "TauCeti.DavisKahan1970.Section8.theorem8_1_upperEigenvalueRepulsion_blockSourceExact",
+            "correspondence": [],
+            "supporting": [
+              "TauCeti.DavisKahan1970.Section8.theorem8_1_upperEigenvalueRepulsion_sourceExact"
+            ]
           },
           "status": "established",
           "evidence_kind": "proof",
-          "justification": "Canonical witness on the PRINTED sequences: `alpha_k` and `lambda_k` are the ordered eigenvalues of the blocks, named through `LinearMap.IsSymmetric.eigenvalues`, and the clause is the printed inequality between them in finite dimensions.  The approximation-number theorem it replaces is dimension-free and is retained as the generalization the source announces as the \"natural infinite-dimensional extensions\"; `approximationNumber_eq_eigenvalues_of_isPositive` is the compiled correspondence between the two readings."
+          "justification": "Canonical witness on the PRINTED sequences: `alpha_k` and `lambda_k` are the ordered eigenvalues of the blocks, named through `LinearMap.IsSymmetric.eigenvalues`, and the clause is the printed inequality between them in finite dimensions.  The approximation-number theorem it replaces is dimension-free and is retained as the generalization the source announces as the \"natural infinite-dimensional extensions\"; `approximationNumber_eq_eigenvalues_of_isPositive` is the compiled correspondence between the two readings.  SOURCE SHAPE 2026-09-07 (fifth hostile review).  Repointed at the source-shaped witness; the previous primary is retained as supporting evidence."
         },
         {
           "id": "part-ii-eigenvalue.complex.2",
@@ -6658,12 +6751,15 @@
           ],
           "scalar_scope": "complex",
           "evidence": {
-            "primary": "TauCeti.DavisKahan1970.Section8.theorem8_1_lowerEigenvalueRepulsion_sourceExact",
-            "correspondence": []
+            "primary": "TauCeti.DavisKahan1970.Section8.theorem8_1_lowerEigenvalueRepulsion_blockSourceExact",
+            "correspondence": [],
+            "supporting": [
+              "TauCeti.DavisKahan1970.Section8.theorem8_1_lowerEigenvalueRepulsion_sourceExact"
+            ]
           },
           "status": "established",
           "evidence_kind": "proof",
-          "justification": "Canonical witness on the PRINTED sequences: `alpha_k` and `lambda_k` are the ordered eigenvalues of the blocks, named through `LinearMap.IsSymmetric.eigenvalues`, and the clause is the printed inequality between them in finite dimensions.  The approximation-number theorem it replaces is dimension-free and is retained as the generalization the source announces as the \"natural infinite-dimensional extensions\"; `approximationNumber_eq_eigenvalues_of_isPositive` is the compiled correspondence between the two readings."
+          "justification": "Canonical witness on the PRINTED sequences: `alpha_k` and `lambda_k` are the ordered eigenvalues of the blocks, named through `LinearMap.IsSymmetric.eigenvalues`, and the clause is the printed inequality between them in finite dimensions.  The approximation-number theorem it replaces is dimension-free and is retained as the generalization the source announces as the \"natural infinite-dimensional extensions\"; `approximationNumber_eq_eigenvalues_of_isPositive` is the compiled correspondence between the two readings.  SOURCE SHAPE 2026-09-07 (fifth hostile review).  Repointed at the source-shaped witness; the previous primary is retained as supporting evidence."
         },
         {
           "id": "part-ii-eigenvalue.real",
@@ -6672,12 +6768,15 @@
           ],
           "scalar_scope": "real",
           "evidence": {
-            "primary": "TauCeti.DavisKahan1970.Section8.theorem8_1_upperEigenvalueRepulsion_sourceExact_real",
-            "correspondence": []
+            "primary": "TauCeti.DavisKahan1970.Section8.theorem8_1_upperEigenvalueRepulsion_blockSourceExact_real",
+            "correspondence": [],
+            "supporting": [
+              "TauCeti.DavisKahan1970.Section8.theorem8_1_upperEigenvalueRepulsion_sourceExact_real"
+            ]
           },
           "status": "established",
           "evidence_kind": "proof",
-          "justification": "Canonical witness on the PRINTED sequences: `alpha_k` and `lambda_k` are the ordered eigenvalues of the blocks, named through `LinearMap.IsSymmetric.eigenvalues`, and the clause is the printed inequality between them in finite dimensions.  The approximation-number theorem it replaces is dimension-free and is retained as the generalization the source announces as the \"natural infinite-dimensional extensions\"; `approximationNumber_eq_eigenvalues_of_isPositive` is the compiled correspondence between the two readings."
+          "justification": "Canonical witness on the PRINTED sequences: `alpha_k` and `lambda_k` are the ordered eigenvalues of the blocks, named through `LinearMap.IsSymmetric.eigenvalues`, and the clause is the printed inequality between them in finite dimensions.  The approximation-number theorem it replaces is dimension-free and is retained as the generalization the source announces as the \"natural infinite-dimensional extensions\"; `approximationNumber_eq_eigenvalues_of_isPositive` is the compiled correspondence between the two readings.  SOURCE SHAPE 2026-09-07 (fifth hostile review).  Repointed at the source-shaped witness; the previous primary is retained as supporting evidence."
         },
         {
           "id": "part-ii-eigenvalue.real.2",
@@ -6686,12 +6785,15 @@
           ],
           "scalar_scope": "real",
           "evidence": {
-            "primary": "TauCeti.DavisKahan1970.Section8.theorem8_1_lowerEigenvalueRepulsion_sourceExact_real",
-            "correspondence": []
+            "primary": "TauCeti.DavisKahan1970.Section8.theorem8_1_lowerEigenvalueRepulsion_blockSourceExact_real",
+            "correspondence": [],
+            "supporting": [
+              "TauCeti.DavisKahan1970.Section8.theorem8_1_lowerEigenvalueRepulsion_sourceExact_real"
+            ]
           },
           "status": "established",
           "evidence_kind": "proof",
-          "justification": "Canonical witness on the PRINTED sequences: `alpha_k` and `lambda_k` are the ordered eigenvalues of the blocks, named through `LinearMap.IsSymmetric.eigenvalues`, and the clause is the printed inequality between them in finite dimensions.  The approximation-number theorem it replaces is dimension-free and is retained as the generalization the source announces as the \"natural infinite-dimensional extensions\"; `approximationNumber_eq_eigenvalues_of_isPositive` is the compiled correspondence between the two readings."
+          "justification": "Canonical witness on the PRINTED sequences: `alpha_k` and `lambda_k` are the ordered eigenvalues of the blocks, named through `LinearMap.IsSymmetric.eigenvalues`, and the clause is the printed inequality between them in finite dimensions.  The approximation-number theorem it replaces is dimension-free and is retained as the generalization the source announces as the \"natural infinite-dimensional extensions\"; `approximationNumber_eq_eigenvalues_of_isPositive` is the compiled correspondence between the two readings.  SOURCE SHAPE 2026-09-07 (fifth hostile review).  Repointed at the source-shaped witness; the previous primary is retained as supporting evidence."
         },
         {
           "id": "part-iii-gauge.complex",
@@ -6700,12 +6802,15 @@
           ],
           "scalar_scope": "complex",
           "evidence": {
-            "primary": "TauCeti.DavisKahan1970.Section8.theorem8_1_upperSymmetricGaugeEigenvalue_sourceExact",
-            "correspondence": []
+            "primary": "TauCeti.DavisKahan1970.Section8.theorem8_1_upperSymmetricGaugeEigenvalue_blockSourceExact",
+            "correspondence": [],
+            "supporting": [
+              "TauCeti.DavisKahan1970.Section8.theorem8_1_upperSymmetricGaugeEigenvalue_sourceExact"
+            ]
           },
           "status": "established",
           "evidence_kind": "proof",
-          "justification": "Canonical witness on the PRINTED sequences: `alpha_k` and `lambda_k` are the ordered eigenvalues of the blocks, named through `LinearMap.IsSymmetric.eigenvalues`, and the clause is the printed inequality between them in finite dimensions.  The approximation-number theorem it replaces is dimension-free and is retained as the generalization the source announces as the \"natural infinite-dimensional extensions\"; `approximationNumber_eq_eigenvalues_of_isPositive` is the compiled correspondence between the two readings."
+          "justification": "Canonical witness on the PRINTED sequences: `alpha_k` and `lambda_k` are the ordered eigenvalues of the blocks, named through `LinearMap.IsSymmetric.eigenvalues`, and the clause is the printed inequality between them in finite dimensions.  The approximation-number theorem it replaces is dimension-free and is retained as the generalization the source announces as the \"natural infinite-dimensional extensions\"; `approximationNumber_eq_eigenvalues_of_isPositive` is the compiled correspondence between the two readings.  SOURCE SHAPE 2026-09-07 (fifth hostile review).  Repointed at the source-shaped witness; the previous primary is retained as supporting evidence."
         },
         {
           "id": "part-iii-gauge.complex.2",
@@ -6714,12 +6819,15 @@
           ],
           "scalar_scope": "complex",
           "evidence": {
-            "primary": "TauCeti.DavisKahan1970.Section8.theorem8_1_lowerSymmetricGaugeEigenvalue_sourceExact",
-            "correspondence": []
+            "primary": "TauCeti.DavisKahan1970.Section8.theorem8_1_lowerSymmetricGaugeEigenvalue_blockSourceExact",
+            "correspondence": [],
+            "supporting": [
+              "TauCeti.DavisKahan1970.Section8.theorem8_1_lowerSymmetricGaugeEigenvalue_sourceExact"
+            ]
           },
           "status": "established",
           "evidence_kind": "proof",
-          "justification": "Canonical witness on the PRINTED sequences: `alpha_k` and `lambda_k` are the ordered eigenvalues of the blocks, named through `LinearMap.IsSymmetric.eigenvalues`, and the clause is the printed inequality between them in finite dimensions.  The approximation-number theorem it replaces is dimension-free and is retained as the generalization the source announces as the \"natural infinite-dimensional extensions\"; `approximationNumber_eq_eigenvalues_of_isPositive` is the compiled correspondence between the two readings."
+          "justification": "Canonical witness on the PRINTED sequences: `alpha_k` and `lambda_k` are the ordered eigenvalues of the blocks, named through `LinearMap.IsSymmetric.eigenvalues`, and the clause is the printed inequality between them in finite dimensions.  The approximation-number theorem it replaces is dimension-free and is retained as the generalization the source announces as the \"natural infinite-dimensional extensions\"; `approximationNumber_eq_eigenvalues_of_isPositive` is the compiled correspondence between the two readings.  SOURCE SHAPE 2026-09-07 (fifth hostile review).  Repointed at the source-shaped witness; the previous primary is retained as supporting evidence."
         },
         {
           "id": "part-iii-gauge.real",
@@ -6728,12 +6836,15 @@
           ],
           "scalar_scope": "real",
           "evidence": {
-            "primary": "TauCeti.DavisKahan1970.Section8.theorem8_1_upperSymmetricGaugeEigenvalue_sourceExact_real",
-            "correspondence": []
+            "primary": "TauCeti.DavisKahan1970.Section8.theorem8_1_upperSymmetricGaugeEigenvalue_blockSourceExact_real",
+            "correspondence": [],
+            "supporting": [
+              "TauCeti.DavisKahan1970.Section8.theorem8_1_upperSymmetricGaugeEigenvalue_sourceExact_real"
+            ]
           },
           "status": "established",
           "evidence_kind": "proof",
-          "justification": "Canonical witness on the PRINTED sequences: `alpha_k` and `lambda_k` are the ordered eigenvalues of the blocks, named through `LinearMap.IsSymmetric.eigenvalues`, and the clause is the printed inequality between them in finite dimensions.  The approximation-number theorem it replaces is dimension-free and is retained as the generalization the source announces as the \"natural infinite-dimensional extensions\"; `approximationNumber_eq_eigenvalues_of_isPositive` is the compiled correspondence between the two readings."
+          "justification": "Canonical witness on the PRINTED sequences: `alpha_k` and `lambda_k` are the ordered eigenvalues of the blocks, named through `LinearMap.IsSymmetric.eigenvalues`, and the clause is the printed inequality between them in finite dimensions.  The approximation-number theorem it replaces is dimension-free and is retained as the generalization the source announces as the \"natural infinite-dimensional extensions\"; `approximationNumber_eq_eigenvalues_of_isPositive` is the compiled correspondence between the two readings.  SOURCE SHAPE 2026-09-07 (fifth hostile review).  Repointed at the source-shaped witness; the previous primary is retained as supporting evidence."
         },
         {
           "id": "part-iii-gauge.real.2",
@@ -6742,12 +6853,15 @@
           ],
           "scalar_scope": "real",
           "evidence": {
-            "primary": "TauCeti.DavisKahan1970.Section8.theorem8_1_lowerSymmetricGaugeEigenvalue_sourceExact_real",
-            "correspondence": []
+            "primary": "TauCeti.DavisKahan1970.Section8.theorem8_1_lowerSymmetricGaugeEigenvalue_blockSourceExact_real",
+            "correspondence": [],
+            "supporting": [
+              "TauCeti.DavisKahan1970.Section8.theorem8_1_lowerSymmetricGaugeEigenvalue_sourceExact_real"
+            ]
           },
           "status": "established",
           "evidence_kind": "proof",
-          "justification": "Canonical witness on the PRINTED sequences: `alpha_k` and `lambda_k` are the ordered eigenvalues of the blocks, named through `LinearMap.IsSymmetric.eigenvalues`, and the clause is the printed inequality between them in finite dimensions.  The approximation-number theorem it replaces is dimension-free and is retained as the generalization the source announces as the \"natural infinite-dimensional extensions\"; `approximationNumber_eq_eigenvalues_of_isPositive` is the compiled correspondence between the two readings."
+          "justification": "Canonical witness on the PRINTED sequences: `alpha_k` and `lambda_k` are the ordered eigenvalues of the blocks, named through `LinearMap.IsSymmetric.eigenvalues`, and the clause is the printed inequality between them in finite dimensions.  The approximation-number theorem it replaces is dimension-free and is retained as the generalization the source announces as the \"natural infinite-dimensional extensions\"; `approximationNumber_eq_eigenvalues_of_isPositive` is the compiled correspondence between the two readings.  SOURCE SHAPE 2026-09-07 (fifth hostile review).  Repointed at the source-shaped witness; the previous primary is retained as supporting evidence."
         }
       ],
       "nonlocal_source_interpretation": {
@@ -6789,21 +6903,11 @@
           "open_work": "DONE, 2026-09-06.  The lift is complete for every clause that inherits ambient scope, in both scalar fields, in the vocabulary the unbounded Section 2 endpoints already use (`ReducesSubspace`, `IsOddFor`, form bounds on `dom A`, `specRange`).  The last piece was the converse half of Theorem 8.1's printed iff, which turned on POINTWISE rather than uniform strictness of the quarter-angle bound plus the commutation of a reducing projection with a spectral projection (`TauCeti.LinearPMap.specProjection_apply_of_unitary_intertwines`)."
         },
         "distinct_from_refutation": "DK-4.4-prop",
-        "distributable_specification_sha256": "05ef66dd33b497329f745505d3a04b0100f2a0052202a3b7a188d76a545e71fd",
+        "distributable_specification_sha256": "2143e6cf2d27662e2556500405cc4bdd121a267027a60944a3f13fd8afb83c3d",
         "source_fidelity_inventory_sha256": "a35c9158f5fab388494d59393f2c49343e0810cb0c5a864abc383e955542564c",
         "supporting_atom_digest_sha256": "9d2013e666da3d323c1a2351a7d52cf4c878868c048a296656164cce5accb447"
       },
-      "notes": "\n\nUNBOUNDED SCOPE, PROGRESS 2026-09-05.  The angle conclusion Davis and Kahan print -- `Theta <= pi/4`, non-strict -- is now proved at unbounded ambient scope by `maximalAngle_le_pi_div_four_of_orderedFormGap_unbounded_printed`, in the paper's own orientation on `P` and `Q`.  Reading the printed statement mattered: the bounded canonical evidence concludes the strictly stronger supremum bound `subspaceGap < sqrt 2 / 2`, whose constant is `delta / (1 + ‖C‖)` and therefore degenerates as `‖A‖ -> infinity`.  The paper does not claim it, and it is not available unbounded.\n\nSUPERSEDED THE SAME DAY -- the sentence that stood here said the canonical evidence was unchanged and the row not yet at its source scope.  Both stopped being true on 2026-09-06: see the entries below.\n\nThe unbounded core is now exported as reflection-product positivity (`reflectionProduct_form_nonneg_of_orderedFormGap_unbounded`), with the angle conclusion and the projector-gap conclusion `subspaceGap P Q <= sqrt 2 / 2` as thin consumers of it in the paper's own orientation.\n\nBRANCH EXISTENCE AT UNBOUNDED SCOPE, 2026-09-06.  `theorem8_1_canonicalBranchUnbounded_printed` supplies, at the printed hypotheses and at unbounded scope, the branch `Q = specRange (A + H) (Iic alpha)` together with all three printed facts about it: it reduces `A + H`, it carries `Lambda_0 <= alpha` and `Lambda_1 >= alpha + delta`, and `Theta(P, Q) <= pi/4`.  The two form bounds are the half-line energy bounds of the spectral measure applied through a one-sided limit, with the open gap removed by the already-proved unbounded repulsion `notMem_spectrum_addBounded_of_offDiagonal_form_gap`.\n\nThe printed characterization's direction FROM the spectral placement is also proved at unbounded scope, from the printed half-line placements themselves: `theorem8_1_maximalAngle_le_of_spectrumIn_unbounded`, with `re_inner_le_of_reducingRestriction_realSpectrum_subset_Iic` and its dual as the bridge from half-line spectrum to form bound.\n\nPART (i) AT UNBOUNDED SCOPE, 2026-09-06.  `theorem8_1_upperCompressionRepulsion_unbounded` and its lower-block dual give part (i) in its form reading -- the alpha-shifted energy of a domain vector is at most that of its component in the branch's complement.  The proof is `re_inner_split_of_reduces` (a reducing subspace splits the energy, the cross terms vanishing by invariance) plus the branch's own ordered form bound; nothing about `P` is used, so it holds on the whole domain and the paper's `P^perp` is only where it is read.\n\nPRINTED SCOPE OF PARTS (ii) AND (iii), measured 2026-09-06.  Neither is an unbounded obligation.  The source prints (ii) `in finite dimensions ... with ... natural infinite-dimensional extensions` and (iii) `for every symmetric gauge function Phi in finite dimensions`.  Part (i), by contrast, carries no dimension qualifier and so inherits the ambient unbounded scope.  The existing finite/bounded evidence for (ii) and (iii) is therefore AT the printed scope, and the dimension-free approximation-number form already registered covers (ii)'s extension remark.\n\nCONVERSE AT UNBOUNDED SCOPE, 2026-09-06.  The converse half of the printed iff is proved at unbounded scope by `theorem8_1_eq_canonicalBranchUnbounded_of_maximalAngle_le` (uniqueness of the branch) and packaged with the forward direction as `theorem8_1_maximalAngle_le_iff_orderedFormGap_unbounded`, in the ordered-form reading of the printed placements `Lambda_0 <= alpha` and `Lambda_1 >= alpha + delta`.\n\nAn earlier revision of this note recorded the converse as an open mathematical question, on the grounds that the bounded proof rests on the UNIFORM strict bound `IsQuarterAcute P Q` whose constant `delta / (1 + ‖C‖)` degenerates as ‖A‖ grows.  That reasoning was wrong.  The uniqueness argument tests one vector at a time, so POINTWISE strictness suffices, and pointwise strictness was already inside the unbounded quarter-angle proof: retaining the `delta ‖G y‖^2` margin that `reflectionProduct_form_nonneg_of_orderedFormGap_unbounded` discarded gives `reflectionProduct_form_pos_of_orderedFormGap_unbounded`, hence `‖P_P y - P_Q y‖ < ‖y‖/sqrt 2` for every nonzero `y`.  No uniform bound follows and none is claimed, which is consistent with the paper printing only the non-strict `Theta <= pi/4`.  The second ingredient is `TauCeti.LinearPMap.specProjection_apply_of_unitary_intertwines`: a unitary preserving the domain and commuting with the operator commutes with every spectral projection, so the reflection of a reducing subspace makes `P_M` and `P_Q` commute.\n\nWHAT IS STILL BOUNDED ON THIS ROW.  Only the canonical evidence selection, and the real scalar scope of the unbounded work.  Every printed clause of Theorem 8.1 that inherits unbounded scope -- branch existence with its form bounds, both directions of the characterization, and part (i) -- now has a compiled unbounded COMPLEX proof registered as supporting evidence.  Parts (ii) and (iii) are printed in finite dimensions and are at their printed scope already.  Promoting the canonical evidence would drop this row's real coverage, since the unbounded Section 8 development is complex-only; the real unbounded ports are the remaining work, and `GOAL.md` says so.",
-      "remaining_gap": {
-        "category": "source_correspondence",
-        "missing_surface": "Parts (ii) and (iii) on the block eigenvalue lists of `A_1` and `Lambda_1`, indexed by the block dimension, rather than on the ambient zero-padded operators.",
-        "next_action": "Build the ambient/block approximation-number bridge and the block-dimension equality from the acute angle; then restate (ii), and for (iii) either establish the majorization at block dimension or extend a block gauge to the ambient one.",
-        "strongest_existing_evidence": [
-          "TauCeti.DavisKahan1970.Section8.theorem8_1_upperEigenvalueRepulsion_sourceExact",
-          "TauCeti.DavisKahan1970.Section8.theorem8_1_upperSymmetricGaugeEigenvalue_sourceExact",
-          "TauCeti.DavisKahan1970.Section8.isSymmetric_upperBlockShift"
-        ]
-      }
+      "notes": "\n\nUNBOUNDED SCOPE, PROGRESS 2026-09-05.  The angle conclusion Davis and Kahan print -- `Theta <= pi/4`, non-strict -- is now proved at unbounded ambient scope by `maximalAngle_le_pi_div_four_of_orderedFormGap_unbounded_printed`, in the paper's own orientation on `P` and `Q`.  Reading the printed statement mattered: the bounded canonical evidence concludes the strictly stronger supremum bound `subspaceGap < sqrt 2 / 2`, whose constant is `delta / (1 + ‖C‖)` and therefore degenerates as `‖A‖ -> infinity`.  The paper does not claim it, and it is not available unbounded.\n\nSUPERSEDED THE SAME DAY -- the sentence that stood here said the canonical evidence was unchanged and the row not yet at its source scope.  Both stopped being true on 2026-09-06: see the entries below.\n\nThe unbounded core is now exported as reflection-product positivity (`reflectionProduct_form_nonneg_of_orderedFormGap_unbounded`), with the angle conclusion and the projector-gap conclusion `subspaceGap P Q <= sqrt 2 / 2` as thin consumers of it in the paper's own orientation.\n\nBRANCH EXISTENCE AT UNBOUNDED SCOPE, 2026-09-06.  `theorem8_1_canonicalBranchUnbounded_printed` supplies, at the printed hypotheses and at unbounded scope, the branch `Q = specRange (A + H) (Iic alpha)` together with all three printed facts about it: it reduces `A + H`, it carries `Lambda_0 <= alpha` and `Lambda_1 >= alpha + delta`, and `Theta(P, Q) <= pi/4`.  The two form bounds are the half-line energy bounds of the spectral measure applied through a one-sided limit, with the open gap removed by the already-proved unbounded repulsion `notMem_spectrum_addBounded_of_offDiagonal_form_gap`.\n\nThe printed characterization's direction FROM the spectral placement is also proved at unbounded scope, from the printed half-line placements themselves: `theorem8_1_maximalAngle_le_of_spectrumIn_unbounded`, with `re_inner_le_of_reducingRestriction_realSpectrum_subset_Iic` and its dual as the bridge from half-line spectrum to form bound.\n\nPART (i) AT UNBOUNDED SCOPE, 2026-09-06.  `theorem8_1_upperCompressionRepulsion_unbounded` and its lower-block dual give part (i) in its form reading -- the alpha-shifted energy of a domain vector is at most that of its component in the branch's complement.  The proof is `re_inner_split_of_reduces` (a reducing subspace splits the energy, the cross terms vanishing by invariance) plus the branch's own ordered form bound; nothing about `P` is used, so it holds on the whole domain and the paper's `P^perp` is only where it is read.\n\nPRINTED SCOPE OF PARTS (ii) AND (iii), measured 2026-09-06.  Neither is an unbounded obligation.  The source prints (ii) `in finite dimensions ... with ... natural infinite-dimensional extensions` and (iii) `for every symmetric gauge function Phi in finite dimensions`.  Part (i), by contrast, carries no dimension qualifier and so inherits the ambient unbounded scope.  The existing finite/bounded evidence for (ii) and (iii) is therefore AT the printed scope, and the dimension-free approximation-number form already registered covers (ii)'s extension remark.\n\nCONVERSE AT UNBOUNDED SCOPE, 2026-09-06.  The converse half of the printed iff is proved at unbounded scope by `theorem8_1_eq_canonicalBranchUnbounded_of_maximalAngle_le` (uniqueness of the branch) and packaged with the forward direction as `theorem8_1_maximalAngle_le_iff_orderedFormGap_unbounded`, in the ordered-form reading of the printed placements `Lambda_0 <= alpha` and `Lambda_1 >= alpha + delta`.\n\nAn earlier revision of this note recorded the converse as an open mathematical question, on the grounds that the bounded proof rests on the UNIFORM strict bound `IsQuarterAcute P Q` whose constant `delta / (1 + ‖C‖)` degenerates as ‖A‖ grows.  That reasoning was wrong.  The uniqueness argument tests one vector at a time, so POINTWISE strictness suffices, and pointwise strictness was already inside the unbounded quarter-angle proof: retaining the `delta ‖G y‖^2` margin that `reflectionProduct_form_nonneg_of_orderedFormGap_unbounded` discarded gives `reflectionProduct_form_pos_of_orderedFormGap_unbounded`, hence `‖P_P y - P_Q y‖ < ‖y‖/sqrt 2` for every nonzero `y`.  No uniform bound follows and none is claimed, which is consistent with the paper printing only the non-strict `Theta <= pi/4`.  The second ingredient is `TauCeti.LinearPMap.specProjection_apply_of_unitary_intertwines`: a unitary preserving the domain and commuting with the operator commutes with every spectral projection, so the reflection of a reducing subspace makes `P_M` and `P_Q` commute.\n\nWHAT IS STILL BOUNDED ON THIS ROW.  Only the canonical evidence selection, and the real scalar scope of the unbounded work.  Every printed clause of Theorem 8.1 that inherits unbounded scope -- branch existence with its form bounds, both directions of the characterization, and part (i) -- now has a compiled unbounded COMPLEX proof registered as supporting evidence.  Parts (ii) and (iii) are printed in finite dimensions and are at their printed scope already.  Promoting the canonical evidence would drop this row's real coverage, since the unbounded Section 8 development is complex-only; the real unbounded ports are the remaining work, and `GOAL.md` says so."
     },
     {
       "id": "DK-8.2-thm",
@@ -7372,7 +7476,7 @@
           }
         ],
         "distinct_from_refutation": "DK-4.4-prop",
-        "distributable_specification_sha256": "05ef66dd33b497329f745505d3a04b0100f2a0052202a3b7a188d76a545e71fd",
+        "distributable_specification_sha256": "2143e6cf2d27662e2556500405cc4bdd121a267027a60944a3f13fd8afb83c3d",
         "source_fidelity_inventory_sha256": "a35c9158f5fab388494d59393f2c49343e0810cb0c5a864abc383e955542564c",
         "supporting_atom_digest_sha256": "248778cb2ddbccf38c27d7e877ad5a86c8e9637fc5a6d1e28d004a4e55d72cbe",
         "reaudit_note": "ACCEPTED 2026-09-02 on hostile review. Reclassified from `locally_exact`: the row carried the Section 3 standing-scope atom while declaring no nonlocal dependency, and the Lean witnesses take the crossed-defect condition explicitly. Verified against the source-facing theorem signatures rather than inferred from the row.",
@@ -7394,14 +7498,12 @@
     "method": "2026-08-31 hostile re-review of all 29 counted results under the coherent-clause model.  For each result: read the printed statement in the checked-in distributable specification, enumerate its separately quantified clauses, then read the COMPILER-PRINTED TYPE of each clause's canonical witness -- not its name -- and compare scalar field, bounded/unbounded operator scope, domain assumptions, dimension, norm class, separation alternatives, residual versus ambient perturbation, directed versus ambient angle, constants, representative choice, and any hypothesis present in Lean but not in the paper or the reverse.  Eight findings, all repaired in the same pass: (F1) the ambient sin 2Theta clause had no witness at the row's unbounded scope -- repaired by proving it; (F2) Corollary 4.1, Proposition 4.3, Theorem 5.2 and Theorem 6.3 are printed 'for every unitary-invariant norm' but were certified at `KyFanDominantIdealFamily` -- repaired by `symmetricNorming_of_kyFanDominant` and six new paper-norm endpoints; (F3) Theorem 6.3's witnesses were existential inside the ideal quantifier -- repaired by the parameterized paper-norm endpoints; (F4) the sin 2Theta directed clauses cited no correspondence for the reflected overlap block -- repaired by registering the existing lemmas; and four checker holes (F5 conclusions stated under `lemma` were unchecked, F6 a clause primary need not be canonical evidence, F7 a clause's scalar field was unchecked against its primary, F8 the half-infinite gap justification was unchecked prose), each repaired with a regression test.  Theorem 8.1 part (iii)'s `FiniteDimensional` binder was checked and is the printed scope; Proposition 4.4's single counterexample was checked and is sufficient for a refutation.  The earlier 2026-08-12 sweep is retained as history; its union-of-atoms acceptance is the defect this model replaced.  RE-RUN 2026-08-31 (second pass), on the unbounded-compression axis specifically, after the Palomar Section 2 statement audit exposed it.  For each of the seven printed Section 2 clauses the two scopes `ambient operator may be unbounded` and `trial/Ritz compression may itself be unbounded` were separated and read off the compiler-printed type of the clause's canonical witness.  One clause failed: `S2-tan-theta` directed, whose primaries took a bounded compression.  It is repaired; the axis is now a `type_requirements` obligation on `DK-6-appendix.unbounded-tangent-extension` rather than prose.  The per-clause result table is in the human report.  THIRD PASS 2026-09-01: no counted result's disposition changed and no canonical evidence moved.  Two things were closed and are recorded in the human report.  (a) The Palomar Section 2 Challenge, which had gone on demanding an unbounded trial compression for directed `sin 2Theta` after this audit concluded the Appendix does not grant one, was narrowed to a bounded compression; the repository now gives one answer to that question.  (b) The paper's ambient tangents were proved to carry the tangent singular-value sequence -- `approximationNumber_tanAngleOperatorC` and `approximationNumber_absTanTwoAngleOperatorC` -- by pairing the existing Gram resolvent transfer with its inverse `approximationNumber_le_of_gramContraction`, so that `||tan Theta||` is a norm of the sequence `tan theta_n` as a theorem rather than as a docstring.  FOURTH PASS 2026-09-02: the directed `tan 2Θ` clauses were re-read against the compiler-printed types of the new source-shaped endpoints; both scalar fields now conclude on the paper's directed object with the identification of its singular values as tan (arcsin a_n(sin 2Θ₀)) inside the theorem type, and the checker now requires the registered correspondence and transport chain to be invoked by the primary's proof, to agree across both ledgers, and to be statement-pinned.  FIFTH PASS 2026-09-04, on the ordered-angle and right-hand-side axes, after a hostile review of the directed Section 2 clause.  Scope of this pass: only `S2-sin-two-theta` changed canonical evidence; the other 28 rows' canonical evidence is byte-identical and their prior acceptance is carried forward unexamined.  Two defects were found on the row that changed, both by reading the compiler-printed type rather than the name.  (i) RIGHT-HAND SIDE.  The public alias `SectionTwo.sinTwoTheta_complex`, registered here and in the statement map as the printed directed clause `delta N(sin 2Theta_0) <= 2 N(R)`, named `sinTwoTheta_directed_unbounded_addBounded_symmetricNorming_complex`, whose right-hand side is `2 N(E)` for the full bounded perturbation.  `N(E)` and `N(R)` are different source quantities and the printed directed clause is the residual one, so the alias exposed a theorem the row did not claim.  Repaired by repointing the alias; the perturbation theorem is retained as `alternative_route`.  (ii) ORDERED ANGLE.  The registered primary concluded on `sinTwoThetaIdealBlock U V` and the correspondence registered by finding F4 of the 2026-08-31 pass -- `mem_directedSinTwoAngleOperatorC_iff` and `gauge_directedSinTwoAngleOperatorC` -- carries it to `directedSinTwoAngleOperator U V`, with `U` the subspace whose blocks the gap separates and `V` the trial subspace.  Section 1 of the source reads the directed angle as `||sin Theta_0|| = ||Q^perp P|| = ||Q^perp E_0||`, the cross-projection with the TRIAL subspace on the right, which in this development is `directedSinTwoAngleOperator V U`.  F4 therefore closed the block-to-angle gap in the wrong ordering, and the ordering is not a naming choice: the two ordered directed sines have different approximation numbers in general.  Repaired by proving `Angle.directedSinTwoAngleOperator_hasSameApproximationNumbers_swap` -- the doubled sines do agree, by the polar decomposition of `T = P_U P_V` -- and canonicalizing the row on the angle-level theorems in the trial-side ordering.  The orientation is now pinned by two audit theorems that fix the semantic names `trial` and `gapCarrier` and would stop elaborating if the arguments were swapped.  No other row's disposition changed and the denominator is unchanged.  SIXTH PASS 2026-09-04, propagating the fifth pass.  Scope: only `DK-8.2-thm` changed canonical evidence.  Theorem 8.2 retains the Section 2 residual alternative, so its printed conclusion is the same directed `sin 2Theta_0` with the same ordering question, and its canonical evidence had the same defect: `theorem8_2_sinTwoTheta_residual_symmetricNorming` concludes on `sinTwoThetaIdealBlock Q P`, the proof's one-sided block, in the ordering (gap-carrying, trial) rather than the paper's trial-side reading `||sin Theta_0|| = ||Q^perp E_0||`.  The row read terminal through the fifth pass, which repaired exactly this on `S2-sin-two-theta`: the repair was not propagated and nothing noticed.  Repaired by `theorem8_2_sinTwoTheta_residual_directedAngle_symmetricNorming` and its real sibling, on `Angle.directedSinTwoAngleOperator P Q`, through the same trial-side bridge; the block theorems are demoted to `implementation_structure`.  The perturbation alternative was checked and needs no change: it is the ambient clause, and the ambient sine is the modulus of a projector difference, so it does not depend on the order of the pair.  The conclusion-object invariant now covers both rows rather than only the one that was repaired first.  SEVENTH PASS 2026-09-04, on `DK-3.1-cor` only.  The realization clause was canonicalized on a theorem strictly weaker than the printed sentence: `corollary3_1_realization` realizes the angle sequence but forces the two angle-zero multiplicities to coincide, and 'except perhaps for the multiplicity of 0' is precisely the clause that distinguishes Theta_0 from Theta_1.  The repository already contained `corollary3_1_realization_zeroMultiplicity`, which prescribes them as two independent Hilbert spaces, so the row was under-certified against a theorem it already had.  Canonical evidence moved; the weaker realization is retained as a specialization, and the classification half is registered beside it.  Also added and registered: `angle_eq_of_sin_sq_eq` and `angleSequence_eq_of_angleList_eq`, which prove that the approximation-number list `n |-> sin^2 theta_n` this development records determines the printed angle sequence -- previously an explanatory sentence rather than a theorem.  EIGHTH PASS 2026-09-04, on public-signature honesty across all 29 rows.  Every one of the 82 canonical declarations was `#check`ed against the build and its compiler-printed type searched for implementation-only structure classes.  Eight declarations in six Section 3 rows -- `DK-3.1-cor`, `DK-3.1-prop`, `DK-3.2-cor`, `DK-3.2-prop` (two), `DK-3.5-prop` (three) -- quantified over `[Algebra ℝ (H →L[𝕜] H)]`, `[IsScalarTower ℝ 𝕜 (H →L[𝕜] H)]` and `[ContinuousFunctionalCalculus ℝ (H →L[𝕜] H) IsSelfAdjoint]` as section `variable`s.  Davis and Kahan print none of them, and all three hold unconditionally at every `RCLike` field since 2026-09-01, so the signatures asked callers for instances that instance search finds.  Repaired by activating them with `attribute [local instance 100]` (not globally: a global `Algebra ℝ (E →L[𝕜] E)` makes Lean's `•` elaborator drop an author-written coercion).  Re-probed: 0 of 82 leak.  The existing capability check could not see any of this -- it matches `Has…`-shaped class names -- so `IMPLEMENTATION_STRUCTURE_CLASSES` now checks the printed type for these too, and was tamper-tested.  No canonical evidence moved in this pass; only the types got smaller.  NINTH PASS 2026-09-04, on 'stronger theorem used as exact source witness', for `DK-5.1-thm` and `DK-5.2-thm`.  Neither row was mathematically wrong; both named a theorem more general than the printed one as the printed one.  Theorem 5.1 is printed over BANACH spaces and its witnesses were stated over normed spaces -- the estimate is a rearrangement of the Sylvester identity and never uses completeness -- so a wrapper carrying `[CompleteSpace X]` and `[CompleteSpace Y]` is now canonical and the normed-space theorems are `generalization` evidence.  The printed `gamma >= 0` was checked and was already carried as nonneg, not strengthened to positive.  Theorem 5.2's real witness took `FormBoundedSylvesterGap`, which also covers the interval/exterior and reversed configurations, while the complex witness already carried the printed `A >= gamma + delta > gamma >= B`; the two now agree at the printed hypothesis.  Both wrappers invoke the general theorems internally and reprove nothing.  TENTH PASS 2026-09-04, on `DK-5.1-thm` only, after a hostile review of the ninth pass found a defect in the ninth pass itself.  The Banach-completeness repair was right, but the scalar-generic witness it introduced, `theorem5_1_banach_sylvester_banachScope_ofProperties`, takes `N` as an arbitrary real-valued FUNCTION satisfying the four inequalities the proof consumes: nonnegativity, subadditivity, and the two one-sided composition bounds.  The source says 'use any NORM compatible with those bound norms', and a function with neither definiteness nor absolute homogeneity is not a norm -- so the ninth pass repeated, in its own repair, the 'stronger theorem presented as the exact source witness' defect it was written to remove.  Repaired by generalizing `CompatibleCrossOperatorNorm`, which does carry all four norm axioms plus two-sided contraction compatibility, from `ℂ` to an arbitrary `RCLike` field along with its entire API, so that one canonical witness now carries the printed norm axioms, the printed Banach scope, and the paper's real-or-complex scalar scope at once.  The bare-function theorem is retained as `generalization` evidence.  Separately in this pass, the `S2-sin-two-theta` census row was restored: an external census-format update on 2026-09-04 dropped ten declarations and reverted that row's canonical set to the pre-repair block theorems while adding new clause-map `lean_targets` data.  The row's declaration ledger, canonical/supporting/context declarations and notes were merged back from the pre-update revision; all eight new `lean_targets` blocks were verified present afterwards.  ELEVENTH PASS 2026-09-04: THREE ROWS REOPENED, and the certificate is deliberately no longer 29/29.  A hostile review of the ninth and tenth passes accepted the Section 2 and Theorem 8.2 ordered-angle repairs, the Corollary 3.1 repair and the capability cleanup, and identified three source-hypothesis mismatches that no previous pass had recorded as open.  (a) `S2-tan-theta`: the printed Section 2 tangent theorem assumes the ordered gap, delta > 0 and H_0 = 0; the Lean ambient conclusion additionally carries (3.5), which the paper introduces in Section 3 after Proposition 3.2 and declares to govern the REMAINDER of the paper.  A convention introduced after a theorem is not a hypothesis of it, and the earlier acceptance of a 'retroactive standing assumption' reading is withdrawn.  (b) `DK-3.1-thm`: the converse clause was certified against theorems that take the intertwining partial isometry as input, while the source says the proof reconstructs it; a new witness constructs it from the multiplicity hypothesis, but that hypothesis is agreement everywhere and the printed one permits disagreement at 0, so the clause is recorded open.  (c) `DK-3.2-prop`: the infinite-dimensional reading of (3.5) is a representation convention rather than a theorem, and every later row resting on (3.5) inherits it.  Each is entered in `open_hostile_review_obligations` with the repair it needs, so the ledger and the rows agree in both directions.  26 of 29 rows are terminal.  TWELFTH PASS 2026-09-04: `S2-tan-theta` repaired and closed along the route the hostile review specified.  Condition (3.5) is gone from the canonical endpoints; in its place is `HasDefinedAmbientTangent`, the Section 1 vacuity convention made explicit.  (3.5) is derived from it rather than assumed, and the definedness hypothesis is shown to do work in the conclusion: under it the angle spectrum misses pi/2, so `cfc Real.tan` is applied to a continuous function and the endpoint is about the paper's `tan Theta` and not about Mathlib's totalisation, which sets `tan (pi/2) = 0`.  One reservation is recorded rather than hidden: vacuity is modelled in one direction only.  27 of 29 rows are terminal.  THIRTEENTH PASS 2026-09-04: the reservation recorded on the `S2-tan-theta` closure is closed.  `hasDefinedAmbientTangent_iff_pi_div_two_notMem_spectrum` proves the definedness hypothesis holds if and only if pi/2 is not an angle of the pair, so the Section 1 vacuity convention is modelled in both directions: when the hypothesis fails the paper's `tan Theta` genuinely does not exist, because a nonnegative operator attains its norm in its spectrum and arcsin carries that norm to pi/2.  FOURTEENTH PASS 2026-09-04: `DK-3.2-prop` closed.  The infinite-dimensional reading of (3.5) was the last representation convention in the certificate, and it is now a theorem at the paper's separable scope.  Two pieces the pinned Mathlib does not have were built for it in `ForTauCeti`: an orthonormal set in a separable space is countable, and an equivalence of index sets induces an isometry of `l^2` models.  With `exists_hilbertBasis` and the finite/infinite dichotomy those give the classification of separable Hilbert spaces, and `crossedDefectsEquivalent_iff_sameDimension` reads (3.5) off it.  28 of 29 rows are terminal; only the `DK-3.1-thm` converse, narrowed at the spectral point 0, remains open.  FIFTEENTH PASS 2026-09-04: `DK-3.1-thm` closed, and with it the last open hostile-review obligation.  The converse's multiplicity hypothesis now compares the two angle operators only away from 0, by restricting each to the orthogonal complement of the kernel of its sine -- which on the printed spectrum [0, pi/2] is the `closure (Ran Theta)` the source's J_0 is required to carry across -- so the null spaces are unconstrained, as printed.  J_0 is constructed from that hypothesis as the unitary between the nonzero parts extended by zero, its two partial-isometry identities are the two star projections, and they act as the identity on the ranges of the sines because a self-adjoint operator maps into the orthogonal complement of its own kernel.  All 29 rows are terminal on all three axes.  FOURTH PASS 2026-09-05, on the two axes a hostile follow-up review reopened after the 2026-09-04 report.  (a) NORM CLASS.  The review observed that `SymmetricNormingFunction` is the Gohberg--Krein class of symmetrically normed ideals, whose infinite-dimensional value is the supremum of finite singular-value prefixes, and exhibited a unitarily invariant norm outside it: `T |-> ||T|| + ||pi(T)||` on B(H), with `pi` the Calkin quotient map.  The repair is a theorem, not a reclassification: `kyFanDominant_of_symmetricNorming` transports any estimate proved over the whole symmetric-norming class to every Fan-dominant unitarily invariant ideal gauge, by instantiating at `kyFanNormingFunction k` -- the Ky Fan gauge presented as a coherent symmetric norming function, already in the tree -- and `symmetricNorming_iff_kyFanDominant` states the resulting equivalence.  Both quantifiers are weak Ky Fan majorization, which is the criterion the source itself announces at (1.11)-(1.13).  The four Section 2 rows carry the reading in `norm_class_reading` and register the transports.  (b) DIRECTED TANGENT REPRESENTATION.  The canonical directed `tan Theta` witnesses on S2-tan-theta and DK-6.3-thm took the tangent representative and its approximation-number characterization as PARAMETERS; the printed theorem asks the reader for neither.  Both rows now canonicalize the `_exists_` unbounded-Ritz endpoints, which derive the pole exclusion and construct the representative from the source form bounds, and which name the paper's residual `R` of (1.8) explicitly.  DK-6.3-thm's former witnesses, the `_unboundedTrial_` pair carrying a spectral-gap hypothesis the printed theorem does not have (finding F1 of the 2026-09-04 report), are demoted to `specialization`.  Only `type_requirements.rationale` on the two unitary-invariant-norm atoms changed in the source-atom inventory, so every accepted nonlocal reading was re-checked against unchanged atom summaries, reason codes and interpretation roles before its staleness digest was refreshed.",
     "compiler_audit_surface": "DavisKahan/Sources/DavisKahan1970/Audits/ResultSemanticSurface.lean",
     "human_report": "dev/davis-kahan-1970-result-semantic-review-2026-08-31.md",
-    "terminal_results": 28,
-    "remaining_results": [
-      "DK-8.1-thm"
-    ],
-    "note": "The structured fields above are authoritative; this paragraph is regenerated whenever the count moves. 2026-09-02, closing: terminal_results is 29 and remaining_results is empty. `S2-tan-two-theta` was `hostile_review_blocked` under obligation `tan2theta-directed-correspondence` after a 2026-09-02 closure that did not compose; it is now accepted on canonical directed witnesses `tanTwoTheta_directed_unboundedResidual_symmetricNorming_{complex,real}`, which take the reducing subspace and conclude on the paper's directed corner (`tanTwoDirectedCornerR U V` over ℝ) with the singular-value identification in their types. The canonical-evidence digest changed accordingly and the statement pins were refreshed for the new canonical and bridging declarations. Earlier history of this field (the 2026-08-31 `S2-sin-two-theta` reopening, the `S2-tan-theta` Appendix-scope primaries, the paper-prefix rename with an unchanged digest) is in the human report.  2026-09-05: recomputed after the two directed `tan 2Theta` clauses of S2-tan-two-theta were retargeted at their source-exact façades.  The canonical statements are strictly closer to the printed ones -- separable ambient scope and the literal normalized unitarily invariant norm class -- and the theorems they delegate to are retained as registered generalizations, so nothing that was reviewed has been withdrawn.  2026-09-05: recomputed after DK-3.1-thm's converse clauses were repointed from the model-level theorem, which takes the isometric identification as caller data, to the source-shaped one that takes the dimension condition as a proposition.  The model-level theorem is retained as registered implementation structure, so nothing reviewed has been withdrawn.  2026-09-05: recomputed after Lemmas 6.1 and 6.2 were given source-exact façades over the literal normalized unitarily invariant norm class.  The SymmetricNormingFunction endpoints they delegate to are retained as registered generalizations -- for Lemma 6.1 the retained theorem is genuinely stronger, taking Ky Fan inequalities as its premise where the paper assumes the bound for every unitarily invariant norm.\n\n2026-09-06, CANONICAL EVIDENCE PROMOTED ON DK-8.1-thm, AND RE-REVIEWED.  The unbounded lift of Section 8 completed: with the converse half of Theorem 8.1's printed iff proved at unbounded scope and the real endpoints transported by complexification, every clause of Theorem 8.1 that inherits ambient scope has a compiled unbounded witness in BOTH scalar fields.  The canonical evidence for `existence-correct-q`, `acute-iff-spectral-placement` and `part-i-compression` therefore moved to those witnesses; the bounded declarations that were canonical are retained as registered specializations, and parts (ii) and (iii) keep their finite-dimensional evidence, which is the source's own restriction.\n\nThe eight promoted witnesses were re-read at their COMPILER-PRINTED types against the printed statement, not at their names.  Findings: (a) the printed placements `Lambda_1 >= alpha + delta` and `Lambda_0 <= alpha` are delivered in their ORDERED FORM reading -- operator inequalities on the blocks of `A + H` over `dom (A + H)` -- which is how Davis and Kahan write them; the bounded spectrum-inclusion reading is retained as the specialization, and the two are equivalent for a self-adjoint reducing block.  (b) Part (i) is delivered on the WHOLE domain, where the paper reads it on `P^perp`; nothing about `P` enters the proof, and on `P^perp` the `A + H` form equals the `A` form because `H` is fully off-diagonal, so the delivered inequality specialises to the printed `A_1 - alpha <= C_1 (Lambda_1 - alpha) C_1`.  (c) One defect found and repaired in the same pass: `theorem8_1_canonicalBranchUnbounded_form`, `..._printed`, `theorem8_1_eq_canonicalBranchUnbounded_of_maximalAngle_le` and `theorem8_1_maximalAngle_le_iff_orderedFormGap_unbounded` each carried BOTH `IsSelfAdjointOperator Hop` and `IsSelfAdjoint Hop` in the public type -- two spellings of one hypothesis.  The second is now derived inside each proof, so the promoted types carry each hypothesis once.  No other mismatch of scalar field, operator scope, domain assumption, dimension, constant, orientation or angle convention was found.\n\n2026-09-06, SECOND PASS: SOURCE-SURFACE PROMOTION ON BOTH SECTION 8 ROWS, RE-REVIEWED.  A hostile reviewer restricted the criterion to one question -- does the canonical public theorem signature, read in the paper's standing context, state the Davis--Kahan result with no stronger restriction and no weaker conclusion? -- and found two signature defects that the first pass had left.\n\n(1) DK-8.2-thm.  The acute conclusion was canonical at the inherited UNBOUNDED scope while the retained double-angle estimates were still canonical at BOUNDED operator scope, `A K : H ->L[k] H`.  Four façades now state Theorem 8.2 the way the source states it -- one theorem per alternative and scalar field, under the inherited `sin 2theta` context plus the new central-spectrum and smallness assumptions, concluding BOTH the retained estimate and `Theta < pi/4` -- with `A` a possibly unbounded self-adjoint partial map: `theorem8_2_{perturbation,residual}_sourceExact_unbounded_{complex,real}`.  Read at compiler-printed types: the perturbation branch takes `‖H‖ < delta/2` and the residual branch takes `‖R‖ < delta/2` on the residual itself and does NOT acquire `‖H‖ < delta/2`; the residual is the `sin 2theta` theorem's own `(M, R)` data with the source's identification of `M` as the block `A_0`, which forces `R = H|_P`.\n\n(2) DK-8.1-thm.  The canonical declarations were the general unbounded theorems: the block placements stated as form inequalities over the ambient domain, and part (i) stated for an arbitrary partial map `B` and reducing subspace `Q` with no `A/H/P/Q` context.  `Theorem81SourceUnbounded.lean` restates them on the source's objects -- `Lambda_0`, `Lambda_1` as the two reducing restrictions of `A + H` with the placements as operator inequalities on them, the existence clause as the existential the source asserts rather than a named-branch conjunction, and part (i) as `A_1 - alpha <= C_1 (Lambda_1 - alpha) C_1` read on `P^perp` with `C_1` the cosine block.  Read at compiler-printed types, each states its clause with no hypothesis the paper does not carry and no conclusion weaker than printed.\n\nBoth promotions are façade work: no proof of any underlying theorem changed, and every displaced declaration is retained as a registered specialization or generalization.  The bridge `semiboundedAbove_reducingRestriction_iff` and its three siblings are unfolding in both directions.\n\n2026-09-06, THIRD PASS: SEVEN SOURCE-BOUNDARY DEFECTS FROM A SIGNATURE-ONLY REVIEW.  The review accepted the mathematics outright and rejected the surface on one criterion: does the canonical public signature, read in the paper's standing context, state the result with no stronger restriction and no weaker conclusion?  All seven repairs are façades; no proof changed.\n\n(1) Theorem 8.2's residual branch exposed `M`, `hPdom`, `hRitz` and `hres` as caller hypotheses.  Davis--Kahan add only the central-spectrum condition and `‖R‖ < delta/2`, and the Ritz block FOLLOWS from the central-spectrum condition, so those four moved inside (`exists_ritzBlock_of_realSpectrum_subset_Icc_{complex,real}`).  `sourceResidual` names the printed residual and `sourceResidual_eq_sub_ritzBlock` proves the reading.\n\n(2) and (3) Theorem 8.1's source façades carried neither the ambient `SeparableSpace` nor the standing post-Proposition-3.2 convention (3.5).  Both are now on the public types.  The existence clause cannot carry (3.5), which is a condition on a given pair, and the module docstring records that.\n\n(4) Theorem 8.1(i) was stated for an arbitrary reducing subspace with only the half of the hypotheses it needs; the printed clause is about THE branch the existence half asserts, under the full context.  It now is, with `hQbranch` pinning the branch; the arbitrary-subspace versions are renamed `..._ofBlockPlacement_unbounded_*` and retained.\n\n(5) Theorem 8.1(ii) and (iii) were canonical on `approximationNumber`.  The printed clauses are finite-dimensional ordered-EIGENVALUE statements.  Eight façades now state them on `LinearMap.IsSymmetric.eigenvalues`, composing `approximationNumber_eq_eigenvalues_of_isPositive`; the dimension-free approximation-number readings are retained as the generalizations the source itself announces.\n\n(6) Section 4 exposed the internal defect isometry `J` and `nonacuteDirectRotation … J`.  The source object is the direct rotation.  Propositions 4.1, 4.3 and Corollary 4.1 now take the standing (3.5) and produce a `D` with `IsDirectRotation U V D`.  Proposition 4.2 needed no façade.\n\n(7) The separability sweep.  The policy says an exact façade carries the paper's separable ambient scope; the table said `generalized` for twenty rows.  Sixteen new wrappers in `SeparableSourceScope.lean` plus the Section 4 and Section 8 façades close the gap where the paper's single ambient space corresponds to a Lean type variable.  The rows that remain `generalized` now each carry a specific reason in `generalized_reasons` -- Section 5 changes the setting to Banach spaces, the Section 6 transfer statements quantify over several spaces at once with no single ambient, and two rows construct their space rather than assume it.  The reasons are stated so a reviewer can disagree with a specific argument.  FOURTH HOSTILE REVIEW, 2026-09-07.  Six findings, five repaired in this pass: Theorem 8.1 part (i) no longer pins `Q` to a Lean spectral construction and no longer asks the caller for the block symmetry of parts (ii)/(iii); Section 4 takes a GIVEN Davis--Kahan Definition 3.1 direct rotation instead of producing one existentially; Theorem 3.1's converse and Corollary 3.1's realization move to the paper's separable scope with the construction's intertwiner internal; Section 6 moves to the printed interval/exterior separation, the paper's ambient separability, and the source's definedness convention for the Hilbert--Schmidt norm; and the Section 1 norm record is split so that Fan dominance is a named printed property rather than a field of the definition.  The sixth finding -- that Theorem 8.1 (ii)/(iii) index ambient zero-padded operators rather than the block eigenvalue lists -- is NOT repaired and is recorded in `open_hostile_review_obligations`.",
-    "canonical_evidence_sha256": "370ed877ac533e067474132aae5972be3ec0dc4ede5e11480fa0da3891d307f6",
-    "hostile_review_status": "open",
-    "hostile_review_note": "OPEN, 2026-09-07.  The fourth hostile review reopened Theorem 8.1: parts (ii) and (iii) are registered on ambient zero-padded operators and an ambient-dimension gauge, where the source indexes the block eigenvalue lists of `A_1` and `Lambda_1`.  See `open_hostile_review_obligations.obligations` for the finding and exactly what the repair needs.  Every other finding of that review is repaired in this pass."
+    "terminal_results": 29,
+    "remaining_results": [],
+    "note": "The structured fields above are authoritative; this paragraph is regenerated whenever the count moves. 2026-09-02, closing: terminal_results is 29 and remaining_results is empty. `S2-tan-two-theta` was `hostile_review_blocked` under obligation `tan2theta-directed-correspondence` after a 2026-09-02 closure that did not compose; it is now accepted on canonical directed witnesses `tanTwoTheta_directed_unboundedResidual_symmetricNorming_{complex,real}`, which take the reducing subspace and conclude on the paper's directed corner (`tanTwoDirectedCornerR U V` over ℝ) with the singular-value identification in their types. The canonical-evidence digest changed accordingly and the statement pins were refreshed for the new canonical and bridging declarations. Earlier history of this field (the 2026-08-31 `S2-sin-two-theta` reopening, the `S2-tan-theta` Appendix-scope primaries, the paper-prefix rename with an unchanged digest) is in the human report.  2026-09-05: recomputed after the two directed `tan 2Theta` clauses of S2-tan-two-theta were retargeted at their source-exact façades.  The canonical statements are strictly closer to the printed ones -- separable ambient scope and the literal normalized unitarily invariant norm class -- and the theorems they delegate to are retained as registered generalizations, so nothing that was reviewed has been withdrawn.  2026-09-05: recomputed after DK-3.1-thm's converse clauses were repointed from the model-level theorem, which takes the isometric identification as caller data, to the source-shaped one that takes the dimension condition as a proposition.  The model-level theorem is retained as registered implementation structure, so nothing reviewed has been withdrawn.  2026-09-05: recomputed after Lemmas 6.1 and 6.2 were given source-exact façades over the literal normalized unitarily invariant norm class.  The SymmetricNormingFunction endpoints they delegate to are retained as registered generalizations -- for Lemma 6.1 the retained theorem is genuinely stronger, taking Ky Fan inequalities as its premise where the paper assumes the bound for every unitarily invariant norm.\n\n2026-09-06, CANONICAL EVIDENCE PROMOTED ON DK-8.1-thm, AND RE-REVIEWED.  The unbounded lift of Section 8 completed: with the converse half of Theorem 8.1's printed iff proved at unbounded scope and the real endpoints transported by complexification, every clause of Theorem 8.1 that inherits ambient scope has a compiled unbounded witness in BOTH scalar fields.  The canonical evidence for `existence-correct-q`, `acute-iff-spectral-placement` and `part-i-compression` therefore moved to those witnesses; the bounded declarations that were canonical are retained as registered specializations, and parts (ii) and (iii) keep their finite-dimensional evidence, which is the source's own restriction.\n\nThe eight promoted witnesses were re-read at their COMPILER-PRINTED types against the printed statement, not at their names.  Findings: (a) the printed placements `Lambda_1 >= alpha + delta` and `Lambda_0 <= alpha` are delivered in their ORDERED FORM reading -- operator inequalities on the blocks of `A + H` over `dom (A + H)` -- which is how Davis and Kahan write them; the bounded spectrum-inclusion reading is retained as the specialization, and the two are equivalent for a self-adjoint reducing block.  (b) Part (i) is delivered on the WHOLE domain, where the paper reads it on `P^perp`; nothing about `P` enters the proof, and on `P^perp` the `A + H` form equals the `A` form because `H` is fully off-diagonal, so the delivered inequality specialises to the printed `A_1 - alpha <= C_1 (Lambda_1 - alpha) C_1`.  (c) One defect found and repaired in the same pass: `theorem8_1_canonicalBranchUnbounded_form`, `..._printed`, `theorem8_1_eq_canonicalBranchUnbounded_of_maximalAngle_le` and `theorem8_1_maximalAngle_le_iff_orderedFormGap_unbounded` each carried BOTH `IsSelfAdjointOperator Hop` and `IsSelfAdjoint Hop` in the public type -- two spellings of one hypothesis.  The second is now derived inside each proof, so the promoted types carry each hypothesis once.  No other mismatch of scalar field, operator scope, domain assumption, dimension, constant, orientation or angle convention was found.\n\n2026-09-06, SECOND PASS: SOURCE-SURFACE PROMOTION ON BOTH SECTION 8 ROWS, RE-REVIEWED.  A hostile reviewer restricted the criterion to one question -- does the canonical public theorem signature, read in the paper's standing context, state the Davis--Kahan result with no stronger restriction and no weaker conclusion? -- and found two signature defects that the first pass had left.\n\n(1) DK-8.2-thm.  The acute conclusion was canonical at the inherited UNBOUNDED scope while the retained double-angle estimates were still canonical at BOUNDED operator scope, `A K : H ->L[k] H`.  Four façades now state Theorem 8.2 the way the source states it -- one theorem per alternative and scalar field, under the inherited `sin 2theta` context plus the new central-spectrum and smallness assumptions, concluding BOTH the retained estimate and `Theta < pi/4` -- with `A` a possibly unbounded self-adjoint partial map: `theorem8_2_{perturbation,residual}_sourceExact_unbounded_{complex,real}`.  Read at compiler-printed types: the perturbation branch takes `‖H‖ < delta/2` and the residual branch takes `‖R‖ < delta/2` on the residual itself and does NOT acquire `‖H‖ < delta/2`; the residual is the `sin 2theta` theorem's own `(M, R)` data with the source's identification of `M` as the block `A_0`, which forces `R = H|_P`.\n\n(2) DK-8.1-thm.  The canonical declarations were the general unbounded theorems: the block placements stated as form inequalities over the ambient domain, and part (i) stated for an arbitrary partial map `B` and reducing subspace `Q` with no `A/H/P/Q` context.  `Theorem81SourceUnbounded.lean` restates them on the source's objects -- `Lambda_0`, `Lambda_1` as the two reducing restrictions of `A + H` with the placements as operator inequalities on them, the existence clause as the existential the source asserts rather than a named-branch conjunction, and part (i) as `A_1 - alpha <= C_1 (Lambda_1 - alpha) C_1` read on `P^perp` with `C_1` the cosine block.  Read at compiler-printed types, each states its clause with no hypothesis the paper does not carry and no conclusion weaker than printed.\n\nBoth promotions are façade work: no proof of any underlying theorem changed, and every displaced declaration is retained as a registered specialization or generalization.  The bridge `semiboundedAbove_reducingRestriction_iff` and its three siblings are unfolding in both directions.\n\n2026-09-06, THIRD PASS: SEVEN SOURCE-BOUNDARY DEFECTS FROM A SIGNATURE-ONLY REVIEW.  The review accepted the mathematics outright and rejected the surface on one criterion: does the canonical public signature, read in the paper's standing context, state the result with no stronger restriction and no weaker conclusion?  All seven repairs are façades; no proof changed.\n\n(1) Theorem 8.2's residual branch exposed `M`, `hPdom`, `hRitz` and `hres` as caller hypotheses.  Davis--Kahan add only the central-spectrum condition and `‖R‖ < delta/2`, and the Ritz block FOLLOWS from the central-spectrum condition, so those four moved inside (`exists_ritzBlock_of_realSpectrum_subset_Icc_{complex,real}`).  `sourceResidual` names the printed residual and `sourceResidual_eq_sub_ritzBlock` proves the reading.\n\n(2) and (3) Theorem 8.1's source façades carried neither the ambient `SeparableSpace` nor the standing post-Proposition-3.2 convention (3.5).  Both are now on the public types.  The existence clause cannot carry (3.5), which is a condition on a given pair, and the module docstring records that.\n\n(4) Theorem 8.1(i) was stated for an arbitrary reducing subspace with only the half of the hypotheses it needs; the printed clause is about THE branch the existence half asserts, under the full context.  It now is, with `hQbranch` pinning the branch; the arbitrary-subspace versions are renamed `..._ofBlockPlacement_unbounded_*` and retained.\n\n(5) Theorem 8.1(ii) and (iii) were canonical on `approximationNumber`.  The printed clauses are finite-dimensional ordered-EIGENVALUE statements.  Eight façades now state them on `LinearMap.IsSymmetric.eigenvalues`, composing `approximationNumber_eq_eigenvalues_of_isPositive`; the dimension-free approximation-number readings are retained as the generalizations the source itself announces.\n\n(6) Section 4 exposed the internal defect isometry `J` and `nonacuteDirectRotation … J`.  The source object is the direct rotation.  Propositions 4.1, 4.3 and Corollary 4.1 now take the standing (3.5) and produce a `D` with `IsDirectRotation U V D`.  Proposition 4.2 needed no façade.\n\n(7) The separability sweep.  The policy says an exact façade carries the paper's separable ambient scope; the table said `generalized` for twenty rows.  Sixteen new wrappers in `SeparableSourceScope.lean` plus the Section 4 and Section 8 façades close the gap where the paper's single ambient space corresponds to a Lean type variable.  The rows that remain `generalized` now each carry a specific reason in `generalized_reasons` -- Section 5 changes the setting to Banach spaces, the Section 6 transfer statements quantify over several spaces at once with no single ambient, and two rows construct their space rather than assume it.  The reasons are stated so a reviewer can disagree with a specific argument.  FOURTH HOSTILE REVIEW, 2026-09-07.  Six findings, five repaired in this pass: Theorem 8.1 part (i) no longer pins `Q` to a Lean spectral construction and no longer asks the caller for the block symmetry of parts (ii)/(iii); Section 4 takes a GIVEN Davis--Kahan Definition 3.1 direct rotation instead of producing one existentially; Theorem 3.1's converse and Corollary 3.1's realization move to the paper's separable scope with the construction's intertwiner internal; Section 6 moves to the printed interval/exterior separation, the paper's ambient separability, and the source's definedness convention for the Hilbert--Schmidt norm; and the Section 1 norm record is split so that Fan dominance is a named printed property rather than a field of the definition.  The sixth finding -- that Theorem 8.1 (ii)/(iii) index ambient zero-padded operators rather than the block eigenvalue lists -- is NOT repaired and is recorded in `open_hostile_review_obligations`.  FIFTH HOSTILE REVIEW, 2026-09-07.  Four findings, all repaired in this pass: the Theorem 8.1 (ii)/(iii) block-eigenvalue obligation recorded open by the fourth review is closed; Lemma 6.1's canonical evidence is the source's one-K-one-L statement; Theorem 8.1's existence and part (i) are canonical on the combined existential; and a transcription error in the reconstructed source (Lemma 6.3 printed as a non-strict inequality) is corrected against the original.",
+    "canonical_evidence_sha256": "d1b8010c1a8533c227ef1ba2c1b972112ebcd8d13b03eec2954aa8b8ecd113c9",
+    "hostile_review_status": "accepted",
+    "hostile_review_note": "ACCEPTED, 2026-09-07.  The fifth hostile review's four findings are all repaired: Theorem 8.1 (ii)/(iii) now read the block eigenvalue lists with the gauge at the block dimension; Lemma 6.1 has the source's two-operator facade; Theorem 8.1's existence clause and part (i) are canonical on the single combined statement that matches the printed word order; and the reconstructed source's Lemma 6.3 inequality is corrected to the strict `< eta` the original prints, which is what the Lean theorem already concluded."
   },
   "section_two_short_names": {
     "purpose": "The four unqualified `TauCeti.DavisKahan1970.SectionTwo.*` names, and what each is bound to. A short name is bound only to a declaration that is scalar-generic over `RCLike` AND at the printed source scope; `null` means deliberately unbound. This is the single owner of that fact: `check_davis_kahan_1970_result_inventory.py` reads `SectionTwo.lean`'s own `alias` lines and fails if they disagree.",
@@ -7415,20 +7517,9 @@
   },
   "open_hostile_review_obligations": {
     "recorded_on": "2026-09-07",
-    "status": "open",
+    "status": "closed",
     "purpose": "Three independent hostile reviews accepted the mathematics but found defects in exact source correspondence and inherited source scope. This list holds DEFECTS that are not repaired, and the checker enforces that any result named here has a non-terminal `semantic_certification` on its own row -- so listing something here asserts that its mathematics or its source correspondence is incomplete. It is empty as of 2026-09-05. Reviewer disagreements that are NOT defects live in `hostile_review_policy_questions` below; they do not block a row, and putting them here would falsely mark ten terminal results as incomplete. Closed obligations are kept in `closed_obligations` with what closed them, so a reviewer can check the closure rather than take a row's disappearance as evidence.",
-    "obligations": [
-      {
-        "id": "theorem-81-parts-ii-iii-block-eigenvalue-lists",
-        "results": [
-          "DK-8.1-thm"
-        ],
-        "finding": "Theorem 8.1 parts (ii) and (iii) are printed on the ordered eigenvalues of the BLOCKS `A_1` and `Lambda_1` themselves, and part (iii)'s symmetric gauge is applied to those block eigenvalue lists, so its dimension is the block dimension.  The registered witnesses instead index `Fin (finrank H)` and take a gauge on `finrank H`, reading the eigenvalue lists of `upperBlockShift` and `lowerBlockShift`, which are the blocks extended by zero to the ambient space.  Zero-padding changes the public object and the gauge dimension: neither reading implies the other, so these are nearby represented statements rather than exact source facades.  Found by the fourth hostile review, 2026-09-07.  The same review's second half of this finding -- that the witnesses asked the caller for the blocks' symmetry, which is a derived fact -- IS repaired: `isSymmetric_upperBlockShift` and `isSymmetric_lowerBlockShift` supply it, and no caller hypothesis remains.",
-        "required_repair": "State (ii) and (iii) on `compressOperator Pperp (A - alpha)` and its perturbed counterpart -- the blocks as operators on their own spaces -- indexed by the block dimension.  Two pieces are missing and neither is a wrapper.  (a) The ambient/block bridge: the padded operator and the block have the same approximation numbers (`approximationNumber_subtypeL_comp_comp_orthogonalProjectionOnto` is the general fact), and on the block the approximation numbers of a positive operator are its eigenvalues.  (b) The two blocks live on DIFFERENT spaces, `Pperp` and `Qperp`, so naming the right-hand list requires `finrank Pperp = finrank Qperp`, which in the Section 8 context follows from the acute angle (`maximalAngle P Q <= pi/4` forces the projection gap below one, hence `P_Q` injective on `P` and conversely) but is not currently a theorem in this tree.  For (iii) there is a third piece: the majorization the proof runs on is established at the AMBIENT gauge dimension, and a symmetric gauge on the block dimension is not obtained from it by restriction -- extending a block gauge to the ambient one is the decreasing-rearrangement construction, a real theorem.  Part (ii) alone is reachable without the dimension equality by quantifying over the two indices with equal underlying naturals.",
-        "status": "open",
-        "note": "Recorded rather than repaired because the repair is new mathematics, not a signature change, and the review that raised it asked explicitly for public-type repairs and no new operator-theory project.  DK-8.1-thm's `semantic_certification` is accordingly not accepted, and the repository must not report 29/29 while this is open."
-      }
-    ],
+    "obligations": [],
     "closed_obligations": [
       {
         "id": "theorem-31-converse-multiplicity-at-zero",
@@ -7512,6 +7603,18 @@
         "status": "closed",
         "closed_on": "2026-09-02",
         "closure": "Closed with a theorem rather than a policy statement alone. `crossedDefectsEquivalent_iff_finrank_eq` proves that the constructive predicate is exactly equality of the crossed defect dimensions whenever those spaces are finite-dimensional, which is the case where the printed phrase 'equal Hilbert dimension' has an unambiguous elementary reading. The general case is documented as the constructive reading, with the reason it must be data: Proposition 3.2 builds a direct rotation out of the condition. The consistency the obligation asked for is therefore satisfied in the direction it was raised -- a non-obvious representation now carries registered evidence, exactly as the tan 2Theta case is required to."
+      },
+      {
+        "id": "theorem-81-parts-ii-iii-block-eigenvalue-lists",
+        "results": [
+          "DK-8.1-thm"
+        ],
+        "finding": "Theorem 8.1 parts (ii) and (iii) are printed on the ordered eigenvalues of the BLOCKS `A_1` and `Lambda_1` themselves, and part (iii)'s symmetric gauge is applied to those block eigenvalue lists, so its dimension is the block dimension.  The registered witnesses instead index `Fin (finrank H)` and take a gauge on `finrank H`, reading the eigenvalue lists of `upperBlockShift` and `lowerBlockShift`, which are the blocks extended by zero to the ambient space.  Zero-padding changes the public object and the gauge dimension: neither reading implies the other, so these are nearby represented statements rather than exact source facades.  Found by the fourth hostile review, 2026-09-07.  The same review's second half of this finding -- that the witnesses asked the caller for the blocks' symmetry, which is a derived fact -- IS repaired: `isSymmetric_upperBlockShift` and `isSymmetric_lowerBlockShift` supply it, and no caller hypothesis remains.",
+        "required_repair": "State (ii) and (iii) on `compressOperator Pperp (A - alpha)` and its perturbed counterpart -- the blocks as operators on their own spaces -- indexed by the block dimension.  Two pieces are missing and neither is a wrapper.  (a) The ambient/block bridge: the padded operator and the block have the same approximation numbers (`approximationNumber_subtypeL_comp_comp_orthogonalProjectionOnto` is the general fact), and on the block the approximation numbers of a positive operator are its eigenvalues.  (b) The two blocks live on DIFFERENT spaces, `Pperp` and `Qperp`, so naming the right-hand list requires `finrank Pperp = finrank Qperp`, which in the Section 8 context follows from the acute angle (`maximalAngle P Q <= pi/4` forces the projection gap below one, hence `P_Q` injective on `P` and conversely) but is not currently a theorem in this tree.  For (iii) there is a third piece: the majorization the proof runs on is established at the AMBIENT gauge dimension, and a symmetric gauge on the block dimension is not obtained from it by restriction -- extending a block gauge to the ambient one is the decreasing-rearrangement construction, a real theorem.  Part (ii) alone is reachable without the dimension equality by quantifying over the two indices with equal underlying naturals.",
+        "status": "closed",
+        "note": "Recorded rather than repaired because the repair is new mathematics, not a signature change, and the review that raised it asked explicitly for public-type repairs and no new operator-theory project.  DK-8.1-thm's `semantic_certification` is accordingly not accepted, and the repository must not report 29/29 while this is open.",
+        "closed_on": "2026-09-07",
+        "closed_by": "Parts (ii) and (iii) are restated on the blocks themselves.  `upperBlockCompression`/`lowerBlockCompression` are `A_1 - alpha` on `P-perp` and `(alpha + delta) - A_0` on `P`; `approximationNumber_upperBlockCompression` is the extend-by-zero bridge; `finrank_orthogonal_eq_of_isAcute` supplies the block-dimension equality from Theorem 8.1's own quarter-acute conclusion (over the reals via the complexification, whose gap is unchanged); and `weaklyMajorized_comp_castLE` restricts the ambient majorization to the block indices so that part (iii)'s arbitrary symmetric gauge is quantified at the block dimension.  Eight new canonical witnesses, `theorem8_1_{upper,lower}{EigenvalueRepulsion,SymmetricGaugeEigenvalue}_blockSourceExact{,_real}`."
       }
     ]
   },
@@ -7678,6 +7781,14 @@
         {
           "declaration": "TauCeti.DavisKahan1970.Section8.theorem8_2_residual_sourceExact_unbounded_real",
           "why": "The real sibling, for the same reason; it runs the complex theorems on the complexification, whose separability follows from the ambient one."
+        },
+        {
+          "declaration": "TauCeti.DavisKahan1970.Section8.theorem8_1_exists_branch_withCompression_unbounded_complex",
+          "why": "Theorem 8.1's existence clause with part (i), at the paper's inherited unbounded ambient scope.  Separability is load-bearing exactly as it is for the branch existence it contains: the unbounded branch is built from the spectral measure of the Cayley transform, whose construction is stated for separable spaces."
+        },
+        {
+          "declaration": "TauCeti.DavisKahan1970.Section8.theorem8_1_exists_branch_withCompression_unbounded_real",
+          "why": "The real sibling, for the same reason."
         }
       ],
       "source_scope_facades": [
@@ -7952,6 +8063,22 @@
         {
           "declaration": "TauCeti.DavisKahan1970.corollary3_1_realization_zeroMultiplicity_sourceScope",
           "why": "Source-scope facade: the angle-zero multiplicity spaces are restricted to the paper's separable scope, which is where the source places them -- they are the null spaces of the angle operators inside the separable ambient space.  The unrestricted arbitrary-Hilbert realization is retained as a generalization."
+        },
+        {
+          "declaration": "TauCeti.DavisKahan1970.lemma6_1_sourceOperators_separable_complex",
+          "why": "Source-exact facade: the paper's Lemma 6.1 compares one K with one L, on the paper's separable ambient space.  The four-operator statement beneath is the generalization."
+        },
+        {
+          "declaration": "TauCeti.DavisKahan1970.lemma6_1_sourceOperators_separable_real",
+          "why": "The real sibling, for the same reason."
+        },
+        {
+          "declaration": "TauCeti.DavisKahan1970.lemma6_1_converse_sourceOperators_separable_complex",
+          "why": "The converse, for the same reason."
+        },
+        {
+          "declaration": "TauCeti.DavisKahan1970.lemma6_1_converse_sourceOperators_separable_real",
+          "why": "The real converse, for the same reason."
         }
       ],
       "generalized_reasons": {

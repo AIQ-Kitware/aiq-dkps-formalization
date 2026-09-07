@@ -374,12 +374,10 @@ Do not reopen any of these merely to obtain a more uniform internal API unless a
 §10.2, §10.3 and §10.4 were the live queue when they were written, and all of
 them have closed; the closing entries are dated inside each.  They are kept
 because the analysis in them — especially §10.3.3's record of a wrong "open
-question" verdict and §10.3.4's record of what a signature-only review found — is
-the archive of how the work went, not a list of open items.
-
-**The one exception is §10.3.5, which is live.**  Theorem 8.1 (ii) and (iii) were
-reopened on 2026-09-07 and are the only counted result not source-exact.  The
-rest of the current queue is §XVI.
+question" verdict, §10.3.4's record of what a signature-only review found, and
+§10.3.5's record of a defect that was reopened and closed in two days — is the
+archive of how the work went, not a list of open items.  The current queue is
+§XVI.
 
 ## 10.1 Directed real `S2-tan-two-theta` — closed
 
@@ -783,54 +781,58 @@ The final source-facing real and complex Theorem 8.1 evidence;
 
 Any bounded or arbitrary-Hilbert variants remain separate useful theorems.
 
-## 10.3.5 Open: Theorem 8.1 (ii) and (iii) on the block eigenvalue lists
+## 10.3.5 Theorem 8.1 (ii) and (iii) on the block eigenvalue lists — closed 2026-09-07
 
-**Reopened 2026-09-07 by the fourth hostile review.  This is the one counted
-result that is not source-exact.**
+Reopened 2026-09-06 by the fourth hostile review, closed 2026-09-07.
 
-Davis and Kahan print (ii) and (iii) on the ordered eigenvalues of the *blocks*:
-`λ_k` are the eigenvalues of `Λ₁`, `α_k` those of `A₁`, and (iii)'s symmetric
-gauge `Φ` acts on `n` numbers where `n` is the block dimension.  The registered
-witnesses read the eigenvalue lists of `upperBlockShift`/`lowerBlockShift` —
-the blocks extended by zero to the ambient space — indexed by
-`Fin (finrank ℂ H)`, with `Φ : FiniteSymmetricGauge (finrank ℂ H)`.  Zero-padding
-changes the public object and the gauge dimension, and neither reading implies
-the other.
+Davis and Kahan index (ii) and (iii) by the ordered eigenvalues of the *blocks*:
+`α_k` are the eigenvalues of `A₁`, `λ_k` those of `Λ₁`, and part (iii)'s
+symmetric gauge acts on `n` numbers where `n` is the block dimension.  The
+registered witnesses read the eigenvalue lists of `upperBlockShift` and
+`lowerBlockShift` — those blocks **extended by zero to the ambient space**, whose
+lists are the printed ones followed by zeros — indexed by `Fin (finrank ℂ H)`,
+with the gauge on `finrank ℂ H`.  Zero-padding changes the public object and the
+gauge dimension, and neither reading implies the other.
 
-The other half of the same finding **is** repaired: the witnesses used to ask the
-caller for `hsymA`, `hsymQ`, which are derived from `A` Hermitian and which
-Davis and Kahan do not assume.  `isSymmetric_upperBlockShift` and
-`isSymmetric_lowerBlockShift` now supply the proof term, and the eight
-declarations take no symmetry hypothesis.
+`Theorem81BlockEigenvalue.lean` puts the statements on the blocks.  Four pieces,
+and none of them is a wrapper:
 
-### What the repair needs, and why it is not a wrapper
+1. **The blocks as operators on their own spaces.**  `upperBlockCompression` and
+   `lowerBlockCompression` are `A₁ − α` on `Pᗮ` and `(α + δ) − A₀` on `P`, the
+   compressions of the ambient blocks.
 
-1. **The ambient/block bridge.**  Define the blocks as operators on their own
-   spaces — `compressOperator Pᗮ (A − α)` and its perturbed counterpart — and
-   show the padded operator and the block have the same approximation numbers.
-   The general fact is
-   `approximationNumber_subtypeL_comp_comp_orthogonalProjectionOnto`; on the
-   block, the approximation numbers of a positive operator are its eigenvalues
-   by `approximationNumber_eq_eigenvalues_of_isPositive`.  This part is routine.
+2. **Extending by zero moves no approximation number.**
+   `subtypeL_comp_upperBlockCompression` says the ambient block *is* its own
+   compression extended by zero, and
+   `ApproximationNumber.approximationNumber_subtypeL_comp_comp_orthogonalProjectionOnto`
+   then transfers every ambient estimate verbatim.  With
+   `nonneg_compressOperator_of_nonneg` the compression is positive, so its
+   approximation numbers are its ordered eigenvalues.
 
-2. **The block dimensions.**  `A₁` lives on `Pᗮ` and `Λ₁` on `Qᗮ`, so naming the
-   right-hand list at the left-hand indices needs `finrank Pᗮ = finrank Qᗮ`.  In
-   the Section 8 context it follows from the acute angle — `maximalAngle P Q ≤ π/4`
-   puts the projection gap below one, which makes `P_Q` injective on `P` and
-   conversely — but that is not currently a theorem in this tree.  **Part (ii)
-   alone can avoid it** by quantifying over two indices with equal underlying
-   naturals, which is the printed inequality at every index that names both lists.
+3. **The two blocks have the same dimension.**  `A₁` lives on `Pᗮ` and `Λ₁` on
+   `Qᗮ`, so the printed inequality only names both lists if the dimensions agree.
+   They do, and Theorem 8.1's *own conclusion* is what says so: its `quarter_acute`
+   clause puts the projection gap strictly inside the quarter turn, which is
+   acuteness, which is injectivity of each projection on the other subspace in
+   both directions, which is `finrank_orthogonal_eq_of_isAcute`.  Over `ℝ` the same
+   fact comes through the complexification, whose gap is unchanged
+   (`subspaceGap_complexifySubmodule`) and whose branch is the descent of the
+   complex one.
 
-3. **(iii) needs a third piece.**  The majorization the proof runs on
-   (`theorem8_1_upperWeightedWeakMajorization`) is established at the *ambient*
-   gauge dimension, and a symmetric gauge on the block dimension is not obtained
-   from it by restriction: extending a block gauge to the ambient one is the
-   decreasing-rearrangement construction, which is a real theorem.  Either that,
-   or redo the majorization at block dimension through
-   `FiniteSymmetricGauge.le_of_prefixSum_le`, which does hold at every `n`.
+4. **The gauge at the block dimension.**  The majorization the (iii) proof runs on
+   is established at the ambient dimension.  `weaklyMajorized_comp_castLE`
+   restricts a weak majorization to an initial segment of the indices — the prefix
+   sums agree below the cut and the block's prefix sum is the ambient one at the
+   cut — and `FiniteSymmetricGauge.mono_weaklyMajorized` then holds at the block
+   dimension, which is where the source quantifies `Φ`.
 
-None of this is a signature change, which is why it is recorded rather than done
-in a pass whose brief was public-type repairs.
+Eight canonical witnesses,
+`theorem8_1_{upper,lower}{EigenvalueRepulsion,SymmetricGaugeEigenvalue}_blockSourceExact{,_real}`.
+The ambient-padded statements are retained as generalizations.
+
+The same finding's other half was repaired on 2026-09-06: the witnesses no longer
+ask the caller for the blocks' symmetry, which is derived from `A` Hermitian and
+which Davis and Kahan do not assume.
 
 ## 10.4 Unbounded Theorem 8.2
 
@@ -1296,7 +1298,7 @@ This may remove a reported gap without any new mathematics.
 `tanTwoTheta_directed_unboundedResidual_sourceExact_real` is canonical evidence
 on `S2-tan-two-theta`, which is terminal.
 
-## 3. Finish unbounded Theorem 8.1 — **the unbounded half is done; (ii)/(iii) reopened 2026-09-07**
+## 3. Finish unbounded Theorem 8.1 — **done, 2026-09-07**
 
 Both halves of the printed *iff*, branch existence and part (i) are proved at
 unbounded ambient scope in both scalar fields, and the canonical evidence states
@@ -1306,11 +1308,11 @@ construction: it carries the properties the existence clause asserts, and
 `theorem8_1_exists_branch_withCompression_unbounded_*` states existence and
 part (i) together in the source's word order.  §10.3.3 and §10.3.4 record how.
 
-Parts (ii) and (iii) are canonical on eigenvalue sequences in the finite
-dimensions the source prints them for, and no longer ask the caller for the
-blocks' symmetry — but they read the eigenvalue lists of the *ambient
-zero-padded* operators, where the source reads the blocks' own.  That is
-**open**; see §10.3.5.
+Parts (ii) and (iii) are canonical on the eigenvalue lists of the **blocks
+themselves**, in the finite dimensions the source prints them for, with part
+(iii)'s arbitrary symmetric gauge quantified at the **block dimension**.  They no
+longer ask the caller for the blocks' symmetry either.  §10.3.5 records how, and
+what the two-day reopening cost.
 
 ## 3c. The source norm class is inhabited (resolved, 2026-09-05)
 
@@ -1617,62 +1619,73 @@ The following are **not** prerequisites;
 * formalizing every mathematical prose sentence:
 * making every stronger theorem part of a perfectly uniform API.
 
-## XVII.1 Scoreboard, 2026-09-07
+## XVII.1 Scoreboard, 2026-09-07 (second revision)
 
 Measured, not asserted.  Every line below is checkable from
 `dev/davis-kahan-1970-formalization-result-inventory.json` and a build.
 
 | Condition | Status |
 | --- | --- |
-| every designated result has canonical Lean evidence at its actual source scope | **28 of 29** as of 2026-09-07.  `DK-8.1-thm` is reopened: parts (ii) and (iii) are registered on ambient zero-padded operators and an ambient-dimension gauge where the source indexes the block eigenvalue lists (§10.3.5) |
+| every designated result has canonical Lean evidence at its actual source scope | **29 of 29**.  `DK-8.1-thm` was reopened on 2026-09-06 over parts (ii)/(iii) and closed on 2026-09-07 by putting them on the blocks themselves (§10.3.5) |
 | real/complex coverage for every result | met |
-| canonical façades expose the paper's separability scope | met, and widened 2026-09-07: Theorem 3.1's converse, Corollary 3.1's realization and all six Section 6 rows now carry it too.  Only Section 5, which the source explicitly broadens, and Proposition 4.4's concrete counterexample remain `generalized`, each with its reason |
-| finite vs infinite-dimensional scope matches each printed result | met — Theorem 8.1 (ii) and (iii) stay finite, which the source prints |
+| canonical façades expose the paper's separability scope | met, and widened 2026-09-06: Theorem 3.1's converse, Corollary 3.1's realization and all six Section 6 rows carry it too.  Only Section 5, which the source explicitly broadens, and Proposition 4.4's concrete counterexample remain `generalized`, each with its reason |
+| finite vs infinite-dimensional scope matches each printed result | met — Theorem 8.1 (ii) and (iii) stay finite, which the source prints, and are now indexed by the *block* dimension, which the source also prints |
 | bounded vs unbounded scope matches each printed result | met — Theorem 8.1's branch existence, both halves of its printed *iff*, and part (i) are canonical at unbounded scope in complex and real scalar scope |
-| every UIN-quantified theorem uses the literal source abstraction at its boundary | met at the level the paper reaches; §4d records where the abstraction and the printed definition still differ, and why that difference cannot be closed by proof here |
-| no canonical theorem asks for a hypothesis absent from the paper | met, and tightened 2026-09-07: Theorem 8.1(i) no longer pins `Q` to a Lean construction, (ii)/(iii) no longer ask for the blocks' symmetry, Theorem 6.2 no longer asks `R` to be Hilbert--Schmidt, and Sections 6.1/6.1-prop take the printed separation instead of the weaker form-bounded gap |
-| source objects, gaps, ordered angles, residuals, constants, conclusions agree | met for 28 rows; the exception is `DK-8.1-thm` (ii)/(iii)'s index and gauge dimension |
+| every UIN-quantified theorem uses the literal source abstraction at its boundary | met.  §4d records the Fan-dominance split and why the derivation is not ours to do; the fifth review closed that concern |
+| no canonical theorem asks for a hypothesis absent from the paper | met.  8.1(i) no longer pins `Q` to a Lean construction; (ii)/(iii) no longer ask for the blocks' symmetry; Theorem 6.2 no longer asks `R` to be Hilbert--Schmidt; Proposition 6.1 and Theorem 6.1 take the printed separation; Lemma 6.1 compares one `K` with one `L` as the source does |
+| source objects, gaps, ordered angles, residuals, constants, conclusions agree | met, re-checked by the tamper suite and the 93 statement pins |
 | **Theorems 8.1 and 8.2 cover their inherited unbounded scope** | met — both, in complex and real scalar scope, 8.1 including both halves of the printed *iff* |
 | the exact/stronger distinction stays visible in the census | met |
-| a fresh source-first review finds no material statement mismatch | **not met.**  The fourth review, 2026-09-07, found six; five are repaired and the sixth is recorded open |
-| the final certification pass succeeds | `certify_davis_kahan_1970.py` runs clean at **28/29 terminal**, with `DK-8.1-thm` blocked by the recorded hostile finding rather than silently accepted |
+| a fresh source-first review finds no material statement mismatch | five reviews have run.  The fifth (2026-09-07) found four things: one substantive statement gap, one trivial missing façade, one registration repoint, and one **error in the repository's own reconstruction of the source**.  All four are repaired |
+| the final certification pass succeeds | `certify_davis_kahan_1970.py` PASS, 29/29 terminal |
 
-**§XVIII stays withdrawn**, and now for a substantive reason rather than a
-procedural one: one counted result is not source-exact.
+**§XVIII stays withdrawn until a reviewer grants it.**  Nothing in this scoreboard
+is now known to be unmet; that is not the same as a reviewer having said so.
 
 ---
 
 # XVIII. Final public claim
 
-## WITHDRAWN.  One counted result is reopened, 2026-09-07
+## WITHDRAWN, and now with nothing recorded as unmet — 2026-09-07
 
-Two signature/context-only hostile reviews have now run against this tree, and
-both applied the same criterion:
+Five hostile reviews have run against this tree.  The third (2026-09-06) is
+recorded in §XVIII.2 below; the fourth (2026-09-06) in §XVIII.1; the fifth
+(2026-09-07) is here.  All applied the same criterion:
 
 > Does the canonical public theorem signature, interpreted in the paper's
 > standing context, state the Davis--Kahan result with no stronger restriction and
 > no weaker conclusion?
 
-The third review's nine findings (2026-09-06) are repaired; the table is kept in
-§XVIII.1 below.  The fourth review (2026-09-07) accepted the deep unbounded
-Section 8 mathematics, accepted Theorem 8.2 at the signature level, and found six
-further source-façade defects.  **Five are repaired.  The sixth is not, and it
-reopens `DK-8.1-thm`.**
+The fifth review accepted every previously reopened item, closed its own
+Fan-dominance concern, and found four things.  All four are repaired.
 
-| # | Finding | Disposition |
+| # | Finding | Repair |
 | --- | --- | --- |
-| 1 | Theorem 8.1(i) required `Q = canonicalLowBranchUnbounded …` — a Lean construction as a theorem hypothesis | **repaired.**  `Q` now carries the properties the existence clause asserts of it: reducing, both blocks on the printed sides of `α`, acute angle.  `theorem8_1_exists_branch_withCompression_unbounded_*` states the existential and part (i) together, in the source's word order |
-| 2 | Theorem 8.1(ii)/(iii) asked the caller for `hsymA`, `hsymQ` — derived facts — and indexed `Fin (finrank H)` with a gauge on `finrank H`, on operators zero-padded off their block | **half repaired.**  The symmetry hypotheses are gone: `isSymmetric_upperBlockShift` and `isSymmetric_lowerBlockShift` supply the proof term.  The block-eigenvalue reading is **open** — see §10.3.5 and `open_hostile_review_obligations` |
-| 3 | Section 4 fixed the wrong quantifier: `∃ D, IsDirectRotation U V D ∧ …` instead of extremality for the direct rotation the source has fixed | **repaired**, and it exposed a second defect the review did not name: the repository's `IsDirectRotation` is *not* Davis--Kahan's Definition 3.1 — it records the diagonal compressions only through their numerical range, and Section 4's extremality is **false** for it.  `IsSourceDirectRotation` is Definition 3.1; the façades take a given `D` satisfying it |
-| 4 | Theorem 3.1's converse dropped source separability and returned `J`, `hJ`, `hisom`, `hcoisom`; Corollary 3.1's realization permitted arbitrary `Z₀`, `Z₁` | **repaired.**  `theorem3_1_realization_sourceExact_*` carries `[SeparableSpace H]` and keeps `J₀` internal to the angle datum; `corollary3_1_realization_zeroMultiplicity_sourceScope` restricts the multiplicity spaces to the paper's scope |
-| 5 | Section 6's separability exception was too broad, and Proposition 6.1/Theorem 6.1 used `FormBoundedSylvesterGap` where the source prints an interval/exterior separation; Theorem 6.2 added `R` Hilbert--Schmidt | **repaired.**  `Section6SourceScope.lean`: separable-ambient wrappers for Lemmas 6.1, 6.2, 6.3; `..._printedGap_sourceExact_*` for Proposition 6.1 and Theorem 6.1; `theorem6_2_vacuity_sourceExact_*` in `ℝ≥0∞`, which *is* the source's "vacuous when the norm does not exist" |
-| 6 | Fan dominance is a field of `FanDominantIdealFamily`, so the public quantifier is "every UIN norm supplied with a Fan-dominance certificate" | **split, not derived.**  `SourceUnitaryInvariantNorm` is the printed law list without it; `HasFanDominance` is the printed sentence, named; `toNormalized` is the bridge and `toSource_toNormalized` shows the split is exact.  It is **not** derived from the other laws, and §4d says why |
+| 1 | **Theorem 8.1 (ii)/(iii)** still indexed `Fin (finrank ℂ H)` on the zero-padded blocks, with part (iii)'s gauge on `finrank ℂ H`, where the source reads the blocks' own eigenvalue lists at the block dimension | `Theorem81BlockEigenvalue.lean`.  The blocks as operators on `Pᗮ` and `P`; extending by zero moves no approximation number; the block dimensions agree by Theorem 8.1's own acuteness conclusion; and the ambient majorization restricts to the block indices, so the arbitrary gauge is quantified where the source quantifies it.  Eight canonical witnesses (§10.3.5) |
+| 2 | **Lemma 6.1** had no exact façade: the canonical statement took four operators `K, K̃, L, L̃` where the paper compares **one** `K` with **one** `L` | `lemma6_1_sourceOperators_separable_*` and the converse, instantiating `K̃ := K`, `L̃ := L`.  The four-operator statement is retained as the generalization it is |
+| 3 | **Theorem 8.1's existence + part (i)**: the combined statement matching the printed word order already existed, but the inventory canonicalized the separate existence and per-`Q` compression theorems | registration only.  `theorem8_1_exists_branch_withCompression_unbounded_*` is now the canonical evidence for both clauses |
+| 4 | **The repository's own reconstruction of Lemma 6.3 was wrong.**  `DavisKahan1970_part_III.tex` printed the leakage bound as `‖Γ K Ψᗮ‖₁ ≤ η`; Davis and Kahan print `< η`, their proof derives a squared norm strictly below `η²`, and their applications use the strict form | the **TeX** is corrected, not the Lean.  `lemma6_3_approximationNumber_leakage_complex` already concluded `< η` and is unchanged.  The specification hash, the DK-6.3-lem source pin, and the statement-map passage hash all moved, each with the reason recorded.  This is the case the repository's rule anticipates: the original paper is authoritative over the reconstruction |
 
-Evidence after the repairs: `certify_davis_kahan_1970.py` clean at **28/29
-terminal**; `lake build` green on every default target with zero production
-warnings; 95 statement pins clean; the tamper suite green.
+Evidence after the repairs: `certify_davis_kahan_1970.py` PASS at 29/29 terminal;
+`lake build` green on every default target with zero production warnings; 93
+statement pins and 43 source pins clean; the tamper suite green.
 
-## §XVIII.1 The third review's nine findings (2026-09-06), all repaired
+**The claim below stays withdrawn.**  Every line of the §XVII.1 scoreboard is met
+and no obligation is recorded open, but five reviews have each found something
+the previous one did not, and the verdict is the reviewer's to give.
+
+## §XVIII.1 The fourth review's six findings (2026-09-06)
+
+| # | Finding | Repair |
+| --- | --- | --- |
+| 1 | Theorem 8.1(i) required `Q = canonicalLowBranchUnbounded …` — a Lean construction as a theorem hypothesis | `Q` carries the properties the existence clause asserts of it: reducing, both blocks on the printed sides of `α`, acute angle.  `theorem8_1_exists_branch_withCompression_unbounded_*` states the existential and part (i) together, in the source's word order, and is canonical for both clauses since the fifth review |
+| 2 | Theorem 8.1(ii)/(iii) asked the caller for `hsymA`, `hsymQ` — derived facts — and indexed the ambient zero-padded operators | the symmetry hypotheses are gone (`isSymmetric_upperBlockShift`, `isSymmetric_lowerBlockShift`); the block-eigenvalue reading was recorded open on 2026-09-06 and closed on 2026-09-07 (§10.3.5) |
+| 3 | Section 4 fixed the wrong quantifier: `∃ D, IsDirectRotation U V D ∧ …` instead of extremality for the direct rotation the source has fixed | repaired, and it exposed a second defect the review did not name: the repository's `IsDirectRotation` is *not* Davis--Kahan's Definition 3.1, and Section 4's extremality is **false** for it.  `IsSourceDirectRotation` is Definition 3.1; the façades take a given `D` satisfying it (§3d) |
+| 4 | Theorem 3.1's converse dropped source separability and returned `J`, `hJ`, `hisom`, `hcoisom`; Corollary 3.1's realization permitted arbitrary `Z₀`, `Z₁` | `theorem3_1_realization_sourceExact_*` carries `[SeparableSpace H]` and keeps `J₀` internal to the angle datum; `corollary3_1_realization_zeroMultiplicity_sourceScope` restricts the multiplicity spaces to the paper's scope |
+| 5 | Section 6's separability exception was too broad; Proposition 6.1/Theorem 6.1 used `FormBoundedSylvesterGap` where the source prints an interval/exterior separation; Theorem 6.2 added `R` Hilbert--Schmidt | `Section6SourceScope.lean`: separable-ambient wrappers for Lemmas 6.1, 6.2, 6.3; `..._printedGap_sourceExact_*`; and `theorem6_2_vacuity_sourceExact_*` in `ℝ≥0∞`, which *is* the source's "vacuous when the norm does not exist" |
+| 6 | Fan dominance is a field of `FanDominantIdealFamily`, so the public quantifier is "every UIN norm supplied with a Fan-dominance certificate" | split, not derived: `SourceUnitaryInvariantNorm` is the printed law list, `HasFanDominance` the printed sentence, `toNormalized` the bridge, `toSource_toNormalized` the exactness of the split.  §4d says why the derivation is not ours to do; the fifth review accepted this and closed the concern |
+
+## §XVIII.2 The third review's nine findings (2026-09-06), all repaired
 
 | # | Finding | Repair |
 | --- | --- | --- |

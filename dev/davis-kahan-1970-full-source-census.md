@@ -4,7 +4,7 @@
 
 **Census family:** `source-completion-census`  
 **Items:** 50  
-**Unique cited Lean declarations:** 1491
+**Unique cited Lean declarations:** 1503
 
 ## How to use this census
 
@@ -3542,6 +3542,10 @@ SOURCE-EXACT FAÇADE REGISTERED 2026-09-05. Canonical evidence is now the printe
 - `TauCeti.DavisKahan1970.lemma6_1_separable_real`
 - `TauCeti.DavisKahan1970.lemma6_1_converse_separable_complex`
 - `TauCeti.DavisKahan1970.lemma6_1_converse_separable_real`
+- `TauCeti.DavisKahan1970.lemma6_1_sourceOperators_separable_complex`
+- `TauCeti.DavisKahan1970.lemma6_1_sourceOperators_separable_real`
+- `TauCeti.DavisKahan1970.lemma6_1_converse_sourceOperators_separable_complex`
+- `TauCeti.DavisKahan1970.lemma6_1_converse_sourceOperators_separable_real`
 
 **Notes.** Both directions are proved; the converse should be added to the exact audit manifest.
 
@@ -4481,6 +4485,14 @@ ROW WAS STALE; CORRECTED 2026-08-07 (Fable 5).  The requested 'exact source norm
 - `TauCeti.DavisKahan1970.Section8.theorem8_1_exists_branch_withCompression_unbounded_real`
 - `TauCeti.DavisKahan1970.Section8.isSymmetric_upperBlockShift`
 - `TauCeti.DavisKahan1970.Section8.isSymmetric_lowerBlockShift`
+- `TauCeti.DavisKahan1970.Section8.theorem8_1_upperEigenvalueRepulsion_blockSourceExact`
+- `TauCeti.DavisKahan1970.Section8.theorem8_1_lowerEigenvalueRepulsion_blockSourceExact`
+- `TauCeti.DavisKahan1970.Section8.theorem8_1_upperEigenvalueRepulsion_blockSourceExact_real`
+- `TauCeti.DavisKahan1970.Section8.theorem8_1_lowerEigenvalueRepulsion_blockSourceExact_real`
+- `TauCeti.DavisKahan1970.Section8.theorem8_1_upperSymmetricGaugeEigenvalue_blockSourceExact`
+- `TauCeti.DavisKahan1970.Section8.theorem8_1_lowerSymmetricGaugeEigenvalue_blockSourceExact`
+- `TauCeti.DavisKahan1970.Section8.theorem8_1_upperSymmetricGaugeEigenvalue_blockSourceExact_real`
+- `TauCeti.DavisKahan1970.Section8.theorem8_1_lowerSymmetricGaugeEigenvalue_blockSourceExact_real`
 
 **Curated source/Lean review:**
 

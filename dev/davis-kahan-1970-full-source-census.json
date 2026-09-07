@@ -466,7 +466,7 @@
             "type_text_sha256": "381d825130c744e7a5c5bbfd96fc23aa4ebbb58cf097eb8464c9539a4c78e985",
             "toolchain": "leanprover/lean4:v4.34.0-rc1",
             "pinned_on": "2026-09-06",
-            "note": "Re-pinned 2026-09-07 for the fourth hostile review's source-scope facades: Theorem 8.1 part (i) drops the canonical-branch identity for the printed placement, parts (ii)/(iii) drop the caller-supplied block symmetry, Section 4 takes a given Definition 3.1 direct rotation, Theorem 3.1's converse and Section 6 move to the paper's separable scope, Section 6's separation is the printed interval/exterior one, and Theorem 6.2 carries the source's definedness convention."
+            "note": "Re-pinned 2026-09-07 for the fifth hostile review: Theorem 8.1's existence clause and part (i) are one combined statement, parts (ii)/(iii) are on the block eigenvalue lists with the gauge at the block dimension, and Lemma 6.1 is on the source's own two operators.  The DK-6.3-lem source passage is re-pinned because the reconstruction's non-strict leakage inequality was corrected to the strict one the original prints."
           },
           {
             "declaration": "TauCeti.DavisKahan1970.sinTheta_unbounded_formGap_sourceExact_real",
@@ -474,7 +474,7 @@
             "type_text_sha256": "c4d5e23852152ce832b3582d3f1fcb17e85c30ca406fd99be909b2bab911c6e9",
             "toolchain": "leanprover/lean4:v4.34.0-rc1",
             "pinned_on": "2026-09-06",
-            "note": "Re-pinned 2026-09-07 for the fourth hostile review's source-scope facades: Theorem 8.1 part (i) drops the canonical-branch identity for the printed placement, parts (ii)/(iii) drop the caller-supplied block symmetry, Section 4 takes a given Definition 3.1 direct rotation, Theorem 3.1's converse and Section 6 move to the paper's separable scope, Section 6's separation is the printed interval/exterior one, and Theorem 6.2 carries the source's definedness convention."
+            "note": "Re-pinned 2026-09-07 for the fifth hostile review: Theorem 8.1's existence clause and part (i) are one combined statement, parts (ii)/(iii) are on the block eigenvalue lists with the gauge at the block dimension, and Lemma 6.1 is on the source's own two operators.  The DK-6.3-lem source passage is re-pinned because the reconstruction's non-strict leakage inequality was corrected to the strict one the original prints."
           },
           {
             "declaration": "TauCeti.DavisKahan1970.sinTheta_unbounded_intervalExterior_characterizedWitness_rclike",
@@ -482,7 +482,7 @@
             "type_text_sha256": "36e1a267e9537cef09376681c0e2d7904e056fe1941568884edcf513dd4f7dcc",
             "toolchain": "leanprover/lean4:v4.34.0-rc1",
             "pinned_on": "2026-09-06",
-            "note": "Re-pinned 2026-09-07 for the fourth hostile review's source-scope facades: Theorem 8.1 part (i) drops the canonical-branch identity for the printed placement, parts (ii)/(iii) drop the caller-supplied block symmetry, Section 4 takes a given Definition 3.1 direct rotation, Theorem 3.1's converse and Section 6 move to the paper's separable scope, Section 6's separation is the printed interval/exterior one, and Theorem 6.2 carries the source's definedness convention."
+            "note": "Re-pinned 2026-09-07 for the fifth hostile review: Theorem 8.1's existence clause and part (i) are one combined statement, parts (ii)/(iii) are on the block eigenvalue lists with the gauge at the block dimension, and Lemma 6.1 is on the source's own two operators.  The DK-6.3-lem source passage is re-pinned because the reconstruction's non-strict leakage inequality was corrected to the strict one the original prints."
           },
           {
             "declaration": "TauCeti.DavisKahan1970.sinTheta_unbounded_formGap_symmetricNorming_rclike",
@@ -490,7 +490,7 @@
             "type_text_sha256": "a723da65ef6812d80d54451bde587b0dfef289495b468632db7a31d607ace06f",
             "toolchain": "leanprover/lean4:v4.34.0-rc1",
             "pinned_on": "2026-09-06",
-            "note": "Re-pinned 2026-09-07 for the fourth hostile review's source-scope facades: Theorem 8.1 part (i) drops the canonical-branch identity for the printed placement, parts (ii)/(iii) drop the caller-supplied block symmetry, Section 4 takes a given Definition 3.1 direct rotation, Theorem 3.1's converse and Section 6 move to the paper's separable scope, Section 6's separation is the printed interval/exterior one, and Theorem 6.2 carries the source's definedness convention."
+            "note": "Re-pinned 2026-09-07 for the fifth hostile review: Theorem 8.1's existence clause and part (i) are one combined statement, parts (ii)/(iii) are on the block eigenvalue lists with the gauge at the block dimension, and Lemma 6.1 is on the source's own two operators.  The DK-6.3-lem source passage is re-pinned because the reconstruction's non-strict leakage inequality was corrected to the strict one the original prints."
           },
           {
             "declaration": "TauCeti.DavisKahan1970.isTrialResidual_iff",
@@ -498,7 +498,7 @@
             "type_text_sha256": "a93aaad365a65cf5c6c32bb31f608708c5100413c3233a048fe1cd8cdb4d8388",
             "toolchain": "leanprover/lean4:v4.34.0-rc1",
             "pinned_on": "2026-09-06",
-            "note": "Re-pinned 2026-09-07 for the fourth hostile review's source-scope facades: Theorem 8.1 part (i) drops the canonical-branch identity for the printed placement, parts (ii)/(iii) drop the caller-supplied block symmetry, Section 4 takes a given Definition 3.1 direct rotation, Theorem 3.1's converse and Section 6 move to the paper's separable scope, Section 6's separation is the printed interval/exterior one, and Theorem 6.2 carries the source's definedness convention."
+            "note": "Re-pinned 2026-09-07 for the fifth hostile review: Theorem 8.1's existence clause and part (i) are one combined statement, parts (ii)/(iii) are on the block eigenvalue lists with the gauge at the block dimension, and Lemma 6.1 is on the source's own two operators.  The DK-6.3-lem source passage is re-pinned because the reconstruction's non-strict leakage inequality was corrected to the strict one the original prints."
           },
           {
             "declaration": "TauCeti.DavisKahan1970.isExactSpectralDecomposition_iff",
@@ -506,7 +506,7 @@
             "type_text_sha256": "f559623bd25c11cfb9d108dbb9215d67993dc44c94fec02217eade03444d838f",
             "toolchain": "leanprover/lean4:v4.34.0-rc1",
             "pinned_on": "2026-09-06",
-            "note": "Re-pinned 2026-09-07 for the fourth hostile review's source-scope facades: Theorem 8.1 part (i) drops the canonical-branch identity for the printed placement, parts (ii)/(iii) drop the caller-supplied block symmetry, Section 4 takes a given Definition 3.1 direct rotation, Theorem 3.1's converse and Section 6 move to the paper's separable scope, Section 6's separation is the printed interval/exterior one, and Theorem 6.2 carries the source's definedness convention."
+            "note": "Re-pinned 2026-09-07 for the fifth hostile review: Theorem 8.1's existence clause and part (i) are one combined statement, parts (ii)/(iii) are on the block eigenvalue lists with the gauge at the block dimension, and Lemma 6.1 is on the source's own two operators.  The DK-6.3-lem source passage is re-pinned because the reconstruction's non-strict leakage inequality was corrected to the strict one the original prints."
           }
         ],
         "source_fragments": [
@@ -572,8 +572,8 @@
               "result": "Section 2, first unnumbered theorem"
             },
             "visibility": "public_reconstruction",
-            "pinned_on": "2026-09-04",
-            "note": "Pinned 2026-09-04 with the seven Section 3-8 major reviews: their declarations and the passages they cite are now guarded like the four Section 2 headline rows."
+            "pinned_on": "2026-09-06",
+            "note": "Re-pinned 2026-09-07 for the fifth hostile review: Theorem 8.1's existence clause and part (i) are one combined statement, parts (ii)/(iii) are on the block eigenvalue lists with the gauge at the block dimension, and Lemma 6.1 is on the source's own two operators.  The DK-6.3-lem source passage is re-pinned because the reconstruction's non-strict leakage inequality was corrected to the strict one the original prints."
           },
           {
             "fragment": "block-residual",
@@ -591,8 +591,8 @@
               "result": "Block notation, reducing decompositions, and residual"
             },
             "visibility": "public_reconstruction",
-            "pinned_on": "2026-09-04",
-            "note": "Pinned for the inherited Section 1 setup used by S2-sin-theta semantic focus."
+            "pinned_on": "2026-09-06",
+            "note": "Re-pinned 2026-09-07 for the fifth hostile review: Theorem 8.1's existence clause and part (i) are one combined statement, parts (ii)/(iii) are on the block eigenvalue lists with the gauge at the block dimension, and Lemma 6.1 is on the source's own two operators.  The DK-6.3-lem source passage is re-pinned because the reconstruction's non-strict leakage inequality was corrected to the strict one the original prints."
           },
           {
             "fragment": "ui-norms",
@@ -610,8 +610,8 @@
               "result": "Unitary-invariant norms and singular values"
             },
             "visibility": "public_reconstruction",
-            "pinned_on": "2026-09-04",
-            "note": "Pinned 2026-09-04 with the seven Section 3-8 major reviews: their declarations and the passages they cite are now guarded like the four Section 2 headline rows."
+            "pinned_on": "2026-09-06",
+            "note": "Re-pinned 2026-09-07 for the fifth hostile review: Theorem 8.1's existence clause and part (i) are one combined statement, parts (ii)/(iii) are on the block eigenvalue lists with the gauge at the block dimension, and Lemma 6.1 is on the source's own two operators.  The DK-6.3-lem source passage is re-pinned because the reconstruction's non-strict leakage inequality was corrected to the strict one the original prints."
           },
           {
             "fragment": "scope",
@@ -629,8 +629,8 @@
               "result": "Scope of the four theorems"
             },
             "visibility": "public_reconstruction",
-            "pinned_on": "2026-09-04",
-            "note": "Pinned 2026-09-04 with the seven Section 3-8 major reviews: their declarations and the passages they cite are now guarded like the four Section 2 headline rows."
+            "pinned_on": "2026-09-06",
+            "note": "Re-pinned 2026-09-07 for the fifth hostile review: Theorem 8.1's existence clause and part (i) are one combined statement, parts (ii)/(iii) are on the block eigenvalue lists with the gauge at the block dimension, and Lemma 6.1 is on the source's own two operators.  The DK-6.3-lem source passage is re-pinned because the reconstruction's non-strict leakage inequality was corrected to the strict one the original prints."
           }
         ]
       },
@@ -906,7 +906,7 @@
             "type_text_sha256": "cb19bccb3155c2d7ad33f5521a7e3472553ab532801c41d99976548fa4b69388",
             "toolchain": "leanprover/lean4:v4.34.0-rc1",
             "pinned_on": "2026-09-06",
-            "note": "Re-pinned 2026-09-07 for the fourth hostile review's source-scope facades: Theorem 8.1 part (i) drops the canonical-branch identity for the printed placement, parts (ii)/(iii) drop the caller-supplied block symmetry, Section 4 takes a given Definition 3.1 direct rotation, Theorem 3.1's converse and Section 6 move to the paper's separable scope, Section 6's separation is the printed interval/exterior one, and Theorem 6.2 carries the source's definedness convention."
+            "note": "Re-pinned 2026-09-07 for the fifth hostile review: Theorem 8.1's existence clause and part (i) are one combined statement, parts (ii)/(iii) are on the block eigenvalue lists with the gauge at the block dimension, and Lemma 6.1 is on the source's own two operators.  The DK-6.3-lem source passage is re-pinned because the reconstruction's non-strict leakage inequality was corrected to the strict one the original prints."
           },
           {
             "declaration": "TauCeti.DavisKahan1970.tanTheta_ambient_unboundedRitz_definedTangent_sourceExact_real",
@@ -914,7 +914,7 @@
             "type_text_sha256": "3324fd350f16181c52888a619362d9725e4fa372baf5ac92ee6d5f827ff4b792",
             "toolchain": "leanprover/lean4:v4.34.0-rc1",
             "pinned_on": "2026-09-06",
-            "note": "Re-pinned 2026-09-07 for the fourth hostile review's source-scope facades: Theorem 8.1 part (i) drops the canonical-branch identity for the printed placement, parts (ii)/(iii) drop the caller-supplied block symmetry, Section 4 takes a given Definition 3.1 direct rotation, Theorem 3.1's converse and Section 6 move to the paper's separable scope, Section 6's separation is the printed interval/exterior one, and Theorem 6.2 carries the source's definedness convention."
+            "note": "Re-pinned 2026-09-07 for the fifth hostile review: Theorem 8.1's existence clause and part (i) are one combined statement, parts (ii)/(iii) are on the block eigenvalue lists with the gauge at the block dimension, and Lemma 6.1 is on the source's own two operators.  The DK-6.3-lem source passage is re-pinned because the reconstruction's non-strict leakage inequality was corrected to the strict one the original prints."
           },
           {
             "declaration": "TauCeti.DavisKahan1970.tanTheta_directed_unboundedRitz_sourceExact_complex",
@@ -922,7 +922,7 @@
             "type_text_sha256": "84fa71cc2c1977e62a0b6eaf0ac3a1eb654255ffcc6aa8657f6d92e10c36780a",
             "toolchain": "leanprover/lean4:v4.34.0-rc1",
             "pinned_on": "2026-09-06",
-            "note": "Re-pinned 2026-09-07 for the fourth hostile review's source-scope facades: Theorem 8.1 part (i) drops the canonical-branch identity for the printed placement, parts (ii)/(iii) drop the caller-supplied block symmetry, Section 4 takes a given Definition 3.1 direct rotation, Theorem 3.1's converse and Section 6 move to the paper's separable scope, Section 6's separation is the printed interval/exterior one, and Theorem 6.2 carries the source's definedness convention."
+            "note": "Re-pinned 2026-09-07 for the fifth hostile review: Theorem 8.1's existence clause and part (i) are one combined statement, parts (ii)/(iii) are on the block eigenvalue lists with the gauge at the block dimension, and Lemma 6.1 is on the source's own two operators.  The DK-6.3-lem source passage is re-pinned because the reconstruction's non-strict leakage inequality was corrected to the strict one the original prints."
           },
           {
             "declaration": "TauCeti.DavisKahan1970.tanTheta_directed_unboundedRitz_sourceExact_real",
@@ -930,7 +930,7 @@
             "type_text_sha256": "c17d54006246bc81283a137786e601941d4705c3b2edf49fc5f06b461405ab48",
             "toolchain": "leanprover/lean4:v4.34.0-rc1",
             "pinned_on": "2026-09-06",
-            "note": "Re-pinned 2026-09-07 for the fourth hostile review's source-scope facades: Theorem 8.1 part (i) drops the canonical-branch identity for the printed placement, parts (ii)/(iii) drop the caller-supplied block symmetry, Section 4 takes a given Definition 3.1 direct rotation, Theorem 3.1's converse and Section 6 move to the paper's separable scope, Section 6's separation is the printed interval/exterior one, and Theorem 6.2 carries the source's definedness convention."
+            "note": "Re-pinned 2026-09-07 for the fifth hostile review: Theorem 8.1's existence clause and part (i) are one combined statement, parts (ii)/(iii) are on the block eigenvalue lists with the gauge at the block dimension, and Lemma 6.1 is on the source's own two operators.  The DK-6.3-lem source passage is re-pinned because the reconstruction's non-strict leakage inequality was corrected to the strict one the original prints."
           }
         ],
         "source_fragments": [
@@ -979,8 +979,8 @@
               "result": "Section 2, second unnumbered theorem"
             },
             "visibility": "public_reconstruction",
-            "pinned_on": "2026-09-04",
-            "note": "Pinned 2026-09-04 with the seven Section 3-8 major reviews: their declarations and the passages they cite are now guarded like the four Section 2 headline rows."
+            "pinned_on": "2026-09-06",
+            "note": "Re-pinned 2026-09-07 for the fifth hostile review: Theorem 8.1's existence clause and part (i) are one combined statement, parts (ii)/(iii) are on the block eigenvalue lists with the gauge at the block dimension, and Lemma 6.1 is on the source's own two operators.  The DK-6.3-lem source passage is re-pinned because the reconstruction's non-strict leakage inequality was corrected to the strict one the original prints."
           },
           {
             "fragment": "standing-3-5",
@@ -1002,8 +1002,8 @@
               ]
             },
             "visibility": "public_reconstruction",
-            "pinned_on": "2026-09-04",
-            "note": "Pinned 2026-09-04 with the seven Section 3-8 major reviews: their declarations and the passages they cite are now guarded like the four Section 2 headline rows."
+            "pinned_on": "2026-09-06",
+            "note": "Re-pinned 2026-09-07 for the fifth hostile review: Theorem 8.1's existence clause and part (i) are one combined statement, parts (ii)/(iii) are on the block eigenvalue lists with the gauge at the block dimension, and Lemma 6.1 is on the source's own two operators.  The DK-6.3-lem source passage is re-pinned because the reconstruction's non-strict leakage inequality was corrected to the strict one the original prints."
           }
         ]
       }
@@ -1260,8 +1260,8 @@
               "result": "Section 2, third unnumbered theorem"
             },
             "visibility": "public_reconstruction",
-            "pinned_on": "2026-09-04",
-            "note": "Pinned 2026-09-04 with the seven Section 3-8 major reviews: their declarations and the passages they cite are now guarded like the four Section 2 headline rows."
+            "pinned_on": "2026-09-06",
+            "note": "Re-pinned 2026-09-07 for the fifth hostile review: Theorem 8.1's existence clause and part (i) are one combined statement, parts (ii)/(iii) are on the block eigenvalue lists with the gauge at the block dimension, and Lemma 6.1 is on the source's own two operators.  The DK-6.3-lem source passage is re-pinned because the reconstruction's non-strict leakage inequality was corrected to the strict one the original prints."
           },
           {
             "fragment": "scope",
@@ -1279,8 +1279,8 @@
               "result": "Scope of the four theorems"
             },
             "visibility": "public_reconstruction",
-            "pinned_on": "2026-09-04",
-            "note": "Pinned 2026-09-04 with the seven Section 3-8 major reviews: their declarations and the passages they cite are now guarded like the four Section 2 headline rows."
+            "pinned_on": "2026-09-06",
+            "note": "Re-pinned 2026-09-07 for the fifth hostile review: Theorem 8.1's existence clause and part (i) are one combined statement, parts (ii)/(iii) are on the block eigenvalue lists with the gauge at the block dimension, and Lemma 6.1 is on the source's own two operators.  The DK-6.3-lem source passage is re-pinned because the reconstruction's non-strict leakage inequality was corrected to the strict one the original prints."
           }
         ],
         "statement_pins": [
@@ -1290,7 +1290,7 @@
             "type_text_sha256": "ed697f147ef8c87f0925fac3e86d8723d8607e4241bc4c8bff90e206d2aa4a22",
             "toolchain": "leanprover/lean4:v4.34.0-rc1",
             "pinned_on": "2026-09-06",
-            "note": "Re-pinned 2026-09-07 for the fourth hostile review's source-scope facades: Theorem 8.1 part (i) drops the canonical-branch identity for the printed placement, parts (ii)/(iii) drop the caller-supplied block symmetry, Section 4 takes a given Definition 3.1 direct rotation, Theorem 3.1's converse and Section 6 move to the paper's separable scope, Section 6's separation is the printed interval/exterior one, and Theorem 6.2 carries the source's definedness convention."
+            "note": "Re-pinned 2026-09-07 for the fifth hostile review: Theorem 8.1's existence clause and part (i) are one combined statement, parts (ii)/(iii) are on the block eigenvalue lists with the gauge at the block dimension, and Lemma 6.1 is on the source's own two operators.  The DK-6.3-lem source passage is re-pinned because the reconstruction's non-strict leakage inequality was corrected to the strict one the original prints."
           },
           {
             "declaration": "TauCeti.DavisKahan1970.sinTwoTheta_directed_unboundedResidual_sourceExact_real",
@@ -1298,7 +1298,7 @@
             "type_text_sha256": "8bd4e59aeca86aa0c8326dfca69ecc2c4ef4a88a135bc5b4a27ea07e1b1b73d1",
             "toolchain": "leanprover/lean4:v4.34.0-rc1",
             "pinned_on": "2026-09-06",
-            "note": "Re-pinned 2026-09-07 for the fourth hostile review's source-scope facades: Theorem 8.1 part (i) drops the canonical-branch identity for the printed placement, parts (ii)/(iii) drop the caller-supplied block symmetry, Section 4 takes a given Definition 3.1 direct rotation, Theorem 3.1's converse and Section 6 move to the paper's separable scope, Section 6's separation is the printed interval/exterior one, and Theorem 6.2 carries the source's definedness convention."
+            "note": "Re-pinned 2026-09-07 for the fifth hostile review: Theorem 8.1's existence clause and part (i) are one combined statement, parts (ii)/(iii) are on the block eigenvalue lists with the gauge at the block dimension, and Lemma 6.1 is on the source's own two operators.  The DK-6.3-lem source passage is re-pinned because the reconstruction's non-strict leakage inequality was corrected to the strict one the original prints."
           },
           {
             "declaration": "TauCeti.DavisKahan1970.sinTwoTheta_ambient_unbounded_perturbedGap_sourceExact_complex",
@@ -1306,7 +1306,7 @@
             "type_text_sha256": "5adcf1cf286684b33f85530a0a2242bdb7ef8c53176ae4d54624ac125673e36a",
             "toolchain": "leanprover/lean4:v4.34.0-rc1",
             "pinned_on": "2026-09-06",
-            "note": "Re-pinned 2026-09-07 for the fourth hostile review's source-scope facades: Theorem 8.1 part (i) drops the canonical-branch identity for the printed placement, parts (ii)/(iii) drop the caller-supplied block symmetry, Section 4 takes a given Definition 3.1 direct rotation, Theorem 3.1's converse and Section 6 move to the paper's separable scope, Section 6's separation is the printed interval/exterior one, and Theorem 6.2 carries the source's definedness convention."
+            "note": "Re-pinned 2026-09-07 for the fifth hostile review: Theorem 8.1's existence clause and part (i) are one combined statement, parts (ii)/(iii) are on the block eigenvalue lists with the gauge at the block dimension, and Lemma 6.1 is on the source's own two operators.  The DK-6.3-lem source passage is re-pinned because the reconstruction's non-strict leakage inequality was corrected to the strict one the original prints."
           },
           {
             "declaration": "TauCeti.DavisKahan1970.sinTwoTheta_ambient_unbounded_perturbedGap_sourceExact_real",
@@ -1314,7 +1314,7 @@
             "type_text_sha256": "8ab268e1b64733c9a5efee5c40a1fe5a9eee5aeb0f960661b2f5c02c2a9292b6",
             "toolchain": "leanprover/lean4:v4.34.0-rc1",
             "pinned_on": "2026-09-06",
-            "note": "Re-pinned 2026-09-07 for the fourth hostile review's source-scope facades: Theorem 8.1 part (i) drops the canonical-branch identity for the printed placement, parts (ii)/(iii) drop the caller-supplied block symmetry, Section 4 takes a given Definition 3.1 direct rotation, Theorem 3.1's converse and Section 6 move to the paper's separable scope, Section 6's separation is the printed interval/exterior one, and Theorem 6.2 carries the source's definedness convention."
+            "note": "Re-pinned 2026-09-07 for the fifth hostile review: Theorem 8.1's existence clause and part (i) are one combined statement, parts (ii)/(iii) are on the block eigenvalue lists with the gauge at the block dimension, and Lemma 6.1 is on the source's own two operators.  The DK-6.3-lem source passage is re-pinned because the reconstruction's non-strict leakage inequality was corrected to the strict one the original prints."
           }
         ]
       }
@@ -1627,7 +1627,7 @@
             "type_text_sha256": "f586535ee91aee11e28b7f6b54f8712c96dc4fe243700926d0bfe5396f2237bf",
             "toolchain": "leanprover/lean4:v4.34.0-rc1",
             "pinned_on": "2026-09-06",
-            "note": "Re-pinned 2026-09-07 for the fourth hostile review's source-scope facades: Theorem 8.1 part (i) drops the canonical-branch identity for the printed placement, parts (ii)/(iii) drop the caller-supplied block symmetry, Section 4 takes a given Definition 3.1 direct rotation, Theorem 3.1's converse and Section 6 move to the paper's separable scope, Section 6's separation is the printed interval/exterior one, and Theorem 6.2 carries the source's definedness convention."
+            "note": "Re-pinned 2026-09-07 for the fifth hostile review: Theorem 8.1's existence clause and part (i) are one combined statement, parts (ii)/(iii) are on the block eigenvalue lists with the gauge at the block dimension, and Lemma 6.1 is on the source's own two operators.  The DK-6.3-lem source passage is re-pinned because the reconstruction's non-strict leakage inequality was corrected to the strict one the original prints."
           },
           {
             "declaration": "TauCeti.DavisKahan1970.tanTwoTheta_ambient_unbounded_sourceExact_real",
@@ -1635,7 +1635,7 @@
             "type_text_sha256": "623d4135fee93f972218285c0234cb625626dd7da8cd422d46f63580e81fab70",
             "toolchain": "leanprover/lean4:v4.34.0-rc1",
             "pinned_on": "2026-09-06",
-            "note": "Re-pinned 2026-09-07 for the fourth hostile review's source-scope facades: Theorem 8.1 part (i) drops the canonical-branch identity for the printed placement, parts (ii)/(iii) drop the caller-supplied block symmetry, Section 4 takes a given Definition 3.1 direct rotation, Theorem 3.1's converse and Section 6 move to the paper's separable scope, Section 6's separation is the printed interval/exterior one, and Theorem 6.2 carries the source's definedness convention."
+            "note": "Re-pinned 2026-09-07 for the fifth hostile review: Theorem 8.1's existence clause and part (i) are one combined statement, parts (ii)/(iii) are on the block eigenvalue lists with the gauge at the block dimension, and Lemma 6.1 is on the source's own two operators.  The DK-6.3-lem source passage is re-pinned because the reconstruction's non-strict leakage inequality was corrected to the strict one the original prints."
           },
           {
             "declaration": "TauCeti.DavisKahan1970.tanTwoTheta_directed_unboundedResidual_sourceExact_complex",
@@ -1643,7 +1643,7 @@
             "type_text_sha256": "5f1d1081010598f5e42c625c2c780ed8a231324d3ba7d45b6d7932483b872cec",
             "toolchain": "leanprover/lean4:v4.34.0-rc1",
             "pinned_on": "2026-09-06",
-            "note": "Re-pinned 2026-09-07 for the fourth hostile review's source-scope facades: Theorem 8.1 part (i) drops the canonical-branch identity for the printed placement, parts (ii)/(iii) drop the caller-supplied block symmetry, Section 4 takes a given Definition 3.1 direct rotation, Theorem 3.1's converse and Section 6 move to the paper's separable scope, Section 6's separation is the printed interval/exterior one, and Theorem 6.2 carries the source's definedness convention."
+            "note": "Re-pinned 2026-09-07 for the fifth hostile review: Theorem 8.1's existence clause and part (i) are one combined statement, parts (ii)/(iii) are on the block eigenvalue lists with the gauge at the block dimension, and Lemma 6.1 is on the source's own two operators.  The DK-6.3-lem source passage is re-pinned because the reconstruction's non-strict leakage inequality was corrected to the strict one the original prints."
           },
           {
             "declaration": "TauCeti.DavisKahan1970.tanTwoTheta_directed_unboundedResidual_sourceExact_real",
@@ -1651,7 +1651,7 @@
             "type_text_sha256": "fc410b60172ec02a236fbf16f9c91c63adff840aa6742da403b8b86a7605e437",
             "toolchain": "leanprover/lean4:v4.34.0-rc1",
             "pinned_on": "2026-09-06",
-            "note": "Re-pinned 2026-09-07 for the fourth hostile review's source-scope facades: Theorem 8.1 part (i) drops the canonical-branch identity for the printed placement, parts (ii)/(iii) drop the caller-supplied block symmetry, Section 4 takes a given Definition 3.1 direct rotation, Theorem 3.1's converse and Section 6 move to the paper's separable scope, Section 6's separation is the printed interval/exterior one, and Theorem 6.2 carries the source's definedness convention."
+            "note": "Re-pinned 2026-09-07 for the fifth hostile review: Theorem 8.1's existence clause and part (i) are one combined statement, parts (ii)/(iii) are on the block eigenvalue lists with the gauge at the block dimension, and Lemma 6.1 is on the source's own two operators.  The DK-6.3-lem source passage is re-pinned because the reconstruction's non-strict leakage inequality was corrected to the strict one the original prints."
           },
           {
             "declaration": "TauCeti.DavisKahan1970.approximationNumber_tanTwoDirectedCorner",
@@ -1659,7 +1659,7 @@
             "type_text_sha256": "faacaca01c7838606ca6f2fd1105c0ab424593e9fa1917945da733c279faf72e",
             "toolchain": "leanprover/lean4:v4.34.0-rc1",
             "pinned_on": "2026-09-06",
-            "note": "Re-pinned 2026-09-07 for the fourth hostile review's source-scope facades: Theorem 8.1 part (i) drops the canonical-branch identity for the printed placement, parts (ii)/(iii) drop the caller-supplied block symmetry, Section 4 takes a given Definition 3.1 direct rotation, Theorem 3.1's converse and Section 6 move to the paper's separable scope, Section 6's separation is the printed interval/exterior one, and Theorem 6.2 carries the source's definedness convention."
+            "note": "Re-pinned 2026-09-07 for the fifth hostile review: Theorem 8.1's existence clause and part (i) are one combined statement, parts (ii)/(iii) are on the block eigenvalue lists with the gauge at the block dimension, and Lemma 6.1 is on the source's own two operators.  The DK-6.3-lem source passage is re-pinned because the reconstruction's non-strict leakage inequality was corrected to the strict one the original prints."
           },
           {
             "declaration": "TauCeti.DavisKahan.sinTwoThetaIdealBlock_hasSameApproximationNumbers",
@@ -1667,7 +1667,7 @@
             "type_text_sha256": "fecc178d33f99c2ea216fdf1e00dd425617d89fb9c12e46acda41488c75da61d",
             "toolchain": "leanprover/lean4:v4.34.0-rc1",
             "pinned_on": "2026-09-06",
-            "note": "Re-pinned 2026-09-07 for the fourth hostile review's source-scope facades: Theorem 8.1 part (i) drops the canonical-branch identity for the printed placement, parts (ii)/(iii) drop the caller-supplied block symmetry, Section 4 takes a given Definition 3.1 direct rotation, Theorem 3.1's converse and Section 6 move to the paper's separable scope, Section 6's separation is the printed interval/exterior one, and Theorem 6.2 carries the source's definedness convention."
+            "note": "Re-pinned 2026-09-07 for the fifth hostile review: Theorem 8.1's existence clause and part (i) are one combined statement, parts (ii)/(iii) are on the block eigenvalue lists with the gauge at the block dimension, and Lemma 6.1 is on the source's own two operators.  The DK-6.3-lem source passage is re-pinned because the reconstruction's non-strict leakage inequality was corrected to the strict one the original prints."
           },
           {
             "declaration": "TauCeti.DavisKahan1970.approximationNumber_tanTwoDirectedCornerR",
@@ -1675,7 +1675,7 @@
             "type_text_sha256": "33893c7d2b382aadc3ccd94ad536a5794459e5b91ce03f09b342e19d6673e8b2",
             "toolchain": "leanprover/lean4:v4.34.0-rc1",
             "pinned_on": "2026-09-06",
-            "note": "Re-pinned 2026-09-07 for the fourth hostile review's source-scope facades: Theorem 8.1 part (i) drops the canonical-branch identity for the printed placement, parts (ii)/(iii) drop the caller-supplied block symmetry, Section 4 takes a given Definition 3.1 direct rotation, Theorem 3.1's converse and Section 6 move to the paper's separable scope, Section 6's separation is the printed interval/exterior one, and Theorem 6.2 carries the source's definedness convention."
+            "note": "Re-pinned 2026-09-07 for the fifth hostile review: Theorem 8.1's existence clause and part (i) are one combined statement, parts (ii)/(iii) are on the block eigenvalue lists with the gauge at the block dimension, and Lemma 6.1 is on the source's own two operators.  The DK-6.3-lem source passage is re-pinned because the reconstruction's non-strict leakage inequality was corrected to the strict one the original prints."
           },
           {
             "declaration": "TauCeti.DavisKahan.ReflectionIntertwines.ofReducesSubspace",
@@ -1683,7 +1683,7 @@
             "type_text_sha256": "8d2ef442626ee31d0c1e6826f745d24de799e3f213d1ed648d643fc0d3376761",
             "toolchain": "leanprover/lean4:v4.34.0-rc1",
             "pinned_on": "2026-09-06",
-            "note": "Re-pinned 2026-09-07 for the fourth hostile review's source-scope facades: Theorem 8.1 part (i) drops the canonical-branch identity for the printed placement, parts (ii)/(iii) drop the caller-supplied block symmetry, Section 4 takes a given Definition 3.1 direct rotation, Theorem 3.1's converse and Section 6 move to the paper's separable scope, Section 6's separation is the printed interval/exterior one, and Theorem 6.2 carries the source's definedness convention."
+            "note": "Re-pinned 2026-09-07 for the fifth hostile review: Theorem 8.1's existence clause and part (i) are one combined statement, parts (ii)/(iii) are on the block eigenvalue lists with the gauge at the block dimension, and Lemma 6.1 is on the source's own two operators.  The DK-6.3-lem source passage is re-pinned because the reconstruction's non-strict leakage inequality was corrected to the strict one the original prints."
           },
           {
             "declaration": "TauCeti.DavisKahan1970.reflectionTangentCorner_reflection_eq_tanTwoBlockCompression",
@@ -1691,7 +1691,7 @@
             "type_text_sha256": "3ba654bebf34db64df3da7e3f19a0aeeb68ea1216164d969fa2fed61d2a61410",
             "toolchain": "leanprover/lean4:v4.34.0-rc1",
             "pinned_on": "2026-09-06",
-            "note": "Re-pinned 2026-09-07 for the fourth hostile review's source-scope facades: Theorem 8.1 part (i) drops the canonical-branch identity for the printed placement, parts (ii)/(iii) drop the caller-supplied block symmetry, Section 4 takes a given Definition 3.1 direct rotation, Theorem 3.1's converse and Section 6 move to the paper's separable scope, Section 6's separation is the printed interval/exterior one, and Theorem 6.2 carries the source's definedness convention."
+            "note": "Re-pinned 2026-09-07 for the fifth hostile review: Theorem 8.1's existence clause and part (i) are one combined statement, parts (ii)/(iii) are on the block eigenvalue lists with the gauge at the block dimension, and Lemma 6.1 is on the source's own two operators.  The DK-6.3-lem source passage is re-pinned because the reconstruction's non-strict leakage inequality was corrected to the strict one the original prints."
           },
           {
             "declaration": "TauCeti.DavisKahan1970.blockCompression_diagonalPair",
@@ -1699,7 +1699,7 @@
             "type_text_sha256": "b4535300953e53bc0c4fae8868432b1f17e1bb42d575306532a777fda9b797e3",
             "toolchain": "leanprover/lean4:v4.34.0-rc1",
             "pinned_on": "2026-09-06",
-            "note": "Re-pinned 2026-09-07 for the fourth hostile review's source-scope facades: Theorem 8.1 part (i) drops the canonical-branch identity for the printed placement, parts (ii)/(iii) drop the caller-supplied block symmetry, Section 4 takes a given Definition 3.1 direct rotation, Theorem 3.1's converse and Section 6 move to the paper's separable scope, Section 6's separation is the printed interval/exterior one, and Theorem 6.2 carries the source's definedness convention."
+            "note": "Re-pinned 2026-09-07 for the fifth hostile review: Theorem 8.1's existence clause and part (i) are one combined statement, parts (ii)/(iii) are on the block eigenvalue lists with the gauge at the block dimension, and Lemma 6.1 is on the source's own two operators.  The DK-6.3-lem source passage is re-pinned because the reconstruction's non-strict leakage inequality was corrected to the strict one the original prints."
           },
           {
             "declaration": "TauCeti.DavisKahan1970.mem_projectionBlock_iff_mem_blockCompression",
@@ -1707,7 +1707,7 @@
             "type_text_sha256": "fde1c4bfceeb5915d1d9f704fb34cf5d19aa9be602d217a78176dcfb117c3956",
             "toolchain": "leanprover/lean4:v4.34.0-rc1",
             "pinned_on": "2026-09-06",
-            "note": "Re-pinned 2026-09-07 for the fourth hostile review's source-scope facades: Theorem 8.1 part (i) drops the canonical-branch identity for the printed placement, parts (ii)/(iii) drop the caller-supplied block symmetry, Section 4 takes a given Definition 3.1 direct rotation, Theorem 3.1's converse and Section 6 move to the paper's separable scope, Section 6's separation is the printed interval/exterior one, and Theorem 6.2 carries the source's definedness convention."
+            "note": "Re-pinned 2026-09-07 for the fifth hostile review: Theorem 8.1's existence clause and part (i) are one combined statement, parts (ii)/(iii) are on the block eigenvalue lists with the gauge at the block dimension, and Lemma 6.1 is on the source's own two operators.  The DK-6.3-lem source passage is re-pinned because the reconstruction's non-strict leakage inequality was corrected to the strict one the original prints."
           },
           {
             "declaration": "TauCeti.DavisKahan1970.gauge_projectionBlock_eq_blockCompression",
@@ -1715,7 +1715,7 @@
             "type_text_sha256": "05cf84a146eddcca7392b73e2e88b08d6c396ad4f8db8f87bd11c62b0cc30cdb",
             "toolchain": "leanprover/lean4:v4.34.0-rc1",
             "pinned_on": "2026-09-06",
-            "note": "Re-pinned 2026-09-07 for the fourth hostile review's source-scope facades: Theorem 8.1 part (i) drops the canonical-branch identity for the printed placement, parts (ii)/(iii) drop the caller-supplied block symmetry, Section 4 takes a given Definition 3.1 direct rotation, Theorem 3.1's converse and Section 6 move to the paper's separable scope, Section 6's separation is the printed interval/exterior one, and Theorem 6.2 carries the source's definedness convention."
+            "note": "Re-pinned 2026-09-07 for the fifth hostile review: Theorem 8.1's existence clause and part (i) are one combined statement, parts (ii)/(iii) are on the block eigenvalue lists with the gauge at the block dimension, and Lemma 6.1 is on the source's own two operators.  The DK-6.3-lem source passage is re-pinned because the reconstruction's non-strict leakage inequality was corrected to the strict one the original prints."
           },
           {
             "declaration": "TauCeti.LinearPMap.isSelfAdjoint_complexifyReal",
@@ -1723,7 +1723,7 @@
             "type_text_sha256": "54470d3f97383c71a25f48003bcf03649c56b728debe491b5a81f6f5eb7c38bc",
             "toolchain": "leanprover/lean4:v4.34.0-rc1",
             "pinned_on": "2026-09-06",
-            "note": "Re-pinned 2026-09-07 for the fourth hostile review's source-scope facades: Theorem 8.1 part (i) drops the canonical-branch identity for the printed placement, parts (ii)/(iii) drop the caller-supplied block symmetry, Section 4 takes a given Definition 3.1 direct rotation, Theorem 3.1's converse and Section 6 move to the paper's separable scope, Section 6's separation is the printed interval/exterior one, and Theorem 6.2 carries the source's definedness convention."
+            "note": "Re-pinned 2026-09-07 for the fifth hostile review: Theorem 8.1's existence clause and part (i) are one combined statement, parts (ii)/(iii) are on the block eigenvalue lists with the gauge at the block dimension, and Lemma 6.1 is on the source's own two operators.  The DK-6.3-lem source passage is re-pinned because the reconstruction's non-strict leakage inequality was corrected to the strict one the original prints."
           },
           {
             "declaration": "TauCeti.DavisKahan1970.reducesSubspace_complexifyReal",
@@ -1731,7 +1731,7 @@
             "type_text_sha256": "187cbdbede605aa77cf613da2914cb976b5421423bcb07fb6d4c94da4f2ed12e",
             "toolchain": "leanprover/lean4:v4.34.0-rc1",
             "pinned_on": "2026-09-06",
-            "note": "Re-pinned 2026-09-07 for the fourth hostile review's source-scope facades: Theorem 8.1 part (i) drops the canonical-branch identity for the printed placement, parts (ii)/(iii) drop the caller-supplied block symmetry, Section 4 takes a given Definition 3.1 direct rotation, Theorem 3.1's converse and Section 6 move to the paper's separable scope, Section 6's separation is the printed interval/exterior one, and Theorem 6.2 carries the source's definedness convention."
+            "note": "Re-pinned 2026-09-07 for the fifth hostile review: Theorem 8.1's existence clause and part (i) are one combined statement, parts (ii)/(iii) are on the block eigenvalue lists with the gauge at the block dimension, and Lemma 6.1 is on the source's own two operators.  The DK-6.3-lem source passage is re-pinned because the reconstruction's non-strict leakage inequality was corrected to the strict one the original prints."
           },
           {
             "declaration": "TauCeti.DavisKahan1970.isOddFor_complexifySubmodule",
@@ -1739,7 +1739,7 @@
             "type_text_sha256": "d10b78dd6ab3dc042895ddf0827e03d83cdc0a970477691750f2c266e989ee68",
             "toolchain": "leanprover/lean4:v4.34.0-rc1",
             "pinned_on": "2026-09-06",
-            "note": "Re-pinned 2026-09-07 for the fourth hostile review's source-scope facades: Theorem 8.1 part (i) drops the canonical-branch identity for the printed placement, parts (ii)/(iii) drop the caller-supplied block symmetry, Section 4 takes a given Definition 3.1 direct rotation, Theorem 3.1's converse and Section 6 move to the paper's separable scope, Section 6's separation is the printed interval/exterior one, and Theorem 6.2 carries the source's definedness convention."
+            "note": "Re-pinned 2026-09-07 for the fifth hostile review: Theorem 8.1's existence clause and part (i) are one combined statement, parts (ii)/(iii) are on the block eigenvalue lists with the gauge at the block dimension, and Lemma 6.1 is on the source's own two operators.  The DK-6.3-lem source passage is re-pinned because the reconstruction's non-strict leakage inequality was corrected to the strict one the original prints."
           },
           {
             "declaration": "TauCeti.DavisKahan1970.reducesSubspace_addBounded_complexifyReal",
@@ -1747,7 +1747,7 @@
             "type_text_sha256": "44d09d3d19e3b8357a86df24c0dea4aae67ea0acb47698b7e8191b6ff6f1a45e",
             "toolchain": "leanprover/lean4:v4.34.0-rc1",
             "pinned_on": "2026-09-06",
-            "note": "Re-pinned 2026-09-07 for the fourth hostile review's source-scope facades: Theorem 8.1 part (i) drops the canonical-branch identity for the printed placement, parts (ii)/(iii) drop the caller-supplied block symmetry, Section 4 takes a given Definition 3.1 direct rotation, Theorem 3.1's converse and Section 6 move to the paper's separable scope, Section 6's separation is the printed interval/exterior one, and Theorem 6.2 carries the source's definedness convention."
+            "note": "Re-pinned 2026-09-07 for the fifth hostile review: Theorem 8.1's existence clause and part (i) are one combined statement, parts (ii)/(iii) are on the block eigenvalue lists with the gauge at the block dimension, and Lemma 6.1 is on the source's own two operators.  The DK-6.3-lem source passage is re-pinned because the reconstruction's non-strict leakage inequality was corrected to the strict one the original prints."
           },
           {
             "declaration": "TauCeti.DavisKahan1970.re_inner_complexifyReal_le_of_forall_mem",
@@ -1755,7 +1755,7 @@
             "type_text_sha256": "ab74c79e1ef90153b835b63231295344de25e67b1359c3967f8ae913b51f89d7",
             "toolchain": "leanprover/lean4:v4.34.0-rc1",
             "pinned_on": "2026-09-06",
-            "note": "Re-pinned 2026-09-07 for the fourth hostile review's source-scope facades: Theorem 8.1 part (i) drops the canonical-branch identity for the printed placement, parts (ii)/(iii) drop the caller-supplied block symmetry, Section 4 takes a given Definition 3.1 direct rotation, Theorem 3.1's converse and Section 6 move to the paper's separable scope, Section 6's separation is the printed interval/exterior one, and Theorem 6.2 carries the source's definedness convention."
+            "note": "Re-pinned 2026-09-07 for the fifth hostile review: Theorem 8.1's existence clause and part (i) are one combined statement, parts (ii)/(iii) are on the block eigenvalue lists with the gauge at the block dimension, and Lemma 6.1 is on the source's own two operators.  The DK-6.3-lem source passage is re-pinned because the reconstruction's non-strict leakage inequality was corrected to the strict one the original prints."
           },
           {
             "declaration": "TauCeti.DavisKahan1970.le_re_inner_complexifyReal_of_forall_mem_orthogonal",
@@ -1763,7 +1763,7 @@
             "type_text_sha256": "3cbabb21e29759369d1a90ee364ca539c7a898a3c29edb79abfedf96b0b6a9c7",
             "toolchain": "leanprover/lean4:v4.34.0-rc1",
             "pinned_on": "2026-09-06",
-            "note": "Re-pinned 2026-09-07 for the fourth hostile review's source-scope facades: Theorem 8.1 part (i) drops the canonical-branch identity for the printed placement, parts (ii)/(iii) drop the caller-supplied block symmetry, Section 4 takes a given Definition 3.1 direct rotation, Theorem 3.1's converse and Section 6 move to the paper's separable scope, Section 6's separation is the printed interval/exterior one, and Theorem 6.2 carries the source's definedness convention."
+            "note": "Re-pinned 2026-09-07 for the fifth hostile review: Theorem 8.1's existence clause and part (i) are one combined statement, parts (ii)/(iii) are on the block eigenvalue lists with the gauge at the block dimension, and Lemma 6.1 is on the source's own two operators.  The DK-6.3-lem source passage is re-pinned because the reconstruction's non-strict leakage inequality was corrected to the strict one the original prints."
           },
           {
             "declaration": "TauCeti.DavisKahan1970.projectionBlock_complexifySubmodule",
@@ -1771,7 +1771,7 @@
             "type_text_sha256": "60257b271040c8196b483f46cb87f3b6e3752e71e855ceaa8d362bc892a90243",
             "toolchain": "leanprover/lean4:v4.34.0-rc1",
             "pinned_on": "2026-09-06",
-            "note": "Re-pinned 2026-09-07 for the fourth hostile review's source-scope facades: Theorem 8.1 part (i) drops the canonical-branch identity for the printed placement, parts (ii)/(iii) drop the caller-supplied block symmetry, Section 4 takes a given Definition 3.1 direct rotation, Theorem 3.1's converse and Section 6 move to the paper's separable scope, Section 6's separation is the printed interval/exterior one, and Theorem 6.2 carries the source's definedness convention."
+            "note": "Re-pinned 2026-09-07 for the fifth hostile review: Theorem 8.1's existence clause and part (i) are one combined statement, parts (ii)/(iii) are on the block eigenvalue lists with the gauge at the block dimension, and Lemma 6.1 is on the source's own two operators.  The DK-6.3-lem source passage is re-pinned because the reconstruction's non-strict leakage inequality was corrected to the strict one the original prints."
           },
           {
             "declaration": "TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction.mem_complexify_iff",
@@ -1779,7 +1779,7 @@
             "type_text_sha256": "259e93c43f775e37e0dbd2e410aecc0c93da31b6626d35e881f6be9128479905",
             "toolchain": "leanprover/lean4:v4.34.0-rc1",
             "pinned_on": "2026-09-06",
-            "note": "Re-pinned 2026-09-07 for the fourth hostile review's source-scope facades: Theorem 8.1 part (i) drops the canonical-branch identity for the printed placement, parts (ii)/(iii) drop the caller-supplied block symmetry, Section 4 takes a given Definition 3.1 direct rotation, Theorem 3.1's converse and Section 6 move to the paper's separable scope, Section 6's separation is the printed interval/exterior one, and Theorem 6.2 carries the source's definedness convention."
+            "note": "Re-pinned 2026-09-07 for the fifth hostile review: Theorem 8.1's existence clause and part (i) are one combined statement, parts (ii)/(iii) are on the block eigenvalue lists with the gauge at the block dimension, and Lemma 6.1 is on the source's own two operators.  The DK-6.3-lem source passage is re-pinned because the reconstruction's non-strict leakage inequality was corrected to the strict one the original prints."
           },
           {
             "declaration": "TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction.gauge_complexify",
@@ -1787,7 +1787,7 @@
             "type_text_sha256": "24c0cd97d19319a8a83ffc0f924bd2601ed46e9e678b3bb45a588e4a6cc66dfd",
             "toolchain": "leanprover/lean4:v4.34.0-rc1",
             "pinned_on": "2026-09-06",
-            "note": "Re-pinned 2026-09-07 for the fourth hostile review's source-scope facades: Theorem 8.1 part (i) drops the canonical-branch identity for the printed placement, parts (ii)/(iii) drop the caller-supplied block symmetry, Section 4 takes a given Definition 3.1 direct rotation, Theorem 3.1's converse and Section 6 move to the paper's separable scope, Section 6's separation is the printed interval/exterior one, and Theorem 6.2 carries the source's definedness convention."
+            "note": "Re-pinned 2026-09-07 for the fifth hostile review: Theorem 8.1's existence clause and part (i) are one combined statement, parts (ii)/(iii) are on the block eigenvalue lists with the gauge at the block dimension, and Lemma 6.1 is on the source's own two operators.  The DK-6.3-lem source passage is re-pinned because the reconstruction's non-strict leakage inequality was corrected to the strict one the original prints."
           },
           {
             "declaration": "TauCeti.DavisKahan.complexify_sinTwoThetaIdealBlock",
@@ -1795,7 +1795,7 @@
             "type_text_sha256": "e35bbfcf6c91f5fc2c55e79571e96058f4c8756b651e1c6acc3d6b62bba46486",
             "toolchain": "leanprover/lean4:v4.34.0-rc1",
             "pinned_on": "2026-09-06",
-            "note": "Re-pinned 2026-09-07 for the fourth hostile review's source-scope facades: Theorem 8.1 part (i) drops the canonical-branch identity for the printed placement, parts (ii)/(iii) drop the caller-supplied block symmetry, Section 4 takes a given Definition 3.1 direct rotation, Theorem 3.1's converse and Section 6 move to the paper's separable scope, Section 6's separation is the printed interval/exterior one, and Theorem 6.2 carries the source's definedness convention."
+            "note": "Re-pinned 2026-09-07 for the fifth hostile review: Theorem 8.1's existence clause and part (i) are one combined statement, parts (ii)/(iii) are on the block eigenvalue lists with the gauge at the block dimension, and Lemma 6.1 is on the source's own two operators.  The DK-6.3-lem source passage is re-pinned because the reconstruction's non-strict leakage inequality was corrected to the strict one the original prints."
           },
           {
             "declaration": "TauCeti.DavisKahan.ExactSinTheta.ComplexificationApproximation.approximationSingularValue_complexify",
@@ -1803,7 +1803,7 @@
             "type_text_sha256": "78b15076246648285343fdcff51a4e8da02ef99f6ff256e1526eed75254837c9",
             "toolchain": "leanprover/lean4:v4.34.0-rc1",
             "pinned_on": "2026-09-06",
-            "note": "Re-pinned 2026-09-07 for the fourth hostile review's source-scope facades: Theorem 8.1 part (i) drops the canonical-branch identity for the printed placement, parts (ii)/(iii) drop the caller-supplied block symmetry, Section 4 takes a given Definition 3.1 direct rotation, Theorem 3.1's converse and Section 6 move to the paper's separable scope, Section 6's separation is the printed interval/exterior one, and Theorem 6.2 carries the source's definedness convention."
+            "note": "Re-pinned 2026-09-07 for the fifth hostile review: Theorem 8.1's existence clause and part (i) are one combined statement, parts (ii)/(iii) are on the block eigenvalue lists with the gauge at the block dimension, and Lemma 6.1 is on the source's own two operators.  The DK-6.3-lem source passage is re-pinned because the reconstruction's non-strict leakage inequality was corrected to the strict one the original prints."
           },
           {
             "declaration": "TauCeti.DavisKahan1970.norm_offDiagonalPart_reflectionOperator_complexifySubmodule",
@@ -1811,7 +1811,7 @@
             "type_text_sha256": "27324753faaa3aa44d600dda7ce0221728eddd5931a46e3065bc3e69bbccfe35",
             "toolchain": "leanprover/lean4:v4.34.0-rc1",
             "pinned_on": "2026-09-06",
-            "note": "Re-pinned 2026-09-07 for the fourth hostile review's source-scope facades: Theorem 8.1 part (i) drops the canonical-branch identity for the printed placement, parts (ii)/(iii) drop the caller-supplied block symmetry, Section 4 takes a given Definition 3.1 direct rotation, Theorem 3.1's converse and Section 6 move to the paper's separable scope, Section 6's separation is the printed interval/exterior one, and Theorem 6.2 carries the source's definedness convention."
+            "note": "Re-pinned 2026-09-07 for the fifth hostile review: Theorem 8.1's existence clause and part (i) are one combined statement, parts (ii)/(iii) are on the block eigenvalue lists with the gauge at the block dimension, and Lemma 6.1 is on the source's own two operators.  The DK-6.3-lem source passage is re-pinned because the reconstruction's non-strict leakage inequality was corrected to the strict one the original prints."
           }
         ],
         "source_fragments": [
@@ -1855,8 +1855,8 @@
               "result": "Section 2, fourth unnumbered theorem"
             },
             "visibility": "public_reconstruction",
-            "pinned_on": "2026-09-04",
-            "note": "Pinned 2026-09-04 with the seven Section 3-8 major reviews: their declarations and the passages they cite are now guarded like the four Section 2 headline rows."
+            "pinned_on": "2026-09-06",
+            "note": "Re-pinned 2026-09-07 for the fifth hostile review: Theorem 8.1's existence clause and part (i) are one combined statement, parts (ii)/(iii) are on the block eigenvalue lists with the gauge at the block dimension, and Lemma 6.1 is on the source's own two operators.  The DK-6.3-lem source passage is re-pinned because the reconstruction's non-strict leakage inequality was corrected to the strict one the original prints."
           },
           {
             "fragment": "ui-norms",
@@ -1874,8 +1874,8 @@
               "result": "Unitary-invariant norms and singular values"
             },
             "visibility": "public_reconstruction",
-            "pinned_on": "2026-09-04",
-            "note": "Pinned 2026-09-04 with the seven Section 3-8 major reviews: their declarations and the passages they cite are now guarded like the four Section 2 headline rows."
+            "pinned_on": "2026-09-06",
+            "note": "Re-pinned 2026-09-07 for the fifth hostile review: Theorem 8.1's existence clause and part (i) are one combined statement, parts (ii)/(iii) are on the block eigenvalue lists with the gauge at the block dimension, and Lemma 6.1 is on the source's own two operators.  The DK-6.3-lem source passage is re-pinned because the reconstruction's non-strict leakage inequality was corrected to the strict one the original prints."
           }
         ]
       }
@@ -2641,7 +2641,7 @@
             "type_text_sha256": "c1b604d432afc8a1c8f96711575630a7112f9bb963bb4af1ed5d55231d5ae4cb",
             "toolchain": "leanprover/lean4:v4.34.0-rc1",
             "pinned_on": "2026-09-06",
-            "note": "Re-pinned 2026-09-07 for the fourth hostile review's source-scope facades: Theorem 8.1 part (i) drops the canonical-branch identity for the printed placement, parts (ii)/(iii) drop the caller-supplied block symmetry, Section 4 takes a given Definition 3.1 direct rotation, Theorem 3.1's converse and Section 6 move to the paper's separable scope, Section 6's separation is the printed interval/exterior one, and Theorem 6.2 carries the source's definedness convention."
+            "note": "Re-pinned 2026-09-07 for the fifth hostile review: Theorem 8.1's existence clause and part (i) are one combined statement, parts (ii)/(iii) are on the block eigenvalue lists with the gauge at the block dimension, and Lemma 6.1 is on the source's own two operators.  The DK-6.3-lem source passage is re-pinned because the reconstruction's non-strict leakage inequality was corrected to the strict one the original prints."
           },
           {
             "declaration": "TauCeti.DavisKahan1970.theorem3_1_spectralMultiplicity_classification_sourceAngle_real",
@@ -2649,7 +2649,7 @@
             "type_text_sha256": "d3139ea22f123a5d3b12d1b818cdf8bef91ddbed1d5122894e6da7c18a5b744b",
             "toolchain": "leanprover/lean4:v4.34.0-rc1",
             "pinned_on": "2026-09-06",
-            "note": "Re-pinned 2026-09-07 for the fourth hostile review's source-scope facades: Theorem 8.1 part (i) drops the canonical-branch identity for the printed placement, parts (ii)/(iii) drop the caller-supplied block symmetry, Section 4 takes a given Definition 3.1 direct rotation, Theorem 3.1's converse and Section 6 move to the paper's separable scope, Section 6's separation is the printed interval/exterior one, and Theorem 6.2 carries the source's definedness convention."
+            "note": "Re-pinned 2026-09-07 for the fifth hostile review: Theorem 8.1's existence clause and part (i) are one combined statement, parts (ii)/(iii) are on the block eigenvalue lists with the gauge at the block dimension, and Lemma 6.1 is on the source's own two operators.  The DK-6.3-lem source passage is re-pinned because the reconstruction's non-strict leakage inequality was corrected to the strict one the original prints."
           },
           {
             "declaration": "TauCeti.DavisKahan1970.theorem3_1_realization_sourceExact_complex",
@@ -2657,7 +2657,7 @@
             "type_text_sha256": "508ed49d2f38a0a97761615dbe684d7657926e84fda45dc0517d4f59bcdb1dcf",
             "toolchain": "leanprover/lean4:v4.34.0-rc1",
             "pinned_on": "2026-09-06",
-            "note": "Re-pinned 2026-09-07 for the fourth hostile review's source-scope facades: Theorem 8.1 part (i) drops the canonical-branch identity for the printed placement, parts (ii)/(iii) drop the caller-supplied block symmetry, Section 4 takes a given Definition 3.1 direct rotation, Theorem 3.1's converse and Section 6 move to the paper's separable scope, Section 6's separation is the printed interval/exterior one, and Theorem 6.2 carries the source's definedness convention."
+            "note": "Re-pinned 2026-09-07 for the fifth hostile review: Theorem 8.1's existence clause and part (i) are one combined statement, parts (ii)/(iii) are on the block eigenvalue lists with the gauge at the block dimension, and Lemma 6.1 is on the source's own two operators.  The DK-6.3-lem source passage is re-pinned because the reconstruction's non-strict leakage inequality was corrected to the strict one the original prints."
           },
           {
             "declaration": "TauCeti.DavisKahan1970.theorem3_1_realization_sourceExact_real",
@@ -2665,7 +2665,7 @@
             "type_text_sha256": "c900cb60f3a61d15bd225a69896a6b0c8efde8d1beef960109fc387bcd19d4ac",
             "toolchain": "leanprover/lean4:v4.34.0-rc1",
             "pinned_on": "2026-09-06",
-            "note": "Re-pinned 2026-09-07 for the fourth hostile review's source-scope facades: Theorem 8.1 part (i) drops the canonical-branch identity for the printed placement, parts (ii)/(iii) drop the caller-supplied block symmetry, Section 4 takes a given Definition 3.1 direct rotation, Theorem 3.1's converse and Section 6 move to the paper's separable scope, Section 6's separation is the printed interval/exterior one, and Theorem 6.2 carries the source's definedness convention."
+            "note": "Re-pinned 2026-09-07 for the fifth hostile review: Theorem 8.1's existence clause and part (i) are one combined statement, parts (ii)/(iii) are on the block eigenvalue lists with the gauge at the block dimension, and Lemma 6.1 is on the source's own two operators.  The DK-6.3-lem source passage is re-pinned because the reconstruction's non-strict leakage inequality was corrected to the strict one the original prints."
           },
           {
             "declaration": "TauCeti.DavisKahan.HalmosAngleDatum.starProjection_targetSubspace_apply",
@@ -2673,7 +2673,7 @@
             "type_text_sha256": "8c27236802cc41d18b8784c74cb16be28914099455cad364bef762b437d14919",
             "toolchain": "leanprover/lean4:v4.34.0-rc1",
             "pinned_on": "2026-09-06",
-            "note": "Re-pinned 2026-09-07 for the fourth hostile review's source-scope facades: Theorem 8.1 part (i) drops the canonical-branch identity for the printed placement, parts (ii)/(iii) drop the caller-supplied block symmetry, Section 4 takes a given Definition 3.1 direct rotation, Theorem 3.1's converse and Section 6 move to the paper's separable scope, Section 6's separation is the printed interval/exterior one, and Theorem 6.2 carries the source's definedness convention."
+            "note": "Re-pinned 2026-09-07 for the fifth hostile review: Theorem 8.1's existence clause and part (i) are one combined statement, parts (ii)/(iii) are on the block eigenvalue lists with the gauge at the block dimension, and Lemma 6.1 is on the source's own two operators.  The DK-6.3-lem source passage is re-pinned because the reconstruction's non-strict leakage inequality was corrected to the strict one the original prints."
           },
           {
             "declaration": "TauCeti.DavisKahan1970.twoProjection_operator_classification",
@@ -2681,7 +2681,7 @@
             "type_text_sha256": "ee83cf099f6f99ea1b03687420b33d387403aae535af38f3552a21b21ba18f75",
             "toolchain": "leanprover/lean4:v4.34.0-rc1",
             "pinned_on": "2026-09-06",
-            "note": "Re-pinned 2026-09-07 for the fourth hostile review's source-scope facades: Theorem 8.1 part (i) drops the canonical-branch identity for the printed placement, parts (ii)/(iii) drop the caller-supplied block symmetry, Section 4 takes a given Definition 3.1 direct rotation, Theorem 3.1's converse and Section 6 move to the paper's separable scope, Section 6's separation is the printed interval/exterior one, and Theorem 6.2 carries the source's definedness convention."
+            "note": "Re-pinned 2026-09-07 for the fifth hostile review: Theorem 8.1's existence clause and part (i) are one combined statement, parts (ii)/(iii) are on the block eigenvalue lists with the gauge at the block dimension, and Lemma 6.1 is on the source's own two operators.  The DK-6.3-lem source passage is re-pinned because the reconstruction's non-strict leakage inequality was corrected to the strict one the original prints."
           },
           {
             "declaration": "TauCeti.DavisKahan.pairOfSubspacesUnitaryEquivalent_iff_sameHalmosCosineBlockInvariant",
@@ -2689,7 +2689,7 @@
             "type_text_sha256": "5445221df4cdcb0b0a1ec030b23b8b37e75c699bd26c28224ed8324253e2a744",
             "toolchain": "leanprover/lean4:v4.34.0-rc1",
             "pinned_on": "2026-09-06",
-            "note": "Re-pinned 2026-09-07 for the fourth hostile review's source-scope facades: Theorem 8.1 part (i) drops the canonical-branch identity for the printed placement, parts (ii)/(iii) drop the caller-supplied block symmetry, Section 4 takes a given Definition 3.1 direct rotation, Theorem 3.1's converse and Section 6 move to the paper's separable scope, Section 6's separation is the printed interval/exterior one, and Theorem 6.2 carries the source's definedness convention."
+            "note": "Re-pinned 2026-09-07 for the fifth hostile review: Theorem 8.1's existence clause and part (i) are one combined statement, parts (ii)/(iii) are on the block eigenvalue lists with the gauge at the block dimension, and Lemma 6.1 is on the source's own two operators.  The DK-6.3-lem source passage is re-pinned because the reconstruction's non-strict leakage inequality was corrected to the strict one the original prints."
           }
         ],
         "source_pins": [
@@ -2709,8 +2709,8 @@
               "result": "Theorem 3.1"
             },
             "visibility": "public_reconstruction",
-            "pinned_on": "2026-09-04",
-            "note": "Pinned 2026-09-04 with the seven Section 3-8 major reviews: their declarations and the passages they cite are now guarded like the four Section 2 headline rows."
+            "pinned_on": "2026-09-06",
+            "note": "Re-pinned 2026-09-07 for the fifth hostile review: Theorem 8.1's existence clause and part (i) are one combined statement, parts (ii)/(iii) are on the block eigenvalue lists with the gauge at the block dimension, and Lemma 6.1 is on the source's own two operators.  The DK-6.3-lem source passage is re-pinned because the reconstruction's non-strict leakage inequality was corrected to the strict one the original prints."
           },
           {
             "fragment": "angle-operators",
@@ -2728,8 +2728,8 @@
               "result": "Unitary-invariant norms, angle operators and the direct-rotation setup"
             },
             "visibility": "public_reconstruction",
-            "pinned_on": "2026-09-04",
-            "note": "Pinned 2026-09-04 with the seven Section 3-8 major reviews: their declarations and the passages they cite are now guarded like the four Section 2 headline rows."
+            "pinned_on": "2026-09-06",
+            "note": "Re-pinned 2026-09-07 for the fifth hostile review: Theorem 8.1's existence clause and part (i) are one combined statement, parts (ii)/(iii) are on the block eigenvalue lists with the gauge at the block dimension, and Lemma 6.1 is on the source's own two operators.  The DK-6.3-lem source passage is re-pinned because the reconstruction's non-strict leakage inequality was corrected to the strict one the original prints."
           },
           {
             "fragment": "ambient",
@@ -2747,8 +2747,8 @@
               "result": "Section 1, equations (1.1)--(1.8)"
             },
             "visibility": "public_reconstruction",
-            "pinned_on": "2026-09-04",
-            "note": "Pinned 2026-09-04 with the seven Section 3-8 major reviews: their declarations and the passages they cite are now guarded like the four Section 2 headline rows."
+            "pinned_on": "2026-09-06",
+            "note": "Re-pinned 2026-09-07 for the fifth hostile review: Theorem 8.1's existence clause and part (i) are one combined statement, parts (ii)/(iii) are on the block eigenvalue lists with the gauge at the block dimension, and Lemma 6.1 is on the source's own two operators.  The DK-6.3-lem source passage is re-pinned because the reconstruction's non-strict leakage inequality was corrected to the strict one the original prints."
           },
           {
             "fragment": "compact-corollary",
@@ -2766,8 +2766,8 @@
               "result": "Corollary 3.1"
             },
             "visibility": "public_reconstruction",
-            "pinned_on": "2026-09-04",
-            "note": "Pinned 2026-09-04 with the seven Section 3-8 major reviews: their declarations and the passages they cite are now guarded like the four Section 2 headline rows."
+            "pinned_on": "2026-09-06",
+            "note": "Re-pinned 2026-09-07 for the fifth hostile review: Theorem 8.1's existence clause and part (i) are one combined statement, parts (ii)/(iii) are on the block eigenvalue lists with the gauge at the block dimension, and Lemma 6.1 is on the source's own two operators.  The DK-6.3-lem source passage is re-pinned because the reconstruction's non-strict leakage inequality was corrected to the strict one the original prints."
           }
         ]
       }
@@ -3365,7 +3365,7 @@
             "type_text_sha256": "0d5ad1e17d5f349f478c26aa92a525829f6267372ae4de23d6a4a42762ac3058",
             "toolchain": "leanprover/lean4:v4.34.0-rc1",
             "pinned_on": "2026-09-06",
-            "note": "Re-pinned 2026-09-07 for the fourth hostile review's source-scope facades: Theorem 8.1 part (i) drops the canonical-branch identity for the printed placement, parts (ii)/(iii) drop the caller-supplied block symmetry, Section 4 takes a given Definition 3.1 direct rotation, Theorem 3.1's converse and Section 6 move to the paper's separable scope, Section 6's separation is the printed interval/exterior one, and Theorem 6.2 carries the source's definedness convention."
+            "note": "Re-pinned 2026-09-07 for the fifth hostile review: Theorem 8.1's existence clause and part (i) are one combined statement, parts (ii)/(iii) are on the block eigenvalue lists with the gauge at the block dimension, and Lemma 6.1 is on the source's own two operators.  The DK-6.3-lem source passage is re-pinned because the reconstruction's non-strict leakage inequality was corrected to the strict one the original prints."
           },
           {
             "declaration": "TauCeti.DavisKahan1970.proposition4_3_directRotation_sourceExact_real",
@@ -3373,7 +3373,7 @@
             "type_text_sha256": "c380711bddbc1715e5592ca02e57d05c6b0e8637ed07e59f0757ce9505a8850a",
             "toolchain": "leanprover/lean4:v4.34.0-rc1",
             "pinned_on": "2026-09-06",
-            "note": "Re-pinned 2026-09-07 for the fourth hostile review's source-scope facades: Theorem 8.1 part (i) drops the canonical-branch identity for the printed placement, parts (ii)/(iii) drop the caller-supplied block symmetry, Section 4 takes a given Definition 3.1 direct rotation, Theorem 3.1's converse and Section 6 move to the paper's separable scope, Section 6's separation is the printed interval/exterior one, and Theorem 6.2 carries the source's definedness convention."
+            "note": "Re-pinned 2026-09-07 for the fifth hostile review: Theorem 8.1's existence clause and part (i) are one combined statement, parts (ii)/(iii) are on the block eigenvalue lists with the gauge at the block dimension, and Lemma 6.1 is on the source's own two operators.  The DK-6.3-lem source passage is re-pinned because the reconstruction's non-strict leakage inequality was corrected to the strict one the original prints."
           },
           {
             "declaration": "TauCeti.DavisKahan1970.symmetricNorming_of_kyFanDominant",
@@ -3381,7 +3381,7 @@
             "type_text_sha256": "953bf02bcce285e0c146620ce3e9cf37ff0a9cf4399c711d961c454549239d52",
             "toolchain": "leanprover/lean4:v4.34.0-rc1",
             "pinned_on": "2026-09-06",
-            "note": "Re-pinned 2026-09-07 for the fourth hostile review's source-scope facades: Theorem 8.1 part (i) drops the canonical-branch identity for the printed placement, parts (ii)/(iii) drop the caller-supplied block symmetry, Section 4 takes a given Definition 3.1 direct rotation, Theorem 3.1's converse and Section 6 move to the paper's separable scope, Section 6's separation is the printed interval/exterior one, and Theorem 6.2 carries the source's definedness convention."
+            "note": "Re-pinned 2026-09-07 for the fifth hostile review: Theorem 8.1's existence clause and part (i) are one combined statement, parts (ii)/(iii) are on the block eigenvalue lists with the gauge at the block dimension, and Lemma 6.1 is on the source's own two operators.  The DK-6.3-lem source passage is re-pinned because the reconstruction's non-strict leakage inequality was corrected to the strict one the original prints."
           }
         ],
         "source_pins": [
@@ -3401,8 +3401,8 @@
               "result": "The whole-space extremality calculation through Proposition 4.3, including (4.3)--(4.6)"
             },
             "visibility": "public_reconstruction",
-            "pinned_on": "2026-09-04",
-            "note": "Pinned 2026-09-04 with the seven Section 3-8 major reviews: their declarations and the passages they cite are now guarded like the four Section 2 headline rows."
+            "pinned_on": "2026-09-06",
+            "note": "Re-pinned 2026-09-07 for the fifth hostile review: Theorem 8.1's existence clause and part (i) are one combined statement, parts (ii)/(iii) are on the block eigenvalue lists with the gauge at the block dimension, and Lemma 6.1 is on the source's own two operators.  The DK-6.3-lem source passage is re-pinned because the reconstruction's non-strict leakage inequality was corrected to the strict one the original prints."
           },
           {
             "fragment": "ui-norms",
@@ -3420,8 +3420,8 @@
               "result": "Unitary-invariant norms and singular values"
             },
             "visibility": "public_reconstruction",
-            "pinned_on": "2026-09-04",
-            "note": "Pinned 2026-09-04 with the seven Section 3-8 major reviews: their declarations and the passages they cite are now guarded like the four Section 2 headline rows."
+            "pinned_on": "2026-09-06",
+            "note": "Re-pinned 2026-09-07 for the fifth hostile review: Theorem 8.1's existence clause and part (i) are one combined statement, parts (ii)/(iii) are on the block eigenvalue lists with the gauge at the block dimension, and Lemma 6.1 is on the source's own two operators.  The DK-6.3-lem source passage is re-pinned because the reconstruction's non-strict leakage inequality was corrected to the strict one the original prints."
           },
           {
             "fragment": "section-4-hypotheses",
@@ -3439,8 +3439,8 @@
               "result": "Section 4 setup, Proposition 4.1, and equations (4.1)--(4.2)"
             },
             "visibility": "public_reconstruction",
-            "pinned_on": "2026-09-04",
-            "note": "Pinned 2026-09-04 with the seven Section 3-8 major reviews: their declarations and the passages they cite are now guarded like the four Section 2 headline rows."
+            "pinned_on": "2026-09-06",
+            "note": "Re-pinned 2026-09-07 for the fifth hostile review: Theorem 8.1's existence clause and part (i) are one combined statement, parts (ii)/(iii) are on the block eigenvalue lists with the gauge at the block dimension, and Lemma 6.1 is on the source's own two operators.  The DK-6.3-lem source passage is re-pinned because the reconstruction's non-strict leakage inequality was corrected to the strict one the original prints."
           },
           {
             "fragment": "ambient",
@@ -3458,8 +3458,8 @@
               "result": "Section 1, equations (1.1)--(1.8)"
             },
             "visibility": "public_reconstruction",
-            "pinned_on": "2026-09-04",
-            "note": "Pinned 2026-09-04 with the seven Section 3-8 major reviews: their declarations and the passages they cite are now guarded like the four Section 2 headline rows."
+            "pinned_on": "2026-09-06",
+            "note": "Re-pinned 2026-09-07 for the fifth hostile review: Theorem 8.1's existence clause and part (i) are one combined statement, parts (ii)/(iii) are on the block eigenvalue lists with the gauge at the block dimension, and Lemma 6.1 is on the source's own two operators.  The DK-6.3-lem source passage is re-pinned because the reconstruction's non-strict leakage inequality was corrected to the strict one the original prints."
           }
         ]
       }
@@ -3594,8 +3594,8 @@
               "result": "Examples 4.1--4.2 and Proposition 4.4"
             },
             "visibility": "public_reconstruction",
-            "pinned_on": "2026-09-04",
-            "note": "Pinned 2026-09-04 with the seven Section 3-8 major reviews: their declarations and the passages they cite are now guarded like the four Section 2 headline rows."
+            "pinned_on": "2026-09-06",
+            "note": "Re-pinned 2026-09-07 for the fifth hostile review: Theorem 8.1's existence clause and part (i) are one combined statement, parts (ii)/(iii) are on the block eigenvalue lists with the gauge at the block dimension, and Lemma 6.1 is on the source's own two operators.  The DK-6.3-lem source passage is re-pinned because the reconstruction's non-strict leakage inequality was corrected to the strict one the original prints."
           }
         ],
         "statement_pins": [
@@ -3605,7 +3605,7 @@
             "type_text_sha256": "c54d4bbe6d38e3d6f89a09b71c2c82380ade81e715b0b40597daab7ec724c1a8",
             "toolchain": "leanprover/lean4:v4.34.0-rc1",
             "pinned_on": "2026-09-06",
-            "note": "Re-pinned 2026-09-07 for the fourth hostile review's source-scope facades: Theorem 8.1 part (i) drops the canonical-branch identity for the printed placement, parts (ii)/(iii) drop the caller-supplied block symmetry, Section 4 takes a given Definition 3.1 direct rotation, Theorem 3.1's converse and Section 6 move to the paper's separable scope, Section 6's separation is the printed interval/exterior one, and Theorem 6.2 carries the source's definedness convention."
+            "note": "Re-pinned 2026-09-07 for the fifth hostile review: Theorem 8.1's existence clause and part (i) are one combined statement, parts (ii)/(iii) are on the block eigenvalue lists with the gauge at the block dimension, and Lemma 6.1 is on the source's own two operators.  The DK-6.3-lem source passage is re-pinned because the reconstruction's non-strict leakage inequality was corrected to the strict one the original prints."
           },
           {
             "declaration": "TauCeti.DavisKahan1970.proposition4_4_printedStatement",
@@ -3613,7 +3613,7 @@
             "type_text_sha256": "57d968860fabe1008d2c72342adec04b70f4bae48b7bcf6ebca915624100c353",
             "toolchain": "leanprover/lean4:v4.34.0-rc1",
             "pinned_on": "2026-09-06",
-            "note": "Re-pinned 2026-09-07 for the fourth hostile review's source-scope facades: Theorem 8.1 part (i) drops the canonical-branch identity for the printed placement, parts (ii)/(iii) drop the caller-supplied block symmetry, Section 4 takes a given Definition 3.1 direct rotation, Theorem 3.1's converse and Section 6 move to the paper's separable scope, Section 6's separation is the printed interval/exterior one, and Theorem 6.2 carries the source's definedness convention."
+            "note": "Re-pinned 2026-09-07 for the fifth hostile review: Theorem 8.1's existence clause and part (i) are one combined statement, parts (ii)/(iii) are on the block eigenvalue lists with the gauge at the block dimension, and Lemma 6.1 is on the source's own two operators.  The DK-6.3-lem source passage is re-pinned because the reconstruction's non-strict leakage inequality was corrected to the strict one the original prints."
           },
           {
             "declaration": "TauCeti.DavisKahan1970.proposition4_4_refutingPair",
@@ -3621,7 +3621,7 @@
             "type_text_sha256": "7454383c5969014e0f9b63af966a931cb30f273831218d3bb851db8176b22e63",
             "toolchain": "leanprover/lean4:v4.34.0-rc1",
             "pinned_on": "2026-09-06",
-            "note": "Re-pinned 2026-09-07 for the fourth hostile review's source-scope facades: Theorem 8.1 part (i) drops the canonical-branch identity for the printed placement, parts (ii)/(iii) drop the caller-supplied block symmetry, Section 4 takes a given Definition 3.1 direct rotation, Theorem 3.1's converse and Section 6 move to the paper's separable scope, Section 6's separation is the printed interval/exterior one, and Theorem 6.2 carries the source's definedness convention."
+            "note": "Re-pinned 2026-09-07 for the fifth hostile review: Theorem 8.1's existence clause and part (i) are one combined statement, parts (ii)/(iii) are on the block eigenvalue lists with the gauge at the block dimension, and Lemma 6.1 is on the source's own two operators.  The DK-6.3-lem source passage is re-pinned because the reconstruction's non-strict leakage inequality was corrected to the strict one the original prints."
           }
         ]
       }
@@ -3831,7 +3831,7 @@
             "type_text_sha256": "15dc0c0b6dba43744700c66d2511008bb7a6302a37b9b57e458fa2f1a0082cd8",
             "toolchain": "leanprover/lean4:v4.34.0-rc1",
             "pinned_on": "2026-09-06",
-            "note": "Re-pinned 2026-09-07 for the fourth hostile review's source-scope facades: Theorem 8.1 part (i) drops the canonical-branch identity for the printed placement, parts (ii)/(iii) drop the caller-supplied block symmetry, Section 4 takes a given Definition 3.1 direct rotation, Theorem 3.1's converse and Section 6 move to the paper's separable scope, Section 6's separation is the printed interval/exterior one, and Theorem 6.2 carries the source's definedness convention."
+            "note": "Re-pinned 2026-09-07 for the fifth hostile review: Theorem 8.1's existence clause and part (i) are one combined statement, parts (ii)/(iii) are on the block eigenvalue lists with the gauge at the block dimension, and Lemma 6.1 is on the source's own two operators.  The DK-6.3-lem source passage is re-pinned because the reconstruction's non-strict leakage inequality was corrected to the strict one the original prints."
           }
         ],
         "source_pins": [
@@ -3851,8 +3851,8 @@
               "result": "Theorem 5.1 and its two immediate scope remarks"
             },
             "visibility": "public_reconstruction",
-            "pinned_on": "2026-09-04",
-            "note": "Pinned 2026-09-04 with the seven Section 3-8 major reviews: their declarations and the passages they cite are now guarded like the four Section 2 headline rows."
+            "pinned_on": "2026-09-06",
+            "note": "Re-pinned 2026-09-07 for the fifth hostile review: Theorem 8.1's existence clause and part (i) are one combined statement, parts (ii)/(iii) are on the block eigenvalue lists with the gauge at the block dimension, and Lemma 6.1 is on the source's own two operators.  The DK-6.3-lem source passage is re-pinned because the reconstruction's non-strict leakage inequality was corrected to the strict one the original prints."
           },
           {
             "fragment": "theorem-5-2",
@@ -3870,8 +3870,8 @@
               "result": "Theorem 5.2"
             },
             "visibility": "public_reconstruction",
-            "pinned_on": "2026-09-04",
-            "note": "Pinned 2026-09-04 with the seven Section 3-8 major reviews: their declarations and the passages they cite are now guarded like the four Section 2 headline rows."
+            "pinned_on": "2026-09-06",
+            "note": "Re-pinned 2026-09-07 for the fifth hostile review: Theorem 8.1's existence clause and part (i) are one combined statement, parts (ii)/(iii) are on the block eigenvalue lists with the gauge at the block dimension, and Lemma 6.1 is on the source's own two operators.  The DK-6.3-lem source passage is re-pinned because the reconstruction's non-strict leakage inequality was corrected to the strict one the original prints."
           }
         ]
       }
@@ -4110,7 +4110,7 @@
             "type_text_sha256": "6cd81949a68601257c50a6d0ed213f300f42db18fd1d1aa0f5a3d2b9f0362107",
             "toolchain": "leanprover/lean4:v4.34.0-rc1",
             "pinned_on": "2026-09-06",
-            "note": "Re-pinned 2026-09-07 for the fourth hostile review's source-scope facades: Theorem 8.1 part (i) drops the canonical-branch identity for the printed placement, parts (ii)/(iii) drop the caller-supplied block symmetry, Section 4 takes a given Definition 3.1 direct rotation, Theorem 3.1's converse and Section 6 move to the paper's separable scope, Section 6's separation is the printed interval/exterior one, and Theorem 6.2 carries the source's definedness convention."
+            "note": "Re-pinned 2026-09-07 for the fifth hostile review: Theorem 8.1's existence clause and part (i) are one combined statement, parts (ii)/(iii) are on the block eigenvalue lists with the gauge at the block dimension, and Lemma 6.1 is on the source's own two operators.  The DK-6.3-lem source passage is re-pinned because the reconstruction's non-strict leakage inequality was corrected to the strict one the original prints."
           },
           {
             "declaration": "TauCeti.DavisKahan1970.theorem5_2_sourceExact_real",
@@ -4118,7 +4118,7 @@
             "type_text_sha256": "dde4e9917ac63662098db4cebd26dd480566be58830c3d2a9eee5b2da89d5b80",
             "toolchain": "leanprover/lean4:v4.34.0-rc1",
             "pinned_on": "2026-09-06",
-            "note": "Re-pinned 2026-09-07 for the fourth hostile review's source-scope facades: Theorem 8.1 part (i) drops the canonical-branch identity for the printed placement, parts (ii)/(iii) drop the caller-supplied block symmetry, Section 4 takes a given Definition 3.1 direct rotation, Theorem 3.1's converse and Section 6 move to the paper's separable scope, Section 6's separation is the printed interval/exterior one, and Theorem 6.2 carries the source's definedness convention."
+            "note": "Re-pinned 2026-09-07 for the fifth hostile review: Theorem 8.1's existence clause and part (i) are one combined statement, parts (ii)/(iii) are on the block eigenvalue lists with the gauge at the block dimension, and Lemma 6.1 is on the source's own two operators.  The DK-6.3-lem source passage is re-pinned because the reconstruction's non-strict leakage inequality was corrected to the strict one the original prints."
           },
           {
             "declaration": "TauCeti.DavisKahan1970.symmetricNorming_of_kyFanDominant",
@@ -4126,7 +4126,7 @@
             "type_text_sha256": "953bf02bcce285e0c146620ce3e9cf37ff0a9cf4399c711d961c454549239d52",
             "toolchain": "leanprover/lean4:v4.34.0-rc1",
             "pinned_on": "2026-09-06",
-            "note": "Re-pinned 2026-09-07 for the fourth hostile review's source-scope facades: Theorem 8.1 part (i) drops the canonical-branch identity for the printed placement, parts (ii)/(iii) drop the caller-supplied block symmetry, Section 4 takes a given Definition 3.1 direct rotation, Theorem 3.1's converse and Section 6 move to the paper's separable scope, Section 6's separation is the printed interval/exterior one, and Theorem 6.2 carries the source's definedness convention."
+            "note": "Re-pinned 2026-09-07 for the fifth hostile review: Theorem 8.1's existence clause and part (i) are one combined statement, parts (ii)/(iii) are on the block eigenvalue lists with the gauge at the block dimension, and Lemma 6.1 is on the source's own two operators.  The DK-6.3-lem source passage is re-pinned because the reconstruction's non-strict leakage inequality was corrected to the strict one the original prints."
           }
         ],
         "source_pins": [
@@ -4146,8 +4146,8 @@
               "result": "Theorem 5.2"
             },
             "visibility": "public_reconstruction",
-            "pinned_on": "2026-09-04",
-            "note": "Pinned 2026-09-04 with the seven Section 3-8 major reviews: their declarations and the passages they cite are now guarded like the four Section 2 headline rows."
+            "pinned_on": "2026-09-06",
+            "note": "Re-pinned 2026-09-07 for the fifth hostile review: Theorem 8.1's existence clause and part (i) are one combined statement, parts (ii)/(iii) are on the block eigenvalue lists with the gauge at the block dimension, and Lemma 6.1 is on the source's own two operators.  The DK-6.3-lem source passage is re-pinned because the reconstruction's non-strict leakage inequality was corrected to the strict one the original prints."
           },
           {
             "fragment": "ui-norms",
@@ -4165,8 +4165,8 @@
               "result": "Unitary-invariant norms and singular values"
             },
             "visibility": "public_reconstruction",
-            "pinned_on": "2026-09-04",
-            "note": "Pinned 2026-09-04 with the seven Section 3-8 major reviews: their declarations and the passages they cite are now guarded like the four Section 2 headline rows."
+            "pinned_on": "2026-09-06",
+            "note": "Re-pinned 2026-09-07 for the fifth hostile review: Theorem 8.1's existence clause and part (i) are one combined statement, parts (ii)/(iii) are on the block eigenvalue lists with the gauge at the block dimension, and Lemma 6.1 is on the source's own two operators.  The DK-6.3-lem source passage is re-pinned because the reconstruction's non-strict leakage inequality was corrected to the strict one the original prints."
           },
           {
             "fragment": "unbounded-scope",
@@ -4184,8 +4184,8 @@
               "result": "Scope of the four theorems"
             },
             "visibility": "public_reconstruction",
-            "pinned_on": "2026-09-04",
-            "note": "Pinned 2026-09-04 with the seven Section 3-8 major reviews: their declarations and the passages they cite are now guarded like the four Section 2 headline rows."
+            "pinned_on": "2026-09-06",
+            "note": "Re-pinned 2026-09-07 for the fifth hostile review: Theorem 8.1's existence clause and part (i) are one combined statement, parts (ii)/(iii) are on the block eigenvalue lists with the gauge at the block dimension, and Lemma 6.1 is on the source's own two operators.  The DK-6.3-lem source passage is re-pinned because the reconstruction's non-strict leakage inequality was corrected to the strict one the original prints."
           },
           {
             "fragment": "ambient",
@@ -4203,8 +4203,8 @@
               "result": "Section 1, equations (1.1)--(1.8)"
             },
             "visibility": "public_reconstruction",
-            "pinned_on": "2026-09-04",
-            "note": "Pinned 2026-09-04 with the seven Section 3-8 major reviews: their declarations and the passages they cite are now guarded like the four Section 2 headline rows."
+            "pinned_on": "2026-09-06",
+            "note": "Re-pinned 2026-09-07 for the fifth hostile review: Theorem 8.1's existence clause and part (i) are one combined statement, parts (ii)/(iii) are on the block eigenvalue lists with the gauge at the block dimension, and Lemma 6.1 is on the source's own two operators.  The DK-6.3-lem source passage is re-pinned because the reconstruction's non-strict leakage inequality was corrected to the strict one the original prints."
           }
         ]
       }
@@ -4253,7 +4253,11 @@
         "TauCeti.DavisKahan1970.lemma6_1_separable_complex",
         "TauCeti.DavisKahan1970.lemma6_1_separable_real",
         "TauCeti.DavisKahan1970.lemma6_1_converse_separable_complex",
-        "TauCeti.DavisKahan1970.lemma6_1_converse_separable_real"
+        "TauCeti.DavisKahan1970.lemma6_1_converse_separable_real",
+        "TauCeti.DavisKahan1970.lemma6_1_sourceOperators_separable_complex",
+        "TauCeti.DavisKahan1970.lemma6_1_sourceOperators_separable_real",
+        "TauCeti.DavisKahan1970.lemma6_1_converse_sourceOperators_separable_complex",
+        "TauCeti.DavisKahan1970.lemma6_1_converse_sourceOperators_separable_real"
       ],
       "notes": "Both directions are proved; the converse should be added to the exact audit manifest.\n\n**STATUS LOWERED 2026-08-07 (Claude Opus 5): `compiled_exact` -> `compiled_specialization`, on scalar scope, not on any doubt about the mathematics.**  Every declaration on this row is stated for `InnerProductSpace ℂ`.  Standing assumption 1 of the transcription says the space is real OR complex and assumption 4 says the headline theorems apply in infinite as well as finite dimension, so the compiled statement is a specialization of the printed one.  `compiled_specialization` is defined as exactly that: 'a useful compiled specialization exists, but not the full source scope'.  The remedy is a real wrapper through the complexification route, not a reproof; see blocker `real-scalar-infinite-dimensional-scope`.\n\n**STATUS RESTORED 2026-08-08 (Claude Opus 5): `compiled_specialization` -> `compiled_exact`; blocker `real-scalar-infinite-dimensional-scope` removed from this row.**  The 2026-08-07 scope_gap claim that 'every declaration is `InnerProductSpace ℂ` only' is FALSE at this HEAD: the mathematics was generalized to `RCLike` in commit 83e1b854, and both declarations on this row elaborate to\n\n    {𝕜 : Type u} [RCLike 𝕜] {E : Type v} [NormedAddCommGroup E] [InnerProductSpace 𝕜 E]\n      [CompleteSpace E] [ContinuousLinearMap.HasMinMaxLowerBoundEverywhere 𝕜]\n\nwith no finite-dimensionality hypothesis.  `HasMinMaxLowerBoundEverywhere` has instances for both `ℝ` (`TauCeti.ApproximationNumber.hasMinMaxLowerBoundEverywhere_real`) and `ℂ`, so real infinite-dimensional Hilbert spaces are covered.  VERIFIED BY ELABORATION 2026-08-08 (`#check @TauCeti.DavisKahan1970.lemma6_1`, `lemma6_1_converse`) rather than by reading the file, per the method the blocker itself prescribes.  No code change was needed on this row -- only the audit record was stale.",
       "next_action": "No hostile-review hole is currently recorded for this source passage. Preserve exact source scope and re-audit if the distributable source specification changes.",
@@ -4577,7 +4581,7 @@
             "type_text_sha256": "f479af79f31a65f852e46574acd966dd9404414f45df85a937de47fa7507a88e",
             "toolchain": "leanprover/lean4:v4.34.0-rc1",
             "pinned_on": "2026-09-06",
-            "note": "Re-pinned 2026-09-07 for the fourth hostile review's source-scope facades: Theorem 8.1 part (i) drops the canonical-branch identity for the printed placement, parts (ii)/(iii) drop the caller-supplied block symmetry, Section 4 takes a given Definition 3.1 direct rotation, Theorem 3.1's converse and Section 6 move to the paper's separable scope, Section 6's separation is the printed interval/exterior one, and Theorem 6.2 carries the source's definedness convention."
+            "note": "Re-pinned 2026-09-07 for the fifth hostile review: Theorem 8.1's existence clause and part (i) are one combined statement, parts (ii)/(iii) are on the block eigenvalue lists with the gauge at the block dimension, and Lemma 6.1 is on the source's own two operators.  The DK-6.3-lem source passage is re-pinned because the reconstruction's non-strict leakage inequality was corrected to the strict one the original prints."
           },
           {
             "declaration": "TauCeti.DavisKahan1970.theorem6_1_printedGap_sourceExact_real",
@@ -4585,7 +4589,7 @@
             "type_text_sha256": "ef76934ffbd83e1188a3addd332b22bab032e65b8c8f3606f5c1cbd32da21068",
             "toolchain": "leanprover/lean4:v4.34.0-rc1",
             "pinned_on": "2026-09-06",
-            "note": "Re-pinned 2026-09-07 for the fourth hostile review's source-scope facades: Theorem 8.1 part (i) drops the canonical-branch identity for the printed placement, parts (ii)/(iii) drop the caller-supplied block symmetry, Section 4 takes a given Definition 3.1 direct rotation, Theorem 3.1's converse and Section 6 move to the paper's separable scope, Section 6's separation is the printed interval/exterior one, and Theorem 6.2 carries the source's definedness convention."
+            "note": "Re-pinned 2026-09-07 for the fifth hostile review: Theorem 8.1's existence clause and part (i) are one combined statement, parts (ii)/(iii) are on the block eigenvalue lists with the gauge at the block dimension, and Lemma 6.1 is on the source's own two operators.  The DK-6.3-lem source passage is re-pinned because the reconstruction's non-strict leakage inequality was corrected to the strict one the original prints."
           },
           {
             "declaration": "TauCeti.DavisKahan1970.isTrialResidual_iff_equation_and_isometry",
@@ -4593,7 +4597,7 @@
             "type_text_sha256": "ed63b9058eef816913af7155236e1d7c1688fd258e12d7af1c28b0cd38fadb56",
             "toolchain": "leanprover/lean4:v4.34.0-rc1",
             "pinned_on": "2026-09-06",
-            "note": "Re-pinned 2026-09-07 for the fourth hostile review's source-scope facades: Theorem 8.1 part (i) drops the canonical-branch identity for the printed placement, parts (ii)/(iii) drop the caller-supplied block symmetry, Section 4 takes a given Definition 3.1 direct rotation, Theorem 3.1's converse and Section 6 move to the paper's separable scope, Section 6's separation is the printed interval/exterior one, and Theorem 6.2 carries the source's definedness convention."
+            "note": "Re-pinned 2026-09-07 for the fifth hostile review: Theorem 8.1's existence clause and part (i) are one combined statement, parts (ii)/(iii) are on the block eigenvalue lists with the gauge at the block dimension, and Lemma 6.1 is on the source's own two operators.  The DK-6.3-lem source passage is re-pinned because the reconstruction's non-strict leakage inequality was corrected to the strict one the original prints."
           },
           {
             "declaration": "TauCeti.DavisKahan1970.lowerFrameBound_iff_operator_inequality",
@@ -4601,7 +4605,7 @@
             "type_text_sha256": "a437d198c0d5602ab14ede5fe60ab2ff5ec2aabb981520316d0f63ef6482ea57",
             "toolchain": "leanprover/lean4:v4.34.0-rc1",
             "pinned_on": "2026-09-06",
-            "note": "Re-pinned 2026-09-07 for the fourth hostile review's source-scope facades: Theorem 8.1 part (i) drops the canonical-branch identity for the printed placement, parts (ii)/(iii) drop the caller-supplied block symmetry, Section 4 takes a given Definition 3.1 direct rotation, Theorem 3.1's converse and Section 6 move to the paper's separable scope, Section 6's separation is the printed interval/exterior one, and Theorem 6.2 carries the source's definedness convention."
+            "note": "Re-pinned 2026-09-07 for the fifth hostile review: Theorem 8.1's existence clause and part (i) are one combined statement, parts (ii)/(iii) are on the block eigenvalue lists with the gauge at the block dimension, and Lemma 6.1 is on the source's own two operators.  The DK-6.3-lem source passage is re-pinned because the reconstruction's non-strict leakage inequality was corrected to the strict one the original prints."
           },
           {
             "declaration": "TauCeti.DavisKahan1970.lowerFrameBound_of_operator_inequality",
@@ -4609,7 +4613,7 @@
             "type_text_sha256": "288a835276ff37b35c34bc07439ddcef39ab74ade18a2639e0f5bfe0fa3780ef",
             "toolchain": "leanprover/lean4:v4.34.0-rc1",
             "pinned_on": "2026-09-06",
-            "note": "Re-pinned 2026-09-07 for the fourth hostile review's source-scope facades: Theorem 8.1 part (i) drops the canonical-branch identity for the printed placement, parts (ii)/(iii) drop the caller-supplied block symmetry, Section 4 takes a given Definition 3.1 direct rotation, Theorem 3.1's converse and Section 6 move to the paper's separable scope, Section 6's separation is the printed interval/exterior one, and Theorem 6.2 carries the source's definedness convention."
+            "note": "Re-pinned 2026-09-07 for the fifth hostile review: Theorem 8.1's existence clause and part (i) are one combined statement, parts (ii)/(iii) are on the block eigenvalue lists with the gauge at the block dimension, and Lemma 6.1 is on the source's own two operators.  The DK-6.3-lem source passage is re-pinned because the reconstruction's non-strict leakage inequality was corrected to the strict one the original prints."
           }
         ],
         "source_pins": [
@@ -4629,8 +4633,8 @@
               "result": "Theorem 6.1"
             },
             "visibility": "public_reconstruction",
-            "pinned_on": "2026-09-04",
-            "note": "Pinned 2026-09-04 with the seven Section 3-8 major reviews: their declarations and the passages they cite are now guarded like the four Section 2 headline rows."
+            "pinned_on": "2026-09-06",
+            "note": "Re-pinned 2026-09-07 for the fifth hostile review: Theorem 8.1's existence clause and part (i) are one combined statement, parts (ii)/(iii) are on the block eigenvalue lists with the gauge at the block dimension, and Lemma 6.1 is on the source's own two operators.  The DK-6.3-lem source passage is re-pinned because the reconstruction's non-strict leakage inequality was corrected to the strict one the original prints."
           },
           {
             "fragment": "ui-norms",
@@ -4648,8 +4652,8 @@
               "result": "Unitary-invariant norms and singular values"
             },
             "visibility": "public_reconstruction",
-            "pinned_on": "2026-09-04",
-            "note": "Pinned 2026-09-04 with the seven Section 3-8 major reviews: their declarations and the passages they cite are now guarded like the four Section 2 headline rows."
+            "pinned_on": "2026-09-06",
+            "note": "Re-pinned 2026-09-07 for the fifth hostile review: Theorem 8.1's existence clause and part (i) are one combined statement, parts (ii)/(iii) are on the block eigenvalue lists with the gauge at the block dimension, and Lemma 6.1 is on the source's own two operators.  The DK-6.3-lem source passage is re-pinned because the reconstruction's non-strict leakage inequality was corrected to the strict one the original prints."
           },
           {
             "fragment": "block-residual",
@@ -4667,8 +4671,8 @@
               "result": "Section 1, equations (1.1)--(1.8)"
             },
             "visibility": "public_reconstruction",
-            "pinned_on": "2026-09-04",
-            "note": "Pinned 2026-09-04 with the seven Section 3-8 major reviews: their declarations and the passages they cite are now guarded like the four Section 2 headline rows."
+            "pinned_on": "2026-09-06",
+            "note": "Re-pinned 2026-09-07 for the fifth hostile review: Theorem 8.1's existence clause and part (i) are one combined statement, parts (ii)/(iii) are on the block eigenvalue lists with the gauge at the block dimension, and Lemma 6.1 is on the source's own two operators.  The DK-6.3-lem source passage is re-pinned because the reconstruction's non-strict leakage inequality was corrected to the strict one the original prints."
           },
           {
             "fragment": "unbounded-scope",
@@ -4686,8 +4690,8 @@
               "result": "Scope of the four theorems"
             },
             "visibility": "public_reconstruction",
-            "pinned_on": "2026-09-04",
-            "note": "Pinned 2026-09-04 with the seven Section 3-8 major reviews: their declarations and the passages they cite are now guarded like the four Section 2 headline rows."
+            "pinned_on": "2026-09-06",
+            "note": "Re-pinned 2026-09-07 for the fifth hostile review: Theorem 8.1's existence clause and part (i) are one combined statement, parts (ii)/(iii) are on the block eigenvalue lists with the gauge at the block dimension, and Lemma 6.1 is on the source's own two operators.  The DK-6.3-lem source passage is re-pinned because the reconstruction's non-strict leakage inequality was corrected to the strict one the original prints."
           },
           {
             "fragment": "ambient",
@@ -4705,8 +4709,8 @@
               "result": "Section 1, ambient scope"
             },
             "visibility": "public_reconstruction",
-            "pinned_on": "2026-09-04",
-            "note": "Pinned 2026-09-04 with the seven Section 3-8 major reviews: their declarations and the passages they cite are now guarded like the four Section 2 headline rows."
+            "pinned_on": "2026-09-06",
+            "note": "Re-pinned 2026-09-07 for the fifth hostile review: Theorem 8.1's existence clause and part (i) are one combined statement, parts (ii)/(iii) are on the block eigenvalue lists with the gauge at the block dimension, and Lemma 6.1 is on the source's own two operators.  The DK-6.3-lem source passage is re-pinned because the reconstruction's non-strict leakage inequality was corrected to the strict one the original prints."
           }
         ]
       }
@@ -5101,7 +5105,7 @@
             "type_text_sha256": "84fa71cc2c1977e62a0b6eaf0ac3a1eb654255ffcc6aa8657f6d92e10c36780a",
             "toolchain": "leanprover/lean4:v4.34.0-rc1",
             "pinned_on": "2026-09-06",
-            "note": "Re-pinned 2026-09-07 for the fourth hostile review's source-scope facades: Theorem 8.1 part (i) drops the canonical-branch identity for the printed placement, parts (ii)/(iii) drop the caller-supplied block symmetry, Section 4 takes a given Definition 3.1 direct rotation, Theorem 3.1's converse and Section 6 move to the paper's separable scope, Section 6's separation is the printed interval/exterior one, and Theorem 6.2 carries the source's definedness convention."
+            "note": "Re-pinned 2026-09-07 for the fifth hostile review: Theorem 8.1's existence clause and part (i) are one combined statement, parts (ii)/(iii) are on the block eigenvalue lists with the gauge at the block dimension, and Lemma 6.1 is on the source's own two operators.  The DK-6.3-lem source passage is re-pinned because the reconstruction's non-strict leakage inequality was corrected to the strict one the original prints."
           },
           {
             "declaration": "TauCeti.DavisKahan1970.tanTheta_directed_unboundedRitz_sourceExact_real",
@@ -5109,7 +5113,7 @@
             "type_text_sha256": "c17d54006246bc81283a137786e601941d4705c3b2edf49fc5f06b461405ab48",
             "toolchain": "leanprover/lean4:v4.34.0-rc1",
             "pinned_on": "2026-09-06",
-            "note": "Re-pinned 2026-09-07 for the fourth hostile review's source-scope facades: Theorem 8.1 part (i) drops the canonical-branch identity for the printed placement, parts (ii)/(iii) drop the caller-supplied block symmetry, Section 4 takes a given Definition 3.1 direct rotation, Theorem 3.1's converse and Section 6 move to the paper's separable scope, Section 6's separation is the printed interval/exterior one, and Theorem 6.2 carries the source's definedness convention."
+            "note": "Re-pinned 2026-09-07 for the fifth hostile review: Theorem 8.1's existence clause and part (i) are one combined statement, parts (ii)/(iii) are on the block eigenvalue lists with the gauge at the block dimension, and Lemma 6.1 is on the source's own two operators.  The DK-6.3-lem source passage is re-pinned because the reconstruction's non-strict leakage inequality was corrected to the strict one the original prints."
           }
         ],
         "source_pins": [
@@ -5129,8 +5133,8 @@
               "result": "Equations (6.2)--(6.6), Example 6.1, and Theorem 6.3"
             },
             "visibility": "public_reconstruction",
-            "pinned_on": "2026-09-04",
-            "note": "Pinned 2026-09-04 with the seven Section 3-8 major reviews: their declarations and the passages they cite are now guarded like the four Section 2 headline rows."
+            "pinned_on": "2026-09-06",
+            "note": "Re-pinned 2026-09-07 for the fifth hostile review: Theorem 8.1's existence clause and part (i) are one combined statement, parts (ii)/(iii) are on the block eigenvalue lists with the gauge at the block dimension, and Lemma 6.1 is on the source's own two operators.  The DK-6.3-lem source passage is re-pinned because the reconstruction's non-strict leakage inequality was corrected to the strict one the original prints."
           },
           {
             "fragment": "ui-norms",
@@ -5148,8 +5152,8 @@
               "result": "Unitary-invariant norms and singular values"
             },
             "visibility": "public_reconstruction",
-            "pinned_on": "2026-09-04",
-            "note": "Pinned 2026-09-04 with the seven Section 3-8 major reviews: their declarations and the passages they cite are now guarded like the four Section 2 headline rows."
+            "pinned_on": "2026-09-06",
+            "note": "Re-pinned 2026-09-07 for the fifth hostile review: Theorem 8.1's existence clause and part (i) are one combined statement, parts (ii)/(iii) are on the block eigenvalue lists with the gauge at the block dimension, and Lemma 6.1 is on the source's own two operators.  The DK-6.3-lem source passage is re-pinned because the reconstruction's non-strict leakage inequality was corrected to the strict one the original prints."
           },
           {
             "fragment": "ambient-tangent",
@@ -5167,8 +5171,8 @@
               "result": "Section 2, second unnumbered theorem"
             },
             "visibility": "public_reconstruction",
-            "pinned_on": "2026-09-04",
-            "note": "Pinned 2026-09-04 with the seven Section 3-8 major reviews: their declarations and the passages they cite are now guarded like the four Section 2 headline rows."
+            "pinned_on": "2026-09-06",
+            "note": "Re-pinned 2026-09-07 for the fifth hostile review: Theorem 8.1's existence clause and part (i) are one combined statement, parts (ii)/(iii) are on the block eigenvalue lists with the gauge at the block dimension, and Lemma 6.1 is on the source's own two operators.  The DK-6.3-lem source passage is re-pinned because the reconstruction's non-strict leakage inequality was corrected to the strict one the original prints."
           },
           {
             "fragment": "appendix",
@@ -5186,8 +5190,8 @@
               "result": "Appendix to Section 6"
             },
             "visibility": "public_reconstruction",
-            "pinned_on": "2026-09-04",
-            "note": "Pinned 2026-09-04 with the seven Section 3-8 major reviews: their declarations and the passages they cite are now guarded like the four Section 2 headline rows."
+            "pinned_on": "2026-09-06",
+            "note": "Re-pinned 2026-09-07 for the fifth hostile review: Theorem 8.1's existence clause and part (i) are one combined statement, parts (ii)/(iii) are on the block eigenvalue lists with the gauge at the block dimension, and Lemma 6.1 is on the source's own two operators.  The DK-6.3-lem source passage is re-pinned because the reconstruction's non-strict leakage inequality was corrected to the strict one the original prints."
           },
           {
             "fragment": "ambient",
@@ -5205,8 +5209,8 @@
               "result": "Section 1, ambient scope"
             },
             "visibility": "public_reconstruction",
-            "pinned_on": "2026-09-04",
-            "note": "Pinned 2026-09-04 with the seven Section 3-8 major reviews: their declarations and the passages they cite are now guarded like the four Section 2 headline rows."
+            "pinned_on": "2026-09-06",
+            "note": "Re-pinned 2026-09-07 for the fifth hostile review: Theorem 8.1's existence clause and part (i) are one combined statement, parts (ii)/(iii) are on the block eigenvalue lists with the gauge at the block dimension, and Lemma 6.1 is on the source's own two operators.  The DK-6.3-lem source passage is re-pinned because the reconstruction's non-strict leakage inequality was corrected to the strict one the original prints."
           }
         ]
       }
@@ -5540,7 +5544,15 @@
         "TauCeti.DavisKahan1970.Section8.theorem8_1_exists_branch_withCompression_unbounded_complex",
         "TauCeti.DavisKahan1970.Section8.theorem8_1_exists_branch_withCompression_unbounded_real",
         "TauCeti.DavisKahan1970.Section8.isSymmetric_upperBlockShift",
-        "TauCeti.DavisKahan1970.Section8.isSymmetric_lowerBlockShift"
+        "TauCeti.DavisKahan1970.Section8.isSymmetric_lowerBlockShift",
+        "TauCeti.DavisKahan1970.Section8.theorem8_1_upperEigenvalueRepulsion_blockSourceExact",
+        "TauCeti.DavisKahan1970.Section8.theorem8_1_lowerEigenvalueRepulsion_blockSourceExact",
+        "TauCeti.DavisKahan1970.Section8.theorem8_1_upperEigenvalueRepulsion_blockSourceExact_real",
+        "TauCeti.DavisKahan1970.Section8.theorem8_1_lowerEigenvalueRepulsion_blockSourceExact_real",
+        "TauCeti.DavisKahan1970.Section8.theorem8_1_upperSymmetricGaugeEigenvalue_blockSourceExact",
+        "TauCeti.DavisKahan1970.Section8.theorem8_1_lowerSymmetricGaugeEigenvalue_blockSourceExact",
+        "TauCeti.DavisKahan1970.Section8.theorem8_1_upperSymmetricGaugeEigenvalue_blockSourceExact_real",
+        "TauCeti.DavisKahan1970.Section8.theorem8_1_lowerSymmetricGaugeEigenvalue_blockSourceExact_real"
       ],
       "notes": "Theorems 8.1's conclusion is packaged as `Theorem81ContinuationConclusion` and proved sorry-free in `DavisKahan/Experimental/Frontier/Section8.lean`; `#print axioms` gives [propext, Classical.choice, Quot.sound]. The status stays `candidate_under_repair` because that axis is fidelity to the printed statement, which compiling does not establish -- not because anything fails to build.\n\nSTATUS CORRECTED 2026-08-04: `candidate_under_repair` -> `compiled_exact`. All five declarations are compiled and axiom-clean. They resolve only outside the default build, which is what `proved_outside_build` records; the mathematics itself matches the printed theorem.\n\nVERIFIED 2026-08-04 by the elaborator, not by grep: a probe file importing `DavisKahan.All`, `DavisKahan.Experimental.All` and `ForTauCeti` and running `#print axioms` on all 87 declarations named in this census elaborated cleanly -- every name resolves and **none reaches `sorryAx`**. A second probe importing only the default-build roots showed 78 of the 87 resolve there; the 9 that do not are exactly the `TauCeti.DavisKahan1970.Section8.*` names on rows DK-8.1-thm and DK-8.2-thm, whose `proved_outside_build` verification was already correct. `candidate_under_repair` -- \"not compiler-certified on this base\" -- was therefore false for every row that carried it. The scope question (does the compiled statement match the printed one?) is a separate judgement and is recorded in `next_action`; the status below is the weakest one consistent with that recorded evidence, so no row is overstated.\n\n**2026-08-05 (second session): both promotion-blocking admissions are out of this row's closure.** `directRotation_minimal` was orphaned -- nothing outside its own file referenced it, and the complex statement is already proved in production as `spectraDirectRotation_minimal`; `SpectraBridge/DirectRotationAPI.lean` imported that module only for `IsAcute` and now takes it from `BoundedOperator/Compat`. `projectionDifference_ideal_intervalExterior`, `ideal_sinTheta` and `ideal_sinTwoTheta` moved into `Experimental/InfiniteDimensional/SinTheta/IdealIntervalExterior.lean`, leaving `SinTheta/General.lean` and `InfiniteDimensional/DoubleAngle.lean` sorry-free. Measured closures: 175/188/199 modules, 24/41/50 Experimental, 0 tactic sorries each. WHAT STILL BLOCKS THE ROW: `check_library_structure` rule 2 forbids a production module importing `Experimental`, so promotion means RELOCATING those closures out of `Experimental/`. That is a design decision, not a mechanical step -- take it deliberately. Rule 3 now reports 49 violations (was 6) precisely because 34 modules became admission-free; the checker is enumerating what ought to move.\n\n**GUARDED BY `lake build` 2026-08-06.** This row was `proved_outside_build` only because its modules sat under `Experimental/`, where no default target reaches them. The mathematics never changed. Two admissions were first removed from the import closures (one was orphaned; the other moved to `SinTheta/IdealIntervalExterior.lean`), after which `check_library_structure` rule 3 began enumerating the modules that had become admission-free -- i.e. the checker produced the promotion worklist. 84 modules then moved by `git mv` with **no namespace or declaration renamed**, the precedent being `Geometry/Polar/DirectRotationSquare.lean`, which lives in production while declaring into `DavisKahan.Experimental`. So the fully-qualified names in this row are unchanged.\n\nThe move had to be the DOWNWARD CLOSURE of the flagged modules, not the flagged modules alone: they import admission-free modules held under `Experimental/` only because something *above* those carried a `sorry`, so moving the flagged set alone would have violated rule 2. Rule 3 went 49 -> 13 violations.\n\n**BLOCKER CLEARED 2026-08-06: the promotion happened.**  `section8-promotion-out-of-experimental` described the theorems as living under `DavisKahan.Experimental.Frontier`, untouched by `lake build`.  They no longer do: `DavisKahan/Sources/DavisKahan1970/Section8/BranchRepulsion.lean` and `DavisKahan/Sources/DavisKahan1970/Section8/**` are production, reached from `DavisKahan.All`, and the Experimental copies are gone (their leftover build products were purged the same day).  Re-verified by the elaborator: both headline declarations resolve against `DavisKahan.All` and `#print axioms` gives exactly [propext, Classical.choice, Quot.sound].  The census declaration probe is at 156/156.  The blocker entry is removed because no row is blocked by it.\n\n**FIDELITY BUG FOUND AND THE ROW DOWNGRADED 2026-08-07 (Claude Opus 5).**  This row read `compiled_exact` / \"Nothing outstanding\" while the production source file it points at, `DavisKahan/Sources/DavisKahan1970/Section8/SourceSurface.lean`, says in its own module docstring that the complete historical Theorem 8.1 and Theorem 8.2 are NOT promoted.  Both statements cannot be true.  The source file is the one that is right: `theorem8_1_selectedBranch_and_spectralRepulsion` is an `alias` for `theorem81CoreConclusion`, which takes a `SpectralContinuationWitness` plus `hsmall`, `h0` and `h1` -- the branch selection, the contour smallness, and the spectral orientation are all supplied BY THE CALLER, and they are exactly what the paper proves.  Likewise `theorem8_2_perturbationHalfGap_selectedBranch` requires a `PerturbationHalfGapBridge`, whose field `contour_selects_quarter_branch` is the conclusion.  A declaration compiling says nothing about whether its hypotheses are the printed ones; that is the lesson this row records.\n\n**REPAIRED 2026-08-07 (Claude Opus 5): the headline theorem now takes only the printed hypotheses.**  `theorem8_1_canonicalBranch` assumes exactly: `A` self-adjoint, `P` reduces `A`, the `P` block below `alpha`, the `Pperp` block above `alpha+delta`, `H` self-adjoint and FULLY OFF-DIAGONAL relative to `P`.  No contour, no `SpectralContinuationWitness`, no `hsmall`, no caller-supplied orientation.  It proves: full spectral repulsion (`realSpectrum (A+H) subseteq Iic alpha union Ici (alpha+delta)` -- continuous spectrum included, not merely eigenvalues); the canonical branch `Q` as the genuine spectral subspace of `A+H` for `Iic alpha`; both sharp ordered form bounds on `Q` and `Qperp`; both restricted-spectrum containments; and `IsQuarterAcute P Q`, i.e. STRICTLY inside the quarter turn, which is stronger than the printed closed `Theta <= pi/4`.  `theorem8_1_eq_canonicalBranch_of_maximalAngle_le` is the converse: a reducing subspace satisfying the printed CLOSED condition equals `Q`.  `theorem8_1_maximalAngle_le_iff_spectrumIn` is the printed `iff` between the closed quarter-angle condition and the spectral orientation.  All axiom-clean.\n\nTwo supporting seams were new mathematics, not bookkeeping.  (1) The sharp form bounds: with the gap, the indicator of `Iic alpha` is continuous ON THE SPECTRUM, so the spectral projection is a continuous functional calculus and `(alpha - t) chi(t) >= 0` on the spectrum gives the bound with NO loss.  The pre-existing band estimate `norm_comp_boundedPVM_proj_sub_smul_le` loses a factor of two and cannot close the gap at all.  (2) Uniqueness needs a reducing projection to commute with the branch projection; that is `Commute.cfcHom`, available precisely because (1) made the projection a continuous calculus.\n\nPART (i) IS ALSO DONE.  `theorem8_1_upperCompressionRepulsion_canonicalBranch` and its lower companion instantiate the compression-repulsion cores at `canonicalLowBranch`, so no abstract data record and no continuation witness appears in their hypotheses either -- the caller supplies only the printed configuration.\n\nWHAT WAS STILL MISSING AT THAT POINT (superseded later the same day; see the `compiled_exact` note below): parts (ii) and (iii).  (ii) is the finite-dimensional ordered eigenvalue inequalities, which should follow from the compression inequalities via `LinearMap.IsSymmetric.eigenvalue_mono` (ForTauCeti/Analysis/InnerProductSpace/CourantFischer.lean).  (iii) is the printed \"every symmetric gauge\" inequality, which must go through the finite symmetric-gauge / majorization / Ky Fan layer -- substituting the operator norm would be a weakening, not a proof.\n\n**SOURCE-VERIFIED AGAINST THE FULL TRANSCRIPTION 2026-08-07 (Claude Opus 5).**  The printed proof of the quarter-angle bound is finite-dimensional plus \"the infinite-dimensional case follows by approximation\".  `theorem8_1_canonicalBranch` is dimension-free and gives the STRICT bound `IsQuarterAcute P Q`, so the Lean development is stronger than the printed argument here, not weaker.  The printed converse is exactly the direction formalized by `theorem8_1_eq_canonicalBranch_of_maximalAngle_le`.\n\n**PARTS (ii) AND (iii) LANDED, BOTH BLOCKS, AND THE ROW IS NOW `compiled_exact` 2026-08-07 (Claude Opus 5).**\n\nPart (ii).  `theorem8_1_upperApproximationRepulsion` and\n`theorem8_1_lowerApproximationRepulsion`.  The route recorded in the previous\n`next_action` was not the one taken, and the difference matters: it proposed\n`LinearMap.IsSymmetric.eigenvalue_mono`, which is finite-dimensional and would have forced a\nsubspace transfer of the whole development.  `approximationNumber_mono_of_form_le` does the\nsame Weyl step for POSITIVE operators in ARBITRARY dimension, by factoring through square\nroots, so no transfer and no finite-dimensionality hypothesis is needed.  That is what\ndelivers the printed clause's \"and natural infinite-dimensional extensions\" rather than only\nits finite reading.  The two blocks share the step\n`theorem8_1_{upper,lower}SandwichApproximation_source`, which is part (i) plus form\nmonotonicity and nothing else; part (ii) then applies the coarse cosine-sandwich bound\n`a_n(D* M D) <= ||D||^2 a_n(M)`.\n\nPart (iii).  `theorem8_1_upperSymmetricGaugeRepulsion` and its lower companion,\nquantified over EVERY `FiniteSymmetricGauge` -- not the operator norm, not Frobenius, not\nKy Fan k.  They are corollaries of the strictly stronger weak majorizations\n`theorem8_1_{upper,lower}WeightedWeakMajorization_source`,\n\n    a(A_1 - alpha)  <<w  (i |-> a_i(Lambda_1 - alpha) * a_i(C_1)^2),\n\nwhich chain the SAME Weyl step of part (i) into `approximationNumber_adjoint_sandwich_weaklyMajorized`.\nPart (iii) is therefore NOT derived from part (ii)'s conclusion, which has already discarded\nevery cosine but the largest; the two clauses share only the earlier step.  The generalized\nvon Neumann / rearrangement / Ky Fan content of the printed proof is absorbed into the generic\nsandwich majorization theorem, which is proved by the Ky Fan maximum principle plus Abel\nsummation and needs no alignment unitary.\n\nThe lower block is a MIRROR, not a second proof.  The reflection `A |-> -A`,\n`alpha |-> -(alpha + delta)` exchanges the two sides of the printed gap and carries\n`A_1 - alpha` to `(alpha + delta) - A_0` and `C_1` to `C_0`, which is why `lowerBlockShift`\ncarries the shift constant `alpha + delta`.  Positivity of the perturbed lower block comes\nfrom `branch_form_low` of the canonical branch, so no branch bound is re-proved.\n\nTHE SOURCE DICTIONARY IS COMPILED, NOT PROSE.  Three identifications, each its own theorem:\n(a) `approximationNumber_eq_eigenvalues_of_isPositive` -- for a positive operator the\napproximation numbers ARE the sorted eigenvalues, which is the printed `alpha_k` and\n`lambda_k`; every block here is positive because of the printed gap.\n(b) `approximationNumber_{upper,lower}BlockShift_eq_zero_of_le` -- extending a compression by\nzero only appends zeros, so the ambient sequence is the printed finite eigenvalue list\nfollowed by a zero tail, which changes neither a prefix sum nor a symmetric gauge.\n(c) `approximationNumber_cosineBlock_eq_principalCosines` and its lower companion -- the\ncosine block's singular values ARE `TauCeti.principalCosines`, the repository's principal-angle\ncosines, defined as the singular values of the cross projection.  No new theta was invented:\nthis is the paper's own equation (1.16), `Theta_j = arccos (C_j C_j*)^{1/2}`, which DEFINES the\nangles as arccosines of exactly these numbers.  `cos_arccos_approximationNumber_cosineBlock`\nrecords the round trip with `theta_i` in `[0, pi/2]`, and\n`norm_cosineBlock_eq_principalCosines_zero` reads the printed bound norm `||C_1||_1` as the\nlargest principal cosine, which is the printed meaning of replacing every `cos^2 theta_k` by\nthe largest one in part (ii).\n\nORDERING, HANDLED ON BOTH SIDES AT ONCE.  `approximationNumber` and `principalCosines` are\nindexed decreasingly; the paper prints `lambda_1 <= lambda_2 <= ...` increasing and (Section 1,\nafter (1.16)) `theta_1 >= theta_2 >= ...` decreasing, so the printed `cos^2 theta_k` is\nINCREASING in k and the printed right-hand side pairs k-th smallest with k-th smallest.  That\nis the same multiset of products as pairing largest with largest.  The reindex is compiled,\nnot asserted: `theorem8_1_{upper,lower}SymmetricGaugeRepulsion_angle_rev_source` apply `Fin.rev`\nto BOTH sides simultaneously and are the printed increasing reading; they follow from the\ndecreasing statements by `FiniteSymmetricGauge.perm` alone.\n\nAudit: `DavisKahan/Frontier/Section8Audit.lean`, 42 targets, every one\n[propext, Classical.choice, Quot.sound].\n\n**M18 ADJUDICATION 2026-08-09 (Claude Opus 5), against `dev/davis-kahan-1970-final-audit-2026-08-09.md`.**  Disagreement 21 is UPHELD for this row: it was\n`compiled_exact` with `blocked_by: []` while every declaration on it is `InnerProductSpace C`, which is\nthe defect for which the sine rows were graded.  The `real-scalar-infinite-dimensional-scope` blocker\nand a `scope_gap` are added; the STATUS DELIBERATELY DOES NOT MOVE, because this census's established\nconvention for a complex-only row whose mathematics is otherwise exact is `compiled_exact` plus that\nblocker (see `DK-3.1-prop`, `DK-6.1-thm`, `S2-sin-theta`).  Everything else on this row was\nindependently re-confirmed by the 2026-08-09 audit: (a) both directions over every reducing `M`, (b) an\nexplicit construction with strict `Theta < pi/4` and uniqueness rather than an existential, (i)/(ii)/(iii)\nboth sides each, and Krein's completion PROVED rather than assumed.\n\n**REAL THEOREM 8.1 IS COMPLETE FOR 8.1(a) AND 8.1(b), 2026-08-09.**  Existence landed in commit 9173ad4e and uniqueness plus the printed characterization in cd11f08f (joncrall with GPT-5.6 Sol); this note and the declaration list were added by the coordinator (Claude Opus 5) at integration, because NEITHER COMMIT TOUCHED THE CENSUS and every gate passed while this row still asserted that no declaration on it covered a real Hilbert space.  That is the documented failure mode of `probe_census_declarations.py`: it can only check the declarations a row NAMES, so a row whose list is incomplete has nothing to disagree with.\n\nThe uniqueness proof does NOT replay the complex cfc argument: it complexifies both candidate reducing subspaces, applies the dimension-free complex uniqueness theorem to identify each with the same canonical branch, and descends the equality through injectivity of `complexifySubmodule`.  The form-bound-to-spectrum implications were factored out into `DavisKahan/SpectralTheory/FormSpectrumBounds.lean` as four `RCLike`-generic lemmas rather than duplicated over R, and both the real and complex source theorems consume them; those four are now listed on this row.\n\nSTATUS LEFT AT `compiled_exact` PENDING A HUMAN CALL on whether the surviving complex-only (ii)/(iii) family is a narrowing worth recording in the status field.  The row carried `compiled_exact` with a real-scalar gap BEFORE this work, which the completion handoff cites as its example of a status that overstates; the gap is now strictly smaller but not empty.\n\nUNBOUNDED SCOPE, PROGRESS 2026-09-05.  The angle conclusion Davis and Kahan print -- `Theta <= pi/4`, non-strict -- is now proved at unbounded ambient scope by `maximalAngle_le_pi_div_four_of_orderedFormGap_unbounded_printed`, in the paper's own orientation on `P` and `Q`.  Reading the printed statement mattered: the bounded canonical evidence concludes the strictly stronger supremum bound `subspaceGap < sqrt 2 / 2`, whose constant is `delta / (1 + ‖C‖)` and therefore degenerates as `‖A‖ -> infinity`.  The paper does not claim it, and it is not available unbounded.\n\nSUPERSEDED THE SAME DAY -- see the 2026-09-06 entries below.\n\nUNBOUNDED SCOPE, 2026-09-06.  The paragraph above is superseded.  Branch existence with its printed ordered form bounds (`theorem8_1_canonicalBranchUnbounded_printed`), part (i) (`theorem8_1_upperCompressionRepulsion_unbounded` and its lower dual), the direction of the printed characterization from the spectral placement (`theorem8_1_maximalAngle_le_of_spectrumIn_unbounded`) and the CONVERSE direction -- uniqueness of the branch, `theorem8_1_eq_canonicalBranchUnbounded_of_maximalAngle_le`, packaged as the printed `iff` in `theorem8_1_maximalAngle_le_iff_orderedFormGap_unbounded` -- are all proved at unbounded ambient scope.  Parts (ii) and (iii) are printed IN FINITE DIMENSIONS and are at their printed scope already.\n\nThe converse turned on POINTWISE rather than uniform strictness: `reflectionProduct_form_pos_of_orderedFormGap_unbounded` retains the `delta ‖G y‖^2` margin the non-strict statement discards, giving `‖P_P y - P_Q y‖ < ‖y‖/sqrt 2` for every nonzero `y` with no constant that degenerates.  The commuting-projection step is `TauCeti.LinearPMap.specProjection_apply_of_unitary_intertwines`.\n\nWHAT IS STILL BOUNDED: only the canonical evidence selection, because the unbounded Section 8 development is complex-only and this row's real scalar coverage is carried by its bounded canonical evidence.  Promoting now would trade a scope gain for a scalar-scope loss; the real unbounded ports are the remaining work.\n\nREAL UNBOUNDED ENDPOINTS AND CANONICAL PROMOTION, 2026-09-06.  The unbounded Section 8 development now has its real siblings: `theorem8_1_canonicalBranchUnbounded_printed_real`, `theorem8_1_maximalAngle_le_iff_orderedFormGap_unbounded_real`, `theorem8_1_eq_canonicalBranchUnbounded_of_maximalAngle_le_real` and the two `..._CompressionRepulsion_unbounded_real`, transported by complexification through `realSpecRange` and `complexifySubmodule`.  With complex and real unbounded evidence for every clause of Theorem 8.1 that inherits ambient scope, the canonical evidence for `existence-correct-q`, `acute-iff-spectral-placement` and `part-i-compression` is promoted to the unbounded witnesses; the bounded declarations that were canonical are retained as registered specializations.  Parts (ii) and (iii) keep their finite-dimensional canonical evidence, which is the source's own restriction.\n\nSOURCE-FACING UNBOUNDED FAÇADES, 2026-09-06.  The canonical declarations were the general unbounded theorems -- the placements as form inequalities over the ambient domain, part (i) for an arbitrary partial map and reducing subspace.  Those are the right shapes for the mathematics and the wrong shapes for a source boundary.  `Theorem81SourceUnbounded.lean` restates them on the objects Davis and Kahan write: `Lambda_0`, `Lambda_1` as the reducing restrictions of `A + H` with the placements as operator inequalities on them, the existence clause as the existential, and part (i) in the `A/H/P/Q` context with `C_1` the cosine block.  The bridge `semiboundedAbove_reducingRestriction_iff` and its siblings are unfolding.  The general theorems are retained as registered generalizations.",
       "next_action": "No result-level hole remains for Theorem 8.1. Preserve the accepted exact source-facing evidence set and re-audit only if the source specification or theorem signatures change.",
@@ -5579,22 +5591,20 @@
           ]
         },
         "canonical_declarations": [
-          "TauCeti.DavisKahan1970.Section8.theorem8_1_exists_branch_blockPlacement_unbounded_complex",
-          "TauCeti.DavisKahan1970.Section8.theorem8_1_exists_branch_blockPlacement_unbounded_real",
+          "TauCeti.DavisKahan1970.Section8.theorem8_1_exists_branch_withCompression_unbounded_complex",
+          "TauCeti.DavisKahan1970.Section8.theorem8_1_exists_branch_withCompression_unbounded_real",
           "TauCeti.DavisKahan1970.Section8.theorem8_1_maximalAngle_le_iff_blockPlacement_unbounded_complex",
           "TauCeti.DavisKahan1970.Section8.theorem8_1_maximalAngle_le_iff_blockPlacement_unbounded_real",
-          "TauCeti.DavisKahan1970.Section8.theorem8_1_upperCompressionRepulsion_sourceExact_unbounded_complex",
           "TauCeti.DavisKahan1970.Section8.theorem8_1_lowerCompressionRepulsion_sourceExact_unbounded_complex",
-          "TauCeti.DavisKahan1970.Section8.theorem8_1_upperCompressionRepulsion_sourceExact_unbounded_real",
           "TauCeti.DavisKahan1970.Section8.theorem8_1_lowerCompressionRepulsion_sourceExact_unbounded_real",
-          "TauCeti.DavisKahan1970.Section8.theorem8_1_upperEigenvalueRepulsion_sourceExact",
-          "TauCeti.DavisKahan1970.Section8.theorem8_1_lowerEigenvalueRepulsion_sourceExact",
-          "TauCeti.DavisKahan1970.Section8.theorem8_1_upperEigenvalueRepulsion_sourceExact_real",
-          "TauCeti.DavisKahan1970.Section8.theorem8_1_lowerEigenvalueRepulsion_sourceExact_real",
-          "TauCeti.DavisKahan1970.Section8.theorem8_1_upperSymmetricGaugeEigenvalue_sourceExact",
-          "TauCeti.DavisKahan1970.Section8.theorem8_1_lowerSymmetricGaugeEigenvalue_sourceExact",
-          "TauCeti.DavisKahan1970.Section8.theorem8_1_upperSymmetricGaugeEigenvalue_sourceExact_real",
-          "TauCeti.DavisKahan1970.Section8.theorem8_1_lowerSymmetricGaugeEigenvalue_sourceExact_real"
+          "TauCeti.DavisKahan1970.Section8.theorem8_1_upperEigenvalueRepulsion_blockSourceExact",
+          "TauCeti.DavisKahan1970.Section8.theorem8_1_lowerEigenvalueRepulsion_blockSourceExact",
+          "TauCeti.DavisKahan1970.Section8.theorem8_1_upperEigenvalueRepulsion_blockSourceExact_real",
+          "TauCeti.DavisKahan1970.Section8.theorem8_1_lowerEigenvalueRepulsion_blockSourceExact_real",
+          "TauCeti.DavisKahan1970.Section8.theorem8_1_upperSymmetricGaugeEigenvalue_blockSourceExact",
+          "TauCeti.DavisKahan1970.Section8.theorem8_1_lowerSymmetricGaugeEigenvalue_blockSourceExact",
+          "TauCeti.DavisKahan1970.Section8.theorem8_1_upperSymmetricGaugeEigenvalue_blockSourceExact_real",
+          "TauCeti.DavisKahan1970.Section8.theorem8_1_lowerSymmetricGaugeEigenvalue_blockSourceExact_real"
         ],
         "supporting_declarations": [
           "TauCeti.DavisKahan1970.Section8.Theorem81Conclusion",
@@ -5664,7 +5674,19 @@
           "TauCeti.DavisKahan1970.Section8.theorem8_1_upperCompressionRepulsion_ofBlockPlacement_unbounded_complex",
           "TauCeti.DavisKahan1970.Section8.theorem8_1_lowerCompressionRepulsion_ofBlockPlacement_unbounded_complex",
           "TauCeti.DavisKahan1970.Section8.theorem8_1_upperCompressionRepulsion_ofBlockPlacement_unbounded_real",
-          "TauCeti.DavisKahan1970.Section8.theorem8_1_lowerCompressionRepulsion_ofBlockPlacement_unbounded_real"
+          "TauCeti.DavisKahan1970.Section8.theorem8_1_lowerCompressionRepulsion_ofBlockPlacement_unbounded_real",
+          "TauCeti.DavisKahan1970.Section8.theorem8_1_exists_branch_blockPlacement_unbounded_complex",
+          "TauCeti.DavisKahan1970.Section8.theorem8_1_exists_branch_blockPlacement_unbounded_real",
+          "TauCeti.DavisKahan1970.Section8.theorem8_1_upperCompressionRepulsion_sourceExact_unbounded_complex",
+          "TauCeti.DavisKahan1970.Section8.theorem8_1_upperCompressionRepulsion_sourceExact_unbounded_real",
+          "TauCeti.DavisKahan1970.Section8.theorem8_1_upperEigenvalueRepulsion_sourceExact",
+          "TauCeti.DavisKahan1970.Section8.theorem8_1_lowerEigenvalueRepulsion_sourceExact",
+          "TauCeti.DavisKahan1970.Section8.theorem8_1_upperEigenvalueRepulsion_sourceExact_real",
+          "TauCeti.DavisKahan1970.Section8.theorem8_1_lowerEigenvalueRepulsion_sourceExact_real",
+          "TauCeti.DavisKahan1970.Section8.theorem8_1_upperSymmetricGaugeEigenvalue_sourceExact",
+          "TauCeti.DavisKahan1970.Section8.theorem8_1_lowerSymmetricGaugeEigenvalue_sourceExact",
+          "TauCeti.DavisKahan1970.Section8.theorem8_1_upperSymmetricGaugeEigenvalue_sourceExact_real",
+          "TauCeti.DavisKahan1970.Section8.theorem8_1_lowerSymmetricGaugeEigenvalue_sourceExact_real"
         ],
         "context_declarations": [
           {
@@ -5883,20 +5905,20 @@
         "note": "Two canonical pairs, because the printed theorem has two headline assertions: the characterization (`theorem8_1_maximalAngle_le_iff_spectrumIn`, an honest biconditional over every reducing subspace) and the existence of the branch (`theorem8_1_canonicalBranch`, which constructs the spectral projector the paper names and concludes the whole package about it), each with its real sibling. Parts (i), (ii) and (iii) are separate declarations and are bound clause by clause rather than folded into the canonical list; they are registered as supporting evidence, on both blocks and over both fields. Two places where the Lean is stronger than the print, both recorded above: the constructed branch is strictly inside the quarter turn while the printed condition is closed, and part (ii) is dimension-free where the print is finite-dimensional with an unproved extension clause. One place where it is weaker in hypothesis and therefore stronger as a theorem: the tan 2 theta placement is taken as form bounds with the lower endpoint beta dropped. The only clause not claimed is the derivation itself: equations (8.1) and (8.2) have no registered declaration, because the compiled proof of the quarter-angle bound runs through a continuous functional calculus of the half-line indicator rather than through the printed singular-vector computation. This review does not move the row's bookkeeping: the row is `compiled_exact`, hostile-certified accepted, with no completion hole, and the review is consistent with that -- the one `open` clause is proof machinery, which the census's own boundary policy treats as source-fidelity material rather than as part of the printed result statement. CANONICAL WITNESSES FOLLOW THE RESULT INVENTORY. The printed theorem has five assertions -- the characterization, the existence of the branch, and parts (i), (ii), (iii) -- and the inventory records a canonical witness for each, over both scalar fields and on both blocks. This review now lists all sixteen rather than only the two headline pairs, so the two documents answer the question the same way. The `_canonicalBranch` instantiations of parts (i) and (ii), which take the printed configuration and no data record, remain supporting evidence and are what the corresponding clauses cite.\n\nRECLASSIFIED nonlocal 2026-09-05.  Theorem 8.1 states no hypotheses of its own -- it opens \"Assume the hypotheses of the tan 2theta theorem\" -- so its operator scope is whatever that phrase imports, and the repository certifies the tan 2theta theorem at unbounded scope while every registered Section 8 declaration is bounded.  The accepted reading, its source evidence, the competing unbounded reading and the open lift are in the result inventory under `nonlocal_source_interpretation.operator_scope_reading`.",
         "statement_pins": [
           {
-            "declaration": "TauCeti.DavisKahan1970.Section8.theorem8_1_exists_branch_blockPlacement_unbounded_complex",
-            "type_expr_hash": "2006130595",
-            "type_text_sha256": "c887db217bc6ce3045b4dc7148e86453815e93bc3c98636a37f27ee075764059",
+            "declaration": "TauCeti.DavisKahan1970.Section8.theorem8_1_exists_branch_withCompression_unbounded_complex",
+            "type_expr_hash": "3138182438",
+            "type_text_sha256": "329ce0a46e3d4a4e14f58b201c986965b4aefd8e034515704dfa89a63f3099c9",
             "toolchain": "leanprover/lean4:v4.34.0-rc1",
             "pinned_on": "2026-09-06",
-            "note": "Re-pinned 2026-09-07 for the fourth hostile review's source-scope facades: Theorem 8.1 part (i) drops the canonical-branch identity for the printed placement, parts (ii)/(iii) drop the caller-supplied block symmetry, Section 4 takes a given Definition 3.1 direct rotation, Theorem 3.1's converse and Section 6 move to the paper's separable scope, Section 6's separation is the printed interval/exterior one, and Theorem 6.2 carries the source's definedness convention."
+            "note": "Re-pinned 2026-09-07 for the fifth hostile review: Theorem 8.1's existence clause and part (i) are one combined statement, parts (ii)/(iii) are on the block eigenvalue lists with the gauge at the block dimension, and Lemma 6.1 is on the source's own two operators.  The DK-6.3-lem source passage is re-pinned because the reconstruction's non-strict leakage inequality was corrected to the strict one the original prints."
           },
           {
-            "declaration": "TauCeti.DavisKahan1970.Section8.theorem8_1_exists_branch_blockPlacement_unbounded_real",
-            "type_expr_hash": "1584745841",
-            "type_text_sha256": "9d9cb74bff9d039033689c8bf1078ef7cb74625aa82e3cf851bf4a43ae077914",
+            "declaration": "TauCeti.DavisKahan1970.Section8.theorem8_1_exists_branch_withCompression_unbounded_real",
+            "type_expr_hash": "2339037476",
+            "type_text_sha256": "f5abd6aa14b5b1b14ff46dfd574c8ffd460ef0311e22cacd72791665266f8627",
             "toolchain": "leanprover/lean4:v4.34.0-rc1",
             "pinned_on": "2026-09-06",
-            "note": "Re-pinned 2026-09-07 for the fourth hostile review's source-scope facades: Theorem 8.1 part (i) drops the canonical-branch identity for the printed placement, parts (ii)/(iii) drop the caller-supplied block symmetry, Section 4 takes a given Definition 3.1 direct rotation, Theorem 3.1's converse and Section 6 move to the paper's separable scope, Section 6's separation is the printed interval/exterior one, and Theorem 6.2 carries the source's definedness convention."
+            "note": "Re-pinned 2026-09-07 for the fifth hostile review: Theorem 8.1's existence clause and part (i) are one combined statement, parts (ii)/(iii) are on the block eigenvalue lists with the gauge at the block dimension, and Lemma 6.1 is on the source's own two operators.  The DK-6.3-lem source passage is re-pinned because the reconstruction's non-strict leakage inequality was corrected to the strict one the original prints."
           },
           {
             "declaration": "TauCeti.DavisKahan1970.Section8.theorem8_1_maximalAngle_le_iff_blockPlacement_unbounded_complex",
@@ -5904,7 +5926,7 @@
             "type_text_sha256": "9e9c7cefcca3b40a295e03bfedec80b0beea0baff8d7a976f6df3a13c9eaecdf",
             "toolchain": "leanprover/lean4:v4.34.0-rc1",
             "pinned_on": "2026-09-06",
-            "note": "Re-pinned 2026-09-07 for the fourth hostile review's source-scope facades: Theorem 8.1 part (i) drops the canonical-branch identity for the printed placement, parts (ii)/(iii) drop the caller-supplied block symmetry, Section 4 takes a given Definition 3.1 direct rotation, Theorem 3.1's converse and Section 6 move to the paper's separable scope, Section 6's separation is the printed interval/exterior one, and Theorem 6.2 carries the source's definedness convention."
+            "note": "Re-pinned 2026-09-07 for the fifth hostile review: Theorem 8.1's existence clause and part (i) are one combined statement, parts (ii)/(iii) are on the block eigenvalue lists with the gauge at the block dimension, and Lemma 6.1 is on the source's own two operators.  The DK-6.3-lem source passage is re-pinned because the reconstruction's non-strict leakage inequality was corrected to the strict one the original prints."
           },
           {
             "declaration": "TauCeti.DavisKahan1970.Section8.theorem8_1_maximalAngle_le_iff_blockPlacement_unbounded_real",
@@ -5912,15 +5934,7 @@
             "type_text_sha256": "bf229ab6317eec7f27991bbf0fc050eee1f96d8b67b35589dfe3f18406415cc3",
             "toolchain": "leanprover/lean4:v4.34.0-rc1",
             "pinned_on": "2026-09-06",
-            "note": "Re-pinned 2026-09-07 for the fourth hostile review's source-scope facades: Theorem 8.1 part (i) drops the canonical-branch identity for the printed placement, parts (ii)/(iii) drop the caller-supplied block symmetry, Section 4 takes a given Definition 3.1 direct rotation, Theorem 3.1's converse and Section 6 move to the paper's separable scope, Section 6's separation is the printed interval/exterior one, and Theorem 6.2 carries the source's definedness convention."
-          },
-          {
-            "declaration": "TauCeti.DavisKahan1970.Section8.theorem8_1_upperCompressionRepulsion_sourceExact_unbounded_complex",
-            "type_expr_hash": "2444237546",
-            "type_text_sha256": "a19ee61099bb2dcbb6cdcd7286119d9e5d7d7f283cd836c42704320590232f41",
-            "toolchain": "leanprover/lean4:v4.34.0-rc1",
-            "pinned_on": "2026-09-06",
-            "note": "Re-pinned 2026-09-07 for the fourth hostile review's source-scope facades: Theorem 8.1 part (i) drops the canonical-branch identity for the printed placement, parts (ii)/(iii) drop the caller-supplied block symmetry, Section 4 takes a given Definition 3.1 direct rotation, Theorem 3.1's converse and Section 6 move to the paper's separable scope, Section 6's separation is the printed interval/exterior one, and Theorem 6.2 carries the source's definedness convention."
+            "note": "Re-pinned 2026-09-07 for the fifth hostile review: Theorem 8.1's existence clause and part (i) are one combined statement, parts (ii)/(iii) are on the block eigenvalue lists with the gauge at the block dimension, and Lemma 6.1 is on the source's own two operators.  The DK-6.3-lem source passage is re-pinned because the reconstruction's non-strict leakage inequality was corrected to the strict one the original prints."
           },
           {
             "declaration": "TauCeti.DavisKahan1970.Section8.theorem8_1_lowerCompressionRepulsion_sourceExact_unbounded_complex",
@@ -5928,15 +5942,7 @@
             "type_text_sha256": "a8b742aa00555f1c106076d937b4019b770599fbc404a68b5be90f430ca4fcf8",
             "toolchain": "leanprover/lean4:v4.34.0-rc1",
             "pinned_on": "2026-09-06",
-            "note": "Re-pinned 2026-09-07 for the fourth hostile review's source-scope facades: Theorem 8.1 part (i) drops the canonical-branch identity for the printed placement, parts (ii)/(iii) drop the caller-supplied block symmetry, Section 4 takes a given Definition 3.1 direct rotation, Theorem 3.1's converse and Section 6 move to the paper's separable scope, Section 6's separation is the printed interval/exterior one, and Theorem 6.2 carries the source's definedness convention."
-          },
-          {
-            "declaration": "TauCeti.DavisKahan1970.Section8.theorem8_1_upperCompressionRepulsion_sourceExact_unbounded_real",
-            "type_expr_hash": "2771752236",
-            "type_text_sha256": "634a6f8c6fb125f92e2a5e551a6cdafc4ab36ab07497872fd11312f516516d7f",
-            "toolchain": "leanprover/lean4:v4.34.0-rc1",
-            "pinned_on": "2026-09-06",
-            "note": "Re-pinned 2026-09-07 for the fourth hostile review's source-scope facades: Theorem 8.1 part (i) drops the canonical-branch identity for the printed placement, parts (ii)/(iii) drop the caller-supplied block symmetry, Section 4 takes a given Definition 3.1 direct rotation, Theorem 3.1's converse and Section 6 move to the paper's separable scope, Section 6's separation is the printed interval/exterior one, and Theorem 6.2 carries the source's definedness convention."
+            "note": "Re-pinned 2026-09-07 for the fifth hostile review: Theorem 8.1's existence clause and part (i) are one combined statement, parts (ii)/(iii) are on the block eigenvalue lists with the gauge at the block dimension, and Lemma 6.1 is on the source's own two operators.  The DK-6.3-lem source passage is re-pinned because the reconstruction's non-strict leakage inequality was corrected to the strict one the original prints."
           },
           {
             "declaration": "TauCeti.DavisKahan1970.Section8.theorem8_1_lowerCompressionRepulsion_sourceExact_unbounded_real",
@@ -5944,71 +5950,71 @@
             "type_text_sha256": "ea7bece2c6376bbf20c06c56a4ff8f26b421593edc36fe632624f3594b7eaa5c",
             "toolchain": "leanprover/lean4:v4.34.0-rc1",
             "pinned_on": "2026-09-06",
-            "note": "Re-pinned 2026-09-07 for the fourth hostile review's source-scope facades: Theorem 8.1 part (i) drops the canonical-branch identity for the printed placement, parts (ii)/(iii) drop the caller-supplied block symmetry, Section 4 takes a given Definition 3.1 direct rotation, Theorem 3.1's converse and Section 6 move to the paper's separable scope, Section 6's separation is the printed interval/exterior one, and Theorem 6.2 carries the source's definedness convention."
+            "note": "Re-pinned 2026-09-07 for the fifth hostile review: Theorem 8.1's existence clause and part (i) are one combined statement, parts (ii)/(iii) are on the block eigenvalue lists with the gauge at the block dimension, and Lemma 6.1 is on the source's own two operators.  The DK-6.3-lem source passage is re-pinned because the reconstruction's non-strict leakage inequality was corrected to the strict one the original prints."
           },
           {
-            "declaration": "TauCeti.DavisKahan1970.Section8.theorem8_1_upperEigenvalueRepulsion_sourceExact",
-            "type_expr_hash": "81169530",
-            "type_text_sha256": "d715e77c633f1f02d811a7e05df61436fb5447d70dfff370224dba49c45eb219",
+            "declaration": "TauCeti.DavisKahan1970.Section8.theorem8_1_upperEigenvalueRepulsion_blockSourceExact",
+            "type_expr_hash": "1774194057",
+            "type_text_sha256": "7b3ae5e83694b2e0ff6f84dcd4b0b2c1af766d61004b43e37ff6ca9b21a0bf10",
             "toolchain": "leanprover/lean4:v4.34.0-rc1",
             "pinned_on": "2026-09-06",
-            "note": "Re-pinned 2026-09-07 for the fourth hostile review's source-scope facades: Theorem 8.1 part (i) drops the canonical-branch identity for the printed placement, parts (ii)/(iii) drop the caller-supplied block symmetry, Section 4 takes a given Definition 3.1 direct rotation, Theorem 3.1's converse and Section 6 move to the paper's separable scope, Section 6's separation is the printed interval/exterior one, and Theorem 6.2 carries the source's definedness convention."
+            "note": "Re-pinned 2026-09-07 for the fifth hostile review: Theorem 8.1's existence clause and part (i) are one combined statement, parts (ii)/(iii) are on the block eigenvalue lists with the gauge at the block dimension, and Lemma 6.1 is on the source's own two operators.  The DK-6.3-lem source passage is re-pinned because the reconstruction's non-strict leakage inequality was corrected to the strict one the original prints."
           },
           {
-            "declaration": "TauCeti.DavisKahan1970.Section8.theorem8_1_lowerEigenvalueRepulsion_sourceExact",
-            "type_expr_hash": "2368654331",
-            "type_text_sha256": "dc56bc8e977a89e885ed49c85e8e0720a05f3231a3801075a22045865cc0730d",
+            "declaration": "TauCeti.DavisKahan1970.Section8.theorem8_1_lowerEigenvalueRepulsion_blockSourceExact",
+            "type_expr_hash": "2645686357",
+            "type_text_sha256": "1a10bfe3ef4328ee8be99777bd481985fc781d8659da7940b22c9b1526d36046",
             "toolchain": "leanprover/lean4:v4.34.0-rc1",
             "pinned_on": "2026-09-06",
-            "note": "Re-pinned 2026-09-07 for the fourth hostile review's source-scope facades: Theorem 8.1 part (i) drops the canonical-branch identity for the printed placement, parts (ii)/(iii) drop the caller-supplied block symmetry, Section 4 takes a given Definition 3.1 direct rotation, Theorem 3.1's converse and Section 6 move to the paper's separable scope, Section 6's separation is the printed interval/exterior one, and Theorem 6.2 carries the source's definedness convention."
+            "note": "Re-pinned 2026-09-07 for the fifth hostile review: Theorem 8.1's existence clause and part (i) are one combined statement, parts (ii)/(iii) are on the block eigenvalue lists with the gauge at the block dimension, and Lemma 6.1 is on the source's own two operators.  The DK-6.3-lem source passage is re-pinned because the reconstruction's non-strict leakage inequality was corrected to the strict one the original prints."
           },
           {
-            "declaration": "TauCeti.DavisKahan1970.Section8.theorem8_1_upperEigenvalueRepulsion_sourceExact_real",
-            "type_expr_hash": "4227254319",
-            "type_text_sha256": "430eec07929c25ec0ce591a2f4f7742e84a02cdd4d9f1b7b6c43b4f545ce1a7f",
+            "declaration": "TauCeti.DavisKahan1970.Section8.theorem8_1_upperEigenvalueRepulsion_blockSourceExact_real",
+            "type_expr_hash": "1792215758",
+            "type_text_sha256": "fbd8138e9bb48142fd4c69d035611c5e13d70e79cf067f9399a8c5cadd56d21e",
             "toolchain": "leanprover/lean4:v4.34.0-rc1",
             "pinned_on": "2026-09-06",
-            "note": "Re-pinned 2026-09-07 for the fourth hostile review's source-scope facades: Theorem 8.1 part (i) drops the canonical-branch identity for the printed placement, parts (ii)/(iii) drop the caller-supplied block symmetry, Section 4 takes a given Definition 3.1 direct rotation, Theorem 3.1's converse and Section 6 move to the paper's separable scope, Section 6's separation is the printed interval/exterior one, and Theorem 6.2 carries the source's definedness convention."
+            "note": "Re-pinned 2026-09-07 for the fifth hostile review: Theorem 8.1's existence clause and part (i) are one combined statement, parts (ii)/(iii) are on the block eigenvalue lists with the gauge at the block dimension, and Lemma 6.1 is on the source's own two operators.  The DK-6.3-lem source passage is re-pinned because the reconstruction's non-strict leakage inequality was corrected to the strict one the original prints."
           },
           {
-            "declaration": "TauCeti.DavisKahan1970.Section8.theorem8_1_lowerEigenvalueRepulsion_sourceExact_real",
-            "type_expr_hash": "1467989068",
-            "type_text_sha256": "4b7fbe0aa8bdfa7710a0173a1c5f266dab8d2fc3bf2800874f6da6bbe86d9a60",
+            "declaration": "TauCeti.DavisKahan1970.Section8.theorem8_1_lowerEigenvalueRepulsion_blockSourceExact_real",
+            "type_expr_hash": "57417155",
+            "type_text_sha256": "ddd4b0b363b6445be877a58e92751334d0ef8a096e1ec5bf5f876f9a104a60d2",
             "toolchain": "leanprover/lean4:v4.34.0-rc1",
             "pinned_on": "2026-09-06",
-            "note": "Re-pinned 2026-09-07 for the fourth hostile review's source-scope facades: Theorem 8.1 part (i) drops the canonical-branch identity for the printed placement, parts (ii)/(iii) drop the caller-supplied block symmetry, Section 4 takes a given Definition 3.1 direct rotation, Theorem 3.1's converse and Section 6 move to the paper's separable scope, Section 6's separation is the printed interval/exterior one, and Theorem 6.2 carries the source's definedness convention."
+            "note": "Re-pinned 2026-09-07 for the fifth hostile review: Theorem 8.1's existence clause and part (i) are one combined statement, parts (ii)/(iii) are on the block eigenvalue lists with the gauge at the block dimension, and Lemma 6.1 is on the source's own two operators.  The DK-6.3-lem source passage is re-pinned because the reconstruction's non-strict leakage inequality was corrected to the strict one the original prints."
           },
           {
-            "declaration": "TauCeti.DavisKahan1970.Section8.theorem8_1_upperSymmetricGaugeEigenvalue_sourceExact",
-            "type_expr_hash": "299081846",
-            "type_text_sha256": "7748a709dfd6143566a7dc1a281ebfc8979e140d855975992c9465afcc955bd8",
+            "declaration": "TauCeti.DavisKahan1970.Section8.theorem8_1_upperSymmetricGaugeEigenvalue_blockSourceExact",
+            "type_expr_hash": "2048239897",
+            "type_text_sha256": "7b8de83b256fe60c0bcf638e229eda8090bb10c585ee807c747b0a67ffbbdf59",
             "toolchain": "leanprover/lean4:v4.34.0-rc1",
             "pinned_on": "2026-09-06",
-            "note": "Re-pinned 2026-09-07 for the fourth hostile review's source-scope facades: Theorem 8.1 part (i) drops the canonical-branch identity for the printed placement, parts (ii)/(iii) drop the caller-supplied block symmetry, Section 4 takes a given Definition 3.1 direct rotation, Theorem 3.1's converse and Section 6 move to the paper's separable scope, Section 6's separation is the printed interval/exterior one, and Theorem 6.2 carries the source's definedness convention."
+            "note": "Re-pinned 2026-09-07 for the fifth hostile review: Theorem 8.1's existence clause and part (i) are one combined statement, parts (ii)/(iii) are on the block eigenvalue lists with the gauge at the block dimension, and Lemma 6.1 is on the source's own two operators.  The DK-6.3-lem source passage is re-pinned because the reconstruction's non-strict leakage inequality was corrected to the strict one the original prints."
           },
           {
-            "declaration": "TauCeti.DavisKahan1970.Section8.theorem8_1_lowerSymmetricGaugeEigenvalue_sourceExact",
-            "type_expr_hash": "937898053",
-            "type_text_sha256": "38093eaece2bd65a7d63be77b368c8c42c66d7be0cf79e35c6cf5b7c4dd0c245",
+            "declaration": "TauCeti.DavisKahan1970.Section8.theorem8_1_lowerSymmetricGaugeEigenvalue_blockSourceExact",
+            "type_expr_hash": "482128989",
+            "type_text_sha256": "f73b23bdad5abb194a79c4c9ba5597c147b2bb9a5a1705b3e37ed1727a298336",
             "toolchain": "leanprover/lean4:v4.34.0-rc1",
             "pinned_on": "2026-09-06",
-            "note": "Re-pinned 2026-09-07 for the fourth hostile review's source-scope facades: Theorem 8.1 part (i) drops the canonical-branch identity for the printed placement, parts (ii)/(iii) drop the caller-supplied block symmetry, Section 4 takes a given Definition 3.1 direct rotation, Theorem 3.1's converse and Section 6 move to the paper's separable scope, Section 6's separation is the printed interval/exterior one, and Theorem 6.2 carries the source's definedness convention."
+            "note": "Re-pinned 2026-09-07 for the fifth hostile review: Theorem 8.1's existence clause and part (i) are one combined statement, parts (ii)/(iii) are on the block eigenvalue lists with the gauge at the block dimension, and Lemma 6.1 is on the source's own two operators.  The DK-6.3-lem source passage is re-pinned because the reconstruction's non-strict leakage inequality was corrected to the strict one the original prints."
           },
           {
-            "declaration": "TauCeti.DavisKahan1970.Section8.theorem8_1_upperSymmetricGaugeEigenvalue_sourceExact_real",
-            "type_expr_hash": "2315217899",
-            "type_text_sha256": "e5482c37bb85ab5086b8c2fb4bab662bb4a74493c69c5de42994b8f2e0da2a1d",
+            "declaration": "TauCeti.DavisKahan1970.Section8.theorem8_1_upperSymmetricGaugeEigenvalue_blockSourceExact_real",
+            "type_expr_hash": "146233491",
+            "type_text_sha256": "f21360779d1a7165ea4ea93153cb0dbf25fed94e578d004eb97d0aef0784eff0",
             "toolchain": "leanprover/lean4:v4.34.0-rc1",
             "pinned_on": "2026-09-06",
-            "note": "Re-pinned 2026-09-07 for the fourth hostile review's source-scope facades: Theorem 8.1 part (i) drops the canonical-branch identity for the printed placement, parts (ii)/(iii) drop the caller-supplied block symmetry, Section 4 takes a given Definition 3.1 direct rotation, Theorem 3.1's converse and Section 6 move to the paper's separable scope, Section 6's separation is the printed interval/exterior one, and Theorem 6.2 carries the source's definedness convention."
+            "note": "Re-pinned 2026-09-07 for the fifth hostile review: Theorem 8.1's existence clause and part (i) are one combined statement, parts (ii)/(iii) are on the block eigenvalue lists with the gauge at the block dimension, and Lemma 6.1 is on the source's own two operators.  The DK-6.3-lem source passage is re-pinned because the reconstruction's non-strict leakage inequality was corrected to the strict one the original prints."
           },
           {
-            "declaration": "TauCeti.DavisKahan1970.Section8.theorem8_1_lowerSymmetricGaugeEigenvalue_sourceExact_real",
-            "type_expr_hash": "493364564",
-            "type_text_sha256": "95349c85e8f89305d36f7a7699e6bc9b4785d29babe25ef44bd144b8093f7a91",
+            "declaration": "TauCeti.DavisKahan1970.Section8.theorem8_1_lowerSymmetricGaugeEigenvalue_blockSourceExact_real",
+            "type_expr_hash": "3561243139",
+            "type_text_sha256": "98c9093b4c87cc74d592e51482e7bebb83a147cdc40a8fff28aa0bf46f2fa6e8",
             "toolchain": "leanprover/lean4:v4.34.0-rc1",
             "pinned_on": "2026-09-06",
-            "note": "Re-pinned 2026-09-07 for the fourth hostile review's source-scope facades: Theorem 8.1 part (i) drops the canonical-branch identity for the printed placement, parts (ii)/(iii) drop the caller-supplied block symmetry, Section 4 takes a given Definition 3.1 direct rotation, Theorem 3.1's converse and Section 6 move to the paper's separable scope, Section 6's separation is the printed interval/exterior one, and Theorem 6.2 carries the source's definedness convention."
+            "note": "Re-pinned 2026-09-07 for the fifth hostile review: Theorem 8.1's existence clause and part (i) are one combined statement, parts (ii)/(iii) are on the block eigenvalue lists with the gauge at the block dimension, and Lemma 6.1 is on the source's own two operators.  The DK-6.3-lem source passage is re-pinned because the reconstruction's non-strict leakage inequality was corrected to the strict one the original prints."
           },
           {
             "declaration": "TauCeti.DavisKahan1970.Section8.theorem8_1_eq_canonicalBranch_of_maximalAngle_le",
@@ -6016,7 +6022,7 @@
             "type_text_sha256": "d1b3f4c6e28fbce7dd09d07fa8b2449482dadf6a71a832c8ce3a60c7ffeefd32",
             "toolchain": "leanprover/lean4:v4.34.0-rc1",
             "pinned_on": "2026-09-06",
-            "note": "Re-pinned 2026-09-07 for the fourth hostile review's source-scope facades: Theorem 8.1 part (i) drops the canonical-branch identity for the printed placement, parts (ii)/(iii) drop the caller-supplied block symmetry, Section 4 takes a given Definition 3.1 direct rotation, Theorem 3.1's converse and Section 6 move to the paper's separable scope, Section 6's separation is the printed interval/exterior one, and Theorem 6.2 carries the source's definedness convention."
+            "note": "Re-pinned 2026-09-07 for the fifth hostile review: Theorem 8.1's existence clause and part (i) are one combined statement, parts (ii)/(iii) are on the block eigenvalue lists with the gauge at the block dimension, and Lemma 6.1 is on the source's own two operators.  The DK-6.3-lem source passage is re-pinned because the reconstruction's non-strict leakage inequality was corrected to the strict one the original prints."
           },
           {
             "declaration": "TauCeti.DavisKahan1970.Section8.theorem8_1_eq_of_maximalAngle_le_real",
@@ -6024,7 +6030,7 @@
             "type_text_sha256": "f6d2c91adedd39f901288f27fdec65541ded3ebedc4f8730fa48f11426be8600",
             "toolchain": "leanprover/lean4:v4.34.0-rc1",
             "pinned_on": "2026-09-06",
-            "note": "Re-pinned 2026-09-07 for the fourth hostile review's source-scope facades: Theorem 8.1 part (i) drops the canonical-branch identity for the printed placement, parts (ii)/(iii) drop the caller-supplied block symmetry, Section 4 takes a given Definition 3.1 direct rotation, Theorem 3.1's converse and Section 6 move to the paper's separable scope, Section 6's separation is the printed interval/exterior one, and Theorem 6.2 carries the source's definedness convention."
+            "note": "Re-pinned 2026-09-07 for the fifth hostile review: Theorem 8.1's existence clause and part (i) are one combined statement, parts (ii)/(iii) are on the block eigenvalue lists with the gauge at the block dimension, and Lemma 6.1 is on the source's own two operators.  The DK-6.3-lem source passage is re-pinned because the reconstruction's non-strict leakage inequality was corrected to the strict one the original prints."
           },
           {
             "declaration": "TauCeti.DavisKahan1970.Section8.approximationNumber_eq_eigenvalues_of_isPositive",
@@ -6032,7 +6038,7 @@
             "type_text_sha256": "d1d7bb35e9192fa5308884f96092e384fc6d7ccbaa1ea8002ce2c534c8450427",
             "toolchain": "leanprover/lean4:v4.34.0-rc1",
             "pinned_on": "2026-09-06",
-            "note": "Re-pinned 2026-09-07 for the fourth hostile review's source-scope facades: Theorem 8.1 part (i) drops the canonical-branch identity for the printed placement, parts (ii)/(iii) drop the caller-supplied block symmetry, Section 4 takes a given Definition 3.1 direct rotation, Theorem 3.1's converse and Section 6 move to the paper's separable scope, Section 6's separation is the printed interval/exterior one, and Theorem 6.2 carries the source's definedness convention."
+            "note": "Re-pinned 2026-09-07 for the fifth hostile review: Theorem 8.1's existence clause and part (i) are one combined statement, parts (ii)/(iii) are on the block eigenvalue lists with the gauge at the block dimension, and Lemma 6.1 is on the source's own two operators.  The DK-6.3-lem source passage is re-pinned because the reconstruction's non-strict leakage inequality was corrected to the strict one the original prints."
           },
           {
             "declaration": "TauCeti.DavisKahan1970.Section8.approximationNumber_upperBlockShift_eq_zero_of_le",
@@ -6040,7 +6046,7 @@
             "type_text_sha256": "f2d63ba5d9ef503da0375e1eabaf80a5ef9a70f80d54aa872cc46c99940ce3e3",
             "toolchain": "leanprover/lean4:v4.34.0-rc1",
             "pinned_on": "2026-09-06",
-            "note": "Re-pinned 2026-09-07 for the fourth hostile review's source-scope facades: Theorem 8.1 part (i) drops the canonical-branch identity for the printed placement, parts (ii)/(iii) drop the caller-supplied block symmetry, Section 4 takes a given Definition 3.1 direct rotation, Theorem 3.1's converse and Section 6 move to the paper's separable scope, Section 6's separation is the printed interval/exterior one, and Theorem 6.2 carries the source's definedness convention."
+            "note": "Re-pinned 2026-09-07 for the fifth hostile review: Theorem 8.1's existence clause and part (i) are one combined statement, parts (ii)/(iii) are on the block eigenvalue lists with the gauge at the block dimension, and Lemma 6.1 is on the source's own two operators.  The DK-6.3-lem source passage is re-pinned because the reconstruction's non-strict leakage inequality was corrected to the strict one the original prints."
           },
           {
             "declaration": "TauCeti.DavisKahan1970.Section8.norm_cosineBlock_eq_principalCosines_zero",
@@ -6048,7 +6054,7 @@
             "type_text_sha256": "920da1e7caabc52b17479ceccf10d28bc5c71dc7bb49a5d098fe8a5ac72a76d6",
             "toolchain": "leanprover/lean4:v4.34.0-rc1",
             "pinned_on": "2026-09-06",
-            "note": "Re-pinned 2026-09-07 for the fourth hostile review's source-scope facades: Theorem 8.1 part (i) drops the canonical-branch identity for the printed placement, parts (ii)/(iii) drop the caller-supplied block symmetry, Section 4 takes a given Definition 3.1 direct rotation, Theorem 3.1's converse and Section 6 move to the paper's separable scope, Section 6's separation is the printed interval/exterior one, and Theorem 6.2 carries the source's definedness convention."
+            "note": "Re-pinned 2026-09-07 for the fifth hostile review: Theorem 8.1's existence clause and part (i) are one combined statement, parts (ii)/(iii) are on the block eigenvalue lists with the gauge at the block dimension, and Lemma 6.1 is on the source's own two operators.  The DK-6.3-lem source passage is re-pinned because the reconstruction's non-strict leakage inequality was corrected to the strict one the original prints."
           },
           {
             "declaration": "TauCeti.DavisKahan1970.Section8.approximationNumber_cosineBlock_eq_principalCosines",
@@ -6056,7 +6062,7 @@
             "type_text_sha256": "4b917aee70d4f84b962a7e85877e5543a3940bd68fe52f56f1dfd030bcde6e2d",
             "toolchain": "leanprover/lean4:v4.34.0-rc1",
             "pinned_on": "2026-09-06",
-            "note": "Re-pinned 2026-09-07 for the fourth hostile review's source-scope facades: Theorem 8.1 part (i) drops the canonical-branch identity for the printed placement, parts (ii)/(iii) drop the caller-supplied block symmetry, Section 4 takes a given Definition 3.1 direct rotation, Theorem 3.1's converse and Section 6 move to the paper's separable scope, Section 6's separation is the printed interval/exterior one, and Theorem 6.2 carries the source's definedness convention."
+            "note": "Re-pinned 2026-09-07 for the fifth hostile review: Theorem 8.1's existence clause and part (i) are one combined statement, parts (ii)/(iii) are on the block eigenvalue lists with the gauge at the block dimension, and Lemma 6.1 is on the source's own two operators.  The DK-6.3-lem source passage is re-pinned because the reconstruction's non-strict leakage inequality was corrected to the strict one the original prints."
           },
           {
             "declaration": "TauCeti.DavisKahan1970.Section8.cos_arccos_approximationNumber_cosineBlock",
@@ -6064,7 +6070,7 @@
             "type_text_sha256": "07d5505061bfedd90d18d4134258fbe08cd7b8fbf7b0eabd70728803173600fa",
             "toolchain": "leanprover/lean4:v4.34.0-rc1",
             "pinned_on": "2026-09-06",
-            "note": "Re-pinned 2026-09-07 for the fourth hostile review's source-scope facades: Theorem 8.1 part (i) drops the canonical-branch identity for the printed placement, parts (ii)/(iii) drop the caller-supplied block symmetry, Section 4 takes a given Definition 3.1 direct rotation, Theorem 3.1's converse and Section 6 move to the paper's separable scope, Section 6's separation is the printed interval/exterior one, and Theorem 6.2 carries the source's definedness convention."
+            "note": "Re-pinned 2026-09-07 for the fifth hostile review: Theorem 8.1's existence clause and part (i) are one combined statement, parts (ii)/(iii) are on the block eigenvalue lists with the gauge at the block dimension, and Lemma 6.1 is on the source's own two operators.  The DK-6.3-lem source passage is re-pinned because the reconstruction's non-strict leakage inequality was corrected to the strict one the original prints."
           },
           {
             "declaration": "TauCeti.approximationNumber_adjoint_sandwich_weaklyMajorized",
@@ -6072,7 +6078,7 @@
             "type_text_sha256": "c1f4a5857e6a0a0d178eb2da10df6dc8aff9ff384e7471fe61cb565d0987cec8",
             "toolchain": "leanprover/lean4:v4.34.0-rc1",
             "pinned_on": "2026-09-06",
-            "note": "Re-pinned 2026-09-07 for the fourth hostile review's source-scope facades: Theorem 8.1 part (i) drops the canonical-branch identity for the printed placement, parts (ii)/(iii) drop the caller-supplied block symmetry, Section 4 takes a given Definition 3.1 direct rotation, Theorem 3.1's converse and Section 6 move to the paper's separable scope, Section 6's separation is the printed interval/exterior one, and Theorem 6.2 carries the source's definedness convention."
+            "note": "Re-pinned 2026-09-07 for the fifth hostile review: Theorem 8.1's existence clause and part (i) are one combined statement, parts (ii)/(iii) are on the block eigenvalue lists with the gauge at the block dimension, and Lemma 6.1 is on the source's own two operators.  The DK-6.3-lem source passage is re-pinned because the reconstruction's non-strict leakage inequality was corrected to the strict one the original prints."
           }
         ],
         "source_pins": [
@@ -6092,8 +6098,8 @@
               "result": "Theorem 8.1, equations (8.1)--(8.2), and the eigenvalue/majorization interpretation"
             },
             "visibility": "public_reconstruction",
-            "pinned_on": "2026-09-04",
-            "note": "Pinned 2026-09-04 with the seven Section 3-8 major reviews: their declarations and the passages they cite are now guarded like the four Section 2 headline rows."
+            "pinned_on": "2026-09-06",
+            "note": "Re-pinned 2026-09-07 for the fifth hostile review: Theorem 8.1's existence clause and part (i) are one combined statement, parts (ii)/(iii) are on the block eigenvalue lists with the gauge at the block dimension, and Lemma 6.1 is on the source's own two operators.  The DK-6.3-lem source passage is re-pinned because the reconstruction's non-strict leakage inequality was corrected to the strict one the original prints."
           },
           {
             "fragment": "tan-two-theta",
@@ -6111,8 +6117,8 @@
               "result": "Section 2, fourth unnumbered theorem"
             },
             "visibility": "public_reconstruction",
-            "pinned_on": "2026-09-04",
-            "note": "Pinned 2026-09-04 with the seven Section 3-8 major reviews: their declarations and the passages they cite are now guarded like the four Section 2 headline rows."
+            "pinned_on": "2026-09-06",
+            "note": "Re-pinned 2026-09-07 for the fifth hostile review: Theorem 8.1's existence clause and part (i) are one combined statement, parts (ii)/(iii) are on the block eigenvalue lists with the gauge at the block dimension, and Lemma 6.1 is on the source's own two operators.  The DK-6.3-lem source passage is re-pinned because the reconstruction's non-strict leakage inequality was corrected to the strict one the original prints."
           },
           {
             "fragment": "ui-norms",
@@ -6130,8 +6136,8 @@
               "result": "Unitary-invariant norms, angle operators and the direct-rotation setup"
             },
             "visibility": "public_reconstruction",
-            "pinned_on": "2026-09-04",
-            "note": "Pinned 2026-09-04 with the seven Section 3-8 major reviews: their declarations and the passages they cite are now guarded like the four Section 2 headline rows."
+            "pinned_on": "2026-09-06",
+            "note": "Re-pinned 2026-09-07 for the fifth hostile review: Theorem 8.1's existence clause and part (i) are one combined statement, parts (ii)/(iii) are on the block eigenvalue lists with the gauge at the block dimension, and Lemma 6.1 is on the source's own two operators.  The DK-6.3-lem source passage is re-pinned because the reconstruction's non-strict leakage inequality was corrected to the strict one the original prints."
           },
           {
             "fragment": "ambient",
@@ -6149,8 +6155,8 @@
               "result": "Section 1, ambient scope"
             },
             "visibility": "public_reconstruction",
-            "pinned_on": "2026-09-04",
-            "note": "Pinned 2026-09-04 with the seven Section 3-8 major reviews: their declarations and the passages they cite are now guarded like the four Section 2 headline rows."
+            "pinned_on": "2026-09-06",
+            "note": "Re-pinned 2026-09-07 for the fifth hostile review: Theorem 8.1's existence clause and part (i) are one combined statement, parts (ii)/(iii) are on the block eigenvalue lists with the gauge at the block dimension, and Lemma 6.1 is on the source's own two operators.  The DK-6.3-lem source passage is re-pinned because the reconstruction's non-strict leakage inequality was corrected to the strict one the original prints."
           }
         ],
         "nonlocal_rationale": "Theorem 8.1 states no hypotheses at all.  It opens \"Assume the hypotheses of the tan 2 theta theorem\", so everything -- the separation, the Rayleigh-Ritz condition, and the OPERATOR SCOPE -- is imported from a passage printed six sections earlier.  The passage is therefore not self-contained, and the question a reviewer has to settle is what the phrase imports.\n\nThe accepted reading is that it imports the tan 2 theta theorem as the main body states it, at the paper's bounded setting.  Three things support it.  Section 1 fixes bounded as the setting and unbounded as an allowance.  The Section 2 scope paragraph attaches that allowance to a named list -- \"The paper states the four main results ... but the results are also intended for unbounded self-adjoint A\" -- and then locates the extra analytic work exactly: \"concentrated in Theorem 5.2 and the Appendix to Section 6\".  Section 8 is not on that list and has no counterpart there.  And Section 8 restricts its own parts (ii) and (iii) to finite dimensions, so a section that qualifies what it means to qualify, and says nothing about unbounded operators, is being read rather than silently narrowed.\n\nA reviewer who rejects this reading is saying the phrase imports the tan 2 theta theorem at its widest certified scope.  Nothing in Section 8's text forbids that: (8.1) and (8.2) are quadratic-form identities that survive an unbounded A, and the Theorem 8.2 homotopy is meaningful for unbounded A with bounded H.  On that reading the registered evidence is a proper specialization.  The repository does not claim the second reading is wrong, only that the first is better supported, and the unbounded lift -- which would make the question moot -- is tracked as `DK-S8-UNBOUNDED` in GOAL.md."
@@ -6502,8 +6508,8 @@
               ]
             },
             "visibility": "public_reconstruction",
-            "pinned_on": "2026-09-04",
-            "note": "Pinned 2026-09-04 with the seven Section 3-8 major reviews: their declarations and the passages they cite are now guarded like the four Section 2 headline rows."
+            "pinned_on": "2026-09-06",
+            "note": "Re-pinned 2026-09-07 for the fifth hostile review: Theorem 8.1's existence clause and part (i) are one combined statement, parts (ii)/(iii) are on the block eigenvalue lists with the gauge at the block dimension, and Lemma 6.1 is on the source's own two operators.  The DK-6.3-lem source passage is re-pinned because the reconstruction's non-strict leakage inequality was corrected to the strict one the original prints."
           },
           {
             "fragment": "standing-3-5",
@@ -6525,8 +6531,8 @@
               ]
             },
             "visibility": "public_reconstruction",
-            "pinned_on": "2026-09-04",
-            "note": "Pinned 2026-09-04 with the seven Section 3-8 major reviews: their declarations and the passages they cite are now guarded like the four Section 2 headline rows."
+            "pinned_on": "2026-09-06",
+            "note": "Re-pinned 2026-09-07 for the fifth hostile review: Theorem 8.1's existence clause and part (i) are one combined statement, parts (ii)/(iii) are on the block eigenvalue lists with the gauge at the block dimension, and Lemma 6.1 is on the source's own two operators.  The DK-6.3-lem source passage is re-pinned because the reconstruction's non-strict leakage inequality was corrected to the strict one the original prints."
           },
           {
             "fragment": "crossing-3-5",
@@ -6547,8 +6553,8 @@
               ]
             },
             "visibility": "public_reconstruction",
-            "pinned_on": "2026-09-04",
-            "note": "Pinned 2026-09-04 with the seven Section 3-8 major reviews: their declarations and the passages they cite are now guarded like the four Section 2 headline rows."
+            "pinned_on": "2026-09-06",
+            "note": "Re-pinned 2026-09-07 for the fifth hostile review: Theorem 8.1's existence clause and part (i) are one combined statement, parts (ii)/(iii) are on the block eigenvalue lists with the gauge at the block dimension, and Lemma 6.1 is on the source's own two operators.  The DK-6.3-lem source passage is re-pinned because the reconstruction's non-strict leakage inequality was corrected to the strict one the original prints."
           },
           {
             "fragment": "sin-two-theta",
@@ -6566,8 +6572,8 @@
               "result": "Section 2, third unnumbered theorem"
             },
             "visibility": "public_reconstruction",
-            "pinned_on": "2026-09-04",
-            "note": "Pinned 2026-09-04 with the seven Section 3-8 major reviews: their declarations and the passages they cite are now guarded like the four Section 2 headline rows."
+            "pinned_on": "2026-09-06",
+            "note": "Re-pinned 2026-09-07 for the fifth hostile review: Theorem 8.1's existence clause and part (i) are one combined statement, parts (ii)/(iii) are on the block eigenvalue lists with the gauge at the block dimension, and Lemma 6.1 is on the source's own two operators.  The DK-6.3-lem source passage is re-pinned because the reconstruction's non-strict leakage inequality was corrected to the strict one the original prints."
           }
         ],
         "statement_pins": [
@@ -6577,7 +6583,7 @@
             "type_text_sha256": "53356d39c52d864020a13c73c782e404318c245317b6b3876a7bc04f580a7b43",
             "toolchain": "leanprover/lean4:v4.34.0-rc1",
             "pinned_on": "2026-09-06",
-            "note": "Re-pinned 2026-09-07 for the fourth hostile review's source-scope facades: Theorem 8.1 part (i) drops the canonical-branch identity for the printed placement, parts (ii)/(iii) drop the caller-supplied block symmetry, Section 4 takes a given Definition 3.1 direct rotation, Theorem 3.1's converse and Section 6 move to the paper's separable scope, Section 6's separation is the printed interval/exterior one, and Theorem 6.2 carries the source's definedness convention."
+            "note": "Re-pinned 2026-09-07 for the fifth hostile review: Theorem 8.1's existence clause and part (i) are one combined statement, parts (ii)/(iii) are on the block eigenvalue lists with the gauge at the block dimension, and Lemma 6.1 is on the source's own two operators.  The DK-6.3-lem source passage is re-pinned because the reconstruction's non-strict leakage inequality was corrected to the strict one the original prints."
           },
           {
             "declaration": "TauCeti.DavisKahan1970.Section8.theorem8_2_branch_maximalAngle_lt_unbounded_source_real",
@@ -6585,7 +6591,7 @@
             "type_text_sha256": "48c1ab8fb00bb4564727d54b01a32eeec2383d41d502af48d993971d415b25e1",
             "toolchain": "leanprover/lean4:v4.34.0-rc1",
             "pinned_on": "2026-09-06",
-            "note": "Re-pinned 2026-09-07 for the fourth hostile review's source-scope facades: Theorem 8.1 part (i) drops the canonical-branch identity for the printed placement, parts (ii)/(iii) drop the caller-supplied block symmetry, Section 4 takes a given Definition 3.1 direct rotation, Theorem 3.1's converse and Section 6 move to the paper's separable scope, Section 6's separation is the printed interval/exterior one, and Theorem 6.2 carries the source's definedness convention."
+            "note": "Re-pinned 2026-09-07 for the fifth hostile review: Theorem 8.1's existence clause and part (i) are one combined statement, parts (ii)/(iii) are on the block eigenvalue lists with the gauge at the block dimension, and Lemma 6.1 is on the source's own two operators.  The DK-6.3-lem source passage is re-pinned because the reconstruction's non-strict leakage inequality was corrected to the strict one the original prints."
           },
           {
             "declaration": "TauCeti.DavisKahan1970.Section8.theorem8_2_perturbation_sourceExact_unbounded_complex",
@@ -6593,7 +6599,7 @@
             "type_text_sha256": "c1cc17d3883f451933e2a8eae43a10c495661226d85c25bdb7a696324e4e3add",
             "toolchain": "leanprover/lean4:v4.34.0-rc1",
             "pinned_on": "2026-09-06",
-            "note": "Re-pinned 2026-09-07 for the fourth hostile review's source-scope facades: Theorem 8.1 part (i) drops the canonical-branch identity for the printed placement, parts (ii)/(iii) drop the caller-supplied block symmetry, Section 4 takes a given Definition 3.1 direct rotation, Theorem 3.1's converse and Section 6 move to the paper's separable scope, Section 6's separation is the printed interval/exterior one, and Theorem 6.2 carries the source's definedness convention."
+            "note": "Re-pinned 2026-09-07 for the fifth hostile review: Theorem 8.1's existence clause and part (i) are one combined statement, parts (ii)/(iii) are on the block eigenvalue lists with the gauge at the block dimension, and Lemma 6.1 is on the source's own two operators.  The DK-6.3-lem source passage is re-pinned because the reconstruction's non-strict leakage inequality was corrected to the strict one the original prints."
           },
           {
             "declaration": "TauCeti.DavisKahan1970.Section8.theorem8_2_residual_sourceExact_unbounded_complex",
@@ -6601,7 +6607,7 @@
             "type_text_sha256": "33d9c43fd6cfdb2a24b2a9f376e6e82c6df5cd8858279cd6a9dbb222d5c36bd0",
             "toolchain": "leanprover/lean4:v4.34.0-rc1",
             "pinned_on": "2026-09-06",
-            "note": "Re-pinned 2026-09-07 for the fourth hostile review's source-scope facades: Theorem 8.1 part (i) drops the canonical-branch identity for the printed placement, parts (ii)/(iii) drop the caller-supplied block symmetry, Section 4 takes a given Definition 3.1 direct rotation, Theorem 3.1's converse and Section 6 move to the paper's separable scope, Section 6's separation is the printed interval/exterior one, and Theorem 6.2 carries the source's definedness convention."
+            "note": "Re-pinned 2026-09-07 for the fifth hostile review: Theorem 8.1's existence clause and part (i) are one combined statement, parts (ii)/(iii) are on the block eigenvalue lists with the gauge at the block dimension, and Lemma 6.1 is on the source's own two operators.  The DK-6.3-lem source passage is re-pinned because the reconstruction's non-strict leakage inequality was corrected to the strict one the original prints."
           },
           {
             "declaration": "TauCeti.DavisKahan1970.Section8.theorem8_2_perturbation_sourceExact_unbounded_real",
@@ -6609,7 +6615,7 @@
             "type_text_sha256": "61b66f84f3ece33da25582030d4c8d908c0059e96fa2ea821b47052ca543759a",
             "toolchain": "leanprover/lean4:v4.34.0-rc1",
             "pinned_on": "2026-09-06",
-            "note": "Re-pinned 2026-09-07 for the fourth hostile review's source-scope facades: Theorem 8.1 part (i) drops the canonical-branch identity for the printed placement, parts (ii)/(iii) drop the caller-supplied block symmetry, Section 4 takes a given Definition 3.1 direct rotation, Theorem 3.1's converse and Section 6 move to the paper's separable scope, Section 6's separation is the printed interval/exterior one, and Theorem 6.2 carries the source's definedness convention."
+            "note": "Re-pinned 2026-09-07 for the fifth hostile review: Theorem 8.1's existence clause and part (i) are one combined statement, parts (ii)/(iii) are on the block eigenvalue lists with the gauge at the block dimension, and Lemma 6.1 is on the source's own two operators.  The DK-6.3-lem source passage is re-pinned because the reconstruction's non-strict leakage inequality was corrected to the strict one the original prints."
           },
           {
             "declaration": "TauCeti.DavisKahan1970.Section8.theorem8_2_residual_sourceExact_unbounded_real",
@@ -6617,7 +6623,7 @@
             "type_text_sha256": "ae100eb6eb127e279ffc32206b5008f9e37f4e9cfcdd79c093f21a7305cf21ad",
             "toolchain": "leanprover/lean4:v4.34.0-rc1",
             "pinned_on": "2026-09-06",
-            "note": "Re-pinned 2026-09-07 for the fourth hostile review's source-scope facades: Theorem 8.1 part (i) drops the canonical-branch identity for the printed placement, parts (ii)/(iii) drop the caller-supplied block symmetry, Section 4 takes a given Definition 3.1 direct rotation, Theorem 3.1's converse and Section 6 move to the paper's separable scope, Section 6's separation is the printed interval/exterior one, and Theorem 6.2 carries the source's definedness convention."
+            "note": "Re-pinned 2026-09-07 for the fifth hostile review: Theorem 8.1's existence clause and part (i) are one combined statement, parts (ii)/(iii) are on the block eigenvalue lists with the gauge at the block dimension, and Lemma 6.1 is on the source's own two operators.  The DK-6.3-lem source passage is re-pinned because the reconstruction's non-strict leakage inequality was corrected to the strict one the original prints."
           },
           {
             "declaration": "TauCeti.DavisKahan1970.Section8.subspaceGap_eq_directedGap_of_crossedDefects",
@@ -6625,7 +6631,7 @@
             "type_text_sha256": "bbb8ef3e4a38bd84e759eb972a52404cfb664f6529a8d3ff12097e900532b2e6",
             "toolchain": "leanprover/lean4:v4.34.0-rc1",
             "pinned_on": "2026-09-06",
-            "note": "Re-pinned 2026-09-07 for the fourth hostile review's source-scope facades: Theorem 8.1 part (i) drops the canonical-branch identity for the printed placement, parts (ii)/(iii) drop the caller-supplied block symmetry, Section 4 takes a given Definition 3.1 direct rotation, Theorem 3.1's converse and Section 6 move to the paper's separable scope, Section 6's separation is the printed interval/exterior one, and Theorem 6.2 carries the source's definedness convention."
+            "note": "Re-pinned 2026-09-07 for the fifth hostile review: Theorem 8.1's existence clause and part (i) are one combined statement, parts (ii)/(iii) are on the block eigenvalue lists with the gauge at the block dimension, and Lemma 6.1 is on the source's own two operators.  The DK-6.3-lem source passage is re-pinned because the reconstruction's non-strict leakage inequality was corrected to the strict one the original prints."
           },
           {
             "declaration": "TauCeti.DavisKahan1970.Section8.subspaceGap_eq_directedGap_of_finrank_eq",
@@ -6633,7 +6639,7 @@
             "type_text_sha256": "e17ced871fc6fbb6accf633a49b04b8fe6fa79c5d9458fdb38e3faac998c7fa7",
             "toolchain": "leanprover/lean4:v4.34.0-rc1",
             "pinned_on": "2026-09-06",
-            "note": "Re-pinned 2026-09-07 for the fourth hostile review's source-scope facades: Theorem 8.1 part (i) drops the canonical-branch identity for the printed placement, parts (ii)/(iii) drop the caller-supplied block symmetry, Section 4 takes a given Definition 3.1 direct rotation, Theorem 3.1's converse and Section 6 move to the paper's separable scope, Section 6's separation is the printed interval/exterior one, and Theorem 6.2 carries the source's definedness convention."
+            "note": "Re-pinned 2026-09-07 for the fifth hostile review: Theorem 8.1's existence clause and part (i) are one combined statement, parts (ii)/(iii) are on the block eigenvalue lists with the gauge at the block dimension, and Lemma 6.1 is on the source's own two operators.  The DK-6.3-lem source passage is re-pinned because the reconstruction's non-strict leakage inequality was corrected to the strict one the original prints."
           },
           {
             "declaration": "TauCeti.DavisKahan1970.Section8.maximalAngle_lt_pi_div_four_of_crossedDefects",
@@ -6641,7 +6647,7 @@
             "type_text_sha256": "a0efd2b03927dd657da40fdaadc47245416a1c4b992320ddd75adc607a2d491b",
             "toolchain": "leanprover/lean4:v4.34.0-rc1",
             "pinned_on": "2026-09-06",
-            "note": "Re-pinned 2026-09-07 for the fourth hostile review's source-scope facades: Theorem 8.1 part (i) drops the canonical-branch identity for the printed placement, parts (ii)/(iii) drop the caller-supplied block symmetry, Section 4 takes a given Definition 3.1 direct rotation, Theorem 3.1's converse and Section 6 move to the paper's separable scope, Section 6's separation is the printed interval/exterior one, and Theorem 6.2 carries the source's definedness convention."
+            "note": "Re-pinned 2026-09-07 for the fifth hostile review: Theorem 8.1's existence clause and part (i) are one combined statement, parts (ii)/(iii) are on the block eigenvalue lists with the gauge at the block dimension, and Lemma 6.1 is on the source's own two operators.  The DK-6.3-lem source passage is re-pinned because the reconstruction's non-strict leakage inequality was corrected to the strict one the original prints."
           }
         ]
       }
