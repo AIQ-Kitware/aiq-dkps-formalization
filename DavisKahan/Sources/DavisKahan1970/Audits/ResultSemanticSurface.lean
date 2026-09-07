@@ -1095,3 +1095,14 @@ themselves, with the symmetric gauge at the block dimension. -/
 #check @TauCeti.DavisKahan1970.Section8.theorem8_1_lowerSymmetricGaugeEigenvalue_blockSourceExact
 #check @TauCeti.DavisKahan1970.Section8.theorem8_1_upperSymmetricGaugeEigenvalue_blockSourceExact_real
 #check @TauCeti.DavisKahan1970.Section8.theorem8_1_lowerSymmetricGaugeEigenvalue_blockSourceExact_real
+
+/-! ## 2026-09-08 Theorem 8.1 (ii)'s printed infinite-dimensional extension
+
+Part (ii) is printed with "natural infinite-dimensional extensions"; part (iii)
+is not.  These are that extension, on the blocks themselves, with the paper's own
+minimax sequence (1.10) in place of the ordered eigenvalue lists. -/
+
+#check @TauCeti.DavisKahan1970.Section8.theorem8_1_upperApproximationRepulsion_blockSourceExact
+#check @TauCeti.DavisKahan1970.Section8.theorem8_1_lowerApproximationRepulsion_blockSourceExact
+#check @TauCeti.DavisKahan1970.Section8.theorem8_1_upperApproximationRepulsion_blockSourceExact_real
+#check @TauCeti.DavisKahan1970.Section8.theorem8_1_lowerApproximationRepulsion_blockSourceExact_real
