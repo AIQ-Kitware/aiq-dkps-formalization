@@ -74,7 +74,10 @@ signatures and alternative repository-backed examples remain in
 
 `scripts/build_evidence.py` extracts the historical witness, verifies the later
 `PaperUnitaryInvariantNorm` -> `SymmetricNormingFunction` rename, and generates
-the reader-facing theorem statement. The current exact source interface uses
+the reader-facing theorem statement through checked, single-occurrence rewrites
+of the extracted signature. The display spells out `RingHom.id Complex` and
+uses the container-first argument order of `Membership.mem`. The exact
+historical signature is unchanged. The current exact source interface uses
 `NormalizedUnitaryInvariantNorm`; the candidate-note generator preserves full
 verbatim signatures from pinned Git history.
 
@@ -102,6 +105,7 @@ The paper uses local rendered PNGs for the workflow figure and appendix screensh
 make -C papers/formalization_process_4page
 make -C papers/formalization_process_4page public
 make -C papers/formalization_process_4page check-prose
+make -C papers/formalization_process_4page check-layout
 ```
 
 `make` builds the anonymous review version with the official NeurIPS 2026
@@ -109,6 +113,19 @@ MATH-AI double-blind workshop style. `make public` builds `paper_public.pdf`
 with Jonathan Crall, Brian Hu, Edward Wang, and Carey E. Priebe as authors,
 exposes the public GitHub URLs, and includes the DARPA acknowledgment in the main
 paper.  The anonymous review build omits that acknowledgment.
+
+Both versions have four pages of main text, with References starting on page 5.
+The public version groups authors by affiliation and places the DARPA
+acknowledgment at the end of page 4. The submission style, margins, and body
+font are unchanged. The historical signature uses the normal footnote-size code
+font and is kept with its caption on one page.
+
+`make check-layout` builds both versions and checks the actual PDF text and TeX
+logs. It requires `pdftotext` from Poppler. It checks the reference-page boundary,
+conclusion placement, an intact historical signature, early workflow figure,
+appendix publication figure, anonymous/public author visibility, and major TeX
+rendering diagnostics. It does not replace visual inspection. `check-prose`
+checks both the main paper and appendix, leaving the historical prompt log alone.
 
 `neurips_2026.sty` is the official workshop style supplied with the MATH-AI
 2026 template. `draft_neurips_2026.sty` is retained only as the earlier local

@@ -1,0 +1,119 @@
+#!/usr/bin/env python3
+"""Check the workshop page budget, display integrity, and author visibility.
+
+Requires pdftotext (Poppler). Run after building both PDFs. This checks the
+rendered text and TeX logs; visual inspection is still needed for layout.
+"""
+from __future__ import annotations
+
+import re
+import shutil
+import subprocess
+from pathlib import Path
+
+PAPER = Path(__file__).resolve().parent.parent
+AUTHORS = ('Jonathan Crall', 'Brian Hu', 'Edward Wang', 'Carey E. Priebe')
+CONTRACT = 'HR001125CE017'
+
+
+def validate_pages(pages: list[str], public: bool) -> list[str]:
+    """Return failures for extracted, form-feed-separated PDF pages."""
+    errors = []
+    reference_pages = [
+        i + 1 for i, page in enumerate(pages)
+        if re.search(r'^\s*(?:\d+\s+)?References\s*(?:\d+\s*)?$', page, re.M)
+    ]
+    if reference_pages != [5]:
+        errors.append(f'References must begin on page 5; found {reference_pages}')
+    if len(pages) < 5:
+        errors.append('PDF has fewer than five pages')
+        return errors
+    if not re.search(r'\bConclusion\b', pages[3]):
+        errors.append('Conclusion must be on main-text page 4')
+    flat_pages = [' '.join(page.split()) for page in pages]
+    display_pages = [
+        i for i, page in enumerate(flat_pages)
+        if 'theorem sinTwoTheta_directedResidual' in page
+    ]
+    if len(display_pages) != 1 or display_pages[0] >= 4:
+        errors.append('Historical theorem must appear once in the main text')
+    else:
+        display = flat_pages[display_pages[0]]
+        required = (
+            '-- proof omitted', 'Formalization 1:',
+            'ContinuousLinearMap (RingHom.id Complex) E E',
+            'SymmetricNormingFunction', 'Membership.mem',
+            'Or (x <= a - delta) (b + delta <= x)',
+            '2 * N.gauge (residual A V.subtypeL M)',
+        )
+        for token in required:
+            if token not in display:
+                errors.append(f'Historical display split or text missing: {token}')
+    figure1 = [i + 1 for i, page in enumerate(flat_pages) if 'Figure 1:' in page]
+    figure2 = [i + 1 for i, page in enumerate(flat_pages) if 'Figure 2:' in page]
+    if len(figure1) != 1 or figure1[0] > 2:
+        errors.append(f'Workflow Figure 1 must appear by page 2; found {figure1}')
+    if len(figure2) != 1 or figure2[0] <= 5:
+        errors.append(f'Publication Figure 2 must remain in the appendix; found {figure2}')
+    text = ' '.join(flat_pages)
+    if public:
+        for author in AUTHORS:
+            if author not in flat_pages[0]:
+                errors.append(f'Public first page is missing author: {author}')
+        if CONTRACT not in flat_pages[3]:
+            errors.append('Public acknowledgment must remain on page 4 before References')
+    else:
+        for identifier in (*AUTHORS, CONTRACT, 'github.com/AIQ-Kitware'):
+            if identifier in text:
+                errors.append(f'Identifying text in anonymous PDF: {identifier}')
+    if '\ufffd' in text or '??' in text:
+        errors.append('Replacement glyph or unresolved reference in PDF text')
+    return errors
+
+
+def main() -> int:
+    executable = shutil.which('pdftotext')
+    if executable is None:
+        print('ERROR: pdftotext is required (install Poppler utilities).')
+        return 1
+    failed = False
+    for name, public in [('paper', False), ('paper_public', True)]:
+        pdf = PAPER / f'{name}.pdf'
+        log = PAPER / f'{name}.log'
+        errors = []
+        if not pdf.is_file() or not log.is_file():
+            errors.append(f'Build {pdf.name} and its TeX log before checking layout')
+        else:
+            result = subprocess.run(
+                [executable, '-layout', str(pdf), '-'],
+                text=True, encoding='utf-8', capture_output=True, check=False,
+            )
+            if result.returncode:
+                errors.append(f'pdftotext failed: {result.stderr.strip()}')
+            else:
+                pages = result.stdout.split('\f')
+                while pages and not pages[-1].strip():
+                    pages.pop()
+                errors.extend(validate_pages(pages, public))
+            log_text = log.read_text(encoding='utf-8', errors='replace')
+            for pattern in (
+                r'Overfull \\[hv]box', r'Missing character:',
+                r'(?:Citation|Reference) .+ undefined',
+                r'There were undefined (?:references|citations)',
+                r'Label\(s\) may have changed', r'Rerun to get',
+                r'Token not allowed in a PDF string',
+            ):
+                if re.search(pattern, log_text):
+                    errors.append(f'TeX diagnostic matched: {pattern}')
+        if errors:
+            failed = True
+            for error in errors:
+                print(f'{pdf.name}: ERROR: {error}')
+        else:
+            print(f'{pdf.name}: PASS: 4 main pages; References on page 5; '
+                  'display, figures, author visibility, and TeX diagnostics checked')
+    return int(failed)
+
+
+if __name__ == '__main__':
+    raise SystemExit(main())

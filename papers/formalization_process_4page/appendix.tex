@@ -27,59 +27,71 @@ included in the supplementary artifact.
 The build records SHA-256 digests for manuscript inputs and generated evidence
 in \texttt{generated/materials\_manifest.json}.
 
+The 29-result register counts the four unnumbered Section~2 headline theorems
+and every named theorem, proposition, lemma, and corollary established in the
+source.  Definitions, proof steps, examples, immediate consequences, and open
+or deferred claims are not counted separately.  Each row records the source
+location and scope, the Lean declaration used as evidence, and the review state.
+Proposition~4.4 remains a counted result: its formal treatment certifies a
+counterexample to the printed claim and proves a repaired theorem.
+
 \section{Davis--Kahan background and Formalization 1}
 \label{app:formalization1}
 
-The mathematical setup behind Formalization~1 asks how a chosen subspace
-compares with an exact spectral subspace of a self-adjoint operator.  At the
-finite-dimensional level,
-let $A=A^*$ and let $E_0$ have orthonormal columns spanning a candidate subspace
-$P$.  Here ``candidate'' simply means the subspace being compared with an exact
-invariant spectral subspace.  The matrix
+Davis and Kahan compare a candidate subspace with an exact invariant
+subspace of a self-adjoint operator \citep{davis1970rotation}.  In finite
+dimensions, let $A=A^*$ and let $E_0$ have orthonormal columns spanning the
+candidate subspace $V$.  The map $E_0$ takes coordinates in $V$ to the ambient
+space.  Applying $A$ and then returning to those coordinates gives the
+compression $A_0=E_0^*AE_0$.  With $P_V=E_0E_0^*$, its residual is
 \[
-  A_0 = E_0^* A E_0
+  R=AE_0-E_0A_0=(I-P_V)AE_0.
 \]
-records what $A$ does after a vector is represented in the $E_0$ coordinates,
-acted on by $A$, and projected back into those coordinates.  The residual
-\[
-  R = A E_0 - E_0 A_0
-\]
-is the part of $AE_0$ that this within-$P$ action does not explain.  In
-particular, $R=0$ when $P$ is invariant under $A$.
+Thus $R$ is the component of $AE_0$ outside $V$, and $R=0$ precisely when $V$
+is invariant under $A$.  The historical signature allows any bounded operator
+\texttt{M} on $V$, not just this compression; its residual is
+$A\circ\iota_V-\iota_V\circ M$, where $\iota_V:V\hookrightarrow E$ is inclusion.
+Choosing $M$ to be the compression recovers the preceding interpretation.
 
-The comparison becomes stable when the relevant spectral cluster is separated
-from the rest of the spectrum.  If the exact reducing subspace $U$ corresponds
-to spectrum in an interval $[a,b]$, the hypotheses in Formalization~1 require
-the spectrum on $U^\perp$ to lie at least $\delta>0$ away from that interval.
-Principal angles are canonical angles between two subspaces: they are zero
-when the corresponding directions coincide and grow as those directions rotate
-apart.  The directed $\sin 2\Theta$ construction applies
-$\sin(2\theta)$ to those angles while retaining the orientation associated with
-the chosen exact subspace.  The source estimate represented by
-Formalization~1 has the form
-\[
-  \delta\,N(\sin 2\Theta_0) \le 2N(R),
-\]
-where $N$ is a unitarily invariant norm.  Thus the residual controls subspace
-misalignment relative to the spectral gap.
+For the exact subspace $U$, the assumption \texttt{Reduces A U} says that both
+$U$ and $U^\perp$ are invariant.  In Formalization~1, the spectrum of $A|_U$
+lies in $[a,b]$, while the spectrum of $A|_{U^\perp}$ lies outside
+$(a-\delta,b+\delta)$ for $\delta>0$.  This gap separates the two exact spectral
+parts.  It is an assumption on the operator being compared, rather than a
+consequence of the residual being small.
 
-Formalization~1 is a historical bounded-complex version of this estimate.  In
-its Lean statement, $U$ is the exact reducing subspace and $V$ is the candidate
-subspace.  The inclusion \texttt{V.subtypeL} plays the role of $E_0$, and the
-operator \texttt{M} on $V$ plays the role of $A_0$.  Consequently
-\texttt{residual A V.subtypeL M} is the formal counterpart of
-$AE_0-E_0A_0$.
+For two subspaces of the same finite dimension with orthonormal coordinate
+maps $E_0$ and $F_0$, their principal angles $\theta_j\in[0,\pi/2]$ satisfy
+$\cos\theta_j=\sigma_j(F_0^*E_0)$.  Equivalently, they pair directions in the two
+subspaces by their overlap.  The directed sine measures the part of a candidate
+direction outside the exact subspace; its matrix representative is
+$(I-P_U)E_0$.  The doubled-angle quantity applies $\sin(2\theta_j)$ to the
+angles, with the candidate-to-exact orientation fixed by the source.  The bound
+\[
+  \delta\,N(\sin 2\Theta_0)\le 2N(R)
+\]
+therefore controls the doubled-angle quantity by the residual relative to the
+gap.  A small doubled sine alone does not imply a small angle:
+$\sin(2\theta)$ vanishes at both $0$ and $\pi/2$.  Recovering a small-angle bound
+requires an appropriate angle branch, such as $0\le\theta\le\pi/4$.
+
+Formalization~1 states the estimate for complex Hilbert spaces.  Its ambient
+Hilbert-space assumptions are omitted from the displayed code.  The type
+\texttt{ContinuousLinearMap (RingHom.id Complex) E E} restricts $A$ to a bounded
+complex-linear operator.  The identity scalar homomorphism specifies complex
+linearity.  The following table connects the remaining structures to the
+mathematics.
 
 \begin{table}[H]
 \centering
 \small
 \caption{Reader's guide to the principal Lean structures in Formalization~1.}
 \label{tab:formalization1-glossary}
-\begin{tabularx}{\linewidth}{@{}p{0.34\linewidth}>{\raggedright\arraybackslash}X@{}}
+\begin{tabularx}{\linewidth}{@{}>{\raggedright\arraybackslash}p{0.36\linewidth}>{\raggedright\arraybackslash}X@{}}
 \toprule
 Lean expression & Mathematical role \\
 \midrule
-\texttt{ContinuousLinearMap Complex E E}
+\texttt{ContinuousLinearMap (RingHom.id Complex) E E}
   & A bounded continuous complex-linear operator $E\to E$.  In Formalization~1
     this is the ambient self-adjoint operator $A$; restricting it to this type
     is part of the historical scope mismatch. \\
@@ -102,11 +114,12 @@ Lean expression & Mathematical role \\
 \texttt{V.subtypeL}
   & The bounded inclusion $V\hookrightarrow E$, corresponding to the source's
     coordinate map $E_0$. \\
-\texttt{M : ContinuousLinearMap Complex V V}
-  & The operator acting in the candidate-subspace coordinates, corresponding
-    to $A_0$. \\
+\texttt{M : ContinuousLinearMap (RingHom.id Complex) V V}
+  & An arbitrary bounded operator on the candidate subspace.  Taking it to
+    be the compression gives the introductory choice of $A_0$. \\
 \texttt{residual A V.subtypeL M}
-  & $A\circ E_0-E_0\circ A_0$, the source residual $R$. \\
+  & $A\circ\iota_V-\iota_V\circ M$.  The inclusion plays the role of $E_0$
+    and $M$ the role of the candidate-space operator $A_0$. \\
 \texttt{SymmetricNormingFunction}
   & A normalized, dimension-coherent symmetric gauge on singular values used to
     represent the source's unitarily invariant norm $N$. \\
@@ -114,23 +127,21 @@ Lean expression & Mathematical role \\
   & $T$ lies in the canonical operator ideal on which the norm determined by
     $N$ is finite. \\
 \texttt{N.gauge T}
-  & The real-valued norm/gauge of $T$, i.e. the quantity written $N(T)$ in the
-    source-level inequality. \\
+  & The real-valued gauge used as $N(T)$ in the inequality.  The accompanying
+    membership hypothesis places $T$ in its normed ideal. \\
 \texttt{sinTwoThetaIdealBlock U V}
-  & A bounded operator whose singular values encode the directed
-    $\sin 2\Theta$ quantity, so its \texttt{N.gauge} is the norm appearing on
-    the left-hand side of the estimate. \\
+  & A projection-product representative of the doubled-angle quantity.
+    Its approximation numbers agree with those of the directed double-angle
+    sine, which identifies the norms in the estimate. \\
 \bottomrule
 \end{tabularx}
 \end{table}
 
-The residual, spectral gap, norm inequality, and directed-angle quantity in
-Formalization~1 are the intended mathematical objects.  The mismatch is in
-scope: the declaration fixes the scalar field to $\mathbb C$ and takes $A$ to
-be bounded, while the source also covers real and appropriate unbounded
-self-adjoint settings.  The scalar field and the type of $A$ in the signature
-therefore show why this theorem could not represent the full source statement on
-its own.
+The conclusion asserts that the doubled-angle block belongs to the same ideal
+as the residual and then bounds its gauge.  These norm and spectral conditions
+are part of the statement.  The historical scope mismatch is visible in the
+fixed complex field and bounded type of $A$.  They exclude the source's real
+and unbounded settings, even when all the displayed hypotheses hold.
 
 \section{Lean publication activity}
 
@@ -169,17 +180,17 @@ Date & commit & event \\
   \caption{A review interface developed late in the project.  The source passage
   and inherited context appear at left, the claimed source-to-Lean
   correspondence in the middle, and compiler-derived Lean evidence at right.
-  The reviews reported in the main paper were performed primarily through LLM
-  source/signature comparison rather than through this interface.}
+  Most reviews reported in the main paper used LLM source/signature comparison;
+  the interface was added later.}
   \label{fig:dashboard}
 \end{figure}
 
-The interface consolidates evidence that had previously been inspected through
-source files, LLM reviews, and small Lean queries.  A reader learning Lean may
-still need help understanding structures, predicates, coercions, and typeclass
-assumptions in a signature.  Lean Compass's theorem-centered semantic dependency
-view suggests a useful extension: make those definitions inspectable from the
-statement while omitting proof-only dependencies \citep{yanahama2026leanatlas}.
+The interface consolidates source passages, correspondence judgments, and
+compiler-derived signatures previously inspected through files and Lean
+queries.  Understanding a signature can also require the definitions of its
+structures, predicates, coercions, and typeclass assumptions.  Lean Compass's
+semantic dependency view suggests how these definitions could be exposed while
+omitting proof-only dependencies \citep{yanahama2026leanatlas}.
 
 \section{Resource transparency}
 \label{app:resources}
@@ -194,10 +205,11 @@ client devices, and network energy.
 \begin{table}[H]
 \centering
 \scriptsize
-\caption{Resource snapshot at the 13 August 2026 accounting cutoff.}
+\caption{Observed lower bounds and derived estimates at the 13 August 2026
+accounting cutoff.  These are not project totals.}
 \begin{tabularx}{\linewidth}{@{}p{0.28\linewidth}p{0.17\linewidth}>{\raggedright\arraybackslash}X@{}}
 \toprule
-quantity & value & basis / interpretation \\
+Quantity & Lower bound / estimate & Basis / interpretation \\
 \midrule
 \input{generated/resource_snapshot_table.tex}
 \end{tabularx}
@@ -207,8 +219,8 @@ quantity & value & basis / interpretation \\
 \begin{table}[H]
 \centering
 \scriptsize
-\caption{AI systems and model families used during the formalization.  This is
-usage provenance, not a claim that every model has complete token telemetry.}
+\caption{AI systems and model families used during the formalization.
+Token telemetry is incomplete.}
 \label{tab:formalization-systems}
 \begin{tabularx}{\linewidth}{@{}p{0.20\linewidth}p{0.27\linewidth}>{\raggedright\arraybackslash}X@{}}
 \toprule
