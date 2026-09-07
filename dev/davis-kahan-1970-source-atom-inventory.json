@@ -3849,11 +3849,24 @@
       "present_in_distributable_spec": true,
       "restored_in_2026_08_12_pdf_reaudit": false,
       "formalization_role": "result_support",
-      "formalization_role_reason": "This atom is part of the printed statement/conclusion of a counted Davis--Kahan result and supports that result in the 29-result denominator.",
+      "formalization_role_reason": "This atom is part of the printed statement/conclusion of a counted Davis--Kahan result and supports that result in the 29-result denominator.  ITS TWO HALVES ARE ACCOUNTED FOR DIFFERENTLY, recorded 2026-09-07.  The printed finite-dimensional inequality `alpha_k - alpha <= ||C_1||_1^2 (lambda_k - alpha)` for both blocks is the counted content and carries canonical evidence.  The clause's closing phrase 'and natural infinite-dimensional extensions' ASSERTS that extensions exist and does not state one: Theorem 8.1 prints no infinite-dimensional formula, and Section 1 offers two candidate readings of 'the eigenvalues' in infinite dimensions without choosing between them -- the minimax sequence (1.10), of which it says 'the same minimax expression makes sense for general bounded operators', and then, in the same sentence, that 'in the noncompact case the source warns that spectral-multiplicity language may be more appropriate'.  So the phrase does not identify a unique formal proposition, it is discharged by classification rather than by proof, and no declaration is registered as source evidence for it.  The repository additionally proves one concrete extension consistent with the Section 1 minimax machinery -- `theorem8_1_{upper,lower}ApproximationRepulsion_blockExtension{,_real}` -- and registers it as a generalization on DK-8.1-thm, not as coverage of this atom.",
       "formalization_role_reason_code": "counted_result_statement",
       "formalization_result_ids": [
         "DK-8.1-thm"
-      ]
+      ],
+      "underspecified_source_assertion": {
+        "phrase": "with the analogous lower-block statement and natural infinite-dimensional extensions",
+        "why_not_a_proposition": "The source states that extensions exist without printing one, and the objects an extension would be stated on are not fixed: Section 1 presents both the minimax singular-value sequence and spectral-multiplicity language for the infinite-dimensional case, and says the latter may be more appropriate when the operator is noncompact.",
+        "accounting": "classified, not proved",
+        "repository_extension_offered": [
+          "TauCeti.DavisKahan1970.Section8.theorem8_1_upperApproximationRepulsion_blockExtension",
+          "TauCeti.DavisKahan1970.Section8.theorem8_1_lowerApproximationRepulsion_blockExtension",
+          "TauCeti.DavisKahan1970.Section8.theorem8_1_upperApproximationRepulsion_blockExtension_real",
+          "TauCeti.DavisKahan1970.Section8.theorem8_1_lowerApproximationRepulsion_blockExtension_real"
+        ],
+        "recorded_on": "2026-09-07",
+        "recorded_because": "The sixth hostile review asked for canonical evidence for the phrase; the seventh established that no such evidence can exist, because the phrase is not a proposition. The disagreement is recorded here so a later reviewer can reopen the reading rather than the silence."
+      }
     },
     {
       "id": "DK-8.1-thm.part-iii-gauge",
