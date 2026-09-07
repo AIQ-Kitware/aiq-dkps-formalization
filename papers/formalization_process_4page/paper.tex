@@ -304,22 +304,24 @@ generated mathematical renderings, and human match/mismatch judgments together
 to expose a smaller set of declarations whose meanings can affect a target
 theorem \citep{yanahama2026leanatlas}.  ShadowBench probes a formal statement
 with auxiliary shadow statements and implication checks
-\citep{han2026shadowbench}.  These systems are especially interesting for users
-who cannot audit a large generated development line by line.
+\citep{han2026shadowbench}.
 
 \section{What we formalized}
 \label{sec:dk}
 
 Davis and Kahan study how invariant spectral subspaces of a self-adjoint
 operator change under perturbation.  In matrix terms, let $A=A^*$ and let $E_0$
-have orthonormal columns spanning a trial subspace.  The Rayleigh--Ritz matrix
-$A_0=E_0^*AE_0$ describes the action of $A$ within that subspace, while
+have orthonormal columns spanning a candidate subspace: the subspace whose
+closeness to an exact invariant spectral subspace we want to measure.  The matrix
+$A_0=E_0^*AE_0$ records the action of $A$ after projecting back into the $E_0$
+coordinates, while
 \[
   R = A E_0 - E_0 A_0
 \]
-measures its failure to be invariant.  Under spectral separation, the paper
-bounds the principal angles between the trial subspace and an exact spectral
-subspace.  One directed $\sin 2\Theta$ result has the form
+measures the part of $AE_0$ not explained by that within-subspace action.  Under
+spectral separation, the paper bounds the principal angles between the candidate
+subspace and an exact spectral subspace.  One directed $\sin 2\Theta$ result has
+the form
 \begin{equation}
   \delta\,N(\sin 2\Theta_0) \le 2N(R),
   \label{eq:sin2theta}
@@ -350,8 +352,8 @@ and a repaired theorem \citep{aiqdkps2026repo}.
 \subsection{Example of a semantically misaligned formalization}
 \label{sec:scope-mismatch}
 
-The directed $\sin 2\Theta$ statement in \cref{eq:sin2theta} uses the trial
-residual $R=AE_0-E_0A_0$ and includes real and complex, potentially unbounded
+The directed $\sin 2\Theta$ statement in \cref{eq:sin2theta} uses the
+residual $R=AE_0-E_0A_0$ associated with the candidate subspace and includes real and complex, potentially unbounded
 self-adjoint settings under the paper's domain and bounded-residual conditions.
 At one stage the checked theorem below was used as the ledger witness for this
 source result.  It has the printed residual and factor~2, but the signature fixes
@@ -373,52 +375,41 @@ bounded \texttt{ContinuousLinearMap}.
 ]{generated/historical_scope_mismatch_presentation.lean}
 
 A separate checked theorem at the time covered unbounded operators but used a
-reflection residual rather than the printed trial residual.  Thus no single
+reflection residual rather than the printed candidate-subspace residual.  Thus no single
 checked theorem matched both the residual and scope of the source statement.
-The repair supplied real and complex unbounded endpoints with the printed trial
+The repair supplied real and complex unbounded endpoints with the printed candidate-subspace
 residual.  Appendix~\ref{app:formalization1} maps the Lean structures in
 Formalization~1 back to the Davis--Kahan notation and mathematical statement.
 
 \clearpage
 \section{Conclusion}
 
-\paragraph{Did we formalize all 29 tracked results?}
-Yes, in the sense that every tracked source result now has a checked formal
-resolution.  Twenty-eight printed results have Lean proofs.  Proposition~4.4
-also counts as formalized: the development certifies that the printed claim is
-false, gives a finite-dimensional counterexample, and proves a repaired theorem.
-This is theorem-level coverage, however, and does not by itself certify that
-every source-to-Lean correspondence has been reviewed correctly.  LLM reviewers
-have continued to find scope and representation problems in formalizations that
-had previously been marked complete.
-
-\paragraph{What helped during the process?}
-A persistent source-to-Lean result register made completion claims inspectable:
-for each target we kept the source location, intended scope, Lean declaration,
-and current review status.  Similar author-facing correspondence workflows now
-appear in EconCSLib, while Lean Atlas/Compass helps identify the declarations
-whose semantics can affect a target, and FormaTheoria and LeanArchitect address
-longer-horizon source/formal reconciliation \citep{garg2026econcs,yanahama2026leanatlas,nie2026formatheoria,zhu2026leanarchitect}.
+Formalizing the 29 tracked results required more than constructing Lean proofs.
+A persistent source-to-Lean result register kept the source location, intended
+scope, Lean declaration, and review status visible for each target.  Related
+workflows appear in EconCSLib; Lean Atlas/Compass helps expose the declarations
+whose meanings can affect a target; and FormaTheoria and LeanArchitect support
+longer-running source/formal reconciliation
+\citep{garg2026econcs,yanahama2026leanatlas,nie2026formatheoria,zhu2026leanarchitect}.
 During this project we also developed \texttt{leanq}, a small query tool for the
-pinned Lean environment.  It made it easy to ask for elaborated theorem types,
-source locations, declaration kinds, axioms, and dependencies while comparing a
-formal statement with the paper.  In practice, the most useful review loop was
-to review apparently completed results again with a falsification objective and inspect
-exactly the dimensions along which source scope can drift: scalar field,
-dimension, operator domain, norm class, gap assumptions, and the identity of the
-residual and angle objects.
+pinned Lean environment that returns elaborated theorem types, source locations,
+declaration kinds, axioms, and dependencies.  In review, we repeatedly returned
+to apparently completed results with a falsification objective and checked the
+specific places where source scope can drift: scalar field, dimension, operator
+domain, norm class, gap assumptions, and the identity of the residual and angle
+objects.
 
 \paragraph{Did we formalize Davis--Kahan?}
-At the level of covering the paper's 29 tracked mathematical results, yes.  At
-the stronger level we ultimately care about---formalization faithful to the source
-for every result at its intended scope---not yet.  As of this revision, LLM reviewers
-are still identifying issues in some formalizations, although the remaining
-problems appear to be source-correspondence defects rather than missing headline
-results.  We therefore believe the development is very close, but we are not yet
-ready to declare every correspondence closed.  The experience changed what a
-completion claim means for us: a theorem should not count as finished merely
-because Lean accepts it or an LLM reports success; its formal statement and the
-source claim also need to survive explicit semantic review.
+All 29 tracked results now have checked formal treatments.  Twenty-eight printed
+statements are proved in Lean.  Proposition~4.4 is certified false as printed;
+the development gives a finite-dimensional counterexample and proves a repaired
+theorem.  The remaining uncertainty is semantic correspondence.  As of this
+revision, LLM reviewers are still identifying scope and representation problems
+in some formalizations that had previously been marked complete.  We believe the
+development is very close, but we are not yet ready to declare every
+source-to-Lean correspondence closed.  For this project, completion now requires
+both a checked formal result and explicit review that the formal statement
+matches the source claim at its intended scope.
 \ifshowartifacturl\space Public materials: \url{\artifacturl}.\fi
 
 \ifnum\PublicVersion=1\relax
