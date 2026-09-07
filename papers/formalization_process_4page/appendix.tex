@@ -10,14 +10,11 @@ checked against its public source.  The collection is not necessarily
 representative, so we make no prevalence estimates from it.
 
 \texttt{make sources} validates the account schema, identifiers, citation keys,
-and URLs and regenerates the paper macros.  The monthly Lean-publication series
-and selected Git timeline are kept separately.  For the publication series, a
-networked survey captured the exact Papers With Lean statistics page and
-\texttt{site\_papers.json} corpus on 6 September 2026 and recorded hashes of both.
-Grouping the corpus by its \texttt{published} calendar month reproduced every
-frozen January 2025--July 2026 chart value and the live August value.  The
-tracked CSV retains the partial September count for provenance; the figure below
-shows complete months only, through August 2026.
+and URLs and regenerates the paper macros.  Figure~\ref{fig:lean-activity}
+reproduces the Papers With Lean public monthly series for January 2025 through
+August 2026 from a 6 September 2026 snapshot.  Grouping the captured corpus by
+its \texttt{published} month reproduced the public chart; the partial September
+count is excluded from the figure.
 
 \ifshowartifacturl
 Project materials: \href{\artifacturl}{public GitHub repository}.\\
@@ -27,25 +24,95 @@ Identifying repository URLs are suppressed in this double-blind build and are
 included in the supplementary artifact.
 \fi
 
-The build records SHA-256 digests and Git revisions for the manuscript inputs
-and generated evidence in \texttt{generated/materials\_manifest.json}.  The
-generated semantic-alignment candidate notes retain the historical theorem
-signatures used to study example choices, with their exact revisions, paths,
-line ranges, and digests.  The prompt history used while drafting this paper is
-preserved verbatim in \texttt{brainstorm.md}; retained pasted text written by
-another agent is labeled as such.
+The build records SHA-256 digests for manuscript inputs and generated evidence
+in \texttt{generated/materials\_manifest.json}.
+
+\section{Reading Formalization 1}
+\label{app:formalization1}
+
+Formalization~1 is a historical bounded-complex version of the directed
+$\sin 2\Theta$ residual estimate.  In the notation of the source, $U$ is the
+separated exact subspace and $V$ is the trial subspace.  The inclusion
+\texttt{V.subtypeL} plays the role of $E_0$, while the operator \texttt{M} on
+$V$ plays the role of $A_0$.  Consequently
+\texttt{residual A V.subtypeL M} is exactly the operator
+$AE_0-E_0A_0$.  The two spectral hypotheses place the spectrum of $A$ on $U$
+inside $[a,b]$ and the spectrum on $U^\perp$ at least $\delta$ away.  The
+conclusion says that the directed $\sin 2\Theta$ object belongs to the same norm
+ideal as the residual and satisfies
+$\delta N(\sin 2\Theta) \le 2N(R)$.
+
+\begin{table}[H]
+\centering
+\small
+\caption{Reader's guide to the principal Lean structures in Formalization~1.}
+\label{tab:formalization1-glossary}
+\begin{tabularx}{\linewidth}{@{}p{0.34\linewidth}>{\raggedright\arraybackslash}X@{}}
+\toprule
+Lean expression & Mathematical role \\
+\midrule
+\texttt{ContinuousLinearMap Complex E E}
+  & A bounded continuous complex-linear operator $E\to E$.  In Formalization~1
+    this is the ambient self-adjoint operator $A$; restricting it to this type
+    is part of the historical scope mismatch. \\
+\texttt{IsSelfAdjoint A}
+  & $A=A^*$, the self-adjointness assumption. \\
+\texttt{Submodule Complex E}
+  & A complex linear subspace of the ambient Hilbert space.  Here $U$ is the
+    separated exact/reducing subspace and $V$ is the trial subspace. \\
+\texttt{U.HasOrthogonalProjection}
+  & The orthogonal projection onto $U$ is available; likewise for $V$.  This
+    supports $U^\perp$, compressions, and the angle constructions. \\
+\texttt{Reduces A U}
+  & Both $U$ and $U^\perp$ are invariant under $A$. \\
+\texttt{compressOperator U A}
+  & The orthogonal compression $P_U A|_U$; for a reducing subspace this is the
+    restriction of $A$ to $U$. \\
+\texttt{spectrum Real (...)}
+  & The real spectrum of the self-adjoint compression, used to state the
+    interval and gap hypotheses. \\
+\texttt{V.subtypeL}
+  & The bounded inclusion $V\hookrightarrow E$, corresponding to the source's
+    trial-basis map $E_0$. \\
+\texttt{M : ContinuousLinearMap Complex V V}
+  & The operator on the trial coordinates, corresponding to $A_0$. \\
+\texttt{residual A V.subtypeL M}
+  & $A\circ E_0-E_0\circ A_0$, the source residual $R$. \\
+\texttt{SymmetricNormingFunction}
+  & A normalized, dimension-coherent symmetric gauge on singular values used to
+    represent the source's unitarily invariant norm $N$. \\
+\texttt{N.Mem T}
+  & $T$ lies in the canonical operator ideal on which the norm determined by
+    $N$ is finite. \\
+\texttt{N.gauge T}
+  & The real-valued norm/gauge of $T$, i.e. the quantity written $N(T)$ in the
+    source-level inequality. \\
+\texttt{sinTwoThetaIdealBlock U V}
+  & A bounded operator whose singular values encode the directed
+    $\sin 2\Theta$ quantity, so its \texttt{N.gauge} is the norm appearing on
+    the left-hand side of the estimate. \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+The residual, spectral gap, norm inequality, and directed-angle quantity in
+Formalization~1 are the intended mathematical objects.  The mismatch is in
+scope: the declaration fixes the scalar field to $\mathbb C$ and takes $A$ to
+be bounded, while the source also covers real and appropriate unbounded
+self-adjoint settings.  The scalar field and the type of $A$ in the signature
+therefore show why this theorem could not by itself serve as the source-exact
+witness.
 
 \section{Lean publication activity}
 
 \begin{figure}[H]
   \centering
   \input{generated/lean_activity_timeline_tikz.tex}
-  \caption{Monthly Lean-related arXiv papers represented in Papers With Lean,
-  grouped by the corpus \texttt{published} month, from January 2024 through
-  August 2026 \citep{paperswithlean2026stats}.  The public statistics chart
-  begins in January 2025; the 2024 extension uses the audited corpus after its
-  date field reproduced the chart overlap.  Only complete months are shown.  The
-  fraction that used AI is unknown.}
+  \caption{Monthly publication counts reproduced from the Papers With Lean
+  public statistics series, January 2025 through August 2026
+  \citep{paperswithlean2026stats}.  Counts are grouped by the captured data's
+  \texttt{published} month, and only complete months are shown.  The fraction
+  that used AI is unknown.}
   \label{fig:lean-activity}
 \end{figure}
 
@@ -84,27 +151,6 @@ still need help understanding structures, predicates, coercions, and typeclass
 assumptions in a signature.  Lean Compass's theorem-centered semantic dependency
 view suggests a useful extension: make those definitions inspectable from the
 statement while omitting proof-only dependencies \citep{yanahama2026leanatlas}.
-
-\section{Glossary}
-
-\begin{center}
-\small
-\begin{tabularx}{\linewidth}{@{}>{\raggedright\arraybackslash}p{0.24\linewidth}>{\raggedright\arraybackslash}X@{}}
-\toprule
-Term & Meaning here \\
-\midrule
-Lean signature & The theorem declaration: parameters and hypotheses followed by the proposition being proved. \\
-Elaboration & Lean's resolution of notation, implicit arguments, coercions, namespaces, and typeclass inference into a fully typed term. \\
-Self-adjoint operator & An operator equal to its adjoint; for real finite-dimensional matrices this corresponds to a symmetric matrix. \\
-Spectral subspace & A subspace associated with a selected part of an operator's spectrum; eigenspaces are the finite-matrix example. \\
-Residual & A quantity measuring how far a trial subspace or frame fails to satisfy the exact invariant relation; here $R=AE_0-E_0A_0$. \\
-Spectral gap & Separation between the target spectral region and competing spectrum. \\
-$\sin\Theta$ & An operator whose singular values encode sines of principal angles between subspaces. \\
-Unitarily invariant norm & A norm unchanged by unitary changes of coordinates; examples include spectral, Frobenius/Hilbert--Schmidt, and trace norms in finite dimensions. \\
-Semantic alignment & Agreement between a formal declaration and the mathematical claim intended by its source, including inherited context and scope. \\
-\bottomrule
-\end{tabularx}
-\end{center}
 
 \section{Resource transparency}
 \label{app:resources}
@@ -154,5 +200,5 @@ appear here were still used.}
 \resizebox{\linewidth}{!}{\input{generated/model_token_table.tex}}
 \end{table}
 
-The longer accounting record retains historical model labels verbatim and uses
-exact recovered telemetry when it is available.
+Historical model labels are retained verbatim, with exact recovered telemetry used
+when it is available.
