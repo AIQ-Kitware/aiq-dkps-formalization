@@ -62,18 +62,19 @@ prompts that are not available verbatim are not reconstructed from summaries.
 
 ## Worked semantic-alignment example
 
-The four-page paper uses the historical Theorem 8.2 bounded/unbounded scope
-mismatch. `scripts/build_evidence.py` extracts the full historical and repaired
-theorem signatures from Git and writes `generated/historical_scope_mismatch.json`.
-The PDF displays only the operator-type lines needed for the comparison in
-`generated/historical_scope_mismatch.lean`; the full verbatim Lean is also
-retained in `notes/SEMANTIC_ALIGNMENT_CANDIDATES.md`.
+The four-page paper uses the historical directed $\sin 2\Theta$
+correspondence failure. One checked theorem had the printed trial residual,
+factor two, and norm family, but only bounded complex operator scope. A separate
+checked theorem had unbounded scope but used a reflection residual rather than
+the printed trial residual. The paper shows a compact generated scope table;
+full historical signatures and alternative repository-backed examples remain in
+`notes/SEMANTIC_ALIGNMENT_CANDIDATES.md`.
 
-The earlier witness typed both the ambient self-adjoint operator and the
-perturbation as bounded continuous linear maps. Section 8 inherits a possibly
-unbounded ambient operator scope while keeping the perturbation bounded. The
-repaired source-facing endpoint restores that distinction. Alternative
-repository-backed examples remain in `notes/SEMANTIC_ALIGNMENT_CANDIDATES.md`.
+`scripts/build_evidence.py` extracts the historical witness and the current real
+and complex source-facing endpoints to build that table. The current exact
+source interface uses `NormalizedUnitaryInvariantNorm`; the proof layer may pass
+through `SymmetricNormingFunction`. The candidate-note generator preserves full
+verbatim signatures from pinned Git history.
 
 The manuscript reports mathematical resolution of all 29 tracked Davis--Kahan
 results while keeping semantic alignment separate: the latest signature/context

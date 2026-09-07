@@ -587,3 +587,87 @@ But going back to the residual, teh reader doesn't know what A, E0, or A0 is.
 
 We also still have the issue where line 122 is rendered as `(M : V L[] V)` we have to register the latex way of expressing the symbols with listings. But actually, let's choose a different result. Maybe let's do 5. section 2 tan-theta.  The issue here is that h35 was something we could prove from the premise, but we added it in as a required input? 
 ````
+
+### Prompt 25
+
+````text
+I've annotated the tex files with \\note please read these and make the appropriate adjustments and give me the overlay and responses to questions can be in chat.
+````
+
+### Prompt 26
+
+````text
+Change to: We observe that LLMs often reported completion before source-level review exposed scope mismatches
+
+
+
+ \\note{we can't say this was a final review, I'm not sure if we even note this here given that we already mentioend that LLMs overclaim completion} A final signature/context review found seven source-scope
+mismatches, which were subsequently repaired; final re-review remained pending
+at this revision.
+
+> if the source says that
+>
+> all doohickeys are excellent while the formal statement says only that special
+>
+> doohickeys are quasi-excellent
+
+I want to rephrase this more like: you may have intended to formalize a statement that that all doohikies are excellent, but the agent may have only formalized that all doohikies are quasi-excellent. 
+
+Not sure if that's the best phrasing, but I want to find the best words for this as I think it is a powerful example.
+
+> Grouping
+>
+> the Papers With Lean corpu
+
+We should write this more like: "We collect the... "
+
+> Git events used here are kept in a separate dated table keyed by commit.
+
+The main text should contain no git events or the need to explain anything about them. 
+
+> The Davis–Kahan case
+
+Maybe we just introduce the general problem, so we get rid of statement of the problem, and this section 3.0 is just about what we attempted to formalize, and as concise, but understandable of an explanation as possible. 
+
+> Formalization 1: T
+
+The notation is still messsed up the -> is getting rendered as []. 
+
+I'm not even sure this is a good example of illustrating the problem. Maybe we go back to the sin 2theta example? 
+````
+
+### Prompt 27
+
+````text
+> We observe that LLMs often reported completion before
+>
+> source-level review exposed scope mismatches
+
+Change to: We observe that LLMs often reported completion prematurely. 
+
+>  Lean can
+>
+> certify the latter statement without establishing the former
+
+This line is an llmism and isn't adding anything. We need to state the takeaway, or the question. 
+
+> Once LLMs authored the Lean, compilation still left a separate question
+
+This is an llmism. 
+
+On section 3.1, I think I do want the example of the misaligned sine 2 theta as we used to have. Not sure if it is git history or not. And isn't N called something else like a Symmetric thing I think the lean is calling it now, I still don't understand why its not a UI norm in our source. 
+
+> Some paper-independent operator theory developed along the way is being prepared for possible
+>
+> contribution to Tau Ceti 
+
+We should say that this formalization required development of foundational layers (say what some are, refer to draft2 if needed), and that these are being prepared to contribution to tau ceti, you can drop possible.
+
+>  the longer formalization manuscript
+>
+> develops that result in detail 
+
+We should not reference the "longer manuscript here".
+
+I'm thinking now it is important to introduce the concept of the ledger as an organizational tool. And we should give a brief description of the tools we found useful during formalization. We have some space, so distilling the important lessons learned in this repo - for humans (not the llm lessons) will make it stronger. 
+````

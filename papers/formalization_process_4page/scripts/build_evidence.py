@@ -243,7 +243,7 @@ def build_model_tables():
 
 
 def build_historical_scope_mismatch():
-    """Extract the Theorem 8.2 bounded/unbounded scope mismatch from Git."""
+    """Extract the historical directed sin-2-Theta scope mismatch from Git."""
 
     def extract_decl(commit: str, source_path: str, name: str):
         full_commit = git('rev-parse', commit)
@@ -275,52 +275,78 @@ def build_historical_scope_mismatch():
         }
 
     historical = extract_decl(
-        '59f37a20',
-        'DavisKahan/Sources/DavisKahan1970/Section8/Theorem82.lean',
-        'theorem8_2_sinTwoTheta_perturbation_sourceExact',
+        '7001ed05',
+        'DavisKahan/Sources/DavisKahan1970/SinTwoThetaWholeSpace.lean',
+        'sinTwoTheta_directedResidual_paperUINorm',
     )
-    repaired = extract_decl(
-        '064df8d3',
-        'DavisKahan/Sources/DavisKahan1970/Section8/Theorem82SourceUnbounded.lean',
-        'theorem8_2_perturbation_sourceExact_unbounded_complex',
+    current_complex = extract_decl(
+        'HEAD',
+        'DavisKahan/Sources/DavisKahan1970/SinTwoThetaDirectedAngle.lean',
+        'sinTwoTheta_directed_unboundedResidual_sourceExact_complex',
+    )
+    current_real = extract_decl(
+        'HEAD',
+        'DavisKahan/Sources/DavisKahan1970/SinTwoThetaDirectedAngle.lean',
+        'sinTwoTheta_directed_unboundedResidual_sourceExact_real',
     )
 
-    def matching_line(item, needle):
-        for line in item['signature'].splitlines():
-            if needle in line:
-                return line.strip()
-        raise RuntimeError(f'cannot find {needle!r} in {item["name"]}')
+    current_path = 'DavisKahan/Sources/DavisKahan1970/SinTwoThetaDirectedAngle.lean'
+    current_source = git('show', f'HEAD:{current_path}')
+    checks = [
+        ('historical norm', historical['signature'], '(N : PaperUnitaryInvariantNorm)'),
+        ('historical bounded complex operator', historical['signature'], '{A : E →L[ℂ] E}'),
+        ('historical trial residual', historical['signature'], 'residual A V.subtypeL M'),
+        ('current complex source norm', current_complex['signature'], 'NormalizedUnitaryInvariantNorm'),
+        ('current real source norm', current_real['signature'], 'NormalizedUnitaryInvariantNorm'),
+        ('current complex unbounded operator context', current_source, '{A : H →ₗ.[ℂ] H}'),
+        ('current real unbounded operator context', current_source, '{A : E →ₗ.[ℝ] E}'),
+    ]
+    for label, text, needle in checks:
+        if needle not in text:
+            raise RuntimeError(f'{label}: expected {needle!r} in extracted source')
 
-    historical_ops = matching_line(historical, '{A K : H →L[ℂ] H}')
-    repaired_A = matching_line(repaired, '{A : Hc →ₗ.[ℂ] Hc}')
-    repaired_H = matching_line(repaired, '(Hop : Hc →L[ℂ] Hc)')
-
-    display = '\n'.join([
-        '-- Earlier Theorem 8.2 witness: both operators are bounded',
-        historical_ops,
-        '',
-        '-- Repaired source-facing endpoint: A may be unbounded',
-        repaired_A,
-        repaired_H,
+    table = '\n'.join([
+        r'\begin{tabularx}{\linewidth}{@{}p{0.20\linewidth}>{\raggedright\arraybackslash}X>{\raggedright\arraybackslash}X@{}}',
+        r'\toprule',
+        r' & Historical checked witness & Source scope / current endpoint \\',
+        r'\midrule',
+        r'Scalar field & $\mathbb{C}$ only & $\mathbb{R}$ and $\mathbb{C}$ \\',
+        r'Ambient operator & bounded \texttt{ContinuousLinearMap} & potentially unbounded self-adjoint \texttt{LinearPMap} \\',
+        r'Norm parameter & \texttt{PaperUnitaryInvariantNorm} (now \texttt{SymmetricNormingFunction}) & \texttt{NormalizedUnitaryInvariantNorm} \\',
+        r'Right-hand side & printed trial residual $R=AE_0-E_0A_0$ & printed trial residual $R=AE_0-E_0A_0$ \\',
+        r'\bottomrule',
+        r'\end{tabularx}',
         '',
     ])
 
     payload = {
-        'schema_version': 1,
-        'case': 'theorem8.2-bounded-witness-for-inherited-unbounded-scope',
+        'schema_version': 2,
+        'case': 'directed-sin-two-theta-bounded-complex-witness',
         'historical': historical,
-        'repaired': repaired,
-        'display_sha256': hashlib.sha256(display.encode('utf8')).hexdigest(),
+        'current_complex': current_complex,
+        'current_real': current_real,
+        'current_ambient_context': {
+            'source_path': current_path,
+            'complex': '{A : H →ₗ.[ℂ] H}',
+            'real': '{A : E →ₗ.[ℝ] E}',
+        },
+        'table_sha256': hashlib.sha256(table.encode('utf8')).hexdigest(),
         'note': (
-            'The PDF displays only the lines needed to show the operator-type '
-            'scope difference. Full verbatim signatures are retained here and '
-            'in notes/SEMANTIC_ALIGNMENT_CANDIDATES.md.'
+            'The PDF table is a scope summary derived from these exact signatures. '
+            'The historical theorem used the source trial residual but only bounded '
+            'complex scope. Current source-facing endpoints use the source norm class '
+            'NormalizedUnitaryInvariantNorm and potentially unbounded ambient operators '
+            'over both real and complex Hilbert spaces.'
         ),
     }
     out = PAPER / 'generated' / 'historical_scope_mismatch.json'
     out.write_text(json.dumps(payload, indent=2, sort_keys=True) + '\n', encoding='utf8')
-    lean_out = PAPER / 'generated' / 'historical_scope_mismatch.lean'
-    lean_out.write_text(display, encoding='utf8')
+    (PAPER / 'generated' / 'historical_scope_mismatch_table.tex').write_text(
+        table, encoding='utf8'
+    )
+    stale = PAPER / 'generated' / 'historical_scope_mismatch.lean'
+    if stale.exists():
+        stale.unlink()
 
 def build_manifest():
     relpaths = [
@@ -340,7 +366,7 @@ def build_manifest():
         'papers/formalization_process_4page/figures/formalization_workflow.png',
         'papers/formalization_process_4page/figures/semantic-alignment-sine-theta-row.png',
         'papers/formalization_process_4page/generated/historical_scope_mismatch.json',
-        'papers/formalization_process_4page/generated/historical_scope_mismatch.lean',
+        'papers/formalization_process_4page/generated/historical_scope_mismatch_table.tex',
         'DavisKahan/Sources/DavisKahan1970/SineTheta/Presentation.lean',
         'dev/davis-kahan-1970-formalization-result-inventory.json',
         'dev/davis-kahan-1970-full-source-census.json',
@@ -400,7 +426,7 @@ def build_manifest():
         'papers/formalization_process_4page/data/practitioner_accounts.csv': 'public-account snapshot',
         'papers/formalization_process_4page/data/practitioner_accounts.schema.json': 'account-field schema',
         'papers/formalization_process_4page/data/review_timeline.csv': 'selected Git chronology',
-        'papers/formalization_process_4page/generated/historical_scope_mismatch.json': 'historical Theorem 8.2 scope-mismatch example',
+        'papers/formalization_process_4page/generated/historical_scope_mismatch.json': 'historical directed sin-2-Theta scope-mismatch example',
         'papers/formalization_process_4page/notes/SEMANTIC_ALIGNMENT_CANDIDATES.md': 'semantic-alignment candidate signatures',
         'DavisKahan/Sources/DavisKahan1970/SineTheta/Presentation.lean': 'current sine-theta Lean source',
         'dev/davis-kahan-1970-formalization-result-inventory.json': '29-result tracking data',

@@ -28,14 +28,12 @@ included in the supplementary artifact.
 \fi
 
 The build records SHA-256 digests and Git revisions for the manuscript inputs
-and generated evidence in \texttt{generated/materials\_manifest.json}.  For
-\cref{lst:scope-mismatch}, it extracts the historical bounded Theorem~8.2
-signature from commit \texttt{59f37a20} and the unbounded source-facing endpoint
-from \texttt{064df8d3}; the full signatures, paths, line ranges, and digests are
-retained in the generated semantic-alignment candidate notes.  The prompt
-history used while drafting this paper is preserved verbatim in
-\texttt{brainstorm.md}; retained pasted text written by another agent is labeled
-as such.
+and generated evidence in \texttt{generated/materials\_manifest.json}.  The
+generated semantic-alignment candidate notes retain the historical theorem
+signatures used to study example choices, with their exact revisions, paths,
+line ranges, and digests.  The prompt history used while drafting this paper is
+preserved verbatim in \texttt{brainstorm.md}; retained pasted text written by
+another agent is labeled as such.
 
 \section{Lean publication activity}
 
@@ -95,7 +93,6 @@ statement while omitting proof-only dependencies \citep{yanahama2026leanatlas}.
 \toprule
 Term & Meaning here \\
 \midrule
-Lean kernel & The small checker that validates an elaborated proof term against its formal type. \\
 Lean signature & The theorem declaration: parameters and hypotheses followed by the proposition being proved. \\
 Elaboration & Lean's resolution of notation, implicit arguments, coercions, namespaces, and typeclass inference into a fully typed term. \\
 Self-adjoint operator & An operator equal to its adjoint; for real finite-dimensional matrices this corresponds to a symmetric matrix. \\
@@ -122,7 +119,7 @@ client devices, and network energy.
 \begin{table}[H]
 \centering
 \scriptsize
-\caption{Resource snapshot carried over from the longer formalization manuscript.}
+\caption{Resource snapshot at the 13 August 2026 accounting cutoff.}
 \begin{tabularx}{\linewidth}{@{}p{0.28\linewidth}p{0.17\linewidth}>{\raggedright\arraybackslash}X@{}}
 \toprule
 quantity & value & basis / interpretation \\
