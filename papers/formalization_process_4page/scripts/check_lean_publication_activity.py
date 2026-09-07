@@ -15,6 +15,7 @@ from pathlib import Path
 
 DEFAULT_URL = "https://paperswithlean.com/stat/"
 DEFAULT_SNAPSHOT = Path(__file__).resolve().parents[1] / "data" / "lean_publication_activity.csv"
+PAPER_CUTOFF_MONTH = "2026-09"
 
 
 def parse_args() -> argparse.Namespace:
@@ -83,13 +84,21 @@ def main() -> int:
     live, meta = parse_live_series(page)
     frozen = load_snapshot(args.snapshot)
     live_map = dict(live)
+    live_first = live[0][0]
+    live_last = live[-1][0]
+
+    comparable = [
+        (month, expected)
+        for month, expected in frozen
+        if live_first <= month <= live_last and month < PAPER_CUTOFF_MONTH
+    ]
 
     mismatches = [
         (month, expected, live_map.get(month))
-        for month, expected in frozen
+        for month, expected in comparable
         if live_map.get(month) != expected
     ]
-    missing = [month for month, _ in frozen if month not in live_map]
+    missing = [month for month, _ in comparable if month not in live_map]
     if missing:
         print("live page is missing frozen months: " + ", ".join(missing), file=sys.stderr)
         return 2
@@ -102,16 +111,19 @@ def main() -> int:
             )
         return 1
 
-    first_month = frozen[0][0]
-    last_month = frozen[-1][0]
+    if not comparable:
+        print("no complete tracked months overlap the live statistics chart", file=sys.stderr)
+        return 2
+    first_month = comparable[0][0]
+    last_month = comparable[-1][0]
     print(
-        f"OK: {len(frozen)} frozen months {first_month}--{last_month} "
-        "match the live Papers With Lean series."
+        f"OK: {len(comparable)} complete tracked months {first_month}--{last_month} "
+        "match the live Papers With Lean chart."
     )
     if meta:
         print(meta)
 
-    newer = [(month, count) for month, count in live if month > last_month]
+    newer = [(month, count) for month, count in live if month > frozen[-1][0]]
     if newer:
         print("Newer live months (not used by the frozen paper statistic):")
         for month, count in newer:

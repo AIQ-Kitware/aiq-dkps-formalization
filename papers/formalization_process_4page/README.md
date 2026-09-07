@@ -16,8 +16,9 @@ The monthly activity counts used in the introduction are:
 - `data/lean_publication_activity.csv`
 
 The tracked CSV records the audited January 2024--September 2026 series.
-Figure 2 shows complete months through August 2026; the partial September value
-is retained only for audit provenance.
+Figure 2 reproduces the Papers With Lean public-chart window from January 2025
+through August 2026 using complete months only; the extra tracked months remain
+available for audit provenance.
 To reproduce or re-audit the source definition, run the separate survey:
 
 ```bash
@@ -66,14 +67,15 @@ The four-page paper uses the historical directed $\sin 2\Theta$
 correspondence failure. One checked theorem had the printed trial residual,
 factor two, and norm family, but only bounded complex operator scope. A separate
 checked theorem had unbounded scope but used a reflection residual rather than
-the printed trial residual. The paper shows a compact generated scope table;
-full historical signatures and alternative repository-backed examples remain in
+the printed trial residual. The paper shows a generated version of the historical
+theorem statement with names adjusted for readability; full exact historical
+signatures and alternative repository-backed examples remain in
 `notes/SEMANTIC_ALIGNMENT_CANDIDATES.md`.
 
-`scripts/build_evidence.py` extracts the historical witness and the current real
-and complex source-facing endpoints to build that table. The current exact
-source interface uses `NormalizedUnitaryInvariantNorm`; the proof layer may pass
-through `SymmetricNormingFunction`. The candidate-note generator preserves full
+`scripts/build_evidence.py` extracts the historical witness, verifies the later
+`PaperUnitaryInvariantNorm` -> `SymmetricNormingFunction` rename, and generates
+the reader-facing theorem statement. The current exact source interface uses
+`NormalizedUnitaryInvariantNorm`; the candidate-note generator preserves full
 verbatim signatures from pinned Git history.
 
 The manuscript reports mathematical resolution of all 29 tracked Davis--Kahan
