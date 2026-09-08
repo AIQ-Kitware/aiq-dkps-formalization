@@ -100,8 +100,13 @@ def build_timeline_table(rows):
         'full_paper_faithful_scaffold': 'Full-paper-faithful DK scaffold',
         'dedicated_tree_reorganization': 'Reorganized into dedicated DK tree',
         'source_comparison_finds_mismatch': 'Source comparison finds incomplete coverage',
+        'first_29_of_29_checkpoint': 'Result inventory reaches 29/29',
+        'same_day_reopen': 'Later review invalidates Proposition 3.5 acceptance',
+        'august_17_29_of_29_checkpoint': 'Maintained semantic review reports 29/29',
+        'palomar_readiness_reorganization': 'Palomar readiness cleanup begins',
+        'coherent_clause_recheck': 'Clause-by-clause check invalidates sin 2Theta acceptance',
         'broad_review': 'Broader source comparison finds remaining gaps',
-        'apparent_completion': 'Project checks reach 29/29',
+        'apparent_completion': 'Another 29/29 checkpoint',
         'new_gap_found': 'Follow-up review finds another scope gap',
         'gap_repaired': 'Source-shaped endpoint added',
         'section8_unbounded_source_facades': 'Section 8 promoted to unbounded source facades',
@@ -251,9 +256,9 @@ def build_model_tables():
 
 
 def build_historical_scope_mismatch():
-    """Extract the historical directed sin-2-Theta scope mismatch from Git."""
+    """Extract the August 17 ambient sin-2-Theta certificate mismatch from Git."""
 
-    def extract_decl(commit: str, source_path: str, name: str):
+    def extract_decl(commit: str, source_path: str, name: str, context_prefix=None):
         full_commit = git('rev-parse', commit)
         raw = subprocess.check_output(
             ['git', '-c', f'safe.directory={REPO}', 'show', f'{full_commit}:{source_path}'],
@@ -271,21 +276,50 @@ def build_historical_scope_mismatch():
                 end += 1
                 break
             end += 1
-        snippet = '\n'.join(lines[start:end]) + '\n'
+        signature = '\n'.join(lines[start:end]) + '\n'
+        context = None
+        context_line = None
+        if context_prefix is not None:
+            context_idx = next(
+                i for i in range(start - 1, -1, -1)
+                if lines[i].strip().startswith(context_prefix)
+            )
+            context_line = lines[context_idx]
+            context = context_line + '\n\n' + signature
         return {
             'name': name,
             'commit': full_commit,
             'source_path': source_path,
             'source_file_sha256': hashlib.sha256(raw).hexdigest(),
             'line_range_1based': [start + 1, end],
-            'signature_sha256': hashlib.sha256(snippet.encode('utf8')).hexdigest(),
-            'signature': snippet,
+            'context_line_1based': None if context_line is None else context_idx + 1,
+            'signature_sha256': hashlib.sha256(signature.encode('utf8')).hexdigest(),
+            'signature': signature,
+            'display_source': context if context is not None else signature,
         }
 
+    checkpoint = '8b3f0f392f98c9a6de54e9acf3d6a7404a85ac95'
     historical = extract_decl(
-        '7001ed05',
+        checkpoint,
         'DavisKahan/Sources/DavisKahan1970/SinTwoThetaWholeSpace.lean',
-        'sinTwoTheta_directedResidual_paperUINorm',
+        'sinTwoTheta_wholeSpace_paperUINorm',
+        context_prefix='variable {A B : E →L[ℂ] E}',
+    )
+    historical_real = extract_decl(
+        checkpoint,
+        'DavisKahan/Sources/DavisKahan1970/WholeSpaceReal.lean',
+        'sinTwoTheta_wholeSpace_paperUINorm_real',
+        context_prefix='variable {A H T B : E →L[ℝ] E}',
+    )
+    historical_directed_complex = extract_decl(
+        checkpoint,
+        'DavisKahan/Sources/DavisKahan1970/SinTwoThetaUnboundedDirectedResidual.lean',
+        'sinTwoTheta_unbounded_directedResidual_paperUINorm',
+    )
+    historical_directed_real = extract_decl(
+        checkpoint,
+        'DavisKahan/Sources/DavisKahan1970/SinTwoThetaUnboundedDirectedResidualReal.lean',
+        'sinTwoTheta_unbounded_directedResidual_paperUINorm_real',
     )
 
     # Presentation-only rename audit. Commit a905bd4c deliberately renamed the
@@ -327,63 +361,46 @@ def build_historical_scope_mismatch():
 
     current_complex = extract_decl(
         'HEAD',
-        'DavisKahan/Sources/DavisKahan1970/SinTwoThetaDirectedAngle.lean',
-        'sinTwoTheta_directed_unboundedResidual_sourceExact_complex',
+        'DavisKahan/Sources/DavisKahan1970/SinTwoThetaAmbientUnbounded.lean',
+        'sinTwoTheta_ambient_unbounded_perturbedGap_sourceExact_complex',
     )
     current_real = extract_decl(
         'HEAD',
-        'DavisKahan/Sources/DavisKahan1970/SinTwoThetaDirectedAngle.lean',
-        'sinTwoTheta_directed_unboundedResidual_sourceExact_real',
+        'DavisKahan/Sources/DavisKahan1970/SinTwoThetaAmbientUnbounded.lean',
+        'sinTwoTheta_ambient_unbounded_perturbedGap_sourceExact_real',
     )
 
-    current_path = 'DavisKahan/Sources/DavisKahan1970/SinTwoThetaDirectedAngle.lean'
-    current_source = git('show', f'HEAD:{current_path}')
     checks = [
         ('historical norm', historical['signature'], '(N : PaperUnitaryInvariantNorm)'),
-        ('historical bounded complex operator', historical['signature'], '{A : E →L[ℂ] E}'),
-        ('historical trial residual', historical['signature'], 'residual A V.subtypeL M'),
+        ('historical bounded complex context', historical['display_source'], '{A B : E →L[ℂ] E}'),
+        ('historical ambient perturbation', historical['signature'], 'N.Mem (B - A)'),
+        ('historical bounded real context', historical_real['display_source'], '{A H T B : E →L[ℝ] E}'),
+        ('historical real ambient sibling', historical_real['signature'], 'paperSinTwoAngleOperatorR'),
+        ('historical complex unbounded directed witness', historical_directed_complex['signature'], 'hVdom'),
+        ('historical complex printed residual', historical_directed_complex['signature'], '2 * N.gauge R'),
+        ('historical real unbounded directed witness', historical_directed_real['signature'], 'hVdom'),
+        ('historical real printed residual', historical_directed_real['signature'], '2 * N.gauge R'),
         ('current complex source norm', current_complex['signature'], 'NormalizedUnitaryInvariantNorm'),
         ('current real source norm', current_real['signature'], 'NormalizedUnitaryInvariantNorm'),
-        ('current complex unbounded operator context', current_source, '{A : H →ₗ.[ℂ] H}'),
-        ('current real unbounded operator context', current_source, '{A : E →ₗ.[ℝ] E}'),
+        ('current complex unbounded operator', current_complex['signature'], '{A : Hc →ₗ.[ℂ] Hc}'),
+        ('current real unbounded operator', current_real['signature'], '{A : Er →ₗ.[ℝ] Er}'),
     ]
-    for label, text, needle in checks:
-        if needle not in text:
+    for label, body, needle in checks:
+        if needle not in body:
             raise RuntimeError(f'{label}: expected {needle!r} in extracted source')
 
     # Follow the MCC paper's listings pattern: put ASCII stand-ins in the
     # listings input and let LaTeX `literate=` turn them into rendered symbols.
-    # IMPORTANT: keep the exact source and the PDF presentation as two separate
-    # generated artifacts. We have repeatedly gotten this wrong when asking LLMs
-    # to "make Lean Unicode work in listings": putting literal Lean glyphs on the
-    # left-hand side of LaTeX listings' `literate=` table is fragile (and a
-    # non-BMP glyph in paper.tex can make an uploaded Overleaf source
-    # non-editable), while expanding notation into verbose ASCII Lean changes
-    # what the reader sees. Instead:
-    #
-    #   1. write the extracted historical signature verbatim to an exact sidecar;
-    #   2. copy that signature to a presentation buffer;
-    #   3. make only the audited readability name changes documented below;
-    #   4. replace display-sensitive Lean Unicode with unique ASCII sentinels;
-    #   5. let paper.tex `literate=` map those sentinels to LaTeX glyphs.
-    #
-    # The presentation file is intentionally not valid Lean. Its generated header
-    # points back to the exact sidecar. Source-fidelity audits must use the exact
-    # sidecar / JSON provenance, never reverse-engineer Lean from the PDF input.
+    # The exact Git text and the PDF presentation remain separate artifacts.
+    exact_text = historical['display_source']
     exact_sidecar = PAPER / 'generated' / 'historical_scope_mismatch_exact.lean'
-    exact_sidecar.write_text(historical['signature'], encoding='utf8')
-    if exact_sidecar.read_text(encoding='utf8') != historical['signature']:
+    exact_sidecar.write_text(exact_text, encoding='utf8')
+    if exact_sidecar.read_text(encoding='utf8') != exact_text:
         raise RuntimeError('historical exact sidecar changed during write')
 
-    presentation = historical['signature']
-
-    # These two presentation-only renames are deliberately narrow. The first
-    # shortens the historical theorem name. The second uses the current name of
-    # the norm structure, after the structural rename audit above has proved the
-    # old and new declarations agree modulo the documented helper rename.
+    presentation = exact_text
     name_rewrites = [
-        ('sinTwoTheta_directedResidual_paperUINorm',
-         'sinTwoTheta_directedResidual'),
+        ('sinTwoTheta_wholeSpace_paperUINorm', 'sinTwoTheta_ambient'),
         ('PaperUnitaryInvariantNorm', 'SymmetricNormingFunction'),
     ]
     for before, after in name_rewrites:
@@ -392,9 +409,7 @@ def build_historical_scope_mismatch():
         presentation = presentation.replace(before, after)
 
     # Keep these tokens synchronized with the ASCII keys in paper.tex's
-    # `leanpaper` literate table. Longer source tokens must come first so a
-    # component glyph (for example Complex inside the continuous-linear-map
-    # arrow) is not consumed before the compound notation is replaced.
+    # `leanpaper` literate table. Longer source tokens must come first.
     literate_sentinels = [
         ('→L[ℂ]', r'\LeanLitCLMapC'),
         ('ℂ', r'\LeanLitComplex'),
@@ -409,21 +424,15 @@ def build_historical_scope_mismatch():
     ]
     sentinels = [sentinel for _, sentinel in literate_sentinels]
     for sentinel in sentinels:
-        if any(
-            other != sentinel and other.startswith(sentinel)
-            for other in sentinels
-        ):
+        if any(other != sentinel and other.startswith(sentinel) for other in sentinels):
             raise RuntimeError(
                 f'literate sentinel is a prefix of another sentinel: {sentinel}'
             )
     for source_token, sentinel in literate_sentinels:
-        if sentinel in historical['signature']:
+        if sentinel in exact_text:
             raise RuntimeError(f'literate sentinel collides with Lean source: {sentinel}')
         presentation = presentation.replace(source_token, sentinel)
 
-    # The exact sidecar ends at `:= by`.  Keep the omission marker on that same
-    # line in the presentation artifact so the listing reads as an intentionally
-    # elided proof, rather than as a synthetic first line of the proof body.
     if not presentation.endswith(':= by\n'):
         raise RuntimeError(
             'historical presentation no longer ends with the expected `:= by`'
@@ -438,15 +447,12 @@ def build_historical_scope_mismatch():
 
     presentation_header = [
         '-- GENERATED PRESENTATION INPUT; this is not the exact Lean source.',
-        '-- Exact historical signature: generated/historical_scope_mismatch_exact.lean',
+        '-- Exact historical context/signature: generated/historical_scope_mismatch_exact.lean',
         '-- ASCII LeanLit... sentinels stand in for display-sensitive Lean notation.',
         '-- paper.tex renders those sentinels with the listings literate= table.',
         '-- Audit the exact sidecar/JSON provenance, not this presentation file.',
     ]
 
-    # Fail generation if the TeX side drifts from the generator contract. A
-    # sentinel such as `\LeanLitReal` appears as `\\LeanLitReal` in the
-    # LaTeX `literate=` key because listings must match a literal backslash.
     paper_tex = (PAPER / 'paper.tex').read_text(encoding='utf8')
     for _, sentinel in literate_sentinels:
         tex_key = '{' + sentinel.replace('\\', '\\\\') + '}'
@@ -462,47 +468,40 @@ def build_historical_scope_mismatch():
         )
 
     presentation_text = '\n'.join(presentation_header) + '\n' + presentation
-    presentation_path = (
-        PAPER / 'generated' / 'historical_scope_mismatch_presentation.lean'
-    )
+    presentation_path = PAPER / 'generated' / 'historical_scope_mismatch_presentation.lean'
     presentation_path.write_text(presentation_text, encoding='ascii')
 
     table = '\n'.join([
         r'\begin{tabularx}{\linewidth}{@{}p{0.20\linewidth}>{\raggedright\arraybackslash}X>{\raggedright\arraybackslash}X@{}}',
         r'\toprule',
-        r' & Historical checked witness & Source scope / current endpoint \\',
+        r' & 17 Aug. checkpoint & Source scope / current endpoint \\',
         r'\midrule',
-        r'Scalar field & $\mathbb{C}$ only & $\mathbb{R}$ and $\mathbb{C}$ \\',
+        r'Scalar field & $\mathbb{R}$ and $\mathbb{C}$ in separate ambient witnesses & $\mathbb{R}$ and $\mathbb{C}$ \\',
         r'Ambient operator & bounded \texttt{ContinuousLinearMap} & potentially unbounded self-adjoint \texttt{LinearPMap} \\',
-        r'Norm parameter & \texttt{PaperUnitaryInvariantNorm} (now \texttt{SymmetricNormingFunction}) & \texttt{NormalizedUnitaryInvariantNorm} \\',
-        r'Right-hand side & printed trial residual $R=AE_0-E_0A_0$ & printed trial residual $R=AE_0-E_0A_0$ \\',
+        r'Gap placement & blocks of the unperturbed operator & blocks of the perturbed operator, as printed \\',
+        r'Conclusion & ambient $\delta N(\sin 2\Theta)\le 2N(H)$ form & same ambient conclusion \\',
         r'\bottomrule',
         r'\end{tabularx}',
         '',
     ])
 
     payload = {
-        'schema_version': 3,
-        'case': 'directed-sin-two-theta-bounded-complex-witness',
-        'historical': historical,
-        'current_complex': current_complex,
-        'current_real': current_real,
-        'current_ambient_context': {
-            'source_path': current_path,
-            'complex': '{A : H →ₗ.[ℂ] H}',
-            'real': '{A : E →ₗ.[ℝ] E}',
-        },
+        'schema_version': 4,
+        'case': 'august-17-sin-two-theta-ambient-scope-certificate-mismatch',
+        'checkpoint_commit': checkpoint,
+        'historical_ambient_complex': historical,
+        'historical_ambient_real': historical_real,
+        'historical_unbounded_directed_complex': historical_directed_complex,
+        'historical_unbounded_directed_real': historical_directed_real,
+        'current_ambient_complex': current_complex,
+        'current_ambient_real': current_real,
         'exact_sidecar': {
             'path': 'generated/historical_scope_mismatch_exact.lean',
-            'sha256': hashlib.sha256(
-                historical['signature'].encode('utf8')
-            ).hexdigest(),
+            'sha256': hashlib.sha256(exact_text.encode('utf8')).hexdigest(),
         },
         'presentation': {
             'path': 'generated/historical_scope_mismatch_presentation.lean',
-            'sha256': hashlib.sha256(
-                presentation_text.encode('ascii')
-            ).hexdigest(),
+            'sha256': hashlib.sha256(presentation_text.encode('ascii')).hexdigest(),
             'header_lines_skipped_by_paper': len(presentation_header),
             'literate_sentinels': [
                 {'source': source, 'sentinel': sentinel}
@@ -511,13 +510,13 @@ def build_historical_scope_mismatch():
         },
         'table_sha256': hashlib.sha256(table.encode('utf8')).hexdigest(),
         'note': (
-            'The PDF theorem display is derived from the exact historical signature; '
-            'the exact signature is also emitted as a sidecar while the listings input '
-            'uses ASCII sentinels that paper.tex renders through literate=. '
-            'The historical theorem used the source trial residual but only bounded '
-            'complex scope. Current source-facing endpoints use the source norm class '
-            'NormalizedUnitaryInvariantNorm and potentially unbounded ambient operators '
-            'over both real and complex Hilbert spaces.'
+            'At the 17 August checkpoint both scalar fields were covered. The '
+            'directed clause had unbounded real and complex residual witnesses, '
+            'while the ambient real and complex witnesses were bounded. The old '
+            'certificate combined scope and conclusions across declarations, so '
+            'the row could pass without one ambient witness carrying the source-wide '
+            'unbounded scope. Current source-facing ambient endpoints carry the '
+            'unbounded operator scope and the source placement of the spectral gap.'
         ),
     }
     out = PAPER / 'generated' / 'historical_scope_mismatch.json'
