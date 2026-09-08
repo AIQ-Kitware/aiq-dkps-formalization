@@ -191,10 +191,11 @@ types or inherited assumptions.
 \section{Formalization system}
 \label{sec:system}
 
-The project uses a pinned Lean workspace together with persistent source
-records, compiler-facing checks, and a separate semantic-review step.  These
-components persist across model sessions and separate proof production from the
-claim that the proved statement matches the source.
+The project keeps source interpretation, Lean execution, and correspondence
+review in persistent records outside any model session.  The workflow in
+\cref{fig:workflow} is implemented by the components in
+\cref{tab:system-components}; Appendix~\ref{app:system} gives the corresponding
+repository artifacts and checks.
 
 \begin{table}[H]
 \centering
@@ -202,44 +203,55 @@ claim that the proved statement matches the source.
 \caption{Components of the formalization system; implementation details are in
 Appendix~\ref{app:system}.}
 \label{tab:system-components}
-\begin{tabularx}{\linewidth}{@{}>{\raggedright\arraybackslash}p{0.23\linewidth}>{\raggedright\arraybackslash}X@{}}
+\begin{tabularx}{\linewidth}{@{}>{\raggedright\arraybackslash}p{0.25\linewidth}>{\raggedright\arraybackslash}X@{}}
 \toprule
 Component & Responsibility \\
 \midrule
-Source and target records
-  & Preserve source passages and fix the tracked results and their intended scope. \\
-Lean workspace and foundations
-  & Pin the proof environment and provide reusable foundations and target declarations. \\
+Source transcription and target register
+  & Preserve source passages and inherited context; fix the 29 tracked results and their intended scope. \\
+Pinned Lean environment and foundations
+  & Fix Lean, Mathlib, and Tau Ceti revisions; provide reusable foundations and the paper-facing declarations. \\
 Implementation loop
-  & Search libraries, write Lean, build missing foundations, and repair code from compiler feedback. \\
-Mechanical checks
-  & Check builds, declaration resolution, axioms/placeholders, registration consistency, and evidence drift. \\
-Semantic review and inspection
-  & Compare compiler-derived types and relevant definitions with the source and record the correspondence judgment. \\
+  & Search libraries, propose definitions and proofs, compile, add missing foundations, and repair code from compiler feedback. \\
+Evidence registration and queries
+  & Map each source target to a Lean declaration and resolve elaborated types, axioms, and dependencies with project checks and \texttt{leanq}. \\
+Mechanical validation
+  & Check builds, placeholders, source coverage, declaration resolution, registration consistency, and evidence drift. \\
+Semantic-review materials
+  & Join source context, claimed correspondence, compiler-derived types, and relevant definitions for an accept-or-revise judgment. \\
 \bottomrule
 \end{tabularx}
 \end{table}
 
+The source-order transcription and 29-result register are the inputs to an
+implementation session.  A successful Lean build supplies candidate formal
+evidence; semantic status changes only after that evidence is registered and
+compared with the source.  Generated review material places the source passage
+and inherited assumptions beside the resolved Lean declaration, its elaborated
+type, and definitions that affect its meaning.  A reviewer can accept the
+correspondence or return the target to implementation, with the decision kept in
+the register for later sessions.
+
 Claude Code was used chiefly for implementation, ChatGPT chiefly for planning
 and source review, and Codex in both; human authors fixed the target set and
-adjudicated ambiguous source readings.  The result register records source
-scope, Lean evidence, and review state, while a finer source map retains context
-and representation choices.  \texttt{leanq} queries elaborated types, axioms,
-and dependencies.  Review packets and the later interface in
-Appendix~\ref{app:review-page} place source and compiler-derived evidence in one
-inspection path.  This architecture supports review without providing an
-automated semantic certificate.
+adjudicated ambiguous source readings.  This structure lets model sessions be
+replaced without losing the target set, compiler evidence, or review state.  It
+does not provide an automated semantic certificate.
 
 \section{Related Work}
 \label{sec:related}
 
 Using LLM-assisted web search, we collected \PractitionerAccountCount{} public
-first-person accounts of AI-assisted Lean work.  They describe different ways
-of deciding whether generated Lean expresses the intended mathematics.
-The collection is not necessarily representative; Appendix~\ref{app:data}
-describes the source records, qualifications, and screening log.  Collins
-et al. study initial human--AI formalization workflows, while Ilin and Nugent
-compare a sorry-free semi-autonomous development before and after expert review
+first-person project/workflow accounts of AI-assisted Lean work.  Multiple public
+sources can support one account, and accounts known to share a practitioner are
+marked explicitly; the \PractitionerAccountCount{} rows form
+\PractitionerOverlapClusterCount{} practitioner-overlap clusters, not a count of
+unique people.  They describe different ways of deciding whether generated Lean
+expresses the intended mathematics.  The collection is not necessarily
+representative; Appendix~\ref{app:data} describes the source records,
+qualifications, and screening log.  Collins et al. study initial human--AI
+formalization workflows, while Ilin and Nugent compare a sorry-free
+semi-autonomous development before and after expert review
 \citep{collins2026workflows,ilin2026sorries}.
 
 Kahle and Saiki describe checking definitions, hypotheses, and decomposition
@@ -268,6 +280,27 @@ misformalized targets that survived repeated AI self-judgment before human
 counterexamples exposed them \citep{zhang2026slt}; Saiki and Oum report related
 uses of counterexamples and source correction
 \citep{saiki2026double,oum2026preprint}.
+
+The expanded corpus also includes software-facing trust boundaries.  Yadav
+reports carefully checking every definition and theorem statement while largely
+ignoring generated proof implementations; Warren reports five AI-written formal
+statements that type-checked and passed numerical validation before proof
+obligations exposed defects; and Zaliva reports parser and semantics defects, a
+human-directed semantic redesign, and an initially wrong progress property
+\citep{yadav2026verification,warren2026tessera,zaliva2026semantics}.  A verified
+polygon-intersection project instead makes a short human-reviewed specification
+the trust boundary while leaving AI-written implementation and proof files
+unread \citep{schildep2026polygon}.
+
+The added mathematical accounts show a second range of supervision.  Armstrong
+and Kempe report supplying detailed proof blueprints and architecture while
+agents wrote the Lean; Aslyan describes selecting symbols and redirecting
+modeling decisions while the agent implemented them.  Vergo, Bernier, and
+Schmitt explicitly solicit review of whether generated formalizations encode
+the intended mathematics, while Davis preserves the blueprint, raw model output,
+cleanup diff, and pinned environment for independent inspection
+\citep{armstrong2026degiorgi,aslyan2026friedberg,vergo2025aiproofs,
+bernier2026classfield,schmitt2025extremal,davis2026gdlean}.
 
 Within the \PractitionerAccountCount{} accounts, \AccountSemanticMismatchCount{}
 explicitly report a statement, definition, scope, or correspondence mismatch,
@@ -416,6 +449,17 @@ Lean establishes the encoded proposition.  Source review asks whether that
 proposition preserves the intended hypotheses, objects, and scope without
 exceeding what the source states; how to validate and stop such review remains
 open.
+
+\section*{Tool and computational resource disclosure}
+Following the Leiden Declaration's disclosure recommendation
+\citep{leiden2026declaration}, ChatGPT, Claude Code, and Codex were substantially
+used in the writing process, including drafting and revision, literature
+discovery, and organization of the practitioner survey.  The same systems were
+used for formalization planning, Lean implementation, and source-to-signature
+review as described in \cref{sec:system}.  Lean~4 and Mathlib provided formal
+checking.  Human authors selected the research questions and claims,
+adjudicated source interpretations, reviewed and revised the manuscript, and
+retain responsibility for its contents and citations.
 
 \begin{ack}
 This material is based upon work supported by the Defense Advanced Research

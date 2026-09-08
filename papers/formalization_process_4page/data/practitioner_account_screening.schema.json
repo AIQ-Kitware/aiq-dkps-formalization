@@ -1,26 +1,28 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "title": "Fields in practitioner_account_screening.csv",
-  "description": "Documentation for the screening log accompanying the public AI-assisted Lean account table.",
+  "description": "Screening log for candidate sources and account dispositions in the public AI-assisted Lean survey.",
   "columns": {
-    "candidate_id": "Stable local identifier for the screened source.",
-    "screened_on": "Date on which this screening decision was recorded.",
-    "date": "Publication date when known; may be a year or year-month.",
-    "author": "Named author(s) of the source.",
-    "title": "Source title or concise public description.",
-    "source_type": "Source category used by the account table.",
-    "source_url": "Public source URL.",
-    "citation_key": "BibTeX key when the source is cited or represented in the account table; may be blank for duplicates or exclusions.",
-    "discovery_route": "Short provenance label for how the candidate entered the screening log.",
-    "decision": "include_account, structured_study, related_work, duplicate, or exclude.",
-    "decision_reason": "Concise reason for the disposition.",
-    "duplicate_of": "candidate_id whose workflow evidence is already represented; required only for duplicate rows."
+    "candidate_id": "Stable identifier for the screened source/candidate.",
+    "screened_on": "Date the decision was recorded.",
+    "date": "Publication date when known.",
+    "author": "Named source author(s).",
+    "title": "Source title or public description.",
+    "source_type": "Source category.",
+    "source_url": "Public HTTPS URL.",
+    "citation_key": "BibTeX key when included, supplemental, structured-study, or related-work evidence; may be blank for holds/exclusions.",
+    "discovery_route": "Short provenance label for discovery.",
+    "decision": "include_account, supplemental_source, structured_study, related_work, hold, duplicate, or exclude.",
+    "decision_reason": "Concise reason for disposition.",
+    "account_id": "Account represented or supported when the screened source is stored in the normalized account/source tables; blank for external structured studies and related-work-only evidence.",
+    "duplicate_of": "candidate_id already representing the same source evidence; used only for true duplicate records."
   },
   "categorical_values": {
     "source_type": [
       "blog",
       "paper",
       "repository_transcript",
+      "repository_readme",
       "social_post",
       "forum_post",
       "essay",
@@ -29,8 +31,10 @@
     ],
     "decision": [
       "include_account",
+      "supplemental_source",
       "structured_study",
       "related_work",
+      "hold",
       "duplicate",
       "exclude"
     ]

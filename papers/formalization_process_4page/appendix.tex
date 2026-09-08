@@ -2,21 +2,29 @@
 \label{app:data}
 
 Using LLM-assisted web search, we collected the \PractitionerAccountCount{}
-public first-person accounts used in this paper.  Each row retains the public
-source URL, bibliography key, observation used here, a qualification note, and
-the categorical fields used for the descriptive counts.  The checked-in source
-notes render these rows as per-account records so each observation can be
-checked against its public source.  The collection is not necessarily
-representative, so we make no prevalence estimates from it.
+public first-person project/workflow accounts used in this paper.  They are
+supported by \PractitionerSourceCount{} practitioner-source records, including
+\PractitionerSupplementalSourceCount{} supplemental or corroborating sources.
+The account table is separate from the source table: additional sources for one
+project do not increase the project-account denominator.  Accounts known to
+share a practitioner carry the same practitioner-overlap cluster; the
+\PractitionerAccountCount{} project accounts form
+\PractitionerOverlapClusterCount{} such clusters.  This cluster count is not a
+count of unique practitioners.  Each account retains the observation and coding
+qualifications used here, while each source retains its URL, bibliography key,
+source role, and objective provenance fields.  The collection is not
+necessarily representative, so we make no prevalence estimates from it.
 
-The account table is accompanied by a screening log.  The log records the
-sources in the preexisting snapshot and candidates reviewed from 8 September
-2026 onward, with their disposition and a reason.  It does not reconstruct every
-candidate encountered in earlier searches and is not an exhaustive search
-record.
+The screening log records the sources in the preexisting snapshot and candidates
+reviewed from 8 September 2026 onward, with their disposition and a reason.
+Useful follow-up sources are marked \texttt{supplemental\_source} instead of
+being counted as new accounts; \PractitionerHoldCount{} screened candidates are
+currently marked \texttt{hold} pending stronger first-person workflow evidence.
+The log does not reconstruct every candidate encountered in earlier searches
+and is not an exhaustive search record.
 
-\texttt{make sources} validates the account and screening schemas, cross-table
-identifiers, citation keys, and URLs and regenerates the paper macros.  Figure~\ref{fig:lean-activity}
+\texttt{make sources} validates the account, source, and screening schemas,
+cross-table identifiers, citation keys, and URLs and regenerates the paper macros.  Figure~\ref{fig:lean-activity}
 reproduces the Papers With Lean public monthly series for January 2025 through
 August 2026 from a 6 September 2026 snapshot.  Grouping the captured corpus by
 its \texttt{published} month reproduced the public chart; the partial September
@@ -84,6 +92,17 @@ Lean source tree and \texttt{ForTauCeti/}
 \bottomrule
 \end{tabularx}
 \end{table}
+
+\paragraph{Component flow.}
+A target enters implementation after its source passage, inherited assumptions,
+and intended scope have been recorded.  Once Lean accepts an implementation,
+the evidence register maps the source target to the declaration used as its
+formal evidence.  The checkers resolve that declaration in the pinned workspace
+and regenerate compiler-derived types and consistency checks.  The audit packet
+then combines those results with the source context and the claimed
+correspondence.  Semantic-review decisions are written back to the register so
+later model sessions inherit the target and review state without relying on a
+chat transcript.
 
 \paragraph{Mechanical verification.}
 The ordinary build checks the Lean libraries in the pinned environment.  The

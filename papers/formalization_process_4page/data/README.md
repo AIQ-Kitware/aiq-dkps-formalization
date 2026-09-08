@@ -6,34 +6,48 @@ edit and review.
 
 ## `practitioner_accounts.csv`
 
-One row per public first-person account, plus one row marked `human_study` for
-the Collins et al. comparison study.  Each row carries its source URL,
-bibliography key, a concise observation, a source note explaining ambiguous
-coding, and the fields used for descriptive counts.  The allowed categorical
-values and field meanings are documented in
-`practitioner_accounts.schema.json`.  `scripts/build_practitioner_accounts.py`
-validates the file and regenerates `notes/practitioner_accounts.md`.
+One row per project/workflow episode, plus one row marked `human_study` for the
+Collins et al. comparison study.  Account rows contain the coded workflow
+observation and review fields, but no longer treat a URL as the unit of
+observation.  `practitioner_cluster` marks known cross-account practitioner
+overlap, while `project_cluster` can group multiple workflow episodes from one
+project.  The cluster identifier is an overlap component, not a unique-person
+identifier.  Field meanings and categorical values are documented in
+`practitioner_accounts.schema.json`.
 
-The snapshot was assembled with LLM-assisted web search.  Its
-representativeness is unknown.  The source URL, citation key, observation, and
-qualification note are retained so another reader can check each row against
-the public account.  The categorical fields should not be used to estimate
-prevalence among Lean users.
+## `practitioner_account_sources.csv`
+
+One row per public source supporting an account.  Every account has exactly one
+`primary` source; additional `supplemental` or `corroborating` rows can strengthen
+its evidence without increasing the project-account denominator.  The source
+table retains URLs and bibliography keys plus objective provenance fields:
+first-person status, public-artifact availability, build/provenance availability,
+and whether the source supports the coded account observation.  The schema is
+`practitioner_account_sources.schema.json`.
+
+The snapshot was assembled with LLM-assisted web search.  Its representativeness
+is unknown.  The source records and account qualification notes are retained so
+another reader can check the coding against public evidence.  The categorical
+fields should not be used to estimate prevalence among Lean users.
 
 ## `practitioner_account_screening.csv`
 
-A screening log for the account table and nearby evidence.  The log was
+A screening log for candidate sources and nearby evidence.  The log was
 introduced on 8 September 2026.  It records the sources already present in the
 paper snapshot at that point and candidates reviewed during the current
-expansion and later searches.  Each candidate receives one disposition:
-`include_account`, `structured_study`, `related_work`, `duplicate`, or
-`exclude`, together with a short reason and duplicate link when applicable.
+expansion and later searches.  Dispositions are `include_account`,
+`supplemental_source`, `structured_study`, `related_work`, `hold`, `duplicate`,
+or `exclude`.  `supplemental_source` is used when a new URL adds evidence to an
+existing project account; `duplicate` is reserved for a source that adds no new
+evidence.  `hold` records plausible candidates for which the available
+first-person material is not yet strong enough for detailed workflow coding.
 
 The log does not reconstruct every candidate encountered before it was
 introduced and should not be treated as an exhaustive search record.  New
-candidates should be logged when they are evaluated, including sources that are
-not added to `practitioner_accounts.csv`.  The builder validates the screening
-schema and its consistency with the account table and bibliography.
+candidates should be logged when evaluated.  The builder validates all three
+schemas, account/source relationships, screening dispositions, URLs, and
+bibliography keys, then regenerates `notes/practitioner_accounts.md` and the
+paper macros.
 
 ## `lean_publication_activity.csv`
 
