@@ -3,6 +3,19 @@ SHELL := /bin/bash
 	survey-publication-activity check-publication-survey \
 	self-test-publication-survey check-layout
 
+BUILD_DIR := build
+
+LATEXMK_FLAGS := \
+	-pdf \
+	-interaction=nonstopmode \
+	-halt-on-error \
+	-outdir=$(BUILD_DIR)
+
+PDFLATEX_FLAGS := \
+	-interaction=nonstopmode \
+	-halt-on-error \
+	-output-directory=$(BUILD_DIR)
+
 all: paper
 
 sources:
@@ -11,26 +24,31 @@ sources:
 	python3 scripts/build_evidence.py
 
 paper: sources
+	@mkdir -p $(BUILD_DIR)
 	@set -e; \
 	if command -v bibtex >/dev/null 2>&1; then \
-		latexmk -pdf -interaction=nonstopmode -halt-on-error paper.tex; \
+		latexmk $(LATEXMK_FLAGS) paper.tex; \
 	elif command -v bibtex8 >/dev/null 2>&1; then \
-		latexmk -pdf -interaction=nonstopmode -halt-on-error -e '$${bibtex} = "bibtex8 %O %B";' paper.tex; \
+		latexmk $(LATEXMK_FLAGS) -e '$${bibtex} = "bibtex8 %O %B";' paper.tex; \
 	else \
-		pdflatex -interaction=nonstopmode -halt-on-error paper.tex; \
-		pdflatex -interaction=nonstopmode -halt-on-error paper.tex; \
+		pdflatex $(PDFLATEX_FLAGS) paper.tex; \
+		pdflatex $(PDFLATEX_FLAGS) paper.tex; \
 	fi
 
 public: sources
+	@mkdir -p $(BUILD_DIR)
 	@set -e; \
 	if command -v bibtex >/dev/null 2>&1; then \
-		latexmk -pdf -interaction=nonstopmode -halt-on-error paper_public.tex; \
+		latexmk $(LATEXMK_FLAGS) paper_public.tex; \
 	elif command -v bibtex8 >/dev/null 2>&1; then \
-		latexmk -pdf -interaction=nonstopmode -halt-on-error -e '$${bibtex} = "bibtex8 %O %B";' paper_public.tex; \
+		latexmk $(LATEXMK_FLAGS) -e '$${bibtex} = "bibtex8 %O %B";' paper_public.tex; \
 	else \
-		pdflatex -interaction=nonstopmode -halt-on-error paper_public.tex; \
-		pdflatex -interaction=nonstopmode -halt-on-error paper_public.tex; \
+		pdflatex $(PDFLATEX_FLAGS) paper_public.tex; \
+		pdflatex $(PDFLATEX_FLAGS) paper_public.tex; \
 	fi
+
+clean:
+	rm -rf $(BUILD_DIR)
 
 check-layout: paper public
 	python3 scripts/check_layout.py

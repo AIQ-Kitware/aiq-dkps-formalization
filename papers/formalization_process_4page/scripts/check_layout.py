@@ -43,9 +43,9 @@ def validate_pages(pages: list[str], public: bool) -> list[str]:
         display = flat_pages[display_pages[0]]
         required = (
             '-- proof omitted', 'Formalization 1:',
-            'ContinuousLinearMap (RingHom.id Complex) E E',
-            'SymmetricNormingFunction', 'Membership.mem',
-            'Or (x <= a - delta) (b + delta <= x)',
+            'SymmetricNormingFunction', '{A : E → L[C] E}',
+            '{U V : Submodule C E}', 'U⊥ A',
+            'x ≤ a - d ∨ b + d ≤ x',
             '2 * N.gauge (residual A V.subtypeL M)',
         )
         for token in required:
@@ -76,12 +76,32 @@ def validate_pages(pages: list[str], public: bool) -> list[str]:
     return errors
 
 
+def validate_source_editability() -> list[str]:
+    """Catch source characters that make uploaded Overleaf .tex files non-editable."""
+    errors = []
+    for path in sorted(PAPER.glob('*.tex')):
+        text = path.read_text(encoding='utf-8')
+        for lineno, line in enumerate(text.splitlines(), 1):
+            bad = [(c, ord(c)) for c in line if ord(c) > 0xFFFF]
+            if bad:
+                rendered = ', '.join(f'U+{code:04X}' for _, code in bad)
+                errors.append(
+                    f'{path.name}:{lineno}: non-BMP Unicode ({rendered}); '
+                    'use ASCII listings sentinels / LaTeX commands instead'
+                )
+    return errors
+
+
 def main() -> int:
     executable = shutil.which('pdftotext')
     if executable is None:
         print('ERROR: pdftotext is required (install Poppler utilities).')
         return 1
     failed = False
+    source_errors = validate_source_editability()
+    for error in source_errors:
+        failed = True
+        print(f'source: ERROR: {error}')
     for name, public in [('paper', False), ('paper_public', True)]:
         pdf = PAPER / f'{name}.pdf'
         log = PAPER / f'{name}.log'
