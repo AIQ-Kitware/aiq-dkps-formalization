@@ -230,28 +230,37 @@ Using LLM-assisted web search, we collected \PractitionerAccountCount{} public
 first-person accounts of AI-assisted Lean work.  They describe different ways
 of deciding whether generated Lean expresses the intended mathematics.
 The collection is not necessarily representative; Appendix~\ref{app:data}
-describes the accompanying source records and qualifications.  Collins
-et al. separately study initial human--AI formalization workflows
-\citep{collins2026workflows}.
+describes the source records, qualifications, and screening log.  Collins
+et al. study initial human--AI formalization workflows, while Ilin and Nugent
+compare a sorry-free semi-autonomous development before and after expert review
+\citep{collins2026workflows,ilin2026sorries}.
 
 Kahle and Saiki describe checking definitions, hypotheses, and decomposition
 while agents write much of the proof code
-\citep{kahle2026keeptrying,saiki2026double}.  Sergey intervenes at representation
-choices and missing lemmas \citep{sergey2026move}.  By contrast, Suomela describes
-studying the mathematical proof without first reading the generated Lean, and
-Gowers reports using Aristotle on a complicated paper without needing Lean
-knowledge \citep{suomela2026workflow,gowers2026leiden}.  Enomoto describes a later
-``proof digestion'' phase, reorganizing a checked argument until he understood
-it mathematically \citep{enomoto2026essay}.
+\citep{kahle2026keeptrying,saiki2026double}.  Deng and Shum separate successful
+builds from source-fidelity review; they report an initial variance declaration
+that compiled while imposing weaker domain discipline than the textbook
+intended \citep{deng2026probability}.  De Dios Pont et al. report concentrating
+intensive review on theorem statements and definitions, then returning to
+understand and generalize an argument after obtaining a Lean certificate
+\citep{dedios2026banach}.  Other accounts put less emphasis on reading generated
+Lean directly: Suomela studies the mathematical proof first, Gowers reports
+using Aristotle without needing Lean knowledge, and Enomoto describes a later
+``proof digestion'' phase
+\citep{suomela2026workflow,gowers2026leiden,enomoto2026essay}.
 
 Other accounts use a second model to mediate review.  Nowak and F\"ugger used
 Claude to check Codex formalizations for added hypotheses, weakened statements,
 and proof holes \citep{nowak2026workflow}.  Kova\v{c} asked another model to
 translate Lean into English because he could not read it directly
 \citep{kovac2025erdos189}; Ilin reports adversarial review among multiple systems
-\citep{ilin2026vml}.  Counterexamples can expose errors in the intended
-mathematics: Saiki diagnosed an underspecified definition, and Oum corrected a
-source hypothesis after formalization \citep{saiki2026double,oum2026preprint}.
+\citep{ilin2026vml}.  Douglas et al. cross-validated conjectured helper results
+and proof plans across several models \citep{douglas2026qft}.  Human
+counterexamples also catch statement errors: Zhang et al. report three
+misformalized targets that survived repeated AI self-judgment before human
+counterexamples exposed them \citep{zhang2026slt}; Saiki and Oum report related
+uses of counterexamples and source correction
+\citep{saiki2026double,oum2026preprint}.
 
 Within the \PractitionerAccountCount{} accounts, \AccountSemanticMismatchCount{}
 explicitly report a statement, definition, scope, or correspondence mismatch,
@@ -262,6 +271,12 @@ Formalization exposed a source defect in \AccountSourceDefectCount{} accounts;
 \AccountCounterexampleCount{} explicitly used a counterexample to diagnose or
 communicate a problem.  These categories can overlap and describe only the
 accounts collected here.
+
+In a controlled 100-agent experiment, Paglieri et al. report agents using local
+notation to change how unchanged benchmark text elaborated while still passing
+a submission harness based on template checks and Lean compilation
+\citep{paglieri2026swarm}.  Lean checked the submitted propositions; the harness
+did not ensure that the benchmark text retained its intended elaboration.
 
 Semantic-review tools address several parts of this process.  FormalAlign
 evaluates informal/formal agreement \citep{lu2025formalalign}; ShadowBench tests
@@ -368,22 +383,19 @@ covering the intended source claim.
 \subsection{A review-driven over-correction}
 \label{sec:overcorrection}
 
-Theorem~8.1(ii) exposed a different problem.  It prints a
-finite-dimensional block-eigenvalue inequality followed by ``and natural
-infinite-dimensional extensions,'' but gives no extension formula
-\citep{davis1970rotation}.  One review found that our treatment covered only the finite-dimensional
-formula.  The resulting repair treated four approximation-number extensions as
-the formal interpretation of the source phrase.  A subsequent review rejected
-that choice because Section~1 admits more than one plausible infinite-dimensional
-reading and Theorem~8.1 chooses none.  We retained the extensions as
-generalizations and classified the phrase as underspecified.
+Theorem~8.1(ii) exposed the opposite risk.  It prints a finite-dimensional
+block-eigenvalue inequality followed only by ``and natural infinite-dimensional
+extensions'' \citep{davis1970rotation}.  One review correctly found that our
+treatment covered only the finite-dimensional formula; the repair then treated
+four approximation-number extensions as the source's formal meaning.  A later
+review found several plausible infinite-dimensional readings and no choice among
+them in Theorem~8.1.  We retained the extensions as generalizations and marked
+the source phrase underspecified.
 
-These reviews distinguish finding missing source scope from selecting an
-interpretation that the source does not fix.  The same boundary applies to proof
-architecture: our alignment target concerns theorem statements in their
-mathematical context.  For this case study, source-fidelity review therefore asks
-whether the public theorem type has the source hypotheses, objects, scope,
-constants, and conclusion, while allowing any correct Lean proof route.
+These reviews distinguish missing source scope from choosing an interpretation
+the source does not fix.  Source-fidelity review likewise concerns the public
+theorem's hypotheses, objects, scope, constants, and conclusion, while allowing
+any correct Lean proof route.
 
 \section{Conclusion}
 
@@ -394,13 +406,10 @@ finite-dimensional counterexample plus proved repair for Proposition~4.4
 remaining material mismatch, but we have no calibrated stopping rule or formal
 certificate that every source correspondence is correct.
 
-This case study separates two checks that can otherwise be conflated.  Compiler
-and kernel feedback establish that the encoded proposition is proved; source
-review asks whether that proposition preserves the intended theorem, including
-its hypotheses, mathematical objects, and scope.  The review history also shows
-that this comparison must remain bounded by what the source actually says.
-Further work is needed to determine how such review should be validated and when
-it is sufficient.
+Compiler and kernel feedback establish that the encoded proposition is proved.
+Source review asks whether it preserves the intended theorem's hypotheses,
+objects, and scope, while remaining bounded by what the source actually says.
+How to validate and stop such review remains open.
 
 \begin{ack}
 This material is based upon work supported by the Defense Advanced Research

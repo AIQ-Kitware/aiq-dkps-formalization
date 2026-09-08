@@ -1,20 +1,70 @@
 # Public first-person accounts of AI-assisted Lean work
 
-This document is generated from `data/practitioner_accounts.csv`.  It keeps the public sources behind the workshop paper easy to inspect and corroborate.  The categorical fields are documented in `data/practitioner_accounts.schema.json`.
+This document is generated from `data/practitioner_accounts.csv` and `data/practitioner_account_screening.csv`.  It keeps the public sources behind the workshop paper easy to inspect and corroborate.  The categorical fields are documented in the corresponding schema files.
 
 The accounts were found through LLM-assisted web search.  Representativeness is unknown, so the rows should not be used to estimate prevalence.  `yes` records an event or practice explicitly described by the source; `qualified`, `unclear`, and `not_reported` preserve uncertainty instead of filling it in.
 
+The screening log was introduced on 2026-09-08.  It records the preexisting included snapshot and the candidates reviewed during the current expansion; it does not reconstruct every source encountered in earlier searches and should not be read as an exhaustive search record.
+
 ## Descriptive counts
 
-- Public first-person accounts: **21**
+- Public first-person accounts: **31**
 - Human--AI workflow studies kept alongside them: **1**
-- Explicit formal statement/definition/correspondence mismatch: **8** (+ **2** qualified)
-- Source defect exposed during formalization: **5**
-- Counterexample explicitly used: **4**
-- Separate AI review role: **6**
-- Persistent project state outside chat: **12**
-- Later human understanding of an already checked result: **2**
-- Generated Lean explicitly not read in the described workflow: **2**
+- Explicit formal statement/definition/correspondence mismatch: **11** (+ **3** qualified)
+- Source defect exposed during formalization: **8**
+- Counterexample explicitly used: **7**
+- Separate AI review role: **8**
+- Persistent project state outside chat: **20**
+- Later human understanding of an already checked result: **3**
+- Generated Lean explicitly not read in the described workflow: **3**
+
+## Screening log
+
+- Candidates recorded: **36**
+- Included first-person accounts: **31**
+- Structured studies: **2**
+- Related-work-only sources: **2**
+- Duplicates: **1**
+- Excluded: **0**
+
+| Candidate | Decision | Discovery route | Reason |
+|---|---|---|---|
+| `kahle_bei` | `include_account` | `preexisting_snapshot` | Public first-person account already present in the pre-expansion paper snapshot. |
+| `saiki_double_rounding` | `include_account` | `preexisting_snapshot` | Public first-person account already present in the pre-expansion paper snapshot. |
+| `ilin_vml` | `include_account` | `preexisting_snapshot` | Public first-person account already present in the pre-expansion paper snapshot. |
+| `sergey_move` | `include_account` | `preexisting_snapshot` | Public first-person account already present in the pre-expansion paper snapshot. |
+| `miller_vlasov` | `include_account` | `preexisting_snapshot` | Public first-person account already present in the pre-expansion paper snapshot. |
+| `armstrong_homogenization` | `include_account` | `preexisting_snapshot` | Public first-person account already present in the pre-expansion paper snapshot. |
+| `tao_sendov` | `include_account` | `preexisting_snapshot` | Public first-person account already present in the pre-expansion paper snapshot. |
+| `nowak_tcs` | `include_account` | `preexisting_snapshot` | Public first-person account already present in the pre-expansion paper snapshot. |
+| `suomela_loop` | `include_account` | `preexisting_snapshot` | Public first-person account already present in the pre-expansion paper snapshot. |
+| `kovac_erdos189` | `include_account` | `preexisting_snapshot` | Public first-person account already present in the pre-expansion paper snapshot. |
+| `enomoto_quotient` | `include_account` | `preexisting_snapshot` | Public first-person account already present in the pre-expansion paper snapshot. |
+| `oum_preprint` | `include_account` | `preexisting_snapshot` | Public first-person account already present in the pre-expansion paper snapshot. |
+| `hirai_fri` | `include_account` | `preexisting_snapshot` | Public first-person account already present in the pre-expansion paper snapshot. |
+| `robertj_ac` | `include_account` | `preexisting_snapshot` | Public first-person account already present in the pre-expansion paper snapshot. |
+| `ennis_math` | `include_account` | `preexisting_snapshot` | Public first-person account already present in the pre-expansion paper snapshot. |
+| `gowers_leiden` | `include_account` | `preexisting_snapshot` | Public first-person account already present in the pre-expansion paper snapshot. |
+| `chow_aristotle` | `include_account` | `preexisting_snapshot` | Public first-person account already present in the pre-expansion paper snapshot. |
+| `issai_aristotle` | `include_account` | `preexisting_snapshot` | Public first-person account already present in the pre-expansion paper snapshot. |
+| `davis_partial` | `include_account` | `preexisting_snapshot` | Public first-person account already present in the pre-expansion paper snapshot. |
+| `chafai_ginibre` | `include_account` | `preexisting_snapshot` | Public first-person account already present in the pre-expansion paper snapshot. |
+| `alexeev_erdos` | `include_account` | `preexisting_snapshot` | Public first-person account already present in the pre-expansion paper snapshot. |
+| `deng_shum_probability` | `include_account` | `web_search_2026-09-08` | Public first-person account with source-grounded observations relevant to AI-assisted Lean practice; added in the 8 September search. |
+| `dedios_banach_phase` | `include_account` | `web_search_2026-09-08` | Public first-person account with source-grounded observations relevant to AI-assisted Lean practice; added in the 8 September search. |
+| `chen_huang_ripple` | `include_account` | `web_search_2026-09-08` | Public first-person account with source-grounded observations relevant to AI-assisted Lean practice; added in the 8 September search. |
+| `swaminathan_quartic` | `include_account` | `web_search_2026-09-08` | Public first-person account with source-grounded observations relevant to AI-assisted Lean practice; added in the 8 September search. |
+| `lau_grasshopper` | `include_account` | `web_search_2026-09-08` | Public first-person account with source-grounded observations relevant to AI-assisted Lean practice; added in the 8 September search. |
+| `freer_definetti` | `include_account` | `web_search_2026-09-08` | Public first-person account with source-grounded observations relevant to AI-assisted Lean practice; added in the 8 September search. |
+| `zhang_slt` | `include_account` | `web_search_2026-09-08` | Public first-person account with source-grounded observations relevant to AI-assisted Lean practice; added in the 8 September search. |
+| `cook_partial_fractions` | `include_account` | `web_search_2026-09-08` | Public first-person account with source-grounded observations relevant to AI-assisted Lean practice; added in the 8 September search. |
+| `douglas_qft` | `include_account` | `web_search_2026-09-08` | Public first-person account with source-grounded observations relevant to AI-assisted Lean practice; added in the 8 September search. |
+| `treleaven_pile_shuffle` | `include_account` | `web_search_2026-09-08` | Public first-person account with source-grounded observations on novice use, proof readability, and human supervision. |
+| `collins_workflows` | `structured_study` | `preexisting_snapshot` | Structured human--AI workflow study retained alongside the first-person accounts but excluded from the practitioner-account count. |
+| `ilin_nugent_sorries` | `structured_study` | `web_search_2026-09-08` | Purpose-designed before/after expert-review case study. It is cited as related evidence rather than counted as an ordinary practitioner account. |
+| `paglieri_swarm` | `related_work` | `user_suggested_2026-09-08` | Controlled multi-agent experiment about verifier and specification gaming, not a first-person practitioner account. |
+| `garg_econcs` | `related_work` | `preexisting_related_work` | Methodology and system paper already cited as adjacent work; kept outside the first-person account count. |
+| `munozlahoz_banach_library` | `duplicate` | `citation_chain_2026-09-08` | Companion paper from the same Banach-lattice formalization effort; the overlapping workflow evidence is coded once through de Dios Pont et al. |
 
 ## Lean publication activity used for context
 
@@ -52,6 +102,16 @@ The accounts were found through LLM-assisted web search.  Representativeness is 
 | `davis_partial` | Kelly Davis and Vasily Ilin | `not_reported` | `not_reported` | `no` | `no` | `no` | `yes` |
 | `chafai_ginibre` | Djalil Chafaï | `not_reported` | `not_reported` | `no` | `no` | `no` | `no` |
 | `alexeev_erdos` | Boris Alexeev | `mixed` | `selective` | `no` | `yes` | `yes` | `yes` |
+| `deng_shum_probability` | Shuo Deng and Kenneth W. Shum | `not_reported` | `selective` | `unclear` | `yes` | `yes` | `yes` |
+| `dedios_banach_phase` | Jaume de Dios Pont, Lukas Liehr, David Muñoz-Lahoz, Mitchell A. Taylor, and Pedro Tradacete | `mixed` | `selective` | `unclear` | `qualified` | `no` | `unclear` |
+| `chen_huang_ripple` | Ho-Lin Chen and Xiang Huang | `not_reported` | `not_reported` | `yes` | `no` | `yes` | `yes` |
+| `swaminathan_quartic` | Ashvin Swaminathan | `not_reported` | `selective` | `no` | `no` | `yes` | `yes` |
+| `lau_grasshopper` | Gabriel Rongyang Lau | `not_reported` | `substantial` | `no` | `no` | `no` | `yes` |
+| `freer_definetti` | Cameron Freer | `not_reported` | `not_reported` | `no` | `no` | `no` | `yes` |
+| `zhang_slt` | Yuanhe Zhang, Jason D. Lee, and Fanghui Liu | `not_reported` | `selective` | `no` | `yes` | `unclear` | `yes` |
+| `cook_partial_fractions` | John D. Cook | `not_reported` | `selective` | `no` | `no` | `no` | `no` |
+| `douglas_qft` | Michael R. Douglas, Sarah Hoback, Anna Mei, and Ron Nissim | `not_reported` | `selective` | `yes` | `yes` | `no` | `yes` |
+| `treleaven_pile_shuffle` | Kyle Treleaven | `none` | `none` | `no` | `no` | `no` | `yes` |
 
 ## Source records
 
@@ -412,7 +472,177 @@ The accounts were found through LLM-assisted web search.  Representativeness is 
 - **Citation key:** `alexeev2025erdos`
 - **Source:** https://xenaproject.wordpress.com/2025/12/05/formalization-of-erdos-problems/
 
-### 22. Katherine M. Collins et al. - Characterizing initial human-AI proof formalization workflows
+### 22. Shuo Deng and Kenneth W. Shum - From Lecture Notes to Lean: Formalizing a Textbook on Probability Theory
+
+- **ID:** `deng_shum_probability`
+- **Date:** 2026-07-29
+- **Source type:** `paper`
+- **Target:** measure-theoretic probability textbook
+- **Reported Lean experience:** `not_reported`
+- **Reads generated Lean:** `selective`
+- **Multiple AI tools:** `yes`; **separate AI review:** `unclear`
+- **Semantic mismatch:** `yes`; **source defect found:** `yes`; **counterexample used:** `yes`
+- **Persistent project state:** `yes`; **post-hoc understanding:** `no`
+- **Human role described:** statement approval; source-error adjudication; source-to-Lean review
+- **Observation used by the paper:** An initial variance declaration compiled while imposing weaker domain discipline than the textbook intended. The workflow separately reviews candidates against source passages; formalization also exposed a missing textbook hypothesis and produced a counterexample.
+- **Source note:** The paper explicitly separates successful builds from source-fidelity review. It describes manual semantic checking but does not identify the read-only reviewer as a distinct AI role, so separate_ai_review is unclear.
+- **Citation key:** `deng2026probability`
+- **Source:** https://arxiv.org/abs/2607.27298
+
+### 23. Jaume de Dios Pont, Lukas Liehr, David Muñoz-Lahoz, Mitchell A. Taylor, and Pedro Tradacete - Banach lattices and phase retrieval: A case study for the use of AI in mathematics
+
+- **ID:** `dedios_banach_phase`
+- **Date:** 2026-08-07
+- **Source type:** `paper`
+- **Target:** Banach-lattice and phase-retrieval research formalizations
+- **Reported Lean experience:** `mixed`
+- **Reads generated Lean:** `selective`
+- **Multiple AI tools:** `yes`; **separate AI review:** `unclear`
+- **Semantic mismatch:** `qualified`; **source defect found:** `no`; **counterexample used:** `no`
+- **Persistent project state:** `unclear`; **post-hoc understanding:** `yes`
+- **Human role described:** statement and definition review; mathematical interpretation; post-certificate proof digestion; library curation
+- **Observation used by the paper:** The group concentrated intensive review on theorem statements and their definitions rather than generated proof bodies, warns that LLMs can alter definitions in ways that simplify proofs, and describes revisiting an argument after obtaining a Lean certificate in order to understand and generalize it.
+- **Source note:** The definition-drift statement is a reported recurring risk rather than one isolated mismatch in a named theorem, so semantic_mismatch is qualified. The group includes both experienced formalizers and a contributor reported to have had no Lean experience three months earlier.
+- **Citation key:** `dedios2026banach`
+- **Source:** https://arxiv.org/abs/2608.07396
+
+### 24. Ho-Lin Chen and Xiang Huang - Ripple: An Open, AI-Formalized Lean 4 Framework for Computing with CRNs
+
+- **ID:** `chen_huang_ripple`
+- **Date:** 2026-07-21
+- **Source type:** `paper`
+- **Target:** chemical reaction network computation framework
+- **Reported Lean experience:** `not_reported`
+- **Reads generated Lean:** `not_reported`
+- **Multiple AI tools:** `yes`; **separate AI review:** `yes`
+- **Semantic mismatch:** `no`; **source defect found:** `yes`; **counterexample used:** `yes`
+- **Persistent project state:** `yes`; **post-hoc understanding:** `no`
+- **Human role described:** direction and review; construction design; counterexample-first checking; framework curation
+- **Observation used by the paper:** The project reports source gaps exposed during formalization and a playbook that checks residual goals for counterexamples before proof attempts, with cross-verification by a second independent model. Planning and assumption state are retained outside model context.
+- **Source note:** The paper reports genuine gaps in published arguments and several defenses against vacuous or false targets. We do not code those source gaps as a source-to-Lean semantic mismatch.
+- **Citation key:** `chen2026ripple`
+- **Source:** https://arxiv.org/abs/2607.13531
+
+### 25. Ashvin Swaminathan - On the Quartic Invariant of Odd Degree Binary Forms
+
+- **ID:** `swaminathan_quartic`
+- **Date:** 2026-03-25
+- **Source type:** `paper`
+- **Target:** quartic invariant of odd-degree binary forms
+- **Reported Lean experience:** `not_reported`
+- **Reads generated Lean:** `selective`
+- **Multiple AI tools:** `yes`; **separate AI review:** `no`
+- **Semantic mismatch:** `no`; **source defect found:** `yes`; **counterexample used:** `no`
+- **Persistent project state:** `yes`; **post-hoc understanding:** `no`
+- **Human role described:** mathematical review and correction; target selection; proof-strategy judgment
+- **Observation used by the paper:** Claude Code and Codex completed parts of the proof and Aristotle discharged Lean obligations under author review. Formal verification uncovered a sign error in an earlier draft of Proposition 5.3, which the author corrected.
+- **Source note:** The reported defect was in an earlier manuscript draft rather than a mismatch between a source theorem and its Lean statement. The project retained the author's notes and modular Lean companion materials.
+- **Citation key:** `swaminathan2026quartic`
+- **Source:** https://arxiv.org/abs/2603.24330
+
+### 26. Gabriel Rongyang Lau - Using Aristotle API for AI-Assisted Theorem Proving in Lean 4: A Formalisation Case Study of the Grasshopper Problem
+
+- **ID:** `lau_grasshopper`
+- **Date:** 2026-05-19
+- **Source type:** `paper`
+- **Target:** IMO 2009 Grasshopper problem
+- **Reported Lean experience:** `not_reported`
+- **Reads generated Lean:** `substantial`
+- **Multiple AI tools:** `no`; **separate AI review:** `no`
+- **Semantic mismatch:** `no`; **source defect found:** `no`; **counterexample used:** `no`
+- **Persistent project state:** `yes`; **post-hoc understanding:** `no`
+- **Human role described:** artifact inspection; verification-status auditing; separation of local lemmas from headline completion
+- **Observation used by the paper:** The generated artifact contained four verified helper lemmas while the main theorem remained closed directly by one unresolved sorry. The paper analyzes the verified and unverified parts of the artifact separately.
+- **Source note:** This is an incompleteness/admission-state example rather than a source-correspondence mismatch. Reproducible Lean artifacts are provided with the paper.
+- **Citation key:** `lau2026grasshopper`
+- **Source:** https://arxiv.org/abs/2605.20120
+
+### 27. Cameron Freer - Three Roads to de Finetti's Theorem in Lean 4
+
+- **ID:** `freer_definetti`
+- **Date:** 2026-07-16
+- **Source type:** `paper`
+- **Target:** de Finetti--Ryll-Nardzewski theorem
+- **Reported Lean experience:** `not_reported`
+- **Reads generated Lean:** `not_reported`
+- **Multiple AI tools:** `yes`; **separate AI review:** `no`
+- **Semantic mismatch:** `no`; **source defect found:** `no`; **counterexample used:** `no`
+- **Persistent project state:** `yes`; **post-hoc understanding:** `no`
+- **Human role described:** proof-route design; common interface selection; independent-route cross-checking
+- **Observation used by the paper:** Three independently formalized proof routes were required to reach the same finite conditional-factorization interface before the common conclusion, providing a cross-check during extensive Claude- and GPT-assisted development.
+- **Source note:** The cross-check is between independent mathematical proof routes, not a separately assigned AI review role. The paper also reports a reusable Lean proof-engineering skill developed during the project.
+- **Citation key:** `freer2026definetti`
+- **Source:** https://drops.dagstuhl.de/entities/document/10.4230/LIPIcs.ITP.2026.34
+
+### 28. Yuanhe Zhang, Jason D. Lee, and Fanghui Liu - AI4SLT: Empirical Processes in Lean 4 for Formal Statistical Learning Theory
+
+- **ID:** `zhang_slt`
+- **Date:** 2026-06-10
+- **Source type:** `paper`
+- **Target:** statistical learning theory and empirical processes
+- **Reported Lean experience:** `not_reported`
+- **Reads generated Lean:** `selective`
+- **Multiple AI tools:** `no`; **separate AI review:** `no`
+- **Semantic mismatch:** `yes`; **source defect found:** `unclear`; **counterexample used:** `yes`
+- **Persistent project state:** `yes`; **post-hoc understanding:** `no`
+- **Human role described:** proof-strategy design; theorem decomposition; target-statement verification; supervised cleanup
+- **Observation used by the paper:** The authors report three misformalized target statements that survived multiple rounds of AI self-judgment and were detected by humans constructing explicit counterexamples. The workflow preserved structured TASK.md specifications for proof tasks.
+- **Source note:** The paper also reports resolving implicit assumptions and missing textbook details, but it does not identify all of these as defects in one fixed source, so source_defect_found remains unclear.
+- **Citation key:** `zhang2026slt`
+- **Source:** https://arxiv.org/abs/2602.02285
+
+### 29. John D. Cook - Formalizing a ring theorem with Lean 4 and Claude
+
+- **ID:** `cook_partial_fractions`
+- **Date:** 2026-06-17
+- **Source type:** `blog`
+- **Target:** partial fraction decomposition over a principal ideal domain
+- **Reported Lean experience:** `not_reported`
+- **Reads generated Lean:** `selective`
+- **Multiple AI tools:** `no`; **separate AI review:** `no`
+- **Semantic mismatch:** `no`; **source defect found:** `no`; **counterexample used:** `no`
+- **Persistent project state:** `no`; **post-hoc understanding:** `no`
+- **Human role described:** compiler-feedback relay; output inspection; admission-state checking
+- **Observation used by the paper:** After eleven iterations driven by compiler errors, Claude produced an artifact that the author initially described as a proof but that still contained five sorry placeholders; attempts to remove them had not succeeded by the end of the experiment.
+- **Source note:** This is a partial experiment rather than a completed formalization. It is included because the author explicitly inspects and reports the remaining admissions.
+- **Citation key:** `cook2026rings`
+- **Source:** https://www.johndcook.com/blog/2026/06/17/rings-with-lean-claude/
+
+### 30. Michael R. Douglas, Sarah Hoback, Anna Mei, and Ron Nissim - Formalization of QFT
+
+- **ID:** `douglas_qft`
+- **Date:** 2026-03-16
+- **Source type:** `paper`
+- **Target:** free bosonic Euclidean quantum field theory
+- **Reported Lean experience:** `not_reported`
+- **Reads generated Lean:** `selective`
+- **Multiple AI tools:** `yes`; **separate AI review:** `yes`
+- **Semantic mismatch:** `yes`; **source defect found:** `no`; **counterexample used:** `no`
+- **Persistent project state:** `yes`; **post-hoc understanding:** `no`
+- **Human role described:** definition design; high-level decomposition; cross-model review; assumption tracking
+- **Observation used by the paper:** The project cross-validated conjectured helper lemmas and proof plans among Claude, Gemini, and GPT, tracked active assumptions in auxiliary documents, and reports correcting several project definitions, including its original rendition of the Osterwalder--Schrader axioms.
+- **Source note:** The definition errors were internal to the formalization project rather than defects in an external source. The original release carried three named assumptions that later work proved or avoided.
+- **Citation key:** `douglas2026qft`
+- **Source:** https://arxiv.org/abs/2603.15770
+
+### 31. Kyle Treleaven - Post on AI-assisted Lean formalization of a pile-shuffle reduction
+
+- **ID:** `treleaven_pile_shuffle`
+- **Date:** 2026
+- **Source type:** `social_post`
+- **Target:** first reduction in an NP-hardness proof for pile-shuffle sorting
+- **Reported Lean experience:** `none`
+- **Reads generated Lean:** `none`
+- **Multiple AI tools:** `yes`; **separate AI review:** `no`
+- **Semantic mismatch:** `no`; **source defect found:** `no`; **counterexample used:** `no`
+- **Persistent project state:** `yes`; **post-hoc understanding:** `no`
+- **Human role described:** conceptual steering; iterative supervision; artifact integration
+- **Observation used by the paper:** Treleaven reports starting with no Lean experience, using mostly Claude Code with some Codex, and being unable to meaningfully read the generated proof code while relying on Lean to check it; he also reports substantial ongoing supervision of the agents.
+- **Source note:** The public LinkedIn activity item links both the paper and Lean repository. It describes proof readability and supervision but no separate semantic-review role.
+- **Citation key:** `treleaven2026lean`
+- **Source:** https://www.linkedin.com/in/kyle-treleaven-58586a22
+
+### 32. Katherine M. Collins et al. - Characterizing initial human-AI proof formalization workflows
 
 - **ID:** `collins_workflows`
 - **Date:** 2026-06-02
