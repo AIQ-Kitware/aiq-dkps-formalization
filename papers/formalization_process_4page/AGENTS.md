@@ -30,7 +30,8 @@ Additional constraints:
    `notes/practitioner_accounts.md` and
    `generated/practitioner_account_macros.tex`.
 7. `data/lean_publication_activity.csv` contains the monthly Papers With Lean
-   counts used for the short growth statistic in the introduction.
+   counts retained as appendix context. Do not spend main-text space on the
+   growth statistic unless it becomes necessary to the argument.
 8. Keep disagreements between practitioners visible. Some read generated Lean
    closely; some use another model to translate or challenge it; some let the
    prover run ahead and study the result later.
@@ -80,10 +81,16 @@ Additional constraints:
     support fitting that model to this project.
 22. Chow's doohickey example is illustrative. Do not describe it as silly or
     otherwise belittle the example.
-23. Keep the exact historical Lean signature in the generated candidate note and
-    generate the shorter theorem statement shown in the paper from that evidence.
-    Avoid fragile Unicode notation in the PDF by using verified readability-only
-    identifier/notation adjustments in the generated display.
+23. Keep the exact historical Lean signature as a generated sidecar and generate
+    the shorter theorem statement shown in the paper from that exact evidence.
+    The file consumed by `listings` must use unique ASCII `LeanLit...` sentinels
+    for display-sensitive Lean Unicode; `paper.tex` maps those sentinels to LaTeX
+    with `literate=`. Do not put literal Lean Unicode on the left-hand side of
+    `literate=`, and do not replace Lean notation by verbose ASCII API spellings
+    merely to make `listings` work. The generated presentation file must point to
+    the exact sidecar and state that it is presentation-only. This indirection is
+    deliberate: it preserves auditable exact Lean while avoiding listings/Overleaf
+    Unicode failure modes that have previously been reintroduced by automated edits.
 24. Section titles should describe their contents directly. Avoid evaluative or
     slogan-like headings such as "still too narrow" and rhetorical mini-lessons.
 
@@ -91,3 +98,8 @@ Additional constraints:
 
 25. Keep the Theorem 8.1(ii) over-correction grounded in the recorded review sequence. Do not promote it into a generic failure taxonomy or novelty claim.
 26. The workshop checklist is required. Keep its questions and guideline text unchanged; update only answers and justifications as the paper changes.
+27. Describe the formalization system in the main text at the level of stable
+    components, interfaces, and responsibilities. Put repository paths, exact
+    dependency revisions, checker names, and other reproduction details in the
+    appendix. Do not copy the system-component breakdown into the abstract or
+    conclusion.

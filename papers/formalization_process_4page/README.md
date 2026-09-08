@@ -11,7 +11,7 @@ The public-account table is:
 
 - `data/practitioner_accounts.csv`
 
-The monthly activity counts used in the introduction are:
+The monthly activity counts retained as appendix context are:
 
 - `data/lean_publication_activity.csv`
 
@@ -61,6 +61,19 @@ validates the structured source snapshot and Git chronology and regenerates:
 human prompts available from the retained paper-revision transcript. Earlier
 prompts that are not available verbatim are not reconstructed from summaries.
 
+## Formalization system description
+
+The main paper describes the formalization setup as a small set of persistent
+components: source/target records, the pinned Lean workspace and reusable
+foundations, the implementation loop, mechanical checks, and semantic review.
+The main text stays at the architectural level. `appendix.tex` records the
+concrete repository artifacts, dependency revisions, checker roles, audit-packet
+path, and actor responsibilities needed to reproduce or inspect that setup.
+
+The workflow figure remains a high-level control-flow view. The appendix
+semantic-review screenshot is a later inspection interface and is not presented
+as the mechanism used for every historical review.
+
 ## Worked semantic-alignment example
 
 The paper uses the historical directed $\sin 2\Theta$
@@ -72,12 +85,16 @@ theorem statement with names adjusted for readability; full exact historical
 signatures and alternative repository-backed examples remain in
 `notes/SEMANTIC_ALIGNMENT_CANDIDATES.md`.
 
-`scripts/build_evidence.py` extracts the historical witness, verifies the later
-`PaperUnitaryInvariantNorm` -> `SymmetricNormingFunction` rename, and generates
-the reader-facing theorem statement through checked, single-occurrence rewrites
-of the extracted signature. The display spells out `RingHom.id Complex` and
-uses the container-first argument order of `Membership.mem`. The exact
-historical signature is unchanged. The current exact source interface uses
+`scripts/build_evidence.py` extracts the historical witness and writes its
+signature verbatim to `generated/historical_scope_mismatch_exact.lean`.  It then
+builds the separate `historical_scope_mismatch_presentation.lean` used by
+`listings`.  That presentation applies only the audited readability name changes
+and replaces display-sensitive Lean Unicode with unique ASCII `LeanLit...`
+sentinels.  `paper.tex` maps those sentinels to LaTeX glyphs with `literate=`.
+The presentation file is therefore intentionally not Lean source and begins
+with comments pointing back to the exact sidecar.  This split is deliberate:
+it avoids fragile Unicode handling in LaTeX/Overleaf without losing the exact
+Lean being discussed.  The current exact source interface uses
 `NormalizedUnitaryInvariantNorm`; the candidate-note generator preserves full
 verbatim signatures from pinned Git history.
 
