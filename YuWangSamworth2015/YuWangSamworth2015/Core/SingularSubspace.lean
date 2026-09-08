@@ -19,7 +19,7 @@ Literature map:
   "The singular-vector extension".
 * `prose/core-arguments/Horn-Johnson-2013-Gram-core-arguments.tex`, Sections on
   Gram factorization and isometric freedom.
-* `papers/DavisKahan-formalized-vs-literature.tex`, paragraph
+* `papers/formalization_comparisons/DavisKahan-formalized-vs-literature.tex`, paragraph
   "The singular-subspace extension".
 
 The right singular subspaces are spectral subspaces of `A⋆A`, the left ones

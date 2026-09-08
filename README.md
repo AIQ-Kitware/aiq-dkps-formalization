@@ -246,7 +246,7 @@ hypotheses used by the inference layer.
 
 ## Literature/formalization discrepancy ledger
 
-[`papers/DKPS-formalized-vs-literature.tex`](papers/DKPS-formalized-vs-literature.tex)
+[`papers/formalization_comparisons/DKPS-formalized-vs-literature.tex`](papers/formalization_comparisons/DKPS-formalized-vs-literature.tex)
 is the maintained audit for the four primary DKPS papers. It records repaired
 statements, surfaced assumptions, strengthened or weakened conclusions, MDS
 variant differences, completed theorem mappings, and the remaining opportunities for hypothesis reduction. Update it whenever a

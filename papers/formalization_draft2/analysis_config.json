@@ -35,7 +35,7 @@
     "davis_kahan": [
       "DavisKahan/",
       "ForTauCeti/Analysis/InnerProductSpace/DavisKahan/",
-      "papers/davis_kahan_prop_4_4_counterexample.tex"
+      "papers/davis_kahan_prop_4_4/davis_kahan_prop_4_4_counterexample.tex"
     ],
     "quench": [
       "DkpsQuench2026/"

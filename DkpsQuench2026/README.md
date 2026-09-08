@@ -182,5 +182,5 @@ grep -RIn '^axiom ' DkpsQuench2026 --include='*.lean'
 ```
 
 The exact paper transcription is retained under `DkpsQuench2026/prose/`.
-`papers/DKPS-formalized-vs-literature.tex` records the modernized comparison
+`papers/formalization_comparisons/DKPS-formalized-vs-literature.tex` records the modernized comparison
 between the printed theorem and the stronger formal theorem family.

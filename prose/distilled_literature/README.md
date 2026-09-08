@@ -41,7 +41,7 @@ Entries marked `needs_verification` in the manifest must be bibliographically ch
 
 The repository already contains:
 
-- transcriptions of the 2024 consistency paper, the 2025 concentration paper, and the 2026 Quench paper; the Quench transcription is intentionally retained as the source-order asset because its short proof is reconstructed and audited in `papers/DKPS-formalized-vs-literature.tex`;
+- transcriptions of the 2024 consistency paper, the 2025 concentration paper, and the 2026 Quench paper; the Quench transcription is intentionally retained as the source-order asset because its short proof is reconstructed and audited in `papers/formalization_comparisons/DKPS-formalized-vs-literature.tex`;
 - source prose and TeX for the 2025 inference paper;
 - source-order reconstructions for Davis (1963) and Yu--Wang--Samworth, plus a transcription-audited, source-ordered Davis--Kahan Part III ledger that remains incomplete at the full Hilbert-space theorem level; and broad core notes for Horn--Johnson Gram theory;
 - broad formalized-versus-literature comparison documents under `papers/`.

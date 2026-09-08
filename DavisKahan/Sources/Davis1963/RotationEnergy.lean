@@ -14,7 +14,7 @@ import ForTauCeti.Analysis.InnerProductSpace.UnitarilyInvariantSeminorm
 Literature map:
 
 * `prose/core-arguments/Davis-1963-core-arguments.tex`, all sections.
-* `papers/DavisKahan-formalized-vs-literature.tex`, paragraphs
+* `papers/formalization_comparisons/DavisKahan-formalized-vs-literature.tex`, paragraphs
   "Davis's sharper total-rotation estimate" and
   "The per-eigenvector sin2theta/tan2theta theorem".
 

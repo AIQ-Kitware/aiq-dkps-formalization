@@ -23,20 +23,22 @@ def validate_pages(pages: list[str], public: bool) -> list[str]:
         i + 1 for i, page in enumerate(pages)
         if re.search(r'^\s*(?:\d+\s+)?References\s*(?:\d+\s*)?$', page, re.M)
     ]
-    if reference_pages != [5]:
-        errors.append(f'References must begin on page 5; found {reference_pages}')
-    if len(pages) < 5:
-        errors.append('PDF has fewer than five pages')
+    if len(reference_pages) != 1:
+        errors.append(f'References heading must appear exactly once; found {reference_pages}')
         return errors
-    if not re.search(r'\bConclusion\b', pages[3]):
-        errors.append('Conclusion must be on main-text page 4')
+    reference_page = reference_pages[0]
+    main_pages = reference_page - 1
+    if not public and not (4 <= main_pages <= 9):
+        errors.append(f'Anonymous main text must be 4--9 pages; found {main_pages}')
+    if not any(re.search(r'\bConclusion\b', page) for page in pages[:main_pages]):
+        errors.append('Conclusion must appear before References')
     flat_pages = [' '.join(page.split()) for page in pages]
     display_pages = [
         i for i, page in enumerate(flat_pages)
         if 'theorem sinTwoTheta_directedResidual' in page
     ]
-    if len(display_pages) != 1 or display_pages[0] >= 4:
-        errors.append('Historical theorem must appear once in the main text')
+    if len(display_pages) != 1 or display_pages[0] >= main_pages:
+        errors.append('Historical theorem must appear once before References')
     else:
         display = flat_pages[display_pages[0]]
         required = (
@@ -53,15 +55,18 @@ def validate_pages(pages: list[str], public: bool) -> list[str]:
     figure2 = [i + 1 for i, page in enumerate(flat_pages) if 'Figure 2:' in page]
     if len(figure1) != 1 or figure1[0] > 2:
         errors.append(f'Workflow Figure 1 must appear by page 2; found {figure1}')
-    if len(figure2) != 1 or figure2[0] <= 5:
-        errors.append(f'Publication Figure 2 must remain in the appendix; found {figure2}')
+    if len(figure2) != 1 or figure2[0] <= reference_page:
+        errors.append(f'Publication Figure 2 must remain after References in the appendix; found {figure2}')
+    checklist_pages = [i + 1 for i, page in enumerate(flat_pages) if 'NeurIPS Paper Checklist' in page]
+    if len(checklist_pages) != 1 or checklist_pages[0] <= reference_page:
+        errors.append(f'NeurIPS checklist must appear once after References; found {checklist_pages}')
     text = ' '.join(flat_pages)
     if public:
         for author in AUTHORS:
             if author not in flat_pages[0]:
                 errors.append(f'Public first page is missing author: {author}')
-        if CONTRACT not in flat_pages[3]:
-            errors.append('Public acknowledgment must remain on page 4 before References')
+        if CONTRACT not in ' '.join(flat_pages[:reference_page]):
+            errors.append('Public acknowledgment must appear before References')
     else:
         for identifier in (*AUTHORS, CONTRACT, 'github.com/AIQ-Kitware'):
             if identifier in text:
@@ -110,8 +115,8 @@ def main() -> int:
             for error in errors:
                 print(f'{pdf.name}: ERROR: {error}')
         else:
-            print(f'{pdf.name}: PASS: 4 main pages; References on page 5; '
-                  'display, figures, author visibility, and TeX diagnostics checked')
+            print(f'{pdf.name}: PASS: workshop page budget/reference boundary, display, '
+                  'figures, checklist, author visibility, and TeX diagnostics checked')
     return int(failed)
 
 

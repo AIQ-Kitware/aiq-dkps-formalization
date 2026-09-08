@@ -4,11 +4,11 @@
 % paper_public.tex defines \PublicVersion before loading this file.
 \providecommand{\PublicVersion}{0}
 \ifnum\PublicVersion=1\relax
-  \usepackage[dblblindworkshop,nonanonymous]{neurips_2026}
+  \usepackage[preprint]{neurips_2026_vericode}
 \else
-  \usepackage[dblblindworkshop]{neurips_2026}
+  \usepackage{neurips_2026_vericode}
 \fi
-\workshoptitle{The 6th Workshop on Mathematical Reasoning and AI}
+\workshoptitle{AI for Verifiable Coding}
 
 \usepackage{amsmath,amssymb}
 \usepackage{microtype}
@@ -23,6 +23,12 @@
 \usepackage[nameinlink]{cleveref}
 \usepackage[T1]{fontenc}
 \usepackage[utf8]{inputenc}
+
+% The review style loads lineno only for the anonymous submission build.
+% Keep the historical theorem display usable in the public preprint as well.
+\ifnum\PublicVersion=1\relax
+  \newenvironment{nolinenumbers}{}{}
+\fi
 
 \newcommand{\Lean}{\textsc{Lean}}
 \newcommand{\DK}{Davis--Kahan}
@@ -120,7 +126,7 @@
 \Crefname{lstlisting}{Formalization}{Formalizations}
 \renewcommand{\lstlistingname}{Formalization}
 
-\title{Did We Really Formalize Davis--Kahan?}
+\title{Did We Really Formalize Davis--Kahan? Semantic Alignment for LLM-Assisted Lean Formalization}
 \author{%
   Jonathan Crall \quad Brian Hu \\
   Kitware, Inc.
@@ -136,16 +142,16 @@
 \begin{abstract}
 We report an LLM-assisted Lean formalization of the 29 mathematical results
 tracked from Davis and Kahan's 1970 paper.  The project is a case study in
-semantic alignment: whether checked formal statements express the source
-claims at their intended scope.  We observe that LLMs often reported completion
-prematurely.  A historical directed $\sin 2\Theta$ theorem illustrates the
-problem: it had the printed residual and factor~2, but only bounded complex
-scope.  All 29 results now have checked formal treatments: Lean proofs for 28
-printed results, and a finite-dimensional counterexample and repaired theorem
-for Proposition~4.4.  Source-to-signature review remains ongoing.  We describe
-the evolving implementation and review process and compare it with
+semantic alignment: whether machine-checked formal statements preserve the
+mathematical claims made in the source.  Lean verifies proofs of encoded
+propositions, while source correspondence still requires checking hypotheses,
+objects, and scope.  The current development contains checked treatments for
+all 29 tracked results, including a counterexample and repaired theorem for
+Proposition~4.4.  We describe the formalization and source-review process,
+examples of discrepancies found during development, and
 \PractitionerAccountCount{} public first-person accounts of AI-assisted Lean
-work.
+work.  The case study illustrates why successful compilation alone does not
+establish that an existing theorem has been formalized as intended.
 \end{abstract}
 
 \section{Introduction}
@@ -184,7 +190,12 @@ needed to determine what each assumption allowed and what the conclusion
 established.  When the formalization represented an angle or residual by another
 operator, the correspondence required a mathematical identification of those
 objects.  Inspecting a theorem name and its final inequality could miss a
-restriction in a type or an inherited hypothesis.
+restriction in a type or an inherited hypothesis.  Repeated review also exposed
+a risk in the review loop itself: criticism can enlarge the target by asking for
+a particular proof route or by choosing a formal meaning for source prose that
+does not specify one.  We therefore constrain source-fidelity review to public
+theorem statements and the mathematical source context needed to interpret
+them.
 
 Claude Code handled most implementation and compiler-driven repair; ChatGPT
 was used heavily for planning and source review; Codex participated in both.
@@ -200,7 +211,8 @@ pinned Lean environment.
   \caption{Process developed during the \DK{} formalization.  Source claims and
   their scope guide decomposition, foundation search, implementation, and
   compilation.  Source-to-signature review can return a result to any of these
-  stages.}
+  stages.  The review target is the public statement in source context; a
+  different proof route does not by itself create a mismatch.}
   \label{fig:workflow}
 \end{figure}
 
@@ -298,12 +310,17 @@ reader's guide to the mathematics and the Lean signature below.
 
 Our 29 targets comprise the four unnumbered headline theorems in Section~2 and
 every named theorem, proposition, lemma, and corollary established in the paper.
-Appendix~\ref{app:data} specifies the counting convention.  The development
-required projection and principal-angle geometry, singular-subspace geometry,
-unitarily invariant norms and operator ideals, Borel spectral calculus,
-unbounded self-adjoint operator theory, real/complex transfer, direct rotations,
-and Sylvester equations.  These reusable components are being prepared for
-contribution to Tau Ceti \citep{tauceti2026}.
+Appendix~\ref{app:data} specifies the counting convention.  At the manuscript
+snapshot, the latest source-to-signature review reported no remaining material
+mismatch.  We have not yet run a further independent review after that pass, so
+we treat this as the current review state rather than a guarantee of complete
+semantic correspondence.
+
+The development required projection and principal-angle geometry,
+singular-subspace geometry, unitarily invariant norms and operator ideals,
+Borel spectral calculus, unbounded self-adjoint operator theory, real/complex
+transfer, direct rotations, and Sylvester equations.  These reusable components
+are being prepared for contribution to Tau Ceti \citep{tauceti2026}.
 
 \subsection{A historical directed \texorpdfstring{$\sin 2\Theta$}{sin 2 Theta} mismatch}
 \label{sec:scope-mismatch}
@@ -348,32 +365,50 @@ shows why finding the right inequality or several related theorems was
 insufficient: the hypotheses and conclusion had to occur together in a statement
 covering the intended source claim.
 
+\subsection{A review-driven over-correction}
+\label{sec:overcorrection}
+
+Theorem~8.1(ii) exposed a different problem.  It prints a
+finite-dimensional block-eigenvalue inequality followed by ``and natural
+infinite-dimensional extensions,'' but gives no extension formula
+\citep{davis1970rotation}.  One review found that our treatment covered only the finite-dimensional
+formula.  The resulting repair treated four approximation-number extensions as
+the formal interpretation of the source phrase.  A subsequent review rejected
+that choice because Section~1 admits more than one plausible infinite-dimensional
+reading and Theorem~8.1 chooses none.  We retained the extensions as
+generalizations and classified the phrase as underspecified.
+
+These reviews distinguish finding missing source scope from selecting an
+interpretation that the source does not fix.  The same boundary applies to proof
+architecture: our alignment target concerns theorem statements in their
+mathematical context.  For this case study, source-fidelity review therefore asks
+whether the public theorem type has the source hypotheses, objects, scope,
+constants, and conclusion, while allowing any correct Lean proof route.
+
 \section{Conclusion}
 
 \paragraph{Did we formalize Davis--Kahan?}
-All 29 tracked results have checked formal treatments.  Twenty-eight printed
-results have Lean proofs.  Proposition~4.4 is certified false as printed, with
-a finite-dimensional counterexample and a proved repair
-(Appendix~\ref{app:data}).  Source-to-Lean correspondence remains under review.
-LLM reviewers continue to identify scope and representation problems in
-formalizations previously marked complete.  We believe the development is very
-close, but are not yet ready to declare every correspondence closed.
+All 29 tracked results have checked formal treatments: Lean proofs for 28 and a
+finite-dimensional counterexample plus proved repair for Proposition~4.4
+(Appendix~\ref{app:data}).  Current source-to-signature review has found no
+remaining material mismatch, but we have no calibrated stopping rule or formal
+certificate that every source correspondence is correct.
 
-The practical changes were to keep source claims and review state outside model
-conversations, revisit completed results with a falsification objective, and
-inspect signatures together with the definitions and context that determine
-their meaning.  The result register and \texttt{leanq} supported that work.
-This case study records one evolving project; it does not estimate review error
-rates or establish when further review can safely stop.
+This case study separates two checks that can otherwise be conflated.  Compiler
+and kernel feedback establish that the encoded proposition is proved; source
+review asks whether that proposition preserves the intended theorem, including
+its hypotheses, mathematical objects, and scope.  The review history also shows
+that this comparison must remain bounded by what the source actually says.
+Further work is needed to determine how such review should be validated and when
+it is sufficient.
 
-\ifnum\PublicVersion=1\relax
-\acksection
+\begin{ack}
 This material is based upon work supported by the Defense Advanced Research
 Projects Agency (DARPA) under Contract No. HR001125CE017. Any opinions, findings,
 and conclusions or recommendations expressed in this material are those of the
 author(s) and do not necessarily reflect the views of the Defense Advanced
 Research Projects Agency (DARPA).
-\fi
+\end{ack}
 
 \clearpage
 \begingroup
@@ -385,5 +420,8 @@ Research Projects Agency (DARPA).
 \clearpage
 \appendix
 \input{appendix.tex}
+
+\clearpage
+\input{checklist.tex}
 
 \end{document}

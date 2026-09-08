@@ -15,7 +15,7 @@ public import ForTauCeti.Analysis.InnerProductSpace.AlignedBasis
 Literature map:
 
 * `prose/core-arguments/Yu-Wang-Samworth-2014-core-arguments.tex`, all sections.
-* `papers/DavisKahan-formalized-vs-literature.tex`, paragraphs
+* `papers/formalization_comparisons/DavisKahan-formalized-vs-literature.tex`, paragraphs
   "Hoffman--Wielandt and the exact YWS theorem" and
   "The aligned-basis (Procrustes) bound".
 

@@ -1,13 +1,13 @@
 # Workshop-paper writing constraints
 
 This directory contains the workshop paper **Did We Really Formalize
-Davis--Kahan?** and the source notes used while drafting it.
+Davis--Kahan? Semantic Alignment for LLM-Assisted Lean Formalization** and the source notes used while drafting it.
 
 Before editing prose, read and follow:
 
 - `../formalization_draft2/STYLE_GUIDE.md`
-- `../formalization_draft2/BANNED_WORDS_AND_PHRASES.md`
-- `../formalization_draft2/SPECIFIC_NEGATIVE_PROMPTS.md`
+- `../BANNED_WORDS_AND_PHRASES.md`
+- `../SPECIFIC_NEGATIVE_PROMPTS.md`
 
 Additional constraints:
 
@@ -28,13 +28,14 @@ Additional constraints:
 7. Keep disagreements between practitioners visible. Some read generated Lean
    closely; some use another model to translate or challenge it; some let the
    prover run ahead and study the result later.
-8. Treat the Git chronology as a description of this project and keep it out of
-   the main paper. The result ledger may be introduced as an organizational tool
-   for fixing the counted source targets, their intended scope, Lean evidence,
-   and review status; avoid internal Git status transitions.
-9. The current 29/29 state is provisional. Say that we think all 29 Davis--Kahan
-   source results are covered at the intended scope, or are very close. Do not
-   turn the current accepted rows into a certainty claim.
+8. Treat the detailed Git chronology as supporting evidence rather than the
+   organizing spine of the main paper. Use a specific review episode only when
+   it directly supports a manuscript claim. The result ledger may be introduced
+   as an organizational tool for fixing counted source targets, intended scope,
+   Lean evidence, and review state; avoid internal Git status jargon.
+9. Keep the current source-review state accurate without turning a successful
+   review into a semantic-completeness claim. Distinguish the latest review
+   result from independent replication when that distinction affects a claim.
 10. Keep the workflow figure as Figure 1. Binary render outputs (PNG, PDF,
     ZIP, etc.) are local artifacts only and must never be staged or committed.
     The dashboard screenshot is an untracked appendix render.
@@ -55,11 +56,12 @@ Additional constraints:
     dashboard.
 14. Keep detailed Davis--Kahan mathematics in `../formalization_draft2/`.
 15. Use numeric citations.
-16. Main text must fit four workshop pages under the submission template;
-    references may follow.
+16. The VeriCodeGen main text must be 4--9 pages under the supplied
+    `neurips_2026_vericode.sty`; references, checklist, and optional technical
+    appendices do not count toward that limit. Do not modify the supplied style.
 17. The live project repository identifies the authors. Keep the default
-    `paper.tex` build anonymous; use `paper_public.tex` for a public preprint or
-    camera-ready copy.
+    `paper.tex` build anonymous with the VeriCodeGen submission style; use
+    `paper_public.tex` with the style's `preprint` option for a public preprint.
 18. `brainstorm.md` preserves the original notes and a verbatim human prompt
     log. Never clean up spelling, punctuation, capitalization, or wording inside
     those prompt blocks. Add only short bracketed context when the prompt would
@@ -80,3 +82,6 @@ Additional constraints:
     slogan-like headings such as "still too narrow" and rhetorical mini-lessons.
 
 - `notes/SEMANTIC_ALIGNMENT_CANDIDATES.md` is generated evidence. Do not hand-edit its Lean snippets; update `scripts/build_semantic_alignment_candidates.py` and run `make sources`.
+
+24. Keep the Theorem 8.1(ii) over-correction grounded in the recorded review sequence. Do not promote it into a generic failure taxonomy or novelty claim.
+25. The workshop checklist is required. Keep its questions and guideline text unchanged; update only answers and justifications as the paper changes.
