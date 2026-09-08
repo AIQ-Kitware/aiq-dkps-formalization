@@ -55,54 +55,66 @@ established, at the level of Lean type-checking, the following reductions:
 Those results are reductions only.  In particular, the finite-dimensional
 successes must **not** be mistaken for closure of the source theorem.
 
-## Current decisive push: Probes 17--24
+## Decisive result: Probes 17--24
 
-Before formalizing a large infinite-dimensional dominance theorem, we are
-stress-testing whether that theorem is even derivable from the current raw
-`SourceUnitaryInvariantNorm` laws.
-
-The exploration-only candidate countermodel is:
+Before formalizing a large infinite-dimensional dominance theorem, we tested
+whether that theorem was even derivable from the current raw
+`SourceUnitaryInvariantNorm` laws.  The exploration-only countermodel is:
 
 * carrier: finite-rank operators;
 * gauge on the carrier: operator norm;
 * extended gauge off the carrier: `∞`.
 
-It is intended to satisfy the raw two-sided symmetric ideal laws and the source
-rank-one normalization.  On `ell^2`, an infinite-rank compact diagonal with
-approximation numbers `2^-(n+1)` is Ky-Fan dominated by a norm-one rank-one
-operator.  If the finite-rank/operator-norm model type-checks as a
-`SourceUnitaryInvariantNorm`, then the dominated diagonal is outside the ideal
-while the rank-one comparator is inside it.  That gives a machine-checked
-countermodel to the current unconditional `SourceUnitaryInvariantNorm.HasFanDominance`.
+This model compiled as a `SourceUnitaryInvariantNorm`.  On `ell^2`, an
+infinite-rank compact diagonal with approximation numbers `2^-(n+1)` is Ky-Fan
+dominated by a norm-one rank-one operator.  The diagonal is outside the ideal
+while the comparator is inside it, so the file contains a machine-checked
+countermodel to the current unconditional
+`SourceUnitaryInvariantNorm.HasFanDominance`.
 
-Probes 22--24 also split the production property into two logically distinct
-parts:
+Probes 22--24 split that property into two logically distinct parts:
 
 1. **where-defined monotonicity**: if both gauges are finite, Ky-Fan dominance
    implies the gauge inequality;
 2. **membership transfer / solidity**: Ky-Fan domination by an ideal member
    forces the dominated operator to belong to the ideal.
 
-The candidate finite-rank/operator-norm model should satisfy (1) and fail (2).
-If that compiles, stop trying to prove raw-source `HasFanDominance`: the current
-source structure is too weak.  The next task is then a source-level audit of the
-exact Fan theorem Davis and Kahan invoke and of what their phrase
-"unitary-invariant norm" imports from the surrounding operator-ideal literature.
-Do not repair that by simply adding `HasFanDominance` as an unexplained field.
+The countermodel satisfies (1) and fails (2).  Therefore stop trying to prove
+raw-source `HasFanDominance`: the current source structure is too weak.  The
+next task is a source-level audit of the exact Fan theorem Davis and Kahan invoke
+and of what their phrase "unitary-invariant norm" imports from the surrounding
+operator-ideal literature.  Do not repair this by simply adding
+`HasFanDominance` as an unexplained field.
 
-If the countermodel fails for a **mathematical** reason rather than an
-elaboration issue, inspect which raw source law rules it out; that law identifies
-the missing route to the desired theorem.
+## State after the clean Probe 17--24 compile
 
-## State at this revision
+The user compiled Probes 17--24 cleanly on 2026-09-08.  This is the decisive
+result of the exploration so far:
 
-The first Probe 17--24 compiler pass reached the candidate model and found only
-proof/elaboration issues in its `OperatorIdealFamily` construction plus the
-rank-one comparator gauge calculation.  The present revision mirrors the
-already-working `compactOperatorIdealFamily` proof pattern, replaces deprecated
-`if_pos`/`if_neg` uses with `ite_eq_left`/`ite_eq_right`, handles zero/nonzero
-`ℝ≥0∞` norms explicitly, and fixes the comparator's extended-norm calculation.
-These fixes are **not established until the user compiles this revision**.
+* `finiteRankOperatorNormSource` is a genuine `SourceUnitaryInvariantNorm` under
+  the current raw structure;
+* it satisfies Fan monotonicity whenever both source gauges are defined;
+* it fails the current unconditional `HasFanDominance`; and
+* the failure is exactly Ky-Fan membership transfer: an infinite-rank diagonal
+  can be Ky-Fan dominated by a finite-rank member without itself belonging to
+  the finite-rank ideal.
+
+Therefore **do not resume the attempt to prove**
+`SourceUnitaryInvariantNorm.hasFanDominance` from the present raw fields.  That
+implication is false.  The next semantic question is what Davis--Kahan import by
+their Section 1 language.  Two source facts pull in different directions and
+must be reconciled rather than silently choosing one:
+
+1. they say that some results are vacuous when the norms in them fail to exist;
+2. they say every unitary-invariant norm is obtained as a symmetric gauge
+   function of the singular values and immediately invoke Ky Fan dominance.
+
+Probes 25 onward distinguish a **memberwise/value representation** (the
+symmetric gauge agrees wherever the source norm exists) from a **total/domain
+representation** (the canonical extended symmetric gauge also determines where
+the norm exists).  The finite-rank countermodel will test whether the former is
+already compatible with all compiled raw source laws.  This distinction is the
+next likely source-exactness boundary.
 -/
 import DavisKahan.OperatorIdeal.NormalizedUnitaryInvariantNorm
 import ForTauCeti.Analysis.OperatorIdeal.Family.SymmetricGauge
@@ -116,6 +128,7 @@ import ForTauCeti.Analysis.InnerProductSpace.SeparableOrthonormal
 import DavisKahan.OperatorIdeal.ApproximationNumbers.BlockSum
 import ForTauCeti.Analysis.OperatorIdeal.Family.OperatorNorm
 import DavisKahan.Sources.DavisKahan1970.Ideals.RankOneNormalization
+import DavisKahan.Sources.DavisKahan1970.Ideals.KyFanNorm
 
 /-!
 # Exploration: Fan dominance at the Davis--Kahan source norm boundary
@@ -2624,38 +2637,309 @@ theorem finiteRankOperatorNormSource_not_membershipTransfer
   exact hA rfl
 
 /-!
-## Boundary after Probes 17--24
+## Boundary after Probes 17--24 -- COMPILED
 
-If this batch compiles, it changes the next question materially.  The exact
-current production implication
+This batch compiled cleanly on 2026-09-08.  It is now machine-checked that the
+current raw `SourceUnitaryInvariantNorm` fields do **not** imply the current
+unconditional `HasFanDominance` property.  The finite-rank/operator-norm source
+is a counterexample.  The same source satisfies the norm inequality whenever
+both norms are defined; what fails is weak-majorization membership transfer.
 
-```
-∀ N : SourceUnitaryInvariantNorm, N.HasFanDominance
-```
-
-cannot be proved from the current raw source structure: a finite-rank
-operator-norm source model is a counterexample.  The same concrete model is also
-a separable counterexample once the mathematically standard separability of its
-`lp` space is supplied; pinned Mathlib does not currently expose that instance,
-so this exploration records the separable theorem conditionally rather than
-adding an axiom.  The failure is specifically the membership-transfer half of
-the current `ENNReal` formulation, while the same model satisfies Fan
-monotonicity whenever both source norms are defined.
-
-That leaves a source-interpretation decision to investigate against Section 1:
-
-* does Davis--Kahan's cited Fan theorem range over a standard fully symmetric
-  ideal class with precisely this membership solidity;
-* does their convention that a displayed norm may fail to exist make the
-  where-defined statement the exact source proposition instead; or
-* is the current `SourceUnitaryInvariantNorm` missing a standard regularity /
-  ideal-solidity condition implicit in the mathematical term they use?
-
-Those alternatives should be settled from the source and the cited Fan theorem
-before changing a production structure or attempting a large infinite-dimensional
-majorization formalization.
+That result changes the exploration target.  We no longer ask Lean to prove a
+false implication from the raw fields.  The next probes ask what different
+formal readings of the source's "symmetric gauge function" sentence buy us and
+how that interacts with the paper-wide convention that results are vacuous when
+a displayed norm fails to exist.
 -/
 
+/-!
+## Probes 25--31: separate value representation, domain representation, and vacuity
+
+The source language can be read at two different strengths:
+
+* **memberwise/value representation:** on operators for which a source norm
+  exists, its value is given by one coherent symmetric norming function;
+* **total/domain representation:** the canonical extended symmetric norming
+  function agrees with the source extended gauge on every bounded operator, so
+  it determines both values and the ideal domain.
+
+The finite-rank/operator-norm countermodel is designed to distinguish them.  On
+finite-rank members its value is exactly the first Ky Fan norm, hence it has the
+weak/memberwise representation.  But its extended gauge is `∞` on an
+infinite-rank compact diagonal even though the first Ky Fan gauge is finite.
+
+The probes below also spell out a total-gauge formulation of the source's
+"vacuous when norms fail to exist" convention.  This is exploration-only
+semantics; no production theorem is changed here.
+-/
+
+/-- Cross-space finite-prefix dominance for a coherent symmetric norming
+function.  The production theorem currently has same source/target types; this
+local version records that its proof only compares the two finite singular-value
+vectors and therefore works across different Hilbert-space pairs. -/
+private theorem symmetricNorming_prefixGauge_le_cross
+    (M : SymmetricNormingFunction)
+    {E F E' F' : Type v}
+    [NormedAddCommGroup E] [InnerProductSpace ℂ E] [CompleteSpace E]
+    [NormedAddCommGroup F] [InnerProductSpace ℂ F] [CompleteSpace F]
+    [NormedAddCommGroup E'] [InnerProductSpace ℂ E'] [CompleteSpace E']
+    [NormedAddCommGroup F'] [InnerProductSpace ℂ F'] [CompleteSpace F']
+    {A : E →L[ℂ] F} {B : E' →L[ℂ] F'}
+    (h : ∀ k : ℕ, kyFanApproximationGauge k A ≤
+      kyFanApproximationGauge k B) (n : ℕ) :
+    M.prefixGauge n A ≤ M.prefixGauge n B := by
+  let MN := M.finiteNorm n
+  let b := EuclideanSpace.basisFun (Fin n) ℂ
+  change MN.gauge b (SymmetricNormingFunction.approximationPrefix n A) ≤
+    MN.gauge b (SymmetricNormingFunction.approximationPrefix n B)
+  apply MN.gauge_le_gauge_of_prefix_sums_le b
+  · intro i j hij
+    exact approximationSingularValue_antitone A (Fin.le_def.mp hij)
+  · intro i
+    exact approximationSingularValue_nonneg _ _
+  · intro i
+    exact approximationSingularValue_nonneg _ _
+  · intro m
+    rcases le_or_gt m n with hm | hm
+    · simp only [SymmetricNormingFunction.approximationPrefix]
+      rw [sum_filter_lt_eq_sum_fin hm
+          (fun k => approximationSingularValue k A),
+        sum_filter_lt_eq_sum_fin hm
+          (fun k => approximationSingularValue k B),
+        Fin.sum_univ_eq_sum_range
+          (fun k => approximationSingularValue k A) m,
+        Fin.sum_univ_eq_sum_range
+          (fun k => approximationSingularValue k B) m]
+      exact h m
+    · have huniv :
+          (Finset.univ.filter fun i : Fin n => (i : ℕ) < m) =
+            Finset.univ :=
+        Finset.filter_true_of_mem fun i _ => lt_trans i.isLt hm
+      rw [huniv, SymmetricNormingFunction.sum_approximationPrefix n A,
+        SymmetricNormingFunction.sum_approximationPrefix n B]
+      exact h n
+
+/-- Cross-space Fan dominance for the canonical extended gauge of one coherent
+symmetric norming function. -/
+theorem symmetricNorming_extendedGauge_le_cross
+    (M : SymmetricNormingFunction)
+    {E F E' F' : Type v}
+    [NormedAddCommGroup E] [InnerProductSpace ℂ E] [CompleteSpace E]
+    [NormedAddCommGroup F] [InnerProductSpace ℂ F] [CompleteSpace F]
+    [NormedAddCommGroup E'] [InnerProductSpace ℂ E'] [CompleteSpace E']
+    [NormedAddCommGroup F'] [InnerProductSpace ℂ F'] [CompleteSpace F']
+    {A : E →L[ℂ] F} {B : E' →L[ℂ] F'}
+    (h : ∀ k : ℕ, kyFanApproximationGauge k A ≤
+      kyFanApproximationGauge k B) :
+    M.extendedGauge A ≤ M.extendedGauge B := by
+  change (⨆ n : ℕ, ENNReal.ofReal (M.prefixGauge n A)) ≤
+    (⨆ n : ℕ, ENNReal.ofReal (M.prefixGauge n B))
+  apply iSup_le
+  intro n
+  exact le_trans
+    (ENNReal.ofReal_le_ofReal (symmetricNorming_prefixGauge_le_cross M h n))
+    (le_iSup (fun m : ℕ => ENNReal.ofReal (M.prefixGauge m B)) n)
+
+/-! ### Probe 25: a weak/memberwise reading of "obtained as a symmetric gauge" -/
+
+/-- One coherent symmetric norming function gives the source norm value on every
+operator where that source norm is actually defined.  No claim is made about the
+canonical extension away from the source ideal. -/
+def HasMemberwiseSymmetricNormingRepresentation
+    (N : SourceUnitaryInvariantNorm.{0, v} ℂ) : Prop :=
+  ∃ M : SymmetricNormingFunction,
+    ∀ {E F : Type v}
+      [NormedAddCommGroup E] [InnerProductSpace ℂ E] [CompleteSpace E]
+      [NormedAddCommGroup F] [InnerProductSpace ℂ F] [CompleteSpace F]
+      (A : E →L[ℂ] F),
+      N.toSymmetricOperatorIdealFamily.gauge A ≠ ⊤ →
+        N.toSymmetricOperatorIdealFamily.gauge A = M.extendedGauge A
+
+/-- The compiled finite-rank/operator-norm countermodel has a memberwise
+symmetric-norming representation: on its domain it is just the first Ky Fan norm.
+Thus a value-only reading of the source's symmetric-gauge sentence does not by
+itself rule out the countermodel. -/
+theorem finiteRankOperatorNormSource_hasMemberwiseSymmetricNormingRepresentation :
+    HasMemberwiseSymmetricNormingRepresentation
+      (finiteRankOperatorNormSource.{0}) := by
+  have h1 : 0 < (1 : ℕ) := by omega
+  refine ⟨kyFanNormingFunction 1 h1, ?_⟩
+  intro E F _ _ _ _ _ _ A hA
+  change finiteRankOperatorNormGauge A ≠ ⊤ at hA
+  have hAfin : ProbeFiniteRank A :=
+    (finiteRankOperatorNormGauge_ne_top_iff A).mp hA
+  change finiteRankOperatorNormGauge A =
+    (kyFanNormingFunction 1 h1).extendedGauge A
+  rw [finiteRankOperatorNormGauge_of_finiteRank hAfin,
+    kyFanNormingFunction_extendedGauge,
+    kyFanApproximationGauge_one, ← ofReal_norm]
+
+/-! ### Probe 26: memberwise representation gives exactly the where-defined Fan inequality -/
+
+/-- Once one coherent symmetric norming function represents the values on the
+source ideal, ordinary Fan dominance follows whenever both displayed norms
+exist.  No membership-transfer conclusion is used. -/
+theorem fanDominantWhereDefined_of_memberwiseSymmetricNormingRepresentation
+    (N : SourceUnitaryInvariantNorm.{0, v} ℂ)
+    (hrep : HasMemberwiseSymmetricNormingRepresentation N) :
+    HasFanDominanceWhereDefined N := by
+  rcases hrep with ⟨M, hM⟩
+  intro E F E' F' _ _ _ _ _ _ _ _ _ _ _ _ A B hA hB hAB
+  rw [hM A hA, hM B hB]
+  exact symmetricNorming_extendedGauge_le_cross M hAB
+
+/-- The value-only symmetric-norming statement is strictly weaker than the
+current production `HasFanDominance`: the compiled finite-rank source satisfies
+the former and refutes the latter. -/
+theorem memberwiseSymmetricNormingRepresentation_does_not_imply_fanDominance :
+    ∃ N : SourceUnitaryInvariantNorm.{0, 0} ℂ,
+      HasMemberwiseSymmetricNormingRepresentation N ∧ ¬ N.HasFanDominance := by
+  refine ⟨finiteRankOperatorNormSource.{0},
+    finiteRankOperatorNormSource_hasMemberwiseSymmetricNormingRepresentation,
+    finiteRankOperatorNormSource_not_fanDominant⟩
+
+/-! ### Probe 27: formalize the source's paper-wide vacuity convention -/
+
+/-- Total-gauge form of: if one of the displayed source norms does not exist,
+the comparison is treated as vacuous; otherwise the Fan inequality must hold.
+This is an exploration predicate, not a production proposal. -/
+def HasFanDominanceWithVacuity
+    (N : SourceUnitaryInvariantNorm.{0, v} ℂ) : Prop :=
+  ∀ {E F E' F' : Type v}
+    [NormedAddCommGroup E] [InnerProductSpace ℂ E] [CompleteSpace E]
+    [NormedAddCommGroup F] [InnerProductSpace ℂ F] [CompleteSpace F]
+    [NormedAddCommGroup E'] [InnerProductSpace ℂ E'] [CompleteSpace E']
+    [NormedAddCommGroup F'] [InnerProductSpace ℂ F'] [CompleteSpace F']
+    {A : E →L[ℂ] F} {B : E' →L[ℂ] F'},
+    (∀ k, kyFanApproximationGauge k A ≤ kyFanApproximationGauge k B) →
+      (N.toSymmetricOperatorIdealFamily.gauge A = ⊤ ∨
+        N.toSymmetricOperatorIdealFamily.gauge B = ⊤) ∨
+      N.toSymmetricOperatorIdealFamily.gauge A ≤
+        N.toSymmetricOperatorIdealFamily.gauge B
+
+/-- The explicit-vacuity contract is exactly the earlier where-defined contract.
+This theorem is bookkeeping, but it makes the semantic difference from the
+current unconditional `ENNReal` inequality visible in the type. -/
+theorem fanDominanceWithVacuity_iff_whereDefined
+    (N : SourceUnitaryInvariantNorm.{0, v} ℂ) :
+    HasFanDominanceWithVacuity N ↔ HasFanDominanceWhereDefined N := by
+  constructor
+  · intro hv E F E' F' _ _ _ _ _ _ _ _ _ _ _ _ A B hA hB hAB
+    rcases hv hAB with hmissing | hle
+    · rcases hmissing with hAtop | hBtop
+      · exact (hA hAtop).elim
+      · exact (hB hBtop).elim
+    · exact hle
+  · intro hwhere E F E' F' _ _ _ _ _ _ _ _ _ _ _ _ A B hAB
+    by_cases hA : N.toSymmetricOperatorIdealFamily.gauge A = ⊤
+    · exact Or.inl (Or.inl hA)
+    · by_cases hB : N.toSymmetricOperatorIdealFamily.gauge B = ⊤
+      · exact Or.inl (Or.inr hB)
+      · exact Or.inr (hwhere hA hB hAB)
+
+/-- Memberwise symmetric-norming representation is sufficient for the explicit
+vacuity reading of the Fan sentence. -/
+theorem fanDominanceWithVacuity_of_memberwiseSymmetricNormingRepresentation
+    (N : SourceUnitaryInvariantNorm.{0, v} ℂ)
+    (hrep : HasMemberwiseSymmetricNormingRepresentation N) :
+    HasFanDominanceWithVacuity N := by
+  rw [fanDominanceWithVacuity_iff_whereDefined]
+  exact fanDominantWhereDefined_of_memberwiseSymmetricNormingRepresentation N hrep
+
+/-! ### Probe 28: a strong/total reading of "obtained as a symmetric gauge" -/
+
+/-- Strong reading: one canonical symmetric-norming extension agrees with the
+source's total `ENNReal` gauge on *every* bounded operator.  Unlike the
+memberwise statement, this fixes the ideal domain as well as norm values. -/
+def HasTotalSymmetricNormingRepresentation
+    (N : SourceUnitaryInvariantNorm.{0, v} ℂ) : Prop :=
+  ∃ M : SymmetricNormingFunction,
+    ∀ {E F : Type v}
+      [NormedAddCommGroup E] [InnerProductSpace ℂ E] [CompleteSpace E]
+      [NormedAddCommGroup F] [InnerProductSpace ℂ F] [CompleteSpace F]
+      (A : E →L[ℂ] F),
+      N.toSymmetricOperatorIdealFamily.gauge A = M.extendedGauge A
+
+/-- A total canonical symmetric-norming representation is strong enough to
+recover the current production `HasFanDominance`, including membership
+transfer. -/
+theorem fanDominance_of_totalSymmetricNormingRepresentation
+    (N : SourceUnitaryInvariantNorm.{0, v} ℂ)
+    (hrep : HasTotalSymmetricNormingRepresentation N) :
+    N.HasFanDominance := by
+  rcases hrep with ⟨M, hM⟩
+  intro E F E' F' _ _ _ _ _ _ _ _ _ _ _ _ A B hAB
+  rw [hM A, hM B]
+  exact symmetricNorming_extendedGauge_le_cross M hAB
+
+/-- Total representation trivially restricts to memberwise representation. -/
+theorem memberwiseSymmetricNormingRepresentation_of_total
+    (N : SourceUnitaryInvariantNorm.{0, v} ℂ)
+    (hrep : HasTotalSymmetricNormingRepresentation N) :
+    HasMemberwiseSymmetricNormingRepresentation N := by
+  rcases hrep with ⟨M, hM⟩
+  refine ⟨M, ?_⟩
+  intro E F _ _ _ _ _ _ A _
+  exact hM A
+
+/-! ### Probes 29--30: identify the exact extra content of the production property -/
+
+/-- Once memberwise symmetric-norming representation is granted, the only extra
+content of current unconditional Fan dominance is Ky-Fan membership transfer. -/
+theorem fanDominance_iff_membershipTransfer_of_memberwiseRepresentation
+    (N : SourceUnitaryInvariantNorm.{0, v} ℂ)
+    (hrep : HasMemberwiseSymmetricNormingRepresentation N) :
+    N.HasFanDominance ↔ HasKyFanMembershipTransfer N := by
+  have hwhere : HasFanDominanceWhereDefined N :=
+    fanDominantWhereDefined_of_memberwiseSymmetricNormingRepresentation N hrep
+  constructor
+  · intro hfan
+    exact ((fanDominance_iff_whereDefined_and_membershipTransfer N).mp hfan).2
+  · intro htransfer
+    exact (fanDominance_iff_whereDefined_and_membershipTransfer N).mpr
+      ⟨hwhere, htransfer⟩
+
+/-- A compact witness to the semantic split established by this exploration:
+there exists a raw source norm with a coherent symmetric-norming formula on its
+entire domain and with the explicit-vacuity Fan property, yet without the
+current unconditional production property. -/
+theorem exists_memberwise_vacuous_but_not_unconditional_fanDominance :
+    ∃ N : SourceUnitaryInvariantNorm.{0, 0} ℂ,
+      HasMemberwiseSymmetricNormingRepresentation N ∧
+      HasFanDominanceWithVacuity N ∧
+      ¬ N.HasFanDominance := by
+  refine ⟨finiteRankOperatorNormSource.{0},
+    finiteRankOperatorNormSource_hasMemberwiseSymmetricNormingRepresentation,
+    ?_, finiteRankOperatorNormSource_not_fanDominant⟩
+  exact fanDominanceWithVacuity_of_memberwiseSymmetricNormingRepresentation
+    finiteRankOperatorNormSource.{0}
+    finiteRankOperatorNormSource_hasMemberwiseSymmetricNormingRepresentation
+
+/-!
+## Boundary after Probes 25--30
+
+If this batch compiles, the exploration has isolated a precise semantic fork.
+The already-compiled countermodel is compatible with all of the following:
+
+* the current raw source ideal/norm laws;
+* a single coherent symmetric-norming formula for every value on its domain;
+* Ky Fan monotonicity whenever the two displayed norms exist; and
+* an explicit formalization of the paper-wide convention that a comparison is
+  vacuous when a displayed norm fails to exist.
+
+It still fails current production `HasFanDominance`, solely because that total
+`ENNReal` inequality additionally forces weak-majorization closure of the norm's
+**domain**.  In contrast, a total/canonical symmetric-norming representation of
+the extended gauge *does* imply the production property.
+
+Therefore the next source-exactness decision should be made from the meaning of
+Davis--Kahan's Section 1 sentence that every unitary-invariant norm is obtained
+as a symmetric gauge function, together with their explicit vacuity convention
+and the cited Ky Fan theorem.  The key question is no longer whether Fan
+monotonicity is true; it is whether the source imports **domain solidity** as
+part of the mathematical notion of its norm ideal.  Do not modify production
+structures until that question is settled.
+-/
 end
 
 end FanDominanceExploration
