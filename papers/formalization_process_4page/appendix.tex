@@ -41,23 +41,114 @@ location and scope, the Lean declaration used as evidence, and the review state.
 Proposition~4.4 remains a counted result: its formal treatment certifies a
 counterexample to the printed claim and proves a repaired theorem.
 
+\section{Formalization system details}
+\label{app:system}
+
+\Cref{sec:system} describes the system at the level used in the main argument.
+This section records the concrete implementation surfaces used at the manuscript
+snapshot.  The Lean workspace uses Lean \texttt{v4.34.0-rc1}; the Lake manifest
+pins Mathlib at \texttt{72f9c607bb3a} and Tau Ceti at
+\texttt{1b39d420ac84}.  The ordinary \texttt{lake build} includes the reusable
+\texttt{ForTauCeti} package, the Davis--Kahan paper-facing library, and the other
+formalization targets in the workspace.
+
+\begin{table}[H]
+\centering
+\scriptsize
+\caption{Persistent artifacts used to separate source selection, Lean checking,
+and semantic review.  Paths are relative to the supplementary repository.}
+\label{tab:system-artifacts}
+\begin{tabularx}{\linewidth}{@{}>{\raggedright\arraybackslash}p{0.38\linewidth}>{\raggedright\arraybackslash}X@{}}
+\toprule
+Artifact & Role \\
+\midrule
+Source-order transcription
+  & Mathematical reconstruction used for distributable review. \\
+Source-atom record
+  & Fine-grained accounting of source statements and surrounding mathematical
+    material.  It is used for source-coverage review, rather than as the
+    29-result completion denominator. \\
+29-result register
+  & The completion contract.  Each row records source scope, Lean evidence,
+    review status, and, where needed, nonlocal source interpretation or
+    refutation information. \\
+Registered Lean-evidence record
+  & Source-result-to-declaration evidence and status used by the project
+    checkers. \\
+Independent audit packet
+  & Reviewer-facing document that places source text, the claimed interpretation,
+    and registered Lean evidence together for result-by-result review. \\
+Lean source tree and \texttt{ForTauCeti/}
+  & Checked theorem implementations and reusable foundations developed while
+    closing the source results. \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+\paragraph{Mechanical verification.}
+The ordinary build checks the Lean libraries in the pinned environment.  The
+project additionally runs separate checkers for the statement map, source
+coverage, and 29-result register.  The result-level checker resolves registered
+declarations against the Lean project and can query compiler-derived theorem
+types rather than trusting declaration names or copied signatures.  The checks
+also enforce recorded scope policies and reject stale or internally
+inconsistent evidence.  Axiom and dependency inspection is available through
+\texttt{leanq}.  These checks establish properties of the formal artifact and
+its bookkeeping; they do not decide whether a formal statement has the same
+mathematical meaning as the source.
+
+\paragraph{Semantic-review path.}
+For a tracked result, a reviewer starts from the source passage and its inherited
+context, identifies the registered Lean declaration, and inspects the elaborated
+type together with definitions that affect the meaning of its hypotheses or
+conclusion.  The comparison covers scalar field, dimension, bounded or unbounded
+operator scope, norm class, gap conditions, constants, directionality, and the
+identity of represented angle or residual operators.  A result can be returned
+to implementation without invalidating an already correct Lean proof of a
+narrower or different proposition.  The script
+\texttt{scripts/render\_davis\_kahan\_1970\_audit\_packet.py} renders the
+result-by-result review packet.  The interface in \cref{app:review-page} was
+added later to present the same source/correspondence/Lean relationship more
+directly.
+
+\paragraph{Actors.}
+Implementation, review, and acceptance are deliberately separate roles even
+when the same model family participates at different times.  LLMs propose Lean,
+search for foundations, diagnose compiler failures, and perform skeptical
+source/signature comparisons.  Human authors determine the claimed source
+boundary and adjudicate cases where the paper itself leaves room for more than
+one formal reading.  No fixed number of review rounds is treated as a semantic
+certificate.
+
 \section{Davis--Kahan background and Formalization 1}
 \label{app:formalization1}
 
 Davis and Kahan compare a candidate subspace with an exact invariant
 subspace of a self-adjoint operator \citep{davis1970rotation}.  In finite
-dimensions, let $A=A^*$ and let $E_0$ have orthonormal columns spanning the
-candidate subspace $V$.  The map $E_0$ takes coordinates in $V$ to the ambient
-space.  Applying $A$ and then returning to those coordinates gives the
-compression $A_0=E_0^*AE_0$.  With $P_V=E_0E_0^*$, its residual is
-\[
+dimensions, let $A=A^*$ (i.e., $A$ is self-adjoint) and let $E_0$ have
+orthonormal columns spanning the candidate subspace $V$.  The
+\emph{candidate-space compression} is
+\begin{equation}
+  A_0=E_0^*AE_0.
+  \label{eq:dk-candidate-compression}
+\end{equation}
+This expression can be read from right to left: $E_0$ embeds candidate
+coordinates into the ambient space, $A$ acts there, and $E_0^*$ projects the
+result back to candidate coordinates.  Thus $A_0$ is the operator seen after
+applying $A$ and discarding the component outside $V$.  Writing
+$P_V=E_0E_0^*$ for the orthogonal projector onto $V$, define the
+\emph{candidate residual}
+\begin{equation}
   R=AE_0-E_0A_0=(I-P_V)AE_0.
-\]
-Thus $R$ is the component of $AE_0$ outside $V$, and $R=0$ precisely when $V$
-is invariant under $A$.  The historical signature allows any bounded operator
-\texttt{M} on $V$, not just this compression; its residual is
+  \label{eq:dk-candidate-residual}
+\end{equation}
+Thus $R$ is exactly the component of $AE_0$ outside $V$, and $R=0$ precisely
+when $V$ is invariant under $A$.  The historical signature allows any bounded
+operator \texttt{M} on $V$, not just the compression in
+\cref{eq:dk-candidate-compression}; its residual is
 $A\circ\iota_V-\iota_V\circ M$, where $\iota_V:V\hookrightarrow E$ is inclusion.
-Choosing $M$ to be the compression recovers the preceding interpretation.
+Choosing $M$ to be the corresponding candidate-space compression recovers
+the residual in \cref{eq:dk-candidate-residual}.
 
 For the exact subspace $U$, the assumption \texttt{Reduces A U} says that both
 $U$ and $U^\perp$ are invariant.  In Formalization~1, the spectrum of $A|_U$
@@ -82,11 +173,12 @@ $\sin(2\theta)$ vanishes at both $0$ and $\pi/2$.  Recovering a small-angle boun
 requires an appropriate angle branch, such as $0\le\theta\le\pi/4$.
 
 Formalization~1 states the estimate for complex Hilbert spaces.  Its ambient
-Hilbert-space assumptions are omitted from the displayed code.  The type
-\texttt{ContinuousLinearMap (RingHom.id Complex) E E} restricts $A$ to a bounded
-complex-linear operator.  The identity scalar homomorphism specifies complex
-linearity.  The following table connects the remaining structures to the
-mathematics.
+Hilbert-space assumptions are omitted from the displayed code.  In the syntax
+shown there, \texttt{E }$\mathrel{\to}\!\mathtt{L}[\mathbb C]$\texttt{ E}
+means a bounded continuous complex-linear map $E\to E$.  It elaborates to
+\texttt{ContinuousLinearMap (RingHom.id Complex) E E}; this bounded,
+complex-linear type is part of the historical scope mismatch.  The following
+table uses the same surface syntax as the displayed formalization.
 
 \begin{table}[H]
 \centering
@@ -97,13 +189,13 @@ mathematics.
 \toprule
 Lean expression & Mathematical role \\
 \midrule
-\texttt{ContinuousLinearMap (RingHom.id Complex) E E}
+\texttt{E }$\mathrel{\to}\!\mathtt{L}[\mathbb C]$\texttt{ E}
   & A bounded continuous complex-linear operator $E\to E$.  In Formalization~1
-    this is the ambient self-adjoint operator $A$; restricting it to this type
-    is part of the historical scope mismatch. \\
+    this is the ambient operator $A$; the bounded complex-linear type is part
+    of the historical scope mismatch. \\
 \texttt{IsSelfAdjoint A}
-  & $A=A^*$, the self-adjointness assumption. \\
-\texttt{Submodule Complex E}
+  & $A=A^*$, i.e., $A$ is self-adjoint. \\
+\texttt{Submodule }$\mathbb C$\texttt{ E}
   & A complex linear subspace of the ambient Hilbert space.  Here $U$ is the
     exact reducing subspace and $V$ is the candidate subspace. \\
 \texttt{U.HasOrthogonalProjection}
@@ -112,20 +204,25 @@ Lean expression & Mathematical role \\
 \texttt{Reduces A U}
   & Both $U$ and $U^\perp$ are invariant under $A$. \\
 \texttt{compressOperator U A}
-  & The orthogonal compression $P_U A|_U$; for a reducing subspace this is the
-    restriction of $A$ to $U$. \\
-\texttt{spectrum Real (...)}
+  & The compression to $U$: include a vector from $U$, apply $A$, and project
+    back to $U$.  Because $U$ reduces $A$, no component spills outside $U$, so
+    this agrees with the restriction of $A$ to $U$. \\
+\texttt{spectrum }$\mathbb R$\texttt{ (...)}
   & The real spectrum of the self-adjoint compression, used to state the
     interval and gap hypotheses. \\
 \texttt{V.subtypeL}
-  & The bounded inclusion $V\hookrightarrow E$, corresponding to the source's
-    coordinate map $E_0$. \\
-\texttt{M : ContinuousLinearMap (RingHom.id Complex) V V}
-  & An arbitrary bounded operator on the candidate subspace.  Taking it to
-    be the compression gives the introductory choice of $A_0$. \\
+  & The bounded inclusion $V\hookrightarrow E$, the coordinate-free analogue
+    of the source's embedding $E_0$. \\
+\texttt{M : V }$\mathrel{\to}\!\mathtt{L}[\mathbb C]$\texttt{ V}
+  & An arbitrary bounded operator on the candidate subspace.  Choosing $M$ as
+    the candidate-space compression corresponding to $A_0=E_0^*AE_0$ gives
+    the introductory specialization; \texttt{M} is not definitionally that
+    matrix expression. \\
 \texttt{residual A V.subtypeL M}
-  & $A\circ\iota_V-\iota_V\circ M$.  The inclusion plays the role of $E_0$
-    and $M$ the role of the candidate-space operator $A_0$. \\
+  & $A\circ\iota_V-\iota_V\circ M$.  When $M$ is the candidate-space
+    compression corresponding to $A_0$, this is the residual $R$ in
+    \cref{eq:dk-candidate-residual}; for general $M$ it is the
+    more general residual stated by Formalization~1. \\
 \texttt{SymmetricNormingFunction}
   & A normalized, dimension-coherent symmetric gauge on singular values used to
     represent the source's unitarily invariant norm $N$. \\
@@ -179,6 +276,7 @@ Date & commit & event \\
 \end{table}
 
 \section{Semantic-review page}
+\label{app:review-page}
 
 \begin{figure}[H]
   \centering

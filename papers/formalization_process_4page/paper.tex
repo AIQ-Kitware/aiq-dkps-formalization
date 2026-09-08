@@ -307,16 +307,20 @@ their context; it is included in the supplementary code.
 \label{sec:dk}
 
 Davis and Kahan bound the change in invariant subspaces under self-adjoint
-perturbations.  In matrix terms, let $A=A^*$ and let $E_0$ have orthonormal
-columns spanning a \emph{candidate subspace}, which is to be compared with an
-exact invariant subspace.  The compression $A_0=E_0^*AE_0$ records the action of
-$A$ after projecting back into the $E_0$ coordinates.  The residual
+perturbations.  In matrix terms, let $A=A^*$ (i.e., $A$ is self-adjoint) and let
+$E_0$ have orthonormal columns spanning a \emph{candidate subspace} $V$, which
+is to be compared with an exact invariant subspace.  The candidate-space
+\emph{compression}, $A_0=E_0^*AE_0$, is obtained by using $E_0$ to embed
+candidate coordinates into the ambient space, applying $A$, and using $E_0^*$
+to project the result back to candidate coordinates.  Writing $P_V=E_0E_0^*$ for the orthogonal projector
+onto $V$, the \emph{residual}
 \[
-  R=AE_0-E_0A_0
+  R=AE_0-E_0A_0=(I-P_V)AE_0
 \]
-measures failure of invariance: it vanishes exactly when $A$ preserves the
-candidate subspace.  Principal angles measure the angles between corresponding
-subspace directions.  With spectral separation $\delta>0$, one directed
+is exactly the part of $AE_0$ that lies outside $V$; it vanishes exactly when
+$A$ preserves the candidate subspace.  Principal angles measure the angles
+between corresponding subspace directions.  With spectral separation $\delta>0$,
+one directed
 $\sin 2\Theta$ result has the form
 \begin{equation}
   \delta\,N(\sin 2\Theta_0) \le 2N(R),
