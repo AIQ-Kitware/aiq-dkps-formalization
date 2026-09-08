@@ -60,6 +60,13 @@ def validate_pages(pages: list[str], public: bool) -> list[str]:
     checklist_pages = [i + 1 for i, page in enumerate(flat_pages) if 'NeurIPS Paper Checklist' in page]
     if len(checklist_pages) != 1 or checklist_pages[0] <= reference_page:
         errors.append(f'NeurIPS checklist must appear once after References; found {checklist_pages}')
+    main_text = ' '.join(flat_pages[:main_pages])
+    for token in (
+        'Tool and computational resource disclosure',
+        'substantially used in the writing process',
+    ):
+        if token not in main_text:
+            errors.append(f'Main-text tool disclosure is missing: {token}')
     text = ' '.join(flat_pages)
     if public:
         for author in AUTHORS:
@@ -103,8 +110,8 @@ def main() -> int:
         failed = True
         print(f'source: ERROR: {error}')
     for name, public in [('paper', False), ('paper_public', True)]:
-        pdf = PAPER / f'{name}.pdf'
-        log = PAPER / f'{name}.log'
+        pdf = PAPER / 'build' / f'{name}.pdf'
+        log = PAPER / 'build' / f'{name}.log'
         errors = []
         if not pdf.is_file() or not log.is_file():
             errors.append(f'Build {pdf.name} and its TeX log before checking layout')

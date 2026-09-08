@@ -1,0 +1,50 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Fields in practitioner_account_sources.csv",
+  "description": "One row per public source attached to a practitioner-survey account.",
+  "columns": {
+    "source_id": "Stable source identifier; unique and nonempty.",
+    "account_id": "Account supported by this source.",
+    "source_role": "primary, supplemental, or corroborating.",
+    "date": "Publication date when known.",
+    "author": "Named source author(s).",
+    "title": "Source title.",
+    "source_type": "Public source category.",
+    "source_url": "Public HTTPS URL.",
+    "citation_key": "BibTeX key in references.bib.",
+    "first_person": "yes/no/unclear: whether the source directly reports the practitioner workflow.",
+    "public_artifact": "yes/no/unclear: whether a public formalization/code artifact is linked or provided.",
+    "build_provenance_available": "yes/no/unclear: whether build/toolchain/transcript/history provenance is publicly available.",
+    "supports_account_observation": "yes/partial/no: whether this source supports the coded account observation.",
+    "evidence_scope": "Short description of which account evidence this source supports.",
+    "source_note": "Source-specific provenance or qualification note."
+  },
+  "categorical_values": {
+    "source_role": [
+      "primary",
+      "supplemental",
+      "corroborating"
+    ],
+    "source_type": [
+      "blog",
+      "paper",
+      "repository_transcript",
+      "repository_readme",
+      "social_post",
+      "forum_post",
+      "essay",
+      "zulip",
+      "human_study"
+    ],
+    "boolean_like": [
+      "yes",
+      "no",
+      "unclear"
+    ],
+    "support": [
+      "yes",
+      "partial",
+      "no"
+    ]
+  }
+}

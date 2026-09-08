@@ -7,9 +7,11 @@ first-person reports from other researchers.
 
 ## Source notes
 
-The public-account table is:
+The public-account snapshot is normalized into:
 
-- `data/practitioner_accounts.csv`
+- `data/practitioner_accounts.csv` - one row per project/workflow episode;
+- `data/practitioner_account_sources.csv` - primary, supplemental, and corroborating public sources;
+- `data/practitioner_account_screening.csv` - screening decisions, including holds and supplemental sources.
 
 The monthly activity counts retained as appendix context are:
 
@@ -49,8 +51,8 @@ make sources
 
 validates the structured source snapshot and Git chronology and regenerates:
 
-- `notes/practitioner_accounts.md` - one source record per public account plus
-  the descriptive counts quoted in the paper;
+- `notes/practitioner_accounts.md` - account records with their attached public
+  sources, screening decisions, and descriptive counts quoted in the paper;
 - `generated/practitioner_account_macros.tex` - TeX macros consumed by
   `paper.tex`;
 - `generated/lean_activity_timeline_tikz.tex` - the appendix timeline figure;
@@ -113,6 +115,26 @@ The live project repository is:
 That URL identifies the authors. The default `paper.tex` build is anonymous.
 `paper_public.tex` sets `\PublicVersion` to expose the authors and public links
 for a preprint or camera-ready version.
+
+## Double-blind supplementary copy
+
+Create a Git-history-free review copy from the tracked repository files with:
+
+```bash
+python3 papers/formalization_process_4page/scripts/anonymize_repo.py
+```
+
+Use `--output PATH` to choose the destination and `--force` to replace an
+existing destination. The script honors Git `filter=crypt` attributes, rewrites
+known author, institution, repository-organization, email, and contract
+identifiers in UTF-8 text, byte-audits copied binary files for the same obvious
+identifiers, and fails rather than leaving a known residual. Gitlink/submodule
+entries and `.git` history are omitted. The tracked `.llm_resource_tally/tool`
+zipapp is also omitted because its binary payload contains an author alias, and
+the anonymizer itself is omitted because it contains the private replacement
+vocabulary. The generated `ANONYMIZATION_REPORT.txt` records all explicit
+omissions. The resulting directory still requires a final human inspection
+before submission.
 
 ## Figure
 

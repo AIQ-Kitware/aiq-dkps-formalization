@@ -1,7 +1,7 @@
 SHELL := /bin/bash
 .PHONY: all sources paper public clean check-prose check-publication-activity \
 	survey-publication-activity check-publication-survey \
-	self-test-publication-survey check-layout
+	self-test-publication-survey check-layout anonymize-repo
 
 BUILD_DIR := build
 
@@ -67,6 +67,9 @@ check-publication-survey:
 
 self-test-publication-survey:
 	python3 scripts/refresh_lean_publication_activity.py self-test
+
+anonymize-repo:
+	python3 scripts/anonymize_repo.py
 
 clean:
 	latexmk -C paper.tex || true
