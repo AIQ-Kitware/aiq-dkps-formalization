@@ -3,6 +3,107 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, OpenAI GPT-5.6 Sol
 -/
+
+
+/-
+# HANDOFF: source-UIN / Fan-dominance exploration (2026-09-08)
+
+This file is intentionally a **standalone compile probe**.  It is not production
+API.  Nothing should import it, and exploration work must not modify
+`SourceUnitaryInvariantNorm`, `NormalizedUnitaryInvariantNorm`, or any existing
+Davis--Kahan theorem signature until the mathematical boundary below is settled.
+
+## Why this exists
+
+A hostile source-exactness review found that Davis--Kahan state their norm
+inequalities for arbitrary unitary-invariant norms, while the current canonical
+Lean endpoints quantify over `NormalizedUnitaryInvariantNorm`, whose structure
+contains Fan dominance.  The raw source-facing structure
+`SourceUnitaryInvariantNorm` deliberately does not contain that field.  If Fan
+dominance is genuinely required by the public theorem statement, source exactness
+requires us either to derive it from the correct source norm class or to discover
+that the source abstraction is missing mathematically implicit hypotheses.
+
+The immediate question is therefore **not** how the existing Davis--Kahan proof
+uses Fan dominance.  It is whether the current raw source norm laws themselves
+entail the Fan-dominance property needed by the theorem boundary.
+
+## Established compile probes
+
+The user is the compiler: this ChatGPT environment has no usable Lake/Lean
+installation.  The command used for every probe is:
+
+```text
+lake env lean \
+  DavisKahan/Explorations/SourceUnitaryInvariantNormFanDominance.lean
+```
+
+Probes 1--16 compiled cleanly before the current countermodel push.  They
+established, at the level of Lean type-checking, the following reductions:
+
+* a symmetric-gauge representation would imply separable Fan dominance;
+* the existing finite-dimensional majorization infrastructure yields finite-
+  dimensional Fan dominance;
+* finite-dimensional membership follows from the current source ideal laws;
+* source gauges are invariant under modulus / the relevant unitary transports;
+* all infinite-dimensional separable spaces can be reduced to one model space;
+* zero stabilization removes the finite/infinite dimension split; and
+* full separable Fan dominance reduces to the genuinely infinite-dimensional
+  positive-operator problem on one fixed infinite-dimensional separable Hilbert
+  space.
+
+Those results are reductions only.  In particular, the finite-dimensional
+successes must **not** be mistaken for closure of the source theorem.
+
+## Current decisive push: Probes 17--24
+
+Before formalizing a large infinite-dimensional dominance theorem, we are
+stress-testing whether that theorem is even derivable from the current raw
+`SourceUnitaryInvariantNorm` laws.
+
+The exploration-only candidate countermodel is:
+
+* carrier: finite-rank operators;
+* gauge on the carrier: operator norm;
+* extended gauge off the carrier: `∞`.
+
+It is intended to satisfy the raw two-sided symmetric ideal laws and the source
+rank-one normalization.  On `ell^2`, an infinite-rank compact diagonal with
+approximation numbers `2^-(n+1)` is Ky-Fan dominated by a norm-one rank-one
+operator.  If the finite-rank/operator-norm model type-checks as a
+`SourceUnitaryInvariantNorm`, then the dominated diagonal is outside the ideal
+while the rank-one comparator is inside it.  That gives a machine-checked
+countermodel to the current unconditional `SourceUnitaryInvariantNorm.HasFanDominance`.
+
+Probes 22--24 also split the production property into two logically distinct
+parts:
+
+1. **where-defined monotonicity**: if both gauges are finite, Ky-Fan dominance
+   implies the gauge inequality;
+2. **membership transfer / solidity**: Ky-Fan domination by an ideal member
+   forces the dominated operator to belong to the ideal.
+
+The candidate finite-rank/operator-norm model should satisfy (1) and fail (2).
+If that compiles, stop trying to prove raw-source `HasFanDominance`: the current
+source structure is too weak.  The next task is then a source-level audit of the
+exact Fan theorem Davis and Kahan invoke and of what their phrase
+"unitary-invariant norm" imports from the surrounding operator-ideal literature.
+Do not repair that by simply adding `HasFanDominance` as an unexplained field.
+
+If the countermodel fails for a **mathematical** reason rather than an
+elaboration issue, inspect which raw source law rules it out; that law identifies
+the missing route to the desired theorem.
+
+## State at this revision
+
+The first Probe 17--24 compiler pass reached the candidate model and found only
+proof/elaboration issues in its `OperatorIdealFamily` construction plus the
+rank-one comparator gauge calculation.  The present revision mirrors the
+already-working `compactOperatorIdealFamily` proof pattern, replaces deprecated
+`if_pos`/`if_neg` uses with `ite_eq_left`/`ite_eq_right`, handles zero/nonzero
+`ℝ≥0∞` norms explicitly, and fixes the comparator's extended-norm calculation.
+These fixes are **not established until the user compiles this revision**.
+-/
 import DavisKahan.OperatorIdeal.NormalizedUnitaryInvariantNorm
 import ForTauCeti.Analysis.OperatorIdeal.Family.SymmetricGauge
 import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.PrescribedSequence
@@ -13,6 +114,8 @@ import ForTauCeti.Analysis.InnerProductSpace.RectangularUnitarilyInvariantSemino
 import ForTauCeti.Analysis.InnerProductSpace.Singular.System
 import ForTauCeti.Analysis.InnerProductSpace.SeparableOrthonormal
 import DavisKahan.OperatorIdeal.ApproximationNumbers.BlockSum
+import ForTauCeti.Analysis.OperatorIdeal.Family.OperatorNorm
+import DavisKahan.Sources.DavisKahan1970.Ideals.RankOneNormalization
 
 /-!
 # Exploration: Fan dominance at the Davis--Kahan source norm boundary
@@ -1838,6 +1941,719 @@ should therefore attack this positive infinite-dimensional model theorem itself,
 and in particular determine whether the raw source ideal laws imply the needed
 infinite limiting/majorization step or whether the current source abstraction is
 missing a standard regularity assumption.
+-/
+
+
+/-!
+## Probes 17--24: test whether the raw source laws can imply unconditional Fan dominance
+
+Probes 13--16 reduce the separable problem to positive Fan dominance on one fixed
+infinite-dimensional separable Hilbert space.  Before attempting the remaining
+infinite-dimensional majorization proof, there is a more basic question to
+settle: is the current raw `SourceUnitaryInvariantNorm` abstraction itself
+strong enough for the unconditional `ENNReal`-valued Fan-dominance property?
+
+The source gauge uses `∞` outside its ideal.  Therefore
+`HasFanDominanceSeparable` contains two logically different assertions:
+
+1. **where-defined norm monotonicity** -- if both displayed norms exist, Ky Fan
+   domination implies the source-norm inequality;
+2. **membership transfer** -- if the right-hand operator belongs to the ideal,
+   then every operator weakly majorized by it also belongs to the ideal.
+
+A finite-rank ideal equipped with the operator norm is a useful stress test.  It
+satisfies the raw symmetric ideal laws and the rank-one normalization, while an
+infinite-rank compact diagonal can be weakly majorized by a rank-one operator.
+If the following probes compile, the current raw source laws do **not** imply the
+unconditional Fan-dominance property.  That would not by itself decide the
+correct Davis--Kahan source interpretation; it would identify the exact semantic
+boundary that has to be resolved.
+-/
+
+/-- Exploration-only finite-rank predicate, expressed with a natural rank bound
+so the existing rank-composition and adjoint lemmas apply directly. -/
+def ProbeFiniteRank
+    {E F : Type v}
+    [NormedAddCommGroup E] [InnerProductSpace ℂ E]
+    [NormedAddCommGroup F] [InnerProductSpace ℂ F]
+    (A : E →L[ℂ] F) : Prop :=
+  ∃ n : ℕ, A.rank ≤ (n : Cardinal)
+
+private theorem probeFiniteRank_zero
+    {E F : Type v}
+    [NormedAddCommGroup E] [InnerProductSpace ℂ E]
+    [NormedAddCommGroup F] [InnerProductSpace ℂ F] :
+    ProbeFiniteRank (0 : E →L[ℂ] F) := by
+  refine ⟨0, ?_⟩
+  simp [LinearMap.rank_zero]
+
+private theorem probeFiniteRank_add
+    {E F : Type v}
+    [NormedAddCommGroup E] [InnerProductSpace ℂ E]
+    [NormedAddCommGroup F] [InnerProductSpace ℂ F]
+    {A B : E →L[ℂ] F}
+    (hA : ProbeFiniteRank A) (hB : ProbeFiniteRank B) :
+    ProbeFiniteRank (A + B) := by
+  obtain ⟨m, hm⟩ := hA
+  obtain ⟨n, hn⟩ := hB
+  refine ⟨m + n, ?_⟩
+  calc
+    (A + B).rank ≤ A.rank + B.rank := LinearMap.rank_add_le _ _
+    _ ≤ (m : Cardinal) + (n : Cardinal) := add_le_add hm hn
+    _ = ((m + n : ℕ) : Cardinal) := by norm_cast
+
+/-- Local copy of the elementary rank inequality used privately by the
+approximation-number development. -/
+private theorem probe_rank_smul_le_rank
+    {E F : Type v}
+    [NormedAddCommGroup E] [InnerProductSpace ℂ E]
+    [NormedAddCommGroup F] [InnerProductSpace ℂ F]
+    (c : ℂ) (A : E →L[ℂ] F) :
+    (c • A).rank ≤ A.rank := by
+  refine Submodule.rank_mono ?_
+  rintro y ⟨x, rfl⟩
+  exact ⟨c • x, by simp⟩
+
+private theorem probeFiniteRank_smul
+    {E F : Type v}
+    [NormedAddCommGroup E] [InnerProductSpace ℂ E]
+    [NormedAddCommGroup F] [InnerProductSpace ℂ F]
+    (c : ℂ) {A : E →L[ℂ] F} (hA : ProbeFiniteRank A) :
+    ProbeFiniteRank (c • A) := by
+  obtain ⟨n, hn⟩ := hA
+  exact ⟨n, (probe_rank_smul_le_rank c A).trans hn⟩
+
+private theorem probeFiniteRank_smul_iff
+    {E F : Type v}
+    [NormedAddCommGroup E] [InnerProductSpace ℂ E]
+    [NormedAddCommGroup F] [InnerProductSpace ℂ F]
+    (c : ℂ) (hc : c ≠ 0) (A : E →L[ℂ] F) :
+    ProbeFiniteRank (c • A) ↔ ProbeFiniteRank A := by
+  constructor
+  · intro h
+    have h' := probeFiniteRank_smul c⁻¹ h
+    simpa [smul_smul, inv_mul_cancel₀ hc] using h'
+  · exact probeFiniteRank_smul c
+
+private theorem probeFiniteRank_comp
+    {E H F G : Type v}
+    [NormedAddCommGroup E] [InnerProductSpace ℂ E]
+    [NormedAddCommGroup H] [InnerProductSpace ℂ H]
+    [NormedAddCommGroup F] [InnerProductSpace ℂ F]
+    [NormedAddCommGroup G] [InnerProductSpace ℂ G]
+    (L : F →L[ℂ] G) {A : E →L[ℂ] F} (hA : ProbeFiniteRank A)
+    (R : H →L[ℂ] E) :
+    ProbeFiniteRank (L ∘L A ∘L R) := by
+  obtain ⟨n, hn⟩ := hA
+  have hLA : (L ∘L A).rank ≤ (n : Cardinal) :=
+    ContinuousLinearMap.rank_comp_le_natCast_right A L hn
+  exact ⟨n, (ContinuousLinearMap.rank_comp_le_left R (L ∘L A)).trans hLA⟩
+
+private theorem probeFiniteRank_adjoint
+    {E F : Type v}
+    [NormedAddCommGroup E] [InnerProductSpace ℂ E] [CompleteSpace E]
+    [NormedAddCommGroup F] [InnerProductSpace ℂ F] [CompleteSpace F]
+    {A : E →L[ℂ] F} (hA : ProbeFiniteRank A) :
+    ProbeFiniteRank A.adjoint := by
+  obtain ⟨n, hn⟩ := hA
+  exact ⟨n, ContinuousLinearMap.rank_adjoint_le_natCast_of_rank_le A hn⟩
+
+private theorem probeFiniteRank_adjoint_iff
+    {E F : Type v}
+    [NormedAddCommGroup E] [InnerProductSpace ℂ E] [CompleteSpace E]
+    [NormedAddCommGroup F] [InnerProductSpace ℂ F] [CompleteSpace F]
+    (A : E →L[ℂ] F) :
+    ProbeFiniteRank A.adjoint ↔ ProbeFiniteRank A := by
+  constructor
+  · intro h
+    have h' := probeFiniteRank_adjoint h
+    simpa using h'
+  · exact probeFiniteRank_adjoint
+
+/-! ### Probe 17: a raw source model on the finite-rank ideal -/
+
+/-- Operator norm on finite-rank maps and `∞` elsewhere. -/
+noncomputable def finiteRankOperatorNormGauge
+    {E F : Type v}
+    [NormedAddCommGroup E] [InnerProductSpace ℂ E] [CompleteSpace E]
+    [NormedAddCommGroup F] [InnerProductSpace ℂ F] [CompleteSpace F]
+    (A : E →L[ℂ] F) : ℝ≥0∞ := by
+  classical
+  exact if ProbeFiniteRank A then ‖A‖ₑ else ⊤
+
+/-- The finite-rank ideal with the operator norm, as an exploration-only ideal
+family.  The proof deliberately mirrors the existing compact-operator family. -/
+noncomputable def finiteRankOperatorNormIdealFamily :
+    OperatorIdealFamily.{0, v, v} ℂ where
+  gauge A := finiteRankOperatorNormGauge A
+  gauge_add_le A B := by
+    classical
+    by_cases hA : ProbeFiniteRank A
+    · by_cases hB : ProbeFiniteRank B
+      · have hAB : ProbeFiniteRank (A + B) := probeFiniteRank_add hA hB
+        change finiteRankOperatorNormGauge (A + B) ≤
+          finiteRankOperatorNormGauge A + finiteRankOperatorNormGauge B
+        simp only [finiteRankOperatorNormGauge, ite_eq_left hA,
+          ite_eq_left hB, ite_eq_left hAB]
+        exact (operatorNormIdealFamily.{0, v, v} ℂ).gauge_add_le A B
+      · simp [finiteRankOperatorNormGauge, ite_eq_right hB]
+    · simp [finiteRankOperatorNormGauge, ite_eq_right hA]
+  gauge_smul c A := by
+    classical
+    rcases eq_or_ne c 0 with rfl | hc
+    · have hz : ProbeFiniteRank ((0 : ℂ) • A) := by
+        rw [zero_smul]
+        exact probeFiniteRank_zero
+      have h1 : ‖((0 : ℂ) • A)‖ₑ = 0 := by
+        rw [zero_smul]
+        simp [enorm_eq_nnnorm]
+      have h2 : ‖(0 : ℂ)‖ₑ = 0 := by
+        simp [enorm_eq_nnnorm]
+      change finiteRankOperatorNormGauge ((0 : ℂ) • A) =
+        ‖(0 : ℂ)‖ₑ * finiteRankOperatorNormGauge A
+      rw [finiteRankOperatorNormGauge, ite_eq_left hz, h1, h2, zero_mul]
+    · by_cases hA : ProbeFiniteRank A
+      · have hcA : ProbeFiniteRank (c • A) := probeFiniteRank_smul c hA
+        change finiteRankOperatorNormGauge (c • A) =
+          ‖c‖ₑ * finiteRankOperatorNormGauge A
+        simp only [finiteRankOperatorNormGauge, ite_eq_left hA,
+          ite_eq_left hcA]
+        exact (operatorNormIdealFamily.{0, v, v} ℂ).gauge_smul c A
+      · have hcA : ¬ ProbeFiniteRank (c • A) := by
+          intro h
+          exact hA ((probeFiniteRank_smul_iff c hc A).mp h)
+        change finiteRankOperatorNormGauge (c • A) =
+          ‖c‖ₑ * finiteRankOperatorNormGauge A
+        simp only [finiteRankOperatorNormGauge, ite_eq_right hA,
+          ite_eq_right hcA]
+        simp [ENNReal.mul_top, enorm_ne_zero.mpr hc]
+  enorm_le_gauge A := by
+    classical
+    change ‖A‖ₑ ≤ finiteRankOperatorNormGauge A
+    by_cases hA : ProbeFiniteRank A
+    · rw [finiteRankOperatorNormGauge, ite_eq_left hA]
+    · rw [finiteRankOperatorNormGauge, ite_eq_right hA]
+      exact le_top
+  gauge_comp_le L A R := by
+    classical
+    change finiteRankOperatorNormGauge (L ∘L A ∘L R) ≤
+      ‖L‖ₑ * finiteRankOperatorNormGauge A * ‖R‖ₑ
+    by_cases hA : ProbeFiniteRank A
+    · have hcomp : ProbeFiniteRank (L ∘L A ∘L R) :=
+        probeFiniteRank_comp L hA R
+      simp only [finiteRankOperatorNormGauge, ite_eq_left hA,
+        ite_eq_left hcomp]
+      exact (operatorNormIdealFamily.{0, v, v} ℂ).gauge_comp_le L A R
+    · simp only [finiteRankOperatorNormGauge, ite_eq_right hA]
+      by_cases hL : L = 0
+      · have hzero : L ∘L A ∘L R = 0 := by
+          rw [hL, ContinuousLinearMap.zero_comp]
+        have hz : ProbeFiniteRank (L ∘L A ∘L R) := by
+          rw [hzero]
+          exact probeFiniteRank_zero
+        have hz0 : ‖L ∘L A ∘L R‖ₑ = 0 := by
+          rw [hzero]
+          simp [enorm_eq_nnnorm]
+        rw [ite_eq_left hz, hz0]
+        exact zero_le
+      · by_cases hR : R = 0
+        · have hzero : L ∘L A ∘L R = 0 := by
+            rw [hR, ContinuousLinearMap.comp_zero, ContinuousLinearMap.comp_zero]
+          have hz : ProbeFiniteRank (L ∘L A ∘L R) := by
+            rw [hzero]
+            exact probeFiniteRank_zero
+          have hz0 : ‖L ∘L A ∘L R‖ₑ = 0 := by
+            rw [hzero]
+            simp [enorm_eq_nnnorm]
+          rw [ite_eq_left hz, hz0]
+          exact zero_le
+        · have hLe : ‖L‖ₑ ≠ 0 := by
+            simp only [enorm_eq_nnnorm, ne_eq, ENNReal.coe_eq_zero,
+              nnnorm_eq_zero]
+            exact hL
+          have hRe : ‖R‖ₑ ≠ 0 := by
+            simp only [enorm_eq_nnnorm, ne_eq, ENNReal.coe_eq_zero,
+              nnnorm_eq_zero]
+            exact hR
+          rw [ENNReal.mul_top hLe, ENNReal.top_mul hRe]
+          exact le_top
+
+/-- Adjoint-invariant refinement of the finite-rank operator-norm family. -/
+noncomputable def finiteRankOperatorNormFamily :
+    SymmetricOperatorIdealFamily.{0, v} ℂ where
+  toOperatorIdealFamily := finiteRankOperatorNormIdealFamily
+  gauge_adjoint A := by
+    classical
+    change finiteRankOperatorNormGauge A.adjoint = finiteRankOperatorNormGauge A
+    have hiff := probeFiniteRank_adjoint_iff A
+    by_cases hA : ProbeFiniteRank A
+    · have hAdj : ProbeFiniteRank A.adjoint := hiff.mpr hA
+      rw [finiteRankOperatorNormGauge, finiteRankOperatorNormGauge,
+        ite_eq_left hAdj, ite_eq_left hA, ← ofReal_norm, ← ofReal_norm,
+        ContinuousLinearMap.adjoint.norm_map]
+    · have hAdj : ¬ ProbeFiniteRank A.adjoint := by
+        intro h
+        exact hA (hiff.mp h)
+      rw [finiteRankOperatorNormGauge, finiteRankOperatorNormGauge,
+        ite_eq_right hAdj, ite_eq_right hA]
+
+/-- The finite-rank operator-norm family satisfies the current raw source laws,
+including rank-one normalization. -/
+noncomputable def finiteRankOperatorNormSource :
+    SourceUnitaryInvariantNorm.{0, v} ℂ where
+  toSymmetricOperatorIdealFamily := finiteRankOperatorNormFamily
+  gauge_rankOne_eq_one := by
+    intro E F _ _ _ _ _ _ V hVnorm hVrank
+    have hfin : ProbeFiniteRank V := ⟨1, hVrank⟩
+    change (finiteRankOperatorNormGauge V).toReal = 1
+    rw [finiteRankOperatorNormGauge, ite_eq_left hfin, toReal_enorm, hVnorm]
+
+/-! ### Probe 18: expose the exact carrier/gauge boundary -/
+
+@[simp]
+theorem finiteRankOperatorNormGauge_eq_top_iff
+    {E F : Type v}
+    [NormedAddCommGroup E] [InnerProductSpace ℂ E] [CompleteSpace E]
+    [NormedAddCommGroup F] [InnerProductSpace ℂ F] [CompleteSpace F]
+    (A : E →L[ℂ] F) :
+    finiteRankOperatorNormGauge A = ⊤ ↔ ¬ ProbeFiniteRank A := by
+  classical
+  by_cases hA : ProbeFiniteRank A
+  · rw [finiteRankOperatorNormGauge, ite_eq_left hA]
+    simp [hA]
+  · rw [finiteRankOperatorNormGauge, ite_eq_right hA]
+    simp [hA]
+
+@[simp]
+theorem finiteRankOperatorNormGauge_ne_top_iff
+    {E F : Type v}
+    [NormedAddCommGroup E] [InnerProductSpace ℂ E] [CompleteSpace E]
+    [NormedAddCommGroup F] [InnerProductSpace ℂ F] [CompleteSpace F]
+    (A : E →L[ℂ] F) :
+    finiteRankOperatorNormGauge A ≠ ⊤ ↔ ProbeFiniteRank A := by
+  rw [ne_eq, finiteRankOperatorNormGauge_eq_top_iff]
+  tauto
+
+@[simp]
+theorem finiteRankOperatorNormGauge_of_finiteRank
+    {E F : Type v}
+    [NormedAddCommGroup E] [InnerProductSpace ℂ E] [CompleteSpace E]
+    [NormedAddCommGroup F] [InnerProductSpace ℂ F] [CompleteSpace F]
+    {A : E →L[ℂ] F} (hA : ProbeFiniteRank A) :
+    finiteRankOperatorNormGauge A = ‖A‖ₑ := by
+  rw [finiteRankOperatorNormGauge, ite_eq_left hA]
+
+/-! ### Probes 19--20: an infinite-rank diagonal below a rank-one Ky Fan profile -/
+
+abbrev FanCounterexampleSpace := lp (fun _ : ℕ => ℂ) 2
+
+/-- Positive geometric approximation-number profile with total mass one. -/
+def fanCounterexampleRealCoeff (n : ℕ) : ℝ := (1 / 2 : ℝ) ^ (n + 1)
+
+/-- The same profile as complex diagonal coefficients. -/
+def fanCounterexampleCoeff (n : ℕ) : ℂ := fanCounterexampleRealCoeff n
+
+@[simp]
+theorem norm_fanCounterexampleCoeff (n : ℕ) :
+    ‖fanCounterexampleCoeff n‖ = fanCounterexampleRealCoeff n := by
+  simp [fanCounterexampleCoeff, fanCounterexampleRealCoeff]
+
+private theorem fanCounterexampleCoeff_le_one (n : ℕ) :
+    ‖fanCounterexampleCoeff n‖ ≤ 1 := by
+  rw [norm_fanCounterexampleCoeff]
+  exact pow_le_one₀ (by norm_num) (by norm_num)
+
+private theorem fanCounterexampleCoeff_antitone :
+    Antitone (fun n : ℕ => ‖fanCounterexampleCoeff n‖) := by
+  rw [show (fun n : ℕ => ‖fanCounterexampleCoeff n‖) = fanCounterexampleRealCoeff by
+    funext n
+    exact norm_fanCounterexampleCoeff n]
+  refine antitone_nat_of_succ_le fun n => ?_
+  unfold fanCounterexampleRealCoeff
+  have hpow : 0 ≤ (1 / 2 : ℝ) ^ (n + 1) := pow_nonneg (by norm_num) _
+  rw [show n + 1 + 1 = (n + 1) + 1 by omega, pow_succ]
+  nlinarith
+
+/-- Infinite-rank compact diagonal used to test membership transfer. -/
+noncomputable def fanCounterexampleA :
+    FanCounterexampleSpace →L[ℂ] FanCounterexampleSpace :=
+  diagOpLp fanCounterexampleCoeff (K := 1) (by norm_num) fanCounterexampleCoeff_le_one
+
+@[simp]
+theorem approximationNumber_fanCounterexampleA (n : ℕ) :
+    fanCounterexampleA.approximationNumber n = fanCounterexampleRealCoeff n := by
+  rw [fanCounterexampleA, approximationNumber_diagOpLp
+    fanCounterexampleCoeff (K := 1) (by norm_num) fanCounterexampleCoeff_le_one
+    fanCounterexampleCoeff_antitone]
+  exact norm_fanCounterexampleCoeff n
+
+private theorem fanCounterexampleRealCoeff_pos (n : ℕ) :
+    0 < fanCounterexampleRealCoeff n := by
+  unfold fanCounterexampleRealCoeff
+  positivity
+
+/-- The geometric diagonal cannot have finite rank: every approximation number
+is strictly positive. -/
+theorem fanCounterexampleA_not_finiteRank :
+    ¬ ProbeFiniteRank fanCounterexampleA := by
+  rintro ⟨n, hn⟩
+  have hz := ContinuousLinearMap.approximationNumber_eq_zero_of_rank_le
+    fanCounterexampleA hn
+  rw [approximationNumber_fanCounterexampleA] at hz
+  exact (ne_of_gt (fanCounterexampleRealCoeff_pos n)) hz
+
+/-- Exact finite geometric-prefix identity. -/
+theorem fanCounterexample_prefix_sum (k : ℕ) :
+    (∑ n ∈ Finset.range k, fanCounterexampleRealCoeff n) =
+      1 - (1 / 2 : ℝ) ^ k := by
+  induction k with
+  | zero => simp
+  | succ k ih =>
+      rw [Finset.sum_range_succ, ih]
+      unfold fanCounterexampleRealCoeff
+      rw [show k + 1 = Nat.succ k by rfl, pow_succ]
+      ring
+
+/-- Every Ky Fan prefix of the infinite-rank diagonal is at most one. -/
+theorem fanCounterexampleA_kyFan_le_one (k : ℕ) :
+    kyFanApproximationGauge k fanCounterexampleA ≤ 1 := by
+  change fanCounterexampleA.kyFanGauge k ≤ 1
+  rw [ContinuousLinearMap.kyFanGauge]
+  simp_rw [approximationNumber_fanCounterexampleA]
+  rw [fanCounterexample_prefix_sum]
+  have hp : 0 ≤ (1 / 2 : ℝ) ^ k := pow_nonneg (by norm_num) _
+  linarith
+
+/-- Unit vector for the rank-one comparator. -/
+noncomputable def fanCounterexampleUnit : FanCounterexampleSpace :=
+  lp.single 2 0 (1 : ℂ)
+
+@[simp]
+theorem norm_fanCounterexampleUnit : ‖fanCounterexampleUnit‖ = 1 := by
+  rw [fanCounterexampleUnit, lp.norm_single (by norm_num), norm_one]
+
+/-- Rank-one comparator with singular-value profile `(1,0,0,...)`. -/
+noncomputable def fanCounterexampleB :
+    FanCounterexampleSpace →L[ℂ] FanCounterexampleSpace :=
+  InnerProductSpace.rankOne ℂ fanCounterexampleUnit fanCounterexampleUnit
+
+@[simp]
+theorem norm_fanCounterexampleB : ‖fanCounterexampleB‖ = 1 := by
+  simp [fanCounterexampleB]
+
+private theorem fanCounterexampleB_rank_le_one :
+    fanCounterexampleB.rank ≤ (1 : Cardinal) := by
+  exact rankOne_rank_le_one _ _
+
+/-- Exact approximation-number profile of the rank-one comparator. -/
+theorem approximationNumber_fanCounterexampleB (n : ℕ) :
+    fanCounterexampleB.approximationNumber n = if n = 0 then 1 else 0 := by
+  have h := SymmetricNormingFunction.approximationSingularValue_rankOne
+    norm_fanCounterexampleB fanCounterexampleB_rank_le_one n
+  exact h
+
+/-- Every positive Ky Fan prefix of the rank-one comparator equals one. -/
+theorem fanCounterexampleB_kyFan_succ (k : ℕ) :
+    kyFanApproximationGauge (k + 1) fanCounterexampleB = 1 := by
+  change fanCounterexampleB.kyFanGauge (k + 1) = 1
+  rw [ContinuousLinearMap.kyFanGauge]
+  have hval : ∀ n ∈ Finset.range (k + 1),
+      fanCounterexampleB.approximationNumber n = if n = 0 then 1 else 0 :=
+    fun n _ => approximationNumber_fanCounterexampleB n
+  rw [Finset.sum_congr rfl hval,
+    Finset.sum_ite_eq' (Finset.range (k + 1)) 0 (fun _ => (1 : ℝ))]
+  simp
+
+/-- The infinite-rank diagonal is weakly Ky-Fan-majorized by the rank-one
+comparator. -/
+theorem fanCounterexample_kyFan_domination :
+    ∀ k, kyFanApproximationGauge k fanCounterexampleA ≤
+      kyFanApproximationGauge k fanCounterexampleB := by
+  intro k
+  rcases k with _ | k
+  · change fanCounterexampleA.kyFanGauge 0 ≤ fanCounterexampleB.kyFanGauge 0
+    simp
+  · rw [fanCounterexampleB_kyFan_succ]
+    exact fanCounterexampleA_kyFan_le_one (k + 1)
+
+/-! ### Probe 21: the raw source laws do not imply unconditional Fan dominance -/
+
+@[simp]
+theorem finiteRankSource_gauge_A :
+    (finiteRankOperatorNormSource.{0}).toSymmetricOperatorIdealFamily.gauge
+      fanCounterexampleA = ⊤ := by
+  change finiteRankOperatorNormGauge fanCounterexampleA = ⊤
+  rw [finiteRankOperatorNormGauge,
+    ite_eq_right fanCounterexampleA_not_finiteRank]
+
+@[simp]
+theorem finiteRankSource_gauge_B :
+    (finiteRankOperatorNormSource.{0}).toSymmetricOperatorIdealFamily.gauge
+      fanCounterexampleB = 1 := by
+  have hfin : ProbeFiniteRank fanCounterexampleB := ⟨1, fanCounterexampleB_rank_le_one⟩
+  change finiteRankOperatorNormGauge fanCounterexampleB = 1
+  rw [finiteRankOperatorNormGauge, ite_eq_left hfin, ← ofReal_norm,
+    norm_fanCounterexampleB]
+  norm_num
+
+/-- **Decisive unrestricted countermodel probe.**  The raw source laws do not
+imply the current production `HasFanDominance` property.  This theorem does not
+need a separability instance for the concrete `lp` model. -/
+theorem finiteRankOperatorNormSource_not_fanDominant :
+    ¬ (finiteRankOperatorNormSource.{0}).HasFanDominance := by
+  intro hfan
+  have hle := hfan (A := fanCounterexampleA) (B := fanCounterexampleB)
+    fanCounterexample_kyFan_domination
+  rw [finiteRankSource_gauge_A, finiteRankSource_gauge_B] at hle
+  have hbad : (⊤ : ℝ≥0∞) = 1 := le_antisymm hle le_top
+  simp at hbad
+
+/-- Existential form for the exact current production property. -/
+theorem rawSourceLaws_do_not_imply_fanDominance :
+    ∃ N : SourceUnitaryInvariantNorm.{0, 0} ℂ, ¬ N.HasFanDominance :=
+  ⟨finiteRankOperatorNormSource.{0},
+    finiteRankOperatorNormSource_not_fanDominant⟩
+
+/-- The same countermodel is separable as soon as Lean is supplied the missing
+`SeparableSpace` instance for the pinned `lp` model.  Pinned Mathlib does not
+currently provide that instance, so the fact is kept explicit rather than
+smuggled in as an axiom or local instance. -/
+theorem finiteRankOperatorNormSource_not_fanDominantSeparable
+    [TopologicalSpace.SeparableSpace FanCounterexampleSpace] :
+    ¬ HasFanDominanceSeparable (finiteRankOperatorNormSource.{0}) := by
+  intro hfan
+  have hle := hfan (A := fanCounterexampleA) (B := fanCounterexampleB)
+    fanCounterexample_kyFan_domination
+  rw [finiteRankSource_gauge_A, finiteRankSource_gauge_B] at hle
+  have hbad : (⊤ : ℝ≥0∞) = 1 := le_antisymm hle le_top
+  simp at hbad
+
+/-- Conditional existential form of the separable countermodel. -/
+theorem rawSourceLaws_do_not_imply_fanDominanceSeparable
+    [TopologicalSpace.SeparableSpace FanCounterexampleSpace] :
+    ∃ N : SourceUnitaryInvariantNorm.{0, 0} ℂ, ¬ HasFanDominanceSeparable N :=
+  ⟨finiteRankOperatorNormSource.{0},
+    finiteRankOperatorNormSource_not_fanDominantSeparable⟩
+
+/-! ### Probe 22: split the exact current production property -/
+
+/-- Fan dominance only where both source norms exist, without a separability
+restriction.  This is the exact where-defined component of the current
+production `SourceUnitaryInvariantNorm.HasFanDominance` property. -/
+def HasFanDominanceWhereDefined
+    (N : SourceUnitaryInvariantNorm.{0, v} ℂ) : Prop :=
+  ∀ {E F E' F' : Type v}
+    [NormedAddCommGroup E] [InnerProductSpace ℂ E] [CompleteSpace E]
+    [NormedAddCommGroup F] [InnerProductSpace ℂ F] [CompleteSpace F]
+    [NormedAddCommGroup E'] [InnerProductSpace ℂ E'] [CompleteSpace E']
+    [NormedAddCommGroup F'] [InnerProductSpace ℂ F'] [CompleteSpace F']
+    {A : E →L[ℂ] F} {B : E' →L[ℂ] F'},
+    N.toSymmetricOperatorIdealFamily.gauge A ≠ ⊤ →
+    N.toSymmetricOperatorIdealFamily.gauge B ≠ ⊤ →
+    (∀ k, kyFanApproximationGauge k A ≤ kyFanApproximationGauge k B) →
+      N.toSymmetricOperatorIdealFamily.gauge A ≤
+        N.toSymmetricOperatorIdealFamily.gauge B
+
+/-- The membership-solidity component of the current production Fan-dominance
+property. -/
+def HasKyFanMembershipTransfer
+    (N : SourceUnitaryInvariantNorm.{0, v} ℂ) : Prop :=
+  ∀ {E F E' F' : Type v}
+    [NormedAddCommGroup E] [InnerProductSpace ℂ E] [CompleteSpace E]
+    [NormedAddCommGroup F] [InnerProductSpace ℂ F] [CompleteSpace F]
+    [NormedAddCommGroup E'] [InnerProductSpace ℂ E'] [CompleteSpace E']
+    [NormedAddCommGroup F'] [InnerProductSpace ℂ F'] [CompleteSpace F']
+    {A : E →L[ℂ] F} {B : E' →L[ℂ] F'},
+    N.toSymmetricOperatorIdealFamily.gauge B ≠ ⊤ →
+    (∀ k, kyFanApproximationGauge k A ≤ kyFanApproximationGauge k B) →
+      N.toSymmetricOperatorIdealFamily.gauge A ≠ ⊤
+
+/-- The production property decomposes exactly into where-defined monotonicity
+and Ky-Fan membership transfer. -/
+theorem fanDominance_iff_whereDefined_and_membershipTransfer
+    (N : SourceUnitaryInvariantNorm.{0, v} ℂ) :
+    N.HasFanDominance ↔
+      HasFanDominanceWhereDefined N ∧ HasKyFanMembershipTransfer N := by
+  constructor
+  · intro h
+    constructor
+    · intro E F E' F' _ _ _ _ _ _ _ _ _ _ _ _ A B _ _ hAB
+      exact h hAB
+    · intro E F E' F' _ _ _ _ _ _ _ _ _ _ _ _ A B hB hAB
+      exact ne_top_of_le_ne_top hB (h hAB)
+  · rintro ⟨hwhere, htransfer⟩
+    intro E F E' F' _ _ _ _ _ _ _ _ _ _ _ _ A B hAB
+    by_cases hB : N.toSymmetricOperatorIdealFamily.gauge B = ⊤
+    · rw [hB]
+      exact le_top
+    · have hA : N.toSymmetricOperatorIdealFamily.gauge A ≠ ⊤ :=
+        htransfer hB hAB
+      exact hwhere hA hB hAB
+
+/-- The finite-rank/operator-norm source satisfies the norm inequality whenever
+both source gauges are defined. -/
+theorem finiteRankOperatorNormSource_fanDominantWhereDefined_unrestricted :
+    HasFanDominanceWhereDefined (finiteRankOperatorNormSource.{0}) := by
+  intro E F E' F' _ _ _ _ _ _ _ _ _ _ _ _ A B hA hB hAB
+  have hAfin : ProbeFiniteRank A := by
+    change finiteRankOperatorNormGauge A ≠ ⊤ at hA
+    exact (finiteRankOperatorNormGauge_ne_top_iff A).mp hA
+  have hBfin : ProbeFiniteRank B := by
+    change finiteRankOperatorNormGauge B ≠ ⊤ at hB
+    exact (finiteRankOperatorNormGauge_ne_top_iff B).mp hB
+  change finiteRankOperatorNormGauge A ≤ finiteRankOperatorNormGauge B
+  rw [finiteRankOperatorNormGauge_of_finiteRank hAfin,
+    finiteRankOperatorNormGauge_of_finiteRank hBfin]
+  have h1 := hAB 1
+  rw [kyFanApproximationGauge_one, kyFanApproximationGauge_one] at h1
+  rw [← ofReal_norm, ← ofReal_norm]
+  exact ENNReal.ofReal_le_ofReal h1
+
+/-- The concrete diagonal/rank-one pair disproves the membership-transfer half
+of the production property. -/
+theorem finiteRankOperatorNormSource_not_membershipTransfer_unrestricted :
+    ¬ HasKyFanMembershipTransfer (finiteRankOperatorNormSource.{0}) := by
+  intro htransfer
+  have hB :
+      (finiteRankOperatorNormSource.{0}).toSymmetricOperatorIdealFamily.gauge
+        fanCounterexampleB ≠ ⊤ := by
+    rw [finiteRankSource_gauge_B]
+    simp
+  have hA := htransfer (A := fanCounterexampleA) (B := fanCounterexampleB)
+    hB fanCounterexample_kyFan_domination
+  rw [finiteRankSource_gauge_A] at hA
+  exact hA rfl
+
+/-! ### Probes 23--24: repeat the split on the separable source scope -/
+
+/-- Fan dominance only where both source norms exist.  This is an exploration
+predicate, not a proposed production replacement. -/
+def HasFanDominanceSeparableWhereDefined
+    (N : SourceUnitaryInvariantNorm.{0, v} ℂ) : Prop :=
+  ∀ {E F E' F' : Type v}
+    [NormedAddCommGroup E] [InnerProductSpace ℂ E] [CompleteSpace E]
+    [TopologicalSpace.SeparableSpace E]
+    [NormedAddCommGroup F] [InnerProductSpace ℂ F] [CompleteSpace F]
+    [TopologicalSpace.SeparableSpace F]
+    [NormedAddCommGroup E'] [InnerProductSpace ℂ E'] [CompleteSpace E']
+    [TopologicalSpace.SeparableSpace E']
+    [NormedAddCommGroup F'] [InnerProductSpace ℂ F'] [CompleteSpace F']
+    [TopologicalSpace.SeparableSpace F']
+    {A : E →L[ℂ] F} {B : E' →L[ℂ] F'},
+    N.toSymmetricOperatorIdealFamily.gauge A ≠ ⊤ →
+    N.toSymmetricOperatorIdealFamily.gauge B ≠ ⊤ →
+    (∀ k, kyFanApproximationGauge k A ≤ kyFanApproximationGauge k B) →
+      N.toSymmetricOperatorIdealFamily.gauge A ≤
+        N.toSymmetricOperatorIdealFamily.gauge B
+
+/-- The extra ideal-solidity statement hidden inside unconditional `ENNReal`
+Fan dominance: weak Ky Fan domination by a member forces membership. -/
+def HasKyFanMembershipTransferSeparable
+    (N : SourceUnitaryInvariantNorm.{0, v} ℂ) : Prop :=
+  ∀ {E F E' F' : Type v}
+    [NormedAddCommGroup E] [InnerProductSpace ℂ E] [CompleteSpace E]
+    [TopologicalSpace.SeparableSpace E]
+    [NormedAddCommGroup F] [InnerProductSpace ℂ F] [CompleteSpace F]
+    [TopologicalSpace.SeparableSpace F]
+    [NormedAddCommGroup E'] [InnerProductSpace ℂ E'] [CompleteSpace E']
+    [TopologicalSpace.SeparableSpace E']
+    [NormedAddCommGroup F'] [InnerProductSpace ℂ F'] [CompleteSpace F']
+    [TopologicalSpace.SeparableSpace F']
+    {A : E →L[ℂ] F} {B : E' →L[ℂ] F'},
+    N.toSymmetricOperatorIdealFamily.gauge B ≠ ⊤ →
+    (∀ k, kyFanApproximationGauge k A ≤ kyFanApproximationGauge k B) →
+      N.toSymmetricOperatorIdealFamily.gauge A ≠ ⊤
+
+/-- Unconditional Fan dominance decomposes exactly into where-defined norm
+monotonicity plus membership transfer. -/
+theorem fanDominanceSeparable_iff_whereDefined_and_membershipTransfer
+    (N : SourceUnitaryInvariantNorm.{0, v} ℂ) :
+    HasFanDominanceSeparable N ↔
+      HasFanDominanceSeparableWhereDefined N ∧
+        HasKyFanMembershipTransferSeparable N := by
+  constructor
+  · intro h
+    constructor
+    · intro E F E' F' _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ A B _ _ hAB
+      exact h hAB
+    · intro E F E' F' _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ A B hB hAB
+      exact ne_top_of_le_ne_top hB (h hAB)
+  · rintro ⟨hwhere, htransfer⟩
+    intro E F E' F' _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ A B hAB
+    by_cases hB : N.toSymmetricOperatorIdealFamily.gauge B = ⊤
+    · rw [hB]
+      exact le_top
+    · have hA : N.toSymmetricOperatorIdealFamily.gauge A ≠ ⊤ :=
+        htransfer hB hAB
+      exact hwhere hA hB hAB
+
+/-- The finite-rank operator-norm source passes the *where-defined* inequality:
+on its ideal, the source gauge is just the operator norm, which is the first Ky
+Fan gauge. -/
+theorem finiteRankOperatorNormSource_fanDominantWhereDefined :
+    HasFanDominanceSeparableWhereDefined (finiteRankOperatorNormSource.{0}) := by
+  intro E F E' F' _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ A B hA hB hAB
+  have hAfin : ProbeFiniteRank A := by
+    change finiteRankOperatorNormGauge A ≠ ⊤ at hA
+    exact (finiteRankOperatorNormGauge_ne_top_iff A).mp hA
+  have hBfin : ProbeFiniteRank B := by
+    change finiteRankOperatorNormGauge B ≠ ⊤ at hB
+    exact (finiteRankOperatorNormGauge_ne_top_iff B).mp hB
+  change finiteRankOperatorNormGauge A ≤ finiteRankOperatorNormGauge B
+  rw [finiteRankOperatorNormGauge_of_finiteRank hAfin,
+    finiteRankOperatorNormGauge_of_finiteRank hBfin]
+  have h1 := hAB 1
+  rw [kyFanApproximationGauge_one, kyFanApproximationGauge_one] at h1
+  rw [← ofReal_norm, ← ofReal_norm]
+  exact ENNReal.ofReal_le_ofReal h1
+
+/-- The same counterexample pinpoints the failed component: membership transfer,
+not the norm inequality on the finite-rank ideal. -/
+theorem finiteRankOperatorNormSource_not_membershipTransfer
+    [TopologicalSpace.SeparableSpace FanCounterexampleSpace] :
+    ¬ HasKyFanMembershipTransferSeparable (finiteRankOperatorNormSource.{0}) := by
+  intro htransfer
+  have hB :
+      (finiteRankOperatorNormSource.{0}).toSymmetricOperatorIdealFamily.gauge
+        fanCounterexampleB ≠ ⊤ := by
+    rw [finiteRankSource_gauge_B]
+    simp
+  have hA := htransfer (A := fanCounterexampleA) (B := fanCounterexampleB)
+    hB fanCounterexample_kyFan_domination
+  rw [finiteRankSource_gauge_A] at hA
+  exact hA rfl
+
+/-!
+## Boundary after Probes 17--24
+
+If this batch compiles, it changes the next question materially.  The exact
+current production implication
+
+```
+∀ N : SourceUnitaryInvariantNorm, N.HasFanDominance
+```
+
+cannot be proved from the current raw source structure: a finite-rank
+operator-norm source model is a counterexample.  The same concrete model is also
+a separable counterexample once the mathematically standard separability of its
+`lp` space is supplied; pinned Mathlib does not currently expose that instance,
+so this exploration records the separable theorem conditionally rather than
+adding an axiom.  The failure is specifically the membership-transfer half of
+the current `ENNReal` formulation, while the same model satisfies Fan
+monotonicity whenever both source norms are defined.
+
+That leaves a source-interpretation decision to investigate against Section 1:
+
+* does Davis--Kahan's cited Fan theorem range over a standard fully symmetric
+  ideal class with precisely this membership solidity;
+* does their convention that a displayed norm may fail to exist make the
+  where-defined statement the exact source proposition instead; or
+* is the current `SourceUnitaryInvariantNorm` missing a standard regularity /
+  ideal-solidity condition implicit in the mathematical term they use?
+
+Those alternatives should be settled from the source and the cited Fan theorem
+before changing a production structure or attempting a large infinite-dimensional
+majorization formalization.
 -/
 
 end
