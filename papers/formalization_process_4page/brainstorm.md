@@ -42,6 +42,12 @@ LLMs = fairly high confidence in semantic alignment.
 
 
 
+### Recent (2026-09-08) observation:
+
+I've also come across a new axis that I think might be worth paying attention to in terms of the question: "even with hostile LLM review of the semantic alignment, how do you gain confidence that your formalization encodes the theorem you care about?" - and that is overcorrection. I was doing more hostile reviews in order to say something about the probability of an error still existing with N hostile reviewers reporting no findings, and in doing so one of them did find a real deficiency in one of the section 8 DK proofs (it was still formalized in the bounded operator case, and not the more general unbounded case). So I did some review iterations, and after a few iterations, I noticed the formalizing agent saying things like: "I can't complete this right now, this is a multi-month long formalization effort", so on inspecting that I realized that the hostile reviewer was starting to give the implementing agents tasks that were focused on how the proof was done, instead of the theorem statement.
+
+The scope of the goal was to prove exactly the 29 main statements that DK proved in their paper, in the scope that they proved them in, and I explicitly said the content of the proof didn't matter, we didn't have to use the same mechanism that Davis and Kahan used, we just had to ensure that the theorem statements were semantically aligned. So, that introduces another risk / difficulty in the formalization loop of the diagram, because an LLM reviewer could keep the wheel spinning even if you are actually done.
+
 
 #### Relevant notes from emails:
 
