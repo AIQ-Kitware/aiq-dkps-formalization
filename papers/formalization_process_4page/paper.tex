@@ -188,55 +188,57 @@ types or inherited assumptions.
   \label{fig:workflow}
 \end{figure}
 
-\section{Formalization system}
+\section{Formalization procedure}
 \label{sec:system}
 
-The project keeps source interpretation, Lean execution, and correspondence
-review in persistent records outside any model session.  The workflow in
-\cref{fig:workflow} is implemented by the components in
-\cref{tab:system-components}; Appendix~\ref{app:system} gives the corresponding
-repository artifacts and checks.
+The formalization was developed over many ChatGPT, Claude Code, and Codex
+sessions in a pinned Lean/Mathlib/Tau Ceti environment.  Agents could produce
+checked Lean faster than we could inspect proof bodies line by line, so we kept
+proof checking and source correspondence as separate tasks.  The working
+procedure was:
 
-\begin{table}[H]
-\centering
-\scriptsize
-\caption{Components of the formalization system; implementation details are in
-Appendix~\ref{app:system}.}
-\label{tab:system-components}
-\begin{tabularx}{\linewidth}{@{}>{\raggedright\arraybackslash}p{0.25\linewidth}>{\raggedright\arraybackslash}X@{}}
-\toprule
-Component & Responsibility \\
-\midrule
-Source transcription and target register
-  & Preserve source passages and inherited context; fix the 29 tracked results and their intended scope. \\
-Pinned Lean environment and foundations
-  & Fix Lean, Mathlib, and Tau Ceti revisions; provide reusable foundations and the paper-facing declarations. \\
-Implementation loop
-  & Search libraries, propose definitions and proofs, compile, add missing foundations, and repair code from compiler feedback. \\
-Evidence registration and queries
-  & Map each source target to a Lean declaration and resolve elaborated types, axioms, and dependencies with project checks and \texttt{leanq}. \\
-Mechanical validation
-  & Check builds, placeholders, source coverage, declaration resolution, registration consistency, and evidence drift. \\
-Semantic-review materials
-  & Join source context, claimed correspondence, compiler-derived types, and relevant definitions for an accept-or-revise judgment. \\
-\bottomrule
-\end{tabularx}
-\end{table}
+\begin{itemize}
+\setlength{\itemsep}{0.25em}
+\item \textbf{Start from the source.}  For each of
+  the 29 tracked results, we recorded the source passage, assumptions inherited
+  from the surrounding text, and the scope we intended the Lean statement to
+  cover.  That record remained the completion criterion while the implementation
+  changed.
 
-The source-order transcription and 29-result register are the inputs to an
-implementation session.  A successful Lean build supplies candidate formal
-evidence; semantic status changes only after that evidence is registered and
-compared with the source.  Generated review material places the source passage
-and inherited assumptions beside the resolved Lean declaration, its elaborated
-type, and definitions that affect its meaning.  A reviewer can accept the
-correspondence or return the target to implementation, with the decision kept in
-the register for later sessions.
+\item \textbf{Let the agents write and repair Lean.}  The
+  agents searched Mathlib and the local libraries, proposed definitions and
+  intermediate lemmas, compiled the result, and revised code from compiler
+  feedback.  When the existing libraries were insufficient, the same process
+  produced reusable foundations needed by later targets.
+
+\item \textbf{Use Lean and scripts to catch mechanical failures.}  In addition to
+  \texttt{lake build}, project scripts check source coverage, resolve the Lean
+  declaration registered for each tracked result, and reject stale or
+  inconsistent evidence.  We used \texttt{leanq} when we needed the elaborated
+  theorem type, axioms, or dependency information rather than a copied
+  signature.
+
+\item \textbf{Read the statement Lean actually checked.}  Review starts
+  from the original passage and inherited assumptions, then inspects the
+  elaborated Lean type and the definitions that affect its meaning.  For the
+  Davis--Kahan results this includes the scalar field, finite- versus
+  infinite-dimensional scope, bounded versus unbounded operators, norm class,
+  gap assumptions and constants, directionality, and the particular angle or
+  residual operator being represented.
+
+\item \textbf{Write down the review result.}  A result that
+  compiled but expressed a narrower or different proposition was returned for
+  revision even though its Lean proof remained valid.  Accepted and revised
+  judgments were recorded with the target so later sessions did not have to
+  reconstruct them from chat history.
+\end{itemize}
 
 Claude Code was used chiefly for implementation, ChatGPT chiefly for planning
-and source review, and Codex in both; human authors fixed the target set and
-adjudicated ambiguous source readings.  This structure lets model sessions be
-replaced without losing the target set, compiler evidence, or review state.  It
-does not provide an automated semantic certificate.
+and source review, and Codex in both roles.  LLMs also compared source passages
+with Lean theorem signatures during review.  The human authors selected the target set and
+adjudicated ambiguous readings of the source.  Appendix~\ref{app:system} gives
+the pinned versions, repository records, and checks used to reproduce this
+workflow.
 
 \section{Related Work}
 \label{sec:related}

@@ -98,8 +98,10 @@ Additional constraints:
 
 25. Keep the Theorem 8.1(ii) over-correction grounded in the recorded review sequence. Do not promote it into a generic failure taxonomy or novelty claim.
 26. The workshop checklist is required. Keep its questions and guideline text unchanged; update only answers and justifications as the paper changes.
-27. Describe the formalization system in the main text at the level of stable
-    components, interfaces, and responsibilities. Put repository paths, exact
-    dependency revisions, checker names, and other reproduction details in the
-    appendix. Do not copy the system-component breakdown into the abstract or
-    conclusion.
+27. Describe the formalization procedure in the main text from the researcher's
+    point of view: how source targets were fixed, what the agents implemented,
+    what Lean and scripts checked mechanically, what humans reviewed, and how
+    correspondence decisions were retained. Prefer a short bullet sequence to a
+    component/interface table. Put repository paths, exact dependency revisions,
+    checker names, and other reproduction details in the appendix. Do not copy
+    the workflow breakdown into the abstract or conclusion.
