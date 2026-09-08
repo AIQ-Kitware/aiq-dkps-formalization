@@ -35,11 +35,13 @@ Additional constraints:
 8. Keep disagreements between practitioners visible. Some read generated Lean
    closely; some use another model to translate or challenge it; some let the
    prover run ahead and study the result later.
-9. Treat the detailed Git chronology as supporting evidence rather than the
-   organizing spine of the main paper. Use a specific review episode only when
-   it directly supports a manuscript claim. The result ledger may be introduced
-   as an organizational tool for fixing counted source targets, intended scope,
-   Lean evidence, and review state; avoid internal Git status jargon.
+9. Treat the detailed Git chronology as supporting evidence rather than rendered
+   exposition. Use a specific review episode only when it directly supports a
+   manuscript claim. Do not render a commit-by-commit chronology table merely
+   because the data are available; keep the detailed sequence in
+   `data/review_timeline.csv` and source comments. The result ledger may be
+   introduced as an organizational tool for fixing counted source targets,
+   intended scope, Lean evidence, and review state; avoid internal Git status jargon.
 10. Keep the current source-review state accurate without turning a successful
    review into a semantic-completeness claim. Distinguish the latest review
    result from independent replication when that distinction affects a claim.
@@ -48,16 +50,19 @@ Additional constraints:
     The dashboard screenshot is an untracked appendix render.
 12. Figure 1 names Tau Ceti as a possible destination for reusable foundations,
     so retain a brief accurate explanation and citation.
-13. The worked example is the historical directed sin-2-Theta correspondence
-    failure: one checked theorem had the printed trial residual but only bounded
-    complex scope, while another had unbounded scope but a reflection residual
-    rather than the printed trial residual. Show the historical theorem statement
-    in the paper, generated from commit `7001ed05`; names may be adjusted for
-    readability when the transformation is verified and documented in the
-    generator. Full exact historical signatures stay in the candidate note.
-    `PaperUnitaryInvariantNorm` was renamed to `SymmetricNormingFunction` in
-    commit `a905bd4c`; current source-facing endpoints use
-    `NormalizedUnitaryInvariantNorm`.
+13. The worked example is the historical ambient sin-2-Theta semantic
+    mismatch present at the 17 August 2026 checkpoint. Real and complex directed
+    residual witnesses already covered the unbounded scope, and real and complex
+    ambient witnesses existed, but the ambient witnesses were bounded. The old
+    certificate combined unbounded scope from the directed clause with the ambient
+    conclusion from a different bounded theorem. Show the historical complex
+    ambient theorem with its bounded section context; do not describe scalar
+    coverage as the defect. Keep the 12/17/31 August review chronology, Palomar
+    reorganization, later gap-placement repair, and exact commit provenance in
+    source comments, appendix evidence, or generated metadata unless a rendered
+    claim specifically depends on them. `PaperUnitaryInvariantNorm` was renamed
+    to `SymmetricNormingFunction` in commit `a905bd4c`; current source-facing
+    endpoints use `NormalizedUnitaryInvariantNorm`.
 14. Present EconCSLib, Lean Atlas, ShadowBench, LeanMarathon, FormaTheoria, and
     related systems as adjacent work without priority claims for the local
     dashboard.
@@ -91,8 +96,10 @@ Additional constraints:
     the exact sidecar and state that it is presentation-only. This indirection is
     deliberate: it preserves auditable exact Lean while avoiding listings/Overleaf
     Unicode failure modes that have previously been reintroduced by automated edits.
-24. Section titles should describe their contents directly. Avoid evaluative or
-    slogan-like headings such as "still too narrow" and rhetorical mini-lessons.
+24. Section titles should describe their contents directly. Avoid evaluative,
+    causal, or slogan-like headings such as "still too narrow" or "How X passed
+    review too early". For a worked mismatch, prefer a literal title such as
+    "Example of a semantically misaligned statement."
 
 - `notes/SEMANTIC_ALIGNMENT_CANDIDATES.md` is generated evidence. Do not hand-edit its Lean snippets; update `scripts/build_semantic_alignment_candidates.py` and run `make sources`.
 
@@ -105,3 +112,12 @@ Additional constraints:
     component/interface table. Put repository paths, exact dependency revisions,
     checker names, and other reproduction details in the appendix. Do not copy
     the workflow breakdown into the abstract or conclusion.
+
+28. Do not announce importance before stating a fact. Delete sentences such as
+    "The chronology is important here," "A key point is," or "It is important to
+    note." If the sentence carries no information, remove it; otherwise state the
+    concrete fact or consequence directly.
+29. Use non-rendered LaTeX comments for editor-facing provenance that is useful
+    during revision but not part of the scientific exposition: dates, commits,
+    review-state transitions, why a wording changed, and alternative historical
+    interpretations. Do not promote those notes into rendered prose by default.

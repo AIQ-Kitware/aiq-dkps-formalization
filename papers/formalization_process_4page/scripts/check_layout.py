@@ -43,7 +43,8 @@ def validate_pages(pages: list[str], public: bool) -> list[str]:
         display = flat_pages[display_pages[0]]
         required = (
             '-- proof omitted', 'Formalization 1:',
-            '17 August 29/29 checkpoint', 'SymmetricNormingFunction',
+            'bounded operator scope',
+            'SymmetricNormingFunction',
             'variable {A B : E → L[C] E}', '{U V : Submodule C E}',
             'U⊥ A', 'x ≤ a - d ∨ b + d ≤ x',
             '2 * N.gauge (B - A)',

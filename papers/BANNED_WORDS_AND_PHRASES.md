@@ -13,6 +13,22 @@ Do not use these words as rhetorical emphasis:
 
 Do not replace them with a synonym that performs the same empty emphasis. State the concrete consequence.
 
+## Banned significance announcements
+
+Delete sentences whose main function is to announce that the next fact is important,
+interesting, notable, central, or worth attention. Examples include:
+
+- "This is important."
+- "The chronology is important here."
+- "A key point is ..."
+- "It is important to note that ..."
+- "It is useful to note that ..."
+- "This deserves emphasis."
+
+If deleting the sentence loses no factual content, delete it. If it was trying to
+introduce a consequence, state that consequence directly. Do not substitute another
+importance adjective or adverb.
+
 
 ## Banned phrases
 

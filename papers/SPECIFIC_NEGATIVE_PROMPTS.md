@@ -74,3 +74,29 @@ In particular:
 - after incorporating new evidence, reread the abstract and conclusion from the
   perspective of a reader who has not seen the development conversation and
   remove details whose prominence depends on that conversation.
+
+## Keep revision history out of rendered prose
+
+A correction may require substantial historical work to establish what happened.
+Preserve that work in source comments, notes, supplementary data, or audit artifacts
+when it is useful for reproducibility. Rendered manuscript prose normally needs the
+resulting scientific fact, not the story of how the authors discovered or repaired it.
+
+Do not:
+
+- narrate prompt history, review-state transitions, checkpoint counts, re-openings,
+  repairs, commit order, or repository cleanup in rendered prose merely to justify a
+  corrected statement;
+- turn a correction into a dramatic or causal section title such as "How X passed
+  review too early";
+- explain why a paragraph was rewritten or what a recent discussion changed;
+- import dates, commit hashes, checker names, or intermediate classifications into a
+  worked mathematical example unless the chronology itself is evidence for the claim;
+- render a commit-by-commit or review-by-review chronology in an appendix merely
+  because the data exist. Keep detailed reconstruction in supplementary data or
+  source notes unless readers need it to evaluate a reported result.
+
+When historical provenance is useful to future editors, prefer non-rendered LaTeX
+comments immediately beside the relevant prose. When a historical correction changes
+a worked example, rewrite the example in its final mathematical form and keep the
+repair history out of the rendered explanation.
