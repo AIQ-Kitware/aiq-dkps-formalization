@@ -20,6 +20,21 @@ qualification note are retained so another reader can check each row against
 the public account.  The categorical fields should not be used to estimate
 prevalence among Lean users.
 
+## `practitioner_account_screening.csv`
+
+A screening log for the account table and nearby evidence.  The log was
+introduced on 8 September 2026.  It records the sources already present in the
+paper snapshot at that point and candidates reviewed during the current
+expansion and later searches.  Each candidate receives one disposition:
+`include_account`, `structured_study`, `related_work`, `duplicate`, or
+`exclude`, together with a short reason and duplicate link when applicable.
+
+The log does not reconstruct every candidate encountered before it was
+introduced and should not be treated as an exhaustive search record.  New
+candidates should be logged when they are evaluated, including sources that are
+not added to `practitioner_accounts.csv`.  The builder validates the screening
+schema and its consistency with the account table and bibliography.
+
 ## `lean_publication_activity.csv`
 
 Monthly Lean-related arXiv-paper counts derived from Papers With Lean for the

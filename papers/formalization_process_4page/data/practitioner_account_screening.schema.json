@@ -1,0 +1,38 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Fields in practitioner_account_screening.csv",
+  "description": "Documentation for the screening log accompanying the public AI-assisted Lean account table.",
+  "columns": {
+    "candidate_id": "Stable local identifier for the screened source.",
+    "screened_on": "Date on which this screening decision was recorded.",
+    "date": "Publication date when known; may be a year or year-month.",
+    "author": "Named author(s) of the source.",
+    "title": "Source title or concise public description.",
+    "source_type": "Source category used by the account table.",
+    "source_url": "Public source URL.",
+    "citation_key": "BibTeX key when the source is cited or represented in the account table; may be blank for duplicates or exclusions.",
+    "discovery_route": "Short provenance label for how the candidate entered the screening log.",
+    "decision": "include_account, structured_study, related_work, duplicate, or exclude.",
+    "decision_reason": "Concise reason for the disposition.",
+    "duplicate_of": "candidate_id whose workflow evidence is already represented; required only for duplicate rows."
+  },
+  "categorical_values": {
+    "source_type": [
+      "blog",
+      "paper",
+      "repository_transcript",
+      "social_post",
+      "forum_post",
+      "essay",
+      "zulip",
+      "human_study"
+    ],
+    "decision": [
+      "include_account",
+      "structured_study",
+      "related_work",
+      "duplicate",
+      "exclude"
+    ]
+  }
+}
