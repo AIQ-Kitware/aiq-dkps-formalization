@@ -79,27 +79,28 @@ as the mechanism used for every historical review.
 
 ## Worked semantic-alignment example
 
-The paper uses the historical directed $\sin 2\Theta$
-correspondence failure. One checked theorem had the printed trial residual,
-factor two, and norm family, but only bounded complex operator scope. A separate
-checked theorem had unbounded scope but used a reflection residual rather than
-the printed trial residual. The paper shows a generated version of the historical
-theorem statement with names adjusted for readability; full exact historical
-signatures and alternative repository-backed examples remain in
-`notes/SEMANTIC_ALIGNMENT_CANDIDATES.md`.
+The paper shows an ambient $\sin 2\Theta$ theorem from the 17 August checkpoint
+that had been accepted for the source result despite having only bounded operator
+scope. Real and complex versions were already present, and the directed residual
+clause already had unbounded real and complex witnesses; scalar coverage was not
+the mismatch. The historical review had combined scope and conclusions across
+different declarations.
 
-`scripts/build_evidence.py` extracts the historical witness and writes its
-signature verbatim to `generated/historical_scope_mismatch_exact.lean`.  It then
-builds the separate `historical_scope_mismatch_presentation.lean` used by
-`listings`.  That presentation applies only the audited readability name changes
-and replaces display-sensitive Lean Unicode with unique ASCII `LeanLit...`
-sentinels.  `paper.tex` maps those sentinels to LaTeX glyphs with `literate=`.
-The presentation file is therefore intentionally not Lean source and begins
-with comments pointing back to the exact sidecar.  This split is deliberate:
-it avoids fragile Unicode handling in LaTeX/Overleaf without losing the exact
-Lean being discussed.  The current exact source interface uses
-`NormalizedUnitaryInvariantNorm`; the candidate-note generator preserves full
-verbatim signatures from pinned Git history.
+The rendered paper states only that mathematical mismatch. Detailed checkpoint
+chronology, the later gap-placement correction, and exact provenance are retained
+in LaTeX comments, `data/review_timeline.csv`, and generated metadata rather than
+narrated in the worked example. The appendix states only the chronology fact needed
+to correct the paper's account.
+
+`scripts/build_evidence.py` extracts the historical ambient witness and its section
+context and writes them verbatim to
+`generated/historical_scope_mismatch_exact.lean`. It then builds the separate
+`historical_scope_mismatch_presentation.lean` used by `listings`. That
+presentation applies only the audited readability name changes and replaces
+display-sensitive Lean Unicode with unique ASCII `LeanLit...` sentinels.
+`paper.tex` maps those sentinels to LaTeX glyphs with `literate=`. The
+presentation file begins with comments pointing back to the exact sidecar. The
+current exact source interface uses `NormalizedUnitaryInvariantNorm`.
 
 The manuscript reports checked formal treatments for all 29 tracked Davis--Kahan
 results while keeping semantic alignment separate.  The latest source/signature

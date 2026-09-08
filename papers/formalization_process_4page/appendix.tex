@@ -259,28 +259,10 @@ and unbounded settings, even when all the displayed hypotheses hold.
 
 \section{Project chronology}
 
-The completion count was reached more than once.  In particular, the maintained
-semantic-review record at the 17 August checkpoint reported 29/29 terminal
-results.  Later hostile reviews invalidated earlier acceptances after finding
-source-correspondence and certificate defects that the earlier checks had
-accepted.  The ambient $\sin 2\Theta$ scope defect discussed in the main text can
-be located directly in the 17 August snapshot, before the Palomar cleanup shown
-below.  These dates therefore record successive review states rather than a
-single first-completion sequence.
-
-\begin{table}[H]
-\centering
-\small
-\caption{Selected public Git events used to anchor the chronology.  The CSV
-stores the full commit identifiers and evidence paths; the build validates both.}
-\label{tab:review-timeline}
-\begin{tabularx}{\linewidth}{@{}ll>{\raggedright\arraybackslash}X@{}}
-\toprule
-Date & commit & event \\
-\midrule
-\input{generated/review_timeline_table.tex}
-\end{tabularx}
-\end{table}
+The 17 August snapshot already records 29/29.  Later reviews identified defects
+that were present in that snapshot, including the ambient $\sin 2\Theta$ mismatch
+in \cref{sec:scope-mismatch}.  The supplementary chronology preserves the dated
+Git checkpoints used to reconstruct this sequence.
 
 \section{Semantic-review page}
 \label{app:review-page}

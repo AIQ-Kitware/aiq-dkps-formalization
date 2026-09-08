@@ -608,7 +608,7 @@ def build_manifest():
         'papers/formalization_process_4page/data/practitioner_accounts.csv': 'public-account snapshot',
         'papers/formalization_process_4page/data/practitioner_accounts.schema.json': 'account-field schema',
         'papers/formalization_process_4page/data/review_timeline.csv': 'selected Git chronology',
-        'papers/formalization_process_4page/generated/historical_scope_mismatch.json': 'historical directed sin-2-Theta scope-mismatch example',
+        'papers/formalization_process_4page/generated/historical_scope_mismatch.json': 'historical ambient sin-2-Theta semantic-mismatch example',
         'papers/formalization_process_4page/generated/historical_scope_mismatch_exact.lean': 'exact historical Lean signature sidecar',
         'papers/formalization_process_4page/notes/SEMANTIC_ALIGNMENT_CANDIDATES.md': 'semantic-alignment candidate signatures',
         'DavisKahan/Sources/DavisKahan1970/SineTheta/Presentation.lean': 'current sine-theta Lean source',

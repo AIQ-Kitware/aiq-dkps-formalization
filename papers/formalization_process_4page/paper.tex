@@ -383,33 +383,26 @@ Borel spectral calculus, unbounded self-adjoint operator theory, real/complex
 transfer, direct rotations, and Sylvester equations.  These reusable components
 are being prepared for contribution to Tau Ceti \citep{tauceti2026}.
 
-\subsection{How a \texorpdfstring{$\sin 2\Theta$}{sin 2 Theta} result passed review too early}
+% Historical provenance for editors (not rendered): the maintained result
+% record reached 29/29 on 12 Aug. 2026, later lost that state, and again reported
+% 29/29 at commit 8b3f0f39 on 17 Aug.  The ambient sin 2Theta mismatch below was
+% already present in that 17 Aug. snapshot, before the Palomar-oriented cleanup
+% beginning 28 Aug.  Commit 8499471d on 31 Aug. exposed it by requiring each
+% printed clause to be supported by one theorem carrying the relevant result-wide
+% scope.  Real and complex directed residual witnesses were already unbounded at
+% the 17 Aug. checkpoint; real and complex ambient witnesses were bounded.  A
+% later review also corrected which operator's blocks carry the printed spectral
+% gap.  Keep this chronology and repair history in comments/appendix evidence;
+% the rendered example should state the mathematical mismatch directly.
+\subsection{Example of a semantically misaligned statement}
 \label{sec:scope-mismatch}
 
-The chronology is important here.  The result ledger had already reached 29/29 by
-12 August after several correction cycles.  A later same-day review
-returned Proposition~3.5 to review, and the maintained semantic-review record in the
-17 August snapshot again reported all 29 results as semantically terminal.
-The \(\sin 2\Theta\) defect described below was already present in that snapshot;
-it therefore predates the later Palomar-oriented reorganization.
-
-The Section~2 \(\sin 2\Theta\) result has two conclusions.  The directed clause
-is \cref{eq:sin2theta}; the ambient clause bounds the full subspace angle by the
-perturbation,
-\[
-  \delta\,N(\sin 2\Theta) \le 2N(H).
-\]
-By 17 August the development already had separate real and complex witnesses
-for the directed clause at unbounded self-adjoint scope, with the printed trial
-residual on the right.  It also had real and complex ambient witnesses.  Scalar
-coverage was therefore present.  The problem was that the ambient witnesses
-were stated only for bounded operators.
-
-Formalization~\ref{lst:sin2theta-mismatch} is the complex ambient witness from
-the 17 August checkpoint.  Its surrounding section fixes
-\texttt{A B : E $\to$L[$\mathbb C$] E}; the real sibling had the same bounded
-operator scope.  The theorem proves the ambient inequality, but it cannot by
-itself establish the source's unbounded ambient case.
+Formalization~\ref{lst:sin2theta-mismatch} was accepted as evidence for the
+ambient clause of the Section~2 $\sin 2\Theta$ result.  Davis--Kahan allow
+unbounded self-adjoint operators, but this declaration is stated in a section
+where \texttt{A B : E $\to$L[$\mathbb C$] E} are bounded continuous linear maps.
+Real and complex ambient analogues were both present.  The mismatch was bounded
+versus unbounded operator scope.
 
 % Presentation note (not rendered): scripts/build_evidence.py extracts the
 % historical declaration and its section-level operator context from Git and
@@ -426,38 +419,23 @@ itself establish the source's unbounded ambient case.
 \lstinputlisting[
   style=leanpaper,
   firstline=6,
-  caption={Complex ambient $\sin 2\Theta$ witness in the 17 August
-  29/29 checkpoint.  The displayed section context makes its bounded operator
-  scope explicit; a real bounded sibling was present as well.},
+  caption={Historical ambient $\sin 2\Theta$ theorem with bounded operator scope.},
   label={lst:sin2theta-mismatch}
 ]{generated/historical_scope_mismatch_presentation.lean}
 \end{minipage}
 \end{nolinenumbers}
 
-The mistake was in how we reviewed the evidence.  The checker asked whether
-the registered theorems collectively covered every part of the source result.
-That allowed an unbounded directed theorem to satisfy the scope check and a
-bounded ambient theorem to satisfy the ambient conclusion.  It never required
-the theorem used for the ambient conclusion itself to have the source's unbounded
-scope.  On 31 August we changed the record to pair each printed clause with one
-primary theorem and check that theorem against the result's scope.  The ambient
-clause then failed, and new unbounded ambient theorems supplied the missing case.
+The review aggregated coverage across declarations.  An unbounded directed theorem
+supplied the scope, while the bounded theorem above supplied the ambient inequality.
+No single declaration established the ambient claim at the source's unbounded
+scope.  The revised check pairs each source clause with a theorem carrying its
+applicable scope.
 
-Later reviews found a second source-correspondence issue in the same clause: the
-old ambient witness placed the spectral gap on the unperturbed operator's blocks,
-whereas Section~2 places it on the perturbed blocks.  The two readings are
-mathematically equivalent for the ambient estimate after exchanging the operator
-roles, but that equivalence also had to be represented in Lean before the
-source-facing statement could be treated as exact.  Thus the review failures in
-this example include both a genuine scope gap and an initially unrecorded
-correspondence between equivalent formulations.
-
-Review also exposed the opposite risk.  Theorem~8.1(ii) gives a
-finite-dimensional inequality followed only by ``and natural infinite-dimensional
-extensions'' \citep{davis1970rotation}.  After we selected approximation-number
-extensions as that meaning, a later review found that the source does not choose
-among several plausible extensions; we retained them as generalizations.  Review
-must test missing scope without supplying scope the source does not fix.
+Theorem~8.1(ii) gives a finite-dimensional inequality followed only by ``and
+natural infinite-dimensional extensions'' \citep{davis1970rotation}.  We initially
+selected approximation-number extensions as that meaning, but the source does not
+choose among several plausible extensions.  We retained those variants as
+generalizations rather than source-equivalent statements.
 
 \section{Conclusion}
 
