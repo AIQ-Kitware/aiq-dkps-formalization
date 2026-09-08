@@ -1096,13 +1096,15 @@ themselves, with the symmetric gauge at the block dimension. -/
 #check @TauCeti.DavisKahan1970.Section8.theorem8_1_upperSymmetricGaugeEigenvalue_blockSourceExact_real
 #check @TauCeti.DavisKahan1970.Section8.theorem8_1_lowerSymmetricGaugeEigenvalue_blockSourceExact_real
 
-/-! ## 2026-09-08 Theorem 8.1 (ii)'s printed infinite-dimensional extension
+/-! ## An approximation-number extension of Theorem 8.1 (ii)
 
 Part (ii) is printed with "natural infinite-dimensional extensions"; part (iii)
-is not.  These are that extension, on the blocks themselves, with the paper's own
-minimax sequence (1.10) in place of the ordered eigenvalue lists. -/
+is not.  The phrase does not identify a unique formal proposition -- Section 1
+offers both the minimax sequence and spectral-multiplicity language and does not
+choose -- so these are registered as generalizations, not as source evidence for
+the phrase. -/
 
-#check @TauCeti.DavisKahan1970.Section8.theorem8_1_upperApproximationRepulsion_blockSourceExact
-#check @TauCeti.DavisKahan1970.Section8.theorem8_1_lowerApproximationRepulsion_blockSourceExact
-#check @TauCeti.DavisKahan1970.Section8.theorem8_1_upperApproximationRepulsion_blockSourceExact_real
-#check @TauCeti.DavisKahan1970.Section8.theorem8_1_lowerApproximationRepulsion_blockSourceExact_real
+#check @TauCeti.DavisKahan1970.Section8.theorem8_1_upperApproximationRepulsion_blockExtension
+#check @TauCeti.DavisKahan1970.Section8.theorem8_1_lowerApproximationRepulsion_blockExtension
+#check @TauCeti.DavisKahan1970.Section8.theorem8_1_upperApproximationRepulsion_blockExtension_real
+#check @TauCeti.DavisKahan1970.Section8.theorem8_1_lowerApproximationRepulsion_blockExtension_real

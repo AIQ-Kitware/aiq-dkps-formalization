@@ -797,46 +797,55 @@ theorem theorem8_1_lowerSymmetricGaugeEigenvalue_blockSourceExact_real
 
 end Real
 
-/-! ### Part (ii)'s printed infinite-dimensional extension
+/-! ### An approximation-number extension of part (ii)
 
 Part (ii) is printed "in finite dimensions … with the analogous lower-block
-statement **and natural infinite-dimensional extensions**".  Part (iii), by
-contrast, is printed for finite dimensions with no such clause.  So the extension
-is part of what (ii) asserts, and it has a determinate reading: Davis and Kahan
-fix the replacement for "ordered eigenvalues" themselves, at (1.10), as the
-minimax singular-value sequence
+statement **and natural infinite-dimensional extensions**".  Part (iii) carries
+no such clause.  So the phrase is Davis and Kahan's, and it is about (ii) alone.
 
-  `κ_k = inf_{dim S = k−1} sup_{‖x‖=1, x ⊥ S} ‖K x‖`,
+**It does not identify a unique formal proposition, and nothing below claims to
+be it.**  Section 1 offers two candidate readings of "the eigenvalues" in
+infinite dimensions and does not choose: it gives the minimax sequence (1.10) and
+says "the same minimax expression makes sense for general bounded operators", and
+then says that *in the noncompact case spectral-multiplicity language may be more
+appropriate*.  Theorem 8.1 prints no infinite-dimensional formula.  The counted
+content of (ii) is therefore the finite-dimensional inequality, and the extension
+phrase is a source assertion that is **accounted for by classification, not
+discharged by proof** — see `dev/davis-kahan-1970-source-atom-inventory.json`
+under `DK-8.1-thm.part-ii-eigenvalue`.
 
-and say in as many words that "the same minimax expression makes sense for
-general bounded operators".  For a positive operator on a finite-dimensional
-space that sequence *is* the decreasing eigenvalue list
-(`approximationNumber_eq_eigenvalues_of_isPositive`), and the blocks appearing in
-(ii) are positive under Theorem 8.1's hypotheses, so the two readings agree where
-both are defined.
+What follows is one concrete extension, offered as such: the printed inequality
+on the blocks themselves with the ordered eigenvalue lists replaced by the
+minimax sequence, no dimension hypothesis, bounded operators.  It is consistent
+with Section 1's own machinery — for a positive operator in finite dimensions the
+minimax sequence *is* the sorted eigenvalue list
+(`approximationNumber_eq_eigenvalues_of_isPositive`), and every block here is
+positive under Theorem 8.1's hypotheses — so it agrees with the printed statement
+wherever both are defined.  It is **not** registered as source-exact evidence for
+the phrase, and it is not evidence that this is what Davis and Kahan had in mind.
 
-The extension is therefore to infinite-dimensional **bounded** operators, which
-is exactly the scope at which the paper defines the object it extends.  It is not
-to unbounded `A`: with `A₁ ≥ α + δ` unbounded there is no decreasing enumeration
-to compare, and the paper's own minimax is stated for bounded operators.
-
-`‖C₁‖₁` is read as the operator norm of the cosine block, which is its largest
+`‖C₁‖₁` is read here as the operator norm of the cosine block, its largest
 singular value; `norm_cosineBlock_eq_principalCosines_zero` is the identification
 with the largest principal cosine, and it needs finite dimension. -/
 
-section InfiniteDimensionalPartTwo
+section ApproximationNumberExtension
 
 variable {H : Type u} [NormedAddCommGroup H] [InnerProductSpace ℂ H] [CompleteSpace H]
 variable (A K : H →L[ℂ] H) (P : Submodule ℂ H)
 
-/-- **Davis--Kahan 1970, Theorem 8.1 (ii)'s infinite-dimensional extension, upper
-block, over `ℂ`.**
+/-- **An approximation-number extension of Theorem 8.1 (ii), upper block, over
+`ℂ`.**
 
 The printed inequality on the blocks themselves, with the ordered eigenvalue
-lists replaced by the paper's own minimax sequence (1.10), and no dimension
-hypothesis.  In finite dimensions this is
-`theorem8_1_upperEigenvalueRepulsion_blockSourceExact`. -/
-theorem theorem8_1_upperApproximationRepulsion_blockSourceExact
+lists replaced by the minimax sequence (1.10), and no dimension hypothesis.  In
+finite dimensions it specializes to the printed statement,
+`theorem8_1_upperEigenvalueRepulsion_blockSourceExact`.
+
+This is *an* extension, not *the* extension: the source asserts that natural
+infinite-dimensional extensions exist without printing one, and Section 1 leaves
+open whether the minimax sequence or spectral-multiplicity data is the right
+object in the noncompact case.  See the section docstring. -/
+theorem theorem8_1_upperApproximationRepulsion_blockExtension
     [TopologicalSpace.SeparableSpace H] [P.HasOrthogonalProjection]
     {alpha delta : ℝ} (hdelta : 0 < delta)
     (hA : IsSelfAdjoint A) (hK : IsSelfAdjoint K)
@@ -854,9 +863,9 @@ theorem theorem8_1_upperApproximationRepulsion_blockSourceExact
   exact theorem8_1_upperApproximationRepulsion A K P hdelta hA hK hAP hPlow hPhigh
     hKP hKPperp n
 
-/-- **Theorem 8.1 (ii)'s infinite-dimensional extension, lower block, over
+/-- **An approximation-number extension of Theorem 8.1 (ii), lower block, over
 `ℂ`.** -/
-theorem theorem8_1_lowerApproximationRepulsion_blockSourceExact
+theorem theorem8_1_lowerApproximationRepulsion_blockExtension
     [TopologicalSpace.SeparableSpace H] [P.HasOrthogonalProjection]
     {alpha delta : ℝ} (hdelta : 0 < delta)
     (hA : IsSelfAdjoint A) (hK : IsSelfAdjoint K)
@@ -875,16 +884,16 @@ theorem theorem8_1_lowerApproximationRepulsion_blockSourceExact
   exact theorem8_1_lowerApproximationRepulsion A K P hdelta hA hK hAP hPlow hPhigh
     hKP hKPperp n
 
-end InfiniteDimensionalPartTwo
+end ApproximationNumberExtension
 
-section InfiniteDimensionalPartTwoReal
+section ApproximationNumberExtensionReal
 
 variable {E : Type u} [NormedAddCommGroup E] [InnerProductSpace ℝ E] [CompleteSpace E]
 variable (A K : E →L[ℝ] E) (P : Submodule ℝ E)
 
-/-- **Theorem 8.1 (ii)'s infinite-dimensional extension, upper block, over
+/-- **An approximation-number extension of Theorem 8.1 (ii), upper block, over
 `ℝ`.** -/
-theorem theorem8_1_upperApproximationRepulsion_blockSourceExact_real
+theorem theorem8_1_upperApproximationRepulsion_blockExtension_real
     [TopologicalSpace.SeparableSpace E] [P.HasOrthogonalProjection]
     {alpha delta : ℝ} (hdelta : 0 < delta)
     (hA : IsSelfAdjoint A) (hK : IsSelfAdjoint K)
@@ -905,9 +914,9 @@ theorem theorem8_1_upperApproximationRepulsion_blockSourceExact_real
   exact theorem8_1_upperApproximationRepulsion_real A K P hdelta hA hK hAP hPlow
     hPhigh hKP hKPperp n
 
-/-- **Theorem 8.1 (ii)'s infinite-dimensional extension, lower block, over
+/-- **An approximation-number extension of Theorem 8.1 (ii), lower block, over
 `ℝ`.** -/
-theorem theorem8_1_lowerApproximationRepulsion_blockSourceExact_real
+theorem theorem8_1_lowerApproximationRepulsion_blockExtension_real
     [TopologicalSpace.SeparableSpace E] [P.HasOrthogonalProjection]
     {alpha delta : ℝ} (hdelta : 0 < delta)
     (hA : IsSelfAdjoint A) (hK : IsSelfAdjoint K)
@@ -929,7 +938,7 @@ theorem theorem8_1_lowerApproximationRepulsion_blockSourceExact_real
   exact theorem8_1_lowerApproximationRepulsion_real A K P hdelta hA hK hAP hPlow
     hPhigh hKP hKPperp n
 
-end InfiniteDimensionalPartTwoReal
+end ApproximationNumberExtensionReal
 
 end
 
