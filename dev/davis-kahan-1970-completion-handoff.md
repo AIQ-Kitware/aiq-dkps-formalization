@@ -1024,7 +1024,7 @@ These are established by compiler work or counterexample. Do not re-propose them
 16. **The naive unrestricted unbounded `tan 2Θ` Sylvester identity has a nonzero commutator defect.** `doubleAngleTangent_sylvesterEquation` carries it explicitly. Do not assume it vanishes.
 17. **(1.12)/(1.13) suprema need not be attained.** The `diag(1-1/n)` example rules out an exact maximizer.
 18. **The old `sin 2Θ` multiplicity-mismatch counterexample was wrong.** The directed double-angle sine range sits in the relevant source subspace; re-check the actual block geometry.
-19. **Proposition 4.4 is false as printed.** It is correctly terminal as `refuted_as_transcribed`; see the compiled counterexample and `papers/davis_kahan_prop_4_4_counterexample.tex`.
+19. **Proposition 4.4 is false as printed.** It is correctly terminal as `refuted_as_transcribed`; see the compiled counterexample and `papers/davis_kahan_prop_4_4/davis_kahan_prop_4_4_counterexample.tex`.
 20. **The Section 10 questions are the paper's open questions.** They are not proof debt.
 21. **M30's factor two is sacred.** Reflection gives the `2`; adjoint/corner transport gives no additional `2`.
 

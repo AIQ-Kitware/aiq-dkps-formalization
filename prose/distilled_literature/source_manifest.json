@@ -385,15 +385,15 @@
         "DkpsQuench2026/Paper/Theorem2.lean",
         "DkpsQuench2026/Paper/QueryEfficiency.lean",
         "DkpsQuench2026/QueryEfficiency/AllQueries.lean",
-        "papers/DKPS-formalized-vs-literature.tex"
+        "papers/formalization_comparisons/DKPS-formalized-vs-literature.tex"
       ],
       "existing_assets": [
         "DkpsQuench2026/prose/quench-icml-nonanon_transcription.md",
         "DkpsQuench2026/prose/quench-tex-src/main_icml.tex",
-        "papers/DKPS-formalized-vs-literature.tex"
+        "papers/formalization_comparisons/DKPS-formalized-vs-literature.tex"
       ],
       "scope": "Theorem 2, its literal tie-averaged nearest-neighbor estimator, the fixed-subset and all-budget query-efficiency predicates, and the stronger raw-response Quench theorem family.",
-      "missing_work": "No separate distilled note is currently planned: the exact source-order transcription is retained, while papers/DKPS-formalized-vs-literature.tex supplies the modern mathematical reconstruction, discrepancy audit, and hypothesis ledger. Revisit only if the source theorem changes materially.",
+      "missing_work": "No separate distilled note is currently planned: the exact source-order transcription is retained, while papers/formalization_comparisons/DKPS-formalized-vs-literature.tex supplies the modern mathematical reconstruction, discrepancy audit, and hypothesis ledger. Revisit only if the source theorem changes materially.",
       "role": "direct_target",
       "bibliographic_status": "verified"
     },
@@ -610,7 +610,7 @@
       "target_note": "ChienWaldron2016_finite_frame_gram_rigidity.tex",
       "repo_evidence": [
         "ForTauCeti/Analysis/InnerProductSpace/Gram/Matrix.lean",
-        "papers/GramRigidity-formalized-vs-literature.tex"
+        "papers/formalization_comparisons/GramRigidity-formalized-vs-literature.tex"
       ],
       "existing_assets": [],
       "scope": "Unitary/projective equivalence of finite frames from Gram data.",
@@ -660,7 +660,7 @@
       "target_note": "Weyl1912_eigenvalue_inequalities.tex",
       "repo_evidence": [
         "ForTauCeti/Analysis/InnerProductSpace/CourantFischer.lean",
-        "papers/DavisKahan-formalized-vs-literature.tex"
+        "papers/formalization_comparisons/DavisKahan-formalized-vs-literature.tex"
       ],
       "existing_assets": [],
       "scope": "The eigenvalue inequalities whose operator-norm perturbation corollary is proved locally and repeatedly used in the DKPS spectral chain.",
@@ -709,7 +709,7 @@
       "target_note": "EckartYoung1936_low_rank_approximation.tex",
       "repo_evidence": [
         "dev/external-lean-references.md",
-        "papers/DavisKahan-formalized-vs-literature.tex"
+        "papers/formalization_comparisons/DavisKahan-formalized-vs-literature.tex"
       ],
       "existing_assets": [],
       "scope": "Best low-rank approximation via singular values.",
@@ -734,7 +734,7 @@
       "repo_evidence": [
         "ForTauCeti/Analysis/InnerProductSpace/HoffmanWielandt.lean",
         "ForTauCeti/Analysis/InnerProductSpace/UnitarilyInvariantSeminorm.lean",
-        "papers/DavisKahan-formalized-vs-literature.tex"
+        "papers/formalization_comparisons/DavisKahan-formalized-vs-literature.tex"
       ],
       "existing_assets": [],
       "scope": "The singular-value trace inequality and symmetric-norm viewpoint behind the local von-Neumann-type trace bound and unitarily invariant norm layer.",
@@ -1045,7 +1045,7 @@
       "repo_evidence": [
         "ForTauCeti/Analysis/InnerProductSpace/Sylvester/Internal/ReciprocalMultiplier.lean",
         "DavisKahan/Alternative/FiniteDimensional/Sylvester/ContinuousLinearMapBridge.lean",
-        "papers/DavisKahan-formalized-vs-literature.tex"
+        "papers/formalization_comparisons/DavisKahan-formalized-vs-literature.tex"
       ],
       "existing_assets": [
         "prose/distilled_literature/AlbeverioMakarovMotovilov2001_sylvester_fourier_pi_over_two.tex"
@@ -1196,7 +1196,7 @@
       "target_note": "Motovilov2012_tan_theta_comment.tex",
       "repo_evidence": [
         "DavisKahan/FiniteDimensional/TanTheta/Vector.lean",
-        "papers/DavisKahan-formalized-vs-literature.tex"
+        "papers/formalization_comparisons/DavisKahan-formalized-vs-literature.tex"
       ],
       "existing_assets": [],
       "scope": "Correction/clarification of the spectral condition in the relaxed tan Theta theorem.",
@@ -1246,7 +1246,7 @@
       "target_note": "GrubisicKostrykinMakarovVeselic2013_tan_two_theta.tex",
       "repo_evidence": [
         "DavisKahan/FiniteDimensional/DoubleAngle/TanTheta.lean",
-        "papers/DavisKahan-formalized-vs-literature.tex"
+        "papers/formalization_comparisons/DavisKahan-formalized-vs-literature.tex"
       ],
       "existing_assets": [],
       "scope": "Sharp tan 2 Theta theorem for indefinite quadratic forms and the pi/4 regime.",
@@ -1353,7 +1353,7 @@
       "primary_url": "",
       "target_note": "StewartSun1990_selected_matrix_perturbation.tex",
       "repo_evidence": [
-        "papers/DavisKahan-formalized-vs-literature.tex"
+        "papers/formalization_comparisons/DavisKahan-formalized-vs-literature.tex"
       ],
       "existing_assets": [],
       "scope": "Selected eigenvector, invariant-subspace, singular-subspace, and Procrustes perturbation statements.",
@@ -1508,7 +1508,7 @@
         "ForTauCeti/Analysis/InnerProductSpace/SchurHorn.lean",
         "ForTauCeti/Analysis/InnerProductSpace/Singular/Subspace.lean",
         "ForTauCeti/Analysis/InnerProductSpace/Gram/Matrix.lean",
-        "papers/GramRigidity-formalized-vs-literature.tex"
+        "papers/formalization_comparisons/GramRigidity-formalized-vs-literature.tex"
       ],
       "existing_assets": [
         "prose/distilled_literature/HornJohnson2013_selected_matrix_analysis.tex",

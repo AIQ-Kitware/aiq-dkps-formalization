@@ -299,7 +299,7 @@ infinite-dimensional aliases exist and are build-guarded, so the mitigation is r
 | Counterexample: the residual inference is asymmetric (`A = diag(0,δ)`, `H = [[0,1],[1,−δ]]`) | — | **ABSENT** |
 | (7.6) and the paired-singular-vector argument | `tanTwoTheta_equation_7_6_approximate`, `paired_singularVector_gap_inequality`, `singularValue_ne_one` | EXACT (branch-free, `RCLike`, dimension-free) |
 | `tan 2θ` both halves | see §2 rows 6–7 | one selected-branch, one **ABSENT** |
-| The page-34 factor-of-2 slip in the printed residual step | written up in `papers/davis_kahan_prop_4_4_counterexample.tex`; census `S2-sin-two-theta` records it | correctly diagnosed; the constant to keep is 2 |
+| The page-34 factor-of-2 slip in the printed residual step | written up in `papers/davis_kahan_prop_4_4/davis_kahan_prop_4_4_counterexample.tex`; census `S2-sin-two-theta` records it | correctly diagnosed; the constant to keep is 2 |
 
 ### Section 8 — interpretation of the double-angle theorems
 

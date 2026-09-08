@@ -52,3 +52,25 @@ Do not:
 - put census construction, exact source registries, file paths, or declaration-level provenance tables in the main body;
 - place appendices before the references.
 
+
+## Do not promote recent discussion into manuscript prominence
+
+Do not let the most recent review, correction, user comment, or agent discussion
+set the emphasis of a manuscript revision merely because it is fresh in context.
+Use new information to revise the paper's understanding, then write at the level
+of the paper's stable research question and evidence.
+
+In particular:
+
+- do not move a newly discussed episode into the title, abstract, contribution
+  list, or conclusion unless it is independently central to the paper;
+- do not summarize the conversation that led to a revision when the manuscript
+  only needs the resulting scientific point;
+- do not enumerate review rounds, transient classifications, or recent repair
+  details in the abstract unless the count or chronology is itself a reported
+  result;
+- keep concrete episodes in the body when they provide evidence for a broader
+  claim, rather than making every episode a headline claim;
+- after incorporating new evidence, reread the abstract and conclusion from the
+  perspective of a reader who has not seen the development conversation and
+  remove details whose prominence depends on that conversation.

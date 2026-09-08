@@ -1,6 +1,6 @@
 # Formalization paper style guide
 
-This guide describes the prose and structure we want for the manuscript. It is affirmative: use it to decide how to write. See [BANNED_WORDS_AND_PHRASES.md](BANNED_WORDS_AND_PHRASES.md) for constructions and vocabulary to remove.
+This guide describes the prose and structure we want for the manuscript. It is affirmative: use it to decide how to write. See [../BANNED_WORDS_AND_PHRASES.md](../BANNED_WORDS_AND_PHRASES.md) and [../SPECIFIC_NEGATIVE_PROMPTS.md](../SPECIFIC_NEGATIVE_PROMPTS.md) for constructions and recurring failure modes to remove.
 
 ## Write for a mathematical reader
 

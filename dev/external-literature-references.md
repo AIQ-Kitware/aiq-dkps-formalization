@@ -143,7 +143,7 @@ the printed derivation does not establish it. The counterexample the paper gives
 afterwards does not settle it either, since it concerns a gap in the spectrum of `A` rather than of
 `Lambda`. Whether the sharper constant holds appears to be open. Do not record it as refuted.
 
-**Written up** in `papers/davis_kahan_prop_4_4_counterexample.tex`, section "An additional error
+**Written up** in `papers/davis_kahan_prop_4_4/davis_kahan_prop_4_4_counterexample.tex`, section "An additional error
 surfaced by the formalization", alongside the Proposition 4.4 refutation. The two findings are of
 very different weight: Proposition 4.4 is a false proposition, this is a dropped factor in a proof
 line that leaves every theorem statement intact.

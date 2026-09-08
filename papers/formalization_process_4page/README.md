@@ -1,6 +1,6 @@
-# Did We Really Formalize Davis--Kahan?
+# Did We Really Formalize Davis--Kahan? Semantic Alignment for LLM-Assisted Lean Formalization
 
-This directory contains a four-page workshop draft about one LLM-assisted Lean
+This directory contains a VeriCodeGen workshop draft about one LLM-assisted Lean
 formalization and the problem of deciding whether the checked declarations
 match the source mathematics. The paper places that experience beside public
 first-person reports from other researchers.
@@ -63,7 +63,7 @@ prompts that are not available verbatim are not reconstructed from summaries.
 
 ## Worked semantic-alignment example
 
-The four-page paper uses the historical directed $\sin 2\Theta$
+The paper uses the historical directed $\sin 2\Theta$
 correspondence failure. One checked theorem had the printed trial residual,
 factor two, and norm family, but only bounded complex operator scope. A separate
 checked theorem had unbounded scope but used a reflection residual rather than
@@ -81,9 +81,11 @@ historical signature is unchanged. The current exact source interface uses
 `NormalizedUnitaryInvariantNorm`; the candidate-note generator preserves full
 verbatim signatures from pinned Git history.
 
-The manuscript reports mathematical resolution of all 29 tracked Davis--Kahan
-results while keeping semantic alignment separate: the latest signature/context
-review in the paper snapshot still records source-surface issues to repair.
+The manuscript reports checked formal treatments for all 29 tracked Davis--Kahan
+results while keeping semantic alignment separate.  The latest source/signature
+review found no remaining material mismatch, but no further independent review
+has yet followed that pass; the paper therefore avoids a 100-percent
+semantic-completeness claim.
 
 ## Public project repository
 
@@ -97,7 +99,7 @@ for a preprint or camera-ready version.
 
 ## Figure
 
-The paper uses local rendered PNGs for the workflow figure and appendix screenshot, but binary render outputs are never staged or committed. The source repository keeps only text/code inputs; rendered figures remain local build artifacts. The workflow figure remains in the four-page body and the semantic-alignment screenshot remains in the appendix.
+The paper uses local rendered PNGs for the workflow figure and appendix screenshot, but binary render outputs are never staged or committed. The source repository keeps only text/code inputs; rendered figures remain local build artifacts. The workflow figure remains in the main body and the semantic-alignment screenshot remains in the appendix.
 
 ## Build
 
@@ -108,28 +110,30 @@ make -C papers/formalization_process_4page check-prose
 make -C papers/formalization_process_4page check-layout
 ```
 
-`make` builds the anonymous review version with the official NeurIPS 2026
-MATH-AI double-blind workshop style. `make public` builds `paper_public.pdf`
+`make` builds the anonymous review version with the supplied NeurIPS 2026
+VeriCodeGen workshop style. `make public` builds `paper_public.pdf`
 with Jonathan Crall, Brian Hu, Edward Wang, and Carey E. Priebe as authors,
 exposes the public GitHub URLs, and includes the DARPA acknowledgment in the main
 paper.  The anonymous review build omits that acknowledgment.
 
-Both versions have four pages of main text, with References starting on page 5.
-The public version groups authors by affiliation and places the DARPA
-acknowledgment at the end of page 4. The submission style, margins, and body
-font are unchanged. The historical signature uses the normal footnote-size code
+The anonymous submission must remain within the workshop's 4--9-page main-text
+limit. References, the technical appendix, and checklist follow outside that
+limit. The public version groups authors by affiliation and shows the DARPA
+acknowledgment. The historical signature uses the normal footnote-size code
 font and is kept with its caption on one page.
 
 `make check-layout` builds both versions and checks the actual PDF text and TeX
-logs. It requires `pdftotext` from Poppler. It checks the reference-page boundary,
-conclusion placement, an intact historical signature, early workflow figure,
-appendix publication figure, anonymous/public author visibility, and major TeX
-rendering diagnostics. It does not replace visual inspection. `check-prose`
+logs. It requires `pdftotext` from Poppler. It checks the 4--9-page anonymous main-text budget,
+reference boundary, conclusion placement, an intact historical signature, early
+workflow figure, appendix publication figure, checklist presence, anonymous/public
+author visibility, and major TeX rendering diagnostics. It does not replace visual inspection. `check-prose`
 checks both the main paper and appendix, leaving the historical prompt log alone.
 
-`neurips_2026.sty` is the official workshop style supplied with the MATH-AI
-2026 template. `draft_neurips_2026.sty` is retained only as the earlier local
-page-budget approximation and is not used by either build.
+`neurips_2026_vericode.sty` is the supplied VeriCodeGen workshop style and is
+used unchanged. `checklist.tex` comes from the same workshop bundle; its questions
+and guidelines are unchanged. `neurips_2026.sty` and `draft_neurips_2026.sty` are
+retained only as files from the earlier MATH-AI target and are not used by either
+build.
 
 Detailed Davis--Kahan and Yu--Wang--Samworth mathematics remain in
 `../formalization_draft2/` for the longer formalization paper.

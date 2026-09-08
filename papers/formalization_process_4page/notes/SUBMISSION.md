@@ -1,25 +1,16 @@
-# Submission notes (checked 2026-09-04)
+# Submission notes (updated 2026-09-08)
 
-## MATH-AI 2026
-
-- Deadline: September 6, 2026 AoE.
-- Four pages of content in the NeurIPS 2026 workshop format; references and
-  supplementary material may follow.
-- Double blind.
-- The CFP asks for `\usepackage[dblblindworkshop]{neurips_2026}` and the MATH-AI
-  NeurIPS 2026 template.
-
-## VeriCodeGen 2026
+## Target: NeurIPS 2026 Workshop on AI for Verifiable Coding (VeriCodeGen)
 
 - Abstract: September 11, 2026 AoE.
 - Full paper: September 13, 2026 AoE.
-- Main text: 4--9 pages; references do not count.
+- Main text: 4--9 pages; references, checklist, and optional technical appendices do not count.
 - Double blind.
-- The CFP requires its own `neurips_2026_vericode_workshop.tex` and
-  `neurips_2026_vericode.sty`; changing margins or font sizes is grounds for
-  desk rejection.
+- The supplied workshop style is `neurips_2026_vericode.sty`; do not modify it.
+- The required NeurIPS checklist is included as `checklist.tex` and is input after the appendix.
+- `paper.tex` is the anonymous submission build.
+- `paper_public.tex` uses the workshop style's `preprint` option and exposes author/public-project information.
 
-The MATH-AI paper now builds against the official `neurips_2026.sty` with
-`dblblindworkshop`; `draft_neurips_2026.sty` is retained only as the old local
-page-count approximation and must not be submitted. VeriCodeGen still requires
-its separate workshop template before that submission.
+The earlier MATH-AI submission was not completed.  `neurips_2026.sty` and
+`draft_neurips_2026.sty` are retained as historical local files but are no longer
+used by the paper build.

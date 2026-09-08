@@ -2,12 +2,13 @@
 
 This directory contains the manuscript and its generated analysis snapshots.
 
-Before editing manuscript prose, read both:
+Before editing manuscript prose, read:
 
 - [STYLE_GUIDE.md](STYLE_GUIDE.md), which describes the writing style and manuscript structure we want;
-- [BANNED_WORDS_AND_PHRASES.md](BANNED_WORDS_AND_PHRASES.md), which lists prohibited vocabulary and recurring LLM writing patterns.
+- [../BANNED_WORDS_AND_PHRASES.md](../BANNED_WORDS_AND_PHRASES.md), which lists prohibited vocabulary and recurring LLM writing patterns.
+- [../SPECIFIC_NEGATIVE_PROMPTS.md](../SPECIFIC_NEGATIVE_PROMPTS.md), which records recurring manuscript-specific failure modes.
 
-Both apply to the main text, appendices, captions, and generated prose intended for the paper.
+These rules apply to the main text, appendices, captions, and generated prose intended for the paper.
 
 ## Manuscript operating rules
 
