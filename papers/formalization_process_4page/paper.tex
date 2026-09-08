@@ -383,53 +383,74 @@ Borel spectral calculus, unbounded self-adjoint operator theory, real/complex
 transfer, direct rotations, and Sylvester equations.  These reusable components
 are being prepared for contribution to Tau Ceti \citep{tauceti2026}.
 
-\subsection{A historical directed \texorpdfstring{$\sin 2\Theta$}{sin 2 Theta} mismatch}
+\subsection{How a \texorpdfstring{$\sin 2\Theta$}{sin 2 Theta} result passed review too early}
 \label{sec:scope-mismatch}
 
-At one stage, Formalization~\ref{lst:sin2theta-mismatch} was the checked
-declaration recorded for \cref{eq:sin2theta}.  It has the printed residual and
-factor~2, but fixes the scalar field to $\mathbb C$ and takes $A$ to be a bounded
-\texttt{ContinuousLinearMap}.  In the signature, $U$ is the exact reducing
-subspace, $V$ the candidate, and \texttt{M} an operator on $V$; choosing the
-compression recovers $A_0$ above.
+The chronology is important here.  The result ledger had already reached 29/29 by
+12 August after several correction cycles.  A later same-day review
+returned Proposition~3.5 to review, and the maintained semantic-review record in the
+17 August snapshot again reported all 29 results as semantically terminal.
+The \(\sin 2\Theta\) defect described below was already present in that snapshot;
+it therefore predates the later Palomar-oriented reorganization.
 
-The spectral hypotheses place the spectrum on $U$ in $[a,b]$ and that on
-$U^\perp$ outside $(a-\delta,b+\delta)$.  The norm parameter determines an
-operator ideal; \texttt{hMem} requires the residual to belong to it.  The
-conclusion gives both ideal membership for the directed doubled-angle block
-and the norm bound.  These clauses supply the mathematical content of the
-bounded result; they do not extend the scalar field or the operator domain.
+The Section~2 \(\sin 2\Theta\) result has two conclusions.  The directed clause
+is \cref{eq:sin2theta}; the ambient clause bounds the full subspace angle by the
+perturbation,
+\[
+  \delta\,N(\sin 2\Theta) \le 2N(H).
+\]
+By 17 August the development already had separate real and complex witnesses
+for the directed clause at unbounded self-adjoint scope, with the printed trial
+residual on the right.  It also had real and complex ambient witnesses.  Scalar
+coverage was therefore present.  The problem was that the ambient witnesses
+were stated only for bounded operators.
 
-% Presentation note (not rendered): scripts/build_evidence.py extracts this
-% historical declaration from Git and writes the exact signature verbatim to
-% generated/historical_scope_mismatch_exact.lean. The file consumed by listings
-% is a separate presentation artifact: it carries a header pointing back to that
-% exact sidecar, applies the audited PaperUnitaryInvariantNorm ->
-% SymmetricNormingFunction readability rename, and replaces Lean Unicode notation
-% with ASCII LeanLit... sentinels. The leanpaper literate= table above renders
-% those sentinels as LaTeX glyphs. firstline=6 hides the generated presentation
-% header from the paper. Do not audit source fidelity from the presentation file;
-% use the exact sidecar/JSON provenance instead.
+Formalization~\ref{lst:sin2theta-mismatch} is the complex ambient witness from
+the 17 August checkpoint.  Its surrounding section fixes
+\texttt{A B : E $\to$L[$\mathbb C$] E}; the real sibling had the same bounded
+operator scope.  The theorem proves the ambient inequality, but it cannot by
+itself establish the source's unbounded ambient case.
+
+% Presentation note (not rendered): scripts/build_evidence.py extracts the
+% historical declaration and its section-level operator context from Git and
+% writes the exact text verbatim to generated/historical_scope_mismatch_exact.lean.
+% The file consumed by listings is a separate presentation artifact: it carries
+% a header pointing back to that exact sidecar, applies the audited
+% PaperUnitaryInvariantNorm -> SymmetricNormingFunction readability rename, and
+% replaces Lean Unicode notation with ASCII LeanLit... sentinels. The leanpaper
+% literate= table above renders those sentinels as LaTeX glyphs. Do not audit
+% source fidelity from the presentation file; use the exact sidecar/JSON
+% provenance instead.
 \begin{nolinenumbers}
 \begin{minipage}{\linewidth}
 \lstinputlisting[
   style=leanpaper,
   firstline=6,
-  caption={Historical checked theorem statement used for the directed
-  $\sin 2\Theta$ result. Ambient Hilbert-space context is omitted;
-  names are adjusted for presentation.},
+  caption={Complex ambient $\sin 2\Theta$ witness in the 17 August
+  29/29 checkpoint.  The displayed section context makes its bounded operator
+  scope explicit; a real bounded sibling was present as well.},
   label={lst:sin2theta-mismatch}
 ]{generated/historical_scope_mismatch_presentation.lean}
 \end{minipage}
 \end{nolinenumbers}
 
-A separate checked theorem covered unbounded operators but used a reflection
-residual, a different operator from $R$.  Neither statement combined the
-printed residual with the source's full scope.  The repair supplied real and
-complex unbounded statements with the candidate-subspace residual.  This case
-shows why finding the right inequality or several related theorems was
-insufficient: the hypotheses and conclusion had to occur together in a statement
-covering the intended source claim.
+The mistake was in how we reviewed the evidence.  The checker asked whether
+the registered theorems collectively covered every part of the source result.
+That allowed an unbounded directed theorem to satisfy the scope check and a
+bounded ambient theorem to satisfy the ambient conclusion.  It never required
+the theorem used for the ambient conclusion itself to have the source's unbounded
+scope.  On 31 August we changed the record to pair each printed clause with one
+primary theorem and check that theorem against the result's scope.  The ambient
+clause then failed, and new unbounded ambient theorems supplied the missing case.
+
+Later reviews found a second source-correspondence issue in the same clause: the
+old ambient witness placed the spectral gap on the unperturbed operator's blocks,
+whereas Section~2 places it on the perturbed blocks.  The two readings are
+mathematically equivalent for the ambient estimate after exchanging the operator
+roles, but that equivalence also had to be represented in Lean before the
+source-facing statement could be treated as exact.  Thus the review failures in
+this example include both a genuine scope gap and an initially unrecorded
+correspondence between equivalent formulations.
 
 Review also exposed the opposite risk.  Theorem~8.1(ii) gives a
 finite-dimensional inequality followed only by ``and natural infinite-dimensional

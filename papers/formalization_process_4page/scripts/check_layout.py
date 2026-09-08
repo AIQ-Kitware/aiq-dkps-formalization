@@ -35,7 +35,7 @@ def validate_pages(pages: list[str], public: bool) -> list[str]:
     flat_pages = [' '.join(page.split()) for page in pages]
     display_pages = [
         i for i, page in enumerate(flat_pages)
-        if 'theorem sinTwoTheta_directedResidual' in page
+        if 'theorem sinTwoTheta_ambient' in page
     ]
     if len(display_pages) != 1 or display_pages[0] >= main_pages:
         errors.append('Historical theorem must appear once before References')
@@ -43,10 +43,10 @@ def validate_pages(pages: list[str], public: bool) -> list[str]:
         display = flat_pages[display_pages[0]]
         required = (
             '-- proof omitted', 'Formalization 1:',
-            'SymmetricNormingFunction', '{A : E → L[C] E}',
-            '{U V : Submodule C E}', 'U⊥ A',
-            'x ≤ a - d ∨ b + d ≤ x',
-            '2 * N.gauge (residual A V.subtypeL M)',
+            '17 August 29/29 checkpoint', 'SymmetricNormingFunction',
+            'variable {A B : E → L[C] E}', '{U V : Submodule C E}',
+            'U⊥ A', 'x ≤ a - d ∨ b + d ≤ x',
+            '2 * N.gauge (B - A)',
         )
         for token in required:
             if token not in display:

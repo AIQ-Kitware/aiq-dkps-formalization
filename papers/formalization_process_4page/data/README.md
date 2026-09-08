@@ -90,6 +90,9 @@ Selected public Git events used in the paper and appendix.  Every event is keyed
 by commit and an evidence path.  `scripts/build_evidence.py` checks that the
 commits exist in the repository and that their commit date agrees with the CSV.
 The table intentionally records project-level events rather than model chat.
+Completion checkpoints may recur: a later source/signature review can return a
+row to review while its Lean proof remains valid, so a 29/29 entry is a dated review state
+rather than an irreversible milestone.
 
 ## `resource_snapshot.csv`
 
