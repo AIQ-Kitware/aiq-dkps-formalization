@@ -1,5 +1,8 @@
 # Goal: repair every finding of the 2026-09-04 hostile review and reach an honest 29/29
 
+> **SUPERSEDED — 2026-09-08.** This was the execution plan for the 2026-09-04 hostile-review findings. Those findings are closed, the Section 8 unbounded lift has landed in both scalar fields, and the final signature/context hostile review has passed. Keep this file for provenance only. For current completion status use `GOAL.md`, `dev/davis-kahan-1970-formalization-result-inventory.md`, and `dev/davis-kahan-1970-full-source-census.md`.
+
+
 You are taking over `aiq-dkps-formalization` to close the findings in
 `dev/davis-kahan-1970-hostile-review-2026-09-04.md`. Read that report first; this document
 tells you what to change, in what order, and what "done" means. It does not repeat the

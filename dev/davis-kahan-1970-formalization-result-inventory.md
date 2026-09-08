@@ -108,24 +108,38 @@ The accepted reading is hash-pinned to the distributable specification, the sour
 
 ### `DK-8.1-thm` — Branch selection and spectral repulsion
 
-- Interpretation review: **accepted** (paper_faithful_nonlocal_source_interpretation), reviewed 2026-09-05
+- Interpretation review: **accepted** (`paper_faithful_nonlocal_source_interpretation`), reviewed through 2026-09-08
 - Kept distinct from the canonical refutation `DK-4.4-prop`
 
-**The interpretive issue.** Theorem 8.1 states no hypotheses of its own. It opens "Assume the hypotheses of the tan 2θ theorem", so its scope is whatever that phrase imports. This repository certifies the tan 2θ theorem at unbounded self-adjoint scope; every registered Section 8 declaration takes bounded `A H : E →L[ℂ] E`. A reviewer must decide whether Section 8 inherits the announced unbounded extension along with the hypotheses it names — in which case the delivered evidence is a proper specialization — or is printed at the paper's main bounded setting, in which case it is exact. This is finding F2 of the 2026-09-04 hostile review, reopened by the 2026-09-05 follow-up review, which refused to close it by metadata alone.
+**Why the statement is nonlocal.** Theorem 8.1 states no hypotheses of its own;
+it opens by assuming the hypotheses of the `tan 2θ` theorem.  Its exact source
+boundary therefore depends on the paper-wide scope attached to that earlier
+result rather than on Section 8 alone.
 
-**Nonlocal source material used to read the statement.**
+**Historical scope dispute, now moot for coverage.** Earlier reviews disagreed on
+whether the inherited operator scope should be read at the paper's main bounded
+setting or at the unbounded self-adjoint scope announced for the Section 2
+results.  That dispute no longer creates a coverage gap: the canonical evidence
+for every Theorem 8.1 clause that inherits ambient operator scope is now delivered
+at the wider unbounded scope, in both real and complex scalar fields, with bounded
+`H`.  The former bounded declarations remain registered as specializations.
 
-- Section 1 setup: "In the main bounded setting `A = A*` and `A + H = (A + H)*` are bounded. The paper also allows self-adjoint unbounded `A` when the later domain conditions are met." Bounded is the setting; unbounded is an allowance.
-- Section 2 scope paragraph: the unbounded extension is announced for *the four main results*, and the additional analytic work is located precisely — "concentrated in Theorem 5.2 and the Appendix to Section 6". Section 8 is not on that list and has no counterpart there.
-- Section 8's own scope attentiveness: parts (ii) and (iii) of Theorem 8.1 are explicitly restricted to finite dimensions, and part (ii) explicitly promises "natural infinite-dimensional extensions".
+The exact source façades are source-shaped rather than proof-shaped: branch
+existence and part (i) are combined in the source's existential order; the printed
+`Θ ≤ π/4` iff is stated on the reducing blocks `Λ₀, Λ₁`; and part (i) is stated in
+the `A/H/P/Q` context rather than on an internal canonical-branch identifier.
 
-**Accepted reading.** Section 8 is printed at the paper's main bounded setting, and "the hypotheses of the tan 2θ theorem" imports that theorem as the main body states it. A section that qualifies its own parts, and says nothing about unbounded operators, is being read rather than silently narrowed.
+**Parts (ii) and (iii).** Their explicit formulas are printed in finite
+dimensions and the canonical declarations use the eigenvalue lists of the blocks
+themselves, indexed by the block dimension.  Part (ii) additionally says
+"natural infinite-dimensional extensions" without printing a unique formal
+extension.  That phrase is recorded as an underspecified source assertion.  The
+repository's approximation-number extension is retained as a generalization,
+not as invented canonical evidence for the phrase.
 
-**Strongest competing literal reading.** Read the phrase as importing the tan 2θ theorem at its widest certified scope. Nothing in Section 8's printed text forbids it; the proof identities (8.1) and (8.2) are quadratic-form identities that survive an unbounded `A`, and the Theorem 8.2 homotopy `A(σ) = A + H − σH` with a continuously varying spectral projector is meaningful for unbounded `A` and bounded `H`. On that reading the registered evidence is a proper specialization and this row is NARROW, exactly as the 2026-09-04 review classified it. The repository does not claim that reading is wrong, only that the bounded one is better supported, and records both so a reviewer can disagree with an argument rather than with silence.
-
-**Why this is not a refutation.** Nothing here is false. The disagreement is about which hypotheses a phrase imports, not about the truth of any statement.
-
-**Open work regardless.** Lifting the iff, the canonical branch, part (i), and the Theorem 8.2 branch theorem to `A : E →ₗ.[𝕜] E` self-adjoint with bounded `H` would make the reading moot. It is tracked in `GOAL.md`. It is real work: Section 8 is 6437 lines built on bounded `Reduces`, `SpectrumIn` and `canonicalLowBranch`.
+**Current status.** No operator-scope or source-shape work remains on this row.
+The final 2026-09-08 hostile pass found no material mismatch in the canonical
+Theorem 8.1 signatures at their source context.
 
 ## Current closure queue
 

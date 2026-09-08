@@ -1680,7 +1680,7 @@ The following are **not** prerequisites;
 * formalizing every mathematical prose sentence:
 * making every stronger theorem part of a perfectly uniform API.
 
-## XVII.1 Scoreboard, 2026-09-07 (second revision)
+## XVII.1 Scoreboard, updated 2026-09-08
 
 Measured, not asserted.  Every line below is checkable from
 `dev/davis-kahan-1970-formalization-result-inventory.json` and a build.
@@ -1690,35 +1690,37 @@ Measured, not asserted.  Every line below is checkable from
 | every designated result has canonical Lean evidence at its actual source scope | **29 of 29**.  `DK-8.1-thm` was reopened on 2026-09-06 over parts (ii)/(iii) and closed on 2026-09-07 by putting them on the blocks themselves (§10.3.5) |
 | real/complex coverage for every result | met |
 | canonical façades expose the paper's separability scope | met, and widened 2026-09-06: Theorem 3.1's converse, Corollary 3.1's realization and all six Section 6 rows carry it too.  Only Section 5, which the source explicitly broadens, and Proposition 4.4's concrete counterexample remain `generalized`, each with its reason |
-| finite vs infinite-dimensional scope matches each printed result | met.  (ii) and (iii) are both printed in finite dimensions and both canonical there, indexed by the *block* dimension, which the source also prints.  (ii) additionally asserts *natural infinite-dimensional extensions* without stating one; that phrase is classified, not proved (§10.3.6), and the approximation-number extension the repository proves is registered as a generalization |
+| finite vs infinite-dimensional scope matches each printed result | met.  The explicit formulas in Theorem 8.1(ii) and (iii) are printed in finite dimensions and are canonical there, indexed by the *block* dimension.  Part (ii) additionally asserts *natural infinite-dimensional extensions* without specifying a unique formal statement; that phrase is classified rather than assigned invented canonical evidence (§10.3.6), and the approximation-number extension proved here is registered as a generalization |
 | bounded vs unbounded scope matches each printed result | met — Theorem 8.1's branch existence, both halves of its printed *iff*, and part (i) are canonical at unbounded scope in complex and real scalar scope |
 | every UIN-quantified theorem uses the literal source abstraction at its boundary | met.  §4d records the Fan-dominance split and why the derivation is not ours to do; the fifth review closed that concern |
 | no canonical theorem asks for a hypothesis absent from the paper | met.  8.1(i) no longer pins `Q` to a Lean construction; (ii)/(iii) no longer ask for the blocks' symmetry; Theorem 6.2 no longer asks `R` to be Hilbert--Schmidt; Proposition 6.1 and Theorem 6.1 take the printed separation; Lemma 6.1 compares one `K` with one `L` as the source does |
 | source objects, gaps, ordered angles, residuals, constants, conclusions agree | met, re-checked by the tamper suite and the 93 statement pins |
 | **Theorems 8.1 and 8.2 cover their inherited unbounded scope** | met — both, in complex and real scalar scope, 8.1 including both halves of the printed *iff* |
 | the exact/stronger distinction stays visible in the census | met |
-| a fresh source-first review finds no material statement mismatch | five reviews have run.  The fifth (2026-09-07) found four things: one substantive statement gap, one trivial missing façade, one registration repoint, and one **error in the repository's own reconstruction of the source**.  All four are repaired |
+| a fresh source-first review finds no material statement mismatch | **met**.  Eight hostile passes have now run.  The eighth (2026-09-08), restricted to canonical theorem signatures plus source context, found no remaining material mismatch and granted the §XVIII claim.  Earlier findings and their repairs remain recorded below |
 | the final certification pass succeeds | `certify_davis_kahan_1970.py` PASS, 29/29 terminal |
 
-**§XVIII stays withdrawn until a reviewer grants it.**  Nothing in this scoreboard
-is now known to be unmet; that is not the same as a reviewer having said so.
+**§XVIII is granted as of 2026-09-08.**  The eighth hostile review found no
+remaining material mismatch in the canonical theorem signatures at their source context.
 
 ---
 
 # XVIII. Final public claim
 
-## WITHDRAWN — 2026-09-07
+## HOSTILE REVIEW PASSED — 2026-09-08
 
-Seven hostile reviews have run against this tree.  The third is in §XVIII.4, the
-fourth in §XVIII.3, the fifth in §XVIII.2, the sixth in §XVIII.1, and the seventh
-is here.  All applied the same criterion:
+Eight hostile reviews have run against this development.  All applied the same
+criterion; the eighth pass, on 2026-09-08, was limited to the source boundary that
+controls the public claim: canonical theorem signatures plus the mathematical
+context inherited from the paper:
 
 > Does the canonical public theorem signature, interpreted in the paper's
 > standing context, state the Davis--Kahan result with no stronger restriction and
 > no weaker conclusion?
 
-**The seventh review found no missing Davis--Kahan mathematics.**  Its one finding
-was against the sixth review's repair, and it was right.
+**The eighth review found no remaining material source-signature mismatch and
+granted the public claim.**  The seventh review's sole finding was against the
+sixth review's repair, and that correction is retained below.
 
 | # | Finding | Repair |
 | --- | --- | --- |
@@ -1735,7 +1737,8 @@ Evidence after the repair: `certify_davis_kahan_1970.py` PASS at 29/29 terminal;
 `lake build` green on every default target with zero production warnings;
 statement and source pins clean; the tamper suite green.
 
-**The claim below stays withdrawn** until a reviewer grants it.
+**The claim below is granted.**  The qualifications remain part of the claim and
+must travel with any summary of the 29-result completion state.
 
 ## §XVIII.1 The sixth review's finding (2026-09-07), and its correction
 
@@ -1777,11 +1780,11 @@ statement and source pins clean; the tamper suite green.
 | 8 | the separability table contradicted the separability policy | sixteen wrappers; every remaining `generalized` row carries a specific reason |
 | 9 | stale text: Section 8 "still bounded", §3d's overruled `J` decision, §X/§XVI queues | corrected in place, with the superseded sentences named rather than deleted |
 
-## The claim, when the conditions are met
+## Granted claim
 
 > **The designated Davis–Kahan 1970 results have been formally resolved in Lean at the mathematical scope of their original statements, including the applicable real and complex, separable-Hilbert-space, unbounded-operator, and arbitrary normalized unitary-invariant norm scope. Stronger generalizations are recorded separately and are not used to conceal missing source-exact evidence.**
 
-### What "resolved" would cover, exactly
+### What "resolved" covers, exactly
 
 Twenty-eight of the twenty-nine counted results are `proved_exact`.  The
 twenty-ninth is **not**, and §XVIII requires it to be stated separately rather
@@ -1811,12 +1814,12 @@ than collapsed into "all theorems proved":
 2. **The operator-scope question is moot as of 2026-09-06.**  Both Section 8 rows
    are delivered at unbounded self-adjoint ambient scope with bounded `H`, in
    complex and real scalar scope, every canonical clause included.
-3. **Parts (ii) and (iii) of Theorem 8.1 are finite-dimensional because the
-   source prints them so** — "in finite dimensions" — not because the repository
-   narrowed them.  Part (ii) additionally asserts *"natural infinite-dimensional
-   extensions"* without stating one; that assertion is classified rather than
-   proved, and the extension the repository does prove is registered as a
-   generalization (§10.3.6).
+3. **The explicit formulas in Theorem 8.1(ii) and (iii) are printed in finite
+   dimensions.**  Part (ii) additionally asserts *"natural infinite-dimensional
+   extensions"* without specifying a unique formal extension.  That assertion is
+   classified rather than converted into invented canonical evidence; the
+   approximation-number extension proved by the repository is registered separately
+   as a generalization (§10.3.6).
 4. **The certificate proves compilation, declaration resolution and pin
    stability.**  It does not prove that a Lean statement says what the paper
    says.  That is the hostile semantic review's job.
