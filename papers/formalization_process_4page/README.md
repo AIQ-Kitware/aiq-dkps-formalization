@@ -63,14 +63,15 @@ validates the structured source snapshot and Git chronology and regenerates:
 human prompts available from the retained paper-revision transcript. Earlier
 prompts that are not available verbatim are not reconstructed from summaries.
 
-## Formalization system description
+## Formalization procedure description
 
-The main paper describes the formalization setup as a small set of persistent
-components: source/target records, the pinned Lean workspace and reusable
-foundations, the implementation loop, mechanical checks, and semantic review.
-The main text stays at the architectural level. `appendix.tex` records the
-concrete repository artifacts, dependency revisions, checker roles, audit-packet
-path, and actor responsibilities needed to reproduce or inspect that setup.
+The main paper describes the setup from the researcher's point of view: how a
+source target was fixed before implementation, what work the agents performed,
+what Lean and project scripts checked mechanically, what was inspected during
+source correspondence review, and how the review result was retained.  This is
+presented as a short bullet sequence rather than a component table.  Exact
+dependency revisions, repository records, checker behavior, and the audit-packet
+script remain in `appendix.tex`.
 
 The workflow figure remains a high-level control-flow view. The appendix
 semantic-review screenshot is a later inspection interface and is not presented
