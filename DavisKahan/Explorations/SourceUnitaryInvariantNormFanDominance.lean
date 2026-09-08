@@ -109,12 +109,33 @@ must be reconciled rather than silently choosing one:
 2. they say every unitary-invariant norm is obtained as a symmetric gauge
    function of the singular values and immediately invoke Ky Fan dominance.
 
-Probes 25 onward distinguish a **memberwise/value representation** (the
-symmetric gauge agrees wherever the source norm exists) from a **total/domain
-representation** (the canonical extended symmetric gauge also determines where
-the norm exists).  The finite-rank countermodel will test whether the former is
-already compatible with all compiled raw source laws.  This distinction is the
-next likely source-exactness boundary.
+## State after the clean Probes 25--30 compile
+
+The user compiled Probes 25--30 cleanly on 2026-09-08.  They establish a second
+important separation:
+
+* a **memberwise/value representation** by one symmetric norming function is
+  enough for Fan monotonicity wherever both source norms exist;
+* that same representation is enough for the paper-style convention that the
+  comparison is vacuous when one of the displayed norms does not exist;
+* a **total/domain representation** by the canonical extended symmetric gauge is
+  strong enough to recover the current unconditional `ENNReal`
+  `SourceUnitaryInvariantNorm.HasFanDominance`; and
+* once memberwise representation is assumed, the exact extra content of the
+  current production property is Ky-Fan membership transfer.
+
+So the current unconditional production property should no longer be treated as
+synonymous with the value-comparison part of Fan dominance.  Probes 31 onward
+now test the source sentence itself in a class-level form and, more importantly,
+whether the existing Davis--Kahan analytic theorems can be exposed with the
+paper-wide vacuity semantics using only **where-defined** Fan dominance.  The
+first concrete target is the Section 2 sine-theta theorem.  Probes 31--37 are
+the active compile target: they state the class-level vacuous Fan sentence, put
+the finite Ky Fan norms back into the raw source class, recover the converse
+Ky-Fan implication, and attempt the source-facing sine-theta facade using only
+where-defined Fan dominance.  No production API should change until this
+standalone probe has compiled and the source/literature interpretation has been
+independently audited.
 -/
 import DavisKahan.OperatorIdeal.NormalizedUnitaryInvariantNorm
 import ForTauCeti.Analysis.OperatorIdeal.Family.SymmetricGauge
@@ -129,6 +150,8 @@ import DavisKahan.OperatorIdeal.ApproximationNumbers.BlockSum
 import ForTauCeti.Analysis.OperatorIdeal.Family.OperatorNorm
 import DavisKahan.Sources.DavisKahan1970.Ideals.RankOneNormalization
 import DavisKahan.Sources.DavisKahan1970.Ideals.KyFanNorm
+import DavisKahan.Sources.DavisKahan1970.Ideals.NormalizedUnitaryInvariantNormExamples
+import DavisKahan.Sources.DavisKahan1970.SineTheta.Presentation
 
 /-!
 # Exploration: Fan dominance at the Davis--Kahan source norm boundary
@@ -2940,6 +2963,311 @@ monotonicity is true; it is whether the source imports **domain solidity** as
 part of the mathematical notion of its norm ideal.  Do not modify production
 structures until that question is settled.
 -/
+
+
+/-! ### Probe 31: state the source's class-level Fan sentence with vacuity -/
+
+/-- Pairwise source-norm comparison with the paper-wide convention made
+explicit: if either displayed norm does not exist, the comparison is vacuous;
+otherwise the stored extended gauges are ordered. -/
+def SourceVacuousGaugeLe
+    {E F E' F' : Type v}
+    [NormedAddCommGroup E] [InnerProductSpace ℂ E] [CompleteSpace E]
+    [NormedAddCommGroup F] [InnerProductSpace ℂ F] [CompleteSpace F]
+    [NormedAddCommGroup E'] [InnerProductSpace ℂ E'] [CompleteSpace E']
+    [NormedAddCommGroup F'] [InnerProductSpace ℂ F'] [CompleteSpace F']
+    (N : SourceUnitaryInvariantNorm.{0, v} ℂ)
+    (A : E →L[ℂ] F) (B : E' →L[ℂ] F') : Prop :=
+  (N.toSymmetricOperatorIdealFamily.gauge A = ⊤ ∨
+      N.toSymmetricOperatorIdealFamily.gauge B = ⊤) ∨
+    N.toSymmetricOperatorIdealFamily.gauge A ≤
+      N.toSymmetricOperatorIdealFamily.gauge B
+
+/-- The left side of Davis--Kahan's strong Fan sentence, interpreted with the
+paper-wide vacuity convention: the comparison holds for every source norm. -/
+def EverySourceVacuousGaugeLe
+    {E F E' F' : Type v}
+    [NormedAddCommGroup E] [InnerProductSpace ℂ E] [CompleteSpace E]
+    [NormedAddCommGroup F] [InnerProductSpace ℂ F] [CompleteSpace F]
+    [NormedAddCommGroup E'] [InnerProductSpace ℂ E'] [CompleteSpace E']
+    [NormedAddCommGroup F'] [InnerProductSpace ℂ F'] [CompleteSpace F']
+    (A : E →L[ℂ] F) (B : E' →L[ℂ] F') : Prop :=
+  ∀ N : SourceUnitaryInvariantNorm.{0, v} ℂ, SourceVacuousGaugeLe N A B
+
+/-- If the external Fan theorem supplies where-defined dominance for every raw
+source norm, Ky-Fan majorization implies the source's class-level vacuous
+comparison. -/
+theorem everySourceVacuousGaugeLe_of_kyFan
+    {E F E' F' : Type v}
+    [NormedAddCommGroup E] [InnerProductSpace ℂ E] [CompleteSpace E]
+    [NormedAddCommGroup F] [InnerProductSpace ℂ F] [CompleteSpace F]
+    [NormedAddCommGroup E'] [InnerProductSpace ℂ E'] [CompleteSpace E']
+    [NormedAddCommGroup F'] [InnerProductSpace ℂ F'] [CompleteSpace F']
+    {A : E →L[ℂ] F} {B : E' →L[ℂ] F'}
+    (hclass : ∀ N : SourceUnitaryInvariantNorm.{0, v} ℂ,
+      HasFanDominanceWhereDefined N)
+    (hAB : ∀ k, kyFanApproximationGauge k A ≤ kyFanApproximationGauge k B) :
+    EverySourceVacuousGaugeLe A B := by
+  intro N
+  exact ((fanDominanceWithVacuity_iff_whereDefined N).2 (hclass N)) hAB
+
+/-! ### Probe 32: put the Ky Fan norms themselves into the raw source class -/
+
+/-- The `k`-th Ky Fan norm, projected from the already-constructed normalized
+source member down to the raw printed-law structure. -/
+noncomputable def kyFanSourceUnitaryInvariantNorm (k : ℕ) (hk : 0 < k) :
+    SourceUnitaryInvariantNorm.{0, v} ℂ :=
+  (kyFanNormalizedUnitaryInvariantNorm (𝕜 := ℂ) k hk).toSource
+
+/-- The raw source gauge of the Ky Fan source member is exactly the finite Ky Fan
+approximation gauge transported to `ENNReal`. -/
+@[simp]
+theorem gauge_kyFanSourceUnitaryInvariantNorm
+    (k : ℕ) (hk : 0 < k)
+    {E F : Type v}
+    [NormedAddCommGroup E] [InnerProductSpace ℂ E] [CompleteSpace E]
+    [NormedAddCommGroup F] [InnerProductSpace ℂ F] [CompleteSpace F]
+    (A : E →L[ℂ] F) :
+    (kyFanSourceUnitaryInvariantNorm k hk).toSymmetricOperatorIdealFamily.gauge A =
+      ENNReal.ofReal (kyFanApproximationGauge k A) := by
+  change (kyFanSymmetricIdealFamily (𝕜 := ℂ) k hk).gauge A =
+    ENNReal.ofReal (kyFanApproximationGauge k A)
+  exact gauge_kyFanSymmetricIdealFamily k hk A
+
+/-- Every bounded operator lies in the raw source member supplied by a finite Ky
+Fan norm. -/
+theorem mem_kyFanSourceUnitaryInvariantNorm
+    (k : ℕ) (hk : 0 < k)
+    {E F : Type v}
+    [NormedAddCommGroup E] [InnerProductSpace ℂ E] [CompleteSpace E]
+    [NormedAddCommGroup F] [InnerProductSpace ℂ F] [CompleteSpace F]
+    (A : E →L[ℂ] F) :
+    (kyFanSourceUnitaryInvariantNorm k hk).toSymmetricOperatorIdealFamily.gauge A ≠ ⊤ := by
+  rw [gauge_kyFanSourceUnitaryInvariantNorm]
+  exact ENNReal.ofReal_ne_top
+
+/-! ### Probe 33: recover every Ky Fan inequality from the class-level sentence -/
+
+/-- The converse half of the source's strong Fan sentence needs no dominance
+assumption: because the source class itself contains every finite Ky Fan norm,
+a comparison valid for every source norm implies every Ky Fan comparison. -/
+theorem kyFan_le_of_everySourceVacuousGaugeLe
+    {E F E' F' : Type v}
+    [NormedAddCommGroup E] [InnerProductSpace ℂ E] [CompleteSpace E]
+    [NormedAddCommGroup F] [InnerProductSpace ℂ F] [CompleteSpace F]
+    [NormedAddCommGroup E'] [InnerProductSpace ℂ E'] [CompleteSpace E']
+    [NormedAddCommGroup F'] [InnerProductSpace ℂ F'] [CompleteSpace F']
+    {A : E →L[ℂ] F} {B : E' →L[ℂ] F'}
+    (h : EverySourceVacuousGaugeLe A B) :
+    ∀ k, kyFanApproximationGauge k A ≤ kyFanApproximationGauge k B := by
+  intro k
+  by_cases hk0 : k = 0
+  · subst k
+    simp [kyFanApproximationGauge, ContinuousLinearMap.kyFanGauge_zero_index]
+  · have hk : 0 < k := Nat.pos_of_ne_zero hk0
+    have hpair := h (kyFanSourceUnitaryInvariantNorm k hk)
+    rcases hpair with hmissing | hle
+    · rcases hmissing with hAtop | hBtop
+      · exact (mem_kyFanSourceUnitaryInvariantNorm k hk A hAtop).elim
+      · exact (mem_kyFanSourceUnitaryInvariantNorm k hk B hBtop).elim
+    · rw [gauge_kyFanSourceUnitaryInvariantNorm,
+        gauge_kyFanSourceUnitaryInvariantNorm] at hle
+      exact (ENNReal.ofReal_le_ofReal_iff
+        (kyFanApproximationGauge_nonneg k B)).mp hle
+
+/-- Under exactly the missing external theorem -- where-defined Fan dominance
+for every source norm -- the paper's class-level "every UIN iff every Ky Fan
+norm" sentence becomes a literal Lean equivalence with vacuity explicit. -/
+theorem everySourceVacuousGaugeLe_iff_everyKyFan_le
+    {E F E' F' : Type v}
+    [NormedAddCommGroup E] [InnerProductSpace ℂ E] [CompleteSpace E]
+    [NormedAddCommGroup F] [InnerProductSpace ℂ F] [CompleteSpace F]
+    [NormedAddCommGroup E'] [InnerProductSpace ℂ E'] [CompleteSpace E']
+    [NormedAddCommGroup F'] [InnerProductSpace ℂ F'] [CompleteSpace F']
+    {A : E →L[ℂ] F} {B : E' →L[ℂ] F'}
+    (hclass : ∀ N : SourceUnitaryInvariantNorm.{0, v} ℂ,
+      HasFanDominanceWhereDefined N) :
+    EverySourceVacuousGaugeLe A B ↔
+      ∀ k, kyFanApproximationGauge k A ≤ kyFanApproximationGauge k B := by
+  constructor
+  · exact kyFan_le_of_everySourceVacuousGaugeLe
+  · exact everySourceVacuousGaugeLe_of_kyFan hclass
+
+/-! ### Probe 34: scaled where-defined Fan dominance -/
+
+/-- The scaled form actually consumed by Davis--Kahan estimates.  It follows
+from ordinary where-defined Fan dominance by applying that theorem to `c • A`.
+No membership transfer is used: membership of `A` is an explicit premise. -/
+theorem mul_gaugeReal_le_of_all_mul_kyFan_le_whereDefined
+    (N : SourceUnitaryInvariantNorm.{0, v} ℂ)
+    (hfan : HasFanDominanceWhereDefined N)
+    {E F E' F' : Type v}
+    [NormedAddCommGroup E] [InnerProductSpace ℂ E] [CompleteSpace E]
+    [NormedAddCommGroup F] [InnerProductSpace ℂ F] [CompleteSpace F]
+    [NormedAddCommGroup E'] [InnerProductSpace ℂ E'] [CompleteSpace E']
+    [NormedAddCommGroup F'] [InnerProductSpace ℂ F'] [CompleteSpace F']
+    {A : E →L[ℂ] F} {B : E' →L[ℂ] F'} {c : ℝ}
+    (hc : 0 < c)
+    (hA : N.toSymmetricOperatorIdealFamily.gauge A ≠ ⊤)
+    (hB : N.toSymmetricOperatorIdealFamily.gauge B ≠ ⊤)
+    (hky : ∀ k, c * kyFanApproximationGauge k A ≤
+      kyFanApproximationGauge k B) :
+    c * N.toSymmetricOperatorIdealFamily.gaugeReal A ≤
+      N.toSymmetricOperatorIdealFamily.gaugeReal B := by
+  let S := N.toSymmetricOperatorIdealFamily
+  have hcA : S.Mem (((c : ℂ)) • A) := S.smul_mem (c : ℂ) hA
+  have hscaled : ∀ k, kyFanApproximationGauge k (((c : ℂ)) • A) ≤
+      kyFanApproximationGauge k B := by
+    intro k
+    rw [kyFanApproximationGauge_smul, Complex.norm_real, Real.norm_eq_abs,
+      abs_of_nonneg hc.le]
+    exact hky k
+  have hle : S.gauge (((c : ℂ)) • A) ≤ S.gauge B := hfan hcA hB hscaled
+  have hreal : S.gaugeReal (((c : ℂ)) • A) ≤ S.gaugeReal B :=
+    (ENNReal.toReal_le_toReal hcA hB).mpr hle
+  rw [S.gaugeReal_smul (c : ℂ) hA, Complex.norm_real, Real.norm_eq_abs,
+    abs_of_nonneg hc.le] at hreal
+  exact hreal
+
+/-! ### Probe 35: scaled estimates with the paper's vacuity convention -/
+
+/-- A source estimate `c ‖A‖ ≤ ‖B‖` with the paper-wide "norm may fail to
+exist" convention made explicit. -/
+def ScaledSourceEstimateWithVacuity
+    {E F E' F' : Type v}
+    [NormedAddCommGroup E] [InnerProductSpace ℂ E] [CompleteSpace E]
+    [NormedAddCommGroup F] [InnerProductSpace ℂ F] [CompleteSpace F]
+    [NormedAddCommGroup E'] [InnerProductSpace ℂ E'] [CompleteSpace E']
+    [NormedAddCommGroup F'] [InnerProductSpace ℂ F'] [CompleteSpace F']
+    (N : SourceUnitaryInvariantNorm.{0, v} ℂ) (c : ℝ)
+    (A : E →L[ℂ] F) (B : E' →L[ℂ] F') : Prop :=
+  (N.toSymmetricOperatorIdealFamily.gauge A = ⊤ ∨
+      N.toSymmetricOperatorIdealFamily.gauge B = ⊤) ∨
+    c * N.toSymmetricOperatorIdealFamily.gaugeReal A ≤
+      N.toSymmetricOperatorIdealFamily.gaugeReal B
+
+/-- Scaled Ky Fan inequalities imply the corresponding source estimate with
+vacuity under only the where-defined form of Fan dominance. -/
+theorem scaledSourceEstimateWithVacuity_of_all_mul_kyFan_le
+    (N : SourceUnitaryInvariantNorm.{0, v} ℂ)
+    (hfan : HasFanDominanceWhereDefined N)
+    {E F E' F' : Type v}
+    [NormedAddCommGroup E] [InnerProductSpace ℂ E] [CompleteSpace E]
+    [NormedAddCommGroup F] [InnerProductSpace ℂ F] [CompleteSpace F]
+    [NormedAddCommGroup E'] [InnerProductSpace ℂ E'] [CompleteSpace E']
+    [NormedAddCommGroup F'] [InnerProductSpace ℂ F'] [CompleteSpace F']
+    {A : E →L[ℂ] F} {B : E' →L[ℂ] F'} {c : ℝ}
+    (hc : 0 < c)
+    (hky : ∀ k, c * kyFanApproximationGauge k A ≤
+      kyFanApproximationGauge k B) :
+    ScaledSourceEstimateWithVacuity N c A B := by
+  by_cases hA : N.toSymmetricOperatorIdealFamily.gauge A = ⊤
+  · exact Or.inl (Or.inl hA)
+  · by_cases hB : N.toSymmetricOperatorIdealFamily.gauge B = ⊤
+    · exact Or.inl (Or.inr hB)
+    · exact Or.inr
+        (mul_gaugeReal_le_of_all_mul_kyFan_le_whereDefined
+          N hfan hc hA hB hky)
+
+/-! ### Probe 36: the class-wide scaled bridge -/
+
+/-- Once the external Fan theorem is available in its where-defined form for the
+source class, a scaled Ky Fan estimate transports to every source norm with the
+paper's vacuity semantics and without any membership-transfer theorem. -/
+theorem everySource_scaledEstimateWithVacuity_of_all_mul_kyFan_le
+    {E F E' F' : Type v}
+    [NormedAddCommGroup E] [InnerProductSpace ℂ E] [CompleteSpace E]
+    [NormedAddCommGroup F] [InnerProductSpace ℂ F] [CompleteSpace F]
+    [NormedAddCommGroup E'] [InnerProductSpace ℂ E'] [CompleteSpace E']
+    [NormedAddCommGroup F'] [InnerProductSpace ℂ F'] [CompleteSpace F']
+    {A : E →L[ℂ] F} {B : E' →L[ℂ] F'} {c : ℝ}
+    (hclass : ∀ N : SourceUnitaryInvariantNorm.{0, v} ℂ,
+      HasFanDominanceWhereDefined N)
+    (hc : 0 < c)
+    (hky : ∀ k, c * kyFanApproximationGauge k A ≤
+      kyFanApproximationGauge k B) :
+    ∀ N : SourceUnitaryInvariantNorm.{0, v} ℂ,
+      ScaledSourceEstimateWithVacuity N c A B := by
+  intro N
+  exact scaledSourceEstimateWithVacuity_of_all_mul_kyFan_le
+    N (hclass N) hc hky
+
+/-! ### Probe 37: a source-vacuous sine-theta façade -/
+
+/-- Exploration-only Section 2 façade with the source norm represented by the
+raw printed-law structure plus the *where-defined* external Fan theorem.
+
+Unlike the current production `..._sourceExact_complex` façade, this prototype
+has no residual-membership premise and no membership-transfer conclusion.  The
+paper's global convention is instead visible in `ScaledSourceEstimateWithVacuity`:
+if either displayed norm does not exist the conclusion is vacuous, and otherwise
+it is exactly `δ · N(sin Θ₀) ≤ N(R)`.
+
+The proof deliberately reuses the already-proved analytic sine-theta theorem only
+to obtain the Ky Fan inequalities.  Thus this probe tests theorem-boundary
+semantics rather than rebuilding the Davis--Kahan argument. -/
+theorem sinTheta_unbounded_formGap_sourceVacuous_complex_probe
+    {E F G H : Type v}
+    [NormedAddCommGroup E] [InnerProductSpace ℂ E] [CompleteSpace E]
+    [TopologicalSpace.SeparableSpace E]
+    [NormedAddCommGroup F] [InnerProductSpace ℂ F] [CompleteSpace F]
+    [NormedAddCommGroup G] [InnerProductSpace ℂ G] [CompleteSpace G]
+    [NormedAddCommGroup H] [InnerProductSpace ℂ H] [CompleteSpace H]
+    (N : SourceUnitaryInvariantNorm.{0, v} ℂ)
+    (hfan : HasFanDominanceWhereDefined N)
+    (A : E →ₗ.[ℂ] E) (A₀ : F →ₗ.[ℂ] F) (Λ₁ : G →ₗ.[ℂ] G)
+    (E₀ : F →L[ℂ] E) (F₀ : H →L[ℂ] E) (F₁ : G →L[ℂ] E)
+    (R : F →L[ℂ] E)
+    (hA : IsSelfAdjoint A) (hA₀ : IsSelfAdjoint A₀)
+    (hΛ₁ : IsSelfAdjoint Λ₁)
+    (htrial : TauCeti.DavisKahan1970.IsTrialResidual A A₀ E₀ R)
+    (hexact : TauCeti.DavisKahan1970.IsExactSpectralDecomposition A Λ₁ F₀ F₁)
+    {δ : ℝ} (hδ : 0 < δ)
+    (hgap : TauCeti.DavisKahan.Sylvester.FormBoundedSylvesterGap A₀ Λ₁ δ) :
+    ScaledSourceEstimateWithVacuity N δ
+      ((ContinuousLinearMap.id ℂ E - F₀ ∘L F₀.adjoint) ∘L E₀) R := by
+  let X := (ContinuousLinearMap.id ℂ E - F₀ ∘L F₀.adjoint) ∘L E₀
+  have hky : ∀ k, δ * kyFanApproximationGauge k X ≤
+      kyFanApproximationGauge k R := by
+    intro k
+    by_cases hk0 : k = 0
+    · subst k
+      simp [kyFanApproximationGauge, ContinuousLinearMap.kyFanGauge_zero_index]
+    · have hk : 0 < k := Nat.pos_of_ne_zero hk0
+      have hmain :=
+        TauCeti.DavisKahan1970.sinTheta_unbounded_formGap_symmetricNorming_complex
+          (kyFanNormingFunction k hk) A A₀ Λ₁ E₀ F₀ F₁ R
+          hA hA₀ hΛ₁ htrial hexact hδ hgap
+          (kyFanNormingFunction_mem k hk R)
+      simpa only [X, kyFanNormingFunction_gauge] using hmain.2
+  change ScaledSourceEstimateWithVacuity N δ X R
+  exact scaledSourceEstimateWithVacuity_of_all_mul_kyFan_le N hfan hδ hky
+
+/-!
+## Boundary after Probes 31--37
+
+If this batch compiles, three separate claims have been mechanically separated:
+
+1. The source's class-level strong Fan sentence can be stated literally with the
+   paper-wide vacuity convention.  Its converse direction is already available
+   because the raw source class contains every finite Ky Fan norm.
+2. The only external mathematical input needed for the forward direction is
+   **where-defined Fan dominance for every source UIN**.  Membership transfer is
+   absent from that statement.
+3. The actual Section 2 sine-theta analytic theorem can be exposed at this
+   boundary: all Ky Fan estimates come from existing proved machinery, and the
+   raw source norm receives a vacuous scaled estimate with no residual-membership
+   premise and no membership-transfer conclusion.
+
+A clean compile would therefore make the next task a sharply scoped source and
+literature audit: determine whether the external Ky Fan theorem Davis--Kahan cite
+proves the where-defined class theorem represented by
+`∀ N, HasFanDominanceWhereDefined N` for the exact mathematical norm class they
+intend.  Do not replace production `HasFanDominance` or any canonical source
+façade from this exploration alone; first subject this interpretation to an
+independent source/signature review.
+-/
+
 end
 
 end FanDominanceExploration
