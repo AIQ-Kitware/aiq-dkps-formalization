@@ -90,37 +90,27 @@
   tabsize=2,
   aboveskip=0.6em,
   belowskip=0.6em,
+  % This deliberately follows the MCC paper's \Real/\root pattern: the
+  % listings input contains ASCII stand-ins and literate= does the typesetting.
+  % IMPORTANT: the left-hand sides below are ASCII presentation sentinels,
+  % not literal Lean Unicode. scripts/build_evidence.py writes the exact
+  % extracted Lean signature to generated/historical_scope_mismatch_exact.lean,
+  % then writes a separate listings input in which only display-sensitive Lean
+  % notation is replaced by these sentinels. listings resolves each sentinel to
+  % LaTeX here. Keep this indirection: it avoids Unicode decoding/editability
+  % problems in listings/Overleaf while preserving an exact Lean sidecar for
+  % audit. Do not replace the sentinel keys below with literal Lean glyphs.
   literate=
-    {→ₗ.[ℂ]}{{$\mathrel{\to}_{\!\ell.}[\mathbb{C}]$}}6
-    {→ₗ.[ℝ]}{{$\mathrel{\to}_{\!\ell.}[\mathbb{R}]$}}6
-    {→L[ℂ]}{{$\mathrel{\to}\!L[\mathbb{C}]$}}5
-    {→L[ℝ]}{{$\mathrel{\to}\!L[\mathbb{R}]$}}5
-    {→ₗ[ℂ]}{{$\mathrel{\to}_{\!\ell}[\mathbb{C}]$}}5
-    {→ₗ[ℝ]}{{$\mathrel{\to}_{\!\ell}[\mathbb{R}]$}}5
-    {ℂ}{{$\mathbb{C}$}}1
-    {ℝ}{{$\mathbb{R}$}}1
-    {𝕜}{{$\Bbbk$}}1
-    {₀}{{$_0$}}1
-    {₁}{{$_1$}}1
-    {ₗ}{{$_\ell$}}1
-    {Λ}{{$\Lambda$}}1
-    {α}{{$\alpha$}}1
-    {β}{{$\beta$}}1
-    {δ}{{$\delta$}}1
-    {→}{{$\to$}}1
-    {∘}{{$\circ$}}1
-    {∧}{{$\land$}}1
-    {∨}{{$\lor$}}1
-    {≤}{{$\le$}}1
-    {≥}{{$\ge$}}1
-    {⊆}{{$\subseteq$}}1
-    {∈}{{$\in$}}1
-    {∀}{{$\forall$}}1
-    {∃}{{$\exists$}}1
-    {‖}{{$\Vert$}}1
-    {⟨}{{$\langle$}}1
-    {⟩}{{$\rangle$}}1
-    {ᗮ}{{$^{\perp}$}}1
+    {\\LeanLitCLMapC}{{$\mathrel{\to}\!\mathtt{L}[\mathbb{C}]$}}5
+    {\\LeanLitComplex}{{$\mathbb{C}$}}1
+    {\\LeanLitReal}{{$\mathbb{R}$}}1
+    {\\LeanLitLe}{{$\le$}}1
+    {\\LeanLitSubsetEq}{{$\subseteq$}}1
+    {\\LeanLitForall}{{$\forall$}}1
+    {\\LeanLitMem}{{$\in$}}1
+    {\\LeanLitOrth}{{$^{\perp}$}}1
+    {\\LeanLitDisj}{{$\lor$}}1
+    {\\LeanLitConj}{{$\land$}}1
 }
 \crefname{lstlisting}{formalization}{formalizations}
 \Crefname{lstlisting}{Formalization}{Formalizations}
@@ -176,34 +166,16 @@ examines how we organized that review when LLMs could produce more Lean than
 we could inspect line by line.
 
 The process in \cref{fig:workflow} developed as discrepancies appeared.  We
-recorded each source claim and its scope, decomposed missing mathematics,
-searched Mathlib and the literature for foundations, and used compiler feedback
-to repair Lean implementations.  After compilation, a skeptical review compared
-the source with the theorem signature and the definitions it used.  Reviewers
-checked scalar field, dimension, operator domain, norm class, gap assumptions,
-and the identity of residuals and angle operators.  A mismatch could require a
-new statement, a different representation, or further foundational work.
+separated three questions that an end-to-end proof loop can blur: which source
+results are in scope, whether Lean proves the formal statements, and whether
+those statements preserve the source mathematics.  The first two can be guarded
+by persistent records and compiler checks; the third still requires mathematical
+review of the statement in context.  A mismatch can therefore return a result to review
+even when its Lean proof remains valid.
 
-The review concerned theorem statements in their mathematical context.  A Lean
-proof could use a different argument from Davis and Kahan's.  Reviewers instead
-needed to determine what each assumption allowed and what the conclusion
-established.  When the formalization represented an angle or residual by another
-operator, the correspondence required a mathematical identification of those
-objects.  Inspecting a theorem name and its final inequality could miss a
-restriction in a type or an inherited hypothesis.  Repeated review also exposed
-a risk in the review loop itself: criticism can enlarge the target by asking for
-a particular proof route or by choosing a formal meaning for source prose that
-does not specify one.  We therefore constrain source-fidelity review to public
-theorem statements and the mathematical source context needed to interpret
-them.
-
-Claude Code handled most implementation and compiler-driven repair; ChatGPT
-was used heavily for planning and source review; Codex participated in both.
-A persistent result register kept one row per source result, recording its
-location and scope, the Lean declaration used as evidence, and the review
-state.  We developed \texttt{leanq} to inspect compiler-derived declarations,
-elaborated types, source locations, axioms, and dependencies in the project's
-pinned Lean environment.
+Semantic review compares theorem statements in source context rather than
+reproducing Davis and Kahan's proof strategy, including restrictions carried by
+types or inherited assumptions.
 
 \begin{figure}[H]
   \centering
@@ -216,12 +188,47 @@ pinned Lean environment.
   \label{fig:workflow}
 \end{figure}
 
-Lean-related publication activity is growing rapidly.  The Papers With Lean
-index records \LeanPapersTwentyFive{} Lean-related papers in 2025 and
-\LeanPapersJanAugTwentySix{} in January--August 2026, a
-\LeanPublicationRateRatio{}-fold increase in the mean monthly rate
-\citep{paperswithlean2026stats}.  Figure~\ref{fig:lean-activity} reproduces its
-monthly series; the fraction of these papers that used AI is unknown.
+\section{Formalization system}
+\label{sec:system}
+
+The project uses a pinned Lean workspace together with persistent source
+records, compiler-facing checks, and a separate semantic-review step.  These
+components persist across model sessions and separate proof production from the
+claim that the proved statement matches the source.
+
+\begin{table}[H]
+\centering
+\scriptsize
+\caption{Components of the formalization system; implementation details are in
+Appendix~\ref{app:system}.}
+\label{tab:system-components}
+\begin{tabularx}{\linewidth}{@{}>{\raggedright\arraybackslash}p{0.23\linewidth}>{\raggedright\arraybackslash}X@{}}
+\toprule
+Component & Responsibility \\
+\midrule
+Source and target records
+  & Preserve source passages and fix the tracked results and their intended scope. \\
+Lean workspace and foundations
+  & Pin the proof environment and provide reusable foundations and target declarations. \\
+Implementation loop
+  & Search libraries, write Lean, build missing foundations, and repair code from compiler feedback. \\
+Mechanical checks
+  & Check builds, declaration resolution, axioms/placeholders, registration consistency, and evidence drift. \\
+Semantic review and inspection
+  & Compare compiler-derived types and relevant definitions with the source and record the correspondence judgment. \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+Claude Code was used chiefly for implementation, ChatGPT chiefly for planning
+and source review, and Codex in both; human authors fixed the target set and
+adjudicated ambiguous source readings.  The result register records source
+scope, Lean evidence, and review state, while a finer source map retains context
+and representation choices.  \texttt{leanq} queries elaborated types, axioms,
+and dependencies.  Review packets and the later interface in
+Appendix~\ref{app:review-page} place source and compiler-derived evidence in one
+inspection path.  This architecture supports review without providing an
+automated semantic certificate.
 
 \section{Related Work}
 \label{sec:related}
@@ -355,15 +362,20 @@ and the norm bound.  These clauses supply the mathematical content of the
 bounded result; they do not extend the scalar field or the operator domain.
 
 % Presentation note (not rendered): scripts/build_evidence.py extracts this
-% historical declaration from Git and verifies the PaperUnitaryInvariantNorm ->
-% SymmetricNormingFunction rename before generating the display. The display
-% also ASCII-normalizes notation that produced unreliable PDF text extraction.
-% These are presentation changes only; the mismatch being shown is the
-% historical bounded-complex scope of the checked theorem.
+% historical declaration from Git and writes the exact signature verbatim to
+% generated/historical_scope_mismatch_exact.lean. The file consumed by listings
+% is a separate presentation artifact: it carries a header pointing back to that
+% exact sidecar, applies the audited PaperUnitaryInvariantNorm ->
+% SymmetricNormingFunction readability rename, and replaces Lean Unicode notation
+% with ASCII LeanLit... sentinels. The leanpaper literate= table above renders
+% those sentinels as LaTeX glyphs. firstline=6 hides the generated presentation
+% header from the paper. Do not audit source fidelity from the presentation file;
+% use the exact sidecar/JSON provenance instead.
 \begin{nolinenumbers}
 \begin{minipage}{\linewidth}
 \lstinputlisting[
   style=leanpaper,
+  firstline=6,
   caption={Historical checked theorem statement used for the directed
   $\sin 2\Theta$ result. Ambient Hilbert-space context is omitted;
   names are adjusted for presentation.},
@@ -380,36 +392,26 @@ shows why finding the right inequality or several related theorems was
 insufficient: the hypotheses and conclusion had to occur together in a statement
 covering the intended source claim.
 
-\subsection{A review-driven over-correction}
-\label{sec:overcorrection}
-
-Theorem~8.1(ii) exposed the opposite risk.  It prints a finite-dimensional
-block-eigenvalue inequality followed only by ``and natural infinite-dimensional
-extensions'' \citep{davis1970rotation}.  One review correctly found that our
-treatment covered only the finite-dimensional formula; the repair then treated
-four approximation-number extensions as the source's formal meaning.  A later
-review found several plausible infinite-dimensional readings and no choice among
-them in Theorem~8.1.  We retained the extensions as generalizations and marked
-the source phrase underspecified.
-
-These reviews distinguish missing source scope from choosing an interpretation
-the source does not fix.  Source-fidelity review likewise concerns the public
-theorem's hypotheses, objects, scope, constants, and conclusion, while allowing
-any correct Lean proof route.
+Review also exposed the opposite risk.  Theorem~8.1(ii) gives a
+finite-dimensional inequality followed only by ``and natural infinite-dimensional
+extensions'' \citep{davis1970rotation}.  After we selected approximation-number
+extensions as that meaning, a later review found that the source does not choose
+among several plausible extensions; we retained them as generalizations.  Review
+must test missing scope without supplying scope the source does not fix.
 
 \section{Conclusion}
 
 \paragraph{Did we formalize Davis--Kahan?}
-All 29 tracked results have checked formal treatments: Lean proofs for 28 and a
+All 29 tracked results have checked treatments: 28 Lean proofs and a
 finite-dimensional counterexample plus proved repair for Proposition~4.4
-(Appendix~\ref{app:data}).  Current source-to-signature review has found no
-remaining material mismatch, but we have no calibrated stopping rule or formal
-certificate that every source correspondence is correct.
+(Appendix~\ref{app:data}).  Current source-to-signature review found no remaining
+material mismatch, but we have no calibrated stopping rule or certificate of
+complete source correspondence.
 
-Compiler and kernel feedback establish that the encoded proposition is proved.
-Source review asks whether it preserves the intended theorem's hypotheses,
-objects, and scope, while remaining bounded by what the source actually says.
-How to validate and stop such review remains open.
+Lean establishes the encoded proposition.  Source review asks whether that
+proposition preserves the intended hypotheses, objects, and scope without
+exceeding what the source states; how to validate and stop such review remains
+open.
 
 \begin{ack}
 This material is based upon work supported by the Defense Advanced Research

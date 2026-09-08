@@ -351,58 +351,121 @@ def build_historical_scope_mismatch():
         if needle not in text:
             raise RuntimeError(f'{label}: expected {needle!r} in extracted source')
 
-    # Reader-facing presentation. The source checks above are the authority for
-    # this example. Commit a905bd4c verifies the type rename
-    # PaperUnitaryInvariantNorm -> SymmetricNormingFunction. The displayed code
-    # intentionally uses ASCII-safe spellings for Real/Complex, order, set
-    # membership/subset, conjunction/disjunction, and orthogonal complement so
-    # PDF text extraction does not drop mathematical glyphs. This normalization
-    # is for presentation only; it does not alter the historical scope mismatch.
-    # Spell out the identity scalar homomorphism in ContinuousLinearMap:
-    # E ->L[Complex] E expands to ContinuousLinearMap (RingHom.id Complex) E E.
-    # Membership.mem takes the container first, then the element. Reversing
-    # these arguments would change the meaning of the displayed hypothesis.
-    # The exact historical signature is retained separately in the JSON/note.
-    # Apply explicit rewrites to the extracted signature instead of maintaining
-    # an independent transcription. Each source fragment must occur once.
+    # Follow the MCC paper's listings pattern: put ASCII stand-ins in the
+    # listings input and let LaTeX `literate=` turn them into rendered symbols.
+    # IMPORTANT: keep the exact source and the PDF presentation as two separate
+    # generated artifacts. We have repeatedly gotten this wrong when asking LLMs
+    # to "make Lean Unicode work in listings": putting literal Lean glyphs on the
+    # left-hand side of LaTeX listings' `literate=` table is fragile (and a
+    # non-BMP glyph in paper.tex can make an uploaded Overleaf source
+    # non-editable), while expanding notation into verbose ASCII Lean changes
+    # what the reader sees. Instead:
+    #
+    #   1. write the extracted historical signature verbatim to an exact sidecar;
+    #   2. copy that signature to a presentation buffer;
+    #   3. make only the audited readability name changes documented below;
+    #   4. replace display-sensitive Lean Unicode with unique ASCII sentinels;
+    #   5. let paper.tex `literate=` map those sentinels to LaTeX glyphs.
+    #
+    # The presentation file is intentionally not valid Lean. Its generated header
+    # points back to the exact sidecar. Source-fidelity audits must use the exact
+    # sidecar / JSON provenance, never reverse-engineer Lean from the PDF input.
+    exact_sidecar = PAPER / 'generated' / 'historical_scope_mismatch_exact.lean'
+    exact_sidecar.write_text(historical['signature'], encoding='utf8')
+    if exact_sidecar.read_text(encoding='utf8') != historical['signature']:
+        raise RuntimeError('historical exact sidecar changed during write')
+
     presentation = historical['signature']
-    rewrites = [
+
+    # These two presentation-only renames are deliberately narrow. The first
+    # shortens the historical theorem name. The second uses the current name of
+    # the norm structure, after the structural rename audit above has proved the
+    # old and new declarations agree modulo the documented helper rename.
+    name_rewrites = [
         ('sinTwoTheta_directedResidual_paperUINorm',
          'sinTwoTheta_directedResidual'),
         ('PaperUnitaryInvariantNorm', 'SymmetricNormingFunction'),
-        ('{A : E \u2192L[\u2102] E}',
-         '{A : ContinuousLinearMap (RingHom.id Complex) E E}'),
-        ('{U V : Submodule \u2102 E}', '{U V : Submodule Complex E}'),
-        ('{a b d : \u211d} (hd : 0 < d) (hab : a \u2264 b)',
-         '{a b delta : Real} (hdelta : 0 < delta) (hab : a <= b)'),
-        ('(hUspec : spectrum \u211d (compressOperator U A) \u2286 Set.Icc a b)',
-         '(hUspec : Set.Subset\n'
-         '      (spectrum Real (compressOperator U A)) (Set.Icc a b))'),
-        ("(hUspec' : \u2200 x \u2208 spectrum \u211d (compressOperator U\u15ee A),\n"
-         '      x \u2264 a - d \u2228 b + d \u2264 x)',
-         "(hUspec' : forall x,\n"
-         '      Membership.mem\n'
-         '        (spectrum Real (compressOperator (Submodule.orthogonal U) A)) x ->\n'
-         '      Or (x <= a - delta) (b + delta <= x))'),
-        ('(M : V \u2192L[\u2102] V)',
-         '(M : ContinuousLinearMap (RingHom.id Complex) V V)'),
-        ('    N.Mem (sinTwoThetaIdealBlock U V) \u2227\n'
-         '      d * N.gauge (sinTwoThetaIdealBlock U V) \u2264\n'
-         '        2 * N.gauge (residual A V.subtypeL M) := by\n',
-         '    And (N.Mem (sinTwoThetaIdealBlock U V))\n'
-         '      (delta * N.gauge (sinTwoThetaIdealBlock U V) <=\n'
-         '        2 * N.gauge (residual A V.subtypeL M)) := by\n'),
     ]
-    for before, after in rewrites:
+    for before, after in name_rewrites:
         if presentation.count(before) != 1:
-            raise RuntimeError(f'historical display rewrite is ambiguous: {before!r}')
+            raise RuntimeError(f'historical display rename is ambiguous: {before!r}')
         presentation = presentation.replace(before, after)
-    presentation += '  -- proof omitted\n'
+
+    # Keep these tokens synchronized with the ASCII keys in paper.tex's
+    # `leanpaper` literate table. Longer source tokens must come first so a
+    # component glyph (for example Complex inside the continuous-linear-map
+    # arrow) is not consumed before the compound notation is replaced.
+    literate_sentinels = [
+        ('→L[ℂ]', r'\LeanLitCLMapC'),
+        ('ℂ', r'\LeanLitComplex'),
+        ('ℝ', r'\LeanLitReal'),
+        ('≤', r'\LeanLitLe'),
+        ('⊆', r'\LeanLitSubsetEq'),
+        ('∀', r'\LeanLitForall'),
+        ('∈', r'\LeanLitMem'),
+        ('ᗮ', r'\LeanLitOrth'),
+        ('∨', r'\LeanLitDisj'),
+        ('∧', r'\LeanLitConj'),
+    ]
+    sentinels = [sentinel for _, sentinel in literate_sentinels]
+    for sentinel in sentinels:
+        if any(
+            other != sentinel and other.startswith(sentinel)
+            for other in sentinels
+        ):
+            raise RuntimeError(
+                f'literate sentinel is a prefix of another sentinel: {sentinel}'
+            )
+    for source_token, sentinel in literate_sentinels:
+        if sentinel in historical['signature']:
+            raise RuntimeError(f'literate sentinel collides with Lean source: {sentinel}')
+        presentation = presentation.replace(source_token, sentinel)
+
+    # The exact sidecar ends at `:= by`.  Keep the omission marker on that same
+    # line in the presentation artifact so the listing reads as an intentionally
+    # elided proof, rather than as a synthetic first line of the proof body.
+    if not presentation.endswith(':= by\n'):
+        raise RuntimeError(
+            'historical presentation no longer ends with the expected `:= by`'
+        )
+    presentation = presentation[:-1] + '  -- proof omitted\n'
     if not presentation.isascii():
-        raise RuntimeError('historical display contains unhandled Unicode notation')
-    (
+        remaining = sorted({c for c in presentation if ord(c) > 127})
+        raise RuntimeError(
+            'historical presentation contains Lean Unicode without a literate '
+            f'sentinel: {remaining!r}'
+        )
+
+    presentation_header = [
+        '-- GENERATED PRESENTATION INPUT; this is not the exact Lean source.',
+        '-- Exact historical signature: generated/historical_scope_mismatch_exact.lean',
+        '-- ASCII LeanLit... sentinels stand in for display-sensitive Lean notation.',
+        '-- paper.tex renders those sentinels with the listings literate= table.',
+        '-- Audit the exact sidecar/JSON provenance, not this presentation file.',
+    ]
+
+    # Fail generation if the TeX side drifts from the generator contract. A
+    # sentinel such as `\LeanLitReal` appears as `\\LeanLitReal` in the
+    # LaTeX `literate=` key because listings must match a literal backslash.
+    paper_tex = (PAPER / 'paper.tex').read_text(encoding='utf8')
+    for _, sentinel in literate_sentinels:
+        tex_key = '{' + sentinel.replace('\\', '\\\\') + '}'
+        if tex_key not in paper_tex:
+            raise RuntimeError(
+                f'paper.tex is missing literate mapping for sentinel {sentinel}'
+            )
+    first_code_line = len(presentation_header) + 1
+    if f'firstline={first_code_line},' not in paper_tex:
+        raise RuntimeError(
+            'paper.tex firstline no longer skips exactly the generated '
+            'presentation header'
+        )
+
+    presentation_text = '\n'.join(presentation_header) + '\n' + presentation
+    presentation_path = (
         PAPER / 'generated' / 'historical_scope_mismatch_presentation.lean'
-    ).write_text(presentation, encoding='utf8')
+    )
+    presentation_path.write_text(presentation_text, encoding='ascii')
 
     table = '\n'.join([
         r'\begin{tabularx}{\linewidth}{@{}p{0.20\linewidth}>{\raggedright\arraybackslash}X>{\raggedright\arraybackslash}X@{}}',
@@ -419,7 +482,7 @@ def build_historical_scope_mismatch():
     ])
 
     payload = {
-        'schema_version': 2,
+        'schema_version': 3,
         'case': 'directed-sin-two-theta-bounded-complex-witness',
         'historical': historical,
         'current_complex': current_complex,
@@ -429,9 +492,28 @@ def build_historical_scope_mismatch():
             'complex': '{A : H →ₗ.[ℂ] H}',
             'real': '{A : E →ₗ.[ℝ] E}',
         },
+        'exact_sidecar': {
+            'path': 'generated/historical_scope_mismatch_exact.lean',
+            'sha256': hashlib.sha256(
+                historical['signature'].encode('utf8')
+            ).hexdigest(),
+        },
+        'presentation': {
+            'path': 'generated/historical_scope_mismatch_presentation.lean',
+            'sha256': hashlib.sha256(
+                presentation_text.encode('ascii')
+            ).hexdigest(),
+            'header_lines_skipped_by_paper': len(presentation_header),
+            'literate_sentinels': [
+                {'source': source, 'sentinel': sentinel}
+                for source, sentinel in literate_sentinels
+            ],
+        },
         'table_sha256': hashlib.sha256(table.encode('utf8')).hexdigest(),
         'note': (
             'The PDF theorem display is derived from the exact historical signature; '
+            'the exact signature is also emitted as a sidecar while the listings input '
+            'uses ASCII sentinels that paper.tex renders through literate=. '
             'The historical theorem used the source trial residual but only bounded '
             'complex scope. Current source-facing endpoints use the source norm class '
             'NormalizedUnitaryInvariantNorm and potentially unbounded ambient operators '
@@ -466,6 +548,7 @@ def build_manifest():
         'papers/formalization_process_4page/figures/semantic-alignment-sine-theta-row.png',
         'papers/formalization_process_4page/generated/historical_scope_mismatch.json',
         'papers/formalization_process_4page/generated/historical_scope_mismatch_table.tex',
+        'papers/formalization_process_4page/generated/historical_scope_mismatch_exact.lean',
         'papers/formalization_process_4page/generated/historical_scope_mismatch_presentation.lean',
         'DavisKahan/Sources/DavisKahan1970/SineTheta/Presentation.lean',
         'dev/davis-kahan-1970-formalization-result-inventory.json',
@@ -527,6 +610,7 @@ def build_manifest():
         'papers/formalization_process_4page/data/practitioner_accounts.schema.json': 'account-field schema',
         'papers/formalization_process_4page/data/review_timeline.csv': 'selected Git chronology',
         'papers/formalization_process_4page/generated/historical_scope_mismatch.json': 'historical directed sin-2-Theta scope-mismatch example',
+        'papers/formalization_process_4page/generated/historical_scope_mismatch_exact.lean': 'exact historical Lean signature sidecar',
         'papers/formalization_process_4page/notes/SEMANTIC_ALIGNMENT_CANDIDATES.md': 'semantic-alignment candidate signatures',
         'DavisKahan/Sources/DavisKahan1970/SineTheta/Presentation.lean': 'current sine-theta Lean source',
         'dev/davis-kahan-1970-formalization-result-inventory.json': '29-result tracking data',
