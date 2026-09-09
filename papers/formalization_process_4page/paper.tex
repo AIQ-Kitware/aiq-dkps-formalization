@@ -312,10 +312,11 @@ reader's guide to the mathematics and the Lean signature below.
 Our 29 targets comprise the four unnumbered headline theorems in Section~2 and
 every named theorem, proposition, lemma, and corollary established in the paper.
 Appendix~\ref{app:data} specifies the counting convention.  At the manuscript
-snapshot, the latest source-to-signature review reported no remaining material
-mismatch.  We have not yet run a further independent review after that pass, so
-we treat this as the current review state rather than a guarantee of complete
-semantic correspondence.
+snapshot, all 29 have checked treatments.  Source-to-signature review has
+continued to refine some source-facing theorem boundaries, including the norm
+domain of the sine-theta theorem discussed below.  We therefore report the
+current review state without treating it as a certificate of complete semantic
+correspondence.
 
 The development required projection and principal-angle geometry,
 singular-subspace geometry, unitarily invariant norms and operator ideals,
@@ -396,12 +397,12 @@ Appendix~\ref{app:system} records the concrete project artifacts and checks.
 % later review also corrected which operator's blocks carry the printed spectral
 % gap.  Keep this chronology and repair history in comments/appendix evidence;
 % the rendered example should state the mathematical mismatch directly.
-\subsection{Example of a semantically misaligned statement}
+\subsection{Examples of semantically misaligned statements}
 \label{sec:scope-mismatch}
 
 Formalization~\ref{lst:sin2theta-mismatch} was accepted as evidence for the
 ambient clause of the Section~2 $\sin 2\Theta$ result.  Davis--Kahan allow
-unbounded self-adjoint operators, but this declaration is stated in a section
+unbounded self-adjoint operators, while this declaration is stated in a section
 where \texttt{A B : E $\to$L[$\mathbb C$] E} are bounded continuous linear maps.
 Real and complex ambient analogues were both present.  The mismatch was bounded
 versus unbounded operator scope.
@@ -433,20 +434,50 @@ No single declaration established the ambient claim at the source's unbounded
 scope.  The revised check pairs each source clause with a theorem carrying its
 applicable scope.
 
-Theorem~8.1(ii) gives a finite-dimensional inequality followed only by ``and
-natural infinite-dimensional extensions'' \citep{davis1970rotation}.  We initially
-selected approximation-number extensions as that meaning, but the source does not
-choose among several plausible extensions.  We retained those variants as
-generalizations rather than source-equivalent statements.
+Two further repairs exposed different statement-level discrepancies:
+\begin{itemize}
+\setlength{\itemsep}{0.15em}
+\item In the Section~2 $\sin\Theta$ theorem, the earlier source-facing statement
+used a stronger norm abstraction, required residual ideal membership, and concluded
+that the angle operator belongs to the norm's ideal.  The repaired boundary uses the source's
+where-defined normalized unitarily invariant norm semantics.
+\item Theorem~8.1(ii),(iii) was stated on blocks extended by zero to the ambient
+space, with ambient-size indexing and gauges.  The repaired finite-dimensional
+statements use the ordered eigenvalues of the blocks themselves and the block
+dimension.
+\end{itemize}
+
+\paragraph{Current source-facing sine-theta statement.}
+For $\mathbb K\in\{\mathbb R,\mathbb C\}$ on a separable Hilbert space, under
+the source's self-adjointness, residual, exact-decomposition, and spectral-gap
+hypotheses (including its unbounded-operator scope), the current endpoints state
+for every normalized unitarily invariant norm $N$:
+\begin{equation}
+  N(\sin\Theta_0)\ \text{defined}\;\land\;N(R)\ \text{defined}
+  \quad\Longrightarrow\quad
+  \delta N(\sin\Theta_0)\le N(R),
+  \label{eq:source-facing-sin-theta}
+\end{equation}
+where $P$ is the orthogonal projector onto the exact subspace,
+$\sin\Theta_0=(I-P)E_0$, and $R=AE_0-E_0A_0$.  The proof uses a stronger
+symmetric-norming theorem, retained separately as a generalization.
+
+% Candidate future example of review overreach (not rendered): Theorem 8.1(ii)
+% ends with "and natural infinite-dimensional extensions."  A prior review
+% selected approximation-number extensions as the source meaning.  The paper
+% does not choose a unique extension, so those theorems are retained as
+% generalizations rather than source-equivalent evidence.  If this is used in
+% the manuscript later, present it as a calibrated-review example, not as repair
+% chronology.
 
 \section{Conclusion}
 
 \paragraph{Did we formalize Davis--Kahan?}
 All 29 tracked results have checked treatments: 28 Lean proofs and a
 finite-dimensional counterexample plus proved repair for Proposition~4.4
-(Appendix~\ref{app:data}).  Current source-to-signature review found no remaining
-material mismatch, but we have no calibrated stopping rule or certificate of
-complete source correspondence.
+(Appendix~\ref{app:data}).  The current source-facing statements incorporate the
+repairs described above, but we have no calibrated stopping rule or certificate
+of complete source correspondence.
 
 Lean establishes the encoded proposition.  Source review asks whether that
 proposition preserves the intended hypotheses, objects, and scope without
