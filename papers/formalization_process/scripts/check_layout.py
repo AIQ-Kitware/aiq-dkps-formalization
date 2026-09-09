@@ -63,20 +63,23 @@ def validate_pages(pages: list[str], public: bool) -> list[str]:
         errors.append(f'NeurIPS checklist must appear once after References; found {checklist_pages}')
     current_pages = [
         i for i, page in enumerate(flat_pages)
-        if 'theorem sinTheta_unbounded_formGap_whereDefinedUIN_rclike' in page
+        if 'theorem sinTwoTheta_unbounded_perturbedGap_whereDefinedUIN_rclike' in page
     ]
     if len(current_pages) != 1 or current_pages[0] >= main_pages:
-        errors.append('Current source-facing sine-theta theorem must appear once before References')
+        errors.append('Current source-facing sin 2Theta theorem must appear once before References')
     else:
         current = flat_pages[current_pages[0]]
         for token in (
             '-- proof omitted', 'Formalization 2:',
             'NormalizedSymmetricOperatorIdealFamily',
-            'RCLike K', 'SeparableSpace E', 'FormBoundedSylvesterGap',
-            'N.Mem R', 'N.gaugeReal R',
+            'RCLike K', 'SeparableSpace H', 'FormBoundedSylvesterGap',
+            'ReducesSubspace A P', 'addBounded A Hop',
+            'directedSinTwoAngleOperator P Q', 'sinTwoAngleOperator P Q',
+            'N.Mem R', 'N.Mem Hop', '2 * N.gaugeReal R',
+            '2 * N.gaugeReal Hop',
         ):
             if token not in current:
-                errors.append(f'Current sine-theta display split or text missing: {token}')
+                errors.append(f'Current sin 2Theta display split or text missing: {token}')
     main_text = ' '.join(flat_pages[:main_pages])
     for token in ('AI assistance.', 'ChatGPT and Claude were used throughout'):
         if token not in main_text:

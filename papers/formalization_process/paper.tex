@@ -109,6 +109,8 @@
     {\\LeanLitSubsetEq}{{$\subseteq$}}1
     {\\LeanLitForall}{{$\forall$}}1
     {\\LeanLitMem}{{$\in$}}1
+    {\\LeanLitLAngle}{{$\langle$}}1
+    {\\LeanLitRAngle}{{$\rangle$}}1
     {\\LeanLitOrth}{{$^{\perp}$}}1
     {\\LeanLitDisj}{{$\lor$}}1
     {\\LeanLitConj}{{$\land$}}1
@@ -289,8 +291,9 @@ Our 29 targets comprise the four unnumbered headline theorems in Davis--Kahan Se
 every named theorem, proposition, lemma, and corollary established in the paper.
 \Cref{app:data} specifies the counting convention.  At the manuscript
 snapshot, all 29 have checked treatments.  Source-to-signature review has
-continued to refine some source-facing theorem boundaries, including the norm
-domain of the sine-theta theorem discussed below.  We therefore report the
+continued to refine some source-facing theorem boundaries, including the scalar,
+operator-scope, and norm-domain boundary of the $\sin 2\Theta$ theorem discussed
+below.  We therefore report the
 current review state without treating it as a certificate of complete semantic
 correspondence.
 
@@ -430,48 +433,54 @@ statements use the ordered eigenvalues of the blocks themselves and the block
 dimension.
 \end{itemize}
 
-\paragraph{Current source-facing sine-theta statement.}
-The Davis--Kahan Section~2 sine-theta theorem is concise on the page, but its
-formal scope depends on surrounding conventions.  We currently read it in the
-paper's real-or-complex separable Hilbert-space setting, together with the
-unbounded self-adjoint extension, bounded residuals, the full spectral-gap
-alternatives, and the convention that a displayed unitarily invariant norm
-inequality is vacuous when either norm is undefined.  Pinning down these
-inherited conditions was itself part of the source review.
+\paragraph{Current source-facing $\sin 2\Theta$ statement.}
+The current declaration below represents the same Davis--Kahan Section~2
+$\sin 2\Theta$ result as \Cref{lst:sin2theta-mismatch}.  This makes the two
+formalizations directly comparable rather than using a different theorem as the
+repair example.  The source statement inherits several conditions from its
+surrounding context: the real-or-complex separable Hilbert-space setting, the
+unbounded self-adjoint extension, the reducing-subspace setup, the placement of
+the spectral gap on the perturbed operator's blocks, and the convention that a
+unitarily invariant norm inequality is asserted where the displayed norms are
+defined.
 
-\Cref{lst:current-sintheta} shows the current scalar-generic declaration.  Its
-\texttt{RCLike} scalar parameter covers the real and complex cases with one theorem, so the two
-fixed-field APIs cannot drift independently at this boundary.  The potentially unbounded
-operators are represented by partial linear maps.  The
-\texttt{NormalizedSymmetricOperatorIdealFamily} represents a normalized
-unitarily invariant norm together with its domain of finiteness.  Consequently,
-the two \texttt{N.Mem} implications after the colon express the source's
-``where both norms are defined'' convention rather than additional assumptions
-needed to invoke an analytic theorem.
+\Cref{lst:current-sin2theta} shows the current scalar-generic declaration.  Its
+\texttt{RCLike} scalar parameter covers the real and complex cases in one theorem.
+The unbounded ambient operator is represented by a partial linear map and the
+bounded perturbation separately.  The theorem contains both the directed
+residual inequality and the ambient perturbation inequality under one shared
+setup.  The \texttt{NormalizedSymmetricOperatorIdealFamily} carries the domain
+of finiteness of the norm, so the \texttt{N.Mem} implications express the
+source's where-defined convention rather than ideal-membership transfer.
 
 % Editor provenance (not rendered): this display is generated verbatim from
-% DavisKahan/Sources/DavisKahan1970/SineTheta/Presentation.lean in the checked-out source.  The
-% exact Unicode signature is written to generated/current_sin_theta_exact.lean;
-% the listings input differs only by ASCII sentinels used for typography.
+% DavisKahan/Sources/DavisKahan1970/SinTwoThetaDirectedRCLike.lean in the
+% checked-out source.  The exact Unicode signature is written to
+% generated/current_sin_two_theta_exact.lean; the listings input differs only
+% by ASCII sentinels used for typography.
 \begin{nolinenumbers}
 \begin{minipage}{\linewidth}
 \lstinputlisting[
   style=leanpaper,
   firstline=6,
-  caption={Current scalar-generic signature for the Davis--Kahan Section~2 sine-theta theorem. The \texttt{RCLike} parameter covers real and complex scalars while exposing ambient separability, potentially unbounded operators, the spectral-gap condition, and the where-defined norm convention.},
-  label={lst:current-sintheta}
-]{generated/current_sin_theta_presentation.lean}
+  caption={Current scalar-generic signature for the same Davis--Kahan Section~2 $\sin 2\Theta$ result as Formalization~1.  It covers real and complex scalars, potentially unbounded self-adjoint operators, the directed residual and ambient perturbation clauses, and the where-defined norm convention.},
+  label={lst:current-sin2theta}
+]{generated/current_sin_two_theta_presentation.lean}
 \end{minipage}
 \end{nolinenumbers}
 
-In mathematical notation, its conclusion is
+In mathematical notation, the two conclusions are
 \[
-  N(\sin\Theta_0)\ \text{defined},\quad N(R)\ \text{defined}
-  \quad\Longrightarrow\quad
-  \delta N(\sin\Theta_0)\le N(R),
+\begin{aligned}
+  &N(\sin 2\Theta_0),\ N(R)\ \text{defined}
+    &&\Longrightarrow&& \delta N(\sin 2\Theta_0)\le 2N(R),\\
+  &N(\sin 2\Theta),\ N(H)\ \text{defined}
+    &&\Longrightarrow&& \delta N(\sin 2\Theta)\le 2N(H).
+\end{aligned}
 \]
-with $\sin\Theta_0=(I-P)E_0$.  The stronger symmetric-norming theorem used in
-the proof is retained separately as a generalization.
+The stronger symmetric-norming and fixed-field theorems used in the proof are
+retained separately as supporting generalizations and API variants; the result
+ledger identifies the declaration used as the current source-facing witness.
 
 % Candidate future example of review overreach (not rendered): Theorem 8.1(ii)
 % ends with "and natural infinite-dimensional extensions."  A prior review
