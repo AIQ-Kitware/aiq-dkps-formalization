@@ -234,6 +234,8 @@ THREE NEW REUSABLE DECLARATIONS underwrite it, each grounding the next by `:=`, 
 
 **Lean declarations:**
 
+- `TauCeti.DavisKahan1970.SectionTwo.sinTheta`
+- `TauCeti.DavisKahan1970.sinTheta_unbounded_formGap_whereDefinedUIN_rclike`
 - `TauCeti.DavisKahan1970.SectionTwo.sinTheta_complex`
 - `TauCeti.DavisKahan1970.SectionTwo.sinTheta_real`
 - `TauCeti.DavisKahan1970.sinTheta_unbounded_intervalExterior_characterizedWitness_rclike`
@@ -250,7 +252,6 @@ THREE NEW REUSABLE DECLARATIONS underwrite it, each grounding the next by `:=`, 
 - `TauCeti.DavisKahan1970.sinTheta_unbounded_formGap_symmetricNorming_real`
 - `TauCeti.DavisKahan1970.sinTheta_unbounded_intervalExterior_symmetricNorming_complex`
 - `TauCeti.DavisKahan1970.sinTheta_unbounded_intervalExterior_symmetricNorming_real`
-- `TauCeti.DavisKahan1970.SectionTwo.sinTheta`
 - `TauCeti.DavisKahan1970.sinTheta_unbounded_formGap_symmetricNorming_rclike`
 - `TauCeti.DavisKahan1970.sinTheta_unbounded_formGap_symmetricNorming_complex_ofRCLike`
 - `TauCeti.DavisKahan1970.sinTheta_unbounded_formGap_symmetricNorming_real_ofRCLike`
@@ -266,8 +267,8 @@ THREE NEW REUSABLE DECLARATIONS underwrite it, each grounding the next by `:=`, 
 - `TauCeti.DavisKahan.ExactSinTheta.NormalizedSymmetricOperatorIdealFamily.HasFanDominanceWhereDefined`
 - `TauCeti.DavisKahan.ExactSinTheta.NormalizedSymmetricOperatorIdealFamily.ScaledGaugeLEWhereDefined`
 - `TauCeti.DavisKahan.ExactSinTheta.NormalizedSymmetricOperatorIdealFamily.scaledGaugeLEWhereDefined_of_all_mul_kyFan_le`
-- `TauCeti.DavisKahan1970.sinTheta_unbounded_formGap_sourceExact_complex`
-- `TauCeti.DavisKahan1970.sinTheta_unbounded_formGap_sourceExact_real`
+- `TauCeti.DavisKahan1970.sinTheta_unbounded_formGap_whereDefinedUIN_complex`
+- `TauCeti.DavisKahan1970.sinTheta_unbounded_formGap_whereDefinedUIN_real`
 
 **Curated source/Lean review:**
 
@@ -399,10 +400,10 @@ SIGNATURE RETARGET 2026-09-08. Probes 17--43 established that unconditional `ENN
 - `TauCeti.DavisKahan1970.symmetricNorming_of_kyFanDominant`
 - `TauCeti.DavisKahan1970.kyFanDominant_of_symmetricNorming`
 - `TauCeti.DavisKahan1970.symmetricNorming_iff_kyFanDominant`
-- `TauCeti.DavisKahan1970.tanTheta_ambient_unboundedRitz_definedTangent_sourceExact_complex`
-- `TauCeti.DavisKahan1970.tanTheta_ambient_unboundedRitz_definedTangent_sourceExact_real`
-- `TauCeti.DavisKahan1970.tanTheta_directed_unboundedRitz_sourceExact_complex`
-- `TauCeti.DavisKahan1970.tanTheta_directed_unboundedRitz_sourceExact_real`
+- `TauCeti.DavisKahan1970.tanTheta_ambient_unboundedRitz_definedTangent_normalizedUIN_complex`
+- `TauCeti.DavisKahan1970.tanTheta_ambient_unboundedRitz_definedTangent_normalizedUIN_real`
+- `TauCeti.DavisKahan1970.tanTheta_directed_unboundedRitz_normalizedUIN_complex`
+- `TauCeti.DavisKahan1970.tanTheta_directed_unboundedRitz_normalizedUIN_real`
 - `TauCeti.DavisKahan1970.normalizedUnitaryInvariant_of_symmetricNorming`
 - `TauCeti.DavisKahan1970.normalizedUnitaryInvariant_of_symmetricNorming_mul`
 - `TauCeti.DavisKahan.ExactSinTheta.NormalizedUnitaryInvariantNorm`
@@ -583,6 +584,10 @@ SOURCE-EXACT FAÇADES REGISTERED 2026-09-05. Canonical evidence for this row is 
 - `TauCeti.DavisKahan1970.sinTwoTheta_directed_unbounded_addBounded_unequalDimension_symmetricNorming_real`
 - `TauCeti.DavisKahan1970.sinTwoTheta_ambient_unbounded_addBounded_symmetricNorming_complex`
 - `TauCeti.DavisKahan1970.sinTwoTheta_ambient_unbounded_addBounded_symmetricNorming_real`
+- `TauCeti.DavisKahan1970.SectionTwo.sinTwoTheta_ambient`
+- `TauCeti.DavisKahan1970.sinTwoTheta_ambient_unbounded_perturbedGap_whereDefinedUIN_rclike`
+- `TauCeti.DavisKahan1970.sinTwoTheta_ambient_unbounded_perturbedGap_whereDefinedUIN_complex`
+- `TauCeti.DavisKahan1970.sinTwoTheta_ambient_unbounded_perturbedGap_whereDefinedUIN_real`
 - `TauCeti.DavisKahan1970.SectionTwo.sinTwoTheta_ambient_complex`
 - `TauCeti.DavisKahan1970.SectionTwo.sinTwoTheta_ambient_real`
 - `TauCeti.DavisKahan1970.sinTwoTheta_ambient_reflection_projectorDifference_symmetricNorming`
@@ -613,10 +618,12 @@ SOURCE-EXACT FAÇADES REGISTERED 2026-09-05. Canonical evidence for this row is 
 - `TauCeti.DavisKahan.Angle.sinTwoAngleOperator_comm`
 - `TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction.gauge_neg`
 - `TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction.mem_neg`
-- `TauCeti.DavisKahan1970.sinTwoTheta_directed_unboundedResidual_sourceExact_complex`
-- `TauCeti.DavisKahan1970.sinTwoTheta_directed_unboundedResidual_sourceExact_real`
-- `TauCeti.DavisKahan1970.sinTwoTheta_ambient_unbounded_perturbedGap_sourceExact_complex`
-- `TauCeti.DavisKahan1970.sinTwoTheta_ambient_unbounded_perturbedGap_sourceExact_real`
+- `TauCeti.DavisKahan1970.sinTwoTheta_directed_unboundedResidual_whereDefinedUIN_complex`
+- `TauCeti.DavisKahan1970.sinTwoTheta_directed_unboundedResidual_whereDefinedUIN_real`
+- `TauCeti.DavisKahan1970.sinTwoTheta_directed_unboundedResidual_normalizedUIN_complex`
+- `TauCeti.DavisKahan1970.sinTwoTheta_directed_unboundedResidual_normalizedUIN_real`
+- `TauCeti.DavisKahan1970.sinTwoTheta_ambient_unbounded_perturbedGap_normalizedUIN_complex`
+- `TauCeti.DavisKahan1970.sinTwoTheta_ambient_unbounded_perturbedGap_normalizedUIN_real`
 - `TauCeti.DavisKahan1970.normalizedUnitaryInvariant_of_symmetricNorming`
 - `TauCeti.DavisKahan1970.normalizedUnitaryInvariant_of_symmetricNorming_mul`
 - `TauCeti.DavisKahan.ExactSinTheta.NormalizedUnitaryInvariantNorm`
@@ -901,13 +908,13 @@ SOURCE-EXACT FAÇADES REGISTERED 2026-09-05. Canonical evidence for this row is 
 - `TauCeti.DavisKahan1970.kyFanDominant_of_symmetricNorming`
 - `TauCeti.DavisKahan1970.symmetricNorming_iff_kyFanDominant`
 - `TauCeti.DavisKahan1970.cos_two_ne_zero_of_isUnit_diagonalPart_reflection_sq_real`
-- `TauCeti.DavisKahan1970.tanTwoTheta_directed_unboundedResidual_sourceExact_complex`
-- `TauCeti.DavisKahan1970.tanTwoTheta_ambient_unbounded_sourceExact_complex`
-- `TauCeti.DavisKahan1970.tanTwoTheta_ambient_unbounded_sourceExact_real`
+- `TauCeti.DavisKahan1970.tanTwoTheta_directed_unboundedResidual_normalizedUIN_complex`
+- `TauCeti.DavisKahan1970.tanTwoTheta_ambient_unbounded_normalizedUIN_complex`
+- `TauCeti.DavisKahan1970.tanTwoTheta_ambient_unbounded_normalizedUIN_real`
 - `TauCeti.DavisKahan1970.normalizedUnitaryInvariant_of_symmetricNorming`
 - `TauCeti.DavisKahan1970.normalizedUnitaryInvariant_of_symmetricNorming_mul`
 - `TauCeti.DavisKahan.ExactSinTheta.NormalizedUnitaryInvariantNorm`
-- `TauCeti.DavisKahan1970.tanTwoTheta_directed_unboundedResidual_sourceExact_real`
+- `TauCeti.DavisKahan1970.tanTwoTheta_directed_unboundedResidual_normalizedUIN_real`
 
 **Curated source/Lean review:**
 
@@ -3802,8 +3809,8 @@ Residue, and not a gap: `[CompleteSpace Z]`, which `Theorem63InfiniteTrial.lean`
 - `TauCeti.DavisKahan1970.approximationSingularValue_directedSineBlock_lt_one_unboundedRitz_real`
 - `TauCeti.DavisKahan1970.tanTheta_directed_unboundedRitz_symmetricNorming_complex`
 - `TauCeti.DavisKahan1970.tanTheta_directed_unboundedRitz_symmetricNorming_real`
-- `TauCeti.DavisKahan1970.tanTheta_directed_unboundedRitz_sourceExact_complex`
-- `TauCeti.DavisKahan1970.tanTheta_directed_unboundedRitz_sourceExact_real`
+- `TauCeti.DavisKahan1970.tanTheta_directed_unboundedRitz_normalizedUIN_complex`
+- `TauCeti.DavisKahan1970.tanTheta_directed_unboundedRitz_normalizedUIN_real`
 - `TauCeti.DavisKahan.ExactSinTheta.NormalizedUnitaryInvariantNorm`
 - `TauCeti.DavisKahan1970.theorem6_3_unbounded_infiniteTrial_ideal_exists`
 - `TauCeti.DavisKahan1970.theorem6_3_unbounded_infiniteTrial_ideal_exists_real`

@@ -11,56 +11,26 @@ import DavisKahan.Sources.DavisKahan1970.SymmetricNormingFanDominance
 open TauCeti.DavisKahan.Sylvester
 
 /-!
-# The Davis--Kahan 1970 sine-theta source surface
+# The Davis--Kahan 1970 sine-theta theorem family
 
-**The canonical source-facing theorem is
-`sinTheta_unbounded_formGap_symmetricNorming_rclike`**, at the end of this module
-and re-exported as `TauCeti.DavisKahan1970.SectionTwo.sinTheta`.  Davis and Kahan
-state Section 2 for a real or complex separable Hilbert space, so the theorem
-that answers them is the one generic in the field.  It states the result at its
-full proved scope: an arbitrary `RCLike` field, unbounded self-adjoint
-`LinearPMap` operators, arbitrary Hilbert dimension, the whole
-`FormBoundedSylvesterGap` rather than one of its branches, a
-`SymmetricNormingFunction`, and both conclusions -- ideal membership and the
-inequality.  Cite it.
+This module contains both the stronger symmetric-norming implementation theorems and the
+fixed-field where-defined norm declarations currently selected by the result ledger.
+Source fidelity is a property recorded by that ledger, not by theorem names.
 
-Its signature carries only the paper's hypotheses.  The two analytic
-capabilities the proof runs on -- `ContinuousLinearMap.HasMinMaxLowerBoundEverywhere`
-and `HasUnboundedSylvesterKyFan` -- were once binders here.  They are now
-unconditional instances at every `RCLike` field
-(`ContinuousLinearMap.hasMinMaxLowerBoundEverywhere` in
-`ForTauCeti/Analysis/OperatorIdeal/ApproximationNumber/ScalarTransport.lean`,
-`TauCeti.DavisKahan.Sylvester.hasUnboundedSylvesterKyFan` in
-`DavisKahan/Sylvester/ScalarTransport.lean`), so instance search supplies them
-and a caller never sees them.
+`sinTheta_unbounded_formGap_symmetricNorming_rclike` is the scalar-generic implementation
+API.  It proves ideal membership together with the inequality for every
+`SymmetricNormingFunction`.  The later source review found that membership transfer is extra
+structure relative to Davis--Kahan's convention that a displayed unitarily invariant norm
+statement is vacuous when either norm is undefined.
 
-`sinTheta_unbounded_formGap_symmetricNorming_complex` and
-`…_real` state the same theorem at the two fields Davis and Kahan write about.
-They are fixed-field corroboration, and convenient when a field is already in
-hand; they are not the canonical statement of a result whose source scope is
-real-or-complex.
+The ledger points to the scalar-generic
+`sinTheta_unbounded_formGap_whereDefinedUIN_rclike`.  It exposes ambient separability and
+states only the where-defined inequality.  The complex and real declarations are thin
+specializations of that theorem rather than independent source-fidelity boundaries.
 
-`sinTheta_unbounded_intervalExterior_characterizedWitness_rclike` below is kept
-for **presentation and compatibility**.  It inlines the finite interval/exterior
-branch of the separation, so it states a strictly smaller theorem than the one
-that is proved, and it drops the ideal-membership half of the conclusion.  It
-remains correct and remains the declaration the semantic review reads for its
-explicit `sinTheta₀` parameter; it is not the theorem to cite.
-
-The substantive proof remains
-`TauCeti.DavisKahan1970.sinTheta_unbounded_intervalExterior_symmetricNorming_rclike`.
-
-The central presentation choice is to name the source object `sinTheta₀` as an
-explicit theorem parameter and state its concrete realization by an equality
-hypothesis.  Thus the conclusion reads like the printed theorem while the
-meaning of `sinTheta₀` remains visible in the same theorem signature; there is
-no opaque local definition to chase.
-
-Only the domain-aware trial residual and exact complementary spectral
-coordinates are grouped into named predicates.  Their characteristic theorems
-below expose every bundled clause to the semantic-alignment review.
+Presentation forms that inline one gap branch or expose an explicit `sinTheta₀` parameter
+remain useful for review and compatibility, but they are not substitutes for the ledger.
 -/
-
 namespace TauCeti
 namespace DavisKahan1970
 
@@ -209,8 +179,8 @@ theorem isExactSpectralDecomposition_iff
 
 /-- **Davis--Kahan 1970, Section 2 sine-theta theorem, presentation form.**
 
-**Not the theorem to cite.**  `sinTheta_unbounded_formGap_symmetricNorming_rclike`
-below is the canonical source-facing statement; this one is kept because its
+**Not the theorem to cite.**  The result ledger now selects
+`sinTheta_unbounded_formGap_whereDefinedUIN_rclike`; this presentation form is kept because its
 explicit `sinTheta₀` parameter makes the printed inequality legible in the
 signature, and because callers already depend on it.
 
@@ -262,13 +232,15 @@ theorem sinTheta_unbounded_intervalExterior_characterizedWitness_rclike
   rw [← hSinTheta₀] at hfull
   exact hfull.2
 
-/-! ## The canonical fixed-field statements
+/-! ## Scalar-generic implementation and fixed-field statement boundaries
 
-`sinTheta_unbounded_formGap_symmetricNorming_rclike` below is the canonical
-source-facing statement: an arbitrary `RCLike` field, direct argument lists, the
-full gap, both conclusions, and nothing in the signature that is not Davis and
-Kahan's.  `sinTheta_unbounded_intervalExterior_symmetricNorming_rclike` remains
-the engine underneath.
+`sinTheta_unbounded_formGap_symmetricNorming_rclike` below is the scalar-generic
+implementation theorem. It is stronger than the current ledger-selected boundary:
+it quantifies over `SymmetricNormingFunction`, requires residual membership, and
+concludes membership transfer. The fixed-field where-defined wrappers later in
+this file expose the current source norm convention directly. A matching `RCLike`
+where-defined wrapper is tested in the standalone Fan-dominance probe before any
+short public alias is rebound.
 
 `sinTheta_unbounded_intervalExterior_characterizedWitness_rclike` above is the
 presentation declaration, and it inlines the finite interval/exterior branch of
@@ -279,29 +251,24 @@ configurations the Appendix needs are others.  Stating the headline with the
 interval branch inlined therefore fixes a strictly smaller theorem than the one
 that is proved.
 
-The fixed-field pair further below states the canonical theorem at `ℂ` and at
-`ℝ`.  They corroborate it and are convenient when the field is already in hand;
-they are not the canonical statement of a result the paper writes for a real *or*
-complex Hilbert space. -/
+The result ledger, rather than any declaration name or this module comment, records
+which fixed-field declarations currently witness source fidelity. -/
 
 /-- **Davis--Kahan 1970, the `sin Theta` theorem, over an arbitrary `RCLike` field.**
 
-This is the Section 2 sine theorem at the printed source scope, generic over the
-scalar field, in the same shape as its fixed-field siblings below: an unbounded
-self-adjoint ambient `LinearPMap`, a separable Hilbert space of arbitrary
-dimension, the whole `FormBoundedSylvesterGap` -- the printed interval/exterior
-separation together with the half-infinite configurations the source also
-permits -- an arbitrary `SymmetricNormingFunction`, and both printed
-conclusions.
+This is the scalar-generic implementation theorem used by the Section 2 sine
+development. It has the full unbounded operator and `FormBoundedSylvesterGap`
+scope, but its `SymmetricNormingFunction` membership-transfer boundary is stronger
+than the where-defined norm convention currently selected by the result ledger.
 
 `IsTrialResidual` and `IsExactSpectralDecomposition` are the same two structural
 predicates the complex and real statements take, and they were already
 scalar-generic; `isTrialResidual_iff` and `isExactSpectralDecomposition_iff`
 expand them.
 
-Nothing in the signature is a proof vehicle.  The two analytic capabilities the
-proof consumes hold at every `RCLike` field and reach it by instance search, so
-the hypotheses here are exactly Davis and Kahan's. -/
+The analytic capabilities consumed by the proof hold at every `RCLike` field and
+reach it by instance search. This theorem remains an implementation API while the
+where-defined scalar-generic wrapper is validated separately. -/
 theorem sinTheta_unbounded_formGap_symmetricNorming_rclike
     (N : SymmetricNormingFunction)
     (A : E →ₗ.[𝕜] E) (A₀ : F →ₗ.[𝕜] F) (Λ₁ : G →ₗ.[𝕜] G)
@@ -320,6 +287,42 @@ theorem sinTheta_unbounded_formGap_symmetricNorming_rclike
     hexact.complementIsometry hexact.orthogonal hexact.complete
     htrial.mapsDomain hexact.mapsDomain htrial.residualEquation
     hexact.intertwines hδ hgap hR
+
+/-- **Davis--Kahan 1970, the `sin Theta` theorem at the where-defined norm boundary,
+scalar-generic over `RCLike`.**
+
+This is the production form of the scalar-generic endpoint validated by the Fan-dominance
+exploration.  It exposes the paper's separable ambient scope and normalized symmetric
+operator-ideal norm family, but does not turn Ky Fan dominance into a membership-transfer
+claim.  The displayed inequality is asserted exactly where both norms are defined. -/
+theorem sinTheta_unbounded_formGap_whereDefinedUIN_rclike
+    [TopologicalSpace.SeparableSpace E]
+    (N : NormalizedSymmetricOperatorIdealFamily.{u, v} 𝕜)
+    (A : E →ₗ.[𝕜] E) (A₀ : F →ₗ.[𝕜] F) (Λ₁ : G →ₗ.[𝕜] G)
+    (E₀ : F →L[𝕜] E) (F₀ : H →L[𝕜] E) (F₁ : G →L[𝕜] E) (R : F →L[𝕜] E)
+    (hA : IsSelfAdjoint A) (hA₀ : IsSelfAdjoint A₀) (hΛ₁ : IsSelfAdjoint Λ₁)
+    (htrial : IsTrialResidual A A₀ E₀ R)
+    (hexact : IsExactSpectralDecomposition A Λ₁ F₀ F₁)
+    {δ : ℝ} (hδ : 0 < δ)
+    (hgap : FormBoundedSylvesterGap A₀ Λ₁ δ) :
+    N.Mem ((ContinuousLinearMap.id 𝕜 E - F₀ ∘L F₀.adjoint) ∘L E₀) →
+    N.Mem R →
+      δ * N.gaugeReal ((ContinuousLinearMap.id 𝕜 E - F₀ ∘L F₀.adjoint) ∘L E₀) ≤
+        N.gaugeReal R := by
+  change N.ScaledGaugeLEWhereDefined δ
+    ((ContinuousLinearMap.id 𝕜 E - F₀ ∘L F₀.adjoint) ∘L E₀) R
+  apply N.scaledGaugeLEWhereDefined_of_all_mul_kyFan_le hδ
+  intro k
+  by_cases hk0 : k = 0
+  · subst k
+    simp [kyFanApproximationGauge, ContinuousLinearMap.kyFanGauge_zero_index]
+  · have hk : 0 < k := Nat.pos_of_ne_zero hk0
+    have hmain :=
+      sinTheta_unbounded_formGap_symmetricNorming_rclike
+        (𝕜 := 𝕜) (kyFanNormingFunction k hk) A A₀ Λ₁ E₀ F₀ F₁ R
+        hA hA₀ hΛ₁ htrial hexact hδ hgap
+        (kyFanNormingFunction_mem k hk R)
+    simpa only [kyFanNormingFunction_gauge] using hmain.2
 
 section FixedField
 
@@ -446,20 +449,14 @@ theorem sinTheta_unbounded_intervalExterior_symmetricNorming_complex
   sinTheta_unbounded_formGap_symmetricNorming_complex N A A₀ Λ₁ E₀ F₀ F₁ R hA hA₀ hΛ₁ htrial hexact hδ
     (FormBoundedSylvesterGap.intervalExterior hβα hspectral) hR
 
-/-! ### The source-exact façade
+/-! ### The where-defined normalized-UIN boundary
 
-Davis and Kahan work on a separable Hilbert space and quantify over arbitrary
-unitary-invariant norms, with displayed norm statements treated as vacuous when
-a norm does not exist.  The theorem above is proved through symmetric norming
-functions at strictly greater Hilbert-space generality.  The façade
-below is the printed statement, and it is the canonical source evidence.
+Davis and Kahan work on a separable Hilbert space and use the convention that a
+displayed norm comparison is vacuous when a norm does not exist.  These declarations
+expose that weaker norm boundary directly.  The result ledger records whether a given
+declaration is the current fidelity witness; the theorem name does not.
 
-It is deliberately weaker than the theorem that proves it.  That is the point:
-a reader comparing it with the paper should find the paper's own scope, and the
-generalizations are registered separately rather than substituted for it.
-
-Only the *ambient* space carries separability, because that is all the source
-assumes; nothing here asks the caller for separability of a coordinate space. -/
+Only the ambient space carries separability, because that is all the source assumes. -/
 
 /-- **Davis--Kahan 1970, the sine-theta theorem, at the printed source scope over
 `ℂ`.**
@@ -474,7 +471,7 @@ No residual-membership hypothesis and no membership-transfer conclusion appear
 at this source-facing boundary.  The two `N.Mem` arrows are written literally
 after the colon: they are the logical form of the paper's vacuity convention,
 not hypotheses required to invoke the theorem. -/
-theorem sinTheta_unbounded_formGap_sourceExact_complex
+theorem sinTheta_unbounded_formGap_whereDefinedUIN_complex
     [TopologicalSpace.SeparableSpace E]
     (N : NormalizedSymmetricOperatorIdealFamily.{0, v} ℂ)
     (A : E →ₗ.[ℂ] E) (A₀ : F →ₗ.[ℂ] F) (Λ₁ : G →ₗ.[ℂ] G)
@@ -487,21 +484,9 @@ theorem sinTheta_unbounded_formGap_sourceExact_complex
     N.Mem ((ContinuousLinearMap.id ℂ E - F₀ ∘L F₀.adjoint) ∘L E₀) →
     N.Mem R →
       δ * N.gaugeReal ((ContinuousLinearMap.id ℂ E - F₀ ∘L F₀.adjoint) ∘L E₀) ≤
-        N.gaugeReal R := by
-  change N.ScaledGaugeLEWhereDefined δ
-    ((ContinuousLinearMap.id ℂ E - F₀ ∘L F₀.adjoint) ∘L E₀) R
-  apply N.scaledGaugeLEWhereDefined_of_all_mul_kyFan_le hδ
-  intro k
-  by_cases hk0 : k = 0
-  · subst k
-    simp [kyFanApproximationGauge, ContinuousLinearMap.kyFanGauge_zero_index]
-  · have hk : 0 < k := Nat.pos_of_ne_zero hk0
-    have hmain :=
-      sinTheta_unbounded_formGap_symmetricNorming_complex
-        (kyFanNormingFunction k hk) A A₀ Λ₁ E₀ F₀ F₁ R
-        hA hA₀ hΛ₁ htrial hexact hδ hgap
-        (kyFanNormingFunction_mem k hk R)
-    simpa only [kyFanNormingFunction_gauge] using hmain.2
+        N.gaugeReal R :=
+  sinTheta_unbounded_formGap_whereDefinedUIN_rclike
+    (𝕜 := ℂ) N A A₀ Λ₁ E₀ F₀ F₁ R hA hA₀ hΛ₁ htrial hexact hδ hgap
 
 end FixedField
 
@@ -617,10 +602,10 @@ theorem sinTheta_unbounded_formGap_symmetricNorming_real_ofRCLike
 /-- **Davis--Kahan 1970, the sine-theta theorem, at the printed source scope over
 `ℝ`.**
 
-The real sibling of `sinTheta_unbounded_formGap_sourceExact_complex`, with the
+The real sibling of `sinTheta_unbounded_formGap_whereDefinedUIN_complex`, with the
 same partial-norm/vacuity boundary and the same explicit `Mem → Mem →`
 conclusion shape. -/
-theorem sinTheta_unbounded_formGap_sourceExact_real
+theorem sinTheta_unbounded_formGap_whereDefinedUIN_real
     [TopologicalSpace.SeparableSpace E]
     (N : NormalizedSymmetricOperatorIdealFamily.{0, v} ℝ)
     (A : E →ₗ.[ℝ] E) (A₀ : F →ₗ.[ℝ] F) (Λ₁ : G →ₗ.[ℝ] G)
@@ -633,21 +618,9 @@ theorem sinTheta_unbounded_formGap_sourceExact_real
     N.Mem ((ContinuousLinearMap.id ℝ E - F₀ ∘L F₀.adjoint) ∘L E₀) →
     N.Mem R →
       δ * N.gaugeReal ((ContinuousLinearMap.id ℝ E - F₀ ∘L F₀.adjoint) ∘L E₀) ≤
-        N.gaugeReal R := by
-  change N.ScaledGaugeLEWhereDefined δ
-    ((ContinuousLinearMap.id ℝ E - F₀ ∘L F₀.adjoint) ∘L E₀) R
-  apply N.scaledGaugeLEWhereDefined_of_all_mul_kyFan_le hδ
-  intro k
-  by_cases hk0 : k = 0
-  · subst k
-    simp [kyFanApproximationGauge, ContinuousLinearMap.kyFanGauge_zero_index]
-  · have hk : 0 < k := Nat.pos_of_ne_zero hk0
-    have hmain :=
-      sinTheta_unbounded_formGap_symmetricNorming_real
-        (kyFanNormingFunction k hk) A A₀ Λ₁ E₀ F₀ F₁ R
-        hA hA₀ hΛ₁ htrial hexact hδ hgap
-        (kyFanNormingFunction_mem k hk R)
-    simpa only [kyFanNormingFunction_gauge] using hmain.2
+        N.gaugeReal R :=
+  sinTheta_unbounded_formGap_whereDefinedUIN_rclike
+    (𝕜 := ℝ) N A A₀ Λ₁ E₀ F₀ F₁ R hA hA₀ hΛ₁ htrial hexact hδ hgap
 
 end FixedFieldReal
 

@@ -36,6 +36,7 @@ from typing import Any
 ROOT = Path(__file__).resolve().parents[1]
 STATEMENT_MAP_PATH = ROOT / "dev/davis-kahan-1970-statement-map.json"
 CENSUS_PATH = ROOT / "dev/davis-kahan-1970-full-source-census.json"
+SECTION_TWO_VARIANT_INDEX_PATH = ROOT / "dev/davis-kahan-1970-section-two-variant-index.json"
 TEX_PATH = ROOT / "prose/distilled_literature/DavisKahan1970_part_III.tex"
 DEFAULT_CANDIDATES = (
     ROOT / "dev/davis-kahan-1970-formalization-result-inventory.json",
@@ -106,43 +107,12 @@ IMPLEMENTATION_STRUCTURE_CLASSES = {
     "IsScalarTower ℝ",
     "StarOrderedRing",
 }
-# Counted results that have a scalar-generic `RCLike` witness, mapped to the
-# public `SectionTwo` short name that must alias it.
-#
-# **The verdict here was reversed on 2026-09-05 by GOAL.md section 4.3, and the
-# tripwire was kept.**  The paper's scalar fields are `ℝ` and `ℂ`, so canonical
-# source evidence is now the pair of fixed-field façades, and the generic theorem
-# is a stronger scalar-generic variant registered beside them.  What this table
-# still enforces -- unchanged -- is that the generic witness has not quietly
-# disappeared: it must be registered as supporting evidence on the row, and the
-# public short name must be `#check`ed by the audit surface.  Removing a row is
-# still a claim that the generic witness is gone, and needs the same review as
-# any other evidence change.
-#
-# The history below is why the tripwire exists at all and is kept verbatim.
-#
-# Davis and Kahan state Section 2 for a real *or* complex separable Hilbert
-# space.  A result whose canonical evidence is a pair of fixed-field theorems is
-# therefore answering the printed statement one field at a time; once a witness
-# generic in `RCLike 𝕜` exists, that witness is the answer, and demoting the row
-# back to the fixed-field pair is a regression.
-#
-# That regression happened.  `S2-sin-theta` was canonicalized on
-# `..._complex`/`..._real` because the generic theorem carried
-# `[ContinuousLinearMap.HasMinMaxLowerBoundEverywhere]` and
-# `[HasUnboundedSylvesterKyFan]`, which are not paper hypotheses.  The objection
-# was fair at the time and went stale the moment both capabilities became
-# unconditional instances at every `RCLike` field; nothing noticed for a week.
-# So the requirement is checked rather than remembered: for each row below, every
-# canonical evidence entry must be scalar-generic and carry no capability class,
-# and the public short name must be `#check`ed by the audit surface.
-#
-# Add a row here when its generic witness lands.  Removing one is a claim that a
-# result no longer has a source-scope witness, and needs the same review as any
-# other canonical-evidence change.
-SCALAR_GENERIC_CANONICAL_RESULTS = {
-    "S2-sin-theta": "TauCeti.DavisKahan1970.SectionTwo.sinTheta",
-}
+# A short Section 2 API name is not a source-fidelity certificate.  The result
+# inventory owns source-fidelity evidence, while the separate Section 2 variant
+# index records how fixed-field, scalar-generic, implementation, and probe
+# declarations relate.  Do not hard-code a generic declaration here: that was
+# exactly how the old `SectionTwo.sinTheta` binding stayed canonical after its
+# norm-domain boundary had changed.
 
 # Canonical evidence whose *conclusion object* is part of what the row claims,
 # expressed as tokens that must and must not occur in the compiler-printed type.
@@ -655,14 +625,24 @@ def _validate_source_clauses(
                     "a clause's primary witness is by definition canonical evidence, not supporting "
                     "evidence"
                 )
-            # The clause's own scalar field must be the primary's, and the primary's is
-            # compiler-derived.  Otherwise a row could claim both of the paper's scalar
-            # fields while both clauses are witnessed over the same one.
-            if primary in canonical_scopes and clause.get("scalar_scope") != canonical_scopes[primary]:
-                fail(
-                    f"{where}: clause scalar_scope {clause.get('scalar_scope')!r} disagrees with the "
-                    f"compiler-derived scalar scope {canonical_scopes[primary]!r} of its primary {primary}"
+            # The clause's scalar field must be supported by the primary's
+            # compiler-derived scalar scope.  A fixed-field primary may witness only
+            # that same field.  An RCLike primary may witness either the real or the
+            # complex source clause because the one theorem is genuinely scalar-generic;
+            # this is the intended way to prevent the two fixed-field surfaces from
+            # drifting apart while still keeping the source's two clauses explicit.
+            if primary in canonical_scopes:
+                clause_scope = clause.get("scalar_scope")
+                primary_scope = canonical_scopes[primary]
+                scalar_scope_ok = (
+                    clause_scope == primary_scope
+                    or (primary_scope == "rclike" and clause_scope in {"real", "complex"})
                 )
+                if not scalar_scope_ok:
+                    fail(
+                        f"{where}: clause scalar_scope {clause_scope!r} is not supported by the "
+                        f"compiler-derived scalar scope {primary_scope!r} of its primary {primary}"
+                    )
             # A clause whose Lean object is not the paper's own must SAY what
             # bridges them, and the bridge must mention both objects.  Checking
             # only that the listed declarations are registered let a reviewer
@@ -2073,6 +2053,100 @@ def _validate_section_two_short_names(data: dict[str, Any]) -> None:
             )
 
 
+def _validate_section_two_variant_index(data: dict[str, Any]) -> None:
+    """Keep the four headline-theorem maintenance index synchronized with the ledger.
+
+    The index is deliberately not another fidelity authority.  It must copy the
+    ledger-selected witnesses exactly, while recording API/generalization/probe
+    variants around them.  This prevents theorem names such as `sourceExact` from
+    becoming an accidental second certificate.
+    """
+    if not SECTION_TWO_VARIANT_INDEX_PATH.exists():
+        fail(f"missing Section 2 variant index: {SECTION_TWO_VARIANT_INDEX_PATH.relative_to(ROOT)}")
+    index = json.loads(SECTION_TWO_VARIANT_INDEX_PATH.read_text(encoding="utf-8"))
+    if index.get("schema_version") != 1:
+        fail("Section 2 variant index must have schema_version 1")
+    families = index.get("results")
+    if not isinstance(families, list):
+        fail("Section 2 variant index families must be a list")
+
+    expected_ids = ["S2-sin-theta", "S2-tan-theta", "S2-sin-two-theta", "S2-tan-two-theta"]
+    by_id = {item.get("result_id"): item for item in families if isinstance(item, dict)}
+    if set(by_id) != set(expected_ids):
+        fail(
+            "Section 2 variant index must contain exactly the four headline results; "
+            f"got {sorted(x for x in by_id if isinstance(x, str))}"
+        )
+
+    result_by_id = {item["id"]: item for item in data.get("results", [])}
+    bindings = data["section_two_short_names"]["bindings"]
+    short_names = {
+        "S2-sin-theta": "sinTheta",
+        "S2-tan-theta": "tanTheta",
+        "S2-sin-two-theta": "sinTwoTheta",
+        "S2-tan-two-theta": "tanTwoTheta",
+    }
+
+    for result_id in expected_ids:
+        family = by_id[result_id]
+        ledger = [
+            entry["declaration"]
+            for entry in result_by_id[result_id].get("canonical_evidence", [])
+        ]
+        recorded = family.get("ledger_witnesses")
+        if recorded != ledger:
+            fail(
+                f"{result_id}: Section 2 variant index ledger_witnesses is stale; "
+                f"inventory has {ledger!r}, index has {recorded!r}"
+            )
+
+        short_name = short_names[result_id]
+        short_api = family.get("short_api")
+        if not isinstance(short_api, dict):
+            fail(f"{result_id}: variant index must record short_api")
+        expected_decl = f"TauCeti.DavisKahan1970.SectionTwo.{short_name}"
+        if short_api.get("declaration") != expected_decl:
+            fail(
+                f"{result_id}: short_api.declaration must be {expected_decl!r}, "
+                f"got {short_api.get('declaration')!r}"
+            )
+        expected_status = "bound" if bindings[short_name] is not None else "unbound"
+        if short_api.get("status") != expected_status:
+            fail(
+                f"{result_id}: short API status is {short_api.get('status')!r}, but "
+                f"section_two_short_names records {bindings[short_name]!r}"
+            )
+
+        variants = family.get("variants")
+        if not isinstance(variants, list):
+            fail(f"{result_id}: variants must be a list")
+        variant_by_decl = {
+            item.get("declaration"): item for item in variants if isinstance(item, dict)
+        }
+        for declaration in ledger:
+            item = variant_by_decl.get(declaration)
+            if item is None:
+                fail(f"{result_id}: ledger witness {declaration} is missing from variant index")
+            if item.get("role") != "ledger_witness" or item.get("source_fidelity") != "attested_by_ledger":
+                fail(
+                    f"{result_id}: ledger witness {declaration} must be role=ledger_witness "
+                    "and source_fidelity=attested_by_ledger in the variant index"
+                )
+        for declaration, item in variant_by_decl.items():
+            if not isinstance(declaration, str):
+                fail(f"{result_id}: every variant must name a declaration")
+            if "sourceExact" in declaration or "sourceFaithful" in declaration:
+                fail(
+                    f"{result_id}: variant declaration {declaration!r} encodes source fidelity "
+                    "in its theorem name; the ledger owns that claim"
+                )
+            if item.get("source_fidelity") == "attested_by_ledger" and declaration not in ledger:
+                fail(
+                    f"{result_id}: variant {declaration} claims attested_by_ledger but is not "
+                    "one of the inventory's canonical witnesses"
+                )
+
+
 def _validate_census_canonical_agreement(items: list[dict[str, Any]]) -> None:
     """The census reviewer packet must not name a different canonical theorem.
 
@@ -2401,22 +2475,6 @@ def _validate_canonical_evidence(
                         f"capability_classes {sorted(recorded_caps)!r}, but its "
                         f"compiler-printed type carries {derived_caps!r}"
                     )
-            if result_id in SCALAR_GENERIC_CANONICAL_RESULTS:
-                if scope not in {"rclike", "complex", "real"}:
-                    fail(
-                        f"{result_id}: canonical evidence {declaration} has scalar_scope "
-                        f"{scope!r}; the paper states this result over a real or complex "
-                        "Hilbert space, so canonical evidence must be fixed at one of those "
-                        "fields or generic over both"
-                    )
-                if recorded_caps:
-                    fail(
-                        f"{result_id}: canonical evidence {declaration} exposes the "
-                        f"proof-capability class(es) {sorted(recorded_caps)!r} in its "
-                        "signature.  These are implementation infrastructure with "
-                        "unconditional instances at every `RCLike` field; resolve them by "
-                        "instance search instead of quantifying over them"
-                    )
             atoms = entry.get("covers_source_atoms")
             if not isinstance(atoms, list) or not all(isinstance(a, str) for a in atoms):
                 fail(
@@ -2593,16 +2651,6 @@ def _validate_semantic_audit_surface(
 
     audit_text = audit_path.read_text(encoding="utf-8")
     report_text = report_path.read_text(encoding="utf-8")
-    for result_id, short_name in sorted(SCALAR_GENERIC_CANONICAL_RESULTS.items()):
-        if (
-            f"#check @{short_name}" not in audit_text
-            and f"#check {short_name}" not in audit_text
-        ):
-            fail(
-                f"{result_id}: the public Section 2 short name {short_name} is bound to a "
-                f"scalar-generic source theorem, so {audit_rel} must #check it -- that is "
-                "what makes the binding, and its type, visible to a reviewer"
-            )
     expected_evidence_digest = _canonical_evidence_digest(items)
     recorded_evidence_digest = sweep.get("canonical_evidence_sha256")
     if recorded_evidence_digest != expected_evidence_digest:
@@ -2833,6 +2881,7 @@ def completion_summary(
     )
     _validate_census_canonical_agreement(items)
     _validate_section_two_short_names(data)
+    _validate_section_two_variant_index(data)
     _validate_markdown_view(items, terminal, nonterminal)
     nonlocal_interpretation = _validate_nonlocal_interpretation(
         items, source_atoms, source_inventory_path, census_declarations, audit_text

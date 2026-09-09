@@ -463,6 +463,55 @@ theorem sinTwoTheta_ambient_unbounded_perturbedGap_symmetricNorming_rclike
   rw [SymmetricNormingFunction.gauge_neg] at hle
   exact ⟨hmem, hle⟩
 
+/-- **Davis--Kahan 1970, Section 2, ambient `sin 2Theta` at the where-defined
+unitarily invariant norm boundary, scalar-generic over `RCLike`.**
+
+The analytic estimate is the scalar-generic symmetric-norming theorem above.  This
+production wrapper uses the weaker normalized symmetric operator-ideal family selected by
+source review and asserts the numerical inequality only when both displayed norms exist.
+The factor two is handled by applying Fan dominance to the equivalent `δ / 2` estimate. -/
+theorem sinTwoTheta_ambient_unbounded_perturbedGap_whereDefinedUIN_rclike
+    [TopologicalSpace.SeparableSpace H]
+    (N : NormalizedSymmetricOperatorIdealFamily.{u, v} 𝕜)
+    {A : H →ₗ.[𝕜] H} (hA : IsSelfAdjoint A)
+    (Hop : H →L[𝕜] H) (hHop : DavisKahan.IsSelfAdjointOperator Hop)
+    {P Q : Submodule 𝕜 H} [P.HasOrthogonalProjection] [Q.HasOrthogonalProjection]
+    (hPred : TauCeti.LinearPMap.ReducesSubspace A P)
+    (hQred : TauCeti.LinearPMap.ReducesSubspace
+      (TauCeti.LinearPMap.addBounded A Hop) Q)
+    {δ : ℝ} (hδ : 0 < δ)
+    (hgap : FormBoundedSylvesterGap
+      (TauCeti.LinearPMap.reducingRestriction
+        (TauCeti.LinearPMap.addBounded A Hop) Q hQred)
+      (TauCeti.LinearPMap.reducingRestriction
+        (TauCeti.LinearPMap.addBounded A Hop) Qᗮ hQred.orthogonal) δ) :
+    N.Mem (TauCeti.DavisKahan.Angle.sinTwoAngleOperator P Q) →
+    N.Mem Hop →
+      δ * N.gaugeReal (TauCeti.DavisKahan.Angle.sinTwoAngleOperator P Q) ≤
+        2 * N.gaugeReal Hop := by
+  intro hAngle hHopMem
+  have hhalf : N.ScaledGaugeLEWhereDefined (δ / 2)
+      (TauCeti.DavisKahan.Angle.sinTwoAngleOperator P Q) Hop := by
+    apply N.scaledGaugeLEWhereDefined_of_all_mul_kyFan_le
+      (div_pos hδ (by norm_num : (0 : ℝ) < 2))
+    intro k
+    by_cases hk0 : k = 0
+    · subst k
+      simp [kyFanApproximationGauge, ContinuousLinearMap.kyFanGauge_zero_index]
+    · have hk : 0 < k := Nat.pos_of_ne_zero hk0
+      have hmain :=
+        sinTwoTheta_ambient_unbounded_perturbedGap_symmetricNorming_rclike
+          (𝕜 := 𝕜) (kyFanNormingFunction k hk) hA Hop hHop
+          hPred hQred hδ hgap (kyFanNormingFunction_mem k hk Hop)
+      have hky :
+          δ * kyFanApproximationGauge k
+              (TauCeti.DavisKahan.Angle.sinTwoAngleOperator P Q) ≤
+            2 * kyFanApproximationGauge k Hop := by
+        simpa only [kyFanNormingFunction_gauge] using hmain.2
+      nlinarith
+  have hle := hhalf hAngle hHopMem
+  nlinarith
+
 /-- The complex fixed-field form of
 `sinTwoTheta_ambient_unbounded_perturbedGap_symmetricNorming_rclike`. -/
 theorem sinTwoTheta_ambient_unbounded_perturbedGap_symmetricNorming_complex
@@ -534,24 +583,77 @@ theorem sinTwoTheta_ambient_unbounded_perturbedGap_symmetricNorming_real
   sinTwoTheta_ambient_unbounded_perturbedGap_symmetricNorming_rclike N hA Hop hHop
     hPred hQred hδ hgap hHmem
 
-/-! ### The source-exact façades
+/-! ### Where-defined fixed-field wrappers
 
-The theorems above are proved for an arbitrary Hilbert space and an arbitrary
-symmetric norming function.  Davis and Kahan work on a separable Hilbert space
-and quantify over normalized unitarily invariant norms.  The two façades below
-are the printed statement, and they are the canonical source evidence; the
-theorems that prove them are registered as generalizations.
+These declarations are convenience specializations of the scalar-generic production
+boundary above.  Source fidelity is attested by the result ledger; neither theorem name
+acts as a certificate. -/
+
+/-- Complex specialization of
+`sinTwoTheta_ambient_unbounded_perturbedGap_whereDefinedUIN_rclike`. -/
+theorem sinTwoTheta_ambient_unbounded_perturbedGap_whereDefinedUIN_complex
+    {Hc : Type v} [NormedAddCommGroup Hc] [InnerProductSpace ℂ Hc] [CompleteSpace Hc]
+    [TopologicalSpace.SeparableSpace Hc]
+    (N : NormalizedSymmetricOperatorIdealFamily.{0, v} ℂ)
+    {A : Hc →ₗ.[ℂ] Hc} (hA : IsSelfAdjoint A)
+    (Hop : Hc →L[ℂ] Hc) (hHop : DavisKahan.IsSelfAdjointOperator Hop)
+    {P Q : Submodule ℂ Hc} [P.HasOrthogonalProjection] [Q.HasOrthogonalProjection]
+    (hPred : TauCeti.LinearPMap.ReducesSubspace A P)
+    (hQred : TauCeti.LinearPMap.ReducesSubspace
+      (TauCeti.LinearPMap.addBounded A Hop) Q)
+    {δ : ℝ} (hδ : 0 < δ)
+    (hgap : FormBoundedSylvesterGap
+      (TauCeti.LinearPMap.reducingRestriction
+        (TauCeti.LinearPMap.addBounded A Hop) Q hQred)
+      (TauCeti.LinearPMap.reducingRestriction
+        (TauCeti.LinearPMap.addBounded A Hop) Qᗮ hQred.orthogonal) δ) :
+    N.Mem (TauCeti.DavisKahan.Angle.sinTwoAngleOperator P Q) →
+    N.Mem Hop →
+      δ * N.gaugeReal (TauCeti.DavisKahan.Angle.sinTwoAngleOperator P Q) ≤
+        2 * N.gaugeReal Hop :=
+  sinTwoTheta_ambient_unbounded_perturbedGap_whereDefinedUIN_rclike
+    (𝕜 := ℂ) N hA Hop hHop hPred hQred hδ hgap
+
+/-- Real specialization of
+`sinTwoTheta_ambient_unbounded_perturbedGap_whereDefinedUIN_rclike`. -/
+theorem sinTwoTheta_ambient_unbounded_perturbedGap_whereDefinedUIN_real
+    {Er : Type v} [NormedAddCommGroup Er] [InnerProductSpace ℝ Er] [CompleteSpace Er]
+    [TopologicalSpace.SeparableSpace Er]
+    (N : NormalizedSymmetricOperatorIdealFamily.{0, v} ℝ)
+    {A : Er →ₗ.[ℝ] Er} (hA : IsSelfAdjoint A)
+    (Hop : Er →L[ℝ] Er) (hHop : DavisKahan.IsSelfAdjointOperator Hop)
+    {P Q : Submodule ℝ Er} [P.HasOrthogonalProjection] [Q.HasOrthogonalProjection]
+    (hPred : TauCeti.LinearPMap.ReducesSubspace A P)
+    (hQred : TauCeti.LinearPMap.ReducesSubspace
+      (TauCeti.LinearPMap.addBounded A Hop) Q)
+    {δ : ℝ} (hδ : 0 < δ)
+    (hgap : FormBoundedSylvesterGap
+      (TauCeti.LinearPMap.reducingRestriction
+        (TauCeti.LinearPMap.addBounded A Hop) Q hQred)
+      (TauCeti.LinearPMap.reducingRestriction
+        (TauCeti.LinearPMap.addBounded A Hop) Qᗮ hQred.orthogonal) δ) :
+    N.Mem (TauCeti.DavisKahan.Angle.sinTwoAngleOperator P Q) →
+    N.Mem Hop →
+      δ * N.gaugeReal (TauCeti.DavisKahan.Angle.sinTwoAngleOperator P Q) ≤
+        2 * N.gaugeReal Hop :=
+  sinTwoTheta_ambient_unbounded_perturbedGap_whereDefinedUIN_rclike
+    (𝕜 := ℝ) N hA Hop hHop hPred hQred hδ hgap
+
+/-! ### Stronger normalized-UIN fixed-field wrappers
+
+The two declarations below retain the older membership-transfer API over
+`NormalizedUnitaryInvariantNorm`.  They are useful stronger specializations, but the result
+ledger now selects the where-defined `NormalizedSymmetricOperatorIdealFamily` boundary above.
 
 Only the ambient space carries separability, which is all the source assumes. -/
 
-/-- **Davis--Kahan 1970, the ambient `sin 2Θ` theorem at the printed source scope
-over `ℂ`.**
+/-- **Complex normalized-UIN specialization of the ambient `sin 2Θ` theorem.**
 
 Separable ambient Hilbert space, normalized unitarily invariant norm, unbounded
 self-adjoint `A`, bounded self-adjoint perturbation, and -- as Section 2 states
 it -- the spectral gap between the two blocks of the *perturbed* operator
 `A + H` relative to `Q`. -/
-theorem sinTwoTheta_ambient_unbounded_perturbedGap_sourceExact_complex
+theorem sinTwoTheta_ambient_unbounded_perturbedGap_normalizedUIN_complex
     {Hc : Type v} [NormedAddCommGroup Hc] [InnerProductSpace ℂ Hc] [CompleteSpace Hc]
     [TopologicalSpace.SeparableSpace Hc]
     (N : NormalizedUnitaryInvariantNorm.{0, v} ℂ)
@@ -575,9 +677,8 @@ theorem sinTwoTheta_ambient_unbounded_perturbedGap_sourceExact_complex
     sinTwoTheta_ambient_unbounded_perturbedGap_symmetricNorming_complex M hA Hop hHop
       hPred hQred hδ hgap hM
 
-/-- **Davis--Kahan 1970, the ambient `sin 2Θ` theorem at the printed source scope
-over `ℝ`.** -/
-theorem sinTwoTheta_ambient_unbounded_perturbedGap_sourceExact_real
+/-- **Real normalized-UIN specialization of the ambient `sin 2Θ` theorem.** -/
+theorem sinTwoTheta_ambient_unbounded_perturbedGap_normalizedUIN_real
     {Er : Type v} [NormedAddCommGroup Er] [InnerProductSpace ℝ Er] [CompleteSpace Er]
     [TopologicalSpace.SeparableSpace Er]
     (N : NormalizedUnitaryInvariantNorm.{0, v} ℝ)
@@ -758,11 +859,12 @@ real Hilbert dimension, genuine real spectral subspaces, the full
 `FormBoundedSylvesterGap` including its half-infinite configurations, an
 arbitrary `SymmetricNormingFunction`, and the exact factor `2`.
 
-This is a canonical source witness in its own right.  The analytic content is
-the scalar-generic reflected-pair theorem at `ℝ`, not a complexification of the
-complex endpoint; complexification enters only to name the real ambient angle
-operator, since `sinTwoAngleOperatorR` is defined as the real part of the
-complex one. -/
+This stronger fixed-field theorem remains a useful API and implementation witness.
+The result ledger now selects the scalar-generic where-defined UIN endpoint for the
+ambient source clause.  The analytic content here is the scalar-generic reflected-pair
+theorem at `ℝ`, not a complexification of the complex endpoint; complexification
+enters only to name the real ambient angle operator, since `sinTwoAngleOperatorR` is
+defined as the real part of the complex one. -/
 theorem sinTwoTheta_ambient_unbounded_addBounded_symmetricNorming_real
     (N : SymmetricNormingFunction)
     (A : Er →ₗ.[ℝ] Er) (hA : IsSelfAdjoint A)

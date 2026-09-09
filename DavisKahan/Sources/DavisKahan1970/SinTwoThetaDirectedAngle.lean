@@ -128,13 +128,11 @@ theorem sinTwoTheta_directed_unboundedResidual_reducing_symmetricNorming_complex
   refine ⟨(Angle.mem_directedSinTwoAngleOperator_trialSide_iff _ _ N).mpr hmem, ?_⟩
   rwa [Angle.gauge_directedSinTwoAngleOperator_trialSide]
 
-/-- **Davis--Kahan 1970, the directed `sin 2Θ₀` theorem at the printed source
-scope over `ℂ`.**
+/-- **Complex normalized-UIN specialization of the directed `sin 2Θ₀` theorem.**
 
-Separable ambient Hilbert space and normalized unitarily invariant norm.  The
-theorem it is proved from is stated for an arbitrary Hilbert space and an
-arbitrary symmetric norming function, and is registered as a generalization. -/
-theorem sinTwoTheta_directed_unboundedResidual_sourceExact_complex
+This stronger API concludes ideal membership from residual membership.  The result ledger
+selects the where-defined wrapper below instead. -/
+theorem sinTwoTheta_directed_unboundedResidual_normalizedUIN_complex
     [TopologicalSpace.SeparableSpace H]
     (N : NormalizedUnitaryInvariantNorm.{0, v} ℂ)
     (hA : IsSelfAdjoint A)
@@ -153,6 +151,50 @@ theorem sinTwoTheta_directed_unboundedResidual_sourceExact_complex
   normalizedUnitaryInvariant_of_symmetricNorming_mul N hδ two_pos hRmem fun Msnf hM =>
     sinTwoTheta_directed_unboundedResidual_symmetricNorming_complex Msnf hA B hB
       hVdom hres hδ hgap hM
+
+/-- Complex fixed-field where-defined norm boundary for the directed `sin 2Θ₀` clause.
+
+This is the fixed-field production form of the norm-layer construction validated by Probe 46.
+It does not claim ideal-membership transfer: the numerical estimate is asserted when both
+`N(sin 2Θ₀)` and `N(R)` are defined. -/
+theorem sinTwoTheta_directed_unboundedResidual_whereDefinedUIN_complex
+    [TopologicalSpace.SeparableSpace H]
+    (N : NormalizedSymmetricOperatorIdealFamily.{0, v} ℂ)
+    (hA : IsSelfAdjoint A)
+    (B : Set ℝ) (hB : MeasurableSet B)
+    (hVdom : ∀ v : V, (v : H) ∈ A.domain)
+    (hres : ∀ v : V, A ⟨(v : H), hVdom v⟩ = R v + ((M v : V) : H))
+    {δ : ℝ} (hδ : 0 < δ)
+    (hgap : FormBoundedSylvesterGap
+      (selfAdjointSpectralRestriction A hA B hB)
+      (selfAdjointSpectralRestriction A hA Bᶜ hB.compl) δ) :
+    N.Mem (Angle.directedSinTwoAngleOperator V
+        (selfAdjointSpectralSubspace A hA B hB)) →
+    N.Mem R →
+      δ * N.gaugeReal (Angle.directedSinTwoAngleOperator V
+          (selfAdjointSpectralSubspace A hA B hB)) ≤ 2 * N.gaugeReal R := by
+  intro hAngle hR
+  have hhalf : N.ScaledGaugeLEWhereDefined (δ / 2)
+      (Angle.directedSinTwoAngleOperator V (selfAdjointSpectralSubspace A hA B hB)) R := by
+    apply N.scaledGaugeLEWhereDefined_of_all_mul_kyFan_le
+      (div_pos hδ (by norm_num : (0 : ℝ) < 2))
+    intro k
+    by_cases hk0 : k = 0
+    · subst k
+      simp [kyFanApproximationGauge, ContinuousLinearMap.kyFanGauge_zero_index]
+    · have hk : 0 < k := Nat.pos_of_ne_zero hk0
+      have hmain :=
+        sinTwoTheta_directed_unboundedResidual_symmetricNorming_complex
+          (kyFanNormingFunction k hk) hA B hB hVdom hres hδ hgap
+          (kyFanNormingFunction_mem k hk R)
+      have hky :
+          δ * kyFanApproximationGauge k
+              (Angle.directedSinTwoAngleOperator V (selfAdjointSpectralSubspace A hA B hB)) ≤
+            2 * kyFanApproximationGauge k R := by
+        simpa only [kyFanNormingFunction_gauge] using hmain.2
+      nlinarith
+  have hle := hhalf hAngle hR
+  nlinarith
 
 end Complex
 
@@ -216,9 +258,11 @@ theorem sinTwoTheta_directed_unboundedResidual_reducing_symmetricNorming_real
   refine ⟨(Angle.mem_directedSinTwoAngleOperator_trialSide_iff _ _ N).mpr hmem, ?_⟩
   rwa [Angle.gauge_directedSinTwoAngleOperator_trialSide]
 
-/-- **Davis--Kahan 1970, the directed `sin 2Θ₀` theorem at the printed source
-scope over `ℝ`.** -/
-theorem sinTwoTheta_directed_unboundedResidual_sourceExact_real
+/-- **Real normalized-UIN specialization of the directed `sin 2Θ₀` theorem.**
+
+This is the real stronger membership-transfer API; the result ledger selects the
+where-defined wrapper below instead. -/
+theorem sinTwoTheta_directed_unboundedResidual_normalizedUIN_real
     [TopologicalSpace.SeparableSpace E]
     (N : NormalizedUnitaryInvariantNorm.{0, v} ℝ)
     (hA : IsSelfAdjoint A)
@@ -237,6 +281,46 @@ theorem sinTwoTheta_directed_unboundedResidual_sourceExact_real
   normalizedUnitaryInvariant_of_symmetricNorming_mul N hδ two_pos hRmem fun Msnf hM =>
     sinTwoTheta_directed_unboundedResidual_symmetricNorming_real Msnf hA B hB
       hVdom hres hδ hgap hM
+
+/-- Real fixed-field where-defined norm boundary for the directed `sin 2Θ₀` clause. -/
+theorem sinTwoTheta_directed_unboundedResidual_whereDefinedUIN_real
+    [TopologicalSpace.SeparableSpace E]
+    (N : NormalizedSymmetricOperatorIdealFamily.{0, v} ℝ)
+    (hA : IsSelfAdjoint A)
+    (B : Set ℝ) (hB : MeasurableSet B)
+    (hVdom : ∀ v : V, (v : E) ∈ A.domain)
+    (hres : ∀ v : V, A ⟨(v : E), hVdom v⟩ = R v + ((M v : V) : E))
+    {δ : ℝ} (hδ : 0 < δ)
+    (hgap : FormBoundedSylvesterGap
+      (realSelfAdjointSpectralRestriction A hA B hB)
+      (realSelfAdjointSpectralRestriction A hA Bᶜ hB.compl) δ) :
+    N.Mem (Angle.directedSinTwoAngleOperator V
+        (realSelfAdjointSpectralSubspace A hA B hB)) →
+    N.Mem R →
+      δ * N.gaugeReal (Angle.directedSinTwoAngleOperator V
+          (realSelfAdjointSpectralSubspace A hA B hB)) ≤ 2 * N.gaugeReal R := by
+  intro hAngle hR
+  have hhalf : N.ScaledGaugeLEWhereDefined (δ / 2)
+      (Angle.directedSinTwoAngleOperator V (realSelfAdjointSpectralSubspace A hA B hB)) R := by
+    apply N.scaledGaugeLEWhereDefined_of_all_mul_kyFan_le
+      (div_pos hδ (by norm_num : (0 : ℝ) < 2))
+    intro k
+    by_cases hk0 : k = 0
+    · subst k
+      simp [kyFanApproximationGauge, ContinuousLinearMap.kyFanGauge_zero_index]
+    · have hk : 0 < k := Nat.pos_of_ne_zero hk0
+      have hmain :=
+        sinTwoTheta_directed_unboundedResidual_symmetricNorming_real
+          (kyFanNormingFunction k hk) hA B hB hVdom hres hδ hgap
+          (kyFanNormingFunction_mem k hk R)
+      have hky :
+          δ * kyFanApproximationGauge k
+              (Angle.directedSinTwoAngleOperator V (realSelfAdjointSpectralSubspace A hA B hB)) ≤
+            2 * kyFanApproximationGauge k R := by
+        simpa only [kyFanNormingFunction_gauge] using hmain.2
+      nlinarith
+  have hle := hhalf hAngle hR
+  nlinarith
 
 end Real
 

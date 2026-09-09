@@ -1364,7 +1364,7 @@ This may remove a reported gap without any new mathematics.
 
 ## 2. Add the directed real `tan 2Θ` source façade — **done**
 
-`tanTwoTheta_directed_unboundedResidual_sourceExact_real` is canonical evidence
+`tanTwoTheta_directed_unboundedResidual_normalizedUIN_real` is canonical evidence
 on `S2-tan-two-theta`, which is terminal.
 
 ## 3. Finish unbounded Theorem 8.1 — **done, 2026-09-07**
@@ -1634,14 +1634,15 @@ the countermodel excluded by `NormalizedUnitaryInvariantNorm`, and characterize
 the intended public conclusion as the ordinary real-valued inequality conditional
 on both displayed norms existing.
 
-The production retarget begins with the canonical Section 2 sine-theta façades:
+The production retarget begins with the canonical Section 2 sine-theta façade:
 
-1. `NormalizedSymmetricOperatorIdealFamily` now carries the historical **where-defined** Fan comparison;
-2. `sinTheta_unbounded_formGap_sourceExact_{complex,real}` spell the vacuity convention directly in their theorem types as `N.Mem sinTheta₀ → N.Mem R → δ * N.gaugeReal sinTheta₀ ≤ N.gaugeReal R`;
-3. `ScaledGaugeLEWhereDefined` remains only as a proof-side helper, while the source-facing type has no caller-visible residual-membership premise and no membership-transfer conclusion; and
-4. `NormalizedUnitaryInvariantNorm` remains available only where the stronger internal domain-solid property is genuinely useful.
+1. `NormalizedSymmetricOperatorIdealFamily` carries the historical **where-defined** Fan comparison;
+2. `sinTheta_unbounded_formGap_whereDefinedUIN_rclike` spells the vacuity convention directly in its theorem type as `N.Mem sinTheta₀ → N.Mem R → δ * N.gaugeReal sinTheta₀ ≤ N.gaugeReal R` and is the ledger-selected witness for both real and complex scalar clauses;
+3. the real and complex declarations are thin specializations of that scalar-generic theorem rather than independent fidelity claims;
+4. `ScaledGaugeLEWhereDefined` remains only as a proof-side helper, while the ledger-facing type has no caller-visible residual-membership premise and no membership-transfer conclusion; and
+5. `NormalizedUnitaryInvariantNorm` remains available only where the stronger internal domain-solid property is genuinely useful.
 
-The remaining source-facing UIN façades should be retargeted case by case, with their census rows updated in the same commit.
+The ambient `sin 2Θ` where-defined endpoint has likewise been promoted at arbitrary `RCLike`, while the directed clause remains fixed-field at its analytic engine.  Remaining UIN façades should be retargeted case by case, with the result ledger and Section 2 variant index updated in the same commit.
 
 ## 5. Fresh hostile review of all designated results
 
