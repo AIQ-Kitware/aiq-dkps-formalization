@@ -102,25 +102,20 @@ context and writes them verbatim to
 presentation applies only the audited readability name changes and replaces
 display-sensitive Lean Unicode with unique ASCII `LeanLit...` sentinels.
 `paper.tex` maps those sentinels to LaTeX glyphs with `literate=`. The
-presentation file begins with comments pointing back to the exact sidecar. The
-current restricted interface uses `NormalizedSymmetricOperatorIdealFamily`; its
-where-defined Fan comparison is an explicit field of that record.
+presentation file begins with comments pointing back to the exact sidecar.
+Formalization 2 uses `NormalizedSymmetricOperatorIdealFamily`; its where-defined
+Fan comparison is an explicit field of that record.
 
-The 2026-09-09 source/signature review found a remaining trial-domain mismatch
-in the displayed current sine-two-theta theorem. The manuscript retains the
-29-target artifact accounting while identifying that scope restriction. The
-result register now leaves `S2-sin-two-theta` open, with 28 other status records
-unchanged. This targeted pass is not a new acceptance review of those 28 rows.
-
-`DavisKahan/Sources/DavisKahan1970/SinTwoThetaCommonDomain.lean` contains a
-common-domain replacement candidate. Its residual and ambient perturbation
-hypotheses are local to their respective clauses. It has not been compiled in
-the review environment and is not imported by `DavisKahan.All` or substituted
-for the accepted aliases. See
-`dev/davis-kahan-1970-sin-two-theta-review-2026-09-09.md` and
-`dev/formalization_process_review_validation.md` for findings and validation.
-The old signature remains in the paper as the artifact being reviewed; the
-candidate is not substituted into the display and called checked.
+The worked comparison now displays the compiled common-domain theorem from
+`DavisKahan/Sources/DavisKahan1970/SinTwoThetaCommonDomain.lean` as
+Formalization 2. The manuscript explains the mathematical difference from the
+preceding bounded-trial refinement without narrating the review chronology:
+the directed clause uses a bounded residual on the common operator domain,
+while the ambient clause separately uses a bounded self-adjoint perturbation.
+The appendix defines reducing subspaces for partial operators and gives a
+reader's guide to every hypothesis in the displayed theorem. Historical review
+state remains in `dev/davis-kahan-1970-sin-two-theta-review-2026-09-09.md` rather
+than in the manuscript narrative.
 
 ## Public project repository
 
@@ -154,9 +149,10 @@ before submission.
 
 ## Figure
 
-The workflow figure remains the existing `figures/formalization_workflow.png` artifact used by the main paper. Do not replace or redraw it as part of prose revisions. The appendix includes the semantic-alignment screenshot only when its file is
-present; this revision explicitly omits it pending regeneration. It is not
-evidence for the current source-correspondence judgment.
+The workflow figure remains the existing `figures/formalization_workflow.png`
+artifact used by the main paper. Do not replace or redraw it as part of prose
+revisions. The appendix includes the semantic-alignment screenshot only when its
+file is present; the paper does not depend on that screenshot for its argument.
 
 ## Build
 
@@ -176,8 +172,8 @@ paper.  The anonymous review build omits that acknowledgment.
 The anonymous submission must remain within the workshop's 4--9-page main-text
 limit. References, the technical appendix, and checklist follow outside that
 limit. The public version groups authors by affiliation and shows the DARPA
-acknowledgment. The historical signature uses the normal footnote-size code
-font and is kept with its caption on one page.
+acknowledgment. The two displayed formalizations use the normal footnote-size code font; the
+layout check keeps each signature with its caption on one page.
 
 `make check-layout` builds both versions and checks the actual PDF text and TeX
 logs. It requires `pdftotext` from Poppler. It checks the 4--9-page anonymous main-text budget,

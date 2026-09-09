@@ -257,7 +257,13 @@ def build_model_tables():
 def build_historical_scope_mismatch():
     """Extract the August 17 ambient sin-2-Theta certificate mismatch from Git."""
 
-    def extract_decl(commit: str, source_path: str, name: str, context_prefix=None):
+    def extract_decl(
+        commit: str,
+        source_path: str,
+        name: str,
+        context_prefix=None,
+        context_line_count: int = 1,
+    ):
         if commit == 'WORKTREE':
             # Current generated evidence must be buildable before the overlay is
             # committed.  Historical evidence is commit-pinned below; current
@@ -290,7 +296,8 @@ def build_historical_scope_mismatch():
                 i for i in range(start - 1, -1, -1)
                 if lines[i].strip().startswith(context_prefix)
             )
-            context_line = lines[context_idx]
+            context_lines = lines[context_idx:context_idx + context_line_count]
+            context_line = '\n'.join(context_lines)
             context = context_line + '\n\n' + signature
         return {
             'name': name,
@@ -485,29 +492,37 @@ def build_historical_scope_mismatch():
     presentation_path.write_text(presentation_text, encoding='ascii')
 
 
-    # Current source-facing Davis--Kahan Section 2 sin 2Theta signature. Keep an
-    # exact Unicode sidecar and a separate ASCII-sentinel listings input so the
-    # current statement can be compared directly with the historical sin 2Theta
-    # mismatch displayed above.
+    # Current Davis--Kahan Section 2 sin 2Theta signature.  The displayed
+    # theorem is the compiled common-domain formulation: its shared prefix carries
+    # only the operator/domain/gap hypotheses, while the directed and ambient
+    # conjuncts introduce their bounded residual and bounded perturbation
+    # assumptions separately.
     current_sin_two_theta = extract_decl(
         'WORKTREE',
-        'DavisKahan/Sources/DavisKahan1970/SinTwoThetaDirectedRCLike.lean',
-        'sinTwoTheta_unbounded_perturbedGap_whereDefinedUIN_rclike',
-        context_prefix='variable {𝕜 : Type u} [RCLike 𝕜]',
+        'DavisKahan/Sources/DavisKahan1970/SinTwoThetaCommonDomain.lean',
+        'sinTwoTheta_commonDomain_whereDefinedUIN_rclike',
+        context_prefix='variable {K : Type u} [RCLike K]',
+        context_line_count=2,
     )
     current_checks = [
-        ('display', 'RCLike 𝕜'),
-        ('signature', 'TopologicalSpace.SeparableSpace H'),
+        ('display', 'RCLike K'),
+        ('display', 'InnerProductSpace K E'),
+        ('signature', 'TopologicalSpace.SeparableSpace E'),
         ('signature', 'NormalizedSymmetricOperatorIdealFamily'),
-        ('signature', 'H →ₗ.[𝕜] H'),
-        ('signature', 'IsSelfAdjointOperator Hop'),
+        ('signature', '{A T : E →ₗ.[K] E}'),
+        ('signature', 'hdom : T.domain = A.domain'),
         ('signature', 'ReducesSubspace A P'),
-        ('signature', 'addBounded A Hop'),
+        ('signature', 'ReducesSubspace T Q'),
         ('signature', 'FormBoundedSylvesterGap'),
+        ('signature', '∀ R : P →L[K] E'),
+        ('signature', '∀ hp : (p : E) ∈ T.domain'),
         ('signature', 'Angle.directedSinTwoAngleOperator P Q'),
+        ('signature', 'N.Mem R ->'),
+        ('signature', '∀ Hop : E →L[K] E'),
+        ('signature', 'IsSelfAdjointOperator Hop'),
+        ('signature', 'T = TauCeti.LinearPMap.addBounded A Hop'),
         ('signature', 'Angle.sinTwoAngleOperator P Q'),
-        ('signature', 'N.Mem R →'),
-        ('signature', 'N.Mem Hop →'),
+        ('signature', 'N.Mem Hop ->'),
         ('signature', '2 * N.gaugeReal R'),
         ('signature', '2 * N.gaugeReal Hop'),
     ]
@@ -529,17 +544,14 @@ def build_historical_scope_mismatch():
 
     current_presentation = current_exact_text
     current_literate = [
-        ('→ₗ.[𝕜]', r'\LeanLitPMapK'),
-        ('→L[𝕜]', r'\LeanLitCLMapK'),
-        ('𝕜', r'\LeanLitScalar'),
-        ('ℝ', r'\LeanLitReal'),
+        ('→ₗ.[K]', r'\LeanLitPMapK'),
+        ('→L[K]', r'\LeanLitCLMapK'),
         ('∀', r'\LeanLitForall'),
         ('∈', r'\LeanLitMem'),
-        ('ᗮ', r'\LeanLitOrth'),
         ('∧', r'\LeanLitConj'),
         ('≤', r'\LeanLitLe'),
+        ('←', r'\LeanLitLeftArrow'),
         ('→', r'\LeanLitArrow'),
-        ('δ', r'\LeanLitDelta'),
         ('⟨', r'\LeanLitLAngle'),
         ('⟩', r'\LeanLitRAngle'),
     ]
