@@ -125,6 +125,12 @@ Fan-dominance reduction at (1.11)-(1.13). -/
 #check @TauCeti.DavisKahan1970.tanTheta_directed_unboundedRitz_normalizedUIN_real
 #check @TauCeti.DavisKahan1970.sinTwoTheta_directed_unboundedResidual_whereDefinedUIN_complex
 #check @TauCeti.DavisKahan1970.sinTwoTheta_directed_unboundedResidual_whereDefinedUIN_real
+#check @TauCeti.DavisKahan1970.sinTwoTheta_unbounded_perturbedGap_whereDefinedUIN_rclike
+#check @TauCeti.DavisKahan1970.sinTwoTheta_directed_unboundedResidual_reducing_whereDefinedUIN_rclike
+#check @TauCeti.DavisKahan1970.sinTwoTheta_directed_unboundedResidual_reducing_symmetricNorming_rclike
+#check @TauCeti.DavisKahan1970.sinTwoTheta_reflectionResidual_block_gauge_reducing_rclike
+#check @TauCeti.DavisKahan1970.sinTwoTheta_directed_unboundedResidual_blockRepresentative_reducing_kyFan_rclike
+#check @TauCeti.DavisKahan1970.sinTwoTheta_directed_unboundedResidual_blockRepresentative_reducing_symmetricNorming_rclike
 #check @TauCeti.DavisKahan1970.sinTwoTheta_ambient_unbounded_perturbedGap_whereDefinedUIN_rclike
 #check @TauCeti.DavisKahan1970.sinTwoTheta_ambient_unbounded_perturbedGap_whereDefinedUIN_complex
 #check @TauCeti.DavisKahan1970.sinTwoTheta_ambient_unbounded_perturbedGap_whereDefinedUIN_real
@@ -276,6 +282,8 @@ field-specific.  Its signature carries no capability class and no functional
 calculus: the real calculus on `E →L[𝕜] E` is a theorem at every `RCLike` field.
 -/
 
+#check @TauCeti.DavisKahan1970.SectionTwo.sinTwoTheta
+#check @TauCeti.DavisKahan1970.SectionTwo.sinTwoTheta_directed
 #check @TauCeti.DavisKahan1970.SectionTwo.sinTwoTheta_directed_complex
 #check @TauCeti.DavisKahan1970.SectionTwo.sinTwoTheta_directed_real
 #check @TauCeti.DavisKahan1970.sinTwoTheta_directed_finiteDimensional_symmetricNorming_rclike

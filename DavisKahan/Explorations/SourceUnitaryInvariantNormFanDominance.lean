@@ -13,10 +13,12 @@ The user compiled Probes 1--43 cleanly before the naming cleanup that renamed th
 base record from its previous provenance-based name to the
 mathematical `NormalizedSymmetricOperatorIdealFamily`. Probes 44--46 were added on
 2026-09-09 to test the repaired real/complex/RCLike maintenance boundary for
-`sin Θ` and `sin 2Θ`. Probes 44 and 45 compiled on the first run. Probe 46 first
-failed because this standalone file had not opened the repository's scoped
-`TauCeti.CompleteSubspace` instance; the probe now opens that existing scope and
-awaits rerun.
+`sin Θ` and `sin 2Θ`. Probes 44 and 45 compiled on the first run. The original
+Probe 46 compiled after this standalone file opened the repository's scoped
+`TauCeti.CompleteSubspace` instance.  That successful norm-layer probe was then
+replaced by production-conformance Probes 46 and 47 after the scalar-generic
+directed residual engine was factored into production; those current probes
+still require a compiler run.
 
 Compile this file with:
 
@@ -88,6 +90,8 @@ import DavisKahan.Sources.DavisKahan1970.Ideals.NormalizedUnitaryInvariantNormEx
 import DavisKahan.Sources.DavisKahan1970.SineTheta.Presentation
 import DavisKahan.Sources.DavisKahan1970.SinTwoThetaAmbientUnbounded
 import DavisKahan.Sources.DavisKahan1970.SinTwoThetaDirectedAngle
+import DavisKahan.Sources.DavisKahan1970.SinTwoThetaDirectedRCLike
+import DavisKahan.Sources.DavisKahan1970.SectionTwo
 
 /-!
 # Exploration: Fan dominance at the Davis--Kahan source norm boundary
@@ -3445,10 +3449,11 @@ surface remained on an older statement boundary.  The three surfaces must be
 reviewed together.
 
 Probes 44 and 45 compiled on 2026-09-09 and were then promoted to production.
-They remain here as conformance probes that elaborate the production endpoints at the same
-generic signatures.  Probe 46 also compiled after opening the repository's intentionally
-scoped completeness instance for projected subspaces; it still tests only the directed
-norm/API layer because the scalar-generic residual transport engine remains open.
+The original Probe 46 also compiled after opening the repository's intentionally scoped
+completeness instance for projected subspaces.  The directed residual engine was then
+factored over `RCLike`; the current Probes 46 and 47 call that production directed endpoint
+and the complete `SectionTwo.sinTwoTheta` endpoint respectively.  They are conformance
+probes and have not yet been compiler-validated in this revision.
 
 The theorem names below deliberately do **not** say `sourceExact`.  Fidelity is
 metadata owned by the result ledger; these declarations are only compile probes.
@@ -3518,76 +3523,81 @@ theorem sinTwoTheta_ambient_unbounded_perturbedGap_whereDefinedUIN_rclike_probe
   exact TauCeti.DavisKahan1970.sinTwoTheta_ambient_unbounded_perturbedGap_whereDefinedUIN_rclike
     (𝕜 := 𝕜) N hA Hop hHop hPred hQred hδ hgap
 
-/-- **Probe 46: the directed `sin 2Θ₀` norm/API layer is also scalar-generic.**
+/-- **Probe 46: the production directed `sin 2Θ₀` theorem is scalar-generic.**
 
-The remaining analytic engine is intentionally an argument here.  The fixed-field
-reducing-residual theorems exist at `ℂ` and `ℝ`, while the transport of their
-subspace-domain residual data to arbitrary `RCLike` is the remaining seam recorded
-in `dev/section-two-rclike-endpoint-frontier.md`.  This probe checks that once that
-engine has the scalar-generic `SymmetricNormingFunction` statement, no additional
-field split is needed for the paper's directed angle or where-defined norm boundary. -/
-theorem sinTwoTheta_directed_whereDefinedUIN_rclike_of_symmetricNorming_probe
+This is now a conformance probe rather than an assumed-core probe.  It exercises the
+production reducing-subspace/residual engine all the way through the where-defined UIN
+boundary over arbitrary `RCLike`. -/
+theorem sinTwoTheta_directed_whereDefinedUIN_rclike_production_probe
     {𝕜 : Type u} [RCLike 𝕜]
     {E : Type v} [NormedAddCommGroup E] [InnerProductSpace 𝕜 E] [CompleteSpace E]
     [TopologicalSpace.SeparableSpace E]
     (N : NormalizedSymmetricOperatorIdealFamily.{u, v} 𝕜)
-    (trial gapCarrier : Submodule 𝕜 E)
+    {A : E →ₗ.[𝕜] E} (hA : IsSelfAdjoint A)
+    {trial gapCarrier : Submodule 𝕜 E}
     [trial.HasOrthogonalProjection] [gapCarrier.HasOrthogonalProjection]
-    (R : trial →L[𝕜] E)
+    {M : trial →L[𝕜] trial} {R : trial →L[𝕜] E}
+    (hred : TauCeti.LinearPMap.ReducesSubspace A gapCarrier)
+    (htrialDom : ∀ v : trial, (v : E) ∈ A.domain)
+    (hres : ∀ v : trial, A ⟨(v : E), htrialDom v⟩ = R v + ((M v : trial) : E))
     {δ : ℝ} (hδ : 0 < δ)
-    (hcore : ∀ Msnf : SymmetricNormingFunction,
-      Msnf.Mem R →
-        Msnf.Mem (TauCeti.DavisKahan.Angle.directedSinTwoAngleOperator
-          trial gapCarrier) ∧
-        δ * Msnf.gauge (TauCeti.DavisKahan.Angle.directedSinTwoAngleOperator
-          trial gapCarrier) ≤ 2 * Msnf.gauge R) :
+    (hgap : TauCeti.DavisKahan.Sylvester.FormBoundedSylvesterGap
+      (TauCeti.LinearPMap.reducingRestriction A gapCarrier hred)
+      (TauCeti.LinearPMap.reducingRestriction A gapCarrierᗮ hred.orthogonal) δ) :
     N.Mem (TauCeti.DavisKahan.Angle.directedSinTwoAngleOperator trial gapCarrier) →
     N.Mem R →
       δ * N.gaugeReal
           (TauCeti.DavisKahan.Angle.directedSinTwoAngleOperator trial gapCarrier) ≤
         2 * N.gaugeReal R := by
-  intro hAngle hR
-  have hhalf : N.ScaledGaugeLEWhereDefined (δ / 2)
-      (TauCeti.DavisKahan.Angle.directedSinTwoAngleOperator trial gapCarrier) R := by
-    apply N.scaledGaugeLEWhereDefined_of_all_mul_kyFan_le
-      (div_pos hδ (by norm_num : (0 : ℝ) < 2))
-    intro k
-    by_cases hk0 : k = 0
-    · subst k
-      simp [kyFanApproximationGauge, ContinuousLinearMap.kyFanGauge_zero_index]
-    · have hk : 0 < k := Nat.pos_of_ne_zero hk0
-      have hmain := hcore (kyFanNormingFunction k hk)
-        (kyFanNormingFunction_mem k hk R)
-      have hky :
-          δ * kyFanApproximationGauge k
-              (TauCeti.DavisKahan.Angle.directedSinTwoAngleOperator trial gapCarrier) ≤
-            2 * kyFanApproximationGauge k R := by
-        simpa only [kyFanNormingFunction_gauge] using hmain.2
-      nlinarith
-  have hle := hhalf hAngle hR
-  nlinarith
+  exact TauCeti.DavisKahan1970.sinTwoTheta_directed_unboundedResidual_reducing_whereDefinedUIN_rclike
+    N hA hred htrialDom hres hδ hgap
+
+/-- **Probe 47: the complete short `SectionTwo.sinTwoTheta` API is scalar-generic.**
+
+This probe exercises both printed clauses under one shared source setup: the unperturbed
+reducing subspace, the perturbed reducing subspace, the trial residual of `A + H`, and the
+gap on the two perturbed reducing restrictions. -/
+theorem sinTwoTheta_complete_whereDefinedUIN_rclike_production_probe
+    {𝕜 : Type u} [RCLike 𝕜]
+    {E : Type v} [NormedAddCommGroup E] [InnerProductSpace 𝕜 E] [CompleteSpace E]
+    [TopologicalSpace.SeparableSpace E]
+    (N : NormalizedSymmetricOperatorIdealFamily.{u, v} 𝕜)
+    {A : E →ₗ.[𝕜] E} (hA : IsSelfAdjoint A)
+    (Hop : E →L[𝕜] E) (hHop : TauCeti.DavisKahan.IsSelfAdjointOperator Hop)
+    {P Q : Submodule 𝕜 E} [P.HasOrthogonalProjection] [Q.HasOrthogonalProjection]
+    (hPred : TauCeti.LinearPMap.ReducesSubspace A P)
+    (hQred : TauCeti.LinearPMap.ReducesSubspace
+      (TauCeti.LinearPMap.addBounded A Hop) Q)
+    {M : P →L[𝕜] P} {R : P →L[𝕜] E}
+    (hPdom : ∀ p : P, (p : E) ∈ (TauCeti.LinearPMap.addBounded A Hop).domain)
+    (hres : ∀ p : P,
+      (TauCeti.LinearPMap.addBounded A Hop) ⟨(p : E), hPdom p⟩ =
+        R p + ((M p : P) : E))
+    {δ : ℝ} (hδ : 0 < δ)
+    (hgap : TauCeti.DavisKahan.Sylvester.FormBoundedSylvesterGap
+      (TauCeti.LinearPMap.reducingRestriction
+        (TauCeti.LinearPMap.addBounded A Hop) Q hQred)
+      (TauCeti.LinearPMap.reducingRestriction
+        (TauCeti.LinearPMap.addBounded A Hop) Qᗮ hQred.orthogonal) δ) :
+    (N.Mem (TauCeti.DavisKahan.Angle.directedSinTwoAngleOperator P Q) →
+      N.Mem R →
+        δ * N.gaugeReal (TauCeti.DavisKahan.Angle.directedSinTwoAngleOperator P Q) ≤
+          2 * N.gaugeReal R) ∧
+    (N.Mem (TauCeti.DavisKahan.Angle.sinTwoAngleOperator P Q) →
+      N.Mem Hop →
+        δ * N.gaugeReal (TauCeti.DavisKahan.Angle.sinTwoAngleOperator P Q) ≤
+          2 * N.gaugeReal Hop) := by
+  exact TauCeti.DavisKahan1970.SectionTwo.sinTwoTheta
+    N hA Hop hHop hPred hQred hPdom hres hδ hgap
 
 /-!
-## Boundary after Probes 44--46
+## Boundary after Probes 44--47
 
-If Probes 44--46 compile, the where-defined norm boundary itself is no longer a
-reason to split either sine theorem by scalar field.
-
-* Probe 44 is a complete candidate `RCLike` wrapper for the Davis--Kahan Section 2
-  `sin Θ` statement boundary currently represented by separate real and complex
-  ledger witnesses.
-* Probe 45 does the same for the ambient clause of Davis--Kahan Section 2 `sin 2Θ`,
-  whose analytic theorem is already scalar-generic.
-* Probe 46 checks the directed `sin 2Θ₀` angle and norm layer at arbitrary
-  `RCLike`.  It deliberately leaves the known unbounded reducing-subspace/residual
-  transport as `hcore`; compiling this probe does not claim that transport has
-  been completed.
-
-Probes 44 and 45 were promoted after the successful compile: the ledger now selects the
-production RCLike `sin Θ` witness and the production RCLike ambient `sin 2Θ` witness.
-Probe 46 remains a boundary test only.  Do not bind the whole `SectionTwo.sinTwoTheta` or
-retarget its directed clause until the scalar-generic reducing-subspace/residual engine is
-itself in production.
+Probes 44 and 45 are conformance checks for the promoted scalar-generic `sin Θ` and ambient
+`sin 2Θ` endpoints.  Probe 46 now calls the production scalar-generic directed residual
+engine directly; there is no assumed fixed-field core.  Probe 47 calls the complete
+`SectionTwo.sinTwoTheta` API carrying both boxed Section 2 conclusions under one shared
+setup.  Fidelity remains attested by the result ledger rather than by these probe names.
 -/
 
 /-!

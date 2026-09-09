@@ -11,6 +11,7 @@ import DavisKahan.Sources.DavisKahan1970.SinTwoThetaAmbientUnbounded
 import DavisKahan.Sources.DavisKahan1970.SinTwoThetaUnboundedDirectedResidual
 import DavisKahan.Sources.DavisKahan1970.SinTwoThetaUnboundedDirectedResidualReal
 import DavisKahan.Sources.DavisKahan1970.SinTwoThetaDirectedAngle
+import DavisKahan.Sources.DavisKahan1970.SinTwoThetaDirectedRCLike
 import DavisKahan.Sources.DavisKahan1970.TanThetaDirectedUnbounded
 import DavisKahan.Sources.DavisKahan1970.TanTwoThetaUnboundedAmbientExact
 import DavisKahan.Sources.DavisKahan1970.TanTwoThetaUnboundedExactReal
@@ -38,7 +39,7 @@ The names say which.
 | --- | --- | --- |
 | `sin Θ` | `sinTheta`, `sinTheta_complex`, `sinTheta_real` | -- (one printed conclusion) |
 | `tan Θ` | `tanTheta_directed_complex`, `tanTheta_directed_real` | `tanTheta_ambient_complex`, `tanTheta_ambient_real` |
-| `sin 2Θ` | `sinTwoTheta_directed_complex`, `sinTwoTheta_directed_real` | `sinTwoTheta_ambient`, `sinTwoTheta_ambient_complex`, `sinTwoTheta_ambient_real` |
+| `sin 2Θ` (`sinTwoTheta`) | `sinTwoTheta_directed`, `sinTwoTheta_directed_complex`, `sinTwoTheta_directed_real` | `sinTwoTheta_ambient`, `sinTwoTheta_ambient_complex`, `sinTwoTheta_ambient_real` |
 | `tan 2Θ` | `tanTwoTheta_directed_complex`, `tanTwoTheta_directed_real` | `tanTwoTheta_ambient_complex`, `tanTwoTheta_ambient_real` |
 
 `sinTwoTheta_bothConclusions_{complex,real}` and `tanTwoTheta_bothConclusions_{complex,real}`
@@ -55,10 +56,10 @@ submission repository under `submodules/` still consumes them.
 
 A short unqualified name is bound only to a declaration that is scalar-generic over
 `RCLike 𝕜` and whose statement boundary is the one selected by the result ledger.
-`sinTheta` is now bound to the promoted where-defined RCLike theorem.  The whole
-`sinTwoTheta` result remains unbound because only its ambient clause has a production
-RCLike endpoint; the directed unbounded-residual engine is still split by scalar field.
-The tangent short names remain unbound for their own recorded reasons.
+`sinTheta` and `sinTwoTheta` are bound to the promoted where-defined RCLike theorems.
+For `sinTwoTheta`, the short theorem carries both printed clauses under their shared source
+setup; its directed and ambient clause APIs are also available separately.  The tangent
+short names remain unbound for their own recorded reasons.
 
 Which short names are bound is recorded structurally in `section_two_short_names` in the
 result inventory and in the Section 2 variant index; do not infer source fidelity from a
@@ -150,6 +151,19 @@ exactly. -/
 alias tanTheta_real := tanTheta_ambient_unboundedRitz_definedTangent_symmetricNorming_real
 
 /-! ## `sin 2Θ` -/
+
+/-- **Davis--Kahan 1970, the complete `sin 2Θ` theorem, scalar-generic over `RCLike`.**
+
+This is the short source-facing API selected by the ledger.  It carries both boxed Section 2
+conclusions under the shared setup: `P` reduces `A`, `Q` reduces `A + H`, the gap is on the
+two `Q`-blocks of `A + H`, and the trial residual is `(A + H)E₀ - E₀A₀`.  The norm
+inequalities are asserted where the displayed norms are defined. -/
+alias sinTwoTheta := DavisKahan1970.sinTwoTheta_unbounded_perturbedGap_whereDefinedUIN_rclike
+
+/-- Scalar-generic directed clause `δ N(sin 2Θ₀) ≤ 2 N(R)` at an arbitrary reducing
+subspace, with the ledger-selected where-defined norm boundary. -/
+alias sinTwoTheta_directed :=
+  DavisKahan1970.sinTwoTheta_directed_unboundedResidual_reducing_whereDefinedUIN_rclike
 
 /-- **Davis--Kahan 1970, the `sin 2Θ` theorem, over `ℂ` -- the DIRECTED clause.**
 
@@ -273,8 +287,8 @@ alias tanTwoTheta_ambient_real := tanTwoTheta_ambient_unbounded_symmetricNorming
 /-- **`sin 2Θ`, ambient clause, scalar-generic over `RCLike`**:
 `δ N(sin 2Θ) ≤ 2 N(H)` at the where-defined norm boundary selected by the ledger.
 
-The whole unqualified `sinTwoTheta` result remains deliberately unbound because its directed
-residual clause still lacks a production RCLike analytic engine. -/
+The complete unqualified `sinTwoTheta` API above combines this ambient clause with the
+scalar-generic directed residual clause under the shared source setup. -/
 alias sinTwoTheta_ambient :=
   sinTwoTheta_ambient_unbounded_perturbedGap_whereDefinedUIN_rclike
 
@@ -315,23 +329,13 @@ no loss of constant or norm class and no second analytic proof. -/
 @[deprecated "The unqualified clause names are not uniform; use `tanTwoTheta_ambient_real`, which says which of the two printed conclusions it is." (since := "2026-09-05")]
 alias tanTwoTheta_real := tanTwoTheta_ambient_unbounded_symmetricNorming_real
 
-/-! ## The whole printed `sin 2Θ` theorem, in one declaration
+/-! ## Fixed-field combined presentations retained for compatibility
 
-Davis and Kahan print two boxed conclusions under one set of separation
-hypotheses.  The two clause aliases above are those two conclusions; the two
-declarations here are the *result*, so a reviewer has one name to point at.
-
-Both clauses take the same operator, the same measurable selection of its
-spectrum and the same `FormBoundedSylvesterGap`, so that data is shared.  What is
-not shared stays inside its own conjunct: the directed clause quantifies over the
-trial subspace and its residual, the ambient clause over the bounded perturbation
-and the selection it makes from the perturbed operator.  Forcing either one's data
-into the other's telescope would change the printed statement, so it is not done.
-
-`tan Θ` and `tan 2Θ` have no such certificate: their two clauses share almost no
-data -- an unbounded Ritz pair against a trial block, a reflection intertwiner
-against an involution -- so a conjunction would be two disjoint theorems written
-next to each other, which is what the clause aliases already are. -/
+The canonical whole-result API is the scalar-generic `sinTwoTheta` alias above.  The two
+older declarations below package both conclusions over fixed fields using the stronger
+`SymmetricNormingFunction` boundary and spectral-selection conveniences.  They remain useful
+for downstream code but are not fidelity certificates; the result ledger selects the generic
+reducing-subspace/where-defined declarations instead. -/
 
 section SinTwoThetaSource
 

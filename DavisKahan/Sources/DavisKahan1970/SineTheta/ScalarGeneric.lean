@@ -3,6 +3,7 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, OpenAI GPT-5.6 Sol
 -/
+import DavisKahan.SinTheta.BoundedPerturbation
 import DavisKahan.Sylvester.ScalarGeneric
 import DavisKahan.Sylvester.ScalarTransport
 import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.ScalarTransport
@@ -94,6 +95,77 @@ theorem sinTheta_unbounded_formGap_idealFamily_rclike
   rw [FanDominantIdealFamily.toSymmetric_gaugeReal] at hAngle
   rw [hAngle.2]
   exact hBlock.2
+
+/-- Scalar-generic complementary-block form of the unbounded `sin Theta` estimate.
+
+Unlike `sinTheta_unbounded_formGap_idealFamily_rclike`, this stops before converting the
+rectangular Sylvester block into the ambient directed sine.  The double-angle reflection
+argument needs exactly this sharper intermediate form. -/
+theorem sinTheta_unbounded_formGap_idealFamily_block_rclike
+    (N : KyFanDominantIdealFamily (𝕜 := 𝕜))
+    (D : UnboundedSinThetaData (𝕜 := 𝕜) (E := E) (F := F) (G := G))
+    (hA : _root_.IsSelfAdjoint D.A)
+    (hA₀ : _root_.IsSelfAdjoint D.A₀)
+    (hΛ₁ : _root_.IsSelfAdjoint D.Λ₁)
+    (hF₁ : IsometricEmbedding D.F₁)
+    {δ : ℝ} (hδ : 0 < δ)
+    (hgap : FormBoundedSylvesterGap D.A₀ D.Λ₁ δ)
+    (hR : N.Mem D.residual) :
+    N.Mem (D.X.adjoint ∘L D.F₁) ∧
+      δ * N.gauge (D.X.adjoint ∘L D.F₁) ≤
+        N.gauge (D.residual.adjoint ∘L D.F₁) := by
+  have hEq := unbounded_adjoint_residual_block_identity D hA hA₀ hΛ₁
+  have hC := adjointResidualBlock_mem_and_gauge_le
+    N.toSymmetricOperatorIdealFamily D hF₁ hR
+  have hRaw :
+      N.Mem (D.X.adjoint ∘L D.F₁) ∧
+        δ * N.gauge (D.X.adjoint ∘L D.F₁) ≤
+          N.gauge (-(D.residual.adjoint ∘L D.F₁)) := by
+    apply mem_and_scaled_gauge_le_of_all_scaled_kyFan_le
+      N.toFanDominantIdealFamily hδ hC.1
+    intro k
+    exact unbounded_sylvester_kyFan hA₀ hΛ₁ hδ hgap hEq k
+  have hmem : N.Mem (D.residual.adjoint ∘L D.F₁) :=
+    N.toSymmetricOperatorIdealFamily.comp_right_mem D.F₁
+      (N.toSymmetricOperatorIdealFamily.adjoint_mem hR)
+  refine ⟨hRaw.1, hRaw.2.trans (le_of_eq ?_)⟩
+  exact N.toSymmetricOperatorIdealFamily.gaugeReal_neg hmem
+
+/-- Scalar-generic bounded-perturbation block adapter at the full form-bounded gap.
+
+This is the common real/complex engine formerly duplicated by
+`sinTheta_addBounded_gauge_complex_block_of_formGap` and
+`sinTheta_addBounded_gauge_real_block`. -/
+theorem sinTheta_addBounded_gauge_block_of_formGap_rclike
+    (N : KyFanDominantIdealFamily (𝕜 := 𝕜))
+    (A : E →ₗ.[𝕜] E) (hA : IsSelfAdjoint A)
+    (Vop : E →L[𝕜] E) (hVop : IsSelfAdjointOperator Vop)
+    (A₀ : F →ₗ.[𝕜] F) (hA₀ : IsSelfAdjoint A₀)
+    (Λ₁ : G →ₗ.[𝕜] G) (hΛ₁ : IsSelfAdjoint Λ₁)
+    (X : F →L[𝕜] E) (F₁ : G →L[𝕜] E)
+    (hXdom : ∀ x : A₀.domain, X (x : F) ∈ A.domain)
+    (hXintertwines : ∀ x : A₀.domain,
+      A ⟨X (x : F), hXdom x⟩ = X (A₀ x))
+    (hF₁dom : ∀ y : Λ₁.domain, F₁ (y : G) ∈ A.domain)
+    (hF₁intertwines : ∀ y : Λ₁.domain,
+      (TauCeti.LinearPMap.addBounded A Vop) ⟨F₁ (y : G), hF₁dom y⟩ =
+        F₁ (Λ₁ y))
+    (hF₁iso : IsometricEmbedding F₁)
+    {δ : ℝ} (hδ : 0 < δ) (hgap : FormBoundedSylvesterGap A₀ Λ₁ δ)
+    (hVmem : N.Mem Vop) :
+    N.Mem (X.adjoint ∘L F₁) ∧
+      δ * N.gauge (X.adjoint ∘L F₁) ≤
+        N.gauge ((Vop ∘L X).adjoint ∘L F₁) := by
+  let D := boundedPerturbationSinThetaData A Vop A₀ Λ₁ X F₁
+    hXdom hXintertwines hF₁dom hF₁intertwines
+  have hD : _root_.IsSelfAdjoint D.A := by
+    change _root_.IsSelfAdjoint (TauCeti.LinearPMap.addBounded A Vop)
+    exact addBounded_isSelfAdjoint A hA Vop hVop
+  have hResMem : N.Mem D.residual := by
+    change N.Mem (Vop ∘L X)
+    exact N.toSymmetricOperatorIdealFamily.comp_right_mem X hVmem
+  exact sinTheta_unbounded_formGap_idealFamily_block_rclike
+    N D hD hA₀ hΛ₁ hF₁iso hδ hgap hResMem
 
 /-- **Davis--Kahan 1970, Section 2 `sin Theta` theorem, scalar-generic
 paper-facing form, at the full source gap.**

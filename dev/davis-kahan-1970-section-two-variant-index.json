@@ -163,35 +163,89 @@
       "source_label": "Davis--Kahan Section 2 sin 2Theta",
       "short_api": {
         "declaration": "TauCeti.DavisKahan1970.SectionTwo.sinTwoTheta",
-        "status": "unbound",
-        "reason": "The ambient clause is now scalar-generic at the ledger-selected where-defined boundary, but the directed unbounded-residual analytic engine still has a scalar-transport seam."
+        "status": "bound",
+        "reason": "One scalar-generic where-defined theorem now carries both printed clauses under the shared Davis--Kahan Section 2 setup."
       },
       "ledger_witnesses": [
-        "TauCeti.DavisKahan1970.sinTwoTheta_directed_unboundedResidual_whereDefinedUIN_complex",
-        "TauCeti.DavisKahan1970.sinTwoTheta_directed_unboundedResidual_whereDefinedUIN_real",
-        "TauCeti.DavisKahan1970.sinTwoTheta_ambient_unbounded_perturbedGap_whereDefinedUIN_rclike"
+        "TauCeti.DavisKahan1970.sinTwoTheta_unbounded_perturbedGap_whereDefinedUIN_rclike"
       ],
       "variants": [
         {
-          "declaration": "TauCeti.DavisKahan1970.sinTwoTheta_directed_unboundedResidual_whereDefinedUIN_complex",
-          "role": "ledger_witness",
-          "scalar_scope": "complex",
-          "source_fidelity": "attested_by_ledger",
-          "reason": "Complex directed where-defined norm boundary selected by the ledger. The remaining missing RClike work is the underlying residual transport engine."
-        },
-        {
-          "declaration": "TauCeti.DavisKahan1970.sinTwoTheta_directed_unboundedResidual_whereDefinedUIN_real",
-          "role": "ledger_witness",
-          "scalar_scope": "real",
-          "source_fidelity": "attested_by_ledger",
-          "reason": "Real directed where-defined norm boundary selected by the ledger. The remaining missing RClike work is the underlying residual transport engine."
-        },
-        {
-          "declaration": "TauCeti.DavisKahan1970.sinTwoTheta_ambient_unbounded_perturbedGap_whereDefinedUIN_rclike",
+          "declaration": "TauCeti.DavisKahan1970.sinTwoTheta_unbounded_perturbedGap_whereDefinedUIN_rclike",
           "role": "ledger_witness",
           "scalar_scope": "rclike",
           "source_fidelity": "attested_by_ledger",
-          "reason": "Single scalar-generic where-defined ambient clause selected by the ledger for the source real-or-complex scope."
+          "reason": "Single whole-result witness for both real/complex and directed/ambient source clauses at the where-defined norm boundary."
+        },
+        {
+          "declaration": "TauCeti.DavisKahan1970.sinTwoTheta_directed_unboundedResidual_reducing_whereDefinedUIN_rclike",
+          "role": "scalar_generic_api",
+          "scalar_scope": "rclike",
+          "source_fidelity": "not_ledger_witness",
+          "reason": "Generic directed residual clause at arbitrary reducing subspace; invoked by the complete ledger witness."
+        },
+        {
+          "declaration": "TauCeti.DavisKahan1970.sinTwoTheta_directed_unboundedResidual_reducing_symmetricNorming_rclike",
+          "role": "implementation_engine",
+          "scalar_scope": "rclike",
+          "source_fidelity": "not_ledger_witness",
+          "reason": "Stronger symmetric-norming analytic engine underlying the generic directed where-defined endpoint."
+        },
+        {
+          "declaration": "TauCeti.DavisKahan1970.sinTwoTheta_directed_unboundedResidual_blockRepresentative_reducing_kyFan_rclike",
+          "role": "implementation_engine",
+          "scalar_scope": "rclike",
+          "source_fidelity": "not_ledger_witness",
+          "reason": "Scalar-generic Ky Fan block engine for the directed residual argument."
+        },
+        {
+          "declaration": "TauCeti.DavisKahan1970.SectionTwo.sinTwoTheta",
+          "role": "scalar_generic_api",
+          "scalar_scope": "rclike",
+          "source_fidelity": "not_ledger_witness",
+          "reason": "Public short alias to the complete ledger witness."
+        },
+        {
+          "declaration": "TauCeti.DavisKahan1970.SectionTwo.sinTwoTheta_directed",
+          "role": "scalar_generic_api",
+          "scalar_scope": "rclike",
+          "source_fidelity": "not_ledger_witness",
+          "reason": "Public short alias for the generic directed clause."
+        },
+        {
+          "declaration": "TauCeti.DavisKahan1970.sinTwoTheta_directed_unboundedResidual_whereDefinedUIN_complex",
+          "role": "fixed_field_api",
+          "scalar_scope": "complex",
+          "source_fidelity": "not_ledger_witness",
+          "reason": "Complex spectral-selection convenience endpoint; the ledger uses the generic reducing-subspace whole theorem."
+        },
+        {
+          "declaration": "TauCeti.DavisKahan1970.sinTwoTheta_directed_unboundedResidual_whereDefinedUIN_real",
+          "role": "fixed_field_api",
+          "scalar_scope": "real",
+          "source_fidelity": "not_ledger_witness",
+          "reason": "Real spectral-selection convenience endpoint; the ledger uses the generic reducing-subspace whole theorem."
+        },
+        {
+          "declaration": "TauCeti.DavisKahan.ExactSinTheta.FanDominanceExploration.sinTwoTheta_directed_whereDefinedUIN_rclike_production_probe",
+          "role": "probe",
+          "scalar_scope": "rclike",
+          "source_fidelity": "production_conformance",
+          "reason": "Compile probe that calls the production generic directed endpoint directly; no assumed fixed-field core."
+        },
+        {
+          "declaration": "TauCeti.DavisKahan.ExactSinTheta.FanDominanceExploration.sinTwoTheta_complete_whereDefinedUIN_rclike_production_probe",
+          "role": "probe",
+          "scalar_scope": "rclike",
+          "source_fidelity": "production_conformance",
+          "reason": "Compile probe for the complete public SectionTwo.sinTwoTheta API."
+        },
+        {
+          "declaration": "TauCeti.DavisKahan1970.sinTwoTheta_ambient_unbounded_perturbedGap_whereDefinedUIN_rclike",
+          "role": "scalar_generic_api",
+          "scalar_scope": "rclike",
+          "source_fidelity": "not_ledger_witness",
+          "reason": "Clause-level API retained below the complete whole-result ledger witness."
         },
         {
           "declaration": "TauCeti.DavisKahan1970.sinTwoTheta_directed_unboundedResidual_normalizedUIN_complex",
@@ -212,28 +266,28 @@
           "role": "fixed_field_api",
           "scalar_scope": "complex",
           "source_fidelity": "not_ledger_witness",
-          "reason": "Public alias to the complex where-defined directed ledger witness."
+          "reason": "Public complex specialization of the fixed-field directed where-defined API; the ledger witness is the complete RCLike theorem."
         },
         {
           "declaration": "TauCeti.DavisKahan1970.SectionTwo.sinTwoTheta_directed_real",
           "role": "fixed_field_api",
           "scalar_scope": "real",
           "source_fidelity": "not_ledger_witness",
-          "reason": "Public alias to the real where-defined directed ledger witness."
+          "reason": "Public real specialization of the fixed-field directed where-defined API; the ledger witness is the complete RCLike theorem."
         },
         {
           "declaration": "TauCeti.DavisKahan1970.sinTwoTheta_ambient_unbounded_perturbedGap_whereDefinedUIN_complex",
           "role": "fixed_field_api",
           "scalar_scope": "complex",
           "source_fidelity": "not_ledger_witness",
-          "reason": "Thin complex specialization of the generic ambient ledger witness."
+          "reason": "Thin complex specialization of the generic ambient clause API; the ledger witness is the complete RCLike theorem."
         },
         {
           "declaration": "TauCeti.DavisKahan1970.sinTwoTheta_ambient_unbounded_perturbedGap_whereDefinedUIN_real",
           "role": "fixed_field_api",
           "scalar_scope": "real",
           "source_fidelity": "not_ledger_witness",
-          "reason": "Thin real specialization of the generic ambient ledger witness."
+          "reason": "Thin real specialization of the generic ambient clause API; the ledger witness is the complete RCLike theorem."
         },
         {
           "declaration": "TauCeti.DavisKahan1970.sinTwoTheta_ambient_unbounded_perturbedGap_normalizedUIN_complex",
@@ -283,13 +337,6 @@
           "scalar_scope": "rclike",
           "source_fidelity": "superseded_by_production",
           "reason": "Compiled on 2026-09-09 and was promoted to the production generic ambient endpoint."
-        },
-        {
-          "declaration": "TauCeti.DavisKahan.ExactSinTheta.FanDominanceExploration.sinTwoTheta_directed_whereDefinedUIN_rclike_of_symmetricNorming_probe",
-          "role": "probe",
-          "scalar_scope": "rclike",
-          "source_fidelity": "pending_engine",
-          "reason": "Compiled norm/API layer only. It assumes the scalar-generic directed symmetric-norming engine as hcore; the reducing-subspace/residual transport seam remains open."
         }
       ]
     },
