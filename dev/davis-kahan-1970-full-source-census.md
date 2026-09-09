@@ -4,7 +4,7 @@
 
 **Census family:** `source-completion-census`  
 **Items:** 50  
-**Unique cited Lean declarations:** 1507
+**Unique cited Lean declarations:** 1511
 
 ## How to use this census
 
@@ -293,8 +293,8 @@ THREE NEW REUSABLE DECLARATIONS underwrite it, each grounding the next by `:=`, 
 | R = A E0 - E0 A0 on the operator domain, while F1 intertwines Lambda1 with A. | These clauses are exactly the residualEquation and intertwines components exposed by isTrialResidual_iff and isExactSpectralDecomposition_iff, together with their domain-transport hypotheses. | claimed_exact |
 | sin Theta0 is the directed sine block from the trial subspace to the exact subspace. | The canonical source-exact conclusion names the directed sine block directly as `(I - F₀ F₀†) E₀`; no auxiliary membership conclusion is bundled into the result. | claimed_exact |
 | For beta <= alpha and delta > 0, one spectrum lies in [beta,alpha] and the other avoids (beta-delta,alpha+delta), with the roles interchangeable. | hβα and hδ are explicit, and hspectral is literally the disjunction of the two real-spectrum inclusions. | claimed_exact |
-| The norm is arbitrary, with the paper-wide convention that the result is vacuous when a displayed norm does not exist. | `N : NormalizedSymmetricOperatorIdealFamily` appears directly. There is no `hR` binder. The conclusion `N.ScaledGaugeLEWhereDefined δ sinTheta₀ R` expands to the printed inequality under the two norm-existence premises, exactly encoding the source vacuity convention without membership transfer. | claimed_exact |
-| delta \|\|sin Theta0\|\| <= \|\|R\|\|. | The theorem conclusion is `N.ScaledGaugeLEWhereDefined δ sinTheta₀ R`: whenever both displayed norms exist, it reduces to `δ * N.gaugeReal sinTheta₀ ≤ N.gaugeReal R`; if either norm does not exist, the source statement has no numerical obligation. | claimed_exact |
+| The norm is arbitrary, with the paper-wide convention that the result is vacuous when a displayed norm does not exist. | `N : NormalizedSymmetricOperatorIdealFamily` appears directly and there is no `hR` binder. After the colon the theorem itself reads `N.Mem sinTheta₀ → N.Mem R → δ * N.gaugeReal sinTheta₀ ≤ N.gaugeReal R`. The two membership arrows are therefore part of the conclusion implementing the source vacuity convention, not caller hypotheses. | claimed_exact |
+| delta \|\|sin Theta0\|\| <= \|\|R\|\|. | The numerical comparison appears literally in the canonical theorem type as `δ * N.gaugeReal sinTheta₀ ≤ N.gaugeReal R`, preceded only by the two norm-existence implications `N.Mem sinTheta₀ → N.Mem R →`. No opaque comparison predicate has to be unfolded to audit the claim. | claimed_exact |
 | Infinite-dimensional and unbounded self-adjoint scope. | There is no FiniteDimensional hypothesis; A, A₀, and Λ₁ are `LinearPMap` values and the two expanded setup predicates carry the required domain conditions. | claimed_exact |
 
 **Notes.** The definitive source form is Theorem 6.1; real, complex, bounded, unbounded, and arbitrary-representative forms are present.
@@ -309,11 +309,11 @@ REOPENED 2026-08-31 by the scope-atom re-audit: a source passage that explicitly
 
 REOPENING WITHDRAWN 2026-08-31 and the rule corrected: a later source passage enlarges a counted result only when it is needed to determine what Davis and Kahan actually claim in it. An extension, variant or consequence they mention without introducing and proving it as a result of its own is `result_adjacent_extension` fidelity material. The Lean coverage produced during the reopening is kept as supporting evidence.
 
-SOURCE-EXACT FAÇADES REGISTERED 2026-09-05. Canonical evidence for this row is the fixed-field façade at the printed Hilbert-space scope, with the arbitrary-Hilbert `SymmetricNormingFunction` theorem retained beneath it as a registered generalization.
+SOURCE-EXACT FAÇADES REGISTERED 2026-09-05. Canonical evidence for this row is the fixed-field façade at the printed Hilbert-space scope, with the arbitrary-Hilbert `SymmetricNormingFunction` theorem retained beneath it as a registered generalization. The initial stronger norm boundary was superseded by the 2026-09-08 source-UIN audit described below.
 
-SIGNATURE RETARGET 2026-09-08. Probes 17--43 established that unconditional `ENNReal` Fan dominance adds Ky-Fan membership transfer that Davis--Kahan do not print, while the paper explicitly declares results vacuous when relevant norms fail to exist. The canonical complex and real façades now quantify over `NormalizedSymmetricOperatorIdealFamily`, have no caller-visible residual-membership premise, and conclude `ScaledGaugeLEWhereDefined` rather than membership of the sine block. The committed row remains `compiled_exact` / `proved_in_build`; do not commit this retarget unless the prescribed Lean compile accepts the changed theorem types.
+SIGNATURE RETARGET 2026-09-08. Probes 17--43 established that unconditional `ENNReal` Fan dominance adds Ky-Fan membership transfer that Davis--Kahan do not print, while the paper explicitly declares results vacuous when relevant norms fail to exist. The canonical source-exact complex and real façades quantify over `NormalizedSymmetricOperatorIdealFamily`, remove the caller-visible residual-membership premise, and do not conclude membership of the sine block. READABILITY FOLLOW-UP 2026-09-08: the theorem types now expose the partial-domain semantics directly as `N.Mem sinTheta₀ → N.Mem R → δ * N.gaugeReal sinTheta₀ ≤ N.gaugeReal R`; `ScaledGaugeLEWhereDefined` remains only a proof-side helper. The row remains `compiled_exact` / `proved_in_build` only after the prescribed Lean compile and statement-pin refresh accept the changed signatures.
 
-**Next action.** Preserve the where-defined/vacuous norm boundary and re-audit if the source-facing theorem type changes.
+**Next action.** No hostile-review hole is currently recorded for this source passage. Preserve the where-defined/vacuous norm boundary and re-audit if the source-facing theorem type changes.
 
 ### `S2-tan-theta` — Single-angle tangent theorem
 

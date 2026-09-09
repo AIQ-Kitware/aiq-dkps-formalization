@@ -1637,8 +1637,8 @@ on both displayed norms existing.
 The production retarget begins with the canonical Section 2 sine-theta façades:
 
 1. `NormalizedSymmetricOperatorIdealFamily` now carries the historical **where-defined** Fan comparison;
-2. `ScaledGaugeLEWhereDefined` spells the paper's vacuity convention without manufacturing membership;
-3. `sinTheta_unbounded_formGap_sourceExact_{complex,real}` quantify over that base, have no caller-visible residual-membership premise, and have no membership-transfer conclusion; and
+2. `sinTheta_unbounded_formGap_sourceExact_{complex,real}` spell the vacuity convention directly in their theorem types as `N.Mem sinTheta₀ → N.Mem R → δ * N.gaugeReal sinTheta₀ ≤ N.gaugeReal R`;
+3. `ScaledGaugeLEWhereDefined` remains only as a proof-side helper, while the source-facing type has no caller-visible residual-membership premise and no membership-transfer conclusion; and
 4. `NormalizedUnitaryInvariantNorm` remains available only where the stronger internal domain-solid property is genuinely useful.
 
 The remaining source-facing UIN façades should be retargeted case by case, with their census rows updated in the same commit.
@@ -1794,7 +1794,7 @@ must travel with any summary of the 29-result completion state.
 | 3 | Section 4 fixed the wrong quantifier: `∃ D, IsDirectRotation U V D ∧ …` instead of extremality for the direct rotation the source has fixed | repaired, and it exposed a second defect the review did not name: the repository's `IsDirectRotation` is *not* Davis--Kahan's Definition 3.1, and Section 4's extremality is **false** for it.  `IsSourceDirectRotation` is Definition 3.1; the façades take a given `D` satisfying it (§3d) |
 | 4 | Theorem 3.1's converse dropped source separability and returned `J`, `hJ`, `hisom`, `hcoisom`; Corollary 3.1's realization permitted arbitrary `Z₀`, `Z₁` | `theorem3_1_realization_sourceExact_*` carries `[SeparableSpace H]` and keeps `J₀` internal to the angle datum; `corollary3_1_realization_zeroMultiplicity_sourceScope` restricts the multiplicity spaces to the paper's scope |
 | 5 | Section 6's separability exception was too broad; Proposition 6.1/Theorem 6.1 used `FormBoundedSylvesterGap` where the source prints an interval/exterior separation; Theorem 6.2 added `R` Hilbert--Schmidt | `Section6SourceScope.lean`: separable-ambient wrappers for Lemmas 6.1, 6.2, 6.3; `..._printedGap_sourceExact_*`; and `theorem6_2_vacuity_sourceExact_*` in `ℝ≥0∞`, which *is* the source's "vacuous when the norm does not exist" |
-| 6 | Fan dominance is a field of `FanDominantIdealFamily`, so the public quantifier is stronger than the printed where-defined/vacuous norm statement | isolated by Probes 17–43; the canonical Section 2 sine-theta façades are now retargeted to `NormalizedSymmetricOperatorIdealFamily` + `ScaledGaugeLEWhereDefined`.  Other source-facing UIN façades remain separate follow-up work and must be updated with their own census rows. |
+| 6 | Fan dominance is a field of `FanDominantIdealFamily`, so the public quantifier is stronger than the printed where-defined/vacuous norm statement | isolated by Probes 17–43; the canonical Section 2 sine-theta façades now quantify over `NormalizedSymmetricOperatorIdealFamily` and spell the where-defined `Mem → Mem → gaugeReal` inequality directly in the theorem type. `ScaledGaugeLEWhereDefined` is an internal proof helper. Other source-facing UIN façades remain separate follow-up work and must be updated with their own census rows. |
 
 ## §XVIII.4 The third review's nine findings (2026-09-06), all repaired
 
