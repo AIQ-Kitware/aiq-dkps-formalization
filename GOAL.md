@@ -266,32 +266,44 @@ The implementation route used to prove those unbounded statements is unrestricte
 
 # VI. Literal unitary-invariant norm scope
 
-Davis–Kahan quantify over arbitrary normalized unitary-invariant norms with the paper's ideal/definedness behavior.
+Davis–Kahan quantify over arbitrary normalized unitary-invariant norms with the
+paper's ideal/definedness behavior.
 
-The repository now has;
+The mathematical base record for that partial norm/ideal data is now:
 
 ```text
-NormalizedUnitaryInvariantNorm
+NormalizedSymmetricOperatorIdealFamily
 ```
 
-as the source-facing abstraction.
+The name is structural rather than provenance-based: it is a symmetric operator
+ideal family with the rank-one normalization.  It deliberately does **not**
+bundle unconditional Fan dominance.
 
-Preserve it.
+`NormalizedUnitaryInvariantNorm` remains a stronger internal carrier whose
+`FanDominantIdealFamily` field also entails membership transfer.  Probes 17–43
+show that this is a genuinely stronger domain assertion than the where-defined
+Fan comparison needed by the source-facing Davis–Kahan inequalities.  It must
+therefore not be treated as the literal source quantifier merely because existing
+analytic proofs consume it.
 
-Canonical results whose source statement quantifies over arbitrary unitary-invariant norms should quantify over this literal source abstraction, or another transparently equivalent source abstraction if the design is later improved.
+Canonical results whose source statement quantifies over arbitrary
+unitary-invariant norms should expose the normalized symmetric-family boundary
+with the paper's definedness/vacuity convention.  Fan comparison should enter
+through the historical where-defined theorem, not as a caller-visible
+membership-transfer hypothesis.
 
 Existing;
 
 ```text
 SymmetricNormingFunction
+FanDominantIdealFamily
 KyFanDominantIdealFamily
+NormalizedUnitaryInvariantNorm
 ```
 
-theorems remain valuable analytic/general results.
-
-They may be used internally through Fan dominance.
-
-They are not substitutes for the source-facing norm quantifier.
+theorems remain valuable analytic/general results and may be used internally.
+They are not substitutes for the source-facing norm quantifier when their public
+types impose stronger structure.
 
 Do not add a UIN parameter to a theorem clause that does not have one in Davis–Kahan.
 
@@ -354,8 +366,9 @@ Do not replace them with a much larger generic verification framework.
 
 As of the current 2026-09-05 implementation state, preserve the completed work rather than rebuilding it;
 
-* `NormalizedUnitaryInvariantNorm` and its Fan-dominance bridge:
-* source UIN façades already added across Section 2 and later results:
+* `NormalizedSymmetricOperatorIdealFamily` as the normalized symmetric-ideal base,
+  with `NormalizedUnitaryInvariantNorm` retained as the stronger Fan-dominant implementation carrier:
+* source UIN façades already added across Section 2 and later results; their norm boundary is being retargeted after the Fan-domain audit:
 * exact separable real/complex façades already completed:
 * machine-readable distinction between canonical source evidence and generalizations:
 * hostile-review regression invariants:
@@ -1369,11 +1382,13 @@ themselves**, in the finite dimensions the source prints them for, with part
 longer ask the caller for the blocks' symmetry either.  §10.3.5 records how, and
 what the two-day reopening cost.
 
-## 3c. The source norm class is inhabited (resolved, 2026-09-05)
+## 3c. The strong normalized class is inhabited (resolved, 2026-09-05)
 
-The hostile review asked whether `NormalizedUnitaryInvariantNorm` is really as
-broad as Davis--Kahan's Section 1 class, since it extends
-`KyFanDominantIdealFamily`, which carries a completeness requirement.
+The hostile review asked whether `NormalizedUnitaryInvariantNorm` could even
+serve as a broad Davis--Kahan norm carrier, since it then extended
+`KyFanDominantIdealFamily`, which carried a completeness requirement.  This
+section records the historical nonemptiness/completeness repair; §4d supersedes
+its former conclusion that this strong record is source-exact.
 
 Checking that turned up something sharper, and worse: **the repository had never
 constructed a single term of the type.** Every occurrence was a universally
@@ -1564,54 +1579,72 @@ FanDominantIdealFamily     -- symmetric ideal family + Fan dominance
 KyFanDominantIdealFamily   -- extends it, and adds `isComplete`
 ```
 
-`NormalizedUnitaryInvariantNorm` — the source-facing norm quantifier — now
-extends the **completeness-free** base, so a source theorem quantified over it no
-longer implicitly restricts the norm class.  `Mem`, `gauge` and the small bridges
-moved to the base; a `CoeOut` from the complete family to the base is what let
-the roughly 150 existing binder sites keep passing the stronger structure without
-being touched.
+`NormalizedUnitaryInvariantNorm` now extends the **completeness-free**
+`FanDominantIdealFamily`, so completeness is no longer one of its hidden
+restrictions.  `Mem`, `gauge` and the small bridges moved to the base; a `CoeOut`
+from the complete family to the base is what let the roughly 150 existing binder
+sites keep passing the stronger structure without being touched.
+
+That repair settled completeness only.  The later Fan-domain probes in §4d show
+that unconditional Fan dominance itself still makes this record stronger than
+the source-facing boundary.
 
 The refactor is the empirical answer to the question the analysis left open:
 **every theorem the source façades depend on went through unchanged**, so none of
 them used completeness.  The families that do need it keep it.
 
-## 4d. The UIN Fan-dominance question: split, and why it is not derived
+## 4d. The UIN Fan-dominance question: source boundary isolated
 
-The fourth hostile review, 2026-09-07, made the sibling objection to §4c's:
+The fourth hostile review, 2026-09-07, observed that
+`NormalizedUnitaryInvariantNorm` contains unconditional Fan dominance through
+`FanDominantIdealFamily`.  The first repair split that property away from the
+ordinary norm/ideal laws.  The base record is now named for its mathematical
+data:
 
-> `NormalizedUnitaryInvariantNorm` is still defined by
-> `toFanDominantIdealFamily : FanDominantIdealFamily`, and that structure
-> contains, as a field, `gauge_le_of_forall_kyFanApproximationGauge_le`.  That is
-> Fan dominance itself.  Davis--Kahan define the source norm by the ordinary norm
-> laws, unitary invariance, and rank-one normalization; they then state Fan
-> dominance as a theorem about arbitrary UIN norms.
+```text
+NormalizedSymmetricOperatorIdealFamily
+```
 
-**The split is done.**  `SourceUnitaryInvariantNorm` carries the printed law list
-and nothing else; `SourceUnitaryInvariantNorm.HasFanDominance` is the printed
-sentence, named and stated *about* a norm; `toNormalized` is the bridge; and
-`NormalizedUnitaryInvariantNorm.toSource_toNormalized` proves the split is exact —
-taking the printed laws out and putting the sentence back returns the same norm.
+It is a `SymmetricOperatorIdealFamily` plus the rank-one normalization and no
+Fan-dominance field.  `NormalizedSymmetricOperatorIdealFamily.HasFanDominance`
+spells the stronger unconditional `ℝ≥0∞` property separately;
+`withFanDominance` adds it to obtain the existing
+`NormalizedUnitaryInvariantNorm`, and
+`NormalizedUnitaryInvariantNorm.toNormalizedSymmetricOperatorIdealFamily`
+forgets it.
 
-**Fan dominance is not derived from the other laws, and should not be.**  Davis
-and Kahan do not prove it either.  Their Section 1 sentence is
+The follow-up exploration changed the semantic conclusion.  Probes 17–24 build
+a finite-rank/operator-norm countermodel satisfying the base record while
+refuting unconditional Fan dominance.  The failure is exactly membership
+transfer: where both norms exist, Fan monotonicity still holds.  Thus
 
-> Fan dominance is used in the strong form: `‖K‖ ≤ ‖L‖` for every
-> unitary-invariant norm iff the inequality holds for every Ky Fan norm.
+```text
+NormalizedSymmetricOperatorIdealFamily -> HasFanDominance
+```
 
-— *used*, announced, and attributed; it is Ky Fan's theorem, cited rather than
-established in this paper.  `AGENTS.md` is explicit that externally attributed
-results are source-fidelity material and that this repository does not prove what
-Davis and Kahan did not prove.  And the statement is not one this tree could
-prove as stated: for an arbitrary unitarily invariant norm on an arbitrary ideal,
-without a symmetric-norming or lower-semicontinuity hypothesis, Fan dominance is
-not available here.  The classical class where it *is* derived is the symmetric
-norming functions, and `kyFanDominant_of_symmetricNorming` is that derivation.
+is false for the current base abstraction and must not be used as the production
+repair.
 
-So the honest position, which a reviewer may still dispute: the public quantifier
-is Davis and Kahan's own class *including their own standing property of it*.
-Re-spelling the façades as `(N : SourceUnitaryInvariantNorm 𝕜) (h : N.HasFanDominance)`
-would be the same quantifier with more words, so the endpoints keep the single
-record and the split stands as the audit surface.
+Probes 25–37 separate memberwise symmetric-norming representation from total
+domain representation and show that the source's "vacuous when the norm does not
+exist" convention can be represented without manufacturing membership.  Probes
+38–43 then exercise the actual sine-theta theorem at that boundary, including on
+the countermodel excluded by `NormalizedUnitaryInvariantNorm`, and characterize
+the intended public conclusion as the ordinary real-valued inequality conditional
+on both displayed norms existing.
+
+The production direction is therefore:
+
+1. use `NormalizedSymmetricOperatorIdealFamily` for the mathematical base object;
+2. formalize/port the historical **where-defined** Fan comparison at that scope;
+3. expose Davis--Kahan source façades using the paper's vacuity convention, with
+   no caller-visible residual-membership premise and no membership-transfer
+   conclusion; and
+4. retain `NormalizedUnitaryInvariantNorm` only where the stronger internal
+   domain-solid property is genuinely useful.
+
+This naming cleanup is intentionally separate from the production theorem
+retarget so the semantic API change remains independently reviewable.
 
 ## 5. Fresh hostile review of all designated results
 
@@ -1764,7 +1797,7 @@ must travel with any summary of the 29-result completion state.
 | 3 | Section 4 fixed the wrong quantifier: `∃ D, IsDirectRotation U V D ∧ …` instead of extremality for the direct rotation the source has fixed | repaired, and it exposed a second defect the review did not name: the repository's `IsDirectRotation` is *not* Davis--Kahan's Definition 3.1, and Section 4's extremality is **false** for it.  `IsSourceDirectRotation` is Definition 3.1; the façades take a given `D` satisfying it (§3d) |
 | 4 | Theorem 3.1's converse dropped source separability and returned `J`, `hJ`, `hisom`, `hcoisom`; Corollary 3.1's realization permitted arbitrary `Z₀`, `Z₁` | `theorem3_1_realization_sourceExact_*` carries `[SeparableSpace H]` and keeps `J₀` internal to the angle datum; `corollary3_1_realization_zeroMultiplicity_sourceScope` restricts the multiplicity spaces to the paper's scope |
 | 5 | Section 6's separability exception was too broad; Proposition 6.1/Theorem 6.1 used `FormBoundedSylvesterGap` where the source prints an interval/exterior separation; Theorem 6.2 added `R` Hilbert--Schmidt | `Section6SourceScope.lean`: separable-ambient wrappers for Lemmas 6.1, 6.2, 6.3; `..._printedGap_sourceExact_*`; and `theorem6_2_vacuity_sourceExact_*` in `ℝ≥0∞`, which *is* the source's "vacuous when the norm does not exist" |
-| 6 | Fan dominance is a field of `FanDominantIdealFamily`, so the public quantifier is "every UIN norm supplied with a Fan-dominance certificate" | split, not derived: `SourceUnitaryInvariantNorm` is the printed law list, `HasFanDominance` the printed sentence, `toNormalized` the bridge, `toSource_toNormalized` the exactness of the split.  §4d says why the derivation is not ours to do; the fifth review accepted this and closed the concern |
+| 6 | Fan dominance is a field of `FanDominantIdealFamily`, so the public quantifier is stronger than the printed where-defined/vacuous norm statement | reopened and isolated by Probes 17–43: `NormalizedSymmetricOperatorIdealFamily` is the mathematical base; unconditional `HasFanDominance` additionally transfers membership and is false for the finite-rank countermodel.  The production source façades still need the §4d retarget to where-defined Fan comparison. |
 
 ## §XVIII.4 The third review's nine findings (2026-09-06), all repaired
 

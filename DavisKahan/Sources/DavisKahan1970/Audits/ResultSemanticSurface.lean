@@ -1059,10 +1059,10 @@ source's definedness convention. -/
 #check @TauCeti.DavisKahan1970.lemma6_3_leakage_separable_complex
 #check @TauCeti.DavisKahan1970.lemma6_3_leakage_separable_real
 
-#check @TauCeti.DavisKahan.ExactSinTheta.SourceUnitaryInvariantNorm
-#check @TauCeti.DavisKahan.ExactSinTheta.SourceUnitaryInvariantNorm.HasFanDominance
-#check @TauCeti.DavisKahan.ExactSinTheta.SourceUnitaryInvariantNorm.toNormalized
-#check @TauCeti.DavisKahan.ExactSinTheta.NormalizedUnitaryInvariantNorm.toSource_toNormalized
+#check @TauCeti.DavisKahan.ExactSinTheta.NormalizedSymmetricOperatorIdealFamily
+#check @TauCeti.DavisKahan.ExactSinTheta.NormalizedSymmetricOperatorIdealFamily.HasFanDominance
+#check @TauCeti.DavisKahan.ExactSinTheta.NormalizedSymmetricOperatorIdealFamily.withFanDominance
+#check @TauCeti.DavisKahan.ExactSinTheta.NormalizedUnitaryInvariantNorm.toNormalizedSymmetricOperatorIdealFamily_withFanDominance
 
 /-! ## 2026-09-07 fifth-hostile-review repairs
 
