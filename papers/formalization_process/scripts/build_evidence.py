@@ -660,6 +660,9 @@ def build_manifest():
         'papers/formalization_process/generated/current_sin_two_theta_exact.lean',
         'papers/formalization_process/generated/current_sin_two_theta_presentation.lean',
         'DavisKahan/Sources/DavisKahan1970/SinTwoThetaDirectedRCLike.lean',
+        'DavisKahan/Sources/DavisKahan1970/SinTwoThetaCommonDomain.lean',
+        'DavisKahan/Sources/DavisKahan1970/Audits/SinTwoThetaCommonDomainUsage.lean',
+        'dev/davis-kahan-1970-sin-two-theta-review-2026-09-09.md',
         'dev/davis-kahan-1970-formalization-result-inventory.json',
         'dev/davis-kahan-1970-full-source-census.json',
         'prose/distilled_literature/DavisKahan1970_part_III.tex',
@@ -700,6 +703,12 @@ def build_manifest():
         sub = 'unavailable'
     manifest = {
         'schema_version': 1,
+        'source_scope_review': {
+            'result': 'S2-sin-two-theta',
+            'status': 'scope_restricted',
+            'replacement_validation': 'not_compiler_validated',
+            'dashboard': 'optional_pending_regeneration',
+        },
         'repository_head': head,
         'formalization_tools_submodule': sub,
         'aggregate_sha256': aggregate,

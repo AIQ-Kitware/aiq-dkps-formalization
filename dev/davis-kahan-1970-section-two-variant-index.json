@@ -164,7 +164,7 @@
       "short_api": {
         "declaration": "TauCeti.DavisKahan1970.SectionTwo.sinTwoTheta",
         "status": "bound",
-        "reason": "One scalar-generic where-defined theorem now carries both printed clauses under the shared Davis--Kahan Section 2 setup."
+        "reason": "Compatibility binding to the currently selected but scope-restricted theorem. The result ledger blocks source-scope certification pending the common-domain repair."
       },
       "ledger_witnesses": [
         "TauCeti.DavisKahan1970.sinTwoTheta_unbounded_perturbedGap_whereDefinedUIN_rclike"
@@ -175,7 +175,7 @@
           "role": "ledger_witness",
           "scalar_scope": "rclike",
           "source_fidelity": "attested_by_ledger",
-          "reason": "Single whole-result witness for both real/complex and directed/ambient source clauses at the where-defined norm boundary."
+          "reason": "Selected evidence under review, NOT accepted source-scope certification. See result semantic_certification=hostile_review_blocked. The source_fidelity tag indicates ledger ownership, not a separate acceptance decision."
         },
         {
           "declaration": "TauCeti.DavisKahan1970.sinTwoTheta_directed_unboundedResidual_reducing_whereDefinedUIN_rclike",
@@ -338,7 +338,9 @@
           "source_fidelity": "superseded_by_production",
           "reason": "Compiled on 2026-09-09 and was promoted to the production generic ambient endpoint."
         }
-      ]
+      ],
+      "review_status": "hostile_review_blocked",
+      "review_note": "2026-09-09 source-scope review: the currently selected conjunction is a bounded-trial specialization. Its bounded M and hPdom (every trial vector in dom(A+H)) exclude the source common-dense-domain unbounded trial setting, and unnecessarily restrict the ambient conjunct. The directed source inference requires a bounded residual, not a globally bounded perturbation. The separate ambient theorem remains available without the trial restriction. The common-domain replacement is proof code pending compiler validation, not accepted evidence. See dev/davis-kahan-1970-sin-two-theta-review-2026-09-09.md."
     },
     {
       "result_id": "S2-tan-two-theta",

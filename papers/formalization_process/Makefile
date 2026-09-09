@@ -70,8 +70,3 @@ self-test-publication-survey:
 
 anonymize-repo:
 	python3 scripts/anonymize_repo.py
-
-clean:
-	latexmk -C paper.tex || true
-	latexmk -C paper_public.tex || true
-	rm -f paper.bbl paper.blg paper_public.bbl paper_public.blg

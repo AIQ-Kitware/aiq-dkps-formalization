@@ -148,9 +148,10 @@ tracked from Davis and Kahan's 1970 paper.  The project is a case study in
 semantic alignment: whether machine-checked formal statements preserve the
 mathematical claims made in the source.  Lean verifies proofs of encoded
 propositions, while source correspondence still requires checking hypotheses,
-objects, and scope.  The current development contains checked treatments for
-all 29 tracked results, including a counterexample and repaired theorem for
-Proposition~4.4.  We describe the formalization and source-review process,
+objects, and scope.  The development records checked treatments addressing all 29 targets,
+including a counterexample and repaired theorem for Proposition~4.4.
+A further source review nevertheless finds a domain restriction in the current
+$\sin 2\Theta$ statement that excludes part of the source scope.  We describe the formalization and source-review process,
 examples of discrepancies found during development, and
 \PractitionerAccountCount{} public first-person accounts of AI-assisted Lean
 work.  The case study illustrates why successful compilation alone does not
@@ -189,7 +190,8 @@ stages in more detail.
   \includegraphics[width=0.98\linewidth]{figures/formalization_workflow.png}
   \caption{Formalization workflow used in this case study.  Failed semantic
   review returns a target to the loop; accepted results contribute checked
-  theorems and reusable foundations.}
+  theorems and reusable foundations. The source comparison concerns extra or
+  missing hypotheses, rather than proving that the source hypotheses are minimal.}
   \label{fig:workflow}
 \end{figure}
 
@@ -214,8 +216,7 @@ Aristotle without needing Lean knowledge, and Kova\v{c} asks another model to
 translate generated Lean into English
 \citep{suomela2026workflow,gowers2026leiden,kovac2025erdos189}.
 
-Semantic mismatch is common enough in these accounts to be a practical review
-concern.  \AccountSemanticMismatchCount{} accounts explicitly report a
+\AccountSemanticMismatchCount{} accounts explicitly report a
 statement, definition, scope, or correspondence mismatch, with
 \AccountSemanticMismatchQualifiedCount{} additional qualified cases; \AccountSeparateAIReviewCount{}
 describe a separate AI review role.  Deng and Shum distinguish successful
@@ -259,43 +260,48 @@ declarations and maintaining source-to-statement records.
 \section{What we formalized}
 \label{sec:dk}
 
-Davis and Kahan bound the change in invariant subspaces under self-adjoint
-perturbations.  In matrix terms, let $A=A^*$ and let
-$E_0$ have orthonormal columns spanning a \emph{trial subspace} $V$, which
-is to be compared with an exact invariant subspace.  The trial-space
-\emph{compression}, $A_0=E_0^*AE_0$, is obtained by using $E_0$ to embed
-trial coordinates into the ambient space, applying $A$, and using $E_0^*$
-to project the result back to trial coordinates.  Writing $P_V=E_0E_0^*$ for the orthogonal projector
-onto $V$, the \emph{residual}
+Davis and Kahan compare reducing subspaces $P\mathcal H$ and
+$Q\mathcal H$ of self-adjoint operators $A$ and $T=A+H$, respectively.
+Here $H$ denotes the perturbation, while $\mathcal H$ denotes the Hilbert space.
+If $E_0$ is an isometric coordinate map onto $P\mathcal H$, and $A_0$ is the
+corresponding restriction of $A$, the source residual is
 \[
-  R=AE_0-E_0A_0=(I-P_V)AE_0
+  R=TE_0-E_0A_0=HE_0.
 \]
-is exactly the part of $AE_0$ that lies outside $V$; it vanishes exactly when
-$A$ preserves the trial subspace.  Principal angles measure the angles
-between corresponding subspace directions.  With spectral separation $\delta>0$,
-one directed
-$\sin 2\Theta$ result has the form
-\begin{equation}
-  \delta\,N(\sin 2\Theta_0) \le 2N(R),
-  \label{eq:sin2theta}
-\end{equation}
-where $N$ is a unitarily invariant norm and $\Theta_0$ denotes the directed
-angle from the trial to the exact subspace.  Here the gap separates the
-spectrum on the exact subspace from that on its orthogonal complement.
-The source also covers real and complex separable Hilbert spaces, including
-unbounded self-adjoint operators under its domain and bounded-residual
-conditions \citep{davis1970rotation}.  \Cref{app:formalization1} gives a
-reader's guide to the mathematics and the Lean signature below.
+It measures the error in the trial eigenvector relation. In finite dimensions,
+choosing $A_0=E_0^*TE_0$ gives the Rayleigh--Ritz specialization
+$R=(I-P)TE_0$. This choice makes the trial-side diagonal perturbation zero;
+it is an additional specialization, rather than the general definition of $R$.
 
-Our 29 targets comprise the four unnumbered headline theorems in Davis--Kahan Section~2 and
-every named theorem, proposition, lemma, and corollary established in the paper.
-\Cref{app:data} specifies the counting convention.  At the manuscript
-snapshot, all 29 have checked treatments.  Source-to-signature review has
-continued to refine some source-facing theorem boundaries, including the scalar,
-operator-scope, and norm-domain boundary of the $\sin 2\Theta$ theorem discussed
-below.  We therefore report the
-current review state without treating it as a certificate of complete semantic
-correspondence.
+For the $\sin 2\Theta$ theorem, let $\Lambda_0$ and $\Lambda_1$ be the
+restrictions of $T$ to $Q\mathcal H$ and $Q^\perp\mathcal H$. The gap condition is
+\[
+ \sigma(\Lambda_0)\subseteq[\beta,\alpha],\qquad
+ \sigma(\Lambda_1)\cap(\beta-\delta,\alpha+\delta)=\varnothing,
+ \qquad \delta>0.
+\]
+The source permits the corresponding half-infinite intervals as well.
+For a unitarily invariant norm $N$, its two conclusions are
+\begin{equation}
+ \delta N(\sin 2\Theta_0)\le 2N(R),\qquad
+ \delta N(\sin 2\Theta)\le 2N(H),
+ \label{eq:sin2theta}
+\end{equation}
+where $\Theta_0$ is the trial-side angle and $\Theta$ is the ambient angle.
+Each inequality is read where its displayed norms exist. The gap is on the
+\emph{perturbed} restrictions $\Lambda_0,\Lambda_1$; moving it to the
+unperturbed blocks does not in general preserve the residual conclusion.
+The source covers real and complex separable Hilbert spaces, including
+unbounded self-adjoint operators with the stated domain conditions
+\citep{davis1970rotation}. \Cref{app:formalization1} explains the notation.
+
+Our 29 targets comprise the four unnumbered headline theorems in Davis--Kahan
+Section~2 and every named theorem, proposition, lemma, and corollary established
+in the paper. \Cref{app:data} specifies the counting convention. The development
+records checked treatments addressing all 29 targets. This counts formal
+artifacts associated with the targets, rather than certifying that every
+artifact has the full source scope. The current $\sin 2\Theta$ declaration
+provides a concrete remaining discrepancy, discussed below.
 
 The development required projection and principal-angle geometry,
 singular-subspace geometry, unitarily invariant norms and operator ideals,
@@ -433,25 +439,22 @@ statements use the ordered eigenvalues of the blocks themselves and the block
 dimension.
 \end{itemize}
 
-\paragraph{Current source-facing $\sin 2\Theta$ statement.}
-The current declaration below represents the same Davis--Kahan Section~2
-$\sin 2\Theta$ result as \Cref{lst:sin2theta-mismatch}.  This makes the two
-formalizations directly comparable rather than using a different theorem as the
-repair example.  The source statement inherits several conditions from its
-surrounding context: the real-or-complex separable Hilbert-space setting, the
-unbounded self-adjoint extension, the reducing-subspace setup, the placement of
-the spectral gap on the perturbed operator's blocks, and the convention that a
-unitarily invariant norm inequality is asserted where the displayed norms are
-defined.
+\paragraph{Domain scope of the current $\sin 2\Theta$ statement.}
+\Cref{lst:current-sin2theta} is the current scalar-generic declaration for the
+same source result. Its \texttt{RCLike} parameter covers real and complex
+scalars; its spectral gap is on the perturbed operator's reducing restrictions.
+The \texttt{N.Mem} implications express where-defined norm inequalities without
+concluding ideal membership. The norm record also carries the normalized ideal
+laws and a where-defined Ky Fan comparison law. Davis--Kahan cite that comparison
+in Section~1; storing it in the record does not derive it from unitary invariance.
 
-\Cref{lst:current-sin2theta} shows the current scalar-generic declaration.  Its
-\texttt{RCLike} scalar parameter covers the real and complex cases in one theorem.
-The unbounded ambient operator is represented by a partial linear map and the
-bounded perturbation separately.  The theorem contains both the directed
-residual inequality and the ambient perturbation inequality under one shared
-setup.  The \texttt{NormalizedSymmetricOperatorIdealFamily} carries the domain
-of finiteness of the norm, so the \texttt{N.Mem} implications express the
-source's where-defined convention rather than ideal-membership transfer.
+The domain restriction remains visible in the signature. Although \texttt{A}
+is a partial linear map, \texttt{M} is bounded on the entire trial space
+\texttt{P}, and \texttt{hPdom} requires every vector of \texttt{P} to lie in the
+domain of $A+H$. The source's unbounded appendix instead permits the trial
+operator to be unbounded: $TE_0$ and $E_0A_0$ have a common dense domain, on
+which their difference extends to a bounded residual. Consequently, the current
+declaration does not cover that source setting.
 
 % Editor provenance (not rendered): this display is generated verbatim from
 % DavisKahan/Sources/DavisKahan1970/SinTwoThetaDirectedRCLike.lean in the
@@ -463,24 +466,29 @@ source's where-defined convention rather than ideal-membership transfer.
 \lstinputlisting[
   style=leanpaper,
   firstline=6,
-  caption={Current scalar-generic signature for the same Davis--Kahan Section~2 $\sin 2\Theta$ result as Formalization~1.  It covers real and complex scalars, potentially unbounded self-adjoint operators, the directed residual and ambient perturbation clauses, and the where-defined norm convention.},
+  caption={Current scalar-generic $\sin 2\Theta$ signature. The bounded trial operator \texttt{M} and whole-trial-space domain hypothesis \texttt{hPdom} restrict both conclusions. A partial ambient operator type alone does not supply the source's unbounded trial scope.},
   label={lst:current-sin2theta}
 ]{generated/current_sin_two_theta_presentation.lean}
 \end{minipage}
 \end{nolinenumbers}
 
-In mathematical notation, the two conclusions are
-\[
-\begin{aligned}
-  &N(\sin 2\Theta_0),\ N(R)\ \text{defined}
-    &&\Longrightarrow&& \delta N(\sin 2\Theta_0)\le 2N(R),\\
-  &N(\sin 2\Theta),\ N(H)\ \text{defined}
-    &&\Longrightarrow&& \delta N(\sin 2\Theta)\le 2N(H).
-\end{aligned}
-\]
-The stronger symmetric-norming and fixed-field theorems used in the proof are
-retained separately as supporting generalizations and API variants; the result
-ledger identifies the declaration used as the current source-facing witness.
+For example, on $\ell^2\oplus\ell^2$, let $D(x_n)=((n+1)x_n)$ on its
+natural domain, $A=T=(-D)\oplus D$, and let $P=Q$ project onto the first
+summand. The two spectral parts have gap $2$, and $H=R=0$, so both source
+inequalities apply. But $P\mathcal H$ is not contained in $\operatorname{dom}T$:
+the vector with first component $x_n=1/(n+1)$ lies in $P\mathcal H$ and not
+in the domain. No choice of bounded \texttt{M} can supply \texttt{hPdom}.
+
+There are two distinct scope issues. The common domain must replace the
+whole-trial-space domain assumption. In addition, a bounded ambient perturbation
+is needed for the ambient inequality, whereas the residual inequality can apply
+when only $R$ is bounded. Those hypotheses belong to their respective clauses.
+The separate ambient theorem in the development already avoids the trial-domain
+restriction; joining the clauses under the restricted prefix loses that scope.
+\Cref{app:domain-repair} states a common-domain replacement and explains its
+reflection identity. Its Lean proof code is supplied for validation but has not
+yet been checked with the pinned compiler, so it is not counted as a completed
+repair.
 
 % Candidate future example of review overreach (not rendered): Theorem 8.1(ii)
 % ends with "and natural infinite-dimensional extensions."  A prior review
@@ -493,21 +501,24 @@ ledger identifies the declaration used as the current source-facing witness.
 \section{Conclusion}
 
 \paragraph{Did we formalize Davis--Kahan?}
-All 29 tracked results have checked treatments: 28 Lean proofs and a
-finite-dimensional counterexample plus proved repair for Proposition~4.4
-(\Cref{app:data}).  The current source-facing statements incorporate the
-repairs described above, but we have no calibrated stopping rule or certificate
-of complete source correspondence.
+The development records 28 Lean proofs associated with tracked results and a
+finite-dimensional counterexample plus proved repair for Proposition~4.4.
+The current $\sin 2\Theta$ statement still excludes source inputs with an
+unbounded trial restriction. Its common-domain replacement awaits compiler
+validation and a further source-to-statement review. The 29-target accounting
+therefore does not establish a complete formalization of the source.
 
-Lean establishes the encoded proposition.  Source review asks whether that
-proposition preserves the intended hypotheses, objects, and scope without
-exceeding what the source states; how to validate and stop such review remains
-open.
+The case study supports reviewing each conclusion together with its own
+hypotheses, inherited definitions, and operator domains. A partial-map type,
+a matching inequality, or a successful build can each coexist with a
+source-scope mismatch. The project provides no calibrated stopping rule or
+residual-error estimate for this review process.
 
 \paragraph{AI assistance.}
 ChatGPT and Claude were used throughout the formalization and manuscript
 preparation, including code generation, mathematical discussion, literature
-search, and source review.  Lean~4 and Mathlib checked the formal development.
+search, and source review.  The reported checked artifacts use Lean~4 and Mathlib; the new common-domain
+proof code is explicitly excluded from that validation claim.
 Incomplete token telemetry and derived resource estimates are reported in
 \cref{app:resources}.
 

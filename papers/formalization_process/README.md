@@ -103,13 +103,24 @@ presentation applies only the audited readability name changes and replaces
 display-sensitive Lean Unicode with unique ASCII `LeanLit...` sentinels.
 `paper.tex` maps those sentinels to LaTeX glyphs with `literate=`. The
 presentation file begins with comments pointing back to the exact sidecar. The
-current exact source interface uses `NormalizedSymmetricOperatorIdealFamily`.
+current restricted interface uses `NormalizedSymmetricOperatorIdealFamily`; its
+where-defined Fan comparison is an explicit field of that record.
 
-The manuscript reports checked formal treatments for all 29 tracked Davis--Kahan
-results while keeping semantic alignment separate.  The latest source/signature
-review found no remaining material mismatch, but no further independent review
-has yet followed that pass; the paper therefore avoids a 100-percent
-semantic-completeness claim.
+The 2026-09-09 source/signature review found a remaining trial-domain mismatch
+in the displayed current sine-two-theta theorem. The manuscript retains the
+29-target artifact accounting while identifying that scope restriction. The
+result register now leaves `S2-sin-two-theta` open, with 28 other status records
+unchanged. This targeted pass is not a new acceptance review of those 28 rows.
+
+`DavisKahan/Sources/DavisKahan1970/SinTwoThetaCommonDomain.lean` contains a
+common-domain replacement candidate. Its residual and ambient perturbation
+hypotheses are local to their respective clauses. It has not been compiled in
+the review environment and is not imported by `DavisKahan.All` or substituted
+for the accepted aliases. See
+`dev/davis-kahan-1970-sin-two-theta-review-2026-09-09.md` and
+`dev/formalization_process_review_validation.md` for findings and validation.
+The old signature remains in the paper as the artifact being reviewed; the
+candidate is not substituted into the display and called checked.
 
 ## Public project repository
 
@@ -143,7 +154,9 @@ before submission.
 
 ## Figure
 
-The workflow figure remains the existing `figures/formalization_workflow.png` artifact used by the main paper. Do not replace or redraw it as part of prose revisions. The semantic-alignment screenshot remains in the appendix.
+The workflow figure remains the existing `figures/formalization_workflow.png` artifact used by the main paper. Do not replace or redraw it as part of prose revisions. The appendix includes the semantic-alignment screenshot only when its file is
+present; this revision explicitly omits it pending regeneration. It is not
+evidence for the current source-correspondence judgment.
 
 ## Build
 

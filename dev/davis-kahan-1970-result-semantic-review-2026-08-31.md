@@ -1,5 +1,16 @@
 # Davis--Kahan 1970: hostile result-by-result semantic review, 2026-08-31
 
+> **Current correction, 2026-09-09.** `S2-sin-two-theta` is reopened.
+> The selected current conjunction restricts the trial block to a bounded map
+> and requires the whole trial subspace in the exact operator domain. Its
+> ambient conjunct inherits those unnecessary hypotheses. A bounded residual
+> also does not require a globally bounded perturbation. See
+> `dev/davis-kahan-1970-sin-two-theta-review-2026-09-09.md` and the explicit
+> `remaining_gap` in the result inventory. The candidate repair has not been
+> compiler-validated. The review below is historical where it reports closure
+> of this row; the other 28 records are unchanged by this targeted review.
+
+
 This is a full re-review of all 29 counted results, performed after the
 coherent-clause certificate was introduced (8499471d) and after the ambient
 `sin 2Theta` theorem was proved at the source's unbounded scope.  It supersedes

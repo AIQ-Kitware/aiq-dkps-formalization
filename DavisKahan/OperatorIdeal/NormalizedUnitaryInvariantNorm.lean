@@ -11,7 +11,9 @@ import DavisKahan.OperatorIdeal.ApproximationNumbers.ScalarGeneric
 This module contains two related operator-ideal norm records.
 
 * `NormalizedSymmetricOperatorIdealFamily` is the mathematical base object: a
-  symmetric operator ideal family together with the rank-one normalization.
+  symmetric operator ideal family together with rank-one normalization and
+  where-defined Fan comparison. The last property is an explicit structure field,
+  not a theorem derived here from the other two ingredients.
   Its name describes the data it carries; Davis--Kahan provenance belongs in
   theorem and module documentation rather than in the type name.
 * `NormalizedUnitaryInvariantNorm` is the older, stronger implementation record.
@@ -36,13 +38,20 @@ carry the stronger membership-transferring form.
 * adjoint/unitary invariance and contraction compatibility, derived from those
   ideal laws; and
 * the rank-one normalization `‖u v*‖ = ‖u‖ ‖v‖`, represented by
-  `gauge_rankOne_eq_one` after normalizing the vectors.
+  `gauge_rankOne_eq_one` after normalizing the vectors; and
+* the where-defined comparison law
+  `gauge_le_of_forall_kyFanApproximationGauge_le_defined`.
 
 Where-defined Fan comparison is part of the mathematical base record.  Adding the
 stronger unconditional property with `NormalizedSymmetricOperatorIdealFamily.withFanDominance` recovers a
 `NormalizedUnitaryInvariantNorm`.  Conversely,
 `NormalizedUnitaryInvariantNorm.toNormalizedSymmetricOperatorIdealFamily` forgets
 that extra property.
+
+The theorem `hasFanDominanceWhereDefined` below exposes that stored law. It does
+not establish a representation theorem for every norm satisfying only bare
+unitary invariance. Davis--Kahan Section 1 cites Fan comparison as mathematical
+background; source audits must record that choice explicitly.
 -/
 
 namespace TauCeti

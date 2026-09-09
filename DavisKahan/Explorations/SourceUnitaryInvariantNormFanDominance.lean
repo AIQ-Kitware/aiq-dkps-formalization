@@ -8,6 +8,15 @@ Authors: Jon Crall, OpenAI GPT-5.6 Sol
 /-
 # HANDOFF: normalized symmetric ideal families / Fan dominance (2026-09-08)
 
+**2026-09-09 scope note.** The handoff below is historical. In the current base
+record, where-defined Fan comparison is already an explicit field. Consequently
+its public accessor is not an independent derivation from the norm and ideal
+laws. The earlier statement below that the base record contains no Fan dominance
+must be read as the pre-field state. Unconditional membership-transferring Fan
+dominance is still distinct. Preserve the probes as exploration history; do not
+count a field projection as closure of a bare-UI-norm representation obligation.
+
+
 This file is intentionally a **standalone compile probe**.  Nothing imports it.
 The user compiled Probes 1--43 cleanly before the naming cleanup that renamed the
 base record from its previous provenance-based name to the

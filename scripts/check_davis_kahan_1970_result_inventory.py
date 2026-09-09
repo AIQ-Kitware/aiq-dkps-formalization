@@ -240,12 +240,15 @@ BOUNDARY_REASON_CODES = {
     "paper_wide_semantic_convention_not_result",
 }
 
-# Reviewer-facing source-alignment taxonomy.  It is deliberately three-valued:
+# Reviewer-facing source-alignment taxonomy. The first three values classify accepted readings;
+# scope_restricted records an actual unmatched source scope and cannot be certified.
+# Historical three-way reading taxonomy:
 # a locally self-contained exact match, a true result whose exact formalization
 # depends on nonlocal source semantics, and a meaningful printed statement that
 # is mathematically false.  The middle category must never be used to soften the
 # third one.
 SEMANTIC_ALIGNMENTS = {
+    "scope_restricted",
     "locally_exact",
     "paper_faithful_nonlocal_source_interpretation",
     "refuted_as_transcribed",
@@ -1561,6 +1564,11 @@ def _validate_nonlocal_interpretation(
                 + ", ".join(sorted(SEMANTIC_ALIGNMENTS))
                 + f"; got {alignment!r}"
             )
+        if alignment == "scope_restricted":
+            if _semantic_certification(item) not in BLOCKED_SEMANTIC_CERTIFICATIONS:
+                fail(f"{result_id}: scope_restricted alignment requires blocked semantic certification")
+            if not isinstance(item.get("remaining_gap"), dict):
+                fail(f"{result_id}: scope_restricted alignment requires an explicit remaining_gap")
         self_contained = item.get("local_statement_self_contained")
         if not isinstance(self_contained, bool):
             fail(f"{result_id}: local_statement_self_contained must be an explicit boolean")

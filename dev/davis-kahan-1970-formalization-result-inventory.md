@@ -6,15 +6,17 @@ The denominator contains exactly the four Section 2 headline theorems and every 
 
 - Counted results: **29**
 - Result-boundary reviews accepted: **29/29**
-- Currently hostile-certified terminal: **29**
-- Awaiting closure: **0**
+- Currently hostile-certified terminal: **28**
+- Awaiting closure: **1**
 - Printed statements that are NOT locally self-contained: **6**
-- Result-only semantic sweep: `dev/davis-kahan-1970-result-semantic-review-2026-08-12.md`
+- Result-only semantic sweep: `dev/davis-kahan-1970-result-semantic-review-2026-08-31.md`; targeted reopening: `dev/davis-kahan-1970-sin-two-theta-review-2026-09-09.md`
 - Compiler-checkable theorem surface: `DavisKahan/Sources/DavisKahan1970/Audits/ResultSemanticSurface.lean`
 
 Each result below explicitly partitions its primary source block into atoms inside the printed result statement and adjacent fidelity-only atoms outside it. Cross-block atoms are shared scope clauses (not extra results).
 
 ## Source-alignment taxonomy
+
+- `scope_restricted` -- existing checked statements exclude identified source inputs. Certification must be blocked and a remaining gap recorded. The compiler column describes the existing restricted evidence, not an unvalidated replacement.
 
 - `locally_exact` — the printed statement is self-contained and Lean matches it directly.
 - `paper_faithful_nonlocal_source_interpretation` — the result is true and Lean is faithful, but the correspondence relies on source semantics stated elsewhere in the paper. The row must carry an accepted `nonlocal_source_interpretation` record, and the generated audit packet puts that record in front of the reviewer for adjudication.
@@ -24,7 +26,7 @@ Each result below explicitly partitions its primary source block into atoms insi
 |---|---|---|---|---|---|---|---|
 | `S2-sin-theta` | unnumbered_theorem | `locally_exact` | yes | `proved_exact` | `proved_in_build` | `accepted` | `accepted` |
 | `S2-tan-theta` | unnumbered_theorem | `paper_faithful_nonlocal_source_interpretation` | **no** | `proved_exact` | `proved_in_build` | `accepted` | `accepted` |
-| `S2-sin-two-theta` | unnumbered_theorem | `locally_exact` | yes | `proved_exact` | `proved_in_build` | `accepted` | `accepted` |
+| `S2-sin-two-theta` | unnumbered_theorem | `scope_restricted` | yes | `proved_partial` | `proved_in_build` | `hostile_review_blocked` | `accepted` |
 | `S2-tan-two-theta` | unnumbered_theorem | `locally_exact` | yes | `proved_exact` | `proved_in_build` | `accepted` | `accepted` |
 | `DK-3.1-prop` | proposition | `locally_exact` | yes | `proved_exact` | `proved_in_build` | `accepted` | `accepted` |
 | `DK-3.2-prop` | proposition | `locally_exact` | yes | `proved_exact` | `proved_in_build` | `accepted` | `accepted` |
@@ -143,8 +145,19 @@ Theorem 8.1 signatures at their source context.
 
 ## Current closure queue
 
-Empty. All 29 counted results are terminal on all three axes, and no
-hostile-review obligation is open.
+`S2-sin-two-theta` was reopened on 2026-09-09. The selected conjunction
+requires a bounded trial operator and puts every trial vector in the exact
+operator domain. Davis--Kahan allow a common dense domain with an unbounded
+trial restriction. The directed clause also need not assume a globally bounded
+perturbation. The ambient clause has a separate existing unrestricted theorem.
+
+`SinTwoThetaCommonDomain.lean` supplies a repair candidate with clause-local
+boundedness; it has not been compiled in the review environment. The row must
+remain blocked until its proof and public statement have both been validated.
+The other 28 status records are retained, not independently re-certified by this
+targeted review.
+
+Historical closure notes follow.
 
 What last emptied it, 2026-09-07: `DK-8.1-thm` had been reopened the day before,
 by the fourth hostile review, because parts (ii) and (iii) read the eigenvalue

@@ -57,8 +57,10 @@ submission repository under `submodules/` still consumes them.
 A short unqualified name is bound only to a declaration that is scalar-generic over
 `RCLike 𝕜` and whose statement boundary is the one selected by the result ledger.
 `sinTheta` and `sinTwoTheta` are bound to the promoted where-defined RCLike theorems.
-For `sinTwoTheta`, the short theorem carries both printed clauses under their shared source
-setup; its directed and ambient clause APIs are also available separately.  The tangent
+The `sinTwoTheta` binding is retained for compatibility but was reopened on
+2026-09-09: its shared bounded-trial/domain hypotheses restrict both clauses.
+The separate ambient API does not have that restriction. The common-domain
+candidate is not imported or certified here.  The tangent
 short names remain unbound for their own recorded reasons.
 
 Which short names are bound is recorded structurally in `section_two_short_names` in the
@@ -67,7 +69,9 @@ declaration name.
 
 ## What these names carry
 
-Each is an `alias`, so each has exactly the type of the declaration it names: an unbounded
+Each is an `alias`, so each has exactly the type of the declaration it names.
+The following describes the intended boundary, not a substitute for reading
+that type; the `sinTwoTheta` bounded-trial restriction is recorded above: an unbounded
 self-adjoint `LinearPMap` ambient operator, arbitrary Hilbert dimension, an arbitrary source
 unitarily invariant norm, both printed conclusions where the result has two, no capability
 class, no finite-dimensional hypothesis and no proof vehicle in the conclusion.
@@ -152,9 +156,11 @@ alias tanTheta_real := tanTheta_ambient_unboundedRitz_definedTangent_symmetricNo
 
 /-! ## `sin 2Θ` -/
 
-/-- **Davis--Kahan 1970, the complete `sin 2Θ` theorem, scalar-generic over `RCLike`.**
+/-- **Davis--Kahan 1970, the bounded-trial `sin 2Θ` specialization over `RCLike`.**
 
-This is the short source-facing API selected by the ledger.  It carries both boxed Section 2
+This compatibility alias is selected but currently blocked by the ledger's
+2026-09-09 source review: `hPdom` and bounded `M` exclude the unbounded trial
+scope. It carries both boxed Section 2
 conclusions under the shared setup: `P` reduces `A`, `Q` reduces `A + H`, the gap is on the
 two `Q`-blocks of `A + H`, and the trial residual is `(A + H)E₀ - E₀A₀`.  The norm
 inequalities are asserted where the displayed norms are defined. -/

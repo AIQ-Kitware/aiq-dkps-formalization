@@ -2,6 +2,17 @@
 Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, OpenAI GPT-5.6 Sol
+
+Source-scope review (2026-09-09): the bounded-trial declarations in this module
+remain valid specializations, not full coverage of the unbounded trial scope.
+Their `hVdom`/`hPdom` hypotheses put every trial vector in the exact operator's
+domain, and their trial operator `M` is bounded. The common-dense-domain setup
+of the source does not require either restriction. In the final conjunction,
+these shared hypotheses also restrict the ambient clause unnecessarily; use
+`SinTwoThetaAmbientUnbounded` for its independent ambient estimate.
+`SinTwoThetaCommonDomain` contains a replacement candidate pending compiler
+validation. It is not imported here or certified by the result inventory.
+
 -/
 import DavisKahan.DoubleAngle.UnboundedIdeal
 import DavisKahan.Sources.DavisKahan1970.SineTheta.ScalarGeneric
@@ -386,13 +397,12 @@ theorem sinTwoTheta_directed_unboundedResidual_reducing_whereDefinedUIN_rclike
   nlinarith
 
 
-/-- Davis--Kahan Section 2 `sin 2Θ` theorem at the shared printed setup,
-scalar-generic over `RCLike` and at the where-defined unitarily invariant norm boundary.
+/-- Combined bounded-trial specialization of the double-angle inequalities.
 
-`P` reduces the unperturbed operator `A`.  `Q` reduces `A + H`, whose two reducing
-restrictions carry the printed gap.  The trial residual is formed from `A + H`, exactly as
-in (1.8).  The conclusion contains the two boxed Section 2 inequalities without asserting
-ideal-membership transfer. -/
+The shared `hPdom` and bounded `M` assumptions restrict both conclusions. This
+is retained for compatibility, not as full source-scope certification. The
+separate ambient theorem needs no such trial data. See the common-domain
+replacement candidate and the 2026-09-09 source review. -/
 theorem sinTwoTheta_unbounded_perturbedGap_whereDefinedUIN_rclike
     [TopologicalSpace.SeparableSpace H]
     (N : NormalizedSymmetricOperatorIdealFamily.{u, v} 𝕜)
