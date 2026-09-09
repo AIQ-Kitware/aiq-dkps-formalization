@@ -92,8 +92,8 @@ One row per printed source clause per scalar field.  A clause is `PASS` only whe
 
 | clause | scalar | witness | status |
 | --- | --- | --- | --- |
-| `directed.complex` | complex | `TauCeti.DavisKahan1970.sinTheta_unbounded_formGap_sourceExact_complex` + `TauCeti.DavisKahan.ExactSinTheta.NormalizedSymmetricOperatorIdealFamily` | **PASS** |
-| `directed.real` | real | `TauCeti.DavisKahan1970.sinTheta_unbounded_formGap_sourceExact_real` + `TauCeti.DavisKahan.ExactSinTheta.NormalizedSymmetricOperatorIdealFamily` | **PASS** |
+| `directed.complex` | complex | `TauCeti.DavisKahan1970.sinTheta_unbounded_formGap_whereDefinedUIN_complex` + `TauCeti.DavisKahan.ExactSinTheta.NormalizedSymmetricOperatorIdealFamily` | **PASS** |
+| `directed.real` | real | `TauCeti.DavisKahan1970.sinTheta_unbounded_formGap_whereDefinedUIN_real` + `TauCeti.DavisKahan.ExactSinTheta.NormalizedSymmetricOperatorIdealFamily` | **PASS** |
 
 **`directed.complex`.** delta * N(sin Theta_0) <= N(R) on the paper's directed sine, at the PRINTED scope: separable ambient Hilbert space, `NormalizedSymmetricOperatorIdealFamily`, unbounded self-adjoint ambient operator, an arbitrary trial subspace with the printed trial residual as the only right-hand side, and the full `FormBoundedSylvesterGap`. There is no caller-visible residual-membership premise. The primary theorem itself spells the source vacuity convention as `N.Mem sinTheta₀ → N.Mem R → δ * N.gaugeReal sinTheta₀ ≤ N.gaugeReal R`, so no sibling predicate donates the conclusion semantics.
 
@@ -109,12 +109,11 @@ Result-wide scope every clause must carry: `S2-sin-theta.ui-norm-scope`, `S2-sin
 
 The declarations that carry this result's printed statement, with the source atoms each one covers.  Everything under *Other registered declarations* below accompanies the result without establishing it.
 
-- `TauCeti.DavisKahan1970.sinTheta_unbounded_formGap_sourceExact_complex` — primary_source_witness, complex scalars, proof; covers `S2-sin-theta.ui-norm-scope`, `S2-sin-theta.gap-hypothesis`, `S2-sin-theta.directed-conclusion`, `S2-unbounded-scope.infinite-dimensional-scope`, `S2-unbounded-scope.arbitrary-ui-scope`, `S2-unbounded-scope.unbounded-selfadjoint-scope`, `S2-unbounded-scope.bounded-residual-needed`, `S2-unbounded-scope.half-infinite-gap-intervals`
-- `TauCeti.DavisKahan1970.sinTheta_unbounded_formGap_sourceExact_real` — primary_source_witness, real scalars, proof; covers `S2-sin-theta.ui-norm-scope`, `S2-sin-theta.gap-hypothesis`, `S2-sin-theta.directed-conclusion`, `S2-unbounded-scope.infinite-dimensional-scope`, `S2-unbounded-scope.arbitrary-ui-scope`, `S2-unbounded-scope.unbounded-selfadjoint-scope`, `S2-unbounded-scope.bounded-residual-needed`, `S2-unbounded-scope.half-infinite-gap-intervals`
+- `TauCeti.DavisKahan1970.sinTheta_unbounded_formGap_whereDefinedUIN_complex` — primary_source_witness, complex scalars, proof; covers `S2-sin-theta.ui-norm-scope`, `S2-sin-theta.gap-hypothesis`, `S2-sin-theta.directed-conclusion`, `S2-unbounded-scope.infinite-dimensional-scope`, `S2-unbounded-scope.arbitrary-ui-scope`, `S2-unbounded-scope.unbounded-selfadjoint-scope`, `S2-unbounded-scope.bounded-residual-needed`, `S2-unbounded-scope.half-infinite-gap-intervals`
+- `TauCeti.DavisKahan1970.sinTheta_unbounded_formGap_whereDefinedUIN_real` — primary_source_witness, real scalars, proof; covers `S2-sin-theta.ui-norm-scope`, `S2-sin-theta.gap-hypothesis`, `S2-sin-theta.directed-conclusion`, `S2-unbounded-scope.infinite-dimensional-scope`, `S2-unbounded-scope.arbitrary-ui-scope`, `S2-unbounded-scope.unbounded-selfadjoint-scope`, `S2-unbounded-scope.bounded-residual-needed`, `S2-unbounded-scope.half-infinite-gap-intervals`
 
 ### Other registered declarations
 
-- `TauCeti.DavisKahan1970.SectionTwo.sinTheta` — public_alias
 - `TauCeti.DavisKahan1970.sinTheta_unbounded_formGap_symmetricNorming_real` — specialization
 - `TauCeti.DavisKahan1970.sinTheta_unbounded_formGap_symmetricNorming_complex` — specialization
 - `TauCeti.DavisKahan1970.SectionTwo.sinTheta_complex` — public_alias
@@ -138,12 +137,6 @@ The declarations that carry this result's printed statement, with the source ato
 - `TauCeti.DavisKahan.ExactSinTheta.NormalizedSymmetricOperatorIdealFamily.ScaledGaugeLEWhereDefined` — implementation_structure
 
 ### Source-facing Lean declarations
-
-#### `TauCeti.DavisKahan1970.SectionTwo.sinTheta`
-
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/SectionTwo.lean:118`
-
-Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.SectionTwo.sinTheta_complex`
 
@@ -253,13 +246,13 @@ Source location candidates: `DavisKahan/Sources/DavisKahan1970/SymmetricNormingF
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
-#### `TauCeti.DavisKahan1970.sinTheta_unbounded_formGap_sourceExact_complex`
+#### `TauCeti.DavisKahan1970.sinTheta_unbounded_formGap_whereDefinedUIN_complex`
 
 Source location candidates: `DavisKahan/Sources/DavisKahan1970/SineTheta/Presentation.lean:477`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
-#### `TauCeti.DavisKahan1970.sinTheta_unbounded_formGap_sourceExact_real`
+#### `TauCeti.DavisKahan1970.sinTheta_unbounded_formGap_whereDefinedUIN_real`
 
 Source location candidates: `DavisKahan/Sources/DavisKahan1970/SineTheta/Presentation.lean:623`
 
@@ -776,10 +769,10 @@ One row per printed source clause per scalar field.  A clause is `PASS` only whe
 
 | clause | scalar | witness | status |
 | --- | --- | --- | --- |
-| `ambient.complex` | complex | `TauCeti.DavisKahan1970.tanTheta_ambient_unboundedRitz_definedTangent_sourceExact_complex` + `TauCeti.DavisKahan1970.crossedDefectsEquivalent_of_hasDefinedAmbientTangent` + `TauCeti.DavisKahan1970.continuousOn_tan_spectrum_of_hasDefinedAmbientTangent` + `TauCeti.DavisKahan1970.hasDefinedAmbientTangent_iff_pi_div_two_notMem_spectrum` + `TauCeti.DavisKahan1970.normalizedUnitaryInvariant_of_symmetricNorming` + `TauCeti.DavisKahan.ExactSinTheta.NormalizedUnitaryInvariantNorm` | **PASS** |
-| `ambient.real` | real | `TauCeti.DavisKahan1970.tanTheta_ambient_unboundedRitz_definedTangent_sourceExact_real` + `TauCeti.DavisKahan1970.crossedDefectsEquivalent_of_hasDefinedAmbientTangent` + `TauCeti.DavisKahan1970.continuousOn_tan_spectrum_of_hasDefinedAmbientTangent` + `TauCeti.DavisKahan1970.hasDefinedAmbientTangent_iff_pi_div_two_notMem_spectrum` + `TauCeti.DavisKahan1970.normalizedUnitaryInvariant_of_symmetricNorming` + `TauCeti.DavisKahan.ExactSinTheta.NormalizedUnitaryInvariantNorm` | **PASS** |
-| `directed.complex` | complex | `TauCeti.DavisKahan1970.tanTheta_directed_unboundedRitz_sourceExact_complex` + `TauCeti.DavisKahan1970.normalizedUnitaryInvariant_of_symmetricNorming` + `TauCeti.DavisKahan.ExactSinTheta.NormalizedUnitaryInvariantNorm` | **PASS** |
-| `directed.real` | real | `TauCeti.DavisKahan1970.tanTheta_directed_unboundedRitz_sourceExact_real` + `TauCeti.DavisKahan1970.normalizedUnitaryInvariant_of_symmetricNorming` + `TauCeti.DavisKahan.ExactSinTheta.NormalizedUnitaryInvariantNorm` | **PASS** |
+| `ambient.complex` | complex | `TauCeti.DavisKahan1970.tanTheta_ambient_unboundedRitz_definedTangent_normalizedUIN_complex` + `TauCeti.DavisKahan1970.crossedDefectsEquivalent_of_hasDefinedAmbientTangent` + `TauCeti.DavisKahan1970.continuousOn_tan_spectrum_of_hasDefinedAmbientTangent` + `TauCeti.DavisKahan1970.hasDefinedAmbientTangent_iff_pi_div_two_notMem_spectrum` + `TauCeti.DavisKahan1970.normalizedUnitaryInvariant_of_symmetricNorming` + `TauCeti.DavisKahan.ExactSinTheta.NormalizedUnitaryInvariantNorm` | **PASS** |
+| `ambient.real` | real | `TauCeti.DavisKahan1970.tanTheta_ambient_unboundedRitz_definedTangent_normalizedUIN_real` + `TauCeti.DavisKahan1970.crossedDefectsEquivalent_of_hasDefinedAmbientTangent` + `TauCeti.DavisKahan1970.continuousOn_tan_spectrum_of_hasDefinedAmbientTangent` + `TauCeti.DavisKahan1970.hasDefinedAmbientTangent_iff_pi_div_two_notMem_spectrum` + `TauCeti.DavisKahan1970.normalizedUnitaryInvariant_of_symmetricNorming` + `TauCeti.DavisKahan.ExactSinTheta.NormalizedUnitaryInvariantNorm` | **PASS** |
+| `directed.complex` | complex | `TauCeti.DavisKahan1970.tanTheta_directed_unboundedRitz_normalizedUIN_complex` + `TauCeti.DavisKahan1970.normalizedUnitaryInvariant_of_symmetricNorming` + `TauCeti.DavisKahan.ExactSinTheta.NormalizedUnitaryInvariantNorm` | **PASS** |
+| `directed.real` | real | `TauCeti.DavisKahan1970.tanTheta_directed_unboundedRitz_normalizedUIN_real` + `TauCeti.DavisKahan1970.normalizedUnitaryInvariant_of_symmetricNorming` + `TauCeti.DavisKahan.ExactSinTheta.NormalizedUnitaryInvariantNorm` | **PASS** |
 
 **`ambient.complex`.** delta * N(tan Theta) <= N(H) on the ambient tanAngleOperatorC, with ideal membership, unbounded self-adjoint LinearPMap ambient operator and unbounded Ritz compression.  CONDITION (3.5) REMOVED 2026-09-04: the primary took `CrossedDefectsEquivalent U V`, which is (3.5), and the printed Section 2 theorem does not state it -- the paper introduces (3.5) in Section 3 after Proposition 3.2 and declares it to hold for the REMAINDER of the paper, so it cannot be a hypothesis of an earlier theorem.  In its place the primary now takes `HasDefinedAmbientTangent U V`, which is the Section 1 vacuity convention made explicit: `||P_U - P_V|| < 1` says no principal angle reaches pi/2, which is exactly when `||tan Theta||` exists.  Nothing is lost, because `crossedDefectsEquivalent_of_hasDefinedAmbientTangent` derives (3.5) from it -- an angle of pi/2 is a vector in one of the crossed defect spaces, so a defined tangent makes both trivial.  And the hypothesis does work in the conclusion: `continuousOn_tan_spectrum_of_hasDefinedAmbientTangent` shows the angle spectrum then misses pi/2, so `cfc Real.tan` is applied to a genuinely continuous function and is the paper's `tan Theta` rather than Mathlib's totalisation, which sets `tan (pi/2) = 0`.  The (3.5) theorems are retained as the non-vacuous specialization.  VACUITY MADE TWO-DIRECTIONAL 2026-09-04: `hasDefinedAmbientTangent_iff_pi_div_two_notMem_spectrum` proves the hypothesis holds EXACTLY when pi/2 is not an angle of the pair.  So it is not merely a sufficient condition chosen for convenience: when it fails, a nonnegative operator attains its norm in its spectrum, arcsin carries that to pi/2, and the paper's `tan Theta` genuinely does not exist -- which is the case Section 1 declares vacuous.  The hypothesis and the source's vacuity condition are the same condition.
 
@@ -811,10 +804,10 @@ Result-wide scope every clause must carry: `S2-sin-theta.ui-norm-scope`, `S2-tan
 
 The declarations that carry this result's printed statement, with the source atoms each one covers.  Everything under *Other registered declarations* below accompanies the result without establishing it.
 
-- `TauCeti.DavisKahan1970.tanTheta_ambient_unboundedRitz_definedTangent_sourceExact_complex` — primary_source_witness, complex scalars, proof; covers `S2-sin-theta.ui-norm-scope`, `S2-tan-theta.ordered-gap-hypothesis`, `S2-tan-theta.rayleigh-ritz-hypothesis`, `S2-tan-theta.ambient-conclusion`, `S2-unbounded-scope.infinite-dimensional-scope`, `S2-unbounded-scope.arbitrary-ui-scope`, `S2-unbounded-scope.unbounded-selfadjoint-scope`, `S2-unbounded-scope.bounded-residual-needed`, `S2-unbounded-scope.half-infinite-gap-intervals`, `DK-6-appendix.unbounded-tangent-extension`
-- `TauCeti.DavisKahan1970.tanTheta_ambient_unboundedRitz_definedTangent_sourceExact_real` — primary_source_witness, real scalars, proof; covers `S2-sin-theta.ui-norm-scope`, `S2-tan-theta.ordered-gap-hypothesis`, `S2-tan-theta.rayleigh-ritz-hypothesis`, `S2-tan-theta.ambient-conclusion`, `S2-unbounded-scope.infinite-dimensional-scope`, `S2-unbounded-scope.arbitrary-ui-scope`, `S2-unbounded-scope.unbounded-selfadjoint-scope`, `S2-unbounded-scope.bounded-residual-needed`, `S2-unbounded-scope.half-infinite-gap-intervals`, `DK-6-appendix.unbounded-tangent-extension`
-- `TauCeti.DavisKahan1970.tanTheta_directed_unboundedRitz_sourceExact_complex` — primary_source_witness, complex scalars, proof; covers `S2-sin-theta.ui-norm-scope`, `S2-tan-theta.ordered-gap-hypothesis`, `S2-tan-theta.rayleigh-ritz-hypothesis`, `S2-tan-theta.directed-conclusion`, `S2-unbounded-scope.infinite-dimensional-scope`, `S2-unbounded-scope.arbitrary-ui-scope`, `S2-unbounded-scope.unbounded-selfadjoint-scope`, `S2-unbounded-scope.bounded-residual-needed`, `S2-unbounded-scope.half-infinite-gap-intervals`, `DK-6-appendix.unbounded-tangent-extension`
-- `TauCeti.DavisKahan1970.tanTheta_directed_unboundedRitz_sourceExact_real` — primary_source_witness, real scalars, proof; covers `S2-sin-theta.ui-norm-scope`, `S2-tan-theta.ordered-gap-hypothesis`, `S2-tan-theta.rayleigh-ritz-hypothesis`, `S2-tan-theta.directed-conclusion`, `S2-unbounded-scope.infinite-dimensional-scope`, `S2-unbounded-scope.arbitrary-ui-scope`, `S2-unbounded-scope.unbounded-selfadjoint-scope`, `S2-unbounded-scope.bounded-residual-needed`, `S2-unbounded-scope.half-infinite-gap-intervals`, `DK-6-appendix.unbounded-tangent-extension`
+- `TauCeti.DavisKahan1970.tanTheta_ambient_unboundedRitz_definedTangent_normalizedUIN_complex` — primary_source_witness, complex scalars, proof; covers `S2-sin-theta.ui-norm-scope`, `S2-tan-theta.ordered-gap-hypothesis`, `S2-tan-theta.rayleigh-ritz-hypothesis`, `S2-tan-theta.ambient-conclusion`, `S2-unbounded-scope.infinite-dimensional-scope`, `S2-unbounded-scope.arbitrary-ui-scope`, `S2-unbounded-scope.unbounded-selfadjoint-scope`, `S2-unbounded-scope.bounded-residual-needed`, `S2-unbounded-scope.half-infinite-gap-intervals`, `DK-6-appendix.unbounded-tangent-extension`
+- `TauCeti.DavisKahan1970.tanTheta_ambient_unboundedRitz_definedTangent_normalizedUIN_real` — primary_source_witness, real scalars, proof; covers `S2-sin-theta.ui-norm-scope`, `S2-tan-theta.ordered-gap-hypothesis`, `S2-tan-theta.rayleigh-ritz-hypothesis`, `S2-tan-theta.ambient-conclusion`, `S2-unbounded-scope.infinite-dimensional-scope`, `S2-unbounded-scope.arbitrary-ui-scope`, `S2-unbounded-scope.unbounded-selfadjoint-scope`, `S2-unbounded-scope.bounded-residual-needed`, `S2-unbounded-scope.half-infinite-gap-intervals`, `DK-6-appendix.unbounded-tangent-extension`
+- `TauCeti.DavisKahan1970.tanTheta_directed_unboundedRitz_normalizedUIN_complex` — primary_source_witness, complex scalars, proof; covers `S2-sin-theta.ui-norm-scope`, `S2-tan-theta.ordered-gap-hypothesis`, `S2-tan-theta.rayleigh-ritz-hypothesis`, `S2-tan-theta.directed-conclusion`, `S2-unbounded-scope.infinite-dimensional-scope`, `S2-unbounded-scope.arbitrary-ui-scope`, `S2-unbounded-scope.unbounded-selfadjoint-scope`, `S2-unbounded-scope.bounded-residual-needed`, `S2-unbounded-scope.half-infinite-gap-intervals`, `DK-6-appendix.unbounded-tangent-extension`
+- `TauCeti.DavisKahan1970.tanTheta_directed_unboundedRitz_normalizedUIN_real` — primary_source_witness, real scalars, proof; covers `S2-sin-theta.ui-norm-scope`, `S2-tan-theta.ordered-gap-hypothesis`, `S2-tan-theta.rayleigh-ritz-hypothesis`, `S2-tan-theta.directed-conclusion`, `S2-unbounded-scope.infinite-dimensional-scope`, `S2-unbounded-scope.arbitrary-ui-scope`, `S2-unbounded-scope.unbounded-selfadjoint-scope`, `S2-unbounded-scope.bounded-residual-needed`, `S2-unbounded-scope.half-infinite-gap-intervals`, `DK-6-appendix.unbounded-tangent-extension`
 
 ### Other registered declarations
 
@@ -1111,25 +1104,25 @@ Source location candidates: `DavisKahan/Sources/DavisKahan1970/SymmetricNormingF
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
-#### `TauCeti.DavisKahan1970.tanTheta_ambient_unboundedRitz_definedTangent_sourceExact_complex`
+#### `TauCeti.DavisKahan1970.tanTheta_ambient_unboundedRitz_definedTangent_normalizedUIN_complex`
 
 Source location candidates: `DavisKahan/Sources/DavisKahan1970/TanThetaUnboundedAmbient.lean:747`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
-#### `TauCeti.DavisKahan1970.tanTheta_ambient_unboundedRitz_definedTangent_sourceExact_real`
+#### `TauCeti.DavisKahan1970.tanTheta_ambient_unboundedRitz_definedTangent_normalizedUIN_real`
 
 Source location candidates: `DavisKahan/Sources/DavisKahan1970/TanThetaUnboundedAmbientReal.lean:478`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
-#### `TauCeti.DavisKahan1970.tanTheta_directed_unboundedRitz_sourceExact_complex`
+#### `TauCeti.DavisKahan1970.tanTheta_directed_unboundedRitz_normalizedUIN_complex`
 
 Source location candidates: `DavisKahan/Sources/DavisKahan1970/TanThetaDirectedUnbounded.lean:381`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
-#### `TauCeti.DavisKahan1970.tanTheta_directed_unboundedRitz_sourceExact_real`
+#### `TauCeti.DavisKahan1970.tanTheta_directed_unboundedRitz_normalizedUIN_real`
 
 Source location candidates: `DavisKahan/Sources/DavisKahan1970/TanThetaDirectedUnbounded.lean:471`
 
@@ -1231,10 +1224,10 @@ One row per printed source clause per scalar field.  A clause is `PASS` only whe
 
 | clause | scalar | witness | status |
 | --- | --- | --- | --- |
-| `directed.residual.complex` | complex | `TauCeti.DavisKahan1970.sinTwoTheta_directed_unboundedResidual_sourceExact_complex` + `TauCeti.DavisKahan.Angle.sinTwoThetaIdealBlock_hasSameApproximationNumbers_trialSide` + `TauCeti.DavisKahan.Angle.directedSinTwoAngleOperator_hasSameApproximationNumbers_swap` + `TauCeti.DavisKahan.Angle.mem_directedSinTwoAngleOperator_trialSide_iff` + `TauCeti.DavisKahan.Angle.gauge_directedSinTwoAngleOperator_trialSide` + `TauCeti.DavisKahan1970.normalizedUnitaryInvariant_of_symmetricNorming` + `TauCeti.DavisKahan.ExactSinTheta.NormalizedUnitaryInvariantNorm` | **PASS** |
-| `directed.residual.real` | real | `TauCeti.DavisKahan1970.sinTwoTheta_directed_unboundedResidual_sourceExact_real` + `TauCeti.DavisKahan.Angle.sinTwoThetaIdealBlock_hasSameApproximationNumbers_trialSide` + `TauCeti.DavisKahan.Angle.directedSinTwoAngleOperator_hasSameApproximationNumbers_swap` + `TauCeti.DavisKahan.Angle.mem_directedSinTwoAngleOperator_trialSide_iff` + `TauCeti.DavisKahan.Angle.gauge_directedSinTwoAngleOperator_trialSide` + `TauCeti.DavisKahan1970.normalizedUnitaryInvariant_of_symmetricNorming` + `TauCeti.DavisKahan.ExactSinTheta.NormalizedUnitaryInvariantNorm` | **PASS** |
-| `ambient.complex` | complex | `TauCeti.DavisKahan1970.sinTwoTheta_ambient_unbounded_perturbedGap_sourceExact_complex` + `TauCeti.LinearPMap.addBounded_neg_cancel` + `TauCeti.DavisKahan.Angle.sinTwoAngleOperator_comm` + `TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction.gauge_neg` + `TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction.mem_neg` + `TauCeti.DavisKahan1970.normalizedUnitaryInvariant_of_symmetricNorming` + `TauCeti.DavisKahan.ExactSinTheta.NormalizedUnitaryInvariantNorm` | **PASS** |
-| `ambient.real` | real | `TauCeti.DavisKahan1970.sinTwoTheta_ambient_unbounded_perturbedGap_sourceExact_real` + `TauCeti.LinearPMap.addBounded_neg_cancel` + `TauCeti.DavisKahan.Angle.sinTwoAngleOperator_comm` + `TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction.gauge_neg` + `TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction.mem_neg` + `TauCeti.DavisKahan1970.normalizedUnitaryInvariant_of_symmetricNorming` + `TauCeti.DavisKahan.ExactSinTheta.NormalizedUnitaryInvariantNorm` | **PASS** |
+| `directed.residual.complex` | complex | `TauCeti.DavisKahan1970.sinTwoTheta_directed_unboundedResidual_normalizedUIN_complex` + `TauCeti.DavisKahan.Angle.sinTwoThetaIdealBlock_hasSameApproximationNumbers_trialSide` + `TauCeti.DavisKahan.Angle.directedSinTwoAngleOperator_hasSameApproximationNumbers_swap` + `TauCeti.DavisKahan.Angle.mem_directedSinTwoAngleOperator_trialSide_iff` + `TauCeti.DavisKahan.Angle.gauge_directedSinTwoAngleOperator_trialSide` + `TauCeti.DavisKahan1970.normalizedUnitaryInvariant_of_symmetricNorming` + `TauCeti.DavisKahan.ExactSinTheta.NormalizedUnitaryInvariantNorm` | **PASS** |
+| `directed.residual.real` | real | `TauCeti.DavisKahan1970.sinTwoTheta_directed_unboundedResidual_normalizedUIN_real` + `TauCeti.DavisKahan.Angle.sinTwoThetaIdealBlock_hasSameApproximationNumbers_trialSide` + `TauCeti.DavisKahan.Angle.directedSinTwoAngleOperator_hasSameApproximationNumbers_swap` + `TauCeti.DavisKahan.Angle.mem_directedSinTwoAngleOperator_trialSide_iff` + `TauCeti.DavisKahan.Angle.gauge_directedSinTwoAngleOperator_trialSide` + `TauCeti.DavisKahan1970.normalizedUnitaryInvariant_of_symmetricNorming` + `TauCeti.DavisKahan.ExactSinTheta.NormalizedUnitaryInvariantNorm` | **PASS** |
+| `ambient.complex` | complex | `TauCeti.DavisKahan1970.sinTwoTheta_ambient_unbounded_perturbedGap_normalizedUIN_complex` + `TauCeti.LinearPMap.addBounded_neg_cancel` + `TauCeti.DavisKahan.Angle.sinTwoAngleOperator_comm` + `TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction.gauge_neg` + `TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction.mem_neg` + `TauCeti.DavisKahan1970.normalizedUnitaryInvariant_of_symmetricNorming` + `TauCeti.DavisKahan.ExactSinTheta.NormalizedUnitaryInvariantNorm` | **PASS** |
+| `ambient.real` | real | `TauCeti.DavisKahan1970.sinTwoTheta_ambient_unbounded_perturbedGap_normalizedUIN_real` + `TauCeti.LinearPMap.addBounded_neg_cancel` + `TauCeti.DavisKahan.Angle.sinTwoAngleOperator_comm` + `TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction.gauge_neg` + `TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction.mem_neg` + `TauCeti.DavisKahan1970.normalizedUnitaryInvariant_of_symmetricNorming` + `TauCeti.DavisKahan.ExactSinTheta.NormalizedUnitaryInvariantNorm` | **PASS** |
 
 **`directed.residual.complex`.** delta * N(sin 2Theta_0) <= 2 N(R) with the printed trial residual R = A E_0 - E_0 A_0 as the only right-hand side, an unbounded self-adjoint ambient operator, an arbitrary closed trial subspace V inside its domain, arbitrary SymmetricNormingFunction, and the full FormBoundedSylvesterGap.  The conclusion is on the paper's own directed double-angle sine, `Angle.directedSinTwoAngleOperator V U` with V the trial subspace and U the subspace whose two blocks the gap separates -- the TRIAL-SIDE ordering, which is what `||sin Theta_0|| = ||Q^perp E_0||` names in the source.  ORIENTATION CORRECTED 2026-09-04: the primary was the `blockRepresentative` theorem, whose conclusion is on `sinTwoThetaIdealBlock U V`, and the registered correspondence lemmas carried it to `directedSinTwoAngleOperatorC U V` -- the OTHER ordering.  The two ordered directed sines have different approximation numbers in general, so that was not a renaming.  The doubled sines do have the same approximation numbers, which is `Angle.directedSinTwoAngleOperator_hasSameApproximationNumbers_swap`, and the composite bridge is `..._trialSide`.  The orientation is pinned in the audit surface by `sinTwoTheta_directed_orientation_sourceAudit_complex`, which fixes the semantic names and would stop elaborating if the arguments were swapped.
 
@@ -1270,10 +1263,10 @@ Result-wide scope every clause must carry: `S2-sin-theta.ui-norm-scope`, `S2-sin
 
 The declarations that carry this result's printed statement, with the source atoms each one covers.  Everything under *Other registered declarations* below accompanies the result without establishing it.
 
-- `TauCeti.DavisKahan1970.sinTwoTheta_directed_unboundedResidual_sourceExact_complex` — primary_source_witness, complex scalars, proof; covers `S2-sin-theta.ui-norm-scope`, `S2-sin-two-theta.gap-hypothesis`, `S2-sin-two-theta.directed-conclusion`, `S2-unbounded-scope.infinite-dimensional-scope`, `S2-unbounded-scope.arbitrary-ui-scope`, `S2-unbounded-scope.unbounded-selfadjoint-scope`, `S2-unbounded-scope.bounded-residual-needed`, `S2-unbounded-scope.half-infinite-gap-intervals`
-- `TauCeti.DavisKahan1970.sinTwoTheta_directed_unboundedResidual_sourceExact_real` — primary_source_witness, real scalars, proof; covers `S2-sin-theta.ui-norm-scope`, `S2-sin-two-theta.gap-hypothesis`, `S2-sin-two-theta.directed-conclusion`, `S2-unbounded-scope.infinite-dimensional-scope`, `S2-unbounded-scope.arbitrary-ui-scope`, `S2-unbounded-scope.unbounded-selfadjoint-scope`, `S2-unbounded-scope.bounded-residual-needed`, `S2-unbounded-scope.half-infinite-gap-intervals`
-- `TauCeti.DavisKahan1970.sinTwoTheta_ambient_unbounded_perturbedGap_sourceExact_complex` — primary_source_witness, complex scalars, proof; covers `S2-sin-theta.ui-norm-scope`, `S2-sin-two-theta.gap-hypothesis`, `S2-sin-two-theta.ambient-conclusion`, `S2-unbounded-scope.infinite-dimensional-scope`, `S2-unbounded-scope.arbitrary-ui-scope`, `S2-unbounded-scope.unbounded-selfadjoint-scope`, `S2-unbounded-scope.bounded-residual-needed`, `S2-unbounded-scope.half-infinite-gap-intervals`
-- `TauCeti.DavisKahan1970.sinTwoTheta_ambient_unbounded_perturbedGap_sourceExact_real` — primary_source_witness, real scalars, proof; covers `S2-sin-theta.ui-norm-scope`, `S2-sin-two-theta.gap-hypothesis`, `S2-sin-two-theta.ambient-conclusion`, `S2-unbounded-scope.infinite-dimensional-scope`, `S2-unbounded-scope.arbitrary-ui-scope`, `S2-unbounded-scope.unbounded-selfadjoint-scope`, `S2-unbounded-scope.bounded-residual-needed`, `S2-unbounded-scope.half-infinite-gap-intervals`
+- `TauCeti.DavisKahan1970.sinTwoTheta_directed_unboundedResidual_normalizedUIN_complex` — primary_source_witness, complex scalars, proof; covers `S2-sin-theta.ui-norm-scope`, `S2-sin-two-theta.gap-hypothesis`, `S2-sin-two-theta.directed-conclusion`, `S2-unbounded-scope.infinite-dimensional-scope`, `S2-unbounded-scope.arbitrary-ui-scope`, `S2-unbounded-scope.unbounded-selfadjoint-scope`, `S2-unbounded-scope.bounded-residual-needed`, `S2-unbounded-scope.half-infinite-gap-intervals`
+- `TauCeti.DavisKahan1970.sinTwoTheta_directed_unboundedResidual_normalizedUIN_real` — primary_source_witness, real scalars, proof; covers `S2-sin-theta.ui-norm-scope`, `S2-sin-two-theta.gap-hypothesis`, `S2-sin-two-theta.directed-conclusion`, `S2-unbounded-scope.infinite-dimensional-scope`, `S2-unbounded-scope.arbitrary-ui-scope`, `S2-unbounded-scope.unbounded-selfadjoint-scope`, `S2-unbounded-scope.bounded-residual-needed`, `S2-unbounded-scope.half-infinite-gap-intervals`
+- `TauCeti.DavisKahan1970.sinTwoTheta_ambient_unbounded_perturbedGap_normalizedUIN_complex` — primary_source_witness, complex scalars, proof; covers `S2-sin-theta.ui-norm-scope`, `S2-sin-two-theta.gap-hypothesis`, `S2-sin-two-theta.ambient-conclusion`, `S2-unbounded-scope.infinite-dimensional-scope`, `S2-unbounded-scope.arbitrary-ui-scope`, `S2-unbounded-scope.unbounded-selfadjoint-scope`, `S2-unbounded-scope.bounded-residual-needed`, `S2-unbounded-scope.half-infinite-gap-intervals`
+- `TauCeti.DavisKahan1970.sinTwoTheta_ambient_unbounded_perturbedGap_normalizedUIN_real` — primary_source_witness, real scalars, proof; covers `S2-sin-theta.ui-norm-scope`, `S2-sin-two-theta.gap-hypothesis`, `S2-sin-two-theta.ambient-conclusion`, `S2-unbounded-scope.infinite-dimensional-scope`, `S2-unbounded-scope.arbitrary-ui-scope`, `S2-unbounded-scope.unbounded-selfadjoint-scope`, `S2-unbounded-scope.bounded-residual-needed`, `S2-unbounded-scope.half-infinite-gap-intervals`
 
 ### Other registered declarations
 
@@ -1710,25 +1703,25 @@ Source location candidates: `DavisKahan/Sources/DavisKahan1970/SineTheta/Norms/U
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
-#### `TauCeti.DavisKahan1970.sinTwoTheta_directed_unboundedResidual_sourceExact_complex`
+#### `TauCeti.DavisKahan1970.sinTwoTheta_directed_unboundedResidual_normalizedUIN_complex`
 
 Source location candidates: `DavisKahan/Sources/DavisKahan1970/SinTwoThetaDirectedAngle.lean:137`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
-#### `TauCeti.DavisKahan1970.sinTwoTheta_directed_unboundedResidual_sourceExact_real`
+#### `TauCeti.DavisKahan1970.sinTwoTheta_directed_unboundedResidual_normalizedUIN_real`
 
 Source location candidates: `DavisKahan/Sources/DavisKahan1970/SinTwoThetaDirectedAngle.lean:221`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
-#### `TauCeti.DavisKahan1970.sinTwoTheta_ambient_unbounded_perturbedGap_sourceExact_complex`
+#### `TauCeti.DavisKahan1970.sinTwoTheta_ambient_unbounded_perturbedGap_normalizedUIN_complex`
 
 Source location candidates: `DavisKahan/Sources/DavisKahan1970/SinTwoThetaAmbientUnbounded.lean:554`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
-#### `TauCeti.DavisKahan1970.sinTwoTheta_ambient_unbounded_perturbedGap_sourceExact_real`
+#### `TauCeti.DavisKahan1970.sinTwoTheta_ambient_unbounded_perturbedGap_normalizedUIN_real`
 
 Source location candidates: `DavisKahan/Sources/DavisKahan1970/SinTwoThetaAmbientUnbounded.lean:580`
 
@@ -1838,10 +1831,10 @@ One row per printed source clause per scalar field.  A clause is `PASS` only whe
 
 | clause | scalar | witness | status |
 | --- | --- | --- | --- |
-| `directed.complex` | complex | `TauCeti.DavisKahan1970.tanTwoTheta_directed_unboundedResidual_sourceExact_complex` + `TauCeti.DavisKahan1970.approximationNumber_tanTwoDirectedCorner` + `TauCeti.DavisKahan.sinTwoThetaIdealBlock_hasSameApproximationNumbers` | **PASS** |
-| `directed.real` | real | `TauCeti.DavisKahan1970.tanTwoTheta_directed_unboundedResidual_sourceExact_real` + `TauCeti.DavisKahan1970.approximationNumber_tanTwoDirectedCornerR` | **PASS** |
-| `ambient.complex` | complex | `TauCeti.DavisKahan1970.tanTwoTheta_ambient_unbounded_sourceExact_complex` + `TauCeti.DavisKahan1970.normalizedUnitaryInvariant_of_symmetricNorming` + `TauCeti.DavisKahan.ExactSinTheta.NormalizedUnitaryInvariantNorm` | **PASS** |
-| `ambient.real` | real | `TauCeti.DavisKahan1970.tanTwoTheta_ambient_unbounded_sourceExact_real` + `TauCeti.DavisKahan1970.normalizedUnitaryInvariant_of_symmetricNorming` + `TauCeti.DavisKahan.ExactSinTheta.NormalizedUnitaryInvariantNorm` | **PASS** |
+| `directed.complex` | complex | `TauCeti.DavisKahan1970.tanTwoTheta_directed_unboundedResidual_normalizedUIN_complex` + `TauCeti.DavisKahan1970.approximationNumber_tanTwoDirectedCorner` + `TauCeti.DavisKahan.sinTwoThetaIdealBlock_hasSameApproximationNumbers` | **PASS** |
+| `directed.real` | real | `TauCeti.DavisKahan1970.tanTwoTheta_directed_unboundedResidual_normalizedUIN_real` + `TauCeti.DavisKahan1970.approximationNumber_tanTwoDirectedCornerR` | **PASS** |
+| `ambient.complex` | complex | `TauCeti.DavisKahan1970.tanTwoTheta_ambient_unbounded_normalizedUIN_complex` + `TauCeti.DavisKahan1970.normalizedUnitaryInvariant_of_symmetricNorming` + `TauCeti.DavisKahan.ExactSinTheta.NormalizedUnitaryInvariantNorm` | **PASS** |
+| `ambient.real` | real | `TauCeti.DavisKahan1970.tanTwoTheta_ambient_unbounded_normalizedUIN_real` + `TauCeti.DavisKahan1970.normalizedUnitaryInvariant_of_symmetricNorming` + `TauCeti.DavisKahan.ExactSinTheta.NormalizedUnitaryInvariantNorm` | **PASS** |
 
 **`directed.complex`.** (b - a) * N(tan 2Theta_0) <= 2 N(R) on the paper's directed object, at the PRINTED scope: separable ambient Hilbert space, `NormalizedUnitaryInvariantNorm` -- the Lean type for Section 1's norm class -- an unbounded self-adjoint ambient operator, a reducing subspace U with the ordered form gap, H_0 = H_1 = 0, and a subspace V reducing A + H.  The primary concludes on the U -> U-perp projection block of 2 (P_V - P_U)(1 - 2(P_V - P_U)^2)^{-1} and states in its own type that this block has approximation numbers tan (arcsin a_n(sinTwoThetaIdealBlock U V)), one per directed principal angle, with every such angle short of a quarter turn.  `approximationNumber_tanTwoDirectedCorner` is that identification as a standalone pinned theorem; `sinTwoThetaIdealBlock_hasSameApproximationNumbers` closes the chain to the paper's directedSinTwoAngleOperatorC.
 
@@ -1875,10 +1868,10 @@ Result-wide scope every clause must carry: `S2-sin-theta.ui-norm-scope`, `S2-tan
 
 The declarations that carry this result's printed statement, with the source atoms each one covers.  Everything under *Other registered declarations* below accompanies the result without establishing it.
 
-- `TauCeti.DavisKahan1970.tanTwoTheta_ambient_unbounded_sourceExact_complex` — primary_source_witness, complex scalars, proof; covers `S2-sin-theta.ui-norm-scope`, `S2-tan-two-theta.ambient-conclusion`, `S2-tan-two-theta.no-extra-pole-hypothesis`, `S2-tan-two-theta.ordered-gap-hypothesis`, `S2-tan-two-theta.strong-offdiagonal-hypothesis`, `S2-unbounded-scope.arbitrary-ui-scope`, `S2-unbounded-scope.bounded-residual-needed`, `S2-unbounded-scope.half-infinite-gap-intervals`, `S2-unbounded-scope.infinite-dimensional-scope`, `S2-unbounded-scope.unbounded-selfadjoint-scope`
-- `TauCeti.DavisKahan1970.tanTwoTheta_ambient_unbounded_sourceExact_real` — primary_source_witness, real scalars, proof; covers `S2-sin-theta.ui-norm-scope`, `S2-tan-two-theta.ambient-conclusion`, `S2-tan-two-theta.no-extra-pole-hypothesis`, `S2-tan-two-theta.ordered-gap-hypothesis`, `S2-tan-two-theta.strong-offdiagonal-hypothesis`, `S2-unbounded-scope.arbitrary-ui-scope`, `S2-unbounded-scope.bounded-residual-needed`, `S2-unbounded-scope.half-infinite-gap-intervals`, `S2-unbounded-scope.infinite-dimensional-scope`, `S2-unbounded-scope.unbounded-selfadjoint-scope`
-- `TauCeti.DavisKahan1970.tanTwoTheta_directed_unboundedResidual_sourceExact_complex` — primary_source_witness, complex scalars, proof; covers `S2-sin-theta.ui-norm-scope`, `S2-tan-two-theta.directed-conclusion`, `S2-tan-two-theta.no-extra-pole-hypothesis`, `S2-tan-two-theta.ordered-gap-hypothesis`, `S2-tan-two-theta.strong-offdiagonal-hypothesis`, `S2-unbounded-scope.arbitrary-ui-scope`, `S2-unbounded-scope.bounded-residual-needed`, `S2-unbounded-scope.half-infinite-gap-intervals`, `S2-unbounded-scope.infinite-dimensional-scope`, `S2-unbounded-scope.unbounded-selfadjoint-scope`
-- `TauCeti.DavisKahan1970.tanTwoTheta_directed_unboundedResidual_sourceExact_real` — primary_source_witness, real scalars, proof; covers `S2-sin-theta.ui-norm-scope`, `S2-tan-two-theta.directed-conclusion`, `S2-tan-two-theta.no-extra-pole-hypothesis`, `S2-tan-two-theta.ordered-gap-hypothesis`, `S2-tan-two-theta.strong-offdiagonal-hypothesis`, `S2-unbounded-scope.arbitrary-ui-scope`, `S2-unbounded-scope.bounded-residual-needed`, `S2-unbounded-scope.half-infinite-gap-intervals`, `S2-unbounded-scope.infinite-dimensional-scope`, `S2-unbounded-scope.unbounded-selfadjoint-scope`
+- `TauCeti.DavisKahan1970.tanTwoTheta_ambient_unbounded_normalizedUIN_complex` — primary_source_witness, complex scalars, proof; covers `S2-sin-theta.ui-norm-scope`, `S2-tan-two-theta.ambient-conclusion`, `S2-tan-two-theta.no-extra-pole-hypothesis`, `S2-tan-two-theta.ordered-gap-hypothesis`, `S2-tan-two-theta.strong-offdiagonal-hypothesis`, `S2-unbounded-scope.arbitrary-ui-scope`, `S2-unbounded-scope.bounded-residual-needed`, `S2-unbounded-scope.half-infinite-gap-intervals`, `S2-unbounded-scope.infinite-dimensional-scope`, `S2-unbounded-scope.unbounded-selfadjoint-scope`
+- `TauCeti.DavisKahan1970.tanTwoTheta_ambient_unbounded_normalizedUIN_real` — primary_source_witness, real scalars, proof; covers `S2-sin-theta.ui-norm-scope`, `S2-tan-two-theta.ambient-conclusion`, `S2-tan-two-theta.no-extra-pole-hypothesis`, `S2-tan-two-theta.ordered-gap-hypothesis`, `S2-tan-two-theta.strong-offdiagonal-hypothesis`, `S2-unbounded-scope.arbitrary-ui-scope`, `S2-unbounded-scope.bounded-residual-needed`, `S2-unbounded-scope.half-infinite-gap-intervals`, `S2-unbounded-scope.infinite-dimensional-scope`, `S2-unbounded-scope.unbounded-selfadjoint-scope`
+- `TauCeti.DavisKahan1970.tanTwoTheta_directed_unboundedResidual_normalizedUIN_complex` — primary_source_witness, complex scalars, proof; covers `S2-sin-theta.ui-norm-scope`, `S2-tan-two-theta.directed-conclusion`, `S2-tan-two-theta.no-extra-pole-hypothesis`, `S2-tan-two-theta.ordered-gap-hypothesis`, `S2-tan-two-theta.strong-offdiagonal-hypothesis`, `S2-unbounded-scope.arbitrary-ui-scope`, `S2-unbounded-scope.bounded-residual-needed`, `S2-unbounded-scope.half-infinite-gap-intervals`, `S2-unbounded-scope.infinite-dimensional-scope`, `S2-unbounded-scope.unbounded-selfadjoint-scope`
+- `TauCeti.DavisKahan1970.tanTwoTheta_directed_unboundedResidual_normalizedUIN_real` — primary_source_witness, real scalars, proof; covers `S2-sin-theta.ui-norm-scope`, `S2-tan-two-theta.directed-conclusion`, `S2-tan-two-theta.no-extra-pole-hypothesis`, `S2-tan-two-theta.ordered-gap-hypothesis`, `S2-tan-two-theta.strong-offdiagonal-hypothesis`, `S2-unbounded-scope.arbitrary-ui-scope`, `S2-unbounded-scope.bounded-residual-needed`, `S2-unbounded-scope.half-infinite-gap-intervals`, `S2-unbounded-scope.infinite-dimensional-scope`, `S2-unbounded-scope.unbounded-selfadjoint-scope`
 
 ### Other registered declarations
 
@@ -2315,19 +2308,19 @@ Source location candidates: `DavisKahan/Sources/DavisKahan1970/TanTwoThetaUnboun
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
-#### `TauCeti.DavisKahan1970.tanTwoTheta_directed_unboundedResidual_sourceExact_complex`
+#### `TauCeti.DavisKahan1970.tanTwoTheta_directed_unboundedResidual_normalizedUIN_complex`
 
 Source location candidates: `DavisKahan/Sources/DavisKahan1970/TanTwoThetaUnboundedAmbientExact.lean:1026`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
-#### `TauCeti.DavisKahan1970.tanTwoTheta_ambient_unbounded_sourceExact_complex`
+#### `TauCeti.DavisKahan1970.tanTwoTheta_ambient_unbounded_normalizedUIN_complex`
 
 Source location candidates: `DavisKahan/Sources/DavisKahan1970/TanTwoThetaUnboundedAmbientExact.lean:683`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
-#### `TauCeti.DavisKahan1970.tanTwoTheta_ambient_unbounded_sourceExact_real`
+#### `TauCeti.DavisKahan1970.tanTwoTheta_ambient_unbounded_normalizedUIN_real`
 
 Source location candidates: `DavisKahan/Sources/DavisKahan1970/TanTwoThetaUnboundedExactReal.lean:607`
 
@@ -2351,7 +2344,7 @@ Source location candidates: `DavisKahan/OperatorIdeal/NormalizedUnitaryInvariant
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
-#### `TauCeti.DavisKahan1970.tanTwoTheta_directed_unboundedResidual_sourceExact_real`
+#### `TauCeti.DavisKahan1970.tanTwoTheta_directed_unboundedResidual_normalizedUIN_real`
 
 Source location candidates: `DavisKahan/Sources/DavisKahan1970/TanTwoThetaUnboundedExactReal.lean:1008`
 
@@ -6376,8 +6369,8 @@ One row per printed source clause per scalar field.  A clause is `PASS` only whe
 
 | clause | scalar | witness | status |
 | --- | --- | --- | --- |
-| `generalized-tangent-theorem.complex` | complex | `TauCeti.DavisKahan1970.tanTheta_directed_unboundedRitz_sourceExact_complex` + `TauCeti.DavisKahan.ExactSinTheta.NormalizedUnitaryInvariantNorm` | **PASS** |
-| `generalized-tangent-theorem.real` | real | `TauCeti.DavisKahan1970.tanTheta_directed_unboundedRitz_sourceExact_real` + `TauCeti.DavisKahan.ExactSinTheta.NormalizedUnitaryInvariantNorm` | **PASS** |
+| `generalized-tangent-theorem.complex` | complex | `TauCeti.DavisKahan1970.tanTheta_directed_unboundedRitz_normalizedUIN_complex` + `TauCeti.DavisKahan.ExactSinTheta.NormalizedUnitaryInvariantNorm` | **PASS** |
+| `generalized-tangent-theorem.real` | real | `TauCeti.DavisKahan1970.tanTheta_directed_unboundedRitz_normalizedUIN_real` + `TauCeti.DavisKahan.ExactSinTheta.NormalizedUnitaryInvariantNorm` | **PASS** |
 
 **`generalized-tangent-theorem.complex`.** delta * N(tan Theta_0) <= N(R) with the representative CONSTRUCTED, not assumed: the theorem takes only the source data -- an unbounded self-adjoint ambient LinearPMap A, an UnboundedRitzPair whose Ritz compression A_0 is itself a densely defined self-adjoint partial operator on the trial subspace Z, an arbitrary reducing complement V (ReducingComplement A V, no spectral-subspace and no spectral-gap hypothesis), the ordered form bounds A_0 <= alpha and A >= alpha + delta on V-perp within dom A, arbitrary trial dimension, a bounded residual R tied to the Ritz data by hR, and an arbitrary SymmetricNormingFunction -- and CONCLUDES (i) that no principal angle between Z and V is a right angle, so the paper's tan theta_j are genuine tangents and not the value Lean's totalised Real.tan takes at the pole, (ii) that a bounded operator whose approximation numbers are exactly tan(arcsin a_n(P_{V-perp}|_Z)) exists, and (iii) that it satisfies the printed estimate and lies in the norm's ideal.
 
@@ -6393,8 +6386,8 @@ Result-wide scope every clause must carry: *(none)*
 
 The declarations that carry this result's printed statement, with the source atoms each one covers.  Everything under *Other registered declarations* below accompanies the result without establishing it.
 
-- `TauCeti.DavisKahan1970.tanTheta_directed_unboundedRitz_sourceExact_complex` — primary_source_witness, complex scalars, proof; covers `DK-6.3-thm.generalized-tangent-theorem`
-- `TauCeti.DavisKahan1970.tanTheta_directed_unboundedRitz_sourceExact_real` — primary_source_witness, real scalars, proof; covers `DK-6.3-thm.generalized-tangent-theorem`
+- `TauCeti.DavisKahan1970.tanTheta_directed_unboundedRitz_normalizedUIN_complex` — primary_source_witness, complex scalars, proof; covers `DK-6.3-thm.generalized-tangent-theorem`
+- `TauCeti.DavisKahan1970.tanTheta_directed_unboundedRitz_normalizedUIN_real` — primary_source_witness, real scalars, proof; covers `DK-6.3-thm.generalized-tangent-theorem`
 
 ### Other registered declarations
 
@@ -6486,13 +6479,13 @@ Source location candidates: `DavisKahan/Sources/DavisKahan1970/TanThetaDirectedU
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
-#### `TauCeti.DavisKahan1970.tanTheta_directed_unboundedRitz_sourceExact_complex`
+#### `TauCeti.DavisKahan1970.tanTheta_directed_unboundedRitz_normalizedUIN_complex`
 
 Source location candidates: `DavisKahan/Sources/DavisKahan1970/TanThetaDirectedUnbounded.lean:381`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
-#### `TauCeti.DavisKahan1970.tanTheta_directed_unboundedRitz_sourceExact_real`
+#### `TauCeti.DavisKahan1970.tanTheta_directed_unboundedRitz_normalizedUIN_real`
 
 Source location candidates: `DavisKahan/Sources/DavisKahan1970/TanThetaDirectedUnbounded.lean:471`
 

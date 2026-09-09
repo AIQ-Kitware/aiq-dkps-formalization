@@ -130,7 +130,7 @@ theorem norm_sinTwoAngleOperator_le_of_perturbedGap_unbounded_complex
     δ * ‖TauCeti.DavisKahan.Angle.sinTwoAngleOperator P Q‖ ≤ 2 * ‖Hop‖ := by
   set N : NormalizedUnitaryInvariantNorm.{0, v} ℂ :=
     kyFanNormalizedUnitaryInvariantNorm (𝕜 := ℂ) 1 one_pos with hN
-  obtain ⟨-, hle⟩ := sinTwoTheta_ambient_unbounded_perturbedGap_sourceExact_complex
+  obtain ⟨-, hle⟩ := sinTwoTheta_ambient_unbounded_perturbedGap_normalizedUIN_complex
     N hA Hop hHop hPred hQred hδ hgap
     (mem_kyFanNormalizedUnitaryInvariantNorm 1 one_pos Hop)
   rw [hN] at hle

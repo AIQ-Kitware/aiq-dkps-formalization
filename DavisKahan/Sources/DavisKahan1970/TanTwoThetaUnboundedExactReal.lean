@@ -604,7 +604,7 @@ over `ℝ`.**
 Separable ambient Hilbert space and normalized unitarily invariant norm.  Unlike
 the directed real clause, both sides of this estimate are real operators, so a
 single real source norm reaches them. -/
-theorem tanTwoTheta_ambient_unbounded_sourceExact_real
+theorem tanTwoTheta_ambient_unbounded_normalizedUIN_real
     [TopologicalSpace.SeparableSpace E]
     (N : NormalizedUnitaryInvariantNorm.{0, u} ℝ)
     {A : E →ₗ.[ℝ] E} {B : E →L[ℝ] E} {a b c : ℝ}
@@ -1004,8 +1004,8 @@ both sides at `ℂ`.
 
 Nothing new is proved here: every hypothesis is carried to the complexification
 by the transports the real `SymmetricNormingFunction` theorem already uses, and
-the estimate is the complex source-exact endpoint. -/
-theorem tanTwoTheta_directed_unboundedResidual_sourceExact_real
+the estimate is the complex normalized-UIN fixed-field endpoint. -/
+theorem tanTwoTheta_directed_unboundedResidual_normalizedUIN_real
     [TopologicalSpace.SeparableSpace E]
     (N : NormalizedUnitaryInvariantNorm.{0, _} ℂ)
     (U V : Submodule ℝ E) [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
@@ -1043,7 +1043,7 @@ theorem tanTwoTheta_directed_unboundedResidual_sourceExact_real
   have hUaC := re_inner_complexifyReal_le_of_forall_mem hUa
   have hUbC := le_re_inner_complexifyReal_of_forall_mem_orthogonal hUb
   obtain ⟨hlt, -, hmem, hle⟩ :=
-    tanTwoTheta_directed_unboundedResidual_sourceExact_complex
+    tanTwoTheta_directed_unboundedResidual_normalizedUIN_complex
       (complexifySubmodule U) (complexifySubmodule V) N hAc hredC hBC hVC hUaC hUbC hab hRmemC
   -- the pole exclusion, read back over `ℝ`
   have hV' := DavisKahan.ReflectionIntertwines.ofReducesSubspace hVC

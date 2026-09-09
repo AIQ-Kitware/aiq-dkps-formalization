@@ -761,6 +761,13 @@ or alternative proofs.
 Production theorem names use stable namespaces, and they say their scope. A
 declaration whose statement is fixed to one scalar field says `_complex` or
 `_real`; the unqualified name is reserved for the `RCLike`-generic statement and
-is left unbound when none exists yet. `dev/davis-kahan-1970-section-two-naming-classification.json`
-records the vocabulary and the token-to-scope commitments this rests on, and
+is left unbound when none exists yet. Source fidelity is **not** part of a theorem
+name: do not introduce names containing `sourceExact` or `sourceFaithful`. The
+result ledger owns the claim that a declaration matches the source. For the four
+Section 2 headline results, also update
+`dev/davis-kahan-1970-section-two-variant-index.json` whenever a real, complex, or
+`RCLike` endpoint changes; those three surfaces are one maintenance family, and a
+fixed-field repair is not complete until the sibling/API status has been reviewed.
+`dev/davis-kahan-1970-section-two-naming-classification.json` records the vocabulary
+and the token-to-scope commitments this rests on, and
 `dev/honesty-census-2026-08-31.md` records what was measured and renamed.

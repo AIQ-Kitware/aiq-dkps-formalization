@@ -224,7 +224,7 @@ theorem theorem8_2_perturbation_sourceExact_unbounded_complex
       TauCeti.DavisKahanExt.maximalAngle P Q < Real.pi / 4 := by
   refine ⟨?_, theorem8_2_perturbationHalfGap_maximalAngle_lt_unbounded_complex hA Hop hHop
     hdelta hab hPred hQred hQspec hQperp hPspec hcross hsmall⟩
-  exact sinTwoTheta_ambient_unbounded_perturbedGap_sourceExact_complex N hA Hop hHop
+  exact sinTwoTheta_ambient_unbounded_perturbedGap_normalizedUIN_complex N hA Hop hHop
     hPred hQred hdelta (.intervalExterior hab (Or.inl ⟨hQspec, hQperp⟩)) hHmem
 
 /-- **Davis--Kahan 1970, Theorem 8.2, perturbation alternative, at the printed
@@ -258,7 +258,7 @@ theorem theorem8_2_perturbation_sourceExact_unbounded_real
       TauCeti.DavisKahanExt.maximalAngle P Q < Real.pi / 4 := by
   refine ⟨?_, theorem8_2_perturbationHalfGap_maximalAngle_lt_unbounded_real hA Hop hHop
     hdelta hab hPred hQred hQspec hQperp hPspec hcross hsmall⟩
-  exact sinTwoTheta_ambient_unbounded_perturbedGap_sourceExact_real N hA Hop hHop
+  exact sinTwoTheta_ambient_unbounded_perturbedGap_normalizedUIN_real N hA Hop hHop
     hPred hQred hdelta (.intervalExterior hab (Or.inl ⟨hQspec, hQperp⟩)) hHmem
 
 /-! ### The residual alternative -/
