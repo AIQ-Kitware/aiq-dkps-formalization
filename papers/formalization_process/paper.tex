@@ -110,9 +110,18 @@
     {\\LeanLitOrth}{{$^{\perp}$}}1
     {\\LeanLitDisj}{{$\lor$}}1
     {\\LeanLitConj}{{$\land$}}1
+    {\\LeanLitPMapC}{{$\mathrel{\to}\!\mathtt{L}_{\rm p}[\mathbb{C}]$}}6
+    {\\LeanLitArrow}{{$\to$}}1
+    {\\LeanLitCompL}{{$\circ_L$}}2
+    {\\LeanLitDelta}{{$\delta$}}1
+    {\\LeanLitLambda}{{$\Lambda$}}1
+    {\\LeanLitSubZero}{{$_0$}}1
+    {\\LeanLitSubOne}{{$_1$}}1
 }
 \crefname{lstlisting}{formalization}{formalizations}
 \Crefname{lstlisting}{Formalization}{Formalizations}
+\crefname{listing}{formalization}{formalizations}
+\Crefname{listing}{Formalization}{Formalizations}
 \renewcommand{\lstlistingname}{Formalization}
 
 \title{Did We Really Formalize Davis--Kahan? Semantic Alignment for LLM-Assisted Lean Formalization}
@@ -167,7 +176,7 @@ we could inspect line by line.
 \Cref{fig:workflow} summarizes the process that developed around these
 source-correspondence failures.  The source material remains visible through
 context gathering, decomposition, foundation search, formalization, and a
-separate source-to-statement review.  Section~\ref{sec:system} describes these
+separate source-to-statement review.  \Cref{sec:system} describes these
 stages in more detail.
 
 \begin{figure}[H]
@@ -182,118 +191,82 @@ stages in more detail.
 \section{Related Work}
 \label{sec:related}
 
-Using LLM-assisted web search, we collected \PractitionerAccountCount{} public
-first-person project/workflow accounts of AI-assisted Lean work.  Multiple public
-sources can support one account, and accounts known to share a practitioner are
-marked explicitly; the \PractitionerAccountCount{} rows form
-\PractitionerOverlapClusterCount{} practitioner-overlap clusters, not a count of
-unique people.  They describe different ways of deciding whether generated Lean
-expresses the intended mathematics.  The collection is not necessarily
-representative; Appendix~\ref{app:data} describes the source records,
-qualifications, and screening log.  Collins et al. study initial human--AI
-formalization workflows, while Ilin and Nugent compare a sorry-free
-semi-autonomous development before and after expert review
+We collected \PractitionerAccountCount{} public first-person accounts of
+AI-assisted Lean projects and workflows, supported by \PractitionerSourceCount{}
+public practitioner-source records.  Known repeated practitioners form
+\PractitionerOverlapClusterCount{} overlap clusters; one controlled human--AI
+workflow study is tracked separately.  The collection was assembled through
+LLM-assisted web search and is not intended to estimate prevalence.
+\Cref{app:data} describes the records and screening process.
+
+The accounts differ substantially in how much generated Lean the human reads.
+Kahle and Saiki describe checking definitions, hypotheses, and decomposition
+while agents write much of the proof code, and Yadav reports checking every
+definition and theorem statement while largely ignoring proof implementations
+\citep{kahle2026keeptrying,saiki2026double,yadav2026verification}.  At the other
+end, Suomela studies the mathematical proof first, Gowers reports using
+Aristotle without needing Lean knowledge, and Kova\v{c} asks another model to
+translate generated Lean into English
+\citep{suomela2026workflow,gowers2026leiden,kovac2025erdos189}.
+
+Semantic mismatch is common enough in these accounts to be a practical review
+concern.  \AccountSemanticMismatchCount{} accounts explicitly report a
+statement, definition, scope, or correspondence mismatch, with
+\AccountSemanticMismatchQualifiedCount{} additional qualified cases; \AccountSeparateAIReviewCount{}
+describe a separate AI review role.  Deng and Shum distinguish successful
+compilation from source-fidelity review, and Nowak and F\"ugger used one model
+to challenge formalizations produced by another
+\citep{deng2026probability,nowak2026workflow}.  Zhang et al. report
+misformalized targets that survived repeated AI self-judgment until human
+counterexamples exposed them; Warren and Zaliva likewise report checked or
+apparently validated statements whose specifications still required repair
+\citep{zhang2026slt,warren2026tessera,zaliva2026semantics}.  Across the
+collection, \AccountSourceDefectCount{} accounts report a source defect exposed
+during formalization and \AccountCounterexampleCount{} explicitly use a
+counterexample.
+
+Long-running projects also tend to externalize state and decomposition.
+\AccountPersistentStateCount{} accounts retain substantive project state outside
+the chat.  Armstrong and Kempe describe detailed proof blueprints, while Davis
+preserves the blueprint, model output, cleanup diff, and pinned environment
+\citep{armstrong2026degiorgi,davis2026gdlean}.  This is related to blueprint
+workflows used in larger Lean developments
+\citep{liquidblueprint2023,pfrblueprint2024,zhu2026leanarchitect}.  Collins et
+al. separately study initial human--AI formalization workflows, and Ilin and
+Nugent compare a semi-autonomous development before and after expert review
 \citep{collins2026workflows,ilin2026sorries}.
 
-Kahle and Saiki describe checking definitions, hypotheses, and decomposition
-while agents write much of the proof code
-\citep{kahle2026keeptrying,saiki2026double}.  Deng and Shum separate successful
-builds from source-fidelity review; they report an initial variance declaration
-that compiled while imposing weaker domain discipline than the textbook
-intended \citep{deng2026probability}.  De Dios Pont et al. report concentrating
-intensive review on theorem statements and definitions, then returning to
-understand and generalize an argument after obtaining a Lean certificate
-\citep{dedios2026banach}.  Other accounts put less emphasis on reading generated
-Lean directly: Suomela studies the mathematical proof first, Gowers reports
-using Aristotle without needing Lean knowledge, and Enomoto describes a later
-``proof digestion'' phase
-\citep{suomela2026workflow,gowers2026leiden,enomoto2026essay}.
-
-Other accounts use a second model to mediate review.  Nowak and F\"ugger used
-Claude to check Codex formalizations for added hypotheses, weakened statements,
-and proof holes \citep{nowak2026workflow}.  Kova\v{c} asked another model to
-translate Lean into English because he could not read it directly
-\citep{kovac2025erdos189}; Ilin reports adversarial review among multiple systems
-\citep{ilin2026vml}.  Douglas et al. cross-validated conjectured helper results
-and proof plans across several models \citep{douglas2026qft}.  Human
-counterexamples also catch statement errors: Zhang et al. report three
-misformalized targets that survived repeated AI self-judgment before human
-counterexamples exposed them \citep{zhang2026slt}; Saiki and Oum report related
-uses of counterexamples and source correction
-\citep{saiki2026double,oum2026preprint}.
-
-The expanded corpus also includes software-facing trust boundaries.  Yadav
-reports carefully checking every definition and theorem statement while largely
-ignoring generated proof implementations; Warren reports five AI-written formal
-statements that type-checked and passed numerical validation before proof
-obligations exposed defects; and Zaliva reports parser and semantics defects, a
-human-directed semantic redesign, and an initially wrong progress property
-\citep{yadav2026verification,warren2026tessera,zaliva2026semantics}.  A verified
-polygon-intersection project instead makes a short human-reviewed specification
-the trust boundary while leaving AI-written implementation and proof files
-unread \citep{schildep2026polygon}.
-
-The added mathematical accounts show a second range of supervision.  Armstrong
-and Kempe report supplying detailed proof blueprints and architecture while
-agents wrote the Lean; Aslyan describes selecting symbols and redirecting
-modeling decisions while the agent implemented them.  Vergo, Bernier, and
-Schmitt explicitly solicit review of whether generated formalizations encode
-the intended mathematics, while Davis preserves the blueprint, raw model output,
-cleanup diff, and pinned environment for independent inspection
-\citep{armstrong2026degiorgi,aslyan2026friedberg,vergo2025aiproofs,
-bernier2026classfield,schmitt2025extremal,davis2026gdlean}.
-
-Within the \PractitionerAccountCount{} accounts, \AccountSemanticMismatchCount{}
-explicitly report a statement, definition, scope, or correspondence mismatch,
-with \AccountSemanticMismatchQualifiedCount{} additional qualified cases.
-\AccountSeparateAIReviewCount{} describe a separate AI review role, and
-\AccountPersistentStateCount{} keep substantive project state outside the chat.
-Formalization exposed a source defect in \AccountSourceDefectCount{} accounts;
-\AccountCounterexampleCount{} explicitly used a counterexample to diagnose or
-communicate a problem.  These categories can overlap and describe only the
-accounts collected here.
-
-In a controlled 100-agent experiment, Paglieri et al. report agents using local
-notation to change how unchanged benchmark text elaborated while still passing
-a submission harness based on template checks and Lean compilation
-\citep{paglieri2026swarm}.  Lean checked the submitted propositions; the harness
-did not ensure that the benchmark text retained its intended elaboration.
-
-Semantic-review tools address several parts of this process.  FormalAlign
-evaluates informal/formal agreement \citep{lu2025formalalign}; ShadowBench tests
-formal statements through auxiliary statements and implication checks
-\citep{han2026shadowbench}.  EconCSLib presents source text, Lean statements,
-mathematical renderings, and human match/mismatch judgments together
-\citep{garg2026econcs}.  Lean Atlas and Lean Compass prune proof-only dependencies
-to expose definitions that can affect a theorem's meaning
-\citep{yanahama2026leanatlas}.  LeanMarathon uses adversarial target review,
-FormaTheoria supports independent review and source reconciliation, and
-LeanArchitect synchronizes informal blueprint metadata with Lean declarations
+Several systems directly address source-to-formal correspondence.  FormalAlign
+evaluates informal/formal agreement; ShadowBench probes formal statements with
+auxiliary implications; EconCSLib presents source text, Lean statements, and
+human correspondence judgments; and Lean Atlas/Lean Compass expose semantic
+dependencies while pruning proof-only dependencies
+\citep{lu2025formalalign,han2026shadowbench,garg2026econcs,yanahama2026leanatlas}.
+LeanMarathon, FormaTheoria, and LeanArchitect address adversarial review,
+source reconciliation, and synchronization between informal blueprints and
+Lean declarations
 \citep{zhang2026leanmarathon,nie2026formatheoria,zhu2026leanarchitect}.
-These systems provide context for our result register and review interface.
-
-Compiler access is supported by LeanDojo, Pantograph, and LeanInteract
-\citep{yang2023leandojo,aniva2024pantograph,poiroux2025leaninteract}.
-As this project grew, we developed smaller project-specific tools for querying
-compiler-derived declarations and maintaining the source-to-statement records;
-the supplementary artifact contains those tools and their exact interfaces.
+LeanDojo, Pantograph, and LeanInteract provide programmatic access to Lean
+\citep{yang2023leandojo,aniva2024pantograph,poiroux2025leaninteract}.  As our
+project grew, we developed narrower tools for inspecting compiler-derived
+declarations and maintaining source-to-statement records.
 
 \section{What we formalized}
 \label{sec:dk}
 
 Davis and Kahan bound the change in invariant subspaces under self-adjoint
-perturbations.  In matrix terms, let $A=A^*$ (i.e., $A$ is self-adjoint) and let
-$E_0$ have orthonormal columns spanning a \emph{candidate subspace} $V$, which
-is to be compared with an exact invariant subspace.  The candidate-space
+perturbations.  In matrix terms, let $A=A^*$ and let
+$E_0$ have orthonormal columns spanning a \emph{trial subspace} $V$, which
+is to be compared with an exact invariant subspace.  The trial-space
 \emph{compression}, $A_0=E_0^*AE_0$, is obtained by using $E_0$ to embed
-candidate coordinates into the ambient space, applying $A$, and using $E_0^*$
-to project the result back to candidate coordinates.  Writing $P_V=E_0E_0^*$ for the orthogonal projector
+trial coordinates into the ambient space, applying $A$, and using $E_0^*$
+to project the result back to trial coordinates.  Writing $P_V=E_0E_0^*$ for the orthogonal projector
 onto $V$, the \emph{residual}
 \[
   R=AE_0-E_0A_0=(I-P_V)AE_0
 \]
 is exactly the part of $AE_0$ that lies outside $V$; it vanishes exactly when
-$A$ preserves the candidate subspace.  Principal angles measure the angles
+$A$ preserves the trial subspace.  Principal angles measure the angles
 between corresponding subspace directions.  With spectral separation $\delta>0$,
 one directed
 $\sin 2\Theta$ result has the form
@@ -302,16 +275,16 @@ $\sin 2\Theta$ result has the form
   \label{eq:sin2theta}
 \end{equation}
 where $N$ is a unitarily invariant norm and $\Theta_0$ denotes the directed
-angle from the candidate to the exact subspace.  Here the gap separates the
+angle from the trial to the exact subspace.  Here the gap separates the
 spectrum on the exact subspace from that on its orthogonal complement.
 The source also covers real and complex separable Hilbert spaces, including
 unbounded self-adjoint operators under its domain and bounded-residual
-conditions \citep{davis1970rotation}.  Appendix~\ref{app:formalization1} gives a
+conditions \citep{davis1970rotation}.  \Cref{app:formalization1} gives a
 reader's guide to the mathematics and the Lean signature below.
 
-Our 29 targets comprise the four unnumbered headline theorems in Section~2 and
+Our 29 targets comprise the four unnumbered headline theorems in Davis--Kahan Section~2 and
 every named theorem, proposition, lemma, and corollary established in the paper.
-Appendix~\ref{app:data} specifies the counting convention.  At the manuscript
+\Cref{app:data} specifies the counting convention.  At the manuscript
 snapshot, all 29 have checked treatments.  Source-to-signature review has
 continued to refine some source-facing theorem boundaries, including the norm
 domain of the sine-theta theorem discussed below.  We therefore report the
@@ -330,61 +303,64 @@ Mathlib \citep{tauceti2026}.
 \section{Formalization process}
 \label{sec:system}
 
-The workflow in \cref{fig:workflow} can be summarized by five recurring
+The workflow in \Cref{fig:workflow} can be summarized by five recurring
 activities.  ``Gather Context'' corresponds to the inputs at the left of the
-figure, while ``Formalize'' below includes its compile-and-revise cycle:
+figure, while ``Formalize'' includes its compile-and-revise cycle:
 
 \begin{itemize}
 \setlength{\itemsep}{0.25em}
 \item \textbf{Gather Context.}  We collected the relevant PDFs, built
-  transcriptions of the source passages, and wrote prose distillations of the
+  transcriptions of source passages, and wrote prose distillations of the
   definitions, assumptions, and arguments needed for the target result.  These
-  materials fixed the mathematical context against which later Lean statements
-  were reviewed.
+  materials provided the context used to interpret later Lean statements.
 
-\item \textbf{Decompose.}  We worked out a sequence of intermediate results and
-  dependencies that would support the target theorem.  This serves a role similar
-  to the blueprints used in other large Lean formalizations
-  \citep{liquidblueprint2023,pfrblueprint2024,zhu2026leanarchitect}: it gives the
-  implementation agents a mathematical route through a task larger than one
-  proof request.
+\item \textbf{Decompose.}  We worked out intermediate results and dependencies
+  that would support the target.  This serves a role similar to the blueprints
+  used in other large Lean formalizations
+  \citep{liquidblueprint2023,pfrblueprint2024,zhu2026leanarchitect}.
 
 \item \textbf{Find Foundations.}  Before rebuilding an intermediate result, we
-  searched Mathlib, existing Lean developments, and the literature.  In this
-  project, for example, Spectra supplied spectral and operator-theoretic material
-  that we reused or extended \citep{bornemann2026spectra}.  Missing foundations
-  were developed locally for reuse by later targets.
+  searched Mathlib, existing Lean developments, and the literature.  Spectra,
+  for example, supplied spectral and operator-theoretic material that we reused
+  or extended \citep{bornemann2026spectra}.  Missing foundations were developed
+  locally for reuse by later targets.
 
-\item \textbf{Formalize.}  Agents implemented the resulting tasks in Lean,
-  compiled them, and revised definitions and proofs in response to compiler
-  feedback.  We used ChatGPT and Claude Code across this work rather than tying
-  a fixed role to a particular system.
+\item \textbf{Formalize.}  Agents implemented the resulting tasks in Lean and
+  revised definitions and proofs in response to compiler feedback.  ChatGPT and
+  Claude were used throughout the project; we do not assign fixed roles to the
+  two systems.
 
-\item \textbf{Skeptical Review.}  When possible, an agent that had not implemented
-  the result compared the source passage with the resulting theorem statement.
-  The review checked hypotheses, objects, scalar field, dimension, bounded or
-  unbounded operator scope, norm class, gap assumptions, constants, and
-  directionality.  Implementing agents sometimes declared a target complete
-  before this comparison; reviewers could also demand a stronger statement than
-  the source required.  The human authors resolved such disagreements by
-  returning to the source mathematics.
+\item \textbf{Skeptical Review.}  When possible, an agent that had not
+  implemented the result compared the source passage with the resulting theorem
+  statement.  Reviews checked hypotheses, objects, scalar field, dimension,
+  bounded or unbounded operator scope, norm class, gap assumptions, constants,
+  and directionality.  Implementing agents sometimes reported completion before
+  this comparison; reviewers could also ask for a stronger statement than the
+  source supported.  The humans directing the work monitored these exchanges,
+  supplied framing, noticed inconsistencies among model outputs, and asked for
+  further explanations or independent reviews.  They were not Davis--Kahan
+  subject-matter experts, so this process did not provide independent expert
+  adjudication of every source interpretation.
 \end{itemize}
 
 The stages loop.  A mismatch can require more source context, a different
-decomposition, additional foundations, or a revised formal statement.  As the
-formalization grew, we periodically refactored definitions and intermediate
-results so foundations developed for one target could be reused by later ones.
-We also added project-specific tools for querying compiler-derived declarations
-and maintaining the accumulated source-to-statement records.
+decomposition, additional foundations, or a revised formal statement.  We also
+periodically reorganized definitions and intermediate results so foundations
+developed for one target could be reused by later ones.  As the project grew,
+we added tools for inspecting the accumulated formalization and maintaining
+source-to-statement records.
 
-A target left the loop when Lean checked its formal treatment and a separate
-source-to-statement review found its hypotheses, mathematical objects,
-conclusion, and scope consistent with the source.  When that correspondence
-used a non-obvious representation, the required identification also had to be
-established.  Proposition~4.4 instead exits through a checked counterexample to
-the printed claim together with a proved repair.  A later review can still find
-a mismatch missed by an earlier pass, as in the example below.
-Appendix~\ref{app:system} records the concrete project artifacts and checks.
+We provisionally accepted a target when Lean checked its formal treatment and a
+separate source-to-statement review found its hypotheses, mathematical objects,
+conclusion, and scope consistent with the source.  When a correspondence used a
+non-obvious representation, the required identification also had to be
+established.  Davis--Kahan Proposition~4.4 instead has a checked counterexample
+to the printed claim and a proved repair.  Later review can still expose a
+mismatch missed by an earlier pass, so this is an operational stopping rule, not
+a certificate of source correspondence.  \Cref{app:system} gives additional
+procedure details.
+
+% Historical provenance for editors
 
 % Historical provenance for editors (not rendered): the maintained result
 % record reached 29/29 on 12 Aug. 2026, later lost that state, and again reported
@@ -400,8 +376,8 @@ Appendix~\ref{app:system} records the concrete project artifacts and checks.
 \subsection{Examples of semantically misaligned statements}
 \label{sec:scope-mismatch}
 
-Formalization~\ref{lst:sin2theta-mismatch} was accepted as evidence for the
-ambient clause of the Section~2 $\sin 2\Theta$ result.  Davis--Kahan allow
+\Cref{lst:sin2theta-mismatch} was accepted as evidence for the
+ambient clause of the Davis--Kahan Section~2 $\sin 2\Theta$ result.  Davis--Kahan allow
 unbounded self-adjoint operators, while this declaration is stated in a section
 where \texttt{A B : E $\to$L[$\mathbb C$] E} are bounded continuous linear maps.
 Real and complex ambient analogues were both present.  The mismatch was bounded
@@ -422,7 +398,7 @@ versus unbounded operator scope.
 \lstinputlisting[
   style=leanpaper,
   firstline=6,
-  caption={Historical ambient $\sin 2\Theta$ theorem with bounded operator scope.},
+  caption={Historical ambient $\sin 2\Theta$ theorem. It was used for a Davis--Kahan Section~2 claim whose source scope includes unbounded self-adjoint operators, while the ambient operators in this signature are bounded.},
   label={lst:sin2theta-mismatch}
 ]{generated/historical_scope_mismatch_presentation.lean}
 \end{minipage}
@@ -437,30 +413,57 @@ applicable scope.
 Two further repairs exposed different statement-level discrepancies:
 \begin{itemize}
 \setlength{\itemsep}{0.15em}
-\item In the Section~2 $\sin\Theta$ theorem, the earlier source-facing statement
+\item In the Davis--Kahan Section~2 $\sin\Theta$ theorem, the earlier source-facing statement
 used a stronger norm abstraction, required residual ideal membership, and concluded
 that the angle operator belongs to the norm's ideal.  The repaired boundary uses the source's
 where-defined normalized unitarily invariant norm semantics.
-\item Theorem~8.1(ii),(iii) was stated on blocks extended by zero to the ambient
+\item Davis--Kahan Theorem~8.1(ii),(iii) was stated on blocks extended by zero to the ambient
 space, with ambient-size indexing and gauges.  The repaired finite-dimensional
 statements use the ordered eigenvalues of the blocks themselves and the block
 dimension.
 \end{itemize}
 
 \paragraph{Current source-facing sine-theta statement.}
-For $\mathbb K\in\{\mathbb R,\mathbb C\}$ on a separable Hilbert space, under
-the source's self-adjointness, residual, exact-decomposition, and spectral-gap
-hypotheses (including its unbounded-operator scope), the current endpoints state
-for every normalized unitarily invariant norm $N$:
-\begin{equation}
-  N(\sin\Theta_0)\ \text{defined}\;\land\;N(R)\ \text{defined}
+The Davis--Kahan Section~2 sine-theta theorem is concise on the page, but its
+formal scope depends on surrounding conventions.  We currently read it in the
+paper's real-or-complex separable Hilbert-space setting, together with the
+unbounded self-adjoint extension, bounded residuals, the full spectral-gap
+alternatives, and the convention that a displayed unitarily invariant norm
+inequality is vacuous when either norm is undefined.  Pinning down these
+inherited conditions was itself part of the source review.
+
+\Cref{lst:current-sintheta} shows the current complex source-facing declaration;
+a real declaration has the same structure.  The potentially unbounded
+operators are represented by partial linear maps.  The
+\texttt{NormalizedSymmetricOperatorIdealFamily} represents a normalized
+unitarily invariant norm together with its domain of finiteness.  Consequently,
+the two \texttt{N.Mem} implications after the colon express the source's
+``where both norms are defined'' convention rather than additional assumptions
+needed to invoke an analytic theorem.
+
+% Editor provenance (not rendered): this display is generated verbatim from
+% DavisKahan/Sources/DavisKahan1970/SineTheta/Presentation.lean at HEAD.  The
+% exact Unicode signature is written to generated/current_sin_theta_exact.lean;
+% the listings input differs only by ASCII sentinels used for typography.
+\begin{nolinenumbers}
+\begin{minipage}{\linewidth}
+\lstinputlisting[
+  style=leanpaper,
+  firstline=6,
+  caption={Current source-facing complex signature for the Davis--Kahan Section~2 sine-theta theorem. It exposes ambient separability, potentially unbounded operators, the spectral-gap condition, and the where-defined norm convention.},
+  label={lst:current-sintheta}
+]{generated/current_sin_theta_presentation.lean}
+\end{minipage}
+\end{nolinenumbers}
+
+In mathematical notation, its conclusion is
+\[
+  N(\sin\Theta_0)\ \text{defined},\quad N(R)\ \text{defined}
   \quad\Longrightarrow\quad
   \delta N(\sin\Theta_0)\le N(R),
-  \label{eq:source-facing-sin-theta}
-\end{equation}
-where $P$ is the orthogonal projector onto the exact subspace,
-$\sin\Theta_0=(I-P)E_0$, and $R=AE_0-E_0A_0$.  The proof uses a stronger
-symmetric-norming theorem, retained separately as a generalization.
+\]
+with $\sin\Theta_0=(I-P)E_0$.  The stronger symmetric-norming theorem used in
+the proof is retained separately as a generalization.
 
 % Candidate future example of review overreach (not rendered): Theorem 8.1(ii)
 % ends with "and natural infinite-dimensional extensions."  A prior review
@@ -475,7 +478,7 @@ symmetric-norming theorem, retained separately as a generalization.
 \paragraph{Did we formalize Davis--Kahan?}
 All 29 tracked results have checked treatments: 28 Lean proofs and a
 finite-dimensional counterexample plus proved repair for Proposition~4.4
-(Appendix~\ref{app:data}).  The current source-facing statements incorporate the
+(\Cref{app:data}).  The current source-facing statements incorporate the
 repairs described above, but we have no calibrated stopping rule or certificate
 of complete source correspondence.
 
@@ -484,24 +487,21 @@ proposition preserves the intended hypotheses, objects, and scope without
 exceeding what the source states; how to validate and stop such review remains
 open.
 
-\section*{Tool and computational resource disclosure}
-Following the Leiden Declaration's disclosure recommendation
-\citep{leiden2026declaration}, ChatGPT and Claude Code were substantially
-used in the writing process, including drafting and revision, literature
-discovery, and organization of the practitioner survey.  The same systems were
-used for formalization planning, Lean implementation, and source-to-signature
-review as described in \cref{sec:system}.  Lean~4 and Mathlib provided formal
-checking.  Human authors selected the research questions and claims,
-adjudicated source interpretations, reviewed and revised the manuscript, and
-retain responsibility for its contents and citations.
+\paragraph{AI assistance.}
+ChatGPT and Claude were used throughout the formalization and manuscript
+preparation, including code generation, mathematical discussion, literature
+search, and source review.  Lean~4 and Mathlib checked the formal development.
+Incomplete token telemetry and derived resource estimates are reported in
+\cref{app:resources}.
 
-\begin{ack}
+\ifnum\PublicVersion=1\relax
+\section*{Acknowledgements}
 This material is based upon work supported by the Defense Advanced Research
 Projects Agency (DARPA) under Contract No. HR001125CE017. Any opinions, findings,
 and conclusions or recommendations expressed in this material are those of the
 author(s) and do not necessarily reflect the views of the Defense Advanced
 Research Projects Agency (DARPA).
-\end{ack}
+\fi
 
 \clearpage
 \begingroup

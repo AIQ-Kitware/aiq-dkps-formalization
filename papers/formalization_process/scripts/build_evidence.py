@@ -225,8 +225,7 @@ def build_model_tables():
     system_lines = []
     for r in systems:
         system_lines.append(
-            f'{tex_escape(r["system"])} & {tex_escape(r["models"])} & '
-            f'{tex_escape(r["typical_use"])} \\\\'
+            f'{tex_escape(r["system"])} & {tex_escape(r["models"])} \\\\'
         )
     system_lines.append('\\bottomrule')
     (PAPER / 'generated' / 'model_systems_table.tex').write_text(
@@ -471,6 +470,77 @@ def build_historical_scope_mismatch():
     presentation_path = PAPER / 'generated' / 'historical_scope_mismatch_presentation.lean'
     presentation_path.write_text(presentation_text, encoding='ascii')
 
+
+    # Current source-facing Davis--Kahan Section 2 sine-theta signature.  Keep an
+    # exact Unicode sidecar and a separate ASCII-sentinel listings input.
+    current_sin_theta = extract_decl(
+        'HEAD',
+        'DavisKahan/Sources/DavisKahan1970/SineTheta/Presentation.lean',
+        'sinTheta_unbounded_formGap_sourceExact_complex',
+    )
+    current_checks = [
+        'TopologicalSpace.SeparableSpace E',
+        'NormalizedSymmetricOperatorIdealFamily',
+        'E →ₗ.[ℂ] E',
+        'IsTrialResidual',
+        'IsExactSpectralDecomposition',
+        'FormBoundedSylvesterGap',
+        'N.Mem R →',
+        'N.gaugeReal R',
+    ]
+    for needle in current_checks:
+        if needle not in current_sin_theta['signature']:
+            raise RuntimeError(
+                f'current sine-theta signature missing expected text: {needle!r}'
+            )
+    current_exact_text = current_sin_theta['signature']
+    current_exact_path = PAPER / 'generated' / 'current_sin_theta_exact.lean'
+    current_exact_path.write_text(current_exact_text, encoding='utf8')
+    if current_exact_path.read_text(encoding='utf8') != current_exact_text:
+        raise RuntimeError('current sine-theta exact sidecar changed during write')
+
+    current_presentation = current_exact_text
+    current_literate = [
+        ('→ₗ.[ℂ]', r'\LeanLitPMapC'),
+        ('→L[ℂ]', r'\LeanLitCLMapC'),
+        ('∘L', r'\LeanLitCompL'),
+        ('ℂ', r'\LeanLitComplex'),
+        ('ℝ', r'\LeanLitReal'),
+        ('≤', r'\LeanLitLe'),
+        ('→', r'\LeanLitArrow'),
+        ('δ', r'\LeanLitDelta'),
+        ('Λ', r'\LeanLitLambda'),
+        ('₀', r'\LeanLitSubZero'),
+        ('₁', r'\LeanLitSubOne'),
+    ]
+    for source_token, sentinel in current_literate:
+        current_presentation = current_presentation.replace(source_token, sentinel)
+    if not current_presentation.endswith(':= by\n'):
+        raise RuntimeError('current sine-theta presentation does not end in `:= by`')
+    current_presentation = current_presentation[:-1] + '  -- proof omitted\n'
+    if not current_presentation.isascii():
+        remaining = sorted({c for c in current_presentation if ord(c) > 127})
+        raise RuntimeError(
+            'current sine-theta presentation contains unmapped Lean Unicode: '
+            f'{remaining!r}'
+        )
+    current_header = [
+        '-- GENERATED PRESENTATION INPUT; this is not the exact Lean source.',
+        '-- Exact current signature: generated/current_sin_theta_exact.lean',
+        '-- ASCII LeanLit... sentinels stand in for display-sensitive Lean notation.',
+        '-- paper.tex renders those sentinels with the listings literate= table.',
+        '-- Audit the exact sidecar/source, not this presentation file.',
+    ]
+    current_text = '\n'.join(current_header) + '\n' + current_presentation
+    current_path = PAPER / 'generated' / 'current_sin_theta_presentation.lean'
+    current_path.write_text(current_text, encoding='ascii')
+    for _, sentinel in current_literate:
+        tex_key = '{' + sentinel.replace('\\', '\\\\') + '}'
+        if tex_key not in paper_tex:
+            raise RuntimeError(
+                f'paper.tex is missing current sine-theta literate mapping {sentinel}'
+            )
+
     table = '\n'.join([
         r'\begin{tabularx}{\linewidth}{@{}p{0.20\linewidth}>{\raggedright\arraybackslash}X>{\raggedright\arraybackslash}X@{}}',
         r'\toprule',
@@ -549,6 +619,8 @@ def build_manifest():
         'papers/formalization_process/generated/historical_scope_mismatch_table.tex',
         'papers/formalization_process/generated/historical_scope_mismatch_exact.lean',
         'papers/formalization_process/generated/historical_scope_mismatch_presentation.lean',
+        'papers/formalization_process/generated/current_sin_theta_exact.lean',
+        'papers/formalization_process/generated/current_sin_theta_presentation.lean',
         'DavisKahan/Sources/DavisKahan1970/SineTheta/Presentation.lean',
         'dev/davis-kahan-1970-formalization-result-inventory.json',
         'dev/davis-kahan-1970-full-source-census.json',
@@ -610,6 +682,7 @@ def build_manifest():
         'papers/formalization_process/data/review_timeline.csv': 'selected Git chronology',
         'papers/formalization_process/generated/historical_scope_mismatch.json': 'historical ambient sin-2-Theta semantic-mismatch example',
         'papers/formalization_process/generated/historical_scope_mismatch_exact.lean': 'exact historical Lean signature sidecar',
+        'papers/formalization_process/generated/current_sin_theta_exact.lean': 'exact current Davis--Kahan Section 2 sine-theta signature',
         'papers/formalization_process/notes/SEMANTIC_ALIGNMENT_CANDIDATES.md': 'semantic-alignment candidate signatures',
         'DavisKahan/Sources/DavisKahan1970/SineTheta/Presentation.lean': 'current sine-theta Lean source',
         'dev/davis-kahan-1970-formalization-result-inventory.json': '29-result tracking data',

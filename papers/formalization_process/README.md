@@ -103,7 +103,7 @@ presentation applies only the audited readability name changes and replaces
 display-sensitive Lean Unicode with unique ASCII `LeanLit...` sentinels.
 `paper.tex` maps those sentinels to LaTeX glyphs with `literate=`. The
 presentation file begins with comments pointing back to the exact sidecar. The
-current exact source interface uses `NormalizedUnitaryInvariantNorm`.
+current exact source interface uses `NormalizedSymmetricOperatorIdealFamily`.
 
 The manuscript reports checked formal treatments for all 29 tracked Davis--Kahan
 results while keeping semantic alignment separate.  The latest source/signature
