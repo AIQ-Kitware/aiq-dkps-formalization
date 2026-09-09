@@ -258,11 +258,18 @@ def build_historical_scope_mismatch():
     """Extract the August 17 ambient sin-2-Theta certificate mismatch from Git."""
 
     def extract_decl(commit: str, source_path: str, name: str, context_prefix=None):
-        full_commit = git('rev-parse', commit)
-        raw = subprocess.check_output(
-            ['git', '-c', f'safe.directory={REPO}', 'show', f'{full_commit}:{source_path}'],
-            cwd=REPO,
-        )
+        if commit == 'WORKTREE':
+            # Current generated evidence must be buildable before the overlay is
+            # committed.  Historical evidence is commit-pinned below; current
+            # evidence is intentionally read from the checked-out source.
+            full_commit = f"WORKTREE@{git('rev-parse', 'HEAD')}"
+            raw = (REPO / source_path).read_bytes()
+        else:
+            full_commit = git('rev-parse', commit)
+            raw = subprocess.check_output(
+                ['git', '-c', f'safe.directory={REPO}', 'show', f'{full_commit}:{source_path}'],
+                cwd=REPO,
+            )
         source = raw.decode('utf8')
         lines = source.splitlines()
         start = next(
@@ -358,15 +365,20 @@ def build_historical_scope_mismatch():
             'no longer verifies modulo documented helper renames'
         )
 
-    current_complex = extract_decl(
-        'HEAD',
+    current_rclike = extract_decl(
+        'WORKTREE',
         'DavisKahan/Sources/DavisKahan1970/SinTwoThetaAmbientUnbounded.lean',
-        'sinTwoTheta_ambient_unbounded_perturbedGap_sourceExact_complex',
+        'sinTwoTheta_ambient_unbounded_perturbedGap_whereDefinedUIN_rclike',
+    )
+    current_complex = extract_decl(
+        'WORKTREE',
+        'DavisKahan/Sources/DavisKahan1970/SinTwoThetaAmbientUnbounded.lean',
+        'sinTwoTheta_ambient_unbounded_perturbedGap_whereDefinedUIN_complex',
     )
     current_real = extract_decl(
-        'HEAD',
+        'WORKTREE',
         'DavisKahan/Sources/DavisKahan1970/SinTwoThetaAmbientUnbounded.lean',
-        'sinTwoTheta_ambient_unbounded_perturbedGap_sourceExact_real',
+        'sinTwoTheta_ambient_unbounded_perturbedGap_whereDefinedUIN_real',
     )
 
     checks = [
@@ -379,8 +391,10 @@ def build_historical_scope_mismatch():
         ('historical complex printed residual', historical_directed_complex['signature'], '2 * N.gauge R'),
         ('historical real unbounded directed witness', historical_directed_real['signature'], 'hVdom'),
         ('historical real printed residual', historical_directed_real['signature'], '2 * N.gauge R'),
-        ('current complex source norm', current_complex['signature'], 'NormalizedUnitaryInvariantNorm'),
-        ('current real source norm', current_real['signature'], 'NormalizedUnitaryInvariantNorm'),
+        ('current generic source norm', current_rclike['signature'], 'NormalizedSymmetricOperatorIdealFamily'),
+        ('current complex source norm', current_complex['signature'], 'NormalizedSymmetricOperatorIdealFamily'),
+        ('current real source norm', current_real['signature'], 'NormalizedSymmetricOperatorIdealFamily'),
+        ('current generic unbounded operator', current_rclike['signature'], '{A : H →ₗ.[𝕜] H}'),
         ('current complex unbounded operator', current_complex['signature'], '{A : Hc →ₗ.[ℂ] Hc}'),
         ('current real unbounded operator', current_real['signature'], '{A : Er →ₗ.[ℝ] Er}'),
     ]
@@ -474,26 +488,29 @@ def build_historical_scope_mismatch():
     # Current source-facing Davis--Kahan Section 2 sine-theta signature.  Keep an
     # exact Unicode sidecar and a separate ASCII-sentinel listings input.
     current_sin_theta = extract_decl(
-        'HEAD',
+        'WORKTREE',
         'DavisKahan/Sources/DavisKahan1970/SineTheta/Presentation.lean',
-        'sinTheta_unbounded_formGap_sourceExact_complex',
+        'sinTheta_unbounded_formGap_whereDefinedUIN_rclike',
+        context_prefix='variable {𝕜 : Type u} [RCLike 𝕜]',
     )
     current_checks = [
-        'TopologicalSpace.SeparableSpace E',
-        'NormalizedSymmetricOperatorIdealFamily',
-        'E →ₗ.[ℂ] E',
-        'IsTrialResidual',
-        'IsExactSpectralDecomposition',
-        'FormBoundedSylvesterGap',
-        'N.Mem R →',
-        'N.gaugeReal R',
+        ('display', 'RCLike 𝕜'),
+        ('signature', 'TopologicalSpace.SeparableSpace E'),
+        ('signature', 'NormalizedSymmetricOperatorIdealFamily'),
+        ('signature', 'E →ₗ.[𝕜] E'),
+        ('signature', 'IsTrialResidual'),
+        ('signature', 'IsExactSpectralDecomposition'),
+        ('signature', 'FormBoundedSylvesterGap'),
+        ('signature', 'N.Mem R →'),
+        ('signature', 'N.gaugeReal R'),
     ]
-    for needle in current_checks:
-        if needle not in current_sin_theta['signature']:
+    for surface, needle in current_checks:
+        body = current_sin_theta['display_source'] if surface == 'display' else current_sin_theta['signature']
+        if needle not in body:
             raise RuntimeError(
-                f'current sine-theta signature missing expected text: {needle!r}'
+                f'current sine-theta {surface} missing expected text: {needle!r}'
             )
-    current_exact_text = current_sin_theta['signature']
+    current_exact_text = current_sin_theta['display_source']
     current_exact_path = PAPER / 'generated' / 'current_sin_theta_exact.lean'
     current_exact_path.write_text(current_exact_text, encoding='utf8')
     if current_exact_path.read_text(encoding='utf8') != current_exact_text:
@@ -501,10 +518,10 @@ def build_historical_scope_mismatch():
 
     current_presentation = current_exact_text
     current_literate = [
-        ('→ₗ.[ℂ]', r'\LeanLitPMapC'),
-        ('→L[ℂ]', r'\LeanLitCLMapC'),
+        ('→ₗ.[𝕜]', r'\LeanLitPMapK'),
+        ('→L[𝕜]', r'\LeanLitCLMapK'),
         ('∘L', r'\LeanLitCompL'),
-        ('ℂ', r'\LeanLitComplex'),
+        ('𝕜', r'\LeanLitScalar'),
         ('ℝ', r'\LeanLitReal'),
         ('≤', r'\LeanLitLe'),
         ('→', r'\LeanLitArrow'),
@@ -563,6 +580,7 @@ def build_historical_scope_mismatch():
         'historical_ambient_real': historical_real,
         'historical_unbounded_directed_complex': historical_directed_complex,
         'historical_unbounded_directed_real': historical_directed_real,
+        'current_ambient_rclike': current_rclike,
         'current_ambient_complex': current_complex,
         'current_ambient_real': current_real,
         'exact_sidecar': {

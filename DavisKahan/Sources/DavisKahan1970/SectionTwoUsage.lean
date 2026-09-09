@@ -104,17 +104,15 @@ theorem sinTheta_from_printed_separation
     N.Mem ((ContinuousLinearMap.id ℂ E - F₀ ∘L F₀.adjoint) ∘L E₀) ∧
       δ * N.gauge ((ContinuousLinearMap.id ℂ E - F₀ ∘L F₀.adjoint) ∘L E₀) ≤
         N.gauge R :=
-  SectionTwo.sinTheta_complex N A A₀ Λ₁ E₀ F₀ F₁ R hA hA₀ hΛ₁ htrial hexact hδ
+  DavisKahan1970.sinTheta_unbounded_formGap_symmetricNorming_complex
+    N A A₀ Λ₁ E₀ F₀ F₁ R hA hA₀ hΛ₁ htrial hexact hδ
     (FormBoundedSylvesterGap.intervalExterior hβα (Or.inl ⟨htrialSpec, hcomplSpec⟩))
     hR
 
-/-- The same call over an arbitrary `RCLike` field, through the newly bound
-`SectionTwo.sinTheta`.
+/-- The same stronger symmetric-norming API over an arbitrary `RCLike` field.
 
-This is the reachability check for the scalar-generic endpoint: ordinary
-operator-theory hypotheses in, printed conclusion out, with no problem record
-assembled by hand.  The two class hypotheses are the field capabilities, which
-`ℝ` and `ℂ` both satisfy by instance. -/
+This checks reachability of the stronger scalar-generic implementation theorem.  The short
+`SectionTwo.sinTheta` now names the separate where-defined RClike ledger witness. -/
 theorem sinTheta_from_printed_separation_rclike
     {𝕜 : Type u₁} [RCLike 𝕜]
     {E F G H : Type v₁}
@@ -136,7 +134,8 @@ theorem sinTheta_from_printed_separation_rclike
     N.Mem ((ContinuousLinearMap.id 𝕜 E - F₀ ∘L F₀.adjoint) ∘L E₀) ∧
       δ * N.gauge ((ContinuousLinearMap.id 𝕜 E - F₀ ∘L F₀.adjoint) ∘L E₀) ≤
         N.gauge R :=
-  SectionTwo.sinTheta N A A₀ Λ₁ E₀ F₀ F₁ R hA hA₀ hΛ₁ htrial hexact hδ
+  DavisKahan1970.sinTheta_unbounded_formGap_symmetricNorming_rclike
+    N A A₀ Λ₁ E₀ F₀ F₁ R hA hA₀ hΛ₁ htrial hexact hδ
     (FormBoundedSylvesterGap.intervalExterior hβα (Or.inl ⟨htrialSpec, hcomplSpec⟩))
     hR
 

@@ -101,7 +101,9 @@
   % audit. Do not replace the sentinel keys below with literal Lean glyphs.
   literate=
     {\\LeanLitCLMapC}{{$\mathrel{\to}\!\mathtt{L}[\mathbb{C}]$}}5
+    {\\LeanLitCLMapK}{{$\mathrel{\to}\!\mathtt{L}[\mathbb{K}]$}}5
     {\\LeanLitComplex}{{$\mathbb{C}$}}1
+    {\\LeanLitScalar}{{$\mathbb{K}$}}1
     {\\LeanLitReal}{{$\mathbb{R}$}}1
     {\\LeanLitLe}{{$\le$}}1
     {\\LeanLitSubsetEq}{{$\subseteq$}}1
@@ -111,6 +113,7 @@
     {\\LeanLitDisj}{{$\lor$}}1
     {\\LeanLitConj}{{$\land$}}1
     {\\LeanLitPMapC}{{$\mathrel{\to}\!\mathtt{L}_{\rm p}[\mathbb{C}]$}}6
+    {\\LeanLitPMapK}{{$\mathrel{\to}\!\mathtt{L}_{\rm p}[\mathbb{K}]$}}6
     {\\LeanLitArrow}{{$\to$}}1
     {\\LeanLitCompL}{{$\circ_L$}}2
     {\\LeanLitDelta}{{$\delta$}}1
@@ -334,9 +337,13 @@ figure, while ``Formalize'' includes its compile-and-revise cycle:
   implemented the result compared the source passage with the resulting theorem
   statement.  Reviews checked hypotheses, objects, scalar field, dimension,
   bounded or unbounded operator scope, norm class, gap assumptions, constants,
-  and directionality.  Implementing agents sometimes reported completion before
-  this comparison; reviewers could also ask for a stronger statement than the
-  source supported.  The humans directing the work monitored these exchanges,
+  and directionality.  A recurring failure mode was scalar-scope drift: an agent
+  would repair a complex declaration without making the corresponding real
+  declaration and shared \texttt{RCLike} API consistent.  We therefore review the
+  complex, real, and scalar-generic surfaces as one family.  Implementing agents
+  sometimes reported completion before this comparison; reviewers could also ask
+  for a stronger statement than the source supported.  The humans directing the
+  work monitored these exchanges,
   supplied framing, noticed inconsistencies among model outputs, and asked for
   further explanations or independent reviews.  They were not Davis--Kahan
   subject-matter experts, so this process did not provide independent expert
@@ -432,8 +439,9 @@ alternatives, and the convention that a displayed unitarily invariant norm
 inequality is vacuous when either norm is undefined.  Pinning down these
 inherited conditions was itself part of the source review.
 
-\Cref{lst:current-sintheta} shows the current complex source-facing declaration;
-a real declaration has the same structure.  The potentially unbounded
+\Cref{lst:current-sintheta} shows the current scalar-generic declaration.  Its
+\texttt{RCLike} scalar parameter covers the real and complex cases with one theorem, so the two
+fixed-field APIs cannot drift independently at this boundary.  The potentially unbounded
 operators are represented by partial linear maps.  The
 \texttt{NormalizedSymmetricOperatorIdealFamily} represents a normalized
 unitarily invariant norm together with its domain of finiteness.  Consequently,
@@ -442,7 +450,7 @@ the two \texttt{N.Mem} implications after the colon express the source's
 needed to invoke an analytic theorem.
 
 % Editor provenance (not rendered): this display is generated verbatim from
-% DavisKahan/Sources/DavisKahan1970/SineTheta/Presentation.lean at HEAD.  The
+% DavisKahan/Sources/DavisKahan1970/SineTheta/Presentation.lean in the checked-out source.  The
 % exact Unicode signature is written to generated/current_sin_theta_exact.lean;
 % the listings input differs only by ASCII sentinels used for typography.
 \begin{nolinenumbers}
@@ -450,7 +458,7 @@ needed to invoke an analytic theorem.
 \lstinputlisting[
   style=leanpaper,
   firstline=6,
-  caption={Current source-facing complex signature for the Davis--Kahan Section~2 sine-theta theorem. It exposes ambient separability, potentially unbounded operators, the spectral-gap condition, and the where-defined norm convention.},
+  caption={Current scalar-generic signature for the Davis--Kahan Section~2 sine-theta theorem. The \texttt{RCLike} parameter covers real and complex scalars while exposing ambient separability, potentially unbounded operators, the spectral-gap condition, and the where-defined norm convention.},
   label={lst:current-sintheta}
 ]{generated/current_sin_theta_presentation.lean}
 \end{minipage}

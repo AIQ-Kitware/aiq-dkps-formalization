@@ -116,20 +116,26 @@ Fan-dominance reduction at (1.11)-(1.13). -/
 #check @TauCeti.DavisKahan1970.Section8.theorem8_2_sinTwoTheta_residual_directedAngle_sourceExact
 #check @TauCeti.DavisKahan1970.Section8.theorem8_2_sinTwoTheta_perturbation_real_sourceExact
 #check @TauCeti.DavisKahan1970.Section8.theorem8_2_sinTwoTheta_residual_directedAngle_real_sourceExact
-#check @TauCeti.DavisKahan1970.sinTheta_unbounded_formGap_sourceExact_complex
-#check @TauCeti.DavisKahan1970.sinTheta_unbounded_formGap_sourceExact_real
-#check @TauCeti.DavisKahan1970.tanTheta_ambient_unboundedRitz_definedTangent_sourceExact_complex
-#check @TauCeti.DavisKahan1970.tanTheta_ambient_unboundedRitz_definedTangent_sourceExact_real
-#check @TauCeti.DavisKahan1970.tanTheta_directed_unboundedRitz_sourceExact_complex
-#check @TauCeti.DavisKahan1970.tanTheta_directed_unboundedRitz_sourceExact_real
-#check @TauCeti.DavisKahan1970.sinTwoTheta_directed_unboundedResidual_sourceExact_complex
-#check @TauCeti.DavisKahan1970.sinTwoTheta_directed_unboundedResidual_sourceExact_real
-#check @TauCeti.DavisKahan1970.sinTwoTheta_ambient_unbounded_perturbedGap_sourceExact_complex
-#check @TauCeti.DavisKahan1970.sinTwoTheta_ambient_unbounded_perturbedGap_sourceExact_real
-#check @TauCeti.DavisKahan1970.tanTwoTheta_directed_unboundedResidual_sourceExact_complex
-#check @TauCeti.DavisKahan1970.tanTwoTheta_directed_unboundedResidual_sourceExact_real
-#check @TauCeti.DavisKahan1970.tanTwoTheta_ambient_unbounded_sourceExact_complex
-#check @TauCeti.DavisKahan1970.tanTwoTheta_ambient_unbounded_sourceExact_real
+#check @TauCeti.DavisKahan1970.sinTheta_unbounded_formGap_whereDefinedUIN_rclike
+#check @TauCeti.DavisKahan1970.sinTheta_unbounded_formGap_whereDefinedUIN_complex
+#check @TauCeti.DavisKahan1970.sinTheta_unbounded_formGap_whereDefinedUIN_real
+#check @TauCeti.DavisKahan1970.tanTheta_ambient_unboundedRitz_definedTangent_normalizedUIN_complex
+#check @TauCeti.DavisKahan1970.tanTheta_ambient_unboundedRitz_definedTangent_normalizedUIN_real
+#check @TauCeti.DavisKahan1970.tanTheta_directed_unboundedRitz_normalizedUIN_complex
+#check @TauCeti.DavisKahan1970.tanTheta_directed_unboundedRitz_normalizedUIN_real
+#check @TauCeti.DavisKahan1970.sinTwoTheta_directed_unboundedResidual_whereDefinedUIN_complex
+#check @TauCeti.DavisKahan1970.sinTwoTheta_directed_unboundedResidual_whereDefinedUIN_real
+#check @TauCeti.DavisKahan1970.sinTwoTheta_ambient_unbounded_perturbedGap_whereDefinedUIN_rclike
+#check @TauCeti.DavisKahan1970.sinTwoTheta_ambient_unbounded_perturbedGap_whereDefinedUIN_complex
+#check @TauCeti.DavisKahan1970.sinTwoTheta_ambient_unbounded_perturbedGap_whereDefinedUIN_real
+#check @TauCeti.DavisKahan1970.sinTwoTheta_directed_unboundedResidual_normalizedUIN_complex
+#check @TauCeti.DavisKahan1970.sinTwoTheta_directed_unboundedResidual_normalizedUIN_real
+#check @TauCeti.DavisKahan1970.sinTwoTheta_ambient_unbounded_perturbedGap_normalizedUIN_complex
+#check @TauCeti.DavisKahan1970.sinTwoTheta_ambient_unbounded_perturbedGap_normalizedUIN_real
+#check @TauCeti.DavisKahan1970.tanTwoTheta_directed_unboundedResidual_normalizedUIN_complex
+#check @TauCeti.DavisKahan1970.tanTwoTheta_directed_unboundedResidual_normalizedUIN_real
+#check @TauCeti.DavisKahan1970.tanTwoTheta_ambient_unbounded_normalizedUIN_complex
+#check @TauCeti.DavisKahan1970.tanTwoTheta_ambient_unbounded_normalizedUIN_real
 #check @TauCeti.DavisKahan1970.normalizedUnitaryInvariant_of_symmetricNorming
 #check @TauCeti.DavisKahan1970.normalizedUnitaryInvariant_of_symmetricNorming_mul
 #check @TauCeti.DavisKahan.ExactSinTheta.NormalizedUnitaryInvariantNorm
@@ -165,13 +171,9 @@ norms outside the symmetrically normed ideals. -/
 
 Status: **TERMINAL EXACT**.
 
-The first name is the public Section 2 short name, aliasing the canonical
-witness `sinTheta_unbounded_formGap_symmetricNorming_rclike`: an arbitrary
-`RCLike` field, the full `FormBoundedSylvesterGap`, both conclusions, and nothing
-in the signature that is not Davis and Kahan's -- in particular no
-proof-capability class.  The fixed-field inventory names and the declarations
-they alias follow, as corroboration at `ℂ` and at `ℝ`.  The rest are the
-presentation declaration, the engine, and the scope companions. -/
+The first name is the public Section 2 short name, now aliasing the ledger-selected
+where-defined RClike theorem. The fixed-field aliases are thin specializations; the older
+`SymmetricNormingFunction` declarations remain stronger implementation APIs. -/
 
 #check @TauCeti.DavisKahan1970.SectionTwo.sinTheta
 #check @TauCeti.DavisKahan1970.SectionTwo.sinTheta_complex
@@ -316,6 +318,7 @@ calculus: the real calculus on `E →L[𝕜] E` is a theorem at every `RCLike` f
 #check @TauCeti.DavisKahan1970.sinTwoTheta_ambient_unbounded_reflectionPair_symmetricNorming_rclike
 #check @TauCeti.DavisKahan1970.sinTwoTheta_ambient_unbounded_addBounded_symmetricNorming_complex
 #check @TauCeti.DavisKahan1970.sinTwoTheta_ambient_unbounded_addBounded_symmetricNorming_real
+#check @TauCeti.DavisKahan1970.SectionTwo.sinTwoTheta_ambient
 #check @TauCeti.DavisKahan1970.SectionTwo.sinTwoTheta_ambient_complex
 #check @TauCeti.DavisKahan1970.SectionTwo.sinTwoTheta_ambient_real
 #check @TauCeti.DavisKahan1970.sinTwoTheta_ambient_reflection_projectorDifference_symmetricNorming

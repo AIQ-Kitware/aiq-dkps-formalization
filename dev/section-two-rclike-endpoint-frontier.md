@@ -1,13 +1,24 @@
 # Scalar-generic Section 2 endpoints: what each family still needs
 
-Status: **partly superseded, 2026-09-04.**  The tracing below is still the record
-of how the three families were blocked, and the `tan Θ` and `tan 2Θ` analysis is
-unchanged.  Its central recommendation is not: it tells the reader to settle
-whether to build a scalar-generic projection-valued spectral measure *before*
-starting any family, and that is no longer the right next step.  Read
-"What the scalar transport settled" immediately below before acting on anything
-in this file.  Declaration names here also predate the `paperUINorm` →
-`symmetricNorming` rename; resolve a name against the tree before citing it.
+Status: **partly superseded, updated 2026-09-09.**  The tracing below is still the
+record of the scalar-generic transport frontier, but it is not the maintenance
+index for the four headline theorem families.  Use
+`dev/davis-kahan-1970-section-two-variant-index.json` for the current real, complex,
+RCLike, ledger-witness, and API relationships.
+
+The 2026-09-08/09 norm-domain repair is now reflected in the scalar-generic public
+surface.  `sinTheta_unbounded_formGap_whereDefinedUIN_rclike` is the ledger witness
+for both scalar clauses and is bound as `SectionTwo.sinTheta`; its real and complex
+siblings are thin specializations.  The ambient `sin 2Θ` where-defined boundary is
+also promoted at arbitrary `RCLike` and bound as `SectionTwo.sinTwoTheta_ambient`.
+The directed `sin 2Θ₀` ledger witnesses use the same where-defined boundary at the
+two fixed fields.  Its RCLike norm/API layer compiles, but the underlying generic
+reducing-subspace/residual transport engine remains open, so the whole
+`SectionTwo.sinTwoTheta` result is still deliberately unbound.
+
+The tracing below also predates several declaration renames.  Resolve names against
+the tree and the variant index before citing them.  Read "What the scalar transport
+settled" immediately below before acting on the older recommendations.
 
 ## What the scalar transport settled (2026-09-01 .. 2026-09-04)
 
@@ -179,9 +190,11 @@ downward, not extrapolated from the weaker `RCLike` wrappers.
 
 ## `sin Θ` — complete
 
-`DavisKahan1970.sinTheta_unbounded_formGap_paperUINorm_rclike`, bound as
-`SectionTwo.sinTheta`.  Conformance to both fixed fields is compiled
-(`..._complex_ofRCLike`, `..._real_ofRCLike`), with no adapter.
+`DavisKahan1970.sinTheta_unbounded_formGap_whereDefinedUIN_rclike`, bound as
+`SectionTwo.sinTheta`, is the ledger-selected scalar-generic endpoint.  The
+`..._whereDefinedUIN_complex` and `..._whereDefinedUIN_real` declarations are thin
+fixed-field specializations.  The older `SymmetricNormingFunction` declarations
+remain stronger implementation/API variants rather than ledger witnesses.
 
 ## `tan Θ` — generic infrastructure, **not** an API bridge
 

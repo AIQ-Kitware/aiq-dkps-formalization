@@ -1,0 +1,370 @@
+{
+  "schema_version": 1,
+  "purpose": "Curated maintenance index for the important public, source-review, and implementation variants of the four unnumbered Davis--Kahan Section 2 headline theorems. This is not a source census and does not determine the 29-result denominator.",
+  "authority": {
+    "source_fidelity": "dev/davis-kahan-1970-formalization-result-inventory.json",
+    "public_aliases": "DavisKahan/Sources/DavisKahan1970/SectionTwo.lean",
+    "rclike_frontier": "dev/section-two-rclike-endpoint-frontier.md",
+    "rule": "A declaration is source-faithful because the result ledger selects it and records the covered source atoms. The theorem name must not encode source exactness. When any important variant changes, review its real, complex, and RCLike siblings together and update this index."
+  },
+  "roles": {
+    "ledger_witness": "Declaration currently selected by the result ledger as evidence for a source clause.",
+    "fixed_field_api": "Convenience public API specialized to real or complex scalars; it may be stronger or otherwise differently parameterized than the ledger witness.",
+    "scalar_generic_api": "RCLike-generic public API.",
+    "implementation_engine": "Stronger or proof-oriented theorem retained to implement another statement boundary.",
+    "probe": "Exploration-only declaration. Never ledger evidence until it compiles, is promoted to production, and the ledger is explicitly retargeted."
+  },
+  "results": [
+    {
+      "result_id": "S2-sin-theta",
+      "source_label": "Davis--Kahan Section 2 sin Theta",
+      "short_api": {
+        "declaration": "TauCeti.DavisKahan1970.SectionTwo.sinTheta",
+        "status": "bound",
+        "reason": "Bound to the ledger-selected scalar-generic where-defined RCLike theorem. The real and complex aliases are thin specializations."
+      },
+      "ledger_witnesses": [
+        "TauCeti.DavisKahan1970.sinTheta_unbounded_formGap_whereDefinedUIN_rclike"
+      ],
+      "variants": [
+        {
+          "declaration": "TauCeti.DavisKahan1970.sinTheta_unbounded_formGap_whereDefinedUIN_rclike",
+          "role": "ledger_witness",
+          "scalar_scope": "rclike",
+          "source_fidelity": "attested_by_ledger",
+          "reason": "Single scalar-generic where-defined theorem selected by the ledger for the source real-or-complex scope."
+        },
+        {
+          "declaration": "TauCeti.DavisKahan1970.sinTheta_unbounded_formGap_whereDefinedUIN_complex",
+          "role": "fixed_field_api",
+          "scalar_scope": "complex",
+          "source_fidelity": "not_ledger_witness",
+          "reason": "Thin complex specialization of the RCLike ledger witness."
+        },
+        {
+          "declaration": "TauCeti.DavisKahan1970.sinTheta_unbounded_formGap_whereDefinedUIN_real",
+          "role": "fixed_field_api",
+          "scalar_scope": "real",
+          "source_fidelity": "not_ledger_witness",
+          "reason": "Thin real specialization of the RCLike ledger witness."
+        },
+        {
+          "declaration": "TauCeti.DavisKahan1970.sinTheta_unbounded_formGap_symmetricNorming_rclike",
+          "role": "implementation_engine",
+          "scalar_scope": "rclike",
+          "source_fidelity": "not_ledger_witness",
+          "reason": "Stronger scalar-generic implementation theorem with membership transfer; retained to prove the where-defined boundary."
+        },
+        {
+          "declaration": "TauCeti.DavisKahan1970.SectionTwo.sinTheta",
+          "role": "scalar_generic_api",
+          "scalar_scope": "rclike",
+          "source_fidelity": "not_ledger_witness",
+          "reason": "Public short alias to the generic ledger witness. Alias names do not carry independent fidelity status."
+        },
+        {
+          "declaration": "TauCeti.DavisKahan1970.SectionTwo.sinTheta_complex",
+          "role": "fixed_field_api",
+          "scalar_scope": "complex",
+          "source_fidelity": "not_ledger_witness",
+          "reason": "Public complex convenience alias to the thin specialization."
+        },
+        {
+          "declaration": "TauCeti.DavisKahan1970.SectionTwo.sinTheta_real",
+          "role": "fixed_field_api",
+          "scalar_scope": "real",
+          "source_fidelity": "not_ledger_witness",
+          "reason": "Public real convenience alias to the thin specialization."
+        },
+        {
+          "declaration": "TauCeti.DavisKahan.ExactSinTheta.FanDominanceExploration.sinTheta_unbounded_formGap_whereDefinedUIN_rclike_probe",
+          "role": "probe",
+          "scalar_scope": "rclike",
+          "source_fidelity": "superseded_by_production",
+          "reason": "Compiled on 2026-09-09 and was promoted to the production RCLike theorem. Retained only as an exploration/regression witness."
+        }
+      ]
+    },
+    {
+      "result_id": "S2-tan-theta",
+      "source_label": "Davis--Kahan Section 2 tan Theta",
+      "short_api": {
+        "declaration": "TauCeti.DavisKahan1970.SectionTwo.tanTheta",
+        "status": "unbound",
+        "reason": "No scalar-generic declaration currently carries both ledger-selected clauses at the intended statement boundary."
+      },
+      "ledger_witnesses": [
+        "TauCeti.DavisKahan1970.tanTheta_ambient_unboundedRitz_definedTangent_normalizedUIN_complex",
+        "TauCeti.DavisKahan1970.tanTheta_ambient_unboundedRitz_definedTangent_normalizedUIN_real",
+        "TauCeti.DavisKahan1970.tanTheta_directed_unboundedRitz_normalizedUIN_complex",
+        "TauCeti.DavisKahan1970.tanTheta_directed_unboundedRitz_normalizedUIN_real"
+      ],
+      "variants": [
+        {
+          "declaration": "TauCeti.DavisKahan1970.tanTheta_ambient_unboundedRitz_definedTangent_normalizedUIN_complex",
+          "role": "ledger_witness",
+          "scalar_scope": "complex",
+          "source_fidelity": "attested_by_ledger",
+          "reason": "Current fixed-field clause selected by the result ledger."
+        },
+        {
+          "declaration": "TauCeti.DavisKahan1970.tanTheta_ambient_unboundedRitz_definedTangent_normalizedUIN_real",
+          "role": "ledger_witness",
+          "scalar_scope": "real",
+          "source_fidelity": "attested_by_ledger",
+          "reason": "Current fixed-field clause selected by the result ledger."
+        },
+        {
+          "declaration": "TauCeti.DavisKahan1970.tanTheta_directed_unboundedRitz_normalizedUIN_complex",
+          "role": "ledger_witness",
+          "scalar_scope": "complex",
+          "source_fidelity": "attested_by_ledger",
+          "reason": "Current fixed-field clause selected by the result ledger."
+        },
+        {
+          "declaration": "TauCeti.DavisKahan1970.tanTheta_directed_unboundedRitz_normalizedUIN_real",
+          "role": "ledger_witness",
+          "scalar_scope": "real",
+          "source_fidelity": "attested_by_ledger",
+          "reason": "Current fixed-field clause selected by the result ledger."
+        },
+        {
+          "declaration": "TauCeti.DavisKahan1970.SectionTwo.tanTheta_ambient_complex",
+          "role": "fixed_field_api",
+          "scalar_scope": "complex",
+          "source_fidelity": "not_ledger_witness",
+          "reason": "Public ambient convenience alias to the stronger SymmetricNormingFunction API."
+        },
+        {
+          "declaration": "TauCeti.DavisKahan1970.SectionTwo.tanTheta_ambient_real",
+          "role": "fixed_field_api",
+          "scalar_scope": "real",
+          "source_fidelity": "not_ledger_witness",
+          "reason": "Real ambient convenience alias."
+        },
+        {
+          "declaration": "TauCeti.DavisKahan1970.SectionTwo.tanTheta_directed_complex",
+          "role": "fixed_field_api",
+          "scalar_scope": "complex",
+          "source_fidelity": "not_ledger_witness",
+          "reason": "Public directed convenience alias; the ledger separately identifies the fixed-field source witness."
+        },
+        {
+          "declaration": "TauCeti.DavisKahan1970.SectionTwo.tanTheta_directed_real",
+          "role": "fixed_field_api",
+          "scalar_scope": "real",
+          "source_fidelity": "not_ledger_witness",
+          "reason": "Real directed convenience alias."
+        }
+      ]
+    },
+    {
+      "result_id": "S2-sin-two-theta",
+      "source_label": "Davis--Kahan Section 2 sin 2Theta",
+      "short_api": {
+        "declaration": "TauCeti.DavisKahan1970.SectionTwo.sinTwoTheta",
+        "status": "unbound",
+        "reason": "The ambient clause is now scalar-generic at the ledger-selected where-defined boundary, but the directed unbounded-residual analytic engine still has a scalar-transport seam."
+      },
+      "ledger_witnesses": [
+        "TauCeti.DavisKahan1970.sinTwoTheta_directed_unboundedResidual_whereDefinedUIN_complex",
+        "TauCeti.DavisKahan1970.sinTwoTheta_directed_unboundedResidual_whereDefinedUIN_real",
+        "TauCeti.DavisKahan1970.sinTwoTheta_ambient_unbounded_perturbedGap_whereDefinedUIN_rclike"
+      ],
+      "variants": [
+        {
+          "declaration": "TauCeti.DavisKahan1970.sinTwoTheta_directed_unboundedResidual_whereDefinedUIN_complex",
+          "role": "ledger_witness",
+          "scalar_scope": "complex",
+          "source_fidelity": "attested_by_ledger",
+          "reason": "Complex directed where-defined norm boundary selected by the ledger. The remaining missing RClike work is the underlying residual transport engine."
+        },
+        {
+          "declaration": "TauCeti.DavisKahan1970.sinTwoTheta_directed_unboundedResidual_whereDefinedUIN_real",
+          "role": "ledger_witness",
+          "scalar_scope": "real",
+          "source_fidelity": "attested_by_ledger",
+          "reason": "Real directed where-defined norm boundary selected by the ledger. The remaining missing RClike work is the underlying residual transport engine."
+        },
+        {
+          "declaration": "TauCeti.DavisKahan1970.sinTwoTheta_ambient_unbounded_perturbedGap_whereDefinedUIN_rclike",
+          "role": "ledger_witness",
+          "scalar_scope": "rclike",
+          "source_fidelity": "attested_by_ledger",
+          "reason": "Single scalar-generic where-defined ambient clause selected by the ledger for the source real-or-complex scope."
+        },
+        {
+          "declaration": "TauCeti.DavisKahan1970.sinTwoTheta_directed_unboundedResidual_normalizedUIN_complex",
+          "role": "fixed_field_api",
+          "scalar_scope": "complex",
+          "source_fidelity": "not_ledger_witness",
+          "reason": "Stronger normalized-UIN specialization retained for compatibility and implementation use."
+        },
+        {
+          "declaration": "TauCeti.DavisKahan1970.sinTwoTheta_directed_unboundedResidual_normalizedUIN_real",
+          "role": "fixed_field_api",
+          "scalar_scope": "real",
+          "source_fidelity": "not_ledger_witness",
+          "reason": "Stronger normalized-UIN specialization retained for compatibility and implementation use."
+        },
+        {
+          "declaration": "TauCeti.DavisKahan1970.SectionTwo.sinTwoTheta_directed_complex",
+          "role": "fixed_field_api",
+          "scalar_scope": "complex",
+          "source_fidelity": "not_ledger_witness",
+          "reason": "Public alias to the complex where-defined directed ledger witness."
+        },
+        {
+          "declaration": "TauCeti.DavisKahan1970.SectionTwo.sinTwoTheta_directed_real",
+          "role": "fixed_field_api",
+          "scalar_scope": "real",
+          "source_fidelity": "not_ledger_witness",
+          "reason": "Public alias to the real where-defined directed ledger witness."
+        },
+        {
+          "declaration": "TauCeti.DavisKahan1970.sinTwoTheta_ambient_unbounded_perturbedGap_whereDefinedUIN_complex",
+          "role": "fixed_field_api",
+          "scalar_scope": "complex",
+          "source_fidelity": "not_ledger_witness",
+          "reason": "Thin complex specialization of the generic ambient ledger witness."
+        },
+        {
+          "declaration": "TauCeti.DavisKahan1970.sinTwoTheta_ambient_unbounded_perturbedGap_whereDefinedUIN_real",
+          "role": "fixed_field_api",
+          "scalar_scope": "real",
+          "source_fidelity": "not_ledger_witness",
+          "reason": "Thin real specialization of the generic ambient ledger witness."
+        },
+        {
+          "declaration": "TauCeti.DavisKahan1970.sinTwoTheta_ambient_unbounded_perturbedGap_normalizedUIN_complex",
+          "role": "fixed_field_api",
+          "scalar_scope": "complex",
+          "source_fidelity": "not_ledger_witness",
+          "reason": "Stronger Fan-dominant normalized-UIN API retained as a specialization; it is not the ledger-selected where-defined norm boundary."
+        },
+        {
+          "declaration": "TauCeti.DavisKahan1970.sinTwoTheta_ambient_unbounded_perturbedGap_normalizedUIN_real",
+          "role": "fixed_field_api",
+          "scalar_scope": "real",
+          "source_fidelity": "not_ledger_witness",
+          "reason": "Stronger Fan-dominant normalized-UIN API retained as a specialization; it is not the ledger-selected where-defined norm boundary."
+        },
+        {
+          "declaration": "TauCeti.DavisKahan1970.sinTwoTheta_ambient_unbounded_perturbedGap_symmetricNorming_rclike",
+          "role": "implementation_engine",
+          "scalar_scope": "rclike",
+          "source_fidelity": "not_ledger_witness",
+          "reason": "Stronger scalar-generic analytic theorem used to prove the where-defined ambient endpoint."
+        },
+        {
+          "declaration": "TauCeti.DavisKahan1970.SectionTwo.sinTwoTheta_ambient",
+          "role": "scalar_generic_api",
+          "scalar_scope": "rclike",
+          "source_fidelity": "not_ledger_witness",
+          "reason": "Public scalar-generic API for the ambient clause only."
+        },
+        {
+          "declaration": "TauCeti.DavisKahan1970.SectionTwo.sinTwoTheta_ambient_complex",
+          "role": "fixed_field_api",
+          "scalar_scope": "complex",
+          "source_fidelity": "not_ledger_witness",
+          "reason": "Public complex specialization of the generic ambient API."
+        },
+        {
+          "declaration": "TauCeti.DavisKahan1970.SectionTwo.sinTwoTheta_ambient_real",
+          "role": "fixed_field_api",
+          "scalar_scope": "real",
+          "source_fidelity": "not_ledger_witness",
+          "reason": "Public real specialization of the generic ambient API."
+        },
+        {
+          "declaration": "TauCeti.DavisKahan.ExactSinTheta.FanDominanceExploration.sinTwoTheta_ambient_unbounded_perturbedGap_whereDefinedUIN_rclike_probe",
+          "role": "probe",
+          "scalar_scope": "rclike",
+          "source_fidelity": "superseded_by_production",
+          "reason": "Compiled on 2026-09-09 and was promoted to the production generic ambient endpoint."
+        },
+        {
+          "declaration": "TauCeti.DavisKahan.ExactSinTheta.FanDominanceExploration.sinTwoTheta_directed_whereDefinedUIN_rclike_of_symmetricNorming_probe",
+          "role": "probe",
+          "scalar_scope": "rclike",
+          "source_fidelity": "pending_engine",
+          "reason": "Compiled norm/API layer only. It assumes the scalar-generic directed symmetric-norming engine as hcore; the reducing-subspace/residual transport seam remains open."
+        }
+      ]
+    },
+    {
+      "result_id": "S2-tan-two-theta",
+      "source_label": "Davis--Kahan Section 2 tan 2Theta",
+      "short_api": {
+        "declaration": "TauCeti.DavisKahan1970.SectionTwo.tanTwoTheta",
+        "status": "unbound",
+        "reason": "No scalar-generic declaration currently carries the ledger-selected directed and ambient clauses at their source-facing boundaries."
+      },
+      "ledger_witnesses": [
+        "TauCeti.DavisKahan1970.tanTwoTheta_ambient_unbounded_normalizedUIN_complex",
+        "TauCeti.DavisKahan1970.tanTwoTheta_ambient_unbounded_normalizedUIN_real",
+        "TauCeti.DavisKahan1970.tanTwoTheta_directed_unboundedResidual_normalizedUIN_complex",
+        "TauCeti.DavisKahan1970.tanTwoTheta_directed_unboundedResidual_normalizedUIN_real"
+      ],
+      "variants": [
+        {
+          "declaration": "TauCeti.DavisKahan1970.tanTwoTheta_ambient_unbounded_normalizedUIN_complex",
+          "role": "ledger_witness",
+          "scalar_scope": "complex",
+          "source_fidelity": "attested_by_ledger",
+          "reason": "Current fixed-field clause selected by the result ledger."
+        },
+        {
+          "declaration": "TauCeti.DavisKahan1970.tanTwoTheta_ambient_unbounded_normalizedUIN_real",
+          "role": "ledger_witness",
+          "scalar_scope": "real",
+          "source_fidelity": "attested_by_ledger",
+          "reason": "Current fixed-field clause selected by the result ledger."
+        },
+        {
+          "declaration": "TauCeti.DavisKahan1970.tanTwoTheta_directed_unboundedResidual_normalizedUIN_complex",
+          "role": "ledger_witness",
+          "scalar_scope": "complex",
+          "source_fidelity": "attested_by_ledger",
+          "reason": "Current fixed-field clause selected by the result ledger."
+        },
+        {
+          "declaration": "TauCeti.DavisKahan1970.tanTwoTheta_directed_unboundedResidual_normalizedUIN_real",
+          "role": "ledger_witness",
+          "scalar_scope": "real",
+          "source_fidelity": "attested_by_ledger",
+          "reason": "Current fixed-field clause selected by the result ledger."
+        },
+        {
+          "declaration": "TauCeti.DavisKahan1970.SectionTwo.tanTwoTheta_directed_complex",
+          "role": "fixed_field_api",
+          "scalar_scope": "complex",
+          "source_fidelity": "not_ledger_witness",
+          "reason": "Public directed fixed-field convenience API."
+        },
+        {
+          "declaration": "TauCeti.DavisKahan1970.SectionTwo.tanTwoTheta_directed_real",
+          "role": "fixed_field_api",
+          "scalar_scope": "real",
+          "source_fidelity": "not_ledger_witness",
+          "reason": "Real directed fixed-field convenience API."
+        },
+        {
+          "declaration": "TauCeti.DavisKahan1970.SectionTwo.tanTwoTheta_ambient_complex",
+          "role": "fixed_field_api",
+          "scalar_scope": "complex",
+          "source_fidelity": "not_ledger_witness",
+          "reason": "Public ambient fixed-field convenience API."
+        },
+        {
+          "declaration": "TauCeti.DavisKahan1970.SectionTwo.tanTwoTheta_ambient_real",
+          "role": "fixed_field_api",
+          "scalar_scope": "real",
+          "source_fidelity": "not_ledger_witness",
+          "reason": "Real ambient fixed-field convenience API."
+        }
+      ]
+    }
+  ]
+}

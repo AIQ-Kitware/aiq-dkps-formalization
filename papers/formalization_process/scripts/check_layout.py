@@ -63,7 +63,7 @@ def validate_pages(pages: list[str], public: bool) -> list[str]:
         errors.append(f'NeurIPS checklist must appear once after References; found {checklist_pages}')
     current_pages = [
         i for i, page in enumerate(flat_pages)
-        if 'theorem sinTheta_unbounded_formGap_sourceExact_complex' in page
+        if 'theorem sinTheta_unbounded_formGap_whereDefinedUIN_rclike' in page
     ]
     if len(current_pages) != 1 or current_pages[0] >= main_pages:
         errors.append('Current source-facing sine-theta theorem must appear once before References')
@@ -72,7 +72,7 @@ def validate_pages(pages: list[str], public: bool) -> list[str]:
         for token in (
             '-- proof omitted', 'Formalization 2:',
             'NormalizedSymmetricOperatorIdealFamily',
-            'SeparableSpace E', 'FormBoundedSylvesterGap',
+            'RCLike K', 'SeparableSpace E', 'FormBoundedSylvesterGap',
             'N.Mem R', 'N.gaugeReal R',
         ):
             if token not in current:

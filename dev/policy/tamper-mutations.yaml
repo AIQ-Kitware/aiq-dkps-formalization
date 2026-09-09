@@ -37,14 +37,14 @@ mutations:
 
   - name: source-uin-replaced-by-symmetric-norming-only
     description: >-
-      The sin Theta clause is carried by the source-exact facade, which
+      The sin Theta clause is carried by the ledger-selected façade, which
       quantifies over the normalized symmetric operator ideal family at the
       paper's where-defined/vacuous norm boundary and carries separable ambient
       scope. Retargeting it at the SymmetricNormingFunction theorem beneath drops
       the canonical source boundary.
     file: dev/davis-kahan-1970-formalization-result-inventory.json
-    find: '"primary": "TauCeti.DavisKahan1970.sinTheta_unbounded_formGap_sourceExact_complex"'
-    replace: '"primary": "TauCeti.DavisKahan1970.sinTheta_unbounded_formGap_symmetricNorming_complex"'
+    find: '"declaration": "TauCeti.DavisKahan1970.sinTheta_unbounded_formGap_whereDefinedUIN_complex"'
+    replace: '"declaration": "TauCeti.DavisKahan1970.sinTheta_unbounded_formGap_symmetricNorming_complex"'
     detected_by: ["python3", "scripts/check_davis_kahan_1970_result_inventory.py"]
 
   - name: real-source-witness-replaced-by-complex
@@ -52,8 +52,8 @@ mutations:
       Davis and Kahan state Section 2 over a real *or* complex space.  Pointing
       the real clause at the complex witness must not be accepted as covering it.
     file: dev/davis-kahan-1970-formalization-result-inventory.json
-    find: '"primary": "TauCeti.DavisKahan1970.sinTheta_unbounded_formGap_sourceExact_real"'
-    replace: '"primary": "TauCeti.DavisKahan1970.sinTheta_unbounded_formGap_sourceExact_complex"'
+    find: '"declaration": "TauCeti.DavisKahan1970.sinTheta_unbounded_formGap_whereDefinedUIN_real"'
+    replace: '"declaration": "TauCeti.DavisKahan1970.sinTheta_unbounded_formGap_whereDefinedUIN_complex"'
     detected_by: ["python3", "scripts/check_davis_kahan_1970_result_inventory.py"]
 
   - name: ambient-gap-moved-to-unperturbed-blocks
@@ -63,8 +63,8 @@ mutations:
       hypothesis about the *perturbed* operator.  Retargeting the ambient clause
       at the reducing-block theorem puts the gap back on the unperturbed A.
     file: dev/davis-kahan-1970-formalization-result-inventory.json
-    find: '"primary": "TauCeti.DavisKahan1970.sinTwoTheta_ambient_unbounded_perturbedGap_sourceExact_complex"'
-    replace: '"primary": "TauCeti.DavisKahan1970.sinTwoTheta_ambient_unbounded_reducing_symmetricNorming_complex"'
+    find: '"declaration": "TauCeti.DavisKahan1970.sinTwoTheta_ambient_unbounded_perturbedGap_normalizedUIN_complex"'
+    replace: '"declaration": "TauCeti.DavisKahan1970.sinTwoTheta_ambient_unbounded_reducing_symmetricNorming_complex"'
     detected_by: ["python3", "scripts/check_davis_kahan_1970_result_inventory.py"]
 
   - name: theorem-3-1-angle-multiplicity-replaced-by-cos-block
@@ -114,23 +114,23 @@ mutations:
     file: dev/davis-kahan-1970-formalization-result-inventory.json
     find: |-
       "capability_classes": [],
-                "note": "Source-exact fixed-field façade at separable ambient scope over `NormalizedSymmetricOperatorIdealFamily`; the result is a where-defined norm comparison and carries no residual-membership premise or membership-transfer conclusion."
+                "note": "Ledger-selected scalar-generic witness at the separable where-defined norm boundary. It covers the real and complex source scope in one RCLike declaration. The two fixed-field declarations are thin specializations and remain API conveniences, not separate fidelity certificates."
     replace: |-
       "capability_classes": ["ContinuousLinearMap.HasMinMaxLowerBoundEverywhere"],
-                "note": "Source-exact fixed-field façade at separable ambient scope over `NormalizedSymmetricOperatorIdealFamily`; the result is a where-defined norm comparison and carries no residual-membership premise or membership-transfer conclusion."
+                "note": "Ledger-selected scalar-generic witness at the separable where-defined norm boundary. It covers the real and complex source scope in one RCLike declaration. The two fixed-field declarations are thin specializations and remain API conveniences, not separate fidelity certificates."
     detected_by: ["python3", "scripts/check_davis_kahan_1970_result_inventory.py"]
 
   - name: scalar-scope-mislabelled
     description: >-
       The scalar scope of a canonical witness is read off its type.  Labelling
-      the real witness complex must not be accepted.
+      the RCLike witness as complex-only must not be accepted.
     file: dev/davis-kahan-1970-formalization-result-inventory.json
     find: |-
-      "declaration": "TauCeti.DavisKahan1970.sinTheta_unbounded_formGap_sourceExact_real",
+      "declaration": "TauCeti.DavisKahan1970.sinTheta_unbounded_formGap_whereDefinedUIN_rclike",
                 "role": "primary_source_witness",
-                "scalar_scope": "real",
+                "scalar_scope": "rclike",
     replace: |-
-      "declaration": "TauCeti.DavisKahan1970.sinTheta_unbounded_formGap_sourceExact_real",
+      "declaration": "TauCeti.DavisKahan1970.sinTheta_unbounded_formGap_whereDefinedUIN_rclike",
                 "role": "primary_source_witness",
                 "scalar_scope": "complex",
     detected_by: ["python3", "scripts/check_davis_kahan_1970_result_inventory.py"]

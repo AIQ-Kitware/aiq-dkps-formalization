@@ -38,7 +38,7 @@ The names say which.
 | --- | --- | --- |
 | `sin Θ` | `sinTheta`, `sinTheta_complex`, `sinTheta_real` | -- (one printed conclusion) |
 | `tan Θ` | `tanTheta_directed_complex`, `tanTheta_directed_real` | `tanTheta_ambient_complex`, `tanTheta_ambient_real` |
-| `sin 2Θ` | `sinTwoTheta_directed_complex`, `sinTwoTheta_directed_real` | `sinTwoTheta_ambient_complex`, `sinTwoTheta_ambient_real` |
+| `sin 2Θ` | `sinTwoTheta_directed_complex`, `sinTwoTheta_directed_real` | `sinTwoTheta_ambient`, `sinTwoTheta_ambient_complex`, `sinTwoTheta_ambient_real` |
 | `tan 2Θ` | `tanTwoTheta_directed_complex`, `tanTwoTheta_directed_real` | `tanTwoTheta_ambient_complex`, `tanTwoTheta_ambient_real` |
 
 `sinTwoTheta_bothConclusions_{complex,real}` and `tanTwoTheta_bothConclusions_{complex,real}`
@@ -51,16 +51,18 @@ named the ambient clause and one the directed -- and each now carries a `@[depre
 pointing at the name that says which.  They survive only because the standalone Davis--Kahan
 submission repository under `submodules/` still consumes them.
 
-## `sinTheta` is bound; the other three short names are reserved
+## Short names are reserved for scalar-generic source-scope APIs
 
-A short unqualified name is bound only to a declaration that is **both** scalar-generic over
-`RCLike 𝕜` **and** at the printed source scope.  `SectionTwo.sinTheta` satisfies that;
-`SectionTwo.tanTheta`, `.sinTwoTheta` and `.tanTwoTheta` name nothing, because no such
-declaration exists for those three yet.  Binding a short name to a complex-only statement is
-what once made `SectionTwo.sinTheta` read as the canonical theorem when it was the complex
-one, so the three stay empty.  Which of the four are bound is recorded structurally, in
-`section_two_short_names` in the result inventory, and checked against this file -- a prose
-copy of that fact went stale once and is deliberately not restated here.
+A short unqualified name is bound only to a declaration that is scalar-generic over
+`RCLike 𝕜` and whose statement boundary is the one selected by the result ledger.
+`sinTheta` is now bound to the promoted where-defined RCLike theorem.  The whole
+`sinTwoTheta` result remains unbound because only its ambient clause has a production
+RCLike endpoint; the directed unbounded-residual engine is still split by scalar field.
+The tangent short names remain unbound for their own recorded reasons.
+
+Which short names are bound is recorded structurally in `section_two_short_names` in the
+result inventory and in the Section 2 variant index; do not infer source fidelity from a
+declaration name.
 
 ## What these names carry
 
@@ -102,38 +104,18 @@ namespace SectionTwo
 
 /-! ## `sin Θ` -/
 
-/-- **Davis--Kahan 1970, the `sin Θ` theorem, over an arbitrary `RCLike` field.**
+/-- **Davis--Kahan 1970, the `sin Θ` theorem, scalar-generic over `RCLike`.**
 
-The scalar-generic endpoint at the printed source scope: unbounded self-adjoint
-ambient `LinearPMap`, arbitrary Hilbert dimension, the whole
-`FormBoundedSylvesterGap`, an arbitrary `SymmetricNormingFunction`, and both
-printed conclusions.  **This is the theorem to cite.**  Its hypotheses are the
-paper's; the analytic capabilities its proof runs on -- a min-max lower bound and
-the unbounded Sylvester Ky Fan estimate -- hold at every `RCLike` field and are
-supplied by instance search, so they do not appear in the signature.
+This short API now names the same where-defined norm boundary selected by the result ledger.
+The complex and real names below are thin specializations of the same generic theorem; they
+are conveniences, not separate fidelity certificates. -/
+alias sinTheta := DavisKahan1970.sinTheta_unbounded_formGap_whereDefinedUIN_rclike
 
-`sinTheta_complex` and `sinTheta_real` below are this statement at the two fields
-Davis and Kahan write about.  They are corroboration, and convenient when a fixed
-field is already in hand. -/
-alias sinTheta := DavisKahan1970.sinTheta_unbounded_formGap_symmetricNorming_rclike
+/-- Complex specialization of `sinTheta`. -/
+alias sinTheta_complex := DavisKahan1970.sinTheta_unbounded_formGap_whereDefinedUIN_complex
 
-/-- **Davis--Kahan 1970, the `sin Θ` theorem, over `ℂ`.**
-
-`δ · N(sin Θ₀) ≤ N(R)` with `sin Θ₀ = (I - F₀F₀⋆) E₀`, together with membership of
-`sin Θ₀` in the norm's ideal.  Unbounded self-adjoint ambient operator, arbitrary
-Hilbert dimension, the whole `FormBoundedSylvesterGap` rather than one of its
-branches, and an arbitrary source unitarily invariant norm.
-
-`DavisKahan1970.sinTheta_unbounded_intervalExterior_symmetricNorming_complex` states the same theorem with
-the gap written out as the printed interval/exterior separation. -/
-alias sinTheta_complex := DavisKahan1970.sinTheta_unbounded_formGap_symmetricNorming_complex
-
-/-- **Davis--Kahan 1970, the `sin Θ` theorem, over `ℝ`.**
-
-The real sibling of `sinTheta`, with the same argument list, the same full gap
-scope and the same two conclusions.  The descent from the complex case happens
-inside the proof and is not visible in the statement. -/
-alias sinTheta_real := DavisKahan1970.sinTheta_unbounded_formGap_symmetricNorming_real
+/-- Real specialization of `sinTheta`. -/
+alias sinTheta_real := DavisKahan1970.sinTheta_unbounded_formGap_whereDefinedUIN_real
 
 /-! ## `tan Θ` -/
 
@@ -176,7 +158,7 @@ The printed `sin 2Θ` theorem has two boxed conclusions.  This name is the first
 ambient one, `δ N(sin 2Θ) ≤ 2 N(H)`, is `sinTwoTheta_ambient_complex`.
 `sinTwoTheta_bothConclusions_complex` below states both together.
 
-The conclusion is on `Angle.directedSinTwoAngleOperator V U` with `V` the trial
+The public alias uses the where-defined norm boundary on `Angle.directedSinTwoAngleOperator V U` with `V` the trial
 subspace and `U` the spectral subspace whose two blocks the gap separates: that is
 the paper's `Θ₀`, whose sine is `Q^⊥ E₀` in the source's own notation, and it is
 the trial-side object.  Not the proof's overlap block, and not the other ordering
@@ -249,12 +231,12 @@ the proof's own statement and is retained;
 it to the angle, and it is a theorem rather than a rewriting, because it composes
 the block correspondence with the order swap. -/
 alias sinTwoTheta_directed_complex :=
-  sinTwoTheta_directed_unboundedResidual_symmetricNorming_complex
+  sinTwoTheta_directed_unboundedResidual_whereDefinedUIN_complex
 
 /-- **`sin 2Θ`, directed clause, over `ℝ`**, on the paper's own trial-side directed
 double-angle sine. -/
 alias sinTwoTheta_directed_real :=
-  sinTwoTheta_directed_unboundedResidual_symmetricNorming_real
+  sinTwoTheta_directed_unboundedResidual_whereDefinedUIN_real
 
 /-- **`sin 2Θ`, directed clause, over `ℂ`, in the proof's block form**:
 `δ N(P_U P_{J_V Uᗮ}) ≤ 2 N(R)`.  The estimate is proved here and transported to the
@@ -288,22 +270,21 @@ alias tanTwoTheta_ambient_complex := tanTwoTheta_ambient_unbounded_symmetricNorm
 /-- **`tan 2Θ`, ambient clause, over `ℝ`**. -/
 alias tanTwoTheta_ambient_real := tanTwoTheta_ambient_unbounded_symmetricNorming_real
 
-/-- **`sin 2Θ`, ambient clause, over `ℂ`**: `δ N(sin 2Θ) ≤ 2 N(H)` on the paper's
-*ambient* double-angle sine, at this result's unbounded scope and at the printed
-hypothesis -- `U` reduces `A`, `V` reduces `A + H`, and neither is required to be a
-spectral subspace.
+/-- **`sin 2Θ`, ambient clause, scalar-generic over `RCLike`**:
+`δ N(sin 2Θ) ≤ 2 N(H)` at the where-defined norm boundary selected by the ledger.
 
-Retargeted 2026-09-05, closing finding F5 of the 2026-09-04 hostile review.  Until
-then this alias named `sinTwoTheta_ambient_unbounded_addBounded_symmetricNorming_complex`,
-which forces both subspaces to be spectral subspaces selected by measurable sets.
-That is how a reader *produces* such a pair in the source, not what the printed
-theorem assumes.  The spectral endpoint is retained as a specialization. -/
+The whole unqualified `sinTwoTheta` result remains deliberately unbound because its directed
+residual clause still lacks a production RCLike analytic engine. -/
+alias sinTwoTheta_ambient :=
+  sinTwoTheta_ambient_unbounded_perturbedGap_whereDefinedUIN_rclike
+
+/-- Complex specialization of `sinTwoTheta_ambient`. -/
 alias sinTwoTheta_ambient_complex :=
-  sinTwoTheta_ambient_unbounded_reducing_symmetricNorming_complex
+  sinTwoTheta_ambient_unbounded_perturbedGap_whereDefinedUIN_complex
 
-/-- **`sin 2Θ`, ambient clause, over `ℝ`**, likewise at an arbitrary reducing pair. -/
+/-- Real specialization of `sinTwoTheta_ambient`. -/
 alias sinTwoTheta_ambient_real :=
-  sinTwoTheta_ambient_unbounded_reducing_symmetricNorming_real
+  sinTwoTheta_ambient_unbounded_perturbedGap_whereDefinedUIN_real
 
 /-! ## `tan 2Θ` -/
 
@@ -400,9 +381,10 @@ theorem sinTwoTheta_bothConclusions_complex
             δ * N.gauge (sinTwoAngleOperatorC
                 (selfAdjointSpectralSubspace A hA B hB) W) ≤ 2 * N.gauge Eop) :=
   ⟨fun hVdom hres hR =>
-      sinTwoTheta_directed_complex N hA B hB hVdom hres hδ hgap hR,
+      sinTwoTheta_directed_unboundedResidual_symmetricNorming_complex
+        N hA B hB hVdom hres hδ hgap hR,
     fun Eop hEop W _ hW hEmem =>
-      sinTwoTheta_ambient_complex N hA Eop hEop
+      sinTwoTheta_ambient_unbounded_reducing_symmetricNorming_complex N hA Eop hEop
         (selfAdjointSpectralSubspace_reducing A hA B hB) hW hδ
         (by
           rw [selfAdjointSpectralRestriction_eq_reducingRestriction A hA B hB,
@@ -445,10 +427,11 @@ theorem sinTwoTheta_bothConclusions_real
                 (RealSpectralRestriction.realSelfAdjointSpectralSubspace A hA B hB) W) ≤
               2 * N.gauge Eop) :=
   ⟨fun hVdom hres hR =>
-      sinTwoTheta_directed_real N hA B hB hVdom hres hδ hgap hR,
+      sinTwoTheta_directed_unboundedResidual_symmetricNorming_real
+        N hA B hB hVdom hres hδ hgap hR,
     fun Eop hEop W _ hW hEmem => by
       rw [← Angle.sinTwoAngleOperator_real]
-      exact sinTwoTheta_ambient_real N hA Eop hEop
+      exact sinTwoTheta_ambient_unbounded_reducing_symmetricNorming_real N hA Eop hEop
         (RealSpectralRestriction.realSelfAdjointSpectralSubspace_reducing A hA B hB) hW hδ
         (FormBoundedSylvesterGap.reducingRestriction_congr_right
           (RealSpectralRestriction.realSelfAdjointSpectralSubspace_compl A hA B hB)

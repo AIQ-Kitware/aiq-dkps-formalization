@@ -173,8 +173,13 @@ Additional constraints:
     heading ``Resource utilization'' and keep the main AI-assistance statement
     short.  Do not frame disclosure as evidence of transparency.
 44. The current source-facing Davis--Kahan Section~2 sine-theta example should
-    show the full generated Lean signature when space permits.  Explain the
+    show the full generated scalar-generic `RCLike` Lean signature when space permits.  Explain the
     source-context ambiguity around separability, unbounded operators, gap
     alternatives, and the where-defined unitarily invariant norm convention.
     Do not replace the signature with a compressed equation merely to minimize
     page count.
+45. When describing source-scope maintenance, treat real, complex, and scalar-generic
+    `RCLike` declarations as one API family. A repair to one fixed field is not evidence
+    that the sibling field or scalar-generic surface was updated. Do not name a theorem
+    `sourceExact` or `sourceFaithful`; source fidelity is metadata owned by the result
+    ledger, not a semantic property encoded in a declaration name.
