@@ -14,7 +14,7 @@ repo = pathlib.Path(
 )
 
 src = repo / 'build/semantic-alignment/review.html'
-out_dpath = repo / 'papers/formalization_process_4page/figures'
+out_dpath = repo / 'papers/formalization_process/figures'
 out_dpath.mkdir(parents=True, exist_ok=True)
 
 if not src.exists():

@@ -102,10 +102,10 @@ Call log:
 ````text
 file:///home/joncrall/code/aiq-dkps-formalization/build/semantic-alignment/review.html#3-S2-sin-theta
 
-Is what resolves in the brwoser, but (uvpy3.13.13) joncrall@toothbrush:~/code/aiq-dkps-formalization/papers/formalization_process_4page$ python render_semantic_dashboard.py
+Is what resolves in the brwoser, but (uvpy3.13.13) joncrall@toothbrush:~/code/aiq-dkps-formalization/papers/formalization_process$ python render_semantic_dashboard.py
 src=PosixPath('/home/joncrall/code/aiq-dkps-formalization/build/semantic-alignment/review.html')
 Traceback (most recent call last):
-  File "/home/joncrall/code/aiq-dkps-formalization/papers/formalization_process_4page/render_semantic_dashboard.py", line 64, in <module>
+  File "/home/joncrall/code/aiq-dkps-formalization/papers/formalization_process/render_semantic_dashboard.py", line 64, in <module>
     row.wait_for(state='visible')
     ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
   File "/home/joncrall/.local/uv/envs/uvpy3.13.13/lib/python3.13/site-packages/playwright/sync_api/_generated.py", line 18670, in wait_for
@@ -160,7 +160,7 @@ repo = pathlib.Path(
 )
 
 src = repo / 'build/semantic-alignment/review.html'
-out_dpath = repo / 'papers/formalization_process_4page/figures'
+out_dpath = repo / 'papers/formalization_process/figures'
 out_dpath.mkdir(parents=True, exist_ok=True)
 
 if not src.exists():
@@ -226,7 +226,7 @@ print(f'Wrote screenshots to: {out_dpath}')
 ### Prompt 4
 
 ````text
-Use file:///home/joncrall/code/aiq-dkps-formalization/papers/formalization_process_4page/figures/semantic-alignment-sine-theta-row.png and give me the updated paper that uses this figure.
+Use file:///home/joncrall/code/aiq-dkps-formalization/papers/formalization_process/figures/semantic-alignment-sine-theta-row.png and give me the updated paper that uses this figure.
 ````
 
 ### Prompt 5
