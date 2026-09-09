@@ -1,0 +1,581 @@
+{
+  "schema_version": 1,
+  "result_id": "S2-sin-theta",
+  "title": "Historical census-confirmed semantic misalignment of the Davis--Kahan Section 2 sin Theta theorem",
+  "generated_from_commit": "351a465f7f7c8e503c4d17ec76107319d27e8a0b",
+  "purpose": "Make historical source-exact/canonical sine-theta statements directly comparable without inferring defects merely from renames, refactors, or stronger supporting theorems.",
+  "inclusion_policy": {
+    "include": "A theorem snapshot only appears in misalignment_events when the maintained S2-sin-theta census/result-ledger history explicitly corrected, demoted, or superseded it as canonical/source-exact evidence for a source-correspondence reason.",
+    "exclude": "Mere renames, implementation refactors, supporting/generalizing theorems that were never used as the canonical source witness, and reviewer inferences not recorded by the maintained census are excluded.",
+    "source_exact_meaning_here": "The declaration was used as semantic_review canonical evidence / primary source witness for S2-sin-theta. The Lean identifier need not literally contain `sourceExact`.",
+    "retracted_findings": "Census findings later explicitly retracted as false positives are kept separately and are not counted as confirmed misalignment events."
+  },
+  "semantic_alignment_policy": {
+    "paper_path": "papers/formalization_process/paper.tex",
+    "paper_commit": "351a465f7f7c8e503c4d17ec76107319d27e8a0b",
+    "definition_lines_1based": [
+      164,
+      169
+    ],
+    "review_dimensions_lines_1based": [
+      355,
+      369
+    ],
+    "acceptance_rule_lines_1based": [
+      379,
+      386
+    ],
+    "sin_theta_example_lines_1based": [
+      442,
+      445
+    ],
+    "summary": "Semantic alignment is source-to-statement agreement on hypotheses, mathematical objects, conclusion, and scope; non-obvious representations also need their identification established. Lean compilation alone is insufficient."
+  },
+  "signature_capture": {
+    "method": "Read the file at the recorded Git commit with `git show <commit>:<path>`, locate the exact theorem declaration, and copy its source header through the top-level `:=` / `:= by` line.",
+    "hashes": "signature_sha256 hashes that verbatim header; source_file_sha256 hashes the full historical Lean file.",
+    "compiler_identity": "When the historical census carried a statement pin for the exact declaration at that snapshot, it is copied as census_statement_pin. No historical checkout/build is synthesized just to invent a missing pin.",
+    "tooling_decision": "No new leanq command is required for this dataset. Git already supplies the historical source exactly, and the repository formalization-process evidence builder already uses the same git-show style of historical declaration extraction."
+  },
+  "misalignment_events": [
+    {
+      "id": "2026-08-31-bounded-gap-witness-recorded-as-exact",
+      "correction": {
+        "commit": "cb3b330b78ddd203fa93ad1ba717fc6db5709103",
+        "author_date": "2026-08-31T10:25:05-04:00",
+        "subject": "Correct the sin theta full-source semantic evidence",
+        "census_path": "dev/davis-kahan-1970-full-source-census.json",
+        "row_id": "S2-sin-theta",
+        "line_1based": 263,
+        "match_phrase": "CANONICAL WITNESS CORRECTED 2026-08-31.",
+        "excerpt": "The row had named `sinTheta_unbounded_intervalExterior_characterizedWitness_rclike` as the exact source match; the census says that was wrong because the theorem only carried the bounded interval/exterior gap while the source permits half-infinite separating intervals, and (under the interpretation then in force) because it omitted ideal-membership from the conclusion."
+      },
+      "source_exact_claim": {
+        "commit": "ddceb87b158b70389d25515fc3a599217a5d183f",
+        "author_date": "2026-08-31T08:00:34-04:00",
+        "subject": "Regression pass: restore the foundations ledger, regenerate the audit packets",
+        "census_path": "dev/davis-kahan-1970-full-source-census.json",
+        "row_id": "S2-sin-theta",
+        "row_status": "compiled_exact",
+        "canonical_declarations": [
+          "DavisKahan1970.sinTheta_unbounded_intervalExterior_characterizedWitness_rclike"
+        ],
+        "declaration_is_canonical": true,
+        "json_pointer": "/items/2/semantic_review/canonical_declarations"
+      },
+      "claim_interval": {
+        "first_commit_with_this_exact_canonical_name": {
+          "commit": "ddceb87b158b70389d25515fc3a599217a5d183f",
+          "author_date": "2026-08-31T08:00:34-04:00",
+          "subject": "Regression pass: restore the foundations ledger, regenerate the audit packets"
+        },
+        "last_misaligned_snapshot": {
+          "commit": "ddceb87b158b70389d25515fc3a599217a5d183f",
+          "author_date": "2026-08-31T08:00:34-04:00",
+          "subject": "Regression pass: restore the foundations ledger, regenerate the audit packets"
+        },
+        "correction_commit": {
+          "commit": "cb3b330b78ddd203fa93ad1ba717fc6db5709103",
+          "author_date": "2026-08-31T10:25:05-04:00",
+          "subject": "Correct the sin theta full-source semantic evidence"
+        }
+      },
+      "misaligned_snapshot": {
+        "commit": "ddceb87b158b70389d25515fc3a599217a5d183f",
+        "author_date": "2026-08-31T08:00:34-04:00",
+        "subject": "Regression pass: restore the foundations ledger, regenerate the audit packets",
+        "declaration": "DavisKahan1970.sinTheta_unbounded_intervalExterior_characterizedWitness_rclike",
+        "source_path": "DavisKahan/Sources/DavisKahan1970/SineTheta/PaperSurface.lean",
+        "line_range_1based": [
+          163,
+          194
+        ],
+        "signature_kind": "verbatim Lean source header through the top-level `:=` / `:= by` line",
+        "source_signature": "theorem sinTheta_unbounded_intervalExterior_characterizedWitness_rclike\n    [ContinuousLinearMap.HasMinMaxLowerBoundEverywhere.{u, v} 𝕜]\n    [HasUnboundedSylvesterKyFan.{u, v} 𝕜]\n    (N : UnitaryInvariantNorm)\n    (A : E →ₗ.[𝕜] E)\n    (A₀ : F →ₗ.[𝕜] F)\n    (Λ₁ : G →ₗ.[𝕜] G)\n    (E₀ : F →L[𝕜] E)\n    (F₀ : H →L[𝕜] E)\n    (F₁ : G →L[𝕜] E)\n    (sinTheta₀ : F →L[𝕜] E)\n    (R : F →L[𝕜] E)\n    (hSinTheta₀ :\n      sinTheta₀ =\n        (ContinuousLinearMap.id 𝕜 E - F₀ ∘L F₀.adjoint) ∘L E₀)\n    (hA : IsSelfAdjoint A)\n    (hA₀ : IsSelfAdjoint A₀)\n    (hΛ₁ : IsSelfAdjoint Λ₁)\n    (htrial : IsTrialResidual A A₀ E₀ R)\n    (hexact : IsExactSpectralDecomposition A Λ₁ F₀ F₁)\n    {β α δ : ℝ}\n    (hβα : β ≤ α)\n    (hδ : 0 < δ)\n    (hspectral :\n      (LinearPMap.realSpectrum A₀ ⊆ Set.Icc β α ∧\n          LinearPMap.realSpectrum Λ₁ ⊆\n            {x : ℝ | x ≤ β - δ ∨ α + δ ≤ x}) ∨\n        (LinearPMap.realSpectrum Λ₁ ⊆ Set.Icc β α ∧\n          LinearPMap.realSpectrum A₀ ⊆\n            {x : ℝ | x ≤ β - δ ∨ α + δ ≤ x}))\n    (hR : N.Mem R) :\n    δ * N.gauge sinTheta₀ ≤ N.gauge R := by\n",
+        "signature_sha256": "2ab98c12bf766bd5489a4e882979bd79ac0ffb953d57f4abc098b147b8aa54e4",
+        "source_file_sha256": "35732be12476b2b60a1463b299dca8d964314df3b049b9a8c9f31d22a1a0c2b7"
+      },
+      "replacement_at_correction": {
+        "commit": "cb3b330b78ddd203fa93ad1ba717fc6db5709103",
+        "author_date": "2026-08-31T10:25:05-04:00",
+        "subject": "Correct the sin theta full-source semantic evidence",
+        "declaration": "DavisKahan1970.sinTheta_unbounded_formGap_paperUINorm_rclike",
+        "source_path": "DavisKahan/Sources/DavisKahan1970/SineTheta/PaperSurface.lean",
+        "line_range_1based": [
+          253,
+          267
+        ],
+        "signature_kind": "verbatim Lean source header through the top-level `:=` / `:= by` line",
+        "source_signature": "theorem sinTheta_unbounded_formGap_paperUINorm_rclike\n    [ContinuousLinearMap.HasMinMaxLowerBoundEverywhere.{u, v} 𝕜]\n    [TauCeti.DavisKahan.ExactSinTheta.HasUnboundedSylvesterKyFan.{u, v} 𝕜]\n    (N : PaperUnitaryInvariantNorm)\n    (A : E →ₗ.[𝕜] E) (A₀ : F →ₗ.[𝕜] F) (Λ₁ : G →ₗ.[𝕜] G)\n    (E₀ : F →L[𝕜] E) (F₀ : H →L[𝕜] E) (F₁ : G →L[𝕜] E) (R : F →L[𝕜] E)\n    (hA : IsSelfAdjoint A) (hA₀ : IsSelfAdjoint A₀) (hΛ₁ : IsSelfAdjoint Λ₁)\n    (htrial : IsTrialResidual A A₀ E₀ R)\n    (hexact : IsExactSpectralDecomposition A Λ₁ F₀ F₁)\n    {δ : ℝ} (hδ : 0 < δ)\n    (hgap : FormBoundedSylvesterGap A₀ Λ₁ δ)\n    (hR : N.Mem R) :\n    N.Mem ((ContinuousLinearMap.id 𝕜 E - F₀ ∘L F₀.adjoint) ∘L E₀) ∧\n      δ * N.gauge ((ContinuousLinearMap.id 𝕜 E - F₀ ∘L F₀.adjoint) ∘L E₀) ≤\n        N.gauge R :=\n",
+        "signature_sha256": "7de800d21871e3a8aad39c4d162348709595b0d2a9cfae9ff44bcdc46922e147",
+        "source_file_sha256": "a63dbf966343797622d2e2b2367a05dbcd0221c28666f24b3564e6efb776a6dc"
+      },
+      "semantic_delta": {
+        "gap_scope": {
+          "old": "Explicit bounded interval/exterior separation via beta, alpha, delta.",
+          "source_required": "Full FormBoundedSylvesterGap, including the half-infinite separating configurations.",
+          "current_adjudication": "confirmed"
+        },
+        "ideal_membership_conclusion": {
+          "old": "Only the inequality was concluded.",
+          "historical_census_judgment": "The 2026-08-31 census correction treated omission of sine-block ideal membership as a second defect.",
+          "current_adjudication": "superseded on 2026-09-08: the later source-UIN audit concluded that Davis--Kahan print the inequality under a where-defined/vacuity convention and do not print membership transfer."
+        }
+      }
+    },
+    {
+      "id": "2026-08-31-proof-capability-binders-in-canonical-rclike-signature",
+      "correction": {
+        "commit": "4187b873b623b2a414cccdcc372a60fb5afaa0d7",
+        "author_date": "2026-08-31T14:40:23-04:00",
+        "subject": "Move Proposition 6.1 and Theorems 6.1/6.2 off their Paper* records, and make canonical scalar scope compiler-derived",
+        "census_path": "dev/davis-kahan-1970-full-source-census.json",
+        "row_id": "S2-sin-theta",
+        "line_1based": 267,
+        "match_phrase": "Demoted to supporting:",
+        "excerpt": "Second-pass census review demoted the scalar-generic full-gap theorem because its public signature carried proof-capability instance binders not present in the printed theorem; fixed-field endpoints avoided those binders."
+      },
+      "source_exact_claim": {
+        "commit": "6bf1fa6f3997c61f16e247b5eff4ff4266efb9e4",
+        "author_date": "2026-08-31T13:14:46-04:00",
+        "subject": "Close sin 2Theta at the full source gap over C, and make canonical proof evidence machine-owned",
+        "census_path": "dev/davis-kahan-1970-full-source-census.json",
+        "row_id": "S2-sin-theta",
+        "row_status": "compiled_exact",
+        "canonical_declarations": [
+          "DavisKahan1970.sinTheta_unbounded_formGap_paperUINorm_complex",
+          "DavisKahan1970.sinTheta_unbounded_formGap_paperUINorm_real",
+          "DavisKahan1970.sinTheta_unbounded_formGap_paperUINorm_rclike"
+        ],
+        "declaration_is_canonical": true,
+        "json_pointer": "/items/2/semantic_review/canonical_declarations"
+      },
+      "claim_interval": {
+        "first_canonical_commit": {
+          "commit": "cb3b330b78ddd203fa93ad1ba717fc6db5709103",
+          "author_date": "2026-08-31T10:25:05-04:00",
+          "subject": "Correct the sin theta full-source semantic evidence"
+        },
+        "last_misaligned_snapshot": {
+          "commit": "6bf1fa6f3997c61f16e247b5eff4ff4266efb9e4",
+          "author_date": "2026-08-31T13:14:46-04:00",
+          "subject": "Close sin 2Theta at the full source gap over C, and make canonical proof evidence machine-owned"
+        },
+        "demotion_commit": {
+          "commit": "4187b873b623b2a414cccdcc372a60fb5afaa0d7",
+          "author_date": "2026-08-31T14:40:23-04:00",
+          "subject": "Move Proposition 6.1 and Theorems 6.1/6.2 off their Paper* records, and make canonical scalar scope compiler-derived"
+        },
+        "generic_signature_repaired_and_repromoted": {
+          "commit": "66250fe7519460e490663c573564e53542253f7b",
+          "author_date": "2026-09-03T22:06:46-04:00",
+          "subject": "Make the RCLike sine-theta theorem the canonical Section 2 sine witness"
+        }
+      },
+      "misaligned_snapshot": {
+        "commit": "6bf1fa6f3997c61f16e247b5eff4ff4266efb9e4",
+        "author_date": "2026-08-31T13:14:46-04:00",
+        "subject": "Close sin 2Theta at the full source gap over C, and make canonical proof evidence machine-owned",
+        "declaration": "DavisKahan1970.sinTheta_unbounded_formGap_paperUINorm_rclike",
+        "source_path": "DavisKahan/Sources/DavisKahan1970/SineTheta/PaperSurface.lean",
+        "line_range_1based": [
+          253,
+          267
+        ],
+        "signature_kind": "verbatim Lean source header through the top-level `:=` / `:= by` line",
+        "source_signature": "theorem sinTheta_unbounded_formGap_paperUINorm_rclike\n    [ContinuousLinearMap.HasMinMaxLowerBoundEverywhere.{u, v} 𝕜]\n    [TauCeti.DavisKahan.ExactSinTheta.HasUnboundedSylvesterKyFan.{u, v} 𝕜]\n    (N : PaperUnitaryInvariantNorm)\n    (A : E →ₗ.[𝕜] E) (A₀ : F →ₗ.[𝕜] F) (Λ₁ : G →ₗ.[𝕜] G)\n    (E₀ : F →L[𝕜] E) (F₀ : H →L[𝕜] E) (F₁ : G →L[𝕜] E) (R : F →L[𝕜] E)\n    (hA : IsSelfAdjoint A) (hA₀ : IsSelfAdjoint A₀) (hΛ₁ : IsSelfAdjoint Λ₁)\n    (htrial : IsTrialResidual A A₀ E₀ R)\n    (hexact : IsExactSpectralDecomposition A Λ₁ F₀ F₁)\n    {δ : ℝ} (hδ : 0 < δ)\n    (hgap : FormBoundedSylvesterGap A₀ Λ₁ δ)\n    (hR : N.Mem R) :\n    N.Mem ((ContinuousLinearMap.id 𝕜 E - F₀ ∘L F₀.adjoint) ∘L E₀) ∧\n      δ * N.gauge ((ContinuousLinearMap.id 𝕜 E - F₀ ∘L F₀.adjoint) ∘L E₀) ≤\n        N.gauge R :=\n",
+        "signature_sha256": "7de800d21871e3a8aad39c4d162348709595b0d2a9cfae9ff44bcdc46922e147",
+        "source_file_sha256": "8f440d124b04046bb3281491886c62fa81cd754354e939c2b8fdec6dd1259df4"
+      },
+      "repaired_generic_snapshot": {
+        "commit": "66250fe7519460e490663c573564e53542253f7b",
+        "author_date": "2026-09-03T22:06:46-04:00",
+        "subject": "Make the RCLike sine-theta theorem the canonical Section 2 sine witness",
+        "declaration": "DavisKahan1970.sinTheta_unbounded_formGap_symmetricNorming_rclike",
+        "source_path": "DavisKahan/Sources/DavisKahan1970/SineTheta/Presentation.lean",
+        "line_range_1based": [
+          305,
+          317
+        ],
+        "signature_kind": "verbatim Lean source header through the top-level `:=` / `:= by` line",
+        "source_signature": "theorem sinTheta_unbounded_formGap_symmetricNorming_rclike\n    (N : SymmetricNormingFunction)\n    (A : E →ₗ.[𝕜] E) (A₀ : F →ₗ.[𝕜] F) (Λ₁ : G →ₗ.[𝕜] G)\n    (E₀ : F →L[𝕜] E) (F₀ : H →L[𝕜] E) (F₁ : G →L[𝕜] E) (R : F →L[𝕜] E)\n    (hA : IsSelfAdjoint A) (hA₀ : IsSelfAdjoint A₀) (hΛ₁ : IsSelfAdjoint Λ₁)\n    (htrial : IsTrialResidual A A₀ E₀ R)\n    (hexact : IsExactSpectralDecomposition A Λ₁ F₀ F₁)\n    {δ : ℝ} (hδ : 0 < δ)\n    (hgap : FormBoundedSylvesterGap A₀ Λ₁ δ)\n    (hR : N.Mem R) :\n    N.Mem ((ContinuousLinearMap.id 𝕜 E - F₀ ∘L F₀.adjoint) ∘L E₀) ∧\n      δ * N.gauge ((ContinuousLinearMap.id 𝕜 E - F₀ ∘L F₀.adjoint) ∘L E₀) ≤\n        N.gauge R :=\n",
+        "signature_sha256": "00b22b54f3b0f8fc4d91b708dd3f748708ffea685f02efab3f3c3f9f9c4589e6",
+        "source_file_sha256": "5fc7270f0b25bab0abcd725b0d5050a1aacf90549d557f0e490cca511bb0ca83"
+      },
+      "semantic_delta": {
+        "extra_public_hypotheses": {
+          "old": [
+            "ContinuousLinearMap.HasMinMaxLowerBoundEverywhere.{u, v} 𝕜",
+            "TauCeti.DavisKahan.ExactSinTheta.HasUnboundedSylvesterKyFan.{u, v} 𝕜"
+          ],
+          "source_required": "Neither proof-capability class is a printed Davis--Kahan hypothesis.",
+          "resolution": "The generic theorem was first demoted in favor of fixed-field endpoints; on 2026-09-03 the now-unconditional capability binders were removed from the RCLike declaration and it was re-promoted."
+        }
+      }
+    },
+    {
+      "id": "2026-09-05-generalization-substituted-for-printed-source-scope",
+      "correction": {
+        "commit": "d7a02ea9d9c8ee6d6c6e67e3f74cee349eb79869",
+        "author_date": "2026-09-05T16:53:02-04:00",
+        "subject": "Make the Section 2 source-exact façades canonical, and follow the policy in the gates",
+        "census_path": "dev/davis-kahan-1970-full-source-census.json",
+        "row_id": "S2-sin-theta",
+        "line_1based": 167,
+        "match_phrase": "SOURCE-EXACT FAÇADES REGISTERED 2026-09-05.",
+        "excerpt": "The census switched canonical evidence to fixed-field source-exact façades at the printed Hilbert-space scope and retained the arbitrary-Hilbert SymmetricNormingFunction RCLike theorem only as a registered generalization."
+      },
+      "source_exact_claim": {
+        "commit": "494fa7dd2a55c83abe24c318bc264a20b9aa32d0",
+        "author_date": "2026-09-05T03:27:36-04:00",
+        "subject": "Move SineTheta/Presentation.lean into the TauCeti namespace",
+        "census_path": "dev/davis-kahan-1970-full-source-census.json",
+        "row_id": "S2-sin-theta",
+        "row_status": "compiled_exact",
+        "canonical_declarations": [
+          "TauCeti.DavisKahan1970.sinTheta_unbounded_formGap_symmetricNorming_rclike"
+        ],
+        "declaration_is_canonical": true,
+        "json_pointer": "/items/2/semantic_review/canonical_declarations"
+      },
+      "claim_interval": {
+        "first_canonical_commit_after_capability_repair": {
+          "commit": "66250fe7519460e490663c573564e53542253f7b",
+          "author_date": "2026-09-03T22:06:46-04:00",
+          "subject": "Make the RCLike sine-theta theorem the canonical Section 2 sine witness"
+        },
+        "last_misaligned_snapshot": {
+          "commit": "494fa7dd2a55c83abe24c318bc264a20b9aa32d0",
+          "author_date": "2026-09-05T03:27:36-04:00",
+          "subject": "Move SineTheta/Presentation.lean into the TauCeti namespace"
+        },
+        "reclassification_commit": {
+          "commit": "d7a02ea9d9c8ee6d6c6e67e3f74cee349eb79869",
+          "author_date": "2026-09-05T16:53:02-04:00",
+          "subject": "Make the Section 2 source-exact façades canonical, and follow the policy in the gates"
+        }
+      },
+      "misaligned_snapshot": {
+        "commit": "494fa7dd2a55c83abe24c318bc264a20b9aa32d0",
+        "author_date": "2026-09-05T03:27:36-04:00",
+        "subject": "Move SineTheta/Presentation.lean into the TauCeti namespace",
+        "declaration": "TauCeti.DavisKahan1970.sinTheta_unbounded_formGap_symmetricNorming_rclike",
+        "source_path": "DavisKahan/Sources/DavisKahan1970/SineTheta/Presentation.lean",
+        "line_range_1based": [
+          304,
+          316
+        ],
+        "signature_kind": "verbatim Lean source header through the top-level `:=` / `:= by` line",
+        "source_signature": "theorem sinTheta_unbounded_formGap_symmetricNorming_rclike\n    (N : SymmetricNormingFunction)\n    (A : E →ₗ.[𝕜] E) (A₀ : F →ₗ.[𝕜] F) (Λ₁ : G →ₗ.[𝕜] G)\n    (E₀ : F →L[𝕜] E) (F₀ : H →L[𝕜] E) (F₁ : G →L[𝕜] E) (R : F →L[𝕜] E)\n    (hA : IsSelfAdjoint A) (hA₀ : IsSelfAdjoint A₀) (hΛ₁ : IsSelfAdjoint Λ₁)\n    (htrial : IsTrialResidual A A₀ E₀ R)\n    (hexact : IsExactSpectralDecomposition A Λ₁ F₀ F₁)\n    {δ : ℝ} (hδ : 0 < δ)\n    (hgap : FormBoundedSylvesterGap A₀ Λ₁ δ)\n    (hR : N.Mem R) :\n    N.Mem ((ContinuousLinearMap.id 𝕜 E - F₀ ∘L F₀.adjoint) ∘L E₀) ∧\n      δ * N.gauge ((ContinuousLinearMap.id 𝕜 E - F₀ ∘L F₀.adjoint) ∘L E₀) ≤\n        N.gauge R :=\n",
+        "signature_sha256": "00b22b54f3b0f8fc4d91b708dd3f748708ffea685f02efab3f3c3f9f9c4589e6",
+        "source_file_sha256": "31e721e0198049ad74588aae5b40bf1eecdd2229a3d3e64f756f31fd2e1cc555",
+        "census_statement_pin": {
+          "type_expr_hash": "3763768627",
+          "type_text_sha256": "a723da65ef6812d80d54451bde587b0dfef289495b468632db7a31d607ace06f",
+          "toolchain": "leanprover/lean4:v4.34.0-rc1",
+          "pinned_on": "2026-09-05"
+        }
+      },
+      "replacement_snapshots": [
+        {
+          "commit": "d7a02ea9d9c8ee6d6c6e67e3f74cee349eb79869",
+          "author_date": "2026-09-05T16:53:02-04:00",
+          "subject": "Make the Section 2 source-exact façades canonical, and follow the policy in the gates",
+          "declaration": "TauCeti.DavisKahan1970.sinTheta_unbounded_formGap_sourceExact_complex",
+          "source_path": "DavisKahan/Sources/DavisKahan1970/SineTheta/Presentation.lean",
+          "line_range_1based": [
+            471,
+            484
+          ],
+          "signature_kind": "verbatim Lean source header through the top-level `:=` / `:= by` line",
+          "source_signature": "theorem sinTheta_unbounded_formGap_sourceExact_complex\n    [TopologicalSpace.SeparableSpace E]\n    (N : NormalizedUnitaryInvariantNorm.{0, v} ℂ)\n    (A : E →ₗ.[ℂ] E) (A₀ : F →ₗ.[ℂ] F) (Λ₁ : G →ₗ.[ℂ] G)\n    (E₀ : F →L[ℂ] E) (F₀ : H →L[ℂ] E) (F₁ : G →L[ℂ] E) (R : F →L[ℂ] E)\n    (hA : IsSelfAdjoint A) (hA₀ : IsSelfAdjoint A₀) (hΛ₁ : IsSelfAdjoint Λ₁)\n    (htrial : IsTrialResidual A A₀ E₀ R)\n    (hexact : IsExactSpectralDecomposition A Λ₁ F₀ F₁)\n    {δ : ℝ} (hδ : 0 < δ)\n    (hgap : FormBoundedSylvesterGap A₀ Λ₁ δ)\n    (hR : N.Mem R) :\n    N.Mem ((ContinuousLinearMap.id ℂ E - F₀ ∘L F₀.adjoint) ∘L E₀) ∧\n      δ * N.gauge ((ContinuousLinearMap.id ℂ E - F₀ ∘L F₀.adjoint) ∘L E₀) ≤\n        N.gauge R :=\n",
+          "signature_sha256": "d9c774cf293acdef1472351fc9a64d98276768cf019ea37bb6a3213be1058e70",
+          "source_file_sha256": "12eff9969dc2cab2be81b52c3aa2b32c2ab74119a567df5807c37236de589d64"
+        },
+        {
+          "commit": "d7a02ea9d9c8ee6d6c6e67e3f74cee349eb79869",
+          "author_date": "2026-09-05T16:53:02-04:00",
+          "subject": "Make the Section 2 source-exact façades canonical, and follow the policy in the gates",
+          "declaration": "TauCeti.DavisKahan1970.sinTheta_unbounded_formGap_sourceExact_real",
+          "source_path": "DavisKahan/Sources/DavisKahan1970/SineTheta/Presentation.lean",
+          "line_range_1based": [
+            606,
+            619
+          ],
+          "signature_kind": "verbatim Lean source header through the top-level `:=` / `:= by` line",
+          "source_signature": "theorem sinTheta_unbounded_formGap_sourceExact_real\n    [TopologicalSpace.SeparableSpace E]\n    (N : NormalizedUnitaryInvariantNorm.{0, v} ℝ)\n    (A : E →ₗ.[ℝ] E) (A₀ : F →ₗ.[ℝ] F) (Λ₁ : G →ₗ.[ℝ] G)\n    (E₀ : F →L[ℝ] E) (F₀ : H →L[ℝ] E) (F₁ : G →L[ℝ] E) (R : F →L[ℝ] E)\n    (hA : IsSelfAdjoint A) (hA₀ : IsSelfAdjoint A₀) (hΛ₁ : IsSelfAdjoint Λ₁)\n    (htrial : IsTrialResidual A A₀ E₀ R)\n    (hexact : IsExactSpectralDecomposition A Λ₁ F₀ F₁)\n    {δ : ℝ} (hδ : 0 < δ)\n    (hgap : FormBoundedSylvesterGap A₀ Λ₁ δ)\n    (hR : N.Mem R) :\n    N.Mem ((ContinuousLinearMap.id ℝ E - F₀ ∘L F₀.adjoint) ∘L E₀) ∧\n      δ * N.gauge ((ContinuousLinearMap.id ℝ E - F₀ ∘L F₀.adjoint) ∘L E₀) ≤\n        N.gauge R :=\n",
+          "signature_sha256": "ced143fe6abe5b8c543369e18677d259e74c867c663d938976b7d2ac5c85342d",
+          "source_file_sha256": "12eff9969dc2cab2be81b52c3aa2b32c2ab74119a567df5807c37236de589d64"
+        }
+      ],
+      "semantic_delta": {
+        "ambient_scope": {
+          "old": "Arbitrary Hilbert space.",
+          "source_required": "The paper-facing endpoint carries the printed separable ambient Hilbert-space scope.",
+          "current_adjudication": "confirmed; the current scalar-generic endpoint carries `[TopologicalSpace.SeparableSpace E]`."
+        },
+        "norm_abstraction": {
+          "old": "Arbitrary `SymmetricNormingFunction`.",
+          "source_required_at_2026_09_05": "A façade exposing the normalized unitarily invariant norm class used to model the printed source.",
+          "current_adjudication": "the exact norm boundary was refined again on 2026-09-08 to `NormalizedSymmetricOperatorIdealFamily` with where-defined semantics."
+        },
+        "scalar_presentation": {
+          "old": "One scalar-generic `RCLike` declaration stood in for the printed real/complex cases.",
+          "historical_2026_09_05_judgment": "Use real and complex source façades as the two canonical witnesses.",
+          "current_adjudication": "superseded as a presentation restriction on 2026-09-09: once the exact separable/where-defined boundary was available generically, the ledger promoted one RCLike theorem to cover both source fields."
+        }
+      }
+    },
+    {
+      "id": "2026-09-08-sourceexact-facades-overstated-norm-domain-semantics",
+      "correction": {
+        "commit": "fef728e500d476d65b2668af352b21a3be47b8f2",
+        "author_date": "2026-09-08T22:08:11-04:00",
+        "subject": "retarget sine-theta source norm boundary",
+        "census_path": "dev/davis-kahan-1970-full-source-census.json",
+        "row_id": "S2-sin-theta",
+        "line_1based": 168,
+        "match_phrase": "SIGNATURE RETARGET 2026-09-08.",
+        "excerpt": "The census records that unconditional ENNReal Fan dominance adds Ky-Fan membership transfer not printed by Davis--Kahan. The source-exact façades were retargeted to the where-defined normalized symmetric operator-ideal family, removed the caller-visible residual-membership premise, and stopped concluding sine-block membership."
+      },
+      "source_exact_claims": [
+        {
+          "commit": "40362543a16445ea02b1fafc2b7b7e8d2aaaa646",
+          "author_date": "2026-09-08T20:28:04-04:00",
+          "subject": "name normalized symmetric ideal family mathematically",
+          "census_path": "dev/davis-kahan-1970-full-source-census.json",
+          "row_id": "S2-sin-theta",
+          "row_status": "compiled_exact",
+          "canonical_declarations": [
+            "TauCeti.DavisKahan1970.sinTheta_unbounded_formGap_sourceExact_complex",
+            "TauCeti.DavisKahan1970.sinTheta_unbounded_formGap_sourceExact_real"
+          ],
+          "declaration_is_canonical": true,
+          "json_pointer": "/items/2/semantic_review/canonical_declarations"
+        },
+        {
+          "commit": "40362543a16445ea02b1fafc2b7b7e8d2aaaa646",
+          "author_date": "2026-09-08T20:28:04-04:00",
+          "subject": "name normalized symmetric ideal family mathematically",
+          "census_path": "dev/davis-kahan-1970-full-source-census.json",
+          "row_id": "S2-sin-theta",
+          "row_status": "compiled_exact",
+          "canonical_declarations": [
+            "TauCeti.DavisKahan1970.sinTheta_unbounded_formGap_sourceExact_complex",
+            "TauCeti.DavisKahan1970.sinTheta_unbounded_formGap_sourceExact_real"
+          ],
+          "declaration_is_canonical": true,
+          "json_pointer": "/items/2/semantic_review/canonical_declarations"
+        }
+      ],
+      "claim_interval": {
+        "first_canonical_commit": {
+          "commit": "d7a02ea9d9c8ee6d6c6e67e3f74cee349eb79869",
+          "author_date": "2026-09-05T16:53:02-04:00",
+          "subject": "Make the Section 2 source-exact façades canonical, and follow the policy in the gates"
+        },
+        "last_misaligned_snapshot": {
+          "commit": "40362543a16445ea02b1fafc2b7b7e8d2aaaa646",
+          "author_date": "2026-09-08T20:28:04-04:00",
+          "subject": "name normalized symmetric ideal family mathematically"
+        },
+        "semantic_correction_commit": {
+          "commit": "fef728e500d476d65b2668af352b21a3be47b8f2",
+          "author_date": "2026-09-08T22:08:11-04:00",
+          "subject": "retarget sine-theta source norm boundary"
+        },
+        "signature_readability_followup": {
+          "commit": "61c8529dd3b62e330fc5ef4060ca0bad755a4712",
+          "author_date": "2026-09-08T23:40:06-04:00",
+          "subject": "make sine-theta source signature explicit"
+        }
+      },
+      "misaligned_snapshots": [
+        {
+          "commit": "40362543a16445ea02b1fafc2b7b7e8d2aaaa646",
+          "author_date": "2026-09-08T20:28:04-04:00",
+          "subject": "name normalized symmetric ideal family mathematically",
+          "declaration": "TauCeti.DavisKahan1970.sinTheta_unbounded_formGap_sourceExact_complex",
+          "source_path": "DavisKahan/Sources/DavisKahan1970/SineTheta/Presentation.lean",
+          "line_range_1based": [
+            471,
+            484
+          ],
+          "signature_kind": "verbatim Lean source header through the top-level `:=` / `:= by` line",
+          "source_signature": "theorem sinTheta_unbounded_formGap_sourceExact_complex\n    [TopologicalSpace.SeparableSpace E]\n    (N : NormalizedUnitaryInvariantNorm.{0, v} ℂ)\n    (A : E →ₗ.[ℂ] E) (A₀ : F →ₗ.[ℂ] F) (Λ₁ : G →ₗ.[ℂ] G)\n    (E₀ : F →L[ℂ] E) (F₀ : H →L[ℂ] E) (F₁ : G →L[ℂ] E) (R : F →L[ℂ] E)\n    (hA : IsSelfAdjoint A) (hA₀ : IsSelfAdjoint A₀) (hΛ₁ : IsSelfAdjoint Λ₁)\n    (htrial : IsTrialResidual A A₀ E₀ R)\n    (hexact : IsExactSpectralDecomposition A Λ₁ F₀ F₁)\n    {δ : ℝ} (hδ : 0 < δ)\n    (hgap : FormBoundedSylvesterGap A₀ Λ₁ δ)\n    (hR : N.Mem R) :\n    N.Mem ((ContinuousLinearMap.id ℂ E - F₀ ∘L F₀.adjoint) ∘L E₀) ∧\n      δ * N.gauge ((ContinuousLinearMap.id ℂ E - F₀ ∘L F₀.adjoint) ∘L E₀) ≤\n        N.gauge R :=\n",
+          "signature_sha256": "d9c774cf293acdef1472351fc9a64d98276768cf019ea37bb6a3213be1058e70",
+          "source_file_sha256": "12eff9969dc2cab2be81b52c3aa2b32c2ab74119a567df5807c37236de589d64",
+          "census_statement_pin": {
+            "type_expr_hash": "3506210647",
+            "type_text_sha256": "381d825130c744e7a5c5bbfd96fc23aa4ebbb58cf097eb8464c9539a4c78e985",
+            "toolchain": "leanprover/lean4:v4.34.0-rc1",
+            "pinned_on": "2026-09-07"
+          }
+        },
+        {
+          "commit": "40362543a16445ea02b1fafc2b7b7e8d2aaaa646",
+          "author_date": "2026-09-08T20:28:04-04:00",
+          "subject": "name normalized symmetric ideal family mathematically",
+          "declaration": "TauCeti.DavisKahan1970.sinTheta_unbounded_formGap_sourceExact_real",
+          "source_path": "DavisKahan/Sources/DavisKahan1970/SineTheta/Presentation.lean",
+          "line_range_1based": [
+            606,
+            619
+          ],
+          "signature_kind": "verbatim Lean source header through the top-level `:=` / `:= by` line",
+          "source_signature": "theorem sinTheta_unbounded_formGap_sourceExact_real\n    [TopologicalSpace.SeparableSpace E]\n    (N : NormalizedUnitaryInvariantNorm.{0, v} ℝ)\n    (A : E →ₗ.[ℝ] E) (A₀ : F →ₗ.[ℝ] F) (Λ₁ : G →ₗ.[ℝ] G)\n    (E₀ : F →L[ℝ] E) (F₀ : H →L[ℝ] E) (F₁ : G →L[ℝ] E) (R : F →L[ℝ] E)\n    (hA : IsSelfAdjoint A) (hA₀ : IsSelfAdjoint A₀) (hΛ₁ : IsSelfAdjoint Λ₁)\n    (htrial : IsTrialResidual A A₀ E₀ R)\n    (hexact : IsExactSpectralDecomposition A Λ₁ F₀ F₁)\n    {δ : ℝ} (hδ : 0 < δ)\n    (hgap : FormBoundedSylvesterGap A₀ Λ₁ δ)\n    (hR : N.Mem R) :\n    N.Mem ((ContinuousLinearMap.id ℝ E - F₀ ∘L F₀.adjoint) ∘L E₀) ∧\n      δ * N.gauge ((ContinuousLinearMap.id ℝ E - F₀ ∘L F₀.adjoint) ∘L E₀) ≤\n        N.gauge R :=\n",
+          "signature_sha256": "ced143fe6abe5b8c543369e18677d259e74c867c663d938976b7d2ac5c85342d",
+          "source_file_sha256": "12eff9969dc2cab2be81b52c3aa2b32c2ab74119a567df5807c37236de589d64",
+          "census_statement_pin": {
+            "type_expr_hash": "476608504",
+            "type_text_sha256": "c4d5e23852152ce832b3582d3f1fcb17e85c30ca406fd99be909b2bab911c6e9",
+            "toolchain": "leanprover/lean4:v4.34.0-rc1",
+            "pinned_on": "2026-09-07"
+          }
+        }
+      ],
+      "corrected_snapshots_at_retarget": [
+        {
+          "commit": "fef728e500d476d65b2668af352b21a3be47b8f2",
+          "author_date": "2026-09-08T22:08:11-04:00",
+          "subject": "retarget sine-theta source norm boundary",
+          "declaration": "TauCeti.DavisKahan1970.sinTheta_unbounded_formGap_sourceExact_complex",
+          "source_path": "DavisKahan/Sources/DavisKahan1970/SineTheta/Presentation.lean",
+          "line_range_1based": [
+            475,
+            486
+          ],
+          "signature_kind": "verbatim Lean source header through the top-level `:=` / `:= by` line",
+          "source_signature": "theorem sinTheta_unbounded_formGap_sourceExact_complex\n    [TopologicalSpace.SeparableSpace E]\n    (N : NormalizedSymmetricOperatorIdealFamily.{0, v} ℂ)\n    (A : E →ₗ.[ℂ] E) (A₀ : F →ₗ.[ℂ] F) (Λ₁ : G →ₗ.[ℂ] G)\n    (E₀ : F →L[ℂ] E) (F₀ : H →L[ℂ] E) (F₁ : G →L[ℂ] E) (R : F →L[ℂ] E)\n    (hA : IsSelfAdjoint A) (hA₀ : IsSelfAdjoint A₀) (hΛ₁ : IsSelfAdjoint Λ₁)\n    (htrial : IsTrialResidual A A₀ E₀ R)\n    (hexact : IsExactSpectralDecomposition A Λ₁ F₀ F₁)\n    {δ : ℝ} (hδ : 0 < δ)\n    (hgap : FormBoundedSylvesterGap A₀ Λ₁ δ) :\n    N.ScaledGaugeLEWhereDefined δ\n      ((ContinuousLinearMap.id ℂ E - F₀ ∘L F₀.adjoint) ∘L E₀) R := by\n",
+          "signature_sha256": "76b549659eed0fc96a8e9a8ce903111b3f44eb1f1c4e9f69c2a5c05e8f786032",
+          "source_file_sha256": "80fce510b0bf2c334de9003e2d9c7c719d962ff6f26c0efd71ee85657adc97c3"
+        },
+        {
+          "commit": "fef728e500d476d65b2668af352b21a3be47b8f2",
+          "author_date": "2026-09-08T22:08:11-04:00",
+          "subject": "retarget sine-theta source norm boundary",
+          "declaration": "TauCeti.DavisKahan1970.sinTheta_unbounded_formGap_sourceExact_real",
+          "source_path": "DavisKahan/Sources/DavisKahan1970/SineTheta/Presentation.lean",
+          "line_range_1based": [
+            616,
+            627
+          ],
+          "signature_kind": "verbatim Lean source header through the top-level `:=` / `:= by` line",
+          "source_signature": "theorem sinTheta_unbounded_formGap_sourceExact_real\n    [TopologicalSpace.SeparableSpace E]\n    (N : NormalizedSymmetricOperatorIdealFamily.{0, v} ℝ)\n    (A : E →ₗ.[ℝ] E) (A₀ : F →ₗ.[ℝ] F) (Λ₁ : G →ₗ.[ℝ] G)\n    (E₀ : F →L[ℝ] E) (F₀ : H →L[ℝ] E) (F₁ : G →L[ℝ] E) (R : F →L[ℝ] E)\n    (hA : IsSelfAdjoint A) (hA₀ : IsSelfAdjoint A₀) (hΛ₁ : IsSelfAdjoint Λ₁)\n    (htrial : IsTrialResidual A A₀ E₀ R)\n    (hexact : IsExactSpectralDecomposition A Λ₁ F₀ F₁)\n    {δ : ℝ} (hδ : 0 < δ)\n    (hgap : FormBoundedSylvesterGap A₀ Λ₁ δ) :\n    N.ScaledGaugeLEWhereDefined δ\n      ((ContinuousLinearMap.id ℝ E - F₀ ∘L F₀.adjoint) ∘L E₀) R := by\n",
+          "signature_sha256": "193facb317e9b67a610592f4e9433a4567bac2b5776ab7e6bd84ba5e83886c2a",
+          "source_file_sha256": "80fce510b0bf2c334de9003e2d9c7c719d962ff6f26c0efd71ee85657adc97c3"
+        }
+      ],
+      "readable_corrected_snapshots": [
+        {
+          "commit": "61c8529dd3b62e330fc5ef4060ca0bad755a4712",
+          "author_date": "2026-09-08T23:40:06-04:00",
+          "subject": "make sine-theta source signature explicit",
+          "declaration": "TauCeti.DavisKahan1970.sinTheta_unbounded_formGap_sourceExact_complex",
+          "source_path": "DavisKahan/Sources/DavisKahan1970/SineTheta/Presentation.lean",
+          "line_range_1based": [
+            477,
+            490
+          ],
+          "signature_kind": "verbatim Lean source header through the top-level `:=` / `:= by` line",
+          "source_signature": "theorem sinTheta_unbounded_formGap_sourceExact_complex\n    [TopologicalSpace.SeparableSpace E]\n    (N : NormalizedSymmetricOperatorIdealFamily.{0, v} ℂ)\n    (A : E →ₗ.[ℂ] E) (A₀ : F →ₗ.[ℂ] F) (Λ₁ : G →ₗ.[ℂ] G)\n    (E₀ : F →L[ℂ] E) (F₀ : H →L[ℂ] E) (F₁ : G →L[ℂ] E) (R : F →L[ℂ] E)\n    (hA : IsSelfAdjoint A) (hA₀ : IsSelfAdjoint A₀) (hΛ₁ : IsSelfAdjoint Λ₁)\n    (htrial : IsTrialResidual A A₀ E₀ R)\n    (hexact : IsExactSpectralDecomposition A Λ₁ F₀ F₁)\n    {δ : ℝ} (hδ : 0 < δ)\n    (hgap : FormBoundedSylvesterGap A₀ Λ₁ δ) :\n    N.Mem ((ContinuousLinearMap.id ℂ E - F₀ ∘L F₀.adjoint) ∘L E₀) →\n    N.Mem R →\n      δ * N.gaugeReal ((ContinuousLinearMap.id ℂ E - F₀ ∘L F₀.adjoint) ∘L E₀) ≤\n        N.gaugeReal R := by\n",
+          "signature_sha256": "c845887b082371d2c4499c29c18eab1ed036801b7ca0de29033c454ce8bdc2d5",
+          "source_file_sha256": "4df03895cd2d564865fc2468b6fc42ab6c56f7438e5a40e1320b50206c74e300"
+        },
+        {
+          "commit": "61c8529dd3b62e330fc5ef4060ca0bad755a4712",
+          "author_date": "2026-09-08T23:40:06-04:00",
+          "subject": "make sine-theta source signature explicit",
+          "declaration": "TauCeti.DavisKahan1970.sinTheta_unbounded_formGap_sourceExact_real",
+          "source_path": "DavisKahan/Sources/DavisKahan1970/SineTheta/Presentation.lean",
+          "line_range_1based": [
+            623,
+            636
+          ],
+          "signature_kind": "verbatim Lean source header through the top-level `:=` / `:= by` line",
+          "source_signature": "theorem sinTheta_unbounded_formGap_sourceExact_real\n    [TopologicalSpace.SeparableSpace E]\n    (N : NormalizedSymmetricOperatorIdealFamily.{0, v} ℝ)\n    (A : E →ₗ.[ℝ] E) (A₀ : F →ₗ.[ℝ] F) (Λ₁ : G →ₗ.[ℝ] G)\n    (E₀ : F →L[ℝ] E) (F₀ : H →L[ℝ] E) (F₁ : G →L[ℝ] E) (R : F →L[ℝ] E)\n    (hA : IsSelfAdjoint A) (hA₀ : IsSelfAdjoint A₀) (hΛ₁ : IsSelfAdjoint Λ₁)\n    (htrial : IsTrialResidual A A₀ E₀ R)\n    (hexact : IsExactSpectralDecomposition A Λ₁ F₀ F₁)\n    {δ : ℝ} (hδ : 0 < δ)\n    (hgap : FormBoundedSylvesterGap A₀ Λ₁ δ) :\n    N.Mem ((ContinuousLinearMap.id ℝ E - F₀ ∘L F₀.adjoint) ∘L E₀) →\n    N.Mem R →\n      δ * N.gaugeReal ((ContinuousLinearMap.id ℝ E - F₀ ∘L F₀.adjoint) ∘L E₀) ≤\n        N.gaugeReal R := by\n",
+          "signature_sha256": "c4449a5b40d3786cae8e926de241e9d525b4ef9069deeb1e99ac6a44c82ec827",
+          "source_file_sha256": "4df03895cd2d564865fc2468b6fc42ab6c56f7438e5a40e1320b50206c74e300"
+        }
+      ],
+      "semantic_delta": {
+        "norm_class": {
+          "old": "`NormalizedUnitaryInvariantNorm` with stronger domain-solid/membership-transfer structure.",
+          "corrected": "`NormalizedSymmetricOperatorIdealFamily`, carrying only the source-facing where-defined comparison semantics."
+        },
+        "residual_membership": {
+          "old": "Caller had to provide `(hR : N.Mem R)`.",
+          "corrected": "No unconditional caller-visible residual-membership premise; the conclusion is conditional on the displayed norms being defined."
+        },
+        "sine_membership": {
+          "old": "The theorem concluded `N.Mem sinTheta₀` in conjunction with the inequality.",
+          "corrected": "No membership-transfer conclusion; direct type is `N.Mem sinTheta₀ → N.Mem R → δ * N.gaugeReal sinTheta₀ ≤ N.gaugeReal R`."
+        },
+        "status": "confirmed and repaired; this is the single-angle discrepancy described in the current formalization-process paper."
+      }
+    }
+  ],
+  "retracted_census_findings": [
+    {
+      "id": "2026-08-07-real-infinite-dimensional-scope-false-positive",
+      "finding": {
+        "commit": "28082e33aa2dc22c4ec059dace64859c551507f0",
+        "author_date": "2026-08-07T13:46:06-04:00",
+        "subject": "Audit: 17 of 30 compiled_exact rows do not reach a real Hilbert space at infinite dimension",
+        "census_path": "dev/davis-kahan-1970-full-source-census.json",
+        "row_id": "S2-sin-theta",
+        "line_1based": 113,
+        "match_phrase": "STATUS LOWERED 2026-08-07",
+        "excerpt": "The census temporarily lowered S2-sin-theta from compiled_exact to compiled_specialization after an audit claimed the listed declarations did not reach real infinite-dimensional Hilbert spaces."
+      },
+      "retraction": {
+        "commit": "2799c724c4846065d60d794205a14a261b727aad",
+        "author_date": "2026-08-07T14:15:44-04:00",
+        "subject": "Correct the scalar-scope audit method; fix the Theorem 8.2 recipe",
+        "census_path": "dev/davis-kahan-1970-full-source-census.json",
+        "row_id": "S2-sin-theta",
+        "line_1based": 115,
+        "match_phrase": "FALSE POSITIVE",
+        "excerpt": "The census explicitly retracts the finding: the first audit searched only declarations already listed on the row; a repository-wide search and elaboration found real infinite-dimensional sine-theta declarations, and compiled_exact was restored."
+      },
+      "disposition": "retracted_false_positive",
+      "counted_in_misalignment_events": false
+    }
+  ],
+  "current_reference": {
+    "census_claim": {
+      "commit": "351a465f7f7c8e503c4d17ec76107319d27e8a0b",
+      "author_date": "2026-09-09T19:20:32-04:00",
+      "subject": "Correct more violated prose rules, and clarify Co authored by GPT 5.6",
+      "census_path": "dev/davis-kahan-1970-full-source-census.json",
+      "row_id": "S2-sin-theta",
+      "row_status": "compiled_exact",
+      "canonical_declarations": [
+        "TauCeti.DavisKahan1970.sinTheta_unbounded_formGap_whereDefinedUIN_rclike"
+      ],
+      "declaration_is_canonical": true,
+      "json_pointer": "/items/2/semantic_review/canonical_declarations"
+    },
+    "theorem_snapshot": {
+      "commit": "351a465f7f7c8e503c4d17ec76107319d27e8a0b",
+      "author_date": "2026-09-09T19:20:32-04:00",
+      "subject": "Correct more violated prose rules, and clarify Co authored by GPT 5.6",
+      "declaration": "TauCeti.DavisKahan1970.sinTheta_unbounded_formGap_whereDefinedUIN_rclike",
+      "source_path": "DavisKahan/Sources/DavisKahan1970/SineTheta/Presentation.lean",
+      "line_range_1based": [
+        298,
+        311
+      ],
+      "signature_kind": "verbatim Lean source header through the top-level `:=` / `:= by` line",
+      "source_signature": "theorem sinTheta_unbounded_formGap_whereDefinedUIN_rclike\n    [TopologicalSpace.SeparableSpace E]\n    (N : NormalizedSymmetricOperatorIdealFamily.{u, v} 𝕜)\n    (A : E →ₗ.[𝕜] E) (A₀ : F →ₗ.[𝕜] F) (Λ₁ : G →ₗ.[𝕜] G)\n    (E₀ : F →L[𝕜] E) (F₀ : H →L[𝕜] E) (F₁ : G →L[𝕜] E) (R : F →L[𝕜] E)\n    (hA : IsSelfAdjoint A) (hA₀ : IsSelfAdjoint A₀) (hΛ₁ : IsSelfAdjoint Λ₁)\n    (htrial : IsTrialResidual A A₀ E₀ R)\n    (hexact : IsExactSpectralDecomposition A Λ₁ F₀ F₁)\n    {δ : ℝ} (hδ : 0 < δ)\n    (hgap : FormBoundedSylvesterGap A₀ Λ₁ δ) :\n    N.Mem ((ContinuousLinearMap.id 𝕜 E - F₀ ∘L F₀.adjoint) ∘L E₀) →\n    N.Mem R →\n      δ * N.gaugeReal ((ContinuousLinearMap.id 𝕜 E - F₀ ∘L F₀.adjoint) ∘L E₀) ≤\n        N.gaugeReal R := by\n",
+      "signature_sha256": "9b80d6d346c68b85fc99a6a96179c8cd30542da1b73002292db1a0eeddd49bef",
+      "source_file_sha256": "80f8e082ba4ce604f434fd9697b25cd9071d128c6f510f0c72ebb72de8251cf3"
+    },
+    "promoted_commit": {
+      "commit": "82078c2f6a03b354c7bcea72566f4cf81ab5f250",
+      "author_date": "2026-09-09T15:07:21-04:00",
+      "subject": "Promote Section 2 RCLike sine endpoints"
+    },
+    "note": "Current census canonical witness: scalar-generic over RCLike, separable ambient scope, full FormBoundedSylvesterGap, and the source-facing where-defined norm implication."
+  }
+}
