@@ -120,7 +120,7 @@
       },
       "semantic_alignment": "locally_exact",
       "local_statement_self_contained": true,
-      "notes": " **Canonical fixed-field statements added 2026-08-29.** `sinTheta_unbounded_intervalExterior_characterizedWitness_rclike` is the presentation declaration and pays twice for being scalar-generic: it carries the capability classes `ContinuousLinearMap.HasMinMaxLowerBoundEverywhere` and `HasUnboundedSylvesterKyFan`, and it inlines the finite interval/exterior branch of the separation, which fixes a strictly smaller theorem than the one proved. Neither cost is Davis--Kahan mathematics: the capability classes package the unbounded Sylvester Ky Fan estimate and a min-max lower bound, both proved here for both scalar fields, and they appear only because RCLike is an open abstraction. `sinTheta_complex` and `sinTheta_real` take direct argument lists, the full `FormBoundedSylvesterGap`, and conclude both ideal membership and the bound, with no capability class; they route through the already capability-free `FormBoundedIsometricSinThetaProblem.result_complex`/`.result_real` one Ky Fan gauge at a time. The `_of_intervalExterior` pair spells out the printed Section 2 separation. `sinTheta_unbounded_intervalExterior_symmetricNorming_rclike` remains the engine and is unchanged. **Canonical Section 2 inventory, 2026-08-30.** `DavisKahan/Sources/DavisKahan1970/SectionTwo.lean` is the public inventory of the paper's four unnumbered headline theorems over both scalar fields: `TauCeti.DavisKahan1970.SectionTwo.{sinTheta_complex, tanTheta_complex, sinTwoTheta_complex, tanTwoTheta_complex}` and their `_real` siblings. The unqualified `SectionTwo.{sinTheta, tanTheta, sinTwoTheta, tanTwoTheta}` are reserved by a standing rule: a short name is bound only to a declaration that is BOTH scalar-generic over `RCLike` AND at the printed source scope, and is left unbound otherwise. Which of the four currently satisfy that is a property of `SectionTwo.lean`; it is recorded once, structurally, in `section_two_short_names` below and checked against the file, and is deliberately not restated in prose -- a copy of a moving fact goes stale silently, and this sentence did. They are `alias`es, so each carries exactly the type of the declaration it names -- unbounded self-adjoint `LinearPMap` ambient operator, arbitrary Hilbert dimension, a `SymmetricNormingFunction`, both printed conclusions, no capability class, no finite-dimensional hypothesis, no proof vehicle in the conclusion. `SectionTwoUsage.lean` calls each from ordinary operator-theory hypotheses, so the advertised entry points are compiler-checked to be reachable without building Sylvester witnesses, reflection blocks, or spectral reflections by hand. The scalar-generic presentation forms, directed and whole-space variants, finite specializations, operator-norm statements and bundled-problem entry points are unchanged and remain registered separately.\n\nSIGNATURE RETARGET 2026-09-08. Canonical evidence now uses the partial-domain norm class and `ScaledGaugeLEWhereDefined`; the former `NormalizedUnitaryInvariantNorm` correspondence and residual-membership premise were removed from the source-facing type after Probes 17--43 isolated membership transfer as extra structure.",
+      "notes": " **Canonical fixed-field statements added 2026-08-29.** `sinTheta_unbounded_intervalExterior_characterizedWitness_rclike` is the presentation declaration and pays twice for being scalar-generic: it carries the capability classes `ContinuousLinearMap.HasMinMaxLowerBoundEverywhere` and `HasUnboundedSylvesterKyFan`, and it inlines the finite interval/exterior branch of the separation, which fixes a strictly smaller theorem than the one proved. Neither cost is Davis--Kahan mathematics: the capability classes package the unbounded Sylvester Ky Fan estimate and a min-max lower bound, both proved here for both scalar fields, and they appear only because RCLike is an open abstraction. `sinTheta_complex` and `sinTheta_real` take direct argument lists, the full `FormBoundedSylvesterGap`, and conclude both ideal membership and the bound, with no capability class; they route through the already capability-free `FormBoundedIsometricSinThetaProblem.result_complex`/`.result_real` one Ky Fan gauge at a time. The `_of_intervalExterior` pair spells out the printed Section 2 separation. `sinTheta_unbounded_intervalExterior_symmetricNorming_rclike` remains the engine and is unchanged. **Canonical Section 2 inventory, 2026-08-30.** `DavisKahan/Sources/DavisKahan1970/SectionTwo.lean` is the public inventory of the paper's four unnumbered headline theorems over both scalar fields: `TauCeti.DavisKahan1970.SectionTwo.{sinTheta_complex, tanTheta_complex, sinTwoTheta_complex, tanTwoTheta_complex}` and their `_real` siblings. The unqualified `SectionTwo.{sinTheta, tanTheta, sinTwoTheta, tanTwoTheta}` are reserved by a standing rule: a short name is bound only to a declaration that is BOTH scalar-generic over `RCLike` AND at the printed source scope, and is left unbound otherwise. Which of the four currently satisfy that is a property of `SectionTwo.lean`; it is recorded once, structurally, in `section_two_short_names` below and checked against the file, and is deliberately not restated in prose -- a copy of a moving fact goes stale silently, and this sentence did. They are `alias`es, so each carries exactly the type of the declaration it names -- unbounded self-adjoint `LinearPMap` ambient operator, arbitrary Hilbert dimension, a `SymmetricNormingFunction`, both printed conclusions, no capability class, no finite-dimensional hypothesis, no proof vehicle in the conclusion. `SectionTwoUsage.lean` calls each from ordinary operator-theory hypotheses, so the advertised entry points are compiler-checked to be reachable without building Sylvester witnesses, reflection blocks, or spectral reflections by hand. The scalar-generic presentation forms, directed and whole-space variants, finite specializations, operator-norm statements and bundled-problem entry points are unchanged and remain registered separately.\n\nSIGNATURE RETARGET 2026-09-08. Canonical evidence uses the partial-domain norm class; the former `NormalizedUnitaryInvariantNorm` correspondence and residual-membership premise were removed after Probes 17--43 isolated membership transfer as extra structure. READABILITY FOLLOW-UP 2026-09-08: the canonical theorem type now spells the partial-domain conclusion literally as `N.Mem sinTheta₀ → N.Mem R → δ * N.gaugeReal sinTheta₀ ≤ N.gaugeReal R`; `ScaledGaugeLEWhereDefined` remains only as a proof-side helper.",
       "canonical_evidence": [
         {
           "declaration": "TauCeti.DavisKahan1970.sinTheta_unbounded_formGap_sourceExact_complex",
@@ -138,7 +138,7 @@
             "S2-unbounded-scope.half-infinite-gap-intervals"
           ],
           "capability_classes": [],
-          "note": "Source-exact fixed-field façade at separable ambient scope over `NormalizedSymmetricOperatorIdealFamily`; the result is a where-defined norm comparison and carries no residual-membership premise or membership-transfer conclusion."
+          "note": "Source-exact fixed-field façade at separable ambient scope over `NormalizedSymmetricOperatorIdealFamily`. The theorem type spells the vacuity boundary directly as `N.Mem sinTheta₀ → N.Mem R → δ * N.gaugeReal sinTheta₀ ≤ N.gaugeReal R`; there is no caller-visible residual-membership premise and no membership-transfer conclusion."
         },
         {
           "declaration": "TauCeti.DavisKahan1970.sinTheta_unbounded_formGap_sourceExact_real",
@@ -156,7 +156,7 @@
             "S2-unbounded-scope.half-infinite-gap-intervals"
           ],
           "capability_classes": [],
-          "note": "Source-exact fixed-field façade at separable ambient scope over `NormalizedSymmetricOperatorIdealFamily`; the result is a where-defined norm comparison and carries no residual-membership premise or membership-transfer conclusion."
+          "note": "Source-exact fixed-field façade at separable ambient scope over `NormalizedSymmetricOperatorIdealFamily`. The theorem type spells the vacuity boundary directly as `N.Mem sinTheta₀ → N.Mem R → δ * N.gaugeReal sinTheta₀ ≤ N.gaugeReal R`; there is no caller-visible residual-membership premise and no membership-transfer conclusion."
         }
       ],
       "supporting_evidence": [
@@ -259,8 +259,8 @@
         },
         {
           "declaration": "TauCeti.DavisKahan.ExactSinTheta.NormalizedSymmetricOperatorIdealFamily.ScaledGaugeLEWhereDefined",
-          "role": "source_correspondence",
-          "note": "Encodes the paper-wide vacuity convention: if both displayed norms exist, the real-valued inequality holds; otherwise there is no numerical obligation."
+          "role": "implementation_structure",
+          "note": "Proof-side convenience predicate equivalent to the explicit `Mem → Mem → gaugeReal` conclusion. The canonical Davis--Kahan façades no longer expose this name in their theorem types."
         }
       ],
       "expected_status": "compiled_exact",
@@ -283,8 +283,7 @@
           "evidence": {
             "primary": "TauCeti.DavisKahan1970.sinTheta_unbounded_formGap_sourceExact_complex",
             "correspondence": [
-              "TauCeti.DavisKahan.ExactSinTheta.NormalizedSymmetricOperatorIdealFamily",
-              "TauCeti.DavisKahan.ExactSinTheta.NormalizedSymmetricOperatorIdealFamily.ScaledGaugeLEWhereDefined"
+              "TauCeti.DavisKahan.ExactSinTheta.NormalizedSymmetricOperatorIdealFamily"
             ],
             "supporting": [
               "TauCeti.DavisKahan1970.sinTheta_unbounded_formGap_symmetricNorming_rclike",
@@ -292,7 +291,7 @@
             ]
           },
           "status": "established",
-          "justification": "delta * N(sin Theta_0) <= N(R) on the paper's directed sine, at the PRINTED scope: separable ambient Hilbert space, `NormalizedSymmetricOperatorIdealFamily`, unbounded self-adjoint ambient operator, an arbitrary trial subspace with the printed trial residual as the only right-hand side, and the full `FormBoundedSylvesterGap`. There is no caller-visible residual-membership premise. The conclusion is where-defined: when both displayed norms exist it is exactly the printed inequality, and when either fails to exist the paper declares the result vacuous.",
+          "justification": "delta * N(sin Theta_0) <= N(R) on the paper's directed sine, at the PRINTED scope: separable ambient Hilbert space, `NormalizedSymmetricOperatorIdealFamily`, unbounded self-adjoint ambient operator, an arbitrary trial subspace with the printed trial residual as the only right-hand side, and the full `FormBoundedSylvesterGap`. There is no caller-visible residual-membership premise. The primary theorem itself spells the source vacuity convention as `N.Mem sinTheta₀ → N.Mem R → δ * N.gaugeReal sinTheta₀ ≤ N.gaugeReal R`, so no sibling predicate donates the conclusion semantics.",
           "gap_scope_justification": "The primary takes `FormBoundedSylvesterGap A_0 Lambda_1 delta`, whose `leftAboveRightBelow` and `leftBelowRightAbove` constructors ARE the two half-infinite configurations; `intervalExterior` is the bounded one. All three are available to a caller.",
           "gap_scope_hypothesis_tokens": [
             "FormBoundedSylvesterGap"
@@ -307,8 +306,7 @@
           "evidence": {
             "primary": "TauCeti.DavisKahan1970.sinTheta_unbounded_formGap_sourceExact_real",
             "correspondence": [
-              "TauCeti.DavisKahan.ExactSinTheta.NormalizedSymmetricOperatorIdealFamily",
-              "TauCeti.DavisKahan.ExactSinTheta.NormalizedSymmetricOperatorIdealFamily.ScaledGaugeLEWhereDefined"
+              "TauCeti.DavisKahan.ExactSinTheta.NormalizedSymmetricOperatorIdealFamily"
             ],
             "supporting": [
               "TauCeti.DavisKahan1970.sinTheta_unbounded_formGap_symmetricNorming_rclike",
@@ -316,14 +314,14 @@
             ]
           },
           "status": "established",
-          "justification": "delta * N(sin Theta_0) <= N(R) on the paper's directed sine, at the PRINTED scope: separable ambient Hilbert space, `NormalizedSymmetricOperatorIdealFamily`, unbounded self-adjoint ambient operator, an arbitrary trial subspace with the printed trial residual as the only right-hand side, and the full `FormBoundedSylvesterGap`. There is no caller-visible residual-membership premise. The conclusion is where-defined: when both displayed norms exist it is exactly the printed inequality, and when either fails to exist the paper declares the result vacuous.",
+          "justification": "delta * N(sin Theta_0) <= N(R) on the paper's directed sine, at the PRINTED scope: separable ambient Hilbert space, `NormalizedSymmetricOperatorIdealFamily`, unbounded self-adjoint ambient operator, an arbitrary trial subspace with the printed trial residual as the only right-hand side, and the full `FormBoundedSylvesterGap`. There is no caller-visible residual-membership premise. The primary theorem itself spells the source vacuity convention as `N.Mem sinTheta₀ → N.Mem R → δ * N.gaugeReal sinTheta₀ ≤ N.gaugeReal R`, so no sibling predicate donates the conclusion semantics.",
           "gap_scope_justification": "The primary takes `FormBoundedSylvesterGap A_0 Lambda_1 delta`, whose `leftAboveRightBelow` and `leftBelowRightAbove` constructors ARE the two half-infinite configurations; `intervalExterior` is the bounded one. All three are available to a caller.",
           "gap_scope_hypothesis_tokens": [
             "FormBoundedSylvesterGap"
           ]
         }
       ],
-      "norm_class_reading": "The printed quantifier is every normalized unitary-invariant norm, together with the paper-wide convention that results are vacuous when relevant norms fail to exist. Probes 17--43 distinguish the where-defined Ky Fan comparison used by that sentence from unconditional dominance of an extended `ENNReal` gauge: the latter additionally transfers ideal membership and is therefore stronger. `NormalizedSymmetricOperatorIdealFamily` is the source-facing mathematical class. It stores the symmetric ideal/norm laws, rank-one normalization, and Ky Fan comparison only where both displayed norms exist. `NormalizedUnitaryInvariantNorm` remains a stronger internal implementation object and is not canonical source evidence for this row."
+      "norm_class_reading": "The printed quantifier is every normalized unitary-invariant norm, together with the paper-wide convention that results are vacuous when relevant norms fail to exist. Probes 17--43 distinguish the where-defined Ky Fan comparison used by that sentence from unconditional dominance of an extended `ENNReal` gauge: the latter additionally transfers ideal membership and is therefore stronger. `NormalizedSymmetricOperatorIdealFamily` is the source-facing mathematical class. The canonical theorem does not hide the partial-domain convention behind a repository predicate: its result is written literally as `N.Mem sinTheta₀ → N.Mem R → δ * N.gaugeReal sinTheta₀ ≤ N.gaugeReal R`. `NormalizedUnitaryInvariantNorm` remains a stronger internal implementation object and is not canonical source evidence for this row."
     },
     {
       "id": "S2-tan-theta",

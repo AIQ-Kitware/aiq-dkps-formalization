@@ -96,12 +96,13 @@ theorem theorem5_2_real_ordered_sourceAudit
 
 /-! ## Source-exact Section 2 façades
 
-Each of these states its Section 2 clause at the PRINTED scope: separable ambient
-Hilbert space, and `NormalizedUnitaryInvariantNorm` -- the Lean type for the norm
-class Davis and Kahan quantify over in Section 1.  They are deliberately weaker
-than the arbitrary-Hilbert `SymmetricNormingFunction` theorems that prove them,
-which are registered separately as generalizations.  The discharge is the source's
-own Fan-dominance reduction at (1.11)-(1.13). -/
+Each of these states its Section 2 clause at the PRINTED scope.  For the
+sine-theta façade that means a separable ambient Hilbert space and
+`NormalizedSymmetricOperatorIdealFamily`, with the source-wide vacuity convention
+spelled directly in the theorem type as `N.Mem sinTheta₀ → N.Mem R → ...`.
+The stronger arbitrary-Hilbert `SymmetricNormingFunction` theorem remains
+registered separately as a generalization.  The discharge is the source's own
+Fan-dominance reduction at (1.11)-(1.13). -/
 
 #check @TauCeti.DavisKahan1970.corollary4_1_compact_nonacute_sourceExact_complex
 #check @TauCeti.DavisKahan1970.corollary4_1_compact_nonacute_sourceExact_real

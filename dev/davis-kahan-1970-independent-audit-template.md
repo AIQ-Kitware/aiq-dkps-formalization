@@ -92,22 +92,14 @@ One row per printed source clause per scalar field.  A clause is `PASS` only whe
 
 | clause | scalar | witness | status |
 | --- | --- | --- | --- |
-| `directed.complex` | complex | `TauCeti.DavisKahan1970.sinTheta_unbounded_formGap_sourceExact_complex` + `TauCeti.DavisKahan1970.normalizedUnitaryInvariant_of_symmetricNorming` + `TauCeti.DavisKahan.ExactSinTheta.NormalizedUnitaryInvariantNorm` | **PASS** |
-| `directed.real` | real | `TauCeti.DavisKahan1970.sinTheta_unbounded_formGap_sourceExact_real` + `TauCeti.DavisKahan1970.normalizedUnitaryInvariant_of_symmetricNorming` + `TauCeti.DavisKahan.ExactSinTheta.NormalizedUnitaryInvariantNorm` | **PASS** |
+| `directed.complex` | complex | `TauCeti.DavisKahan1970.sinTheta_unbounded_formGap_sourceExact_complex` + `TauCeti.DavisKahan.ExactSinTheta.NormalizedSymmetricOperatorIdealFamily` | **PASS** |
+| `directed.real` | real | `TauCeti.DavisKahan1970.sinTheta_unbounded_formGap_sourceExact_real` + `TauCeti.DavisKahan.ExactSinTheta.NormalizedSymmetricOperatorIdealFamily` | **PASS** |
 
-**`directed.complex`.** delta * N(sin Theta_0) <= N(R) on the paper's directed sine, at the PRINTED scope: separable ambient Hilbert space, `NormalizedUnitaryInvariantNorm` -- the Lean type for Section 1's norm class -- unbounded self-adjoint ambient operator, an arbitrary trial subspace with the printed trial residual as the only right-hand side, and the full `FormBoundedSylvesterGap`.
-
-SCALAR SCOPE CORRECTED 2026-09-05 (GOAL.md section 4.3). This row carried a single clause whose canonical witness was the scalar-generic `..._rclike` theorem. The source's scalar fields are R and C, so canonical evidence is now the two fixed-field façades and the `RCLike` theorem is registered as a stronger scalar-generic variant rather than standing in for them.
-
-SOURCE-EXACT FAÇADE REGISTERED 2026-09-05 (GOAL.md sections I, III and IV). The arbitrary-Hilbert `SymmetricNormingFunction` theorem that proves the façade is retained as supporting evidence with role `generalization`; the façade is deliberately weaker on both axes, and the discharge is the source's own Fan-dominance reduction.
+**`directed.complex`.** delta * N(sin Theta_0) <= N(R) on the paper's directed sine, at the PRINTED scope: separable ambient Hilbert space, `NormalizedSymmetricOperatorIdealFamily`, unbounded self-adjoint ambient operator, an arbitrary trial subspace with the printed trial residual as the only right-hand side, and the full `FormBoundedSylvesterGap`. There is no caller-visible residual-membership premise. The primary theorem itself spells the source vacuity convention as `N.Mem sinTheta₀ → N.Mem R → δ * N.gaugeReal sinTheta₀ ≤ N.gaugeReal R`, so no sibling predicate donates the conclusion semantics.
 
 *Gap scope:* The primary takes `FormBoundedSylvesterGap A_0 Lambda_1 delta`, whose `leftAboveRightBelow` and `leftBelowRightAbove` constructors ARE the two half-infinite configurations; `intervalExterior` is the bounded one. All three are available to a caller.
 
-**`directed.real`.** delta * N(sin Theta_0) <= N(R) on the paper's directed sine, at the PRINTED scope: separable ambient Hilbert space, `NormalizedUnitaryInvariantNorm` -- the Lean type for Section 1's norm class -- unbounded self-adjoint ambient operator, an arbitrary trial subspace with the printed trial residual as the only right-hand side, and the full `FormBoundedSylvesterGap`.
-
-SCALAR SCOPE CORRECTED 2026-09-05 (GOAL.md section 4.3). This row carried a single clause whose canonical witness was the scalar-generic `..._rclike` theorem. The source's scalar fields are R and C, so canonical evidence is now the two fixed-field façades and the `RCLike` theorem is registered as a stronger scalar-generic variant rather than standing in for them.
-
-SOURCE-EXACT FAÇADE REGISTERED 2026-09-05 (GOAL.md sections I, III and IV). The arbitrary-Hilbert `SymmetricNormingFunction` theorem that proves the façade is retained as supporting evidence with role `generalization`; the façade is deliberately weaker on both axes, and the discharge is the source's own Fan-dominance reduction.
+**`directed.real`.** delta * N(sin Theta_0) <= N(R) on the paper's directed sine, at the PRINTED scope: separable ambient Hilbert space, `NormalizedSymmetricOperatorIdealFamily`, unbounded self-adjoint ambient operator, an arbitrary trial subspace with the printed trial residual as the only right-hand side, and the full `FormBoundedSylvesterGap`. There is no caller-visible residual-membership premise. The primary theorem itself spells the source vacuity convention as `N.Mem sinTheta₀ → N.Mem R → δ * N.gaugeReal sinTheta₀ ≤ N.gaugeReal R`, so no sibling predicate donates the conclusion semantics.
 
 *Gap scope:* The primary takes `FormBoundedSylvesterGap A_0 Lambda_1 delta`, whose `leftAboveRightBelow` and `leftBelowRightAbove` constructors ARE the two half-infinite configurations; `intervalExterior` is the bounded one. All three are available to a caller.
 
@@ -141,9 +133,9 @@ The declarations that carry this result's printed statement, with the source ato
 - `TauCeti.DavisKahan1970.symmetricNorming_of_kyFanDominant` — transport_lemma
 - `TauCeti.DavisKahan1970.symmetricNorming_iff_kyFanDominant` — transport_lemma
 - `TauCeti.DavisKahan1970.sinTheta_unbounded_formGap_symmetricNorming_rclike` — generalization
-- `TauCeti.DavisKahan.ExactSinTheta.NormalizedUnitaryInvariantNorm` — source_correspondence
-- `TauCeti.DavisKahan1970.normalizedUnitaryInvariant_of_symmetricNorming` — source_correspondence
-- `TauCeti.DavisKahan1970.normalizedUnitaryInvariant_of_symmetricNorming_mul` — source_correspondence
+- `TauCeti.DavisKahan.ExactSinTheta.NormalizedSymmetricOperatorIdealFamily` — source_correspondence
+- `TauCeti.DavisKahan.ExactSinTheta.NormalizedSymmetricOperatorIdealFamily.HasFanDominanceWhereDefined` — source_correspondence
+- `TauCeti.DavisKahan.ExactSinTheta.NormalizedSymmetricOperatorIdealFamily.ScaledGaugeLEWhereDefined` — implementation_structure
 
 ### Source-facing Lean declarations
 
@@ -209,7 +201,7 @@ Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.sinTheta_unbounded_formGap_symmetricNorming_real`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/SineTheta/Presentation.lean:504`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/SineTheta/Presentation.lean:521`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
@@ -221,7 +213,7 @@ Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.sinTheta_unbounded_intervalExterior_symmetricNorming_real`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/SineTheta/Presentation.lean:555`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/SineTheta/Presentation.lean:572`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
@@ -263,31 +255,31 @@ Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.sinTheta_unbounded_formGap_sourceExact_complex`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/SineTheta/Presentation.lean:471`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/SineTheta/Presentation.lean:477`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.sinTheta_unbounded_formGap_sourceExact_real`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/SineTheta/Presentation.lean:606`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/SineTheta/Presentation.lean:623`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
-#### `TauCeti.DavisKahan1970.normalizedUnitaryInvariant_of_symmetricNorming`
+#### `TauCeti.DavisKahan.ExactSinTheta.NormalizedSymmetricOperatorIdealFamily`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/SymmetricNormingFanDominance.lean:563`
-
-Compiler-printed type: *inserted when a compiler certificate is supplied.*
-
-#### `TauCeti.DavisKahan1970.normalizedUnitaryInvariant_of_symmetricNorming_mul`
-
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/SymmetricNormingFanDominance.lean:582`
+Source location candidates: `DavisKahan/OperatorIdeal/NormalizedUnitaryInvariantNorm.lean:274`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
-#### `TauCeti.DavisKahan.ExactSinTheta.NormalizedUnitaryInvariantNorm`
+#### `TauCeti.DavisKahan.ExactSinTheta.NormalizedSymmetricOperatorIdealFamily.HasFanDominanceWhereDefined`
 
-Source location candidates: `DavisKahan/OperatorIdeal/NormalizedUnitaryInvariantNorm.lean:87`
+Source location candidates: `DavisKahan/Explorations/SourceUnitaryInvariantNormFanDominance.lean:2426`, `DavisKahan/OperatorIdeal/NormalizedUnitaryInvariantNorm.lean:328`
+
+Compiler-printed type: *inserted when a compiler certificate is supplied.*
+
+#### `TauCeti.DavisKahan.ExactSinTheta.NormalizedSymmetricOperatorIdealFamily.ScaledGaugeLEWhereDefined`
+
+Source location candidates: `DavisKahan/OperatorIdeal/NormalizedUnitaryInvariantNorm.lean:350`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
@@ -1157,7 +1149,7 @@ Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan.ExactSinTheta.NormalizedUnitaryInvariantNorm`
 
-Source location candidates: `DavisKahan/OperatorIdeal/NormalizedUnitaryInvariantNorm.lean:87`
+Source location candidates: `DavisKahan/OperatorIdeal/NormalizedUnitaryInvariantNorm.lean:64`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
@@ -1756,7 +1748,7 @@ Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan.ExactSinTheta.NormalizedUnitaryInvariantNorm`
 
-Source location candidates: `DavisKahan/OperatorIdeal/NormalizedUnitaryInvariantNorm.lean:87`
+Source location candidates: `DavisKahan/OperatorIdeal/NormalizedUnitaryInvariantNorm.lean:64`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
@@ -2355,7 +2347,7 @@ Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan.ExactSinTheta.NormalizedUnitaryInvariantNorm`
 
-Source location candidates: `DavisKahan/OperatorIdeal/NormalizedUnitaryInvariantNorm.lean:87`
+Source location candidates: `DavisKahan/OperatorIdeal/NormalizedUnitaryInvariantNorm.lean:64`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
@@ -4244,7 +4236,7 @@ Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan.ExactSinTheta.NormalizedUnitaryInvariantNorm`
 
-Source location candidates: `DavisKahan/OperatorIdeal/NormalizedUnitaryInvariantNorm.lean:87`
+Source location candidates: `DavisKahan/OperatorIdeal/NormalizedUnitaryInvariantNorm.lean:64`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
@@ -4839,7 +4831,7 @@ Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan.ExactSinTheta.NormalizedUnitaryInvariantNorm`
 
-Source location candidates: `DavisKahan/OperatorIdeal/NormalizedUnitaryInvariantNorm.lean:87`
+Source location candidates: `DavisKahan/OperatorIdeal/NormalizedUnitaryInvariantNorm.lean:64`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
@@ -5317,7 +5309,7 @@ Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan.ExactSinTheta.NormalizedUnitaryInvariantNorm`
 
-Source location candidates: `DavisKahan/OperatorIdeal/NormalizedUnitaryInvariantNorm.lean:87`
+Source location candidates: `DavisKahan/OperatorIdeal/NormalizedUnitaryInvariantNorm.lean:64`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
@@ -6508,7 +6500,7 @@ Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan.ExactSinTheta.NormalizedUnitaryInvariantNorm`
 
-Source location candidates: `DavisKahan/OperatorIdeal/NormalizedUnitaryInvariantNorm.lean:87`
+Source location candidates: `DavisKahan/OperatorIdeal/NormalizedUnitaryInvariantNorm.lean:64`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
@@ -8213,7 +8205,7 @@ Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan.ExactSinTheta.NormalizedUnitaryInvariantNorm`
 
-Source location candidates: `DavisKahan/OperatorIdeal/NormalizedUnitaryInvariantNorm.lean:87`
+Source location candidates: `DavisKahan/OperatorIdeal/NormalizedUnitaryInvariantNorm.lean:64`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 

@@ -302,6 +302,26 @@ namespace NormalizedSymmetricOperatorIdealFamily
 
 variable {𝕜 : Type u} [RCLike 𝕜]
 
+/-- Membership in the normalized symmetric operator ideal family.  This is the
+finiteness domain of the underlying symmetric ideal gauge. -/
+abbrev Mem
+    (N : NormalizedSymmetricOperatorIdealFamily.{u, v} 𝕜)
+    {E F : Type v}
+    [NormedAddCommGroup E] [InnerProductSpace 𝕜 E] [CompleteSpace E]
+    [NormedAddCommGroup F] [InnerProductSpace 𝕜 F] [CompleteSpace F]
+    (A : E →L[𝕜] F) : Prop :=
+  N.toSymmetricOperatorIdealFamily.Mem A
+
+/-- The real-valued ideal gauge, to be read only together with a corresponding
+`Mem` hypothesis. -/
+noncomputable abbrev gaugeReal
+    (N : NormalizedSymmetricOperatorIdealFamily.{u, v} 𝕜)
+    {E F : Type v}
+    [NormedAddCommGroup E] [InnerProductSpace 𝕜 E] [CompleteSpace E]
+    [NormedAddCommGroup F] [InnerProductSpace 𝕜 F] [CompleteSpace F]
+    (A : E →L[𝕜] F) : ℝ :=
+  N.toSymmetricOperatorIdealFamily.gaugeReal A
+
 /-- Ky Fan dominance where both displayed ideal norms exist.  This is the
 comparison property of the normalized symmetric ideal family itself; it does not
 assert that majorization transfers membership between ideal domains. -/

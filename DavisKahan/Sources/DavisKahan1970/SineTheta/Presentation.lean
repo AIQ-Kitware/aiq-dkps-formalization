@@ -471,7 +471,9 @@ comparison is vacuous when either norm does not exist: whenever both norms are
 defined, `δ · N(sin Θ₀) ≤ N(R)`.
 
 No residual-membership hypothesis and no membership-transfer conclusion appear
-at this source-facing boundary. -/
+at this source-facing boundary.  The two `N.Mem` arrows are written literally
+after the colon: they are the logical form of the paper's vacuity convention,
+not hypotheses required to invoke the theorem. -/
 theorem sinTheta_unbounded_formGap_sourceExact_complex
     [TopologicalSpace.SeparableSpace E]
     (N : NormalizedSymmetricOperatorIdealFamily.{0, v} ℂ)
@@ -482,8 +484,12 @@ theorem sinTheta_unbounded_formGap_sourceExact_complex
     (hexact : IsExactSpectralDecomposition A Λ₁ F₀ F₁)
     {δ : ℝ} (hδ : 0 < δ)
     (hgap : FormBoundedSylvesterGap A₀ Λ₁ δ) :
-    N.ScaledGaugeLEWhereDefined δ
-      ((ContinuousLinearMap.id ℂ E - F₀ ∘L F₀.adjoint) ∘L E₀) R := by
+    N.Mem ((ContinuousLinearMap.id ℂ E - F₀ ∘L F₀.adjoint) ∘L E₀) →
+    N.Mem R →
+      δ * N.gaugeReal ((ContinuousLinearMap.id ℂ E - F₀ ∘L F₀.adjoint) ∘L E₀) ≤
+        N.gaugeReal R := by
+  change N.ScaledGaugeLEWhereDefined δ
+    ((ContinuousLinearMap.id ℂ E - F₀ ∘L F₀.adjoint) ∘L E₀) R
   apply N.scaledGaugeLEWhereDefined_of_all_mul_kyFan_le hδ
   intro k
   by_cases hk0 : k = 0
@@ -612,7 +618,8 @@ theorem sinTheta_unbounded_formGap_symmetricNorming_real_ofRCLike
 `ℝ`.**
 
 The real sibling of `sinTheta_unbounded_formGap_sourceExact_complex`, with the
-same partial-norm/vacuity boundary. -/
+same partial-norm/vacuity boundary and the same explicit `Mem → Mem →`
+conclusion shape. -/
 theorem sinTheta_unbounded_formGap_sourceExact_real
     [TopologicalSpace.SeparableSpace E]
     (N : NormalizedSymmetricOperatorIdealFamily.{0, v} ℝ)
@@ -623,8 +630,12 @@ theorem sinTheta_unbounded_formGap_sourceExact_real
     (hexact : IsExactSpectralDecomposition A Λ₁ F₀ F₁)
     {δ : ℝ} (hδ : 0 < δ)
     (hgap : FormBoundedSylvesterGap A₀ Λ₁ δ) :
-    N.ScaledGaugeLEWhereDefined δ
-      ((ContinuousLinearMap.id ℝ E - F₀ ∘L F₀.adjoint) ∘L E₀) R := by
+    N.Mem ((ContinuousLinearMap.id ℝ E - F₀ ∘L F₀.adjoint) ∘L E₀) →
+    N.Mem R →
+      δ * N.gaugeReal ((ContinuousLinearMap.id ℝ E - F₀ ∘L F₀.adjoint) ∘L E₀) ≤
+        N.gaugeReal R := by
+  change N.ScaledGaugeLEWhereDefined δ
+    ((ContinuousLinearMap.id ℝ E - F₀ ∘L F₀.adjoint) ∘L E₀) R
   apply N.scaledGaugeLEWhereDefined_of_all_mul_kyFan_le hδ
   intro k
   by_cases hk0 : k = 0
