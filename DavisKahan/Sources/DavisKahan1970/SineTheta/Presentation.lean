@@ -448,9 +448,10 @@ theorem sinTheta_unbounded_intervalExterior_symmetricNorming_complex
 
 /-! ### The source-exact façade
 
-Davis and Kahan work on a separable Hilbert space and quantify over normalized
-unitarily invariant norms.  The theorem above is proved at strictly greater
-generality: any Hilbert space, and any symmetric norming function.  The façade
+Davis and Kahan work on a separable Hilbert space and quantify over arbitrary
+unitary-invariant norms, with displayed norm statements treated as vacuous when
+a norm does not exist.  The theorem above is proved through symmetric norming
+functions at strictly greater Hilbert-space generality.  The façade
 below is the printed statement, and it is the canonical source evidence.
 
 It is deliberately weaker than the theorem that proves it.  That is the point:
@@ -463,28 +464,38 @@ assumes; nothing here asks the caller for separability of a coordinate space. -/
 /-- **Davis--Kahan 1970, the sine-theta theorem, at the printed source scope over
 `ℂ`.**
 
-Separable ambient Hilbert space, normalized unitarily invariant norm, unbounded
-self-adjoint ambient operator, the full form-bounded gap:
+Separable ambient Hilbert space, arbitrary normalized symmetric operator ideal
+family, unbounded self-adjoint ambient operator, and the full form-bounded gap.
+The conclusion implements the paper's convention that a displayed norm
+comparison is vacuous when either norm does not exist: whenever both norms are
+defined, `δ · N(sin Θ₀) ≤ N(R)`.
 
-`δ · N(sin Θ₀) ≤ N(R)`, with `sin Θ₀ = (1 − F₀F₀*) E₀`, together with
-membership of `sin Θ₀` in the norm's ideal. -/
+No residual-membership hypothesis and no membership-transfer conclusion appear
+at this source-facing boundary. -/
 theorem sinTheta_unbounded_formGap_sourceExact_complex
     [TopologicalSpace.SeparableSpace E]
-    (N : NormalizedUnitaryInvariantNorm.{0, v} ℂ)
+    (N : NormalizedSymmetricOperatorIdealFamily.{0, v} ℂ)
     (A : E →ₗ.[ℂ] E) (A₀ : F →ₗ.[ℂ] F) (Λ₁ : G →ₗ.[ℂ] G)
     (E₀ : F →L[ℂ] E) (F₀ : H →L[ℂ] E) (F₁ : G →L[ℂ] E) (R : F →L[ℂ] E)
     (hA : IsSelfAdjoint A) (hA₀ : IsSelfAdjoint A₀) (hΛ₁ : IsSelfAdjoint Λ₁)
     (htrial : IsTrialResidual A A₀ E₀ R)
     (hexact : IsExactSpectralDecomposition A Λ₁ F₀ F₁)
     {δ : ℝ} (hδ : 0 < δ)
-    (hgap : FormBoundedSylvesterGap A₀ Λ₁ δ)
-    (hR : N.Mem R) :
-    N.Mem ((ContinuousLinearMap.id ℂ E - F₀ ∘L F₀.adjoint) ∘L E₀) ∧
-      δ * N.gauge ((ContinuousLinearMap.id ℂ E - F₀ ∘L F₀.adjoint) ∘L E₀) ≤
-        N.gauge R :=
-  normalizedUnitaryInvariant_of_symmetricNorming N hδ hR fun M hM =>
-    sinTheta_unbounded_formGap_symmetricNorming_complex M A A₀ Λ₁ E₀ F₀ F₁ R
-      hA hA₀ hΛ₁ htrial hexact hδ hgap hM
+    (hgap : FormBoundedSylvesterGap A₀ Λ₁ δ) :
+    N.ScaledGaugeLEWhereDefined δ
+      ((ContinuousLinearMap.id ℂ E - F₀ ∘L F₀.adjoint) ∘L E₀) R := by
+  apply N.scaledGaugeLEWhereDefined_of_all_mul_kyFan_le hδ
+  intro k
+  by_cases hk0 : k = 0
+  · subst k
+    simp [kyFanApproximationGauge, ContinuousLinearMap.kyFanGauge_zero_index]
+  · have hk : 0 < k := Nat.pos_of_ne_zero hk0
+    have hmain :=
+      sinTheta_unbounded_formGap_symmetricNorming_complex
+        (kyFanNormingFunction k hk) A A₀ Λ₁ E₀ F₀ F₁ R
+        hA hA₀ hΛ₁ htrial hexact hδ hgap
+        (kyFanNormingFunction_mem k hk R)
+    simpa only [kyFanNormingFunction_gauge] using hmain.2
 
 end FixedField
 
@@ -600,26 +611,32 @@ theorem sinTheta_unbounded_formGap_symmetricNorming_real_ofRCLike
 /-- **Davis--Kahan 1970, the sine-theta theorem, at the printed source scope over
 `ℝ`.**
 
-The real sibling of `sinTheta_unbounded_formGap_sourceExact_complex`; see its
-docstring for why the façade is deliberately weaker than the theorem that proves
-it. -/
+The real sibling of `sinTheta_unbounded_formGap_sourceExact_complex`, with the
+same partial-norm/vacuity boundary. -/
 theorem sinTheta_unbounded_formGap_sourceExact_real
     [TopologicalSpace.SeparableSpace E]
-    (N : NormalizedUnitaryInvariantNorm.{0, v} ℝ)
+    (N : NormalizedSymmetricOperatorIdealFamily.{0, v} ℝ)
     (A : E →ₗ.[ℝ] E) (A₀ : F →ₗ.[ℝ] F) (Λ₁ : G →ₗ.[ℝ] G)
     (E₀ : F →L[ℝ] E) (F₀ : H →L[ℝ] E) (F₁ : G →L[ℝ] E) (R : F →L[ℝ] E)
     (hA : IsSelfAdjoint A) (hA₀ : IsSelfAdjoint A₀) (hΛ₁ : IsSelfAdjoint Λ₁)
     (htrial : IsTrialResidual A A₀ E₀ R)
     (hexact : IsExactSpectralDecomposition A Λ₁ F₀ F₁)
     {δ : ℝ} (hδ : 0 < δ)
-    (hgap : FormBoundedSylvesterGap A₀ Λ₁ δ)
-    (hR : N.Mem R) :
-    N.Mem ((ContinuousLinearMap.id ℝ E - F₀ ∘L F₀.adjoint) ∘L E₀) ∧
-      δ * N.gauge ((ContinuousLinearMap.id ℝ E - F₀ ∘L F₀.adjoint) ∘L E₀) ≤
-        N.gauge R :=
-  normalizedUnitaryInvariant_of_symmetricNorming N hδ hR fun M hM =>
-    sinTheta_unbounded_formGap_symmetricNorming_real M A A₀ Λ₁ E₀ F₀ F₁ R
-      hA hA₀ hΛ₁ htrial hexact hδ hgap hM
+    (hgap : FormBoundedSylvesterGap A₀ Λ₁ δ) :
+    N.ScaledGaugeLEWhereDefined δ
+      ((ContinuousLinearMap.id ℝ E - F₀ ∘L F₀.adjoint) ∘L E₀) R := by
+  apply N.scaledGaugeLEWhereDefined_of_all_mul_kyFan_le hδ
+  intro k
+  by_cases hk0 : k = 0
+  · subst k
+    simp [kyFanApproximationGauge, ContinuousLinearMap.kyFanGauge_zero_index]
+  · have hk : 0 < k := Nat.pos_of_ne_zero hk0
+    have hmain :=
+      sinTheta_unbounded_formGap_symmetricNorming_real
+        (kyFanNormingFunction k hk) A A₀ Λ₁ E₀ F₀ F₁ R
+        hA hA₀ hΛ₁ htrial hexact hδ hgap
+        (kyFanNormingFunction_mem k hk R)
+    simpa only [kyFanNormingFunction_gauge] using hmain.2
 
 end FixedFieldReal
 

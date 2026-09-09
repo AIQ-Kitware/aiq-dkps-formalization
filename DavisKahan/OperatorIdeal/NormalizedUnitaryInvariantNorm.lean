@@ -23,7 +23,8 @@ Fan dominance also transfers ideal membership: if the right-hand operator has fi
 gauge and every Ky Fan gauge of the left-hand operator is smaller, the left-hand
 operator must have finite gauge as well.  That domain-solidity assertion is stronger
 than the where-defined comparison needed by the source-facing Davis--Kahan
-inequalities.  The base record therefore does not include Fan dominance.
+inequalities.  The base record therefore carries only where-defined Fan comparison; it does not
+carry the stronger membership-transferring form.
 
 ## Mathematical data in the base record
 
@@ -37,8 +38,8 @@ inequalities.  The base record therefore does not include Fan dominance.
 * the rank-one normalization `‖u v*‖ = ‖u‖ ‖v‖`, represented by
   `gauge_rankOne_eq_one` after normalizing the vectors.
 
-Fan comparison is kept as a separate property.  Adding the stronger unconditional
-property with `NormalizedSymmetricOperatorIdealFamily.withFanDominance` recovers a
+Where-defined Fan comparison is part of the mathematical base record.  Adding the
+stronger unconditional property with `NormalizedSymmetricOperatorIdealFamily.withFanDominance` recovers a
 `NormalizedUnitaryInvariantNorm`.  Conversely,
 `NormalizedUnitaryInvariantNorm.toNormalizedSymmetricOperatorIdealFamily` forgets
 that extra property.
@@ -239,7 +240,8 @@ end NormalizedUnitaryInvariantNorm
 
 `NormalizedSymmetricOperatorIdealFamily` is the mathematical record obtained by
 adding the rank-one normalization to `TauCeti.SymmetricOperatorIdealFamily`.
-It deliberately does not include Fan dominance.
+It includes only the standard where-defined Ky Fan comparison, not unconditional
+Fan dominance of the total extended gauge.
 
 `NormalizedUnitaryInvariantNorm` is the stronger record obtained by adding the
 unconditional Fan-dominance property.  The conversions below make that relation
@@ -267,7 +269,8 @@ This is a symmetric operator ideal family -- carrying its domain, gauge, norm la
 adjoint symmetry, and two-sided ideal law -- together with the rank-one
 normalization `‖u v*‖ = ‖u‖ ‖v‖`.
 
-No Fan-dominance or domain-solidity property is part of this structure. -/
+The standard Ky Fan comparison is stored only at its where-defined scope.  No
+membership-transfer or domain-solidity property is part of this structure. -/
 structure NormalizedSymmetricOperatorIdealFamily (𝕜 : Type u) [RCLike 𝕜] where
   /-- The symmetric ideal family supplying the gauge, its domain, and all the
   norm and ideal laws. -/
@@ -279,10 +282,91 @@ structure NormalizedSymmetricOperatorIdealFamily (𝕜 : Type u) [RCLike 𝕜] w
       [NormedAddCommGroup F] [InnerProductSpace 𝕜 F] [CompleteSpace F]
       {V : E →L[𝕜] F}, ‖V‖ = 1 → V.rank ≤ (1 : Cardinal) →
       (toSymmetricOperatorIdealFamily.gauge V).toReal = 1
+  /-- Ky Fan dominance where both displayed ideal norms exist.  This is the
+  partial-domain comparison theorem used by Davis--Kahan; unlike unconditional
+  dominance of the extended `ℝ≥0∞` gauge, it does not transfer ideal membership. -/
+  gauge_le_of_forall_kyFanApproximationGauge_le_defined :
+    ∀ {E F E' F' : Type v}
+      [NormedAddCommGroup E] [InnerProductSpace 𝕜 E] [CompleteSpace E]
+      [NormedAddCommGroup F] [InnerProductSpace 𝕜 F] [CompleteSpace F]
+      [NormedAddCommGroup E'] [InnerProductSpace 𝕜 E'] [CompleteSpace E']
+      [NormedAddCommGroup F'] [InnerProductSpace 𝕜 F'] [CompleteSpace F']
+      {A : E →L[𝕜] F} {B : E' →L[𝕜] F'},
+      toSymmetricOperatorIdealFamily.gauge A ≠ ⊤ →
+      toSymmetricOperatorIdealFamily.gauge B ≠ ⊤ →
+      (∀ k, kyFanApproximationGauge k A ≤ kyFanApproximationGauge k B) →
+        toSymmetricOperatorIdealFamily.gauge A ≤
+          toSymmetricOperatorIdealFamily.gauge B
 
 namespace NormalizedSymmetricOperatorIdealFamily
 
 variable {𝕜 : Type u} [RCLike 𝕜]
+
+/-- Ky Fan dominance where both displayed ideal norms exist.  This is the
+comparison property of the normalized symmetric ideal family itself; it does not
+assert that majorization transfers membership between ideal domains. -/
+def HasFanDominanceWhereDefined
+    (N : NormalizedSymmetricOperatorIdealFamily.{u, v} 𝕜) : Prop :=
+  ∀ {E F E' F' : Type v}
+    [NormedAddCommGroup E] [InnerProductSpace 𝕜 E] [CompleteSpace E]
+    [NormedAddCommGroup F] [InnerProductSpace 𝕜 F] [CompleteSpace F]
+    [NormedAddCommGroup E'] [InnerProductSpace 𝕜 E'] [CompleteSpace E']
+    [NormedAddCommGroup F'] [InnerProductSpace 𝕜 F'] [CompleteSpace F']
+    {A : E →L[𝕜] F} {B : E' →L[𝕜] F'},
+    N.toSymmetricOperatorIdealFamily.gauge A ≠ ⊤ →
+    N.toSymmetricOperatorIdealFamily.gauge B ≠ ⊤ →
+    (∀ k, kyFanApproximationGauge k A ≤ kyFanApproximationGauge k B) →
+      N.toSymmetricOperatorIdealFamily.gauge A ≤
+        N.toSymmetricOperatorIdealFamily.gauge B
+
+/-- Every normalized symmetric operator ideal family carries where-defined Fan dominance. -/
+theorem hasFanDominanceWhereDefined (N : NormalizedSymmetricOperatorIdealFamily.{u, v} 𝕜) :
+    N.HasFanDominanceWhereDefined :=
+  N.gauge_le_of_forall_kyFanApproximationGauge_le_defined
+
+/-- A scaled norm comparison with Davis--Kahan's partial-norm convention: when
+both displayed norms exist, `c ‖A‖ ≤ ‖B‖`; if either norm does not exist, there
+is no numerical obligation. -/
+def ScaledGaugeLEWhereDefined
+    (N : NormalizedSymmetricOperatorIdealFamily.{u, v} 𝕜)
+    {E F E' F' : Type v}
+    [NormedAddCommGroup E] [InnerProductSpace 𝕜 E] [CompleteSpace E]
+    [NormedAddCommGroup F] [InnerProductSpace 𝕜 F] [CompleteSpace F]
+    [NormedAddCommGroup E'] [InnerProductSpace 𝕜 E'] [CompleteSpace E']
+    [NormedAddCommGroup F'] [InnerProductSpace 𝕜 F'] [CompleteSpace F']
+    (c : ℝ) (A : E →L[𝕜] F) (B : E' →L[𝕜] F') : Prop :=
+  N.toSymmetricOperatorIdealFamily.Mem A →
+  N.toSymmetricOperatorIdealFamily.Mem B →
+    c * N.toSymmetricOperatorIdealFamily.gaugeReal A ≤
+      N.toSymmetricOperatorIdealFamily.gaugeReal B
+
+/-- Transport scaled Ky Fan inequalities through the standard where-defined Fan
+comparison, without deriving membership of either displayed operator. -/
+theorem scaledGaugeLEWhereDefined_of_all_mul_kyFan_le
+    (N : NormalizedSymmetricOperatorIdealFamily.{u, v} 𝕜)
+    {E F E' F' : Type v}
+    [NormedAddCommGroup E] [InnerProductSpace 𝕜 E] [CompleteSpace E]
+    [NormedAddCommGroup F] [InnerProductSpace 𝕜 F] [CompleteSpace F]
+    [NormedAddCommGroup E'] [InnerProductSpace 𝕜 E'] [CompleteSpace E']
+    [NormedAddCommGroup F'] [InnerProductSpace 𝕜 F'] [CompleteSpace F']
+    {c : ℝ} {A : E →L[𝕜] F} {B : E' →L[𝕜] F'}
+    (hc : 0 < c)
+    (hky : ∀ k, c * kyFanApproximationGauge k A ≤ kyFanApproximationGauge k B) :
+    N.ScaledGaugeLEWhereDefined c A B := by
+  intro hA hB
+  let S := N.toSymmetricOperatorIdealFamily
+  have hscaledMem : S.Mem ((((c : ℝ) : 𝕜)) • A) := S.smul_mem (((c : ℝ) : 𝕜)) hA
+  have hscaled : ∀ k, kyFanApproximationGauge k ((((c : ℝ) : 𝕜)) • A) ≤
+      kyFanApproximationGauge k B := by
+    intro k
+    rw [kyFanApproximationGauge_smul, RCLike.norm_ofReal, abs_of_pos hc]
+    exact hky k
+  have hle : S.gauge ((((c : ℝ) : 𝕜)) • A) ≤ S.gauge B :=
+    N.hasFanDominanceWhereDefined hscaledMem hB hscaled
+  have hreal : S.gaugeReal ((((c : ℝ) : 𝕜)) • A) ≤ S.gaugeReal B :=
+    ENNReal.toReal_mono hB hle
+  rw [S.gaugeReal_smul (((c : ℝ) : 𝕜)) hA, RCLike.norm_ofReal, abs_of_pos hc] at hreal
+  exact hreal
 
 /-- Unconditional Fan dominance for a normalized symmetric operator ideal family.
 
@@ -320,6 +404,9 @@ def toNormalizedSymmetricOperatorIdealFamily (N : NormalizedUnitaryInvariantNorm
   toSymmetricOperatorIdealFamily :=
     N.toFanDominantIdealFamily.toSymmetricOperatorIdealFamily
   gauge_rankOne_eq_one := fun hV hr => N.gauge_rankOne_eq_one hV hr
+  gauge_le_of_forall_kyFanApproximationGauge_le_defined := by
+    intro E F E' F' _ _ _ _ _ _ _ _ _ _ _ _ A B _ _ hAB
+    exact N.toFanDominantIdealFamily.gauge_le_of_forall_kyFanApproximationGauge_le hAB
 
 /-- The forgotten base family satisfies unconditional Fan dominance by the field carried above it. -/
 theorem toNormalizedSymmetricOperatorIdealFamily_hasFanDominance (N : NormalizedUnitaryInvariantNorm.{u, v} 𝕜) :

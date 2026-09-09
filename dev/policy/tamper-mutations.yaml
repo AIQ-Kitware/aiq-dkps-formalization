@@ -38,9 +38,10 @@ mutations:
   - name: source-uin-replaced-by-symmetric-norming-only
     description: >-
       The sin Theta clause is carried by the source-exact facade, which
-      quantifies over the literal normalized unitarily invariant norm class and
-      carries the paper's separable ambient scope.  Retargeting it at the
-      SymmetricNormingFunction theorem beneath drops both.
+      quantifies over the normalized symmetric operator ideal family at the
+      paper's where-defined/vacuous norm boundary and carries separable ambient
+      scope. Retargeting it at the SymmetricNormingFunction theorem beneath drops
+      the canonical source boundary.
     file: dev/davis-kahan-1970-formalization-result-inventory.json
     find: '"primary": "TauCeti.DavisKahan1970.sinTheta_unbounded_formGap_sourceExact_complex"'
     replace: '"primary": "TauCeti.DavisKahan1970.sinTheta_unbounded_formGap_symmetricNorming_complex"'
@@ -113,10 +114,10 @@ mutations:
     file: dev/davis-kahan-1970-formalization-result-inventory.json
     find: |-
       "capability_classes": [],
-                "note": "The source-exact façade over C: separable ambient scope and the literal normalized unitarily invariant norm class."
+                "note": "Source-exact fixed-field façade at separable ambient scope over `NormalizedSymmetricOperatorIdealFamily`; the result is a where-defined norm comparison and carries no residual-membership premise or membership-transfer conclusion."
     replace: |-
       "capability_classes": ["ContinuousLinearMap.HasMinMaxLowerBoundEverywhere"],
-                "note": "The source-exact façade over C: separable ambient scope and the literal normalized unitarily invariant norm class."
+                "note": "Source-exact fixed-field façade at separable ambient scope over `NormalizedSymmetricOperatorIdealFamily`; the result is a where-defined norm comparison and carries no residual-membership premise or membership-transfer conclusion."
     detected_by: ["python3", "scripts/check_davis_kahan_1970_result_inventory.py"]
 
   - name: scalar-scope-mislabelled

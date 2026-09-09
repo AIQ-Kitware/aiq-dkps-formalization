@@ -1061,6 +1061,8 @@ source's definedness convention. -/
 
 #check @TauCeti.DavisKahan.ExactSinTheta.NormalizedSymmetricOperatorIdealFamily
 #check @TauCeti.DavisKahan.ExactSinTheta.NormalizedSymmetricOperatorIdealFamily.HasFanDominance
+#check @TauCeti.DavisKahan.ExactSinTheta.NormalizedSymmetricOperatorIdealFamily.HasFanDominanceWhereDefined
+#check @TauCeti.DavisKahan.ExactSinTheta.NormalizedSymmetricOperatorIdealFamily.ScaledGaugeLEWhereDefined
 #check @TauCeti.DavisKahan.ExactSinTheta.NormalizedSymmetricOperatorIdealFamily.withFanDominance
 #check @TauCeti.DavisKahan.ExactSinTheta.NormalizedUnitaryInvariantNorm.toNormalizedSymmetricOperatorIdealFamily_withFanDominance
 

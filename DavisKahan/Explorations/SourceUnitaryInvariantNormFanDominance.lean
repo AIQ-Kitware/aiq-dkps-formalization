@@ -2172,6 +2172,26 @@ noncomputable def finiteRankNormalizedSymmetricOperatorIdealFamily :
     have hfin : ProbeFiniteRank V := ⟨1, hVrank⟩
     change (finiteRankOperatorNormGauge V).toReal = 1
     rw [finiteRankOperatorNormGauge, ite_eq_left hfin, toReal_enorm, hVnorm]
+  gauge_le_of_forall_kyFanApproximationGauge_le_defined := by
+    intro E F E' F' _ _ _ _ _ _ _ _ _ _ _ _ A B hA hB hAB
+    classical
+    have hAfin : ProbeFiniteRank A := by
+      by_contra hn
+      change finiteRankOperatorNormGauge A ≠ ⊤ at hA
+      rw [finiteRankOperatorNormGauge, if_neg hn] at hA
+      exact hA rfl
+    have hBfin : ProbeFiniteRank B := by
+      by_contra hn
+      change finiteRankOperatorNormGauge B ≠ ⊤ at hB
+      rw [finiteRankOperatorNormGauge, if_neg hn] at hB
+      exact hB rfl
+    change finiteRankOperatorNormGauge A ≤ finiteRankOperatorNormGauge B
+    rw [finiteRankOperatorNormGauge, if_pos hAfin,
+      finiteRankOperatorNormGauge, if_pos hBfin]
+    have h1 := hAB 1
+    rw [kyFanApproximationGauge_one, kyFanApproximationGauge_one] at h1
+    rw [← ofReal_norm, ← ofReal_norm]
+    exact ENNReal.ofReal_le_ofReal h1
 
 /-! ### Probe 18: expose the exact carrier/gauge boundary -/
 
@@ -2402,22 +2422,10 @@ theorem normalizedSymmetricFamilyLaws_do_not_imply_fanDominanceSeparable
 
 /-! ### Probe 22: split the exact current production property -/
 
-/-- Fan dominance only where both source norms exist, without a separability
-restriction.  This is the exact where-defined component of the current
-production `NormalizedSymmetricOperatorIdealFamily.HasFanDominance` property. -/
-def HasFanDominanceWhereDefined
+/-- Exploration spelling of the now-production where-defined Fan property. -/
+abbrev HasFanDominanceWhereDefined
     (N : NormalizedSymmetricOperatorIdealFamily.{0, v} ℂ) : Prop :=
-  ∀ {E F E' F' : Type v}
-    [NormedAddCommGroup E] [InnerProductSpace ℂ E] [CompleteSpace E]
-    [NormedAddCommGroup F] [InnerProductSpace ℂ F] [CompleteSpace F]
-    [NormedAddCommGroup E'] [InnerProductSpace ℂ E'] [CompleteSpace E']
-    [NormedAddCommGroup F'] [InnerProductSpace ℂ F'] [CompleteSpace F']
-    {A : E →L[ℂ] F} {B : E' →L[ℂ] F'},
-    N.toSymmetricOperatorIdealFamily.gauge A ≠ ⊤ →
-    N.toSymmetricOperatorIdealFamily.gauge B ≠ ⊤ →
-    (∀ k, kyFanApproximationGauge k A ≤ kyFanApproximationGauge k B) →
-      N.toSymmetricOperatorIdealFamily.gauge A ≤
-        N.toSymmetricOperatorIdealFamily.gauge B
+  N.HasFanDominanceWhereDefined
 
 /-- The membership-solidity component of the current production Fan-dominance
 property. -/
