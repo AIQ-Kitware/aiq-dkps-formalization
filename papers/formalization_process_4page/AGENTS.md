@@ -45,11 +45,13 @@ Additional constraints:
 10. Keep the current source-review state accurate without turning a successful
    review into a semantic-completeness claim. Distinguish the latest review
    result from independent replication when that distinction affects a claim.
-11. Keep the workflow figure as Figure 1. Binary render outputs (PNG, PDF,
-    ZIP, etc.) are local artifacts only and must never be staged or committed.
-    The dashboard screenshot is an untracked appendix render.
-12. Figure 1 names Tau Ceti as a possible destination for reusable foundations,
-    so retain a brief accurate explanation and citation.
+11. Keep the workflow figure as Figure 1. Its tracked source is
+    `figures/formalization_workflow.tex`; binary render outputs (PNG, PDF, ZIP,
+    etc.) are local artifacts only and must never be staged or committed. The
+    dashboard screenshot is an untracked appendix render.
+12. Figure 1 should remain project-neutral and should not name Tau Ceti or local
+    helper tools. Introduce Tau Ceti later in the main text, with an accurate
+    explanation and citation, when the reusable foundations are discussed.
 13. The worked example is the historical ambient sin-2-Theta semantic
     mismatch present at the 17 August 2026 checkpoint. Real and complex directed
     residual witnesses already covered the unbounded scope, and real and complex
@@ -121,3 +123,27 @@ Additional constraints:
     during revision but not part of the scientific exposition: dates, commits,
     review-state transitions, why a wording changed, and alternative historical
     interpretations. Do not promote those notes into rendered prose by default.
+30. Keep Section 2 as Related Work. The main formalization-process section comes
+    after "What we formalized" and should refer back to Figure 1.
+31. Figure 1 and the process bullets use the same five stages, in this order:
+    **Gather Context**, **Decompose**, **Find Foundations**, **Formalize**, and
+    **Skeptical Review**. Gather Context includes PDFs, transcriptions, and prose
+    distillations; Decompose produces intermediate obligations/blueprint-like
+    structure; Find Foundations searches Mathlib, prior formalizations, and the
+    literature; Formalize includes ordinary compile/revise iteration; Skeptical
+    Review is source-to-statement review by a non-implementing agent when
+    possible. Do not split compiler feedback into its own conceptual stage.
+32. In anonymous main-text prose, describe local maintenance/query tooling by
+    function rather than product name. Exact helper-tool names and repository
+    interfaces belong in the appendix or supplementary artifact.
+33. For this project's model disclosure, do not distinguish the ChatGPT and
+    Codex interfaces. Refer to them collectively as ChatGPT. Preserve product
+    names when accurately reporting a cited practitioner's workflow.
+34. Introduce Tau Ceti before naming it in rendered prose. Do not put Tau Ceti
+    in Figure 1. The first main-text mention should identify it as an AI-authored
+    Lean library downstream of Mathlib and cite it.
+35. State the loop and exit criterion in prose after the five process bullets.
+    Refactoring/reorganization is part of maintaining reusable foundations as
+    the project grows, not another figure stage. Completion of a target requires
+    both a checked formal treatment and a separate source-to-statement review;
+    non-obvious representation correspondences must also be established.
