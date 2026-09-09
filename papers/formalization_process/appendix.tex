@@ -59,248 +59,168 @@ not Davis--Kahan subject-matter experts, so disagreements about source meaning
 were often investigated by probing the models in different ways rather than by
 an independent expert reading of the theorem.
 
-\section{Davis--Kahan background and Formalization 1}
+\section{Davis--Kahan sine-theta notation and Formalization 1}
 \label{app:formalization1}
 
-In the source notation, $T=A+H$ is the perturbed self-adjoint operator,
-$P\mathcal H$ reduces $A$, and $Q\mathcal H$ reduces $T$
-\citep{davis1970rotation}.  For a possibly unbounded operator, reduction means
-that the orthogonal projections onto the subspace and its complement preserve
-the operator domain and that both summands are invariant there.  In the bounded
-case this is the usual block-diagonal decomposition. With $E_0$ an isometry onto $P\mathcal H$,
-$AE_0=E_0A_0$ defines the unperturbed trial restriction. The general residual is
-\begin{equation}
- R=TE_0-E_0A_0=HE_0.
- \label{eq:dk-general-residual}
-\end{equation}
-In finite dimensions, the Rayleigh--Ritz choice is
-\begin{equation}
- A_0=E_0^*TE_0,
- \label{eq:dk-trial-compression}
-\end{equation}
-which makes the trial-side diagonal block $H_0$ of the perturbation zero.
-Only under this specialization is the residual exactly the component outside
-the trial space:
-\begin{equation}
- R=(I-P)TE_0.
- \label{eq:dk-trial-residual}
-\end{equation}
-It then vanishes precisely when the trial space is invariant under $T$.
-In general, $R=0$ means that the specified trial operator and embedding satisfy
-the exact intertwining relation, which is stronger than invariance alone.
-
-Formalization~1 displays an \emph{ambient} theorem, not a residual theorem.
-Its local names \texttt{A} and \texttt{B} denote the two bounded self-adjoint
-operators; \texttt{U} reduces \texttt{A} and \texttt{V} reduces \texttt{B}.
-The perturbation in its conclusion is \texttt{B - A}. No trial operator
-\texttt{M} or residual \texttt{R} occurs in that declaration.
-
-The hypotheses \texttt{hUspec} and \texttt{hUspec'} separate the restrictions
-of \texttt{A} to $U$ and $U^\perp$ by a gap $d>0$: their spectra lie in
-$[a,b]$ and outside $(a-d,b+d)$, respectively. This gap is on the first
-operator. For the ambient double-angle bound, Davis--Kahan explicitly permit
-interchanging the two operators. Thus this placement is not a defect in the
-displayed ambient theorem. The directed residual inequality does not admit
-that interchange in general. The historical discrepancy is the bounded
-ambient operator type, not the choice of which operator supplies this gap.
-
-For two subspaces of the same finite dimension with orthonormal coordinate
-maps $E_0$ and $F_0$, their principal angles $\theta_j\in[0,\pi/2]$ satisfy
-$\cos\theta_j=\sigma_j(F_0^*E_0)$.  Equivalently, they pair directions in the two
-subspaces by their overlap.  The directed sine measures the part of a trial
-direction outside the exact subspace; its matrix representative is
-$(I-Q)E_0$.  The doubled-angle quantity applies $\sin(2\theta_j)$ to the
-angles, with the trial-to-exact orientation fixed by the source.  The bound
+The sine-theta theorem is naturally expressed with coordinate maps.  The
+ambient self-adjoint operator is $A$.  The trial-coordinate space carries a
+possibly unbounded self-adjoint operator $A_0$, and the isometry
+$E_0$ embeds those coordinates into the ambient Hilbert space.  Its range is
+the trial subspace.  The bounded residual $R$ extends
 \[
-  \delta\,N(\sin 2\Theta_0)\le 2N(R)
+  AE_0-E_0A_0
 \]
-therefore controls the doubled-angle quantity by the residual relative to the
-gap.  A small doubled sine alone does not imply a small angle:
-$\sin(2\theta)$ vanishes at both $0$ and $\pi/2$.  Recovering a small-angle bound
-requires an appropriate angle branch, such as $0\le\theta\le\pi/4$.
+from the domain of $A_0$.  The desired exact subspace is represented by an
+isometry $F_0$; $F_1$ represents its orthogonal complement, and the
+self-adjoint operator $\Lambda_1$ is the complementary spectral block.  The
+exact-coordinate hypotheses say that the ranges of $F_0$ and $F_1$ are
+orthogonal and complete and that $F_1$ intertwines $\Lambda_1$ with $A$.
 
-Formalization~1 states the estimate for complex Hilbert spaces.  Its ambient
-Hilbert-space assumptions are omitted from the displayed code.  In the syntax
-shown there, \texttt{E }$\mathrel{\to}\!\mathtt{L}[\mathbb C]$\texttt{ E}
-means a bounded continuous complex-linear map $E\to E$.  It elaborates to
-\texttt{ContinuousLinearMap (RingHom.id Complex) E E}; its boundedness is the historical scope restriction. The complex field
-is not itself the project-level mismatch: a real sibling was present.  The following
-table uses the same surface syntax as the displayed formalization.
+The directed sine operator
+\[
+  \sin\Theta_0=(I-F_0F_0^*)E_0
+\]
+measures the component of a trial vector orthogonal to the desired exact
+subspace.  In finite dimensions its singular values are the sines of the
+principal angles between the two subspaces.  Davis--Kahan's estimate bounds
+this operator by the residual as in \cref{eq:sin-theta}.
+
+Formalization~1 is already scalar-generic over real and complex Hilbert spaces
+and uses potentially unbounded operators.  Its defect is the explicit
+\texttt{hspectral} hypothesis.  The two alternatives in that hypothesis say
+that one spectrum lies in a finite interval $[\beta,\alpha]$ and the other lies
+outside the enlarged open interval
+$(\beta-\delta,\alpha+\delta)$.  Swapping the two blocks gives the second
+alternative.  Davis--Kahan also allow the separating interval to be
+half-infinite, so neither block need have spectrum contained in a finite
+interval.  Those cases cannot in general satisfy Formalization~1.
+
+The historical signature also contains two scalar-generic capability classes.
+They package analytic results used by the proof and have instances for the real
+and complex source fields; they are not the gap-scope defect discussed in the
+paper.  Likewise, the norm API in this historical declaration predates the
+current where-defined interface.  The worked mismatch is specifically the
+finite interval/exterior restriction.
 
 \begin{table}[H]
 \centering
 \small
-\caption{Reader's guide to the displayed ambient theorem in Formalization~1.}
+\caption{Reader's guide to Formalization~1.}
 \label{tab:formalization1-glossary}
-\begin{tabularx}{\linewidth}{@{}>{\raggedright\arraybackslash}p{0.39\linewidth}>{\raggedright\arraybackslash}X@{}}
+\begin{tabularx}{\linewidth}{@{}>{\raggedright\arraybackslash}p{0.41\linewidth}>{\raggedright\arraybackslash}X@{}}
 \toprule
 Lean expression & Mathematical role \\
 \midrule
-\texttt{A B : E }$\mathrel{\to}\!\mathtt{L}[\mathbb C]$\texttt{ E}
-  & Both ambient operators are bounded continuous complex-linear maps. \\
-\texttt{IsSelfAdjoint A}
-  & $A=A^*$; likewise for $B$. \\
-\texttt{Reduces A U}
-  & Both $U$ and $U^\perp$ are invariant under $A$; the other hypothesis
-    says that $V$ reduces $B$. \\
-\texttt{U.HasOrthogonalProjection}
-  & The orthogonal projection onto $U$ is available; likewise for $V$.
-    These instances are supplied by the surrounding context. \\
-\texttt{compressOperator U A}
-  & The compression of $A$ to $U$, equal to its restriction because $U$
-    reduces $A$. \\
-\texttt{spectrum }$\mathbb R$\texttt{ (...)}
-  & The real spectrum of that self-adjoint compression. \\
-\texttt{SymmetricNormingFunction}
-  & The presentation's audited rename of the historical norm record.
-    It supplies the ideal and gauge; the exact sidecar retains the original name. \\
-\texttt{N.Mem (B - A)}
-  & The perturbation lies in the ideal on which $N$ is finite. Unlike the
-    where-defined boundary used in Formalization~2, this historical theorem then \emph{concludes}
-    angle ideal membership as well. \\
-\texttt{N.gauge (B - A)}
-  & The real-valued perturbation norm used on the right-hand side. \\
-\texttt{paperSinTwoAngleOperatorC U V}
-  & The ambient doubled-angle operator. Its two angle blocks must not be
-    replaced by a single directed block when comparing general ideal norms. \\
+\texttt{RCLike} $\mathbb K$
+  & The scalar field may be real or complex. \\
+\texttt{A}, \texttt{A0}, $\Lambda_1$ as partial linear maps
+  & The ambient, trial, and complementary exact self-adjoint operators; each
+    may be unbounded. \\
+\texttt{E0}, \texttt{F0}, \texttt{F1}
+  & Bounded coordinate maps for the trial subspace, desired exact subspace,
+    and its orthogonal complement. \\
+\texttt{IsTrialResidual A A0 E0 R}
+  & $E_0$ is isometric, maps $\operatorname{dom}A_0$ into
+    $\operatorname{dom}A$, and $R=AE_0-E_0A_0$ on that domain. \\
+\texttt{IsExactSpectralDecomposition A Lambda1 F0 F1}
+  & $F_0,F_1$ are orthogonal isometric coordinates forming a complete
+    decomposition, and $F_1\Lambda_1=AF_1$ on $\operatorname{dom}\Lambda_1$. \\
+\texttt{hSinTheta0}
+  & Identifies the displayed angle operator with $(I-F_0F_0^*)E_0$. \\
+\texttt{beta alpha delta}, \texttt{hspectral}
+  & The finite interval/exterior gap.  This is the historical restriction:
+    it does not express the two half-infinite source configurations. \\
+\texttt{hR : N.Mem R}
+  & The historical norm interface assumes the residual is in the domain of
+    the gauge used in its conclusion. \\
 \bottomrule
 \end{tabularx}
 \end{table}
 
-The historical ambient conclusion asserts ideal membership and bounds the
-ambient doubled-angle gauge by twice the gauge of \texttt{B - A}.  These norm and spectral conditions
-are part of the statement.  The displayed declaration is complex and bounded;
-a real ambient sibling also existed.  The project-level mismatch was therefore
-the bounded ambient operator type, which did not cover Davis--Kahan's unbounded
-setting.
-
 \section{Reading Formalization 2}
 \label{app:formalization2}
 
-Formalization~2 uses partial linear maps because $A$ and $T$ may be unbounded.
-Let
-\[
-  \mathcal D=\operatorname{dom}A=\operatorname{dom}T.
-\]
-For such an operator, the hypothesis that a subspace $P$ \emph{reduces} $A$
-has two parts: the orthogonal projections onto $P$ and $P^\perp$ map
-$\mathcal D$ back into $\mathcal D$, and $A$ maps vectors in each summand back
-into that summand.  Thus the restrictions $A|_P$ and $A|_{P^\perp}$ are
-well-defined on their induced domains.  The analogous hypothesis for $Q$ and
-$T$ lets the theorem speak about the two perturbed spectral blocks
-$T|_Q$ and $T|_{Q^\perp}$.
+Formalization~2 keeps the same trial/exact decomposition but changes the two
+interfaces that matter for the worked comparison.  First,
+\texttt{FormBoundedSylvesterGap A0 Lambda1 delta} includes the finite
+interval/exterior case and both ordered semibounded cases.  In the ordered
+cases one operator is semibounded above by $c$ and the other semibounded below
+by $c+\delta$, in either orientation.  The source states these cases through
+spectral half-lines; for self-adjoint operators the source spectral assumptions
+imply the form bounds used by the Lean theorem.  Thus this formal gap predicate
+is at least as permissive as the source hypothesis.
 
-The theorem has one shared setup followed by two conclusions.  The shared setup
-contains the hypotheses needed by both Davis--Kahan inequalities; the residual
-and perturbation assumptions appear only in the conclusions that use them.
-\Cref{tab:formalization2-glossary} translates the displayed Lean signature.
+Second, the norm object records a partial domain of definition.  The conclusion
+is written as two implications,
+\[
+  N(\sin\Theta_0)\ \text{defined},\qquad N(R)\ \text{defined}
+  \quad\Longrightarrow\quad
+  \delta N(\sin\Theta_0)\le N(R),
+\]
+rather than using an ideal-membership transfer as part of the theorem boundary.
+
+\Cref{tab:formalization2-glossary} translates the rest of the current signature.
 
 \begin{table}[H]
 \centering
 \small
 \caption{Reader's guide to Formalization~2.}
 \label{tab:formalization2-glossary}
-\begin{tabularx}{\linewidth}{@{}>{\raggedright\arraybackslash}p{0.40\linewidth}>{\raggedright\arraybackslash}X@{}}
+\begin{tabularx}{\linewidth}{@{}>{\raggedright\arraybackslash}p{0.42\linewidth}>{\raggedright\arraybackslash}X@{}}
 \toprule
 Lean expression & Mathematical role \\
 \midrule
-\texttt{K} with \texttt{RCLike K}
+\texttt{mathbbK} with \texttt{RCLike}
   & The scalar field is real or complex. \\
-\texttt{E} with inner-product, completeness, and \texttt{SeparableSpace}
-  & The ambient space is a separable Hilbert space. \\
+\texttt{SeparableSpace E}
+  & The ambient Hilbert space is separable, as in the source setup. \\
 \texttt{N : NormalizedSymmetric\-OperatorIdeal\-Family}
-  & The unitarily invariant norm object used by the theorem, including its
-    domain of definition and the where-defined Fan comparison described below. \\
-\texttt{A T : E }$\mathrel{\to}\!\mathtt{L}_{\rm p}[\mathbb K]$\texttt{ E}
-  & Possibly unbounded linear operators $A$ and $T$.  The self-adjointness
-    hypotheses \texttt{hA} and \texttt{hT} state $A=A^*$ and $T=T^*$. \\
-\texttt{hdom : T.domain = A.domain}
-  & The two operators use the same ambient domain $\mathcal D$. \\
-\texttt{P Q : Submodule K E}
-  & $P$ is the trial subspace and $Q$ is the comparison spectral subspace.  In
-    applications a trial subspace is often an approximation to a spectral
-    subspace of interest.  \texttt{HasOrthogonalProjection} supplies their
-    orthogonal projections. \\
-\texttt{hP : ReducesSubspace A P}
-  & Projection onto $P$ and $P^\perp$ preserves $\mathcal D$, and both
-    summands are invariant under $A$ on that domain.  \texttt{hQ} says the
-    analogous thing for $T$ and $Q$. \\
-\texttt{hgapPos : 0 < gap}
-  & The spectral separation constant is positive. \\
-\texttt{hgap : FormBoundedSylvesterGap (...)}
-  & The restrictions of $T$ to $Q$ and $Q^\perp$ satisfy the Davis--Kahan
-    spectral-gap condition.  This predicate includes the interval/exterior and
-    half-infinite ordered configurations used by the source. \\
-\midrule
-\texttt{forall R : P }$\mathrel{\to}\!\mathtt{L}[\mathbb K]$\texttt{ E}
-  & The directed clause may be invoked with any bounded residual
-    $R:P\mathcal H\to\mathcal H$. \\
-\texttt{forall p : P, forall hp : p in T.domain, ...}
-  & The residual identity is required only for trial vectors that lie in the
-    common domain: $Tp=Ap+Rp$ for $p\in P\mathcal H\cap\mathcal D$. \\
-\texttt{by rw [<- hdom]; exact hp}
-  & Lean converts the proof $p\in\operatorname{dom}T$ into a proof
-    $p\in\operatorname{dom}A$ using equality of the two domains.  This term
-    supplies typing information and adds no mathematical hypothesis. \\
-\texttt{N.Mem (directedSinTwoAngleOperator P Q)} and \texttt{N.Mem R}
-  & The two norms displayed in the directed inequality are defined. \\
-\texttt{gap * N.gaugeReal (...) <= 2 * N.gaugeReal R}
-  & $\delta N(\sin 2\Theta_0)\le 2N(R)$. \\
-\midrule
-\texttt{forall Hop : E }$\mathrel{\to}\!\mathtt{L}[\mathbb K]$\texttt{ E}
-  & The ambient clause may be invoked with a bounded perturbation $H$. \\
-\texttt{IsSelfAdjointOperator Hop}
-  & The perturbation is self-adjoint. \\
-\texttt{T = addBounded A Hop}
-  & $T=A+H$.  This bounded-perturbation assumption belongs only to the ambient
-    conclusion. \\
-\texttt{N.Mem (sinTwoAngleOperator P Q)} and \texttt{N.Mem Hop}
-  & The two norms displayed in the ambient inequality are defined. \\
-\texttt{gap * N.gaugeReal (...) <= 2 * N.gaugeReal Hop}
-  & $\delta N(\sin 2\Theta)\le 2N(H)$. \\
+  & The normalized unitarily invariant norm object, including the set of
+    operators on which its gauge is defined. \\
+\texttt{A}, \texttt{A0}, $\Lambda_1$ as partial linear maps
+  & The possibly unbounded ambient, trial, and complementary exact
+    self-adjoint operators. \\
+\texttt{E0}, \texttt{F0}, \texttt{F1}, \texttt{R}
+  & The trial coordinate map, desired/complementary exact coordinates, and
+    bounded residual. \\
+\texttt{htrial : IsTrialResidual A A0 E0 R}
+  & $E_0$ is isometric; $E_0(\operatorname{dom}A_0)$ lies in
+    $\operatorname{dom}A$; and $R=AE_0-E_0A_0$ on
+    $\operatorname{dom}A_0$. \\
+\texttt{hexact : IsExactSpectralDecomposition ...}
+  & The exact subspace and complement are orthogonal and complete, and the
+    complement intertwines $\Lambda_1$ with $A$. \\
+\texttt{hgap : FormBoundedSylvesterGap A0 Lambda1 delta}
+  & The full gap family: finite interval/exterior or either ordered
+    half-infinite configuration. \\
+\texttt{N.Mem ((I - F0 F0*) E0)} and \texttt{N.Mem R}
+  & The two norms displayed in the inequality are defined. \\
+\texttt{delta * N.gaugeReal (...) <= N.gaugeReal R}
+  & $\delta N(\sin\Theta_0)\le N(R)$. \\
 \bottomrule
 \end{tabularx}
 \end{table}
 
-The distinction between the two clauses accounts for much of the apparent
-complexity of the signature.  Davis--Kahan's directed estimate can use a bounded
-residual even when $T-A$ is not a bounded operator on the whole Hilbert space.
-The ambient estimate instead uses a bounded self-adjoint perturbation.  Placing a
-single bounded perturbation hypothesis before both conclusions would therefore
-narrow the directed statement.
-
-The common-domain formulation also removes an earlier whole-trial-space
-condition.  That refinement had a hypothesis requiring every vector of $P$ to
-lie in $\operatorname{dom}T$, which excludes an unbounded trial restriction.
-Formalization~2 quantifies instead over $p\in P\mathcal H\cap\mathcal D$ in the
-residual equation.  No bounded trial operator appears in its statement.
+\paragraph{The common-domain condition.}
+Davis--Kahan's unbounded discussion states the trial-domain condition as
+\[
+  \{x:E_0x\in\operatorname{dom}A\}=\operatorname{dom}A_0.
+\]
+The current theorem's \texttt{IsTrialResidual} predicate uses only the forward
+inclusion together with the residual identity on $\operatorname{dom}A_0$.
+The repository's \texttt{HasCommonDomain} predicate records the source equality
+and proves that it implies this forward inclusion.  Consequently the displayed
+Lean theorem is more general on this axis: every source instance satisfies its
+domain hypothesis, but the theorem also applies to some inputs outside the
+literal source formulation.  This is useful as an API generalization and is not
+a loss of source coverage.
 
 \paragraph{Norm representation.}
-The norm record used in Formalization~2 contains a symmetric ideal gauge,
-rank-one normalization, and the comparison implication
-\[
- \bigl(\forall k,\ \|X\|_k\le\|Y\|_k\bigr)
- \ \Longrightarrow\ N(X)\le N(Y)
-\]
-when both $X$ and $Y$ belong to the norm's domain.  Davis--Kahan cite this Fan
-comparison for unitarily invariant norms.  The formal record packages that
-comparison as mathematical background; the accessor used by the proof is not
-an independent derivation of Fan dominance from weaker norm axioms.
-
-\paragraph{Transcription check.}
-The supplied modernized transcription states the factor $2$ in the headline
-residual inequality but omits it in the residual step of the Section~7 proof.
-The factor $2$ is necessary. For
-\[
- A=0,\quad T=H=\begin{pmatrix}0&1\\1&0\end{pmatrix},\quad
- P\mathbb R^2=\operatorname{span}(e_1),\quad
- Q\mathbb R^2=\operatorname{span}(e_1+e_2),
-\]
-the spectral gap is $2$, the angle is $\pi/4$, and $\|R\|=1$.
-Hence $\delta\|\sin2\Theta_0\|=2=2\|R\|$; the inequality with factor $1$
-is false. The reflection calculation also gives $H-JHJ$ equal to twice the
-off-diagonal part. This identifies an inconsistency in the supplied
-transcription; locating its origin requires comparison with the printed scan.
+The norm record contains a symmetric ideal gauge, rank-one normalization, and a
+where-defined Fan comparison.  Davis--Kahan use the corresponding Ky Fan
+comparison principle for unitarily invariant norms.  The formal theorem packages
+that comparison as part of the norm interface rather than deriving it from a
+smaller collection of norm axioms inside this theorem.
 
 \section{Lean publication activity}
 
