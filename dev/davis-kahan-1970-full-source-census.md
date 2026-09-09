@@ -262,9 +262,10 @@ THREE NEW REUSABLE DECLARATIONS underwrite it, each grounding the next by `:=`, 
 - `TauCeti.DavisKahan1970.symmetricNorming_of_kyFanDominant`
 - `TauCeti.DavisKahan1970.kyFanDominant_of_symmetricNorming`
 - `TauCeti.DavisKahan1970.symmetricNorming_iff_kyFanDominant`
-- `TauCeti.DavisKahan1970.normalizedUnitaryInvariant_of_symmetricNorming`
-- `TauCeti.DavisKahan1970.normalizedUnitaryInvariant_of_symmetricNorming_mul`
-- `TauCeti.DavisKahan.ExactSinTheta.NormalizedUnitaryInvariantNorm`
+- `TauCeti.DavisKahan.ExactSinTheta.NormalizedSymmetricOperatorIdealFamily`
+- `TauCeti.DavisKahan.ExactSinTheta.NormalizedSymmetricOperatorIdealFamily.HasFanDominanceWhereDefined`
+- `TauCeti.DavisKahan.ExactSinTheta.NormalizedSymmetricOperatorIdealFamily.ScaledGaugeLEWhereDefined`
+- `TauCeti.DavisKahan.ExactSinTheta.NormalizedSymmetricOperatorIdealFamily.scaledGaugeLEWhereDefined_of_all_mul_kyFan_le`
 - `TauCeti.DavisKahan1970.sinTheta_unbounded_formGap_sourceExact_complex`
 - `TauCeti.DavisKahan1970.sinTheta_unbounded_formGap_sourceExact_real`
 
@@ -276,7 +277,7 @@ THREE NEW REUSABLE DECLARATIONS underwrite it, each grounding the next by `:=`, 
 *Hypotheses*
 - There are beta <= alpha and delta > 0 such that spec(A0) is contained in [beta, alpha] and spec(Lambda1) avoids (beta-delta, alpha+delta), or the same interval/exterior condition with A0 and Lambda1 interchanged.
 - The separating interval may be half-infinite: the source states that the spectral intervals in the gap hypotheses may be half-infinite and the remaining spectra unbounded, so the ordered semibounded configurations are part of the printed hypothesis and not a later generalization.
-- The norm is an arbitrary source unitary-invariant norm and the residual belongs to its norm ideal whenever that norm is finite.
+- The norm is an arbitrary normalized symmetric operator ideal norm in the source sense. If either displayed norm does not exist, the source declares the result vacuous; when both exist, the numerical inequality applies.
 
 *Conclusions*
 - delta * ||sin Theta0|| <= ||R||.
@@ -290,10 +291,10 @@ THREE NEW REUSABLE DECLARATIONS underwrite it, each grounding the next by `:=`, 
 | The scalar field is real or complex. | The source's scalar scope is realized twice over. Canonical evidence is the pair of fixed-field source-exact façades, one at ℝ and one at ℂ -- the paper's own fields (GOAL.md section 4.3). The retained scalar-generic theorem named below, which is where the `RCLike` binder lives, covers both at once and is registered as a stronger variant; its two scalar capability binders have proved instances at both source fields. | claimed_exact |
 | A, A0, and Lambda1 are self-adjoint; E0 is the trial coordinate map and F0,F1 are orthogonal exact-space coordinates. | A, A₀, Λ₁, E₀, F₀, and F₁ are explicit arguments. Self-adjointness is literal; IsTrialResidual and IsExactSpectralDecomposition are expanded immediately in the local semantic dictionary. | claimed_exact |
 | R = A E0 - E0 A0 on the operator domain, while F1 intertwines Lambda1 with A. | These clauses are exactly the residualEquation and intertwines components exposed by isTrialResidual_iff and isExactSpectralDecomposition_iff, together with their domain-transport hypotheses. | claimed_exact |
-| sin Theta0 is the directed sine block from the trial subspace to the exact subspace. | sinTheta₀ is an explicit theorem parameter and hSinTheta₀ literally states sinTheta₀ = (I - F₀ F₀†) E₀. No named definition hides this identification. | claimed_exact |
+| sin Theta0 is the directed sine block from the trial subspace to the exact subspace. | The canonical source-exact conclusion names the directed sine block directly as `(I - F₀ F₀†) E₀`; no auxiliary membership conclusion is bundled into the result. | claimed_exact |
 | For beta <= alpha and delta > 0, one spectrum lies in [beta,alpha] and the other avoids (beta-delta,alpha+delta), with the roles interchangeable. | hβα and hδ are explicit, and hspectral is literally the disjunction of the two real-spectrum inclusions. | claimed_exact |
-| The norm is an arbitrary source unitary-invariant norm and R has finite norm. | N : UnitaryInvariantNorm and hR : N.Mem R appear directly. UnitaryInvariantNorm is the existing public source-facing name for the audited SymmetricNormingFunction implementation structure. | claimed_exact |
-| delta \|\|sin Theta0\|\| <= \|\|R\|\|. | The text after the theorem colon is exactly δ * N.gauge sinTheta₀ <= N.gauge R. The supporting sinTheta_unbounded_intervalExterior_symmetricNorming_rclike theorem additionally certifies N.Mem sinTheta₀ after rewriting by hSinTheta₀. | claimed_exact |
+| The norm is arbitrary, with the paper-wide convention that the result is vacuous when a displayed norm does not exist. | `N : NormalizedSymmetricOperatorIdealFamily` appears directly. There is no `hR` binder. The conclusion `N.ScaledGaugeLEWhereDefined δ sinTheta₀ R` expands to the printed inequality under the two norm-existence premises, exactly encoding the source vacuity convention without membership transfer. | claimed_exact |
+| delta \|\|sin Theta0\|\| <= \|\|R\|\|. | The theorem conclusion is `N.ScaledGaugeLEWhereDefined δ sinTheta₀ R`: whenever both displayed norms exist, it reduces to `δ * N.gaugeReal sinTheta₀ ≤ N.gaugeReal R`; if either norm does not exist, the source statement has no numerical obligation. | claimed_exact |
 | Infinite-dimensional and unbounded self-adjoint scope. | There is no FiniteDimensional hypothesis; A, A₀, and Λ₁ are `LinearPMap` values and the two expanded setup predicates carry the required domain conditions. | claimed_exact |
 
 **Notes.** The definitive source form is Theorem 6.1; real, complex, bounded, unbounded, and arbitrary-representative forms are present.
@@ -308,9 +309,11 @@ REOPENED 2026-08-31 by the scope-atom re-audit: a source passage that explicitly
 
 REOPENING WITHDRAWN 2026-08-31 and the rule corrected: a later source passage enlarges a counted result only when it is needed to determine what Davis and Kahan actually claim in it. An extension, variant or consequence they mention without introducing and proving it as a result of its own is `result_adjacent_extension` fidelity material. The Lean coverage produced during the reopening is kept as supporting evidence.
 
-SOURCE-EXACT FAÇADES REGISTERED 2026-09-05. Canonical evidence for this row is now the façade at the printed scope -- separable ambient Hilbert space and the literal `NormalizedUnitaryInvariantNorm` class -- with the arbitrary-Hilbert `SymmetricNormingFunction` theorem retained beneath it as a registered generalization. See GOAL.md sections I, III and IV.
+SOURCE-EXACT FAÇADES REGISTERED 2026-09-05. Canonical evidence for this row is the fixed-field façade at the printed Hilbert-space scope, with the arbitrary-Hilbert `SymmetricNormingFunction` theorem retained beneath it as a registered generalization.
 
-**Next action.** No hostile-review hole is currently recorded for this source passage. Preserve exact source scope and re-audit if the distributable source specification changes.
+SIGNATURE RETARGET 2026-09-08. Probes 17--43 established that unconditional `ENNReal` Fan dominance adds Ky-Fan membership transfer that Davis--Kahan do not print, while the paper explicitly declares results vacuous when relevant norms fail to exist. The canonical complex and real façades now quantify over `NormalizedSymmetricOperatorIdealFamily`, have no caller-visible residual-membership premise, and conclude `ScaledGaugeLEWhereDefined` rather than membership of the sine block. The committed row remains `compiled_exact` / `proved_in_build`; do not commit this retarget unless the prescribed Lean compile accepts the changed theorem types.
+
+**Next action.** Preserve the where-defined/vacuous norm boundary and re-audit if the source-facing theorem type changes.
 
 ### `S2-tan-theta` — Single-angle tangent theorem
 

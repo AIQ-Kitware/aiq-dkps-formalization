@@ -276,8 +276,9 @@ NormalizedSymmetricOperatorIdealFamily
 ```
 
 The name is structural rather than provenance-based: it is a symmetric operator
-ideal family with the rank-one normalization.  It deliberately does **not**
-bundle unconditional Fan dominance.
+ideal family with the rank-one normalization.  It carries Ky Fan comparison only
+where both displayed norms exist, and deliberately does **not** bundle the
+stronger unconditional membership-transferring dominance of the extended gauge.
 
 `NormalizedUnitaryInvariantNorm` remains a stronger internal carrier whose
 `FanDominantIdealFamily` field also entails membership transfer.  Probes 17–43
@@ -368,7 +369,7 @@ As of the current 2026-09-05 implementation state, preserve the completed work r
 
 * `NormalizedSymmetricOperatorIdealFamily` as the normalized symmetric-ideal base,
   with `NormalizedUnitaryInvariantNorm` retained as the stronger Fan-dominant implementation carrier:
-* source UIN façades already added across Section 2 and later results; their norm boundary is being retargeted after the Fan-domain audit:
+* the Section 2 sine-theta source-exact façades retargeted to the where-defined `NormalizedSymmetricOperatorIdealFamily` boundary; later source UIN façades remain to be audited/retargeted separately where their printed statements use the same convention:
 * exact separable real/complex façades already completed:
 * machine-readable distinction between canonical source evidence and generalizations:
 * hostile-review regression invariants:
@@ -1605,8 +1606,8 @@ data:
 NormalizedSymmetricOperatorIdealFamily
 ```
 
-It is a `SymmetricOperatorIdealFamily` plus the rank-one normalization and no
-Fan-dominance field.  `NormalizedSymmetricOperatorIdealFamily.HasFanDominance`
+It is a `SymmetricOperatorIdealFamily` plus the rank-one normalization and the
+where-defined Ky Fan comparison.  `NormalizedSymmetricOperatorIdealFamily.HasFanDominance`
 spells the stronger unconditional `ℝ≥0∞` property separately;
 `withFanDominance` adds it to obtain the existing
 `NormalizedUnitaryInvariantNorm`, and
@@ -1633,18 +1634,14 @@ the countermodel excluded by `NormalizedUnitaryInvariantNorm`, and characterize
 the intended public conclusion as the ordinary real-valued inequality conditional
 on both displayed norms existing.
 
-The production direction is therefore:
+The production retarget begins with the canonical Section 2 sine-theta façades:
 
-1. use `NormalizedSymmetricOperatorIdealFamily` for the mathematical base object;
-2. formalize/port the historical **where-defined** Fan comparison at that scope;
-3. expose Davis--Kahan source façades using the paper's vacuity convention, with
-   no caller-visible residual-membership premise and no membership-transfer
-   conclusion; and
-4. retain `NormalizedUnitaryInvariantNorm` only where the stronger internal
-   domain-solid property is genuinely useful.
+1. `NormalizedSymmetricOperatorIdealFamily` now carries the historical **where-defined** Fan comparison;
+2. `ScaledGaugeLEWhereDefined` spells the paper's vacuity convention without manufacturing membership;
+3. `sinTheta_unbounded_formGap_sourceExact_{complex,real}` quantify over that base, have no caller-visible residual-membership premise, and have no membership-transfer conclusion; and
+4. `NormalizedUnitaryInvariantNorm` remains available only where the stronger internal domain-solid property is genuinely useful.
 
-This naming cleanup is intentionally separate from the production theorem
-retarget so the semantic API change remains independently reviewable.
+The remaining source-facing UIN façades should be retargeted case by case, with their census rows updated in the same commit.
 
 ## 5. Fresh hostile review of all designated results
 
@@ -1797,7 +1794,7 @@ must travel with any summary of the 29-result completion state.
 | 3 | Section 4 fixed the wrong quantifier: `∃ D, IsDirectRotation U V D ∧ …` instead of extremality for the direct rotation the source has fixed | repaired, and it exposed a second defect the review did not name: the repository's `IsDirectRotation` is *not* Davis--Kahan's Definition 3.1, and Section 4's extremality is **false** for it.  `IsSourceDirectRotation` is Definition 3.1; the façades take a given `D` satisfying it (§3d) |
 | 4 | Theorem 3.1's converse dropped source separability and returned `J`, `hJ`, `hisom`, `hcoisom`; Corollary 3.1's realization permitted arbitrary `Z₀`, `Z₁` | `theorem3_1_realization_sourceExact_*` carries `[SeparableSpace H]` and keeps `J₀` internal to the angle datum; `corollary3_1_realization_zeroMultiplicity_sourceScope` restricts the multiplicity spaces to the paper's scope |
 | 5 | Section 6's separability exception was too broad; Proposition 6.1/Theorem 6.1 used `FormBoundedSylvesterGap` where the source prints an interval/exterior separation; Theorem 6.2 added `R` Hilbert--Schmidt | `Section6SourceScope.lean`: separable-ambient wrappers for Lemmas 6.1, 6.2, 6.3; `..._printedGap_sourceExact_*`; and `theorem6_2_vacuity_sourceExact_*` in `ℝ≥0∞`, which *is* the source's "vacuous when the norm does not exist" |
-| 6 | Fan dominance is a field of `FanDominantIdealFamily`, so the public quantifier is stronger than the printed where-defined/vacuous norm statement | reopened and isolated by Probes 17–43: `NormalizedSymmetricOperatorIdealFamily` is the mathematical base; unconditional `HasFanDominance` additionally transfers membership and is false for the finite-rank countermodel.  The production source façades still need the §4d retarget to where-defined Fan comparison. |
+| 6 | Fan dominance is a field of `FanDominantIdealFamily`, so the public quantifier is stronger than the printed where-defined/vacuous norm statement | isolated by Probes 17–43; the canonical Section 2 sine-theta façades are now retargeted to `NormalizedSymmetricOperatorIdealFamily` + `ScaledGaugeLEWhereDefined`.  Other source-facing UIN façades remain separate follow-up work and must be updated with their own census rows. |
 
 ## §XVIII.4 The third review's nine findings (2026-09-06), all repaired
 
