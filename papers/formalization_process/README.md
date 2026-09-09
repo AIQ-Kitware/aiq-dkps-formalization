@@ -126,7 +126,7 @@ for a preprint or camera-ready version.
 Create a Git-history-free review copy from the tracked repository files with:
 
 ```bash
-python3 papers/formalization_process_4page/scripts/anonymize_repo.py
+python3 papers/formalization_process/scripts/anonymize_repo.py
 ```
 
 Use `--output PATH` to choose the destination and `--force` to replace an
@@ -148,10 +148,10 @@ The workflow figure remains the existing `figures/formalization_workflow.png` ar
 ## Build
 
 ```bash
-make -C papers/formalization_process_4page
-make -C papers/formalization_process_4page public
-make -C papers/formalization_process_4page check-prose
-make -C papers/formalization_process_4page check-layout
+make -C papers/formalization_process
+make -C papers/formalization_process public
+make -C papers/formalization_process check-prose
+make -C papers/formalization_process check-layout
 ```
 
 `make` builds the anonymous review version with the supplied NeurIPS 2026

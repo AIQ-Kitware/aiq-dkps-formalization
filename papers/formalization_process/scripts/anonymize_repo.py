@@ -74,7 +74,7 @@ PATH_REPLACEMENTS = (
 # listed in ANONYMIZATION_REPORT.txt.
 OMIT_PATHS = {
     ".llm_resource_tally/tool",
-    "papers/formalization_process_4page/scripts/anonymize_repo.py",
+    "papers/formalization_process/scripts/anonymize_repo.py",
 }
 
 # Binary files are not rewritten. These byte strings are therefore checked
