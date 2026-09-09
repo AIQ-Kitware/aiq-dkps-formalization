@@ -6,136 +6,65 @@ Authors: Jon Crall, OpenAI GPT-5.6 Sol
 
 
 /-
-# HANDOFF: source-UIN / Fan-dominance exploration (2026-09-08)
+# HANDOFF: normalized symmetric ideal families / Fan dominance (2026-09-08)
 
-This file is intentionally a **standalone compile probe**.  It is not production
-API.  Nothing should import it, and exploration work must not modify
-`SourceUnitaryInvariantNorm`, `NormalizedUnitaryInvariantNorm`, or any existing
-Davis--Kahan theorem signature until the mathematical boundary below is settled.
+This file is intentionally a **standalone compile probe**.  Nothing imports it.
+The user compiled Probes 1--43 cleanly before the naming cleanup that renamed the
+base record from its previous provenance-based name to the
+mathematical `NormalizedSymmetricOperatorIdealFamily`.
 
-## Why this exists
-
-A hostile source-exactness review found that Davis--Kahan state their norm
-inequalities for arbitrary unitary-invariant norms, while the current canonical
-Lean endpoints quantify over `NormalizedUnitaryInvariantNorm`, whose structure
-contains Fan dominance.  The raw source-facing structure
-`SourceUnitaryInvariantNorm` deliberately does not contain that field.  If Fan
-dominance is genuinely required by the public theorem statement, source exactness
-requires us either to derive it from the correct source norm class or to discover
-that the source abstraction is missing mathematically implicit hypotheses.
-
-The immediate question is therefore **not** how the existing Davis--Kahan proof
-uses Fan dominance.  It is whether the current raw source norm laws themselves
-entail the Fan-dominance property needed by the theorem boundary.
-
-## Established compile probes
-
-The user is the compiler: this ChatGPT environment has no usable Lake/Lean
-installation.  The command used for every probe is:
+Compile this file with:
 
 ```text
 lake env lean \
   DavisKahan/Explorations/SourceUnitaryInvariantNormFanDominance.lean
 ```
 
-Probes 1--16 compiled cleanly before the current countermodel push.  They
-established, at the level of Lean type-checking, the following reductions:
+## Result of the exploration
 
-* a symmetric-gauge representation would imply separable Fan dominance;
-* the existing finite-dimensional majorization infrastructure yields finite-
-  dimensional Fan dominance;
-* finite-dimensional membership follows from the current source ideal laws;
-* source gauges are invariant under modulus / the relevant unitary transports;
-* all infinite-dimensional separable spaces can be reduced to one model space;
-* zero stabilization removes the finite/infinite dimension split; and
-* full separable Fan dominance reduces to the genuinely infinite-dimensional
-  positive-operator problem on one fixed infinite-dimensional separable Hilbert
-  space.
+The base mathematical object is now:
 
-Those results are reductions only.  In particular, the finite-dimensional
-successes must **not** be mistaken for closure of the source theorem.
+```text
+NormalizedSymmetricOperatorIdealFamily
+```
 
-## Decisive result: Probes 17--24
+It is a `SymmetricOperatorIdealFamily` together with the rank-one normalization.
+It does not contain Fan dominance.  `NormalizedUnitaryInvariantNorm` remains the
+stronger implementation record whose underlying `FanDominantIdealFamily` carries
+unconditional `ENNReal` Fan dominance.
 
-Before formalizing a large infinite-dimensional dominance theorem, we tested
-whether that theorem was even derivable from the current raw
-`SourceUnitaryInvariantNorm` laws.  The exploration-only countermodel is:
+Probes 17--24 construct a finite-rank/operator-norm family with gauge `∞` outside
+the finite-rank ideal.  It satisfies the base record and where-defined Fan
+monotonicity but refutes unconditional Fan dominance.  The failure is exactly
+membership transfer: Ky-Fan domination by an ideal member need not force the
+dominated operator into this ideal.
 
-* carrier: finite-rank operators;
-* gauge on the carrier: operator norm;
-* extended gauge off the carrier: `∞`.
+Probes 25--30 separate memberwise symmetric-norming representation from total
+ideal-domain representation.  Memberwise representation is enough for
+where-defined Fan comparison; total/domain representation additionally gives the
+membership-transfer property bundled into unconditional `ENNReal` dominance.
 
-This model compiled as a `SourceUnitaryInvariantNorm`.  On `ell^2`, an
-infinite-rank compact diagonal with approximation numbers `2^-(n+1)` is Ky-Fan
-dominated by a norm-one rank-one operator.  The diagonal is outside the ideal
-while the comparator is inside it, so the file contains a machine-checked
-countermodel to the current unconditional
-`SourceUnitaryInvariantNorm.HasFanDominance`.
+Probes 31--37 express the source's "vacuous when the norm does not exist"
+convention directly and show that the Davis--Kahan sine-theta analytic theorem
+can be presented at the where-defined boundary.
 
-Probes 22--24 split that property into two logically distinct parts:
+Probes 38--43 finish the theorem-signature test.  They show that:
 
-1. **where-defined monotonicity**: if both gauges are finite, Ky-Fan dominance
-   implies the gauge inequality;
-2. **membership transfer / solidity**: Ky-Fan domination by an ideal member
-   forces the dominated operator to belong to the ideal.
+* vacuous comparison is exactly the ordinary real-valued inequality conditional
+  on both displayed norms existing;
+* the finite-rank countermodel is not in the image of
+  `NormalizedUnitaryInvariantNorm.toNormalizedSymmetricOperatorIdealFamily`;
+* the actual sine-theta theorem still holds for that excluded family at the
+  vacuous/where-defined boundary; and
+* the candidate public norm quantifier requires no caller-visible membership
+  premise and concludes no membership transfer.
 
-The countermodel satisfies (1) and fails (2).  Therefore stop trying to prove
-raw-source `HasFanDominance`: the current source structure is too weak.  The
-next task is a source-level audit of the exact Fan theorem Davis and Kahan invoke
-and of what their phrase "unitary-invariant norm" imports from the surrounding
-operator-ideal literature.  Do not repair this by simply adding
-`HasFanDominance` as an unexplained field.
-
-## State after the clean Probe 17--24 compile
-
-The user compiled Probes 17--24 cleanly on 2026-09-08.  This is the decisive
-result of the exploration so far:
-
-* `finiteRankOperatorNormSource` is a genuine `SourceUnitaryInvariantNorm` under
-  the current raw structure;
-* it satisfies Fan monotonicity whenever both source gauges are defined;
-* it fails the current unconditional `HasFanDominance`; and
-* the failure is exactly Ky-Fan membership transfer: an infinite-rank diagonal
-  can be Ky-Fan dominated by a finite-rank member without itself belonging to
-  the finite-rank ideal.
-
-Therefore **do not resume the attempt to prove**
-`SourceUnitaryInvariantNorm.hasFanDominance` from the present raw fields.  That
-implication is false.  The next semantic question is what Davis--Kahan import by
-their Section 1 language.  Two source facts pull in different directions and
-must be reconciled rather than silently choosing one:
-
-1. they say that some results are vacuous when the norms in them fail to exist;
-2. they say every unitary-invariant norm is obtained as a symmetric gauge
-   function of the singular values and immediately invoke Ky Fan dominance.
-
-## State after the clean Probes 25--30 compile
-
-The user compiled Probes 25--30 cleanly on 2026-09-08.  They establish a second
-important separation:
-
-* a **memberwise/value representation** by one symmetric norming function is
-  enough for Fan monotonicity wherever both source norms exist;
-* that same representation is enough for the paper-style convention that the
-  comparison is vacuous when one of the displayed norms does not exist;
-* a **total/domain representation** by the canonical extended symmetric gauge is
-  strong enough to recover the current unconditional `ENNReal`
-  `SourceUnitaryInvariantNorm.HasFanDominance`; and
-* once memberwise representation is assumed, the exact extra content of the
-  current production property is Ky-Fan membership transfer.
-
-So the current unconditional production property should no longer be treated as
-synonymous with the value-comparison part of Fan dominance.  Probes 31 onward
-now test the source sentence itself in a class-level form and, more importantly,
-whether the existing Davis--Kahan analytic theorems can be exposed with the
-paper-wide vacuity semantics using only **where-defined** Fan dominance.  The
-first concrete target is the Section 2 sine-theta theorem.  Probes 31--37 are
-the active compile target: they state the class-level vacuous Fan sentence, put
-the finite Ky Fan norms back into the raw source class, recover the converse
-Ky-Fan implication, and attempt the source-facing sine-theta facade using only
-where-defined Fan dominance.  No production API should change until this
-standalone probe has compiled and the source/literature interpretation has been
-independently audited.
+The source/literature audit therefore points to where-defined Fan comparison as
+the source-facing boundary.  The next production step is separate from this
+naming cleanup: put the where-defined comparison at the reusable mathematical
+layer and retarget the canonical Davis--Kahan façades to the vacuous conclusion.
+Do not attempt to prove unconditional `HasFanDominance` from the base record;
+the countermodel proves that implication false.
 -/
 import DavisKahan.OperatorIdeal.NormalizedUnitaryInvariantNorm
 import ForTauCeti.Analysis.OperatorIdeal.Family.SymmetricGauge
@@ -157,13 +86,13 @@ import DavisKahan.Sources.DavisKahan1970.SineTheta.Presentation
 # Exploration: Fan dominance at the Davis--Kahan source norm boundary
 
 This file is deliberately standalone.  Nothing imports it, and it does not
-change `SourceUnitaryInvariantNorm`, `NormalizedUnitaryInvariantNorm`, or any
+change `NormalizedSymmetricOperatorIdealFamily`, `NormalizedUnitaryInvariantNorm`, or any
 production theorem signature.
 
 The question being tested is narrower than "formalize Calkin's theorem":
 
 1. Davis--Kahan work on separable Hilbert spaces.
-2. Their source norm class is represented by `SourceUnitaryInvariantNorm`.
+2. Their source norm class is represented by `NormalizedSymmetricOperatorIdealFamily`.
 3. The source-facing theorem should not require an extra `HasFanDominance`
    argument if Fan dominance is a theorem of that source class.
 4. Existing `ForTauCeti` infrastructure already proves that a gauge obtained
@@ -196,8 +125,8 @@ universe v
 Davis--Kahan paper.
 
 This is intentionally a local exploration predicate rather than a field added
-to `SourceUnitaryInvariantNorm`. -/
-def HasFanDominanceSeparable (N : SourceUnitaryInvariantNorm.{0, v} ℂ) : Prop :=
+to `NormalizedSymmetricOperatorIdealFamily`. -/
+def HasFanDominanceSeparable (N : NormalizedSymmetricOperatorIdealFamily.{0, v} ℂ) : Prop :=
   ∀ {E F E' F' : Type v}
     [NormedAddCommGroup E] [InnerProductSpace ℂ E] [CompleteSpace E]
     [TopologicalSpace.SeparableSpace E]
@@ -220,7 +149,7 @@ separable source/target pair.  This is the missing mathematical bridge we want
 to investigate; it is a proposition here, not an assumption added to the source
 norm structure. -/
 def HasSymmetricGaugeRepresentationSeparable
-    (N : SourceUnitaryInvariantNorm.{0, v} ℂ) : Prop :=
+    (N : NormalizedSymmetricOperatorIdealFamily.{0, v} ℂ) : Prop :=
   ∃ Φ : TauCeti.SymmetricGauge,
     ∀ {E F : Type v}
       [NormedAddCommGroup E] [InnerProductSpace ℂ E] [CompleteSpace E]
@@ -235,7 +164,7 @@ def HasSymmetricGaugeRepresentationSeparable
 separable version.  This checks that `HasFanDominanceSeparable` is only a
 restriction of the current target, not a different mathematical condition. -/
 theorem hasFanDominanceSeparable_of_hasFanDominance
-    (N : SourceUnitaryInvariantNorm.{0, v} ℂ) (h : N.HasFanDominance) :
+    (N : NormalizedSymmetricOperatorIdealFamily.{0, v} ℂ) (h : N.HasFanDominance) :
     HasFanDominanceSeparable N := by
   intro E F E' F' _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ A B hAB
   exact h hAB
@@ -256,7 +185,7 @@ The proof uses only infrastructure already present in `ForTauCeti`:
 Thus a successful compile isolates the remaining gap to the representation
 step. -/
 theorem hasFanDominanceSeparable_of_symmetricGaugeRepresentation
-    (N : SourceUnitaryInvariantNorm.{0, v} ℂ)
+    (N : NormalizedSymmetricOperatorIdealFamily.{0, v} ℂ)
     (hrep : HasSymmetricGaugeRepresentationSeparable N) :
     HasFanDominanceSeparable N := by
   rcases hrep with ⟨Φ, hΦ⟩
@@ -306,7 +235,7 @@ this source ideal.
 This is an exploration predicate, not a new field.  The next probe will try to
 derive it from rank-one normalization. -/
 def HasFiniteDimensionalMembership
-    (N : SourceUnitaryInvariantNorm.{0, v} ℂ) : Prop :=
+    (N : NormalizedSymmetricOperatorIdealFamily.{0, v} ℂ) : Prop :=
   ∀ {E F : Type v}
     [NormedAddCommGroup E] [InnerProductSpace ℂ E] [FiniteDimensional ℂ E]
     [NormedAddCommGroup F] [InnerProductSpace ℂ F] [FiniteDimensional ℂ F]
@@ -329,7 +258,7 @@ private theorem norm_isometryEquiv_le_one_finite
 unitaries on both sides.  This is derived from the ideal law in both directions,
 not assumed. -/
 theorem gaugeReal_comp_isometryEquiv_finite
-    (N : SourceUnitaryInvariantNorm.{0, v} ℂ)
+    (N : NormalizedSymmetricOperatorIdealFamily.{0, v} ℂ)
     (hfinite : HasFiniteDimensionalMembership N)
     {E F : Type v}
     [NormedAddCommGroup E] [InnerProductSpace ℂ E] [FiniteDimensional ℂ E]
@@ -385,7 +314,7 @@ local membership hypothesis it is a rectangular unitarily invariant seminorm,
 so the existing T-transform/Fan-dominance engine applies without any symmetric
 sequence-gauge representation of the infinite-dimensional ideal. -/
 noncomputable def finiteRectangularSeminorm
-    (N : SourceUnitaryInvariantNorm.{0, v} ℂ)
+    (N : NormalizedSymmetricOperatorIdealFamily.{0, v} ℂ)
     (hfinite : HasFiniteDimensionalMembership N)
     {E F : Type v}
     [NormedAddCommGroup E] [InnerProductSpace ℂ E] [FiniteDimensional ℂ E]
@@ -435,7 +364,7 @@ Fan dominance for arbitrary rectangular finite-dimensional operators.  The
 proof is exactly the existing rectangular T-transform theorem, with the bridge
 from finite singular-value sums to approximation-number Ky Fan gauges. -/
 theorem finiteDimensional_fanDominance_real
-    (N : SourceUnitaryInvariantNorm.{0, v} ℂ)
+    (N : NormalizedSymmetricOperatorIdealFamily.{0, v} ℂ)
     (hfinite : HasFiniteDimensionalMembership N)
     {E F : Type v}
     [NormedAddCommGroup E] [InnerProductSpace ℂ E] [FiniteDimensional ℂ E]
@@ -463,9 +392,9 @@ theorem finiteDimensional_fanDominance_real
   exact (finiteRectangularSeminorm N hfinite).apply_le_of_kyFanSum_le hlin
 
 /-- The same finite-dimensional result at the canonical `ℝ≥0∞` gauge level,
-which is the shape of `SourceUnitaryInvariantNorm.HasFanDominance`. -/
+which is the shape of `NormalizedSymmetricOperatorIdealFamily.HasFanDominance`. -/
 theorem finiteDimensional_fanDominance
-    (N : SourceUnitaryInvariantNorm.{0, v} ℂ)
+    (N : NormalizedSymmetricOperatorIdealFamily.{0, v} ℂ)
     (hfinite : HasFiniteDimensionalMembership N)
     {E F : Type v}
     [NormedAddCommGroup E] [InnerProductSpace ℂ E] [FiniteDimensional ℂ E]
@@ -500,7 +429,7 @@ to be a member of the source ideal: an infinite `ENNReal` gauge would have
 This is the source-level analogue of `NormalizedUnitaryInvariantNorm.mem_rankOne`,
 proved here without first bundling Fan dominance. -/
 theorem source_mem_rankOne_unit
-    (N : SourceUnitaryInvariantNorm.{0, v} ℂ)
+    (N : NormalizedSymmetricOperatorIdealFamily.{0, v} ℂ)
     {E F : Type v}
     [NormedAddCommGroup E] [InnerProductSpace ℂ E] [CompleteSpace E]
     [NormedAddCommGroup F] [InnerProductSpace ℂ F] [CompleteSpace F]
@@ -543,7 +472,7 @@ The singular-value decomposition already available in `ForTauCeti` supplies the
 finite rank-one sum.  No Fan-dominance or symmetric-gauge representation theorem
 is used. -/
 theorem source_hasFiniteDimensionalMembership
-    (N : SourceUnitaryInvariantNorm.{0, v} ℂ) :
+    (N : NormalizedSymmetricOperatorIdealFamily.{0, v} ℂ) :
     HasFiniteDimensionalMembership N := by
   intro E F _ _ _ _ _ _ A
   let S := N.toSymmetricOperatorIdealFamily
@@ -585,7 +514,7 @@ theorem source_hasFiniteDimensionalMembership
 unnecessary: finite-dimensional Fan dominance follows directly from the source
 laws and the already-formalized rectangular majorization theorem. -/
 theorem finiteDimensional_fanDominance_of_sourceLaws
-    (N : SourceUnitaryInvariantNorm.{0, v} ℂ)
+    (N : NormalizedSymmetricOperatorIdealFamily.{0, v} ℂ)
     {E F : Type v}
     [NormedAddCommGroup E] [InnerProductSpace ℂ E] [FiniteDimensional ℂ E]
     [NormedAddCommGroup F] [InnerProductSpace ℂ F] [FiniteDimensional ℂ F]
@@ -599,7 +528,7 @@ theorem finiteDimensional_fanDominance_of_sourceLaws
 ## What remains after Probe 3
 
 If Probe 3 compiles, the finite-dimensional part of the Fan-dominance boundary
-is closed from the current `SourceUnitaryInvariantNorm` laws themselves.  The
+is closed from the current `NormalizedSymmetricOperatorIdealFamily` laws themselves.  The
 remaining source-level question is then genuinely infinite-dimensional:
 
 * can finite-dimensional compressions/approximants transfer the source gauge
@@ -610,7 +539,7 @@ remaining source-level question is then genuinely infinite-dimensional:
   abstraction?
 
 The next probe should attack exactly that finite-to-separable passage.  It
-should not modify `SourceUnitaryInvariantNorm`, and it should not assume a full
+should not modify `NormalizedSymmetricOperatorIdealFamily`, and it should not assume a full
 symmetric-gauge representation unless the source mathematics forces one.
 -/
 
@@ -668,7 +597,7 @@ private theorem isometryEquiv_enorm_le_one
 left/right transport at the stored `ENNReal` gauge level.  This does not use
 Fan dominance or finite membership. -/
 theorem source_gauge_comp_isometryEquiv
-    (N : SourceUnitaryInvariantNorm.{0, v} ℂ)
+    (N : NormalizedSymmetricOperatorIdealFamily.{0, v} ℂ)
     {E F G H : Type v}
     [NormedAddCommGroup E] [InnerProductSpace ℂ E] [CompleteSpace E]
     [NormedAddCommGroup F] [InnerProductSpace ℂ F] [CompleteSpace F]
@@ -703,7 +632,7 @@ theorem source_gauge_comp_isometryEquiv
 isometry and its adjoint are contractions, so the two polar factorizations give
 the two gauge inequalities directly. -/
 theorem source_gauge_modulus_eq
-    (N : SourceUnitaryInvariantNorm.{0, v} ℂ)
+    (N : NormalizedSymmetricOperatorIdealFamily.{0, v} ℂ)
     {E : Type v}
     [NormedAddCommGroup E] [InnerProductSpace ℂ E] [CompleteSpace E]
     (T : E →L[ℂ] E) :
@@ -732,7 +661,7 @@ theorem source_gauge_modulus_eq
 /-- Source-law control of a square compression.  No Fan-dominance hypothesis is
 used. -/
 theorem source_gauge_compression_le
-    (N : SourceUnitaryInvariantNorm.{0, v} ℂ)
+    (N : NormalizedSymmetricOperatorIdealFamily.{0, v} ℂ)
     {E : Type v}
     [NormedAddCommGroup E] [InnerProductSpace ℂ E] [CompleteSpace E]
     (W : Submodule ℂ E) [W.HasOrthogonalProjection] [CompleteSpace W]
@@ -748,7 +677,7 @@ theorem source_gauge_compression_le
 /-- Extension by zero across an orthogonal summand preserves the source gauge
 exactly, using only the two-sided ideal law. -/
 theorem source_gauge_zeroExtension_eq
-    (N : SourceUnitaryInvariantNorm.{0, v} ℂ)
+    (N : NormalizedSymmetricOperatorIdealFamily.{0, v} ℂ)
     {E : Type v}
     [NormedAddCommGroup E] [InnerProductSpace ℂ E] [CompleteSpace E]
     (W : Submodule ℂ E) [W.HasOrthogonalProjection] [CompleteSpace W]
@@ -781,7 +710,7 @@ packages the pre-existing approximation-number theorem with the source-gauge
 calculation above and verifies that this elementary ambient-space transport is
 already completely invisible on both sides. -/
 theorem source_zeroExtension_sameSequence_and_gauge
-    (N : SourceUnitaryInvariantNorm.{0, v} ℂ)
+    (N : NormalizedSymmetricOperatorIdealFamily.{0, v} ℂ)
     {E : Type v}
     [NormedAddCommGroup E] [InnerProductSpace ℂ E] [CompleteSpace E]
     (W : Submodule ℂ E) [W.HasOrthogonalProjection] [CompleteSpace W]
@@ -848,7 +777,7 @@ dominance theorem would follow from it.
 /-- The source gauge factors through the complete approximation-number sequence
 on separable Hilbert spaces. -/
 def HasApproximationNumberGaugeInvarianceSeparable
-    (N : SourceUnitaryInvariantNorm.{0, v} ℂ) : Prop :=
+    (N : NormalizedSymmetricOperatorIdealFamily.{0, v} ℂ) : Prop :=
   ∀ {E F E' F' : Type v}
     [NormedAddCommGroup E] [InnerProductSpace ℂ E] [CompleteSpace E]
     [TopologicalSpace.SeparableSpace E]
@@ -867,7 +796,7 @@ def HasApproximationNumberGaugeInvarianceSeparable
 a sanity check that the new predicate really is a necessary component of the
 target rather than an unrelated extra assumption. -/
 theorem hasApproximationNumberGaugeInvarianceSeparable_of_fanDominance
-    (N : SourceUnitaryInvariantNorm.{0, v} ℂ)
+    (N : NormalizedSymmetricOperatorIdealFamily.{0, v} ℂ)
     (hfan : HasFanDominanceSeparable N) :
     HasApproximationNumberGaugeInvarianceSeparable N := by
   intro E F E' F' _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ A B hsame
@@ -884,7 +813,7 @@ theorem hasApproximationNumberGaugeInvarianceSeparable_of_fanDominance
 /-- The stronger production `HasFanDominance` property therefore also implies
 separable sequence invariance. -/
 theorem hasApproximationNumberGaugeInvarianceSeparable_of_hasFanDominance
-    (N : SourceUnitaryInvariantNorm.{0, v} ℂ)
+    (N : NormalizedSymmetricOperatorIdealFamily.{0, v} ℂ)
     (hfan : N.HasFanDominance) :
     HasApproximationNumberGaugeInvarianceSeparable N :=
   hasApproximationNumberGaugeInvarianceSeparable_of_fanDominance N
@@ -893,7 +822,7 @@ theorem hasApproximationNumberGaugeInvarianceSeparable_of_hasFanDominance
 /-- A symmetric-gauge representation implies sequence invariance directly.
 This reconnects Probe 1 with the weaker intermediate property isolated here. -/
 theorem hasApproximationNumberGaugeInvarianceSeparable_of_symmetricGaugeRepresentation
-    (N : SourceUnitaryInvariantNorm.{0, v} ℂ)
+    (N : NormalizedSymmetricOperatorIdealFamily.{0, v} ℂ)
     (hrep : HasSymmetricGaugeRepresentationSeparable N) :
     HasApproximationNumberGaugeInvarianceSeparable N := by
   rcases hrep with ⟨Φ, hΦ⟩
@@ -922,7 +851,7 @@ toward noncompact operators carrying essential/Calkin information.
 /-- Source-gauge sequence invariance for compact positive self-adjoint square
 operators with trivial kernel. -/
 theorem source_gauge_eq_of_compactPositive_sameApproximationNumbers
-    (N : SourceUnitaryInvariantNorm.{0, v} ℂ)
+    (N : NormalizedSymmetricOperatorIdealFamily.{0, v} ℂ)
     {E F : Type v}
     [NormedAddCommGroup E] [InnerProductSpace ℂ E] [CompleteSpace E]
     [NormedAddCommGroup F] [InnerProductSpace ℂ F] [CompleteSpace F]
@@ -952,7 +881,7 @@ theorem source_gauge_eq_of_compactPositive_sameApproximationNumbers
 
 /-- Fan dominance restricted to square operators on one fixed Hilbert space. -/
 def HasFanDominanceOnSquare
-    (N : SourceUnitaryInvariantNorm.{0, v} ℂ)
+    (N : NormalizedSymmetricOperatorIdealFamily.{0, v} ℂ)
     (H : Type v)
     [NormedAddCommGroup H] [InnerProductSpace ℂ H] [CompleteSpace H] : Prop :=
   ∀ {A B : H →L[ℂ] H},
@@ -976,7 +905,7 @@ where spectral/diagonal approximation machinery is the natural next target.
 /-- Fan dominance restricted to positive square operators on one fixed Hilbert
 space. -/
 def HasFanDominanceOnPositiveSquare
-    (N : SourceUnitaryInvariantNorm.{0, v} ℂ)
+    (N : NormalizedSymmetricOperatorIdealFamily.{0, v} ℂ)
     (H : Type v)
     [NormedAddCommGroup H] [InnerProductSpace ℂ H] [CompleteSpace H] : Prop :=
   ∀ {A B : H →L[ℂ] H},
@@ -988,7 +917,7 @@ def HasFanDominanceOnPositiveSquare
 /-- Positive-square dominance is sufficient for arbitrary square dominance by
 passing both operators to their moduli. -/
 theorem hasFanDominanceOnSquare_of_positive
-    (N : SourceUnitaryInvariantNorm.{0, v} ℂ)
+    (N : NormalizedSymmetricOperatorIdealFamily.{0, v} ℂ)
     {H : Type v}
     [NormedAddCommGroup H] [InnerProductSpace ℂ H] [CompleteSpace H]
     (hpos : HasFanDominanceOnPositiveSquare N H) :
@@ -1013,7 +942,7 @@ theorem hasFanDominanceOnSquare_of_positive
 
 /-- Arbitrary square dominance obviously implies its positive restriction. -/
 theorem hasFanDominanceOnPositiveSquare_of_square
-    (N : SourceUnitaryInvariantNorm.{0, v} ℂ)
+    (N : NormalizedSymmetricOperatorIdealFamily.{0, v} ℂ)
     {H : Type v}
     [NormedAddCommGroup H] [InnerProductSpace ℂ H] [CompleteSpace H]
     (h : HasFanDominanceOnSquare N H) :
@@ -1024,7 +953,7 @@ theorem hasFanDominanceOnPositiveSquare_of_square
 /-- The one-space Fan-dominance problem is exactly the positive one-space
 problem; no sequence-invariance assumption is needed for this reduction. -/
 theorem fanDominanceOnSquare_iff_positive
-    (N : SourceUnitaryInvariantNorm.{0, v} ℂ)
+    (N : NormalizedSymmetricOperatorIdealFamily.{0, v} ℂ)
     {H : Type v}
     [NormedAddCommGroup H] [InnerProductSpace ℂ H] [CompleteSpace H] :
     HasFanDominanceOnSquare N H ↔ HasFanDominanceOnPositiveSquare N H := by
@@ -1048,7 +977,7 @@ finite-dimensional result at all.
 
 /-- The full separable target trivially contains the one-model-space target. -/
 theorem hasFanDominanceOnSquare_of_fanDominanceSeparable
-    (N : SourceUnitaryInvariantNorm.{0, v} ℂ)
+    (N : NormalizedSymmetricOperatorIdealFamily.{0, v} ℂ)
     {H : Type v}
     [NormedAddCommGroup H] [InnerProductSpace ℂ H] [CompleteSpace H]
     [TopologicalSpace.SeparableSpace H]
@@ -1066,7 +995,7 @@ universe.  Then sequence invariance plus Fan dominance for square operators on
 No finite-dimensional approximation, density, compactness, or symmetric-gauge
 representation is used. -/
 theorem hasFanDominanceSeparable_of_sequenceInvariance_and_modelSpace
-    (N : SourceUnitaryInvariantNorm.{0, v} ℂ)
+    (N : NormalizedSymmetricOperatorIdealFamily.{0, v} ℂ)
     {H : Type v}
     [NormedAddCommGroup H] [InnerProductSpace ℂ H] [CompleteSpace H]
     [TopologicalSpace.SeparableSpace H]
@@ -1105,7 +1034,7 @@ separable Fan-dominance problem is equivalent to exactly two obligations:
 
 This equivalence is the main output of the new probes. -/
 theorem fanDominanceSeparable_iff_sequenceInvariance_and_modelSpace
-    (N : SourceUnitaryInvariantNorm.{0, v} ℂ)
+    (N : NormalizedSymmetricOperatorIdealFamily.{0, v} ℂ)
     {H : Type v}
     [NormedAddCommGroup H] [InnerProductSpace ℂ H] [CompleteSpace H]
     [TopologicalSpace.SeparableSpace H]
@@ -1126,7 +1055,7 @@ factorization found by these probes: on any chosen infinite-dimensional
 separable model space, full separable Fan dominance is equivalent to sequence
 invariance plus Fan dominance only for positive operators on that model. -/
 theorem fanDominanceSeparable_iff_sequenceInvariance_and_positiveModel
-    (N : SourceUnitaryInvariantNorm.{0, v} ℂ)
+    (N : NormalizedSymmetricOperatorIdealFamily.{0, v} ℂ)
     {H : Type v}
     [NormedAddCommGroup H] [InnerProductSpace ℂ H] [CompleteSpace H]
     [TopologicalSpace.SeparableSpace H]
@@ -1153,7 +1082,7 @@ attack them independently without changing the source structure.
 /-- Once sequence invariance has been established, one-space Fan dominance and
 the full separable statement are equivalent. -/
 theorem fanDominanceSeparable_iff_modelSpace_of_sequenceInvariance
-    (N : SourceUnitaryInvariantNorm.{0, v} ℂ)
+    (N : NormalizedSymmetricOperatorIdealFamily.{0, v} ℂ)
     {H : Type v}
     [NormedAddCommGroup H] [InnerProductSpace ℂ H] [CompleteSpace H]
     [TopologicalSpace.SeparableSpace H]
@@ -1236,7 +1165,7 @@ private theorem polarPartial_and_adjoint_enorm_le_one_rectangular
 
 /-- **Rectangular modulus reduction from the source laws alone.** -/
 theorem source_gauge_modulus_eq_rectangular
-    (N : SourceUnitaryInvariantNorm.{0, v} ℂ)
+    (N : NormalizedSymmetricOperatorIdealFamily.{0, v} ℂ)
     {E F : Type v}
     [NormedAddCommGroup E] [InnerProductSpace ℂ E] [CompleteSpace E]
     [NormedAddCommGroup F] [InnerProductSpace ℂ F] [CompleteSpace F]
@@ -1338,7 +1267,7 @@ private theorem approximationNumber_comp_isometryEquiv_eq
 /-- Unitary conjugation of a square operator preserves both the complete
 approximation-number sequence and the source gauge. -/
 theorem source_conjugation_sameSequence_and_gauge
-    (N : SourceUnitaryInvariantNorm.{0, v} ℂ)
+    (N : NormalizedSymmetricOperatorIdealFamily.{0, v} ℂ)
     {E H : Type v}
     [NormedAddCommGroup E] [InnerProductSpace ℂ E] [CompleteSpace E]
     [NormedAddCommGroup H] [InnerProductSpace ℂ H] [CompleteSpace H]
@@ -1370,7 +1299,7 @@ same-sequence replacement is used.
 infinite-dimensional separable Hilbert spaces.  The codomains remain arbitrary
 separable Hilbert spaces. -/
 def HasFanDominanceOnInfiniteSeparableDomains
-    (N : SourceUnitaryInvariantNorm.{0, v} ℂ) : Prop :=
+    (N : NormalizedSymmetricOperatorIdealFamily.{0, v} ℂ) : Prop :=
   ∀ {E F E' F' : Type v}
     [NormedAddCommGroup E] [InnerProductSpace ℂ E] [CompleteSpace E]
     [TopologicalSpace.SeparableSpace E]
@@ -1391,7 +1320,7 @@ def HasFanDominanceOnInfiniteSeparableDomains
 all-infinite separable rectangular comparison, using only rectangular modulus
 and unitary equivalence of separable infinite-dimensional Hilbert spaces. -/
 theorem hasFanDominanceOnInfiniteSeparableDomains_of_modelSpace
-    (N : SourceUnitaryInvariantNorm.{0, v} ℂ)
+    (N : NormalizedSymmetricOperatorIdealFamily.{0, v} ℂ)
     {H : Type v}
     [NormedAddCommGroup H] [InnerProductSpace ℂ H] [CompleteSpace H]
     [TopologicalSpace.SeparableSpace H]
@@ -1442,7 +1371,7 @@ theorem hasFanDominanceOnInfiniteSeparableDomains_of_modelSpace
 /-- Conversely, the all-infinite predicate contains the one-model-space square
 case. -/
 theorem hasFanDominanceOnSquare_of_infiniteSeparableDomains
-    (N : SourceUnitaryInvariantNorm.{0, v} ℂ)
+    (N : NormalizedSymmetricOperatorIdealFamily.{0, v} ℂ)
     {H : Type v}
     [NormedAddCommGroup H] [InnerProductSpace ℂ H] [CompleteSpace H]
     [TopologicalSpace.SeparableSpace H]
@@ -1457,7 +1386,7 @@ separable model space, Fan dominance there is equivalent to Fan dominance for
 all rectangular comparisons whose two domains are infinite-dimensional and
 separable. -/
 theorem fanDominanceInfiniteSeparable_iff_modelSpace
-    (N : SourceUnitaryInvariantNorm.{0, v} ℂ)
+    (N : NormalizedSymmetricOperatorIdealFamily.{0, v} ℂ)
     {H : Type v}
     [NormedAddCommGroup H] [InnerProductSpace ℂ H] [CompleteSpace H]
     [TopologicalSpace.SeparableSpace H]
@@ -1470,7 +1399,7 @@ theorem fanDominanceInfiniteSeparable_iff_modelSpace
 /-- The same all-infinite reduction can be stated using only positive operators
 on the fixed model space. -/
 theorem fanDominanceInfiniteSeparable_iff_positiveModel
-    (N : SourceUnitaryInvariantNorm.{0, v} ℂ)
+    (N : NormalizedSymmetricOperatorIdealFamily.{0, v} ℂ)
     {H : Type v}
     [NormedAddCommGroup H] [InnerProductSpace ℂ H] [CompleteSpace H]
     [TopologicalSpace.SeparableSpace H]
@@ -1500,7 +1429,7 @@ contribution or an infinite-completion issue can actually matter.
 
 /-- Fan dominance when both operator domains are finite-dimensional. -/
 def HasFanDominanceOnFiniteSeparableDomains
-    (N : SourceUnitaryInvariantNorm.{0, v} ℂ) : Prop :=
+    (N : NormalizedSymmetricOperatorIdealFamily.{0, v} ℂ) : Prop :=
   ∀ {E F E' F' : Type v}
     [NormedAddCommGroup E] [InnerProductSpace ℂ E] [CompleteSpace E]
     [TopologicalSpace.SeparableSpace E]
@@ -1520,7 +1449,7 @@ def HasFanDominanceOnFiniteSeparableDomains
 /-- Fan dominance in the genuinely cross-dimensional case: exactly one of the
 two operator domains is finite-dimensional. -/
 def HasFanDominanceOnMixedSeparableDomains
-    (N : SourceUnitaryInvariantNorm.{0, v} ℂ) : Prop :=
+    (N : NormalizedSymmetricOperatorIdealFamily.{0, v} ℂ) : Prop :=
   ∀ {E F E' F' : Type v}
     [NormedAddCommGroup E] [InnerProductSpace ℂ E] [CompleteSpace E]
     [TopologicalSpace.SeparableSpace E]
@@ -1541,7 +1470,7 @@ def HasFanDominanceOnMixedSeparableDomains
 /-- The complete separable target is exactly finite/finite + infinite/infinite
 + mixed-domain dominance. -/
 theorem fanDominanceSeparable_iff_dimensionSplit
-    (N : SourceUnitaryInvariantNorm.{0, v} ℂ) :
+    (N : NormalizedSymmetricOperatorIdealFamily.{0, v} ℂ) :
     HasFanDominanceSeparable N ↔
       HasFanDominanceOnFiniteSeparableDomains N ∧
       HasFanDominanceOnInfiniteSeparableDomains N ∧
@@ -1571,7 +1500,7 @@ boundary: after choosing one infinite separable model space, the full source
 claim consists of the positive-model theorem plus the finite/finite and mixed
 cross-dimensional cases. -/
 theorem fanDominanceSeparable_iff_finite_mixed_positiveModel
-    (N : SourceUnitaryInvariantNorm.{0, v} ℂ)
+    (N : NormalizedSymmetricOperatorIdealFamily.{0, v} ℂ)
     {H : Type v}
     [NormedAddCommGroup H] [InnerProductSpace ℂ H] [CompleteSpace H]
     [TopologicalSpace.SeparableSpace H]
@@ -1660,7 +1589,7 @@ private theorem sndL_enorm_le_one_stabilization
 
 /-- Adjoining a zero second block preserves the source gauge exactly. -/
 theorem source_gauge_blockSum_zero_right_eq
-    (N : SourceUnitaryInvariantNorm.{0, v} ℂ)
+    (N : NormalizedSymmetricOperatorIdealFamily.{0, v} ℂ)
     {E H : Type v}
     [NormedAddCommGroup E] [InnerProductSpace ℂ E] [CompleteSpace E]
     [NormedAddCommGroup H] [InnerProductSpace ℂ H] [CompleteSpace H]
@@ -1693,7 +1622,7 @@ theorem source_gauge_blockSum_zero_right_eq
 /-- Adjoining a zero second block preserves every approximation number and the
 source gauge. -/
 theorem source_blockSum_zero_right_sameSequence_and_gauge
-    (N : SourceUnitaryInvariantNorm.{0, v} ℂ)
+    (N : NormalizedSymmetricOperatorIdealFamily.{0, v} ℂ)
     {E H : Type v}
     [NormedAddCommGroup E] [InnerProductSpace ℂ E] [CompleteSpace E]
     [NormedAddCommGroup H] [InnerProductSpace ℂ H] [CompleteSpace H]
@@ -1790,7 +1719,7 @@ unchanged, while both stabilized domains are now infinite-dimensional.  Probe
 /-- Fan dominance for arbitrary pairs of square operators on separable Hilbert
 spaces, with no dimension restriction. -/
 def HasFanDominanceOnSeparableSquarePairs
-    (N : SourceUnitaryInvariantNorm.{0, v} ℂ) : Prop :=
+    (N : NormalizedSymmetricOperatorIdealFamily.{0, v} ℂ) : Prop :=
   ∀ {E E' : Type v}
     [NormedAddCommGroup E] [InnerProductSpace ℂ E] [CompleteSpace E]
     [TopologicalSpace.SeparableSpace E]
@@ -1804,7 +1733,7 @@ def HasFanDominanceOnSeparableSquarePairs
 /-- All-infinite separable dominance implies arbitrary separable square-pair
 dominance after stabilization by one fixed infinite separable Hilbert space. -/
 theorem hasFanDominanceOnSeparableSquarePairs_of_infiniteDomains
-    (N : SourceUnitaryInvariantNorm.{0, v} ℂ)
+    (N : NormalizedSymmetricOperatorIdealFamily.{0, v} ℂ)
     {H : Type v}
     [NormedAddCommGroup H] [InnerProductSpace ℂ H] [CompleteSpace H]
     [TopologicalSpace.SeparableSpace H]
@@ -1861,7 +1790,7 @@ fixed infinite-dimensional separable Hilbert space.
 statement, because both the gauge and approximation numbers are unchanged by
 passing to the operator modulus. -/
 theorem hasFanDominanceSeparable_of_squarePairs
-    (N : SourceUnitaryInvariantNorm.{0, v} ℂ)
+    (N : NormalizedSymmetricOperatorIdealFamily.{0, v} ℂ)
     (hsq : HasFanDominanceOnSeparableSquarePairs N) :
     HasFanDominanceSeparable N := by
   intro E F E' F' _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ A B hAB
@@ -1890,7 +1819,7 @@ theorem hasFanDominanceSeparable_of_squarePairs
 /-- Positive Fan dominance on one fixed infinite separable Hilbert space implies
 the complete separable source statement. -/
 theorem hasFanDominanceSeparable_of_positiveModel_stabilized
-    (N : SourceUnitaryInvariantNorm.{0, v} ℂ)
+    (N : NormalizedSymmetricOperatorIdealFamily.{0, v} ℂ)
     {H : Type v}
     [NormedAddCommGroup H] [InnerProductSpace ℂ H] [CompleteSpace H]
     [TopologicalSpace.SeparableSpace H]
@@ -1934,7 +1863,7 @@ theorem hasFanDominanceSeparable_of_positiveModel_stabilized
 /-- Conversely, the full separable source statement contains the positive
 square case on any particular separable model space. -/
 theorem hasFanDominanceOnPositiveSquare_of_fanDominanceSeparable
-    (N : SourceUnitaryInvariantNorm.{0, v} ℂ)
+    (N : NormalizedSymmetricOperatorIdealFamily.{0, v} ℂ)
     {H : Type v}
     [NormedAddCommGroup H] [InnerProductSpace ℂ H] [CompleteSpace H]
     [TopologicalSpace.SeparableSpace H]
@@ -1947,7 +1876,7 @@ theorem hasFanDominanceOnPositiveSquare_of_fanDominanceSeparable
 separable complex Hilbert space `H`, full source-scope Fan dominance is exactly
 positive Fan dominance on `H`. -/
 theorem fanDominanceSeparable_iff_positiveModel_stabilized
-    (N : SourceUnitaryInvariantNorm.{0, v} ℂ)
+    (N : NormalizedSymmetricOperatorIdealFamily.{0, v} ℂ)
     {H : Type v}
     [NormedAddCommGroup H] [InnerProductSpace ℂ H] [CompleteSpace H]
     [TopologicalSpace.SeparableSpace H]
@@ -1986,7 +1915,7 @@ missing a standard regularity assumption.
 Probes 13--16 reduce the separable problem to positive Fan dominance on one fixed
 infinite-dimensional separable Hilbert space.  Before attempting the remaining
 infinite-dimensional majorization proof, there is a more basic question to
-settle: is the current raw `SourceUnitaryInvariantNorm` abstraction itself
+settle: is the current raw `NormalizedSymmetricOperatorIdealFamily` abstraction itself
 strong enough for the unconditional `ENNReal`-valued Fan-dominance property?
 
 The source gauge uses `∞` outside its ideal.  Therefore
@@ -2235,8 +2164,8 @@ noncomputable def finiteRankOperatorNormFamily :
 
 /-- The finite-rank operator-norm family satisfies the current raw source laws,
 including rank-one normalization. -/
-noncomputable def finiteRankOperatorNormSource :
-    SourceUnitaryInvariantNorm.{0, v} ℂ where
+noncomputable def finiteRankNormalizedSymmetricOperatorIdealFamily :
+    NormalizedSymmetricOperatorIdealFamily.{0, v} ℂ where
   toSymmetricOperatorIdealFamily := finiteRankOperatorNormFamily
   gauge_rankOne_eq_one := by
     intro E F _ _ _ _ _ _ V hVnorm hVrank
@@ -2415,16 +2344,16 @@ theorem fanCounterexample_kyFan_domination :
 /-! ### Probe 21: the raw source laws do not imply unconditional Fan dominance -/
 
 @[simp]
-theorem finiteRankSource_gauge_A :
-    (finiteRankOperatorNormSource.{0}).toSymmetricOperatorIdealFamily.gauge
+theorem finiteRankNormalizedSymmetricOperatorIdealFamily_gauge_A :
+    (finiteRankNormalizedSymmetricOperatorIdealFamily.{0}).toSymmetricOperatorIdealFamily.gauge
       fanCounterexampleA = ⊤ := by
   change finiteRankOperatorNormGauge fanCounterexampleA = ⊤
   rw [finiteRankOperatorNormGauge,
     ite_eq_right fanCounterexampleA_not_finiteRank]
 
 @[simp]
-theorem finiteRankSource_gauge_B :
-    (finiteRankOperatorNormSource.{0}).toSymmetricOperatorIdealFamily.gauge
+theorem finiteRankNormalizedSymmetricOperatorIdealFamily_gauge_B :
+    (finiteRankNormalizedSymmetricOperatorIdealFamily.{0}).toSymmetricOperatorIdealFamily.gauge
       fanCounterexampleB = 1 := by
   have hfin : ProbeFiniteRank fanCounterexampleB := ⟨1, fanCounterexampleB_rank_le_one⟩
   change finiteRankOperatorNormGauge fanCounterexampleB = 1
@@ -2435,49 +2364,49 @@ theorem finiteRankSource_gauge_B :
 /-- **Decisive unrestricted countermodel probe.**  The raw source laws do not
 imply the current production `HasFanDominance` property.  This theorem does not
 need a separability instance for the concrete `lp` model. -/
-theorem finiteRankOperatorNormSource_not_fanDominant :
-    ¬ (finiteRankOperatorNormSource.{0}).HasFanDominance := by
+theorem finiteRankNormalizedSymmetricOperatorIdealFamily_not_fanDominant :
+    ¬ (finiteRankNormalizedSymmetricOperatorIdealFamily.{0}).HasFanDominance := by
   intro hfan
   have hle := hfan (A := fanCounterexampleA) (B := fanCounterexampleB)
     fanCounterexample_kyFan_domination
-  rw [finiteRankSource_gauge_A, finiteRankSource_gauge_B] at hle
+  rw [finiteRankNormalizedSymmetricOperatorIdealFamily_gauge_A, finiteRankNormalizedSymmetricOperatorIdealFamily_gauge_B] at hle
   have hbad : (⊤ : ℝ≥0∞) = 1 := le_antisymm hle le_top
   simp at hbad
 
 /-- Existential form for the exact current production property. -/
-theorem rawSourceLaws_do_not_imply_fanDominance :
-    ∃ N : SourceUnitaryInvariantNorm.{0, 0} ℂ, ¬ N.HasFanDominance :=
-  ⟨finiteRankOperatorNormSource.{0},
-    finiteRankOperatorNormSource_not_fanDominant⟩
+theorem normalizedSymmetricFamilyLaws_do_not_imply_fanDominance :
+    ∃ N : NormalizedSymmetricOperatorIdealFamily.{0, 0} ℂ, ¬ N.HasFanDominance :=
+  ⟨finiteRankNormalizedSymmetricOperatorIdealFamily.{0},
+    finiteRankNormalizedSymmetricOperatorIdealFamily_not_fanDominant⟩
 
 /-- The same countermodel is separable as soon as Lean is supplied the missing
 `SeparableSpace` instance for the pinned `lp` model.  Pinned Mathlib does not
 currently provide that instance, so the fact is kept explicit rather than
 smuggled in as an axiom or local instance. -/
-theorem finiteRankOperatorNormSource_not_fanDominantSeparable
+theorem finiteRankNormalizedSymmetricOperatorIdealFamily_not_fanDominantSeparable
     [TopologicalSpace.SeparableSpace FanCounterexampleSpace] :
-    ¬ HasFanDominanceSeparable (finiteRankOperatorNormSource.{0}) := by
+    ¬ HasFanDominanceSeparable (finiteRankNormalizedSymmetricOperatorIdealFamily.{0}) := by
   intro hfan
   have hle := hfan (A := fanCounterexampleA) (B := fanCounterexampleB)
     fanCounterexample_kyFan_domination
-  rw [finiteRankSource_gauge_A, finiteRankSource_gauge_B] at hle
+  rw [finiteRankNormalizedSymmetricOperatorIdealFamily_gauge_A, finiteRankNormalizedSymmetricOperatorIdealFamily_gauge_B] at hle
   have hbad : (⊤ : ℝ≥0∞) = 1 := le_antisymm hle le_top
   simp at hbad
 
 /-- Conditional existential form of the separable countermodel. -/
-theorem rawSourceLaws_do_not_imply_fanDominanceSeparable
+theorem normalizedSymmetricFamilyLaws_do_not_imply_fanDominanceSeparable
     [TopologicalSpace.SeparableSpace FanCounterexampleSpace] :
-    ∃ N : SourceUnitaryInvariantNorm.{0, 0} ℂ, ¬ HasFanDominanceSeparable N :=
-  ⟨finiteRankOperatorNormSource.{0},
-    finiteRankOperatorNormSource_not_fanDominantSeparable⟩
+    ∃ N : NormalizedSymmetricOperatorIdealFamily.{0, 0} ℂ, ¬ HasFanDominanceSeparable N :=
+  ⟨finiteRankNormalizedSymmetricOperatorIdealFamily.{0},
+    finiteRankNormalizedSymmetricOperatorIdealFamily_not_fanDominantSeparable⟩
 
 /-! ### Probe 22: split the exact current production property -/
 
 /-- Fan dominance only where both source norms exist, without a separability
 restriction.  This is the exact where-defined component of the current
-production `SourceUnitaryInvariantNorm.HasFanDominance` property. -/
+production `NormalizedSymmetricOperatorIdealFamily.HasFanDominance` property. -/
 def HasFanDominanceWhereDefined
-    (N : SourceUnitaryInvariantNorm.{0, v} ℂ) : Prop :=
+    (N : NormalizedSymmetricOperatorIdealFamily.{0, v} ℂ) : Prop :=
   ∀ {E F E' F' : Type v}
     [NormedAddCommGroup E] [InnerProductSpace ℂ E] [CompleteSpace E]
     [NormedAddCommGroup F] [InnerProductSpace ℂ F] [CompleteSpace F]
@@ -2493,7 +2422,7 @@ def HasFanDominanceWhereDefined
 /-- The membership-solidity component of the current production Fan-dominance
 property. -/
 def HasKyFanMembershipTransfer
-    (N : SourceUnitaryInvariantNorm.{0, v} ℂ) : Prop :=
+    (N : NormalizedSymmetricOperatorIdealFamily.{0, v} ℂ) : Prop :=
   ∀ {E F E' F' : Type v}
     [NormedAddCommGroup E] [InnerProductSpace ℂ E] [CompleteSpace E]
     [NormedAddCommGroup F] [InnerProductSpace ℂ F] [CompleteSpace F]
@@ -2507,7 +2436,7 @@ def HasKyFanMembershipTransfer
 /-- The production property decomposes exactly into where-defined monotonicity
 and Ky-Fan membership transfer. -/
 theorem fanDominance_iff_whereDefined_and_membershipTransfer
-    (N : SourceUnitaryInvariantNorm.{0, v} ℂ) :
+    (N : NormalizedSymmetricOperatorIdealFamily.{0, v} ℂ) :
     N.HasFanDominance ↔
       HasFanDominanceWhereDefined N ∧ HasKyFanMembershipTransfer N := by
   constructor
@@ -2528,8 +2457,8 @@ theorem fanDominance_iff_whereDefined_and_membershipTransfer
 
 /-- The finite-rank/operator-norm source satisfies the norm inequality whenever
 both source gauges are defined. -/
-theorem finiteRankOperatorNormSource_fanDominantWhereDefined_unrestricted :
-    HasFanDominanceWhereDefined (finiteRankOperatorNormSource.{0}) := by
+theorem finiteRankNormalizedSymmetricOperatorIdealFamily_fanDominantWhereDefined_unrestricted :
+    HasFanDominanceWhereDefined (finiteRankNormalizedSymmetricOperatorIdealFamily.{0}) := by
   intro E F E' F' _ _ _ _ _ _ _ _ _ _ _ _ A B hA hB hAB
   have hAfin : ProbeFiniteRank A := by
     change finiteRankOperatorNormGauge A ≠ ⊤ at hA
@@ -2547,17 +2476,17 @@ theorem finiteRankOperatorNormSource_fanDominantWhereDefined_unrestricted :
 
 /-- The concrete diagonal/rank-one pair disproves the membership-transfer half
 of the production property. -/
-theorem finiteRankOperatorNormSource_not_membershipTransfer_unrestricted :
-    ¬ HasKyFanMembershipTransfer (finiteRankOperatorNormSource.{0}) := by
+theorem finiteRankNormalizedSymmetricOperatorIdealFamily_not_membershipTransfer_unrestricted :
+    ¬ HasKyFanMembershipTransfer (finiteRankNormalizedSymmetricOperatorIdealFamily.{0}) := by
   intro htransfer
   have hB :
-      (finiteRankOperatorNormSource.{0}).toSymmetricOperatorIdealFamily.gauge
+      (finiteRankNormalizedSymmetricOperatorIdealFamily.{0}).toSymmetricOperatorIdealFamily.gauge
         fanCounterexampleB ≠ ⊤ := by
-    rw [finiteRankSource_gauge_B]
+    rw [finiteRankNormalizedSymmetricOperatorIdealFamily_gauge_B]
     simp
   have hA := htransfer (A := fanCounterexampleA) (B := fanCounterexampleB)
     hB fanCounterexample_kyFan_domination
-  rw [finiteRankSource_gauge_A] at hA
+  rw [finiteRankNormalizedSymmetricOperatorIdealFamily_gauge_A] at hA
   exact hA rfl
 
 /-! ### Probes 23--24: repeat the split on the separable source scope -/
@@ -2565,7 +2494,7 @@ theorem finiteRankOperatorNormSource_not_membershipTransfer_unrestricted :
 /-- Fan dominance only where both source norms exist.  This is an exploration
 predicate, not a proposed production replacement. -/
 def HasFanDominanceSeparableWhereDefined
-    (N : SourceUnitaryInvariantNorm.{0, v} ℂ) : Prop :=
+    (N : NormalizedSymmetricOperatorIdealFamily.{0, v} ℂ) : Prop :=
   ∀ {E F E' F' : Type v}
     [NormedAddCommGroup E] [InnerProductSpace ℂ E] [CompleteSpace E]
     [TopologicalSpace.SeparableSpace E]
@@ -2585,7 +2514,7 @@ def HasFanDominanceSeparableWhereDefined
 /-- The extra ideal-solidity statement hidden inside unconditional `ENNReal`
 Fan dominance: weak Ky Fan domination by a member forces membership. -/
 def HasKyFanMembershipTransferSeparable
-    (N : SourceUnitaryInvariantNorm.{0, v} ℂ) : Prop :=
+    (N : NormalizedSymmetricOperatorIdealFamily.{0, v} ℂ) : Prop :=
   ∀ {E F E' F' : Type v}
     [NormedAddCommGroup E] [InnerProductSpace ℂ E] [CompleteSpace E]
     [TopologicalSpace.SeparableSpace E]
@@ -2603,7 +2532,7 @@ def HasKyFanMembershipTransferSeparable
 /-- Unconditional Fan dominance decomposes exactly into where-defined norm
 monotonicity plus membership transfer. -/
 theorem fanDominanceSeparable_iff_whereDefined_and_membershipTransfer
-    (N : SourceUnitaryInvariantNorm.{0, v} ℂ) :
+    (N : NormalizedSymmetricOperatorIdealFamily.{0, v} ℂ) :
     HasFanDominanceSeparable N ↔
       HasFanDominanceSeparableWhereDefined N ∧
         HasKyFanMembershipTransferSeparable N := by
@@ -2626,8 +2555,8 @@ theorem fanDominanceSeparable_iff_whereDefined_and_membershipTransfer
 /-- The finite-rank operator-norm source passes the *where-defined* inequality:
 on its ideal, the source gauge is just the operator norm, which is the first Ky
 Fan gauge. -/
-theorem finiteRankOperatorNormSource_fanDominantWhereDefined :
-    HasFanDominanceSeparableWhereDefined (finiteRankOperatorNormSource.{0}) := by
+theorem finiteRankNormalizedSymmetricOperatorIdealFamily_fanDominantWhereDefined :
+    HasFanDominanceSeparableWhereDefined (finiteRankNormalizedSymmetricOperatorIdealFamily.{0}) := by
   intro E F E' F' _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ A B hA hB hAB
   have hAfin : ProbeFiniteRank A := by
     change finiteRankOperatorNormGauge A ≠ ⊤ at hA
@@ -2645,25 +2574,25 @@ theorem finiteRankOperatorNormSource_fanDominantWhereDefined :
 
 /-- The same counterexample pinpoints the failed component: membership transfer,
 not the norm inequality on the finite-rank ideal. -/
-theorem finiteRankOperatorNormSource_not_membershipTransfer
+theorem finiteRankNormalizedSymmetricOperatorIdealFamily_not_membershipTransfer
     [TopologicalSpace.SeparableSpace FanCounterexampleSpace] :
-    ¬ HasKyFanMembershipTransferSeparable (finiteRankOperatorNormSource.{0}) := by
+    ¬ HasKyFanMembershipTransferSeparable (finiteRankNormalizedSymmetricOperatorIdealFamily.{0}) := by
   intro htransfer
   have hB :
-      (finiteRankOperatorNormSource.{0}).toSymmetricOperatorIdealFamily.gauge
+      (finiteRankNormalizedSymmetricOperatorIdealFamily.{0}).toSymmetricOperatorIdealFamily.gauge
         fanCounterexampleB ≠ ⊤ := by
-    rw [finiteRankSource_gauge_B]
+    rw [finiteRankNormalizedSymmetricOperatorIdealFamily_gauge_B]
     simp
   have hA := htransfer (A := fanCounterexampleA) (B := fanCounterexampleB)
     hB fanCounterexample_kyFan_domination
-  rw [finiteRankSource_gauge_A] at hA
+  rw [finiteRankNormalizedSymmetricOperatorIdealFamily_gauge_A] at hA
   exact hA rfl
 
 /-!
 ## Boundary after Probes 17--24 -- COMPILED
 
 This batch compiled cleanly on 2026-09-08.  It is now machine-checked that the
-current raw `SourceUnitaryInvariantNorm` fields do **not** imply the current
+current raw `NormalizedSymmetricOperatorIdealFamily` fields do **not** imply the current
 unconditional `HasFanDominance` property.  The finite-rank/operator-norm source
 is a counterexample.  The same source satisfies the norm inequality whenever
 both norms are defined; what fails is weak-majorization membership transfer.
@@ -2769,7 +2698,7 @@ theorem symmetricNorming_extendedGauge_le_cross
 operator where that source norm is actually defined.  No claim is made about the
 canonical extension away from the source ideal. -/
 def HasMemberwiseSymmetricNormingRepresentation
-    (N : SourceUnitaryInvariantNorm.{0, v} ℂ) : Prop :=
+    (N : NormalizedSymmetricOperatorIdealFamily.{0, v} ℂ) : Prop :=
   ∃ M : SymmetricNormingFunction,
     ∀ {E F : Type v}
       [NormedAddCommGroup E] [InnerProductSpace ℂ E] [CompleteSpace E]
@@ -2782,9 +2711,9 @@ def HasMemberwiseSymmetricNormingRepresentation
 symmetric-norming representation: on its domain it is just the first Ky Fan norm.
 Thus a value-only reading of the source's symmetric-gauge sentence does not by
 itself rule out the countermodel. -/
-theorem finiteRankOperatorNormSource_hasMemberwiseSymmetricNormingRepresentation :
+theorem finiteRankNormalizedSymmetricOperatorIdealFamily_hasMemberwiseSymmetricNormingRepresentation :
     HasMemberwiseSymmetricNormingRepresentation
-      (finiteRankOperatorNormSource.{0}) := by
+      (finiteRankNormalizedSymmetricOperatorIdealFamily.{0}) := by
   have h1 : 0 < (1 : ℕ) := by omega
   refine ⟨kyFanNormingFunction 1 h1, ?_⟩
   intro E F _ _ _ _ _ _ A hA
@@ -2803,7 +2732,7 @@ theorem finiteRankOperatorNormSource_hasMemberwiseSymmetricNormingRepresentation
 source ideal, ordinary Fan dominance follows whenever both displayed norms
 exist.  No membership-transfer conclusion is used. -/
 theorem fanDominantWhereDefined_of_memberwiseSymmetricNormingRepresentation
-    (N : SourceUnitaryInvariantNorm.{0, v} ℂ)
+    (N : NormalizedSymmetricOperatorIdealFamily.{0, v} ℂ)
     (hrep : HasMemberwiseSymmetricNormingRepresentation N) :
     HasFanDominanceWhereDefined N := by
   rcases hrep with ⟨M, hM⟩
@@ -2815,11 +2744,11 @@ theorem fanDominantWhereDefined_of_memberwiseSymmetricNormingRepresentation
 current production `HasFanDominance`: the compiled finite-rank source satisfies
 the former and refutes the latter. -/
 theorem memberwiseSymmetricNormingRepresentation_does_not_imply_fanDominance :
-    ∃ N : SourceUnitaryInvariantNorm.{0, 0} ℂ,
+    ∃ N : NormalizedSymmetricOperatorIdealFamily.{0, 0} ℂ,
       HasMemberwiseSymmetricNormingRepresentation N ∧ ¬ N.HasFanDominance := by
-  refine ⟨finiteRankOperatorNormSource.{0},
-    finiteRankOperatorNormSource_hasMemberwiseSymmetricNormingRepresentation,
-    finiteRankOperatorNormSource_not_fanDominant⟩
+  refine ⟨finiteRankNormalizedSymmetricOperatorIdealFamily.{0},
+    finiteRankNormalizedSymmetricOperatorIdealFamily_hasMemberwiseSymmetricNormingRepresentation,
+    finiteRankNormalizedSymmetricOperatorIdealFamily_not_fanDominant⟩
 
 /-! ### Probe 27: formalize the source's paper-wide vacuity convention -/
 
@@ -2827,7 +2756,7 @@ theorem memberwiseSymmetricNormingRepresentation_does_not_imply_fanDominance :
 the comparison is treated as vacuous; otherwise the Fan inequality must hold.
 This is an exploration predicate, not a production proposal. -/
 def HasFanDominanceWithVacuity
-    (N : SourceUnitaryInvariantNorm.{0, v} ℂ) : Prop :=
+    (N : NormalizedSymmetricOperatorIdealFamily.{0, v} ℂ) : Prop :=
   ∀ {E F E' F' : Type v}
     [NormedAddCommGroup E] [InnerProductSpace ℂ E] [CompleteSpace E]
     [NormedAddCommGroup F] [InnerProductSpace ℂ F] [CompleteSpace F]
@@ -2844,7 +2773,7 @@ def HasFanDominanceWithVacuity
 This theorem is bookkeeping, but it makes the semantic difference from the
 current unconditional `ENNReal` inequality visible in the type. -/
 theorem fanDominanceWithVacuity_iff_whereDefined
-    (N : SourceUnitaryInvariantNorm.{0, v} ℂ) :
+    (N : NormalizedSymmetricOperatorIdealFamily.{0, v} ℂ) :
     HasFanDominanceWithVacuity N ↔ HasFanDominanceWhereDefined N := by
   constructor
   · intro hv E F E' F' _ _ _ _ _ _ _ _ _ _ _ _ A B hA hB hAB
@@ -2863,7 +2792,7 @@ theorem fanDominanceWithVacuity_iff_whereDefined
 /-- Memberwise symmetric-norming representation is sufficient for the explicit
 vacuity reading of the Fan sentence. -/
 theorem fanDominanceWithVacuity_of_memberwiseSymmetricNormingRepresentation
-    (N : SourceUnitaryInvariantNorm.{0, v} ℂ)
+    (N : NormalizedSymmetricOperatorIdealFamily.{0, v} ℂ)
     (hrep : HasMemberwiseSymmetricNormingRepresentation N) :
     HasFanDominanceWithVacuity N := by
   rw [fanDominanceWithVacuity_iff_whereDefined]
@@ -2875,7 +2804,7 @@ theorem fanDominanceWithVacuity_of_memberwiseSymmetricNormingRepresentation
 source's total `ENNReal` gauge on *every* bounded operator.  Unlike the
 memberwise statement, this fixes the ideal domain as well as norm values. -/
 def HasTotalSymmetricNormingRepresentation
-    (N : SourceUnitaryInvariantNorm.{0, v} ℂ) : Prop :=
+    (N : NormalizedSymmetricOperatorIdealFamily.{0, v} ℂ) : Prop :=
   ∃ M : SymmetricNormingFunction,
     ∀ {E F : Type v}
       [NormedAddCommGroup E] [InnerProductSpace ℂ E] [CompleteSpace E]
@@ -2887,7 +2816,7 @@ def HasTotalSymmetricNormingRepresentation
 recover the current production `HasFanDominance`, including membership
 transfer. -/
 theorem fanDominance_of_totalSymmetricNormingRepresentation
-    (N : SourceUnitaryInvariantNorm.{0, v} ℂ)
+    (N : NormalizedSymmetricOperatorIdealFamily.{0, v} ℂ)
     (hrep : HasTotalSymmetricNormingRepresentation N) :
     N.HasFanDominance := by
   rcases hrep with ⟨M, hM⟩
@@ -2897,7 +2826,7 @@ theorem fanDominance_of_totalSymmetricNormingRepresentation
 
 /-- Total representation trivially restricts to memberwise representation. -/
 theorem memberwiseSymmetricNormingRepresentation_of_total
-    (N : SourceUnitaryInvariantNorm.{0, v} ℂ)
+    (N : NormalizedSymmetricOperatorIdealFamily.{0, v} ℂ)
     (hrep : HasTotalSymmetricNormingRepresentation N) :
     HasMemberwiseSymmetricNormingRepresentation N := by
   rcases hrep with ⟨M, hM⟩
@@ -2910,7 +2839,7 @@ theorem memberwiseSymmetricNormingRepresentation_of_total
 /-- Once memberwise symmetric-norming representation is granted, the only extra
 content of current unconditional Fan dominance is Ky-Fan membership transfer. -/
 theorem fanDominance_iff_membershipTransfer_of_memberwiseRepresentation
-    (N : SourceUnitaryInvariantNorm.{0, v} ℂ)
+    (N : NormalizedSymmetricOperatorIdealFamily.{0, v} ℂ)
     (hrep : HasMemberwiseSymmetricNormingRepresentation N) :
     N.HasFanDominance ↔ HasKyFanMembershipTransfer N := by
   have hwhere : HasFanDominanceWhereDefined N :=
@@ -2927,16 +2856,16 @@ there exists a raw source norm with a coherent symmetric-norming formula on its
 entire domain and with the explicit-vacuity Fan property, yet without the
 current unconditional production property. -/
 theorem exists_memberwise_vacuous_but_not_unconditional_fanDominance :
-    ∃ N : SourceUnitaryInvariantNorm.{0, 0} ℂ,
+    ∃ N : NormalizedSymmetricOperatorIdealFamily.{0, 0} ℂ,
       HasMemberwiseSymmetricNormingRepresentation N ∧
       HasFanDominanceWithVacuity N ∧
       ¬ N.HasFanDominance := by
-  refine ⟨finiteRankOperatorNormSource.{0},
-    finiteRankOperatorNormSource_hasMemberwiseSymmetricNormingRepresentation,
-    ?_, finiteRankOperatorNormSource_not_fanDominant⟩
+  refine ⟨finiteRankNormalizedSymmetricOperatorIdealFamily.{0},
+    finiteRankNormalizedSymmetricOperatorIdealFamily_hasMemberwiseSymmetricNormingRepresentation,
+    ?_, finiteRankNormalizedSymmetricOperatorIdealFamily_not_fanDominant⟩
   exact fanDominanceWithVacuity_of_memberwiseSymmetricNormingRepresentation
-    finiteRankOperatorNormSource.{0}
-    finiteRankOperatorNormSource_hasMemberwiseSymmetricNormingRepresentation
+    finiteRankNormalizedSymmetricOperatorIdealFamily.{0}
+    finiteRankNormalizedSymmetricOperatorIdealFamily_hasMemberwiseSymmetricNormingRepresentation
 
 /-!
 ## Boundary after Probes 25--30
@@ -2976,7 +2905,7 @@ def SourceVacuousGaugeLe
     [NormedAddCommGroup F] [InnerProductSpace ℂ F] [CompleteSpace F]
     [NormedAddCommGroup E'] [InnerProductSpace ℂ E'] [CompleteSpace E']
     [NormedAddCommGroup F'] [InnerProductSpace ℂ F'] [CompleteSpace F']
-    (N : SourceUnitaryInvariantNorm.{0, v} ℂ)
+    (N : NormalizedSymmetricOperatorIdealFamily.{0, v} ℂ)
     (A : E →L[ℂ] F) (B : E' →L[ℂ] F') : Prop :=
   (N.toSymmetricOperatorIdealFamily.gauge A = ⊤ ∨
       N.toSymmetricOperatorIdealFamily.gauge B = ⊤) ∨
@@ -2992,7 +2921,7 @@ def EverySourceVacuousGaugeLe
     [NormedAddCommGroup E'] [InnerProductSpace ℂ E'] [CompleteSpace E']
     [NormedAddCommGroup F'] [InnerProductSpace ℂ F'] [CompleteSpace F']
     (A : E →L[ℂ] F) (B : E' →L[ℂ] F') : Prop :=
-  ∀ N : SourceUnitaryInvariantNorm.{0, v} ℂ, SourceVacuousGaugeLe N A B
+  ∀ N : NormalizedSymmetricOperatorIdealFamily.{0, v} ℂ, SourceVacuousGaugeLe N A B
 
 /-- If the external Fan theorem supplies where-defined dominance for every raw
 source norm, Ky-Fan majorization implies the source's class-level vacuous
@@ -3004,7 +2933,7 @@ theorem everySourceVacuousGaugeLe_of_kyFan
     [NormedAddCommGroup E'] [InnerProductSpace ℂ E'] [CompleteSpace E']
     [NormedAddCommGroup F'] [InnerProductSpace ℂ F'] [CompleteSpace F']
     {A : E →L[ℂ] F} {B : E' →L[ℂ] F'}
-    (hclass : ∀ N : SourceUnitaryInvariantNorm.{0, v} ℂ,
+    (hclass : ∀ N : NormalizedSymmetricOperatorIdealFamily.{0, v} ℂ,
       HasFanDominanceWhereDefined N)
     (hAB : ∀ k, kyFanApproximationGauge k A ≤ kyFanApproximationGauge k B) :
     EverySourceVacuousGaugeLe A B := by
@@ -3015,20 +2944,20 @@ theorem everySourceVacuousGaugeLe_of_kyFan
 
 /-- The `k`-th Ky Fan norm, projected from the already-constructed normalized
 source member down to the raw printed-law structure. -/
-noncomputable def kyFanSourceUnitaryInvariantNorm (k : ℕ) (hk : 0 < k) :
-    SourceUnitaryInvariantNorm.{0, v} ℂ :=
-  (kyFanNormalizedUnitaryInvariantNorm (𝕜 := ℂ) k hk).toSource
+noncomputable def kyFanNormalizedSymmetricOperatorIdealFamily (k : ℕ) (hk : 0 < k) :
+    NormalizedSymmetricOperatorIdealFamily.{0, v} ℂ :=
+  (kyFanNormalizedUnitaryInvariantNorm (𝕜 := ℂ) k hk).toNormalizedSymmetricOperatorIdealFamily
 
 /-- The raw source gauge of the Ky Fan source member is exactly the finite Ky Fan
 approximation gauge transported to `ENNReal`. -/
 @[simp]
-theorem gauge_kyFanSourceUnitaryInvariantNorm
+theorem gauge_kyFanNormalizedSymmetricOperatorIdealFamily
     (k : ℕ) (hk : 0 < k)
     {E F : Type v}
     [NormedAddCommGroup E] [InnerProductSpace ℂ E] [CompleteSpace E]
     [NormedAddCommGroup F] [InnerProductSpace ℂ F] [CompleteSpace F]
     (A : E →L[ℂ] F) :
-    (kyFanSourceUnitaryInvariantNorm k hk).toSymmetricOperatorIdealFamily.gauge A =
+    (kyFanNormalizedSymmetricOperatorIdealFamily k hk).toSymmetricOperatorIdealFamily.gauge A =
       ENNReal.ofReal (kyFanApproximationGauge k A) := by
   change (kyFanSymmetricIdealFamily (𝕜 := ℂ) k hk).gauge A =
     ENNReal.ofReal (kyFanApproximationGauge k A)
@@ -3036,14 +2965,14 @@ theorem gauge_kyFanSourceUnitaryInvariantNorm
 
 /-- Every bounded operator lies in the raw source member supplied by a finite Ky
 Fan norm. -/
-theorem mem_kyFanSourceUnitaryInvariantNorm
+theorem mem_kyFanNormalizedSymmetricOperatorIdealFamily
     (k : ℕ) (hk : 0 < k)
     {E F : Type v}
     [NormedAddCommGroup E] [InnerProductSpace ℂ E] [CompleteSpace E]
     [NormedAddCommGroup F] [InnerProductSpace ℂ F] [CompleteSpace F]
     (A : E →L[ℂ] F) :
-    (kyFanSourceUnitaryInvariantNorm k hk).toSymmetricOperatorIdealFamily.gauge A ≠ ⊤ := by
-  rw [gauge_kyFanSourceUnitaryInvariantNorm]
+    (kyFanNormalizedSymmetricOperatorIdealFamily k hk).toSymmetricOperatorIdealFamily.gauge A ≠ ⊤ := by
+  rw [gauge_kyFanNormalizedSymmetricOperatorIdealFamily]
   exact ENNReal.ofReal_ne_top
 
 /-! ### Probe 33: recover every Ky Fan inequality from the class-level sentence -/
@@ -3065,13 +2994,13 @@ theorem kyFan_le_of_everySourceVacuousGaugeLe
   · subst k
     simp [kyFanApproximationGauge, ContinuousLinearMap.kyFanGauge_zero_index]
   · have hk : 0 < k := Nat.pos_of_ne_zero hk0
-    have hpair := h (kyFanSourceUnitaryInvariantNorm k hk)
+    have hpair := h (kyFanNormalizedSymmetricOperatorIdealFamily k hk)
     rcases hpair with hmissing | hle
     · rcases hmissing with hAtop | hBtop
-      · exact (mem_kyFanSourceUnitaryInvariantNorm k hk A hAtop).elim
-      · exact (mem_kyFanSourceUnitaryInvariantNorm k hk B hBtop).elim
-    · rw [gauge_kyFanSourceUnitaryInvariantNorm,
-        gauge_kyFanSourceUnitaryInvariantNorm] at hle
+      · exact (mem_kyFanNormalizedSymmetricOperatorIdealFamily k hk A hAtop).elim
+      · exact (mem_kyFanNormalizedSymmetricOperatorIdealFamily k hk B hBtop).elim
+    · rw [gauge_kyFanNormalizedSymmetricOperatorIdealFamily,
+        gauge_kyFanNormalizedSymmetricOperatorIdealFamily] at hle
       exact (ENNReal.ofReal_le_ofReal_iff
         (kyFanApproximationGauge_nonneg k B)).mp hle
 
@@ -3085,7 +3014,7 @@ theorem everySourceVacuousGaugeLe_iff_everyKyFan_le
     [NormedAddCommGroup E'] [InnerProductSpace ℂ E'] [CompleteSpace E']
     [NormedAddCommGroup F'] [InnerProductSpace ℂ F'] [CompleteSpace F']
     {A : E →L[ℂ] F} {B : E' →L[ℂ] F'}
-    (hclass : ∀ N : SourceUnitaryInvariantNorm.{0, v} ℂ,
+    (hclass : ∀ N : NormalizedSymmetricOperatorIdealFamily.{0, v} ℂ,
       HasFanDominanceWhereDefined N) :
     EverySourceVacuousGaugeLe A B ↔
       ∀ k, kyFanApproximationGauge k A ≤ kyFanApproximationGauge k B := by
@@ -3099,7 +3028,7 @@ theorem everySourceVacuousGaugeLe_iff_everyKyFan_le
 from ordinary where-defined Fan dominance by applying that theorem to `c • A`.
 No membership transfer is used: membership of `A` is an explicit premise. -/
 theorem mul_gaugeReal_le_of_all_mul_kyFan_le_whereDefined
-    (N : SourceUnitaryInvariantNorm.{0, v} ℂ)
+    (N : NormalizedSymmetricOperatorIdealFamily.{0, v} ℂ)
     (hfan : HasFanDominanceWhereDefined N)
     {E F E' F' : Type v}
     [NormedAddCommGroup E] [InnerProductSpace ℂ E] [CompleteSpace E]
@@ -3139,7 +3068,7 @@ def ScaledSourceEstimateWithVacuity
     [NormedAddCommGroup F] [InnerProductSpace ℂ F] [CompleteSpace F]
     [NormedAddCommGroup E'] [InnerProductSpace ℂ E'] [CompleteSpace E']
     [NormedAddCommGroup F'] [InnerProductSpace ℂ F'] [CompleteSpace F']
-    (N : SourceUnitaryInvariantNorm.{0, v} ℂ) (c : ℝ)
+    (N : NormalizedSymmetricOperatorIdealFamily.{0, v} ℂ) (c : ℝ)
     (A : E →L[ℂ] F) (B : E' →L[ℂ] F') : Prop :=
   (N.toSymmetricOperatorIdealFamily.gauge A = ⊤ ∨
       N.toSymmetricOperatorIdealFamily.gauge B = ⊤) ∨
@@ -3149,7 +3078,7 @@ def ScaledSourceEstimateWithVacuity
 /-- Scaled Ky Fan inequalities imply the corresponding source estimate with
 vacuity under only the where-defined form of Fan dominance. -/
 theorem scaledSourceEstimateWithVacuity_of_all_mul_kyFan_le
-    (N : SourceUnitaryInvariantNorm.{0, v} ℂ)
+    (N : NormalizedSymmetricOperatorIdealFamily.{0, v} ℂ)
     (hfan : HasFanDominanceWhereDefined N)
     {E F E' F' : Type v}
     [NormedAddCommGroup E] [InnerProductSpace ℂ E] [CompleteSpace E]
@@ -3181,12 +3110,12 @@ theorem everySource_scaledEstimateWithVacuity_of_all_mul_kyFan_le
     [NormedAddCommGroup E'] [InnerProductSpace ℂ E'] [CompleteSpace E']
     [NormedAddCommGroup F'] [InnerProductSpace ℂ F'] [CompleteSpace F']
     {A : E →L[ℂ] F} {B : E' →L[ℂ] F'} {c : ℝ}
-    (hclass : ∀ N : SourceUnitaryInvariantNorm.{0, v} ℂ,
+    (hclass : ∀ N : NormalizedSymmetricOperatorIdealFamily.{0, v} ℂ,
       HasFanDominanceWhereDefined N)
     (hc : 0 < c)
     (hky : ∀ k, c * kyFanApproximationGauge k A ≤
       kyFanApproximationGauge k B) :
-    ∀ N : SourceUnitaryInvariantNorm.{0, v} ℂ,
+    ∀ N : NormalizedSymmetricOperatorIdealFamily.{0, v} ℂ,
       ScaledSourceEstimateWithVacuity N c A B := by
   intro N
   exact scaledSourceEstimateWithVacuity_of_all_mul_kyFan_le
@@ -3213,7 +3142,7 @@ theorem sinTheta_unbounded_formGap_sourceVacuous_complex_probe
     [NormedAddCommGroup F] [InnerProductSpace ℂ F] [CompleteSpace F]
     [NormedAddCommGroup G] [InnerProductSpace ℂ G] [CompleteSpace G]
     [NormedAddCommGroup H] [InnerProductSpace ℂ H] [CompleteSpace H]
-    (N : SourceUnitaryInvariantNorm.{0, v} ℂ)
+    (N : NormalizedSymmetricOperatorIdealFamily.{0, v} ℂ)
     (hfan : HasFanDominanceWhereDefined N)
     (A : E →ₗ.[ℂ] E) (A₀ : F →ₗ.[ℂ] F) (Λ₁ : G →ₗ.[ℂ] G)
     (E₀ : F →L[ℂ] E) (F₀ : H →L[ℂ] E) (F₁ : G →L[ℂ] E)
@@ -3278,7 +3207,7 @@ conclusion.  These are theorem-signature probes, not production changes.
 /-- `SourceVacuousGaugeLe` is not an extra inequality.  It is exactly the
 ordinary gauge comparison conditional on both displayed source norms existing. -/
 theorem sourceVacuousGaugeLe_iff_defined_implication
-    (N : SourceUnitaryInvariantNorm.{0, v} ℂ)
+    (N : NormalizedSymmetricOperatorIdealFamily.{0, v} ℂ)
     {E F E' F' : Type v}
     [NormedAddCommGroup E] [InnerProductSpace ℂ E] [CompleteSpace E]
     [NormedAddCommGroup F] [InnerProductSpace ℂ F] [CompleteSpace F]
@@ -3308,7 +3237,7 @@ theorem sourceVacuousGaugeLe_iff_defined_implication
 norms exist it is precisely the printed real-valued inequality, and otherwise
 the result is vacuous. -/
 theorem scaledSourceEstimateWithVacuity_iff_defined_implication
-    (N : SourceUnitaryInvariantNorm.{0, v} ℂ)
+    (N : NormalizedSymmetricOperatorIdealFamily.{0, v} ℂ)
     {E F E' F' : Type v}
     [NormedAddCommGroup E] [InnerProductSpace ℂ E] [CompleteSpace E]
     [NormedAddCommGroup F] [InnerProductSpace ℂ F] [CompleteSpace F]
@@ -3338,23 +3267,23 @@ theorem scaledSourceEstimateWithVacuity_iff_defined_implication
 
 /-- Any current production normalized norm supplies the where-defined Fan
 property after forgetting its stronger membership-transfer field. -/
-theorem normalized_toSource_hasFanDominanceWhereDefined
+theorem normalizedUnitaryInvariantNorm_hasFanDominanceWhereDefined
     (N : NormalizedUnitaryInvariantNorm.{0, v} ℂ) :
-    HasFanDominanceWhereDefined N.toSource :=
-  ((fanDominance_iff_whereDefined_and_membershipTransfer N.toSource).mp
-    N.toSource_hasFanDominance).1
+    HasFanDominanceWhereDefined N.toNormalizedSymmetricOperatorIdealFamily :=
+  ((fanDominance_iff_whereDefined_and_membershipTransfer N.toNormalizedSymmetricOperatorIdealFamily).mp
+    N.toNormalizedSymmetricOperatorIdealFamily_hasFanDominance).1
 
 /-- The compiled finite-rank source norm is outside the image of the current
 normalized production class.  Thus a theorem quantifying only over normalized
 norms genuinely excludes raw source norms that satisfy the printed-law
 abstraction and where-defined Fan comparison. -/
-theorem finiteRankOperatorNormSource_not_normalized_toSource :
+theorem finiteRankNormalizedSymmetricOperatorIdealFamily_not_from_normalizedUnitaryInvariantNorm :
     ¬ ∃ N : NormalizedUnitaryInvariantNorm.{0, 0} ℂ,
-      N.toSource = finiteRankOperatorNormSource.{0} := by
+      N.toNormalizedSymmetricOperatorIdealFamily = finiteRankNormalizedSymmetricOperatorIdealFamily.{0} := by
   rintro ⟨N, hN⟩
-  have hfan : N.toSource.HasFanDominance := N.toSource_hasFanDominance
+  have hfan : N.toNormalizedSymmetricOperatorIdealFamily.HasFanDominance := N.toNormalizedSymmetricOperatorIdealFamily_hasFanDominance
   rw [hN] at hfan
-  exact finiteRankOperatorNormSource_not_fanDominant hfan
+  exact finiteRankNormalizedSymmetricOperatorIdealFamily_not_fanDominant hfan
 
 /-! ### Probe 40: the actual sine theorem survives on the countermodel -/
 
@@ -3380,11 +3309,11 @@ theorem sinTheta_unbounded_formGap_finiteRankSourceVacuous_complex_probe
     (hexact : TauCeti.DavisKahan1970.IsExactSpectralDecomposition A Λ₁ F₀ F₁)
     {δ : ℝ} (hδ : 0 < δ)
     (hgap : TauCeti.DavisKahan.Sylvester.FormBoundedSylvesterGap A₀ Λ₁ δ) :
-    ScaledSourceEstimateWithVacuity (finiteRankOperatorNormSource.{0}) δ
+    ScaledSourceEstimateWithVacuity (finiteRankNormalizedSymmetricOperatorIdealFamily.{0}) δ
       ((ContinuousLinearMap.id ℂ E - F₀ ∘L F₀.adjoint) ∘L E₀) R :=
   sinTheta_unbounded_formGap_sourceVacuous_complex_probe
-    (finiteRankOperatorNormSource.{0})
-    finiteRankOperatorNormSource_fanDominantWhereDefined_unrestricted
+    (finiteRankNormalizedSymmetricOperatorIdealFamily.{0})
+    finiteRankNormalizedSymmetricOperatorIdealFamily_fanDominantWhereDefined_unrestricted
     A A₀ Λ₁ E₀ F₀ F₁ R hA hA₀ hΛ₁ htrial hexact hδ hgap
 
 /-! ### Probe 41: normalized norms also admit the weaker source boundary -/
@@ -3409,10 +3338,10 @@ theorem sinTheta_unbounded_formGap_normalizedAsSourceVacuous_complex_probe
     (hexact : TauCeti.DavisKahan1970.IsExactSpectralDecomposition A Λ₁ F₀ F₁)
     {δ : ℝ} (hδ : 0 < δ)
     (hgap : TauCeti.DavisKahan.Sylvester.FormBoundedSylvesterGap A₀ Λ₁ δ) :
-    ScaledSourceEstimateWithVacuity N.toSource δ
+    ScaledSourceEstimateWithVacuity N.toNormalizedSymmetricOperatorIdealFamily δ
       ((ContinuousLinearMap.id ℂ E - F₀ ∘L F₀.adjoint) ∘L E₀) R :=
   sinTheta_unbounded_formGap_sourceVacuous_complex_probe
-    N.toSource (normalized_toSource_hasFanDominanceWhereDefined N)
+    N.toNormalizedSymmetricOperatorIdealFamily (normalizedUnitaryInvariantNorm_hasFanDominanceWhereDefined N)
     A A₀ Λ₁ E₀ F₀ F₁ R hA hA₀ hΛ₁ htrial hexact hδ hgap
 
 /-! ### Probe 42: package the literal source-facing norm quantifier -/
@@ -3430,7 +3359,7 @@ def EverySourceSinThetaEstimateWithVacuity
     [NormedAddCommGroup H] [InnerProductSpace ℂ H] [CompleteSpace H]
     (δ : ℝ) (E₀ : F →L[ℂ] E) (F₀ : H →L[ℂ] E)
     (R : F →L[ℂ] E) : Prop :=
-  ∀ N : SourceUnitaryInvariantNorm.{0, v} ℂ,
+  ∀ N : NormalizedSymmetricOperatorIdealFamily.{0, v} ℂ,
     ScaledSourceEstimateWithVacuity N δ
       ((ContinuousLinearMap.id ℂ E - F₀ ∘L F₀.adjoint) ∘L E₀) R
 
@@ -3447,7 +3376,7 @@ theorem everySourceSinThetaEstimateWithVacuity_of_whereDefinedFanClass
     [NormedAddCommGroup F] [InnerProductSpace ℂ F] [CompleteSpace F]
     [NormedAddCommGroup G] [InnerProductSpace ℂ G] [CompleteSpace G]
     [NormedAddCommGroup H] [InnerProductSpace ℂ H] [CompleteSpace H]
-    (hclass : ∀ N : SourceUnitaryInvariantNorm.{0, v} ℂ,
+    (hclass : ∀ N : NormalizedSymmetricOperatorIdealFamily.{0, v} ℂ,
       HasFanDominanceWhereDefined N)
     (A : E →ₗ.[ℂ] E) (A₀ : F →ₗ.[ℂ] F) (Λ₁ : G →ₗ.[ℂ] G)
     (E₀ : F →L[ℂ] E) (F₀ : H →L[ℂ] E) (F₁ : G →L[ℂ] E)
@@ -3478,7 +3407,7 @@ theorem everySourceSinThetaEstimateWithVacuity_iff
     {δ : ℝ} {E₀ : F →L[ℂ] E} {F₀ : H →L[ℂ] E}
     {R : F →L[ℂ] E} :
     EverySourceSinThetaEstimateWithVacuity δ E₀ F₀ R ↔
-      ∀ N : SourceUnitaryInvariantNorm.{0, v} ℂ,
+      ∀ N : NormalizedSymmetricOperatorIdealFamily.{0, v} ℂ,
         N.toSymmetricOperatorIdealFamily.gauge
             ((ContinuousLinearMap.id ℂ E - F₀ ∘L F₀.adjoint) ∘L E₀) ≠ ⊤ →
         N.toSymmetricOperatorIdealFamily.gauge R ≠ ⊤ →
@@ -3503,7 +3432,7 @@ part of the source audit.
   implications, not a weakened numerical estimate hidden behind `ENNReal`.
 * Probe 39 proves that the current normalized quantifier is genuinely narrower
   than the raw source quantifier: the finite-rank source countermodel cannot be
-  the `toSource` of any `NormalizedUnitaryInvariantNorm`.
+  the `toNormalizedSymmetricOperatorIdealFamily` of any `NormalizedUnitaryInvariantNorm`.
 * Probe 40 applies the actual Davis--Kahan sine-theta analytic result to that
   excluded raw source norm at the vacuous/where-defined boundary.
 * Probe 41 shows that no proof strength is lost internally by presenting a
@@ -3511,7 +3440,7 @@ part of the source audit.
 * Probes 42--43 package and expand the candidate public quantifier.  There is no
   caller-visible `N.Mem R`, no `N.Mem sinTheta` conclusion, and no hidden
   membership transfer.  The remaining foundation theorem is exactly
-  `∀ N : SourceUnitaryInvariantNorm, HasFanDominanceWhereDefined N`.
+  `∀ N : NormalizedSymmetricOperatorIdealFamily, HasFanDominanceWhereDefined N`.
 
 The source audit now points to this boundary as the semantically aligned one.
 Davis--Kahan's explicit "vacuous when certain norms fail to exist" convention is
