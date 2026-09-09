@@ -43,7 +43,6 @@
   \showartifacturlfalse
 \fi
 \newcommand{\artifacturl}{https://github.com/AIQ-Kitware/aiq-dkps-formalization}
-\newcommand{\leanqurl}{https://github.com/AIQ-Kitware/aiq-lean-formalization-tools}
 
 \definecolor{leankeyword}{HTML}{243B6B}
 \definecolor{leantactic}{HTML}{70477A}
@@ -165,80 +164,20 @@ covered less than the source and a false printed proposition.  This paper
 examines how we organized that review when LLMs could produce more Lean than
 we could inspect line by line.
 
-The process in \cref{fig:workflow} developed as discrepancies appeared.  We
-separated three questions that an end-to-end proof loop can blur: which source
-results are in scope, whether Lean proves the formal statements, and whether
-those statements preserve the source mathematics.  The first two can be guarded
-by persistent records and compiler checks; the third still requires mathematical
-review of the statement in context.  A mismatch can therefore return a result to review
-even when its Lean proof remains valid.
-
-Semantic review compares theorem statements in source context rather than
-reproducing Davis and Kahan's proof strategy, including restrictions carried by
-types or inherited assumptions.
+\Cref{fig:workflow} summarizes the process that developed around these
+source-correspondence failures.  The source material remains visible through
+context gathering, decomposition, foundation search, formalization, and a
+separate source-to-statement review.  Section~\ref{sec:system} describes these
+stages in more detail.
 
 \begin{figure}[H]
   \centering
-  \includegraphics[width=0.96\linewidth]{figures/formalization_workflow.png}
-  \caption{Process developed during the \DK{} formalization.  Source claims and
-  their scope guide decomposition, foundation search, implementation, and
-  compilation.  Source-to-signature review can return a result to any of these
-  stages.  The review target is the public statement in source context; a
-  different proof route does not by itself create a mismatch.}
+  \resizebox{0.98\linewidth}{!}{\input{figures/formalization_workflow.tex}}
+  \caption{Formalization process used in this case study.  A review failure can
+  return a target to an earlier stage; a target leaves the loop only after Lean
+  checking and a separate source-to-statement review.}
   \label{fig:workflow}
 \end{figure}
-
-\section{Formalization procedure}
-\label{sec:system}
-
-The formalization was developed over many ChatGPT, Claude Code, and Codex
-sessions in a pinned Lean/Mathlib/Tau Ceti environment.  Agents could produce
-checked Lean faster than we could inspect proof bodies line by line, so we kept
-proof checking and source correspondence as separate tasks.  The working
-procedure was:
-
-\begin{itemize}
-\setlength{\itemsep}{0.25em}
-\item \textbf{Start from the source.}  For each of
-  the 29 tracked results, we recorded the source passage, assumptions inherited
-  from the surrounding text, and the scope we intended the Lean statement to
-  cover.  That record remained the completion criterion while the implementation
-  changed.
-
-\item \textbf{Let the agents write and repair Lean.}  The
-  agents searched Mathlib and the local libraries, proposed definitions and
-  intermediate lemmas, compiled the result, and revised code from compiler
-  feedback.  When the existing libraries were insufficient, the same process
-  produced reusable foundations needed by later targets.
-
-\item \textbf{Use Lean and scripts to catch mechanical failures.}  In addition to
-  \texttt{lake build}, project scripts check source coverage, resolve the Lean
-  declaration registered for each tracked result, and reject stale or
-  inconsistent evidence.  We used \texttt{leanq} when we needed the elaborated
-  theorem type, axioms, or dependency information rather than a copied
-  signature.
-
-\item \textbf{Read the statement Lean actually checked.}  Review starts
-  from the original passage and inherited assumptions, then inspects the
-  elaborated Lean type and the definitions that affect its meaning.  For the
-  Davis--Kahan results this includes the scalar field, finite- versus
-  infinite-dimensional scope, bounded versus unbounded operators, norm class,
-  gap assumptions and constants, directionality, and the particular angle or
-  residual operator being represented.
-
-\item \textbf{Write down the review result.}  A result that
-  compiled but expressed a narrower or different proposition was returned for
-  revision even though its Lean proof remained valid.  Accepted and revised
-  judgments were recorded with the target so later sessions did not have to
-  reconstruct them from chat history.
-\end{itemize}
-
-Claude Code was used chiefly for implementation, ChatGPT chiefly for planning
-and source review, and Codex in both roles.  LLMs also compared source passages
-with Lean theorem signatures during review.  The human authors selected the target set and
-adjudicated ambiguous readings of the source.  Appendix~\ref{app:system} gives
-the pinned versions, repository records, and checks used to reproduce this
-workflow.
 
 \section{Related Work}
 \label{sec:related}
@@ -335,8 +274,9 @@ These systems provide context for our result register and review interface.
 
 Compiler access is supported by LeanDojo, Pantograph, and LeanInteract
 \citep{yang2023leandojo,aniva2024pantograph,poiroux2025leaninteract}.
-Our \texttt{leanq} tool provides focused queries for inspecting statements and
-their context; it is included in the supplementary code.
+As this project grew, we developed smaller project-specific tools for querying
+compiler-derived declarations and maintaining the source-to-statement records;
+the supplementary artifact contains those tools and their exact interfaces.
 
 \section{What we formalized}
 \label{sec:dk}
@@ -380,8 +320,69 @@ semantic correspondence.
 The development required projection and principal-angle geometry,
 singular-subspace geometry, unitarily invariant norms and operator ideals,
 Borel spectral calculus, unbounded self-adjoint operator theory, real/complex
-transfer, direct rotations, and Sylvester equations.  These reusable components
-are being prepared for contribution to Tau Ceti \citep{tauceti2026}.
+transfer, direct rotations, and Sylvester equations.  Parts of the spectral and
+operator-theoretic infrastructure were copied, adapted, or generalized from the
+Spectra formalization \citep{bornemann2026spectra}.  Reusable components developed
+here are being prepared for Tau Ceti, an AI-authored Lean library downstream of
+Mathlib \citep{tauceti2026}.
+
+\section{Formalization process}
+\label{sec:system}
+
+The five stages in \cref{fig:workflow} describe the recurring unit of work rather
+than a fixed one-pass pipeline:
+
+\begin{itemize}
+\setlength{\itemsep}{0.25em}
+\item \textbf{Gather Context.}  We collected the relevant PDFs, built
+  transcriptions of the source passages, and wrote prose distillations of the
+  definitions, assumptions, and arguments needed for the target result.  These
+  materials fixed the mathematical context against which later Lean statements
+  were reviewed.
+
+\item \textbf{Decompose.}  We worked out a sequence of intermediate results and
+  dependencies that would support the target theorem.  This serves a role similar
+  to the blueprints used in other large Lean formalizations
+  \citep{liquidblueprint2023,pfrblueprint2024,zhu2026leanarchitect}: it gives the
+  implementation agents a mathematical route through a task larger than one
+  proof request.
+
+\item \textbf{Find Foundations.}  Before rebuilding an intermediate result, we
+  searched Mathlib, existing Lean developments, and the literature.  In this
+  project, for example, Spectra supplied spectral and operator-theoretic material
+  that we reused or extended \citep{bornemann2026spectra}.  Missing foundations
+  were developed locally for reuse by later targets.
+
+\item \textbf{Formalize.}  Agents implemented the resulting tasks in Lean,
+  compiled them, and revised definitions and proofs in response to compiler
+  feedback.  We used ChatGPT and Claude Code across this work rather than tying
+  a fixed role to a particular system.
+
+\item \textbf{Skeptical Review.}  When possible, an agent that had not implemented
+  the result compared the source passage with the resulting theorem statement.
+  The review checked hypotheses, objects, scalar field, dimension, bounded or
+  unbounded operator scope, norm class, gap assumptions, constants, and
+  directionality.  Implementing agents sometimes declared a target complete
+  before this comparison; reviewers could also demand a stronger statement than
+  the source required.  The human authors resolved such disagreements by
+  returning to the source mathematics.
+\end{itemize}
+
+The stages loop.  A mismatch can require more source context, a different
+decomposition, additional foundations, or a revised formal statement.  As the
+formalization grew, we periodically refactored definitions and intermediate
+results so foundations developed for one target could be reused by later ones.
+We also added project-specific tools for querying compiler-derived declarations
+and maintaining the accumulated source-to-statement records.
+
+A target left the loop when Lean checked its formal treatment and a separate
+source-to-statement review found its hypotheses, mathematical objects,
+conclusion, and scope consistent with the source.  When that correspondence
+used a non-obvious representation, the required identification also had to be
+established.  Proposition~4.4 instead exits through a checked counterexample to
+the printed claim together with a proved repair.  A later review can still find
+a mismatch missed by an earlier pass, as in the example below.
+Appendix~\ref{app:system} records the concrete project artifacts and checks.
 
 % Historical provenance for editors (not rendered): the maintained result
 % record reached 29/29 on 12 Aug. 2026, later lost that state, and again reported
@@ -453,7 +454,7 @@ open.
 
 \section*{Tool and computational resource disclosure}
 Following the Leiden Declaration's disclosure recommendation
-\citep{leiden2026declaration}, ChatGPT, Claude Code, and Codex were substantially
+\citep{leiden2026declaration}, ChatGPT and Claude Code were substantially
 used in the writing process, including drafting and revision, literature
 discovery, and organization of the practitioner survey.  The same systems were
 used for formalization planning, Lean implementation, and source-to-signature

@@ -73,9 +73,11 @@ presented as a short bullet sequence rather than a component table.  Exact
 dependency revisions, repository records, checker behavior, and the audit-packet
 script remain in `appendix.tex`.
 
-The workflow figure remains a high-level control-flow view. The appendix
-semantic-review screenshot is a later inspection interface and is not presented
-as the mechanism used for every historical review.
+The workflow figure is maintained as text-source TikZ and uses the same five
+stages as the main process section: Gather Context, Decompose, Find Foundations,
+Formalize, and Skeptical Review. The appendix semantic-review screenshot is a
+later inspection interface and is not presented as the mechanism used for every
+historical review.
 
 ## Worked semantic-alignment example
 
@@ -140,7 +142,7 @@ before submission.
 
 ## Figure
 
-The paper uses local rendered PNGs for the workflow figure and appendix screenshot, but binary render outputs are never staged or committed. The source repository keeps only text/code inputs; rendered figures remain local build artifacts. The workflow figure remains in the main body and the semantic-alignment screenshot remains in the appendix.
+The workflow figure is tracked as text-source TikZ in `figures/formalization_workflow.tex`. The appendix screenshot is a local rendered PNG. Binary render outputs are never staged or committed; the source repository keeps only text/code inputs. The workflow figure remains in the main body and the semantic-alignment screenshot remains in the appendix.
 
 ## Build
 
