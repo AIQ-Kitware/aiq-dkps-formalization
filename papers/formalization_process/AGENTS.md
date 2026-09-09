@@ -151,3 +151,30 @@ Additional constraints:
     A current source-facing statement may be rendered in mathematical notation
     when that makes its hypotheses and scope clearer than another Lean listing;
     preserve the exact Lean declaration in the repository as the evidence.
+
+37. Do not invent a human expert-adjudication role.  The humans directing this
+    formalization were not Davis--Kahan specialists; describe their supervision
+    as monitoring progress, providing framing, noticing inconsistencies among
+    model outputs, asking questions, and requesting additional reviews.
+38. Keep procedure details selective.  Ordinary build commands, helper-program
+    names, exact dependency revisions, and exhaustive lists of internal records
+    belong in repository documentation, not the rendered appendix.
+39. In rendered prose call the Anthropic coding system ``Claude'', not ``Claude
+    Code''.  Do not assign fixed implementation/review roles to ChatGPT or Claude.
+40. Use `\cref`/`\Cref` for numbered cross-references.  Prefer `\Cref` when a
+    reference begins a sentence; do not hand-write ``fig.'' or ``Figure~\ref``.
+41. Qualify references to Davis--Kahan's internal numbering as ``Davis--Kahan
+    Section~2'', ``Davis--Kahan Theorem~8.1'', etc., so they cannot be mistaken
+    for sections or theorems of this manuscript.
+42. Use the source's trial-space language (`trial subspace`, `trial operator`,
+    `trial-space compression`) and call `R` the residual.  Avoid ``candidate
+    residual'' and similar terminology unless a cited source specifically uses it.
+43. Resource reporting is descriptive accounting, not a virtue claim.  Use the
+    heading ``Resource utilization'' and keep the main AI-assistance statement
+    short.  Do not frame disclosure as evidence of transparency.
+44. The current source-facing Davis--Kahan Section~2 sine-theta example should
+    show the full generated Lean signature when space permits.  Explain the
+    source-context ambiguity around separability, unbounded operators, gap
+    alternatives, and the where-defined unitarily invariant norm convention.
+    Do not replace the signature with a compressed equation merely to minimize
+    page count.

@@ -1,152 +1,90 @@
-\section{Data and reproducibility}
+\section{Supplementary data}
 \label{app:data}
 
-Using LLM-assisted web search, we collected the \PractitionerAccountCount{}
-public first-person project/workflow accounts used in this paper.  They are
-supported by \PractitionerSourceCount{} practitioner-source records, including
-\PractitionerSupplementalSourceCount{} supplemental or corroborating sources.
-The account table is separate from the source table: additional sources for one
-project do not increase the project-account denominator.  Accounts known to
-share a practitioner carry the same practitioner-overlap cluster; the
-\PractitionerAccountCount{} project accounts form
-\PractitionerOverlapClusterCount{} such clusters.  This cluster count is not a
-count of unique practitioners.  Each account retains the observation and coding
-qualifications used here, while each source retains its URL, bibliography key,
-source role, and objective provenance fields.  The collection is not
-necessarily representative, so we make no prevalence estimates from it.
+The supplementary tables contain \PractitionerAccountCount{} public
+first-person practitioner accounts supported by \PractitionerSourceCount{}
+practitioner-source records.  Known repeated practitioners form
+\PractitionerOverlapClusterCount{} overlap clusters; one controlled human--AI
+workflow study is kept separate.  Accounts are project/workflow episodes rather
+than unique-person records, and multiple sources may support one account.  The
+collection was assembled through LLM-assisted web search and is not a systematic
+or representative sample.
 
-The screening log records the sources in the preexisting snapshot and candidates
-reviewed from 8 September 2026 onward, with their disposition and a reason.
-Useful follow-up sources are marked \texttt{supplemental\_source} instead of
-being counted as new accounts; \PractitionerHoldCount{} screened candidates are
-currently marked \texttt{hold} pending stronger first-person workflow evidence.
-The log does not reconstruct every candidate encountered in earlier searches
-and is not an exhaustive search record.
+The screening table records \PractitionerScreenedCandidateCount{} candidates and
+their dispositions.  It begins on 8 September 2026 and does not reconstruct
+every source encountered in earlier searches.
 
-\texttt{make sources} validates the account, source, and screening schemas,
-cross-table identifiers, citation keys, and URLs and regenerates the paper macros.  Figure~\ref{fig:lean-activity}
-reproduces the Papers With Lean public monthly series for January 2025 through
-August 2026 from a 6 September 2026 snapshot.  Grouping the captured corpus by
-its \texttt{published} month reproduced the public chart; the partial September
-count is excluded from the figure.
+The supplementary material also contains the 29-result register used for the
+Davis--Kahan formalization.  It counts the four unnumbered headline theorems in
+Davis--Kahan Section~2 and every named theorem, proposition, lemma, and corollary
+established in the source.  Definitions, proof steps, examples, immediate
+consequences, and open or deferred claims are not counted separately.
+Davis--Kahan Proposition~4.4 remains a counted result because its formal
+treatment gives a counterexample to the printed claim and proves a repaired
+theorem.
 
 \ifshowartifacturl
-Project materials: \href{\artifacturl}{public GitHub repository}.\\
-Lean helper tooling, including \texttt{leanq}: \href{https://github.com/AIQ-Kitware/aiq-lean-formalization-tools}{aiq-lean-formalization-tools}.
+Project materials: \href{\artifacturl}{public GitHub repository}.
 \else
 Identifying repository URLs are suppressed in this double-blind build and are
 included in the supplementary artifact.
 \fi
 
-The build records SHA-256 digests for manuscript inputs and generated evidence
-in \texttt{generated/materials\_manifest.json}.
-
-The 29-result register counts the four unnumbered Section~2 headline theorems
-and every named theorem, proposition, lemma, and corollary established in the
-source.  Definitions, proof steps, examples, immediate consequences, and open
-or deferred claims are not counted separately.  Each row records the source
-location and scope, the Lean declaration used as evidence, and the review state.
-Proposition~4.4 remains a counted result: its formal treatment certifies a
-counterexample to the printed claim and proves a repaired theorem.
-
-\section{Formalization procedure details}
+\section{Formalization procedure}
 \label{app:system}
 
-\Cref{sec:system} summarizes the working procedure.  At the manuscript snapshot,
-the workspace uses Lean \texttt{v4.34.0-rc1}; the Lake manifest pins Mathlib at
-\texttt{72f9c607bb3a} and Tau Ceti at \texttt{1b39d420ac84}.  The ordinary
-\texttt{lake build} checks the reusable \texttt{ForTauCeti} package, the
-Davis--Kahan library used by this paper, and the other formalization targets in
-the workspace.
+\Cref{sec:system} summarizes the workflow.  The project used a pinned
+Lean/Mathlib environment together with reusable local foundations.  Source
+transcriptions, prose summaries, result records, and review judgments were kept
+outside individual model conversations so work could continue across sessions.
+As the project grew, we also developed tools for inspecting elaborated
+declarations and checking that recorded formal evidence still referred to the
+current development.
 
-\paragraph{Records kept during the formalization.}
-The supplementary repository retains the information needed to resume and audit
-work without relying on a particular chat transcript:
-\begin{itemize}
-\setlength{\itemsep}{0.2em}
-\item the \textbf{source-order transcription}, used to read the source claims in
-  order and distribute them for review;
-\item the \textbf{source-atom record}, which records finer-grained statements and
-  surrounding mathematical material for source-coverage checks;
-\item the \textbf{29-result register}, which records each counted source result,
-  its intended scope, the Lean evidence used for it, and its review state;
-\item the \textbf{registered Lean-evidence record}, used by the checkers to map a
-  source result to the declaration that is claimed to formalize it;
-\item the \textbf{audit packet}, which places the source text, our interpretation,
-  and the resolved Lean evidence together for result-by-result review; and
-\item the \textbf{Lean source tree and \texttt{ForTauCeti/}}, containing the
-  checked implementations and reusable foundations developed during the work.
-\end{itemize}
+Source review compared each tracked Davis--Kahan result with the elaborated Lean
+statement and definitions that affected its meaning.  Recurring questions were
+the scalar field, dimension, bounded or unbounded operator scope, norm class,
+gap conditions, constants, directionality, and the identity of angle and
+residual operators.  Mechanical checks established properties of the formal
+artifact; they did not determine whether our reading of the source was correct.
 
-\paragraph{Working procedure.}
-Before implementation, we recorded the source passage, inherited assumptions,
-and intended scope of a target.  After Lean accepted an implementation, we
-registered the declaration used as evidence for that target.  The project
-checkers then resolved that declaration in the pinned workspace and regenerated
-its compiler-derived type and consistency checks.  The audit packet placed those
-results beside the source context.  The resulting correspondence judgment was
-stored with the target for later work.
-
-\paragraph{Mechanical checks.}
-The ordinary build checks the Lean libraries in the pinned environment.  We also
-run separate checks for the statement map, source coverage, and the 29-result
-register.  The result-level checker resolves registered declarations against the
-Lean project and can query compiler-derived theorem types rather than relying on
-copied signatures.  It also rejects stale or internally inconsistent evidence.
-Axiom and dependency inspection is available through \texttt{leanq}.  These
-checks establish that the recorded formal artifact exists and has the recorded
-formal properties; source correspondence is reviewed separately.
-
-\paragraph{Statement review.}
-For each tracked result, review starts from the source passage and inherited
-context and then examines the elaborated Lean type together with definitions
-that affect the hypotheses or conclusion.  For Davis--Kahan, the recurring
-questions were the scalar field, dimension, bounded or unbounded operator scope,
-norm class, gap conditions, constants, directionality, and which angle or
-residual operator a definition represents.  When these disagreed with the
-source, we revised the formalization even if Lean had already proved the encoded
-proposition.  The script
-\texttt{scripts/render\_davis\_kahan\_1970\_audit\_packet.py} renders the
-result-by-result audit packet.  The interface in \cref{app:review-page} was added
-later to place the same source, interpretation, and Lean evidence in one view.
-
-\paragraph{Division of labor.}
-LLMs proposed Lean code, searched for existing foundations, diagnosed compiler
-failures, and assisted with source/signature comparisons.  Human authors chose
-the source results claimed by the paper and adjudicated ambiguous source
-readings.  Review by another model was useful for finding possible problems, but
-acceptance of a source correspondence did not follow from a fixed number of
-model review rounds.
+ChatGPT and Claude were used for implementation, mathematical discussion,
+search, and review.  Human supervision consisted mainly of monitoring progress,
+supplying framing, asking models to explain inconsistencies, and requesting
+additional or independent reviews.  The humans directing the formalization were
+not Davis--Kahan subject-matter experts, so disagreements about source meaning
+were often investigated by probing the models in different ways rather than by
+an independent expert reading of the theorem.
 
 \section{Davis--Kahan background and Formalization 1}
 \label{app:formalization1}
 
-Davis and Kahan compare a candidate subspace with an exact invariant
+Davis and Kahan compare a trial subspace with an exact invariant
 subspace of a self-adjoint operator \citep{davis1970rotation}.  In finite
-dimensions, let $A=A^*$ (i.e., $A$ is self-adjoint) and let $E_0$ have
-orthonormal columns spanning the candidate subspace $V$.  The
-\emph{candidate-space compression} is
+dimensions, let $A=A^*$ and let $E_0$ have
+orthonormal columns spanning the trial subspace $V$.  The
+\emph{trial-space compression} is
 \begin{equation}
   A_0=E_0^*AE_0.
-  \label{eq:dk-candidate-compression}
+  \label{eq:dk-trial-compression}
 \end{equation}
-This expression can be read from right to left: $E_0$ embeds candidate
+This expression can be read from right to left: $E_0$ embeds trial
 coordinates into the ambient space, $A$ acts there, and $E_0^*$ projects the
-result back to candidate coordinates.  Thus $A_0$ is the operator seen after
+result back to trial coordinates.  Thus $A_0$ is the operator seen after
 applying $A$ and discarding the component outside $V$.  Writing
 $P_V=E_0E_0^*$ for the orthogonal projector onto $V$, define the
-\emph{candidate residual}
+\emph{residual}
 \begin{equation}
   R=AE_0-E_0A_0=(I-P_V)AE_0.
-  \label{eq:dk-candidate-residual}
+  \label{eq:dk-trial-residual}
 \end{equation}
 Thus $R$ is exactly the component of $AE_0$ outside $V$, and $R=0$ precisely
 when $V$ is invariant under $A$.  The historical signature allows any bounded
 operator \texttt{M} on $V$, not just the compression in
-\cref{eq:dk-candidate-compression}; its residual is
+\cref{eq:dk-trial-compression}; its residual is
 $A\circ\iota_V-\iota_V\circ M$, where $\iota_V:V\hookrightarrow E$ is inclusion.
-Choosing $M$ to be the corresponding candidate-space compression recovers
-the residual in \cref{eq:dk-candidate-residual}.
+Choosing $M$ to be the corresponding trial-space compression recovers
+the residual in \cref{eq:dk-trial-residual}.
 
 For the exact subspace $U$, the assumption \texttt{Reduces A U} says that both
 $U$ and $U^\perp$ are invariant.  In Formalization~1, the spectrum of $A|_U$
@@ -158,10 +96,10 @@ consequence of the residual being small.
 For two subspaces of the same finite dimension with orthonormal coordinate
 maps $E_0$ and $F_0$, their principal angles $\theta_j\in[0,\pi/2]$ satisfy
 $\cos\theta_j=\sigma_j(F_0^*E_0)$.  Equivalently, they pair directions in the two
-subspaces by their overlap.  The directed sine measures the part of a candidate
+subspaces by their overlap.  The directed sine measures the part of a trial
 direction outside the exact subspace; its matrix representative is
 $(I-P_U)E_0$.  The doubled-angle quantity applies $\sin(2\theta_j)$ to the
-angles, with the candidate-to-exact orientation fixed by the source.  The bound
+angles, with the trial-to-exact orientation fixed by the source.  The bound
 \[
   \delta\,N(\sin 2\Theta_0)\le 2N(R)
 \]
@@ -192,10 +130,10 @@ Lean expression & Mathematical role \\
     this is the ambient operator $A$; the bounded complex-linear type is part
     of the historical scope mismatch. \\
 \texttt{IsSelfAdjoint A}
-  & $A=A^*$, i.e., $A$ is self-adjoint. \\
+  & $A=A^*$. \\
 \texttt{Submodule }$\mathbb C$\texttt{ E}
   & A complex linear subspace of the ambient Hilbert space.  Here $U$ is the
-    exact reducing subspace and $V$ is the candidate subspace. \\
+    exact reducing subspace and $V$ is the trial subspace. \\
 \texttt{U.HasOrthogonalProjection}
   & The orthogonal projection onto $U$ is available; likewise for $V$.  This
     supports $U^\perp$, compressions, and the angle constructions. \\
@@ -212,14 +150,14 @@ Lean expression & Mathematical role \\
   & The bounded inclusion $V\hookrightarrow E$, the coordinate-free analogue
     of the source's embedding $E_0$. \\
 \texttt{M : V }$\mathrel{\to}\!\mathtt{L}[\mathbb C]$\texttt{ V}
-  & An arbitrary bounded operator on the candidate subspace.  Choosing $M$ as
-    the candidate-space compression corresponding to $A_0=E_0^*AE_0$ gives
+  & An arbitrary bounded operator on the trial subspace.  Choosing $M$ as
+    the trial-space compression corresponding to $A_0=E_0^*AE_0$ gives
     the introductory specialization; \texttt{M} is not definitionally that
     matrix expression. \\
 \texttt{residual A V.subtypeL M}
-  & $A\circ\iota_V-\iota_V\circ M$.  When $M$ is the candidate-space
+  & $A\circ\iota_V-\iota_V\circ M$.  When $M$ is the trial-space
     compression corresponding to $A_0$, this is the residual $R$ in
-    \cref{eq:dk-candidate-residual}; for general $M$ it is the
+    \cref{eq:dk-trial-residual}; for general $M$ it is the
     more general residual stated by Formalization~1. \\
 \texttt{SymmetricNormingFunction}
   & A normalized, dimension-coherent symmetric gauge on singular values used to
@@ -240,9 +178,10 @@ Lean expression & Mathematical role \\
 
 The conclusion asserts that the doubled-angle block belongs to the same ideal
 as the residual and then bounds its gauge.  These norm and spectral conditions
-are part of the statement.  The historical scope mismatch is visible in the
-fixed complex field and bounded type of $A$.  They exclude the source's real
-and unbounded settings, even when all the displayed hypotheses hold.
+are part of the statement.  The displayed declaration is complex and bounded;
+a real ambient sibling also existed.  The project-level mismatch was therefore
+the bounded ambient operator type, which did not cover Davis--Kahan's unbounded
+setting.
 
 \section{Lean publication activity}
 
@@ -257,12 +196,7 @@ and unbounded settings, even when all the displayed hypotheses hold.
   \label{fig:lean-activity}
 \end{figure}
 
-\section{Project chronology}
 
-The 17 August snapshot already records 29/29.  Later reviews identified defects
-that were present in that snapshot, including the ambient $\sin 2\Theta$ mismatch
-in \cref{sec:scope-mismatch}.  The supplementary chronology preserves the dated
-Git checkpoints used to reconstruct this sequence.
 
 \section{Semantic-review page}
 \label{app:review-page}
@@ -285,7 +219,7 @@ structures, predicates, coercions, and typeclass assumptions.  Lean Compass's
 semantic dependency view suggests how these definitions could be exposed while
 omitting proof-only dependencies \citep{yanahama2026leanatlas}.
 
-\section{Resource transparency}
+\section{Resource utilization}
 \label{app:resources}
 
 To estimate the cost of the formalization effort, we maintained a resource
@@ -315,9 +249,9 @@ Quantity & Lower bound / estimate & Basis / interpretation \\
 \caption{AI systems and model families used during the formalization.
 Token telemetry is incomplete.}
 \label{tab:formalization-systems}
-\begin{tabularx}{\linewidth}{@{}p{0.20\linewidth}p{0.27\linewidth}>{\raggedright\arraybackslash}X@{}}
+\begin{tabularx}{\linewidth}{@{}p{0.24\linewidth}>{\raggedright\arraybackslash}X@{}}
 \toprule
-System & Models used & Typical use \\
+System & Model families observed \\
 \midrule
 \input{generated/model_systems_table.tex}
 \end{tabularx}

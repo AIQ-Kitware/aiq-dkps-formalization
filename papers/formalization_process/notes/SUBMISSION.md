@@ -10,7 +10,7 @@
 - The required NeurIPS checklist is included as `checklist.tex` and is input after the appendix.
 - `paper.tex` is the anonymous submission build.
 - `paper_public.tex` uses the workshop style's `preprint` option and exposes author/public-project information.
-- The manuscript includes a tool and computational resource disclosure stating substantial LLM use in the writing process.
+- The manuscript includes a concise AI-assistance statement and reports incomplete resource measurements separately in the appendix.
 - Generate a double-blind supplemental repository with `scripts/anonymize_repo.py` and inspect the generated report and copy before upload.
 
 The earlier MATH-AI submission was not completed.  `neurips_2026.sty` and

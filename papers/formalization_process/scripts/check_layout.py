@@ -43,7 +43,7 @@ def validate_pages(pages: list[str], public: bool) -> list[str]:
         display = flat_pages[display_pages[0]]
         required = (
             '-- proof omitted', 'Formalization 1:',
-            'bounded operator scope',
+            'source scope includes unbounded',
             'SymmetricNormingFunction',
             'variable {A B : E → L[C] E}', '{U V : Submodule C E}',
             'U⊥ A', 'x ≤ a - d ∨ b + d ≤ x',
@@ -61,13 +61,26 @@ def validate_pages(pages: list[str], public: bool) -> list[str]:
     checklist_pages = [i + 1 for i, page in enumerate(flat_pages) if 'NeurIPS Paper Checklist' in page]
     if len(checklist_pages) != 1 or checklist_pages[0] <= reference_page:
         errors.append(f'NeurIPS checklist must appear once after References; found {checklist_pages}')
+    current_pages = [
+        i for i, page in enumerate(flat_pages)
+        if 'theorem sinTheta_unbounded_formGap_sourceExact_complex' in page
+    ]
+    if len(current_pages) != 1 or current_pages[0] >= main_pages:
+        errors.append('Current source-facing sine-theta theorem must appear once before References')
+    else:
+        current = flat_pages[current_pages[0]]
+        for token in (
+            '-- proof omitted', 'Formalization 2:',
+            'NormalizedSymmetricOperatorIdealFamily',
+            'SeparableSpace E', 'FormBoundedSylvesterGap',
+            'N.Mem R', 'N.gaugeReal R',
+        ):
+            if token not in current:
+                errors.append(f'Current sine-theta display split or text missing: {token}')
     main_text = ' '.join(flat_pages[:main_pages])
-    for token in (
-        'Tool and computational resource disclosure',
-        'substantially used in the writing process',
-    ):
+    for token in ('AI assistance.', 'ChatGPT and Claude were used throughout'):
         if token not in main_text:
-            errors.append(f'Main-text tool disclosure is missing: {token}')
+            errors.append(f'Main-text AI-assistance statement is missing: {token}')
     text = ' '.join(flat_pages)
     if public:
         for author in AUTHORS:

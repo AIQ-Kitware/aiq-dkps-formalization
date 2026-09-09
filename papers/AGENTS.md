@@ -15,5 +15,5 @@ Standalone paper sources are grouped by purpose rather than kept at the root:
   documents;
 - `davis_kahan_prop_4_4/` contains the Proposition 4.4 counterexample note and
   its historical-search supplement;
-- manuscript projects such as `formalization_process_4page/` and
+- manuscript projects such as `formalization_process/` and
   `formalization_draft2/` remain self-contained directories.
