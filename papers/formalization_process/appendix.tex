@@ -33,26 +33,16 @@ included in the supplementary artifact.
 \section{Formalization procedure}
 \label{app:system}
 
-\Cref{sec:system} summarizes the workflow.  The project used a pinned
-Lean/Mathlib environment together with reusable local foundations.  Source
-transcriptions, prose summaries, result records, and review judgments were kept
-outside individual model conversations so work could continue across sessions.
-The reviewed snapshot specifies Lean~4.34.0-rc1, Mathlib revision
-\texttt{72f9c607bb3a}, and Tau Ceti revision \texttt{1b39d420ac84}.
-The reusable mathematics package is \texttt{ForTauCeti}; source-facing
-Davis--Kahan declarations live in the separate \texttt{DavisKahan} library.
-Full dependency revisions are recorded in the supplied Lake manifest.
-These identify the reproduction environment; the proposed replacement below
-has not yet been validated in it.
-As the project grew, we also developed tools for inspecting elaborated
-declarations and checking that recorded formal evidence still referred to the
-current development. Reusable foundations lived below the paper-facing theorem
-modules. Agent tasks named an intended statement and its source context; agents
-returned Lean declarations and obstruction notes. Compilation, axiom inspection,
-and signature extraction supplied mechanical evidence, while correspondence
-judgments were recorded separately. Source review included inherited section
-variables and the fields of structures occurring in a theorem type, because
-both can restrict a claim without appearing in its concluding inequality.
+\Cref{sec:system} summarizes the workflow.  Source transcriptions, prose
+summaries, result records, and review judgments were kept outside individual
+model conversations so work could continue across sessions.  The formalization
+used a pinned Lean/Mathlib environment and reusable local foundations; exact
+dependency revisions and helper commands are supplied with the artifact rather
+than repeated here.  Mechanical checks established the Lean declarations and
+their types, while correspondence judgments were recorded separately.  Source
+review included inherited section assumptions and the fields of structures
+occurring in a theorem type, because both can restrict a claim without changing
+its concluding inequality.
 
 Source review compared each tracked Davis--Kahan result with the elaborated Lean
 statement and definitions that affected its meaning.  Recurring questions were
@@ -74,7 +64,10 @@ an independent expert reading of the theorem.
 
 In the source notation, $T=A+H$ is the perturbed self-adjoint operator,
 $P\mathcal H$ reduces $A$, and $Q\mathcal H$ reduces $T$
-\citep{davis1970rotation}. With $E_0$ an isometry onto $P\mathcal H$,
+\citep{davis1970rotation}.  For a possibly unbounded operator, reduction means
+that the orthogonal projections onto the subspace and its complement preserve
+the operator domain and that both summands are invariant there.  In the bounded
+case this is the usual block-diagonal decomposition. With $E_0$ an isometry onto $P\mathcal H$,
 $AE_0=E_0A_0$ defines the unperturbed trial restriction. The general residual is
 \begin{equation}
  R=TE_0-E_0A_0=HE_0.
@@ -163,7 +156,7 @@ Lean expression & Mathematical role \\
     It supplies the ideal and gauge; the exact sidecar retains the original name. \\
 \texttt{N.Mem (B - A)}
   & The perturbation lies in the ideal on which $N$ is finite. Unlike the
-    current where-defined boundary, this historical theorem then \emph{concludes}
+    where-defined boundary used in Formalization~2, this historical theorem then \emph{concludes}
     angle ideal membership as well. \\
 \texttt{N.gauge (B - A)}
   & The real-valued perturbation norm used on the right-hand side. \\
@@ -181,73 +174,116 @@ a real ambient sibling also existed.  The project-level mismatch was therefore
 the bounded ambient operator type, which did not cover Davis--Kahan's unbounded
 setting.
 
-\section{Common-domain double-angle replacement}
-\label{app:domain-repair}
+\section{Reading Formalization 2}
+\label{app:formalization2}
 
-Let $A$ and $T$ be self-adjoint operators on the same dense domain
-$\mathcal D\subseteq\mathcal H$. Let $P$ reduce $A$, let $Q$ reduce $T$,
-and place the source gap on $T|_{Q\mathcal H}$ and $T|_{Q^\perp\mathcal H}$.
-The directed clause takes a bounded map $R:P\mathcal H\to\mathcal H$ such that
+Formalization~2 uses partial linear maps because $A$ and $T$ may be unbounded.
+Let
 \[
- Tp=Ap+Rp \qquad(p\in P\mathcal H\cap\mathcal D).
+  \mathcal D=\operatorname{dom}A=\operatorname{dom}T.
 \]
-The trial restriction is $A_0=A|_{P\mathcal H}$, with its own dense domain.
-Since $A$ and $T$ have the same domain, $T\iota_P$ and $\iota_PA_0$ have
-exactly that common domain. Neither the trial restriction nor $T-A$ is required
-to be bounded. This gives the source's directed residual setup.
-The ambient clause separately takes a bounded self-adjoint $H$ with $T=A+H$.
-A residual hypothesis is unnecessary for that clause.
+For such an operator, the hypothesis that a subspace $P$ \emph{reduces} $A$
+has two parts: the orthogonal projections onto $P$ and $P^\perp$ map
+$\mathcal D$ back into $\mathcal D$, and $A$ maps vectors in each summand back
+into that summand.  Thus the restrictions $A|_P$ and $A|_{P^\perp}$ are
+well-defined on their induced domains.  The analogous hypothesis for $Q$ and
+$T$ lets the theorem speak about the two perturbed spectral blocks
+$T|_Q$ and $T|_{Q^\perp}$.
 
-The new proof code reduces the domain issue to a bounded off-diagonal block.
-Write $P^\perp=I-P$, let $\iota_P:P\mathcal H\hookrightarrow\mathcal H$, and set
-\[
- C=P^\perp R\iota_P^*,\qquad S=C+C^*,\qquad J=2P-I.
-\]
-Reduction of $A$ and the common-domain equality imply that $P$ and $J$ preserve
-$\mathcal D$. For $x\in\mathcal D$ the residual identity gives
-$Cx=P^\perp TPx$. Self-adjointness of $T$, tested on the dense domain, gives
-$C^*x=PTP^\perp x$. Thus
-\[
- (C-C^*)x=TPx-PTx,\qquad (T-2S)Jx=JTx.
-\]
-The existing reflection estimate then bounds the doubled-angle block in every
-Ky Fan norm by $2\|C\|_k\le 2\|R\|_k$. The existing angle correspondence and
-the norm record's where-defined Fan law give the directed inequality in
-\cref{eq:sin2theta}. The ambient clause uses the separate existing ambient
-theorem. The proposed Lean module follows these steps; its compiler validation
-remains pending. These equations explain the proposed repair, not a claim that
-the new Lean declarations have already been checked.
+The theorem has one shared setup followed by two conclusions.  The shared setup
+contains the hypotheses needed by both Davis--Kahan inequalities; the residual
+and perturbation assumptions appear only in the conclusions that use them.
+\Cref{tab:formalization2-glossary} translates the displayed Lean signature.
 
-The restriction in the current theorem is also visible with a finite gap
-interval. Take $A=T=D\oplus0$ on $\ell^2\oplus\ell^2$, with
-$D(x_n)=((n+1)x_n)$, let $P$ select the first summand and $Q$ the second.
-Then $\sigma(T|_Q)=\{0\}$, $\sigma(T|_{Q^\perp})\subseteq[1,\infty)$,
-and the gap condition holds with $[\beta,\alpha]=[0,0]$, $\delta=1$.
-The source's dimension conditions hold and $H=R=0$. The angle is $\pi/2$,
-so its doubled sine is zero; $P\mathcal H$ still fails the whole-space domain
-hypothesis. This example also shows why a small doubled sine alone does not
-select the small-angle branch.
+\begin{table}[H]
+\centering
+\small
+\caption{Reader's guide to Formalization~2.}
+\label{tab:formalization2-glossary}
+\begin{tabularx}{\linewidth}{@{}>{\raggedright\arraybackslash}p{0.40\linewidth}>{\raggedright\arraybackslash}X@{}}
+\toprule
+Lean expression & Mathematical role \\
+\midrule
+\texttt{K} with \texttt{RCLike K}
+  & The scalar field is real or complex. \\
+\texttt{E} with inner-product, completeness, and \texttt{SeparableSpace}
+  & The ambient space is a separable Hilbert space. \\
+\texttt{N : NormalizedSymmetric\-OperatorIdeal\-Family}
+  & The unitarily invariant norm object used by the theorem, including its
+    domain of definition and the where-defined Fan comparison described below. \\
+\texttt{A T : E }$\mathrel{\to}\!\mathtt{L}_{\rm p}[\mathbb K]$\texttt{ E}
+  & Possibly unbounded linear operators $A$ and $T$.  The self-adjointness
+    hypotheses \texttt{hA} and \texttt{hT} state $A=A^*$ and $T=T^*$. \\
+\texttt{hdom : T.domain = A.domain}
+  & The two operators use the same ambient domain $\mathcal D$. \\
+\texttt{P Q : Submodule K E}
+  & The trial and exact subspaces.  \texttt{HasOrthogonalProjection} supplies
+    the orthogonal projections onto them. \\
+\texttt{hP : ReducesSubspace A P}
+  & Projection onto $P$ and $P^\perp$ preserves $\mathcal D$, and both
+    summands are invariant under $A$ on that domain.  \texttt{hQ} says the
+    analogous thing for $T$ and $Q$. \\
+\texttt{hgapPos : 0 < gap}
+  & The spectral separation constant is positive. \\
+\texttt{hgap : FormBoundedSylvesterGap (...)}
+  & The restrictions of $T$ to $Q$ and $Q^\perp$ satisfy the Davis--Kahan
+    spectral-gap condition.  This predicate includes the interval/exterior and
+    half-infinite ordered configurations used by the source. \\
+\midrule
+\texttt{forall R : P }$\mathrel{\to}\!\mathtt{L}[\mathbb K]$\texttt{ E}
+  & The directed clause may be invoked with any bounded residual
+    $R:P\mathcal H\to\mathcal H$. \\
+\texttt{forall p : P, forall hp : p in T.domain, ...}
+  & The residual identity is required only for trial vectors that lie in the
+    common domain: $Tp=Ap+Rp$ for $p\in P\mathcal H\cap\mathcal D$. \\
+\texttt{by rw [<- hdom]; exact hp}
+  & Lean converts the proof $p\in\operatorname{dom}T$ into a proof
+    $p\in\operatorname{dom}A$ using equality of the two domains.  This term
+    supplies typing information and adds no mathematical hypothesis. \\
+\texttt{N.Mem (directedSinTwoAngleOperator P Q)} and \texttt{N.Mem R}
+  & The two norms displayed in the directed inequality are defined. \\
+\texttt{gap * N.gaugeReal (...) <= 2 * N.gaugeReal R}
+  & $\delta N(\sin 2\Theta_0)\le 2N(R)$. \\
+\midrule
+\texttt{forall Hop : E }$\mathrel{\to}\!\mathtt{L}[\mathbb K]$\texttt{ E}
+  & The ambient clause may be invoked with a bounded perturbation $H$. \\
+\texttt{IsSelfAdjointOperator Hop}
+  & The perturbation is self-adjoint. \\
+\texttt{T = addBounded A Hop}
+  & $T=A+H$.  This bounded-perturbation assumption belongs only to the ambient
+    conclusion. \\
+\texttt{N.Mem (sinTwoAngleOperator P Q)} and \texttt{N.Mem Hop}
+  & The two norms displayed in the ambient inequality are defined. \\
+\texttt{gap * N.gaugeReal (...) <= 2 * N.gaugeReal Hop}
+  & $\delta N(\sin 2\Theta)\le 2N(H)$. \\
+\bottomrule
+\end{tabularx}
+\end{table}
 
-The residual-only boundedness issue is independent. With
-$A=(-D)\oplus D$, $T=(-D)\oplus2D$, and $P=Q$ the first summand,
-the operators have the same domain, $R=0$, and the perturbed spectral parts
-are separated. The difference $T-A=0\oplus D$ is unbounded. The directed
-source inequality remains applicable, although an endpoint requiring a
-bounded ambient perturbation cannot be instantiated.
+The distinction between the two clauses accounts for much of the apparent
+complexity of the signature.  Davis--Kahan's directed estimate can use a bounded
+residual even when $T-A$ is not a bounded operator on the whole Hilbert space.
+The ambient estimate instead uses a bounded self-adjoint perturbation.  Placing a
+single bounded perturbation hypothesis before both conclusions would therefore
+narrow the directed statement.
+
+The common-domain formulation also removes an earlier whole-trial-space
+condition.  That refinement had a hypothesis requiring every vector of $P$ to
+lie in $\operatorname{dom}T$, which excludes an unbounded trial restriction.
+Formalization~2 quantifies instead over $p\in P\mathcal H\cap\mathcal D$ in the
+residual equation.  No bounded trial operator appears in its statement.
 
 \paragraph{Norm representation.}
-The current norm record contains a symmetric ideal gauge, rank-one
-normalization, and the comparison implication
+The norm record used in Formalization~2 contains a symmetric ideal gauge,
+rank-one normalization, and the comparison implication
 \[
  \bigl(\forall k,\ \|X\|_k\le\|Y\|_k\bigr)
  \ \Longrightarrow\ N(X)\le N(Y)
 \]
-when both $X$ and $Y$ belong to the norm's domain. The theorem exposing this
-property projects the corresponding structure field. This uses the
-source-cited Fan comparison as packaged mathematical background; it is not an
-independent formal derivation of Fan dominance from the bare norm axioms.
-The new common-domain code retains that boundary and makes no additional
-norm-representation claim.
+when both $X$ and $Y$ belong to the norm's domain.  Davis--Kahan cite this Fan
+comparison for unitarily invariant norms.  The formal record packages that
+comparison as mathematical background; the accessor used by the proof is not
+an independent derivation of Fan dominance from weaker norm axioms.
 
 \paragraph{Transcription check.}
 The supplied modernized transcription states the factor $2$ in the headline
@@ -286,18 +322,12 @@ transcription; locating its origin requires comparison with the printed scan.
 \begin{figure}[H]
   \centering
   \includegraphics[width=\linewidth,trim=0 250 0 0,clip]{figures/semantic-alignment-sine-theta-row.png}
-  \caption{A review interface developed late in the project.  The source passage
-  and inherited context appear at left, the claimed source-to-Lean
-  correspondence in the middle, and compiler-derived Lean evidence at right.
-  Most reviews reported in the main paper used LLM source/signature comparison;
-  the interface was added later.}
+  \caption{Example semantic-review interface.  The source passage and inherited
+  context appear at left, the claimed source-to-Lean correspondence in the
+  middle, and compiler-derived Lean evidence at right.}
   \label{fig:dashboard}
 \end{figure}
-
-}{
-The dashboard image is omitted from this review build pending regeneration.
-It is not used as evidence for the current source-correspondence judgment.
-}
+}{}
 
 The interface consolidates source passages, correspondence judgments, and
 compiler-derived signatures previously inspected through files and Lean

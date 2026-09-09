@@ -63,7 +63,7 @@ def validate_pages(pages: list[str], public: bool) -> list[str]:
         errors.append(f'NeurIPS checklist must appear once after References; found {checklist_pages}')
     current_pages = [
         i for i, page in enumerate(flat_pages)
-        if 'theorem sinTwoTheta_unbounded_perturbedGap_whereDefinedUIN_rclike' in page
+        if 'theorem sinTwoTheta_commonDomain_whereDefinedUIN_rclike' in page
     ]
     if len(current_pages) != 1 or current_pages[0] >= main_pages:
         errors.append('Current source-facing sin 2Theta theorem must appear once before References')
@@ -72,8 +72,9 @@ def validate_pages(pages: list[str], public: bool) -> list[str]:
         for token in (
             '-- proof omitted', 'Formalization 2:',
             'NormalizedSymmetricOperatorIdealFamily',
-            'RCLike K', 'SeparableSpace H', 'FormBoundedSylvesterGap',
-            'ReducesSubspace A P', 'addBounded A Hop',
+            'RCLike K', 'SeparableSpace E', 'T.domain = A.domain',
+            'FormBoundedSylvesterGap', 'ReducesSubspace A P',
+            'ReducesSubspace T Q', '∀ R : P', '∀ Hop : E',
             'directedSinTwoAngleOperator P Q', 'sinTwoAngleOperator P Q',
             'N.Mem R', 'N.Mem Hop', '2 * N.gaugeReal R',
             '2 * N.gaugeReal Hop',

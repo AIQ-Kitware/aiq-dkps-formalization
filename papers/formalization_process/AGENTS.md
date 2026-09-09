@@ -183,3 +183,16 @@ Additional constraints:
     that the sibling field or scalar-generic surface was updated. Do not name a theorem
     `sourceExact` or `sourceFaithful`; source fidelity is metadata owned by the result
     ledger, not a semantic property encoded in a declaration name.
+46. Define a reducing subspace before relying on the term in reader-facing prose.
+    For the unbounded `LinearPMap` setting, explain that the orthogonal projections
+    preserve the operator domain and that the selected and complementary summands
+    are invariant there; bounded block-diagonal intuition may be given second.
+47. Formalization 2 is the common-domain `sin 2Theta` theorem from
+    `SinTwoThetaCommonDomain.lean`.  Present it as a mathematical formulation, not
+    as the latest review event.  The main text should explain the shared hypotheses
+    and the clause-local residual/perturbation assumptions; the appendix should
+    translate every displayed hypothesis needed by a non-Lean reader.
+48. Do not leave transient validation language in rendered prose (for example,
+    "replacement awaits compiler validation", "new common-domain code", or
+    "a further source review finds").  Keep commit/review status in comments or
+    audit documents and write the manuscript from the stable mathematical state.
