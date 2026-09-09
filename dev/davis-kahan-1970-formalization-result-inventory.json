@@ -7869,6 +7869,10 @@
           "why": "Ledger-selected RClike where-defined facade carrying the paper's separable ambient and real-or-complex scalar scope in one theorem. Fixed-field wrappers are thin specializations."
         },
         {
+          "declaration": "TauCeti.DavisKahan1970.sinTwoTheta_unbounded_perturbedGap_whereDefinedUIN_rclike",
+          "why": "Ledger-selected RClike whole-result facade carrying the paper's separable ambient and real-or-complex scalar scope in one theorem. The generic analytic engines are maintained separately; this endpoint carries separability to state the result at the paper's ambient scope."
+        },
+        {
           "declaration": "TauCeti.DavisKahan1970.tanTheta_ambient_unboundedRitz_definedTangent_normalizedUIN_complex",
           "why": "Source-exact fa\u00e7ade: carries separability because the paper's ambient scope does, not because the mathematics needs it. The theorem beneath it holds on an arbitrary Hilbert space and is registered as a generalization."
         },

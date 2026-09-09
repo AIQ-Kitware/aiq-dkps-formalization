@@ -172,12 +172,12 @@ Additional constraints:
 43. Resource reporting is descriptive accounting, not a virtue claim.  Use the
     heading ``Resource utilization'' and keep the main AI-assistance statement
     short.  Do not frame disclosure as evidence of transparency.
-44. The current source-facing Davis--Kahan Section~2 sine-theta example should
-    show the full generated scalar-generic `RCLike` Lean signature when space permits.  Explain the
-    source-context ambiguity around separability, unbounded operators, gap
-    alternatives, and the where-defined unitarily invariant norm convention.
-    Do not replace the signature with a compressed equation merely to minimize
-    page count.
+44. When the manuscript uses the historical Davis--Kahan Section~2 `sin 2Theta`
+    mismatch as Formalization 1, the comparison statement must be the current
+    `sin 2Theta` theorem itself, not `sin Theta` or another nearby result.  Show
+    the full generated scalar-generic `RCLike` signature and explain the scope
+    differences that the repair addresses.  The point of the pair is direct
+    statement comparison, not a compressed summary of two different theorems.
 45. When describing source-scope maintenance, treat real, complex, and scalar-generic
     `RCLike` declarations as one API family. A repair to one fixed field is not evidence
     that the sibling field or scalar-generic surface was updated. Do not name a theorem
