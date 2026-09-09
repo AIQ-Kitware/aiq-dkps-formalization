@@ -378,7 +378,7 @@ Separable ambient Hilbert space and normalized unitarily invariant norm.  The
 pole-exclusion conjunct and the tangent representative are both produced from the
 source data and do not mention the norm, so they are constructed once; only the
 estimate goes through the Fan-dominance bridge. -/
-theorem tanTheta_directed_unboundedRitz_sourceExact_complex
+theorem tanTheta_directed_unboundedRitz_normalizedUIN_complex
     [TopologicalSpace.SeparableSpace H]
     (N : NormalizedUnitaryInvariantNorm.{0, v} ℂ)
     {A : H →ₗ.[ℂ] H}
@@ -468,7 +468,7 @@ theorem tanTheta_directed_unboundedRitz_symmetricNorming_exists_real
 
 /-- **Davis--Kahan 1970, the directed `tan Θ₀` theorem at the printed source scope
 over `ℝ`.** -/
-theorem tanTheta_directed_unboundedRitz_sourceExact_real
+theorem tanTheta_directed_unboundedRitz_normalizedUIN_real
     [TopologicalSpace.SeparableSpace E]
     (N : NormalizedUnitaryInvariantNorm.{0, v} ℝ)
     {A : E →ₗ.[ℝ] E}

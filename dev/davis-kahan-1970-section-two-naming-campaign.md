@@ -1,5 +1,7 @@
 # Section 2 declaration-naming campaign, 2026-08-30
 
+**Historical record.** This document and its classification JSON describe the 2026-08-30 rename campaign, not the current fidelity/API selection. For current real/complex/`RCLike` relationships use `dev/davis-kahan-1970-section-two-variant-index.json`; source fidelity itself is owned by the result ledger.
+
 The four Section 2 theorem families carried names that recorded how a proof was
 once obtained rather than what the theorem says.  `sinTheta_headline_generic`
 did not say it was the interval/exterior branch; `tanTheta_headline_generic_directed`

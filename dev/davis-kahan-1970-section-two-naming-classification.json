@@ -1,5 +1,8 @@
 {
   "campaign": "Davis--Kahan 1970 Section 2 declaration-naming campaign, 2026-08-30",
+  "status": "historical_rename_snapshot",
+  "current_variant_index": "dev/davis-kahan-1970-section-two-variant-index.json",
+  "current_status_note": "This file records the 2026-08-30 naming campaign and is not the current source-fidelity/API authority. Use the result ledger for source fidelity and the Section 2 variant index for current real/complex/RCLike/API relationships.",
   "columns": [
     "old_name",
     "new_name",

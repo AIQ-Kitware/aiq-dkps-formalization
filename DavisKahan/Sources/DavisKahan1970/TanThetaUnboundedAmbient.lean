@@ -599,7 +599,7 @@ nothing else.  The endpoints above additionally take `CrossedDefectsEquivalent U
 condition (3.5) -- and (3.5) is introduced in Section 3, *after* Proposition 3.2, where the
 source announces it will be assumed for the **remainder** of the paper.  A convention
 introduced after a theorem is not a hypothesis of it, so reading (3.5) back into Section 2 is
-not source-exact.
+not the ledger-selected source witness.
 
 What Section 1 does give, before any of this, is a semantic convention: some of the paper's
 results are vacuous when a norm occurring in them fails to exist, and the source says it will
@@ -744,7 +744,7 @@ over `ℂ`.**
 Separable ambient Hilbert space and normalized unitarily invariant norm.  The
 definedness hypothesis stays exactly as printed; the estimate goes through the
 Fan-dominance bridge. -/
-theorem tanTheta_ambient_unboundedRitz_definedTangent_sourceExact_complex
+theorem tanTheta_ambient_unboundedRitz_definedTangent_normalizedUIN_complex
     [TopologicalSpace.SeparableSpace E]
     (N : NormalizedUnitaryInvariantNorm.{0, u} ℂ)
     {A : E →ₗ.[ℂ] E}
