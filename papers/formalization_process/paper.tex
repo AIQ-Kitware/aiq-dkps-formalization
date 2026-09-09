@@ -169,8 +169,7 @@ scope.  This agreement is called \emph{semantic alignment}
 definitions, inherited assumptions, and surrounding mathematical context.
 Chow illustrates the risk with an agent that replaces ``all doohickeys are
 excellent'' by ``all special doohickeys are quasi-excellent''
-\citep{chow2026mindreading}.  A valid proof of the replacement would leave the
-intended theorem unresolved.
+\citep{chow2026mindreading}.
 
 We encountered this problem while formalizing Davis and Kahan's 1970
 spectral-perturbation results \citep{davis1970rotation}.  We wanted reusable
@@ -263,14 +262,17 @@ declarations and maintaining source-to-statement records.
 
 Davis and Kahan compare subspaces $P\mathcal H$ and $Q\mathcal H$
 associated with self-adjoint operators $A$ and $T=A+H$, respectively.  The
-subspace $P\mathcal H$ \emph{reduces} $A$ when its orthogonal projection
-preserves the operator domain and the two orthogonal summands are invariant
-under $A$; similarly, $Q\mathcal H$ reduces $T$.  For bounded operators this is
-the familiar block-diagonal decomposition with respect to the subspace and its
-orthogonal complement.  Here $H$ denotes the perturbation, while $\mathcal H$
-denotes the Hilbert space. If $E_0$ is an isometric coordinate map onto
-$P\mathcal H$, and $A_0$ is the corresponding restriction of $A$, the source
-residual is
+subspace $P\mathcal H$ plays the role of a \emph{trial subspace}; in applications
+such a subspace is often an approximation to a spectral subspace of interest.
+Related perturbation problems compare spectral subspaces before and after the
+operator changes from $A$ to $T$.  The subspace $P\mathcal H$ \emph{reduces} $A$ when its
+orthogonal projection preserves the operator domain and the two orthogonal
+summands are invariant under $A$; similarly, $Q\mathcal H$ reduces $T$.  For
+bounded operators this is the familiar block-diagonal decomposition with respect
+to the subspace and its orthogonal complement.  Here $H$ denotes the perturbation,
+while $\mathcal H$ denotes the Hilbert space. If $E_0$ is an isometric coordinate
+map onto $P\mathcal H$, and $A_0$ is the corresponding restriction of $A$, the
+source residual is
 \[
   R=TE_0-E_0A_0=HE_0.
 \]
@@ -488,9 +490,8 @@ clauses the norm comparison is asserted when the displayed norms are defined.
 Compared with the preceding refinement, Formalization~2 has no bounded trial
 operator and no hypothesis that all of $P\mathcal H$ lies in the operator
 domain.  A bounded ambient perturbation appears only in the ambient clause.
-\Cref{app:formalization2} gives a line-by-line reader's guide, including the
-meaning of ``reduces,'' the common-domain equality, and the Lean term that
-transports a domain-membership proof from $T$ to $A$.
+\Cref{app:formalization2} gives a line-by-line reader's guide to the
+hypotheses and conclusions in Formalization~2.
 
 % Candidate future example of review overreach (not rendered): Theorem 8.1(ii)
 % ends with "and natural infinite-dimensional extensions."  A prior review
