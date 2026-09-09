@@ -37,9 +37,22 @@ included in the supplementary artifact.
 Lean/Mathlib environment together with reusable local foundations.  Source
 transcriptions, prose summaries, result records, and review judgments were kept
 outside individual model conversations so work could continue across sessions.
+The reviewed snapshot specifies Lean~4.34.0-rc1, Mathlib revision
+\texttt{72f9c607bb3a}, and Tau Ceti revision \texttt{1b39d420ac84}.
+The reusable mathematics package is \texttt{ForTauCeti}; source-facing
+Davis--Kahan declarations live in the separate \texttt{DavisKahan} library.
+Full dependency revisions are recorded in the supplied Lake manifest.
+These identify the reproduction environment; the proposed replacement below
+has not yet been validated in it.
 As the project grew, we also developed tools for inspecting elaborated
 declarations and checking that recorded formal evidence still referred to the
-current development.
+current development. Reusable foundations lived below the paper-facing theorem
+modules. Agent tasks named an intended statement and its source context; agents
+returned Lean declarations and obstruction notes. Compilation, axiom inspection,
+and signature extraction supplied mechanical evidence, while correspondence
+judgments were recorded separately. Source review included inherited section
+variables and the fields of structures occurring in a theorem type, because
+both can restrict a claim without appearing in its concluding inequality.
 
 Source review compared each tracked Davis--Kahan result with the elaborated Lean
 statement and definitions that affected its meaning.  Recurring questions were
@@ -59,46 +72,51 @@ an independent expert reading of the theorem.
 \section{Davis--Kahan background and Formalization 1}
 \label{app:formalization1}
 
-Davis and Kahan compare a trial subspace with an exact invariant
-subspace of a self-adjoint operator \citep{davis1970rotation}.  In finite
-dimensions, let $A=A^*$ and let $E_0$ have
-orthonormal columns spanning the trial subspace $V$.  The
-\emph{trial-space compression} is
+In the source notation, $T=A+H$ is the perturbed self-adjoint operator,
+$P\mathcal H$ reduces $A$, and $Q\mathcal H$ reduces $T$
+\citep{davis1970rotation}. With $E_0$ an isometry onto $P\mathcal H$,
+$AE_0=E_0A_0$ defines the unperturbed trial restriction. The general residual is
 \begin{equation}
-  A_0=E_0^*AE_0.
-  \label{eq:dk-trial-compression}
+ R=TE_0-E_0A_0=HE_0.
+ \label{eq:dk-general-residual}
 \end{equation}
-This expression can be read from right to left: $E_0$ embeds trial
-coordinates into the ambient space, $A$ acts there, and $E_0^*$ projects the
-result back to trial coordinates.  Thus $A_0$ is the operator seen after
-applying $A$ and discarding the component outside $V$.  Writing
-$P_V=E_0E_0^*$ for the orthogonal projector onto $V$, define the
-\emph{residual}
+In finite dimensions, the Rayleigh--Ritz choice is
 \begin{equation}
-  R=AE_0-E_0A_0=(I-P_V)AE_0.
-  \label{eq:dk-trial-residual}
+ A_0=E_0^*TE_0,
+ \label{eq:dk-trial-compression}
 \end{equation}
-Thus $R$ is exactly the component of $AE_0$ outside $V$, and $R=0$ precisely
-when $V$ is invariant under $A$.  The historical signature allows any bounded
-operator \texttt{M} on $V$, not just the compression in
-\cref{eq:dk-trial-compression}; its residual is
-$A\circ\iota_V-\iota_V\circ M$, where $\iota_V:V\hookrightarrow E$ is inclusion.
-Choosing $M$ to be the corresponding trial-space compression recovers
-the residual in \cref{eq:dk-trial-residual}.
+which makes the trial-side diagonal block $H_0$ of the perturbation zero.
+Only under this specialization is the residual exactly the component outside
+the trial space:
+\begin{equation}
+ R=(I-P)TE_0.
+ \label{eq:dk-trial-residual}
+\end{equation}
+It then vanishes precisely when the trial space is invariant under $T$.
+In general, $R=0$ means that the specified trial operator and embedding satisfy
+the exact intertwining relation, which is stronger than invariance alone.
 
-For the exact subspace $U$, the assumption \texttt{Reduces A U} says that both
-$U$ and $U^\perp$ are invariant.  In Formalization~1, the spectrum of $A|_U$
-lies in $[a,b]$, while the spectrum of $A|_{U^\perp}$ lies outside
-$(a-\delta,b+\delta)$ for $\delta>0$.  This gap separates the two exact spectral
-parts.  It is an assumption on the operator being compared, rather than a
-consequence of the residual being small.
+Formalization~1 displays an \emph{ambient} theorem, not a residual theorem.
+Its local names \texttt{A} and \texttt{B} denote the two bounded self-adjoint
+operators; \texttt{U} reduces \texttt{A} and \texttt{V} reduces \texttt{B}.
+The perturbation in its conclusion is \texttt{B - A}. No trial operator
+\texttt{M} or residual \texttt{R} occurs in that declaration.
+
+The hypotheses \texttt{hUspec} and \texttt{hUspec'} separate the restrictions
+of \texttt{A} to $U$ and $U^\perp$ by a gap $d>0$: their spectra lie in
+$[a,b]$ and outside $(a-d,b+d)$, respectively. This gap is on the first
+operator. For the ambient double-angle bound, Davis--Kahan explicitly permit
+interchanging the two operators. Thus this placement is not a defect in the
+displayed ambient theorem. The directed residual inequality does not admit
+that interchange in general. The historical discrepancy is the bounded
+ambient operator type, not the choice of which operator supplies this gap.
 
 For two subspaces of the same finite dimension with orthonormal coordinate
 maps $E_0$ and $F_0$, their principal angles $\theta_j\in[0,\pi/2]$ satisfy
 $\cos\theta_j=\sigma_j(F_0^*E_0)$.  Equivalently, they pair directions in the two
 subspaces by their overlap.  The directed sine measures the part of a trial
 direction outside the exact subspace; its matrix representative is
-$(I-P_U)E_0$.  The doubled-angle quantity applies $\sin(2\theta_j)$ to the
+$(I-Q)E_0$.  The doubled-angle quantity applies $\sin(2\theta_j)$ to the
 angles, with the trial-to-exact orientation fixed by the source.  The bound
 \[
   \delta\,N(\sin 2\Theta_0)\le 2N(R)
@@ -112,76 +130,139 @@ Formalization~1 states the estimate for complex Hilbert spaces.  Its ambient
 Hilbert-space assumptions are omitted from the displayed code.  In the syntax
 shown there, \texttt{E }$\mathrel{\to}\!\mathtt{L}[\mathbb C]$\texttt{ E}
 means a bounded continuous complex-linear map $E\to E$.  It elaborates to
-\texttt{ContinuousLinearMap (RingHom.id Complex) E E}; this bounded,
-complex-linear type is part of the historical scope mismatch.  The following
+\texttt{ContinuousLinearMap (RingHom.id Complex) E E}; its boundedness is the historical scope restriction. The complex field
+is not itself the project-level mismatch: a real sibling was present.  The following
 table uses the same surface syntax as the displayed formalization.
 
 \begin{table}[H]
 \centering
 \small
-\caption{Reader's guide to the principal Lean structures in Formalization~1.}
+\caption{Reader's guide to the displayed ambient theorem in Formalization~1.}
 \label{tab:formalization1-glossary}
-\begin{tabularx}{\linewidth}{@{}>{\raggedright\arraybackslash}p{0.36\linewidth}>{\raggedright\arraybackslash}X@{}}
+\begin{tabularx}{\linewidth}{@{}>{\raggedright\arraybackslash}p{0.39\linewidth}>{\raggedright\arraybackslash}X@{}}
 \toprule
 Lean expression & Mathematical role \\
 \midrule
-\texttt{E }$\mathrel{\to}\!\mathtt{L}[\mathbb C]$\texttt{ E}
-  & A bounded continuous complex-linear operator $E\to E$.  In Formalization~1
-    this is the ambient operator $A$; the bounded complex-linear type is part
-    of the historical scope mismatch. \\
+\texttt{A B : E }$\mathrel{\to}\!\mathtt{L}[\mathbb C]$\texttt{ E}
+  & Both ambient operators are bounded continuous complex-linear maps. \\
 \texttt{IsSelfAdjoint A}
-  & $A=A^*$. \\
-\texttt{Submodule }$\mathbb C$\texttt{ E}
-  & A complex linear subspace of the ambient Hilbert space.  Here $U$ is the
-    exact reducing subspace and $V$ is the trial subspace. \\
-\texttt{U.HasOrthogonalProjection}
-  & The orthogonal projection onto $U$ is available; likewise for $V$.  This
-    supports $U^\perp$, compressions, and the angle constructions. \\
+  & $A=A^*$; likewise for $B$. \\
 \texttt{Reduces A U}
-  & Both $U$ and $U^\perp$ are invariant under $A$. \\
+  & Both $U$ and $U^\perp$ are invariant under $A$; the other hypothesis
+    says that $V$ reduces $B$. \\
+\texttt{U.HasOrthogonalProjection}
+  & The orthogonal projection onto $U$ is available; likewise for $V$.
+    These instances are supplied by the surrounding context. \\
 \texttt{compressOperator U A}
-  & The compression to $U$: include a vector from $U$, apply $A$, and project
-    back to $U$.  Because $U$ reduces $A$, no component spills outside $U$, so
-    this agrees with the restriction of $A$ to $U$. \\
+  & The compression of $A$ to $U$, equal to its restriction because $U$
+    reduces $A$. \\
 \texttt{spectrum }$\mathbb R$\texttt{ (...)}
-  & The real spectrum of the self-adjoint compression, used to state the
-    interval and gap hypotheses. \\
-\texttt{V.subtypeL}
-  & The bounded inclusion $V\hookrightarrow E$, the coordinate-free analogue
-    of the source's embedding $E_0$. \\
-\texttt{M : V }$\mathrel{\to}\!\mathtt{L}[\mathbb C]$\texttt{ V}
-  & An arbitrary bounded operator on the trial subspace.  Choosing $M$ as
-    the trial-space compression corresponding to $A_0=E_0^*AE_0$ gives
-    the introductory specialization; \texttt{M} is not definitionally that
-    matrix expression. \\
-\texttt{residual A V.subtypeL M}
-  & $A\circ\iota_V-\iota_V\circ M$.  When $M$ is the trial-space
-    compression corresponding to $A_0$, this is the residual $R$ in
-    \cref{eq:dk-trial-residual}; for general $M$ it is the
-    more general residual stated by Formalization~1. \\
+  & The real spectrum of that self-adjoint compression. \\
 \texttt{SymmetricNormingFunction}
-  & A normalized, dimension-coherent symmetric gauge on singular values used to
-    represent the source's unitarily invariant norm $N$. \\
-\texttt{N.Mem T}
-  & $T$ lies in the canonical operator ideal on which the norm determined by
-    $N$ is finite. \\
-\texttt{N.gauge T}
-  & The real-valued gauge used as $N(T)$ in the inequality.  The accompanying
-    membership hypothesis places $T$ in its normed ideal. \\
-\texttt{sinTwoThetaIdealBlock U V}
-  & A projection-product representative of the doubled-angle quantity.
-    Its approximation numbers agree with those of the directed double-angle
-    sine, which identifies the norms in the estimate. \\
+  & The presentation's audited rename of the historical norm record.
+    It supplies the ideal and gauge; the exact sidecar retains the original name. \\
+\texttt{N.Mem (B - A)}
+  & The perturbation lies in the ideal on which $N$ is finite. Unlike the
+    current where-defined boundary, this historical theorem then \emph{concludes}
+    angle ideal membership as well. \\
+\texttt{N.gauge (B - A)}
+  & The real-valued perturbation norm used on the right-hand side. \\
+\texttt{paperSinTwoAngleOperatorC U V}
+  & The ambient doubled-angle operator. Its two angle blocks must not be
+    replaced by a single directed block when comparing general ideal norms. \\
 \bottomrule
 \end{tabularx}
 \end{table}
 
-The conclusion asserts that the doubled-angle block belongs to the same ideal
-as the residual and then bounds its gauge.  These norm and spectral conditions
+The historical ambient conclusion asserts ideal membership and bounds the
+ambient doubled-angle gauge by twice the gauge of \texttt{B - A}.  These norm and spectral conditions
 are part of the statement.  The displayed declaration is complex and bounded;
 a real ambient sibling also existed.  The project-level mismatch was therefore
 the bounded ambient operator type, which did not cover Davis--Kahan's unbounded
 setting.
+
+\section{Common-domain double-angle replacement}
+\label{app:domain-repair}
+
+Let $A$ and $T$ be self-adjoint operators on the same dense domain
+$\mathcal D\subseteq\mathcal H$. Let $P$ reduce $A$, let $Q$ reduce $T$,
+and place the source gap on $T|_{Q\mathcal H}$ and $T|_{Q^\perp\mathcal H}$.
+The directed clause takes a bounded map $R:P\mathcal H\to\mathcal H$ such that
+\[
+ Tp=Ap+Rp \qquad(p\in P\mathcal H\cap\mathcal D).
+\]
+The trial restriction is $A_0=A|_{P\mathcal H}$, with its own dense domain.
+Since $A$ and $T$ have the same domain, $T\iota_P$ and $\iota_PA_0$ have
+exactly that common domain. Neither the trial restriction nor $T-A$ is required
+to be bounded. This gives the source's directed residual setup.
+The ambient clause separately takes a bounded self-adjoint $H$ with $T=A+H$.
+A residual hypothesis is unnecessary for that clause.
+
+The new proof code reduces the domain issue to a bounded off-diagonal block.
+Write $P^\perp=I-P$, let $\iota_P:P\mathcal H\hookrightarrow\mathcal H$, and set
+\[
+ C=P^\perp R\iota_P^*,\qquad S=C+C^*,\qquad J=2P-I.
+\]
+Reduction of $A$ and the common-domain equality imply that $P$ and $J$ preserve
+$\mathcal D$. For $x\in\mathcal D$ the residual identity gives
+$Cx=P^\perp TPx$. Self-adjointness of $T$, tested on the dense domain, gives
+$C^*x=PTP^\perp x$. Thus
+\[
+ (C-C^*)x=TPx-PTx,\qquad (T-2S)Jx=JTx.
+\]
+The existing reflection estimate then bounds the doubled-angle block in every
+Ky Fan norm by $2\|C\|_k\le 2\|R\|_k$. The existing angle correspondence and
+the norm record's where-defined Fan law give the directed inequality in
+\cref{eq:sin2theta}. The ambient clause uses the separate existing ambient
+theorem. The proposed Lean module follows these steps; its compiler validation
+remains pending. These equations explain the proposed repair, not a claim that
+the new Lean declarations have already been checked.
+
+The restriction in the current theorem is also visible with a finite gap
+interval. Take $A=T=D\oplus0$ on $\ell^2\oplus\ell^2$, with
+$D(x_n)=((n+1)x_n)$, let $P$ select the first summand and $Q$ the second.
+Then $\sigma(T|_Q)=\{0\}$, $\sigma(T|_{Q^\perp})\subseteq[1,\infty)$,
+and the gap condition holds with $[\beta,\alpha]=[0,0]$, $\delta=1$.
+The source's dimension conditions hold and $H=R=0$. The angle is $\pi/2$,
+so its doubled sine is zero; $P\mathcal H$ still fails the whole-space domain
+hypothesis. This example also shows why a small doubled sine alone does not
+select the small-angle branch.
+
+The residual-only boundedness issue is independent. With
+$A=(-D)\oplus D$, $T=(-D)\oplus2D$, and $P=Q$ the first summand,
+the operators have the same domain, $R=0$, and the perturbed spectral parts
+are separated. The difference $T-A=0\oplus D$ is unbounded. The directed
+source inequality remains applicable, although an endpoint requiring a
+bounded ambient perturbation cannot be instantiated.
+
+\paragraph{Norm representation.}
+The current norm record contains a symmetric ideal gauge, rank-one
+normalization, and the comparison implication
+\[
+ \bigl(\forall k,\ \|X\|_k\le\|Y\|_k\bigr)
+ \ \Longrightarrow\ N(X)\le N(Y)
+\]
+when both $X$ and $Y$ belong to the norm's domain. The theorem exposing this
+property projects the corresponding structure field. This uses the
+source-cited Fan comparison as packaged mathematical background; it is not an
+independent formal derivation of Fan dominance from the bare norm axioms.
+The new common-domain code retains that boundary and makes no additional
+norm-representation claim.
+
+\paragraph{Transcription check.}
+The supplied modernized transcription states the factor $2$ in the headline
+residual inequality but omits it in the residual step of the Section~7 proof.
+The factor $2$ is necessary. For
+\[
+ A=0,\quad T=H=\begin{pmatrix}0&1\\1&0\end{pmatrix},\quad
+ P\mathbb R^2=\operatorname{span}(e_1),\quad
+ Q\mathbb R^2=\operatorname{span}(e_1+e_2),
+\]
+the spectral gap is $2$, the angle is $\pi/4$, and $\|R\|=1$.
+Hence $\delta\|\sin2\Theta_0\|=2=2\|R\|$; the inequality with factor $1$
+is false. The reflection calculation also gives $H-JHJ$ equal to twice the
+off-diagonal part. This identifies an inconsistency in the supplied
+transcription; locating its origin requires comparison with the printed scan.
 
 \section{Lean publication activity}
 
@@ -201,6 +282,7 @@ setting.
 \section{Semantic-review page}
 \label{app:review-page}
 
+\IfFileExists{figures/semantic-alignment-sine-theta-row.png}{
 \begin{figure}[H]
   \centering
   \includegraphics[width=\linewidth,trim=0 250 0 0,clip]{figures/semantic-alignment-sine-theta-row.png}
@@ -211,6 +293,11 @@ setting.
   the interface was added later.}
   \label{fig:dashboard}
 \end{figure}
+
+}{
+The dashboard image is omitted from this review build pending regeneration.
+It is not used as evidence for the current source-correspondence judgment.
+}
 
 The interface consolidates source passages, correspondence judgments, and
 compiler-derived signatures previously inspected through files and Lean

@@ -59,8 +59,10 @@ variable (V : Submodule 𝕜 H) [V.HasOrthogonalProjection]
   (M : V →L[𝕜] V) (R : V →L[𝕜] H)
 
 /-- The bounded operator the trial data determines, namely `A P_V`.  It is
-bounded because the residual and the trial operator are, which is exactly the
-source's standing requirement for a useful unbounded conclusion. -/
+bounded because this specialization assumes both residual and trial operator
+bounded. That is stronger than the source common-dense-domain setup, where the
+trial operator may be unbounded. Only its off-diagonal residual block is needed
+in the common-domain replacement. -/
 def trialCompression : H →L[𝕜] H :=
   (R + V.subtypeL ∘L M) ∘L V.subtypeL.adjoint
 
