@@ -217,8 +217,10 @@ Lean expression & Mathematical role \\
 \texttt{hdom : T.domain = A.domain}
   & The two operators use the same ambient domain $\mathcal D$. \\
 \texttt{P Q : Submodule K E}
-  & The trial and exact subspaces.  \texttt{HasOrthogonalProjection} supplies
-    the orthogonal projections onto them. \\
+  & $P$ is the trial subspace and $Q$ is the comparison spectral subspace.  In
+    applications a trial subspace is often an approximation to a spectral
+    subspace of interest.  \texttt{HasOrthogonalProjection} supplies their
+    orthogonal projections. \\
 \texttt{hP : ReducesSubspace A P}
   & Projection onto $P$ and $P^\perp$ preserves $\mathcal D$, and both
     summands are invariant under $A$ on that domain.  \texttt{hQ} says the
