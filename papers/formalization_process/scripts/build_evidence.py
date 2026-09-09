@@ -254,20 +254,17 @@ def build_model_tables():
     )
 
 
-def build_historical_scope_mismatch():
-    """Extract the August 17 ambient sin-2-Theta certificate mismatch from Git."""
+def build_sin_theta_alignment_example():
+    """Build the historical/current sine-theta statement comparison."""
 
     def extract_decl(
         commit: str,
         source_path: str,
         name: str,
-        context_prefix=None,
+        context_prefix: str | None = None,
         context_line_count: int = 1,
     ):
         if commit == 'WORKTREE':
-            # Current generated evidence must be buildable before the overlay is
-            # committed.  Historical evidence is commit-pinned below; current
-            # evidence is intentionally read from the checked-out source.
             full_commit = f"WORKTREE@{git('rev-parse', 'HEAD')}"
             raw = (REPO / source_path).read_bytes()
         else:
@@ -278,375 +275,259 @@ def build_historical_scope_mismatch():
             )
         source = raw.decode('utf8')
         lines = source.splitlines()
-        start = next(
+        decl_start = next(
             i for i, line in enumerate(lines)
             if line.strip().startswith(f'theorem {name}')
         )
-        end = start
-        while end < len(lines):
-            if ':=' in lines[end]:
-                end += 1
+        decl_end = decl_start
+        while decl_end < len(lines):
+            if ':=' in lines[decl_end]:
+                decl_end += 1
                 break
-            end += 1
-        signature = '\n'.join(lines[start:end]) + '\n'
-        context = None
-        context_line = None
+            decl_end += 1
+        signature = '\n'.join(lines[decl_start:decl_end]) + '\n'
+        context = ''
+        context_start = None
         if context_prefix is not None:
-            context_idx = next(
-                i for i in range(start - 1, -1, -1)
+            context_start = next(
+                i for i in range(decl_start - 1, -1, -1)
                 if lines[i].strip().startswith(context_prefix)
             )
-            context_lines = lines[context_idx:context_idx + context_line_count]
-            context_line = '\n'.join(context_lines)
-            context = context_line + '\n\n' + signature
+            context = '\n'.join(
+                lines[context_start:context_start + context_line_count]
+            ) + '\n\n'
         return {
             'name': name,
             'commit': full_commit,
             'source_path': source_path,
             'source_file_sha256': hashlib.sha256(raw).hexdigest(),
-            'line_range_1based': [start + 1, end],
-            'context_line_1based': None if context_line is None else context_idx + 1,
+            'line_range_1based': [decl_start + 1, decl_end],
+            'context_line_1based': None if context_start is None else context_start + 1,
             'signature_sha256': hashlib.sha256(signature.encode('utf8')).hexdigest(),
             'signature': signature,
-            'display_source': context if context is not None else signature,
+            'display_source': context + signature,
         }
 
-    checkpoint = '8b3f0f392f98c9a6de54e9acf3d6a7404a85ac95'
+    historical_review_commit = '489c01c2cc992a20d38415b5f827cdc046fe7236'
+    correction_commit = git('rev-parse', 'cb3b330b')
+    historical_path = 'DavisKahan/Sources/DavisKahan1970/SineTheta/PaperSurface.lean'
+    historical_name = 'sinTheta_unbounded_intervalExterior_characterizedWitness_rclike'
     historical = extract_decl(
-        checkpoint,
-        'DavisKahan/Sources/DavisKahan1970/SinTwoThetaWholeSpace.lean',
-        'sinTwoTheta_wholeSpace_paperUINorm',
-        context_prefix='variable {A B : E →L[ℂ] E}',
+        historical_review_commit,
+        historical_path,
+        historical_name,
+        context_prefix='variable {𝕜 : Type u} [RCLike 𝕜]',
+        context_line_count=6,
     )
-    historical_real = extract_decl(
-        checkpoint,
-        'DavisKahan/Sources/DavisKahan1970/WholeSpaceReal.lean',
-        'sinTwoTheta_wholeSpace_paperUINorm_real',
-        context_prefix='variable {A H T B : E →L[ℝ] E}',
-    )
-    historical_directed_complex = extract_decl(
-        checkpoint,
-        'DavisKahan/Sources/DavisKahan1970/SinTwoThetaUnboundedDirectedResidual.lean',
-        'sinTwoTheta_unbounded_directedResidual_paperUINorm',
-    )
-    historical_directed_real = extract_decl(
-        checkpoint,
-        'DavisKahan/Sources/DavisKahan1970/SinTwoThetaUnboundedDirectedResidualReal.lean',
-        'sinTwoTheta_unbounded_directedResidual_paperUINorm_real',
-    )
-
-    # Presentation-only rename audit. Commit a905bd4c deliberately renamed the
-    # dimension-coherent norm structure PaperUnitaryInvariantNorm to
-    # SymmetricNormingFunction. Its three fields are unchanged; the same commit
-    # also renamed related helper identifiers (for example paperZeroPad ->
-    # zeroPad), so this verifies the structure modulo those documented names
-    # before the historical theorem is displayed with the later type name.
-    norm_path = (
-        'DavisKahan/Sources/DavisKahan1970/SineTheta/Norms/'
-        'UnitaryInvariantNorm.lean'
-    )
-
-    def extract_structure(rev: str, name: str):
-        source = git('show', f'{rev}:{norm_path}')
-        lines = source.splitlines()
-        start = next(
-            i for i, line in enumerate(lines)
-            if line.startswith(f'structure {name} where')
-        )
-        end = next(
-            i for i in range(start + 1, len(lines))
-            if lines[i].startswith('namespace ')
-        )
-        return '\n'.join(lines[start:end]).strip()
-
-    norm_before = extract_structure('a905bd4c^', 'PaperUnitaryInvariantNorm')
-    norm_after = extract_structure('a905bd4c', 'SymmetricNormingFunction')
-    normalized_before = (
-        norm_before
-        .replace('PaperUnitaryInvariantNorm', 'SymmetricNormingFunction')
-        .replace('paperZeroPad', 'zeroPad')
-    )
-    if normalized_before != norm_after:
-        raise RuntimeError(
-            'PaperUnitaryInvariantNorm -> SymmetricNormingFunction rename '
-            'no longer verifies modulo documented helper renames'
-        )
-
-    current_rclike = extract_decl(
+    current_path = 'DavisKahan/Sources/DavisKahan1970/SineTheta/Presentation.lean'
+    current_name = 'sinTheta_unbounded_formGap_whereDefinedUIN_rclike'
+    current = extract_decl(
         'WORKTREE',
-        'DavisKahan/Sources/DavisKahan1970/SinTwoThetaAmbientUnbounded.lean',
-        'sinTwoTheta_ambient_unbounded_perturbedGap_whereDefinedUIN_rclike',
-    )
-    current_complex = extract_decl(
-        'WORKTREE',
-        'DavisKahan/Sources/DavisKahan1970/SinTwoThetaAmbientUnbounded.lean',
-        'sinTwoTheta_ambient_unbounded_perturbedGap_whereDefinedUIN_complex',
-    )
-    current_real = extract_decl(
-        'WORKTREE',
-        'DavisKahan/Sources/DavisKahan1970/SinTwoThetaAmbientUnbounded.lean',
-        'sinTwoTheta_ambient_unbounded_perturbedGap_whereDefinedUIN_real',
+        current_path,
+        current_name,
+        context_prefix='variable {𝕜 : Type u} [RCLike 𝕜]',
+        context_line_count=6,
     )
 
-    checks = [
-        ('historical norm', historical['signature'], '(N : PaperUnitaryInvariantNorm)'),
-        ('historical bounded complex context', historical['display_source'], '{A B : E →L[ℂ] E}'),
-        ('historical ambient perturbation', historical['signature'], 'N.Mem (B - A)'),
-        ('historical bounded real context', historical_real['display_source'], '{A H T B : E →L[ℝ] E}'),
-        ('historical real ambient sibling', historical_real['signature'], 'paperSinTwoAngleOperatorR'),
-        ('historical complex unbounded directed witness', historical_directed_complex['signature'], 'hVdom'),
-        ('historical complex printed residual', historical_directed_complex['signature'], '2 * N.gauge R'),
-        ('historical real unbounded directed witness', historical_directed_real['signature'], 'hVdom'),
-        ('historical real printed residual', historical_directed_real['signature'], '2 * N.gauge R'),
-        ('current generic source norm', current_rclike['signature'], 'NormalizedSymmetricOperatorIdealFamily'),
-        ('current complex source norm', current_complex['signature'], 'NormalizedSymmetricOperatorIdealFamily'),
-        ('current real source norm', current_real['signature'], 'NormalizedSymmetricOperatorIdealFamily'),
-        ('current generic unbounded operator', current_rclike['signature'], '{A : H →ₗ.[𝕜] H}'),
-        ('current complex unbounded operator', current_complex['signature'], '{A : Hc →ₗ.[ℂ] Hc}'),
-        ('current real unbounded operator', current_real['signature'], '{A : Er →ₗ.[ℝ] Er}'),
-    ]
-    for label, body, needle in checks:
-        if needle not in body:
-            raise RuntimeError(f'{label}: expected {needle!r} in extracted source')
+    historical_review_path = 'docs/semantic-alignment/dk-headline-review.md'
+    historical_review = git(
+        'show', f'{historical_review_commit}:{historical_review_path}'
+    )
+    for needle in (
+        '### Canonical Lean declarations',
+        f'#### `DavisKahan1970.{historical_name}`',
+        '| claimed_exact |',
+    ):
+        if needle not in historical_review:
+            raise RuntimeError(
+                f'historical sine-theta review evidence missing {needle!r}'
+            )
+    corrected_review = git('show', f'{correction_commit}:{historical_review_path}')
+    correction_needles = (
+        'CANONICAL WITNESS CORRECTED 2026-08-31.',
+        f'The row named `{historical_name}` as the exact source match.',
+        'That was wrong on two counts: it carries only the bounded interval/exterior branch of the gap, while the source permits half-infinite separating intervals',
+    )
+    for needle in correction_needles:
+        if needle not in corrected_review:
+            raise RuntimeError(
+                f'corrective sine-theta review evidence missing {needle!r}'
+            )
 
-    # Follow the MCC paper's listings pattern: put ASCII stand-ins in the
-    # listings input and let LaTeX `literate=` turn them into rendered symbols.
-    # The exact Git text and the PDF presentation remain separate artifacts.
-    exact_text = historical['display_source']
-    exact_sidecar = PAPER / 'generated' / 'historical_scope_mismatch_exact.lean'
-    exact_sidecar.write_text(exact_text, encoding='utf8')
-    if exact_sidecar.read_text(encoding='utf8') != exact_text:
-        raise RuntimeError('historical exact sidecar changed during write')
+    historical_checks = (
+        '[RCLike 𝕜]',
+        '[ContinuousLinearMap.HasMinMaxLowerBoundEverywhere',
+        '[HasUnboundedSylvesterKyFan',
+        '(N : UnitaryInvariantNorm)',
+        '(A : E →ₗ.[𝕜] E)',
+        '(A₀ : F →ₗ.[𝕜] F)',
+        '(Λ₁ : G →ₗ.[𝕜] G)',
+        '{β α δ : ℝ}',
+        'Set.Icc β α',
+        'x ≤ β - δ ∨ α + δ ≤ x',
+        'δ * N.gauge sinTheta₀ ≤ N.gauge R',
+    )
+    for needle in historical_checks:
+        if needle not in historical['display_source']:
+            raise RuntimeError(
+                f'historical sine-theta signature missing {needle!r}'
+            )
+    current_checks = (
+        '[RCLike 𝕜]',
+        '[TopologicalSpace.SeparableSpace E]',
+        'NormalizedSymmetricOperatorIdealFamily',
+        '(A : E →ₗ.[𝕜] E)',
+        '(A₀ : F →ₗ.[𝕜] F)',
+        '(Λ₁ : G →ₗ.[𝕜] G)',
+        'IsTrialResidual A A₀ E₀ R',
+        'IsExactSpectralDecomposition A Λ₁ F₀ F₁',
+        'FormBoundedSylvesterGap A₀ Λ₁ δ',
+        'N.Mem ((ContinuousLinearMap.id 𝕜 E - F₀ ∘L F₀.adjoint) ∘L E₀) →',
+        'N.Mem R →',
+        'δ * N.gaugeReal',
+        '≤',
+        'N.gaugeReal R',
+    )
+    for needle in current_checks:
+        if needle not in current['display_source']:
+            raise RuntimeError(f'current sine-theta signature missing {needle!r}')
 
-    presentation = exact_text
-    name_rewrites = [
-        ('sinTwoTheta_wholeSpace_paperUINorm', 'sinTwoTheta_ambient'),
-        ('PaperUnitaryInvariantNorm', 'SymmetricNormingFunction'),
-    ]
-    for before, after in name_rewrites:
-        if presentation.count(before) != 1:
-            raise RuntimeError(f'historical display rename is ambiguous: {before!r}')
-        presentation = presentation.replace(before, after)
+    exact_outputs = {
+        'historical_sin_theta_gap_mismatch_exact.lean': historical['display_source'],
+        'current_sin_theta_exact.lean': current['display_source'],
+    }
+    for name, text in exact_outputs.items():
+        path = PAPER / 'generated' / name
+        path.write_text(text, encoding='utf8')
+        if path.read_text(encoding='utf8') != text:
+            raise RuntimeError(f'exact sine-theta sidecar changed during write: {name}')
 
-    # Keep these tokens synchronized with the ASCII keys in paper.tex's
-    # `leanpaper` literate table. Longer source tokens must come first.
-    literate_sentinels = [
-        ('→L[ℂ]', r'\LeanLitCLMapC'),
-        ('ℂ', r'\LeanLitComplex'),
+    # Replace only display-sensitive Unicode.  The exact sidecars above remain
+    # byte-for-byte excerpts from Git/current source.
+    literate = [
+        ('→ₗ.[𝕜]', r'\LeanLitPMapK'),
+        ('→L[𝕜]', r'\LeanLitCLMapK'),
+        ('𝕜', r'\LeanLitScalar'),
+        ('Λ₁', r'\LeanLitLambda\LeanLitSubOne'),
+        ('A₀', r'A\LeanLitSubZero'),
+        ('E₀', r'E\LeanLitSubZero'),
+        ('F₀', r'F\LeanLitSubZero'),
+        ('F₁', r'F\LeanLitSubOne'),
+        ('sinTheta₀', r'sinTheta\LeanLitSubZero'),
+        ('₀', r'\LeanLitSubZero'),
+        ('₁', r'\LeanLitSubOne'),
+        ('β', r'\LeanLitBeta'),
+        ('α', r'\LeanLitAlpha'),
+        ('δ', r'\LeanLitDelta'),
         ('ℝ', r'\LeanLitReal'),
         ('≤', r'\LeanLitLe'),
         ('⊆', r'\LeanLitSubsetEq'),
         ('∀', r'\LeanLitForall'),
         ('∈', r'\LeanLitMem'),
-        ('ᗮ', r'\LeanLitOrth'),
         ('∨', r'\LeanLitDisj'),
         ('∧', r'\LeanLitConj'),
+        ('∘L', r'\LeanLitCompL'),
+        ('→', r'\LeanLitArrow'),
     ]
-    sentinels = [sentinel for _, sentinel in literate_sentinels]
-    for sentinel in sentinels:
-        if any(other != sentinel and other.startswith(sentinel) for other in sentinels):
-            raise RuntimeError(
-                f'literate sentinel is a prefix of another sentinel: {sentinel}'
-            )
-    for source_token, sentinel in literate_sentinels:
-        if sentinel in exact_text:
-            raise RuntimeError(f'literate sentinel collides with Lean source: {sentinel}')
-        presentation = presentation.replace(source_token, sentinel)
-
-    if not presentation.endswith(':= by\n'):
-        raise RuntimeError(
-            'historical presentation no longer ends with the expected `:= by`'
-        )
-    presentation = presentation[:-1] + '  -- proof omitted\n'
-    if not presentation.isascii():
-        remaining = sorted({c for c in presentation if ord(c) > 127})
-        raise RuntimeError(
-            'historical presentation contains Lean Unicode without a literate '
-            f'sentinel: {remaining!r}'
-        )
-
-    presentation_header = [
-        '-- GENERATED PRESENTATION INPUT; this is not the exact Lean source.',
-        '-- Exact historical context/signature: generated/historical_scope_mismatch_exact.lean',
-        '-- ASCII LeanLit... sentinels stand in for display-sensitive Lean notation.',
-        '-- paper.tex renders those sentinels with the listings literate= table.',
-        '-- Audit the exact sidecar/JSON provenance, not this presentation file.',
-    ]
+    # Longer tokens first so subscripted identifiers are not partially replaced.
+    literate.sort(key=lambda pair: len(pair[0]), reverse=True)
 
     paper_tex = (PAPER / 'paper.tex').read_text(encoding='utf8')
-    for _, sentinel in literate_sentinels:
-        tex_key = '{' + sentinel.replace('\\', '\\\\') + '}'
-        if tex_key not in paper_tex:
+    for _, sentinel in literate:
+        # Verify every actual sentinel referenced in the replacement has a mapping.
+        import re
+        for token in re.findall(r'\\LeanLit[A-Za-z]+', sentinel):
+            tex_key = '{' + token.replace('\\', '\\\\') + '}'
+            if tex_key not in paper_tex:
+                raise RuntimeError(
+                    f'paper.tex is missing literate mapping for sentinel {token}'
+                )
+
+    def presentation(name: str, exact_name: str, exact_text: str) -> str:
+        text = exact_text
+        for source_token, sentinel in literate:
+            text = text.replace(source_token, sentinel)
+        if not text.endswith(':= by\n'):
+            raise RuntimeError(f'{name} presentation no longer ends in `:= by`')
+        text = text[:-1] + '  -- proof omitted\n'
+        if not text.isascii():
+            remaining = sorted({c for c in text if ord(c) > 127})
             raise RuntimeError(
-                f'paper.tex is missing literate mapping for sentinel {sentinel}'
+                f'{name} presentation contains unmapped Lean Unicode: {remaining!r}'
             )
-    first_code_line = len(presentation_header) + 1
-    if f'firstline={first_code_line},' not in paper_tex:
-        raise RuntimeError(
-            'paper.tex firstline no longer skips exactly the generated '
-            'presentation header'
-        )
+        header = [
+            '-- GENERATED PRESENTATION INPUT; this is not the exact Lean source.',
+            f'-- Exact signature/context: generated/{exact_name}',
+            '-- ASCII LeanLit... sentinels stand in for display-sensitive Lean notation.',
+            '-- paper.tex renders those sentinels with the listings literate= table.',
+            '-- Audit the exact sidecar/provenance JSON, not this presentation file.',
+        ]
+        return '\n'.join(header) + '\n' + text
 
-    presentation_text = '\n'.join(presentation_header) + '\n' + presentation
-    presentation_path = PAPER / 'generated' / 'historical_scope_mismatch_presentation.lean'
-    presentation_path.write_text(presentation_text, encoding='ascii')
-
-
-    # Current Davis--Kahan Section 2 sin 2Theta signature.  The displayed
-    # theorem is the compiled common-domain formulation: its shared prefix carries
-    # only the operator/domain/gap hypotheses, while the directed and ambient
-    # conjuncts introduce their bounded residual and bounded perturbation
-    # assumptions separately.
-    current_sin_two_theta = extract_decl(
-        'WORKTREE',
-        'DavisKahan/Sources/DavisKahan1970/SinTwoThetaCommonDomain.lean',
-        'sinTwoTheta_commonDomain_whereDefinedUIN_rclike',
-        context_prefix='variable {K : Type u} [RCLike K]',
-        context_line_count=2,
+    historical_presentation = presentation(
+        'historical sine-theta',
+        'historical_sin_theta_gap_mismatch_exact.lean',
+        historical['display_source'],
     )
-    current_checks = [
-        ('display', 'RCLike K'),
-        ('display', 'InnerProductSpace K E'),
-        ('signature', 'TopologicalSpace.SeparableSpace E'),
-        ('signature', 'NormalizedSymmetricOperatorIdealFamily'),
-        ('signature', '{A T : E →ₗ.[K] E}'),
-        ('signature', 'hdom : T.domain = A.domain'),
-        ('signature', 'ReducesSubspace A P'),
-        ('signature', 'ReducesSubspace T Q'),
-        ('signature', 'FormBoundedSylvesterGap'),
-        ('signature', '∀ R : P →L[K] E'),
-        ('signature', '∀ hp : (p : E) ∈ T.domain'),
-        ('signature', 'Angle.directedSinTwoAngleOperator P Q'),
-        ('signature', 'N.Mem R ->'),
-        ('signature', '∀ Hop : E →L[K] E'),
-        ('signature', 'IsSelfAdjointOperator Hop'),
-        ('signature', 'T = TauCeti.LinearPMap.addBounded A Hop'),
-        ('signature', 'Angle.sinTwoAngleOperator P Q'),
-        ('signature', 'N.Mem Hop ->'),
-        ('signature', '2 * N.gaugeReal R'),
-        ('signature', '2 * N.gaugeReal Hop'),
-    ]
-    for surface, needle in current_checks:
-        body = (
-            current_sin_two_theta['display_source']
-            if surface == 'display'
-            else current_sin_two_theta['signature']
-        )
-        if needle not in body:
-            raise RuntimeError(
-                f'current sin 2Theta {surface} missing expected text: {needle!r}'
-            )
-    current_exact_text = current_sin_two_theta['display_source']
-    current_exact_path = PAPER / 'generated' / 'current_sin_two_theta_exact.lean'
-    current_exact_path.write_text(current_exact_text, encoding='utf8')
-    if current_exact_path.read_text(encoding='utf8') != current_exact_text:
-        raise RuntimeError('current sin 2Theta exact sidecar changed during write')
-
-    current_presentation = current_exact_text
-    current_literate = [
-        ('→ₗ.[K]', r'\LeanLitPMapK'),
-        ('→L[K]', r'\LeanLitCLMapK'),
-        ('∀', r'\LeanLitForall'),
-        ('∈', r'\LeanLitMem'),
-        ('∧', r'\LeanLitConj'),
-        ('≤', r'\LeanLitLe'),
-        ('←', r'\LeanLitLeftArrow'),
-        ('→', r'\LeanLitArrow'),
-        ('⟨', r'\LeanLitLAngle'),
-        ('⟩', r'\LeanLitRAngle'),
-    ]
-    for source_token, sentinel in current_literate:
-        current_presentation = current_presentation.replace(source_token, sentinel)
-    if not current_presentation.endswith(':= by\n'):
-        raise RuntimeError('current sin 2Theta presentation does not end in `:= by`')
-    current_presentation = current_presentation[:-1] + '  -- proof omitted\n'
-    if not current_presentation.isascii():
-        remaining = sorted({c for c in current_presentation if ord(c) > 127})
-        raise RuntimeError(
-            'current sin 2Theta presentation contains unmapped Lean Unicode: '
-            f'{remaining!r}'
-        )
-    current_header = [
-        '-- GENERATED PRESENTATION INPUT; this is not the exact Lean source.',
-        '-- Exact current signature: generated/current_sin_two_theta_exact.lean',
-        '-- ASCII LeanLit... sentinels stand in for display-sensitive Lean notation.',
-        '-- paper.tex renders those sentinels with the listings literate= table.',
-        '-- Audit the exact sidecar/source, not this presentation file.',
-    ]
-    current_text = '\n'.join(current_header) + '\n' + current_presentation
-    current_path = PAPER / 'generated' / 'current_sin_two_theta_presentation.lean'
-    current_path.write_text(current_text, encoding='ascii')
-    for _, sentinel in current_literate:
-        tex_key = '{' + sentinel.replace('\\', '\\\\') + '}'
-        if tex_key not in paper_tex:
-            raise RuntimeError(
-                f'paper.tex is missing current sin 2Theta literate mapping {sentinel}'
-            )
-    for stale_name in (
+    current_presentation = presentation(
+        'current sine-theta',
         'current_sin_theta_exact.lean',
-        'current_sin_theta_presentation.lean',
-    ):
-        stale_current = PAPER / 'generated' / stale_name
-        if stale_current.exists():
-            stale_current.unlink()
+        current['display_source'],
+    )
+    (PAPER / 'generated' / 'historical_sin_theta_gap_mismatch_presentation.lean').write_text(
+        historical_presentation, encoding='ascii'
+    )
+    (PAPER / 'generated' / 'current_sin_theta_presentation.lean').write_text(
+        current_presentation, encoding='ascii'
+    )
 
-    table = '\n'.join([
-        r'\begin{tabularx}{\linewidth}{@{}p{0.20\linewidth}>{\raggedright\arraybackslash}X>{\raggedright\arraybackslash}X@{}}',
-        r'\toprule',
-        r' & 17 Aug. checkpoint & Source scope / current endpoint \\',
-        r'\midrule',
-        r'Scalar field & $\mathbb{R}$ and $\mathbb{C}$ in separate ambient witnesses & $\mathbb{R}$ and $\mathbb{C}$ \\',
-        r'Ambient operator & bounded \texttt{ContinuousLinearMap} & potentially unbounded self-adjoint \texttt{LinearPMap} \\',
-        r'Gap placement & blocks of the unperturbed operator & blocks of the perturbed operator, as printed \\',
-        r'Conclusion & ambient $\delta N(\sin 2\Theta)\le 2N(H)$ form & same ambient conclusion \\',
-        r'\bottomrule',
-        r'\end{tabularx}',
-        '',
-    ])
+    if paper_tex.count('firstline=6,') < 2:
+        raise RuntimeError('paper.tex must skip the five-line header for both sine-theta displays')
 
     payload = {
-        'schema_version': 4,
-        'case': 'august-17-sin-two-theta-ambient-scope-certificate-mismatch',
-        'checkpoint_commit': checkpoint,
-        'historical_ambient_complex': historical,
-        'historical_ambient_real': historical_real,
-        'historical_unbounded_directed_complex': historical_directed_complex,
-        'historical_unbounded_directed_real': historical_directed_real,
-        'current_ambient_rclike': current_rclike,
-        'current_ambient_complex': current_complex,
-        'current_ambient_real': current_real,
-        'exact_sidecar': {
-            'path': 'generated/historical_scope_mismatch_exact.lean',
-            'sha256': hashlib.sha256(exact_text.encode('utf8')).hexdigest(),
+        'schema_version': 1,
+        'case': 'sin-theta-finite-gap-review-misclassification',
+        'historical_review_commit': historical_review_commit,
+        'correction_commit': correction_commit,
+        'historical_declaration': historical,
+        'current_declaration': current,
+        'review_evidence': {
+            'historical_packet_path': historical_review_path,
+            'historical_packet_sha256': hashlib.sha256(historical_review.encode('utf8')).hexdigest(),
+            'historical_classification': 'canonical / claimed_exact',
+            'corrected_packet_sha256': hashlib.sha256(corrected_review.encode('utf8')).hexdigest(),
+            'durable_defect_used_in_paper': (
+                'The historical declaration inlines only the finite interval/exterior '
+                'gap, while Davis--Kahan also permit half-infinite separation.'
+            ),
         },
-        'presentation': {
-            'path': 'generated/historical_scope_mismatch_presentation.lean',
-            'sha256': hashlib.sha256(presentation_text.encode('ascii')).hexdigest(),
-            'header_lines_skipped_by_paper': len(presentation_header),
-            'literate_sentinels': [
-                {'source': source, 'sentinel': sentinel}
-                for source, sentinel in literate_sentinels
-            ],
+        'presentation_files': {
+            'historical': 'generated/historical_sin_theta_gap_mismatch_presentation.lean',
+            'current': 'generated/current_sin_theta_presentation.lean',
         },
-        'table_sha256': hashlib.sha256(table.encode('utf8')).hexdigest(),
         'note': (
-            'At the 17 August checkpoint both scalar fields were covered. The '
-            'directed clause had unbounded real and complex residual witnesses, '
-            'while the ambient real and complex witnesses were bounded. The old '
-            'certificate combined scope and conclusions across declarations, so '
-            'the row could pass without one ambient witness carrying the source-wide '
-            'unbounded scope. Current source-facing ambient endpoints carry the '
-            'unbounded operator scope and the source placement of the spectral gap.'
+            'The paper uses the gap-scope defect only. A later review also discussed '
+            'an ideal-membership interpretation, but the project subsequently revised '
+            'its norm-boundary model; that point is intentionally not used as the '
+            'historical misalignment example.'
         ),
     }
-    out = PAPER / 'generated' / 'historical_scope_mismatch.json'
-    out.write_text(json.dumps(payload, indent=2, sort_keys=True) + '\n', encoding='utf8')
-    (PAPER / 'generated' / 'historical_scope_mismatch_table.tex').write_text(
-        table, encoding='utf8'
+    (PAPER / 'generated' / 'sin_theta_alignment_example.json').write_text(
+        json.dumps(payload, indent=2, sort_keys=True) + '\n', encoding='utf8'
     )
-    stale = PAPER / 'generated' / 'historical_scope_mismatch.lean'
-    if stale.exists():
-        stale.unlink()
+
+    # Remove generated files for the superseded sin-2-Theta worked example.
+    for stale_name in (
+        'historical_scope_mismatch.json',
+        'historical_scope_mismatch_table.tex',
+        'historical_scope_mismatch_exact.lean',
+        'historical_scope_mismatch_presentation.lean',
+        'current_sin_two_theta_exact.lean',
+        'current_sin_two_theta_presentation.lean',
+    ):
+        stale = PAPER / 'generated' / stale_name
+        if stale.exists():
+            stale.unlink()
 
 def build_manifest():
     relpaths = [
@@ -665,16 +546,14 @@ def build_manifest():
         'papers/formalization_process/generated/semantic_alignment_candidates.json',
         'papers/formalization_process/figures/formalization_workflow.png',
         'papers/formalization_process/figures/semantic-alignment-sine-theta-row.png',
-        'papers/formalization_process/generated/historical_scope_mismatch.json',
-        'papers/formalization_process/generated/historical_scope_mismatch_table.tex',
-        'papers/formalization_process/generated/historical_scope_mismatch_exact.lean',
-        'papers/formalization_process/generated/historical_scope_mismatch_presentation.lean',
-        'papers/formalization_process/generated/current_sin_two_theta_exact.lean',
-        'papers/formalization_process/generated/current_sin_two_theta_presentation.lean',
-        'DavisKahan/Sources/DavisKahan1970/SinTwoThetaDirectedRCLike.lean',
-        'DavisKahan/Sources/DavisKahan1970/SinTwoThetaCommonDomain.lean',
-        'DavisKahan/Sources/DavisKahan1970/Audits/SinTwoThetaCommonDomainUsage.lean',
-        'dev/davis-kahan-1970-sin-two-theta-review-2026-09-09.md',
+        'papers/formalization_process/generated/sin_theta_alignment_example.json',
+        'papers/formalization_process/generated/historical_sin_theta_gap_mismatch_exact.lean',
+        'papers/formalization_process/generated/historical_sin_theta_gap_mismatch_presentation.lean',
+        'papers/formalization_process/generated/current_sin_theta_exact.lean',
+        'papers/formalization_process/generated/current_sin_theta_presentation.lean',
+        'DavisKahan/Sources/DavisKahan1970/SineTheta/Presentation.lean',
+        'DavisKahan/Sources/DavisKahan1970/SineTheta/CommonDomain.lean',
+        'docs/semantic-alignment/dk-headline-review.md',
         'dev/davis-kahan-1970-formalization-result-inventory.json',
         'dev/davis-kahan-1970-full-source-census.json',
         'prose/distilled_literature/DavisKahan1970_part_III.tex',
@@ -715,11 +594,11 @@ def build_manifest():
         sub = 'unavailable'
     manifest = {
         'schema_version': 1,
-        'source_scope_review': {
-            'result': 'S2-sin-two-theta',
-            'status': 'scope_restricted',
-            'replacement_validation': 'not_compiler_validated',
-            'dashboard': 'optional_pending_regeneration',
+        'worked_semantic_example': {
+            'result': 'S2-sin-theta',
+            'historical_defect': 'finite_interval_exterior_gap_only',
+            'current_endpoint': 'sinTheta_unbounded_formGap_whereDefinedUIN_rclike',
+            'fidelity_authority': 'result ledger / source review, not theorem name',
         },
         'repository_head': head,
         'formalization_tools_submodule': sub,
@@ -739,11 +618,11 @@ def build_manifest():
         'papers/formalization_process/data/practitioner_accounts.csv': 'public-account snapshot',
         'papers/formalization_process/data/practitioner_accounts.schema.json': 'account-field schema',
         'papers/formalization_process/data/review_timeline.csv': 'selected Git chronology',
-        'papers/formalization_process/generated/historical_scope_mismatch.json': 'historical ambient sin-2-Theta semantic-mismatch example',
-        'papers/formalization_process/generated/historical_scope_mismatch_exact.lean': 'exact historical Lean signature sidecar',
-        'papers/formalization_process/generated/current_sin_two_theta_exact.lean': 'exact current Davis--Kahan Section 2 sin-2-Theta signature',
+        'papers/formalization_process/generated/sin_theta_alignment_example.json': 'historical/current sine-theta semantic-alignment evidence',
+        'papers/formalization_process/generated/historical_sin_theta_gap_mismatch_exact.lean': 'exact historical sine-theta signature sidecar',
+        'papers/formalization_process/generated/current_sin_theta_exact.lean': 'exact current Davis--Kahan Section 2 sine-theta signature',
         'papers/formalization_process/notes/SEMANTIC_ALIGNMENT_CANDIDATES.md': 'semantic-alignment candidate signatures',
-        'DavisKahan/Sources/DavisKahan1970/SinTwoThetaDirectedRCLike.lean': 'current sin-2-Theta Lean source',
+        'DavisKahan/Sources/DavisKahan1970/SineTheta/Presentation.lean': 'current sine-theta Lean source',
         'dev/davis-kahan-1970-formalization-result-inventory.json': '29-result tracking data',
         'dev/davis-kahan-1970-full-source-census.json': 'source-comparison data',
         'prose/distilled_literature/DavisKahan1970_part_III.tex': 'Davis--Kahan source reconstruction',
@@ -783,7 +662,7 @@ def main():
     build_activity_tikz()
     build_resource_table()
     build_model_tables()
-    build_historical_scope_mismatch()
+    build_sin_theta_alignment_example()
     build_manifest()
     print(f'validated {len(timeline)} Git timeline events against {REPO}')
     print('wrote generated evidence, timeline, model, resource, and hash artifacts')

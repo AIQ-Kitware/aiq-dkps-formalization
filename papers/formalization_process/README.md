@@ -70,8 +70,8 @@ source target was fixed before implementation, what work the agents performed,
 what Lean and project scripts checked mechanically, what was inspected during
 source correspondence review, and how the review result was retained.  This is
 presented as a short bullet sequence rather than a component table.  Exact
-dependency revisions, repository records, checker behavior, and the audit-packet
-script remain in `appendix.tex`.
+dependency revisions, repository mechanics, and helper-script interfaces remain
+in the supplementary repository documentation rather than the rendered paper.
 
 The existing workflow figure remains Figure 1. The process bullets map onto it
 conceptually: Gather Context summarizes the Inputs panel, Formalize includes the
@@ -82,40 +82,35 @@ as the mechanism used for every historical review.
 
 ## Worked semantic-alignment example
 
-The paper shows an ambient $\sin 2\Theta$ theorem from the 17 August checkpoint
-that had been accepted for the source result despite having only bounded operator
-scope. Real and complex versions were already present, and the directed residual
-clause already had unbounded real and complex witnesses; scalar coverage was not
-the mismatch. The historical review had combined scope and conclusions across
-different declarations.
+The paper uses the Davis--Kahan Section 2 `sin Theta` theorem for both displayed
+formalizations. Formalization 1 is the historical
+`sinTheta_unbounded_intervalExterior_characterizedWitness_rclike` declaration.
+A generated semantic-review packet classified that declaration as canonical and
+exact even though its explicit gap hypothesis covers only the finite
+interval/exterior case. Davis--Kahan also permit half-infinite separation, so the
+historical theorem is a strict specialization of the source theorem.
 
-The rendered paper states only that mathematical mismatch. Detailed checkpoint
-chronology, the later gap-placement correction, and exact provenance are retained
-in LaTeX comments, `data/review_timeline.csv`, and generated metadata rather than
-narrated in the worked example. The appendix states only the chronology fact needed
-to correct the paper's account.
+`scripts/build_evidence.py` pins the historical declaration to commit
+`489c01c2cc992a20d38415b5f827cdc046fe7236`, verifies the contemporaneous
+semantic-review classification and its later correction from Git, and writes the
+exact signature to `generated/historical_sin_theta_gap_mismatch_exact.lean`.
+The separate presentation file used by `listings` differs only by ASCII
+`LeanLit...` typography sentinels.
 
-`scripts/build_evidence.py` extracts the historical ambient witness and its section
-context and writes them verbatim to
-`generated/historical_scope_mismatch_exact.lean`. It then builds the separate
-`historical_scope_mismatch_presentation.lean` used by `listings`. That
-presentation applies only the audited readability name changes and replaces
-display-sensitive Lean Unicode with unique ASCII `LeanLit...` sentinels.
-`paper.tex` maps those sentinels to LaTeX glyphs with `literate=`. The
-presentation file begins with comments pointing back to the exact sidecar.
-Formalization 2 uses `NormalizedSymmetricOperatorIdealFamily`; its where-defined
-Fan comparison is an explicit field of that record.
+Formalization 2 is generated from the current
+`sinTheta_unbounded_formGap_whereDefinedUIN_rclike` declaration. Its
+`FormBoundedSylvesterGap` covers the finite interval/exterior and two ordered
+half-infinite configurations, and its norm comparison is stated where both
+norms are defined. The appendix explains the theorem's trial/exact coordinate
+objects, `IsTrialResidual`, `IsExactSpectralDecomposition`, and the full gap
+predicate.
 
-The worked comparison now displays the compiled common-domain theorem from
-`DavisKahan/Sources/DavisKahan1970/SinTwoThetaCommonDomain.lean` as
-Formalization 2. The manuscript explains the mathematical difference from the
-preceding bounded-trial refinement without narrating the review chronology:
-the directed clause uses a bounded residual on the common operator domain,
-while the ambient clause separately uses a bounded self-adjoint perturbation.
-The appendix defines reducing subspaces for partial operators and gives a
-reader's guide to every hypothesis in the displayed theorem. Historical review
-state remains in `dev/davis-kahan-1970-sin-two-theta-review-2026-09-09.md` rather
-than in the manuscript narrative.
+The current theorem is a useful API generalization rather than a literal
+transcription on every axis. Davis--Kahan's common-domain equality implies the
+forward domain compatibility stored by `IsTrialResidual`, and the source's
+spectral half-line assumptions imply the operator-form semibounds used by the
+ordered `FormBoundedSylvesterGap` branches. These relationships are stated in
+the manuscript; theorem names themselves do not certify source fidelity.
 
 ## Public project repository
 

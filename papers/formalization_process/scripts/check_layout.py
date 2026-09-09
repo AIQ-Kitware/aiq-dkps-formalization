@@ -35,23 +35,22 @@ def validate_pages(pages: list[str], public: bool) -> list[str]:
     flat_pages = [' '.join(page.split()) for page in pages]
     display_pages = [
         i for i, page in enumerate(flat_pages)
-        if 'theorem sinTwoTheta_ambient' in page
+        if 'theorem sinTheta_unbounded_intervalExterior_' in page
+        and 'characterizedWitness_rclike' in page
     ]
     if len(display_pages) != 1 or display_pages[0] >= main_pages:
-        errors.append('Historical theorem must appear once before References')
+        errors.append('Historical sine-theta theorem must appear once before References')
     else:
         display = flat_pages[display_pages[0]]
         required = (
-            '-- proof omitted', 'Formalization 1:',
-            'source scope includes unbounded',
-            'SymmetricNormingFunction',
-            'variable {A B : E → L[C] E}', '{U V : Submodule C E}',
-            'U⊥ A', 'x ≤ a - d ∨ b + d ≤ x',
-            '2 * N.gauge (B - A)',
+            '-- proof omitted', 'Formalization 1:', 'RCLike',
+            'UnitaryInvariantNorm', 'IsTrialResidual',
+            'IsExactSpectralDecomposition', 'Set.Icc',
+            'realSpectrum', 'N.gauge',
         )
         for token in required:
             if token not in display:
-                errors.append(f'Historical display split or text missing: {token}')
+                errors.append(f'Historical sine-theta display split or text missing: {token}')
     figure1 = [i + 1 for i, page in enumerate(flat_pages) if 'Figure 1:' in page]
     figure2 = [i + 1 for i, page in enumerate(flat_pages) if 'Figure 2:' in page]
     if len(figure1) != 1 or figure1[0] > 2:
@@ -63,25 +62,24 @@ def validate_pages(pages: list[str], public: bool) -> list[str]:
         errors.append(f'NeurIPS checklist must appear once after References; found {checklist_pages}')
     current_pages = [
         i for i, page in enumerate(flat_pages)
-        if 'theorem sinTwoTheta_commonDomain_whereDefinedUIN_rclike' in page
+        if 'theorem sinTheta_unbounded_formGap_whereDefinedUIN_rclike' in page
     ]
     if len(current_pages) != 1 or current_pages[0] >= main_pages:
-        errors.append('Current source-facing sin 2Theta theorem must appear once before References')
+        errors.append('Current sine-theta theorem must appear once before References')
     else:
         current = flat_pages[current_pages[0]]
         for token in (
             '-- proof omitted', 'Formalization 2:',
             'NormalizedSymmetricOperatorIdealFamily',
-            'RCLike K', 'SeparableSpace E', 'T.domain = A.domain',
-            'FormBoundedSylvesterGap', 'ReducesSubspace A P',
-            'ReducesSubspace T Q', '∀ R : P', '∀ Hop : E',
-            'directedSinTwoAngleOperator P Q', 'sinTwoAngleOperator P Q',
-            'N.Mem R', 'N.Mem Hop', '2 * N.gaugeReal R',
-            '2 * N.gaugeReal Hop',
+            'RCLike', 'SeparableSpace E', 'IsTrialResidual',
+            'IsExactSpectralDecomposition', 'FormBoundedSylvesterGap',
+            'N.Mem R', 'N.gaugeReal R',
         ):
             if token not in current:
-                errors.append(f'Current sin 2Theta display split or text missing: {token}')
+                errors.append(f'Current sine-theta display split or text missing: {token}')
     main_text = ' '.join(flat_pages[:main_pages])
+    if 'sin 2Θ' in main_text or 'sin 2Theta' in main_text or 'sinTwoTheta' in main_text:
+        errors.append('Superseded sin 2Theta worked example remains in main text')
     for token in ('AI assistance.', 'ChatGPT and Claude were used throughout'):
         if token not in main_text:
             errors.append(f'Main-text AI-assistance statement is missing: {token}')
@@ -106,6 +104,12 @@ def validate_source_editability() -> list[str]:
     errors = []
     for path in sorted(PAPER.glob('*.tex')):
         text = path.read_text(encoding='utf-8')
+        if path.name in {'paper.tex', 'appendix.tex'} and re.search(
+            r'sin\s*2\\Theta|sinTwoTheta|sin2Theta', text, re.I
+        ):
+            errors.append(
+                f'{path.name}: superseded sin 2Theta worked-example text remains'
+            )
         for lineno, line in enumerate(text.splitlines(), 1):
             bad = [(c, ord(c)) for c in line if ord(c) > 0xFFFF]
             if bad:

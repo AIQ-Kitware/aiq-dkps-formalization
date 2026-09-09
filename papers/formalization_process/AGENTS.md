@@ -172,26 +172,29 @@ Additional constraints:
 43. Resource reporting is descriptive accounting, not a virtue claim.  Use the
     heading ``Resource utilization'' and keep the main AI-assistance statement
     short.  Do not frame disclosure as evidence of transparency.
-44. When the manuscript uses the historical Davis--Kahan Section~2 `sin 2Theta`
-    mismatch as Formalization 1, the comparison statement must be the current
-    `sin 2Theta` theorem itself, not `sin Theta` or another nearby result.  Show
-    the full generated scalar-generic `RCLike` signature and explain the scope
-    differences that the repair addresses.  The point of the pair is direct
-    statement comparison, not a compressed summary of two different theorems.
+44. Formalizations 1 and 2 in the manuscript are both Davis--Kahan Section~2
+    `sin Theta` statements. Formalization 1 is the historically misclassified
+    finite interval/exterior declaration; Formalization 2 is the current
+    scalar-generic full-gap where-defined endpoint. Do not substitute a `sin 2Theta`
+    theorem or mix theorem families in this worked comparison.
 45. When describing source-scope maintenance, treat real, complex, and scalar-generic
     `RCLike` declarations as one API family. A repair to one fixed field is not evidence
     that the sibling field or scalar-generic surface was updated. Do not name a theorem
     `sourceExact` or `sourceFaithful`; source fidelity is metadata owned by the result
     ledger, not a semantic property encoded in a declaration name.
-46. Define a reducing subspace before relying on the term in reader-facing prose.
-    For the unbounded `LinearPMap` setting, explain that the orthogonal projections
-    preserve the operator domain and that the selected and complementary summands
-    are invariant there; bounded block-diagonal intuition may be given second.
-47. Formalization 2 is the common-domain `sin 2Theta` theorem from
-    `SinTwoThetaCommonDomain.lean`.  Present it as a mathematical formulation, not
-    as the latest review event.  The main text should explain the shared hypotheses
-    and the clause-local residual/perturbation assumptions; the appendix should
-    translate every displayed hypothesis needed by a non-Lean reader.
+46. Define the sine-theta coordinate objects before relying on compact Lean
+    predicates: `E0` embeds the trial coordinates, `A0` is the possibly unbounded
+    trial operator, `F0` is the desired exact subspace, `F1` its orthogonal
+    complement, `Lambda1` the complementary exact block, and `R = A E0 - E0 A0`
+    on the trial domain. A trial subspace is often an approximate spectral
+    subspace in applications.
+47. Formalization 2 is
+    `sinTheta_unbounded_formGap_whereDefinedUIN_rclike`. Explain that it covers
+    the historical missing half-infinite gap cases and uses the where-defined norm
+    boundary. Also state the two API generalizations relevant to fidelity: the
+    source common-domain equality implies `IsTrialResidual`'s forward domain
+    condition, and the source spectral half-line conditions imply the form-bound
+    ordered gap constructors. Do not call the theorem itself `sourceExact`.
 48. Do not leave transient validation language in rendered prose (for example,
     "replacement awaits compiler validation", "new common-domain code", or
     "a further source review finds").  Keep commit/review status in comments or
