@@ -145,3 +145,9 @@ Additional constraints:
     the project grows, not another figure stage. Completion of a target requires
     both a checked formal treatment and a separate source-to-statement review;
     non-obvious representation correspondences must also be established.
+36. When the semantic-alignment section presents multiple repairs, choose examples
+    that expose different statement-level failure modes rather than successive
+    checkpoints of the same repair. Keep repair chronology in comments/notes.
+    A current source-facing statement may be rendered in mathematical notation
+    when that makes its hypotheses and scope clearer than another Lean listing;
+    preserve the exact Lean declaration in the repository as the evidence.
