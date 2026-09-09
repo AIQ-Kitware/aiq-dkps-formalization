@@ -172,10 +172,10 @@ stages in more detail.
 
 \begin{figure}[H]
   \centering
-  \resizebox{0.98\linewidth}{!}{\input{figures/formalization_workflow.tex}}
-  \caption{Formalization process used in this case study.  A review failure can
-  return a target to an earlier stage; a target leaves the loop only after Lean
-  checking and a separate source-to-statement review.}
+  \includegraphics[width=0.98\linewidth]{figures/formalization_workflow.png}
+  \caption{Formalization workflow used in this case study.  Failed semantic
+  review returns a target to the loop; accepted results contribute checked
+  theorems and reusable foundations.}
   \label{fig:workflow}
 \end{figure}
 
@@ -329,8 +329,9 @@ Mathlib \citep{tauceti2026}.
 \section{Formalization process}
 \label{sec:system}
 
-The five stages in \cref{fig:workflow} describe the recurring unit of work rather
-than a fixed one-pass pipeline:
+The workflow in \cref{fig:workflow} can be summarized by five recurring
+activities.  ``Gather Context'' corresponds to the inputs at the left of the
+figure, while ``Formalize'' below includes its compile-and-revise cycle:
 
 \begin{itemize}
 \setlength{\itemsep}{0.25em}

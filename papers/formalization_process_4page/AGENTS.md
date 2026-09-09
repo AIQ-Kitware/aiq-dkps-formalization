@@ -45,10 +45,10 @@ Additional constraints:
 10. Keep the current source-review state accurate without turning a successful
    review into a semantic-completeness claim. Distinguish the latest review
    result from independent replication when that distinction affects a claim.
-11. Keep the workflow figure as Figure 1. Its tracked source is
-    `figures/formalization_workflow.tex`; binary render outputs (PNG, PDF, ZIP,
-    etc.) are local artifacts only and must never be staged or committed. The
-    dashboard screenshot is an untracked appendix render.
+11. Keep the existing formalization workflow figure as Figure 1. Preserve its
+    design and content; do not redraw or replace it merely to make prose labels
+    match. The paper uses the existing `figures/formalization_workflow.png`
+    artifact. The dashboard screenshot is an untracked appendix render.
 12. Figure 1 should remain project-neutral and should not name Tau Ceti or local
     helper tools. Introduce Tau Ceti later in the main text, with an accurate
     explanation and citation, when the reusable foundations are discussed.
@@ -125,14 +125,12 @@ Additional constraints:
     interpretations. Do not promote those notes into rendered prose by default.
 30. Keep Section 2 as Related Work. The main formalization-process section comes
     after "What we formalized" and should refer back to Figure 1.
-31. Figure 1 and the process bullets use the same five stages, in this order:
-    **Gather Context**, **Decompose**, **Find Foundations**, **Formalize**, and
-    **Skeptical Review**. Gather Context includes PDFs, transcriptions, and prose
-    distillations; Decompose produces intermediate obligations/blueprint-like
-    structure; Find Foundations searches Mathlib, prior formalizations, and the
-    literature; Formalize includes ordinary compile/revise iteration; Skeptical
-    Review is source-to-statement review by a non-implementing agent when
-    possible. Do not split compiler feedback into its own conceptual stage.
+31. The process bullets correspond to Figure 1 without requiring one-to-one box
+    labels. **Gather Context** summarizes the Inputs panel; **Decompose** and
+    **Find Foundations** match their boxes; **Formalize** includes both the
+    Formalize and Compile & Revise boxes; **Skeptical Review** corresponds to the
+    Skeptical Critic. Preserve the existing figure rather than changing it to fit
+    the prose.
 32. In anonymous main-text prose, describe local maintenance/query tooling by
     function rather than product name. Exact helper-tool names and repository
     interfaces belong in the appendix or supplementary artifact.

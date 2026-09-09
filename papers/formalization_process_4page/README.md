@@ -73,11 +73,12 @@ presented as a short bullet sequence rather than a component table.  Exact
 dependency revisions, repository records, checker behavior, and the audit-packet
 script remain in `appendix.tex`.
 
-The workflow figure is maintained as text-source TikZ and uses the same five
-stages as the main process section: Gather Context, Decompose, Find Foundations,
-Formalize, and Skeptical Review. The appendix semantic-review screenshot is a
-later inspection interface and is not presented as the mechanism used for every
-historical review.
+The existing workflow figure remains Figure 1. The process bullets map onto it
+conceptually: Gather Context summarizes the Inputs panel, Formalize includes the
+Compile & Revise box, and Skeptical Review corresponds to the Skeptical Critic.
+Do not redraw the figure merely to force one-to-one labels. The appendix
+semantic-review screenshot is a later inspection interface and is not presented
+as the mechanism used for every historical review.
 
 ## Worked semantic-alignment example
 
@@ -142,7 +143,7 @@ before submission.
 
 ## Figure
 
-The workflow figure is tracked as text-source TikZ in `figures/formalization_workflow.tex`. The appendix screenshot is a local rendered PNG. Binary render outputs are never staged or committed; the source repository keeps only text/code inputs. The workflow figure remains in the main body and the semantic-alignment screenshot remains in the appendix.
+The workflow figure remains the existing `figures/formalization_workflow.png` artifact used by the main paper. Do not replace or redraw it as part of prose revisions. The semantic-alignment screenshot remains in the appendix.
 
 ## Build
 
