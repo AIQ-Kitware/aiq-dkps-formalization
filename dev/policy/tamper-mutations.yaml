@@ -63,8 +63,12 @@ mutations:
       hypothesis about the *perturbed* operator.  Retargeting the ambient clause
       at the reducing-block theorem puts the gap back on the unperturbed A.
     file: dev/davis-kahan-1970-formalization-result-inventory.json
-    find: '"declaration": "TauCeti.DavisKahan1970.sinTwoTheta_ambient_unbounded_perturbedGap_normalizedUIN_complex"'
-    replace: '"declaration": "TauCeti.DavisKahan1970.sinTwoTheta_ambient_unbounded_reducing_symmetricNorming_complex"'
+    find: |-
+      "declaration": "TauCeti.DavisKahan1970.sinTwoTheta_unbounded_perturbedGap_whereDefinedUIN_rclike",
+            "role": "primary_source_witness"
+    replace: |-
+      "declaration": "TauCeti.DavisKahan1970.sinTwoTheta_ambient_unbounded_reducing_symmetricNorming_rclike",
+            "role": "primary_source_witness"
     detected_by: ["python3", "scripts/check_davis_kahan_1970_result_inventory.py"]
 
   - name: theorem-3-1-angle-multiplicity-replaced-by-cos-block

@@ -1,157 +1,57 @@
-# Scalar-generic Section 2 endpoints: what each family still needs
+# Scalar-generic Section 2 endpoints: current frontier
 
-Status: **partly superseded, updated 2026-09-09.**  The tracing below is still the
-record of the scalar-generic transport frontier, but it is not the maintenance
-index for the four headline theorem families.  Use
-`dev/davis-kahan-1970-section-two-variant-index.json` for the current real, complex,
-RCLike, ledger-witness, and API relationships.
+Status: **sine families complete; tangent families remain. Updated 2026-09-09.**
 
-The 2026-09-08/09 norm-domain repair is now reflected in the scalar-generic public
-surface.  `sinTheta_unbounded_formGap_whereDefinedUIN_rclike` is the ledger witness
-for both scalar clauses and is bound as `SectionTwo.sinTheta`; its real and complex
-siblings are thin specializations.  The ambient `sin 2Θ` where-defined boundary is
-also promoted at arbitrary `RCLike` and bound as `SectionTwo.sinTwoTheta_ambient`.
-The directed `sin 2Θ₀` ledger witnesses use the same where-defined boundary at the
-two fixed fields.  Its RCLike norm/API layer compiles, but the underlying generic
-reducing-subspace/residual transport engine remains open, so the whole
-`SectionTwo.sinTwoTheta` result is still deliberately unbound.
+The maintenance index for all four headline theorem families is
+`dev/davis-kahan-1970-section-two-variant-index.json`. The result ledger remains the authority
+for source fidelity. This document records the scalar-generic architecture frontier.
 
-The tracing below also predates several declaration renames.  Resolve names against
-the tree and the variant index before citing them.  Read "What the scalar transport
-settled" immediately below before acting on the older recommendations.
+## `sin Θ` — complete
 
-## What the scalar transport settled (2026-09-01 .. 2026-09-04)
+`sinTheta_unbounded_formGap_whereDefinedUIN_rclike` is the ledger witness and
+`SectionTwo.sinTheta` short API. Its real and complex declarations are fixed-field
+specializations.
 
-Four things this document treats as open or as costed obstacles are now facts in
-the tree.
+## `sin 2Θ` — complete
 
-1. **The dispatch exists and is used.**  `ForTauCeti/Analysis/RCLike/`
-   `ScalarTransport.lean` carries a Hilbert space, its operators, its
-   `LinearPMap`s, its subspaces and its adjoints across an isomorphism of `RCLike`
-   fields.  The "second complexification-scale layer" the last section prices is
-   built, and it is about 550 lines, not a campaign.
+The former real/complex split in the directed residual proof has been removed without a
+scalar-dispatch transport layer. The proof itself is now generic over `[RCLike 𝕜]`:
 
-2. **The real continuous functional calculus is an instance at every `RCLike`
-   field**, not something behind a capability binder:
-   `ContinuousLinearMap.continuousFunctionalCalculusReal`
-   (`ForTauCeti/Analysis/RCLike/ScalarTransportFunctionalCalculus.lean`), obtained
-   by transporting the `ℝ` and `ℂ` constructions.  Every sentence below about the
-   angle vocabulary being available "behind a capability binder with instances at
-   `ℝ` and `ℂ`" should be read as: available, full stop.
+1. `sinTheta_unbounded_formGap_idealFamily_block_rclike` provides the scalar-generic
+   complementary single-angle block estimate needed by the reflection argument.
+2. `sinTwoTheta_reflectionResidual_block_gauge_reducing_rclike` proves the reflected
+   comparison estimate at an arbitrary reducing subspace.
+3. `sinTwoTheta_directed_unboundedResidual_blockRepresentative_reducing_kyFan_rclike` and
+   `..._symmetricNorming_rclike` prove the directed residual estimate before the angle
+   correspondence.
+4. `sinTwoTheta_directed_unboundedResidual_reducing_symmetricNorming_rclike` transports the
+   block result to the paper's trial-side `Angle.directedSinTwoAngleOperator`.
+5. `sinTwoTheta_directed_unboundedResidual_reducing_whereDefinedUIN_rclike` exposes the
+   partial-domain norm boundary used by the source-facing API.
+6. `sinTwoTheta_unbounded_perturbedGap_whereDefinedUIN_rclike` combines that directed clause
+   with `sinTwoTheta_ambient_unbounded_perturbedGap_whereDefinedUIN_rclike` under the shared
+   Davis--Kahan Section 2 setup.
 
-3. **The angle objects are written.**  `TauCeti.DavisKahan.Angle.sinAngleOperator`,
-   `.angleOperator`, `.sinTwoAngleOperator` and the directed
-   `.directedSinAngleOperator` / `.directedCosAngleOperator` /
-   `.directedSinTwoAngleOperator` are single definitions at arbitrary `[RCLike 𝕜]`
-   which *are* the `...C` objects over `ℂ` and complexify to the `...R` / `...RC`
-   ones over `ℝ`.  The ideal block and the directed `sin 2Θ` have the same gauge in
-   every `SymmetricNormingFunction` at every field
-   (`DoubleAngle/DirectedAngleGeneric.lean`).
+`SectionTwo.sinTwoTheta` aliases the complete two-clause theorem.
+`SectionTwo.sinTwoTheta_directed` and `SectionTwo.sinTwoTheta_ambient` expose the generic
+clauses independently. Fixed real/complex spectral-selection declarations remain convenience
+APIs and compatibility surfaces; the ledger does not use theorem names as fidelity claims.
 
-4. **The ambient `sin 2Θ` clause is proved at arbitrary `RCLike`**:
-   `sinTwoTheta_ambient_unbounded_reflectionPair_symmetricNorming_rclike`, on the
-   angle operator rather than on a projector-difference representative.
+The gap is on the two reducing restrictions of the **perturbed** operator `A + H`, matching
+Davis--Kahan's `Λ₀`/`Λ₁` hypothesis. The directed result uses the trial-side orientation
+`directedSinTwoAngleOperator P Q`. The existing swap/approximation-number correspondence
+pins that orientation rather than treating the ordered directed sine as symmetric.
 
-### The spectral-selection question is not the blocker it is described as
+The implementation lesson is also recorded in the paper and variant index: scalar-field drift
+was a recurring maintenance failure. A repair that changes a headline theorem must check the
+RCLike endpoint and both fixed-field APIs together, or record explicitly why a field-specific
+variant is intentional.
 
-This file says the remaining obstacle is that the conclusion "names the angle
-operators **and the spectral selection**", and recommends deciding about a generic
-projection-valued measure first.  Do not start there.
+## Remaining scalar-generic Section 2 work
 
-The ambient clause was closed without any generic spectral measure, by taking the
-hypotheses the *proof* actually needs -- a reducing subspace and a reflected pair --
-rather than the spectral subspaces the fixed-field wrappers construct from
-measurable sets.  The directed clause looks the same: the accepted fixed-field
-theorem `sinTwoTheta_directed_unboundedResidual_blockRepresentative_reducing_`
-`symmetricNorming_complex` already quantifies over an **arbitrary reducing
-subspace**, and so does the old Palomar directed proof.
-
-So the open question is a **source-correspondence** one -- whether the paper's
-standing hypotheses are faithfully expressed by "a reducing subspace with
-separated blocks" -- and it should be settled by reading the source, not by
-building operator theory.  Only if the answer is no does a generic spectral
-measure become the next task.
-
-### What the directed clause actually needs
-
-Transport of the unbounded-ideal proof data: `ReducesSubspace`,
-`LinearPMap.reducingRestriction`, the trial residual, and
-`SymmetricNormingFunction` membership and gauge.  `formBoundedSylvesterGap_pmap`,
-`kyFanApproximationGauge_clm`, `reducesSubspace_pmap_iff`, `isSelfAdjoint_pmap_iff`
-and `approximationNumber_clm` are written.
-
-**One missing layer accounts for everything that is left**, and it is the
-*subspace* side of the transport rather than the operator side.  `ScalarTransport`
-is a type synonym (`ScalarTransport e E := E`, with `of` and `out` the identity),
-so `ScalarTransport e ↥S` and `↥(submodule (e := e) S)` are the same type by `rfl`
-and carry the same norm and inner product.  They are not the same *instance path*:
-the first gets its `𝕂`-module structure from `Module.compHom`, the second from
-`Submodule.module` over the transported ambient space.  Nothing rewrites across
-that on its own.
-
-What is needed is a `ScalarTransport e ↥S ≃ₗᵢ[𝕂] ↥(submodule (e := e) S)`, and then
-three consequences of it: `reducingRestriction` read through it as a `LinearPMap`
-equality, the trial residual `R : ↥V →L[𝕜] H` read through it as a `𝕂`-operator,
-and `SymmetricNormingFunction` membership and gauge carried along it — the last is
-free once the first two land, because an isometry preserves approximation numbers.
-Each of the three appears once in the directed statement.  This is bounded,
-well-understood work; it is not written.
-
-Then the estimate lands on `sinTwoThetaIdealBlock`, and the correspondence in (3)
-carries it to `Angle.directedSinTwoAngleOperator`.
-
-### The correspondence has an orientation, and it is not free
-
-Sentence (3) above was written as if the block-to-angle step finished the source
-correspondence.  It does not, and a hostile review on 2026-09-04 found the gap.
-
-`Angle.directedSinTwoAngleOperator` is an **ordered** object:
-`directedSinAngleOperator X Y = |P_{Yᗮ} P_X|`.  The reducing residual theorem is
-naturally parameterized as (gap-carrying subspace `U`, trial subspace `V`), and
-`Angle.sinTwoThetaIdealBlock_hasSameApproximationNumbers_rclike` lands on
-`directedSinTwoAngleOperator U V`.  Davis and Kahan's `Θ₀` is the **trial-side**
-angle: Section 1 reads it off as `‖sin Θ₀‖ = ‖Q^⊥ P‖ = ‖Q^⊥ E₀‖`, the
-cross-projection with the trial subspace on the right, which is
-`directedSinTwoAngleOperator V U`.
-
-That is not a renaming.  The two ordered directed *sines* have different
-approximation numbers in general — a line inside a plane makes one zero and the
-other not.  The doubled sines do agree, and that is now a theorem:
-
-* `Angle.directedSinTwoAngleOperator_hasSameApproximationNumbers_swap`
-  (`Geometry/Angle/OperatorAngleGeneric.lean`), at every `RCLike` field, by the
-  polar decomposition of `T = P_U P_V`: both doubled sines are moduli of `2W⋆`
-  and `2W` for `W = T (1 - T⋆T)^{1/2}`, and an operator and its adjoint have the
-  same approximation numbers.
-* `Angle.sinTwoThetaIdealBlock_hasSameApproximationNumbers_trialSide` composes it
-  with the block correspondence, and
-  `Angle.mem_directedSinTwoAngleOperator_trialSide_iff` /
-  `..._gauge_...` are the `SymmetricNormingFunction` forms
-  (`DoubleAngle/DirectedAngleGeneric.lean`).
-
-**This point is settled.**  The remaining chain is therefore:
-
-```text
-arbitrary [RCLike 𝕜]
-  → real-like / complex-like dispatch
-  → transport the operator, reducing subspace, trial subspace, residual, gap
-    and symmetric-norm data
-  → fixed-field reducing residual theorem
-  → estimate on `sinTwoThetaIdealBlock gapCarrier trial`
-  → `sinTwoThetaIdealBlock_hasSameApproximationNumbers_trialSide`
-  → `Angle.directedSinTwoAngleOperator trial gapCarrier`   ← the paper's Θ₀
-```
-
-and only the transport step is open.  The fixed-field ends of that chain already
-exist in the trial-side orientation:
-`sinTwoTheta_directed_unboundedResidual_reducing_symmetricNorming_complex` and
-its real sibling.  `SectionTwo.sinTwoTheta` may be bound to the generic form of
-those, and nothing weaker; the orientation is pinned by
-`sinTwoTheta_directed_orientation_sourceAudit_complex`/`_real` in
-`Audits/ResultSemanticSurface.lean`, which fix the semantic names `trial` and
-`gapCarrier` and stop elaborating if the arguments are swapped.
-
-A generic projection-valued measure is still not a prerequisite for any of this.
+Only the tangent families remain on this frontier. The historical analysis below predates the
+sine consolidation and is retained for provenance; statements there saying `sin 2Θ` is still
+open are historical, not current status.
 
 ---
 

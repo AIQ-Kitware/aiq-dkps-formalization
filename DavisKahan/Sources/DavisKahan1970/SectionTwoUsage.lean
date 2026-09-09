@@ -30,18 +30,18 @@ What the four ask for, in the vocabulary of the subject:
   reals through `TauCeti.LinearPMap.specRange` / `realSpecRange`;
 * **the gap** is either a `FormBoundedSylvesterGap` between two self-adjoint
   restrictions, or the printed ordered/interval separation written out;
-* **the residual or perturbation** is a bounded operator: `R` in the `sin Θ`
-  theorem, `H` in `tan Θ`, `E` in `sin 2Θ`, `B` in `tan 2Θ`;
-* **the norm** is a `SymmetricNormingFunction`: a normalized symmetric norming
-  function, which induces a unitarily invariant norm on singular values and with
-  it a symmetrically normed ideal.  `N.gauge` is that norm and `N.Mem` is
-  membership of that ideal.  Membership of the perturbation is a hypothesis while
-  membership of the angle is part of the conclusion -- in infinite dimension that
-  is a statement, not a side condition;
+* **the residual or perturbation** is bounded where it appears on the right-hand
+  side: the directed sine statements use a residual `R`, while the ambient
+  statements use the bounded perturbation;
+* **the norm** on the canonical sine APIs is a
+  `NormalizedSymmetricOperatorIdealFamily`, with `N.gaugeReal` used where the
+  displayed operators belong to its domain.  Older convenience and tangent APIs
+  in this file also use `SymmetricNormingFunction`; those stronger interfaces
+  retain explicit ideal-membership conclusions;
 * **the angle** in the conclusion is a paper object:
-  `(I - F₀F₀⋆) E₀` for `sin Θ`, `tanAngleOperatorC` for `tan Θ`,
-  `directedSinTwoAngleOperatorC` for `sin 2Θ`, `absTanTwoAngleOperatorC` for
-  `tan 2Θ`.
+  `(I - F₀F₀⋆) E₀` for `sin Θ`, the directed and ambient
+  `sinTwoAngleOperator` constructions for `sin 2Θ`, and the corresponding
+  tangent operators for the tangent theorems.
 
 Structural facts are carried by objects with constructors, so they never become
 proof obligations for the caller:
@@ -66,12 +66,58 @@ universe u₁ v₁
 namespace SectionTwoUsage
 
 open scoped InnerProductSpace
+open scoped TauCeti.CompleteSubspace
 
 open TauCeti.DavisKahan.ExactSinTheta TauCeti.DavisKahanExt
 
 noncomputable section
 
 universe v
+
+/-! ## Complete `sin 2Θ` from the shared Section 2 setup -/
+
+section SinTwoThetaRCLike
+
+variable {𝕜 : Type u₁} [RCLike 𝕜]
+variable {H : Type v₁}
+  [NormedAddCommGroup H] [InnerProductSpace 𝕜 H] [CompleteSpace H]
+  [TopologicalSpace.SeparableSpace H]
+
+/-- The complete scalar-generic Section 2 `sin 2Θ` entry point from ordinary
+reducing-subspace data.
+
+`P` reduces the unperturbed operator, `Q` reduces the perturbed operator, and the
+same perturbed `Q`-block gap drives both the directed residual and ambient
+perturbation conclusions.  This example intentionally calls only the public
+`SectionTwo.sinTwoTheta` alias. -/
+theorem sinTwoTheta_from_shared_reducing_setup
+    (N : NormalizedSymmetricOperatorIdealFamily.{u₁, v₁} 𝕜)
+    {A : H →ₗ.[𝕜] H} (hA : IsSelfAdjoint A)
+    (Hop : H →L[𝕜] H) (hHop : DavisKahan.IsSelfAdjointOperator Hop)
+    {P Q : Submodule 𝕜 H} [P.HasOrthogonalProjection] [Q.HasOrthogonalProjection]
+    (hPred : TauCeti.LinearPMap.ReducesSubspace A P)
+    (hQred : TauCeti.LinearPMap.ReducesSubspace
+      (TauCeti.LinearPMap.addBounded A Hop) Q)
+    {M : P →L[𝕜] P} {R : P →L[𝕜] H}
+    (hPdom : ∀ p : P, (p : H) ∈ (TauCeti.LinearPMap.addBounded A Hop).domain)
+    (hres : ∀ p : P,
+      (TauCeti.LinearPMap.addBounded A Hop) ⟨(p : H), hPdom p⟩ =
+        R p + ((M p : P) : H))
+    {δ : ℝ} (hδ : 0 < δ)
+    (hgap : FormBoundedSylvesterGap
+      (TauCeti.LinearPMap.reducingRestriction
+        (TauCeti.LinearPMap.addBounded A Hop) Q hQred)
+      (TauCeti.LinearPMap.reducingRestriction
+        (TauCeti.LinearPMap.addBounded A Hop) Qᗮ hQred.orthogonal) δ) :
+    (N.Mem (TauCeti.DavisKahan.Angle.directedSinTwoAngleOperator P Q) →
+      N.Mem R →
+        δ * N.gaugeReal (TauCeti.DavisKahan.Angle.directedSinTwoAngleOperator P Q) ≤ 2 * N.gaugeReal R) ∧
+    (N.Mem (TauCeti.DavisKahan.Angle.sinTwoAngleOperator P Q) →
+      N.Mem Hop →
+        δ * N.gaugeReal (TauCeti.DavisKahan.Angle.sinTwoAngleOperator P Q) ≤ 2 * N.gaugeReal Hop) := by
+  exact SectionTwo.sinTwoTheta N hA Hop hHop hPred hQred hPdom hres hδ hgap
+
+end SinTwoThetaRCLike
 
 /-! ## `sin Θ` from the printed interval/exterior separation -/
 

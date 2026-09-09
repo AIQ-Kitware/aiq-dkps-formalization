@@ -5,6 +5,7 @@ Authors: Jon Crall, Claude Opus 5
 -/
 import DavisKahan.Sources.DavisKahan1970.SinTwoThetaUnboundedDirectedResidual
 import DavisKahan.Sources.DavisKahan1970.SinTwoThetaUnboundedDirectedResidualReal
+import DavisKahan.Sources.DavisKahan1970.SinTwoThetaDirectedRCLike
 import DavisKahan.DoubleAngle.DirectedAngleGeneric
 import DavisKahan.Sources.DavisKahan1970.SymmetricNormingFanDominance
 
@@ -93,11 +94,15 @@ theorem sinTwoTheta_directed_unboundedResidual_symmetricNorming_complex
         (selfAdjointSpectralSubspace A hA B hB)) ∧
       δ * N.gauge (Angle.directedSinTwoAngleOperator V
         (selfAdjointSpectralSubspace A hA B hB)) ≤ 2 * N.gauge R := by
-  obtain ⟨hmem, hle⟩ :=
-    sinTwoTheta_directed_unboundedResidual_blockRepresentative_symmetricNorming_complex
-      N hA B hB hVdom hres hδ hgap hRmem
-  refine ⟨(Angle.mem_directedSinTwoAngleOperator_trialSide_iff _ _ N).mpr hmem, ?_⟩
-  rwa [Angle.gauge_directedSinTwoAngleOperator_trialSide]
+  rw [selfAdjointSpectralRestriction_eq_reducingRestriction A hA B hB,
+    selfAdjointSpectralRestriction_eq_reducingRestriction A hA Bᶜ hB.compl] at hgap
+  exact sinTwoTheta_directed_unboundedResidual_reducing_symmetricNorming_rclike
+    N hA (selfAdjointSpectralSubspace_reducing A hA B hB) hVdom hres hδ
+      (FormBoundedSylvesterGap.reducingRestriction_congr_right
+        (selfAdjointSpectralSubspace_compl_eq_orthogonal A hA B hB)
+        (selfAdjointSpectralSubspace_reducing A hA Bᶜ hB.compl)
+        (selfAdjointSpectralSubspace_reducing A hA B hB).orthogonal hgap)
+      hRmem
 
 /-- **Davis--Kahan 1970, the directed half of the `sin 2Θ` theorem, over `ℂ`, on the paper's own
 angle, at an arbitrary reducing subspace.**
@@ -121,12 +126,9 @@ theorem sinTwoTheta_directed_unboundedResidual_reducing_symmetricNorming_complex
       (TauCeti.LinearPMap.reducingRestriction A Uᗮ hred.orthogonal) δ)
     (hRmem : N.Mem R) :
     N.Mem (Angle.directedSinTwoAngleOperator V U) ∧
-      δ * N.gauge (Angle.directedSinTwoAngleOperator V U) ≤ 2 * N.gauge R := by
-  obtain ⟨hmem, hle⟩ :=
-    sinTwoTheta_directed_unboundedResidual_blockRepresentative_reducing_symmetricNorming_complex
-      N hA hred hVdom hres hδ hgap hRmem
-  refine ⟨(Angle.mem_directedSinTwoAngleOperator_trialSide_iff _ _ N).mpr hmem, ?_⟩
-  rwa [Angle.gauge_directedSinTwoAngleOperator_trialSide]
+      δ * N.gauge (Angle.directedSinTwoAngleOperator V U) ≤ 2 * N.gauge R :=
+  sinTwoTheta_directed_unboundedResidual_reducing_symmetricNorming_rclike
+    N hA hred hVdom hres hδ hgap hRmem
 
 /-- **Complex normalized-UIN specialization of the directed `sin 2Θ₀` theorem.**
 
@@ -173,28 +175,14 @@ theorem sinTwoTheta_directed_unboundedResidual_whereDefinedUIN_complex
     N.Mem R →
       δ * N.gaugeReal (Angle.directedSinTwoAngleOperator V
           (selfAdjointSpectralSubspace A hA B hB)) ≤ 2 * N.gaugeReal R := by
-  intro hAngle hR
-  have hhalf : N.ScaledGaugeLEWhereDefined (δ / 2)
-      (Angle.directedSinTwoAngleOperator V (selfAdjointSpectralSubspace A hA B hB)) R := by
-    apply N.scaledGaugeLEWhereDefined_of_all_mul_kyFan_le
-      (div_pos hδ (by norm_num : (0 : ℝ) < 2))
-    intro k
-    by_cases hk0 : k = 0
-    · subst k
-      simp [kyFanApproximationGauge, ContinuousLinearMap.kyFanGauge_zero_index]
-    · have hk : 0 < k := Nat.pos_of_ne_zero hk0
-      have hmain :=
-        sinTwoTheta_directed_unboundedResidual_symmetricNorming_complex
-          (kyFanNormingFunction k hk) hA B hB hVdom hres hδ hgap
-          (kyFanNormingFunction_mem k hk R)
-      have hky :
-          δ * kyFanApproximationGauge k
-              (Angle.directedSinTwoAngleOperator V (selfAdjointSpectralSubspace A hA B hB)) ≤
-            2 * kyFanApproximationGauge k R := by
-        simpa only [kyFanNormingFunction_gauge] using hmain.2
-      nlinarith
-  have hle := hhalf hAngle hR
-  nlinarith
+  rw [selfAdjointSpectralRestriction_eq_reducingRestriction A hA B hB,
+    selfAdjointSpectralRestriction_eq_reducingRestriction A hA Bᶜ hB.compl] at hgap
+  exact sinTwoTheta_directed_unboundedResidual_reducing_whereDefinedUIN_rclike
+    N hA (selfAdjointSpectralSubspace_reducing A hA B hB) hVdom hres hδ
+      (FormBoundedSylvesterGap.reducingRestriction_congr_right
+        (selfAdjointSpectralSubspace_compl_eq_orthogonal A hA B hB)
+        (selfAdjointSpectralSubspace_reducing A hA Bᶜ hB.compl)
+        (selfAdjointSpectralSubspace_reducing A hA B hB).orthogonal hgap)
 
 end Complex
 
@@ -227,11 +215,13 @@ theorem sinTwoTheta_directed_unboundedResidual_symmetricNorming_real
         (realSelfAdjointSpectralSubspace A hA B hB)) ∧
       δ * N.gauge (Angle.directedSinTwoAngleOperator V
         (realSelfAdjointSpectralSubspace A hA B hB)) ≤ 2 * N.gauge R := by
-  obtain ⟨hmem, hle⟩ :=
-    sinTwoTheta_directed_unboundedResidual_blockRepresentative_symmetricNorming_real
-      N hA B hB hVdom hres hδ hgap hRmem
-  refine ⟨(Angle.mem_directedSinTwoAngleOperator_trialSide_iff _ _ N).mpr hmem, ?_⟩
-  rwa [Angle.gauge_directedSinTwoAngleOperator_trialSide]
+  exact sinTwoTheta_directed_unboundedResidual_reducing_symmetricNorming_rclike
+    N hA (realSelfAdjointSpectralSubspace_reducing A hA B hB) hVdom hres hδ
+      (FormBoundedSylvesterGap.reducingRestriction_congr_right
+        (realSelfAdjointSpectralSubspace_compl A hA B hB)
+        (realSelfAdjointSpectralSubspace_reducing A hA Bᶜ hB.compl)
+        (realSelfAdjointSpectralSubspace_reducing A hA B hB).orthogonal hgap)
+      hRmem
 
 /-- **Davis--Kahan 1970, the directed half of the `sin 2Θ` theorem, over `ℝ`, on the paper's own
 angle, at an arbitrary reducing subspace.**
@@ -251,12 +241,9 @@ theorem sinTwoTheta_directed_unboundedResidual_reducing_symmetricNorming_real
       (TauCeti.LinearPMap.reducingRestriction A Uᗮ hred.orthogonal) δ)
     (hRmem : N.Mem R) :
     N.Mem (Angle.directedSinTwoAngleOperator V U) ∧
-      δ * N.gauge (Angle.directedSinTwoAngleOperator V U) ≤ 2 * N.gauge R := by
-  obtain ⟨hmem, hle⟩ :=
-    sinTwoTheta_directed_unboundedResidual_blockRepresentative_reducing_symmetricNorming_real
-      N hA hred hVdom hres hδ hgap hRmem
-  refine ⟨(Angle.mem_directedSinTwoAngleOperator_trialSide_iff _ _ N).mpr hmem, ?_⟩
-  rwa [Angle.gauge_directedSinTwoAngleOperator_trialSide]
+      δ * N.gauge (Angle.directedSinTwoAngleOperator V U) ≤ 2 * N.gauge R :=
+  sinTwoTheta_directed_unboundedResidual_reducing_symmetricNorming_rclike
+    N hA hred hVdom hres hδ hgap hRmem
 
 /-- **Real normalized-UIN specialization of the directed `sin 2Θ₀` theorem.**
 
@@ -299,28 +286,12 @@ theorem sinTwoTheta_directed_unboundedResidual_whereDefinedUIN_real
     N.Mem R →
       δ * N.gaugeReal (Angle.directedSinTwoAngleOperator V
           (realSelfAdjointSpectralSubspace A hA B hB)) ≤ 2 * N.gaugeReal R := by
-  intro hAngle hR
-  have hhalf : N.ScaledGaugeLEWhereDefined (δ / 2)
-      (Angle.directedSinTwoAngleOperator V (realSelfAdjointSpectralSubspace A hA B hB)) R := by
-    apply N.scaledGaugeLEWhereDefined_of_all_mul_kyFan_le
-      (div_pos hδ (by norm_num : (0 : ℝ) < 2))
-    intro k
-    by_cases hk0 : k = 0
-    · subst k
-      simp [kyFanApproximationGauge, ContinuousLinearMap.kyFanGauge_zero_index]
-    · have hk : 0 < k := Nat.pos_of_ne_zero hk0
-      have hmain :=
-        sinTwoTheta_directed_unboundedResidual_symmetricNorming_real
-          (kyFanNormingFunction k hk) hA B hB hVdom hres hδ hgap
-          (kyFanNormingFunction_mem k hk R)
-      have hky :
-          δ * kyFanApproximationGauge k
-              (Angle.directedSinTwoAngleOperator V (realSelfAdjointSpectralSubspace A hA B hB)) ≤
-            2 * kyFanApproximationGauge k R := by
-        simpa only [kyFanNormingFunction_gauge] using hmain.2
-      nlinarith
-  have hle := hhalf hAngle hR
-  nlinarith
+  exact sinTwoTheta_directed_unboundedResidual_reducing_whereDefinedUIN_rclike
+    N hA (realSelfAdjointSpectralSubspace_reducing A hA B hB) hVdom hres hδ
+      (FormBoundedSylvesterGap.reducingRestriction_congr_right
+        (realSelfAdjointSpectralSubspace_compl A hA B hB)
+        (realSelfAdjointSpectralSubspace_reducing A hA Bᶜ hB.compl)
+        (realSelfAdjointSpectralSubspace_reducing A hA B hB).orthogonal hgap)
 
 end Real
 
