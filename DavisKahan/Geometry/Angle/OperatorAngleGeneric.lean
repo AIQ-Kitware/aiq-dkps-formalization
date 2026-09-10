@@ -6,7 +6,7 @@ Authors: Jon Crall, Claude Opus 5
 import DavisKahan.Geometry.Angle.AngleFunctionalCalculusReal
 import DavisKahan.SpectralTheory.ReflectionRestriction
 import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.SameSequence
-import ForTauCeti.Analysis.RCLike.ScalarTransportFunctionalCalculus
+import ForTauCeti.Analysis.InnerProductSpace.ModulusTransport
 
 /-!
 # The operator angle at an arbitrary `RCLike` field

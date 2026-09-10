@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, Claude Opus 5
 -/
 import DavisKahan.InfiniteDimensional.SinTheta.BoundedBorelProjectionComplex
-import ForTauCeti.Analysis.InnerProductSpace.SpectralOrder.Complex
+import ForTauCeti.Analysis.InnerProductSpace.SpectralOrder
 import DavisKahan.InfiniteDimensional.SinTheta.Continuation.SelectedReduction
 
 open TauCeti.DavisKahan.Sylvester
@@ -420,7 +420,7 @@ theorem re_inner_le_of_spectrumIn_Iic
     exact h.subset
       ⟨h.invariant, by simpa using (spectrum.algebraMap_mem_iff (S := ℂ)).mpr hr⟩
   have hb :=
-    SpectralOrder.Complex.upperFormBoundOn_of_restriction_spectrum_subset_Iic
+    SpectralOrder.upperFormBoundOn_of_restriction_spectrum_subset_Iic
       hT h.invariant hσ y hy
   calc RCLike.re ⟪y, T y⟫_ℂ = RCLike.re ⟪T y, y⟫_ℂ :=
       (congrArg RCLike.re (hT y y)).symm
@@ -438,7 +438,7 @@ theorem le_re_inner_of_spectrumIn_Ici
     exact h.subset
       ⟨h.invariant, by simpa using (spectrum.algebraMap_mem_iff (S := ℂ)).mpr hr⟩
   have hb :=
-    SpectralOrder.Complex.lowerFormBoundOn_of_restriction_spectrum_subset_Ici
+    SpectralOrder.lowerFormBoundOn_of_restriction_spectrum_subset_Ici
       hT h.invariant hσ y hy
   calc b * ‖y‖ ^ 2 ≤ RCLike.re ⟪T y, y⟫_ℂ := hb
     _ = RCLike.re ⟪y, T y⟫_ℂ := congrArg RCLike.re (hT y y)

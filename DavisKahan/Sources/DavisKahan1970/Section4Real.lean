@@ -299,7 +299,7 @@ theorem sourceCosineR_nonnegative (x : U) :
 
 /-- The real functional-calculus modulus agrees with the conjugation-descended modulus. -/
 theorem spectraAbsoluteValue_canonicalIntertwinerR_eq :
-    TauCeti.DavisKahan.spectraOperatorAbsoluteValue
+    ContinuousLinearMap.modulus
         (TauCeti.DavisKahan.canonicalIntertwinerR U V) =
       TauCeti.DavisKahan.canonicalAbsoluteValueR U V := by
   have hsquare :
@@ -312,7 +312,7 @@ theorem spectraAbsoluteValue_canonicalIntertwinerR_eq :
       TauCeti.DavisKahan.complexify_star,
       TauCeti.DavisKahan.complexify_canonicalAbsoluteValueR,
       TauCeti.DavisKahan.complexify_canonicalIntertwinerR]
-    exact TauCeti.DavisKahan.spectraOperatorAbsoluteValue_mul_self _
+    exact ContinuousLinearMap.modulus_mul_self_eq_star_mul_self _
   have h := ContinuousLinearMap.eq_modulus_of_nonneg_of_mul_self_eq
     (T := TauCeti.DavisKahan.canonicalIntertwinerR U V)
     ((ContinuousLinearMap.nonneg_iff_isPositive _).mpr
@@ -944,7 +944,7 @@ private theorem diagonalPart_nonacuteDirectRotation_displacementSquare_real
       (1 - star (TauCeti.DavisKahan.nonacuteDirectRotation U V J)) *
         (1 - TauCeti.DavisKahan.nonacuteDirectRotation U V J) := by
   let D := TauCeti.DavisKahan.nonacuteDirectRotation U V J
-  let C := TauCeti.DavisKahan.spectraOperatorAbsoluteValue
+  let C := ContinuousLinearMap.modulus
     (TauCeti.DavisKahan.spectraCanonicalIntertwiner U V)
   let A : E →L[ℝ] E := (1 - star D) * (1 - D)
   have hunit := TauCeti.DavisKahan.star_nonacuteDirectRotation_mul_self U V J

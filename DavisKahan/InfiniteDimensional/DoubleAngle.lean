@@ -624,8 +624,7 @@ theorem SymmetricNormIdeal.sinTwoAngle_mem_and_gauge_le
 one-sided double-angle operator.**
 
 This is `sinAngle_reflected_eq_sinTwoAngle` stated for the sine operator itself
-rather than for the gap, which it becomes once `‖|T|‖ = ‖T‖`
-(`norm_operatorAbsoluteValue`).
+rather than for the gap, using `ContinuousLinearMap.norm_modulus`.
 
 ## What this replaced, and why it is a norm statement and not a gauge statement
 
@@ -646,18 +645,15 @@ The operator norm is exactly the gauge that cannot see this, since `max` of a
 doubled multiset is unchanged — which is why the two norm identities directly
 above go through and the ideal statement could not.  A true ideal-level
 statement would be the two-sided bound
-`gauge (sin 2Θ) ≤ gauge |P_U - P_W| ≤ 2 * gauge (sin 2Θ)`; it is not stated here
-because it needs `operatorAbsoluteValue_mem_and_gauge_eq`, still a leaf. -/
+`gauge (sin 2Θ) ≤ gauge |P_U - P_W| ≤ 2 * gauge (sin 2Θ)`.  This theorem records
+only the operator-norm identity. -/
 theorem norm_sinAngle_reflected_eq_norm_sinTwoAngle
-    [Algebra ℝ (E →L[𝕜] E)] [IsScalarTower ℝ 𝕜 (E →L[𝕜] E)]
-    [ContinuousFunctionalCalculus ℝ (E →L[𝕜] E) IsSelfAdjoint]
     (U V : Submodule 𝕜 E)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] :
     ‖sinAngleOperator U (reflectedSubspace V U)‖ = ‖sinTwoAngleOperator U V‖ := by
   rw [show sinAngleOperator U (reflectedSubspace V U) =
-      operatorAbsoluteValue
-        (U.starProjection - (reflectedSubspace V U).starProjection) from rfl,
-    norm_operatorAbsoluteValue]
+      (U.starProjection - (reflectedSubspace V U).starProjection).modulus from rfl,
+    ContinuousLinearMap.norm_modulus]
   exact sinAngle_reflected_eq_sinTwoAngle U V
 
 omit [CompleteSpace E] in

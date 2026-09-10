@@ -324,14 +324,6 @@ theorem finrank_eigenspace_eq_of_intertwiner
   rw [← hmap]
   exact hequiv.finrank_eq
 
-variable [Algebra ℝ (genericLeftHalf U₁ V₁ →L[𝕜] genericLeftHalf U₁ V₁)]
-  [IsScalarTower ℝ 𝕜 (genericLeftHalf U₁ V₁ →L[𝕜] genericLeftHalf U₁ V₁)]
-  [ContinuousFunctionalCalculus ℝ (genericLeftHalf U₁ V₁ →L[𝕜] genericLeftHalf U₁ V₁)
-    IsSelfAdjoint]
-variable [Algebra ℝ (genericLeftHalf U₂ V₂ →L[𝕜] genericLeftHalf U₂ V₂)]
-  [IsScalarTower ℝ 𝕜 (genericLeftHalf U₂ V₂ →L[𝕜] genericLeftHalf U₂ V₂)]
-  [ContinuousFunctionalCalculus ℝ (genericLeftHalf U₂ V₂ →L[𝕜] genericLeftHalf U₂ V₂)
-    IsSelfAdjoint]
 
 /-- **Davis--Kahan 1970, Corollary 3.1.**
 

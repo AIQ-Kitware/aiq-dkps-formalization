@@ -6,7 +6,7 @@ Authors: Jon Crall, Claude Opus 5
 module
 
 public import ForTauCeti.Analysis.InnerProductSpace.Complexification.Spectrum
-public import ForTauCeti.Analysis.InnerProductSpace.Polar.PartialIsometry
+public import Mathlib.Analysis.InnerProductSpace.StarOrder
 
 /-!
 # Continuous functional calculus over `ℝ` for a real Hilbert space
@@ -29,11 +29,12 @@ at `𝕜 = ℂ`.  `Matrix n n 𝕜` escapes this through a separate spectral-the
 operator one does not.  Mathlib records the gap in prose: `Analysis/InnerProductSpace/`
 `StarOrder.lean` proves `ContinuousLinearMap.instStarOrderedRingRCLike` for a general `RCLike`
 field and declines to register it, because it takes exactly this calculus as an argument and
-"for the moment we only have this for `𝕜 := ℂ`".  Registering the instance below therefore also
-supplies `StarOrderedRing (E →L[ℝ] E)`, and turns the whole `RCLike`-generic operator modulus
-and polar factorization API of this library from stated into usable over `ℝ`.
+"for the moment we only have this for `𝕜 := ℂ`".  Registering the instance below supplies the
+missing input to `ContinuousLinearMap.instStarOrderedRingRCLike`.  The modulus and polar
+factorization consume it downstream rather than being dependencies of this foundational file.
 
-**This result is not on the current Tau Ceti roadmap and is proposed for it.**
+This real instance is the concrete-field base case used by the `RCLike`-generic continuous
+functional calculus in `ScalarTransportFunctionalCalculus.lean`.
 
 ## The construction
 
@@ -58,8 +59,8 @@ For `a : E →L[ℝ] E` self-adjoint:
 ## Main results
 
 * `TauCeti.RealComplexification.realCfcHom`: the descended calculus;
-* `ContinuousLinearMap.instContinuousFunctionalCalculusRealIsSelfAdjoint`: the instance;
-* the `example`s at the end of the file: `modulus` and `polarPartial` at `ℝ`.
+* `ContinuousLinearMap.instContinuousFunctionalCalculusRealIsSelfAdjoint`: the real-field instance;
+* `TauCeti.RealComplexification.complexify_cfc`: naturality of the calculus under complexification.
 
 ## A duplication this file does not resolve
 
@@ -306,42 +307,6 @@ instance instContinuousFunctionalCalculusRealIsSelfAdjoint :
     ⟨realCfcHom ha, continuous_realCfcHom ha, realCfcHom_injective ha, realCfcHom_id ha,
       realCfcHom_map_spectrum ha, isSelfAdjoint_realCfcHom ha⟩
 
-/-! ## The downstream API, instantiated at `ℝ`
-
-The instance above is worth having only because it discharges the hypothesis block
-
-```text
-[Algebra ℝ (E →L[𝕜] E)] [IsScalarTower ℝ 𝕜 (E →L[𝕜] E)]
-[ContinuousFunctionalCalculus ℝ (E →L[𝕜] E) IsSelfAdjoint]
-```
-
-that `OperatorModulus.lean`, `ModulusConjugation.lean` and `Polar/PartialIsometry.lean` carry.
-"The instance compiles" and "the downstream API is usable" are different claims; these
-statements check the second one, at unrestricted dimension, between two different real spaces.
-They are `example`s deliberately -- they add no names, and they fail loudly if the instance ever
-stops being found. -/
-
-section Downstream
-
-variable {F : Type*} [NormedAddCommGroup F] [InnerProductSpace ℝ F] [CompleteSpace F]
-
-attribute [local instance] ContinuousLinearMap.instStarOrderedRingRCLike
-
-example : StarOrderedRing (E →L[ℝ] E) := inferInstance
-
-example (T : E →L[ℝ] F) : 0 ≤ T.modulus := T.modulus_nonneg
-
-example (T : E →L[ℝ] F) : T.modulus * T.modulus = T.adjoint ∘L T := T.modulus_mul_self
-
-example (T : E →L[ℝ] F) (x : E) : ‖T.modulus x‖ = ‖T x‖ := T.norm_modulus_apply x
-
-example (T : E →L[ℝ] F) : ‖T.modulus‖ = ‖T‖ := T.norm_modulus
-
-example (T : E →L[ℝ] F) : T.polarPartial ∘L T.modulus = T := T.polarPartial_comp_modulus
-
-example (T : E →L[ℝ] F) : T.polarPartial.IsPartialIsometry := T.polarPartial_isPartialIsometry
-
-end Downstream
 
 end ContinuousLinearMap
 
@@ -399,12 +364,12 @@ theorem realPartOperator_cfc_complexify (f : ℝ → ℝ) {a : E →L[ℝ] E} (h
   rw [← complexify_cfc f ha hf]
   exact ContinuousLinearMap.ext fun x => by simp
 
-/-! ### Positivity and the modulus
+/-! ### Positivity
 
 `complexify` preserves and reflects the order, because it preserves self-adjointness and the
 real spectrum, and in a `C⋆`-algebra nonnegativity is exactly a self-adjoint element with
-nonnegative spectrum.  The modulus then transports as well, since it is the unique nonnegative
-square root of the Gram operator. -/
+nonnegative spectrum.  Modulus naturality is downstream in
+`ForTauCeti.Analysis.InnerProductSpace.ModulusTransport`. -/
 
 attribute [local instance] ContinuousLinearMap.instStarOrderedRingRCLike
 
@@ -423,15 +388,6 @@ attribute [local instance] ContinuousLinearMap.instStarOrderedRingRCLike
     rw [StarOrderedRing.nonneg_iff_spectrum_nonneg (R := ℝ) _ (.of_nonneg h)] at h
     exact h
 
-/-- **The operator modulus commutes with complexification.**  Both sides are nonnegative and
-square to the complexified Gram operator, and the nonnegative square root is unique. -/
-@[simp] theorem complexify_modulus (T : E →L[ℝ] E) :
-    complexify T.modulus = (complexify T).modulus := by
-  refine ContinuousLinearMap.eq_modulus_of_nonneg_of_mul_self_eq ?_ ?_
-  · exact complexify_nonneg_iff.2 T.modulus_nonneg
-  · have hmul : complexify T.modulus * complexify T.modulus =
-        complexify (T.modulus * T.modulus) := (complexify_comp _ _).symm
-    rw [hmul, ContinuousLinearMap.modulus_mul_self, complexify_comp, complexify_adjoint]
 
 end RealComplexification
 end TauCeti

@@ -4,11 +4,16 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
 import DavisKahan.BoundedOperator.Reflection
-import DavisKahan.Geometry.Polar.OperatorAbsoluteValue
+import ForTauCeti.Analysis.InnerProductSpace.Polar.PartialIsometry
 import Mathlib.Analysis.Normed.Ring.Units
 import Mathlib.Algebra.Group.Commute.Units
 import Mathlib.Analysis.CStarAlgebra.ContinuousFunctionalCalculus.Commute
 import Mathlib.Analysis.SpecialFunctions.ContinuousFunctionalCalculus.Abs
+import ForTauCeti.Analysis.RCLike.ScalarTransportFunctionalCalculus
+
+attribute [local instance 100] ContinuousLinearMap.realAlgebra
+  ContinuousLinearMap.realIsScalarTower ContinuousLinearMap.continuousFunctionalCalculusReal
+  ContinuousLinearMap.instStarOrderedRingRCLike
 
 /-!
 # The pre-polar canonical intertwiner and its polar factor
@@ -35,21 +40,14 @@ onto the target subspace.
 
 ## The scalar field
 
-Everything here is stated over an arbitrary `RCLike` field.  Nothing in the
-construction is complex-specific; the one field-dependent ingredient is the
-continuous functional calculus that the operator modulus runs on, and it is
-carried as a typeclass hypothesis exactly as `ForTauCeti`'s modulus API carries
-it (`ForTauCeti/Analysis/InnerProductSpace/OperatorModulus.lean`).  Typeclass
-inference discharges it at `𝕜 = ℂ`, and at `𝕜 = ℝ` through
-`ContinuousLinearMap.instContinuousFunctionalCalculusRealIsSelfAdjoint`, so no
-consumer has to supply anything.
+Everything here is stated over an arbitrary `RCLike` field.  The real scalar structure and
+self-adjoint continuous functional calculus used by the modulus are supplied by `ForTauCeti`
+and activated locally in this module, so they do not appear in the public theorem signatures.
 
-The `spectra*` prefixes, and the `_complex` suffixes on the three reflection
-lemmas near the end, are historical names left from the Spectra-backed and
-complex-only eras.  They are misnomers now.  Renaming them is a naming-audit
-sweep across five modules and is deliberately not folded into this scalar
-generalization, exactly as the same decision was recorded for the `spectra*`
-names in `OperatorAbsoluteValue.lean`.
+The remaining `spectra*` prefixes and `_complex` suffixes are historical names from the
+Spectra-backed and complex-only eras.  They name Davis--Kahan-specific composites rather than a
+second modulus or polar-factor implementation; their eventual naming cleanup is independent of
+the canonical polar API used here.
 -/
 
 open scoped InnerProductSpace
@@ -60,10 +58,7 @@ namespace DavisKahan
 variable {𝕜 : Type*} [RCLike 𝕜]
 variable {H : Type*} [NormedAddCommGroup H] [InnerProductSpace 𝕜 H]
   [CompleteSpace H]
-variable [Algebra ℝ (H →L[𝕜] H)] [IsScalarTower ℝ 𝕜 (H →L[𝕜] H)]
-  [ContinuousFunctionalCalculus ℝ (H →L[𝕜] H) IsSelfAdjoint]
 
-attribute [local instance] ContinuousLinearMap.instStarOrderedRingRCLike
 
 /-- The canonical pre-polar intertwiner `Q P + Qᗮ Pᗮ`. -/
 noncomputable def spectraCanonicalIntertwiner
@@ -72,7 +67,7 @@ noncomputable def spectraCanonicalIntertwiner
   projection V * projection U +
     complementaryProjection V * complementaryProjection U
 
-omit [CompleteSpace H] [Algebra ℝ (H →L[𝕜] H)] [IsScalarTower ℝ 𝕜 (H →L[𝕜] H)] in
+omit [CompleteSpace H] in
 /-- The canonical intertwiner sends the `U` block into the `V` block. -/
 theorem spectraCanonicalIntertwiner_mul_projection
     (U V : Submodule 𝕜 H)
@@ -95,8 +90,6 @@ theorem spectraCanonicalIntertwiner_mul_projection
   rw [← mul_assoc, hQ]
   module
 
-omit [Algebra ℝ (H →L[𝕜] H)] [IsScalarTower ℝ 𝕜 (H →L[𝕜] H)]
-  [ContinuousFunctionalCalculus ℝ (H →L[𝕜] H) IsSelfAdjoint] in
 /-- The adjoint of the canonical intertwiner is obtained by reversing the
 ordered pair of subspaces. -/
 theorem star_spectraCanonicalIntertwiner
@@ -115,7 +108,7 @@ theorem star_spectraCanonicalIntertwiner
     (isSelfAdjoint_starProjection Uᗮ).star_eq,
     (isSelfAdjoint_starProjection Vᗮ).star_eq]
 
-omit [CompleteSpace H] [Algebra ℝ (H →L[𝕜] H)] [IsScalarTower ℝ 𝕜 (H →L[𝕜] H)] in
+omit [CompleteSpace H] in
 /-- Reflection through `U` written in the projection algebra. -/
 theorem reflectionOperator_eq_projection_add_projection_sub_one
     (U : Submodule 𝕜 H) [U.HasOrthogonalProjection] :
@@ -125,7 +118,7 @@ theorem reflectionOperator_eq_projection_add_projection_sub_one
   simp only [add_apply, sub_apply, one_apply_eq_self]
   module
 
-omit [CompleteSpace H] [Algebra ℝ (H →L[𝕜] H)] [IsScalarTower ℝ 𝕜 (H →L[𝕜] H)] in
+omit [CompleteSpace H] in
 /-- Exact factorization of the displacement of the canonical intertwiner from
 the identity. -/
 theorem spectraCanonicalIntertwiner_sub_one
@@ -146,8 +139,7 @@ theorem spectraCanonicalIntertwiner_sub_one
     U.isIdempotentElem_starProjection
   noncomm_ring [hP]
 
-omit [CompleteSpace H] [ContinuousFunctionalCalculus ℝ (H →L[𝕜] H) IsSelfAdjoint]
-  [Algebra ℝ (H →L[𝕜] H)] [IsScalarTower ℝ 𝕜 (H →L[𝕜] H)] in
+omit [CompleteSpace H] in
 /-- The displacement of the canonical intertwiner is bounded by the symmetric
 projection gap. -/
 theorem norm_spectraCanonicalIntertwiner_sub_one_le_gap
@@ -169,8 +161,7 @@ theorem norm_spectraCanonicalIntertwiner_sub_one_le_gap
       rw [show V.starProjection - U.starProjection =
         -(U.starProjection - V.starProjection) by abel, norm_neg]
 
-omit [CompleteSpace H] [ContinuousFunctionalCalculus ℝ (H →L[𝕜] H) IsSelfAdjoint]
-  [Algebra ℝ (H →L[𝕜] H)] [IsScalarTower ℝ 𝕜 (H →L[𝕜] H)] in
+omit [CompleteSpace H] in
 /-- Equivalent one-sided norm estimate, in the form consumed by
 `Units.oneSub`. -/
 theorem norm_one_sub_spectraCanonicalIntertwiner_le_gap
@@ -181,8 +172,7 @@ theorem norm_one_sub_spectraCanonicalIntertwiner_le_gap
     -(spectraCanonicalIntertwiner U V - 1) by abel, norm_neg]
   exact norm_spectraCanonicalIntertwiner_sub_one_le_gap U V
 
-omit [CompleteSpace H] [ContinuousFunctionalCalculus ℝ (H →L[𝕜] H) IsSelfAdjoint]
-  [Algebra ℝ (H →L[𝕜] H)] [IsScalarTower ℝ 𝕜 (H →L[𝕜] H)] in
+omit [CompleteSpace H] in
 /-- Acuteness places the canonical intertwiner strictly inside the unit ball
 around the identity. -/
 theorem norm_one_sub_spectraCanonicalIntertwiner_lt_one
@@ -200,8 +190,6 @@ noncomputable def spectraCanonicalIntertwinerUnit
   Units.oneSub (1 - spectraCanonicalIntertwiner U V)
     (norm_one_sub_spectraCanonicalIntertwiner_lt_one U V hacute)
 
-omit [ContinuousFunctionalCalculus ℝ (H →L[𝕜] H) IsSelfAdjoint] [Algebra ℝ (H →L[𝕜] H)]
-  [IsScalarTower ℝ 𝕜 (H →L[𝕜] H)] in
 /-- The bundled unit has the intended underlying canonical intertwiner. -/
 @[simp]
 theorem coe_spectraCanonicalIntertwinerUnit
@@ -212,11 +200,11 @@ theorem coe_spectraCanonicalIntertwinerUnit
       spectraCanonicalIntertwiner U V := by
   simp [spectraCanonicalIntertwinerUnit]
 
-/-- The Spectra polar factor of the canonical intertwiner. -/
+/-- The polar factor of the canonical intertwiner. -/
 noncomputable def spectraCanonicalPolarFactor
     (U V : Submodule 𝕜 H)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] : H →L[𝕜] H :=
-  spectraPolarIsometry (spectraCanonicalIntertwiner U V)
+  (spectraCanonicalIntertwiner U V).polarPartial
 
 /-- Spectra-backed direct-rotation candidate in the acute regime.  The acute
 witness records the intended branch; the underlying polar factor is defined
@@ -232,9 +220,9 @@ theorem spectraCanonicalPolarFactor_decomposition
     (U V : Submodule 𝕜 H)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] :
     spectraCanonicalPolarFactor U V ∘L
-        spectraOperatorAbsoluteValue (spectraCanonicalIntertwiner U V) =
+        ContinuousLinearMap.modulus (spectraCanonicalIntertwiner U V) =
       spectraCanonicalIntertwiner U V :=
-  spectraPolar_decomposition (spectraCanonicalIntertwiner U V)
+  ContinuousLinearMap.polarPartial_comp_modulus (spectraCanonicalIntertwiner U V)
 
 /-- Polar decomposition stated through the acute direct-rotation candidate. -/
 theorem spectraDirectRotation_decomposition
@@ -242,7 +230,7 @@ theorem spectraDirectRotation_decomposition
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
     (hacute : IsUniformlyAcute U V) :
     spectraDirectRotation U V hacute ∘L
-        spectraOperatorAbsoluteValue (spectraCanonicalIntertwiner U V) =
+        ContinuousLinearMap.modulus (spectraCanonicalIntertwiner U V) =
       spectraCanonicalIntertwiner U V :=
   spectraCanonicalPolarFactor_decomposition U V
 
@@ -254,19 +242,16 @@ namespace DavisKahan
 variable {𝕜 : Type*} [RCLike 𝕜]
 variable {H : Type*} [NormedAddCommGroup H] [InnerProductSpace 𝕜 H]
   [CompleteSpace H]
-variable [Algebra ℝ (H →L[𝕜] H)] [IsScalarTower ℝ 𝕜 (H →L[𝕜] H)]
-  [ContinuousFunctionalCalculus ℝ (H →L[𝕜] H) IsSelfAdjoint]
 
-attribute [local instance] ContinuousLinearMap.instStarOrderedRingRCLike
 
 /-- The absolute value of the acute canonical intertwiner is invertible. -/
 theorem isUnit_spectraCanonicalAbsoluteValue
     (U V : Submodule 𝕜 H)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
     (hacute : IsUniformlyAcute U V) :
-    IsUnit (spectraOperatorAbsoluteValue (spectraCanonicalIntertwiner U V)) := by
+    IsUnit (ContinuousLinearMap.modulus (spectraCanonicalIntertwiner U V)) := by
   rw [← isUnit_mul_self_iff]
-  rw [spectraOperatorAbsoluteValue_mul_self]
+  rw [ContinuousLinearMap.modulus_mul_self_eq_star_mul_self]
   have hS : IsUnit (spectraCanonicalIntertwiner U V) := by
     rw [← coe_spectraCanonicalIntertwinerUnit U V hacute]
     exact (spectraCanonicalIntertwinerUnit U V hacute).isUnit
@@ -286,7 +271,7 @@ theorem coe_spectraCanonicalAbsoluteValueUnit
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
     (hacute : IsUniformlyAcute U V) :
     (spectraCanonicalAbsoluteValueUnit U V hacute : H →L[𝕜] H) =
-      spectraOperatorAbsoluteValue (spectraCanonicalIntertwiner U V) :=
+      ContinuousLinearMap.modulus (spectraCanonicalIntertwiner U V) :=
   Classical.choose_spec (isUnit_spectraCanonicalAbsoluteValue U V hacute)
 
 /-- The absolute-value unit is fixed by the star operation. -/
@@ -299,7 +284,7 @@ theorem star_spectraCanonicalAbsoluteValueUnit
   apply Units.ext
   simp only [Units.coe_star]
   rw [coe_spectraCanonicalAbsoluteValueUnit]
-  exact (spectraOperatorAbsoluteValue_isSelfAdjoint
+  exact (ContinuousLinearMap.modulus_isSelfAdjoint
     (spectraCanonicalIntertwiner U V)).star_eq
 
 /-- The Gram units of the canonical intertwiner and its absolute value agree. -/
@@ -315,7 +300,7 @@ theorem star_intertwinerUnit_mul_self_eq_absoluteValueUnit_mul_self
   simp only [Units.val_mul, Units.coe_star]
   rw [coe_spectraCanonicalIntertwinerUnit,
     coe_spectraCanonicalAbsoluteValueUnit]
-  exact (spectraOperatorAbsoluteValue_mul_self
+  exact (ContinuousLinearMap.modulus_mul_self_eq_star_mul_self
     (spectraCanonicalIntertwiner U V)).symm
 
 /-- The Spectra polar factor bundled as a unit, using the invertible polar
@@ -337,7 +322,7 @@ theorem coe_spectraCanonicalPolarFactorUnit
       spectraCanonicalPolarFactor U V := by
   let AUnit := spectraCanonicalAbsoluteValueUnit U V hacute
   let SUnit := spectraCanonicalIntertwinerUnit U V hacute
-  let A := spectraOperatorAbsoluteValue (spectraCanonicalIntertwiner U V)
+  let A := ContinuousLinearMap.modulus (spectraCanonicalIntertwiner U V)
   let S := spectraCanonicalIntertwiner U V
   let W := spectraCanonicalPolarFactor U V
   have hA : (AUnit : H →L[𝕜] H) = A :=
@@ -433,8 +418,6 @@ theorem spectraCanonicalPolarFactor_injective
     congrArg (fun T : H →L[𝕜] H => T y) hcoe
   exact hx.trans (hxy.trans hy.symm)
 
-omit [ContinuousFunctionalCalculus ℝ (H →L[𝕜] H) IsSelfAdjoint] [Algebra ℝ (H →L[𝕜] H)]
-  [IsScalarTower ℝ 𝕜 (H →L[𝕜] H)] in
 /-- The Gram operator of the canonical intertwiner commutes with the source
 projection. -/
 theorem star_spectraCanonicalIntertwiner_mul_self_commute_projection
@@ -480,7 +463,7 @@ theorem spectraCanonicalAbsoluteValue_commute_projection
     (U V : Submodule 𝕜 H)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] :
     Commute
-      (spectraOperatorAbsoluteValue (spectraCanonicalIntertwiner U V))
+      (ContinuousLinearMap.modulus (spectraCanonicalIntertwiner U V))
       (projection U) := by
   have hGram :
       Commute
@@ -670,7 +653,7 @@ subspace for its complement*, so the whole polar construction returns literally 
 operator.  Only the double-complement identity `Uᗮᗮ = U` is involved, and it is available
 here as `starProjection_orthogonal'` applied twice. -/
 
-omit [CompleteSpace H] [Algebra ℝ (H →L[𝕜] H)] [IsScalarTower ℝ 𝕜 (H →L[𝕜] H)] in
+omit [CompleteSpace H] in
 /-- The star projection of a double orthogonal complement is the original one. -/
 theorem starProjection_orthogonal_orthogonal (U : Submodule 𝕜 H)
     [U.HasOrthogonalProjection] :
@@ -678,7 +661,7 @@ theorem starProjection_orthogonal_orthogonal (U : Submodule 𝕜 H)
   rw [Submodule.starProjection_orthogonal' Uᗮ, Submodule.starProjection_orthogonal' U]
   abel
 
-omit [CompleteSpace H] [Algebra ℝ (H →L[𝕜] H)] [IsScalarTower ℝ 𝕜 (H →L[𝕜] H)] in
+omit [CompleteSpace H] in
 /-- **The canonical intertwiner of the complementary pair is the same operator.**
 
 `P_Vᗮ P_Uᗮ + P_Vᗮᗮ P_Uᗮᗮ = P_Vᗮ P_Uᗮ + P_V P_U`, which is the original sum with its two
@@ -690,7 +673,7 @@ theorem spectraCanonicalIntertwiner_orthogonal (U V : Submodule 𝕜 H)
     starProjection_orthogonal_orthogonal]
   exact add_comm _ _
 
-omit [CompleteSpace H] [Algebra ℝ (H →L[𝕜] H)] [IsScalarTower ℝ 𝕜 (H →L[𝕜] H)] in
+omit [CompleteSpace H] in
 /-- The symmetric projection gap is unchanged by passing to complements, since
 `P_Uᗮ − P_Vᗮ = P_V − P_U`. -/
 theorem subspaceGap_orthogonal (U V : Submodule 𝕜 H)
@@ -702,7 +685,7 @@ theorem subspaceGap_orthogonal (U V : Submodule 𝕜 H)
       = V.starProjection - U.starProjection from by abel]
   exact norm_sub_rev _ _
 
-omit [CompleteSpace H] [Algebra ℝ (H →L[𝕜] H)] [IsScalarTower ℝ 𝕜 (H →L[𝕜] H)] in
+omit [CompleteSpace H] in
 /-- Acuteness passes to the complementary pair: it is literally the same number. -/
 theorem isUniformlyAcute_orthogonal {U V : Submodule 𝕜 H}
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] (h : IsUniformlyAcute U V) :
@@ -714,7 +697,7 @@ theorem isUniformlyAcute_orthogonal {U V : Submodule 𝕜 H}
 
 The polar factor depends only on the canonical intertwiner, and the acute witness is a
 `Prop` the definition discards, so this is `spectraCanonicalIntertwiner_orthogonal`
-transported through `spectraPolarIsometry`. -/
+transported through `ContinuousLinearMap.polarPartial`. -/
 theorem spectraDirectRotation_orthogonal (U V : Submodule 𝕜 H)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] (hacute : IsUniformlyAcute U V) :
     spectraDirectRotation Uᗮ Vᗮ (isUniformlyAcute_orthogonal hacute) =
@@ -972,8 +955,6 @@ theorem star_spectraDirectRotation_maps_orthogonalComplement
 
 /-! ## Reflection-product reduction for the square theorem -/
 
-omit [ContinuousFunctionalCalculus ℝ (H →L[𝕜] H) IsSelfAdjoint] [Algebra ℝ (H →L[𝕜] H)]
-  [IsScalarTower ℝ 𝕜 (H →L[𝕜] H)] in
 /-- A subspace reflection is self-adjoint in the complex bounded-operator
 algebra. -/
 theorem star_reflectionOperator_complex
@@ -983,8 +964,6 @@ theorem star_reflectionOperator_complex
   simp only [star_sub, star_add, star_one,
     (isSelfAdjoint_starProjection U).star_eq]
 
-omit [ContinuousFunctionalCalculus ℝ (H →L[𝕜] H) IsSelfAdjoint] [Algebra ℝ (H →L[𝕜] H)]
-  [IsScalarTower ℝ 𝕜 (H →L[𝕜] H)] in
 /-- A subspace reflection is a unitary element of the complex bounded-operator
 algebra. -/
 theorem reflectionOperator_mem_unitary_complex
@@ -997,7 +976,7 @@ theorem reflectionOperator_mem_unitary_complex
       reflectionOperator_involutive U
   exact ⟨by rw [hstar, hinv], by rw [hstar, hinv]⟩
 
-omit [CompleteSpace H] [Algebra ℝ (H →L[𝕜] H)] [IsScalarTower ℝ 𝕜 (H →L[𝕜] H)] in
+omit [CompleteSpace H] in
 /-- Reflections square to the identity in the bounded-operator algebra. -/
 theorem reflectionOperator_mul_self_complex
     (U : Submodule 𝕜 H) [U.HasOrthogonalProjection] :
@@ -1005,7 +984,7 @@ theorem reflectionOperator_mul_self_complex
   simpa only [ContinuousLinearMap.mul_def, ContinuousLinearMap.one_def] using
     reflectionOperator_involutive U
 
-omit [CompleteSpace H] [Algebra ℝ (H →L[𝕜] H)] [IsScalarTower ℝ 𝕜 (H →L[𝕜] H)] in
+omit [CompleteSpace H] in
 /-- Doubling identity: `C + C = 1 + Rᵥ Rᵤ`.  Because each reflection is degree
 one in a single projection, this expands with no idempotent reduction. -/
 theorem spectraCanonicalIntertwiner_add_self
@@ -1024,7 +1003,7 @@ theorem spectraCanonicalIntertwiner_add_self
     Submodule.starProjection_orthogonal' U, Submodule.starProjection_orthogonal' V]
   noncomm_ring
 
-omit [CompleteSpace H] [Algebra ℝ (H →L[𝕜] H)] [IsScalarTower ℝ 𝕜 (H →L[𝕜] H)] in
+omit [CompleteSpace H] in
 /-- Additive doubling is injective in a torsion-free bounded-operator algebra. -/
 private theorem add_self_cancel_complex {w z : H →L[𝕜] H} (h : w + w = z + z) :
     w = z := by
@@ -1033,7 +1012,7 @@ private theorem add_self_cancel_complex {w z : H →L[𝕜] H} (h : w + w = z + 
   rw [hw, hz] at h
   exact smul_right_injective (H →L[𝕜] H) (by norm_num) h
 
-omit [CompleteSpace H] [Algebra ℝ (H →L[𝕜] H)] [IsScalarTower ℝ 𝕜 (H →L[𝕜] H)] in
+omit [CompleteSpace H] in
 /-- Additive quadrupling is injective in a torsion-free bounded-operator
 algebra. -/
 private theorem add_four_cancel_complex {w z : H →L[𝕜] H}
@@ -1043,8 +1022,6 @@ private theorem add_four_cancel_complex {w z : H →L[𝕜] H}
   rw [hw, hz] at h
   exact smul_right_injective (H →L[𝕜] H) (by norm_num) h
 
-omit [ContinuousFunctionalCalculus ℝ (H →L[𝕜] H) IsSelfAdjoint] [Algebra ℝ (H →L[𝕜] H)]
-  [IsScalarTower ℝ 𝕜 (H →L[𝕜] H)] in
 /-- The canonical intertwiner `C = Q P + Qᗮ Pᗮ` is **normal**: `C⋆ C = C C⋆`.
 Since `2 C = 1 + Rᵥ Rᵤ` is one plus a product of two reflections (a unitary),
 both Gram products equal `2 + Rᵥ Rᵤ + Rᵤ Rᵥ` after clearing the factor of four,
@@ -1081,8 +1058,6 @@ theorem spectraCanonicalIntertwiner_normal
   rw [hlhs, hrhs, hGG', hG'G]
   abel
 
-omit [ContinuousFunctionalCalculus ℝ (H →L[𝕜] H) IsSelfAdjoint] [Algebra ℝ (H →L[𝕜] H)]
-  [IsScalarTower ℝ 𝕜 (H →L[𝕜] H)] in
 /-- The canonical intertwiner satisfies `C + C⋆ = 2 C⋆C`; its Hermitian part is
 its Gram operator.  With `2C = 1 + G`, `G = Rᵥ Rᵤ` unitary, both sides equal
 `2 + G + G⋆`. -/
@@ -1114,8 +1089,6 @@ theorem spectraCanonicalIntertwiner_add_star
   rw [hprod, hG'G]
   abel
 
-omit [ContinuousFunctionalCalculus ℝ (H →L[𝕜] H) IsSelfAdjoint] [Algebra ℝ (H →L[𝕜] H)]
-  [IsScalarTower ℝ 𝕜 (H →L[𝕜] H)] in
 /-- The Gram operator `C⋆C` commutes with the source projection `P`.  This
 follows purely from the intertwining `C P = Q C` and its adjoint, with no
 coordinate computation. -/
@@ -1143,8 +1116,6 @@ noncomputable abbrev spectraReflectionProduct
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] : H →L[𝕜] H :=
   reflectionOperator V * reflectionOperator U
 
-omit [ContinuousFunctionalCalculus ℝ (H →L[𝕜] H) IsSelfAdjoint] [Algebra ℝ (H →L[𝕜] H)]
-  [IsScalarTower ℝ 𝕜 (H →L[𝕜] H)] in
 /-- The ordered reflection product is unitary. -/
 theorem spectraReflectionProduct_mem_unitary
     (U V : Submodule 𝕜 H)
@@ -1154,7 +1125,7 @@ theorem spectraReflectionProduct_mem_unitary
     (reflectionOperator_mem_unitary_complex V)
     (reflectionOperator_mem_unitary_complex U)
 
-omit [CompleteSpace H] [Algebra ℝ (H →L[𝕜] H)] [IsScalarTower ℝ 𝕜 (H →L[𝕜] H)] in
+omit [CompleteSpace H] in
 /-- Twice the canonical intertwiner is the identity plus the ordered
 reflection product.  Thus the pre-polar operator is the algebraic midpoint of
 `1` and `J_V J_U`, without introducing division by two into later rewrites. -/
@@ -1179,7 +1150,7 @@ theorem spectraCanonicalIntertwiner_add_self_eq_one_add_reflectionProduct
     Submodule.starProjection_orthogonal' V]
   noncomm_ring
 
-omit [CompleteSpace H] [Algebra ℝ (H →L[𝕜] H)] [IsScalarTower ℝ 𝕜 (H →L[𝕜] H)] in
+omit [CompleteSpace H] in
 /-- The canonical intertwiner commutes with the ordered reflection product. -/
 theorem spectraCanonicalIntertwiner_commute_reflectionProduct
     (U V : Submodule 𝕜 H)
@@ -1203,8 +1174,6 @@ theorem spectraCanonicalIntertwiner_commute_reflectionProduct
     Submodule.starProjection_orthogonal' V]
   noncomm_ring
 
-omit [ContinuousFunctionalCalculus ℝ (H →L[𝕜] H) IsSelfAdjoint] [Algebra ℝ (H →L[𝕜] H)]
-  [IsScalarTower ℝ 𝕜 (H →L[𝕜] H)] in
 /-- The canonical intertwiner also commutes with the adjoint of the ordered
 reflection product.  This follows from the midpoint identity and unitarity of
 the reflection product, avoiding a second projection-polynomial expansion. -/
@@ -1238,7 +1207,7 @@ theorem spectraCanonicalAbsoluteValue_commute_reflectionProduct
     (U V : Submodule 𝕜 H)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] :
     Commute
-      (spectraOperatorAbsoluteValue (spectraCanonicalIntertwiner U V))
+      (ContinuousLinearMap.modulus (spectraCanonicalIntertwiner U V))
       (spectraReflectionProduct U V) := by
   change Commute (CFC.abs (spectraCanonicalIntertwiner U V))
     (spectraReflectionProduct U V)

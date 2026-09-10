@@ -6,6 +6,11 @@ Authors: Jon Crall, OpenAI GPT-5.6 Thinking, Claude Opus 5
 import DavisKahan.Geometry.Halmos.GenericReconstruction
 import ForTauCeti.Analysis.InnerProductSpace.RealContinuousFunctionalCalculus
 import DavisKahan.SpectralTheory.Real.SpectralMultiplicityClassification
+import ForTauCeti.Analysis.RCLike.ScalarTransportFunctionalCalculus
+attribute [local instance 100] ContinuousLinearMap.realAlgebra
+  ContinuousLinearMap.realIsScalarTower ContinuousLinearMap.continuousFunctionalCalculusReal
+  ContinuousLinearMap.instStarOrderedRingRCLike
+
 
 open TauCeti.DavisKahan.Sylvester
 
@@ -95,18 +100,8 @@ variable (U₂ V₂ : Submodule 𝕜 H₂) [U₂.HasOrthogonalProjection]
   [V₂.HasOrthogonalProjection]
 
 /-! The converse direction reconstructs the pair from the cosine block through the
-polar decomposition of the Halmos cross block, so it carries the functional-calculus
-hypotheses of `Geometry/Halmos/GenericReconstruction.lean`.  They are found by typeclass
-inference at `𝕜 = ℂ` and at `𝕜 = ℝ` alike. -/
-
-variable [Algebra ℝ (genericLeftHalf U₁ V₁ →L[𝕜] genericLeftHalf U₁ V₁)]
-  [IsScalarTower ℝ 𝕜 (genericLeftHalf U₁ V₁ →L[𝕜] genericLeftHalf U₁ V₁)]
-  [ContinuousFunctionalCalculus ℝ
-    (genericLeftHalf U₁ V₁ →L[𝕜] genericLeftHalf U₁ V₁) IsSelfAdjoint]
-variable [Algebra ℝ (genericLeftHalf U₂ V₂ →L[𝕜] genericLeftHalf U₂ V₂)]
-  [IsScalarTower ℝ 𝕜 (genericLeftHalf U₂ V₂ →L[𝕜] genericLeftHalf U₂ V₂)]
-  [ContinuousFunctionalCalculus ℝ
-    (genericLeftHalf U₂ V₂ →L[𝕜] genericLeftHalf U₂ V₂) IsSelfAdjoint]
+polar decomposition of the Halmos cross block.  The required real functional calculus on each
+complete generic half is supplied by the local `RCLike` operator instances above. -/
 
 /-- **Davis--Kahan 1970, Theorem 3.1: the operator-level classification, both
 directions.**
@@ -395,20 +390,13 @@ The real classification above is stated on `cos²Θ`.  The invariant Davis and
 Kahan name is `Θ`, and this section carries the classification onto it, exactly
 as `SourceAngleInvariant` does over `ℂ`.
 
-The complex proofs transcribe directly.  The one thing they need that is not a
-global instance is `StarOrderedRing (E →L[ℝ] E)`: Mathlib proves
-`ContinuousLinearMap.instStarOrderedRingRCLike` for a general `RCLike` field and
-declines to register it, because it takes the continuous functional calculus as
-an argument and Mathlib has that only at `𝕜 = ℂ`.
-`ForTauCeti.Analysis.InnerProductSpace.RealContinuousFunctionalCalculus` supplies
-the real calculus, so the instance is available here for the asking; it is
-installed locally below, which is how the rest of this repository uses it.
+The complex proofs transcribe directly.  The real scalar structure, scalar tower,
+self-adjoint continuous functional calculus, and star order on bounded operators are selected
+locally from the canonical `ForTauCeti` constructions imported above.  They do not appear as
+hypotheses in the classification statements.
 
-The angle operator itself needs its own real definition: `cfc` on `E →L[𝕜] E`
-asks for `Algebra ℝ (E →L[𝕜] E)`, which is unavailable for a bare `RCLike 𝕜`,
-so `genericAngleBlock` and `genericAngleBlockReal` are two spellings of one
-concept for an instance reason, exactly as `sameSpectralMultiplicity_cfc_iff`
-and its real twin are. -/
+`genericAngleBlockReal` remains the source-facing real spelling used by this theorem, while the
+scalar-generic operator calculus is available to the reusable geometry layer. -/
 
 section SourceAngleInvariantReal
 
@@ -420,8 +408,6 @@ variable (U₁ V₁ : Submodule ℝ H₁) [U₁.HasOrthogonalProjection] [V₁.H
 variable (U₂ V₂ : Submodule ℝ H₂) [U₂.HasOrthogonalProjection] [V₂.HasOrthogonalProjection]
 
 set_option maxSynthPendingDepth 3
-
-attribute [local instance] ContinuousLinearMap.instStarOrderedRingRCLike
 
 /-- Halmos's `cos²Θ` block is a positive operator over `ℝ` too: its quadratic
 form is `‖P_V m‖²`. -/

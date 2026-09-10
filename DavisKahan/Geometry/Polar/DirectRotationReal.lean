@@ -5,17 +5,17 @@ Authors: Jon Crall, Claude Opus 5
 -/
 import DavisKahan.Geometry.Polar.DirectRotationSquare
 import DavisKahan.SpectralTheory.Complexification.FormTransport
-import ForTauCeti.Analysis.InnerProductSpace.Complexification.FunctionalCalculus
+import ForTauCeti.Analysis.InnerProductSpace.ModulusTransport
 
 /-!
 # The direct rotation of two **real** closed subspaces
 
 Standing assumption 1 of Davis--Kahan 1970 is that the Hilbert space is "real or
-complex", and Section 3 is written at that generality.  The repository's Section 3
-development is built over `ℂ`, because the polar decomposition it runs on is
-supplied by Mathlib's continuous functional calculus, which is registered on
-Hilbert-space operators only over `ℂ`.  That is a *representation* restriction,
-not a mathematical one, and this module removes it in arbitrary dimension.
+complex", and Section 3 is written at that generality.  The repository's original Section 3
+construction was developed over `ℂ` and then descended through real complexification.  The
+canonical bounded modulus and polar decomposition are now available directly over arbitrary
+`RCLike` fields; this module retains the real-complexification identities needed by the
+source-facing real development.
 
 ## The descent, and why it is available
 
@@ -130,9 +130,9 @@ theorem conjugateOperator_spectraCanonicalIntertwiner_complexifySubmodule :
 conjugation. -/
 theorem conjugateOperator_spectraCanonicalAbsoluteValue_complexifySubmodule :
     conjugateOperator
-        (spectraOperatorAbsoluteValue
+        (ContinuousLinearMap.modulus
           (spectraCanonicalIntertwiner (complexifySubmodule U) (complexifySubmodule V))) =
-      spectraOperatorAbsoluteValue
+      ContinuousLinearMap.modulus
         (spectraCanonicalIntertwiner (complexifySubmodule U) (complexifySubmodule V)) :=
   conjugateOperator_modulus_of_fixed
     (conjugateOperator_spectraCanonicalIntertwiner_complexifySubmodule U V)
@@ -140,7 +140,7 @@ theorem conjugateOperator_spectraCanonicalAbsoluteValue_complexifySubmodule :
 /-- The positive Halmos cosine `|S|` of a **real** pair. -/
 def canonicalAbsoluteValueR : E →L[ℝ] E :=
   realPartOperator
-    (spectraOperatorAbsoluteValue
+    (ContinuousLinearMap.modulus
       (spectraCanonicalIntertwiner (complexifySubmodule U) (complexifySubmodule V)))
 
 /-- The complexified real Halmos cosine is the modulus of the complexified
@@ -148,7 +148,7 @@ intertwiner. -/
 @[simp]
 theorem complexify_canonicalAbsoluteValueR :
     complexify (canonicalAbsoluteValueR U V) =
-      spectraOperatorAbsoluteValue
+      ContinuousLinearMap.modulus
         (spectraCanonicalIntertwiner (complexifySubmodule U) (complexifySubmodule V)) :=
   complexify_realPartOperator
     (conjugateOperator_spectraCanonicalAbsoluteValue_complexifySubmodule U V)
@@ -636,7 +636,7 @@ theorem directRotationR_unique_of_diagonalBlocks_pos (hacute : IsUniformlyAcute 
 /-! #### The converse: the real direct rotation *has* positive diagonal blocks
 
 The complex converse `eq_spectraDirectRotation_iff_diagonalBlocks_pos` reads the sign of the
-blocks off `spectraOperatorAbsoluteValue_nonneg`.  Over `ℝ` the block condition is
+blocks off `ContinuousLinearMap.modulus_nonneg`.  Over `ℝ` the block condition is
 `IsPositive` of the compression, which carries symmetry as well, so the descent is of
 *operator positivity* and not of a pointwise sign: `isPositive_of_complexify` below reflects
 both halves, and the compression step is then elementary. -/
@@ -679,13 +679,13 @@ private theorem isPositive_starProjection_compression {A : E →L[ℝ] E}
 
 /-- **The real Halmos cosine `|S|` is a positive operator.**
 
-Descended from `spectraOperatorAbsoluteValue_nonneg` on the complexification. -/
+Descended from `ContinuousLinearMap.modulus_nonneg` on the complexification. -/
 theorem isPositive_canonicalAbsoluteValueR :
     (canonicalAbsoluteValueR U V).IsPositive := by
   refine isPositive_of_complexify ?_
   rw [complexify_canonicalAbsoluteValueR]
   exact (ContinuousLinearMap.nonneg_iff_isPositive _).mp
-    (spectraOperatorAbsoluteValue_nonneg _)
+    (ContinuousLinearMap.modulus_nonneg _)
 
 /-- Rewriting a diagonal block of the real direct rotation as a compression of the Halmos
 cosine.  Multiplying `P A P = |S| P` on the left by the idempotent `P` replaces the loose

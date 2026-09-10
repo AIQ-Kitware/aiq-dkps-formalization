@@ -755,10 +755,10 @@ its square is `C²`. -/
 theorem spectraCanonicalAbsoluteValue_sq_eq_halmosCosineSq
     (U V : Submodule ℂ H) [U.HasOrthogonalProjection]
     [V.HasOrthogonalProjection] :
-    spectraOperatorAbsoluteValue (spectraCanonicalIntertwiner U V) *
-        spectraOperatorAbsoluteValue (spectraCanonicalIntertwiner U V) =
+    ContinuousLinearMap.modulus (spectraCanonicalIntertwiner U V) *
+        ContinuousLinearMap.modulus (spectraCanonicalIntertwiner U V) =
       halmosCosineSq U V := by
-  rw [spectraOperatorAbsoluteValue_mul_self,
+  rw [ContinuousLinearMap.modulus_mul_self_eq_star_mul_self,
     star_spectraCanonicalIntertwiner]
   let P : H →L[ℂ] H := projection U
   let Pc : H →L[ℂ] H := complementaryProjection U

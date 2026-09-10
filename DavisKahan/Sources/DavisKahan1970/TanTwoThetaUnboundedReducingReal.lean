@@ -79,8 +79,7 @@ private theorem approximationNumber_complexify_eq {F : Type u}
     [NormedAddCommGroup F] [InnerProductSpace ℝ F] [CompleteSpace F]
     (T : E →L[ℝ] F) (n : ℕ) :
     (complexify T).approximationNumber n = T.approximationNumber n :=
-  TauCeti.DavisKahan.ExactSinTheta.ComplexificationApproximation.approximationSingularValue_complexify
-    T n
+  ComplexificationApproximation.approximationSingularValue_complexify T n
 
 /-- The real ambient double-angle sine: the projector difference between `U` and
 its mirror image in `V`.  Private, because the endpoint below states it inline --
@@ -159,8 +158,9 @@ theorem tanTwoTheta_ambient_unbounded_reducing_sineSequence_symmetricNorming_rea
       (complexifySubmodule V).reflectionOperator *
       (complexifySubmodule U).diagonalPart
         (complexifySubmodule V).reflectionOperator) := by
-    rw [← TauCeti.DavisKahan.complexify_reflectionOperator, diagonalPart_complexifySubmodule,
-      ← Foundation.RealComplexification.complexify_mul, Foundation.RealComplexification.isUnit_complexify_iff]
+    rw [← TauCeti.DavisKahan.complexify_reflectionOperator,
+      diagonalPart_complexifySubmodule, ← Foundation.RealComplexification.complexify_mul,
+      TauCeti.RealComplexification.isUnit_complexify_iff]
     exact hunit
   have hcos := DavisKahan.cos_two_ne_zero_of_isUnit_diagonalPart_reflection_sq
     (complexifySubmodule U) (complexifySubmodule V) hunitC

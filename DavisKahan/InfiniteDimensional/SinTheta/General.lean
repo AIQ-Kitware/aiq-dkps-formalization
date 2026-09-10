@@ -6,8 +6,7 @@ Authors: Jon Crall, GPT 5.6 High
 import DavisKahan.InfiniteDimensional.SinTheta.RestrictionCompat
 import DavisKahan.InfiniteDimensional.SinTheta.SpectralBridge
 import DavisKahan.SpectralTheory.Complexification.Spectrum
-import Mathlib.Analysis.InnerProductSpace.StarOrder
-import Mathlib.Analysis.SpecialFunctions.ContinuousFunctionalCalculus.Abs
+import ForTauCeti.Analysis.InnerProductSpace.OperatorModulus
 import ForTauCeti.Analysis.InnerProductSpace.Polar.GramContraction
 import DavisKahan.SpectralTheory.AbstractSpectrum
 
@@ -621,12 +620,11 @@ declared over `[InnerProductSpace ℂ H]` — while this section is over a gener
 `𝕜 : RCLike`.  Reusing it would mean either restricting this section to `ℂ` or
 generalising `ProjValMeasure`, and neither is necessary.
 
-So the `ℂ`-only ingredient is carried as a *hypothesis*, exactly as the operator
-absolute value is in the `OperatorAbsoluteValue` section below, and for the
-reason given there: an unproved `def` is an opaque term with no body, so no
-theorem about it can be proved at all, whereas the definitions below unfold.
-Relative to `BoundedBorelProjection` the three former leaf obligations are
-ordinary theorems, and the `sin Θ` consequences are fully proved.
+The bounded Borel projection assignment is therefore still carried as the explicit
+`BoundedBorelProjection` hypothesis below.  This is separate from the bounded operator modulus,
+whose continuous functional calculus is now available directly over arbitrary `RCLike` fields.
+Relative to `BoundedBorelProjection` the three former leaf obligations are ordinary theorems,
+and the `sin Θ` consequences are fully proved.
 -/
 
 section SpectralSubspace
@@ -768,134 +766,37 @@ end SpectralSubspace
 
 /-! ## Ideal-valued form
 
-The ideal-valued projector-difference estimate below is a genuinely missing
-analytic ingredient (the gauge identity `‖|T|‖_I = ‖T‖_I` needs the polar
-partial isometry) and stays a leaf obligation.
-
-The operator absolute value is **not** missing, and the reason is worth
-recording, because it was previously an escape and was sized as research.
-Over `ℂ` it is `CFC.sqrt (star T * T)`; over a general `RCLike` field every
-ingredient is already available except one typeclass:
-
-* `CStarRing (E →L[𝕜] E)` is an unconditional instance
-  (`Mathlib/Analysis/InnerProductSpace/Adjoint.lean`);
-* `NonnegSpectrumClass ℝ (E →L[𝕜] E)` is an unconditional instance
-  (`Mathlib/Analysis/InnerProductSpace/StarOrder.lean`);
-* `StarOrderedRing (E →L[𝕜] E)` is *proved* for general `𝕜` there as
-  `instStarOrderedRingRCLike`, taking `ContinuousFunctionalCalculus ℝ _
-  IsSelfAdjoint` as its single argument;
-* the operator itself is `CFC.abs`, already upstream in
-  `Mathlib/Analysis/SpecialFunctions/ContinuousFunctionalCalculus/Abs.lean`.
-
-Mathlib states the remaining gap explicitly: that continuous functional
-calculus instance is known only for `𝕜 = ℂ`, which is exactly why
-`instStarOrderedRingRCLike` is a lemma there rather than an instance.  So the
-absolute value is carried here as a *hypothesis*, not as an escape.  This is
-the difference between unproved and unprovable: an unproved `def` is an opaque
-term with no body, so no theorem about it can be proved at all, whereas the
-definition below unfolds and discharges automatically at `𝕜 = ℂ`.
+The bounded-operator modulus used by the ideal-valued sine theorem is
+`ContinuousLinearMap.modulus`.  Its `RCLike` continuous functional calculus and real scalar
+structure are internal to `ForTauCeti`; theorem signatures here carry only the Hilbert-space
+and completeness assumptions.
 -/
 
-section OperatorAbsoluteValue
+section OperatorModulus
 
-/-! The first two are the scalar-action assumptions Mathlib itself makes when
-relating the Loewner order on `E →L[𝕜] E` to the continuous functional
-calculus.  The third is the one genuinely `ℂ`-only ingredient: Mathlib has that
-instance for `𝕜 = ℂ`, and carrying it as a hypothesis keeps the development
-general without pretending the general case is already available. -/
-variable [Algebra ℝ (E →L[𝕜] E)] [IsScalarTower ℝ 𝕜 (E →L[𝕜] E)]
-  [ContinuousFunctionalCalculus ℝ (E →L[𝕜] E) IsSelfAdjoint]
-
-attribute [local instance] ContinuousLinearMap.instStarOrderedRingRCLike
-
-/-- The operator absolute value `|T| = (T⋆T)^{1/2}`, as the continuous
-functional calculus `CFC.abs`.
-
-Relative to the `ContinuousFunctionalCalculus` hypothesis above this is a real
-definition rather than a leaf obligation, so the results below unfold it. -/
-noncomputable def operatorAbsoluteValue (T : E →L[𝕜] E) : E →L[𝕜] E :=
-  CFC.abs T
-
-/-- Unfolding lemma: the absolute value *is* `CFC.abs`.  Stated so that
-downstream rewrites do not have to unfold a `def`. -/
-theorem operatorAbsoluteValue_eq (T : E →L[𝕜] E) :
-    operatorAbsoluteValue T = CFC.abs T := rfl
-
-/-- The absolute value is nonnegative in the Loewner order.
-
-This is the first consequence that was previously out of reach: with an opaque
-term there is nothing to unfold, so even this could not be stated usefully. -/
-@[simp]
-theorem operatorAbsoluteValue_nonneg (T : E →L[𝕜] E) :
-    0 ≤ operatorAbsoluteValue T :=
-  CFC.abs_nonneg T
-
-/-- The absolute value is insensitive to sign. -/
-@[simp]
-theorem operatorAbsoluteValue_neg (T : E →L[𝕜] E) :
-    operatorAbsoluteValue (-T) = operatorAbsoluteValue T :=
-  CFC.abs_neg T
-
-/-- The absolute value of `0` is `0`. -/
-@[simp]
-theorem operatorAbsoluteValue_zero :
-    operatorAbsoluteValue (0 : E →L[𝕜] E) = 0 :=
-  CFC.abs_zero
-
-/-- **The absolute value is norm-preserving.**  `‖|T|‖ = ‖T‖`, by the C⋆
-identity applied twice: `|T|` is self-adjoint and `|T| * |T| = T⋆ T`, so
-`‖|T|‖² = ‖|T|⋆ |T|‖ = ‖T⋆ T‖ = ‖T‖²`.
-
-This is the gauge-free half of what a symmetric norm ideal wants from the
-absolute value, and unlike the gauge half it needs no polar decomposition — so
-it is available over a general `RCLike` field, where
-`operatorAbsoluteValue_mem_and_gauge_eq` is still a leaf. -/
-theorem norm_operatorAbsoluteValue (T : E →L[𝕜] E) :
-    ‖operatorAbsoluteValue T‖ = ‖T‖ := by
-  have hsa : star (operatorAbsoluteValue T) = operatorAbsoluteValue T :=
-    (CFC.abs_nonneg T).isSelfAdjoint
-  have hsq : ‖operatorAbsoluteValue T‖ * ‖operatorAbsoluteValue T‖ = ‖T‖ * ‖T‖ := by
-    calc ‖operatorAbsoluteValue T‖ * ‖operatorAbsoluteValue T‖
-        = ‖star (operatorAbsoluteValue T) * operatorAbsoluteValue T‖ :=
-          (CStarRing.norm_star_mul_self).symm
-      _ = ‖star T * T‖ := by
-          rw [hsa, operatorAbsoluteValue_eq, CFC.abs_mul_abs]
-      _ = ‖T‖ * ‖T‖ := CStarRing.norm_star_mul_self
-  exact (mul_self_inj (norm_nonneg _) (norm_nonneg _)).mp hsq
-
-/-- The full ambient sine-angle operator of two subspaces: the absolute value
-of the projector difference. -/
+/-- The full ambient sine-angle operator of two subspaces: the modulus of the projector
+difference. -/
 noncomputable def sinAngleOperator (U V : Submodule 𝕜 E)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] : E →L[𝕜] E :=
-  operatorAbsoluteValue (projection U - projection V)
+  (projection U - projection V).modulus
 
-/-- **Symmetric norm ideals contain absolute values with equal gauge, given a
-polar partial isometry.**
+/-- **Symmetric norm ideals contain moduli with equal gauge, given a polar contraction.**
 
-This is the mathematical content of the leaf obligation below, with the one
-genuinely missing ingredient — the polar partial isometry — taken as an explicit
-hypothesis rather than assumed into existence.
-
-Two things are worth recording about the proof.  First, **unitary invariance is
-not needed**, although the leaf's own description reaches for it: `ideal_bound`
-alone closes both directions, because each of `|T|` and `T` is a two-sided
-multiple of the other.  Second, only the *norm bounds* on `W` are used, not that
-it is a partial isometry, so the hypotheses here are weaker than polar
-decomposition actually delivers. -/
-theorem SymmetricNormIdeal.operatorAbsoluteValue_mem_and_gauge_eq_of_polar
+Only the two factorization identities and the operator-norm bounds are needed.  The ideal
+axioms give the two gauge inequalities directly. -/
+theorem SymmetricNormIdeal.modulus_mem_and_gauge_eq_of_polar
     (I : SymmetricNormIdeal (𝕜 := 𝕜) (E := E)) {T W : E →L[𝕜] E}
     (hT : I.mem T)
-    (hWT : W ∘L operatorAbsoluteValue T = T)
-    (hWadj : (ContinuousLinearMap.adjoint W) ∘L T = operatorAbsoluteValue T)
+    (hWT : W ∘L T.modulus = T)
+    (hWadj : (ContinuousLinearMap.adjoint W) ∘L T = T.modulus)
     (hWnorm : ‖W‖ ≤ 1) (hWadjnorm : ‖ContinuousLinearMap.adjoint W‖ ≤ 1) :
-    I.mem (operatorAbsoluteValue T) ∧
-      I.gauge (operatorAbsoluteValue T) = I.gauge T := by
+    I.mem T.modulus ∧ I.gauge T.modulus = I.gauge T := by
   have hid : ‖ContinuousLinearMap.id 𝕜 E‖ ≤ 1 := ContinuousLinearMap.norm_id_le
-  -- `|T| = W⋆ ∘ T ∘ 1`, so membership and one gauge bound come from the ideal axioms.
   have habs : ContinuousLinearMap.adjoint W ∘L T ∘L ContinuousLinearMap.id 𝕜 E =
-      operatorAbsoluteValue T := by
-    rw [ContinuousLinearMap.comp_id]; exact hWadj
-  have hmem : I.mem (operatorAbsoluteValue T) := by
+      T.modulus := by
+    rw [ContinuousLinearMap.comp_id]
+    exact hWadj
+  have hmem : I.mem T.modulus := by
     have := I.ideal_mem (ContinuousLinearMap.adjoint W) (ContinuousLinearMap.id 𝕜 E) hT
     rwa [habs] at this
   refine ⟨hmem, le_antisymm ?_ ?_⟩
@@ -907,49 +808,32 @@ theorem SymmetricNormIdeal.operatorAbsoluteValue_mem_and_gauge_eq_of_polar
         ≤ 1 * I.gauge T * 1 := by
           gcongr
       _ = I.gauge T := by ring
-  · -- and symmetrically `T = W ∘ |T| ∘ 1`.
-    have hT' : W ∘L operatorAbsoluteValue T ∘L ContinuousLinearMap.id 𝕜 E = T := by
-      rw [ContinuousLinearMap.comp_id]; exact hWT
+  · have hT' : W ∘L T.modulus ∘L ContinuousLinearMap.id 𝕜 E = T := by
+      rw [ContinuousLinearMap.comp_id]
+      exact hWT
     have hb := I.ideal_bound W (ContinuousLinearMap.id 𝕜 E) hmem
     rw [hT'] at hb
     refine hb.trans ?_
-    have h0 : 0 ≤ I.gauge (operatorAbsoluteValue T) := I.nonneg hmem
-    calc ‖W‖ * I.gauge (operatorAbsoluteValue T) * ‖ContinuousLinearMap.id 𝕜 E‖
-        ≤ 1 * I.gauge (operatorAbsoluteValue T) * 1 := by
+    have h0 : 0 ≤ I.gauge T.modulus := I.nonneg hmem
+    calc ‖W‖ * I.gauge T.modulus * ‖ContinuousLinearMap.id 𝕜 E‖
+        ≤ 1 * I.gauge T.modulus * 1 := by
           gcongr
-      _ = I.gauge (operatorAbsoluteValue T) := by ring
+      _ = I.gauge T.modulus := by ring
 
-/-- **Symmetric norm ideals contain absolute values with equal gauge.**
+/-- **Symmetric norm ideals contain moduli with equal gauge.**
 
-**Closed 2026-08-04.**  This was a leaf obligation, with the mathematics already
-proved directly above in `operatorAbsoluteValue_mem_and_gauge_eq_of_polar` and
-only the polar partial isometry missing, "over a general `RCLike` field in
-infinite dimensions" — `ContinuousLinearMap.polarPartial` being `ℂ`-only and the
-`RCLike` `polarFactor` being for plain linear maps.
-
-The field restriction turned out to be an artefact of how that isometry was
-*keyed*, not of the mathematics.  Both existing constructions build it from
-`|T|`, so both inherit `|T|`'s dependence on a continuous functional calculus,
-which Mathlib supplies only for `ℂ`.  But the construction never uses the
-calculus: it uses `‖|T| x‖ = ‖T x‖`, which is a consequence of the *Gram*
-identity `|T|² = T⋆T` and self-adjointness alone.  Keying on the Gram identity
-instead — `ForTauCeti/Analysis/InnerProductSpace/Polar/GramContraction.lean` —
-removes the restriction, and the calculus enters here only where it already did,
-in producing `|T|` itself. -/
-theorem SymmetricNormIdeal.operatorAbsoluteValue_mem_and_gauge_eq
+The Gram identity for `T.modulus` supplies a contraction polar factor through
+`exists_contraction_of_gram_eq`; the ideal estimate then follows from
+`modulus_mem_and_gauge_eq_of_polar`. -/
+theorem SymmetricNormIdeal.modulus_mem_and_gauge_eq
     (I : SymmetricNormIdeal (𝕜 := 𝕜) (E := E)) {T : E →L[𝕜] E}
     (hT : I.mem T) :
-    I.mem (operatorAbsoluteValue T) ∧
-      I.gauge (operatorAbsoluteValue T) = I.gauge T := by
-  have hgram : operatorAbsoluteValue T ∘L operatorAbsoluteValue T =
-      ContinuousLinearMap.adjoint T ∘L T := by
-    rw [← ContinuousLinearMap.mul_def, ← ContinuousLinearMap.mul_def,
-      ← ContinuousLinearMap.star_eq_adjoint, operatorAbsoluteValue_eq]
-    exact CFC.abs_mul_abs T
+    I.mem T.modulus ∧ I.gauge T.modulus = I.gauge T := by
+  have hgram : T.modulus ∘L T.modulus = ContinuousLinearMap.adjoint T ∘L T := by
+    simpa only [ContinuousLinearMap.mul_def] using T.modulus_mul_self
   obtain ⟨W, hWnorm, hWadjnorm, hWT, hWadj⟩ :=
-    ContinuousLinearMap.exists_contraction_of_gram_eq
-      (operatorAbsoluteValue_nonneg T).isSelfAdjoint hgram
-  exact I.operatorAbsoluteValue_mem_and_gauge_eq_of_polar hT hWT hWadj hWnorm hWadjnorm
+    ContinuousLinearMap.exists_contraction_of_gram_eq T.modulus_isSelfAdjoint hgram
+  exact I.modulus_mem_and_gauge_eq_of_polar hT hWT hWadj hWnorm hWadjnorm
 
 /-! ### Reduction of the ideal-valued projector-difference estimate
 
@@ -989,8 +873,7 @@ piece.  The statement itself is believed true and sharp: equality holds at
 `B − A = d (P_U − P_V)`.
 -/
 
-omit [CompleteSpace E] [Algebra ℝ (E →L[𝕜] E)]
-  [IsScalarTower ℝ 𝕜 (E →L[𝕜] E)] in
+omit [CompleteSpace E] in
 /-- **The projector difference solves a Sylvester equation.**
 
 With `A` reducing `U` and `B` reducing `V`,
@@ -1012,8 +895,7 @@ theorem projectionDifference_sylvester
   rw [mul_sub, sub_mul, sub_mul, mul_sub, hAU, hBV]
   abel
 
-omit [CompleteSpace E] [Algebra ℝ (E →L[𝕜] E)]
-  [IsScalarTower ℝ 𝕜 (E →L[𝕜] E)] in
+omit [CompleteSpace E] in
 /-- **The cross term is a reflection pinch**: `R P_V − P_U R = (R J_V − J_U R)/2`.
 
 Immediate from `J = 2P − 1`, but worth naming: it is what makes the right-hand
@@ -1036,7 +918,6 @@ theorem projectionCross_eq_reflectionPinch
     ContinuousLinearMap.coe_id', id_eq, map_sub, map_smul]
   match_scalars <;> (try field_simp) ; ring
 
-omit [ContinuousFunctionalCalculus ℝ (E →L[𝕜] E) IsSelfAdjoint] [Algebra ℝ (E →L[𝕜] E)] [IsScalarTower ℝ 𝕜 (E →L[𝕜] E)] in
 /-- **The cross term is gauge-contractive**: `gauge (R P_V − P_U R) ≤ gauge R`.
 
 The two-subspace analogue of `gauge_offDiagonalPart_le`, which pinches against a
@@ -1109,7 +990,7 @@ theorem SymmetricNormIdeal.gauge_projectionCross_le
   rw [hnorm]
   linarith
 
-end OperatorAbsoluteValue
+end OperatorModulus
 
 end DavisKahanExt
 end TauCeti

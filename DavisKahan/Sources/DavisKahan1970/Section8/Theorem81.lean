@@ -7,7 +7,7 @@ import DavisKahan.SpectralTheory.SpectralGapFormBounds
 import DavisKahan.InfiniteDimensional.TanTwoTheta.OffDiagonalSpectralRepulsion
 import DavisKahan.Geometry.Polar.DirectRotation
 import DavisKahan.SpectralTheory.OperatorAngle
-import ForTauCeti.Analysis.InnerProductSpace.SpectralOrder.Complex
+import ForTauCeti.Analysis.InnerProductSpace.SpectralOrder
 
 open TauCeti.DavisKahan.Angle
 
@@ -58,7 +58,7 @@ open scoped InnerProductSpace
 open DavisKahanExt
 open TauCeti.DavisKahan
 open TauCeti.DavisKahan.Foundation
-open TauCeti.SpectralOrder.Complex
+open TauCeti.SpectralOrder
 
 noncomputable section
 

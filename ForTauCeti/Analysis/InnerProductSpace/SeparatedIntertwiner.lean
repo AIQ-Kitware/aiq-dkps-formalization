@@ -6,6 +6,7 @@ Authors: Jon Crall
 module
 
 public import Mathlib.Analysis.InnerProductSpace.Adjoint
+public import ForTauCeti.Analysis.RCLike.ScalarTransportFunctionalCalculus
 public import ForTauCeti.Analysis.InnerProductSpace.LinearPMap.Resolvent
 public import ForTauCeti.Analysis.InnerProductSpace.LinearPMap.SelfAdjointResolvent
 public import Mathlib.Analysis.CStarAlgebra.ContinuousFunctionalCalculus.Basic
@@ -126,26 +127,17 @@ theorem continuous_symbolRestrict {K s : Set 𝕜} (h : s ⊆ K) :
 
 /-! ## The self-adjoint calculus, at `RCLike` scalars
 
-Below, the *operator-algebra* scalar is a general `RCLike` field `𝕜` while the
-functional calculus itself is over `ℝ`.  Mathlib derives
-`ContinuousFunctionalCalculus ℝ (E →L[𝕜] E) IsSelfAdjoint` by spectrum
-restriction only at `𝕜 = ℂ`, and
-`ContinuousLinearMap.instContinuousFunctionalCalculusRealIsSelfAdjoint` (in
-`ForTauCeti/Analysis/InnerProductSpace/RealContinuousFunctionalCalculus.lean`)
-supplies it at `𝕜 = ℝ`.  The calculus is therefore carried as a hypothesis, in
-the same shape `ForTauCeti/Analysis/InnerProductSpace/OperatorModulus.lean`
-uses: the two scalar-action assumptions plus the calculus itself, once for each
-of the two spaces.  Every one of them is found by typeclass inference at
-`𝕜 = ℝ` and at `𝕜 = ℂ` alike, so no consumer at either field has to supply
-anything. -/
+The operator algebra uses `𝕜`, while the self-adjoint functional calculus uses real symbols.
+The real algebra, scalar tower, and calculus are canonical for every complete Hilbert space over
+an `RCLike` field and are activated locally below. -/
 
 section SelfAdjoint
 
 variable [CompleteSpace E] [CompleteSpace F]
-variable [Algebra ℝ (E →L[𝕜] E)] [IsScalarTower ℝ 𝕜 (E →L[𝕜] E)]
-  [ContinuousFunctionalCalculus ℝ (E →L[𝕜] E) IsSelfAdjoint]
-  [Algebra ℝ (F →L[𝕜] F)] [IsScalarTower ℝ 𝕜 (F →L[𝕜] F)]
-  [ContinuousFunctionalCalculus ℝ (F →L[𝕜] F) IsSelfAdjoint]
+
+attribute [local instance 100] ContinuousLinearMap.realAlgebra
+  ContinuousLinearMap.realIsScalarTower ContinuousLinearMap.continuousFunctionalCalculusReal
+  ContinuousLinearMap.instStarOrderedRingRCLike
 
 /-- **A rectangular intertwiner of self-adjoint operators intertwines their real
 continuous functional calculi.**

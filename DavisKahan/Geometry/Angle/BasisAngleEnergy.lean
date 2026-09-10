@@ -120,15 +120,15 @@ into a statement about the angle operator. -/
 theorem norm_absoluteValue_apply_eq_norm_projection
     (U V : Submodule ℂ H) [U.HasOrthogonalProjection]
     [V.HasOrthogonalProjection] {x : H} (hx : x ∈ U) :
-    ‖spectraOperatorAbsoluteValue (spectraCanonicalIntertwiner U V) x‖ =
+    ‖ContinuousLinearMap.modulus (spectraCanonicalIntertwiner U V) x‖ =
       ‖projection V x‖ := by
   let C : H →L[ℂ] H :=
-    spectraOperatorAbsoluteValue (spectraCanonicalIntertwiner U V)
+    ContinuousLinearMap.modulus (spectraCanonicalIntertwiner U V)
   let P : H →L[ℂ] H := projection U
   let Q : H →L[ℂ] H := projection V
   have hxP : P x = x := Submodule.starProjection_eq_self_iff.mpr hx
   have hCsa : star C = C :=
-    (spectraOperatorAbsoluteValue_isSelfAdjoint
+    (ContinuousLinearMap.modulus_isSelfAdjoint
       (spectraCanonicalIntertwiner U V)).star_eq
   have hC2 : C * C = halmosCosineSq U V :=
     spectraCanonicalAbsoluteValue_sq_eq_halmosCosineSq U V
@@ -179,7 +179,7 @@ theorem norm_inner_competitor_le
     (hWunitary : W ∈ unitary (H →L[ℂ] H))
     (hWmap : W * projection U = projection V * W) {x : H} (hx : x ∈ U) :
     ‖⟪x, W x⟫_ℂ‖ ≤
-      ‖spectraOperatorAbsoluteValue (spectraCanonicalIntertwiner U V) x‖ *
+      ‖ContinuousLinearMap.modulus (spectraCanonicalIntertwiner U V) x‖ *
         ‖x‖ := by
   have hWxV : W x ∈ V := by
     apply V.starProjection_eq_self_iff.mp
@@ -199,7 +199,7 @@ theorem norm_inner_competitor_le
   calc
     ‖⟪x, W x⟫_ℂ‖ = ‖⟪projection V x, W x⟫_ℂ‖ := by rw [hinner]
     _ ≤ ‖projection V x‖ * ‖W x‖ := norm_inner_le_norm _ _
-    _ = ‖spectraOperatorAbsoluteValue (spectraCanonicalIntertwiner U V) x‖ *
+    _ = ‖ContinuousLinearMap.modulus (spectraCanonicalIntertwiner U V) x‖ *
         ‖x‖ := by
       rw [hWnorm, norm_absoluteValue_apply_eq_norm_projection U V hx]
 
@@ -211,13 +211,13 @@ theorem displacementAngleSineSq_ge_complex
     (hWunitary : W ∈ unitary (H →L[ℂ] H))
     (hWmap : W * projection U = projection V * W) {x : H} (hx : x ∈ U)
     (hxnorm : ‖x‖ = 1) :
-    1 - ‖spectraOperatorAbsoluteValue (spectraCanonicalIntertwiner U V) x‖ ^ 2 ≤
+    1 - ‖ContinuousLinearMap.modulus (spectraCanonicalIntertwiner U V) x‖ ^ 2 ≤
       displacementAngleSineSq W x := by
   have hbound := norm_inner_competitor_le U V W hWunitary hWmap hx
   rw [hxnorm, mul_one] at hbound
   have hre : |RCLike.re ⟪x, W x⟫_ℂ| ≤ ‖⟪x, W x⟫_ℂ‖ := RCLike.abs_re_le_norm _
   have hsq : (RCLike.re ⟪x, W x⟫_ℂ) ^ 2 ≤
-      ‖spectraOperatorAbsoluteValue (spectraCanonicalIntertwiner U V) x‖ ^ 2 := by
+      ‖ContinuousLinearMap.modulus (spectraCanonicalIntertwiner U V) x‖ ^ 2 := by
     have h := hre.trans hbound
     have habs : (RCLike.re ⟪x, W x⟫_ℂ) ^ 2 = |RCLike.re ⟪x, W x⟫_ℂ| ^ 2 :=
       (sq_abs _).symm
@@ -244,7 +244,7 @@ theorem sum_displacementAngleSineSq_ge
     (b : OrthonormalBasis ι ℂ U) (W : H →L[ℂ] H)
     (hWunitary : W ∈ unitary (H →L[ℂ] H))
     (hWmap : W * projection U = projection V * W) :
-    ∑ i, (1 - ‖spectraOperatorAbsoluteValue (spectraCanonicalIntertwiner U V)
+    ∑ i, (1 - ‖ContinuousLinearMap.modulus (spectraCanonicalIntertwiner U V)
         ((b i : U) : H)‖ ^ 2) ≤
       ∑ i, displacementAngleSineSq W ((b i : U) : H) := by
   refine Finset.sum_le_sum fun i _ => ?_
@@ -281,7 +281,7 @@ theorem sum_displacementAngleSineSq_ge_of_mem_complex
     (hWmap : W * projection U = projection V * W)
     {ι : Type*} (b : ι → H) (hb : ∀ i, b i ∈ U) (hbnorm : ∀ i, ‖b i‖ = 1)
     (s : Finset ι) :
-    ∑ i ∈ s, (1 - ‖spectraOperatorAbsoluteValue
+    ∑ i ∈ s, (1 - ‖ContinuousLinearMap.modulus
         (spectraCanonicalIntertwiner U V) (b i)‖ ^ 2) ≤
       ∑ i ∈ s, displacementAngleSineSq W (b i) :=
   Finset.sum_le_sum fun i _ =>
@@ -299,7 +299,7 @@ theorem tsum_displacementAngleSineSq_ge_of_mem_complex
     (hWunitary : W ∈ unitary (H →L[ℂ] H))
     (hWmap : W * projection U = projection V * W)
     {ι : Type*} (b : ι → H) (hb : ∀ i, b i ∈ U) (hbnorm : ∀ i, ‖b i‖ = 1) :
-    ∑' i, ENNReal.ofReal (1 - ‖spectraOperatorAbsoluteValue
+    ∑' i, ENNReal.ofReal (1 - ‖ContinuousLinearMap.modulus
         (spectraCanonicalIntertwiner U V) (b i)‖ ^ 2) ≤
       ∑' i, ENNReal.ofReal (displacementAngleSineSq W (b i)) :=
   ENNReal.tsum_le_tsum fun i =>
@@ -318,16 +318,16 @@ theorem displacementAngleSineSq_directRotation_eq_of_smul
     (U V : Submodule ℂ H) [U.HasOrthogonalProjection]
     [V.HasOrthogonalProjection] (hacute : IsUniformlyAcute U V) {x : H} {μ : ℝ}
     (hμ : 0 ≤ μ) (hxnorm : ‖x‖ = 1)
-    (hCx : spectraOperatorAbsoluteValue (spectraCanonicalIntertwiner U V) x =
+    (hCx : ContinuousLinearMap.modulus (spectraCanonicalIntertwiner U V) x =
       (μ : ℂ) • x) :
     displacementAngleSineSq (spectraDirectRotation U V hacute) x =
-      1 - ‖spectraOperatorAbsoluteValue (spectraCanonicalIntertwiner U V) x‖ ^ 2 := by
-  have hnorm : ‖spectraOperatorAbsoluteValue
+      1 - ‖ContinuousLinearMap.modulus (spectraCanonicalIntertwiner U V) x‖ ^ 2 := by
+  have hnorm : ‖ContinuousLinearMap.modulus
       (spectraCanonicalIntertwiner U V) x‖ = μ := by
     rw [hCx, norm_smul, hxnorm, mul_one, Complex.norm_real, Real.norm_eq_abs,
       abs_of_nonneg hμ]
   have hform := re_inner_spectraDirectRotation_eq_absoluteValue U V hacute x
-  have hCform : RCLike.re ⟪spectraOperatorAbsoluteValue
+  have hCform : RCLike.re ⟪ContinuousLinearMap.modulus
       (spectraCanonicalIntertwiner U V) x, x⟫_ℂ = μ := by
     rw [hCx, inner_smul_left]
     have hxx : ⟪x, x⟫_ℂ = ((‖x‖ : ℝ) ^ 2 : ℝ) := by
@@ -348,12 +348,12 @@ theorem ofReal_one_sub_sq_norm_absoluteValue_eq_enorm_principalSineOperator
     (U V : Submodule ℂ H) [U.HasOrthogonalProjection]
     [V.HasOrthogonalProjection] {x : H} (hx : x ∈ U) (hxnorm : ‖x‖ = 1) :
     ENNReal.ofReal
-        (1 - ‖spectraOperatorAbsoluteValue (spectraCanonicalIntertwiner U V) x‖ ^ 2) =
+        (1 - ‖ContinuousLinearMap.modulus (spectraCanonicalIntertwiner U V) x‖ ^ 2) =
       ‖TauCeti.principalSineOperator U V ⟨x, hx⟩‖ₑ ^ 2 := by
   have hC := norm_absoluteValue_apply_eq_norm_projection U V hx
   have hpy := V.norm_sq_eq_add_norm_sq_starProjection x
   have hreal :
-      1 - ‖spectraOperatorAbsoluteValue (spectraCanonicalIntertwiner U V) x‖ ^ 2 =
+      1 - ‖ContinuousLinearMap.modulus (spectraCanonicalIntertwiner U V) x‖ ^ 2 =
         ‖Vᗮ.starProjection x‖ ^ 2 := by
     rw [hxnorm, one_pow] at hpy
     rw [hC]
@@ -368,7 +368,7 @@ theorem tsum_one_sub_sq_norm_absoluteValue_eq_tsum_sq_principalSineSequence
     (U V : Submodule ℂ H) [U.HasOrthogonalProjection]
     [V.HasOrthogonalProjection] {ι : Type u} (b : HilbertBasis ι ℂ U) :
     (∑' i, ENNReal.ofReal
-        (1 - ‖spectraOperatorAbsoluteValue (spectraCanonicalIntertwiner U V)
+        (1 - ‖ContinuousLinearMap.modulus (spectraCanonicalIntertwiner U V)
           ((b i : U) : H)‖ ^ 2)) =
       ∑' n : ℕ, ENNReal.ofReal (TauCeti.principalSineSequence U V n) ^ 2 := by
   rw [TauCeti.tsum_sq_principalSineSequence_eq_tsum_enorm_projection U V b]
@@ -450,7 +450,7 @@ theorem sum_one_sub_sq_norm_absoluteValue_eq_sum_sq_principalSines
     (U V : Submodule ℂ H) [U.HasOrthogonalProjection]
     [V.HasOrthogonalProjection]
     (b : OrthonormalBasis (Fin (Module.finrank ℂ U)) ℂ U) :
-    ∑ i, (1 - ‖spectraOperatorAbsoluteValue (spectraCanonicalIntertwiner U V)
+    ∑ i, (1 - ‖ContinuousLinearMap.modulus (spectraCanonicalIntertwiner U V)
         ((b i : U) : H)‖ ^ 2) =
       ∑ i : Fin (Module.finrank ℂ U),
         TauCeti.principalSines U V (i : ℕ) ^ 2 := by

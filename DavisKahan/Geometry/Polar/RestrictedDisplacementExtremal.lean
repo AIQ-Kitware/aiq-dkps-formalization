@@ -685,7 +685,7 @@ local instance sourceCompleteSpace : CompleteSpace U :=
 /-- The positive cosine acting in source coordinates. -/
 noncomputable def sourceCosine : U →L[ℂ] U := by
   let C : H →L[ℂ] H :=
-    spectraOperatorAbsoluteValue (spectraCanonicalIntertwiner U V)
+    ContinuousLinearMap.modulus (spectraCanonicalIntertwiner U V)
   have hCU : InvariantFor C U := by
     intro x hx
     apply U.starProjection_eq_self_iff.mp
@@ -704,39 +704,39 @@ noncomputable def sourceRestrictedDisplacement (T : H →L[ℂ] H) : U →L[ℂ]
 @[simp]
 theorem sourceCosine_apply_coe (x : U) :
     ((sourceCosine U V x : U) : H) =
-      spectraOperatorAbsoluteValue (spectraCanonicalIntertwiner U V) (x : H) :=
+      ContinuousLinearMap.modulus (spectraCanonicalIntertwiner U V) (x : H) :=
   rfl
 
 /-- The source cosine is self-adjoint. -/
 theorem sourceCosine_selfAdjoint : IsSelfAdjointOperator (sourceCosine U V) := by
   intro x y
-  change ⟪spectraOperatorAbsoluteValue (spectraCanonicalIntertwiner U V)
+  change ⟪ContinuousLinearMap.modulus (spectraCanonicalIntertwiner U V)
       (x : H), (y : H)⟫_ℂ =
-    ⟪(x : H), spectraOperatorAbsoluteValue
+    ⟪(x : H), ContinuousLinearMap.modulus
       (spectraCanonicalIntertwiner U V) (y : H)⟫_ℂ
-  exact (spectraOperatorAbsoluteValue_isSelfAdjoint
+  exact (ContinuousLinearMap.modulus_isSelfAdjoint
     (spectraCanonicalIntertwiner U V)).isSymmetric (x : H) (y : H)
 
 /-- The source cosine has nonnegative quadratic form. -/
 theorem sourceCosine_nonnegative (x : U) :
     0 ≤ RCLike.re ⟪sourceCosine U V x, x⟫_ℂ := by
   change 0 ≤ RCLike.re
-    ⟪spectraOperatorAbsoluteValue (spectraCanonicalIntertwiner U V)
+    ⟪ContinuousLinearMap.modulus (spectraCanonicalIntertwiner U V)
       (x : H), (x : H)⟫_ℂ
   have hpos := (ContinuousLinearMap.nonneg_iff_isPositive _).mp
-    (spectraOperatorAbsoluteValue_nonneg (spectraCanonicalIntertwiner U V))
+    (ContinuousLinearMap.modulus_nonneg (spectraCanonicalIntertwiner U V))
   exact hpos.re_inner_nonneg_left (x : H)
 
 /-- The norm of the source cosine is the norm of the target projection. -/
 theorem norm_sourceCosine_eq_norm_targetProjection (x : U) :
     ‖sourceCosine U V x‖ = ‖projection V (x : H)‖ := by
   let C : H →L[ℂ] H :=
-    spectraOperatorAbsoluteValue (spectraCanonicalIntertwiner U V)
+    ContinuousLinearMap.modulus (spectraCanonicalIntertwiner U V)
   let P : H →L[ℂ] H := projection U
   let Q : H →L[ℂ] H := projection V
   have hxP : P (x : H) = (x : H) := Submodule.starProjection_eq_self_iff.mpr x.property
   have hCsa : star C = C :=
-    (spectraOperatorAbsoluteValue_isSelfAdjoint
+    (ContinuousLinearMap.modulus_isSelfAdjoint
       (spectraCanonicalIntertwiner U V)).star_eq
   have hC2 : C * C = halmosCosineSq U V :=
     spectraCanonicalAbsoluteValue_sq_eq_halmosCosineSq U V

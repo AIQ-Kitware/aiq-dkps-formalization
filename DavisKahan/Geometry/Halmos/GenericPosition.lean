@@ -608,17 +608,9 @@ variable {Hc : Type u} [NormedAddCommGroup Hc] [InnerProductSpace 𝕜 Hc]
   [CompleteSpace Hc]
 variable (Uc Vc : Submodule 𝕜 Hc) [Uc.HasOrthogonalProjection]
   [Vc.HasOrthogonalProjection]
-variable [Algebra ℝ (genericLeftHalf Uc Vc →L[𝕜] genericLeftHalf Uc Vc)]
-  [IsScalarTower ℝ 𝕜 (genericLeftHalf Uc Vc →L[𝕜] genericLeftHalf Uc Vc)]
-  [ContinuousFunctionalCalculus ℝ (genericLeftHalf Uc Vc →L[𝕜] genericLeftHalf Uc Vc)
-    IsSelfAdjoint]
 
-/-! The polar decomposition of the cross block needs the continuous functional
-calculus on the `U`-half's operator algebra.  It is carried as a hypothesis, as
-in `ForTauCeti/Analysis/InnerProductSpace/OperatorModulus.lean`; typeclass
-inference discharges it at `𝕜 = ℂ` from Mathlib's C⋆-algebra structure and at
-`𝕜 = ℝ` from
-`ForTauCeti/Analysis/InnerProductSpace/RealContinuousFunctionalCalculus.lean`. -/
+/-! The generic left half is complete, so the local `RCLike` operator instances supply the
+real functional calculus needed by the polar decomposition of the cross block. -/
 
 /-- The polar factor of the cross block is isometric on the whole `Uc`-half: its
 initial space is all of `M`, because `B` is injective. -/
@@ -682,8 +674,7 @@ block is the adjoint of the cross block, and the `(1,1)` block gives
 
 This is the relation that later makes `|B|` a function of `A` on the polar
 side, over any `RCLike` field: the block identity and the polar step are both
-field-generic, the latter modulo the functional-calculus hypothesis carried
-below.
+field-generic, with the functional calculus selected locally on the complete generic half.
 -/
 
 /-- The cosine block is self-adjoint. -/
@@ -896,10 +887,6 @@ variable {Hc : Type u} [NormedAddCommGroup Hc] [InnerProductSpace 𝕜 Hc]
   [CompleteSpace Hc]
 variable (Uc Vc : Submodule 𝕜 Hc) [Uc.HasOrthogonalProjection]
   [Vc.HasOrthogonalProjection]
-variable [Algebra ℝ (genericLeftHalf Uc Vc →L[𝕜] genericLeftHalf Uc Vc)]
-  [IsScalarTower ℝ 𝕜 (genericLeftHalf Uc Vc →L[𝕜] genericLeftHalf Uc Vc)]
-  [ContinuousFunctionalCalculus ℝ (genericLeftHalf Uc Vc →L[𝕜] genericLeftHalf Uc Vc)
-    IsSelfAdjoint]
 
 /-- **The polar identity for the cross block**: `Φ |B| = B`.  This is what makes
 `Φ` usable in the transport step — everything about `B` is `Φ` applied to a

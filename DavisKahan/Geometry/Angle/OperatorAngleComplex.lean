@@ -9,12 +9,10 @@ import DavisKahan.BoundedOperator.Compat
 /-!
 # The complex operator angle calculus: honest first rungs
 
-The scalar-generic ladder in `Core/OperatorAngle.lean` is blocked on an
-`RCLike`-generic positive operator square root.  Per the route decision
-recorded in `docs/planning/davis-kahan-full-paper-goal.md`, this module
-specializes to `ℂ`, where the continuous-functional-calculus square root is
-available (`ForMathlib/Analysis/InnerProductSpace/OperatorAbsoluteValue.lean`),
-with a real-scalar bridge by complexification expected later.
+This module is the complex specialization of the operator-angle API.  The underlying
+positive operator square root is now the scalar-generic `ContinuousLinearMap.modulus` from
+`ForTauCeti`; the complex specialization remains because the surrounding angle API in this module
+is itself source-specific.
 
 * `sinAngleOperatorC U V = |P_U - P_V|`: the sine of the operator angle as
   the absolute value of the projector difference — the definition the

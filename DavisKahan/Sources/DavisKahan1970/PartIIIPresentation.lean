@@ -88,9 +88,9 @@ alias unbounded_sylvester_exteriorInterval_uiNorm_of_spectra :=
 alias unbounded_sylvester_intervalExterior_uiNorm_of_spectra :=
   DavisKahan.unbounded_sylvester_mem_and_gauge_le_of_spectra_intervalLeft_exteriorRight
 alias real_sinTheta_symmetric_of_restriction_spectra :=
-  TauCeti.SpectralOrder.Real.opNorm_starProjection_sub_le_of_restriction_spectra
+  TauCeti.SpectralOrder.opNorm_starProjection_sub_le_of_restriction_spectra
 alias real_upperFormBound_of_spectrum :=
-  TauCeti.SpectralOrder.Real.upperFormBoundOn_top_of_spectrum_subset_Iic
+  TauCeti.SpectralOrder.upperFormBoundOn_top_of_spectrum_subset_Iic
 alias bounded_sinAngleOperatorC_norm := DavisKahan.Angle.norm_sinAngleOperatorC
 alias bounded_directedSinAngleOperatorC_norm :=
   DavisKahan.Angle.norm_directedSinAngleOperatorC

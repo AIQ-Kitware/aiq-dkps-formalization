@@ -11,6 +11,10 @@ import ForTauCeti.Analysis.RCLike.ScalarTransportFunctionalCalculus
 import ForTauCeti.Analysis.InnerProductSpace.BorelCalculus.SpectralMultiplicityEquiv
 import DavisKahan.SpectralTheory.Real.SpectralMultiplicityClassification
 
+attribute [local instance 100] ContinuousLinearMap.realAlgebra
+  ContinuousLinearMap.realIsScalarTower ContinuousLinearMap.continuousFunctionalCalculusReal
+  ContinuousLinearMap.instStarOrderedRingRCLike
+
 /-!
 # Davis--Kahan 1970, Theorem 3.1, the realization half
 
@@ -26,10 +30,8 @@ The construction is owned upstream by `Geometry/Halmos/Realization.lean`; every
 statement here is grounded on it by `:=`, so there is a single source of truth
 and no geometry is redone.
 
-Everything is `RCLike`-generic, so the real case is an instantiation rather than
-a second theorem; it is recorded at the end as an `example`, which adds no
-declaration but fails loudly if the `𝕜 = ℝ` hypothesis block ever stops being
-inhabited.
+Everything is `RCLike`-generic, so the real case is an instantiation rather than a second
+theorem; it is recorded at the end as an `example` that checks the real specialization.
 -/
 
 open scoped InnerProductSpace
@@ -106,10 +108,6 @@ theorem theorem3_1_realization (d : HalmosAngleDatum 𝕜 E F) :
     d.nonempty_halmosSourceDefect_equiv_targetDefect⟩
 section OfAngles
 
-variable [Algebra ℝ (E →L[𝕜] E)] [IsScalarTower ℝ 𝕜 (E →L[𝕜] E)]
-  [ContinuousFunctionalCalculus ℝ (E →L[𝕜] E) IsSelfAdjoint]
-  [Algebra ℝ (F →L[𝕜] F)] [IsScalarTower ℝ 𝕜 (F →L[𝕜] F)]
-  [ContinuousFunctionalCalculus ℝ (F →L[𝕜] F) IsSelfAdjoint]
 
 /-- **Davis--Kahan 1970, Theorem 3.1, sentence (ii), in the printed shape: stated
 from the angle operators rather than from a packaged datum.**
@@ -217,14 +215,9 @@ end Realization
 /-! ## Theorem 3.1, sentence (ii), over a real Hilbert space
 
 `theorem3_1_realization_ofAngles` is `RCLike`-generic, so its real form is an
-instantiation and not a theorem.  It is recorded as an `example` rather than by
-name deliberately: it adds no declaration, and it fails loudly if the `𝕜 = ℝ`
-hypothesis block ever stops being inhabited.  That block is the only thing that
-could have made the real case cost something -- the wrapper needs
-`ContinuousFunctionalCalculus ℝ (Hⱼ →L[ℝ] Hⱼ) IsSelfAdjoint` on *both* spaces to
-form `cos Θⱼ` and `sin Θⱼ`, and instance search supplies it from
-`ContinuousLinearMap.instContinuousFunctionalCalculusRealIsSelfAdjoint`, in
-unrestricted dimension.  Two of the seven conjuncts are read off below: the
+instantiation rather than a separate theorem.  The example below checks that the local
+operator functional calculus supplies the two real angle calculi in unrestricted dimension.
+Two of the seven conjuncts are read off below: the
 angle-`π/2` space on the `P`-side, and the isometry between the two crossed
 defects that forces the two `π/2` multiplicities to agree. -/
 

@@ -98,11 +98,11 @@ theorem isSelfAdjoint_source_block_spectraDirectRotation
     (hacute : IsUniformlyAcute U V) :
     IsSelfAdjoint (projection U * spectraDirectRotation U V hacute * projection U) := by
   have hC : IsSelfAdjoint
-      (spectraOperatorAbsoluteValue (spectraCanonicalIntertwiner U V)) :=
+      (ContinuousLinearMap.modulus (spectraCanonicalIntertwiner U V)) :=
     ((ContinuousLinearMap.nonneg_iff_isPositive _).mp
-      (spectraOperatorAbsoluteValue_nonneg _)).isSelfAdjoint
+      (ContinuousLinearMap.modulus_nonneg _)).isSelfAdjoint
   have hcomm : Commute
-      (spectraOperatorAbsoluteValue (spectraCanonicalIntertwiner U V)) (projection U) :=
+      (ContinuousLinearMap.modulus (spectraCanonicalIntertwiner U V)) (projection U) :=
     spectraCanonicalAbsoluteValue_commute_projection U V
   rw [projection_mul_spectraDirectRotation_mul_projection U V hacute]
   rw [IsSelfAdjoint, star_mul, (isSelfAdjoint_starProjection U).star_eq, hC.star_eq]
@@ -114,11 +114,11 @@ theorem isSelfAdjoint_complement_block_spectraDirectRotation
     IsSelfAdjoint (complementaryProjection U * spectraDirectRotation U V hacute *
       complementaryProjection U) := by
   have hC : IsSelfAdjoint
-      (spectraOperatorAbsoluteValue (spectraCanonicalIntertwiner U V)) :=
+      (ContinuousLinearMap.modulus (spectraCanonicalIntertwiner U V)) :=
     ((ContinuousLinearMap.nonneg_iff_isPositive _).mp
-      (spectraOperatorAbsoluteValue_nonneg _)).isSelfAdjoint
+      (ContinuousLinearMap.modulus_nonneg _)).isSelfAdjoint
   have hcomm : Commute
-      (spectraOperatorAbsoluteValue (spectraCanonicalIntertwiner U V))
+      (ContinuousLinearMap.modulus (spectraCanonicalIntertwiner U V))
       (complementaryProjection U) := by
     have hcomp : complementaryProjection U = 1 - projection U :=
       Submodule.starProjection_orthogonal' U
@@ -454,7 +454,7 @@ theorem re_inner_intertwiner_eq_cosineSq (x : H) :
         + star (spectraCanonicalIntertwiner U V)
       = halmosCosineSq U V + halmosCosineSq U V := by
     rw [spectraCanonicalIntertwiner_add_star U V,
-      ← spectraOperatorAbsoluteValue_mul_self,
+      ← ContinuousLinearMap.modulus_mul_self_eq_star_mul_self,
       spectraCanonicalAbsoluteValue_sq_eq_halmosCosineSq]
   have h := congrArg (fun T : H →L[ℂ] H => RCLike.re ⟪T x, x⟫_ℂ) hSstar
   have hstar : RCLike.re ⟪star (spectraCanonicalIntertwiner U V) x, x⟫_ℂ

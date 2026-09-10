@@ -50,7 +50,7 @@ absolute value is insensitive to its sign. -/
 theorem corollary3_2_sinAngleOperator_symm :
     DavisKahanExt.sinAngleOperator V U = DavisKahanExt.sinAngleOperator U V := by
   rw [DavisKahanExt.sinAngleOperator, DavisKahanExt.sinAngleOperator,
-    ← DavisKahanExt.operatorAbsoluteValue_neg]
+    ← ContinuousLinearMap.modulus_neg]
   congr 1
   abel
 

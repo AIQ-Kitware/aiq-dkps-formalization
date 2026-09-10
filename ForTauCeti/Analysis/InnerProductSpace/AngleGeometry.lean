@@ -41,14 +41,19 @@ open Module (finrank)
 variable {𝕜 : Type*} [RCLike 𝕜]
 variable {E : Type*} [NormedAddCommGroup E] [InnerProductSpace 𝕜 E]
   [FiniteDimensional 𝕜 E]
-/-- The modulus `|A| = (A⋆A)^{1/2}` has the same singular values as `A`: both
-Gram operators coincide, `|A|⋆|A| = |A|² = A⋆A`.  This is the finite-dimensional
-`σ(|A|) = σ(A)` used to identify difference-of-projector singular values with the
-`sin Θ` operator's. -/
-theorem singularValues_operatorAbs (A : E →ₗ[𝕜] E) :
+section OperatorAbsSingularValues
+
+variable {F : Type*} [NormedAddCommGroup F] [InnerProductSpace 𝕜 F]
+  [FiniteDimensional 𝕜 F]
+
+/-- The modulus `|A| = (A⋆A)^{1/2}` has the same zero-padded singular-value sequence as
+`A`: both Gram operators coincide, `|A|⋆|A| = |A|² = A⋆A`. -/
+theorem singularValues_operatorAbs (A : E →ₗ[𝕜] F) :
     (TauCeti.operatorAbs A).singularValues = A.singularValues := by
   refine TauCeti.singularValues_eq_of_gram_eq ?_
   rw [(TauCeti.isPositive_operatorAbs A).adjoint_eq, TauCeti.operatorAbs_mul_self]
+
+end OperatorAbsSingularValues
 
 /-- The cosine cross-projection `P_V P_U`. -/
 @[expose]
