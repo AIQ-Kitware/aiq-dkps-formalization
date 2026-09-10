@@ -4,7 +4,7 @@
 
 **Census family:** `source-completion-census`  
 **Items:** 50  
-**Unique cited Lean declarations:** 1526
+**Unique cited Lean declarations:** 1527
 
 ## How to use this census
 
@@ -20,7 +20,8 @@ The `importance` field is an external-review priority, not a proof-status axis. 
 
 | value | items |
 | --- | ---: |
-| `compiled_exact` | 45 |
+| `compiled_exact` | 44 |
+| `compiled_general_infrastructure` | 1 |
 | `refuted_as_transcribed` | 1 |
 | `resolved_by_modern_development` | 1 |
 | `not_a_completion_obligation` | 3 |
@@ -57,7 +58,7 @@ The `importance` field is an external-review priority, not a proof-status axis. 
 | --- | --- | --- | --- | --- | --- |
 | S1-block-residual | technical | Section 1, equations (1.1)–(1.8) | compiled_exact | proved_in_build |  |
 | S1-ui-norms | technical | Section 1, equations (1.9)–(1.18) | compiled_exact | proved_in_build |  |
-| S2-sin-theta | headline | Section 2, sin theta theorem | compiled_exact | proved_in_build |  |
+| S2-sin-theta | headline | Section 2, sin theta theorem | compiled_general_infrastructure | proved_in_build |  |
 | S2-tan-theta | headline | Section 2, tan theta theorem | compiled_exact | proved_in_build |  |
 | S2-sin-two-theta | headline | Section 2, sin 2 theta theorem | compiled_exact | proved_in_build |  |
 | S2-tan-two-theta | headline | Section 2, tan 2 theta theorem | compiled_exact | proved_in_build |  |
@@ -228,9 +229,9 @@ THREE NEW REUSABLE DECLARATIONS underwrite it, each grounding the next by `:=`, 
 
 ### `S2-sin-theta` — Single-angle sine theorem
 
-**importance:** `headline`  **section:** 2  **source:** Section 2, sin theta theorem  **kind:** unnumbered_theorem  **status:** `compiled_exact`  **verification:** `proved_in_build`  **completion:** `accepted`
+**importance:** `headline`  **section:** 2  **source:** Section 2, sin theta theorem  **kind:** unnumbered_theorem  **status:** `compiled_general_infrastructure`  **verification:** `proved_in_build`  **completion:** `accepted`
 
-**Summary.** Interval/exterior spectral separation gives delta times the directed sine norm bounded by the residual norm for every source unitary-invariant norm.
+**Summary.** The factor-one sine-theta estimate appears in three checked statement boundaries: a finite interval/exterior form narrower than the later unbounded extension, a form-gap theorem with weaker operator-side hypotheses, and a where-defined theorem closest to the source scope and norm convention.
 
 **Lean declarations:**
 
@@ -269,36 +270,37 @@ THREE NEW REUSABLE DECLARATIONS underwrite it, each grounding the next by `:=`, 
 - `TauCeti.DavisKahan1970.sinTheta_unbounded_formGap_whereDefinedUIN_real`
 - `TauCeti.DavisKahan1970.SectionTwo.sinTheta`
 - `TauCeti.DavisKahan1970.sinTheta_unbounded_formGap_whereDefinedUIN_rclike`
+- `TauCeti.DavisKahan.ExactSinTheta.HasCommonDomain.maps_domain`
 
 **Curated source/Lean review:**
 
 *Setup*
-- A0 is the trial/compressed self-adjoint operator, Lambda1 is the complementary exact self-adjoint block, R is the residual, and Theta0 is the directed angle from the trial subspace to the exact subspace.
+- In the numerical-analysis notation, T = A + H is the perturbed full-space operator, A0 is the trial-coordinate self-adjoint operator, Lambda1 is the complementary exact block of T, R = T E0 - E0 A0 is the residual, and Theta0 is the directed angle from the trial subspace to the desired exact subspace.
 
 *Hypotheses*
-- There are beta <= alpha and delta > 0 such that spec(A0) is contained in [beta, alpha] and spec(Lambda1) avoids (beta-delta, alpha+delta), or the same interval/exterior condition with A0 and Lambda1 interchanged.
-- The separating interval may be half-infinite: the source states that the spectral intervals in the gap hypotheses may be half-infinite and the remaining spectra unbounded, so the ordered semibounded configurations are part of the printed hypothesis and not a later generalization.
-- The norm is an arbitrary normalized symmetric operator ideal norm in the source sense. If either displayed norm does not exist, the source declares the result vacuous; when both exist, the numerical inequality applies.
+- The Section 2 theorem is stated with beta <= alpha and delta > 0: spec(A0) lies in [beta, alpha] while spec(Lambda1) avoids (beta-delta, alpha+delta), or the same interval/exterior condition with A0 and Lambda1 interchanged.
+- The Appendix to Section 6 later extends the same sine-theta estimate to half-infinite separation. In the infinite-interval case it assumes (A+H)E0 and E0A0 have a common dense domain on which the residual is bounded, then extends R continuously.
+- The norm is an arbitrary normalized unitary-invariant norm in the source sense. If either displayed norm does not exist, the source declares the result vacuous; when both exist, the numerical inequality applies.
 
 *Conclusions*
 - delta * ||sin Theta0|| <= ||R||.
 
 *Scope*
-- The paper states the result in finite and infinite dimension, over real or complex Hilbert spaces.
-- The unbounded self-adjoint extension is included when the domain condition holds and the residual/norm expression is bounded and meaningful.
+- The paper works on separable real or complex Hilbert spaces and treats finite- and infinite-dimensional settings.
+- The sine-theta estimate is stated for the initial interval/exterior case and later extended to the pertinent unbounded half-infinite cases under the common-domain and bounded-residual conditions.
 
 | source clause | Lean realization | status |
 | --- | --- | --- |
-| The scalar field is real or complex. | The ledger-selected theorem quantifies over 𝕜 with [RCLike 𝕜], so one declaration carries the source real-or-complex scalar scope. Fixed-field declarations are API specializations rather than separate fidelity witnesses. | claimed_exact |
-| A, A0, and Lambda1 are self-adjoint; E0 is the trial coordinate map and F0,F1 are orthogonal exact-space coordinates. | A, A₀, Λ₁, E₀, F₀, and F₁ are explicit arguments. Self-adjointness is literal; IsTrialResidual and IsExactSpectralDecomposition are expanded immediately in the local semantic dictionary. | claimed_exact |
-| R = A E0 - E0 A0 on the operator domain, while F1 intertwines Lambda1 with A. | These clauses are exactly the residualEquation and intertwines components exposed by isTrialResidual_iff and isExactSpectralDecomposition_iff, together with their domain-transport hypotheses. | claimed_exact |
-| sin Theta0 is the directed sine block from the trial subspace to the exact subspace. | The canonical source-exact conclusion names the directed sine block directly as `(I - F₀ F₀†) E₀`; no auxiliary membership conclusion is bundled into the result. | claimed_exact |
-| For beta <= alpha and delta > 0, one spectrum lies in [beta,alpha] and the other avoids (beta-delta,alpha+delta), with the roles interchangeable. | hβα and hδ are explicit, and hspectral is literally the disjunction of the two real-spectrum inclusions. | claimed_exact |
-| The norm is arbitrary, with the paper-wide convention that the result is vacuous when a displayed norm does not exist. | `N : NormalizedSymmetricOperatorIdealFamily` appears directly and there is no `hR` binder. After the colon the theorem itself reads `N.Mem sinTheta₀ → N.Mem R → δ * N.gaugeReal sinTheta₀ ≤ N.gaugeReal R`. The two membership arrows are therefore part of the conclusion implementing the source vacuity convention, not caller hypotheses. | claimed_exact |
-| delta \|\|sin Theta0\|\| <= \|\|R\|\|. | The numerical comparison appears literally in the canonical theorem type as `δ * N.gaugeReal sinTheta₀ ≤ N.gaugeReal R`, preceded only by the two norm-existence implications `N.Mem sinTheta₀ → N.Mem R →`. No opaque comparison predicate has to be unfolded to audit the claim. | claimed_exact |
-| Infinite-dimensional and unbounded self-adjoint scope. | There is no FiniteDimensional hypothesis; A, A₀, and Λ₁ are `LinearPMap` values and the two expanded setup predicates carry the required domain conditions. | claimed_exact |
+| The scalar field is real or complex. | The selected where-defined theorem quantifies over 𝕜 with [RCLike 𝕜] and assumes a separable ambient space, so one declaration carries the source real-or-complex scalar scope. | claimed_exact |
+| T = A + H is the perturbed full-space operator; A0 and Lambda1 are self-adjoint trial and complementary exact blocks; E0 is the trial coordinate map and F0,F1 are orthogonal exact-space coordinates. | The Lean parameter named A denotes the full-space operator T. A₀, Λ₁, E₀, F₀, and F₁ are explicit arguments. The source reference operator A and perturbation H are not separately needed by this residual-form theorem. | claimed_exact |
+| R = T E0 - E0 A0 on the relevant domain. For the later half-infinite unbounded extension, (T E0) and (E0 A0) have a common dense domain. | IsTrialResidual contains the residual identity and requires only the forward inclusion E0(dom A0) subset dom T. HasCommonDomain records the source equality of pulled-back domains and proves that it implies this forward inclusion. The selected theorem therefore has a weaker domain hypothesis than the source unbounded extension. | scope_companion |
+| The source positive sin Theta0 is the directed sine-angle operator; its rectangular S0 representative has the same singular values and every unitary-invariant norm. | The selected theorem inlines the rectangular map S = (I - F₀ F₀†) E₀. Formalization 1 exposes the same map through hSinTheta0. Davis--Kahan identify their rectangular S0 as sin Theta0 followed by an isometry, establishing equality of singular values and unitary-invariant norms. | claimed_exact |
+| The Section 2 statement uses the finite interval/exterior gap in either orientation; the later unbounded extension also allows half-infinite spectral separation. | hgap : FormBoundedSylvesterGap A₀ Λ₁ δ includes the finite interval/exterior case and both ordered form-semibounded cases. The source spectral half-line assumptions imply the ordered form bounds, so the selected Lean hypothesis is weaker on those branches. | scope_companion |
+| The norm is arbitrary, with the paper-wide convention that the result is vacuous when a displayed norm does not exist. | `N : NormalizedSymmetricOperatorIdealFamily` appears directly and there is no `hR` binder. After the colon the theorem reads `N.Mem S → N.Mem R → δ * N.gaugeReal S ≤ N.gaugeReal R`, implementing the source convention that the numerical comparison is asserted where both displayed norms exist. | claimed_exact |
+| delta \|\|sin Theta0\|\| <= \|\|R\|\|. | The numerical comparison is `δ * N.gaugeReal S ≤ N.gaugeReal R` after the two norm-existence implications. The registered sine-representative correspondence identifies `N.gaugeReal S` with the source `N(sin Theta0)`. | claimed_exact |
+| Separable real-or-complex Hilbert-space scope, including the stated unbounded cases under their domain and boundedness conditions. | The selected theorem has an explicit SeparableSpace E assumption and uses LinearPMap values for A, A₀, and Λ₁. Its forward-domain hypothesis is weaker than the source common-domain equality used in the half-infinite unbounded extension. | scope_companion |
 
-**Notes.** The definitive source form is Theorem 6.1; real, complex, bounded, unbounded, and arbitrary-representative forms are present.
+**Notes.** CURRENT STATEMENT COMPARISON. The Section 2 sine-theta development has three relevant checked boundaries. `sinTheta_unbounded_intervalExterior_characterizedWitness_rclike` covers the initial finite interval/exterior gap and does not cover the later half-infinite extension. `sinTheta_unbounded_formGap_symmetricNorming_rclike` has weaker operator-side hypotheses: it drops ambient separability, uses forward domain inclusion rather than the source common-domain equality in the unbounded extension, and uses form-semibounded ordered gaps implied by the source spectral half-line assumptions. `sinTheta_unbounded_formGap_whereDefinedUIN_rclike` restores ambient separability and the source where-defined norm convention, while retaining the forward-domain and form-gap generalizations. It is the closest current statement, but its hypothesis boundary is not literal on those two axes. The generalized sine-theta theorem of Section 6 is a separate source result and is tracked separately.
 
 **STATUS LOWERED 2026-08-07 (Claude Opus 5): `compiled_exact` -> `compiled_specialization`, on scalar scope, not on any doubt about the mathematics.**  Every declaration on this row is stated for `InnerProductSpace ℂ`.  Standing assumption 1 of the transcription says the space is real OR complex and assumption 4 says the headline theorems apply in infinite as well as finite dimension, so the compiled statement is a specialization of the printed one.  `compiled_specialization` is defined as exactly that: 'a useful compiled specialization exists, but not the full source scope'.  The remedy is a real wrapper through the complexification route, not a reproof; see blocker `real-scalar-infinite-dimensional-scope`.
 
@@ -314,7 +316,7 @@ SOURCE-EXACT FAÇADES REGISTERED 2026-09-05. Canonical evidence for this row is 
 
 SIGNATURE RETARGET 2026-09-08. Probes 17--43 established that unconditional `ENNReal` Fan dominance adds Ky-Fan membership transfer that Davis--Kahan do not print, while the paper explicitly declares results vacuous when relevant norms fail to exist. The canonical source-exact complex and real façades quantify over `NormalizedSymmetricOperatorIdealFamily`, remove the caller-visible residual-membership premise, and do not conclude membership of the sine block. READABILITY FOLLOW-UP 2026-09-08: the theorem types now expose the partial-domain semantics directly as `N.Mem sinTheta₀ → N.Mem R → δ * N.gaugeReal sinTheta₀ ≤ N.gaugeReal R`; `ScaledGaugeLEWhereDefined` remains only a proof-side helper. The row remains `compiled_exact` / `proved_in_build` only after the prescribed Lean compile and statement-pin refresh accept the changed signatures.
 
-**Next action.** No hostile-review hole is currently recorded for this source passage. Preserve the where-defined/vacuous norm boundary and re-audit if the source-facing theorem type changes.
+**Next action.** For a literal source boundary, add a thin theorem that combines the source domain and spectral-gap hypotheses with the where-defined norm convention. Keep the broader operator-side theorem as a generalization and the finite interval/exterior form as a specialization.
 
 ### `S2-tan-theta` — Single-angle tangent theorem
 

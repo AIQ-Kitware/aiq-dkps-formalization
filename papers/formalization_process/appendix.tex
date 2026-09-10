@@ -62,16 +62,12 @@ an independent expert reading of the theorem.
 \section{Davis--Kahan sine-theta notation and Formalization 1}
 \label{app:formalization1}
 
-Davis--Kahan use $A$ for the reference operator and $A+H$ for the
-perturbed operator.  Under a population/sample interpretation, these are the
-population and sample operators.  Their numerical-analysis discussion treats
-$A+H$ as the given full-space operator, while $A_0$ acts on the smaller trial
-coordinate space.  As in the main text, write $T:=A+H$ for the full-space
-operator.  In the Lean signatures, the parameter named \texttt{A} denotes this
-$T$.
+The sine-theta theorem is naturally expressed with coordinate maps.  Davis and
+Kahan write the reference operator as $A$ and the perturbed full-space operator
+as $A+H$.  We write $T=A+H$ for the latter in the manuscript.  The Lean
+signatures use the parameter name \texttt{A} for this operator $T$.
 
-The sine-theta theorem is naturally expressed with coordinate maps.  The
-trial-coordinate space carries a possibly unbounded self-adjoint operator
+The trial-coordinate space carries a possibly unbounded self-adjoint operator
 $A_0$, and the isometry $E_0$ embeds those coordinates into the ambient Hilbert
 space.  Its range is the trial subspace.  The bounded residual $R$ extends
 \[
@@ -79,18 +75,33 @@ space.  Its range is the trial subspace.  The bounded residual $R$ extends
 \]
 from the domain of $A_0$.  The desired exact subspace is represented by an
 isometry $F_0$; $F_1$ represents its orthogonal complement, and the
-self-adjoint operator $\Lambda_1$ is the complementary spectral block of $T$.
-The exact-coordinate hypotheses say that the ranges of $F_0$ and $F_1$ are
+self-adjoint operator $\Lambda_1$ is the complementary spectral block.  The
+exact-coordinate hypotheses say that the ranges of $F_0$ and $F_1$ are
 orthogonal and complete and that $F_1$ intertwines $\Lambda_1$ with $T$.
 
-The directed sine operator
+The source's positive operator $\sin\Theta_0$ acts on the trial-coordinate
+space.  The Lean signatures use the rectangular map
 \[
-  \sin\Theta_0=(I-F_0F_0^*)E_0
+  S=(I-F_0F_0^*)E_0,
 \]
-measures the component of a trial vector orthogonal to the desired exact
-subspace.  In finite dimensions its singular values are the sines of the
-principal angles between the two subspaces.  Davis--Kahan's estimate bounds
-this operator by the residual as in \cref{eq:sin-theta}.
+which sends trial coordinates into the ambient space and extracts the component
+orthogonal to the desired exact subspace.  Davis--Kahan explicitly observe that
+their corresponding rectangular operator is $\sin\Theta_0$ followed by an
+isometry.  It therefore has the same singular values
+$\sin\theta_1,\sin\theta_2,\ldots$ and the same value under every unitarily
+invariant norm:
+\[
+  N(S)=N(\sin\Theta_0).
+\]
+Thus \cref{eq:sin-theta} can be written using either operator.
+
+Formalization~1 makes this representation visible by introducing a variable
+named \texttt{sinTheta0} and the hypothesis \texttt{hSinTheta0}.  The hypothesis
+defines that variable to be the rectangular map $S$.  The source's positive
+$\sin\Theta_0$ and this Lean map have different codomains; equality of their
+unitarily invariant norms follows from their common singular values.  This is
+the identification needed to read \texttt{N.gauge sinTheta0} as the source term
+$N(\sin\Theta_0)$.
 
 Formalization~1 is already scalar-generic over real and complex Hilbert spaces
 and uses potentially unbounded operators.  Its defect is the explicit
@@ -121,22 +132,21 @@ Lean expression & Mathematical role \\
 \texttt{RCLike} $\mathbb K$
   & The scalar field may be real or complex. \\
 \texttt{A}, \texttt{A0}, $\Lambda_1$ as partial linear maps
-  & In Lean, \texttt{A} is the full-space operator $T$ (Davis--Kahan's $A+H$
-    in the numerical-analysis formulation); \texttt{A0} is the trial operator,
-    and $\Lambda_1$ is the complementary exact block.  Each may be unbounded. \\
+  & The perturbed full-space operator $T$, trial operator, and complementary
+    exact self-adjoint block; each may be unbounded. \\
 \texttt{E0}, \texttt{F0}, \texttt{F1}
   & Bounded coordinate maps for the trial subspace, desired exact subspace,
     and its orthogonal complement. \\
 \texttt{IsTrialResidual A A0 E0 R}
-  & With Lean's \texttt{A} denoting $T$, $E_0$ is isometric, maps
-    $\operatorname{dom}A_0$ into $\operatorname{dom}T$, and
-    $R=TE_0-E_0A_0$ on that domain. \\
+  & $E_0$ is isometric, maps $\operatorname{dom}A_0$ into
+    $\operatorname{dom}T$, and $R=TE_0-E_0A_0$ on that domain. \\
 \texttt{IsExactSpectralDecomposition A Lambda1 F0 F1}
   & $F_0,F_1$ are orthogonal isometric coordinates forming a complete
-    decomposition, and $F_1\Lambda_1=TF_1$ on
-    $\operatorname{dom}\Lambda_1$. \\
+    decomposition, and $F_1\Lambda_1=TF_1$ on $\operatorname{dom}\Lambda_1$. \\
 \texttt{hSinTheta0}
-  & Identifies the displayed angle operator with $(I-F_0F_0^*)E_0$. \\
+  & Defines the displayed rectangular sine representative as
+    $S=(I-F_0F_0^*)E_0$; $S$ has the same singular values and unitarily
+    invariant norms as the source's positive $\sin\Theta_0$. \\
 \texttt{beta alpha delta}, \texttt{hspectral}
   & The finite interval/exterior gap.  This is the historical restriction:
     it does not express the two half-infinite source configurations. \\
@@ -150,26 +160,35 @@ Lean expression & Mathematical role \\
 \section{Reading Formalization 2}
 \label{app:formalization2}
 
-Formalization~2 keeps the same trial/exact decomposition but changes the two
-interfaces that matter for the worked comparison.  First,
-\texttt{FormBoundedSylvesterGap A0 Lambda1 delta} includes the finite
-interval/exterior case and both ordered semibounded cases.  In the ordered
-cases one operator is semibounded above by $c$ and the other semibounded below
-by $c+\delta$, in either orientation.  The source states these cases through
-spectral half-lines; for self-adjoint operators the source spectral assumptions
-imply the form bounds used by the Lean theorem.  Thus this formal gap predicate
-is at least as permissive as the source hypothesis.
+Formalization~2 uses the same trial and exact coordinate maps but weakens several
+operator-side hypotheses.  It places no separability assumption on the ambient
+Hilbert space.  Its \texttt{IsTrialResidual} predicate uses forward domain
+inclusion rather than the source common-domain equality.  Its
+\texttt{FormBoundedSylvesterGap} predicate includes the finite interval/exterior
+case and both ordered semibounded cases; in the ordered cases the source's
+spectral half-line hypotheses imply the form semibounds used in Lean.
 
-Second, the norm object records a partial domain of definition.  The conclusion
-is written as two implications,
+The norm parameter is a \texttt{SymmetricNormingFunction}.  The theorem assumes
+\texttt{hR : N.Mem R} and concludes both
 \[
-  N(\sin\Theta_0)\ \text{defined},\qquad N(R)\ \text{defined}
-  \quad\Longrightarrow\quad
-  \delta N(\sin\Theta_0)\le N(R),
+  N.\mathrm{Mem}(S)
+  \qquad\text{and}\qquad
+  \delta N(S)\le N(R).
 \]
-rather than using an ideal-membership transfer as part of the theorem boundary.
+The first conclusion transfers membership in the norm ideal from the residual
+to the sine representative.  Davis--Kahan state the numerical comparison under
+their convention that a displayed norm result is vacuous when a norm does not
+exist.  This Lean norm interface instead adds a residual-membership premise and
+a sine-representative membership conclusion.  The claim that Formalization~2 is
+stronger concerns its operator-side hypotheses.
 
-\Cref{tab:formalization2-glossary} translates the rest of the current signature.
+The expression inside \texttt{N.gauge} is exactly the map $S$ defined above.
+Formalization~1 exposes the same map through \texttt{hSinTheta0};
+Formalization~2 inlines it.  Since $S$ and the source's positive
+$\sin\Theta_0$ have the same singular values, \texttt{N.gauge S} is the norm
+appearing in the source inequality.
+
+\Cref{tab:formalization2-glossary} translates the signature.
 
 \begin{table}[H]
 \centering
@@ -182,31 +201,74 @@ Lean expression & Mathematical role \\
 \midrule
 \texttt{mathbbK} with \texttt{RCLike}
   & The scalar field is real or complex. \\
-\texttt{SeparableSpace E}
-  & The ambient Hilbert space is separable, as in the source setup. \\
-\texttt{N : NormalizedSymmetric\-OperatorIdeal\-Family}
-  & The normalized unitarily invariant norm object, including the set of
-    operators on which its gauge is defined. \\
+\texttt{N : SymmetricNormingFunction}
+  & A symmetric norming function and its associated operator-ideal gauge. \\
 \texttt{A}, \texttt{A0}, $\Lambda_1$ as partial linear maps
-  & The possibly unbounded ambient, trial, and complementary exact
-    self-adjoint operators. \\
+  & The possibly unbounded perturbed full-space operator $T$, trial operator,
+    and complementary exact block. \\
 \texttt{E0}, \texttt{F0}, \texttt{F1}, \texttt{R}
   & The trial coordinate map, desired/complementary exact coordinates, and
     bounded residual. \\
 \texttt{htrial : IsTrialResidual A A0 E0 R}
   & $E_0$ is isometric; $E_0(\operatorname{dom}A_0)$ lies in
-    $\operatorname{dom}A$; and $R=AE_0-E_0A_0$ on
+    $\operatorname{dom}T$; and $R=TE_0-E_0A_0$ on
     $\operatorname{dom}A_0$. \\
 \texttt{hexact : IsExactSpectralDecomposition ...}
   & The exact subspace and complement are orthogonal and complete, and the
-    complement intertwines $\Lambda_1$ with $A$. \\
+    complement intertwines $\Lambda_1$ with $T$. \\
 \texttt{hgap : FormBoundedSylvesterGap A0 Lambda1 delta}
   & The full gap family: finite interval/exterior or either ordered
     half-infinite configuration. \\
+\texttt{hR : N.Mem R}
+  & The residual belongs to the domain of the norm gauge. \\
+\texttt{N.Mem ((I - F0 F0*) E0)}
+  & The theorem concludes that the sine representative $S$ also belongs to
+    the gauge domain. \\
+\texttt{delta * N.gauge (...) <= N.gauge R}
+  & $\delta N(S)\le N(R)$; since $N(S)=N(\sin\Theta_0)$, this is the
+    source sine-angle inequality. \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+\section{Reading Formalization 3}
+\label{app:formalization3}
+
+Formalization~3 restores the separable ambient scope stated by Davis--Kahan and
+uses a norm object with an explicit domain of definition.  Its conclusion is
+written as two implications,
+\[
+  N(S)\ \text{defined},\qquad N(R)\ \text{defined}
+  \quad\Longrightarrow\quad
+  \delta N(S)\le N(R).
+\]
+The Lean term \texttt{N.gaugeReal S} is the real-valued gauge of the rectangular
+operator $S$ on this domain.  Because unitarily invariant norms depend on the
+singular values and $S$ has the same singular values as the source's positive
+$\sin\Theta_0$, this term corresponds to $N(\sin\Theta_0)$ in Davis--Kahan's
+inequality.
+
+\begin{table}[H]
+\centering
+\small
+\caption{Reader's guide to the norm and scope changes in Formalization~3.}
+\label{tab:formalization3-glossary}
+\begin{tabularx}{\linewidth}{@{}>{\raggedright\arraybackslash}p{0.42\linewidth}>{\raggedright\arraybackslash}X@{}}
+\toprule
+Lean expression & Mathematical role \\
+\midrule
+\texttt{SeparableSpace E}
+  & The perturbed full-space Hilbert space is separable, as in the source setup. \\
+\texttt{N : NormalizedSymmetric\-OperatorIdeal\-Family}
+  & A normalized unitarily invariant norm object together with the set of
+    operators on which its gauge is defined. \\
 \texttt{N.Mem ((I - F0 F0*) E0)} and \texttt{N.Mem R}
-  & The two norms displayed in the inequality are defined. \\
+  & The two gauges in the displayed inequality are defined.  These are
+    implications after the colon rather than binders required to invoke the theorem. \\
+\texttt{N.gaugeReal ((I - F0 F0*) E0)}
+  & $N(S)=N(\sin\Theta_0)$, where $S$ is the rectangular representative above. \\
 \texttt{delta * N.gaugeReal (...) <= N.gaugeReal R}
-  & $\delta N(\sin\Theta_0)\le N(R)$. \\
+  & The source numerical comparison $\delta N(\sin\Theta_0)\le N(R)$. \\
 \bottomrule
 \end{tabularx}
 \end{table}
@@ -214,16 +276,15 @@ Lean expression & Mathematical role \\
 \paragraph{The common-domain condition.}
 Davis--Kahan's unbounded discussion states the trial-domain condition as
 \[
-  \{x:E_0x\in\operatorname{dom}A\}=\operatorname{dom}A_0.
+  \{x:E_0x\in\operatorname{dom}T\}=\operatorname{dom}A_0.
 \]
-The current theorem's \texttt{IsTrialResidual} predicate uses only the forward
+Formalization~3's \texttt{IsTrialResidual} predicate uses only the forward
 inclusion together with the residual identity on $\operatorname{dom}A_0$.
 The repository's \texttt{HasCommonDomain} predicate records the source equality
 and proves that it implies this forward inclusion.  Consequently the displayed
 Lean theorem is more general on this axis: every source instance satisfies its
-domain hypothesis, but the theorem also applies to some inputs outside the
-literal source formulation.  This is useful as an API generalization and is not
-a loss of source coverage.
+domain hypothesis, and the theorem also applies to inputs satisfying only the
+forward inclusion.
 
 \paragraph{Norm representation.}
 The norm record contains a symmetric ideal gauge, rank-one normalization, and a
