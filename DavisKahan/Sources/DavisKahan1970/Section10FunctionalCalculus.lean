@@ -114,7 +114,7 @@ theorem subtypeL_comp_compressOperator_of_invariant
 
 /-- **The gap step function of a reduced self-adjoint operator is its reducing projection.**
 
-This is `TauCeti.SpectralGap.cfc_eq_starProjection_of_blockGap_complex` presented in the paper's
+This is `TauCeti.SpectralGap.cfc_eq_starProjection_of_blockGap` presented in the paper's
 block vocabulary: `U` reduces `A`, the two blocks are the compressions `A₀` and `A₁`, and
 their spectra are separated by the gap `(α, α + δ)`. -/
 theorem cfc_gapStep_eq_starProjection_complex
@@ -129,7 +129,7 @@ theorem cfc_gapStep_eq_starProjection_complex
   have hAred : A.Reduces U :=
     DavisKahan.reduces_orthogonalComplement
       (ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mp hA) hAU
-  exact TauCeti.SpectralGap.cfc_eq_starProjection_of_blockGap_complex hA
+  exact TauCeti.SpectralGap.cfc_eq_starProjection_of_blockGap hA
     (subtypeL_comp_compressOperator_of_invariant A U hAU)
     (subtypeL_comp_compressOperator_of_invariant A Uᗮ hAred.2)
     hδ hA0spec hA1spec hf1 hf0
@@ -294,7 +294,7 @@ theorem Question10_4_directed_functionalCalculusResidual_complex
 Davis and Kahan work on a real *or* complex Hilbert space, and the `tan 2θ` estimates these
 identities feed into already have real endpoints
 (`tanTwoTheta_ambient_bounded_spectralGap_symmetricNorming_real` and the directed sibling).  The same five
-claims over `ℝ`, on `TauCeti.SpectralGap.cfc_eq_starProjection_of_blockGap_real`.
+claims over `ℝ`, on `TauCeti.SpectralGap.cfc_eq_starProjection_of_blockGap`.
 
 The ambient identity is stated as `Q − P` directly rather than through
 `projectorDifference`, which is a complex-only definition; the norm form then reads
@@ -319,7 +319,7 @@ theorem cfc_gapStep_eq_starProjection_real
   have hAred : A.Reduces U :=
     DavisKahan.reduces_orthogonalComplement
       (ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mp hA) hAU
-  exact TauCeti.SpectralGap.cfc_eq_starProjection_of_blockGap_real hA
+  exact TauCeti.SpectralGap.cfc_eq_starProjection_of_blockGap hA
     (subtypeL_comp_compressOperator_of_invariant A U hAU)
     (subtypeL_comp_compressOperator_of_invariant A Uᗮ hAred.2)
     hδ hA0spec hA1spec hf1 hf0

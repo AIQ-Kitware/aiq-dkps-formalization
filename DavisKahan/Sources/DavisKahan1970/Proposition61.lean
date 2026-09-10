@@ -45,12 +45,11 @@ why the record existed.
 Over `ℂ` the conclusion is the paper's literal object,
 `sinAngleOperatorC U V = cfc Real.sin (angleOperatorC U V)`.
 
-Over `ℝ` there is no continuous functional calculus in this development, and
-building one would be the wrong response: a unitarily invariant norm sees an
-operator only through its complete singular-value sequence.  The real conclusion
-is therefore stated on the **projector difference** `P_V − P_U`, whose
-approximation numbers are the sines of the principal angles.  That is not a
-weaker statement, and it is not a different one:
+The real conclusion is stated on the **projector difference** `P_V − P_U`, whose
+approximation numbers are the sines of the principal angles.  The development now has the
+real continuous functional calculus uniformly over `RCLike`, but this theorem does not need
+to choose a second angle-operator presentation: a unitarily invariant norm sees the same
+singular-value sequence.  The statement is therefore not weaker:
 `sinAngleOperatorC` is by definition `|P_U − P_V|`, so `proposition6_1_projectorDifference_complex`
 below states the *same* conclusion over `ℂ`, and the complex and real surfaces
 are visibly one theorem.

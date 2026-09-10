@@ -99,7 +99,7 @@ theorem acute_directRotation_maps_subspace (hacute : TauCeti.IsAcute U V) :
 positive Halmos cosine `|S| P_U`. -/
 theorem acute_directRotation_diagonalBlock (hacute : TauCeti.IsAcute U V) :
     U.starProjection * acute_directRotation U V * U.starProjection =
-      spectraOperatorAbsoluteValue (spectraCanonicalIntertwiner U V) * U.starProjection :=
+      ContinuousLinearMap.modulus (spectraCanonicalIntertwiner U V) * U.starProjection :=
   projection_mul_spectraCanonicalPolarFactor_mul_projection U V
     (TauCeti.isAcute_iff_inf_orthogonal_eq_bot.mp hacute).1
     (TauCeti.isAcute_iff_inf_orthogonal_eq_bot.mp hacute).2
@@ -107,7 +107,7 @@ theorem acute_directRotation_diagonalBlock (hacute : TauCeti.IsAcute U V) :
 /-- The complementary diagonal block of the direct rotation of an acute pair. -/
 theorem acute_directRotation_complementaryDiagonalBlock (hacute : TauCeti.IsAcute U V) :
     Uᗮ.starProjection * acute_directRotation U V * Uᗮ.starProjection =
-      spectraOperatorAbsoluteValue (spectraCanonicalIntertwiner U V) * Uᗮ.starProjection :=
+      ContinuousLinearMap.modulus (spectraCanonicalIntertwiner U V) * Uᗮ.starProjection :=
   complementaryProjection_mul_spectraCanonicalPolarFactor_mul_complementaryProjection U V
     (TauCeti.isAcute_iff_inf_orthogonal_eq_bot.mp hacute).1
     (TauCeti.isAcute_iff_inf_orthogonal_eq_bot.mp hacute).2

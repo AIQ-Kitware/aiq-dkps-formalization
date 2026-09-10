@@ -145,13 +145,13 @@ theorem directRotation_displacementSquare_eq (U V : Submodule ℂ H)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] (hacute : IsUniformlyAcute U V) :
     (1 - star (spectraDirectRotation U V hacute)) *
         (1 - spectraDirectRotation U V hacute) =
-      2 - (2 : ℂ) • spectraOperatorAbsoluteValue (spectraCanonicalIntertwiner U V) := by
+      2 - (2 : ℂ) • ContinuousLinearMap.modulus (spectraCanonicalIntertwiner U V) := by
   have h1 : star (spectraDirectRotation U V hacute) *
       spectraDirectRotation U V hacute = 1 :=
     star_spectraDirectRotation_mul_self U V hacute
   have h2 : spectraDirectRotation U V hacute +
       star (spectraDirectRotation U V hacute) =
-      (2 : ℂ) • spectraOperatorAbsoluteValue (spectraCanonicalIntertwiner U V) :=
+      (2 : ℂ) • ContinuousLinearMap.modulus (spectraCanonicalIntertwiner U V) :=
     spectraDirectRotation_add_star_eq_two_smul_absoluteValue U V hacute
   have hexp : (1 - star (spectraDirectRotation U V hacute)) *
       (1 - spectraDirectRotation U V hacute) =
@@ -174,7 +174,7 @@ theorem diagonalPart_directRotation_displacementSquare (U V : Submodule ℂ H)
       (1 - star (spectraDirectRotation U V hacute)) *
         (1 - spectraDirectRotation U V hacute) := by
   set C : H →L[ℂ] H :=
-    spectraOperatorAbsoluteValue (spectraCanonicalIntertwiner U V) with hC
+    ContinuousLinearMap.modulus (spectraCanonicalIntertwiner U V) with hC
   set A : H →L[ℂ] H := (1 - star (spectraDirectRotation U V hacute)) *
     (1 - spectraDirectRotation U V hacute) with hA
   have hAeq : A = 2 - (2 : ℂ) • C := directRotation_displacementSquare_eq U V hacute
@@ -203,7 +203,7 @@ theorem nonacuteDirectRotation_displacementSquare_eq (U V : Submodule ℂ H)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
     (J : halmosSourceDefect U V ≃ₗᵢ[ℂ] halmosTargetDefect U V) :
     (1 - star (nonacuteDirectRotation U V J)) * (1 - nonacuteDirectRotation U V J) =
-      2 - (2 : ℂ) • spectraOperatorAbsoluteValue (spectraCanonicalIntertwiner U V) := by
+      2 - (2 : ℂ) • ContinuousLinearMap.modulus (spectraCanonicalIntertwiner U V) := by
   have hunit := star_nonacuteDirectRotation_mul_self U V J
   have hsum := nonacuteDirectRotation_add_star_eq_two_absoluteValue U V J
   have hexp : (1 - star (nonacuteDirectRotation U V J)) *
@@ -223,7 +223,7 @@ theorem diagonalPart_nonacuteDirectRotation_displacementSquare_complex (U V : Su
       (1 - star (nonacuteDirectRotation U V J)) *
         (1 - nonacuteDirectRotation U V J) := by
   set C : H →L[ℂ] H :=
-    spectraOperatorAbsoluteValue (spectraCanonicalIntertwiner U V)
+    ContinuousLinearMap.modulus (spectraCanonicalIntertwiner U V)
   set A : H →L[ℂ] H := (1 - star (nonacuteDirectRotation U V J)) *
     (1 - nonacuteDirectRotation U V J)
   have hAeq : A = 2 - (2 : ℂ) • C := nonacuteDirectRotation_displacementSquare_eq U V J

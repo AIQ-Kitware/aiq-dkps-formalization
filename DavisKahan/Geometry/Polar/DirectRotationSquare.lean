@@ -357,10 +357,10 @@ theorem spectraCanonicalIntertwiner_eq_cfc
   exact h3.symm
 
 /-- The Spectra modulus of the acute midpoint is `cfc` of the cosine gauge. -/
-theorem spectraOperatorAbsoluteValue_intertwiner_eq_cfc
+theorem modulus_intertwiner_eq_cfc
     (U V : Submodule ℂ H)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] :
-    spectraOperatorAbsoluteValue (spectraCanonicalIntertwiner U V) =
+    ContinuousLinearMap.modulus (spectraCanonicalIntertwiner U V) =
       cfc cosineGauge (spectraReflectionProduct U V) := by
   have hnormal : IsStarNormal (spectraReflectionProduct U V) :=
     isStarNormal_of_mem_unitary (spectraReflectionProduct_mem_unitary U V)
@@ -384,11 +384,11 @@ theorem spectraOperatorAbsoluteValue_intertwiner_eq_cfc
         continuous_cosineGauge.continuousOn]
     exact cfc_congr fun z _ => cosineGauge_mul_self z
   have habs0 : (0 : H →L[ℂ] H) ≤
-      spectraOperatorAbsoluteValue (spectraCanonicalIntertwiner U V) :=
-    spectraOperatorAbsoluteValue_nonneg _
-  have habssq := spectraOperatorAbsoluteValue_mul_self
+      ContinuousLinearMap.modulus (spectraCanonicalIntertwiner U V) :=
+    ContinuousLinearMap.modulus_nonneg _
+  have habssq := ContinuousLinearMap.modulus_mul_self_eq_star_mul_self
     (spectraCanonicalIntertwiner U V)
-  calc spectraOperatorAbsoluteValue (spectraCanonicalIntertwiner U V)
+  calc ContinuousLinearMap.modulus (spectraCanonicalIntertwiner U V)
       = CFC.sqrt (star (spectraCanonicalIntertwiner U V) *
           spectraCanonicalIntertwiner U V) :=
         (CFC.sqrt_unique habssq habs0).symm
@@ -416,16 +416,16 @@ theorem spectraDirectRotation_eq_reflectionProductHalfPhase
     continuousOn_principalHalfPhase hneg
   -- Both operators satisfy `X * |S| = S`.
   have hW : spectraReflectionProductHalfPhase U V hacute *
-      spectraOperatorAbsoluteValue (spectraCanonicalIntertwiner U V) =
+      ContinuousLinearMap.modulus (spectraCanonicalIntertwiner U V) =
       spectraCanonicalIntertwiner U V := by
-    rw [spectraOperatorAbsoluteValue_intertwiner_eq_cfc U V,
+    rw [modulus_intertwiner_eq_cfc U V,
       spectraReflectionProductHalfPhase,
       ← cfc_mul _ _ _ hphpcont continuous_cosineGauge.continuousOn,
       spectraCanonicalIntertwiner_eq_cfc U V]
     exact cfc_congr fun z hz =>
       principalHalfPhase_mul_cosineGauge fun h => hneg (h ▸ hz)
   have hP : spectraDirectRotation U V hacute *
-      spectraOperatorAbsoluteValue (spectraCanonicalIntertwiner U V) =
+      ContinuousLinearMap.modulus (spectraCanonicalIntertwiner U V) =
       spectraCanonicalIntertwiner U V :=
     spectraDirectRotation_decomposition U V hacute
   obtain ⟨v, hv⟩ := isUnit_spectraCanonicalAbsoluteValue U V hacute
@@ -563,29 +563,29 @@ theorem spectraDirectRotation_add_star_eq_two_smul_absoluteValue
     (hacute : IsUniformlyAcute U V) :
     spectraDirectRotation U V hacute +
         star (spectraDirectRotation U V hacute) =
-      (2 : ℂ) • spectraOperatorAbsoluteValue
+      (2 : ℂ) • ContinuousLinearMap.modulus
         (spectraCanonicalIntertwiner U V) := by
   have hdecomp :
       spectraDirectRotation U V hacute *
-          spectraOperatorAbsoluteValue (spectraCanonicalIntertwiner U V) =
+          ContinuousLinearMap.modulus (spectraCanonicalIntertwiner U V) =
         spectraCanonicalIntertwiner U V :=
     spectraDirectRotation_decomposition U V hacute
   have hleft :
       star (spectraDirectRotation U V hacute) *
           spectraCanonicalIntertwiner U V =
-        spectraOperatorAbsoluteValue (spectraCanonicalIntertwiner U V) := by
+        ContinuousLinearMap.modulus (spectraCanonicalIntertwiner U V) := by
     calc
       star (spectraDirectRotation U V hacute) *
           spectraCanonicalIntertwiner U V =
         star (spectraDirectRotation U V hacute) *
           (spectraDirectRotation U V hacute *
-            spectraOperatorAbsoluteValue (spectraCanonicalIntertwiner U V)) := by
+            ContinuousLinearMap.modulus (spectraCanonicalIntertwiner U V)) := by
               rw [hdecomp]
       _ = (star (spectraDirectRotation U V hacute) *
             spectraDirectRotation U V hacute) *
-          spectraOperatorAbsoluteValue (spectraCanonicalIntertwiner U V) := by
+          ContinuousLinearMap.modulus (spectraCanonicalIntertwiner U V) := by
               rw [mul_assoc]
-      _ = spectraOperatorAbsoluteValue (spectraCanonicalIntertwiner U V) := by
+      _ = ContinuousLinearMap.modulus (spectraCanonicalIntertwiner U V) := by
               rw [star_spectraDirectRotation_mul_self U V hacute, one_mul]
   have hstarR :
       star (spectraDirectRotation U V hacute) *
@@ -608,8 +608,8 @@ theorem spectraDirectRotation_add_star_eq_two_smul_absoluteValue
   have hmul := congrArg
     (fun T : H →L[ℂ] H => star (spectraDirectRotation U V hacute) * T) hmid
   have htwice :
-      spectraOperatorAbsoluteValue (spectraCanonicalIntertwiner U V) +
-          spectraOperatorAbsoluteValue (spectraCanonicalIntertwiner U V) =
+      ContinuousLinearMap.modulus (spectraCanonicalIntertwiner U V) +
+          ContinuousLinearMap.modulus (spectraCanonicalIntertwiner U V) =
         star (spectraDirectRotation U V hacute) +
           spectraDirectRotation U V hacute := by
     simpa only [mul_add, hleft, mul_one, hstarR] using hmul
@@ -618,9 +618,9 @@ theorem spectraDirectRotation_add_star_eq_two_smul_absoluteValue
         star (spectraDirectRotation U V hacute) =
       star (spectraDirectRotation U V hacute) +
         spectraDirectRotation U V hacute := add_comm _ _
-    _ = spectraOperatorAbsoluteValue (spectraCanonicalIntertwiner U V) +
-        spectraOperatorAbsoluteValue (spectraCanonicalIntertwiner U V) := htwice.symm
-    _ = (2 : ℂ) • spectraOperatorAbsoluteValue
+    _ = ContinuousLinearMap.modulus (spectraCanonicalIntertwiner U V) +
+        ContinuousLinearMap.modulus (spectraCanonicalIntertwiner U V) := htwice.symm
+    _ = (2 : ℂ) • ContinuousLinearMap.modulus
         (spectraCanonicalIntertwiner U V) := by rw [two_smul]
 
 /-- The positive midpoint modulus has strictly positive quadratic form on
@@ -629,17 +629,17 @@ theorem spectraCanonicalAbsoluteValue_inner_pos
     (U V : Submodule ℂ H)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
     (hacute : IsUniformlyAcute U V) {x : H} (hx : x ≠ 0) :
-    0 < Complex.re ⟪spectraOperatorAbsoluteValue
+    0 < Complex.re ⟪ContinuousLinearMap.modulus
       (spectraCanonicalIntertwiner U V) x, x⟫_ℂ := by
-  let B := spectraOperatorAbsoluteValue (spectraCanonicalIntertwiner U V)
+  let B := ContinuousLinearMap.modulus (spectraCanonicalIntertwiner U V)
   change 0 < RCLike.re ⟪B x, x⟫_ℂ
   have hBnonneg : (0 : H →L[ℂ] H) ≤ B :=
-    spectraOperatorAbsoluteValue_nonneg _
+    ContinuousLinearMap.modulus_nonneg _
   have hBpositive := (ContinuousLinearMap.nonneg_iff_isPositive B).mp hBnonneg
   have hBform : ∀ z : H, 0 ≤ RCLike.re ⟪B z, z⟫_ℂ := fun z =>
     hBpositive.re_inner_nonneg_left z
   have hBsym : (B : H →ₗ[ℂ] H).IsSymmetric :=
-    (spectraOperatorAbsoluteValue_isSelfAdjoint _).isSymmetric
+    (ContinuousLinearMap.modulus_isSelfAdjoint _).isSymmetric
   have hBinj : Function.Injective B :=
     (ContinuousLinearMap.isUnit_iff_bijective.mp
       (isUnit_spectraCanonicalAbsoluteValue U V hacute)).1
@@ -667,7 +667,7 @@ theorem spectraDirectRotation_real_inner_pos
     (hacute : IsUniformlyAcute U V) {x : H} (hx : x ≠ 0) :
     0 < Complex.re ⟪spectraDirectRotation U V hacute x, x⟫_ℂ := by
   let D := spectraDirectRotation U V hacute
-  let B := spectraOperatorAbsoluteValue (spectraCanonicalIntertwiner U V)
+  let B := ContinuousLinearMap.modulus (spectraCanonicalIntertwiner U V)
   change 0 < RCLike.re ⟪D x, x⟫_ℂ
   have hsum : D + star D = (2 : ℂ) • B := by
     simpa [D, B] using
@@ -897,11 +897,11 @@ theorem re_inner_spectraDirectRotation_eq_absoluteValue
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
     (hacute : IsUniformlyAcute U V) (x : H) :
     RCLike.re ⟪spectraDirectRotation U V hacute x, x⟫_ℂ =
-      RCLike.re ⟪spectraOperatorAbsoluteValue
+      RCLike.re ⟪ContinuousLinearMap.modulus
         (spectraCanonicalIntertwiner U V) x, x⟫_ℂ := by
   let D : H →L[ℂ] H := spectraDirectRotation U V hacute
   let C : H →L[ℂ] H :=
-    spectraOperatorAbsoluteValue (spectraCanonicalIntertwiner U V)
+    ContinuousLinearMap.modulus (spectraCanonicalIntertwiner U V)
   have hsum : D + star D = C + C := by
     have h := spectraDirectRotation_add_star_eq_two_smul_absoluteValue
       U V hacute
@@ -922,11 +922,11 @@ theorem projection_mul_spectraDirectRotation_mul_projection
     (U V : Submodule ℂ H) [U.HasOrthogonalProjection]
     [V.HasOrthogonalProjection] (hacute : IsUniformlyAcute U V) :
     projection U * spectraDirectRotation U V hacute * projection U =
-      spectraOperatorAbsoluteValue (spectraCanonicalIntertwiner U V) *
+      ContinuousLinearMap.modulus (spectraCanonicalIntertwiner U V) *
         projection U := by
   let B := spectraCanonicalAbsoluteValueUnit U V hacute
   let C : H →L[ℂ] H :=
-    spectraOperatorAbsoluteValue (spectraCanonicalIntertwiner U V)
+    ContinuousLinearMap.modulus (spectraCanonicalIntertwiner U V)
   let D : H →L[ℂ] H := spectraDirectRotation U V hacute
   let P : H →L[ℂ] H := projection U
   let Q : H →L[ℂ] H := projection V
@@ -979,11 +979,11 @@ theorem complementaryProjection_mul_spectraDirectRotation_mul_complementaryProje
     [V.HasOrthogonalProjection] (hacute : IsUniformlyAcute U V) :
     complementaryProjection U * spectraDirectRotation U V hacute *
         complementaryProjection U =
-      spectraOperatorAbsoluteValue (spectraCanonicalIntertwiner U V) *
+      ContinuousLinearMap.modulus (spectraCanonicalIntertwiner U V) *
         complementaryProjection U := by
   let B := spectraCanonicalAbsoluteValueUnit U V hacute
   let C : H →L[ℂ] H :=
-    spectraOperatorAbsoluteValue (spectraCanonicalIntertwiner U V)
+    ContinuousLinearMap.modulus (spectraCanonicalIntertwiner U V)
   let D : H →L[ℂ] H := spectraDirectRotation U V hacute
   let P : H →L[ℂ] H := complementaryProjection U
   let Q : H →L[ℂ] H := complementaryProjection V
@@ -1556,9 +1556,9 @@ theorem eq_spectraDirectRotation_iff_diagonalBlocks_pos
         W * U.starProjection = V.starProjection * W ∧
         (∀ x ∈ U, 0 ≤ ⟪W x, x⟫_ℂ) ∧
         (∀ x ∈ Uᗮ, 0 ≤ ⟪W x, x⟫_ℂ) := by
-  have hCP : (spectraOperatorAbsoluteValue (spectraCanonicalIntertwiner U V)).IsPositive :=
+  have hCP : (ContinuousLinearMap.modulus (spectraCanonicalIntertwiner U V)).IsPositive :=
     (ContinuousLinearMap.nonneg_iff_isPositive _).mp
-      (spectraOperatorAbsoluteValue_nonneg _)
+      (ContinuousLinearMap.modulus_nonneg _)
   constructor
   · rintro rfl
     refine ⟨spectraDirectRotation_mem_unitary U V hacute,
@@ -1566,27 +1566,27 @@ theorem eq_spectraDirectRotation_iff_diagonalBlocks_pos
     · intro x hx
       have hPx : U.starProjection x = x := Submodule.starProjection_eq_self_iff.mpr hx
       have hblk : U.starProjection * spectraDirectRotation U V hacute *
-          U.starProjection = spectraOperatorAbsoluteValue
+          U.starProjection = ContinuousLinearMap.modulus
             (spectraCanonicalIntertwiner U V) * U.starProjection :=
         projection_mul_spectraDirectRotation_mul_projection U V hacute
       have h := congrArg (fun S : H →L[ℂ] H => S x) hblk
       simp only [mul_apply_eq_comp, hPx] at h
       have hval : ⟪spectraDirectRotation U V hacute x, x⟫_ℂ =
-          ⟪spectraOperatorAbsoluteValue (spectraCanonicalIntertwiner U V) x, x⟫_ℂ := by
+          ⟪ContinuousLinearMap.modulus (spectraCanonicalIntertwiner U V) x, x⟫_ℂ := by
         rw [← h, Submodule.inner_starProjection_left_eq_right, hPx]
       rw [hval]
       exact hCP.inner_nonneg_left x
     · intro x hx
       have hPx : Uᗮ.starProjection x = x := Submodule.starProjection_eq_self_iff.mpr hx
       have hblk : Uᗮ.starProjection * spectraDirectRotation U V hacute *
-          Uᗮ.starProjection = spectraOperatorAbsoluteValue
+          Uᗮ.starProjection = ContinuousLinearMap.modulus
             (spectraCanonicalIntertwiner U V) * Uᗮ.starProjection :=
         complementaryProjection_mul_spectraDirectRotation_mul_complementaryProjection
           U V hacute
       have h := congrArg (fun S : H →L[ℂ] H => S x) hblk
       simp only [mul_apply_eq_comp, hPx] at h
       have hval : ⟪spectraDirectRotation U V hacute x, x⟫_ℂ =
-          ⟪spectraOperatorAbsoluteValue (spectraCanonicalIntertwiner U V) x, x⟫_ℂ := by
+          ⟪ContinuousLinearMap.modulus (spectraCanonicalIntertwiner U V) x, x⟫_ℂ := by
         rw [← h, Submodule.inner_starProjection_left_eq_right, hPx]
       rw [hval]
       exact hCP.inner_nonneg_left x
@@ -1734,7 +1734,7 @@ theorem spectraDirectRotation_minimal
     ‖spectraDirectRotation U V hacute - 1‖ ≤ ‖W - 1‖ := by
   let D : H →L[ℂ] H := spectraDirectRotation U V hacute
   let C : H →L[ℂ] H :=
-    spectraOperatorAbsoluteValue (spectraCanonicalIntertwiner U V)
+    ContinuousLinearMap.modulus (spectraCanonicalIntertwiner U V)
   let P : H →L[ℂ] H := projection U
   let Pc : H →L[ℂ] H := complementaryProjection U
   let A : H →L[ℂ] H := star D * W
@@ -1895,7 +1895,7 @@ theorem spectraDirectRotation_minimal
     have hstarRC : star R * C = 1 := by
       have h := congrArg star hCR
       have hCsa : star C = C :=
-        (spectraOperatorAbsoluteValue_isSelfAdjoint
+        (ContinuousLinearMap.modulus_isSelfAdjoint
           (spectraCanonicalIntertwiner U V)).star_eq
       simpa only [star_mul, star_one, hCsa] using h
     show star R = R
@@ -1908,7 +1908,7 @@ theorem spectraDirectRotation_minimal
     intro z
     have hCpos :=
       (ContinuousLinearMap.nonneg_iff_isPositive C).mp
-        (spectraOperatorAbsoluteValue_nonneg
+        (ContinuousLinearMap.modulus_nonneg
           (spectraCanonicalIntertwiner U V))
     have hz : C (R z) = z := by
       have h := congrArg (fun T : H →L[ℂ] H => T z) hCR
@@ -1931,7 +1931,7 @@ theorem spectraDirectRotation_minimal
   have hCcoer : ∀ z : H, c * ‖z‖ ^ 2 ≤ RCLike.re ⟪C z, z⟫_ℂ := fun z =>
     re_inner_ge_of_inverse_norm_le hc hRC hRsa hRpos hRnorm
       (fun w => ((ContinuousLinearMap.nonneg_iff_isPositive C).mp
-        (spectraOperatorAbsoluteValue_nonneg
+        (ContinuousLinearMap.modulus_nonneg
           (spectraCanonicalIntertwiner U V))).re_inner_nonneg_left w) z
   refine (D - 1).opNorm_le_bound (norm_nonneg (W - 1)) ?_
   intro x

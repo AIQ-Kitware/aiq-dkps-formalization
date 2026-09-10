@@ -305,7 +305,7 @@ theorem tanTwoTheta_directed_unboundedResidual_blockRepresentative_symmetricNorm
     rw [← diagonalPart_congr hUeq (complexify Z)]
     exact diagonalPart_complexifySubmodule U Z
   rw [hdiag, ← complexify_mul,
-    TauCeti.DavisKahan.Foundation.RealComplexification.isUnit_complexify_iff] at hCCc
+    TauCeti.RealComplexification.isUnit_complexify_iff] at hCCc
   have hCC : IsUnit (U.diagonalPart Z * U.diagonalPart Z) := hCCc
   have hTmemc : N.Mem
       (reflectionTangentCorner (complexifySubmodule U) (complexify Z)) :=
@@ -446,7 +446,7 @@ theorem tanTwoTheta_ambient_unbounded_blockRepresentative_symmetricNorming_real
     rw [← diagonalPart_congr hUeq (complexify Z)]
     exact diagonalPart_complexifySubmodule U Z
   rw [hdiag, ← complexify_mul,
-    TauCeti.DavisKahan.Foundation.RealComplexification.isUnit_complexify_iff] at hCCc
+    TauCeti.RealComplexification.isUnit_complexify_iff] at hCCc
   have hCC : IsUnit (U.diagonalPart Z * U.diagonalPart Z) := hCCc
   have hTsub :
       unboundedReflectionTangent
@@ -483,7 +483,8 @@ tangent are all supplied by the library, and no pole certificate is asked for. -
 /-- **Davis--Kahan 1970, `tan 2Θ`, unbounded ambient form over `ℝ`, taking the
 reducing subspace rather than a reflection witness.**
 
-`tanTwoTheta_ambient_unbounded_blockRepresentative_symmetricNorming_real` with `Z = V.reflectionOperator`
+`tanTwoTheta_ambient_unbounded_blockRepresentative_symmetricNorming_real` with
+`Z = V.reflectionOperator`
 and with `Z` self-adjoint and involutive supplied by the library. -/
 theorem tanTwoTheta_ambient_unbounded_blockRepresentative_derivedReflection_symmetricNorming_real
     (N : SymmetricNormingFunction)
@@ -541,7 +542,7 @@ theorem cos_two_ne_zero_of_isUnit_diagonalPart_reflection_sq_real
         (complexifySubmodule V).reflectionOperator) := by
     rw [← TauCeti.DavisKahan.complexify_reflectionOperator, diagonalPart_complexifySubmodule,
       ← TauCeti.DavisKahan.complexify_mul,
-      TauCeti.DavisKahan.Foundation.RealComplexification.isUnit_complexify_iff]
+      TauCeti.RealComplexification.isUnit_complexify_iff]
     exact h
   intro t ht
   refine DavisKahan.cos_two_ne_zero_of_isUnit_diagonalPart_reflection_sq
@@ -552,7 +553,8 @@ theorem cos_two_ne_zero_of_isUnit_diagonalPart_reflection_sq_real
 /-- **Davis--Kahan 1970, `tan 2Θ`, unbounded ambient form over `ℝ`, on the paper's
 angle operator.**
 
-The same theorem as `tanTwoTheta_ambient_unbounded_blockRepresentative_derivedReflection_symmetricNorming_real`,
+The same theorem as
+`tanTwoTheta_ambient_unbounded_blockRepresentative_derivedReflection_symmetricNorming_real`,
 with the proof's block tangent replaced by the paper's real ambient `|tan 2Θ|`;
 see `DavisKahan.extendedGauge_unboundedReflectionTangent_real`.
 
@@ -587,8 +589,8 @@ theorem tanTwoTheta_ambient_unbounded_symmetricNorming_real
         (TauCeti.LinearPMap.realSpecRange hA (Set.Iic c) measurableSet_Iic) V) ≤
         2 * N.gauge B := by
   obtain ⟨hunit, hmem, hle⟩ :=
-    tanTwoTheta_ambient_unbounded_blockRepresentative_derivedReflection_symmetricNorming_real N V hA hBsa hB hV hUa
-      hUb hab hBmem
+    tanTwoTheta_ambient_unbounded_blockRepresentative_derivedReflection_symmetricNorming_real
+      N V hA hBsa hB hV hUa hUb hab hBmem
   have hgauge := DavisKahan.extendedGauge_unboundedReflectionTangent_real
     (TauCeti.LinearPMap.realSpecRange hA (Set.Iic c) measurableSet_Iic) V N hunit
   refine ⟨cos_two_ne_zero_of_isUnit_diagonalPart_reflection_sq_real _ V hunit, ?_, ?_⟩
@@ -690,7 +692,7 @@ theorem tanTwoTheta_ambient_unbounded_blockRepresentative_reducing_symmetricNorm
     hab N ((complexify_isSelfAdjoint_iff B).2 hBsa) ((N.mem_complexify_iff B).2 hBmem)
   have hCCc := hc.1
   rw [diagonalPart_complexifySubmodule U Z, ← complexify_mul,
-    TauCeti.DavisKahan.Foundation.RealComplexification.isUnit_complexify_iff] at hCCc
+    TauCeti.RealComplexification.isUnit_complexify_iff] at hCCc
   have hCC : IsUnit (U.diagonalPart Z * U.diagonalPart Z) := hCCc
   have hTcomplex : unboundedReflectionTangent (complexifySubmodule U) (complexify Z) =
       complexify (unboundedReflectionTangent U Z) :=
@@ -724,7 +726,7 @@ theorem tanTwoTheta_directed_unboundedResidual_reducing_symmetricNorming_real
     hab N ((directedCorner_mem_complexify_iff N U B).2 hRmem)
   have hCCc := hc.1
   rw [diagonalPart_complexifySubmodule U Z, ← complexify_mul,
-    TauCeti.DavisKahan.Foundation.RealComplexification.isUnit_complexify_iff] at hCCc
+    TauCeti.RealComplexification.isUnit_complexify_iff] at hCCc
   have hCC : IsUnit (U.diagonalPart Z * U.diagonalPart Z) := hCCc
   have hTcorner : reflectionTangentCorner (complexifySubmodule U) (complexify Z) =
       blockCompression (complexifySubmodule U)ᗮ (complexifySubmodule U)

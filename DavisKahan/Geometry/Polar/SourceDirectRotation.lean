@@ -158,10 +158,10 @@ theorem halmosCosineSq_eq_projection_expansion :
 /-- `4 |C|² = J_V J_U + J_U J_V + 2`: the square of twice the canonical modulus,
 computed from the projection algebra alone. -/
 theorem absoluteValue_double_mul_self :
-    (spectraOperatorAbsoluteValue (spectraCanonicalIntertwiner U V) +
-        spectraOperatorAbsoluteValue (spectraCanonicalIntertwiner U V)) *
-      (spectraOperatorAbsoluteValue (spectraCanonicalIntertwiner U V) +
-        spectraOperatorAbsoluteValue (spectraCanonicalIntertwiner U V)) =
+    (ContinuousLinearMap.modulus (spectraCanonicalIntertwiner U V) +
+        ContinuousLinearMap.modulus (spectraCanonicalIntertwiner U V)) *
+      (ContinuousLinearMap.modulus (spectraCanonicalIntertwiner U V) +
+        ContinuousLinearMap.modulus (spectraCanonicalIntertwiner U V)) =
       reflectionOperator V * reflectionOperator U +
         reflectionOperator U * reflectionOperator V + 1 + 1 := by
   have hAA := Proposition35.section3CanonicalAbsoluteValue_mul_self_eq_halmosCosineSq U V
@@ -169,10 +169,10 @@ theorem absoluteValue_double_mul_self :
     reflectionOperator_eq_projection_add_projection_sub_one U
   have hRV : reflectionOperator V = projection V + projection V - 1 :=
     reflectionOperator_eq_projection_add_projection_sub_one V
-  have hexpand : (spectraOperatorAbsoluteValue (spectraCanonicalIntertwiner U V) +
-        spectraOperatorAbsoluteValue (spectraCanonicalIntertwiner U V)) *
-      (spectraOperatorAbsoluteValue (spectraCanonicalIntertwiner U V) +
-        spectraOperatorAbsoluteValue (spectraCanonicalIntertwiner U V)) =
+  have hexpand : (ContinuousLinearMap.modulus (spectraCanonicalIntertwiner U V) +
+        ContinuousLinearMap.modulus (spectraCanonicalIntertwiner U V)) *
+      (ContinuousLinearMap.modulus (spectraCanonicalIntertwiner U V) +
+        ContinuousLinearMap.modulus (spectraCanonicalIntertwiner U V)) =
       halmosCosineSq U V + halmosCosineSq U V + halmosCosineSq U V
         + halmosCosineSq U V := by
     rw [← hAA]; noncomm_ring
@@ -186,8 +186,8 @@ has a unique nonnegative square root. -/
 theorem IsSourceDirectRotation.add_star_eq_two_absoluteValue {D : H →L[𝕜] H}
     (h : IsSourceDirectRotation U V D) :
     D + star D =
-      spectraOperatorAbsoluteValue (spectraCanonicalIntertwiner U V) +
-        spectraOperatorAbsoluteValue (spectraCanonicalIntertwiner U V) := by
+      ContinuousLinearMap.modulus (spectraCanonicalIntertwiner U V) +
+        ContinuousLinearMap.modulus (spectraCanonicalIntertwiner U V) := by
   have hDs : D * star D = 1 := Unitary.mul_star_self_of_mem h.unitary_mem
   have hsD : star D * D = 1 := Unitary.star_mul_self_of_mem h.unitary_mem
   have hstarsq : star D * star D = reflectionOperator U * reflectionOperator V := by
@@ -204,8 +204,8 @@ theorem IsSourceDirectRotation.add_star_eq_two_absoluteValue {D : H →L[𝕜] H
     abel
   have h1 := CFC.sqrt_unique hsq h.add_star_nonneg
   have h2 := CFC.sqrt_unique (absoluteValue_double_mul_self U V)
-    (add_nonneg (spectraOperatorAbsoluteValue_nonneg _)
-      (spectraOperatorAbsoluteValue_nonneg _))
+    (add_nonneg (ContinuousLinearMap.modulus_nonneg _)
+      (ContinuousLinearMap.modulus_nonneg _))
   exact h1.symm.trans h2
 
 /-- **Every two Definition 3.1 direct rotations of the same pair have the same

@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, Claude Opus 4.8, GPT 5.6 High
 -/
 import DavisKahan.BoundedOperator.Compat
-import ForTauCeti.Analysis.InnerProductSpace.SpectralOrder.Complex
+import ForTauCeti.Analysis.InnerProductSpace.SpectralOrder
 
 /-!
 # Complex spectral specialization of bounded Davis--Kahan theory
@@ -40,13 +40,13 @@ theorem opNorm_starProjection_sub_le_of_restriction_spectra
     ‖(U.starProjection - W.starProjection : H →L[ℂ] H)‖ ≤
       ‖B - A‖ / g := by
   apply opNorm_starProjection_sub_le_of_formBounds hA hB hU hW hg
-  · exact SpectralOrder.Complex.lowerFormBoundOn_of_restriction_spectrum_subset_Ici
+  · exact SpectralOrder.lowerFormBoundOn_of_restriction_spectrum_subset_Ici
       hA hU.1 hUhi
-  · exact SpectralOrder.Complex.upperFormBoundOn_of_restriction_spectrum_subset_Iic
+  · exact SpectralOrder.upperFormBoundOn_of_restriction_spectrum_subset_Iic
       hA hU.2 hUlo
-  · exact SpectralOrder.Complex.lowerFormBoundOn_of_restriction_spectrum_subset_Ici
+  · exact SpectralOrder.lowerFormBoundOn_of_restriction_spectrum_subset_Ici
       hB hW.1 hWhi
-  · exact SpectralOrder.Complex.upperFormBoundOn_of_restriction_spectrum_subset_Iic
+  · exact SpectralOrder.upperFormBoundOn_of_restriction_spectrum_subset_Iic
       hB hW.2 hWlo
 
 

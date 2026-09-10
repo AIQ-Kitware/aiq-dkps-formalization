@@ -11,7 +11,7 @@ import DavisKahan.OperatorIdeal.ApproximationNumbers.ScalarGeneric
 import DavisKahan.Sources.DavisKahan1970.Ideals.HilbertSchmidtFiniteRank
 import DavisKahan.OperatorIdeal.ApproximationNumbers.FiniteSourceSingularSystem
 import ForTauCeti.Analysis.InnerProductSpace.Singular.Subspace
-import ForTauCeti.Analysis.InnerProductSpace.SpectralOrder.Complex
+import ForTauCeti.Analysis.InnerProductSpace.SpectralOrder
 
 open TauCeti.DavisKahan.Sylvester
 
@@ -874,14 +874,14 @@ theorem theorem6_3_generalizedTanTheta_ideal
   have hCompressionUpper : ∀ z : Z,
       RCLike.re ⟪theorem63Compression T Z z, z⟫_ℂ ≤ alpha * ‖z‖ ^ 2 := by
     intro z
-    apply SpectralOrder.Complex.re_inner_le_of_spectrum_subset_Iic
+    apply SpectralOrder.re_inner_le_of_spectrum_subset_Iic
       (theorem63Compression T Z) hMsa
     · intro r hr
       exact (hCompressionSpectrum hr).2
   have hUnwantedLower : ∀ y ∈ Vᗮ,
       (alpha + delta) * ‖y‖ ^ 2 ≤ RCLike.re ⟪T y, y⟫_ℂ := by
     intro y hy
-    exact SpectralOrder.Complex.le_re_inner_on_subspace_of_restriction_spectrum_subset_Ici
+    exact SpectralOrder.le_re_inner_on_subspace_of_restriction_spectrum_subset_Ici
       hT (hV.orthogonalComplement).1 hUnwantedSpectrum hy
   exact theorem6_3_generalizedTanTheta_of_formBounds N T hT V Z hV
     hStrictDimension hdelta hCompressionUpper hUnwantedLower tanTheta0 htan
@@ -1114,13 +1114,13 @@ theorem theorem6_3_generalizedTanTheta_ideal_directedTangent
   have hCompressionUpper : ∀ z : Z,
       RCLike.re ⟪theorem63Compression T Z z, z⟫_ℂ ≤ alpha * ‖z‖ ^ 2 := by
     intro z
-    refine SpectralOrder.Complex.re_inner_le_of_spectrum_subset_Iic
+    refine SpectralOrder.re_inner_le_of_spectrum_subset_Iic
       (theorem63Compression T Z) hMsa ?_ z
     intro r hr
     exact (hCompressionSpectrum hr).2
   have hUnwantedLower : ∀ y ∈ Vᗮ,
       (alpha + delta) * ‖y‖ ^ 2 ≤ RCLike.re ⟪T y, y⟫_ℂ := fun y hy =>
-    SpectralOrder.Complex.le_re_inner_on_subspace_of_restriction_spectrum_subset_Ici
+    SpectralOrder.le_re_inner_on_subspace_of_restriction_spectrum_subset_Ici
       hT (hV.orthogonalComplement).1 hUnwantedSpectrum hy
   exact theorem6_3_generalizedTanTheta_ideal N T hT V Z hV
     hStrictDimension hbetaalpha hdelta hCompressionSpectrum hUnwantedSpectrum
@@ -1194,13 +1194,13 @@ theorem theorem6_3_generalizedTanTheta_equalRank_spectral
   have hCompressionUpper : ∀ z : Z,
       RCLike.re ⟪theorem63Compression T Z z, z⟫_ℂ ≤ alpha * ‖z‖ ^ 2 := by
     intro z
-    refine SpectralOrder.Complex.re_inner_le_of_spectrum_subset_Iic
+    refine SpectralOrder.re_inner_le_of_spectrum_subset_Iic
       (theorem63Compression T Z) hMsa ?_ z
     intro r hr
     exact (hCompressionSpectrum hr).2
   have hUnwantedLower : ∀ y ∈ Vᗮ,
       (alpha + delta) * ‖y‖ ^ 2 ≤ RCLike.re ⟪T y, y⟫_ℂ := fun y hy =>
-    SpectralOrder.Complex.le_re_inner_on_subspace_of_restriction_spectrum_subset_Ici
+    SpectralOrder.le_re_inner_on_subspace_of_restriction_spectrum_subset_Ici
       hT (hV.orthogonalComplement).1 hUnwantedSpectrum hy
   exact theorem6_3_generalizedTanTheta_of_formBounds_equalRank Z V N T hT hV
     hdelta hCompressionUpper hUnwantedLower hResidual

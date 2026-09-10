@@ -20,7 +20,7 @@ and should eventually be built from the closed range of an isometric embedding.
 
 /-! ## Construction plan
 
-* Route inequalities derived from real spectra through `TauCeti.SpectralOrder.Real`;
+* Route inequalities derived from real spectra through `TauCeti.SpectralOrder`;
   the set definitions here are exact, but the real spectral-order theorem is a
   separate analytic obligation.
 * Keep spectral separation hypotheses tied to invariant subspaces.  For a

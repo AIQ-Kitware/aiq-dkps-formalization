@@ -28,9 +28,8 @@ itself, not of an existential witness.
 
 ## What this removes
 
-The scalar-generic operator API of this library — the modulus, the polar decomposition, the
-angle operators `sin Θ` and `sin 2Θ` between two subspaces — is stated over an arbitrary
-`RCLike` field but built on real functional calculus, and so has been carrying
+Scalar-generic operator modules are stated over an arbitrary `RCLike` field but built on real
+functional calculus, and historically carried
 
 ```text
 [Algebra ℝ (E →L[𝕜] E)] [IsScalarTower ℝ 𝕜 (E →L[𝕜] E)]
@@ -208,9 +207,9 @@ namespace ScalarTransport
 
 /-! ## What the transport does to the calculus
 
-With the instance in place on both sides, `clm` commutes with everything built from the
-calculus.  These are the lemmas a scalar-generic theorem about angles between subspaces
-actually consumes when it dispatches to a fixed field. -/
+With the instance in place on both sides, `clm` commutes with the functional calculus.
+Modulus naturality is downstream in `ForTauCeti.Analysis.InnerProductSpace.ModulusTransport`,
+which keeps this file usable by the modulus definition without an import cycle. -/
 
 variable {𝕜 : Type u} {𝕂 : Type w} [RCLike 𝕜] [RCLike 𝕂] {e : RCLikeIso 𝕜 𝕂}
 variable {E : Type v} [NormedAddCommGroup E] [InnerProductSpace 𝕜 E] [CompleteSpace E]
@@ -243,17 +242,6 @@ theorem clm_cfc (f : ℝ → ℝ) {T : E →L[𝕜] E} (hT : IsSelfAdjoint T)
   ContinuousFunctionalCalculus.map_cfc (clmStarAlgEquiv e E)
     continuous_clmStarAlgEquiv (fun _ => isSelfAdjoint_clm_iff.symm) f hT hf
 
-/-- **The transport commutes with the operator modulus.**  Both sides are nonnegative and
-square to the transported Gram operator. -/
-@[simp] theorem clm_modulus (T : E →L[𝕜] E) :
-    clm (e := e) T.modulus = (clm (e := e) T).modulus := by
-  refine ContinuousLinearMap.eq_modulus_of_nonneg_of_mul_self_eq ?_ ?_
-  · exact nonneg_clm_iff.2 T.modulus_nonneg
-  · rw [← clm_mul, ContinuousLinearMap.modulus_mul_self]
-    change clm (e := e) (ContinuousLinearMap.adjoint T ∘L T) =
-      ContinuousLinearMap.adjoint (clm (e := e) T) ∘L clm (e := e) T
-    rw [adjoint_clm]
-    rfl
 
 /-! ## Reflections and reflected subspaces
 

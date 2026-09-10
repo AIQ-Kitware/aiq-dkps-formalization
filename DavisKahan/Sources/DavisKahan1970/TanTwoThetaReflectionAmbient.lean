@@ -8,7 +8,7 @@ import DavisKahan.InfiniteDimensional.DoubleAngle
 import DavisKahan.Sources.DavisKahan1970.TanTwoThetaAmbient
 import ForTauCeti.Analysis.InnerProductSpace.DoubleAngle.ReflectionBlocks
 import ForTauCeti.Analysis.InnerProductSpace.DoubleAngle.UnboundedPole
-import ForTauCeti.Analysis.InnerProductSpace.SpectralOrder.Complex
+import ForTauCeti.Analysis.InnerProductSpace.SpectralOrder
 
 open TauCeti.DavisKahan.Angle
 
@@ -1195,7 +1195,7 @@ theorem tanTwoTheta_directed_boundedResidual_blockRepresentative_spectralGap_sym
       RCLike.re ⟪A x, x⟫_ℂ ≤ α * ‖x‖ ^ 2 := by
     intro x hx
     let xu : U := ⟨x, hx⟩
-    have h := TauCeti.SpectralOrder.Complex.re_inner_le_of_spectrum_subset_Iic
+    have h := TauCeti.SpectralOrder.re_inner_le_of_spectrum_subset_Iic
       (compressOperator U A) hA0sa hA0upper xu
     have hcoe : ((compressOperator U A xu : U) : E) = A (x : E) :=
       coe_compressOperator_apply_of_maps A hAU xu
@@ -1204,7 +1204,7 @@ theorem tanTwoTheta_directed_boundedResidual_blockRepresentative_spectralGap_sym
       (α + δ) * ‖x‖ ^ 2 ≤ RCLike.re ⟪A x, x⟫_ℂ := by
     intro x hx
     let xu : Uᗮ := ⟨x, hx⟩
-    have h := TauCeti.SpectralOrder.Complex.le_re_inner_of_spectrum_subset_Ici
+    have h := TauCeti.SpectralOrder.le_re_inner_of_spectrum_subset_Ici
       (compressOperator Uᗮ A) hA1sa hA1spec xu
     have hcoe : ((compressOperator Uᗮ A xu : Uᗮ) : E) = A (x : E) :=
       coe_compressOperator_apply_of_maps A hAUperp xu
@@ -1327,7 +1327,7 @@ theorem tanTwoTheta_ambient_bounded_spectralGap_symmetricNorming_complex
       RCLike.re ⟪A x, x⟫_ℂ ≤ α * ‖x‖ ^ 2 := by
     intro x hx
     let xu : U := ⟨x, hx⟩
-    have h := TauCeti.SpectralOrder.Complex.re_inner_le_of_spectrum_subset_Iic
+    have h := TauCeti.SpectralOrder.re_inner_le_of_spectrum_subset_Iic
       (compressOperator U A) hA0sa hA0upper xu
     have hcoe : ((compressOperator U A xu : U) : E) = A (x : E) :=
       coe_compressOperator_apply_of_maps A hAU xu
@@ -1336,7 +1336,7 @@ theorem tanTwoTheta_ambient_bounded_spectralGap_symmetricNorming_complex
       (α + δ) * ‖x‖ ^ 2 ≤ RCLike.re ⟪A x, x⟫_ℂ := by
     intro x hx
     let xu : Uᗮ := ⟨x, hx⟩
-    have h := TauCeti.SpectralOrder.Complex.le_re_inner_of_spectrum_subset_Ici
+    have h := TauCeti.SpectralOrder.le_re_inner_of_spectrum_subset_Ici
       (compressOperator Uᗮ A) hA1sa hA1spec xu
     have hcoe : ((compressOperator Uᗮ A xu : Uᗮ) : E) = A (x : E) :=
       coe_compressOperator_apply_of_maps A hAUperp xu

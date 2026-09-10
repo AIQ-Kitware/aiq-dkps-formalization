@@ -475,7 +475,7 @@ theorem tanTheta_directed_bounded_arbitraryDimension_symmetricNorming_real
 The hypotheses Davis and Kahan actually print are spectral placements, not quadratic-form
 bounds: the Rayleigh--Ritz compression has spectrum in `[β, α]` and the restriction to the
 unwanted exact subspace has spectrum in `[α + δ, ∞)`.  Over `ℂ` the conversion is
-`SpectralOrder.Complex`; the real conversion is `TauCeti.SpectralOrder.Real`, which proves the
+`SpectralOrder`; the real conversion is `TauCeti.SpectralOrder`, which proves the
 same two bridges by a Rayleigh shift because Mathlib has no `StarOrderedRing (E →L[ℝ] E)`. -/
 
 /-- **Real directed Theorem 6.3 at every source unitarily invariant norm, in the printed
@@ -487,7 +487,7 @@ the paper's norm class, with the tangent representative exhibited and its member
 concluded.  Real Hilbert space of arbitrary dimension, arbitrary closed real trial subspace.
 
 Grounded on `tanTheta_directed_bounded_symmetricNorming_real`; the spectral placement is converted to the
-form bounds by the two `TauCeti.SpectralOrder.Real` bridges, exactly as
+form bounds by the two `TauCeti.SpectralOrder` bridges, exactly as
 `tanTheta_directed_bounded_spectralGap_symmetricNorming_complex` uses their complex twins. -/
 theorem tanTheta_directed_bounded_spectralGap_symmetricNorming_real
     (N : SymmetricNormingFunction)
@@ -507,15 +507,13 @@ theorem tanTheta_directed_bounded_spectralGap_symmetricNorming_real
   have hTsym : T.IsSymmetric := ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mp hT
   have hMsa : IsSelfAdjoint (compressOperatorReal Z T) :=
     isSelfAdjoint_compressOperator hT Z
-  have hMsym : (compressOperatorReal Z T).IsSymmetric :=
-    ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mp hMsa
   have hCompressionUpper : ∀ z : Z,
       ⟪compressOperatorReal Z T z, z⟫_ℝ ≤ alpha * ‖z‖ ^ 2 := fun z =>
-    SpectralOrder.Real.upperFormBoundOn_top_of_spectrum_subset_Iic
-      (compressOperatorReal Z T) hMsym
+    SpectralOrder.upperFormBoundOn_top_of_spectrum_subset_Iic
+      (compressOperatorReal Z T) hMsa
       (fun r hr => (hCompressionSpectrum hr).2) z Submodule.mem_top
   have hUnwantedLower : ∀ y ∈ Vᗮ, (alpha + delta) * ‖y‖ ^ 2 ≤ ⟪T y, y⟫_ℝ :=
-    SpectralOrder.Real.lowerFormBoundOn_of_restriction_spectrum_subset_Ici
+    SpectralOrder.lowerFormBoundOn_of_restriction_spectrum_subset_Ici
       hTsym hV.2 hUnwantedSpectrum
   exact tanTheta_directed_bounded_symmetricNorming_real N T hT V Z hV hdelta hCompressionUpper
     hUnwantedLower hResidual

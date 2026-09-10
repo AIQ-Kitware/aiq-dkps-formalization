@@ -6,15 +6,16 @@ Authors: Jon Crall, Claude Opus 5
 import DavisKahan.Geometry.Angle.TanAngleFunctionalCalculus
 import DavisKahan.Geometry.Angle.DoubleAngleFunctionalCalculus
 import DavisKahan.SpectralTheory.Complexification.FormTransport
+import ForTauCeti.Analysis.InnerProductSpace.ModulusTransport
 
 /-!
 # The paper's operator angle between two **real** subspaces
 
 Standing assumption 1 of Davis--Kahan 1970 is that the Hilbert space is "real or
-complex".  The paper's angle `Θ = arcsin |P_U - P_V|` and its trigonometric
-functions are built here over `ℂ`, because Mathlib registers the continuous
-functional calculus on Hilbert-space operators only over `ℂ`.  That is a
-*representation* restriction, not a mathematical one, and this module removes it.
+complex".  This module records the real-complexification descent identities for the
+paper's angle `Θ = arcsin |P_U - P_V|` and its trigonometric functions.  The direct
+`RCLike` functional calculus is now available separately; these results identify it with the
+historical complexification construction.
 
 `DavisKahan/Geometry/Angle/OperatorAngleReal.lean` already evaluates the complex
 calculus at the complexification of a real pair; its operators, however, act on

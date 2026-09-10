@@ -34,26 +34,19 @@ one another.
 
 ## Why this is stated on the Gram operator rather than on `|T|`
 
-`ForTauCeti/Analysis/InnerProductSpace/Polar/PartialIsometry.lean` builds the
-same object for `𝕜 = ℂ`, keyed on `ContinuousLinearMap.modulus`.  That route is
-confined to `ℂ` for one reason only: the modulus is a continuous functional
-calculus, and Mathlib supplies the `ContinuousFunctionalCalculus ℝ (E →L[𝕜] E)
-IsSelfAdjoint` instance for `ℂ` and not for a general `RCLike` field.
-
-**The construction needs no functional calculus at all.**  Everything below
-rests on one consequence of the Gram identity,
+`ForTauCeti/Analysis/InnerProductSpace/Polar/PartialIsometry.lean` specializes this
+construction to `A = T.modulus` and packages the result as the canonical polar partial
+isometry.  The lower-level Gram formulation remains useful because it needs no functional
+calculus at all.  Everything below rests on one consequence of the Gram identity,
 `ContinuousLinearMap.norm_apply_eq_of_gram_eq`:
 
 ```
 ‖A x‖ = ‖T x‖.
 ```
 
-Read left to right it says `A x ↦ T x` is well defined; read as an equation it
-says that assignment is isometric.  So taking the Gram square root as a
-*hypothesis* rather than as a definition removes the field restriction, and a
-caller who does have a modulus — over `ℂ`, or over `RCLike` with the calculus
-assumed as an instance argument, as `DavisKahan`'s symmetric-norm-ideal theory
-does — supplies it by `operatorAbsoluteValue_sq` and self-adjointness.
+Read left to right it says `A x ↦ T x` is well defined; read as an equation it says that
+assignment is isometric.  A caller with the canonical modulus supplies
+`A = T.modulus`, `T.modulus_isSelfAdjoint`, and `T.modulus_mul_self`.
 
 ## Main definitions and results
 

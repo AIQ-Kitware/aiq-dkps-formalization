@@ -194,7 +194,7 @@ theorem spectraDirectRotation_sourceCompression_nonnegative
     0 ≤ RCLike.re
       ⟪x, (projection U * spectraDirectRotation U V hacute *
         projection U) x⟫_ℂ := by
-  let C := spectraOperatorAbsoluteValue (spectraCanonicalIntertwiner U V)
+  let C := ContinuousLinearMap.modulus (spectraCanonicalIntertwiner U V)
   have hdiag :=
     projection_mul_spectraDirectRotation_mul_projection U V hacute
   have hform :
@@ -229,7 +229,7 @@ theorem spectraDirectRotation_sourceCompression_nonnegative
         re_inner_projection_compression U C x
   rw [hform]
   have hnonneg : (0 : H →L[ℂ] H) ≤ C :=
-    spectraOperatorAbsoluteValue_nonneg _
+    ContinuousLinearMap.modulus_nonneg _
   have hpositive :=
     (ContinuousLinearMap.nonneg_iff_isPositive C).mp hnonneg
   exact hpositive.re_inner_nonneg_left (projection U x)
@@ -243,7 +243,7 @@ theorem spectraDirectRotation_complementCompression_nonnegative
       ⟪x, (complementaryProjection U *
         spectraDirectRotation U V hacute *
         complementaryProjection U) x⟫_ℂ := by
-  let C := spectraOperatorAbsoluteValue (spectraCanonicalIntertwiner U V)
+  let C := ContinuousLinearMap.modulus (spectraCanonicalIntertwiner U V)
   have hdiag :=
     complementaryProjection_mul_spectraDirectRotation_mul_complementaryProjection
       U V hacute
@@ -299,7 +299,7 @@ theorem spectraDirectRotation_complementCompression_nonnegative
         re_inner_projection_compression Uᗮ C x
   rw [hform]
   have hnonneg : (0 : H →L[ℂ] H) ≤ C :=
-    spectraOperatorAbsoluteValue_nonneg _
+    ContinuousLinearMap.modulus_nonneg _
   have hpositive :=
     (ContinuousLinearMap.nonneg_iff_isPositive C).mp hnonneg
   exact hpositive.re_inner_nonneg_left (complementaryProjection U x)
@@ -314,7 +314,7 @@ theorem spectraDirectRotation_crossed_blocks
       -star (projection U * spectraDirectRotation U V hacute *
         complementaryProjection U) := by
   let D := spectraDirectRotation U V hacute
-  let C := spectraOperatorAbsoluteValue (spectraCanonicalIntertwiner U V)
+  let C := ContinuousLinearMap.modulus (spectraCanonicalIntertwiner U V)
   let P := projection U
   let Pc := complementaryProjection U
   have hsum : D + star D = C + C := by

@@ -13,7 +13,7 @@ import DavisKahan.Geometry.Polar.DirectRotation
 
 open TauCeti.DavisKahan.Sylvester
 -- supplies `spectraReflectionProduct`, `spectraCanonicalIntertwiner`, the operator absolute
--- value `spectraOperatorAbsoluteValue` and the polar identities relating them.  That module
+-- value `ContinuousLinearMap.modulus` and the polar identities relating them.  That module
 -- and everything beneath it are `Geometry`/`BoundedOperator` leaves and never import
 -- the source layer, so this module is acyclic.
 
@@ -246,7 +246,7 @@ theorem proposition3_3_principalSquareRoot_converse
     (hcross : T '' (halmosSourceDefect U V : Set H) =
       (halmosTargetDefect U V : Set H)) :
     IsDirectRotation U V T := by
-  set A := spectraOperatorAbsoluteValue (spectraCanonicalIntertwiner U V) with hAdef
+  set A := ContinuousLinearMap.modulus (spectraCanonicalIntertwiner U V) with hAdef
   have hunit := hroot.unitary_mem
   have hTsT : T * star T = 1 := Unitary.mul_star_self_of_mem hunit
   have hsTT : star T * T = 1 := Unitary.star_mul_self_of_mem hunit
@@ -288,7 +288,7 @@ theorem proposition3_3_principalSquareRoot_converse
         rw [← star_mul, hroot.square_eq]
       have expandR : (A + A) * (A + A) = A * A + A * A + A * A + A * A := by noncomm_ring
       have hAA : A * A = star (spectraCanonicalIntertwiner U V) * spectraCanonicalIntertwiner U V :=
-        spectraOperatorAbsoluteValue_mul_self _
+        ContinuousLinearMap.modulus_mul_self_eq_star_mul_self _
       rw [expand, hroot.square_eq, hTsT, hsTT, hstarTT, expandR, hAA]
       have hG : spectraReflectionProduct U V + 1 =
           spectraCanonicalIntertwiner U V + spectraCanonicalIntertwiner U V := by
@@ -322,7 +322,7 @@ theorem proposition3_3_principalSquareRoot_converse
               + star (spectraCanonicalIntertwiner U V) * spectraCanonicalIntertwiner U V := by
             abel
     have h2A_nonneg : (0 : H →L[ℂ] H) ≤ A + A :=
-      add_nonneg (spectraOperatorAbsoluteValue_nonneg _) (spectraOperatorAbsoluteValue_nonneg _)
+      add_nonneg (ContinuousLinearMap.modulus_nonneg _) (ContinuousLinearMap.modulus_nonneg _)
     calc T + star T
         = CFC.sqrt ((T + star T) * (T + star T)) := (CFC.sqrt_unique rfl hTpos).symm
       _ = CFC.sqrt ((A + A) * (A + A)) := by rw [hsqeq]
@@ -367,7 +367,7 @@ theorem proposition3_3_principalSquareRoot_converse
     intro x hx
     have hSx : spectraCanonicalIntertwiner U V x = 0 := by
       have hn : ‖spectraCanonicalIntertwiner U V x‖ = 0 := by
-        rw [← norm_spectraOperatorAbsoluteValue_apply (spectraCanonicalIntertwiner U V) x, ← hAdef,
+        rw [← ContinuousLinearMap.norm_modulus_apply (spectraCanonicalIntertwiner U V) x, ← hAdef,
           hx, norm_zero]
       exact norm_eq_zero.mp hn
     have hSexpand : spectraCanonicalIntertwiner U V x =
@@ -446,7 +446,7 @@ theorem proposition3_3_principalSquareRoot_converse
       simpa [mul_apply_eq_comp] using this
     have hself : ContinuousLinearMap.adjoint A = A := by
       rw [← ContinuousLinearMap.star_eq_adjoint]
-      exact (spectraOperatorAbsoluteValue_isSelfAdjoint _).star_eq
+      exact (ContinuousLinearMap.modulus_isSelfAdjoint _).star_eq
     have horthEq : A.kerᗮ = A.range.topologicalClosure := by
       have h1 : A.rangeᗮ = A.ker := by rw [A.orthogonal_range, hself]
       calc A.kerᗮ = A.rangeᗮᗮ := by rw [h1]
