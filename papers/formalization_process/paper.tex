@@ -148,11 +148,10 @@
 \begin{abstract}
 We report an LLM-assisted Lean formalization of the 29 mathematical results
 tracked from Davis and Kahan's 1970 paper.  The project is a case study in
-semantic alignment: whether machine-checked formal statements preserve the
-mathematical claims made in the source.  Lean verifies proofs of encoded
-propositions, while source correspondence still requires checking hypotheses,
-objects, and scope.  The development records checked treatments addressing all 29 targets,
-including a counterexample and repaired theorem for Proposition~4.4.  Several
+semantic alignment: whether LLM generated Lean code preserves the
+mathematical claims made in the source.  While Lean can verify the proof of an encoded theorem, the question of if that theorem is the intended one is less straight forward. The result of our efforts are formalizations that claim to address all 29 targets,
+including a counterexample and repaired theorem for Proposition~4.4, as well as significant 
+reusable foundational work to address operator theory gaps in Lean libraries.  Several
 checked statements required revision after comparison with the source even
 though their Lean proofs were valid.  We describe the formalization and
 source-review process, representative discrepancies and repairs, and
