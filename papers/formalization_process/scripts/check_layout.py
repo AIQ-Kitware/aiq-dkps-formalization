@@ -60,6 +60,21 @@ def validate_pages(pages: list[str], public: bool) -> list[str]:
     checklist_pages = [i + 1 for i, page in enumerate(flat_pages) if 'NeurIPS Paper Checklist' in page]
     if len(checklist_pages) != 1 or checklist_pages[0] <= reference_page:
         errors.append(f'NeurIPS checklist must appear once after References; found {checklist_pages}')
+    stronger_pages = [
+        i for i, page in enumerate(flat_pages)
+        if 'theorem sinTheta_unbounded_formGap_symmetricNorming_rclike' in page
+    ]
+    if len(stronger_pages) != 1 or stronger_pages[0] >= main_pages:
+        errors.append('Stronger sine-theta theorem must appear once before References')
+    else:
+        stronger = flat_pages[stronger_pages[0]]
+        for token in (
+            '-- proof omitted', 'Formalization 2:', 'SymmetricNormingFunction',
+            'RCLike', 'IsTrialResidual', 'IsExactSpectralDecomposition',
+            'FormBoundedSylvesterGap', 'N.Mem R', 'N.gauge R',
+        ):
+            if token not in stronger:
+                errors.append(f'Stronger sine-theta display split or text missing: {token}')
     current_pages = [
         i for i, page in enumerate(flat_pages)
         if 'theorem sinTheta_unbounded_formGap_whereDefinedUIN_rclike' in page
@@ -69,7 +84,7 @@ def validate_pages(pages: list[str], public: bool) -> list[str]:
     else:
         current = flat_pages[current_pages[0]]
         for token in (
-            '-- proof omitted', 'Formalization 2:',
+            '-- proof omitted', 'Formalization 3:',
             'NormalizedSymmetricOperatorIdealFamily',
             'RCLike', 'SeparableSpace E', 'IsTrialResidual',
             'IsExactSpectralDecomposition', 'FormBoundedSylvesterGap',

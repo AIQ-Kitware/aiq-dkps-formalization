@@ -255,7 +255,7 @@ def build_model_tables():
 
 
 def build_sin_theta_alignment_example():
-    """Build the historical/current sine-theta statement comparison."""
+    """Build the three sine-theta statement boundaries used in the paper."""
 
     def extract_decl(
         commit: str,
@@ -320,6 +320,14 @@ def build_sin_theta_alignment_example():
         context_line_count=6,
     )
     current_path = 'DavisKahan/Sources/DavisKahan1970/SineTheta/Presentation.lean'
+    stronger_name = 'sinTheta_unbounded_formGap_symmetricNorming_rclike'
+    stronger = extract_decl(
+        'WORKTREE',
+        current_path,
+        stronger_name,
+        context_prefix='variable {𝕜 : Type u} [RCLike 𝕜]',
+        context_line_count=6,
+    )
     current_name = 'sinTheta_unbounded_formGap_whereDefinedUIN_rclike'
     current = extract_decl(
         'WORKTREE',
@@ -372,6 +380,26 @@ def build_sin_theta_alignment_example():
             raise RuntimeError(
                 f'historical sine-theta signature missing {needle!r}'
             )
+    stronger_checks = (
+        '[RCLike 𝕜]',
+        '(N : SymmetricNormingFunction)',
+        '(A : E →ₗ.[𝕜] E)',
+        '(A₀ : F →ₗ.[𝕜] F)',
+        '(Λ₁ : G →ₗ.[𝕜] G)',
+        'IsTrialResidual A A₀ E₀ R',
+        'IsExactSpectralDecomposition A Λ₁ F₀ F₁',
+        'FormBoundedSylvesterGap A₀ Λ₁ δ',
+        '(hR : N.Mem R)',
+        'N.Mem ((ContinuousLinearMap.id 𝕜 E - F₀ ∘L F₀.adjoint) ∘L E₀) ∧',
+        'δ * N.gauge',
+        '≤',
+        'N.gauge R',
+    )
+    for needle in stronger_checks:
+        if needle not in stronger['display_source']:
+            raise RuntimeError(f'stronger sine-theta signature missing {needle!r}')
+    if '[TopologicalSpace.SeparableSpace E]' in stronger['display_source']:
+        raise RuntimeError('stronger sine-theta signature unexpectedly requires separability')
     current_checks = (
         '[RCLike 𝕜]',
         '[TopologicalSpace.SeparableSpace E]',
@@ -394,6 +422,7 @@ def build_sin_theta_alignment_example():
 
     exact_outputs = {
         'historical_sin_theta_gap_mismatch_exact.lean': historical['display_source'],
+        'stronger_sin_theta_exact.lean': stronger['display_source'],
         'current_sin_theta_exact.lean': current['display_source'],
     }
     for name, text in exact_outputs.items():
@@ -447,9 +476,12 @@ def build_sin_theta_alignment_example():
         text = exact_text
         for source_token, sentinel in literate:
             text = text.replace(source_token, sentinel)
-        if not text.endswith(':= by\n'):
-            raise RuntimeError(f'{name} presentation no longer ends in `:= by`')
-        text = text[:-1] + '  -- proof omitted\n'
+        if text.endswith(':= by\n'):
+            text = text[:-1] + '  -- proof omitted\n'
+        elif text.endswith(':=\n'):
+            text = text[:-1] + ' by\n  -- proof omitted\n'
+        else:
+            raise RuntimeError(f'{name} presentation no longer ends at a theorem proof boundary')
         if not text.isascii():
             remaining = sorted({c for c in text if ord(c) > 127})
             raise RuntimeError(
@@ -469,6 +501,11 @@ def build_sin_theta_alignment_example():
         'historical_sin_theta_gap_mismatch_exact.lean',
         historical['display_source'],
     )
+    stronger_presentation = presentation(
+        'stronger sine-theta',
+        'stronger_sin_theta_exact.lean',
+        stronger['display_source'],
+    )
     current_presentation = presentation(
         'current sine-theta',
         'current_sin_theta_exact.lean',
@@ -477,12 +514,15 @@ def build_sin_theta_alignment_example():
     (PAPER / 'generated' / 'historical_sin_theta_gap_mismatch_presentation.lean').write_text(
         historical_presentation, encoding='ascii'
     )
+    (PAPER / 'generated' / 'stronger_sin_theta_presentation.lean').write_text(
+        stronger_presentation, encoding='ascii'
+    )
     (PAPER / 'generated' / 'current_sin_theta_presentation.lean').write_text(
         current_presentation, encoding='ascii'
     )
 
-    if paper_tex.count('firstline=6,') < 2:
-        raise RuntimeError('paper.tex must skip the five-line header for both sine-theta displays')
+    if paper_tex.count('firstline=6,') < 3:
+        raise RuntimeError('paper.tex must skip the five-line header for all three sine-theta displays')
 
     payload = {
         'schema_version': 1,
@@ -490,7 +530,19 @@ def build_sin_theta_alignment_example():
         'historical_review_commit': historical_review_commit,
         'correction_commit': correction_commit,
         'historical_declaration': historical,
+        'stronger_declaration': stronger,
         'current_declaration': current,
+        'roles': {
+            'historical_declaration': 'strict specialization: finite interval/exterior gap only',
+            'stronger_declaration': (
+                'stronger on operator-side hypotheses: no ambient separability and '
+                'weaker domain/gap conditions than the source'
+            ),
+            'current_declaration': (
+                'closest source-correspondence boundary: separable ambient scope and '
+                'where-defined norm comparison, retaining the generalized domain/gap API'
+            ),
+        },
         'review_evidence': {
             'historical_packet_path': historical_review_path,
             'historical_packet_sha256': hashlib.sha256(historical_review.encode('utf8')).hexdigest(),
@@ -503,6 +555,7 @@ def build_sin_theta_alignment_example():
         },
         'presentation_files': {
             'historical': 'generated/historical_sin_theta_gap_mismatch_presentation.lean',
+            'stronger': 'generated/stronger_sin_theta_presentation.lean',
             'current': 'generated/current_sin_theta_presentation.lean',
         },
         'note': (
@@ -549,6 +602,8 @@ def build_manifest():
         'papers/formalization_process/generated/sin_theta_alignment_example.json',
         'papers/formalization_process/generated/historical_sin_theta_gap_mismatch_exact.lean',
         'papers/formalization_process/generated/historical_sin_theta_gap_mismatch_presentation.lean',
+        'papers/formalization_process/generated/stronger_sin_theta_exact.lean',
+        'papers/formalization_process/generated/stronger_sin_theta_presentation.lean',
         'papers/formalization_process/generated/current_sin_theta_exact.lean',
         'papers/formalization_process/generated/current_sin_theta_presentation.lean',
         'DavisKahan/Sources/DavisKahan1970/SineTheta/Presentation.lean',
@@ -618,8 +673,9 @@ def build_manifest():
         'papers/formalization_process/data/practitioner_accounts.csv': 'public-account snapshot',
         'papers/formalization_process/data/practitioner_accounts.schema.json': 'account-field schema',
         'papers/formalization_process/data/review_timeline.csv': 'selected Git chronology',
-        'papers/formalization_process/generated/sin_theta_alignment_example.json': 'historical/current sine-theta semantic-alignment evidence',
+        'papers/formalization_process/generated/sin_theta_alignment_example.json': 'three sine-theta statement boundaries used in the paper',
         'papers/formalization_process/generated/historical_sin_theta_gap_mismatch_exact.lean': 'exact historical sine-theta signature sidecar',
+        'papers/formalization_process/generated/stronger_sin_theta_exact.lean': 'exact stronger sine-theta signature sidecar',
         'papers/formalization_process/generated/current_sin_theta_exact.lean': 'exact current Davis--Kahan Section 2 sine-theta signature',
         'papers/formalization_process/notes/SEMANTIC_ALIGNMENT_CANDIDATES.md': 'semantic-alignment candidate signatures',
         'DavisKahan/Sources/DavisKahan1970/SineTheta/Presentation.lean': 'current sine-theta Lean source',

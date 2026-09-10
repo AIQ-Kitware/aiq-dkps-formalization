@@ -172,27 +172,30 @@ Additional constraints:
 43. Resource reporting is descriptive accounting, not a virtue claim.  Use the
     heading ``Resource utilization'' and keep the main AI-assistance statement
     short.  Do not frame disclosure as evidence of transparency.
-44. Formalizations 1 and 2 in the manuscript are both Davis--Kahan Section~2
-    `sin Theta` statements. Formalization 1 is the historically misclassified
-    finite interval/exterior declaration; Formalization 2 is the current
-    scalar-generic full-gap where-defined endpoint. Do not substitute a `sin 2Theta`
-    theorem or mix theorem families in this worked comparison.
+44. Formalizations 1--3 in the manuscript compare three Davis--Kahan Section~2
+    `sin Theta` statement boundaries. Formalization 1 is the historically
+    misclassified finite interval/exterior specialization. Formalization 2 is
+    `sinTheta_unbounded_formGap_symmetricNorming_rclike`, which is mathematically
+    stronger on the operator-side hypotheses: it drops ambient separability and
+    uses the weaker forward-domain/form-gap conditions. Formalization 3 is
+    `sinTheta_unbounded_formGap_whereDefinedUIN_rclike`, the closest current
+    source-correspondence boundary. Do not substitute a `sin 2Theta` theorem or
+    a Section 6 generalized-sine theorem in this worked comparison.
 45. When describing source-scope maintenance, treat real, complex, and scalar-generic
     `RCLike` declarations as one API family. A repair to one fixed field is not evidence
     that the sibling field or scalar-generic surface was updated. Do not name a theorem
     `sourceExact` or `sourceFaithful`; source fidelity is metadata owned by the result
     ledger, not a semantic property encoded in a declaration name.
 46. Define the sine-theta coordinate objects before relying on compact Lean
-    predicates. Davis--Kahan use `A` for the reference operator and `A+H` for the
-    perturbed operator; in the numerical-analysis formulation, `A+H` is the given
-    full-space operator. In rendered exposition, write `T := A+H` for that operator
-    and state once that the Lean parameter `A` denotes this `T`. Then define `E0`
-    as the trial-coordinate embedding, `A0` as the possibly unbounded trial
-    operator, `F0` as the desired exact subspace, `F1` as its orthogonal complement,
-    `Lambda1` as the complementary exact block of `T`, and `R = T E0 - E0 A0` on
-    the trial domain. A trial subspace is often an approximate spectral subspace in
-    applications.
-47. Formalization 2 is
+    predicates. In Davis--Kahan notation `A` is the reference operator and
+    `A+H` is the perturbed full-space operator. The manuscript writes
+    `T := A+H`; the Lean signatures use the parameter name `A` for this `T`.
+    `E0` embeds the trial coordinates, `A0` is the possibly unbounded trial
+    operator, `F0` is the desired exact subspace of `T`, `F1` its orthogonal
+    complement, `Lambda1` the complementary exact block, and
+    `R = T E0 - E0 A0` on the trial domain. A trial subspace is often an
+    approximate spectral subspace in applications.
+47. Formalization 3 is
     `sinTheta_unbounded_formGap_whereDefinedUIN_rclike`. Explain that it covers
     the historical missing half-infinite gap cases and uses the where-defined norm
     boundary. Also state the two API generalizations relevant to fidelity: the
@@ -203,3 +206,13 @@ Additional constraints:
     "replacement awaits compiler validation", "new common-domain code", or
     "a further source review finds").  Keep commit/review status in comments or
     audit documents and write the manuscript from the stable mathematical state.
+49. Use `stronger` for theorem statements only when the mathematical scope is
+    broader or the hypotheses are weaker. When two statements use different norm
+    interfaces and are not totally ordered by implication, name the axis of
+    generality explicitly rather than treating an extra conclusion as sufficient
+    evidence of theorem strength.
+50. The source's positive `sin Theta0` and the rectangular map
+    `(I - F0 F0*) E0` act between different spaces. Explain the correspondence
+    through the source's singular-value/unitarily-invariant-norm identity.
+    Formalization 1's `hSinTheta0` names the rectangular representative;
+    Formalizations 2 and 3 inline that same map inside the gauge.

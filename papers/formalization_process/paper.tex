@@ -262,19 +262,22 @@ declarations and maintaining source-to-statement records.
 \section{What we formalized}
 \label{sec:dk}
 
-Davis and Kahan begin with a reference operator $A$ and a perturbed
-operator $A+H$.  Under a population/sample interpretation, $A$ is the
-population operator and $A+H$ is the sample operator.  Their numerical-analysis
-discussion takes $A+H$ as the given full-space operator.  The symbol $A_0$ has
-a separate role: it is the lower-dimensional operator on trial coordinates.
-We therefore write $T:=A+H$ for the full-space operator in this exposition.
-The Lean signatures retain the parameter name \texttt{A} for $T$.
-
 Davis and Kahan's Section~2 $\sin\Theta$ theorem compares a trial subspace
-with an exact spectral subspace of $T$.  Let $A_0$ be a self-adjoint operator on
-trial coordinates and let $E_0$ embed those coordinates isometrically into the
-ambient Hilbert space.  The range of $E_0$ is the \emph{trial subspace}; in
-applications it is often an approximate spectral subspace.  The residual
+with an exact spectral subspace of the perturbed full-space operator.  Their
+notation writes the reference operator as $A$ and the perturbed operator as
+$A+H$.  We write
+\[
+  T:=A+H
+\]
+for the perturbed operator in the discussion below.  In applications using
+population/sample terminology, $A$ is the reference or population operator and
+$T$ is the perturbed or sample operator.  The Lean signatures below use the
+parameter name \texttt{A} for this full-space operator $T$.
+
+Let $A_0$ be a self-adjoint operator on trial coordinates and let $E_0$ embed
+those coordinates isometrically into the ambient Hilbert space.  The range of
+$E_0$ is the \emph{trial subspace}; in applications it is often an approximate
+spectral subspace.  The residual
 \[
   R=TE_0-E_0A_0
 \]
@@ -284,14 +287,28 @@ $A_0$, and $R$ is a bounded extension of that residual.
 
 Let $F_0$ be isometric coordinates for the desired exact subspace and $F_1$ for
 its orthogonal complement, with $\Lambda_1$ the corresponding complementary
-spectral block of $T$.  The directed sine of the angle is represented by
+spectral block of $T$.  Davis--Kahan's positive operator $\sin\Theta_0$ acts on
+trial coordinates.  The rectangular map
+\begin{equation}
+  S=(I-F_0F_0^*)E_0
+  \label{eq:sin-theta-representative}
+\end{equation}
+maps a trial coordinate vector to the component of its ambient image orthogonal
+to the desired exact subspace.  Davis--Kahan show that $S$ is
+$\sin\Theta_0$ followed by an isometry.  The two operators therefore have the
+same singular values and
 \[
-  \sin\Theta_0=(I-F_0F_0^*)E_0.
+  N(S)=N(\sin\Theta_0)
 \]
+for every unitarily invariant norm $N$.  The Lean statements below use $S$ as
+this norm representative.
+
 If the trial block $A_0$ and complementary block $\Lambda_1$ are separated by
 $\delta>0$, Davis--Kahan prove, for every unitarily invariant norm for which the
 two displayed quantities are defined,
 \begin{equation}
+  \delta\,N(S)\le N(R),
+  \qquad\text{equivalently}\qquad
   \delta\,N(\sin\Theta_0)\le N(R).
   \label{eq:sin-theta}
 \end{equation}
@@ -321,6 +338,147 @@ operator-theoretic infrastructure were copied, adapted, or generalized from the
 Spectra formalization \citep{bornemann2026spectra}.  Reusable components developed
 here are being prepared for Tau Ceti, an AI-authored Lean library downstream of
 Mathlib \citep{tauceti2026}.
+
+% Historical provenance for editors (not rendered): the semantic-review packet
+% at commit 489c01c2cc992a20d38415b5f827cdc046fe7236 listed
+% sinTheta_unbounded_intervalExterior_characterizedWitness_rclike under
+% "Canonical Lean declarations" and marked the source-correspondence rows
+% claimed_exact. Commit cb3b330b later recorded explicitly that the row had
+% named this declaration as the exact source match and that this was wrong
+% because the theorem covered only the finite interval/exterior branch while
+% Davis--Kahan permit half-infinite separation. The same correction also
+% discussed an older ideal-membership interpretation; do not use that point as
+% the worked mismatch because the project's norm-boundary interpretation later
+% changed. The durable defect used here is gap scope.
+\subsection{Three sine-theta theorem statements}
+\label{sec:scope-mismatch}
+
+The development contains several checked declarations with the factor-one
+$\sin\Theta$ inequality in \cref{eq:sin-theta}.  Their hypothesis boundaries
+differ.  Davis--Kahan first state the theorem with a finite separating interval
+and later extend the same estimate to half-infinite intervals in the Appendix to
+Section~6.  Three signatures show a statement narrower than this complete proved
+scope, a statement with weaker operator-side hypotheses, and the declaration
+that most closely follows the source's scope and norm convention.
+
+\begin{table}[t]
+\centering
+\small
+\caption{Comparison of three checked $\sin\Theta$ statements.  Formalization~2
+uses weaker operator-side hypotheses than Davis--Kahan; its norm interface is
+different from the source convention.}
+\label{tab:sintheta-boundaries}
+\begin{tabularx}{\linewidth}{@{}p{0.19\linewidth}p{0.31\linewidth}X@{}}
+\toprule
+Statement & Scope change & Relation to Davis--Kahan \\
+\midrule
+Formalization 1 & finite interval/exterior gap
+  & narrower than the complete proved scope \\
+Formalization 2 & no separability; forward domain inclusion; form semibounds
+  & operator-side generalization \\
+Formalization 3 & separable; where-defined norm; forward domain inclusion; form semibounds
+  & closest source statement in the development \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+\paragraph{Formalization 1: the finite-interval specialization.}
+\Cref{lst:sintheta-mismatch} requires finite $\beta\le\alpha$ and one spectrum
+to lie in $[\beta,\alpha]$ while the other lies outside
+$(\beta-\delta,\alpha+\delta)$, with the two roles interchangeable.
+
+In the Appendix to Section~6, Davis--Kahan extend the same sine-theta estimate
+to half-infinite separating intervals.  In those cases one spectral block may be
+only semibounded above and the other only semibounded below, with a gap of at
+least $\delta$ between them.  Such an instance need not put either block inside
+any finite interval $[\beta,\alpha]$.  Formalization~1 therefore covers the
+initial finite-interval statement but not the later proved extension.
+
+% Presentation note (not rendered): scripts/build_evidence.py extracts the
+% historical signature from commit 489c01c2cc992a20d38415b5f827cdc046fe7236,
+% writes the exact text to generated/historical_sin_theta_gap_mismatch_exact.lean,
+% and verifies the contemporaneous/corrective semantic-review text from Git.
+% The listings input differs only by LeanLit... ASCII typography sentinels.
+\begin{nolinenumbers}
+\begin{minipage}{\linewidth}
+\lstinputlisting[
+  style=leanpaper,
+  firstline=6,
+  caption={The finite interval/exterior form matches the initial Section~2 gap condition but does not include the half-infinite extension proved later.  The hypothesis \texttt{hSinTheta0} names the rectangular representative $S$ in \cref{eq:sin-theta-representative}.},
+  label={lst:sintheta-mismatch}
+]{generated/historical_sin_theta_gap_mismatch_presentation.lean}
+\end{minipage}
+\end{nolinenumbers}
+
+\paragraph{Formalization 2: weaker operator-side hypotheses.}
+\Cref{lst:stronger-sintheta} weakens several hypotheses that delimit the source
+statement.  It has no ambient separability assumption.  Its
+\texttt{IsTrialResidual} predicate requires only that $E_0$ carry
+$\operatorname{dom}A_0$ into the domain of the full-space operator, rather than
+requiring equality of the two pulled-back domains.  Its ordered
+\texttt{FormBoundedSylvesterGap} branches use quadratic-form semibounds, which
+are implied by the source's spectral half-line conditions.  On these axes the
+theorem applies to every source instance and to additional instances satisfying
+the weaker conditions.
+
+Its norm interface is expressed differently from the source convention:
+\texttt{hR : N.Mem R} assumes that the residual has finite $N$-gauge, and the
+conclusion also proves membership of the sine representative in that gauge's
+domain.  The operator-side hypotheses are weaker than the corresponding source
+assumptions.  The norm interface changes at the same time, so Formalizations~2
+and~3 are not totally ordered by implication.
+
+% Editor provenance (not rendered): this display is generated verbatim from
+% sinTheta_unbounded_formGap_symmetricNorming_rclike in
+% DavisKahan/Sources/DavisKahan1970/SineTheta/Presentation.lean.  The exact
+% Unicode signature is generated/stronger_sin_theta_exact.lean.
+\begin{nolinenumbers}
+\begin{minipage}{\linewidth}
+\lstinputlisting[
+  style=leanpaper,
+  firstline=6,
+  caption={This theorem uses weaker operator-side hypotheses: ambient separability is absent, the source common-domain equality is weakened to forward domain inclusion, and the ordered gap cases use form semibounds.  The angle term in \texttt{N.gauge} is the same rectangular representative $S$ named by \texttt{hSinTheta0} in Formalization~1.},
+  label={lst:stronger-sintheta}
+]{generated/stronger_sin_theta_presentation.lean}
+\end{minipage}
+\end{nolinenumbers}
+
+\paragraph{Formalization 3: the statement closest to Davis--Kahan.}
+\Cref{lst:current-sintheta} restores the source's separable ambient scope and
+models its convention that a displayed unitarily invariant norm statement is
+vacuous when either norm is undefined.  There is no residual-membership binder
+before the colon.  The two \texttt{N.Mem} implications after the colon restrict
+the numerical comparison to the cases in which both displayed norms exist.
+
+% Editor provenance (not rendered): this display is generated verbatim from
+% sinTheta_unbounded_formGap_whereDefinedUIN_rclike in
+% DavisKahan/Sources/DavisKahan1970/SineTheta/Presentation.lean. The exact
+% Unicode signature is generated/current_sin_theta_exact.lean; the listings
+% input differs only by ASCII typography sentinels. Source fidelity is a ledger
+% judgment, not a theorem-name claim.
+\begin{nolinenumbers}
+\begin{minipage}{\linewidth}
+\lstinputlisting[
+  style=leanpaper,
+  firstline=6,
+  caption={The statement closest to Davis--Kahan restores ambient separability and states the norm comparison where both gauges are defined.  Its inlined map $S=(I-F_0F_0^*)E_0$ is the rectangular sine representative named by \texttt{hSinTheta0} in Formalization~1 and explained in \cref{eq:sin-theta-representative}.},
+  label={lst:current-sintheta}
+]{generated/current_sin_theta_presentation.lean}
+\end{minipage}
+\end{nolinenumbers}
+
+Formalization~3 retains two operator-side generalizations from Formalization~2.
+Its \texttt{IsTrialResidual} predicate uses forward domain inclusion, while
+Davis--Kahan's unbounded discussion states the common-domain condition
+\[
+  \{x:E_0x\in\operatorname{dom}T\}=\operatorname{dom}A_0.
+\]
+The source condition implies the Lean domain hypothesis.  Likewise, the
+source's spectral half-line assumptions imply the form semibounds in the ordered
+branches of \texttt{FormBoundedSylvesterGap}.  Formalization~3 therefore covers
+all of these source cases while admitting additional cases on those two axes.
+\Cref{app:formalization1,app:formalization2,app:formalization3} gives a reader's
+guide to the three signatures and the sine-angle norm representation.
 
 \section{Formalization process}
 \label{sec:system}
@@ -352,21 +510,14 @@ figure, while ``Formalize'' includes its compile-and-revise cycle:
   Claude were used throughout the project; we do not assign fixed roles to the
   two systems.
 
-\item \textbf{Skeptical Review.}  When possible, an agent that had not
-  implemented the result compared the source passage with the resulting theorem
-  statement.  Reviews checked hypotheses, objects, scalar field, dimension,
-  bounded or unbounded operator scope, norm class, gap assumptions, constants,
-  and directionality.  A recurring failure mode was scalar-scope drift: an agent
-  would repair a complex declaration without making the corresponding real
-  declaration and shared \texttt{RCLike} API consistent.  We therefore review the
-  complex, real, and scalar-generic surfaces as one family.  Implementing agents
-  sometimes reported completion before this comparison; reviewers could also ask
-  for a stronger statement than the source supported.  The humans directing the
-  work monitored these exchanges,
-  supplied framing, noticed inconsistencies among model outputs, and asked for
-  further explanations or independent reviews.  They were not Davis--Kahan
-  subject-matter experts, so this process did not provide independent expert
-  adjudication of every source interpretation.
+\item \textbf{Skeptical Review.}  A reviewer independent of implementation
+  compared source passages with theorem statements, checking hypotheses,
+  mathematical objects, scalar field, dimension, boundedness, norm class, gap
+  assumptions, constants, and directionality.  Complex, real, and
+  scalar-generic \texttt{RCLike} declarations were reviewed as one family because
+  changes to one declaration can leave its siblings with different scope.  These
+  checks did not constitute independent subject-matter adjudication of every
+  source interpretation.
 \end{itemize}
 
 The stages loop.  A mismatch can require more source context, a different
@@ -386,109 +537,19 @@ mismatch missed by an earlier pass, so this is an operational stopping rule, not
 a certificate of source correspondence.  \Cref{app:system} gives additional
 procedure details.
 
-% Historical provenance for editors (not rendered): the semantic-review packet
-% at commit 489c01c2cc992a20d38415b5f827cdc046fe7236 listed
-% sinTheta_unbounded_intervalExterior_characterizedWitness_rclike under
-% "Canonical Lean declarations" and marked the source-correspondence rows
-% claimed_exact. Commit cb3b330b later recorded explicitly that the row had
-% named this declaration as the exact source match and that this was wrong
-% because the theorem covered only the finite interval/exterior branch while
-% Davis--Kahan permit half-infinite separation. The same correction also
-% discussed an older ideal-membership interpretation; do not use that point as
-% the worked mismatch because the project's norm-boundary interpretation later
-% changed. The durable defect used here is gap scope.
-\subsection{A source-alignment failure in the sine-theta theorem}
-\label{sec:scope-mismatch}
-
-A historical semantic-review packet classified
-\Cref{lst:sintheta-mismatch} as the canonical exact match for the
-Davis--Kahan Section~2 $\sin\Theta$ theorem.  The conclusion, scalar-generic
-operator types, residual, and factor one were already in place.  The spectral
-hypothesis was not: it required finite $\beta\le\alpha$ and one spectrum to lie
-in $[\beta,\alpha]$ while the other lay outside
-$(\beta-\delta,\alpha+\delta)$, with the two roles interchangeable.
-
-Davis--Kahan also allow half-infinite separating intervals.  In those cases one
-spectral block may be only semibounded above and the other only semibounded below,
-with a gap of at least $\delta$ between them.  Such a source instance need not
-put either block inside any finite interval $[\beta,\alpha]$.  Therefore the
-historical declaration proves a proper specialization of the source theorem and
-cannot by itself establish the full Davis--Kahan claim.
-
-% Presentation note (not rendered): scripts/build_evidence.py extracts the
-% historical signature from commit 489c01c2cc992a20d38415b5f827cdc046fe7236,
-% writes the exact text to generated/historical_sin_theta_gap_mismatch_exact.lean,
-% and verifies the contemporaneous/corrective semantic-review text from Git.
-% The listings input differs only by LeanLit... ASCII typography sentinels.
-\begin{nolinenumbers}
-\begin{minipage}{\linewidth}
-\lstinputlisting[
-  style=leanpaper,
-  firstline=6,
-  caption={Historical $\sin\Theta$ declaration once classified by a semantic-review packet as the canonical exact source match.  Its explicit spectral hypothesis covers the finite interval/exterior case but omits the half-infinite separation allowed by Davis--Kahan.},
-  label={lst:sintheta-mismatch}
-]{generated/historical_sin_theta_gap_mismatch_presentation.lean}
-\end{minipage}
-\end{nolinenumbers}
-
-The failure is confined to a hypothesis rather than the displayed inequality.
-This made it easy to miss in a review centered on theorem conclusions.  A later
-source comparison corrected the classification and moved the full gap scope into
-the public theorem boundary.
-
-\paragraph{Formalization 2: the current sine-theta theorem.}
-\Cref{lst:current-sintheta} shows the current scalar-generic endpoint.  Its
-\texttt{FormBoundedSylvesterGap} hypothesis contains the finite
-interval/exterior configuration together with both ordered half-infinite
-configurations.  Its norm boundary also states the comparison only when the two
-displayed norms are defined.  Thus the theorem concludes exactly the inequality
-in \cref{eq:sin-theta} without requiring norm-domain membership as an invocation
-condition beyond those two displayed quantities.
-
-% Editor provenance (not rendered): this display is generated verbatim from
-% sinTheta_unbounded_formGap_whereDefinedUIN_rclike in
-% DavisKahan/Sources/DavisKahan1970/SineTheta/Presentation.lean. The exact
-% Unicode signature is generated/current_sin_theta_exact.lean; the listings
-% input differs only by ASCII typography sentinels. Source fidelity is a ledger
-% judgment, not a theorem-name claim.
-\begin{nolinenumbers}
-\begin{minipage}{\linewidth}
-\lstinputlisting[
-  style=leanpaper,
-  firstline=6,
-  caption={Current scalar-generic $\sin\Theta$ theorem.  The full form-bounded gap includes the finite and half-infinite source configurations, and the norm comparison is stated where both displayed norms are defined.},
-  label={lst:current-sintheta}
-]{generated/current_sin_theta_presentation.lean}
-\end{minipage}
-\end{nolinenumbers}
-
-The current theorem is not a literal transcription in every respect.  Its
-\texttt{IsTrialResidual} hypothesis requires that $E_0$ map
-$\operatorname{dom}A_0$ into $\operatorname{dom}A$ and that the residual identity
-hold there.  Davis--Kahan's unbounded discussion states the stronger common-domain
-condition
-\[
-  \{x:E_0x\in\operatorname{dom}A\}=\operatorname{dom}A_0.
-\]
-The source condition therefore implies the Lean domain hypothesis, so this extra
-generality does not exclude any Davis--Kahan instance.  Similarly, the
-half-infinite branches of \texttt{FormBoundedSylvesterGap} use operator-form
-semibounds; the source's spectral half-line conditions imply those form bounds.
-\Cref{app:formalization2} gives a reader's guide to these hypotheses and their
-relation to the source.
-
 \section{Conclusion}
 
 \paragraph{Did we formalize Davis--Kahan?}
 The development contains checked formal treatments addressing all 29 tracked
 results, with Proposition~4.4 handled by a finite-dimensional counterexample
-and a proved repair.  The sine-theta example shows why that accounting is
-separate from source correspondence: a theorem once classified as the exact
-match had the correct factor-one inequality but omitted the half-infinite gap
-cases permitted by Davis--Kahan.  The current scalar-generic endpoint covers
-those cases and is, on its domain interface, slightly more general than the
-literal source assumptions.  The project still has no calibrated stopping rule
-that certifies that every source-to-statement comparison is complete.
+and a proved repair.  The three sine-theta signatures separate mathematical
+strength from correspondence with a particular source statement.  One is a
+strict specialization because its gap hypothesis is too narrow; another has
+weaker operator-side hypotheses than Davis--Kahan; and the closest current
+boundary restores the source's separable scope and where-defined norm convention
+while retaining two operator-side generalizations.  The project still has no
+calibrated stopping rule that certifies that every source-to-statement comparison
+is complete.
 
 The case study therefore supports reviewing each conclusion together with the
 hypotheses and definitions that determine its scope.  A matching inequality,
