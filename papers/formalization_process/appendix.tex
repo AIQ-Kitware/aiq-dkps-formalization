@@ -59,168 +59,212 @@ not Davis--Kahan subject-matter experts, so disagreements about source meaning
 were often investigated by probing the models in different ways rather than by
 an independent expert reading of the theorem.
 
-\section{Davis--Kahan sine-theta notation and Formalization 1}
+\section{Sine-angle norms and Formalization 1}
 \label{app:formalization1}
 
-The sine-theta theorem is naturally expressed with coordinate maps.  The
-ambient self-adjoint operator is $A$.  The trial-coordinate space carries a
-possibly unbounded self-adjoint operator $A_0$, and the isometry
-$E_0$ embeds those coordinates into the ambient Hilbert space.  Its range is
-the trial subspace.  The bounded residual $R$ extends
+The coordinate spaces in the Lean signatures are \texttt{E} for the ambient
+space, \texttt{F} for the trial coordinates, \texttt{H} for the desired exact
+coordinates, and \texttt{G} for the complementary exact coordinates.  The maps
+$E_0,F_0,F_1$ embed the last three spaces isometrically into the first.  In
+finite dimensions these maps can be viewed as matrices with orthonormal
+columns.  An adjoint, written $^*$ in mathematics and \texttt{.adjoint} in
+Lean, is then the conjugate transpose.  The notation $\circ_L$ composes bounded
+linear maps, with the right-hand map applied first.  Thus the expression
+inside \texttt{N.gaugeReal} in \cref{lst:current-sintheta} first embeds a
+trial vector and then removes its component in the desired exact subspace.
+
+\paragraph{Why this map represents the sine of the angle.}
+Recall $Q=F_0F_0^*$ and $S=(I-Q)E_0$.  The map $Q$ is an orthogonal
+projection because $F_0$ is isometric.  For one-dimensional trial and exact
+subspaces, choose coordinates in which the exact subspace is the horizontal
+axis and the trial unit vector is $(\cos\theta,\sin\theta)$, with
+$0\le\theta\le\pi/2$.  Then
 \[
-  AE_0-E_0A_0
+  S(1)=(0,\sin\theta),\qquad |S|(1)=\sin\theta.
 \]
-from the domain of $A_0$.  The desired exact subspace is represented by an
-isometry $F_0$; $F_1$ represents its orthogonal complement, and the
-self-adjoint operator $\Lambda_1$ is the complementary spectral block.  The
-exact-coordinate hypotheses say that the ranges of $F_0$ and $F_1$ are
-orthogonal and complete and that $F_1$ intertwines $\Lambda_1$ with $A$.
+The two outputs have the same length and lie in different spaces: $S$ maps
+trial coordinates into the ambient space, while $|S|$ acts on trial coordinates.
 
-The directed sine operator
+For general subspaces, isometry gives $E_0^*E_0=I$, and projection gives
+$(I-Q)^2=I-Q$.  Consequently,
+\begin{equation}
+  S^*S=E_0^*(I-Q)E_0=I-E_0^*QE_0.
+  \label{eq:sine-gram}
+\end{equation}
+The operator $E_0^*QE_0$ is positive and bounded by the identity.  Put
+$C=(E_0^*QE_0)^{1/2}$.  Davis--Kahan define the angle on trial coordinates
+by $\Theta_0=\arccos C$; their equation~(1.16) uses the same positive
+square root in its coordinate notation.  Applying the identity
+$\sin(\arccos t)=\sqrt{1-t^2}$ on $0\le t\le1$ through functional calculus
+and using \cref{eq:sine-gram} gives
 \[
-  \sin\Theta_0=(I-F_0F_0^*)E_0
+  \sin\Theta_0=(I-C^2)^{1/2}=(S^*S)^{1/2}=|S|.
 \]
-measures the component of a trial vector orthogonal to the desired exact
-subspace.  In finite dimensions its singular values are the sines of the
-principal angles between the two subspaces.  Davis--Kahan's estimate bounds
-this operator by the residual as in \cref{eq:sin-theta}.
+In finite dimensions, the eigenvalues of $|S|$ are the singular values of $S$,
+namely the sines of the principal angles.  The positive-square-root identity
+also applies in infinite dimensions, without a discrete list of eigenvectors.
 
-Formalization~1 is already scalar-generic over real and complex Hilbert spaces
-and uses potentially unbounded operators.  Its defect is the explicit
-\texttt{hspectral} hypothesis.  The two alternatives in that hypothesis say
-that one spectrum lies in a finite interval $[\beta,\alpha]$ and the other lies
-outside the enlarged open interval
-$(\beta-\delta,\alpha+\delta)$.  Swapping the two blocks gives the second
-alternative.  Davis--Kahan also allow the separating interval to be
-half-infinite, so neither block need have spectrum contained in a finite
-interval.  Those cases cannot in general satisfy Formalization~1.
+\paragraph{Why the norms agree.}
+Polar decomposition writes $S=U|S|$, where $U$ preserves lengths on the closure
+of the range of $|S|$ and is zero on its orthogonal complement.  This
+\emph{partial isometry} and its adjoint are contractions, and $|S|=U^*S$.
+Davis--Kahan's compatibility law says that composing with a contraction cannot
+increase the chosen norm.  Applying it to these two factorizations yields
+\[
+  N(S)\le N(|S|),\qquad N(|S|)\le N(S).
+\]
+This proves \cref{eq:sine-norm-representation}.  It also preserves the domain
+on which the norm is defined.  The argument needs neither compactness nor an
+extension of $U$ to a unitary operator.  Davis--Kahan state the resulting
+identity $N((I-Q)E_0)=N(\sin\Theta_0)$ in their Section~1
+\citep{davis1970rotation}.
 
-The historical signature also contains two scalar-generic capability classes.
-They package analytic results used by the proof and have instances for the real
-and complex source fields; they are not the gap-scope defect discussed in the
-paper.  Likewise, the norm API in this historical declaration predates the
-current where-defined interface.  The worked mismatch is specifically the
-finite interval/exterior restriction.
+The exact decomposition also gives $I-Q=F_1F_1^*$, so
+$S=F_1(F_1^*E_0)$.  Removing or restoring the isometric factor $F_1$
+preserves the norm.  This connects $S$ to the complementary coordinate block
+$F_1^*E_0$ used in the source proof.
+
+\paragraph{The equality hypothesis in Formalization 1.}
+The parameter \texttt{sinTheta}\(_0\) names $S$.  The hypothesis
+\texttt{hSinTheta}\(_0\) fixes it to $(I-F_0F_0^*)E_0$, so the supplied
+coordinate maps determine its value.  This is a choice of name for a
+bounded map and imposes no additional condition on those subspaces.  Its
+modulus is the positive operator $\sin\Theta_0$ used in the source.
+\Cref{lst:current-sintheta} substitutes the map directly into the conclusion.
+
+The historical gap hypothesis \texttt{hspectral} requires one block to have
+spectrum in a finite interval.  For example, on $\ell^2(\mathbb N)$ let $D$
+be the self-adjoint diagonal operator with entries $1,2,3,\ldots$.  The blocks
+$A_0=-D$ and $\Lambda_1=D$ have a gap of two, although neither has bounded
+spectrum.  They fit the source's half-infinite configuration and cannot satisfy
+that finite-interval hypothesis.  Taking $A=(-D)\oplus D$, the first-summand
+inclusion for $E_0=F_0$, and the second-summand inclusion for $F_1$ gives such
+a source instance with $R=S=0$.
+
+The two bracketed analytic assumptions in \cref{lst:sintheta-mismatch}
+supply a minimax lower bound for singular values and a Ky Fan norm estimate
+for unbounded Sylvester equations.
 
 \begin{table}[H]
 \centering
 \small
-\caption{Reader's guide to Formalization~1.}
+\caption{Mathematical roles of the hypotheses in \cref{lst:sintheta-mismatch}.}
 \label{tab:formalization1-glossary}
 \begin{tabularx}{\linewidth}{@{}>{\raggedright\arraybackslash}p{0.41\linewidth}>{\raggedright\arraybackslash}X@{}}
 \toprule
 Lean expression & Mathematical role \\
 \midrule
 \texttt{RCLike} $\mathbb K$
-  & The scalar field may be real or complex. \\
+  & A common scalar interface covering real and complex Hilbert spaces. \\
 \texttt{A}, \texttt{A0}, $\Lambda_1$ as partial linear maps
-  & The ambient, trial, and complementary exact self-adjoint operators; each
-    may be unbounded. \\
-\texttt{E0}, \texttt{F0}, \texttt{F1}
-  & Bounded coordinate maps for the trial subspace, desired exact subspace,
-    and its orthogonal complement. \\
+  & The ambient, trial, and complementary exact self-adjoint operators;
+    each may be unbounded. \\
 \texttt{IsTrialResidual A A0 E0 R}
   & $E_0$ is isometric, maps $\operatorname{dom}A_0$ into
-    $\operatorname{dom}A$, and $R=AE_0-E_0A_0$ on that domain. \\
+    $\operatorname{dom}A$, and satisfies $AE_0-E_0A_0=R$ there. \\
 \texttt{IsExactSpectralDecomposition A Lambda1 F0 F1}
   & $F_0,F_1$ are orthogonal isometric coordinates forming a complete
-    decomposition, and $F_1\Lambda_1=AF_1$ on $\operatorname{dom}\Lambda_1$. \\
-\texttt{hSinTheta0}
-  & Identifies the displayed angle operator with $(I-F_0F_0^*)E_0$. \\
+    decomposition; $AF_1=F_1\Lambda_1$ on $\operatorname{dom}\Lambda_1$. \\
+\texttt{hSinTheta}\(_0\)
+  & Fixes the parameter \texttt{sinTheta}\(_0\) to $S$, whose modulus is
+    $\sin\Theta_0$ and whose norm appears in the source inequality. \\
 \texttt{beta alpha delta}, \texttt{hspectral}
-  & The finite interval/exterior gap.  This is the historical restriction:
-    it does not express the two half-infinite source configurations. \\
+  & The finite interval/exterior gap, in either orientation. \\
 \texttt{hR : N.Mem R}
-  & The historical norm interface assumes the residual is in the domain of
-    the gauge used in its conclusion. \\
+  & The residual belongs to the domain of the historical norm gauge. \\
 \bottomrule
 \end{tabularx}
 \end{table}
 
+% The historical capability classes and norm interface are preserved verbatim
+% in the generated signature. The gap counterexample does not require a
+% judgment about their implementations or a comparison of the norm interfaces.
+
 \section{Reading Formalization 2}
 \label{app:formalization2}
 
-Formalization~2 keeps the same trial/exact decomposition but changes the two
-interfaces that matter for the worked comparison.  First,
-\texttt{FormBoundedSylvesterGap A0 Lambda1 delta} includes the finite
-interval/exterior case and both ordered semibounded cases.  In the ordered
-cases one operator is semibounded above by $c$ and the other semibounded below
-by $c+\delta$, in either orientation.  The source states these cases through
-spectral half-lines; for self-adjoint operators the source spectral assumptions
-imply the form bounds used by the Lean theorem.  Thus this formal gap predicate
-is at least as permissive as the source hypothesis.
+\paragraph{The norm expression.}
+The theorem quantifies over a normalized symmetric operator-ideal family $N$.
+Such a family assigns compatible norms to operators between Hilbert spaces.
+Its underlying gauge takes values in $[0,+\infty]$, with $+\infty$ marking
+operators outside the norm's domain.  Thus \texttt{N.Mem T} asserts that this
+gauge is finite on $T$, and \texttt{N.gaugeReal T} converts that finite value
+to a real number.  The suffix \texttt{Real} refers to the value of the norm;
+the operator itself may be real or complex.
 
-Second, the norm object records a partial domain of definition.  The conclusion
-is written as two implications,
+In \cref{lst:current-sintheta}, the two membership premises are
+$S\in\operatorname{dom}N$ and $R\in\operatorname{dom}N$.  The body of the
+left-hand gauge is precisely the map fixed by \texttt{hSinTheta}\(_0\) in
+\cref{lst:sintheta-mismatch}.  The conclusion therefore reads
 \[
-  N(\sin\Theta_0)\ \text{defined},\qquad N(R)\ \text{defined}
-  \quad\Longrightarrow\quad
-  \delta N(\sin\Theta_0)\le N(R),
+  \delta\,N(S)\le N(R),
 \]
-rather than using an ideal-membership transfer as part of the theorem boundary.
+which is \cref{eq:sin-theta} by the norm identity proved in
+\cref{app:formalization1}.  The membership premises ensure that each
+real-valued gauge is being used on its finite domain.
 
-\Cref{tab:formalization2-glossary} translates the rest of the current signature.
+The record includes the rank-one normalization and contraction compatibility
+specified in Davis--Kahan Section~1.  It also includes the where-defined
+Ky Fan comparison cited there: inequalities for every Ky Fan norm imply the
+corresponding inequality for the chosen norm when both quantities exist.
+The sine-theta theorem uses that comparison through the norm record.  It does
+not independently derive it from unitary invariance alone.
 
+\paragraph{The gap hypothesis.}
+\texttt{FormBoundedSylvesterGap A0 Lambda1 delta} has three constructors.
+One expresses finite interval/exterior separation, allowing either block to
+occupy the interval.  The other two express ordered half-infinite separation
+by quadratic-form bounds: one block is bounded above by $c$ and the other
+bounded below by $c+\delta$, in either order.  For example, the first bound
+means $\langle A_0x,x\rangle\le c\|x\|^2$ for every $x$ in its domain.
+For self-adjoint operators, spectral containment in the corresponding
+half-lines implies these form bounds.  This supplies the source assumptions
+required to use either ordered constructor.
+
+\paragraph{The domain hypotheses.}
+The operators $A,A_0,\Lambda_1$ are self-adjoint and may be unbounded.
+The maps $E_0,F_0,F_1,R$ are bounded.  Davis--Kahan's common-domain assumption
+for $AE_0$ and $E_0A_0$ is
+\[
+  \{x:E_0x\in\operatorname{dom}A\}=\operatorname{dom}A_0.
+\]
+It implies the forward inclusion in \texttt{IsTrialResidual}; self-adjointness
+of $A_0$ supplies density of that domain.  The same predicate states the
+residual identity there.  The exact-decomposition predicate supplies the
+orthogonal coordinate maps and the intertwining relation for $\Lambda_1$.
+These conditions require domain compatibility only where the unbounded
+operators are applied.
+
+% Source comparison uses the implication from common-domain equality to the
+% forward inclusion. Do not infer strict extra generality from the shorter
+% predicate: the other hypotheses of the full theorem must also be considered.
+% No converse of the spectral-to-form conversion is needed for source coverage.
 \begin{table}[H]
 \centering
 \small
-\caption{Reader's guide to Formalization~2.}
+\caption{Additional expressions in \cref{lst:current-sintheta}.  The coordinate
+maps and residual predicates are explained in \cref{app:formalization1}.}
 \label{tab:formalization2-glossary}
 \begin{tabularx}{\linewidth}{@{}>{\raggedright\arraybackslash}p{0.42\linewidth}>{\raggedright\arraybackslash}X@{}}
 \toprule
 Lean expression & Mathematical role \\
 \midrule
-\texttt{mathbbK} with \texttt{RCLike}
-  & The scalar field is real or complex. \\
 \texttt{SeparableSpace E}
   & The ambient Hilbert space is separable, as in the source setup. \\
-\texttt{N : NormalizedSymmetric\-OperatorIdeal\-Family}
-  & The normalized unitarily invariant norm object, including the set of
-    operators on which its gauge is defined. \\
-\texttt{A}, \texttt{A0}, $\Lambda_1$ as partial linear maps
-  & The possibly unbounded ambient, trial, and complementary exact
-    self-adjoint operators. \\
-\texttt{E0}, \texttt{F0}, \texttt{F1}, \texttt{R}
-  & The trial coordinate map, desired/complementary exact coordinates, and
-    bounded residual. \\
-\texttt{htrial : IsTrialResidual A A0 E0 R}
-  & $E_0$ is isometric; $E_0(\operatorname{dom}A_0)$ lies in
-    $\operatorname{dom}A$; and $R=AE_0-E_0A_0$ on
-    $\operatorname{dom}A_0$. \\
-\texttt{hexact : IsExactSpectralDecomposition ...}
-  & The exact subspace and complement are orthogonal and complete, and the
-    complement intertwines $\Lambda_1$ with $A$. \\
-\texttt{hgap : FormBoundedSylvesterGap A0 Lambda1 delta}
-  & The full gap family: finite interval/exterior or either ordered
-    half-infinite configuration. \\
-\texttt{N.Mem ((I - F0 F0*) E0)} and \texttt{N.Mem R}
-  & The two norms displayed in the inequality are defined. \\
-\texttt{delta * N.gaugeReal (...) <= N.gaugeReal R}
-  & $\delta N(\sin\Theta_0)\le N(R)$. \\
+\texttt{NormalizedSymmetric\-OperatorIdeal\-Family}
+  & A norm family with its domain, normalization, ideal laws, and
+    where-defined Ky Fan comparison. \\
+\texttt{hgap : FormBoundedSylvesterGap ...}
+  & Finite interval/exterior or either ordered half-infinite separation. \\
+\texttt{N.Mem ((I - F0 F0*) E0)}
+  & The norm of $S$, equivalently the norm of $\sin\Theta_0$, is finite. \\
+\texttt{N.Mem R}
+  & The residual has finite norm in the same family. \\
+\texttt{N.gaugeReal ((I - F0 F0*) E0)}
+  & The real number $N(S)=N(\sin\Theta_0)$. \\
 \bottomrule
 \end{tabularx}
 \end{table}
-
-\paragraph{The common-domain condition.}
-Davis--Kahan's unbounded discussion states the trial-domain condition as
-\[
-  \{x:E_0x\in\operatorname{dom}A\}=\operatorname{dom}A_0.
-\]
-The current theorem's \texttt{IsTrialResidual} predicate uses only the forward
-inclusion together with the residual identity on $\operatorname{dom}A_0$.
-The repository's \texttt{HasCommonDomain} predicate records the source equality
-and proves that it implies this forward inclusion.  Consequently the displayed
-Lean theorem is more general on this axis: every source instance satisfies its
-domain hypothesis, but the theorem also applies to some inputs outside the
-literal source formulation.  This is useful as an API generalization and is not
-a loss of source coverage.
-
-\paragraph{Norm representation.}
-The norm record contains a symmetric ideal gauge, rank-one normalization, and a
-where-defined Fan comparison.  Davis--Kahan use the corresponding Ky Fan
-comparison principle for unitarily invariant norms.  The formal theorem packages
-that comparison as part of the norm interface rather than deriving it from a
-smaller collection of norm axioms inside this theorem.
 
 \section{Lean publication activity}
 
