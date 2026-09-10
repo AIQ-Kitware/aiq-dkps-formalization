@@ -63,7 +63,7 @@ theorem yuWangSamworth_lemma5_columns
       exact mul_le_mul_of_nonneg_right
         (mul_le_mul_of_nonneg_right hU hF) (norm_nonneg _)
     _ ≤ 1 * UnitarilyInvariantSeminorm.frobenius A * 1 := by
-      exact mul_le_mul_of_nonneg_left hW (by simpa using hF)
+      exact mul_le_mul_of_nonneg_left hW (by simp)
     _ = UnitarilyInvariantSeminorm.frobenius A := by ring
 
 /-- Lemma A1 with the source's orthonormal-column hypotheses expressed
@@ -164,7 +164,7 @@ theorem yuWangSamworth_lemma5_rows
         exact mul_le_mul_of_nonneg_right
           (mul_le_mul_of_nonneg_right hU hC) (norm_nonneg _)
       _ ≤ 1 * UnitarilyInvariantSeminorm.frobenius C * 1 := by
-        exact mul_le_mul_of_nonneg_left hW (by simpa using hC)
+        exact mul_le_mul_of_nonneg_left hW (by simp)
       _ = UnitarilyInvariantSeminorm.frobenius C := by ring
       _ = UnitarilyInvariantSeminorm.frobenius
             (U.adjoint ∘ₗ A ∘ₗ W) := by rw [hCdef]

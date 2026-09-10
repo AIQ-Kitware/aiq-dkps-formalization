@@ -80,20 +80,15 @@ noncomputable def adjointTransport
           N.invariant V.symm U.symm A.adjoint)
 
 /-- The transported norm evaluated at an adjoint returns the original norm of
-the operator — the defining property of `adjointTransport`. -/
+the operator — the defining property of `adjointTransport`.
+
+Stated in the **coerced** form, which is how call sites write it: a `.toFun` form cannot be
+rewritten with at a call site that says `(adjointTransport N) A.adjoint`, because the goal
+carries the `CoeFun` application rather than the projection. -/
 @[simp] theorem adjointTransport_apply (A : E →ₗ[𝕜] F) :
-    (adjointTransport N).toFun A.adjoint = N.toFun A := by
-  simp only [adjointTransport, LinearMap.adjoint_adjoint]
-
-/-- `adjointTransport_apply` in the **coerced** form, which is how call sites write it.
-
-The `.toFun` form above cannot be rewritten with at a
-call site that says `(adjointTransport N) A.adjoint`: the rewrite reports *"did not find an
-occurrence of the pattern"*, because the goal carries the `CoeFun` application rather than
-the projection. Consumers were working around that with `change`, which is the
-`proof-quality` rubric's code smell — the lemma existed but was unusable as stated. -/
-@[simp] theorem adjointTransport_coe_apply (A : E →ₗ[𝕜] F) :
-    (adjointTransport N) A.adjoint = N A := adjointTransport_apply N A
+    (adjointTransport N) A.adjoint = N A := by
+  change N A.adjoint.adjoint = N A
+  rw [LinearMap.adjoint_adjoint]
 
 /-- The transported norm of a *negated* adjoint.
 
@@ -148,12 +143,15 @@ noncomputable def opNorm : UnitarilyInvariantSeminorm 𝕜 E F where
       exact norm_smul a _)
   unitary_invariant' :=
     TauCeti.UnitarilyInvariantSeminorm.unitary_invariant_of_isometry
+      (f := fun A : E →ₗ[𝕜] F => ‖A.toContinuousLinearMap‖)
       (fun U V A => by
         have hcomp :
             (U.toLinearMap ∘ₗ A ∘ₗ V.toLinearMap).toContinuousLinearMap =
               (U : F →L[𝕜] F) ∘L A.toContinuousLinearMap ∘L (V : E →L[𝕜] E) := by
           ext x
           simp
+        change ‖(U.toLinearMap ∘ₗ A ∘ₗ V.toLinearMap).toContinuousLinearMap‖
+            = ‖A.toContinuousLinearMap‖
         rw [hcomp]
         simp)
 
@@ -211,7 +209,12 @@ noncomputable def frobenius : UnitarilyInvariantSeminorm 𝕜 E F where
         Real.sqrt_mul (sq_nonneg _), Real.sqrt_sq (norm_nonneg a)])
   unitary_invariant' :=
     TauCeti.UnitarilyInvariantSeminorm.unitary_invariant_of_isometry
+      (f := fun A : E →ₗ[𝕜] F => Real.sqrt
+        (∑ i, ‖A (stdOrthonormalBasis 𝕜 E i)‖ ^ 2))
       (fun U V A => by
+        change Real.sqrt (∑ i, ‖(U.toLinearMap ∘ₗ A ∘ₗ V.toLinearMap)
+              (stdOrthonormalBasis 𝕜 E i)‖ ^ 2)
+            = Real.sqrt (∑ i, ‖A (stdOrthonormalBasis 𝕜 E i)‖ ^ 2)
         have key : ∀ i,
             ‖(U.toLinearMap ∘ₗ A ∘ₗ V.toLinearMap)
                 (stdOrthonormalBasis 𝕜 E i)‖ ^ 2 =
@@ -238,6 +241,7 @@ noncomputable def kyFan (k : ℕ) : UnitarilyInvariantSeminorm 𝕜 E F where
       exact Finset.sum_congr rfl fun i _ => singularValues_smul_apply a A (i : ℕ))
   unitary_invariant' :=
     TauCeti.UnitarilyInvariantSeminorm.unitary_invariant_of_isometry
+      (f := fun A : E →ₗ[𝕜] F => kyFanSum k A)
       (fun U V A => by
         unfold kyFanSum
         rw [singularValues_unitary_comp, singularValues_comp_unitary])

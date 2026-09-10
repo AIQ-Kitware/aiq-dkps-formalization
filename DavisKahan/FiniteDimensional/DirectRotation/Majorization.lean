@@ -430,6 +430,7 @@ theorem positive_affine_reverse_kyFanSum
   have hAeig := LinearMap.IsSymmetric.eigenvalues_eq_of_eigenbasis hA.isSymmetric rfl br hanti heig
   have hrange : kyFanSum k A
       = ∑ i ∈ Finset.range (min k (finrank 𝕜 E)), A.singularValues i := by
+    rw [kyFanSum_eq_sum_range]
     refine (Finset.sum_subset
       (fun i hi => Finset.mem_range.mpr
         (lt_of_lt_of_le (Finset.mem_range.mp hi) (min_le_left _ _)))

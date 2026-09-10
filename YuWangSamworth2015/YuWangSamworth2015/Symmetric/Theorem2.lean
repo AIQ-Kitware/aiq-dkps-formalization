@@ -346,7 +346,7 @@ seminorm, so the source notation can appear directly in the theorem statement
 without introducing an opaque application-specific quantity. -/
 noncomputable abbrev frobeniusNorm {p : Nat}
     (A : EuclideanSpace Real (Fin p) →ₗ[Real] EuclideanSpace Real (Fin p)) : Real :=
-  UnitarilyInvariantSeminorm.frobenius Real (EuclideanSpace Real (Fin p)) A
+  UnitarilyInvariantSeminorm.frobenius A
 
 /-- Source-facing operator norm notation for the YWS headline statements. -/
 local notation "‖" A "‖_op" => ‖LinearMap.toContinuousLinearMap A‖

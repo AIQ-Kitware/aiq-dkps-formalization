@@ -197,11 +197,9 @@ noncomputable def schattenNorm (p : ℝ) (hp : 1 ≤ p) :
         abs_of_nonneg (norm_nonneg a)])
   unitary_invariant' :=
     TauCeti.UnitarilyInvariantSeminorm.unitary_invariant_of_isometry
+      (f := fun A : E →ₗ[𝕜] F => FiniteVector.lpGauge p (singularValueVector A))
       (fun U V A => by
-        rw [show singularValueVector
-              (U.toLinearMap ∘ₗ A ∘ₗ V.toLinearMap) = singularValueVector A by
-          rw [singularValueVector_unitary_comp,
-            singularValueVector_comp_unitary]])
+        rw [singularValueVector_unitary_comp, singularValueVector_comp_unitary])
 
 /-- The Schatten `p` norm *is* the `ℓᵖ` gauge of the singular-value vector,
 definitionally.  This is the lemma that turns Schatten statements into

@@ -277,7 +277,7 @@ theorem uiNorm_sylvester_le_of_orderedGap
     have hbound := uiNorm_sylvester_le_of_form_bounds_aux
       (UnitarilyInvariantSeminorm.adjointTransport N)
       hB hA hδ hBform hAform hEqAdj
-    rw [UnitarilyInvariantSeminorm.adjointTransport_coe_apply,
+    rw [UnitarilyInvariantSeminorm.adjointTransport_apply,
       UnitarilyInvariantSeminorm.adjointTransport_neg_adjoint_apply] at hbound
     exact hbound
 
@@ -448,7 +448,7 @@ theorem uiNorm_sylvester_le_of_unorderedIntervalGap
     have hbound := uiNorm_sylvester_le_of_intervalGap
       (UnitarilyInvariantSeminorm.adjointTransport N)
       hB hA hδ hreverse hEqAdj
-    rw [UnitarilyInvariantSeminorm.adjointTransport_coe_apply,
+    rw [UnitarilyInvariantSeminorm.adjointTransport_apply,
       UnitarilyInvariantSeminorm.adjointTransport_neg_adjoint_apply] at hbound
     exact hbound
 

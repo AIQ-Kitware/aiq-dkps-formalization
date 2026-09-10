@@ -51,8 +51,8 @@ theorem rectangularFrobenius_adjoint (A : E →ₗ[𝕜] F) :
   let : CompleteSpace F := FiniteDimensional.complete 𝕜 F
   have h := ContinuousLinearMap.hilbertSchmidtNorm_adjoint A.toContinuousLinearMap
   rw [← LinearMap.adjoint_toContinuousLinearMap,
-    hilbertSchmidtNorm_eq_rectangularFrobenius,
-    hilbertSchmidtNorm_eq_rectangularFrobenius] at h
+    hilbertSchmidtNorm_eq_frobenius,
+    hilbertSchmidtNorm_eq_frobenius] at h
   exact h
 
 /-- The Frobenius norm of a square product is bounded by the operator norm of
@@ -85,7 +85,7 @@ theorem frobenius_comp_rectangular_le_opNorm_mul
         (ContinuousLinearMap.hilbertSchmidtNorm_nonneg A.toContinuousLinearMap))
       ContinuousLinearMap.norm_id_le)
   rw [hilbertSchmidtNorm_eq_frobenius,
-    hilbertSchmidtNorm_eq_rectangularFrobenius] at h'
+    hilbertSchmidtNorm_eq_frobenius] at h'
   have hcomp :
       (C.toContinuousLinearMap ∘L A.toContinuousLinearMap).toLinearMap =
         C ∘ₗ A := by
@@ -116,8 +116,8 @@ theorem rectangularFrobenius_twoSided_comp_le
     L.toContinuousLinearMap
     ((isHilbertSchmidt_iff_approximationNumberEnergy_ne_top _).2 hA)
     R.toContinuousLinearMap
-  rw [hilbertSchmidtNorm_eq_rectangularFrobenius,
-    hilbertSchmidtNorm_eq_rectangularFrobenius] at h
+  rw [hilbertSchmidtNorm_eq_frobenius,
+    hilbertSchmidtNorm_eq_frobenius] at h
   have hcomp :
       (L.toContinuousLinearMap ∘L A.toContinuousLinearMap ∘L
         R.toContinuousLinearMap).toLinearMap = L ∘ₗ A ∘ₗ R := by

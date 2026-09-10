@@ -22,7 +22,7 @@ public section
 namespace TauCeti
 
 open scoped InnerProductSpace
-open LinearMap
+open _root_.LinearMap
 open Module (finrank)
 
 variable {𝕜 E : Type*} [RCLike 𝕜]
@@ -53,7 +53,7 @@ theorem gauge_add_le (b : OrthonormalBasis (Fin n) 𝕜 E) (x y : Fin n → ℝ)
 /-- The induced vector gauge is absolutely homogeneous over `ℝ`. -/
 theorem gauge_real_smul (b : OrthonormalBasis (Fin n) 𝕜 E) (c : ℝ)
     (x : Fin n → ℝ) : N.gauge b (c • x) = |c| * N.gauge b x := by
-  rw [gauge, diagOp_real_smul, N.smul', RCLike.norm_ofReal]
+  rw [gauge, diagOp_real_smul, N.smul_eq, RCLike.norm_ofReal]
   rfl
 
 /-- Permutation invariance of the gauge: conjugating the diagonal operator by
@@ -164,7 +164,7 @@ theorem gauge_le_gauge_of_prefix_sums_le (b : OrthonormalBasis (Fin n) 𝕜 E)
 
 /-- A square seminorm is unchanged by taking the adjoint. -/
 theorem apply_adjoint (A : E →ₗ[𝕜] E) : N A.adjoint = N A :=
-  N.eq_of_same_singularValues (singularValues_adjoint A)
+  N.eq_of_same_singularValues (LinearMap.singularValues_adjoint A)
 
 /-- A square seminorm is unchanged by taking the operator absolute value. -/
 theorem apply_operatorAbs (A : E →ₗ[𝕜] E) : N (operatorAbs A) = N A := by

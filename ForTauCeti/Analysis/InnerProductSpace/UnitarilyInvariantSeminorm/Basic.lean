@@ -53,6 +53,8 @@ structure UnitarilyInvariantSeminorm (𝕜 E F : Type*)
 
 namespace UnitarilyInvariantSeminorm
 
+/-- A unitarily invariant seminorm is a function on rectangular maps, injectively so:
+the seminorm laws and the invariance field are propositions. -/
 instance : FunLike (UnitarilyInvariantSeminorm 𝕜 E F) (E →ₗ[𝕜] F) ℝ where
   coe N := N.toFun
   coe_injective := by
@@ -61,12 +63,15 @@ instance : FunLike (UnitarilyInvariantSeminorm 𝕜 E F) (E →ₗ[𝕜] F) ℝ 
     cases hNM
     rfl
 
+/-- The seminorm laws of the underlying `Seminorm`, transported to the coercion, so that
+the generic `Seminorm` API (`apply_nonneg`, `map_neg_eq_map`, …) applies directly. -/
 instance : SeminormClass (UnitarilyInvariantSeminorm 𝕜 E F) 𝕜 (E →ₗ[𝕜] F) where
   map_zero N := N.map_zero'
   map_add_le_add N := N.add_le'
   map_neg_eq_map N := N.neg'
   map_smul_eq_mul N := N.smul'
 
+/-- Two unitarily invariant seminorms agreeing at every rectangular map are equal. -/
 @[ext]
 theorem ext {N M : UnitarilyInvariantSeminorm 𝕜 E F}
     (h : ∀ A, N A = M A) : N = M :=
@@ -109,22 +114,14 @@ variable (N : UnitarilyInvariantSeminorm 𝕜 E F)
 
 
 /-- A rectangular UI seminorm vanishes at zero. -/
-@[simp] theorem apply_zero : N (0 : E →ₗ[𝕜] F) = 0 := by
-  have h := N.smul' 0 (0 : E →ₗ[𝕜] F)
-  simpa using h
+@[simp] theorem apply_zero : N (0 : E →ₗ[𝕜] F) = 0 :=
+  map_zero N
 
 
-/-- A rectangular UI seminorm is nonnegative -- derived from subadditivity applied to `A` and `-A`,
-not assumed as a field. -/
-theorem nonneg (A : E →ₗ[𝕜] F) : 0 ≤ N A := by
-  have h := N.add_le' A (-A)
-  rw [add_neg_cancel] at h
-  have hneg : N.toFun (-A) = N.toFun A := by
-    have h1 := N.smul' (-1) A
-    simpa using h1
-  have hz : N.toFun (0 : E →ₗ[𝕜] F) = 0 := apply_zero N
-  rw [hz, hneg] at h
-  linarith
+/-- A rectangular UI seminorm is nonnegative -- derived from the seminorm laws, not assumed
+as a field. -/
+theorem nonneg (A : E →ₗ[𝕜] F) : 0 ≤ N A :=
+  apply_nonneg N A
 
 
 /-- Subadditivity. -/
@@ -285,9 +282,8 @@ theorem smul_eq (a : 𝕜) (A : E →ₗ[𝕜] F) : N (a • A) = ‖a‖ * N A 
   N.smul' a A
 
 /-- A rectangular UI seminorm is invariant under negation. -/
-@[simp] theorem apply_neg (A : E →ₗ[𝕜] F) : N (-A) = N A := by
-  have h := N.smul_eq (-1 : 𝕜) A
-  simpa using h
+@[simp] theorem apply_neg (A : E →ₗ[𝕜] F) : N (-A) = N A :=
+  map_neg_eq_map N A
 
 
 /-- Two-sided unitary invariance, with `U` acting on the codomain and `V` on the domain.  Note the
