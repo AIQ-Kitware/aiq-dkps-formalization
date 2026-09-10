@@ -103,10 +103,41 @@ unitarily invariant norms follows from their common singular values.  This is
 the identification needed to read \texttt{N.gauge sinTheta0} as the source term
 $N(\sin\Theta_0)$.
 
-Formalization~1 is already scalar-generic over real and complex Hilbert spaces
-and uses potentially unbounded operators.  Its defect is the explicit
-\texttt{hspectral} hypothesis.  The two alternatives in that hypothesis say
-that one spectrum lies in a finite interval $[\beta,\alpha]$ and the other lies
+\paragraph{Lean operator notation.}
+The signatures use three operator notations repeatedly.  For normed spaces
+$E$ and $F$ over the scalar field $\mathbb K$,
+\[
+  E\mathrel{\to}\!\mathtt{L}[\mathbb K]F
+\]
+denotes a continuous linear map, hence an everywhere-defined bounded linear
+operator.  The notation
+\[
+  E\mathrel{\to}\!\mathtt{L}_{\mathrm p}[\mathbb K]F
+\]
+denotes a \texttt{LinearPMap}: a linear operator together with an explicitly
+tracked domain.  This is the type used for the possibly unbounded operators
+$T$, $A_0$, and $\Lambda_1$.  Thus the $\mathtt L$ and $\mathtt L_{\mathrm p}$
+forms distinguish bounded everywhere-defined maps from domain-aware partial
+maps.
+
+For continuous linear maps, $S\mathbin{\circ_L}T$ denotes composition,
+$x\mapsto S(Tx)$.  In particular,
+\[
+  (I-F_0\mathbin{\circ_L}F_0^*)\mathbin{\circ_L}E_0
+\]
+is the Lean expression for the rectangular sine representative
+$(I-F_0F_0^*)E_0$.  The suffix $L$ on $\circ_L$ identifies composition in the
+continuous-linear-map API.  The notation \texttt{F0.adjoint} denotes the
+adjoint $F_0^*$.
+
+Throughout these signatures, $\mathbb K$ is the scalar type and
+\texttt{RCLike} supplies the real-or-complex scalar structure used by the
+generic theorem.
+
+Formalization~1 is scalar-generic over real and complex Hilbert spaces and
+uses potentially unbounded operators.  The two alternatives in its
+\texttt{hspectral} hypothesis say that one spectrum lies in a finite interval
+$[\beta,\alpha]$ and the other lies
 outside the enlarged open interval
 $(\beta-\delta,\alpha+\delta)$.  Swapping the two blocks gives the second
 alternative.  Davis--Kahan also allow the separating interval to be
@@ -115,44 +146,49 @@ interval.  Those cases cannot in general satisfy Formalization~1.
 
 The historical signature also contains two scalar-generic capability classes.
 They package analytic results used by the proof and have instances for the real
-and complex source fields; they are not the gap-scope defect discussed in the
-paper.  Likewise, the norm API in this historical declaration predates the
-current where-defined interface.  The worked mismatch is specifically the
-finite interval/exterior restriction.
+and complex source fields.  Its norm API also predates the current where-defined
+interface.  The finite interval/exterior hypothesis is the restriction relevant
+to the source-scope comparison here.
 
 \begin{table}[H]
 \centering
 \small
-\caption{Reader's guide to Formalization~1.}
+\caption{Reader's guide to Formalization~1.  This table establishes the
+baseline notation used again in Formalizations~2 and~3.}
 \label{tab:formalization1-glossary}
 \begin{tabularx}{\linewidth}{@{}>{\raggedright\arraybackslash}p{0.41\linewidth}>{\raggedright\arraybackslash}X@{}}
 \toprule
 Lean expression & Mathematical role \\
 \midrule
-\texttt{RCLike} $\mathbb K$
+\texttt{[RCLike }$\mathbb K$\texttt{]}
   & The scalar field may be real or complex. \\
-\texttt{A}, \texttt{A0}, $\Lambda_1$ as partial linear maps
-  & The perturbed full-space operator $T$, trial operator, and complementary
-    exact self-adjoint block; each may be unbounded. \\
-\texttt{E0}, \texttt{F0}, \texttt{F1}
+$\texttt{A}:E\mathrel{\to}\!\mathtt{L}_{\mathrm p}[\mathbb K]E$,
+$\texttt{A0}:F\mathrel{\to}\!\mathtt{L}_{\mathrm p}[\mathbb K]F$,
+$\Lambda_1:G\mathrel{\to}\!\mathtt{L}_{\mathrm p}[\mathbb K]G$
+  & The perturbed full-space operator $T$, trial operator $A_0$, and
+    complementary exact self-adjoint block $\Lambda_1$; each may be unbounded. \\
+$\texttt{E0}:F\mathrel{\to}\!\mathtt{L}[\mathbb K]E$,
+$\texttt{F0}:H\mathrel{\to}\!\mathtt{L}[\mathbb K]E$,
+$\texttt{F1}:G\mathrel{\to}\!\mathtt{L}[\mathbb K]E$
   & Bounded coordinate maps for the trial subspace, desired exact subspace,
     and its orthogonal complement. \\
+$\texttt{R}:F\mathrel{\to}\!\mathtt{L}[\mathbb K]E$
+  & The bounded residual extending $TE_0-E_0A_0$ from $\operatorname{dom}A_0$. \\
 \texttt{IsTrialResidual A A0 E0 R}
   & $E_0$ is isometric, maps $\operatorname{dom}A_0$ into
     $\operatorname{dom}T$, and $R=TE_0-E_0A_0$ on that domain. \\
-\texttt{IsExactSpectralDecomposition A Lambda1 F0 F1}
+\texttt{IsExactSpectralDecomposition A }$\Lambda_1$\texttt{ F0 F1}
   & $F_0,F_1$ are orthogonal isometric coordinates forming a complete
     decomposition, and $F_1\Lambda_1=TF_1$ on $\operatorname{dom}\Lambda_1$. \\
 \texttt{hSinTheta0}
   & Defines the displayed rectangular sine representative as
     $S=(I-F_0F_0^*)E_0$; $S$ has the same singular values and unitarily
     invariant norms as the source's positive $\sin\Theta_0$. \\
-\texttt{beta alpha delta}, \texttt{hspectral}
-  & The finite interval/exterior gap.  This is the historical restriction:
-    it does not express the two half-infinite source configurations. \\
+$\beta,\alpha,\delta$, \texttt{hspectral}
+  & The finite interval/exterior gap; it does not express the two
+    half-infinite source configurations. \\
 \texttt{hR : N.Mem R}
-  & The historical norm interface assumes the residual is in the domain of
-    the gauge used in its conclusion. \\
+  & The residual is in the domain of the gauge used in the conclusion. \\
 \bottomrule
 \end{tabularx}
 \end{table}
@@ -160,13 +196,14 @@ Lean expression & Mathematical role \\
 \section{Reading Formalization 2}
 \label{app:formalization2}
 
-Formalization~2 uses the same trial and exact coordinate maps but weakens several
-operator-side hypotheses.  It places no separability assumption on the ambient
-Hilbert space.  Its \texttt{IsTrialResidual} predicate uses forward domain
-inclusion rather than the source common-domain equality.  Its
-\texttt{FormBoundedSylvesterGap} predicate includes the finite interval/exterior
-case and both ordered semibounded cases; in the ordered cases the source's
-spectral half-line hypotheses imply the form semibounds used in Lean.
+Formalization~2 retains Formalization~1's scalar-generic spaces, operator
+types, residual predicate, and exact decomposition.  It replaces the finite
+\texttt{hspectral} condition by \texttt{FormBoundedSylvesterGap}, which includes
+the finite interval/exterior case and both ordered semibounded cases.  In the
+ordered cases, the source's spectral half-line hypotheses imply the form
+semibounds used in Lean.  As in Formalization~1, no ambient separability
+assumption is imposed and \texttt{IsTrialResidual} uses forward domain inclusion
+rather than the source common-domain equality.
 
 The norm parameter is a \texttt{SymmetricNormingFunction}.  The theorem assumes
 \texttt{hR : N.Mem R} and concludes both
@@ -179,8 +216,9 @@ The first conclusion transfers membership in the norm ideal from the residual
 to the sine representative.  Davis--Kahan state the numerical comparison under
 their convention that a displayed norm result is vacuous when a norm does not
 exist.  This Lean norm interface instead adds a residual-membership premise and
-a sine-representative membership conclusion.  The claim that Formalization~2 is
-stronger concerns its operator-side hypotheses.
+a sine-representative membership conclusion.  Relative to Davis--Kahan,
+Formalization~2 weakens the operator-side assumptions; the norm interface
+changes separately.
 
 The expression inside \texttt{N.gauge} is exactly the map $S$ defined above.
 Formalization~1 exposes the same map through \texttt{hSinTheta0};
@@ -193,40 +231,23 @@ appearing in the source inequality.
 \begin{table}[H]
 \centering
 \small
-\caption{Reader's guide to Formalization~2.}
+\caption{Changes introduced by Formalization~2 relative to the baseline in
+\cref{tab:formalization1-glossary}.  Unchanged operator and coordinate-map
+notation is omitted.}
 \label{tab:formalization2-glossary}
 \begin{tabularx}{\linewidth}{@{}>{\raggedright\arraybackslash}p{0.42\linewidth}>{\raggedright\arraybackslash}X@{}}
 \toprule
 Lean expression & Mathematical role \\
 \midrule
-\texttt{mathbbK} with \texttt{RCLike}
-  & The scalar field is real or complex. \\
 \texttt{N : SymmetricNormingFunction}
   & A symmetric norming function and its associated operator-ideal gauge. \\
-\texttt{A}, \texttt{A0}, $\Lambda_1$ as partial linear maps
-  & The possibly unbounded perturbed full-space operator $T$, trial operator,
-    and complementary exact block. \\
-\texttt{E0}, \texttt{F0}, \texttt{F1}, \texttt{R}
-  & The trial coordinate map, desired/complementary exact coordinates, and
-    bounded residual. \\
-\texttt{htrial : IsTrialResidual A A0 E0 R}
-  & $E_0$ is isometric; $E_0(\operatorname{dom}A_0)$ lies in
-    $\operatorname{dom}T$; and $R=TE_0-E_0A_0$ on
-    $\operatorname{dom}A_0$. \\
-\texttt{hexact : IsExactSpectralDecomposition ...}
-  & The exact subspace and complement are orthogonal and complete, and the
-    complement intertwines $\Lambda_1$ with $T$. \\
-\texttt{hgap : FormBoundedSylvesterGap A0 Lambda1 delta}
-  & The full gap family: finite interval/exterior or either ordered
-    half-infinite configuration. \\
-\texttt{hR : N.Mem R}
-  & The residual belongs to the domain of the norm gauge. \\
-\texttt{N.Mem ((I - F0 F0*) E0)}
-  & The theorem concludes that the sine representative $S$ also belongs to
-    the gauge domain. \\
-\texttt{delta * N.gauge (...) <= N.gauge R}
-  & $\delta N(S)\le N(R)$; since $N(S)=N(\sin\Theta_0)$, this is the
-    source sine-angle inequality. \\
+\texttt{hgap : FormBoundedSylvesterGap }$A_0$ $\Lambda_1$ $\delta$
+  & Replaces the finite interval/exterior hypothesis by the full gap family:
+    the finite case or either ordered half-infinite configuration. \\
+\texttt{N.Mem }$S$ $\land$ $\delta$\texttt{ * N.gauge }$S$
+$\le$ \texttt{N.gauge R}
+  & In addition to $\delta N(S)\le N(R)$, the conclusion places $S$ in the
+    gauge domain when \texttt{hR : N.Mem R} holds. \\
 \bottomrule
 \end{tabularx}
 \end{table}
@@ -234,9 +255,10 @@ Lean expression & Mathematical role \\
 \section{Reading Formalization 3}
 \label{app:formalization3}
 
-Formalization~3 restores the separable ambient scope stated by Davis--Kahan and
-uses a norm object with an explicit domain of definition.  Its conclusion is
-written as two implications,
+Formalization~3 keeps the operator and gap predicates of Formalization~2,
+adds the separable ambient hypothesis stated by Davis--Kahan, and uses a norm
+object with an explicit domain of definition.  Its conclusion is written as two
+implications,
 \[
   N(S)\ \text{defined},\qquad N(R)\ \text{defined}
   \quad\Longrightarrow\quad
@@ -251,24 +273,26 @@ inequality.
 \begin{table}[H]
 \centering
 \small
-\caption{Reader's guide to the norm and scope changes in Formalization~3.}
+\caption{Changes introduced by Formalization~3 relative to Formalization~2.
+The operator types, coordinate maps, residual predicate, exact decomposition,
+and form-gap predicate are unchanged.}
 \label{tab:formalization3-glossary}
 \begin{tabularx}{\linewidth}{@{}>{\raggedright\arraybackslash}p{0.42\linewidth}>{\raggedright\arraybackslash}X@{}}
 \toprule
 Lean expression & Mathematical role \\
 \midrule
-\texttt{SeparableSpace E}
-  & The perturbed full-space Hilbert space is separable, as in the source setup. \\
-\texttt{N : NormalizedSymmetric\-OperatorIdeal\-Family}
+\texttt{[SeparableSpace E]}
+  & Restricts the perturbed full-space Hilbert space to the separable setting
+    used in the source. \\
+\texttt{N : NormalizedSymmetric}\newline
+\texttt{OperatorIdealFamily}
   & A normalized unitarily invariant norm object together with the set of
     operators on which its gauge is defined. \\
-\texttt{N.Mem ((I - F0 F0*) E0)} and \texttt{N.Mem R}
-  & The two gauges in the displayed inequality are defined.  These are
-    implications after the colon rather than binders required to invoke the theorem. \\
-\texttt{N.gaugeReal ((I - F0 F0*) E0)}
-  & $N(S)=N(\sin\Theta_0)$, where $S$ is the rectangular representative above. \\
-\texttt{delta * N.gaugeReal (...) <= N.gaugeReal R}
-  & The source numerical comparison $\delta N(\sin\Theta_0)\le N(R)$. \\
+\texttt{N.Mem }$S$ $\to$ \texttt{N.Mem R} $\to$\newline
+$\delta$\texttt{ * N.gaugeReal }$S$ $\le$ \texttt{N.gaugeReal R}
+  & States the numerical comparison when both displayed gauges are defined;
+    \texttt{N.gaugeReal} is the real-valued gauge, so the left side is
+    $\delta N(\sin\Theta_0)$. \\
 \bottomrule
 \end{tabularx}
 \end{table}
