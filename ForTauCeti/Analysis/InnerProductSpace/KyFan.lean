@@ -60,7 +60,7 @@ public section
 namespace TauCeti
 
 open scoped InnerProductSpace
-open LinearMap
+open _root_.LinearMap
 open Module (finrank)
 
 variable {𝕜 E F F' : Type*} [RCLike 𝕜]
@@ -184,7 +184,8 @@ theorem singularValues_comp_le {C : F →ₗ[𝕜] F'} {c : ℝ} (hc : 0 ≤ c)
 theorem singularValues_comp_le' {X : E →ₗ[𝕜] F} {C : E →ₗ[𝕜] E} {c : ℝ} (hc : 0 ≤ c)
     (hC : ∀ y, ‖C y‖ ≤ c * ‖y‖) (i : ℕ) :
     (X ∘ₗ C).singularValues i ≤ c * X.singularValues i := by
-  rw [← singularValues_adjoint (X ∘ₗ C), LinearMap.adjoint_comp, ← singularValues_adjoint X]
+  rw [← LinearMap.singularValues_adjoint (X ∘ₗ C), LinearMap.adjoint_comp,
+    ← LinearMap.singularValues_adjoint X]
   exact singularValues_comp_le hc (fun y => norm_adjoint_apply_le hc hC y) X.adjoint i
 
 /-- The sorted eigenvalues of the modulus `|A|` are the singular values. -/
@@ -445,7 +446,12 @@ private theorem exists_orthonormal_re_sum_inner_map_eq_square (A : E →ₗ[𝕜
 -/
 
 /-- **The Ky Fan `k`-sum** of an operator: the sum of its `k` largest singular
-values.  `kyFanSum 1 A = ‖A‖`, `kyFanSum (finrank 𝕜 E) A` is the trace norm. -/
+values.  `kyFanSum 1 A = ‖A‖`, `kyFanSum (finrank 𝕜 E) A` is the trace norm.
+
+`@[expose]`: the defining sum is the working form throughout the Ky Fan and
+unitarily-invariant-norm development, so the body must stay visible to the
+kernel for the `rfl`-level rewrites below. -/
+@[expose]
 noncomputable def kyFanSum (k : ℕ) (A : E →ₗ[𝕜] F) : ℝ :=
   ∑ i : Fin k, A.singularValues (i : ℕ)
 
@@ -514,7 +520,7 @@ theorem kyFanSum_le_of_singularValues_le {A B : E →ₗ[𝕜] F}
 theorem kyFanSum_adjoint (k : ℕ) (A : E →ₗ[𝕜] F) :
     kyFanSum k A.adjoint = kyFanSum k A := by
   unfold kyFanSum
-  rw [singularValues_adjoint]
+  rw [LinearMap.singularValues_adjoint]
 
 /-- Ky Fan sums are unchanged by a unitary on the codomain. -/
 theorem kyFanSum_unitary_comp (k : ℕ) (U : F ≃ₗᵢ[𝕜] F) (A : E →ₗ[𝕜] F) :

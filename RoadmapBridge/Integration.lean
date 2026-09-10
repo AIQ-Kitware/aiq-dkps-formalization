@@ -114,7 +114,7 @@ example {A B : E →ₗ[𝕜] F} :
 example (N : UnitarilyInvariantSeminorm 𝕜 E E) (A : E →ₗ[𝕜] E) :
     N (operatorAbs A) = N A := N.apply_operatorAbs A
 
-example : UnitarilyInvariantSeminorm 𝕜 E E :=
+noncomputable example : UnitarilyInvariantSeminorm 𝕜 E E :=
   UnitarilyInvariantSeminorm.frobenius
 
 example {n : ℕ} (A : E →ₗ[𝕜] F) (hn : Module.finrank 𝕜 E = n)

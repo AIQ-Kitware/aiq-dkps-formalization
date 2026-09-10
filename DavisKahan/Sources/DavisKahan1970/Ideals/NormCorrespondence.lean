@@ -402,17 +402,6 @@ theorem toNormingFunction_ofNormingFunction_finite_apply
   ((N.finiteNorm n).apply_eq_gauge finrank_euclideanSpace_fin
     (EuclideanSpace.basisFun (Fin n) ℂ) A).symm
 
-/-- Two coherent finite operator families with the same gauge agree. -/
-private theorem uin_ext {n : ℕ}
-    {N M : TauCeti.UnitarilyInvariantSeminorm ℂ (EuclideanSpace ℂ (Fin n))
-      (EuclideanSpace ℂ (Fin n))}
-    (h : ∀ A, N A = M A) : N = M := by
-  cases N
-  cases M
-  congr 1
-  funext A
-  exact h A
-
 /-- The coherent finite operator family is completely determined by its source
 symmetric norming function. -/
 theorem ext_finiteGauge
@@ -424,7 +413,7 @@ theorem ext_finiteGauge
     | mk Mf Mnorm Mz =>
       congr 1
       funext n
-      apply uin_ext
+      apply TauCeti.UnitarilyInvariantSeminorm.ext
       intro A
       rw [(Nf n).apply_eq_gauge finrank_euclideanSpace_fin
           (EuclideanSpace.basisFun (Fin n) ℂ) A,

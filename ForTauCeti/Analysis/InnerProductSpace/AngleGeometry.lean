@@ -522,7 +522,7 @@ theorem principalCosines_comm (U V : Submodule 𝕜 E)
     intro x y
     simp only [cosThetaMap, projection, LinearMap.comp_apply, ContinuousLinearMap.coe_coe]
     rw [V.inner_starProjection_left_eq_right, U.inner_starProjection_left_eq_right]
-  rw [principalCosines, principalCosines, ← hadj, TauCeti.singularValues_adjoint]
+  rw [principalCosines, principalCosines, ← hadj, LinearMap.singularValues_adjoint]
 
 /-- The singular values of `P_U-P_V` are the full-space `sin Θ` values: with
 `sinAngleOperator = |P_U - P_V|` and `σ(|T|) = σ(T)` (`singularValues_operatorAbs`). -/

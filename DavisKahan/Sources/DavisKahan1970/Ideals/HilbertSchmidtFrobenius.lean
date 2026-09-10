@@ -69,9 +69,10 @@ theorem approximationNumberEnergy_eq_ofReal_sum_sq_singularValues
     rw [hsv, A.toLinearMap.singularValues_of_finrank_le hfinrank]
     simp
 
-/-- In finite dimensions, the basis-free paper square norm is exactly the
-rectangular Frobenius norm. -/
-theorem hilbertSchmidtNorm_eq_rectangularFrobenius
+/-- In finite dimensions, the basis-free paper norm is exactly the Frobenius norm of the
+unified rectangular unitarily invariant seminorm family.  Square operators are the `E = F`
+case of this statement; there is no separate square spelling. -/
+theorem hilbertSchmidtNorm_eq_frobenius
     {𝕜 : Type u} [RCLike 𝕜]
     {E : Type vE} {F : Type vF}
     [NormedAddCommGroup E] [InnerProductSpace 𝕜 E]
@@ -86,18 +87,6 @@ theorem hilbertSchmidtNorm_eq_rectangularFrobenius
     ENNReal.toReal_ofReal (Finset.sum_nonneg fun i _ => sq_nonneg _)]
   exact (UnitarilyInvariantSeminorm.frobenius_eq_sqrt_sum_sq_singularValues
     A.toLinearMap).symm
-
-/-- Square-operator spelling of the finite-dimensional Frobenius bridge. -/
-theorem hilbertSchmidtNorm_eq_frobenius
-    {𝕜 : Type u} [RCLike 𝕜]
-    {E : Type vE}
-    [NormedAddCommGroup E] [InnerProductSpace 𝕜 E]
-    [FiniteDimensional 𝕜 E] [CompleteSpace E]
-    (A : E →L[𝕜] E) :
-    ContinuousLinearMap.hilbertSchmidtNorm A =
-      TauCeti.UnitarilyInvariantSeminorm.frobenius (𝕜 := 𝕜) (E := E) (F := E) A.toLinearMap := by
-  rw [hilbertSchmidtNorm_eq_rectangularFrobenius]
-  rfl
 
 end
 
