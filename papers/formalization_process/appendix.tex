@@ -64,20 +64,22 @@ an independent expert reading of the theorem.
 
 The sine-theta theorem is naturally expressed with coordinate maps.  Davis and
 Kahan write the reference operator as $A$ and the perturbed full-space operator
-as $A+H$.  We write $T=A+H$ for the latter in the manuscript.  The Lean
-signatures use the parameter name \texttt{A} for this operator $T$.
+as $A+H$.  The Lean signatures use the parameter name \texttt{A} for the latter:
+throughout this reader's guide, $A$ therefore denotes Davis--Kahan's $A+H$.
+Their unperturbed reference operator does not appear as a separate parameter in
+these signatures.
 
 The trial-coordinate space carries a possibly unbounded self-adjoint operator
 $A_0$, and the isometry $E_0$ embeds those coordinates into the ambient Hilbert
 space.  Its range is the trial subspace.  The bounded residual $R$ extends
 \[
-  TE_0-E_0A_0
+  AE_0-E_0A_0
 \]
 from the domain of $A_0$.  The desired exact subspace is represented by an
 isometry $F_0$; $F_1$ represents its orthogonal complement, and the
 self-adjoint operator $\Lambda_1$ is the complementary spectral block.  The
 exact-coordinate hypotheses say that the ranges of $F_0$ and $F_1$ are
-orthogonal and complete and that $F_1$ intertwines $\Lambda_1$ with $T$.
+orthogonal and complete and that $F_1$ intertwines $\Lambda_1$ with $A$.
 
 The source's positive operator $\sin\Theta_0$ acts on the trial-coordinate
 space.  The Lean signatures use the rectangular map
@@ -116,12 +118,12 @@ operator.  The notation
 \]
 denotes a \texttt{LinearPMap}: a linear operator together with an explicitly
 tracked domain.  This is the type used for the possibly unbounded operators
-$T$, $A_0$, and $\Lambda_1$.  Thus the $\mathtt L$ and $\mathtt L_{\mathrm p}$
+$A$, $A_0$, and $\Lambda_1$.  Thus the $\mathtt L$ and $\mathtt L_{\mathrm p}$
 forms distinguish bounded everywhere-defined maps from domain-aware partial
 maps.
 
-For continuous linear maps, $S\mathbin{\circ_L}T$ denotes composition,
-$x\mapsto S(Tx)$.  In particular,
+For continuous linear maps, $S\mathbin{\circ_L}U$ denotes composition,
+$x\mapsto S(Ux)$.  In particular,
 \[
   (I-F_0\mathbin{\circ_L}F_0^*)\mathbin{\circ_L}E_0
 \]
@@ -165,21 +167,22 @@ Lean expression & Mathematical role \\
 $\texttt{A}:E\mathrel{\to}\!\mathtt{L}_{\mathrm p}[\mathbb K]E$,
 $\texttt{A0}:F\mathrel{\to}\!\mathtt{L}_{\mathrm p}[\mathbb K]F$,
 $\Lambda_1:G\mathrel{\to}\!\mathtt{L}_{\mathrm p}[\mathbb K]G$
-  & The perturbed full-space operator $T$, trial operator $A_0$, and
-    complementary exact self-adjoint block $\Lambda_1$; each may be unbounded. \\
+  & The perturbed full-space operator $A$ (Davis--Kahan's $A+H$), trial
+    operator $A_0$, and complementary exact self-adjoint block $\Lambda_1$;
+    each may be unbounded. \\
 $\texttt{E0}:F\mathrel{\to}\!\mathtt{L}[\mathbb K]E$,
 $\texttt{F0}:H\mathrel{\to}\!\mathtt{L}[\mathbb K]E$,
 $\texttt{F1}:G\mathrel{\to}\!\mathtt{L}[\mathbb K]E$
   & Bounded coordinate maps for the trial subspace, desired exact subspace,
     and its orthogonal complement. \\
 $\texttt{R}:F\mathrel{\to}\!\mathtt{L}[\mathbb K]E$
-  & The bounded residual extending $TE_0-E_0A_0$ from $\operatorname{dom}A_0$. \\
+  & The bounded residual extending $AE_0-E_0A_0$ from $\operatorname{dom}A_0$. \\
 \texttt{IsTrialResidual A A0 E0 R}
   & $E_0$ is isometric, maps $\operatorname{dom}A_0$ into
-    $\operatorname{dom}T$, and $R=TE_0-E_0A_0$ on that domain. \\
+    $\operatorname{dom}A$, and $R=AE_0-E_0A_0$ on that domain. \\
 \texttt{IsExactSpectralDecomposition A }$\Lambda_1$\texttt{ F0 F1}
   & $F_0,F_1$ are orthogonal isometric coordinates forming a complete
-    decomposition, and $F_1\Lambda_1=TF_1$ on $\operatorname{dom}\Lambda_1$. \\
+    decomposition, and $F_1\Lambda_1=AF_1$ on $\operatorname{dom}\Lambda_1$. \\
 \texttt{hSinTheta0}
   & Defines the displayed rectangular sine representative as
     $S=(I-F_0F_0^*)E_0$; $S$ has the same singular values and unitarily
@@ -298,9 +301,10 @@ $\delta$\texttt{ * N.gaugeReal }$S$ $\le$ \texttt{N.gaugeReal R}
 \end{table}
 
 \paragraph{The common-domain condition.}
-Davis--Kahan's unbounded discussion states the trial-domain condition as
+After translating Davis--Kahan's $A+H$ to the Lean parameter $A$, their
+unbounded discussion states the trial-domain condition as
 \[
-  \{x:E_0x\in\operatorname{dom}T\}=\operatorname{dom}A_0.
+  \{x:E_0x\in\operatorname{dom}A\}=\operatorname{dom}A_0.
 \]
 Formalization~3's \texttt{IsTrialResidual} predicate uses only the forward
 inclusion together with the residual identity on $\operatorname{dom}A_0$.

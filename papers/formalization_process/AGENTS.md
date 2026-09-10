@@ -188,13 +188,14 @@ Additional constraints:
     ledger, not a semantic property encoded in a declaration name.
 46. Define the sine-theta coordinate objects before relying on compact Lean
     predicates. In Davis--Kahan notation `A` is the reference operator and
-    `A+H` is the perturbed full-space operator. The manuscript writes
-    `T := A+H`; the Lean signatures use the parameter name `A` for this `T`.
-    `E0` embeds the trial coordinates, `A0` is the possibly unbounded trial
-    operator, `F0` is the desired exact subspace of `T`, `F1` its orthogonal
-    complement, `Lambda1` the complementary exact block, and
-    `R = T E0 - E0 A0` on the trial domain. A trial subspace is often an
-    approximate spectral subspace in applications.
+    `A+H` is the perturbed full-space operator. Match the displayed mathematics
+    to the Lean signatures: the Lean parameter `A` denotes Davis--Kahan's
+    `A+H`; do not introduce a third symbol for that operator. `E0` embeds the
+    trial coordinates, `A0` is the possibly unbounded trial operator, `F0` is
+    the desired exact subspace of Lean `A`, `F1` its orthogonal complement,
+    `Lambda1` the complementary exact block, and `R = A E0 - E0 A0` on the
+    trial domain. A trial subspace is often an approximate spectral subspace in
+    applications.
 47. Formalization 3 is
     `sinTheta_unbounded_formGap_whereDefinedUIN_rclike`. Explain that it covers
     the historical missing half-infinite gap cases and uses the where-defined norm
