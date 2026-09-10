@@ -264,22 +264,20 @@ declarations and maintaining source-to-statement records.
 
 Davis and Kahan's Section~2 $\sin\Theta$ theorem compares a trial subspace
 with an exact spectral subspace of the perturbed full-space operator.  Their
-notation writes the reference operator as $A$ and the perturbed operator as
-$A+H$.  We write
-\[
-  T:=A+H
-\]
-for the perturbed operator in the discussion below.  In applications using
-population/sample terminology, $A$ is the reference or population operator and
-$T$ is the perturbed or sample operator.  The Lean signatures below use the
-parameter name \texttt{A} for this full-space operator $T$.
+notation distinguishes the reference operator $A$ from the perturbed operator
+$A+H$.  To match the Lean signatures below, we use $A$ for the perturbed
+full-space operator: the Lean parameter \texttt{A} therefore corresponds to
+Davis--Kahan's $A+H$, and their reference operator $A$ is not a separate
+parameter of these signatures.  In population/sample terminology, the Lean
+$A$ is the perturbed or sample operator, while Davis--Kahan's unperturbed $A$
+is the reference or population operator.
 
 Let $A_0$ be a self-adjoint operator on trial coordinates and let $E_0$ embed
 those coordinates isometrically into the ambient Hilbert space.  The range of
 $E_0$ is the \emph{trial subspace}; in applications it is often an approximate
 spectral subspace.  The residual
 \[
-  R=TE_0-E_0A_0
+  R=AE_0-E_0A_0
 \]
 measures the failure of the trial vectors to satisfy the exact intertwining
 relation.  In the unbounded setting this identity is imposed on the domain of
@@ -287,7 +285,7 @@ $A_0$, and $R$ is a bounded extension of that residual.
 
 Let $F_0$ be isometric coordinates for the desired exact subspace and $F_1$ for
 its orthogonal complement, with $\Lambda_1$ the corresponding complementary
-spectral block of $T$.  Davis--Kahan's positive operator $\sin\Theta_0$ acts on
+spectral block of $A$.  Davis--Kahan's positive operator $\sin\Theta_0$ acts on
 trial coordinates.  The rectangular map
 \begin{equation}
   S=(I-F_0F_0^*)E_0
@@ -354,38 +352,17 @@ Mathlib \citep{tauceti2026}.
 \label{sec:scope-mismatch}
 
 The development contains several checked declarations with the factor-one
-$\sin\Theta$ inequality in \cref{eq:sin-theta}.  Their hypothesis boundaries
-differ.  Davis--Kahan first state the theorem with a finite separating interval
-and later extend the same estimate to half-infinite intervals in the Appendix to
-Section~6.  Three signatures show a statement narrower than this complete proved
-scope, a statement with weaker operator-side hypotheses, and the declaration
-that most closely follows the source's scope and norm convention.
+$\sin\Theta$ inequality in \cref{eq:sin-theta}.  Davis--Kahan first state the
+theorem with a finite separating interval and later extend the same estimate to
+half-infinite intervals in the Appendix to Section~6.  The three signatures
+below differ in how closely their hypotheses follow that complete proved scope.
 
-\begin{table}[t]
-\centering
-\small
-\caption{Comparison of three checked $\sin\Theta$ statements.  Formalization~2
-uses weaker operator-side hypotheses than Davis--Kahan; its norm interface is
-different from the source convention.}
-\label{tab:sintheta-boundaries}
-\begin{tabularx}{\linewidth}{@{}p{0.19\linewidth}p{0.31\linewidth}X@{}}
-\toprule
-Statement & Scope change & Relation to Davis--Kahan \\
-\midrule
-Formalization 1 & finite interval/exterior gap
-  & narrower than the complete proved scope \\
-Formalization 2 & no separability; forward domain inclusion; form semibounds
-  & operator-side generalization \\
-Formalization 3 & separable; where-defined norm; forward domain inclusion; form semibounds
-  & closest source statement in the development \\
-\bottomrule
-\end{tabularx}
-\end{table}
-
-\paragraph{Formalization 1: the finite-interval specialization.}
-\Cref{lst:sintheta-mismatch} requires finite $\beta\le\alpha$ and one spectrum
-to lie in $[\beta,\alpha]$ while the other lies outside
-$(\beta-\delta,\alpha+\delta)$, with the two roles interchangeable.
+\paragraph{Formalization 1.}
+Formalization~1 is weaker than the target statement because it restricts the
+gap to the finite interval/exterior case.  \Cref{lst:sintheta-mismatch}
+requires finite $\beta\le\alpha$ and one spectrum to lie in $[\beta,\alpha]$
+while the other lies outside $(\beta-\delta,\alpha+\delta)$, with the two roles
+interchangeable.
 
 In the Appendix to Section~6, Davis--Kahan extend the same sine-theta estimate
 to half-infinite separating intervals.  In those cases one spectral block may be
@@ -410,9 +387,10 @@ initial finite-interval statement but not the later proved extension.
 \end{minipage}
 \end{nolinenumbers}
 
-\paragraph{Formalization 2: weaker operator-side hypotheses.}
-\Cref{lst:stronger-sintheta} weakens several hypotheses that delimit the source
-statement.  It has no ambient separability assumption.  Its
+\paragraph{Formalization 2.}
+Formalization~2 is stronger than the target statement on the operator
+hypotheses because those hypotheses are weaker.  \Cref{lst:stronger-sintheta}
+has no ambient separability assumption.  Its
 \texttt{IsTrialResidual} predicate requires only that $E_0$ carry
 $\operatorname{dom}A_0$ into the domain of the full-space operator, rather than
 requiring equality of the two pulled-back domains.  Its ordered
@@ -424,9 +402,8 @@ the weaker conditions.
 Its norm interface is expressed differently from the source convention:
 \texttt{hR : N.Mem R} assumes that the residual has finite $N$-gauge, and the
 conclusion also proves membership of the sine representative in that gauge's
-domain.  The operator-side hypotheses are weaker than the corresponding source
-assumptions.  The norm interface changes at the same time, so Formalizations~2
-and~3 are not totally ordered by implication.
+domain.  The greater generality comes from the weaker operator hypotheses;
+the norm interface is a separate difference from the source convention.
 
 % Editor provenance (not rendered): this display is generated verbatim from
 % sinTheta_unbounded_formGap_symmetricNorming_rclike in
@@ -443,7 +420,8 @@ and~3 are not totally ordered by implication.
 \end{minipage}
 \end{nolinenumbers}
 
-\paragraph{Formalization 3: the statement closest to Davis--Kahan.}
+\paragraph{Formalization 3.}
+Formalization~3 is the closest of the three to the target statement.
 \Cref{lst:current-sintheta} restores the source's separable ambient scope and
 models its convention that a displayed unitarily invariant norm statement is
 vacuous when either norm is undefined.  There is no residual-membership binder
@@ -467,18 +445,17 @@ the numerical comparison to the cases in which both displayed norms exist.
 \end{minipage}
 \end{nolinenumbers}
 
-Formalization~3 retains two operator-side generalizations from Formalization~2.
-Its \texttt{IsTrialResidual} predicate uses forward domain inclusion, while
-Davis--Kahan's unbounded discussion states the common-domain condition
+Formalization~3 retains the forward-domain and form-gap hypotheses of
+Formalization~2.  After translating Davis--Kahan's $A+H$ to the Lean parameter
+$A$, their unbounded discussion states the common-domain condition
 \[
-  \{x:E_0x\in\operatorname{dom}T\}=\operatorname{dom}A_0.
+  \{x:E_0x\in\operatorname{dom}A\}=\operatorname{dom}A_0.
 \]
-The source condition implies the Lean domain hypothesis.  Likewise, the
-source's spectral half-line assumptions imply the form semibounds in the ordered
-branches of \texttt{FormBoundedSylvesterGap}.  Formalization~3 therefore covers
-all of these source cases while admitting additional cases on those two axes.
-\Cref{app:formalization1,app:formalization2,app:formalization3} gives a reader's
-guide to the three signatures and the sine-angle norm representation.
+This equality implies the forward inclusion used by \texttt{IsTrialResidual};
+the source's spectral half-line assumptions likewise imply the ordered form
+semibounds.  \Cref{app:formalization1,app:formalization2,app:formalization3}
+gives a reader's guide to the three signatures and the sine-angle norm
+representation.
 
 \section{Formalization process}
 \label{sec:system}
