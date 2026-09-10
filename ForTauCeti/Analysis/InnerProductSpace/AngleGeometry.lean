@@ -536,7 +536,7 @@ theorem singularValues_projection_sub_projection (U V : Submodule 𝕜 E)
 norm of `P_U - P_V` equals that of the full `sin Θ` operator `|P_U - P_V|`, since
 they share the singular-value sequence.  This is the only projection-geometry
 rewrite the final UI-norm projector theorem needs. -/
-theorem uiNorm_projection_sub_eq_sinAngleOperator (N : UnitarilyInvariantSeminorm 𝕜 E)
+theorem uiNorm_projection_sub_eq_sinAngleOperator (N : UnitarilyInvariantSeminorm 𝕜 E E)
     (U V : Submodule 𝕜 E) [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] :
     N (projection U - projection V) = N (sinAngleOperator U V) :=
   N.eq_of_same_singularValues (singularValues_projection_sub_projection U V)

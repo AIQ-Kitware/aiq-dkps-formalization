@@ -591,8 +591,7 @@ theorem counterexample_sine_square_norm :
         counterexampleExact counterexampleTrial) = 1 := by
   rw [hilbertSchmidtNorm_sinAngleOperatorRC_eq_projectionDifference,
     hilbertSchmidtNorm_eq_frobenius,
-    TauCeti.UnitarilyInvariantSeminorm.frobenius_apply
-    ℝ (PlanarModelSpace ℝ)
+    TauCeti.UnitarilyInvariantSeminorm.frobenius_apply_basis (𝕜 := ℝ) (E := (PlanarModelSpace ℝ))
     (counterexampleExact.starProjection -
       counterexampleTrial.starProjection).toLinearMap
     realPlane_finrank (EuclideanSpace.basisFun (Fin 2) ℝ)]
@@ -612,8 +611,8 @@ theorem counterexample_sine_square_norm :
 theorem counterexample_perturbation_square_norm :
     ContinuousLinearMap.hilbertSchmidtNorm counterexampleH = Real.sqrt 3 := by
   rw [hilbertSchmidtNorm_eq_frobenius,
-    TauCeti.UnitarilyInvariantSeminorm.frobenius_apply
-    ℝ (PlanarModelSpace ℝ) counterexampleH.toLinearMap
+    TauCeti.UnitarilyInvariantSeminorm.frobenius_apply_basis (𝕜 := ℝ) (E := (PlanarModelSpace
+      ℝ)) counterexampleH.toLinearMap
     realPlane_finrank (EuclideanSpace.basisFun (Fin 2) ℝ)]
   rw [Fin.sum_univ_two]
   simp only [EuclideanSpace.basisFun_apply]

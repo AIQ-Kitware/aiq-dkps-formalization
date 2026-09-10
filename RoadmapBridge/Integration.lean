@@ -21,10 +21,10 @@ The seams are not hypothetical.  All three are recorded regressions or review fi
    argument.  That fact is *free* — it holds of the spectral subspace by construction — and
    is now proved once, as `spectrumIn_spectralSubspace`.  Nothing prevents a future edit from
    re-adding the argument, and the library would still build; the example below would not.
-2. **Four names for one number.**  The square Frobenius seminorm, the rectangular Frobenius
-   seminorm, the Schatten `S₂` norm and the Hilbert--Schmidt energy are four separate
-   definitions in four modules.  Three theorems relate them; this file checks that the
-   composite chain closes, which no one of the three does on its own.
+2. **One rectangular seminorm interface.** The examples exercise the inherited `Seminorm`
+   laws, independent domain and codomain unitaries, Fan dominance in both directions, and
+   the square specialization. They identify the single Frobenius construction with the
+   Schatten `S2` norm and finite Hilbert--Schmidt energy.
 3. **A deleted compatibility layer.**  `DavisKahan/SpectralTheory/Compatibility.lean` held 46
    forwarding declarations and was removed.  This file imports canonical owner modules
    directly and names nothing from that layer.
@@ -40,6 +40,7 @@ the finite-rank hypothesis and the conclusion in one statement.
 namespace RoadmapBridge.Integration
 
 open TauCeti
+open scoped BigOperators
 
 /-! ## Seam 1 — the spectral subspace supplies its own spectral-containment hypothesis
 
@@ -52,7 +53,7 @@ section SpectralSubspaceSinTheta
 variable {𝕜 : Type*} [RCLike 𝕜]
 variable {E : Type*} [NormedAddCommGroup E] [InnerProductSpace 𝕜 E] [FiniteDimensional 𝕜 E]
 
-example (N : UnitarilyInvariantSeminorm 𝕜 E)
+example (N : UnitarilyInvariantSeminorm 𝕜 E E)
     {A B : E →ₗ[𝕜] E} (hA : A.IsSymmetric) (hB : B.IsSymmetric)
     {a b δ : ℝ} (hδ : 0 < δ)
     (hBoutside : SpectrumIn B (spectralSubspace B (Set.Icc a b))ᗮ
@@ -68,68 +69,73 @@ example (A : E →ₗ[𝕜] E) (Ω : Set ℝ) : SpectrumIn A (spectralSubspace A
 
 end SpectralSubspaceSinTheta
 
-/-! ## Seam 2 — the finite-dimensional Frobenius chain closes
+/-! ## The unified finite-dimensional norm interface -/
 
-Four definitions, in four modules:
+section UnifiedUIN
 
-| object | module | topic |
-| --- | --- | --- |
-| `UnitarilyInvariantSeminorm.frobenius` | `InnerProductSpace/UnitarilyInvariantSeminorm.lean` | T05 |
-| `RectangularUnitarilyInvariantSeminorm.frobenius` | `.../RectangularUnitarilyInvariantSeminorm/Instances.lean` | T07 |
-| `RectangularUnitarilyInvariantSeminorm.schattenNorm 2` | `InnerProductSpace/SchattenNorm.lean` | T10 |
-| `ContinuousLinearMap.hilbertSchmidtEnergy` | `InnerProductSpace/HilbertSchmidt/Energy.lean` | T10 |
+variable {𝕜 E F : Type*} [RCLike 𝕜]
+  [NormedAddCommGroup E] [InnerProductSpace 𝕜 E] [FiniteDimensional 𝕜 E]
+  [NormedAddCommGroup F] [InnerProductSpace 𝕜 F] [FiniteDimensional 𝕜 F]
 
-The rectangular seminorm is the canonical reusable owner: the other three are identified
-against it.  It is *not* the literal implementation owner — two Frobenius `def`s remain, and
-the docstring of `frobenius_toSquare_eq` records exactly why removing one is blocked. -/
+example (N : UnitarilyInvariantSeminorm 𝕜 E F) : Seminorm 𝕜 (E →ₗ[𝕜] F) :=
+  N.toSeminorm
 
-section Frobenius
+example (N : UnitarilyInvariantSeminorm 𝕜 E F) (A : E →ₗ[𝕜] F) :
+    N.toSeminorm A = N A := rfl
 
-variable {𝕜 : Type*} [RCLike 𝕜]
-variable {E : Type*} [NormedAddCommGroup E] [InnerProductSpace 𝕜 E] [FiniteDimensional 𝕜 E]
-variable {F : Type*} [NormedAddCommGroup F] [InnerProductSpace 𝕜 F] [FiniteDimensional 𝕜 F]
+example (N : UnitarilyInvariantSeminorm 𝕜 E F) : N 0 = 0 :=
+  map_zero N
 
-/-- Link 1: the square Frobenius seminorm is the square restriction of the rectangular one. -/
-example :
-    (RectangularUnitarilyInvariantSeminorm.frobenius (𝕜 := 𝕜) (E := E) (F := E)).toSquare =
-      UnitarilyInvariantSeminorm.frobenius 𝕜 E :=
-  UnitarilyInvariantSeminorm.frobenius_toSquare_eq
+example (N : UnitarilyInvariantSeminorm 𝕜 E F) (A : E →ₗ[𝕜] F) :
+    N (-A) = N A := map_neg_eq_map N A
 
-/-- Link 2: the Schatten `S₂` norm is the rectangular Frobenius seminorm. -/
+example (N : UnitarilyInvariantSeminorm 𝕜 E F) (A B : E →ₗ[𝕜] F) :
+    N (A + B) ≤ N A + N B := map_add_le_add N A B
+
+example (N : UnitarilyInvariantSeminorm 𝕜 E F) (a : 𝕜)
+    (A : E →ₗ[𝕜] F) : N (a • A) = ‖a‖ * N A :=
+  map_smul_eq_mul N a A
+
+example (k : ℕ) (A B : E →ₗ[𝕜] F) :
+    kyFanSum k (A + B) ≤ kyFanSum k A + kyFanSum k B :=
+  kyFanSum_add_le k A B
+
+example (N : UnitarilyInvariantSeminorm 𝕜 E F)
+    (U : unitary (F →ₗ[𝕜] F)) (V : unitary (E →ₗ[𝕜] E))
+    (A : E →ₗ[𝕜] F) :
+    N ((U : F →ₗ[𝕜] F) ∘ₗ A ∘ₗ (V : E →ₗ[𝕜] E)) = N A :=
+  N.unitary_invariant' U V A
+
+example {A B : E →ₗ[𝕜] F} :
+    (∀ k, kyFanSum k A ≤ kyFanSum k B) ↔
+      ∀ N : UnitarilyInvariantSeminorm 𝕜 E F, N A ≤ N B :=
+  UnitarilyInvariantSeminorm.kyFanSum_le_iff_forall_seminorm
+
+example (N : UnitarilyInvariantSeminorm 𝕜 E E) (A : E →ₗ[𝕜] E) :
+    N (operatorAbs A) = N A := N.apply_operatorAbs A
+
+example : UnitarilyInvariantSeminorm 𝕜 E E :=
+  UnitarilyInvariantSeminorm.frobenius
+
+example {n : ℕ} (A : E →ₗ[𝕜] F) (hn : Module.finrank 𝕜 E = n)
+    (b : OrthonormalBasis (Fin n) 𝕜 E) :
+    UnitarilyInvariantSeminorm.frobenius A = Real.sqrt (∑ i, ‖A (b i)‖ ^ 2) :=
+  UnitarilyInvariantSeminorm.frobenius_apply_basis A hn b
+
 example (A : E →ₗ[𝕜] F) :
-    RectangularUnitarilyInvariantSeminorm.schattenNorm
-        (𝕜 := 𝕜) (E := E) (F := F) 2 (by norm_num) A =
-      RectangularUnitarilyInvariantSeminorm.frobenius A :=
-  RectangularUnitarilyInvariantSeminorm.schattenNorm_two_apply A
+    UnitarilyInvariantSeminorm.kyFan 0 A = 0 := by
+  simp [UnitarilyInvariantSeminorm.kyFan_apply, kyFanSum]
 
-/-- Link 3: the Hilbert--Schmidt energy is the squared rectangular Frobenius seminorm. -/
+example (A : E →ₗ[𝕜] F) :
+    UnitarilyInvariantSeminorm.schattenNorm 2 (by norm_num) A =
+      UnitarilyInvariantSeminorm.frobenius A :=
+  UnitarilyInvariantSeminorm.schattenNorm_two_apply A
+
 example [CompleteSpace E] (A : E →L[𝕜] F) :
     A.hilbertSchmidtEnergy (stdOrthonormalBasis 𝕜 E).toHilbertBasis =
-      ENNReal.ofReal (RectangularUnitarilyInvariantSeminorm.frobenius A.toLinearMap ^ 2) :=
-  RectangularUnitarilyInvariantSeminorm.hilbertSchmidtEnergy_eq_ofReal_frobenius_sq A
+      ENNReal.ofReal (UnitarilyInvariantSeminorm.frobenius A.toLinearMap ^ 2) :=
+  UnitarilyInvariantSeminorm.hilbertSchmidtEnergy_eq_ofReal_frobenius_sq A
 
-/-- **The chain, composed.**  For a square operator the Hilbert--Schmidt energy is the square
-of the *square* Frobenius seminorm.  Neither link 1 nor link 3 says this; only their
-composite does, and this is the statement a consumer of the paper's `‖·‖²_F` vocabulary
-actually needs. -/
-example [CompleteSpace E] (A : E →L[𝕜] E) :
-    A.hilbertSchmidtEnergy (stdOrthonormalBasis 𝕜 E).toHilbertBasis =
-      ENNReal.ofReal (UnitarilyInvariantSeminorm.frobenius 𝕜 E A.toLinearMap ^ 2) := by
-  rw [RectangularUnitarilyInvariantSeminorm.hilbertSchmidtEnergy_eq_ofReal_frobenius_sq,
-    ← UnitarilyInvariantSeminorm.frobenius_toSquare_eq]
-  rfl
-
-/-- **The chain, composed the other way.**  The Schatten `S₂` norm of a square operator is
-its square Frobenius seminorm — the statement that lets the operator-ideal topic (T10) and
-the unitarily-invariant-norm topic (T05) be read as talking about the same norm. -/
-example (A : E →ₗ[𝕜] E) :
-    RectangularUnitarilyInvariantSeminorm.schattenNorm
-        (𝕜 := 𝕜) (E := E) (F := E) 2 (by norm_num) A =
-      UnitarilyInvariantSeminorm.frobenius 𝕜 E A := by
-  rw [RectangularUnitarilyInvariantSeminorm.schattenNorm_two_apply,
-    ← UnitarilyInvariantSeminorm.frobenius_toSquare_eq]
-  rfl
-
-end Frobenius
+end UnifiedUIN
 
 end RoadmapBridge.Integration

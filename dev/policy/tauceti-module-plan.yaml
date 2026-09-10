@@ -56,6 +56,7 @@ topics:
   modules:
   - Analysis.InnerProductSpace.Singular.Values
   - Analysis.InnerProductSpace.RectangularSingularValues
+  - Analysis.InnerProductSpace.ZeroExtension
   - Analysis.InnerProductSpace.Singular.System
   - Analysis.InnerProductSpace.MoorePenroseInverse
 - id: T26
@@ -82,6 +83,12 @@ topics:
   - Analysis.InnerProductSpace.SchurHorn
   - Analysis.InnerProductSpace.Singular.Subspace
   - Analysis.InnerProductSpace.KyFan
+  - Analysis.InnerProductSpace.DiagonalOperator
+  - Analysis.InnerProductSpace.UnitarilyInvariantSeminorm.Basic
+  - Analysis.InnerProductSpace.UnitarilyInvariantSeminorm.Majorization
+  - Analysis.InnerProductSpace.UnitarilyInvariantSeminorm.Gauge
+  - Analysis.InnerProductSpace.UnitarilyInvariantSeminorm.BlockSum
+  - Analysis.InnerProductSpace.UnitarilyInvariantSeminorm.Instances
   - Analysis.InnerProductSpace.UnitarilyInvariantSeminorm
 - id: T06
   title: Principal angles, aligned bases, and finite frames
@@ -90,14 +97,9 @@ topics:
   - Analysis.InnerProductSpace.AlignedBasis
   - Analysis.InnerProductSpace.FiniteFrame
 - id: T07
-  title: Rectangular unitarily invariant norms
+  title: Two-dimensional singular values
   modules:
-  - Analysis.InnerProductSpace.RectangularUnitarilyInvariantSeminorm
   - Analysis.InnerProductSpace.TwoDimensionalSingularValues
-  - Analysis.InnerProductSpace.RectangularUnitarilyInvariantSeminorm.Basic
-  - Analysis.InnerProductSpace.RectangularUnitarilyInvariantSeminorm.BlockSum
-  - Analysis.InnerProductSpace.RectangularUnitarilyInvariantSeminorm.Instances
-  - Analysis.InnerProductSpace.RectangularUnitarilyInvariantSeminorm.Majorization
 - id: T08
   title: Angle geometry and eigenvalue perturbation
   modules:
@@ -203,7 +205,6 @@ topics:
   - Analysis.InnerProductSpace.LinearPMap.SubmoduleAdjoint
   - Analysis.InnerProductSpace.LinearPMap.UnitaryTransport
   - Analysis.InnerProductSpace.QuadraticFormBounds
-  - Analysis.InnerProductSpace.SpectralOrder.Complex
 - id: T15b
   title: Resolvents of self-adjoint LinearPMap operators, and semiboundedness
   modules:
@@ -281,7 +282,6 @@ topics:
   - Analysis.InnerProductSpace.DoubleAngle.ReducingCutoff
   - Analysis.InnerProductSpace.BoundedOperator.Projector
   - Analysis.InnerProductSpace.BoundedOperator.SinTheta
-  - Analysis.InnerProductSpace.SpectralOrder.Real
   - Analysis.InnerProductSpace.Complexification.Basic
   - Analysis.InnerProductSpace.Complexification.FunctionalCalculus
   - Analysis.InnerProductSpace.ReducedExtension
@@ -413,7 +413,7 @@ rungs:
   - LinearAlgebra.Dimension.RankComp
   - SetTheory.Cardinal.Lift
 - id: D
-  title: Convex majorization and symmetric gauges
+  title: Ky Fan majorization and unitarily invariant seminorms
   seeds:
   - Analysis.Convex.Majorization
   - Analysis.InnerProductSpace.KyFan
@@ -421,19 +421,19 @@ rungs:
   - Analysis.InnerProductSpace.SchurHorn
   - Analysis.InnerProductSpace.Singular.Subspace
   - Analysis.InnerProductSpace.Spectrum
-  - Analysis.InnerProductSpace.UnitarilyInvariantNorm
+  - Analysis.InnerProductSpace.UnitarilyInvariantSeminorm
 - id: E
-  title: Rectangular unitarily invariant norms
+  title: Principal-angle prerequisites
   seeds:
   - Analysis.InnerProductSpace.AlignedBasis
   - Analysis.InnerProductSpace.Basic
   - Analysis.InnerProductSpace.Gram.Matrix
   - Analysis.InnerProductSpace.PrincipalAngles
-  - Analysis.InnerProductSpace.RectangularUnitarilyInvariantNorm
-  - Analysis.InnerProductSpace.RectangularUnitarilyInvariantNorm.Basic
-  - Analysis.InnerProductSpace.RectangularUnitarilyInvariantNorm.BlockSum
-  - Analysis.InnerProductSpace.RectangularUnitarilyInvariantNorm.Instances
-  - Analysis.InnerProductSpace.RectangularUnitarilyInvariantNorm.Majorization
+  - Analysis.InnerProductSpace.UnitarilyInvariantSeminorm
+  - Analysis.InnerProductSpace.UnitarilyInvariantSeminorm.Basic
+  - Analysis.InnerProductSpace.UnitarilyInvariantSeminorm.BlockSum
+  - Analysis.InnerProductSpace.UnitarilyInvariantSeminorm.Instances
+  - Analysis.InnerProductSpace.UnitarilyInvariantSeminorm.Majorization
   - Analysis.Normed.Operator.LinearIsometry
 - id: F
   title: Ky Fan gauges and operator ideal families
@@ -486,11 +486,11 @@ rungs:
   - Analysis.InnerProductSpace.Projection.Gap
   - Analysis.InnerProductSpace.Projection.Geometry
   - Analysis.InnerProductSpace.RectangularSingularValues
-  - Analysis.InnerProductSpace.RectangularUnitarilyInvariantNorm
-  - Analysis.InnerProductSpace.RectangularUnitarilyInvariantNorm.Basic
-  - Analysis.InnerProductSpace.RectangularUnitarilyInvariantNorm.BlockSum
-  - Analysis.InnerProductSpace.RectangularUnitarilyInvariantNorm.Instances
-  - Analysis.InnerProductSpace.RectangularUnitarilyInvariantNorm.Majorization
+  - Analysis.InnerProductSpace.UnitarilyInvariantSeminorm
+  - Analysis.InnerProductSpace.UnitarilyInvariantSeminorm.Basic
+  - Analysis.InnerProductSpace.UnitarilyInvariantSeminorm.BlockSum
+  - Analysis.InnerProductSpace.UnitarilyInvariantSeminorm.Instances
+  - Analysis.InnerProductSpace.UnitarilyInvariantSeminorm.Majorization
   - Analysis.InnerProductSpace.ReducingSubspace
   - Analysis.InnerProductSpace.SchattenNorm
   - Analysis.InnerProductSpace.SchurHorn
@@ -503,7 +503,7 @@ rungs:
   - Analysis.InnerProductSpace.Spectral.Subspace
   - Analysis.InnerProductSpace.Spectrum
   - Analysis.InnerProductSpace.TwoDimensionalSingularValues
-  - Analysis.InnerProductSpace.UnitarilyInvariantNorm
+  - Analysis.InnerProductSpace.UnitarilyInvariantSeminorm
   - Analysis.Normed.FiniteLpGauge
   - Analysis.Normed.Operator.LinearIsometry
   - Analysis.OperatorIdeal.ApproximationNumber.Adjoint
@@ -582,7 +582,6 @@ rungs:
   - Analysis.InnerProductSpace.LinearPMap.Sylvester
   - Analysis.InnerProductSpace.LinearPMap.UnitaryTransport
   - Analysis.InnerProductSpace.QuadraticFormBounds
-  - Analysis.InnerProductSpace.SpectralOrder.Complex
 - id: M
   title: Resolvents of self-adjoint LinearPMap operators, and semiboundedness (T15b)
   seeds:
@@ -639,7 +638,6 @@ rungs:
   - Analysis.InnerProductSpace.Complexification.Basic
   - Analysis.InnerProductSpace.Complexification.FunctionalCalculus
   - Analysis.OperatorIdeal.ApproximationNumber.MinMaxReal
-  - Analysis.InnerProductSpace.SpectralOrder.Real
   - Analysis.InnerProductSpace.BoundedOperator.SinTheta
   - Analysis.InnerProductSpace.DoubleAngle.Vector
   - Analysis.InnerProductSpace.Residual.AngleEmbedding

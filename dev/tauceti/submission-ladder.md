@@ -21,46 +21,27 @@ reproduce is a bug in this document.**
 This document answers one question: *what is the most valuable reorganization
 for Tau Ceti submission?*
 
-## The finding
+## Scope and validation
 
-**PR1 is not a PR. It is roughly six topics fused, and the fix is a re-slice, not
-a rewrite.**
+The rungs below are computed from the current source-import graph. They describe
+submission dependencies, not compiler certification. The module plan still has
+unassigned or unseeded modules; `--check` reports those outstanding decisions.
+The unified norm modules are one rectangular theory, not successive square and
+rectangular submissions. Approximation-number triangle inequalities use the
+norm-free Ky Fan layer directly.
 
-Tau Ceti accepts **one topic per PR against an accepted roadmap target**.
-`tauceti-pr1-approximation-numbers.md` proposes *"Add rectangular approximation
-numbers for bounded operators"* and points at 8 modules of approximation-number
-content.
+## Import-closure statistics
 
-Its **dependency-closed slice is 37 `ForTauCeti` modules**, of which **29 are
-outside the approximation-number tree**. A reviewer opening it would be asked to
-accept, in one sitting:
-
-- Schur--Horn majorization,
-- convex majorization and symmetric gauges,
-- Courant--Fischer,
-- principal angles,
-- polar decomposition and the positive operator square root,
-- a five-module rectangular unitarily-invariant-norm framework,
-
-*and* approximation numbers. That is not a reviewable unit, and no amount of
-docstring or lint polish changes it.
-
-## Why this is cheap to fix
-
-**`ForTauCeti` is not a tangle.** Derived over its 164 modules, counting only
-internal (`ForTauCeti.*`) imports:
+Measured over 306 `ForTauCeti` modules:
 
 | statistic | value |
 | --- | --- |
-| median internal import closure | **3** |
-| mean | 8.7 |
-| modules that are internal leaves | **43 of 164** |
-| modules pulling more than 30 | **15** |
-| maximum | 64 |
-
-The library already stratifies. **The ladder exists in the import graph. It needs
-naming, not building.** No Lean file has to move for the re-slice; only the
-submission plan changes.
+| Median internal import closure | 4 |
+| Mean internal import closure | 11.3 |
+| Internal leaves | 75 |
+| Modules with more than 30 internal dependencies in their closure | 39 |
+| Maximum internal import closure | 74 |
+| Modules outside the seeded ladder | 109 |
 
 ## The ladder
 
@@ -70,19 +51,30 @@ base Tau Ceti has already accepted.
 
 ### Rung A — Positive square root, operator modulus, polar decomposition
 
-**7 new, cumulative closed slice 7.**
+**18 new, cumulative closed slice 18.**
 
+  - `Analysis.CStarAlgebra.ContinuousFunctionalCalculusTransport`
   - `Analysis.InnerProductSpace.BasisSpan`
+  - `Analysis.InnerProductSpace.Complexification.Basic`
+  - `Analysis.InnerProductSpace.Complexification.FunctionalCalculus`
+  - `Analysis.InnerProductSpace.Complexification.Spectrum`
   - `Analysis.InnerProductSpace.CourantFischer`
   - `Analysis.InnerProductSpace.OperatorModulus`
+  - `Analysis.InnerProductSpace.OperatorRealAlgebra`
   - `Analysis.InnerProductSpace.PartialIsometry`
   - `Analysis.InnerProductSpace.Polar.Decomposition`
   - `Analysis.InnerProductSpace.PositiveSqrt`
+  - `Analysis.InnerProductSpace.Projection.Blocks`
+  - `Analysis.InnerProductSpace.Projection.ScalarTransport`
+  - `Analysis.InnerProductSpace.RealContinuousFunctionalCalculus`
+  - `Analysis.InnerProductSpace.ReducingSubspace`
   - `Analysis.InnerProductSpace.SelfAdjointFunctionalCalculus`
+  - `Analysis.RCLike.ScalarTransport`
+  - `Analysis.RCLike.ScalarTransportFunctionalCalculus`
 
 ### Rung B — Singular values (square and rectangular)
 
-**3 new, cumulative closed slice 10.**
+**3 new, cumulative closed slice 21.**
 
   - `Analysis.InnerProductSpace.RectangularSingularValues`
   - `Analysis.InnerProductSpace.Singular.Values`
@@ -90,43 +82,45 @@ base Tau Ceti has already accepted.
 
 ### Rung C — Rectangular approximation numbers  ← *this is the advertised PR1 topic*
 
-**3 new, cumulative closed slice 13.**
+**3 new, cumulative closed slice 24.**
 
   - `Analysis.OperatorIdeal.ApproximationNumber.Basic`
   - `LinearAlgebra.Dimension.RankComp`
   - `SetTheory.Cardinal.Lift`
 
-### Rung D — Convex majorization and symmetric gauges
+### Rung D — Ky Fan majorization and unitarily invariant seminorms
 
-**5 new, cumulative closed slice 18.**
+**16 new, cumulative closed slice 40.**
 
   - `Analysis.Convex.Majorization`
+  - `Analysis.InnerProductSpace.Basic`
+  - `Analysis.InnerProductSpace.DiagonalOperator`
+  - `Analysis.InnerProductSpace.Gram.Matrix`
   - `Analysis.InnerProductSpace.KyFan`
   - `Analysis.InnerProductSpace.Projection.Geometry`
   - `Analysis.InnerProductSpace.SchurHorn`
   - `Analysis.InnerProductSpace.Singular.Subspace`
+  - `Analysis.InnerProductSpace.UnitarilyInvariantSeminorm`
+  - `Analysis.InnerProductSpace.UnitarilyInvariantSeminorm.Basic`
+  - `Analysis.InnerProductSpace.UnitarilyInvariantSeminorm.BlockSum`
+  - `Analysis.InnerProductSpace.UnitarilyInvariantSeminorm.Gauge`
+  - `Analysis.InnerProductSpace.UnitarilyInvariantSeminorm.Instances`
+  - `Analysis.InnerProductSpace.UnitarilyInvariantSeminorm.Majorization`
+  - `Analysis.InnerProductSpace.ZeroExtension`
+  - `Analysis.Normed.Operator.LinearIsometry`
 
-### Rung E — Rectangular unitarily invariant norms
+### Rung E — Principal-angle prerequisites
 
-**5 new, cumulative closed slice 23.**
+**2 new, cumulative closed slice 42.**
 
   - `Analysis.InnerProductSpace.AlignedBasis`
-  - `Analysis.InnerProductSpace.Basic`
-  - `Analysis.InnerProductSpace.Gram.Matrix`
   - `Analysis.InnerProductSpace.PrincipalAngles`
-  - `Analysis.Normed.Operator.LinearIsometry`
 
 ### Rung F — Ky Fan gauges and operator ideal families
 
-**22 new, cumulative closed slice 45.**
+**16 new, cumulative closed slice 58.**
 
-  - `Analysis.InnerProductSpace.RectangularUnitarilyInvariantSeminorm`
-  - `Analysis.InnerProductSpace.RectangularUnitarilyInvariantSeminorm.Basic`
-  - `Analysis.InnerProductSpace.RectangularUnitarilyInvariantSeminorm.BlockSum`
-  - `Analysis.InnerProductSpace.RectangularUnitarilyInvariantSeminorm.Instances`
-  - `Analysis.InnerProductSpace.RectangularUnitarilyInvariantSeminorm.Majorization`
   - `Analysis.InnerProductSpace.Spectral.Cutoff`
-  - `Analysis.InnerProductSpace.UnitarilyInvariantSeminorm`
   - `Analysis.Normed.Operator.FiniteRankCompact`
   - `Analysis.OperatorIdeal.ApproximationNumber.Adjoint`
   - `Analysis.OperatorIdeal.ApproximationNumber.Compact`
@@ -143,12 +137,11 @@ base Tau Ceti has already accepted.
   - `Analysis.OperatorIdeal.Family.TraceClass`
   - `Topology.ENNRealLiminf`
 
-**Cumulative after F: 41 of 272 `ForTauCeti` modules.** Rungs A–F were the whole
-ladder until 2026-07-29; rungs G–S below carry the other 123.
+**Cumulative after F: 58 of 306 `ForTauCeti` modules.**
 
 ### Rung G — Foundations completion — the rest of topics T01-T10
 
-**35 new, cumulative closed slice 80.**
+**35 new, cumulative closed slice 93.**
 
   - `Analysis.CStarAlgebra.RealSpectrumFunctionalCalculus`
   - `Analysis.InnerProductSpace.AngleGeometry`
@@ -163,10 +156,8 @@ ladder until 2026-07-29; rungs G–S below carry the other 123.
   - `Analysis.InnerProductSpace.OrthogonalSeries`
   - `Analysis.InnerProductSpace.Polar.Isometry`
   - `Analysis.InnerProductSpace.Polar.PartialIsometry`
-  - `Analysis.InnerProductSpace.Projection.Blocks`
   - `Analysis.InnerProductSpace.Projection.Gap`
   - `Analysis.InnerProductSpace.RectangularPartialIsometry`
-  - `Analysis.InnerProductSpace.ReducingSubspace`
   - `Analysis.InnerProductSpace.SchattenNorm`
   - `Analysis.InnerProductSpace.Singular.System`
   - `Analysis.InnerProductSpace.Spectral.Gap`
@@ -181,14 +172,16 @@ ladder until 2026-07-29; rungs G–S below carry the other 123.
   - `Analysis.OperatorIdeal.ApproximationNumber.FiniteValueFibers`
   - `Analysis.OperatorIdeal.ApproximationNumber.FiniteValueSeparation`
   - `Analysis.OperatorIdeal.ApproximationNumber.LeadingCutoff`
+  - `Analysis.OperatorIdeal.ApproximationNumber.MinMaxReal`
   - `Analysis.OperatorIdeal.ApproximationNumber.SameSequence`
+  - `Analysis.OperatorIdeal.ApproximationNumber.ScalarTransport`
   - `Analysis.OperatorIdeal.Family.HilbertSchmidt`
   - `Analysis.OperatorIdeal.Family.Schatten`
   - `Analysis.SpecialFunctions.Sqrt`
 
 ### Rung H — Hilbert-Schmidt operators (T11)
 
-**4 new, cumulative closed slice 84.**
+**4 new, cumulative closed slice 97.**
 
   - `Analysis.InnerProductSpace.HilbertSchmidt.Conjugation`
   - `Analysis.InnerProductSpace.HilbertSchmidt.Lp`
@@ -197,7 +190,7 @@ ladder until 2026-07-29; rungs G–S below carry the other 123.
 
 ### Rung I — The Haagerup-Zsido kernel and its Fourier transform (T12)
 
-**8 new, cumulative closed slice 92.**
+**8 new, cumulative closed slice 105.**
 
   - `Analysis.Fourier.ExponentialAbs`
   - `Analysis.Fourier.HaagerupZsido.Defs`
@@ -210,7 +203,7 @@ ladder until 2026-07-29; rungs G–S below carry the other 123.
 
 ### Rung J — One-parameter unitary groups and Stone's theorem (T13)
 
-**6 new, cumulative closed slice 98.**
+**6 new, cumulative closed slice 111.**
 
   - `Analysis.InnerProductSpace.IntertwiningUnitary`
   - `Analysis.InnerProductSpace.OneParameterUnitaryGroup.Basic`
@@ -221,7 +214,7 @@ ladder until 2026-07-29; rungs G–S below carry the other 123.
 
 ### Rung K — Borel functional calculus and projection-valued measures (T14)
 
-**11 new, cumulative closed slice 109.**
+**11 new, cumulative closed slice 122.**
 
   - `Analysis.InnerProductSpace.BorelCalculus.DiagonalMeasure`
   - `Analysis.InnerProductSpace.BorelCalculus.Multiplicative`
@@ -237,19 +230,19 @@ ladder until 2026-07-29; rungs G–S below carry the other 123.
 
 ### Rung L — Closed operators on LinearPMap: graphs, constructions and form bounds (T15a)
 
-**7 new, cumulative closed slice 116.**
+**7 new, cumulative closed slice 129.**
 
   - `Analysis.InnerProductSpace.LinearPMap.Closed`
   - `Analysis.InnerProductSpace.LinearPMap.Constructions`
   - `Analysis.InnerProductSpace.LinearPMap.GraphCore`
   - `Analysis.InnerProductSpace.LinearPMap.SubmoduleAdjoint`
   - `Analysis.InnerProductSpace.LinearPMap.Sylvester`
+  - `Analysis.InnerProductSpace.LinearPMap.UnitaryTransport`
   - `Analysis.InnerProductSpace.QuadraticFormBounds`
-  - `Analysis.InnerProductSpace.SpectralOrder.Complex`
 
 ### Rung M — Resolvents of self-adjoint LinearPMap operators, and semiboundedness (T15b)
 
-**7 new, cumulative closed slice 123.**
+**8 new, cumulative closed slice 137.**
 
   - `Analysis.CStarAlgebra.SelfAdjointGapInverse`
   - `Analysis.InnerProductSpace.LinearPMap.RealLowerBound`
@@ -258,10 +251,11 @@ ladder until 2026-07-29; rungs G–S below carry the other 123.
   - `Analysis.InnerProductSpace.LinearPMap.ResolventOpen`
   - `Analysis.InnerProductSpace.LinearPMap.SelfAdjointResolvent`
   - `Analysis.InnerProductSpace.SeparatedIntertwiner`
+  - `Analysis.Normed.Operator.Resolvent.Unbounded`
 
 ### Rung N — The spectral measure of an unbounded self-adjoint operator, and Stone (T15c)
 
-**16 new, cumulative closed slice 139.**
+**16 new, cumulative closed slice 153.**
 
   - `Analysis.InnerProductSpace.BlockLowerBound`
   - `Analysis.InnerProductSpace.LinearPMap.SelfAdjointMaximal`
@@ -282,7 +276,7 @@ ladder until 2026-07-29; rungs G–S below carry the other 123.
 
 ### Rung O — Sylvester equations and the Rosenblum theorem (T16)
 
-**18 new, cumulative closed slice 157.**
+**18 new, cumulative closed slice 171.**
 
   - `Analysis.InnerProductSpace.CoerciveUnit`
   - `Analysis.InnerProductSpace.HilbertSchmidt.Block`
@@ -305,12 +299,10 @@ ladder until 2026-07-29; rungs G–S below carry the other 123.
 
 ### Rung P — Spectral subspace perturbation: the Davis-Kahan sin-Theta theorems (T17)
 
-**15 new, cumulative closed slice 172.**
+**11 new, cumulative closed slice 182.**
 
   - `Analysis.InnerProductSpace.BoundedOperator.Projector`
   - `Analysis.InnerProductSpace.BoundedOperator.SinTheta`
-  - `Analysis.InnerProductSpace.Complexification.Basic`
-  - `Analysis.InnerProductSpace.Complexification.FunctionalCalculus`
   - `Analysis.InnerProductSpace.DoubleAngle.Vector`
   - `Analysis.InnerProductSpace.ReducedExtension`
   - `Analysis.InnerProductSpace.Residual.AngleEmbedding`
@@ -320,20 +312,15 @@ ladder until 2026-07-29; rungs G–S below carry the other 123.
   - `Analysis.InnerProductSpace.SinTheta.OperatorNorm`
   - `Analysis.InnerProductSpace.SinTheta.Perturbation`
   - `Analysis.InnerProductSpace.SinTheta.UnitarilyInvariant`
-  - `Analysis.InnerProductSpace.SpectralOrder.Real`
-  - `Analysis.OperatorIdeal.ApproximationNumber.MinMaxReal`
 
 ### Rung Q — The Yu-Wang-Samworth statistical variant (T18)
 
-**3 new, cumulative closed slice 175.**
+**0 new, cumulative closed slice 182.**
 
-  - `Analysis.InnerProductSpace.YuWangSamworth.Residual`
-  - `Analysis.InnerProductSpace.YuWangSamworth.SingularSubspace`
-  - `Analysis.InnerProductSpace.YuWangSamworth.Statistics`
 
 ### Rung R — Matrix spectra and spectral measurability (T19)
 
-**6 new, cumulative closed slice 181.**
+**6 new, cumulative closed slice 188.**
 
   - `Analysis.Matrix.EntrywiseEigenvalue`
   - `Analysis.Matrix.EntrywiseOpNorm`
@@ -344,7 +331,7 @@ ladder until 2026-07-29; rungs G–S below carry the other 123.
 
 ### Rung S — Sample moments and matrix concentration (T20)
 
-**5 new, cumulative closed slice 186.**
+**5 new, cumulative closed slice 193.**
 
   - `Probability.Moments.CenteredScatter`
   - `Probability.Moments.MatrixConcentration`
@@ -354,18 +341,18 @@ ladder until 2026-07-29; rungs G–S below carry the other 123.
 
 ### Rung T — Matrix rank factorization and positive semidefiniteness (T21)
 
-**2 new, cumulative closed slice 188.**
+**2 new, cumulative closed slice 195.**
 
   - `LinearAlgebra.Matrix.PosDef`
   - `LinearAlgebra.Matrix.RankFactorization`
 
 ### Rung U — Berge's maximum theorem and approximate minimizers (T22)
 
-**2 new, cumulative closed slice 190.**
+**2 new, cumulative closed slice 197.**
 
   - `Topology.ApproxMinimizer`
   - `Topology.Berge`
-**Cumulative: 179 of 272 `ForTauCeti` modules — the ladder is total.**
+**Cumulative: 179 of 306 `ForTauCeti` modules — the ladder is total.**
 
 It briefly was not.  Three modules merged in after rung U closed on 2026-07-29
 and no rung's closure reached them; they were placed on 2026-07-30 by matching

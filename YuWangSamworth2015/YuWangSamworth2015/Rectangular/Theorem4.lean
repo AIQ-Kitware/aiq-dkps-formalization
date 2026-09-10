@@ -145,7 +145,7 @@ private theorem yuWangSamworth_gram_sinTheta_le
     {Δ c perturbOp perturbFrob : ℝ} (hΔ : 0 < Δ)
     (hgap : InternalGap G U Δ)
     (hop : ‖(Ĝ - G).toContinuousLinearMap‖ ≤ c * perturbOp)
-    (hfrob : UnitarilyInvariantSeminorm.frobenius 𝕜 H (Ĝ - G) ≤
+    (hfrob : UnitarilyInvariantSeminorm.frobenius (𝕜 := 𝕜) (E := H) (F := H) (Ĝ - G) ≤
       c * perturbFrob) :
     sinThetaFrobenius U V ≤
       2 * c * min (Real.sqrt d * perturbOp) perturbFrob / Δ := by
@@ -157,7 +157,7 @@ private theorem yuWangSamworth_gram_sinTheta_le
   have hmin := gram_min_le_scaled_min (d := d) hop hfrob
   calc
     2 * min (Real.sqrt d * ‖(Ĝ - G).toContinuousLinearMap‖)
-          (UnitarilyInvariantSeminorm.frobenius 𝕜 H (Ĝ - G)) / Δ
+          (UnitarilyInvariantSeminorm.frobenius (𝕜 := 𝕜) (E := H) (F := H) (Ĝ - G)) / Δ
         ≤ 2 * (c * min (Real.sqrt d * perturbOp) perturbFrob) / Δ := by
           exact div_le_div_of_nonneg_right
             (mul_le_mul_of_nonneg_left hmin (by norm_num)) hΔ.le
@@ -175,7 +175,7 @@ private theorem yuWangSamworth_gram_alignedBasis_le
     {Δ c perturbOp perturbFrob : ℝ} (hΔ : 0 < Δ)
     (hgap : InternalGap G U Δ)
     (hop : ‖(Ĝ - G).toContinuousLinearMap‖ ≤ c * perturbOp)
-    (hfrob : UnitarilyInvariantSeminorm.frobenius 𝕜 H (Ĝ - G) ≤
+    (hfrob : UnitarilyInvariantSeminorm.frobenius (𝕜 := 𝕜) (E := H) (F := H) (Ĝ - G) ≤
       c * perturbFrob) :
     ∃ (u v : Fin d → H), Orthonormal 𝕜 u ∧ Orthonormal 𝕜 v ∧
       Submodule.span 𝕜 (Set.range u) = U ∧
@@ -196,7 +196,7 @@ private theorem yuWangSamworth_gram_alignedBasis_le
   calc
     2 * Real.sqrt 2 *
           min (Real.sqrt d * ‖(Ĝ - G).toContinuousLinearMap‖)
-            (UnitarilyInvariantSeminorm.frobenius 𝕜 H (Ĝ - G)) / Δ
+            (UnitarilyInvariantSeminorm.frobenius (𝕜 := 𝕜) (E := H) (F := H) (Ĝ - G)) / Δ
         ≤ 2 * Real.sqrt 2 *
             (c * min (Real.sqrt d * perturbOp) perturbFrob) / Δ := by
           exact div_le_div_of_nonneg_right
@@ -221,7 +221,7 @@ theorem yuWangSamworth_rightSingularSubspace_opNormCoefficient_le
       2 * (2 * ‖A.toContinuousLinearMap‖ +
           ‖(Â - A).toContinuousLinearMap‖) *
         min (Real.sqrt d * ‖(Â - A).toContinuousLinearMap‖)
-          (RectangularUnitarilyInvariantSeminorm.frobenius (Â - A)) / Δ := by
+          (UnitarilyInvariantSeminorm.frobenius (Â - A)) / Δ := by
   apply yuWangSamworth_gram_sinTheta_le
     (isSymmetric_rightGram A) (isSymmetric_rightGram Â)
     (by simpa only [CorrespondingRightSingularBlock] using hcorr)
@@ -242,7 +242,7 @@ theorem yuWangSamworth_leftSingularSubspace_opNormCoefficient_le
       2 * (2 * ‖A.toContinuousLinearMap‖ +
           ‖(Â - A).toContinuousLinearMap‖) *
         min (Real.sqrt d * ‖(Â - A).toContinuousLinearMap‖)
-          (RectangularUnitarilyInvariantSeminorm.frobenius (Â - A)) / Δ := by
+          (UnitarilyInvariantSeminorm.frobenius (Â - A)) / Δ := by
   apply yuWangSamworth_gram_sinTheta_le
     (isSymmetric_leftGram A) (isSymmetric_leftGram Â)
     (by simpa only [CorrespondingLeftSingularBlock] using hcorr)
@@ -266,7 +266,7 @@ theorem yuWangSamworth_rightSingularAlignedBasis_opNormCoefficient_le
           (2 * ‖A.toContinuousLinearMap‖ +
             ‖(Â - A).toContinuousLinearMap‖) *
           min (Real.sqrt d * ‖(Â - A).toContinuousLinearMap‖)
-            (RectangularUnitarilyInvariantSeminorm.frobenius (Â - A)) / Δ := by
+            (UnitarilyInvariantSeminorm.frobenius (Â - A)) / Δ := by
   apply yuWangSamworth_gram_alignedBasis_le
     (isSymmetric_rightGram A) (isSymmetric_rightGram Â)
     (by simpa only [CorrespondingRightSingularBlock] using hcorr)
@@ -290,7 +290,7 @@ theorem yuWangSamworth_leftSingularAlignedBasis_opNormCoefficient_le
           (2 * ‖A.toContinuousLinearMap‖ +
             ‖(Â - A).toContinuousLinearMap‖) *
           min (Real.sqrt d * ‖(Â - A).toContinuousLinearMap‖)
-            (RectangularUnitarilyInvariantSeminorm.frobenius (Â - A)) / Δ := by
+            (UnitarilyInvariantSeminorm.frobenius (Â - A)) / Δ := by
   apply yuWangSamworth_gram_alignedBasis_le
     (isSymmetric_leftGram A) (isSymmetric_leftGram Â)
     (by simpa only [CorrespondingLeftSingularBlock] using hcorr)
@@ -322,7 +322,7 @@ theorem yuWangSamworth_rightSingularSubspace_le
       2 * (2 * A.singularValues 0 +
           ‖(Â - A).toContinuousLinearMap‖) *
         min (Real.sqrt d * ‖(Â - A).toContinuousLinearMap‖)
-          (RectangularUnitarilyInvariantSeminorm.frobenius (Â - A)) / Δ := by
+          (UnitarilyInvariantSeminorm.frobenius (Â - A)) / Δ := by
   simpa only [opNorm_eq_topSingularValue A] using
     yuWangSamworth_rightSingularSubspace_opNormCoefficient_le
       hcorr hrank hΔ hgap
@@ -338,7 +338,7 @@ theorem yuWangSamworth_leftSingularSubspace_le
       2 * (2 * A.singularValues 0 +
           ‖(Â - A).toContinuousLinearMap‖) *
         min (Real.sqrt d * ‖(Â - A).toContinuousLinearMap‖)
-          (RectangularUnitarilyInvariantSeminorm.frobenius (Â - A)) / Δ := by
+          (UnitarilyInvariantSeminorm.frobenius (Â - A)) / Δ := by
   simpa only [opNorm_eq_topSingularValue A] using
     yuWangSamworth_leftSingularSubspace_opNormCoefficient_le
       hcorr hrank hΔ hgap
@@ -358,7 +358,7 @@ theorem yuWangSamworth_rightSingularAlignedBasis_le
           (2 * A.singularValues 0 +
             ‖(Â - A).toContinuousLinearMap‖) *
           min (Real.sqrt d * ‖(Â - A).toContinuousLinearMap‖)
-            (RectangularUnitarilyInvariantSeminorm.frobenius (Â - A)) / Δ := by
+            (UnitarilyInvariantSeminorm.frobenius (Â - A)) / Δ := by
   simpa only [opNorm_eq_topSingularValue A] using
     yuWangSamworth_rightSingularAlignedBasis_opNormCoefficient_le
       hcorr hrank hΔ hgap
@@ -378,7 +378,7 @@ theorem yuWangSamworth_leftSingularAlignedBasis_le
           (2 * A.singularValues 0 +
             ‖(Â - A).toContinuousLinearMap‖) *
           min (Real.sqrt d * ‖(Â - A).toContinuousLinearMap‖)
-            (RectangularUnitarilyInvariantSeminorm.frobenius (Â - A)) / Δ := by
+            (UnitarilyInvariantSeminorm.frobenius (Â - A)) / Δ := by
   simpa only [opNorm_eq_topSingularValue A] using
     yuWangSamworth_leftSingularAlignedBasis_opNormCoefficient_le
       hcorr hrank hΔ hgap
@@ -435,7 +435,8 @@ private theorem yuWangSamworth_gram_sinTheta_frame_le
     (hgap : ∀ (i : Fin d) (k : Fin n), k ∉ Set.range (⇑e) →
       Δ ≤ |hG.eigenvalues hn (e i) - hG.eigenvalues hn k|)
     (hop : ‖(Ĝ - G).toContinuousLinearMap‖ ≤ c * perturbOp)
-    (hfrob : UnitarilyInvariantSeminorm.frobenius 𝕜 H (Ĝ - G) ≤ c * perturbFrob) :
+    (hfrob : UnitarilyInvariantSeminorm.frobenius (𝕜 := 𝕜) (E := H) (F := H) (Ĝ - G) ≤ c *
+      perturbFrob) :
     sinThetaFrobenius (Submodule.span 𝕜 (Set.range u))
         (Submodule.span 𝕜 (Set.range v)) ≤
       2 * c * min (Real.sqrt d * perturbOp) perturbFrob / Δ := by
@@ -443,7 +444,7 @@ private theorem yuWangSamworth_gram_sinTheta_frame_le
   have hmin := gram_min_le_scaled_min (d := d) hop hfrob
   calc
     2 * min (Real.sqrt d * ‖(Ĝ - G).toContinuousLinearMap‖)
-          (UnitarilyInvariantSeminorm.frobenius 𝕜 H (Ĝ - G)) / Δ
+          (UnitarilyInvariantSeminorm.frobenius (𝕜 := 𝕜) (E := H) (F := H) (Ĝ - G)) / Δ
         ≤ 2 * (c * min (Real.sqrt d * perturbOp) perturbFrob) / Δ :=
           div_le_div_of_nonneg_right
             (mul_le_mul_of_nonneg_left hmin (by norm_num)) hΔ.le
@@ -461,7 +462,8 @@ private theorem yuWangSamworth_gram_alignedBasis_frame_le
     (hgap : ∀ (i : Fin d) (k : Fin n), k ∉ Set.range (⇑e) →
       Δ ≤ |hG.eigenvalues hn (e i) - hG.eigenvalues hn k|)
     (hop : ‖(Ĝ - G).toContinuousLinearMap‖ ≤ c * perturbOp)
-    (hfrob : UnitarilyInvariantSeminorm.frobenius 𝕜 H (Ĝ - G) ≤ c * perturbFrob) :
+    (hfrob : UnitarilyInvariantSeminorm.frobenius (𝕜 := 𝕜) (E := H) (F := H) (Ĝ - G) ≤ c *
+      perturbFrob) :
     ∃ (u' v' : Fin d → H), Orthonormal 𝕜 u' ∧ Orthonormal 𝕜 v' ∧
       Submodule.span 𝕜 (Set.range u') = Submodule.span 𝕜 (Set.range u) ∧
       Submodule.span 𝕜 (Set.range v') = Submodule.span 𝕜 (Set.range v) ∧
@@ -474,7 +476,7 @@ private theorem yuWangSamworth_gram_alignedBasis_frame_le
   calc
     2 * Real.sqrt 2 *
           min (Real.sqrt d * ‖(Ĝ - G).toContinuousLinearMap‖)
-            (UnitarilyInvariantSeminorm.frobenius 𝕜 H (Ĝ - G)) / Δ
+            (UnitarilyInvariantSeminorm.frobenius (𝕜 := 𝕜) (E := H) (F := H) (Ĝ - G)) / Δ
         ≤ 2 * Real.sqrt 2 *
             (c * min (Real.sqrt d * perturbOp) perturbFrob) / Δ :=
           div_le_div_of_nonneg_right
@@ -503,7 +505,7 @@ theorem yuWangSamworth_rightSingularSubspace_frame_le
         (Submodule.span 𝕜 (Set.range vHat)) ≤
       2 * (2 * A.singularValues 0 + ‖(Â - A).toContinuousLinearMap‖) *
         min (Real.sqrt d * ‖(Â - A).toContinuousLinearMap‖)
-          (RectangularUnitarilyInvariantSeminorm.frobenius (Â - A)) / Δ := by
+          (UnitarilyInvariantSeminorm.frobenius (Â - A)) / Δ := by
   simpa only [opNorm_eq_topSingularValue A] using
     yuWangSamworth_gram_sinTheta_frame_le
       (isOrderedRightSingularFrame_iff.mp hv) (isOrderedRightSingularFrame_iff.mp hvHat)
@@ -525,7 +527,7 @@ theorem yuWangSamworth_leftSingularSubspace_frame_le
         (Submodule.span 𝕜 (Set.range û)) ≤
       2 * (2 * A.singularValues 0 + ‖(Â - A).toContinuousLinearMap‖) *
         min (Real.sqrt d * ‖(Â - A).toContinuousLinearMap‖)
-          (RectangularUnitarilyInvariantSeminorm.frobenius (Â - A)) / Δ := by
+          (UnitarilyInvariantSeminorm.frobenius (Â - A)) / Δ := by
   simpa only [opNorm_eq_topSingularValue A] using
     yuWangSamworth_gram_sinTheta_frame_le
       (isOrderedLeftSingularFrame_iff.mp hu) (isOrderedLeftSingularFrame_iff.mp hû)
@@ -550,7 +552,7 @@ theorem yuWangSamworth_rightSingularAlignedBasis_frame_le
         2 * Real.sqrt 2 *
           (2 * A.singularValues 0 + ‖(Â - A).toContinuousLinearMap‖) *
           min (Real.sqrt d * ‖(Â - A).toContinuousLinearMap‖)
-            (RectangularUnitarilyInvariantSeminorm.frobenius (Â - A)) / Δ := by
+            (UnitarilyInvariantSeminorm.frobenius (Â - A)) / Δ := by
   simpa only [opNorm_eq_topSingularValue A] using
     yuWangSamworth_gram_alignedBasis_frame_le
       (isOrderedRightSingularFrame_iff.mp hv) (isOrderedRightSingularFrame_iff.mp hvHat)
@@ -575,7 +577,7 @@ theorem yuWangSamworth_leftSingularAlignedBasis_frame_le
         2 * Real.sqrt 2 *
           (2 * A.singularValues 0 + ‖(Â - A).toContinuousLinearMap‖) *
           min (Real.sqrt d * ‖(Â - A).toContinuousLinearMap‖)
-            (RectangularUnitarilyInvariantSeminorm.frobenius (Â - A)) / Δ := by
+            (UnitarilyInvariantSeminorm.frobenius (Â - A)) / Δ := by
   simpa only [opNorm_eq_topSingularValue A] using
     yuWangSamworth_gram_alignedBasis_frame_le
       (isOrderedLeftSingularFrame_iff.mp hu) (isOrderedLeftSingularFrame_iff.mp hû)

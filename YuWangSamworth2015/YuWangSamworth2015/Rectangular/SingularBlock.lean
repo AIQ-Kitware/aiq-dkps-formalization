@@ -169,7 +169,7 @@ theorem yuWangSamworth_rightSingularSubspace_block_le
         (Submodule.span 𝕜 (Set.range vHat)) ≤
       2 * (2 * A.singularValues 0 + ‖(Â - A).toContinuousLinearMap‖) *
         min (Real.sqrt d * ‖(Â - A).toContinuousLinearMap‖)
-          (RectangularUnitarilyInvariantSeminorm.frobenius (Â - A)) / Δ :=
+          (UnitarilyInvariantSeminorm.frobenius (Â - A)) / Δ :=
   yuWangSamworth_rightSingularSubspace_frame_le hv hvHat hΔ
     ((orderedBlockBoundaryGap_rightGram hn hlo hhi).indexGap _ hd)
 
@@ -188,7 +188,7 @@ theorem yuWangSamworth_leftSingularSubspace_block_le
         (Submodule.span 𝕜 (Set.range û)) ≤
       2 * (2 * A.singularValues 0 + ‖(Â - A).toContinuousLinearMap‖) *
         min (Real.sqrt d * ‖(Â - A).toContinuousLinearMap‖)
-          (RectangularUnitarilyInvariantSeminorm.frobenius (Â - A)) / Δ :=
+          (UnitarilyInvariantSeminorm.frobenius (Â - A)) / Δ :=
   yuWangSamworth_leftSingularSubspace_frame_le hu hû hΔ
     ((orderedBlockBoundaryGap_leftGram hm hlo hhi).indexGap _ hd)
 
@@ -210,7 +210,7 @@ theorem yuWangSamworth_rightSingularAlignedBasis_block_le
         2 * Real.sqrt 2 *
           (2 * A.singularValues 0 + ‖(Â - A).toContinuousLinearMap‖) *
           min (Real.sqrt d * ‖(Â - A).toContinuousLinearMap‖)
-            (RectangularUnitarilyInvariantSeminorm.frobenius (Â - A)) / Δ :=
+            (UnitarilyInvariantSeminorm.frobenius (Â - A)) / Δ :=
   yuWangSamworth_rightSingularAlignedBasis_frame_le hv hvHat hΔ
     ((orderedBlockBoundaryGap_rightGram hn hlo hhi).indexGap _ hd)
 
@@ -232,7 +232,7 @@ theorem yuWangSamworth_leftSingularAlignedBasis_block_le
         2 * Real.sqrt 2 *
           (2 * A.singularValues 0 + ‖(Â - A).toContinuousLinearMap‖) *
           min (Real.sqrt d * ‖(Â - A).toContinuousLinearMap‖)
-            (RectangularUnitarilyInvariantSeminorm.frobenius (Â - A)) / Δ :=
+            (UnitarilyInvariantSeminorm.frobenius (Â - A)) / Δ :=
   yuWangSamworth_leftSingularAlignedBasis_frame_le hu hû hΔ
     ((orderedBlockBoundaryGap_leftGram hm hlo hhi).indexGap _ hd)
 
@@ -278,7 +278,7 @@ theorem yuWangSamworth_rightSingularAlignedFrame_block_le
       2 * Real.sqrt 2 *
           (2 * A.singularValues 0 + ‖(Â - A).toContinuousLinearMap‖) *
           min (Real.sqrt d * ‖(Â - A).toContinuousLinearMap‖)
-            (RectangularUnitarilyInvariantSeminorm.frobenius (Â - A)) / Δ := by
+            (UnitarilyInvariantSeminorm.frobenius (Â - A)) / Δ := by
   obtain ⟨O, hO, hbound⟩ :=
     exists_unitary_sqrt_sum_sq_norm_frameComp_sub_le hv.orthonormal hvHat.orthonormal
       (yuWangSamworth_rightSingularSubspace_block_le hsn hd hv hvHat hΔ hlo hhi)
@@ -301,7 +301,7 @@ theorem yuWangSamworth_leftSingularAlignedFrame_block_le
       2 * Real.sqrt 2 *
           (2 * A.singularValues 0 + ‖(Â - A).toContinuousLinearMap‖) *
           min (Real.sqrt d * ‖(Â - A).toContinuousLinearMap‖)
-            (RectangularUnitarilyInvariantSeminorm.frobenius (Â - A)) / Δ := by
+            (UnitarilyInvariantSeminorm.frobenius (Â - A)) / Δ := by
   obtain ⟨O, hO, hbound⟩ :=
     exists_unitary_sqrt_sum_sq_norm_frameComp_sub_le hu.orthonormal hû.orthonormal
       (yuWangSamworth_leftSingularSubspace_block_le hsm hd hu hû hΔ hlo hhi)

@@ -2,14 +2,12 @@
 # Rectangular Fan dominance and two-sided orbit majorization
   -- dependency audit only
 
-These are flagship reusable matrix-analysis results developed for the sharp
-Davis--Kahan proof. They currently receive a leaderboard-only dependency audit
-because their public vocabulary and implementations still cohabit
-`RectangularUINorm.lean`; splitting a clean Mathlib-only conformance surface is
-future PR-shaping work.
+These results use the canonical rectangular seminorm and two-sided orbit API.
+This leaderboard audits their proof dependencies; it does not compare their
+signatures against an independent conformance module.
 -/
 
-import ForTauCeti.Analysis.InnerProductSpace.RectangularUnitarilyInvariantSeminorm
+import ForTauCeti.Analysis.InnerProductSpace.UnitarilyInvariantSeminorm
 
-#print axioms TauCeti.RectangularUnitarilyInvariantSeminorm.mem_convexHull_twoSidedUnitaryOrbit_of_kyFanSum_le
-#print axioms TauCeti.RectangularUnitarilyInvariantSeminorm.apply_le_of_kyFanSum_le
+#print axioms TauCeti.UnitarilyInvariantSeminorm.mem_convexHull_twoSidedUnitaryOrbit_of_kyFanSum_le
+#print axioms TauCeti.UnitarilyInvariantSeminorm.apply_le_of_kyFanSum_le

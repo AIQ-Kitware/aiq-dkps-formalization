@@ -55,7 +55,7 @@ theorem yuWangSamworth_sinTheta_block_le
     sinThetaFrobenius (Submodule.span 𝕜 (Set.range u))
         (Submodule.span 𝕜 (Set.range v)) ≤
       2 * min (Real.sqrt d * ‖(B - A).toContinuousLinearMap‖)
-        (UnitarilyInvariantSeminorm.frobenius 𝕜 E (B - A)) / Δ :=
+        (UnitarilyInvariantSeminorm.frobenius (𝕜 := 𝕜) (E := E) (F := E) (B - A)) / Δ :=
   yuWangSamworth_sinTheta_frame_le hu hv hΔ (hgap.indexGap _ hd)
 
 /-- **Yu--Wang--Samworth Theorem 2, second conclusion, as printed.**
@@ -73,7 +73,7 @@ theorem yuWangSamworth_alignedFrame_block_le
         Real.sqrt (∑ i, ‖frameComp hv.orthonormal O i - u i‖ ^ 2) ≤
           2 * Real.sqrt 2 *
             min (Real.sqrt d * ‖(B - A).toContinuousLinearMap‖)
-              (UnitarilyInvariantSeminorm.frobenius 𝕜 E (B - A)) / Δ :=
+              (UnitarilyInvariantSeminorm.frobenius (𝕜 := 𝕜) (E := E) (F := E) (B - A)) / Δ :=
   yuWangSamworth_alignedFrame_le hu hv hΔ (hgap.indexGap _ hd)
 
 /-- **The residual form of Theorem 2 with the source's indexing.**
@@ -140,7 +140,7 @@ theorem yuWangSamworth_alignedFrame_block_real_le
       Real.sqrt (∑ i, ‖(∑ j, O j i • v j) - u i‖ ^ 2) ≤
         2 * Real.sqrt 2 *
           min (Real.sqrt d * ‖(B - A).toContinuousLinearMap‖)
-            (UnitarilyInvariantSeminorm.frobenius ℝ F (B - A)) / Δ :=
+            (UnitarilyInvariantSeminorm.frobenius (𝕜 := ℝ) (E := F) (F := F) (B - A)) / Δ :=
   yuWangSamworth_alignedFrame_real_le hu hv hΔ (hgap.indexGap _ hd)
 
 end Real

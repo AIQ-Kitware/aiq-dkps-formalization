@@ -7,7 +7,9 @@ module
 
 public import ForTauCeti.Analysis.InnerProductSpace.Gram.Matrix
 public import ForTauCeti.Analysis.Convex.Majorization
-public import ForTauCeti.Analysis.InnerProductSpace.RectangularUnitarilyInvariantSeminorm.Basic
+public import Mathlib.Analysis.InnerProductSpace.Projection.Reflection
+public import ForTauCeti.Analysis.InnerProductSpace.DiagonalOperator
+public import ForTauCeti.Analysis.InnerProductSpace.UnitarilyInvariantSeminorm.Basic
 
 /-!
 # Ky Fan majorization for rectangular unitarily invariant norms
@@ -26,17 +28,9 @@ spaces, and the transport of equal singular-value data by the rectangular SVD.
 
 ## Provenance
 
-* Original repository: Davis--Kahan/DKPS formalization (Kitware, Inc.).
-* Original module: `ForTauCeti.Analysis.InnerProductSpace.RectangularUnitarilyInvariantSeminorm`,
-  split out on 2026-07-28 because that file had grown to 2124 lines while Tau Ceti's
-  `lean_lib` enforces a hard 1500-line ceiling, and 1000 for a newly added file.
-* Extraction class: **split**.  No statement, proof or declaration name changed; only
-  `exists_unitary_factorization_of_singularValues_eq` was promoted from `private` to
-  public, because the split puts its users in a different module.
-* Original authors / copyright: Jon Crall, Claude Fable 5;
-  Copyright (c) 2026 Kitware, Inc.; Apache 2.0.
-* Spectra influence: **none** — this module imports only Mathlib and sibling
-  `ForTauCeti` staging modules.
+Adapted from the rectangular majorization and block-sum modules in the Davis--Kahan/DKPS
+formalization (Kitware, Inc.). The vector majorization descent remains in
+`ForTauCeti.Analysis.Convex.Majorization`.
 -/
 
 public section
@@ -65,9 +59,9 @@ theorem finrank_range_le_min (A : E →ₗ[𝕜] F) :
   have := A.finrank_range_add_finrank_ker
   omega
 
-namespace RectangularUnitarilyInvariantSeminorm
+namespace UnitarilyInvariantSeminorm
 
-variable (N : RectangularUnitarilyInvariantSeminorm 𝕜 E F)
+variable (N : UnitarilyInvariantSeminorm 𝕜 E F)
 
 /- `Module ℝ (E →ₗ[𝕜] F)` is a *local* instance in `Basic`, so it does not survive the
 import.  Re-enable it here; making it global would put a second `Module ℝ` structure on
@@ -138,54 +132,6 @@ private theorem singularValues_coordinateLift
     _ = X.singularValues :=
       singularValues_comp_adjoint_linearIsometry ιE X
 
-/-- Pull a rectangular UI norm back to square operators on a common coordinate
-space.  Ambient extensions of the coordinate unitaries prove full square
-unitary invariance. -/
-private noncomputable def coordinateSquareNorm
-    {H : Type*} [NormedAddCommGroup H] [InnerProductSpace 𝕜 H]
-    [FiniteDimensional 𝕜 H]
-    (N : RectangularUnitarilyInvariantSeminorm 𝕜 E F)
-    (ιE : H →ₗᵢ[𝕜] E) (ιF : H →ₗᵢ[𝕜] F) :
-    UnitarilyInvariantSeminorm 𝕜 H where
-  toFun X := N (coordinateLift ιE ιF X)
-  add_le' X Y := by
-    have hmap : coordinateLift ιE ιF (X + Y) =
-        coordinateLift ιE ιF X + coordinateLift ιE ιF Y := by
-      ext x
-      simp [coordinateLift, LinearMap.comp_apply]
-    rw [hmap]
-    exact N.add_le _ _
-  smul' a X := by
-    have hmap : coordinateLift ιE ιF (a • X) =
-        a • coordinateLift ιE ιF X := by
-      ext x
-      simp [coordinateLift, LinearMap.comp_apply]
-    rw [hmap]
-    exact N.smul_eq a _
-  invariant' U V X := by
-    obtain ⟨UF, hUF⟩ := exists_ambient_unitary_intertwining ιF U
-    obtain ⟨WE, hWE⟩ := exists_ambient_unitary_intertwining ιE V.symm
-    have hadj : LinearMap.adjoint ιE.toLinearMap ∘ₗ WE.symm.toLinearMap =
-        V.toLinearMap ∘ₗ LinearMap.adjoint ιE.toLinearMap := by
-      simpa using adjoint_comp_symm_of_intertwining hWE
-    have hlift : coordinateLift ιE ιF
-          (U.toLinearMap ∘ₗ X ∘ₗ V.toLinearMap) =
-        UF.toLinearMap ∘ₗ coordinateLift ιE ιF X ∘ₗ
-          WE.symm.toLinearMap := by
-      ext z
-      simp only [coordinateLift, LinearMap.comp_apply]
-      calc
-        ιF (U (X (V (LinearMap.adjoint ιE.toLinearMap z)))) =
-            UF (ιF (X (V (LinearMap.adjoint ιE.toLinearMap z)))) :=
-          (LinearMap.congr_fun hUF _).symm
-        _ = UF (ιF (X (LinearMap.adjoint ιE.toLinearMap (WE.symm z)))) := by
-          have hz := LinearMap.congr_fun hadj z
-          simp only [LinearMap.comp_apply,
-            LinearIsometryEquiv.coe_toLinearEquiv, LinearEquiv.coe_coe] at hz
-          exact congrArg (fun q => UF (ιF (X q))) hz.symm
-    rw [hlift]
-    exact N.invariant UF WE.symm _
-
 /-- The initial coordinate embedding determined by the first `d` vectors of
 the standard orthonormal basis. -/
 private noncomputable def initialCoordinateIsometry
@@ -221,26 +167,6 @@ private theorem singularValues_singularValueDiagonal
       simpa only [finrank_euclideanSpace_fin] using hi
     rw [(singularValueDiagonal d A).singularValues_of_finrank_le hcoord,
       A.singularValues_eq_zero_iff_le_finrank_range.mpr (hrank.trans hi)]
-
-private theorem apply_eq_coordinateSquareNorm
-    {H : Type*} [NormedAddCommGroup H] [InnerProductSpace 𝕜 H]
-    [FiniteDimensional 𝕜 H]
-    (N : RectangularUnitarilyInvariantSeminorm 𝕜 E F)
-    (ιE : H →ₗᵢ[𝕜] E) (ιF : H →ₗᵢ[𝕜] F)
-    (A : E →ₗ[𝕜] F) (X : H →ₗ[𝕜] H)
-    (hσ : X.singularValues = A.singularValues) :
-    N A = coordinateSquareNorm N ιE ιF X := by
-  have hliftσ : (coordinateLift ιE ιF X).singularValues = A.singularValues :=
-    (singularValues_coordinateLift ιE ιF X).trans hσ
-  obtain ⟨U, V, hfac⟩ :=
-    exists_unitary_factorization_of_singularValues_eq hliftσ.symm
-  -- unfolds the private helper `coordinateLift`. It has no `_apply` lemma because
-  -- it is file-local plumbing rather than public API, so there is nothing to
-  -- rewrite with; `change` names the unfolded form the next step needs.
-  change N A = N (coordinateLift ιE ιF X)
-  rw [hfac]
-  exact N.invariant U V _
-
 
 /-- A real-linear two-sided unitary action on rectangular maps. -/
 private noncomputable def twoSidedActionLinear
@@ -424,7 +350,7 @@ equal singular-value data is transported by the rectangular SVD factorization al
 above. -/
 theorem mem_convexHull_twoSidedUnitaryOrbit_of_kyFanSum_le
     {A B : E →ₗ[𝕜] F}
-    (h : ∀ k, rectangularKyFanSum k A ≤ rectangularKyFanSum k B) :
+    (h : ∀ k, kyFanSum k A ≤ kyFanSum k B) :
     A ∈ convexHull ℝ (twoSidedUnitaryOrbit B) := by
   classical
   let d : ℕ := min (finrank 𝕜 E) (finrank 𝕜 F)
@@ -528,50 +454,6 @@ theorem mem_convexHull_twoSidedUnitaryOrbit_of_kyFanSum_le
   exact twoSidedAction_mem_convexHull hzK U V
 
 
-/-- Fan dominance in rectangular form.
--/
-theorem apply_le_of_kyFanSum_le {A B : E →ₗ[𝕜] F}
-    (h : ∀ k, rectangularKyFanSum k A ≤ rectangularKyFanSum k B) : N A ≤ N B := by
-  let d : ℕ := min (finrank 𝕜 E) (finrank 𝕜 F)
-  have hdE : d ≤ finrank 𝕜 E := by
-    dsimp [d]
-    exact min_le_left _ _
-  have hdF : d ≤ finrank 𝕜 F := by
-    dsimp [d]
-    exact min_le_right _ _
-  let ιE := initialCoordinateIsometry (𝕜 := 𝕜) (K := E) hdE
-  let ιF := initialCoordinateIsometry (𝕜 := 𝕜) (K := F) hdF
-  let XA := singularValueDiagonal d A
-  let XB := singularValueDiagonal d B
-  have hrankA : finrank 𝕜 A.range ≤ d := finrank_range_le_min A
-  have hrankB : finrank 𝕜 B.range ≤ d := finrank_range_le_min B
-  have hσA : XA.singularValues = A.singularValues := by
-    simpa only [XA] using singularValues_singularValueDiagonal A hrankA
-  have hσB : XB.singularValues = B.singularValues := by
-    simpa only [XB] using singularValues_singularValueDiagonal B hrankB
-  have hNA : N A = coordinateSquareNorm N ιE ιF XA :=
-    apply_eq_coordinateSquareNorm N ιE ιF A XA hσA
-  have hNB : N B = coordinateSquareNorm N ιE ιF XB :=
-    apply_eq_coordinateSquareNorm N ιE ιF B XB hσB
-  rw [hNA, hNB]
-  apply UnitarilyInvariantSeminorm.apply_le_of_kyFanSum_le
-  intro k
-  rw [kyFanSum_eq_sum_fin, kyFanSum_eq_sum_fin, hσA, hσB]
-  exact h k
-
-/-- Nonnegative real scaling commutes with rectangular Ky Fan prefix sums.
-
-This public form is used when a sharp Sylvester inequality is converted into
-unitary-orbit convex-hull membership.  The proof is coefficientwise scaling of
-the singular-value sequence. -/
-theorem rectangularKyFanSum_real_smul
-    (k : ℕ) (A : E →ₗ[𝕜] F) {r : ℝ} (hr : 0 ≤ r) :
-    rectangularKyFanSum k (((r : 𝕜)) • A) =
-      r * rectangularKyFanSum k A := by
-  unfold rectangularKyFanSum
-  rw [Finset.mul_sum]
-  exact Finset.sum_congr rfl fun i _ => singularValues_real_smul A hr i
-
 /-- Convex-hull domination by a two-sided unitary orbit implies domination in
 any rectangular unitarily invariant norm.
 
@@ -587,7 +469,43 @@ theorem apply_le_of_mem_convexHull_twoSidedUnitaryOrbit
   simpa using N.apply_le_of_finiteUnitaryOrbitCertificate hcert
 
 
-end RectangularUnitarilyInvariantSeminorm
+/-- Fan dominance for rectangular maps: domination of all Ky Fan sums implies
+comparison in every unitarily invariant seminorm on that map space. -/
+theorem apply_le_of_kyFanSum_le {A B : E →ₗ[𝕜] F}
+    (h : ∀ k, kyFanSum k A ≤ kyFanSum k B) : N A ≤ N B :=
+  N.apply_le_of_mem_convexHull_twoSidedUnitaryOrbit
+    (mem_convexHull_twoSidedUnitaryOrbit_of_kyFanSum_le h)
+
+/-! ### The operator-ideal property -/
+
+/-- **The ideal property (left factor).**  If `‖C y‖ ≤ c ‖y‖` for `0 ≤ c`, then
+`N (C ∘ₗ X) ≤ c * N X` for every unitarily invariant norm.  From Fan dominance
+applied to the singular-value domination `σᵢ(C ∘ X) ≤ c σᵢ(X)`. -/
+theorem apply_comp_le {C : F →ₗ[𝕜] F} {X : E →ₗ[𝕜] F} {c : ℝ} (hc : 0 ≤ c)
+    (hC : ∀ y, ‖C y‖ ≤ c * ‖y‖) : N (C ∘ₗ X) ≤ c * N X :=
+  calc N (C ∘ₗ X)
+      ≤ N (((c : 𝕜)) • X) :=
+        N.apply_le_of_kyFanSum_le fun k =>
+          kyFanSum_le_of_singularValues_le (fun i => by
+            rw [singularValues_real_smul X hc i]
+            exact singularValues_comp_le hc hC X i) k
+    _ = c * N X := by rw [N.smul_eq, RCLike.norm_ofReal, abs_of_nonneg hc]
+
+/-- **The ideal property (right factor).**  If `‖C y‖ ≤ c ‖y‖` for `0 ≤ c`, then
+`N (X ∘ₗ C) ≤ N X * c`. -/
+theorem apply_comp_le' {X : E →ₗ[𝕜] F} {C : E →ₗ[𝕜] E} {c : ℝ} (hc : 0 ≤ c)
+    (hC : ∀ y, ‖C y‖ ≤ c * ‖y‖) : N (X ∘ₗ C) ≤ N X * c :=
+  calc N (X ∘ₗ C)
+      ≤ N (((c : 𝕜)) • X) :=
+        N.apply_le_of_kyFanSum_le fun k =>
+          kyFanSum_le_of_singularValues_le (fun i => by
+            rw [singularValues_real_smul X hc i]
+            exact singularValues_comp_le' hc hC i) k
+    _ = N X * c := by rw [N.smul_eq, RCLike.norm_ofReal, abs_of_nonneg hc, mul_comm]
+
+
+
+end UnitarilyInvariantSeminorm
 
 
 end TauCeti

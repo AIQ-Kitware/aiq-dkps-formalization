@@ -353,7 +353,7 @@ for every UI norm `N`, over any `RCLike` field, with no largest-angle
 threshold.  `IsAcute` is required, but only because `directRotation` is
 defined from it. -/
 theorem uiNorm_restrictedDisplacement_le
-    (N : UnitarilyInvariantSeminorm 𝕜 E)
+    (N : UnitarilyInvariantSeminorm 𝕜 E E)
     (U V : Submodule 𝕜 E)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
     (hacute : IsAcute U V)

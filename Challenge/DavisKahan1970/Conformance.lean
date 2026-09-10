@@ -21,7 +21,6 @@ import DavisKahan.FiniteDimensional.Core.All
 import ForTauCeti.Analysis.InnerProductSpace.Spectral.Subspace
 import ForTauCeti.Analysis.InnerProductSpace.Residual.Ritz
 import ForTauCeti.Analysis.InnerProductSpace.Residual.AngleEmbedding
-import ForTauCeti.Analysis.InnerProductSpace.RectangularUnitarilyInvariantSeminorm
 import ForTauCeti.Analysis.InnerProductSpace.UnitarilyInvariantSeminorm
 import DavisKahan.BoundedOperator.Compat
 import DavisKahan.Geometry.Angle.AngleFunctionalCalculus
@@ -83,7 +82,7 @@ variable {F : Type*} [NormedAddCommGroup F] [InnerProductSpace 𝕜 F]
 unitarily invariant norm.  This remains in the exhibition because it is the
 low-dependency specialization from which many computational applications start. -/
 theorem partIII_sinTheta_residual_uiNorm
-    (N : RectangularUnitarilyInvariantSeminorm 𝕜 F E)
+    (N : UnitarilyInvariantSeminorm 𝕜 F E)
     {A : E →ₗ[𝕜] E} (hA : A.IsSymmetric) {U : Submodule 𝕜 E}
     [U.HasOrthogonalProjection] (hU : IsInvariant A U)
     (X : F →ₗᵢ[𝕜] E) {M : F →ₗ[𝕜] F} (hM : M.IsSymmetric)
@@ -107,7 +106,7 @@ variable [CompleteSpace E] {T S : E →ₗ[𝕜] E}
 
 /-- Finite Part III perturbation `sin Theta` theorem in every square UI norm. -/
 theorem partIII_sinTheta_uiNorm
-    (N : UnitarilyInvariantSeminorm 𝕜 E)
+    (N : UnitarilyInvariantSeminorm 𝕜 E E)
     (hT : T.IsSymmetric) (hS : S.IsSymmetric)
     {U V : Submodule 𝕜 E} [U.HasOrthogonalProjection]
     [V.HasOrthogonalProjection]
@@ -128,7 +127,7 @@ variable {F : Type*} [NormedAddCommGroup F] [InnerProductSpace 𝕜 F]
 
 /-- Finite source-shaped directed `tan Theta` Ritz-residual theorem. -/
 theorem partIII_tanTheta_uiNorm
-    (N : RectangularUnitarilyInvariantSeminorm 𝕜 F E)
+    (N : UnitarilyInvariantSeminorm 𝕜 F E)
     {A : E →ₗ[𝕜] E} (hA : A.IsSymmetric)
     {U : Submodule 𝕜 E} [U.HasOrthogonalProjection] (hU : IsInvariant A U)
     (X : F →ₗᵢ[𝕜] E) (hrank : finrank 𝕜 F = finrank 𝕜 U)
@@ -149,7 +148,7 @@ variable [CompleteSpace E] {T S : E →ₗ[𝕜] E}
 
 /-- Finite Part III `sin 2Theta` theorem in every unitarily invariant seminorm. -/
 theorem partIII_sinTwoTheta_uiNorm
-    (N : UnitarilyInvariantSeminorm 𝕜 E)
+    (N : UnitarilyInvariantSeminorm 𝕜 E E)
     (hT : T.IsSymmetric) (hS : S.IsSymmetric)
     {U V : Submodule 𝕜 E} [U.HasOrthogonalProjection]
     [V.HasOrthogonalProjection]

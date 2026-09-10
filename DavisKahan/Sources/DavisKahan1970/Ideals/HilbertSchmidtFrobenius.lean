@@ -80,11 +80,11 @@ theorem hilbertSchmidtNorm_eq_rectangularFrobenius
     [FiniteDimensional 𝕜 F] [CompleteSpace F]
     (A : E →L[𝕜] F) :
     ContinuousLinearMap.hilbertSchmidtNorm A =
-      RectangularUnitarilyInvariantSeminorm.frobenius A.toLinearMap := by
+      UnitarilyInvariantSeminorm.frobenius A.toLinearMap := by
   rw [hilbertSchmidtNorm_eq_sqrt_approximationNumberEnergy]
   rw [approximationNumberEnergy_eq_ofReal_sum_sq_singularValues,
     ENNReal.toReal_ofReal (Finset.sum_nonneg fun i _ => sq_nonneg _)]
-  exact (RectangularUnitarilyInvariantSeminorm.frobenius_eq_sqrt_sum_sq_singularValues
+  exact (UnitarilyInvariantSeminorm.frobenius_eq_sqrt_sum_sq_singularValues
     A.toLinearMap).symm
 
 /-- Square-operator spelling of the finite-dimensional Frobenius bridge. -/
@@ -95,7 +95,7 @@ theorem hilbertSchmidtNorm_eq_frobenius
     [FiniteDimensional 𝕜 E] [CompleteSpace E]
     (A : E →L[𝕜] E) :
     ContinuousLinearMap.hilbertSchmidtNorm A =
-      TauCeti.UnitarilyInvariantSeminorm.frobenius 𝕜 E A.toLinearMap := by
+      TauCeti.UnitarilyInvariantSeminorm.frobenius (𝕜 := 𝕜) (E := E) (F := E) A.toLinearMap := by
   rw [hilbertSchmidtNorm_eq_rectangularFrobenius]
   rfl
 

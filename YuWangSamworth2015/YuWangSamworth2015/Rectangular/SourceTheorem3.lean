@@ -390,7 +390,7 @@ theorem theorem3_rightSinTheta {p q d r s : ℕ}
         (Submodule.span ℝ (Set.range Vhat)) ≤
       2 * (2 * A.singularValues 0 + ‖(Ahat - A).toContinuousLinearMap‖) *
         min (Real.sqrt d * ‖(Ahat - A).toContinuousLinearMap‖)
-          (RectangularUnitarilyInvariantSeminorm.frobenius (Ahat - A)) / Delta := by
+          (UnitarilyInvariantSeminorm.frobenius (Ahat - A)) / Delta := by
   have hsq : s < q := lt_of_lt_of_le hrank (finrank_range_le_domain A)
   have : Nonempty (Fin q) := ⟨⟨s, hsq⟩⟩
   have : Nontrivial (EuclideanSpace ℝ (Fin q)) := inferInstance
@@ -418,7 +418,7 @@ theorem theorem3_rightAlignedFrame {p q d r s : ℕ}
         2 * Real.sqrt 2 *
           (2 * A.singularValues 0 + ‖(Ahat - A).toContinuousLinearMap‖) *
           min (Real.sqrt d * ‖(Ahat - A).toContinuousLinearMap‖)
-            (RectangularUnitarilyInvariantSeminorm.frobenius (Ahat - A)) / Delta := by
+            (UnitarilyInvariantSeminorm.frobenius (Ahat - A)) / Delta := by
   obtain ⟨O, hO, hbound⟩ := exists_orthogonal_sqrt_sum_sq_norm_sub_le hV.1 hVhat.1
     (theorem3_rightSinTheta A Ahat hr hrank hd V Vhat hV hVhat Delta hDelta hgap)
   exact ⟨O, hO, hbound.trans_eq (by ring)⟩
@@ -437,7 +437,7 @@ theorem theorem3_leftSinTheta {p q d r s : ℕ}
         (Submodule.span ℝ (Set.range Uhat)) ≤
       2 * (2 * A.singularValues 0 + ‖(Ahat - A).toContinuousLinearMap‖) *
         min (Real.sqrt d * ‖(Ahat - A).toContinuousLinearMap‖)
-          (RectangularUnitarilyInvariantSeminorm.frobenius (Ahat - A)) / Delta := by
+          (UnitarilyInvariantSeminorm.frobenius (Ahat - A)) / Delta := by
   have hsq : s < q := lt_of_lt_of_le hrank (finrank_range_le_domain A)
   have hsp : s < p := lt_of_lt_of_le hrank (finrank_range_le_codomain A)
   have : Nonempty (Fin q) := ⟨⟨s, hsq⟩⟩
@@ -463,7 +463,7 @@ theorem theorem3_leftAlignedFrame {p q d r s : ℕ}
         2 * Real.sqrt 2 *
           (2 * A.singularValues 0 + ‖(Ahat - A).toContinuousLinearMap‖) *
           min (Real.sqrt d * ‖(Ahat - A).toContinuousLinearMap‖)
-            (RectangularUnitarilyInvariantSeminorm.frobenius (Ahat - A)) / Delta := by
+            (UnitarilyInvariantSeminorm.frobenius (Ahat - A)) / Delta := by
   obtain ⟨O, hO, hbound⟩ := exists_orthogonal_sqrt_sum_sq_norm_sub_le hU.1 hUhat.1
     (theorem3_leftSinTheta A Ahat hr hrank hd U Uhat hU hUhat Delta hDelta hgap)
   exact ⟨O, hO, hbound.trans_eq (by ring)⟩

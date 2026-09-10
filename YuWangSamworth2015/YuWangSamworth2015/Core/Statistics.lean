@@ -99,7 +99,8 @@ theorem sinThetaFrobenius_eq_sqrt_sum_cross {n : ℕ}
   let V : Submodule 𝕜 E := Submodule.span 𝕜 (bS '' (↑s : Set (Fin n)))
   have hn : finrank 𝕜 E = n := by
     rw [Module.finrank_eq_card_basis bT.toBasis, Fintype.card_fin]
-  rw [sinThetaFrobenius_eq, UnitarilyInvariantSeminorm.frobenius_apply 𝕜 E _ hn bT]
+  rw [sinThetaFrobenius_eq, UnitarilyInvariantSeminorm.frobenius_apply_basis (𝕜 := 𝕜) (E := E)
+    _ hn bT]
   congr 1
   have hcol : ∀ i : Fin n,
       ‖sinThetaMap U V (bT i)‖ ^ 2 =
@@ -381,7 +382,7 @@ theorem yuWangSamworth_sinTheta_frame_le
     sinThetaFrobenius (Submodule.span 𝕜 (Set.range u))
         (Submodule.span 𝕜 (Set.range v)) ≤
       2 * min (Real.sqrt d * ‖(B - A).toContinuousLinearMap‖)
-        (UnitarilyInvariantSeminorm.frobenius 𝕜 E (B - A)) / Δ := by
+        (UnitarilyInvariantSeminorm.frobenius (𝕜 := 𝕜) (E := E) (F := E) (B - A)) / Δ := by
   classical
   set U := Submodule.span 𝕜 (Set.range u) with hU
   set V := Submodule.span 𝕜 (Set.range v) with hV
@@ -394,10 +395,11 @@ theorem yuWangSamworth_sinTheta_frame_le
       fun i => hu.toIsEigenFamily.eigenvalue_mem_restrictedSpectrum i
   -- Frobenius branch.
   have hfrob : sinThetaFrobenius U V ≤
-      2 * UnitarilyInvariantSeminorm.frobenius 𝕜 E (B - A) / Δ := by
+      2 * UnitarilyInvariantSeminorm.frobenius (𝕜 := 𝕜) (E := E) (F := E) (B - A) / Δ := by
     refine le_two_mul_div_of_sq_gap_mul_sq_le hΔ
-      ((UnitarilyInvariantSeminorm.frobenius 𝕜 E).nonneg _) (hkey.trans ?_)
-    rw [UnitarilyInvariantSeminorm.frobenius_sq 𝕜 E (B - A) hn (hA.eigenvectorBasis hn)]
+      ((UnitarilyInvariantSeminorm.frobenius (𝕜 := 𝕜) (E := E) (F := E)).nonneg _) (hkey.trans ?_)
+    rw [UnitarilyInvariantSeminorm.frobenius_sq (𝕜 := 𝕜) (E := E) (B - A) hn
+      (hA.eigenvectorBasis hn)]
     exact sum_sq_norm_frameResidual_le hA hB hn hv
   -- Dimension-scaled operator-norm branch.
   have hop : sinThetaFrobenius U V ≤
@@ -412,7 +414,7 @@ theorem yuWangSamworth_sinTheta_frame_le
     rw [mul_pow, Real.sq_sqrt (Nat.cast_nonneg d)]
     ring
   rcases le_total (Real.sqrt d * ‖(B - A).toContinuousLinearMap‖)
-      (UnitarilyInvariantSeminorm.frobenius 𝕜 E (B - A)) with hle | hle
+      (UnitarilyInvariantSeminorm.frobenius (𝕜 := 𝕜) (E := E) (F := E) (B - A)) with hle | hle
   · rw [min_eq_left hle]; exact hop
   · rw [min_eq_right hle]; exact hfrob
 
@@ -457,7 +459,7 @@ theorem yuWangSamworth_sinTheta_le
     (hgap : InternalGap A U Δ) :
     sinThetaFrobenius U V ≤
       2 * min (Real.sqrt d * ‖(B - A).toContinuousLinearMap‖)
-        (UnitarilyInvariantSeminorm.frobenius 𝕜 E (B - A)) / Δ := by
+        (UnitarilyInvariantSeminorm.frobenius (𝕜 := 𝕜) (E := E) (F := E) (B - A)) / Δ := by
   classical
   obtain ⟨n, hn, s, rfl, rfl⟩ := hcorr
   have hcard : s.card = d := by
@@ -511,7 +513,7 @@ theorem yuWangSamworth_intervalBlock_le
     (hgap : InternalGap A U Δ) :
     sinThetaFrobenius U V ≤
       2 * min (Real.sqrt (finrank 𝕜 U) * ‖(B - A).toContinuousLinearMap‖)
-        (UnitarilyInvariantSeminorm.frobenius 𝕜 E (B - A)) / Δ := by
+        (UnitarilyInvariantSeminorm.frobenius (𝕜 := 𝕜) (E := E) (F := E) (B - A)) / Δ := by
   obtain ⟨n, hn, s, -, hVp⟩ := id hcorr
   refine yuWangSamworth_sinTheta_le hA hB ?_ ?_ hcorr rfl hΔ hgap
   · rw [hUeq]; exact isInvariant_spectralSubspace A (Set.Icc a b)
@@ -587,7 +589,7 @@ theorem yuWangSamworth_alignedBasis_frame_le
       Real.sqrt (∑ i, ‖v' i - u' i‖ ^ 2) ≤
         2 * Real.sqrt 2 *
           min (Real.sqrt d * ‖(B - A).toContinuousLinearMap‖)
-            (UnitarilyInvariantSeminorm.frobenius 𝕜 E (B - A)) / Δ := by
+            (UnitarilyInvariantSeminorm.frobenius (𝕜 := 𝕜) (E := E) (F := E) (B - A)) / Δ := by
   obtain ⟨u', v', hu', hv', hspanU, hspanV, hsum⟩ :=
     exists_aligned_orthonormalBasis hu.finrank_span hv.finrank_span
   refine ⟨u', v', hu', hv', hspanU, hspanV, ?_⟩
@@ -602,10 +604,10 @@ theorem yuWangSamworth_alignedBasis_frame_le
           (Submodule.span 𝕜 (Set.range v)) := by
         rw [Real.sqrt_mul (by norm_num : (0 : ℝ) ≤ 2), Real.sqrt_sq hsnn]
     _ ≤ Real.sqrt 2 * (2 * min (Real.sqrt d * ‖(B - A).toContinuousLinearMap‖)
-          (UnitarilyInvariantSeminorm.frobenius 𝕜 E (B - A)) / Δ) :=
+          (UnitarilyInvariantSeminorm.frobenius (𝕜 := 𝕜) (E := E) (F := E) (B - A)) / Δ) :=
         mul_le_mul_of_nonneg_left hsine (Real.sqrt_nonneg 2)
     _ = 2 * Real.sqrt 2 * min (Real.sqrt d * ‖(B - A).toContinuousLinearMap‖)
-          (UnitarilyInvariantSeminorm.frobenius 𝕜 E (B - A)) / Δ := by ring
+          (UnitarilyInvariantSeminorm.frobenius (𝕜 := 𝕜) (E := E) (F := E) (B - A)) / Δ := by ring
 
 /-- **The residual-numerator form of the aligned-frame conclusion** — the second
 inequality Yu, Wang and Samworth record as available from their proof:
@@ -662,7 +664,7 @@ theorem yuWangSamworth_alignedBasis_le
       Real.sqrt (∑ i, ‖v i - u i‖ ^ 2) ≤
         2 * Real.sqrt 2 *
           min (Real.sqrt d * ‖(B - A).toContinuousLinearMap‖)
-            (UnitarilyInvariantSeminorm.frobenius 𝕜 E (B - A)) / Δ := by
+            (UnitarilyInvariantSeminorm.frobenius (𝕜 := 𝕜) (E := E) (F := E) (B - A)) / Δ := by
   obtain ⟨u, v, hu, hv, hspanU, hspanV, hsum⟩ :=
     exists_aligned_orthonormalBasis hrankU hrankV
   refine ⟨u, v, hu, hv, hspanU, hspanV, ?_⟩
@@ -674,10 +676,10 @@ theorem yuWangSamworth_alignedBasis_le
     _ = Real.sqrt 2 * sinThetaFrobenius U V := by
         rw [Real.sqrt_mul (by norm_num : (0 : ℝ) ≤ 2), Real.sqrt_sq hsnn]
     _ ≤ Real.sqrt 2 * (2 * min (Real.sqrt d * ‖(B - A).toContinuousLinearMap‖)
-          (UnitarilyInvariantSeminorm.frobenius 𝕜 E (B - A)) / Δ) :=
+          (UnitarilyInvariantSeminorm.frobenius (𝕜 := 𝕜) (E := E) (F := E) (B - A)) / Δ) :=
         mul_le_mul_of_nonneg_left hsine (Real.sqrt_nonneg 2)
     _ = 2 * Real.sqrt 2 * min (Real.sqrt d * ‖(B - A).toContinuousLinearMap‖)
-          (UnitarilyInvariantSeminorm.frobenius 𝕜 E (B - A)) / Δ := by ring
+          (UnitarilyInvariantSeminorm.frobenius (𝕜 := 𝕜) (E := E) (F := E) (B - A)) / Δ := by ring
 
 omit [FiniteDimensional 𝕜 E] in
 /-- **The span of an eigenvector is invariant.**  If `A u = lam • u` then every
@@ -783,7 +785,7 @@ theorem yuWangSamworth_eigenvector_le
   rw [key, ← hsum1]
   refine hbound.trans ?_
   have hmin : min (Real.sqrt (↑(1 : ℕ)) * ‖(B - A).toContinuousLinearMap‖)
-      (UnitarilyInvariantSeminorm.frobenius 𝕜 E (B - A))
+      (UnitarilyInvariantSeminorm.frobenius (𝕜 := 𝕜) (E := E) (F := E) (B - A))
       ≤ ‖(B - A).toContinuousLinearMap‖ :=
     (min_le_left _ _).trans_eq (by rw [Nat.cast_one, Real.sqrt_one, one_mul])
   gcongr
@@ -847,7 +849,7 @@ theorem yuWangSamworth_eigenvector_frame_sinTheta_le
   rw [span_range_const, span_range_const] at hkey
   refine hkey.trans ?_
   have hmin : min (Real.sqrt (↑(1 : ℕ)) * ‖(B - A).toContinuousLinearMap‖)
-      (UnitarilyInvariantSeminorm.frobenius 𝕜 E (B - A))
+      (UnitarilyInvariantSeminorm.frobenius (𝕜 := 𝕜) (E := E) (F := E) (B - A))
       ≤ ‖(B - A).toContinuousLinearMap‖ :=
     (min_le_left _ _).trans_eq (by rw [Nat.cast_one, Real.sqrt_one, one_mul])
   gcongr
@@ -904,7 +906,7 @@ theorem yuWangSamworth_eigenvector_frame_le
   rw [key, ← hsum1]
   refine hbound.trans ?_
   have hmin : min (Real.sqrt (↑(1 : ℕ)) * ‖(B - A).toContinuousLinearMap‖)
-      (UnitarilyInvariantSeminorm.frobenius 𝕜 E (B - A))
+      (UnitarilyInvariantSeminorm.frobenius (𝕜 := 𝕜) (E := E) (F := E) (B - A))
       ≤ ‖(B - A).toContinuousLinearMap‖ :=
     (min_le_left _ _).trans_eq (by rw [Nat.cast_one, Real.sqrt_one, one_mul])
   gcongr
@@ -972,7 +974,8 @@ theorem sinThetaFrobenius_spanIndices_of_subset_compl {n : ℕ}
     change ((b.spanIndices T)ᗮ).starProjection ((b.spanIndices S).starProjection x) =
       (b.spanIndices S).starProjection x
     exact Submodule.starProjection_eq_self_iff.mpr hmem
-  rw [sinThetaFrobenius_eq, hsin, UnitarilyInvariantSeminorm.frobenius_apply 𝕜 E _ hn b]
+  rw [sinThetaFrobenius_eq, hsin, UnitarilyInvariantSeminorm.frobenius_apply_basis (𝕜 := 𝕜) (E
+    := E) _ hn b]
   have hspan : b.spanIndices S =
       Submodule.span 𝕜 (b '' (↑S.toFinset : Set (Fin n))) := by
     rw [OrthonormalBasis.spanIndices_eq_span, Set.coe_toFinset]

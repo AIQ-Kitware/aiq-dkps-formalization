@@ -3,10 +3,10 @@
 **Internal bookkeeping. Not part of the roadmap family, and not written for a Tau Ceti
 reviewer.**
 
-The `TOPICS` table in `scripts/check_tauceti_roadmap_topics.py` partitions the maintained
+The `topics` table in `dev/policy/tauceti-module-plan.yaml` partitions the maintained
 `ForTauCeti` modules into fine-grained topic keys; it is the authority on which module
-belongs to which topic. This file maps those topics to roadmap directories, and the same
-script reads it: the gate fails on a topic no roadmap claims, a topic two roadmaps claim, a
+belongs to which topic. This file maps those topics to roadmap directories, and
+`scripts/check_tauceti_roadmap_topics.py` reads it: the gate fails on a topic no roadmap claims, a topic two roadmaps claim, a
 roadmap directory that claims nothing, or a cycle in the resulting roadmap-level dependency
 graph.
 
@@ -50,7 +50,7 @@ rather than being attached to a roadmap whose mathematics does not cover them.
 `Spectral.Gap` and `Spectral.Subspace` import `T04` itself and belong with the angle layer.
 Keeping them together forced `Majorization` to depend on `PrincipalAngles` — `KyFan` uses
 `Orthonormal.norm_sq_starProjection_span_image` and
-`RectangularUnitarilyInvariantSeminorm.Basic` uses
+`UnitarilyInvariantSeminorm.Basic` uses
 `exists_linearIsometryEquiv_map_eq_of_inner_eq` — while `PrincipalAngles` depends on
 `Majorization` seven ways. `T26` carries the foundational half to `OrthogonalGeometry` and
 the cycle is gone.

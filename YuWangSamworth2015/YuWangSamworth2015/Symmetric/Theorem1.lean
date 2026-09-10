@@ -28,7 +28,7 @@ variable {E : Type*} [NormedAddCommGroup E] [InnerProductSpace 𝕜 E]
 /-- Yu--Wang--Samworth Theorem 1 in its strongest paper-advertised form:
 any unitarily invariant norm may replace the Frobenius norm. -/
 theorem yuWangSamworth_theorem1_uiNorm_le
-    (N : UnitarilyInvariantSeminorm 𝕜 E)
+    (N : UnitarilyInvariantSeminorm 𝕜 E E)
     {A B : E →ₗ[𝕜] E} (hA : A.IsSymmetric) (hB : B.IsSymmetric)
     {U V : Submodule 𝕜 E} [U.HasOrthogonalProjection]
     [V.HasOrthogonalProjection] (hU : IsInvariant A U) (hV : IsInvariant B V)
@@ -50,10 +50,10 @@ theorem yuWangSamworth_theorem1_frobenius_le
     {a b δ : ℝ} (hδ : 0 < δ)
     (hgap : IntervalExteriorGap A B U V a b δ) :
     sinThetaFrobenius U V ≤
-      UnitarilyInvariantSeminorm.frobenius 𝕜 E (B - A) / δ := by
+      UnitarilyInvariantSeminorm.frobenius (𝕜 := 𝕜) (E := E) (F := E) (B - A) / δ := by
   rw [sinThetaFrobenius_eq]
   exact yuWangSamworth_theorem1_uiNorm_le
-      (UnitarilyInvariantSeminorm.frobenius 𝕜 E)
+      (UnitarilyInvariantSeminorm.frobenius (𝕜 := 𝕜) (E := E) (F := E))
       hA hB hU hV hδ hgap
 
 /-- The operator-norm specialization explicitly mentioned after equation (1). -/

@@ -6,7 +6,7 @@ Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 import DavisKahan.OperatorIdeal.ApproximationNumbers.ScalarGeneric
 import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.SameSequence
 import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.FiniteRestriction
-import ForTauCeti.Analysis.InnerProductSpace.RectangularUnitarilyInvariantSeminorm
+import ForTauCeti.Analysis.InnerProductSpace.UnitarilyInvariantSeminorm
 import ForTauCeti.Analysis.InnerProductSpace.Projection.Blocks
 import Mathlib.Analysis.InnerProductSpace.ProdL2
 import DavisKahan.Sylvester.ScalarTransport

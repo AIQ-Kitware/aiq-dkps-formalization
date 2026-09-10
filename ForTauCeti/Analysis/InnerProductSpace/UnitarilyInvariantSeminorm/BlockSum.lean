@@ -5,7 +5,7 @@ Authors: Jon Crall, Claude Fable 5
 -/
 module
 
-public import ForTauCeti.Analysis.InnerProductSpace.RectangularUnitarilyInvariantSeminorm.Majorization
+public import ForTauCeti.Analysis.InnerProductSpace.UnitarilyInvariantSeminorm.Majorization
 
 /-!
 # Orthogonal block sums of rectangular maps
@@ -15,17 +15,9 @@ majorization statements that transfer to it.
 
 ## Provenance
 
-* Original repository: Davis--Kahan/DKPS formalization (Kitware, Inc.).
-* Original module: `ForTauCeti.Analysis.InnerProductSpace.RectangularUnitarilyInvariantSeminorm`,
-  split out on 2026-07-28 because that file had grown to 2124 lines while Tau Ceti's
-  `lean_lib` enforces a hard 1500-line ceiling, and 1000 for a newly added file.
-* Extraction class: **split**.  No statement, proof or declaration name changed; only
-  `exists_unitary_factorization_of_singularValues_eq` was promoted from `private` to
-  public, because the split puts its users in a different module.
-* Original authors / copyright: Jon Crall, Claude Fable 5;
-  Copyright (c) 2026 Kitware, Inc.; Apache 2.0.
-* Spectra influence: **none** — this module imports only Mathlib and sibling
-  `ForTauCeti` staging modules.
+Adapted from the rectangular majorization and block-sum modules in the Davis--Kahan/DKPS
+formalization (Kitware, Inc.). The vector majorization descent remains in
+`ForTauCeti.Analysis.Convex.Majorization`.
 -/
 
 public section
@@ -43,9 +35,9 @@ variable {F : Type*} [NormedAddCommGroup F] [InnerProductSpace 𝕜 F]
 variable {G : Type*} [NormedAddCommGroup G] [InnerProductSpace 𝕜 G]
   [FiniteDimensional 𝕜 G]
 
-namespace RectangularUnitarilyInvariantSeminorm
+namespace UnitarilyInvariantSeminorm
 
-variable (N : RectangularUnitarilyInvariantSeminorm 𝕜 E F)
+variable (N : UnitarilyInvariantSeminorm 𝕜 E F)
 
 /- `Module ℝ (E →ₗ[𝕜] F)` is a *local* instance in `Basic`, so it does not survive the
 import.  Re-enable it here; making it global would put a second `Module ℝ` structure on
@@ -321,7 +313,7 @@ theorem apply_orthogonalBlockSum_eq_of_singularValues_smul_eq
     {E₁ E₂ : Type*}
     [NormedAddCommGroup E₁] [InnerProductSpace 𝕜 E₁] [FiniteDimensional 𝕜 E₁]
     [NormedAddCommGroup E₂] [InnerProductSpace 𝕜 E₂] [FiniteDimensional 𝕜 E₂]
-    (N : UnitarilyInvariantSeminorm 𝕜 (WithLp 2 (E₁ × E₂)))
+    (N : UnitarilyInvariantSeminorm 𝕜 (WithLp 2 (E₁ × E₂)) (WithLp 2 (E₁ × E₂)))
     {c : ℝ} (hc : 0 ≤ c)
     {S₁ P₁ : E₁ →ₗ[𝕜] E₁} {S₂ P₂ : E₂ →ₗ[𝕜] E₂}
     (h₁ : ((c : 𝕜) • S₁).singularValues = P₁.singularValues)
@@ -427,18 +419,18 @@ theorem singularValues_orthogonalBlockSum_self
     rw [A.singularValues_of_finrank_le hdiv]
 
 /-- Every Ky Fan prefix doubles on the orthogonal sum of two identical maps. -/
-theorem rectangularKyFanSum_orthogonalBlockSum_self
+theorem kyFanSum_orthogonalBlockSum_self
     {E₀ F₀ : Type*}
     [NormedAddCommGroup E₀] [InnerProductSpace 𝕜 E₀]
     [NormedAddCommGroup F₀] [InnerProductSpace 𝕜 F₀]
     [FiniteDimensional 𝕜 E₀] [FiniteDimensional 𝕜 F₀]
     (A : E₀ →ₗ[𝕜] F₀) (k : ℕ) :
-    rectangularKyFanSum (2 * k) (orthogonalBlockSum A A) =
-      2 * rectangularKyFanSum k A := by
+    kyFanSum (2 * k) (orthogonalBlockSum A A) =
+      2 * kyFanSum k A := by
   classical
   let e : Fin k × Fin 2 ≃ Fin (2 * k) :=
     finProdFinEquiv.trans (finCongr (by omega))
-  unfold rectangularKyFanSum
+  unfold kyFanSum
   calc
     ∑ j : Fin (2 * k), (orthogonalBlockSum A A).singularValues (j : ℕ) =
         ∑ p : Fin k × Fin 2,
@@ -595,11 +587,11 @@ theorem orthogonalBlockSum_apply_le_of_kyFanSum_le
     [NormedAddCommGroup F₂] [InnerProductSpace 𝕜 F₂]
     [FiniteDimensional 𝕜 E₁] [FiniteDimensional 𝕜 E₂]
     [FiniteDimensional 𝕜 F₁] [FiniteDimensional 𝕜 F₂]
-    (NB : RectangularUnitarilyInvariantSeminorm 𝕜
+    (NB : UnitarilyInvariantSeminorm 𝕜
       (WithLp 2 (E₁ × E₂)) (WithLp 2 (F₁ × F₂)))
     {A C : E₁ →ₗ[𝕜] F₁} {B D : E₂ →ₗ[𝕜] F₂}
-    (hA : ∀ k, rectangularKyFanSum k A ≤ rectangularKyFanSum k C)
-    (hB : ∀ k, rectangularKyFanSum k B ≤ rectangularKyFanSum k D) :
+    (hA : ∀ k, kyFanSum k A ≤ kyFanSum k C)
+    (hB : ∀ k, kyFanSum k B ≤ kyFanSum k D) :
     NB (orthogonalBlockSum A B) ≤ NB (orthogonalBlockSum C D) := by
   apply NB.apply_le_of_mem_convexHull_twoSidedUnitaryOrbit
   exact orthogonalBlockSum_mem_convexHull_twoSidedUnitaryOrbit
@@ -612,11 +604,11 @@ theorem apply_le_of_singularValues_le {A B : E →ₗ[𝕜] F}
     (h : ∀ i, A.singularValues i ≤ B.singularValues i) : N A ≤ N B := by
   apply N.apply_le_of_kyFanSum_le
   intro k
-  unfold rectangularKyFanSum
+  unfold kyFanSum
   exact Finset.sum_le_sum fun i _ => h (i : ℕ)
 
 
-end RectangularUnitarilyInvariantSeminorm
+end UnitarilyInvariantSeminorm
 
 
 end TauCeti

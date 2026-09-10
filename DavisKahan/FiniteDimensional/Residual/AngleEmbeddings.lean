@@ -7,9 +7,8 @@ import ForTauCeti.Analysis.InnerProductSpace.Spectral.Gap
 import ForTauCeti.Analysis.InnerProductSpace.Residual.AngleEmbedding
 import DavisKahan.FiniteDimensional.TanTheta.RitzResidual
 import ForTauCeti.Analysis.InnerProductSpace.Sylvester.Internal.SpectralBounds
-import ForTauCeti.Analysis.InnerProductSpace.RectangularUnitarilyInvariantSeminorm
-import ForTauCeti.Analysis.InnerProductSpace.MoorePenroseInverse
 import ForTauCeti.Analysis.InnerProductSpace.UnitarilyInvariantSeminorm
+import ForTauCeti.Analysis.InnerProductSpace.MoorePenroseInverse
 
 /-!
 # Coordinate tangent and double-angle embeddings
@@ -79,7 +78,7 @@ noncomputable def sinTwoThetaEmbedding (U : Submodule 𝕜 E)
 /-- Every rectangular unitarily invariant norm of the coordinate double-angle
 sine is at most twice the corresponding single-angle sine norm. -/
 theorem sinTwoThetaEmbedding_uiNorm_le_two_mul
-    (N : RectangularUnitarilyInvariantSeminorm 𝕜 F E)
+    (N : UnitarilyInvariantSeminorm 𝕜 F E)
     (U : Submodule 𝕜 E) [U.HasOrthogonalProjection]
     (X : F →ₗᵢ[𝕜] E) :
     N (sinTwoThetaEmbedding U X) ≤ 2 * N (sinThetaEmbedding U X) := by
@@ -377,7 +376,7 @@ theorem isTransverse_of_orderedRitzGap
 /-- Ordered-gap residual `tan Θ` theorem for the canonical coordinate tangent,
 in every rectangular unitarily invariant norm. -/
 theorem tanThetaEmbedding_residual_le_of_orderedGap
-    (N : RectangularUnitarilyInvariantSeminorm 𝕜 F E)
+    (N : UnitarilyInvariantSeminorm 𝕜 F E)
     {A : E →ₗ[𝕜] E} (hA : A.IsSymmetric) {U : Submodule 𝕜 E}
     [U.HasOrthogonalProjection] (hU : IsInvariant A U)
     (X : F →ₗᵢ[𝕜] E) {M : F →ₗ[𝕜] F} (hM : M.IsSymmetric)
@@ -426,7 +425,7 @@ theorem singularValues_graphOperator (U : Submodule 𝕜 E)
 
 /-- **Davis--Kahan `tan Θ`, ordered residual form, every UI norm.** -/
 theorem tanTheta_residual_le
-    (N : RectangularUnitarilyInvariantSeminorm 𝕜 F E)
+    (N : UnitarilyInvariantSeminorm 𝕜 F E)
     {A : E →ₗ[𝕜] E} (hA : A.IsSymmetric) {U : Submodule 𝕜 E}
     [U.HasOrthogonalProjection] (hU : IsInvariant A U)
     (X : F →ₗᵢ[𝕜] E) {M : F →ₗ[𝕜] F} (hM : M.IsSymmetric)
@@ -490,11 +489,11 @@ theorem tanTheta_vector_le
         ‖(residual A X M).toContinuousLinearMap‖ ≤ ρ :=
       (residual A X M).toContinuousLinearMap.opNorm_le_bound hρ hres
     have hTop := tanTheta_residual_le
-      (RectangularUnitarilyInvariantSeminorm.opNorm (𝕜 := 𝕜) (E := F) (F := E))
+      (UnitarilyInvariantSeminorm.opNorm (𝕜 := 𝕜) (E := F) (F := E))
       hA hU X hM hGalerkin hδ hgap
     have hTbound :
         δ * ‖(tanThetaEmbedding U X).toContinuousLinearMap‖ ≤ ρ := by
-      simpa [RectangularUnitarilyInvariantSeminorm.opNorm_apply] using
+      simpa [UnitarilyInvariantSeminorm.opNorm_apply] using
         hTop.trans hRop
     intro y
     have hSy := LinearMap.congr_fun hfactor y
