@@ -217,12 +217,11 @@ noncomputable def compactOperator :
     SymmetricNormIdeal (𝕜 := 𝕜) (E := E) :=
   ofCanonical (TauCeti.compactOperatorFamily 𝕜)
 
-/-- Schatten `p` ideal.  Carries the min--max hypothesis `schattenIdealFamily`
-needs. -/
+/-- Schatten `p` ideal induced by the canonical symmetric gauge. -/
 noncomputable def schatten
     {p : ℝ} (hp : 1 ≤ p) :
     SymmetricNormIdeal (𝕜 := 𝕜) (E := E) :=
-  ofCanonical (TauCeti.schattenIdealFamily 𝕜 hp)
+  ofCanonical (TauCeti.schattenFamilySymmetric 𝕜 p hp)
 
 /-- Trace-class ideal. -/
 noncomputable def traceClass :

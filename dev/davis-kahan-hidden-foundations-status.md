@@ -28,7 +28,7 @@ Recursive hidden-foundation map for the Davis--Kahan 1970 formalization. Each no
 
 ### Hilbert--Schmidt and Schatten ideal families
 
-`sylvester-real-ideals` · construction=2, proof_candidate=2
+`sylvester-real-ideals` · construction=1, proof_candidate=3
 
 ### Free-beam ODE, Sobolev realization, and spectral gap
 
@@ -44,7 +44,7 @@ Recursive hidden-foundation map for the Davis--Kahan 1970 formalization. Each no
 | `two-projection-classification` | proof_candidate | medium | yes | - | `TauCeti.DavisKahan.twoProjection_operator_classification` |
 | `hs-completeness` | proof_candidate | low | yes | - | `TauCeti.DavisKahan.ExactSinTheta.hilbertSchmidt_complete_complex` |
 | `hs-complex-family` | construction | low | yes | - | `TauCeti.DavisKahan.ExactSinTheta.hilbertSchmidtComplex` |
-| `schatten-foundation` | construction | high | yes | - | `TauCeti.schattenIdealFamily` |
+| `schatten-foundation` | proof_candidate | high | yes | - | `TauCeti.schattenFamily` |
 | `schatten-family` | proof_candidate | high | yes | - | `ContinuousLinearMap.schattenENorm_add_le` |
 | `free-beam-mode-ode` | proof_candidate | medium | yes | - | `TauCeti.DavisKahan.FreeBeam.mode_fourth_derivative` |
 | `free-beam-boundary-determinant` | proof_candidate | medium | yes | - | `TauCeti.DavisKahan.FreeBeam.boundaryDet_eq` |

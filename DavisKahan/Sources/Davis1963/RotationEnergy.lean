@@ -49,7 +49,7 @@ bases of two self-adjoint operators.
 This is the finite simple-spectrum quantity appearing in Davis's Theorem 3.2:
 `Σᵢ (1 - |⟪vᵢ,xᵢ⟫|²)`, expressed through the canonical intertwining unitary of
 the two rank-one spectral families.  The earlier arbitrary-block signature was
-not mathematically sound: `SpectrumIn` alone neither makes a block reducing nor
+not mathematically sound: `PointSpectrumIn` alone neither makes a block reducing nor
 forces scalar action on it, and unweighted block labels mishandle multiplicity.
 -/
 noncomputable def totalRotationEnergy
@@ -86,7 +86,7 @@ This corrected statement is the mathematically meaningful theorem supported by
 the repository's completed rank-one spectral-resolution development.  An
 arbitrary block-family version requires explicit reducing/scalar-action
 hypotheses and rank-weighted eigenvalue motion; it cannot be obtained from the
-old `SpectrumIn` hypotheses.
+old `PointSpectrumIn` hypotheses.
 -/
 theorem totalRotation_add_eigenvalueMotion_le
     {A B : E →ₗ[𝕜] E} (hA : A.IsSymmetric) (hB : B.IsSymmetric)

@@ -19,7 +19,7 @@ The paper's first sharpness construction, from the discussion after Theorem 2:
 
 Everything on that line is proved here, against the *same* hypotheses the
 theorem carries: `correspondingEigenblock_orthogonalSharpness` supplies the
-branch-selection datum and `internalGap_orthogonalSharpness` the population
+branch-selection datum and `pointInternalGap_orthogonalSharpness` the population
 gap, so the example is a genuine instance of
 `YuWangSamworth2015.yuWangSamworth_alignedBasis_le` rather than a numerical coincidence.
 The conclusion is that the constant `2^{3/2}` and the `√d` dimension dependence
@@ -234,26 +234,32 @@ spectrum of the leading block is `{3}` and of its complement is `{1}`.
 
 No size hypotheses on `d`: if either block is trivial the separation holds
 vacuously, so the statement is cleanest without them. -/
-theorem internalGap_orthogonalSharpness :
-    InternalGap (orthogonalSharpnessPopulation b d)
+theorem pointInternalGap_orthogonalSharpness :
+    PointInternalGap (orthogonalSharpnessPopulation b d)
       (eigenspace (orthogonalSharpnessPopulation b d) ((3 : ℝ) : 𝕜)) 2 := by
-  intro lam μ hlam hμ
-  rw [eigenspace_orthogonalSharpnessPopulation] at hlam hμ
-  -- The block carries only the value `3`.
-  have h3 : lam = 3 := by
-    obtain ⟨i, hi, rfl⟩ :=
-      restrictedSpectrum_basisDiagonal_subset b _ _ hlam
-    simp only [Set.mem_ofPred_eq] at hi
-    simp [orthogonalSharpnessPopulationData, hi]
-  -- Its complement carries only the value `1`.
-  have h1 : μ = 1 := by
-    rw [OrthonormalBasis.orthogonal_spanIndices] at hμ
-    obtain ⟨i, hi, rfl⟩ :=
-      restrictedSpectrum_basisDiagonal_subset b _ _ hμ
-    simp only [Set.mem_compl_iff, Set.mem_ofPred_eq] at hi
-    simp [orthogonalSharpnessPopulationData, hi]
-  rw [h3, h1]
-  norm_num
+  refine ⟨?_, ?_⟩
+  · intro x hx
+    rw [Module.End.mem_eigenspace_iff] at hx ⊢
+    rw [← map_smul, hx]
+  ·
+    intro lam μ hlam hμ
+    rw [eigenspace_orthogonalSharpnessPopulation] at hlam hμ
+    -- The block carries only the value `3`.
+    have h3 : lam = 3 := by
+      obtain ⟨i, hi, rfl⟩ :=
+        restrictedPointSpectrum_basisDiagonal_subset b _ _ hlam
+      simp only [Set.mem_ofPred_eq] at hi
+      simp [orthogonalSharpnessPopulationData, hi]
+    -- Its complement carries only the value `1`.
+    have h1 : μ = 1 := by
+      rw [OrthonormalBasis.orthogonal_spanIndices] at hμ
+      obtain ⟨i, hi, rfl⟩ :=
+        restrictedPointSpectrum_basisDiagonal_subset b _ _ hμ
+      simp only [Set.mem_compl_iff, Set.mem_ofPred_eq] at hi
+      simp [orthogonalSharpnessPopulationData, hi]
+    rw [h3, h1]
+    norm_num
+
 
 /-- **The perturbation has operator norm `1 + ε`.**  The largest displacement is
 on the leading block, where `Σ̂` reads `2 − ε` against `Σ`'s `3`. -/

@@ -33,7 +33,7 @@ theorem yuWangSamworth_theorem1_uiNorm_le
     {U V : Submodule 𝕜 E} [U.HasOrthogonalProjection]
     [V.HasOrthogonalProjection] (hU : IsInvariant A U) (hV : IsInvariant B V)
     {a b δ : ℝ} (hδ : 0 < δ)
-    (hgap : IntervalExteriorGap A B U V a b δ) :
+    (hgap : PointIntervalExteriorGap A U B Vᗮ a b δ) :
     N (sinThetaMap U V) ≤ N (B - A) / δ := by
   rw [le_div_iff₀ hδ]
   simpa only [mul_comm] using
@@ -48,7 +48,7 @@ theorem yuWangSamworth_theorem1_frobenius_le
     {U V : Submodule 𝕜 E} [U.HasOrthogonalProjection]
     [V.HasOrthogonalProjection] (hU : IsInvariant A U) (hV : IsInvariant B V)
     {a b δ : ℝ} (hδ : 0 < δ)
-    (hgap : IntervalExteriorGap A B U V a b δ) :
+    (hgap : PointIntervalExteriorGap A U B Vᗮ a b δ) :
     sinThetaFrobenius U V ≤
       UnitarilyInvariantSeminorm.frobenius (𝕜 := 𝕜) (E := E) (F := E) (B - A) / δ := by
   rw [sinThetaFrobenius_eq]
@@ -62,7 +62,7 @@ theorem yuWangSamworth_theorem1_opNorm_le
     {U V : Submodule 𝕜 E} [U.HasOrthogonalProjection]
     [V.HasOrthogonalProjection] (hU : IsInvariant A U) (hV : IsInvariant B V)
     {a b δ : ℝ} (hδ : 0 < δ)
-    (hgap : IntervalExteriorGap A B U V a b δ) :
+    (hgap : PointIntervalExteriorGap A U B Vᗮ a b δ) :
     ‖(sinThetaMap U V).toContinuousLinearMap‖ ≤
       ‖(B - A).toContinuousLinearMap‖ / δ := by
   rw [le_div_iff₀ hδ]
@@ -124,9 +124,9 @@ theorem yuWangSamworth_equation1_opNorm_le
   have hUeq : U = Submodule.span 𝕜 (Set.range fun _ : Fin 1 => v) := by
     rw [hU, Set.range_const]
   have hUinv : IsInvariant Sig U := by rw [hUeq]; exact hfamU.isInvariant_span
-  have hUspec : SpectrumIn Sig U (Set.Icc lam lam) := by
+  have hUspec : PointSpectrumIn Sig U (Set.Icc lam lam) := by
     rw [hUeq]
-    refine (hfamU.restrictedSpectrum_span_subset hSig).trans ?_
+    refine (hfamU.restrictedPointSpectrum_span_subset hSig).trans ?_
     rintro x ⟨i, rfl⟩
     exact ⟨le_rfl, le_rfl⟩
   -- `V` likewise, and `Vᗮ` is the span of the remaining basis vectors.
@@ -147,10 +147,10 @@ theorem yuWangSamworth_equation1_opNorm_le
       (fun k : ({j}ᶜ : Set (Fin p)) => lamhat (k : Fin p))
       (fun k : ({j}ᶜ : Set (Fin p)) => bhat (k : Fin p)) :=
     ⟨bhat.orthonormal.comp _ Subtype.val_injective, fun k => hbhat _⟩
-  have hVperpSpec : SpectrumIn Sighat Vᗮ
+  have hVperpSpec : PointSpectrumIn Sighat Vᗮ
       {mu | mu ∉ Set.Ioo (lam - δ) (lam + δ)} := by
     rw [hVperpEq]
-    refine (hfamV.restrictedSpectrum_span_subset hSighat).trans ?_
+    refine (hfamV.restrictedPointSpectrum_span_subset hSighat).trans ?_
     rintro x ⟨k, rfl⟩
     have hk : (k : Fin p) ≠ j := fun h => k.2 (Set.mem_singleton_iff.mpr h)
     have hd := hgap _ hk

@@ -349,9 +349,9 @@ theorem yuWangSamworth_sinTheta_le_residual
   have hkey : Δ ^ 2 * sinThetaFrobenius U V ^ 2 ≤ R := by
     rw [sinThetaFrobenius_sq_eq_sum_sq_norm_starProjection_orthogonal
       hu.orthonormal hv.orthonormal]
-    exact sq_gap_mul_sum_sq_norm_starProjection_orthogonal_le hA hu.isInvariant_span
-      hΔ.le (hu.internalGap_span hΔ hgap) v (fun i => hA.eigenvalues hn (e i))
-      fun i => hu.toIsEigenFamily.eigenvalue_mem_restrictedSpectrum i
+    exact sq_gap_mul_sum_sq_norm_starProjection_orthogonal_le hA
+      hΔ.le (hu.pointInternalGap_span hΔ hgap) v (fun i => hA.eigenvalues hn (e i))
+      fun i => hu.toIsEigenFamily.eigenvalue_mem_restrictedPointSpectrum i
   have hs0 : 0 ≤ sinThetaFrobenius U V :=
     sinThetaFrobenius_nonneg U V
   rw [le_div_iff₀ hΔ]
@@ -390,9 +390,9 @@ theorem yuWangSamworth_sinTheta_frame_le
   have hkey : Δ ^ 2 * sinThetaFrobenius U V ^ 2 ≤ R := by
     rw [hR, sinThetaFrobenius_sq_eq_sum_sq_norm_starProjection_orthogonal
       hu.orthonormal hv.orthonormal]
-    exact sq_gap_mul_sum_sq_norm_starProjection_orthogonal_le hA hu.isInvariant_span
-      hΔ.le (hu.internalGap_span hΔ hgap) v (fun i => hA.eigenvalues hn (e i))
-      fun i => hu.toIsEigenFamily.eigenvalue_mem_restrictedSpectrum i
+    exact sq_gap_mul_sum_sq_norm_starProjection_orthogonal_le hA
+      hΔ.le (hu.pointInternalGap_span hΔ hgap) v (fun i => hA.eigenvalues hn (e i))
+      fun i => hu.toIsEigenFamily.eigenvalue_mem_restrictedPointSpectrum i
   -- Frobenius branch.
   have hfrob : sinThetaFrobenius U V ≤
       2 * UnitarilyInvariantSeminorm.frobenius (𝕜 := 𝕜) (E := E) (F := E) (B - A) / Δ := by
@@ -453,10 +453,10 @@ aligned-basis conclusion proved here.
 theorem yuWangSamworth_sinTheta_le
     {A B : E →ₗ[𝕜] E} (hA : A.IsSymmetric) (hB : B.IsSymmetric)
     {U V : Submodule 𝕜 E} [U.HasOrthogonalProjection]
-    [V.HasOrthogonalProjection] (_hU : IsInvariant A U) (_hV : IsInvariant B V)
+    [V.HasOrthogonalProjection] (_hV : IsInvariant B V)
     (hcorr : CorrespondingEigenblock hA hB U V)
     {d : ℕ} (hrank : finrank 𝕜 U = d) {Δ : ℝ} (hΔ : 0 < Δ)
-    (hgap : InternalGap A U Δ) :
+    (hgap : PointInternalGap A U Δ) :
     sinThetaFrobenius U V ≤
       2 * min (Real.sqrt d * ‖(B - A).toContinuousLinearMap‖)
         (UnitarilyInvariantSeminorm.frobenius (𝕜 := 𝕜) (E := E) (F := E) (B - A)) / Δ := by
@@ -467,13 +467,13 @@ theorem yuWangSamworth_sinTheta_le
   have hindexGap : ∀ j ∈ s, ∀ k ∉ s,
       Δ ≤ |hA.eigenvalues hn j - hA.eigenvalues hn k| := by
     intro j hj k hk
-    apply hgap (hA.eigenvalues hn j) (hA.eigenvalues hn k)
-    · refine mem_restrictedSpectrum ?_
+    apply hgap.2 (hA.eigenvalues hn j) (hA.eigenvalues hn k)
+    · refine mem_restrictedPointSpectrum ?_
         ((hA.eigenvectorBasis hn).orthonormal.ne_zero j)
         (hA.apply_eigenvectorBasis hn j)
       rw [OrthonormalBasis.spanIndices]
       exact Submodule.subset_span ⟨j, hj, rfl⟩
-    · refine mem_restrictedSpectrum ?_
+    · refine mem_restrictedPointSpectrum ?_
         ((hA.eigenvectorBasis hn).orthonormal.ne_zero k)
         (hA.apply_eigenvectorBasis hn k)
       rw [OrthonormalBasis.orthogonal_spanIndices, OrthonormalBasis.spanIndices]
@@ -508,16 +508,15 @@ theorem yuWangSamworth_intervalBlock_le
     {U V : Submodule 𝕜 E} [U.HasOrthogonalProjection]
     [V.HasOrthogonalProjection]
     {a b Δ : ℝ} (hΔ : 0 < Δ)
-    (hUeq : U = spectralSubspace A (Set.Icc a b))
+    (_hUeq : U = pointSpectralSubspace A (Set.Icc a b))
     (hcorr : CorrespondingEigenblock hA hB U V)
-    (hgap : InternalGap A U Δ) :
+    (hgap : PointInternalGap A U Δ) :
     sinThetaFrobenius U V ≤
       2 * min (Real.sqrt (finrank 𝕜 U) * ‖(B - A).toContinuousLinearMap‖)
         (UnitarilyInvariantSeminorm.frobenius (𝕜 := 𝕜) (E := E) (F := E) (B - A)) / Δ := by
   obtain ⟨n, hn, s, -, hVp⟩ := id hcorr
-  refine yuWangSamworth_sinTheta_le hA hB ?_ ?_ hcorr rfl hΔ hgap
-  · rw [hUeq]; exact isInvariant_spectralSubspace A (Set.Icc a b)
-  · rw [hVp]; exact reduces_spanIndices hB hn ↑s
+  refine yuWangSamworth_sinTheta_le hA hB ?_ hcorr rfl hΔ hgap
+  rw [hVp]; exact reduces_spanIndices hB hn ↑s
 
 /-- Procrustes-aligned orthonormal bases. -/
 theorem exists_aligned_orthonormalBasis
@@ -654,10 +653,10 @@ printed theorem in exactly the same way.
 theorem yuWangSamworth_alignedBasis_le
     {A B : E →ₗ[𝕜] E} (hA : A.IsSymmetric) (hB : B.IsSymmetric)
     {U V : Submodule 𝕜 E} [U.HasOrthogonalProjection]
-    [V.HasOrthogonalProjection] (hU : IsInvariant A U) (hV : IsInvariant B V)
+    [V.HasOrthogonalProjection] (hV : IsInvariant B V)
     (hcorr : CorrespondingEigenblock hA hB U V)
     {d : ℕ} (hrankU : finrank 𝕜 U = d) (hrankV : finrank 𝕜 V = d)
-    {Δ : ℝ} (hΔ : 0 < Δ) (hgap : InternalGap A U Δ) :
+    {Δ : ℝ} (hΔ : 0 < Δ) (hgap : PointInternalGap A U Δ) :
     ∃ (u v : Fin d → E), Orthonormal 𝕜 u ∧ Orthonormal 𝕜 v ∧
       Submodule.span 𝕜 (Set.range u) = U ∧
       Submodule.span 𝕜 (Set.range v) = V ∧
@@ -668,7 +667,7 @@ theorem yuWangSamworth_alignedBasis_le
   obtain ⟨u, v, hu, hv, hspanU, hspanV, hsum⟩ :=
     exists_aligned_orthonormalBasis hrankU hrankV
   refine ⟨u, v, hu, hv, hspanU, hspanV, ?_⟩
-  have hsine := yuWangSamworth_sinTheta_le hA hB hU hV hcorr hrankU hΔ hgap
+  have hsine := yuWangSamworth_sinTheta_le hA hB hV hcorr hrankU hΔ hgap
   have hsnn : (0 : ℝ) ≤ sinThetaFrobenius U V :=
     sinThetaFrobenius_nonneg U V
   calc Real.sqrt (∑ i, ‖v i - u i‖ ^ 2)
@@ -731,7 +730,7 @@ theorem yuWangSamworth_eigenvector_le
     (hcorr : CorrespondingEigenblock hA hB
       (Submodule.span 𝕜 {u}) (Submodule.span 𝕜 {v}))
     (hΔ : 0 < Δ)
-    (hgap : ∀ ν ∈ restrictedSpectrum A (Submodule.span 𝕜 {u})ᗮ,
+    (hgap : ∀ ν ∈ restrictedPointSpectrum A (Submodule.span 𝕜 {u})ᗮ,
       Δ ≤ |lam - ν|) :
     ∃ c : 𝕜, ‖c‖ = 1 ∧
       ‖c • v - u‖ ≤ 2 * Real.sqrt 2 * ‖(B - A).toContinuousLinearMap‖ / Δ := by
@@ -746,9 +745,10 @@ theorem yuWangSamworth_eigenvector_le
   have hrankV : finrank 𝕜 (Submodule.span 𝕜 {v}) = 1 := finrank_span_singleton hv0
   -- The restricted spectrum of `A` on the eigenline is exactly `{lam}`, so the internal
   -- gap follows from `hgap`.
-  have hgap' : InternalGap A (Submodule.span 𝕜 {u}) Δ := by
+  have hgap' : PointInternalGap A (Submodule.span 𝕜 {u}) Δ := by
+    refine ⟨hU, ?_⟩
     intro l ν hl hν
-    obtain ⟨x, hxU, hx0, hAx⟩ := mem_restrictedSpectrum_iff.mp hl
+    obtain ⟨x, hxU, hx0, hAx⟩ := mem_restrictedPointSpectrum_iff.mp hl
     rw [Submodule.mem_span_singleton] at hxU
     obtain ⟨a, rfl⟩ := hxU
     have heq : (lam : 𝕜) • (a • u) = (l : 𝕜) • (a • u) := by
@@ -761,7 +761,7 @@ theorem yuWangSamworth_eigenvector_le
       · exact hx0 h
     rw [← hll]; exact hgap ν hν
   obtain ⟨u', v', hu'on, hv'on, hspanU, hspanV, hbound⟩ :=
-    yuWangSamworth_alignedBasis_le hA hB hU hV hcorr hrankU hrankV hΔ hgap'
+    yuWangSamworth_alignedBasis_le hA hB hV hcorr hrankU hrankV hΔ hgap'
   -- Extract the unit scalars relating the aligned basis vectors to `u`, `v`.
   have hu'mem : u' 0 ∈ Submodule.span 𝕜 {u} := hspanU ▸ Submodule.subset_span ⟨0, rfl⟩
   have hv'mem : v' 0 ∈ Submodule.span 𝕜 {v} := hspanV ▸ Submodule.subset_span ⟨0, rfl⟩

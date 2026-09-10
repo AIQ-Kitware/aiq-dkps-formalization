@@ -10,7 +10,7 @@
       "roadmap_focus": "spectral-subspace-perturbation",
       "status": "staged-needs-current-validation",
       "upstream_pr": null,
-      "tauceti_population": "Everything remains staged in ForTauCeti. The 2026-07-24 Tau Ceti throwaway export/build predates the real-valued approximation-number conversion, Courant--Fischer redesign, dependency splits, and unified operator-modulus API; it is historical evidence only. Re-export the dependency-closed module list computed from current imports and rerun strict Tau Ceti validation before submission.",
+      "tauceti_population": "Staged in ForTauCeti. This module list is refreshed from the current import closure; it is not build evidence. Re-export and compile against Tau Ceti before submission.",
       "tauceti_target_marker": "<!--tauceti-target:v1 {\"focus\":\"spectral-subspace-perturbation\",\"id\":\"SpectralSubspacePerturbation/PartB/approximation-numbers\"}--> (provisional; confirm accepted id against TauCetiRoadmap before submission)",
       "staging_modules": [
         "ForTauCeti.Analysis.CStarAlgebra.ContinuousFunctionalCalculusTransport",
@@ -41,6 +41,7 @@
         "ForTauCeti.Analysis.InnerProductSpace.SchurHorn",
         "ForTauCeti.Analysis.InnerProductSpace.SelfAdjointFunctionalCalculus",
         "ForTauCeti.Analysis.InnerProductSpace.Singular.Subspace",
+        "ForTauCeti.Analysis.InnerProductSpace.Singular.System",
         "ForTauCeti.Analysis.InnerProductSpace.Singular.Values",
         "ForTauCeti.Analysis.InnerProductSpace.Spectral.Cutoff",
         "ForTauCeti.Analysis.InnerProductSpace.Spectrum",
@@ -51,19 +52,27 @@
         "ForTauCeti.Analysis.InnerProductSpace.UnitarilyInvariantSeminorm.Instances",
         "ForTauCeti.Analysis.InnerProductSpace.UnitarilyInvariantSeminorm.Majorization",
         "ForTauCeti.Analysis.InnerProductSpace.ZeroExtension",
+        "ForTauCeti.Analysis.Normed.FiniteLpGauge",
         "ForTauCeti.Analysis.Normed.Operator.FiniteRankCompact",
         "ForTauCeti.Analysis.Normed.Operator.LinearIsometry",
+        "ForTauCeti.Analysis.Normed.SchattenGauge",
+        "ForTauCeti.Analysis.Normed.SupGauge",
+        "ForTauCeti.Analysis.Normed.SymmetricGauge",
         "ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.Adjoint",
         "ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.Basic",
         "ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.Compact",
         "ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.CompactHilbert",
         "ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.Core",
+        "ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.DiagonalSequence",
+        "ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.EnergyComparison",
         "ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.FiniteDimensional",
         "ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.FiniteRestriction",
+        "ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.Isometry",
         "ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.KyFan",
         "ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.MinMax",
         "ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.MinMaxReal",
         "ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.MinMaxUpper",
+        "ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.Rank",
         "ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.SameSequence",
         "ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.ScalarTransport",
         "ForTauCeti.Analysis.OperatorIdeal.Family.Basic",
@@ -71,6 +80,8 @@
         "ForTauCeti.Analysis.OperatorIdeal.Family.KyFan",
         "ForTauCeti.Analysis.OperatorIdeal.Family.KyFanDominance",
         "ForTauCeti.Analysis.OperatorIdeal.Family.OperatorNorm",
+        "ForTauCeti.Analysis.OperatorIdeal.Family.Schatten",
+        "ForTauCeti.Analysis.OperatorIdeal.Family.SymmetricGauge",
         "ForTauCeti.Analysis.OperatorIdeal.Family.TraceClass",
         "ForTauCeti.Analysis.RCLike.ScalarTransport",
         "ForTauCeti.Analysis.RCLike.ScalarTransportFunctionalCalculus",
@@ -83,9 +94,9 @@
       "cluster": "operator-polar-decomposition",
       "roadmap_target": "Polar decomposition of a bounded operator: `A = U |A|` with `U` a partial isometry, the positive square root, near-isometry perturbation, and the Moore--Penrose inverse with all four Penrose identities.",
       "roadmap_focus": "operator-polar-decomposition",
-      "status": "staged-unreviewed",
+      "status": "staged-needs-current-validation",
       "upstream_pr": null,
-      "tauceti_population": "Staged in `ForTauCeti`, not yet exported. Every module carries a `## Provenance` section and an Apache-2.0 Kitware header; the import firewall holds (Mathlib and sibling staging modules only), so the cluster is independently copyable. The module list is the import closure of the cluster's roots, so exporting it yields a self-contained Tau Ceti subtree.",
+      "tauceti_population": "Staged in ForTauCeti. This module list is refreshed from the current import closure; it is not build evidence. Re-export and compile against Tau Ceti before submission.",
       "tauceti_target_marker": null,
       "staging_modules": [
         "ForTauCeti.Analysis.CStarAlgebra.ContinuousFunctionalCalculusTransport",
@@ -164,18 +175,39 @@
       "cluster": "principal-angles",
       "roadmap_target": "Principal angles between subspaces, aligned bases, finite frames, and eigenvalue-change bounds.",
       "roadmap_focus": "principal-angles",
-      "status": "staged-unreviewed",
+      "status": "staged-needs-current-validation",
       "upstream_pr": null,
-      "tauceti_population": "Staged in `ForTauCeti`, not yet exported. Every module carries a `## Provenance` section and an Apache-2.0 Kitware header; the import firewall holds (Mathlib and sibling staging modules only), so the cluster is independently copyable. The module list is the import closure of the cluster's roots, so exporting it yields a self-contained Tau Ceti subtree.",
+      "tauceti_population": "Staged in ForTauCeti. This module list is refreshed from the current import closure; it is not build evidence. Re-export and compile against Tau Ceti before submission.",
       "tauceti_target_marker": null,
       "staging_modules": [
+        "ForTauCeti.Analysis.CStarAlgebra.ContinuousFunctionalCalculusTransport",
         "ForTauCeti.Analysis.InnerProductSpace.BasisSpan",
+        "ForTauCeti.Analysis.InnerProductSpace.BoundedOperator.Projector",
+        "ForTauCeti.Analysis.InnerProductSpace.BoundedOperator.SinTheta",
+        "ForTauCeti.Analysis.InnerProductSpace.Complexification.Basic",
+        "ForTauCeti.Analysis.InnerProductSpace.Complexification.FunctionalCalculus",
+        "ForTauCeti.Analysis.InnerProductSpace.Complexification.Spectrum",
         "ForTauCeti.Analysis.InnerProductSpace.CourantFischer",
         "ForTauCeti.Analysis.InnerProductSpace.EigenvalueChange",
         "ForTauCeti.Analysis.InnerProductSpace.FiniteFrame",
+        "ForTauCeti.Analysis.InnerProductSpace.OperatorRealAlgebra",
+        "ForTauCeti.Analysis.InnerProductSpace.Projection.Blocks",
+        "ForTauCeti.Analysis.InnerProductSpace.Projection.Gap",
+        "ForTauCeti.Analysis.InnerProductSpace.Projection.ScalarTransport",
+        "ForTauCeti.Analysis.InnerProductSpace.QuadraticFormBounds",
+        "ForTauCeti.Analysis.InnerProductSpace.RealContinuousFunctionalCalculus",
         "ForTauCeti.Analysis.InnerProductSpace.RectangularSingularValues",
+        "ForTauCeti.Analysis.InnerProductSpace.ReducedExtension",
+        "ForTauCeti.Analysis.InnerProductSpace.ReducingSubspace",
         "ForTauCeti.Analysis.InnerProductSpace.SchurHorn",
-        "ForTauCeti.Analysis.InnerProductSpace.Spectrum"
+        "ForTauCeti.Analysis.InnerProductSpace.Spectral.Gap",
+        "ForTauCeti.Analysis.InnerProductSpace.Spectral.Subspace",
+        "ForTauCeti.Analysis.InnerProductSpace.SpectralOrder",
+        "ForTauCeti.Analysis.InnerProductSpace.Spectrum",
+        "ForTauCeti.Analysis.InnerProductSpace.Sylvester.Bound",
+        "ForTauCeti.Analysis.InnerProductSpace.Sylvester.Operator",
+        "ForTauCeti.Analysis.RCLike.ScalarTransport",
+        "ForTauCeti.Analysis.RCLike.ScalarTransportFunctionalCalculus"
       ]
     },
     {
@@ -197,9 +229,9 @@
       "cluster": "matrix-spectral",
       "roadmap_target": "Matrix spectrum, entrywise eigenvalue and operator-norm bounds, and measurability of spectral functions.",
       "roadmap_focus": "matrix-spectral-theory",
-      "status": "staged-unreviewed",
+      "status": "staged-needs-current-validation",
       "upstream_pr": null,
-      "tauceti_population": "Staged in `ForTauCeti`, not yet exported. Every module carries a `## Provenance` section and an Apache-2.0 Kitware header; the import firewall holds (Mathlib and sibling staging modules only), so the cluster is independently copyable. The module list is the import closure of the cluster's roots, so exporting it yields a self-contained Tau Ceti subtree.",
+      "tauceti_population": "Staged in ForTauCeti. This module list is refreshed from the current import closure; it is not build evidence. Re-export and compile against Tau Ceti before submission.",
       "tauceti_target_marker": null,
       "staging_modules": [
         "ForTauCeti.Analysis.InnerProductSpace.BasisSpan",
@@ -207,6 +239,7 @@
         "ForTauCeti.Analysis.Matrix.EntrywiseEigenvalue",
         "ForTauCeti.Analysis.Matrix.EntrywiseOpNorm",
         "ForTauCeti.Analysis.Matrix.SpectralFunctionMeasurable",
+        "ForTauCeti.Analysis.Matrix.SpectralProjection",
         "ForTauCeti.Analysis.Matrix.Spectrum",
         "ForTauCeti.MeasureTheory.CfcMeasurable"
       ]
@@ -215,9 +248,9 @@
       "cluster": "probability-concentration",
       "roadmap_target": "Sample mean, variance, sample covariance, centered scatter, and matrix concentration.",
       "roadmap_focus": "probability-concentration",
-      "status": "staged-unreviewed",
+      "status": "staged-needs-current-validation",
       "upstream_pr": null,
-      "tauceti_population": "Staged in `ForTauCeti`, not yet exported. Every module carries a `## Provenance` section and an Apache-2.0 Kitware header; the import firewall holds (Mathlib and sibling staging modules only), so the cluster is independently copyable. The module list is the import closure of the cluster's roots, so exporting it yields a self-contained Tau Ceti subtree.",
+      "tauceti_population": "Staged in ForTauCeti. This module list is refreshed from the current import closure; it is not build evidence. Re-export and compile against Tau Ceti before submission.",
       "tauceti_target_marker": null,
       "staging_modules": [
         "ForTauCeti.Analysis.InnerProductSpace.BasisSpan",
@@ -308,9 +341,9 @@
       "cluster": "unbounded-spectral-theory",
       "roadmap_target": "Unbounded self-adjoint operators on a Hilbert space: the Cayley transform, the bounded and unbounded Borel functional calculus, projection-valued measures and the spectral measure, Yosida approximants, Stone's theorem in both directions, and the spectral-gap inverse.",
       "roadmap_focus": "unbounded-spectral-theory",
-      "status": "staged-unreviewed",
+      "status": "staged-needs-current-validation",
       "upstream_pr": null,
-      "tauceti_population": "Staged in `ForTauCeti`, not yet exported. The module list is the import closure of the cluster's roots, so exporting it yields a self-contained Tau Ceti subtree. Declared 2026-07-29 by lane M-MANIFEST: these modules existed on disk and were invisible to `scripts/export_for_tauceti.py`, which refuses to export an undeclared module.",
+      "tauceti_population": "Staged in ForTauCeti. This module list is refreshed from the current import closure; it is not build evidence. Re-export and compile against Tau Ceti before submission.",
       "tauceti_target_marker": null,
       "staging_modules": [
         "ForTauCeti.Analysis.InnerProductSpace.BorelCalculus.DiagonalMeasure",
@@ -326,6 +359,7 @@
         "ForTauCeti.Analysis.InnerProductSpace.LinearPMap.ResolventBound",
         "ForTauCeti.Analysis.InnerProductSpace.LinearPMap.SelfAdjointMaximal",
         "ForTauCeti.Analysis.InnerProductSpace.LinearPMap.SelfAdjointResolvent",
+        "ForTauCeti.Analysis.InnerProductSpace.LinearPMap.Shift",
         "ForTauCeti.Analysis.InnerProductSpace.LinearPMap.SpectralCutOperator",
         "ForTauCeti.Analysis.InnerProductSpace.LinearPMap.SpectralFormBounds",
         "ForTauCeti.Analysis.InnerProductSpace.LinearPMap.SpectralGapInverse",
@@ -350,9 +384,9 @@
       "cluster": "hilbert-schmidt-sylvester-gap",
       "roadmap_target": "The Hilbert-Schmidt space as an l2 of columns, the Sylvester one-parameter unitary group it carries, the identification of that group's generator with Z -> i(A Z - Z B), and the pairwise-to-vector spectral gap for it.",
       "roadmap_focus": "sylvester-hilbert-schmidt",
-      "status": "staged-unreviewed",
+      "status": "staged-needs-current-validation",
       "upstream_pr": null,
-      "tauceti_population": "Staged in `ForTauCeti`, not yet exported. The module list is the import closure of the cluster's roots, so exporting it yields a self-contained Tau Ceti subtree. Declared 2026-07-29 by lane M-MANIFEST: these modules existed on disk and were invisible to `scripts/export_for_tauceti.py`, which refuses to export an undeclared module.",
+      "tauceti_population": "Staged in ForTauCeti. This module list is refreshed from the current import closure; it is not build evidence. Re-export and compile against Tau Ceti before submission.",
       "tauceti_target_marker": null,
       "staging_modules": [
         "ForTauCeti.Analysis.CStarAlgebra.ContinuousFunctionalCalculusTransport",
@@ -378,6 +412,7 @@
         "ForTauCeti.Analysis.InnerProductSpace.LinearPMap.ResolventOpen",
         "ForTauCeti.Analysis.InnerProductSpace.LinearPMap.SelfAdjointMaximal",
         "ForTauCeti.Analysis.InnerProductSpace.LinearPMap.SelfAdjointResolvent",
+        "ForTauCeti.Analysis.InnerProductSpace.LinearPMap.Shift",
         "ForTauCeti.Analysis.InnerProductSpace.LinearPMap.SpectralCutOperator",
         "ForTauCeti.Analysis.InnerProductSpace.LinearPMap.SpectralGapInverse",
         "ForTauCeti.Analysis.InnerProductSpace.LinearPMap.SpectralGrid",
@@ -415,9 +450,9 @@
       "cluster": "davis-kahan-sin-theta",
       "roadmap_target": "The finite-dimensional Davis-Kahan sin-Theta core: spectral subspaces and gaps, angle geometry, Ritz residuals, the Sylvester interval and spectral-distance machinery, and the sin/tan two-theta perturbation theorems.",
       "roadmap_focus": "davis-kahan-sin-theta",
-      "status": "staged-unreviewed",
+      "status": "staged-needs-current-validation",
       "upstream_pr": null,
-      "tauceti_population": "Staged in `ForTauCeti`, not yet exported. The module list is the import closure of the cluster's roots, so exporting it yields a self-contained Tau Ceti subtree. Declared 2026-07-29 by lane M-MANIFEST: these modules existed on disk and were invisible to `scripts/export_for_tauceti.py`, which refuses to export an undeclared module.",
+      "tauceti_population": "Staged in ForTauCeti. This module list is refreshed from the current import closure; it is not build evidence. Re-export and compile against Tau Ceti before submission.",
       "tauceti_target_marker": null,
       "staging_modules": [
         "ForTauCeti.Analysis.CStarAlgebra.ContinuousFunctionalCalculusTransport",
@@ -616,14 +651,26 @@
       "roadmap_target": "Part B / PR 1",
       "provenance_class": "copied",
       "direct_dependencies": [
-        "Mathlib"
+        "ForTauCeti.LinearAlgebra.Dimension.RankComp",
+        "Mathlib.Analysis.Normed.Operator.Basic",
+        "Mathlib.LinearAlgebra.Dimension.Finite",
+        "Mathlib.LinearAlgebra.Dimension.LinearMap"
       ],
       "blocked_dependencies": [],
       "downstream_users": [
-        "DavisKahan.OperatorIdeal.ApproximationNumbers.Core"
+        "DavisKahan.Geometry.Halmos.GenericRotationPredicates",
+        "ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.Adjoint",
+        "ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.Compact",
+        "ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.CompactHilbert",
+        "ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.DiagonalSequence",
+        "ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.Isometry",
+        "ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.LeadingCutoff",
+        "ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.MinMax",
+        "ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.Rank"
       ],
-      "status": "staged",
-      "upstream_pr": null
+      "status": "staged-needs-current-validation",
+      "upstream_pr": null,
+      "migration_note": "Revised OperatorTheory roadmap port from 5427f8bccf6d; source declarations record provenance, not a current API inventory. Elaboration and downstream builds must be rerun."
     },
     {
       "source_module": "ForMathlib.Analysis.Normed.Operator.ApproximationNumberAdjoint",
@@ -689,16 +736,26 @@
       "roadmap_target": "Part B / PR 1",
       "provenance_class": "copied (ForMathlib.* helper refs rewritten to TauCeti.*)",
       "direct_dependencies": [
-        "Mathlib",
-        "ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.Basic",
-        "ForTauCeti.Analysis.InnerProductSpace.CourantFischer"
+        "ForTauCeti.Analysis.InnerProductSpace.CourantFischer",
+        "ForTauCeti.Analysis.InnerProductSpace.Singular.Values",
+        "ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.Rank",
+        "Mathlib.Analysis.InnerProductSpace.Projection.Basic",
+        "Mathlib.LinearAlgebra.Basis.Basic"
       ],
       "blocked_dependencies": [],
       "downstream_users": [
-        "DavisKahan.OperatorIdeal.ApproximationNumbers.Core"
+        "DavisKahan.Sources.DavisKahan1970.Section6AppendixLeakage",
+        "ForTauCeti.Analysis.InnerProductSpace.SandwichMajorization",
+        "ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.Core",
+        "ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.DiagonalExample",
+        "ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.EnergyComparison",
+        "ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.Examples",
+        "ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.KyFan",
+        "RoadmapBridge.OperatorTheory"
       ],
-      "status": "staged",
-      "upstream_pr": null
+      "status": "staged-needs-current-validation",
+      "upstream_pr": null,
+      "migration_note": "Revised OperatorTheory roadmap port from 5427f8bccf6d; source declarations record provenance, not a current API inventory. Elaboration and downstream builds must be rerun."
     },
     {
       "source_module": "ForMathlib.Analysis.Normed.Operator.ApproximationNumberMinMax",
@@ -1627,15 +1684,18 @@
       "roadmap_target": "matrix-spectral",
       "provenance_class": "moved; introduced at Davis--Kahan commit 2356fd0; authors Jon Crall, Claude Opus 4.8; Apache 2.0, Copyright (c) 2026 Kitware, Inc.",
       "direct_dependencies": [
-        "Mathlib",
         "ForTauCeti.Analysis.InnerProductSpace.CourantFischer",
         "ForTauCeti.Analysis.Matrix.EntrywiseOpNorm",
         "ForTauCeti.Analysis.Matrix.SpectralFunctionMeasurable"
       ],
       "blocked_dependencies": [],
-      "downstream_users": [],
-      "status": "staged",
-      "upstream_pr": null
+      "downstream_users": [
+        "ForTauCeti.Probability.Moments.MatrixConcentration",
+        "RoadmapBridge.OperatorTheory"
+      ],
+      "status": "staged-needs-current-validation",
+      "upstream_pr": null,
+      "migration_note": "Revised OperatorTheory roadmap port from 5427f8bccf6d; source declarations record provenance, not a current API inventory. Elaboration and downstream builds must be rerun."
     },
     {
       "source_module": "ForMathlib.Analysis.Matrix.EntrywiseOpNorm",
@@ -1647,12 +1707,21 @@
       "roadmap_target": "matrix-spectral",
       "provenance_class": "moved; introduced at Davis--Kahan commit 7366186; authors Jon Crall, Claude Opus 4.8; Apache 2.0, Copyright (c) 2026 Kitware, Inc.",
       "direct_dependencies": [
-        "Mathlib"
+        "Mathlib.Algebra.Order.Chebyshev",
+        "Mathlib.Analysis.InnerProductSpace.PiL2"
       ],
       "blocked_dependencies": [],
-      "downstream_users": [],
-      "status": "staged",
-      "upstream_pr": null
+      "downstream_users": [
+        "Acharyya2025.OperatorBridge",
+        "DavisKahan.Sources.DavisKahan1970.DoubleAngleTangentOperator",
+        "DkpsQuench2026.Geometry.Covariance",
+        "ForTauCeti.Analysis.Matrix.EntrywiseEigenvalue",
+        "ForTauCeti.Analysis.Matrix.SpectralFunctionMeasurable",
+        "ForTauCeti.Probability.Moments.MatrixConcentration"
+      ],
+      "status": "staged-needs-current-validation",
+      "upstream_pr": null,
+      "migration_note": "Revised OperatorTheory roadmap port from 5427f8bccf6d; source declarations record provenance, not a current API inventory. Elaboration and downstream builds must be rerun."
     },
     {
       "source_module": "ForMathlib.Analysis.Matrix.SpectralFunctionMeasurable",
@@ -1664,14 +1733,28 @@
       "roadmap_target": "matrix-spectral",
       "provenance_class": "moved; introduced at Davis--Kahan commit 82989e1; authors Jon Crall, Claude Fable 5; Apache 2.0, Copyright (c) 2026 Kitware, Inc.",
       "direct_dependencies": [
-        "Mathlib",
+        "ForTauCeti.Analysis.InnerProductSpace.CourantFischer",
         "ForTauCeti.Analysis.Matrix.EntrywiseOpNorm",
-        "ForTauCeti.MeasureTheory.CfcMeasurable"
+        "Mathlib.Analysis.CStarAlgebra.ContinuousFunctionalCalculus.Continuity",
+        "Mathlib.Analysis.Matrix.Hermitian",
+        "Mathlib.Analysis.Matrix.Order",
+        "Mathlib.Analysis.Matrix.Spectrum",
+        "Mathlib.MeasureTheory.Constructions.BorelSpace.Basic",
+        "Mathlib.MeasureTheory.Constructions.BorelSpace.Complex",
+        "Mathlib.MeasureTheory.Constructions.BorelSpace.Metric",
+        "Mathlib.MeasureTheory.Constructions.BorelSpace.Metrizable"
       ],
       "blocked_dependencies": [],
-      "downstream_users": [],
-      "status": "staged",
-      "upstream_pr": null
+      "downstream_users": [
+        "Acharyya2025.ManifoldCondition",
+        "Acharyya2025.MatrixPerturbation",
+        "Challenge.SpectralFunctionMeasurable.Leaderboard",
+        "ForTauCeti.Analysis.Matrix.EntrywiseEigenvalue",
+        "ForTauCeti.Analysis.Matrix.SpectralProjection"
+      ],
+      "status": "staged-needs-current-validation",
+      "upstream_pr": null,
+      "migration_note": "Revised OperatorTheory roadmap port from 5427f8bccf6d; source declarations record provenance, not a current API inventory. Elaboration and downstream builds must be rerun."
     },
     {
       "source_module": "ForTauCeti.Analysis.Matrix.Spectrum",
@@ -1877,14 +1960,18 @@
       "roadmap_target": "probability-concentration",
       "provenance_class": "moved; introduced at Davis--Kahan commit 2356fd0; authors Jon Crall, Claude Opus 4.8; Apache 2.0, Copyright (c) 2026 Kitware, Inc.",
       "direct_dependencies": [
-        "Mathlib",
         "ForTauCeti.Analysis.Matrix.EntrywiseEigenvalue",
+        "ForTauCeti.Analysis.Matrix.EntrywiseOpNorm",
         "ForTauCeti.Probability.Moments.Variance"
       ],
       "blocked_dependencies": [],
-      "downstream_users": [],
-      "status": "staged",
-      "upstream_pr": null
+      "downstream_users": [
+        "Challenge.MatrixConcentration.Leaderboard",
+        "ForTauCeti.Probability.Moments.SampleSecondMoment"
+      ],
+      "status": "staged-needs-current-validation",
+      "upstream_pr": null,
+      "migration_note": "Revised OperatorTheory roadmap port from 5427f8bccf6d; source declarations record provenance, not a current API inventory. Elaboration and downstream builds must be rerun."
     },
     {
       "source_module": "ForMathlib.Probability.Moments.SampleCovariance",
@@ -2339,14 +2426,16 @@
       "roadmap_target": "symmetric-operator-ideals",
       "provenance_class": "restructured 2026-07-28: the Fan-dominance field of KyFanDominantIdealFamily becomes a class over the canonical family, as item S2 of the symmetric-ideals roadmap specifies, with instances for the operator-norm, Ky Fan and trace-class families",
       "direct_dependencies": [
-        "Mathlib",
         "ForTauCeti.Analysis.OperatorIdeal.Family.OperatorNorm",
         "ForTauCeti.Analysis.OperatorIdeal.Family.TraceClass"
       ],
       "blocked_dependencies": [],
-      "downstream_users": [],
-      "status": "staged",
-      "upstream_pr": null
+      "downstream_users": [
+        "ForTauCeti.Analysis.OperatorIdeal.Family.SymmetricGauge"
+      ],
+      "status": "staged-needs-current-validation",
+      "upstream_pr": null,
+      "migration_note": "Revised OperatorTheory roadmap port from 5427f8bccf6d; source declarations record provenance, not a current API inventory. Elaboration and downstream builds must be rerun."
     },
     {
       "source_module": "DavisKahan.Sources.DavisKahan1970.SineTheta.Norms.SingularValueTransport",
@@ -2632,14 +2721,19 @@
       "roadmap_target": "Unbounded self-adjoint operators on a Hilbert space: the Cayley transform, the bounded and unbounded Borel functional calculus, projection-valued measures and the spectral measure, Yosida approximants, Stone's theorem in both directions, and the spectral-gap inverse.",
       "provenance_class": "new",
       "direct_dependencies": [
-        "ForTauCeti.Analysis.InnerProductSpace.LinearPMap.SelfAdjointResolvent"
+        "ForTauCeti.Analysis.InnerProductSpace.LinearPMap.Shift"
       ],
       "blocked_dependencies": [],
       "downstream_users": [
-        "ForTauCeti.Analysis.InnerProductSpace.Sylvester.SpectralGap"
+        "DavisKahan.Specialized.FreeBeam.BeamTangent",
+        "DavisKahan.SpectralTheory.GapResolvent",
+        "ForTauCeti.Analysis.InnerProductSpace.LinearPMap.ResolventSandwich",
+        "ForTauCeti.Analysis.InnerProductSpace.Sylvester.SpectralGap",
+        "RoadmapBridge.OperatorTheory"
       ],
-      "status": "staged",
-      "upstream_pr": null
+      "status": "staged-needs-current-validation",
+      "upstream_pr": null,
+      "migration_note": "Revised OperatorTheory roadmap port from 5427f8bccf6d; source declarations record provenance, not a current API inventory. Elaboration and downstream builds must be rerun."
     },
     {
       "source_module": "new -- authored directly in ForTauCeti (no `## Provenance` origin recorded)",
@@ -2753,18 +2847,22 @@
       "roadmap_target": "Unbounded self-adjoint operators on a Hilbert space: the Cayley transform, the bounded and unbounded Borel functional calculus, projection-valued measures and the spectral measure, Yosida approximants, Stone's theorem in both directions, and the spectral-gap inverse.",
       "provenance_class": "staged in ForTauCeti",
       "direct_dependencies": [
-        "ForTauCeti.Analysis.InnerProductSpace.LinearPMap.ResolventBound",
-        "Mathlib"
+        "ForTauCeti.Analysis.InnerProductSpace.LinearPMap.Shift",
+        "Mathlib.Analysis.CStarAlgebra.ContinuousFunctionalCalculus.Unitary",
+        "Mathlib.Analysis.CStarAlgebra.ContinuousLinearMap",
+        "Mathlib.Analysis.InnerProductSpace.LinearPMap"
       ],
       "blocked_dependencies": [],
       "downstream_users": [
-        "ForTauCeti.Analysis.InnerProductSpace.LinearPMap.RealLowerBound",
-        "ForTauCeti.Analysis.InnerProductSpace.LinearPMap.SpectralMeasure",
+        "DavisKahan.SpectralTheory.GapResolvent",
+        "DavisKahan.SpectralTheory.PartialMap.RealSpectrum",
+        "ForTauCeti.Analysis.InnerProductSpace.LinearPMap.SpectralMeasure.Construction",
         "ForTauCeti.Analysis.InnerProductSpace.LinearPMap.YosidaApproximation",
         "ForTauCeti.Analysis.InnerProductSpace.SeparatedIntertwiner"
       ],
-      "status": "staged",
-      "upstream_pr": null
+      "status": "staged-needs-current-validation",
+      "upstream_pr": null,
+      "migration_note": "Revised OperatorTheory roadmap port from 5427f8bccf6d; source declarations record provenance, not a current API inventory. Elaboration and downstream builds must be rerun."
     },
     {
       "source_module": "new -- authored directly in ForTauCeti",
@@ -3178,10 +3276,12 @@
       ],
       "blocked_dependencies": [],
       "downstream_users": [
-        "ForTauCeti.Analysis.InnerProductSpace.OneParameterUnitaryGroup.Stone"
+        "ForTauCeti.Analysis.InnerProductSpace.OneParameterUnitaryGroup.Stone",
+        "RoadmapBridge.OperatorTheory"
       ],
-      "status": "staged",
-      "upstream_pr": null
+      "status": "staged-needs-current-validation",
+      "upstream_pr": null,
+      "migration_note": "Revised OperatorTheory roadmap port from 5427f8bccf6d; source declarations record provenance, not a current API inventory. Elaboration and downstream builds must be rerun."
     },
     {
       "source_module": "new -- authored directly in ForTauCeti",
@@ -3216,8 +3316,9 @@
         "ForTauCeti.Analysis.InnerProductSpace.LinearPMap.StoneUniqueness",
         "ForTauCeti.Analysis.InnerProductSpace.Sylvester.Group"
       ],
-      "status": "staged",
-      "upstream_pr": null
+      "status": "staged-needs-current-validation",
+      "upstream_pr": null,
+      "migration_note": "Revised OperatorTheory roadmap port from 5427f8bccf6d; source declarations record provenance, not a current API inventory. Elaboration and downstream builds must be rerun."
     },
     {
       "source_module": "new -- authored directly in ForTauCeti",
@@ -3705,7 +3806,7 @@
       ],
       "current_namespace": "TauCeti.HilbertSchmidt",
       "staging_module": "ForTauCeti.Analysis.InnerProductSpace.Sylvester.SpectralGap",
-      "final_tauceti_module": "TauCeti.Analysis.InnerProductSpace.SylvesterSpectralGap",
+      "final_tauceti_module": "TauCeti.Analysis.InnerProductSpace.Sylvester.SpectralGap",
       "ownership_class": "tauceti",
       "roadmap_target": "The Hilbert-Schmidt space as an l2 of columns, the Sylvester one-parameter unitary group it carries, the identification of that group's generator with Z -> i(A Z - Z B), and the pairwise-to-vector spectral gap for it.",
       "provenance_class": "new",
@@ -3719,9 +3820,13 @@
         "ForTauCeti.Analysis.InnerProductSpace.Sylvester.BlockEstimate"
       ],
       "blocked_dependencies": [],
-      "downstream_users": [],
-      "status": "staged",
-      "upstream_pr": null
+      "downstream_users": [
+        "DavisKahan.Sources.DavisKahan1970.Ideals.HilbertSchmidtComplexFamily",
+        "DavisKahan.Sources.DavisKahan1970.Sylvester.HilbertSchmidtPairwise"
+      ],
+      "status": "staged-needs-current-validation",
+      "upstream_pr": null,
+      "migration_note": "Revised OperatorTheory roadmap port from 5427f8bccf6d; source declarations record provenance, not a current API inventory. Elaboration and downstream builds must be rerun."
     },
     {
       "source_module": "DavisKahan/FiniteDimensional/Core/AngleGeometry.lean",
@@ -3758,7 +3863,7 @@
       "final_tauceti_module": "TauCeti.Analysis.InnerProductSpace.AngleGeometry",
       "ownership_class": "tauceti",
       "roadmap_target": "The finite-dimensional Davis-Kahan sin-Theta core: spectral subspaces and gaps, angle geometry, Ritz residuals, the Sylvester interval and spectral-distance machinery, and the sin/tan two-theta perturbation theorems.",
-      "provenance_class": "moved verbatim; statements, proofs, signatures and namespaces unchanged",
+      "provenance_class": "Originally moved verbatim; now migrated in place to the revised roadmap. See source_module and source_declarations for the original extraction.",
       "direct_dependencies": [
         "ForTauCeti.Analysis.InnerProductSpace.Polar.Decomposition",
         "ForTauCeti.Analysis.InnerProductSpace.PrincipalAngles",
@@ -3768,11 +3873,30 @@
       ],
       "blocked_dependencies": [],
       "downstream_users": [
+        "DavisKahan.FiniteDimensional.Core.All",
+        "DavisKahan.FiniteDimensional.Core.AngleOperators",
+        "DavisKahan.FiniteDimensional.DirectRotation.Basic",
+        "DavisKahan.FiniteDimensional.DoubleAngle.SinTheta",
+        "DavisKahan.FiniteDimensional.Sharpness",
+        "DavisKahan.FiniteDimensional.TanTheta.RitzResidual",
+        "DavisKahan.Geometry.Angle.BasisAngleEnergy",
+        "DavisKahan.Geometry.Angle.Proposition35Infinite",
+        "DavisKahan.Geometry.Halmos.CrossedDefectGap",
+        "DavisKahan.Sources.DavisKahan1970.Audits.Theorem63Distillation",
+        "DavisKahan.Sources.DavisKahan1970.Section3AcuteCounterexample",
+        "DavisKahan.Sources.DavisKahan1970.Section3AcuteDirectRotation",
+        "DavisKahan.Sources.DavisKahan1970.Section8.Theorem81AngleForms",
+        "DavisKahan.Sources.DavisKahan1970.Section8.Theorem82",
+        "ForTauCeti.Analysis.InnerProductSpace.AngleGeometryBlockSum",
+        "ForTauCeti.Analysis.InnerProductSpace.DoubleAngle.Gram",
+        "ForTauCeti.Analysis.InnerProductSpace.RankOneSinTheta",
         "ForTauCeti.Analysis.InnerProductSpace.Residual.AngleEmbedding",
+        "ForTauCeti.Analysis.InnerProductSpace.SinTheta.DirectedBounds",
         "ForTauCeti.Analysis.InnerProductSpace.SinTheta.Perturbation"
       ],
-      "status": "staged",
-      "upstream_pr": null
+      "status": "staged-needs-current-validation",
+      "upstream_pr": null,
+      "migration_note": "Revised OperatorTheory roadmap port from 5427f8bccf6d; source declarations record provenance, not a current API inventory. Elaboration and downstream builds must be rerun."
     },
     {
       "source_module": "DavisKahan/BoundedOperator/Projector.lean",
@@ -3954,15 +4078,24 @@
       "roadmap_target": "The finite-dimensional Davis-Kahan sin-Theta core: spectral subspaces and gaps, angle geometry, Ritz residuals, the Sylvester interval and spectral-distance machinery, and the sin/tan two-theta perturbation theorems.",
       "provenance_class": "staged in ForTauCeti",
       "direct_dependencies": [
-        "Mathlib"
+        "Mathlib.Analysis.InnerProductSpace.Projection.Submodule"
       ],
       "blocked_dependencies": [],
       "downstream_users": [
+        "DavisKahan.FiniteDimensional.TanTheta.Vector",
+        "DavisKahan.Geometry.Halmos.TwoProjections",
+        "DavisKahan.SpectralTheory.ReducingSubspace.Restriction",
+        "DavisKahan.Sylvester.Spectrum",
+        "DavisKahan.TanTheta.Vector",
+        "ForTauCeti.Analysis.InnerProductSpace.BoundedOperator.SinTheta",
+        "ForTauCeti.Analysis.InnerProductSpace.Polar.SelfAdjointCompletion",
         "ForTauCeti.Analysis.InnerProductSpace.Projection.Blocks",
-        "ForTauCeti.Analysis.InnerProductSpace.SpectralOrder"
+        "ForTauCeti.Analysis.InnerProductSpace.SpectralOrder",
+        "ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.SubspaceTransport"
       ],
-      "status": "staged",
-      "upstream_pr": null
+      "status": "staged-needs-current-validation",
+      "upstream_pr": null,
+      "migration_note": "Revised OperatorTheory roadmap port from 5427f8bccf6d; source declarations record provenance, not a current API inventory. Elaboration and downstream builds must be rerun."
     },
     {
       "source_module": "DavisKahan/FiniteDimensional/Residual/AngleEmbedding.lean",
@@ -4145,28 +4278,37 @@
       "final_tauceti_module": "TauCeti.Analysis.InnerProductSpace.SinTheta.Perturbation",
       "ownership_class": "tauceti",
       "roadmap_target": "The finite-dimensional Davis-Kahan sin-Theta core: spectral subspaces and gaps, angle geometry, Ritz residuals, the Sylvester interval and spectral-distance machinery, and the sin/tan two-theta perturbation theorems.",
-      "provenance_class": "moved verbatim; statements, proofs, signatures and namespaces unchanged",
+      "provenance_class": "Originally moved verbatim; now migrated in place to the revised roadmap. See source_module and source_declarations for the original extraction.",
       "direct_dependencies": [
         "ForTauCeti.Analysis.InnerProductSpace.AngleGeometry",
         "ForTauCeti.Analysis.InnerProductSpace.BoundedOperator.Projector",
         "ForTauCeti.Analysis.InnerProductSpace.BoundedOperator.SinTheta",
         "ForTauCeti.Analysis.InnerProductSpace.RectangularSingularValues",
-        "ForTauCeti.Analysis.InnerProductSpace.UnitarilyInvariantSeminorm",
         "ForTauCeti.Analysis.InnerProductSpace.Residual.AngleEmbedding",
         "ForTauCeti.Analysis.InnerProductSpace.Residual.Ritz",
+        "ForTauCeti.Analysis.InnerProductSpace.SinTheta.DirectedBounds",
         "ForTauCeti.Analysis.InnerProductSpace.SinTheta.OperatorNorm",
         "ForTauCeti.Analysis.InnerProductSpace.SinTheta.UnitarilyInvariant",
         "ForTauCeti.Analysis.InnerProductSpace.Spectral.Gap",
         "ForTauCeti.Analysis.InnerProductSpace.Spectral.Subspace",
         "ForTauCeti.Analysis.InnerProductSpace.Sylvester.Interval",
-        "ForTauCeti.Analysis.InnerProductSpace.Sylvester.SpectralDistance"
+        "ForTauCeti.Analysis.InnerProductSpace.Sylvester.SpectralDistance",
+        "ForTauCeti.Analysis.InnerProductSpace.UnitarilyInvariantSeminorm"
       ],
       "blocked_dependencies": [],
       "downstream_users": [
-        "YuWangSamworth2015.Core.Statistics"
+        "DavisKahan.Alternative.FiniteDimensional.API.ClassicalProseLike",
+        "DavisKahan.Alternative.FiniteDimensional.API.ProseLike",
+        "DavisKahan.FiniteDimensional.DoubleAngle.SinTwoThetaResidual",
+        "DavisKahan.FiniteDimensional.Sharpness",
+        "DavisKahan.FiniteDimensional.SinTheta.All",
+        "DavisKahan.Sources.DavisKahan1970.PartIII",
+        "ForTauCeti.Analysis.InnerProductSpace.SinTheta.Frobenius",
+        "RoadmapBridge.Integration"
       ],
-      "status": "staged",
-      "upstream_pr": null
+      "status": "staged-needs-current-validation",
+      "upstream_pr": null,
+      "migration_note": "Revised OperatorTheory roadmap port from 5427f8bccf6d; source declarations record provenance, not a current API inventory. Elaboration and downstream builds must be rerun."
     },
     {
       "source_module": "DavisKahan/Specialized/Statistics.lean",
@@ -4233,22 +4375,32 @@
         "TwoBlockFormGap",
         "orderedInternalGap_of_spectrumIn_Iic_Ici"
       ],
-      "current_namespace": "TauCeti.DavisKahan.FiniteDimensional",
+      "current_namespace": "TauCeti",
       "staging_module": "ForTauCeti.Analysis.InnerProductSpace.Spectral.Gap",
-      "final_tauceti_module": "TauCeti.Analysis.InnerProductSpace.SpectralGap",
+      "final_tauceti_module": "TauCeti.Analysis.InnerProductSpace.Spectral.Gap",
       "ownership_class": "tauceti",
       "roadmap_target": "The finite-dimensional Davis-Kahan sin-Theta core: spectral subspaces and gaps, angle geometry, Ritz residuals, the Sylvester interval and spectral-distance machinery, and the sin/tan two-theta perturbation theorems.",
-      "provenance_class": "moved verbatim; statements, proofs, signatures and namespaces unchanged",
+      "provenance_class": "Originally moved verbatim; now migrated in place to the revised roadmap. See source_module and source_declarations for the original extraction.",
       "direct_dependencies": [
         "ForTauCeti.Analysis.InnerProductSpace.Spectral.Subspace"
       ],
       "blocked_dependencies": [],
       "downstream_users": [
+        "Challenge.DavisKahanSylvesterPiOverTwo.Conformance",
+        "DavisKahan.FiniteDimensional.Core.All",
+        "DavisKahan.FiniteDimensional.DoubleAngle.SinTheta",
+        "DavisKahan.FiniteDimensional.Residual.AngleEmbeddings",
+        "DavisKahan.FiniteDimensional.Sharpness",
+        "ForTauCeti.Analysis.InnerProductSpace.SinTheta.DirectedBounds",
         "ForTauCeti.Analysis.InnerProductSpace.SinTheta.Perturbation",
-        "ForTauCeti.Analysis.InnerProductSpace.Sylvester.Basic"
+        "ForTauCeti.Analysis.InnerProductSpace.Spectral.EigenFrame",
+        "ForTauCeti.Analysis.InnerProductSpace.Sylvester.Basic",
+        "ForTauCeti.Analysis.InnerProductSpace.TwoLevelOperator",
+        "RoadmapBridge.OperatorTheory"
       ],
-      "status": "staged",
-      "upstream_pr": null
+      "status": "staged-needs-current-validation",
+      "upstream_pr": null,
+      "migration_note": "Revised OperatorTheory roadmap port from 5427f8bccf6d; source declarations record provenance, not a current API inventory. Elaboration and downstream builds must be rerun."
     },
     {
       "source_module": "ForMathlib",
@@ -4269,14 +4421,30 @@
       "roadmap_target": "The finite-dimensional Davis-Kahan sin-Theta core: spectral subspaces and gaps, angle geometry, Ritz residuals, the Sylvester interval and spectral-distance machinery, and the sin/tan two-theta perturbation theorems.",
       "provenance_class": "staged in ForTauCeti; unified in the rectangular Seminorm-extending API; inherited laws and consumers migrated; current overlay awaits Lean compilation",
       "direct_dependencies": [
+        "ForTauCeti.Analysis.InnerProductSpace.BoundedOperator.Projector",
         "ForTauCeti.Analysis.InnerProductSpace.QuadraticFormBounds",
         "ForTauCeti.Analysis.InnerProductSpace.ReducingSubspace",
-        "Mathlib"
+        "ForTauCeti.Analysis.RCLike.ScalarTransportFunctionalCalculus",
+        "Mathlib.Analysis.InnerProductSpace.StarOrder"
       ],
       "blocked_dependencies": [],
-      "downstream_users": [],
+      "downstream_users": [
+        "DavisKahan.BoundedOperator.Spectral.Complex",
+        "DavisKahan.InfiniteDimensional.Sylvester.OrderedSemigroup",
+        "DavisKahan.InfiniteDimensional.TanTwoTheta.BoundedOffDiagonalHalfLine",
+        "DavisKahan.Sources.DavisKahan1970.Section8.BranchRepulsion",
+        "DavisKahan.Sources.DavisKahan1970.Section8.Theorem81",
+        "DavisKahan.Sources.DavisKahan1970.SharpIdeal",
+        "DavisKahan.Sources.DavisKahan1970.TanTwoThetaReflectionAmbient",
+        "DavisKahan.SpectralTheory.Real.All",
+        "DavisKahan.SpectralTheory.SpectralGapFormBounds",
+        "DavisKahan.TanTheta.Theorem63FiniteSource",
+        "ForTauCeti.Analysis.InnerProductSpace.Spectral.GapProjection",
+        "ForTauCeti.Analysis.InnerProductSpace.Spectral.Subspace"
+      ],
       "status": "staged-needs-current-validation",
-      "upstream_pr": null
+      "upstream_pr": null,
+      "migration_note": "Revised OperatorTheory roadmap port from 5427f8bccf6d; source declarations record provenance, not a current API inventory. Elaboration and downstream builds must be rerun."
     },
     {
       "source_module": "DavisKahan/FiniteDimensional/Core/SpectralSubspace.lean",
@@ -4305,27 +4473,39 @@
         "spectralSubspace_eq_span_eigenvectors",
         "spectrumIn_restrict_iff"
       ],
-      "current_namespace": "TauCeti.DavisKahan.FiniteDimensional",
+      "current_namespace": "TauCeti",
       "staging_module": "ForTauCeti.Analysis.InnerProductSpace.Spectral.Subspace",
-      "final_tauceti_module": "TauCeti.Analysis.InnerProductSpace.SpectralSubspace",
+      "final_tauceti_module": "TauCeti.Analysis.InnerProductSpace.Spectral.Subspace",
       "ownership_class": "tauceti",
       "roadmap_target": "The finite-dimensional Davis-Kahan sin-Theta core: spectral subspaces and gaps, angle geometry, Ritz residuals, the Sylvester interval and spectral-distance machinery, and the sin/tan two-theta perturbation theorems.",
-      "provenance_class": "moved verbatim; statements, proofs, signatures and namespaces unchanged",
+      "provenance_class": "Originally moved verbatim; now migrated in place to the revised roadmap. See source_module and source_declarations for the original extraction.",
       "direct_dependencies": [
         "ForTauCeti.Analysis.InnerProductSpace.CourantFischer",
-        "ForTauCeti.Analysis.InnerProductSpace.Projection.Gap"
+        "ForTauCeti.Analysis.InnerProductSpace.Projection.Gap",
+        "ForTauCeti.Analysis.InnerProductSpace.SpectralOrder",
+        "Mathlib.Analysis.Normed.Operator.Banach"
       ],
       "blocked_dependencies": [],
       "downstream_users": [
+        "Challenge.DavisKahan1970.Conformance",
+        "DavisKahan.FiniteDimensional.Core.All",
+        "DavisKahan.FiniteDimensional.Core.OperatorBlocks",
+        "DavisKahan.FiniteDimensional.DoubleAngle.SinTheta",
+        "DavisKahan.FiniteDimensional.SinTheta.TrialMap",
+        "DavisKahan.FiniteDimensional.TanTheta.RitzResidual",
         "ForTauCeti.Analysis.InnerProductSpace.AngleGeometry",
+        "ForTauCeti.Analysis.InnerProductSpace.BasisDiagonal",
         "ForTauCeti.Analysis.InnerProductSpace.Residual.Ritz",
+        "ForTauCeti.Analysis.InnerProductSpace.SinTheta.DirectedBounds",
         "ForTauCeti.Analysis.InnerProductSpace.SinTheta.Perturbation",
         "ForTauCeti.Analysis.InnerProductSpace.Spectral.Gap",
         "ForTauCeti.Analysis.InnerProductSpace.Sylvester.Basic",
-        "ForTauCeti.Analysis.InnerProductSpace.Sylvester.Internal.SpectralBounds"
+        "ForTauCeti.Analysis.InnerProductSpace.Sylvester.Internal.SpectralBounds",
+        "ForTauCeti.Analysis.InnerProductSpace.TwoLevelOperator"
       ],
-      "status": "staged",
-      "upstream_pr": null
+      "status": "staged-needs-current-validation",
+      "upstream_pr": null,
+      "migration_note": "Revised OperatorTheory roadmap port from 5427f8bccf6d; source declarations record provenance, not a current API inventory. Elaboration and downstream builds must be rerun."
     },
     {
       "source_module": "DavisKahan/FiniteDimensional/Sylvester/Basic.lean",
@@ -4344,7 +4524,7 @@
       "final_tauceti_module": "TauCeti.Analysis.InnerProductSpace.Sylvester.Basic",
       "ownership_class": "tauceti",
       "roadmap_target": "The finite-dimensional Davis-Kahan sin-Theta core: spectral subspaces and gaps, angle geometry, Ritz residuals, the Sylvester interval and spectral-distance machinery, and the sin/tan two-theta perturbation theorems.",
-      "provenance_class": "moved verbatim; statements, proofs, signatures and namespaces unchanged",
+      "provenance_class": "Originally moved verbatim; now migrated in place to the revised roadmap. See source_module and source_declarations for the original extraction.",
       "direct_dependencies": [
         "ForTauCeti.Analysis.InnerProductSpace.Spectral.Gap",
         "ForTauCeti.Analysis.InnerProductSpace.Spectral.Subspace",
@@ -4352,10 +4532,12 @@
       ],
       "blocked_dependencies": [],
       "downstream_users": [
+        "DavisKahan.FiniteDimensional.Sylvester.All",
         "ForTauCeti.Analysis.InnerProductSpace.Sylvester.Interval"
       ],
-      "status": "staged",
-      "upstream_pr": null
+      "status": "staged-needs-current-validation",
+      "upstream_pr": null,
+      "migration_note": "Revised OperatorTheory roadmap port from 5427f8bccf6d; source declarations record provenance, not a current API inventory. Elaboration and downstream builds must be rerun."
     },
     {
       "source_module": "DavisKahan/FiniteDimensional/Sylvester/Internal/ReciprocalMultiplier.lean",
@@ -4433,18 +4615,21 @@
       "final_tauceti_module": "TauCeti.Analysis.InnerProductSpace.Sylvester.Internal.SpectralBounds",
       "ownership_class": "tauceti",
       "roadmap_target": "The finite-dimensional Davis-Kahan sin-Theta core: spectral subspaces and gaps, angle geometry, Ritz residuals, the Sylvester interval and spectral-distance machinery, and the sin/tan two-theta perturbation theorems.",
-      "provenance_class": "moved verbatim; statements, proofs, signatures and namespaces unchanged",
+      "provenance_class": "Originally moved verbatim; now migrated in place to the revised roadmap. See source_module and source_declarations for the original extraction.",
       "direct_dependencies": [
         "ForTauCeti.Analysis.InnerProductSpace.Spectral.Subspace",
         "ForTauCeti.Analysis.InnerProductSpace.Sylvester.Bound"
       ],
       "blocked_dependencies": [],
       "downstream_users": [
+        "DavisKahan.FiniteDimensional.Residual.AngleEmbeddings",
+        "DavisKahan.FiniteDimensional.Sylvester.Internal.All",
         "ForTauCeti.Analysis.InnerProductSpace.Sylvester.Interval",
         "ForTauCeti.Analysis.InnerProductSpace.Sylvester.SpectralDistance"
       ],
-      "status": "staged",
-      "upstream_pr": null
+      "status": "staged-needs-current-validation",
+      "upstream_pr": null,
+      "migration_note": "Revised OperatorTheory roadmap port from 5427f8bccf6d; source declarations record provenance, not a current API inventory. Elaboration and downstream builds must be rerun."
     },
     {
       "source_module": "DavisKahan/FiniteDimensional/Sylvester/Interval.lean",
@@ -4462,20 +4647,25 @@
       "final_tauceti_module": "TauCeti.Analysis.InnerProductSpace.Sylvester.Interval",
       "ownership_class": "tauceti",
       "roadmap_target": "The finite-dimensional Davis-Kahan sin-Theta core: spectral subspaces and gaps, angle geometry, Ritz residuals, the Sylvester interval and spectral-distance machinery, and the sin/tan two-theta perturbation theorems.",
-      "provenance_class": "moved verbatim; statements, proofs, signatures and namespaces unchanged",
+      "provenance_class": "Originally moved verbatim; now migrated in place to the revised roadmap. See source_module and source_declarations for the original extraction.",
       "direct_dependencies": [
-        "ForTauCeti.Analysis.InnerProductSpace.UnitarilyInvariantSeminorm",
         "ForTauCeti.Analysis.InnerProductSpace.Sylvester.Basic",
+        "ForTauCeti.Analysis.InnerProductSpace.Sylvester.Bound",
         "ForTauCeti.Analysis.InnerProductSpace.Sylvester.Internal.SpectralBounds",
-        "ForTauCeti.Analysis.InnerProductSpace.Sylvester.Bound"
+        "ForTauCeti.Analysis.InnerProductSpace.UnitarilyInvariantSeminorm"
       ],
       "blocked_dependencies": [],
       "downstream_users": [
+        "DavisKahan.FiniteDimensional.SinTheta.TrialMap",
+        "DavisKahan.FiniteDimensional.Sylvester.All",
+        "DavisKahan.Sources.DavisKahan1970.PartIII",
+        "ForTauCeti.Analysis.InnerProductSpace.SinTheta.DirectedBounds",
         "ForTauCeti.Analysis.InnerProductSpace.SinTheta.Perturbation",
         "ForTauCeti.Analysis.InnerProductSpace.Sylvester.SpectralDistance"
       ],
-      "status": "staged",
-      "upstream_pr": null
+      "status": "staged-needs-current-validation",
+      "upstream_pr": null,
+      "migration_note": "Revised OperatorTheory roadmap port from 5427f8bccf6d; source declarations record provenance, not a current API inventory. Elaboration and downstream builds must be rerun."
     },
     {
       "source_module": "DavisKahan/FiniteDimensional/Sylvester/SpectralDistance.lean",
@@ -4499,7 +4689,7 @@
       "final_tauceti_module": "TauCeti.Analysis.InnerProductSpace.Sylvester.SpectralDistance",
       "ownership_class": "tauceti",
       "roadmap_target": "The finite-dimensional Davis-Kahan sin-Theta core: spectral subspaces and gaps, angle geometry, Ritz residuals, the Sylvester interval and spectral-distance machinery, and the sin/tan two-theta perturbation theorems.",
-      "provenance_class": "moved verbatim; statements, proofs, signatures and namespaces unchanged",
+      "provenance_class": "Originally moved verbatim; now migrated in place to the revised roadmap. See source_module and source_declarations for the original extraction.",
       "direct_dependencies": [
         "ForTauCeti.Analysis.InnerProductSpace.Sylvester.Internal.ReciprocalMultiplier",
         "ForTauCeti.Analysis.InnerProductSpace.Sylvester.Internal.SpectralBounds",
@@ -4507,10 +4697,14 @@
       ],
       "blocked_dependencies": [],
       "downstream_users": [
+        "DavisKahan.Alternative.FiniteDimensional.Sylvester.ContinuousLinearMapBridge",
+        "DavisKahan.FiniteDimensional.Sylvester.All",
+        "ForTauCeti.Analysis.InnerProductSpace.SinTheta.DirectedBounds",
         "ForTauCeti.Analysis.InnerProductSpace.SinTheta.Perturbation"
       ],
-      "status": "staged",
-      "upstream_pr": null
+      "status": "staged-needs-current-validation",
+      "upstream_pr": null,
+      "migration_note": "Revised OperatorTheory roadmap port from 5427f8bccf6d; source declarations record provenance, not a current API inventory. Elaboration and downstream builds must be rerun."
     },
     {
       "source_module": "ForMathlib",
@@ -4881,6 +5075,196 @@
       ],
       "status": "staged-needs-current-validation",
       "upstream_pr": null
+    },
+    {
+      "source_module": "new or refactored directly in ForTauCeti",
+      "source_declarations": [
+        "approximationNumber_eq_zero_iff_rank_le",
+        "approximationNumber_eq_zero_iff_finrank_range_le"
+      ],
+      "current_namespace": "ContinuousLinearMap",
+      "staging_module": "ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.Rank",
+      "final_tauceti_module": "TauCeti.Analysis.OperatorIdeal.ApproximationNumber.Rank",
+      "ownership_class": "tauceti",
+      "roadmap_target": "approximation-number",
+      "provenance_class": "new normed-space proof using the openness of finite rank lower bounds",
+      "direct_dependencies": [
+        "ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.Basic",
+        "Mathlib.Analysis.Normed.Module.FiniteDimension"
+      ],
+      "blocked_dependencies": [],
+      "downstream_users": [
+        "ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.FiniteDimensional",
+        "RoadmapBridge.OperatorTheory"
+      ],
+      "status": "staged-needs-current-validation",
+      "upstream_pr": null,
+      "migration_note": "Revised OperatorTheory roadmap port from 5427f8bccf6d; source declarations record provenance, not a current API inventory. Elaboration and downstream builds must be rerun."
+    },
+    {
+      "source_module": "new or refactored directly in ForTauCeti",
+      "source_declarations": [
+        "approximationNumber_comp_linearIsometryEquiv"
+      ],
+      "current_namespace": "ContinuousLinearMap",
+      "staging_module": "ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.Isometry",
+      "final_tauceti_module": "TauCeti.Analysis.OperatorIdeal.ApproximationNumber.Isometry",
+      "ownership_class": "tauceti",
+      "roadmap_target": "approximation-number",
+      "provenance_class": "new independent-universe isometric transport",
+      "direct_dependencies": [
+        "ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.Basic",
+        "Mathlib.Analysis.Normed.Operator.LinearIsometry"
+      ],
+      "blocked_dependencies": [],
+      "downstream_users": [
+        "ForTauCeti.Analysis.OperatorIdeal.Family.SymmetricGauge"
+      ],
+      "status": "staged-needs-current-validation",
+      "upstream_pr": null,
+      "migration_note": "Revised OperatorTheory roadmap port from 5427f8bccf6d; source declarations record provenance, not a current API inventory. Elaboration and downstream builds must be rerun."
+    },
+    {
+      "source_module": "new or refactored directly in ForTauCeti",
+      "source_declarations": [
+        "supGauge",
+        "supGauge_extend",
+        "supGauge_extend_of_antitone"
+      ],
+      "current_namespace": "TauCeti",
+      "staging_module": "ForTauCeti.Analysis.Normed.SupGauge",
+      "final_tauceti_module": "TauCeti.Analysis.Normed.SupGauge",
+      "ownership_class": "tauceti",
+      "roadmap_target": "approximation-number",
+      "provenance_class": "supremum-gauge theory moved from the removed parallel sequence-gauge module",
+      "direct_dependencies": [
+        "ForTauCeti.Analysis.Normed.SymmetricGauge"
+      ],
+      "blocked_dependencies": [],
+      "downstream_users": [
+        "ForTauCeti.Analysis.OperatorIdeal.Family.SymmetricGauge"
+      ],
+      "status": "staged-needs-current-validation",
+      "upstream_pr": null,
+      "migration_note": "Revised OperatorTheory roadmap port from 5427f8bccf6d; source declarations record provenance, not a current API inventory. Elaboration and downstream builds must be rerun."
+    },
+    {
+      "source_module": "new or refactored directly in ForTauCeti",
+      "source_declarations": [
+        "extend",
+        "extend_eq_iSup_truncate",
+        "extend_le_extend_of_forall_sum_le"
+      ],
+      "current_namespace": "TauCeti.SymmetricGauge",
+      "staging_module": "ForTauCeti.Analysis.Normed.SymmetricGauge",
+      "final_tauceti_module": "TauCeti.Analysis.Normed.SymmetricGauge",
+      "ownership_class": "tauceti",
+      "roadmap_target": "approximation-number",
+      "provenance_class": "canonical dominated-sequence extension; no antitone assumption on the B60 input",
+      "direct_dependencies": [
+        "ForTauCeti.Analysis.Convex.Majorization",
+        "Mathlib.Algebra.BigOperators.Finsupp.Basic",
+        "Mathlib.Data.Finsupp.Basic",
+        "Mathlib.Data.Finsupp.Order",
+        "Mathlib.Data.NNReal.Basic",
+        "Mathlib.Topology.Algebra.InfiniteSum.ENNReal"
+      ],
+      "blocked_dependencies": [],
+      "downstream_users": [
+        "ForTauCeti.Analysis.Normed.SchattenGauge",
+        "ForTauCeti.Analysis.Normed.SupGauge",
+        "ForTauCeti.Analysis.OperatorIdeal.Family.SymmetricGauge"
+      ],
+      "status": "staged-needs-current-validation",
+      "upstream_pr": null,
+      "migration_note": "Revised OperatorTheory roadmap port from 5427f8bccf6d; source declarations record provenance, not a current API inventory. Elaboration and downstream builds must be rerun."
+    },
+    {
+      "source_module": "new or refactored directly in ForTauCeti",
+      "source_declarations": [
+        "symmetricGaugeFamily",
+        "symmetricGaugeFamily_injective",
+        "schattenFamily",
+        "schattenFamilyInf",
+        "isComplete_schattenFamily"
+      ],
+      "current_namespace": "TauCeti",
+      "staging_module": "ForTauCeti.Analysis.OperatorIdeal.Family.SymmetricGauge",
+      "final_tauceti_module": "TauCeti.Analysis.OperatorIdeal.Family.SymmetricGauge",
+      "ownership_class": "tauceti",
+      "roadmap_target": "approximation-number",
+      "provenance_class": "single scalar-generic rectangular family constructor; includes the Schatten scale",
+      "direct_dependencies": [
+        "ForTauCeti.Analysis.Normed.SchattenGauge",
+        "ForTauCeti.Analysis.Normed.SupGauge",
+        "ForTauCeti.Analysis.Normed.SymmetricGauge",
+        "ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.Adjoint",
+        "ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.DiagonalSequence",
+        "ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.Isometry",
+        "ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.KyFan",
+        "ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.ScalarTransport",
+        "ForTauCeti.Analysis.OperatorIdeal.Family.Basic",
+        "ForTauCeti.Analysis.OperatorIdeal.Family.KyFanDominance",
+        "ForTauCeti.Analysis.OperatorIdeal.Family.Schatten"
+      ],
+      "blocked_dependencies": [],
+      "downstream_users": [
+        "DavisKahan.Explorations.SourceUnitaryInvariantNormFanDominance",
+        "RoadmapBridge.OperatorTheory"
+      ],
+      "status": "staged-needs-current-validation",
+      "upstream_pr": null,
+      "migration_note": "Revised OperatorTheory roadmap port from 5427f8bccf6d; source declarations record provenance, not a current API inventory. Elaboration and downstream builds must be rerun."
+    },
+    {
+      "source_module": "new or refactored directly in ForTauCeti",
+      "source_declarations": [
+        "shiftMap",
+        "orthogonal_range_shiftMap_eq_bot",
+        "isClosed_range_shiftMap_of_lower_bound"
+      ],
+      "current_namespace": "TauCeti.LinearPMap",
+      "staging_module": "ForTauCeti.Analysis.InnerProductSpace.LinearPMap.Shift",
+      "final_tauceti_module": "TauCeti.Analysis.InnerProductSpace.LinearPMap.Shift",
+      "ownership_class": "tauceti",
+      "roadmap_target": "unbounded-spectral-theory",
+      "provenance_class": "shared shift/range proofs factored from SelfAdjointResolvent and RealLowerBound and generalized to RCLike",
+      "direct_dependencies": [
+        "ForTauCeti.Analysis.InnerProductSpace.LinearPMap.ResolventBound",
+        "Mathlib.Analysis.InnerProductSpace.LinearPMap"
+      ],
+      "blocked_dependencies": [],
+      "downstream_users": [
+        "ForTauCeti.Analysis.InnerProductSpace.LinearPMap.RealLowerBound",
+        "ForTauCeti.Analysis.InnerProductSpace.LinearPMap.SelfAdjointResolvent"
+      ],
+      "status": "staged-needs-current-validation",
+      "upstream_pr": null,
+      "migration_note": "Revised OperatorTheory roadmap port from 5427f8bccf6d; source declarations record provenance, not a current API inventory. Elaboration and downstream builds must be rerun."
+    },
+    {
+      "source_module": "new or refactored directly in ForTauCeti",
+      "source_declarations": [
+        "spectralProjectionIci",
+        "measurable_spectralProjectionIci",
+        "spectralProjectionIci_mulVec_of_eigenvalue_eq"
+      ],
+      "current_namespace": "TauCeti.Matrix",
+      "staging_module": "ForTauCeti.Analysis.Matrix.SpectralProjection",
+      "final_tauceti_module": "TauCeti.Analysis.Matrix.SpectralProjection",
+      "ownership_class": "tauceti",
+      "roadmap_target": "matrix-spectral",
+      "provenance_class": "finite-spectrum threshold CFC and measurability, including equality at the threshold",
+      "direct_dependencies": [
+        "ForTauCeti.Analysis.Matrix.SpectralFunctionMeasurable"
+      ],
+      "blocked_dependencies": [],
+      "downstream_users": [
+        "RoadmapBridge.OperatorTheory"
+      ],
+      "status": "staged-needs-current-validation",
+      "upstream_pr": null,
+      "migration_note": "Revised OperatorTheory roadmap port from 5427f8bccf6d; source declarations record provenance, not a current API inventory. Elaboration and downstream builds must be rerun."
     }
   ]
 }

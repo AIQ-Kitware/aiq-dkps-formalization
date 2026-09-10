@@ -259,8 +259,8 @@ theorem uiNorm_sylvester_le_of_orderedGap
     have hAform : ∀ y, (c + δ) * ‖y‖ ^ 2 ≤ RCLike.re ⟪A y, y⟫_𝕜 :=
       le_re_inner_of_le_eigenvalues hA fun i =>
         hBA c (hA.eigenvalues rfl i)
-          (eigenvalue_mem_restrictedSpectrum_top hB j₀)
-          (eigenvalue_mem_restrictedSpectrum_top hA i)
+          (eigenvalue_mem_restrictedPointSpectrum_top hB j₀)
+          (eigenvalue_mem_restrictedPointSpectrum_top hA i)
     exact uiNorm_sylvester_le_of_form_bounds_aux N hA hB hδ hAform hBform hEq
   · let i₀ : Fin (Module.finrank 𝕜 F) := ⟨0, Module.finrank_pos⟩
     let c : ℝ := hA.eigenvalues rfl i₀
@@ -270,8 +270,8 @@ theorem uiNorm_sylvester_le_of_orderedGap
     have hBform : ∀ x, (c + δ) * ‖x‖ ^ 2 ≤ RCLike.re ⟪B x, x⟫_𝕜 :=
       le_re_inner_of_le_eigenvalues hB fun j =>
         hAB c (hB.eigenvalues rfl j)
-          (eigenvalue_mem_restrictedSpectrum_top hA i₀)
-          (eigenvalue_mem_restrictedSpectrum_top hB j)
+          (eigenvalue_mem_restrictedPointSpectrum_top hA i₀)
+          (eigenvalue_mem_restrictedPointSpectrum_top hB j)
     have hEqAdj : B ∘ₗ X.adjoint - X.adjoint ∘ₗ A = -C.adjoint :=
       sylvester_adjoint_neg hA hB hEq
     have hbound := uiNorm_sylvester_le_of_form_bounds_aux
@@ -318,7 +318,7 @@ theorem uiNorm_sylvester_le_of_intervalGap
   let : NeZero (Module.finrank 𝕜 F) :=
     ⟨Nat.ne_of_gt Module.finrank_pos⟩
   let j₀ : Fin (Module.finrank 𝕜 E) := ⟨0, Module.finrank_pos⟩
-  have hj₀ := hgap.1 (eigenvalue_mem_restrictedSpectrum_top hB j₀)
+  have hj₀ := hgap.1 (eigenvalue_mem_restrictedPointSpectrum_top hB j₀)
   have hab : a ≤ b := hj₀.1.trans hj₀.2
   let m : ℝ := (a + b) / 2
   let r : ℝ := (b - a) / 2
@@ -330,7 +330,7 @@ theorem uiNorm_sylvester_le_of_intervalGap
   let Y : E →ₗ[𝕜] F := U.symm.toLinearMap ∘ₗ C
   have hr : 0 ≤ r := by simp only [r]; linarith
   have hTnorm : ‖T.toContinuousLinearMap‖ ≤ r := by
-    simpa [T, m, r] using opNorm_shift_le_of_spectrumIn_Icc hB hab hgap.1
+    simpa [T, m, r] using opNorm_shift_le_of_pointSpectrumIn_Icc hB hab hgap.1
   have hSlower : ∀ y, (r + δ) * ‖y‖ ≤ ‖S y‖ := by
     simpa [S, m, r] using
       norm_shift_lower_of_spectrumOutside hA hab hδ hgap.2

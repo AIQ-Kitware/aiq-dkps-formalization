@@ -84,11 +84,12 @@ theorem matrixL2OperatorClose_of_entrywise
     -- Conclusion: `A` and `B` are `ℓ² → ℓ²` operator-close with constant `n · ε`.
     MatrixL2OperatorClose A B ((n : Real) * ε) := by
   intro x
-  -- Thin reduction to the Mathlib-staged entrywise -> operator-norm bound,
+  -- Thin reduction to the Mathlib-staged entrywise → operator-norm bound,
   -- applied to the difference matrix `A - B`.
   have hentry' : ∀ i j, |(A - B) i j| ≤ ε := by
     intro i j; rw [Matrix.sub_apply]; exact hentry i j
-  exact TauCeti.norm_toEuclideanLin_le_of_entry_le hentry' x
+  exact TauCeti.norm_toEuclideanLin_le_of_entry_le
+    (fun i j => by simpa only [Real.norm_eq_abs] using hentry' i j) x
 
 /--
 A Hermitian (over `ℝ`: symmetric) matrix induces a symmetric operator on

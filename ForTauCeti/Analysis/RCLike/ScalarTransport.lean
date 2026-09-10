@@ -101,6 +101,16 @@ instance : CoeFun (RCLikeIso 𝕜 𝕂) (fun _ => 𝕜 → 𝕂) := ⟨fun e => 
 /-- The coercion to a function is the underlying ring equivalence. -/
 @[simp] theorem coe_toRingEquiv (e : RCLikeIso 𝕜 𝕂) (x : 𝕜) : e.toRingEquiv x = e x := rfl
 
+/-- Reverse an isomorphism of `RCLike` fields. -/
+def symm (e : RCLikeIso 𝕜 𝕂) : RCLikeIso 𝕂 𝕜 where
+  toRingEquiv := e.toRingEquiv.symm
+  map_ofReal r := by
+    apply e.toRingEquiv.injective
+    simp only [RingEquiv.apply_symm_apply, e.map_ofReal]
+  map_I := by
+    apply e.toRingEquiv.injective
+    simp only [RingEquiv.apply_symm_apply, e.map_I]
+
 /-- When `I = 0` the field is `ℝ`. -/
 noncomputable def real (h : (RCLike.I : 𝕜) = 0) : RCLikeIso 𝕜 ℝ where
   toRingEquiv := RCLike.realRingEquiv h

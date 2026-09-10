@@ -45,8 +45,8 @@ the exact subspace is contained in `[α + δ, ∞)`. -/
 def TanThetaIntervalGap (A : E →ₗ[𝕜] E) (U : Submodule 𝕜 E)
     [U.HasOrthogonalProjection] (X : F →ₗᵢ[𝕜] E)
     (β α δ : ℝ) : Prop :=
-  SpectrumIn (compression A X) ⊤ (Set.Icc β α) ∧
-    SpectrumIn A Uᗮ (Set.Ici (α + δ))
+  PointSpectrumIn (compression A X) ⊤ (Set.Icc β α) ∧
+    PointSpectrumIn A Uᗮ (Set.Ici (α + δ))
 
 /-- The paper's interval hypotheses force the trial and exact subspaces to be
 transverse.  Thus the tangent has no `π/2` pole; this is a conclusion, not an
@@ -69,17 +69,17 @@ theorem isTransverse_of_tanThetaIntervalGap
   have hTopRed : IsInvariant (compression A X) ⊤ := by
     intro z _
     exact Submodule.mem_top
-  have hMspec : SpectrumIn (compression A X) ⊤ (Set.Iic α) := by
+  have hMspec : PointSpectrumIn (compression A X) ⊤ (Set.Iic α) := by
     intro lam hlam
     exact (hgap.1 hlam).2
   have hMupper :
       RCLike.re ⟪compression A X y, y⟫_𝕜 ≤ α * ‖y‖ ^ 2 :=
-    re_inner_le_of_spectrumIn (isSymmetric_compression hA X)
-      hTopRed hMspec Submodule.mem_top
+    upperFormBound_of_pointSpectrumIn (isSymmetric_compression hA X)
+      hTopRed hMspec y Submodule.mem_top
   have hAlower :
       (α + δ) * ‖X.toLinearMap y‖ ^ 2 ≤
         RCLike.re ⟪A (X.toLinearMap y), X.toLinearMap y⟫_𝕜 :=
-    le_re_inner_of_spectrumIn hA hUperpRed hgap.2 hxyUperp
+    lowerFormBound_of_pointSpectrumIn hA hUperpRed hgap.2 (X.toLinearMap y) hxyUperp
   have hinner :
       RCLike.re ⟪compression A X y, y⟫_𝕜 =
         RCLike.re ⟪A (X.toLinearMap y), X.toLinearMap y⟫_𝕜 := by
@@ -460,17 +460,17 @@ theorem tanThetaResidualWitness_scalar
         adjoint_apply_sinTheta_leftSingularVector U X hσzero
     have hMupper : RCLike.re ⟪M v, v⟫_𝕜 ≤ α := by
       have hTopRed : IsInvariant M ⊤ := fun z _ => Submodule.mem_top
-      have hspec : SpectrumIn M ⊤ (Set.Iic α) := by
+      have hspec : PointSpectrumIn M ⊤ (Set.Iic α) := by
         intro lam hlam
         exact (hgap.1 hlam).2
       have hbound : RCLike.re ⟪M v, v⟫_𝕜 ≤ α * ‖v‖ ^ 2 :=
-        re_inner_le_of_spectrumIn (isSymmetric_compression hA X)
-          hTopRed hspec Submodule.mem_top
+        upperFormBound_of_pointSpectrumIn (isSymmetric_compression hA X)
+          hTopRed hspec v Submodule.mem_top
       simpa [hvnorm] using hbound
     have hAlower : α + δ ≤ RCLike.re ⟪A y, y⟫_𝕜 := by
       have hUperpRed : IsInvariant A Uᗮ := isInvariant_orthogonal_of_isSymmetric hA hU
       have hbound : (α + δ) * ‖y‖ ^ 2 ≤ RCLike.re ⟪A y, y⟫_𝕜 :=
-        le_re_inner_of_spectrumIn hA hUperpRed hgap.2 hyUperp
+        lowerFormBound_of_pointSpectrumIn hA hUperpRed hgap.2 y hyUperp
       simpa [hynorm] using hbound
     have hSyl := LinearMap.congr_fun
       (sylvester_sinThetaEmbedding_eq_projectedResidual hA hU X M) v

@@ -10,7 +10,7 @@ Two advertising-level leaves of the completed generic theory:
 -/
 
 import ForTauCeti.Analysis.InnerProductSpace.UnitarilyInvariantSeminorm
--- `SpectraSeparated` is the *hypothesis* predicate of the challenge, not part of what is to
+-- `PointSpectraSeparated` is the *hypothesis* predicate of the challenge, not part of what is to
 -- be proved; the challenged theorems live in `DavisKahan.FiniteDimensional.Sylvester.All`,
 -- which only the paired leaderboard imports.
 import ForTauCeti.Analysis.InnerProductSpace.Spectral.Gap
@@ -40,7 +40,7 @@ theorem uiNorm_sylvester_le_of_spectralDistance
     (N : UnitarilyInvariantSeminorm 𝕜 E F)
     {A : F →ₗ[𝕜] F} {B : E →ₗ[𝕜] E} {X C : E →ₗ[𝕜] F}
     (hA : A.IsSymmetric) (hB : B.IsSymmetric) {δ : ℝ} (hδ : 0 < δ)
-    (hgap : SpectraSeparated A ⊤ B ⊤ δ)
+    (hgap : PointSpectraSeparated A ⊤ B ⊤ δ)
     (hEq : A ∘ₗ X - X ∘ₗ B = C) :
     δ * N X ≤ (Real.pi / 2) * N C := by
   sorry
@@ -50,7 +50,7 @@ particular separated Sylvester solution. -/
 theorem sylvester_hasFiniteUnitaryOrbitCertificate_of_spectralDistance
     {A : F →ₗ[𝕜] F} {B : E →ₗ[𝕜] E} {X C : E →ₗ[𝕜] F}
     (hA : A.IsSymmetric) (hB : B.IsSymmetric)
-    {δ : ℝ} (hδ : 0 < δ) (hgap : SpectraSeparated A ⊤ B ⊤ δ)
+    {δ : ℝ} (hδ : 0 < δ) (hgap : PointSpectraSeparated A ⊤ B ⊤ δ)
     (hEq : A ∘ₗ X - X ∘ₗ B = C) :
     UnitarilyInvariantSeminorm.HasFiniteUnitaryOrbitCertificate
       (Real.pi / 2) (((δ : 𝕜)) • X) C := by
