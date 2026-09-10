@@ -61,7 +61,7 @@ over it. It is divided at its own `## Perturbation form` boundary:
 * this file keeps the **perturbation form** — the six private lemmas transporting
   a bound across the canonical isometric inclusion of a subspace, and the wrappers
   built on them: `sinTheta_perturbation_le`, `sinAngleOperator_perturbation_le`,
-  `sinTheta_perturbation_le_of_orderedGap`, `sinTheta_spectralSubspace_le`,
+  `sinTheta_perturbation_le_of_orderedGap`, `sinTheta_pointSpectralSubspace_le`,
   `opNorm_sinThetaMap_le_of_intervalGap`,
   `frobenius_sinTheta_residual_le_of_spectralDistance`,
   `opNorm_projection_sub_projection_le`,
@@ -221,13 +221,13 @@ theorem sinTheta_perturbation_le
     {U V : Submodule 𝕜 E} [U.HasOrthogonalProjection]
     [V.HasOrthogonalProjection] (hU : IsInvariant A U) (hV : IsInvariant B V)
     {a b δ : ℝ} (hδ : 0 < δ)
-    (hgap : IntervalExteriorGap A B U V a b δ) :
+    (hgap : PointIntervalExteriorGap A U B Vᗮ a b δ) :
     δ * N (sinThetaMap U V) ≤ N (B - A) := by
   let NU : UnitarilyInvariantSeminorm 𝕜 U E :=
     N.domainIsometryTransport U.subtypeₗᵢ
-  have hM : (A.restrict hU).IsSymmetric := isSymmetric_restrict hA hU
-  have hMspec : SpectrumIn (A.restrict hU) ⊤ (Set.Icc a b) :=
-    (spectrumIn_restrict_iff A hU (Set.Icc a b)).2 hgap.1
+  have hM : (A.restrict hU).IsSymmetric := hA.restrict_invariant hU
+  have hMspec : PointSpectrumIn (A.restrict hU) ⊤ (Set.Icc a b) :=
+    (pointSpectrumIn_restrict_iff A hU (Set.Icc a b)).2 hgap.1
   have hres :
       δ * NU (sinThetaEmbedding V U.subtypeₗᵢ) ≤
         NU (residual B U.subtypeₗᵢ (A.restrict hU)) :=
@@ -252,7 +252,7 @@ invariant under `B`, an interval/exterior gap of width `δ` gives
 `Σₖ σ (δ • P_{Wᗮ}|_U) ≤ Σₖ σ (P_{Wᗮ} (B - A)|_U)`
 
 at every `k`.  The proof restricts both operators to their blocks, transports the
-gap through `spectrumIn_restrict_iff`, checks the Sylvester equation
+gap through `pointSpectrumIn_restrict_iff`, checks the Sylvester equation
 `B|_{Wᗮ} X - X A|_U = C`, and applies `kyFan_sylvester_le_of_intervalGap`.
 
 `sinAngleOperator_perturbation_le` needs this on both diagonals — once as
@@ -262,7 +262,7 @@ private theorem kyFanSum_smul_compression_le_of_intervalExteriorGap
     {U W : Submodule 𝕜 E} [W.HasOrthogonalProjection]
     (hU : IsInvariant A U) (hWperp : IsInvariant B Wᗮ)
     {a b δ : ℝ} (hδ : 0 < δ)
-    (hgap : IntervalExteriorGap A B U W a b δ) (k : ℕ) :
+    (hgap : PointIntervalExteriorGap A U B Wᗮ a b δ) (k : ℕ) :
     TauCeti.kyFanSum k
         (((δ : ℝ) : 𝕜) •
           (Wᗮ.orthogonalProjectionOnto.toLinearMap ∘ₗ U.subtype)) ≤
@@ -274,12 +274,12 @@ private theorem kyFanSum_smul_compression_le_of_intervalExteriorGap
     Wᗮ.orthogonalProjectionOnto.toLinearMap ∘ₗ U.subtype with hXdef
   set C : U →ₗ[𝕜] Wᗮ :=
     Wᗮ.orthogonalProjectionOnto.toLinearMap ∘ₗ ((B - A) ∘ₗ U.subtype) with hCdef
-  have hAU : AU.IsSymmetric := isSymmetric_restrict hA hU
-  have hBWperp : BWperp.IsSymmetric := isSymmetric_restrict hB hWperp
+  have hAU : AU.IsSymmetric := hA.restrict_invariant hU
+  have hBWperp : BWperp.IsSymmetric := hB.restrict_invariant hWperp
   have hgap' : IntervalSylvesterGap BWperp AU a b δ := by
     constructor
-    · exact (spectrumIn_restrict_iff A hU (Set.Icc a b)).2 hgap.1
-    · exact (spectrumIn_restrict_iff B hWperp
+    · exact (pointSpectrumIn_restrict_iff A hU (Set.Icc a b)).2 hgap.1
+    · exact (pointSpectrumIn_restrict_iff B hWperp
         {lam | lam ∉ Set.Ioo (a - δ) (b + δ)}).2 hgap.2
   have hEq : BWperp ∘ₗ X - X ∘ₗ AU = C := by
     ext x
@@ -439,8 +439,8 @@ theorem sinAngleOperator_perturbation_le
     {U V : Submodule 𝕜 E} [U.HasOrthogonalProjection]
     [V.HasOrthogonalProjection] (hU : IsInvariant A U) (hV : IsInvariant B V)
     {a b c d δ : ℝ} (hδ : 0 < δ)
-    (hgapUV : IntervalExteriorGap A B U V a b δ)
-    (hgapVU : IntervalExteriorGap B A V U c d δ) :
+    (hgapUV : PointIntervalExteriorGap A U B Vᗮ a b δ)
+    (hgapVU : PointIntervalExteriorGap B V A Uᗮ c d δ) :
     δ * N (sinAngleOperator U V) ≤ N (B - A) := by
   classical
   have hUperp : IsInvariant A Uᗮ := isInvariant_orthogonal_of_isSymmetric hA hU
@@ -559,11 +559,11 @@ theorem sinTheta_perturbation_le_of_orderedGap
     δ * N (sinThetaMap U V) ≤ N (B - A) := by
   let NU : UnitarilyInvariantSeminorm 𝕜 U E :=
     N.domainIsometryTransport U.subtypeₗᵢ
-  have hM : (A.restrict hU).IsSymmetric := isSymmetric_restrict hA hU
+  have hM : (A.restrict hU).IsSymmetric := hA.restrict_invariant hU
   have hgap' : OrderedGap (A.restrict hU) ⊤ B Vᗮ δ := by
     intro lam μ hlam hμ
     apply hgap lam μ
-    · rw [← restrictedSpectrum_restrict A hU]
+    · rw [← restrictedPointSpectrum_restrict A hU]
       exact hlam
     · exact hμ
   have hres :
@@ -586,18 +586,18 @@ theorem sinTheta_perturbation_le_of_orderedGap
 
 /-- Canonical spectral-projector statement with no eigenbasis in the API.
 -/
-theorem sinTheta_spectralSubspace_le
+theorem sinTheta_pointSpectralSubspace_le
     (N : UnitarilyInvariantSeminorm 𝕜 E E)
     {A B : E →ₗ[𝕜] E} (hA : A.IsSymmetric) (hB : B.IsSymmetric)
     {a b δ : ℝ} (hδ : 0 < δ)
-    (hBoutside : SpectrumIn B (spectralSubspace B (Set.Icc a b))ᗮ
+    (hBoutside : PointSpectrumIn B (pointSpectralSubspace B (Set.Icc a b))ᗮ
       {lam | lam ∉ Set.Ioo (a - δ) (b + δ)}) :
-    δ * N (sinThetaMap (spectralSubspace A (Set.Icc a b))
-        (spectralSubspace B (Set.Icc a b))) ≤ N (B - A) := by
+    δ * N (sinThetaMap (pointSpectralSubspace A (Set.Icc a b))
+        (pointSpectralSubspace B (Set.Icc a b))) ≤ N (B - A) := by
   exact sinTheta_perturbation_le N hA hB
-    (isInvariant_spectralSubspace A (Set.Icc a b))
-    (isInvariant_spectralSubspace B (Set.Icc a b)) hδ
-    ⟨spectrumIn_spectralSubspace A (Set.Icc a b), hBoutside⟩
+    (isInvariant_pointSpectralSubspace A (Set.Icc a b))
+    (isInvariant_pointSpectralSubspace B (Set.Icc a b)) hδ
+    ⟨pointSpectrumIn_pointSpectralSubspace A (Set.Icc a b), hBoutside⟩
 
 /-- **Sharp one-sided interval/exterior `sin Θ` bound in operator norm.**
 
@@ -609,7 +609,7 @@ theorem opNorm_sinThetaMap_le_of_intervalGap
     {U V : Submodule 𝕜 E} [U.HasOrthogonalProjection]
     [V.HasOrthogonalProjection] (hU : IsInvariant A U) (hV : IsInvariant B V)
     {a b δ : ℝ} (hδ : 0 < δ)
-    (hgap : IntervalExteriorGap A B U V a b δ) :
+    (hgap : PointIntervalExteriorGap A U B Vᗮ a b δ) :
     δ * ‖(sinThetaMap U V).toContinuousLinearMap‖ ≤
       ‖(B - A).toContinuousLinearMap‖ := by
   have hVperp : IsInvariant B Vᗮ := isInvariant_orthogonal_of_isSymmetric hB hV
@@ -619,12 +619,12 @@ theorem opNorm_sinThetaMap_le_of_intervalGap
     Vᗮ.orthogonalProjectionOnto.toLinearMap ∘ₗ U.subtype
   let C : U →ₗ[𝕜] Vᗮ :=
     Vᗮ.orthogonalProjectionOnto.toLinearMap ∘ₗ ((B - A) ∘ₗ U.subtype)
-  have hAU : AU.IsSymmetric := isSymmetric_restrict hA hU
-  have hBVperp : BVperp.IsSymmetric := isSymmetric_restrict hB hVperp
+  have hAU : AU.IsSymmetric := hA.restrict_invariant hU
+  have hBVperp : BVperp.IsSymmetric := hB.restrict_invariant hVperp
   have hgap' : IntervalSylvesterGap BVperp AU a b δ := by
     constructor
-    · exact (spectrumIn_restrict_iff A hU (Set.Icc a b)).2 hgap.1
-    · exact (spectrumIn_restrict_iff B hVperp
+    · exact (pointSpectrumIn_restrict_iff A hU (Set.Icc a b)).2 hgap.1
+    · exact (pointSpectrumIn_restrict_iff B hVperp
         {lam | lam ∉ Set.Ioo (a - δ) (b + δ)}).2 hgap.2
   have hEq : BVperp ∘ₗ X - X ∘ₗ AU = C := by
     ext x
@@ -697,7 +697,7 @@ theorem frobenius_sinTheta_residual_le_of_spectralDistance
     [U.HasOrthogonalProjection] (hU : IsInvariant A U)
     (X : F →ₗᵢ[𝕜] E) {M : F →ₗ[𝕜] F} (hM : M.IsSymmetric)
     {δ : ℝ} (hδ : 0 < δ)
-    (hgap : SpectraSeparated M ⊤ A Uᗮ δ) :
+    (hgap : PointSpectraSeparated M ⊤ A Uᗮ δ) :
     δ * UnitarilyInvariantSeminorm.frobenius
         (sinThetaEmbedding U X) ≤
       UnitarilyInvariantSeminorm.frobenius (residual A X M) := by
@@ -707,17 +707,17 @@ theorem frobenius_sinTheta_residual_le_of_spectralDistance
     Uᗮ.orthogonalProjectionOnto.toLinearMap ∘ₗ X.toLinearMap
   let C : F →ₗ[𝕜] Uᗮ :=
     Uᗮ.orthogonalProjectionOnto.toLinearMap ∘ₗ residual A X M
-  have hAU : AU.IsSymmetric := isSymmetric_restrict hA hUperp
-  have hgap' : SpectraSeparated AU ⊤ M ⊤ δ := by
+  have hAU : AU.IsSymmetric := hA.restrict_invariant hUperp
+  have hgap' : PointSpectraSeparated AU ⊤ M ⊤ δ := by
     intro lam mu hlam hmu
-    have hlam' : lam ∈ restrictedSpectrum A Uᗮ := by
-      rw [← restrictedSpectrum_restrict A hUperp]
+    have hlam' : lam ∈ restrictedPointSpectrum A Uᗮ := by
+      rw [← restrictedPointSpectrum_restrict A hUperp]
       exact hlam
     have hsep := hgap mu lam hmu hlam'
     simpa [abs_sub_comm] using hsep
   have hEq : AU ∘ₗ Y - Y ∘ₗ M = C :=
     sylvester_projectedResidual_eq hA hU hUperp X M
-  have hSylv := frobenius_sylvester_le_of_spectraSeparated
+  have hSylv := frobenius_sylvester_le_of_pointSpectraSeparated
     hAU hM hδ hgap' hEq
   have hY : UnitarilyInvariantSeminorm.frobenius Y =
       UnitarilyInvariantSeminorm.frobenius (sinThetaEmbedding U X) := by
@@ -738,7 +738,7 @@ theorem opNorm_projection_sub_projection_le
     [V.HasOrthogonalProjection] (hU : IsInvariant A U) (hV : IsInvariant B V)
     (hrank : finrank 𝕜 U = finrank 𝕜 V)
     {a b δ : ℝ} (hδ : 0 < δ)
-    (hgap : IntervalExteriorGap A B U V a b δ) :
+    (hgap : PointIntervalExteriorGap A U B Vᗮ a b δ) :
     δ * ‖(projection U - projection V).toContinuousLinearMap‖ ≤
       ‖(B - A).toContinuousLinearMap‖ := by
   rw [opNorm_projection_sub_eq_opNorm_sinThetaMap U V hrank]
@@ -753,18 +753,18 @@ difference. -/
 theorem opNorm_spectralProjection_sub_spectralProjection_le
     {A B : E →ₗ[𝕜] E} (hA : A.IsSymmetric) (hB : B.IsSymmetric)
     {a b δ : ℝ} (hδ : 0 < δ)
-    (hrank : finrank 𝕜 (spectralSubspace A (Set.Icc a b)) =
-      finrank 𝕜 (spectralSubspace B (Set.Icc a b)))
-    (hBoutside : SpectrumIn B (spectralSubspace B (Set.Icc a b))ᗮ
+    (hrank : finrank 𝕜 (pointSpectralSubspace A (Set.Icc a b)) =
+      finrank 𝕜 (pointSpectralSubspace B (Set.Icc a b)))
+    (hBoutside : PointSpectrumIn B (pointSpectralSubspace B (Set.Icc a b))ᗮ
       {lam | lam ∉ Set.Ioo (a - δ) (b + δ)}) :
     δ * ‖(spectralProjection A (Set.Icc a b) -
         spectralProjection B (Set.Icc a b)).toContinuousLinearMap‖ ≤
       ‖(B - A).toContinuousLinearMap‖ := by
   simpa [spectralProjection, projection] using
     opNorm_projection_sub_projection_le hA hB
-      (isInvariant_spectralSubspace A (Set.Icc a b))
-      (isInvariant_spectralSubspace B (Set.Icc a b))
-      hrank hδ ⟨spectrumIn_spectralSubspace A (Set.Icc a b), hBoutside⟩
+      (isInvariant_pointSpectralSubspace A (Set.Icc a b))
+      (isInvariant_pointSpectralSubspace B (Set.Icc a b))
+      hrank hδ ⟨pointSpectrumIn_pointSpectralSubspace A (Set.Icc a b), hBoutside⟩
 
 /-- Frobenius form.
 -/
@@ -773,7 +773,7 @@ theorem frobenius_sinTheta_le
     {U V : Submodule 𝕜 E} [U.HasOrthogonalProjection]
     [V.HasOrthogonalProjection] (hU : IsInvariant A U) (hV : IsInvariant B V)
     {a b δ : ℝ} (hδ : 0 < δ)
-    (hgap : IntervalExteriorGap A B U V a b δ) :
+    (hgap : PointIntervalExteriorGap A U B Vᗮ a b δ) :
     δ * UnitarilyInvariantSeminorm.frobenius (𝕜 := 𝕜) (E := E) (F := E) (sinThetaMap U V) ≤
       UnitarilyInvariantSeminorm.frobenius (𝕜 := 𝕜) (E := E) (F := E) (B - A) := by
   exact sinTheta_perturbation_le (UnitarilyInvariantSeminorm.frobenius (𝕜 := 𝕜) (E := E) (F := E))
@@ -786,7 +786,7 @@ theorem kyFan_sinTheta_le
     {U V : Submodule 𝕜 E} [U.HasOrthogonalProjection]
     [V.HasOrthogonalProjection] (hU : IsInvariant A U) (hV : IsInvariant B V)
     {a b δ : ℝ} (hδ : 0 < δ)
-    (hgap : IntervalExteriorGap A B U V a b δ) (k : ℕ) :
+    (hgap : PointIntervalExteriorGap A U B Vᗮ a b δ) (k : ℕ) :
     δ * kyFanSum k (sinThetaMap U V) ≤ kyFanSum k (B - A) := by
   let NK : UnitarilyInvariantSeminorm 𝕜 E E :=
     (UnitarilyInvariantSeminorm.kyFan
@@ -804,15 +804,15 @@ theorem sinTheta_perturbation_le_of_spectralDistance
     {U V : Submodule 𝕜 E} [U.HasOrthogonalProjection]
     [V.HasOrthogonalProjection] (hU : IsInvariant A U) (hV : IsInvariant B V)
     {δ : ℝ} (hδ : 0 < δ)
-    (hgap : SpectraSeparated A U B Vᗮ δ) :
+    (hgap : PointSpectraSeparated A U B Vᗮ δ) :
     δ * N (sinThetaMap U V) ≤ (Real.pi / 2) * N (B - A) := by
   let NU : UnitarilyInvariantSeminorm 𝕜 U E :=
     N.domainIsometryTransport U.subtypeₗᵢ
-  have hM : (A.restrict hU).IsSymmetric := isSymmetric_restrict hA hU
-  have hgap' : SpectraSeparated (A.restrict hU) ⊤ B Vᗮ δ := by
+  have hM : (A.restrict hU).IsSymmetric := hA.restrict_invariant hU
+  have hgap' : PointSpectraSeparated (A.restrict hU) ⊤ B Vᗮ δ := by
     intro lam μ hlam hμ
     apply hgap lam μ
-    · rw [← restrictedSpectrum_restrict A hU]
+    · rw [← restrictedPointSpectrum_restrict A hU]
       exact hlam
     · exact hμ
   have hres :

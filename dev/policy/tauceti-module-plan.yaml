@@ -135,6 +135,8 @@ topics:
   - Analysis.OperatorIdeal.ApproximationNumber.MinMax
   - Analysis.OperatorIdeal.ApproximationNumber.MinMaxUpper
   - Analysis.OperatorIdeal.ApproximationNumber.SameSequence
+  - Analysis.OperatorIdeal.ApproximationNumber.Rank
+  - Analysis.OperatorIdeal.ApproximationNumber.Isometry
 - id: T10
   title: Symmetric operator ideals and Schatten norms
   modules:
@@ -151,10 +153,10 @@ topics:
   - Analysis.InnerProductSpace.HilbertSchmidt.Energy
   - Analysis.Normed.FiniteLpGauge
   - Topology.ENNRealLiminf
-  - Analysis.OperatorIdeal.SymmetricGauge
   - Analysis.Normed.SymmetricGauge
   - Analysis.Normed.SchattenGauge
   - Analysis.OperatorIdeal.Family.SymmetricGauge
+  - Analysis.Normed.SupGauge
 - id: T11
   title: Hilbert-Schmidt operators
   modules:
@@ -215,6 +217,7 @@ topics:
   - Analysis.InnerProductSpace.LinearPMap.RealLowerBound
   - Analysis.CStarAlgebra.SelfAdjointGapInverse
   - Analysis.InnerProductSpace.SeparatedIntertwiner
+  - Analysis.InnerProductSpace.LinearPMap.Shift
 - id: T15c
   title: The spectral measure of an unbounded self-adjoint operator, and Stone
   modules:
@@ -287,10 +290,11 @@ topics:
   - Analysis.InnerProductSpace.ReducedExtension
 - id: T18
   title: The Yu-Wang-Samworth statistical variant
+  # Source-facing YWS modules live in the root YuWangSamworth2015 package.
+  # These reusable eigenframe/residual lemmas are their ForTauCeti prerequisites.
   modules:
-  - Analysis.InnerProductSpace.YuWangSamworth.Residual
-  - Analysis.InnerProductSpace.YuWangSamworth.SingularSubspace
-  - Analysis.InnerProductSpace.YuWangSamworth.Statistics
+  - Analysis.InnerProductSpace.Spectral.EigenFrame
+  - Analysis.InnerProductSpace.Spectral.ResidualGap
 - id: T19
   title: Matrix spectra and spectral measurability
   modules:
@@ -300,6 +304,7 @@ topics:
   - Analysis.Matrix.Spectrum
   - MeasureTheory.Function.ConvergenceInMeasure
   - MeasureTheory.Measure.Typeclasses.Probability
+  - Analysis.Matrix.SpectralProjection
 - id: T20
   title: Sample moments and matrix concentration
   modules:
@@ -412,6 +417,7 @@ rungs:
   - Analysis.OperatorIdeal.ApproximationNumber.Basic
   - LinearAlgebra.Dimension.RankComp
   - SetTheory.Cardinal.Lift
+  - Analysis.OperatorIdeal.ApproximationNumber.Rank
 - id: D
   title: Ky Fan majorization and unitarily invariant seminorms
   seeds:
@@ -450,6 +456,7 @@ rungs:
   - Analysis.OperatorIdeal.Family.KyFanDominance
   - Analysis.OperatorIdeal.Family.OperatorNorm
   - Analysis.OperatorIdeal.Family.TraceClass
+  - Analysis.OperatorIdeal.Family.SymmetricGauge
 - id: G
   title: Foundations completion — the rest of topics T01-T10
   seeds:
@@ -592,6 +599,7 @@ rungs:
   - Analysis.InnerProductSpace.LinearPMap.ResolventOpen
   - Analysis.InnerProductSpace.LinearPMap.SelfAdjointResolvent
   - Analysis.InnerProductSpace.SeparatedIntertwiner
+  - Analysis.InnerProductSpace.LinearPMap.Shift
 - id: N
   title: The spectral measure of an unbounded self-adjoint operator, and Stone (T15c)
   seeds:
@@ -649,10 +657,11 @@ rungs:
   - Analysis.InnerProductSpace.SinTheta.UnitarilyInvariant
 - id: Q
   title: The Yu-Wang-Samworth statistical variant (T18)
+  # Source-facing YWS modules live in the root YuWangSamworth2015 package.
+  # Export their reusable prerequisites, not the paper-facing package.
   seeds:
-  - Analysis.InnerProductSpace.YuWangSamworth.Residual
-  - Analysis.InnerProductSpace.YuWangSamworth.SingularSubspace
-  - Analysis.InnerProductSpace.YuWangSamworth.Statistics
+  - Analysis.InnerProductSpace.Spectral.EigenFrame
+  - Analysis.InnerProductSpace.Spectral.ResidualGap
 - id: R
   title: Matrix spectra and spectral measurability (T19)
   seeds:
@@ -662,6 +671,7 @@ rungs:
   - Analysis.Matrix.Spectrum
   - MeasureTheory.Function.ConvergenceInMeasure
   - MeasureTheory.Measure.Typeclasses.Probability
+  - Analysis.Matrix.SpectralProjection
 - id: S
   title: Sample moments and matrix concentration (T20)
   seeds:

@@ -314,28 +314,34 @@ omit [FiniteDimensional 𝕜 E] in
 carries only the value `3`, and its complement carries `5` and `1`, both at
 distance exactly `2`.  This is the feature the preprint's top-block example
 lacks. -/
-theorem internalGap_middleSharpness (hdp : 2 * d ≤ p) :
-    InternalGap (middleSharpnessPopulation b d)
+theorem pointInternalGap_middleSharpness (hdp : 2 * d ≤ p) :
+    PointInternalGap (middleSharpnessPopulation b d)
       (eigenspace (middleSharpnessPopulation b d) ((3 : ℝ) : 𝕜)) 2 := by
-  intro lam μ hlam hμ
-  rw [eigenspace_middleSharpnessPopulation b] at hlam hμ
-  have h3 : lam = 3 := by
-    obtain ⟨i, hi, rfl⟩ :=
-      restrictedSpectrum_basisDiagonal_subset b _ _ hlam
-    simp only [Set.mem_ofPred_eq] at hi
-    simp only [middleSharpnessPopulationData]
-    rw [ite_eq_right (by omega), ite_eq_left (by omega)]
-  have hout : μ = 5 ∨ μ = 1 := by
-    rw [OrthonormalBasis.orthogonal_spanIndices] at hμ
-    obtain ⟨i, hi, rfl⟩ :=
-      restrictedSpectrum_basisDiagonal_subset b _ _ hμ
-    simp only [Set.mem_compl_iff, Set.mem_ofPred_eq] at hi
-    simp only [middleSharpnessPopulationData]
-    by_cases h1 : (i : ℕ) < p - 2 * d
-    · exact Or.inl (by rw [ite_eq_left h1])
-    · exact Or.inr (by rw [ite_eq_right h1, ite_eq_right (by omega)])
-  rw [h3]
-  rcases hout with h | h <;> rw [h] <;> norm_num
+  refine ⟨?_, ?_⟩
+  · intro x hx
+    rw [Module.End.mem_eigenspace_iff] at hx ⊢
+    rw [← map_smul, hx]
+  ·
+    intro lam μ hlam hμ
+    rw [eigenspace_middleSharpnessPopulation b] at hlam hμ
+    have h3 : lam = 3 := by
+      obtain ⟨i, hi, rfl⟩ :=
+        restrictedPointSpectrum_basisDiagonal_subset b _ _ hlam
+      simp only [Set.mem_ofPred_eq] at hi
+      simp only [middleSharpnessPopulationData]
+      rw [ite_eq_right (by omega), ite_eq_left (by omega)]
+    have hout : μ = 5 ∨ μ = 1 := by
+      rw [OrthonormalBasis.orthogonal_spanIndices] at hμ
+      obtain ⟨i, hi, rfl⟩ :=
+        restrictedPointSpectrum_basisDiagonal_subset b _ _ hμ
+      simp only [Set.mem_compl_iff, Set.mem_ofPred_eq] at hi
+      simp only [middleSharpnessPopulationData]
+      by_cases h1 : (i : ℕ) < p - 2 * d
+      · exact Or.inl (by rw [ite_eq_left h1])
+      · exact Or.inr (by rw [ite_eq_right h1, ite_eq_right (by omega)])
+    rw [h3]
+    rcases hout with h | h <;> rw [h] <;> norm_num
+
 
 /-- **The perturbation has operator norm `1 + ε`.**  The displacements are `0`
 on the leading block, `-1` on the middle block and `1 + ε` on the trailing
@@ -397,7 +403,7 @@ For every `0 < ε < 3` the model satisfies the hypotheses of
 `YuWangSamworth2015.yuWangSamworth_alignedBasis_le` — a corresponding eigenblock
 (`correspondingEigenblock_middleSharpness`) of dimension `d`
 (`finrank_eigenspace_middleSharpnessPopulation`) with the genuinely two-sided
-population gap `min(5-3, 3-1) = 2` (`internalGap_middleSharpness`) — and this
+population gap `min(5-3, 3-1) = 2` (`pointInternalGap_middleSharpness`) — and this
 theorem is the resulting comparison: *every* aligned orthonormal pair of the two
 blocks realizes distance exactly `√(2d)`, against a bound of `√(2d)(1+ε)`.
 

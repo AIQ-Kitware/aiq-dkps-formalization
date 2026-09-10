@@ -176,23 +176,29 @@ omit [FiniteDimensional 𝕜 E] in
 operator level.**  The block carries only `20`, and its complement carries `50`,
 `40`, `30` and `10`, each at distance at least `10`.  So
 `YuWangSamworth2015.yuWangSamworth_alignedBasis_le` applies to this pair while
-Theorem 1 does not.  `internalGap_section1_paperBlock` is the same fact at the
+Theorem 1 does not.  `pointInternalGap_section1_paperBlock` is the same fact at the
 block the article actually selects. -/
-theorem internalGap_section1 :
-    InternalGap (section1Population b)
+theorem pointInternalGap_section1 :
+    PointInternalGap (section1Population b)
       (eigenspace (section1Population b) ((20 : ℝ) : 𝕜)) 10 := by
-  intro lam μ hlam hμ
-  rw [eigenspace_section1Population] at hlam hμ
-  have h20 : lam = 20 := by
-    obtain ⟨i, hi, rfl⟩ := restrictedSpectrum_basisDiagonal_subset b _ _ hlam
-    simp only [Set.mem_ofPred_eq] at hi
-    fin_cases i <;> simp_all [section1PopulationData]
-    norm_num
-  rw [OrthonormalBasis.orthogonal_spanIndices] at hμ
-  obtain ⟨i, hi, rfl⟩ := restrictedSpectrum_basisDiagonal_subset b _ _ hμ
-  simp only [Set.mem_compl_iff, Set.mem_ofPred_eq] at hi
-  rw [h20]
-  fin_cases i <;> simp_all [section1PopulationData] <;> norm_num
+  refine ⟨?_, ?_⟩
+  · intro x hx
+    rw [Module.End.mem_eigenspace_iff] at hx ⊢
+    rw [← map_smul, hx]
+  ·
+    intro lam μ hlam hμ
+    rw [eigenspace_section1Population] at hlam hμ
+    have h20 : lam = 20 := by
+      obtain ⟨i, hi, rfl⟩ := restrictedPointSpectrum_basisDiagonal_subset b _ _ hlam
+      simp only [Set.mem_ofPred_eq] at hi
+      fin_cases i <;> simp_all [section1PopulationData]
+      norm_num
+    rw [OrthonormalBasis.orthogonal_spanIndices] at hμ
+    obtain ⟨i, hi, rfl⟩ := restrictedPointSpectrum_basisDiagonal_subset b _ _ hμ
+    simp only [Set.mem_compl_iff, Set.mem_ofPred_eq] at hi
+    rw [h20]
+    fin_cases i <;> simp_all [section1PopulationData] <;> norm_num
+
 
 omit [FiniteDimensional 𝕜 E] in
 /-- **The population gap of the article's block `r = 2`, `s = 4` is `10`, at the
@@ -201,14 +207,15 @@ operator level.**
 The block carries `40`, `30` and `20`; its complement carries `50` and `10`; the
 closest pair is at distance `10`.  So the population-gap theorems apply to this
 pair at the article's own block, while Theorem 1 does not. -/
-theorem internalGap_section1_paperBlock :
-    InternalGap (section1Population b)
+theorem pointInternalGap_section1_paperBlock :
+    PointInternalGap (section1Population b)
       (b.spanIndices {i : Fin 5 | 1 ≤ (i : ℕ) ∧ (i : ℕ) ≤ 3}) 10 := by
+  refine ⟨isInvariant_basisDiagonal_spanIndices b _ _, ?_⟩
   intro lam μ hlam hμ
   rw [section1Population] at hlam hμ
-  obtain ⟨i, hi, rfl⟩ := restrictedSpectrum_basisDiagonal_subset b _ _ hlam
+  obtain ⟨i, hi, rfl⟩ := restrictedPointSpectrum_basisDiagonal_subset b _ _ hlam
   rw [OrthonormalBasis.orthogonal_spanIndices] at hμ
-  obtain ⟨j, hj, rfl⟩ := restrictedSpectrum_basisDiagonal_subset b _ _ hμ
+  obtain ⟨j, hj, rfl⟩ := restrictedPointSpectrum_basisDiagonal_subset b _ _ hμ
   simp only [Set.mem_ofPred_eq, Set.mem_compl_iff] at hi hj
   fin_cases i <;> fin_cases j <;> simp_all [section1PopulationData] <;> norm_num
 
@@ -228,7 +235,7 @@ theorem opNorm_section1_perturbation :
 `YuWangSamworth2015.mixedGap_of_populationGap_weyl` turns the population gap `Δ = 10` into a
 mixed gap `Δ − ε`, and here `ε = 11`: the recovered separation is negative, so
 the two-step route yields nothing whatever.  Theorem 2 is unaffected, by
-`internalGap_section1`. -/
+`pointInternalGap_section1`. -/
 theorem section1_weylRecovery_fails :
     (10 : ℝ) - ‖(section1Sample b - section1Population b).toContinuousLinearMap‖ < 0 := by
   rw [opNorm_section1_perturbation]

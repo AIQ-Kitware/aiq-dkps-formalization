@@ -74,7 +74,7 @@ theorem generalizedSinTheta_frobenius_le_of_spectralDistance
     (hM : (whitenedCoordinateOperator X hX M).IsSymmetric)
     {δ ε : ℝ} (hδ : 0 < δ) (hε : 0 < ε)
     (hframe : LowerFrameBound X ε)
-    (hgap : SpectraSeparated (whitenedCoordinateOperator X hX M) ⊤ A Vᗮ δ) :
+    (hgap : PointSpectraSeparated (whitenedCoordinateOperator X hX M) ⊤ A Vᗮ δ) :
     δ * ε * UnitarilyInvariantSeminorm.frobenius
         (sinThetaEmbedding V (orthonormalizedEmbedding X hX)) ≤
       UnitarilyInvariantSeminorm.frobenius
@@ -120,7 +120,7 @@ theorem generalizedSinTheta_nuclear_le_of_spectralDistance
     (hM : (whitenedCoordinateOperator X hX M).IsSymmetric)
     {δ ε : ℝ} (hδ : 0 < δ) (hε : 0 < ε)
     (hframe : LowerFrameBound X ε)
-    (hgap : SpectraSeparated (whitenedCoordinateOperator X hX M) ⊤ A Vᗮ δ) :
+    (hgap : PointSpectraSeparated (whitenedCoordinateOperator X hX M) ⊤ A Vᗮ δ) :
     δ * ε * UnitarilyInvariantSeminorm.nuclear
         (sinThetaEmbedding V (orthonormalizedEmbedding X hX)) ≤
       Real.sqrt (finrank 𝕜 F) *

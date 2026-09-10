@@ -61,8 +61,8 @@ theorem partIII_tanTheta_uiNorm
     {U : Submodule 𝕜 E} [U.HasOrthogonalProjection] (hU : IsInvariant A U)
     (X : F →ₗᵢ[𝕜] E) (hrank : finrank 𝕜 F = finrank 𝕜 U)
     {β α δ : ℝ} (hβα : β ≤ α) (hδ : 0 < δ)
-    (hMspec : SpectrumIn (compression A X) ⊤ (Set.Icc β α))
-    (hAspec : SpectrumIn A Uᗮ (Set.Ici (α + δ)))
+    (hMspec : PointSpectrumIn (compression A X) ⊤ (Set.Icc β α))
+    (hAspec : PointSpectrumIn A Uᗮ (Set.Ici (α + δ)))
     (tanTheta0 : F →ₗ[𝕜] E)
     (htan : tanTheta0.singularValues =
       principalTangents (approximateSubspace X) U) :

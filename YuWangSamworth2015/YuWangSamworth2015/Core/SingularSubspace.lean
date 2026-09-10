@@ -54,12 +54,12 @@ variable {F : Type*} [NormedAddCommGroup F] [InnerProductSpace 𝕜 F]
 /-- Right singular subspace selected by squared singular values in `Ω`. -/
 noncomputable def rightSingularSubspace (A : E →ₗ[𝕜] F) (Ω : Set ℝ) :
     Submodule 𝕜 E :=
-  spectralSubspace (rightGram A) Ω
+  pointSpectralSubspace (rightGram A) Ω
 
 /-- Left singular subspace selected by squared singular values in `Ω`. -/
 noncomputable def leftSingularSubspace (A : E →ₗ[𝕜] F) (Ω : Set ℝ) :
     Submodule 𝕜 F :=
-  spectralSubspace (leftGram A) Ω
+  pointSpectralSubspace (leftGram A) Ω
 
 /-- The product-coordinate block map underlying the Hermitian dilation. -/
 noncomputable def hermitianDilationProd (A : E →ₗ[𝕜] F) :
@@ -123,9 +123,9 @@ theorem hermitianDilation_sq (A : E →ₗ[𝕜] F) :
 -/
 theorem rightSingularSubspace_sinTheta_le
     {A Â : E →ₗ[𝕜] F} {a b δ : ℝ} (hδ : 0 < δ)
-    (hgap : IntervalExteriorGap (rightGram A) (rightGram Â)
-      (rightSingularSubspace A (Set.Icc a b))
-      (rightSingularSubspace Â (Set.Icc a b)) a b δ) :
+    (hgap : PointIntervalExteriorGap (rightGram A)
+      (rightSingularSubspace A (Set.Icc a b)) (rightGram Â)
+      (rightSingularSubspace Â (Set.Icc a b))ᗮ a b δ) :
     δ * ‖(sinThetaMap (rightSingularSubspace A (Set.Icc a b))
         (rightSingularSubspace Â (Set.Icc a b))).toContinuousLinearMap‖ ≤
       (‖Â.toContinuousLinearMap‖ + ‖A.toContinuousLinearMap‖) *
@@ -133,8 +133,8 @@ theorem rightSingularSubspace_sinTheta_le
   have hdk := sinTheta_perturbation_le (UnitarilyInvariantSeminorm.opNorm (𝕜 := 𝕜) (E := E) (F
     := E))
     (isSymmetric_rightGram A) (isSymmetric_rightGram Â)
-    (isInvariant_spectralSubspace (rightGram A) (Set.Icc a b))
-    (isInvariant_spectralSubspace (rightGram Â) (Set.Icc a b)) hδ hgap
+    (isInvariant_pointSpectralSubspace (rightGram A) (Set.Icc a b))
+    (isInvariant_pointSpectralSubspace (rightGram Â) (Set.Icc a b)) hδ hgap
   -- names the application so the norm bound applies to it directly.
   change δ * ‖(sinThetaMap (rightSingularSubspace A (Set.Icc a b))
       (rightSingularSubspace Â (Set.Icc a b))).toContinuousLinearMap‖ ≤
@@ -145,9 +145,9 @@ theorem rightSingularSubspace_sinTheta_le
 -/
 theorem leftSingularSubspace_sinTheta_le
     {A Â : E →ₗ[𝕜] F} {a b δ : ℝ} (hδ : 0 < δ)
-    (hgap : IntervalExteriorGap (leftGram A) (leftGram Â)
-      (leftSingularSubspace A (Set.Icc a b))
-      (leftSingularSubspace Â (Set.Icc a b)) a b δ) :
+    (hgap : PointIntervalExteriorGap (leftGram A)
+      (leftSingularSubspace A (Set.Icc a b)) (leftGram Â)
+      (leftSingularSubspace Â (Set.Icc a b))ᗮ a b δ) :
     δ * ‖(sinThetaMap (leftSingularSubspace A (Set.Icc a b))
         (leftSingularSubspace Â (Set.Icc a b))).toContinuousLinearMap‖ ≤
       (‖Â.toContinuousLinearMap‖ + ‖A.toContinuousLinearMap‖) *
@@ -155,8 +155,8 @@ theorem leftSingularSubspace_sinTheta_le
   have hdk := sinTheta_perturbation_le (UnitarilyInvariantSeminorm.opNorm (𝕜 := 𝕜) (E := F) (F
     := F))
     (isSymmetric_leftGram A) (isSymmetric_leftGram Â)
-    (isInvariant_spectralSubspace (leftGram A) (Set.Icc a b))
-    (isInvariant_spectralSubspace (leftGram Â) (Set.Icc a b)) hδ hgap
+    (isInvariant_pointSpectralSubspace (leftGram A) (Set.Icc a b))
+    (isInvariant_pointSpectralSubspace (leftGram Â) (Set.Icc a b)) hδ hgap
   -- names the application so the norm bound applies to it directly.
   change δ * ‖(sinThetaMap (leftSingularSubspace A (Set.Icc a b))
       (leftSingularSubspace Â (Set.Icc a b))).toContinuousLinearMap‖ ≤
@@ -172,17 +172,17 @@ arbitrary `HybridGap`; constant one requires a stronger gap predicate.
 theorem singularSubspace_dilation_sinTheta_le
     {A Â : E →ₗ[𝕜] F} {Ω : Set ℝ} {δ : ℝ} (hδ : 0 < δ)
     (hgap : HybridGap (hermitianDilation A) (hermitianDilation Â)
-      (spectralSubspace (hermitianDilation A) Ω)
-      (spectralSubspace (hermitianDilation Â) Ω) δ) :
-    δ * ‖(sinThetaMap (spectralSubspace (hermitianDilation A) Ω)
-        (spectralSubspace (hermitianDilation Â) Ω)).toContinuousLinearMap‖ ≤
+      (pointSpectralSubspace (hermitianDilation A) Ω)
+      (pointSpectralSubspace (hermitianDilation Â) Ω) δ) :
+    δ * ‖(sinThetaMap (pointSpectralSubspace (hermitianDilation A) Ω)
+        (pointSpectralSubspace (hermitianDilation Â) Ω)).toContinuousLinearMap‖ ≤
       (Real.pi / 2) *
         ‖(hermitianDilation Â - hermitianDilation A).toContinuousLinearMap‖ := by
   exact sinTheta_perturbation_le_of_spectralDistance
     (UnitarilyInvariantSeminorm.opNorm (𝕜 := 𝕜) (E := (WithLp 2 (E × F))) (F := (WithLp 2 (E × F))))
     (isSymmetric_hermitianDilation A) (isSymmetric_hermitianDilation Â)
-    (isInvariant_spectralSubspace (hermitianDilation A) Ω)
-    (isInvariant_spectralSubspace (hermitianDilation Â) Ω) hδ hgap
+    (isInvariant_pointSpectralSubspace (hermitianDilation A) Ω)
+    (isInvariant_pointSpectralSubspace (hermitianDilation Â) Ω) hδ hgap
 
 /-- Equal-dimensional right singular subspaces admit an isometric
 identification; the aligned-frame theorem in `Statistics.lean` chooses the

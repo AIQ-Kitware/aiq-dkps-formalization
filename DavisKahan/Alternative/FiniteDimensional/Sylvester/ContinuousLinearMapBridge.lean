@@ -29,13 +29,13 @@ namespace ContinuousLinearMapBridge
 /-- Point spectrum carried by vectors in a supplied subspace. This local
 compatibility definition keeps the finite continuous-linear-map bridge
 independent of the experimental bounded-operator spectrum interfaces. -/
-abbrev restrictedSpectrum (A : E →L[𝕜] E) (U : Submodule 𝕜 E) : Set ℝ :=
+abbrev restrictedPointSpectrum (A : E →L[𝕜] E) (U : Submodule 𝕜 E) : Set ℝ :=
   {r | ∃ x : E, x ∈ U ∧ x ≠ 0 ∧ A x = ((r : ℝ) : 𝕜) • x}
 
 /-- Separation of the two carried point spectra by at least `d`. -/
-abbrev SpectraSeparated (A : E →L[𝕜] E) (U : Submodule 𝕜 E)
+abbrev PointSpectraSeparated (A : E →L[𝕜] E) (U : Submodule 𝕜 E)
     (B : F →L[𝕜] F) (V : Submodule 𝕜 F) (d : ℝ) : Prop :=
-  ∀ a ∈ restrictedSpectrum A U, ∀ b ∈ restrictedSpectrum B V, d ≤ |a - b|
+  ∀ a ∈ restrictedPointSpectrum A U, ∀ b ∈ restrictedPointSpectrum B V, d ≤ |a - b|
 
 end ContinuousLinearMapBridge
 
@@ -44,14 +44,14 @@ omit [CompleteSpace E] [CompleteSpace F] in
 
 Membership in the top submodule is free, so the eigenvector witnesses carry
 across unchanged.  All three bridge theorems below did this inline. -/
-private theorem spectraSeparated_toLinearMap
+private theorem pointSpectraSeparated_toLinearMap
     [FiniteDimensional 𝕜 E] [FiniteDimensional 𝕜 F]
     {A : F →L[𝕜] F} {B : E →L[𝕜] E} {d : ℝ}
-    (hsep : ContinuousLinearMapBridge.SpectraSeparated A ⊤ B ⊤ d) :
-    TauCeti.SpectraSeparated A.toLinearMap ⊤ B.toLinearMap ⊤ d := by
+    (hsep : ContinuousLinearMapBridge.PointSpectraSeparated A ⊤ B ⊤ d) :
+    TauCeti.PointSpectraSeparated A.toLinearMap ⊤ B.toLinearMap ⊤ d := by
   intro a b ha hb
-  rcases TauCeti.mem_restrictedSpectrum_iff.mp ha with ⟨x, -, hx0, hxeig⟩
-  rcases TauCeti.mem_restrictedSpectrum_iff.mp hb with ⟨y, -, hy0, hyeig⟩
+  rcases TauCeti.mem_restrictedPointSpectrum_iff.mp ha with ⟨x, -, hx0, hxeig⟩
+  rcases TauCeti.mem_restrictedPointSpectrum_iff.mp hb with ⟨y, -, hy0, hyeig⟩
   exact hsep a ⟨x, Submodule.mem_top, hx0, hxeig⟩
     b ⟨y, Submodule.mem_top, hy0, hyeig⟩
 
@@ -90,7 +90,7 @@ theorem ideal_sylvester_le
     {A : F →L[𝕜] F} {B : E →L[𝕜] E} {X C : E →L[𝕜] F}
     (hA : IsSelfAdjointOperator A) (hB : IsSelfAdjointOperator B)
     {d : ℝ} (hd : 0 < d)
-    (hsep : ContinuousLinearMapBridge.SpectraSeparated A ⊤ B ⊤ d)
+    (hsep : ContinuousLinearMapBridge.PointSpectraSeparated A ⊤ B ⊤ d)
     (hEq : ContinuousLinearMap.sylvesterOperator A B X = C) :
     d * N X.toLinearMap ≤ (Real.pi / 2) * N C.toLinearMap := by
   let A' : F →ₗ[𝕜] F := A.toLinearMap
@@ -103,8 +103,8 @@ theorem ideal_sylvester_le
   have hB' : B'.IsSymmetric := by
     intro x y
     exact hB x y
-  have hsep' : TauCeti.SpectraSeparated A' ⊤ B' ⊤ d :=
-    spectraSeparated_toLinearMap hsep
+  have hsep' : TauCeti.PointSpectraSeparated A' ⊤ B' ⊤ d :=
+    pointSpectraSeparated_toLinearMap hsep
   have hEq' : A' ∘ₗ X' - X' ∘ₗ B' = C' :=
     sylvesterOperator_toLinearMap hEq
   simpa [X', C'] using
@@ -122,7 +122,7 @@ theorem ideal_sylvester_le_complex
     {A : FC →L[ℂ] FC} {B : EC →L[ℂ] EC} {X C : EC →L[ℂ] FC}
     (hA : IsSelfAdjointOperator A) (hB : IsSelfAdjointOperator B)
     {d : ℝ} (hd : 0 < d)
-    (hsep : ContinuousLinearMapBridge.SpectraSeparated A ⊤ B ⊤ d)
+    (hsep : ContinuousLinearMapBridge.PointSpectraSeparated A ⊤ B ⊤ d)
     (hEq : ContinuousLinearMap.sylvesterOperator A B X = C) :
     d * N X.toLinearMap ≤ (Real.pi / 2) * N C.toLinearMap := by
   let A' : FC →ₗ[ℂ] FC := A.toLinearMap
@@ -135,8 +135,8 @@ theorem ideal_sylvester_le_complex
   have hB' : B'.IsSymmetric := by
     intro x y
     exact hB x y
-  have hsep' : TauCeti.SpectraSeparated A' ⊤ B' ⊤ d :=
-    spectraSeparated_toLinearMap hsep
+  have hsep' : TauCeti.PointSpectraSeparated A' ⊤ B' ⊤ d :=
+    pointSpectraSeparated_toLinearMap hsep
   have hEq' : A' ∘ₗ X' - X' ∘ₗ B' = C' :=
     sylvesterOperator_toLinearMap hEq
   simpa [X', C'] using
@@ -154,7 +154,7 @@ theorem ideal_sylvester_le_real
     {A : FR →L[ℝ] FR} {B : ER →L[ℝ] ER} {X C : ER →L[ℝ] FR}
     (hA : IsSelfAdjointOperator A) (hB : IsSelfAdjointOperator B)
     {d : ℝ} (hd : 0 < d)
-    (hsep : ContinuousLinearMapBridge.SpectraSeparated A ⊤ B ⊤ d)
+    (hsep : ContinuousLinearMapBridge.PointSpectraSeparated A ⊤ B ⊤ d)
     (hEq : ContinuousLinearMap.sylvesterOperator A B X = C) :
     d * N X.toLinearMap ≤ (Real.pi / 2) * N C.toLinearMap := by
   let A' : FR →ₗ[ℝ] FR := A.toLinearMap
@@ -167,8 +167,8 @@ theorem ideal_sylvester_le_real
   have hB' : B'.IsSymmetric := by
     intro x y
     exact hB x y
-  have hsep' : TauCeti.SpectraSeparated A' ⊤ B' ⊤ d :=
-    spectraSeparated_toLinearMap hsep
+  have hsep' : TauCeti.PointSpectraSeparated A' ⊤ B' ⊤ d :=
+    pointSpectraSeparated_toLinearMap hsep
   have hEq' : A' ∘ₗ X' - X' ∘ₗ B' = C' :=
     sylvesterOperator_toLinearMap hEq
   simpa [X', C'] using

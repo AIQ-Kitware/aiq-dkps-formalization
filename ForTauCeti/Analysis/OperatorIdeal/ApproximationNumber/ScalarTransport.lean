@@ -174,4 +174,14 @@ instance hasMinMaxLowerBoundEverywhere (𝕜 : Type u) [RCLike 𝕜] :
     intro E _ _ _ F _ _ _
     exact hasMinMaxLowerBound_rclike 𝕜
 
+/-- Ky Fan subadditivity on Hilbert spaces over any `RCLike` field.
+
+The min--max localization is an internal theorem, not a public capability hypothesis. -/
+theorem kyFanGauge_add_le {𝕜 : Type u} [RCLike 𝕜]
+    {E : Type v} [NormedAddCommGroup E] [InnerProductSpace 𝕜 E] [CompleteSpace E]
+    {F : Type v'} [NormedAddCommGroup F] [InnerProductSpace 𝕜 F] [CompleteSpace F]
+    (S T : E →L[𝕜] F) (k : ℕ) :
+    (S + T).kyFanGauge k ≤ S.kyFanGauge k + T.kyFanGauge k :=
+  kyFanGauge_add_le_of_hasMinMaxLowerBound (hasMinMaxLowerBound_rclike 𝕜) S T k
+
 end ContinuousLinearMap

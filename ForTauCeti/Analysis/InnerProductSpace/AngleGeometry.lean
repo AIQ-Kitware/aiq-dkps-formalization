@@ -104,7 +104,7 @@ are symmetric in `U, V` because `(P_V P_U)⋆ = P_U P_V` (`principalCosines_comm
 @[expose]
 noncomputable def principalCosines (U V : Submodule 𝕜 E)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] : ℕ →₀ ℝ :=
-  (cosThetaMap U V).singularValues
+  (cosThetaMap U V : E →ₗ[𝕜] E).singularValues
 
 /-- Principal-angle sines: the singular values of the directed cross projection
 `P_{Vᗮ} P_U`.  In equal-dimension configurations these are the sines of the
@@ -113,7 +113,7 @@ principal angles; when `dim U ≠ dim V` the directed map also records the
 @[expose]
 noncomputable def principalSines (U V : Submodule 𝕜 E)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] : ℕ →₀ ℝ :=
-  (sinThetaMap U V).singularValues
+  (sinThetaMap U V : E →ₗ[𝕜] E).singularValues
 
 /-- Principal angles as a sorted finitely supported sequence: `arcsin` applied to
 the principal sines.  `arcsin 0 = 0` keeps the support finite. -/
@@ -501,14 +501,14 @@ theorem principalAngles_comm (U V : Submodule 𝕜 E)
 `principalCosines` is defined as those singular values). -/
 theorem singularValues_cosThetaMap (U V : Submodule 𝕜 E)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] :
-    (cosThetaMap U V).singularValues = principalCosines U V :=
+    (cosThetaMap U V : E →ₗ[𝕜] E).singularValues = principalCosines U V :=
   rfl
 
 /-- Principal-angle sines are the singular values of `P_{Vᗮ} P_U` (definitional:
 `principalSines` is defined as those singular values). -/
 theorem singularValues_sinThetaMap (U V : Submodule 𝕜 E)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] :
-    (sinThetaMap U V).singularValues = principalSines U V :=
+    (sinThetaMap U V : E →ₗ[𝕜] E).singularValues = principalSines U V :=
   rfl
 
 /-- Principal-angle cosines are symmetric in the two subspaces, since

@@ -1534,11 +1534,11 @@ private theorem isInvariant_span_singleton {A : Plane 𝕜 →ₗ[𝕜] Plane �
   obtain ⟨c, rfl⟩ := hx
   exact ⟨c * (lam : 𝕜), by rw [map_smul, h, smul_smul, mul_comm]⟩
 
-private theorem restrictedSpectrum_span_singleton_subset {A : Plane 𝕜 →ₗ[𝕜] Plane 𝕜}
+private theorem restrictedPointSpectrum_span_singleton_subset {A : Plane 𝕜 →ₗ[𝕜] Plane 𝕜}
     {u : Plane 𝕜} (hu : u ≠ 0) {lam : ℝ} (h : A u = (lam : 𝕜) • u) :
-    restrictedSpectrum A (Submodule.span 𝕜 {u}) ⊆ {lam} := by
+    restrictedPointSpectrum A (Submodule.span 𝕜 {u}) ⊆ {lam} := by
   intro μ hμ
-  rw [mem_restrictedSpectrum_iff] at hμ
+  rw [mem_restrictedPointSpectrum_iff] at hμ
   obtain ⟨x, hxU, hx0, hxeq⟩ := hμ
   rw [Submodule.mem_span_singleton] at hxU
   obtain ⟨c, rfl⟩ := hxU
@@ -1725,19 +1725,18 @@ theorem isInvariant_modelRotatedOperator_rotatedModelSubspace (a b θ : ℝ) :
 first: the selected block of the unperturbed operator against the complementary block of the
 perturbed one. -/
 theorem intervalExteriorGap_sinTheta_model {a b θ : ℝ} (hab : a < b) :
-    IntervalExteriorGap (modelGappedOperator (𝕜 := 𝕜) a b)
-      (modelRotatedOperator (𝕜 := 𝕜) a b θ) (modelSubspace (𝕜 := 𝕜))
-      (rotatedModelSubspace (𝕜 := 𝕜) θ) a a (b - a) := by
+    PointIntervalExteriorGap (modelGappedOperator (𝕜 := 𝕜) a b) (modelSubspace (𝕜 := 𝕜))
+      (modelRotatedOperator (𝕜 := 𝕜) a b θ) (rotatedModelSubspace (𝕜 := 𝕜) θ)ᗮ a a (b - a) := by
   constructor
   · intro lam hlam
-    have h := restrictedSpectrum_span_singleton_subset (𝕜 := 𝕜) e0_ne_zero
+    have h := restrictedPointSpectrum_span_singleton_subset (𝕜 := 𝕜) e0_ne_zero
       (modelGappedOperator_apply_e0 (𝕜 := 𝕜) a b) hlam
     rw [Set.mem_singleton_iff] at h
     subst h
     simp
   · intro lam hlam
     rw [orthogonal_rotatedModelSubspace] at hlam
-    have h := restrictedSpectrum_span_singleton_subset (𝕜 := 𝕜) (vθ_ne_zero θ)
+    have h := restrictedPointSpectrum_span_singleton_subset (𝕜 := 𝕜) (vθ_ne_zero θ)
       (modelRotatedOperator_apply_vθ (𝕜 := 𝕜) a b θ) hlam
     rw [Set.mem_singleton_iff] at h
     subst h
@@ -1748,19 +1747,18 @@ theorem intervalExteriorGap_sinTheta_model {a b θ : ℝ} (hab : a < b) :
 /-- The interval/exterior gap of the `sin Θ` pair in the mirrored orientation, which the
 symmetric `sin Θ` theorem also requires. -/
 theorem intervalExteriorGap_sinTheta_model_symm {a b θ : ℝ} (hab : a < b) :
-    IntervalExteriorGap (modelRotatedOperator (𝕜 := 𝕜) a b θ)
-      (modelGappedOperator (𝕜 := 𝕜) a b) (rotatedModelSubspace (𝕜 := 𝕜) θ)
-      (modelSubspace (𝕜 := 𝕜)) a a (b - a) := by
+    PointIntervalExteriorGap (modelRotatedOperator (𝕜 := 𝕜) a b θ) (rotatedModelSubspace (𝕜 := 𝕜) θ)
+      (modelGappedOperator (𝕜 := 𝕜) a b) (modelSubspace (𝕜 := 𝕜))ᗮ a a (b - a) := by
   constructor
   · intro lam hlam
-    have h := restrictedSpectrum_span_singleton_subset (𝕜 := 𝕜) (uθ_ne_zero θ)
+    have h := restrictedPointSpectrum_span_singleton_subset (𝕜 := 𝕜) (uθ_ne_zero θ)
       (modelRotatedOperator_apply_uθ (𝕜 := 𝕜) a b θ) hlam
     rw [Set.mem_singleton_iff] at h
     subst h
     simp
   · intro lam hlam
     rw [orthogonal_modelSubspace] at hlam
-    have h := restrictedSpectrum_span_singleton_subset (𝕜 := 𝕜) e1_ne_zero
+    have h := restrictedPointSpectrum_span_singleton_subset (𝕜 := 𝕜) e1_ne_zero
       (modelGappedOperator_apply_e1 (𝕜 := 𝕜) a b) hlam
     rw [Set.mem_singleton_iff] at h
     subst h
@@ -1781,12 +1779,11 @@ theorem sinTheta_model_isAdmissiblePair {a b θ : ℝ} (hab : a < b) :
       IsInvariant (modelGappedOperator (𝕜 := 𝕜) a b) (modelSubspace (𝕜 := 𝕜)) ∧
       IsInvariant (modelRotatedOperator (𝕜 := 𝕜) a b θ)
         (rotatedModelSubspace (𝕜 := 𝕜) θ) ∧
-      IntervalExteriorGap (modelGappedOperator (𝕜 := 𝕜) a b)
-        (modelRotatedOperator (𝕜 := 𝕜) a b θ) (modelSubspace (𝕜 := 𝕜))
-        (rotatedModelSubspace (𝕜 := 𝕜) θ) a a (b - a) ∧
-      IntervalExteriorGap (modelRotatedOperator (𝕜 := 𝕜) a b θ)
-        (modelGappedOperator (𝕜 := 𝕜) a b) (rotatedModelSubspace (𝕜 := 𝕜) θ)
-        (modelSubspace (𝕜 := 𝕜)) a a (b - a) ∧
+      PointIntervalExteriorGap (modelGappedOperator (𝕜 := 𝕜) a b) (modelSubspace (𝕜 := 𝕜))
+        (modelRotatedOperator (𝕜 := 𝕜) a b θ) (rotatedModelSubspace (𝕜 := 𝕜) θ)ᗮ a a (b - a) ∧
+      PointIntervalExteriorGap (modelRotatedOperator (𝕜 := 𝕜) a b θ)
+        (rotatedModelSubspace (𝕜 := 𝕜) θ)
+        (modelGappedOperator (𝕜 := 𝕜) a b) (modelSubspace (𝕜 := 𝕜))ᗮ a a (b - a) ∧
       modelRotatedOperator (𝕜 := 𝕜) a b θ - modelGappedOperator (𝕜 := 𝕜) a b =
         modelSinThetaPerturbation (𝕜 := 𝕜) a b θ :=
   ⟨modelGappedOperator_isSymmetric a b, modelRotatedOperator_isSymmetric a b θ,
@@ -2003,11 +2000,11 @@ theorem orderedGap_tanTheta_model {a b θ : ℝ} (_hab : a < b) (hcos : Real.cos
       (rotatedModelSubspace (𝕜 := 𝕜) θ) (modelTanThetaBaseOperator (𝕜 := 𝕜) a b θ)
       (modelSubspace (𝕜 := 𝕜))ᗮ (b - a) := by
   intro lam μ hlam hμ
-  have hl := restrictedSpectrum_span_singleton_subset (𝕜 := 𝕜) (uθ_ne_zero θ)
+  have hl := restrictedPointSpectrum_span_singleton_subset (𝕜 := 𝕜) (uθ_ne_zero θ)
     (modelTanThetaPerturbedOperator_apply_uθ (𝕜 := 𝕜) (a := a) (b := b) hcos) hlam
   rw [Set.mem_singleton_iff] at hl
   rw [orthogonal_modelSubspace] at hμ
-  have hr := restrictedSpectrum_span_singleton_subset (𝕜 := 𝕜) e1_ne_zero
+  have hr := restrictedPointSpectrum_span_singleton_subset (𝕜 := 𝕜) e1_ne_zero
     (modelGappedOperator_apply_e1 (𝕜 := 𝕜) a (a + (b - a) * (1 + Real.tan θ ^ 2))) hμ
   rw [Set.mem_singleton_iff] at hr
   subst hl
@@ -2327,14 +2324,15 @@ theorem isInvariant_modelTanTwoThetaPerturbedOperator {a b θ : ℝ}
     (modelTanTwoThetaPerturbedOperator_apply_uθ hcos2)
 
 /-- **The internal gap of the `tan 2Θ` pair's unperturbed operator is exactly `b - a`.** -/
-theorem internalGap_tanTwoTheta_model {a b : ℝ} (hab : a < b) :
-    InternalGap (modelGappedOperator (𝕜 := 𝕜) a b) (modelSubspace (𝕜 := 𝕜)) (b - a) := by
+theorem pointInternalGap_tanTwoTheta_model {a b : ℝ} (hab : a < b) :
+    PointInternalGap (modelGappedOperator (𝕜 := 𝕜) a b) (modelSubspace (𝕜 := 𝕜)) (b - a) := by
+  refine ⟨isInvariant_modelGappedOperator_modelSubspace a b, ?_⟩
   intro lam μ hlam hμ
-  have hl := restrictedSpectrum_span_singleton_subset (𝕜 := 𝕜) e0_ne_zero
+  have hl := restrictedPointSpectrum_span_singleton_subset (𝕜 := 𝕜) e0_ne_zero
     (modelGappedOperator_apply_e0 (𝕜 := 𝕜) a b) hlam
   rw [Set.mem_singleton_iff] at hl
   rw [orthogonal_modelSubspace] at hμ
-  have hr := restrictedSpectrum_span_singleton_subset (𝕜 := 𝕜) e1_ne_zero
+  have hr := restrictedPointSpectrum_span_singleton_subset (𝕜 := 𝕜) e1_ne_zero
     (modelGappedOperator_apply_e1 (𝕜 := 𝕜) a b) hμ
   rw [Set.mem_singleton_iff] at hr
   subst hl
@@ -2421,14 +2419,14 @@ theorem tanTwoTheta_model_isAdmissiblePair {a b θ : ℝ} (hab : a < b)
       IsInvariant (modelGappedOperator (𝕜 := 𝕜) a b) (modelSubspace (𝕜 := 𝕜)) ∧
       IsInvariant (modelTanTwoThetaPerturbedOperator (𝕜 := 𝕜) a b θ)
         (rotatedModelSubspace (𝕜 := 𝕜) θ) ∧
-      InternalGap (modelGappedOperator (𝕜 := 𝕜) a b) (modelSubspace (𝕜 := 𝕜)) (b - a) ∧
+      PointInternalGap (modelGappedOperator (𝕜 := 𝕜) a b) (modelSubspace (𝕜 := 𝕜)) (b - a) ∧
       modelTanTwoThetaPerturbedOperator (𝕜 := 𝕜) a b θ - modelGappedOperator (𝕜 := 𝕜) a b =
         -modelTanTwoThetaPerturbation (𝕜 := 𝕜) a b θ :=
   ⟨modelGappedOperator_isSymmetric a b,
    modelTanTwoThetaPerturbedOperator_isSymmetric a b θ,
    isInvariant_modelGappedOperator_modelSubspace a b,
    isInvariant_modelTanTwoThetaPerturbedOperator hcos2,
-   internalGap_tanTwoTheta_model hab,
+   pointInternalGap_tanTwoTheta_model hab,
    modelTanTwoThetaPerturbedOperator_sub_base a b θ⟩
 
 /-- **Equality in the `tan 2Θ` perturbation bound, for the admissible pair.** -/
@@ -2460,7 +2458,7 @@ theorem tanTwoTheta_model_sourceSharpness
       IsInvariant (modelGappedOperator (𝕜 := 𝕜) a b) (modelSubspace (𝕜 := 𝕜)) ∧
       IsInvariant (modelTanTwoThetaPerturbedOperator (𝕜 := 𝕜) a b θ)
         (rotatedModelSubspace (𝕜 := 𝕜) θ) ∧
-      InternalGap (modelGappedOperator (𝕜 := 𝕜) a b)
+      PointInternalGap (modelGappedOperator (𝕜 := 𝕜) a b)
         (modelSubspace (𝕜 := 𝕜)) (b - a) ∧
       modelTanTwoThetaPerturbedOperator (𝕜 := 𝕜) a b θ -
           modelGappedOperator (𝕜 := 𝕜) a b =

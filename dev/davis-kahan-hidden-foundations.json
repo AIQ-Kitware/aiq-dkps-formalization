@@ -106,14 +106,14 @@
     {
       "id": "schatten-foundation",
       "title": "Approximation-number Schatten infrastructure",
-      "module": "ForTauCeti.Analysis.OperatorIdeal.Family.Schatten",
-      "file": "ForTauCeti/Analysis/OperatorIdeal/Family/Schatten.lean",
-      "declaration": "TauCeti.schattenIdealFamily",
-      "kind": "construction",
+      "module": "ForTauCeti.Analysis.OperatorIdeal.Family.SymmetricGauge",
+      "file": "ForTauCeti/Analysis/OperatorIdeal/Family/SymmetricGauge.lean",
+      "declaration": "TauCeti.schattenFamily",
+      "kind": "proof_candidate",
       "dependencies": [],
       "frontier_nodes": [],
       "confidence": "high",
-      "notes": "Closed.  This node used to be a fifteen-field `interface` contract listing every theorem needed to turn approximation-number l^p gauges into complete rectangular ideals, in `DavisKahan/OperatorIdeal/ApproximationNumbers/SchattenApproximationFoundation.lean`.  Nothing ever instantiated that contract; the campaign it described was carried out in ForTauCeti instead, and the file was deleted on 2026-08-27.  The node now points at what discharges it."
+      "notes": "The former interface contract was replaced by implementations in ForTauCeti. The revised port removes the parallel schattenIdealFamily constructor: schattenFamily is induced by the canonical SymmetricGauge over arbitrary RCLike fields, with independent source and target universes. This migration awaits compilation; no new build verification is claimed."
     },
     {
       "id": "schatten-family",
@@ -127,7 +127,7 @@
       ],
       "frontier_nodes": [],
       "confidence": "high",
-      "notes": "Closed.  Was the bridge from the deleted interface contract to a legacy rectangular record.  The hard field of that contract was the triangle inequality -- the Tomic--Weyl majorization argument -- and this is it; completeness is the separate instance `isComplete_schattenIdealFamily` in the same module."
+      "notes": "The approximation-number power-sum triangle inequality remains here and uses generic rectangular Ky Fan dominance. The canonical family and its completeness instance isComplete_schattenFamily are in Family.SymmetricGauge. The revised port awaits compilation."
     },
     {
       "id": "free-beam-mode-ode",

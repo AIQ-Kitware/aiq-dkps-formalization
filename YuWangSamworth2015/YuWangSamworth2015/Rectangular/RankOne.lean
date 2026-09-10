@@ -37,7 +37,7 @@ theorem yuWangSamworth_rightSingularVector_opNormCoefficient_le
     (hcorr : CorrespondingRightSingularBlock A Â
       (Submodule.span 𝕜 {u}) (Submodule.span 𝕜 {v}))
     (hΔ : 0 < Δ)
-    (hgap : ∀ ν ∈ restrictedSpectrum (rightGram A)
+    (hgap : ∀ ν ∈ restrictedPointSpectrum (rightGram A)
       (Submodule.span 𝕜 {u})ᗮ, Δ ≤ |σ ^ 2 - ν|) :
     ∃ c : 𝕜, ‖c‖ = 1 ∧
       ‖c • v - u‖ ≤
@@ -76,7 +76,7 @@ theorem yuWangSamworth_leftSingularVector_opNormCoefficient_le
     (hcorr : CorrespondingLeftSingularBlock A Â
       (Submodule.span 𝕜 {u}) (Submodule.span 𝕜 {v}))
     (hΔ : 0 < Δ)
-    (hgap : ∀ ν ∈ restrictedSpectrum (leftGram A)
+    (hgap : ∀ ν ∈ restrictedPointSpectrum (leftGram A)
       (Submodule.span 𝕜 {u})ᗮ, Δ ≤ |σ ^ 2 - ν|) :
     ∃ c : 𝕜, ‖c‖ = 1 ∧
       ‖c • v - u‖ ≤
@@ -115,7 +115,7 @@ theorem yuWangSamworth_rightSingularVector_le
     (hcorr : CorrespondingRightSingularBlock A Â
       (Submodule.span 𝕜 {u}) (Submodule.span 𝕜 {v}))
     (hΔ : 0 < Δ)
-    (hgap : ∀ ν ∈ restrictedSpectrum (rightGram A)
+    (hgap : ∀ ν ∈ restrictedPointSpectrum (rightGram A)
       (Submodule.span 𝕜 {u})ᗮ, Δ ≤ |σ ^ 2 - ν|) :
     ∃ c : 𝕜, ‖c‖ = 1 ∧
       ‖c • v - u‖ ≤
@@ -137,7 +137,7 @@ theorem yuWangSamworth_leftSingularVector_le
     (hcorr : CorrespondingLeftSingularBlock A Â
       (Submodule.span 𝕜 {u}) (Submodule.span 𝕜 {v}))
     (hΔ : 0 < Δ)
-    (hgap : ∀ ν ∈ restrictedSpectrum (leftGram A)
+    (hgap : ∀ ν ∈ restrictedPointSpectrum (leftGram A)
       (Submodule.span 𝕜 {u})ᗮ, Δ ≤ |σ ^ 2 - ν|) :
     ∃ c : 𝕜, ‖c‖ = 1 ∧
       ‖c • v - u‖ ≤

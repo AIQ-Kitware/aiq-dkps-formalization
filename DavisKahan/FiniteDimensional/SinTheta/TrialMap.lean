@@ -120,10 +120,10 @@ unwanted exact spectrum of `A` on `Vᗮ` outside the enlarged interval.  The
 second branch reverses those roles, as allowed in Davis--Kahan Theorem 6.1. -/
 def TrialComplementIntervalGap (M : F →ₗ[𝕜] F) (A : E →ₗ[𝕜] E)
     (V : Submodule 𝕜 E) (a b δ : ℝ) : Prop :=
-  (SpectrumIn M ⊤ (Set.Icc a b) ∧
-      SpectrumIn A Vᗮ {lam | lam ∉ Set.Ioo (a - δ) (b + δ)}) ∨
-    (SpectrumIn A Vᗮ (Set.Icc a b) ∧
-      SpectrumIn M ⊤ {lam | lam ∉ Set.Ioo (a - δ) (b + δ)})
+  (PointSpectrumIn M ⊤ (Set.Icc a b) ∧
+      PointSpectrumIn A Vᗮ {lam | lam ∉ Set.Ioo (a - δ) (b + δ)}) ∨
+    (PointSpectrumIn A Vᗮ (Set.Icc a b) ∧
+      PointSpectrumIn M ⊤ {lam | lam ∉ Set.Ioo (a - δ) (b + δ)})
 
 /-- **Raw generalized sine-block residual estimate, every UI norm.**
 
@@ -146,13 +146,13 @@ theorem complementaryTrialBlock_residual_le_of_intervalGap
     Vᗮ.orthogonalProjectionOnto.toLinearMap ∘ₗ generalResidual A X M
   let NV : UnitarilyInvariantSeminorm 𝕜 F Vᗮ :=
     N.codomainIsometryTransport Vᗮ.subtypeₗᵢ
-  have hAV : AV.IsSymmetric := isSymmetric_restrict hA hVperp
+  have hAV : AV.IsSymmetric := hA.restrict_invariant hVperp
   have hgap' : UnorderedIntervalSylvesterGap AV M a b δ := by
     rcases hgap with hforward | hreverse
     · exact Or.inl ⟨hforward.1,
-        (spectrumIn_restrict_iff A hVperp _).2 hforward.2⟩
+        (pointSpectrumIn_restrict_iff A hVperp _).2 hforward.2⟩
     · exact Or.inr ⟨
-        (spectrumIn_restrict_iff A hVperp _).2 hreverse.1,
+        (pointSpectrumIn_restrict_iff A hVperp _).2 hreverse.1,
         hreverse.2⟩
   have hEq : AV ∘ₗ Y - Y ∘ₗ M = C := by
     ext x
@@ -281,8 +281,8 @@ theorem generalizedSinTheta_residual_le
     {M : F →ₗ[𝕜] F} (hM : M.IsSymmetric)
     {a b δ ε : ℝ} (hδ : 0 < δ) (hε : 0 < ε)
     (hframe : LowerFrameBound X ε)
-    (hMspec : SpectrumIn M ⊤ (Set.Icc a b))
-    (hAspec : SpectrumIn A Vᗮ {lam | lam ∉ Set.Ioo (a - δ) (b + δ)}) :
+    (hMspec : PointSpectrumIn M ⊤ (Set.Icc a b))
+    (hAspec : PointSpectrumIn A Vᗮ {lam | lam ∉ Set.Ioo (a - δ) (b + δ)}) :
     δ * ε * N (sinThetaEmbedding V (orthonormalizedEmbedding X hX)) ≤
       N (generalResidual A X M) := by
   have htransport := lowerFrame_mul_uiNorm_sinTheta_le_complementaryTrialBlock

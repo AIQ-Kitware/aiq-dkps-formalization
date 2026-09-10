@@ -111,7 +111,7 @@ bookkeeping. -/
 theorem kyFan_sylvester_le_of_spectralDistance_analytic
     {A : F →ₗ[𝕜] F} {B : E →ₗ[𝕜] E} {X C : E →ₗ[𝕜] F}
     (hA : A.IsSymmetric) (hB : B.IsSymmetric)
-    {δ : ℝ} (hδ : 0 < δ) (hgap : SpectraSeparated A ⊤ B ⊤ δ)
+    {δ : ℝ} (hδ : 0 < δ) (hgap : PointSpectraSeparated A ⊤ B ⊤ δ)
     (hEq : A ∘ₗ X - X ∘ₗ B = C) (k : ℕ) :
     δ * TauCeti.kyFanSum k X ≤
       (Real.pi / 2) *
@@ -125,8 +125,8 @@ theorem kyFan_sylvester_le_of_spectralDistance_analytic
   · intro i j
     exact hgap
       (hA.eigenvalues rfl i) (hB.eigenvalues rfl j)
-      (eigenvalue_mem_restrictedSpectrum_top hA i)
-      (eigenvalue_mem_restrictedSpectrum_top hB j)
+      (eigenvalue_mem_restrictedPointSpectrum_top hA i)
+      (eigenvalue_mem_restrictedPointSpectrum_top hB j)
   · intro i j
     exact sylvester_eigenbasis_coefficient_equation hA hB hEq i j
 
@@ -150,7 +150,7 @@ scalar identity recovers `δ • X = p • Y`. -/
 theorem sylvester_barycentricOrbitRepresentation_of_spectralDistance
     {A : F →ₗ[𝕜] F} {B : E →ₗ[𝕜] E} {X C : E →ₗ[𝕜] F}
     (hA : A.IsSymmetric) (hB : B.IsSymmetric)
-    {δ : ℝ} (hδ : 0 < δ) (hgap : SpectraSeparated A ⊤ B ⊤ δ)
+    {δ : ℝ} (hδ : 0 < δ) (hgap : PointSpectraSeparated A ⊤ B ⊤ δ)
     (hEq : A ∘ₗ X - X ∘ₗ B = C) :
     ∃ m : ℝ, 0 ≤ m ∧ m ≤ Real.pi / 2 ∧
       ∃ Y : E →ₗ[𝕜] F,
@@ -209,7 +209,7 @@ certificate at that mass is refuted. -/
 theorem sylvester_hasFiniteUnitaryOrbitCertificate_of_spectralDistance
     {A : F →ₗ[𝕜] F} {B : E →ₗ[𝕜] E} {X C : E →ₗ[𝕜] F}
     (hA : A.IsSymmetric) (hB : B.IsSymmetric)
-    {δ : ℝ} (hδ : 0 < δ) (hgap : SpectraSeparated A ⊤ B ⊤ δ)
+    {δ : ℝ} (hδ : 0 < δ) (hgap : PointSpectraSeparated A ⊤ B ⊤ δ)
     (hEq : A ∘ₗ X - X ∘ₗ B = C) :
     UnitarilyInvariantSeminorm.HasFiniteUnitaryOrbitCertificate
       (Real.pi / 2) (((δ : 𝕜)) • X) C := by
@@ -226,7 +226,7 @@ not proof dependencies. -/
 theorem kyFan_sylvester_le_of_spectralDistance
     {A : F →ₗ[𝕜] F} {B : E →ₗ[𝕜] E} {X C : E →ₗ[𝕜] F}
     (hA : A.IsSymmetric) (hB : B.IsSymmetric)
-    {δ : ℝ} (hδ : 0 < δ) (hgap : SpectraSeparated A ⊤ B ⊤ δ)
+    {δ : ℝ} (hδ : 0 < δ) (hgap : PointSpectraSeparated A ⊤ B ⊤ δ)
     (hEq : A ∘ₗ X - X ∘ₗ B = C) (k : ℕ) :
     δ * TauCeti.kyFanSum k X ≤
       (Real.pi / 2) *
@@ -242,7 +242,7 @@ theorem uiNorm_sylvester_le_of_spectralDistance
     (N : UnitarilyInvariantSeminorm 𝕜 E F)
     {A : F →ₗ[𝕜] F} {B : E →ₗ[𝕜] E} {X C : E →ₗ[𝕜] F}
     (hA : A.IsSymmetric) (hB : B.IsSymmetric) {δ : ℝ} (hδ : 0 < δ)
-    (hgap : SpectraSeparated A ⊤ B ⊤ δ)
+    (hgap : PointSpectraSeparated A ⊤ B ⊤ δ)
     (hEq : A ∘ₗ X - X ∘ₗ B = C) :
     δ * N X ≤ (Real.pi / 2) * N C := by
   let p : ℝ := Real.pi / 2
@@ -281,7 +281,7 @@ theorem kyFan_sylvester_le_of_spectralDistance_complex
     [NormedAddCommGroup FC] [InnerProductSpace ℂ FC] [FiniteDimensional ℂ FC]
     {A : FC →ₗ[ℂ] FC} {B : EC →ₗ[ℂ] EC} {X C : EC →ₗ[ℂ] FC}
     (hA : A.IsSymmetric) (hB : B.IsSymmetric)
-    {δ : ℝ} (hδ : 0 < δ) (hgap : SpectraSeparated A ⊤ B ⊤ δ)
+    {δ : ℝ} (hδ : 0 < δ) (hgap : PointSpectraSeparated A ⊤ B ⊤ δ)
     (hEq : A ∘ₗ X - X ∘ₗ B = C) (k : ℕ) :
     δ * TauCeti.kyFanSum k X ≤
       (Real.pi / 2) *
@@ -295,8 +295,8 @@ theorem kyFan_sylvester_le_of_spectralDistance_complex
   · intro i j
     exact hgap
       (hA.eigenvalues rfl i) (hB.eigenvalues rfl j)
-      (eigenvalue_mem_restrictedSpectrum_top hA i)
-      (eigenvalue_mem_restrictedSpectrum_top hB j)
+      (eigenvalue_mem_restrictedPointSpectrum_top hA i)
+      (eigenvalue_mem_restrictedPointSpectrum_top hB j)
   · intro i j
     exact sylvester_eigenbasis_coefficient_equation hA hB hEq i j
 
@@ -307,7 +307,7 @@ theorem kyFan_sylvester_le_of_spectralDistance_real
     [NormedAddCommGroup FR] [InnerProductSpace ℝ FR] [FiniteDimensional ℝ FR]
     {A : FR →ₗ[ℝ] FR} {B : ER →ₗ[ℝ] ER} {X C : ER →ₗ[ℝ] FR}
     (hA : A.IsSymmetric) (hB : B.IsSymmetric)
-    {δ : ℝ} (hδ : 0 < δ) (hgap : SpectraSeparated A ⊤ B ⊤ δ)
+    {δ : ℝ} (hδ : 0 < δ) (hgap : PointSpectraSeparated A ⊤ B ⊤ δ)
     (hEq : A ∘ₗ X - X ∘ₗ B = C) (k : ℕ) :
     δ * TauCeti.kyFanSum k X ≤
       (Real.pi / 2) *
@@ -321,8 +321,8 @@ theorem kyFan_sylvester_le_of_spectralDistance_real
   · intro i j
     exact hgap
       (hA.eigenvalues rfl i) (hB.eigenvalues rfl j)
-      (eigenvalue_mem_restrictedSpectrum_top hA i)
-      (eigenvalue_mem_restrictedSpectrum_top hB j)
+      (eigenvalue_mem_restrictedPointSpectrum_top hA i)
+      (eigenvalue_mem_restrictedPointSpectrum_top hB j)
   · intro i j
     have h := sylvester_eigenbasis_coefficient_equation hA hB hEq i j
     simpa only [RCLike.ofReal_real_eq_id, id_eq] using h
@@ -335,7 +335,7 @@ theorem uiNorm_sylvester_le_of_spectralDistance_complex
     (N : UnitarilyInvariantSeminorm ℂ EC FC)
     {A : FC →ₗ[ℂ] FC} {B : EC →ₗ[ℂ] EC} {X C : EC →ₗ[ℂ] FC}
     (hA : A.IsSymmetric) (hB : B.IsSymmetric) {δ : ℝ} (hδ : 0 < δ)
-    (hgap : SpectraSeparated A ⊤ B ⊤ δ)
+    (hgap : PointSpectraSeparated A ⊤ B ⊤ δ)
     (hEq : A ∘ₗ X - X ∘ₗ B = C) :
     δ * N X ≤ (Real.pi / 2) * N C := by
   let p : ℝ := Real.pi / 2
@@ -373,7 +373,7 @@ theorem uiNorm_sylvester_le_of_spectralDistance_real
     (N : UnitarilyInvariantSeminorm ℝ ER FR)
     {A : FR →ₗ[ℝ] FR} {B : ER →ₗ[ℝ] ER} {X C : ER →ₗ[ℝ] FR}
     (hA : A.IsSymmetric) (hB : B.IsSymmetric) {δ : ℝ} (hδ : 0 < δ)
-    (hgap : SpectraSeparated A ⊤ B ⊤ δ)
+    (hgap : PointSpectraSeparated A ⊤ B ⊤ δ)
     (hEq : A ∘ₗ X - X ∘ₗ B = C) :
     δ * N X ≤ (Real.pi / 2) * N C := by
   let p : ℝ := Real.pi / 2
@@ -412,10 +412,10 @@ Hilbert--Schmidt form of Davis--Kahan Theorem 6.2.
 /-- **Frobenius Sylvester estimate, constant one.**  Under arbitrary positive
 spectral separation the Hilbert--Schmidt norm of a Sylvester solution is
 controlled by the residual with no dimensional or analytic loss. -/
-theorem frobenius_sylvester_le_of_spectraSeparated
+theorem frobenius_sylvester_le_of_pointSpectraSeparated
     {A : F →ₗ[𝕜] F} {B : E →ₗ[𝕜] E} {X C : E →ₗ[𝕜] F}
     (hA : A.IsSymmetric) (hB : B.IsSymmetric)
-    {δ : ℝ} (hδ : 0 < δ) (hgap : SpectraSeparated A ⊤ B ⊤ δ)
+    {δ : ℝ} (hδ : 0 < δ) (hgap : PointSpectraSeparated A ⊤ B ⊤ δ)
     (hEq : A ∘ₗ X - X ∘ₗ B = C) :
     δ * UnitarilyInvariantSeminorm.frobenius X ≤
       UnitarilyInvariantSeminorm.frobenius C := by
@@ -428,8 +428,8 @@ theorem frobenius_sylvester_le_of_spectraSeparated
     intro i j
     have hcoef := sylvester_eigenbasis_coefficient_equation hA hB hEq i j
     have hsep : δ ≤ |hA.eigenvalues rfl i - hB.eigenvalues rfl j| :=
-      hgap _ _ (eigenvalue_mem_restrictedSpectrum_top hA i)
-        (eigenvalue_mem_restrictedSpectrum_top hB j)
+      hgap _ _ (eigenvalue_mem_restrictedPointSpectrum_top hA i)
+        (eigenvalue_mem_restrictedPointSpectrum_top hB j)
     have hnorm :
         ‖((hA.eigenvalues rfl i : 𝕜) - (hB.eigenvalues rfl j : 𝕜))‖ =
           |hA.eigenvalues rfl i - hB.eigenvalues rfl j| := by

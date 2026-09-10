@@ -275,8 +275,8 @@ theorem hasVectorSpectralGap_sylvesterGroup (hA : IsSelfAdjoint A) (hB : IsSelfA
         (TauCeti.LinearPMap.genToGroup hB) b)) := by
     intro s hs
     have hsabs : |s| < δ := abs_lt.mpr ⟨hs.1, hs.2⟩
-    refine TauCeti.LinearPMap.mem_resolventSet_of_lower_bound (c := δ - |s|) hS (by simp)
-      (by linarith) ?_
+    refine (TauCeti.LinearPMap.mem_resolventSet_and_norm_le_of_lower_bound (c := δ - |s|) hS
+      (by linarith) ?_).1
     intro x
     -- let the grid width go to zero
     refine le_of_forall_pos_le_add fun η hη => ?_

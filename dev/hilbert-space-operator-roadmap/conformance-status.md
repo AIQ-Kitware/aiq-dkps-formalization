@@ -1,5 +1,8 @@
 # Conformance status — ForTauCeti against the submitted roadmap
 
+> Historical record. This is the earlier HilbertSpaceOperatorTheory conformance snapshot, not a measurement of the revised OperatorTheory port.
+> See [the current migration notes](../tauceti/remaining-roadmap-migration.md) for the revised port.
+
 Measured with `scripts/check_roadmap_delivered.py`, which reads
 `submodules/TauCetiRoadmap/TauCetiRoadmap/HilbertSpaceOperatorTheory`.
 

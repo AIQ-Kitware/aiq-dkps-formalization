@@ -79,8 +79,8 @@ theorem tanTheta_directed_finiteDimensional_symmetricNorming_rclike
     (_hrank : Module.finrank 𝕜 F = Module.finrank 𝕜 U)
     {β α δ : ℝ} (hβα : β ≤ α) (hδ : 0 < δ)
     (hCompressionSpectrum :
-      SpectrumIn (compression A X) ⊤ (Set.Icc β α))
-    (hUnwantedSpectrum : SpectrumIn A Uᗮ (Set.Ici (α + δ)))
+      PointSpectrumIn (compression A X) ⊤ (Set.Icc β α))
+    (hUnwantedSpectrum : PointSpectrumIn A Uᗮ (Set.Ici (α + δ)))
     (tanTheta0 : F →ₗ[𝕜] E)
     (htan : tanTheta0.singularValues =
       principalTangents (approximateSubspace X) U)
@@ -116,9 +116,9 @@ theorem sinTwoTheta_directed_finiteDimensional_symmetricNorming_rclike
     (X : F →ₗᵢ[𝕜] E)
     {M : F →ₗ[𝕜] F} (hM : M.IsSymmetric)
     {β α δ : ℝ} (_hβα : β ≤ α) (hδ : 0 < δ)
-    (hCompressionSpectrum : SpectrumIn M ⊤ (Set.Icc β α))
+    (hCompressionSpectrum : PointSpectrumIn M ⊤ (Set.Icc β α))
     (hUnwantedSpectrum :
-      SpectrumIn A Uᗮ {lam : ℝ | lam ≤ β - δ ∨ α + δ ≤ lam})
+      PointSpectrumIn A Uᗮ {lam : ℝ | lam ≤ β - δ ∨ α + δ ≤ lam})
     (hR : N.Mem (residual A X M).toContinuousLinearMap) :
     N.Mem (sinTwoThetaEmbedding U X).toContinuousLinearMap ∧
       δ * N.gauge (sinTwoThetaEmbedding U X).toContinuousLinearMap ≤
@@ -139,7 +139,7 @@ theorem sinTwoTheta_directed_finiteDimensional_symmetricNorming_rclike
     rw [← kyFanSum_eq_kyFanApproximationGauge k (sinTwoThetaEmbedding U X),
       ← kyFanSum_eq_kyFanApproximationGauge k (residual A X M)]
     have hOutside :
-        SpectrumIn A Uᗮ {lam : ℝ | lam ∉ Set.Ioo (β - δ) (α + δ)} := by
+        PointSpectrumIn A Uᗮ {lam : ℝ | lam ∉ Set.Ioo (β - δ) (α + δ)} := by
       intro lam hlam
       have hout := hUnwantedSpectrum hlam
       change lam ≤ β - δ ∨ α + δ ≤ lam at hout

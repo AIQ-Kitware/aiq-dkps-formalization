@@ -22,7 +22,7 @@ The residual gap belongs between the coordinate operator `M` and the unwanted
 spectrum of `A` on `Uᗮ`.  A bare internal gap between the two reducing blocks
 of `A` does not control an arbitrary trial pair `(X,M)`, and the former direct
 Sylvester body was not type-correct: its displayed right-hand side consisted
-of ambient endomorphisms while the norm had rectangular type `F -> E`.
+of ambient endomorphisms while the norm had rectangular type `F → E`.
 -/
 
 namespace TauCeti
@@ -45,8 +45,8 @@ theorem sinTwoTheta_residual_le
     [U.HasOrthogonalProjection] (hU : IsInvariant A U)
     (X : F →ₗᵢ[𝕜] E) {M : F →ₗ[𝕜] F} (hM : M.IsSymmetric)
     {a b δ : ℝ} (hδ : 0 < δ)
-    (hMspec : SpectrumIn M ⊤ (Set.Icc a b))
-    (hAspec : SpectrumIn A Uᗮ {lam | lam ∉ Set.Ioo (a - δ) (b + δ)}) :
+    (hMspec : PointSpectrumIn M ⊤ (Set.Icc a b))
+    (hAspec : PointSpectrumIn A Uᗮ {lam | lam ∉ Set.Ioo (a - δ) (b + δ)}) :
     δ * N (sinTwoThetaEmbedding U X) ≤ 2 * N (residual A X M) := by
   have hdouble := sinTwoThetaEmbedding_uiNorm_le_two_mul N U X
   have hsingle := sinTheta_residual_le N hA hU X hM hδ hMspec hAspec
@@ -84,7 +84,7 @@ theorem sinTwoTheta_residual_le_of_spectralDistance
     {A : E →ₗ[𝕜] E} (hA : A.IsSymmetric) {U : Submodule 𝕜 E}
     [U.HasOrthogonalProjection] (hU : IsInvariant A U)
     (X : F →ₗᵢ[𝕜] E) {M : F →ₗ[𝕜] F} (hM : M.IsSymmetric)
-    {δ : ℝ} (hδ : 0 < δ) (hgap : SpectraSeparated M ⊤ A Uᗮ δ) :
+    {δ : ℝ} (hδ : 0 < δ) (hgap : PointSpectraSeparated M ⊤ A Uᗮ δ) :
     δ * N (sinTwoThetaEmbedding U X) ≤
       Real.pi * N (residual A X M) := by
   have hdouble := sinTwoThetaEmbedding_uiNorm_le_two_mul N U X

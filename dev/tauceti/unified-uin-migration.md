@@ -1,5 +1,8 @@
 # Unified UIN / Majorization migration
 
+> Historical record. This records the original, uncompiled UIN overlay. Opus later repaired it in commit 59003c6b; this report is not the current validation record.
+> See [the current migration notes](remaining-roadmap-migration.md) for the revised port.
+
 ## Status
 
 Unverified full-file source migration against `143a43f06c93b18f610cce4a6f25cafef20f5ddf`. Lean and Lake are not installed
