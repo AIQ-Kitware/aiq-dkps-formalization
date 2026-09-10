@@ -7,7 +7,7 @@ import DavisKahan.FiniteDimensional.DirectRotation.PrincipalPlanes
 import DavisKahan.FiniteDimensional.Core.OperatorBlocks
 import ForTauCeti.Analysis.InnerProductSpace.CourantFischer
 import ForTauCeti.Analysis.InnerProductSpace.KyFan
-import ForTauCeti.Analysis.InnerProductSpace.RectangularUnitarilyInvariantSeminorm
+import ForTauCeti.Analysis.InnerProductSpace.UnitarilyInvariantSeminorm
 import ForTauCeti.Analysis.InnerProductSpace.SandwichMajorization
 
 /-!
@@ -277,7 +277,7 @@ theorem eigenvalues_hermitianPart_le_singularValues
 /-- Pinching relative to `U + U orthogonal` is a contraction for every
 unitarily invariant norm. -/
 theorem uiNorm_pinch_le
-    (N : UnitarilyInvariantSeminorm 𝕜 E)
+    (N : UnitarilyInvariantSeminorm 𝕜 E E)
     (U : Submodule 𝕜 E) [U.HasOrthogonalProjection]
     (A : E →ₗ[𝕜] E) : N (pinch U A) ≤ N A := by
   have hpinch : (2 : 𝕜) • pinch U A =
@@ -609,7 +609,7 @@ theorem directRotation_displacementSquare_kyFan
 
 /-- Every UI norm inherits the squared-displacement extremum. -/
 theorem directRotation_displacementSquare_uiNorm
-    (N : UnitarilyInvariantSeminorm 𝕜 E)
+    (N : UnitarilyInvariantSeminorm 𝕜 E E)
     (U V : Submodule 𝕜 E)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
     (hacute : IsAcute U V) (W : E ≃ₗᵢ[𝕜] E)

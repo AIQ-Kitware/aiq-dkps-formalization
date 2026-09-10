@@ -145,7 +145,7 @@ theorem yuWangSamworth_theorem3_printed_rankBoundary_refutation
           sinThetaFrobenius (Submodule.span ℝ {v}) (Submodule.span ℝ {w}) ≤
             2 * (2 * ‖A.toContinuousLinearMap‖ + ‖(Â - A).toContinuousLinearMap‖) *
               min (Real.sqrt 1 * ‖(Â - A).toContinuousLinearMap‖)
-                (RectangularUnitarilyInvariantSeminorm.frobenius (Â - A)) / Δ := by
+                (UnitarilyInvariantSeminorm.frobenius (Â - A)) / Δ := by
   classical
   have hv0 : v ≠ 0 := by rw [← norm_ne_zero_iff, hv]; norm_num
   have hw0 : w ≠ 0 := by rw [← norm_ne_zero_iff, hw]; norm_num
@@ -171,15 +171,15 @@ theorem yuWangSamworth_theorem3_printed_rankBoundary_refutation
     have hbound := hall (2 * K * D + 1) hΔpos
     rw [hsin] at hbound
     have hmin : min (Real.sqrt 1 * D)
-        (RectangularUnitarilyInvariantSeminorm.frobenius (Â - A)) ≤ D := by
+        (UnitarilyInvariantSeminorm.frobenius (Â - A)) ≤ D := by
       refine (min_le_left _ _).trans_eq ?_
       rw [Real.sqrt_one, one_mul]
     have hnum : 2 * K * min (Real.sqrt 1 * D)
-        (RectangularUnitarilyInvariantSeminorm.frobenius (Â - A)) ≤ 2 * K * D := by
+        (UnitarilyInvariantSeminorm.frobenius (Â - A)) ≤ 2 * K * D := by
       have h2K : (0 : ℝ) ≤ 2 * K := by positivity
       exact mul_le_mul_of_nonneg_left hmin h2K
     have hfinal : 2 * K * min (Real.sqrt 1 * D)
-        (RectangularUnitarilyInvariantSeminorm.frobenius (Â - A)) / (2 * K * D + 1)
+        (UnitarilyInvariantSeminorm.frobenius (Â - A)) / (2 * K * D + 1)
           ≤ 2 * K * D / (2 * K * D + 1) :=
       div_le_div_of_nonneg_right hnum hΔpos.le
     have hlt : 2 * K * D / (2 * K * D + 1) < 1 := by
@@ -206,7 +206,7 @@ theorem yuWangSamworth_theorem3_printed_rankBoundary_refutation_euclidean :
               (Submodule.span ℝ {EuclideanSpace.single (1 : Fin 2) (1 : ℝ)}) ≤
             2 * (2 * ‖A.toContinuousLinearMap‖ + ‖(Â - A).toContinuousLinearMap‖) *
               min (Real.sqrt 1 * ‖(Â - A).toContinuousLinearMap‖)
-                (RectangularUnitarilyInvariantSeminorm.frobenius (Â - A)) / Δ := by
+                (UnitarilyInvariantSeminorm.frobenius (Â - A)) / Δ := by
   have h0 : ‖(EuclideanSpace.single (0 : Fin 2) (1 : ℝ))‖ = 1 := by
     simp
   have h1 : ‖(EuclideanSpace.single (1 : Fin 2) (1 : ℝ))‖ = 1 := by

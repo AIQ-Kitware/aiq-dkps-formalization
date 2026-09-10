@@ -822,7 +822,7 @@ theorem shortRotation_fullDisplacement_refuted :
 direct rotation in one particular unitarily invariant norm.  To refute the
 source claim *as stated* — "for every unitarily invariant norm" — that Ky Fan
 sum must be presented as an inhabitant of `UnitarilyInvariantSeminorm`, which is
-what `RectangularUnitarilyInvariantSeminorm.kyFan _ |>.toSquare` supplies. -/
+what `UnitarilyInvariantSeminorm.kyFan _ |>` supplies. -/
 
 /-- **The transcribed Davis--Kahan Proposition 4.4**, in the finite-dimensional
 specialization: over a real inner-product space, if the largest principal angle
@@ -844,7 +844,7 @@ def DavisKahanProposition4_4_Finite : Prop :=
     (_hshort : principalAngles U V 0 ≤ Real.pi / 3)
     (W : E ≃ₗᵢ[ℝ] E)
     (_hmap : U.map W.toLinearMap = V)
-    (N : UnitarilyInvariantSeminorm ℝ E),
+    (N : UnitarilyInvariantSeminorm ℝ E E),
       N (LinearMap.id - (directRotation U V hacute).toLinearMap) ≤
         N (LinearMap.id - W.toLinearMap)
 
@@ -852,7 +852,7 @@ open ShortRotationCounterexample in
 /-- **The transcribed Proposition 4.4 is false**, in the "every unitarily
 invariant norm" form in which the source states it.  The witnessing norm is the
 trace norm of `ℝ⁴`, presented as the bundled unitarily invariant norm
-`(RectangularUnitarilyInvariantSeminorm.kyFan 4).toSquare`, whose underlying
+`(UnitarilyInvariantSeminorm.kyFan 4)`, whose underlying
 function is `kyFanSum 4`.
 
 Stated at universe `0`, where the witness `EuclideanSpace ℝ (Fin 4)` lives.
@@ -863,13 +863,10 @@ theorem not_davisKahanProposition4_4_Finite :
     ¬ DavisKahanProposition4_4_Finite.{0} := by
   intro h
   have hN := h E4 U4 V4 acute principalAngle_le Wequiv rfl
-    (RectangularUnitarilyInvariantSeminorm.kyFan (𝕜 := ℝ) (E := E4) (F := E4) 4).toSquare
+    (UnitarilyInvariantSeminorm.kyFan (𝕜 := ℝ) (E := E4) (F := E4) 4)
   have hle : kyFanSum 4 (LinearMap.id - (directRotation U4 V4 acute).toLinearMap) ≤
       kyFanSum 4 (LinearMap.id - Wequiv.toLinearMap) := by
-    simpa [RectangularUnitarilyInvariantSeminorm.toSquare,
-      RectangularUnitarilyInvariantSeminorm.kyFan_apply,
-      RectangularUnitarilyInvariantSeminorm.rectangularKyFanSum,
-      kyFanSum_eq_sum_fin] using hN
+    simpa only [UnitarilyInvariantSeminorm.kyFan_apply] using hN
   exact absurd hle (not_le.mpr kyFanSum_lt)
 
 open ShortRotationCounterexample in
@@ -881,16 +878,13 @@ full-displacement minimality — as `kyFanSum 4` does on `ℝ⁴` — cannot be 
 This is the formal counterpart of the classical fact that the Schatten `Q`-norms
 are exactly those with `2 ≤ p ≤ ∞`: the trace norm is the `p = 1` endpoint. -/
 theorem kyFan_not_isQNorm :
-    ¬ IsQNorm (RectangularUnitarilyInvariantSeminorm.kyFan
-      (𝕜 := ℝ) (E := E4) (F := E4) 4).toSquare := by
+    ¬ IsQNorm (UnitarilyInvariantSeminorm.kyFan
+      (𝕜 := ℝ) (E := E4) (F := E4) 4) := by
   intro hQ
   have hle := directRotation_fullDisplacement_qnorm _ hQ U4 V4 acute Wequiv rfl
   have hle' : kyFanSum 4 (LinearMap.id - (directRotation U4 V4 acute).toLinearMap) ≤
       kyFanSum 4 (LinearMap.id - Wequiv.toLinearMap) := by
-    simpa [RectangularUnitarilyInvariantSeminorm.toSquare,
-      RectangularUnitarilyInvariantSeminorm.kyFan_apply,
-      RectangularUnitarilyInvariantSeminorm.rectangularKyFanSum,
-      kyFanSum_eq_sum_fin] using hle
+    simpa only [UnitarilyInvariantSeminorm.kyFan_apply] using hle
   exact absurd hle' (not_le.mpr kyFanSum_lt)
 
 end DavisKahan.FiniteDimensional

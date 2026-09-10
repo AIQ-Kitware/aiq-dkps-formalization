@@ -6,32 +6,21 @@ Authors: Jon Crall, Claude Fable 5
 module
 
 public import ForTauCeti.Analysis.InnerProductSpace.KyFan
-public import ForTauCeti.Analysis.InnerProductSpace.UnitarilyInvariantSeminorm
-public import ForTauCeti.Analysis.InnerProductSpace.Gram.Matrix
-public import ForTauCeti.Analysis.InnerProductSpace.RectangularSingularValues
-public import Mathlib.Analysis.InnerProductSpace.ProdL2
+public import Mathlib.Analysis.Seminorm
 public import Mathlib.Analysis.Convex.Caratheodory
 
 /-!
-# Rectangular unitarily invariant norms: the structure and its basic laws
+# Unitarily invariant seminorms on rectangular linear maps
 
-The structure itself, the finite Ky Fan sums of singular values, the two-sided unitary
-orbit with its finiteness certificates, and transport of a norm along an isometry of
-the domain or the codomain.
+The structure extends `Seminorm` and adds invariance under independent unitary actions on
+its domain and codomain. This module supplies its function and seminorm instances,
+finite two-sided orbit certificates, singular-value invariance, and isometric transport.
 
 ## Provenance
 
-* Original repository: Davis--Kahan/DKPS formalization (Kitware, Inc.).
-* Original module: `ForTauCeti.Analysis.InnerProductSpace.RectangularUnitarilyInvariantSeminorm`,
-  split out on 2026-07-28 because that file had grown to 2124 lines while Tau Ceti's
-  `lean_lib` enforces a hard 1500-line ceiling, and 1000 for a newly added file.
-* Extraction class: **split**.  No statement, proof or declaration name changed; only
-  `exists_unitary_factorization_of_singularValues_eq` was promoted from `private` to
-  public, because the split puts its users in a different module.
-* Original authors / copyright: Jon Crall, Claude Fable 5;
-  Copyright (c) 2026 Kitware, Inc.; Apache 2.0.
-* Spectra influence: **none** — this module imports only Mathlib and sibling
-  `ForTauCeti` staging modules.
+Adapted from the square and rectangular unitarily invariant seminorm modules in the
+Davis--Kahan/DKPS formalization (Kitware, Inc.). The finite orbit and isometric-transport
+proofs were originally part of the rectangular module.
 -/
 
 public section
@@ -49,34 +38,74 @@ variable {F : Type*} [NormedAddCommGroup F] [InnerProductSpace 𝕜 F]
 variable {G : Type*} [NormedAddCommGroup G] [InnerProductSpace 𝕜 G]
   [FiniteDimensional 𝕜 G]
 
-/-- A unitarily invariant seminorm on rectangular linear maps.
-
-As in the existing square `UnitarilyInvariantSeminorm`, definiteness is deliberately
-not bundled: the Davis--Kahan inequalities and Fan dominance use only
-subadditivity, absolute homogeneity, and two-sided unitary invariance. -/
-structure RectangularUnitarilyInvariantSeminorm (𝕜 E F : Type*)
+/-- A seminorm on rectangular linear maps, invariant under independent unitary
+changes of domain and codomain coordinates. Square operators use `E = F`. -/
+structure UnitarilyInvariantSeminorm (𝕜 E F : Type*)
     [RCLike 𝕜] [NormedAddCommGroup E] [InnerProductSpace 𝕜 E]
     [FiniteDimensional 𝕜 E] [NormedAddCommGroup F] [InnerProductSpace 𝕜 F]
-    [FiniteDimensional 𝕜 F] where
-  toFun : (E →ₗ[𝕜] F) → ℝ
-  add_le' : ∀ A B, toFun (A + B) ≤ toFun A + toFun B
-  smul' : ∀ (a : 𝕜) A, toFun (a • A) = ‖a‖ * toFun A
-  invariant' : ∀ (U : F ≃ₗᵢ[𝕜] F) (V : E ≃ₗᵢ[𝕜] E) A,
-    toFun (U.toLinearMap ∘ₗ A ∘ₗ V.toLinearMap) = toFun A
+    [FiniteDimensional 𝕜 F] extends Seminorm 𝕜 (E →ₗ[𝕜] F) where
+  /-- Two-sided unitary invariance. The left unitary acts on the codomain. -/
+  unitary_invariant' :
+    ∀ (U : unitary (F →ₗ[𝕜] F))
+      (V : unitary (E →ₗ[𝕜] E)) A,
+      toFun ((U : F →ₗ[𝕜] F) ∘ₗ A ∘ₗ
+        (V : E →ₗ[𝕜] E)) = toFun A
 
-namespace RectangularUnitarilyInvariantSeminorm
+namespace UnitarilyInvariantSeminorm
 
-/-- Prefix sum of singular values for a rectangular map. -/
-@[expose]
-noncomputable def rectangularKyFanSum (k : ℕ) (A : E →ₗ[𝕜] F) : ℝ :=
-  ∑ i : Fin k, A.singularValues (i : ℕ)
+instance : FunLike (UnitarilyInvariantSeminorm 𝕜 E F) (E →ₗ[𝕜] F) ℝ where
+  coe N := N.toFun
+  coe_injective := by
+    rintro ⟨N, _hN⟩ ⟨M, _hM⟩ h
+    have hNM : N = M := Seminorm.ext (fun A => congrFun h A)
+    cases hNM
+    rfl
 
-/-- Apply a rectangular UI seminorm directly to a map, writing `N A` for `N.toFun A`. -/
-instance : CoeFun (RectangularUnitarilyInvariantSeminorm 𝕜 E F)
-    fun _ => (E →ₗ[𝕜] F) → ℝ :=
-  ⟨RectangularUnitarilyInvariantSeminorm.toFun⟩
+instance : SeminormClass (UnitarilyInvariantSeminorm 𝕜 E F) 𝕜 (E →ₗ[𝕜] F) where
+  map_zero N := N.map_zero'
+  map_add_le_add N := N.add_le'
+  map_neg_eq_map N := N.neg'
+  map_smul_eq_mul N := N.smul'
 
-variable (N : RectangularUnitarilyInvariantSeminorm 𝕜 E F)
+@[ext]
+theorem ext {N M : UnitarilyInvariantSeminorm 𝕜 E F}
+    (h : ∀ A, N A = M A) : N = M :=
+  DFunLike.ext N M h
+
+/-- A unitary endomorphism as a linear isometric equivalence. -/
+private noncomputable def unitaryIsometry
+    (U : unitary (E →ₗ[𝕜] E)) : E ≃ₗᵢ[𝕜] E :=
+  LinearIsometryEquiv.ofSurjective
+    ((U : E →ₗ[𝕜] E).isometryOfInner (by
+      intro x y
+      have hU : (U : E →ₗ[𝕜] E).adjoint ∘ₗ
+          (U : E →ₗ[𝕜] E) = LinearMap.id := U.property.1
+      rw [← LinearMap.adjoint_inner_left]
+      exact congrArg (fun z => ⟪z, y⟫_𝕜) (LinearMap.congr_fun hU x)))
+    (by
+      intro y
+      refine ⟨(U : E →ₗ[𝕜] E).adjoint y, ?_⟩
+      exact LinearMap.congr_fun U.property.2 y)
+
+/-- A linear isometric equivalence is a unitary element of the endomorphism algebra. -/
+private def isometryUnitary (U : E ≃ₗᵢ[𝕜] E) : unitary (E →ₗ[𝕜] E) :=
+  ⟨U.toLinearMap, by
+    change U.toLinearMap.adjoint ∘ₗ U.toLinearMap = LinearMap.id ∧
+      U.toLinearMap ∘ₗ U.toLinearMap.adjoint = LinearMap.id
+    rw [U.adjoint_toLinearMap_eq_symm]
+    constructor <;> ext x <;> simp⟩
+
+/-- Prove the unitary field using the equivalent linear-isometry action.
+This changes only the representation of a unitary, not the seminorm. -/
+theorem unitary_invariant_of_isometry {f : (E →ₗ[𝕜] F) → ℝ}
+    (h : ∀ (U : F ≃ₗᵢ[𝕜] F) (V : E ≃ₗᵢ[𝕜] E) A,
+      f (U.toLinearMap ∘ₗ A ∘ₗ V.toLinearMap) = f A)
+    (U : unitary (F →ₗ[𝕜] F)) (V : unitary (E →ₗ[𝕜] E)) A :
+    f ((U : F →ₗ[𝕜] F) ∘ₗ A ∘ₗ
+      (V : E →ₗ[𝕜] E)) = f A :=
+  h (unitaryIsometry U) (unitaryIsometry V) A
+
+variable (N : UnitarilyInvariantSeminorm 𝕜 E F)
 
 
 /-- A rectangular UI seminorm vanishes at zero. -/
@@ -266,7 +295,24 @@ argument order follows the composition `U ∘ A ∘ V`, not the alphabet. -/
 theorem invariant (U : F ≃ₗᵢ[𝕜] F) (V : E ≃ₗᵢ[𝕜] E)
     (A : E →ₗ[𝕜] F) :
     N (U.toLinearMap ∘ₗ A ∘ₗ V.toLinearMap) = N A :=
-  N.invariant' U V A
+  N.unitary_invariant' (isometryUnitary U) (isometryUnitary V) A
+
+/-- Left unitary invariance. -/
+theorem invariant_left (U : F ≃ₗᵢ[𝕜] F) (A : E →ₗ[𝕜] F) :
+    N (U.toLinearMap ∘ₗ A) = N A := by
+  have h := N.invariant U (LinearIsometryEquiv.refl 𝕜 E) A
+  have hid : A ∘ₗ (LinearIsometryEquiv.refl 𝕜 E).toLinearMap = A := by
+    ext v; rfl
+  rwa [hid] at h
+
+/-- Right unitary invariance. -/
+theorem invariant_right (V : E ≃ₗᵢ[𝕜] E) (A : E →ₗ[𝕜] F) :
+    N (A ∘ₗ V.toLinearMap) = N A := by
+  have h := N.invariant (LinearIsometryEquiv.refl 𝕜 F) V A
+  have hid : (LinearIsometryEquiv.refl 𝕜 F).toLinearMap
+      ∘ₗ (A ∘ₗ V.toLinearMap) = A ∘ₗ V.toLinearMap := by
+    ext v; rfl
+  rwa [hid] at h
 
 /-- Every rectangular UI seminorm is bounded by the mass of a finite two-sided
 unitary-orbit certificate.
@@ -364,7 +410,7 @@ theorem exists_unitary_factorization_of_singularValues_eq
 
 /-- A rectangular unitarily invariant norm depends only on the complete
 singular-value sequence. -/
-theorem apply_eq_of_singularValues_eq {A B : E →ₗ[𝕜] F}
+theorem eq_of_same_singularValues {A B : E →ₗ[𝕜] F}
     (hσ : A.singularValues = B.singularValues) : N A = N B := by
   obtain ⟨U, V, hfac⟩ :=
     exists_unitary_factorization_of_singularValues_eq hσ
@@ -378,40 +424,43 @@ codomain.  The transported norm measures `A : E → H` by measuring
 noncomputable def codomainIsometryTransport
     {H : Type*} [NormedAddCommGroup H] [InnerProductSpace 𝕜 H]
     [FiniteDimensional 𝕜 H]
-    (N : RectangularUnitarilyInvariantSeminorm 𝕜 E F)
+    (N : UnitarilyInvariantSeminorm 𝕜 E F)
     (ι : H →ₗᵢ[𝕜] F) :
-    RectangularUnitarilyInvariantSeminorm 𝕜 E H where
-  toFun A := N (ι.toLinearMap ∘ₗ A)
-  add_le' A B := by
-    have hmap : ι.toLinearMap ∘ₗ (A + B) =
-        (ι.toLinearMap ∘ₗ A) + (ι.toLinearMap ∘ₗ B) := by
-      ext x
-      simp
-    rw [hmap]
-    exact N.add_le _ _
-  smul' a A := by
-    have hmap : ι.toLinearMap ∘ₗ (a • A) =
-        a • (ι.toLinearMap ∘ₗ A) := by
-      ext x
-      simp
-    rw [hmap]
-    exact N.smul_eq _ _
-  invariant' U V A := by
-    apply N.apply_eq_of_singularValues_eq
-    calc
-      (ι.toLinearMap ∘ₗ (U.toLinearMap ∘ₗ A ∘ₗ V.toLinearMap)).singularValues =
-          (U.toLinearMap ∘ₗ A ∘ₗ V.toLinearMap).singularValues :=
-        singularValues_linearIsometry_comp ι _
-      _ = A.singularValues := by
-        rw [singularValues_unitary_comp, singularValues_comp_unitary]
-      _ = (ι.toLinearMap ∘ₗ A).singularValues :=
-        (singularValues_linearIsometry_comp ι A).symm
+    UnitarilyInvariantSeminorm 𝕜 E H where
+  toSeminorm := Seminorm.of
+    (fun A => N (ι.toLinearMap ∘ₗ A))
+    (fun A B => by
+      have hmap : ι.toLinearMap ∘ₗ (A + B) =
+          (ι.toLinearMap ∘ₗ A) + (ι.toLinearMap ∘ₗ B) := by
+        ext x
+        simp
+      rw [hmap]
+      exact N.add_le _ _)
+    (fun a A => by
+      have hmap : ι.toLinearMap ∘ₗ (a • A) =
+          a • (ι.toLinearMap ∘ₗ A) := by
+        ext x
+        simp
+      rw [hmap]
+      exact N.smul_eq _ _)
+  unitary_invariant' :=
+    TauCeti.UnitarilyInvariantSeminorm.unitary_invariant_of_isometry
+      (fun U V A => by
+        apply N.eq_of_same_singularValues
+        calc
+          (ι.toLinearMap ∘ₗ (U.toLinearMap ∘ₗ A ∘ₗ V.toLinearMap)).singularValues =
+              (U.toLinearMap ∘ₗ A ∘ₗ V.toLinearMap).singularValues :=
+            singularValues_linearIsometry_comp ι _
+          _ = A.singularValues := by
+            rw [singularValues_unitary_comp, singularValues_comp_unitary]
+          _ = (ι.toLinearMap ∘ₗ A).singularValues :=
+            (singularValues_linearIsometry_comp ι A).symm)
 
 /-- Codomain transport, unfolded. -/
 @[simp] theorem codomainIsometryTransport_apply
     {H : Type*} [NormedAddCommGroup H] [InnerProductSpace 𝕜 H]
     [FiniteDimensional 𝕜 H]
-    (N : RectangularUnitarilyInvariantSeminorm 𝕜 E F)
+    (N : UnitarilyInvariantSeminorm 𝕜 E F)
     (ι : H →ₗᵢ[𝕜] F) (A : E →ₗ[𝕜] H) :
     N.codomainIsometryTransport ι A = N (ι.toLinearMap ∘ₗ A) :=
   (rfl)
@@ -423,49 +472,52 @@ zero-padded map `A ∘ ι⋆ : E → F`. -/
 noncomputable def domainIsometryTransport
     {H : Type*} [NormedAddCommGroup H] [InnerProductSpace 𝕜 H]
     [FiniteDimensional 𝕜 H]
-    (N : RectangularUnitarilyInvariantSeminorm 𝕜 E F)
+    (N : UnitarilyInvariantSeminorm 𝕜 E F)
     (ι : H →ₗᵢ[𝕜] E) :
-    RectangularUnitarilyInvariantSeminorm 𝕜 H F where
-  toFun A := N (A ∘ₗ LinearMap.adjoint ι.toLinearMap)
-  add_le' A B := by
-    have hmap : (A + B) ∘ₗ LinearMap.adjoint ι.toLinearMap =
-        (A ∘ₗ LinearMap.adjoint ι.toLinearMap) +
-          (B ∘ₗ LinearMap.adjoint ι.toLinearMap) := by
-      ext x
-      simp
-    rw [hmap]
-    exact N.add_le _ _
-  smul' a A := by
-    have hmap : (a • A) ∘ₗ LinearMap.adjoint ι.toLinearMap =
-        a • (A ∘ₗ LinearMap.adjoint ι.toLinearMap) := by
-      ext x
-      simp
-    rw [hmap]
-    exact N.smul_eq _ _
-  invariant' U V A := by
-    apply N.apply_eq_of_singularValues_eq
-    calc
-      ((U.toLinearMap ∘ₗ A ∘ₗ V.toLinearMap) ∘ₗ
-          LinearMap.adjoint ι.toLinearMap).singularValues =
-          (U.toLinearMap ∘ₗ A ∘ₗ V.toLinearMap).singularValues :=
-        singularValues_comp_adjoint_linearIsometry ι _
-      _ = A.singularValues := by
-        rw [singularValues_unitary_comp, singularValues_comp_unitary]
-      _ = (A ∘ₗ LinearMap.adjoint ι.toLinearMap).singularValues :=
-        (singularValues_comp_adjoint_linearIsometry ι A).symm
+    UnitarilyInvariantSeminorm 𝕜 H F where
+  toSeminorm := Seminorm.of
+    (fun A => N (A ∘ₗ LinearMap.adjoint ι.toLinearMap))
+    (fun A B => by
+      have hmap : (A + B) ∘ₗ LinearMap.adjoint ι.toLinearMap =
+          (A ∘ₗ LinearMap.adjoint ι.toLinearMap) +
+            (B ∘ₗ LinearMap.adjoint ι.toLinearMap) := by
+        ext x
+        simp
+      rw [hmap]
+      exact N.add_le _ _)
+    (fun a A => by
+      have hmap : (a • A) ∘ₗ LinearMap.adjoint ι.toLinearMap =
+          a • (A ∘ₗ LinearMap.adjoint ι.toLinearMap) := by
+        ext x
+        simp
+      rw [hmap]
+      exact N.smul_eq _ _)
+  unitary_invariant' :=
+    TauCeti.UnitarilyInvariantSeminorm.unitary_invariant_of_isometry
+      (fun U V A => by
+        apply N.eq_of_same_singularValues
+        calc
+          ((U.toLinearMap ∘ₗ A ∘ₗ V.toLinearMap) ∘ₗ
+              LinearMap.adjoint ι.toLinearMap).singularValues =
+              (U.toLinearMap ∘ₗ A ∘ₗ V.toLinearMap).singularValues :=
+            singularValues_comp_adjoint_linearIsometry ι _
+          _ = A.singularValues := by
+            rw [singularValues_unitary_comp, singularValues_comp_unitary]
+          _ = (A ∘ₗ LinearMap.adjoint ι.toLinearMap).singularValues :=
+            (singularValues_comp_adjoint_linearIsometry ι A).symm)
 
 /-- Domain transport, unfolded. -/
 @[simp] theorem domainIsometryTransport_apply
     {H : Type*} [NormedAddCommGroup H] [InnerProductSpace 𝕜 H]
     [FiniteDimensional 𝕜 H]
-    (N : RectangularUnitarilyInvariantSeminorm 𝕜 E F)
+    (N : UnitarilyInvariantSeminorm 𝕜 E F)
     (ι : H →ₗᵢ[𝕜] E) (A : H →ₗ[𝕜] F) :
     N.domainIsometryTransport ι A =
       N (A ∘ₗ LinearMap.adjoint ι.toLinearMap) :=
   (rfl)
 
 
-end RectangularUnitarilyInvariantSeminorm
+end UnitarilyInvariantSeminorm
 
 
 end TauCeti

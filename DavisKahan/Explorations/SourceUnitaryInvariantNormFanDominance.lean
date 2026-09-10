@@ -88,7 +88,7 @@ import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.PrescribedSequence
 import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.SameSequence
 import ForTauCeti.Analysis.InnerProductSpace.CompactApproximationEigenvalues
 import DavisKahan.SharedFoundations.Ideal.ModulusTransport
-import ForTauCeti.Analysis.InnerProductSpace.RectangularUnitarilyInvariantSeminorm.Majorization
+import ForTauCeti.Analysis.InnerProductSpace.UnitarilyInvariantSeminorm.Majorization
 import ForTauCeti.Analysis.InnerProductSpace.Singular.System
 import ForTauCeti.Analysis.InnerProductSpace.SeparableOrthonormal
 import DavisKahan.OperatorIdeal.ApproximationNumbers.BlockSum
@@ -339,43 +339,45 @@ noncomputable def finiteRectangularSeminorm
     {E F : Type v}
     [NormedAddCommGroup E] [InnerProductSpace ℂ E] [FiniteDimensional ℂ E]
     [NormedAddCommGroup F] [InnerProductSpace ℂ F] [FiniteDimensional ℂ F] :
-    TauCeti.RectangularUnitarilyInvariantSeminorm ℂ E F where
-  toFun A :=
-    N.toSymmetricOperatorIdealFamily.gaugeReal A.toContinuousLinearMap
-  add_le' A B := by
-    let S := N.toSymmetricOperatorIdealFamily
-    have hA : S.Mem A.toContinuousLinearMap := by
-      simpa [S] using hfinite A.toContinuousLinearMap
-    have hB : S.Mem B.toContinuousLinearMap := by
-      simpa [S] using hfinite B.toContinuousLinearMap
-    change S.gaugeReal (A + B).toContinuousLinearMap ≤
-      S.gaugeReal A.toContinuousLinearMap + S.gaugeReal B.toContinuousLinearMap
-    rw [map_add]
-    exact S.gaugeReal_add_le hA hB
-  smul' c A := by
-    let S := N.toSymmetricOperatorIdealFamily
-    have hA : S.Mem A.toContinuousLinearMap := by
-      simpa [S] using hfinite A.toContinuousLinearMap
-    change S.gaugeReal (c • A).toContinuousLinearMap =
-      ‖c‖ * S.gaugeReal A.toContinuousLinearMap
-    rw [map_smul]
-    exact S.gaugeReal_smul c hA
-  invariant' U V A := by
-    let S := N.toSymmetricOperatorIdealFamily
-    have hcomp :
-        (U.toLinearMap ∘ₗ A ∘ₗ V.toLinearMap).toContinuousLinearMap =
-          (U.toContinuousLinearEquiv : F →L[ℂ] F) ∘L
-            A.toContinuousLinearMap ∘L
-              (V.toContinuousLinearEquiv : E →L[ℂ] E) := by
-      ext x
-      simp
-    change S.gaugeReal
-        (U.toLinearMap ∘ₗ A ∘ₗ V.toLinearMap).toContinuousLinearMap =
-      S.gaugeReal A.toContinuousLinearMap
-    rw [hcomp]
-    simpa [S] using
-      gaugeReal_comp_isometryEquiv_finite N hfinite U V
-        A.toContinuousLinearMap
+    TauCeti.UnitarilyInvariantSeminorm ℂ E F where
+  toSeminorm := Seminorm.of
+    (fun A => N.toSymmetricOperatorIdealFamily.gaugeReal A.toContinuousLinearMap)
+    (fun A B => by
+      let S := N.toSymmetricOperatorIdealFamily
+      have hA : S.Mem A.toContinuousLinearMap := by
+        simpa [S] using hfinite A.toContinuousLinearMap
+      have hB : S.Mem B.toContinuousLinearMap := by
+        simpa [S] using hfinite B.toContinuousLinearMap
+      change S.gaugeReal (A + B).toContinuousLinearMap ≤
+        S.gaugeReal A.toContinuousLinearMap + S.gaugeReal B.toContinuousLinearMap
+      rw [map_add]
+      exact S.gaugeReal_add_le hA hB)
+    (fun c A => by
+      let S := N.toSymmetricOperatorIdealFamily
+      have hA : S.Mem A.toContinuousLinearMap := by
+        simpa [S] using hfinite A.toContinuousLinearMap
+      change S.gaugeReal (c • A).toContinuousLinearMap =
+        ‖c‖ * S.gaugeReal A.toContinuousLinearMap
+      rw [map_smul]
+      exact S.gaugeReal_smul c hA)
+  unitary_invariant' :=
+    TauCeti.UnitarilyInvariantSeminorm.unitary_invariant_of_isometry
+      (fun U V A => by
+        let S := N.toSymmetricOperatorIdealFamily
+        have hcomp :
+            (U.toLinearMap ∘ₗ A ∘ₗ V.toLinearMap).toContinuousLinearMap =
+              (U.toContinuousLinearEquiv : F →L[ℂ] F) ∘L
+                A.toContinuousLinearMap ∘L
+                  (V.toContinuousLinearEquiv : E →L[ℂ] E) := by
+          ext x
+          simp
+        change S.gaugeReal
+            (U.toLinearMap ∘ₗ A ∘ₗ V.toLinearMap).toContinuousLinearMap =
+          S.gaugeReal A.toContinuousLinearMap
+        rw [hcomp]
+        simpa [S] using
+          gaugeReal_comp_isometryEquiv_finite N hfinite U V
+            A.toContinuousLinearMap)
 
 /-- **Finite-dimensional reduction.**
 
@@ -394,11 +396,11 @@ theorem finiteDimensional_fanDominance_real
     N.toSymmetricOperatorIdealFamily.gaugeReal A ≤
       N.toSymmetricOperatorIdealFamily.gaugeReal B := by
   have hlin : ∀ k,
-      TauCeti.RectangularUnitarilyInvariantSeminorm.rectangularKyFanSum k A.toLinearMap ≤
-        TauCeti.RectangularUnitarilyInvariantSeminorm.rectangularKyFanSum k B.toLinearMap := by
+      TauCeti.kyFanSum k A.toLinearMap ≤
+        TauCeti.kyFanSum k B.toLinearMap := by
     intro k
-    rw [rectangularKyFanSum_eq_kyFanApproximationGauge,
-      rectangularKyFanSum_eq_kyFanApproximationGauge]
+    rw [kyFanSum_eq_kyFanApproximationGauge,
+      kyFanSum_eq_kyFanApproximationGauge]
     have hA : A.toLinearMap.toContinuousLinearMap = A := by
       ext x
       rfl

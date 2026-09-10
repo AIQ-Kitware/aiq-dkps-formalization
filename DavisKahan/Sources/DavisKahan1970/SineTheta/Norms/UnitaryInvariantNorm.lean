@@ -75,7 +75,7 @@ and complex operators, and to rectangular operators through their singular
 values. -/
 structure SymmetricNormingFunction where
   finiteNorm : ∀ n : ℕ,
-    TauCeti.UnitarilyInvariantSeminorm ℂ (EuclideanSpace ℂ (Fin n))
+    TauCeti.UnitarilyInvariantSeminorm ℂ (EuclideanSpace ℂ (Fin n)) (EuclideanSpace ℂ (Fin n))
   normalized :
     (finiteNorm 1).gauge (EuclideanSpace.basisFun (Fin 1) ℂ)
       (fun _ => 1) = 1

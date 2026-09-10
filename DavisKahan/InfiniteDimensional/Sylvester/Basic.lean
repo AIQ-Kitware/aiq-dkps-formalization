@@ -8,7 +8,7 @@ import DavisKahan.InfiniteDimensional.Ideals.CompactIntegral
 import DavisKahan.InfiniteDimensional.Sylvester.FourierSemigroup
 import DavisKahan.InfiniteDimensional.Sylvester.OrderedSemigroup
 import ForTauCeti.Analysis.InnerProductSpace.Sylvester.Bound
-import ForTauCeti.Analysis.InnerProductSpace.RectangularUnitarilyInvariantSeminorm
+import ForTauCeti.Analysis.InnerProductSpace.UnitarilyInvariantSeminorm
 import DavisKahan.SpectralTheory.AbstractSpectrum
 
 open TauCeti.DavisKahan.Angle
