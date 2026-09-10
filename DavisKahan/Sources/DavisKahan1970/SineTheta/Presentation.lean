@@ -13,23 +13,20 @@ open TauCeti.DavisKahan.Sylvester
 /-!
 # The Davis--Kahan 1970 sine-theta theorem family
 
-This module contains both the stronger symmetric-norming implementation theorems and the
-fixed-field where-defined norm declarations currently selected by the result ledger.
-Source fidelity is a property recorded by that ledger, not by theorem names.
+`sinTheta_unbounded_formGap_whereDefinedUIN_rclike` states the source's
+where-defined norm inequality over real or complex separable Hilbert spaces.
+Its gap predicate includes finite interval/exterior separation and both ordered
+half-infinite configurations. The complex and real versions specialize it.
 
-`sinTheta_unbounded_formGap_symmetricNorming_rclike` is the scalar-generic implementation
-API.  It proves ideal membership together with the inequality for every
-`SymmetricNormingFunction`.  The later source review found that membership transfer is extra
-structure relative to Davis--Kahan's convention that a displayed unitarily invariant norm
-statement is vacuous when either norm is undefined.
+`IsTrialResidual` records the isometric trial map and its bounded residual on
+the trial operator's domain. `IsExactSpectralDecomposition` records the exact
+orthogonal coordinate maps and the complementary operator. The ambient, trial,
+and complementary operators may all be unbounded. The rectangular map `(I - F₀ F₀*) E₀` has modulus `sin Theta₀`
+and the same ideal norm as that positive operator on trial coordinates.
 
-The ledger points to the scalar-generic
-`sinTheta_unbounded_formGap_whereDefinedUIN_rclike`.  It exposes ambient separability and
-states only the where-defined inequality.  The complex and real declarations are thin
-specializations of that theorem rather than independent source-fidelity boundaries.
-
-Presentation forms that inline one gap branch or expose an explicit `sinTheta₀` parameter
-remain useful for review and compatibility, but they are not substitutes for the ledger.
+The `symmetricNorming` theorems also prove ideal membership for their
+`SymmetricNormingFunction` gauges. The interval/exterior theorem with an
+explicit `sinTheta₀` parameter restricts the gap to a finite interval.
 -/
 namespace TauCeti
 namespace DavisKahan1970
@@ -189,9 +186,11 @@ infinite-dimensional scope of the proved headline theorem, but its separation
 hypothesis is only the interval/exterior branch of `FormBoundedSylvesterGap`, so
 it states a strictly smaller theorem.
 
-The source object `sinTheta₀` is an explicit parameter, and `hSinTheta₀` states
-its concrete realization `(I - F₀ F₀*) E₀` in the theorem signature.  The
-claim after the colon is therefore the printed factor-one inequality itself.
+The parameter `sinTheta₀` names the rectangular map `S = (I - F₀ F₀*) E₀`,
+and `hSinTheta₀` fixes it to that expression. The source's positive operator
+`sin Theta₀` is the modulus of `S` on the trial-coordinate space. Polar
+decomposition and the ideal contraction law give equal norms for these two
+operators, so the conclusion has the source's factor-one sine-angle norm.
 The stronger supporting theorem `sinTheta_unbounded_intervalExterior_symmetricNorming_rclike` additionally
 certifies membership of this operator in the source norm ideal. -/
 theorem sinTheta_unbounded_intervalExterior_characterizedWitness_rclike
@@ -232,43 +231,21 @@ theorem sinTheta_unbounded_intervalExterior_characterizedWitness_rclike
   rw [← hSinTheta₀] at hfull
   exact hfull.2
 
-/-! ## Scalar-generic implementation and fixed-field statement boundaries
+/-! ## Full-gap inequalities
 
-`sinTheta_unbounded_formGap_symmetricNorming_rclike` below is the scalar-generic
-implementation theorem. It is stronger than the current ledger-selected boundary:
-it quantifies over `SymmetricNormingFunction`, requires residual membership, and
-concludes membership transfer. The fixed-field where-defined wrappers later in
-this file expose the current source norm convention directly. A matching `RCLike`
-where-defined wrapper is tested in the standalone Fan-dominance probe before any
-short public alias is rebound.
+`FormBoundedSylvesterGap` permits finite interval/exterior separation or ordered
+half-infinite separation. The latter cases allow both spectral blocks to be
+unbounded. The `symmetricNorming` theorem below proves membership and the norm
+bound for symmetric-norming gauges; the where-defined theorem then gives the
+source inequality for a normalized symmetric operator-ideal family.
+-/
 
-`sinTheta_unbounded_intervalExterior_characterizedWitness_rclike` above is the
-presentation declaration, and it inlines the finite interval/exterior branch of
-the separation.  `FormBoundedSylvesterGap` is the general form-bounded gap, and
-the interval/exterior configuration is one of its constructors
-(`FormBoundedSylvesterGap.intervalExterior`); the ordered half-line
-configurations the Appendix needs are others.  Stating the headline with the
-interval branch inlined therefore fixes a strictly smaller theorem than the one
-that is proved.
+/-- **Davis--Kahan 1970, the sine-theta inequality for symmetric-norming gauges.**
 
-The result ledger, rather than any declaration name or this module comment, records
-which fixed-field declarations currently witness source fidelity. -/
-
-/-- **Davis--Kahan 1970, the `sin Theta` theorem, over an arbitrary `RCLike` field.**
-
-This is the scalar-generic implementation theorem used by the Section 2 sine
-development. It has the full unbounded operator and `FormBoundedSylvesterGap`
-scope, but its `SymmetricNormingFunction` membership-transfer boundary is stronger
-than the where-defined norm convention currently selected by the result ledger.
-
-`IsTrialResidual` and `IsExactSpectralDecomposition` are the same two structural
-predicates the complex and real statements take, and they were already
-scalar-generic; `isTrialResidual_iff` and `isExactSpectralDecomposition_iff`
-expand them.
-
-The analytic capabilities consumed by the proof hold at every `RCLike` field and
-reach it by instance search. This theorem remains an implementation API while the
-where-defined scalar-generic wrapper is validated separately. -/
+The operators may be unbounded and the gap has full `FormBoundedSylvesterGap`
+scope. Residual membership implies both membership of `(I - F₀ F₀*) E₀` and
+the factor-one norm bound. The structural hypotheses expand through
+`isTrialResidual_iff` and `isExactSpectralDecomposition_iff`. -/
 theorem sinTheta_unbounded_formGap_symmetricNorming_rclike
     (N : SymmetricNormingFunction)
     (A : E →ₗ.[𝕜] E) (A₀ : F →ₗ.[𝕜] F) (Λ₁ : G →ₗ.[𝕜] G)
@@ -288,13 +265,22 @@ theorem sinTheta_unbounded_formGap_symmetricNorming_rclike
     htrial.mapsDomain hexact.mapsDomain htrial.residualEquation
     hexact.intertwines hδ hgap hR
 
-/-- **Davis--Kahan 1970, the `sin Theta` theorem at the where-defined norm boundary,
-scalar-generic over `RCLike`.**
+/-- **Davis--Kahan 1970, the sine-theta inequality over real or complex Hilbert spaces.**
 
-This is the production form of the scalar-generic endpoint validated by the Fan-dominance
-exploration.  It exposes the paper's separable ambient scope and normalized symmetric
-operator-ideal norm family, but does not turn Ky Fan dominance into a membership-transfer
-claim.  The displayed inequality is asserted exactly where both norms are defined. -/
+The ambient operator `A` denotes the source's `A + H`. The hypotheses give an
+isometric trial map, a bounded residual on the trial operator's domain, an exact
+complementary block, and finite interval/exterior or ordered half-infinite separation.
+
+Put `S = (I - F₀ F₀*) E₀`. This rectangular map is the perpendicular component
+of each trial vector. Its modulus on the trial-coordinate space is the source's
+positive `sin Theta₀` operator. The polar identities `S = U |S|` and
+`|S| = U* S`, with `U` and `U*` contractive, preserve ideal membership and the
+norm. Thus `N.gaugeReal S` is the source sine-angle norm whenever `N.Mem S` holds.
+The body of this gauge is the same expression named by `hSinTheta₀` in
+`sinTheta_unbounded_intervalExterior_characterizedWitness_rclike`.
+
+Both norms are assumed finite. The norm record supplies the where-defined
+Ky Fan comparison; the conclusion makes no ideal-membership transfer claim. -/
 theorem sinTheta_unbounded_formGap_whereDefinedUIN_rclike
     [TopologicalSpace.SeparableSpace E]
     (N : NormalizedSymmetricOperatorIdealFamily.{u, v} 𝕜)

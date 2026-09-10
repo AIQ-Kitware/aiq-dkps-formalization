@@ -52,19 +52,11 @@ Additional constraints:
 12. Figure 1 should remain project-neutral and should not name Tau Ceti or local
     helper tools. Introduce Tau Ceti later in the main text, with an accurate
     explanation and citation, when the reusable foundations are discussed.
-13. The worked example is the historical ambient sin-2-Theta semantic
-    mismatch present at the 17 August 2026 checkpoint. Real and complex directed
-    residual witnesses already covered the unbounded scope, and real and complex
-    ambient witnesses existed, but the ambient witnesses were bounded. The old
-    certificate combined unbounded scope from the directed clause with the ambient
-    conclusion from a different bounded theorem. Show the historical complex
-    ambient theorem with its bounded section context; do not describe scalar
-    coverage as the defect. Keep the 12/17/31 August review chronology, Palomar
-    reorganization, later gap-placement repair, and exact commit provenance in
-    source comments, appendix evidence, or generated metadata unless a rendered
-    claim specifically depends on them. `PaperUnitaryInvariantNorm` was renamed
-    to `SymmetricNormingFunction` in commit `a905bd4c`; current source-facing
-    endpoints use `NormalizedUnitaryInvariantNorm`.
+13. Use the sine-theta gap-scope comparison specified in rules 44 and 47.
+    Preserve the exact historical signature and its norm terminology; do not
+    replace it with a later declaration bearing the same name. The current
+    displayed theorem takes `NormalizedSymmetricOperatorIdealFamily`.
+    Keep source-version provenance in comments or generated evidence.
 14. Present EconCSLib, Lean Atlas, ShadowBench, LeanMarathon, FormaTheoria, and
     related systems as adjacent work without priority claims for the local
     dashboard.
@@ -123,8 +115,9 @@ Additional constraints:
     during revision but not part of the scientific exposition: dates, commits,
     review-state transitions, why a wording changed, and alternative historical
     interpretations. Do not promote those notes into rendered prose by default.
-30. Keep Section 2 as Related Work. The main formalization-process section comes
-    after "What we formalized" and should refer back to Figure 1.
+30. Keep Section 2 as Related Work. Put the formalization process in Section 3,
+    referring back to Figure 1, followed by "What we formalized" in Section 4.
+    Keep the worked theorem comparison after its mathematical notation.
 31. The process bullets correspond to Figure 1 without requiring one-to-one box
     labels. **Gather Context** summarizes the Inputs panel; **Decompose** and
     **Find Foundations** match their boxes; **Formalize** includes both the
@@ -184,18 +177,26 @@ Additional constraints:
     ledger, not a semantic property encoded in a declaration name.
 46. Define the sine-theta coordinate objects before relying on compact Lean
     predicates: `E0` embeds the trial coordinates, `A0` is the possibly unbounded
-    trial operator, `F0` is the desired exact subspace, `F1` its orthogonal
-    complement, `Lambda1` the complementary exact block, and `R = A E0 - E0 A0`
+    trial operator, `F0` gives isometric coordinates for the desired exact
+    subspace, `F1` does the same for its orthogonal complement, `Lambda1` is
+    the complementary exact block, and `R = A E0 - E0 A0`
     on the trial domain. A trial subspace is often an approximate spectral
     subspace in applications.
 47. Formalization 2 is
     `sinTheta_unbounded_formGap_whereDefinedUIN_rclike`. Explain that it covers
     the historical missing half-infinite gap cases and uses the where-defined norm
-    boundary. Also state the two API generalizations relevant to fidelity: the
+    boundary. State the two source-to-formal implications: the
     source common-domain equality implies `IsTrialResidual`'s forward domain
     condition, and the source spectral half-line conditions imply the form-bound
-    ordered gap constructors. Do not call the theorem itself `sourceExact`.
+    ordered gap constructors. These implications establish source coverage;
+    do not infer strict extra generality without considering all hypotheses.
+    Do not call the theorem itself `sourceExact`.
 48. Do not leave transient validation language in rendered prose (for example,
     "replacement awaits compiler validation", "new common-domain code", or
     "a further source review finds").  Keep commit/review status in comments or
     audit documents and write the manuscript from the stable mathematical state.
+49. Distinguish the rectangular map `S = (I - F0 F0*) E0` from the positive
+    operator `sin Theta0 = |S|` on trial coordinates. Explain their equal norm
+    using polar decomposition and contraction compatibility. `hSinTheta0`
+    identifies `S`; Formalization 2 inlines it inside `N.gaugeReal`. Its caption
+    should make that connection. Explain `N.Mem` as finiteness of the chosen norm.
