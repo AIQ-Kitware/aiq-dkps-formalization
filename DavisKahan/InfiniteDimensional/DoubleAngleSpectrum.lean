@@ -192,7 +192,7 @@ omit [CompleteSpace E] in
 theorem reflectionOperator_eq_reflection (V : Submodule ℂ E)
     [V.HasOrthogonalProjection] (x : E) :
     (V.reflectionOperator : E →L[ℂ] E) x = V.reflection x := by
-  rw [Submodule.reflectionOperator_apply, Submodule.reflection_apply, two_smul]
+  simp [Submodule.reflectionOperator_apply, Submodule.reflection_apply, two_smul]
 
 omit [CompleteSpace E] in
 /-- Conjugation by the reflection through `V` differs from the identity by

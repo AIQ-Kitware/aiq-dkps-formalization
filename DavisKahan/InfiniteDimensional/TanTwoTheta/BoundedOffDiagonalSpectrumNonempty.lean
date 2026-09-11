@@ -79,7 +79,7 @@ theorem restrictedSpectrum_nonempty_of_invariant
     (U.isComplete_coe_of_hasOrthogonalProjection).completeSpace_coe
   have hAsa : IsSelfAdjoint A :=
     ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mpr hA
-  have hcompress : ContinuousLinearMap.IsSymmetric (compressOperator U A) :=
+  have hcompress : (compressOperator U A).IsSymmetric :=
     ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mp
       (isSelfAdjoint_compressOperator hAsa U)
   rw [restrictedSpectrum_eq_realSpectrum_compressOperator A U hU]

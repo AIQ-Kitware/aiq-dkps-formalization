@@ -86,7 +86,6 @@ namespace DavisKahan1970
 
 open scoped InnerProductSpace
 
-open TauCeti.DavisKahanExt
 open TauCeti.DavisKahan
 open scoped TauCeti.CompleteSubspace
 

@@ -30,7 +30,6 @@ noncomputable section
 
 universe u v
 
-open TauCeti.DavisKahanExt
 
 /-- Scalar-generic source bookkeeping before choosing the spectral gap. -/
 structure CommonDomainSinThetaData

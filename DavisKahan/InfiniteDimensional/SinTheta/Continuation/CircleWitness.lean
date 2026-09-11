@@ -67,7 +67,7 @@ parameter is conjugation-fixed. -/
 theorem operatorPath_isSelfAdjointOperator
     {A E : H →L[ℂ] H} (hA : A.IsSymmetric)
     (hE : E.IsSymmetric) (t : ℝ) :
-    ContinuousLinearMap.IsSymmetric (operatorPath A E t) :=
+    (operatorPath A E t).IsSymmetric :=
   hA.add (hE.smul (Complex.conj_ofReal t))
 
 /-- Circle data sufficient to construct the continuation witness used by the
@@ -256,7 +256,7 @@ theorem canonicalGapCircle_margin_le_realSpectrum
     (_hU : A.Reduces U) (_hoff : Submodule.IsOffDiagonal U E)
     {d left right : ℝ} (hd : 0 < d) (hlr : left ≤ right)
     (hdiag : ∀ t : ℝ, t ∈ Set.Icc (0 : ℝ) 1 →
-      ∀ hpath : ContinuousLinearMap.IsSymmetric (operatorPath A E t),
+      ∀ hpath : (operatorPath A E t).IsSymmetric,
       ∀ z : ℂ, ∀ delta0 delta1 : ℝ,
         0 < delta0 → 0 < delta1 →
         (∀ lam ∈ Set.Icc left right,
@@ -537,7 +537,7 @@ omit [CompleteSpace H] in
 /-- Every point of the affine path `A + t E` with real `t` is self-adjoint. -/
 theorem isSelfAdjointOperator_path {A E : H →L[ℂ] H}
     (hA : A.IsSymmetric) (hE : E.IsSymmetric) (t : ℝ) :
-    ContinuousLinearMap.IsSymmetric (A + t • E) := by
+    (A + t • E).IsSymmetric := by
   rw [real_smul_eq_complex_smul]
   exact operatorPath_isSelfAdjointOperator hA hE t
 

@@ -636,8 +636,8 @@ theorem tendsto_unitary_orbit
 theorem tendsto_separated_integral
     {An : ℕ → F →L[ℂ] F} {Bn : ℕ → E →L[ℂ] E} {Cn : ℕ → E →L[ℂ] F}
     {A0 : F →L[ℂ] F} {B0 : E →L[ℂ] E} {C0 : E →L[ℂ] F}
-    (hAn : ∀ n, ContinuousLinearMap.IsSymmetric (An n))
-    (hBn : ∀ n, ContinuousLinearMap.IsSymmetric (Bn n))
+    (hAn : ∀ n, (An n).IsSymmetric)
+    (hBn : ∀ n, (Bn n).IsSymmetric)
     {M : ℝ} (hM : ∀ n, ‖Cn n‖ ≤ M)
     (hA : Tendsto An atTop (nhds A0)) (hB : Tendsto Bn atTop (nhds B0))
     (hC : Tendsto Cn atTop (nhds C0))

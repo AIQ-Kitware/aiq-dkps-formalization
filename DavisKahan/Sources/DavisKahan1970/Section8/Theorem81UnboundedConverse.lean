@@ -46,7 +46,6 @@ namespace DavisKahan1970
 namespace Section8
 
 open scoped InnerProductSpace
-open TauCeti.DavisKahan (Submodule.projectionGap)
 open TauCeti.DavisKahanExt (maximalAngle)
 
 noncomputable section

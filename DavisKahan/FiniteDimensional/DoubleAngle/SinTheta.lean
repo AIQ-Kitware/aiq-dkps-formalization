@@ -591,7 +591,7 @@ theorem reflectionDefect_le_two_mul_perturbation
     have hproj :
         V.starProjection (B x) = B (V.starProjection x) := by
       change projection V (B x) = B (projection V x)
-      exact ContinuousLinearMap.starProjection_apply_comm_of_reduces hB hV x
+      exact projection_apply_comm_of_isInvariant hB hV x
     rw [hproj]
   have hJinvol : J ∘ₗ J = LinearMap.id := by
     ext x

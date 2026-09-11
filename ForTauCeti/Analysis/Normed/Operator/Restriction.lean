@@ -45,11 +45,10 @@ theorem spectrum_restrict_top (A : E →L[𝕜] E)
         (A.restrict hInv) = A := by
     ext x
     rw [ContinuousLinearEquiv.conjContinuousAlgEquiv_apply_apply]
-    show ((A.restrict hInv) ((Submodule.topContEquiv :
+    change ((A.restrict hInv) ((Submodule.topContEquiv :
       (⊤ : Submodule 𝕜 E) ≃L[𝕜] E).symm x) : E) = A x
     rw [ContinuousLinearMap.coe_restrict_apply]
     rfl
-  show spectrum 𝕜 (A.restrict hInv) = spectrum 𝕜 A
   conv_rhs => rw [← hconj]
   exact (AlgEquiv.spectrum_eq
     ((Submodule.topContEquiv : (⊤ : Submodule 𝕜 E) ≃L[𝕜] E).conjContinuousAlgEquiv)

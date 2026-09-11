@@ -179,7 +179,7 @@ theorem theorem8_1_maximalAngle_le_iff_orderedFormGap_unbounded_real
   classical
   have hAC : IsSelfAdjoint (TauCeti.LinearPMap.complexifyReal A) :=
     TauCeti.LinearPMap.isSelfAdjoint_complexifyReal hA
-  have hHC : ContinuousLinearMap.IsSymmetric (complexify Hop) :=
+  have hHC : (complexify Hop).IsSymmetric :=
     (TauCeti.RealComplexification.complexify_isSymmetric_iff Hop).mpr hH
   have hsum : TauCeti.LinearPMap.addBounded (TauCeti.LinearPMap.complexifyReal A)
       (complexify Hop)
@@ -297,7 +297,7 @@ theorem theorem8_1_canonicalBranchUnbounded_printed_real
     DavisKahan.addBounded_isSelfAdjoint A hA Hop hH
   have hAC : IsSelfAdjoint (TauCeti.LinearPMap.complexifyReal A) :=
     TauCeti.LinearPMap.isSelfAdjoint_complexifyReal hA
-  have hHC : ContinuousLinearMap.IsSymmetric (complexify Hop) :=
+  have hHC : (complexify Hop).IsSymmetric :=
     (TauCeti.RealComplexification.complexify_isSymmetric_iff Hop).mpr hH
   have hsum : TauCeti.LinearPMap.addBounded (TauCeti.LinearPMap.complexifyReal A)
       (complexify Hop)
@@ -355,7 +355,7 @@ theorem theorem8_1_eq_canonicalBranchUnbounded_of_maximalAngle_le_real
     DavisKahan.addBounded_isSelfAdjoint A hA Hop hH
   have hAC : IsSelfAdjoint (TauCeti.LinearPMap.complexifyReal A) :=
     TauCeti.LinearPMap.isSelfAdjoint_complexifyReal hA
-  have hHC : ContinuousLinearMap.IsSymmetric (complexify Hop) :=
+  have hHC : (complexify Hop).IsSymmetric :=
     (TauCeti.RealComplexification.complexify_isSymmetric_iff Hop).mpr hH
   have hsum : TauCeti.LinearPMap.addBounded (TauCeti.LinearPMap.complexifyReal A)
       (complexify Hop)

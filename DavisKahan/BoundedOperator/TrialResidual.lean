@@ -33,7 +33,6 @@ namespace BoundedOperator
 
 open scoped InnerProductSpace
 open TauCeti.DavisKahan.ExactSinTheta
-open DavisKahanExt
 open TauCeti.DavisKahan
 
 universe u

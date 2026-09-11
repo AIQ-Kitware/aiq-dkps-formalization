@@ -192,7 +192,7 @@ theorem sinTheta_addBounded_reverseDirectedGap_of_spectrum_gap
         (selfAdjointSpectralSubspace A hA B hB) ≤ ‖V‖ := by
   let C := TauCeti.LinearPMap.addBounded A V
   let hC : IsSelfAdjoint C := addBounded_isSelfAdjoint A hA V hV
-  have hnegV : ContinuousLinearMap.IsSymmetric (-V) := by
+  have hnegV : (-V).IsSymmetric := by
     intro x y
     change ⟪-V x, y⟫_ℂ = ⟪x, -V y⟫_ℂ
     simpa using congrArg Neg.neg (hV x y)

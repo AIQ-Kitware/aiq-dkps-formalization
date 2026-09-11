@@ -128,7 +128,7 @@ theorem quarterAcuteAngularCoordinate_solvesRiccati
     (U.isComplete_coe_of_hasOrthogonalProjection).completeSpace_coe
   let : CompleteSpace (Uᗮ : Submodule ℂ E) :=
     (Uᗮ.isComplete_coe_of_hasOrthogonalProjection).completeSpace_coe
-  have hAH : ContinuousLinearMap.IsSymmetric (A + H) := by
+  have hAH : (A + H).IsSymmetric := by
     have h := hA.add hH
     rwa [← ContinuousLinearMap.toLinearMap_add] at h
   have hgraphReduces : ContinuousLinearMap.Reduces (A + H)
@@ -172,7 +172,7 @@ theorem subspaceBlockOperatorData_add_offDiagonal_components
     (hA : A.IsSymmetric) (hH : H.IsSymmetric)
     (U : Submodule ℂ E) [U.HasOrthogonalProjection]
     (hU : A.Reduces U) (hoff : Submodule.IsOffDiagonal U H) :
-    let hAH : ContinuousLinearMap.IsSymmetric (A + H) := by
+    let hAH : (A + H).IsSymmetric := by
       have h := hA.add hH
       rwa [← ContinuousLinearMap.toLinearMap_add] at h
     (subspaceBlockOperatorData (A + H) U hAH).A0 = compressOperator U A ∧
@@ -182,7 +182,7 @@ theorem subspaceBlockOperatorData_add_offDiagonal_components
     (subspaceBlockOperatorData (A + H) U hAH).B10 =
       Uᗮ.orthogonalProjectionOnto ∘L H ∘L U.subtypeL := by
   dsimp only
-  have hAH : ContinuousLinearMap.IsSymmetric (A + H) := by
+  have hAH : (A + H).IsSymmetric := by
     have h := hA.add hH
     rwa [← ContinuousLinearMap.toLinearMap_add] at h
   exact ⟨
@@ -198,12 +198,12 @@ theorem norm_subspaceBlockOperatorData_B01_add_offDiagonal_le
     (hA : A.IsSymmetric) (hH : H.IsSymmetric)
     (U : Submodule ℂ E) [U.HasOrthogonalProjection]
     (hU : A.Reduces U) :
-    let hAH : ContinuousLinearMap.IsSymmetric (A + H) := by
+    let hAH : (A + H).IsSymmetric := by
       have h := hA.add hH
       rwa [← ContinuousLinearMap.toLinearMap_add] at h
     ‖(subspaceBlockOperatorData (A + H) U hAH).B01‖ ≤ ‖H‖ := by
   dsimp only
-  have hAH : ContinuousLinearMap.IsSymmetric (A + H) := by
+  have hAH : (A + H).IsSymmetric := by
     have h := hA.add hH
     rwa [← ContinuousLinearMap.toLinearMap_add] at h
   rw [subspaceBlockOperatorData_B01_add_of_reduces A H U hAH hU]

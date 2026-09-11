@@ -46,7 +46,7 @@ theorem isometryEquiv_intertwines_projection (e : H₁ ≃ₗᵢ[𝕜] H₂)
     {K : Submodule 𝕜 H₁} {K' : Submodule 𝕜 H₂} [K.HasOrthogonalProjection]
     [K'.HasOrthogonalProjection]
     (hmap : K.map (e.toLinearEquiv : H₁ →ₗ[𝕜] H₂) = K') (x : H₁) :
-    e (K.starProjection x) = K.starProjection' (e x) := by
+    e (K.starProjection x) = K'.starProjection (e x) := by
   subst hmap
   have h := Submodule.starProjection_map_apply e K (e x)
   rw [e.symm_apply_apply] at h

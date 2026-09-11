@@ -126,7 +126,7 @@ theorem norm_semigroup_neg_le_of_spectrum_subset_Ici
     ‖semigroup (-T) t‖ ≤ Real.exp (-t * c) := by
   have hsa : IsSelfAdjoint T :=
     ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mpr hT
-  have hTneg : ContinuousLinearMap.IsSymmetric (-T) :=
+  have hTneg : (-T).IsSymmetric :=
     ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mp hsa.neg
   have hσneg : realSpectrum (-T) ⊆ Set.Iic (-c) := by
     intro r hr

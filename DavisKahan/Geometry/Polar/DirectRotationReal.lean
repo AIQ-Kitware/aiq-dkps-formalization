@@ -80,10 +80,8 @@ lives in a `ℂ`-only section, so the real case is proved here from the same
 scalar-generic ingredient. -/
 theorem IsUniformlyAcuteReal.symm {U V : Submodule ℝ E}
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
-    (h : IsUniformlyAcute U V) : IsUniformlyAcute V U := by
-  show V.projectionGap U < 1
-  rw [Submodule.projectionGap, Submodule.projectionGap_comm]
-  exact h
+    (h : IsUniformlyAcute U V) : IsUniformlyAcute V U :=
+  (Submodule.projectionGap_comm V U).trans_lt h
 
 omit [CompleteSpace E] in
 /-- Acuteness of a real pair passes to the complexified pair. -/

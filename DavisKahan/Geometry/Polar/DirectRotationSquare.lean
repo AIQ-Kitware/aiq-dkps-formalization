@@ -292,10 +292,8 @@ omit [CompleteSpace H] in
 theorem _root_.TauCeti.DavisKahan.IsUniformlyAcute.symm
     {U V : Submodule ℂ H}
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
-    (h : IsUniformlyAcute U V) : IsUniformlyAcute V U := by
-  show V.projectionGap U < 1
-  rw [Submodule.projectionGap, Submodule.projectionGap_comm]
-  exact h
+    (h : IsUniformlyAcute U V) : IsUniformlyAcute V U :=
+  (Submodule.projectionGap_comm V U).trans_lt h
 
 /-- The scalar cosine gauge `‖1 + z‖ / 2` of the reflection product. -/
 noncomputable def cosineGauge (z : ℂ) : ℂ := ((‖1 + z‖ / 2 : ℝ) : ℂ)

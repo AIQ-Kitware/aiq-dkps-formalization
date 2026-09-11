@@ -48,7 +48,7 @@ theorem exists_unitary_transport_selectedSpectralProjections_of_identification
     (delta : ℝ) (hdelta : 0 < delta)
     (s : Set ℝ) (hs : MeasurableSet s)
     (hself : ∀ t ∈ Set.Icc (0 : ℝ) 1,
-      ContinuousLinearMap.IsSymmetric (operatorPath A V t))
+      (operatorPath A V t).IsSymmetric)
     (hsep : ∀ t ∈ Set.Icc (0 : ℝ) 1, ∀ x : unitInterval,
       ∀ lam ∈ realSpectrum (operatorPath A V t),
         delta ≤ ‖Γ.path x - (lam : ℂ)‖)
@@ -85,7 +85,7 @@ theorem exists_unitary_transport_selectedSpectralSubspaces_of_identification
     (delta : ℝ) (hdelta : 0 < delta)
     (s : Set ℝ) (hs : MeasurableSet s)
     (hself : ∀ t ∈ Set.Icc (0 : ℝ) 1,
-      ContinuousLinearMap.IsSymmetric (operatorPath A V t))
+      (operatorPath A V t).IsSymmetric)
     (hsep : ∀ t ∈ Set.Icc (0 : ℝ) 1, ∀ x : unitInterval,
       ∀ lam ∈ realSpectrum (operatorPath A V t),
         delta ≤ ‖Γ.path x - (lam : ℂ)‖)

@@ -119,9 +119,9 @@ theorem existsUnique_selectedEndpointAngularOperator_of_contour_bound
     (delta : ℝ) (hdelta : 0 < delta)
     (s : Set ℝ) (hs : MeasurableSet s)
     (hA : A.IsSymmetric)
-    (hAK : ContinuousLinearMap.IsSymmetric (A + K))
+    (hAK : (A + K).IsSymmetric)
     (hself : ∀ t ∈ Set.Icc (0 : ℝ) 1,
-      ContinuousLinearMap.IsSymmetric (operatorPath A K t))
+      (operatorPath A K t).IsSymmetric)
     (hsep : ∀ t ∈ Set.Icc (0 : ℝ) 1, ∀ x : unitInterval,
       ∀ lam ∈ realSpectrum (operatorPath A K t),
         delta ≤ ‖Γ.path x - (lam : ℂ)‖)
@@ -151,9 +151,9 @@ noncomputable def selectedEndpointAngularOperator
     (delta : ℝ) (hdelta : 0 < delta)
     (s : Set ℝ) (hs : MeasurableSet s)
     (hA : A.IsSymmetric)
-    (hAK : ContinuousLinearMap.IsSymmetric (A + K))
+    (hAK : (A + K).IsSymmetric)
     (hself : ∀ t ∈ Set.Icc (0 : ℝ) 1,
-      ContinuousLinearMap.IsSymmetric (operatorPath A K t))
+      (operatorPath A K t).IsSymmetric)
     (hsep : ∀ t ∈ Set.Icc (0 : ℝ) 1, ∀ x : unitInterval,
       ∀ lam ∈ realSpectrum (operatorPath A K t),
         delta ≤ ‖Γ.path x - (lam : ℂ)‖)
@@ -174,9 +174,9 @@ theorem selectedEndpointAngularOperator_isAngularOperator
     (delta : ℝ) (hdelta : 0 < delta)
     (s : Set ℝ) (hs : MeasurableSet s)
     (hA : A.IsSymmetric)
-    (hAK : ContinuousLinearMap.IsSymmetric (A + K))
+    (hAK : (A + K).IsSymmetric)
     (hself : ∀ t ∈ Set.Icc (0 : ℝ) 1,
-      ContinuousLinearMap.IsSymmetric (operatorPath A K t))
+      (operatorPath A K t).IsSymmetric)
     (hsep : ∀ t ∈ Set.Icc (0 : ℝ) 1, ∀ x : unitInterval,
       ∀ lam ∈ realSpectrum (operatorPath A K t),
         delta ≤ ‖Γ.path x - (lam : ℂ)‖)
@@ -200,9 +200,9 @@ theorem graphSubspace_selectedEndpointAngularOperator
     (delta : ℝ) (hdelta : 0 < delta)
     (s : Set ℝ) (hs : MeasurableSet s)
     (hA : A.IsSymmetric)
-    (hAK : ContinuousLinearMap.IsSymmetric (A + K))
+    (hAK : (A + K).IsSymmetric)
     (hself : ∀ t ∈ Set.Icc (0 : ℝ) 1,
-      ContinuousLinearMap.IsSymmetric (operatorPath A K t))
+      (operatorPath A K t).IsSymmetric)
     (hsep : ∀ t ∈ Set.Icc (0 : ℝ) 1, ∀ x : unitInterval,
       ∀ lam ∈ realSpectrum (operatorPath A K t),
         delta ≤ ‖Γ.path x - (lam : ℂ)‖)
@@ -226,9 +226,9 @@ theorem norm_selectedEndpointAngularOperator_lt_one
     (delta : ℝ) (hdelta : 0 < delta)
     (s : Set ℝ) (hs : MeasurableSet s)
     (hA : A.IsSymmetric)
-    (hAK : ContinuousLinearMap.IsSymmetric (A + K))
+    (hAK : (A + K).IsSymmetric)
     (hself : ∀ t ∈ Set.Icc (0 : ℝ) 1,
-      ContinuousLinearMap.IsSymmetric (operatorPath A K t))
+      (operatorPath A K t).IsSymmetric)
     (hsep : ∀ t ∈ Set.Icc (0 : ℝ) 1, ∀ x : unitInterval,
       ∀ lam ∈ realSpectrum (operatorPath A K t),
         delta ≤ ‖Γ.path x - (lam : ℂ)‖)

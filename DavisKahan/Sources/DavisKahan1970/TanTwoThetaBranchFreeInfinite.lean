@@ -8,7 +8,6 @@ import DavisKahan.Sources.DavisKahan1970.Ideals.SpectralSelection
 import DavisKahan.Sources.DavisKahan1970.SineTheta.Norms.SubspaceSingularTransport
 
 open TauCeti.DavisKahan.ExactSinTheta
-open TauCeti.DavisKahanExt
 
 open TauCeti.DavisKahan.Sylvester
 

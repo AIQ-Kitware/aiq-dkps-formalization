@@ -138,7 +138,7 @@ resolvent-set and norm hypotheses automatically. -/
 theorem norm_resolventOperator_operatorPath_sub_le_of_spectral_distance
     (A H : Hc →L[ℂ] Hc) (z : ℂ) (delta : ℝ) (hdelta : 0 < delta)
     (I : Set ℝ)
-    (hself : ∀ t ∈ I, ContinuousLinearMap.IsSymmetric (operatorPath A H t))
+    (hself : ∀ t ∈ I, (operatorPath A H t).IsSymmetric)
     (hsep : ∀ t ∈ I, ∀ lam ∈ realSpectrum (operatorPath A H t),
       delta ≤ ‖z - (lam : ℂ)‖)
     {t u : ℝ} (ht : t ∈ I) (hu : u ∈ I) :

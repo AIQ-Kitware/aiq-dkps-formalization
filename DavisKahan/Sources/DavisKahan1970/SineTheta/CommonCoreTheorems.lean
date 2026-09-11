@@ -33,7 +33,6 @@ noncomputable section
 
 universe u v
 
-open TauCeti.DavisKahanExt
 
 /-- Scalar-generic source bookkeeping with the residual equation supplied on a
 graph core of the trial operator. -/

@@ -115,7 +115,7 @@ theorem sinTwoTheta_directed_unboundedResidual_blockRepresentative_kyFan_real
   have hDsa' : IsSelfAdjoint ((-2 : ℝ) • trialOffDiagonalPart V M R) := by
     rw [IsSelfAdjoint, star_smul, hSsa.star_eq]
     norm_num
-  have hDsa : ContinuousLinearMap.IsSymmetric ((-2 : ℝ) • trialOffDiagonalPart V M R) :=
+  have hDsa : ((-2 : ℝ) • trialOffDiagonalPart V M R).IsSymmetric :=
     ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mp hDsa'
   have hraw := sinTwoTheta_reflectionResidual_block_gauge_real A hA B hB
     (KyFanDominantIdealFamily.kyFan (𝕜 := ℝ) k hk)
@@ -289,7 +289,7 @@ theorem sinTwoTheta_directed_unboundedResidual_blockRepresentative_reducing_kyFa
   have hDsa' : IsSelfAdjoint ((-2 : ℝ) • trialOffDiagonalPart V M R) := by
     rw [IsSelfAdjoint, star_smul, hSsa.star_eq]
     norm_num
-  have hDsa : ContinuousLinearMap.IsSymmetric ((-2 : ℝ) • trialOffDiagonalPart V M R) :=
+  have hDsa : ((-2 : ℝ) • trialOffDiagonalPart V M R).IsSymmetric :=
     ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mp hDsa'
   have hraw := sinTwoTheta_reflectionResidual_block_gauge_reducing_real hA hred
     (KyFanDominantIdealFamily.kyFan (𝕜 := ℝ) k hk)

@@ -82,7 +82,7 @@ theorem beamRealZeroMode_sourceFacts :
 
 /-- A source-facing summary of the real Section 9 perturbation and trial-space data. -/
 theorem beamRealFiniteData_sourceFacts (ε : ℝ) (hε : 0 < ε) :
-    ContinuousLinearMap.IsSymmetric (beamPerturbation ε) ∧
+    (beamPerturbation ε).IsSymmetric ∧
       ‖beamPerturbation ε‖ ≤ ε ∧
       (‖centeredAffineLp trialOne‖ ^ 2 = 1 ∧
         ‖centeredAffineLp trialTwo‖ ^ 2 = 1 ∧

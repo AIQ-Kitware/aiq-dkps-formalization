@@ -95,7 +95,7 @@ theorem subspaceGap_bandSubspace_le
     (hBspec : TauCeti.LinearPMap.realSpectrum B ⊆
       Set.Icc l r ∪ bandExterior l r d) :
     d * Submodule.projectionGap (bandSubspace hA l r) (bandSubspace hB l r) ≤ ‖K‖ := by
-  have hnegK : ContinuousLinearMap.IsSymmetric (-K) := by
+  have hnegK : (-K).IsSymmetric := by
     intro x y
     have h : ⟪K x, y⟫_ℂ = ⟪x, K y⟫_ℂ := hK x y
     show ⟪-(K x), y⟫_ℂ = ⟪x, -(K y)⟫_ℂ
@@ -250,7 +250,7 @@ theorem le_of_band_exterior_spectra
       ⊆ bandExterior l r d) :
     P ≤ W := by
   subst hAB
-  have hzero : ContinuousLinearMap.IsSymmetric (0 : H →L[ℂ] H) := by
+  have hzero : (0 : H →L[ℂ] H).IsSymmetric := by
     intro x y
     simp
   have hgap : TauCeti.DavisKahan.Sylvester.FormBoundedSylvesterGap

@@ -38,7 +38,6 @@ variable {E F : Type v}
   [NormedAddCommGroup E] [InnerProductSpace 𝕜 E] [CompleteSpace E]
   [NormedAddCommGroup F] [InnerProductSpace 𝕜 F] [CompleteSpace F]
 
-open TauCeti.DavisKahanExt
 open TauCeti.DavisKahan
 
 /-- An orthogonally complemented subspace is complete.  This repeats the

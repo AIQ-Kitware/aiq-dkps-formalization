@@ -28,7 +28,6 @@ open scoped InnerProductSpace
 namespace TauCeti
 namespace DavisKahan
 
-open TauCeti.DavisKahanExt
 open TauCeti.DavisKahan
 open TauCeti.DavisKahan.ExactSinTheta
 

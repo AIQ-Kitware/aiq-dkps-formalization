@@ -166,7 +166,7 @@ theorem shiftedOperator_isSelfAdjoint
 omit [CompleteSpace H] in
 /-- The identity perturbation is symmetric. -/
 theorem negIdentity_isSelfAdjointOperator :
-    ContinuousLinearMap.IsSymmetric (-(1 : H →L[𝕜] H)) := by
+    (-(1 : H →L[𝕜] H)).IsSymmetric := by
   intro x y
   simp
 

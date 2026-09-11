@@ -158,7 +158,7 @@ theorem theorem8_1_canonicalBranch
       alpha delta := by
   classical
   have hAH : IsSelfAdjoint (A + H) := hA.add hH
-  have hAHop : ContinuousLinearMap.IsSymmetric (A + H) :=
+  have hAHop : (A + H).IsSymmetric :=
     ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mp hAH
   have hAsym : A.IsSymmetric :=
     ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mp hA
@@ -304,7 +304,7 @@ theorem theorem8_1_eq_canonicalBranch_of_maximalAngle_le
       (ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mp (hA.add hH)) alpha := by
   classical
   have hAH : IsSelfAdjoint (A + H) := hA.add hH
-  have hAHop : ContinuousLinearMap.IsSymmetric (A + H) :=
+  have hAHop : (A + H).IsSymmetric :=
     ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mp hAH
   have hconc := theorem8_1_canonicalBranch A H P hdelta hA hH hAP hPlow hPhigh hHP hHPperp
   set Q : Submodule ℂ E := canonicalLowBranch (A + H) hAHop alpha with hQdef
@@ -406,7 +406,7 @@ theorem theorem8_1_maximalAngle_le_iff_spectrumIn
   have hAH : IsSelfAdjoint (A + H) := hA.add hH
   have hAHsym : (A + H).IsSymmetric :=
     ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mp hAH
-  have hAHop : ContinuousLinearMap.IsSymmetric (A + H) := hAHsym
+  have hAHop : (A + H).IsSymmetric := hAHsym
   have hconc := theorem8_1_canonicalBranch A H P hdelta hA hH hAP hPlow hPhigh hHP hHPperp
   have hPperpperp : (Pᗮ)ᗮ = P := Submodule.orthogonal_orthogonal P
   have hAsym : A.IsSymmetric :=

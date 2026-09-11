@@ -185,14 +185,14 @@ theorem norm_sylvester_le_of_generalSeparation_rclike
     simpa [real_inner_eq_re_inner (𝕜 := 𝕜)] using congrArg RCLike.re (hA x y)
   have hBr : (B.restrictScalars ℝ).IsSymmetric := fun x y => by
     simpa [real_inner_eq_re_inner (𝕜 := 𝕜)] using congrArg RCLike.re (hB x y)
-  have hAc : ContinuousLinearMap.IsSymmetric (complexify (A.restrictScalars ℝ)) := by
+  have hAc : (complexify (A.restrictScalars ℝ)).IsSymmetric := by
     have hsa : IsSelfAdjoint (complexify (A.restrictScalars ℝ)) := by
       show ContinuousLinearMap.adjoint _ = _
       rw [← TauCeti.RealComplexification.complexify_adjoint]
       exact congrArg complexify
         (ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.2 hAr)
     exact ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.1 hsa
-  have hBc : ContinuousLinearMap.IsSymmetric (complexify (B.restrictScalars ℝ)) := by
+  have hBc : (complexify (B.restrictScalars ℝ)).IsSymmetric := by
     have hsa : IsSelfAdjoint (complexify (B.restrictScalars ℝ)) := by
       show ContinuousLinearMap.adjoint _ = _
       rw [← TauCeti.RealComplexification.complexify_adjoint]

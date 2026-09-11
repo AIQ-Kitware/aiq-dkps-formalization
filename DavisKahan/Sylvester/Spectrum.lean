@@ -75,7 +75,6 @@ namespace TauCeti
 namespace DavisKahan.Sylvester
 
 
-open TauCeti.DavisKahanExt
 
 open DavisKahan.Foundation
 

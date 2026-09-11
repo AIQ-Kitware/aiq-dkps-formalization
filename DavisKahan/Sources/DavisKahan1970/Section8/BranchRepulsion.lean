@@ -154,7 +154,7 @@ complement.  The former placeholder statement compared the unperturbed and
 perturbed forms with cancelling cut terms and was false as transcribed. -/
 theorem theorem8_1_upperCompressionRepulsion_of_targetSplitting
     (C : SpectralContinuationWitness A E s) {a : ℝ}
-    (hsym : ContinuousLinearMap.IsSymmetric (A + E))
+    (hsym : (A + E).IsSymmetric)
     (h0 : SpectrumIn (A + E) C.targetSelectedSpectralSubspace (Set.Iic a))
     (h1inv : InvariantFor (A + E) C.targetSelectedSpectralSubspaceᗮ) :
     ∀ x : C.sourceSelectedSpectralSubspaceᗮ,
@@ -190,7 +190,7 @@ theorem theorem8_1_upperCompressionRepulsion_of_targetSplitting
 faithfully over the old selected subspace. -/
 theorem theorem8_1_lowerCompressionRepulsion_of_targetSplitting
     (C : SpectralContinuationWitness A E s) {b : ℝ}
-    (hsym : ContinuousLinearMap.IsSymmetric (A + E))
+    (hsym : (A + E).IsSymmetric)
     (h0inv : InvariantFor (A + E) C.targetSelectedSpectralSubspace)
     (h1 : SpectrumIn (A + E) C.targetSelectedSpectralSubspaceᗮ (Set.Ici b)) :
     ∀ x : C.sourceSelectedSpectralSubspace,
@@ -273,7 +273,7 @@ theorem theorem8_1_selectedBranch_and_spectralRepulsion
       (Set.Ici b)) :
     Theorem81ContinuationConclusion
       (spectralContinuationWitness_of_circle D) a b delta := by
-  have hsym : ContinuousLinearMap.IsSymmetric (A + E) := D.hA.add D.hE
+  have hsym : (A + E).IsSymmetric := D.hA.add D.hE
   have hsmallC : selectedBranchProjectionLipschitzConstant
       (spectralContinuationWitness_of_circle D).contour E D.margin <
         Real.sqrt 2 / 2 :=

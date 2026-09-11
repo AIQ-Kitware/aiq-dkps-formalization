@@ -192,7 +192,7 @@ self-adjoint path with one common separating contour. -/
 theorem norm_fixedContourRieszOperator_operatorPath_sub_le
     (Γ : PiecewiseC1ClosedContour) (A V : H →L[ℂ] H)
     (parameterSet : Set ℝ) (delta : ℝ) (hdelta : 0 < delta)
-    (hself : ∀ t ∈ parameterSet, ContinuousLinearMap.IsSymmetric (operatorPath A V t))
+    (hself : ∀ t ∈ parameterSet, (operatorPath A V t).IsSymmetric)
     (hsep : ∀ t ∈ parameterSet, ∀ x : unitInterval,
       ∀ lam ∈ realSpectrum (operatorPath A V t),
         delta ≤ ‖Γ.path x - (lam : ℂ)‖)
@@ -247,7 +247,7 @@ a common positive spectral margin. -/
 theorem lipschitzOnWith_fixedContourRieszOperator_operatorPath
     (Γ : PiecewiseC1ClosedContour) (A V : H →L[ℂ] H)
     (parameterSet : Set ℝ) (delta : ℝ) (hdelta : 0 < delta)
-    (hself : ∀ t ∈ parameterSet, ContinuousLinearMap.IsSymmetric (operatorPath A V t))
+    (hself : ∀ t ∈ parameterSet, (operatorPath A V t).IsSymmetric)
     (hsep : ∀ t ∈ parameterSet, ∀ x : unitInterval,
       ∀ lam ∈ realSpectrum (operatorPath A V t),
         delta ≤ ‖Γ.path x - (lam : ℂ)‖) :
@@ -281,7 +281,7 @@ theorem lipschitzOnWith_fixedContourRieszOperator_operatorPath
 theorem continuousOn_fixedContourRieszOperator_operatorPath
     (Γ : PiecewiseC1ClosedContour) (A V : H →L[ℂ] H)
     (parameterSet : Set ℝ) (delta : ℝ) (hdelta : 0 < delta)
-    (hself : ∀ t ∈ parameterSet, ContinuousLinearMap.IsSymmetric (operatorPath A V t))
+    (hself : ∀ t ∈ parameterSet, (operatorPath A V t).IsSymmetric)
     (hsep : ∀ t ∈ parameterSet, ∀ x : unitInterval,
       ∀ lam ∈ realSpectrum (operatorPath A V t),
         delta ≤ ‖Γ.path x - (lam : ℂ)‖) :

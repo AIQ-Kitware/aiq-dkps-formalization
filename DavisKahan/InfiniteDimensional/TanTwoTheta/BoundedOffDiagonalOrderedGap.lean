@@ -76,7 +76,7 @@ theorem spectrum_real_compress_subset_Iic_of_restrictedSpectrum_subset_Iic
     (U.isComplete_coe_of_hasOrthogonalProjection).completeSpace_coe
   have hAsa : IsSelfAdjoint A :=
     ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mpr hA
-  have hcompress : ContinuousLinearMap.IsSymmetric (compressOperator U A) :=
+  have hcompress : (compressOperator U A).IsSymmetric :=
     ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mp
       (isSelfAdjoint_compressOperator hAsa U)
   apply spectrum_real_subset_Iic_of_realSpectrum_subset_Iic
@@ -96,7 +96,7 @@ theorem spectrum_real_compress_subset_Ici_of_restrictedSpectrum_subset_Ici
     (U.isComplete_coe_of_hasOrthogonalProjection).completeSpace_coe
   have hAsa : IsSelfAdjoint A :=
     ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mpr hA
-  have hcompress : ContinuousLinearMap.IsSymmetric (compressOperator U A) :=
+  have hcompress : (compressOperator U A).IsSymmetric :=
     ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mp
       (isSelfAdjoint_compressOperator hAsa U)
   apply spectrum_real_subset_Ici_of_realSpectrum_subset_Ici

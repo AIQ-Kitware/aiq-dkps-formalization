@@ -284,7 +284,7 @@ theorem sourceCosineR_apply_coe (x : U) :
   rfl
 
 /-- The restricted real Halmos cosine is symmetric and nonnegative. -/
-theorem sourceCosineR_selfAdjoint : ContinuousLinearMap.IsSymmetric (sourceCosineR U V) := by
+theorem sourceCosineR_selfAdjoint : (sourceCosineR U V).IsSymmetric := by
   intro x y
   change ⟪TauCeti.DavisKahan.canonicalAbsoluteValueR U V (x : E), (y : E)⟫_ℝ =
     ⟪(x : E), TauCeti.DavisKahan.canonicalAbsoluteValueR U V (y : E)⟫_ℝ

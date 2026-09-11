@@ -48,7 +48,7 @@ omit [CompleteSpace E0] [CompleteSpace E1] in
 and mutually adjoint off-diagonal blocks is symmetric. -/
 theorem blockOperator_isSelfAdjoint
     (H : BlockOperatorData (𝕜 := 𝕜) (E0 := E0) (E1 := E1)) :
-    ContinuousLinearMap.IsSymmetric (blockOperator H) := by
+    (blockOperator H).IsSymmetric := by
   intro x y
   let x0 : E0 := WithLp.fst x
   let x1 : E1 := WithLp.snd x
