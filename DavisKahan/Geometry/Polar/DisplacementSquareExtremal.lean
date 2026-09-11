@@ -132,8 +132,8 @@ omit [CompleteSpace H] in
 `W P_U = P_V W` from `W = W`. -/
 theorem competitor_admissible_orthogonal_complex (U V : Submodule ℂ H)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] (W : H →L[ℂ] H)
-    (hWmap : W * projection U = projection V * W) :
-    W * projection Uᗮ = projection Vᗮ * W := by
+    (hWmap : W * U.starProjection = V.starProjection * W) :
+    W * Uᗮ.starProjection = Vᗮ.starProjection * W := by
   show W * Uᗮ.starProjection = Vᗮ.starProjection * W
   rw [Submodule.starProjection_orthogonal' U, Submodule.starProjection_orthogonal' V,
     mul_sub, sub_mul, mul_one, one_mul, hWmap]
@@ -256,7 +256,7 @@ theorem proposition4_3_squaredDisplacement_kyFan (U V : Submodule ℂ H)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
     (hacute : IsUniformlyAcute U V) (W : H →L[ℂ] H)
     (hWunitary : W ∈ unitary (H →L[ℂ] H))
-    (hWmap : W * projection U = projection V * W) (k : ℕ) :
+    (hWmap : W * U.starProjection = V.starProjection * W) (k : ℕ) :
     kyFanApproximationGauge k
         ((1 - star (spectraDirectRotation U V hacute)) *
           (1 - spectraDirectRotation U V hacute)) ≤
@@ -331,7 +331,7 @@ theorem proposition4_3_nonacute_squaredDisplacement_kyFan (U V : Submodule ℂ H
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
     (J : halmosSourceDefect U V ≃ₗᵢ[ℂ] halmosTargetDefect U V)
     (W : H →L[ℂ] H) (hWunitary : W ∈ unitary (H →L[ℂ] H))
-    (hWmap : W * projection U = projection V * W) (k : ℕ) :
+    (hWmap : W * U.starProjection = V.starProjection * W) (k : ℕ) :
     kyFanApproximationGauge k
         ((1 - star (nonacuteDirectRotation U V J)) *
           (1 - nonacuteDirectRotation U V J)) ≤

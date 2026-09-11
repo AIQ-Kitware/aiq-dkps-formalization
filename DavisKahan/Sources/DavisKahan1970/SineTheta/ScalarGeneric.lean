@@ -139,7 +139,7 @@ This is the common real/complex engine formerly duplicated by
 theorem sinTheta_addBounded_gauge_block_of_formGap_rclike
     (N : KyFanDominantIdealFamily (𝕜 := 𝕜))
     (A : E →ₗ.[𝕜] E) (hA : IsSelfAdjoint A)
-    (Vop : E →L[𝕜] E) (hVop : IsSelfAdjointOperator Vop)
+    (Vop : E →L[𝕜] E) (hVop : Vop.IsSymmetric)
     (A₀ : F →ₗ.[𝕜] F) (hA₀ : IsSelfAdjoint A₀)
     (Λ₁ : G →ₗ.[𝕜] G) (hΛ₁ : IsSelfAdjoint Λ₁)
     (X : F →L[𝕜] E) (F₁ : G →L[𝕜] E)

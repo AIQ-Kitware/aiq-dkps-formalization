@@ -64,16 +64,16 @@ variable {H : Type*} [NormedAddCommGroup H] [InnerProductSpace 𝕜 H]
 noncomputable def spectraCanonicalIntertwiner
     (U V : Submodule 𝕜 H)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] : H →L[𝕜] H :=
-  projection V * projection U +
-    complementaryProjection V * complementaryProjection U
+  V.starProjection * U.starProjection +
+    (Vᗮ).starProjection * (Uᗮ).starProjection
 
 omit [CompleteSpace H] in
 /-- The canonical intertwiner sends the `U` block into the `V` block. -/
 theorem spectraCanonicalIntertwiner_mul_projection
     (U V : Submodule 𝕜 H)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] :
-    spectraCanonicalIntertwiner U V * projection U =
-      projection V * spectraCanonicalIntertwiner U V := by
+    spectraCanonicalIntertwiner U V * U.starProjection =
+      V.starProjection * spectraCanonicalIntertwiner U V := by
   change
     (V.starProjection * U.starProjection +
         Vᗮ.starProjection * Uᗮ.starProjection) * U.starProjection =
@@ -102,7 +102,7 @@ theorem star_spectraCanonicalIntertwiner
       Vᗮ.starProjection * Uᗮ.starProjection) =
       U.starProjection * V.starProjection +
         Uᗮ.starProjection * Vᗮ.starProjection
-  simp only [star_add, star_mul, star_mul,
+  simp only [star_add, star_mul,
     (isSelfAdjoint_starProjection U).star_eq,
     (isSelfAdjoint_starProjection V).star_eq,
     (isSelfAdjoint_starProjection Uᗮ).star_eq,
@@ -112,7 +112,7 @@ omit [CompleteSpace H] in
 /-- Reflection through `U` written in the projection algebra. -/
 theorem reflectionOperator_eq_projection_add_projection_sub_one
     (U : Submodule 𝕜 H) [U.HasOrthogonalProjection] :
-    reflectionOperator U = projection U + projection U - 1 := by
+    U.reflectionOperator = U.starProjection + U.starProjection - 1 := by
   ext x
   rw [Submodule.reflectionOperator_apply]
   simp only [add_apply, sub_apply, one_apply_eq_self]
@@ -125,7 +125,7 @@ theorem spectraCanonicalIntertwiner_sub_one
     (U V : Submodule 𝕜 H)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] :
     spectraCanonicalIntertwiner U V - 1 =
-      (projection V - projection U) * reflectionOperator U := by
+      (V.starProjection - U.starProjection) * U.reflectionOperator := by
   change
     (V.starProjection * U.starProjection +
         Vᗮ.starProjection * Uᗮ.starProjection) - 1 =
@@ -145,16 +145,16 @@ projection gap. -/
 theorem norm_spectraCanonicalIntertwiner_sub_one_le_gap
     (U V : Submodule 𝕜 H)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] :
-    ‖spectraCanonicalIntertwiner U V - 1‖ ≤ subspaceGap U V := by
+    ‖spectraCanonicalIntertwiner U V - 1‖ ≤ U.projectionGap V := by
   rw [spectraCanonicalIntertwiner_sub_one]
   calc
-    ‖(projection V - projection U) * reflectionOperator U‖
-        ≤ ‖projection V - projection U‖ * ‖reflectionOperator U‖ :=
+    ‖(V.starProjection - U.starProjection) * U.reflectionOperator‖
+        ≤ ‖V.starProjection - U.starProjection‖ * ‖U.reflectionOperator‖ :=
       norm_mul_le _ _
-    _ ≤ ‖projection V - projection U‖ * 1 :=
-      mul_le_mul_of_nonneg_left (norm_reflectionOperator_le_one U)
-        (norm_nonneg (projection V - projection U))
-    _ = subspaceGap U V := by
+    _ ≤ ‖V.starProjection - U.starProjection‖ * 1 :=
+      mul_le_mul_of_nonneg_left (Submodule.norm_reflectionOperator_le_one U)
+        (norm_nonneg (V.starProjection - U.starProjection))
+    _ = U.projectionGap V := by
       rw [mul_one]
       change ‖V.starProjection - U.starProjection‖ =
         ‖U.starProjection - V.starProjection‖
@@ -167,7 +167,7 @@ omit [CompleteSpace H] in
 theorem norm_one_sub_spectraCanonicalIntertwiner_le_gap
     (U V : Submodule 𝕜 H)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] :
-    ‖1 - spectraCanonicalIntertwiner U V‖ ≤ subspaceGap U V := by
+    ‖1 - spectraCanonicalIntertwiner U V‖ ≤ U.projectionGap V := by
   rw [show 1 - spectraCanonicalIntertwiner U V =
     -(spectraCanonicalIntertwiner U V - 1) by abel, norm_neg]
   exact norm_spectraCanonicalIntertwiner_sub_one_le_gap U V
@@ -426,34 +426,34 @@ theorem star_spectraCanonicalIntertwiner_mul_self_commute_projection
     Commute
       (star (spectraCanonicalIntertwiner U V) *
         spectraCanonicalIntertwiner U V)
-      (projection U) := by
+      (U.starProjection) := by
   have hSP := spectraCanonicalIntertwiner_mul_projection U V
   have hPSstar :
-      projection U * star (spectraCanonicalIntertwiner U V) =
-        star (spectraCanonicalIntertwiner U V) * projection V := by
+      U.starProjection * star (spectraCanonicalIntertwiner U V) =
+        star (spectraCanonicalIntertwiner U V) * V.starProjection := by
     have h := congrArg star hSP
     simpa only [star_mul,
       (isSelfAdjoint_starProjection U).star_eq,
       (isSelfAdjoint_starProjection V).star_eq] using h
   show
     (star (spectraCanonicalIntertwiner U V) *
-        spectraCanonicalIntertwiner U V) * projection U =
-      projection U *
+        spectraCanonicalIntertwiner U V) * U.starProjection =
+      U.starProjection *
         (star (spectraCanonicalIntertwiner U V) *
           spectraCanonicalIntertwiner U V)
   calc
     (star (spectraCanonicalIntertwiner U V) *
-        spectraCanonicalIntertwiner U V) * projection U =
+        spectraCanonicalIntertwiner U V) * U.starProjection =
       star (spectraCanonicalIntertwiner U V) *
-        (spectraCanonicalIntertwiner U V * projection U) := by
+        (spectraCanonicalIntertwiner U V * U.starProjection) := by
           rw [mul_assoc]
     _ = star (spectraCanonicalIntertwiner U V) *
-        (projection V * spectraCanonicalIntertwiner U V) := by rw [hSP]
-    _ = (star (spectraCanonicalIntertwiner U V) * projection V) *
+        (V.starProjection * spectraCanonicalIntertwiner U V) := by rw [hSP]
+    _ = (star (spectraCanonicalIntertwiner U V) * V.starProjection) *
         spectraCanonicalIntertwiner U V := by rw [← mul_assoc]
-    _ = (projection U * star (spectraCanonicalIntertwiner U V)) *
+    _ = (U.starProjection * star (spectraCanonicalIntertwiner U V)) *
         spectraCanonicalIntertwiner U V := by rw [← hPSstar]
-    _ = projection U *
+    _ = U.starProjection *
         (star (spectraCanonicalIntertwiner U V) *
           spectraCanonicalIntertwiner U V) := by rw [mul_assoc]
 
@@ -464,16 +464,16 @@ theorem spectraCanonicalAbsoluteValue_commute_projection
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] :
     Commute
       (ContinuousLinearMap.modulus (spectraCanonicalIntertwiner U V))
-      (projection U) := by
+      (U.starProjection) := by
   have hGram :
       Commute
         (star (spectraCanonicalIntertwiner U V) *
           spectraCanonicalIntertwiner U V)
-        (projection U) :=
+        (U.starProjection) :=
     star_spectraCanonicalIntertwiner_mul_self_commute_projection U V
   change Commute
     (CFC.abs (spectraCanonicalIntertwiner U V))
-    (projection U)
+    (U.starProjection)
   rw [CFC.abs, CFC.sqrt_eq_real_sqrt
     (star (spectraCanonicalIntertwiner U V) *
       spectraCanonicalIntertwiner U V)
@@ -487,7 +487,7 @@ theorem spectraCanonicalAbsoluteValueUnit_inv_commute_projection
     (hacute : IsUniformlyAcute U V) :
     Commute
       (↑((spectraCanonicalAbsoluteValueUnit U V hacute)⁻¹) : H →L[𝕜] H)
-      (projection U) := by
+      (U.starProjection) := by
   have h := spectraCanonicalAbsoluteValue_commute_projection U V
   rw [← coe_spectraCanonicalAbsoluteValueUnit U V hacute] at h
   exact h.units_inv_left
@@ -514,8 +514,8 @@ theorem spectraCanonicalPolarFactor_intertwines
     (U V : Submodule 𝕜 H)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
     (hacute : IsUniformlyAcute U V) :
-    spectraCanonicalPolarFactor U V * projection U =
-      projection V * spectraCanonicalPolarFactor U V := by
+    spectraCanonicalPolarFactor U V * U.starProjection =
+      V.starProjection * spectraCanonicalPolarFactor U V := by
   rw [spectraCanonicalPolarFactor_eq_intertwiner_mul_absoluteValueUnit_inv
     U V hacute]
   have hInv :=
@@ -523,21 +523,21 @@ theorem spectraCanonicalPolarFactor_intertwines
   calc
     (spectraCanonicalIntertwiner U V *
         (↑((spectraCanonicalAbsoluteValueUnit U V hacute)⁻¹) : H →L[𝕜] H)) *
-        projection U =
+        U.starProjection =
       spectraCanonicalIntertwiner U V *
         ((↑((spectraCanonicalAbsoluteValueUnit U V hacute)⁻¹) : H →L[𝕜] H) *
-          projection U) := by rw [mul_assoc]
+          U.starProjection) := by rw [mul_assoc]
     _ = spectraCanonicalIntertwiner U V *
-        (projection U *
+        (U.starProjection *
           (↑((spectraCanonicalAbsoluteValueUnit U V hacute)⁻¹) : H →L[𝕜] H)) := by
             rw [hInv.eq]
-    _ = (spectraCanonicalIntertwiner U V * projection U) *
+    _ = (spectraCanonicalIntertwiner U V * U.starProjection) *
         (↑((spectraCanonicalAbsoluteValueUnit U V hacute)⁻¹) : H →L[𝕜] H) := by
           rw [← mul_assoc]
-    _ = (projection V * spectraCanonicalIntertwiner U V) *
+    _ = (V.starProjection * spectraCanonicalIntertwiner U V) *
         (↑((spectraCanonicalAbsoluteValueUnit U V hacute)⁻¹) : H →L[𝕜] H) := by
           rw [spectraCanonicalIntertwiner_mul_projection]
-    _ = projection V *
+    _ = V.starProjection *
         (spectraCanonicalIntertwiner U V *
           (↑((spectraCanonicalAbsoluteValueUnit U V hacute)⁻¹) : H →L[𝕜] H)) := by
             rw [mul_assoc]
@@ -572,8 +572,8 @@ theorem spectraDirectRotation_intertwines
     (U V : Submodule 𝕜 H)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
     (hacute : IsUniformlyAcute U V) :
-    spectraDirectRotation U V hacute * projection U =
-      projection V * spectraDirectRotation U V hacute :=
+    spectraDirectRotation U V hacute * U.starProjection =
+      V.starProjection * spectraDirectRotation U V hacute :=
   spectraCanonicalPolarFactor_intertwines U V hacute
 
 /-- The acute Spectra direct rotation also intertwines the complementary
@@ -582,8 +582,8 @@ theorem spectraDirectRotation_intertwines_complementary
     (U V : Submodule 𝕜 H)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
     (hacute : IsUniformlyAcute U V) :
-    spectraDirectRotation U V hacute * complementaryProjection U =
-      complementaryProjection V * spectraDirectRotation U V hacute := by
+    spectraDirectRotation U V hacute * (Uᗮ).starProjection =
+      (Vᗮ).starProjection * spectraDirectRotation U V hacute := by
   change
     spectraDirectRotation U V hacute * Uᗮ.starProjection =
       Vᗮ.starProjection * spectraDirectRotation U V hacute
@@ -669,7 +669,7 @@ terms exchanged. -/
 theorem spectraCanonicalIntertwiner_orthogonal (U V : Submodule 𝕜 H)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] :
     spectraCanonicalIntertwiner Uᗮ Vᗮ = spectraCanonicalIntertwiner U V := by
-  simp only [spectraCanonicalIntertwiner, projection, complementaryProjection,
+  simp only [spectraCanonicalIntertwiner,
     starProjection_orthogonal_orthogonal]
   exact add_comm _ _
 
@@ -678,7 +678,7 @@ omit [CompleteSpace H] in
 `P_Uᗮ − P_Vᗮ = P_V − P_U`. -/
 theorem subspaceGap_orthogonal (U V : Submodule 𝕜 H)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] :
-    subspaceGap Uᗮ Vᗮ = subspaceGap U V := by
+    Uᗮ.projectionGap Vᗮ = U.projectionGap V := by
   show ‖Uᗮ.starProjection - Vᗮ.starProjection‖ = ‖U.starProjection - V.starProjection‖
   rw [Submodule.starProjection_orthogonal' U, Submodule.starProjection_orthogonal' V,
     show (1 - U.starProjection) - (1 - V.starProjection)
@@ -743,8 +743,8 @@ theorem star_spectraDirectRotation_intertwines
     (U V : Submodule 𝕜 H)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
     (hacute : IsUniformlyAcute U V) :
-    star (spectraDirectRotation U V hacute) * projection V =
-      projection U * star (spectraDirectRotation U V hacute) := by
+    star (spectraDirectRotation U V hacute) * V.starProjection =
+      U.starProjection * star (spectraDirectRotation U V hacute) := by
   have h := congrArg star (spectraDirectRotation_intertwines U V hacute)
   simpa only [star_mul, star_star,
       (isSelfAdjoint_starProjection U).star_eq,
@@ -756,8 +756,8 @@ theorem star_spectraDirectRotation_intertwines_complementary
     (U V : Submodule 𝕜 H)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
     (hacute : IsUniformlyAcute U V) :
-    star (spectraDirectRotation U V hacute) * complementaryProjection V =
-      complementaryProjection U * star (spectraDirectRotation U V hacute) := by
+    star (spectraDirectRotation U V hacute) * (Vᗮ).starProjection =
+      (Uᗮ).starProjection * star (spectraDirectRotation U V hacute) := by
   change
     star (spectraDirectRotation U V hacute) * Vᗮ.starProjection =
       Uᗮ.starProjection * star (spectraDirectRotation U V hacute)
@@ -772,18 +772,18 @@ theorem spectraDirectRotation_conjugates_projection
     (U V : Submodule 𝕜 H)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
     (hacute : IsUniformlyAcute U V) :
-    spectraDirectRotation U V hacute * projection U *
-        star (spectraDirectRotation U V hacute) = projection V := by
+    spectraDirectRotation U V hacute * U.starProjection *
+        star (spectraDirectRotation U V hacute) = V.starProjection := by
   calc
-    spectraDirectRotation U V hacute * projection U *
+    spectraDirectRotation U V hacute * U.starProjection *
         star (spectraDirectRotation U V hacute) =
-      (projection V * spectraDirectRotation U V hacute) *
+      (V.starProjection * spectraDirectRotation U V hacute) *
         star (spectraDirectRotation U V hacute) := by
           rw [spectraDirectRotation_intertwines U V hacute]
-    _ = projection V *
+    _ = V.starProjection *
         (spectraDirectRotation U V hacute *
           star (spectraDirectRotation U V hacute)) := by rw [mul_assoc]
-    _ = projection V := by
+    _ = V.starProjection := by
       rw [spectraDirectRotation_mul_star_self U V hacute, mul_one]
 
 /-- Conjugation by the adjoint carries the target projection back to the
@@ -792,18 +792,18 @@ theorem star_spectraDirectRotation_conjugates_projection
     (U V : Submodule 𝕜 H)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
     (hacute : IsUniformlyAcute U V) :
-    star (spectraDirectRotation U V hacute) * projection V *
-        spectraDirectRotation U V hacute = projection U := by
+    star (spectraDirectRotation U V hacute) * V.starProjection *
+        spectraDirectRotation U V hacute = U.starProjection := by
   calc
-    star (spectraDirectRotation U V hacute) * projection V *
+    star (spectraDirectRotation U V hacute) * V.starProjection *
         spectraDirectRotation U V hacute =
-      (projection U * star (spectraDirectRotation U V hacute)) *
+      (U.starProjection * star (spectraDirectRotation U V hacute)) *
         spectraDirectRotation U V hacute := by
           rw [star_spectraDirectRotation_intertwines U V hacute]
-    _ = projection U *
+    _ = U.starProjection *
         (star (spectraDirectRotation U V hacute) *
           spectraDirectRotation U V hacute) := by rw [mul_assoc]
-    _ = projection U := by
+    _ = U.starProjection := by
       rw [star_spectraDirectRotation_mul_self U V hacute, mul_one]
 
 /-- Conjugation by the acute Spectra direct rotation carries complementary
@@ -812,18 +812,18 @@ theorem spectraDirectRotation_conjugates_complementaryProjection
     (U V : Submodule 𝕜 H)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
     (hacute : IsUniformlyAcute U V) :
-    spectraDirectRotation U V hacute * complementaryProjection U *
-        star (spectraDirectRotation U V hacute) = complementaryProjection V := by
+    spectraDirectRotation U V hacute * (Uᗮ).starProjection *
+        star (spectraDirectRotation U V hacute) = (Vᗮ).starProjection := by
   calc
-    spectraDirectRotation U V hacute * complementaryProjection U *
+    spectraDirectRotation U V hacute * (Uᗮ).starProjection *
         star (spectraDirectRotation U V hacute) =
-      (complementaryProjection V * spectraDirectRotation U V hacute) *
+      ((Vᗮ).starProjection * spectraDirectRotation U V hacute) *
         star (spectraDirectRotation U V hacute) := by
           rw [spectraDirectRotation_intertwines_complementary U V hacute]
-    _ = complementaryProjection V *
+    _ = (Vᗮ).starProjection *
         (spectraDirectRotation U V hacute *
           star (spectraDirectRotation U V hacute)) := by rw [mul_assoc]
-    _ = complementaryProjection V := by
+    _ = (Vᗮ).starProjection := by
       rw [spectraDirectRotation_mul_star_self U V hacute, mul_one]
 
 /-- The acute Spectra direct rotation intertwines the two reflection
@@ -832,8 +832,8 @@ theorem spectraDirectRotation_intertwines_reflection
     (U V : Submodule 𝕜 H)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
     (hacute : IsUniformlyAcute U V) :
-    spectraDirectRotation U V hacute * reflectionOperator U =
-      reflectionOperator V * spectraDirectRotation U V hacute := by
+    spectraDirectRotation U V hacute * U.reflectionOperator =
+      V.reflectionOperator * spectraDirectRotation U V hacute := by
   simp only [reflectionOperator_eq_projection_add_projection_sub_one,
     mul_sub, mul_add, mul_one, sub_mul, add_mul, one_mul,
     spectraDirectRotation_intertwines U V hacute]
@@ -844,8 +844,8 @@ theorem star_spectraDirectRotation_intertwines_reflection
     (U V : Submodule 𝕜 H)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
     (hacute : IsUniformlyAcute U V) :
-    star (spectraDirectRotation U V hacute) * reflectionOperator V =
-      reflectionOperator U * star (spectraDirectRotation U V hacute) := by
+    star (spectraDirectRotation U V hacute) * V.reflectionOperator =
+      U.reflectionOperator * star (spectraDirectRotation U V hacute) := by
   simp only [reflectionOperator_eq_projection_add_projection_sub_one,
     mul_sub, mul_add, mul_one, sub_mul, add_mul, one_mul,
     star_spectraDirectRotation_intertwines U V hacute]
@@ -856,18 +856,18 @@ theorem spectraDirectRotation_conjugates_reflection
     (U V : Submodule 𝕜 H)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
     (hacute : IsUniformlyAcute U V) :
-    spectraDirectRotation U V hacute * reflectionOperator U *
-        star (spectraDirectRotation U V hacute) = reflectionOperator V := by
+    spectraDirectRotation U V hacute * U.reflectionOperator *
+        star (spectraDirectRotation U V hacute) = V.reflectionOperator := by
   calc
-    spectraDirectRotation U V hacute * reflectionOperator U *
+    spectraDirectRotation U V hacute * U.reflectionOperator *
         star (spectraDirectRotation U V hacute) =
-      (reflectionOperator V * spectraDirectRotation U V hacute) *
+      (V.reflectionOperator * spectraDirectRotation U V hacute) *
         star (spectraDirectRotation U V hacute) := by
           rw [spectraDirectRotation_intertwines_reflection U V hacute]
-    _ = reflectionOperator V *
+    _ = V.reflectionOperator *
         (spectraDirectRotation U V hacute *
           star (spectraDirectRotation U V hacute)) := by rw [mul_assoc]
-    _ = reflectionOperator V := by
+    _ = V.reflectionOperator := by
       rw [spectraDirectRotation_mul_star_self U V hacute, mul_one]
 
 /-- The adjoint of the acute Spectra direct rotation is onto. -/
@@ -959,7 +959,7 @@ theorem star_spectraDirectRotation_maps_orthogonalComplement
 algebra. -/
 theorem star_reflectionOperator_complex
     (U : Submodule 𝕜 H) [U.HasOrthogonalProjection] :
-    star (reflectionOperator U) = reflectionOperator U := by
+    star (U.reflectionOperator) = U.reflectionOperator := by
   rw [reflectionOperator_eq_projection_add_projection_sub_one]
   simp only [star_sub, star_add, star_one,
     (isSelfAdjoint_starProjection U).star_eq]
@@ -968,21 +968,21 @@ theorem star_reflectionOperator_complex
 algebra. -/
 theorem reflectionOperator_mem_unitary_complex
     (U : Submodule 𝕜 H) [U.HasOrthogonalProjection] :
-    reflectionOperator U ∈ unitary (H →L[𝕜] H) := by
-  have hstar : star (reflectionOperator U) = reflectionOperator U :=
+    U.reflectionOperator ∈ unitary (H →L[𝕜] H) := by
+  have hstar : star (U.reflectionOperator) = U.reflectionOperator :=
     star_reflectionOperator_complex U
-  have hinv : reflectionOperator U * reflectionOperator U = 1 := by
+  have hinv : U.reflectionOperator * U.reflectionOperator = 1 := by
     simpa only [ContinuousLinearMap.mul_def, ContinuousLinearMap.one_def] using
-      reflectionOperator_involutive U
+      Submodule.reflectionOperator_involutive U
   exact ⟨by rw [hstar, hinv], by rw [hstar, hinv]⟩
 
 omit [CompleteSpace H] in
 /-- Reflections square to the identity in the bounded-operator algebra. -/
 theorem reflectionOperator_mul_self_complex
     (U : Submodule 𝕜 H) [U.HasOrthogonalProjection] :
-    reflectionOperator U * reflectionOperator U = 1 := by
+    U.reflectionOperator * U.reflectionOperator = 1 := by
   simpa only [ContinuousLinearMap.mul_def, ContinuousLinearMap.one_def] using
-    reflectionOperator_involutive U
+    Submodule.reflectionOperator_involutive U
 
 omit [CompleteSpace H] in
 /-- Doubling identity: `C + C = 1 + Rᵥ Rᵤ`.  Because each reflection is degree
@@ -991,13 +991,13 @@ theorem spectraCanonicalIntertwiner_add_self
     (U V : Submodule 𝕜 H)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] :
     spectraCanonicalIntertwiner U V + spectraCanonicalIntertwiner U V =
-      1 + reflectionOperator V * reflectionOperator U := by
+      1 + V.reflectionOperator * U.reflectionOperator := by
   change
     (V.starProjection * U.starProjection +
           Vᗮ.starProjection * Uᗮ.starProjection) +
         (V.starProjection * U.starProjection +
           Vᗮ.starProjection * Uᗮ.starProjection) =
-      1 + reflectionOperator V * reflectionOperator U
+      1 + V.reflectionOperator * U.reflectionOperator
   rw [reflectionOperator_eq_projection_add_projection_sub_one U,
     reflectionOperator_eq_projection_add_projection_sub_one V,
     Submodule.starProjection_orthogonal' U, Submodule.starProjection_orthogonal' V]
@@ -1032,8 +1032,8 @@ theorem spectraCanonicalIntertwiner_normal
     star (spectraCanonicalIntertwiner U V) * spectraCanonicalIntertwiner U V =
       spectraCanonicalIntertwiner U V * star (spectraCanonicalIntertwiner U V) := by
   set C := spectraCanonicalIntertwiner U V with hCdef
-  set a := reflectionOperator U with hadef
-  set b := reflectionOperator V with hbdef
+  set a := U.reflectionOperator with hadef
+  set b := V.reflectionOperator with hbdef
   have hRU : a * a = 1 := reflectionOperator_mul_self_complex U
   have hRV : b * b = 1 := reflectionOperator_mul_self_complex V
   have hGG' : (b * a) * (a * b) = 1 := by
@@ -1068,8 +1068,8 @@ theorem spectraCanonicalIntertwiner_add_star
       star (spectraCanonicalIntertwiner U V) * spectraCanonicalIntertwiner U V +
         star (spectraCanonicalIntertwiner U V) * spectraCanonicalIntertwiner U V := by
   set C := spectraCanonicalIntertwiner U V with hCdef
-  set a := reflectionOperator U with hadef
-  set b := reflectionOperator V with hbdef
+  set a := U.reflectionOperator with hadef
+  set b := V.reflectionOperator with hbdef
   have hRU : a * a = 1 := reflectionOperator_mul_self_complex U
   have hRV : b * b = 1 := reflectionOperator_mul_self_complex V
   have hG'G : (a * b) * (b * a) = 1 := by
@@ -1095,17 +1095,17 @@ coordinate computation. -/
 theorem commute_projection_spectraCanonicalIntertwiner_star_mul_self
     (U V : Submodule 𝕜 H)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] :
-    Commute (projection U)
+    Commute (U.starProjection)
       (star (spectraCanonicalIntertwiner U V) * spectraCanonicalIntertwiner U V) := by
   set C := spectraCanonicalIntertwiner U V with hCdef
-  have h1 : C * projection U = projection V * C :=
+  have h1 : C * U.starProjection = V.starProjection * C :=
     spectraCanonicalIntertwiner_mul_projection U V
-  have h2 : star C * projection V = projection U * star C := by
+  have h2 : star C * V.starProjection = U.starProjection * star C := by
     have h := congrArg star h1
     rw [star_mul, star_mul, (isSelfAdjoint_starProjection U).star_eq,
       (isSelfAdjoint_starProjection V).star_eq] at h
     exact h.symm
-  show projection U * (star C * C) = star C * C * projection U
+  show U.starProjection * (star C * C) = star C * C * U.starProjection
   rw [← mul_assoc, ← h2, mul_assoc, ← h1, ← mul_assoc]
 
 /-- The ordered product of the target and source reflections.  The direct
@@ -1114,7 +1114,7 @@ factor. -/
 noncomputable abbrev spectraReflectionProduct
     (U V : Submodule 𝕜 H)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] : H →L[𝕜] H :=
-  reflectionOperator V * reflectionOperator U
+  V.reflectionOperator * U.reflectionOperator
 
 /-- The ordered reflection product is unitary. -/
 theorem spectraReflectionProduct_mem_unitary

@@ -141,7 +141,7 @@ the source writes them.  The hypotheses are the `tan 2θ` theorem's, likewise on
 the blocks `A₀`, `A₁`. -/
 theorem theorem8_1_maximalAngle_le_iff_blockPlacement_unbounded_complex
     [TopologicalSpace.SeparableSpace Hc]
-    (hA : IsSelfAdjoint A) (hH : DavisKahan.IsSelfAdjointOperator Hop)
+    (hA : IsSelfAdjoint A) (hH : Hop.IsSymmetric)
     (hPred : TauCeti.LinearPMap.ReducesSubspace A P)
     (hPlow : TauCeti.LinearPMap.SemiboundedAbove
       (TauCeti.LinearPMap.reducingRestriction A P hPred) alpha)
@@ -174,7 +174,7 @@ properties."  The witness is the spectral projector of `A + H` on the side of
 `α`, but the statement is the existential the source asserts. -/
 theorem theorem8_1_exists_branch_blockPlacement_unbounded_complex
     [TopologicalSpace.SeparableSpace Hc]
-    (hA : IsSelfAdjoint A) (hH : DavisKahan.IsSelfAdjointOperator Hop)
+    (hA : IsSelfAdjoint A) (hH : Hop.IsSymmetric)
     (hPred : TauCeti.LinearPMap.ReducesSubspace A P)
     (hPlow : TauCeti.LinearPMap.SemiboundedAbove
       (TauCeti.LinearPMap.reducingRestriction A P hPred) alpha)
@@ -296,7 +296,7 @@ and this particular inequality does not consume; it is carried so that the Lean
 context is the source's. -/
 theorem theorem8_1_upperCompressionRepulsion_sourceExact_unbounded_complex
     [TopologicalSpace.SeparableSpace Hc]
-    (_hA : IsSelfAdjoint A) (_hH : DavisKahan.IsSelfAdjointOperator Hop)
+    (_hA : IsSelfAdjoint A) (_hH : Hop.IsSymmetric)
     (hPred : TauCeti.LinearPMap.ReducesSubspace A P)
     (_hPlow : TauCeti.LinearPMap.SemiboundedAbove
       (TauCeti.LinearPMap.reducingRestriction A P hPred) alpha)
@@ -330,7 +330,7 @@ print and this particular inequality does not consume; it is carried so that the
 Lean context is the source's. -/
 theorem theorem8_1_lowerCompressionRepulsion_sourceExact_unbounded_complex
     [TopologicalSpace.SeparableSpace Hc]
-    (_hA : IsSelfAdjoint A) (_hH : DavisKahan.IsSelfAdjointOperator Hop)
+    (_hA : IsSelfAdjoint A) (_hH : Hop.IsSymmetric)
     (hPred : TauCeti.LinearPMap.ReducesSubspace A P)
     (_hPlow : TauCeti.LinearPMap.SemiboundedAbove
       (TauCeti.LinearPMap.reducingRestriction A P hPred) alpha)
@@ -366,7 +366,7 @@ carrying the placement, the acute angle, and both compression inequalities, so
 that "this `Q`" is the `Q` the clause just produced and nothing else. -/
 theorem theorem8_1_exists_branch_withCompression_unbounded_complex
     [TopologicalSpace.SeparableSpace Hc]
-    (hA : IsSelfAdjoint A) (hH : DavisKahan.IsSelfAdjointOperator Hop)
+    (hA : IsSelfAdjoint A) (hH : Hop.IsSymmetric)
     (hPred : TauCeti.LinearPMap.ReducesSubspace A P)
     (hPlow : TauCeti.LinearPMap.SemiboundedAbove
       (TauCeti.LinearPMap.reducingRestriction A P hPred) alpha)
@@ -451,7 +451,7 @@ theorem semiboundedBelow_reducingRestriction_real_iff
 own blocks, at unbounded ambient scope over `ℝ`.** -/
 theorem theorem8_1_maximalAngle_le_iff_blockPlacement_unbounded_real
     [TopologicalSpace.SeparableSpace Er]
-    (hA : IsSelfAdjoint A) (hH : DavisKahan.IsSelfAdjointOperator Hop)
+    (hA : IsSelfAdjoint A) (hH : Hop.IsSymmetric)
     (hPred : TauCeti.LinearPMap.ReducesSubspace A P)
     (hPlow : TauCeti.LinearPMap.SemiboundedAbove
       (TauCeti.LinearPMap.reducingRestriction A P hPred) alpha)
@@ -481,7 +481,7 @@ theorem theorem8_1_maximalAngle_le_iff_blockPlacement_unbounded_real
 blocks, at unbounded ambient scope over `ℝ`.** -/
 theorem theorem8_1_exists_branch_blockPlacement_unbounded_real
     [TopologicalSpace.SeparableSpace Er]
-    (hA : IsSelfAdjoint A) (hH : DavisKahan.IsSelfAdjointOperator Hop)
+    (hA : IsSelfAdjoint A) (hH : Hop.IsSymmetric)
     (hPred : TauCeti.LinearPMap.ReducesSubspace A P)
     (hPlow : TauCeti.LinearPMap.SemiboundedAbove
       (TauCeti.LinearPMap.reducingRestriction A P hPred) alpha)
@@ -591,7 +591,7 @@ equality with a Lean construction.  A `_`-prefixed binder is a hypothesis Davis
 and Kahan print and this particular inequality does not consume. -/
 theorem theorem8_1_upperCompressionRepulsion_sourceExact_unbounded_real
     [TopologicalSpace.SeparableSpace Er]
-    (_hA : IsSelfAdjoint A) (_hH : DavisKahan.IsSelfAdjointOperator Hop)
+    (_hA : IsSelfAdjoint A) (_hH : Hop.IsSymmetric)
     (hPred : TauCeti.LinearPMap.ReducesSubspace A P)
     (_hPlow : TauCeti.LinearPMap.SemiboundedAbove
       (TauCeti.LinearPMap.reducingRestriction A P hPred) alpha)
@@ -623,7 +623,7 @@ scope over `ℝ`.**  The analogous lower-block inequality, read on `P` with the
 cosine block `P_Q`. -/
 theorem theorem8_1_lowerCompressionRepulsion_sourceExact_unbounded_real
     [TopologicalSpace.SeparableSpace Er]
-    (_hA : IsSelfAdjoint A) (_hH : DavisKahan.IsSelfAdjointOperator Hop)
+    (_hA : IsSelfAdjoint A) (_hH : Hop.IsSymmetric)
     (hPred : TauCeti.LinearPMap.ReducesSubspace A P)
     (_hPlow : TauCeti.LinearPMap.SemiboundedAbove
       (TauCeti.LinearPMap.reducingRestriction A P hPred) alpha)
@@ -655,7 +655,7 @@ over `ℝ`.**  The source's own word order: one existential carrying the placeme
 the acute angle, and both compression inequalities for the `Q` it produces. -/
 theorem theorem8_1_exists_branch_withCompression_unbounded_real
     [TopologicalSpace.SeparableSpace Er]
-    (hA : IsSelfAdjoint A) (hH : DavisKahan.IsSelfAdjointOperator Hop)
+    (hA : IsSelfAdjoint A) (hH : Hop.IsSymmetric)
     (hPred : TauCeti.LinearPMap.ReducesSubspace A P)
     (hPlow : TauCeti.LinearPMap.SemiboundedAbove
       (TauCeti.LinearPMap.reducingRestriction A P hPred) alpha)

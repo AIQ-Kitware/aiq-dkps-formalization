@@ -96,7 +96,7 @@ over `ℝ` at all. -/
 theorem sinTheta_addBounded_gauge_real_isometric
     (N : KyFanDominantIdealFamily (𝕜 := ℝ))
     (A : E →ₗ.[ℝ] E) (hA : IsSelfAdjoint A)
-    (V : E →L[ℝ] E) (hV : IsSelfAdjointOperator V)
+    (V : E →L[ℝ] E) (hV : V.IsSymmetric)
     (A₀ : F →ₗ.[ℝ] F) (hA₀ : IsSelfAdjoint A₀)
     (Λ₁ : G →ₗ.[ℝ] G) (hΛ₁ : IsSelfAdjoint Λ₁)
     (X : F →L[ℝ] E) (F₁ : G →L[ℝ] E)
@@ -135,7 +135,7 @@ this stage. -/
 theorem sinTheta_addBounded_gauge_real_block
     (N : KyFanDominantIdealFamily (𝕜 := ℝ))
     (A : E →ₗ.[ℝ] E) (hA : IsSelfAdjoint A)
-    (V : E →L[ℝ] E) (hV : IsSelfAdjointOperator V)
+    (V : E →L[ℝ] E) (hV : V.IsSymmetric)
     (A₀ : F →ₗ.[ℝ] F) (hA₀ : IsSelfAdjoint A₀)
     (Λ₁ : G →ₗ.[ℝ] G) (hΛ₁ : IsSelfAdjoint Λ₁)
     (X : F →L[ℝ] E) (F₁ : G →L[ℝ] E)
@@ -195,7 +195,7 @@ There is no dimension hypothesis and no compactness hypothesis; membership in
 the ideal is *concluded*, exactly as in the complex statement. -/
 theorem sinTwoTheta_reflectionResidual_block_gauge_real
     (N : KyFanDominantIdealFamily (𝕜 := ℝ))
-    (R : E →L[ℝ] E) (hR : IsSelfAdjointOperator R)
+    (R : E →L[ℝ] E) (hR : R.IsSymmetric)
     (V : Submodule ℝ E) [V.HasOrthogonalProjection]
     {δ : ℝ} (hδ : 0 < δ)
     (hgap : FormBoundedSylvesterGap
@@ -348,7 +348,7 @@ space, reflection-residual form.**  The block form above with the block
 contracted back to the whole reflection residual. -/
 theorem sinTwoTheta_reflectionResidual_gauge_real
     (N : KyFanDominantIdealFamily (𝕜 := ℝ))
-    (R : E →L[ℝ] E) (hR : IsSelfAdjointOperator R)
+    (R : E →L[ℝ] E) (hR : R.IsSymmetric)
     (V : Submodule ℝ E) [V.HasOrthogonalProjection]
     {δ : ℝ} (hδ : 0 < δ)
     (hgap : FormBoundedSylvesterGap
@@ -395,7 +395,7 @@ theorem sinTwoTheta_reflectionResidual_block_gauge_reducing_real
     {U : Submodule ℝ E} [U.HasOrthogonalProjection]
     (hred : TauCeti.LinearPMap.ReducesSubspace A U)
     (N : KyFanDominantIdealFamily (𝕜 := ℝ))
-    (R : E →L[ℝ] E) (hR : IsSelfAdjointOperator R)
+    (R : E →L[ℝ] E) (hR : R.IsSymmetric)
     (V : Submodule ℝ E) [V.HasOrthogonalProjection]
     {δ : ℝ} (hδ : 0 < δ)
     (hgap : FormBoundedSylvesterGap
@@ -611,7 +611,7 @@ theorem realSelfAdjoint_apply_spectralReflection
   rw [hreflect, LinearPMap.map_sub, LinearPMap.map_smul,
     Submodule.reflectionOperator_apply, hPcomm]
 
-variable (Eop : E →L[ℝ] E) (hEop : IsSelfAdjointOperator Eop)
+variable (Eop : E →L[ℝ] E) (hEop : Eop.IsSymmetric)
 
 /-- For a perturbed real operator `A + E`, reflection through a spectral range
 of the perturbed operator preserves the original domain, because the two
@@ -717,7 +717,7 @@ theorem sinTwoTheta_addBounded_gauge_real
   set V := realSelfAdjointSpectralSubspace (TauCeti.LinearPMap.addBounded A Eop)
     (addBounded_isSelfAdjoint A hA Eop hEop) T hT with hVdef
   set D : E →L[ℝ] E := reflectionPerturbation V Eop with hDdef
-  have hD : IsSelfAdjointOperator D := reflectionPerturbation_isSelfAdjoint V Eop hEop
+  have hD : D.IsSymmetric := reflectionPerturbation_isSelfAdjoint V Eop hEop
   have hDideal := reflectionPerturbation_mem_and_gauge_le
     N.toSymmetricOperatorIdealFamily V Eop hEmem
   have hmain := sinTwoTheta_reflectionResidual_gauge_real A hA S hS N D hD V hδ hgap

@@ -160,7 +160,7 @@ the paper prescribes, read as the ordered form bounds `Λ₀ ≤ α` and
 theorem theorem8_1_maximalAngle_le_iff_orderedFormGap_unbounded_real
     {A : Er →ₗ.[ℝ] Er} {Hop : Er →L[ℝ] Er} {P : Submodule ℝ Er}
     [P.HasOrthogonalProjection] {alpha delta : ℝ}
-    (hA : IsSelfAdjoint A) (hH : DavisKahan.IsSelfAdjointOperator Hop)
+    (hA : IsSelfAdjoint A) (hH : Hop.IsSymmetric)
     (hredPperp : TauCeti.LinearPMap.ReducesSubspace A Pᗮ)
     (hPlow : ∀ x : A.domain, (x : Er) ∈ P →
       ⟪A x, (x : Er)⟫_ℝ ≤ alpha * ‖(x : Er)‖ ^ 2)
@@ -179,7 +179,7 @@ theorem theorem8_1_maximalAngle_le_iff_orderedFormGap_unbounded_real
   classical
   have hAC : IsSelfAdjoint (TauCeti.LinearPMap.complexifyReal A) :=
     TauCeti.LinearPMap.isSelfAdjoint_complexifyReal hA
-  have hHC : DavisKahan.IsSelfAdjointOperator (complexify Hop) :=
+  have hHC : ContinuousLinearMap.IsSymmetric (complexify Hop) :=
     (TauCeti.RealComplexification.complexify_isSymmetric_iff Hop).mpr hH
   have hsum : TauCeti.LinearPMap.addBounded (TauCeti.LinearPMap.complexifyReal A)
       (complexify Hop)
@@ -267,7 +267,7 @@ off-diagonal.  The branch `Q` reduces `A + H`, carries `Λ₀ ≤ α` and
 theorem theorem8_1_canonicalBranchUnbounded_printed_real
     {A : Er →ₗ.[ℝ] Er} {Hop : Er →L[ℝ] Er} {P : Submodule ℝ Er}
     [P.HasOrthogonalProjection] {alpha delta : ℝ}
-    (hA : IsSelfAdjoint A) (hH : DavisKahan.IsSelfAdjointOperator Hop)
+    (hA : IsSelfAdjoint A) (hH : Hop.IsSymmetric)
     (hredPperp : TauCeti.LinearPMap.ReducesSubspace A Pᗮ)
     (hPlow : ∀ x : A.domain, (x : Er) ∈ P →
       ⟪A x, (x : Er)⟫_ℝ ≤ alpha * ‖(x : Er)‖ ^ 2)
@@ -297,7 +297,7 @@ theorem theorem8_1_canonicalBranchUnbounded_printed_real
     DavisKahan.addBounded_isSelfAdjoint A hA Hop hH
   have hAC : IsSelfAdjoint (TauCeti.LinearPMap.complexifyReal A) :=
     TauCeti.LinearPMap.isSelfAdjoint_complexifyReal hA
-  have hHC : DavisKahan.IsSelfAdjointOperator (complexify Hop) :=
+  have hHC : ContinuousLinearMap.IsSymmetric (complexify Hop) :=
     (TauCeti.RealComplexification.complexify_isSymmetric_iff Hop).mpr hH
   have hsum : TauCeti.LinearPMap.addBounded (TauCeti.LinearPMap.complexifyReal A)
       (complexify Hop)
@@ -337,7 +337,7 @@ canonical spectral branch.  This is the converse half of the printed `iff`;
 theorem theorem8_1_eq_canonicalBranchUnbounded_of_maximalAngle_le_real
     {A : Er →ₗ.[ℝ] Er} {Hop : Er →L[ℝ] Er} {P : Submodule ℝ Er}
     [P.HasOrthogonalProjection] {alpha delta : ℝ}
-    (hA : IsSelfAdjoint A) (hH : DavisKahan.IsSelfAdjointOperator Hop)
+    (hA : IsSelfAdjoint A) (hH : Hop.IsSymmetric)
     (hredPperp : TauCeti.LinearPMap.ReducesSubspace A Pᗮ)
     (hPlow : ∀ x : A.domain, (x : Er) ∈ P →
       ⟪A x, (x : Er)⟫_ℝ ≤ alpha * ‖(x : Er)‖ ^ 2)
@@ -355,7 +355,7 @@ theorem theorem8_1_eq_canonicalBranchUnbounded_of_maximalAngle_le_real
     DavisKahan.addBounded_isSelfAdjoint A hA Hop hH
   have hAC : IsSelfAdjoint (TauCeti.LinearPMap.complexifyReal A) :=
     TauCeti.LinearPMap.isSelfAdjoint_complexifyReal hA
-  have hHC : DavisKahan.IsSelfAdjointOperator (complexify Hop) :=
+  have hHC : ContinuousLinearMap.IsSymmetric (complexify Hop) :=
     (TauCeti.RealComplexification.complexify_isSymmetric_iff Hop).mpr hH
   have hsum : TauCeti.LinearPMap.addBounded (TauCeti.LinearPMap.complexifyReal A)
       (complexify Hop)

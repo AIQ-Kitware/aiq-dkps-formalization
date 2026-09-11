@@ -48,16 +48,10 @@ variable {E : Type u} [NormedAddCommGroup E] [InnerProductSpace ℂ E]
 variable {F : Type v} [NormedAddCommGroup F] [InnerProductSpace ℂ F]
   [CompleteSpace F]
 
-omit [CompleteSpace E] in
-/-- The restriction to the full space has the original real spectrum. -/
-theorem restrictedSpectrum_top_eq_realSpectrum
-    (T : E →L[ℂ] E) : restrictedSpectrum T ⊤ = realSpectrum T :=
-  restrictedSpectrum_top_eq T
-
 /-- A common cut between two compact ordered spectra. -/
 theorem exists_common_cut_of_orderedSeparation
     {A : F →L[ℂ] F} {B : E →L[ℂ] E}
-    (_hA : IsSelfAdjointOperator A) (_hB : IsSelfAdjointOperator B)
+    (_hA : A.IsSymmetric) (_hB : B.IsSymmetric)
     {d : ℝ} (_hd : 0 < d)
     (hsep : OrderedSpectraSeparated B ⊤ A ⊤ d) :
     ∃ c : ℝ,
@@ -66,8 +60,8 @@ theorem exists_common_cut_of_orderedSeparation
   obtain ⟨hInvB, hInvA, hord⟩ := hsep
   have hkey : ∀ b ∈ realSpectrum B, ∀ a ∈ realSpectrum A, b + d ≤ a := by
     intro b hb a ha
-    exact hord b ⟨hInvB, (spectrum_restrict_top B hInvB).symm.subset hb⟩
-      a ⟨hInvA, (spectrum_restrict_top A hInvA).symm.subset ha⟩
+    exact hord b ⟨hInvB, (ContinuousLinearMap.spectrum_restrict_top B hInvB).symm.subset hb⟩
+      a ⟨hInvA, (ContinuousLinearMap.spectrum_restrict_top A hInvA).symm.subset ha⟩
   rcases (realSpectrum B).eq_empty_or_nonempty with hB0 | hBne
   · rcases (realSpectrum A).eq_empty_or_nonempty with hA0 | hAne
     · exact ⟨0, by simp [hB0], by simp [hA0]⟩
@@ -86,7 +80,7 @@ theorem exists_common_cut_of_orderedSeparation
 set_option maxHeartbeats 800000 in
 /-- Functional-calculus formula for the bounded exponential group. -/
 theorem semigroup_eq_cfc
-    (T : E →L[ℂ] E) (hT : IsSelfAdjointOperator T) (t : ℝ) :
+    (T : E →L[ℂ] E) (hT : T.IsSymmetric) (t : ℝ) :
     semigroup T t = cfc (fun z : ℂ => Complex.exp (t * z)) T := by
   have hsa : IsSelfAdjoint T :=
     ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mpr hT
@@ -102,7 +96,7 @@ theorem semigroup_eq_cfc
 set_option maxHeartbeats 800000 in
 /-- Upper spectral bound for a self-adjoint exponential. -/
 theorem norm_semigroup_le_of_spectrum_subset_Iic
-    (T : E →L[ℂ] E) (hT : IsSelfAdjointOperator T)
+    (T : E →L[ℂ] E) (hT : T.IsSymmetric)
     {c t : ℝ} (ht : 0 ≤ t)
     (hσ : realSpectrum T ⊆ Set.Iic c) :
     ‖semigroup T t‖ ≤ Real.exp (t * c) := by
@@ -126,13 +120,13 @@ theorem norm_semigroup_le_of_spectrum_subset_Iic
 
 /-- Lower spectral bound, written as decay of `exp(-t T)`. -/
 theorem norm_semigroup_neg_le_of_spectrum_subset_Ici
-    (T : E →L[ℂ] E) (hT : IsSelfAdjointOperator T)
+    (T : E →L[ℂ] E) (hT : T.IsSymmetric)
     {c t : ℝ} (ht : 0 ≤ t)
     (hσ : realSpectrum T ⊆ Set.Ici c) :
     ‖semigroup (-T) t‖ ≤ Real.exp (-t * c) := by
   have hsa : IsSelfAdjoint T :=
     ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mpr hT
-  have hTneg : IsSelfAdjointOperator (-T) :=
+  have hTneg : ContinuousLinearMap.IsSymmetric (-T) :=
     ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mp hsa.neg
   have hσneg : realSpectrum (-T) ⊆ Set.Iic (-c) := by
     intro r hr
@@ -153,7 +147,7 @@ theorem norm_semigroup_neg_le_of_spectrum_subset_Ici
 /-- The ordered semigroup integrand has the sharp exponential majorant. -/
 theorem orderedSemigroup_integrand_bound
     {A : F →L[ℂ] F} {B : E →L[ℂ] E}
-    (hA : IsSelfAdjointOperator A) (hB : IsSelfAdjointOperator B)
+    (hA : A.IsSymmetric) (hB : B.IsSymmetric)
     {d : ℝ} (hd : 0 < d)
     (hsep : OrderedSpectraSeparated B ⊤ A ⊤ d)
     (C : E →L[ℂ] F) :
@@ -182,7 +176,7 @@ theorem orderedSemigroup_integrand_bound
 line. -/
 theorem orderedSylvester_integrableOn
     {A : F →L[ℂ] F} {B : E →L[ℂ] E}
-    (hA : IsSelfAdjointOperator A) (hB : IsSelfAdjointOperator B)
+    (hA : A.IsSymmetric) (hB : B.IsSymmetric)
     {d : ℝ} (hd : 0 < d)
     (hsep : OrderedSpectraSeparated B ⊤ A ⊤ d)
     (C : E →L[ℂ] F) :
@@ -205,7 +199,7 @@ theorem orderedSylvester_integrableOn
 /-- Bochner integrability of the ordered semigroup formula. -/
 theorem orderedSylvester_integrable
     {A : F →L[ℂ] F} {B : E →L[ℂ] E}
-    (hA : IsSelfAdjointOperator A) (hB : IsSelfAdjointOperator B)
+    (hA : A.IsSymmetric) (hB : B.IsSymmetric)
     {d : ℝ} (hd : 0 < d)
     (hsep : OrderedSpectraSeparated B ⊤ A ⊤ d)
     (C : E →L[ℂ] F) :
@@ -302,7 +296,7 @@ theorem ordered_orbit_sub_eq_integral
 /-- The conjugated endpoint tends to zero under an ordered gap. -/
 theorem tendsto_ordered_solution_orbit_zero
     {A : F →L[ℂ] F} {B : E →L[ℂ] E}
-    (hA : IsSelfAdjointOperator A) (hB : IsSelfAdjointOperator B)
+    (hA : A.IsSymmetric) (hB : B.IsSymmetric)
     {d : ℝ} (hd : 0 < d)
     (hsep : OrderedSpectraSeparated B ⊤ A ⊤ d)
     (X : E →L[ℂ] F) :
@@ -324,7 +318,7 @@ theorem tendsto_ordered_solution_orbit_zero
 /-- Exact ordered-spectrum reconstruction. -/
 theorem orderedSylvester_reconstruction
     {A : F →L[ℂ] F} {B : E →L[ℂ] E}
-    (hA : IsSelfAdjointOperator A) (hB : IsSelfAdjointOperator B)
+    (hA : A.IsSymmetric) (hB : B.IsSymmetric)
     {d : ℝ} (hd : 0 < d)
     (hsep : OrderedSpectraSeparated B ⊤ A ⊤ d)
     {X C : E →L[ℂ] F}

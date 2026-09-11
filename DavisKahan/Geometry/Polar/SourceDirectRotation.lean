@@ -79,11 +79,11 @@ structure IsSourceDirectRotation (U V : Submodule 𝕜 H) [U.HasOrthogonalProjec
   /-- The source diagonal compression `C₀` is self-adjoint; with the inherited
   numerical-range sign this is `C₀ ≥ 0`. -/
   source_compression_isSelfAdjoint :
-    IsSelfAdjoint (projection U * D * projection U)
+    IsSelfAdjoint (U.starProjection * D * U.starProjection)
   /-- The complementary diagonal compression `C₁` is self-adjoint; with the
   inherited numerical-range sign this is `C₁ ≥ 0`. -/
   complement_compression_isSelfAdjoint :
-    IsSelfAdjoint (complementaryProjection U * D * complementaryProjection U)
+    IsSelfAdjoint ((Uᗮ).starProjection * D * (Uᗮ).starProjection)
 
 namespace IsSourceDirectRotation
 
@@ -93,7 +93,7 @@ variable {D : H →L[𝕜] H}
 /-- The source diagonal compression is a positive operator: Definition 3.1's
 `C₀ ≥ 0`. -/
 theorem source_compression_isPositive (h : IsSourceDirectRotation U V D) :
-    (projection U * D * projection U).IsPositive :=
+    (U.starProjection * D * U.starProjection).IsPositive :=
   ContinuousLinearMap.isPositive_def'.mpr
     ⟨h.source_compression_isSelfAdjoint, fun x => by
       have := h.source_compression_nonnegative x
@@ -102,7 +102,7 @@ theorem source_compression_isPositive (h : IsSourceDirectRotation U V D) :
 
 /-- Definition 3.1's `C₁ ≥ 0`. -/
 theorem complement_compression_isPositive (h : IsSourceDirectRotation U V D) :
-    (complementaryProjection U * D * complementaryProjection U).IsPositive :=
+    ((Uᗮ).starProjection * D * (Uᗮ).starProjection).IsPositive :=
   ContinuousLinearMap.isPositive_def'.mpr
     ⟨h.complement_compression_isSelfAdjoint, fun x => by
       have := h.complement_compression_nonnegative x
@@ -111,7 +111,7 @@ theorem complement_compression_isPositive (h : IsSourceDirectRotation U V D) :
 
 /-- **Proposition 3.3's square identity**, for the source predicate. -/
 theorem sq_eq (h : IsSourceDirectRotation U V D) :
-    D * D = reflectionOperator V * reflectionOperator U :=
+    D * D = V.reflectionOperator * U.reflectionOperator :=
   sq_eq_reflectionProduct U V D h.unitary_mem h.intertwines
     h.source_compression_isSelfAdjoint h.complement_compression_isSelfAdjoint
     h.crossed_blocks
@@ -140,18 +140,19 @@ omit [CompleteSpace H] in
 /-- **The Halmos cosine square in projection coordinates.**  `P_U P_V P_U`
 together with the complementary block is `1 − P_U − P_V + P_V P_U + P_U P_V`. -/
 theorem halmosCosineSq_eq_projection_expansion :
-    halmosCosineSq U V = 1 - projection U - projection V
-      + projection V * projection U + projection U * projection V := by
-  have hP : projection U * projection U = projection U :=
+    halmosCosineSq U V = 1 - U.starProjection - V.starProjection
+      + V.starProjection * U.starProjection + U.starProjection * V.starProjection := by
+  have hP : U.starProjection * U.starProjection = U.starProjection :=
     U.isIdempotentElem_starProjection
-  have hPc : complementaryProjection U = 1 - projection U :=
+  have hPc : (Uᗮ).starProjection = 1 - U.starProjection :=
     Submodule.starProjection_orthogonal' U
-  have hQc : complementaryProjection V = 1 - projection V :=
+  have hQc : (Vᗮ).starProjection = 1 - V.starProjection :=
     Submodule.starProjection_orthogonal' V
-  have hexp : (1 - projection U) * (1 - projection V) * (1 - projection U)
-      = 1 - projection U - projection V + projection V * projection U
-        + projection U * projection V - projection U * projection V * projection U
-        - projection U + projection U * projection U := by noncomm_ring
+  have hexp : (1 - U.starProjection) * (1 - V.starProjection) * (1 - U.starProjection)
+      = 1 - U.starProjection - V.starProjection + V.starProjection * U.starProjection
+        + U.starProjection * V.starProjection - U.starProjection * V.starProjection *
+          U.starProjection
+        - U.starProjection + U.starProjection * U.starProjection := by noncomm_ring
   rw [halmosCosineSq, hPc, hQc, hexp, hP]
   abel
 
@@ -162,12 +163,12 @@ theorem absoluteValue_double_mul_self :
         ContinuousLinearMap.modulus (spectraCanonicalIntertwiner U V)) *
       (ContinuousLinearMap.modulus (spectraCanonicalIntertwiner U V) +
         ContinuousLinearMap.modulus (spectraCanonicalIntertwiner U V)) =
-      reflectionOperator V * reflectionOperator U +
-        reflectionOperator U * reflectionOperator V + 1 + 1 := by
+      V.reflectionOperator * U.reflectionOperator +
+        U.reflectionOperator * V.reflectionOperator + 1 + 1 := by
   have hAA := Proposition35.section3CanonicalAbsoluteValue_mul_self_eq_halmosCosineSq U V
-  have hRU : reflectionOperator U = projection U + projection U - 1 :=
+  have hRU : U.reflectionOperator = U.starProjection + U.starProjection - 1 :=
     reflectionOperator_eq_projection_add_projection_sub_one U
-  have hRV : reflectionOperator V = projection V + projection V - 1 :=
+  have hRV : V.reflectionOperator = V.starProjection + V.starProjection - 1 :=
     reflectionOperator_eq_projection_add_projection_sub_one V
   have hexpand : (ContinuousLinearMap.modulus (spectraCanonicalIntertwiner U V) +
         ContinuousLinearMap.modulus (spectraCanonicalIntertwiner U V)) *
@@ -190,14 +191,14 @@ theorem IsSourceDirectRotation.add_star_eq_two_absoluteValue {D : H →L[𝕜] H
         ContinuousLinearMap.modulus (spectraCanonicalIntertwiner U V) := by
   have hDs : D * star D = 1 := Unitary.mul_star_self_of_mem h.unitary_mem
   have hsD : star D * D = 1 := Unitary.star_mul_self_of_mem h.unitary_mem
-  have hstarsq : star D * star D = reflectionOperator U * reflectionOperator V := by
+  have hstarsq : star D * star D = U.reflectionOperator * V.reflectionOperator := by
     have hst := congrArg star h.sq_eq
     rw [star_mul, star_mul, star_reflectionOperator_complex U,
       star_reflectionOperator_complex V] at hst
     exact hst
   have hsq : (D + star D) * (D + star D) =
-      reflectionOperator V * reflectionOperator U +
-        reflectionOperator U * reflectionOperator V + 1 + 1 := by
+      V.reflectionOperator * U.reflectionOperator +
+        U.reflectionOperator * V.reflectionOperator + 1 + 1 := by
     have hstep : (D + star D) * (D + star D) =
         D * D + D * star D + (star D * D + star D * star D) := by noncomm_ring
     rw [hstep, h.sq_eq, hstarsq, hDs, hsD]

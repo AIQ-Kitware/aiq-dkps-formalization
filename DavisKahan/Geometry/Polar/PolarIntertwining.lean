@@ -191,8 +191,8 @@ theorem polarPartial_intertwines_of_projection_intertwining
 both projections without an acuteness assumption. -/
 theorem canonicalPolarFactor_intertwines_from_polar
     (U V : Submodule 𝕜 H) [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] :
-    spectraCanonicalPolarFactor U V ∘L projection U =
-      projection V ∘L spectraCanonicalPolarFactor U V := by
+    spectraCanonicalPolarFactor U V ∘L U.starProjection =
+      V.starProjection ∘L spectraCanonicalPolarFactor U V := by
   rw [spectraCanonicalPolarFactor]
   apply polarPartial_intertwines_of_projection_intertwining
   · exact ⟨U.isIdempotentElem_starProjection,

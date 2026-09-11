@@ -119,7 +119,7 @@ in which the paper's compactness hypothesis reaches the angle operator. -/
 theorem genericCosineBlock_eq_compress_halmos :
     genericCosineBlock U V =
       DavisKahan.Sylvester.compressOperator (genericLeftHalf U V)
-        (projection U ∘L projection V ∘L projection U) := by
+        (U.starProjection ∘L V.starProjection ∘L U.starProjection) := by
   refine ContinuousLinearMap.ext fun m => ?_
   apply Subtype.ext
   have hmU : U.starProjection (m : H) = (m : H) :=
@@ -133,7 +133,7 @@ theorem genericCosineBlock_eq_compress_halmos :
       (genericLeftHalf U V).starProjection (V.starProjection (m : H)) := by
     simp [genericCosineBlock, DavisKahan.Sylvester.compressOperator]
   have hRHS : ((DavisKahan.Sylvester.compressOperator (genericLeftHalf U V)
-      (projection U ∘L projection V ∘L projection U) m : genericLeftHalf U V) : H) =
+      (U.starProjection ∘L V.starProjection ∘L U.starProjection) m : genericLeftHalf U V) : H) =
       (genericLeftHalf U V).starProjection
         (U.starProjection (V.starProjection (U.starProjection (m : H)))) := by
     simp [DavisKahan.Sylvester.compressOperator]
@@ -143,7 +143,7 @@ theorem genericCosineBlock_eq_compress_halmos :
 
 /-- **The angle operator is compact** when `P_U P_V P_U` is. -/
 theorem isCompactOperator_genericCosineBlock
-    (hc : IsCompactOperator (projection U ∘L projection V ∘L projection U)) :
+    (hc : IsCompactOperator (U.starProjection ∘L V.starProjection ∘L U.starProjection)) :
     IsCompactOperator (genericCosineBlock U V) := by
   rw [genericCosineBlock_eq_compress_halmos, DavisKahan.Sylvester.compressOperator]
   exact (hc.comp_clm (genericLeftHalf U V).subtypeL).clm_comp
@@ -335,8 +335,8 @@ This is Theorem 3.1 with the operator invariant replaced by numbers.  The
 replacement is legitimate precisely because compactness makes the angle operator
 one for which the eigenvalue list *is* a complete invariant. -/
 theorem pairOfSubspacesUnitaryEquivalent_iff_sameCompactAngleData
-    (hc₁ : IsCompactOperator (projection U₁ ∘L projection V₁ ∘L projection U₁))
-    (hc₂ : IsCompactOperator (projection U₂ ∘L projection V₂ ∘L projection U₂)) :
+    (hc₁ : IsCompactOperator (U₁.starProjection ∘L V₁.starProjection ∘L U₁.starProjection))
+    (hc₂ : IsCompactOperator (U₂.starProjection ∘L V₂.starProjection ∘L U₂.starProjection)) :
     PairOfSubspacesUnitaryEquivalent U₁ V₁ U₂ V₂ ↔
       SameCompactAngleData U₁ V₁ U₂ V₂ := by
   constructor

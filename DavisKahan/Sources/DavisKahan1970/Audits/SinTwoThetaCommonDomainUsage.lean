@@ -62,7 +62,7 @@ example (R : P →L[K] E)
     N hA hT hdom hP hQ hgapPos hgap).1 R hres hAngle hR
 
 /-- Ambient use: the caller supplies no trial residual or bounded trial operator. -/
-example (Hop : E →L[K] E) (hHop : IsSelfAdjointOperator Hop)
+example (Hop : E →L[K] E) (hHop : Hop.IsSymmetric)
     (hEq : T = TauCeti.LinearPMap.addBounded A Hop)
     (hAngle : N.Mem (Angle.sinTwoAngleOperator P Q)) (hMem : N.Mem Hop) :
     gap * N.gaugeReal (Angle.sinTwoAngleOperator P Q) ≤ 2 * N.gaugeReal Hop := by

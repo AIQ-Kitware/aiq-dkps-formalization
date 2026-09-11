@@ -22,7 +22,9 @@ import ForTauCeti.Analysis.InnerProductSpace.Spectral.Subspace
 import ForTauCeti.Analysis.InnerProductSpace.Residual.Ritz
 import ForTauCeti.Analysis.InnerProductSpace.Residual.AngleEmbedding
 import ForTauCeti.Analysis.InnerProductSpace.UnitarilyInvariantSeminorm
-import DavisKahan.BoundedOperator.Compat
+import ForTauCeti.Analysis.InnerProductSpace.BoundedOperator.Projector
+import ForTauCeti.Analysis.InnerProductSpace.Projection.Blocks
+import DavisKahan.BoundedOperator.Problem
 import DavisKahan.Geometry.Angle.AngleFunctionalCalculus
 import DavisKahan.Geometry.Angle.DoubleAngleFunctionalCalculus
 import DavisKahan.Geometry.Angle.TanAngleFunctionalCalculus
@@ -393,7 +395,7 @@ theorem sinTwoTheta_directed_boundedResidual_blockRepresentative_symmetricNormin
     {A : E →L[ℂ] E} (hA : IsSelfAdjoint A)
     {U V : Submodule ℂ E}
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
-    (hU : Reduces A U)
+    (hU : A.Reduces U)
     {a b d : ℝ} (hd : 0 < d) (hab : a ≤ b)
     (hUspec : spectrum ℝ (compressOperator U A) ⊆ Set.Icc a b)
     (hUspec' : ∀ x ∈ spectrum ℝ (compressOperator Uᗮ A),
@@ -414,7 +416,7 @@ variable {A B : E →L[ℂ] E} {U V : Submodule ℂ E}
 theorem sinTwoTheta_ambient_bounded_symmetricNorming_complex
     (N : SymmetricNormingFunction)
     (hA : IsSelfAdjoint A) (hB : IsSelfAdjoint B)
-    (hU : Reduces A U) (hV : Reduces B V)
+    (hU : A.Reduces U) (hV : B.Reduces V)
     {a b d : ℝ} (hd : 0 < d) (hab : a ≤ b)
     (hUspec : spectrum ℝ (compressOperator U A) ⊆ Set.Icc a b)
     (hUspec' : ∀ x ∈ spectrum ℝ (compressOperator Uᗮ A),

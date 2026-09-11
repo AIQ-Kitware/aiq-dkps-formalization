@@ -575,8 +575,10 @@ noncomputable def ofBounded (P : SymmetricSinThetaProblem (E := E)) :
     CommonDomainSymmetricSinThetaProblem P.U P.V where
   A := (P.A.toLinearMap.toPMap ⊤)
   B := (P.B.toLinearMap.toPMap ⊤)
-  selfAdjoint_A := TauCeti.DavisKahanExt.ofBounded_isSelfAdjoint P.A P.selfAdjoint_A
-  selfAdjoint_B := TauCeti.DavisKahanExt.ofBounded_isSelfAdjoint P.B P.selfAdjoint_B
+  selfAdjoint_A := TauCeti.LinearPMap.isSelfAdjoint_toPMap_top (T := P.A)
+    (ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mpr P.selfAdjoint_A)
+  selfAdjoint_B := TauCeti.LinearPMap.isSelfAdjoint_toPMap_top (T := P.B)
+    (ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mpr P.selfAdjoint_B)
   reduces_A_U := TauCeti.DavisKahanExt.PartialMap.ofBounded_reducesSubspace P.A P.U P.reduces_A_U
   reduces_B_V := TauCeti.DavisKahanExt.PartialMap.ofBounded_reducesSubspace P.B P.V P.reduces_B_V
   perturbation := P.perturbation
@@ -645,8 +647,10 @@ noncomputable def ofBoundedReal (P : RealSymmetricSinThetaProblem (E := E)) :
     CommonDomainSymmetricSinThetaProblem P.U P.V where
   A := (P.A.toLinearMap.toPMap ⊤)
   B := (P.B.toLinearMap.toPMap ⊤)
-  selfAdjoint_A := TauCeti.DavisKahanExt.ofBounded_isSelfAdjoint P.A P.selfAdjoint_A
-  selfAdjoint_B := TauCeti.DavisKahanExt.ofBounded_isSelfAdjoint P.B P.selfAdjoint_B
+  selfAdjoint_A := TauCeti.LinearPMap.isSelfAdjoint_toPMap_top (T := P.A)
+    (ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mpr P.selfAdjoint_A)
+  selfAdjoint_B := TauCeti.LinearPMap.isSelfAdjoint_toPMap_top (T := P.B)
+    (ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mpr P.selfAdjoint_B)
   reduces_A_U := TauCeti.DavisKahanExt.PartialMap.ofBounded_reducesSubspace P.A P.U P.reduces_A_U
   reduces_B_V := TauCeti.DavisKahanExt.PartialMap.ofBounded_reducesSubspace P.B P.V P.reduces_B_V
   perturbation := P.perturbation

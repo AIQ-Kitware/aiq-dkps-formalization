@@ -40,7 +40,7 @@ variable {E : Type v} [NormedAddCommGroup E] [InnerProductSpace ℂ E]
 /-- A half-line bound on the native real spectrum of a self-adjoint complex
 operator also bounds its spectrum over the real scalar subalgebra. -/
 theorem spectrum_real_subset_Iic_of_realSpectrum_subset_Iic
-    (T : E →L[ℂ] E) (hT : IsSelfAdjointOperator T) {c : ℝ}
+    (T : E →L[ℂ] E) (hT : T.IsSymmetric) {c : ℝ}
     (hspec : realSpectrum T ⊆ Set.Iic c) :
     spectrum ℝ T ⊆ Set.Iic c := by
   have hTsa : IsSelfAdjoint T :=
@@ -53,7 +53,7 @@ theorem spectrum_real_subset_Iic_of_realSpectrum_subset_Iic
 
 /-- The analogous lower half-line transport. -/
 theorem spectrum_real_subset_Ici_of_realSpectrum_subset_Ici
-    (T : E →L[ℂ] E) (hT : IsSelfAdjointOperator T) {c : ℝ}
+    (T : E →L[ℂ] E) (hT : T.IsSymmetric) {c : ℝ}
     (hspec : realSpectrum T ⊆ Set.Ici c) :
     spectrum ℝ T ⊆ Set.Ici c := by
   have hTsa : IsSelfAdjoint T :=
@@ -67,7 +67,7 @@ theorem spectrum_real_subset_Ici_of_realSpectrum_subset_Ici
 /-- A restricted-spectrum upper half-line transports to the real spectrum of
 the corresponding orthogonal compression. -/
 theorem spectrum_real_compress_subset_Iic_of_restrictedSpectrum_subset_Iic
-    (A : E →L[ℂ] E) (hA : IsSelfAdjointOperator A)
+    (A : E →L[ℂ] E) (hA : A.IsSymmetric)
     (U : Submodule ℂ E) [U.HasOrthogonalProjection]
     (hU : InvariantFor A U) {c : ℝ}
     (hspec : restrictedSpectrum A U ⊆ Set.Iic c) :
@@ -76,7 +76,7 @@ theorem spectrum_real_compress_subset_Iic_of_restrictedSpectrum_subset_Iic
     (U.isComplete_coe_of_hasOrthogonalProjection).completeSpace_coe
   have hAsa : IsSelfAdjoint A :=
     ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mpr hA
-  have hcompress : IsSelfAdjointOperator (compressOperator U A) :=
+  have hcompress : ContinuousLinearMap.IsSymmetric (compressOperator U A) :=
     ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mp
       (isSelfAdjoint_compressOperator hAsa U)
   apply spectrum_real_subset_Iic_of_realSpectrum_subset_Iic
@@ -87,7 +87,7 @@ theorem spectrum_real_compress_subset_Iic_of_restrictedSpectrum_subset_Iic
 /-- A restricted-spectrum lower half-line transports to the real spectrum of
 the corresponding orthogonal compression. -/
 theorem spectrum_real_compress_subset_Ici_of_restrictedSpectrum_subset_Ici
-    (A : E →L[ℂ] E) (hA : IsSelfAdjointOperator A)
+    (A : E →L[ℂ] E) (hA : A.IsSymmetric)
     (U : Submodule ℂ E) [U.HasOrthogonalProjection]
     (hU : InvariantFor A U) {c : ℝ}
     (hspec : restrictedSpectrum A U ⊆ Set.Ici c) :
@@ -96,7 +96,7 @@ theorem spectrum_real_compress_subset_Ici_of_restrictedSpectrum_subset_Ici
     (U.isComplete_coe_of_hasOrthogonalProjection).completeSpace_coe
   have hAsa : IsSelfAdjoint A :=
     ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mpr hA
-  have hcompress : IsSelfAdjointOperator (compressOperator U A) :=
+  have hcompress : ContinuousLinearMap.IsSymmetric (compressOperator U A) :=
     ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mp
       (isSelfAdjoint_compressOperator hAsa U)
   apply spectrum_real_subset_Ici_of_realSpectrum_subset_Ici
@@ -109,11 +109,11 @@ The nontriviality assumptions are exactly those needed for nonempty restricted
 spectra and the supremum separating center. -/
 theorem quarterAcuteAngularCoordinate_sharp_bound_of_orderedSpectraSeparated
     (A H : E →L[ℂ] E)
-    (hA : IsSelfAdjointOperator A) (hH : IsSelfAdjointOperator H)
+    (hA : A.IsSymmetric) (hH : H.IsSymmetric)
     (U V : Submodule ℂ E) [U.HasOrthogonalProjection]
     [V.HasOrthogonalProjection] [Nontrivial U] [Nontrivial Uᗮ]
-    (hU : Reduces A U) (hV : Reduces (A + H) V)
-    (hoff : IsOffDiagonal U H)
+    (hU : A.Reduces U) (hV : ContinuousLinearMap.Reduces (A + H) V)
+    (hoff : Submodule.IsOffDiagonal U H)
     {d : ℝ} (hd : 0 < d)
     (hordered : OrderedSpectraSeparated A U A Uᗮ d)
     (hquarter : IsQuarterAcute U V) :

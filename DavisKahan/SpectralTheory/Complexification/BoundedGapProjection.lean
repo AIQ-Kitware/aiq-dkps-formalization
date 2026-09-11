@@ -65,7 +65,7 @@ theorem conjugateOperator_boundedSelfAdjointSpectralProjection_Iic_complexify
           ((complexify_isSelfAdjoint_iff B).2 hB))
         (Set.Iic alpha) measurableSet_Iic := by
   have hBc : IsSelfAdjoint (complexify B) := (complexify_isSelfAdjoint_iff B).2 hB
-  have hBcop : IsSelfAdjointOperator (complexify B) :=
+  have hBcop : ContinuousLinearMap.IsSymmetric (complexify B) :=
     ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mp hBc
   have hgapC : realSpectrum (complexify B) ⊆
       Set.Iic alpha ∪ Set.Ici (alpha + delta) := by

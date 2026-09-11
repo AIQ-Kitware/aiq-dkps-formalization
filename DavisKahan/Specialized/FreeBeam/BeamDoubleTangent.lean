@@ -79,7 +79,7 @@ def beamRitzOffDiagonal (ε : ℝ) : BeamL2 →L[ℂ] BeamL2 :=
 
 /-- The block-diagonal part of a symmetric operator is symmetric. -/
 theorem beamRitzDiagonal_isSelfAdjoint (ε : ℝ) :
-    DavisKahan.IsSelfAdjointOperator (beamRitzDiagonal ε) := by
+    ContinuousLinearMap.IsSymmetric (beamRitzDiagonal ε) := by
   intro x y
   have hd : ∀ z : BeamL2, beamRitzDiagonal ε z
       = beamTrial.starProjection (beamPerturbation ε (beamTrial.starProjection z))
@@ -98,7 +98,7 @@ theorem beamRitzDiagonal_isSelfAdjoint (ε : ℝ) :
 
 /-- The block-off-diagonal part of a symmetric operator is symmetric. -/
 theorem beamRitzOffDiagonal_isSelfAdjoint (ε : ℝ) :
-    DavisKahan.IsSelfAdjointOperator (beamRitzOffDiagonal ε) := by
+    ContinuousLinearMap.IsSymmetric (beamRitzOffDiagonal ε) := by
   intro x y
   have hsym : ∀ u v : BeamL2,
       ⟪beamPerturbation ε u, v⟫_ℂ = ⟪u, beamPerturbation ε v⟫_ℂ :=

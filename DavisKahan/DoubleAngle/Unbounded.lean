@@ -78,8 +78,8 @@ theorem norm_starProjection_reflectedComplementary_eq_sinTwoAngle
         ← ContinuousLinearMap.star_eq_adjoint,
         (isSelfAdjoint_starProjection Wᗮ).star_eq,
         (isSelfAdjoint_starProjection U).star_eq]
-    _ = directedGap U W := rfl
-    _ = subspaceGap U W :=
+    _ = U.directedProjectionGap W := rfl
+    _ = U.projectionGap W :=
       (subspaceGap_eq_directedGap_reflection U V).symm
     _ = ‖directedSinTwoAngleOperatorC U V‖ :=
       subspaceGap_map_reflection_eq_norm_sinTwoAngle U V

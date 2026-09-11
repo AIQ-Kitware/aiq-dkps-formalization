@@ -140,12 +140,15 @@ example
     (hgap : SpectralSylvesterGap
       ((A0.toLinearMap.toPMap ⊤))
       (selfAdjointSpectralRestriction ((A.toLinearMap.toPMap ⊤))
-        (TauCeti.DavisKahanExt.ofBounded_isSelfAdjoint A hA) Sᶜ hS.compl) δ) :
+        (TauCeti.LinearPMap.isSelfAdjoint_toPMap_top (T := A)
+          (ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mpr hA)) Sᶜ hS.compl) δ) :
     δ * ‖(ContinuousLinearMap.id ℂ E -
         selfAdjointSpectralSubspaceInclusion ((A.toLinearMap.toPMap ⊤))
-          (TauCeti.DavisKahanExt.ofBounded_isSelfAdjoint A hA) S hS ∘L
+          (TauCeti.LinearPMap.isSelfAdjoint_toPMap_top (T := A)
+            (ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mpr hA)) S hS ∘L
         (selfAdjointSpectralSubspaceInclusion ((A.toLinearMap.toPMap ⊤))
-          (TauCeti.DavisKahanExt.ofBounded_isSelfAdjoint A hA) S hS).adjoint) ∘L X‖
+          (TauCeti.LinearPMap.isSelfAdjoint_toPMap_top (T := A)
+            (ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mpr hA)) S hS).adjoint) ∘L X‖
       ≤ ‖generalResidual A X A0‖ := by
   have hmain := sinTheta_bounded_spectralSubspace_of_spectrumGap
     (KyFanDominantIdealFamily.operatorNorm (𝕜 := ℂ))
@@ -187,11 +190,11 @@ theorem realPlane_zeroResidual_model :
     simp [A, U, TauCeti.LinearPMap.ReducesSubspace,
       TauCeti.LinearPMap.InvariantSubspace]
   have hA : IsSelfAdjoint A := by
-    exact TauCeti.DavisKahanExt.ofBounded_isSelfAdjoint
-      (0 : RealPlane →L[ℝ] RealPlane) (by intro x y; simp)
+    exact TauCeti.LinearPMap.isSelfAdjoint_toPMap_top (T := (0 : RealPlane →L[ℝ] RealPlane))
+      (ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mpr (by intro x y; simp))
   have hA0 : _root_.IsSelfAdjoint A0 := by
-    exact TauCeti.DavisKahanExt.ofBounded_isSelfAdjoint
-      (0 : RealPlane →L[ℝ] RealPlane) (by intro x y; simp)
+    exact TauCeti.LinearPMap.isSelfAdjoint_toPMap_top (T := (0 : RealPlane →L[ℝ] RealPlane))
+      (ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mpr (by intro x y; simp))
   have hA0upper : TauCeti.LinearPMap.SemiboundedAbove A0 0 := by
     intro x
     show RCLike.re

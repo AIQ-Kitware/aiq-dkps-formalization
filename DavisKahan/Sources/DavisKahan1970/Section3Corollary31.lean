@@ -81,9 +81,9 @@ variable (U₂ V₂ : Submodule 𝕜 H₂) [U₂.HasOrthogonalProjection]
 angle eigenvalue lists and elementary multiplicities classify the pair. -/
 theorem corollary3_1_compact_angleList_classification
     (hcompact₁ : IsCompactOperator
-      (projection U₁ ∘L projection V₁ ∘L projection U₁))
+      (U₁.starProjection ∘L V₁.starProjection ∘L U₁.starProjection))
     (hcompact₂ : IsCompactOperator
-      (projection U₂ ∘L projection V₂ ∘L projection U₂)) :
+      (U₂.starProjection ∘L V₂.starProjection ∘L U₂.starProjection)) :
     PairOfSubspacesUnitaryEquivalent U₁ V₁ U₂ V₂ ↔
       SameHalmosTrivialDimensions U₁ V₁ U₂ V₂ ∧
       compactAngleEigenvalueList
@@ -151,30 +151,30 @@ and the classifying list is the eigenvalue list of the corresponding
 sine-square angle operator. -/
 theorem corollary3_1_compact_defectBlock_angleList_classification
     (hcompact₁ : IsCompactOperator
-      (projection U₁ ∘L
-        (ContinuousLinearMap.id 𝕜 H₁ - projection V₁) ∘L projection U₁))
+      (U₁.starProjection ∘L
+        (ContinuousLinearMap.id 𝕜 H₁ - V₁.starProjection) ∘L U₁.starProjection))
     (hcompact₂ : IsCompactOperator
-      (projection U₂ ∘L
-        (ContinuousLinearMap.id 𝕜 H₂ - projection V₂) ∘L projection U₂)) :
+      (U₂.starProjection ∘L
+        (ContinuousLinearMap.id 𝕜 H₂ - V₂.starProjection) ∘L U₂.starProjection)) :
     PairOfSubspacesUnitaryEquivalent U₁ V₁ U₂ V₂ ↔
       SameHalmosTrivialDimensions U₁ V₁ U₂ V₂ ∧
       compactAngleEigenvalueList
           (genericCosineBlock U₁ V₁ᗮ) =
         compactAngleEigenvalueList
           (genericCosineBlock U₂ V₂ᗮ) := by
-  have hperp₁ : projection V₁ᗮ =
-      ContinuousLinearMap.id 𝕜 H₁ - projection V₁ := by
+  have hperp₁ : V₁ᗮ.starProjection =
+      ContinuousLinearMap.id 𝕜 H₁ - V₁.starProjection := by
     show V₁ᗮ.starProjection = ContinuousLinearMap.id 𝕜 H₁ - V₁.starProjection
     rw [Submodule.starProjection_orthogonal' V₁]
     rfl
-  have hperp₂ : projection V₂ᗮ =
-      ContinuousLinearMap.id 𝕜 H₂ - projection V₂ := by
+  have hperp₂ : V₂ᗮ.starProjection =
+      ContinuousLinearMap.id 𝕜 H₂ - V₂.starProjection := by
     show V₂ᗮ.starProjection = ContinuousLinearMap.id 𝕜 H₂ - V₂.starProjection
     rw [Submodule.starProjection_orthogonal' V₂]
     rfl
-  have h₁ : IsCompactOperator (projection U₁ ∘L projection V₁ᗮ ∘L projection U₁) := by
+  have h₁ : IsCompactOperator (U₁.starProjection ∘L V₁ᗮ.starProjection ∘L U₁.starProjection) := by
     rwa [hperp₁]
-  have h₂ : IsCompactOperator (projection U₂ ∘L projection V₂ᗮ ∘L projection U₂) := by
+  have h₂ : IsCompactOperator (U₂.starProjection ∘L V₂ᗮ.starProjection ∘L U₂.starProjection) := by
     rwa [hperp₂]
   rw [← pairOfSubspacesUnitaryEquivalent_orthogonal_right_iff U₁ V₁ U₂ V₂,
     ← sameHalmosTrivialDimensions_orthogonal_right_iff U₁ V₁ U₂ V₂]
@@ -288,11 +288,11 @@ theorem corollary3_1_compact_defectBlock_sourceAngleList_classification
     (W₁ X₁ : Submodule 𝕜 H₁) [W₁.HasOrthogonalProjection] [X₁.HasOrthogonalProjection]
     (W₂ X₂ : Submodule 𝕜 H₂) [W₂.HasOrthogonalProjection] [X₂.HasOrthogonalProjection]
     (hcompact₁ : IsCompactOperator
-      (projection W₁ ∘L
-        (ContinuousLinearMap.id 𝕜 H₁ - projection X₁) ∘L projection W₁))
+      (W₁.starProjection ∘L
+        (ContinuousLinearMap.id 𝕜 H₁ - X₁.starProjection) ∘L W₁.starProjection))
     (hcompact₂ : IsCompactOperator
-      (projection W₂ ∘L
-        (ContinuousLinearMap.id 𝕜 H₂ - projection X₂) ∘L projection W₂)) :
+      (W₂.starProjection ∘L
+        (ContinuousLinearMap.id 𝕜 H₂ - X₂.starProjection) ∘L W₂.starProjection)) :
     PairOfSubspacesUnitaryEquivalent W₁ X₁ W₂ X₂ ↔
       SameHalmosTrivialDimensions W₁ X₁ W₂ X₂ ∧
       compactAngleList (genericCosineBlock W₁ X₁ᗮ) =
@@ -345,11 +345,11 @@ the corollary at a specific pair therefore goes through this form, where the ins
 already discharged. -/
 theorem corollary3_1_compact_defectBlock_angleList_classification_complex
     (hcompact₁ : IsCompactOperator
-      (projection U₁ ∘L
-        (ContinuousLinearMap.id ℂ H₁ - projection V₁) ∘L projection U₁))
+      (U₁.starProjection ∘L
+        (ContinuousLinearMap.id ℂ H₁ - V₁.starProjection) ∘L U₁.starProjection))
     (hcompact₂ : IsCompactOperator
-      (projection U₂ ∘L
-        (ContinuousLinearMap.id ℂ H₂ - projection V₂) ∘L projection U₂)) :
+      (U₂.starProjection ∘L
+        (ContinuousLinearMap.id ℂ H₂ - V₂.starProjection) ∘L U₂.starProjection)) :
     PairOfSubspacesUnitaryEquivalent U₁ V₁ U₂ V₂ ↔
       SameHalmosTrivialDimensions U₁ V₁ U₂ V₂ ∧
       compactAngleEigenvalueList
@@ -703,8 +703,8 @@ with `P_U P_V P_U` compact on both sides, the four elementary Halmos
 multiplicities together with the multiplicity of every angle are a complete
 invariant. -/
 theorem corollary3_1_compact_classification_real
-    (hc₁ : IsCompactOperator (projection U₁ ∘L projection V₁ ∘L projection U₁))
-    (hc₂ : IsCompactOperator (projection U₂ ∘L projection V₂ ∘L projection U₂)) :
+    (hc₁ : IsCompactOperator (U₁.starProjection ∘L V₁.starProjection ∘L U₁.starProjection))
+    (hc₂ : IsCompactOperator (U₂.starProjection ∘L V₂.starProjection ∘L U₂.starProjection)) :
     PairOfSubspacesUnitaryEquivalent U₁ V₁ U₂ V₂ ↔
       SameCompactAngleData U₁ V₁ U₂ V₂ :=
   pairOfSubspacesUnitaryEquivalent_iff_sameCompactAngleData
@@ -729,9 +729,9 @@ hypothesis is carried by
 theorem applied to `(U, Vᗮ)`. -/
 theorem corollary3_1_compact_angleList_classification_real
     (hcompact₁ : IsCompactOperator
-      (projection U₁ ∘L projection V₁ ∘L projection U₁))
+      (U₁.starProjection ∘L V₁.starProjection ∘L U₁.starProjection))
     (hcompact₂ : IsCompactOperator
-      (projection U₂ ∘L projection V₂ ∘L projection U₂)) :
+      (U₂.starProjection ∘L V₂.starProjection ∘L U₂.starProjection)) :
     PairOfSubspacesUnitaryEquivalent U₁ V₁ U₂ V₂ ↔
       SameHalmosTrivialDimensions U₁ V₁ U₂ V₂ ∧
       compactAngleEigenvalueList
@@ -753,11 +753,11 @@ The reconstruction functional calculus that the generic form carries is synthesi
 source row is untouched: this is the printed object on both sides. -/
 theorem corollary3_1_compact_defectBlock_angleList_classification_real
     (hcompact₁ : IsCompactOperator
-      (projection U₁ ∘L
-        (ContinuousLinearMap.id ℝ H₁ - projection V₁) ∘L projection U₁))
+      (U₁.starProjection ∘L
+        (ContinuousLinearMap.id ℝ H₁ - V₁.starProjection) ∘L U₁.starProjection))
     (hcompact₂ : IsCompactOperator
-      (projection U₂ ∘L
-        (ContinuousLinearMap.id ℝ H₂ - projection V₂) ∘L projection U₂)) :
+      (U₂.starProjection ∘L
+        (ContinuousLinearMap.id ℝ H₂ - V₂.starProjection) ∘L U₂.starProjection)) :
     PairOfSubspacesUnitaryEquivalent U₁ V₁ U₂ V₂ ↔
       SameHalmosTrivialDimensions U₁ V₁ U₂ V₂ ∧
       compactAngleEigenvalueList

@@ -121,8 +121,8 @@ attribute [local instance 100] ContinuousLinearMap.realAlgebra
 ambient scope.** -/
 theorem proposition3_5_commutations_separable [TopologicalSpace.SeparableSpace H]
     (J : halmosSourceDefect U V ≃ₗᵢ[𝕜] halmosTargetDefect U V) :
-    Commute (proposition3_5_angleOperator U V) (TauCeti.DavisKahan.projection U) ∧
-      Commute (proposition3_5_angleOperator U V) (TauCeti.DavisKahan.projection V) ∧
+    Commute (proposition3_5_angleOperator U V) (U.starProjection) ∧
+      Commute (proposition3_5_angleOperator U V) (V.starProjection) ∧
       Commute (proposition3_5_angleOperator U V) (corollary3_2_nonacuteQuarterTurn U V J) ∧
       Commute (proposition3_5_angleOperator U V) (nonacuteDirectRotation U V J) :=
   proposition3_5_commutations U V J
@@ -318,13 +318,13 @@ theorem corollary3_1_compact_defectBlock_sourceAngleList_classification_separabl
     (W₁ X₁ : Submodule 𝕜 H₁) [W₁.HasOrthogonalProjection] [X₁.HasOrthogonalProjection]
     (W₂ X₂ : Submodule 𝕜 H₂) [W₂.HasOrthogonalProjection] [X₂.HasOrthogonalProjection]
     (hcompact₁ : IsCompactOperator
-      (DavisKahan.projection W₁ ∘L
-        (ContinuousLinearMap.id 𝕜 H₁ - DavisKahan.projection X₁) ∘L
-          DavisKahan.projection W₁))
+      (W₁.starProjection ∘L
+        (ContinuousLinearMap.id 𝕜 H₁ - X₁.starProjection) ∘L
+          W₁.starProjection))
     (hcompact₂ : IsCompactOperator
-      (DavisKahan.projection W₂ ∘L
-        (ContinuousLinearMap.id 𝕜 H₂ - DavisKahan.projection X₂) ∘L
-          DavisKahan.projection W₂)) :
+      (W₂.starProjection ∘L
+        (ContinuousLinearMap.id 𝕜 H₂ - X₂.starProjection) ∘L
+          W₂.starProjection)) :
     PairOfSubspacesUnitaryEquivalent W₁ X₁ W₂ X₂ ↔
       SameHalmosTrivialDimensions W₁ X₁ W₂ X₂ ∧
       compactAngleList (genericCosineBlock W₁ X₁ᗮ) =
@@ -348,7 +348,7 @@ theorem proposition4_2_compact_nonacute_separable {H : Type v}
     (hcrossed : DavisKahan.CrossedDefectsEquivalent U V)
     {ι : Type v} (b : HilbertBasis ι ℂ U)
     (W : H →L[ℂ] H) (hWunitary : W ∈ unitary (H →L[ℂ] H))
-    (hWmap : W * DavisKahan.projection U = DavisKahan.projection V * W) :
+    (hWmap : W * U.starProjection = V.starProjection * W) :
     (∑' n : ℕ, ENNReal.ofReal
         (Real.sin (TauCeti.principalAngleSequence U V n)) ^ 2) ≤
       ∑' i, ENNReal.ofReal
@@ -365,7 +365,7 @@ theorem proposition4_2_compact_nonacute_real_separable {E : Type v}
     (hcrossed : DavisKahan.CrossedDefectsEquivalent U V)
     {ι : Type v} (b : HilbertBasis ι ℝ U) (W : E →L[ℝ] E)
     (hWunitary : W ∈ unitary (E →L[ℝ] E))
-    (hWmap : W * DavisKahan.projection U = DavisKahan.projection V * W) :
+    (hWmap : W * U.starProjection = V.starProjection * W) :
     (∑' n : ℕ, ENNReal.ofReal
         (Real.sin (TauCeti.principalAngleSequence U V n)) ^ 2) ≤
       ∑' i, ENNReal.ofReal

@@ -158,7 +158,7 @@ theorem circleContour_normalizedWinding (c x r : ℝ) (hr : 0 < r)
 
 /-- A separating circle admits a positive uniform margin to the spectrum. -/
 theorem exists_circle_spectralMargin
-    (A : H →L[ℂ] H) (hA : IsSelfAdjointOperator A)
+    (A : H →L[ℂ] H) (hA : A.IsSymmetric)
     {B : Set ℝ} {c r : ℝ}
     (hsep : CircleSeparatesRealSpectrum A hA B c r) :
     ∃ m : ℝ, 0 < m ∧ ∀ t : unitInterval, ∀ lam ∈ realSpectrum A,
@@ -201,7 +201,7 @@ theorem exists_circle_spectralMargin
 omit [CompleteSpace H] in
 /-- A real point of the spectrum never lies on a separating circle. -/
 theorem abs_sub_ne_radius_of_mem_realSpectrum
-    {A : H →L[ℂ] H} {hA : IsSelfAdjointOperator A}
+    {A : H →L[ℂ] H} {hA : A.IsSymmetric}
     {B : Set ℝ} {c r : ℝ}
     (hsep : CircleSeparatesRealSpectrum A hA B c r)
     {lam : ℝ} (hlam : lam ∈ realSpectrum A) :
@@ -219,7 +219,7 @@ theorem norm_ofReal_sub_ofReal (lam c : ℝ) :
 /-- Upgrade a separating circle to the quantitative
 `SpectralSeparatingContour` consumed by the continuation stack. -/
 noncomputable def circleSeparatingContour
-    (A : H →L[ℂ] H) (hA : IsSelfAdjointOperator A)
+    (A : H →L[ℂ] H) (hA : A.IsSymmetric)
     {B : Set ℝ} (hB : MeasurableSet B) {c r : ℝ}
     (hsep : CircleSeparatesRealSpectrum A hA B c r) :
     SpectralSeparatingContour A B where
@@ -305,7 +305,7 @@ theorem margin_le_norm_sub_of_inverse_bound
 
 /-- The circle separating contour rides on the circle contour. -/
 @[simp] theorem circleSeparatingContour_geometric
-    (A : H →L[ℂ] H) (hA : IsSelfAdjointOperator A)
+    (A : H →L[ℂ] H) (hA : A.IsSymmetric)
     {B : Set ℝ} (hB : MeasurableSet B) {c r : ℝ}
     (hsep : CircleSeparatesRealSpectrum A hA B c r) :
     (circleSeparatingContour A hA hB hsep).geometric =

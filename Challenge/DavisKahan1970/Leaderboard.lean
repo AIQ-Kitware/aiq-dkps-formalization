@@ -33,7 +33,7 @@ import DavisKahan.Sources.DavisKahan1970.SinTwoThetaAmbient
 import DavisKahan.Sources.DavisKahan1970.AmbientReal
 import DavisKahan.Sources.DavisKahan1970.TanTwoThetaBranchFree
 import DavisKahan.Sources.DavisKahan1970.TanTwoThetaReflectionAmbient
-import DavisKahan.BoundedOperator.Spectral.Complex
+import ForTauCeti.Analysis.InnerProductSpace.SpectralOrder
 import DavisKahan.FiniteDimensional.DirectRotation.ShortRotationCounterexample
 import DavisKahan.FiniteDimensional.Sharpness
 import DavisKahan.Sources.DavisKahan1970.Section3Proposition32
@@ -90,7 +90,7 @@ theorem projectorDifference_restrictionSpectra_opNorm
     (hWhi : spectrum ℝ (B.restrict hW.1) ⊆ Set.Ici (c + g))
     (hWlo : spectrum ℝ (B.restrict hW.2) ⊆ Set.Iic c) :
     ‖(U.starProjection - W.starProjection : H →L[ℂ] H)‖ ≤ ‖B - A‖ / g := by
-  exact TauCeti.DavisKahan.Spectral.Complex.opNorm_starProjection_sub_le_of_restriction_spectra
+  exact TauCeti.SpectralOrder.opNorm_starProjection_sub_le_of_restriction_spectra
     hA hB hU hW hg hUhi hUlo hWhi hWlo
 
 end ProjectorDifference

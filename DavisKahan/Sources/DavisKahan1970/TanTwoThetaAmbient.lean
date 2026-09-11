@@ -1207,9 +1207,9 @@ theorem tanTwoBlockRepresentative_lowerBlock (hq : IsQuarterAcute U V) :
     have h := projection_graphSubspace_formula U (quarterAcuteAngularOperator U V hq)
       hang
     simp only [graphSubspace_quarterAcuteAngularOperator U V hq] at h
-    rw [show (V.starProjection : E →L[ℂ] E) = DavisKahan.projection V from rfl, h,
+    rw [show (V.starProjection : E →L[ℂ] E) = V.starProjection from rfl, h,
       graphProjectionFormula,
-      show (DavisKahan.projection U : E →L[ℂ] E) = U.starProjection from rfl, hYp,
+      show (U.starProjection : E →L[ℂ] E) = U.starProjection from rfl, hYp,
       star_add, hpsa]
   have hcorner := graph_corner (p := U.starProjection)
     (Y := quarterAcuteAngularOperator U V hq)
@@ -1244,7 +1244,7 @@ variable {A H : E →L[ℂ] E} {U V : Submodule ℂ E}
 omit [CompleteSpace E] in
 private theorem isOffDiagonal_of_maps_orthogonal'
     (hHU : ∀ x ∈ U, H x ∈ Uᗮ) (hHUperp : ∀ x ∈ Uᗮ, H x ∈ U) :
-    IsOffDiagonal U H := by
+    Submodule.IsOffDiagonal U H := by
   change U.diagonalPart H = 0
   apply ContinuousLinearMap.ext
   intro x
@@ -1303,16 +1303,17 @@ theorem tanTwoTheta_directed_boundedResidual_blockRepresentative_kyFan_complex
         (projectionBlock Uᗮ U
           (2 * (projectorDifference U V * doubleSecant U V))) ≤
       2 * kyFanApproximationGauge k (projectionBlock Uᗮᗮ Uᗮ H) := by
-  have hAsym : IsSelfAdjointOperator A :=
+  have hAsym : A.IsSymmetric :=
     ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mp hA
-  have hHsym : IsSelfAdjointOperator H :=
+  have hHsym : H.IsSymmetric :=
     ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mp hH
-  have hAHsym : IsSelfAdjointOperator (A + H) := by
+  have hAHsym : ContinuousLinearMap.IsSymmetric (A + H) := by
     have h := hAsym.add hHsym
     rwa [← ContinuousLinearMap.toLinearMap_add] at h
-  have hUreduces : Reduces A U := reduces_orthogonalComplement hAsym hAU
-  have hVreduces : Reduces (A + H) V := reduces_orthogonalComplement hAHsym hAplusH_V
-  have hoff : IsOffDiagonal U H := isOffDiagonal_of_maps_orthogonal' hHU hHUperp
+  have hUreduces : A.Reduces U := ContinuousLinearMap.IsSymmetric.reduces_of_invariant hAsym hAU
+  have hVreduces : ContinuousLinearMap.Reduces (A + H) V :=
+    ContinuousLinearMap.IsSymmetric.reduces_of_invariant hAHsym hAplusH_V
+  have hoff : Submodule.IsOffDiagonal U H := isOffDiagonal_of_maps_orthogonal' hHU hHUperp
   let B : BlockOperatorData (𝕜 := ℂ) (E0 := U) (E1 := Uᗮ) :=
     TauCeti.DavisKahanExt.subspaceBlockOperatorData (A + H) U hAHsym
   let X : U →L[ℂ] Uᗮ := TauCeti.DavisKahanExt.quarterAcuteAngularCoordinate U V hq

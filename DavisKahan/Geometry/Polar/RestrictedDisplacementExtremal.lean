@@ -68,7 +68,7 @@ variable {E : Type u} {F : Type v}
 operator-theoretic min--max argument from the geometry of two subspaces. -/
 structure CosineDisplacementData
     (C : E →L[ℂ] E) (A B : E →L[ℂ] F) : Prop where
-  cosine_selfAdjoint : IsSelfAdjointOperator C
+  cosine_selfAdjoint : C.IsSymmetric
   cosine_nonnegative : ∀ x, 0 ≤ RCLike.re ⟪C x, x⟫_ℂ
   direct_norm_le_sqrt_two : ‖A‖ ≤ Real.sqrt 2
   direct_norm_sq : ∀ x,
@@ -708,7 +708,7 @@ theorem sourceCosine_apply_coe (x : U) :
   rfl
 
 /-- The source cosine is self-adjoint. -/
-theorem sourceCosine_selfAdjoint : IsSelfAdjointOperator (sourceCosine U V) := by
+theorem sourceCosine_selfAdjoint : ContinuousLinearMap.IsSymmetric (sourceCosine U V) := by
   intro x y
   change ⟪ContinuousLinearMap.modulus (spectraCanonicalIntertwiner U V)
       (x : H), (y : H)⟫_ℂ =
@@ -729,11 +729,11 @@ theorem sourceCosine_nonnegative (x : U) :
 
 /-- The norm of the source cosine is the norm of the target projection. -/
 theorem norm_sourceCosine_eq_norm_targetProjection (x : U) :
-    ‖sourceCosine U V x‖ = ‖projection V (x : H)‖ := by
+    ‖sourceCosine U V x‖ = ‖V.starProjection (x : H)‖ := by
   let C : H →L[ℂ] H :=
     ContinuousLinearMap.modulus (spectraCanonicalIntertwiner U V)
-  let P : H →L[ℂ] H := projection U
-  let Q : H →L[ℂ] H := projection V
+  let P : H →L[ℂ] H := U.starProjection
+  let Q : H →L[ℂ] H := V.starProjection
   have hxP : P (x : H) = (x : H) := Submodule.starProjection_eq_self_iff.mpr x.property
   have hCsa : star C = C :=
     (ContinuousLinearMap.modulus_isSelfAdjoint
@@ -743,7 +743,7 @@ theorem norm_sourceCosine_eq_norm_targetProjection (x : U) :
   have hCosx : halmosCosineSq U V (x : H) = P (Q (x : H)) := by
     simp only [halmosCosineSq, add_apply, mul_apply_eq_comp]
     rw [hxP]
-    have hxPc : complementaryProjection U (x : H) = 0 := by
+    have hxPc : (Uᗮ).starProjection (x : H) = 0 := by
       change Uᗮ.starProjection (x : H) = 0
       apply (Submodule.starProjection_apply_eq_zero_iff Uᗮ).mpr
       rw [Submodule.orthogonal_orthogonal]
@@ -825,10 +825,10 @@ source cosine norm. -/
 theorem competitor_real_inner_le_sourceCosine_norm
     (W : H →L[ℂ] H)
     (hWunitary : W ∈ unitary (H →L[ℂ] H))
-    (hWmap : W * projection U = projection V * W) (x : U) :
+    (hWmap : W * U.starProjection = V.starProjection * W) (x : U) :
     RCLike.re ⟪W (x : H), (x : H)⟫_ℂ ≤
       ‖sourceCosine U V x‖ * ‖x‖ := by
-  let Q : H →L[ℂ] H := projection V
+  let Q : H →L[ℂ] H := V.starProjection
   have hWxV : W (x : H) ∈ V := by
     apply V.starProjection_eq_self_iff.mp
     have happ := congrArg (fun T : H →L[ℂ] H => T (x : H)) hWmap
@@ -861,7 +861,7 @@ theorem competitor_real_inner_le_sourceCosine_norm
 `CosineDisplacementData`. -/
 theorem sourceRestrictedDisplacement_competitor_norm_sq_lower
     (W : H →L[ℂ] H) (hWunitary : W ∈ unitary (H →L[ℂ] H))
-    (hWmap : W * projection U = projection V * W) (x : U) :
+    (hWmap : W * U.starProjection = V.starProjection * W) (x : U) :
     2 * ‖x‖ ^ 2 - 2 * ‖sourceCosine U V x‖ * ‖x‖ ≤
       ‖sourceRestrictedDisplacement U W x‖ ^ 2 := by
   have hdisp := norm_sub_one_apply_sq_of_mem_unitary W hWunitary (x : H)
@@ -878,7 +878,7 @@ theorem sourceRestrictedDisplacement_competitor_norm_sq_lower
 theorem proposition4_1_cosineDisplacementData
     (hacute : IsUniformlyAcute U V) (W : H →L[ℂ] H)
     (hWunitary : W ∈ unitary (H →L[ℂ] H))
-    (hWmap : W * projection U = projection V * W) :
+    (hWmap : W * U.starProjection = V.starProjection * W) :
     CosineDisplacementData
       (sourceCosine U V)
       (sourceRestrictedDisplacement U (spectraDirectRotation U V hacute))
@@ -907,7 +907,7 @@ theorem proposition4_1_nonacuteCosineDisplacementData
     (J : halmosSourceDefect U V ≃ₗᵢ[ℂ]
       halmosTargetDefect U V)
     (W : H →L[ℂ] H) (hWunitary : W ∈ unitary (H →L[ℂ] H))
-    (hWmap : W * projection U = projection V * W) :
+    (hWmap : W * U.starProjection = V.starProjection * W) :
     CosineDisplacementData
       (sourceCosine U V)
       (sourceRestrictedDisplacement U (TauCeti.DavisKahan.nonacuteDirectRotation U V J))
@@ -942,7 +942,7 @@ theorem proposition4_1_nonacute_approximationNumbers
     (J : halmosSourceDefect U V ≃ₗᵢ[ℂ]
       halmosTargetDefect U V)
     (W : H →L[ℂ] H) (hWunitary : W ∈ unitary (H →L[ℂ] H))
-    (hWmap : W * projection U = projection V * W) (n : ℕ) :
+    (hWmap : W * U.starProjection = V.starProjection * W) (n : ℕ) :
     (sourceRestrictedDisplacement U
         (TauCeti.DavisKahan.nonacuteDirectRotation U V J)).approximationNumber n ≤
       (sourceRestrictedDisplacement U W).approximationNumber n :=
@@ -953,7 +953,7 @@ theorem proposition4_1_nonacute_approximationNumbers
 theorem proposition4_1_approximationNumbers
     (hacute : IsUniformlyAcute U V) (W : H →L[ℂ] H)
     (hWunitary : W ∈ unitary (H →L[ℂ] H))
-    (hWmap : W * projection U = projection V * W) (n : ℕ) :
+    (hWmap : W * U.starProjection = V.starProjection * W) (n : ℕ) :
     (sourceRestrictedDisplacement U
         (spectraDirectRotation U V hacute)).approximationNumber n ≤
       (sourceRestrictedDisplacement U W).approximationNumber n :=
@@ -965,7 +965,7 @@ restricted displacement. -/
 theorem sourceRestrictedDisplacement_extendDomainByZero
     (T : H →L[ℂ] H) :
     sourceRestrictedDisplacement U T ∘L U.subtypeL.adjoint =
-      (1 - T) ∘L projection U := by
+      (1 - T) ∘L U.starProjection := by
   ext x
   simp [sourceRestrictedDisplacement, Submodule.adjoint_subtypeL]
 
@@ -974,7 +974,7 @@ approximation-singular-value sequence as the ambient restricted displacement. -/
 theorem sourceRestrictedDisplacement_sameApproximationSingularSequence
     (T : H →L[ℂ] H) :
     ContinuousLinearMap.HasSameApproximationNumbers
-      ((1 - T) ∘L projection U) (sourceRestrictedDisplacement U T) := by
+      ((1 - T) ∘L U.starProjection) (sourceRestrictedDisplacement U T) := by
   intro n
   rw [← sourceRestrictedDisplacement_extendDomainByZero U T]
   exact ContinuousLinearMap.hasSameApproximationNumbers_extendDomainByZero U
@@ -985,11 +985,11 @@ by the frontier. -/
 theorem proposition4_1_restrictedDisplacement_approximationNumbers
     (hacute : IsUniformlyAcute U V) (W : H →L[ℂ] H)
     (hWunitary : W ∈ unitary (H →L[ℂ] H))
-    (hWmap : W * projection U = projection V * W) (n : ℕ) :
+    (hWmap : W * U.starProjection = V.starProjection * W) (n : ℕ) :
     ContinuousLinearMap.approximationNumber
-        ((1 - spectraDirectRotation U V hacute) ∘L projection U) n ≤
+        ((1 - spectraDirectRotation U V hacute) ∘L U.starProjection) n ≤
       ContinuousLinearMap.approximationNumber
-        ((1 - W) ∘L projection U) n := by
+        ((1 - W) ∘L U.starProjection) n := by
   have hsource := proposition4_1_approximationNumbers
     U V hacute W hWunitary hWmap n
   have hDseq := sourceRestrictedDisplacement_sameApproximationSingularSequence
@@ -997,17 +997,17 @@ theorem proposition4_1_restrictedDisplacement_approximationNumbers
   have hWseq := sourceRestrictedDisplacement_sameApproximationSingularSequence
     U W n
   change approximationSingularValue n
-      ((1 - spectraDirectRotation U V hacute) ∘L projection U) ≤
-    approximationSingularValue n ((1 - W) ∘L projection U)
+      ((1 - spectraDirectRotation U V hacute) ∘L U.starProjection) ≤
+    approximationSingularValue n ((1 - W) ∘L U.starProjection)
   calc
     approximationSingularValue n
-        ((1 - spectraDirectRotation U V hacute) ∘L projection U) =
+        ((1 - spectraDirectRotation U V hacute) ∘L U.starProjection) =
         approximationSingularValue n
           (sourceRestrictedDisplacement U
             (spectraDirectRotation U V hacute)) := hDseq
     _ ≤ approximationSingularValue n (sourceRestrictedDisplacement U W) := by
       simpa only [approximationSingularValue] using hsource
-    _ = approximationSingularValue n ((1 - W) ∘L projection U) := hWseq.symm
+    _ = approximationSingularValue n ((1 - W) ∘L U.starProjection) := hWseq.symm
 
 /-- Ambient restricted-displacement form of Proposition 4.1 for a
 chosen nonacute direct rotation. -/
@@ -1015,37 +1015,37 @@ theorem proposition4_1_nonacute_restrictedDisplacement_approximationNumbers
     (J : halmosSourceDefect U V ≃ₗᵢ[ℂ]
       halmosTargetDefect U V)
     (W : H →L[ℂ] H) (hWunitary : W ∈ unitary (H →L[ℂ] H))
-    (hWmap : W * projection U = projection V * W) (n : ℕ) :
+    (hWmap : W * U.starProjection = V.starProjection * W) (n : ℕ) :
     ContinuousLinearMap.approximationNumber
-        ((1 - TauCeti.DavisKahan.nonacuteDirectRotation U V J) ∘L projection U) n ≤
-      ContinuousLinearMap.approximationNumber ((1 - W) ∘L projection U) n := by
+        ((1 - TauCeti.DavisKahan.nonacuteDirectRotation U V J) ∘L U.starProjection) n ≤
+      ContinuousLinearMap.approximationNumber ((1 - W) ∘L U.starProjection) n := by
   have hsource := proposition4_1_nonacute_approximationNumbers
     U V J W hWunitary hWmap n
   have hDseq := sourceRestrictedDisplacement_sameApproximationSingularSequence
     U (TauCeti.DavisKahan.nonacuteDirectRotation U V J) n
   have hWseq := sourceRestrictedDisplacement_sameApproximationSingularSequence U W n
   change approximationSingularValue n
-      ((1 - TauCeti.DavisKahan.nonacuteDirectRotation U V J) ∘L projection U) ≤
-    approximationSingularValue n ((1 - W) ∘L projection U)
+      ((1 - TauCeti.DavisKahan.nonacuteDirectRotation U V J) ∘L U.starProjection) ≤
+    approximationSingularValue n ((1 - W) ∘L U.starProjection)
   calc
     approximationSingularValue n
-        ((1 - TauCeti.DavisKahan.nonacuteDirectRotation U V J) ∘L projection U) =
+        ((1 - TauCeti.DavisKahan.nonacuteDirectRotation U V J) ∘L U.starProjection) =
         approximationSingularValue n
           (sourceRestrictedDisplacement U
             (TauCeti.DavisKahan.nonacuteDirectRotation U V J)) := hDseq
     _ ≤ approximationSingularValue n (sourceRestrictedDisplacement U W) := by
       simpa only [approximationSingularValue] using hsource
-    _ = approximationSingularValue n ((1 - W) ∘L projection U) := hWseq.symm
+    _ = approximationSingularValue n ((1 - W) ∘L U.starProjection) := hWseq.symm
 
 /-- Approximation-number dominance package for a chosen nonacute direct rotation. -/
 theorem nonacute_restrictedDisplacementDominance
     (J : halmosSourceDefect U V ≃ₗᵢ[ℂ]
       halmosTargetDefect U V)
     (W : H →L[ℂ] H) (hWunitary : W ∈ unitary (H →L[ℂ] H))
-    (hWmap : W * projection U = projection V * W) :
+    (hWmap : W * U.starProjection = V.starProjection * W) :
     RestrictedDisplacementApproximationDominance
-      ((1 - TauCeti.DavisKahan.nonacuteDirectRotation U V J) ∘L projection U)
-      ((1 - W) ∘L projection U) where
+      ((1 - TauCeti.DavisKahan.nonacuteDirectRotation U V J) ∘L U.starProjection)
+      ((1 - W) ∘L U.starProjection) where
   approximation_le := fun n =>
     proposition4_1_nonacute_restrictedDisplacement_approximationNumbers
       U V J W hWunitary hWmap n
@@ -1054,10 +1054,10 @@ theorem nonacute_restrictedDisplacementDominance
 theorem infinite_restrictedDisplacementDominance
     (hacute : IsUniformlyAcute U V) (W : H →L[ℂ] H)
     (hWunitary : W ∈ unitary (H →L[ℂ] H))
-    (hWmap : W * projection U = projection V * W) :
+    (hWmap : W * U.starProjection = V.starProjection * W) :
     RestrictedDisplacementApproximationDominance
-      ((1 - spectraDirectRotation U V hacute) ∘L projection U)
-      ((1 - W) ∘L projection U) where
+      ((1 - spectraDirectRotation U V hacute) ∘L U.starProjection)
+      ((1 - W) ∘L U.starProjection) where
   approximation_le := by
     intro n
     simpa only [approximationSingularValue] using

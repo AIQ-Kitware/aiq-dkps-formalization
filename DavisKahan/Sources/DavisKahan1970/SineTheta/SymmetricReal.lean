@@ -259,14 +259,17 @@ theorem forward_all_kyFan
     PartialMap.reducingRestriction_isSelfAdjoint
       ((P.A.toLinearMap.toPMap ⊤)) P.U
       (TauCeti.DavisKahanExt.PartialMap.ofBounded_reducesSubspace P.A P.U P.reduces_A_U)
-      (TauCeti.DavisKahanExt.ofBounded_isSelfAdjoint P.A P.selfAdjoint_A)
+      (TauCeti.LinearPMap.isSelfAdjoint_toPMap_top (T := P.A)
+        (ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mpr P.selfAdjoint_A))
   have hL : _root_.IsSelfAdjoint D.Λ₁ :=
     PartialMap.reducingRestriction_isSelfAdjoint
       ((P.B.toLinearMap.toPMap ⊤)) P.Vᗮ
       (TauCeti.DavisKahanExt.PartialMap.ofBounded_reducesSubspace P.B P.V P.reduces_B_V).orthogonal
-      (TauCeti.DavisKahanExt.ofBounded_isSelfAdjoint P.B P.selfAdjoint_B)
+      (TauCeti.LinearPMap.isSelfAdjoint_toPMap_top (T := P.B)
+        (ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mpr P.selfAdjoint_B))
   have hEq := unbounded_adjoint_residual_block_identity D
-    (TauCeti.DavisKahanExt.ofBounded_isSelfAdjoint P.B P.selfAdjoint_B) hA0 hL
+    (TauCeti.LinearPMap.isSelfAdjoint_toPMap_top (T := P.B)
+      (ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mpr P.selfAdjoint_B)) hA0 hL
   -- The only mathematical substitution against the complex file.
   have hraw := real_unbounded_sylvester_kyFan hA0 hL P.gap_pos
     P.gap_U_to_Vperp hEq k
@@ -320,14 +323,17 @@ theorem reverse_all_kyFan
     PartialMap.reducingRestriction_isSelfAdjoint
       ((P.B.toLinearMap.toPMap ⊤)) P.V
       (TauCeti.DavisKahanExt.PartialMap.ofBounded_reducesSubspace P.B P.V P.reduces_B_V)
-      (TauCeti.DavisKahanExt.ofBounded_isSelfAdjoint P.B P.selfAdjoint_B)
+      (TauCeti.LinearPMap.isSelfAdjoint_toPMap_top (T := P.B)
+        (ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mpr P.selfAdjoint_B))
   have hL : _root_.IsSelfAdjoint D.Λ₁ :=
     PartialMap.reducingRestriction_isSelfAdjoint
       ((P.A.toLinearMap.toPMap ⊤)) P.Uᗮ
       (TauCeti.DavisKahanExt.PartialMap.ofBounded_reducesSubspace P.A P.U P.reduces_A_U).orthogonal
-      (TauCeti.DavisKahanExt.ofBounded_isSelfAdjoint P.A P.selfAdjoint_A)
+      (TauCeti.LinearPMap.isSelfAdjoint_toPMap_top (T := P.A)
+        (ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mpr P.selfAdjoint_A))
   have hEq := unbounded_adjoint_residual_block_identity D
-    (TauCeti.DavisKahanExt.ofBounded_isSelfAdjoint P.A P.selfAdjoint_A) hA0 hL
+    (TauCeti.LinearPMap.isSelfAdjoint_toPMap_top (T := P.A)
+      (ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mpr P.selfAdjoint_A)) hA0 hL
   have hraw := real_unbounded_sylvester_kyFan hA0 hL P.gap_pos
     P.gap_V_to_Uperp hEq k
   -- Mirror of the forward case: the ambient transport lemma again produces the

@@ -7,7 +7,7 @@ have been retired.
 ## Start here for current work
 
 The revised OperatorTheory port and its compile/review requirements are recorded in
-[`remaining-roadmap-migration.md`](remaining-roadmap-migration.md).
+[`canonical-port-completion.md`](canonical-port-completion.md).
 
 1. `../../AGENTS.md` - current workflow and dependency policy.
 2. `../../ForTauCeti/README.md` - package architecture and staging rules.

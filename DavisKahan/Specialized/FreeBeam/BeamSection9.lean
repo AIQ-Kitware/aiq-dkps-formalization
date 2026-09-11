@@ -623,7 +623,7 @@ theorem norm_beamPerturbation_comp_trialIncl_le (ε : ℝ) :
 
 /-- The perturbation is self-adjoint: its symbol is real. -/
 theorem beamPerturbation_isSelfAdjoint (ε : ℝ) :
-    DavisKahan.IsSelfAdjointOperator (beamPerturbation ε) := by
+    ContinuousLinearMap.IsSymmetric (beamPerturbation ε) := by
   intro x y
   rw [MeasureTheory.L2.inner_def, MeasureTheory.L2.inner_def]
   refine integral_congr_ae ?_
@@ -656,7 +656,8 @@ def beamTrialZero : beamTrial →ₗ.[ℂ] beamTrial :=
 /-- The trial-block compression of the unperturbed beam operator is
 self-adjoint. -/
 theorem beamTrialZero_isSelfAdjoint : _root_.IsSelfAdjoint beamTrialZero :=
-  TauCeti.DavisKahanExt.ofBounded_isSelfAdjoint 0 (fun _ _ => by simp)
+  TauCeti.LinearPMap.isSelfAdjoint_toPMap_top (T := 0)
+    (ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mpr (fun _ _ => by simp))
 
 /-- **The largest sine of the angle** between the affine trial subspace and the exact
 low spectral subspace of the perturbed beam: the operator norm of the cross projection

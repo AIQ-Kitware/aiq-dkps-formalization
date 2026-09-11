@@ -117,7 +117,7 @@ private theorem ambientAngularOperator_eq_extendCoordinate
     -- backwards -- and `IsAngularOperator` states its field with
     -- `DavisKahan.projection`, so that abbreviation has to be unfolded for the
     -- goal's `U.starProjection` to match.
-    simpa only [ContinuousLinearMap.comp_apply, DavisKahan.projection] using h
+    simpa only [ContinuousLinearMap.comp_apply] using h
   -- Rewrite the ambient right-hand side instead of `change`-ing the goal.  The
   -- adjoint of `subtypeL` is the orthogonal projection *into* the subspace
   -- (`Submodule.adjoint_subtypeL`) and its coercion back to `E` is
@@ -415,7 +415,7 @@ private theorem directedTanTwoAngleOperatorC_eq_modulus_ambientGraphTangent
     -- instance argument is proof-irrelevant and congruence goes through.
     have hV : graphSubspace U Y = V :=
       graphSubspace_quarterAcuteAngularOperator U V hquarter
-    have hgraph : TauCeti.DavisKahan.projection V = graphProjectionFormula U Y := by
+    have hgraph : V.starProjection = graphProjectionFormula U Y := by
       simpa only [hV] using projection_graphSubspace_formula U Y hY
     -- `graphProjectionFormula` produces every factor decorated with `P`:
     --   (P + Y P) · (1 + P Y⋆ (Y P))⁻¹ · (P + P Y⋆)

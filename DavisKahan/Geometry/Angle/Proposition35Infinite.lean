@@ -61,7 +61,7 @@ variable (U V : Submodule 𝕜 H) [U.HasOrthogonalProjection]
 
 /-- The positive ambient sine `sin Θ = |P_U-P_V|`. -/
 noncomputable def section3SinAngleOperator : H →L[𝕜] H :=
-  (projection U - projection V).modulus
+  (U.starProjection - V.starProjection).modulus
 
 /-- The literal bounded operator angle `Θ = arcsin |P_U-P_V|`. -/
 noncomputable def section3AngleOperator : H →L[𝕜] H :=
@@ -89,12 +89,12 @@ noncomputable def section3AngleEigenspace (θ : ℝ) : Submodule 𝕜 H :=
 /-- The sine operator is positive. -/
 theorem section3SinAngleOperator_nonneg :
     0 ≤ section3SinAngleOperator U V :=
-  (projection U - projection V).modulus_nonneg
+  (U.starProjection - V.starProjection).modulus_nonneg
 
 /-- The sine operator is self-adjoint. -/
 theorem section3SinAngleOperator_isSelfAdjoint :
     IsSelfAdjoint (section3SinAngleOperator U V) :=
-  (projection U - projection V).modulus_isSelfAdjoint
+  (U.starProjection - V.starProjection).modulus_isSelfAdjoint
 
 /-- The sine operator is a contraction. -/
 theorem norm_section3SinAngleOperator_le_one :
@@ -279,8 +279,8 @@ theorem section3SinAngleOperator_mul_self_eq_halmosSineSq :
     section3SinAngleOperator U V * section3SinAngleOperator U V =
       halmosSineSq U V := by
   rw [section3SinAngleOperator, ContinuousLinearMap.modulus_mul_self]
-  have hadj : (projection U - projection V : H →L[𝕜] H).adjoint =
-      projection U - projection V := by
+  have hadj : (U.starProjection - V.starProjection : H →L[𝕜] H).adjoint =
+      U.starProjection - V.starProjection := by
     rw [← ContinuousLinearMap.star_eq_adjoint, star_sub,
       (isSelfAdjoint_starProjection U).star_eq,
       (isSelfAdjoint_starProjection V).star_eq]
@@ -295,10 +295,10 @@ theorem section3CanonicalAbsoluteValue_mul_self_eq_halmosCosineSq :
         ContinuousLinearMap.modulus (spectraCanonicalIntertwiner U V) =
       halmosCosineSq U V := by
   rw [ContinuousLinearMap.modulus_mul_self_eq_star_mul_self, star_spectraCanonicalIntertwiner]
-  let P : H →L[𝕜] H := projection U
-  let Pc : H →L[𝕜] H := complementaryProjection U
-  let Q : H →L[𝕜] H := projection V
-  let Qc : H →L[𝕜] H := complementaryProjection V
+  let P : H →L[𝕜] H := U.starProjection
+  let Pc : H →L[𝕜] H := (Uᗮ).starProjection
+  let Q : H →L[𝕜] H := V.starProjection
+  let Qc : H →L[𝕜] H := (Vᗮ).starProjection
   change (P * Q + Pc * Qc) * (Q * P + Qc * Pc) =
     P * Q * P + Pc * Qc * Pc
   have hQ : Q * Q = Q := by simp [Q]
@@ -352,7 +352,7 @@ theorem section3CosAngleOperator_eq_canonicalAbsoluteValue :
 theorem section3SinAngleOperator_symm :
     section3SinAngleOperator V U = section3SinAngleOperator U V := by
   rw [section3SinAngleOperator, section3SinAngleOperator]
-  have hneg : projection V - projection U = -(projection U - projection V) := by
+  have hneg : V.starProjection - U.starProjection = -(U.starProjection - V.starProjection) := by
     abel
   rw [hneg, ContinuousLinearMap.modulus_neg]
 
@@ -376,7 +376,7 @@ theorem section3DirectRotation_swap :
 
 /-- `sin Θ` commutes with the source projection. -/
 theorem section3SinAngleOperator_comm_projection :
-    Commute (section3SinAngleOperator U V) (projection U) := by
+    Commute (section3SinAngleOperator U V) (U.starProjection) := by
   exact TauCeti.commute_of_commute_mul_self
     (section3SinAngleOperator_nonneg U V)
     (by
@@ -385,26 +385,26 @@ theorem section3SinAngleOperator_comm_projection :
 
 /-- `sin Θ` commutes with the target projection. -/
 theorem section3SinAngleOperator_comm_projection_right :
-    Commute (section3SinAngleOperator U V) (projection V) := by
-  have hsinQ : Commute (halmosSineSq U V) (projection V) := by
+    Commute (section3SinAngleOperator U V) (V.starProjection) := by
+  have hsinQ : Commute (halmosSineSq U V) (V.starProjection) := by
     have hcosQ := halmosCosineSq_commute_projection_right U V
     have hs : halmosSineSq U V = 1 - halmosCosineSq U V :=
       eq_sub_of_add_eq' (halmosCosineSq_add_sineSq U V)
     rw [hs]
-    exact (Commute.one_left (projection V)).sub_left hcosQ
+    exact (Commute.one_left (V.starProjection)).sub_left hcosQ
   exact TauCeti.commute_of_commute_mul_self
     (section3SinAngleOperator_nonneg U V)
     (by rwa [section3SinAngleOperator_mul_self_eq_halmosSineSq])
 
 /-- Proposition 3.5: `Θ` commutes with `P`. -/
 theorem section3AngleOperator_comm_projection :
-    Commute (section3AngleOperator U V) (projection U) := by
+    Commute (section3AngleOperator U V) (U.starProjection) := by
   rw [section3AngleOperator]
   exact Commute.cfc_real (section3SinAngleOperator_comm_projection U V) Real.arcsin
 
 /-- Proposition 3.5: `Θ` commutes with `Q`. -/
 theorem section3AngleOperator_comm_projection_right :
-    Commute (section3AngleOperator U V) (projection V) := by
+    Commute (section3AngleOperator U V) (V.starProjection) := by
   rw [section3AngleOperator]
   exact Commute.cfc_real (section3SinAngleOperator_comm_projection_right U V) Real.arcsin
 

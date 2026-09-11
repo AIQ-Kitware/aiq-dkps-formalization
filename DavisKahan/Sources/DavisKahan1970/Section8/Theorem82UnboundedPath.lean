@@ -64,8 +64,8 @@ theorem addBounded_addBounded (A : Hc →ₗ.[ℂ] Hc) (V W : Hc →L[ℂ] Hc) :
 omit [CompleteSpace Hc] in
 /-- A real multiple of a self-adjoint operator is self-adjoint. -/
 theorem isSelfAdjointOperator_realSmul {V : Hc →L[ℂ] Hc}
-    (hV : DavisKahan.IsSelfAdjointOperator V) (c : ℝ) :
-    DavisKahan.IsSelfAdjointOperator ((c : ℂ) • V) := by
+    (hV : V.IsSymmetric) (c : ℝ) :
+    ContinuousLinearMap.IsSymmetric ((c : ℂ) • V) := by
   intro x y
   show ⟪(c : ℂ) • V x, y⟫_ℂ = ⟪x, (c : ℂ) • V y⟫_ℂ
   rw [inner_smul_left, inner_smul_right, Complex.conj_ofReal]
@@ -86,7 +86,7 @@ def pathOperator (A : Hc →ₗ.[ℂ] Hc) (Hop : Hc →L[ℂ] Hc) (t : ℝ) : Hc
 
 /-- Every operator on the path is self-adjoint. -/
 theorem isSelfAdjoint_pathOperator {A : Hc →ₗ.[ℂ] Hc} (hA : IsSelfAdjoint A)
-    {Hop : Hc →L[ℂ] Hc} (hHop : DavisKahan.IsSelfAdjointOperator Hop) (t : ℝ) :
+    {Hop : Hc →L[ℂ] Hc} (hHop : Hop.IsSymmetric) (t : ℝ) :
     IsSelfAdjoint (pathOperator A Hop t) :=
   DavisKahan.addBounded_isSelfAdjoint A hA _ (isSelfAdjointOperator_realSmul hHop _)
 
@@ -116,24 +116,24 @@ theorem pathOperator_zero (A : Hc →ₗ.[ℂ] Hc) (Hop : Hc →L[ℂ] Hc) :
 
 /-- The band subspace along the path. -/
 def pathBand {A : Hc →ₗ.[ℂ] Hc} (hA : IsSelfAdjoint A) {Hop : Hc →L[ℂ] Hc}
-    (hHop : DavisKahan.IsSelfAdjointOperator Hop) (l r : ℝ) (t : ℝ) : Submodule ℂ Hc :=
+    (hHop : Hop.IsSymmetric) (l r : ℝ) (t : ℝ) : Submodule ℂ Hc :=
   DavisKahan.bandSubspace (isSelfAdjoint_pathOperator hA hHop t) l r
 
 /-- The path band, unfolded. -/
 theorem pathBand_def {A : Hc →ₗ.[ℂ] Hc} (hA : IsSelfAdjoint A) {Hop : Hc →L[ℂ] Hc}
-    (hHop : DavisKahan.IsSelfAdjointOperator Hop) (l r : ℝ) (t : ℝ) :
+    (hHop : Hop.IsSymmetric) (l r : ℝ) (t : ℝ) :
     pathBand hA hHop l r t
       = DavisKahan.bandSubspace (isSelfAdjoint_pathOperator hA hHop t) l r := rfl
 
 /-- The path band is a spectral range, hence orthogonally complemented. -/
 instance pathBand_hasOrthogonalProjection {A : Hc →ₗ.[ℂ] Hc} (hA : IsSelfAdjoint A)
-    {Hop : Hc →L[ℂ] Hc} (hHop : DavisKahan.IsSelfAdjointOperator Hop) (l r : ℝ) (t : ℝ) :
+    {Hop : Hc →L[ℂ] Hc} (hHop : Hop.IsSymmetric) (l r : ℝ) (t : ℝ) :
     (pathBand hA hHop l r t).HasOrthogonalProjection :=
   DavisKahan.bandSubspace_hasOrthogonalProjection _ _ _
 
 /-- The path band reduces the operator at its own parameter. -/
 theorem reducesSubspace_pathBand {A : Hc →ₗ.[ℂ] Hc} (hA : IsSelfAdjoint A)
-    {Hop : Hc →L[ℂ] Hc} (hHop : DavisKahan.IsSelfAdjointOperator Hop) (l r : ℝ) (t : ℝ) :
+    {Hop : Hc →L[ℂ] Hc} (hHop : Hop.IsSymmetric) (l r : ℝ) (t : ℝ) :
     TauCeti.LinearPMap.ReducesSubspace (pathOperator A Hop t) (pathBand hA hHop l r t) :=
   DavisKahan.reducesSubspace_bandSubspace _ _ _
 
@@ -160,7 +160,7 @@ what lets `subst` put it in the shape
 theorem norm_sinTwoAngle_path_le
     [TopologicalSpace.SeparableSpace Hc]
     {B0 Bt : Hc →ₗ.[ℂ] Hc} (hBt : IsSelfAdjoint Bt)
-    (K : Hc →L[ℂ] Hc) (hK : DavisKahan.IsSelfAdjointOperator K)
+    (K : Hc →L[ℂ] Hc) (hK : K.IsSymmetric)
     (hlink : B0 = TauCeti.LinearPMap.addBounded Bt K)
     {R Q : Submodule ℂ Hc} [R.HasOrthogonalProjection] [Q.HasOrthogonalProjection]
     (hRred : TauCeti.LinearPMap.ReducesSubspace Bt R)
@@ -198,7 +198,7 @@ block placements read as an interval/exterior gap. -/
 theorem theorem8_2_perturbationHalfGap_unbounded_complex
     [TopologicalSpace.SeparableSpace Hc]
     {A : Hc →ₗ.[ℂ] Hc} (hA : IsSelfAdjoint A)
-    (Hop : Hc →L[ℂ] Hc) (hHop : DavisKahan.IsSelfAdjointOperator Hop)
+    (Hop : Hc →L[ℂ] Hc) (hHop : Hop.IsSymmetric)
     {P Q : Submodule ℂ Hc} [P.HasOrthogonalProjection] [Q.HasOrthogonalProjection]
     {alpha beta delta : ℝ} (hdelta : 0 < delta) (hab : beta ≤ alpha)
     (hPred : TauCeti.LinearPMap.ReducesSubspace A P)
@@ -214,7 +214,7 @@ theorem theorem8_2_perturbationHalfGap_unbounded_complex
       (TauCeti.LinearPMap.reducingRestriction A P hPred)
       ⊆ Set.Icc (beta - delta / 2) (alpha + delta / 2))
     (hsmall : ‖Hop‖ < delta / 2) :
-    DavisKahan.directedGap P Q < Real.sqrt 2 / 2 := by
+    P.directedProjectionGap Q < Real.sqrt 2 / 2 := by
   classical
   have hQgap : FormBoundedSylvesterGap
       (TauCeti.LinearPMap.reducingRestriction (TauCeti.LinearPMap.addBounded A Hop) Q hQred)
@@ -259,8 +259,8 @@ theorem theorem8_2_perturbationHalfGap_unbounded_complex
     exact hstab
   -- the moving branch and the tracked quantity
   obtain ⟨f, hfdef⟩ : ∃ f : ℝ → ℝ,
-      ∀ t, f t = DavisKahan.directedGap (pathBand hA hHop l r t) Q :=
-    ⟨fun t => DavisKahan.directedGap (pathBand hA hHop l r t) Q, fun _ => rfl⟩
+      ∀ t, f t = Submodule.directedProjectionGap (pathBand hA hHop l r t) Q :=
+    ⟨fun t => Submodule.directedProjectionGap (pathBand hA hHop l r t) Q, fun _ => rfl⟩
   -- Lipschitz continuity, from the band estimate
   have hlip : ∀ s t : ℝ, s ∈ Set.Icc (0 : ℝ) 1 → t ∈ Set.Icc (0 : ℝ) 1 →
       |f s - f t| ≤ |s - t| * gam / d := by
@@ -270,15 +270,15 @@ theorem theorem8_2_perturbationHalfGap_unbounded_complex
       rw [pathOperator, pathOperator, addBounded_addBounded]
       congr 1
       module
-    have hsa : DavisKahan.IsSelfAdjointOperator (((s - t : ℝ)) • Hop) :=
+    have hsa : ContinuousLinearMap.IsSymmetric (((s - t : ℝ)) • Hop) :=
       isSelfAdjointOperator_realSmul hHop _
     have hband := DavisKahan.subspaceGap_bandSubspace_le
       (isSelfAdjoint_pathOperator hA hHop s) (isSelfAdjoint_pathOperator hA hHop t)
       (((s - t : ℝ)) • Hop) hsa hlink hlr hd (hspec s hs) (hspec t ht)
     rw [norm_realSmul, ← hgamdef] at hband
-    have hband' : d * DavisKahan.subspaceGap (pathBand hA hHop l r s)
+    have hband' : d * Submodule.projectionGap (pathBand hA hHop l r s)
         (pathBand hA hHop l r t) ≤ |s - t| * gam := hband
-    have hcomp : |f s - f t| ≤ DavisKahan.subspaceGap (pathBand hA hHop l r s)
+    have hcomp : |f s - f t| ≤ Submodule.projectionGap (pathBand hA hHop l r s)
         (pathBand hA hHop l r t) := by
       rw [hfdef s, hfdef t]
       exact DavisKahan.abs_directedGap_sub_directedGap_le _ _ _
@@ -370,7 +370,7 @@ theorem theorem8_2_perturbationHalfGap_unbounded_complex
   have hboot : ∀ t : ℝ, t ∈ Set.Icc (0 : ℝ) 1 → f t ≤ Real.sqrt 2 / 2 →
       f t < Real.sqrt 2 / 2 := by
     intro t ht hclose
-    have hsa : DavisKahan.IsSelfAdjointOperator (((t : ℝ)) • Hop) :=
+    have hsa : ContinuousLinearMap.IsSymmetric (((t : ℝ)) • Hop) :=
       isSelfAdjointOperator_realSmul hHop _
     have hlink : TauCeti.LinearPMap.addBounded A Hop
         = TauCeti.LinearPMap.addBounded (pathOperator A Hop t) (((t : ℝ)) • Hop) :=
@@ -379,7 +379,8 @@ theorem theorem8_2_perturbationHalfGap_unbounded_complex
       (((t : ℝ)) • Hop) hsa hlink (reducesSubspace_pathBand hA hHop l r t) hQred
       hdelta hQgap
     rw [norm_realSmul, ← hgamdef, abs_of_nonneg ht.1] at hsin
-    have hclose' : DavisKahan.directedGap (pathBand hA hHop l r t) Q ≤ Real.sqrt 2 / 2 := by
+    have hclose' : Submodule.directedProjectionGap (pathBand hA hHop l r t) Q ≤ Real.sqrt 2 / 2 :=
+      by
       rw [← hfdef t]; exact hclose
     have hlowbnd := DavisKahan.Angle.sqrt_two_mul_directedGap_le_norm_sinTwoAngleOperator
       Q (pathBand hA hHop l r t) hclose'
@@ -424,7 +425,7 @@ theorem theorem8_2_perturbationHalfGap_unbounded_complex
     ext x
     show (pathBand hA hHop l r 1).starProjection (P.starProjection x) = P.starProjection x
     exact Submodule.starProjection_eq_self_iff.mpr (hR1 (P.starProjection_apply_mem x))
-  have hle : DavisKahan.directedGap P Q ≤ f 1 := by
+  have hle : P.directedProjectionGap Q ≤ f 1 := by
     rw [hfdef 1]
     show ‖Qᗮ.starProjection ∘L P.starProjection‖ ≤
       ‖Qᗮ.starProjection ∘L (pathBand hA hHop l r 1).starProjection‖
@@ -449,7 +450,7 @@ its constructive form.  No finite-dimensionality and no rank hypothesis. -/
 theorem theorem8_2_perturbationHalfGap_maximalAngle_lt_unbounded_complex
     [TopologicalSpace.SeparableSpace Hc]
     {A : Hc →ₗ.[ℂ] Hc} (hA : IsSelfAdjoint A)
-    (Hop : Hc →L[ℂ] Hc) (hHop : DavisKahan.IsSelfAdjointOperator Hop)
+    (Hop : Hc →L[ℂ] Hc) (hHop : Hop.IsSymmetric)
     {P Q : Submodule ℂ Hc} [P.HasOrthogonalProjection] [Q.HasOrthogonalProjection]
     {alpha beta delta : ℝ} (hdelta : 0 < delta) (hab : beta ≤ alpha)
     (hPred : TauCeti.LinearPMap.ReducesSubspace A P)
@@ -468,7 +469,7 @@ theorem theorem8_2_perturbationHalfGap_maximalAngle_lt_unbounded_complex
     (hsmall : ‖Hop‖ < delta / 2) :
     TauCeti.DavisKahanExt.maximalAngle P Q < Real.pi / 4 := by
   refine (maximalAngle_lt_pi_div_four_iff P Q).2 ?_
-  show DavisKahan.subspaceGap P Q < Real.sqrt 2 / 2
+  show P.projectionGap Q < Real.sqrt 2 / 2
   rw [DavisKahan.subspaceGap_eq_directedGap_of_crossedDefectsEquivalent P Q hcross]
   exact theorem8_2_perturbationHalfGap_unbounded_complex hA Hop hHop hdelta hab
     hPred hQred hQspec hQperp hPspec hsmall
@@ -499,7 +500,7 @@ The public type carries `‖R‖ < δ/2` and does **not** acquire `‖H‖ < δ/
 theorem theorem8_2_residualHalfGap_unbounded_complex
     [TopologicalSpace.SeparableSpace Hc]
     {A : Hc →ₗ.[ℂ] Hc} (hA : IsSelfAdjoint A)
-    (Hop : Hc →L[ℂ] Hc) (hHop : DavisKahan.IsSelfAdjointOperator Hop)
+    (Hop : Hc →L[ℂ] Hc) (hHop : Hop.IsSymmetric)
     {P Q : Submodule ℂ Hc} [P.HasOrthogonalProjection] [Q.HasOrthogonalProjection]
     {alpha beta delta : ℝ} (hdelta : 0 < delta) (hab : beta ≤ alpha)
     (hPred : TauCeti.LinearPMap.ReducesSubspace A P)
@@ -515,13 +516,13 @@ theorem theorem8_2_residualHalfGap_unbounded_complex
       (TauCeti.LinearPMap.reducingRestriction A P hPred)
       ⊆ Set.Icc (beta - delta / 2) (alpha + delta / 2))
     (hRsmall : ‖Hop ∘L (P.subtypeL : P →L[ℂ] Hc)‖ < delta / 2) :
-    DavisKahan.directedGap P Q < Real.sqrt 2 / 2 := by
+    P.directedProjectionGap Q < Real.sqrt 2 / 2 := by
   classical
   rw [TauCeti.norm_comp_subtypeL_eq_norm_comp_starProjection] at hRsmall
   obtain ⟨K', hK'sa, hK'col, hK'norm⟩ :=
     TauCeti.exists_selfAdjoint_completion_eq_norm_restriction Hop
       (ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mpr hHop) P
-  have hK'sym : DavisKahan.IsSelfAdjointOperator K' :=
+  have hK'sym : K.IsSymmetric' :=
     ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mp hK'sa
   have hK'small : ‖K'‖ < delta / 2 := by rw [hK'norm]; exact hRsmall
   have hK'P : ∀ x ∈ P, K' x = Hop x := by
@@ -530,7 +531,7 @@ theorem theorem8_2_residualHalfGap_unbounded_complex
     have h := congrArg (fun M : Hc →L[ℂ] Hc => M x) hK'col
     simpa only [ContinuousLinearMap.comp_apply, hfix] using h
   obtain ⟨D, hDdef⟩ : ∃ D : Hc →L[ℂ] Hc, D = Hop - K' := ⟨_, rfl⟩
-  have hDsym : DavisKahan.IsSelfAdjointOperator D := by
+  have hDsym : D.IsSymmetric := by
     intro x y
     have h1 : ⟪Hop x, y⟫_ℂ = ⟪x, Hop y⟫_ℂ := hHop x y
     have h2 : ⟪K' x, y⟫_ℂ = ⟪x, K' y⟫_ℂ := hK'sym x y
@@ -593,7 +594,7 @@ residual alternative.** -/
 theorem theorem8_2_residualHalfGap_maximalAngle_lt_unbounded_complex
     [TopologicalSpace.SeparableSpace Hc]
     {A : Hc →ₗ.[ℂ] Hc} (hA : IsSelfAdjoint A)
-    (Hop : Hc →L[ℂ] Hc) (hHop : DavisKahan.IsSelfAdjointOperator Hop)
+    (Hop : Hc →L[ℂ] Hc) (hHop : Hop.IsSymmetric)
     {P Q : Submodule ℂ Hc} [P.HasOrthogonalProjection] [Q.HasOrthogonalProjection]
     {alpha beta delta : ℝ} (hdelta : 0 < delta) (hab : beta ≤ alpha)
     (hPred : TauCeti.LinearPMap.ReducesSubspace A P)
@@ -612,7 +613,7 @@ theorem theorem8_2_residualHalfGap_maximalAngle_lt_unbounded_complex
     (hRsmall : ‖Hop ∘L (P.subtypeL : P →L[ℂ] Hc)‖ < delta / 2) :
     TauCeti.DavisKahanExt.maximalAngle P Q < Real.pi / 4 := by
   refine (maximalAngle_lt_pi_div_four_iff P Q).2 ?_
-  show DavisKahan.subspaceGap P Q < Real.sqrt 2 / 2
+  show P.projectionGap Q < Real.sqrt 2 / 2
   rw [DavisKahan.subspaceGap_eq_directedGap_of_crossedDefectsEquivalent P Q hcross]
   exact theorem8_2_residualHalfGap_unbounded_complex hA Hop hHop hdelta hab
     hPred hQred hQspec hQperp hPspec hRsmall
@@ -634,7 +635,7 @@ theorem theorem8_2_perturbationHalfGap_unbounded_real
     {Er : Type v} [NormedAddCommGroup Er] [InnerProductSpace ℝ Er] [CompleteSpace Er]
     [TopologicalSpace.SeparableSpace Er]
     {A : Er →ₗ.[ℝ] Er} (hA : IsSelfAdjoint A)
-    (Hop : Er →L[ℝ] Er) (hHop : DavisKahan.IsSelfAdjointOperator Hop)
+    (Hop : Er →L[ℝ] Er) (hHop : Hop.IsSymmetric)
     {P Q : Submodule ℝ Er} [P.HasOrthogonalProjection] [Q.HasOrthogonalProjection]
     {alpha beta delta : ℝ} (hdelta : 0 < delta) (hab : beta ≤ alpha)
     (hPred : TauCeti.LinearPMap.ReducesSubspace A P)
@@ -650,13 +651,13 @@ theorem theorem8_2_perturbationHalfGap_unbounded_real
       (TauCeti.LinearPMap.reducingRestriction A P hPred)
       ⊆ Set.Icc (beta - delta / 2) (alpha + delta / 2))
     (hsmall : ‖Hop‖ < delta / 2) :
-    DavisKahan.directedGap P Q < Real.sqrt 2 / 2 := by
+    P.directedProjectionGap Q < Real.sqrt 2 / 2 := by
   classical
   have hsep : TopologicalSpace.SeparableSpace (TauCeti.RealComplexification Er) :=
     DavisKahan.Foundation.RealComplexification.separableSpace_realComplexification
   have hAC : IsSelfAdjoint (TauCeti.LinearPMap.complexifyReal A) :=
     TauCeti.LinearPMap.isSelfAdjoint_complexifyReal hA
-  have hHC : DavisKahan.IsSelfAdjointOperator (complexify Hop) :=
+  have hHC : ContinuousLinearMap.IsSymmetric (complexify Hop) :=
     (TauCeti.RealComplexification.complexify_isSymmetric_iff Hop).mpr hHop
   have hPredC : TauCeti.LinearPMap.ReducesSubspace (TauCeti.LinearPMap.complexifyReal A)
       (DavisKahan.Foundation.RealComplexification.complexifySubmodule P) :=
@@ -722,7 +723,7 @@ theorem theorem8_2_residualHalfGap_unbounded_real
     {Er : Type v} [NormedAddCommGroup Er] [InnerProductSpace ℝ Er] [CompleteSpace Er]
     [TopologicalSpace.SeparableSpace Er]
     {A : Er →ₗ.[ℝ] Er} (hA : IsSelfAdjoint A)
-    (Hop : Er →L[ℝ] Er) (hHop : DavisKahan.IsSelfAdjointOperator Hop)
+    (Hop : Er →L[ℝ] Er) (hHop : Hop.IsSymmetric)
     {P Q : Submodule ℝ Er} [P.HasOrthogonalProjection] [Q.HasOrthogonalProjection]
     {alpha beta delta : ℝ} (hdelta : 0 < delta) (hab : beta ≤ alpha)
     (hPred : TauCeti.LinearPMap.ReducesSubspace A P)
@@ -738,13 +739,13 @@ theorem theorem8_2_residualHalfGap_unbounded_real
       (TauCeti.LinearPMap.reducingRestriction A P hPred)
       ⊆ Set.Icc (beta - delta / 2) (alpha + delta / 2))
     (hRsmall : ‖Hop ∘L (P.subtypeL : P →L[ℝ] Er)‖ < delta / 2) :
-    DavisKahan.directedGap P Q < Real.sqrt 2 / 2 := by
+    P.directedProjectionGap Q < Real.sqrt 2 / 2 := by
   classical
   have hsep : TopologicalSpace.SeparableSpace (TauCeti.RealComplexification Er) :=
     DavisKahan.Foundation.RealComplexification.separableSpace_realComplexification
   have hAC : IsSelfAdjoint (TauCeti.LinearPMap.complexifyReal A) :=
     TauCeti.LinearPMap.isSelfAdjoint_complexifyReal hA
-  have hHC : DavisKahan.IsSelfAdjointOperator (complexify Hop) :=
+  have hHC : ContinuousLinearMap.IsSymmetric (complexify Hop) :=
     (TauCeti.RealComplexification.complexify_isSymmetric_iff Hop).mpr hHop
   have hPredC : TauCeti.LinearPMap.ReducesSubspace (TauCeti.LinearPMap.complexifyReal A)
       (DavisKahan.Foundation.RealComplexification.complexifySubmodule P) :=
@@ -802,7 +803,7 @@ theorem theorem8_2_perturbationHalfGap_maximalAngle_lt_unbounded_real
     {Er : Type v} [NormedAddCommGroup Er] [InnerProductSpace ℝ Er] [CompleteSpace Er]
     [TopologicalSpace.SeparableSpace Er]
     {A : Er →ₗ.[ℝ] Er} (hA : IsSelfAdjoint A)
-    (Hop : Er →L[ℝ] Er) (hHop : DavisKahan.IsSelfAdjointOperator Hop)
+    (Hop : Er →L[ℝ] Er) (hHop : Hop.IsSymmetric)
     {P Q : Submodule ℝ Er} [P.HasOrthogonalProjection] [Q.HasOrthogonalProjection]
     {alpha beta delta : ℝ} (hdelta : 0 < delta) (hab : beta ≤ alpha)
     (hPred : TauCeti.LinearPMap.ReducesSubspace A P)
@@ -821,7 +822,7 @@ theorem theorem8_2_perturbationHalfGap_maximalAngle_lt_unbounded_real
     (hsmall : ‖Hop‖ < delta / 2) :
     TauCeti.DavisKahanExt.maximalAngle P Q < Real.pi / 4 := by
   refine (maximalAngle_lt_pi_div_four_iff P Q).2 ?_
-  show DavisKahan.subspaceGap P Q < Real.sqrt 2 / 2
+  show P.projectionGap Q < Real.sqrt 2 / 2
   rw [DavisKahan.subspaceGap_eq_directedGap_of_crossedDefectsEquivalent P Q hcross]
   exact theorem8_2_perturbationHalfGap_unbounded_real hA Hop hHop hdelta hab
     hPred hQred hQspec hQperp hPspec hsmall
@@ -832,7 +833,7 @@ theorem theorem8_2_residualHalfGap_maximalAngle_lt_unbounded_real
     {Er : Type v} [NormedAddCommGroup Er] [InnerProductSpace ℝ Er] [CompleteSpace Er]
     [TopologicalSpace.SeparableSpace Er]
     {A : Er →ₗ.[ℝ] Er} (hA : IsSelfAdjoint A)
-    (Hop : Er →L[ℝ] Er) (hHop : DavisKahan.IsSelfAdjointOperator Hop)
+    (Hop : Er →L[ℝ] Er) (hHop : Hop.IsSymmetric)
     {P Q : Submodule ℝ Er} [P.HasOrthogonalProjection] [Q.HasOrthogonalProjection]
     {alpha beta delta : ℝ} (hdelta : 0 < delta) (hab : beta ≤ alpha)
     (hPred : TauCeti.LinearPMap.ReducesSubspace A P)
@@ -851,7 +852,7 @@ theorem theorem8_2_residualHalfGap_maximalAngle_lt_unbounded_real
     (hRsmall : ‖Hop ∘L (P.subtypeL : P →L[ℝ] Er)‖ < delta / 2) :
     TauCeti.DavisKahanExt.maximalAngle P Q < Real.pi / 4 := by
   refine (maximalAngle_lt_pi_div_four_iff P Q).2 ?_
-  show DavisKahan.subspaceGap P Q < Real.sqrt 2 / 2
+  show P.projectionGap Q < Real.sqrt 2 / 2
   rw [DavisKahan.subspaceGap_eq_directedGap_of_crossedDefectsEquivalent P Q hcross]
   exact theorem8_2_residualHalfGap_unbounded_real hA Hop hHop hdelta hab
     hPred hQred hQspec hQperp hPspec hRsmall
@@ -867,7 +868,7 @@ directed conclusion into the printed symmetric one. -/
 theorem theorem8_2_branch_maximalAngle_lt_unbounded_source_complex
     [TopologicalSpace.SeparableSpace Hc]
     {A : Hc →ₗ.[ℂ] Hc} (hA : IsSelfAdjoint A)
-    (Hop : Hc →L[ℂ] Hc) (hHop : DavisKahan.IsSelfAdjointOperator Hop)
+    (Hop : Hc →L[ℂ] Hc) (hHop : Hop.IsSymmetric)
     {P Q : Submodule ℂ Hc} [P.HasOrthogonalProjection] [Q.HasOrthogonalProjection]
     {alpha beta delta : ℝ} (hdelta : 0 < delta) (hab : beta ≤ alpha)
     (hPred : TauCeti.LinearPMap.ReducesSubspace A P)
@@ -897,7 +898,7 @@ theorem theorem8_2_branch_maximalAngle_lt_unbounded_source_real
     {Er : Type v} [NormedAddCommGroup Er] [InnerProductSpace ℝ Er] [CompleteSpace Er]
     [TopologicalSpace.SeparableSpace Er]
     {A : Er →ₗ.[ℝ] Er} (hA : IsSelfAdjoint A)
-    (Hop : Er →L[ℝ] Er) (hHop : DavisKahan.IsSelfAdjointOperator Hop)
+    (Hop : Er →L[ℝ] Er) (hHop : Hop.IsSymmetric)
     {P Q : Submodule ℝ Er} [P.HasOrthogonalProjection] [Q.HasOrthogonalProjection]
     {alpha beta delta : ℝ} (hdelta : 0 < delta) (hab : beta ≤ alpha)
     (hPred : TauCeti.LinearPMap.ReducesSubspace A P)

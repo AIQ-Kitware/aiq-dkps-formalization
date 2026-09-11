@@ -233,7 +233,7 @@ theorem sinTwoTheta_commonDomain_block_kyFan
   have hDsa' : IsSelfAdjoint ((-2 : K) • trialOffDiagonalPart P 0 R) := by
     rw [IsSelfAdjoint, star_smul, hSsa.star_eq]
     norm_num
-  have hDsa : IsSelfAdjointOperator ((-2 : K) • trialOffDiagonalPart P 0 R) :=
+  have hDsa : ContinuousLinearMap.IsSymmetric ((-2 : K) • trialOffDiagonalPart P 0 R) :=
     ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mp hDsa'
   have hraw := sinTwoTheta_reflectionResidual_block_gauge_reducing_rclike
     hT hQ (KyFanDominantIdealFamily.kyFan (𝕜 := K) k hk)
@@ -352,7 +352,7 @@ theorem sinTwoTheta_commonDomain_whereDefinedUIN_rclike
         T (⟨(p : E), hp⟩) = A (⟨(p : E), by rw [← hdom]; exact hp⟩) + R p) ->
       N.Mem (Angle.directedSinTwoAngleOperator P Q) → N.Mem R ->
         gap * N.gaugeReal (Angle.directedSinTwoAngleOperator P Q) ≤ 2 * N.gaugeReal R) ∧
-    (∀ Hop : E →L[K] E, IsSelfAdjointOperator Hop ->
+    (∀ Hop : E →L[K] E, Hop.IsSymmetric ->
       T = TauCeti.LinearPMap.addBounded A Hop ->
       N.Mem (Angle.sinTwoAngleOperator P Q) → N.Mem Hop ->
         gap * N.gaugeReal (Angle.sinTwoAngleOperator P Q) ≤ 2 * N.gaugeReal Hop) := by

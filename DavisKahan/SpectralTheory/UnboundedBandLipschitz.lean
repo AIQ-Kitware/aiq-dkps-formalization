@@ -58,14 +58,14 @@ theorem reducesSubspace_bandSubspace {A : H →ₗ.[ℂ] H} (hA : IsSelfAdjoint 
 theorem at the operator norm. -/
 theorem directedGap_bandSubspace_le
     {A B : H →ₗ.[ℂ] H} (hA : IsSelfAdjoint A) (hB : IsSelfAdjoint B)
-    (K : H →L[ℂ] H) (hK : DavisKahan.IsSelfAdjointOperator K)
+    (K : H →L[ℂ] H) (hK : K.IsSymmetric)
     (hAB : B = TauCeti.LinearPMap.addBounded A K)
     {l r d : ℝ} (hlr : l ≤ r) (hd : 0 < d)
     (_hAspec : TauCeti.LinearPMap.realSpectrum A ⊆
       Set.Icc l r ∪ bandExterior l r d)
     (hBspec : TauCeti.LinearPMap.realSpectrum B ⊆
       Set.Icc l r ∪ bandExterior l r d) :
-    d * DavisKahan.directedGap (bandSubspace hA l r) (bandSubspace hB l r) ≤ ‖K‖ := by
+    d * Submodule.directedProjectionGap (bandSubspace hA l r) (bandSubspace hB l r) ≤ ‖K‖ := by
   subst hAB
   have hQred : TauCeti.LinearPMap.ReducesSubspace (TauCeti.LinearPMap.addBounded A K)
       (bandSubspace hB l r) := reducesSubspace_bandSubspace hB l r
@@ -87,15 +87,15 @@ estimates come from the unbounded `sin Θ` theorem in each orientation; the
 reverse one is the same theorem applied to `A = B + (−K)`. -/
 theorem subspaceGap_bandSubspace_le
     {A B : H →ₗ.[ℂ] H} (hA : IsSelfAdjoint A) (hB : IsSelfAdjoint B)
-    (K : H →L[ℂ] H) (hK : DavisKahan.IsSelfAdjointOperator K)
+    (K : H →L[ℂ] H) (hK : K.IsSymmetric)
     (hAB : B = TauCeti.LinearPMap.addBounded A K)
     {l r d : ℝ} (hlr : l ≤ r) (hd : 0 < d)
     (hAspec : TauCeti.LinearPMap.realSpectrum A ⊆
       Set.Icc l r ∪ bandExterior l r d)
     (hBspec : TauCeti.LinearPMap.realSpectrum B ⊆
       Set.Icc l r ∪ bandExterior l r d) :
-    d * DavisKahan.subspaceGap (bandSubspace hA l r) (bandSubspace hB l r) ≤ ‖K‖ := by
-  have hnegK : DavisKahan.IsSelfAdjointOperator (-K) := by
+    d * Submodule.projectionGap (bandSubspace hA l r) (bandSubspace hB l r) ≤ ‖K‖ := by
+  have hnegK : ContinuousLinearMap.IsSymmetric (-K) := by
     intro x y
     have h : ⟪K x, y⟫_ℂ = ⟪x, K y⟫_ℂ := hK x y
     show ⟪-(K x), y⟫_ℂ = ⟪x, -(K y)⟫_ℂ
@@ -127,8 +127,8 @@ bootstrap tracks. -/
 theorem abs_directedGap_sub_directedGap_le
     (U V W : Submodule ℂ H) [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
     [W.HasOrthogonalProjection] :
-    |DavisKahan.directedGap U W - DavisKahan.directedGap V W| ≤
-      DavisKahan.subspaceGap U V := by
+    |U.directedProjectionGap W - V.directedProjectionGap W| ≤
+      U.projectionGap V := by
   have hX : ‖(Wᗮ.starProjection : H →L[ℂ] H)‖ ≤ 1 := by
     refine ContinuousLinearMap.opNorm_le_bound _ zero_le_one fun y => ?_
     simpa using Wᗮ.norm_starProjection_apply_le y
@@ -214,7 +214,7 @@ omit [CompleteSpace H] in
 /-- A vanishing directed gap is a subspace inclusion. -/
 theorem le_of_directedGap_eq_zero (U V : Submodule ℂ H)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
-    (h : DavisKahan.directedGap U V = 0) : U ≤ V := by
+    (h : U.directedProjectionGap V = 0) : U ≤ V := by
   intro u hu
   have h0 : Vᗮ.starProjection ((U.starProjection) u) = 0 := by
     have hle : ‖(Vᗮ.starProjection ∘L U.starProjection) u‖ ≤
@@ -250,7 +250,7 @@ theorem le_of_band_exterior_spectra
       ⊆ bandExterior l r d) :
     P ≤ W := by
   subst hAB
-  have hzero : DavisKahan.IsSelfAdjointOperator (0 : H →L[ℂ] H) := by
+  have hzero : ContinuousLinearMap.IsSymmetric (0 : H →L[ℂ] H) := by
     intro x y
     simp
   have hgap : TauCeti.DavisKahan.Sylvester.FormBoundedSylvesterGap
@@ -261,7 +261,7 @@ theorem le_of_band_exterior_spectra
   have hle := TauCeti.DavisKahan1970.Section8.directedGap_le_of_reducingGap_unbounded_complex
     hA (0 : H →L[ℂ] H) hzero hPred hWred hd hgap
   rw [norm_zero] at hle
-  have hnn : (0 : ℝ) ≤ DavisKahan.directedGap P W :=
+  have hnn : (0 : ℝ) ≤ P.directedProjectionGap W :=
     norm_nonneg (Wᗮ.starProjection ∘L P.starProjection)
   refine le_of_directedGap_eq_zero P W (le_antisymm ?_ hnn)
   nlinarith [hle, hd, hnn]

@@ -52,7 +52,7 @@ perturbation norm enters. -/
 theorem directedGap_le_of_reducingGap_unbounded_complex
     {Hc : Type v} [NormedAddCommGroup Hc] [InnerProductSpace ℂ Hc] [CompleteSpace Hc]
     {A : Hc →ₗ.[ℂ] Hc} (hA : IsSelfAdjoint A)
-    (Hop : Hc →L[ℂ] Hc) (hHop : DavisKahan.IsSelfAdjointOperator Hop)
+    (Hop : Hc →L[ℂ] Hc) (hHop : Hop.IsSymmetric)
     {P Q : Submodule ℂ Hc} [P.HasOrthogonalProjection] [Q.HasOrthogonalProjection]
     (hPred : TauCeti.LinearPMap.ReducesSubspace A P)
     (hQred : TauCeti.LinearPMap.ReducesSubspace
@@ -62,7 +62,7 @@ theorem directedGap_le_of_reducingGap_unbounded_complex
       (TauCeti.LinearPMap.reducingRestriction A P hPred)
       (TauCeti.LinearPMap.reducingRestriction
         (TauCeti.LinearPMap.addBounded A Hop) Qᗮ hQred.orthogonal) δ) :
-    δ * DavisKahan.directedGap P Q ≤ ‖Hop‖ := by
+    δ * P.directedProjectionGap Q ≤ ‖Hop‖ := by
   classical
   have hB : IsSelfAdjoint (TauCeti.LinearPMap.addBounded A Hop) :=
     DavisKahan.addBounded_isSelfAdjoint A hA Hop hHop
@@ -98,7 +98,7 @@ theorem directedGap_le_of_reducingGap_unbounded_complex
     exact (Submodule.starProjection_orthogonal Q).symm
   rw [hblock] at hle
   have hgapeq : ‖Qᗮ.starProjection ∘L (P.subtypeL : P →L[ℂ] Hc)‖ =
-      DavisKahan.directedGap P Q :=
+      P.directedProjectionGap Q :=
     TauCeti.norm_comp_subtypeL_eq_norm_comp_starProjection Qᗮ.starProjection P
   rw [hgapeq] at hle
   refine hle.trans ?_

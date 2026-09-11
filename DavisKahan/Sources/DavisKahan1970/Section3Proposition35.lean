@@ -280,8 +280,8 @@ No acuteness: `J` here is the quarter turn of the completed direct rotation sele
 crossed-defect isometry, and the commutations for `P` and `Q` never needed acuteness at all. -/
 theorem proposition3_5_commutations
     (J : halmosSourceDefect U V ≃ₗᵢ[𝕜] halmosTargetDefect U V) :
-    Commute (proposition3_5_angleOperator U V) (TauCeti.DavisKahan.projection U) ∧
-      Commute (proposition3_5_angleOperator U V) (TauCeti.DavisKahan.projection V) ∧
+    Commute (proposition3_5_angleOperator U V) (U.starProjection) ∧
+      Commute (proposition3_5_angleOperator U V) (V.starProjection) ∧
       Commute (proposition3_5_angleOperator U V) (corollary3_2_nonacuteQuarterTurn U V J) ∧
       Commute (proposition3_5_angleOperator U V) (nonacuteDirectRotation U V J) :=
   ⟨section3AngleOperator_comm_projection U V,
@@ -293,8 +293,8 @@ theorem proposition3_5_commutations
 Kept for acute-only consumers; see the section note on why this is not a corollary of
 `proposition3_5_commutations`. -/
 theorem proposition3_5_commutations_acute (hacute : TauCeti.IsAcute U V) :
-    Commute (proposition3_5_angleOperator U V) (TauCeti.DavisKahan.projection U) ∧
-      Commute (proposition3_5_angleOperator U V) (TauCeti.DavisKahan.projection V) ∧
+    Commute (proposition3_5_angleOperator U V) (U.starProjection) ∧
+      Commute (proposition3_5_angleOperator U V) (V.starProjection) ∧
       Commute (proposition3_5_angleOperator U V) (proposition3_5_quarterTurn U V) ∧
       Commute (proposition3_5_angleOperator U V) (proposition3_5_directRotation U V) :=
   ⟨section3AngleOperator_comm_projection U V,

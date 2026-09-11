@@ -116,7 +116,7 @@ theorem norm_sinTwoAngleOperator_le_of_perturbedGap_unbounded_complex
     {Hc : Type v} [NormedAddCommGroup Hc] [InnerProductSpace ℂ Hc] [CompleteSpace Hc]
     [TopologicalSpace.SeparableSpace Hc]
     {A : Hc →ₗ.[ℂ] Hc} (hA : IsSelfAdjoint A)
-    (Hop : Hc →L[ℂ] Hc) (hHop : DavisKahan.IsSelfAdjointOperator Hop)
+    (Hop : Hc →L[ℂ] Hc) (hHop : Hop.IsSymmetric)
     {P Q : Submodule ℂ Hc} [P.HasOrthogonalProjection] [Q.HasOrthogonalProjection]
     (hPred : TauCeti.LinearPMap.ReducesSubspace A P)
     (hQred : TauCeti.LinearPMap.ReducesSubspace
@@ -157,7 +157,7 @@ scope, perturbation branch.**
 theorem theorem8_2_branch_maximalAngle_lt_unbounded_complex
     {Hc : Type v} [NormedAddCommGroup Hc] [InnerProductSpace ℂ Hc] [CompleteSpace Hc]
     {P Q : Submodule ℂ Hc} [P.HasOrthogonalProjection] [Q.HasOrthogonalProjection]
-    (hclosed : DavisKahan.subspaceGap P Q ≤ Real.sqrt 2 / 2)
+    (hclosed : P.projectionGap Q ≤ Real.sqrt 2 / 2)
     (hcross : DavisKahan.CrossedDefectsEquivalent Q P)
     (hblock : ‖TauCeti.DavisKahanExt.sinTwoAngleOperator P Q‖ < 1) :
     TauCeti.DavisKahanExt.maximalAngle P Q < Real.pi / 4 :=
@@ -194,7 +194,7 @@ theorem theorem8_2_branch_maximalAngle_lt_of_small_perturbation_unbounded_comple
     {Hc : Type v} [NormedAddCommGroup Hc] [InnerProductSpace ℂ Hc] [CompleteSpace Hc]
     [TopologicalSpace.SeparableSpace Hc]
     {A : Hc →ₗ.[ℂ] Hc} (hA : IsSelfAdjoint A)
-    (Hop : Hc →L[ℂ] Hc) (hHop : DavisKahan.IsSelfAdjointOperator Hop)
+    (Hop : Hc →L[ℂ] Hc) (hHop : Hop.IsSymmetric)
     {P Q : Submodule ℂ Hc} [P.HasOrthogonalProjection] [Q.HasOrthogonalProjection]
     (hPred : TauCeti.LinearPMap.ReducesSubspace A P)
     (hQred : TauCeti.LinearPMap.ReducesSubspace
@@ -205,7 +205,7 @@ theorem theorem8_2_branch_maximalAngle_lt_of_small_perturbation_unbounded_comple
         (TauCeti.LinearPMap.addBounded A Hop) Q hQred)
       (TauCeti.LinearPMap.reducingRestriction
         (TauCeti.LinearPMap.addBounded A Hop) Qᗮ hQred.orthogonal) δ)
-    (hclosed : DavisKahan.subspaceGap P Q ≤ Real.sqrt 2 / 2)
+    (hclosed : P.projectionGap Q ≤ Real.sqrt 2 / 2)
     (hcross : DavisKahan.CrossedDefectsEquivalent Q P)
     (hsmall : ‖Hop‖ < δ / 2) :
     TauCeti.DavisKahanExt.maximalAngle P Q < Real.pi / 4 := by

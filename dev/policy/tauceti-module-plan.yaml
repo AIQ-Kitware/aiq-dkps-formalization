@@ -64,6 +64,7 @@ topics:
     and reducing subspaces
   modules:
   - Analysis.Normed.Operator.LinearIsometry
+  - Analysis.Normed.Operator.Restriction
   - Analysis.InnerProductSpace.Basic
   - Analysis.InnerProductSpace.Gram.Matrix
   - Analysis.InnerProductSpace.OrthogonalSeries
@@ -441,6 +442,7 @@ rungs:
   - Analysis.InnerProductSpace.UnitarilyInvariantSeminorm.Instances
   - Analysis.InnerProductSpace.UnitarilyInvariantSeminorm.Majorization
   - Analysis.Normed.Operator.LinearIsometry
+  - Analysis.Normed.Operator.Restriction
 - id: F
   title: Ky Fan gauges and operator ideal families
   seeds:
@@ -513,6 +515,7 @@ rungs:
   - Analysis.InnerProductSpace.UnitarilyInvariantSeminorm
   - Analysis.Normed.FiniteLpGauge
   - Analysis.Normed.Operator.LinearIsometry
+  - Analysis.Normed.Operator.Restriction
   - Analysis.OperatorIdeal.ApproximationNumber.Adjoint
   - Analysis.OperatorIdeal.ApproximationNumber.Basic
   - Analysis.OperatorIdeal.ApproximationNumber.Compact

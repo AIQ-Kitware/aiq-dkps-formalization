@@ -96,13 +96,13 @@ so their self-adjointness -- which the `star`-block calculus needs -- has to be 
 canonical construction, where the block *is* the positive Halmos cosine. -/
 theorem isSelfAdjoint_source_block_spectraDirectRotation
     (hacute : IsUniformlyAcute U V) :
-    IsSelfAdjoint (projection U * spectraDirectRotation U V hacute * projection U) := by
+    IsSelfAdjoint (U.starProjection * spectraDirectRotation U V hacute * U.starProjection) := by
   have hC : IsSelfAdjoint
       (ContinuousLinearMap.modulus (spectraCanonicalIntertwiner U V)) :=
     ((ContinuousLinearMap.nonneg_iff_isPositive _).mp
       (ContinuousLinearMap.modulus_nonneg _)).isSelfAdjoint
   have hcomm : Commute
-      (ContinuousLinearMap.modulus (spectraCanonicalIntertwiner U V)) (projection U) :=
+      (ContinuousLinearMap.modulus (spectraCanonicalIntertwiner U V)) (U.starProjection) :=
     spectraCanonicalAbsoluteValue_commute_projection U V
   rw [projection_mul_spectraDirectRotation_mul_projection U V hacute]
   rw [IsSelfAdjoint, star_mul, (isSelfAdjoint_starProjection U).star_eq, hC.star_eq]
@@ -111,16 +111,16 @@ theorem isSelfAdjoint_source_block_spectraDirectRotation
 /-- The complementary diagonal block of the canonical direct rotation is self-adjoint. -/
 theorem isSelfAdjoint_complement_block_spectraDirectRotation
     (hacute : IsUniformlyAcute U V) :
-    IsSelfAdjoint (complementaryProjection U * spectraDirectRotation U V hacute *
-      complementaryProjection U) := by
+    IsSelfAdjoint ((Uᗮ).starProjection * spectraDirectRotation U V hacute *
+      (Uᗮ).starProjection) := by
   have hC : IsSelfAdjoint
       (ContinuousLinearMap.modulus (spectraCanonicalIntertwiner U V)) :=
     ((ContinuousLinearMap.nonneg_iff_isPositive _).mp
       (ContinuousLinearMap.modulus_nonneg _)).isSelfAdjoint
   have hcomm : Commute
       (ContinuousLinearMap.modulus (spectraCanonicalIntertwiner U V))
-      (complementaryProjection U) := by
-    have hcomp : complementaryProjection U = 1 - projection U :=
+      ((Uᗮ).starProjection) := by
+    have hcomp : (Uᗮ).starProjection = 1 - U.starProjection :=
       Submodule.starProjection_orthogonal' U
     rw [commute_iff_eq, hcomp, mul_sub, mul_one, sub_mul, one_mul,
       (spectraCanonicalAbsoluteValue_commute_projection U V).eq]
@@ -141,27 +141,27 @@ directed gaps needs acuteness (`Submodule.projectionGap_eq_max_directedProjectio
 only the maximum), and this is the acute half of it. -/
 theorem norm_projection_apply_le_of_forall_mem_source
     (hacute : IsUniformlyAcute U V) {r : ℝ} (hr : 0 ≤ r)
-    (hsrc : ∀ x ∈ U, ‖complementaryProjection V x‖ ≤ r * ‖x‖)
-    (w : H) (hw : w ∈ Uᗮ) : ‖projection V w‖ ≤ r * ‖w‖ := by
+    (hsrc : ∀ x ∈ U, ‖(Vᗮ).starProjection x‖ ≤ r * ‖x‖)
+    (w : H) (hw : w ∈ Uᗮ) : ‖V.starProjection w‖ ≤ r * ‖w‖ := by
   set W := spectraDirectRotation U V hacute with hWdef
-  have hcross : complementaryProjection U * W * projection U =
-      -star (projection U * W * complementaryProjection U) :=
+  have hcross : (Uᗮ).starProjection * W * U.starProjection =
+      -star (U.starProjection * W * (Uᗮ).starProjection) :=
     TauCeti.DavisKahan.spectraDirectRotation_crossed_blocks U V hacute
   obtain ⟨-, -, h12, h21⟩ :=
     star_blocks_eq U W (isSelfAdjoint_source_block_spectraDirectRotation U V hacute)
       (isSelfAdjoint_complement_block_spectraDirectRotation U V hacute) hcross
-  set L : H →L[ℂ] H := projection U * W * complementaryProjection U with hLdef
+  set L : H →L[ℂ] H := U.starProjection * W * (Uᗮ).starProjection with hLdef
   -- the crossed block of the adjoint is the adjoint of the crossed block
-  have hstarL : complementaryProjection U * star W * projection U = star L := by
+  have hstarL : (Uᗮ).starProjection * star W * U.starProjection = star L := by
     rw [h21, hcross, neg_neg]
   have hisom : ∀ z : H, ‖W z‖ = ‖z‖ := norm_spectraDirectRotation_apply U V hacute
   have hconjc : ∀ z : H,
-      complementaryProjection V z = W (complementaryProjection U (star W z)) := by
+      (Vᗮ).starProjection z = W ((Uᗮ).starProjection (star W z)) := by
     intro z
     have h := congrArg (fun T : H →L[ℂ] H => T z)
       (spectraDirectRotation_conjugates_complementaryProjection U V hacute)
     simpa only [mul_apply_eq_comp] using h.symm
-  have hconj : ∀ z : H, projection V z = W (projection U (star W z)) := by
+  have hconj : ∀ z : H, V.starProjection z = W (U.starProjection (star W z)) := by
     intro z
     have h := congrArg (fun T : H →L[ℂ] H => T z)
       (spectraDirectRotation_conjugates_projection U V hacute)
@@ -169,11 +169,11 @@ theorem norm_projection_apply_le_of_forall_mem_source
   -- the hypothesis bounds the adjoint crossed block
   have hstarLbound : ∀ y : H, ‖star L y‖ ≤ r * ‖y‖ := by
     intro y
-    have hy : star L y = complementaryProjection U (star W (projection U y)) := by
+    have hy : star L y = (Uᗮ).starProjection (star W (U.starProjection y)) := by
       rw [← hstarL]
       simp only [mul_apply_eq_comp]
-    have hval : ‖star L y‖ = ‖complementaryProjection V (projection U y)‖ := by
-      rw [hy, hconjc (projection U y), hisom]
+    have hval : ‖star L y‖ = ‖(Vᗮ).starProjection (U.starProjection y)‖ := by
+      rw [hy, hconjc (U.starProjection y), hisom]
     rw [hval]
     refine le_trans (hsrc _ (U.starProjection_apply_mem y)) ?_
     exact mul_le_mul_of_nonneg_left (U.norm_starProjection_apply_le y) hr
@@ -181,12 +181,12 @@ theorem norm_projection_apply_le_of_forall_mem_source
     rw [← norm_star L]
     exact ContinuousLinearMap.opNorm_le_bound _ hr hstarLbound
   -- and the other directed gap is read off the same block
-  have hwc : complementaryProjection U w = w :=
+  have hwc : (Uᗮ).starProjection w = w :=
     Submodule.starProjection_eq_self_iff.mpr hw
-  have hval : projection V w = W (-(L w)) := by
+  have hval : V.starProjection w = W (-(L w)) := by
     rw [hconj w]
-    have hy : projection U (star W w) =
-        (projection U * star W * complementaryProjection U) w := by
+    have hy : U.starProjection (star W w) =
+        (U.starProjection * star W * (Uᗮ).starProjection) w := by
       simp only [mul_apply_eq_comp, hwc]
     rw [hy, h12]
     simp only [neg_apply]
@@ -201,50 +201,50 @@ Definition 3.1 supplies the equality of the two crossed-block norms directly, so
 applies to the full nonacute direct-rotation scope. -/
 theorem norm_projection_apply_le_of_directRotation
     (T : H →L[ℂ] H) (hT : IsDirectRotation U V T)
-    (hsource_sa : IsSelfAdjoint (projection U * T * projection U))
+    (hsource_sa : IsSelfAdjoint (U.starProjection * T * U.starProjection))
     (hcomplement_sa :
-      IsSelfAdjoint (complementaryProjection U * T * complementaryProjection U))
+      IsSelfAdjoint ((Uᗮ).starProjection * T * (Uᗮ).starProjection))
     {r : ℝ} (hr : 0 ≤ r)
-    (hsrc : ∀ x ∈ U, ‖complementaryProjection V x‖ ≤ r * ‖x‖)
-    (w : H) (hw : w ∈ Uᗮ) : ‖projection V w‖ ≤ r * ‖w‖ := by
+    (hsrc : ∀ x ∈ U, ‖(Vᗮ).starProjection x‖ ≤ r * ‖x‖)
+    (w : H) (hw : w ∈ Uᗮ) : ‖V.starProjection w‖ ≤ r * ‖w‖ := by
   obtain ⟨-, -, h12, h21⟩ :=
     star_blocks_eq U T hsource_sa hcomplement_sa hT.crossed_blocks
-  set L : H →L[ℂ] H := projection U * T * complementaryProjection U with hLdef
-  have hstarL : complementaryProjection U * star T * projection U = star L := by
+  set L : H →L[ℂ] H := U.starProjection * T * (Uᗮ).starProjection with hLdef
+  have hstarL : (Uᗮ).starProjection * star T * U.starProjection = star L := by
     rw [h21, hT.crossed_blocks, neg_neg]
   have hisom : ∀ z : H, ‖T z‖ = ‖z‖ := fun z =>
     Unitary.norm_map ⟨T, hT.unitary_mem⟩ z
   have hconjc : ∀ z : H,
-      complementaryProjection V z = T (complementaryProjection U (star T z)) := by
+      (Vᗮ).starProjection z = T ((Uᗮ).starProjection (star T z)) := by
     intro z
     have h := congrArg (fun A : H →L[ℂ] H => A z)
       (TauCeti.DavisKahan.directRotation_conjugates_complementaryProjection
         U V T hT)
     simpa only [mul_apply_eq_comp] using h.symm
-  have hconj : ∀ z : H, projection V z = T (projection U (star T z)) := by
+  have hconj : ∀ z : H, V.starProjection z = T (U.starProjection (star T z)) := by
     intro z
     have h := congrArg (fun A : H →L[ℂ] H => A z)
       (TauCeti.DavisKahan.directRotation_conjugates_projection U V T hT)
     simpa only [mul_apply_eq_comp] using h.symm
   have hstarLbound : ∀ y : H, ‖star L y‖ ≤ r * ‖y‖ := by
     intro y
-    have hy : star L y = complementaryProjection U (star T (projection U y)) := by
+    have hy : star L y = (Uᗮ).starProjection (star T (U.starProjection y)) := by
       rw [← hstarL]
       simp only [mul_apply_eq_comp]
-    have hval : ‖star L y‖ = ‖complementaryProjection V (projection U y)‖ := by
-      rw [hy, hconjc (projection U y), hisom]
+    have hval : ‖star L y‖ = ‖(Vᗮ).starProjection (U.starProjection y)‖ := by
+      rw [hy, hconjc (U.starProjection y), hisom]
     rw [hval]
     refine le_trans (hsrc _ (U.starProjection_apply_mem y)) ?_
     exact mul_le_mul_of_nonneg_left (U.norm_starProjection_apply_le y) hr
   have hLnorm : ‖L‖ ≤ r := by
     rw [← norm_star L]
     exact ContinuousLinearMap.opNorm_le_bound _ hr hstarLbound
-  have hwc : complementaryProjection U w = w :=
+  have hwc : (Uᗮ).starProjection w = w :=
     Submodule.starProjection_eq_self_iff.mpr hw
-  have hval : projection V w = T (-(L w)) := by
+  have hval : V.starProjection w = T (-(L w)) := by
     rw [hconj w]
-    have hy : projection U (star T w) =
-        (projection U * star T * complementaryProjection U) w := by
+    have hy : U.starProjection (star T w) =
+        (U.starProjection * star T * (Uᗮ).starProjection) w := by
       simp only [mul_apply_eq_comp, hwc]
     rw [hy, h12]
     simp only [neg_apply]
@@ -256,27 +256,27 @@ omit [CompleteSpace H] in
 `‖P_V P_U x‖² + ‖P_{Vᗮ} P_{Uᗮ} x‖²`. -/
 theorem re_inner_halmosCosineSq_self (x : H) :
     RCLike.re ⟪x, halmosCosineSq U V x⟫_ℂ =
-      ‖projection V (projection U x)‖ ^ 2 +
-        ‖complementaryProjection V (complementaryProjection U x)‖ ^ 2 := by
+      ‖V.starProjection (U.starProjection x)‖ ^ 2 +
+        ‖(Vᗮ).starProjection ((Uᗮ).starProjection x)‖ ^ 2 := by
   have hval : halmosCosineSq U V x =
-      projection U (projection V (projection U x)) +
-        complementaryProjection U
-          (complementaryProjection V (complementaryProjection U x)) := by
-    show (projection U * projection V * projection U +
-      complementaryProjection U * complementaryProjection V *
-        complementaryProjection U) x = _
+      U.starProjection (V.starProjection (U.starProjection x)) +
+        (Uᗮ).starProjection
+          ((Vᗮ).starProjection ((Uᗮ).starProjection x)) := by
+    show (U.starProjection * V.starProjection * U.starProjection +
+      (Uᗮ).starProjection * (Vᗮ).starProjection *
+        (Uᗮ).starProjection) x = _
     simp only [add_apply, mul_apply_eq_comp]
   have hblock : ∀ (K : Submodule ℂ H) [K.HasOrthogonalProjection]
       (M : Submodule ℂ H) [M.HasOrthogonalProjection],
-      RCLike.re ⟪x, projection K (projection M (projection K x))⟫_ℂ =
-        ‖projection M (projection K x)‖ ^ 2 := by
+      RCLike.re ⟪x, K.starProjection (M.starProjection (K.starProjection x))⟫_ℂ =
+        ‖M.starProjection (K.starProjection x)‖ ^ 2 := by
     intro K _ M _
-    have hsym : ⟪x, projection K (projection M (projection K x))⟫_ℂ =
-        ⟪projection K x, projection M (projection K x)⟫_ℂ :=
-      (K.starProjection_isSymmetric x (projection M (projection K x))).symm
-    have hself : ⟪projection M (projection K x), projection K x⟫_ℂ =
-        ((‖projection M (projection K x)‖ : ℝ) : ℂ) ^ 2 :=
-      inner_starProjection_self_eq M (projection K x)
+    have hsym : ⟪x, K.starProjection (M.starProjection (K.starProjection x))⟫_ℂ =
+        ⟪K.starProjection x, M.starProjection (K.starProjection x)⟫_ℂ :=
+      (K.starProjection_isSymmetric x (M.starProjection (K.starProjection x))).symm
+    have hself : ⟪M.starProjection (K.starProjection x), K.starProjection x⟫_ℂ =
+        ((‖M.starProjection (K.starProjection x)‖ : ℝ) : ℂ) ^ 2 :=
+      inner_starProjection_self_eq M (K.starProjection x)
     rw [hsym, inner_re_symm, hself]
     norm_cast
   rw [hval, inner_add_right, map_add, hblock U V, hblock Uᗮ Vᗮ]
@@ -285,10 +285,10 @@ theorem re_inner_halmosCosineSq_self (x : H) :
 an arbitrary paper direct rotation with self-adjoint diagonal compressions. -/
 theorem re_inner_halmosCosineSq_sub_half_nonneg_of_directRotation
     (T : H →L[ℂ] H) (hT : IsDirectRotation U V T)
-    (hsource_sa : IsSelfAdjoint (projection U * T * projection U))
+    (hsource_sa : IsSelfAdjoint (U.starProjection * T * U.starProjection))
     (hcomplement_sa :
-      IsSelfAdjoint (complementaryProjection U * T * complementaryProjection U))
-    (hcos : ∀ x ∈ U, ‖x‖ ^ 2 / 2 ≤ ‖projection V x‖ ^ 2) (x : H) :
+      IsSelfAdjoint ((Uᗮ).starProjection * T * (Uᗮ).starProjection))
+    (hcos : ∀ x ∈ U, ‖x‖ ^ 2 / 2 ≤ ‖V.starProjection x‖ ^ 2) (x : H) :
     0 ≤ RCLike.re ⟪x, halmosCosineSq U V x⟫_ℂ - ‖x‖ ^ 2 / 2 := by
   have hroot : (0 : ℝ) ≤ Real.sqrt 2 / 2 := by positivity
   have hrootsq : (Real.sqrt 2 / 2) ^ 2 = 1 / 2 := by
@@ -296,38 +296,38 @@ theorem re_inner_halmosCosineSq_sub_half_nonneg_of_directRotation
     rw [div_pow, h2]
     norm_num
   have hsrc : ∀ y ∈ U,
-      ‖complementaryProjection V y‖ ≤ (Real.sqrt 2 / 2) * ‖y‖ := by
+      ‖(Vᗮ).starProjection y‖ ≤ (Real.sqrt 2 / 2) * ‖y‖ := by
     intro y hy
     have hpy : ‖y‖ ^ 2 =
-        ‖projection V y‖ ^ 2 + ‖complementaryProjection V y‖ ^ 2 :=
+        ‖V.starProjection y‖ ^ 2 + ‖(Vᗮ).starProjection y‖ ^ 2 :=
       Submodule.norm_sq_eq_add_norm_sq_starProjection y V
     have h1 := hcos y hy
-    have hsq : ‖complementaryProjection V y‖ ^ 2 ≤
+    have hsq : ‖(Vᗮ).starProjection y‖ ^ 2 ≤
         ((Real.sqrt 2 / 2) * ‖y‖) ^ 2 := by
       rw [mul_pow, hrootsq]
       linarith
     have hle := Real.sqrt_le_sqrt hsq
     rwa [Real.sqrt_sq (norm_nonneg _),
       Real.sqrt_sq (by positivity : (0 : ℝ) ≤ (Real.sqrt 2 / 2) * ‖y‖)] at hle
-  have htgt : ∀ w ∈ Uᗮ, ‖projection V w‖ ≤ (Real.sqrt 2 / 2) * ‖w‖ := fun w hw =>
+  have htgt : ∀ w ∈ Uᗮ, ‖V.starProjection w‖ ≤ (Real.sqrt 2 / 2) * ‖w‖ := fun w hw =>
     norm_projection_apply_le_of_directRotation U V T hT hsource_sa hcomplement_sa
       hroot hsrc w hw
   have hx : ‖x‖ ^ 2 =
-      ‖projection U x‖ ^ 2 + ‖complementaryProjection U x‖ ^ 2 :=
+      ‖U.starProjection x‖ ^ 2 + ‖(Uᗮ).starProjection x‖ ^ 2 :=
     Submodule.norm_sq_eq_add_norm_sq_starProjection x U
-  have hU : ‖projection U x‖ ^ 2 / 2 ≤ ‖projection V (projection U x)‖ ^ 2 :=
+  have hU : ‖U.starProjection x‖ ^ 2 / 2 ≤ ‖V.starProjection (U.starProjection x)‖ ^ 2 :=
     hcos _ (U.starProjection_apply_mem x)
-  have hUc : ‖complementaryProjection U x‖ ^ 2 / 2 ≤
-      ‖complementaryProjection V (complementaryProjection U x)‖ ^ 2 := by
+  have hUc : ‖(Uᗮ).starProjection x‖ ^ 2 / 2 ≤
+      ‖(Vᗮ).starProjection ((Uᗮ).starProjection x)‖ ^ 2 := by
     have hw := htgt _ (Uᗮ.starProjection_apply_mem x)
-    have hpy : ‖complementaryProjection U x‖ ^ 2 =
-        ‖projection V (complementaryProjection U x)‖ ^ 2 +
-          ‖complementaryProjection V (complementaryProjection U x)‖ ^ 2 :=
+    have hpy : ‖(Uᗮ).starProjection x‖ ^ 2 =
+        ‖V.starProjection ((Uᗮ).starProjection x)‖ ^ 2 +
+          ‖(Vᗮ).starProjection ((Uᗮ).starProjection x)‖ ^ 2 :=
       Submodule.norm_sq_eq_add_norm_sq_starProjection _ V
-    have hsq : ‖projection V (complementaryProjection U x)‖ ^ 2 ≤
-        1 / 2 * ‖complementaryProjection U x‖ ^ 2 := by
+    have hsq : ‖V.starProjection ((Uᗮ).starProjection x)‖ ^ 2 ≤
+        1 / 2 * ‖(Uᗮ).starProjection x‖ ^ 2 := by
       have h := mul_self_le_mul_self
-        (norm_nonneg (projection V (complementaryProjection U x))) hw
+        (norm_nonneg (V.starProjection ((Uᗮ).starProjection x))) hw
       rw [← pow_two, ← pow_two, mul_pow, hrootsq] at h
       exact h
     linarith
@@ -346,43 +346,43 @@ supplies a unitary intertwiner whose two crossed blocks are adjoint
 (`norm_projection_apply_le_of_forall_mem_source`). -/
 theorem re_inner_halmosCosineSq_sub_half_nonneg_of_source
     (hacute : IsUniformlyAcute U V)
-    (hcos : ∀ x ∈ U, ‖x‖ ^ 2 / 2 ≤ ‖projection V x‖ ^ 2) (x : H) :
+    (hcos : ∀ x ∈ U, ‖x‖ ^ 2 / 2 ≤ ‖V.starProjection x‖ ^ 2) (x : H) :
     0 ≤ RCLike.re ⟪x, halmosCosineSq U V x⟫_ℂ - ‖x‖ ^ 2 / 2 := by
   have hroot : (0 : ℝ) ≤ Real.sqrt 2 / 2 := by positivity
   have hrootsq : (Real.sqrt 2 / 2) ^ 2 = 1 / 2 := by
     have h2 : Real.sqrt 2 ^ 2 = 2 := Real.sq_sqrt (by norm_num)
     rw [div_pow, h2]
     norm_num
-  have hsrc : ∀ y ∈ U, ‖complementaryProjection V y‖ ≤ (Real.sqrt 2 / 2) * ‖y‖ := by
+  have hsrc : ∀ y ∈ U, ‖(Vᗮ).starProjection y‖ ≤ (Real.sqrt 2 / 2) * ‖y‖ := by
     intro y hy
     have hpy : ‖y‖ ^ 2 =
-        ‖projection V y‖ ^ 2 + ‖complementaryProjection V y‖ ^ 2 :=
+        ‖V.starProjection y‖ ^ 2 + ‖(Vᗮ).starProjection y‖ ^ 2 :=
       Submodule.norm_sq_eq_add_norm_sq_starProjection y V
     have h1 := hcos y hy
-    have hsq : ‖complementaryProjection V y‖ ^ 2 ≤ ((Real.sqrt 2 / 2) * ‖y‖) ^ 2 := by
+    have hsq : ‖(Vᗮ).starProjection y‖ ^ 2 ≤ ((Real.sqrt 2 / 2) * ‖y‖) ^ 2 := by
       rw [mul_pow, hrootsq]
       linarith
     have hle := Real.sqrt_le_sqrt hsq
     rwa [Real.sqrt_sq (norm_nonneg _),
       Real.sqrt_sq (by positivity : (0 : ℝ) ≤ (Real.sqrt 2 / 2) * ‖y‖)] at hle
-  have htgt : ∀ w ∈ Uᗮ, ‖projection V w‖ ≤ (Real.sqrt 2 / 2) * ‖w‖ := fun w hw =>
+  have htgt : ∀ w ∈ Uᗮ, ‖V.starProjection w‖ ≤ (Real.sqrt 2 / 2) * ‖w‖ := fun w hw =>
     norm_projection_apply_le_of_forall_mem_source U V hacute hroot hsrc w hw
   have hx : ‖x‖ ^ 2 =
-      ‖projection U x‖ ^ 2 + ‖complementaryProjection U x‖ ^ 2 :=
+      ‖U.starProjection x‖ ^ 2 + ‖(Uᗮ).starProjection x‖ ^ 2 :=
     Submodule.norm_sq_eq_add_norm_sq_starProjection x U
-  have hU : ‖projection U x‖ ^ 2 / 2 ≤ ‖projection V (projection U x)‖ ^ 2 :=
+  have hU : ‖U.starProjection x‖ ^ 2 / 2 ≤ ‖V.starProjection (U.starProjection x)‖ ^ 2 :=
     hcos _ (U.starProjection_apply_mem x)
-  have hUc : ‖complementaryProjection U x‖ ^ 2 / 2 ≤
-      ‖complementaryProjection V (complementaryProjection U x)‖ ^ 2 := by
+  have hUc : ‖(Uᗮ).starProjection x‖ ^ 2 / 2 ≤
+      ‖(Vᗮ).starProjection ((Uᗮ).starProjection x)‖ ^ 2 := by
     have hw := htgt _ (Uᗮ.starProjection_apply_mem x)
-    have hpy : ‖complementaryProjection U x‖ ^ 2 =
-        ‖projection V (complementaryProjection U x)‖ ^ 2 +
-          ‖complementaryProjection V (complementaryProjection U x)‖ ^ 2 :=
+    have hpy : ‖(Uᗮ).starProjection x‖ ^ 2 =
+        ‖V.starProjection ((Uᗮ).starProjection x)‖ ^ 2 +
+          ‖(Vᗮ).starProjection ((Uᗮ).starProjection x)‖ ^ 2 :=
       Submodule.norm_sq_eq_add_norm_sq_starProjection _ V
-    have hsq : ‖projection V (complementaryProjection U x)‖ ^ 2 ≤
-        1 / 2 * ‖complementaryProjection U x‖ ^ 2 := by
+    have hsq : ‖V.starProjection ((Uᗮ).starProjection x)‖ ^ 2 ≤
+        1 / 2 * ‖(Uᗮ).starProjection x‖ ^ 2 := by
       have h := mul_self_le_mul_self (norm_nonneg
-        (projection V (complementaryProjection U x))) hw
+        (V.starProjection ((Uᗮ).starProjection x))) hw
       rw [← pow_two, ← pow_two, mul_pow, hrootsq] at h
       exact h
     linarith
@@ -392,7 +392,7 @@ theorem re_inner_halmosCosineSq_sub_half_nonneg_of_source
 omit [CompleteSpace H] in
 /-- The reflection through a subspace fixes its own projection, on the left. -/
 theorem reflectionOperator_mul_projection_self :
-    reflectionOperator V * projection V = projection V := by
+    V.reflectionOperator * V.starProjection = V.starProjection := by
   rw [reflectionOperator_eq_projection_add_projection_sub_one V]
   have hPV2 := projection_sq V
   noncomm_ring [hPV2]
@@ -400,7 +400,7 @@ theorem reflectionOperator_mul_projection_self :
 omit [CompleteSpace H] in
 /-- The reflection through a subspace fixes its own projection, on the right. -/
 theorem projection_mul_reflectionOperator_self :
-    projection V * reflectionOperator V = projection V := by
+    V.starProjection * V.reflectionOperator = V.starProjection := by
   rw [reflectionOperator_eq_projection_add_projection_sub_one V]
   have hPV2 := projection_sq V
   noncomm_ring [hPV2]
@@ -428,20 +428,20 @@ conjugate of the reflection through `U` by the reflection through `V`.
 Since the mirror image has projection `R_V P_U R_V`, its reflection
 `2 P - 1` equals `R_V (2 P_U - 1) R_V = R_V R_U R_V`. -/
 theorem reflectionOperator_reflectedSubspace :
-    reflectionOperator (reflectedSubspace V U)
-      = reflectionOperator V * reflectionOperator U * reflectionOperator V := by
-  have hRR : reflectionOperator V * reflectionOperator V = 1 :=
+    Submodule.reflectionOperator (reflectedSubspace V U)
+      = V.reflectionOperator * U.reflectionOperator * V.reflectionOperator := by
+  have hRR : V.reflectionOperator * V.reflectionOperator = 1 :=
     reflectionOperator_mul_self_complex V
-  have hPVref : projection (reflectedSubspace V U)
-      = reflectionOperator V * projection U * reflectionOperator V :=
+  have hPVref : Submodule.starProjection (reflectedSubspace V U)
+      = V.reflectionOperator * U.starProjection * V.reflectionOperator :=
     starProjection_reflectedSubspace V U
   rw [reflectionOperator_eq_projection_add_projection_sub_one (reflectedSubspace V U),
       reflectionOperator_eq_projection_add_projection_sub_one U, hPVref]
-  have expand : reflectionOperator V * (projection U + projection U - 1)
-      * reflectionOperator V
-      = reflectionOperator V * projection U * reflectionOperator V
-        + reflectionOperator V * projection U * reflectionOperator V
-        - reflectionOperator V * reflectionOperator V := by noncomm_ring
+  have expand : V.reflectionOperator * (U.starProjection + U.starProjection - 1)
+      * V.reflectionOperator
+      = V.reflectionOperator * U.starProjection * V.reflectionOperator
+        + V.reflectionOperator * U.starProjection * V.reflectionOperator
+        - V.reflectionOperator * V.reflectionOperator := by noncomm_ring
   rw [expand, hRR]
 
 /-- The canonical intertwiner and the Halmos cosine square carry the same
