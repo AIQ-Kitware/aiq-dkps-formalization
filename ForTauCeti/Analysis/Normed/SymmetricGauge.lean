@@ -237,6 +237,13 @@ theorem le_extend_of_dominated (a : ℕ → ℝ≥0∞) (b : ℕ →₀ ℝ≥0)
     (hb : ∀ i, (b i : ℝ≥0∞) ≤ a i) : (Φ b : ℝ≥0∞) ≤ Φ.extend a :=
   le_iSup (f := fun b : Dominated a => (Φ b.1 : ℝ≥0∞)) ⟨b, hb⟩
 
+/-- The extension is the *least* bound over dominated finitely supported sequences: this is
+the eliminator for the supremum, stated without exposing `extend`'s body. -/
+theorem extend_le {a : ℕ → ℝ≥0∞} {c : ℝ≥0∞}
+    (h : ∀ b : ℕ →₀ ℝ≥0, (∀ i, (b i : ℝ≥0∞) ≤ a i) → (Φ b : ℝ≥0∞) ≤ c) :
+    Φ.extend a ≤ c :=
+  iSup_le fun b => h b.1 b.2
+
 /-- The truncation of `a` to its first `k` entries, capped at `m`.
 
 Distinct from `truncate` below, whose input is already finite-valued; this one

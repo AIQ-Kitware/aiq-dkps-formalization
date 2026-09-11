@@ -159,7 +159,6 @@ theorem mem_resolventSet_and_norm_le_of_lower_bound (hA : IsSelfAdjoint A)
         Submodule.coe_subtype]
       rw [← hsym]
       exact congrArg Subtype.val (e.symm_apply_apply ψ)
-
   refine ⟨hmem, ContinuousLinearMap.opNorm_le_bound _ (inv_nonneg.mpr hc.le) ?_⟩
   intro y
   have hb := hbd ⟨resolvent A z y, resolvent_mem_domain hmem y⟩
@@ -199,7 +198,7 @@ theorem norm_sub_smul_ge_of_coercive_comp
     {J : E →L[𝕜] E} (hJ : ∀ y : E, ‖J y‖ = ‖y‖)
     {c δ : ℝ}
     (hcoer : ∀ x : A.domain,
-      δ * ‖RCLike.re (x : E)‖ ^ 2 ≤ (⟪J (A x - (c : 𝕜) • (x : E)), (x : E)⟫_𝕜))
+      δ * ‖(x : E)‖ ^ 2 ≤ RCLike.re ⟪J (A x - (c : 𝕜) • (x : E)), (x : E)⟫_𝕜)
     (x : A.domain) :
     δ * ‖(x : E)‖ ≤ ‖A x - (c : 𝕜) • (x : E)‖ := by
   have hcs : RCLike.re (⟪J (A x - (c : 𝕜) • (x : E)), (x : E)⟫_𝕜)
@@ -224,7 +223,7 @@ theorem mem_resolventSet_of_coercive_comp (hA : IsSelfAdjoint A)
     {J : E →L[𝕜] E} (hJ : ∀ y : E, ‖J y‖ = ‖y‖)
     {c δ : ℝ} (hδ : 0 < δ)
     (hcoer : ∀ x : A.domain,
-      δ * ‖RCLike.re (x : E)‖ ^ 2 ≤ (⟪J (A x - (c : 𝕜) • (x : E)), (x : E)⟫_𝕜)) :
+      δ * ‖(x : E)‖ ^ 2 ≤ RCLike.re ⟪J (A x - (c : 𝕜) • (x : E)), (x : E)⟫_𝕜) :
     ((c : ℝ) : 𝕜) ∈ resolventSet A :=
   (mem_resolventSet_and_norm_le_of_lower_bound hA hδ
     (norm_sub_smul_ge_of_coercive_comp hJ hcoer)).1

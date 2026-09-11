@@ -115,7 +115,7 @@ theorem norm_toEuclideanLin_le_of_entry_le {𝕜 : Type*} [RCLike 𝕜]
         ∑ i : Fin n, ‖(Matrix.toEuclideanLin A x) i‖ ^ 2
             ≤ ∑ _i : Fin n, (ε * (Real.sqrt n * ‖x‖)) ^ 2 := by
           exact Finset.sum_le_sum fun i _ =>
-            pow_le_pow_left' (norm_nonneg _) (hrow i) 2
+            pow_le_pow_left₀ (norm_nonneg _) (hrow i) 2
         _ = (n : ℝ) * (ε * (Real.sqrt n * ‖x‖)) ^ 2 := by
           rw [Finset.sum_const, Finset.card_univ, Fintype.card_fin, nsmul_eq_mul]
     have hs : (Real.sqrt (n : ℝ)) ^ 2 = (n : ℝ) := Real.sq_sqrt (by positivity)

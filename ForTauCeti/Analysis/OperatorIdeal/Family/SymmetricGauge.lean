@@ -45,6 +45,21 @@ variable {𝕜 : Type u} [RCLike 𝕜]
 
 variable (Φ : SymmetricGauge)
 
+/-- The inner product of a universe lift, carried across `ULift.down`.
+
+Mathlib lifts the normed group and normed space structures to `ULift` but not the inner
+product, and the rectangular ideal families carry their source and target in *independent*
+universes, so realizing a model operator there needs this.  Local: a global instance would
+put an inner product on every `ULift` in the import graph. -/
+noncomputable local instance uliftInnerProductSpace {E : Type*}
+    [NormedAddCommGroup E] [InnerProductSpace 𝕜 E] :
+    InnerProductSpace 𝕜 (ULift.{v} E) where
+  inner x y := inner 𝕜 x.down y.down
+  norm_sq_eq_re_inner x := norm_sq_eq_re_inner (𝕜 := 𝕜) x.down
+  conj_inner_symm x y := inner_conj_symm (𝕜 := 𝕜) x.down y.down
+  add_left x y z := inner_add_left (𝕜 := 𝕜) x.down y.down z.down
+  smul_left x y r := inner_smul_left (𝕜 := 𝕜) x.down y.down r
+
 /-- The approximation-number sequence of an operator, in `ℝ≥0∞`. -/
 noncomputable def approxSeq {E F : Type*}
     [NormedAddCommGroup E] [InnerProductSpace 𝕜 E] [CompleteSpace E]
@@ -229,11 +244,13 @@ theorem symmetricGaugeFamily_injective {Phi Psi : SymmetricGauge}
       let ew : H ≃ₗᵢ[𝕜] ULift.{w, 0} H :=
         (LinearIsometryEquiv.ulift 𝕜 H).symm
       let T : ULift.{v, 0} H →L[𝕜] ULift.{w, 0} H :=
-        ew.toContinuousLinearMap ∘L Q ∘L ev.toContinuousLinearMap
+        ew.toLinearIsometry.toContinuousLinearMap ∘L Q ∘L
+          ev.toLinearIsometry.toContinuousLinearMap
       have hseq : approxSeq T = a := by
         funext n
-        rw [approxSeq, T, approximationNumber_comp_linearIsometryEquiv,
-          Q, ScalarTransport.approximationNumber_clm,
+        simp only [approxSeq, T, Q]
+        rw [approximationNumber_comp_linearIsometryEquiv,
+          ScalarTransport.approximationNumber_clm,
           approximationNumber_diagOpLp c hB0 hcB hanti n, hcnorm,
           ENNReal.ofReal_toReal (hafin n)]
       have hop := congrArg (fun N : OperatorIdealFamily.{u, v, w} 𝕜 => N.gauge T) h
@@ -241,7 +258,7 @@ theorem symmetricGaugeFamily_injective {Phi Psi : SymmetricGauge}
     rcases RCLike.I_eq_zero_or_im_I_eq_one (K := 𝕜) with hI | hI
     · exact realize (RCLikeIso.real hI).symm
     · exact realize (RCLikeIso.complex hI).symm
-  · push_neg at hbdd
+  · push Not at hbdd
     have hsup : (⨆ n, a n) = ⊤ := by
       refine iSup_eq_top.2 fun b hb => ?_
       lift b to NNReal using hb.ne
@@ -421,7 +438,7 @@ theorem schattenFamilySymmetric_two_eq_hilbertSchmidtIdealFamily (𝕜 : Type u)
     schattenFamilySymmetric.{u, v} 𝕜 2 one_le_two = hilbertSchmidtIdealFamily.{u, v} 𝕜 := by
   apply SymmetricOperatorIdealFamily.ext
   intro E F _ _ _ _ _ _ A
-  rw [gauge_schattenFamilySymmetric, gauge_hilbertSchmidtIdealFamily, A.schattenENorm_two]
+  rw [gauge_schattenFamilySymmetric, hilbertSchmidtIdealFamily_gauge, A.schattenENorm_two]
 
 /-- The infinity endpoint is the family induced by the supremum gauge. -/
 noncomputable def schattenFamilyInf (𝕜 : Type u) [RCLike 𝕜] :
@@ -517,10 +534,18 @@ instance isComplete_schattenFamily {𝕜 : Type u} [RCLike 𝕜]
       have := ENNReal.toReal_mono ENNReal.ofReal_ne_top hgauge
       change ((schattenFamily 𝕜 p hp).gauge
         (a n - TauCeti.OperatorIdealFamily.Elem.mk hmemL).val).toReal ≤ ε / 2
-      simpa only [gauge_schattenFamily, ENNReal.toReal_ofReal (by positivity)] using this
+      simpa only [gauge_schattenFamily, TauCeti.OperatorIdealFamily.Elem.val_sub,
+        TauCeti.OperatorIdealFamily.Elem.val_mk,
+        ENNReal.toReal_ofReal (by positivity : (0:ℝ) ≤ ε / 2)] using this
     calc dist (a n) (TauCeti.OperatorIdealFamily.Elem.mk hmemL)
         = ‖a n - TauCeti.OperatorIdealFamily.Elem.mk hmemL‖ := dist_eq_norm _ _
       _ ≤ ε / 2 := hle
       _ < ε := by linarith
+
+/-- The diagonal view is complete, being the same family read on one universe. -/
+instance isComplete_schattenFamilySymmetric {𝕜 : Type u} [RCLike 𝕜]
+    {p : ℝ} (hp : 1 ≤ p) :
+    (schattenFamilySymmetric.{u, v} 𝕜 p hp).toOperatorIdealFamily.IsComplete :=
+  isComplete_schattenFamily.{u, v, v} hp
 
 end TauCeti

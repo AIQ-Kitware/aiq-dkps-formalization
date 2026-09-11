@@ -333,7 +333,7 @@ theorem mem_resolventSet_of_lowerFormBound [CompleteSpace E]
     (hA : IsSelfAdjoint A) {β lam : ℝ} (hlt : lam < β)
     (hform : ∀ x : A.domain, β * ‖(x : E)‖ ^ 2 ≤ (⟪A x, (x : E)⟫_ℂ).re) :
     (lam : ℂ) ∈ resolventSet A :=
-  (mem_resolventSet_and_norm_le_of_lower_bound hA (by linarith)
+  (mem_resolventSet_and_norm_le_of_lower_bound hA (by simpa using sub_pos.mpr hlt)
     (norm_sub_smul_ge_of_lowerFormBound hform)).1
 
 /-- **The resolvent of a form-semibounded operator is coercive**, with constant

@@ -50,7 +50,9 @@ theorem approximationNumber_eq_zero_iff_rank_le (T : E →L[𝕜] F) (n : ℕ) :
         by_contra hdist
         have hmem : S ∈ Metric.ball T ε := by
           simpa [Metric.mem_ball, dist_eq_norm, norm_sub_rev] using not_le.mp hdist
-        have hbad := (hball hmem).trans hS
+        have hmemrank : ((n + 1 : ℕ) : Cardinal) ≤ (S : E →ₗ[𝕜] F).rank :=
+          Set.mem_ofPred.mp (hball hmem)
+        have hbad := hmemrank.trans hS
         have hbad' : n + 1 ≤ n := by exact_mod_cast hbad
         omega
     rw [hz] at hlower

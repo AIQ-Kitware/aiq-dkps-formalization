@@ -277,7 +277,11 @@ omit [CompleteSpace E] [CompleteSpace F] in
   simp only [schattenENorm, approximationNumber_neg]
 
 omit [CompleteSpace E] [CompleteSpace F] in
-/-- `T` is **Schatten-`p`** when its Schatten norm is finite. -/
+/-- `T` is **Schatten-`p`** when its Schatten norm is finite.
+
+`@[expose]`: membership in the Schatten family's carrier is this predicate by definition, and
+the carrier lemmas downstream are stated with `rfl`. -/
+@[expose]
 def IsSchattenClass (p : ℝ) (T : E →L[𝕜] F) : Prop := T.schattenENorm p ≠ ∞
 
 section AgreementAtOne
