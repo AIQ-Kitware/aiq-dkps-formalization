@@ -11,7 +11,10 @@ modular operator to an arbitrary densely recoverable positive symmetric
 partial operator.  The original and adapted files are Apache-2.0 licensed.
 -/
 
-import DavisKahan.SpectralTheory.PartialMap.Basic
+import ForTauCeti.Analysis.InnerProductSpace.LinearPMap.Closed
+import ForTauCeti.Analysis.InnerProductSpace.LinearPMap.Constructions
+import DavisKahan.BoundedOperator.Problem
+import DavisKahan.SpectralTheory.AbstractSpectrum
 import Mathlib.Tactic
 
 /-!

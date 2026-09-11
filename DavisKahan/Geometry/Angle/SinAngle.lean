@@ -3,7 +3,9 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
-import DavisKahan.BoundedOperator.Compat
+import ForTauCeti.Analysis.InnerProductSpace.BoundedOperator.Projector
+import ForTauCeti.Analysis.InnerProductSpace.Projection.Blocks
+import DavisKahan.BoundedOperator.Problem
 import ForTauCeti.Analysis.InnerProductSpace.OperatorModulus
 
 /-!
@@ -28,7 +30,7 @@ orthogonal-projector difference. -/
 noncomputable def spectraSinAngleOperator
     (U V : Submodule ℂ H)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] : H →L[ℂ] H :=
-  ContinuousLinearMap.modulus (projection U - projection V)
+  ContinuousLinearMap.modulus (U.starProjection - V.starProjection)
 
 /-- The bridge definition is exactly the Spectra modulus of the projector
 difference. -/
@@ -37,7 +39,7 @@ theorem spectraSinAngleOperator_eq_absoluteValue
     (U V : Submodule ℂ H)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] :
     spectraSinAngleOperator U V =
-      ContinuousLinearMap.modulus (projection U - projection V) :=
+      ContinuousLinearMap.modulus (U.starProjection - V.starProjection) :=
   rfl
 
 /-- The Spectra-backed sine-angle operator is positive. -/
@@ -46,7 +48,7 @@ theorem spectraSinAngleOperator_nonneg
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] :
     0 ≤ spectraSinAngleOperator U V := by
   simpa [spectraSinAngleOperator] using
-    ContinuousLinearMap.modulus_nonneg (projection U - projection V)
+    ContinuousLinearMap.modulus_nonneg (U.starProjection - V.starProjection)
 
 /-- The Spectra-backed sine-angle operator is self-adjoint. -/
 theorem spectraSinAngleOperator_isSelfAdjoint
@@ -54,7 +56,7 @@ theorem spectraSinAngleOperator_isSelfAdjoint
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] :
     IsSelfAdjoint (spectraSinAngleOperator U V) := by
   simpa [spectraSinAngleOperator] using
-    ContinuousLinearMap.modulus_isSelfAdjoint (projection U - projection V)
+    ContinuousLinearMap.modulus_isSelfAdjoint (U.starProjection - V.starProjection)
 
 /-- Squaring the Spectra-backed sine-angle operator gives the positive product
 of the projector difference with its adjoint. -/
@@ -62,17 +64,17 @@ theorem spectraSinAngleOperator_mul_self
     (U V : Submodule ℂ H)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] :
     spectraSinAngleOperator U V * spectraSinAngleOperator U V =
-      star (projection U - projection V) *
-        (projection U - projection V) := by
+      star (U.starProjection - V.starProjection) *
+        (U.starProjection - V.starProjection) := by
   simpa [spectraSinAngleOperator] using
-    ContinuousLinearMap.modulus_mul_self_eq_star_mul_self (projection U - projection V)
+    ContinuousLinearMap.modulus_mul_self_eq_star_mul_self (U.starProjection - V.starProjection)
 
 /-- Pointwise norms of the sine-angle operator and projector difference agree. -/
 theorem norm_spectraSinAngleOperator_apply
     (U V : Submodule ℂ H)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] (x : H) :
     ‖spectraSinAngleOperator U V x‖ =
-      ‖(projection U - projection V) x‖ := by
+      ‖(U.starProjection - V.starProjection) x‖ := by
   simp [spectraSinAngleOperator]
 
 /-- The operator norm of the Spectra-backed sine-angle operator is exactly the
@@ -80,7 +82,7 @@ existing DKPS symmetric subspace gap. -/
 theorem norm_spectraSinAngleOperator
     (U V : Submodule ℂ H)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] :
-    ‖spectraSinAngleOperator U V‖ = subspaceGap U V := by
+    ‖spectraSinAngleOperator U V‖ = U.projectionGap V := by
   change ‖ContinuousLinearMap.modulus
       (U.starProjection - V.starProjection)‖ =
     ‖U.starProjection - V.starProjection‖

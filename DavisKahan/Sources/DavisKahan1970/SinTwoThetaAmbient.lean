@@ -114,7 +114,7 @@ theorem sinTheta_spectrum_block_gauge
     {A B : E →L[ℂ] E} (hA : IsSelfAdjoint A) (hB : IsSelfAdjoint B)
     {U V : Submodule ℂ E}
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
-    (hU : Reduces A U) (hV : Reduces B V)
+    (hU : A.Reduces U) (hV : B.Reduces V)
     {a b d : ℝ} (hd : 0 < d) (hab : a ≤ b)
     (hUspec : spectrum ℝ (compressOperator U A) ⊆ Set.Icc a b)
     (hVspec : ∀ x ∈ spectrum ℝ (compressOperator Vᗮ B),
@@ -151,7 +151,7 @@ theorem sinTheta_spectrum_block_all_kyFan
     {A B : E →L[ℂ] E} (hA : IsSelfAdjoint A) (hB : IsSelfAdjoint B)
     {U V : Submodule ℂ E}
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
-    (hU : Reduces A U) (hV : Reduces B V)
+    (hU : A.Reduces U) (hV : B.Reduces V)
     {a b d : ℝ} (hd : 0 < d) (hab : a ≤ b)
     (hUspec : spectrum ℝ (compressOperator U A) ⊆ Set.Icc a b)
     (hVspec : ∀ x ∈ spectrum ℝ (compressOperator Vᗮ B),
@@ -199,7 +199,7 @@ are coupled by Lemma 6.1 and contracted by Lemma 6.2 instead, which is the
 paper's argument for Proposition 6.1 and loses nothing. -/
 theorem symmetric_sinTheta_spectrum_all_kyFan
     (hA : IsSelfAdjoint A) (hB : IsSelfAdjoint B)
-    (hU : Reduces A U) (hV : Reduces B V)
+    (hU : A.Reduces U) (hV : B.Reduces V)
     {a b d : ℝ} (hd : 0 < d) (hab : a ≤ b)
     (hUspec : spectrum ℝ (compressOperator U A) ⊆ Set.Icc a b)
     (hUspec' : ∀ x ∈ spectrum ℝ (compressOperator Uᗮ A),
@@ -317,12 +317,12 @@ omit [U.HasOrthogonalProjection] in
 /-- The reflection displacement is bounded by twice the perturbation, at every
 Ky Fan level: `X A X - A = X H X - H` up to sign, and `X` is unitary. -/
 private theorem kyFan_reflectionDisplacement_le
-    (hV : Reduces B V) (k : ℕ) :
+    (hV : B.Reduces V) (k : ℕ) :
     kyFanApproximationGauge k (conjByIsometryEquiv V.reflection A - A) ≤
       2 * kyFanApproximationGauge k (B - A) := by
   have hdefect : conjByIsometryEquiv V.reflection A - A =
-      Submodule.reflectionOperator V ∘L (A - B) ∘L
-          Submodule.reflectionOperator V - (A - B) := by
+      V.reflectionOperator ∘L (A - B) ∘L
+          V.reflectionOperator - (A - B) := by
     rw [conjByReflection_sub_eq_reflectionDefect,
       reflectionDefect_eq_perturbationDefect A B V hV]
   have hAB : kyFanApproximationGauge k (A - B) =
@@ -330,29 +330,29 @@ private theorem kyFan_reflectionDisplacement_le
     rw [show A - B = -(B - A) from by abel, kyFanApproximationGauge_neg]
   have h0 : 0 ≤ kyFanApproximationGauge k (A - B) :=
     kyFanApproximationGauge_nonneg k _
-  have h1 : ‖(Submodule.reflectionOperator V : E →L[ℂ] E)‖ ≤ 1 := by
+  have h1 : ‖(V.reflectionOperator : E →L[ℂ] E)‖ ≤ 1 := by
     exact_mod_cast Submodule.norm_reflectionOperator_le_one V
   have hconj : kyFanApproximationGauge k
-      (Submodule.reflectionOperator V ∘L (A - B) ∘L
-        Submodule.reflectionOperator V) ≤
+      (V.reflectionOperator ∘L (A - B) ∘L
+        V.reflectionOperator) ≤
       kyFanApproximationGauge k (A - B) := by
     refine (kyFanApproximationGauge_comp_le k _ _ _).trans ?_
-    calc ‖(Submodule.reflectionOperator V : E →L[ℂ] E)‖ *
+    calc ‖(V.reflectionOperator : E →L[ℂ] E)‖ *
           kyFanApproximationGauge k (A - B) *
-          ‖(Submodule.reflectionOperator V : E →L[ℂ] E)‖
+          ‖(V.reflectionOperator : E →L[ℂ] E)‖
         ≤ 1 * kyFanApproximationGauge k (A - B) * 1 := by
           gcongr
       _ = kyFanApproximationGauge k (A - B) := by ring
   have hsplit : kyFanApproximationGauge k
-      (Submodule.reflectionOperator V ∘L (A - B) ∘L
-        Submodule.reflectionOperator V - (A - B)) ≤
+      (V.reflectionOperator ∘L (A - B) ∘L
+        V.reflectionOperator - (A - B)) ≤
       kyFanApproximationGauge k
-        (Submodule.reflectionOperator V ∘L (A - B) ∘L
-          Submodule.reflectionOperator V) +
+        (V.reflectionOperator ∘L (A - B) ∘L
+          V.reflectionOperator) +
         kyFanApproximationGauge k (A - B) := by
     have h := kyFanApproximationGauge_add_le k
-      (Submodule.reflectionOperator V ∘L (A - B) ∘L
-        Submodule.reflectionOperator V) (-(A - B))
+      (V.reflectionOperator ∘L (A - B) ∘L
+        V.reflectionOperator) (-(A - B))
     rwa [← sub_eq_add_neg, kyFanApproximationGauge_neg] at h
   rw [hdefect]
   rw [hAB] at hconj hsplit
@@ -362,7 +362,7 @@ private theorem kyFan_reflectionDisplacement_le
 Davis--Kahan 1970 at every finite Ky Fan gauge. -/
 theorem sinTwoTheta_ambient_bounded_kyFan_complex
     (hA : IsSelfAdjoint A) (_hB : IsSelfAdjoint B)
-    (hU : Reduces A U) (hV : Reduces B V)
+    (hU : A.Reduces U) (hV : B.Reduces V)
     {a b d : ℝ} (hd : 0 < d) (hab : a ≤ b)
     (hUspec : spectrum ℝ (compressOperator U A) ⊆ Set.Icc a b)
     (hUspec' : ∀ x ∈ spectrum ℝ (compressOperator Uᗮ A),
@@ -419,7 +419,7 @@ theorem sinTwoTheta_directed_boundedResidual_blockRepresentative_kyFan_complex
     {A : E →L[ℂ] E} (hA : IsSelfAdjoint A)
     {U V : Submodule ℂ E}
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
-    (hU : Reduces A U)
+    (hU : A.Reduces U)
     {a b d : ℝ} (hd : 0 < d) (hab : a ≤ b)
     (hUspec : spectrum ℝ (compressOperator U A) ⊆ Set.Icc a b)
     (hUspec' : ∀ x ∈ spectrum ℝ (compressOperator Uᗮ A),
@@ -433,7 +433,7 @@ theorem sinTwoTheta_directed_boundedResidual_blockRepresentative_kyFan_complex
   let D := conjByIsometryEquiv V.reflection A - A
   have hB : IsSelfAdjoint (conjByIsometryEquiv V.reflection A) :=
     isSelfAdjoint_conjByIsometryEquiv V.reflection hA
-  have hW : Reduces (conjByIsometryEquiv V.reflection A) W :=
+  have hW : ContinuousLinearMap.Reduces (conjByIsometryEquiv V.reflection A) W :=
     hU.map_isometryEquiv V.reflection
   have hWspec : spectrum ℝ (compressOperator W
       (conjByIsometryEquiv V.reflection A)) ⊆ Set.Icc a b := by
@@ -561,7 +561,7 @@ theorem sinTwoTheta_directed_boundedResidual_blockRepresentative_symmetricNormin
     {A : E →L[ℂ] E} (hA : IsSelfAdjoint A)
     {U V : Submodule ℂ E}
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
-    (hU : Reduces A U)
+    (hU : A.Reduces U)
     {a b d : ℝ} (hd : 0 < d) (hab : a ≤ b)
     (hUspec : spectrum ℝ (compressOperator U A) ⊆ Set.Icc a b)
     (hUspec' : ∀ x ∈ spectrum ℝ (compressOperator Uᗮ A),
@@ -604,7 +604,7 @@ theorem and equation (7.5) of Section 7. -/
 theorem sinTwoTheta_ambient_bounded_symmetricNorming_complex
     (N : SymmetricNormingFunction)
     (hA : IsSelfAdjoint A) (hB : IsSelfAdjoint B)
-    (hU : Reduces A U) (hV : Reduces B V)
+    (hU : A.Reduces U) (hV : B.Reduces V)
     {a b d : ℝ} (hd : 0 < d) (hab : a ≤ b)
     (hUspec : spectrum ℝ (compressOperator U A) ⊆ Set.Icc a b)
     (hUspec' : ∀ x ∈ spectrum ℝ (compressOperator Uᗮ A),

@@ -47,7 +47,7 @@ omit [CompleteSpace H] in
 vectors in the selected subspace. -/
 theorem starProjection_map_eq_zero_of_isOffDiagonal
     (U : Submodule ℂ H) [U.HasOrthogonalProjection]
-    (V : H →L[ℂ] H) (hoff : IsOffDiagonal U V)
+    (V : H →L[ℂ] H) (hoff : Submodule.IsOffDiagonal U V)
     {u : H} (hu : u ∈ U) :
     U.starProjection (V u) = 0 := by
   change U.diagonalPart V = 0 at hoff
@@ -64,7 +64,7 @@ omit [CompleteSpace H] in
 vanishes on vectors in the orthogonal complement. -/
 theorem starProjection_orthogonal_map_eq_zero_of_isOffDiagonal
     (U : Submodule ℂ H) [U.HasOrthogonalProjection]
-    (V : H →L[ℂ] H) (hoff : IsOffDiagonal U V)
+    (V : H →L[ℂ] H) (hoff : Submodule.IsOffDiagonal U V)
     {w : H} (hw : w ∈ Uᗮ) :
     Uᗮ.starProjection (V w) = 0 := by
   change U.diagonalPart V = 0 at hoff
@@ -81,8 +81,8 @@ compression of `A` when `V` is off-diagonal. -/
 theorem subspaceBlockOperatorData_A0_add_offDiagonal
     (A V : H →L[ℂ] H) (U : Submodule ℂ H)
     [U.HasOrthogonalProjection]
-    (hAV : IsSelfAdjointOperator (A + V))
-    (hoff : IsOffDiagonal U V) :
+    (hAV : ContinuousLinearMap.IsSymmetric (A + V))
+    (hoff : Submodule.IsOffDiagonal U V) :
     (subspaceBlockOperatorData (A + V) U hAV).A0 =
       compressOperator U A := by
   change compressOperator U (A + V) = compressOperator U A
@@ -100,8 +100,8 @@ compression of `A` when `V` is off-diagonal. -/
 theorem subspaceBlockOperatorData_A1_add_offDiagonal
     (A V : H →L[ℂ] H) (U : Submodule ℂ H)
     [U.HasOrthogonalProjection]
-    (hAV : IsSelfAdjointOperator (A + V))
-    (hoff : IsOffDiagonal U V) :
+    (hAV : ContinuousLinearMap.IsSymmetric (A + V))
+    (hoff : Submodule.IsOffDiagonal U V) :
     (subspaceBlockOperatorData (A + V) U hAV).A1 =
       compressOperator Uᗮ A := by
   change compressOperator Uᗮ (A + V) = compressOperator Uᗮ A
@@ -119,8 +119,8 @@ reduces `A`. -/
 theorem subspaceBlockOperatorData_B01_add_of_reduces
     (A V : H →L[ℂ] H) (U : Submodule ℂ H)
     [U.HasOrthogonalProjection]
-    (hAV : IsSelfAdjointOperator (A + V))
-    (hU : Reduces A U) :
+    (hAV : ContinuousLinearMap.IsSymmetric (A + V))
+    (hU : A.Reduces U) :
     (subspaceBlockOperatorData (A + V) U hAV).B01 =
       U.orthogonalProjectionOnto ∘L V ∘L Uᗮ.subtypeL := by
   change
@@ -141,8 +141,8 @@ reduces `A`. -/
 theorem subspaceBlockOperatorData_B10_add_of_reduces
     (A V : H →L[ℂ] H) (U : Submodule ℂ H)
     [U.HasOrthogonalProjection]
-    (hAV : IsSelfAdjointOperator (A + V))
-    (hU : Reduces A U) :
+    (hAV : ContinuousLinearMap.IsSymmetric (A + V))
+    (hU : A.Reduces U) :
     (subspaceBlockOperatorData (A + V) U hAV).B10 =
       Uᗮ.orthogonalProjectionOnto ∘L V ∘L U.subtypeL := by
   change
@@ -172,7 +172,7 @@ namespace SpectralContinuationWitness
 /-- The source selected spectral subspace reduces the unperturbed operator. -/
 theorem sourceSelectedSpectralSubspace_reduces
     (C : SpectralContinuationWitness A V s) :
-    Reduces A C.sourceSelectedSpectralSubspace := by
+    A.Reduces C.sourceSelectedSpectralSubspace := by
   unfold sourceSelectedSpectralSubspace
   exact boundedSelfAdjointSpectralSubspace_reduces A
     C.sourceSeparatingContour.selfAdjoint s
@@ -182,7 +182,7 @@ theorem sourceSelectedSpectralSubspace_reduces
 its first diagonal block. -/
 theorem selectedEndpointBlockData_A0_eq
     (C : SpectralContinuationWitness A V s)
-    (hoff : IsOffDiagonal C.sourceSelectedSpectralSubspace V) :
+    (hoff : Submodule.IsOffDiagonal C.sourceSelectedSpectralSubspace V) :
     (subspaceBlockOperatorData (A + V) C.sourceSelectedSpectralSubspace
       C.targetSeparatingContour.selfAdjoint).A0 =
       compressOperator C.sourceSelectedSpectralSubspace A :=
@@ -194,7 +194,7 @@ theorem selectedEndpointBlockData_A0_eq
 compression as its second diagonal block. -/
 theorem selectedEndpointBlockData_A1_eq
     (C : SpectralContinuationWitness A V s)
-    (hoff : IsOffDiagonal C.sourceSelectedSpectralSubspace V) :
+    (hoff : Submodule.IsOffDiagonal C.sourceSelectedSpectralSubspace V) :
     (subspaceBlockOperatorData (A + V) C.sourceSelectedSpectralSubspace
       C.targetSeparatingContour.selfAdjoint).A1 =
       compressOperator C.sourceSelectedSpectralSubspaceᗮ A :=
@@ -234,7 +234,7 @@ theorem selectedEndpointAngularCoordinate_offDiagonal_riccati
     (C : SpectralContinuationWitness A V s)
     (hsmall : selectedBranchProjectionLipschitzConstant
       C.contour V C.margin < Real.sqrt 2 / 2)
-    (hoff : IsOffDiagonal C.sourceSelectedSpectralSubspace V) :
+    (hoff : Submodule.IsOffDiagonal C.sourceSelectedSpectralSubspace V) :
     ∀ u : C.sourceSelectedSpectralSubspace,
       (C.sourceSelectedSpectralSubspaceᗮ.orthogonalProjectionOnto ∘L V ∘L
           C.sourceSelectedSpectralSubspace.subtypeL) u +

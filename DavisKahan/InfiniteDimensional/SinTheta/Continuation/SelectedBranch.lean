@@ -44,7 +44,7 @@ self-adjoint path. -/
 noncomputable def selectedSpectralProjectionPath
     (A V : H →L[ℂ] H) (s : Set ℝ) (hs : MeasurableSet s)
     (hself : ∀ t ∈ Set.Icc (0 : ℝ) 1,
-      IsSelfAdjointOperator (operatorPath A V t))
+      ContinuousLinearMap.IsSymmetric (operatorPath A V t))
     (t : unitInterval) : H →L[ℂ] H :=
   boundedSelfAdjointSpectralProjection (operatorPath A V t)
     (hself t t.property) s hs
@@ -54,7 +54,7 @@ self-adjoint path. -/
 noncomputable def selectedSpectralSubspacePath
     (A V : H →L[ℂ] H) (s : Set ℝ) (hs : MeasurableSet s)
     (hself : ∀ t ∈ Set.Icc (0 : ℝ) 1,
-      IsSelfAdjointOperator (operatorPath A V t))
+      ContinuousLinearMap.IsSymmetric (operatorPath A V t))
     (t : unitInterval) : Submodule ℂ H :=
   boundedSelfAdjointSpectralSubspace (operatorPath A V t)
     (hself t t.property) s hs
@@ -64,7 +64,7 @@ orthogonal projection. -/
 noncomputable instance selectedSpectralSubspacePath_hasOrthogonalProjection
     (A V : H →L[ℂ] H) (s : Set ℝ) (hs : MeasurableSet s)
     (hself : ∀ t ∈ Set.Icc (0 : ℝ) 1,
-      IsSelfAdjointOperator (operatorPath A V t))
+      ContinuousLinearMap.IsSymmetric (operatorPath A V t))
     (t : unitInterval) :
     (selectedSpectralSubspacePath A V s hs hself t).HasOrthogonalProjection := by
   unfold selectedSpectralSubspacePath
@@ -75,7 +75,7 @@ selected spectral-subspace path. -/
 theorem selectedSpectralProjectionPath_eq_starProjection
     (A V : H →L[ℂ] H) (s : Set ℝ) (hs : MeasurableSet s)
     (hself : ∀ t ∈ Set.Icc (0 : ℝ) 1,
-      IsSelfAdjointOperator (operatorPath A V t))
+      ContinuousLinearMap.IsSymmetric (operatorPath A V t))
     (t : unitInterval) :
     selectedSpectralProjectionPath A V s hs hself t =
       (selectedSpectralSubspacePath A V s hs hself t).starProjection := by
@@ -89,7 +89,7 @@ theorem exists_unitary_transport_selectedSpectralProjectionPath_of_identificatio
     (delta : ℝ) (hdelta : 0 < delta)
     (s : Set ℝ) (hs : MeasurableSet s)
     (hself : ∀ t ∈ Set.Icc (0 : ℝ) 1,
-      IsSelfAdjointOperator (operatorPath A V t))
+      ContinuousLinearMap.IsSymmetric (operatorPath A V t))
     (hsep : ∀ t ∈ Set.Icc (0 : ℝ) 1, ∀ x : unitInterval,
       ∀ lam ∈ realSpectrum (operatorPath A V t),
         delta ≤ ‖Γ.path x - (lam : ℂ)‖)
@@ -98,7 +98,7 @@ theorem exists_unitary_transport_selectedSpectralProjectionPath_of_identificatio
         boundedSelfAdjointSpectralProjection (operatorPath A V t)
           (hself t ht) s hs) :
     ∃ W : H →L[ℂ] H,
-      IsUnitaryOperator W ∧
+      TauCeti.LinearPMap.IsUnitaryOperator W ∧
       W ∘L selectedSpectralProjectionPath A V s hs hself
           (⟨0, ⟨le_rfl, zero_le_one⟩⟩ : unitInterval) =
         selectedSpectralProjectionPath A V s hs hself
@@ -113,10 +113,10 @@ theorem exists_unitary_transport_selectedSpectralProjections_endpoints_of_identi
     (Γ : PiecewiseC1ClosedContour) (A V : H →L[ℂ] H)
     (delta : ℝ) (hdelta : 0 < delta)
     (s : Set ℝ) (hs : MeasurableSet s)
-    (hA : IsSelfAdjointOperator A)
-    (hAV : IsSelfAdjointOperator (A + V))
+    (hA : A.IsSymmetric)
+    (hAV : ContinuousLinearMap.IsSymmetric (A + V))
     (hself : ∀ t ∈ Set.Icc (0 : ℝ) 1,
-      IsSelfAdjointOperator (operatorPath A V t))
+      ContinuousLinearMap.IsSymmetric (operatorPath A V t))
     (hsep : ∀ t ∈ Set.Icc (0 : ℝ) 1, ∀ x : unitInterval,
       ∀ lam ∈ realSpectrum (operatorPath A V t),
         delta ≤ ‖Γ.path x - (lam : ℂ)‖)
@@ -125,7 +125,7 @@ theorem exists_unitary_transport_selectedSpectralProjections_endpoints_of_identi
         boundedSelfAdjointSpectralProjection (operatorPath A V t)
           (hself t ht) s hs) :
     ∃ W : H →L[ℂ] H,
-      IsUnitaryOperator W ∧
+      TauCeti.LinearPMap.IsUnitaryOperator W ∧
       W ∘L boundedSelfAdjointSpectralProjection A hA s hs =
         boundedSelfAdjointSpectralProjection (A + V) hAV s hs ∘L W := by
   obtain ⟨W, hWunitary, hWintertwines⟩ :=
@@ -156,10 +156,10 @@ theorem exists_unitary_transport_selectedSpectralSubspaces_endpoints_of_identifi
     (Γ : PiecewiseC1ClosedContour) (A V : H →L[ℂ] H)
     (delta : ℝ) (hdelta : 0 < delta)
     (s : Set ℝ) (hs : MeasurableSet s)
-    (hA : IsSelfAdjointOperator A)
-    (hAV : IsSelfAdjointOperator (A + V))
+    (hA : A.IsSymmetric)
+    (hAV : ContinuousLinearMap.IsSymmetric (A + V))
     (hself : ∀ t ∈ Set.Icc (0 : ℝ) 1,
-      IsSelfAdjointOperator (operatorPath A V t))
+      ContinuousLinearMap.IsSymmetric (operatorPath A V t))
     (hsep : ∀ t ∈ Set.Icc (0 : ℝ) 1, ∀ x : unitInterval,
       ∀ lam ∈ realSpectrum (operatorPath A V t),
         delta ≤ ‖Γ.path x - (lam : ℂ)‖)
@@ -168,7 +168,7 @@ theorem exists_unitary_transport_selectedSpectralSubspaces_endpoints_of_identifi
         boundedSelfAdjointSpectralProjection (operatorPath A V t)
           (hself t ht) s hs) :
     ∃ W : H →L[ℂ] H,
-      IsUnitaryOperator W ∧
+      TauCeti.LinearPMap.IsUnitaryOperator W ∧
       W ∘L (boundedSelfAdjointSpectralSubspace A hA s hs).starProjection =
         (boundedSelfAdjointSpectralSubspace (A + V) hAV s hs).starProjection ∘L W := by
   obtain ⟨W, hWunitary, hWintertwines⟩ :=

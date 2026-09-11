@@ -68,7 +68,7 @@ theorem sinTwoTheta_reflectionResidual_block_gauge_reducing_rclike
     {U : Submodule 𝕜 H} [U.HasOrthogonalProjection]
     (hred : TauCeti.LinearPMap.ReducesSubspace A U)
     (N : KyFanDominantIdealFamily (𝕜 := 𝕜))
-    (D : H →L[𝕜] H) (hD : IsSelfAdjointOperator D)
+    (D : H →L[𝕜] H) (hD : D.IsSymmetric)
     (W : Submodule 𝕜 H) [W.HasOrthogonalProjection]
     {δ : ℝ} (hδ : 0 < δ)
     (hgap : FormBoundedSylvesterGap
@@ -236,7 +236,7 @@ theorem sinTwoTheta_directed_unboundedResidual_blockRepresentative_reducing_kyFa
   have hDsa' : IsSelfAdjoint ((-2 : 𝕜) • trialOffDiagonalPart V M R) := by
     rw [IsSelfAdjoint, star_smul, hSsa.star_eq]
     norm_num
-  have hDsa : IsSelfAdjointOperator ((-2 : 𝕜) • trialOffDiagonalPart V M R) :=
+  have hDsa : ContinuousLinearMap.IsSymmetric ((-2 : 𝕜) • trialOffDiagonalPart V M R) :=
     ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mp hDsa'
   have hraw := sinTwoTheta_reflectionResidual_block_gauge_reducing_rclike
     hA hred (KyFanDominantIdealFamily.kyFan (𝕜 := 𝕜) k hk)
@@ -407,7 +407,7 @@ theorem sinTwoTheta_unbounded_perturbedGap_whereDefinedUIN_rclike
     [TopologicalSpace.SeparableSpace H]
     (N : NormalizedSymmetricOperatorIdealFamily.{u, v} 𝕜)
     {A : H →ₗ.[𝕜] H} (hA : IsSelfAdjoint A)
-    (Hop : H →L[𝕜] H) (hHop : IsSelfAdjointOperator Hop)
+    (Hop : H →L[𝕜] H) (hHop : Hop.IsSymmetric)
     {P Q : Submodule 𝕜 H} [P.HasOrthogonalProjection] [Q.HasOrthogonalProjection]
     (hPred : TauCeti.LinearPMap.ReducesSubspace A P)
     (hQred : TauCeti.LinearPMap.ReducesSubspace

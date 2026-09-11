@@ -195,12 +195,12 @@ theorem corollary4_1_compact_nonacute_symmetricNorming_complex
     (J : DavisKahan.halmosSourceDefect U V ≃ₗᵢ[ℂ]
       DavisKahan.halmosTargetDefect U V)
     (W : H →L[ℂ] H) (hWunitary : W ∈ unitary (H →L[ℂ] H))
-    (hWmap : W * DavisKahan.projection U = DavisKahan.projection V * W)
-    (hWmem : N.Mem ((1 - W) ∘L DavisKahan.projection U)) :
-    N.Mem ((1 - DavisKahan.nonacuteDirectRotation U V J) ∘L DavisKahan.projection U) ∧
+    (hWmap : W * U.starProjection = V.starProjection * W)
+    (hWmem : N.Mem ((1 - W) ∘L U.starProjection)) :
+    N.Mem ((1 - DavisKahan.nonacuteDirectRotation U V J) ∘L U.starProjection) ∧
       N.gauge ((1 - DavisKahan.nonacuteDirectRotation U V J) ∘L
-          DavisKahan.projection U) ≤
-        N.gauge ((1 - W) ∘L DavisKahan.projection U) := by
+          U.starProjection) ≤
+        N.gauge ((1 - W) ∘L U.starProjection) := by
   obtain ⟨hmem, hle⟩ := symmetricNorming_of_kyFanDominant N one_pos hWmem
     (fun M hM => by
       obtain ⟨h₁, h₂⟩ :=
@@ -218,7 +218,7 @@ theorem proposition4_3_compact_nonacute_symmetricNorming_complex
     (J : DavisKahan.halmosSourceDefect U V ≃ₗᵢ[ℂ]
       DavisKahan.halmosTargetDefect U V)
     (W : H →L[ℂ] H) (hWunitary : W ∈ unitary (H →L[ℂ] H))
-    (hWmap : W * DavisKahan.projection U = DavisKahan.projection V * W)
+    (hWmap : W * U.starProjection = V.starProjection * W)
     (hWmem : N.Mem ((1 - star W) * (1 - W))) :
     N.Mem ((1 - star (DavisKahan.nonacuteDirectRotation U V J)) *
         (1 - DavisKahan.nonacuteDirectRotation U V J)) ∧
@@ -254,12 +254,12 @@ theorem corollary4_1_compact_nonacute_sourceExact_complex
     (J : DavisKahan.halmosSourceDefect U V ≃ₗᵢ[ℂ]
       DavisKahan.halmosTargetDefect U V)
     (W : H →L[ℂ] H) (hWunitary : W ∈ unitary (H →L[ℂ] H))
-    (hWmap : W * DavisKahan.projection U = DavisKahan.projection V * W)
-    (hWmem : N.Mem ((1 - W) ∘L DavisKahan.projection U)) :
-    N.Mem ((1 - DavisKahan.nonacuteDirectRotation U V J) ∘L DavisKahan.projection U) ∧
+    (hWmap : W * U.starProjection = V.starProjection * W)
+    (hWmem : N.Mem ((1 - W) ∘L U.starProjection)) :
+    N.Mem ((1 - DavisKahan.nonacuteDirectRotation U V J) ∘L U.starProjection) ∧
       N.gauge ((1 - DavisKahan.nonacuteDirectRotation U V J) ∘L
-          DavisKahan.projection U) ≤
-        N.gauge ((1 - W) ∘L DavisKahan.projection U) :=
+          U.starProjection) ≤
+        N.gauge ((1 - W) ∘L U.starProjection) :=
   corollary4_1_compact_nonacute_complex N.toFanDominantIdealFamily U V hcompact J W
     hWunitary hWmap hWmem
 
@@ -272,7 +272,7 @@ theorem proposition4_3_compact_nonacute_sourceExact_complex
     (J : DavisKahan.halmosSourceDefect U V ≃ₗᵢ[ℂ]
       DavisKahan.halmosTargetDefect U V)
     (W : H →L[ℂ] H) (hWunitary : W ∈ unitary (H →L[ℂ] H))
-    (hWmap : W * DavisKahan.projection U = DavisKahan.projection V * W)
+    (hWmap : W * U.starProjection = V.starProjection * W)
     (hWmem : N.Mem ((1 - star W) * (1 - W))) :
     N.Mem ((1 - star (DavisKahan.nonacuteDirectRotation U V J)) *
         (1 - DavisKahan.nonacuteDirectRotation U V J)) ∧
@@ -299,7 +299,7 @@ theorem proposition4_3_compact_nonacute_sourceExact_ofCrossedDefects_complex
     (hcompact : IsCompactOperator (TauCeti.principalSineOperator U V))
     (hcrossed : DavisKahan.CrossedDefectsEquivalent U V)
     (W : H →L[ℂ] H) (hWunitary : W ∈ unitary (H →L[ℂ] H))
-    (hWmap : W * DavisKahan.projection U = DavisKahan.projection V * W)
+    (hWmap : W * U.starProjection = V.starProjection * W)
     (hWmem : N.Mem ((1 - star W) * (1 - W))) :
     ∃ J : DavisKahan.halmosSourceDefect U V ≃ₗᵢ[ℂ] DavisKahan.halmosTargetDefect U V,
       N.Mem ((1 - star (DavisKahan.nonacuteDirectRotation U V J)) *
@@ -326,12 +326,12 @@ theorem corollary4_1_compact_nonacute_symmetricNorming_real
     (J : DavisKahan.halmosSourceDefect U V ≃ₗᵢ[ℝ]
       DavisKahan.halmosTargetDefect U V)
     (W : E →L[ℝ] E) (hWunitary : W ∈ unitary (E →L[ℝ] E))
-    (hWmap : W * DavisKahan.projection U = DavisKahan.projection V * W)
-    (hWmem : N.Mem ((1 - W) ∘L DavisKahan.projection U)) :
-    N.Mem ((1 - DavisKahan.nonacuteDirectRotation U V J) ∘L DavisKahan.projection U) ∧
+    (hWmap : W * U.starProjection = V.starProjection * W)
+    (hWmem : N.Mem ((1 - W) ∘L U.starProjection)) :
+    N.Mem ((1 - DavisKahan.nonacuteDirectRotation U V J) ∘L U.starProjection) ∧
       N.gauge ((1 - DavisKahan.nonacuteDirectRotation U V J) ∘L
-          DavisKahan.projection U) ≤
-        N.gauge ((1 - W) ∘L DavisKahan.projection U) := by
+          U.starProjection) ≤
+        N.gauge ((1 - W) ∘L U.starProjection) := by
   obtain ⟨hmem, hle⟩ := symmetricNorming_of_kyFanDominant N one_pos hWmem
     (fun M hM => by
       obtain ⟨h₁, h₂⟩ :=
@@ -348,7 +348,7 @@ theorem proposition4_3_compact_nonacute_symmetricNorming_real
     (J : DavisKahan.halmosSourceDefect U V ≃ₗᵢ[ℝ]
       DavisKahan.halmosTargetDefect U V)
     (W : E →L[ℝ] E) (hWunitary : W ∈ unitary (E →L[ℝ] E))
-    (hWmap : W * DavisKahan.projection U = DavisKahan.projection V * W)
+    (hWmap : W * U.starProjection = V.starProjection * W)
     (hWmem : N.Mem ((1 - star W) * (1 - W))) :
     N.Mem ((1 - star (DavisKahan.nonacuteDirectRotation U V J)) *
         (1 - DavisKahan.nonacuteDirectRotation U V J)) ∧
@@ -371,12 +371,12 @@ theorem corollary4_1_compact_nonacute_sourceExact_real
     (J : DavisKahan.halmosSourceDefect U V ≃ₗᵢ[ℝ]
       DavisKahan.halmosTargetDefect U V)
     (W : E →L[ℝ] E) (hWunitary : W ∈ unitary (E →L[ℝ] E))
-    (hWmap : W * DavisKahan.projection U = DavisKahan.projection V * W)
-    (hWmem : N.Mem ((1 - W) ∘L DavisKahan.projection U)) :
-    N.Mem ((1 - DavisKahan.nonacuteDirectRotation U V J) ∘L DavisKahan.projection U) ∧
+    (hWmap : W * U.starProjection = V.starProjection * W)
+    (hWmem : N.Mem ((1 - W) ∘L U.starProjection)) :
+    N.Mem ((1 - DavisKahan.nonacuteDirectRotation U V J) ∘L U.starProjection) ∧
       N.gauge ((1 - DavisKahan.nonacuteDirectRotation U V J) ∘L
-          DavisKahan.projection U) ≤
-        N.gauge ((1 - W) ∘L DavisKahan.projection U) :=
+          U.starProjection) ≤
+        N.gauge ((1 - W) ∘L U.starProjection) :=
   corollary4_1_compact_nonacute_real U V N.toFanDominantIdealFamily hcompact J W
     hWunitary hWmap hWmem
 
@@ -390,7 +390,7 @@ theorem proposition4_3_compact_nonacute_sourceExact_real
       DavisKahan.halmosTargetDefect U V)
     (W : E →L[ℝ] E) (hWunitary : W ∈ unitary (E →L[ℝ] E))
     (hWmem : N.Mem ((1 - star W) * (1 - W)))
-    (hWmap : W * DavisKahan.projection U = DavisKahan.projection V * W) :
+    (hWmap : W * U.starProjection = V.starProjection * W) :
     N.Mem ((1 - star (DavisKahan.nonacuteDirectRotation U V J)) *
         (1 - DavisKahan.nonacuteDirectRotation U V J)) ∧
       N.gauge ((1 - star (DavisKahan.nonacuteDirectRotation U V J)) *
@@ -410,7 +410,7 @@ theorem proposition4_3_compact_nonacute_sourceExact_ofCrossedDefects_real
     (hcrossed : DavisKahan.CrossedDefectsEquivalent U V)
     (W : E →L[ℝ] E) (hWunitary : W ∈ unitary (E →L[ℝ] E))
     (hWmem : N.Mem ((1 - star W) * (1 - W)))
-    (hWmap : W * DavisKahan.projection U = DavisKahan.projection V * W) :
+    (hWmap : W * U.starProjection = V.starProjection * W) :
     ∃ J : DavisKahan.halmosSourceDefect U V ≃ₗᵢ[ℝ] DavisKahan.halmosTargetDefect U V,
       N.Mem ((1 - star (DavisKahan.nonacuteDirectRotation U V J)) *
           (1 - DavisKahan.nonacuteDirectRotation U V J)) ∧

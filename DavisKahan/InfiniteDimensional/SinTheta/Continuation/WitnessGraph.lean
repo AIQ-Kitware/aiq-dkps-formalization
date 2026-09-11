@@ -65,7 +65,7 @@ theorem selectedSpectralSubspaces_isQuarterAcute_of_contour_bound
     IsQuarterAcute C.sourceSelectedSpectralSubspace
       C.targetSelectedSpectralSubspace := by
   let hself : ∀ t ∈ Set.Icc (0 : ℝ) 1,
-      IsSelfAdjointOperator (operatorPath A V t) :=
+      ContinuousLinearMap.IsSymmetric (operatorPath A V t) :=
     fun t ht => (C.separating t ht).selfAdjoint
   let hs : MeasurableSet s := C.sourceSeparatingContour.measurable_selected
   have hidentify : ∀ t (ht : t ∈ Set.Icc (0 : ℝ) 1),
@@ -161,7 +161,7 @@ theorem selectedEndpointAngularOperator_graph_reduces
     (C : SpectralContinuationWitness A V s)
     (hsmall : selectedBranchProjectionLipschitzConstant
       C.contour V C.margin < Real.sqrt 2 / 2) :
-    Reduces (A + V)
+    ContinuousLinearMap.Reduces (A + V)
       (graphSubspace C.sourceSelectedSpectralSubspace
         (C.selectedEndpointAngularOperator hsmall)) := by
   rw [C.graphSubspace_selectedEndpointAngularOperator hsmall]

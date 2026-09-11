@@ -42,7 +42,7 @@ theorem section7_sinTwoTheta_ideal
     (N : TauCeti.SymmetricOperatorIdealFamily.{0, u} ℂ)
     [N.toOperatorIdealFamily.IsComplete]
     (A : H →ₗ.[ℂ] H) (hA : IsSelfAdjoint A)
-    (E : H →L[ℂ] H) (hE : IsSelfAdjointOperator E)
+    (E : H →L[ℂ] H) (hE : E.IsSymmetric)
     (B S : Set ℝ) (hB : MeasurableSet B) (hS : MeasurableSet S)
     {beta alpha delta : ℝ} (hba : beta ≤ alpha) (hdelta : 0 < delta)
     (hBlow : TauCeti.LinearPMap.SemiboundedBelow
@@ -78,7 +78,7 @@ theorem section7_tanTwoTheta_ideal
     (N : TauCeti.SymmetricOperatorIdealFamily.{0, u} ℂ)
     [N.toOperatorIdealFamily.IsComplete]
     (A : H →ₗ.[ℂ] H) (hA : IsSelfAdjoint A)
-    (E : H →L[ℂ] H) (hE : IsSelfAdjointOperator E)
+    (E : H →L[ℂ] H) (hE : E.IsSymmetric)
     (B S : Set ℝ) (hB : MeasurableSet B) (hS : MeasurableSet S)
     {beta alpha delta : ℝ} (hba : beta ≤ alpha) (hdelta : 0 < delta)
     (hBlow : TauCeti.LinearPMap.SemiboundedBelow
@@ -102,7 +102,7 @@ theorem section7_tanTwoTheta_ideal
       (selfAdjointSpectralSubspace (TauCeti.LinearPMap.addBounded A E)
         (addBounded_isSelfAdjoint A hA E hE) S hS) hquarter) ≤
       (2 * N.gaugeReal E) /
-        (1 - 2 * directedGap
+        (1 - 2 * Submodule.directedProjectionGap
           (selfAdjointSpectralSubspace A hA B hB)
           (selfAdjointSpectralSubspace (TauCeti.LinearPMap.addBounded A E)
             (addBounded_isSelfAdjoint A hA E hE) S hS) ^ 2) := by

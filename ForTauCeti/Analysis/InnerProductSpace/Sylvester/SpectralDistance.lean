@@ -17,15 +17,9 @@ The reciprocal spectral multiplier, finite orbit certificates, and the sharp
 
 ## Provenance
 
-*Moved, not restated.*  This file was
-`DavisKahan/FiniteDimensional/Sylvester/SpectralDistance.lean`
-before the whole remaining sin-Θ closure moved into
-the staging layer.  Statements, proofs, signatures and namespaces are unchanged;
-the declarations already lived in `TauCeti.*`, so the move was a path change and
-an import repoint.
-
-Y3(b2) and Y3(b3) are what made it possible: before them this file's import
-closure crossed `ForMathlib`, which the `ForTauCeti` layer rule forbids.
+Originally developed in `DavisKahan/FiniteDimensional/Sylvester/SpectralDistance.lean`.
+The reciprocal-multiplier estimate and rectangular Fan dominance are shared by
+all scalar fields covered by `RCLike`.
 
 -/
 
@@ -41,20 +35,14 @@ variable {E : Type*} [NormedAddCommGroup E] [InnerProductSpace 𝕜 E]
 variable {F : Type*} [NormedAddCommGroup F] [InnerProductSpace 𝕜 F]
   [FiniteDimensional 𝕜 F]
 
-/-! ## Arbitrary disjoint spectra: the `π/2` scaffold
+/-! ## Arbitrary disjoint spectra
 
 The Bhatia--Davis--McIntosh extension is factored through the simultaneous Ky
 Fan prefix estimate and rectangular Fan dominance.
 -/
 
-/-- Entrywise spectral-coordinate form of the Sylvester equation:
-`(αᵢ-βⱼ) Xᵢⱼ = Cᵢⱼ`.
-
-This used to be described as exposing "the scalar equation to which the
-reciprocal kernel is applied".  There is no reciprocal kernel: the route through
-an explicit multiplier `(αᵢ-βⱼ)⁻¹` was abandoned in favour of the Ky Fan prefix
-estimate this file actually proves, and the two declarations left over from it
-have been removed. -/
+/-- In orthonormal eigenbases the Sylvester equation is the scalar identity
+`(alpha i - beta j) * X i j = C i j`. -/
 theorem sylvester_eigenbasis_coefficient_equation
     {A : F →ₗ[𝕜] F} {B : E →ₗ[𝕜] E} {X C : E →ₗ[𝕜] F}
     (hA : A.IsSymmetric) (hB : B.IsSymmetric)
@@ -108,7 +96,7 @@ residual, and perturbation statements are formal consequences.
 
 This statement deliberately contains no convex-hull or finite-certificate
 bookkeeping. -/
-theorem kyFan_sylvester_le_of_spectralDistance_analytic
+theorem kyFan_sylvester_le_of_spectralDistance
     {A : F →ₗ[𝕜] F} {B : E →ₗ[𝕜] E} {X C : E →ₗ[𝕜] F}
     (hA : A.IsSymmetric) (hB : B.IsSymmetric)
     {δ : ℝ} (hδ : 0 < δ) (hgap : PointSpectraSeparated A ⊤ B ⊤ δ)
@@ -169,7 +157,7 @@ theorem sylvester_barycentricOrbitRepresentation_of_spectralDistance
       UnitarilyInvariantSeminorm.mem_convexHull_twoSidedUnitaryOrbit_of_kyFanSum_le
     intro k
     have hcore :=
-      kyFan_sylvester_le_of_spectralDistance_analytic
+      kyFan_sylvester_le_of_spectralDistance
         hA hB hδ hgap hEq k
     -- states the goal with the definition unfolded, in the shape the next step needs;
     -- there is no `_apply` lemma to rewrite with here.
@@ -219,24 +207,8 @@ theorem sylvester_hasFiniteUnitaryOrbitCertificate_of_spectralDistance
     UnitarilyInvariantSeminorm.hasFiniteUnitaryOrbitCertificate_of_smul_mem_convexHull
       hm hmass hY hXY
 
-/-- Every Ky Fan prefix satisfies the arbitrary-disjoint-spectrum Sylvester
-bound.  This public theorem is the stable API alias for the analytic root;
-the barycentric and finite-certificate layers are downstream consequences,
-not proof dependencies. -/
-theorem kyFan_sylvester_le_of_spectralDistance
-    {A : F →ₗ[𝕜] F} {B : E →ₗ[𝕜] E} {X C : E →ₗ[𝕜] F}
-    (hA : A.IsSymmetric) (hB : B.IsSymmetric)
-    {δ : ℝ} (hδ : 0 < δ) (hgap : PointSpectraSeparated A ⊤ B ⊤ δ)
-    (hEq : A ∘ₗ X - X ∘ₗ B = C) (k : ℕ) :
-    δ * TauCeti.kyFanSum k X ≤
-      (Real.pi / 2) *
-        TauCeti.kyFanSum k C :=
-  kyFan_sylvester_le_of_spectralDistance_analytic
-    hA hB hδ hgap hEq k
-
 /-- General disjoint-spectrum extension with the Bhatia--Davis--McIntosh
-constant `π/2`, lifted from the finite orbit certificate through Ky Fan
-prefixes and rectangular Fan dominance.
+constant `π/2`, obtained from Ky Fan prefixes by rectangular Fan dominance.
 -/
 theorem uiNorm_sylvester_le_of_spectralDistance
     (N : UnitarilyInvariantSeminorm 𝕜 E F)
@@ -263,141 +235,6 @@ theorem uiNorm_sylvester_le_of_spectralDistance
     _ ≤ N (((p : 𝕜)) • C) := hscaled
     _ = p * N C := by
       rw [N.smul_eq, RCLike.norm_ofReal, abs_of_nonneg hp0]
-    _ = (Real.pi / 2) * N C := by rfl
-
-/-! ### Unconditional field-specific endpoints
-
-The explicit Haagerup--Zsidó kernel closes the analytic root over `ℂ`
-directly and over `ℝ` through the doubled orthogonal descent.  The theorems
-below repeat the sharp arbitrary-separated-spectrum statements at the two
-concrete scalar fields with no open obligation.  The generic `RCLike`
-versions above remain routed through the finite orbit-interpolation seam,
-which is still an open obligation. -/
-
-/-- Unconditional complex Ky Fan Sylvester estimate. -/
-theorem kyFan_sylvester_le_of_spectralDistance_complex
-    {EC FC : Type*}
-    [NormedAddCommGroup EC] [InnerProductSpace ℂ EC] [FiniteDimensional ℂ EC]
-    [NormedAddCommGroup FC] [InnerProductSpace ℂ FC] [FiniteDimensional ℂ FC]
-    {A : FC →ₗ[ℂ] FC} {B : EC →ₗ[ℂ] EC} {X C : EC →ₗ[ℂ] FC}
-    (hA : A.IsSymmetric) (hB : B.IsSymmetric)
-    {δ : ℝ} (hδ : 0 < δ) (hgap : PointSpectraSeparated A ⊤ B ⊤ δ)
-    (hEq : A ∘ₗ X - X ∘ₗ B = C) (k : ℕ) :
-    δ * TauCeti.kyFanSum k X ≤
-      (Real.pi / 2) *
-        TauCeti.kyFanSum k C := by
-  apply kyFan_reciprocalMultiplier_le_complex
-    (eF := hA.eigenvectorBasis rfl)
-    (eE := hB.eigenvectorBasis rfl)
-    (α := hA.eigenvalues rfl)
-    (β := hB.eigenvalues rfl)
-    (X := X) (C := C) hδ
-  · intro i j
-    exact hgap
-      (hA.eigenvalues rfl i) (hB.eigenvalues rfl j)
-      (eigenvalue_mem_restrictedPointSpectrum_top hA i)
-      (eigenvalue_mem_restrictedPointSpectrum_top hB j)
-  · intro i j
-    exact sylvester_eigenbasis_coefficient_equation hA hB hEq i j
-
-/-- Unconditional real Ky Fan Sylvester estimate. -/
-theorem kyFan_sylvester_le_of_spectralDistance_real
-    {ER FR : Type*}
-    [NormedAddCommGroup ER] [InnerProductSpace ℝ ER] [FiniteDimensional ℝ ER]
-    [NormedAddCommGroup FR] [InnerProductSpace ℝ FR] [FiniteDimensional ℝ FR]
-    {A : FR →ₗ[ℝ] FR} {B : ER →ₗ[ℝ] ER} {X C : ER →ₗ[ℝ] FR}
-    (hA : A.IsSymmetric) (hB : B.IsSymmetric)
-    {δ : ℝ} (hδ : 0 < δ) (hgap : PointSpectraSeparated A ⊤ B ⊤ δ)
-    (hEq : A ∘ₗ X - X ∘ₗ B = C) (k : ℕ) :
-    δ * TauCeti.kyFanSum k X ≤
-      (Real.pi / 2) *
-        TauCeti.kyFanSum k C := by
-  apply kyFan_reciprocalMultiplier_le_real
-    (eF := hA.eigenvectorBasis rfl)
-    (eE := hB.eigenvectorBasis rfl)
-    (alpha := hA.eigenvalues rfl)
-    (beta := hB.eigenvalues rfl)
-    (X := X) (C := C) hδ
-  · intro i j
-    exact hgap
-      (hA.eigenvalues rfl i) (hB.eigenvalues rfl j)
-      (eigenvalue_mem_restrictedPointSpectrum_top hA i)
-      (eigenvalue_mem_restrictedPointSpectrum_top hB j)
-  · intro i j
-    have h := sylvester_eigenbasis_coefficient_equation hA hB hEq i j
-    simpa only [RCLike.ofReal_real_eq_id, id_eq] using h
-
-/-- Unconditional complex arbitrary-UI-norm Sylvester estimate. -/
-theorem uiNorm_sylvester_le_of_spectralDistance_complex
-    {EC FC : Type*}
-    [NormedAddCommGroup EC] [InnerProductSpace ℂ EC] [FiniteDimensional ℂ EC]
-    [NormedAddCommGroup FC] [InnerProductSpace ℂ FC] [FiniteDimensional ℂ FC]
-    (N : UnitarilyInvariantSeminorm ℂ EC FC)
-    {A : FC →ₗ[ℂ] FC} {B : EC →ₗ[ℂ] EC} {X C : EC →ₗ[ℂ] FC}
-    (hA : A.IsSymmetric) (hB : B.IsSymmetric) {δ : ℝ} (hδ : 0 < δ)
-    (hgap : PointSpectraSeparated A ⊤ B ⊤ δ)
-    (hEq : A ∘ₗ X - X ∘ₗ B = C) :
-    δ * N X ≤ (Real.pi / 2) * N C := by
-  let p : ℝ := Real.pi / 2
-  have hδ0 : 0 ≤ δ := le_of_lt hδ
-  have hp0 : 0 ≤ p := by
-    dsimp [p]
-    positivity
-  have hscaled : N (((δ : ℂ)) • X) ≤ N (((p : ℂ)) • C) := by
-    apply N.apply_le_of_kyFanSum_le
-    intro k
-    have hX : TauCeti.kyFanSum k
-          (((δ : ℂ)) • X) =
-        δ * TauCeti.kyFanSum k X :=
-      TauCeti.kyFanSum_real_smul k X hδ0
-    have hC : TauCeti.kyFanSum k
-          (((p : ℂ)) • C) =
-        p * TauCeti.kyFanSum k C :=
-      TauCeti.kyFanSum_real_smul k C hp0
-    rw [hX, hC]
-    simpa [p] using
-      kyFan_sylvester_le_of_spectralDistance_complex hA hB hδ hgap hEq k
-  calc
-    δ * N X = N (((δ : ℂ)) • X) := by
-      rw [N.smul_eq, Complex.norm_real, Real.norm_eq_abs, abs_of_pos hδ]
-    _ ≤ N (((p : ℂ)) • C) := hscaled
-    _ = p * N C := by
-      rw [N.smul_eq, Complex.norm_real, Real.norm_eq_abs, abs_of_nonneg hp0]
-    _ = (Real.pi / 2) * N C := by rfl
-
-/-- Unconditional real arbitrary-UI-norm Sylvester estimate. -/
-theorem uiNorm_sylvester_le_of_spectralDistance_real
-    {ER FR : Type*}
-    [NormedAddCommGroup ER] [InnerProductSpace ℝ ER] [FiniteDimensional ℝ ER]
-    [NormedAddCommGroup FR] [InnerProductSpace ℝ FR] [FiniteDimensional ℝ FR]
-    (N : UnitarilyInvariantSeminorm ℝ ER FR)
-    {A : FR →ₗ[ℝ] FR} {B : ER →ₗ[ℝ] ER} {X C : ER →ₗ[ℝ] FR}
-    (hA : A.IsSymmetric) (hB : B.IsSymmetric) {δ : ℝ} (hδ : 0 < δ)
-    (hgap : PointSpectraSeparated A ⊤ B ⊤ δ)
-    (hEq : A ∘ₗ X - X ∘ₗ B = C) :
-    δ * N X ≤ (Real.pi / 2) * N C := by
-  let p : ℝ := Real.pi / 2
-  have hδ0 : 0 ≤ δ := le_of_lt hδ
-  have hp0 : 0 ≤ p := by
-    dsimp [p]
-    positivity
-  have hscaled : N (δ • X) ≤ N (p • C) := by
-    apply N.apply_le_of_kyFanSum_le
-    intro k
-    have hX := TauCeti.kyFanSum_real_smul
-      (𝕜 := ℝ) k X hδ0
-    have hC := TauCeti.kyFanSum_real_smul
-      (𝕜 := ℝ) k C hp0
-    simp only [RCLike.ofReal_real_eq_id, id_eq] at hX hC
-    rw [hX, hC]
-    simpa [p] using
-      kyFan_sylvester_le_of_spectralDistance_real hA hB hδ hgap hEq k
-  calc
-    δ * N X = N (δ • X) := by
-      rw [N.smul_eq, Real.norm_eq_abs, abs_of_pos hδ]
-    _ ≤ N (p • C) := hscaled
-    _ = p * N C := by
-      rw [N.smul_eq, Real.norm_eq_abs, abs_of_nonneg hp0]
     _ = (Real.pi / 2) * N C := by rfl
 
 /-! ## Arbitrary disjoint spectra: the sharp Hilbert--Schmidt estimate

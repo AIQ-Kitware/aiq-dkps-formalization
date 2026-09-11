@@ -46,7 +46,7 @@ operator. -/
 theorem compressOperator_eq_restrict_of_reduces
     (A : Hspace →L[ℂ] Hspace)
     (U : Submodule ℂ Hspace) [U.HasOrthogonalProjection]
-    (hU : Reduces A U) :
+    (hU : A.Reduces U) :
     compressOperator U A = A.restrict hU.1 := by
   apply ContinuousLinearMap.ext
   intro u
@@ -62,7 +62,7 @@ theorem realSpectrum_compressOperator_eq_restrictedSpectrum_of_reduces
     (A : Hspace →L[ℂ] Hspace)
     (U : Submodule ℂ Hspace) [U.HasOrthogonalProjection]
     [CompleteSpace U]
-    (hU : Reduces A U) :
+    (hU : A.Reduces U) :
     realSpectrum (compressOperator U A) = restrictedSpectrum A U := by
   have hInv : InvariantFor A U := by
     intro x hx
@@ -93,7 +93,7 @@ theorem _root_.TauCeti.DavisKahan.Foundation.FiniteGapConfiguration.exists_compr
     (A : Hspace →L[ℂ] Hspace)
     (U : Submodule ℂ Hspace) [U.HasOrthogonalProjection]
     [CompleteSpace U] [CompleteSpace (Uᗮ : Submodule ℂ Hspace)]
-    (hU : Reduces A U) {d : ℝ}
+    (hU : A.Reduces U) {d : ℝ}
     (hfinite : FiniteGapConfiguration A U d) :
     ∃ left right : ℝ, left ≤ right ∧
       realSpectrum (compressOperator U A) ⊆ Set.Icc left right ∧
@@ -121,11 +121,11 @@ theorem _root_.TauCeti.DavisKahan.Foundation.FiniteGapConfiguration.exists_opera
     (A K : Hspace →L[ℂ] Hspace)
     (U : Submodule ℂ Hspace) [U.HasOrthogonalProjection]
     [CompleteSpace U] [CompleteSpace (Uᗮ : Submodule ℂ Hspace)]
-    (hU : Reduces A U) (hK : IsOffDiagonal U K)
+    (hU : A.Reduces U) (hK : Submodule.IsOffDiagonal U K)
     {d : ℝ} (hfinite : FiniteGapConfiguration A U d) :
     ∃ left right : ℝ, left ≤ right ∧
       ∀ t : ℝ, t ∈ Set.Icc (0 : ℝ) 1 →
-      ∀ hpath : IsSelfAdjointOperator (operatorPath A K t),
+      ∀ hpath : ContinuousLinearMap.IsSymmetric (operatorPath A K t),
         realSpectrum
             (subspaceBlockOperatorData (operatorPath A K t) U hpath).A0 ⊆
           Set.Icc left right ∧

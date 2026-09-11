@@ -96,7 +96,7 @@ theorem isSelfAdjoint_sinAngleOperatorRC (U V : Submodule ℝ E)
 original real projection gap. -/
 theorem norm_sinAngleOperatorRC (U V : Submodule ℝ E)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] :
-    ‖sinAngleOperatorRC U V‖ = TauCeti.DavisKahan.subspaceGap U V := by
+    ‖sinAngleOperatorRC U V‖ = U.projectionGap V := by
   rw [sinAngleOperatorRC, norm_sinAngleOperatorC]
   exact subspaceGap_complexifySubmodule U V
 
@@ -114,7 +114,7 @@ theorem norm_sinAngleOperatorRC_ofReal (U V : Submodule ℝ E)
 theorem norm_directedSinAngleOperatorRC (U V : Submodule ℝ E)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] :
     ‖directedSinAngleOperatorRC U V‖ =
-      TauCeti.DavisKahan.directedGap U V := by
+      U.directedProjectionGap V := by
   rw [directedSinAngleOperatorRC, norm_directedSinAngleOperatorC]
   exact directedGap_complexifySubmodule U V
 
@@ -148,16 +148,16 @@ terms of the original real directed gap. -/
 theorem norm_directedSinTwoAngleOperatorRC_le (U V : Submodule ℝ E)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] :
     ‖directedSinTwoAngleOperatorRC U V‖ ≤
-      2 * TauCeti.DavisKahan.directedGap U V := by
+      2 * U.directedProjectionGap V := by
   rw [directedSinTwoAngleOperatorRC]
   have h := norm_directedSinTwoAngleOperatorC_le
     (complexifySubmodule U) (complexifySubmodule V)
   change ‖directedSinTwoAngleOperatorC (complexifySubmodule U)
       (complexifySubmodule V)‖ ≤
-    2 * TauCeti.DavisKahan.directedGap U V
+    2 * U.directedProjectionGap V
   change ‖directedSinTwoAngleOperatorC (complexifySubmodule U)
       (complexifySubmodule V)‖ ≤
-    2 * TauCeti.DavisKahan.directedGap (complexifySubmodule U)
+    2 * Submodule.directedProjectionGap (complexifySubmodule U)
       (complexifySubmodule V) at h
   rw [directedGap_complexifySubmodule] at h
   exact h

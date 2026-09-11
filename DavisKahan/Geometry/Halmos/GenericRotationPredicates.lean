@@ -47,16 +47,16 @@ structure IsDirectRotation
     (U V : Submodule 𝕜 H) [U.HasOrthogonalProjection]
     [V.HasOrthogonalProjection] (T : H →L[𝕜] H) : Prop where
   unitary_mem : T ∈ unitary (H →L[𝕜] H)
-  intertwines : T * projection U = projection V * T
+  intertwines : T * U.starProjection = V.starProjection * T
   source_compression_nonnegative :
     ∀ x : H, 0 ≤ RCLike.re
-      ⟪x, (projection U * T * projection U) x⟫_𝕜
+      ⟪x, (U.starProjection * T * U.starProjection) x⟫_𝕜
   complement_compression_nonnegative :
     ∀ x : H, 0 ≤ RCLike.re
-      ⟪x, (complementaryProjection U * T * complementaryProjection U) x⟫_𝕜
+      ⟪x, ((Uᗮ).starProjection * T * (Uᗮ).starProjection) x⟫_𝕜
   crossed_blocks :
-    complementaryProjection U * T * projection U =
-      -star (projection U * T * complementaryProjection U)
+    (Uᗮ).starProjection * T * U.starProjection =
+      -star (U.starProjection * T * (Uᗮ).starProjection)
 
 /-- The source and target crossed intersections admit a unitary
 identification.  This is the constructive form of equality of their Hilbert

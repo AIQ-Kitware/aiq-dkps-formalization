@@ -54,7 +54,7 @@ theorem ambient_sinTwoTheta_gap_is_on_the_perturbed_blocks
     {H : Type v} [NormedAddCommGroup H] [InnerProductSpace ℂ H] [CompleteSpace H]
     (N : SymmetricNormingFunction)
     {A : H →ₗ.[ℂ] H} (hA : IsSelfAdjoint A)
-    (Hop : H →L[ℂ] H) (hHop : DavisKahan.IsSelfAdjointOperator Hop)
+    (Hop : H →L[ℂ] H) (hHop : Hop.IsSymmetric)
     {P Q : Submodule ℂ H} [P.HasOrthogonalProjection] [Q.HasOrthogonalProjection]
     (hPred : TauCeti.LinearPMap.ReducesSubspace A P)
     (hQred : TauCeti.LinearPMap.ReducesSubspace
@@ -138,13 +138,13 @@ theorem corollary3_1_invariant_is_the_angle_list
     (W₁ X₁ : Submodule 𝕜 H₁) [W₁.HasOrthogonalProjection] [X₁.HasOrthogonalProjection]
     (W₂ X₂ : Submodule 𝕜 H₂) [W₂.HasOrthogonalProjection] [X₂.HasOrthogonalProjection]
     (hcompact₁ : IsCompactOperator
-      (DavisKahan.projection W₁ ∘L
-        (ContinuousLinearMap.id 𝕜 H₁ - DavisKahan.projection X₁) ∘L
-          DavisKahan.projection W₁))
+      (W₁.starProjection ∘L
+        (ContinuousLinearMap.id 𝕜 H₁ - X₁.starProjection) ∘L
+          W₁.starProjection))
     (hcompact₂ : IsCompactOperator
-      (DavisKahan.projection W₂ ∘L
-        (ContinuousLinearMap.id 𝕜 H₂ - DavisKahan.projection X₂) ∘L
-          DavisKahan.projection W₂)) :
+      (W₂.starProjection ∘L
+        (ContinuousLinearMap.id 𝕜 H₂ - X₂.starProjection) ∘L
+          W₂.starProjection)) :
     DavisKahan.PairOfSubspacesUnitaryEquivalent W₁ X₁ W₂ X₂ ↔
       DavisKahan.SameHalmosTrivialDimensions W₁ X₁ W₂ X₂ ∧
       TauCeti.DavisKahan1970.compactAngleList

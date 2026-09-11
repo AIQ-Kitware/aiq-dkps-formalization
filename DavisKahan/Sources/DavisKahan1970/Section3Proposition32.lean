@@ -204,8 +204,8 @@ This is the source's own separation of (1.5) from (3.5). -/
 theorem remark3_2_bilateralShift_separates_dimensionHypotheses
     (b : HilbertBasis ℤ 𝕜 H) :
     (bilateralShiftL b ∈ unitary (H →L[𝕜] H) ∧
-        bilateralShiftL b * DavisKahan.projection (coordinateHalfSpace b 0) =
-          DavisKahan.projection (coordinateHalfSpace b 1) * bilateralShiftL b) ∧
+        bilateralShiftL b * Submodule.starProjection (coordinateHalfSpace b 0) =
+          Submodule.starProjection (coordinateHalfSpace b 1) * bilateralShiftL b) ∧
       (Nonempty (coordinateHalfSpace b 0 ≃ₗᵢ[𝕜] coordinateHalfSpace b 1) ∧
         Nonempty ((coordinateHalfSpace b 0)ᗮ ≃ₗᵢ[𝕜]
           (coordinateHalfSpace b 1)ᗮ)) ∧
@@ -315,8 +315,8 @@ zero, so (3.5) fails and the pair admits no direct rotation. -/
 theorem remark3_2_bilateralShift_separates_dimensionHypotheses_real
     (b : HilbertBasis ℤ ℝ E) :
     (bilateralShiftL b ∈ unitary (E →L[ℝ] E) ∧
-        bilateralShiftL b * DavisKahan.projection (coordinateHalfSpace b 0) =
-          DavisKahan.projection (coordinateHalfSpace b 1) * bilateralShiftL b) ∧
+        bilateralShiftL b * Submodule.starProjection (coordinateHalfSpace b 0) =
+          Submodule.starProjection (coordinateHalfSpace b 1) * bilateralShiftL b) ∧
       (Nonempty (coordinateHalfSpace b 0 ≃ₗᵢ[ℝ] coordinateHalfSpace b 1) ∧
         Nonempty ((coordinateHalfSpace b 0)ᗮ ≃ₗᵢ[ℝ]
           (coordinateHalfSpace b 1)ᗮ)) ∧

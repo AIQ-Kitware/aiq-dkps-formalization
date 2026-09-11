@@ -70,8 +70,8 @@ underneath use. -/
 theorem hasSameApproximationNumbers_displacement_of_isSourceDirectRotation
     {D : H →L[𝕜] H} (hD : DavisKahan.IsSourceDirectRotation U V D)
     (J : DavisKahan.halmosSourceDefect U V ≃ₗᵢ[𝕜] DavisKahan.halmosTargetDefect U V) :
-    ((1 - D) ∘L DavisKahan.projection U).HasSameApproximationNumbers
-      ((1 - DavisKahan.nonacuteDirectRotation U V J) ∘L DavisKahan.projection U) :=
+    ((1 - D) ∘L U.starProjection).HasSameApproximationNumbers
+      ((1 - DavisKahan.nonacuteDirectRotation U V J) ∘L U.starProjection) :=
   ContinuousLinearMap.hasSameApproximationNumbers_of_norm_apply_eq _ _ fun _ =>
     DavisKahan.norm_one_sub_apply_eq_of_isSourceDirectRotation U V hD J _
 
@@ -116,7 +116,7 @@ theorem proposition4_1_directRotation_sourceExact_complex
     (hcompact : IsCompactOperator (TauCeti.principalSineOperator U V))
     (D : H →L[ℂ] H) (hD : DavisKahan.IsSourceDirectRotation U V D)
     (W : H →L[ℂ] H) (hWunitary : W ∈ unitary (H →L[ℂ] H))
-    (hWmap : W * DavisKahan.projection U = DavisKahan.projection V * W) :
+    (hWmap : W * U.starProjection = V.starProjection * W) :
     (∃ v : {n : ℕ // 0 < TauCeti.principalSineSequence U V n} → U,
         Orthonormal ℂ v ∧
           ∀ n : {n : ℕ // 0 < TauCeti.principalSineSequence U V n},
@@ -124,13 +124,13 @@ theorem proposition4_1_directRotation_sourceExact_complex
               TauCeti.vectorAngle ℂ (v n : H) (W (v n : H))) ∧
       (∀ n : ℕ,
         (ContinuousLinearMap.approximationNumber
-            ((1 - D) ∘L DavisKahan.projection U) n : Real) =
+            ((1 - D) ∘L U.starProjection) n : Real) =
           2 * Real.sin (TauCeti.principalAngleSequence U V n / 2)) ∧
       ∀ n : ℕ,
         ContinuousLinearMap.approximationNumber
-            ((1 - D) ∘L DavisKahan.projection U) n ≤
+            ((1 - D) ∘L U.starProjection) n ≤
           ContinuousLinearMap.approximationNumber
-            ((1 - W) ∘L DavisKahan.projection U) n := by
+            ((1 - W) ∘L U.starProjection) n := by
   obtain ⟨J⟩ := crossedDefectsEquivalent_of_isSourceDirectRotation U V hD
   obtain ⟨hv, heq, hle⟩ :=
     proposition4_1_compact_nonacute_complex U V hcompact J W hWunitary hWmap
@@ -148,11 +148,11 @@ theorem corollary4_1_directRotation_sourceExact_complex
     (hcompact : IsCompactOperator (TauCeti.principalSineOperator U V))
     (D : H →L[ℂ] H) (hD : DavisKahan.IsSourceDirectRotation U V D)
     (W : H →L[ℂ] H) (hWunitary : W ∈ unitary (H →L[ℂ] H))
-    (hWmap : W * DavisKahan.projection U = DavisKahan.projection V * W)
-    (hWmem : N.Mem ((1 - W) ∘L DavisKahan.projection U)) :
-    N.Mem ((1 - D) ∘L DavisKahan.projection U) ∧
-      N.gauge ((1 - D) ∘L DavisKahan.projection U) ≤
-        N.gauge ((1 - W) ∘L DavisKahan.projection U) := by
+    (hWmap : W * U.starProjection = V.starProjection * W)
+    (hWmem : N.Mem ((1 - W) ∘L U.starProjection)) :
+    N.Mem ((1 - D) ∘L U.starProjection) ∧
+      N.gauge ((1 - D) ∘L U.starProjection) ≤
+        N.gauge ((1 - W) ∘L U.starProjection) := by
   obtain ⟨J⟩ := crossedDefectsEquivalent_of_isSourceDirectRotation U V hD
   obtain ⟨hmem₀, hle₀⟩ :=
     corollary4_1_compact_nonacute_sourceExact_complex N U V hcompact J W
@@ -171,7 +171,7 @@ theorem proposition4_3_directRotation_sourceExact_complex
     (hcompact : IsCompactOperator (TauCeti.principalSineOperator U V))
     (D : H →L[ℂ] H) (hD : DavisKahan.IsSourceDirectRotation U V D)
     (W : H →L[ℂ] H) (hWunitary : W ∈ unitary (H →L[ℂ] H))
-    (hWmap : W * DavisKahan.projection U = DavisKahan.projection V * W)
+    (hWmap : W * U.starProjection = V.starProjection * W)
     (hWmem : N.Mem ((1 - star W) * (1 - W))) :
     N.Mem ((1 - star D) * (1 - D)) ∧
       N.gauge ((1 - star D) * (1 - D)) ≤ N.gauge ((1 - star W) * (1 - W)) := by
@@ -197,7 +197,7 @@ theorem proposition4_1_directRotation_sourceExact_real
     (hcompact : IsCompactOperator (TauCeti.principalSineOperator U V))
     (D : E →L[ℝ] E) (hD : DavisKahan.IsSourceDirectRotation U V D)
     (W : E →L[ℝ] E) (hWunitary : W ∈ unitary (E →L[ℝ] E))
-    (hWmap : W * DavisKahan.projection U = DavisKahan.projection V * W) :
+    (hWmap : W * U.starProjection = V.starProjection * W) :
     (∃ v : {n : ℕ // 0 < TauCeti.principalSineSequence U V n} → U,
         Orthonormal ℝ v ∧
           ∀ n : {n : ℕ // 0 < TauCeti.principalSineSequence U V n},
@@ -205,13 +205,13 @@ theorem proposition4_1_directRotation_sourceExact_real
               TauCeti.vectorAngle ℝ (v n : E) (W (v n : E))) ∧
       (∀ n : ℕ,
         (ContinuousLinearMap.approximationNumber
-            ((1 - D) ∘L DavisKahan.projection U) n : Real) =
+            ((1 - D) ∘L U.starProjection) n : Real) =
           2 * Real.sin (TauCeti.principalAngleSequence U V n / 2)) ∧
       ∀ n : ℕ,
         ContinuousLinearMap.approximationNumber
-            ((1 - D) ∘L DavisKahan.projection U) n ≤
+            ((1 - D) ∘L U.starProjection) n ≤
           ContinuousLinearMap.approximationNumber
-            ((1 - W) ∘L DavisKahan.projection U) n := by
+            ((1 - W) ∘L U.starProjection) n := by
   obtain ⟨J⟩ := crossedDefectsEquivalent_of_isSourceDirectRotation U V hD
   obtain ⟨hv, heq, hle⟩ :=
     proposition4_1_compact_nonacute_real U V hcompact J W hWunitary hWmap
@@ -227,11 +227,11 @@ theorem corollary4_1_directRotation_sourceExact_real
     (hcompact : IsCompactOperator (TauCeti.principalSineOperator U V))
     (D : E →L[ℝ] E) (hD : DavisKahan.IsSourceDirectRotation U V D)
     (W : E →L[ℝ] E) (hWunitary : W ∈ unitary (E →L[ℝ] E))
-    (hWmap : W * DavisKahan.projection U = DavisKahan.projection V * W)
-    (hWmem : N.Mem ((1 - W) ∘L DavisKahan.projection U)) :
-    N.Mem ((1 - D) ∘L DavisKahan.projection U) ∧
-      N.gauge ((1 - D) ∘L DavisKahan.projection U) ≤
-        N.gauge ((1 - W) ∘L DavisKahan.projection U) := by
+    (hWmap : W * U.starProjection = V.starProjection * W)
+    (hWmem : N.Mem ((1 - W) ∘L U.starProjection)) :
+    N.Mem ((1 - D) ∘L U.starProjection) ∧
+      N.gauge ((1 - D) ∘L U.starProjection) ≤
+        N.gauge ((1 - W) ∘L U.starProjection) := by
   obtain ⟨J⟩ := crossedDefectsEquivalent_of_isSourceDirectRotation U V hD
   obtain ⟨hmem₀, hle₀⟩ :=
     corollary4_1_compact_nonacute_sourceExact_real N U V hcompact J W
@@ -251,7 +251,7 @@ theorem proposition4_3_directRotation_sourceExact_real
     (hcompact : IsCompactOperator (TauCeti.principalSineOperator U V))
     (D : E →L[ℝ] E) (hD : DavisKahan.IsSourceDirectRotation U V D)
     (W : E →L[ℝ] E) (hWunitary : W ∈ unitary (E →L[ℝ] E))
-    (hWmap : W * DavisKahan.projection U = DavisKahan.projection V * W)
+    (hWmap : W * U.starProjection = V.starProjection * W)
     (hWmem : N.Mem ((1 - star W) * (1 - W))) :
     N.Mem ((1 - star D) * (1 - D)) ∧
       N.gauge ((1 - star D) * (1 - D)) ≤ N.gauge ((1 - star W) * (1 - W)) := by

@@ -230,7 +230,7 @@ theorem sinTwoTheta_reflectionResidual_block_gauge_of_spectrum_gap
     (N : TauCeti.SymmetricOperatorIdealFamily.{0, v} ℂ)
     [N.toOperatorIdealFamily.IsComplete]
     (A : H →ₗ.[ℂ] H) (hA : IsSelfAdjoint A)
-    (R : H →L[ℂ] H) (hR : IsSelfAdjointOperator R)
+    (R : H →L[ℂ] H) (hR : R.IsSymmetric)
     (B : Set ℝ) (hB : MeasurableSet B)
     (V : Submodule ℂ H) [V.HasOrthogonalProjection]
     {β α δ : ℝ} (hβα : β ≤ α) (hδ : 0 < δ)
@@ -439,7 +439,7 @@ theorem sinTwoTheta_reflectionResidual_gauge_of_spectrum_gap
     (N : TauCeti.SymmetricOperatorIdealFamily.{0, v} ℂ)
     [N.toOperatorIdealFamily.IsComplete]
     (A : H →ₗ.[ℂ] H) (hA : IsSelfAdjoint A)
-    (R : H →L[ℂ] H) (hR : IsSelfAdjointOperator R)
+    (R : H →L[ℂ] H) (hR : R.IsSymmetric)
     (B : Set ℝ) (hB : MeasurableSet B)
     (V : Submodule ℂ H) [V.HasOrthogonalProjection]
     {β α δ : ℝ} (hβα : β ≤ α) (hδ : 0 < δ)
@@ -476,7 +476,7 @@ theorem sinTwoTheta_addBounded_gauge_of_spectrum_gap
     (N : TauCeti.SymmetricOperatorIdealFamily.{0, v} ℂ)
     [N.toOperatorIdealFamily.IsComplete]
     (A : H →ₗ.[ℂ] H) (hA : IsSelfAdjoint A)
-    (E : H →L[ℂ] H) (hE : IsSelfAdjointOperator E)
+    (E : H →L[ℂ] H) (hE : E.IsSymmetric)
     (B S : Set ℝ) (hB : MeasurableSet B) (hS : MeasurableSet S)
     {β α δ : ℝ} (hβα : β ≤ α) (hδ : 0 < δ)
     (hBlow : TauCeti.LinearPMap.SemiboundedBelow
@@ -500,7 +500,7 @@ theorem sinTwoTheta_addBounded_gauge_of_spectrum_gap
   let hC : IsSelfAdjoint C := addBounded_isSelfAdjoint A hA E hE
   let V := selfAdjointSpectralSubspace C hC S hS
   let D := reflectionPerturbation V E
-  have hD : IsSelfAdjointOperator D :=
+  have hD : D.IsSymmetric :=
     reflectionPerturbation_isSelfAdjoint V E hE
   have hDideal := reflectionPerturbation_mem_and_gauge_le N V E hEmem
   have hmain := sinTwoTheta_reflectionResidual_gauge_of_spectrum_gap
@@ -516,7 +516,7 @@ theorem sinTwoTheta_addBounded_gauge_of_intervalExterior
     (N : TauCeti.SymmetricOperatorIdealFamily.{0, v} ℂ)
     [N.toOperatorIdealFamily.IsComplete]
     (A : H →ₗ.[ℂ] H) (hA : IsSelfAdjoint A)
-    (E : H →L[ℂ] H) (hE : IsSelfAdjointOperator E)
+    (E : H →L[ℂ] H) (hE : E.IsSymmetric)
     (B S : Set ℝ) (hB : MeasurableSet B) (hS : MeasurableSet S)
     {β α δ : ℝ} (hβα : β ≤ α) (hδ : 0 < δ)
     (hBsub : B ⊆ Set.Icc β α)
@@ -546,7 +546,7 @@ form. -/
 theorem sinTwoTheta_addBounded_unitaryInvariant_of_spectrum_gap
     (N : KyFanDominantIdealFamily (𝕜 := ℂ))
     (A : H →ₗ.[ℂ] H) (hA : IsSelfAdjoint A)
-    (E : H →L[ℂ] H) (hE : IsSelfAdjointOperator E)
+    (E : H →L[ℂ] H) (hE : E.IsSymmetric)
     (B S : Set ℝ) (hB : MeasurableSet B) (hS : MeasurableSet S)
     {β α δ : ℝ} (hβα : β ≤ α) (hδ : 0 < δ)
     (hBlow : TauCeti.LinearPMap.SemiboundedBelow
@@ -575,7 +575,7 @@ form. -/
 theorem sinTwoTheta_addBounded_unitaryInvariant_of_intervalExterior
     (N : KyFanDominantIdealFamily (𝕜 := ℂ))
     (A : H →ₗ.[ℂ] H) (hA : IsSelfAdjoint A)
-    (E : H →L[ℂ] H) (hE : IsSelfAdjointOperator E)
+    (E : H →L[ℂ] H) (hE : E.IsSymmetric)
     (B S : Set ℝ) (hB : MeasurableSet B) (hS : MeasurableSet S)
     {β α δ : ℝ} (hβα : β ≤ α) (hδ : 0 < δ)
     (hBsub : B ⊆ Set.Icc β α)
@@ -602,7 +602,7 @@ family, where membership is vacuous and the gauge is the norm; the geometric spi
 once, above. -/
 theorem sinTwoTheta_reflectionResidual_of_spectrum_gap
     (A : H →ₗ.[ℂ] H) (hA : IsSelfAdjoint A)
-    (R : H →L[ℂ] H) (hR : IsSelfAdjointOperator R)
+    (R : H →L[ℂ] H) (hR : R.IsSymmetric)
     (B : Set ℝ) (hB : MeasurableSet B)
     (V : Submodule ℂ H) [V.HasOrthogonalProjection]
     {β α δ : ℝ} (hβα : β ≤ α) (hδ : 0 < δ)
@@ -632,7 +632,7 @@ theorem sinTwoTheta_reflectionResidual_of_spectrum_gap
 bounded self-adjoint perturbation. -/
 theorem sinTwoTheta_addBounded_of_spectrum_gap
     (A : H →ₗ.[ℂ] H) (hA : IsSelfAdjoint A)
-    (E : H →L[ℂ] H) (hE : IsSelfAdjointOperator E)
+    (E : H →L[ℂ] H) (hE : E.IsSymmetric)
     (B S : Set ℝ) (hB : MeasurableSet B) (hS : MeasurableSet S)
     {β α δ : ℝ} (hβα : β ≤ α) (hδ : 0 < δ)
     (hBlow : TauCeti.LinearPMap.SemiboundedBelow
@@ -651,7 +651,7 @@ theorem sinTwoTheta_addBounded_of_spectrum_gap
   let hC : IsSelfAdjoint C := addBounded_isSelfAdjoint A hA E hE
   let V := selfAdjointSpectralSubspace C hC S hS
   let D := reflectionPerturbation V E
-  have hD : IsSelfAdjointOperator D :=
+  have hD : D.IsSymmetric :=
     reflectionPerturbation_isSelfAdjoint V E hE
   have hmain :
       δ * ‖directedSinTwoAngleOperatorC
@@ -666,7 +666,7 @@ theorem sinTwoTheta_addBounded_of_spectrum_gap
 theorem. -/
 theorem sinTwoTheta_addBounded_of_intervalExterior
     (A : H →ₗ.[ℂ] H) (hA : IsSelfAdjoint A)
-    (E : H →L[ℂ] H) (hE : IsSelfAdjointOperator E)
+    (E : H →L[ℂ] H) (hE : E.IsSymmetric)
     (B S : Set ℝ) (hB : MeasurableSet B) (hS : MeasurableSet S)
     {β α δ : ℝ} (hβα : β ≤ α) (hδ : 0 < δ)
     (hBsub : B ⊆ Set.Icc β α)

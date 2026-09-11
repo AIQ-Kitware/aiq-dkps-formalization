@@ -553,7 +553,7 @@ theorem theorem8_1_isAcute_branch_real [P.HasOrthogonalProjection]
       Qc = canonicalLowBranch (RealComplexification.complexify A +
             RealComplexification.complexify K)
           (ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mp (hAc.add hKc)) alpha →
-      DavisKahan.subspaceGap
+      Submodule.projectionGap
           (Foundation.RealComplexification.complexifySubmodule P) Qc <
         Real.sqrt 2 / 2 := by
     rintro Qc _ rfl

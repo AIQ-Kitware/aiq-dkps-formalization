@@ -65,7 +65,7 @@ theorem theorem8_2_branch_maximalAngle_lt_unbounded_smallPerturbation_complex
     {Hc : Type v} [NormedAddCommGroup Hc] [InnerProductSpace ℂ Hc] [CompleteSpace Hc]
     [TopologicalSpace.SeparableSpace Hc]
     {A : Hc →ₗ.[ℂ] Hc} (hA : IsSelfAdjoint A)
-    (Hop : Hc →L[ℂ] Hc) (hHop : DavisKahan.IsSelfAdjointOperator Hop)
+    (Hop : Hc →L[ℂ] Hc) (hHop : Hop.IsSymmetric)
     {P Q : Submodule ℂ Hc} [P.HasOrthogonalProjection] [Q.HasOrthogonalProjection]
     (hPred : TauCeti.LinearPMap.ReducesSubspace A P)
     (hQred : TauCeti.LinearPMap.ReducesSubspace
@@ -88,9 +88,9 @@ theorem theorem8_2_branch_maximalAngle_lt_unbounded_smallPerturbation_complex
   have hrootpos : 0 < Real.sqrt 2 := Real.sqrt_pos.mpr (by norm_num)
   have hdir := directedGap_le_of_reducingGap_unbounded_complex hA Hop hHop hPred hQred
     (by positivity) hgapHalf
-  have hsym : DavisKahan.subspaceGap P Q = DavisKahan.directedGap P Q :=
+  have hsym : P.projectionGap Q = P.directedProjectionGap Q :=
     DavisKahan.subspaceGap_eq_directedGap_of_crossedDefectsEquivalent P Q hcross
-  have hclosed : DavisKahan.subspaceGap P Q ≤ Real.sqrt 2 / 2 := by
+  have hclosed : P.projectionGap Q ≤ Real.sqrt 2 / 2 := by
     rw [hsym]
     nlinarith [hdir, hsmall, hδ]
   have hbound := norm_sinTwoAngleOperator_le_of_perturbedGap_unbounded_complex

@@ -466,7 +466,7 @@ private theorem bounded_reflection_equation_on_U
   let C : E →L[ℂ] E := U.diagonalPart Z
   let S : E →L[ℂ] E := U.offDiagonalPart Z
   have hAsym := ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mp hA
-  have hAred : A.Reduces U := reduces_orthogonalComplement hAsym hAU
+  have hAred : A.Reduces U := ContinuousLinearMap.IsSymmetric.reduces_of_invariant hAsym hAU
   have hAUperp : ∀ y ∈ Uᗮ, A y ∈ Uᗮ := hAred.2
   have hCU : C x ∈ U := by
     dsimp [C]
@@ -560,7 +560,7 @@ private theorem reflection_block_data
   have hLUperp : ∀ x ∈ Uᗮ, L x ∈ U := fun x hx => tanRep_maps_Uperp (U := U) (V := V) hx
   have hAred : A.Reduces U := by
     have hs := ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mp hA
-    exact reduces_orthogonalComplement hs hAU
+    exact ContinuousLinearMap.IsSymmetric.reduces_of_invariant hs hAU
   have hAUperp : ∀ x ∈ Uᗮ, A x ∈ Uᗮ := hAred.2
   have hA0sa : IsSelfAdjoint A0 := by
     dsimp [A0]
@@ -694,8 +694,9 @@ private theorem reflection_block_data
     have hAsym := ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mp hA
     have hAHsa := hA.add hH
     have hAHsym := ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mp hAHsa
-    have hVred : (A + H).Reduces V := reduces_orthogonalComplement hAHsym hAplusH_V
-    have hcommZ := reflectionOperator_comm_of_reduces (A + H) V hVred
+    have hVred : (A + H).Reduces V :=
+      ContinuousLinearMap.IsSymmetric.reduces_of_invariant hAHsym hAplusH_V
+    have hcommZ := Submodule.reflectionOperator_comm_of_reduces (A + H) V hVred
     -- Reduce the projected reflection identity to the explicit `N * L` blocks.
     have hinv := isUnit_one_sub_two_mul_projectorDifference_sq_of_cos_two_ne_zero hcos
     have hp := starProjection_idem_reflection U
@@ -891,7 +892,7 @@ private theorem cos_two_ne_zero_of_ordered_form_gap_offDiagonal
   let Ap : E →ₗ.[ℂ] E := A.toLinearMap.toPMap ⊤
   have hAred : A.Reduces U := by
     have hAsym := ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mp hA
-    exact reduces_orthogonalComplement hAsym hAU
+    exact ContinuousLinearMap.IsSymmetric.reduces_of_invariant hAsym hAU
   have hAUperp : ∀ x ∈ Uᗮ, A x ∈ Uᗮ := hAred.2
   have hred : TauCeti.LinearPMap.ReducesSubspace Ap U := by
     refine TauCeti.LinearPMap.ReducesSubspace.of_components ?_ ?_ ?_ ?_
@@ -918,10 +919,11 @@ private theorem cos_two_ne_zero_of_ordered_form_gap_offDiagonal
     exact Submodule.mem_top
   have hAHsa : IsSelfAdjoint (A + H) := hA.add hH
   have hAHsym := ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mp hAHsa
-  have hVred : (A + H).Reduces V := reduces_orthogonalComplement hAHsym hAplusH_V
+  have hVred : (A + H).Reduces V :=
+    ContinuousLinearMap.IsSymmetric.reduces_of_invariant hAHsym hAplusH_V
   have hcomm : V.reflectionOperator ∘L (A + H) =
       (A + H) ∘L V.reflectionOperator :=
-    reflectionOperator_comm_of_reduces (A + H) V hVred
+    Submodule.reflectionOperator_comm_of_reduces (A + H) V hVred
   have hZcomm : ∀ x : Ap.domain,
       Ap ⟨Z (x : E), hZdom x⟩ + H (Z (x : E)) =
         Z (Ap x) + Z (H (x : E)) := by
@@ -1183,7 +1185,7 @@ theorem tanTwoTheta_directed_boundedResidual_blockRepresentative_spectralGap_sym
         2 * N.gauge (projectionBlock Uᗮ U H) := by
   have hAred : A.Reduces U := by
     have hAsym := ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mp hA
-    exact reduces_orthogonalComplement hAsym hAU
+    exact ContinuousLinearMap.IsSymmetric.reduces_of_invariant hAsym hAU
   have hAUperp : ∀ x ∈ Uᗮ, A x ∈ Uᗮ := hAred.2
   have hA0sa : IsSelfAdjoint (compressOperator U A) :=
     isSelfAdjoint_compressOperator hA U
@@ -1315,7 +1317,7 @@ theorem tanTwoTheta_ambient_bounded_spectralGap_symmetricNorming_complex
       δ * N.gauge (tanTwoAngleOperatorC U V) ≤ 2 * N.gauge H := by
   have hAred : A.Reduces U := by
     have hAsym := ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mp hA
-    exact reduces_orthogonalComplement hAsym hAU
+    exact ContinuousLinearMap.IsSymmetric.reduces_of_invariant hAsym hAU
   have hAUperp : ∀ x ∈ Uᗮ, A x ∈ Uᗮ := hAred.2
   have hA0sa : IsSelfAdjoint (compressOperator U A) :=
     isSelfAdjoint_compressOperator hA U

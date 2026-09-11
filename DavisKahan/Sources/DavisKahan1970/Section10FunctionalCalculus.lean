@@ -6,7 +6,9 @@ Authors: Jon Crall, Claude Opus 5
 import DavisKahan.Sources.DavisKahan1970.AmbientBlockVocabulary
 import DavisKahan.Geometry.Angle.OperatorAngleComplex
 import DavisKahan.Sylvester.Spectrum
-import DavisKahan.BoundedOperator.Compat
+import ForTauCeti.Analysis.InnerProductSpace.BoundedOperator.Projector
+import ForTauCeti.Analysis.InnerProductSpace.Projection.Blocks
+import DavisKahan.BoundedOperator.Problem
 import ForTauCeti.Analysis.InnerProductSpace.Spectral.GapProjection
 import ForTauCeti.Analysis.InnerProductSpace.PrincipalSineSequence
 
@@ -127,7 +129,7 @@ theorem cfc_gapStep_eq_starProjection_complex
     {f : ℝ → ℝ} (hf1 : ∀ t ≤ α, f t = 1) (hf0 : ∀ t, α + δ ≤ t → f t = 0) :
     cfc f A = U.starProjection := by
   have hAred : A.Reduces U :=
-    DavisKahan.reduces_orthogonalComplement
+    ContinuousLinearMap.IsSymmetric.reduces_of_invariant
       (ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mp hA) hAU
   exact TauCeti.SpectralGap.cfc_eq_starProjection_of_blockGap hA
     (subtypeL_comp_compressOperator_of_invariant A U hAU)
@@ -317,7 +319,7 @@ theorem cfc_gapStep_eq_starProjection_real
     {f : ℝ → ℝ} (hf1 : ∀ t ≤ α, f t = 1) (hf0 : ∀ t, α + δ ≤ t → f t = 0) :
     cfc f A = U.starProjection := by
   have hAred : A.Reduces U :=
-    DavisKahan.reduces_orthogonalComplement
+    ContinuousLinearMap.IsSymmetric.reduces_of_invariant
       (ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mp hA) hAU
   exact TauCeti.SpectralGap.cfc_eq_starProjection_of_blockGap hA
     (subtypeL_comp_compressOperator_of_invariant A U hAU)

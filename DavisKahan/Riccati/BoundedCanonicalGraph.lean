@@ -40,7 +40,7 @@ theorem canonicalContractiveRiccatiGraph_reduces
     (hA1spec : ∀ x ∈ spectrum ℝ H.A1,
       x ≤ left - d ∨ right + d ≤ x)
     (hsmall : 2 * ‖H.B01‖ < d) :
-    Reduces (blockOperator H)
+    ContinuousLinearMap.Reduces (blockOperator H)
       (blockGraph
         (canonicalContractiveRiccatiSolution
           H hd hlr hA0spec hA1spec hsmall)) := by
@@ -58,7 +58,7 @@ theorem eq_canonicalContractiveRiccatiSolution_of_reduces
       x ≤ left - d ∨ right + d ≤ x)
     (hsmall : 2 * ‖H.B01‖ < d)
     {X : E0 →L[ℂ] E1}
-    (hred : Reduces (blockOperator H) (blockGraph X))
+    (hred : ContinuousLinearMap.Reduces (blockOperator H) (blockGraph X))
     (hXc : ‖X‖ < 1) :
     X = canonicalContractiveRiccatiSolution
       H hd hlr hA0spec hA1spec hsmall := by
@@ -78,7 +78,7 @@ theorem existsUnique_contractive_reducingGraph_of_spectrum_gap
       x ≤ left - d ∨ right + d ≤ x)
     (hsmall : 2 * ‖H.B01‖ < d) :
     ∃! X : E0 →L[ℂ] E1,
-      Reduces (blockOperator H) (blockGraph X) ∧
+      ContinuousLinearMap.Reduces (blockOperator H) (blockGraph X) ∧
       ‖X‖ < 1 ∧
       ‖X‖ ≤
         2 * ‖H.B01‖ /

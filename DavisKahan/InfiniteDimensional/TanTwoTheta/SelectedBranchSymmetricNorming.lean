@@ -94,7 +94,7 @@ private theorem isOffDiagonal_of_maps_orthogonal
     [U.HasOrthogonalProjection]
     (hHU : ∀ x ∈ U, H x ∈ Uᗮ)
     (hHUperp : ∀ x ∈ Uᗮ, H x ∈ U) :
-    IsOffDiagonal U H := by
+    Submodule.IsOffDiagonal U H := by
   change U.diagonalPart H = 0
   apply ContinuousLinearMap.ext
   intro x
@@ -232,17 +232,17 @@ private theorem tanTwoThetaGraphCoordinate_bound_of_quarterAcute
     (U.isComplete_coe_of_hasOrthogonalProjection).completeSpace_coe
   let : CompleteSpace (Uᗮ : Submodule ℂ E) :=
     (Uᗮ.isComplete_coe_of_hasOrthogonalProjection).completeSpace_coe
-  have hAsym : IsSelfAdjointOperator A :=
+  have hAsym : A.IsSymmetric :=
     ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mp hA
-  have hHsym : IsSelfAdjointOperator H :=
+  have hHsym : H.IsSymmetric :=
     ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mp hH
-  have hAHsym : IsSelfAdjointOperator (A + H) := by
+  have hAHsym : ContinuousLinearMap.IsSymmetric (A + H) := by
     have h := hAsym.add hHsym
     rwa [← ContinuousLinearMap.toLinearMap_add] at h
-  have hUreduces : Reduces A U := reduces_orthogonalComplement hAsym hAU
-  have hVreduces : Reduces (A + H) V :=
-    reduces_orthogonalComplement hAHsym hAplusH_V
-  have hoff : IsOffDiagonal U H :=
+  have hUreduces : A.Reduces U := ContinuousLinearMap.IsSymmetric.reduces_of_invariant hAsym hAU
+  have hVreduces : ContinuousLinearMap.Reduces (A + H) V :=
+    ContinuousLinearMap.IsSymmetric.reduces_of_invariant hAHsym hAplusH_V
+  have hoff : Submodule.IsOffDiagonal U H :=
     isOffDiagonal_of_maps_orthogonal H U hHU hHUperp
   let B : BlockOperatorData (𝕜 := ℂ) (E0 := U) (E1 := Uᗮ) :=
     TauCeti.DavisKahanExt.subspaceBlockOperatorData (A + H) U hAHsym

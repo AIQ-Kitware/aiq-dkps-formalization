@@ -93,7 +93,7 @@ perturbation conclusions.  This example intentionally calls only the public
 theorem sinTwoTheta_from_shared_reducing_setup
     (N : NormalizedSymmetricOperatorIdealFamily.{u₁, v₁} 𝕜)
     {A : H →ₗ.[𝕜] H} (hA : IsSelfAdjoint A)
-    (Hop : H →L[𝕜] H) (hHop : DavisKahan.IsSelfAdjointOperator Hop)
+    (Hop : H →L[𝕜] H) (hHop : Hop.IsSymmetric)
     {P Q : Submodule 𝕜 H} [P.HasOrthogonalProjection] [Q.HasOrthogonalProjection]
     (hPred : TauCeti.LinearPMap.ReducesSubspace A P)
     (hQred : TauCeti.LinearPMap.ReducesSubspace
@@ -275,7 +275,7 @@ written at until the complex full-gap route landed. -/
 theorem sinTwoTheta_from_printed_separation
     (N : SymmetricNormingFunction)
     (A : E →ₗ.[ℂ] E) (hA : IsSelfAdjoint A)
-    (Eop : E →L[ℂ] E) (hEop : DavisKahan.IsSelfAdjointOperator Eop)
+    (Eop : E →L[ℂ] E) (hEop : Eop.IsSymmetric)
     (B S : Set ℝ) (hB : MeasurableSet B) (hS : MeasurableSet S)
     {δ : ℝ} (hδ : 0 < δ)
     (hgap : DavisKahan.Sylvester.FormBoundedSylvesterGap
@@ -306,7 +306,7 @@ spectrum-avoidance certificate. -/
 theorem sinTwoTheta_from_halfInfinite_separation
     (N : SymmetricNormingFunction)
     (A : E →ₗ.[ℂ] E) (hA : IsSelfAdjoint A)
-    (Eop : E →L[ℂ] E) (hEop : DavisKahan.IsSelfAdjointOperator Eop)
+    (Eop : E →L[ℂ] E) (hEop : Eop.IsSymmetric)
     (B S : Set ℝ) (hB : MeasurableSet B) (hS : MeasurableSet S)
     {c δ : ℝ} (hδ : 0 < δ)
     (hBlow : TauCeti.LinearPMap.SemiboundedBelow

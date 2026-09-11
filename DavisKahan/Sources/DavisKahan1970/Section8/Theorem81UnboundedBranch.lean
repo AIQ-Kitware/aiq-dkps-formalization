@@ -202,7 +202,7 @@ variable {A : H →ₗ.[ℂ] H} {Hop : H →L[ℂ] H} {P : Submodule ℂ H}
 
 /-- The perturbed operator of Theorem 8.1. -/
 theorem isSelfAdjoint_perturbed (hA : IsSelfAdjoint A)
-    (hH : DavisKahan.IsSelfAdjointOperator Hop) :
+    (hH : Hop.IsSymmetric) :
     IsSelfAdjoint (TauCeti.LinearPMap.addBounded A Hop) :=
   DavisKahan.addBounded_isSelfAdjoint A hA Hop hH
 
@@ -212,7 +212,7 @@ scope.**
 The repulsion is `notMem_spectrum_addBounded_of_offDiagonal_form_gap`; the two
 bounds are the half-line energy bounds of the spectral measure. -/
 theorem theorem8_1_canonicalBranchUnbounded_form
-    (hA : IsSelfAdjoint A) (hH : DavisKahan.IsSelfAdjointOperator Hop)
+    (hA : IsSelfAdjoint A) (hH : Hop.IsSymmetric)
     (hredP : TauCeti.LinearPMap.ReducesSubspace A P)
     (hPhigh : ∀ x : A.domain, (x : H) ∈ P →
       (alpha + delta) * ‖(x : H)‖ ^ 2 ≤ RCLike.re ⟪A x, (x : H)⟫_ℂ)
@@ -254,7 +254,7 @@ noncomputable local instance instCompleteSpaceCoeBranch
 off-diagonal.  The branch `Q` reduces `A + H`, carries `Λ₀ ≤ α` and
 `Λ₁ ≥ α + δ`, and satisfies the printed `Θ(P, Q) ≤ π/4`. -/
 theorem theorem8_1_canonicalBranchUnbounded_printed
-    (hA : IsSelfAdjoint A) (hH : DavisKahan.IsSelfAdjointOperator Hop)
+    (hA : IsSelfAdjoint A) (hH : Hop.IsSymmetric)
     (hredPperp : TauCeti.LinearPMap.ReducesSubspace A Pᗮ)
     (hPlow : ∀ x : A.domain, (x : H) ∈ P →
       RCLike.re ⟪A x, (x : H)⟫_ℂ ≤ alpha * ‖(x : H)‖ ^ 2)

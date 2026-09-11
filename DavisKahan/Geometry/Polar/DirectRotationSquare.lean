@@ -293,8 +293,8 @@ theorem _root_.TauCeti.DavisKahan.IsUniformlyAcute.symm
     {U V : Submodule ℂ H}
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
     (h : IsUniformlyAcute U V) : IsUniformlyAcute V U := by
-  show subspaceGap V U < 1
-  rw [subspaceGap, Submodule.projectionGap_comm]
+  show V.projectionGap U < 1
+  rw [Submodule.projectionGap, Submodule.projectionGap_comm]
   exact h
 
 /-- The scalar cosine gauge `‖1 + z‖ / 2` of the reflection product. -/
@@ -438,7 +438,7 @@ theorem spectraDirectRotation_sq
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
     (hacute : IsUniformlyAcute U V) :
     spectraDirectRotation U V hacute * spectraDirectRotation U V hacute =
-      reflectionOperator V * reflectionOperator U := by
+      V.reflectionOperator * U.reflectionOperator := by
   rw [spectraDirectRotation_eq_reflectionProductHalfPhase U V hacute]
   exact spectraReflectionProductHalfPhase_sq U V hacute
 
@@ -921,15 +921,15 @@ Halmos cosine. -/
 theorem projection_mul_spectraDirectRotation_mul_projection
     (U V : Submodule ℂ H) [U.HasOrthogonalProjection]
     [V.HasOrthogonalProjection] (hacute : IsUniformlyAcute U V) :
-    projection U * spectraDirectRotation U V hacute * projection U =
+    U.starProjection * spectraDirectRotation U V hacute * U.starProjection =
       ContinuousLinearMap.modulus (spectraCanonicalIntertwiner U V) *
-        projection U := by
+        U.starProjection := by
   let B := spectraCanonicalAbsoluteValueUnit U V hacute
   let C : H →L[ℂ] H :=
     ContinuousLinearMap.modulus (spectraCanonicalIntertwiner U V)
   let D : H →L[ℂ] H := spectraDirectRotation U V hacute
-  let P : H →L[ℂ] H := projection U
-  let Q : H →L[ℂ] H := projection V
+  let P : H →L[ℂ] H := U.starProjection
+  let Q : H →L[ℂ] H := V.starProjection
   let S : H →L[ℂ] H := spectraCanonicalIntertwiner U V
   have hDB : D * C = S := by
     simpa only [ContinuousLinearMap.mul_def] using
@@ -977,16 +977,16 @@ positive Halmos cosine. -/
 theorem complementaryProjection_mul_spectraDirectRotation_mul_complementaryProjection
     (U V : Submodule ℂ H) [U.HasOrthogonalProjection]
     [V.HasOrthogonalProjection] (hacute : IsUniformlyAcute U V) :
-    complementaryProjection U * spectraDirectRotation U V hacute *
-        complementaryProjection U =
+    (Uᗮ).starProjection * spectraDirectRotation U V hacute *
+        (Uᗮ).starProjection =
       ContinuousLinearMap.modulus (spectraCanonicalIntertwiner U V) *
-        complementaryProjection U := by
+        (Uᗮ).starProjection := by
   let B := spectraCanonicalAbsoluteValueUnit U V hacute
   let C : H →L[ℂ] H :=
     ContinuousLinearMap.modulus (spectraCanonicalIntertwiner U V)
   let D : H →L[ℂ] H := spectraDirectRotation U V hacute
-  let P : H →L[ℂ] H := complementaryProjection U
-  let Q : H →L[ℂ] H := complementaryProjection V
+  let P : H →L[ℂ] H := (Uᗮ).starProjection
+  let Q : H →L[ℂ] H := (Vᗮ).starProjection
   let S : H →L[ℂ] H := spectraCanonicalIntertwiner U V
   have hDB : D * C = S := by
     simpa only [ContinuousLinearMap.mul_def] using
@@ -1072,42 +1072,42 @@ theorem reflection_conjugate_eq_star_of_sq_of_intertwines
     (W : H →L[ℂ] H)
     (hWunit : W ∈ unitary (H →L[ℂ] H))
     (hsq : W * W = spectraReflectionProduct U V)
-    (hint : W * reflectionOperator U = reflectionOperator V * W) :
-    reflectionOperator U * W * reflectionOperator U = star W := by
-  have hJJ : reflectionOperator U * reflectionOperator U = (1 : H →L[ℂ] H) :=
+    (hint : W * U.reflectionOperator = V.reflectionOperator * W) :
+    U.reflectionOperator * W * U.reflectionOperator = star W := by
+  have hJJ : U.reflectionOperator * U.reflectionOperator = (1 : H →L[ℂ] H) :=
     reflectionOperator_mul_self_complex U
   have hWstarW : star W * W = 1 := Unitary.star_mul_self_of_mem hWunit
   have hWWstar : W * star W = 1 := Unitary.mul_star_self_of_mem hWunit
   -- Two expressions for `J_V`.
-  have h1 : W * W * reflectionOperator U = reflectionOperator V := by
+  have h1 : W * W * U.reflectionOperator = V.reflectionOperator := by
     calc
-      W * W * reflectionOperator U =
-          reflectionOperator V * reflectionOperator U *
-            reflectionOperator U := by rw [hsq]
-      _ = reflectionOperator V *
-          (reflectionOperator U * reflectionOperator U) := by rw [mul_assoc]
-      _ = reflectionOperator V := by rw [hJJ, mul_one]
-  have h2 : W * reflectionOperator U * star W = reflectionOperator V := by
+      W * W * U.reflectionOperator =
+          V.reflectionOperator * U.reflectionOperator *
+            U.reflectionOperator := by rw [hsq]
+      _ = V.reflectionOperator *
+          (U.reflectionOperator * U.reflectionOperator) := by rw [mul_assoc]
+      _ = V.reflectionOperator := by rw [hJJ, mul_one]
+  have h2 : W * U.reflectionOperator * star W = V.reflectionOperator := by
     rw [hint, mul_assoc, hWWstar, mul_one]
   -- Cancel `W` on the left of `h1 = h2`.
-  have h3 : W * reflectionOperator U = reflectionOperator U * star W := by
+  have h3 : W * U.reflectionOperator = U.reflectionOperator * star W := by
     have h := h1.trans h2.symm
     have h' := congrArg (fun T : H →L[ℂ] H => star W * T) h
     calc
-      W * reflectionOperator U =
-          star W * W * (W * reflectionOperator U) := by rw [hWstarW, one_mul]
-      _ = star W * (W * W * reflectionOperator U) := by
+      W * U.reflectionOperator =
+          star W * W * (W * U.reflectionOperator) := by rw [hWstarW, one_mul]
+      _ = star W * (W * W * U.reflectionOperator) := by
             simp only [mul_assoc]
-      _ = star W * (W * reflectionOperator U * star W) := by rw [h']
-      _ = star W * W * reflectionOperator U * star W := by
+      _ = star W * (W * U.reflectionOperator * star W) := by rw [h']
+      _ = star W * W * U.reflectionOperator * star W := by
             simp only [mul_assoc]
-      _ = reflectionOperator U * star W := by rw [hWstarW, one_mul]
+      _ = U.reflectionOperator * star W := by rw [hWstarW, one_mul]
   -- Multiply on the left by `J_U`.
   calc
-    reflectionOperator U * W * reflectionOperator U =
-        reflectionOperator U * (W * reflectionOperator U) := by rw [mul_assoc]
-    _ = reflectionOperator U * (reflectionOperator U * star W) := by rw [h3]
-    _ = reflectionOperator U * reflectionOperator U * star W := by
+    U.reflectionOperator * W * U.reflectionOperator =
+        U.reflectionOperator * (W * U.reflectionOperator) := by rw [mul_assoc]
+    _ = U.reflectionOperator * (U.reflectionOperator * star W) := by rw [h3]
+    _ = U.reflectionOperator * U.reflectionOperator * star W := by
           rw [mul_assoc]
     _ = star W := by rw [hJJ, one_mul]
 
@@ -1126,29 +1126,29 @@ theorem spectraDirectRotation_unique_of_diagonalBlocks
     (W : H →L[ℂ] H)
     (hWunit : W ∈ unitary (H →L[ℂ] H))
     (hsq : W * W = spectraReflectionProduct U V)
-    (hint : W * reflectionOperator U = reflectionOperator V * W)
+    (hint : W * U.reflectionOperator = V.reflectionOperator * W)
     (hblockU : ∀ x ∈ U, 0 ≤ Complex.re ⟪W x, x⟫_ℂ)
     (hblockUperp : ∀ x ∈ Uᗮ, 0 ≤ Complex.re ⟪W x, x⟫_ℂ) :
     W = spectraDirectRotation U V hacute := by
-  have hJJ : reflectionOperator U * reflectionOperator U = (1 : H →L[ℂ] H) :=
+  have hJJ : U.reflectionOperator * U.reflectionOperator = (1 : H →L[ℂ] H) :=
     reflectionOperator_mul_self_complex U
-  have hconj : reflectionOperator U * W * reflectionOperator U = star W :=
+  have hconj : U.reflectionOperator * W * U.reflectionOperator = star W :=
     reflection_conjugate_eq_star_of_sq_of_intertwines U V W hWunit hsq hint
   -- The Hermitian part commutes with the reflection.
   have hstarconj :
-      reflectionOperator U * star W * reflectionOperator U = W := by
+      U.reflectionOperator * star W * U.reflectionOperator = W := by
     calc
-      reflectionOperator U * star W * reflectionOperator U =
-          reflectionOperator U *
-            (reflectionOperator U * W * reflectionOperator U) *
-              reflectionOperator U := by rw [hconj]
-      _ = (reflectionOperator U * reflectionOperator U) * W *
-            (reflectionOperator U * reflectionOperator U) := by
+      U.reflectionOperator * star W * U.reflectionOperator =
+          U.reflectionOperator *
+            (U.reflectionOperator * W * U.reflectionOperator) *
+              U.reflectionOperator := by rw [hconj]
+      _ = (U.reflectionOperator * U.reflectionOperator) * W *
+            (U.reflectionOperator * U.reflectionOperator) := by
             simp only [mul_assoc]
       _ = W := by rw [hJJ, one_mul, mul_one]
   have hT : U.reflectionOperator ∘L (W + star W) ∘L U.reflectionOperator =
       W + star W := by
-    show reflectionOperator U * ((W + star W) * reflectionOperator U) =
+    show U.reflectionOperator * ((W + star W) * U.reflectionOperator) =
       W + star W
     rw [← mul_assoc, mul_add, add_mul, mul_assoc, mul_assoc, ← mul_assoc _ W,
       ← mul_assoc _ (star W), hconj, hstarconj]
@@ -1193,7 +1193,7 @@ theorem eq_spectraDirectRotation_iff_diagonalBlocks_nonneg
     W = spectraDirectRotation U V hacute ↔
       W ∈ unitary (H →L[ℂ] H) ∧
         W * W = spectraReflectionProduct U V ∧
-        W * reflectionOperator U = reflectionOperator V * W ∧
+        W * U.reflectionOperator = V.reflectionOperator * W ∧
         (∀ x ∈ U, 0 ≤ Complex.re ⟪W x, x⟫_ℂ) ∧
         (∀ x ∈ Uᗮ, 0 ≤ Complex.re ⟪W x, x⟫_ℂ) := by
   constructor
@@ -1504,34 +1504,34 @@ theorem spectraDirectRotation_unique_of_diagonalBlocks_pos
     (hblockU : ∀ x ∈ U, 0 ≤ ⟪W x, x⟫_ℂ)
     (hblockUperp : ∀ x ∈ Uᗮ, 0 ≤ ⟪W x, x⟫_ℂ) :
     W = spectraDirectRotation U V hacute := by
-  have hJJ : reflectionOperator U * reflectionOperator U = (1 : H →L[ℂ] H) :=
+  have hJJ : U.reflectionOperator * U.reflectionOperator = (1 : H →L[ℂ] H) :=
     reflectionOperator_mul_self_complex U
-  have hconj : reflectionOperator U * W * reflectionOperator U = star W :=
+  have hconj : U.reflectionOperator * W * U.reflectionOperator = star W :=
     reflection_conjugate_eq_star_of_intertwines_of_diagonalBlocks_pos U V hacute W
       hWunit hint hblockU hblockUperp
-  have hintJ : W * reflectionOperator U = reflectionOperator V * W := by
+  have hintJ : W * U.reflectionOperator = V.reflectionOperator * W := by
     rw [reflectionOperator_eq_projection_add_projection_sub_one U,
       reflectionOperator_eq_projection_add_projection_sub_one V, mul_sub, mul_add,
       mul_one, sub_mul, add_mul, one_mul, hint]
   -- `W J_U = J_U W⋆`, the left-multiplied form of the reflection conjugate identity.
-  have hWJ : W * reflectionOperator U = reflectionOperator U * star W := by
-    calc W * reflectionOperator U
-        = reflectionOperator U * reflectionOperator U * W * reflectionOperator U := by
+  have hWJ : W * U.reflectionOperator = U.reflectionOperator * star W := by
+    calc W * U.reflectionOperator
+        = U.reflectionOperator * U.reflectionOperator * W * U.reflectionOperator := by
           rw [hJJ, one_mul]
-      _ = reflectionOperator U * (reflectionOperator U * W * reflectionOperator U) := by
+      _ = U.reflectionOperator * (U.reflectionOperator * W * U.reflectionOperator) := by
           simp only [mul_assoc]
-      _ = reflectionOperator U * star W := by rw [hconj]
+      _ = U.reflectionOperator * star W := by rw [hconj]
   -- Equation (3.8) is now a consequence, not a hypothesis.
   have hsq : W * W = spectraReflectionProduct U V := by
-    have hstep : W * W * reflectionOperator U = reflectionOperator V := by
-      calc W * W * reflectionOperator U = W * (W * reflectionOperator U) := by
+    have hstep : W * W * U.reflectionOperator = V.reflectionOperator := by
+      calc W * W * U.reflectionOperator = W * (W * U.reflectionOperator) := by
             rw [mul_assoc]
-        _ = W * (reflectionOperator U * star W) := by rw [hWJ]
-        _ = W * reflectionOperator U * star W := by rw [mul_assoc]
-        _ = reflectionOperator V * W * star W := by rw [hintJ]
-        _ = reflectionOperator V := by
+        _ = W * (U.reflectionOperator * star W) := by rw [hWJ]
+        _ = W * U.reflectionOperator * star W := by rw [mul_assoc]
+        _ = V.reflectionOperator * W * star W := by rw [hintJ]
+        _ = V.reflectionOperator := by
               rw [mul_assoc, Unitary.mul_star_self_of_mem hWunit, mul_one]
-    have h := congrArg (fun T : H →L[ℂ] H => T * reflectionOperator U) hstep
+    have h := congrArg (fun T : H →L[ℂ] H => T * U.reflectionOperator) hstep
     simpa only [mul_assoc, hJJ, mul_one, spectraReflectionProduct] using h
   refine spectraDirectRotation_unique_of_diagonalBlocks U V hacute W hWunit hsq hintJ
     ?_ ?_
@@ -1730,13 +1730,13 @@ theorem spectraDirectRotation_minimal
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
     (hacute : IsUniformlyAcute U V)
     (W : H →L[ℂ] H) (hWunit : W ∈ unitary (H →L[ℂ] H))
-    (hintertwine : W * projection U = projection V * W) :
+    (hintertwine : W * U.starProjection = V.starProjection * W) :
     ‖spectraDirectRotation U V hacute - 1‖ ≤ ‖W - 1‖ := by
   let D : H →L[ℂ] H := spectraDirectRotation U V hacute
   let C : H →L[ℂ] H :=
     ContinuousLinearMap.modulus (spectraCanonicalIntertwiner U V)
-  let P : H →L[ℂ] H := projection U
-  let Pc : H →L[ℂ] H := complementaryProjection U
+  let P : H →L[ℂ] H := U.starProjection
+  let Pc : H →L[ℂ] H := (Uᗮ).starProjection
   let A : H →L[ℂ] H := star D * W
   let r : ℝ := ‖W - 1‖
   by_cases hrlarge : Real.sqrt 2 ≤ r
@@ -1783,12 +1783,12 @@ theorem spectraDirectRotation_minimal
     show A * P = P * A
     calc
       A * P = star D * (W * P) := by simp only [A]; rw [mul_assoc]
-      _ = star D * (projection V * W) := by
-        change star D * (W * projection U) = _
+      _ = star D * (V.starProjection * W) := by
+        change star D * (W * U.starProjection) = _
         rw [hintertwine]
       _ = (P * star D) * W := by
-        change star D * (projection V * W) =
-          (projection U * star D) * W
+        change star D * (V.starProjection * W) =
+          (U.starProjection * star D) * W
         rw [← mul_assoc, star_spectraDirectRotation_intertwines U V hacute]
       _ = P * A := by simp only [A]; rw [mul_assoc]
   -- Commuting with `P` is the same as commuting with its complement, and both `A` and `C`

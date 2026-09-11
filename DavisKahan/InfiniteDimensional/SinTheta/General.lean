@@ -3,7 +3,7 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, GPT 5.6 High
 -/
-import DavisKahan.InfiniteDimensional.SinTheta.RestrictionCompat
+import DavisKahan.InfiniteDimensional.SinTheta.Restriction
 import DavisKahan.InfiniteDimensional.SinTheta.SpectralBridge
 import DavisKahan.SpectralTheory.Complexification.Spectrum
 import ForTauCeti.Analysis.InnerProductSpace.OperatorModulus
@@ -89,8 +89,8 @@ private theorem exists_common_cut_of_orderedSeparation_rclike
       ∀ a ∈ TauCeti.DavisKahan.Foundation.realSpectrum A, b + d ≤ a := by
     intro b hb a ha
     refine hord b ?_ a ?_
-    · rw [restrictedSpectrum_top_eq_realSpectrum_general]; exact hb
-    · rw [restrictedSpectrum_top_eq_realSpectrum_general]; exact ha
+    · rw [TauCeti.DavisKahan.Foundation.restrictedSpectrum_top]; exact hb
+    · rw [TauCeti.DavisKahan.Foundation.restrictedSpectrum_top]; exact ha
   rcases (TauCeti.DavisKahan.Foundation.realSpectrum B).eq_empty_or_nonempty
     with hB0 | hBne
   · rcases (TauCeti.DavisKahan.Foundation.realSpectrum A).eq_empty_or_nonempty
@@ -131,10 +131,10 @@ sits below the other, which gives a *cut*; the bridge wants an
 is what ordered separation already gives. -/
 theorem norm_sylvester_le_of_orderedSeparation_rclike
     {A : F →L[𝕜] F} {B : E →L[𝕜] E} {X C : E →L[𝕜] F}
-    (hA : IsSelfAdjointOperator A) (hB : IsSelfAdjointOperator B)
+    (hA : A.IsSymmetric) (hB : B.IsSymmetric)
     {d : ℝ} (hd : 0 < d)
     (hsep : OrderedSpectraSeparated B ⊤ A ⊤ d)
-    (hEq : sylvesterOperator A B X = C) :
+    (hEq : ContinuousLinearMap.sylvesterOperator A B X = C) :
     d * ‖X‖ ≤ ‖C‖ := by
   obtain ⟨c, hBc, hAc⟩ := exists_common_cut_of_orderedSeparation_rclike hsep
   set β : ℝ := min (-(‖B‖ * ‖(1 : E →L[𝕜] E)‖) - 1) (c - 1) with hβ
@@ -161,17 +161,17 @@ Proved by restricting scalars to `ℝ` and complexifying, which is the route the
 leaf obligation this replaced described as "its complexification transport". -/
 theorem norm_sylvester_le_of_generalSeparation_rclike
     {A : F →L[𝕜] F} {B : E →L[𝕜] E} {X C : E →L[𝕜] F}
-    (hA : IsSelfAdjointOperator A) (hB : IsSelfAdjointOperator B)
+    (hA : A.IsSymmetric) (hB : B.IsSymmetric)
     {d : ℝ} (hd : 0 < d)
     (hsep : SpectraSeparated A ⊤ B ⊤ d)
-    (hEq : sylvesterOperator A B X = C) :
+    (hEq : ContinuousLinearMap.sylvesterOperator A B X = C) :
     d * ‖X‖ ≤ (Real.pi / 2) * ‖C‖ := by
   have hEqr : (A.restrictScalars ℝ) ∘L (X.restrictScalars ℝ)
       - (X.restrictScalars ℝ) ∘L (B.restrictScalars ℝ) = C.restrictScalars ℝ := by
     ext x
     have := congrArg (fun T : E →L[𝕜] F => T x) hEq
-    simpa [sylvesterOperator] using this
-  have hEqc : sylvesterOperator (complexify (A.restrictScalars ℝ))
+    simpa [ContinuousLinearMap.sylvesterOperator] using this
+  have hEqc : ContinuousLinearMap.sylvesterOperator (complexify (A.restrictScalars ℝ))
       (complexify (B.restrictScalars ℝ)) (complexify (X.restrictScalars ℝ)) =
       complexify (C.restrictScalars ℝ) := by
     show complexify (A.restrictScalars ℝ) ∘L complexify (X.restrictScalars ℝ)
@@ -185,14 +185,14 @@ theorem norm_sylvester_le_of_generalSeparation_rclike
     simpa [real_inner_eq_re_inner (𝕜 := 𝕜)] using congrArg RCLike.re (hA x y)
   have hBr : (B.restrictScalars ℝ).IsSymmetric := fun x y => by
     simpa [real_inner_eq_re_inner (𝕜 := 𝕜)] using congrArg RCLike.re (hB x y)
-  have hAc : IsSelfAdjointOperator (complexify (A.restrictScalars ℝ)) := by
+  have hAc : ContinuousLinearMap.IsSymmetric (complexify (A.restrictScalars ℝ)) := by
     have hsa : IsSelfAdjoint (complexify (A.restrictScalars ℝ)) := by
       show ContinuousLinearMap.adjoint _ = _
       rw [← TauCeti.RealComplexification.complexify_adjoint]
       exact congrArg complexify
         (ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.2 hAr)
     exact ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.1 hsa
-  have hBc : IsSelfAdjointOperator (complexify (B.restrictScalars ℝ)) := by
+  have hBc : ContinuousLinearMap.IsSymmetric (complexify (B.restrictScalars ℝ)) := by
     have hsa : IsSelfAdjoint (complexify (B.restrictScalars ℝ)) := by
       show ContinuousLinearMap.adjoint _ = _
       rw [← TauCeti.RealComplexification.complexify_adjoint]
@@ -243,47 +243,46 @@ strongest available Sylvester theorem; only then translate cross-block norms int
 directed or full subspace angles.
 -/
 theorem sinTheta_residual
-    {A : E →L[𝕜] E} (hA : IsSelfAdjointOperator A)
+    {A : E →L[𝕜] E} (hA : A.IsSymmetric)
     {U : Submodule 𝕜 E} [U.HasOrthogonalProjection]
-    (hU : Reduces A U)
+    (hU : A.Reduces U)
     {X : F →L[𝕜] E} (_hX : IsometricEmbedding X)
-    {M : F →L[𝕜] F} (hM : IsSelfAdjointOperator M)
+    {M : F →L[𝕜] F} (hM : M.IsSymmetric)
     {d : ℝ} (hd : 0 < d)
     (hsep : OrderedSpectraSeparated M ⊤ A Uᗮ d) :
     d * ‖sinThetaEmbedding U X‖ ≤ ‖residual A X M‖ := by
   let Y : F →L[𝕜] Uᗮ :=
-    codRestrictTo (complementaryProjection U ∘L X) Uᗮ
-      (fun x => Uᗮ.starProjection_apply_mem _)
+    (((Uᗮ).starProjection ∘L X)).codRestrict Uᗮ (fun x => Uᗮ.starProjection_apply_mem _)
   let C : F →L[𝕜] Uᗮ :=
-    codRestrictTo (complementaryProjection U ∘L residual A X M) Uᗮ
+    (((Uᗮ).starProjection ∘L residual A X M)).codRestrict Uᗮ
       (fun x => Uᗮ.starProjection_apply_mem _)
-  have hEq : sylvesterOperator (restrictToOrthogonal A U hU) M Y = C :=
+  have hEq : ContinuousLinearMap.sylvesterOperator (A.restrict hU.2) M Y = C :=
     directedResidual_sylvesterEquation hA hU
   have hsep' : OrderedSpectraSeparated M ⊤
-      (restrictToOrthogonal A U hU) ⊤ d := by
+      (A.restrict hU.2) ⊤ d := by
     obtain ⟨hM, hAperp, hord⟩ := hsep
     refine ⟨hM, fun x _ => Submodule.mem_top, ?_⟩
     intro a ha b hb
     refine hord a ha b ?_
     have hb' : b ∈ TauCeti.DavisKahan.Foundation.realSpectrum
-        (restrictToOrthogonal A U hU) :=
-      (restrictedSpectrum_top_eq_realSpectrum_general
-        (restrictToOrthogonal A U hU)) ▸ hb
+        (A.restrict hU.2) :=
+      (TauCeti.DavisKahan.Foundation.restrictedSpectrum_top
+        (A.restrict hU.2)) ▸ hb
     have h2 : TauCeti.DavisKahan.Foundation.restrictedSpectrum
           A Uᗮ =
         TauCeti.DavisKahan.Foundation.realSpectrum
-          (restrictToOrthogonal A U hU) :=
-      restrictedSpectrum_orthogonal_eq A U hU
+          (A.restrict hU.2) :=
+      TauCeti.DavisKahan.Foundation.restrictedSpectrum_eq_restrictionSpectrum A Uᗮ hU.2
     rw [h2]
     exact hb'
   have hbound := norm_sylvester_le_of_orderedSeparation_rclike
-    (hA.restrictToOrthogonal U hU) hM hd hsep' hEq
+    (LinearMap.IsSymmetric.restrict_invariant hA hU.2) hM hd hsep' hEq
   have hY : ‖Y‖ = ‖sinThetaEmbedding U X‖ :=
-    norm_codRestrictTo_eq _ _ _
+    ContinuousLinearMap.opNorm_codRestrict_eq _ _ _
   have hC : ‖C‖ ≤ ‖residual A X M‖ := by
     calc
-      ‖C‖ = ‖complementaryProjection U ∘L residual A X M‖ :=
-        norm_codRestrictTo_eq _ _ _
+      ‖C‖ = ‖(Uᗮ).starProjection ∘L residual A X M‖ :=
+        ContinuousLinearMap.opNorm_codRestrict_eq _ _ _
       _ ≤ ‖residual A X M‖ :=
         projection_comp_opNorm_le Uᗮ _
   simpa [hY] using hbound.trans hC
@@ -308,207 +307,38 @@ directed or full subspace angles.
 -/
 theorem sinTheta_perturbation
     {A B : E →L[𝕜] E}
-    (hA : IsSelfAdjointOperator A) (hB : IsSelfAdjointOperator B)
+    (hA : A.IsSymmetric) (hB : B.IsSymmetric)
     {U V : Submodule 𝕜 E}
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
-    (hU : Reduces A U) (hV : Reduces B V)
+    (hU : A.Reduces U) (hV : B.Reduces V)
     {left right d : ℝ} (hlr : left ≤ right) (hd : 0 < d)
     (hgap : IntervalExteriorSeparated A U B Vᗮ left right d) :
-    d * directedGap U V ≤ ‖B - A‖ := by
+    d * U.directedProjectionGap V ≤ ‖B - A‖ := by
   let X : U →L[𝕜] Vᗮ :=
-    codRestrictTo (complementaryProjection V ∘L U.subtypeL) Vᗮ
-      (fun x => Vᗮ.starProjection_apply_mem _)
+    (((Vᗮ).starProjection ∘L U.subtypeL)).codRestrict Vᗮ (fun x => Vᗮ.starProjection_apply_mem _)
   let C : U →L[𝕜] Vᗮ :=
-    codRestrictTo
-      (complementaryProjection V ∘L (B - A) ∘L U.subtypeL) Vᗮ
+    (((Vᗮ).starProjection ∘L (B - A) ∘L U.subtypeL)).codRestrict Vᗮ
       (fun x => Vᗮ.starProjection_apply_mem _)
   have hEq := directedPerturbation_sylvesterEquation hA hB hU hV
   have hgap' : ExactSinTheta.IntervalExteriorGap
-      (restrictToOrthogonal B V hV) (restrictToReducingSubspace A U hU)
+      (B.restrict hV.2) (A.restrict hU.1)
       left right d := by
     exact intervalExteriorSeparated_restrictions hA hB hU hV hgap
   have : CompleteSpace U := completeSpace_of_hasOrthogonalProjection U
   have : CompleteSpace Vᗮ := completeSpace_of_hasOrthogonalProjection Vᗮ
   have hsolve := ExactSinTheta.sylvester_mem_and_gauge_le_of_intervalExteriorGap
     (TauCeti.operatorNormFamily.{u, v} 𝕜)
-    (hB.restrictToOrthogonal V hV) (hA.restrictToReducingSubspace U hU)
+    (LinearMap.IsSymmetric.restrict_invariant hB hV.2)
+    (LinearMap.IsSymmetric.restrict_invariant hA hU.1)
     hlr hd hgap' hEq
     (TauCeti.SymmetricOperatorIdealFamily.mem_operatorNormFamily _)
   have hC : ‖C‖ ≤ ‖B - A‖ :=
     restricted_projection_sandwich_norm_le _ _ _
-  have h2 : d * ‖codRestrictTo
-      (Vᗮ.starProjection ∘L U.subtypeL) Vᗮ
-      (fun x => Vᗮ.starProjection_apply_mem _)‖ ≤ ‖B - A‖ :=
+  have h2 : d * ‖((Vᗮ.starProjection ∘L U.subtypeL)).codRestrict Vᗮ
+    (fun x => Vᗮ.starProjection_apply_mem _)‖ ≤ ‖B - A‖ :=
     hsolve.2.trans hC
   rw [directedGap_eq_restrictedBlock_norm U V] at h2
   exact h2
-
-/-- **The dimension-free operator-norm Davis--Kahan `sin Θ` theorem, coercivity
-form.**  For self-adjoint `A, B` on an arbitrary Hilbert space, `U` reducing `A`
-with quadratic form `≥ (c+g)‖·‖²` on `U`, and `V` reducing `B` with quadratic
-form `≤ c‖·‖²` on `V`,
-
-`‖P_V P_U‖ ≤ ‖B − A‖ / g`.
-
-This is the genuine infinite-dimensional `sin Θ` bound: the analytic core is the
-integral-free Sylvester estimate `norm_sylvester_le_of_coercive` (no spectral
-measure, no dimension or completeness hypothesis on the *bound* itself), and the
-block construction `A ∘L P + (c+g)(1−P)`, `B ∘L Q + c(1−Q)` uses only the
-dimension-free projection commutation `projection_apply_comm_of_isInvariant`.  The
-spectrum-predicate forms (`sinTheta_perturbation`, `IntervalExteriorSeparated`)
-follow from this once a bounded spectral theorem converts spectral separation to
-these coercivity bounds. -/
-theorem sinTheta_directed_coercive
-    {A B : E →L[𝕜] E} (hA : IsSelfAdjointOperator A) (hB : IsSelfAdjointOperator B)
-    {U V : Submodule 𝕜 E} [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
-    (hU : Reduces A U) (hV : Reduces B V)
-    {c g : ℝ} (hg : 0 < g)
-    (hUc : ∀ x ∈ U, (c + g) * ‖x‖ ^ 2 ≤ RCLike.re ⟪A x, x⟫_𝕜)
-    (hVc : ∀ x ∈ V, RCLike.re ⟪B x, x⟫_𝕜 ≤ c * ‖x‖ ^ 2) :
-    ‖(projection V ∘L projection U : E →L[𝕜] E)‖ ≤ ‖B - A‖ / g := by
-  set P := projection U with hP
-  set Q := projection V with hQ
-  set A' : E →L[𝕜] E := A ∘L P + ((c + g : ℝ) : 𝕜) • (1 - P) with hA'
-  set B' : E →L[𝕜] E := B ∘L Q + ((c : ℝ) : 𝕜) • (1 - Q) with hB'
-  set X : E →L[𝕜] E := P ∘L Q with hX
-  set Y : E →L[𝕜] E := P ∘L (A - B) ∘L Q with hY
-  have hPsa : IsSelfAdjoint P := isSelfAdjoint_starProjection U
-  have hQsa : IsSelfAdjoint Q := isSelfAdjoint_starProjection V
-  have hAsa : IsSelfAdjoint A := (ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric).mpr hA
-  have hBsa : IsSelfAdjoint B := (ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric).mpr hB
-  have hcgsa : IsSelfAdjoint ((c + g : ℝ) : 𝕜) := isSelfAdjoint_iff.mpr (RCLike.conj_ofReal _)
-  have hcsa : IsSelfAdjoint ((c : ℝ) : 𝕜) := isSelfAdjoint_iff.mpr (RCLike.conj_ofReal _)
-  have hone : IsSelfAdjoint (1 : E →L[𝕜] E) := IsSelfAdjoint.one _
-  -- commutations
-  have hcommA : A ∘L P = P ∘L A := by
-    ext x; simp only [ContinuousLinearMap.comp_apply]
-    exact (projection_apply_comm_of_isInvariant A U hU x).symm
-  have hcommB : B ∘L Q = Q ∘L B := by
-    ext x; simp only [ContinuousLinearMap.comp_apply]
-    exact (projection_apply_comm_of_isInvariant B V hV x).symm
-  -- self-adjointness of A', B'
-  have hA'sa : IsSelfAdjoint A' := by
-    have h1 : IsSelfAdjoint (A ∘L P) := (IsSelfAdjoint.commute_iff hAsa hPsa).mp hcommA
-    have h2 : IsSelfAdjoint (((c + g : ℝ) : 𝕜) • ((1 : E →L[𝕜] E) - P)) := by
-      rw [isSelfAdjoint_iff, star_smul, hcgsa.star_eq, (hone.sub hPsa).star_eq]
-    exact hA' ▸ h1.add h2
-  have hB'sa : IsSelfAdjoint B' := by
-    have h1 : IsSelfAdjoint (B ∘L Q) := (IsSelfAdjoint.commute_iff hBsa hQsa).mp hcommB
-    have h2 : IsSelfAdjoint (((c : ℝ) : 𝕜) • ((1 : E →L[𝕜] E) - Q)) := by
-      rw [isSelfAdjoint_iff, star_smul, hcsa.star_eq, (hone.sub hQsa).star_eq]
-    exact hB' ▸ h1.add h2
-  have hA'sym : IsSelfAdjointOperator A' := (ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric).mp hA'sa
-  have hB'sym : IsSelfAdjointOperator B' := (ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric).mp hB'sa
-  -- coercivity of A'
-  have hA'c : ∀ x, (c + g) * ‖x‖ ^ 2 ≤ RCLike.re ⟪A' x, x⟫_𝕜 := by
-    intro x
-    have hpx : P x ∈ U := U.starProjection_apply_mem x
-    have hrest : x - P x ∈ Uᗮ := U.sub_starProjection_mem_orthogonal x
-    have hAxeq : A' x = A (P x) + ((c + g : ℝ) : 𝕜) • (x - P x) := by
-      simp only [hA', add_apply, ContinuousLinearMap.comp_apply,
-        smul_apply, sub_apply, one_apply_eq_self]
-    have hre : RCLike.re ⟪A' x, x⟫_𝕜
-        = RCLike.re ⟪A (P x), x⟫_𝕜 + (c + g) * RCLike.re ⟪x - P x, x⟫_𝕜 := by
-      rw [hAxeq, inner_add_left, inner_smul_left, RCLike.conj_ofReal, map_add, RCLike.re_ofReal_mul]
-    have h1 : RCLike.re ⟪A (P x), x⟫_𝕜 = RCLike.re ⟪A (P x), P x⟫_𝕜 := by
-      have hz : ⟪A (P x), x - P x⟫_𝕜 = 0 :=
-        Submodule.inner_right_of_mem_orthogonal (hU.1 _ hpx) hrest
-      have : ⟪A (P x), x⟫_𝕜 = ⟪A (P x), P x⟫_𝕜 + ⟪A (P x), x - P x⟫_𝕜 := by
-        rw [← inner_add_right]; congr 1; abel
-      rw [this, hz, add_zero]
-    have h2 : RCLike.re ⟪x - P x, x⟫_𝕜 = ‖x - P x‖ ^ 2 := by
-      have hz : ⟪x - P x, P x⟫_𝕜 = 0 := Submodule.inner_left_of_mem_orthogonal hpx hrest
-      have : ⟪x - P x, x⟫_𝕜 = ⟪x - P x, x - P x⟫_𝕜 := by
-        have h' : ⟪x - P x, x⟫_𝕜 = ⟪x - P x, P x⟫_𝕜 + ⟪x - P x, x - P x⟫_𝕜 := by
-          rw [← inner_add_right]; congr 1; abel
-        rw [h', hz, zero_add]
-      rw [this, inner_self_eq_norm_sq]
-    have hpyth : ‖x‖ ^ 2 = ‖P x‖ ^ 2 + ‖x - P x‖ ^ 2 := by
-      have h0 : RCLike.re ⟪P x, x - P x⟫_𝕜 = 0 := by
-        rw [Submodule.inner_right_of_mem_orthogonal hpx hrest]; simp
-      have hns := norm_add_sq (𝕜 := 𝕜) (P x) (x - P x)
-      rw [show P x + (x - P x) = x by abel, h0] at hns
-      linarith
-    rw [hre, h1, h2, hpyth]
-    nlinarith [hUc (P x) hpx]
-  -- upper bound for B'
-  have hB'c : ∀ x, RCLike.re ⟪B' x, x⟫_𝕜 ≤ c * ‖x‖ ^ 2 := by
-    intro x
-    have hqx : Q x ∈ V := V.starProjection_apply_mem x
-    have hrest : x - Q x ∈ Vᗮ := V.sub_starProjection_mem_orthogonal x
-    have hBxeq : B' x = B (Q x) + ((c : ℝ) : 𝕜) • (x - Q x) := by
-      simp only [hB', add_apply, ContinuousLinearMap.comp_apply,
-        smul_apply, sub_apply, one_apply_eq_self]
-    have hre : RCLike.re ⟪B' x, x⟫_𝕜
-        = RCLike.re ⟪B (Q x), x⟫_𝕜 + c * RCLike.re ⟪x - Q x, x⟫_𝕜 := by
-      rw [hBxeq, inner_add_left, inner_smul_left, RCLike.conj_ofReal, map_add, RCLike.re_ofReal_mul]
-    have h1 : RCLike.re ⟪B (Q x), x⟫_𝕜 = RCLike.re ⟪B (Q x), Q x⟫_𝕜 := by
-      have hz : ⟪B (Q x), x - Q x⟫_𝕜 = 0 :=
-        Submodule.inner_right_of_mem_orthogonal (hV.1 _ hqx) hrest
-      have : ⟪B (Q x), x⟫_𝕜 = ⟪B (Q x), Q x⟫_𝕜 + ⟪B (Q x), x - Q x⟫_𝕜 := by
-        rw [← inner_add_right]; congr 1; abel
-      rw [this, hz, add_zero]
-    have h2 : RCLike.re ⟪x - Q x, x⟫_𝕜 = ‖x - Q x‖ ^ 2 := by
-      have hz : ⟪x - Q x, Q x⟫_𝕜 = 0 := Submodule.inner_left_of_mem_orthogonal hqx hrest
-      have : ⟪x - Q x, x⟫_𝕜 = ⟪x - Q x, x - Q x⟫_𝕜 := by
-        have h' : ⟪x - Q x, x⟫_𝕜 = ⟪x - Q x, Q x⟫_𝕜 + ⟪x - Q x, x - Q x⟫_𝕜 := by
-          rw [← inner_add_right]; congr 1; abel
-        rw [h', hz, zero_add]
-      rw [this, inner_self_eq_norm_sq]
-    have hpyth : ‖x‖ ^ 2 = ‖Q x‖ ^ 2 + ‖x - Q x‖ ^ 2 := by
-      have h0 : RCLike.re ⟪Q x, x - Q x⟫_𝕜 = 0 := by
-        rw [Submodule.inner_right_of_mem_orthogonal hqx hrest]; simp
-      have hns := norm_add_sq (𝕜 := 𝕜) (Q x) (x - Q x)
-      rw [show Q x + (x - Q x) = x by abel, h0] at hns
-      linarith
-    rw [hre, h1, h2, hpyth]
-    nlinarith [hVc (Q x) hqx]
-  -- Sylvester relation A' X - X B' = Y
-  have hsylv : sylvesterOperator A' B' X = Y := by
-    show A' ∘L X - X ∘L B' = Y
-    ext x
-    have hQxV : Q x ∈ V := V.starProjection_apply_mem x
-    have hPP : P (P (Q x)) = P (Q x) :=
-      U.starProjection_eq_self_iff.mpr (U.starProjection_apply_mem (Q x))
-    have hQrest : Q (x - Q x) = 0 := by
-      have hQQ : Q (Q x) = Q x := V.starProjection_eq_self_iff.mpr (V.starProjection_apply_mem x)
-      rw [map_sub, hQQ, sub_self]
-    have hQBQ : Q (B (Q x)) = B (Q x) := V.starProjection_eq_self_iff.mpr (hV.1 _ hQxV)
-    have hAP : A (P (Q x)) = P (A (Q x)) :=
-      (projection_apply_comm_of_isInvariant A U hU (Q x)).symm
-    have hAX : (A' ∘L X) x = A (P (Q x)) := by
-      simp only [ContinuousLinearMap.comp_apply, hX, hA', add_apply,
-        smul_apply, sub_apply,
-        one_apply_eq_self, hPP, sub_self, smul_zero, add_zero]
-    have hXB : (X ∘L B') x = P (B (Q x)) := by
-      simp only [ContinuousLinearMap.comp_apply, hX, hB', add_apply,
-        smul_apply, sub_apply,
-        one_apply_eq_self, map_add, map_smul, hQBQ, hQrest, map_zero, smul_zero, add_zero]
-    have hYx : Y x = P (A (Q x)) - P (B (Q x)) := by
-      simp only [hY, ContinuousLinearMap.comp_apply, sub_apply, map_sub]
-    rw [sub_apply, hAX, hXB, hYx, hAP]
-  -- norm bound
-  have hYnorm : ‖Y‖ ≤ ‖B - A‖ := by
-    refine ContinuousLinearMap.opNorm_le_bound _ (norm_nonneg _) fun x => ?_
-    have hc : ‖P ((A - B) (Q x))‖ ≤ ‖(A - B) (Q x)‖ := by
-      rw [hP]; exact U.norm_starProjection_apply_le _
-    calc ‖Y x‖ = ‖P ((A - B) (Q x))‖ := by simp only [hY, ContinuousLinearMap.comp_apply]
-      _ ≤ ‖(A - B) (Q x)‖ := hc
-      _ = ‖(B - A) (Q x)‖ := by rw [show A - B = -(B - A) by abel, neg_apply, norm_neg]
-      _ ≤ ‖B - A‖ * ‖Q x‖ := ContinuousLinearMap.le_opNorm _ _
-      _ ≤ ‖B - A‖ * ‖x‖ := by
-          refine mul_le_mul_of_nonneg_left ?_ (norm_nonneg _)
-          rw [hQ]; exact V.norm_starProjection_apply_le x
-  have hXbound : ‖X‖ ≤ ‖B - A‖ / g :=
-    (Sylvester.norm_sylvester_le_of_coercive hA'sym hB'sym hg hA'c hB'c hsylv).trans (by gcongr)
-  have hstar : star (Q ∘L P : E →L[𝕜] E) = P ∘L Q := by
-    rw [ContinuousLinearMap.star_eq_adjoint, ContinuousLinearMap.adjoint_comp,
-      ← ContinuousLinearMap.star_eq_adjoint, ← ContinuousLinearMap.star_eq_adjoint,
-      hPsa.star_eq, hQsa.star_eq]
-  have : ‖(Q ∘L P : E →L[𝕜] E)‖ = ‖X‖ := by rw [hX, ← hstar]; exact (norm_star _).symm
-  calc ‖(projection V ∘L projection U : E →L[𝕜] E)‖ = ‖(Q ∘L P : E →L[𝕜] E)‖ := by rw [hP, hQ]
-    _ = ‖X‖ := this
-    _ ≤ ‖B - A‖ / g := hXbound
 
 /-- Symmetric projector-difference form requiring both mixed gaps. 
 
@@ -528,21 +358,21 @@ directed or full subspace angles.
 -/
 theorem sinTheta_symmetric
     {A B : E →L[𝕜] E}
-    (hA : IsSelfAdjointOperator A) (hB : IsSelfAdjointOperator B)
+    (hA : A.IsSymmetric) (hB : B.IsSymmetric)
     {U V : Submodule 𝕜 E}
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
-    (hU : Reduces A U) (hV : Reduces B V)
+    (hU : A.Reduces U) (hV : B.Reduces V)
     {left right left' right' d : ℝ}
     (hlr : left ≤ right) (hlr' : left' ≤ right') (hd : 0 < d)
     (hUV : IntervalExteriorSeparated A U B Vᗮ left right d)
     (hVU : IntervalExteriorSeparated B V A Uᗮ left' right' d) :
-    d * subspaceGap U V ≤ ‖B - A‖ := by
-  have h1 : d * directedGap U V ≤ ‖B - A‖ :=
+    d * U.projectionGap V ≤ ‖B - A‖ := by
+  have h1 : d * U.directedProjectionGap V ≤ ‖B - A‖ :=
     sinTheta_perturbation hA hB hU hV hlr hd hUV
-  have h2 : d * directedGap V U ≤ ‖A - B‖ :=
+  have h2 : d * V.directedProjectionGap U ≤ ‖A - B‖ :=
     sinTheta_perturbation hB hA hV hU hlr' hd hVU
   rw [show A - B = -(B - A) by abel, norm_neg] at h2
-  have hmax : subspaceGap U V = max (directedGap U V) (directedGap V U) := by
+  have hmax : U.projectionGap V = max (U.directedProjectionGap V) (V.directedProjectionGap U) := by
     show ‖U.starProjection - V.starProjection‖ =
       max ‖Vᗮ.starProjection ∘L U.starProjection‖
         ‖Uᗮ.starProjection ∘L V.starProjection‖
@@ -572,32 +402,30 @@ directed or full subspace angles.
 -/
 theorem sinTheta_generalSeparation
     {A B : E →L[𝕜] E}
-    (hA : IsSelfAdjointOperator A) (hB : IsSelfAdjointOperator B)
+    (hA : A.IsSymmetric) (hB : B.IsSymmetric)
     {U V : Submodule 𝕜 E}
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
-    (hU : Reduces A U) (hV : Reduces B V)
+    (hU : A.Reduces U) (hV : B.Reduces V)
     {d : ℝ} (hd : 0 < d) (hgap : HybridGap A B U V d) :
-    d * directedGap U V ≤ (Real.pi / 2) * ‖B - A‖ := by
+    d * U.directedProjectionGap V ≤ (Real.pi / 2) * ‖B - A‖ := by
   let X : U →L[𝕜] Vᗮ :=
-    codRestrictTo (complementaryProjection V ∘L U.subtypeL) Vᗮ
-      (fun x => Vᗮ.starProjection_apply_mem _)
+    (((Vᗮ).starProjection ∘L U.subtypeL)).codRestrict Vᗮ (fun x => Vᗮ.starProjection_apply_mem _)
   let C : U →L[𝕜] Vᗮ :=
-    codRestrictTo
-      (complementaryProjection V ∘L (B - A) ∘L U.subtypeL) Vᗮ
+    (((Vᗮ).starProjection ∘L (B - A) ∘L U.subtypeL)).codRestrict Vᗮ
       (fun x => Vᗮ.starProjection_apply_mem _)
   have hEq := directedPerturbation_sylvesterEquation hA hB hU hV
-  have hsep : SpectraSeparated (restrictToOrthogonal B V hV) ⊤
-      (restrictToReducingSubspace A U hU) ⊤ d :=
+  have hsep : SpectraSeparated (B.restrict hV.2) ⊤
+      (A.restrict hU.1) ⊤ d :=
     hybridGap_restrictions hA hB hU hV hgap
   have : CompleteSpace U := completeSpace_of_hasOrthogonalProjection U
   have : CompleteSpace Vᗮ := completeSpace_of_hasOrthogonalProjection Vᗮ
   have hsol := norm_sylvester_le_of_generalSeparation_rclike
-    (hB.restrictToOrthogonal V hV) (hA.restrictToReducingSubspace U hU) hd hsep hEq
+    (LinearMap.IsSymmetric.restrict_invariant hB hV.2)
+    (LinearMap.IsSymmetric.restrict_invariant hA hU.1) hd hsep hEq
   have hC : ‖C‖ ≤ ‖B - A‖ :=
     restricted_projection_sandwich_norm_le _ _ _
-  have h2 : d * ‖codRestrictTo
-      (Vᗮ.starProjection ∘L U.subtypeL) Vᗮ
-      (fun x => Vᗮ.starProjection_apply_mem _)‖ ≤
+  have h2 : d * ‖((Vᗮ.starProjection ∘L U.subtypeL)).codRestrict Vᗮ
+    (fun x => Vᗮ.starProjection_apply_mem _)‖ ≤
       (Real.pi / 2) * ‖B - A‖ :=
     hsol.trans (mul_le_mul_of_nonneg_left hC (by positivity))
   rw [directedGap_eq_restrictedBlock_norm U V] at h2
@@ -647,13 +475,13 @@ generic `RCLike` module; it lives in `BoundedBorelProjectionComplex.lean`. -/
 class BoundedBorelProjection (𝕜 : Type u) (E : Type v) [RCLike 𝕜]
     [NormedAddCommGroup E] [InnerProductSpace 𝕜 E] where
   /-- The spectral projection of `A` over a Borel set `s`. -/
-  proj : ∀ (A : E →L[𝕜] E), IsSelfAdjointOperator A →
+  proj : ∀ (A : E →L[𝕜] E), A.IsSymmetric →
     ∀ s : Set ℝ, MeasurableSet s → E →L[𝕜] E
   /-- Spectral projections are idempotent. -/
-  proj_idem : ∀ (A : E →L[𝕜] E) (hA : IsSelfAdjointOperator A)
+  proj_idem : ∀ (A : E →L[𝕜] E) (hA : A.IsSymmetric)
     (s : Set ℝ) (hs : MeasurableSet s), IsIdempotentElem (proj A hA s hs)
   /-- Spectral projections commute with their operator. -/
-  proj_comm : ∀ (A : E →L[𝕜] E) (hA : IsSelfAdjointOperator A)
+  proj_comm : ∀ (A : E →L[𝕜] E) (hA : A.IsSymmetric)
     (s : Set ℝ) (hs : MeasurableSet s),
     A ∘L proj A hA s hs = proj A hA s hs ∘L A
 
@@ -664,7 +492,7 @@ spectral projection of `s`.
 
 Relative to the `BoundedBorelProjection` hypothesis this is a real definition
 rather than a leaf obligation, so the results below unfold it. -/
-noncomputable def spectralSubspace (A : E →L[𝕜] E) (hA : IsSelfAdjointOperator A)
+noncomputable def spectralSubspace (A : E →L[𝕜] E) (hA : A.IsSymmetric)
     (s : Set ℝ) (hs : MeasurableSet s) :
     Submodule 𝕜 E :=
   (BoundedBorelProjection.proj A hA s hs).range
@@ -672,7 +500,7 @@ noncomputable def spectralSubspace (A : E →L[𝕜] E) (hA : IsSelfAdjointOpera
 omit [CompleteSpace E] in
 /-- Unfolding lemma: the spectral subspace *is* the range of the spectral
 projection.  Stated so that downstream rewrites do not have to unfold a `def`. -/
-theorem spectralSubspace_eq_range (A : E →L[𝕜] E) (hA : IsSelfAdjointOperator A)
+theorem spectralSubspace_eq_range (A : E →L[𝕜] E) (hA : A.IsSymmetric)
     (s : Set ℝ) (hs : MeasurableSet s) :
     spectralSubspace A hA s hs = (BoundedBorelProjection.proj A hA s hs).range :=
   rfl
@@ -682,7 +510,7 @@ the complete ambient space.
 
 This needs only idempotence: the range of a bounded idempotent is closed. -/
 noncomputable instance spectralSubspace_hasOrthogonalProjection
-    (A : E →L[𝕜] E) (hA : IsSelfAdjointOperator A)
+    (A : E →L[𝕜] E) (hA : A.IsSymmetric)
     (s : Set ℝ) (hs : MeasurableSet s) :
     (spectralSubspace A hA s hs).HasOrthogonalProjection :=
   ContinuousLinearMap.IsIdempotentElem.hasOrthogonalProjection_range
@@ -690,7 +518,7 @@ noncomputable instance spectralSubspace_hasOrthogonalProjection
 
 /-- The measurable spectral projection: the orthogonal projection onto the
 spectral subspace. -/
-noncomputable def spectralProjection (A : E →L[𝕜] E) (hA : IsSelfAdjointOperator A)
+noncomputable def spectralProjection (A : E →L[𝕜] E) (hA : A.IsSymmetric)
     (s : Set ℝ) (hs : MeasurableSet s) :
     E →L[𝕜] E :=
   (spectralSubspace A hA s hs).starProjection
@@ -702,8 +530,8 @@ Only invariance has to be checked: `IsSymmetric.reduces_of_invariant` supplies
 invariance of the orthogonal complement from symmetry of `A`.  Invariance is
 immediate from commutation, since `A (P y) = P (A y)` is again in the range. -/
 theorem isInvariant_spectralSubspace (A : E →L[𝕜] E)
-    (hA : IsSelfAdjointOperator A) (s : Set ℝ) (hs : MeasurableSet s) :
-    Reduces A (spectralSubspace A hA s hs) := by
+    (hA : A.IsSymmetric) (s : Set ℝ) (hs : MeasurableSet s) :
+    A.Reduces (spectralSubspace A hA s hs) := by
   refine ContinuousLinearMap.IsSymmetric.reduces_of_invariant hA ?_
   rintro x ⟨y, rfl⟩
   refine ⟨A y, ?_⟩
@@ -712,9 +540,9 @@ theorem isInvariant_spectralSubspace (A : E →L[𝕜] E)
 
 /-- The subspace projection of the spectral subspace is the spectral
 projection. -/
-theorem projection_spectralSubspace_eq (A : E →L[𝕜] E) (hA : IsSelfAdjointOperator A)
+theorem projection_spectralSubspace_eq (A : E →L[𝕜] E) (hA : A.IsSymmetric)
     (s : Set ℝ) (hs : MeasurableSet s) :
-    projection (spectralSubspace A hA s hs) = spectralProjection A hA s hs :=
+    Submodule.starProjection (spectralSubspace A hA s hs) = spectralProjection A hA s hs :=
   rfl
 
 /-- Canonical spectral-projection form.
@@ -735,7 +563,7 @@ directed or full subspace angles.
 -/
 theorem spectralProjection_sinTheta
     {A B : E →L[𝕜] E}
-    (hA : IsSelfAdjointOperator A) (hB : IsSelfAdjointOperator B)
+    (hA : A.IsSymmetric) (hB : B.IsSymmetric)
     (s t : Set ℝ) (hs : MeasurableSet s) (ht : MeasurableSet t)
     {left right left' right' d : ℝ}
     (hlr : left ≤ right) (hlr' : left' ≤ right') (hd : 0 < d)
@@ -756,10 +584,10 @@ theorem spectralProjection_sinTheta
   have hVU : IntervalExteriorSeparated B V A Uᗮ left' right' d :=
     ⟨hBs, hAt⟩
   have h := sinTheta_symmetric hA hB hredA hredB hlr hlr' hd hUV hVU
-  have hgapeq : subspaceGap U V =
+  have hgapeq : U.projectionGap V =
       ‖spectralProjection A hA s hs - spectralProjection B hB t ht‖ := rfl
   calc d * ‖spectralProjection A hA s hs - spectralProjection B hB t ht‖
-      = d * subspaceGap U V := by rw [hgapeq]
+      = d * U.projectionGap V := by rw [hgapeq]
     _ ≤ ‖B - A‖ := h
 
 end SpectralSubspace
@@ -778,7 +606,7 @@ section OperatorModulus
 difference. -/
 noncomputable def sinAngleOperator (U V : Submodule 𝕜 E)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] : E →L[𝕜] E :=
-  (projection U - projection V).modulus
+  (U.starProjection - V.starProjection).modulus
 
 /-- **Symmetric norm ideals contain moduli with equal gauge, given a polar contraction.**
 
@@ -884,12 +712,12 @@ Pure algebra: the two reducing hypotheses let `A` and `P_U` swap, and `B` and
 theorem projectionDifference_sylvester
     {A B : E →L[𝕜] E} {U V : Submodule 𝕜 E}
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
-    (hU : Reduces A U) (hV : Reduces B V) :
-    A ∘L (projection U - projection V) - (projection U - projection V) ∘L B =
-      (B - A) ∘L projection V - projection U ∘L (B - A) := by
-  have hAU : A ∘L projection U = projection U ∘L A :=
+    (hU : A.Reduces U) (hV : B.Reduces V) :
+    A ∘L (U.starProjection - V.starProjection) - (U.starProjection - V.starProjection) ∘L B =
+      (B - A) ∘L V.starProjection - U.starProjection ∘L (B - A) := by
+  have hAU : A ∘L U.starProjection = U.starProjection ∘L A :=
     (ContinuousLinearMap.starProjection_comp_comm_of_reduces A U hU).symm
-  have hBV : projection V ∘L B = B ∘L projection V :=
+  have hBV : V.starProjection ∘L B = B ∘L V.starProjection :=
     ContinuousLinearMap.starProjection_comp_comm_of_reduces B V hV
   simp only [← ContinuousLinearMap.mul_def] at hAU hBV ⊢
   rw [mul_sub, sub_mul, sub_mul, mul_sub, hAU, hBV]
@@ -903,13 +731,13 @@ side of `projectionDifference_sylvester` gauge-contractive in `R`. -/
 theorem projectionCross_eq_reflectionPinch
     (R : E →L[𝕜] E) (U V : Submodule 𝕜 E)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] :
-    R ∘L projection V - projection U ∘L R =
+    R ∘L V.starProjection - U.starProjection ∘L R =
       ((2 : 𝕜)⁻¹) • (R ∘L V.reflectionOperator - U.reflectionOperator ∘L R) := by
   have hU : (U.reflectionOperator : E →L[𝕜] E) =
-      (2 : 𝕜) • projection U - ContinuousLinearMap.id 𝕜 E :=
+      (2 : 𝕜) • U.starProjection - ContinuousLinearMap.id 𝕜 E :=
     Submodule.reflectionOperator_eq_two_smul_sub_id U
   have hV : (V.reflectionOperator : E →L[𝕜] E) =
-      (2 : 𝕜) • projection V - ContinuousLinearMap.id 𝕜 E :=
+      (2 : 𝕜) • V.starProjection - ContinuousLinearMap.id 𝕜 E :=
     Submodule.reflectionOperator_eq_two_smul_sub_id V
   rw [hU, hV]
   ext x
@@ -929,8 +757,8 @@ theorem SymmetricNormIdeal.gauge_projectionCross_le
     {R : E →L[𝕜] E} (U V : Submodule 𝕜 E)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
     (hR : I.mem R) :
-    I.mem (R ∘L projection V - projection U ∘L R) ∧
-      I.gauge (R ∘L projection V - projection U ∘L R) ≤ I.gauge R := by
+    I.mem (R ∘L V.starProjection - U.starProjection ∘L R) ∧
+      I.gauge (R ∘L V.starProjection - U.starProjection ∘L R) ≤ I.gauge R := by
   have hJU : ‖(U.reflectionOperator : E →L[𝕜] E)‖ ≤ 1 :=
     Submodule.norm_reflectionOperator_le_one U
   have hJV : ‖(V.reflectionOperator : E →L[𝕜] E)‖ ≤ 1 :=

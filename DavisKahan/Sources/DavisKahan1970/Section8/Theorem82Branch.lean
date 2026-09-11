@@ -139,15 +139,15 @@ of `P H` makes an angle strictly below `π/4` with `Q H`.  See the module
 docstring for why the symmetric projector gap is *not* what the printed
 statement can mean. -/
 theorem theorem8_2_perturbationHalfGap_complex
-    {A K : H →L[ℂ] H} (hA : IsSelfAdjointOperator A) (hK : IsSelfAdjointOperator K)
+    {A K : H →L[ℂ] H} (hA : A.IsSymmetric) (hK : K.IsSymmetric)
     {P Q : Submodule ℂ H} [P.HasOrthogonalProjection] [Q.HasOrthogonalProjection]
     {alpha beta delta : ℝ} (hdelta : 0 < delta) (hab : beta ≤ alpha)
     (hQ : SpectrumIn (A + K) Q (Set.Icc beta alpha))
     (hQperp : SpectrumIn (A + K) Qᗮ (gapExterior beta alpha delta))
-    (hPred : Reduces A P)
+    (hPred : A.Reduces P)
     (hP : SpectrumIn A P (Set.Icc (beta - delta / 2) (alpha + delta / 2)))
     (hsmall : ‖K‖ < delta / 2) :
-    directedGap P Q < Real.sqrt 2 / 2 := by
+    P.directedProjectionGap Q < Real.sqrt 2 / 2 := by
   classical
   set gam : ℝ := ‖K‖ with hgamdef
   have hgam0 : (0 : ℝ) ≤ gam := norm_nonneg K
@@ -158,14 +158,14 @@ theorem theorem8_2_perturbationHalfGap_complex
   have hlr : l ≤ rr := by rw [hldef, hrdef]; linarith
   -- the path
   set A0 : H →L[ℂ] H := A + K with hA0def
-  have hA0 : IsSelfAdjointOperator A0 := hA.add hK
+  have hA0 : A0.IsSymmetric := hA.add hK
   set E : H →L[ℂ] H := -K with hEdef
-  have hE : IsSelfAdjointOperator E := by
+  have hE : E.IsSymmetric := by
     intro x y
     show ⟪-(K x), y⟫_ℂ = ⟪x, -(K y)⟫_ℂ
     have h : ⟪K x, y⟫_ℂ = ⟪x, K y⟫_ℂ := hK x y
     rw [inner_neg_left, inner_neg_right, h]
-  have hBself : ∀ t : ℝ, IsSelfAdjointOperator (A0 + t • E) := fun t =>
+  have hBself : ∀ t : ℝ, ContinuousLinearMap.IsSymmetric (A0 + t • E) := fun t =>
     isSelfAdjointOperator_path hA0 hE t
   have hB0 : A0 + (0 : ℝ) • E = A0 := by simp
   have hB1 : A0 + (1 : ℝ) • E = A := by
@@ -174,7 +174,7 @@ theorem theorem8_2_perturbationHalfGap_complex
     intro t ht
     rw [norm_smul, Real.norm_eq_abs, abs_of_nonneg ht.1, hEdef, norm_neg]
   -- the ambient gap at the start of the path, from the printed `sin 2Θ` data
-  have hQred : Reduces A0 Q := ⟨hQ.invariant, hQperp.invariant⟩
+  have hQred : A0.Reduces Q := ⟨hQ.invariant, hQperp.invariant⟩
   have hgap0 : realSpectrum A0 ⊆
       Set.Icc beta alpha ∪ gapExterior beta alpha delta :=
     realSpectrum_subset_union_of_reduces hA0 hQred hQ hQperp
@@ -213,7 +213,7 @@ theorem theorem8_2_perturbationHalfGap_complex
       (fun t : ℝ => circleRieszProjection (A0 + t • E) cen rad)
       (Set.Icc 0 1) :=
     continuous_circleRieszProjection_path A0 E cen rad hradpos.le hunit
-  set f : ℝ → ℝ := fun t => directedGap (R t) Q with hfdef
+  set f : ℝ → ℝ := fun t => Submodule.directedProjectionGap (R t) Q with hfdef
   have hfeq : ∀ t : ℝ, t ∈ Set.Icc (0 : ℝ) 1 →
       f t = ‖Qᗮ.starProjection ∘L
         circleRieszProjection (A0 + t • E) cen rad‖ := by
@@ -234,7 +234,7 @@ theorem theorem8_2_perturbationHalfGap_complex
   have hR0 : R 0 ≤ Q := by
     have hQperp' : SpectrumIn (A0 + (0 : ℝ) • E) Qᗮ (gapExterior l rr d) := by
       rw [hB0]; exact hQperp.mono hextmono
-    have hQred' : Reduces (A0 + (0 : ℝ) • E) Q := by rw [hB0]; exact hQred
+    have hQred' : ContinuousLinearMap.Reduces (A0 + (0 : ℝ) • E) Q := by rw [hB0]; exact hQred
     exact centralBandSubspace_le_of_spectrumIn_gapExterior _ (hBself 0) hd hlr
       (hgapt 0 ⟨le_rfl, zero_le_one⟩) hQred' hQperp'
   have hf0 : f 0 = 0 := by
@@ -247,7 +247,7 @@ theorem theorem8_2_perturbationHalfGap_complex
       Submodule.starProjection_eq_self_iff.mpr hmem, sub_self]
   -- `P ≤ R 1`
   have hR1 : P ≤ R 1 := by
-    have hPred' : Reduces (A0 + (1 : ℝ) • E) P := by rw [hB1]; exact hPred
+    have hPred' : ContinuousLinearMap.Reduces (A0 + (1 : ℝ) • E) P := by rw [hB1]; exact hPred
     have hP' : SpectrumIn (A0 + (1 : ℝ) • E) P
         (Set.Icc (beta - delta / 2) (alpha + delta / 2)) := by rw [hB1]; exact hP
     refine le_centralBandSubspace_of_spectrumIn_Icc _ (hBself 1) hd hlr
@@ -259,7 +259,7 @@ theorem theorem8_2_perturbationHalfGap_complex
       f t < Real.sqrt 2 / 2 := by
     intro t ht hclose
     have hfinite : FiniteGapConfiguration A0 Q delta := ⟨beta, alpha, hab, hQ, hQperp⟩
-    have hVred : Reduces (A0 + t • E) (R t) :=
+    have hVred : ContinuousLinearMap.Reduces (A0 + t • E) (R t) :=
       centralBandSubspace_reduces (A0 + t • E) (hBself t)
     have hsin := sinTwoTheta_perturbation (A := A0) (B := A0 + t • E)
       hA0 (U := Q) (V := R t) hQred hVred hdelta hfinite
@@ -307,7 +307,7 @@ theorem theorem8_2_perturbationHalfGap_complex
     show (R 1).starProjection (P.starProjection x) = P.starProjection x
     exact Submodule.starProjection_eq_self_iff.mpr
       (hR1 (P.starProjection_apply_mem x))
-  have hle : directedGap P Q ≤ f 1 := by
+  have hle : P.directedProjectionGap Q ≤ f 1 := by
     show ‖Qᗮ.starProjection ∘L P.starProjection‖ ≤
       ‖Qᗮ.starProjection ∘L (R 1).starProjection‖
     calc ‖Qᗮ.starProjection ∘L P.starProjection‖
@@ -324,18 +324,18 @@ theorem theorem8_2_perturbationHalfGap_complex
 /-- **The same conclusion in the printed scalar form.**  The directed angle
 from `P H` into `Q H` is strictly below `π / 4`. -/
 theorem theorem8_2_perturbationHalfGap_angle_lt
-    {A K : H →L[ℂ] H} (hA : IsSelfAdjointOperator A) (hK : IsSelfAdjointOperator K)
+    {A K : H →L[ℂ] H} (hA : A.IsSymmetric) (hK : K.IsSymmetric)
     {P Q : Submodule ℂ H} [P.HasOrthogonalProjection] [Q.HasOrthogonalProjection]
     {alpha beta delta : ℝ} (hdelta : 0 < delta) (hab : beta ≤ alpha)
     (hQ : SpectrumIn (A + K) Q (Set.Icc beta alpha))
     (hQperp : SpectrumIn (A + K) Qᗮ (gapExterior beta alpha delta))
-    (hPred : Reduces A P)
+    (hPred : A.Reduces P)
     (hP : SpectrumIn A P (Set.Icc (beta - delta / 2) (alpha + delta / 2)))
     (hsmall : ‖K‖ < delta / 2) :
-    Real.arcsin (directedGap P Q) < Real.pi / 4 := by
+    Real.arcsin (P.directedProjectionGap Q) < Real.pi / 4 := by
   have h := theorem8_2_perturbationHalfGap_complex hA hK hdelta hab hQ hQperp hPred hP
     hsmall
-  have h0 : (0 : ℝ) ≤ directedGap P Q := norm_nonneg _
+  have h0 : (0 : ℝ) ≤ P.directedProjectionGap Q := norm_nonneg _
   rw [← DavisKahan1970.Section8.arcsin_sqrt_two_div_two]
   refine Real.arcsin_lt_arcsin (by linarith) h ?_
   have : Real.sqrt 2 ≤ 2 := by
@@ -367,15 +367,15 @@ self-adjoint `K'` with the same first column and with `‖K'‖ = ‖R‖`; sett
 hypothesis transfers verbatim and
 `theorem8_2_perturbationHalfGap_complex` applies to `(A', K')`. -/
 theorem theorem8_2_residualHalfGap_complex
-    {A K : H →L[ℂ] H} (hA : IsSelfAdjointOperator A) (hK : IsSelfAdjointOperator K)
+    {A K : H →L[ℂ] H} (hA : A.IsSymmetric) (hK : K.IsSymmetric)
     {P Q : Submodule ℂ H} [P.HasOrthogonalProjection] [Q.HasOrthogonalProjection]
     {alpha beta delta : ℝ} (hdelta : 0 < delta) (hab : beta ≤ alpha)
     (hQ : SpectrumIn (A + K) Q (Set.Icc beta alpha))
     (hQperp : SpectrumIn (A + K) Qᗮ (gapExterior beta alpha delta))
-    (hPred : Reduces A P)
+    (hPred : A.Reduces P)
     (hP : SpectrumIn A P (Set.Icc (beta - delta / 2) (alpha + delta / 2)))
     (hRsmall : ‖residual (A + K) P.subtypeL (compressOperator P A)‖ < delta / 2) :
-    directedGap P Q < Real.sqrt 2 / 2 := by
+    P.directedProjectionGap Q < Real.sqrt 2 / 2 := by
   classical
   let : CompleteSpace P :=
     (P.isComplete_coe_of_hasOrthogonalProjection).completeSpace_coe
@@ -387,7 +387,7 @@ theorem theorem8_2_residualHalfGap_complex
   obtain ⟨K', hK'sa, hK'col, hK'norm⟩ :=
     TauCeti.exists_selfAdjoint_completion_eq_norm_restriction K
       (ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mpr hK) P
-  have hK'sym : IsSelfAdjointOperator K' :=
+  have hK'sym : K.IsSymmetric' :=
     ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mp hK'sa
   -- `‖H'‖ = ‖R‖ < δ/2`
   have hK'small : ‖K'‖ < delta / 2 := by rw [hK'norm]; exact hRsmall
@@ -401,7 +401,7 @@ theorem theorem8_2_residualHalfGap_complex
   set A' : H →L[ℂ] H := A + K - K' with hA'def
   -- (1) the perturbed operator is literally unchanged
   have htotal : A' + K' = A + K := by rw [hA'def]; abel
-  have hA'sym : IsSelfAdjointOperator A' := by
+  have hA'sym : A.IsSymmetric' := by
     intro x y
     have hAxy : ⟪A x, y⟫_ℂ = ⟪x, A y⟫_ℂ := hA x y
     have hKxy : ⟪K x, y⟫_ℂ = ⟪x, K y⟫_ℂ := hK x y
@@ -419,7 +419,7 @@ theorem theorem8_2_residualHalfGap_complex
     intro x hx
     rw [hA'P x hx]
     exact hPred.1 x hx
-  have hA'red : Reduces A' P := reduces_orthogonalComplement hA'sym hA'inv
+  have hA'red : A.Reduces' P := ContinuousLinearMap.IsSymmetric.reduces_of_invariant hA'sym hA'inv
   -- the printed placement of `A₀` transfers, because `A'` and `A` agree on `P`
   have hA'spec : SpectrumIn A' P (Set.Icc (beta - delta / 2) (alpha + delta / 2)) :=
     spectrumIn_of_eqOn (fun x hx => (hA'P x hx).symm) hP
@@ -433,18 +433,18 @@ theorem theorem8_2_residualHalfGap_complex
 
 /-- **The residual alternative in the printed scalar form.** -/
 theorem theorem8_2_residualHalfGap_angle_lt
-    {A K : H →L[ℂ] H} (hA : IsSelfAdjointOperator A) (hK : IsSelfAdjointOperator K)
+    {A K : H →L[ℂ] H} (hA : A.IsSymmetric) (hK : K.IsSymmetric)
     {P Q : Submodule ℂ H} [P.HasOrthogonalProjection] [Q.HasOrthogonalProjection]
     {alpha beta delta : ℝ} (hdelta : 0 < delta) (hab : beta ≤ alpha)
     (hQ : SpectrumIn (A + K) Q (Set.Icc beta alpha))
     (hQperp : SpectrumIn (A + K) Qᗮ (gapExterior beta alpha delta))
-    (hPred : Reduces A P)
+    (hPred : A.Reduces P)
     (hP : SpectrumIn A P (Set.Icc (beta - delta / 2) (alpha + delta / 2)))
     (hRsmall : ‖residual (A + K) P.subtypeL (compressOperator P A)‖ < delta / 2) :
-    Real.arcsin (directedGap P Q) < Real.pi / 4 := by
+    Real.arcsin (P.directedProjectionGap Q) < Real.pi / 4 := by
   have h := theorem8_2_residualHalfGap_complex hA hK hdelta hab hQ hQperp hPred hP
     hRsmall
-  have h0 : (0 : ℝ) ≤ directedGap P Q := norm_nonneg _
+  have h0 : (0 : ℝ) ≤ P.directedProjectionGap Q := norm_nonneg _
   rw [← DavisKahan1970.Section8.arcsin_sqrt_two_div_two]
   refine Real.arcsin_lt_arcsin (by linarith) h ?_
   have : Real.sqrt 2 ≤ 2 := by
@@ -455,16 +455,16 @@ theorem theorem8_2_residualHalfGap_angle_lt
 small perturbation norm *or* small residual norm -- gives the strict quarter
 angle.  Dispatch only; both branches are already theorems. -/
 theorem theorem8_2_branch
-    {A K : H →L[ℂ] H} (hA : IsSelfAdjointOperator A) (hK : IsSelfAdjointOperator K)
+    {A K : H →L[ℂ] H} (hA : A.IsSymmetric) (hK : K.IsSymmetric)
     {P Q : Submodule ℂ H} [P.HasOrthogonalProjection] [Q.HasOrthogonalProjection]
     {alpha beta delta : ℝ} (hdelta : 0 < delta) (hab : beta ≤ alpha)
     (hQ : SpectrumIn (A + K) Q (Set.Icc beta alpha))
     (hQperp : SpectrumIn (A + K) Qᗮ (gapExterior beta alpha delta))
-    (hPred : Reduces A P)
+    (hPred : A.Reduces P)
     (hP : SpectrumIn A P (Set.Icc (beta - delta / 2) (alpha + delta / 2)))
     (hsmall : ‖K‖ < delta / 2 ∨
       ‖residual (A + K) P.subtypeL (compressOperator P A)‖ < delta / 2) :
-    directedGap P Q < Real.sqrt 2 / 2 := by
+    P.directedProjectionGap Q < Real.sqrt 2 / 2 := by
   rcases hsmall with h | h
   · exact theorem8_2_perturbationHalfGap_complex hA hK hdelta hab hQ hQperp hPred hP h
   · exact theorem8_2_residualHalfGap_complex hA hK hdelta hab hQ hQperp hPred hP h

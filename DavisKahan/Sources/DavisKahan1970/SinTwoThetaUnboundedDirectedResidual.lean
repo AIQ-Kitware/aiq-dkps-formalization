@@ -113,7 +113,7 @@ theorem sinTwoTheta_directed_unboundedResidual_blockRepresentative_spectrumGap_k
   have hk : 0 < k := Nat.pos_of_ne_zero hk0
   have hSsa : IsSelfAdjoint (trialOffDiagonalPart V M R) :=
     isSelfAdjoint_trialOffDiagonalPart
-  have hDsa : IsSelfAdjointOperator ((-2 : ℂ) • trialOffDiagonalPart V M R) := by
+  have hDsa : ContinuousLinearMap.IsSymmetric ((-2 : ℂ) • trialOffDiagonalPart V M R) := by
     refine ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mp ?_
     rw [IsSelfAdjoint, star_smul, hSsa.star_eq]
     norm_num
@@ -279,7 +279,7 @@ theorem sinTwoTheta_directed_unboundedResidual_blockRepresentative_kyFan_complex
   have hk : 0 < k := Nat.pos_of_ne_zero hk0
   have hSsa : IsSelfAdjoint (trialOffDiagonalPart V M R) :=
     isSelfAdjoint_trialOffDiagonalPart
-  have hDsa : IsSelfAdjointOperator ((-2 : ℂ) • trialOffDiagonalPart V M R) := by
+  have hDsa : ContinuousLinearMap.IsSymmetric ((-2 : ℂ) • trialOffDiagonalPart V M R) := by
     refine ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mp ?_
     rw [IsSelfAdjoint, star_smul, hSsa.star_eq]
     norm_num
@@ -439,7 +439,7 @@ theorem sinTwoTheta_directed_unboundedResidual_blockRepresentative_reducing_kyFa
   have hk : 0 < k := Nat.pos_of_ne_zero hk0
   have hSsa : IsSelfAdjoint (trialOffDiagonalPart V M R) :=
     isSelfAdjoint_trialOffDiagonalPart
-  have hDsa : IsSelfAdjointOperator ((-2 : ℂ) • trialOffDiagonalPart V M R) := by
+  have hDsa : ContinuousLinearMap.IsSymmetric ((-2 : ℂ) • trialOffDiagonalPart V M R) := by
     refine ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mp ?_
     rw [IsSelfAdjoint, star_smul, hSsa.star_eq]
     norm_num

@@ -200,7 +200,7 @@ theorem subspaceGap_eq_directedGap_of_finrank_eq {𝕜 : Type*} [RCLike 𝕜]
     [FiniteDimensional 𝕜 G]
     (P Q : Submodule 𝕜 G) [P.HasOrthogonalProjection] [Q.HasOrthogonalProjection]
     (hrank : finrank 𝕜 P = finrank 𝕜 Q) :
-    subspaceGap P Q = directedGap P Q :=
+    P.projectionGap Q = P.directedProjectionGap Q :=
   TauCeti.opNorm_projection_sub_eq_opNorm_sinThetaMap P Q hrank
 
 /-- Under equation (1.5), a directed quarter-angle bound is the printed
@@ -213,10 +213,10 @@ theorem maximalAngle_lt_pi_div_four_of_directedGap_lt {𝕜 : Type*} [RCLike �
     [FiniteDimensional 𝕜 G]
     {P Q : Submodule 𝕜 G} [P.HasOrthogonalProjection] [Q.HasOrthogonalProjection]
     (hrank : finrank 𝕜 P = finrank 𝕜 Q)
-    (hdir : directedGap P Q < Real.sqrt 2 / 2) :
+    (hdir : P.directedProjectionGap Q < Real.sqrt 2 / 2) :
     maximalAngle P Q < Real.pi / 4 := by
   refine (DavisKahan1970.Section8.maximalAngle_lt_pi_div_four_iff P Q).2 ?_
-  show subspaceGap P Q < Real.sqrt 2 / 2
+  show P.projectionGap Q < Real.sqrt 2 / 2
   rw [subspaceGap_eq_directedGap_of_finrank_eq P Q hrank]
   exact hdir
 
@@ -236,7 +236,7 @@ theorem subspaceGap_eq_directedGap_of_crossedDefects {𝕜 : Type*} [RCLike 𝕜
     {G : Type*} [NormedAddCommGroup G] [InnerProductSpace 𝕜 G] [CompleteSpace G]
     (P Q : Submodule 𝕜 G) [P.HasOrthogonalProjection] [Q.HasOrthogonalProjection]
     (h : CrossedDefectsEquivalent P Q) :
-    subspaceGap P Q = directedGap P Q :=
+    P.projectionGap Q = P.directedProjectionGap Q :=
   subspaceGap_eq_directedGap_of_crossedDefectsEquivalent P Q h
 
 /-- **The printed `Θ < π/4` of Theorem 8.2 from the directed bound, in any
@@ -251,10 +251,10 @@ theorem maximalAngle_lt_pi_div_four_of_crossedDefects {𝕜 : Type*} [RCLike �
     {G : Type*} [NormedAddCommGroup G] [InnerProductSpace 𝕜 G] [CompleteSpace G]
     {P Q : Submodule 𝕜 G} [P.HasOrthogonalProjection] [Q.HasOrthogonalProjection]
     (h : CrossedDefectsEquivalent P Q)
-    (hdir : directedGap P Q < Real.sqrt 2 / 2) :
+    (hdir : P.directedProjectionGap Q < Real.sqrt 2 / 2) :
     maximalAngle P Q < Real.pi / 4 := by
   refine (DavisKahan1970.Section8.maximalAngle_lt_pi_div_four_iff P Q).2 ?_
-  show subspaceGap P Q < Real.sqrt 2 / 2
+  show P.projectionGap Q < Real.sqrt 2 / 2
   rw [subspaceGap_eq_directedGap_of_crossedDefects P Q h]
   exact hdir
 
@@ -273,15 +273,15 @@ assertion. -/
 Nothing here is re-proved; the printed spectral placement of `Λ₀` and `Λ₁` is
 exactly a `FiniteGapConfiguration` for `A + K` at `Q`. -/
 theorem theorem8_2_sinTwoTheta_perturbation_complex
-    {A K : H →L[ℂ] H} (hA : IsSelfAdjointOperator A) (hK : IsSelfAdjointOperator K)
+    {A K : H →L[ℂ] H} (hA : A.IsSymmetric) (hK : K.IsSymmetric)
     {P Q : Submodule ℂ H} [P.HasOrthogonalProjection] [Q.HasOrthogonalProjection]
     {alpha beta delta : ℝ} (hdelta : 0 < delta) (hab : beta ≤ alpha)
     (hQ : Foundation.SpectrumIn (A + K) Q (Set.Icc beta alpha))
     (hQperp : Foundation.SpectrumIn (A + K) Qᗮ (gapExterior beta alpha delta))
-    (hPred : Reduces A P) :
+    (hPred : A.Reduces P) :
     delta * ‖DavisKahanExt.sinTwoAngleOperator Q P‖ ≤ 2 * ‖K‖ := by
-  have hA0 : IsSelfAdjointOperator (A + K) := hA.add hK
-  have hQred : Reduces (A + K) Q := ⟨hQ.invariant, hQperp.invariant⟩
+  have hA0 : ContinuousLinearMap.IsSymmetric (A + K) := hA.add hK
+  have hQred : ContinuousLinearMap.Reduces (A + K) Q := ⟨hQ.invariant, hQperp.invariant⟩
   have hfinite : Foundation.FiniteGapConfiguration (A + K) Q delta := ⟨beta, alpha, hab, hQ, hQperp⟩
   have h := sinTwoTheta_perturbation (A := A + K) (B := A) hA0 hQred hPred hdelta hfinite
   have hdiff : ‖A - (A + K)‖ = ‖K‖ := by
@@ -301,17 +301,17 @@ two off-diagonal blocks of the reflection defect equal there.  It is not
 legitimate at a general unitarily invariant norm, and that is the remaining open
 axis recorded at the head of section 2b below. -/
 theorem theorem8_2_sinTwoTheta_residual_complex
-    {A K : H →L[ℂ] H} (hA : IsSelfAdjointOperator A) (hK : IsSelfAdjointOperator K)
+    {A K : H →L[ℂ] H} (hA : A.IsSymmetric) (hK : K.IsSymmetric)
     {P Q : Submodule ℂ H} [P.HasOrthogonalProjection] [Q.HasOrthogonalProjection]
     {alpha beta delta : ℝ} (hdelta : 0 < delta) (hab : beta ≤ alpha)
     (hQ : Foundation.SpectrumIn (A + K) Q (Set.Icc beta alpha))
     (hQperp : Foundation.SpectrumIn (A + K) Qᗮ (gapExterior beta alpha delta))
-    (_hPred : Reduces A P) :
+    (_hPred : A.Reduces P) :
     delta * ‖DavisKahanExt.sinTwoAngleOperator Q P‖ ≤
       2 * ‖residual (A + K) P.subtypeL (compressOperator P A)‖ := by
   classical
-  have hA0 : IsSelfAdjointOperator (A + K) := hA.add hK
-  have hQred : Reduces (A + K) Q := ⟨hQ.invariant, hQperp.invariant⟩
+  have hA0 : ContinuousLinearMap.IsSymmetric (A + K) := hA.add hK
+  have hQred : ContinuousLinearMap.Reduces (A + K) Q := ⟨hQ.invariant, hQperp.invariant⟩
   have hfinite : Foundation.FiniteGapConfiguration (A + K) Q delta := ⟨beta, alpha, hab, hQ, hQperp⟩
   have hrange : LinearMap.range (P.subtypeL : P →L[ℂ] H).toLinearMap = P := by
     ext x
@@ -319,7 +319,7 @@ theorem theorem8_2_sinTwoTheta_residual_complex
   have : (LinearMap.range (P.subtypeL : P →L[ℂ] H).toLinearMap).HasOrthogonalProjection := by
     rw [hrange]; infer_instance
   have hX : IsometricEmbedding (P.subtypeL : P →L[ℂ] H) := fun x => rfl
-  have hM : IsSelfAdjointOperator (compressOperator P A) := by
+  have hM : ContinuousLinearMap.IsSymmetric (compressOperator P A) := by
     intro x y
     show ⟪compressOperator P A x, y⟫_ℂ = ⟪x, compressOperator P A y⟫_ℂ
     have := hA (x : H) (y : H)
@@ -433,12 +433,12 @@ the printed gap on `Q` and with `A` — which `P` reduces by hypothesis — as t
 comparison operator, so that the displacement is `-K`. -/
 theorem theorem8_2_sinTwoTheta_perturbation_symmetricNorming
     (N : ExactSinTheta.SymmetricNormingFunction)
-    {A K : H →L[ℂ] H} (hA : IsSelfAdjointOperator A) (hK : IsSelfAdjointOperator K)
+    {A K : H →L[ℂ] H} (hA : A.IsSymmetric) (hK : K.IsSymmetric)
     {P Q : Submodule ℂ H} [P.HasOrthogonalProjection] [Q.HasOrthogonalProjection]
     {alpha beta delta : ℝ} (hdelta : 0 < delta) (hab : beta ≤ alpha)
     (hQ : Foundation.SpectrumIn (A + K) Q (Set.Icc beta alpha))
     (hQperp : Foundation.SpectrumIn (A + K) Qᗮ (gapExterior beta alpha delta))
-    (hPred : Reduces A P)
+    (hPred : A.Reduces P)
     (hKmem : N.Mem K) :
     N.Mem (sinTwoAngleOperatorC Q P) ∧
       delta * N.gauge (sinTwoAngleOperatorC Q P) ≤ 2 * N.gauge K := by
@@ -447,7 +447,7 @@ theorem theorem8_2_sinTwoTheta_perturbation_symmetricNorming
   have hKsa : IsSelfAdjoint K :=
     ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mpr hK
   have hAKsa : IsSelfAdjoint (A + K) := hAsa.add hKsa
-  have hQred : Reduces (A + K) Q := ⟨hQ.invariant, hQperp.invariant⟩
+  have hQred : ContinuousLinearMap.Reduces (A + K) Q := ⟨hQ.invariant, hQperp.invariant⟩
   have hUspec : spectrum ℝ (compressOperator Q (A + K)) ⊆ Set.Icc beta alpha :=
     spectrum_compressOperator_subset_of_spectrumIn hQ
   have hUspec' : ∀ x ∈ spectrum ℝ (compressOperator Qᗮ (A + K)),
@@ -474,12 +474,12 @@ theorem theorem8_2_sinTwoTheta_perturbation_symmetricNorming
 level.**  This is the directed norm content the printed residual alternative
 inherits from the Section 2 `sin 2Θ` theorem. -/
 theorem theorem8_2_sinTwoTheta_residual_all_kyFan
-    {A K : H →L[ℂ] H} (hA : IsSelfAdjointOperator A) (hK : IsSelfAdjointOperator K)
+    {A K : H →L[ℂ] H} (hA : A.IsSymmetric) (hK : K.IsSymmetric)
     {P Q : Submodule ℂ H} [P.HasOrthogonalProjection] [Q.HasOrthogonalProjection]
     {alpha beta delta : ℝ} (hdelta : 0 < delta) (hab : beta ≤ alpha)
     (hQ : Foundation.SpectrumIn (A + K) Q (Set.Icc beta alpha))
     (hQperp : Foundation.SpectrumIn (A + K) Qᗮ (gapExterior beta alpha delta))
-    (_hPred : Reduces A P) :
+    (_hPred : A.Reduces P) :
     ∀ k : ℕ,
       delta * kyFanApproximationGauge k
           (TauCeti.DavisKahan.sinTwoThetaIdealBlock Q P) ≤
@@ -490,7 +490,7 @@ theorem theorem8_2_sinTwoTheta_residual_all_kyFan
   have hKsa : IsSelfAdjoint K :=
     ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mpr hK
   have hAKsa : IsSelfAdjoint (A + K) := hAsa.add hKsa
-  have hQred : Reduces (A + K) Q := ⟨hQ.invariant, hQperp.invariant⟩
+  have hQred : ContinuousLinearMap.Reduces (A + K) Q := ⟨hQ.invariant, hQperp.invariant⟩
   have hUspec : spectrum ℝ (compressOperator Q (A + K)) ⊆ Set.Icc beta alpha :=
     spectrum_compressOperator_subset_of_spectrumIn hQ
   have hUspec' : ∀ x ∈ spectrum ℝ (compressOperator Qᗮ (A + K)),
@@ -511,12 +511,12 @@ paper's directed angle, which is an *ordered* object in the opposite ordering.
 source-facing statement, and it is what this row's canonical evidence names. -/
 theorem theorem8_2_sinTwoTheta_residual_symmetricNorming
     (N : ExactSinTheta.SymmetricNormingFunction)
-    {A K : H →L[ℂ] H} (hA : IsSelfAdjointOperator A) (hK : IsSelfAdjointOperator K)
+    {A K : H →L[ℂ] H} (hA : A.IsSymmetric) (hK : K.IsSymmetric)
     {P Q : Submodule ℂ H} [P.HasOrthogonalProjection] [Q.HasOrthogonalProjection]
     {alpha beta delta : ℝ} (hdelta : 0 < delta) (hab : beta ≤ alpha)
     (hQ : Foundation.SpectrumIn (A + K) Q (Set.Icc beta alpha))
     (hQperp : Foundation.SpectrumIn (A + K) Qᗮ (gapExterior beta alpha delta))
-    (_hPred : Reduces A P)
+    (_hPred : A.Reduces P)
     (hRmem : N.Mem (residual (A + K) P.subtypeL (compressOperator P A))) :
     N.Mem (TauCeti.DavisKahan.sinTwoThetaIdealBlock Q P) ∧
       delta * N.gauge (TauCeti.DavisKahan.sinTwoThetaIdealBlock Q P) ≤
@@ -526,7 +526,7 @@ theorem theorem8_2_sinTwoTheta_residual_symmetricNorming
   have hKsa : IsSelfAdjoint K :=
     ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mpr hK
   have hAKsa : IsSelfAdjoint (A + K) := hAsa.add hKsa
-  have hQred : Reduces (A + K) Q := ⟨hQ.invariant, hQperp.invariant⟩
+  have hQred : ContinuousLinearMap.Reduces (A + K) Q := ⟨hQ.invariant, hQperp.invariant⟩
   have hUspec : spectrum ℝ (compressOperator Q (A + K)) ⊆ Set.Icc beta alpha :=
     spectrum_compressOperator_subset_of_spectrumIn hQ
   have hUspec' : ∀ x ∈ spectrum ℝ (compressOperator Qᗮ (A + K)),
@@ -555,12 +555,12 @@ composite bridge used here is
 `Angle.sinTwoThetaIdealBlock_hasSameApproximationNumbers_trialSide`. -/
 theorem theorem8_2_sinTwoTheta_residual_directedAngle_symmetricNorming
     (N : ExactSinTheta.SymmetricNormingFunction)
-    {A K : H →L[ℂ] H} (hA : IsSelfAdjointOperator A) (hK : IsSelfAdjointOperator K)
+    {A K : H →L[ℂ] H} (hA : A.IsSymmetric) (hK : K.IsSymmetric)
     {P Q : Submodule ℂ H} [P.HasOrthogonalProjection] [Q.HasOrthogonalProjection]
     {alpha beta delta : ℝ} (hdelta : 0 < delta) (hab : beta ≤ alpha)
     (hQ : Foundation.SpectrumIn (A + K) Q (Set.Icc beta alpha))
     (hQperp : Foundation.SpectrumIn (A + K) Qᗮ (gapExterior beta alpha delta))
-    (hPred : Reduces A P)
+    (hPred : A.Reduces P)
     (hRmem : N.Mem (residual (A + K) P.subtypeL (compressOperator P A))) :
     N.Mem (Angle.directedSinTwoAngleOperator P Q) ∧
       delta * N.gauge (Angle.directedSinTwoAngleOperator P Q) ≤
@@ -582,12 +582,12 @@ double-angle bounds. -/
 theorem theorem8_2_sinTwoTheta_perturbation_sourceExact
     [TopologicalSpace.SeparableSpace H]
     (N : ExactSinTheta.NormalizedUnitaryInvariantNorm.{0, _} ℂ)
-    {A K : H →L[ℂ] H} (hA : IsSelfAdjointOperator A) (hK : IsSelfAdjointOperator K)
+    {A K : H →L[ℂ] H} (hA : A.IsSymmetric) (hK : K.IsSymmetric)
     {P Q : Submodule ℂ H} [P.HasOrthogonalProjection] [Q.HasOrthogonalProjection]
     {alpha beta delta : ℝ} (hdelta : 0 < delta) (hab : beta ≤ alpha)
     (hQ : Foundation.SpectrumIn (A + K) Q (Set.Icc beta alpha))
     (hQperp : Foundation.SpectrumIn (A + K) Qᗮ (gapExterior beta alpha delta))
-    (hPred : Reduces A P)
+    (hPred : A.Reduces P)
     (hKmem : N.Mem K) :
     N.Mem (sinTwoAngleOperatorC Q P) ∧
       delta * N.gauge (sinTwoAngleOperatorC Q P) ≤ 2 * N.gauge K :=
@@ -601,12 +601,12 @@ source scope.** -/
 theorem theorem8_2_sinTwoTheta_residual_directedAngle_sourceExact
     [TopologicalSpace.SeparableSpace H]
     (N : ExactSinTheta.NormalizedUnitaryInvariantNorm.{0, _} ℂ)
-    {A K : H →L[ℂ] H} (hA : IsSelfAdjointOperator A) (hK : IsSelfAdjointOperator K)
+    {A K : H →L[ℂ] H} (hA : A.IsSymmetric) (hK : K.IsSymmetric)
     {P Q : Submodule ℂ H} [P.HasOrthogonalProjection] [Q.HasOrthogonalProjection]
     {alpha beta delta : ℝ} (hdelta : 0 < delta) (hab : beta ≤ alpha)
     (hQ : Foundation.SpectrumIn (A + K) Q (Set.Icc beta alpha))
     (hQperp : Foundation.SpectrumIn (A + K) Qᗮ (gapExterior beta alpha delta))
-    (hPred : Reduces A P)
+    (hPred : A.Reduces P)
     (hRmem : N.Mem (residual (A + K) P.subtypeL (compressOperator P A))) :
     N.Mem (Angle.directedSinTwoAngleOperator P Q) ∧
       delta * N.gauge (Angle.directedSinTwoAngleOperator P Q) ≤
@@ -624,12 +624,12 @@ theorem theorem8_2_sinTwoTheta_residual_directedAngle_sourceExact
 (1.5).  The proof adds nothing to `theorem8_2_perturbationHalfGap_complex`; (1.5)
 only converts its directed conclusion into the symmetric one. -/
 theorem theorem8_2_perturbationHalfGap_maximalAngle_lt [FiniteDimensional ℂ H]
-    {A K : H →L[ℂ] H} (hA : IsSelfAdjointOperator A) (hK : IsSelfAdjointOperator K)
+    {A K : H →L[ℂ] H} (hA : A.IsSymmetric) (hK : K.IsSymmetric)
     {P Q : Submodule ℂ H} [P.HasOrthogonalProjection] [Q.HasOrthogonalProjection]
     {alpha beta delta : ℝ} (hdelta : 0 < delta) (hab : beta ≤ alpha)
     (hQ : Foundation.SpectrumIn (A + K) Q (Set.Icc beta alpha))
     (hQperp : Foundation.SpectrumIn (A + K) Qᗮ (gapExterior beta alpha delta))
-    (hPred : Reduces A P)
+    (hPred : A.Reduces P)
     (hP : Foundation.SpectrumIn A P (Set.Icc (beta - delta / 2) (alpha + delta / 2)))
     (hrank : finrank ℂ P = finrank ℂ Q)
     (hsmall : ‖K‖ < delta / 2) :
@@ -639,12 +639,12 @@ theorem theorem8_2_perturbationHalfGap_maximalAngle_lt [FiniteDimensional ℂ H]
 
 /-- **Davis--Kahan 1970, Theorem 8.2, residual alternative, printed form.** -/
 theorem theorem8_2_residualHalfGap_maximalAngle_lt [FiniteDimensional ℂ H]
-    {A K : H →L[ℂ] H} (hA : IsSelfAdjointOperator A) (hK : IsSelfAdjointOperator K)
+    {A K : H →L[ℂ] H} (hA : A.IsSymmetric) (hK : K.IsSymmetric)
     {P Q : Submodule ℂ H} [P.HasOrthogonalProjection] [Q.HasOrthogonalProjection]
     {alpha beta delta : ℝ} (hdelta : 0 < delta) (hab : beta ≤ alpha)
     (hQ : Foundation.SpectrumIn (A + K) Q (Set.Icc beta alpha))
     (hQperp : Foundation.SpectrumIn (A + K) Qᗮ (gapExterior beta alpha delta))
-    (hPred : Reduces A P)
+    (hPred : A.Reduces P)
     (hP : Foundation.SpectrumIn A P (Set.Icc (beta - delta / 2) (alpha + delta / 2)))
     (hrank : finrank ℂ P = finrank ℂ Q)
     (hRsmall : ‖residual (A + K) P.subtypeL (compressOperator P A)‖ < delta / 2) :
@@ -654,12 +654,12 @@ theorem theorem8_2_residualHalfGap_maximalAngle_lt [FiniteDimensional ℂ H]
 
 /-- **Theorem 8.2's printed disjunction, printed conclusion.** -/
 theorem theorem8_2_branch_maximalAngle_lt [FiniteDimensional ℂ H]
-    {A K : H →L[ℂ] H} (hA : IsSelfAdjointOperator A) (hK : IsSelfAdjointOperator K)
+    {A K : H →L[ℂ] H} (hA : A.IsSymmetric) (hK : K.IsSymmetric)
     {P Q : Submodule ℂ H} [P.HasOrthogonalProjection] [Q.HasOrthogonalProjection]
     {alpha beta delta : ℝ} (hdelta : 0 < delta) (hab : beta ≤ alpha)
     (hQ : Foundation.SpectrumIn (A + K) Q (Set.Icc beta alpha))
     (hQperp : Foundation.SpectrumIn (A + K) Qᗮ (gapExterior beta alpha delta))
-    (hPred : Reduces A P)
+    (hPred : A.Reduces P)
     (hP : Foundation.SpectrumIn A P (Set.Icc (beta - delta / 2) (alpha + delta / 2)))
     (hrank : finrank ℂ P = finrank ℂ Q)
     (hsmall : ‖K‖ < delta / 2 ∨
@@ -678,12 +678,12 @@ finite-dimensionality and **no** rank hypothesis.  The complex counterpart of
 `theorem8_2_branch_real_maximalAngle_lt_of_crossedDefects`, which existed
 first only because the real descent needed it. -/
 theorem theorem8_2_branch_maximalAngle_lt_of_crossedDefects
-    {A K : H →L[ℂ] H} (hA : IsSelfAdjointOperator A) (hK : IsSelfAdjointOperator K)
+    {A K : H →L[ℂ] H} (hA : A.IsSymmetric) (hK : K.IsSymmetric)
     {P Q : Submodule ℂ H} [P.HasOrthogonalProjection] [Q.HasOrthogonalProjection]
     {alpha beta delta : ℝ} (hdelta : 0 < delta) (hab : beta ≤ alpha)
     (hQ : Foundation.SpectrumIn (A + K) Q (Set.Icc beta alpha))
     (hQperp : Foundation.SpectrumIn (A + K) Qᗮ (gapExterior beta alpha delta))
-    (hPred : Reduces A P)
+    (hPred : A.Reduces P)
     (hP : Foundation.SpectrumIn A P (Set.Icc (beta - delta / 2) (alpha + delta / 2)))
     (hcross : CrossedDefectsEquivalent P Q)
     (hsmall : ‖K‖ < delta / 2 ∨
@@ -710,12 +710,12 @@ content.
 `‖·‖₁` is the bound norm throughout Theorem 8.2, which is what the operator
 norms here are. -/
 theorem theorem8_2_complex [FiniteDimensional ℂ H]
-    {A K : H →L[ℂ] H} (hA : IsSelfAdjointOperator A) (hK : IsSelfAdjointOperator K)
+    {A K : H →L[ℂ] H} (hA : A.IsSymmetric) (hK : K.IsSymmetric)
     {P Q : Submodule ℂ H} [P.HasOrthogonalProjection] [Q.HasOrthogonalProjection]
     {alpha beta delta : ℝ} (hdelta : 0 < delta) (hab : beta ≤ alpha)
     (hQ : Foundation.SpectrumIn (A + K) Q (Set.Icc beta alpha))
     (hQperp : Foundation.SpectrumIn (A + K) Qᗮ (gapExterior beta alpha delta))
-    (hPred : Reduces A P)
+    (hPred : A.Reduces P)
     (hP : Foundation.SpectrumIn A P (Set.Icc (beta - delta / 2) (alpha + delta / 2)))
     (hrank : finrank ℂ P = finrank ℂ Q)
     (hsmall : ‖K‖ < delta / 2 ∨

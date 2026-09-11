@@ -46,7 +46,7 @@ namespace DavisKahan1970
 namespace Section8
 
 open scoped InnerProductSpace
-open TauCeti.DavisKahan (subspaceGap)
+open TauCeti.DavisKahan (Submodule.projectionGap)
 open TauCeti.DavisKahanExt (maximalAngle)
 
 noncomputable section
@@ -171,7 +171,7 @@ variable {A : H →ₗ.[ℂ] H} {Hop : H →L[ℂ] H} {P : Submodule ℂ H}
 A reducing subspace of `A + H` inside the closed quarter turn from `P` is the
 canonical spectral branch. -/
 theorem theorem8_1_eq_canonicalBranchUnbounded_of_maximalAngle_le
-    (hA : IsSelfAdjoint A) (hH : DavisKahan.IsSelfAdjointOperator Hop)
+    (hA : IsSelfAdjoint A) (hH : Hop.IsSymmetric)
     (hredPperp : TauCeti.LinearPMap.ReducesSubspace A Pᗮ)
     (hPlow : ∀ x : A.domain, (x : H) ∈ P →
       RCLike.re ⟪A x, (x : H)⟫_ℂ ≤ alpha * ‖(x : H)‖ ^ 2)
@@ -196,9 +196,9 @@ theorem theorem8_1_eq_canonicalBranchUnbounded_of_maximalAngle_le
   have hstrict := DavisKahan.norm_starProjection_sub_sq_lt_of_orderedFormGap_unbounded_printed
     A Hop P (canonicalLowBranchUnbounded hB alpha) hA hHsa hredPperp hQred.orthogonal
     hPlow hPhigh hform.1 hform.2 hHP hHPperp hdelta
-  have hgapM : subspaceGap P M ≤ Real.sqrt 2 / 2 :=
+  have hgapM : P.projectionGap M ≤ Real.sqrt 2 / 2 :=
     (maximalAngle_le_pi_div_four_iff P M).1 hMangle
-  have hgapMperp : subspaceGap Pᗮ Mᗮ ≤ Real.sqrt 2 / 2 := by
+  have hgapMperp : Pᗮ.projectionGap Mᗮ ≤ Real.sqrt 2 / 2 := by
     rw [TauCeti.DavisKahan.subspaceGap_orthogonal P M]
     exact hgapM
   have hQsp : (canonicalLowBranchUnbounded hB alpha).starProjection
@@ -234,7 +234,7 @@ the paper prescribes: `Λ₀ ≤ α` on `M` and `Λ₁ ≥ α + δ` on `Mᗮ`.  
 ordered form bounds on the domain, which is the reading the unbounded quarter-angle
 theorem and the spectral branch both use. -/
 theorem theorem8_1_maximalAngle_le_iff_orderedFormGap_unbounded
-    (hA : IsSelfAdjoint A) (hH : DavisKahan.IsSelfAdjointOperator Hop)
+    (hA : IsSelfAdjoint A) (hH : Hop.IsSymmetric)
     (hredPperp : TauCeti.LinearPMap.ReducesSubspace A Pᗮ)
     (hPlow : ∀ x : A.domain, (x : H) ∈ P →
       RCLike.re ⟪A x, (x : H)⟫_ℂ ≤ alpha * ‖(x : H)‖ ^ 2)

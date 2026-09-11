@@ -4,7 +4,9 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
 
-import DavisKahan.BoundedOperator.Compat
+import ForTauCeti.Analysis.InnerProductSpace.BoundedOperator.Projector
+import ForTauCeti.Analysis.InnerProductSpace.Projection.Blocks
+import DavisKahan.BoundedOperator.Problem
 import DavisKahan.Sylvester.Spectrum
 import DavisKahan.DoubleAngle.KyFanOrthonormal
 import DavisKahan.OperatorIdeal.ApproximationNumbers.ScalarGeneric
@@ -496,7 +498,7 @@ theorem orthonormal_theorem63ResidualWitness
               (yj - ((sigma_j : ℝ) : ℂ) • (v_j : H))) := by
           simp [theorem63ResidualWitness, S, sigma_j, v_j, yj, cj, hj]
         simp only [hwi, hwj, inner_smul_left, inner_smul_right,
-          hraw, mul_zero, mul_zero]
+          hraw, mul_zero]
 
 /-- Approximation-number formulation of the paper's instruction that
 `tan Θ₀` have singular values `tan θ_j`, where the directed sine singular

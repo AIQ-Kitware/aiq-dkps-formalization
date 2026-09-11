@@ -182,13 +182,13 @@ acuteness makes `|S|` injective, hence of dense range.  The compiled
 `IsUniformlyAcute` version cancels an invertible `|S|` instead. -/
 theorem projection_mul_spectraCanonicalPolarFactor_mul_projection
     (hUV : U ⊓ Vᗮ = ⊥) (hVU : Uᗮ ⊓ V = ⊥) :
-    projection U * spectraCanonicalPolarFactor U V * projection U =
-      ContinuousLinearMap.modulus (spectraCanonicalIntertwiner U V) * projection U := by
+    U.starProjection * spectraCanonicalPolarFactor U V * U.starProjection =
+      ContinuousLinearMap.modulus (spectraCanonicalIntertwiner U V) * U.starProjection := by
   set S : H →L[𝕜] H := spectraCanonicalIntertwiner U V with hSdef
   set A : H →L[𝕜] H := ContinuousLinearMap.modulus S with hAdef
   set W : H →L[𝕜] H := spectraCanonicalPolarFactor U V with hWdef
-  set P : H →L[𝕜] H := projection U with hPdef
-  set Q : H →L[𝕜] H := projection V with hQdef
+  set P : H →L[𝕜] H := U.starProjection with hPdef
+  set Q : H →L[𝕜] H := V.starProjection with hQdef
   have hWA : W * A = S := by
     rw [ContinuousLinearMap.mul_def]
     exact spectraCanonicalPolarFactor_decomposition U V
@@ -269,7 +269,7 @@ theorem isPositive_projection_mul_spectraCanonicalPolarFactor_mul_projection
     (U.starProjection * spectraCanonicalPolarFactor U V * U.starProjection).IsPositive := by
   have hblk := projection_mul_spectraCanonicalPolarFactor_mul_projection U V hUV hVU
   have hAP : Commute (ContinuousLinearMap.modulus (spectraCanonicalIntertwiner U V))
-      (projection U) := spectraCanonicalAbsoluteValue_commute_projection U V
+      (U.starProjection) := spectraCanonicalAbsoluteValue_commute_projection U V
   have hPP : U.starProjection * U.starProjection = U.starProjection :=
     U.isIdempotentElem_starProjection
   have hpos : (ContinuousLinearMap.modulus (spectraCanonicalIntertwiner U V)).IsPositive :=

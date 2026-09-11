@@ -289,7 +289,7 @@ theorem sinAngleOperatorR_nonneg :
 /-- **The norm of the real sine-angle operator is the real subspace gap**,
 `‖sin Θ‖ = ‖P_U - P_V‖`. -/
 theorem norm_sinAngleOperatorR :
-    ‖sinAngleOperatorR U V‖ = DavisKahan.subspaceGap U V := by
+    ‖sinAngleOperatorR U V‖ = U.projectionGap V := by
   rw [← norm_complexify, complexify_sinAngleOperatorR,
     norm_sinAngleOperatorC]
   exact subspaceGap_complexifySubmodule U V

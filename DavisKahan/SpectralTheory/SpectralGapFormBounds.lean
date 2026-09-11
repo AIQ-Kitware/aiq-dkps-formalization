@@ -81,7 +81,7 @@ theorem spectralGapCutoff_eq_zero {alpha delta t : ℝ} (hdelta : 0 < delta)
 
 /-! ### The symbol on the spectrum -/
 
-variable (B : H →L[ℂ] H) (hB : IsSelfAdjointOperator B)
+variable (B : H →L[ℂ] H) (hB : B.IsSymmetric)
 
 /-- The cutoff pulled back to the spectrum along the real-part coordinate. -/
 def spectralGapSymbol (alpha delta : ℝ) : C(spectrum ℂ B, ℝ) :=
@@ -97,7 +97,7 @@ omit [CompleteSpace H] in
 
 /-- The real-part coordinate of a spectral point is a point of the real
 spectrum. -/
-theorem reCoord_mem_realSpectrum (hB : IsSelfAdjointOperator B)
+theorem reCoord_mem_realSpectrum (hB : B.IsSymmetric)
     (w : spectrum ℂ B) :
     TauCeti.BorelCalculus.reCoord w ∈ realSpectrum B := by
   have h := coe_reCoord B hB w

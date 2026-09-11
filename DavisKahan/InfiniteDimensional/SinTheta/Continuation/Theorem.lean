@@ -180,7 +180,7 @@ canonical orthogonal projections onto the endpoint spectral subspaces. -/
 theorem exists_unitary_transport_selectedSpectralSubspaces
     (C : SpectralContinuationWitness A V s) :
     ∃ W : H →L[ℂ] H,
-      IsUnitaryOperator W ∧
+      TauCeti.LinearPMap.IsUnitaryOperator W ∧
       W ∘L C.sourceSelectedSpectralSubspace.starProjection =
         C.targetSelectedSpectralSubspace.starProjection ∘L W := by
   obtain ⟨W, hWunitary, hWintertwines⟩ :=

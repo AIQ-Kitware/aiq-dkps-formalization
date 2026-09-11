@@ -53,14 +53,11 @@ globs = ["ForTauCeti.*"]
 # local warning regressions from being hidden by this workspace's defaults.
 leanOptions = { warningAsError = true, weak.linter.mathlibStandardSet = true, weak.linter.style.longFile = 1500, weak.linter.style.longFileDefValue = 1500, weak.linter.style.header = false }
 
-# The roadmap bridge. The submitted roadmap
-# (`submodules/TauCetiRoadmap/**/Suggested.lean`) states the proposed signatures against
-# Mathlib alone with `sorry` bodies; `ForTauCeti` proves the mathematics.  Each module here
-# restates a roadmap signature verbatim and discharges it with the delivered declaration, so
-# the correspondence is checked by the compiler rather than by comparing declaration names.
-#
-# In `defaultTargets` deliberately so the roadmap-to-delivery correspondence is
-# re-verified by every ordinary build.
+# Signature and canonical-consumer regression tests, not a production compatibility library.
+# Proposed roadmap signatures are exercised against the delivered declarations. Additional
+# examples check the intended scalar, dimension, and universe scope, and that consumers use
+# the canonical API without the retired forwarding names. No production library imports it.
+# Keep the tests in defaultTargets so ordinary builds check these requirements.
 [[lean_lib]]
 name = "RoadmapBridge"
 globs = ["RoadmapBridge.*"]

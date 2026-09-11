@@ -93,9 +93,9 @@ taking the supremum over `x` turns `‖sin Θ‖ = g` into the claim. -/
 theorem two_mul_sqrt_mul_directedGap_le_norm_directedSinTwoAngleOperatorC
     (U V : Submodule ℂ E)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] :
-    2 * Real.sqrt (1 - directedGap U V ^ 2) * directedGap U V ≤
+    2 * Real.sqrt (1 - U.directedProjectionGap V ^ 2) * U.directedProjectionGap V ≤
       ‖directedSinTwoAngleOperatorC U V‖ := by
-  set g : ℝ := directedGap U V with hgdef
+  set g : ℝ := U.directedProjectionGap V with hgdef
   set c0 : ℝ := Real.sqrt (1 - g ^ 2) with hc0
   set S : E →L[ℂ] E := directedSinAngleOperatorC U V with hS
   set C : E →L[ℂ] E := directedCosAngleOperatorC U V with hC
@@ -139,13 +139,13 @@ double-angle sine dominates `√2` times the directed gap. -/
 theorem sqrt_two_mul_directedGap_le_norm_sinTwoAngleOperator
     (U V : Submodule ℂ E)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
-    (hclose : directedGap V U ≤ Real.sqrt 2 / 2) :
-    Real.sqrt 2 * directedGap V U ≤ ‖sinTwoAngleOperator U V‖ := by
-  have hg0 : 0 ≤ directedGap V U := norm_nonneg _
+    (hclose : V.directedProjectionGap U ≤ Real.sqrt 2 / 2) :
+    Real.sqrt 2 * V.directedProjectionGap U ≤ ‖sinTwoAngleOperator U V‖ := by
+  have hg0 : 0 ≤ V.directedProjectionGap U := norm_nonneg _
   have hcos := sqrt_two_div_two_le_sqrt_one_sub_sq hclose hg0
-  calc Real.sqrt 2 * directedGap V U
-      = 2 * (Real.sqrt 2 / 2) * directedGap V U := by ring
-    _ ≤ 2 * Real.sqrt (1 - directedGap V U ^ 2) * directedGap V U := by
+  calc Real.sqrt 2 * V.directedProjectionGap U
+      = 2 * (Real.sqrt 2 / 2) * V.directedProjectionGap U := by ring
+    _ ≤ 2 * Real.sqrt (1 - V.directedProjectionGap U ^ 2) * V.directedProjectionGap U := by
         have h2 : (0 : ℝ) ≤ 2 := by norm_num
         nlinarith [hcos, hg0]
     _ ≤ ‖directedSinTwoAngleOperatorC V U‖ :=

@@ -64,7 +64,7 @@ theorem exists_selectedEffectiveBlocks_with_realSpectrum
           C.sourceSelectedSpectralSubspace,
       ∃ D1 : C.sourceSelectedSpectralSubspaceᗮ →L[ℂ]
           C.sourceSelectedSpectralSubspaceᗮ,
-      IsUnitaryOperator W ∧ IsUnitaryOperator Winv ∧
+      TauCeti.LinearPMap.IsUnitaryOperator W ∧ TauCeti.LinearPMap.IsUnitaryOperator Winv ∧
       Winv ∘L W = ContinuousLinearMap.id ℂ _ ∧
       W ∘L Winv = ContinuousLinearMap.id ℂ _ ∧
       Winv ∘L

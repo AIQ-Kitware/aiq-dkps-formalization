@@ -121,11 +121,11 @@ theorem norm_absoluteValue_apply_eq_norm_projection
     (U V : Submodule ℂ H) [U.HasOrthogonalProjection]
     [V.HasOrthogonalProjection] {x : H} (hx : x ∈ U) :
     ‖ContinuousLinearMap.modulus (spectraCanonicalIntertwiner U V) x‖ =
-      ‖projection V x‖ := by
+      ‖V.starProjection x‖ := by
   let C : H →L[ℂ] H :=
     ContinuousLinearMap.modulus (spectraCanonicalIntertwiner U V)
-  let P : H →L[ℂ] H := projection U
-  let Q : H →L[ℂ] H := projection V
+  let P : H →L[ℂ] H := U.starProjection
+  let Q : H →L[ℂ] H := V.starProjection
   have hxP : P x = x := Submodule.starProjection_eq_self_iff.mpr hx
   have hCsa : star C = C :=
     (ContinuousLinearMap.modulus_isSelfAdjoint
@@ -135,7 +135,7 @@ theorem norm_absoluteValue_apply_eq_norm_projection
   have hCosx : halmosCosineSq U V x = P (Q x) := by
     simp only [halmosCosineSq, add_apply, mul_apply_eq_comp]
     rw [hxP]
-    have hxPc : complementaryProjection U x = 0 := by
+    have hxPc : (Uᗮ).starProjection x = 0 := by
       change Uᗮ.starProjection x = 0
       apply (Submodule.starProjection_apply_eq_zero_iff Uᗮ).mpr
       rw [Submodule.orthogonal_orthogonal]
@@ -177,7 +177,7 @@ theorem norm_inner_competitor_le
     (U V : Submodule ℂ H) [U.HasOrthogonalProjection]
     [V.HasOrthogonalProjection] (W : H →L[ℂ] H)
     (hWunitary : W ∈ unitary (H →L[ℂ] H))
-    (hWmap : W * projection U = projection V * W) {x : H} (hx : x ∈ U) :
+    (hWmap : W * U.starProjection = V.starProjection * W) {x : H} (hx : x ∈ U) :
     ‖⟪x, W x⟫_ℂ‖ ≤
       ‖ContinuousLinearMap.modulus (spectraCanonicalIntertwiner U V) x‖ *
         ‖x‖ := by
@@ -187,18 +187,18 @@ theorem norm_inner_competitor_le
     rw [mul_apply_eq_comp, mul_apply_eq_comp,
       Submodule.starProjection_eq_self_iff.mpr hx] at happ
     exact happ.symm
-  have hQWx : projection V (W x) = W x :=
+  have hQWx : V.starProjection (W x) = W x :=
     Submodule.starProjection_eq_self_iff.mpr hWxV
-  have hinner : ⟪x, W x⟫_ℂ = ⟪projection V x, W x⟫_ℂ := by
+  have hinner : ⟪x, W x⟫_ℂ = ⟪V.starProjection x, W x⟫_ℂ := by
     calc
-      ⟪x, W x⟫_ℂ = ⟪x, projection V (W x)⟫_ℂ := by rw [hQWx]
-      _ = ⟪projection V x, W x⟫_ℂ :=
+      ⟪x, W x⟫_ℂ = ⟪x, V.starProjection (W x)⟫_ℂ := by rw [hQWx]
+      _ = ⟪V.starProjection x, W x⟫_ℂ :=
         (V.inner_starProjection_left_eq_right x (W x)).symm
   have hWnorm : ‖W x‖ = ‖x‖ :=
     Unitary.norm_map (⟨W, hWunitary⟩ : unitary (H →L[ℂ] H)) x
   calc
-    ‖⟪x, W x⟫_ℂ‖ = ‖⟪projection V x, W x⟫_ℂ‖ := by rw [hinner]
-    _ ≤ ‖projection V x‖ * ‖W x‖ := norm_inner_le_norm _ _
+    ‖⟪x, W x⟫_ℂ‖ = ‖⟪V.starProjection x, W x⟫_ℂ‖ := by rw [hinner]
+    _ ≤ ‖V.starProjection x‖ * ‖W x‖ := norm_inner_le_norm _ _
     _ = ‖ContinuousLinearMap.modulus (spectraCanonicalIntertwiner U V) x‖ *
         ‖x‖ := by
       rw [hWnorm, norm_absoluteValue_apply_eq_norm_projection U V hx]
@@ -209,7 +209,7 @@ theorem displacementAngleSineSq_ge_complex
     (U V : Submodule ℂ H) [U.HasOrthogonalProjection]
     [V.HasOrthogonalProjection] (W : H →L[ℂ] H)
     (hWunitary : W ∈ unitary (H →L[ℂ] H))
-    (hWmap : W * projection U = projection V * W) {x : H} (hx : x ∈ U)
+    (hWmap : W * U.starProjection = V.starProjection * W) {x : H} (hx : x ∈ U)
     (hxnorm : ‖x‖ = 1) :
     1 - ‖ContinuousLinearMap.modulus (spectraCanonicalIntertwiner U V) x‖ ^ 2 ≤
       displacementAngleSineSq W x := by
@@ -243,7 +243,7 @@ theorem sum_displacementAngleSineSq_ge
     [V.HasOrthogonalProjection] {ι : Type*} [Fintype ι]
     (b : OrthonormalBasis ι ℂ U) (W : H →L[ℂ] H)
     (hWunitary : W ∈ unitary (H →L[ℂ] H))
-    (hWmap : W * projection U = projection V * W) :
+    (hWmap : W * U.starProjection = V.starProjection * W) :
     ∑ i, (1 - ‖ContinuousLinearMap.modulus (spectraCanonicalIntertwiner U V)
         ((b i : U) : H)‖ ^ 2) ≤
       ∑ i, displacementAngleSineSq W ((b i : U) : H) := by
@@ -278,7 +278,7 @@ theorem sum_displacementAngleSineSq_ge_of_mem_complex
     (U V : Submodule ℂ H) [U.HasOrthogonalProjection]
     [V.HasOrthogonalProjection] (W : H →L[ℂ] H)
     (hWunitary : W ∈ unitary (H →L[ℂ] H))
-    (hWmap : W * projection U = projection V * W)
+    (hWmap : W * U.starProjection = V.starProjection * W)
     {ι : Type*} (b : ι → H) (hb : ∀ i, b i ∈ U) (hbnorm : ∀ i, ‖b i‖ = 1)
     (s : Finset ι) :
     ∑ i ∈ s, (1 - ‖ContinuousLinearMap.modulus
@@ -297,7 +297,7 @@ theorem tsum_displacementAngleSineSq_ge_of_mem_complex
     (U V : Submodule ℂ H) [U.HasOrthogonalProjection]
     [V.HasOrthogonalProjection] (W : H →L[ℂ] H)
     (hWunitary : W ∈ unitary (H →L[ℂ] H))
-    (hWmap : W * projection U = projection V * W)
+    (hWmap : W * U.starProjection = V.starProjection * W)
     {ι : Type*} (b : ι → H) (hb : ∀ i, b i ∈ U) (hbnorm : ∀ i, ‖b i‖ = 1) :
     ∑' i, ENNReal.ofReal (1 - ‖ContinuousLinearMap.modulus
         (spectraCanonicalIntertwiner U V) (b i)‖ ^ 2) ≤
@@ -387,7 +387,7 @@ theorem tsum_displacementAngleSineSq_ge_tsum_sq_principalSineSequence
     (U V : Submodule ℂ H) [U.HasOrthogonalProjection]
     [V.HasOrthogonalProjection] {ι : Type u} (b : HilbertBasis ι ℂ U)
     (W : H →L[ℂ] H) (hWunitary : W ∈ unitary (H →L[ℂ] H))
-    (hWmap : W * projection U = projection V * W) :
+    (hWmap : W * U.starProjection = V.starProjection * W) :
     (∑' n : ℕ, ENNReal.ofReal (TauCeti.principalSineSequence U V n) ^ 2) ≤
       ∑' i, ENNReal.ofReal
         (displacementAngleSineSq W ((b i : U) : H)) := by
@@ -407,7 +407,7 @@ theorem tsum_displacementAngleSineSq_ge_tsum_sq_sin_principalAngleSequence
     (U V : Submodule ℂ H) [U.HasOrthogonalProjection]
     [V.HasOrthogonalProjection] {ι : Type u} (b : HilbertBasis ι ℂ U)
     (W : H →L[ℂ] H) (hWunitary : W ∈ unitary (H →L[ℂ] H))
-    (hWmap : W * projection U = projection V * W) :
+    (hWmap : W * U.starProjection = V.starProjection * W) :
     (∑' n : ℕ, ENNReal.ofReal
         (Real.sin (TauCeti.principalAngleSequence U V n)) ^ 2) ≤
       ∑' i, ENNReal.ofReal
@@ -476,7 +476,7 @@ theorem sum_displacementAngleSineSq_ge_sum_sq_principalSines
     [V.HasOrthogonalProjection]
     (b : OrthonormalBasis (Fin (Module.finrank ℂ U)) ℂ U) (W : H →L[ℂ] H)
     (hWunitary : W ∈ unitary (H →L[ℂ] H))
-    (hWmap : W * projection U = projection V * W) :
+    (hWmap : W * U.starProjection = V.starProjection * W) :
     ∑ i : Fin (Module.finrank ℂ U), TauCeti.principalSines U V (i : ℕ) ^ 2 ≤
       ∑ i, displacementAngleSineSq W ((b i : U) : H) := by
   rw [← sum_one_sub_sq_norm_absoluteValue_eq_sum_sq_principalSines U V b]

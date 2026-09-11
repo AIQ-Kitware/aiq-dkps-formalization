@@ -421,7 +421,7 @@ theorem apply_orthogonal_starProjection_comp_starProjection_comp
       ContinuousLinearMap.coe_coe, Function.comp_apply, LinearMap.comp_apply]
   -- `M⋆ = P ∘ Ph ∘ Q`, hence `M⋆M = C − C∘C`.
   have hMadj : LinearMap.adjoint M = P ∘ₗ Ph ∘ₗ Q := by
-    simp only [hMcoe, LinearMap.adjoint_comp, LinearMap.adjoint_comp, hPadj, hPhadj, hQadj,
+    simp only [hMcoe, LinearMap.adjoint_comp, hPadj, hPhadj, hQadj,
       LinearMap.comp_assoc]
   have hMM : LinearMap.adjoint M ∘ₗ M = C - C ∘ₗ C := by
     rw [hMadj, hMcoe]
@@ -591,7 +591,7 @@ theorem reflectionDefect_le_two_mul_perturbation
     have hproj :
         V.starProjection (B x) = B (V.starProjection x) := by
       change projection V (B x) = B (projection V x)
-      exact projection_apply_comm_of_isInvariant hB hV x
+      exact ContinuousLinearMap.starProjection_apply_comm_of_reduces hB hV x
     rw [hproj]
   have hJinvol : J ∘ₗ J = LinearMap.id := by
     ext x

@@ -42,7 +42,7 @@ theorem sinTheta_addBounded_gauge_of_spectrum_gap_isometric
     (N : TauCeti.SymmetricOperatorIdealFamily.{0, v} ℂ)
     [N.toOperatorIdealFamily.IsComplete]
     (A : H →ₗ.[ℂ] H) (hA : IsSelfAdjoint A)
-    (V : H →L[ℂ] H) (hV : IsSelfAdjointOperator V)
+    (V : H →L[ℂ] H) (hV : V.IsSymmetric)
     (A₀ : F →ₗ.[ℂ] F) (hA₀ : IsSelfAdjoint A₀)
     (Λ₁ : G →ₗ.[ℂ] G) (hΛ₁ : IsSelfAdjoint Λ₁)
     (X : F →L[ℂ] H) (F₁ : G →L[ℂ] H)
@@ -117,7 +117,7 @@ theorem sinTheta_addBounded_gauge_block_of_spectrum_gap
     (N : TauCeti.SymmetricOperatorIdealFamily.{0, v} ℂ)
     [N.toOperatorIdealFamily.IsComplete]
     (A : H →ₗ.[ℂ] H) (hA : IsSelfAdjoint A)
-    (V : H →L[ℂ] H) (hV : IsSelfAdjointOperator V)
+    (V : H →L[ℂ] H) (hV : V.IsSymmetric)
     (A₀ : F →ₗ.[ℂ] F) (hA₀ : IsSelfAdjoint A₀)
     (Λ₁ : G →ₗ.[ℂ] G) (hΛ₁ : IsSelfAdjoint Λ₁)
     (X : F →L[ℂ] H) (F₁ : G →L[ℂ] H)

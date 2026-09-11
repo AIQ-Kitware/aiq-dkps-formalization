@@ -124,7 +124,7 @@ theorem selectedEndpointAngularOperator_sharp_riccati_bound
     (C : SpectralContinuationWitness A V s)
     (hsmall : selectedBranchProjectionLipschitzConstant
       C.contour V C.margin < Real.sqrt 2 / 2)
-    (hoff : IsOffDiagonal C.sourceSelectedSpectralSubspace V)
+    (hoff : Submodule.IsOffDiagonal C.sourceSelectedSpectralSubspace V)
     {c d : ℝ} (hd0 : 0 ≤ d)
     (hA0 : ∀ z : C.sourceSelectedSpectralSubspace,
       RCLike.re
@@ -195,7 +195,7 @@ theorem norm_selectedEndpointAngularOperator_le_div
     (C : SpectralContinuationWitness A V s)
     (hsmall : selectedBranchProjectionLipschitzConstant
       C.contour V C.margin < Real.sqrt 2 / 2)
-    (hoff : IsOffDiagonal C.sourceSelectedSpectralSubspace V)
+    (hoff : Submodule.IsOffDiagonal C.sourceSelectedSpectralSubspace V)
     {c d : ℝ} (hd : 0 < d)
     (hA0 : ∀ z : C.sourceSelectedSpectralSubspace,
       RCLike.re
@@ -223,7 +223,7 @@ theorem tan_maximalAngle_selectedSpectralSubspaces_le_div
     (C : SpectralContinuationWitness A V s)
     (hsmall : selectedBranchProjectionLipschitzConstant
       C.contour V C.margin < Real.sqrt 2 / 2)
-    (hoff : IsOffDiagonal C.sourceSelectedSpectralSubspace V)
+    (hoff : Submodule.IsOffDiagonal C.sourceSelectedSpectralSubspace V)
     {c d : ℝ} (hd : 0 < d)
     (hA0 : ∀ z : C.sourceSelectedSpectralSubspace,
       RCLike.re

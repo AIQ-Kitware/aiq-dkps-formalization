@@ -129,7 +129,8 @@ noncomputable def ofBounded {V : Submodule 𝕜 H} [V.HasOrthogonalProjection]
     (data : Theorem63TrialData Z V) : UnboundedCompressionTrialData Z where
   compression := (data.compression.toLinearMap.toPMap ⊤)
   compression_isSelfAdjoint :=
-    TauCeti.DavisKahanExt.ofBounded_isSelfAdjoint _ data.compression_isSymmetric
+    TauCeti.LinearPMap.isSelfAdjoint_toPMap_top (T := _)
+      (ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mpr data.compression_isSymmetric)
   residual := data.residual
   residual_orthogonal := data.residual_orthogonal
 

@@ -291,12 +291,12 @@ strictly stronger uniform gap, is `proposition3_1` above; this is the
 theorem proposition3_1_positivity_characterization
     (hacute : DavisKahan.IsUniformlyAcute U V) (T : H →L[ℂ] H)
     (hunitary : T ∈ unitary (H →L[ℂ] H))
-    (hintertwines : T * DavisKahan.projection U = DavisKahan.projection V * T)
+    (hintertwines : T * U.starProjection = V.starProjection * T)
     (hsource_sa : IsSelfAdjoint
-      (DavisKahan.projection U * T * DavisKahan.projection U))
+      (U.starProjection * T * U.starProjection))
     (hcomplement_sa : IsSelfAdjoint
-      (DavisKahan.complementaryProjection U * T *
-        DavisKahan.complementaryProjection U)) :
+      ((Uᗮ).starProjection * T *
+        (Uᗮ).starProjection)) :
     DavisKahan.IsDirectRotation U V T ↔
       T = DavisKahan.spectraDirectRotation U V hacute := by
   constructor

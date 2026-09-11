@@ -96,9 +96,7 @@ noncomputable def ofTrialBlock (D : BoundedCompressionTrialBlock A Z) :
   trial :=
     { compression := D.operator.toLinearMap.toPMap ⊤
       compression_isSelfAdjoint :=
-        TauCeti.DavisKahanExt.ofBounded_isSelfAdjoint _
-          ((ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric).mp
-            D.operator_selfAdjoint)
+        TauCeti.LinearPMap.isSelfAdjoint_toPMap_top D.operator_selfAdjoint
       residual := D.residual
       residual_orthogonal := fun z z' =>
         (Submodule.mem_orthogonal' _ _).mp (D.residual_mem_orthogonal z) _ z'.2 }

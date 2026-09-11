@@ -129,7 +129,7 @@ theorem proposition4_1_compact_orthonormalVectors_complex
     (U V : Submodule ℂ H) [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
     (hcompact : IsCompactOperator (TauCeti.principalSineOperator U V))
     (W : H →L[ℂ] H) (hWunitary : W ∈ unitary (H →L[ℂ] H))
-    (hWmap : W * DavisKahan.projection U = DavisKahan.projection V * W) :
+    (hWmap : W * U.starProjection = V.starProjection * W) :
     ∃ v : {n : ℕ // 0 < TauCeti.principalSineSequence U V n} → U,
       Orthonormal ℂ v ∧ ∀ n : {n : ℕ // 0 < TauCeti.principalSineSequence U V n},
         TauCeti.principalAngleSequence U V (n : ℕ) ≤
@@ -200,7 +200,7 @@ theorem proposition4_1_compact_orthonormalVectors_complex
       rw [TauCeti.principalSineOperator_apply]
     have hxnormH : ‖(x : H)‖ = 1 := hxnorm
     rw [hxnormH, one_pow, ← hTdef, hTx] at hpy
-    change 1 = ‖DavisKahan.projection V (x : H)‖ ^ 2 + s ^ 2 at hpy
+    change 1 = ‖V.starProjection (x : H)‖ ^ 2 + s ^ 2 at hpy
     dsimp only [s] at hpy
     rw [hC]
     rw [hsin] at htrig
@@ -253,11 +253,11 @@ theorem proposition4_1_compact_nonacute_directRotationValues_complex
     (J : DavisKahan.halmosSourceDefect U V ≃ₗᵢ[ℂ]
       DavisKahan.halmosTargetDefect U V)
     (W : H →L[ℂ] H) (hWunitary : W ∈ unitary (H →L[ℂ] H))
-    (hWmap : W * DavisKahan.projection U = DavisKahan.projection V * W)
+    (hWmap : W * U.starProjection = V.starProjection * W)
     (n : ℕ) :
     (ContinuousLinearMap.approximationNumber
         ((1 - DavisKahan.nonacuteDirectRotation U V J) ∘L
-          DavisKahan.projection U) n : Real) =
+          U.starProjection) n : Real) =
       2 * Real.sin (TauCeti.principalAngleSequence U V n / 2) := by
   let _ : CompleteSpace U :=
     (Submodule.isComplete_coe_of_hasOrthogonalProjection U).completeSpace_coe
@@ -305,9 +305,9 @@ theorem proposition4_1_compact_nonacute_directRotationValues_complex
     exact A.approximationNumber_nonneg n
   have ha : a = 2 * shalf := (sq_eq_sq₀ ha0 (mul_nonneg (by norm_num) hshalf0)).1 haSq
   change (ContinuousLinearMap.approximationNumber
-      ((1 - DavisKahan.nonacuteDirectRotation U V J) ∘L DavisKahan.projection U) n : Real) = _
+      ((1 - DavisKahan.nonacuteDirectRotation U V J) ∘L U.starProjection) n : Real) = _
   have hD : ContinuousLinearMap.approximationNumber
-      ((1 - DavisKahan.nonacuteDirectRotation U V J) ∘L DavisKahan.projection U) n =
+      ((1 - DavisKahan.nonacuteDirectRotation U V J) ∘L U.starProjection) n =
       A.approximationNumber n := by
     simpa only [A] using hDseq
   rw [hD]
@@ -321,7 +321,7 @@ theorem proposition4_1_compact_nonacute_complex
     (J : DavisKahan.halmosSourceDefect U V ≃ₗᵢ[ℂ]
       DavisKahan.halmosTargetDefect U V)
     (W : H →L[ℂ] H) (hWunitary : W ∈ unitary (H →L[ℂ] H))
-    (hWmap : W * DavisKahan.projection U = DavisKahan.projection V * W) :
+    (hWmap : W * U.starProjection = V.starProjection * W) :
     (∃ v : {n : ℕ // 0 < TauCeti.principalSineSequence U V n} → U,
       Orthonormal ℂ v ∧
         ∀ n : {n : ℕ // 0 < TauCeti.principalSineSequence U V n},
@@ -330,14 +330,14 @@ theorem proposition4_1_compact_nonacute_complex
       (∀ n : ℕ,
         (ContinuousLinearMap.approximationNumber
             ((1 - DavisKahan.nonacuteDirectRotation U V J) ∘L
-              DavisKahan.projection U) n : Real) =
+              U.starProjection) n : Real) =
           2 * Real.sin (TauCeti.principalAngleSequence U V n / 2)) ∧
       ∀ n : ℕ,
         ContinuousLinearMap.approximationNumber
             ((1 - DavisKahan.nonacuteDirectRotation U V J) ∘L
-              DavisKahan.projection U) n ≤
+              U.starProjection) n ≤
           ContinuousLinearMap.approximationNumber
-            ((1 - W) ∘L DavisKahan.projection U) n := by
+            ((1 - W) ∘L U.starProjection) n := by
   refine ⟨proposition4_1_compact_orthonormalVectors_complex U V hcompact W hWunitary hWmap,
     ?_, fun n => ?_⟩
   · exact proposition4_1_compact_nonacute_directRotationValues_complex
@@ -353,12 +353,12 @@ theorem corollary4_1_compact_nonacute_complex
     (J : DavisKahan.halmosSourceDefect U V ≃ₗᵢ[ℂ]
       DavisKahan.halmosTargetDefect U V)
     (W : H →L[ℂ] H) (hWunitary : W ∈ unitary (H →L[ℂ] H))
-    (hWmap : W * DavisKahan.projection U = DavisKahan.projection V * W)
-    (hWmem : N.Mem ((1 - W) ∘L DavisKahan.projection U)) :
-    N.Mem ((1 - DavisKahan.nonacuteDirectRotation U V J) ∘L DavisKahan.projection U) ∧
+    (hWmap : W * U.starProjection = V.starProjection * W)
+    (hWmem : N.Mem ((1 - W) ∘L U.starProjection)) :
+    N.Mem ((1 - DavisKahan.nonacuteDirectRotation U V J) ∘L U.starProjection) ∧
       N.gauge ((1 - DavisKahan.nonacuteDirectRotation U V J) ∘L
-          DavisKahan.projection U) ≤
-        N.gauge ((1 - W) ∘L DavisKahan.projection U) :=
+          U.starProjection) ≤
+        N.gauge ((1 - W) ∘L U.starProjection) :=
   DavisKahan.Section4.restrictedDisplacement_idealGauge_le N
     (DavisKahan.Section4.nonacute_restrictedDisplacementDominance
       U V J W hWunitary hWmap) hWmem
@@ -383,13 +383,13 @@ theorem corollary4_1_infiniteDimensional_nonacute
     (J : DavisKahan.halmosSourceDefect U V ≃ₗᵢ[ℂ]
       DavisKahan.halmosTargetDefect U V)
     (W : H →L[ℂ] H) (hWunitary : W ∈ unitary (H →L[ℂ] H))
-    (hWmap : W * DavisKahan.projection U = DavisKahan.projection V * W)
-    (hWmem : N.Mem ((1 - W) ∘L DavisKahan.projection U)) :
+    (hWmap : W * U.starProjection = V.starProjection * W)
+    (hWmem : N.Mem ((1 - W) ∘L U.starProjection)) :
     N.Mem ((1 - DavisKahan.nonacuteDirectRotation
-          U V J) ∘L DavisKahan.projection U) ∧
+          U V J) ∘L U.starProjection) ∧
       N.gauge ((1 - DavisKahan.nonacuteDirectRotation
-          U V J) ∘L DavisKahan.projection U) ≤
-        N.gauge ((1 - W) ∘L DavisKahan.projection U) :=
+          U V J) ∘L U.starProjection) ≤
+        N.gauge ((1 - W) ∘L U.starProjection) :=
   DavisKahan.Section4.restrictedDisplacement_idealGauge_le N
     (DavisKahan.Section4.nonacute_restrictedDisplacementDominance
       U V J W hWunitary hWmap) hWmem
@@ -405,13 +405,13 @@ theorem corollary4_1_infiniteDimensional
     (U V : Submodule ℂ H) [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
     (hacute : DavisKahan.IsUniformlyAcute U V)
     (W : H →L[ℂ] H) (hWunitary : W ∈ unitary (H →L[ℂ] H))
-    (hWmap : W * DavisKahan.projection U = DavisKahan.projection V * W)
-    (hWmem : N.Mem ((1 - W) ∘L DavisKahan.projection U)) :
+    (hWmap : W * U.starProjection = V.starProjection * W)
+    (hWmem : N.Mem ((1 - W) ∘L U.starProjection)) :
     N.Mem ((1 - DavisKahan.spectraDirectRotation
-          U V hacute) ∘L DavisKahan.projection U) ∧
+          U V hacute) ∘L U.starProjection) ∧
       N.gauge ((1 - DavisKahan.spectraDirectRotation
-          U V hacute) ∘L DavisKahan.projection U) ≤
-        N.gauge ((1 - W) ∘L DavisKahan.projection U) :=
+          U V hacute) ∘L U.starProjection) ≤
+        N.gauge ((1 - W) ∘L U.starProjection) :=
   DavisKahan.Section4.restrictedDisplacement_idealGauge_le N
     (DavisKahan.Section4.infinite_restrictedDisplacementDominance
       U V hacute W hWunitary hWmap) hWmem
@@ -461,7 +461,7 @@ theorem proposition4_2_compact_nonacute
     (_hcrossed : DavisKahan.CrossedDefectsEquivalent U V)
     {ι : Type u4} (b : HilbertBasis ι ℂ U)
     (W : H →L[ℂ] H) (hWunitary : W ∈ unitary (H →L[ℂ] H))
-    (hWmap : W * DavisKahan.projection U = DavisKahan.projection V * W) :
+    (hWmap : W * U.starProjection = V.starProjection * W) :
     (∑' n : ℕ, ENNReal.ofReal
         (Real.sin (TauCeti.principalAngleSequence U V n)) ^ 2) ≤
       ∑' i, ENNReal.ofReal
@@ -528,7 +528,7 @@ theorem proposition4_3_infiniteDimensional_idealGauge
     (U V : Submodule ℂ H) [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
     (hacute : IsUniformlyAcute U V) (W : H →L[ℂ] H)
     (hWunitary : W ∈ unitary (H →L[ℂ] H))
-    (hWmap : W * DavisKahan.projection U = DavisKahan.projection V * W)
+    (hWmap : W * U.starProjection = V.starProjection * W)
     (hWmem : N.Mem ((1 - star W) * (1 - W))) :
     N.Mem ((1 - star (spectraDirectRotation U V hacute)) *
         (1 - spectraDirectRotation U V hacute)) ∧
@@ -546,7 +546,7 @@ theorem proposition4_3_infiniteDimensional_nonacute_idealGauge
     (J : DavisKahan.halmosSourceDefect U V ≃ₗᵢ[ℂ]
       DavisKahan.halmosTargetDefect U V)
     (W : H →L[ℂ] H) (hWunitary : W ∈ unitary (H →L[ℂ] H))
-    (hWmap : W * DavisKahan.projection U = DavisKahan.projection V * W)
+    (hWmap : W * U.starProjection = V.starProjection * W)
     (hWmem : N.Mem ((1 - star W) * (1 - W))) :
     N.Mem ((1 - star (DavisKahan.nonacuteDirectRotation U V J)) *
         (1 - DavisKahan.nonacuteDirectRotation U V J)) ∧
@@ -566,7 +566,7 @@ theorem proposition4_3_compact_nonacute_idealGauge
     (J : DavisKahan.halmosSourceDefect U V ≃ₗᵢ[ℂ]
       DavisKahan.halmosTargetDefect U V)
     (W : H →L[ℂ] H) (hWunitary : W ∈ unitary (H →L[ℂ] H))
-    (hWmap : W * DavisKahan.projection U = DavisKahan.projection V * W)
+    (hWmap : W * U.starProjection = V.starProjection * W)
     (hWmem : N.Mem ((1 - star W) * (1 - W))) :
     N.Mem ((1 - star (DavisKahan.nonacuteDirectRotation U V J)) *
         (1 - DavisKahan.nonacuteDirectRotation U V J)) ∧
@@ -632,7 +632,7 @@ theorem Proposition4_3_infiniteDimensional_nonacute_fullDisplacement_opNorm
     (J : DavisKahan.halmosSourceDefect U V ≃ₗᵢ[ℂ]
       DavisKahan.halmosTargetDefect U V)
     (W : H →L[ℂ] H) (hWunitary : W ∈ unitary (H →L[ℂ] H))
-    (hWmap : W * DavisKahan.projection U = DavisKahan.projection V * W) :
+    (hWmap : W * U.starProjection = V.starProjection * W) :
     ‖1 - DavisKahan.nonacuteDirectRotation U V J‖ ≤ ‖1 - W‖ := by
   have hk := proposition4_3_infiniteDimensional_nonacute U V J W hWunitary hWmap 1
   rw [displacementSquare_eq_gramOperator, displacementSquare_eq_gramOperator] at hk
@@ -656,7 +656,7 @@ theorem Proposition4_3_infiniteDimensional_nonacute_fullDisplacement_hilbertSchm
     (J : DavisKahan.halmosSourceDefect U V ≃ₗᵢ[ℂ]
       DavisKahan.halmosTargetDefect U V)
     (W : H →L[ℂ] H) (hWunitary : W ∈ unitary (H →L[ℂ] H))
-    (hWmap : W * DavisKahan.projection U = DavisKahan.projection V * W) :
+    (hWmap : W * U.starProjection = V.starProjection * W) :
     (1 - DavisKahan.nonacuteDirectRotation U V J).hilbertSchmidtENorm ≤
       (1 - W).hilbertSchmidtENorm := by
   have hnuc : (gramOperator (1 - DavisKahan.nonacuteDirectRotation U V J)).nuclearENorm ≤

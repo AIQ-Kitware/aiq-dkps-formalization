@@ -175,7 +175,7 @@ singular-value sequence of the canonical reflected overlap block. -/
 theorem sinTwoTheta_unbounded_perturbation_arbitraryRepresentative_complex
     (N : KyFanDominantIdealFamily (𝕜 := ℂ))
     (A : H →ₗ.[ℂ] H) (hA : IsSelfAdjoint A)
-    (E : H →L[ℂ] H) (hE : DavisKahan.IsSelfAdjointOperator E)
+    (E : H →L[ℂ] H) (hE : E.IsSymmetric)
     (B S : Set ℝ) (hB : MeasurableSet B) (hS : MeasurableSet S)
     {β α δ : ℝ} (hβα : β ≤ α) (hδ : 0 < δ)
     (hBlow : TauCeti.LinearPMap.SemiboundedBelow
@@ -229,7 +229,7 @@ signature contains the hypothesis it states. -/
 theorem sinTwoTheta_unbounded_perturbation_arbitraryRepresentative_unequalDimension_complex
     (N : KyFanDominantIdealFamily (𝕜 := ℂ))
     (A : H →ₗ.[ℂ] H) (hA : IsSelfAdjoint A)
-    (E : H →L[ℂ] H) (hE : DavisKahan.IsSelfAdjointOperator E)
+    (E : H →L[ℂ] H) (hE : E.IsSymmetric)
     (B S : Set ℝ) (hB : MeasurableSet B) (hS : MeasurableSet S)
     {β α δ : ℝ} (hβα : β ≤ α) (hδ : 0 < δ)
     (hBlow : TauCeti.LinearPMap.SemiboundedBelow
@@ -263,7 +263,7 @@ controlled by the residual with constant one. -/
 theorem sinTwoTheta_unbounded_reflectionResidual_arbitraryRepresentative_complex
     (N : KyFanDominantIdealFamily (𝕜 := ℂ))
     (A : H →ₗ.[ℂ] H) (hA : IsSelfAdjoint A)
-    (R : H →L[ℂ] H) (hR : DavisKahan.IsSelfAdjointOperator R)
+    (R : H →L[ℂ] H) (hR : R.IsSymmetric)
     (B : Set ℝ) (hB : MeasurableSet B)
     (V : Submodule ℂ H) [V.HasOrthogonalProjection]
     {β α δ : ℝ} (hβα : β ≤ α) (hδ : 0 < δ)
@@ -302,7 +302,7 @@ direct specialization of the stronger dimension-free Section 7 theorem. -/
 theorem sinTwoTheta_unbounded_reflectionResidual_arbitraryRepresentative_unequalDimension_complex
     (N : KyFanDominantIdealFamily (𝕜 := ℂ))
     (A : H →ₗ.[ℂ] H) (hA : IsSelfAdjoint A)
-    (R : H →L[ℂ] H) (hR : DavisKahan.IsSelfAdjointOperator R)
+    (R : H →L[ℂ] H) (hR : R.IsSymmetric)
     (B : Set ℝ) (hB : MeasurableSet B)
     (V : Submodule ℂ H) [V.HasOrthogonalProjection]
     {β α δ : ℝ} (hβα : β ≤ α) (hδ : 0 < δ)
@@ -354,7 +354,7 @@ theorem sinTwoTheta_unbounded_perturbation_arbitraryRepresentative_real
     (N : KyFanDominantIdealFamily (𝕜 := ℝ))
     (A : Er →ₗ.[ℝ] Er)
     (hA : IsSelfAdjoint A)
-    (Eop : Er →L[ℝ] Er) (hEop : DavisKahan.IsSelfAdjointOperator Eop)
+    (Eop : Er →L[ℝ] Er) (hEop : Eop.IsSymmetric)
     (B S : Set ℝ) (hB : MeasurableSet B) (hS : MeasurableSet S)
     {δ : ℝ} (hδ : 0 < δ)
     (hgap : FormBoundedSylvesterGap
@@ -383,7 +383,7 @@ theorem sinTwoTheta_unbounded_perturbation_arbitraryRepresentative_unequalDimens
     (N : KyFanDominantIdealFamily (𝕜 := ℝ))
     (A : Er →ₗ.[ℝ] Er)
     (hA : IsSelfAdjoint A)
-    (Eop : Er →L[ℝ] Er) (hEop : DavisKahan.IsSelfAdjointOperator Eop)
+    (Eop : Er →L[ℝ] Er) (hEop : Eop.IsSymmetric)
     (B S : Set ℝ) (hB : MeasurableSet B) (hS : MeasurableSet S)
     {δ : ℝ} (hδ : 0 < δ)
     (hgap : FormBoundedSylvesterGap
@@ -414,7 +414,7 @@ theorem sinTwoTheta_unbounded_reflectionResidual_arbitraryRepresentative_real
     (N : KyFanDominantIdealFamily (𝕜 := ℝ))
     (A : Er →ₗ.[ℝ] Er)
     (hA : IsSelfAdjoint A)
-    (R : Er →L[ℝ] Er) (hR : DavisKahan.IsSelfAdjointOperator R)
+    (R : Er →L[ℝ] Er) (hR : R.IsSymmetric)
     (B : Set ℝ) (hB : MeasurableSet B)
     (V : Submodule ℝ Er) [V.HasOrthogonalProjection]
     {δ : ℝ} (hδ : 0 < δ)
@@ -446,7 +446,7 @@ theorem sinTwoTheta_unbounded_reflectionResidual_arbitraryRepresentative_unequal
     (N : KyFanDominantIdealFamily (𝕜 := ℝ))
     (A : Er →ₗ.[ℝ] Er)
     (hA : IsSelfAdjoint A)
-    (R : Er →L[ℝ] Er) (hR : DavisKahan.IsSelfAdjointOperator R)
+    (R : Er →L[ℝ] Er) (hR : R.IsSymmetric)
     (B : Set ℝ) (hB : MeasurableSet B)
     (V : Submodule ℝ Er) [V.HasOrthogonalProjection]
     {δ : ℝ} (hδ : 0 < δ)
@@ -492,7 +492,7 @@ theorem sinTwoTheta_directed_unboundedReflectionResidual_blockRepresentative_sym
     (N : SymmetricNormingFunction)
     (A : Er →ₗ.[ℝ] Er)
     (hA : IsSelfAdjoint A)
-    (R : Er →L[ℝ] Er) (hR : DavisKahan.IsSelfAdjointOperator R)
+    (R : Er →L[ℝ] Er) (hR : R.IsSymmetric)
     (B : Set ℝ) (hB : MeasurableSet B)
     (V : Submodule ℝ Er) [V.HasOrthogonalProjection]
     {δ : ℝ} (hδ : 0 < δ)
@@ -528,7 +528,7 @@ theorem sinTwoTheta_directed_unbounded_addBounded_blockRepresentative_symmetricN
     (N : SymmetricNormingFunction)
     (A : Er →ₗ.[ℝ] Er)
     (hA : IsSelfAdjoint A)
-    (Eop : Er →L[ℝ] Er) (hEop : DavisKahan.IsSelfAdjointOperator Eop)
+    (Eop : Er →L[ℝ] Er) (hEop : Eop.IsSymmetric)
     (B S : Set ℝ) (hB : MeasurableSet B) (hS : MeasurableSet S)
     {δ : ℝ} (hδ : 0 < δ)
     (hgap : FormBoundedSylvesterGap
@@ -583,7 +583,7 @@ theorem sinTwoTheta_directed_unbounded_addBounded_symmetricNorming_real
     (N : SymmetricNormingFunction)
     (A : Er →ₗ.[ℝ] Er)
     (hA : IsSelfAdjoint A)
-    (Eop : Er →L[ℝ] Er) (hEop : DavisKahan.IsSelfAdjointOperator Eop)
+    (Eop : Er →L[ℝ] Er) (hEop : Eop.IsSymmetric)
     (B S : Set ℝ) (hB : MeasurableSet B) (hS : MeasurableSet S)
     {δ : ℝ} (hδ : 0 < δ)
     (hgap : FormBoundedSylvesterGap
@@ -617,7 +617,7 @@ theorem sinTwoTheta_directed_unbounded_addBounded_unequalDimension_symmetricNorm
     (N : SymmetricNormingFunction)
     (A : Er →ₗ.[ℝ] Er)
     (hA : IsSelfAdjoint A)
-    (Eop : Er →L[ℝ] Er) (hEop : DavisKahan.IsSelfAdjointOperator Eop)
+    (Eop : Er →L[ℝ] Er) (hEop : Eop.IsSymmetric)
     (B S : Set ℝ) (hB : MeasurableSet B) (hS : MeasurableSet S)
     {δ : ℝ} (hδ : 0 < δ)
     (hgap : FormBoundedSylvesterGap
@@ -706,7 +706,7 @@ The complex counterpart of `sinTwoTheta_directed_unbounded_addBounded_blockRepre
 theorem sinTwoTheta_directed_unbounded_addBounded_blockRepresentative_spectrumGap_symmetricNorming_complex
     (N : SymmetricNormingFunction)
     (A : Hc →ₗ.[ℂ] Hc) (hA : IsSelfAdjoint A)
-    (Eop : Hc →L[ℂ] Hc) (hEop : DavisKahan.IsSelfAdjointOperator Eop)
+    (Eop : Hc →L[ℂ] Hc) (hEop : Eop.IsSymmetric)
     (B S : Set ℝ) (hB : MeasurableSet B) (hS : MeasurableSet S)
     {β α δ : ℝ} (hβα : β ≤ α) (hδ : 0 < δ)
     (hBlow : TauCeti.LinearPMap.SemiboundedBelow
@@ -766,7 +766,7 @@ transport below is not claimed for it. -/
 theorem sinTwoTheta_directed_unbounded_addBounded_spectrumGap_symmetricNorming_complex
     (N : SymmetricNormingFunction)
     (A : Hc →ₗ.[ℂ] Hc) (hA : IsSelfAdjoint A)
-    (Eop : Hc →L[ℂ] Hc) (hEop : DavisKahan.IsSelfAdjointOperator Eop)
+    (Eop : Hc →L[ℂ] Hc) (hEop : Eop.IsSymmetric)
     (B S : Set ℝ) (hB : MeasurableSet B) (hS : MeasurableSet S)
     {β α δ : ℝ} (hβα : β ≤ α) (hδ : 0 < δ)
     (hBlow : TauCeti.LinearPMap.SemiboundedBelow
@@ -830,7 +830,7 @@ The complex counterpart of
 theorem sinTwoTheta_directed_unbounded_addBounded_blockRepresentative_symmetricNorming_complex
     (N : SymmetricNormingFunction)
     (A : Hc →ₗ.[ℂ] Hc) (hA : IsSelfAdjoint A)
-    (Eop : Hc →L[ℂ] Hc) (hEop : DavisKahan.IsSelfAdjointOperator Eop)
+    (Eop : Hc →L[ℂ] Hc) (hEop : Eop.IsSymmetric)
     (B S : Set ℝ) (hB : MeasurableSet B) (hS : MeasurableSet S)
     {δ : ℝ} (hδ : 0 < δ)
     (hgap : FormBoundedSylvesterGap
@@ -878,7 +878,7 @@ norm but with no approximation-number identification claimed here. -/
 theorem sinTwoTheta_directed_unbounded_addBounded_symmetricNorming_complex
     (N : SymmetricNormingFunction)
     (A : Hc →ₗ.[ℂ] Hc) (hA : IsSelfAdjoint A)
-    (Eop : Hc →L[ℂ] Hc) (hEop : DavisKahan.IsSelfAdjointOperator Eop)
+    (Eop : Hc →L[ℂ] Hc) (hEop : Eop.IsSymmetric)
     (B S : Set ℝ) (hB : MeasurableSet B) (hS : MeasurableSet S)
     {δ : ℝ} (hδ : 0 < δ)
     (hgap : FormBoundedSylvesterGap
@@ -934,7 +934,7 @@ strictly smaller dimension than the selected spectral subspace of `A + E`. -/
 theorem sinTwoTheta_directed_unbounded_addBounded_unequalDimension_symmetricNorming_complex
     (N : SymmetricNormingFunction)
     (A : Hc →ₗ.[ℂ] Hc) (hA : IsSelfAdjoint A)
-    (Eop : Hc →L[ℂ] Hc) (hEop : DavisKahan.IsSelfAdjointOperator Eop)
+    (Eop : Hc →L[ℂ] Hc) (hEop : Eop.IsSymmetric)
     (B S : Set ℝ) (hB : MeasurableSet B) (hS : MeasurableSet S)
     {δ : ℝ} (hδ : 0 < δ)
     (hgap : FormBoundedSylvesterGap

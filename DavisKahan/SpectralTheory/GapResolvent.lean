@@ -3,7 +3,10 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, Claude Fable 5, Claude Opus 5
 -/
-import DavisKahan.SpectralTheory.PartialMap.Basic
+import ForTauCeti.Analysis.InnerProductSpace.LinearPMap.Closed
+import ForTauCeti.Analysis.InnerProductSpace.LinearPMap.Constructions
+import DavisKahan.BoundedOperator.Problem
+import DavisKahan.SpectralTheory.AbstractSpectrum
 import DavisKahan.Sylvester.ShiftedInverseGauge
 import ForTauCeti.Analysis.InnerProductSpace.LinearPMap.SelfAdjointResolvent
 import ForTauCeti.Analysis.InnerProductSpace.LinearPMap.RealLowerBound

@@ -226,7 +226,7 @@ field — `J` preserves `dom A`, and `(A + (H − J H J)) J = J A` there. -/
 theorem sinTwoTheta_ambient_reflection_projectorDifference_symmetricNorming
     (N : SymmetricNormingFunction)
     {A : H →ₗ.[𝕜] H} (hA : IsSelfAdjoint A)
-    (Eop : H →L[𝕜] H) (hEop : DavisKahan.IsSelfAdjointOperator Eop)
+    (Eop : H →L[𝕜] H) (hEop : Eop.IsSymmetric)
     {U V : Submodule 𝕜 H} [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
     (hUred : TauCeti.LinearPMap.ReducesSubspace A U)
     (hmem : ∀ x : A.domain, V.reflectionOperator (x : H) ∈ A.domain)
@@ -244,7 +244,7 @@ theorem sinTwoTheta_ambient_reflection_projectorDifference_symmetricNorming
       δ * N.gauge ((U.map (V.reflection.toLinearEquiv : H →ₗ[𝕜] H)).starProjection -
         U.starProjection) ≤ 2 * N.gauge Eop := by
   set D : H →L[𝕜] H := DavisKahan.reflectionPerturbation V Eop with hD
-  have hDsa : DavisKahan.IsSelfAdjointOperator D :=
+  have hDsa : D.IsSymmetric :=
     DavisKahan.reflectionPerturbation_isSelfAdjoint V Eop hEop
   have hDideal := reflectionPerturbation_normingMem_and_gauge_le N V Eop hEmem
   have hBeq : TauCeti.LinearPMap.addBounded A D =
@@ -290,7 +290,7 @@ that the spectral development supplies over each field. -/
 theorem sinTwoTheta_ambient_unbounded_reflectionPair_symmetricNorming_rclike
     (N : SymmetricNormingFunction)
     {A : H →ₗ.[𝕜] H} (hA : IsSelfAdjoint A)
-    (Eop : H →L[𝕜] H) (hEop : DavisKahan.IsSelfAdjointOperator Eop)
+    (Eop : H →L[𝕜] H) (hEop : Eop.IsSymmetric)
     {U V : Submodule 𝕜 H} [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
     (hUred : TauCeti.LinearPMap.ReducesSubspace A U)
     (hmem : ∀ x : A.domain, V.reflectionOperator (x : H) ∈ A.domain)
@@ -351,7 +351,7 @@ as a hypothesis of the theorem. -/
 theorem sinTwoTheta_ambient_unbounded_reducing_symmetricNorming_rclike
     (N : SymmetricNormingFunction)
     {A : H →ₗ.[𝕜] H} (hA : IsSelfAdjoint A)
-    (Eop : H →L[𝕜] H) (hEop : DavisKahan.IsSelfAdjointOperator Eop)
+    (Eop : H →L[𝕜] H) (hEop : Eop.IsSymmetric)
     {U V : Submodule 𝕜 H} [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
     (hUred : TauCeti.LinearPMap.ReducesSubspace A U)
     (hVred : TauCeti.LinearPMap.ReducesSubspace
@@ -377,7 +377,7 @@ theorem sinTwoTheta_ambient_unbounded_reducing_symmetricNorming_complex
     {Hc : Type v} [NormedAddCommGroup Hc] [InnerProductSpace ℂ Hc] [CompleteSpace Hc]
     (N : SymmetricNormingFunction)
     {A : Hc →ₗ.[ℂ] Hc} (hA : IsSelfAdjoint A)
-    (Eop : Hc →L[ℂ] Hc) (hEop : DavisKahan.IsSelfAdjointOperator Eop)
+    (Eop : Hc →L[ℂ] Hc) (hEop : Eop.IsSymmetric)
     {U V : Submodule ℂ Hc} [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
     (hUred : TauCeti.LinearPMap.ReducesSubspace A U)
     (hVred : TauCeti.LinearPMap.ReducesSubspace
@@ -428,7 +428,7 @@ self-adjoint perturbation, arbitrary `SymmetricNormingFunction`. -/
 theorem sinTwoTheta_ambient_unbounded_perturbedGap_symmetricNorming_rclike
     (N : SymmetricNormingFunction)
     {A : H →ₗ.[𝕜] H} (hA : IsSelfAdjoint A)
-    (Hop : H →L[𝕜] H) (hHop : DavisKahan.IsSelfAdjointOperator Hop)
+    (Hop : H →L[𝕜] H) (hHop : Hop.IsSymmetric)
     {P Q : Submodule 𝕜 H} [P.HasOrthogonalProjection] [Q.HasOrthogonalProjection]
     (hPred : TauCeti.LinearPMap.ReducesSubspace A P)
     (hQred : TauCeti.LinearPMap.ReducesSubspace
@@ -449,7 +449,7 @@ theorem sinTwoTheta_ambient_unbounded_perturbedGap_symmetricNorming_rclike
     TauCeti.LinearPMap.addBounded_neg_cancel A Hop
   have hAH : IsSelfAdjoint (TauCeti.LinearPMap.addBounded A Hop) :=
     DavisKahan.addBounded_isSelfAdjoint A hA Hop hHop
-  have hnegHop : DavisKahan.IsSelfAdjointOperator (-Hop) := by
+  have hnegHop : ContinuousLinearMap.IsSymmetric (-Hop) := by
     intro x y
     simpa using congrArg Neg.neg (hHop x y)
   have hPred' : TauCeti.LinearPMap.ReducesSubspace
@@ -474,7 +474,7 @@ theorem sinTwoTheta_ambient_unbounded_perturbedGap_whereDefinedUIN_rclike
     [TopologicalSpace.SeparableSpace H]
     (N : NormalizedSymmetricOperatorIdealFamily.{u, v} 𝕜)
     {A : H →ₗ.[𝕜] H} (hA : IsSelfAdjoint A)
-    (Hop : H →L[𝕜] H) (hHop : DavisKahan.IsSelfAdjointOperator Hop)
+    (Hop : H →L[𝕜] H) (hHop : Hop.IsSymmetric)
     {P Q : Submodule 𝕜 H} [P.HasOrthogonalProjection] [Q.HasOrthogonalProjection]
     (hPred : TauCeti.LinearPMap.ReducesSubspace A P)
     (hQred : TauCeti.LinearPMap.ReducesSubspace
@@ -518,7 +518,7 @@ theorem sinTwoTheta_ambient_unbounded_perturbedGap_symmetricNorming_complex
     {Hc : Type v} [NormedAddCommGroup Hc] [InnerProductSpace ℂ Hc] [CompleteSpace Hc]
     (N : SymmetricNormingFunction)
     {A : Hc →ₗ.[ℂ] Hc} (hA : IsSelfAdjoint A)
-    (Hop : Hc →L[ℂ] Hc) (hHop : DavisKahan.IsSelfAdjointOperator Hop)
+    (Hop : Hc →L[ℂ] Hc) (hHop : Hop.IsSymmetric)
     {P Q : Submodule ℂ Hc} [P.HasOrthogonalProjection] [Q.HasOrthogonalProjection]
     (hPred : TauCeti.LinearPMap.ReducesSubspace A P)
     (hQred : TauCeti.LinearPMap.ReducesSubspace
@@ -542,7 +542,7 @@ theorem sinTwoTheta_ambient_unbounded_reducing_symmetricNorming_real
     {Er : Type v} [NormedAddCommGroup Er] [InnerProductSpace ℝ Er] [CompleteSpace Er]
     (N : SymmetricNormingFunction)
     {A : Er →ₗ.[ℝ] Er} (hA : IsSelfAdjoint A)
-    (Eop : Er →L[ℝ] Er) (hEop : DavisKahan.IsSelfAdjointOperator Eop)
+    (Eop : Er →L[ℝ] Er) (hEop : Eop.IsSymmetric)
     {U V : Submodule ℝ Er} [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
     (hUred : TauCeti.LinearPMap.ReducesSubspace A U)
     (hVred : TauCeti.LinearPMap.ReducesSubspace
@@ -565,7 +565,7 @@ theorem sinTwoTheta_ambient_unbounded_perturbedGap_symmetricNorming_real
     {Er : Type v} [NormedAddCommGroup Er] [InnerProductSpace ℝ Er] [CompleteSpace Er]
     (N : SymmetricNormingFunction)
     {A : Er →ₗ.[ℝ] Er} (hA : IsSelfAdjoint A)
-    (Hop : Er →L[ℝ] Er) (hHop : DavisKahan.IsSelfAdjointOperator Hop)
+    (Hop : Er →L[ℝ] Er) (hHop : Hop.IsSymmetric)
     {P Q : Submodule ℝ Er} [P.HasOrthogonalProjection] [Q.HasOrthogonalProjection]
     (hPred : TauCeti.LinearPMap.ReducesSubspace A P)
     (hQred : TauCeti.LinearPMap.ReducesSubspace
@@ -596,7 +596,7 @@ theorem sinTwoTheta_ambient_unbounded_perturbedGap_whereDefinedUIN_complex
     [TopologicalSpace.SeparableSpace Hc]
     (N : NormalizedSymmetricOperatorIdealFamily.{0, v} ℂ)
     {A : Hc →ₗ.[ℂ] Hc} (hA : IsSelfAdjoint A)
-    (Hop : Hc →L[ℂ] Hc) (hHop : DavisKahan.IsSelfAdjointOperator Hop)
+    (Hop : Hc →L[ℂ] Hc) (hHop : Hop.IsSymmetric)
     {P Q : Submodule ℂ Hc} [P.HasOrthogonalProjection] [Q.HasOrthogonalProjection]
     (hPred : TauCeti.LinearPMap.ReducesSubspace A P)
     (hQred : TauCeti.LinearPMap.ReducesSubspace
@@ -621,7 +621,7 @@ theorem sinTwoTheta_ambient_unbounded_perturbedGap_whereDefinedUIN_real
     [TopologicalSpace.SeparableSpace Er]
     (N : NormalizedSymmetricOperatorIdealFamily.{0, v} ℝ)
     {A : Er →ₗ.[ℝ] Er} (hA : IsSelfAdjoint A)
-    (Hop : Er →L[ℝ] Er) (hHop : DavisKahan.IsSelfAdjointOperator Hop)
+    (Hop : Er →L[ℝ] Er) (hHop : Hop.IsSymmetric)
     {P Q : Submodule ℝ Er} [P.HasOrthogonalProjection] [Q.HasOrthogonalProjection]
     (hPred : TauCeti.LinearPMap.ReducesSubspace A P)
     (hQred : TauCeti.LinearPMap.ReducesSubspace
@@ -658,7 +658,7 @@ theorem sinTwoTheta_ambient_unbounded_perturbedGap_normalizedUIN_complex
     [TopologicalSpace.SeparableSpace Hc]
     (N : NormalizedUnitaryInvariantNorm.{0, v} ℂ)
     {A : Hc →ₗ.[ℂ] Hc} (hA : IsSelfAdjoint A)
-    (Hop : Hc →L[ℂ] Hc) (hHop : DavisKahan.IsSelfAdjointOperator Hop)
+    (Hop : Hc →L[ℂ] Hc) (hHop : Hop.IsSymmetric)
     {P Q : Submodule ℂ Hc} [P.HasOrthogonalProjection] [Q.HasOrthogonalProjection]
     (hPred : TauCeti.LinearPMap.ReducesSubspace A P)
     (hQred : TauCeti.LinearPMap.ReducesSubspace
@@ -683,7 +683,7 @@ theorem sinTwoTheta_ambient_unbounded_perturbedGap_normalizedUIN_real
     [TopologicalSpace.SeparableSpace Er]
     (N : NormalizedUnitaryInvariantNorm.{0, v} ℝ)
     {A : Er →ₗ.[ℝ] Er} (hA : IsSelfAdjoint A)
-    (Hop : Er →L[ℝ] Er) (hHop : DavisKahan.IsSelfAdjointOperator Hop)
+    (Hop : Er →L[ℝ] Er) (hHop : Hop.IsSymmetric)
     {P Q : Submodule ℝ Er} [P.HasOrthogonalProjection] [Q.HasOrthogonalProjection]
     (hPred : TauCeti.LinearPMap.ReducesSubspace A P)
     (hQred : TauCeti.LinearPMap.ReducesSubspace
@@ -732,7 +732,7 @@ specialization, kept as an alternative proof. -/
 theorem sinTwoTheta_ambient_unbounded_addBounded_symmetricNorming_complex
     (N : SymmetricNormingFunction)
     (A : Hc →ₗ.[ℂ] Hc) (hA : IsSelfAdjoint A)
-    (Eop : Hc →L[ℂ] Hc) (hEop : DavisKahan.IsSelfAdjointOperator Eop)
+    (Eop : Hc →L[ℂ] Hc) (hEop : Eop.IsSymmetric)
     (B S : Set ℝ) (hB : MeasurableSet B) (hS : MeasurableSet S)
     {δ : ℝ} (hδ : 0 < δ)
     (hgap : FormBoundedSylvesterGap
@@ -868,7 +868,7 @@ defined as the real part of the complex one. -/
 theorem sinTwoTheta_ambient_unbounded_addBounded_symmetricNorming_real
     (N : SymmetricNormingFunction)
     (A : Er →ₗ.[ℝ] Er) (hA : IsSelfAdjoint A)
-    (Eop : Er →L[ℝ] Er) (hEop : DavisKahan.IsSelfAdjointOperator Eop)
+    (Eop : Er →L[ℝ] Er) (hEop : Eop.IsSymmetric)
     (B S : Set ℝ) (hB : MeasurableSet B) (hS : MeasurableSet S)
     {δ : ℝ} (hδ : 0 < δ)
     (hgap : FormBoundedSylvesterGap

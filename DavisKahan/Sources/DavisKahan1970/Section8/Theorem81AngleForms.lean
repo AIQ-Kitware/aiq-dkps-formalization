@@ -852,10 +852,10 @@ omit [CompleteSpace H] in
 theorem maximalAngle_le_pi_div_six_iff (U V : Submodule 𝕜 H)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] :
     DavisKahanExt.maximalAngle U V ≤ Real.pi / 6 ↔
-      subspaceGap U V ≤ 1 / 2 := by
+      U.projectionGap V ≤ 1 / 2 := by
   have hmem : Real.pi / 6 ∈ Set.Ico (-(Real.pi / 2)) (Real.pi / 2) :=
     ⟨by linarith [Real.pi_pos], by linarith [Real.pi_pos]⟩
-  show Real.arcsin (subspaceGap U V) ≤ Real.pi / 6 ↔ _
+  show Real.arcsin (U.projectionGap V) ≤ Real.pi / 6 ↔ _
   rw [Real.arcsin_le_iff_le_sin' hmem, Real.sin_pi_div_six]
 
 end OpeningIllustration

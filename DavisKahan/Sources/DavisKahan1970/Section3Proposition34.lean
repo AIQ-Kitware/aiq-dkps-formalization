@@ -292,12 +292,12 @@ theorem proposition3_4_square_is_reflected_directRotation
   have hGsq : spectraReflectionProduct U V * spectraReflectionProduct U V
       = spectraReflectionProduct U (reflectedSubspace V U) := by
     show spectraReflectionProduct U V * spectraReflectionProduct U V
-      = reflectionOperator (reflectedSubspace V U) * reflectionOperator U
+      = Submodule.reflectionOperator (reflectedSubspace V U) * U.reflectionOperator
     rw [reflectionOperator_reflectedSubspace U V]
-    show (reflectionOperator V * reflectionOperator U)
-        * (reflectionOperator V * reflectionOperator U)
-      = reflectionOperator V * reflectionOperator U * reflectionOperator V
-        * reflectionOperator U
+    show (V.reflectionOperator * U.reflectionOperator)
+        * (V.reflectionOperator * U.reflectionOperator)
+      = V.reflectionOperator * U.reflectionOperator * V.reflectionOperator
+        * U.reflectionOperator
     noncomm_ring
   have hGre : ∀ x, 0 ≤ Complex.re ⟪spectraReflectionProduct U V x, x⟫_ℂ :=
     re_inner_reflectionProduct_nonneg U V hhalf

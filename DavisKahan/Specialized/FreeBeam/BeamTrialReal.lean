@@ -215,7 +215,7 @@ theorem norm_beamPerturbation_le (ε : ℝ) : ‖beamPerturbation ε‖ ≤ |ε|
 
 /-- The multiplication perturbation is self-adjoint. -/
 theorem beamPerturbation_isSelfAdjoint (ε : ℝ) :
-    DavisKahan.IsSelfAdjointOperator (beamPerturbation ε) := by
+    ContinuousLinearMap.IsSymmetric (beamPerturbation ε) := by
   intro x y
   rw [MeasureTheory.L2.inner_def, MeasureTheory.L2.inner_def]
   refine integral_congr_ae ?_

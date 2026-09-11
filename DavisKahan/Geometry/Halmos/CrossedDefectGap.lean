@@ -3,7 +3,9 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, Claude Opus 5
 -/
-import DavisKahan.BoundedOperator.Compat
+import ForTauCeti.Analysis.InnerProductSpace.BoundedOperator.Projector
+import ForTauCeti.Analysis.InnerProductSpace.Projection.Blocks
+import DavisKahan.BoundedOperator.Problem
 import DavisKahan.Geometry.Halmos.GenericRotationPredicates
 import ForTauCeti.Analysis.InnerProductSpace.AngleGeometry
 import ForTauCeti.Analysis.InnerProductSpace.SeparableOrthonormal
@@ -101,7 +103,7 @@ after Proposition 3.2, where the two sides are `1` and `0`. -/
 theorem directedGap_comm_of_crossedDefectsEquivalent
     (U V : Submodule 𝕜 H) [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
     (h : CrossedDefectsEquivalent U V) :
-    directedGap U V = directedGap V U :=
+    U.directedProjectionGap V = V.directedProjectionGap U :=
   U.directedProjectionGap_comm_of_inf_orthogonal_eq_bot_iff V
     (halmosSourceDefect_eq_bot_iff_halmosTargetDefect_eq_bot U V h)
 
@@ -115,7 +117,7 @@ conversion that finite-dimensional consumers currently use. -/
 theorem subspaceGap_eq_directedGap_of_crossedDefectsEquivalent
     (U V : Submodule 𝕜 H) [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
     (h : CrossedDefectsEquivalent U V) :
-    subspaceGap U V = directedGap U V :=
+    U.projectionGap V = U.directedProjectionGap V :=
   U.projectionGap_eq_directedProjectionGap_of_inf_orthogonal_eq_bot_iff V
     (halmosSourceDefect_eq_bot_iff_halmosTargetDefect_eq_bot U V h)
 

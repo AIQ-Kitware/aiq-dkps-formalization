@@ -3516,7 +3516,7 @@ theorem sinTwoTheta_ambient_unbounded_perturbedGap_whereDefinedUIN_rclike_probe
     [TopologicalSpace.SeparableSpace E]
     (N : NormalizedSymmetricOperatorIdealFamily.{u, v} 𝕜)
     {A : E →ₗ.[𝕜] E} (hA : IsSelfAdjoint A)
-    (Hop : E →L[𝕜] E) (hHop : TauCeti.DavisKahan.IsSelfAdjointOperator Hop)
+    (Hop : E →L[𝕜] E) (hHop : Hop.IsSymmetric)
     {P Q : Submodule 𝕜 E} [P.HasOrthogonalProjection] [Q.HasOrthogonalProjection]
     (hPred : TauCeti.LinearPMap.ReducesSubspace A P)
     (hQred : TauCeti.LinearPMap.ReducesSubspace
@@ -3574,7 +3574,7 @@ theorem sinTwoTheta_complete_whereDefinedUIN_rclike_production_probe
     [TopologicalSpace.SeparableSpace E]
     (N : NormalizedSymmetricOperatorIdealFamily.{u, v} 𝕜)
     {A : E →ₗ.[𝕜] E} (hA : IsSelfAdjoint A)
-    (Hop : E →L[𝕜] E) (hHop : TauCeti.DavisKahan.IsSelfAdjointOperator Hop)
+    (Hop : E →L[𝕜] E) (hHop : Hop.IsSymmetric)
     {P Q : Submodule 𝕜 E} [P.HasOrthogonalProjection] [Q.HasOrthogonalProjection]
     (hPred : TauCeti.LinearPMap.ReducesSubspace A P)
     (hQred : TauCeti.LinearPMap.ReducesSubspace

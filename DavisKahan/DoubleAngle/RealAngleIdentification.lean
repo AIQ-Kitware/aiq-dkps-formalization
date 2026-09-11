@@ -176,7 +176,7 @@ closed subspace, and `R` is a bounded self-adjoint operator implementing the
 mirrored system on the whole domain.  The conclusion names the real operator
 `sin 2Θ(U, V)`. -/
 theorem sinTwoTheta_reflectionResidual_opNorm_real
-    (R : E →L[ℝ] E) (hR : IsSelfAdjointOperator R)
+    (R : E →L[ℝ] E) (hR : R.IsSymmetric)
     (V : Submodule ℝ E) [V.HasOrthogonalProjection]
     {δ : ℝ} (hδ : 0 < δ)
     (hgap : FormBoundedSylvesterGap
@@ -207,7 +207,7 @@ Both subspaces are genuine real spectral subspaces, of the unbounded self-adjoin
 closed operator `A` and of its bounded self-adjoint perturbation `A + E`.  There
 is no dimension hypothesis. -/
 theorem sinTwoTheta_addBounded_opNorm_real
-    (Eop : E →L[ℝ] E) (hEop : IsSelfAdjointOperator Eop)
+    (Eop : E →L[ℝ] E) (hEop : Eop.IsSymmetric)
     (T : Set ℝ) (hT : MeasurableSet T)
     {δ : ℝ} (hδ : 0 < δ)
     (hgap : FormBoundedSylvesterGap

@@ -154,7 +154,7 @@ theorem theorem8_1_canonicalBranch_real
   have hangle : maximalAngle P Q < Real.pi / 4 := by
     have hmem : Real.pi / 4 ∈ Set.Ioc (-(Real.pi / 2)) (Real.pi / 2) :=
       ⟨by linarith [Real.pi_pos], by linarith [Real.pi_pos]⟩
-    show Real.arcsin (subspaceGap P Q) < Real.pi / 4
+    show Real.arcsin (P.projectionGap Q) < Real.pi / 4
     rw [Real.arcsin_lt_iff_lt_sin' hmem, Real.sin_pi_div_four]
     exact hquarter
   refine ⟨Q, hQ, ?_⟩

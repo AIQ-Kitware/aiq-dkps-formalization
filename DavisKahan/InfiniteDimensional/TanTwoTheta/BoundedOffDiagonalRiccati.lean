@@ -115,10 +115,10 @@ theorem norm_quarterAcuteAngularCoordinate_lt_one
 solution for the perturbed operator in `U ⊕ Uᗮ` coordinates. -/
 theorem quarterAcuteAngularCoordinate_solvesRiccati
     (A H : E →L[ℂ] E)
-    (hA : IsSelfAdjointOperator A) (hH : IsSelfAdjointOperator H)
+    (hA : A.IsSymmetric) (hH : H.IsSymmetric)
     (U V : Submodule ℂ E) [U.HasOrthogonalProjection]
     [V.HasOrthogonalProjection]
-    (hV : Reduces (A + H) V) (hquarter : IsQuarterAcute U V) :
+    (hV : ContinuousLinearMap.Reduces (A + H) V) (hquarter : IsQuarterAcute U V) :
     SolvesRiccati
       (subspaceBlockOperatorData (A + H) U (by
         have h := hA.add hH
@@ -128,10 +128,10 @@ theorem quarterAcuteAngularCoordinate_solvesRiccati
     (U.isComplete_coe_of_hasOrthogonalProjection).completeSpace_coe
   let : CompleteSpace (Uᗮ : Submodule ℂ E) :=
     (Uᗮ.isComplete_coe_of_hasOrthogonalProjection).completeSpace_coe
-  have hAH : IsSelfAdjointOperator (A + H) := by
+  have hAH : ContinuousLinearMap.IsSymmetric (A + H) := by
     have h := hA.add hH
     rwa [← ContinuousLinearMap.toLinearMap_add] at h
-  have hgraphReduces : Reduces (A + H)
+  have hgraphReduces : ContinuousLinearMap.Reduces (A + H)
       (graphSubspace U (quarterAcuteAngularOperator U V hquarter)) := by
     rw [graphSubspace_quarterAcuteAngularOperator U V hquarter]
     exact hV
@@ -169,10 +169,10 @@ theorem norm_upperRightSubspaceCompression_le
 reducing subspace of the unperturbed operator. -/
 theorem subspaceBlockOperatorData_add_offDiagonal_components
     (A H : E →L[ℂ] E)
-    (hA : IsSelfAdjointOperator A) (hH : IsSelfAdjointOperator H)
+    (hA : A.IsSymmetric) (hH : H.IsSymmetric)
     (U : Submodule ℂ E) [U.HasOrthogonalProjection]
-    (hU : Reduces A U) (hoff : IsOffDiagonal U H) :
-    let hAH : IsSelfAdjointOperator (A + H) := by
+    (hU : A.Reduces U) (hoff : Submodule.IsOffDiagonal U H) :
+    let hAH : ContinuousLinearMap.IsSymmetric (A + H) := by
       have h := hA.add hH
       rwa [← ContinuousLinearMap.toLinearMap_add] at h
     (subspaceBlockOperatorData (A + H) U hAH).A0 = compressOperator U A ∧
@@ -182,7 +182,7 @@ theorem subspaceBlockOperatorData_add_offDiagonal_components
     (subspaceBlockOperatorData (A + H) U hAH).B10 =
       Uᗮ.orthogonalProjectionOnto ∘L H ∘L U.subtypeL := by
   dsimp only
-  have hAH : IsSelfAdjointOperator (A + H) := by
+  have hAH : ContinuousLinearMap.IsSymmetric (A + H) := by
     have h := hA.add hH
     rwa [← ContinuousLinearMap.toLinearMap_add] at h
   exact ⟨
@@ -195,15 +195,15 @@ theorem subspaceBlockOperatorData_add_offDiagonal_components
 controlled by the perturbation norm. -/
 theorem norm_subspaceBlockOperatorData_B01_add_offDiagonal_le
     (A H : E →L[ℂ] E)
-    (hA : IsSelfAdjointOperator A) (hH : IsSelfAdjointOperator H)
+    (hA : A.IsSymmetric) (hH : H.IsSymmetric)
     (U : Submodule ℂ E) [U.HasOrthogonalProjection]
-    (hU : Reduces A U) :
-    let hAH : IsSelfAdjointOperator (A + H) := by
+    (hU : A.Reduces U) :
+    let hAH : ContinuousLinearMap.IsSymmetric (A + H) := by
       have h := hA.add hH
       rwa [← ContinuousLinearMap.toLinearMap_add] at h
     ‖(subspaceBlockOperatorData (A + H) U hAH).B01‖ ≤ ‖H‖ := by
   dsimp only
-  have hAH : IsSelfAdjointOperator (A + H) := by
+  have hAH : ContinuousLinearMap.IsSymmetric (A + H) := by
     have h := hA.add hH
     rwa [← ContinuousLinearMap.toLinearMap_add] at h
   rw [subspaceBlockOperatorData_B01_add_of_reduces A H U hAH hU]

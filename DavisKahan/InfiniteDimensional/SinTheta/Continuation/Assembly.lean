@@ -98,7 +98,7 @@ theorem exists_uniform_subdivision_fixedContourRieszOperator_norm_sub_lt_one
     (Γ : PiecewiseC1ClosedContour) (A V : H →L[ℂ] H)
     (delta : ℝ) (hdelta : 0 < delta)
     (hself : ∀ t ∈ Set.Icc (0 : ℝ) 1,
-      IsSelfAdjointOperator (operatorPath A V t))
+      ContinuousLinearMap.IsSymmetric (operatorPath A V t))
     (hsep : ∀ t ∈ Set.Icc (0 : ℝ) 1, ∀ x : unitInterval,
       ∀ lam ∈ realSpectrum (operatorPath A V t),
         delta ≤ ‖Γ.path x - (lam : ℂ)‖) :

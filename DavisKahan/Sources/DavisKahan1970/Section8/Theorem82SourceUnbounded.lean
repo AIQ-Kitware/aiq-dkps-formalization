@@ -200,7 +200,7 @@ theorem theorem8_2_perturbation_sourceExact_unbounded_complex
     [TopologicalSpace.SeparableSpace Hc]
     (N : NormalizedUnitaryInvariantNorm.{0, v} ℂ)
     {A : Hc →ₗ.[ℂ] Hc} (hA : IsSelfAdjoint A)
-    (Hop : Hc →L[ℂ] Hc) (hHop : DavisKahan.IsSelfAdjointOperator Hop)
+    (Hop : Hc →L[ℂ] Hc) (hHop : Hop.IsSymmetric)
     {P Q : Submodule ℂ Hc} [P.HasOrthogonalProjection] [Q.HasOrthogonalProjection]
     {alpha beta delta : ℝ} (hdelta : 0 < delta) (hab : beta ≤ alpha)
     (hPred : TauCeti.LinearPMap.ReducesSubspace A P)
@@ -234,7 +234,7 @@ theorem theorem8_2_perturbation_sourceExact_unbounded_real
     [TopologicalSpace.SeparableSpace Er]
     (N : NormalizedUnitaryInvariantNorm.{0, v} ℝ)
     {A : Er →ₗ.[ℝ] Er} (hA : IsSelfAdjoint A)
-    (Hop : Er →L[ℝ] Er) (hHop : DavisKahan.IsSelfAdjointOperator Hop)
+    (Hop : Er →L[ℝ] Er) (hHop : Hop.IsSymmetric)
     {P Q : Submodule ℝ Er} [P.HasOrthogonalProjection] [Q.HasOrthogonalProjection]
     {alpha beta delta : ℝ} (hdelta : 0 < delta) (hab : beta ≤ alpha)
     (hPred : TauCeti.LinearPMap.ReducesSubspace A P)
@@ -273,7 +273,7 @@ theorem theorem8_2_residual_sourceExact_unbounded_complex
     [TopologicalSpace.SeparableSpace Hc]
     (N : NormalizedUnitaryInvariantNorm.{0, v} ℂ)
     {A : Hc →ₗ.[ℂ] Hc} (hA : IsSelfAdjoint A)
-    (Hop : Hc →L[ℂ] Hc) (hHop : DavisKahan.IsSelfAdjointOperator Hop)
+    (Hop : Hc →L[ℂ] Hc) (hHop : Hop.IsSymmetric)
     {P Q : Submodule ℂ Hc} [P.HasOrthogonalProjection] [Q.HasOrthogonalProjection]
     {alpha beta delta : ℝ} (hdelta : 0 < delta) (hab : beta ≤ alpha)
     (hPred : TauCeti.LinearPMap.ReducesSubspace A P)
@@ -325,7 +325,7 @@ theorem theorem8_2_residual_sourceExact_unbounded_real
     [TopologicalSpace.SeparableSpace Er]
     (N : NormalizedUnitaryInvariantNorm.{0, v} ℝ)
     {A : Er →ₗ.[ℝ] Er} (hA : IsSelfAdjoint A)
-    (Hop : Er →L[ℝ] Er) (hHop : DavisKahan.IsSelfAdjointOperator Hop)
+    (Hop : Er →L[ℝ] Er) (hHop : Hop.IsSymmetric)
     {P Q : Submodule ℝ Er} [P.HasOrthogonalProjection] [Q.HasOrthogonalProjection]
     {alpha beta delta : ℝ} (hdelta : 0 < delta) (hab : beta ≤ alpha)
     (hPred : TauCeti.LinearPMap.ReducesSubspace A P)

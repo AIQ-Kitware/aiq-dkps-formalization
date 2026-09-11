@@ -62,11 +62,11 @@ theorem _root_.TauCeti.DavisKahan.Foundation.FiniteGapConfiguration.exists_opera
     (A K : Hspace →L[ℂ] Hspace)
     (U : Submodule ℂ Hspace) [U.HasOrthogonalProjection]
     [CompleteSpace U] [CompleteSpace (Uᗮ : Submodule ℂ Hspace)]
-    (hU : Reduces A U) (hK : IsOffDiagonal U K)
+    (hU : A.Reduces U) (hK : Submodule.IsOffDiagonal U K)
     {d : ℝ} (hfinite : FiniteGapConfiguration A U d) :
     ∃ left right : ℝ, left ≤ right ∧
       ∀ t : ℝ, t ∈ Set.Icc (0 : ℝ) 1 →
-      ∀ hpath : IsSelfAdjointOperator (operatorPath A K t),
+      ∀ hpath : ContinuousLinearMap.IsSymmetric (operatorPath A K t),
       ∀ z : ℂ, ∀ delta0 delta1 : ℝ,
         0 < delta0 → 0 < delta1 →
         (∀ lam ∈ Set.Icc left right,

@@ -56,7 +56,7 @@ theorem norm_selectedSpectralProjectionPath_sub_le_of_identification
     (delta : ℝ) (hdelta : 0 < delta)
     (s : Set ℝ) (hs : MeasurableSet s)
     (hself : ∀ t ∈ Set.Icc (0 : ℝ) 1,
-      IsSelfAdjointOperator (operatorPath A K t))
+      ContinuousLinearMap.IsSymmetric (operatorPath A K t))
     (hsep : ∀ t ∈ Set.Icc (0 : ℝ) 1, ∀ x : unitInterval,
       ∀ lam ∈ realSpectrum (operatorPath A K t),
         delta ≤ ‖Γ.path x - (lam : ℂ)‖)
@@ -82,7 +82,7 @@ theorem subspaceGap_selectedSpectralSubspacePath_le_of_identification
     (delta : ℝ) (hdelta : 0 < delta)
     (s : Set ℝ) (hs : MeasurableSet s)
     (hself : ∀ t ∈ Set.Icc (0 : ℝ) 1,
-      IsSelfAdjointOperator (operatorPath A K t))
+      ContinuousLinearMap.IsSymmetric (operatorPath A K t))
     (hsep : ∀ t ∈ Set.Icc (0 : ℝ) 1, ∀ x : unitInterval,
       ∀ lam ∈ realSpectrum (operatorPath A K t),
         delta ≤ ‖Γ.path x - (lam : ℂ)‖)
@@ -91,7 +91,7 @@ theorem subspaceGap_selectedSpectralSubspacePath_le_of_identification
         boundedSelfAdjointSpectralProjection (operatorPath A K t)
           (hself t ht) s hs)
     (t u : unitInterval) :
-    subspaceGap
+    Submodule.projectionGap
         (selectedSpectralSubspacePath A K s hs hself t)
         (selectedSpectralSubspacePath A K s hs hself u) ≤
       selectedBranchProjectionLipschitzConstant Γ K delta *
@@ -111,7 +111,7 @@ theorem selectedSpectralSubspacePath_endpoints_isQuarterAcute_of_contour_bound
     (delta : ℝ) (hdelta : 0 < delta)
     (s : Set ℝ) (hs : MeasurableSet s)
     (hself : ∀ t ∈ Set.Icc (0 : ℝ) 1,
-      IsSelfAdjointOperator (operatorPath A K t))
+      ContinuousLinearMap.IsSymmetric (operatorPath A K t))
     (hsep : ∀ t ∈ Set.Icc (0 : ℝ) 1, ∀ x : unitInterval,
       ∀ lam ∈ realSpectrum (operatorPath A K t),
         delta ≤ ‖Γ.path x - (lam : ℂ)‖)
@@ -132,11 +132,11 @@ theorem selectedSpectralSubspacePath_endpoints_isQuarterAcute_of_contour_bound
     Γ A K delta hdelta s hs hself hsep hidentify t0 t1
   have hdist : ‖(t0 : ℝ) - (t1 : ℝ)‖ = 1 := by
     simp [t0, t1]
-  change subspaceGap
+  change Submodule.projectionGap
       (selectedSpectralSubspacePath A K s hs hself t0)
       (selectedSpectralSubspacePath A K s hs hself t1) < Real.sqrt 2 / 2
   calc
-    subspaceGap
+    Submodule.projectionGap
         (selectedSpectralSubspacePath A K s hs hself t0)
         (selectedSpectralSubspacePath A K s hs hself t1) ≤
       selectedBranchProjectionLipschitzConstant Γ K delta *
@@ -151,10 +151,10 @@ theorem boundedSelfAdjointSpectralSubspaces_endpoints_isQuarterAcute_of_contour_
     (Γ : PiecewiseC1ClosedContour) (A K : H →L[ℂ] H)
     (delta : ℝ) (hdelta : 0 < delta)
     (s : Set ℝ) (hs : MeasurableSet s)
-    (hA : IsSelfAdjointOperator A)
-    (hAK : IsSelfAdjointOperator (A + K))
+    (hA : A.IsSymmetric)
+    (hAK : ContinuousLinearMap.IsSymmetric (A + K))
     (hself : ∀ t ∈ Set.Icc (0 : ℝ) 1,
-      IsSelfAdjointOperator (operatorPath A K t))
+      ContinuousLinearMap.IsSymmetric (operatorPath A K t))
     (hsep : ∀ t ∈ Set.Icc (0 : ℝ) 1, ∀ x : unitInterval,
       ∀ lam ∈ realSpectrum (operatorPath A K t),
         delta ≤ ‖Γ.path x - (lam : ℂ)‖)

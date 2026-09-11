@@ -478,7 +478,7 @@ theorem subspaceGap_le_of_orderedFormGap_unbounded
         a * ‖(x : E)‖ ^ 2)
     (hHU : ∀ x ∈ U, Hop x ∈ Uᗮ) (hHUperp : ∀ x ∈ Uᗮ, Hop x ∈ U)
     (hab : a < b) :
-    subspaceGap U V ≤ Real.sqrt 2 / 2 :=
+    U.projectionGap V ≤ Real.sqrt 2 / 2 :=
   subspaceGap_le_of_reflectionProduct_form_nonneg U V
     (reflectionProduct_form_nonneg_of_orderedFormGap_unbounded A Hop U V hA hH hred hV
       hUhigh hUperpLow hVhigh hVperpLow hHU hHUperp hab)
@@ -505,7 +505,7 @@ theorem subspaceGap_le_of_orderedFormGap_unbounded_printed
         RCLike.re ⟪TauCeti.LinearPMap.addBounded A Hop x, (x : E)⟫_ℂ)
     (hHP : ∀ x ∈ P, Hop x ∈ Pᗮ) (hHPperp : ∀ x ∈ Pᗮ, Hop x ∈ P)
     (hdelta : 0 < delta) :
-    subspaceGap P Q ≤ Real.sqrt 2 / 2 := by
+    P.projectionGap Q ≤ Real.sqrt 2 / 2 := by
   have hPperpperp : (Pᗮ)ᗮ = P := Submodule.orthogonal_orthogonal P
   have hQperpperp : (Qᗮ)ᗮ = Q := Submodule.orthogonal_orthogonal Q
   have hcompl := subspaceGap_le_of_orderedFormGap_unbounded A Hop Pᗮ Qᗮ
@@ -527,7 +527,7 @@ theorem subspaceGap_le_of_orderedFormGap_unbounded_printed
       rw [hPperpperp] at hx
       exact hHP x hx)
     (by linarith)
-  have hgap : subspaceGap Pᗮ Qᗮ = subspaceGap P Q :=
+  have hgap : Pᗮ.projectionGap Qᗮ = P.projectionGap Q :=
     TauCeti.DavisKahan.subspaceGap_orthogonal P Q
   rw [← hgap]
   exact hcompl
@@ -582,9 +582,9 @@ theorem maximalAngle_le_pi_div_four_of_orderedFormGap_unbounded_printed
       rw [hPperpperp] at hx
       exact hHP x hx)
     (by linarith)
-  have hgap : subspaceGap Pᗮ Qᗮ = subspaceGap P Q :=
+  have hgap : Pᗮ.projectionGap Qᗮ = P.projectionGap Q :=
     TauCeti.DavisKahan.subspaceGap_orthogonal P Q
-  change Real.arcsin (subspaceGap P Q) ≤ Real.pi / 4
+  change Real.arcsin (P.projectionGap Q) ≤ Real.pi / 4
   rw [← hgap]
   exact hcompl
 
@@ -659,24 +659,24 @@ theorem subspaceGap_lt_of_le_of_norm_sinTwoAngle_lt_one
     (U V : Submodule ℂ E)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
     (hcross : TauCeti.DavisKahan.CrossedDefectsEquivalent V U)
-    (hle : subspaceGap U V ≤ Real.sqrt 2 / 2)
+    (hle : U.projectionGap V ≤ Real.sqrt 2 / 2)
     (hsin : ‖DavisKahanExt.sinTwoAngleOperator U V‖ < 1) :
-    subspaceGap U V < Real.sqrt 2 / 2 := by
-  have hsym : subspaceGap U V = subspaceGap V U := by
+    U.projectionGap V < Real.sqrt 2 / 2 := by
+  have hsym : U.projectionGap V = V.projectionGap U := by
     change ‖U.starProjection - V.starProjection‖ = ‖V.starProjection - U.starProjection‖
     rw [← norm_neg]
     congr 1
     abel
-  have hdir : subspaceGap V U = directedGap V U :=
+  have hdir : V.projectionGap U = V.directedProjectionGap U :=
     TauCeti.DavisKahan.subspaceGap_eq_directedGap_of_crossedDefectsEquivalent V U hcross
-  have hclose : directedGap V U ≤ Real.sqrt 2 / 2 := by
+  have hclose : V.directedProjectionGap U ≤ Real.sqrt 2 / 2 := by
     rw [← hdir, ← hsym]
     exact hle
   have hboot := TauCeti.DavisKahan.Angle.sqrt_two_mul_directedGap_le_norm_sinTwoAngleOperator
     U V hclose
   have hs2 : (0 : ℝ) < Real.sqrt 2 := Real.sqrt_pos.mpr (by norm_num)
   have h2 : Real.sqrt 2 * Real.sqrt 2 = 2 := Real.mul_self_sqrt (by norm_num)
-  have hstrict : directedGap V U < Real.sqrt 2 / 2 := by nlinarith [hboot, hsin, hs2]
+  have hstrict : V.directedProjectionGap U < Real.sqrt 2 / 2 := by nlinarith [hboot, hsin, hs2]
   rw [hsym, hdir]
   exact hstrict
 
@@ -685,7 +685,7 @@ theorem maximalAngle_lt_pi_div_four_of_le_of_norm_sinTwoAngle_lt_one
     (U V : Submodule ℂ E)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
     (hcross : TauCeti.DavisKahan.CrossedDefectsEquivalent V U)
-    (hle : subspaceGap U V ≤ Real.sqrt 2 / 2)
+    (hle : U.projectionGap V ≤ Real.sqrt 2 / 2)
     (hsin : ‖DavisKahanExt.sinTwoAngleOperator U V‖ < 1) :
     TauCeti.DavisKahanExt.maximalAngle U V < Real.pi / 4 :=
   (TauCeti.DavisKahan1970.Section8.maximalAngle_lt_pi_div_four_iff U V).2

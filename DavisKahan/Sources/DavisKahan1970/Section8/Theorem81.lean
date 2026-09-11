@@ -79,10 +79,10 @@ omit [CompleteSpace E] in
 projection-gap condition `gap <= sqrt 2 / 2`. -/
 theorem maximalAngle_le_pi_div_four_iff (U V : Submodule ℂ E)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] :
-    maximalAngle U V ≤ Real.pi / 4 ↔ subspaceGap U V ≤ Real.sqrt 2 / 2 := by
+    maximalAngle U V ≤ Real.pi / 4 ↔ U.projectionGap V ≤ Real.sqrt 2 / 2 := by
   have hmem : Real.pi / 4 ∈ Set.Ico (-(Real.pi / 2)) (Real.pi / 2) :=
     ⟨by linarith [Real.pi_pos], by linarith [Real.pi_pos]⟩
-  show Real.arcsin (subspaceGap U V) ≤ Real.pi / 4 ↔ _
+  show Real.arcsin (U.projectionGap V) ≤ Real.pi / 4 ↔ _
   rw [Real.arcsin_le_iff_le_sin' hmem, Real.sin_pi_div_four]
 
 /-- The strict quarter-angle condition, in the two equivalent phrasings.
@@ -96,7 +96,7 @@ theorem maximalAngle_lt_pi_div_four_iff {𝕜 : Type*} [RCLike 𝕜] {E : Type*}
     maximalAngle U V < Real.pi / 4 ↔ IsQuarterAcute U V := by
   have hmem : Real.pi / 4 ∈ Set.Ioc (-(Real.pi / 2)) (Real.pi / 2) :=
     ⟨by linarith [Real.pi_pos], by linarith [Real.pi_pos]⟩
-  show Real.arcsin (subspaceGap U V) < Real.pi / 4 ↔ _
+  show Real.arcsin (U.projectionGap V) < Real.pi / 4 ↔ _
   rw [Real.arcsin_lt_iff_lt_sin' hmem, Real.sin_pi_div_four]
   rfl
 
@@ -104,13 +104,13 @@ theorem maximalAngle_lt_pi_div_four_iff {𝕜 : Type*} [RCLike 𝕜] {E : Type*}
 
 /-- The canonical low branch of Theorem 8.1: the genuine spectral subspace of
 the perturbed operator for the closed half-line `Iic alpha`. -/
-def canonicalLowBranch (B : E →L[ℂ] E) (hB : IsSelfAdjointOperator B)
+def canonicalLowBranch (B : E →L[ℂ] E) (hB : B.IsSymmetric)
     (alpha : ℝ) : Submodule ℂ E :=
   boundedSelfAdjointSpectralSubspace B hB (Set.Iic alpha) measurableSet_Iic
 
 /-- The canonical low branch is a spectral subspace, hence complemented. -/
 instance canonicalLowBranch_hasOrthogonalProjection (B : E →L[ℂ] E)
-    (hB : IsSelfAdjointOperator B) (alpha : ℝ) :
+    (hB : B.IsSymmetric) (alpha : ℝ) :
     (canonicalLowBranch B hB alpha).HasOrthogonalProjection :=
   boundedSelfAdjointSpectralSubspace_hasOrthogonalProjection B hB _ _
 
@@ -123,7 +123,7 @@ structure Theorem81Conclusion (A H : E →L[ℂ] E) (P Q : Submodule ℂ E)
   spectral_repulsion :
     realSpectrum (A + H) ⊆ Set.Iic alpha ∪ Set.Ici (alpha + delta)
   /-- The branch reduces the perturbed operator. -/
-  branch_reduces : Reduces (A + H) Q
+  branch_reduces : ContinuousLinearMap.Reduces (A + H) Q
   /-- Sharp upper form bound on the branch. -/
   branch_form_low : ∀ x ∈ Q, RCLike.re ⟪(A + H) x, x⟫_ℂ ≤ alpha * ‖x‖ ^ 2
   /-- Sharp lower form bound on its complement. -/
@@ -158,7 +158,7 @@ theorem theorem8_1_canonicalBranch
       alpha delta := by
   classical
   have hAH : IsSelfAdjoint (A + H) := hA.add hH
-  have hAHop : IsSelfAdjointOperator (A + H) :=
+  have hAHop : ContinuousLinearMap.IsSymmetric (A + H) :=
     ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mp hAH
   have hAsym : A.IsSymmetric :=
     ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mp hA
@@ -181,7 +181,7 @@ theorem theorem8_1_canonicalBranch
       rw [hPperpperp] at hx
       exact hHP x hx
   set Q : Submodule ℂ E := canonicalLowBranch (A + H) hAHop alpha with hQdef
-  have hQreduces : Reduces (A + H) Q :=
+  have hQreduces : ContinuousLinearMap.Reduces (A + H) Q :=
     boundedSelfAdjointSpectralSubspace_reduces (A + H) hAHop (Set.Iic alpha)
       measurableSet_Iic
   have hlow : ∀ x ∈ Q, RCLike.re ⟪(A + H) x, x⟫_ℂ ≤ alpha * ‖x‖ ^ 2 := fun x hx =>
@@ -212,9 +212,9 @@ theorem theorem8_1_canonicalBranch
       rw [hPperpperp] at hx
       exact hHP x hx
   have hquarter : IsQuarterAcute P Q := by
-    have h : subspaceGap Pᗮ Qᗮ = subspaceGap P Q :=
+    have h : Pᗮ.projectionGap Qᗮ = P.projectionGap Q :=
       TauCeti.DavisKahan.subspaceGap_orthogonal P Q
-    show subspaceGap P Q < Real.sqrt 2 / 2
+    show P.projectionGap Q < Real.sqrt 2 / 2
     rw [← h]
     exact hquarterPerp
   refine
@@ -237,7 +237,7 @@ omit [CompleteSpace E] in
 subspace inside the closed quarter-angle cone around the first. -/
 theorem sqrt_two_div_two_mul_norm_le_norm_starProjection
     {P M : Submodule ℂ E} [P.HasOrthogonalProjection] [M.HasOrthogonalProjection]
-    (hgap : subspaceGap P M ≤ Real.sqrt 2 / 2) {y : E} (hy : y ∈ M) :
+    (hgap : P.projectionGap M ≤ Real.sqrt 2 / 2) {y : E} (hy : y ∈ M) :
     Real.sqrt 2 / 2 * ‖y‖ ≤ ‖P.starProjection y‖ := by
   have hMy : M.starProjection y = y := Submodule.starProjection_eq_self_iff.mpr hy
   have heq : Pᗮ.starProjection y = (M.starProjection - P.starProjection) y := by
@@ -248,7 +248,7 @@ theorem sqrt_two_div_two_mul_norm_le_norm_starProjection
     calc ‖(M.starProjection - P.starProjection) y‖
         ≤ ‖M.starProjection - P.starProjection‖ * ‖y‖ :=
           ContinuousLinearMap.le_opNorm _ _
-      _ = subspaceGap P M * ‖y‖ := by
+      _ = P.projectionGap M * ‖y‖ := by
           rw [show ‖M.starProjection - P.starProjection‖ =
             ‖P.starProjection - M.starProjection‖ from norm_sub_rev _ _]
           rfl
@@ -275,7 +275,7 @@ theorem norm_starProjection_lt_of_mem_orthogonal
     simp only [sub_apply, hQy, sub_zero]
   rw [heq]
   calc ‖(P.starProjection - Q.starProjection) y‖
-      ≤ subspaceGap P Q * ‖y‖ := ContinuousLinearMap.le_opNorm _ _
+      ≤ P.projectionGap Q * ‖y‖ := ContinuousLinearMap.le_opNorm _ _
     _ < Real.sqrt 2 / 2 * ‖y‖ :=
         mul_lt_mul_of_pos_right hq (norm_pos_iff.mpr hy0)
 
@@ -298,24 +298,24 @@ theorem theorem8_1_eq_canonicalBranch_of_maximalAngle_le
     (hHP : ∀ x ∈ P, H x ∈ Pᗮ)
     (hHPperp : ∀ x ∈ Pᗮ, H x ∈ P)
     (M : Submodule ℂ E) [M.HasOrthogonalProjection]
-    (hMreduces : Reduces (A + H) M)
+    (hMreduces : ContinuousLinearMap.Reduces (A + H) M)
     (hMangle : maximalAngle P M ≤ Real.pi / 4) :
     M = canonicalLowBranch (A + H)
       (ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mp (hA.add hH)) alpha := by
   classical
   have hAH : IsSelfAdjoint (A + H) := hA.add hH
-  have hAHop : IsSelfAdjointOperator (A + H) :=
+  have hAHop : ContinuousLinearMap.IsSymmetric (A + H) :=
     ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mp hAH
   have hconc := theorem8_1_canonicalBranch A H P hdelta hA hH hAP hPlow hPhigh hHP hHPperp
   set Q : Submodule ℂ E := canonicalLowBranch (A + H) hAHop alpha with hQdef
   have hquarter : IsQuarterAcute P Q := hconc.quarter_acute
   have hquarterPerp : IsQuarterAcute Pᗮ Qᗮ := by
-    show subspaceGap Pᗮ Qᗮ < Real.sqrt 2 / 2
+    show Pᗮ.projectionGap Qᗮ < Real.sqrt 2 / 2
     rw [TauCeti.DavisKahan.subspaceGap_orthogonal P Q]
     exact hquarter
-  have hgapM : subspaceGap P M ≤ Real.sqrt 2 / 2 :=
+  have hgapM : P.projectionGap M ≤ Real.sqrt 2 / 2 :=
     (maximalAngle_le_pi_div_four_iff P M).1 hMangle
-  have hgapMperp : subspaceGap Pᗮ Mᗮ ≤ Real.sqrt 2 / 2 := by
+  have hgapMperp : Pᗮ.projectionGap Mᗮ ≤ Real.sqrt 2 / 2 := by
     rw [TauCeti.DavisKahan.subspaceGap_orthogonal P M]
     exact hgapM
   -- the branch projection
@@ -398,7 +398,7 @@ theorem theorem8_1_maximalAngle_le_iff_spectrumIn
     (hHP : ∀ x ∈ P, H x ∈ Pᗮ)
     (hHPperp : ∀ x ∈ Pᗮ, H x ∈ P)
     (M : Submodule ℂ E) [M.HasOrthogonalProjection]
-    (hMreduces : Reduces (A + H) M) :
+    (hMreduces : ContinuousLinearMap.Reduces (A + H) M) :
     maximalAngle P M ≤ Real.pi / 4 ↔
       (SpectrumIn (A + H) M (Set.Iic alpha) ∧
         SpectrumIn (A + H) Mᗮ (Set.Ici (alpha + delta))) := by
@@ -406,7 +406,7 @@ theorem theorem8_1_maximalAngle_le_iff_spectrumIn
   have hAH : IsSelfAdjoint (A + H) := hA.add hH
   have hAHsym : (A + H).IsSymmetric :=
     ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mp hAH
-  have hAHop : IsSelfAdjointOperator (A + H) := hAHsym
+  have hAHop : ContinuousLinearMap.IsSymmetric (A + H) := hAHsym
   have hconc := theorem8_1_canonicalBranch A H P hdelta hA hH hAP hPlow hPhigh hHP hHPperp
   have hPperpperp : (Pᗮ)ᗮ = P := Submodule.orthogonal_orthogonal P
   have hAsym : A.IsSymmetric :=
@@ -461,7 +461,7 @@ theorem theorem8_1_maximalAngle_le_iff_spectrumIn
         rw [hPperpperp] at hx
         exact hHP x hx
     have hquarter : IsQuarterAcute P M := by
-      show subspaceGap P M < Real.sqrt 2 / 2
+      show P.projectionGap M < Real.sqrt 2 / 2
       rw [← TauCeti.DavisKahan.subspaceGap_orthogonal P M]
       exact hquarterPerp
     exact le_of_lt ((maximalAngle_lt_pi_div_four_iff P M).2 hquarter)

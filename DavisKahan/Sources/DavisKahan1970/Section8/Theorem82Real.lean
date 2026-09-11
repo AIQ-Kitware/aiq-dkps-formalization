@@ -224,7 +224,7 @@ lemma with a rewrite, and none is a statement about Theorem 8.2. -/
 /-- Self-adjointness in the `IsSelfAdjointOperator` spelling survives
 complexification. -/
 private theorem complexify_isSelfAdjointOperator {T : E →L[ℝ] E}
-    (hT : IsSelfAdjointOperator T) : IsSelfAdjointOperator (complexify T) :=
+    (hT : T.IsSymmetric) : ContinuousLinearMap.IsSymmetric (complexify T) :=
   ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mp
     ((complexify_isSelfAdjoint_iff T).2
       (ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mpr hT))
@@ -263,7 +263,7 @@ Every hypothesis is the real reading of the printed one, and the proof is the
 complexification transport described in this module's header; the perturbation
 theory itself is not re-run. -/
 theorem theorem8_2_perturbationHalfGap_real
-    {A K : E →L[ℝ] E} (hA : IsSelfAdjointOperator A) (hK : IsSelfAdjointOperator K)
+    {A K : E →L[ℝ] E} (hA : A.IsSymmetric) (hK : K.IsSymmetric)
     {P Q : Submodule ℝ E} [P.HasOrthogonalProjection] [Q.HasOrthogonalProjection]
     {alpha beta delta : ℝ} (hdelta : 0 < delta) (hab : beta ≤ alpha)
     (hQ : Foundation.SpectrumIn (A + K) Q (Set.Icc beta alpha))
@@ -271,7 +271,7 @@ theorem theorem8_2_perturbationHalfGap_real
     (hPred : A.Reduces P)
     (hP : Foundation.SpectrumIn A P (Set.Icc (beta - delta / 2) (alpha + delta / 2)))
     (hsmall : ‖K‖ < delta / 2) :
-    directedGap P Q < Real.sqrt 2 / 2 := by
+    P.directedProjectionGap Q < Real.sqrt 2 / 2 := by
   have hsmallc : ‖complexify K‖ < delta / 2 := by
     rw [norm_complexify]; exact hsmall
   have hmain := theorem8_2_perturbationHalfGap_complex
@@ -290,7 +290,7 @@ directed conclusion.  Krein's completion is not re-proved over `ℝ`: the residu
 norm is transported by `norm_residual_complexify` and the complex alternative is
 applied. -/
 theorem theorem8_2_residualHalfGap_real
-    {A K : E →L[ℝ] E} (hA : IsSelfAdjointOperator A) (hK : IsSelfAdjointOperator K)
+    {A K : E →L[ℝ] E} (hA : A.IsSymmetric) (hK : K.IsSymmetric)
     {P Q : Submodule ℝ E} [P.HasOrthogonalProjection] [Q.HasOrthogonalProjection]
     {alpha beta delta : ℝ} (hdelta : 0 < delta) (hab : beta ≤ alpha)
     (hQ : Foundation.SpectrumIn (A + K) Q (Set.Icc beta alpha))
@@ -298,7 +298,7 @@ theorem theorem8_2_residualHalfGap_real
     (hPred : A.Reduces P)
     (hP : Foundation.SpectrumIn A P (Set.Icc (beta - delta / 2) (alpha + delta / 2)))
     (hRsmall : ‖residual (A + K) P.subtypeL (compressOperator P A)‖ < delta / 2) :
-    directedGap P Q < Real.sqrt 2 / 2 := by
+    P.directedProjectionGap Q < Real.sqrt 2 / 2 := by
   have hRsmallc : ‖residual (complexify A + complexify K)
       (complexifySubmodule P).subtypeL
       (compressOperator (complexifySubmodule P) (complexify A))‖ < delta / 2 := by
@@ -315,7 +315,7 @@ theorem theorem8_2_residualHalfGap_real
 /-- **Theorem 8.2's printed disjunction over a REAL Hilbert space.**  Either
 printed smallness alternative gives the directed quarter-angle bound. -/
 theorem theorem8_2_branch_directed_real
-    {A K : E →L[ℝ] E} (hA : IsSelfAdjointOperator A) (hK : IsSelfAdjointOperator K)
+    {A K : E →L[ℝ] E} (hA : A.IsSymmetric) (hK : K.IsSymmetric)
     {P Q : Submodule ℝ E} [P.HasOrthogonalProjection] [Q.HasOrthogonalProjection]
     {alpha beta delta : ℝ} (hdelta : 0 < delta) (hab : beta ≤ alpha)
     (hQ : Foundation.SpectrumIn (A + K) Q (Set.Icc beta alpha))
@@ -324,7 +324,7 @@ theorem theorem8_2_branch_directed_real
     (hP : Foundation.SpectrumIn A P (Set.Icc (beta - delta / 2) (alpha + delta / 2)))
     (halt : ‖K‖ < delta / 2 ∨
       ‖residual (A + K) P.subtypeL (compressOperator P A)‖ < delta / 2) :
-    directedGap P Q < Real.sqrt 2 / 2 := by
+    P.directedProjectionGap Q < Real.sqrt 2 / 2 := by
   rcases halt with hsmall | hRsmall
   · exact theorem8_2_perturbationHalfGap_real hA hK hdelta hab hQ hQperp
       hPred hP hsmall
@@ -350,7 +350,7 @@ Finite dimensionality and equal rank are the printed statement's own standing
 convention, exactly as over `ℂ`. -/
 theorem theorem8_2_perturbationHalfGap_real_maximalAngle_lt
     [FiniteDimensional ℝ E]
-    {A K : E →L[ℝ] E} (hA : IsSelfAdjointOperator A) (hK : IsSelfAdjointOperator K)
+    {A K : E →L[ℝ] E} (hA : A.IsSymmetric) (hK : K.IsSymmetric)
     {P Q : Submodule ℝ E} [P.HasOrthogonalProjection] [Q.HasOrthogonalProjection]
     {alpha beta delta : ℝ} (hdelta : 0 < delta) (hab : beta ≤ alpha)
     (hQ : Foundation.SpectrumIn (A + K) Q (Set.Icc beta alpha))
@@ -362,7 +362,7 @@ theorem theorem8_2_perturbationHalfGap_real_maximalAngle_lt
     maximalAngle P Q < Real.pi / 4 := by
   have hdir := theorem8_2_perturbationHalfGap_real hA hK hdelta hab hQ
     hQperp hPred hP hsmall
-  have hlt : subspaceGap P Q < Real.sqrt 2 / 2 := by
+  have hlt : P.projectionGap Q < Real.sqrt 2 / 2 := by
     rw [subspaceGap_eq_directedGap_of_finrank_eq P Q hrank]
     exact hdir
   exact (DavisKahan1970.Section8.maximalAngle_lt_pi_div_four_iff P Q).2 hlt
@@ -376,7 +376,7 @@ to Theorem 8.2's printed disjunction: either printed smallness alternative, plus
 **no** finite-dimensionality and **no** rank hypothesis, over `ℝ` exactly as
 over `ℂ`. -/
 theorem theorem8_2_branch_real_maximalAngle_lt_of_crossedDefects
-    {A K : E →L[ℝ] E} (hA : IsSelfAdjointOperator A) (hK : IsSelfAdjointOperator K)
+    {A K : E →L[ℝ] E} (hA : A.IsSymmetric) (hK : K.IsSymmetric)
     {P Q : Submodule ℝ E} [P.HasOrthogonalProjection] [Q.HasOrthogonalProjection]
     {alpha beta delta : ℝ} (hdelta : 0 < delta) (hab : beta ≤ alpha)
     (hQ : Foundation.SpectrumIn (A + K) Q (Set.Icc beta alpha))
@@ -396,7 +396,7 @@ REAL Hilbert space, under the finite form of the standing convention (1.5).**
 The real counterpart of `theorem8_2_branch_maximalAngle_lt`, and the form
 `theorem8_2_real` packages. -/
 theorem theorem8_2_branch_real_maximalAngle_lt [FiniteDimensional ℝ E]
-    {A K : E →L[ℝ] E} (hA : IsSelfAdjointOperator A) (hK : IsSelfAdjointOperator K)
+    {A K : E →L[ℝ] E} (hA : A.IsSymmetric) (hK : K.IsSymmetric)
     {P Q : Submodule ℝ E} [P.HasOrthogonalProjection] [Q.HasOrthogonalProjection]
     {alpha beta delta : ℝ} (hdelta : 0 < delta) (hab : beta ≤ alpha)
     (hQ : Foundation.SpectrumIn (A + K) Q (Set.Icc beta alpha))
@@ -460,7 +460,7 @@ re-proved: the configuration is complexified, the complex estimate applied, and
 both sides read back by `norm_sinTwoAngleOperator_complexifySubmodule` and
 `norm_complexify`. -/
 theorem theorem8_2_sinTwoTheta_perturbation_real
-    {A K : E →L[ℝ] E} (hA : IsSelfAdjointOperator A) (hK : IsSelfAdjointOperator K)
+    {A K : E →L[ℝ] E} (hA : A.IsSymmetric) (hK : K.IsSymmetric)
     {P Q : Submodule ℝ E} [P.HasOrthogonalProjection] [Q.HasOrthogonalProjection]
     {alpha beta delta : ℝ} (hdelta : 0 < delta) (hab : beta ≤ alpha)
     (hQ : Foundation.SpectrumIn (A + K) Q (Set.Icc beta alpha))
@@ -484,7 +484,7 @@ As over `ℂ`, the conclusion names the **ambient** `sin 2Θ` of the pair, not t
 directed `sin 2Θ₀` of the printed residual inequality; at the operator norm that
 is the stronger reading. -/
 theorem theorem8_2_sinTwoTheta_residual_real
-    {A K : E →L[ℝ] E} (hA : IsSelfAdjointOperator A) (hK : IsSelfAdjointOperator K)
+    {A K : E →L[ℝ] E} (hA : A.IsSymmetric) (hK : K.IsSymmetric)
     {P Q : Submodule ℝ E} [P.HasOrthogonalProjection] [Q.HasOrthogonalProjection]
     {alpha beta delta : ℝ} (hdelta : 0 < delta) (hab : beta ≤ alpha)
     (hQ : Foundation.SpectrumIn (A + K) Q (Set.Icc beta alpha))
@@ -550,7 +550,7 @@ The conclusion names the paper's literal `sin 2Θ`, the real positive operator
 whole singular-value list that a general unitarily invariant norm reads. -/
 theorem theorem8_2_sinTwoTheta_perturbation_real_symmetricNorming
     (N : ExactSinTheta.SymmetricNormingFunction)
-    {A K : E →L[ℝ] E} (hA : IsSelfAdjointOperator A) (hK : IsSelfAdjointOperator K)
+    {A K : E →L[ℝ] E} (hA : A.IsSymmetric) (hK : K.IsSymmetric)
     {P Q : Submodule ℝ E} [P.HasOrthogonalProjection] [Q.HasOrthogonalProjection]
     {alpha beta delta : ℝ} (hdelta : 0 < delta) (hab : beta ≤ alpha)
     (hQ : Foundation.SpectrumIn (A + K) Q (Set.Icc beta alpha))
@@ -607,7 +607,7 @@ heterogeneous singular-sequence transport return both membership and the norm
 inequality to the real spaces with no loss in the constant. -/
 theorem theorem8_2_sinTwoTheta_residual_real_symmetricNorming
     (N : ExactSinTheta.SymmetricNormingFunction)
-    {A K : E →L[ℝ] E} (hA : IsSelfAdjointOperator A) (hK : IsSelfAdjointOperator K)
+    {A K : E →L[ℝ] E} (hA : A.IsSymmetric) (hK : K.IsSymmetric)
     {P Q : Submodule ℝ E} [P.HasOrthogonalProjection] [Q.HasOrthogonalProjection]
     {alpha beta delta : ℝ} (hdelta : 0 < delta) (hab : beta ≤ alpha)
     (hQ : Foundation.SpectrumIn (A + K) Q (Set.Icc beta alpha))
@@ -667,7 +667,7 @@ same factor two, and the same trial-side ordering
 subspace whose blocks the gap separates. -/
 theorem theorem8_2_sinTwoTheta_residual_directedAngle_real_symmetricNorming
     (N : ExactSinTheta.SymmetricNormingFunction)
-    {A K : E →L[ℝ] E} (hA : IsSelfAdjointOperator A) (hK : IsSelfAdjointOperator K)
+    {A K : E →L[ℝ] E} (hA : A.IsSymmetric) (hK : K.IsSymmetric)
     {P Q : Submodule ℝ E} [P.HasOrthogonalProjection] [Q.HasOrthogonalProjection]
     {alpha beta delta : ℝ} (hdelta : 0 < delta) (hab : beta ≤ alpha)
     (hQ : Foundation.SpectrumIn (A + K) Q (Set.Icc beta alpha))
@@ -700,7 +700,7 @@ descent introduces no hypothesis of its own.
 norms here are; `theorem8_2_sinTwoTheta_perturbation_real_symmetricNorming`
 carries the perturbation estimate at the printed norm scope. -/
 theorem theorem8_2_real [FiniteDimensional ℝ E]
-    {A K : E →L[ℝ] E} (hA : IsSelfAdjointOperator A) (hK : IsSelfAdjointOperator K)
+    {A K : E →L[ℝ] E} (hA : A.IsSymmetric) (hK : K.IsSymmetric)
     {P Q : Submodule ℝ E} [P.HasOrthogonalProjection] [Q.HasOrthogonalProjection]
     {alpha beta delta : ℝ} (hdelta : 0 < delta) (hab : beta ≤ alpha)
     (hQ : Foundation.SpectrumIn (A + K) Q (Set.Icc beta alpha))
@@ -726,7 +726,7 @@ theorem theorem8_2_real [FiniteDimensional ℝ E]
 theorem theorem8_2_sinTwoTheta_perturbation_real_sourceExact
     [TopologicalSpace.SeparableSpace E]
     (N : ExactSinTheta.NormalizedUnitaryInvariantNorm.{0, _} ℝ)
-    {A K : E →L[ℝ] E} (hA : IsSelfAdjointOperator A) (hK : IsSelfAdjointOperator K)
+    {A K : E →L[ℝ] E} (hA : A.IsSymmetric) (hK : K.IsSymmetric)
     {P Q : Submodule ℝ E} [P.HasOrthogonalProjection] [Q.HasOrthogonalProjection]
     {alpha beta delta : ℝ} (hdelta : 0 < delta) (hab : beta ≤ alpha)
     (hQ : Foundation.SpectrumIn (A + K) Q (Set.Icc beta alpha))
@@ -745,7 +745,7 @@ source scope over `ℝ`.** -/
 theorem theorem8_2_sinTwoTheta_residual_directedAngle_real_sourceExact
     [TopologicalSpace.SeparableSpace E]
     (N : ExactSinTheta.NormalizedUnitaryInvariantNorm.{0, _} ℝ)
-    {A K : E →L[ℝ] E} (hA : IsSelfAdjointOperator A) (hK : IsSelfAdjointOperator K)
+    {A K : E →L[ℝ] E} (hA : A.IsSymmetric) (hK : K.IsSymmetric)
     {P Q : Submodule ℝ E} [P.HasOrthogonalProjection] [Q.HasOrthogonalProjection]
     {alpha beta delta : ℝ} (hdelta : 0 < delta) (hab : beta ≤ alpha)
     (hQ : Foundation.SpectrumIn (A + K) Q (Set.Icc beta alpha))
