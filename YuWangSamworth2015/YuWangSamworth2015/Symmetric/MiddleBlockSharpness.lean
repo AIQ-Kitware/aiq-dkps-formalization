@@ -321,8 +321,7 @@ theorem pointInternalGap_middleSharpness (hdp : 2 * d ≤ p) :
   · intro x hx
     rw [Module.End.mem_eigenspace_iff] at hx ⊢
     rw [← map_smul, hx]
-  ·
-    intro lam μ hlam hμ
+  · intro lam μ hlam hμ
     rw [eigenspace_middleSharpnessPopulation b] at hlam hμ
     have h3 : lam = 3 := by
       obtain ⟨i, hi, rfl⟩ :=

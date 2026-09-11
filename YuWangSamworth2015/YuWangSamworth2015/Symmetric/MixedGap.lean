@@ -185,8 +185,7 @@ theorem pointInternalGap_section1 :
   · intro x hx
     rw [Module.End.mem_eigenspace_iff] at hx ⊢
     rw [← map_smul, hx]
-  ·
-    intro lam μ hlam hμ
+  · intro lam μ hlam hμ
     rw [eigenspace_section1Population] at hlam hμ
     have h20 : lam = 20 := by
       obtain ⟨i, hi, rfl⟩ := restrictedPointSpectrum_basisDiagonal_subset b _ _ hlam

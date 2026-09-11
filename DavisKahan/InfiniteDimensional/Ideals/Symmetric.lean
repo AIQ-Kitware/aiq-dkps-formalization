@@ -10,6 +10,7 @@ import ForTauCeti.Analysis.OperatorIdeal.Family.CompactOperator
 import ForTauCeti.Analysis.OperatorIdeal.Family.HilbertSchmidt
 import ForTauCeti.Analysis.OperatorIdeal.Family.KyFan
 import ForTauCeti.Analysis.OperatorIdeal.Family.Schatten
+import ForTauCeti.Analysis.OperatorIdeal.Family.SymmetricGauge
 import ForTauCeti.Analysis.OperatorIdeal.Family.TraceClass
 import DavisKahan.SpectralTheory.AbstractSpectrum
 import DavisKahan.Sylvester.ScalarTransport

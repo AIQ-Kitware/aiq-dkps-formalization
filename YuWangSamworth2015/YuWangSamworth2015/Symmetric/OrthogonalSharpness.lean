@@ -241,8 +241,7 @@ theorem pointInternalGap_orthogonalSharpness :
   · intro x hx
     rw [Module.End.mem_eigenspace_iff] at hx ⊢
     rw [← map_smul, hx]
-  ·
-    intro lam μ hlam hμ
+  · intro lam μ hlam hμ
     rw [eigenspace_orthogonalSharpnessPopulation] at hlam hμ
     -- The block carries only the value `3`.
     have h3 : lam = 3 := by

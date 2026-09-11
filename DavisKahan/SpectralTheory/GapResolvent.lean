@@ -316,7 +316,13 @@ theorem twoSidedShiftedInverseBound_of_coercive_comp
     have habs : |c - lam| = |lam - c| := abs_sub_comm c lam
     have hb := hbase x
     rw [hsm, habs] at htri
-    nlinarith [norm_nonneg ((x : H))]
+    -- `linarith` does not close this: the two sides carry different (defeq) `ℝ` order
+    -- instances, so its atoms do not match.  Chain the two bounds directly.
+    calc (δ - |lam - c|) * ‖(x : H)‖
+        = δ * ‖(x : H)‖ - |lam - c| * ‖(x : H)‖ := by ring
+      _ ≤ ‖A x - ((c : ℝ) : ℂ) • (x : H)‖ - |lam - c| * ‖(x : H)‖ :=
+          sub_le_sub_right hb _
+      _ ≤ ‖A x - ((lam : ℝ) : ℂ) • (x : H)‖ := htri
   have hres := (TauCeti.LinearPMap.mem_resolventSet_and_norm_le_of_lower_bound hA
     hpos hnorm).1
   simpa [TauCeti.LinearPMap.spectrum] using hres

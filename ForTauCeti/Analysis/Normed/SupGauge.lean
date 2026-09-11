@@ -64,16 +64,16 @@ noncomputable def supGauge : SymmetricGauge where
 /-- The extension of the sup gauge is the supremum, including infinite coordinates. -/
 theorem supGauge_extend (a : ℕ → ENNReal) :
     supGauge.extend a = ⨆ n, a n := by
-  refine le_antisymm (iSup_le fun b => ?_) (supGauge.iSup_le_extend a)
+  refine le_antisymm (supGauge.extend_le fun b hb => ?_) (supGauge.iSup_le_extend a)
   by_cases ht : (⨆ n, a n) = ⊤
   · simp [ht]
-  · have hbound : supGaugeFinsupp b.1 ≤ (⨆ n, a n).toNNReal := by
+  · have hbound : supGaugeFinsupp b ≤ (⨆ n, a n).toNNReal := by
       apply supGaugeFinsupp_le
       intro n
       apply ENNReal.coe_le_coe.mp
       rw [ENNReal.coe_toNNReal ht]
-      exact (b.2 n).trans (le_iSup a n)
-    calc (supGauge b.1 : ENNReal)
+      exact (hb n).trans (le_iSup a n)
+    calc (supGauge b : ENNReal)
         ≤ ((⨆ n, a n).toNNReal : ENNReal) := by exact_mod_cast hbound
       _ = ⨆ n, a n := ENNReal.coe_toNNReal ht
 

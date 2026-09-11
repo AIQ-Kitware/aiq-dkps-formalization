@@ -60,6 +60,13 @@ instance instMeasurableSpaceMatrix {m n α : Type*} [MeasurableSpace α] :
     MeasurableSpace (Matrix m n α) :=
   inferInstanceAs (MeasurableSpace (m → n → α))
 
+/-- `Matrix` is a type-level def, so the pi metrizability instance does not fire on it
+either; register it for the entrywise topology. -/
+instance instPseudoMetrizableSpaceMatrix {m n α : Type*} [Finite m] [Finite n]
+    [TopologicalSpace α] [TopologicalSpace.PseudoMetrizableSpace α] :
+    TopologicalSpace.PseudoMetrizableSpace (Matrix m n α) :=
+  inferInstanceAs (TopologicalSpace.PseudoMetrizableSpace (m → n → α))
+
 /-- Matrices carry the Borel σ-algebra of their entrywise topology, so spectral functions of a
 matrix can be shown measurable entrywise.
 
@@ -146,6 +153,20 @@ variable {𝕜 : Type*} [RCLike 𝕜]
 
 open scoped Matrix.Norms.L2Operator
 
+/-- Matrices over `𝕜` in the L2 operator norm are a normed algebra over `𝕜`, and Mathlib
+registers the *real* restriction of that only for `𝕜 = ℂ`.  `ContinuousAt.cfc` needs it over
+`ℝ`, the scalar field of the Hermitian calculus, so supply it here — built on the canonical
+`Algebra ℝ (Matrix …)` so that the matrix (isometric) CFC instances still apply — and keep it
+local, so no second real algebra structure on matrices escapes this section. -/
+noncomputable local instance instRealNormedAlgebraMatrix :
+    NormedAlgebra ℝ (Matrix (Fin n) (Fin n) 𝕜) :=
+  { (inferInstance : Algebra ℝ (Matrix (Fin n) (Fin n) 𝕜)) with
+    norm_smul_le := fun r x => by
+      have hx : r • x = (r : 𝕜) • x := by
+        ext i j
+        simp [RCLike.real_smul_eq_coe_smul (K := 𝕜)]
+      rw [hx, norm_smul, RCLike.norm_ofReal, Real.norm_eq_abs] }
+
 /-- A fixed continuous real spectral function is continuous on Hermitian matrices. -/
 theorem continuous_cfc_on_hermitian (h : ℝ → ℝ) (hh : Continuous h) :
     Continuous fun A : {A : Matrix (Fin n) (Fin n) 𝕜 // A.IsHermitian} => cfc h A.1 := by
@@ -155,13 +176,18 @@ theorem continuous_cfc_on_hermitian (h : ℝ → ℝ) (hh : Continuous h) :
       in 𝓝 A, ‖B.1‖ < ‖A.1‖ + 1 :=
     (continuous_subtype_val.norm.continuousAt).eventually
       (gt_mem_nhds (lt_add_one _))
-  apply ContinuousAt.cfc (isCompact_closedBall (0 : ℝ) (‖A.1‖ + 1)) h
-    continuous_subtype_val.continuousAt
-  · filter_upwards [hnorm] with B hB
-    exact (spectrum.subset_closedBall_norm B.1).trans
-      (Metric.closedBall_subset_closedBall hB.le)
+  refine ContinuousAt.cfc (𝕜 := ℝ) (p := IsSelfAdjoint)
+    (a := fun B : {B : Matrix (Fin n) (Fin n) 𝕜 // B.IsHermitian} => B.1)
+    (isCompact_closedBall (0 : ℝ)
+      ((‖A.1‖ + 1) * ‖(1 : Matrix (Fin n) (Fin n) 𝕜)‖)) h
+    continuous_subtype_val.continuousAt ?_ ?_ hh.continuousOn
+  · -- `‖1‖ = 1` needs `NormOneClass`, which fails on the zero matrix algebra `n = 0`;
+    -- the `‖a‖ * ‖1‖` bound holds unconditionally.
+    filter_upwards [hnorm] with B hB
+    refine (spectrum.subset_closedBall_norm_mul B.1).trans
+      (Metric.closedBall_subset_closedBall ?_)
+    exact mul_le_mul_of_nonneg_right hB.le (norm_nonneg _)
   · exact Filter.Eventually.of_forall fun B => B.2.isSelfAdjoint
-  · exact hh.continuousOn
 
 /-- A continuous real spectral function of a measurable Hermitian matrix is measurable. -/
 theorem measurable_cfc_of_hermitian {Ω : Type*} [MeasurableSpace Ω]
@@ -169,7 +195,7 @@ theorem measurable_cfc_of_hermitian {Ω : Type*} [MeasurableSpace Ω]
     {Bm : Ω → Matrix (Fin n) (Fin n) 𝕜} (hBmeas : Measurable Bm)
     (hherm : ∀ w, (Bm w).IsHermitian) :
     Measurable fun w => cfc h (Bm w) :=
-  (continuous_cfc_on_hermitian h hh).measurable.comp (hBmeas.subtype_mk hherm)
+  (continuous_cfc_on_hermitian h hh).measurable.comp (hBmeas.subtype_mk (h := hherm))
 
 /-- At a fixed finite Hermitian matrix, convergence at its eigenvalues suffices for CFC
 convergence. The scalar functions need not be continuous on the whole real line. -/

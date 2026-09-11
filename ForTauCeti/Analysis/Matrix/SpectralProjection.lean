@@ -46,11 +46,13 @@ theorem isIdempotentElem_spectralProjectionIci (c : ℝ)
   let D : Matrix (Fin n) (Fin n) 𝕜 :=
     Matrix.diagonal (fun i => (f (hA.eigenvalues i) : 𝕜))
   have hd : D * D = D := by
-    rw [D, Matrix.diagonal_mul_diagonal]
+    simp only [D, Matrix.diagonal_mul_diagonal]
     congr 1
     funext i
     by_cases hi : c ≤ hA.eigenvalues i <;> simp [f, hi]
   have h := congrArg (Unitary.conjStarAlgAut 𝕜 _ hA.eigenvectorUnitary) hd
+  change spectralProjectionIci c A hA * spectralProjectionIci c A hA
+      = spectralProjectionIci c A hA
   simpa only [map_mul, spectralProjectionIci, hA.cfc_eq, Matrix.IsHermitian.cfc,
     Function.comp_def, D, f] using h
 
@@ -84,7 +86,9 @@ theorem spectralProjectionIci_mulVec_of_eigenvalue_eq (c : ℝ)
   funext j
   have h := congrArg (fun M : Matrix (Fin n) (Fin n) 𝕜 => M j i)
     (spectralProjectionIci_mul_eigenvectorUnitary c hA)
-  simpa [Matrix.mul_diagonal, Matrix.mul_apply, Matrix.mulVec, dotProduct, hi] using h
+  rw [Matrix.mul_diagonal] at h
+  simp only [hi, le_refl, ite_true, mul_one] at h
+  simpa [Matrix.mulVec, dotProduct, Matrix.mul_apply] using h
 
 private def thresholdRamp (c : ℝ) (m : ℕ) (x : ℝ) : ℝ :=
   max 0 (min 1 (1 + ((m : ℝ) + 1) * (x - c)))
@@ -101,8 +105,8 @@ private theorem thresholdRamp_eventually_eq (c x : ℝ) :
   · apply Filter.Eventually.of_forall
     intro m
     have hprod : 0 ≤ ((m : ℝ) + 1) * (x - c) := by positivity
-    simp [thresholdRamp, hx, min_eq_left (by linarith :
-      (1 : ℝ) ≤ 1 + ((m : ℝ) + 1) * (x - c))]
+    have hmin : min 1 (1 + ((m : ℝ) + 1) * (x - c)) = 1 := min_eq_left (by linarith)
+    simp [thresholdRamp, hx, hmin]
   · have hpos : 0 < c - x := sub_pos.mpr (lt_of_not_ge hx)
     obtain ⟨N, hN⟩ := exists_nat_ge (1 / (c - x))
     have hN' : 1 ≤ (N : ℝ) * (c - x) := (div_le_iff₀ hpos).mp hN
@@ -111,8 +115,10 @@ private theorem thresholdRamp_eventually_eq (c x : ℝ) :
     have hprod : 1 ≤ ((m : ℝ) + 1) * (c - x) :=
       hN'.trans (mul_le_mul_of_nonneg_right (by linarith) hpos.le)
     have hneg : 1 + ((m : ℝ) + 1) * (x - c) ≤ 0 := by nlinarith
-    simp [thresholdRamp, hx, min_eq_right (hneg.trans (by norm_num)),
-      max_eq_left hneg]
+    have hmin : min 1 (1 + ((m : ℝ) + 1) * (x - c)) = 1 + ((m : ℝ) + 1) * (x - c) :=
+      min_eq_right (by linarith)
+    have hmax : max 0 (1 + ((m : ℝ) + 1) * (x - c)) = 0 := max_eq_left hneg
+    simp [thresholdRamp, hx, hmin, hmax]
 
 /-- A fixed-threshold projector is Borel measurable on finite Hermitian matrices. -/
 theorem measurable_spectralProjectionIci (c : ℝ) :
@@ -124,7 +130,7 @@ theorem measurable_spectralProjectionIci (c : ℝ) :
   intro A
   apply tendsto_cfc_of_pointwise A.2
   intro x _
-  exact tendsto_const_nhds.congr' (thresholdRamp_eventually_eq c x).symm
+  exact tendsto_const_nhds.congr' (Filter.EventuallyEq.symm (thresholdRamp_eventually_eq c x))
 
 /-- A measurable Hermitian random matrix has a measurable fixed-threshold projector. -/
 theorem measurable_spectralProjectionIci_of_hermitian {Ω : Type*}
@@ -132,6 +138,6 @@ theorem measurable_spectralProjectionIci_of_hermitian {Ω : Type*}
     {Bm : Ω → Matrix (Fin n) (Fin n) 𝕜} (hBmeas : Measurable Bm)
     (hherm : ∀ w, (Bm w).IsHermitian) :
     Measurable fun w => spectralProjectionIci c (Bm w) (hherm w) :=
-  (measurable_spectralProjectionIci c).comp (hBmeas.subtype_mk hherm)
+  (measurable_spectralProjectionIci c).comp (hBmeas.subtype_mk (h := hherm))
 
 end TauCeti.Matrix

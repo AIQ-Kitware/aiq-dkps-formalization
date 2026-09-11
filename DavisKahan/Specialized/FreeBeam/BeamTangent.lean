@@ -420,7 +420,7 @@ theorem beamPerturbed_mem_resolventSet_of_neg (ε : ℝ) (hε : 0 ≤ ε)
         ≤ ‖(beamPerturbed ε) x - (lam : ℂ) • (x : BeamL2)‖ * ‖(x : BeamL2)‖ := by
       nlinarith [hform, hCS]
     refine le_of_mul_le_mul_right ?_ hxpos
-    nlinarith [hsq]
+    exact le_trans (le_of_eq (by ring)) hsq
 
 /-- The perturbed beam has no spectral mass below zero. -/
 theorem beamPerturbed_specProjection_Iio_zero (ε : ℝ) (hε : 0 ≤ ε) :
