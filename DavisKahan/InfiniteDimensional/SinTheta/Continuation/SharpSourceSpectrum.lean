@@ -125,7 +125,7 @@ theorem _root_.TauCeti.DavisKahan.Foundation.FiniteGapConfiguration.exists_opera
     {d : ℝ} (hfinite : FiniteGapConfiguration A U d) :
     ∃ left right : ℝ, left ≤ right ∧
       ∀ t : ℝ, t ∈ Set.Icc (0 : ℝ) 1 →
-      ∀ hpath : ContinuousLinearMap.IsSymmetric (operatorPath A K t),
+      ∀ hpath : (operatorPath A K t).IsSymmetric,
         realSpectrum
             (subspaceBlockOperatorData (operatorPath A K t) U hpath).A0 ⊆
           Set.Icc left right ∧

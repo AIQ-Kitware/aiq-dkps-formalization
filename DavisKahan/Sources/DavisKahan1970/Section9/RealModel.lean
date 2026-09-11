@@ -166,8 +166,7 @@ def real_freeBeam_finiteDataCertificate (ε : ℝ) (hε : 0 < ε) (hε100 : ε <
 /-- The real multiplication perturbation and orthonormal affine trial plane satisfy the
 source hypotheses used by the finite Section 9 calculation. -/
 theorem real_freeBeam_trial_and_perturbation (ε : ℝ) (hε : 0 < ε) :
-    ContinuousLinearMap.IsSymmetric
-        (DavisKahan.FreeBeam.Model.Real.beamPerturbation ε) ∧
+    (DavisKahan.FreeBeam.Model.Real.beamPerturbation ε).IsSymmetric ∧
       ‖DavisKahan.FreeBeam.Model.Real.beamPerturbation ε‖ ≤ ε ∧
       (‖DavisKahan.FreeBeam.Model.Real.centeredAffineLp trialOne‖ ^ 2 = 1 ∧
         ‖DavisKahan.FreeBeam.Model.Real.centeredAffineLp trialTwo‖ ^ 2 = 1 ∧

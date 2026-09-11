@@ -165,7 +165,7 @@ theorem theorem8_2_perturbationHalfGap_complex
     show ⟪-(K x), y⟫_ℂ = ⟪x, -(K y)⟫_ℂ
     have h : ⟪K x, y⟫_ℂ = ⟪x, K y⟫_ℂ := hK x y
     rw [inner_neg_left, inner_neg_right, h]
-  have hBself : ∀ t : ℝ, ContinuousLinearMap.IsSymmetric (A0 + t • E) := fun t =>
+  have hBself : ∀ t : ℝ, (A0 + t • E).IsSymmetric := fun t =>
     isSelfAdjointOperator_path hA0 hE t
   have hB0 : A0 + (0 : ℝ) • E = A0 := by simp
   have hB1 : A0 + (1 : ℝ) • E = A := by
@@ -387,7 +387,7 @@ theorem theorem8_2_residualHalfGap_complex
   obtain ⟨K', hK'sa, hK'col, hK'norm⟩ :=
     TauCeti.exists_selfAdjoint_completion_eq_norm_restriction K
       (ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mpr hK) P
-  have hK'sym : K.IsSymmetric' :=
+  have hK'sym : K'.IsSymmetric :=
     ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mp hK'sa
   -- `‖H'‖ = ‖R‖ < δ/2`
   have hK'small : ‖K'‖ < delta / 2 := by rw [hK'norm]; exact hRsmall
@@ -401,7 +401,7 @@ theorem theorem8_2_residualHalfGap_complex
   set A' : H →L[ℂ] H := A + K - K' with hA'def
   -- (1) the perturbed operator is literally unchanged
   have htotal : A' + K' = A + K := by rw [hA'def]; abel
-  have hA'sym : A.IsSymmetric' := by
+  have hA'sym : A'.IsSymmetric := by
     intro x y
     have hAxy : ⟪A x, y⟫_ℂ = ⟪x, A y⟫_ℂ := hA x y
     have hKxy : ⟪K x, y⟫_ℂ = ⟪x, K y⟫_ℂ := hK x y
@@ -419,7 +419,7 @@ theorem theorem8_2_residualHalfGap_complex
     intro x hx
     rw [hA'P x hx]
     exact hPred.1 x hx
-  have hA'red : A.Reduces' P := ContinuousLinearMap.IsSymmetric.reduces_of_invariant hA'sym hA'inv
+  have hA'red : A'.Reduces P := ContinuousLinearMap.IsSymmetric.reduces_of_invariant hA'sym hA'inv
   -- the printed placement of `A₀` transfers, because `A'` and `A` agree on `P`
   have hA'spec : SpectrumIn A' P (Set.Icc (beta - delta / 2) (alpha + delta / 2)) :=
     spectrumIn_of_eqOn (fun x hx => (hA'P x hx).symm) hP

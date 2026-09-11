@@ -280,7 +280,7 @@ theorem theorem8_2_sinTwoTheta_perturbation_complex
     (hQperp : Foundation.SpectrumIn (A + K) Qᗮ (gapExterior beta alpha delta))
     (hPred : A.Reduces P) :
     delta * ‖DavisKahanExt.sinTwoAngleOperator Q P‖ ≤ 2 * ‖K‖ := by
-  have hA0 : ContinuousLinearMap.IsSymmetric (A + K) := hA.add hK
+  have hA0 : (A + K).IsSymmetric := hA.add hK
   have hQred : ContinuousLinearMap.Reduces (A + K) Q := ⟨hQ.invariant, hQperp.invariant⟩
   have hfinite : Foundation.FiniteGapConfiguration (A + K) Q delta := ⟨beta, alpha, hab, hQ, hQperp⟩
   have h := sinTwoTheta_perturbation (A := A + K) (B := A) hA0 hQred hPred hdelta hfinite
@@ -310,7 +310,7 @@ theorem theorem8_2_sinTwoTheta_residual_complex
     delta * ‖DavisKahanExt.sinTwoAngleOperator Q P‖ ≤
       2 * ‖residual (A + K) P.subtypeL (compressOperator P A)‖ := by
   classical
-  have hA0 : ContinuousLinearMap.IsSymmetric (A + K) := hA.add hK
+  have hA0 : (A + K).IsSymmetric := hA.add hK
   have hQred : ContinuousLinearMap.Reduces (A + K) Q := ⟨hQ.invariant, hQperp.invariant⟩
   have hfinite : Foundation.FiniteGapConfiguration (A + K) Q delta := ⟨beta, alpha, hab, hQ, hQperp⟩
   have hrange : LinearMap.range (P.subtypeL : P →L[ℂ] H).toLinearMap = P := by
@@ -319,7 +319,7 @@ theorem theorem8_2_sinTwoTheta_residual_complex
   have : (LinearMap.range (P.subtypeL : P →L[ℂ] H).toLinearMap).HasOrthogonalProjection := by
     rw [hrange]; infer_instance
   have hX : IsometricEmbedding (P.subtypeL : P →L[ℂ] H) := fun x => rfl
-  have hM : ContinuousLinearMap.IsSymmetric (compressOperator P A) := by
+  have hM : (compressOperator P A).IsSymmetric := by
     intro x y
     show ⟪compressOperator P A x, y⟫_ℂ = ⟪x, compressOperator P A y⟫_ℂ
     have := hA (x : H) (y : H)

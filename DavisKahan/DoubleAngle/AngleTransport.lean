@@ -54,7 +54,6 @@ namespace DavisKahan
 
 open TauCeti.DavisKahan.ExactSinTheta
 
-open TauCeti.DavisKahanExt
 
 universe v
 

@@ -33,7 +33,6 @@ noncomputable section
 
 universe v
 
-open TauCeti.DavisKahanExt
 
 section Complex
 

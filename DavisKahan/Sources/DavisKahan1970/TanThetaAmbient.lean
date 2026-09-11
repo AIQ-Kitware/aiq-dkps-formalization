@@ -106,7 +106,6 @@ which the printed right-hand side can be finite.
 namespace TauCeti
 namespace DavisKahan1970
 
-open TauCeti.DavisKahanExt
 open TauCeti.DavisKahan
 open TauCeti.DavisKahan.ExactSinTheta
 open TauCeti.DavisKahan.TanTheta

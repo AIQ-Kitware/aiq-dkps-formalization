@@ -65,7 +65,7 @@ omit [CompleteSpace Hc] in
 /-- A real multiple of a self-adjoint operator is self-adjoint. -/
 theorem isSelfAdjointOperator_realSmul {V : Hc →L[ℂ] Hc}
     (hV : V.IsSymmetric) (c : ℝ) :
-    ContinuousLinearMap.IsSymmetric ((c : ℂ) • V) := by
+    ((c : ℂ) • V).IsSymmetric := by
   intro x y
   show ⟪(c : ℂ) • V x, y⟫_ℂ = ⟪x, (c : ℂ) • V y⟫_ℂ
   rw [inner_smul_left, inner_smul_right, Complex.conj_ofReal]
@@ -270,7 +270,7 @@ theorem theorem8_2_perturbationHalfGap_unbounded_complex
       rw [pathOperator, pathOperator, addBounded_addBounded]
       congr 1
       module
-    have hsa : ContinuousLinearMap.IsSymmetric (((s - t : ℝ)) • Hop) :=
+    have hsa : (((s - t : ℝ)) • Hop).IsSymmetric :=
       isSelfAdjointOperator_realSmul hHop _
     have hband := DavisKahan.subspaceGap_bandSubspace_le
       (isSelfAdjoint_pathOperator hA hHop s) (isSelfAdjoint_pathOperator hA hHop t)
@@ -370,7 +370,7 @@ theorem theorem8_2_perturbationHalfGap_unbounded_complex
   have hboot : ∀ t : ℝ, t ∈ Set.Icc (0 : ℝ) 1 → f t ≤ Real.sqrt 2 / 2 →
       f t < Real.sqrt 2 / 2 := by
     intro t ht hclose
-    have hsa : ContinuousLinearMap.IsSymmetric (((t : ℝ)) • Hop) :=
+    have hsa : (((t : ℝ)) • Hop).IsSymmetric :=
       isSelfAdjointOperator_realSmul hHop _
     have hlink : TauCeti.LinearPMap.addBounded A Hop
         = TauCeti.LinearPMap.addBounded (pathOperator A Hop t) (((t : ℝ)) • Hop) :=
@@ -522,7 +522,7 @@ theorem theorem8_2_residualHalfGap_unbounded_complex
   obtain ⟨K', hK'sa, hK'col, hK'norm⟩ :=
     TauCeti.exists_selfAdjoint_completion_eq_norm_restriction Hop
       (ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mpr hHop) P
-  have hK'sym : K.IsSymmetric' :=
+  have hK'sym : K'.IsSymmetric :=
     ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mp hK'sa
   have hK'small : ‖K'‖ < delta / 2 := by rw [hK'norm]; exact hRsmall
   have hK'P : ∀ x ∈ P, K' x = Hop x := by
@@ -657,7 +657,7 @@ theorem theorem8_2_perturbationHalfGap_unbounded_real
     DavisKahan.Foundation.RealComplexification.separableSpace_realComplexification
   have hAC : IsSelfAdjoint (TauCeti.LinearPMap.complexifyReal A) :=
     TauCeti.LinearPMap.isSelfAdjoint_complexifyReal hA
-  have hHC : ContinuousLinearMap.IsSymmetric (complexify Hop) :=
+  have hHC : (complexify Hop).IsSymmetric :=
     (TauCeti.RealComplexification.complexify_isSymmetric_iff Hop).mpr hHop
   have hPredC : TauCeti.LinearPMap.ReducesSubspace (TauCeti.LinearPMap.complexifyReal A)
       (DavisKahan.Foundation.RealComplexification.complexifySubmodule P) :=
@@ -745,7 +745,7 @@ theorem theorem8_2_residualHalfGap_unbounded_real
     DavisKahan.Foundation.RealComplexification.separableSpace_realComplexification
   have hAC : IsSelfAdjoint (TauCeti.LinearPMap.complexifyReal A) :=
     TauCeti.LinearPMap.isSelfAdjoint_complexifyReal hA
-  have hHC : ContinuousLinearMap.IsSymmetric (complexify Hop) :=
+  have hHC : (complexify Hop).IsSymmetric :=
     (TauCeti.RealComplexification.complexify_isSymmetric_iff Hop).mpr hHop
   have hPredC : TauCeti.LinearPMap.ReducesSubspace (TauCeti.LinearPMap.complexifyReal A)
       (DavisKahan.Foundation.RealComplexification.complexifySubmodule P) :=

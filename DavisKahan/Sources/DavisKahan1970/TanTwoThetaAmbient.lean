@@ -1307,7 +1307,7 @@ theorem tanTwoTheta_directed_boundedResidual_blockRepresentative_kyFan_complex
     ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mp hA
   have hHsym : H.IsSymmetric :=
     ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mp hH
-  have hAHsym : ContinuousLinearMap.IsSymmetric (A + H) := by
+  have hAHsym : (A + H).IsSymmetric := by
     have h := hAsym.add hHsym
     rwa [← ContinuousLinearMap.toLinearMap_add] at h
   have hUreduces : A.Reduces U := ContinuousLinearMap.IsSymmetric.reduces_of_invariant hAsym hAU

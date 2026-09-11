@@ -224,7 +224,7 @@ lemma with a rewrite, and none is a statement about Theorem 8.2. -/
 /-- Self-adjointness in the `IsSelfAdjointOperator` spelling survives
 complexification. -/
 private theorem complexify_isSelfAdjointOperator {T : E →L[ℝ] E}
-    (hT : T.IsSymmetric) : ContinuousLinearMap.IsSymmetric (complexify T) :=
+    (hT : T.IsSymmetric) : (complexify T).IsSymmetric :=
   ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mp
     ((complexify_isSelfAdjoint_iff T).2
       (ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mpr hT))

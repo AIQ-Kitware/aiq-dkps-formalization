@@ -85,7 +85,7 @@ theorem operatorPath_subspaceBlockOperatorData_A0_eq
     (A K : Hspace →L[ℂ] Hspace)
     (U : Submodule ℂ Hspace) [U.HasOrthogonalProjection]
     (_hU : A.Reduces U) (hK : Submodule.IsOffDiagonal U K)
-    (t : ℝ) (hpath : ContinuousLinearMap.IsSymmetric (operatorPath A K t)) :
+    (t : ℝ) (hpath : (operatorPath A K t).IsSymmetric) :
     (subspaceBlockOperatorData (operatorPath A K t) U hpath).A0 =
       compressOperator U A := by
   have hKt : Submodule.IsOffDiagonal U ((t : ℂ) • K) :=
@@ -99,7 +99,7 @@ theorem operatorPath_subspaceBlockOperatorData_A1_eq
     (A K : Hspace →L[ℂ] Hspace)
     (U : Submodule ℂ Hspace) [U.HasOrthogonalProjection]
     (_hU : A.Reduces U) (hK : Submodule.IsOffDiagonal U K)
-    (t : ℝ) (hpath : ContinuousLinearMap.IsSymmetric (operatorPath A K t)) :
+    (t : ℝ) (hpath : (operatorPath A K t).IsSymmetric) :
     (subspaceBlockOperatorData (operatorPath A K t) U hpath).A1 =
       compressOperator Uᗮ A := by
   have hKt : Submodule.IsOffDiagonal U ((t : ℂ) • K) :=
@@ -114,7 +114,7 @@ theorem operatorPath_subspaceBlockOperatorData_B01_eq
     (A K : Hspace →L[ℂ] Hspace)
     (U : Submodule ℂ Hspace) [U.HasOrthogonalProjection]
     (hU : A.Reduces U)
-    (t : ℝ) (hpath : ContinuousLinearMap.IsSymmetric (operatorPath A K t)) :
+    (t : ℝ) (hpath : (operatorPath A K t).IsSymmetric) :
     (subspaceBlockOperatorData (operatorPath A K t) U hpath).B01 =
       U.orthogonalProjectionOnto ∘L ((t : ℂ) • K) ∘L Uᗮ.subtypeL := by
   unfold operatorPath
@@ -127,7 +127,7 @@ theorem operatorPath_subspaceBlockOperatorData_B10_eq
     (A K : Hspace →L[ℂ] Hspace)
     (U : Submodule ℂ Hspace) [U.HasOrthogonalProjection]
     (hU : A.Reduces U)
-    (t : ℝ) (hpath : ContinuousLinearMap.IsSymmetric (operatorPath A K t)) :
+    (t : ℝ) (hpath : (operatorPath A K t).IsSymmetric) :
     (subspaceBlockOperatorData (operatorPath A K t) U hpath).B10 =
       Uᗮ.orthogonalProjectionOnto ∘L ((t : ℂ) • K) ∘L U.subtypeL := by
   unfold operatorPath
@@ -140,7 +140,7 @@ theorem norm_operatorPath_subspaceBlockOperatorData_B01_le
     (U : Submodule ℂ Hspace) [U.HasOrthogonalProjection]
     (hU : A.Reduces U)
     (t : ℝ) (ht : t ∈ Set.Icc (0 : ℝ) 1)
-    (hpath : ContinuousLinearMap.IsSymmetric (operatorPath A K t)) :
+    (hpath : (operatorPath A K t).IsSymmetric) :
     ‖(subspaceBlockOperatorData (operatorPath A K t) U hpath).B01‖ ≤
       t * ‖K‖ := by
   rw [operatorPath_subspaceBlockOperatorData_B01_eq A K U hU t hpath]
@@ -158,7 +158,7 @@ theorem norm_operatorPath_subspaceBlockOperatorData_B10_le
     (U : Submodule ℂ Hspace) [U.HasOrthogonalProjection]
     (hU : A.Reduces U)
     (t : ℝ) (ht : t ∈ Set.Icc (0 : ℝ) 1)
-    (hpath : ContinuousLinearMap.IsSymmetric (operatorPath A K t)) :
+    (hpath : (operatorPath A K t).IsSymmetric) :
     ‖(subspaceBlockOperatorData (operatorPath A K t) U hpath).B10‖ ≤
       t * ‖K‖ := by
   rw [operatorPath_subspaceBlockOperatorData_B10_eq A K U hU t hpath]

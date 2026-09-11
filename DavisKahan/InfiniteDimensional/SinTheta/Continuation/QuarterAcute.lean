@@ -56,7 +56,7 @@ theorem norm_selectedSpectralProjectionPath_sub_le_of_identification
     (delta : ℝ) (hdelta : 0 < delta)
     (s : Set ℝ) (hs : MeasurableSet s)
     (hself : ∀ t ∈ Set.Icc (0 : ℝ) 1,
-      ContinuousLinearMap.IsSymmetric (operatorPath A K t))
+      (operatorPath A K t).IsSymmetric)
     (hsep : ∀ t ∈ Set.Icc (0 : ℝ) 1, ∀ x : unitInterval,
       ∀ lam ∈ realSpectrum (operatorPath A K t),
         delta ≤ ‖Γ.path x - (lam : ℂ)‖)
@@ -82,7 +82,7 @@ theorem subspaceGap_selectedSpectralSubspacePath_le_of_identification
     (delta : ℝ) (hdelta : 0 < delta)
     (s : Set ℝ) (hs : MeasurableSet s)
     (hself : ∀ t ∈ Set.Icc (0 : ℝ) 1,
-      ContinuousLinearMap.IsSymmetric (operatorPath A K t))
+      (operatorPath A K t).IsSymmetric)
     (hsep : ∀ t ∈ Set.Icc (0 : ℝ) 1, ∀ x : unitInterval,
       ∀ lam ∈ realSpectrum (operatorPath A K t),
         delta ≤ ‖Γ.path x - (lam : ℂ)‖)
@@ -111,7 +111,7 @@ theorem selectedSpectralSubspacePath_endpoints_isQuarterAcute_of_contour_bound
     (delta : ℝ) (hdelta : 0 < delta)
     (s : Set ℝ) (hs : MeasurableSet s)
     (hself : ∀ t ∈ Set.Icc (0 : ℝ) 1,
-      ContinuousLinearMap.IsSymmetric (operatorPath A K t))
+      (operatorPath A K t).IsSymmetric)
     (hsep : ∀ t ∈ Set.Icc (0 : ℝ) 1, ∀ x : unitInterval,
       ∀ lam ∈ realSpectrum (operatorPath A K t),
         delta ≤ ‖Γ.path x - (lam : ℂ)‖)
@@ -152,9 +152,9 @@ theorem boundedSelfAdjointSpectralSubspaces_endpoints_isQuarterAcute_of_contour_
     (delta : ℝ) (hdelta : 0 < delta)
     (s : Set ℝ) (hs : MeasurableSet s)
     (hA : A.IsSymmetric)
-    (hAK : ContinuousLinearMap.IsSymmetric (A + K))
+    (hAK : (A + K).IsSymmetric)
     (hself : ∀ t ∈ Set.Icc (0 : ℝ) 1,
-      ContinuousLinearMap.IsSymmetric (operatorPath A K t))
+      (operatorPath A K t).IsSymmetric)
     (hsep : ∀ t ∈ Set.Icc (0 : ℝ) 1, ∀ x : unitInterval,
       ∀ lam ∈ realSpectrum (operatorPath A K t),
         delta ≤ ‖Γ.path x - (lam : ℂ)‖)

@@ -136,7 +136,7 @@ theorem quarterAcuteAngularCoordinate_sharp_bound_of_reverse_spectral_halfLines
     (U.isComplete_coe_of_hasOrthogonalProjection).completeSpace_coe
   let : CompleteSpace (Uᗮ : Submodule ℂ E) :=
     (Uᗮ.isComplete_coe_of_hasOrthogonalProjection).completeSpace_coe
-  have hAH : ContinuousLinearMap.IsSymmetric (A + H) := by
+  have hAH : (A + H).IsSymmetric := by
     have h := hA.add hH
     rwa [← ContinuousLinearMap.toLinearMap_add] at h
   let B : BlockOperatorData (𝕜 := ℂ) (E0 := U) (E1 := Uᗮ) :=

@@ -56,7 +56,6 @@ Pythagorean operator identity `tan²Θ (1 − sin²Θ) = sin²Θ`.
 namespace TauCeti
 namespace DavisKahan1970
 
-open TauCeti.DavisKahanExt
 open TauCeti.DavisKahan
 open TauCeti.ApproximationNumber
 

@@ -81,7 +81,7 @@ compression of `A` when `V` is off-diagonal. -/
 theorem subspaceBlockOperatorData_A0_add_offDiagonal
     (A V : H →L[ℂ] H) (U : Submodule ℂ H)
     [U.HasOrthogonalProjection]
-    (hAV : ContinuousLinearMap.IsSymmetric (A + V))
+    (hAV : (A + V).IsSymmetric)
     (hoff : Submodule.IsOffDiagonal U V) :
     (subspaceBlockOperatorData (A + V) U hAV).A0 =
       compressOperator U A := by
@@ -100,7 +100,7 @@ compression of `A` when `V` is off-diagonal. -/
 theorem subspaceBlockOperatorData_A1_add_offDiagonal
     (A V : H →L[ℂ] H) (U : Submodule ℂ H)
     [U.HasOrthogonalProjection]
-    (hAV : ContinuousLinearMap.IsSymmetric (A + V))
+    (hAV : (A + V).IsSymmetric)
     (hoff : Submodule.IsOffDiagonal U V) :
     (subspaceBlockOperatorData (A + V) U hAV).A1 =
       compressOperator Uᗮ A := by
@@ -119,7 +119,7 @@ reduces `A`. -/
 theorem subspaceBlockOperatorData_B01_add_of_reduces
     (A V : H →L[ℂ] H) (U : Submodule ℂ H)
     [U.HasOrthogonalProjection]
-    (hAV : ContinuousLinearMap.IsSymmetric (A + V))
+    (hAV : (A + V).IsSymmetric)
     (hU : A.Reduces U) :
     (subspaceBlockOperatorData (A + V) U hAV).B01 =
       U.orthogonalProjectionOnto ∘L V ∘L Uᗮ.subtypeL := by
@@ -141,7 +141,7 @@ reduces `A`. -/
 theorem subspaceBlockOperatorData_B10_add_of_reduces
     (A V : H →L[ℂ] H) (U : Submodule ℂ H)
     [U.HasOrthogonalProjection]
-    (hAV : ContinuousLinearMap.IsSymmetric (A + V))
+    (hAV : (A + V).IsSymmetric)
     (hU : A.Reduces U) :
     (subspaceBlockOperatorData (A + V) U hAV).B10 =
       Uᗮ.orthogonalProjectionOnto ∘L V ∘L U.subtypeL := by

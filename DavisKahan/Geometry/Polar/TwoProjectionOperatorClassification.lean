@@ -157,7 +157,7 @@ private theorem ambient_apply_generic
 theorem ambient_intertwines_left
     (D : TwoProjectionOperatorEquivalence U V U' V') :
     (D.ambient : H →L[ℂ] H') ∘L U.starProjection =
-      U.starProjection' ∘L (D.ambient : H →L[ℂ] H') := by
+      U'.starProjection ∘L (D.ambient : H →L[ℂ] H') := by
   apply ContinuousLinearMap.ext
   intro x
   let T := halmosTrivialPart U V
@@ -197,7 +197,7 @@ theorem ambient_intertwines_left
 theorem ambient_intertwines_right
     (D : TwoProjectionOperatorEquivalence U V U' V') :
     (D.ambient : H →L[ℂ] H') ∘L V.starProjection =
-      V.starProjection' ∘L (D.ambient : H →L[ℂ] H') := by
+      V'.starProjection ∘L (D.ambient : H →L[ℂ] H') := by
   apply ContinuousLinearMap.ext
   intro x
   let T := halmosTrivialPart U V
@@ -245,7 +245,7 @@ theorem map_left
     exact U'.starProjection_eq_self_iff.mp h.symm
   · intro y hy
     refine ⟨D.ambient.symm y, ?_, D.ambient.apply_symm_apply y⟩
-    have hpy : U.starProjection' y = y := U'.starProjection_eq_self_iff.mpr hy
+    have hpy : U'.starProjection y = y := U'.starProjection_eq_self_iff.mpr hy
     have h := DFunLike.congr_fun D.ambient_intertwines_left (D.ambient.symm y)
     simp only [ContinuousLinearMap.comp_apply, ContinuousLinearEquiv.coe_coe,
       LinearIsometryEquiv.coe_coe, LinearIsometryEquiv.apply_symm_apply, hpy] at h
@@ -266,7 +266,7 @@ theorem map_right
     exact V'.starProjection_eq_self_iff.mp h.symm
   · intro y hy
     refine ⟨D.ambient.symm y, ?_, D.ambient.apply_symm_apply y⟩
-    have hpy : V.starProjection' y = y := V'.starProjection_eq_self_iff.mpr hy
+    have hpy : V'.starProjection y = y := V'.starProjection_eq_self_iff.mpr hy
     have h := DFunLike.congr_fun D.ambient_intertwines_right (D.ambient.symm y)
     simp only [ContinuousLinearMap.comp_apply, ContinuousLinearEquiv.coe_coe,
       LinearIsometryEquiv.coe_coe, LinearIsometryEquiv.apply_symm_apply, hpy] at h

@@ -676,7 +676,7 @@ theorem norm_shiftedOperator_le_of_spectrumIn_Icc
     intro y
     rw [← hScomm]
     exact U.starProjection_apply_mem _
-  have hsym : ContinuousLinearMap.IsSymmetric (S ∘L Pu) := by
+  have hsym : (S ∘L Pu).IsSymmetric := by
     intro u v
     show ⟪S (Pu u), v⟫_ℂ = ⟪u, S (Pu v)⟫_ℂ
     have h1 : ⟪S (Pu u), v⟫_ℂ = ⟪Pu u, S v⟫_ℂ :=

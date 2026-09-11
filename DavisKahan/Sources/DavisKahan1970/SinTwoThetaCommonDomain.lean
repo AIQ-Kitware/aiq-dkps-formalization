@@ -233,7 +233,7 @@ theorem sinTwoTheta_commonDomain_block_kyFan
   have hDsa' : IsSelfAdjoint ((-2 : K) • trialOffDiagonalPart P 0 R) := by
     rw [IsSelfAdjoint, star_smul, hSsa.star_eq]
     norm_num
-  have hDsa : ContinuousLinearMap.IsSymmetric ((-2 : K) • trialOffDiagonalPart P 0 R) :=
+  have hDsa : ((-2 : K) • trialOffDiagonalPart P 0 R).IsSymmetric :=
     ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mp hDsa'
   have hraw := sinTwoTheta_reflectionResidual_block_gauge_reducing_rclike
     hT hQ (KyFanDominantIdealFamily.kyFan (𝕜 := K) k hk)

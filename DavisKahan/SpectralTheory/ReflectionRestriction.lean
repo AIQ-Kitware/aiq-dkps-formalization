@@ -28,7 +28,6 @@ namespace TauCeti
 namespace DavisKahan
 
 
-open TauCeti.DavisKahanExt
 open TauCeti.DavisKahan
 
 universe u v
@@ -93,7 +92,7 @@ is self-adjoint. -/
 theorem reflectionPerturbation_isSelfAdjoint
     (V : Submodule 𝕜 H) [V.HasOrthogonalProjection]
     (E : H →L[𝕜] H) (hE : E.IsSymmetric) :
-    ContinuousLinearMap.IsSymmetric (reflectionPerturbation V E) := by
+    (reflectionPerturbation V E).IsSymmetric := by
   apply hE.sub
   exact ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mp
     (isSelfAdjoint_boundedUnitaryConjugate V.reflection

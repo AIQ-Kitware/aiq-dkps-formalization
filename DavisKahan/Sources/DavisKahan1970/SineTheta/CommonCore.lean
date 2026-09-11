@@ -36,7 +36,6 @@ variable {E F G : Type v}
   [NormedAddCommGroup F] [InnerProductSpace 𝕜 F] [CompleteSpace F]
   [NormedAddCommGroup G] [InnerProductSpace 𝕜 G] [CompleteSpace G]
 
-open TauCeti.DavisKahanExt
 open TauCeti.DavisKahan
 
 namespace PartialMap

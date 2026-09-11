@@ -449,7 +449,7 @@ theorem sinTwoTheta_ambient_unbounded_perturbedGap_symmetricNorming_rclike
     TauCeti.LinearPMap.addBounded_neg_cancel A Hop
   have hAH : IsSelfAdjoint (TauCeti.LinearPMap.addBounded A Hop) :=
     DavisKahan.addBounded_isSelfAdjoint A hA Hop hHop
-  have hnegHop : ContinuousLinearMap.IsSymmetric (-Hop) := by
+  have hnegHop : (-Hop).IsSymmetric := by
     intro x y
     simpa using congrArg Neg.neg (hHop x y)
   have hPred' : TauCeti.LinearPMap.ReducesSubspace

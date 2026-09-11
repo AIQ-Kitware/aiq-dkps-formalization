@@ -149,8 +149,7 @@ noncomputable instance reflectedSubspace_hasOrthogonalProjection
 theorem isSymmetric_reflectionConjugate
     {A : E →L[𝕜] E} (hA : A.IsSymmetric)
     (V : Submodule 𝕜 E) [V.HasOrthogonalProjection] :
-    ContinuousLinearMap.IsSymmetric
-      (V.reflectionOperator ∘L A ∘L V.reflectionOperator) := by
+    (V.reflectionOperator ∘L A ∘L V.reflectionOperator).IsSymmetric := by
   have hAsa : IsSelfAdjoint A :=
     ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mpr hA
   have hJsa : IsSelfAdjoint (V.reflectionOperator : E →L[𝕜] E) :=
@@ -879,8 +878,8 @@ theorem sinTwoTheta_reflectionDefect
       ‖reflectionDefect V A‖ := by
   let A' := V.reflectionOperator ∘L A ∘L V.reflectionOperator
   let U' := reflectedSubspace V U
-  have hA' : A.IsSymmetric' := isSymmetric_reflectionConjugate hA V
-  have hU' : A.Reduces' U' := reduces_reflectedSubspace hU
+  have hA' : A'.IsSymmetric := isSymmetric_reflectionConjugate hA V
+  have hU' : A'.Reduces U' := reduces_reflectedSubspace hU
   obtain ⟨l, r, l', r', hlr, hlr', hUU', hU'U⟩ :=
     finiteGap_mixedIntervalExterior V hfinite
   have hsin := sinTheta_symmetric hA hA' hU hU' hlr hlr' hd hUU' hU'U
@@ -978,8 +977,8 @@ theorem sinTwoTheta_generalSeparation
     d * ‖sinTwoAngleOperator U V‖ ≤ Real.pi * ‖B - A‖ := by
   let A' := V.reflectionOperator ∘L A ∘L V.reflectionOperator
   let U' := reflectedSubspace V U
-  have hA' : A.IsSymmetric' := isSymmetric_reflectionConjugate hA V
-  have hU' : A.Reduces' U' := reduces_reflectedSubspace hU
+  have hA' : A'.IsSymmetric := isSymmetric_reflectionConjugate hA V
+  have hU' : A'.Reduces U' := reduces_reflectedSubspace hU
   have hhybrid : HybridGap A A' U U' d :=
     internalGap_reflection_transport hgap
   have hsin := sinTheta_generalSeparation hA hA' hU hU' hd hhybrid

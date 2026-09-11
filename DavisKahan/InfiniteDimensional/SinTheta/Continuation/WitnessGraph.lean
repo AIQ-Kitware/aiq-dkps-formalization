@@ -65,7 +65,7 @@ theorem selectedSpectralSubspaces_isQuarterAcute_of_contour_bound
     IsQuarterAcute C.sourceSelectedSpectralSubspace
       C.targetSelectedSpectralSubspace := by
   let hself : ∀ t ∈ Set.Icc (0 : ℝ) 1,
-      ContinuousLinearMap.IsSymmetric (operatorPath A V t) :=
+      (operatorPath A V t).IsSymmetric :=
     fun t ht => (C.separating t ht).selfAdjoint
   let hs : MeasurableSet s := C.sourceSeparatingContour.measurable_selected
   have hidentify : ∀ t (ht : t ∈ Set.Icc (0 : ℝ) 1),

@@ -40,7 +40,6 @@ open DavisKahan
 open scoped InnerProductSpace BigOperators ENNReal
 open DavisKahan.ExactSinTheta
 -- `IsometricEmbedding` is re-exported here from the bounded-operator layer.
-open DavisKahanExt
 
 noncomputable section
 

@@ -708,7 +708,7 @@ theorem sourceCosine_apply_coe (x : U) :
   rfl
 
 /-- The source cosine is self-adjoint. -/
-theorem sourceCosine_selfAdjoint : ContinuousLinearMap.IsSymmetric (sourceCosine U V) := by
+theorem sourceCosine_selfAdjoint : (sourceCosine U V).IsSymmetric := by
   intro x y
   change ⟪ContinuousLinearMap.modulus (spectraCanonicalIntertwiner U V)
       (x : H), (y : H)⟫_ℂ =

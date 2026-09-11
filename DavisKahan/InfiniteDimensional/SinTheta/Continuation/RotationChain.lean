@@ -173,7 +173,7 @@ theorem exists_unitary_transport_fixedContourRieszOperator
     (Γ : PiecewiseC1ClosedContour) (A V : H →L[ℂ] H)
     (delta : ℝ) (hdelta : 0 < delta)
     (hself : ∀ t ∈ Set.Icc (0 : ℝ) 1,
-      ContinuousLinearMap.IsSymmetric (operatorPath A V t))
+      (operatorPath A V t).IsSymmetric)
     (hsep : ∀ t ∈ Set.Icc (0 : ℝ) 1, ∀ x : unitInterval,
       ∀ lam ∈ realSpectrum (operatorPath A V t),
         delta ≤ ‖Γ.path x - (lam : ℂ)‖)
