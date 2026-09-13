@@ -507,13 +507,44 @@ Davis--Kahan Proposition~4.4 is false as printed. It asserts that, for real
 Hilbert spaces with largest principal angle at most $\pi/3$, the direct
 rotation minimizes $\lVert I-V\rVert$ for every unitarily invariant norm
 \citep{davis1970rotation}. We obtain an explicit counterexample in
-$\mathbb{R}^4$ for the trace norm. With two principal angles $\pi/4$, the
-direct rotation has trace displacement $4\sqrt{2-\sqrt{2}}$, while an
-admissible orthogonal competitor has displacement $2\sqrt{2}$.
+$\mathbb{R}^4$ for the trace norm. With two principal angles equal to $\pi/4$,
+the direct rotation has trace displacement
+$4\sqrt{2-\sqrt{2}}$, while an admissible orthogonal competitor $W$ has
+displacement $2\sqrt{2}$.
 
-The witness also pinpoints the failure in the printed proof:
-Davis--Kahan equation~(4.3) would imply $2\sqrt{2}\geq4$. The subsequent
-blockwise estimate, where the $\pi/3$ bound enters, holds on this witness.
+The same witness identifies the failing step in the printed proof. Write
+$K=I-W$, and let $\Omega_1$ and $\Omega_2$ project onto the two orthogonal
+principal planes. Davis--Kahan equation~(4.3) asserts, in this case,
+
+$$
+  \lVert K\rVert_4
+  \geq
+  \lVert K\Omega_1\rVert_2+\lVert K\Omega_2\rVert_2,
+$$
+
+where the subscripts denote Ky Fan norms: $\lVert A\rVert_j$ is the sum of
+the $j$ largest singular values of $A$. The inference treats the orthogonal
+decomposition of the domain into principal planes as though the corresponding
+singular-value sums could be added. Orthogonality of
+$\Omega_1E$ and $\Omega_2E$, however, does not imply orthogonality of
+$K\Omega_1E$ and $K\Omega_2E$. When these image spaces overlap, the singular
+values of the two restricted operators need not combine to give those of
+$K$.
+
+That is exactly what happens in the counterexample:
+
+$$
+  \lVert K\rVert_4=2\sqrt{2},
+  \qquad
+  \lVert K\Omega_1\rVert_2
+  =
+  \lVert K\Omega_2\rVert_2
+  =2.
+$$
+
+Thus Davis--Kahan equation~(4.3) would require $2\sqrt{2}\geq4$. The subsequent blockwise
+estimate, where the $\pi/3$ hypothesis enters, holds on this witness; the
+failure occurs earlier, when the separate block estimates are combined.
 Moreover, the construction extends to every $0<\theta<\pi/2$, so no smaller
 positive angle bound repairs the proposition.
 
@@ -540,6 +571,7 @@ additive sine functional, exhibiting the same concentration mechanism without
 connecting it to Davis--Kahan Proposition~4.4 \citep{qiu2006grassmann}. Our
 literature search found no earlier correction or counterexample within the
 stated real $\theta_{\max}\leq\pi/3$ regime.
+
 
 \section{Formalization process}
 \label{sec:system}
