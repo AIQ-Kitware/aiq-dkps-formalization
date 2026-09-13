@@ -132,6 +132,10 @@ $(I-F_0F_0^*)E_0$.  The suffix $L$ on $\circ_L$ identifies composition in the
 continuous-linear-map API.  The notation \texttt{F0.adjoint} denotes the
 adjoint $F_0^*$.
 
+In Lean identifiers, \texttt{Mem} abbreviates \emph{membership}. Thus
+\texttt{N.Mem T} means that the operator $T$ belongs to the operator ideal, or
+equivalently to the domain on which $N$ has a finite gauge.
+
 Throughout these signatures, $\mathbb K$ is the scalar type and
 \texttt{RCLike} supplies the real-or-complex scalar structure used by the
 generic theorem.
@@ -361,8 +365,7 @@ omitting proof-only dependencies \citep{yanahama2026leanatlas}.
 \label{app:resources}
 
 To estimate the cost of the formalization effort, we maintained a resource
-accounting record.  The compact snapshot below has an accounting cutoff of
-13 August 2026.  Retained model turns and token quantities are incomplete
+accounting record.  Retained model turns and token quantities are incomplete
 measured lower bounds; price and serving-energy rows are estimates derived from
 those observations.  The energy estimate excludes training, embodied hardware,
 client devices, and network energy.
@@ -370,8 +373,7 @@ client devices, and network energy.
 \begin{table}[H]
 \centering
 \scriptsize
-\caption{Observed lower bounds and derived estimates at the 13 August 2026
-accounting cutoff.  These are not project totals.}
+\caption{Observed lower bounds and derived estimates. Not all LLM usage is tracked, thus it is important that these are read as lower bounds, and not project totals. Similarly we emphasize that energy use is modeled, and only gives an order of magnitude estimate.}
 \begin{tabularx}{\linewidth}{@{}p{0.28\linewidth}p{0.17\linewidth}>{\raggedright\arraybackslash}X@{}}
 \toprule
 Quantity & Lower bound / estimate & Basis / interpretation \\
@@ -384,8 +386,7 @@ Quantity & Lower bound / estimate & Basis / interpretation \\
 \begin{table}[H]
 \centering
 \scriptsize
-\caption{AI systems and model families used during the formalization.
-Token telemetry is incomplete.}
+\caption{AI systems and model families used during the formalization.}
 \label{tab:formalization-systems}
 \begin{tabularx}{\linewidth}{@{}p{0.24\linewidth}>{\raggedright\arraybackslash}X@{}}
 \toprule
@@ -398,13 +399,10 @@ System & Model families observed \\
 \begin{table}[H]
 \centering
 \scriptsize
-\caption{Recovered model-resolved token measurements at the 13 August 2026
-accounting cutoff.  These are measured lower bounds for the five labels with
+\caption{Recovered model-resolved token measurements.  These are measured lower bounds for the five labels with
 recovered telemetry; models in \cref{tab:formalization-systems} that do not
 appear here were still used.}
 \label{tab:model-tokens-appendix}
 \resizebox{\linewidth}{!}{\input{generated/model_token_table.tex}}
 \end{table}
 
-Historical model labels are retained verbatim, with exact recovered telemetry used
-when it is available.
