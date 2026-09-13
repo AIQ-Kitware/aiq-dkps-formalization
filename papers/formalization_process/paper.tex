@@ -147,12 +147,12 @@
 
 \begin{abstract}
 We report an LLM-assisted Lean formalization of the 29 mathematical results
-tracked from Davis and Kahan's 1970 paper.  The project is a case study in
-semantic alignment: whether LLM generated Lean code preserves the
-mathematical claims made in the source.  While Lean can verify the proof of an encoded theorem, the question of if that theorem is the intended one is less straight forward. The result of our efforts are formalizations that claim to address all 29 targets,
+tracked from Davis and Kahan's seminal 1970 paper.  The project is a case study in
+semantic alignment: whether LLM-generated Lean code preserves the
+mathematical claims made in the source.  While Lean can verify the proof of an encoded theorem, the question of whether that theorem is the intended one is less straightforward. The result of our efforts are formalizations that claim to address all 29 targets,
 including a counterexample and repaired theorem for Proposition~4.4, as well as significant 
 reusable foundational work to address operator theory gaps in Lean libraries.  Several
-checked statements required revision after comparison with the source even
+checked statements required revision after comparison with the source, even
 though their Lean proofs were valid.  We describe the formalization and
 source-review process, representative discrepancies and repairs, and
 \PractitionerAccountCount{} public first-person accounts of AI-assisted Lean
@@ -162,25 +162,33 @@ establish that an existing theorem has been formalized as intended.
 
 \section{Introduction}
 
-Lean checks that a proof term establishes the proposition encoded in a theorem
+Lean as a formalization tool checks that a proof term establishes the proposition encoded in a theorem
 statement \citep{demoura2021lean4,mathlib2020}.  Establishing that the proposition
 expresses a source theorem also requires checking its hypotheses, objects, and
 scope.  This agreement is called \emph{semantic alignment}
 \citep{lu2025formalalign}.  For a research paper, the intended claim includes
 definitions, inherited assumptions, and surrounding mathematical context.
+Consequently, trusting an LLM-generated formalization requires more than simply
+checking if the Lean compiles: the reviewer must also be able to judge whether
+the encoded proposition is semantically aligned with the claim in the source.
 Chow illustrates the risk with an agent that replaces ``all doohickeys are
 excellent'' by ``all special doohickeys are quasi-excellent''
 \citep{chow2026mindreading}.
 
-We encountered this problem while formalizing Davis and Kahan's 1970
+We encountered this semantic alignment problem while formalizing Davis and Kahan's 1970
 spectral-perturbation results \citep{davis1970rotation}.  We wanted reusable
 bounds for downstream applications, including the paper's real and complex
-Hilbert-space settings.  Source review exposed both formal statements that
-covered less than the source and a false printed proposition.  This paper
+Hilbert-space settings.  
+Source review revealed several formal statements that
+did not match the scope of the corresponding source claims: some were weaker,
+while others asserted stronger results than Davis and Kahan had originally proved. Such
+strengthening of claims may be mathematically valuable, but they do not by themselves
+support confidence that the source theorem has been faithfully represented.
+This paper
 examines how we organized that review when LLMs could produce more Lean than
 we could inspect line by line.
 
-\Cref{fig:workflow} summarizes the process that developed around these
+\Cref{fig:workflow} summarizes the human-aligned formalization process that we developed to address these
 source-correspondence failures.  The source material remains visible through
 context gathering, decomposition, foundation search, formalization, and a
 separate source-to-statement review.  \Cref{sec:system} describes these
@@ -196,6 +204,14 @@ stages in more detail.
   \label{fig:workflow}
 \end{figure}
 
+Our contributions are: (1) a workflow for reviewing semantic alignment in
+LLM-assisted formalization; (2) a case study covering all 29 mathematical
+results tracked from Davis and Kahan's 1970 paper, including weaker and stronger
+statement drift and a counterexample to Davis--Kahan Proposition~4.4 with a
+repaired theorem; and (3) a survey of public first-person accounts of
+AI-assisted Lean work.
+
+
 \section{Related Work}
 \label{sec:related}
 
@@ -207,7 +223,7 @@ workflow study is tracked separately.  The collection was assembled through
 LLM-assisted web search and is not intended to estimate prevalence.
 \Cref{app:data} describes the records and screening process.
 
-The accounts differ substantially in how much generated Lean the human reads.
+ The accounts differ substantially in how much generated Lean the human reads.
 Kahle and Saiki describe checking definitions, hypotheses, and decomposition
 while agents write much of the proof code, and Yadav reports checking every
 definition and theorem statement while largely ignoring proof implementations
@@ -272,32 +288,59 @@ $A$ is the perturbed or sample operator, while Davis--Kahan's unperturbed $A$
 is the reference or population operator.
 
 Let $A_0$ be a self-adjoint operator on trial coordinates and let $E_0$ embed
-those coordinates isometrically into the ambient Hilbert space.  The range of
+those coordinates isometrically into the ambient Hilbert space. The range of
 $E_0$ is the \emph{trial subspace}; in applications it is often an approximate
-spectral subspace.  The residual
+spectral subspace. For a trial vector $x$, one can either embed it and apply
+the ambient operator, giving $AE_0x$, or apply the trial operator first and
+then embed, giving $E_0A_0x$. The residual
+
 \[
   R=AE_0-E_0A_0
-\]
-measures the failure of the trial vectors to satisfy the exact intertwining
-relation.  In the unbounded setting this identity is imposed on the domain of
+  \]
+
+measures the discrepancy between these two operations. If $R=0$, the trial
+subspace is invariant under $A$, and $A_0$ describes the action of $A$ on that
+subspace. In the unbounded setting this identity is imposed on the domain of
 $A_0$, and $R$ is a bounded extension of that residual.
 
 Let $F_0$ be isometric coordinates for the desired exact subspace and $F_1$ for
 its orthogonal complement, with $\Lambda_1$ the corresponding complementary
-spectral block of $A$.  Davis--Kahan's positive operator $\sin\Theta_0$ acts on
-trial coordinates.  The rectangular map
+spectral block of $A$. The operator $\Theta_0$ records the principal angles
+between the trial subspace and the desired exact subspace. The positive
+operator
+
+$$
+  \cos\Theta_0
+  = \bigl(E_0^*F_0F_0^*E_0\bigr)^{1/2}
+$$
+
+has, in finite dimensions, the cosines of those principal angles as its
+eigenvalues. Since $E_0$ is an isometry, $E_0^*E_0=I$, and the identity
+$\sin^2\Theta_0=I-\cos^2\Theta_0$ gives
+
+$$
+  \sin\Theta_0
+  = \bigl(E_0^*(I-F_0F_0^*)E_0\bigr)^{1/2}.
+$$
+
+Thus $\sin\Theta_0$ is a positive operator on trial coordinates whose
+eigenvalues are the sines of the principal angles.
+
+Define
+
 \begin{equation}
   S=(I-F_0F_0^*)E_0
   \label{eq:sin-theta-representative}
 \end{equation}
-maps a trial coordinate vector to the component of its ambient image orthogonal
-to the desired exact subspace.  Davis--Kahan show that $S$ is
-$\sin\Theta_0$ followed by an isometry.  The two operators therefore have the
-same singular values and
-\[
+
+Davis--Kahan show that $S$ is $\sin\Theta_0$ followed by an isometry. The two
+operators therefore have the same singular values and
+
+$$
   N(S)=N(\sin\Theta_0)
-\]
-for every unitarily invariant norm $N$.  The Lean statements below use $S$ as
+$$
+
+for every unitarily invariant norm $N$. The Lean statements below use $S$ as
 this norm representative.
 
 If the trial block $A_0$ and complementary block $\Lambda_1$ are separated by
@@ -456,12 +499,53 @@ semibounds.  \Cref{app:formalization1,app:formalization2,app:formalization3}
 gives a reader's guide to the three signatures and the sine-angle norm
 representation.
 
+\subsection{A counterexample to Davis--Kahan Proposition 4.4}
+\label{sec:prop44}
+
+An additional outcome of this effort was the discovery that
+Davis--Kahan Proposition~4.4 is false as printed. It asserts that, for real
+Hilbert spaces with largest principal angle at most $\pi/3$, the direct
+rotation minimizes $\lVert I-V\rVert$ for every unitarily invariant norm
+\citep{davis1970rotation}. We obtain an explicit counterexample in
+$\mathbb{R}^4$ for the trace norm. With two principal angles $\pi/4$, the
+direct rotation has trace displacement $4\sqrt{2-\sqrt{2}}$, while an
+admissible orthogonal competitor has displacement $2\sqrt{2}$.
+
+The witness also pinpoints the failure in the printed proof:
+Davis--Kahan equation~(4.3) would imply $2\sqrt{2}\geq4$. The subsequent
+blockwise estimate, where the $\pi/3$ bound enters, holds on this witness.
+Moreover, the construction extends to every $0<\theta<\pi/2$, so no smaller
+positive angle bound repairs the proposition.
+
+The repair is instead to restrict the norm class. A unitarily invariant norm
+$N$ is a \emph{$Q$-norm} if
+$N(A)^2=M(A^*A)$ for some unitarily invariant norm $M$
+\citep{bolotnikov2001minimal}. Applying the valid Davis--Kahan
+Proposition~4.3 to $M$ and taking square roots shows that, for every acute pair
+of subspaces, the direct rotation minimizes $\lVert I-V\rVert$ for every
+$Q$-norm. This holds in finite-dimensional real or complex inner-product
+spaces and includes the Schatten $p$-norms for $p\geq2$. Thus the repair
+retains acuteness, removes the $\pi/3$ and real-space restrictions, and narrows
+the class of norms.
+
+To the best of our knowledge, Davis--Kahan Proposition~4.4 has not previously
+been explicitly identified as false under its stated hypotheses. There were
+close precedents. Bolotnikov, Li, and Rodman showed that the corresponding
+minimization can fail for Schatten $p<2$ norms, including the trace norm, but
+their explicit obstruction occurs at principal angle $\pi/2$, outside the
+Davis--Kahan short-angle regime \citep{bolotnikov2001minimal}. Qiu, Zhang, and
+Li later repeat the Davis--Kahan $\pi/3$ minimality claim and, elsewhere in the
+same paper, compare the angle vectors $(\pi/4,\pi/4)$ and $(\pi/2,0)$ under an
+additive sine functional, exhibiting the same concentration mechanism without
+connecting it to Davis--Kahan Proposition~4.4 \citep{qiu2006grassmann}. Our
+literature search found no earlier correction or counterexample within the
+stated real $\theta_{\max}\leq\pi/3$ regime.
+
 \section{Formalization process}
 \label{sec:system}
 
 The workflow in \Cref{fig:workflow} can be summarized by five recurring
-activities.  ``Gather Context'' corresponds to the inputs at the left of the
-figure, while ``Formalize'' includes its compile-and-revise cycle:
+activities.  
 
 \begin{itemize}
 \setlength{\itemsep}{0.25em}
@@ -478,20 +562,19 @@ figure, while ``Formalize'' includes its compile-and-revise cycle:
 \item \textbf{Find Foundations.}  Before rebuilding an intermediate result, we
   searched Mathlib, existing Lean developments, and the literature.  Spectra,
   for example, supplied spectral and operator-theoretic material that we reused
-  or extended \citep{bornemann2026spectra}.  Missing foundations were developed
-  locally for reuse by later targets.
+  or extended \citep{bornemann2026spectra}. 
+  Missing foundations were included as formalization obligations.
 
 \item \textbf{Formalize.}  Agents implemented the resulting tasks in Lean and
   revised definitions and proofs in response to compiler feedback.  ChatGPT and
   Claude were used throughout the project; we do not assign fixed roles to the
   two systems.
 
-\item \textbf{Skeptical Review.}  A reviewer independent of implementation
+\item \textbf{Skeptical Review.}  A review agent independent of implementation
   compared source passages with theorem statements, checking hypotheses,
   mathematical objects, scalar field, dimension, boundedness, norm class, gap
-  assumptions, constants, and directionality.  Complex, real, and
-  scalar-generic \texttt{RCLike} declarations were reviewed as one family because
-  changes to one declaration can leave its siblings with different scope.  These
+  assumptions, constants, and directionality.  Real, complex, and scalar-generic variants were reviewed 
+  together to detect semantic differences among sibling statements.  These
   checks did not constitute independent subject-matter adjudication of every
   source interpretation.
 \end{itemize}
@@ -517,7 +600,7 @@ procedure details.
 
 \paragraph{Did we formalize Davis--Kahan?}
 The development contains checked formal treatments addressing all 29 tracked
-results, with Proposition~4.4 handled by a finite-dimensional counterexample
+results, with Proposition~4.4 handled by a counterexample
 and a proved repair.  The three sine-theta signatures separate mathematical
 strength from correspondence with a particular source statement.  One is a
 strict specialization because its gap hypothesis is too narrow; another has
@@ -536,9 +619,8 @@ the source.
 \paragraph{AI assistance.}
 ChatGPT and Claude were used throughout the formalization and manuscript
 preparation, including code generation, mathematical discussion, literature
-search, and source review.  Lean~4 and Mathlib were used to check the formal
-development.  Incomplete token telemetry and derived resource estimates are
-reported in \cref{app:resources}.
+search, and source review. Lower bounds on token usage and derived resource estimates are
+reported in \Cref{app:resources}.
 
 \ifnum\PublicVersion=1\relax
 \section*{Acknowledgements}
