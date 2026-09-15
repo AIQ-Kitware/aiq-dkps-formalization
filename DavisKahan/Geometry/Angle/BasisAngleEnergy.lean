@@ -136,7 +136,6 @@ theorem norm_absoluteValue_apply_eq_norm_projection
     simp only [halmosCosineSq, add_apply, mul_apply_eq_comp]
     rw [hxP]
     have hxPc : (Uᗮ).starProjection x = 0 := by
-      change Uᗮ.starProjection x = 0
       apply (Submodule.starProjection_apply_eq_zero_iff Uᗮ).mpr
       rw [Submodule.orthogonal_orthogonal]
       exact hx

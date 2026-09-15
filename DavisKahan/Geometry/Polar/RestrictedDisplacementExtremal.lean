@@ -744,7 +744,6 @@ theorem norm_sourceCosine_eq_norm_targetProjection (x : U) :
     simp only [halmosCosineSq, add_apply, mul_apply_eq_comp]
     rw [hxP]
     have hxPc : (Uᗮ).starProjection (x : H) = 0 := by
-      change Uᗮ.starProjection (x : H) = 0
       apply (Submodule.starProjection_apply_eq_zero_iff Uᗮ).mpr
       rw [Submodule.orthogonal_orthogonal]
       exact x.property
