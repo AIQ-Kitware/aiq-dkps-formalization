@@ -4,7 +4,7 @@
 
 **Census family:** `source-completion-census`  
 **Items:** 50  
-**Unique cited Lean declarations:** 1537
+**Unique cited Lean declarations:** 1539
 
 ## How to use this census
 
@@ -414,6 +414,7 @@ SIGNATURE RETARGET 2026-09-08. Probes 17--43 established that unconditional `ENN
 - `TauCeti.DavisKahan1970.tanTheta_ambient_unboundedRitz_definedTangent_symmetricNorming_rclike`
 - `TauCeti.DavisKahan1970.SectionTwo.tanTheta_directed`
 - `TauCeti.DavisKahan1970.SectionTwo.tanTheta_ambient`
+- `TauCeti.DavisKahan1970.hasDefinedAmbientTangentReal_iff_norm_sinAngleOperatorR_lt_one`
 
 **Curated source/Lean review:**
 
@@ -421,25 +422,27 @@ SIGNATURE RETARGET 2026-09-08. Probes 17--43 established that unconditional `ENN
 - A0 is the Rayleigh--Ritz compression on the trial subspace, Lambda1 is the unwanted exact block, R is the Ritz residual, H is the full perturbation, and Theta0/Theta are directed/ambient angles.
 
 *Hypotheses*
-- spec(A0) is contained in [beta,alpha], spec(Lambda1) is contained in [alpha+delta,infinity), and delta>0.
-- H0=0, equivalently A0 is the Rayleigh--Ritz compression in the paper setup.
-- For the ambient tangent statement, the standing Section 3 direct-rotation existence condition is required whenever the angle norm would otherwise be undefined.
+- The printed theorem assumes spec(A0) in [beta,alpha], spec(Lambda1) in [alpha+delta,infinity), delta>0, and H0=0 (the Rayleigh--Ritz choice).
+- Section 1 has already declared results vacuous when a displayed norm does not exist. The ambient Lean façade makes this where-defined condition explicit as HasDefinedAmbientTangent rather than pretending that a pole-exclusion hypothesis is printed in Section 2.
+- The Section 6 proof is written in the direct-rotation setting that has been standing since Section 3; the review therefore keeps that later proof context visible as nonlocal source material rather than folding it into the printed Section 2 hypothesis list.
 
 *Conclusions*
 - delta * ||tan Theta0|| <= ||R||.
 - delta * ||tan Theta|| <= ||H||.
 
 *Scope*
-- Every source unitary-invariant norm; finite/infinite dimensional and real/complex scope, with the appendix unbounded extension when the residual/perturbation is bounded.  The Appendix's tangent extension is specifically that BOTH A0 and Lambda1 may be unbounded, so the canonical directed and ambient witnesses must both carry a Ritz compression that is itself a densely defined partial map; a bounded compression under an unbounded ambient operator is a specialization, not this scope.
+- Every source unitary-invariant norm; separable real/complex Hilbert spaces, finite or infinite dimensional.
+- The Appendix allows both the Ritz compression A0 and the unwanted exact block Lambda1 to be genuinely unbounded while the residual entering the estimate remains bounded.
 
 | source clause | Lean realization | status |
 | --- | --- | --- |
-| The scalar field is real or complex. | The canonical directed theorem quantifies over 𝕜 with [RCLike 𝕜]; no ℂ specialization appears in that headline type. Field-specific unbounded ambient declarations remain scope companions. | claimed_exact |
-| spec(A0) subset [beta,alpha] and unwanted exact spectrum subset [alpha+delta,infinity). | hCompressionSpectrum and hUnwantedSpectrum are literal SpectrumIn hypotheses in tanTheta_directed_finiteDimensional_symmetricNorming_rclike; TanThetaIntervalGap is constructed only inside the proof and is not part of the public signature. | claimed_exact |
-| H0=0 / Rayleigh--Ritz choice. | The public conclusion is written directly in terms of ritzResidual A X, where X is the trial isometry and the coordinate compression is the Rayleigh--Ritz compression. | claimed_exact |
-| delta \|\|tan Theta0\|\| <= \|\|R\|\|. | tanTheta_directed_finiteDimensional_symmetricNorming_rclike concludes δ * N.gauge tanTheta0.toContinuousLinearMap <= N.gauge (ritzResidual A X).toContinuousLinearMap, with tanTheta0 constrained to have the principal-tangent singular values. | claimed_exact |
-| delta \|\|tan Theta\|\| <= \|\|H\|\|. | The unbounded ambient source companion concludes the factor-one estimate for tanAngleOperatorC; its real sibling is compiler-checked as supporting scalar scope. | scope_companion |
-| No separately assumed tangent-pole exclusion in the printed theorem. | The scalar-generic directed theorem assumes only the spectral placement and derives transversality in its engine. The ambient source companion uses the accepted nonlocal (3.5) semantics rather than a numerical pole hypothesis. | claimed_exact |
+| The scalar field is real or complex. | The canonical evidence is a matched complex/real pair for each directed and ambient clause; all four use the fixed-field normalized unitary-invariant norm façade. | claimed_exact |
+| spec(A0) subset [beta,alpha], spec(Lambda1) subset [alpha+delta,infinity), and delta>0. | Each canonical endpoint assumes hdelta>0, a semibounded-above Ritz compression hupper, and a form lower bound hUnwanted on the unwanted exact complement. These hypotheses are slightly weaker than the printed spectral inclusions, so the Lean theorem is a genuine generalization at this boundary rather than a literal restatement. | claimed_exact |
+| H0=0 / Rayleigh--Ritz choice, with R the residual (A+H)E0 - E0 A0. | D : UnboundedRitzPair packages the genuinely unbounded Ritz compression and its residual. The directed endpoints expose R and hR : D.trial.residual = R; the ambient endpoints expose H and hResidual identifying the Ritz residual with the off-diagonal block of H. | claimed_exact |
+| delta \|\|tan Theta0\|\| <= \|\|R\|\|. | The directed complex and real endpoints construct a tangent representative, characterize all of its approximation numbers as tan(theta_j), prove norm membership, and conclude the factor-one residual inequality. | claimed_exact |
+| delta \|\|tan Theta\|\| <= \|\|H\|\|. | The ambient complex and real endpoints conclude ideal membership of tanAngleOperatorC/R and the factor-one bound by the full perturbation H. Their hdefined binder is the explicit where-defined condition for the displayed tangent, not a claim that Section 2 printed a numerical pole hypothesis. | claimed_exact |
+| Displayed tangent norms are read only where they exist; the source does not repeat that qualification in the Section 2 display. | All four façades quantify over NormalizedUnitaryInvariantNorm. The directed endpoints construct a bounded representative and prove its membership; the ambient endpoints require HasDefinedAmbientTangent/Real (bounded tangent exists) and then prove membership from N.Mem H. | claimed_exact |
+| The Appendix permits a genuinely unbounded Ritz compression A0 and unwanted block Lambda1, with a bounded residual. | D : UnboundedRitzPair carries a densely defined self-adjoint compression rather than a bounded Ritz matrix, while A is a self-adjoint LinearPMap and the canonical endpoints require only a bounded residual/perturbation on the right-hand side. | claimed_exact |
 
 **Notes.** Finite arbitrary-UI-norm and Hilbert-space operator-norm forms are compiled. The source Hilbert-space arbitrary-UI-norm residual and perturbation statements remain open.
 
@@ -643,29 +646,34 @@ SOURCE-EXACT FAÇADES REGISTERED 2026-09-05. Canonical evidence for this row is 
 - `TauCeti.DavisKahan1970.SectionTwo.sinTwoTheta_directed`
 - `TauCeti.DavisKahan1970.sinTwoTheta_commonDomain_whereDefinedUIN_rclike`
 - `TauCeti.DavisKahan1970.sinTwoTheta_directed_commonDomain_whereDefinedUIN_rclike`
+- `TauCeti.LinearPMap.addBounded_domain`
 
 **Curated source/Lean review:**
 
 *Setup*
-- Lambda0 and Lambda1 are the exact/perturbed diagonal blocks used by the paper, R is the residual, H is the perturbation, and Theta0/Theta are directed/ambient angles.
+- P reduces the reference operator A; Q reduces the perturbed operator T=A+H, whose Q/Q-perp diagonal blocks are Lambda0 and Lambda1. R=(A+H)E0-E0A0 is the directed trial residual; H is the full perturbation.
 
 *Hypotheses*
-- For beta<=alpha and delta>0, spec(Lambda0) is contained in [beta,alpha] and spec(Lambda1) avoids (beta-delta,alpha+delta).
+- For beta<=alpha and delta>0, spec(Lambda0) lies in [beta,alpha] and spec(Lambda1) avoids (beta-delta,alpha+delta).
+- In the unbounded extension, the directed residual is defined on the common dense domain and only its bounded extension is required; the whole trial subspace need not lie in the operator domain.
+- The norm is an arbitrary normalized unitary-invariant norm under the paper-wide where-defined convention.
 
 *Conclusions*
 - delta * ||sin(2 Theta0)|| <= 2 ||R||.
 - delta * ||sin(2 Theta)|| <= 2 ||H||.
 
 *Scope*
-- Arbitrary source unitary-invariant norm; real/complex and infinite-dimensional scope, with the maintained unbounded directed-residual extension.
+- Separable real/complex Hilbert spaces, finite or infinite dimensional, including the maintained unbounded common-domain extension.
 
 | source clause | Lean realization | status |
 | --- | --- | --- |
-| The scalar field is real or complex. | The canonical theorem quantifies over 𝕜 with [RCLike 𝕜], so the same declaration covers the real and complex source fields. | claimed_exact |
-| Interval/exterior spectral separation by delta. | The canonical theorem takes `FormBoundedSylvesterGap` between the two reducing restrictions of T on Q and Q-perp. Its interval/exterior constructor is the printed Lambda_0/Lambda_1 hypothesis, and its semibounded constructors retain the paper's half-infinite extension. | claimed_exact |
-| delta \|\|sin(2 Theta0)\|\| <= 2 \|\|R\|\|. | The first conjunct locally quantifies `R : P ->L E` and requires `T p = A p + R p` only for trial vectors p already in the common domain `T.domain = A.domain`. It concludes delta * N(sin(2 Theta_0)) <= 2 N(R) on `Angle.directedSinTwoAngleOperator P Q`, without a bounded trial compression, `P` contained in the domain, or a bounded global perturbation. | claimed_exact |
-| delta \|\|sin(2 Theta)\|\| <= 2 \|\|H\|\|. | The second conjunct independently quantifies a bounded symmetric `Hop` with `T = LinearPMap.addBounded A Hop` and concludes delta * N(sin(2 Theta)) <= 2 N(Hop) on `Angle.sinTwoAngleOperator P Q`. No residual or trial-domain hypothesis is inherited. | claimed_exact |
-| Infinite-dimensional and unbounded directed-residual scope. | The canonical theorem assumes a separable complete Hilbert space over an RCLike field and self-adjoint partial maps A and T with equal domains. Only the residual extension is bounded in the directed clause; there is no finite-dimensional hypothesis and no requirement that the full trial subspace lie in the operator domain. The ambient clause adds bounded Hop only locally. | claimed_exact |
+| The scalar field is real or complex. | The common-domain canonical theorem is scalar-generic over K with [RCLike K] and assumes a separable ambient Hilbert space. | claimed_exact |
+| Q reduces the perturbed operator and Lambda0/Lambda1 are its two diagonal blocks; their spectra are separated by delta. | hQ says Q reduces T. hgap is a FormBoundedSylvesterGap between T restricted to Q and Q-perp, so the gap is on the perturbed blocks rather than the reference A blocks. The form-gap predicate is slightly more general than the finite spectral interval/exterior spelling printed in Section 2. | claimed_exact |
+| R=(A+H)E0-E0A0 on the common dense domain; in the unbounded extension only the bounded residual extension is required. | The clause-specific directed endpoint exposes R and hres at top level. hdom : T.domain = A.domain supplies the common domain, and hres is required only for p:P that already lie in that domain. There is no P subset T.domain premise and no bounded trial compression. | claimed_exact |
+| delta \|\|sin(2 Theta0)\|\| <= 2 \|\|R\|\|. | The clause-specific directed endpoint concludes exactly the factor-two inequality on Angle.directedSinTwoAngleOperator P Q, behind the two where-defined membership implications. | claimed_exact |
+| delta \|\|sin(2 Theta)\|\| <= 2 \|\|H\|\|, with no directed-residual assumptions leaking into this ambient clause. | The independent ambient endpoint exposes Hop, hHop, hQred, hgap and the result at top level. In the combined canonical theorem Hop and T=A+Hop are quantified only inside the second conjunct, so the ambient branch does not inherit R or trial-domain assumptions. | claimed_exact |
+| Every displayed norm is an arbitrary normalized unitary-invariant norm, under the source where-defined convention. | N : NormalizedSymmetricOperatorIdealFamily is explicit in the canonical and clause-specific endpoints. Each numerical inequality is behind membership assumptions for exactly its displayed angle object and residual/perturbation. | claimed_exact |
+| Infinite-dimensional and unbounded common-domain scope. | The canonical theorem has SeparableSpace E, self-adjoint LinearPMaps A/T, hdom : T.domain=A.domain, reducing subspaces P/Q, and only clause-local bounded ContinuousLinearMap residual/perturbation objects. | claimed_exact |
 
 **Notes.** REPAIRED AND RE-CLOSED 2026-08-12 (result inventory row `S2-sin-two-theta`).  The reopening was correct: the registered unbounded directed endpoint bounded delta * N(sin 2Theta_0) by the norm of a REFLECTION residual, not by the printed trial residual R = (A+H)E_0 - E_0 A_0.  Repaired by `sinTwoTheta_directed_unboundedResidual_blockRepresentative_symmetricNorming_complex` (complex) and `sinTwoTheta_directed_unboundedResidual_blockRepresentative_symmetricNorming_real` (real): unbounded self-adjoint scope, arbitrary closed trial subspace inside the domain, the printed trial residual as the only right-hand side, arbitrary `SymmetricNormingFunction`, directed angle Theta_0, and the printed factor two.  The reflected comparison system is built internally from the trial data by `trialReflection_intertwines`, so no reflection residual and no extra hypothesis is visible to the caller; the sharp factor two comes from the scalar-generic doubling identity `kyFan_reflectionDefectBlock_le_two_mul`, not from a triangle inequality.
 
@@ -941,28 +949,31 @@ CURRENT API 2026-09-15: `sinTwoTheta_commonDomain_whereDefinedUIN_rclike` is the
 **Curated source/Lean review:**
 
 *Setup*
-- A0 and A1 are the two diagonal blocks of A, H0 and H1 are the diagonal perturbation blocks, R is the residual, H is the perturbation, and Theta0/Theta are directed/ambient angles.
+- P reduces A, Q reduces A+H, A0/A1 are the two A-blocks, H0/H1 the diagonal perturbation blocks, R the trial residual, and Theta0/Theta the directed/ambient angles.
 
 *Hypotheses*
-- spec(A0) is contained in [beta,alpha], spec(A1) is contained in [alpha+delta,infinity), and delta>0.
-- H0=H1=0 (the perturbation is fully off diagonal).
-- No independent hypothesis excluding poles of tan(2 Theta), and no separate spectral placement of the perturbed Lambda blocks, is part of the printed theorem.
+- spec(A0) is contained in [beta,alpha], spec(A1) in [alpha+delta,infinity), and delta>0.
+- H0=H1=0: the perturbation is fully off diagonal.
+- There is no separate quarter-angle/pole hypothesis and no spectral placement premise on the perturbed Lambda blocks; Section 7 derives cos(2 theta_j) != 0 from the printed assumptions.
 
 *Conclusions*
 - delta * ||tan(2 Theta0)|| <= 2 ||R||.
 - delta * ||tan(2 Theta)|| <= 2 ||H||.
 
 *Scope*
-- Arbitrary source unitary-invariant norm, with real/complex and unbounded ambient companions.
+- Arbitrary normalized unitary-invariant norm on separable real/complex Hilbert spaces, including the maintained unbounded/infinite-dimensional scope.
 
 | source clause | Lean realization | status |
 | --- | --- | --- |
-| The scalar field is real or complex. | tanTwoTheta_branchFree_bounded_finiteSubspace_symmetricNorming_rclike is an alias of the already proved branch-free theorem quantified over 𝕜 with [RCLike 𝕜] and the literal SymmetricNormingFunction. | claimed_exact |
-| A has an ordered block gap and H is fully off diagonal. | The generic theorem writes the form bounds hUb/hUa and the two literal off-diagonal mapping hypotheses hHU/hHUperp directly; no named gap or oddness predicate hides them. | claimed_exact |
-| The perturbed invariant subspace is arbitrary and no independent tan(2 Theta) pole hypothesis is assumed. | The generic theorem describes the invariant perturbed graph by hTmem, hTzero and hinv and uses the branch-free absDoubleAngleTangent singular values; it has no T<1, IsQuarterAcute, or cos(2 theta) premise. | claimed_exact |
-| delta \|\|tan(2 Theta)\|\| <= 2 \|\|H\|\|. | With delta = b-a, tanTwoTheta_branchFree_bounded_finiteSubspace_symmetricNorming_rclike concludes (b-a) * N.gauge tanTwoTheta <= 2 * N.gauge H for every source norm. | claimed_exact |
-| delta \|\|tan(2 Theta0)\|\| <= 2 \|\|R\|\| in the source-shaped U,V corner notation. | The canonical directed endpoints take the reducing subspace V and conclude on the paper's directed object: over ℂ the U -> U-perp projection block of 2 (P_V - P_U)(1 - 2(P_V - P_U)^2)^{-1}, over ℝ `tanTwoDirectedCornerR U V`; each states in its own type that the block's approximation numbers are tan (arcsin a_n(sinTwoThetaIdealBlock U V)) and that no directed doubled angle is a quarter turn. No caller-supplied involution, pole certificate, branch, or spectral placement. | claimed_exact |
-| Infinite-dimensional/unbounded scope. | The generic branch-free canonical theorem removes ambient finite-dimensionality but still assumes a finite-dimensional graph base U; the full arbitrary-dimensional and unbounded real/complex endpoints remain compiler-checked supporting declarations. | scope_companion |
+| The scalar field is real or complex. | The canonical evidence is a complex/real pair for the directed clause and a complex/real pair for the ambient clause, each at the fixed-field normalized-UIN boundary. | claimed_exact |
+| A has the ordered A0/A1 gap with delta>0. | The four canonical endpoints expose the ordered separation as hUa/hUb form bounds with hab : a<b. This is slightly more general than the printed spectral inclusions while retaining the same one-sided gap geometry and allowing the half-infinite unbounded scope. | claimed_exact |
+| H0=H1=0: the perturbation is fully off diagonal. | Every canonical endpoint has hB : IsOddFor U B (with U the selected/reducing A-subspace). The definition expands literally to B(U) subset U-perp and B(U-perp) subset U, the block condition H0=H1=0. | claimed_exact |
+| Q is a reducing subspace of A+H; the printed theorem imposes no separate spectral placement on the perturbed Lambda blocks. | The directed endpoints state hV : ReducesSubspace (addBounded A B) V directly. The ambient endpoints use ReflectionIntertwines A B V, and ReflectionIntertwines.ofReducesSubspace is the registered bridge from the same source-facing reducing-subspace hypothesis. | claimed_exact |
+| No independent tan(2 Theta) pole-exclusion hypothesis is assumed; cos(2 theta_j) != 0 is derived in the proof. | None of the four canonical theorem telescopes contains a caller-supplied pole certificate. The ambient results explicitly conclude cos(2t) != 0 on the angle spectrum before membership and the inequality; the directed results expose the corresponding subunit sine sequence and tangent identification as result conjuncts. | claimed_exact |
+| delta \|\|tan(2 Theta0)\|\| <= 2 \|\|R\|\| in the source-shaped U,V corner notation. | The canonical directed endpoints are the full-unbounded normalized-UIN source witnesses. Over C the paper object is represented by the U -> U-perp projection block of the doubled tangent expression; over R it is tanTwoDirectedCornerR U V on the canonical complexification. Each endpoint states the complete approximation-number identification in its own result, and the pinned correspondence/transport chain carries that representation to the source tan(2 Theta0) norm without adding a pole or branch hypothesis. | claimed_exact |
+| delta \|\|tan(2 Theta)\|\| <= 2 \|\|H\|\|. | The ambient complex/real endpoints conclude the factor-two estimate for absTanTwoAngleOperatorC/R and the same full perturbation B. Their result also exposes the derived pole exclusion, preventing the totalized functional calculus from hiding a quarter-turn failure. | claimed_exact |
+| The norm is arbitrary normalized unitary-invariant; the same source norm is used on the tangent and residual/perturbation sides. | All canonical endpoints use NormalizedUnitaryInvariantNorm. The real ambient endpoint is genuinely real. The real directed endpoint represents both source quantities on the canonical complexification and uses one complex norm on both sides; the already-pinned complexification transport chain preserves the approximation numbers/gauges exactly. | claimed_exact |
+| Infinite-dimensional and unbounded scope. | The four canonical endpoints assume a separable Hilbert space but no finite-dimensionality; A is a self-adjoint LinearPMap, while B/residual blocks are bounded ContinuousLinearMaps. The ordered form bounds remain meaningful for unbounded A. | claimed_exact |
 
 **Notes.** UNBOUNDED SOURCE-SCOPE CLOSURE 2026-08-12: the remaining Section 2 scope advertised for infinite-dimensional unbounded self-adjoint operators is now compiler-verified. `tanTwoTheta_directed_unboundedResidual_blockRepresentative_symmetricNorming_complex` and `tanTwoTheta_directed_unboundedResidual_blockRepresentative_symmetricNorming_real` provide the complex and real directed residual endpoints; `tanTwoTheta_ambient_unbounded_blockRepresentative_symmetricNorming_complex` and `tanTwoTheta_ambient_unbounded_blockRepresentative_symmetricNorming_real` provide the complex and real ambient factor-two endpoints. These wrappers use only the printed ordered-gap, off-diagonal, reducing-subspace, and norm-domain data; pole exclusion/canonical cutoffs and the two-corner assembly remain internal. The result-only census therefore promotes S2-tan-two-theta to terminal exact at full printed scalar/dimension/unbounded/UI-norm scope.
 
