@@ -147,7 +147,6 @@ theorem tanTwoTheta_directed_unboundedResidual_reducing_symmetricNorming_rclike
       exact ScalarTransport.gauge_blockCompression_orthogonal_transport
         (e := e) N U B
     refine ⟨hlt, T, hseq, hmem, ?_⟩
-    change (b - a) * N.gauge T ≤ 2 * N.gauge (blockCompression Uᗮ U B)
     rw [← hTgauge, ← hRgauge]
     exact hbound'
   · let e := RCLikeIso.complex h
@@ -217,7 +216,6 @@ theorem tanTwoTheta_directed_unboundedResidual_reducing_symmetricNorming_rclike
       exact ScalarTransport.gauge_blockCompression_orthogonal_transport
         (e := e) N U B
     refine ⟨hlt, T, hseq, hmem, ?_⟩
-    change (b - a) * N.gauge T ≤ 2 * N.gauge (blockCompression Uᗮ U B)
     rw [← hTgauge, ← hRgauge]
     exact hbound'
 

@@ -30,6 +30,7 @@ universe u w v
 variable {𝕜 : Type u} {𝕂 : Type w} [RCLike 𝕜] [RCLike 𝕂] {e : RCLikeIso 𝕜 𝕂}
 variable {E : Type v} [NormedAddCommGroup E] [InnerProductSpace 𝕜 E] [CompleteSpace E]
 
+omit [CompleteSpace E] in
 /-- Off-diagonality with respect to a closed splitting is scalar invariant. -/
 theorem isOddFor_clm_iff (U : Submodule 𝕜 E) [U.HasOrthogonalProjection]
     (B : E →L[𝕜] E) :
@@ -59,6 +60,7 @@ theorem isOddFor_clm_iff (U : Submodule 𝕜 E) [U.HasOrthogonalProjection]
         exact (mem_submodule (e := e)).1 hx
       exact (mem_submodule (e := e)).2 (hVU (out (e := e) x) hx0)
 
+omit [CompleteSpace E] in
 /-- A quadratic-form upper bound on a reducing subspace transports unchanged. -/
 theorem formUpperOnSubspace_pmap
     {A : E →ₗ.[𝕜] E} {U : Submodule 𝕜 E} {a : ℝ}
@@ -75,6 +77,7 @@ theorem formUpperOnSubspace_pmap
   change RCLike.re (e (⟪A x0, (x0 : E)⟫_𝕜)) ≤ a * ‖(x0 : E)‖ ^ 2
   rwa [e.re_map]
 
+omit [CompleteSpace E] in
 /-- A quadratic-form lower bound on the orthogonal summand transports unchanged. -/
 theorem formLowerOnOrthogonal_pmap
     {A : E →ₗ.[𝕜] E} {U : Submodule 𝕜 E} {b : ℝ}
@@ -93,6 +96,7 @@ theorem formLowerOnOrthogonal_pmap
   change b * ‖(x0 : E)‖ ^ 2 ≤ RCLike.re (e (⟪A x0, (x0 : E)⟫_𝕜))
   rwa [e.re_map]
 
+omit [CompleteSpace E] in
 /-- Ambient projection blocks commute with scalar transport. -/
 theorem projectionBlock_clm
     (Ω Γ : Submodule 𝕜 E) [Ω.HasOrthogonalProjection] [Γ.HasOrthogonalProjection]
@@ -203,6 +207,7 @@ theorem gauge_blockCompression_orthogonal_transport
   have htransport := extendedGauge_blockCompression_transport (e := e) N Uᗮ U K
   rw [N.extendedGauge_eq_of_hasSameApproximationNumbers hcoord, htransport]
 
+omit [CompleteSpace E] in
 /-- Reduction of `A + B` is scalar invariant, in the spelling consumed by the
 source-facing `tan 2Θ` theorem. -/
 theorem reducesSubspace_addBounded_pmap_iff
