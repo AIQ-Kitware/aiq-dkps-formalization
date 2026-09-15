@@ -74,6 +74,7 @@ import DavisKahan.Sources.DavisKahan1970.TanThetaAmbient
 import DavisKahan.Sources.DavisKahan1970.TanThetaDirectedUnbounded
 import DavisKahan.Sources.DavisKahan1970.TanThetaUnboundedAmbient
 import DavisKahan.Sources.DavisKahan1970.TanThetaUnboundedAmbientReal
+import DavisKahan.Sources.DavisKahan1970.TanThetaScalarGeneric
 import DavisKahan.Sources.DavisKahan1970.TanTwoTheta
 import DavisKahan.Sources.DavisKahan1970.TanTwoThetaAmbient
 import DavisKahan.Sources.DavisKahan1970.TanTwoThetaAmbientBranchFree
@@ -90,6 +91,7 @@ import DavisKahan.Sources.DavisKahan1970.TanTwoThetaUnboundedGramReal
 import DavisKahan.Sources.DavisKahan1970.TanTwoThetaUnboundedKyFan
 import DavisKahan.Sources.DavisKahan1970.TanTwoThetaUnboundedReducing
 import DavisKahan.Sources.DavisKahan1970.TanTwoThetaUnboundedReducingReal
+import DavisKahan.Sources.DavisKahan1970.TanTwoThetaScalarGeneric
 import DavisKahan.Sources.DavisKahan1970.TanTwoThetaUnboundedResidual
 import DavisKahan.Sources.DavisKahan1970.TangentSingularValues
 import DavisKahan.Sources.DavisKahan1970.TangentSingularValuesReal

@@ -248,6 +248,39 @@ theorem tanTheta_from_trialBlock
 
 end TanTheta
 
+/-! ## Scalar-generic `tan Θ` from a Ritz pair and reducing complement -/
+
+section TanThetaRCLike
+
+variable {𝕜 : Type u₁} [RCLike 𝕜]
+variable {E : Type v₁} [NormedAddCommGroup E] [InnerProductSpace 𝕜 E]
+  [CompleteSpace E]
+
+/-- The full-unbounded ambient tangent entry point no longer requires the caller to choose
+between real and complex theorem names. -/
+theorem tanTheta_from_reducingSubspace_rclike
+    (N : SymmetricNormingFunction)
+    {A : E →ₗ.[𝕜] E}
+    {U V : Submodule 𝕜 E}
+    [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] [CompleteSpace U]
+    (D : DavisKahan.UnboundedRitzPair A U)
+    (hVred : TauCeti.LinearPMap.ReducesSubspace A V)
+    (Hop : E →L[𝕜] E) (hH : IsSelfAdjoint Hop)
+    {alpha delta : ℝ} (hdelta : 0 < delta)
+    (hupper : TauCeti.LinearPMap.SemiboundedAbove D.trial.compression alpha)
+    (hUnwanted : ∀ y ∈ Vᗮ, ∀ hy : y ∈ A.domain,
+      (alpha + delta) * ‖y‖ ^ 2 ≤ RCLike.re ⟪A ⟨y, hy⟩, y⟫_𝕜)
+    (hdefined : TauCeti.DavisKahan.Angle.HasDefinedTangent U V)
+    (hResidual : D.trial.residual = Uᗮ.starProjection ∘L Hop ∘L U.subtypeL)
+    (hMem : N.Mem Hop) :
+    N.Mem (TauCeti.DavisKahan.Angle.tanAngleOperator U V) ∧
+      delta * N.gauge (TauCeti.DavisKahan.Angle.tanAngleOperator U V) ≤ N.gauge Hop :=
+  SectionTwo.tanTheta_ambient N D
+    (DavisKahan.ReducingComplement.ofReducesSubspace hVred)
+    Hop hH hdelta hupper hUnwanted hdefined hResidual hMem
+
+end TanThetaRCLike
+
 /-! ## `sin 2Θ` from a measurable spectral selection
 
 This section was missing until 2026-08-31, and its absence hid a certification
@@ -374,6 +407,41 @@ theorem tanTwoTheta_from_reducingSubspace
     (DavisKahan.ReflectionIntertwines.ofReducesSubspace hVred) hUa hUb hab hBmem
 
 end TanTwoTheta
+
+/-! ## Scalar-generic `tan 2Θ` at arbitrary reducing subspaces -/
+
+section TanTwoThetaRCLike
+
+variable {𝕜 : Type u₁} [RCLike 𝕜]
+variable {E : Type v₁} [NormedAddCommGroup E] [InnerProductSpace 𝕜 E]
+  [CompleteSpace E]
+
+/-- The branch-free full-unbounded ambient `tan 2Θ` API at an arbitrary `RCLike` field.
+Both reducing subspaces are supplied directly; no scalar-specific spectral-selection object
+appears in the statement. -/
+theorem tanTwoTheta_from_reducingSubspaces_rclike
+    (N : SymmetricNormingFunction)
+    {A : E →ₗ.[𝕜] E} {B : E →L[𝕜] E} {a b : ℝ}
+    {U : Submodule 𝕜 E} [U.HasOrthogonalProjection]
+    (V : Submodule 𝕜 E) [V.HasOrthogonalProjection]
+    (hA : IsSelfAdjoint A)
+    (hUred : TauCeti.LinearPMap.ReducesSubspace A U)
+    (hBsa : IsSelfAdjoint B)
+    (hB : TauCeti.IsOddFor U B)
+    (hVred : TauCeti.LinearPMap.ReducesSubspace
+      (TauCeti.LinearPMap.addBounded A B) V)
+    (hUa : ∀ x : A.domain, (x : E) ∈ U →
+      RCLike.re ⟪A x, (x : E)⟫_𝕜 ≤ a * ‖(x : E)‖ ^ 2)
+    (hUb : ∀ x : A.domain, (x : E) ∈ Uᗮ →
+      b * ‖(x : E)‖ ^ 2 ≤ RCLike.re ⟪A x, (x : E)⟫_𝕜)
+    (hab : a < b) (hBmem : N.Mem B) :
+    TauCeti.DavisKahan.Angle.HasDefinedDoubleTangent U V ∧
+      N.Mem (TauCeti.DavisKahan.Angle.absTanTwoAngleOperator U V) ∧
+      (b - a) * N.gauge (TauCeti.DavisKahan.Angle.absTanTwoAngleOperator U V) ≤
+        2 * N.gauge B :=
+  SectionTwo.tanTwoTheta_ambient N V hA hUred hBsa hB hVred hUa hUb hab hBmem
+
+end TanTwoThetaRCLike
 
 end
 

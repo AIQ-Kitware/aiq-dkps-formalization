@@ -6,6 +6,7 @@ Authors: Jon Crall, Claude Opus 5
 import DavisKahan.Sources.DavisKahan1970.SineTheta.Presentation
 import DavisKahan.Sources.DavisKahan1970.TanThetaUnboundedAmbient
 import DavisKahan.Sources.DavisKahan1970.TanThetaUnboundedAmbientReal
+import DavisKahan.Sources.DavisKahan1970.TanThetaScalarGeneric
 import DavisKahan.Sources.DavisKahan1970.SinTwoTheta
 import DavisKahan.Sources.DavisKahan1970.SinTwoThetaAmbientUnbounded
 import DavisKahan.Sources.DavisKahan1970.SinTwoThetaUnboundedDirectedResidual
@@ -15,6 +16,7 @@ import DavisKahan.Sources.DavisKahan1970.SinTwoThetaDirectedRCLike
 import DavisKahan.Sources.DavisKahan1970.TanThetaDirectedUnbounded
 import DavisKahan.Sources.DavisKahan1970.TanTwoThetaUnboundedAmbientExact
 import DavisKahan.Sources.DavisKahan1970.TanTwoThetaUnboundedExactReal
+import DavisKahan.Sources.DavisKahan1970.TanTwoThetaScalarGeneric
 
 open TauCeti.DavisKahan.Angle
 
@@ -38,9 +40,9 @@ The names say which.
 | result | directed clause | ambient clause |
 | --- | --- | --- |
 | `sin Θ` | `sinTheta`, `sinTheta_complex`, `sinTheta_real` | -- (one printed conclusion) |
-| `tan Θ` | `tanTheta_directed_complex`, `tanTheta_directed_real` | `tanTheta_ambient_complex`, `tanTheta_ambient_real` |
+| `tan Θ` | `tanTheta_directed` (`RCLike`), plus fixed-field specializations | `tanTheta_ambient` (`RCLike`), plus fixed-field specializations |
 | `sin 2Θ` (`sinTwoTheta`) | `sinTwoTheta_directed`, `sinTwoTheta_directed_complex`, `sinTwoTheta_directed_real` | `sinTwoTheta_ambient`, `sinTwoTheta_ambient_complex`, `sinTwoTheta_ambient_real` |
-| `tan 2Θ` | `tanTwoTheta_directed_complex`, `tanTwoTheta_directed_real` | `tanTwoTheta_ambient_complex`, `tanTwoTheta_ambient_real` |
+| `tan 2Θ` | `tanTwoTheta_directed` (`RCLike`), plus fixed-field specializations | `tanTwoTheta_ambient` (`RCLike`), plus fixed-field specializations |
 
 `sinTwoTheta_bothConclusions_{complex,real}` and `tanTwoTheta_bothConclusions_{complex,real}`
 state both clauses of one result under one set of separation hypotheses, so a reviewer has a
@@ -52,36 +54,41 @@ named the ambient clause and one the directed -- and each now carries a `@[depre
 pointing at the name that says which.  They survive only because the standalone Davis--Kahan
 submission repository under `submodules/` still consumes them.
 
-## Short names are reserved for scalar-generic source-scope APIs
+## Short names are scalar-generic; the norm boundary is explicit
 
-A short unqualified name is bound only to a declaration that is scalar-generic over
-`RCLike 𝕜` and whose statement boundary is the one selected by the result ledger.
-`sinTheta` and `sinTwoTheta` are bound to the promoted where-defined RCLike theorems.
-The `sinTwoTheta` binding is retained for compatibility but was reopened on
-2026-09-09: its shared bounded-trial/domain hypotheses restrict both clauses.
-The separate ambient API does not have that restriction. The common-domain
-candidate is not imported or certified here.  The tangent
-short names remain unbound for their own recorded reasons.
+The public Section 2 names in this module are scalar-generic over `RCLike 𝕜`.  The two
+whole-result source names, `sinTheta` and `sinTwoTheta`, retain the where-defined norm
+boundary selected by the result ledger.  For `sinTwoTheta`, the short theorem carries both
+printed clauses under their shared source setup, and its directed and ambient clause APIs are
+also available separately.
 
-Which short names are bound is recorded structurally in `section_two_short_names` in the
-result inventory and in the Section 2 variant index; do not infer source fidelity from a
-declaration name.
+The tangent *clause* names `tanTheta_{directed,ambient}` and
+`tanTwoTheta_{directed,ambient}` deliberately expose the stronger reusable
+`symmetricNorming` boundary: residual or perturbation ideal membership implies membership of
+the corresponding tangent representative together with the norm inequality.  These are
+stronger implementation APIs, not claims that Davis--Kahan's printed partial-domain norm
+semantics have changed.  The fixed real/complex names remain as compatibility and
+source-audit surfaces.
+
+Which whole-result short names are selected as source-facing ledger endpoints is recorded in
+`section_two_short_names` in the result inventory and in the Section 2 variant index; do not
+infer source fidelity from a declaration name alone.
 
 ## What these names carry
 
-Each is an `alias`, so each has exactly the type of the declaration it names.
-The following describes the intended boundary, not a substitute for reading
-that type; the `sinTwoTheta` bounded-trial restriction is recorded above: an unbounded
-self-adjoint `LinearPMap` ambient operator, arbitrary Hilbert dimension, an arbitrary source
-unitarily invariant norm, both printed conclusions where the result has two, no capability
-class, no finite-dimensional hypothesis and no proof vehicle in the conclusion.
-`SectionTwoUsage.lean` calls each from ordinary operator-theory hypotheses, so the advertised
-entry points are compiler-checked to be reachable without building Sylvester witnesses,
+Every public endpoint here is an alias to a theorem with an unbounded self-adjoint
+`LinearPMap` ambient operator and no finite-dimensional hypothesis or proof-capability class.
+The sine source endpoints quantify over the normalized where-defined UIN abstraction selected
+by the ledger.  The scalar-generic tangent clause endpoints instead quantify over an arbitrary
+`SymmetricNormingFunction` and expose the stronger ideal-membership transfer proved by the
+implementation.  `SectionTwoUsage.lean` calls the advertised endpoints from ordinary
+operator-theory hypotheses, so clients do not have to assemble Sylvester witnesses,
 reflection blocks or spectral reflections by hand.
 
-The tangent endpoints additionally *conclude* their own pole exclusion, so a reader can see
-from the type that the object bounded is the paper's tangent and not the value Mathlib's
-totalised `cfc` assigns at a quarter turn.
+The ambient tangent endpoints additionally *conclude* the relevant pole exclusion or carry a
+definedness hypothesis stated in scalar-generic geometric vocabulary, so a reader can see
+from the type that the object bounded is the paper's tangent and not merely the value
+Mathlib's totalised `cfc` assigns at a pole.
 
 ## What is deliberately not here
 
@@ -124,6 +131,17 @@ alias sinTheta_real := DavisKahan1970.sinTheta_unbounded_formGap_whereDefinedUIN
 
 /-! ## `tan Θ` -/
 
+/-- Scalar-generic full-unbounded directed `tan Θ₀` clause, with the tangent representative
+constructed and characterized by its complete approximation-number sequence. -/
+alias tanTheta_directed :=
+  DavisKahan1970.tanTheta_directed_unboundedRitz_symmetricNorming_exists_rclike
+
+/-- Scalar-generic full-unbounded ambient `tan Θ` clause.  Definedness is stated through the
+generic `Angle.HasDefinedTangent` predicate and the conclusion uses the generic
+`Angle.tanAngleOperator`. -/
+alias tanTheta_ambient :=
+  DavisKahan1970.tanTheta_ambient_unboundedRitz_definedTangent_symmetricNorming_rclike
+
 /-- **Davis--Kahan 1970, the `tan Θ` theorem, over `ℂ` -- the AMBIENT clause.**
 
 The printed `tan Θ` theorem has two boxed conclusions.  This name is the second,
@@ -156,11 +174,9 @@ alias tanTheta_real := tanTheta_ambient_unboundedRitz_definedTangent_symmetricNo
 
 /-! ## `sin 2Θ` -/
 
-/-- **Davis--Kahan 1970, the bounded-trial `sin 2Θ` specialization over `RCLike`.**
+/-- **Davis--Kahan 1970, the complete `sin 2Θ` theorem, scalar-generic over `RCLike`.**
 
-This compatibility alias is selected but currently blocked by the ledger's
-2026-09-09 source review: `hPdom` and bounded `M` exclude the unbounded trial
-scope. It carries both boxed Section 2
+This is the short source-facing API selected by the ledger.  It carries both boxed Section 2
 conclusions under the shared setup: `P` reduces `A`, `Q` reduces `A + H`, the gap is on the
 two `Q`-blocks of `A + H`, and the trial residual is `(A + H)E₀ - E₀A₀`.  The norm
 inequalities are asserted where the displayed norms are defined. -/
@@ -307,6 +323,18 @@ alias sinTwoTheta_ambient_real :=
   sinTwoTheta_ambient_unbounded_perturbedGap_whereDefinedUIN_real
 
 /-! ## `tan 2Θ` -/
+
+/-- Scalar-generic full-unbounded directed `tan 2Θ₀` clause at an arbitrary reducing
+subspace.  The theorem constructs a bounded corner representative whose complete
+approximation-number sequence is `tan (arcsin aₙ(sin 2Θ₀))`. -/
+alias tanTwoTheta_directed :=
+  DavisKahan1970.tanTwoTheta_directed_unboundedResidual_reducing_symmetricNorming_rclike
+
+/-- Scalar-generic full-unbounded ambient `tan 2Θ` clause at an arbitrary reducing subspace.
+The ordered form gap derives pole exclusion; the conclusion is on the generic branch-free
+`Angle.absTanTwoAngleOperator`. -/
+alias tanTwoTheta_ambient :=
+  DavisKahan1970.tanTwoTheta_ambient_unbounded_reducing_symmetricNorming_rclike
 
 /-- **Davis--Kahan 1970, the `tan 2Θ` theorem, over `ℂ` -- the AMBIENT clause.**
 

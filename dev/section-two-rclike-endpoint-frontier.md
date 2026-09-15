@@ -1,57 +1,73 @@
 # Scalar-generic Section 2 endpoints: current frontier
 
-Status: **sine families complete; tangent families remain. Updated 2026-09-09.**
+Status: **candidate closure of the tangent scalar-generic frontier; compiler validation pending. Updated 2026-09-15.**
 
 The maintenance index for all four headline theorem families is
 `dev/davis-kahan-1970-section-two-variant-index.json`. The result ledger remains the authority
-for source fidelity. This document records the scalar-generic architecture frontier.
+for exact source fidelity. This document records the scalar-generic architecture frontier.
 
 ## `sin Θ` — complete
 
 `sinTheta_unbounded_formGap_whereDefinedUIN_rclike` is the ledger witness and
-`SectionTwo.sinTheta` short API. Its real and complex declarations are fixed-field
-specializations.
+`SectionTwo.sinTheta` short API. The stronger
+`sinTheta_unbounded_formGap_symmetricNorming_rclike` is the arbitrary-Hilbert reusable API.
 
 ## `sin 2Θ` — complete
 
-The former real/complex split in the directed residual proof has been removed without a
-scalar-dispatch transport layer. The proof itself is now generic over `[RCLike 𝕜]`:
+The directed and ambient full-unbounded proofs are scalar-generic internally and expose both
+where-defined source APIs and strong symmetric-norming APIs. `SectionTwo.sinTwoTheta` carries
+the complete two-clause source result.
 
-1. `sinTheta_unbounded_formGap_idealFamily_block_rclike` provides the scalar-generic
-   complementary single-angle block estimate needed by the reflection argument.
-2. `sinTwoTheta_reflectionResidual_block_gauge_reducing_rclike` proves the reflected
-   comparison estimate at an arbitrary reducing subspace.
-3. `sinTwoTheta_directed_unboundedResidual_blockRepresentative_reducing_kyFan_rclike` and
-   `..._symmetricNorming_rclike` prove the directed residual estimate before the angle
-   correspondence.
-4. `sinTwoTheta_directed_unboundedResidual_reducing_symmetricNorming_rclike` transports the
-   block result to the paper's trial-side `Angle.directedSinTwoAngleOperator`.
-5. `sinTwoTheta_directed_unboundedResidual_reducing_whereDefinedUIN_rclike` exposes the
-   partial-domain norm boundary used by the source-facing API.
-6. `sinTwoTheta_unbounded_perturbedGap_whereDefinedUIN_rclike` combines that directed clause
-   with `sinTwoTheta_ambient_unbounded_perturbedGap_whereDefinedUIN_rclike` under the shared
-   Davis--Kahan Section 2 setup.
+## `tan Θ` — candidate scalar-generic full-unbounded API
 
-`SectionTwo.sinTwoTheta` aliases the complete two-clause theorem.
-`SectionTwo.sinTwoTheta_directed` and `SectionTwo.sinTwoTheta_ambient` expose the generic
-clauses independently. Fixed real/complex spectral-selection declarations remain convenience
-APIs and compatibility surfaces; the ledger does not use theorem names as fidelity claims.
+The hard Appendix cutoff remains implemented in the established real and complex engines, but
+its boundary is now transported through `RCLikeIso` without weakening the theorem:
 
-The gap is on the two reducing restrictions of the **perturbed** operator `A + H`, matching
-Davis--Kahan's `Λ₀`/`Λ₁` hypothesis. The directed result uses the trial-side orientation
-`directedSinTwoAngleOperator P Q`. The existing swap/approximation-number correspondence
-pins that orientation rather than treating the ordered directed sine as symmetric.
+1. `TanTheta/ScalarTransport.lean` transports `UnboundedCompressionTrialData`, preserving its
+   genuinely unbounded compression, residual approximation numbers, semibounds, crossed form
+   bounds, ideal membership, and gauges.
+2. `Geometry/Angle/TangentOperatorGeneric.lean` defines `tanAngleOperator` and
+   `HasDefinedTangent` over arbitrary `RCLike`, with fixed-field identification and scalar
+   transport theorems.
+3. `UnboundedCompressionTrialData.all_kyFan_core_rclike` is the generic Appendix majorization
+   core.
+4. `tanTheta_directed_unboundedRitz_symmetricNorming_exists_rclike` and
+   `tanTheta_ambient_unboundedRitz_definedTangent_symmetricNorming_rclike` are the full
+   unbounded strong endpoints.
+5. `SectionTwo.tanTheta_directed` and `SectionTwo.tanTheta_ambient` expose those endpoints.
 
-The implementation lesson is also recorded in the paper and variant index: scalar-field drift
-was a recurring maintenance failure. A repair that changes a headline theorem must check the
-RCLike endpoint and both fixed-field APIs together, or record explicitly why a field-specific
-variant is intentional.
+The fixed real and complex source-facing declarations remain available for compatibility and
+for exact source-semantic auditing; scalar genericity is no longer a reason to keep the public
+strong API split by field.
 
-## Remaining scalar-generic Section 2 work
+## `tan 2Θ` — candidate scalar-generic full-unbounded API
 
-Only the tangent families remain on this frontier. The historical analysis below predates the
-sine consolidation and is retained for provenance; statements there saying `sin 2Θ` is still
-open are historical, not current status.
+The same transport architecture closes the double-angle tangent family at an arbitrary
+reducing subspace:
+
+1. `DoubleAngle/ScalarTransport.lean` transports reduction, off-diagonality, form bounds, and
+   residual block gauges.
+2. `Angle.absTanTwoAngleOperator` and `Angle.HasDefinedDoubleTangent` provide the generic
+   branch-free ambient object and its pole condition.
+3. `tanTwoTheta_ambient_unbounded_reducing_symmetricNorming_rclike` derives its own pole
+   exclusion and gives `(b-a) N(|tan 2Θ|) ≤ 2 N(B)`.
+4. `tanTwoTheta_directed_unboundedResidual_reducing_symmetricNorming_rclike` constructs a
+   directed bounded representative and characterizes its complete approximation-number
+   sequence as `tan (arcsin a_n(sin 2Θ₀))`, then gives the strong ideal-membership and gauge
+   estimate.
+5. `SectionTwo.tanTwoTheta_directed` and `SectionTwo.tanTwoTheta_ambient` expose those endpoints.
+
+The directed generic API deliberately exposes the singular-value characterization rather than
+a field-specific inverse spelling. This is the invariant consumed by every symmetric-norming
+functional and avoids making the choice of an inverse implementation part of the public
+scalar-generic contract.
+
+## Source-fidelity boundary
+
+Once compiler-validated, this closes the **scalar-generic strong API** frontier. It does not silently change which
+declarations the result ledger selects as exact transcriptions of Davis--Kahan's partial-domain
+unitarily invariant norm convention. Source-exact wrappers can continue to be promoted
+separately once the generic strong endpoints are compiler-validated.
 
 ---
 
