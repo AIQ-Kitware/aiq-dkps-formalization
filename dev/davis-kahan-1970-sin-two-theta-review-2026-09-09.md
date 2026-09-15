@@ -1,5 +1,24 @@
 # Sin-two-theta source review and paper revision, 2026-09-09
 
+## Status update — 2026-09-15
+
+The semantic diagnosis below remains correct for the checkout it audited,
+`13ea1322d4e4`: the then-selected whole-result witness was a bounded-trial
+specialization and could not certify the printed common-domain directed scope.
+The review's validation status is now obsolete, however. Commit `99d33c5d`
+(`Compile common-domain sin two theta module`, 2026-09-09 18:17 -04:00) compiled
+`SinTwoThetaCommonDomain.lean`, and `d8c84067` added the usage/axiom audit immediately
+afterward. A 2026-09-15 source-contract re-review found no remaining semantic delta:
+the common-domain theorem has only a bounded residual extension in its directed
+branch, keeps the bounded perturbation local to the ambient branch, preserves the
+perturbed-block gap and factor two, and uses the maintained where-defined source
+norm interface. The result inventory and public `SectionTwo` aliases therefore now
+select `sinTwoTheta_commonDomain_whereDefinedUIN_rclike` as canonical evidence.
+
+The remainder of this document is retained as the historical hostile review that
+identified the defect and specified the repair criteria.
+
+
 ## Verdict and validation boundary
 
 The displayed current declaration

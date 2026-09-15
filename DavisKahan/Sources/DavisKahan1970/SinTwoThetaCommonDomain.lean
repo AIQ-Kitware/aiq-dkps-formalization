@@ -8,8 +8,9 @@ import DavisKahan.Sources.DavisKahan1970.SinTwoThetaDirectedRCLike
 /-!
 # Double-angle residual bounds on a common dense domain
 
-This module is a candidate repair, pending validation with the pinned Lean toolchain.
-It is deliberately not imported by `All` or bound to the accepted SectionTwo aliases.
+This module supplies the source-facing common-domain form of the Section 2
+`sin 2Θ` theorem. It is imported by the Section 2 inventory and selected by the
+result census as the canonical whole-result witness.
 
 The existing combined endpoint requires the whole trial space to lie in the
 operator domain and a bounded trial operator. Here `A` and `T` are self-adjoint

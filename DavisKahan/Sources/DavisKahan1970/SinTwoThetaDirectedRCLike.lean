@@ -10,8 +10,9 @@ domain, and their trial operator `M` is bounded. The common-dense-domain setup
 of the source does not require either restriction. In the final conjunction,
 these shared hypotheses also restrict the ambient clause unnecessarily; use
 `SinTwoThetaAmbientUnbounded` for its independent ambient estimate.
-`SinTwoThetaCommonDomain` contains a replacement candidate pending compiler
-validation. It is not imported here or certified by the result inventory.
+`SinTwoThetaCommonDomain` now provides the accepted source-scope replacement and
+is selected by the result inventory. The declarations in this module remain useful
+bounded-trial specializations and implementation support.
 
 -/
 import DavisKahan.DoubleAngle.UnboundedIdeal

@@ -6,8 +6,8 @@ The denominator contains exactly the four Section 2 headline theorems and every 
 
 - Counted results: **29**
 - Result-boundary reviews accepted: **29/29**
-- Currently hostile-certified terminal: **28**
-- Awaiting closure: **1**
+- Currently hostile-certified terminal: **29**
+- Awaiting closure: **0**
 - Printed statements that are NOT locally self-contained: **6**
 - Result-only semantic sweep: `dev/davis-kahan-1970-result-semantic-review-2026-08-31.md`; targeted reopening: `dev/davis-kahan-1970-sin-two-theta-review-2026-09-09.md`
 - Compiler-checkable theorem surface: `DavisKahan/Sources/DavisKahan1970/Audits/ResultSemanticSurface.lean`
@@ -26,7 +26,7 @@ Each result below explicitly partitions its primary source block into atoms insi
 |---|---|---|---|---|---|---|---|
 | `S2-sin-theta` | unnumbered_theorem | `locally_exact` | yes | `proved_exact` | `proved_in_build` | `accepted` | `accepted` |
 | `S2-tan-theta` | unnumbered_theorem | `paper_faithful_nonlocal_source_interpretation` | **no** | `proved_exact` | `proved_in_build` | `accepted` | `accepted` |
-| `S2-sin-two-theta` | unnumbered_theorem | `scope_restricted` | yes | `proved_partial` | `proved_in_build` | `hostile_review_blocked` | `accepted` |
+| `S2-sin-two-theta` | unnumbered_theorem | `locally_exact` | yes | `proved_exact` | `proved_in_build` | `accepted` | `accepted` |
 | `S2-tan-two-theta` | unnumbered_theorem | `locally_exact` | yes | `proved_exact` | `proved_in_build` | `accepted` | `accepted` |
 | `DK-3.1-prop` | proposition | `locally_exact` | yes | `proved_exact` | `proved_in_build` | `accepted` | `accepted` |
 | `DK-3.2-prop` | proposition | `locally_exact` | yes | `proved_exact` | `proved_in_build` | `accepted` | `accepted` |
@@ -145,17 +145,16 @@ Theorem 8.1 signatures at their source context.
 
 ## Current closure queue
 
-`S2-sin-two-theta` was reopened on 2026-09-09. The selected conjunction
-requires a bounded trial operator and puts every trial vector in the exact
-operator domain. Davis--Kahan allow a common dense domain with an unbounded
-trial restriction. The directed clause also need not assume a globally bounded
-perturbation. The ambient clause has a separate existing unrestricted theorem.
+Empty. All 29 counted results are terminal on the result, compiler, and semantic-review axes.
 
-`SinTwoThetaCommonDomain.lean` supplies a repair candidate with clause-local
-boundedness; it has not been compiled in the review environment. The row must
-remain blocked until its proof and public statement have both been validated.
-The other 28 status records are retained, not independently re-certified by this
-targeted review.
+`S2-sin-two-theta` was closed on 2026-09-15 by promoting
+`sinTwoTheta_commonDomain_whereDefinedUIN_rclike`. The September 9 hostile review
+correctly rejected the previous bounded-trial conjunction; the replacement permits
+an unbounded trial restriction on the common domain, requires only a bounded residual
+extension in the directed branch, and keeps the bounded perturbation assumption local
+to the ambient branch. Git history records the candidate compilation in `99d33c5d`
+and the usage/axiom audit in `d8c84067`; the canonical evidence and public Section 2
+aliases now point to that theorem.
 
 Historical closure notes follow.
 

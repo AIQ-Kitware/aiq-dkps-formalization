@@ -192,25 +192,39 @@
       "short_api": {
         "declaration": "TauCeti.DavisKahan1970.SectionTwo.sinTwoTheta",
         "status": "bound",
-        "reason": "Compatibility binding to the currently selected but scope-restricted theorem. The result ledger blocks source-scope certification pending the common-domain repair."
+        "reason": "Public scalar-generic alias to the accepted common-domain source witness."
       },
       "ledger_witnesses": [
-        "TauCeti.DavisKahan1970.sinTwoTheta_unbounded_perturbedGap_whereDefinedUIN_rclike"
+        "TauCeti.DavisKahan1970.sinTwoTheta_commonDomain_whereDefinedUIN_rclike"
       ],
       "variants": [
         {
-          "declaration": "TauCeti.DavisKahan1970.sinTwoTheta_unbounded_perturbedGap_whereDefinedUIN_rclike",
+          "declaration": "TauCeti.DavisKahan1970.sinTwoTheta_commonDomain_whereDefinedUIN_rclike",
           "role": "ledger_witness",
           "scalar_scope": "rclike",
           "source_fidelity": "attested_by_ledger",
-          "reason": "Selected evidence under review, NOT accepted source-scope certification. See result semantic_certification=hostile_review_blocked. The source_fidelity tag indicates ledger ownership, not a separate acceptance decision."
+          "reason": "Accepted common-domain source witness for both printed clauses. Directed boundedness is residual-local; ambient boundedness is perturbation-local; no bounded trial block or whole-trial-space domain assumption."
+        },
+        {
+          "declaration": "TauCeti.DavisKahan1970.sinTwoTheta_directed_commonDomain_whereDefinedUIN_rclike",
+          "role": "scalar_generic_api",
+          "scalar_scope": "rclike",
+          "source_fidelity": "not_ledger_witness",
+          "reason": "Clause-level common-domain API for the printed directed residual inequality."
+        },
+        {
+          "declaration": "TauCeti.DavisKahan1970.sinTwoTheta_unbounded_perturbedGap_whereDefinedUIN_rclike",
+          "role": "scalar_generic_api",
+          "scalar_scope": "rclike",
+          "source_fidelity": "not_ledger_witness",
+          "reason": "Former ledger witness, retained as a valid bounded-trial specialization. It requires a bounded trial operator, all trial vectors in the domain, and a global bounded perturbation, so it is not the source-scope witness."
         },
         {
           "declaration": "TauCeti.DavisKahan1970.sinTwoTheta_directed_unboundedResidual_reducing_whereDefinedUIN_rclike",
           "role": "scalar_generic_api",
           "scalar_scope": "rclike",
           "source_fidelity": "not_ledger_witness",
-          "reason": "Generic directed residual clause at arbitrary reducing subspace; invoked by the complete ledger witness."
+          "reason": "Earlier scalar-generic directed API with the whole trial subspace in the domain; retained as a specialization below the common-domain directed endpoint."
         },
         {
           "declaration": "TauCeti.DavisKahan1970.sinTwoTheta_directed_unboundedResidual_reducing_symmetricNorming_rclike",
@@ -231,14 +245,14 @@
           "role": "scalar_generic_api",
           "scalar_scope": "rclike",
           "source_fidelity": "not_ledger_witness",
-          "reason": "Public short alias to the complete ledger witness."
+          "reason": "Public short alias to the accepted common-domain whole-result ledger witness."
         },
         {
           "declaration": "TauCeti.DavisKahan1970.SectionTwo.sinTwoTheta_directed",
           "role": "scalar_generic_api",
           "scalar_scope": "rclike",
           "source_fidelity": "not_ledger_witness",
-          "reason": "Public short alias for the generic directed clause."
+          "reason": "Public short alias to the common-domain directed residual clause."
         },
         {
           "declaration": "TauCeti.DavisKahan1970.sinTwoTheta_directed_unboundedResidual_whereDefinedUIN_complex",
@@ -367,8 +381,8 @@
           "reason": "Compiled on 2026-09-09 and was promoted to the production generic ambient endpoint."
         }
       ],
-      "review_status": "hostile_review_blocked",
-      "review_note": "2026-09-09 source-scope review: the currently selected conjunction is a bounded-trial specialization. Its bounded M and hPdom (every trial vector in dom(A+H)) exclude the source common-dense-domain unbounded trial setting, and unnecessarily restrict the ambient conjunct. The directed source inference requires a bounded residual, not a globally bounded perturbation. The separate ambient theorem remains available without the trial restriction. The common-domain replacement is proof code pending compiler validation, not accepted evidence. See dev/davis-kahan-1970-sin-two-theta-review-2026-09-09.md."
+      "review_status": "accepted",
+      "review_note": "Accepted 2026-09-15. The September 9 hostile review correctly rejected the old bounded-trial conjunction, but its common-domain replacement was subsequently compiled and audited. The variant index now follows the ledger selection of the common-domain theorem."
     },
     {
       "result_id": "S2-tan-two-theta",

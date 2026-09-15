@@ -8,10 +8,9 @@ import DavisKahan.Sources.DavisKahan1970.SinTwoThetaCommonDomain
 /-!
 # Common-domain double-angle usage and signature audit
 
-PENDING: this file has not been compiled in the review environment. It is not
-imported by the accepted census or `All`. Build the candidate module first,
-then run this file. Inspect the printed types and transitive axioms; in
-particular, absence of `sorry` in source is not a substitute for this check.
+This is the maintained usage/signature audit for the accepted common-domain
+source witness. It is imported by `Audits.All`; the `#check` and `#print axioms`
+commands keep the public type and transitive trust surface visible to review.
 
 The two calls below pin the intended clause separation. The directed call has
 no global bounded perturbation. The ambient call has no residual, bounded

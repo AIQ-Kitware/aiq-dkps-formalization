@@ -4,7 +4,7 @@
 
 **Census family:** `source-completion-census`  
 **Items:** 50  
-**Unique cited Lean declarations:** 1535
+**Unique cited Lean declarations:** 1537
 
 ## How to use this census
 
@@ -528,7 +528,7 @@ SOURCE-EXACT FAÇADES REGISTERED 2026-09-05. Canonical evidence for this row is 
 
 **importance:** `headline`  **section:** 2  **source:** Section 2, sin 2 theta theorem  **kind:** unnumbered_theorem  **status:** `compiled_exact`  **verification:** `proved_in_build`  **completion:** `accepted`
 
-**Summary.** The complete Davis--Kahan Section 2 sin(2 Theta) result is represented by one scalar-generic RCLike theorem at the where-defined unitarily invariant norm boundary. Under the shared source setup it proves both the directed residual bound and the ambient perturbation bound with factor two. Fixed real/complex and stronger norm-class declarations are retained as API and implementation variants.
+**Summary.** The complete Davis--Kahan Section 2 sin(2 Theta) result is represented by one scalar-generic RCLike common-domain theorem at the where-defined unitarily invariant norm boundary. The directed residual branch requires only a bounded residual extension on the common domain; the ambient perturbation branch separately requires a bounded symmetric perturbation. Both use the perturbed-block gap and have factor two.
 
 **Lean declarations:**
 
@@ -641,6 +641,8 @@ SOURCE-EXACT FAÇADES REGISTERED 2026-09-05. Canonical evidence for this row is 
 - `TauCeti.DavisKahan1970.sinTwoTheta_unbounded_perturbedGap_whereDefinedUIN_rclike`
 - `TauCeti.DavisKahan1970.SectionTwo.sinTwoTheta`
 - `TauCeti.DavisKahan1970.SectionTwo.sinTwoTheta_directed`
+- `TauCeti.DavisKahan1970.sinTwoTheta_commonDomain_whereDefinedUIN_rclike`
+- `TauCeti.DavisKahan1970.sinTwoTheta_directed_commonDomain_whereDefinedUIN_rclike`
 
 **Curated source/Lean review:**
 
@@ -660,10 +662,10 @@ SOURCE-EXACT FAÇADES REGISTERED 2026-09-05. Canonical evidence for this row is 
 | source clause | Lean realization | status |
 | --- | --- | --- |
 | The scalar field is real or complex. | The canonical theorem quantifies over 𝕜 with [RCLike 𝕜], so the same declaration covers the real and complex source fields. | claimed_exact |
-| Interval/exterior spectral separation by delta. | The canonical theorem takes a FormBoundedSylvesterGap between the two reducing restrictions of A + H on Q and Qᗮ. These are the source Λ₀ and Λ₁ blocks, and the gap predicate includes the bounded-interval and half-infinite separation configurations used by Davis--Kahan. | claimed_exact |
-| delta \|\|sin(2 Theta0)\|\| <= 2 \|\|R\|\|. | The first conjunct of the canonical theorem is the directed trial-side inequality δ N(sin(2Θ₀)) ≤ 2 N(R), at an arbitrary reducing Q and with R given by the source residual identity for A + H on the trial subspace P. The implication form states the inequality where both partial norms are defined. | claimed_exact |
-| delta \|\|sin(2 Theta)\|\| <= 2 \|\|H\|\|. | The second conjunct of the same canonical theorem is the ambient inequality δ N(sin(2Θ)) ≤ 2 N(H), with P reducing A and Q reducing A + H under the same perturbed-block gap. The implication form again uses the source where-defined norm convention. | claimed_exact |
-| Infinite-dimensional and unbounded directed-residual scope. | The canonical theorem assumes only a separable complete Hilbert space over an RCLike field. A is a potentially unbounded self-adjoint LinearPMap, H and R are bounded where the source expressions require them, and there is no finite-dimensional hypothesis. | claimed_exact |
+| Interval/exterior spectral separation by delta. | The canonical theorem takes `FormBoundedSylvesterGap` between the two reducing restrictions of T on Q and Q-perp. Its interval/exterior constructor is the printed Lambda_0/Lambda_1 hypothesis, and its semibounded constructors retain the paper's half-infinite extension. | claimed_exact |
+| delta \|\|sin(2 Theta0)\|\| <= 2 \|\|R\|\|. | The first conjunct locally quantifies `R : P ->L E` and requires `T p = A p + R p` only for trial vectors p already in the common domain `T.domain = A.domain`. It concludes delta * N(sin(2 Theta_0)) <= 2 N(R) on `Angle.directedSinTwoAngleOperator P Q`, without a bounded trial compression, `P` contained in the domain, or a bounded global perturbation. | claimed_exact |
+| delta \|\|sin(2 Theta)\|\| <= 2 \|\|H\|\|. | The second conjunct independently quantifies a bounded symmetric `Hop` with `T = LinearPMap.addBounded A Hop` and concludes delta * N(sin(2 Theta)) <= 2 N(Hop) on `Angle.sinTwoAngleOperator P Q`. No residual or trial-domain hypothesis is inherited. | claimed_exact |
+| Infinite-dimensional and unbounded directed-residual scope. | The canonical theorem assumes a separable complete Hilbert space over an RCLike field and self-adjoint partial maps A and T with equal domains. Only the residual extension is bounded in the directed clause; there is no finite-dimensional hypothesis and no requirement that the full trial subspace lie in the operator domain. The ambient clause adds bounded Hop only locally. | claimed_exact |
 
 **Notes.** REPAIRED AND RE-CLOSED 2026-08-12 (result inventory row `S2-sin-two-theta`).  The reopening was correct: the registered unbounded directed endpoint bounded delta * N(sin 2Theta_0) by the norm of a REFLECTION residual, not by the printed trial residual R = (A+H)E_0 - E_0 A_0.  Repaired by `sinTwoTheta_directed_unboundedResidual_blockRepresentative_symmetricNorming_complex` (complex) and `sinTwoTheta_directed_unboundedResidual_blockRepresentative_symmetricNorming_real` (real): unbounded self-adjoint scope, arbitrary closed trial subspace inside the domain, the printed trial residual as the only right-hand side, arbitrary `SymmetricNormingFunction`, directed angle Theta_0, and the printed factor two.  The reflected comparison system is built internally from the trial data by `trialReflection_intertwines`, so no reflection residual and no extra hypothesis is visible to the caller; the sharp factor two comes from the scalar-generic doubling identity `kyFan_reflectionDefectBlock_le_two_mul`, not from a triangle inequality.
 
@@ -803,9 +805,9 @@ AMBIENT OPERATOR ROLES CORRECTED 2026-09-05. The registered ambient witnesses ha
 
 SOURCE-EXACT FAÇADES REGISTERED 2026-09-05. Canonical evidence for this row is now the façade at the printed scope -- separable ambient Hilbert space and the literal `NormalizedUnitaryInvariantNorm` class -- with the arbitrary-Hilbert `SymmetricNormingFunction` theorem retained beneath it as a registered generalization. See GOAL.md sections I, III and IV.
 
-CURRENT API 2026-09-09: the RCLike directed reducing-subspace engine and the complete two-clause `sinTwoTheta_unbounded_perturbedGap_whereDefinedUIN_rclike` theorem replace the former fixed-field canonical split.
+CURRENT API 2026-09-15: `sinTwoTheta_commonDomain_whereDefinedUIN_rclike` is the complete two-clause source witness. Its directed branch is common-domain/residual-only and its ambient bounded-perturbation assumptions are clause-local. The earlier bounded-trial whole-result theorem remains a specialization.
 
-**Next action.** No hostile-review hole is currently recorded for this source passage. Preserve exact source scope and re-audit if the distributable source specification changes.
+**Next action.** No source-fidelity gap is currently recorded for this result. Preserve the common-domain clause separation and re-audit if the distributable source specification or canonical theorem signature changes.
 
 ### `S2-tan-two-theta` — Double-angle tangent theorem
 

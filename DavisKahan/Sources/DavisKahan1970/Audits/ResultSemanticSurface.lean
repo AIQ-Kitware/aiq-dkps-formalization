@@ -125,6 +125,8 @@ Fan-dominance reduction at (1.11)-(1.13). -/
 #check @TauCeti.DavisKahan1970.tanTheta_directed_unboundedRitz_normalizedUIN_real
 #check @TauCeti.DavisKahan1970.sinTwoTheta_directed_unboundedResidual_whereDefinedUIN_complex
 #check @TauCeti.DavisKahan1970.sinTwoTheta_directed_unboundedResidual_whereDefinedUIN_real
+#check @TauCeti.DavisKahan1970.sinTwoTheta_commonDomain_whereDefinedUIN_rclike
+#check @TauCeti.DavisKahan1970.sinTwoTheta_directed_commonDomain_whereDefinedUIN_rclike
 #check @TauCeti.DavisKahan1970.sinTwoTheta_unbounded_perturbedGap_whereDefinedUIN_rclike
 #check @TauCeti.DavisKahan1970.sinTwoTheta_directed_unboundedResidual_reducing_whereDefinedUIN_rclike
 #check @TauCeti.DavisKahan1970.sinTwoTheta_directed_unboundedResidual_reducing_symmetricNorming_rclike
