@@ -473,8 +473,9 @@ theorem tanTheta_ambient_unboundedRitz_definedTangent_symmetricNorming_real
 over `ℝ`.**
 
 Separable ambient Hilbert space and normalized unitarily invariant norm.  The
-definedness hypothesis stays exactly as printed; the estimate goes through the
-Fan-dominance bridge. -/
+explicit `HasDefinedAmbientTangentReal` hypothesis makes Section 1's where-defined/vacuity
+convention visible at the Lean boundary; it is not an extra numerical hypothesis printed
+in the Section 2 display.  The estimate goes through the Fan-dominance bridge. -/
 theorem tanTheta_ambient_unboundedRitz_definedTangent_normalizedUIN_real
     [TopologicalSpace.SeparableSpace E]
     (N : NormalizedUnitaryInvariantNorm.{0, v} ℝ)
