@@ -6,7 +6,7 @@ Authors: Jon Crall, Claude Opus 5
 import DavisKahan.Geometry.Angle.AngleFunctionalCalculusReal
 import DavisKahan.SpectralTheory.ReflectionRestriction
 import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.SameSequence
-import ForTauCeti.Analysis.InnerProductSpace.ModulusTransport
+import ForTauCeti.Analysis.RCLike.ScalarTransportFunctionalCalculus
 
 /-!
 # The operator angle at an arbitrary `RCLike` field
@@ -109,6 +109,11 @@ theorem sinTwoAngleOperator_comm :
 /-- `sin Θ` is nonnegative, being a modulus. -/
 theorem sinAngleOperator_nonneg : 0 ≤ sinAngleOperator U V :=
   ContinuousLinearMap.modulus_nonneg _
+
+/-- The operator norm of the generic ambient sine is exactly the projection gap. -/
+theorem norm_sinAngleOperator : ‖sinAngleOperator U V‖ = U.projectionGap V := by
+  unfold sinAngleOperator Submodule.projectionGap
+  exact ContinuousLinearMap.norm_modulus _
 
 /-- `sin Θ` is self-adjoint. -/
 theorem isSelfAdjoint_sinAngleOperator : IsSelfAdjoint (sinAngleOperator U V) :=

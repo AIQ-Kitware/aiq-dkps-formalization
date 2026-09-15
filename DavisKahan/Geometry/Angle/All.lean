@@ -16,5 +16,6 @@ import DavisKahan.Geometry.Angle.Proposition35Infinite
 import DavisKahan.Geometry.Angle.Proposition35Nonacute
 import DavisKahan.Geometry.Angle.SinAngle
 import DavisKahan.Geometry.Angle.TanAngleFunctionalCalculus
+import DavisKahan.Geometry.Angle.TangentOperatorGeneric
 
 /-! # `DavisKahan/Geometry/Angle` -/
