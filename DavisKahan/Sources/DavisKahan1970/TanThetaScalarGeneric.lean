@@ -59,6 +59,7 @@ section Transport
 universe w
 variable {𝕂 : Type w} [RCLike 𝕂] {e : RCLikeIso 𝕜 𝕂}
 
+omit [CompleteSpace H] in
 /-- Scalar transport carries the directed sine block into the canonical transported
 subspace coordinates. -/
 theorem scalarTransport_directedSineBlock
