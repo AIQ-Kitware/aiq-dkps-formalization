@@ -390,7 +390,11 @@
         "TauCeti.DavisKahan1970.tanTheta_directed_unboundedRitz_normalizedUIN_real",
         "TauCeti.DavisKahan1970.normalizedUnitaryInvariant_of_symmetricNorming",
         "TauCeti.DavisKahan1970.normalizedUnitaryInvariant_of_symmetricNorming_mul",
-        "TauCeti.DavisKahan.ExactSinTheta.NormalizedUnitaryInvariantNorm"
+        "TauCeti.DavisKahan.ExactSinTheta.NormalizedUnitaryInvariantNorm",
+        "TauCeti.DavisKahan1970.tanTheta_directed_unboundedRitz_symmetricNorming_exists_rclike",
+        "TauCeti.DavisKahan1970.tanTheta_ambient_unboundedRitz_definedTangent_symmetricNorming_rclike",
+        "TauCeti.DavisKahan1970.SectionTwo.tanTheta_directed",
+        "TauCeti.DavisKahan1970.SectionTwo.tanTheta_ambient"
       ],
       "review_note": "Result-only audit 2026-08-12, superseding the earlier plan to classify this row as refuted-as-transcribed. The printed Section 2 tangent theorem is accepted as a TRUE counted result read under nonlocal source semantics; see `nonlocal_source_interpretation`. The directed conclusion is closed at full source scope (bounded and unbounded, complex and real, arbitrary paper UI norm). The ambient conclusion is closed at bounded scope over both fields in the source-shaped (3.5)-qualified form. The Appendix explicitly strengthens the unbounded scope further: in the ordered case A0 <= alpha and Lambda1 >= alpha + delta, both A0 and Lambda1 may be genuinely unbounded while the residual remains bounded. That Appendix scope is discharged over complex scalars by `tanTheta_ambient_unboundedRitz_explicitCompatibility_symmetricNorming_complex` and over real scalars by `tanTheta_ambient_unboundedRitz_explicitCompatibility_symmetricNorming_real`; both conclude ideal membership and the sharp factor-one ambient inequality. The older `tanTheta_ambient_unboundedOperator_boundedRitz_symmetricNorming_complex` and real sibling remain useful specializations in which the ambient operator is unbounded but the Ritz compression is bounded. The bilateral-shift material remains a vacuity/nonvacuity witness proving that (1.5) does not imply (3.5); it is NOT a counterexample to this result and must not be described as one. The transversality-form declarations `tanTheta_ambient_bounded_symmetricNorming_complex_of_transversality` and its real counterpart are retained as registered specializations: `\u2016sin Theta\u2016 < 1` is strictly stronger than the source's standing (3.5), so they are alternative routes rather than the source-shaped statement. Audit-surface update 2026-08-13: `tanTheta_directed_finiteDimensional_symmetricNorming_rclike` is now the canonical scalar-generic PaperUI directed facade; it exposes the Ritz spectral hypotheses directly and does not alter the separately certified arbitrary-dimensional/unbounded ambient coverage.  DEFECT FOUND AND REPAIRED 2026-08-31, by the Palomar Section 2 statement audit: the directed clause's registered primaries `tanTheta_directed_unboundedTrial_symmetricNorming_{complex,real}` take a `TanTheta.BoundedCompressionTrialBlock`, whose Ritz compression `operator : Z ->L Z` is BOUNDED and everywhere defined; the bundle's name records only that the AMBIENT operator is unbounded.  They therefore did not establish `DK-6-appendix.unbounded-tangent-extension`, which is the Appendix's explicit statement that BOTH A_0 and Lambda_1 may be unbounded while only the residual stays bounded -- and the certificate could not see the difference, because that atom carried no `type_requirements`.  The repair is `tanTheta_directed_unboundedRitz_symmetricNorming_{complex,real}`, which take an `UnboundedRitzPair` whose `trial.compression : Z ->L. Z` is a densely defined self-adjoint partial map, and which promote the already-existing Appendix-scope Ky Fan estimates `UnboundedCompressionTrialData.ideal_of_formBounds` and `theorem6_3_unboundedCompression_ideal_real` to the paper's universal norm quantifier.  The atom now carries `must_contain: UnboundedRitzPair` / `must_not_contain: BoundedCompressionTrialBlock`, so a bounded-compression witness can no longer satisfy it.  The bounded-compression declarations are retained as specializations.\n\n**REOPENED 2026-09-04 (Claude Opus 5, on hostile review).**  The printed Section 2 tangent theorem assumes the ordered spectral gap, delta > 0 and H_0 = 0, and nothing else; the Lean ambient conclusion additionally carries the crossed-defect condition (3.5).  (3.5) is introduced in Section 3, after Proposition 3.2, and is declared to govern the REMAINDER of the paper, so it cannot be read back into an earlier theorem as a missing hypothesis.  The mechanism the source does provide from Section 1 is different: a statement is regarded as vacuous when a norm occurring in it does not exist.  The accepted repair is to model that definedness/vacuity semantics explicitly -- quantify over bounded operators realizing tan Theta, so the statement is vacuous exactly when no such realization exists -- and to derive whatever crossed-defect equality the proof needs inside the proof.  The current (3.5) theorem then remains as a non-vacuous corollary.  Not written.\n\n**CONDITION (3.5) REMOVED FROM THE PRINTED STATEMENT 2026-09-04 (Claude Opus 5, on hostile review).**  The reopening earlier the same day is repaired along the route the review specified: model the source's own definedness/vacuity semantics rather than importing a later standing assumption.  `HasDefinedAmbientTangent` replaces (3.5) in the canonical endpoints; (3.5) is derived from it, and the endpoint is shown to be about the honest tangent rather than Lean's totalisation.  The remaining reservation is recorded on the row: the definedness hypothesis is the *sufficient* condition `||P_U - P_V|| < 1`, and no theorem yet states that the paper's `tan Theta` fails to exist when it is violated, so vacuity is modelled in one direction only.\n\n**RESERVATION CLOSED 2026-09-04.**  The one-directional modelling noted when this row was repaired is closed: `hasDefinedAmbientTangent_iff_pi_div_two_notMem_spectrum` is the biconditional, so the definedness hypothesis and the source's own vacuity condition are the same condition rather than one implying the other.\n\n**DIRECTED CLAUSE RE-REGISTERED 2026-09-05.**  The 2026-08-31 paragraph above names `tanTheta_directed_unboundedTrial_symmetricNorming_{complex,real}` as the directed clause's registered primaries and its repair `tanTheta_directed_unboundedRitz_symmetricNorming_{complex,real}` as the fix.  Both statements are now stale.  The registered primaries are the `_exists_` unbounded-Ritz endpoints, which ask the caller for no tangent representative and no proof that its approximation numbers are the paper's `tan theta_j`: they derive the pole exclusion and construct the representative from the source form bounds.  The parameterized `_unboundedRitz_` pair is `alternative_route`; the `_unboundedTrial_` pair is `specialization` on `DK-6.3-thm` for the reason recorded there.\n\n**NORM CLASS, 2026-09-05.**  See `norm_class_reading` on this row: the `SymmetricNormingFunction` quantifier is transported to and from `KyFanDominantIdealFamily` by compiled theorems, so it is the printed \"every unitary-invariant norm\" and not a narrowing.",
       "boundary_review": {
@@ -760,6 +764,26 @@
           "declaration": "TauCeti.DavisKahan1970.normalizedUnitaryInvariant_of_symmetricNorming_mul",
           "role": "source_correspondence",
           "note": "The same reduction with the source's constant on the right, which the double-angle conclusions need."
+        },
+        {
+          "declaration": "TauCeti.DavisKahan1970.tanTheta_directed_unboundedRitz_symmetricNorming_exists_rclike",
+          "role": "generalization",
+          "note": "Full-unbounded scalar-generic RCLike SymmetricNormingFunction API produced by the 2026-09-15 scalar-transport unification. It is stronger than the ledger-selected fixed-field normalized-UIN source boundary, so it is supporting generalization evidence rather than a replacement canonical witness."
+        },
+        {
+          "declaration": "TauCeti.DavisKahan1970.tanTheta_ambient_unboundedRitz_definedTangent_symmetricNorming_rclike",
+          "role": "generalization",
+          "note": "Full-unbounded scalar-generic RCLike SymmetricNormingFunction API produced by the 2026-09-15 scalar-transport unification. It is stronger than the ledger-selected fixed-field normalized-UIN source boundary, so it is supporting generalization evidence rather than a replacement canonical witness."
+        },
+        {
+          "declaration": "TauCeti.DavisKahan1970.SectionTwo.tanTheta_directed",
+          "role": "public_alias",
+          "note": "Public scalar-generic directed-clause alias to the strong RCLike API; source fidelity remains owned by the fixed-field ledger witnesses."
+        },
+        {
+          "declaration": "TauCeti.DavisKahan1970.SectionTwo.tanTheta_ambient",
+          "role": "public_alias",
+          "note": "Public scalar-generic ambient-clause alias to the strong RCLike API; source fidelity remains owned by the fixed-field ledger witnesses."
         }
       ],
       "result_wide_scope_atoms": [
@@ -1635,7 +1659,11 @@
         "TauCeti.DavisKahan1970.normalizedUnitaryInvariant_of_symmetricNorming",
         "TauCeti.DavisKahan1970.normalizedUnitaryInvariant_of_symmetricNorming_mul",
         "TauCeti.DavisKahan.ExactSinTheta.NormalizedUnitaryInvariantNorm",
-        "TauCeti.DavisKahan1970.tanTwoTheta_directed_unboundedResidual_normalizedUIN_real"
+        "TauCeti.DavisKahan1970.tanTwoTheta_directed_unboundedResidual_normalizedUIN_real",
+        "TauCeti.DavisKahan1970.tanTwoTheta_directed_unboundedResidual_reducing_symmetricNorming_rclike",
+        "TauCeti.DavisKahan1970.tanTwoTheta_ambient_unbounded_reducing_symmetricNorming_rclike",
+        "TauCeti.DavisKahan1970.SectionTwo.tanTwoTheta_directed",
+        "TauCeti.DavisKahan1970.SectionTwo.tanTwoTheta_ambient"
       ],
       "review_note": "Accepted result-only semantic review 2026-08-12. The bounded complex and real source wrappers already expose both directed and ambient arbitrary-PaperUI conclusions from the printed Section 2 hypotheses with pole exclusion derived internally. The unbounded source surface now closes the advertised global scope as well: `tanTwoTheta_directed_unboundedResidual_blockRepresentative_symmetricNorming_complex` and its real counterpart give the sharp directed residual inequality, while `tanTwoTheta_ambient_unbounded_blockRepresentative_symmetricNorming_complex` and its real counterpart give the sharp ambient factor-two inequality for unbounded self-adjoint A in arbitrary Hilbert dimension. The ambient proof assembles the two reflection-tangent corners using the existing Section 7 directed estimate, skew-adjoint symmetry, Lemma 6.1 block assembly, and Fan dominance; the real endpoints descend exactly through the maintained complexification layer. No quarter-angle assumption, caller-supplied pole certificate, finite-dimensional restriction, compactness premise, or perturbed-Q spectral-placement hypothesis is added. The final implementation was compiler-verified by the user on the 7cc049b4 baseline before this census promotion. Audit-surface update 2026-08-13: the already scalar-generic branch-free PaperUI theorem is promoted under the canonical alias `tanTwoTheta_branchFree_bounded_finiteSubspace_symmetricNorming_rclike`; source-shaped directed and unbounded endpoints remain registered separately. Directed clauses closed 2026-09-02: the canonical directed witnesses are now the source-shaped endpoints `tanTwoTheta_directed_unboundedResidual_symmetricNorming_complex` (on the paper's directed projection block) and `tanTwoTheta_directed_unboundedResidual_symmetricNorming_real` (on `tanTwoDirectedCornerR U V`), each taking the reducing subspace `V` and stating the singular-value identification against `sinTwoThetaIdealBlock U V` in its own type. The arbitrary-involution theorems are retained as generalizations.\n\n**POLE EXCLUSION EXPOSED 2026-09-05**, closing the last part of finding F3 of the 2026-09-04 hostile review.  `absTanTwoAngleOperatorC/R` is `cfc (|tan (2 .)|)` of the angle operator, and Mathlib's `cfc` returns `0` off continuity, so a bound on it is trivially true at a quarter turn -- exactly the case the paper's proof excludes.  Both ambient canonical witnesses now conclude the exclusion.  The real side needed one new lemma, `cos_two_ne_zero_of_isUnit_diagonalPart_reflection_sq_real`, because the real chain carries the `IsUnit` form of the fact while the existing exclusion lemma is stated for `angleOperatorC`; it is proved by complexification through `spectrum_complexify`.",
       "boundary_review": {
@@ -2062,6 +2090,26 @@
           "role": "generalization",
           "scalar_scope": "real",
           "note": "The real sibling of the above, and what the real fa\u00e7ade delegates to.  It keeps the residual real because `SymmetricNormingFunction` carries no scalar parameter."
+        },
+        {
+          "declaration": "TauCeti.DavisKahan1970.tanTwoTheta_directed_unboundedResidual_reducing_symmetricNorming_rclike",
+          "role": "generalization",
+          "note": "Full-unbounded scalar-generic RCLike SymmetricNormingFunction API produced by the 2026-09-15 scalar-transport unification. It strengthens the ledger-selected fixed-field normalized-UIN clause and is therefore registered as a generalization, not substituted for canonical source evidence."
+        },
+        {
+          "declaration": "TauCeti.DavisKahan1970.tanTwoTheta_ambient_unbounded_reducing_symmetricNorming_rclike",
+          "role": "generalization",
+          "note": "Full-unbounded scalar-generic RCLike SymmetricNormingFunction API produced by the 2026-09-15 scalar-transport unification. It strengthens the ledger-selected fixed-field normalized-UIN clause and is therefore registered as a generalization, not substituted for canonical source evidence."
+        },
+        {
+          "declaration": "TauCeti.DavisKahan1970.SectionTwo.tanTwoTheta_directed",
+          "role": "public_alias",
+          "note": "Public scalar-generic directed-clause alias to the strong RCLike API; it is not a ledger witness."
+        },
+        {
+          "declaration": "TauCeti.DavisKahan1970.SectionTwo.tanTwoTheta_ambient",
+          "role": "public_alias",
+          "note": "Public scalar-generic ambient-clause alias to the strong RCLike API; it is not a ledger witness."
         }
       ],
       "result_wide_scope_atoms": [

@@ -91,7 +91,7 @@
       "short_api": {
         "declaration": "TauCeti.DavisKahan1970.SectionTwo.tanTheta",
         "status": "unbound",
-        "reason": "No scalar-generic declaration currently carries both ledger-selected clauses at the intended statement boundary."
+        "reason": "No single scalar-generic declaration currently carries both ledger-selected clauses at the intended statement boundary. The strong RCLike clauses are exposed separately as `SectionTwo.tanTheta_directed` and `SectionTwo.tanTheta_ambient`."
       },
       "ledger_witnesses": [
         "TauCeti.DavisKahan1970.tanTheta_ambient_unboundedRitz_definedTangent_normalizedUIN_complex",
@@ -155,6 +155,34 @@
           "scalar_scope": "real",
           "source_fidelity": "not_ledger_witness",
           "reason": "Real directed convenience alias."
+        },
+        {
+          "declaration": "TauCeti.DavisKahan1970.tanTheta_directed_unboundedRitz_symmetricNorming_exists_rclike",
+          "role": "scalar_generic_api",
+          "scalar_scope": "rclike",
+          "source_fidelity": "not_ledger_witness",
+          "reason": "Full-unbounded scalar-generic strong directed API. It constructs one tangent representative, proves the complete approximation-number characterization and pole exclusion, and gives SymmetricNormingFunction membership/gauge control. Stronger than the ledger boundary."
+        },
+        {
+          "declaration": "TauCeti.DavisKahan1970.tanTheta_ambient_unboundedRitz_definedTangent_symmetricNorming_rclike",
+          "role": "scalar_generic_api",
+          "scalar_scope": "rclike",
+          "source_fidelity": "not_ledger_witness",
+          "reason": "Full-unbounded scalar-generic strong ambient API with generic `HasDefinedTangent` and SymmetricNormingFunction membership/gauge control. Stronger than the ledger boundary."
+        },
+        {
+          "declaration": "TauCeti.DavisKahan1970.SectionTwo.tanTheta_directed",
+          "role": "scalar_generic_api",
+          "scalar_scope": "rclike",
+          "source_fidelity": "not_ledger_witness",
+          "reason": "Public Section Two clause alias to the full-unbounded scalar-generic directed API."
+        },
+        {
+          "declaration": "TauCeti.DavisKahan1970.SectionTwo.tanTheta_ambient",
+          "role": "scalar_generic_api",
+          "scalar_scope": "rclike",
+          "source_fidelity": "not_ledger_witness",
+          "reason": "Public Section Two clause alias to the full-unbounded scalar-generic ambient API."
         }
       ]
     },
@@ -348,7 +376,7 @@
       "short_api": {
         "declaration": "TauCeti.DavisKahan1970.SectionTwo.tanTwoTheta",
         "status": "unbound",
-        "reason": "No scalar-generic declaration currently carries the ledger-selected directed and ambient clauses at their source-facing boundaries."
+        "reason": "No single scalar-generic declaration currently carries the ledger-selected directed and ambient clauses at their source-facing boundaries. The strong RCLike clauses are exposed separately as `SectionTwo.tanTwoTheta_directed` and `SectionTwo.tanTwoTheta_ambient`."
       },
       "ledger_witnesses": [
         "TauCeti.DavisKahan1970.tanTwoTheta_ambient_unbounded_normalizedUIN_complex",
@@ -412,6 +440,34 @@
           "scalar_scope": "real",
           "source_fidelity": "not_ledger_witness",
           "reason": "Real ambient fixed-field convenience API."
+        },
+        {
+          "declaration": "TauCeti.DavisKahan1970.tanTwoTheta_directed_unboundedResidual_reducing_symmetricNorming_rclike",
+          "role": "scalar_generic_api",
+          "scalar_scope": "rclike",
+          "source_fidelity": "not_ledger_witness",
+          "reason": "Full-unbounded scalar-generic strong directed API at an arbitrary reducing subspace. It constructs a bounded representative, identifies its complete approximation-number sequence with tan(arcsin a_n(sin 2Theta_0)), and gives SymmetricNormingFunction membership/gauge control."
+        },
+        {
+          "declaration": "TauCeti.DavisKahan1970.tanTwoTheta_ambient_unbounded_reducing_symmetricNorming_rclike",
+          "role": "scalar_generic_api",
+          "scalar_scope": "rclike",
+          "source_fidelity": "not_ledger_witness",
+          "reason": "Full-unbounded scalar-generic strong ambient API at an arbitrary reducing subspace. It derives double-tangent pole exclusion internally and proves the sharp factor-two SymmetricNormingFunction estimate."
+        },
+        {
+          "declaration": "TauCeti.DavisKahan1970.SectionTwo.tanTwoTheta_directed",
+          "role": "scalar_generic_api",
+          "scalar_scope": "rclike",
+          "source_fidelity": "not_ledger_witness",
+          "reason": "Public Section Two clause alias to the full-unbounded scalar-generic directed API."
+        },
+        {
+          "declaration": "TauCeti.DavisKahan1970.SectionTwo.tanTwoTheta_ambient",
+          "role": "scalar_generic_api",
+          "scalar_scope": "rclike",
+          "source_fidelity": "not_ledger_witness",
+          "reason": "Public Section Two clause alias to the full-unbounded scalar-generic ambient API."
         }
       ]
     }
