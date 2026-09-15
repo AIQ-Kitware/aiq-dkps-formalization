@@ -1,6 +1,6 @@
 # Scalar-generic Section 2 endpoints: current frontier
 
-Status: **candidate closure of the tangent scalar-generic frontier; compiler validation pending. Updated 2026-09-15.**
+Status: **closed for the strong tangent scalar-generic API; maintainer compiler validation completed 2026-09-15.**
 
 The maintenance index for all four headline theorem families is
 `dev/davis-kahan-1970-section-two-variant-index.json`. The result ledger remains the authority
@@ -18,7 +18,7 @@ The directed and ambient full-unbounded proofs are scalar-generic internally and
 where-defined source APIs and strong symmetric-norming APIs. `SectionTwo.sinTwoTheta` carries
 the complete two-clause source result.
 
-## `tan Θ` — candidate scalar-generic full-unbounded API
+## `tan Θ` — scalar-generic full-unbounded API complete
 
 The hard Appendix cutoff remains implemented in the established real and complex engines, but
 its boundary is now transported through `RCLikeIso` without weakening the theorem:
@@ -40,7 +40,7 @@ The fixed real and complex source-facing declarations remain available for compa
 for exact source-semantic auditing; scalar genericity is no longer a reason to keep the public
 strong API split by field.
 
-## `tan 2Θ` — candidate scalar-generic full-unbounded API
+## `tan 2Θ` — scalar-generic full-unbounded API complete
 
 The same transport architecture closes the double-angle tangent family at an arbitrary
 reducing subspace:
@@ -64,10 +64,13 @@ scalar-generic contract.
 
 ## Source-fidelity boundary
 
-Once compiler-validated, this closes the **scalar-generic strong API** frontier. It does not silently change which
-declarations the result ledger selects as exact transcriptions of Davis--Kahan's partial-domain
-unitarily invariant norm convention. Source-exact wrappers can continue to be promoted
-separately once the generic strong endpoints are compiler-validated.
+This closes the **scalar-generic strong API** frontier. `ResultSemanticSurface.lean` checks the new
+tangent endpoints and their public clause aliases, and the maintainer reported a green full
+`lake build DavisKahan` after the scalar-transport fixes on 2026-09-15. This does not silently
+change which declarations the result ledger selects as exact transcriptions of Davis--Kahan's
+partial-domain unitarily invariant norm convention. The fixed-field normalized-UIN façades remain
+the canonical source-fidelity witnesses; the new RCLike symmetric-norming endpoints are stronger
+supporting/generalization APIs.
 
 ---
 

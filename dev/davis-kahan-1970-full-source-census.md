@@ -4,7 +4,7 @@
 
 **Census family:** `source-completion-census`  
 **Items:** 50  
-**Unique cited Lean declarations:** 1527
+**Unique cited Lean declarations:** 1535
 
 ## How to use this census
 
@@ -184,7 +184,7 @@ SEPARATELY, AND WORTH KNOWING FOR ANY FUTURE READING OF THAT DOCUMENT: `dev/davi
 - `TauCeti.DavisKahan1970.equation1_13_gauge_starProjection_comp_le`
 - `TauCeti.ApproximationNumber.exists_orthonormal_kyFanApproximationGauge_sub_le_re_sum_inner`
 - `TauCeti.ApproximationNumber.exists_orthonormal_kyFanApproximationGauge_sub_le_re_sum_inner_complex`
-- `TauCeti.RectangularUnitarilyInvariantSeminorm.exists_orthonormal_re_sum_inner_map_eq_rectangularKyFanSum`
+- `TauCeti.exists_orthonormal_re_sum_inner_map_eq_kyFanSum`
 - `ContinuousLinearMap.approximationNumber_comp_eq_of_leftInverse`
 - `ContinuousLinearMap.kyFanGauge_comp_eq_of_leftInverse`
 - `TauCeti.ApproximationNumber.kyFanApproximationGauge_comp_eq_of_leftInverse`
@@ -410,6 +410,10 @@ SIGNATURE RETARGET 2026-09-08. Probes 17--43 established that unconditional `ENN
 - `TauCeti.DavisKahan1970.normalizedUnitaryInvariant_of_symmetricNorming_mul`
 - `TauCeti.DavisKahan.ExactSinTheta.NormalizedUnitaryInvariantNorm`
 - `TauCeti.DavisKahan.crossedDefectsEquivalent_iff_sameDimension`
+- `TauCeti.DavisKahan1970.tanTheta_directed_unboundedRitz_symmetricNorming_exists_rclike`
+- `TauCeti.DavisKahan1970.tanTheta_ambient_unboundedRitz_definedTangent_symmetricNorming_rclike`
+- `TauCeti.DavisKahan1970.SectionTwo.tanTheta_directed`
+- `TauCeti.DavisKahan1970.SectionTwo.tanTheta_ambient`
 
 **Curated source/Lean review:**
 
@@ -927,6 +931,10 @@ CURRENT API 2026-09-09: the RCLike directed reducing-subspace engine and the com
 - `TauCeti.DavisKahan1970.normalizedUnitaryInvariant_of_symmetricNorming_mul`
 - `TauCeti.DavisKahan.ExactSinTheta.NormalizedUnitaryInvariantNorm`
 - `TauCeti.DavisKahan1970.tanTwoTheta_directed_unboundedResidual_normalizedUIN_real`
+- `TauCeti.DavisKahan1970.tanTwoTheta_directed_unboundedResidual_reducing_symmetricNorming_rclike`
+- `TauCeti.DavisKahan1970.tanTwoTheta_ambient_unbounded_reducing_symmetricNorming_rclike`
+- `TauCeti.DavisKahan1970.SectionTwo.tanTwoTheta_directed`
+- `TauCeti.DavisKahan1970.SectionTwo.tanTwoTheta_ambient`
 
 **Curated source/Lean review:**
 
@@ -1299,9 +1307,9 @@ SOURCE-EXACT FAÇADES REGISTERED 2026-09-05. Canonical evidence for this row is 
 - `TauCeti.DavisKahan.FiniteDimensional.sinTwoTheta_directSum_model_equality`
 - `TauCeti.DavisKahan.FiniteDimensional.tanTwoTheta_directSum_model_equality`
 - `TauCeti.DavisKahan.FiniteDimensional.directSum_model_all_four_equalities`
-- `TauCeti.RectangularUnitarilyInvariantSeminorm.orthogonalBlockSum_linearIsometryEquiv`
-- `TauCeti.RectangularUnitarilyInvariantSeminorm.singularValues_orthogonalBlockSum_congr`
-- `TauCeti.RectangularUnitarilyInvariantSeminorm.apply_orthogonalBlockSum_eq_of_singularValues_smul_eq`
+- `TauCeti.UnitarilyInvariantSeminorm.orthogonalBlockSum_linearIsometryEquiv`
+- `TauCeti.UnitarilyInvariantSeminorm.singularValues_orthogonalBlockSum_congr`
+- `TauCeti.UnitarilyInvariantSeminorm.apply_orthogonalBlockSum_eq_of_singularValues_smul_eq`
 - `TauCeti.DavisKahan.FiniteDimensional.sinTheta_model_isAdmissiblePair`
 - `TauCeti.DavisKahan.FiniteDimensional.sinTheta_perturbation_le_model_equality`
 - `TauCeti.DavisKahan.FiniteDimensional.tanTheta_model_isAdmissiblePair`
@@ -1312,14 +1320,14 @@ SOURCE-EXACT FAÇADES REGISTERED 2026-09-05. Canonical evidence for this row is 
 - `TauCeti.DavisKahan.FiniteDimensional.tanTwoTheta_model_isAdmissiblePair`
 - `TauCeti.DavisKahan.FiniteDimensional.tanTwoTheta_perturbation_le_model_equality`
 - `TauCeti.DavisKahan.FiniteDimensional.projection_orthogonalBlockSumSubmodule`
-- `TauCeti.RectangularUnitarilyInvariantSeminorm.orthogonalBlockSumSubmodule`
-- `TauCeti.RectangularUnitarilyInvariantSeminorm.mem_orthogonalBlockSumSubmodule`
-- `TauCeti.RectangularUnitarilyInvariantSeminorm.starProjection_orthogonalBlockSumSubmodule`
+- `TauCeti.UnitarilyInvariantSeminorm.orthogonalBlockSumSubmodule`
+- `TauCeti.UnitarilyInvariantSeminorm.mem_orthogonalBlockSumSubmodule`
+- `TauCeti.UnitarilyInvariantSeminorm.starProjection_orthogonalBlockSumSubmodule`
 - `TauCeti.selfAdjointFunctionalCalculus_intertwines`
-- `TauCeti.RectangularUnitarilyInvariantSeminorm.orthogonalBlockSum_sub`
-- `TauCeti.RectangularUnitarilyInvariantSeminorm.orthogonalBlockSum_isSymmetric`
-- `TauCeti.RectangularUnitarilyInvariantSeminorm.orthogonalBlockSum_isPositive`
-- `TauCeti.RectangularUnitarilyInvariantSeminorm.operatorAbs_orthogonalBlockSum`
+- `TauCeti.UnitarilyInvariantSeminorm.orthogonalBlockSum_sub`
+- `TauCeti.UnitarilyInvariantSeminorm.orthogonalBlockSum_isSymmetric`
+- `TauCeti.UnitarilyInvariantSeminorm.orthogonalBlockSum_isPositive`
+- `TauCeti.UnitarilyInvariantSeminorm.operatorAbs_orthogonalBlockSum`
 - `TauCeti.selfAdjointFunctionalCalculus_orthogonalBlockSum`
 - `TauCeti.projection_orthogonalBlockSumSubmodule`
 - `TauCeti.sinAngleOperator_orthogonalBlockSumSubmodule`
