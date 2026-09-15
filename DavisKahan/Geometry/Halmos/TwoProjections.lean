@@ -589,7 +589,6 @@ omit [CompleteSpace H] in
 theorem projection_mul_complementaryProjection
     (U : Submodule 𝕜 H) [U.HasOrthogonalProjection] :
     U.starProjection * (Uᗮ).starProjection = 0 := by
-  change U.starProjection * Uᗮ.starProjection = 0
   rw [Submodule.starProjection_orthogonal']
   have hP := projection_sq U
   noncomm_ring [hP]
@@ -600,7 +599,6 @@ omit [CompleteSpace H] in
 theorem complementaryProjection_mul_projection
     (U : Submodule 𝕜 H) [U.HasOrthogonalProjection] :
     (Uᗮ).starProjection * U.starProjection = 0 := by
-  change Uᗮ.starProjection * U.starProjection = 0
   rw [Submodule.starProjection_orthogonal']
   have hP := projection_sq U
   noncomm_ring [hP]

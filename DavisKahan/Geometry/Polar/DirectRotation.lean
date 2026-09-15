@@ -584,9 +584,6 @@ theorem spectraDirectRotation_intertwines_complementary
     (hacute : IsUniformlyAcute U V) :
     spectraDirectRotation U V hacute * (Uᗮ).starProjection =
       (Vᗮ).starProjection * spectraDirectRotation U V hacute := by
-  change
-    spectraDirectRotation U V hacute * Uᗮ.starProjection =
-      Vᗮ.starProjection * spectraDirectRotation U V hacute
   rw [Submodule.starProjection_orthogonal',
     Submodule.starProjection_orthogonal']
   rw [mul_sub, mul_one, sub_mul, one_mul,
@@ -758,9 +755,6 @@ theorem star_spectraDirectRotation_intertwines_complementary
     (hacute : IsUniformlyAcute U V) :
     star (spectraDirectRotation U V hacute) * (Vᗮ).starProjection =
       (Uᗮ).starProjection * star (spectraDirectRotation U V hacute) := by
-  change
-    star (spectraDirectRotation U V hacute) * Vᗮ.starProjection =
-      Uᗮ.starProjection * star (spectraDirectRotation U V hacute)
   rw [Submodule.starProjection_orthogonal',
     Submodule.starProjection_orthogonal']
   rw [mul_sub, mul_one, sub_mul, one_mul,
