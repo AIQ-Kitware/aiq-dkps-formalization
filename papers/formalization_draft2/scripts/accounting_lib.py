@@ -251,95 +251,186 @@ def instrumentation_commit(root: pathlib.Path, cutoff: str) -> tuple[str, dateti
     return commit, dt
 
 
+def ledger_row_identity(row: dict) -> tuple:
+    """Return the llm_resource_tally v3 latest-wins row identity.
+
+    Repository/worktree basename is deliberately not part of the identity; the
+    tally tool itself treats ``r`` as descriptive provenance, not a stable
+    repository identifier.
+    """
+    agent = row.get("a") or row.get("agent") or "unknown"
+    session = row.get("sid") or row.get("session_id")
+    if row.get("k") == "cx" or row.get("kind") == "compaction-estimate":
+        return ("compaction", agent, session, row.get("bt") or row.get("boundary_ts"))
+    commit = row.get("c") or row.get("commit") or ""
+    if isinstance(commit, str) and commit.startswith("pending@"):
+        span = row.get("tr") or row.get("turn_ts_range") or [None, None]
+        end = span[1] if len(span) > 1 else None
+        return ("measured", agent, session, commit, end)
+    return ("measured", agent, session, commit)
+
+
+def load_canonical_ledger_rows(
+    root: pathlib.Path, repositories: Sequence[str] | None = None
+) -> list[dict]:
+    """Read published ledger shards using the tally's latest-wins semantics.
+
+    The current retained ledger is intentionally used even when the Git-history
+    cutoff is historical: a later publication or backfill may improve our best
+    measurement of earlier work.  The caller scopes rows by the time of the
+    observed activity, not by ``recorded_at``.
+    """
+    ledger_dir = root / ".llm_resource_tally/ledger"
+    shards = sorted(ledger_dir.glob("ledger*.jsonl"))
+    if not shards:
+        raise FileNotFoundError(f"no published tally ledger shards under {ledger_dir}")
+
+    order: list[tuple] = []
+    best: dict[tuple, dict] = {}
+    for shard in shards:
+        with shard.open(encoding="utf-8") as file:
+            for row_index, line in enumerate(file, 1):
+                if not line.strip():
+                    continue
+                row = json.loads(line)
+                copy = dict(row)
+                copy["ledger_row"] = f"{shard.name}:{row_index}"
+                copy["repository"] = str(row.get("r") or row.get("repo") or "")
+                key = ledger_row_identity(row)
+                if key not in best:
+                    order.append(key)
+                current = best.get(key)
+                current_rec = parse_dt(current.get("rec") or current.get("recorded_at")) if current else None
+                candidate_rec = parse_dt(row.get("rec") or row.get("recorded_at"))
+                if current is None or current_rec is None or (candidate_rec is not None and candidate_rec >= current_rec):
+                    best[key] = copy
+
+    rows = [best[key] for key in order]
+    repo_filter = set(repositories or [])
+    if repo_filter:
+        rows = [r for r in rows if r.get("repository", "") in repo_filter]
+    return rows
+
+
+def row_is_pending(row: dict) -> bool:
+    commit = str(row.get("c") or row.get("commit") or "")
+    return commit.startswith("pending@")
+
+
+def row_is_backfill(row: dict) -> bool:
+    activity = str(row.get("act") or row.get("activity") or "").strip().lower()
+    return activity == "backfill"
+
+
+def row_observed_at(row: dict) -> datetime | None:
+    """Best timestamp for deciding whether observed work precedes a study cutoff."""
+    if row.get("k") == "cx" or row.get("kind") == "compaction-estimate":
+        return parse_dt(row.get("bt") or row.get("boundary_ts"))
+    if row_is_pending(row):
+        span = row.get("tr") or row.get("turn_ts_range") or [None, None]
+        end = span[1] if len(span) > 1 else None
+        start = span[0] if len(span) > 0 else None
+        return parse_dt(end) or parse_dt(start) or parse_dt(row.get("rec") or row.get("recorded_at"))
+    return parse_dt(row.get("ct") or row.get("commit_ts")) or parse_dt(row.get("rec") or row.get("recorded_at"))
+
+
+def aggregate_exact_token_rows(rows: Sequence[dict]) -> dict[str, dict]:
+    """Aggregate token-bearing, non-pending rows by commit SHA."""
+    exact: dict[str, dict] = {}
+    for row in rows:
+        if "t" not in row and "tokens" not in row:
+            continue
+        commit = str(row.get("c") or row.get("commit") or "")
+        if not commit or commit.startswith("pending@"):
+            continue
+        if "t" in row:
+            values = [int(v or 0) for v in list(row.get("t") or [0, 0, 0, 0])]
+            by_model = row.get("bm") or {}
+            turns = int(row.get("n") or 0)
+            agent = row.get("a")
+            models = row.get("m") or []
+        else:
+            tok = row.get("tokens") or {}
+            values = [int(tok.get(k) or 0) for k in ("input", "cache_write", "cache_read", "output")]
+            by_model = row.get("by_model") or {}
+            turns = int(row.get("turns") or 0)
+            agent = row.get("agent")
+            models = row.get("models") or []
+        if len(values) != 4:
+            continue
+        model_sum = [0, 0, 0, 0]
+        for raw_model, model_values in by_model.items():
+            if isinstance(model_values, dict):
+                vals = [int(model_values.get(k) or 0) for k in ("input", "cache_write", "cache_read", "output")]
+            else:
+                vals = [int(v or 0) for v in model_values]
+            if len(vals) != 4:
+                raise ValueError(f"bad per-model token vector for {raw_model!r}")
+            for i, value in enumerate(vals):
+                model_sum[i] += value
+        if by_model and model_sum != values:
+            raise ValueError(
+                f"per-model tokens {model_sum} do not sum to row total {values} for {commit}"
+            )
+        agg = exact.setdefault(
+            commit,
+            {
+                "repositories": set(),
+                "ledger_rows": 0,
+                "turns": 0,
+                "input_tokens": 0,
+                "cache_write_tokens": 0,
+                "cache_read_tokens": 0,
+                "output_tokens": 0,
+                "agents": set(),
+                "models": set(),
+                "activities": set(),
+                "model_tokens": {},
+            },
+        )
+        agg["repositories"].add(str(row.get("repository") or row.get("r") or ""))
+        agg["ledger_rows"] += 1
+        agg["turns"] += turns
+        for name, value in zip(TOKEN_NAMES, values):
+            agg[name] += value
+        if agent:
+            agg["agents"].add(str(agent))
+        activity = row.get("act") or row.get("activity")
+        if activity:
+            agg["activities"].add(str(activity))
+        for model in models:
+            agg["models"].add(canonical_model_name(str(model)))
+        for raw_model, model_values in by_model.items():
+            model = canonical_model_name(str(raw_model))
+            dest = agg["model_tokens"].setdefault(model, [0, 0, 0, 0])
+            if isinstance(model_values, dict):
+                vals = [int(model_values.get(k) or 0) for k in ("input", "cache_write", "cache_read", "output")]
+            else:
+                vals = [int(v or 0) for v in model_values]
+            for i, value in enumerate(vals):
+                dest[i] += value
+    return exact
+
+
 def load_ledger(
     root: pathlib.Path,
     repositories: Sequence[str] | None = None,
-    recorded_before: datetime | None = None,
+    observed_before: datetime | None = None,
 ) -> tuple[dict[str, dict], list[dict], list[dict]]:
-    """Return exact-commit aggregates, pending rows, and token rows.
+    """Return canonical exact aggregates, pending rows, and token rows.
 
-    ``repositories`` makes the study universe explicit.  ``recorded_before``
-    pins the append-only ledger to the same temporal snapshot as the Git
-    analysis, preventing later accounting rows from silently changing a paper
-    build.  Ledger schema v3 stores the aggregate token vector in ``t`` and an
-    exact per-model decomposition in ``bm``.
+    ``observed_before`` is applied to the activity timestamp (commit timestamp
+    for attributed rows; turn-range end for pending rows), not ``recorded_at``.
+    Thus later publication/backfill can improve an earlier adjustable snapshot.
     """
-    ledger = root / ".llm_resource_tally/ledger/ledger.jsonl"
-    repo_filter = set(repositories or [])
-    cutoff = recorded_before.astimezone(timezone.utc) if recorded_before else None
-    exact: dict[str, dict] = {}
-    pending: list[dict] = []
-    token_rows: list[dict] = []
-    with ledger.open(encoding="utf-8") as file:
-        for row_index, line in enumerate(file, 1):
-            if not line.strip():
-                continue
-            row = json.loads(line)
-            if "t" not in row:
-                continue
-            repository = str(row.get("r") or "")
-            if repo_filter and repository not in repo_filter:
-                continue
-            recorded = parse_dt(row.get("rec"))
-            if cutoff is not None and recorded is not None and recorded > cutoff:
-                continue
-            copy = dict(row)
-            copy["ledger_row"] = row_index
-            copy["repository"] = repository
-            token_rows.append(copy)
-            commit = row.get("c") or ""
-            values = [int(v or 0) for v in list(row.get("t") or [0, 0, 0, 0])]
-            if len(values) != 4:
-                continue
-            by_model = row.get("bm") or {}
-            model_sum = [0, 0, 0, 0]
-            for raw_model, model_values in by_model.items():
-                vals = [int(v or 0) for v in model_values]
-                if len(vals) != 4:
-                    raise ValueError(f"ledger row {row_index}: bad bm vector for {raw_model!r}")
-                for i, value in enumerate(vals):
-                    model_sum[i] += value
-            if by_model and model_sum != values:
-                raise ValueError(
-                    f"ledger row {row_index}: per-model tokens {model_sum} do not sum to row total {values}"
-                )
-            if commit.startswith("pending@"):
-                pending.append(copy)
-                continue
-            if not commit:
-                continue
-            agg = exact.setdefault(
-                commit,
-                {
-                    "repository": repository,
-                    "ledger_rows": 0,
-                    "turns": 0,
-                    "input_tokens": 0,
-                    "cache_write_tokens": 0,
-                    "cache_read_tokens": 0,
-                    "output_tokens": 0,
-                    "agents": set(),
-                    "models": set(),
-                    "model_tokens": {},
-                },
-            )
-            if agg["repository"] != repository:
-                raise ValueError(f"commit hash {commit} appears in multiple ledger repositories")
-            agg["ledger_rows"] += 1
-            agg["turns"] += int(row.get("n") or 0)
-            for name, value in zip(TOKEN_NAMES, values):
-                agg[name] += value
-            if row.get("a"):
-                agg["agents"].add(str(row["a"]))
-            for model in row.get("m") or []:
-                agg["models"].add(canonical_model_name(str(model)))
-            for raw_model, model_values in by_model.items():
-                model = canonical_model_name(str(raw_model))
-                dest = agg["model_tokens"].setdefault(model, [0, 0, 0, 0])
-                for i, value in enumerate(model_values):
-                    dest[i] += int(value or 0)
+    rows = load_canonical_ledger_rows(root, repositories)
+    if observed_before is not None:
+        cutoff = observed_before.astimezone(timezone.utc)
+        rows = [r for r in rows if row_observed_at(r) is None or row_observed_at(r) <= cutoff]
+    token_rows = [r for r in rows if "t" in r or "tokens" in r]
+    pending = [r for r in token_rows if row_is_pending(r)]
+    exact = aggregate_exact_token_rows(token_rows)
     return exact, pending, token_rows
-
 
 def pending_windows(pending: Sequence[dict], pad_minutes: float = 0.0) -> list[dict]:
     windows = []

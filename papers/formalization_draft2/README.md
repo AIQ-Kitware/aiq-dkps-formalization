@@ -42,6 +42,13 @@ analysis and the tracked manuscript snapshots explicitly, use:
 make -C papers/formalization_draft2 accounting
 ```
 
+The default cutoff is the repository's current `HEAD`.  A historical or
+alternative cutoff can be selected without editing the configuration:
+
+```bash
+make -C papers/formalization_draft2 accounting CUTOFF=<git-ref-or-commit>
+```
+
 Review and commit the resulting `snapshots/` changes when advancing the paper's
 evidence snapshot. `make -C papers/formalization_draft2 clean` removes LaTeX
 build products and the ignored `generated/` tree, but leaves tracked snapshots
@@ -111,11 +118,12 @@ Before submission, proofs discussed in the manuscript should distinguish:
 ## Accounting design
 
 The accounting study has two related scopes. Commit-level coverage is measured
-against the pinned Git history of the primary formalization repository. Measured
-token totals use an explicit allowlist of ledger repositories because some
-Tau Ceti foundations work relevant to the paper was carried out in a second
-repository. The allowlist is configured in `analysis_config.json`; repository
-identity is never inferred from a commit hash.
+against the selected Git history of the primary formalization repository.
+Measured token totals use an explicit allowlist of historical ledger labels.
+The ledger `r` field stores a checkout/worktree basename rather than a stable
+repository identity; in particular, `aiq-gpu-docs` was a Claude worktree of this
+repository. Exact commit coverage is therefore determined by SHA membership in
+the selected Git history, never by the ledger basename.
 
 Commits that touch **only** `papers/formalization_draft2/` are excluded from the
 formalization-history corpus. Mixed commits remain in scope. This makes the
@@ -123,14 +131,20 @@ exclusion policy useful when the snapshot is advanced during paper preparation
 without deleting legitimate mathematical work that happened to share a commit
 with documentation.
 
-The paper deliberately separates three kinds of resource evidence.
+The paper deliberately separates four kinds of resource evidence.
 
-- **Exact commit-attributed measurement.** A ledger row names a git commit SHA.
-  These numbers can be summed at commit or component level.
+- **Live exact commit-attributed measurement.** A non-backfill ledger row names
+  a Git commit SHA. These are the only ledger measurements used as commit-local
+  calibration observations or in coverage-scaled extrapolation.
+- **Explicit backfill.** Rows with `activity=backfill` recover historical usage.
+  They remain part of retained measured totals but are excluded from commit-local
+  calibration, even if a backfill row names a Git SHA; assigning an aggregated
+  recovery interval to one commit would distort per-commit moments.
 - **Measured but commit-unattributed usage.** `pending@...` ledger rows retain
   measured session-level usage but not a defensible allocation to individual
-  commits. `generated/pending_segments.csv` lists time-window candidate commits;
-  the script never silently assigns the tokens.
+  commits. Live pending rows may define candidate windows in
+  `generated/pending_segments.csv`; explicit backfill rows do not alter those
+  windows or extrapolation eligibility.
 - **Unmeasured work.** This includes work before instrumentation and work done
   through interfaces for which equivalent telemetry was unavailable. A small
   log-ridge model emits exploratory estimates only for commits with positive LLM
@@ -187,9 +201,14 @@ that cannot be reconstructed mechanically. Silence is left `unknown`; apart
 from the bounded historical GPT rule, chat-interface assistance is not guessed
 from missing telemetry.
 
-The analysis history is pinned in `analysis_config.json`. The rendered PDF shows
-the snapshot **date**, not the Git hash; the full hash is retained in generated
-source and attached to the displayed date as PDF tooltip metadata.
+`analysis_config.json` supplies a default history ref (`HEAD`).  `--cutoff` on
+`scripts/build_accounting.py` or `CUTOFF=...` on the Make target selects another
+inclusive Git cutoff.  The generated summary records both the requested ref and
+the resolved commit.  Ledger rows are canonicalized with latest-write-wins
+semantics, then scoped by their observation/activity time; a later-published
+historical recovery can therefore improve an earlier selected history without
+requiring a frozen ledger revision. The rendered PDF shows the resolved snapshot
+date, while the full hash remains in generated source and PDF tooltip metadata.
 
 ## Citation-count snapshots
 

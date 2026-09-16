@@ -19,7 +19,15 @@ HERE = pathlib.Path(__file__).resolve().parent
 DRAFT = HERE
 sys.path.insert(0, str(DRAFT / "scripts"))
 
-from accounting_lib import canonical_model_name, latex_escape, load_commits, parse_dt, repo_root
+from accounting_lib import (
+    canonical_model_name,
+    latex_escape,
+    load_canonical_ledger_rows,
+    load_commits,
+    repo_root,
+    row_is_backfill,
+    row_observed_at,
+)
 
 ROOT = repo_root(DRAFT)
 GENERATED = DRAFT / "generated"
@@ -30,9 +38,10 @@ PRICING_PATH = DRAFT / "resource_valuation_model_pricing_20260817.csv"
 ACCOUNTING_SUMMARY_PATH = GENERATED / "accounting_summary.json"
 ACCOUNTING_MANIFEST_PATH = GENERATED / "commit_accounting_manifest.csv"
 PRIMARY_REPOSITORY = CONFIG.get("primary_repository", "aiq-dkps-formalization")
-LEDGER_REPOSITORIES = set(CONFIG.get("included_ledger_repositories", {PRIMARY_REPOSITORY: ""}))
+LEDGER_LABELS = set(
+    CONFIG.get("included_ledger_labels", CONFIG.get("included_ledger_repositories", {PRIMARY_REPOSITORY: ""}))
+)
 EXCLUDED_ONLY_PREFIXES = tuple(CONFIG.get("exclude_commits_if_only_touch", []))
-CUTOFF = CONFIG["history_cutoff_commit"]
 TOKEN_KEYS = ("input", "cache_write", "cache_read", "output")
 
 
@@ -162,6 +171,7 @@ def main() -> None:
     SNAPSHOTS.mkdir(parents=True, exist_ok=True)
     assumptions = json.loads(ASSUMPTIONS_PATH.read_text())
     accounting_summary = json.loads(ACCOUNTING_SUMMARY_PATH.read_text())
+    cutoff = accounting_summary["history_cutoff_commit"]
     coverage = accounting_summary["coverage_proxies"]
     with ACCOUNTING_MANIFEST_PATH.open(newline="", encoding="utf-8") as f:
         exact_primary_shas = {
@@ -180,8 +190,8 @@ def main() -> None:
         "cache_read_work_factor": stack_cfg["cache_read_work_factor"],
     }
 
-    commits = load_commits(ROOT, CUTOFF)
-    cutoff_commit = next((c for c in commits if c.commit == CUTOFF), commits[-1])
+    commits = load_commits(ROOT, cutoff)
+    cutoff_commit = next((c for c in commits if c.commit == cutoff), commits[-1])
     cutoff_dt = cutoff_commit.timestamp_dt
     excluded_sha = {c.commit for c in commits if commit_is_excluded(c)}
 
@@ -203,78 +213,74 @@ def main() -> None:
             },
         )
 
-    ledger_path = ROOT / ".llm_resource_tally/ledger/ledger.jsonl"
-    with ledger_path.open(encoding="utf-8") as f:
-        for row_index, line in enumerate(f, 1):
-            if not line.strip():
-                continue
-            row = json.loads(line)
-            repo = str(row.get("r") or "")
-            if repo not in LEDGER_REPOSITORIES:
-                continue
-            recorded = parse_dt(row.get("rec"))
-            if recorded is not None and recorded > cutoff_dt:
-                continue
-            commit = str(row.get("c") or "")
-            if repo == PRIMARY_REPOSITORY and commit in excluded_sha:
-                continue
-            is_exact_primary = repo == PRIMARY_REPOSITORY and commit in exact_primary_shas
+    ledger_rows = load_canonical_ledger_rows(ROOT, LEDGER_LABELS)
+    for row_index, row in enumerate(ledger_rows, 1):
+        observed = row_observed_at(row)
+        if observed is not None and observed > cutoff_dt:
+            continue
+        commit = str(row.get("c") or "")
+        if commit in excluded_sha:
+            continue
+        # The ledger label is a checkout/worktree basename.  Exact-history
+        # membership is determined by the SHA, while explicit historical
+        # backfills are never calibration observations.
+        is_exact_primary = commit in exact_primary_shas and not row_is_backfill(row)
 
-            if row.get("k") == "cx":
-                model = canonical_model_name(str((row.get("m") or ["<unknown>"])[0]))
-                peak, summary_chars = (list(row.get("cp") or [0, 0]) + [0, 0])[:2]
-                output = Interval.exact(float(summary_chars)) / Interval.coerce(stack_cfg["summary_chars_per_token"])
-                _seconds, energy, carbon = serving_metrics(
-                    {"input": int(peak or 0), "cache_write": 0, "cache_read": 0, "output": 0},
-                    1.0,
-                    stack,
-                    output=output,
+        if row.get("k") == "cx":
+            model = canonical_model_name(str((row.get("m") or ["<unknown>"])[0]))
+            peak, summary_chars = (list(row.get("cp") or [0, 0]) + [0, 0])[:2]
+            output = Interval.exact(float(summary_chars)) / Interval.coerce(stack_cfg["summary_chars_per_token"])
+            _seconds, energy, carbon = serving_metrics(
+                {"input": int(peak or 0), "cache_write": 0, "cache_read": 0, "output": 0},
+                1.0,
+                stack,
+                output=output,
+            )
+            stat = stat_for(model)
+            stat["compactions"] += 1
+            add_metric(stat, "seconds", _seconds)
+            add_metric(stat, "energy_kwh", energy)
+            add_metric(stat, "carbon_gco2e", carbon)
+            if is_exact_primary:
+                exact_primary_energy += energy
+            continue
+
+        if "t" not in row:
+            continue
+        row_tokens = token_dict(row.get("t"))
+        by_model_raw = row.get("bm") or {}
+        if by_model_raw:
+            by_model = {canonical_model_name(str(m)): token_dict(v) for m, v in by_model_raw.items()}
+        else:
+            model = canonical_model_name(str((row.get("m") or ["<unknown>"])[0]))
+            by_model = {model: row_tokens}
+
+        for kind in TOKEN_KEYS:
+            observed = sum(tokens[kind] for tokens in by_model.values())
+            if observed != row_tokens[kind]:
+                raise ValueError(
+                    f"ledger row {row_index}: by-model {kind} sum {observed} != row total {row_tokens[kind]}"
                 )
-                stat = stat_for(model)
-                stat["compactions"] += 1
-                add_metric(stat, "seconds", _seconds)
-                add_metric(stat, "energy_kwh", energy)
-                add_metric(stat, "carbon_gco2e", carbon)
-                if is_exact_primary:
-                    exact_primary_energy += energy
-                continue
 
-            if "t" not in row:
-                continue
-            row_tokens = token_dict(row.get("t"))
-            by_model_raw = row.get("bm") or {}
-            if by_model_raw:
-                by_model = {canonical_model_name(str(m)): token_dict(v) for m, v in by_model_raw.items()}
-            else:
-                model = canonical_model_name(str((row.get("m") or ["<unknown>"])[0]))
-                by_model = {model: row_tokens}
-
+        weights = {model: sum(tokens.values()) for model, tokens in by_model.items()}
+        total_weight = sum(weights.values())
+        row_turns = float(row.get("n") or 0)
+        for model, tokens in by_model.items():
+            share = weights[model] / total_weight if total_weight else 1.0 / max(1, len(by_model))
+            turns = row_turns * share
+            seconds, energy, carbon = serving_metrics(tokens, turns, stack)
+            stat = stat_for(model)
+            stat["allocated_turns"] += turns
             for kind in TOKEN_KEYS:
-                observed = sum(tokens[kind] for tokens in by_model.values())
-                if observed != row_tokens[kind]:
-                    raise ValueError(
-                        f"ledger row {row_index}: by-model {kind} sum {observed} != row total {row_tokens[kind]}"
-                    )
-
-            weights = {model: sum(tokens.values()) for model, tokens in by_model.items()}
-            total_weight = sum(weights.values())
-            row_turns = float(row.get("n") or 0)
-            for model, tokens in by_model.items():
-                share = weights[model] / total_weight if total_weight else 1.0 / max(1, len(by_model))
-                turns = row_turns * share
-                seconds, energy, carbon = serving_metrics(tokens, turns, stack)
-                stat = stat_for(model)
-                stat["allocated_turns"] += turns
+                stat["tokens"][kind] += tokens[kind]
+            add_metric(stat, "seconds", seconds)
+            add_metric(stat, "energy_kwh", energy)
+            add_metric(stat, "carbon_gco2e", carbon)
+            if is_exact_primary:
+                exact_primary_turns += turns
                 for kind in TOKEN_KEYS:
-                    stat["tokens"][kind] += tokens[kind]
-                add_metric(stat, "seconds", seconds)
-                add_metric(stat, "energy_kwh", energy)
-                add_metric(stat, "carbon_gco2e", carbon)
-                if is_exact_primary:
-                    exact_primary_turns += turns
-                    for kind in TOKEN_KEYS:
-                        exact_primary_tokens[kind] += tokens[kind]
-                    exact_primary_energy += energy
+                    exact_primary_tokens[kind] += tokens[kind]
+                exact_primary_energy += energy
 
     prices = load_prices()
     rows = []
@@ -375,7 +381,7 @@ def main() -> None:
     assumptions_sha = hashlib.sha256(ASSUMPTIONS_PATH.read_bytes()).hexdigest()
     out = {
         "schema": "formalization-draft2/resource-valuation-output/v1",
-        "through_commit": CUTOFF,
+        "through_commit": cutoff,
         "assumptions_version": assumptions["version"],
         "assumptions_sha256": assumptions_sha,
         "pricing_file": PRICING_PATH.name,
@@ -445,7 +451,7 @@ def main() -> None:
         "% Generated by build_resource_valuation_20260817.py; do not edit by hand.",
         r"\begin{tabular}{lrrr}",
         r"\toprule",
-        r"Quantity & \shortstack{Observed\\lower bound} & \shortstack{Linear extrapolation\\commit coverage} & \shortstack{Linear extrapolation\\adjusted text coverage} \\",
+        r"Quantity & \shortstack{Retained\\observed} & \shortstack{Linear extrapolation\\commit coverage} & \shortstack{Linear extrapolation\\adjusted text coverage} \\",
         r"\midrule",
         fr"Billable input (B tokens) & {billable_input / 1e9:.2f} & {extrapolation['commit_scaled']['billable_input_tokens'] / 1e9:.2f} & {extrapolation['adjusted_lean_churn_scaled']['billable_input_tokens'] / 1e9:.2f} \\",
         fr"Output (M tokens) & {total_tokens['output'] / 1e6:.1f} & {extrapolation['commit_scaled']['output_tokens'] / 1e6:.1f} & {extrapolation['adjusted_lean_churn_scaled']['output_tokens'] / 1e6:.1f} \\",
@@ -459,7 +465,7 @@ def main() -> None:
         "% Generated by build_resource_valuation_20260817.py; do not edit by hand.",
         r"\begin{tabular}{lrrrr}",
         r"\toprule",
-        r"Model & Lower-bound input & Lower-bound output & Lower-bound API-equiv. & Modeled energy \\",
+        r"Model & Retained input & Retained output & Retained API-equiv. & Modeled energy \\",
         r" & (B tokens) & (M tokens) & (USD) & (kWh) \\",
         r"\midrule",
     ]

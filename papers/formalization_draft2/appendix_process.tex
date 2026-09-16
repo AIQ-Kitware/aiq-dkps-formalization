@@ -127,29 +127,32 @@ including the YWS equation~(4) correction and rank-boundary repair.
 
 \subsection{Accounting scope}
 
-Commit coverage is computed from the primary formalization repository.  The
-program-level token totals also include measured Tau Ceti foundations work that
-was developed in a separate repository and used by this formalization.  The Git
-history is pinned at \AccountingSnapshot{}, and manuscript-only commits are
-excluded from the coverage denominator.
+Commit coverage is computed by SHA membership in the selected formalization Git
+history.  Ledger repository fields are historical checkout/worktree basenames;
+\texttt{aiq-gpu-docs} is one such worktree basename from this repository.  The
+default selected history ends at \AccountingSnapshot{}, and manuscript-only
+commits are excluded from the coverage denominator.
 
 \begin{table}[H]
 \centering
 \small
 \input{snapshots/ledger_repository_table.tex}
-\caption{Measured lower-bound resource usage by included repository.  Work for
-which telemetry was not recovered is absent from these totals.  Commit coverage
-uses the primary formalization repository.}
+\caption{Retained measured resource usage by historical checkout/worktree label.
+Work for which telemetry was not recovered is absent from these totals.  Commit
+coverage is determined from Git-history membership; the labels are descriptive.}
 \label{tab:ledger-repositories}
 \end{table}
 
 \subsection{Measurement coverage}
 
 Exact commit-level instrumentation began on \InstrumentationSnapshot{};
-\CommitsBeforeInstrumentation{} included commits precede that date.  Backfilled
-harness transcripts recover some earlier usage.  The retained data therefore
-contain exact commit-attributed measurements, measured session usage without a
-one-to-one commit assignment, and periods with no recovered telemetry.
+\CommitsBeforeInstrumentation{} included commits precede that date.  Historical
+installation, attribution, and backfill limitations make the retained telemetry
+incomplete.  Explicit backfill rows recover some earlier usage and are excluded
+from commit-local calibration and pending-window extrapolation logic.  The
+retained data therefore distinguish live exact commit-attributed measurements,
+explicit backfill, live session usage without one-to-one commit assignment, and
+periods with no recovered telemetry.
 
 \begin{table}[H]
 \centering
@@ -160,8 +163,8 @@ Pending measurements contain observed tokens without exact commit attribution.}
 \label{tab:accounting-states}
 \end{table}
 
-All token totals reported in the paper are lower bounds over the retained
-measurements.  At \AccountingSnapshot{} the included ledger contains
+Token totals reported in the paper are sums over the retained canonical ledger
+rows and are incomplete observations of project usage.  At \AccountingSnapshot{} the included ledger contains
 \LedgerTurns{} model turns and \LedgerOutputTokens{} output tokens.  Its
 \LedgerBillableInputTokens{} billable-input measure combines ordinary input,
 cache-write, and cache-read quantities according to the ledger schema.
@@ -170,8 +173,8 @@ cache-write, and cache-read quantities according to the ledger schema.
 \centering
 \small
 \input{snapshots/measured_token_breakdown_table.tex}
-\caption{Measured lower-bound token quantities.  Exact-attributed and pending
-columns partition the retained measurements by attribution status.}
+\caption{Retained measured token quantities.  Live exact, explicit-backfill,
+and pending columns partition the retained measurements by attribution status.}
 \label{tab:measured-token-breakdown}
 \end{table}
 
@@ -179,16 +182,14 @@ columns partition the retained measurements by attribution status.}
 
 Each token-bearing row records ordinary input, cache writes, cache reads, and
 output by model.  Historical API prices are applied after token accounting.
-Using the dated public price inputs gives an API-equivalent list-price value of
-\MeasuredApiEquivalentCost{} for the observed lower-bound usage; valuing every
-recorded Anthropic cache write at the one-hour rate gives
-\MeasuredApiEquivalentCostOneHour{}.
+The valuation generator emits an aggregate API-equivalent dollar value only
+when historically applicable rates are complete for every retained model.
 
 \begin{table}[H]
 \centering
 \scriptsize
 \input{snapshots/model_token_table.tex}
-\caption{Model-resolved measured lower-bound token counts.  The totals omit
+\caption{Model-resolved retained measured token counts.  The totals omit
 formalization work for which no telemetry was recovered.}
 \label{tab:model-tokens-appendix}
 \end{table}
@@ -202,7 +203,7 @@ separate per-token cross-check.
 
 \subsection{Coverage proxies and project-scale extrapolation}
 
-Exact telemetry covers \ExactMeasuredCommitCount{} of \HistoryCommitCount{}
+Live exact telemetry covers \ExactMeasuredCommitCount{} of \HistoryCommitCount{}
 primary-repository commits (\ExactMeasuredCommitShare{}).  Those commits account
 for \ExactMeasuredLeanLineChurn{} of \TotalLeanLineChurn{} cumulative Lean-line
 insertions and deletions (\ExactMeasuredLeanLineChurnShare{}).  This raw Git

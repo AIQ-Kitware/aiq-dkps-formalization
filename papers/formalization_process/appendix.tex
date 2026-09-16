@@ -365,18 +365,20 @@ omitting proof-only dependencies \citep{yanahama2026leanatlas}.
 \label{app:resources}
 
 To estimate the cost of the formalization effort, we maintained a resource
-accounting record.  Retained model turns and token quantities are incomplete
-measured lower bounds; price and serving-energy rows are estimates derived from
-those observations.  The energy estimate excludes training, embodied hardware,
-client devices, and network energy.
+accounting record.  Historical installation, attribution, and backfill
+limitations make the retained telemetry incomplete.  Explicit backfills are
+reported separately and excluded from commit-local calibration and
+extrapolation.  The serving-energy row is an estimate derived from the retained
+observations.  The energy estimate excludes training, embodied
+hardware, client devices, and network energy.
 
 \begin{table}[H]
 \centering
 \scriptsize
-\caption{Observed lower bounds and derived estimates. Not all LLM usage is tracked, thus it is important that these are read as lower bounds, and not project totals. Similarly we emphasize that energy use is modeled, and only gives an order of magnitude estimate.}
+\caption{Retained observed telemetry and derived estimates.  The telemetry is incomplete; the energy value is a modeled order-of-magnitude estimate.}
 \begin{tabularx}{\linewidth}{@{}p{0.28\linewidth}p{0.17\linewidth}>{\raggedright\arraybackslash}X@{}}
 \toprule
-Quantity & Lower bound / estimate & Basis / interpretation \\
+Quantity & Retained / estimate & Basis / interpretation \\
 \midrule
 \input{generated/resource_snapshot_table.tex}
 \end{tabularx}
@@ -399,7 +401,7 @@ System & Model families observed \\
 \begin{table}[H]
 \centering
 \scriptsize
-\caption{Recovered model-resolved token measurements.  These are measured lower bounds for the five labels with
+\caption{Recovered model-resolved token measurements.  These are retained measurements for the model labels with
 recovered telemetry; models in \cref{tab:formalization-systems} that do not
 appear here were still used.}
 \label{tab:model-tokens-appendix}

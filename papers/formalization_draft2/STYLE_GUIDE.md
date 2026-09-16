@@ -73,9 +73,9 @@ When referring readers to supplementary material, use an explicit section or app
 
 Separate directly observed telemetry from quantities inferred with a model and from project-scale extrapolations. Name the extrapolation model explicitly; for the current resource analysis, describe the project-scale calculation as a simple linear extrapolation and state its formula.
 
-Use **lower bound** in the header and caption of every table containing incomplete observed telemetry so a skim reader cannot mistake those values for project totals. State the fraction of the project represented by the observations using transparent denominators such as commit coverage and cumulative Lean-line churn.
+Use **retained observed telemetry** in the header and caption of tables containing incomplete resource measurements so a skim reader cannot mistake those values for project totals. Keep explicit backfills separate from live commit-attributed observations because aggregated recovery rows are not commit-local calibration data. State the fraction of the project represented by live exact observations using transparent denominators such as commit coverage and cumulative Lean-line churn.
 
-Keep modeled operational energy in kWh separate from observed token counts. Put model assumptions, cache pricing, ledger schema, and other reproduction details in the appendix. Keep coverage-scaled project estimates in columns or tables distinct from observed lower bounds and state the scaling assumption concisely.
+Keep modeled operational energy in kWh separate from observed token counts. Put model assumptions, cache pricing, ledger schema, and other reproduction details in the appendix. Keep coverage-scaled project estimates in columns or tables distinct from retained observed telemetry and state the scaling assumption concisely.
 
 The abstract should emphasize directly observed quantities and their coverage. Reserve modeled cost, emissions, energy, and extrapolated totals for the body unless they become sufficiently well established to support a headline claim.
 
@@ -97,7 +97,7 @@ Related work should compare scientific approaches. When discussing alternative f
 
 State the best-supported claim and the uncertainty that changes it. For a literature search, a concise formulation such as "To the best of our knowledge..." is enough when the search has not found a prior correction.
 
-For incomplete telemetry, name the observed fraction and call the measured totals lower bounds. For modeled quantities, identify them as estimates and give the assumptions or sensitivity that governs interpretation.
+For incomplete telemetry, name the live-exact observed fraction and describe the measured totals as retained observations. State the historical-audit limitation concisely. For modeled quantities, identify them as estimates and give the assumptions or sensitivity that governs interpretation.
 
 State the evidence available at the manuscript date and phrase literature-search conclusions at that scope.
 
