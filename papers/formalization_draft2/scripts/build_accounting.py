@@ -1,11 +1,12 @@
 #!/usr/bin/env python3
 """Build commit-level accounting and missing-data artifacts for the paper.
 
-This script intentionally keeps three concepts separate:
+This script intentionally keeps four concepts separate:
 
-1. exact commit-attributed measurements from the LLM ledger;
-2. measured but commit-unattributed ``pending@...`` transcript segments; and
-3. genuinely unmeasured work, for which extrapolation is exploratory.
+1. live commit-attributed measurements suitable for commit-local calibration;
+2. explicit backfill rows, whether or not a historical commit was supplied;
+3. measured but commit-unattributed ``pending@...`` transcript segments; and
+4. genuinely unmeasured work, for which extrapolation is exploratory.
 
 The generated CSVs are designed to be auditable inputs to the manuscript rather
 than opaque summary numbers.
@@ -13,6 +14,7 @@ than opaque summary numbers.
 
 from __future__ import annotations
 
+import argparse
 import csv
 import json
 import math
@@ -23,6 +25,7 @@ from collections import Counter, defaultdict
 
 from accounting_lib import (
     RidgeLogModel,
+    aggregate_exact_token_rows,
     canonical_model_name,
     component_flags,
     feature_vector,
@@ -30,6 +33,7 @@ from accounting_lib import (
     instrumentation_commit,
     latex_escape,
     load_commits,
+    load_canonical_ledger_rows,
     load_ledger,
     load_overrides,
     matching_pending_windows,
@@ -39,6 +43,8 @@ from accounting_lib import (
     pending_windows,
     quantile,
     repo_root,
+    row_is_backfill,
+    row_is_pending,
     rolling_origin_splits,
     run_git,
     subject_flags,
@@ -51,9 +57,17 @@ SNAPSHOTS = HERE / "snapshots"
 DATA = HERE / "data"
 CONFIG = json.loads((HERE / "analysis_config.json").read_text())
 ROOT = repo_root(HERE)
-CUTOFF = CONFIG["history_cutoff_commit"]
+DEFAULT_CUTOFF_REF = CONFIG.get("history_cutoff_ref", CONFIG.get("history_cutoff_commit", "HEAD"))
 PRIMARY_REPOSITORY = CONFIG.get("primary_repository", "aiq-dkps-formalization")
-LEDGER_REPOSITORIES = list(CONFIG.get("included_ledger_repositories", {PRIMARY_REPOSITORY: ""}))
+LEDGER_LABELS = list(
+    CONFIG.get(
+        "included_ledger_labels",
+        CONFIG.get("included_ledger_repositories", {PRIMARY_REPOSITORY: ""}),
+    )
+)
+PRIMARY_HISTORY_LEDGER_LABELS = set(
+    CONFIG.get("primary_history_ledger_labels", LEDGER_LABELS)
+)
 EXCLUDED_ONLY_PREFIXES = tuple(CONFIG.get("exclude_commits_if_only_touch", []))
 GPT_CHAT_RULE = CONFIG.get("gpt_chat_trailer_rule", {})
 LEAN_CHURN_COVERAGE_ADJUSTMENTS = list(CONFIG.get("lean_churn_coverage_adjustments", []))
@@ -155,11 +169,18 @@ def sum_token_rows(rows: list[dict]) -> dict[str, int]:
     return totals
 
 
-def main() -> None:
+def resolve_cutoff(ref: str | None) -> tuple[str, str]:
+    requested = ref or str(DEFAULT_CUTOFF_REF)
+    resolved = run_git(ROOT, "rev-parse", f"{requested}^{{commit}}").strip()
+    return requested, resolved
+
+
+def main(cutoff_ref: str | None = None) -> None:
     GENERATED.mkdir(parents=True, exist_ok=True)
     SNAPSHOTS.mkdir(parents=True, exist_ok=True)
-    repository_commits = load_commits(ROOT, CUTOFF)
-    cutoff_commit = next((c for c in repository_commits if c.commit == CUTOFF), repository_commits[-1])
+    cutoff_requested, cutoff = resolve_cutoff(cutoff_ref)
+    repository_commits = load_commits(ROOT, cutoff)
+    cutoff_commit = next((c for c in repository_commits if c.commit == cutoff), repository_commits[-1])
     cutoff_dt = cutoff_commit.timestamp_dt
 
     excluded_commits = [c for c in repository_commits if commit_is_excluded_from_study(c)]
@@ -167,27 +188,60 @@ def main() -> None:
     commits = [c for c in repository_commits if c.commit not in excluded_sha]
     commit_by_sha = {c.commit: c for c in commits}
 
-    # Commit-level coverage uses only the primary repository. Program-wide token
-    # accounting may include author-confirmed supporting repositories, notably
-    # the TauCeti-foundations work retained under another historical repo label.
-    exact, primary_pending, _primary_token_rows = load_ledger(
-        ROOT, [PRIMARY_REPOSITORY], recorded_before=cutoff_dt
+    # The ledger's ``r`` field is a repository/worktree basename, not a stable
+    # repository identity.  In particular, historical Claude worktree basenames
+    # can differ from the primary checkout while naming commits in this same Git
+    # history.  Exact coverage is therefore determined by commit membership in
+    # the selected history, never by ``r``.
+    _program_exact_all, program_pending, program_token_rows = load_ledger(
+        ROOT, LEDGER_LABELS, observed_before=cutoff_dt
     )
-    program_exact, program_pending, program_token_rows = load_ledger(
-        ROOT, LEDGER_REPOSITORIES, recorded_before=cutoff_dt
-    )
+
     # Paper-production commits are excluded from the formalization study when
-    # they touch only the draft2 paper path. Exact token rows tied to those SHAs
-    # are excluded too; ambiguous pending sessions remain measured and visible.
+    # they touch only the draft2 paper path. Exact rows tied to those SHAs are
+    # excluded regardless of the historical worktree label; ambiguous pending
+    # sessions remain measured and visible.
     token_rows = [
         r for r in program_token_rows
-        if not (r.get("repository") == PRIMARY_REPOSITORY and str(r.get("c") or "") in excluded_sha)
+        if str(r.get("c") or r.get("commit") or "") not in excluded_sha
     ]
-    pending = [r for r in program_pending if r in token_rows]
+    pending = [
+        r for r in token_rows if row_is_pending(r) and not row_is_backfill(r)
+    ]
+    primary_pending = [
+        r for r in pending if r.get("repository", "") in PRIMARY_HISTORY_LEDGER_LABELS
+    ]
     primary_windows = pending_windows(primary_pending, float(CONFIG.get("pending_window_minutes", 0)))
     program_windows = pending_windows(pending, float(CONFIG.get("pending_window_minutes", 0)))
 
-    inst_sha, inst_dt = instrumentation_commit(ROOT, CUTOFF)
+    # Explicit backfills are never calibration observations.  Even a manual
+    # per-commit backfill can aggregate a long historical interval onto one SHA
+    # and would distort per-commit moments if treated like a live hook record.
+    live_exact_token_rows = [
+        r for r in token_rows
+        if not row_is_pending(r)
+        and not row_is_backfill(r)
+        and str(r.get("c") or r.get("commit") or "") in commit_by_sha
+    ]
+    backfill_exact_token_rows = [
+        r for r in token_rows
+        if not row_is_pending(r)
+        and row_is_backfill(r)
+        and str(r.get("c") or r.get("commit") or "") in commit_by_sha
+    ]
+    exact = aggregate_exact_token_rows(live_exact_token_rows)
+    backfill_exact = aggregate_exact_token_rows(backfill_exact_token_rows)
+    live_program_exact = aggregate_exact_token_rows(
+        [r for r in token_rows if not row_is_pending(r) and not row_is_backfill(r)]
+    )
+    backfill_program_exact = aggregate_exact_token_rows(
+        [r for r in token_rows if not row_is_pending(r) and row_is_backfill(r)]
+    )
+    program_exact = aggregate_exact_token_rows(
+        [r for r in token_rows if not row_is_pending(r)]
+    )
+
+    inst_sha, inst_dt = instrumentation_commit(ROOT, cutoff)
     overrides = load_overrides(DATA / "accounting_overrides.csv")
     patterns = CONFIG["component_patterns"]
     component_names = list(patterns)
@@ -212,6 +266,8 @@ def main() -> None:
     rows: list[dict] = []
     for idx, commit in enumerate(commits, 1):
         measure = exact.get(commit.commit)
+        backfill_measure = backfill_exact.get(commit.commit)
+        provenance_measure = measure or backfill_measure
         pending_matches = matching_pending_windows(commit.timestamp_dt, primary_windows)
         flags = component_flags(commit.files, patterns)
         sflags = subject_flags(commit.subject)
@@ -220,12 +276,15 @@ def main() -> None:
         llm_text = " | ".join(llm_names)
         trailer_models = set(commit.llm_coauthor_models)
         manual_models = set(override_models(override))
-        ledger_models = set(measure["models"]) - {"<synthetic>"} if measure else set()
+        ledger_models = (
+            set(provenance_measure["models"]) - {"<synthetic>"}
+            if provenance_measure else set()
+        )
         heuristic_models, heuristic_channel, heuristic_evidence = bounded_gpt_chat_resolution(
-            commit, measure, trailer_models
+            commit, provenance_measure, trailer_models
         )
         assistance_class, channel, evidence = infer_assistance(
-            commit, override, measure, heuristic_channel, heuristic_evidence
+            commit, override, provenance_measure, heuristic_channel, heuristic_evidence
         )
 
         # Distinguish raw Git provenance from the model used for unmeasured-cost
@@ -233,9 +292,11 @@ def main() -> None:
         # manual model overrides come next; the time-bounded GPT chat rule is
         # used only for otherwise unmetered High/Thinking trailer labels.
         declared_models = trailer_models | manual_models
-        if measure:
+        if provenance_measure:
             resolved_models = set(ledger_models)
-            model_resolution_evidence = "exact_ledger"
+            model_resolution_evidence = (
+                "live_exact_ledger" if measure else "backfill_commit_attributed_ledger"
+            )
         elif manual_models:
             resolved_models = set(manual_models)
             model_resolution_evidence = "manual_override"
@@ -246,14 +307,14 @@ def main() -> None:
             resolved_models = set(trailer_models)
             model_resolution_evidence = "git_trailer" if trailer_models else "none"
 
-        if measure and declared_models:
+        if provenance_measure and declared_models:
             if ledger_models == declared_models:
                 model_provenance_status = "exact_match"
             elif ledger_models & declared_models:
                 model_provenance_status = "partial_overlap"
             else:
                 model_provenance_status = "disjoint_signals"
-        elif measure:
+        elif provenance_measure:
             model_provenance_status = "ledger_only"
         elif declared_models:
             model_provenance_status = "declared_model_without_exact_ledger"
@@ -263,12 +324,15 @@ def main() -> None:
         openai = int(any(model.startswith("gpt-") or model.startswith("openai-") or model.startswith("codex-") for model in (declared_models | resolved_models)))
         agent_author = int(commit.author_name.strip().lower() in {"agent", "claude", "codex"})
 
-        # Commit-level accounting is exact only when the ledger names this SHA.
+        # Commit-local calibration uses only live exact rows.  Explicit backfill
+        # rows remain measured evidence, but are a separate state because their
+        # aggregation window need not represent one commit-sized unit of work.
         # Pending transcript ranges are reported separately as allocation
-        # candidates; a broad session range must never make a commit look
-        # accounted when its usage cannot actually be assigned to that commit.
+        # candidates and never make a commit look exactly measured.
         if measure:
             state = "exact_measured"
+        elif backfill_measure:
+            state = "backfill_commit_attributed"
         elif commit.commit == inst_sha:
             state = "instrumentation_commit_unmeasured"
         elif commit.timestamp_dt < inst_dt:
@@ -327,6 +391,20 @@ def main() -> None:
             ),
             "measured_agents": " | ".join(sorted(measure["agents"])) if measure else "",
             "measured_models": " | ".join(sorted(measure["models"])) if measure else "",
+            "backfill_ledger_rows": int(backfill_measure["ledger_rows"]) if backfill_measure else 0,
+            "backfill_turns": int(backfill_measure["turns"]) if backfill_measure else 0,
+            "backfill_input_tokens": int(backfill_measure["input_tokens"]) if backfill_measure else 0,
+            "backfill_cache_write_tokens": int(backfill_measure["cache_write_tokens"]) if backfill_measure else 0,
+            "backfill_cache_read_tokens": int(backfill_measure["cache_read_tokens"]) if backfill_measure else 0,
+            "backfill_output_tokens": int(backfill_measure["output_tokens"]) if backfill_measure else 0,
+            "backfill_billable_input_tokens": (
+                int(
+                    backfill_measure["input_tokens"]
+                    + backfill_measure["cache_write_tokens"]
+                    + backfill_measure["cache_read_tokens"]
+                )
+                if backfill_measure else 0
+            ),
             **sflags,
             **{f"component_{name}": value for name, value in flags.items()},
         }
@@ -334,7 +412,7 @@ def main() -> None:
         # assistance and no measured pending window that could already contain
         # the work. Users can assert chat-interface provenance in overrides.csv.
         row["extrapolation_eligible"] = int(
-            not measure and not pending_matches and assistance_class == "llm"
+            not provenance_measure and not pending_matches and assistance_class == "llm"
         )
         rows.append(row)
 
@@ -369,7 +447,7 @@ def main() -> None:
         repository = r.get("repository", "")
         candidates = (
             [c for c in commits if w["match_start"] <= c.timestamp_dt <= w["match_end"]]
-            if repository == PRIMARY_REPOSITORY else []
+            if repository in PRIMARY_HISTORY_LEDGER_LABELS else []
         )
         tokens = list(r.get("t") or [0, 0, 0, 0])
         pending_rows.append(
@@ -394,33 +472,27 @@ def main() -> None:
                 "candidate_commits": " | ".join(c.commit for c in candidates),
                 "candidate_scope": (
                     "primary_repository_history"
-                    if repository == PRIMARY_REPOSITORY
-                    else "cross_repository_history_not_loaded"
+                    if repository in PRIMARY_HISTORY_LEDGER_LABELS
+                    else "other_history_not_loaded"
                 ),
             }
         )
     pending_fields = list(pending_rows[0].keys()) if pending_rows else ["segment_id"]
     write_csv(GENERATED / "pending_segments.csv", pending_rows, pending_fields)
 
-    # Exact ledger rows not represented by an included primary-repository commit.
-    # Cross-repository rows are not "missing"; their Git histories are simply
-    # outside this checkout and remain part of the program-wide measured total.
+    # Commit-attributed ledger rows not represented by the selected history are
+    # retained as off-history evidence.  The ledger basename does not decide
+    # history membership; the SHA does.
     off_history = []
     for sha, m in program_exact.items():
-        repository = m.get("repository", "")
-        if repository == PRIMARY_REPOSITORY and sha in excluded_sha:
-            continue
-        if repository == PRIMARY_REPOSITORY and sha in commit_by_sha:
+        if sha in excluded_sha or sha in commit_by_sha:
             continue
         off_history.append(
             {
-                "repository": repository,
+                "repository_labels": " | ".join(sorted(m.get("repositories", set()))),
                 "commit": sha,
-                "scope_relation": (
-                    "cross_repository_in_program"
-                    if repository != PRIMARY_REPOSITORY
-                    else "primary_repository_not_in_included_history"
-                ),
+                "scope_relation": "commit_not_in_selected_history",
+                "activities": " | ".join(sorted(m.get("activities", set()))),
                 "ledger_rows": m["ledger_rows"],
                 "turns": m["turns"],
                 "input_tokens": m["input_tokens"],
@@ -434,9 +506,10 @@ def main() -> None:
         GENERATED / "off_history_ledger_commits.csv",
         off_history,
         [
-            "repository",
+            "repository_labels",
             "commit",
             "scope_relation",
+            "activities",
             "ledger_rows",
             "turns",
             "input_tokens",
@@ -470,7 +543,9 @@ def main() -> None:
                 "unmeasured_pre_instrumentation": sum(r["accounting_state"] == "unmeasured_pre_instrumentation" for r in subset),
                 "unmeasured_post_instrumentation": sum(r["accounting_state"] == "unmeasured_post_instrumentation" for r in subset),
                 "llm_evidence_unmeasured": sum(
-                    r["accounting_state"] != "exact_measured" and r["assistance_class"] == "llm" for r in subset
+                    r["accounting_state"] not in {"exact_measured", "backfill_commit_attributed"}
+                    and r["assistance_class"] == "llm"
+                    for r in subset
                 ),
                 "exact_output_tokens": sum(r["output_tokens"] for r in subset),
                 "exact_billable_input_tokens": sum(r["billable_input_tokens"] for r in subset),
@@ -633,41 +708,45 @@ def main() -> None:
                 total += max(0.0, math.expm1(math.log1p(pred) + resid))
             boot[target].append(total)
 
-    # Program-wide measured usage.  This includes every author-confirmed ledger
-    # repository in scope, but excludes exact rows tied solely to this paper's
-    # own draft2-production commits.
+    # Retained observed usage across the accepted historical ledger labels.
+    # These labels are descriptive checkout/worktree basenames, not repository
+    # identities.
     measured_all = sum_token_rows(token_rows)
 
-    # Repository-level accounting keeps the cross-repository contribution
-    # visible rather than letting it disappear into one project-wide scalar.
-    repository_stats = []
-    for repository in LEDGER_REPOSITORIES:
+    ledger_label_stats = []
+    label_descriptions = CONFIG.get(
+        "included_ledger_labels", CONFIG.get("included_ledger_repositories", {})
+    )
+    for repository in LEDGER_LABELS:
         repo_rows = [r for r in token_rows if r.get("repository") == repository]
         totals = sum_token_rows(repo_rows)
-        repository_stats.append({
-            "repository": repository,
-            "scope_label": CONFIG.get("included_ledger_repositories", {}).get(repository, ""),
+        ledger_label_stats.append({
+            "ledger_label": repository,
+            "scope_label": label_descriptions.get(repository, ""),
             "token_rows": len(repo_rows),
-            "exact_rows": sum(not str(r.get("c") or "").startswith("pending@") for r in repo_rows),
-            "pending_rows": sum(str(r.get("c") or "").startswith("pending@") for r in repo_rows),
+            "live_exact_rows": sum(
+                not row_is_pending(r) and not row_is_backfill(r) for r in repo_rows
+            ),
+            "backfill_rows": sum(row_is_backfill(r) for r in repo_rows),
+            "pending_rows": sum(row_is_pending(r) and not row_is_backfill(r) for r in repo_rows),
             **totals,
         })
     write_csv(
         GENERATED / "ledger_repository_summary.csv",
-        repository_stats,
-        list(repository_stats[0].keys()) if repository_stats else ["repository"],
+        ledger_label_stats,
+        list(ledger_label_stats[0].keys()) if ledger_label_stats else ["ledger_label"],
     )
 
-    # Reconcile the committed lifetime snapshot against the *entire current raw
-    # ledger*, not against the paper's scoped/pinned subset.  This keeps the
-    # health check logically separate from the study-universe definition.
-    _raw_exact, _raw_pending, raw_current_token_rows = load_ledger(ROOT)
+    # Reconcile the committed lifetime snapshot against the current canonical
+    # latest-wins ledger, not raw append lines.
+    raw_current_rows = load_canonical_ledger_rows(ROOT)
+    raw_current_token_rows = [r for r in raw_current_rows if "t" in r or "tokens" in r]
     raw_current_totals = sum_token_rows(raw_current_token_rows)
     lifetime_path = ROOT / ".llm_resource_tally/lifetime-totals.json"
     lifetime_snapshot = json.loads(lifetime_path.read_text()) if lifetime_path.exists() else {}
     lifetime_tokens = lifetime_snapshot.get("tokens") or {}
     lifetime_reconciliation = {
-        "ledger_rows_current": len((ROOT / ".llm_resource_tally/ledger/ledger.jsonl").read_text().splitlines()),
+        "ledger_rows_current": len(raw_current_rows),
         "lifetime_ledger_rows": int(lifetime_snapshot.get("ledger_rows") or 0),
         "ledger_turns_current": raw_current_totals["turns"],
         "lifetime_turns": int(lifetime_snapshot.get("turns") or 0),
@@ -692,9 +771,16 @@ def main() -> None:
         "output_tokens": sum(r["output_tokens"] for r in rows),
         "billable_input_tokens": sum(r["billable_input_tokens"] for r in rows),
     }
-    pending_totals = sum_token_rows([r for r in token_rows if str(r.get("c") or "").startswith("pending@")])
-    exact_program_rows = [r for r in token_rows if (r.get("c") or "") and not str(r.get("c") or "").startswith("pending@") ]
-    exact_all = sum_token_rows(exact_program_rows)
+    live_exact_program_rows = [
+        r for r in token_rows if not row_is_pending(r) and not row_is_backfill(r)
+    ]
+    backfill_rows = [r for r in token_rows if row_is_backfill(r)]
+    pending_nonbackfill_rows = [
+        r for r in token_rows if row_is_pending(r) and not row_is_backfill(r)
+    ]
+    exact_all = sum_token_rows(live_exact_program_rows)
+    backfill_totals = sum_token_rows(backfill_rows)
+    pending_totals = sum_token_rows(pending_nonbackfill_rows)
 
     token_breakdown_rows = []
     for key, label in [
@@ -708,9 +794,10 @@ def main() -> None:
             "token_kind": key,
             "label": label,
             "ledger_total": measured_all[key],
-            "exact_commit_attributed_all": exact_all[key],
+            "live_exact_commit_attributed": exact_all[key],
+            "backfill": backfill_totals[key],
             "pending_session_level": pending_totals[key],
-            "exact_on_pinned_history": exact_on_history[key],
+            "live_exact_on_selected_history": exact_on_history[key],
         })
     write_csv(
         GENERATED / "measured_token_breakdown.csv",
@@ -725,6 +812,7 @@ def main() -> None:
     model_stats = defaultdict(lambda: {
         "ledger_rows": 0,
         "exact_rows": 0,
+        "backfill_rows": 0,
         "pending_rows": 0,
         "input_tokens": 0,
         "cache_write_tokens": 0,
@@ -734,6 +822,10 @@ def main() -> None:
         "exact_cache_write_tokens": 0,
         "exact_cache_read_tokens": 0,
         "exact_output_tokens": 0,
+        "backfill_input_tokens": 0,
+        "backfill_cache_write_tokens": 0,
+        "backfill_cache_read_tokens": 0,
+        "backfill_output_tokens": 0,
         "pending_input_tokens": 0,
         "pending_cache_write_tokens": 0,
         "pending_cache_read_tokens": 0,
@@ -745,11 +837,11 @@ def main() -> None:
     })
     for ledger_row in token_rows:
         commit_label = str(ledger_row.get("c") or "")
-        is_pending = commit_label.startswith("pending@")
-        is_exact = bool(commit_label) and not is_pending
+        is_backfill = row_is_backfill(ledger_row)
+        is_pending = row_is_pending(ledger_row) and not is_backfill
+        is_exact = bool(commit_label) and not row_is_pending(ledger_row) and not is_backfill
         on_history = (
             is_exact
-            and ledger_row.get("repository") == PRIMARY_REPOSITORY
             and commit_label in commit_by_sha
         )
         for raw_model, raw_values in (ledger_row.get("bm") or {}).items():
@@ -759,10 +851,13 @@ def main() -> None:
             stat["ledger_rows"] += 1
             stat["pending_rows"] += int(is_pending)
             stat["exact_rows"] += int(is_exact)
+            stat["backfill_rows"] += int(is_backfill)
             for token_name, value in zip(("input_tokens", "cache_write_tokens", "cache_read_tokens", "output_tokens"), values):
                 stat[token_name] += value
                 if is_exact:
                     stat[f"exact_{token_name}"] += value
+                if is_backfill:
+                    stat[f"backfill_{token_name}"] += value
                 if is_pending:
                     stat[f"pending_{token_name}"] += value
                 if on_history:
@@ -776,6 +871,7 @@ def main() -> None:
         row = {"model": model, "provider": model_provider(model), **stat}
         row["billable_input_tokens"] = row["input_tokens"] + row["cache_write_tokens"] + row["cache_read_tokens"]
         row["exact_billable_input_tokens"] = row["exact_input_tokens"] + row["exact_cache_write_tokens"] + row["exact_cache_read_tokens"]
+        row["backfill_billable_input_tokens"] = row["backfill_input_tokens"] + row["backfill_cache_write_tokens"] + row["backfill_cache_read_tokens"]
         row["pending_billable_input_tokens"] = row["pending_input_tokens"] + row["pending_cache_write_tokens"] + row["pending_cache_read_tokens"]
         model_token_rows.append(row)
 
@@ -957,7 +1053,11 @@ def main() -> None:
                 for kind, rate in zip(("input_tokens", "cache_write_tokens", "cache_read_tokens", "output_tokens"), rates)
             )
         calibration_exact_ledger_commits = (
-            sum(model in {m for m in r["ledger_models"].split(" | ") if m} for r in rows)
+            sum(
+                r["accounting_state"] == "exact_measured"
+                and model in {m for m in r["ledger_models"].split(" | ") if m}
+                for r in rows
+            )
             if not model.startswith("<") else 0
         )
         calibration_status = (
@@ -1115,30 +1215,28 @@ def main() -> None:
     inst_author_iso = run_git(ROOT, "show", "-s", "--format=%aI", inst_sha).strip()
     inst_date = date.fromisoformat(inst_author_iso[:10])
     inst_date_label = f"{inst_date.strftime('%B')} {inst_date.day}, {inst_date.year}"
-    program_exact_included = {
-        sha: m for sha, m in program_exact.items()
-        if not (m.get("repository") == PRIMARY_REPOSITORY and sha in excluded_sha)
-    }
-
     summary = {
-        "schema": "formalization-draft2/accounting-summary/v3",
-        "history_cutoff_commit": CUTOFF,
+        "schema": "formalization-draft2/accounting-summary/v4",
+        "history_cutoff_ref": cutoff_requested,
+        "history_cutoff_commit": cutoff,
         "history_cutoff_date": cutoff_date_iso,
         "history_cutoff_date_label": cutoff_date_label,
         "primary_repository": PRIMARY_REPOSITORY,
-        "included_ledger_repositories": CONFIG.get("included_ledger_repositories", {}),
+        "included_ledger_labels": label_descriptions,
+        "primary_history_ledger_labels": sorted(PRIMARY_HISTORY_LEDGER_LABELS),
         "repository_history_commit_count": len(repository_commits),
         "excluded_paper_only_commits": len(excluded_commits),
         "history_commit_count": len(rows),
         "instrumentation_commit": inst_sha,
         "instrumentation_time_utc": inst_dt.isoformat(),
-        "primary_repository_exact_commit_ids": len(exact),
-        "ledger_exact_commit_ids": len(program_exact_included),
-        "ledger_exact_commits_on_history": sum(sha in commit_by_sha for sha in exact),
-        "ledger_exact_commits_off_history": sum(sha not in commit_by_sha for sha in exact),
-        "cross_repository_exact_commit_ids": sum(
-            m.get("repository") != PRIMARY_REPOSITORY for m in program_exact_included.values()
+        "live_exact_commit_ids_on_history": len(exact),
+        "live_exact_commit_ids_program": len(live_program_exact),
+        "live_exact_commit_ids_off_history": sum(
+            sha not in commit_by_sha and sha not in excluded_sha for sha in live_program_exact
         ),
+        "backfill_commit_ids_on_history": len(backfill_exact),
+        "backfill_commit_ids_program": len(backfill_program_exact),
+        "ledger_commit_attributed_ids": len(program_exact),
         "commits_before_instrumentation": sum(c.timestamp_dt < inst_dt for c in commits),
         "commits_without_exact_accounting": sum(r["accounting_state"] != "exact_measured" for r in rows),
         "commits_overlapping_pending_windows": sum(int(r["pending_segment_count"]) > 0 for r in rows),
@@ -1146,7 +1244,10 @@ def main() -> None:
         "pending_segments_turns": pending_totals["turns"],
         "pending_segments_output_tokens": pending_totals["output_tokens"],
         "pending_segments_billable_input_tokens": pending_totals["billable_input_tokens"],
-        "measured_lower_bound": measured_all,
+        "retained_observed_telemetry": measured_all,
+        "live_exact_commit_attributed": exact_all,
+        "backfill": backfill_totals,
+        "pending_session_level": pending_totals,
         "lifetime_snapshot_reconciliation": lifetime_reconciliation,
         "exact_on_history": exact_on_history,
         "accounting_states": dict(state_counts),
@@ -1170,7 +1271,9 @@ def main() -> None:
         },
         "llm_evidence_commits": sum(r["assistance_class"] == "llm" for r in rows),
         "llm_evidence_unmeasured_commits": sum(
-            r["assistance_class"] == "llm" and r["accounting_state"] != "exact_measured" for r in rows
+            r["assistance_class"] == "llm"
+            and r["accounting_state"] not in {"exact_measured", "backfill_commit_attributed"}
+            for r in rows
         ),
         "extrapolation_eligible_commits": len(eligible_rows),
         "coverage_proxies": {
@@ -1202,7 +1305,8 @@ def main() -> None:
     report.append("# Accounting coverage report")
     report.append("")
     report.append(
-        f"Pinned study snapshot: **{cutoff_date_label}** (source commit `{CUTOFF}`; "
+        f"Selected study snapshot: **{cutoff_date_label}** (requested ref `{cutoff_requested}`, "
+        f"resolved commit `{cutoff}`; "
         f"{len(rows):,} included primary-repository commits)."
     )
     if excluded_commits:
@@ -1214,27 +1318,31 @@ def main() -> None:
     report.append("## Study scope")
     report.append("")
     report.append(
-        "Commit-level coverage is computed on the primary formalization repository after path-only exclusions. "
-        "Measured token totals are program-wide across the explicitly allowlisted ledger repositories."
+        "Commit-level coverage is computed by SHA membership in the selected formalization history after path-only exclusions. "
+        "The ledger `r` field is treated only as a historical checkout/worktree label, not as repository identity."
     )
-    for r in repository_stats:
+    for r in ledger_label_stats:
         report.append(
-            f"- `{r['repository']}`: **{r['turns']:,}** turns, **{r['output_tokens']:,}** output tokens; {r['scope_label']}"
+            f"- `{r['ledger_label']}`: **{r['turns']:,}** turns, **{r['output_tokens']:,}** output tokens; {r['scope_label']}"
         )
     report.append("")
-    report.append("## Measured lower bound")
+    report.append("## Retained observed telemetry")
     report.append("")
     report.append(f"- ledger model turns: **{measured_all['turns']:,}**")
     report.append(f"- output tokens: **{measured_all['output_tokens']:,}**")
     report.append(f"- billable-input accounting measure: **{measured_all['billable_input_tokens']:,}**")
     report.append(
-        f"- exact ledger commit IDs across the in-scope program: **{summary['ledger_exact_commit_ids']:,}**; "
-        f"primary-repository exact IDs: **{summary['primary_repository_exact_commit_ids']:,}**; "
-        f"on included pinned history: **{summary['ledger_exact_commits_on_history']:,}**"
+        f"- live exact ledger commit IDs across the in-scope labels: **{summary['live_exact_commit_ids_program']:,}**; "
+        f"on selected history: **{summary['live_exact_commit_ids_on_history']:,}**"
     )
-    report.append(f"- pinned-history commits without exact commit-level accounting: **{summary['commits_without_exact_accounting']:,}**")
+    report.append(
+        f"- explicit backfill: **{backfill_totals['turns']:,}** turns across "
+        f"**{summary['backfill_commit_ids_program']:,}** commit-attributed IDs and session-level recovery rows; "
+        "excluded from commit-local calibration and pending-window extrapolation logic"
+    )
+    report.append(f"- selected-history commits without live exact commit-level accounting: **{summary['commits_without_exact_accounting']:,}**")
     report.append(f"- commits preceding the instrumentation commit: **{summary['commits_before_instrumentation']:,}**")
-    report.append(f"- measured but commit-unattributed pending segments: **{len(pending_rows):,}** containing **{pending_totals['turns']:,}** turns")
+    report.append(f"- live measured but commit-unattributed pending segments: **{len(pending_rows):,}** containing **{pending_totals['turns']:,}** turns")
     if lifetime_reconciliation["snapshot_is_stale"]:
         report.append(
             f"- note: `lifetime-totals.json` is behind the current ledger "
@@ -1287,7 +1395,8 @@ def main() -> None:
     report.append("")
     report.append(
         f"The current model has {len(eligible_rows):,} extrapolation-eligible commits. "
-        "These are positive-evidence LLM-assisted commits with neither exact accounting nor overlap with a measured pending segment."
+        "These are positive-evidence LLM-assisted commits with neither live exact accounting nor overlap with a live measured pending segment. "
+        "Explicit backfills are not calibration observations and do not alter candidate eligibility."
     )
     for target in targets:
         x = extrapolated[target]
@@ -1306,7 +1415,7 @@ def main() -> None:
             + ", ".join(f"`{m}`" for m in uncalibrated_models)
         )
     report.append(
-        "These model-based values are not part of the measured lower bound and should not be quoted without first auditing the override file, the validation table, model calibration coverage, and the missingness assumptions."
+        "These model-based values are not part of retained observed telemetry and should not be quoted without first auditing the override file, the validation table, model calibration coverage, and the missingness assumptions."
     )
     (GENERATED / "ACCOUNTING_REPORT.md").write_text("\n".join(report) + "\n")
 
@@ -1345,9 +1454,9 @@ def main() -> None:
 
     macros = [
         "% Generated by scripts/build_accounting.py; do not edit by hand.",
-        f"\\newcommand{{\\AccountingCutoffCommitRaw}}{{{CUTOFF}}}",
+        f"\\newcommand{{\\AccountingCutoffCommitRaw}}{{{cutoff}}}",
         f"\\newcommand{{\\AccountingCutoffDate}}{{{cutoff_date_label}}}",
-        f"\\newcommand{{\\AccountingSnapshot}}{{\\pdftooltip{{\\AccountingCutoffDate}}{{Git snapshot: {CUTOFF}}}}}",
+        f"\\newcommand{{\\AccountingSnapshot}}{{\\pdftooltip{{\\AccountingCutoffDate}}{{Git snapshot: {cutoff}}}}}",
         f"\\newcommand{{\\InstrumentationDate}}{{{inst_date_label}}}",
         f"\\newcommand{{\\InstrumentationSnapshot}}{{\\pdftooltip{{\\InstrumentationDate}}{{Instrumentation commit: {inst_sha}}}}}",
         f"\\newcommand{{\\RepositoryHistoryCommitCount}}{{{format_int(len(repository_commits))}}}",
@@ -1377,6 +1486,13 @@ def main() -> None:
         f"\\newcommand{{\\LedgerOutputTokensScientific}}{{{truncated_scientific(measured_all['output_tokens'])}}}",
         f"\\newcommand{{\\LedgerBillableInputTokens}}{{{format_int(measured_all['billable_input_tokens'])}}}",
         f"\\newcommand{{\\LedgerBillableInputTokensScientific}}{{{truncated_scientific(measured_all['billable_input_tokens'])}}}",
+        f"\\newcommand{{\\LiveExactLedgerTurns}}{{{format_int(exact_all['turns'])}}}",
+        f"\\newcommand{{\\LiveExactLedgerOutputTokens}}{{{format_int(exact_all['output_tokens'])}}}",
+        f"\\newcommand{{\\LiveExactLedgerBillableInputTokens}}{{{format_int(exact_all['billable_input_tokens'])}}}",
+        f"\\newcommand{{\\BackfillTurns}}{{{format_int(backfill_totals['turns'])}}}",
+        f"\\newcommand{{\\BackfillOutputTokens}}{{{format_int(backfill_totals['output_tokens'])}}}",
+        f"\\newcommand{{\\BackfillBillableInputTokens}}{{{format_int(backfill_totals['billable_input_tokens'])}}}",
+        f"\\newcommand{{\\BackfillCommitAttributedIdCount}}{{{format_int(summary['backfill_commit_ids_program'])}}}",
         f"\\newcommand{{\\PendingSegmentCount}}{{{format_int(len(pending_rows))}}}",
         f"\\newcommand{{\\PendingTurns}}{{{format_int(pending_totals['turns'])}}}",
         f"\\newcommand{{\\LLMEvidenceCommitCount}}{{{format_int(summary['llm_evidence_commits'])}}}",
@@ -1387,10 +1503,10 @@ def main() -> None:
         f"\\newcommand{{\\ChatInterfaceCandidateCount}}{{{format_int(len(chat_candidate_rows))}}}",
         f"\\newcommand{{\\ConfirmedChatInterfaceCommitCount}}{{{format_int(confirmed_chat_commits)}}}",
         f"\\newcommand{{\\BoundedGPTChatRuleCommitCount}}{{{format_int(bounded_gpt_chat_commits)}}}",
-        f"\\newcommand{{\\LedgerRepositoryCount}}{{{format_int(len(repository_stats))}}}",
-        f"\\newcommand{{\\ProgramExactLedgerCommitIdCount}}{{{format_int(summary['ledger_exact_commit_ids'])}}}",
-        f"\\newcommand{{\\PrimaryExactLedgerCommitIdCount}}{{{format_int(summary['primary_repository_exact_commit_ids'])}}}",
-        f"\\newcommand{{\\CrossRepositoryExactLedgerCommitIdCount}}{{{format_int(summary['cross_repository_exact_commit_ids'])}}}",
+        f"\\newcommand{{\\LedgerRepositoryCount}}{{{format_int(len(ledger_label_stats))}}}",
+        f"\\newcommand{{\\ProgramExactLedgerCommitIdCount}}{{{format_int(summary['live_exact_commit_ids_program'])}}}",
+        f"\\newcommand{{\\PrimaryExactLedgerCommitIdCount}}{{{format_int(summary['live_exact_commit_ids_on_history'])}}}",
+        f"\\newcommand{{\\CrossRepositoryExactLedgerCommitIdCount}}{{0}}",
         f"\\newcommand{{\\GPTSolTrailerCommitCount}}{{{format_int(next((r['git_trailer_commits'] for r in coauthor_model_rows if r['model'] == 'gpt-5.6-sol'), 0))}}}",
         f"\\newcommand{{\\GPTSolResolvedProvenanceCommitCount}}{{{format_int(next((r['resolved_provenance_commits'] for r in coauthor_model_rows if r['model'] == 'gpt-5.6-sol'), 0))}}}",
         f"\\newcommand{{\\GPTSolExactLedgerCommitCount}}{{{format_int(next((r['exact_ledger_commits'] for r in coauthor_model_rows if r['model'] == 'gpt-5.6-sol'), 0))}}}",
@@ -1400,15 +1516,16 @@ def main() -> None:
 
     token_lines = [
         "% Generated by scripts/build_accounting.py; do not edit by hand.",
-        r"\begin{tabular}{lrrr}",
+        r"\begin{tabular}{lrrrr}",
         r"\toprule",
-        r"Token kind & \multicolumn{3}{c}{Measured lower-bound tokens} \\",
-        r" & Ledger total & Exact subset & Pending subset \\",
+        r"Token kind & \multicolumn{4}{c}{Retained measured tokens} \\",
+        r" & Ledger total & Live exact & Backfill & Pending \\",
         r"\midrule",
     ]
     for r in token_breakdown_rows:
         token_lines.append(
-            f"{latex_escape(r['label'])} & {r['ledger_total']:,} & {r['exact_commit_attributed_all']:,} & {r['pending_session_level']:,} \\\\")
+            f"{latex_escape(r['label'])} & {r['ledger_total']:,} & {r['live_exact_commit_attributed']:,} & "
+            f"{r['backfill']:,} & {r['pending_session_level']:,} \\\\")
     token_lines += ["\\bottomrule", "\\end{tabular}"]
     (SNAPSHOTS / "measured_token_breakdown_table.tex").write_text("\n".join(token_lines) + "\n")
 
@@ -1416,7 +1533,7 @@ def main() -> None:
         "% Generated by scripts/build_accounting.py; do not edit by hand.",
         r"\begin{tabular}{lrrrr}",
         r"\toprule",
-        r"Model & \multicolumn{4}{c}{Measured lower-bound tokens} \\",
+        r"Model & \multicolumn{4}{c}{Retained measured tokens} \\",
         r" & Input & Cache write & Cache read & Output \\",
         r"\midrule",
     ]
@@ -1434,13 +1551,13 @@ def main() -> None:
         "% Generated by scripts/build_accounting.py; do not edit by hand.",
         r"\begin{tabular}{lrrr}",
         r"\toprule",
-        r"Ledger repository & \multicolumn{3}{c}{Measured lower-bound usage} \\",
+        r"Ledger checkout/worktree label & \multicolumn{3}{c}{Retained measured usage} \\",
         r" & Turns & Billable input & Output \\",
         r"\midrule",
     ]
-    for r in repository_stats:
+    for r in ledger_label_stats:
         repository_lines.append(
-            f"{latex_escape(r['repository'])} & {r['turns']:,} & {r['billable_input_tokens']:,} & {r['output_tokens']:,} \\\\")
+            f"{latex_escape(r['ledger_label'])} & {r['turns']:,} & {r['billable_input_tokens']:,} & {r['output_tokens']:,} \\\\")
     repository_lines += ["\\bottomrule", "\\end{tabular}"]
     (SNAPSHOTS / "ledger_repository_table.tex").write_text("\n".join(repository_lines) + "\n")
 
@@ -1462,6 +1579,7 @@ def main() -> None:
 
     state_label = {
         "exact_measured": "Exact commit-attributed measurement",
+        "backfill_commit_attributed": "Backfilled commit-attributed measurement",
         "instrumentation_commit_unmeasured": "Instrumentation commit",
         "unmeasured_pre_instrumentation": "Pre-instrumentation, unmeasured",
         "unmeasured_post_instrumentation": "Post-instrumentation, unmeasured",
@@ -1492,9 +1610,19 @@ def main() -> None:
     component_lines += ["\\bottomrule", "\\end{tabular}"]
     (SNAPSHOTS / "component_accounting_table.tex").write_text("\n".join(component_lines) + "\n")
 
-    print(f"accounting: {len(rows)} commits, {state_n('exact_measured')} exact measured, {len(pending_rows)} pending segments")
+    print(
+        f"accounting: {len(rows)} commits, {state_n('exact_measured')} live exact measured, "
+        f"{state_n('backfill_commit_attributed')} backfill-attributed, {len(pending_rows)} live pending segments"
+    )
     print(f"accounting: working data under {GENERATED.relative_to(ROOT)}; TeX snapshots under {SNAPSHOTS.relative_to(ROOT)}")
 
 
 if __name__ == "__main__":
-    main()
+    parser = argparse.ArgumentParser(description="Build formalization resource-accounting artifacts.")
+    parser.add_argument(
+        "--cutoff",
+        default=None,
+        help="Git ref/commit defining the inclusive study-history cutoff (default: configured ref, normally HEAD).",
+    )
+    args = parser.parse_args()
+    main(args.cutoff)

@@ -19,7 +19,7 @@ These rules apply to the main text, appendices, captions, and generated prose in
 - Keep the formalization-process description in the methods appendix. State the tools and recurring workflow without turning the manuscript into an agent handoff.
 - Put references before the appendices.
 - Cross-reference appendix sections explicitly whenever the main text sends a reader to supplementary evidence.
-- Label incomplete observed resource telemetry as a lower bound in table headers and captions, and keep observed values separate from modeled or extrapolated values.
+- Label incomplete resource data as retained observed telemetry, state that it is incomplete, and keep live exact, explicit backfill, pending, modeled, and extrapolated quantities separate. Do not describe the retained aggregate as a strict lower bound unless duplicate-observation risk has been ruled out.
 
 ## Citations and bibliography
 

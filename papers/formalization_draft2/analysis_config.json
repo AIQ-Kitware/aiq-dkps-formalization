@@ -1,12 +1,16 @@
 {
-  "schema": "formalization-draft2/accounting-config/v2",
-  "history_cutoff_commit": "7aeff6b62ccab2f96ee64606bc87e368a1650502",
+  "schema": "formalization-draft2/accounting-config/v3",
+  "history_cutoff_ref": "HEAD",
   "study_start_date": "2026-06-03",
   "primary_repository": "aiq-dkps-formalization",
-  "included_ledger_repositories": {
-    "aiq-dkps-formalization": "primary formalization repository",
-    "aiq-gpu-docs": "author-confirmed cross-repository work in scope as part of the TauCeti foundations contribution"
+  "included_ledger_labels": {
+    "aiq-dkps-formalization": "historical primary checkout/worktree basename",
+    "aiq-gpu-docs": "historical Claude worktree basename for commits from this same Git repository"
   },
+  "primary_history_ledger_labels": [
+    "aiq-dkps-formalization",
+    "aiq-gpu-docs"
+  ],
   "exclude_commits_if_only_touch": [
     "papers/formalization_draft2/"
   ],

@@ -152,8 +152,9 @@ including principal angles, singular-subspace geometry, unitarily invariant
 norms, Borel spectral calculus, unbounded self-adjoint operators, direct
 rotations, operator angles, and Sylvester equations.
 
-We also report lower bounds on large language model (LLM) resource use as
-  baselines for comparing formalization efficiency and extrapolate them to
+We also report retained measurements of large language model (LLM) resource use as
+  baselines for comparing formalization efficiency and extrapolate the live
+  commit-attributed subset to
   obtain an order-of-magnitude estimate of project-wide resource usage.
 These records do not capture the full formalization cost, but commit-level
   provenance enables comparisons on individual proof developments.
@@ -218,7 +219,7 @@ geometry, principal angles, singular-subspace comparison, unitarily invariant
 norms, spectral calculus, real/complex transfer, direct rotations, operator
 angles, and Sylvester equations.  Formalizing the papers therefore required
 building reusable mathematical infrastructure beyond the final perturbation
-inequalities.  We also retained lower-bound LLM resource measurements so that
+inequalities.  We also retained LLM resource measurements so that
 the computational scale of the formalization, and possible improvements in
 artificial intelligence (AI) formalization workflows, can be studied
 quantitatively.
@@ -240,7 +241,7 @@ quantitatively.
         foundations required by these proofs.  \Cref{sec:foundations} summarizes
         \FormalizationBasicTheoryCount{} theory areas and credits the portions
         adapted from prior formal work.
-  \item We preserve lower-bound model-resolved resource measurements for the
+  \item We preserve incomplete model-resolved resource measurements for the
         formalization, quantify their coverage of the Git history, and give
         revisable operational-energy estimates and coarse project-level
         extrapolations.
@@ -661,8 +662,10 @@ full dependency analysis are given in Appendix~\ref{app:source-coverage}.
 \section{Resource Accounting}
 \label{sec:process-study}
 
-Instrumentation began after formalization was underway, so the observed totals
-are lower bounds.  Exact commit-attributed measurements cover
+Instrumentation began after formalization was underway, and historical
+installation, attribution, and backfill limitations leave the retained telemetry
+incomplete.  Explicit backfills are reported separately and excluded from
+commit-local calibration and extrapolation.  Live exact commit-attributed measurements cover
 \ExactMeasuredCommitCount{} of \HistoryCommitCount{} primary-repository commits
 (\ExactMeasuredCommitShare{}).  The same commits account for
 \ExactMeasuredLeanLineChurnShare{} of raw cumulative Lean source-line changes.
@@ -672,10 +675,10 @@ contain at least \LedgerTurns{} model turns, \LedgerOutputTokens{} output tokens
 \LedgerBillableInputTokens{} tokens in the billable-input accounting measure.
 Appendix~\ref{app:accounting} gives the adjustment and the model-resolved totals.
 
-Converting the observed token usage to operational energy requires assumptions
+Converting the retained observed token usage to operational energy requires assumptions
 about serving throughput, hardware power, cache work, per-turn overhead, and
 datacenter power usage effectiveness.  Under the central versioned model, the
-observed lower-bound usage corresponds to \ModeledOperationalEnergy{}; a separate
+retained observed usage corresponds to \ModeledOperationalEnergy{}; a separate
 per-token calculation gives \PerTokenCrossCheckEnergy{}.  Provider energy
 meter readings are unavailable, so these values are order-of-magnitude
 operational estimates \citep{crall2026llmresource}.
@@ -690,9 +693,10 @@ formalization-text coverage under the same serving model.
 \begin{table}[H]
 \centering
 \small
-\caption{Observed lower bounds and two rough linear project-scale
-extrapolations.  The observed column uses retained telemetry.  The extrapolated
-columns apply $q/c$ to the exact primary-repository subset using commit coverage
+\caption{Retained observed telemetry and two rough linear project-scale
+extrapolations.  The retained column includes live exact, explicit-backfill,
+and pending measurements.  The extrapolated
+columns apply $q/c$ to the live exact primary-repository subset using commit coverage
 or the adjusted Lean-line-change coverage defined in
 Appendix~\ref{app:accounting}.  All energy values use the same central serving
 assumptions.}

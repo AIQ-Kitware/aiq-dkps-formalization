@@ -1,7 +1,9 @@
 category,quantity,value,unit,interpretation,source_path
-observed_lower_bound,retained_model_turns,42090,turns,"Retained measured model turns; incomplete telemetry means this is a lower bound.",papers/formalization_draft2/snapshots/accounting_macros.tex
-observed_lower_bound,output_tokens,44950936,tokens,"Retained measured output tokens; lower bound.",papers/formalization_draft2/snapshots/accounting_macros.tex
-observed_lower_bound,billable_input_accounting_measure,15750533373,tokens,"Input accounting measure combining ordinary input and cache quantities under the ledger schema; lower bound.",papers/formalization_draft2/snapshots/accounting_macros.tex
-coverage,exact_commit_attribution,933/4637,commits,"Primary-repository commits with exact commit-attributed resource measurements; 20.1 percent.",papers/formalization_draft2/snapshots/accounting_macros.tex
-modeled_from_observed,api_equivalent_list_price,10871,USD,"Historical API list prices applied to observed lower-bound telemetry.",papers/formalization_draft2/snapshots/resource_valuation_macros.tex
-modeled_from_observed,operational_serving_energy,416.1,kWh,"Central serving-model estimate applied to observed lower-bound telemetry; excludes training, embodied hardware, clients, and network energy.",papers/formalization_draft2/snapshots/resource_valuation_macros.tex
+retained_observed,retained_model_turns,60178,turns,"All retained live-exact, explicit-backfill, and live-pending model turns; incomplete project telemetry.",papers/formalization_draft2/snapshots/accounting_macros.tex
+retained_observed,output_tokens,59517501,tokens,"All retained output tokens across live-exact, explicit-backfill, and live-pending rows.",papers/formalization_draft2/snapshots/accounting_macros.tex
+retained_observed,billable_input_accounting_measure,23597180625,tokens,Input accounting measure combining ordinary input and cache quantities across retained rows.,papers/formalization_draft2/snapshots/accounting_macros.tex
+partition,live_exact_model_turns,47743,turns,Live commit-attributed measurements eligible for commit-local calibration.,papers/formalization_draft2/snapshots/accounting_macros.tex
+partition,backfill_model_turns,7879,turns,Explicit historical backfill; retained in measured totals and excluded from commit-local calibration and extrapolation.,papers/formalization_draft2/snapshots/accounting_macros.tex
+partition,pending_model_turns,4556,turns,Live measured session usage without one-to-one commit attribution.,papers/formalization_draft2/snapshots/accounting_macros.tex
+coverage,exact_commit_attribution,1965/5402,commits,Selected-history commits with live exact commit-attributed resource measurements; 36.4 percent.,papers/formalization_draft2/snapshots/accounting_macros.tex
+modeled_from_observed,operational_serving_energy,554.9,kWh,"Central serving-model estimate applied to retained observed telemetry; excludes training, embodied hardware, clients, and network energy.",papers/formalization_draft2/snapshots/resource_valuation_macros.tex

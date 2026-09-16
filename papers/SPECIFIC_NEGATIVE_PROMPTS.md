@@ -38,8 +38,8 @@ Do not:
 Do not:
 
 - place modeled USD, CO2e, or kWh estimates in the abstract as though they were direct measurements;
-- show incomplete observed telemetry without `lower bound` in the relevant table header and caption;
-- put observed lower bounds and project-total extrapolations in an unlabeled shared column;
+- show incomplete resource telemetry without identifying it as retained/incomplete in the relevant table header and caption;
+- combine live exact observations, explicit backfills, or project-total extrapolations without labeling the accounting class;
 - describe extrapolations as confidence intervals unless a statistical model actually supports that interpretation;
 - use CO2e in the current manuscript unless the authors explicitly decide to restore it.
 

@@ -1,4 +1,6 @@
 PYTHON ?= python3
+CUTOFF ?=
+ACCOUNTING_CUTOFF_ARG := $(if $(strip $(CUTOFF)),--cutoff $(CUTOFF),)
 
 .PHONY: all accounting bibliometrics paper literature clean
 
@@ -8,7 +10,7 @@ all: paper
 # derived from them. This is explicit so an ordinary paper build never dirties
 # tracked snapshot files.
 accounting:
-	$(PYTHON) scripts/build_all.py
+	$(PYTHON) scripts/build_all.py $(ACCOUNTING_CUTOFF_ARG)
 
 # Networked, explicit refresh of the OpenAlex raw response and its tracked
 # compact/TeX snapshots. The normal manuscript build never contacts OpenAlex.
