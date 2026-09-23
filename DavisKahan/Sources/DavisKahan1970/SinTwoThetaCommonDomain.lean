@@ -73,12 +73,16 @@ theorem commonDomain_reflection_mem
 
 /-- The bounded off-diagonal residual implements reflection on the entire common domain.
 
+Only self-adjointness of the perturbed operator `T` is needed here; the
+unperturbed operator `A` enters through the common-domain residual equation and
+the reducing-subspace hypothesis, not through a self-adjointness assumption.
+
 The occurrence of `0` below is just a convenient parameter for the existing
 bounded-block constructor: `trialOffDiagonalBlock_eq` shows that this block is
 `P.orthogonal.starProjection` composed with `R` and the adjoint inclusion.
 It is NOT an assumption that the unbounded trial operator is zero or bounded. -/
 theorem commonDomain_trialReflection_intertwines
-    (hA : IsSelfAdjoint A) (hT : IsSelfAdjoint T)
+    (hT : IsSelfAdjoint T)
     (hdom : T.domain = A.domain)
     (hP : TauCeti.LinearPMap.ReducesSubspace A P)
     (R : P →L[K] E)
@@ -208,7 +212,7 @@ theorem commonDomain_trialReflection_intertwines
 
 /-- The common-domain directed estimate, first in the existing block representation. -/
 theorem sinTwoTheta_commonDomain_block_kyFan
-    (hA : IsSelfAdjoint A) (hT : IsSelfAdjoint T)
+    (hT : IsSelfAdjoint T)
     (hdom : T.domain = A.domain)
     (hP : TauCeti.LinearPMap.ReducesSubspace A P)
     {Q : Submodule K E} [Q.HasOrthogonalProjection]
@@ -240,7 +244,7 @@ theorem sinTwoTheta_commonDomain_block_kyFan
     hT hQ (KyFanDominantIdealFamily.kyFan (𝕜 := K) k hk)
     ((-2 : K) • trialOffDiagonalPart P 0 R) hDsa P hgapPos hgap
     (commonDomain_reflection_mem hdom hP)
-    (commonDomain_trialReflection_intertwines hA hT hdom hP R hres)
+    (commonDomain_trialReflection_intertwines hT hdom hP R hres)
     (KyFanDominantIdealFamily.kyFan_mem (𝕜 := K) k hk _)
   rw [KyFanDominantIdealFamily.kyFan_gauge,
     KyFanDominantIdealFamily.kyFan_gauge] at hraw
@@ -288,12 +292,15 @@ theorem sinTwoTheta_commonDomain_block_kyFan
     _ ≤ 2 * kyFanApproximationGauge k (trialOffDiagonalBlock P 0 R) := hdouble
     _ ≤ 2 * kyFanApproximationGauge k R := by gcongr
 
-/-- Source-oriented common-domain directed residual bound. Both displayed norms are finite.
-There is no bounded trial operator and no global bounded perturbation in the hypotheses. -/
+/-- Common-domain directed residual bound. Both displayed norms are finite.
+There is no bounded trial operator and no global bounded perturbation in the hypotheses.
+This directed clause is slightly stronger than the paper's standing setup: its proof does not
+need self-adjointness of the unperturbed operator `A`; the source-facing combined theorem below
+retains that standing assumption because its ambient clause genuinely uses it. -/
 theorem sinTwoTheta_directed_commonDomain_whereDefinedUIN_rclike
     [TopologicalSpace.SeparableSpace E]
     (N : NormalizedSymmetricOperatorIdealFamily.{u, v} K)
-    (hA : IsSelfAdjoint A) (hT : IsSelfAdjoint T)
+    (hT : IsSelfAdjoint T)
     (hdom : T.domain = A.domain)
     (hP : TauCeti.LinearPMap.ReducesSubspace A P)
     {Q : Submodule K E} [Q.HasOrthogonalProjection]
@@ -319,7 +326,7 @@ theorem sinTwoTheta_directed_commonDomain_whereDefinedUIN_rclike
       simp [kyFanApproximationGauge, ContinuousLinearMap.kyFanGauge_zero_index]
     · have hk : 0 < k := Nat.pos_of_ne_zero hk0
       have hblock := sinTwoTheta_commonDomain_block_kyFan
-        hA hT hdom hP hQ R hres hgapPos hgap k
+        hT hdom hP hQ R hres hgapPos hgap k
       have hsame : kyFanApproximationGauge k (Angle.directedSinTwoAngleOperator P Q) =
           kyFanApproximationGauge k (sinTwoThetaIdealBlock Q P) := by
         have h := Angle.gauge_directedSinTwoAngleOperator_trialSide Q P
@@ -360,7 +367,7 @@ theorem sinTwoTheta_commonDomain_whereDefinedUIN_rclike
   constructor
   · intro R hres
     exact sinTwoTheta_directed_commonDomain_whereDefinedUIN_rclike
-      N hA hT hdom hP hQ R hres hgapPos hgap
+      N hT hdom hP hQ R hres hgapPos hgap
   · intro Hop hHop hEq hAngle hHopMem
     subst T
     exact sinTwoTheta_ambient_unbounded_perturbedGap_whereDefinedUIN_rclike

@@ -186,8 +186,11 @@ inherits assumptions belonging only to the other. The norm inequalities are asse
 the displayed norms are defined. -/
 alias sinTwoTheta := DavisKahan1970.sinTwoTheta_commonDomain_whereDefinedUIN_rclike
 
-/-- Scalar-generic directed clause `δ N(sin 2Θ₀) ≤ 2 N(R)` at the source common-domain
-scope, with no bounded trial compression or globally bounded perturbation hypothesis. -/
+/-- Scalar-generic directed clause `δ N(sin 2Θ₀) ≤ 2 N(R)` with no bounded trial
+compression or globally bounded perturbation hypothesis.  This reusable directed endpoint is
+slightly stronger than the paper's standing setup because it does not require self-adjointness
+of the unperturbed operator `A`; `sinTwoTheta` above retains that standing assumption for the
+complete source-facing theorem, whose ambient branch genuinely uses it. -/
 alias sinTwoTheta_directed :=
   DavisKahan1970.sinTwoTheta_directed_commonDomain_whereDefinedUIN_rclike
 
