@@ -124,9 +124,10 @@ theorem integral_id_mul_bumpD2C_eq_zero (k : ℕ) :
   have hpt : ∀ t : ℝ, ((t : ℝ) : ℂ) * bumpD2C k t
       = ((t * intervalBumpD2 k t : ℝ) : ℂ) := by
     intro t
-    rw [bumpD2C]
+    change ((t : ℂ) * (intervalBumpD2 k t : ℂ) =
+      ((t * intervalBumpD2 k t : ℝ) : ℂ))
     push_cast
-    ring
+    rfl
   rw [integral_congr_ae (Filter.Eventually.of_forall hpt), integral_complex_ofReal,
     integral_unitIocMeasure_eq_intervalIntegral, integral_id_mul_intervalBumpD2]
   norm_num

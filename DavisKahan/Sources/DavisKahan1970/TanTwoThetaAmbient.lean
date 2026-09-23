@@ -199,73 +199,13 @@ private theorem two_comm' (T : E →L[ℂ] E) : T * 2 = 2 * T := by
 private theorem two_star' : star (2 : E →L[ℂ] E) = 2 := by
   rw [two_eq_one_add_one', star_add, star_one]
 
-/-! ### Two-projection algebra reused at the doubled angle
+/-! ### Shared projection and inverse algebra
 
-The single-angle module proves the two facts the representative needs about a
-pair of idempotents; the three helpers below are the small consequences the
-doubled angle uses, restated for an abstract ring so that the
-projection-specific rewriting happens once. -/
-
-section ProjectionAlgebra
-
-variable {A : Type*} [Ring A] {p D : A}
-
-private theorem sq_eq_sub' (hkey : D * p + p * D + D * D = D) :
-    D * D = D - D * p - p * D := by
-  have h : D * D = D - (D * p + p * D) := eq_sub_of_add_eq' hkey
-  rw [h]
-  abel
-
-private theorem proj_sq' (hp : p * p = p) (hkey : D * p + p * D + D * D = D) :
-    p * (D * D) = -(p * D * p) := by
-  have e1 : p * (D * p) = p * D * p := (mul_assoc p D p).symm
-  have e2 : p * (p * D) = p * D := by rw [← mul_assoc, hp]
-  rw [sq_eq_sub' hkey, mul_sub, mul_sub, e1, e2]
-  abel
-
-private theorem sq_proj' (hp : p * p = p) (hkey : D * p + p * D + D * D = D) :
-    D * D * p = -(p * D * p) := by
-  have e3 : D * p * p = D * p := by rw [mul_assoc, hp]
-  rw [sq_eq_sub' hkey, sub_mul, sub_mul, e3]
-  abel
-
-/-- The projection commutes with `sin²Θ`. -/
-private theorem proj_comm_sq' (hp : p * p = p)
-    (hkey : D * p + p * D + D * D = D) :
-    p * (D * D) = D * D * p := by
-  rw [proj_sq' hp hkey, sq_proj' hp hkey]
-
-end ProjectionAlgebra
-
-/-! ### Inverses in a ring -/
-
-section RingInverse
-
-variable {A : Type*} [Ring A]
-
-private theorem inverse_comm' {a x : A} (ha : IsUnit a) (h : x * a = a * x) :
-    x * Ring.inverse a = Ring.inverse a * x := by
-  have h1 : Ring.inverse a * a = 1 := Ring.inverse_mul_cancel a ha
-  have h2 : a * Ring.inverse a = 1 := Ring.mul_inverse_cancel a ha
-  calc x * Ring.inverse a
-      = (Ring.inverse a * a) * (x * Ring.inverse a) := by rw [h1, one_mul]
-    _ = Ring.inverse a * ((a * x) * Ring.inverse a) := by noncomm_ring
-    _ = Ring.inverse a * ((x * a) * Ring.inverse a) := by rw [h]
-    _ = Ring.inverse a * x * (a * Ring.inverse a) := by noncomm_ring
-    _ = Ring.inverse a * x := by rw [h2, mul_one]
-
-private theorem star_inverse' [StarRing A] {a : A} (ha : IsUnit a) :
-    star (Ring.inverse a) = Ring.inverse (star a) := by
-  have hstar : IsUnit (star a) := ha.star
-  have h1 : star a * Ring.inverse (star a) = 1 := Ring.mul_inverse_cancel _ hstar
-  have h2 : star (Ring.inverse a) * star a = 1 := by
-    rw [← star_mul, Ring.mul_inverse_cancel a ha, star_one]
-  calc star (Ring.inverse a)
-      = star (Ring.inverse a) * (star a * Ring.inverse (star a)) := by rw [h1, mul_one]
-    _ = (star (Ring.inverse a) * star a) * Ring.inverse (star a) := by rw [mul_assoc]
-    _ = Ring.inverse (star a) := by rw [h2, one_mul]
-
-end RingInverse
+The common two-projection algebra is owned by `TanThetaAmbient`: in particular
+`idempotent_comm_sq_of_anticommutator` is reused below rather than reproved.
+Inverse commutation uses `TauCeti.ringInverse_semiconj` and
+`TauCeti.star_ringInverse`, both shared from
+`ForTauCeti.Analysis.InnerProductSpace.CoerciveUnit`. -/
 
 /-! ### The block representative of the ambient double-angle tangent -/
 
@@ -643,16 +583,16 @@ omit [CompleteSpace E] in
 private theorem doubleSecant_comm_projectorDifference :
     projectorDifference U V * doubleSecant U V =
       doubleSecant U V * projectorDifference U V :=
-  inverse_comm' (hinv)
+  TauCeti.ringInverse_semiconj hinv hinv
     (by noncomm_ring)
 
 omit [CompleteSpace E] in
 private theorem doubleSecant_comm_starProjection :
     doubleSecant U V * U.starProjection =
       U.starProjection * doubleSecant U V :=
-  (inverse_comm' (hinv)
+  (TauCeti.ringInverse_semiconj hinv hinv
     (by
-      have h := proj_comm_sq' (starProjection_idem' U)
+      have h := idempotent_comm_sq_of_anticommutator (starProjection_idem' U)
         (projectorDifference_anticommutator (U := U) (V := V))
       have hp2 : U.starProjection *
             (2 * (projectorDifference U V * projectorDifference U V)) =
@@ -682,7 +622,7 @@ private theorem doubleSecant_comm_starProjection_compl :
 private theorem doubleSecant_selfAdjoint :
     star (doubleSecant U V) = doubleSecant U V := by
   rw [doubleSecant,
-    star_inverse' (hinv)]
+    TauCeti.star_ringInverse hinv]
   congr 1
   rw [star_sub, star_one, star_mul, two_star', star_mul,
     isSelfAdjoint_projectorDifference.star_eq, two_comm']
@@ -982,7 +922,7 @@ private theorem graph_sq_p (hpp : p * p = p) (hQQ : Q * Q = Q)
   have hpDp : p * D * p = R * p - p := by
     have hexp : p * D * p = p * Q * p - p * p * p := by rw [hD]; noncomm_ring
     rw [hexp, graph_pQp hpp hpY hsYp hRp hQ, hpp, hpp]
-  rw [sq_proj' hpp hkey, hpDp]
+  rw [sq_mul_idempotent_of_anticommutator hpp hkey, hpDp]
   noncomm_ring
 
 private theorem graph_secant_p (hpp : p * p = p) (hQQ : Q * Q = Q)
@@ -1190,13 +1130,13 @@ theorem tanTwoBlockRepresentative_lowerBlock (hq : IsQuarterAcute U V) :
       U.starProjection * Ring.inverse (1 +
         star (quarterAcuteAngularOperator U V hq) *
           quarterAcuteAngularOperator U V hq) :=
-    (inverse_comm' hNunit hNp.symm).symm
+    (TauCeti.ringInverse_semiconj hNunit hNunit hNp.symm).symm
   have hMip : Ring.inverse (1 - star (quarterAcuteAngularOperator U V hq) *
         quarterAcuteAngularOperator U V hq) * U.starProjection =
       U.starProjection * Ring.inverse (1 -
         star (quarterAcuteAngularOperator U V hq) *
           quarterAcuteAngularOperator U V hq) :=
-    (inverse_comm' hMunit hMp.symm).symm
+    (TauCeti.ringInverse_semiconj hMunit hMunit hMp.symm).symm
   have hQQ : V.starProjection * V.starProjection = V.starProjection :=
     starProjection_idem' V
   have hQ : V.starProjection =

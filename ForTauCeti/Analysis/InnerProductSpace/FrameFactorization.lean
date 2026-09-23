@@ -77,10 +77,11 @@ theorem LowerFrameBound.gramLowerBound {X : F →ₗ[𝕜] E} {ε : ℝ}
   have hprod := mul_nonneg hdiff hsum
   nlinarith
 
-/-- The Gram-operator lower bound implies the norm-form lower frame bound when
-its parameter is nonnegative. -/
+/-- The Gram-operator lower bound implies the norm-form lower frame bound.
+No sign assumption on `ε` is needed: if the norm lower bound were to fail, its
+right-hand side would already be positive. -/
 theorem GramLowerBound.lowerFrameBound {X : F →ₗ[𝕜] E} {ε : ℝ}
-    (hgram : GramLowerBound X ε) (_hε : 0 ≤ ε) :
+    (hgram : GramLowerBound X ε) :
     LowerFrameBound X ε := by
   intro y
   have hsq := hgram y
@@ -104,7 +105,7 @@ theorem lowerFrameBound_iff_gramLowerBound (X : F →ₗ[𝕜] E) {ε : ℝ}
   · intro hframe
     exact hframe.gramLowerBound hε
   · intro hgram
-    exact hgram.lowerFrameBound hε
+    exact hgram.lowerFrameBound
 
 omit [FiniteDimensional 𝕜 E] [FiniteDimensional 𝕜 F] in
 /-- A positive lower frame bound implies injectivity. -/
@@ -123,7 +124,7 @@ theorem LowerFrameBound.injective {X : F →ₗ[𝕜] E} {ε : ℝ}
 theorem GramLowerBound.injective {X : F →ₗ[𝕜] E} {ε : ℝ}
     (hgram : GramLowerBound X ε) (hε : 0 < ε) :
     Function.Injective X :=
-  (hgram.lowerFrameBound hε.le).injective hε
+  (hgram.lowerFrameBound).injective hε
 
 /-- The positive square root of the Gram operator `X⋆ X`. -/
 @[expose]

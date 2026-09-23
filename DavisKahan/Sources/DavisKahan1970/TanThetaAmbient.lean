@@ -14,6 +14,7 @@ import DavisKahan.Sources.DavisKahan1970.SineTheta.Lemma61
 import DavisKahan.Sources.DavisKahan1970.SineTheta.Norms.UnitaryInvariantNormLaws
 import DavisKahan.TanTheta.Theorem63InfiniteTrial
 import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.GramResolvent
+import ForTauCeti.Analysis.InnerProductSpace.CoerciveUnit
 import Mathlib.Analysis.SpecialFunctions.Trigonometric.Arctan
 
 open TauCeti.DavisKahan.Angle
@@ -145,14 +146,20 @@ private theorem sq_eq_sub (hkey : D * p + p * D + D * D = D) :
   rw [h]
   abel
 
-private theorem proj_mul_sq (hp : p * p = p) (hkey : D * p + p * D + D * D = D) :
+/-- Left-multiplying the two-projection anticommutator by an idempotent
+turns `p D²` into the negative compression `-pDp`. -/
+theorem idempotent_mul_sq_of_anticommutator (hp : p * p = p)
+    (hkey : D * p + p * D + D * D = D) :
     p * (D * D) = -(p * D * p) := by
   have e1 : p * (D * p) = p * D * p := (mul_assoc p D p).symm
   have e2 : p * (p * D) = p * D := by rw [← mul_assoc, hp]
   rw [sq_eq_sub hkey, mul_sub, mul_sub, e1, e2]
   abel
 
-private theorem sq_mul_proj (hp : p * p = p) (hkey : D * p + p * D + D * D = D) :
+/-- Right-multiplying the two-projection anticommutator by an idempotent
+turns `D²p` into the negative compression `-pDp`. -/
+theorem sq_mul_idempotent_of_anticommutator (hp : p * p = p)
+    (hkey : D * p + p * D + D * D = D) :
     D * D * p = -(p * D * p) := by
   have e3 : D * p * p = D * p := by rw [mul_assoc, hp]
   rw [sq_eq_sub hkey, sub_mul, sub_mul, e3]
@@ -161,15 +168,20 @@ private theorem sq_mul_proj (hp : p * p = p) (hkey : D * p + p * D + D * D = D) 
 private theorem proj_mul_mul_proj (hp : p * p = p)
     (hkey : D * p + p * D + D * D = D) :
     p * D * p = -(D * D * p) := by
-  rw [sq_mul_proj hp hkey, neg_neg]
+  rw [sq_mul_idempotent_of_anticommutator hp hkey, neg_neg]
 
-private theorem proj_comm_sq (hp : p * p = p) (hkey : D * p + p * D + D * D = D) :
+/-- An idempotent `p` commutes with `D²` whenever `D` satisfies the two-projection
+anticommutator relation `Dp + pD + D² = D`.  This is shared by the single- and
+double-angle tangent constructions. -/
+theorem idempotent_comm_sq_of_anticommutator (hp : p * p = p)
+    (hkey : D * p + p * D + D * D = D) :
     p * (D * D) = D * D * p := by
-  rw [proj_mul_sq hp hkey, sq_mul_proj hp hkey]
+  rw [idempotent_mul_sq_of_anticommutator hp hkey,
+    sq_mul_idempotent_of_anticommutator hp hkey]
 
 private theorem compl_comm_sq (hp : p * p = p) (hkey : D * p + p * D + D * D = D) :
     (1 - p) * (D * D) = D * D * (1 - p) := by
-  have h := proj_comm_sq hp hkey
+  have h := idempotent_comm_sq_of_anticommutator hp hkey
   simp only [sub_mul, mul_sub, one_mul, mul_one, h]
 
 private theorem compl_idem (hp : p * p = p) : (1 - p) * (1 - p) = 1 - p := by
@@ -193,7 +205,7 @@ private theorem upper_mul_lower (hp : p * p = p)
   have hsplit : p * D * (1 - p) * D * p = p * D * D * p - (p * D * p) * (D * p) := by
     noncomm_ring
   have h2 : p * D * D * p = D * D * p := by
-    rw [mul_assoc p D D, proj_comm_sq hp hkey, mul_assoc (D * D) p p, hp]
+    rw [mul_assoc p D D, idempotent_comm_sq_of_anticommutator hp hkey, mul_assoc (D * D) p p, hp]
   have h3 : (p * D * p) * (D * p) = D * D * (D * D) * p := by
     rw [proj_mul_mul_proj hp hkey]
     have e2 : (-(D * D * p)) * (D * p) = -(D * D * (p * D * p)) := by noncomm_ring
@@ -319,35 +331,10 @@ end Moebius
 
 end ProjectionAlgebra
 
-/-! ### Inverses in a ring -/
+/-! ### Shared inverse algebra
 
-section RingInverse
-
-variable {A : Type*} [Ring A]
-
-private theorem inverse_comm {a x : A} (ha : IsUnit a) (h : x * a = a * x) :
-    x * Ring.inverse a = Ring.inverse a * x := by
-  have h1 : Ring.inverse a * a = 1 := Ring.inverse_mul_cancel a ha
-  have h2 : a * Ring.inverse a = 1 := Ring.mul_inverse_cancel a ha
-  calc x * Ring.inverse a
-      = (Ring.inverse a * a) * (x * Ring.inverse a) := by rw [h1, one_mul]
-    _ = Ring.inverse a * ((a * x) * Ring.inverse a) := by noncomm_ring
-    _ = Ring.inverse a * ((x * a) * Ring.inverse a) := by rw [h]
-    _ = Ring.inverse a * x * (a * Ring.inverse a) := by noncomm_ring
-    _ = Ring.inverse a * x := by rw [h2, mul_one]
-
-private theorem star_inverse [StarRing A] {a : A} (ha : IsUnit a) :
-    star (Ring.inverse a) = Ring.inverse (star a) := by
-  have hstar : IsUnit (star a) := ha.star
-  have h1 : star a * Ring.inverse (star a) = 1 := Ring.mul_inverse_cancel _ hstar
-  have h2 : star (Ring.inverse a) * star a = 1 := by
-    rw [← star_mul, Ring.mul_inverse_cancel a ha, star_one]
-  calc star (Ring.inverse a)
-      = star (Ring.inverse a) * (star a * Ring.inverse (star a)) := by rw [h1, mul_one]
-    _ = (star (Ring.inverse a) * star a) * Ring.inverse (star a) := by rw [mul_assoc]
-    _ = Ring.inverse (star a) := by rw [h2, one_mul]
-
-end RingInverse
+The generic `Ring.inverse` semiconjugation and star lemmas used below live in
+`ForTauCeti.Analysis.InnerProductSpace.CoerciveUnit`. -/
 
 variable {E : Type v} [NormedAddCommGroup E] [InnerProductSpace ℂ E]
   [CompleteSpace E]
@@ -525,14 +512,16 @@ private theorem secant_mul_cancel :
 private theorem secant_comm_projectorDifference :
     projectorDifference U V * secantSquared U V =
       secantSquared U V * projectorDifference U V :=
-  inverse_comm (isUnit_one_sub_projectorDifference_sq htr) (by noncomm_ring)
+  TauCeti.ringInverse_semiconj (isUnit_one_sub_projectorDifference_sq htr)
+    (isUnit_one_sub_projectorDifference_sq htr) (by noncomm_ring)
 
 private theorem secant_comm_starProjection :
     secantSquared U V * U.starProjection =
       U.starProjection * secantSquared U V :=
-  (inverse_comm (isUnit_one_sub_projectorDifference_sq htr)
+  (TauCeti.ringInverse_semiconj (isUnit_one_sub_projectorDifference_sq htr)
+    (isUnit_one_sub_projectorDifference_sq htr)
     (by
-      have h := proj_comm_sq (starProjection_idem U)
+      have h := idempotent_comm_sq_of_anticommutator (starProjection_idem U)
         (projectorDifference_anticommutator (U := U) (V := V))
       simp only [mul_sub, sub_mul, mul_one, one_mul, h])).symm
 
@@ -547,7 +536,7 @@ private theorem secant_comm_starProjection_compl :
 
 private theorem secant_selfAdjoint :
     star (secantSquared U V) = secantSquared U V := by
-  rw [secantSquared, star_inverse (isUnit_one_sub_projectorDifference_sq htr)]
+  rw [secantSquared, TauCeti.star_ringInverse (isUnit_one_sub_projectorDifference_sq htr)]
   congr 1
   rw [star_sub, star_one, star_mul,
     isSelfAdjoint_projectorDifference.star_eq]
@@ -794,7 +783,8 @@ theorem gramOperator_directedSineAmbient :
         U.starProjection := by
   have hp := starProjection_idem U
   have hq := starProjection_idem V
-  rw [sq_mul_proj hp (projectorDifference_anticommutator (U := U) (V := V)),
+  rw [sq_mul_idempotent_of_anticommutator hp
+      (projectorDifference_anticommutator (U := U) (V := V)),
     gramOperator, directedSineAmbient, ContinuousLinearMap.adjoint_comp,
     (isSelfAdjoint_starProjection U).adjoint_eq,
     (isSelfAdjoint_starProjection Vᗮ).adjoint_eq, projectorDifference]
@@ -906,7 +896,7 @@ theorem gramOperator_lowerCorner :
         rw [upper_mul_lower hp hkey]
     _ = projectorDifference U V * projectorDifference U V *
           U.starProjection * secantSquared U V :=
-        moebius_gram (proj_comm_sq hp hkey) (secant_comm_sq htr)
+        moebius_gram (idempotent_comm_sq_of_anticommutator hp hkey) (secant_comm_sq htr)
           (secant_comm_starProjection htr) (secant_mul_cancel htr)
 
 /-- The defining relation of the Möbius transform, pointwise: this is exactly
@@ -922,7 +912,7 @@ theorem gramOperator_lowerCorner_moebius (y : E) :
   have hkey := projectorDifference_anticommutator (U := U) (V := V)
   have halg := moebius_algebra (s := projectorDifference U V *
       projectorDifference U V) (p := U.starProjection)
-    (R := secantSquared U V) (proj_comm_sq hp hkey) hp
+    (R := secantSquared U V) (idempotent_comm_sq_of_anticommutator hp hkey) hp
     (secant_comm_starProjection htr) (secant_mul_cancel htr)
   have h := congrArg (fun S : E →L[ℂ] E => S y) halg
   simpa only [gramOperator_lowerCorner htr, gramOperator_directedSineAmbient,
