@@ -412,4 +412,19 @@ theorem commute_ringInverse {M : Type*} [MonoidWithZero M] {a n : M}
     (hn : IsUnit n) (h : Commute a n) : Commute a (Ring.inverse n) :=
   ringInverse_semiconj hn hn h
 
+/-- `Ring.inverse` commutes with `star` on units. -/
+theorem star_ringInverse {A : Type*} [Ring A] [StarRing A] {a : A} (ha : IsUnit a) :
+    star (Ring.inverse a) = Ring.inverse (star a) := by
+  have hstar : IsUnit (star a) := ha.star
+  have h1 : star a * Ring.inverse (star a) = 1 := Ring.mul_inverse_cancel _ hstar
+  have h2 : star (Ring.inverse a) * star a = 1 := by
+    rw [← star_mul, Ring.mul_inverse_cancel a ha, star_one]
+  calc
+    star (Ring.inverse a)
+        = star (Ring.inverse a) * (star a * Ring.inverse (star a)) := by
+            rw [h1, mul_one]
+    _ = (star (Ring.inverse a) * star a) * Ring.inverse (star a) := by
+          rw [mul_assoc]
+    _ = Ring.inverse (star a) := by rw [h2, one_mul]
+
 end TauCeti

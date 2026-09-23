@@ -128,51 +128,9 @@ private theorem projectionBlock_diagonalPair_lower_reflection
               noncomm_ring
             _ = (1 - U.starProjection) * K * U.starProjection := by rw [hqq]
 
-section ReflectionRing
-
-variable {A : Type*} [Ring A] {p D : A}
-
-private theorem sq_eq_sub_reflection
-    (hkey : D * p + p * D + D * D = D) :
-    D * D = D - D * p - p * D := by
-  have h : D * D = D - (D * p + p * D) := eq_sub_of_add_eq' hkey
-  rw [h]
-  abel
-
-private theorem proj_sq_reflection (hp : p * p = p)
-    (hkey : D * p + p * D + D * D = D) :
-    p * (D * D) = -(p * D * p) := by
-  have e1 : p * (D * p) = p * D * p := (mul_assoc p D p).symm
-  have e2 : p * (p * D) = p * D := by rw [← mul_assoc, hp]
-  rw [sq_eq_sub_reflection hkey, mul_sub, mul_sub, e1, e2]
-  abel
-
-private theorem sq_proj_reflection (hp : p * p = p)
-    (hkey : D * p + p * D + D * D = D) :
-    D * D * p = -(p * D * p) := by
-  have e3 : D * p * p = D * p := by rw [mul_assoc, hp]
-  rw [sq_eq_sub_reflection hkey, sub_mul, sub_mul, e3]
-  abel
-
-private theorem proj_comm_sq_reflection (hp : p * p = p)
-    (hkey : D * p + p * D + D * D = D) :
-    p * (D * D) = D * D * p := by
-  rw [proj_sq_reflection hp hkey, sq_proj_reflection hp hkey]
-
-private theorem inverse_comm_reflection {a x : A} (ha : IsUnit a)
-    (h : x * a = a * x) :
-    x * Ring.inverse a = Ring.inverse a * x := by
-  have h1 : Ring.inverse a * a = 1 := Ring.inverse_mul_cancel a ha
-  have h2 : a * Ring.inverse a = 1 := Ring.mul_inverse_cancel a ha
-  calc
-    x * Ring.inverse a = (Ring.inverse a * a) * (x * Ring.inverse a) := by
-      rw [h1, one_mul]
-    _ = Ring.inverse a * ((a * x) * Ring.inverse a) := by noncomm_ring
-    _ = Ring.inverse a * ((x * a) * Ring.inverse a) := by rw [h]
-    _ = Ring.inverse a * x * (a * Ring.inverse a) := by noncomm_ring
-    _ = Ring.inverse a * x := by rw [h2, mul_one]
-
-end ReflectionRing
+/-! The ring identities needed below are shared with `TanThetaAmbient`:
+`idempotent_comm_sq_of_anticommutator` owns the two-projection calculation and
+`TauCeti.ringInverse_semiconj` owns inverse commutation. -/
 
 /-- The signed doubled cosine `1 - 2(P_V-P_U)^2`. -/
 def signedCosTwo (U V : Submodule ℂ E)
@@ -184,7 +142,7 @@ omit [CompleteSpace E] in
 theorem signedCosTwo_comm_starProjection
     {U V : Submodule ℂ E} [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] :
     signedCosTwo U V * U.starProjection = U.starProjection * signedCosTwo U V := by
-  have hsq := proj_comm_sq_reflection
+  have hsq := idempotent_comm_sq_of_anticommutator
     (starProjection_idem_reflection U)
     (projectorDifference_anticommutator (U := U) (V := V))
   unfold signedCosTwo
@@ -339,7 +297,7 @@ private theorem signedCosBlock_isUnit
     simpa only [signedCosTwo] using hNcomm.symm
   have hRcomm : R * U.starProjection = U.starProjection * R := by
     simpa only [R, doubleSecant] using
-      (inverse_comm_reflection hinv hcommBase).symm
+      (TauCeti.ringInverse_semiconj hinv hinv hcommBase).symm
   have hNU : ∀ x ∈ U, N x ∈ U := fun x hx =>
     maps_mem_of_comm_starProjection N hNcomm hx
   have hRU : ∀ x ∈ U, R x ∈ U := fun x hx =>
@@ -379,7 +337,7 @@ private theorem signedCosBlockOrthogonal_isUnit
     simpa only [signedCosTwo] using hNcomm.symm
   have hRcomm : R * U.starProjection = U.starProjection * R := by
     simpa only [R, doubleSecant] using
-      (inverse_comm_reflection hinv hcommBase).symm
+      (TauCeti.ringInverse_semiconj hinv hinv hcommBase).symm
   have hNU : ∀ x ∈ Uᗮ, N x ∈ Uᗮ := fun x hx =>
     maps_mem_orthogonal_of_comm_starProjection N hNcomm hx
   have hRU : ∀ x ∈ Uᗮ, R x ∈ Uᗮ := fun x hx =>
@@ -710,7 +668,7 @@ private theorem reflection_block_data
             (projectorDifference U V * projectorDifference U V) =
           (projectorDifference U V * projectorDifference U V) *
             U.starProjection :=
-      proj_comm_sq_reflection hp hkey
+      idempotent_comm_sq_of_anticommutator hp hkey
     have hNR : signedCosTwo U V * doubleSecant U V = 1 := by
       unfold signedCosTwo doubleSecant
       exact Ring.mul_inverse_cancel _ hinv
