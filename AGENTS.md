@@ -73,6 +73,13 @@ A summary line must say what is *proved*, not whether a file agrees with itself.
 healthy while Theorems 8.1 and 8.2 — the paper's headline results — did not
 compile at all. Counts of rows are not counts of progress.
 
+## Build cache on guest VMs (virtiofs)
+
+When this repo is a virtiofs share (AIVM guest VMs), put `.lake` on VM-local ext4
+with `submodules/aiq-lean-formalization-tools/scripts/setup-lake-cache.sh` (caches
+under `/var/cache/lake`); the mount does not survive a reboot, so re-apply with
+its `--all`.
+
 ## Lean proof-engineering rules
 
 Before substantial work in `ForTauCeti/Analysis/InnerProductSpace/`, read
