@@ -808,7 +808,7 @@ theorem tendsto_measure_alignmentError_of_pairDist_convergesInProbability
       (Filter.Eventually.of_forall fun t => ?_)
     · have hsum : Tendsto (fun t => ∑ p : Fin n × Fin n,
           P {ω | dist (pairDistErr (ψhat t ω) ψ p.1 p.2) 0 > δ}) atTop (𝓝 0) := by
-        have := tendsto_finset_sum (Finset.univ : Finset (Fin n × Fin n))
+        have := tendsto_finsetSum (Finset.univ : Finset (Fin n × Fin n))
           (fun p _ => h p.1 p.2 δ hδ)
         simpa using this
       exact hsum
@@ -890,14 +890,10 @@ theorem coinMeasure_singleton (b : Bool) : coinMeasure {b} = 1 / 2 := by
 /-- Integration against the fair two-point measure. -/
 theorem integral_coinMeasure (f : Bool → Real) :
     ∫ ω, f ω ∂coinMeasure = (1 / 2) * f true + (1 / 2) * f false := by
-  haveI hf1 : IsFiniteMeasure ((1 / 2 : ENNReal) • Measure.dirac (α := Bool) true) :=
-    ⟨by simp⟩
-  haveI hf2 : IsFiniteMeasure ((1 / 2 : ENNReal) • Measure.dirac (α := Bool) false) :=
-    ⟨by simp⟩
   have h1 : Integrable f ((1 / 2 : ENNReal) • Measure.dirac (α := Bool) true) :=
-    Integrable.of_finite
+    (integrable_dirac (by simp)).smul_measure (by norm_num)
   have h2 : Integrable f ((1 / 2 : ENNReal) • Measure.dirac (α := Bool) false) :=
-    Integrable.of_finite
+    (integrable_dirac (by simp)).smul_measure (by norm_num)
   rw [coinMeasure, integral_add_measure h1 h2, integral_smul_measure, integral_smul_measure,
     integral_dirac, integral_dirac]
   norm_num
@@ -948,8 +944,7 @@ theorem not_exists_deterministic_rigidMotion_of_pairDist_exact :
     exact Finset.sum_nonneg fun i _ => Finset.sum_nonneg fun j _ => sq_nonneg _
   have hstress : ∀ y : Rvec 1, ‖y‖ = 1 → rawStress 2 1 D ![0, y] = 0 := by
     intro y hy
-    simp only [rawStress, Fin.sum_univ_two, hD, Matrix.cons_val_zero, Matrix.cons_val_one,
-      Matrix.head_cons]
+    simp only [rawStress, Fin.sum_univ_two, hD, Matrix.cons_val_zero, Matrix.cons_val_one]
     norm_num [hy, Fin.ext_iff, norm_sub_rev (0 : Rvec 1) y]
   have hmem0 : (![0, x] : Config 2 1) ∈ MDS 2 1 D := hmin _ (hstress x hxnorm)
   have hmemn : (![0, -x] : Config 2 1) ∈ MDS 2 1 D := hmin _ (hstress (-x) (by simp [hxnorm]))
@@ -1090,7 +1085,7 @@ theorem lp_consistency_of_gamma_empirical
     refine (hψconv i j δ hδ).congr fun r => ?_
     congr 1
     ext ω
-    simp [pairDistErr, pairDist, Real.dist_eq, abs_abs]
+    simp [pairDistErr, pairDist, abs_abs]
   have hlp := ContinuousMDS.tendsto_measure_lpPairDistErr_gt (M := Fin n) P (κ := Fin n)
     (d := d) p hp (id : Fin n → Fin n) ψhat ψ
     (fun u ω => measurable_of_countable _) (measurable_of_countable _) hconv (ε := ε) hε
@@ -1156,7 +1151,7 @@ theorem continuousPointStress_twoPoint (v : Rvec 1) :
       (fun _ => (2 : Real)) v
       = (1 / 2) * (|v 0 - 1| - 2) ^ 2 + (1 / 2) * (|v 0 + 1| - 2) ^ 2 := by
   rw [ContinuousMDS.continuousPointStress, integral_coinMeasure]
-  simp only [twoPointEmbedding, norm_sub_one_dim, EuclideanSpace.single_apply]
+  simp only [twoPointEmbedding, norm_sub_one_dim, PiLp.single_apply]
   norm_num
 
 /-- The population one-point stress of the witness is at least `1` everywhere. -/
@@ -1186,7 +1181,7 @@ theorem continuousPointStress_twoPoint_eq_one :
         (fun _ => (2 : Real)) (EuclideanSpace.single 0 (2 : Real)) = 1 := by
   constructor <;>
     · rw [continuousPointStress_twoPoint]
-      simp [EuclideanSpace.single_apply]
+      simp
       norm_num
 
 /--
@@ -1217,7 +1212,7 @@ theorem not_unique_min_continuousPointStress :
     tendsto_const_nhds, tendsto_const_nhds⟩
   · intro hcon
     have := congrArg (fun x : Rvec 1 => x 0) hcon
-    simp [EuclideanSpace.single_apply] at this
+    simp at this
   · rw [h0]; exact one_le_continuousPointStress_twoPoint u
   · rw [h2]; exact one_le_continuousPointStress_twoPoint u
 

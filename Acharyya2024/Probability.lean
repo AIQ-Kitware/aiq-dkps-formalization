@@ -480,7 +480,7 @@ theorem pointwise_dissimilarity_convergesInProbability_of_secondMoment_growing
     · have hempty : {ω | dist (((m r : Real))⁻¹ * ‖Xbar r ω i - Xbar r ω i'‖
           - ((m r : Real))⁻¹ * ‖μ r i - μ r i'‖) (0 : Real) > ε} = (∅ : Set Ω) := by
         ext ω
-        simp [hm0, Real.dist_eq, not_lt.mpr hε.le]
+        simp [hm0, not_lt.mpr hε.le]
       rw [hempty, measure_empty]
       exact bot_le
     · have hm_pos : (0 : Real) < ((m r : Real)) := by exact_mod_cast hmpos
@@ -591,7 +591,7 @@ theorem pointwise_dissimilarity_convergesInProbability_of_secondMoment_random
     · have hempty : {ω | dist (((m r : Real))⁻¹ * ‖Xbar r ω i - Xbar r ω i'‖
           - ((m r : Real))⁻¹ * ‖μ r ω i - μ r ω i'‖) (0 : Real) > ε} = (∅ : Set Ω) := by
         ext ω
-        simp [hm0, Real.dist_eq, not_lt.mpr hε.le]
+        simp [hm0, not_lt.mpr hε.le]
       rw [hempty, measure_empty]
       exact bot_le
     · have hm_pos : (0 : Real) < ((m r : Real)) := by exact_mod_cast hmpos

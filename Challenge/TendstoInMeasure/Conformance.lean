@@ -49,8 +49,8 @@ theorem tendstoInMeasure_of_tendsto_measure_dist_le_rate [PseudoMetricSpace E]
   filter_upwards [hev] with i hi
   apply measure_mono
   intro x hx
-  simp only [Set.mem_setOf_eq] at hx
-  rw [Set.mem_compl_iff, Set.mem_setOf_eq]
+  simp only [Set.mem_ofPred_eq] at hx
+  rw [Set.mem_compl_iff, Set.mem_ofPred_eq]
   intro hle
   rw [edist_dist] at hx
   have hmono : ENNReal.ofReal (dist (f i x) (g x)) ≤ ENNReal.ofReal (rate i) :=

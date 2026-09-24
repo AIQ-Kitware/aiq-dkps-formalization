@@ -115,8 +115,8 @@ theorem exists_linearIsometryEquiv_norm_sub_le (M : E →ₗ[ℝ] E) {δ : ℝ} 
     simp only [RCLike.ofReal_real_eq_id, id_eq]
     by_cases hjk : j = k
     · subst hjk
-      rw [hunit j, if_pos rfl, mul_one]
-    · rw [b.inner_eq_zero hjk, if_neg hjk, mul_zero]
+      rw [hunit j, ite_eq_left rfl, mul_one]
+    · rw [b.inner_eq_zero hjk, ite_eq_right hjk, mul_zero]
   set W : E →ₗ[ℝ] E := M ∘ₗ R with hW
   have hWbasis : ∀ k : Fin d, W (b k) = (Real.sqrt (μ k))⁻¹ • M (b k) := by
     intro k
@@ -127,13 +127,13 @@ theorem exists_linearIsometryEquiv_norm_sub_le (M : E →ₗ[ℝ] E) {δ : ℝ} 
     have hμj : (0 : ℝ) < μ j := by have := hμpos j; linarith
     by_cases hjk : j = k
     · subst hjk
-      rw [if_pos rfl]
+      rw [ite_eq_left rfl]
       have hsj : Real.sqrt (μ j) > 0 := Real.sqrt_pos.mpr hμj
       have hsqj : Real.sqrt (μ j) ^ 2 = μ j := Real.sq_sqrt (le_of_lt hμj)
       rw [hunit j]
       field_simp
       nlinarith [hsqj, hsj]
-    · rw [if_neg hjk, b.inner_eq_zero hjk, mul_zero, mul_zero]
+    · rw [ite_eq_right hjk, b.inner_eq_zero hjk, mul_zero, mul_zero]
   have hWinner : ∀ x y : E, ⟪W x, W y⟫_ℝ = ⟪x, y⟫_ℝ := by
     intro x y
     conv_lhs => rw [← b.sum_repr x, ← b.sum_repr y]

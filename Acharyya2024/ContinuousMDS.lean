@@ -11,7 +11,7 @@ space `M`, and replaces the configuration by a Borel-measurable embedding `h : M
 
 `mds` is then an embedding minimizing this over all Borel-measurable embeddings.  Existence is
 attributed to the cited continuous-MDS literature via Remark 3 (the Euclidean pseudometrics
-form a closed and complete set), and is not reproved here; `ContinuousMDS` is the minimizer set,
+form a closed and complete set), and is not reproved here; `minimizers` is the minimizer set,
 which is the honest formal reading of "the embedding function that minimizes".
 
 The reason to have the definition at all is that the growing-model results -- Lemma 2 and
@@ -57,7 +57,7 @@ stress among all Borel-measurable embeddings.  The source writes `mds` for a cho
 this set; as with the finite `MDS`, the minimizer is determined only up to a rigid motion, so
 the set is the faithful object and a choice is a further step.
 -/
-def ContinuousMDS (d : Nat) (Δ : M → M → Real) (P : Measure M) : Set (M → Rvec d) :=
+def minimizers (d : Nat) (Δ : M → M → Real) (P : Measure M) : Set (M → Rvec d) :=
   {h | Measurable h ∧ ∀ h' : M → Rvec d, Measurable h' →
       continuousRawStress d Δ P h ≤ continuousRawStress d Δ P h'}
 
@@ -250,7 +250,7 @@ theorem tendsto_measure_lpPairDistErr_gt
       Q {ω | δ < |‖ψ u ω (φ q.1) - ψ u ω (φ q.2)‖ - ‖χ (φ q.1) - χ (φ q.2)‖|}) ?_
     (Filter.Eventually.of_forall fun _ => bot_le)
     (Filter.Eventually.of_forall fun u => ?_)
-  · have := tendsto_finset_sum (Finset.univ : Finset (κ × κ))
+  · have := tendsto_finsetSum (Finset.univ : Finset (κ × κ))
       (fun q _ => hconv q.1 q.2 δ hδpos)
     simpa using this
   · calc Q {ω | ε < lpPairDistErr d
@@ -360,7 +360,7 @@ noncomputable def pointStress {n d : Nat} (z : Config n d) (c : Fin n → Real) 
 theorem continuous_pointStress {n d : Nat} (z : Config n d) (c : Fin n → Real) :
     Continuous (pointStress z c) := by
   unfold pointStress
-  exact continuous_finset_sum _ fun i _ =>
+  exact continuous_finsetSum _ fun i _ =>
     (((continuous_id.sub continuous_const).norm.sub continuous_const).pow 2)
 
 /-- **Coercivity of the one-point raw stress.**  Far enough from a reference point, the term of
@@ -489,7 +489,7 @@ theorem tendsto_pointStress {n d : Nat} {z : Nat → Config n d} {ψ : Config n 
     (hv : Tendsto v atTop (𝓝 v')) :
     Tendsto (fun u => pointStress (z u) (c u) (v u)) atTop (𝓝 (pointStress ψ c' v')) := by
   unfold pointStress
-  refine tendsto_finset_sum _ fun i _ => ?_
+  refine tendsto_finsetSum _ fun i _ => ?_
   exact ((hv.sub (hz i)).norm.sub (hc i)).pow 2
 
 /--
@@ -503,7 +503,7 @@ theorem tendsto_outOfSampleExtension {n d : Nat} (hn : 0 < n)
     {c : Nat → Fin n → Real} {c' : Fin n → Real} {v' : Rvec d}
     (hz : ∀ i, Tendsto (fun u => z u i) atTop (𝓝 (ψ i)))
     (hc : ∀ i, Tendsto (fun u => c u i) atTop (𝓝 (c' i)))
-    (hmin : ∀ w : Rvec d, pointStress ψ c' v' ≤ pointStress ψ c' w)
+    (_hmin : ∀ w : Rvec d, pointStress ψ c' v' ≤ pointStress ψ c' w)
     (huniq : ∀ w : Rvec d, (∀ w' : Rvec d, pointStress ψ c' w ≤ pointStress ψ c' w') → w = v') :
     Tendsto (fun u => outOfSampleExtension hn (z u) (c u)) atTop (𝓝 v') := by
   classical
@@ -630,7 +630,7 @@ theorem tendsto_lpPairDistErr_frameEmbedding {M : Type*} [MeasurableSpace M]
       (∀ w' : Rvec d, pointStress ψ (fun i => Δ x (φ i)) w
         ≤ pointStress ψ (fun i => Δ x (φ i)) w') →
       w = frameEmbedding d n hn Δ φ ψ x)
-    {C : Real} (hC : 0 ≤ C)
+    {C : Real} (_hC : 0 ≤ C)
     (hbdd : ∀ u, ∀ x y : M,
       |‖frameEmbedding d n hn (Δhat u) φ (z u) x - frameEmbedding d n hn (Δhat u) φ (z u) y‖
         - ‖frameEmbedding d n hn Δ φ ψ x - frameEmbedding d n hn Δ φ ψ y‖| ≤ C)
@@ -705,6 +705,7 @@ noncomputable def continuousPointStress {M : Type*} [MeasurableSpace M] (d : Nat
 
 variable {M : Type*} [MeasurableSpace M]
 
+omit [MeasurableSpace M] in
 /-- Under a bounded reference embedding and bounded target dissimilarities, the integrand is
 uniformly bounded on any ball of positions. -/
 theorem continuousPointStress_integrand_le {d : Nat} {χ : M → Rvec d} {c : M → Real} {K : Real}
@@ -1174,8 +1175,9 @@ theorem norm_min_pointStress_le_of_bounded {n d : Nat} (hn : 0 < n) (z : Config 
     {v : Rvec d} (hv : ∀ w : Rvec d, pointStress z c v ≤ pointStress z c w) :
     ‖v‖ ≤ 4 * K := by
   classical
-  haveI hne : Nonempty (Fin n) := Fin.pos_iff_nonempty.mp hn
-  have hK : 0 ≤ K := le_trans (abs_nonneg _) (hc (Classical.arbitrary (Fin n)))
+  have hne : Nonempty (Fin n) := Fin.pos_iff_nonempty.mp hn
+  let i₀ := Nonempty.some hne
+  have hK : 0 ≤ K := le_trans (abs_nonneg _) (hc i₀)
   by_contra hcon
   push Not at hcon
   -- at `v` every term exceeds `(2K)²`
@@ -1199,7 +1201,7 @@ theorem norm_min_pointStress_le_of_bounded {n d : Nat} (hn : 0 < n) (z : Config 
       _ ≤ (2 * K) ^ 2 := pow_le_pow_left₀ (abs_nonneg _) habs 2
   have hlt : ∑ _i : Fin n, (2 * K) ^ 2 < pointStress z c v := by
     unfold pointStress
-    exact Finset.sum_lt_sum_of_nonempty Finset.univ_nonempty fun i _ => hbig i
+    exact Finset.sum_lt_sum_of_nonempty (Finset.univ_nonempty_iff.mpr hne) fun i _ => hbig i
   have hle : pointStress z c (0 : Rvec d) ≤ ∑ _i : Fin n, (2 * K) ^ 2 := by
     unfold pointStress
     exact Finset.sum_le_sum fun i _ => hsmall i
@@ -1239,7 +1241,7 @@ theorem ae_tendsto_outOfSampleExtension_of_iid {d : Nat} (P : Measure M) [IsProb
           (fun i : Fin (n + 1) => χ (φ i)) (fun i : Fin (n + 1) => c (φ i)))
         atTop (𝓝 v') := by
   classical
-  haveI hMne : Nonempty M := by
+  have hMne : Nonempty M := by
     by_contra hcon
     rw [not_nonempty_iff] at hcon
     have h1 : P Set.univ = 0 := by
@@ -1247,7 +1249,8 @@ theorem ae_tendsto_outOfSampleExtension_of_iid {d : Nat} (P : Measure M) [IsProb
       rw [this, measure_empty]
     rw [measure_univ] at h1
     exact one_ne_zero h1
-  have hK : 0 ≤ K := le_trans (norm_nonneg _) (hχb (Classical.arbitrary M))
+  obtain ⟨m₀⟩ := hMne
+  have hK : 0 ≤ K := le_trans (norm_nonneg _) (hχb m₀)
   obtain ⟨D, hDcount, hDdense⟩ := TopologicalSpace.exists_countable_dense (Rvec d)
   -- the strong law at every position of a countable dense set, off one null set
   have hall : ∀ᵐ φ ∂(Measure.infinitePi fun _ : Nat => P), ∀ v ∈ D,
@@ -1403,7 +1406,7 @@ theorem ae_eventually_forall_isMinOn_of_iid {d : Nat} (P : Measure M) [IsProbabi
             ≤ pointStress (fun i : Fin (n + 1) => χ (φ i)) (fun i : Fin (n + 1) => c (φ i)) w) →
         ‖v - v'‖ < ε := by
   classical
-  haveI hMne : Nonempty M := by
+  have hMne : Nonempty M := by
     by_contra hcon
     rw [not_nonempty_iff] at hcon
     have h1 : P Set.univ = 0 := by
@@ -1411,7 +1414,8 @@ theorem ae_eventually_forall_isMinOn_of_iid {d : Nat} (P : Measure M) [IsProbabi
       rw [this, measure_empty]
     rw [measure_univ] at h1
     exact one_ne_zero h1
-  have hK : 0 ≤ K := le_trans (norm_nonneg _) (hχb (Classical.arbitrary M))
+  obtain ⟨m₀⟩ := hMne
+  have hK : 0 ≤ K := le_trans (norm_nonneg _) (hχb m₀)
   obtain ⟨D, hDcount, hDdense⟩ := TopologicalSpace.exists_countable_dense (Rvec d)
   -- the strong law at every position of a countable dense set, off one null set
   have hall : ∀ᵐ φ ∂(Measure.infinitePi fun _ : Nat => P), ∀ v ∈ D,
@@ -1516,7 +1520,7 @@ theorem ae_eventually_forall_isMinOn_of_iid_target {d : Nat} (P : Measure M)
                 (fun i : Fin (ns u + 1) => T φ u i) w) →
         ‖v - v'‖ < ε := by
   classical
-  haveI hMne : Nonempty M := by
+  have hMne : Nonempty M := by
     by_contra hcon
     rw [not_nonempty_iff] at hcon
     have h1 : P Set.univ = 0 := by
@@ -1524,7 +1528,8 @@ theorem ae_eventually_forall_isMinOn_of_iid_target {d : Nat} (P : Measure M)
       rw [this, measure_empty]
     rw [measure_univ] at h1
     exact one_ne_zero h1
-  have hK : 0 ≤ K := le_trans (norm_nonneg _) (hχb (Classical.arbitrary M))
+  obtain ⟨m₀⟩ := hMne
+  have hK : 0 ≤ K := le_trans (norm_nonneg _) (hχb m₀)
   obtain ⟨D, hDcount, hDdense⟩ := TopologicalSpace.exists_countable_dense (Rvec d)
   have hall : ∀ᵐ φ ∂(Measure.infinitePi fun _ : Nat => P), ∀ v ∈ D,
       Tendsto (fun n : Nat => ((n : Real))⁻¹ *
@@ -1657,7 +1662,7 @@ noncomputable def pairDiscrepancy {M : Type*} (d : Nat) (p : Real) (ψ χ : M �
     (q : M × M) : Real :=
   |‖ψ q.1 - ψ q.2‖ - ‖χ q.1 - χ q.2‖| ^ p
 
-theorem pairDiscrepancy_nonneg {M : Type*} (d : Nat) {p : Real} (hp : 0 ≤ p)
+theorem pairDiscrepancy_nonneg {M : Type*} (d : Nat) (p : Real)
     (ψ χ : M → Rvec d) (q : M × M) : 0 ≤ pairDiscrepancy d p ψ χ q :=
   Real.rpow_nonneg (abs_nonneg _) p
 
@@ -1679,7 +1684,7 @@ anything, and the same condition this repository discloses for every estimator.
 theorem tendsto_measure_lpPairDistErr_population {Ω : Type*} [MeasurableSpace Ω]
     (μ : Measure Ω) [IsProbabilityMeasure μ]
     {M : Type*} [MeasurableSpace M] (P : Measure M) [IsProbabilityMeasure P]
-    {d : Nat} {p : Real} (hp : 0 ≤ p)
+    {d : Nat} {p : Real} (_hp : 0 ≤ p)
     (Ψ : Nat → Ω → M → Rvec d) (χ : M → Rvec d) {C : Real}
     (hbdd : ∀ n φ q, pairDiscrepancy d p (Ψ n φ) χ q ≤ C)
     (hmeas : ∀ n, Measurable fun z : Ω × (M × M) => pairDiscrepancy d p (Ψ n z.1) χ z.2)
@@ -1689,7 +1694,7 @@ theorem tendsto_measure_lpPairDistErr_population {Ω : Type*} [MeasurableSpace �
     Tendsto (fun n => μ {φ | ε < lpPairDistErr d P p (Ψ n φ) χ}) atTop (𝓝 0) := by
   classical
   have hnn : ∀ n φ q, 0 ≤ pairDiscrepancy d p (Ψ n φ) χ q :=
-    fun n φ q => pairDiscrepancy_nonneg d hp _ _ q
+    fun n φ q => pairDiscrepancy_nonneg d p _ _ q
   have hint : ∀ n φ, Integrable (pairDiscrepancy d p (Ψ n φ) χ) (P.prod P) := by
     intro n φ
     refine Integrable.mono' (integrable_const C)
@@ -1781,7 +1786,7 @@ theorem tendsto_measure_lpPairDistErr_population {Ω : Type*} [MeasurableSpace �
       linarith [hmk]
     calc μ {φ | ε < lpPairDistErr d P p (Ψ n φ) χ}
         ≤ μ {φ | ε ≤ lpPairDistErr d P p (Ψ n φ) χ} :=
-          measure_mono (Set.setOf_subset_setOf.mpr fun φ h => h.le)
+          measure_mono (Set.ofPred_subset_ofPred.mpr fun φ h => h.le)
       _ = ENNReal.ofReal (μ.real {φ | ε ≤ lpPairDistErr d P p (Ψ n φ) χ}) := by
           rw [measureReal_def, ENNReal.ofReal_toReal (measure_ne_top μ _)]
       _ ≤ ENNReal.ofReal ((∫ φ, lpPairDistErr d P p (Ψ n φ) χ ∂μ) / ε) :=

@@ -40,7 +40,7 @@ noncomputable def witness : Config 3 1 :=
 
 theorem rawStress_witness : rawStress 3 1 equilateral witness = 2 := by
   simp only [rawStress, Fin.sum_univ_three, witness, norm_sub_one_dim, equilateral]
-  norm_num [EuclideanSpace.single_apply, Fin.ext_iff]
+  norm_num [PiLp.single_apply, Fin.ext_iff]
 
 /-- A configuration whose points all coincide has raw stress `6` against the equilateral
 matrix, one for each of the six ordered distinct pairs. -/
@@ -206,6 +206,6 @@ theorem rawStress_not_affine_invariant :
   refine ⟨fun i j => if i = j then 0 else 1,
     fun i => EuclideanSpace.single 0 (if i = 1 then (1 : Real) else 0), ?_⟩
   simp only [rawStress, Fin.sum_univ_two, norm_sub_one_dim]
-  norm_num [EuclideanSpace.single_apply, Fin.ext_iff]
+  norm_num [PiLp.single_apply, Fin.ext_iff]
 
 end Acharyya2024.ProfileNonuniqueness

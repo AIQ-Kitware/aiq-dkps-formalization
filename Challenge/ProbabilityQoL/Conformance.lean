@@ -43,7 +43,7 @@ theorem meas_gt_le_ofReal_integral_sq_div_sq {Ω : Type*} [MeasurableSpace Ω]
   have hmark := mul_meas_ge_le_integral_of_nonneg hnonneg hY_int (η ^ 2)
   have hsub : {ω | η < Y ω} ⊆ {ω | η ^ 2 ≤ Y ω ^ 2} := by
     intro ω hω
-    simp only [Set.mem_setOf_eq] at hω ⊢
+    simp only [Set.mem_ofPred_eq] at hω ⊢
     nlinarith [hω, hη, mul_pos (by linarith : (0 : ℝ) < Y ω - η)
       (by linarith : (0 : ℝ) < Y ω + η)]
   have hPreal : P.real {ω | η ^ 2 ≤ Y ω ^ 2} ≤ v / η ^ 2 := by

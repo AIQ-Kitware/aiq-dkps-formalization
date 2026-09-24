@@ -60,12 +60,12 @@ theorem mean_eq (i : Fin 2) (q : Fin 1 × Fin 1) :
     ∫ ω, Xbar ω i q ∂coinMeasure = μ i q := by
   obtain ⟨j, k⟩ := q
   fin_cases i <;> fin_cases j <;> fin_cases k <;>
-    simp [integral_coinMeasure, Xbar, μ, EuclideanSpace.single_apply] <;> norm_num
+    simp [integral_coinMeasure, Xbar, μ] ; norm_num
 
 theorem secondMoment_eq (i : Fin 2) :
     ∫ ω, ‖Xbar ω i - μ i‖ ^ 2 ∂coinMeasure = ∑ j, γ i j := by
   fin_cases i <;>
-    simp [integral_coinMeasure, Xbar, μ, γ, norm_mat_one_one, EuclideanSpace.single_apply] <;>
+    simp [integral_coinMeasure, Xbar, μ, γ, norm_mat_one_one] ;
       norm_num
 
 /-- The doubly centred matrix of a two-point configuration, at the diagonal entry. -/
@@ -98,9 +98,9 @@ theorem prob_entrywiseClose_lt_paper_bound :
       < 1 - ENNReal.ofReal (16 * (∑ i, ∑ j, γ i j) / ((1 : Real) * 1 * 5 ^ 2)) := by
   have hXnorm : ∀ ω : Bool, ‖Xbar ω 0 - Xbar ω 1‖ = if ω then (21 : Real) else 19 := by
     intro ω
-    cases ω <;> simp [Xbar, norm_mat_one_one, EuclideanSpace.single_apply] <;> norm_num
+    cases ω <;> simp [Xbar]
   have hμnorm : ‖μ 0 - μ 1‖ = (20 : Real) := by
-    simp [μ, norm_mat_one_one, EuclideanSpace.single_apply]
+    simp [μ]
   have hempty : {ω : Bool | ∀ i i' : Fin 2,
       |classicalMDSMatrix (responseDist (Xbar ω)) i i'
         - classicalMDSMatrix (responseDist μ) i i'| < (5 : Real)} = (∅ : Set Bool) := by
@@ -111,7 +111,7 @@ theorem prob_entrywiseClose_lt_paper_bound :
     cases ω <;> norm_num
   rw [hempty, measure_empty]
   have hγ : (∑ i, ∑ j, γ i j) = (1 : Real) := by
-    simp [γ, Fin.sum_univ_two, Fin.sum_univ_one]
+    simp [γ]
   rw [hγ]
   norm_num
 

@@ -83,7 +83,7 @@ theorem exists_eq_mul_of_rank_le (M : Matrix m n 𝕜) {r : ℕ} (h : M.rank ≤
       Finset.sum_congr rfl fun k _ => hexact k, Fin.sum_univ_eq_sum_range f M.rank]
     refine (Finset.sum_subset
       (fun x hx => Finset.mem_range.mpr ((Finset.mem_range.mp hx).trans_le h))
-      fun k _ hk => dif_neg (by simpa using hk)).symm
+      fun k _ hk => dite_eq_right (by simpa using hk)).symm
   rw [Matrix.mul_apply]
   simp only [Matrix.of_apply]
   rw [hsum, ← Matrix.mul_apply, ← hM]
