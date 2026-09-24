@@ -246,7 +246,7 @@ theorem entropy_concentration_ratio_zero_of_netRate
         ((((n : Real) + 1) ^ (2 + entropyPower)) / (r n : Real)) := by
       rw [hr0]
       simp
-    simpa [hr0] using hnn
+    simp [hr0]
   · have hfeq : (centersCard n : Real) * (varianceBound / r n) / (safeNetTolerance n) ^ 2
         = 4 * varianceBound * ((centersCard n : Real) * (((n : Real) + 1) ^ entropyPower)⁻¹) *
             ((((n : Real) + 1) ^ (2 + entropyPower)) / (r n : Real)) := by

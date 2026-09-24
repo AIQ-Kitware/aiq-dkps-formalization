@@ -751,7 +751,7 @@ theorem prob_convergence_not_enough_for_expectations :
             (fun _ => (u + 1 : ℝ)) ω|} ⊆ Set.Icc (0 : ℝ) (1 / (u + 1 : ℝ)) := by
         intro ω hω
         by_contra hmem
-        rw [Set.mem_setOf_eq, Set.indicator_of_notMem hmem] at hω
+        rw [Set.mem_ofPred_eq, Set.indicator_of_notMem hmem] at hω
         simp at hω
         linarith
       calc (volume.restrict (Set.Icc (0 : ℝ) 1))
@@ -1348,7 +1348,7 @@ lemma risk_convergence_of_aligned_embeddings (n d d' : ℕ)
       (fun u ω => ⨆ i : Fin (n + 1), dist (psi_hat u ω i) ((ω i).1)))
     -- Assumptions A2 / A3 / A4 / label-support, supplying continuity and the uniform bound:
     (h_cont_learn : ContinuousLearningRule n d d' learn)  -- A2
-    (h_bound_learn : BoundedLearningRule n d d' learn)    -- A3
+    (_h_bound_learn : BoundedLearningRule n d d' learn)    -- A3
     (h_cont_loss : ContinuousLoss d' loss)                -- A4
     (h_dom : LossDominated n d d' P learn loss) :          -- integrable envelope, in place of
                                                           -- the paper-less compact-label hypothesis

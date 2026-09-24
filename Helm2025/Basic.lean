@@ -346,12 +346,12 @@ def MeasurableLossInLabel (d' : ℕ) (loss : LossFunction d') : Prop :=
 /-- The headline reading implies the displayed one. -/
 theorem continuousLossInPrediction_of_continuousLoss (d' : ℕ) (loss : LossFunction d')
     (h : ContinuousLoss d' loss) : ContinuousLossInPrediction d' loss :=
-  fun y => h.comp (continuous_id.prodMk continuous_const)
+  fun _y => h.comp (continuous_id.prodMk continuous_const)
 
 /-- The headline reading implies label measurability. -/
 theorem measurableLossInLabel_of_continuousLoss (d' : ℕ) (loss : LossFunction d')
     (h : ContinuousLoss d' loss) : MeasurableLossInLabel d' loss :=
-  fun p => (h.comp (continuous_const.prodMk continuous_id)).measurable
+  fun _p => (h.comp (continuous_const.prodMk continuous_id)).measurable
 
 /--
 The **printed** Assumption 4, together with measurability of the loss in the label, already

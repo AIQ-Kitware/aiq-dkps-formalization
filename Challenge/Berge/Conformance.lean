@@ -195,7 +195,7 @@ theorem continuous_iInf_of_isCompact [FirstCountableTopology X] [FirstCountableT
     {K : Set X} (hK : IsCompact K) (hKne : K.Nonempty)
     {g : P → X → ℝ} (hg : Continuous (Function.uncurry g)) :
     Continuous (fun p => ⨅ x : ↥K, g p ↑x) := by
-  haveI : Nonempty ↥K := hKne.to_subtype
+  have : Nonempty ↥K := hKne.to_subtype
   have hgcont : ∀ q : P, Continuous (g q) :=
     fun q => hg.comp (continuous_const.prodMk continuous_id)
   have hbdd : ∀ q : P, BddBelow (Set.range fun x : ↥K => g q ↑x) := by

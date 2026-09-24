@@ -104,7 +104,7 @@ Compare each retained source result in the 2024 consistency paper with the Lean 
 
 **Lean declarations:**
 
-- `Acharyya2024.ContinuousMDS.ContinuousMDS`
+- `Acharyya2024.ContinuousMDS.minimizers`
 - `Acharyya2024.ContinuousMDS.ambientDissimilarity`
 - `Acharyya2024.ContinuousMDS.continuousPointStress`
 - `Acharyya2024.ContinuousMDS.continuousRawStress`
@@ -346,7 +346,7 @@ Compare each retained source result in the 2024 consistency paper with the Lean 
 - `Acharyya2024.Consistency.lp_consistency_of_gamma_empirical`
 - `Acharyya2024.Consistency.not_unique_min_continuousPointStress`
 - `Acharyya2024.Consistency.one_le_continuousPointStress_twoPoint`
-- `Acharyya2024.ContinuousMDS.ContinuousMDS`
+- `Acharyya2024.ContinuousMDS.minimizers`
 - `Acharyya2024.ContinuousMDS.abs_sub_pointStress_le`
 - `Acharyya2024.ContinuousMDS.abs_sub_pointStress_target`
 - `Acharyya2024.ContinuousMDS.abs_sub_pointStress_term_le`

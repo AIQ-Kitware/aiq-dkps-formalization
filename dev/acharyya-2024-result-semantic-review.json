@@ -337,7 +337,7 @@
         ]
       },
       "lean_declarations": [
-        "Acharyya2024.ContinuousMDS.ContinuousMDS",
+        "Acharyya2024.ContinuousMDS.minimizers",
         "Acharyya2024.ContinuousMDS.ambientDissimilarity",
         "Acharyya2024.ContinuousMDS.continuousPointStress",
         "Acharyya2024.ContinuousMDS.continuousRawStress",
@@ -406,7 +406,7 @@
       ],
       "statement_pins": [
         {
-          "declaration": "Acharyya2024.ContinuousMDS.ContinuousMDS",
+          "declaration": "Acharyya2024.ContinuousMDS.minimizers",
           "type_expr_hash": "3650250379",
           "type_text_sha256": "e439046b211629f4338d58323556bafd05135a28df03fe5007b6dbec541f21cc",
           "toolchain": "leanprover/lean4:v4.34.0-rc1",
@@ -1491,7 +1491,7 @@
         "Acharyya2024.Consistency.lp_consistency_of_gamma_empirical",
         "Acharyya2024.Consistency.not_unique_min_continuousPointStress",
         "Acharyya2024.Consistency.one_le_continuousPointStress_twoPoint",
-        "Acharyya2024.ContinuousMDS.ContinuousMDS",
+        "Acharyya2024.ContinuousMDS.minimizers",
         "Acharyya2024.ContinuousMDS.abs_sub_pointStress_le",
         "Acharyya2024.ContinuousMDS.abs_sub_pointStress_target",
         "Acharyya2024.ContinuousMDS.abs_sub_pointStress_term_le",
@@ -1679,7 +1679,7 @@
           "note": "Statement pins recorded 2026-09-03: the review's declarations are now guarded against elaborated-type drift, as Quench's already were."
         },
         {
-          "declaration": "Acharyya2024.ContinuousMDS.ContinuousMDS",
+          "declaration": "Acharyya2024.ContinuousMDS.minimizers",
           "type_expr_hash": "3650250379",
           "type_text_sha256": "e439046b211629f4338d58323556bafd05135a28df03fe5007b6dbec541f21cc",
           "toolchain": "leanprover/lean4:v4.34.0-rc1",

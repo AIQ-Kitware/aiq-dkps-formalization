@@ -78,8 +78,8 @@ theorem tendsto_frobSub_responseDist_of_ambientLimit
           atTop (𝓝 0) := by
         simpa [responseDist, responseDistEntry, limitDissimilarity] using h
       simpa using h0.pow 2
-    have := tendsto_finset_sum (Finset.univ : Finset (Fin n))
-      (fun i _ => tendsto_finset_sum (Finset.univ : Finset (Fin n))
+    have := tendsto_finsetSum (Finset.univ : Finset (Fin n))
+      (fun i _ => tendsto_finsetSum (Finset.univ : Finset (Fin n))
         (fun j _ => hterm i j))
     simpa [frobSq] using this
   have hcomp := (Real.continuous_sqrt.continuousAt (x := (0 : Real))).tendsto.comp hsq
