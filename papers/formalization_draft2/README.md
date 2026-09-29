@@ -1,371 +1,154 @@
 # formalization_draft2
 
-Second paper scaffold for the source-faithful Lean formalization of the
-Davis--Kahan / Yu--Wang--Samworth perturbation lineage.  The final manuscript
-may emphasize Davis--Kahan more strongly than YWS; the source intentionally
-keeps that framing question open while the mathematical and dependency evidence
-is audited.  The current scaffold has three supporting stories:
+This directory contains the journal manuscript on the Lean formalization and
+mathematical audit of Davis--Kahan perturbation theory. The scope is now fixed:
 
-1. formalization as mathematical audit: two printed YWS source defects and the
-   false Davis--Kahan Proposition 4.4;
-2. formalization as reusable statistical infrastructure: the Quench theorem
-   family and the operator-theory layer now being staged toward Tau Ceti; and
-3. formalization as an instrumented human--LLM development process: measured
-   token/resource usage, incomplete accounting coverage, model and interaction
-   provenance, and an explicit missing-data model rather than a single
-   misleading cost number.
+- **primary subject:** Davis and Kahan's 1970 perturbation paper and the reusable
+  operator-theoretic infrastructure required to formalize it;
+- **secondary application:** Yu--Wang--Samworth (YWS), where it gives a compact
+  statistical specialization and an independent source-audit case;
+- **out of scope for this manuscript:** downstream application projects and the
+  empirical human--LLM/process study developed for the separate workshop paper.
 
-The directory is intentionally self-contained at the paper layer. Raw evidence
-continues to live in the repository; scripts here read it without rewriting it.
-`development_notes.md` records process observations that are worth preserving
-but are not yet manuscript claims.
+The workshop paper in `../formalization_process/` remains useful editorially. In
+particular, this journal draft adopts its sharper separation between kernel
+verification and semantic/source correspondence, its treatment of representation
+mismatches, and its more precise language for source defects. It does not import
+the workshop paper's process-study contribution as a journal-paper contribution.
+
+## Current mathematical status
+
+The maintained Davis--Kahan result inventory contains 29 source targets. At the
+current snapshot:
+
+- all 29 are verified in the Lean build;
+- all 29 have accepted semantic/source-correspondence review;
+- 28 are proved at their reviewed source scope; and
+- Proposition 4.4 is refuted as printed by a machine-checked finite-dimensional
+  counterexample and accompanied by a valid Q-norm repair.
+
+The journal paper should present those facts as distinct claims. A declaration
+that compiles establishes kernel acceptance of a formal statement. Matching that
+formal statement to a printed source statement, including conventions and
+representation choices, is a separate review obligation.
+
+The current headline sine-theta endpoint is
+`sinTheta_unbounded_formGap_whereDefinedUIN_rclike` in
+`DavisKahan/Sources/DavisKahan1970/SineTheta/Presentation.lean`. It covers the
+current real/complex, unbounded, unitarily invariant norm formulation with the
+full finite-interval/exterior and ordered half-infinite form-gap alternatives.
+The manuscript should not revert to the older finite-gap specialization as the
+main theorem.
+
+A key correspondence point is also part of the journal story. The source's
+positive `sin Theta` operator acts on trial coordinates, while the Lean theorem
+uses the rectangular map `(I - F0 F0*) E0`. These are not literally the same
+operator. The modulus of the rectangular map is the source positive sine
+operator, so the relevant unitarily invariant norms agree. The paper should
+state this bridge explicitly rather than identify the two representations.
+
+## Manuscript organization
+
+`paper.tex` is the journal manuscript. Its intended structure is:
+
+1. mathematical motivation and contribution statement;
+2. Davis--Kahan source scope and the 29-result coverage census;
+3. the current source-facing sine-theta theorem and its representation map;
+4. the remainder of the Davis--Kahan formalization;
+5. the Proposition 4.4 refutation and repaired theorem;
+6. YWS as a shorter statistical specialization and source-audit case;
+7. reusable foundations needed for the formalization;
+8. related work and conclusion;
+9. references; then
+10. appendices containing the detailed result inventory and audit methodology.
+
+`appendix_process.tex` now contains supporting review methodology and the
+complete Davis--Kahan inventory. It is not an empirical process-study appendix.
+
+`literature_review.tex` is an older broad research memo. It contains material for
+several paper directions and should not be treated as defining this journal
+paper's scope. Relevant citations may be migrated into `paper.tex`; unrelated
+process/application material should not be reintroduced merely because it
+appears in the memo.
+
+## Canonical evidence
+
+Use the current repository rather than old prose summaries as the source of
+truth. The main evidence locations are:
+
+- `dev/davis-kahan-1970-formalization-result-inventory.json`: 29-target
+  Davis--Kahan result inventory, build verification, disposition, and semantic
+  certification;
+- `DavisKahan/Sources/DavisKahan1970/`: source-facing Davis--Kahan declarations;
+- `DavisKahan/Sources/DavisKahan1970/Audits/ResultSemanticSurface.lean`:
+  machine-checked semantic-surface audit declarations;
+- `DavisKahan/Sources/DavisKahan1970/SineTheta/Presentation.lean`: current
+  source-facing sine-theta endpoint;
+- `DavisKahan/Sources/DavisKahan1970/Section4.lean`: source-facing Proposition
+  4.4 aliases and section-level results;
+- `DavisKahan/FiniteDimensional/DirectRotation/ShortRotationCounterexample.lean`:
+  explicit Proposition 4.4 counterexample;
+- `DavisKahan/FiniteDimensional/DirectRotation/QNorm.lean`: repaired Q-norm
+  theorem;
+- `ForTauCeti/`: reusable mathematical foundations, with final declarations in
+  the `TauCeti.*` namespace;
+- `YuWangSamworth2015/`: YWS formalization and source-audit material; and
+- `snapshots/census_macros.tex`: manuscript-facing YWS census counts.
+
+`claims_to_evidence.md` records the claims that are safe to make in the current
+journal manuscript and their supporting artifacts.
+
+## YWS terminology
+
+Use **two printed source defects in YWS**, not “two false YWS theorems.” The two
+printed defects are:
+
+1. equation (4) is missing a square; and
+2. Theorem 3's printed rank-boundary convention uses `rank(A)+1` where the
+   argument requires the ambient singular/eigenvalue index together with the
+   ordinary zero continuation of singular values.
+
+Several theorem-facing census rows depend on these corrections, so the number
+of rows marked corrected is larger than two. That row count is not a defect
+count.
+
+Reserve “false proposition” for Davis--Kahan Proposition 4.4, where the
+repository contains an explicit formal counterexample to the printed claim.
 
 ## Build
 
-Paper-local artifacts are split deliberately by durability. `generated/` holds
-disposable working analyses and raw API responses and is gitignored. `snapshots/`
-holds the small manuscript-facing artifacts derived from those analyses (for
-example TeX macros/tables and compact bibliometric summaries) and is tracked.
-LaTeX/latexmk build products (including `paper.pdf`) remain gitignored.
-
-Build the manuscript from a clean checkout with:
+The paper-local snapshots are checked in so the manuscript can be built without
+rerunning repository analyses:
 
 ```bash
 make -C papers/formalization_draft2 paper
 ```
 
-The `paper` target is offline and consumes the checked-in `snapshots/` artifacts;
-it does not refresh analyses or modify tracked files. To refresh the local
-analysis and the tracked manuscript snapshots explicitly, use:
-
-```bash
-make -C papers/formalization_draft2 accounting
-```
-
-The default cutoff is the repository's current `HEAD`.  A historical or
-alternative cutoff can be selected without editing the configuration:
-
-```bash
-make -C papers/formalization_draft2 accounting CUTOFF=<git-ref-or-commit>
-```
-
-Review and commit the resulting `snapshots/` changes when advancing the paper's
-evidence snapshot. `make -C papers/formalization_draft2 clean` removes LaTeX
-build products and the ignored `generated/` tree, but leaves tracked snapshots
-alone.
-
-### Literature-review memo
-
-`literature_review.tex` is a standalone, deliberately over-complete literature
-and positioning memo.  It is a superset of what should eventually appear in
-`paper.tex`: mathematical perturbation lineage, pre-LLM formalization practice,
-AI theorem proving and project-scale formalization, semantic/source-fidelity
-work, statistics and applied-science formalization, human--AI process studies,
-proof provenance, and open novelty checks.  Whole subsections are expected to be
-cut when the eventual Related Work section is written.
-
-Build it from a clean checkout with:
-
-```bash
-make -C papers/formalization_draft2 literature
-```
-
-The literature search is date-stamped in the memo because the nearby 2026
-literature is changing rapidly.
-
-## Dependency analysis for framing
-
-`scripts/build_dependency_analysis.py` parses local Lean import statements and
-computes conservative source-level import closures for the YWS citation surface,
-the Davis--Kahan umbrella, and the Quench umbrella.  The generated report is
-used to test framing claims rather than assume that every foundational module
-built during the Davis--Kahan effort was required by YWS.
-
-The present source-level result is directionally important: the YWS citation
-surface closes over 60 local modules, whereas `DavisKahan.All` closes over 711;
-the two closures overlap in 37 modules.  Import closure is only an upper bound
-on declaration-level proof dependence, so these counts should not be presented
-as a proof-dependency census without a stronger environment/declaration graph.
-
-## Source-census design
-
-The YWS census is keyed on the **paper**, not on the Lean tree. A source claim
-gets a row even when no Lean declaration exists, so an absence remains visible.
-The current census has 24 tracking entries, but those entries are not "24 YWS
-theorems": they include theorem conclusions, lemmas, corollaries, equations,
-identities, examples, a definition, source-scope/audit rows, and two explicitly
-marked additions beyond the printed paper.
-
-`scripts/build_source_census.py` reads the repository census and generates a
-paper-local full inventory plus a source-kind summary. This is the mechanism the
-paper should introduce before quoting the census size.
-
-## Proof-provenance design
-
-The project borrowed or adapted proof ideas from several formal sources,
-especially the former Spectra collaboration, as well as external Lean projects
-and Mathlib PRs. `scripts/build_provenance.py` inventories the module-level
-`## Provenance` blocks and the maintained external-source registries. Its output
-is a **citation-audit seed**, not an automatic intellectual-provenance detector.
-
-Before submission, proofs discussed in the manuscript should distinguish:
-
-1. copied or closely adapted code;
-2. mathematics ported with substantial API rewriting;
-3. a donor proof strategy followed by an independent re-derivation; and
-4. an ordinary upstream Mathlib dependency.
-
-## Accounting design
-
-The accounting study has two related scopes. Commit-level coverage is measured
-against the selected Git history of the primary formalization repository.
-Measured token totals use an explicit allowlist of historical ledger labels.
-The ledger `r` field stores a checkout/worktree basename rather than a stable
-repository identity; in particular, `aiq-gpu-docs` was a Claude worktree of this
-repository. Exact commit coverage is therefore determined by SHA membership in
-the selected Git history, never by the ledger basename.
-
-Commits that touch **only** `papers/formalization_draft2/` are excluded from the
-formalization-history corpus. Mixed commits remain in scope. This makes the
-exclusion policy useful when the snapshot is advanced during paper preparation
-without deleting legitimate mathematical work that happened to share a commit
-with documentation.
-
-The paper deliberately separates four kinds of resource evidence.
-
-- **Live exact commit-attributed measurement.** A non-backfill ledger row names
-  a Git commit SHA. These are the only ledger measurements used as commit-local
-  calibration observations or in coverage-scaled extrapolation.
-- **Explicit backfill.** Rows with `activity=backfill` recover historical usage.
-  They remain part of retained measured totals but are excluded from commit-local
-  calibration, even if a backfill row names a Git SHA; assigning an aggregated
-  recovery interval to one commit would distort per-commit moments.
-- **Measured but commit-unattributed usage.** `pending@...` ledger rows retain
-  measured session-level usage but not a defensible allocation to individual
-  commits. Live pending rows may define candidate windows in
-  `generated/pending_segments.csv`; explicit backfill rows do not alter those
-  windows or extrapolation eligibility.
-- **Unmeasured work.** This includes work before instrumentation and work done
-  through interfaces for which equivalent telemetry was unavailable. A small
-  log-ridge model emits exploratory estimates only for commits with positive LLM
-  provenance and no overlap with a pending measured window. The paper continues
-  to report measured values separately from modeled values.
-
-### Model-resolved token accounting
-
-Ledger schema v3 stores an exact `bm` token vector by model on every measured
-token-bearing row. The accounting loader verifies that those vectors sum to the
-row total. Consequently measured ordinary-input, cache-write, cache-read, and
-output tokens can be tied exactly to the model that consumed them, even in a
-session that switched models. The ledger does not expose a corresponding
-per-model turn count, so the scripts do not invent one.
-
-Model-resolved pricing is deliberately a separate transformation. Populate
-`data/model_pricing.csv` with historically applicable per-million rates for each
-model and token class, together with the rate's effective date and source. Cost
-columns remain blank until a complete rate vector exists. Never price a
-project-wide aggregate with one average token rate.
-
-For extrapolated usage, `generated/imputed_tokens_by_model.csv` records both the
-model assignment and the number of exact ledger commits providing direct
-calibration for that model. Models with no direct measured calibration are
-flagged explicitly.
-
-### Git co-authors versus ledger models
-
-Git `Co-authored-by` trailers provide a second model-provenance channel. The
-analysis preserves four levels separately: the raw trailer text, canonicalized
-trailer labels, any explicitly configured historical interpretation, and exact
-ledger model attribution. Exact ledger attribution wins whenever it exists.
-
-For this study only, `analysis_config.json` contains an author-confirmed,
-time-bounded GPT rule. On **unledgered** commits dated 2026-06-03 through
-2026-08-14, raw GPT-5.6 `High` and `Thinking` trailer labels are interpreted as
-GPT-5.6 Sol chat-interface work. The raw labels remain in the manifest, and the
-rule expires after 2026-08-14 rather than becoming a permanent model-name
-synonym. `generated/gpt_chat_rule_matches.csv` is the complete audit trail.
-
-Raw GPT-5.6 Sol trailer commits are *not* automatically labeled as chat. They
-remain in `generated/chat_interface_review_candidates.csv` unless contemporaneous
-evidence or an explicit row in `data/accounting_overrides.csv` establishes the
-interaction channel.
-
-Anthropic trailers are handled differently. Fable/Opus model switches could
-occur inside a harness session without updating the commit-time co-author
-instruction, so the scripts do not normalize those trailer names toward the
-ledger. Mismatches are retained as review signals. For measured usage, the
-ledger's per-model token vector is authoritative.
-
-`data/accounting_overrides.csv` remains the manual provenance seam for evidence
-that cannot be reconstructed mechanically. Silence is left `unknown`; apart
-from the bounded historical GPT rule, chat-interface assistance is not guessed
-from missing telemetry.
-
-`analysis_config.json` supplies a default history ref (`HEAD`).  `--cutoff` on
-`scripts/build_accounting.py` or `CUTOFF=...` on the Make target selects another
-inclusive Git cutoff.  The generated summary records both the requested ref and
-the resolved commit.  Ledger rows are canonicalized with latest-write-wins
-semantics, then scoped by their observation/activity time; a later-published
-historical recovery can therefore improve an earlier selected history without
-requiring a frozen ledger revision. The rendered PDF shows the resolved snapshot
-date, while the full hash remains in generated source and PDF tooltip metadata.
-
-## Citation-count snapshots
-
-Citation counts used for motivation in the manuscript are collected separately
-from the normal paper build. OpenAlex is queried by the two published DOIs in
-`data/bibliometrics/openalex_works.json`. The selected API response is written to
-ignored `generated/openalex_response.json`; compact reviewable artifacts are
-written to tracked `snapshots/`: `openalex_bibliometrics.json`,
-`openalex_bibliometrics_macros.tex`, `openalex_citation_trends.csv`, and
-`openalex_citation_trend_table.tex`.
-
-OpenAlex currently requires an API key.  Obtain a free key from OpenAlex, then
-run:
-
-```bash
-export OPENALEX_API_KEY=...
-make -C papers/formalization_draft2 bibliometrics
-```
-
-For an audit of the exact requests without making a network call:
-
-```bash
-python3 papers/formalization_draft2/scripts/fetch_openalex_bibliometrics.py --dry-run
-```
-
-The compact snapshot deliberately records the retrieval timestamp, DOI, OpenAlex
-work identifier, total `cited_by_count`, `counts_by_year`, and OpenAlex
-`updated_date`, but never records the API key. The trend CSV and TeX table are
-derived from `counts_by_year`; the retrieval year is marked as partial. The
-regular `paper` and `accounting` targets do not contact OpenAlex.
-
-Google Scholar counts are intentionally not scraped by repository tooling.  If
-we report them, record the visible `Cited by` values and observation date
-manually in the manuscript or a tracked bibliometric note, alongside the dated
-OpenAlex snapshot.  Both sources should be named explicitly because citation
-counts are database- and date-dependent.
-
-## Working and snapshot artifacts
-
-`generated/dependency_import_closure.csv`, `generated/dependency_target_summary.csv`,
-`generated/dependency_target_overlap.csv`
-: Conservative local Lean source-import closures and target overlaps used to
-  distinguish the YWS dependency surface from the much larger Davis--Kahan
-  development.  These are source-level upper bounds, not declaration-level use
-  graphs.
-
-`generated/yws_census_items.csv`, `generated/yws_census_by_kind.csv`
-: Full paper-keyed YWS tracking inventory and a compact explanation of what its
-  rows count.
-
-`generated/proof_provenance_inventory.csv`, `generated/proof_provenance_sources.csv`
-: Module-level recorded provenance plus the maintained source registries that
-  seed the declaration-level citation audit.
-
-`generated/commit_accounting_manifest.csv`
-: One row per commit in the pinned history, including code-change features,
-  trailer/manual/ledger model provenance, exact ledger measurements,
-  pending-window overlap, component labels, and extrapolation eligibility.
-
-`generated/study_commit_exclusions.csv`
-: Commits excluded because every touched path matches a configured manuscript-
-  only prefix. Mixed mathematical/manuscript commits remain in the study.
-
-`generated/ledger_repository_summary.csv`
-: Program-wide measured usage broken out by explicitly allowlisted ledger
-  repository. This is separate from primary-repository Git coverage.
-
-`generated/gpt_chat_rule_matches.csv`
-: Every commit affected by the bounded historical GPT-5.6 High/Thinking -> Sol
-  chat-interface interpretation, with the raw label retained.
-
-`generated/pending_segments.csv`
-: Measured `pending@...` usage segments and all commits whose timestamps fall in
-  the recorded session span. These are allocation candidates, not allocations.
-
-`generated/model_token_breakdown.csv`
-: Exact measured token counts by normalized model and token class, derived from
-  the ledger's per-model vectors.
-
-`generated/coauthor_model_summary.csv`, `generated/model_provenance_reconciliation.csv`
-: Counts and commit-level relations between Git co-author model provenance,
-  manual provenance, and exact ledger models.
-
-`generated/model_provenance_disagreements.csv`
-: The subset with partial overlap or disjoint declared/ledger model sets.
-
-`generated/chat_interface_review_candidates.csv`
-: Conservative review queue for raw GPT-5.6 Sol trailer commits whose interface
-  is not otherwise established. Candidate status is not a channel label.
-
-`generated/model_cost_breakdown.csv`, `generated/model_cost_summary.csv`
-: Cost worksheets. Dollar columns remain blank until historical pricing is
-  supplied and sourced.
-
-`generated/accounting_state_summary.csv`
-: Exact-versus-unaccounted commit coverage.
-
-`generated/component_accounting_summary.csv`
-: Coverage and exact measured usage for YWS, Davis--Kahan, Quench, Tau Ceti
-  staging, paper/docs, and tooling path families. Components overlap by design.
-
-`generated/accounting_coverage_by_week.csv`
-: Time series for visualizing the transition from pre-instrumentation work to
-  partially instrumented development.
-
-`generated/imputation_validation.csv`
-: Rolling-origin validation for the exploratory missing-cost model.
-
-`generated/imputation_predictions.csv`, `generated/imputed_tokens_by_model.csv`
-: Per-commit and model-grouped exploratory predictions. Only rows marked
-  `extrapolation_eligible=1` enter the default extrapolated total.
-
-`generated/interaction_*.csv`
-: Deduplicated post-hoc human-prompt, taxonomy, event, and per-agent summaries.
-
-`snapshots/*_macros.tex` and `snapshots/*_table.tex`
-: Small tracked LaTeX fragments consumed by the manuscript. They are refreshed
-  explicitly by the corresponding analysis script and reviewed in Git like
-  other paper evidence.
-
-`generated/`
-: Ignored working data: detailed CSV/JSON inventories, diagnostic reports, and
-  raw API responses. These files support regeneration and audit but are not part
-  of the committed manuscript snapshot.
-
-## Important limitations to retain in the paper
-
-- Accounting began after substantial work had already occurred.
-- Backfilled agent transcripts recover some earlier usage but do not make the
-  early history complete.
-- Some work happened through chat interfaces with no equivalent local token
-  telemetry. Missing chat logs also remove evidence about initiative and
-  steering, not just token counts.
-- Git co-author trailers establish model provenance, not token use. Interaction
-  channel is inferred only from explicit evidence or the narrow, time-bounded
-  GPT-5.6 chat rule recorded in `analysis_config.json`.
-- Anthropic ledger/trailer disagreement must be reviewed rather than normalized
-  away because mid-session model switches can make the commit trailer stale.
-- `pending@...` time spans can be broad; a timestamp overlap is evidence for a
-  possible allocation, not proof that a particular commit consumed those tokens.
-- Missingness is not random. Agent-harness, chat-interface, pre-instrumentation,
-  and manual work have different observation mechanisms.
-- Some model variants used in unmeasured work have no direct measured ledger
-  calibration. Their extrapolations require wider skepticism/sensitivity tests.
-- Monetary cost depends on historically applicable model- and token-class rates;
-  token measurements are primary evidence and pricing inputs must be sourced.
-- The current extrapolation model is exploratory. Its validation and provenance
-  overrides must be audited before any modeled total is quoted as a result.
-- The committed `lifetime-totals.json` can lag the append-only ledger. The paper
-  scripts recompute measured totals from the ledger and report the reconciliation.
-- Retrospective author memory is not treated as ground truth where contemporaneous
-  traces exist; see `development_notes.md`.
-
-## Editorial strategy for the process study
-
-`appendix_process.tex` is intentionally over-complete. The main manuscript should
-keep YWS, the source audits, the foundational mathematical stack, and Quench at
-the center. Detailed accounting mechanics, provenance reconciliation, prompt
-taxonomies, and interaction archaeology are developed in the appendix first so
-they can be cut aggressively without losing the underlying generated evidence.
+The Makefile uses `latexmk` and expects a BibTeX-compatible executable named
+`bibtex`. Some minimal TeX installations provide only `bibtex8`; in that case a
+local PATH shim or an equivalent LaTeX build command is sufficient and does not
+change the source.
+
+`make -C papers/formalization_draft2 accounting` belongs to the older
+instrumentation workflow. It is not required to substantiate the journal
+paper's central mathematical claims, and parts of it may require optional review
+tooling/submodules that are absent from a lightweight source archive.
+
+## Editing rules for this draft
+
+- Keep Davis--Kahan dominant. YWS may clarify impact, conventions, or statistical
+  specialization, but should not become a co-equal second paper.
+- State the mathematical theorem before discussing its Lean representation.
+- Distinguish proof/kernel verification from semantic/source correspondence.
+- For non-literal representation matches, state the mathematical equivalence
+  being used (for example the modulus relation for the sine operator).
+- Describe Proposition 4.4 precisely: printed claim, counterexample, failed proof
+  step, and repaired theorem.
+- Keep implementation/project-management chronology out of the main scientific
+  narrative unless it is required to explain a mathematical audit result.
+- Keep resource accounting, model provenance, and human--LLM workflow analysis
+  with the separate process paper rather than this journal manuscript.
+- Put declaration inventories and detailed review mechanics in appendices or
+  supplemental material.
+- Do not infer source fidelity from declaration names. Use the reviewed source
+  inventory and correspondence evidence.

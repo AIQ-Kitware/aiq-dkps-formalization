@@ -1,3 +1,14 @@
+# Development notes
+
+> **Journal-scope reset, 2026-09-29.** The current `formalization_draft2`
+> manuscript is focused on Davis--Kahan, with YWS only as a secondary
+> specialization/audit case. The resource-accounting and human--LLM process
+> material below is retained as historical research notes and belongs to the
+> separate `formalization_process` paper, not to the journal contribution. See
+> `README.md` and `consolidation_notes.md` for the current editorial decisions.
+
+## Historical process/accounting notes
+
 # Development/process notes for formalization_draft2
 
 These notes record observations that may or may not survive into the submitted

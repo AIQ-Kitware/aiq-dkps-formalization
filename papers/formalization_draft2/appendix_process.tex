@@ -1,234 +1,147 @@
-\section{Formalization process}
+\section{Davis--Kahan result inventory}
+\label{app:dk-inventory}
+
+\Cref{tab:dk-full-inventory} records the maintained result-level denominator.
+Every row is currently verified in the ordinary Lean build and has accepted
+semantic/source-correspondence review. The disposition column distinguishes a
+proof of the source claim from the checked refutation of Proposition~4.4.
+
+\begin{longtable}{>{\raggedright\arraybackslash}p{0.16\linewidth}>{\raggedright\arraybackslash}p{0.55\linewidth}>{\raggedright\arraybackslash}p{0.18\linewidth}}
+\caption{The \DKResultCount{} Davis--Kahan result-level targets.}
+\label{tab:dk-full-inventory}\\
+\toprule
+ID & Result & Disposition \\
+\midrule
+\endfirsthead
+\toprule
+ID & Result & Disposition \\
+\midrule
+\endhead
+\\path{S2-sin-theta} & Single-angle sine theorem & proved at source scope \\
+\\path{S2-tan-theta} & Single-angle tangent theorem & proved at source scope \\
+\\path{S2-sin-two-theta} & Double-angle sine theorem & proved at source scope \\
+\\path{S2-tan-two-theta} & Double-angle tangent theorem & proved at source scope \\
+\\path{DK-3.1-prop} & Acute direct rotation existence and uniqueness & proved at source scope \\
+\\path{DK-3.2-prop} & Nonacute existence criterion & proved at source scope \\
+\\path{DK-3.3-prop} & Principal square-root characterization & proved at source scope \\
+\\path{DK-3.4-prop} & Square as a direct rotation & proved at source scope \\
+\\path{DK-3.1-thm} & Classification of pairs of subspaces & proved at source scope \\
+\\path{DK-3.1-cor} & Compact classification by angle eigenvalues & proved at source scope \\
+\\path{DK-3.5-prop} & Angle commutation and eigenspace geometry & proved at source scope \\
+\\path{DK-3.2-cor} & Reversal symmetry & proved at source scope \\
+\\path{DK-4.1-prop} & Pointwise and singular-value extremality of the direct rotation & proved at source scope \\
+\\path{DK-4.1-cor} & Unitarily invariant norm minimality of restricted displacement & proved at source scope \\
+\\path{DK-4.2-prop} & Basis-angle square-sum extremality & proved at source scope \\
+\\path{DK-4.3-prop} & Squared-displacement unitarily invariant norm minimality & proved at source scope \\
+\\path{DK-4.4-prop} & Full-displacement claim of Proposition~4.4 & refuted as printed; repaired separately \\
+\\path{DK-5.1-thm} & Banach-space Sylvester lower bound & proved at source scope \\
+\\path{DK-5.2-thm} & Semibounded self-adjoint Sylvester theorem & proved at source scope \\
+\\path{DK-5.1-lem} & Strong-cutoff convergence of singular values & proved at source scope \\
+\\path{DK-6.1-lem} & Direct-sum norm comparison and converse & proved at source scope \\
+\\path{DK-6.2-lem} & Reflection-pinch contraction & proved at source scope \\
+\\path{DK-6.1-prop} & Sine proof, ambient limitation, and symmetric sine theorem & proved at source scope \\
+\\path{DK-6.1-thm} & Generalized sine theorem & proved at source scope \\
+\\path{DK-6.2-thm} & Pairwise-gap square-norm sine theorem & proved at source scope \\
+\\path{DK-6.3-thm} & Generalized tangent theorem and supporting machinery & proved at source scope \\
+\\path{DK-6.3-lem} & Finite-rank near-maximizer leakage estimate & proved at source scope \\
+\\path{DK-8.1-thm} & Branch selection and spectral repulsion & proved at source scope \\
+\\path{DK-8.2-thm} & Smallness selects the acute branch & proved at source scope \\
+\bottomrule
+\end{longtable}
+
+The result table is keyed to source results.  One source result can require many
+Lean declarations, while a single reusable Lean theorem can support more than
+one source-facing wrapper.  The denominator therefore remains stable under
+refactoring of implementation modules.
+
+\section{Source-correspondence review}
+\label{app:source-review}
+
+A result is accepted only after two distinct checks.
+
+\paragraph{Mechanical verification.}
+The declaration must resolve in the ordinary project build, and every theorem
+on which it depends must be accepted by Lean's kernel.  This establishes the
+formal proposition exactly as encoded.
+
+\paragraph{Source comparison.}
+The encoded proposition is compared with the cited source location.  The review
+checks the mathematical objects, hypotheses, conclusion, scalar field,
+dimension, norm class, boundary conventions, and operator-domain assumptions.
+For a nonliteral representation, the review also records the theorem or
+mathematical argument that justifies the correspondence.  Equation
+\cref{eq:modulus-sine} is the main example: the rectangular map in the Lean
+sine-theta theorem represents the source's positive sine operator only after a
+modulus/polar-decomposition argument.
+
+This separation prevents theorem names from serving as evidence of fidelity.
+For example, the proved declaration
+\texttt{sinTheta\_unbounded\_intervalExterior\_characterizedWitness\_rclike}
+remains a useful finite-gap theorem, but it is not the selected source endpoint
+because it does not include the half-infinite gap cases.  Conversely,
+Proposition~4.4 is complete in the inventory even though its printed assertion
+has no proof: the completed formal treatment consists of the transcribed claim
+as a proposition, a checked counterexample/refutation, a diagnosis of the
+source proof, and repaired theorems.
+
+\section{YWS source-audit scope}
+\label{app:yws-coverage}
+
+The YWS audit uses a different denominator because the journal paper does not
+claim a line-by-line formalization of every mathematical statement in that
+article.  The maintained census has \YWSCensusEntryCount{} rows:
+\YWSCensusPaperSourceCount{} rows associated with printed source material and
+\YWSCensusExplicitAdditionCount{} explicitly marked additions.  All
+\YWSCensusVerifiedCount{} rows currently resolve to declarations in the normal
+build.
+
+The source rows include the conclusions of Theorems~1--3 and the equations,
+lemmas, examples, and boundary conventions needed to check those conclusions.
+Several rows can share one correction.  In particular, the current census has
+\YWSCensusCorrectedCount{} rows whose implementation is classified as corrected,
+but the manuscript reports two printed YWS defects: the missing square in
+equation~(4) and the rank-boundary convention in Theorem~3.
+
+\section{Formalization procedure and AI assistance}
 \label{app:formalization-process}
 
-The formalization was developed in Lean~4 with Mathlib
-\citep{demoura2021lean4,mathlib2020}.  The AI-facing tools were the ChatGPT chat interface, Claude Code, and Codex.
-We did not use a separate formalization-agent framework.  The repository itself
-was compiled with the ordinary Lean and Lake toolchain.
-
-The formalization used the following recurring cycle.
+The development used a recurring five-stage workflow.
 \begin{enumerate}
-  \item We supplied the source paper to an LLM and asked it to transcribe the
-        mathematical statements and decompose the proof into intermediate
-        obligations.
-  \item Before building missing theory, we searched Mathlib, other Lean
-        developments, and the mathematical literature for existing definitions,
-        lemmas, or formalizations that could be reused or adapted.
-  \item The LLM implemented definitions and intermediate lemmas, filled theorem
-        proofs, compiled the result, and revised failed proofs using compiler
-        feedback.  Larger arguments were commonly organized into written proof
-        roadmaps before implementation.
-  \item We repeatedly compared each Lean theorem with the source statement,
-        including hypotheses, endpoint conventions, ambient dimension, norm
-        class, and operator domain.  These checks were performed both by humans
-        and by additional LLM reviews.  A narrower or otherwise mismatched
-        statement was revised and checked again.
+  \item \textbf{Gather context.}  Read the source result and surrounding proof,
+        identify standing assumptions and notation, and inspect the relevant
+        Lean interfaces.
+  \item \textbf{Decompose.}  Express the target as mathematical obligations
+        small enough to compare individually with existing library facts.
+  \item \textbf{Find foundations.}  Search Mathlib, Tau Ceti, the local reusable
+        layer, other Lean developments, and the mathematical literature before
+        introducing new theory.
+  \item \textbf{Formalize.}  Implement definitions and lemmas, compile them with
+        Lean, and revise failures until the desired theorem is kernel-checked.
+  \item \textbf{Review skeptically.}  Compare the resulting statement with the
+        source independently of successful compilation.  Reopen the result if
+        the review finds a scope, convention, representation, or hypothesis
+        mismatch.
 \end{enumerate}
+The loop terminates for a source target only when both the formal proof and the
+source-correspondence review are accepted, or when the source statement is
+shown false and the formal record contains the corresponding refutation.
 
-As the development grew, we also asked the LLMs to build repository scripts that
-enumerated source claims and linked them to Lean declarations.  Those tools were
-introduced after substantial formalization had already been completed and were
-used to check coverage and to revisit earlier statements systematically.  The
-resulting source-coverage evidence is summarized in
-Appendix~\ref{app:source-coverage}.
+Large language models were used for proof planning, repository search, Lean
+implementation, proof repair, and source comparison.  Human review determined
+the intended paper scope, evaluated mathematical correspondence, and accepted
+or rejected proposed repairs.  All formal propositions are certified by Lean's
+kernel; model outputs supplied proof text and analysis that remained subject to
+compilation and review.
 
-\begin{table}[H]
-\centering
-\small
-\begin{tabular}{>{\raggedright\arraybackslash}p{0.18\linewidth}>{\raggedright\arraybackslash}p{0.35\linewidth}>{\raggedright\arraybackslash}p{0.39\linewidth}}
-\toprule
-System & Models used & Typical use \\
-\midrule
-ChatGPT chat interface & GPT-5.6 Sol & Mathematical planning, source comparison, review, and generation of proposed repository changes. \\
-Claude Code & Claude Opus 4.8; Claude Opus 5; Claude Fable 5 & Repository search, Lean implementation, compilation, proof repair, and long-running formalization tasks. \\
-Codex & GPT-5.6 Sol; GPT-5.6 Terra; GPT-5 Codex; GPT-5.6 Codex & Repository search, Lean implementation, compilation, repair, and review. \\
-\bottomrule
-\end{tabular}
-\caption{AI systems and models used during the formalization.  Exact token
-measurements were recovered for five model labels; the measured subset is given
-in \cref{tab:model-tokens-appendix}.}
-\label{tab:formalization-systems}
-\end{table}
+\section{Artifact organization}
+\label{app:artifact}
 
-\section{Source coverage and formalization evidence}
-\label{app:source-coverage}
-
-For Davis--Kahan, the denominator used in the paper is
-\FormalizationDKResultCount{} results: the four unnumbered Section~2 theorems and
-every named theorem, proposition, lemma, and corollary established in the paper.
-Definitions, examples, open questions, proof steps, and results attributed to
-other sources are excluded.  Twenty-eight counted results are proved at the
-scope stated in the source.  Proposition~4.4 remains in the denominator and is
-formally refuted as printed, with a repaired result proved separately.
-
-For YWS, the source audit contains \YWSCensusEntryCount{} entries spanning the
-three theorem-level claims and the lemmas, equations, identities, examples,
-conventions, and corrections used to verify them.  Of these,
-\YWSCensusExplicitAdditionCount{} are explicitly marked additions beyond the
-printed paper, and all \YWSCensusVerifiedCount{} entries resolve to declarations
-in the default build.
-
-\begin{table}[H]
-\centering
-\small
-\input{snapshots/yws_census_kind_table.tex}
-\caption{Composition of the YWS source audit.  The generated data retain the
-source location, Lean declaration, verification state, and extension status for
-each row.}
-\label{tab:yws-census-kinds}
-\end{table}
-
-The dependency analysis starts from \FormalizationYWSUnitCount{} maintained YWS
-units and all \FormalizationDKResultCount{} counted Davis--Kahan results.  Its
-conservative imported-environment trace reaches
-\FormalizationTraceDeclarationCount{} declarations through
-\FormalizationTraceEdgeCount{} named-declaration edges across
-\FormalizationTraceModuleCount{} modules.  Imported opaque theorem proofs can
-hide some proof-internal references, so these counts are a lower bound on named
-dependence.  The raw result roots, edges, reachability data, reviewed module
-classification, and declaration-level overrides are stored under
-\path{data/}; \path{scripts/build_formalization_theory_graph.py} regenerates the
-summary tables and rejects unclassified reached modules.
-
-\begin{table}[H]
-\centering
-\scriptsize
-\input{snapshots/formalization_basic_theory_audit_table.tex}
-\caption{Reachability evidence behind the theory classification in
-\cref{tab:formalized-theories}.}
-\label{tab:formalized-theories-audit}
-\end{table}
-
-Most reached declarations were formalized in this project.  The ancestry
-records identify the smaller set copied, adapted, generalized, or informed by
-external Lean developments.  Spectra is the direct donor represented in the
-reached dependency set \citep{bornemann2026spectra}; ordinary Mathlib and Lean
-dependencies are credited upstream \citep{mathlib2020}.
-
-\begin{table}[H]
-\centering
-\small
-\caption{Formalization ancestry within the reached declaration set.  The
-underlying rows identify the exact local declaration and external source for
-each externally derived or influenced declaration.}
-\label{tab:formalization-provenance-credit}
-\input{snapshots/formalization_provenance_credit_table.tex}
-\end{table}
-
-The declaration-level ancestry records are stored in
-\path{data/formalization_formal_provenance_claims_20260817.csv};
-\path{scripts/build_formalization_provenance_credit.py} joins them to the
-reached declarations.  The source-audit data also retain the exact Lean
-counterexamples and corrected statements discussed in \cref{sec:audit},
-including the YWS equation~(4) correction and rank-boundary repair.
-
-\section{Resource-accounting methodology}
-\label{app:accounting}
-
-\subsection{Accounting scope}
-
-Commit coverage is computed by SHA membership in the selected formalization Git
-history.  Ledger repository fields are historical checkout/worktree basenames;
-\texttt{aiq-gpu-docs} is one such worktree basename from this repository.  The
-default selected history ends at \AccountingSnapshot{}, and manuscript-only
-commits are excluded from the coverage denominator.
-
-\begin{table}[H]
-\centering
-\small
-\input{snapshots/ledger_repository_table.tex}
-\caption{Retained measured resource usage by historical checkout/worktree label.
-Work for which telemetry was not recovered is absent from these totals.  Commit
-coverage is determined from Git-history membership; the labels are descriptive.}
-\label{tab:ledger-repositories}
-\end{table}
-
-\subsection{Measurement coverage}
-
-Exact commit-level instrumentation began on \InstrumentationSnapshot{};
-\CommitsBeforeInstrumentation{} included commits precede that date.  Historical
-installation, attribution, and backfill limitations make the retained telemetry
-incomplete.  Explicit backfill rows recover some earlier usage and are excluded
-from commit-local calibration and pending-window extrapolation logic.  The
-retained data therefore distinguish live exact commit-attributed measurements,
-explicit backfill, live session usage without one-to-one commit assignment, and
-periods with no recovered telemetry.
-
-\begin{table}[H]
-\centering
-\small
-\input{snapshots/accounting_state_table.tex}
-\caption{Commit-level measurement coverage in the primary-repository history.
-Pending measurements contain observed tokens without exact commit attribution.}
-\label{tab:accounting-states}
-\end{table}
-
-Token totals reported in the paper are sums over the retained canonical ledger
-rows and are incomplete observations of project usage.  At \AccountingSnapshot{} the included ledger contains
-\LedgerTurns{} model turns and \LedgerOutputTokens{} output tokens.  Its
-\LedgerBillableInputTokens{} billable-input measure combines ordinary input,
-cache-write, and cache-read quantities according to the ledger schema.
-
-\begin{table}[H]
-\centering
-\small
-\input{snapshots/measured_token_breakdown_table.tex}
-\caption{Retained measured token quantities.  Live exact, explicit-backfill,
-and pending columns partition the retained measurements by attribution status.}
-\label{tab:measured-token-breakdown}
-\end{table}
-
-\subsection{Model-resolved tokens, pricing, and energy}
-
-Each token-bearing row records ordinary input, cache writes, cache reads, and
-output by model.  Historical API prices are applied after token accounting.
-The valuation generator emits an aggregate API-equivalent dollar value only
-when historically applicable rates are complete for every retained model.
-
-\begin{table}[H]
-\centering
-\scriptsize
-\input{snapshots/model_token_table.tex}
-\caption{Model-resolved retained measured token counts.  The totals omit
-formalization work for which no telemetry was recovered.}
-\label{tab:model-tokens-appendix}
-\end{table}
-
-The energy calculation uses a versioned serving model with throughput, server
-power, cache-work factors, per-turn overhead, and datacenter power usage
-effectiveness \citep{crall2026llmresource}.  The operational boundary covers LLM
-serving and excludes model training, embodied hardware, client devices, and
-network energy.  The paper reports both the central serving-model value and a
-separate per-token cross-check.
-
-\subsection{Coverage proxies and project-scale extrapolation}
-
-Live exact telemetry covers \ExactMeasuredCommitCount{} of \HistoryCommitCount{}
-primary-repository commits (\ExactMeasuredCommitShare{}).  Those commits account
-for \ExactMeasuredLeanLineChurn{} of \TotalLeanLineChurn{} cumulative Lean-line
-insertions and deletions (\ExactMeasuredLeanLineChurnShare{}).  This raw Git
-quantity is the directly measured text-volume proxy.  We also report an adjusted
-proxy that removes \LeanLineChurnAdjustmentTotal{} known non-LLM line changes
-from bulk repository operations.  The adjusted denominator is
-\AdjustedTotalLeanLineChurn{} Lean-line changes, of which
-\AdjustedExactMeasuredLeanLineChurn{} have exact telemetry, giving
-\AdjustedExactMeasuredLeanLineChurnShare{} coverage.
-
-\begin{table}[H]
-\centering
-\small
-\input{snapshots/lean_churn_coverage_adjustment_table.tex}
-\caption{Raw and adjusted Lean-line-change coverage.  The raw row is the direct
-Git-history count; the adjusted row removes known non-LLM line changes from bulk
-repository operations.}
-\label{tab:lean-churn-adjustment}
-\end{table}
-
-The project-scale estimates in \cref{tab:resource-extrapolation} use the linear
-model $q_{\mathrm{project}}=q_{\mathrm{exact}}/c$, where $c$ is commit coverage or
-adjusted text coverage.  Using the raw \ExactMeasuredLeanLineChurnShare{} text
-proxy would give \RawLeanChurnScaledOperationalEnergy{} under the central
-serving model; the adjusted \AdjustedExactMeasuredLeanLineChurnShare{} proxy
-gives \AdjustedLeanChurnScaledOperationalEnergy{}.  The model assumes comparable
-token intensity between observed and unobserved work under the selected
-denominator.
+The paper-facing Davis--Kahan declarations are under
+\path{DavisKahan/Sources/DavisKahan1970}.  Reusable mathematical infrastructure
+is primarily under \path{ForTauCeti}; its declarations already use final
+\texttt{TauCeti.*} namespaces.  The maintained Davis--Kahan result inventory is
+\path{dev/davis-kahan-1970-formalization-result-inventory.json}.  The YWS source
+census is maintained separately under the YWS package and is summarized for
+this manuscript by the generated census snapshot.  This organization permits
+source-audit records and paper-specific counterexamples to remain local to the
+paper package while reusable analysis is prepared for upstream integration.
