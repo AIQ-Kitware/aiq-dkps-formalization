@@ -7,8 +7,12 @@ mathematical audit of Davis--Kahan perturbation theory. The scope is now fixed:
   operator-theoretic infrastructure required to formalize it;
 - **secondary application:** Yu--Wang--Samworth (YWS), where it gives a compact
   statistical specialization and an independent source-audit case;
+- **methodological observation:** a concise discussion of AI-assisted
+  formalization and the primary author's starting background, together with an
+  explicit AI-use disclosure; and
 - **out of scope for this manuscript:** downstream application projects and the
-  empirical human--LLM/process study developed for the separate workshop paper.
+  workshop paper's empirical human--LLM/process study, practitioner corpus, and
+  resource-accounting analysis.
 
 The workshop paper in `../formalization_process/` remains useful editorially. In
 particular, this journal draft adopts its sharper separation between kernel
@@ -52,15 +56,20 @@ state this bridge explicitly rather than identify the two representations.
 `paper.tex` is the journal manuscript. Its intended structure is:
 
 1. mathematical motivation and contribution statement;
-2. Davis--Kahan source scope and the 29-result coverage census;
-3. the current source-facing sine-theta theorem and its representation map;
-4. the remainder of the Davis--Kahan formalization;
-5. the Proposition 4.4 refutation and repaired theorem;
+2. a concise statement of Davis--Kahan scope, with detailed counting deferred to
+   the appendix;
+3. the full-scope sine-theta theorem and the modulus identification connecting
+   the Lean operator to the source angle operator;
+4. mathematical architecture: direct rotations, operator ideals/majorization,
+   Sylvester separation, unbounded operators, and formal ancestry;
+5. the Proposition 4.4 counterexample, proof diagnosis, and Q-norm repair;
 6. YWS as a shorter statistical specialization and source-audit case;
-7. reusable foundations needed for the formalization;
-8. related work and conclusion;
+7. AI-assisted formalization as an observation about the changing tooling
+   landscape, with limitations stated explicitly;
+8. related work, conclusion, and an AI-assistance disclosure;
 9. references; then
-10. appendices containing the detailed result inventory and audit methodology.
+10. appendices containing the detailed result inventory, review methodology,
+    model/tool details, and artifact organization.
 
 `appendix_process.tex` now contains supporting review methodology and the
 complete Davis--Kahan inventory. It is not an empirical process-study appendix.
@@ -146,8 +155,10 @@ tooling/submodules that are absent from a lightweight source archive.
   step, and repaired theorem.
 - Keep implementation/project-management chronology out of the main scientific
   narrative unless it is required to explain a mathematical audit result.
-- Keep resource accounting, model provenance, and human--LLM workflow analysis
-  with the separate process paper rather than this journal manuscript.
+- Keep the workshop paper's empirical resource accounting, practitioner corpus,
+  and workflow taxonomy out of this manuscript. A concise author-background and
+  AI-tooling observation, plus full disclosure of AI use in formalization and
+  prose preparation, belongs in the journal paper.
 - Put declaration inventories and detailed review mechanics in appendices or
   supplemental material.
 - Do not infer source fidelity from declaration names. Use the reviewed source
