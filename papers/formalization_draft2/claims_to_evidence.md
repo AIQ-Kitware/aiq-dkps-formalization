@@ -1,55 +1,37 @@
-# Claims-to-evidence map
+# Journal claims to evidence
 
-Working map for the paper. This is intentionally stricter than a prose outline:
-each headline claim should point to source material that can be independently
-audited before submission.
+This file maps the principal claims in `paper.tex` to current repository
+evidence. It is deliberately narrower than the historical draft2 accounting
+notes: this journal manuscript is about Davis--Kahan, with YWS as a secondary
+application/audit case.
 
-| Claim | Primary repository evidence | Paper role |
+| Manuscript claim | Evidence | Qualification |
 |---|---|---|
-| YWS theorem-level claims are formalized at the published numbering and stated generality | `YuWangSamworth2015/README.md`, `YuWangSamworth2015/PROOF_OBLIGATIONS.md`, `dev/yu-wang-samworth-2015-full-source-census.json` | Main mathematical contribution |
-| All 29 Davis--Kahan results established in the 1970 paper are covered by the formalization-result inventory; 28 are proved at source scope and Proposition 4.4 is formally refuted and repaired | `dev/davis-kahan-1970-formalization-result-inventory.json`, `dev/davis-kahan-1970-full-source-census.json` | Main mathematical contribution |
-| YWS theorem-level coverage includes all tracked claims from Theorems 1--3, with supporting source units and corrections recorded separately | `dev/yu-wang-samworth-2015-full-source-census.json`, `YuWangSamworth2015/PROOF_OBLIGATIONS.md` | Main mathematical contribution |
-| The paper-keyed YWS tracking census has 24 entries and all currently resolve in the default build | `generated/yws_census_items.csv`, `generated/CENSUS_REPORT.md`, source census JSON | Coverage statement; explicitly explain what the entries count |
-| The 24-entry census is not a count of named YWS theorems and includes two explicitly marked non-source additions | `generated/yws_census_items.csv`, `generated/yws_census_by_kind.csv` | Prevent misleading coverage language |
-| Printed YWS equation (4) is false and corrected | `YuWangSamworth2015/YuWangSamworth2015/Symmetric/AngleIdentity.lean` | Formalization-as-audit case study |
-| Printed YWS Theorem 3 rank-boundary convention is false and corrected | `YuWangSamworth2015/YuWangSamworth2015/Rectangular/RankBoundary.lean`, source census row `YWS-T3-rankBoundary` | Formalization-as-audit case study |
-| Davis--Kahan Proposition 4.4 is false as printed | `papers/davis_kahan_prop_4_4/davis_kahan_prop_4_4_counterexample.tex`, corresponding Lean source under `DavisKahan/` | Independent source-audit result |
-| Conservative Quench reuse audit finds no environment-visible named-declaration overlap with the 887-declaration YWS/DK formalization inventory; therefore the paper makes no downstream-reuse claim from Quench | `DkpsQuench2026/Geometry/AlignedCMDS.lean`, `scripts/build_quench_reuse_trace.py`, generated `quench_reuse_summary.json`, `quench_reuse_declaration_links.csv`, and `quench_reuse_dependency_reachability.csv` | Negative repository-audit result; keep outside the paper unless a stronger source/proof-body trace establishes reuse |
-| DK/YWS development forced foundational operator-theory layers absent from the needed Mathlib surface | `ForTauCeti/`, `DavisKahan/`, Tau Ceti roadmap submodule and migration notes | Motivation and amortization argument |
-| Some formal proofs/strategies have Spectra or other external Lean ancestry and require explicit scholarly citation | `generated/proof_provenance_inventory.csv`, `dev/tauceti/spectra-provenance-map.md`, `dev/external-lean-references.md`, module `## Provenance` blocks | Proof-provenance/citation audit |
-| A substantial fraction of project history lacks exact commit-level telemetry | `generated/commit_accounting_manifest.csv`, `generated/accounting_summary.json` | Accounting limitation/result |
-| Raw Lean-line churn coverage is 11.3%; excluding the pristine Spectra import and the later bulk deletion of the retired fork yields a 16.2% adjusted formalization-text proxy while retaining intervening project edits | `analysis_config.json`, `generated/accounting_summary.json`, `retired/patches-Spectra/README.md`, generated `lean_churn_coverage_adjustment_table.tex` | Resource-accounting coverage adjustment |
-| Program-wide measured token totals include explicitly allowlisted cross-repository Tau Ceti foundations work, whereas commit-coverage denominators use the primary Git history | `analysis_config.json`, `generated/ledger_repository_summary.csv`, `generated/accounting_summary.json` | Keep accounting-program scope distinct from available Git-history scope |
-| Commits touching only `papers/formalization_draft2/` are excluded from the formalization-history corpus; mixed commits remain included | `analysis_config.json`, `generated/study_commit_exclusions.csv` | Prevent manuscript production from feeding back into formalization-cost estimates |
-| PDF presentation uses a snapshot date while retaining the exact Git hash only as generated source/tooltip metadata | `snapshots/accounting_macros.tex`, `paper.tex` | Reproducibility without presenting hashes as reader-facing values |
-| Backfilled usage includes measured but commit-unattributed sessions | `.llm_resource_tally/ledger/ledger.jsonl`, `generated/pending_segments.csv` | Missing-data methodology |
-| Measured tokens can be attributed exactly by model and token class | ledger `bm` vectors, loader reconciliation check, `generated/model_token_breakdown.csv` | Model-resolved accounting/cost basis |
-| Model-resolved dollar cost requires historically applicable model- and token-class rates | `data/model_pricing.csv`, `generated/model_cost_breakdown.csv`, `generated/model_cost_summary.csv` | Pricing methodology; do not use a global token price |
-| Git co-author model provenance can corroborate or disagree with exact ledger model attribution | `generated/coauthor_model_summary.csv`, `generated/model_provenance_reconciliation.csv`, `generated/model_provenance_disagreements.csv` | Provenance reconciliation |
-| Unledgered GPT-5.6 High/Thinking trailers in the author-confirmed 2026-06-03--2026-08-14 study window are interpreted as GPT-5.6 Sol chat-interface work, while exact ledger attribution takes precedence | `analysis_config.json`, `generated/gpt_chat_rule_matches.csv`, raw/resolved columns in `generated/commit_accounting_manifest.csv` | Bounded historical provenance rule; preserve raw labels and do not project into future history |
-| Raw GPT-5.6 Sol trailer commits without independent channel evidence remain review candidates rather than automatic chat classifications | `generated/chat_interface_review_candidates.csv`, `data/accounting_overrides.csv` | Separates author-confirmed High/Thinking rule from weaker raw-Sol recollection |
-| Anthropic Fable/Opus trailer labels can disagree with exact measured model use after mid-session model switches | raw/resolved/ledger columns in `generated/commit_accounting_manifest.csv`, `generated/model_provenance_disagreements.csv` | Treat mismatch as provenance evidence, not an error to normalize away |
-| Confirmed chat-interface work is incompletely observed by the local harness | bounded GPT rule + manual provenance review + `data/accounting_overrides.csv` | Explicit limitation; do not overclaim from telemetry |
-| Human steering can be characterized from retained transcripts | `dev/posthoc-prompt-analysis/findings/`, `generated/interaction_summary.json` | Human--LLM process analysis |
-| The first formal YWS census commit records a human request but an agent-designed elaboration into richer tooling | commit `c559384a51e2fb55d3111bc00e8e450fccaa47ac`, `development_notes.md` | Coordination-tooling case study |
-| Retrospective recollection can disagree with retained process records in this project | `development_notes.md` + contemporaneous census commit | Qualitative limitation/interaction archaeology; single-project observation only |
+| The maintained Davis--Kahan inventory has 29 source targets. | `dev/davis-kahan-1970-formalization-result-inventory.json` | Count the inventory rows, not source files or Lean declarations. |
+| All 29 targets are verified in the current build. | Same inventory: `verification = proved_in_build` for every row. | This is kernel/build verification of the associated formal statements. |
+| All 29 targets have accepted semantic/source-correspondence review. | Same inventory: `semantic_certification = accepted` for every row; supporting audits under `DavisKahan/Sources/DavisKahan1970/Audits/`. | Semantic review is a separate claim from kernel acceptance. |
+| 28 Davis--Kahan targets are proved at reviewed source scope and Proposition 4.4 is refuted as printed. | Same inventory: 28 `disposition = proved_exact`; `DK-4.4-prop` has `disposition = refuted_as_transcribed`. | Do not summarize this as “29 theorems proved.” |
+| The current source-facing sine-theta theorem covers the real/complex, unbounded, unitarily invariant norm formulation with finite and ordered half-infinite form-gap alternatives. | `DavisKahan/Sources/DavisKahan1970/SineTheta/Presentation.lean`, theorem `sinTheta_unbounded_formGap_whereDefinedUIN_rclike`; related definitions in the same source layer. | Describe only the hypotheses actually encoded. In particular, do not claim extra domain generality from the forward-inclusion formulation alone. |
+| The Lean rectangular sine map represents the source positive sine operator at the norm level. | Mathematical identity `S* S = E0* (I-P) E0 = I - E0* P E0`, so `|S|` is the source positive sine operator; review in `papers/formalization_process/notes/SINE_THETA_NORM_SOURCE_REVIEW.md`; implementation in the Davis--Kahan sine/ideal layers. | Do not say the rectangular map and positive sine operator are literally the same operator: their source/target spaces differ. |
+| Davis--Kahan Proposition 4.4 is false as printed. | `DavisKahan/Sources/DavisKahan1970/Section4.lean`; `DavisKahan/FiniteDimensional/DirectRotation/ShortRotationCounterexample.lean`. | The formal witness is four-dimensional and uses principal angle `pi/4`. |
+| The printed proof of Proposition 4.4 uses an invalid full-displacement norm step. | `ShortRotationCounterexample.lean` and the source-review material surrounding Section 4. | State the failed inequality concretely rather than merely saying the proof has a gap. |
+| A Q-norm version of the Proposition 4.4 conclusion is valid. | `DavisKahan/FiniteDimensional/DirectRotation/QNorm.lean`, including `IsQNorm` and `directRotation_fullDisplacement_qnorm`. | Do not automatically identify this formal class with every commonly named norm family unless separately proved/cited. |
+| The formalization required reusable operator-theoretic foundations beyond the source-facing statements. | `ForTauCeti/` and Davis--Kahan foundation layers, including partial/unbounded operators, spectral/form-gap machinery, symmetric operator ideals, principal-angle/direct-rotation geometry, and Sylvester results. | Discuss mathematical capabilities, not raw module counts, unless a fresh reproducible census is provided. |
+| YWS is a downstream statistical specialization supported by its own source-facing Lean layer. | `YuWangSamworth2015/YuWangSamworth2015/CitationSurface.lean`, theorem modules under `Symmetric/` and `Rectangular/`. | YWS is secondary in this journal manuscript. |
+| The YWS source audit found two printed defects. | `YuWangSamworth2015/` audit/grounding files and machine-checked correction/refutation declarations. | The defects are equation (4)'s missing square and Theorem 3's rank-boundary convention. |
+| The current YWS census has 24 tracking entries: 22 printed-source entries and 2 explicit additions; all 24 are verified and 7 rows use corrected statements. | `snapshots/census_macros.tex` and the underlying YWS census generator/source. | “7 corrected rows” does not mean seven independent source defects. |
 
-## Before submission
+## Claims deliberately removed from the journal manuscript
 
-- Replace path-level evidence with declaration-level citations for each formal
-  theorem quoted in the paper.
-- Complete the proof-provenance audit: cite Spectra, external Lean sources,
-  Mathlib PRs, and mathematical literature at the relevant proof/construction,
-  distinguishing adaptation from strategy influence and ordinary dependencies.
-- Freeze and archive the accounting snapshot used for final numbers.
-- Fill `data/model_pricing.csv` only with historically applicable rates and
-  record effective dates and sources before quoting dollar costs.
-- Audit `generated/model_provenance_disagreements.csv` and every proposed chat
-  attribution. Enter confirmed channel/model evidence in
-  `data/accounting_overrides.csv`; do not infer chat from a missing ledger row.
-- Inspect model-specific calibration coverage before quoting imputed usage or
-  imputed cost for model variants with no exact measured examples.
-- Re-run a related-work search immediately before submission; AI formalization is
-  changing too quickly for the current scaffold to freeze a novelty claim.
-- Keep the Davis--Kahan priority language cautious unless the historical search is
-  completed and documented.
+The following evidence may remain in the repository for other papers or
+historical analysis, but it should not be used to expand this journal article's
+contribution statement:
+
+- downstream application-project coverage;
+- token/resource accounting and cost extrapolation;
+- model/co-author provenance as an empirical result;
+- practitioner surveys or human--LLM workflow taxonomy; and
+- broad process-study conclusions from the workshop paper.
+
+The workshop paper is still a useful source of editorial improvements, especially
+its explicit separation of formal verification from source correspondence.
