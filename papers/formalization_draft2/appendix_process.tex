@@ -51,7 +51,7 @@ ID & Result & Disposition \\
 
 The result table is keyed to source results.  One source result can require many
 Lean declarations, while a single reusable Lean theorem can support more than
-one source-facing wrapper.  The denominator therefore remains stable under
+one source-specific wrapper.  The denominator therefore remains stable under
 refactoring of implementation modules.
 
 \section{Source-correspondence review}
@@ -92,12 +92,11 @@ claim a line-by-line formalization of every mathematical statement in that
 article.  The maintained census has \YWSCensusEntryCount{} rows:
 \YWSCensusPaperSourceCount{} rows associated with printed source material and
 \YWSCensusExplicitAdditionCount{} explicitly marked additions.  All
-\YWSCensusVerifiedCount{} rows currently resolve to declarations in the normal
-build.
+\YWSCensusVerifiedCount{} rows resolve to declarations in the normal build.
 
 The source rows include the conclusions of Theorems~1--3 and the equations,
 lemmas, examples, and boundary conventions needed to check those conclusions.
-Several rows can share one correction.  In particular, the current census has
+Several rows can share one correction.  The census has
 \YWSCensusCorrectedCount{} rows whose implementation is classified as corrected,
 but the manuscript reports two printed YWS defects: the missing square in
 equation~(4) and the rank-boundary convention in Theorem~3.
@@ -105,33 +104,58 @@ equation~(4) and the rank-boundary convention in Theorem~3.
 \section{Formalization procedure and AI assistance}
 \label{app:formalization-process}
 
-The development used a recurring five-stage workflow.
-\begin{enumerate}
-  \item \textbf{Gather context.}  Read the source result and surrounding proof,
-        identify standing assumptions and notation, and inspect the relevant
-        Lean interfaces.
-  \item \textbf{Decompose.}  Express the target as mathematical obligations
-        small enough to compare individually with existing library facts.
-  \item \textbf{Find foundations.}  Search Mathlib, Tau Ceti, the local reusable
-        layer, other Lean developments, and the mathematical literature before
-        introducing new theory.
-  \item \textbf{Formalize.}  Implement definitions and lemmas, compile them with
-        Lean, and revise failures until the desired theorem is kernel-checked.
-  \item \textbf{Review skeptically.}  Compare the resulting statement with the
-        source independently of successful compilation.  Reopen the result if
-        the review finds a scope, convention, representation, or hypothesis
-        mismatch.
-\end{enumerate}
-The loop terminates for a source target only when both the formal proof and the
-source-correspondence review are accepted, or when the source statement is
-shown false and the formal record contains the corresponding refutation.
+The development combined ordinary Lean compilation with extensive LLM
+assistance.  Work on a source theorem typically began by reading the statement
+and surrounding proof, identifying standing assumptions, and locating the
+relevant Lean interfaces.  The target was then decomposed into intermediate
+mathematical obligations.  Existing Mathlib, Tau Ceti, local, and external Lean
+results were searched before introducing new foundations.  Candidate
+definitions and proofs were compiled with Lean and revised in response to
+elaboration or proof failures.  A separate pass compared the accepted theorem
+statement with the source, including its operator domains, scalar field,
+dimension, norm class, constants, gap hypotheses, and endpoint conventions.
 
-Large language models were used for proof planning, repository search, Lean
-implementation, proof repair, and source comparison.  Human review determined
-the intended paper scope, evaluated mathematical correspondence, and accepted
-or rejected proposed repairs.  All formal propositions are certified by Lean's
-kernel; model outputs supplied proof text and analysis that remained subject to
-compilation and review.
+LLMs participated at every stage of this cycle.  They transcribed and explained
+source material, proposed decompositions, searched code and literature,
+implemented Lean declarations, repaired proofs from compiler feedback, and
+performed adversarial source comparisons.  Human authors selected the target
+scope, decided which source interpretations to accept, evaluated proposed
+counterexamples and repairs, and reopened statements when later review exposed
+a mismatch.  The stopping condition for a source result was therefore a
+kernel-checked formal treatment together with an accepted mathematical
+comparison to the source, or a checked refutation when the printed statement
+was false.
+
+The systems used during the project are summarized in
+\Cref{tab:formalization-systems}.  Model assignments changed during the
+project.  The table therefore records observed uses without assigning a fixed
+role to any one model.
+
+\begin{table}[H]
+\centering
+\small
+\begin{tabularx}{\linewidth}{>{\raggedright\arraybackslash}p{0.20\linewidth}>{\raggedright\arraybackslash}p{0.28\linewidth}X}
+\toprule
+System & Models used & Observed uses \\
+\midrule
+ChatGPT chat interface & GPT-5.6 Sol & Mathematical discussion, proof planning, source comparison, review, literature search, and manuscript drafting and editing. \\
+Claude Code & Claude Opus 4.8; Claude Opus 5; Claude Fable 5 & Repository search, Lean implementation, compilation, proof repair, and long-running formalization tasks. \\
+Codex & GPT-5.6 Sol; GPT-5.6 Terra; GPT-5 Codex; GPT-5.6 Codex & Repository search, Lean implementation, compilation, repair, review, and proposed repository changes. \\
+\bottomrule
+\end{tabularx}
+\caption{AI systems and model families used during the formalization and
+manuscript preparation.  The prose of the paper was drafted and edited with AI
+assistance; the authors reviewed and take responsibility for the submitted
+text.}
+\label{tab:formalization-systems}
+\end{table}
+
+Lean's kernel checks the proof terms produced by this process.  It does not
+check that a theorem statement is the intended transcription of a paper.  The
+statement-review procedure in Appendix~\ref{app:source-review} addresses that
+second question.  Some early valid Lean statements covered narrower bounded,
+finite-dimensional, or spectral-gap cases than the corresponding
+Davis--Kahan theorem, so those statements were reopened after source review.
 
 \section{Artifact organization}
 \label{app:artifact}

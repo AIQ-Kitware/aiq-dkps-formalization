@@ -5,8 +5,12 @@
 The journal paper is a Davis--Kahan paper. YWS is optional/secondary and should
 appear only where it sharpens the statistical motivation, demonstrates a direct
 specialization, or supplies a compact second source-audit example. Downstream
-application projects and the empirical development-process study are not part of
-the journal contribution.
+application projects and the workshop paper's empirical development-process
+study are not part of the journal contribution. The journal does retain a
+short methodological section on the primary author's starting background, the
+role of AI in making the formalization feasible, observed source-matching
+failure modes, and the changing tooling landscape. This is presented as a case
+observation, not as a controlled process study.
 
 ## What to port from the workshop paper
 
@@ -44,6 +48,30 @@ explain:
 The result inventory is now the natural completeness claim: 29 reviewed source
 targets, all build verified and semantically accepted; 28 proved at source scope
 and Proposition 4.4 refuted as printed.
+
+## Journal narrative
+
+The main text should read as a mathematical paper rather than a coverage report.
+Keep the exact 29-result denominator, but state it concisely and put the complete
+row-level accounting in the appendix. Develop the body around mathematical ideas:
+
+- the full-scope sine-theta theorem and the modulus identity for the angle operator;
+- direct rotations and two-subspace geometry;
+- approximation numbers, majorization, and unitarily invariant norms;
+- Sylvester separation and unbounded operators;
+- Proposition 4.4 as a counterexample/repair result; and
+- YWS as a short statistical specialization.
+
+The author-background/AI section is intentionally retained. The observation is
+that a primary author who began without Lean experience and with limited prior
+operator-theory background could nevertheless drive a formalization of this
+depth using contemporary AI-assisted tooling. State the corresponding limits:
+there was no controlled comparison that isolates model capability from Mathlib,
+local library growth, workflow design, or human review.
+
+The paper must disclose AI assistance in manuscript prose as well as in Lean
+development. Model/system details belong in the appendix; the main disclosure
+should be concise.
 
 ## Proposition 4.4
 

@@ -2,10 +2,13 @@
 
 > **Journal-scope reset, 2026-09-29.** The current `formalization_draft2`
 > manuscript is focused on Davis--Kahan, with YWS only as a secondary
-> specialization/audit case. The resource-accounting and human--LLM process
-> material below is retained as historical research notes and belongs to the
-> separate `formalization_process` paper, not to the journal contribution. See
-> `README.md` and `consolidation_notes.md` for the current editorial decisions.
+> specialization/audit case. The journal paper retains a concise discussion of
+> the primary author's starting background, AI-assisted formalization, observed
+> source-matching failure modes, the changing tooling landscape, and an explicit
+> AI-use disclosure. The detailed resource-accounting, practitioner, and
+> interaction-study material below remains historical research material for the
+> separate `formalization_process` paper. See `README.md` and
+> `consolidation_notes.md` for the current editorial decisions.
 
 ## Historical process/accounting notes
 
