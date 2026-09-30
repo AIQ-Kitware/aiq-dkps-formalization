@@ -119,9 +119,13 @@ namespace SectionTwo
 
 /-- **Davis--Kahan 1970, the `sin Θ` theorem, scalar-generic over `RCLike`.**
 
-This short API now names the same where-defined norm boundary selected by the result ledger.
-The complex and real names below are thin specializations of the same generic theorem; they
-are conveniences, not separate fidelity certificates. -/
+This short API names the where-defined norm boundary selected by the result ledger, with
+the conclusion stated directly on `DavisKahan1970.sourceDirectedSinThetaOperator E₀ F₀`,
+the literal trial-coordinate `sin Θ₀ = cfc sin Θ₀`.  A bridge theorem proves that
+this functional-calculus sine equals the modulus of `(I - F₀F₀*)E₀`; the analytic
+implementation theorem on that rectangular block is kept separately under a
+`_rectangular_` name.
+The complex and real names below are thin specializations of the same generic theorem. -/
 alias sinTheta := DavisKahan1970.sinTheta_unbounded_formGap_whereDefinedUIN_rclike
 
 /-- Complex specialization of `sinTheta`. -/
