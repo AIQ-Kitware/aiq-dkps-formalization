@@ -127,7 +127,55 @@ uv run python -m dkvis.sine_theta \
     --lambda-desired -0.6
 ```
 
-## Sine-theta slide-building sequence
+## Slide deck: the sine-theta theorem, in pictures
+
+`dkvis/slides_sine_theta.py` is a [manim-slides](https://manim-slides.eertmans.be)
+deck of 14 animated slides (40 click-builds, each with presenter notes) that
+introduces the theorem intuition-first:
+
+| # | slide | idea |
+| --- | --- | --- |
+| 0 | title | how far can an eigenvector turn? |
+| 1 | ellipse | a symmetric matrix is an ellipse; axes are eigenvectors |
+| 2 | perturb | `A -> A+H`: eigenvalues barely move (Weyl), axes turn |
+| 3 | no gap | same `H`, shrinking gap: the turn tends to 45 degrees |
+| 4 | angle | `sin theta = dist(v, U)`; principal angles and `sin Theta0` |
+| 5 | residual | `r = Av - rho v` is computable; `R = A E0 - E0 A0` |
+| 6 | gap | `spec(A0)` in `[beta, alpha]`, `spec(Lambda1)` outside the `delta` window; why an interval |
+| 7 | theorem | `delta ||sin Theta0|| <= ||R||`: error <= residual / gap |
+| 8 | why (one vector) | eigenbasis bars: `A - rho` stretches every unwanted component by `>= delta` |
+| 9 | why (blocks) | the Sylvester equation `F1* R = Lambda1 X - X A0` |
+| 10 | sharpness | the 2x2 example with equality at every angle |
+| 11 | payoff | `||sin Theta0|| <= ||H|| / delta` against the true rotation |
+| 12 | Lean | the formal statement and its scope |
+| 13 | family | the four Section 2 theorems |
+
+Every number on a slide comes from `dkvis/sine_theta_story.py` (or the existing
+`dkvis/sine_theta.py`), whose models are checked by `tests/`. Colors carry
+meaning on every slide: blue = exact eigenspace, amber = trial, pink = angle,
+green = residual, violet = gap.
+
+Build and present from `visualizations/`:
+
+```bash
+uv sync --extra slides --extra test          # needs LaTeX, and Pango/Cairo headers to build manimpango
+uv run python -m dkvis.build_slides sine-theta -q l      # quick draft (480p)
+uv run python -m dkvis.build_slides sine-theta --pdf     # 1080p60 -> renders/sine-theta.html (+ .pdf)
+uv run manim-slides present $(uv run python -m dkvis.build_slides sine-theta --list)
+```
+
+- `renders/sine-theta.html` is a reveal.js deck: arrow keys advance builds, `S`
+  opens the speaker view with the notes. Keep the `renders/sine-theta_assets/`
+  folder next to it, or pass `--one-file` to embed the videos.
+- `manim-slides present` is the most robust option for a live talk. Looping
+  builds (angle sweep, sharpness sweep) repeat until you advance.
+- `--pdf` writes the last frame of every build, for handouts or for pasting
+  into other slide software; `--pptx` writes PowerPoint.
+- `--scenes S08Components` re-renders one scene; conversion always uses the
+  whole deck.
+- `DKVIS_THEME=light` renders a light-background deck for bright rooms.
+
+## Sine-theta slide-building sequence (VTK)
 
 The sine-theta material now has **three VTK scenes** intended to build slides in
 order:
