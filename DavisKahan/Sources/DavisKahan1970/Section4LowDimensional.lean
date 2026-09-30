@@ -72,7 +72,7 @@ theorem example4_1_directRotation_uiNorm_le_reflection_of_le_pi_div_three
     N (LinearMap.id - example41DirectRotation theta) ≤
       N (LinearMap.id - example41Reflection theta) := by
   have hfinrank : finrank ℝ RealPlane = 2 := by
-    simpa [RealPlane] using finrank_euclideanSpace_fin (𝕜 := ℝ) (n := 2)
+    simp [RealPlane]
   have hky :
       ∀ k,
         TauCeti.kyFanSum k (LinearMap.id - example41DirectRotation theta) ≤
@@ -91,14 +91,13 @@ theorem example4_1_directRotation_uiNorm_le_reflection_of_le_pi_div_three
     · have hk2 : 2 ≤ k := by omega
       have hfin : finrank ℝ RealPlane ≤ k := by simpa [hfinrank] using hk2
       rw [TauCeti.kyFanSum_eq_of_finrank_le hfin,
-        TauCeti.kyFanSum_eq_of_finrank_le hfin,
-        hfinrank, hfinrank]
+        TauCeti.kyFanSum_eq_of_finrank_le hfin, hfinrank]
       rw [example4_1_directRotation_kyFan_two h0 hpi,
         example4_1_reflection_kyFan_two]
       have hhalf : Real.sin (theta / 2) ≤ 1 / 2 :=
         sin_half_le_one_half_of_le_pi_div_three h0 hθ
       nlinarith
-  exact (TauCeti.kyFanSum_le_iff_forall_seminorm).1 hky N
+  exact (TauCeti.UnitarilyInvariantSeminorm.kyFanSum_le_iff_forall_seminorm).1 hky N
 
 /-- Package the two plane competitors in Example 4.1.  `false` is the direct
 rotation and `true` is the reflecting competitor. -/
@@ -116,10 +115,16 @@ theorem example4_1_directRotation_uiNorm_minimal_of_le_pi_div_three
     (N : UnitarilyInvariantSeminorm ℝ RealPlane RealPlane) :
     N (LinearMap.id - example41DirectRotation theta) ≤
       N (LinearMap.id - example4_1_competitor theta flip) := by
-  cases flip <;> simp [example4_1_competitor,
-    example4_1_directRotation_uiNorm_le_reflection_of_le_pi_div_three,
-    h0, hpi, hθ]
+  cases flip
+  · change N (LinearMap.id - example41DirectRotation theta) ≤
+      N (LinearMap.id - example41DirectRotation theta)
+    exact le_rfl
+  · change N (LinearMap.id - example41DirectRotation theta) ≤
+      N (LinearMap.id - example41Reflection theta)
+    exact example4_1_directRotation_uiNorm_le_reflection_of_le_pi_div_three
+      h0 hpi hθ N
 
+end
 end Section4LowDimensional
 end DavisKahan1970
 end TauCeti
