@@ -125,3 +125,23 @@ def test_plane_trace_contributions_reconstruct_full_trace_norms(model):
     assert competitor[1] == pytest.approx(0.0)
     assert sum(competitor) == pytest.approx(model.competitor_trace_displacement)
     assert sum(competitor) < sum(direct)
+
+
+def test_direct_endpoint_frames_match_rotated_source_frames(model):
+    for idx, angle in enumerate(model.direct_plane_angles):
+        expected = _rotation(angle) @ model.direct_source_local_frames[idx]
+        np.testing.assert_allclose(
+            expected,
+            model.direct_endpoint_local_frames[idx],
+            atol=1e-12,
+        )
+
+
+def test_competitor_endpoint_frames_match_rotated_source_frames(model):
+    for idx, angle in enumerate(model.competitor_plane_angles):
+        expected = _rotation(angle) @ model.competitor_source_local_frames[idx]
+        np.testing.assert_allclose(
+            expected,
+            model.competitor_endpoint_local_frames[idx],
+            atol=1e-12,
+        )
