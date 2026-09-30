@@ -47,18 +47,6 @@ def _rotation_block(angle: float) -> np.ndarray:
     return np.array([[c, -s], [s, c]], dtype=float)
 
 
-def _givens4(i: int, j: int, angle: float) -> np.ndarray:
-    """A 4D Givens rotation in coordinate plane ``(i, j)``."""
-    out = np.eye(4)
-    c = math.cos(angle)
-    s = math.sin(angle)
-    out[i, i] = c
-    out[j, j] = c
-    out[i, j] = -s
-    out[j, i] = s
-    return out
-
-
 @dataclass(frozen=True)
 class Prop44Model:
     """Exact finite-dimensional witness used by the Lean refutation."""
@@ -125,6 +113,48 @@ class Prop44Model:
                 (e[:, 1] - e[:, 3]) / SQRT2,
             ]
         )
+
+    @property
+    def direct_plane_bases(self) -> tuple[np.ndarray, np.ndarray]:
+        """Orthonormal bases for the two invariant planes of the direct rotation.
+
+        The first plane is ``span(e0,e3)`` and rotates by ``+pi/4``.  The
+        second is ``span(e1,e2)`` and rotates by ``-pi/4``.
+        """
+        e = np.eye(4)
+        return (
+            np.column_stack([e[:, 0], e[:, 3]]),
+            np.column_stack([e[:, 1], e[:, 2]]),
+        )
+
+    @property
+    def competitor_plane_bases(self) -> tuple[np.ndarray, np.ndarray]:
+        """Orthonormal bases for the moving and fixed invariant planes of W."""
+        M = self.m_basis
+        return M[:, :2], M[:, 2:]
+
+    @property
+    def direct_plane_angles(self) -> tuple[float, float]:
+        return math.pi / 4.0, -math.pi / 4.0
+
+    @property
+    def competitor_plane_angles(self) -> tuple[float, float]:
+        return math.pi / 2.0, 0.0
+
+    @staticmethod
+    def rotation_plane_singular_value(angle: float) -> float:
+        """Either singular value of ``I - Rot(angle)`` on a real 2-plane."""
+        return 2.0 * abs(math.sin(float(angle) / 2.0))
+
+    @classmethod
+    def rotation_plane_trace_displacement(cls, angle: float) -> float:
+        """Trace-norm contribution of one invariant rotation plane."""
+        return 2.0 * cls.rotation_plane_singular_value(angle)
+
+    def local_operator(self, operator: np.ndarray, plane_basis: np.ndarray) -> np.ndarray:
+        """Matrix of an invariant operator restricted to an orthonormal 2-plane."""
+        plane_basis = np.asarray(plane_basis, dtype=float)
+        return plane_basis.T @ np.asarray(operator, dtype=float) @ plane_basis
 
     @property
     def principal_cosines(self) -> np.ndarray:
@@ -199,50 +229,6 @@ class Prop44Model:
     def competitor_trace_at(self, t: float) -> float:
         return self.trace_displacement(self.competitor_at(t))
 
-    @property
-    def base_view_basis(self) -> np.ndarray:
-        """Orthogonal 4D change of coordinates used before dropping one axis.
-
-        The first three rows span the familiar 3D hyperplane orthogonal to
-        (1,1,1,1); the last row is the hidden coordinate.  This avoids simply
-        erasing one of the original coordinate axes.
-        """
-        return np.array(
-            [
-                [1, -1, 0, 0],
-                [1, 1, -2, 0],
-                [1, 1, 1, -3],
-                [1, 1, 1, 1],
-            ],
-            dtype=float,
-        ) / np.array([[SQRT2], [math.sqrt(6.0)], [math.sqrt(12.0)], [2.0]])
-
-    def projection_4d_to_3d(self, view_angle: float = 0.0) -> np.ndarray:
-        """Return a 3x4 orthogonal projection matrix for viewing R^4 in R^3.
-
-        ``view_angle`` rotates the third visible coordinate into the hidden
-        fourth coordinate before the latter is dropped.  No 4D->3D projection
-        preserves all distances or angles; the VTK scene therefore displays
-        true 4D displacement values separately from the projected geometry.
-        """
-        view_rotation = _givens4(2, 3, view_angle)
-        view_coordinates = view_rotation @ self.base_view_basis
-        return view_coordinates[:3, :]
-
-    def project(self, points: np.ndarray, view_angle: float = 0.0) -> np.ndarray:
-        """Project one 4-vector or a collection of row 4-vectors into R^3."""
-        P = self.projection_4d_to_3d(view_angle)
-        points = np.asarray(points, dtype=float)
-        if points.ndim == 1:
-            return P @ points
-        return points @ P.T
-
-    def circle_in_u(self, count: int = 96) -> np.ndarray:
-        angles = np.linspace(0.0, 2.0 * math.pi, count, endpoint=True)
-        return np.outer(np.cos(angles), self.u_basis[:, 0]) + np.outer(
-            np.sin(angles), self.u_basis[:, 1]
-        )
-
     def verify(self, atol: float = 1e-10) -> None:
         I = self.identity
         M = self.m_basis
@@ -271,9 +257,33 @@ class Prop44Model:
         assert np.allclose(self.competitor_at(0.0), I, atol=atol)
         assert np.allclose(self.competitor_at(1.0), self.W, atol=atol)
 
-        for angle in [0.0, 0.2, 1.0, 2.3]:
-            P = self.projection_4d_to_3d(angle)
-            assert np.allclose(P @ P.T, np.eye(3), atol=atol)
+        for basis, angle in zip(self.direct_plane_bases, self.direct_plane_angles):
+            assert np.allclose(basis.T @ basis, np.eye(2), atol=atol)
+            assert np.allclose(
+                self.local_operator(self.R, basis),
+                _rotation_block(angle),
+                atol=atol,
+            )
+        for basis, angle in zip(self.competitor_plane_bases, self.competitor_plane_angles):
+            assert np.allclose(basis.T @ basis, np.eye(2), atol=atol)
+            assert np.allclose(
+                self.local_operator(self.W, basis),
+                _rotation_block(angle),
+                atol=atol,
+            )
+
+        direct_plane_total = sum(
+            self.rotation_plane_trace_displacement(angle)
+            for angle in self.direct_plane_angles
+        )
+        competitor_plane_total = sum(
+            self.rotation_plane_trace_displacement(angle)
+            for angle in self.competitor_plane_angles
+        )
+        assert math.isclose(direct_plane_total, self.direct_trace_displacement, abs_tol=atol)
+        assert math.isclose(
+            competitor_plane_total, self.competitor_trace_displacement, abs_tol=atol
+        )
 
     def summary(self) -> str:
         direct_sv = ", ".join(f"{x:.6f}" for x in self.direct_singular_values)

@@ -1,23 +1,31 @@
-"""Interactive 4D-to-3D explorer for the Proposition 4.4 counterexample.
+"""Interactive exact 2D invariant-plane view of Proposition 4.4.
 
-Run from ``visualizations/`` with:
+Run from ``visualizations/`` with::
 
     uv run --extra vtk python -m dkvis.vtk_prop44
 
-Two synchronized panels show the actual R^4 direct rotation and competitor
-under the same orthogonal 4D-to-3D projection.  Drag the motion slider to see
-paths from the identity to the endpoint operators, and drag the 4D-view slider
-to rotate one visible coordinate into the hidden fourth coordinate.
+The four panels are exact two-dimensional restrictions of the two endpoint
+operators in the R^4 counterexample.  No 4D-to-3D projection is used.
 
-Only the endpoints at motion t=1 are the two admissible operators compared in
-Proposition 4.4.  Intermediate t values are explanatory interpolation paths.
-Projected distances are not used for the theorem; text reports the true R^4
-singular values and trace displacement.
+Left column -- direct rotation R:
+
+* span(e0,e3): +45 degree rotation;
+* span(e1,e2): -45 degree rotation.
+
+Right column -- admissible competitor W:
+
+* span(m0,m1): +90 degree rotation;
+* span(m2,m3): identity.
+
+The common motion slider interpolates each local rotation from the identity to
+its endpoint.  Only t=1 is the Proposition 4.4 comparison; intermediate values
+are explanatory animation states.
 """
 
 from __future__ import annotations
 
 import argparse
+from dataclasses import dataclass
 import math
 from pathlib import Path
 
@@ -34,34 +42,50 @@ def _rgb(hex_value: str) -> tuple[float, float, float]:
 
 COLORS = {
     "background": _rgb("#10141c"),
+    "control_background": _rgb("#171c26"),
     "ghost": _rgb("#667085"),
-    "u": _rgb("#f2f4f7"),
-    "v": _rgb("#f97066"),
-    "connector": _rgb("#98a2b3"),
     "text": _rgb("#f9fafb"),
-    "m0": _rgb("#f79009"),
-    "m1": _rgb("#36bffa"),
-    "m2": _rgb("#32d583"),
-    "m3": _rgb("#b692f6"),
+    "muted": _rgb("#98a2b3"),
+    "basis0": _rgb("#f79009"),
+    "basis1": _rgb("#36bffa"),
+    "displacement": _rgb("#d0d5dd"),
+    "arc": _rgb("#f97066"),
+    "direct": _rgb("#84caff"),
+    "competitor": _rgb("#73e2a3"),
 }
-M_COLORS = [COLORS[f"m{i}"] for i in range(4)]
 
 
-def _line_actor(
-    color: tuple[float, float, float],
+@dataclass(frozen=True)
+class PlaneSpec:
+    title: str
+    basis_names: tuple[str, str]
+    endpoint_angle: float
+    source_note: str
+    family: str
+
+    @property
+    def endpoint_degrees(self) -> float:
+        return math.degrees(self.endpoint_angle)
+
+
+def _text_actor(
+    text: str,
     *,
-    width: float = 3.0,
-    opacity: float = 1.0,
-) -> tuple[vtk.vtkLineSource, vtk.vtkActor]:
-    source = vtk.vtkLineSource()
-    mapper = vtk.vtkPolyDataMapper()
-    mapper.SetInputConnection(source.GetOutputPort())
-    actor = vtk.vtkActor()
-    actor.SetMapper(mapper)
-    actor.GetProperty().SetColor(*color)
-    actor.GetProperty().SetLineWidth(width)
-    actor.GetProperty().SetOpacity(opacity)
-    return source, actor
+    x: float,
+    y: float,
+    size: int = 16,
+    color: tuple[float, float, float] | None = None,
+) -> vtk.vtkTextActor:
+    actor = vtk.vtkTextActor()
+    actor.SetInput(text)
+    actor.GetPositionCoordinate().SetCoordinateSystemToNormalizedViewport()
+    actor.SetPosition(x, y)
+    prop = actor.GetTextProperty()
+    prop.SetFontSize(size)
+    prop.SetFontFamilyToCourier()
+    prop.SetColor(*(color or COLORS["text"]))
+    prop.SetVerticalJustificationToTop()
+    return actor
 
 
 def _polyline_actor(
@@ -84,12 +108,11 @@ def _polyline_actor(
 def _set_polyline(data: vtk.vtkPolyData, points: np.ndarray, *, closed: bool = False) -> None:
     points = np.asarray(points, dtype=float)
     vtk_points = vtk.vtkPoints()
-    for p in points:
-        vtk_points.InsertNextPoint(float(p[0]), float(p[1]), float(p[2]))
+    for point in points:
+        vtk_points.InsertNextPoint(float(point[0]), float(point[1]), float(point[2]))
     cells = vtk.vtkCellArray()
     n = len(points)
-    count = n + 1 if closed and n else n
-    cells.InsertNextCell(count)
+    cells.InsertNextCell(n + (1 if closed and n else 0))
     for idx in range(n):
         cells.InsertCellPoint(idx)
     if closed and n:
@@ -99,271 +122,265 @@ def _set_polyline(data: vtk.vtkPolyData, points: np.ndarray, *, closed: bool = F
     data.Modified()
 
 
-def _text_actor(
-    text: str,
+def _line_actor(
+    color: tuple[float, float, float],
     *,
-    x: float,
-    y: float,
-    size: int = 18,
-    color: tuple[float, float, float] | None = None,
-) -> vtk.vtkTextActor:
-    actor = vtk.vtkTextActor()
-    actor.SetInput(text)
-    actor.GetPositionCoordinate().SetCoordinateSystemToNormalizedViewport()
-    actor.SetPosition(x, y)
-    prop = actor.GetTextProperty()
-    prop.SetFontSize(size)
-    prop.SetFontFamilyToCourier()
-    prop.SetColor(*(color or COLORS["text"]))
-    prop.SetVerticalJustificationToTop()
-    return actor
-
-
-def _sphere_actor(
-    color: tuple[float, float, float], *, radius: float = 0.035
-) -> vtk.vtkActor:
-    source = vtk.vtkSphereSource()
-    source.SetRadius(radius)
-    source.SetThetaResolution(18)
-    source.SetPhiResolution(18)
+    width: float = 2.0,
+    opacity: float = 1.0,
+) -> tuple[vtk.vtkLineSource, vtk.vtkActor]:
+    source = vtk.vtkLineSource()
     mapper = vtk.vtkPolyDataMapper()
     mapper.SetInputConnection(source.GetOutputPort())
     actor = vtk.vtkActor()
     actor.SetMapper(mapper)
     actor.GetProperty().SetColor(*color)
+    actor.GetProperty().SetLineWidth(width)
+    actor.GetProperty().SetOpacity(opacity)
+    return source, actor
+
+
+def _arrow_actor(
+    color: tuple[float, float, float],
+    *,
+    opacity: float = 1.0,
+) -> vtk.vtkActor:
+    source = vtk.vtkArrowSource()
+    source.SetTipResolution(24)
+    source.SetShaftResolution(24)
+    source.SetTipLength(0.20)
+    source.SetTipRadius(0.07)
+    source.SetShaftRadius(0.018)
+    mapper = vtk.vtkPolyDataMapper()
+    mapper.SetInputConnection(source.GetOutputPort())
+    actor = vtk.vtkActor()
+    actor.SetMapper(mapper)
+    actor.GetProperty().SetColor(*color)
+    actor.GetProperty().SetOpacity(opacity)
     return actor
 
 
-class _Panel:
-    def __init__(
-        self,
-        renderer: vtk.vtkRenderer,
-        *,
-        model: Prop44Model,
-        title: str,
-        kind: str,
-    ) -> None:
+def _set_arrow(actor: vtk.vtkActor, vector: np.ndarray) -> None:
+    vector = np.asarray(vector, dtype=float)
+    length = float(np.linalg.norm(vector[:2]))
+    angle = math.degrees(math.atan2(float(vector[1]), float(vector[0]))) if length else 0.0
+    actor.SetPosition(0.0, 0.0, 0.0)
+    actor.SetOrientation(0.0, 0.0, angle)
+    actor.SetScale(length, 1.0, 1.0)
+
+
+def _label3d(text: str, color: tuple[float, float, float]) -> vtk.vtkBillboardTextActor3D:
+    actor = vtk.vtkBillboardTextActor3D()
+    actor.SetInput(text)
+    prop = actor.GetTextProperty()
+    prop.SetFontSize(15)
+    prop.SetColor(*color)
+    prop.SetJustificationToCentered()
+    return actor
+
+
+class PlanePanel:
+    """One exact 2D invariant-plane restriction of R or W."""
+
+    def __init__(self, renderer: vtk.vtkRenderer, model: Prop44Model, spec: PlaneSpec) -> None:
         self.renderer = renderer
         self.model = model
-        self.title = title
-        self.kind = kind
+        self.spec = spec
 
-        self.u_data, self.u_actor = _polyline_actor(COLORS["u"], width=2.0, opacity=0.42)
-        self.image_data, self.image_actor = _polyline_actor(COLORS["v"], width=4.0, opacity=0.95)
-        renderer.AddActor(self.u_actor)
-        renderer.AddActor(self.image_actor)
-
-        self.ghost_lines: list[vtk.vtkLineSource] = []
-        self.current_lines: list[vtk.vtkLineSource] = []
-        self.connectors: list[vtk.vtkLineSource] = []
-        self.trail_data: list[vtk.vtkPolyData] = []
-        self.endpoints: list[vtk.vtkActor] = []
-        self.labels: list[vtk.vtkBillboardTextActor3D] = []
-
-        for idx in range(4):
-            ghost_source, ghost_actor = _line_actor(COLORS["ghost"], width=2.0, opacity=0.30)
-            current_source, current_actor = _line_actor(M_COLORS[idx], width=5.0, opacity=1.0)
-            connector_source, connector_actor = _line_actor(
-                COLORS["connector"], width=2.0, opacity=0.55
-            )
-            trail_data, trail_actor = _polyline_actor(M_COLORS[idx], width=2.0, opacity=0.55)
-            endpoint = _sphere_actor(M_COLORS[idx])
-            label = vtk.vtkBillboardTextActor3D()
-            label.SetInput(f"m{idx}")
-            label.GetTextProperty().SetFontSize(15)
-            label.GetTextProperty().SetColor(*M_COLORS[idx])
-
-            self.ghost_lines.append(ghost_source)
-            self.current_lines.append(current_source)
-            self.connectors.append(connector_source)
-            self.trail_data.append(trail_data)
-            self.endpoints.append(endpoint)
-            self.labels.append(label)
-
-            renderer.AddActor(ghost_actor)
-            renderer.AddActor(trail_actor)
-            renderer.AddActor(connector_actor)
-            renderer.AddActor(current_actor)
-            renderer.AddActor(endpoint)
-            renderer.AddActor(label)
-
-        self.title_actor = _text_actor(title, x=0.03, y=0.96, size=23)
-        self.info_actor = _text_actor("", x=0.03, y=0.88, size=16)
-        self.legend_actor = _text_actor(
-            "gray loop: U    red loop: current image of U\n"
-            "colored arrows: common m-basis images\n"
-            "gray connectors: projected displacement",
-            x=0.03,
-            y=0.18,
-            size=13,
-            color=COLORS["ghost"],
+        circle_angles = np.linspace(0.0, 2.0 * math.pi, 129)
+        circle = np.column_stack(
+            [np.cos(circle_angles), np.sin(circle_angles), np.zeros_like(circle_angles)]
         )
+        self.circle_data, self.circle_actor = _polyline_actor(COLORS["ghost"], width=1.5, opacity=0.45)
+        _set_polyline(self.circle_data, circle)
+        renderer.AddActor(self.circle_actor)
+
+        self.axis_x_source, self.axis_x_actor = _line_actor(COLORS["ghost"], width=1.0, opacity=0.30)
+        self.axis_y_source, self.axis_y_actor = _line_actor(COLORS["ghost"], width=1.0, opacity=0.30)
+        self.axis_x_source.SetPoint1(-1.22, 0.0, 0.0)
+        self.axis_x_source.SetPoint2(1.22, 0.0, 0.0)
+        self.axis_y_source.SetPoint1(0.0, -1.22, 0.0)
+        self.axis_y_source.SetPoint2(0.0, 1.22, 0.0)
+        renderer.AddActor(self.axis_x_actor)
+        renderer.AddActor(self.axis_y_actor)
+
+        self.initial_arrows = [
+            _arrow_actor(COLORS["ghost"], opacity=0.32),
+            _arrow_actor(COLORS["ghost"], opacity=0.32),
+        ]
+        self.current_arrows = [
+            _arrow_actor(COLORS["basis0"]),
+            _arrow_actor(COLORS["basis1"]),
+        ]
+        for actor in self.initial_arrows + self.current_arrows:
+            renderer.AddActor(actor)
+        _set_arrow(self.initial_arrows[0], np.array([1.0, 0.0, 0.0]))
+        _set_arrow(self.initial_arrows[1], np.array([0.0, 1.0, 0.0]))
+
+        self.connectors: list[vtk.vtkLineSource] = []
+        for _ in range(2):
+            source, actor = _line_actor(COLORS["displacement"], width=2.0, opacity=0.65)
+            self.connectors.append(source)
+            renderer.AddActor(actor)
+
+        self.arc_data, self.arc_actor = _polyline_actor(COLORS["arc"], width=4.0, opacity=0.95)
+        renderer.AddActor(self.arc_actor)
+
+        self.initial_labels = [
+            _label3d(spec.basis_names[0], COLORS["muted"]),
+            _label3d(spec.basis_names[1], COLORS["muted"]),
+        ]
+        for actor in self.initial_labels:
+            renderer.AddActor(actor)
+        self.initial_labels[0].SetPosition(1.16, -0.08, 0.0)
+        self.initial_labels[1].SetPosition(0.10, 1.14, 0.0)
+
+        family_color = COLORS["direct"] if spec.family == "R" else COLORS["competitor"]
+        self.title_actor = _text_actor(spec.title, x=0.025, y=0.965, size=20, color=family_color)
+        self.info_actor = _text_actor("", x=0.025, y=0.855, size=14)
+        self.note_actor = _text_actor(spec.source_note, x=0.025, y=0.125, size=12, color=COLORS["muted"])
         renderer.AddViewProp(self.title_actor)
         renderer.AddViewProp(self.info_actor)
-        renderer.AddViewProp(self.legend_actor)
+        renderer.AddViewProp(self.note_actor)
 
-    def operator_at(self, t: float) -> np.ndarray:
-        if self.kind == "direct":
-            return self.model.direct_rotation_at(t)
-        if self.kind == "competitor":
-            return self.model.competitor_at(t)
-        raise KeyError(self.kind)
+        camera = vtk.vtkCamera()
+        camera.SetPosition(0.0, 0.0, 5.0)
+        camera.SetFocalPoint(0.0, 0.0, 0.0)
+        camera.SetViewUp(0.0, 1.0, 0.0)
+        camera.ParallelProjectionOn()
+        camera.SetParallelScale(1.63)
+        renderer.SetActiveCamera(camera)
 
-    def endpoint_operator(self) -> np.ndarray:
-        return self.model.R if self.kind == "direct" else self.model.W
+    def update(self, t: float) -> None:
+        angle = float(t) * self.spec.endpoint_angle
+        c = math.cos(angle)
+        s = math.sin(angle)
+        current = [np.array([c, s, 0.0]), np.array([-s, c, 0.0])]
+        initial = [np.array([1.0, 0.0, 0.0]), np.array([0.0, 1.0, 0.0])]
 
-    def update(self, t: float, view_angle: float) -> None:
-        transform = self.operator_at(t)
-        M = self.model.m_basis
-
-        initial = self.model.project(M.T, view_angle)
-        current4 = (transform @ M).T
-        current = self.model.project(current4, view_angle)
-
-        zero = np.zeros(3)
-        for idx in range(4):
-            self.ghost_lines[idx].SetPoint1(*zero)
-            self.ghost_lines[idx].SetPoint2(*initial[idx])
-            self.current_lines[idx].SetPoint1(*zero)
-            self.current_lines[idx].SetPoint2(*current[idx])
+        for idx in range(2):
+            _set_arrow(self.current_arrows[idx], current[idx])
             self.connectors[idx].SetPoint1(*initial[idx])
             self.connectors[idx].SetPoint2(*current[idx])
-            self.endpoints[idx].SetPosition(*current[idx])
-            label_pos = 1.07 * current[idx]
-            self.labels[idx].SetPosition(*label_pos)
 
-            sample_t = np.linspace(0.0, t, 60)
-            trail4 = np.array([self.operator_at(float(s)) @ M[:, idx] for s in sample_t])
-            _set_polyline(self.trail_data[idx], self.model.project(trail4, view_angle))
-
-        u_circle = self.model.circle_in_u()
-        image_circle = u_circle @ transform.T
-        _set_polyline(self.u_data, self.model.project(u_circle, view_angle), closed=True)
-        _set_polyline(self.image_data, self.model.project(image_circle, view_angle), closed=True)
-
-        sv = self.model.displacement_singular_values(transform)
-        trace = float(sv.sum())
-        sv_text = ", ".join(f"{x:.3f}" for x in sv)
-        if self.kind == "direct":
-            mechanism = (
-                "endpoint invariant planes:\n"
-                "  span(e0,e3): +45 deg\n"
-                "  span(e1,e2): -45 deg"
-            )
+        if abs(angle) < 1e-12:
+            arc = np.array([[0.72, 0.0, 0.0], [0.72, 0.0, 0.0]])
         else:
-            mechanism = (
-                "endpoint invariant planes:\n"
-                "  span(m0,m1): +90 deg\n"
-                "  span(m2,m3): fixed"
+            samples = np.linspace(0.0, angle, 48)
+            arc = np.column_stack(
+                [0.72 * np.cos(samples), 0.72 * np.sin(samples), np.zeros_like(samples)]
             )
-        endpoint_note = "ENDPOINT: admissible U -> V" if abs(t - 1.0) < 1e-9 else "interpolation only"
+        _set_polyline(self.arc_data, arc)
+
+        sigma = self.model.rotation_plane_singular_value(angle)
+        trace_contribution = self.model.rotation_plane_trace_displacement(angle)
+        endpoint = "endpoint" if abs(t - 1.0) < 1e-9 else "interpolation"
         self.info_actor.SetInput(
-            f"t = {t:.3f}   {endpoint_note}\n"
-            f"true 4D sigma(I-T) = [{sv_text}]\n"
-            f"true 4D trace norm = {trace:.6f}\n"
-            f"{mechanism}"
+            f"angle = {math.degrees(angle):+6.1f} deg   ({endpoint})\n"
+            f"plane sigma(I-T) = [{sigma:.6f}, {sigma:.6f}]\n"
+            f"trace contribution = {trace_contribution:.6f}"
         )
 
 
 class Prop44VTKScene:
-    """Side-by-side 4D projection of the direct rotation and competitor."""
+    """Four synchronized exact 2D views of the Proposition 4.4 witness."""
 
-    def __init__(self, *, t: float = 1.0, view_angle_degrees: float = 24.0, offscreen: bool = False):
+    def __init__(self, *, t: float = 1.0, offscreen: bool = False) -> None:
         self.model = Prop44Model()
         self.model.verify()
         self.t = float(np.clip(t, 0.0, 1.0))
-        self.view_angle = math.radians(view_angle_degrees)
 
         self.window = vtk.vtkRenderWindow()
-        self.window.SetWindowName("Davis--Kahan Proposition 4.4 counterexample")
-        self.window.SetSize(1500, 820)
+        self.window.SetWindowName("Davis--Kahan Proposition 4.4: exact 2D plane decompositions")
+        self.window.SetSize(1500, 950)
         if offscreen:
             self.window.SetOffScreenRendering(1)
 
-        self.left = vtk.vtkRenderer()
-        self.right = vtk.vtkRenderer()
-        self.left.SetViewport(0.0, 0.0, 0.5, 1.0)
-        self.right.SetViewport(0.5, 0.0, 1.0, 1.0)
-        for renderer in [self.left, self.right]:
+        control_fraction = 0.20
+        split_y = (1.0 + control_fraction) / 2.0
+        viewports = [
+            (0.0, split_y, 0.5, 1.0),
+            (0.0, control_fraction, 0.5, split_y),
+            (0.5, split_y, 1.0, 1.0),
+            (0.5, control_fraction, 1.0, split_y),
+        ]
+        self.renderers: list[vtk.vtkRenderer] = []
+        for viewport in viewports:
+            renderer = vtk.vtkRenderer()
+            renderer.SetViewport(*viewport)
             renderer.SetBackground(*COLORS["background"])
             self.window.AddRenderer(renderer)
+            self.renderers.append(renderer)
 
-        self.direct_panel = _Panel(
-            self.left,
-            model=self.model,
-            title="Direct rotation R",
-            kind="direct",
-        )
-        self.competitor_panel = _Panel(
-            self.right,
-            model=self.model,
-            title="Competitor W",
-            kind="competitor",
-        )
+        specs = [
+            PlaneSpec(
+                title="R plane 1: span(e0,e3)",
+                basis_names=("e0", "e3"),
+                endpoint_angle=self.model.direct_plane_angles[0],
+                source_note="U intersects this plane in span(e0).  R rotates that U direction toward V by +45 deg.",
+                family="R",
+            ),
+            PlaneSpec(
+                title="R plane 2: span(e1,e2)",
+                basis_names=("e1", "e2"),
+                endpoint_angle=self.model.direct_plane_angles[1],
+                source_note="U intersects this plane in span(e1).  R rotates that U direction toward V by -45 deg.",
+                family="R",
+            ),
+            PlaneSpec(
+                title="W moving plane: span(m0,m1)",
+                basis_names=("m0", "m1"),
+                endpoint_angle=self.model.competitor_plane_angles[0],
+                source_note="U projected into this plane: e0 -> m0/sqrt(2), e1 -> m1/sqrt(2).\nW quarter-turns both projected components.",
+                family="W",
+            ),
+            PlaneSpec(
+                title="W fixed plane: span(m2,m3)",
+                basis_names=("m2", "m3"),
+                endpoint_angle=self.model.competitor_plane_angles[1],
+                source_note="U projected into this plane: e0 -> m2/sqrt(2), e1 -> m3/sqrt(2).\nW leaves both projected components fixed.",
+                family="W",
+            ),
+        ]
+        self.panels = [
+            PlanePanel(self.renderers[idx], self.model, specs[idx]) for idx in range(4)
+        ]
 
-        camera = vtk.vtkCamera()
-        camera.SetPosition(3.3, 2.6, 3.7)
-        camera.SetFocalPoint(0.0, 0.0, 0.0)
-        camera.SetViewUp(0.0, 0.0, 1.0)
-        camera.ParallelProjectionOn()
-        camera.SetParallelScale(1.55)
-        self.left.SetActiveCamera(camera)
-        self.right.SetActiveCamera(camera)
+        self.controls = vtk.vtkRenderer()
+        self.controls.SetViewport(0.0, 0.0, 1.0, control_fraction)
+        self.controls.SetBackground(*COLORS["control_background"])
+        self.window.AddRenderer(self.controls)
+
+        self.summary_left = _text_actor("", x=0.018, y=0.91, size=14)
+        self.summary_right = _text_actor("", x=0.505, y=0.91, size=14)
+        self.global_fact = _text_actor("", x=0.018, y=0.35, size=12, color=COLORS["muted"])
+        self.motion_help = _text_actor("", x=0.018, y=0.13, size=12, color=COLORS["muted"])
+        for actor in [self.summary_left, self.summary_right, self.global_fact, self.motion_help]:
+            self.controls.AddViewProp(actor)
 
         self.interactor = vtk.vtkRenderWindowInteractor()
         self.interactor.SetRenderWindow(self.window)
-        style = vtk.vtkInteractorStyleTrackballCamera()
-        self.interactor.SetInteractorStyle(style)
+        self.interactor.SetInteractorStyle(vtk.vtkInteractorStyleImage())
 
-        self.footer_left = _text_actor(
-            "Both endpoint operators carry the same U onto the same V.\n"
-            "Principal angles(U,V) = (45 deg, 45 deg) < 60 deg.",
-            x=0.03,
-            y=0.09,
-            size=14,
-        )
-        self.footer_right = _text_actor(
-            "At t=1:  ||I-W||_* = 2 sqrt(2) = 2.828427\n"
-            "          ||I-R||_* = 4 sqrt(2-sqrt(2)) = 3.061467\n"
-            "So W beats R in trace norm.",
-            x=0.03,
-            y=0.09,
-            size=14,
-        )
-        self.left.AddViewProp(self.footer_left)
-        self.right.AddViewProp(self.footer_right)
-
-        self.motion_slider: vtk.vtkSliderWidget | None = None
-        self.view_slider: vtk.vtkSliderWidget | None = None
-        if not offscreen:
-            self._add_sliders()
+        self.motion_slider = self._make_slider()
+        self.motion_slider.AddObserver(vtk.vtkCommand.InteractionEvent, self._motion_callback)
 
         self.update()
 
-    def _slider(
-        self,
-        *,
-        title: str,
-        minimum: float,
-        maximum: float,
-        value: float,
-        y: float,
-    ) -> vtk.vtkSliderWidget:
+    def _make_slider(self) -> vtk.vtkSliderWidget:
         rep = vtk.vtkSliderRepresentation2D()
-        rep.SetMinimumValue(minimum)
-        rep.SetMaximumValue(maximum)
-        rep.SetValue(value)
-        rep.SetTitleText(title)
+        rep.SetMinimumValue(0.0)
+        rep.SetMaximumValue(1.0)
+        rep.SetValue(self.t)
+        rep.SetTitleText("")
+        rep.ShowSliderLabelOff()
         rep.GetPoint1Coordinate().SetCoordinateSystemToNormalizedDisplay()
-        rep.GetPoint1Coordinate().SetValue(0.22, y)
+        rep.GetPoint1Coordinate().SetValue(0.58, 0.040)
         rep.GetPoint2Coordinate().SetCoordinateSystemToNormalizedDisplay()
-        rep.GetPoint2Coordinate().SetValue(0.78, y)
-        rep.SetSliderLength(0.02)
-        rep.SetSliderWidth(0.025)
-        rep.SetTubeWidth(0.005)
-        rep.GetTitleProperty().SetColor(*COLORS["text"])
-        rep.GetLabelProperty().SetColor(*COLORS["text"])
-        rep.GetSliderProperty().SetColor(*COLORS["v"])
+        rep.GetPoint2Coordinate().SetValue(0.95, 0.040)
+        rep.SetSliderLength(0.018)
+        rep.SetSliderWidth(0.022)
+        rep.SetTubeWidth(0.004)
+        rep.GetSliderProperty().SetColor(*COLORS["arc"])
         rep.GetTubeProperty().SetColor(*COLORS["ghost"])
 
         widget = vtk.vtkSliderWidget()
@@ -373,38 +390,43 @@ class Prop44VTKScene:
         widget.EnabledOn()
         return widget
 
-    def _add_sliders(self) -> None:
-        self.motion_slider = self._slider(
-            title="motion t (endpoint comparison is t=1)",
-            minimum=0.0,
-            maximum=1.0,
-            value=self.t,
-            y=0.055,
-        )
-        self.view_slider = self._slider(
-            title="4D view angle (degrees)",
-            minimum=0.0,
-            maximum=360.0,
-            value=math.degrees(self.view_angle) % 360.0,
-            y=0.018,
-        )
-
-        def motion_callback(widget, _event):
-            self.t = float(widget.GetRepresentation().GetValue())
-            self.update()
-            self.window.Render()
-
-        def view_callback(widget, _event):
-            self.view_angle = math.radians(float(widget.GetRepresentation().GetValue()))
-            self.update()
-            self.window.Render()
-
-        self.motion_slider.AddObserver(vtk.vtkCommand.InteractionEvent, motion_callback)
-        self.view_slider.AddObserver(vtk.vtkCommand.InteractionEvent, view_callback)
+    def _motion_callback(self, widget, _event) -> None:
+        self.t = float(widget.GetRepresentation().GetValue())
+        self.update()
+        self.window.Render()
 
     def update(self) -> None:
-        self.direct_panel.update(self.t, self.view_angle)
-        self.competitor_panel.update(self.t, self.view_angle)
+        for panel in self.panels:
+            panel.update(self.t)
+
+        direct_angles = [self.t * angle for angle in self.model.direct_plane_angles]
+        competitor_angles = [self.t * angle for angle in self.model.competitor_plane_angles]
+        direct_contrib = [
+            self.model.rotation_plane_trace_displacement(angle) for angle in direct_angles
+        ]
+        competitor_contrib = [
+            self.model.rotation_plane_trace_displacement(angle) for angle in competitor_angles
+        ]
+        direct_total = sum(direct_contrib)
+        competitor_total = sum(competitor_contrib)
+
+        endpoint_note = "PROPOSITION 4.4 ENDPOINT" if abs(self.t - 1.0) < 1e-9 else "explanatory interpolation"
+        self.summary_left.SetInput(
+            "DIRECT ROTATION R\n"
+            f"plane contributions: {direct_contrib[0]:.6f} + {direct_contrib[1]:.6f}\n"
+            f"trace norm of I-R(t) = {direct_total:.6f}"
+        )
+        comparison = "W < R" if competitor_total < direct_total - 1e-12 else "compare at t=1"
+        self.summary_right.SetInput(
+            "COMPETITOR W\n"
+            f"plane contributions: {competitor_contrib[0]:.6f} + {competitor_contrib[1]:.6f}\n"
+            f"trace norm of I-W(t) = {competitor_total:.6f}    {comparison}"
+        )
+        self.global_fact.SetInput(
+            "At t=1: both operators carry the same U to V; principal angles(U,V)=(45 deg,45 deg)<60 deg.  "
+            "Gray = initial plane basis; orange/blue = its image."
+        )
+        self.motion_help.SetInput(f"MOTION t = {self.t:.3f}   {endpoint_note}")
 
     def render(self) -> None:
         self.window.Render()
@@ -432,7 +454,6 @@ class Prop44VTKScene:
 def _parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--t", type=float, default=1.0, help="motion parameter in [0,1]")
-    parser.add_argument("--view-angle", type=float, default=24.0, help="4D view angle in degrees")
     parser.add_argument("--screenshot", type=Path)
     parser.add_argument(
         "--no-interact",
@@ -446,11 +467,7 @@ def main() -> None:
     args = _parser().parse_args()
     if not 0.0 <= args.t <= 1.0:
         raise SystemExit("--t must lie in [0,1]")
-    scene = Prop44VTKScene(
-        t=args.t,
-        view_angle_degrees=args.view_angle,
-        offscreen=args.no_interact,
-    )
+    scene = Prop44VTKScene(t=args.t, offscreen=args.no_interact)
     if args.screenshot is not None:
         scene.screenshot(args.screenshot)
     if args.no_interact:

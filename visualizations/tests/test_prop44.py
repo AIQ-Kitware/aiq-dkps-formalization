@@ -65,17 +65,63 @@ def test_animation_paths_have_correct_endpoints(model):
     np.testing.assert_allclose(model.competitor_at(1.0), model.W, atol=1e-12)
 
 
-def test_4d_projection_has_orthonormal_rows(model):
-    for angle in np.linspace(0, 2 * math.pi, 9):
-        P = model.projection_4d_to_3d(float(angle))
-        np.testing.assert_allclose(P @ P.T, np.eye(3), atol=1e-12)
 
 
-def test_projection_accepts_vectors_and_point_clouds(model):
-    v = np.array([1.0, 2.0, 3.0, 4.0])
-    one = model.project(v, 0.3)
-    many = model.project(np.vstack([v, -v]), 0.3)
-    assert one.shape == (3,)
-    assert many.shape == (2, 3)
-    np.testing.assert_allclose(many[0], one)
-    np.testing.assert_allclose(many[1], -one)
+def _rotation(angle):
+    c = math.cos(angle)
+    s = math.sin(angle)
+    return np.array([[c, -s], [s, c]], dtype=float)
+
+
+def test_direct_rotation_splits_into_two_exact_2d_planes(model):
+    for basis, angle in zip(model.direct_plane_bases, model.direct_plane_angles):
+        np.testing.assert_allclose(basis.T @ basis, np.eye(2), atol=1e-12)
+        np.testing.assert_allclose(
+            model.local_operator(model.R, basis),
+            _rotation(angle),
+            atol=1e-12,
+        )
+
+
+def test_competitor_splits_into_moving_and_fixed_2d_planes(model):
+    moving, fixed = model.competitor_plane_bases
+    np.testing.assert_allclose(
+        model.local_operator(model.W, moving),
+        _rotation(math.pi / 2.0),
+        atol=1e-12,
+    )
+    np.testing.assert_allclose(
+        model.local_operator(model.W, fixed),
+        np.eye(2),
+        atol=1e-12,
+    )
+
+
+def test_competitor_plane_views_show_actual_projected_u_components(model):
+    moving, fixed = model.competitor_plane_bases
+    e0, e1 = model.u_basis[:, 0], model.u_basis[:, 1]
+    moving_coords_e0 = moving.T @ e0
+    moving_coords_e1 = moving.T @ e1
+    fixed_coords_e0 = fixed.T @ e0
+    fixed_coords_e1 = fixed.T @ e1
+    scale = 1.0 / math.sqrt(2.0)
+    np.testing.assert_allclose(moving_coords_e0, [scale, 0.0], atol=1e-12)
+    np.testing.assert_allclose(moving_coords_e1, [0.0, scale], atol=1e-12)
+    np.testing.assert_allclose(fixed_coords_e0, [scale, 0.0], atol=1e-12)
+    np.testing.assert_allclose(fixed_coords_e1, [0.0, scale], atol=1e-12)
+
+
+def test_plane_trace_contributions_reconstruct_full_trace_norms(model):
+    direct = [
+        model.rotation_plane_trace_displacement(angle)
+        for angle in model.direct_plane_angles
+    ]
+    competitor = [
+        model.rotation_plane_trace_displacement(angle)
+        for angle in model.competitor_plane_angles
+    ]
+    assert direct[0] == pytest.approx(direct[1])
+    assert sum(direct) == pytest.approx(model.direct_trace_displacement)
+    assert competitor[1] == pytest.approx(0.0)
+    assert sum(competitor) == pytest.approx(model.competitor_trace_displacement)
+    assert sum(competitor) < sum(direct)
