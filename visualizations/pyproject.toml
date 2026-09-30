@@ -14,12 +14,17 @@ vtk = [
 manim = [
   "manim>=0.19",
 ]
+slides = [
+  "manim>=0.19",
+  "manim-slides>=5.1",
+]
 test = [
   "pytest>=8",
 ]
 all = [
   "vtk>=9.3",
   "manim>=0.19",
+  "manim-slides>=5.1",
   "pytest>=8",
 ]
 

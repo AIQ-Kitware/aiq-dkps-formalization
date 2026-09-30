@@ -1,0 +1,63 @@
+import math
+
+import numpy as np
+import pytest
+
+from dkvis import sine_theta_story as story
+
+
+@pytest.mark.parametrize("gap", [0.0, 0.02, 0.1, 0.5, 1.0, 3.0])
+def test_perturbed_pair_closed_forms(gap):
+    pair = story.PerturbedPair(gap=gap, eps=story.PERTURBATION_EPS)
+    pair.verify()
+
+
+def test_perturbed_pair_rotation_approaches_45_degrees():
+    pair = story.PerturbedPair(gap=1e-9, eps=story.PERTURBATION_EPS)
+    assert math.degrees(pair.theta) == pytest.approx(45.0, abs=1e-6)
+    assert pair.eigenvalue_shift <= story.PERTURBATION_EPS
+
+
+def test_perturbed_pair_bound_is_asymptotically_tight():
+    pair = story.PerturbedPair(gap=200.0, eps=0.12)
+    assert pair.sin_theta / pair.bound == pytest.approx(1.0, abs=1e-5)
+
+
+@pytest.mark.parametrize("phi_degrees", [0.0, 10.0, 35.0, 45.0, 70.0, 90.0])
+def test_rayleigh_residual(phi_degrees):
+    model = story.RayleighResidual(*story.RESIDUAL_EIGENVALUES, math.radians(phi_degrees))
+    model.verify()
+
+
+def test_rayleigh_residual_vanishes_on_eigenvectors():
+    for phi in (0.0, math.pi / 2):
+        model = story.RayleighResidual(*story.RESIDUAL_EIGENVALUES, phi)
+        assert model.residual_norm == pytest.approx(0.0, abs=1e-12)
+
+
+def test_component_example():
+    ex = story.COMPONENT_EXAMPLE
+    ex.verify()
+    # The slide's picture: two eigenvalues in the window, and unwanted
+    # eigenvalues on both sides of it.
+    assert ex.wanted.sum() == 2
+    assert np.any(ex.lam[~ex.wanted] < ex.rho)
+    assert np.any(ex.lam[~ex.wanted] > ex.rho)
+    # The closest unwanted eigenvalue sits exactly at distance delta.
+    assert ex.weights[~ex.wanted].min() == pytest.approx(ex.delta)
+
+
+def test_gap_example_satisfies_the_hypothesis():
+    g = story.gap_picture_example()
+    lo, hi = g["beta"] - g["delta"], g["alpha"] + g["delta"]
+    assert all(g["beta"] <= a <= g["alpha"] for a in g["ritz"])
+    assert all(not (lo < lam < hi) for lam in g["unwanted"])
+
+
+def test_sylvester_example():
+    ex = story.SYLVESTER_EXAMPLE
+    ex.verify()
+    g = story.gap_picture_example()
+    # The grid uses the gap slide's spectra, so the two pictures agree.
+    assert set(ex.a) == set(g["ritz"])
+    assert set(ex.lam) <= set(g["unwanted"])
