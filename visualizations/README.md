@@ -175,6 +175,61 @@ uv run manim-slides present $(uv run python -m dkvis.build_slides sine-theta --l
   whole deck.
 - `DKVIS_THEME=light` renders a light-background deck for bright rooms.
 
+## Interactive 3D demo (VTK) and its slides
+
+`dkvis/vtk_sine_theta_3d.py` is a live demo of the theorem in `R^3`, where the
+exact invariant subspace is a plane: `U = span(f1, f2)` is the plane of the two
+wanted axes of the ellipsoid of `A`, and `f3` spans the unwanted direction.
+
+```bash
+uv run --extra vtk python -m dkvis.vtk_sine_theta_3d                 # trial mode
+uv run --extra vtk python -m dkvis.vtk_sine_theta_3d --mode perturb  # A -> A + eps H
+```
+
+- **Trial mode:** the trial plane `V` is `U` tilted by `theta` about a hinge
+  line at azimuth `phi`, with the Rayleigh--Ritz `A0 = E0^T A E0`. Two planes in
+  `R^3` share a line, so the principal angles are `(theta, 0)`; the pink drop is
+  the one nonzero sine, and the green residuals leave `V` at right angles.
+- **Perturb mode:** the trial is the old eigenspace and the operator is
+  `A + eps H` (fixed `H` with `||H||_2 = 1`); the ellipsoid and the exact plane move,
+  and `R = eps H E0`.
+- **Readouts:** the spectrum strip shows the wanted eigenvalues, `lambda3`,
+  `spec(A0)`, and the gap `delta = min |mu_i - lambda3|`. With a single unwanted
+  eigenvalue this is exactly the exchanged form of the paper's hypothesis. The
+  right panel compares `delta ||sin Theta0||` against `||R||_2` live.
+- **Controls:** sliders for `theta`, `phi`, `eps`, `lambda3`; drag to rotate, scroll
+  to zoom; keys `m` mode, `space` play, `e` ellipsoid, `x` residuals, `r` reset
+  view, `s` screenshot, `h` help, `q` quit.
+
+Every configuration drawn is computed by `dkvis/sine_theta_3d.py`, and each
+update re-checks the theorem (`tests/test_sine_theta_3d.py`). The same program
+renders headlessly, so it also produces the slide assets:
+
+```bash
+uv run --extra vtk python -m dkvis.vtk_sine_theta_3d --screenshot out.png
+uv run --extra vtk python -m dkvis.vtk_sine_theta_3d --movie sweep-theta --out out.mp4
+uv run --extra vtk python -m dkvis.vtk_sine_theta_3d --slide-assets media/vtk3d
+```
+
+`dkvis/slides_sine_theta_3d.py` is a five-scene deck built on it:
+
+1. the planes in 3D, with VTK stills beside the text, then a looping orbit video;
+2. the tilt sweep with a numbers table;
+3. moving `lambda3`;
+4. the perturbation;
+5. "try it live".
+
+`dkvis.build_slides` renders the VTK assets on first use (about 3 minutes;
+`--refresh-assets` redoes them):
+
+```bash
+uv run --extra vtk --extra slides python -m dkvis.build_slides sine-theta-3d    # 3D deck alone
+uv run --extra vtk --extra slides python -m dkvis.build_slides sine-theta-full  # 2D deck + 3D, spliced before the Lean slide
+```
+
+In a talk, the video slides loop until you advance. To go live instead, switch
+to the running `vtk_sine_theta_3d` window at the "try it live" slide.
+
 ## Sine-theta slide-building sequence (VTK)
 
 The sine-theta material now has **three VTK scenes** intended to build slides in
