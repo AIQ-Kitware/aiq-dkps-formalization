@@ -9,9 +9,12 @@ Run from ``visualizations/``::
 
 Decks:
 
-* ``sine-theta`` -- the 2D intuition deck (:mod:`dkvis.slides_sine_theta`);
-* ``sine-theta-3d`` -- the 3D VTK deck (:mod:`dkvis.slides_sine_theta_3d`);
-* ``sine-theta-full`` -- both, with the 3D slides after the payoff slide.
+* ``sine-theta-short`` -- the 15-minute core talk (intuition, theorem, what was
+  formalized, and the Proposition 4.4 counterexample);
+* ``sine-theta-full`` -- everything, with optional slides badged ``*`` (technical
+  depth) or ``**`` (backup);
+* ``sine-theta`` -- the full deck without the VTK scenes;
+* ``sine-theta-3d`` and ``prop44`` -- those sections alone.
 
 A deck module may define ``prepare(refresh)`` to render assets it needs (the 3D
 deck renders its VTK stills and movies); ``--refresh-assets`` forces that.
@@ -31,26 +34,51 @@ ROOT = Path(__file__).resolve().parent.parent
 
 MAIN = "dkvis.slides_sine_theta"
 THREE_D = "dkvis.slides_sine_theta_3d"
+PROP44 = "dkvis.slides_prop44"
+
+# Presentation order of each deck, by scene name.  Every name must be defined in
+# one of MODULES.  Slides with ``depth`` "*" or "**" carry a badge; the short
+# deck contains only unmarked (core) slides.
+DECK_SCENES = {
+    "sine-theta-short": [
+        "S00TitleShort", "S00bSetting", "S01Ellipse", "S02Perturb", "S03NoGap", "S04Angle", "S05Residual",
+        "S06Gap", "S07Theorem", "S11Payoff", "S08WhyShort", "D01Planes", "S12Lean",
+        "P01Claim", "P02Counterexample", "S14Summary",
+    ],
+    "sine-theta-full": [
+        "S00Title", "S00bSetting", "S01Ellipse", "S02Perturb", "S03NoGap", "S04Angle", "S04bSinThetaOperator",
+        "S05Residual", "S06Gap", "S07Theorem", "S11Payoff", "S08Components", "S09Sylvester",
+        "S10Sharp", "D01Planes", "D02Tilt", "D03Gap", "D04Perturb", "D05TryIt", "S12Lean",
+        "S13Family", "P01Claim", "P02Counterexample", "P03Why", "P04Details", "S14Summary",
+    ],
+    "sine-theta-3d": ["D01Planes", "D02Tilt", "D03Gap", "D04Perturb", "D05TryIt"],
+    "prop44": ["P01Claim", "P02Counterexample", "P03Why", "P04Details"],
+}
+# The full deck without the VTK scenes, for machines without VTK.
+DECK_SCENES["sine-theta"] = [n for n in DECK_SCENES["sine-theta-full"] if not n.startswith("D")]
+
+MODULES = [MAIN, THREE_D, PROP44]
+DECKS = list(DECK_SCENES)
 
 
-def _names(module: str) -> list[str]:
-    return [scene.__name__ for scene in importlib.import_module(module).SCENES]
+def _module_of() -> dict[str, str]:
+    owner = {}
+    for module in MODULES:
+        for name, obj in vars(importlib.import_module(module)).items():
+            if isinstance(obj, type) and getattr(obj, "__module__", None) == module and hasattr(obj, "construct"):
+                owner[name] = module
+    return owner
 
 
 def deck(name: str) -> list[tuple[str, list[str]]]:
-    """``[(module, [scene, ...]), ...]`` in presentation order."""
-    main = _names(MAIN)
-    if name == "sine-theta":
-        return [(MAIN, main)]
-    if name == "sine-theta-3d":
-        return [(THREE_D, _names(THREE_D))]
-    if name == "sine-theta-full":
-        cut = main.index("S12Lean")
-        return [(MAIN, main[:cut]), (THREE_D, _names(THREE_D)), (MAIN, main[cut:])]
-    raise KeyError(name)
-
-
-DECKS = ["sine-theta", "sine-theta-3d", "sine-theta-full"]
+    """``[(module, [scene, ...]), ...]`` grouped by module, in first-use order."""
+    owner = _module_of()
+    grouped: dict[str, list[str]] = {}
+    for scene in DECK_SCENES[name]:
+        if scene not in owner:
+            raise KeyError(f"deck {name!r} names unknown scene {scene!r}")
+        grouped.setdefault(owner[scene], []).append(scene)
+    return list(grouped.items())
 
 
 def _run(*args: str) -> None:
@@ -74,7 +102,7 @@ def main() -> None:
     args = parser.parse_args()
 
     segments = deck(args.deck)
-    names = [n for _, scenes in segments for n in scenes]
+    names = DECK_SCENES[args.deck]
     if args.list:
         print(" ".join(names))
         return

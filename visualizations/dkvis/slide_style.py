@@ -23,6 +23,8 @@ familiar Beamer look, so prose and formulas share one engine.
 from __future__ import annotations
 
 from manim import (
+    RIGHT,
+    UP,
     DOWN,
     LEFT,
     UL,
@@ -180,6 +182,8 @@ class DeckSlide(Slide):
     title: str = ""
     kicker: str = ""
     section: str = "The Davis--Kahan $\\sin\\Theta$ theorem"
+    #: ``""`` core talk, ``"*"`` optional technical depth, ``"**"`` backup.
+    depth: str = ""
     skip_reversing = True
     # manim writes the frame *before* an animation's final state, so a build
     # ending on a staggered FadeIn would otherwise freeze one frame short.
@@ -209,6 +213,12 @@ class DeckSlide(Slide):
                     title, DOWN, aligned_edge=LEFT, buff=0.18
                 )
                 items.add(kick)
+        if self.depth:
+            label = {"*": r"$\ast$\ optional depth", "**": r"$\ast\ast$\ backup"}[self.depth]
+            badge = tex(label, size=20, color=MUTED).move_to(
+                [FRAME_W / 2 - 0.45, TOP_EDGE - 0.05, 0], aligned_edge=UP + RIGHT
+            )
+            items.add(badge)
         if self.section:
             footer = tex(self.section, size=18, color=MUTED).move_to(
                 [LEFT_EDGE, -FRAME_H / 2 + 0.3, 0], aligned_edge=LEFT
