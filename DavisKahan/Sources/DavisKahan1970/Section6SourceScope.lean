@@ -180,8 +180,8 @@ theorem proposition6_1_printedGap_sourceExact_complex
       (DavisKahanExt.PartialMap.boundedReducingBlock B V hV)
       (DavisKahanExt.PartialMap.boundedReducingBlockCompl A U hU) β' α' δ)
     (hMem : N.Mem (B - A)) :
-    N.Mem (DavisKahan.Angle.sinAngleOperatorC U V) ∧
-      δ * N.gauge (DavisKahan.Angle.sinAngleOperatorC U V) ≤ N.gauge (B - A) :=
+    N.Mem (cfc Real.sin (DavisKahan.Angle.angleOperator U V)) ∧
+      δ * N.gauge (cfc Real.sin (DavisKahan.Angle.angleOperator U V)) ≤ N.gauge (B - A) :=
   proposition6_1_sourceExact_complex N hA hB hU hV hδ
     (.intervalExterior hβα hgapUV) (.intervalExterior hβα' hgapVU) hMem
 
@@ -202,8 +202,8 @@ theorem proposition6_1_printedGap_sourceExact_real
       (DavisKahanExt.PartialMap.boundedReducingBlock B V hV)
       (DavisKahanExt.PartialMap.boundedReducingBlockCompl A U hU) β' α' δ)
     (hMem : N.Mem (B - A)) :
-    N.Mem (V.starProjection - U.starProjection) ∧
-      δ * N.gauge (V.starProjection - U.starProjection) ≤ N.gauge (B - A) :=
+    N.Mem (cfc Real.sin (DavisKahan.Angle.angleOperator U V)) ∧
+      δ * N.gauge (cfc Real.sin (DavisKahan.Angle.angleOperator U V)) ≤ N.gauge (B - A) :=
   proposition6_1_sourceExact_real N hA hB hU hV hδ
     (.intervalExterior hβα hgapUV) (.intervalExterior hβα' hgapVU) hMem
 

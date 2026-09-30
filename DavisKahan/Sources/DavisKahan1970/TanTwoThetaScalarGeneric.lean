@@ -10,6 +10,7 @@ import DavisKahan.Geometry.Angle.TangentOperatorGeneric
 import DavisKahan.DoubleAngle.DirectedAngleGeneric
 import DavisKahan.DoubleAngle.ScalarTransport
 import DavisKahan.TanTheta.ScalarTransport
+import DavisKahan.Sources.DavisKahan1970.SineTheta.Norms.HeterogeneousRepresentative
 
 /-!
 # Scalar-generic unbounded `tan 2Θ`
@@ -19,11 +20,14 @@ endpoints but no common `RCLike` front door.  This module transports only the
 source data and the final singular-value objects, leaving the fixed-field
 spectral-cutoff proofs untouched.
 
-The ambient endpoint is canonical: it bounds the scalar-generic
-`absTanTwoAngleOperator`.  The directed endpoint returns a bounded corner whose
-complete approximation-number sequence is `tan (arcsin a_n(sin 2Θ₀))`; this is
-the invariant content of the directed tangent in every source unitarily
-invariant norm and avoids exposing field-specific inverse machinery.
+The proof-facing ambient endpoint bounds the scalar-generic positive
+`absTanTwoAngleOperator`, and the proof-facing directed endpoint returns a bounded
+corner whose complete approximation-number sequence is
+`tan (arcsin a_n(sin 2Θ₀))`.  Presentation theorems then cross those representation
+boundaries explicitly: the ambient theorem is transported to the signed literal
+`tanTwoAngleOperator`, while the directed theorem is transported to the literal
+functional-calculus `sourceDirectedTanTwoThetaOperator` in
+`DirectedTrigonometricPresentation`.
 -/
 
 open scoped InnerProductSpace TauCeti.CompleteSubspace
@@ -331,6 +335,46 @@ theorem tanTwoTheta_ambient_unbounded_reducing_symmetricNorming_rclike
     rwa [SymmetricNormingFunction.gauge_clm,
       SymmetricNormingFunction.gauge_clm] at hboundGeneric'
 
+
+
+/-- **Davis--Kahan Section 2 ambient `tan 2Θ`, literal presentation form.**
+
+The analytic scalar-generic theorem is proved on the positive branch-free
+operator `|tan 2Θ|`.  This façade states the conclusion on the literal signed
+functional-calculus object `cfc (fun t => tan (2*t)) Θ`.  The preceding modulus
+identity is the explicit proof that every source unitarily invariant norm gives
+the two operators the same membership and gauge. -/
+theorem tanTwoTheta_ambient_unbounded_reducing_symmetricNorming_presentation_rclike
+    (N : SymmetricNormingFunction)
+    {A : E →ₗ.[𝕜] E} {B : E →L[𝕜] E} {a b : ℝ}
+    {U : Submodule 𝕜 E} [U.HasOrthogonalProjection]
+    (V : Submodule 𝕜 E) [V.HasOrthogonalProjection]
+    (hA : IsSelfAdjoint A)
+    (hred : TauCeti.LinearPMap.ReducesSubspace A U)
+    (hBsa : IsSelfAdjoint B)
+    (hB : TauCeti.IsOddFor U B)
+    (hV : TauCeti.LinearPMap.ReducesSubspace (TauCeti.LinearPMap.addBounded A B) V)
+    (hUa : ∀ x : A.domain, (x : E) ∈ U →
+      RCLike.re ⟪A x, (x : E)⟫_𝕜 ≤ a * ‖(x : E)‖ ^ 2)
+    (hUb : ∀ x : A.domain, (x : E) ∈ Uᗮ →
+      b * ‖(x : E)‖ ^ 2 ≤ RCLike.re ⟪A x, (x : E)⟫_𝕜)
+    (hab : a < b)
+    (hBmem : N.Mem B) :
+    Angle.HasDefinedDoubleTangent U V ∧
+      N.Mem (Angle.tanTwoAngleOperator U V) ∧
+      (b - a) * N.gauge (Angle.tanTwoAngleOperator U V) ≤ 2 * N.gauge B := by
+  obtain ⟨hdef, habsMem, habsBound⟩ :=
+    tanTwoTheta_ambient_unbounded_reducing_symmetricNorming_rclike
+      N V hA hred hBsa hB hV hUa hUb hab hBmem
+  have hseq : SameApproximationSingularSequence
+      (Angle.tanTwoAngleOperator U V) (Angle.absTanTwoAngleOperator U V) := by
+    rw [Angle.absTanTwoAngleOperator_eq_modulus_tanTwoAngleOperator U V hdef]
+    exact (Angle.modulus_hasSameApproximationNumbers_rclike
+      (Angle.tanTwoAngleOperator U V)).symm
+  have htransport := hseq.normingMem_iff_and_gauge_eq N
+  refine ⟨hdef, htransport.1.mpr habsMem, ?_⟩
+  rw [htransport.2]
+  exact habsBound
 end
 
 end DavisKahan1970

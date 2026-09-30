@@ -171,13 +171,47 @@ theorem hasDefinedDoubleTangent_of_norm_sinTwoAngleOperator_lt_one
   rw [habs] at hspec
   exact (not_le_of_gt h) hspec
 
+/-- Pole exclusion makes the signed doubled tangent continuous on the angle spectrum. -/
+theorem continuousOn_tanTwo_spectrum (h : HasDefinedDoubleTangent U V) :
+    ContinuousOn (fun t : ℝ => Real.tan (2 * t))
+      (spectrum ℝ (angleOperator U V)) := by
+  exact Real.continuousOn_tan.comp (by fun_prop) h
+
 /-- Pole exclusion makes the branch-free doubled tangent continuous on the angle spectrum. -/
 theorem continuousOn_absTanTwo_spectrum (h : HasDefinedDoubleTangent U V) :
     ContinuousOn (fun t : ℝ => |Real.tan (2 * t)|)
       (spectrum ℝ (angleOperator U V)) := by
-  refine ContinuousOn.abs (Real.continuousOn_tan.comp (by fun_prop) ?_)
-  intro t ht
-  exact h t ht
+  exact ContinuousOn.abs (continuousOn_tanTwo_spectrum U V h)
+
+/-- The branch-free doubled tangent is positive. -/
+theorem absTanTwoAngleOperator_nonneg : 0 ≤ absTanTwoAngleOperator U V := by
+  rw [absTanTwoAngleOperator]
+  exact cfc_nonneg fun _ _ => abs_nonneg _
+
+/-- **The branch-free doubled tangent is exactly the modulus of the literal signed
+`tan 2Θ`.**
+
+This is the scalar-generic presentation bridge.  It is the formal reason a
+unitarily invariant norm bound proved on `|tan 2Θ|` is a bound on the paper's
+literal `tan 2Θ`; no identification is left implicit. -/
+theorem absTanTwoAngleOperator_eq_modulus_tanTwoAngleOperator
+    (h : HasDefinedDoubleTangent U V) :
+    absTanTwoAngleOperator U V = (tanTwoAngleOperator U V).modulus := by
+  have htan := continuousOn_tanTwo_spectrum U V h
+  have habs := continuousOn_absTanTwo_spectrum U V h
+  refine ContinuousLinearMap.eq_modulus_of_nonneg_of_mul_self_eq
+    (absTanTwoAngleOperator_nonneg U V) ?_
+  have hadj : (tanTwoAngleOperator U V).adjoint = tanTwoAngleOperator U V := by
+    simpa only [ContinuousLinearMap.star_eq_adjoint] using
+      (isSelfAdjoint_tanTwoAngleOperator U V).star_eq
+  change absTanTwoAngleOperator U V * absTanTwoAngleOperator U V =
+    (tanTwoAngleOperator U V).adjoint * tanTwoAngleOperator U V
+  rw [hadj, absTanTwoAngleOperator, tanTwoAngleOperator,
+    ← cfc_mul (fun t : ℝ => |Real.tan (2 * t)|)
+      (fun t : ℝ => |Real.tan (2 * t)|) (angleOperator U V) habs habs,
+    ← cfc_mul (fun t : ℝ => Real.tan (2 * t))
+      (fun t : ℝ => Real.tan (2 * t)) (angleOperator U V) htan htan]
+  exact cfc_congr fun _ _ => abs_mul_abs_self _
 
 /-! ## Fixed-field identifications -/
 

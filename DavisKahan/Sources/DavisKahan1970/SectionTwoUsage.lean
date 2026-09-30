@@ -317,16 +317,18 @@ theorem sinTwoTheta_from_printed_separation
       (DavisKahan.selfAdjointSpectralRestriction A hA B hB)
       (DavisKahan.selfAdjointSpectralRestriction A hA Bᶜ hB.compl) δ)
     (hEmem : N.Mem Eop) :
-    N.Mem (TauCeti.DavisKahan.Angle.directedSinTwoAngleOperatorC
+    N.Mem (DavisKahan1970.sourceDirectedSinTwoThetaOperator
         (DavisKahan.selfAdjointSpectralSubspace A hA B hB)
         (DavisKahan.selfAdjointSpectralSubspace (TauCeti.LinearPMap.addBounded A Eop)
           (DavisKahan.addBounded_isSelfAdjoint A hA Eop hEop) S hS)) ∧
-      δ * N.gauge (TauCeti.DavisKahan.Angle.directedSinTwoAngleOperatorC
+      δ * N.gauge (DavisKahan1970.sourceDirectedSinTwoThetaOperator
         (DavisKahan.selfAdjointSpectralSubspace A hA B hB)
         (DavisKahan.selfAdjointSpectralSubspace (TauCeti.LinearPMap.addBounded A Eop)
           (DavisKahan.addBounded_isSelfAdjoint A hA Eop hEop) S hS)) ≤
-        2 * N.gauge Eop :=
-  sinTwoTheta_directed_unbounded_addBounded_symmetricNorming_complex
+        2 * N.gauge Eop := by
+  rw [DavisKahan1970.sourceDirectedSinTwoThetaOperator_eq_directedSinTwoAngleOperator,
+    TauCeti.DavisKahan.Angle.directedSinTwoAngleOperator_complex]
+  exact sinTwoTheta_directed_unbounded_addBounded_symmetricNorming_complex
     N A hA Eop hEop B S hB hS hδ hgap hEmem
 
 /-- `sin 2Θ` over `ℂ` at a **half-infinite** separating interval.
@@ -349,16 +351,18 @@ theorem sinTwoTheta_from_halfInfinite_separation
     (hBcomplHigh : TauCeti.LinearPMap.SemiboundedAbove
       (DavisKahan.selfAdjointSpectralRestriction A hA Bᶜ hB.compl) c)
     (hEmem : N.Mem Eop) :
-    N.Mem (TauCeti.DavisKahan.Angle.directedSinTwoAngleOperatorC
+    N.Mem (DavisKahan1970.sourceDirectedSinTwoThetaOperator
         (DavisKahan.selfAdjointSpectralSubspace A hA B hB)
         (DavisKahan.selfAdjointSpectralSubspace (TauCeti.LinearPMap.addBounded A Eop)
           (DavisKahan.addBounded_isSelfAdjoint A hA Eop hEop) S hS)) ∧
-      δ * N.gauge (TauCeti.DavisKahan.Angle.directedSinTwoAngleOperatorC
+      δ * N.gauge (DavisKahan1970.sourceDirectedSinTwoThetaOperator
         (DavisKahan.selfAdjointSpectralSubspace A hA B hB)
         (DavisKahan.selfAdjointSpectralSubspace (TauCeti.LinearPMap.addBounded A Eop)
           (DavisKahan.addBounded_isSelfAdjoint A hA Eop hEop) S hS)) ≤
-        2 * N.gauge Eop :=
-  sinTwoTheta_directed_unbounded_addBounded_symmetricNorming_complex
+        2 * N.gauge Eop := by
+  rw [DavisKahan1970.sourceDirectedSinTwoThetaOperator_eq_directedSinTwoAngleOperator,
+    TauCeti.DavisKahan.Angle.directedSinTwoAngleOperator_complex]
+  exact sinTwoTheta_directed_unbounded_addBounded_symmetricNorming_complex
     N A hA Eop hEop B S hB hS hδ
     (DavisKahan.Sylvester.FormBoundedSylvesterGap.leftAboveRightBelow
       c hBlow hBcomplHigh)
@@ -400,13 +404,17 @@ theorem tanTwoTheta_from_reducingSubspace
     (∀ t ∈ spectrum ℝ (angleOperatorC
         (TauCeti.LinearPMap.specRange hA (Set.Iic c) measurableSet_Iic) V),
         Real.cos (2 * t) ≠ 0) ∧
-      N.Mem (absTanTwoAngleOperatorC
+      N.Mem (tanTwoAngleOperatorC
         (TauCeti.LinearPMap.specRange hA (Set.Iic c) measurableSet_Iic) V) ∧
-      (b - a) * N.gauge (absTanTwoAngleOperatorC
+      (b - a) * N.gauge (tanTwoAngleOperatorC
         (TauCeti.LinearPMap.specRange hA (Set.Iic c) measurableSet_Iic) V) ≤
-        2 * N.gauge B :=
-  SectionTwo.tanTwoTheta_ambient_complex N V hA hBsa hB
-    (DavisKahan.ReflectionIntertwines.ofReducesSubspace hVred) hUa hUb hab hBmem
+        2 * N.gauge B := by
+  have hUred := TauCeti.LinearPMap.reducesSubspace_specRange
+    hA (Set.Iic c) measurableSet_Iic
+  simpa [TauCeti.DavisKahan.Angle.HasDefinedDoubleTangent,
+    TauCeti.DavisKahan.Angle.angleOperator_complex,
+    TauCeti.DavisKahan.Angle.tanTwoAngleOperator_complex] using
+    (SectionTwo.tanTwoTheta_ambient N V hA hUred hBsa hB hVred hUa hUb hab hBmem)
 
 end TanTwoTheta
 
@@ -438,8 +446,8 @@ theorem tanTwoTheta_from_reducingSubspaces_rclike
       b * ‖(x : E)‖ ^ 2 ≤ RCLike.re ⟪A x, (x : E)⟫_𝕜)
     (hab : a < b) (hBmem : N.Mem B) :
     TauCeti.DavisKahan.Angle.HasDefinedDoubleTangent U V ∧
-      N.Mem (TauCeti.DavisKahan.Angle.absTanTwoAngleOperator U V) ∧
-      (b - a) * N.gauge (TauCeti.DavisKahan.Angle.absTanTwoAngleOperator U V) ≤
+      N.Mem (TauCeti.DavisKahan.Angle.tanTwoAngleOperator U V) ∧
+      (b - a) * N.gauge (TauCeti.DavisKahan.Angle.tanTwoAngleOperator U V) ≤
         2 * N.gauge B :=
   SectionTwo.tanTwoTheta_ambient N V hA hUred hBsa hB hVred hUa hUb hab hBmem
 

@@ -4,7 +4,9 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, OpenAI GPT-5.6 Sol
 -/
 import DavisKahan.Sources.DavisKahan1970.TanThetaScalarGeneric
+import DavisKahan.Sources.DavisKahan1970.TanTwoThetaScalarGeneric
 import DavisKahan.Sources.DavisKahan1970.SinTwoThetaCommonDomain
+import DavisKahan.Sources.DavisKahan1970.SinTwoThetaDirectedAngle
 import DavisKahan.Sources.DavisKahan1970.SineTheta.Norms.HeterogeneousRepresentative
 import DavisKahan.Sources.DavisKahan1970.SineTheta.Norms.SubspaceSingularTransport
 import DavisKahan.OperatorIdeal.ComplexificationApproximation
@@ -50,6 +52,7 @@ open TauCeti.DavisKahan.Angle
 open TauCeti.DavisKahan.ExactSinTheta
 open TauCeti.DavisKahan.TanTheta
 open TauCeti.DavisKahan.Sylvester
+open TauCeti.DavisKahan.RealSpectralRestriction
 open TauCeti.RealComplexification
 
 attribute [local instance 100] ContinuousLinearMap.realAlgebra
@@ -89,6 +92,13 @@ noncomputable def sourceDirectedSinTwoThetaOperator
     E →L[K] E :=
   cfc (fun t : Real => Real.sin (2 * t)) (sourceDirectedSubspaceThetaOperator U V)
 
+/-- The literal directed `tan 2 Theta_0`: the scalar function
+`t |-> tan (2*t)` applied to the source-directed angle. -/
+noncomputable def sourceDirectedTanTwoThetaOperator
+    (U V : Submodule K E) [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] :
+    E →L[K] E :=
+  cfc (fun t : Real => Real.tan (2 * t)) (sourceDirectedSubspaceThetaOperator U V)
+
 /-- The reconstructed directed angle is self-adjoint. -/
 theorem isSelfAdjoint_sourceDirectedSubspaceThetaOperator
     (U V : Submodule K E) [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] :
@@ -102,6 +112,22 @@ theorem isSelfAdjoint_sourceDirectedTanThetaOperator
     IsSelfAdjoint (sourceDirectedTanThetaOperator U V) := by
   rw [sourceDirectedTanThetaOperator]
   exact cfc_predicate Real.tan (sourceDirectedSubspaceThetaOperator U V)
+
+/-- The literal directed doubled sine is self-adjoint. -/
+theorem isSelfAdjoint_sourceDirectedSinTwoThetaOperator
+    (U V : Submodule K E) [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] :
+    IsSelfAdjoint (sourceDirectedSinTwoThetaOperator U V) := by
+  rw [sourceDirectedSinTwoThetaOperator]
+  exact cfc_predicate (fun t : Real => Real.sin (2 * t))
+    (sourceDirectedSubspaceThetaOperator U V)
+
+/-- The literal directed doubled tangent is self-adjoint. -/
+theorem isSelfAdjoint_sourceDirectedTanTwoThetaOperator
+    (U V : Submodule K E) [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] :
+    IsSelfAdjoint (sourceDirectedTanTwoThetaOperator U V) := by
+  rw [sourceDirectedTanTwoThetaOperator]
+  exact cfc_predicate (fun t : Real => Real.tan (2 * t))
+    (sourceDirectedSubspaceThetaOperator U V)
 
 private theorem norm_directedSinAngleOperator_le_one
     (U V : Submodule K E) [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] :
@@ -518,6 +544,95 @@ theorem approximationNumber_sourceDirectedTanThetaOperator
   rw [mul_sub, mul_one] at h
   exact sub_eq_iff_eq_add.mp h
 
+/-- A strict contraction of the literal directed `sin 2 Theta_0` excludes
+all quarter-turn poles from the source-directed angle spectrum. -/
+private theorem sourceDirectedHasDefinedDoubleTangent_of_norm_sinTwo_lt_one
+    (U V : Submodule K E) [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
+    (h : ‖sourceDirectedSinTwoThetaOperator U V‖ < 1) :
+    ∀ t ∈ spectrum Real (sourceDirectedSubspaceThetaOperator U V),
+      Real.cos (2 * t) ≠ 0 := by
+  intro t ht hcos
+  have hs : Real.sin (2 * t) ∈
+      spectrum Real (sourceDirectedSinTwoThetaOperator U V) := by
+    rw [sourceDirectedSinTwoThetaOperator,
+      cfc_map_spectrum (R := Real) (f := fun s : Real => Real.sin (2 * s))
+        (a := sourceDirectedSubspaceThetaOperator U V)
+        (isSelfAdjoint_sourceDirectedSubspaceThetaOperator U V)
+        (by fun_prop : ContinuousOn (fun s : Real => Real.sin (2 * s)) _)]
+    exact ⟨t, ht, rfl⟩
+  have hspec : |Real.sin (2 * t)| ≤ ‖sourceDirectedSinTwoThetaOperator U V‖ := by
+    have hk : ‖((Real.sin (2 * t) : K))‖ ≤
+        ‖sourceDirectedSinTwoThetaOperator U V‖ * ‖(1 : E →L[K] E)‖ :=
+      spectrum.norm_le_norm_mul_of_mem hs
+    have hr : |Real.sin (2 * t)| ≤
+        ‖sourceDirectedSinTwoThetaOperator U V‖ * ‖(1 : E →L[K] E)‖ := by
+      rwa [RCLike.norm_ofReal] at hk
+    calc
+      |Real.sin (2 * t)| ≤
+          ‖sourceDirectedSinTwoThetaOperator U V‖ * ‖(1 : E →L[K] E)‖ := hr
+      _ ≤ ‖sourceDirectedSinTwoThetaOperator U V‖ * 1 :=
+        mul_le_mul_of_nonneg_left ContinuousLinearMap.norm_id_le (norm_nonneg _)
+      _ = ‖sourceDirectedSinTwoThetaOperator U V‖ := mul_one _
+  have hpyth := Real.sin_sq_add_cos_sq (2 * t)
+  rw [hcos] at hpyth
+  norm_num at hpyth
+  have habs : |Real.sin (2 * t)| = 1 := by
+    rcases hpyth with hsin | hsin <;> rw [hsin] <;> norm_num
+  rw [habs] at hspec
+  exact (not_le_of_gt h) hspec
+
+private theorem sourceDirectedTanTwoThetaOperator_pythagorean
+    (U V : Submodule K E) [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
+    (hSlt : ‖sourceDirectedSinTwoThetaOperator U V‖ < 1) :
+    sourceDirectedTanTwoThetaOperator U V * sourceDirectedTanTwoThetaOperator U V =
+      sourceDirectedSinTwoThetaOperator U V * sourceDirectedSinTwoThetaOperator U V +
+        sourceDirectedTanTwoThetaOperator U V * sourceDirectedTanTwoThetaOperator U V *
+          (sourceDirectedSinTwoThetaOperator U V * sourceDirectedSinTwoThetaOperator U V) := by
+  let Th : E →L[K] E := sourceDirectedSubspaceThetaOperator U V
+  have hTh : IsSelfAdjoint Th := by
+    simpa [Th] using isSelfAdjoint_sourceDirectedSubspaceThetaOperator U V
+  have hdef := sourceDirectedHasDefinedDoubleTangent_of_norm_sinTwo_lt_one U V hSlt
+  have htan : ContinuousOn (fun t : Real => Real.tan (2 * t)) (spectrum Real Th) := by
+    refine Real.continuousOn_tan.comp (by fun_prop) ?_
+    intro t ht
+    exact hdef t (by simpa [Th] using ht)
+  have hsin : ContinuousOn (fun t : Real => Real.sin (2 * t)) (spectrum Real Th) := by
+    fun_prop
+  rw [sourceDirectedTanTwoThetaOperator, sourceDirectedSinTwoThetaOperator,
+    show sourceDirectedSubspaceThetaOperator U V = Th from rfl,
+    ← cfc_mul (fun t : Real => Real.tan (2 * t))
+      (fun t : Real => Real.tan (2 * t)) Th htan htan,
+    ← cfc_mul (fun t : Real => Real.sin (2 * t))
+      (fun t : Real => Real.sin (2 * t)) Th hsin hsin,
+    ← cfc_mul
+      (fun t : Real => Real.tan (2 * t) * Real.tan (2 * t))
+      (fun t : Real => Real.sin (2 * t) * Real.sin (2 * t)) Th
+      (htan.mul htan) (hsin.mul hsin),
+    ← cfc_add (a := Th)
+      (fun t : Real => Real.sin (2 * t) * Real.sin (2 * t))
+      (fun t : Real =>
+        (Real.tan (2 * t) * Real.tan (2 * t)) *
+          (Real.sin (2 * t) * Real.sin (2 * t)))
+      (hsin.mul hsin) ((htan.mul htan).mul (hsin.mul hsin))]
+  refine cfc_congr fun t ht => ?_
+  have hcos : Real.cos (2 * t) ≠ 0 := hdef t (by simpa [Th] using ht)
+  rw [Real.tan_eq_sin_div_cos]
+  field_simp
+  nlinarith [Real.sin_sq_add_cos_sq (2 * t)]
+
+/-- The literal directed doubled tangent has exactly the complete singular-value
+sequence `tan (arcsin a_n(sin 2 Theta_0))`. -/
+theorem approximationNumber_sourceDirectedTanTwoThetaOperator
+    (U V : Submodule K E) [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
+    (hSlt : ‖sourceDirectedSinTwoThetaOperator U V‖ < 1) (n : Nat) :
+    (sourceDirectedTanTwoThetaOperator U V).approximationNumber n =
+      Real.tan (Real.arcsin
+        ((sourceDirectedSinTwoThetaOperator U V).approximationNumber n)) := by
+  exact approximationNumber_eq_tanArcsin_rclike
+    (isSelfAdjoint_sourceDirectedSinTwoThetaOperator U V)
+    (isSelfAdjoint_sourceDirectedTanTwoThetaOperator U V) hSlt
+    (sourceDirectedTanTwoThetaOperator_pythagorean U V hSlt) n
+
 /-- The ambient positive directed sine and the rectangular trial-side sine block
 have the same complete approximation-number sequence.  This is the explicit
 zero-extension/modulus bridge used by the tangent presentation theorem. -/
@@ -574,6 +689,55 @@ theorem tanTheta_directed_unboundedRitz_symmetricNorming_presentation_rclike
       (sourceDirectedTanThetaOperator Z V) T := by
     intro n
     rw [approximationNumber_sourceDirectedTanThetaOperator Z V htr n,
+      hSseq n, hTseq n]
+  have htransport := hTanSeq.normingMem_iff_and_gauge_eq N
+  refine ⟨hlt, htransport.1.mpr hTmem, ?_⟩
+  rw [htransport.2]
+  exact hTbound
+
+/-- **Davis--Kahan Section 2 directed `tan 2 Theta_0`, presentation form.**
+
+The conclusion is on the literal functional-calculus
+`cfc (fun t => tan (2*t)) Theta_0` on the trial-side ordered pair `(V,U)`.  The existing rectangular corner theorem
+remains the analytic engine.  The bridge above proves that the literal operator
+has exactly the same complete approximation-number sequence as the constructed
+corner, so ideal membership and every symmetric-norming gauge transport
+explicitly. -/
+theorem tanTwoTheta_directed_unboundedResidual_reducing_symmetricNorming_presentation_rclike
+    (N : SymmetricNormingFunction)
+    {A : E →ₗ.[K] E} {B : E →L[K] E} {a b : Real}
+    {U : Submodule K E} [U.HasOrthogonalProjection]
+    (V : Submodule K E) [V.HasOrthogonalProjection]
+    (hA : IsSelfAdjoint A)
+    (hred : TauCeti.LinearPMap.ReducesSubspace A U)
+    (hB : TauCeti.IsOddFor U B)
+    (hV : TauCeti.LinearPMap.ReducesSubspace (TauCeti.LinearPMap.addBounded A B) V)
+    (hUa : ∀ x : A.domain, (x : E) ∈ U →
+      RCLike.re ⟪A x, (x : E)⟫_K ≤ a * ‖(x : E)‖ ^ 2)
+    (hUb : ∀ x : A.domain, (x : E) ∈ Uᗮ →
+      b * ‖(x : E)‖ ^ 2 ≤ RCLike.re ⟪A x, (x : E)⟫_K)
+    (hab : a < b)
+    (hRmem : N.Mem (blockCompression Uᗮ U B)) :
+    (∀ n : Nat, (DavisKahan.sinTwoThetaIdealBlock U V).approximationNumber n < 1) ∧
+      N.Mem (sourceDirectedTanTwoThetaOperator V U) ∧
+      (b - a) * N.gauge (sourceDirectedTanTwoThetaOperator V U) ≤
+        2 * N.gauge (blockCompression Uᗮ U B) := by
+  obtain ⟨hlt, T, hTseq, hTmem, hTbound⟩ :=
+    tanTwoTheta_directed_unboundedResidual_reducing_symmetricNorming_rclike
+      N V hA hred hB hV hUa hUb hab hRmem
+  have hSseq : SameApproximationSingularSequence
+      (sourceDirectedSinTwoThetaOperator V U)
+      (DavisKahan.sinTwoThetaIdealBlock U V) := by
+    rw [sourceDirectedSinTwoThetaOperator_eq_directedSinTwoAngleOperator V U]
+    exact (Angle.sinTwoThetaIdealBlock_hasSameApproximationNumbers_trialSide U V).symm
+  have hSlt : ‖sourceDirectedSinTwoThetaOperator V U‖ < 1 := by
+    rw [← (sourceDirectedSinTwoThetaOperator V U).approximationNumber_index_zero,
+      hSseq 0]
+    exact hlt 0
+  have hTanSeq : SameApproximationSingularSequence
+      (sourceDirectedTanTwoThetaOperator V U) T := by
+    intro n
+    rw [approximationNumber_sourceDirectedTanTwoThetaOperator V U hSlt n,
       hSseq n, hTseq n]
   have htransport := hTanSeq.normingMem_iff_and_gauge_eq N
   refine ⟨hlt, htransport.1.mpr hTmem, ?_⟩
@@ -645,6 +809,196 @@ theorem sinTwoTheta_commonDomain_presentation_whereDefinedUIN_rclike
   · intro Hop hHop hEq hAngle hHopMem
     exact (sinTwoTheta_commonDomain_whereDefinedUIN_rclike
       N hA hT hdom hP hQ hgapPos hgap).2 Hop hHop hEq hAngle hHopMem
+
+
+/-! ## Fixed-field presentation specializations
+
+These wrappers keep the convenient field-specific Section 2 entry points while
+ensuring that their displayed trigonometric objects are the same literal CFC
+objects as the scalar-generic presentation API.  The older fixed-field theorems
+remain available under their long proof-facing names. -/
+
+/-- Complex specialization of the literal directed `tan Theta_0` presentation. -/
+theorem tanTheta_directed_unboundedRitz_symmetricNorming_presentation_complex
+    {Ec : Type v} [NormedAddCommGroup Ec] [InnerProductSpace ℂ Ec] [CompleteSpace Ec]
+    (N : SymmetricNormingFunction)
+    {A : Ec →ₗ.[ℂ] Ec} {Z V : Submodule ℂ Ec}
+    [Z.HasOrthogonalProjection] [V.HasOrthogonalProjection] [CompleteSpace Z]
+    (D : DavisKahan.UnboundedRitzPair A Z)
+    (hV : DavisKahan.ReducingComplement A V)
+    {alpha delta : Real} (hdelta : 0 < delta)
+    (hupper : TauCeti.LinearPMap.SemiboundedAbove D.trial.compression alpha)
+    (hUnwanted : ∀ y ∈ Vᗮ, ∀ hy : y ∈ A.domain,
+      (alpha + delta) * ‖y‖ ^ 2 ≤ RCLike.re ⟪A ⟨y, hy⟩, y⟫_ℂ)
+    (hResidual : N.Mem D.trial.residual) :
+    (∀ n, (TanTheta.directedSineBlock Z V).approximationNumber n < 1) ∧
+      N.Mem (sourceDirectedTanThetaOperator Z V) ∧
+      delta * N.gauge (sourceDirectedTanThetaOperator Z V) ≤
+        N.gauge D.trial.residual :=
+  tanTheta_directed_unboundedRitz_symmetricNorming_presentation_rclike
+    N D hV hdelta hupper hUnwanted hResidual
+
+/-- Real specialization of the literal directed `tan Theta_0` presentation. -/
+theorem tanTheta_directed_unboundedRitz_symmetricNorming_presentation_real
+    {Er : Type v} [NormedAddCommGroup Er] [InnerProductSpace ℝ Er] [CompleteSpace Er]
+    (N : SymmetricNormingFunction)
+    {A : Er →ₗ.[ℝ] Er} {Z V : Submodule ℝ Er}
+    [Z.HasOrthogonalProjection] [V.HasOrthogonalProjection] [CompleteSpace Z]
+    (D : DavisKahan.UnboundedRitzPair A Z)
+    (hV : DavisKahan.ReducingComplement A V)
+    {alpha delta : Real} (hdelta : 0 < delta)
+    (hupper : TauCeti.LinearPMap.SemiboundedAbove D.trial.compression alpha)
+    (hUnwanted : ∀ y ∈ Vᗮ, ∀ hy : y ∈ A.domain,
+      (alpha + delta) * ‖y‖ ^ 2 ≤ RCLike.re ⟪A ⟨y, hy⟩, y⟫_ℝ)
+    (hResidual : N.Mem D.trial.residual) :
+    (∀ n, (TanTheta.directedSineBlock Z V).approximationNumber n < 1) ∧
+      N.Mem (sourceDirectedTanThetaOperator Z V) ∧
+      delta * N.gauge (sourceDirectedTanThetaOperator Z V) ≤
+        N.gauge D.trial.residual :=
+  tanTheta_directed_unboundedRitz_symmetricNorming_presentation_rclike
+    N D hV hdelta hupper hUnwanted hResidual
+
+/-- Complex fixed-field where-defined presentation of directed `sin 2 Theta_0`. -/
+theorem sinTwoTheta_directed_unboundedResidual_presentation_whereDefinedUIN_complex
+    {Ec : Type v} [NormedAddCommGroup Ec] [InnerProductSpace ℂ Ec] [CompleteSpace Ec]
+    {V : Submodule ℂ Ec} [V.HasOrthogonalProjection]
+    {M : V →L[ℂ] V} {R : V →L[ℂ] Ec} {A : Ec →ₗ.[ℂ] Ec}
+    [TopologicalSpace.SeparableSpace Ec]
+    (N : NormalizedSymmetricOperatorIdealFamily.{0, v} ℂ)
+    (hA : IsSelfAdjoint A)
+    (B : Set ℝ) (hB : MeasurableSet B)
+    (hVdom : ∀ v : V, (v : Ec) ∈ A.domain)
+    (hres : ∀ v : V, A ⟨(v : Ec), hVdom v⟩ = R v + ((M v : V) : Ec))
+    {delta : Real} (hdelta : 0 < delta)
+    (hgap : FormBoundedSylvesterGap
+      (selfAdjointSpectralRestriction A hA B hB)
+      (selfAdjointSpectralRestriction A hA Bᶜ hB.compl) delta) :
+    N.Mem (sourceDirectedSinTwoThetaOperator V
+        (selfAdjointSpectralSubspace A hA B hB)) →
+    N.Mem R →
+      delta * N.gaugeReal (sourceDirectedSinTwoThetaOperator V
+          (selfAdjointSpectralSubspace A hA B hB)) ≤ 2 * N.gaugeReal R := by
+  rw [sourceDirectedSinTwoThetaOperator_eq_directedSinTwoAngleOperator]
+  exact sinTwoTheta_directed_unboundedResidual_whereDefinedUIN_complex
+    N hA B hB hVdom hres hdelta hgap
+
+/-- Real fixed-field where-defined presentation of directed `sin 2 Theta_0`. -/
+theorem sinTwoTheta_directed_unboundedResidual_presentation_whereDefinedUIN_real
+    {Er : Type v} [NormedAddCommGroup Er] [InnerProductSpace ℝ Er] [CompleteSpace Er]
+    {V : Submodule ℝ Er} [V.HasOrthogonalProjection]
+    {M : V →L[ℝ] V} {R : V →L[ℝ] Er} {A : Er →ₗ.[ℝ] Er}
+    [TopologicalSpace.SeparableSpace Er]
+    (N : NormalizedSymmetricOperatorIdealFamily.{0, v} ℝ)
+    (hA : IsSelfAdjoint A)
+    (B : Set ℝ) (hB : MeasurableSet B)
+    (hVdom : ∀ v : V, (v : Er) ∈ A.domain)
+    (hres : ∀ v : V, A ⟨(v : Er), hVdom v⟩ = R v + ((M v : V) : Er))
+    {delta : Real} (hdelta : 0 < delta)
+    (hgap : FormBoundedSylvesterGap
+      (realSelfAdjointSpectralRestriction A hA B hB)
+      (realSelfAdjointSpectralRestriction A hA Bᶜ hB.compl) delta) :
+    N.Mem (sourceDirectedSinTwoThetaOperator V
+        (realSelfAdjointSpectralSubspace A hA B hB)) →
+    N.Mem R →
+      delta * N.gaugeReal (sourceDirectedSinTwoThetaOperator V
+          (realSelfAdjointSpectralSubspace A hA B hB)) ≤ 2 * N.gaugeReal R := by
+  rw [sourceDirectedSinTwoThetaOperator_eq_directedSinTwoAngleOperator]
+  exact sinTwoTheta_directed_unboundedResidual_whereDefinedUIN_real
+    N hA B hB hVdom hres hdelta hgap
+
+/-- Complex specialization of the trial-side literal directed `tan 2 Theta_0` presentation. -/
+theorem tanTwoTheta_directed_unboundedResidual_reducing_symmetricNorming_presentation_complex
+    {Ec : Type v} [NormedAddCommGroup Ec] [InnerProductSpace ℂ Ec] [CompleteSpace Ec]
+    (N : SymmetricNormingFunction)
+    {A : Ec →ₗ.[ℂ] Ec} {B : Ec →L[ℂ] Ec} {a b : Real}
+    {U : Submodule ℂ Ec} [U.HasOrthogonalProjection]
+    (V : Submodule ℂ Ec) [V.HasOrthogonalProjection]
+    (hA : IsSelfAdjoint A)
+    (hred : TauCeti.LinearPMap.ReducesSubspace A U)
+    (hB : TauCeti.IsOddFor U B)
+    (hV : TauCeti.LinearPMap.ReducesSubspace (TauCeti.LinearPMap.addBounded A B) V)
+    (hUa : ∀ x : A.domain, (x : Ec) ∈ U →
+      RCLike.re ⟪A x, (x : Ec)⟫_ℂ ≤ a * ‖(x : Ec)‖ ^ 2)
+    (hUb : ∀ x : A.domain, (x : Ec) ∈ Uᗮ →
+      b * ‖(x : Ec)‖ ^ 2 ≤ RCLike.re ⟪A x, (x : Ec)⟫_ℂ)
+    (hab : a < b)
+    (hRmem : N.Mem (blockCompression Uᗮ U B)) :
+    (∀ n : Nat, (DavisKahan.sinTwoThetaIdealBlock U V).approximationNumber n < 1) ∧
+      N.Mem (sourceDirectedTanTwoThetaOperator V U) ∧
+      (b - a) * N.gauge (sourceDirectedTanTwoThetaOperator V U) ≤
+        2 * N.gauge (blockCompression Uᗮ U B) :=
+  tanTwoTheta_directed_unboundedResidual_reducing_symmetricNorming_presentation_rclike
+    N V hA hred hB hV hUa hUb hab hRmem
+
+/-- Real specialization of the trial-side literal directed `tan 2 Theta_0` presentation. -/
+theorem tanTwoTheta_directed_unboundedResidual_reducing_symmetricNorming_presentation_real
+    {Er : Type v} [NormedAddCommGroup Er] [InnerProductSpace ℝ Er] [CompleteSpace Er]
+    (N : SymmetricNormingFunction)
+    {A : Er →ₗ.[ℝ] Er} {B : Er →L[ℝ] Er} {a b : Real}
+    {U : Submodule ℝ Er} [U.HasOrthogonalProjection]
+    (V : Submodule ℝ Er) [V.HasOrthogonalProjection]
+    (hA : IsSelfAdjoint A)
+    (hred : TauCeti.LinearPMap.ReducesSubspace A U)
+    (hB : TauCeti.IsOddFor U B)
+    (hV : TauCeti.LinearPMap.ReducesSubspace (TauCeti.LinearPMap.addBounded A B) V)
+    (hUa : ∀ x : A.domain, (x : Er) ∈ U →
+      RCLike.re ⟪A x, (x : Er)⟫_ℝ ≤ a * ‖(x : Er)‖ ^ 2)
+    (hUb : ∀ x : A.domain, (x : Er) ∈ Uᗮ →
+      b * ‖(x : Er)‖ ^ 2 ≤ RCLike.re ⟪A x, (x : Er)⟫_ℝ)
+    (hab : a < b)
+    (hRmem : N.Mem (blockCompression Uᗮ U B)) :
+    (∀ n : Nat, (DavisKahan.sinTwoThetaIdealBlock U V).approximationNumber n < 1) ∧
+      N.Mem (sourceDirectedTanTwoThetaOperator V U) ∧
+      (b - a) * N.gauge (sourceDirectedTanTwoThetaOperator V U) ≤
+        2 * N.gauge (blockCompression Uᗮ U B) :=
+  tanTwoTheta_directed_unboundedResidual_reducing_symmetricNorming_presentation_rclike
+    N V hA hred hB hV hUa hUb hab hRmem
+
+/-- Complex specialization of the signed literal ambient `tan 2 Theta` presentation. -/
+theorem tanTwoTheta_ambient_unbounded_reducing_symmetricNorming_presentation_complex
+    {Ec : Type v} [NormedAddCommGroup Ec] [InnerProductSpace ℂ Ec] [CompleteSpace Ec]
+    (N : SymmetricNormingFunction)
+    {A : Ec →ₗ.[ℂ] Ec} {B : Ec →L[ℂ] Ec} {a b : Real}
+    {U : Submodule ℂ Ec} [U.HasOrthogonalProjection]
+    (V : Submodule ℂ Ec) [V.HasOrthogonalProjection]
+    (hA : IsSelfAdjoint A)
+    (hred : TauCeti.LinearPMap.ReducesSubspace A U)
+    (hBsa : IsSelfAdjoint B)
+    (hB : TauCeti.IsOddFor U B)
+    (hV : TauCeti.LinearPMap.ReducesSubspace (TauCeti.LinearPMap.addBounded A B) V)
+    (hUa : ∀ x : A.domain, (x : Ec) ∈ U →
+      RCLike.re ⟪A x, (x : Ec)⟫_ℂ ≤ a * ‖(x : Ec)‖ ^ 2)
+    (hUb : ∀ x : A.domain, (x : Ec) ∈ Uᗮ →
+      b * ‖(x : Ec)‖ ^ 2 ≤ RCLike.re ⟪A x, (x : Ec)⟫_ℂ)
+    (hab : a < b) (hBmem : N.Mem B) :
+    Angle.HasDefinedDoubleTangent U V ∧
+      N.Mem (Angle.tanTwoAngleOperator U V) ∧
+      (b - a) * N.gauge (Angle.tanTwoAngleOperator U V) ≤ 2 * N.gauge B :=
+  tanTwoTheta_ambient_unbounded_reducing_symmetricNorming_presentation_rclike
+    N V hA hred hBsa hB hV hUa hUb hab hBmem
+
+/-- Real specialization of the signed literal ambient `tan 2 Theta` presentation. -/
+theorem tanTwoTheta_ambient_unbounded_reducing_symmetricNorming_presentation_real
+    {Er : Type v} [NormedAddCommGroup Er] [InnerProductSpace ℝ Er] [CompleteSpace Er]
+    (N : SymmetricNormingFunction)
+    {A : Er →ₗ.[ℝ] Er} {B : Er →L[ℝ] Er} {a b : Real}
+    {U : Submodule ℝ Er} [U.HasOrthogonalProjection]
+    (V : Submodule ℝ Er) [V.HasOrthogonalProjection]
+    (hA : IsSelfAdjoint A)
+    (hred : TauCeti.LinearPMap.ReducesSubspace A U)
+    (hBsa : IsSelfAdjoint B)
+    (hB : TauCeti.IsOddFor U B)
+    (hV : TauCeti.LinearPMap.ReducesSubspace (TauCeti.LinearPMap.addBounded A B) V)
+    (hUa : ∀ x : A.domain, (x : Er) ∈ U →
+      RCLike.re ⟪A x, (x : Er)⟫_ℝ ≤ a * ‖(x : Er)‖ ^ 2)
+    (hUb : ∀ x : A.domain, (x : Er) ∈ Uᗮ →
+      b * ‖(x : Er)‖ ^ 2 ≤ RCLike.re ⟪A x, (x : Er)⟫_ℝ)
+    (hab : a < b) (hBmem : N.Mem B) :
+    Angle.HasDefinedDoubleTangent U V ∧
+      N.Mem (Angle.tanTwoAngleOperator U V) ∧
+      (b - a) * N.gauge (Angle.tanTwoAngleOperator U V) ≤ 2 * N.gauge B :=
+  tanTwoTheta_ambient_unbounded_reducing_symmetricNorming_presentation_rclike
+    N V hA hred hBsa hB hV hUa hUb hab hBmem
 
 end
 end DavisKahan1970

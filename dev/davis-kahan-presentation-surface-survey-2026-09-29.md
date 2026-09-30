@@ -73,104 +73,94 @@ The presentation module also imports the scalar-transport functional-calculus fo
 directly.  It does not depend on `OperatorAngleGeneric` merely to obtain local real-algebra
 and functional-calculus instances.
 
-## Already in the preferred presentation form
+## Trigonometric presentation status after the follow-up campaign
+
+The stricter audit standard is now explicit: if the source theorem is written on
+`f(Theta)`, the publication-facing Lean theorem should expose a literal functional-calculus
+`f(Theta)` object.  Equality of norms, singular values, or approximation-number sequences is
+not a substitute for that statement; it is the bridge by which the proof result is
+transported to the source object.
+
+### Section 2: `sin Theta`
+
+**Presentation complete.**
+
+`SectionTwo.sinTheta` is stated on `sourceDirectedSinThetaOperator`, literally `cfc sin` of
+the trial-coordinate angle.  The rectangular cross-projection remains the analytic engine,
+with an exact sine/modulus bridge.
+
+### Section 2: directed `tan Theta_0`
+
+**Presentation complete.**
+
+`SectionTwo.tanTheta_directed` and its fixed-field specializations are stated on
+`sourceDirectedTanThetaOperator = cfc tan Theta_0`.  The older existential rectangular
+tangent remains the proof engine.  Equality of the complete approximation-number sequence is
+proved and used to transport symmetric-norming membership and gauge.
 
 ### Section 2: directed and ambient `sin 2 Theta`
 
-**No action recommended.**
+**Presentation complete.**
 
-The scalar-generic public API already concludes on
-`Angle.directedSinTwoAngleOperator` for the directed clause and on the corresponding
-ambient angle object for the ambient clause.  The block-representative theorems are
-separately named as such.  This is the pattern the Section 2 `sin Theta` change now
-follows.
+The ambient object was already literal functional calculus.  The directed public surface now
+uses `sourceDirectedSinTwoThetaOperator = cfc (fun t => sin (2*t)) Theta_0`; an exact operator
+identity connects it to the positive `2 sin Theta_0 cos Theta_0` object used by the analytic
+proof.  Explicitly named block-representative theorems remain available as proof APIs.
+
+### Section 2: directed `tan 2 Theta_0`
+
+**Presentation complete.**
+
+The public directed endpoint is now on the trial-side literal
+`sourceDirectedTanTwoThetaOperator V U = cfc (fun t => tan (2*t)) Theta_0`.  The proof-facing
+corner has the opposite block orientation `(U,V)`; the trial-side correspondence is proved by
+complete approximation-number transport rather than treated as a rewrite.
 
 ### Section 2: ambient `tan Theta`
 
-**No action recommended.**
+**Presentation complete.**
 
-`tanTheta_ambient_unboundedRitz_definedTangent_symmetricNorming_rclike` exposes
-`Angle.HasDefinedTangent` and concludes on `Angle.tanAngleOperator`.  Pole/definedness
-is part of the mathematical statement rather than hidden in a block representation.
+The existing scalar-generic theorem already exposed `Angle.HasDefinedTangent` and literal
+`Angle.tanAngleOperator = cfc tan Theta`, so no representation change was needed.
 
 ### Section 2: ambient `tan 2 Theta`
 
-**No action recommended.**
+**Presentation complete.**
 
-`tanTwoTheta_ambient_unbounded_reducing_symmetricNorming_rclike` concludes on the
-generic branch-free `Angle.absTanTwoAngleOperator`.  The representation used in the
-proof is not exposed as the source object.
+The analytic endpoint remains on the positive branch-free `Angle.absTanTwoAngleOperator`.
+The public endpoint is now on signed literal
+`Angle.tanTwoAngleOperator = cfc (fun t => tan (2*t)) Theta`.  A proved exact identity
+`absTanTwoAngleOperator = |tanTwoAngleOperator|` and modulus invariance transport ideal
+membership and every symmetric-norming gauge.
+
+### Proposition 6.1: ambient `sin Theta`
+
+**Presentation complete.**
+
+Both complex and real canonical Proposition 6.1 declarations, including the Appendix
+common-domain presentations, now conclude on literal
+`cfc Real.sin (Angle.angleOperator U V)`.  The complex positive sine and the real
+projector-difference/cross-sine objects remain proof-facing representations.  The generic
+identity `Angle.cfc_sin_angleOperator` plus complete approximation-number transport makes the
+correspondence explicit.
 
 ### Section 4: direct-rotation source surface
 
 **No analogous wrapper problem found in the sampled public surface.**
 
-The source-oriented declarations in `Section4DirectRotationSource.lean` are already
-stated in terms of the direct rotation / source quantities they certify.  The lower
-level singular-value and compact-operator lemmas remain visibly implementation
-oriented.  Proposition 4.4's repaired statement is also intentionally a different
-mathematical claim, not a representative of the false printed inequality.
+The source-oriented declarations in `Section4DirectRotationSource.lean` are stated in terms
+of the direct rotation / source quantities they certify.  Proposition 4.4's repaired
+statement is intentionally a different mathematical claim, not a representative of the
+false printed inequality.
 
-### Section 8: canonical branch selection
+### Section 8: angle-order statements
 
-**No analogous wrapper problem found.**
+**Separate non-trigonometric presentation follow-up remains.**
 
-The publication-facing API explicitly names the canonical branch and its uniqueness
-property.  Internal block/eigenvalue constructions are supporting theorems rather
-than the object exposed as the paper theorem.
-
-## Presentation candidates for follow-up
-
-### High priority: Proposition 6.1 over `R`
-
-`proposition6_1_complex` already concludes on the paper's literal ambient sine,
-`sinAngleOperatorC U V`.
-
-`proposition6_1_real`, however, still concludes on
-
-`V.starProjection - U.starProjection`.
-
-That was a reasonable representation while the real development lacked the relevant
-functional-calculus surface.  The generic angle API now defines
-
-`Angle.sinAngleOperator U V = |P_U - P_V|`
-
-for arbitrary `RCLike`, including `R`.  This makes the real Proposition 6.1 theorem a
-close analogue of the Section 2 issue repaired here.  A source-facing real theorem
-should be stated on `Angle.sinAngleOperator U V`, with the projector-difference
-estimate retained as an explicitly named implementation/transport theorem.  The
-modulus gauge lemmas added by this overlay should make that transport short.
-
-A stronger cleanup would make both fixed-field Proposition 6.1 statements thin
-specializations of one scalar-generic source theorem on `Angle.sinAngleOperator`.
-
-### Medium priority: directed `tan Theta_0`
-
-`tanTheta_directed_unboundedRitz_symmetricNorming_exists_rclike` constructs an
-existential operator `tanTheta0 : Z -> E` and characterizes it only through
-`HasDirectedTangentApproximationNumbers`.
-
-This is mathematically stronger than accepting an arbitrary caller-supplied
-representative, but the publication-facing conclusion still lacks a named canonical
-directed tangent object.  The ambient tangent side already has such an object.
-
-Recommended follow-up: determine whether the pole-exclusion hypotheses support a
-scalar-generic canonical directed tangent operator on trial coordinates.  If so,
-state the public theorem on that operator and retain the approximation-number
-existence theorem as the construction/transport layer.  This needs a design pass;
-it is not only a renaming exercise.
-
-### Medium priority: directed `tan 2 Theta_0`
-
-`tanTwoTheta_directed_unboundedResidual_reducing_symmetricNorming_rclike` similarly
-constructs an existential corner `T : U -> U^perp` satisfying
-`HasDirectedDoubleTangentApproximationNumbers`.
-
-The directed `sin 2 Theta_0` API already has a canonical angle object, so the tangent
-surface is now the asymmetric member of the pair.  A future presentation theorem
-should prefer a named directed double-tangent object if its pole/branch semantics can
-be encoded canonically.  Keep the current existential theorem as the construction
-engine.
+The Section 8 source writes conditions such as `Theta <= pi/4`, whereas some Lean surfaces
+expose scalar `maximalAngle` inequalities.  That is the same general source-fidelity question,
+but it is an angle-order/spectral presentation issue rather than part of this trigonometric
+facade campaign.
 
 ### Low priority / ergonomic, not a fidelity defect: Theorems 6.1 and 6.2
 
@@ -187,18 +177,14 @@ should remain because it captures genuine source-level invariance and is useful 
 transport across coordinate spaces.  This is not the same source-fidelity problem as
 the former Section 2 `sin Theta` headline.
 
-## Recommended order
+## Remaining presentation work
 
-1. Compile-test the Section 2 `sin Theta` overlay and keep the public name on the
-   positive source operator.
-2. Apply the same source-object/representation-bridge pattern to real Proposition 6.1,
-   preferably through one scalar-generic `Angle.sinAngleOperator` theorem.
-3. Design canonical directed tangent objects before changing either directed tangent
-   public theorem.
-4. Add optional canonical convenience wrappers for Theorems 6.1/6.2 only if they
-   materially improve the paper-facing signatures.
+The trigonometric facade campaign is complete at the public surfaces surveyed here.  The main
+remaining presentation question identified by this audit is Section 8's direct angle-order
+surface.  The generalized Section 6 representative freedom remains intentional because the
+source itself permits singular-value representatives.
 
-The recurring design rule is simple: the source theorem should name the mathematical
-object the paper names; representation-changing equalities and singular-value
-transport belong immediately below that surface, and the analytic proof may continue
-to use whichever block is most convenient.
+The recurring design rule is: the source theorem names the mathematical object the paper
+names; representation-changing equalities and singular-value transport belong immediately
+below that surface, and the analytic proof may continue to use whichever block is most
+convenient.

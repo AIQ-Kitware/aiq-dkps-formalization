@@ -138,14 +138,10 @@ were deleted on 2026-09-05 as case twins of the canonical names (F6.2); cite
 
 alias SymmetricSinThetaProblem := SymmetricSinThetaProblem
 
--- The real-scalar form.  A unitarily invariant norm sees only the complete
--- singular-value sequence, so the real conclusion is carried by
--- `crossSineSum U V` rather than by a functional-calculus sine: no real
--- continuous functional calculus is needed, and none is assumed.
--- `proposition6_1_real_sinTheta_singularValues` is the compiled certificate that
--- this operator carries exactly the paper's whole-space `sin Theta` sequence,
--- and `proposition6_1_real_representative` states the estimate for an arbitrary
--- operator with that sequence.
+-- Compatibility aliases for the real proof representatives.  The canonical
+-- `proposition6_1_real` theorem is now stated on literal
+-- `cfc Real.sin (Angle.angleOperator U V)`.  These aliases retain the lower-level
+-- `crossSineSum` / representative certificates used to transport the proof.
 alias RealSymmetricSinThetaProblem := RealSymmetricSinThetaProblem
 alias proposition6_1_real_kyFan :=
   RealSymmetricSinThetaProblem.symmetric_all_kyFan_real
@@ -197,21 +193,12 @@ alias proposition6_1_commonDomain_kyFan :=
   CommonDomainSymmetricSinThetaProblem.symmetric_all_kyFan
 alias proposition6_1_commonDomain_ofBounded :=
   CommonDomainSymmetricSinThetaProblem.ofBounded
--- The common-domain Proposition 6.1 is stated over any `RCLike` field.  Its
--- scalar-generic conclusion is carried by `crossSineSum U V` rather than by
--- a functional-calculus sine, for the same reason as in the bounded real file:
--- a unitarily invariant norm sees only the singular-value sequence, and the block
--- form is what the proof produces.  Until 2026-09-03 the reason given was that no
--- real continuous functional calculus was constructed; one now is, at every
--- `RCLike` field, so `TauCeti.DavisKahan.Angle.sinAngleOperator` could name the
--- conclusion directly.  Restating it that way is a separate change and would move
--- this theorem's statement pin.
--- `proposition6_1_commonDomain_sinTheta_singularValues` is the compiled
--- certificate that this operator carries exactly the paper's whole-space
--- `sin Theta` sequence.  Over `ℂ` the literal form is `proposition6_1_commonDomain`
--- itself.  `proposition6_1_real_commonDomain_ofBounded` records that the real
--- bounded inputs are an instance, so the real form is a relaxation of the real
--- Proposition 6.1 rather than a statement parallel to it.
+-- The generic common-domain proof still computes through `crossSineSum` and the
+-- projector difference.  The source-facing endpoint is now
+-- `proposition6_1_commonDomain_presentation_rclike`, on
+-- `Angle.ambientSinThetaOperator U V`, definitionally the literal
+-- `cfc Real.sin (Angle.angleOperator U V)` presentation object.  The aliases below retain the
+-- implementation certificates and bounded-specialization witnesses.
 alias proposition6_1_commonDomain_crossSineSum :=
   CommonDomainSymmetricSinThetaProblem.result_every_unitarilyInvariantNorm_crossSineSum
 alias proposition6_1_commonDomain_crossSineSum_kyFan :=
