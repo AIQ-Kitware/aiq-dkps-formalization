@@ -43,6 +43,7 @@ import DavisKahan.Sources.DavisKahan1970.Section4DirectRotationSource
 import DavisKahan.Sources.DavisKahan1970.Section4Dominance
 import DavisKahan.Sources.DavisKahan1970.Section4Examples
 import DavisKahan.Sources.DavisKahan1970.Section4FiniteSurface
+import DavisKahan.Sources.DavisKahan1970.Section4LowDimensional
 import DavisKahan.Sources.DavisKahan1970.Section4Real
 import DavisKahan.Sources.DavisKahan1970.Section5
 import DavisKahan.Sources.DavisKahan1970.Section5BanachSylvester
