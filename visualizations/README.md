@@ -2,18 +2,18 @@
 
 Executable geometric visualizations for the formalized Davis--Kahan results.
 The current package contains two source-grounded case studies: the Section 2
-**sine-theta theorem** and the explicit **Proposition 4.4 counterexample**.  Each
+**sine-theta theorem** and the explicit **Proposition 4.4 counterexample**. Each
 case study shares one checked numerical model between VTK and Manim renderers.
 
-This directory is not part of the Lean build.  It is a companion for developing
-intuition, figures, talks, and manuscript animations.  Numerical assertions here
+This directory is not part of the Lean build. It is a companion for developing
+intuition, figures, talks, and manuscript animations. Numerical assertions here
 do not replace the Lean proofs.
 
-## What the first scene visualizes
+## What the first sine-theta scenes visualize
 
 The public Lean theorem is
 `TauCeti.DavisKahan1970.SectionTwo.sinTheta`, whose conclusion is stated on the
-literal positive trial-coordinate `sin Theta_0`.  Its proof-facing rectangular
+literal positive trial-coordinate `sin Theta_0`. Its proof-facing rectangular
 representative is
 
 ```text
@@ -34,7 +34,7 @@ A0 = [rho]
 ```
 
 The exact coordinate map `F0` sends `1` to `e1`; the trial coordinate map `E0`
-sends `1` to `v_theta`.  Therefore
+sends `1` to `v_theta`. Therefore
 
 ```text
 S(1) = (I - P_U) v_theta = (0, sin(theta)).
@@ -90,9 +90,9 @@ For Manim as well:
 uv sync --extra vtk --extra manim --extra test
 ```
 
-The visualization project currently targets Python 3.11--3.13.  In particular,
+The visualization project currently targets Python 3.11--3.13. In particular,
 Python 3.13 avoids warnings from Manim's current transitive `pydub` dependency
-under Python 3.14.  If an older `.venv` was created with Python 3.14, recreate it:
+under Python 3.14. If an older `.venv` was created with Python 3.14, recreate it:
 
 ```bash
 rm -rf .venv
@@ -101,7 +101,7 @@ uv sync --extra vtk --extra manim --extra test
 ```
 
 If another uv-managed environment is already active, uv may print a
-`VIRTUAL_ENV ... does not match ... .venv` warning.  That is expected: these
+`VIRTUAL_ENV ... does not match ... .venv` warning. That is expected: these
 commands deliberately use the local `visualizations/.venv`.
 
 Manim may require the usual system packages for Cairo, Pango, FFmpeg, and LaTeX
@@ -127,14 +127,95 @@ uv run python -m dkvis.sine_theta \
     --lambda-desired -0.6
 ```
 
-## Interactive VTK explorer
+## Sine-theta slide-building sequence
+
+The sine-theta material now has **three VTK scenes** intended to build slides in
+order:
+
+1. **setup** -- `dkvis.vtk_sine_theta_intro`
+2. **motivation** -- `dkvis.vtk_sine_theta_motivation`
+3. **theorem / illustration** -- `dkvis.vtk_sine_theta`
+
+That sequence is meant to answer, in order:
+
+1. What are the exact and trial objects?
+2. Why does a sine appear at all?
+3. How does the residual bound the subspace error?
+
+### 1. Introductory setup scene
 
 ```bash
 cd visualizations
+uv run --extra vtk python -m dkvis.vtk_sine_theta_intro
+```
+
+This slide-oriented scene introduces the geometric objects **before** any proof
+mechanics are used:
+
+- ambient space `E = R^2`;
+- exact subspace `U = span(e1)`;
+- complementary line `U_perp = span(e2)`;
+- trial subspace `V = span(v_theta)`;
+- unit trial vector `v_theta`;
+- coordinate maps `F0(1)=e1` and `E0(1)=v_theta`.
+
+Generate a deterministic PNG:
+
+```bash
+mkdir -p renders
+uv run --extra vtk python -m dkvis.vtk_sine_theta_intro \
+    --theta 35 \
+    --no-interact \
+    --screenshot renders/sine-theta-intro.png
+```
+
+### 2. Motivation scene: why `sin(theta)`?
+
+```bash
+uv run --extra vtk python -m dkvis.vtk_sine_theta_motivation
+```
+
+This second slide keeps the exact and trial geometry visible while explaining the
+proof-facing rectangular block:
+
+```text
+S = (I - P_U) E0.
+```
+
+On the unit trial coordinate,
+
+```text
+v_theta = P_U v_theta + (I - P_U) v_theta,
+P_U v_theta       = (cos(theta), 0),
+(I - P_U) v_theta = (0, sin(theta)).
+```
+
+So the length of the vertical leg is exactly `sin(theta)`, which is the visible
+specialization of `||sin Theta_0||`.
+
+Generate a deterministic PNG:
+
+```bash
+mkdir -p renders
+uv run --extra vtk python -m dkvis.vtk_sine_theta_motivation \
+    --theta 35 \
+    --no-interact \
+    --screenshot renders/sine-theta-motivation.png
+```
+
+### 3. Main interactive sine-theta explorer
+
+```bash
 uv run --extra vtk python -m dkvis.vtk_sine_theta
 ```
 
-The angle slider rotates the trial subspace.  The scene simultaneously shows:
+This main scene has been made more **slide-friendly**. At every slider position
+it keeps the exact subspace, the trial subspace, the trial vector, its exact
+projection, the complementary sine block, the residual, and the theorem panel
+visible. The goal is that a screenshot at an arbitrary angle should still be
+self-explanatory.
+
+The scene simultaneously shows:
 
 - the exact desired subspace `U`;
 - the trial subspace `V` and unit vector `v_theta`;
@@ -151,7 +232,7 @@ uv run --extra vtk python -m dkvis.vtk_sine_theta \
     --theta 40 \
     --delta 1.25 \
     --no-interact \
-    --screenshot renders/sine-theta.png
+    --screenshot renders/sine-theta-main.png
 ```
 
 ## Manim animation
@@ -162,10 +243,10 @@ uv run --extra manim python -m manim -pql dkvis/manim_sine_theta.py SineThetaSce
 ```
 
 Invoke Manim through `python -m manim`, not the `.venv/bin/manim` console
-script.  Manim loads scene files by path, and the module invocation keeps the
+script. Manim loads scene files by path, and the module invocation keeps the
 `visualizations/` project root on `sys.path`, so `from dkvis...` imports resolve.
 
-The Manim scene uses the same `SineThetaModel`.  It animates the trial line while
+The Manim scene uses the same `SineThetaModel`. It animates the trial line while
 keeping the exact subspace fixed, then displays the two identities that explain
 the theorem geometrically:
 
@@ -174,11 +255,10 @@ the theorem geometrically:
 R(1) = (0, delta sin(theta))              [sharp default model]
 ```
 
-
 ## Proposition 4.4 counterexample
 
 `dkvis.prop44.Prop44Model` encodes the exact `R^4` witness used by the Lean
-refutation.  With `U = span(e0,e1)`, the admissible competitor is
+refutation. With `U = span(e0,e1)`, the admissible competitor is
 
 ```text
 W = 1/2 * [[ 1, -1, -1, -1],
@@ -189,7 +269,7 @@ V = W(U).
 ```
 
 Both principal angles between `U` and `V` are `pi/4`, strictly below the
-printed `pi/3` threshold.  The Davis--Kahan direct rotation is
+printed `pi/3` threshold. The Davis--Kahan direct rotation is
 
 ```text
 R = 1/sqrt(2) * [[ 1,  0,  0, -1],
@@ -220,15 +300,42 @@ cd visualizations
 uv run python -m dkvis.prop44 --verify
 ```
 
+### Explanatory introduction VTK scene
+
+```bash
+uv run --extra vtk python -m dkvis.vtk_prop44_intro
+```
+
+This static slide-oriented scene introduces the actual geometric objects before
+animation:
+
+- ambient space `R^4`;
+- source plane `U = span(e0,e1)`;
+- destination plane `V = R(U) = W(U)`;
+- the two exact invariant-plane decompositions used for the direct rotation and
+  the competitor.
+
+It keeps the source pieces and endpoint image pieces visible in all four exact
+2D restriction panels, so screenshots can be dropped directly into slides.
+
+Generate a deterministic PNG:
+
+```bash
+mkdir -p renders
+uv run --extra vtk python -m dkvis.vtk_prop44_intro \
+    --no-interact \
+    --screenshot renders/prop44-intro.png
+```
+
 ### Interactive four-plane VTK explorer
 
 ```bash
 uv run --extra vtk python -m dkvis.vtk_prop44
 ```
 
-The VTK scene intentionally uses **no 4D-to-3D projection**.  Instead it shows
-four exact two-dimensional invariant-plane restrictions of the actual `R^4`
-operators:
+The main VTK scene intentionally uses **no 4D-to-3D projection**. Instead it
+shows four exact two-dimensional invariant-plane restrictions of the actual
+`R^4` operators:
 
 ```text
 left column -- direct rotation R
@@ -240,12 +347,28 @@ right column -- competitor W
   span(m2,m3):   0 deg (fixed)
 ```
 
-These are different decompositions of `R^4`.  The direct-rotation planes are
+Unlike the first revision, the source and destination remain visible at every
+slider position. Orange/cyan arrows show the source directions (or their
+projected pieces), green/red arrows show the endpoint image, and white arrows
+show the current interpolation state. That makes arbitrary screenshots much
+more self-explanatory for talks.
+
+Generate a deterministic PNG of the improved main scene:
+
+```bash
+mkdir -p renders
+uv run --extra vtk python -m dkvis.vtk_prop44 \
+    --t 0.70 \
+    --no-interact \
+    --screenshot renders/prop44-four-plane.png
+```
+
+These are different decompositions of `R^4`. The direct-rotation planes are
 principal/invariant planes for `R`; the `m` planes are the moving and fixed
-invariant planes for `W`.  The display does not identify them with one another.
+invariant planes for `W`. The display does not identify them with one another.
 
 A single `MOTION t` slider animates all four local rotations from the identity
-to the endpoint.  Only `t=1` is the Proposition 4.4 comparison.  Each panel
+to the endpoint. Only `t=1` is the Proposition 4.4 comparison. Each panel
 reports:
 
 - its exact local rotation angle;
@@ -265,7 +388,7 @@ so one plane contributes
 4 |sin(alpha / 2)|
 ```
 
-to the full trace norm.  At the endpoint this makes the counterexample visible
+to the full trace norm. At the endpoint this makes the counterexample visible
 without any projection artifact:
 
 ```text
@@ -307,7 +430,7 @@ uv run --extra manim python -m manim -pql dkvis/manim_prop44.py Prop44Scene
 ```
 
 This scene uses exact endpoint invariant decompositions instead of a 3D
-projection.  They are deliberately labeled as *different* decompositions:
+projection. They are deliberately labeled as *different* decompositions:
 
 ```text
 R:  span(e0,e3) rotates +45 deg
@@ -317,8 +440,8 @@ W:  span(m0,m1) rotates +90 deg
     span(m2,m3) is fixed
 ```
 
-It then compares the four singular values of the full displacement.  This is
-the key trace-norm mechanism: the direct rotation has four equal nonzero chord
+It then compares the four singular values of the full displacement. This is the
+key trace-norm mechanism: the direct rotation has four equal nonzero chord
 lengths, while the competitor has two larger chord lengths and two zeros; the
 sum is nevertheless smaller for the competitor.
 
@@ -332,16 +455,22 @@ cd visualizations
 uv run --extra test pytest -q
 ```
 
-A useful smoke test for the VTK renderer is:
+Useful smoke tests for the VTK renderer are:
 
 ```bash
+uv run --extra vtk python -m dkvis.vtk_sine_theta_intro \
+    --theta 35 --no-interact --screenshot renders/sine-intro-smoke.png
+
+uv run --extra vtk python -m dkvis.vtk_sine_theta_motivation \
+    --theta 35 --no-interact --screenshot renders/sine-motivation-smoke.png
+
 uv run --extra vtk python -m dkvis.vtk_sine_theta \
-    --theta 40 --no-interact --screenshot renders/smoke.png
+    --theta 40 --no-interact --screenshot renders/sine-main-smoke.png
 ```
 
 ## Planned extensions
 
-Keep the shared numerical model / multiple-renderer split.  The next natural
+Keep the shared numerical model / multiple-renderer split. The next natural
 scenes are:
 
 1. `tan Theta`: show the trial subspace as a graph over the exact subspace and
