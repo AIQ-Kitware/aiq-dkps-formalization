@@ -1,0 +1,28 @@
+[project]
+name = "dkps-visualizations"
+version = "0.1.0"
+description = "Executable geometric visualizations for the Davis--Kahan formalization"
+requires-python = ">=3.11"
+dependencies = [
+  "numpy>=2.0",
+]
+
+[project.optional-dependencies]
+vtk = [
+  "vtk>=9.3",
+]
+manim = [
+  "manim>=0.19",
+]
+test = [
+  "pytest>=8",
+]
+all = [
+  "vtk>=9.3",
+  "manim>=0.19",
+  "pytest>=8",
+]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-ra"
