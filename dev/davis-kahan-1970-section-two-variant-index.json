@@ -21,7 +21,7 @@
       "short_api": {
         "declaration": "TauCeti.DavisKahan1970.SectionTwo.sinTheta",
         "status": "bound",
-        "reason": "Bound to the ledger-selected scalar-generic where-defined RCLike theorem. The real and complex aliases are thin specializations."
+        "reason": "Bound to the ledger-selected scalar-generic where-defined RCLike theorem. Its conclusion is on the positive trial-coordinate source `sin Theta_0`; the rectangular complementary-projection block is retained as an implementation theorem. The real and complex aliases are thin specializations."
       },
       "ledger_witnesses": [
         "TauCeti.DavisKahan1970.sinTheta_unbounded_formGap_whereDefinedUIN_rclike"
@@ -32,7 +32,7 @@
           "role": "ledger_witness",
           "scalar_scope": "rclike",
           "source_fidelity": "attested_by_ledger",
-          "reason": "Single scalar-generic where-defined theorem selected by the ledger for the source real-or-complex scope."
+          "reason": "Single scalar-generic where-defined theorem selected by the ledger for the source real-or-complex scope; its conclusion is stated on `sourceDirectedSinThetaOperator`, not on the rectangular proof representative."
         },
         {
           "declaration": "TauCeti.DavisKahan1970.sinTheta_unbounded_formGap_whereDefinedUIN_complex",
@@ -47,6 +47,13 @@
           "scalar_scope": "real",
           "source_fidelity": "not_ledger_witness",
           "reason": "Thin real specialization of the RCLike ledger witness."
+        },
+        {
+          "declaration": "TauCeti.DavisKahan1970.sinTheta_unbounded_formGap_rectangular_whereDefinedUIN_rclike",
+          "role": "implementation_engine",
+          "scalar_scope": "rclike",
+          "source_fidelity": "not_ledger_witness",
+          "reason": "Rectangular Sylvester-proof endpoint on `(I - F0 F0*) E0`; the ledger witness transports this result through the exact functional-calculus-sine/modulus bridge and then through modulus/gauge invariance to the literal source sine operator."
         },
         {
           "declaration": "TauCeti.DavisKahan1970.sinTheta_unbounded_formGap_symmetricNorming_rclike",

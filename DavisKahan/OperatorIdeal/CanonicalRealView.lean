@@ -1,9 +1,10 @@
 /-
 Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
-Authors: Jon Crall, Claude Opus 5
+Authors: Jon Crall, Claude Opus 5, OpenAI GPT-5.6 Sol
 -/
 import ForTauCeti.Analysis.OperatorIdeal.Family.OperatorNorm
+import ForTauCeti.Analysis.OperatorIdeal.Family.Modulus
 
 /-!
 # Real-valued view of a canonical symmetric ideal family
@@ -91,6 +92,12 @@ theorem mem_iff_mem_carrier (A : E →L[𝕜] F) :
 /-- The real gauge is the `toReal` of the stored `ℝ≥0∞` gauge. -/
 theorem gaugeReal_eq_toReal (A : E →L[𝕜] F) :
     N.gaugeReal A = (N.toOperatorIdealFamily.gauge A).toReal := rfl
+
+/-- Passing from a rectangular operator to its positive modulus preserves the real-valued
+symmetric ideal gauge. -/
+theorem gaugeReal_modulus_eq (A : E →L[𝕜] F) :
+    N.gaugeReal A.modulus = N.gaugeReal A := by
+  exact congrArg ENNReal.toReal (N.gauge_modulus_eq A)
 
 /-! ### The ideal laws, in `ℝ` -/
 

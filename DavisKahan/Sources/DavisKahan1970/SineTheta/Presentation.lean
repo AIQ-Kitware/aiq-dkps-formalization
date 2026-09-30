@@ -7,6 +7,9 @@ import DavisKahan.Sources.DavisKahan1970.SineThetaSourceInventory
 import DavisKahan.SinTheta.Canonical
 import DavisKahan.SinTheta.Real.Canonical
 import DavisKahan.Sources.DavisKahan1970.SymmetricNormingFanDominance
+import DavisKahan.OperatorIdeal.CanonicalRealView
+import DavisKahan.Geometry.Angle.OperatorAngleGeneric
+import DavisKahan.BoundedOperator.IsometricRangeProjection
 
 open TauCeti.DavisKahan.Sylvester
 
@@ -21,8 +24,10 @@ half-infinite configurations. The complex and real versions specialize it.
 `IsTrialResidual` records the isometric trial map and its bounded residual on
 the trial operator's domain. `IsExactSpectralDecomposition` records the exact
 orthogonal coordinate maps and the complementary operator. The ambient, trial,
-and complementary operators may all be unbounded. The rectangular map `(I - F₀ F₀*) E₀` has modulus `sin Theta₀`
-and the same ideal norm as that positive operator on trial coordinates.
+and complementary operators may all be unbounded. The source-directed angle `Theta₀` is represented on trial coordinates by continuous
+functional calculus, and its literal sine is proved equal to the modulus of the
+rectangular block `(I - F₀ F₀*) E₀`.  The two forms therefore have the same
+operator-ideal gauge whenever that gauge is defined.
 
 The `symmetricNorming` theorems also prove ideal membership for their
 `SymmetricNormingFunction` gauges. The interval/exterior theorem with an
@@ -37,6 +42,15 @@ open TauCeti.DavisKahan.ExactSinTheta
 
 
 open scoped InnerProductSpace
+
+-- Real functional calculus on endomorphisms over an abstract `RCLike` field
+-- uses the same local restriction-of-scalars instances as
+-- `Geometry/Angle/OperatorAngleGeneric.lean`.  They are deliberately local;
+-- `OperatorRealAlgebra.lean` documents why registering them globally changes
+-- unrelated scalar-multiplication elaboration.
+attribute [local instance 100] ContinuousLinearMap.realAlgebra
+  ContinuousLinearMap.realIsScalarTower ContinuousLinearMap.continuousFunctionalCalculusReal
+attribute [local instance] ContinuousLinearMap.instStarOrderedRingRCLike
 
 noncomputable section
 
@@ -174,6 +188,126 @@ theorem isExactSpectralDecomposition_iff
   · rintro ⟨hF₀, hF₁, horth, hcomplete, hdom, hintertwines⟩
     exact ⟨hF₀, hF₁, horth, hcomplete, hdom, hintertwines⟩
 
+/-- The rectangular complementary-projection block whose modulus is the
+positive directed sine on trial coordinates. -/
+noncomputable def sourceDirectedSineBlock
+    (E₀ : F →L[𝕜] E) (F₀ : H →L[𝕜] E) : F →L[𝕜] E :=
+  (ContinuousLinearMap.id 𝕜 E - F₀ ∘L F₀.adjoint) ∘L E₀
+
+/-- The positive sine modulus used to reconstruct the directed angle `Θ₀`.
+
+This is the trial-coordinate analogue of
+`DavisKahan.Angle.directedSinAngleOperator`.  It is kept as a separate object
+from `sourceDirectedSinThetaOperator`: the latter is literally `sin Θ₀` via
+continuous functional calculus. -/
+noncomputable def sourceDirectedSineModulus
+    (E₀ : F →L[𝕜] E) (F₀ : H →L[𝕜] E) : F →L[𝕜] F :=
+  ContinuousLinearMap.modulus (sourceDirectedSineBlock E₀ F₀)
+
+/-- The source-directed angle `Θ₀` on trial coordinates.
+
+As in `SineTheta/OperatorAngleBridge.lean`, the angle is reconstructed on the
+canonical interval `[0, π/2]` by applying `arcsin` to the positive directed
+sine.  `SineTheta/AngleIdentity.lean` proves, for the canonical subspace
+coordinates, that this sine-defined angle is exactly Davis--Kahan's
+cosine-defined `arccos |C₀|` angle. -/
+noncomputable def sourceDirectedThetaOperator
+    (E₀ : F →L[𝕜] E) (F₀ : H →L[𝕜] E) : F →L[𝕜] F :=
+  cfc Real.arcsin (sourceDirectedSineModulus E₀ F₀)
+
+/-- **The source's literal positive directed `sin Θ₀` on trial coordinates.**
+
+Unlike the rectangular analytic representative, this definition spells out
+`sin Θ₀`: apply sine by continuous functional calculus to the source-directed
+angle operator. -/
+noncomputable def sourceDirectedSinThetaOperator
+    (E₀ : F →L[𝕜] E) (F₀ : H →L[𝕜] E) : F →L[𝕜] F :=
+  cfc Real.sin (sourceDirectedThetaOperator E₀ F₀)
+
+/-- For isometric trial and exact coordinate maps, the positive directed sine
+modulus is a contraction. -/
+theorem norm_sourceDirectedSineModulus_le_one
+    (E₀ : F →L[𝕜] E) (F₀ : H →L[𝕜] E)
+    (hE₀ : IsometricEmbedding E₀) (hF₀ : IsometricEmbedding F₀) :
+    ‖sourceDirectedSineModulus E₀ F₀‖ ≤ 1 := by
+  rw [sourceDirectedSineModulus, ContinuousLinearMap.norm_modulus]
+  let V : Submodule 𝕜 E := LinearMap.range F₀.toLinearMap
+  let : V.HasOrthogonalProjection :=
+    TauCeti.DavisKahan.BoundedOperator.rangeHasOrthogonalProjection F₀ hF₀
+  have hproj : V.starProjection = F₀ ∘L F₀.adjoint :=
+    TauCeti.DavisKahan.BoundedOperator.starProjection_range_eq_comp_adjoint F₀ hF₀
+  have hcomp :
+      ContinuousLinearMap.id 𝕜 E - F₀ ∘L F₀.adjoint = Vᗮ.starProjection := by
+    rw [← hproj]
+    change (1 : E →L[𝕜] E) - V.starProjection = Vᗮ.starProjection
+    exact (Submodule.starProjection_orthogonal' V).symm
+  rw [sourceDirectedSineBlock, hcomp]
+  calc
+    ‖Vᗮ.starProjection ∘L E₀‖ ≤ ‖Vᗮ.starProjection‖ * ‖E₀‖ :=
+      ContinuousLinearMap.opNorm_comp_le _ _
+    _ ≤ 1 * 1 :=
+      mul_le_mul Vᗮ.starProjection_norm_le
+        (TauCeti.DavisKahan.ExactSinTheta.opNorm_le_one_of_isometry hE₀)
+        (norm_nonneg _) zero_le_one
+    _ = 1 := by ring
+
+set_option maxHeartbeats 1000000 in
+/-- The spectrum of the positive directed sine modulus lies in `[0,1]`. -/
+theorem spectrum_sourceDirectedSineModulus_subset_Icc
+    (E₀ : F →L[𝕜] E) (F₀ : H →L[𝕜] E)
+    (hE₀ : IsometricEmbedding E₀) (hF₀ : IsometricEmbedding F₀) :
+    spectrum ℝ (sourceDirectedSineModulus E₀ F₀) ⊆ Set.Icc 0 1 := by
+  intro x hx
+  refine ⟨spectrum_nonneg_of_nonneg
+    (ContinuousLinearMap.modulus_nonneg (sourceDirectedSineBlock E₀ F₀)) hx, ?_⟩
+  have hone : ‖(1 : F →L[𝕜] F)‖ ≤ 1 := ContinuousLinearMap.norm_id_le
+  have habs : ‖x‖ ≤
+      ‖sourceDirectedSineModulus E₀ F₀‖ * ‖(1 : F →L[𝕜] F)‖ :=
+    spectrum.norm_le_norm_mul_of_mem hx
+  rw [Real.norm_eq_abs] at habs
+  refine (le_abs_self x).trans (habs.trans ?_)
+  calc
+    ‖sourceDirectedSineModulus E₀ F₀‖ * ‖(1 : F →L[𝕜] F)‖ ≤ 1 * 1 :=
+      mul_le_mul (norm_sourceDirectedSineModulus_le_one E₀ F₀ hE₀ hF₀)
+        hone (norm_nonneg _) zero_le_one
+    _ = 1 := by ring
+
+set_option maxHeartbeats 1000000 in
+/-- Applying sine to the source-directed angle recovers exactly the modulus of
+the rectangular complementary-projection block.  This is the bridge used by
+the analytic proof of the sine-theta inequality. -/
+theorem sourceDirectedSinThetaOperator_eq_modulus
+    (E₀ : F →L[𝕜] E) (F₀ : H →L[𝕜] E)
+    (hE₀ : IsometricEmbedding E₀) (hF₀ : IsometricEmbedding F₀) :
+    sourceDirectedSinThetaOperator E₀ F₀ =
+      ContinuousLinearMap.modulus (sourceDirectedSineBlock E₀ F₀) := by
+  have hsa : IsSelfAdjoint (sourceDirectedSineModulus E₀ F₀) :=
+    ContinuousLinearMap.modulus_isSelfAdjoint _
+  rw [sourceDirectedSinThetaOperator, sourceDirectedThetaOperator,
+    ← cfc_comp Real.sin Real.arcsin (sourceDirectedSineModulus E₀ F₀)
+      hsa Real.continuous_sin.continuousOn
+      Real.continuous_arcsin.continuousOn]
+  calc
+    cfc (Real.sin ∘ Real.arcsin) (sourceDirectedSineModulus E₀ F₀) =
+        cfc (fun x : ℝ => x) (sourceDirectedSineModulus E₀ F₀) := by
+      apply cfc_congr
+      intro x hx
+      have hxi := spectrum_sourceDirectedSineModulus_subset_Icc
+        E₀ F₀ hE₀ hF₀ hx
+      exact Real.sin_arcsin (by linarith [hxi.1]) hxi.2
+    _ = sourceDirectedSineModulus E₀ F₀ := cfc_id' ℝ _
+    _ = ContinuousLinearMap.modulus (sourceDirectedSineBlock E₀ F₀) := rfl
+
+/-- The literal source `sin Θ₀` and its rectangular complementary-projection
+representative have the same complete approximation-number sequence. -/
+theorem sourceDirectedSinThetaOperator_hasSameApproximationNumbers
+    (E₀ : F →L[𝕜] E) (F₀ : H →L[𝕜] E)
+    (hE₀ : IsometricEmbedding E₀) (hF₀ : IsometricEmbedding F₀) :
+    (sourceDirectedSinThetaOperator E₀ F₀).HasSameApproximationNumbers
+      (sourceDirectedSineBlock E₀ F₀) := by
+  rw [sourceDirectedSinThetaOperator_eq_modulus E₀ F₀ hE₀ hF₀]
+  exact TauCeti.DavisKahan.Angle.modulus_hasSameApproximationNumbers_rclike _
+
 /-- **Davis--Kahan 1970, Section 2 sine-theta theorem, presentation form.**
 
 **Not the theorem to cite.**  The result ledger now selects
@@ -265,23 +399,14 @@ theorem sinTheta_unbounded_formGap_symmetricNorming_rclike
     htrial.mapsDomain hexact.mapsDomain htrial.residualEquation
     hexact.intertwines hδ hgap hR
 
-/-- **Davis--Kahan 1970, the sine-theta inequality over real or complex Hilbert spaces.**
+/-- **Rectangular implementation theorem for the full-gap sine-theta bound.**
 
-The ambient operator `A` denotes the source's `A + H`. The hypotheses give an
-isometric trial map, a bounded residual on the trial operator's domain, an exact
-complementary block, and finite interval/exterior or ordered half-infinite separation.
-
-Put `S = (I - F₀ F₀*) E₀`. This rectangular map is the perpendicular component
-of each trial vector. Its modulus on the trial-coordinate space is the source's
-positive `sin Theta₀` operator. The polar identities `S = U |S|` and
-`|S| = U* S`, with `U` and `U*` contractive, preserve ideal membership and the
-norm. Thus `N.gaugeReal S` is the source sine-angle norm whenever `N.Mem S` holds.
-The body of this gauge is the same expression named by `hSinTheta₀` in
-`sinTheta_unbounded_intervalExterior_characterizedWitness_rclike`.
-
-Both norms are assumed finite. The norm record supplies the where-defined
-Ky Fan comparison; the conclusion makes no ideal-membership transfer claim. -/
-theorem sinTheta_unbounded_formGap_whereDefinedUIN_rclike
+Put `S = (I - F₀ F₀*) E₀`.  This theorem proves the where-defined UIN estimate
+directly for `S`, which is the operator produced by the Sylvester argument.
+The public source-facing theorem `sinTheta_unbounded_formGap_whereDefinedUIN_rclike`
+transports this estimate to the positive operator `sourceDirectedSinThetaOperator
+E₀ F₀ = |S|`. -/
+theorem sinTheta_unbounded_formGap_rectangular_whereDefinedUIN_rclike
     [TopologicalSpace.SeparableSpace E]
     (N : NormalizedSymmetricOperatorIdealFamily.{u, v} 𝕜)
     (A : E →ₗ.[𝕜] E) (A₀ : F →ₗ.[𝕜] F) (Λ₁ : G →ₗ.[𝕜] G)
@@ -310,6 +435,58 @@ theorem sinTheta_unbounded_formGap_whereDefinedUIN_rclike
         (kyFanNormingFunction_mem k hk R)
     simpa only [kyFanNormingFunction_gauge] using hmain.2
 
+/-- **Davis--Kahan 1970, the sine-theta inequality over real or complex Hilbert spaces.**
+
+The conclusion is stated on the paper's literal `sin Θ₀`, defined by applying
+`sin` through continuous functional calculus to the directed angle operator on
+trial coordinates.  The bridge theorem identifies that literal sine with the
+modulus of the rectangular complementary-projection block; ideal membership and
+the real gauge then transfer through polar decomposition before dispatching to
+`sinTheta_unbounded_formGap_rectangular_whereDefinedUIN_rclike`.
+
+Both displayed norms are interpreted at the paper's where-defined boundary: the
+two `N.Mem` arrows express that the inequality is asserted when both norms exist. -/
+theorem sinTheta_unbounded_formGap_whereDefinedUIN_rclike
+    [TopologicalSpace.SeparableSpace E]
+    (N : NormalizedSymmetricOperatorIdealFamily.{u, v} 𝕜)
+    (A : E →ₗ.[𝕜] E) (A₀ : F →ₗ.[𝕜] F) (Λ₁ : G →ₗ.[𝕜] G)
+    (E₀ : F →L[𝕜] E) (F₀ : H →L[𝕜] E) (F₁ : G →L[𝕜] E) (R : F →L[𝕜] E)
+    (hA : IsSelfAdjoint A) (hA₀ : IsSelfAdjoint A₀) (hΛ₁ : IsSelfAdjoint Λ₁)
+    (htrial : IsTrialResidual A A₀ E₀ R)
+    (hexact : IsExactSpectralDecomposition A Λ₁ F₀ F₁)
+    {δ : ℝ} (hδ : 0 < δ)
+    (hgap : FormBoundedSylvesterGap A₀ Λ₁ δ) :
+    N.Mem (sourceDirectedSinThetaOperator E₀ F₀) →
+    N.Mem R →
+      δ * N.gaugeReal (sourceDirectedSinThetaOperator E₀ F₀) ≤
+        N.gaugeReal R := by
+  intro hsin hR
+  let S : F →L[𝕜] E :=
+    (ContinuousLinearMap.id 𝕜 E - F₀ ∘L F₀.adjoint) ∘L E₀
+  have hsin_eq :
+      sourceDirectedSinThetaOperator E₀ F₀ = S.modulus := by
+    simpa [S, sourceDirectedSineBlock] using
+      sourceDirectedSinThetaOperator_eq_modulus E₀ F₀
+        htrial.isometry hexact.desiredIsometry
+  have hSmod : N.Mem S.modulus := by
+    simpa only [hsin_eq] using hsin
+  have hS : N.Mem S := by
+    change S ∈ N.toSymmetricOperatorIdealFamily.toOperatorIdealFamily.carrier
+    exact (N.toSymmetricOperatorIdealFamily.modulus_mem_iff S).mp hSmod
+  have hrect :=
+    sinTheta_unbounded_formGap_rectangular_whereDefinedUIN_rclike
+      (𝕜 := 𝕜) N A A₀ Λ₁ E₀ F₀ F₁ R hA hA₀ hΛ₁ htrial hexact hδ hgap
+      (by simpa [S] using hS) hR
+  have hgauge :
+      N.gaugeReal (sourceDirectedSinThetaOperator E₀ F₀) = N.gaugeReal S := by
+    calc
+      N.gaugeReal (sourceDirectedSinThetaOperator E₀ F₀) =
+          N.gaugeReal S.modulus := congrArg N.gaugeReal hsin_eq
+      _ = N.gaugeReal S :=
+        N.toSymmetricOperatorIdealFamily.gaugeReal_modulus_eq S
+  rw [hgauge]
+  simpa [S] using hrect
+
 section FixedField
 
 variable {E F G H : Type v}
@@ -327,10 +504,12 @@ complementary spectra, the sine of the angle between the trial and desired
 subspaces is controlled by the residual in every source unitarily invariant
 norm:
 
-`δ · N(sin Θ₀) ≤ N(R)`, where `sin Θ₀ = (1 − F₀F₀*) E₀`.
+Writing `S = (1 − F₀F₀*) E₀`, this implementation theorem proves the equivalent
+rectangular estimate `δ · N(S) ≤ N(R)`.  The source-facing where-defined theorem
+below states the result on the positive operator `sin Θ₀ = |S|`.
 
-The theorem also concludes that `sin Θ₀` lies in the norm's ideal, which in
-infinite dimension is part of the statement rather than a side condition.
+The implementation theorem also concludes that `S` lies in the norm's ideal;
+modulus invariance transfers that membership to `sin Θ₀`.
 
 This is the full gap scope: `FormBoundedSylvesterGap` covers the interval and
 exterior configuration of Section 2 and the ordered half-line configurations of
@@ -467,9 +646,9 @@ theorem sinTheta_unbounded_formGap_whereDefinedUIN_complex
     (hexact : IsExactSpectralDecomposition A Λ₁ F₀ F₁)
     {δ : ℝ} (hδ : 0 < δ)
     (hgap : FormBoundedSylvesterGap A₀ Λ₁ δ) :
-    N.Mem ((ContinuousLinearMap.id ℂ E - F₀ ∘L F₀.adjoint) ∘L E₀) →
+    N.Mem (sourceDirectedSinThetaOperator E₀ F₀) →
     N.Mem R →
-      δ * N.gaugeReal ((ContinuousLinearMap.id ℂ E - F₀ ∘L F₀.adjoint) ∘L E₀) ≤
+      δ * N.gaugeReal (sourceDirectedSinThetaOperator E₀ F₀) ≤
         N.gaugeReal R :=
   sinTheta_unbounded_formGap_whereDefinedUIN_rclike
     (𝕜 := ℂ) N A A₀ Λ₁ E₀ F₀ F₁ R hA hA₀ hΛ₁ htrial hexact hδ hgap
@@ -601,9 +780,9 @@ theorem sinTheta_unbounded_formGap_whereDefinedUIN_real
     (hexact : IsExactSpectralDecomposition A Λ₁ F₀ F₁)
     {δ : ℝ} (hδ : 0 < δ)
     (hgap : FormBoundedSylvesterGap A₀ Λ₁ δ) :
-    N.Mem ((ContinuousLinearMap.id ℝ E - F₀ ∘L F₀.adjoint) ∘L E₀) →
+    N.Mem (sourceDirectedSinThetaOperator E₀ F₀) →
     N.Mem R →
-      δ * N.gaugeReal ((ContinuousLinearMap.id ℝ E - F₀ ∘L F₀.adjoint) ∘L E₀) ≤
+      δ * N.gaugeReal (sourceDirectedSinThetaOperator E₀ F₀) ≤
         N.gaugeReal R :=
   sinTheta_unbounded_formGap_whereDefinedUIN_rclike
     (𝕜 := ℝ) N A A₀ Λ₁ E₀ F₀ F₁ R hA hA₀ hΛ₁ htrial hexact hδ hgap
