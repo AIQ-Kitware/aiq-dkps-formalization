@@ -5,7 +5,7 @@ Davis--Kahan? Semantic Alignment for LLM-Assisted Lean Formalization** and the s
 
 Before editing prose, read and follow:
 
-- `../formalization_draft2/STYLE_GUIDE.md`
+- `../dk_formalization_journal/STYLE_GUIDE.md`
 - `../BANNED_WORDS_AND_PHRASES.md`
 - `../SPECIFIC_NEGATIVE_PROMPTS.md`
 
@@ -68,7 +68,7 @@ Additional constraints:
 14. Present EconCSLib, Lean Atlas, ShadowBench, LeanMarathon, FormaTheoria, and
     related systems as adjacent work without priority claims for the local
     dashboard.
-15. Keep detailed Davis--Kahan mathematics in `../formalization_draft2/`.
+15. Keep detailed Davis--Kahan mathematics in `../dk_formalization_journal/`.
 16. Use numeric citations.
 17. The VeriCodeGen main text must be 4--9 pages under the supplied
     `neurips_2026_vericode.sty`; references, checklist, and optional technical
@@ -214,6 +214,9 @@ Additional constraints:
     evidence of theorem strength.
 50. The source's positive `sin Theta0` and the rectangular map
     `(I - F0 F0*) E0` act between different spaces. Explain the correspondence
-    through the source's singular-value/unitarily-invariant-norm identity.
-    Formalization 1's `hSinTheta0` names the rectangular representative;
-    Formalizations 2 and 3 inline that same map inside the gauge.
+    through the positive modulus and the resulting unitarily-invariant-norm
+    identity. Formalization 1's `hSinTheta0` names the rectangular representative,
+    and Formalization 2 inlines that map inside the gauge. Formalization 3 states
+    the bound on `sourceDirectedSinThetaOperator E0 F0`; Lean proves that this
+    functional-calculus sine equals the modulus of the rectangular block and
+    transports the gauge through that equality.

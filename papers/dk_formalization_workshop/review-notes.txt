@@ -1,0 +1,64 @@
+"Resource transparency" should be "Resource utilization" - transparency sounds
+like we are patting ourselves on the back for how progressive we are. That's
+bullshit. 
+
+
+Project chronology is short enough to the point where it is useless now. Just
+remove it. 
+
+
+We should remove the (I.e. is self-adjoint from appendix C)
+
+
+I don't really like the "candidate residual" terminology. I would prefer to
+talk in terms of an approximating operator, or perhaps a proxy operator, but if
+candidate is the term used in the literature, we can use it if we just define
+what candidate should be viewed as.
+
+The division of labor is invented by LLMs. This is not how it happened. Humans
+monitored LLM progress and asked questions, and provided framing, but the
+humans directing the formalization were not experts on the subject, and could
+only identify issues based on inconsistencies in LLM outputs.
+
+Appendix B is specifying too many obvious details. Of course we used lake
+build. We don't need to say it. We really shouldn't be referencing script
+names.
+
+The appendix A seems out of date wrt to the data that we've collected of first
+person accounts. The text seems very LLMy in this section and needs to have its
+cruft and details for the sake of details removed.
+
+
+"The tool use and resource disclosure" is also egrandizing. This can be
+tightened up significantly. You are also making claims here about what humans
+did that you are inventing.
+
+"Acknowledgement and funding disclosure" should just be Acknowledgements.
+
+
+The current source facing sine theta staement is not a lean listing block. We
+can discuss the problem of pinning down the ambiguity in what Davis and Kahan's
+statement of the context is. That might be interesting. Note I think we are
+being too agressive at maintaining a small page count. We still bias towards
+it, but you can include the full lean signature when I ask for it and we have
+room for it.
+
+
+We often mention Theorm 8.1 or Section 2. I think in each instance we should
+qualify that they belong to the DK paper, and not to this paper, otherwise it
+is confusing if you are skimming the paper.
+
+
+Formalization 1 caption needs to briefly describe the misalignment issue with
+it. 
+
+
+In section 4 you are claming that a human authors resolved disagreements, but
+you are inventing that detail. It's sort of true though, I just don't like the
+way it sounds, it sounds like I had some ability to understand what the context
+actually was when really I just kept probing LLMs in different ways. 
+
+We don't need to say Claude code. Claude is good enough.
+
+We should be using clever ref for references. fig. 1 should be Figure 1. using
+\Cref.

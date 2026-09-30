@@ -24,7 +24,7 @@ SOURCE_REGISTRIES = [
     ("spectra_map", "dev/tauceti/spectra-provenance-map.md"),
     ("external_lean", "dev/external-lean-references.md"),
     ("external_literature", "dev/external-literature-references.md"),
-    ("prior_paper_inventory", "papers/formalization_draft1/model_provenance.md"),
+    ("prior_paper_inventory", "papers/old/formalization_draft1/model_provenance.md"),
 ]
 
 

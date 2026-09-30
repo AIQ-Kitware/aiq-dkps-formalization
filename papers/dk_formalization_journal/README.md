@@ -1,4 +1,4 @@
-# formalization_draft2
+# dk_formalization_journal
 
 This directory contains the journal manuscript on the Lean formalization and
 mathematical audit of Davis--Kahan perturbation theory. The scope is now fixed:
@@ -14,7 +14,7 @@ mathematical audit of Davis--Kahan perturbation theory. The scope is now fixed:
   workshop paper's empirical human--LLM/process study, practitioner corpus, and
   resource-accounting analysis.
 
-The workshop paper in `../formalization_process/` remains useful editorially. In
+The workshop paper in `../dk_formalization_workshop/` remains useful editorially. In
 particular, this journal draft adopts its sharper separation between kernel
 verification and semantic/source correspondence, its treatment of representation
 mismatches, and its more precise language for source defects. It does not import
@@ -130,7 +130,7 @@ The paper-local snapshots are checked in so the manuscript can be built without
 rerunning repository analyses:
 
 ```bash
-make -C papers/formalization_draft2 paper
+make -C papers/dk_formalization_journal paper
 ```
 
 The Makefile uses `latexmk` and expects a BibTeX-compatible executable named
@@ -138,7 +138,7 @@ The Makefile uses `latexmk` and expects a BibTeX-compatible executable named
 local PATH shim or an equivalent LaTeX build command is sufficient and does not
 change the source.
 
-`make -C papers/formalization_draft2 accounting` belongs to the older
+`make -C papers/dk_formalization_journal accounting` belongs to the older
 instrumentation workflow. It is not required to substantiate the journal
 paper's central mathematical claims, and parts of it may require optional review
 tooling/submodules that are absent from a lightweight source archive.

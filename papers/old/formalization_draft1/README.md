@@ -30,13 +30,13 @@ plain `article` class so it can later be converted to:
 If `latexmk` is installed:
 
 ```bash
-make -C papers/formalization_draft1
+make -C papers/old/formalization_draft1
 ```
 
 Otherwise:
 
 ```bash
-cd papers/formalization_draft1
+cd papers/old/formalization_draft1
 pdflatex paper
 pdflatex paper
 ```

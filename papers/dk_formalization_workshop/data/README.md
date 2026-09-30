@@ -97,7 +97,7 @@ rather than an irreversible milestone.
 ## `resource_snapshot.csv`
 
 A compact copy of the transparency numbers reported in the longer
-`papers/formalization_draft2` manuscript.  Rows say whether a value is directly
+`papers/dk_formalization_journal` manuscript.  Rows say whether a value is directly
 observed (and incomplete), part of the live-exact/backfill/pending partition, a
 coverage denominator, or a quantity modeled from the observed telemetry.  The
 source path for each value is included.

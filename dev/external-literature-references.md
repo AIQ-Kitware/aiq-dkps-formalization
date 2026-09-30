@@ -16,7 +16,7 @@ eventually import. Lean formalizations by other projects are a different registr
 | this file | external mathematical literature the Davis--Kahan campaign depends on |
 | [`external-lean-references.md`](external-lean-references.md) | external *Lean* formalizations, with source commits and reuse policy |
 | [`hilbert-space-operator-roadmap/references.md`](hilbert-space-operator-roadmap/references.md) | roadmap-scoped operator-theory reading |
-| `papers/formalization_draft1/references.bib` | BibTeX for the paper draft only |
+| `papers/old/formalization_draft1/references.bib` | BibTeX for the paper draft only |
 | `davis-kahan-1970-full-source-census.json` → `primary_source` | the primary source, with DOI |
 
 Full texts of several of these are held locally under `non-distributable/`, which is gitignored
@@ -143,7 +143,7 @@ the printed derivation does not establish it. The counterexample the paper gives
 afterwards does not settle it either, since it concerns a gap in the spectrum of `A` rather than of
 `Lambda`. Whether the sharper constant holds appears to be open. Do not record it as refuted.
 
-**Written up** in `papers/davis_kahan_prop_4_4/davis_kahan_prop_4_4_counterexample.tex`, section "An additional error
+**Written up** in `papers/old/davis_kahan_prop_4_4/davis_kahan_prop_4_4_counterexample.tex`, section "An additional error
 surfaced by the formalization", alongside the Proposition 4.4 refutation. The two findings are of
 very different weight: Proposition 4.4 is a false proposition, this is a dropped factor in a proof
 line that leaves every theorem statement intact.

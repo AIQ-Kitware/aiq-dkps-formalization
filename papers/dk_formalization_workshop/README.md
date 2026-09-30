@@ -127,7 +127,7 @@ for a preprint or camera-ready version.
 Create a Git-history-free review copy from the tracked repository files with:
 
 ```bash
-python3 papers/formalization_process/scripts/anonymize_repo.py
+python3 papers/dk_formalization_workshop/scripts/anonymize_repo.py
 ```
 
 Use `--output PATH` to choose the destination and `--force` to replace an
@@ -152,10 +152,10 @@ file is present; the paper does not depend on that screenshot for its argument.
 ## Build
 
 ```bash
-make -C papers/formalization_process
-make -C papers/formalization_process public
-make -C papers/formalization_process check-prose
-make -C papers/formalization_process check-layout
+make -C papers/dk_formalization_workshop
+make -C papers/dk_formalization_workshop public
+make -C papers/dk_formalization_workshop check-prose
+make -C papers/dk_formalization_workshop check-layout
 ```
 
 `make` builds the anonymous review version with the supplied NeurIPS 2026
@@ -184,7 +184,7 @@ retained only as files from the earlier MATH-AI target and are not used by eithe
 build.
 
 Detailed Davis--Kahan and Yu--Wang--Samworth mathematics remain in
-`../formalization_draft2/` for the longer formalization paper.
+`../dk_formalization_journal/` for the longer formalization paper.
 
 ## Semantic-alignment candidate cases
 
