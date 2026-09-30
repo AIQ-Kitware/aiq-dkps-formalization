@@ -1,9 +1,9 @@
 # Davis--Kahan visualizations
 
 Executable geometric visualizations for the formalized Davis--Kahan results.
-The first implementation is deliberately narrow: it visualizes the Section 2
-**sine-theta theorem** and shares one numerical model between an interactive VTK
-explorer and a Manim animation.
+The current package contains two source-grounded case studies: the Section 2
+**sine-theta theorem** and the explicit **Proposition 4.4 counterexample**.  Each
+case study shares one checked numerical model between VTK and Manim renderers.
 
 This directory is not part of the Lean build.  It is a companion for developing
 intuition, figures, talks, and manuscript animations.  Numerical assertions here
@@ -174,6 +174,113 @@ the theorem geometrically:
 R(1) = (0, delta sin(theta))              [sharp default model]
 ```
 
+
+## Proposition 4.4 counterexample
+
+`dkvis.prop44.Prop44Model` encodes the exact `R^4` witness used by the Lean
+refutation.  With `U = span(e0,e1)`, the admissible competitor is
+
+```text
+W = 1/2 * [[ 1, -1, -1, -1],
+           [ 1,  1,  1, -1],
+           [-1, -1,  1, -1],
+           [ 1, -1,  1,  1]]
+V = W(U).
+```
+
+Both principal angles between `U` and `V` are `pi/4`, strictly below the
+printed `pi/3` threshold.  The Davis--Kahan direct rotation is
+
+```text
+R = 1/sqrt(2) * [[ 1,  0,  0, -1],
+                 [ 0,  1,  1,  0],
+                 [ 0, -1,  1,  0],
+                 [ 1,  0,  0,  1]].
+```
+
+The displacement singular values are
+
+```text
+sigma(I - R) = (sqrt(2 - sqrt(2)),) * 4
+sigma(I - W) = (sqrt(2), sqrt(2), 0, 0),
+```
+
+so the trace norm gives the strict contradiction
+
+```text
+||I - W||_* = 2 sqrt(2) ~= 2.828427
+            < 4 sqrt(2 - sqrt(2)) ~= 3.061467
+            = ||I - R||_*.
+```
+
+Print and verify those invariants directly:
+
+```bash
+cd visualizations
+uv run python -m dkvis.prop44 --verify
+```
+
+### Interactive 4D-to-3D VTK explorer
+
+```bash
+uv run --extra vtk python -m dkvis.vtk_prop44
+```
+
+The window shows the direct rotation and competitor side by side under the
+same `R^4 -> R^3` orthogonal projection.  There are two controls:
+
+- `motion t`: interpolates from the identity to the endpoint operator;
+- `4D view angle`: rotates one visible coordinate into the hidden fourth
+  coordinate before projecting to 3D.
+
+The four colored arrows use the same orthonormal `m` basis in both panels.  At
+the endpoint, the competitor rotates `span(m0,m1)` by `90` degrees and fixes
+`span(m2,m3)`.  The direct rotation moves all four directions by the same
+full-displacement chord length.  The gray loop is `U`; the red loop is its
+current image.  At `t=1`, both endpoint loops represent the same target
+subspace `V` even though the ambient orthogonal transformations differ.
+
+The motion for `0 < t < 1` is explanatory only.  Proposition 4.4 compares the
+endpoint operators at `t=1`.
+
+A 4D-to-3D projection cannot preserve all lengths and angles.  The geometry in
+the VTK viewport is therefore explicitly a shadow of the 4D configuration;
+the singular values and trace norms printed in the window are computed in the
+original four-dimensional space.
+
+Generate a deterministic endpoint PNG:
+
+```bash
+mkdir -p renders
+uv run --extra vtk python -m dkvis.vtk_prop44 \
+    --t 1 \
+    --view-angle 24 \
+    --no-interact \
+    --screenshot renders/prop44.png
+```
+
+### Manim invariant-plane explanation
+
+```bash
+uv run --extra manim python -m manim -pql dkvis/manim_prop44.py Prop44Scene
+```
+
+This scene uses exact endpoint invariant decompositions instead of a 3D
+projection.  They are deliberately labeled as *different* decompositions:
+
+```text
+R:  span(e0,e3) rotates +45 deg
+    span(e1,e2) rotates -45 deg
+
+W:  span(m0,m1) rotates +90 deg
+    span(m2,m3) is fixed
+```
+
+It then compares the four singular values of the full displacement.  This is
+the key trace-norm mechanism: the direct rotation has four equal nonzero chord
+lengths, while the competitor has two larger chord lengths and two zeros; the
+sum is nevertheless smaller for the competitor.
+
 ## Validation
 
 The unit tests check the geometric decomposition, the residual formula, sharp
@@ -202,10 +309,5 @@ scenes are:
    interpretation.
 3. `tan 2Theta`: animate the sharp 2x2 model and the approach to the `pi/4`
    barrier.
-4. Proposition 4.4: encode the concrete 4D counterexample once, verify its
-   principal angles and displacement norms numerically, then provide both the
-   exact two-principal-plane view and a rotating 4D-to-3D projection in VTK.
-
-For the Proposition 4.4 scene, any 3D view should be labeled as a projection of
-the 4D configuration; the exact invariants should be computed in 4D and shown
-alongside it.
+4. Proposition 4.4 equation (4.3): add a separate scene explaining why the
+   printed principal-plane lower-bound step fails on the same witness.
