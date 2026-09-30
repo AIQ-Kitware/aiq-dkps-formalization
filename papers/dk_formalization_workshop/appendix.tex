@@ -13,7 +13,14 @@ or representative sample.
 
 The screening table records \PractitionerScreenedCandidateCount{} candidates and
 their dispositions.  It begins on 8 September 2026 and does not reconstruct
-every source encountered in earlier searches.
+every source encountered in earlier searches.  Inclusion requires a public
+first-person source about an AI-assisted Lean project or workflow with enough
+source-grounded detail to code at least part of the reported workflow.  Sources
+that are primarily project-status reports without sufficient workflow detail
+are held rather than coded; structured human--AI studies and adjacent system
+papers are recorded separately.  These rules document how the current snapshot
+was curated, but they were not fixed before the initial web search and therefore
+do not make the collection systematic or representative.
 
 The supplementary material also contains the 29-result register used for the
 Davis--Kahan formalization.  It counts the four unnumbered headline theorems in
@@ -30,6 +37,30 @@ Project materials: \href{\artifacturl}{public GitHub repository}.
 Identifying repository URLs are suppressed in this double-blind build and are
 included in the supplementary artifact.
 \fi
+
+\section{Final status of the 29 tracked results}
+\label{app:target-status}
+
+\Cref{tab:target-status} indexes the final maintained state of every counted
+result.  Every row is recorded as \texttt{proved\_in\_build}; 28 have formal
+disposition \texttt{proved\_exact}, while Proposition~4.4 has disposition
+\texttt{refuted\_as\_transcribed}.  All 29 rows have a current internal semantic
+certification of \texttt{accepted}.  For Proposition~4.4 the canonical evidence
+is the Lean theorem negating the printed proposition; the same register records
+\texttt{directRotation\_fullDisplacement\_qnorm} as the proved repair.
+
+The table reports final status rather than retroactively assigning a mismatch
+category or reviewer identity to each target.  The project did not use a
+predefined mismatch taxonomy, and per-target independent reviewer assignments
+were not maintained consistently enough to support such a table.  The full
+machine-readable register retains source clauses, canonical and supporting
+Lean evidence, boundary-review notes, and the distinction between a locally
+self-contained correspondence and one requiring inherited source context.
+
+{\scriptsize
+\setlength{\tabcolsep}{2pt}
+\input{generated/result_status_table.tex}
+}
 
 \section{Formalization procedure}
 \label{app:system}
@@ -59,6 +90,50 @@ additional or independent reviews.  The humans directing the formalization were
 not Davis--Kahan subject-matter experts, so disagreements about source meaning
 were often investigated by probing the models in different ways rather than by
 an independent expert reading of the theorem.
+
+\section{Retrospective source-review record}
+\label{app:review-record}
+
+The source-review process was not designed as a controlled evaluation, so its
+history should not be read as an accuracy experiment.  A retained reconstruction
+script nevertheless provides one quantitative retrospective measure.  At the
+pinned repository snapshot of 4 September 2026, it finds 14 transitions in
+which a result row changed from \texttt{semantic\_certification: accepted} to a
+nonaccepted state at the next revision of the maintained register.  Those
+transitions affected 10 distinct results.  They are acceptance reversals, not
+14 invalid proofs: the underlying Lean proof could remain valid while source
+scope, representation correspondence, evidence registration, or an audit rule
+was found inadequate.
+
+No error taxonomy was fixed before these reviews.  Looking back at the recorded
+findings, recurring themes include hypothesis or scope mismatches (for example,
+finite versus half-infinite gap scope), representation mismatches (directed
+versus ambient angle, residual versus perturbation, or argument ordering), and
+review-infrastructure defects in which the wrong canonical witness had been
+registered.  Proposition~4.4 is different: the source claim itself is false as
+printed.  These categories are descriptive and overlapping, so we do not report
+category frequencies or an alignment-error rate.
+
+The final judgments were project-internal.  Some reviews used fresh model
+sessions or a model different from the implementing pass, and human supervisors
+could request further hostile review, but the 29 targets were not subjected to
+a blinded multi-rater protocol.  There is therefore no inter-rater agreement
+statistic or independent Davis--Kahan expert-adjudication rate to report.
+
+\begin{table}[H]
+\centering
+\scriptsize
+\caption{Selected review-history events retained by the project.  Repeated
+29/29 checkpoints are intentionally shown because later review could return a
+previously accepted source correspondence to review without invalidating the Lean proof.}
+\label{tab:review-history}
+\begin{tabularx}{\linewidth}{@{}p{0.16\linewidth}p{0.14\linewidth}>{\raggedright\arraybackslash}X@{}}
+\toprule
+Date & Commit & Event \\
+\midrule
+\input{generated/review_timeline_table.tex}
+\end{tabularx}
+\end{table}
 
 \section{Davis--Kahan sine-theta notation and Formalization 1}
 \label{app:formalization1}

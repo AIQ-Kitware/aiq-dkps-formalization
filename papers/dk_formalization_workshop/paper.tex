@@ -12,7 +12,7 @@
 
 \usepackage{amsmath,amssymb}
 \usepackage{microtype}
-\usepackage{booktabs,tabularx,array}
+\usepackage{booktabs,tabularx,array,longtable}
 \usepackage{float}
 \usepackage{graphicx}
 \usepackage{xcolor}
@@ -146,19 +146,21 @@
 \maketitle
 
 \begin{abstract}
-We report an LLM-assisted Lean formalization of the 29 mathematical results
-tracked from Davis and Kahan's seminal 1970 paper.  The project is a case study in
-semantic alignment: whether LLM-generated Lean code preserves the
-mathematical claims made in the source.  While Lean can verify the proof of an encoded theorem, the question of whether that theorem is the intended one is less straightforward. The result of our efforts are formalizations that claim to address all 29 targets,
-including a counterexample and repaired theorem for Proposition~4.4, as well as significant 
-reusable foundational work to address operator theory gaps in Lean libraries.  Several
-checked statements required revision after comparison with the source, even
-though their Lean proofs were valid.  We describe the formalization and
-source-review process, representative discrepancies and repairs, and a
-collection of \PractitionerAccountCount{} public practitioner accounts
-of AI-assisted Lean work.  The case study illustrates why successful
-compilation alone does not establish that an existing theorem has been
-formalized as intended.
+We report a retrospective case study of an LLM-assisted Lean formalization of
+29 mathematical results tracked from Davis and Kahan's seminal 1970 paper.  All
+Lean results reported as established in this paper are compiler validated and
+kernel checked.  The project exposed a separate problem: a checked theorem can
+still differ from the mathematical claim being attributed to its source.
+Several previously accepted statements were returned to review after source comparison,
+and the formalization also produced a checked counterexample to
+Davis--Kahan Proposition~4.4 together with a checked repair.  We document the
+formalization and source-review practice that emerged during the project and
+three sine-theta statement boundaries that illustrate different correspondence
+failures.  This is an experience report rather than a controlled evaluation of
+the workflow: we did not compare against a baseline, conduct blind or
+independent expert adjudication, or estimate a residual semantic-error rate.
+The case study therefore supports the narrower conclusion that successful
+compilation alone did not establish source correspondence in this project.
 \end{abstract}
 
 \section{Introduction}
@@ -196,9 +198,10 @@ separate source-to-statement review.  \Cref{sec:related} reviews related work
 in AI-assisted formalization and semantic alignment; \Cref{sec:dk} defines the
 scope and notation of the Davis--Kahan development; \Cref{sec:system} explains
 the workflow and its human intervention points; \Cref{sec:cases} presents the
-worked semantic-alignment examples and Proposition~4.4 counterexample; and
-\Cref{sec:practitioner-accounts} summarizes the collected public practitioner
-accounts.
+worked semantic-alignment examples and Proposition~4.4 counterexample;
+\Cref{sec:practitioner-accounts} gives the public practitioner accounts as
+context; and \Cref{sec:limitations} states the limits of the retrospective
+evidence.
 
 \begin{figure}[H]
   \centering
@@ -217,12 +220,27 @@ accounts.
   \label{fig:workflow}
 \end{figure}
 
-Our contributions are: (1) a workflow for reviewing semantic alignment in
-LLM-assisted formalization; (2) a case study covering all 29 mathematical
-results tracked from Davis and Kahan's 1970 paper, including weaker and stronger
-statement drift and a counterexample to Davis--Kahan Proposition~4.4 with a
-repaired theorem; and (3) a descriptive collection of public
-practitioner accounts of AI-assisted Lean work.
+Our contributions are: (1) a compiler-validated formalization case study
+covering all 29 tracked Davis--Kahan results, with 28 currently recorded as proving
+their source claims and Proposition~4.4 formally refuted as printed; (2) a
+retrospective record of source-to-statement review, including concrete cases in
+which previously accepted checked statements were returned to review and repaired; and
+(3) a fully formalized Proposition~4.4 counterexample and a proved replacement
+for the surviving $Q$-norm class.  We also release a convenience collection of
+public practitioner accounts as contextual material, but do not use that
+collection to estimate prevalence or to validate the workflow.
+
+The workflow was not designed prospectively as an experiment.  It emerged over
+the course of the formalization, and we did not compare it against compile-only,
+human-only, or other review baselines.  Nor did we conduct blind review,
+measure inter-rater agreement, or obtain independent Davis--Kahan expert
+adjudication for the 29 source correspondences.  Our evidence is therefore
+retrospective: it records what the project checked, which accepted
+correspondence judgments were later returned to review, and how those particular defects
+were repaired.  We make no claim that the workflow is optimal or that the final
+correspondence judgments have a measured error rate.  In particular, this paper
+does not introduce a validated semantic-alignment benchmark, metric, or general
+evaluation framework.
 
 
 \section{Related Work}
@@ -358,13 +376,22 @@ self-adjoint operators under the stated domain conditions
 
 Our 29 targets comprise the four unnumbered headline theorems in Davis--Kahan
 Section~2 and every named theorem, proposition, lemma, and corollary established
-in the paper. \Cref{app:data} specifies the counting convention. The development
-records checked treatments addressing all 29 targets.  Proof checking and
-source correspondence are tracked separately, so this count records formal
-coverage of the target set rather than serving as a semantic-completeness
-certificate.  The $\sin\Theta$ example below illustrates the distinction: a
-checked theorem can have the expected conclusion and unbounded operator types
-while still covering only a strict subset of the source's spectral-gap cases.
+in the paper. \Cref{app:data} specifies the counting convention.  At the state
+reported here, all Lean code in the formalization builds, and every one of the
+29 result rows is marked \texttt{proved\_in\_build}.  The maintained result
+register classifies 28 rows as proving their accepted source claims and
+Proposition~4.4 as refuted as transcribed, with a separate proved repair.
+There are no pending compiler-validation items among the formal results reported
+as established here.
+\Cref{app:target-status} gives a per-target index of the final source anchor,
+formal disposition, correspondence status, and canonical Lean evidence.
+
+Proof checking and source correspondence are tracked separately, so ``29/29''
+records formal coverage and a current project-internal correspondence judgment;
+it is not a semantic-completeness certificate or an estimate of residual error.
+The $\sin\Theta$ example below illustrates the distinction: a checked theorem
+can have the expected conclusion and unbounded operator types while still
+covering only a strict subset of the source's spectral-gap cases.
 
 The development required projection and principal-angle geometry,
 singular-subspace geometry, unitarily invariant norms and operator ideals,
@@ -427,11 +454,23 @@ The stages loop.  A mismatch can require more source context, a different
 decomposition, additional foundations, or a revised formal statement.  Human
 intervention is possible at every return edge: the researchers can add context,
 change the framing, reject a decomposition or statement, redirect the search,
-or request another independent review.  We also periodically reorganized
-definitions and intermediate results so foundations developed for one target
-could be reused by later ones.  As the project grew, we added tools for
-inspecting the accumulated formalization and maintaining source-to-statement
-records.
+or request another review.  We also periodically reorganized definitions and
+intermediate results so foundations developed for one target could be reused by
+later ones.  As the project grew, we added tools for inspecting the accumulated
+formalization and maintaining source-to-statement records.
+
+This procedure emerged during the project; it was not a preregistered review
+protocol.  Reviews were sometimes performed in fresh model sessions or by a
+different model from the implementing pass, but targets were not systematically
+double-coded, review order was not blinded, and no inter-rater agreement was
+measured.  At a pinned 4 September snapshot, the retained Git history contains
+14 transitions in which a result previously marked semantically accepted was
+returned to a nonaccepted state, affecting 10 distinct result rows.  These are
+review-state reversals, not 14 invalid Lean proofs: they include mathematical
+scope or representation defects as well as defects in the audit machinery.
+Because no mismatch taxonomy was fixed in advance, we report those transitions
+as retrospective evidence rather than an alignment-accuracy statistic.
+\Cref{app:review-record} gives the supporting chronology.
 
 We provisionally accepted a target when Lean checked its formal treatment and a
 separate source-to-statement review found its hypotheses, mathematical objects,
@@ -569,7 +608,10 @@ $A$, their unbounded discussion states the common-domain condition
 \]
 This equality implies the forward inclusion used by \texttt{IsTrialResidual};
 the source's spectral half-line assumptions likewise imply the ordered form
-semibounds.  \Cref{app:formalization1,app:formalization2,app:formalization3}
+semibounds.  These are established parts of the compiled development, not
+pending replacements: the displayed Formalization~3 declaration and the bridge
+from the source common-domain condition to its Lean trial-residual hypothesis
+are both compiler validated.  \Cref{app:formalization1,app:formalization2,app:formalization3}
 gives a reader's guide to the three signatures and the sine-angle norm
 representation.
 
@@ -631,7 +673,10 @@ of subspaces, the direct rotation minimizes $\lVert I-V\rVert$ for every
 $Q$-norm. This holds in finite-dimensional real or complex inner-product
 spaces and includes the Schatten $p$-norms for $p\geq2$. Thus the repair
 retains acuteness, removes the $\pi/3$ and real-space restrictions, and narrows
-the class of norms.
+the class of norms.  The complete chain is formalized in Lean: the printed
+Proposition~4.4 is represented as a proposition, an explicit $\mathbb R^4$
+witness proves its negation, and the $Q$-norm replacement is a separate checked
+theorem.  \Cref{app:target-status} identifies the corresponding declarations.
 
 To the best of our knowledge, Davis--Kahan Proposition~4.4 has not previously
 been explicitly identified as false under its stated hypotheses. There were
@@ -647,68 +692,89 @@ literature search found no earlier correction or counterexample within the
 stated real $\theta_{\max}\leq\pi/3$ regime.
 
 
-\section{Public practitioner accounts}
+\section{Context: public practitioner accounts}
 \label{sec:practitioner-accounts}
 
-We use \emph{practitioner account} for a public post, paper, discussion, or
-project note in which a person describes their own experience using AI in a
-Lean project.  We collected \PractitionerAccountCount{} such accounts,
-supported by \PractitionerSourceCount{} public practitioner-source records.
-Known repeated practitioners form \PractitionerOverlapClusterCount{} overlap
-clusters; one controlled human--AI workflow study is tracked separately.  The
-collection was assembled through LLM-assisted web search and is not intended to
-estimate prevalence.  The record schema, screening procedure, and overlap
-conventions are documented in \Cref{app:data} of the supplementary appendix.
+We release a convenience collection of public accounts of AI-assisted Lean
+work because these reports are otherwise scattered across papers, blogs,
+repositories, forums, and social posts.  We do not treat the collection as a
+representative survey, an evaluation dataset, or evidence that the workflow in
+\cref{sec:system} is typical or effective.  It was assembled through
+LLM-assisted web search, and the screening log was introduced only after part
+of the collection already existed.
 
-The accounts differ substantially in how much generated Lean the human reads.
-Kahle and Saiki describe checking definitions, hypotheses, and decomposition
-while agents write much of the proof code, and Yadav reports checking every
-definition and theorem statement while largely ignoring proof implementations
-\citep{kahle2026keeptrying,saiki2026double,yadav2026verification}.  At the other
-end, Suomela studies the mathematical proof first, Gowers reports using
-Aristotle without needing Lean knowledge, and Kova\v{c} asks another model to
-translate generated Lean into English
-\citep{suomela2026workflow,gowers2026leiden,kovac2025erdos189}.
+An account is included when a public first-person source describes an
+AI-assisted Lean project or workflow in enough detail to support source-grounded
+coding of at least some supervision, review, or semantic-checking fields.
+Status-only reports without sufficient workflow detail are held rather than
+coded; structured human--AI studies and adjacent system papers are tracked
+separately.  Multiple sources can support one project/workflow episode, and
+known repeated practitioners are clustered rather than being treated as
+independent people.  The current snapshot contains \PractitionerAccountCount{}
+practitioner accounts supported by \PractitionerSourceCount{} source records;
+\Cref{app:data} documents the schemas, screening dispositions, and known
+selection limitations.
 
-\AccountSemanticMismatchCount{} accounts explicitly report a statement,
-definition, scope, or correspondence mismatch, with
-\AccountSemanticMismatchQualifiedCount{} additional qualified cases;
-\AccountSeparateAIReviewCount{} describe a separate AI review role.  Deng and
-Shum distinguish successful compilation from source-fidelity review, and Nowak
-and F\"ugger used one model to challenge formalizations produced by another
-\citep{deng2026probability,nowak2026workflow}.  Zhang et al. report
-misformalized targets that survived repeated AI self-judgment until human
-counterexamples exposed them; Warren and Zaliva likewise report checked or
-apparently validated statements whose specifications still required repair
-\citep{zhang2026slt,warren2026tessera,zaliva2026semantics}.  Across the
-collection, \AccountSourceDefectCount{} accounts report a source defect exposed
-during formalization and \AccountCounterexampleCount{} explicitly use a
-counterexample.
+The collection is useful primarily as a directory of concrete practice.  It
+contains examples ranging from close reading of generated definitions and
+statements to workflows in which humans inspect little Lean directly, as well
+as reports where separate review agents or human counterexamples exposed
+specification problems
+\citep{kahle2026keeptrying,yadav2026verification,gowers2026leiden,zhang2026slt,zaliva2026semantics}.
+Those examples motivated questions we asked of our own process, but their
+frequency in this convenience sample should not be interpreted as prevalence
+among Lean users.
 
-Long-running projects also tend to externalize state and decomposition.
-\AccountPersistentStateCount{} accounts retain substantive project state outside
-the chat.  Armstrong and Kempe describe detailed proof blueprints, while Davis
-preserves the blueprint, model output, cleanup diff, and pinned environment
-\citep{armstrong2026degiorgi,davis2026gdlean}.  This is related to blueprint
-workflows used in larger Lean developments
-\citep{liquidblueprint2023,pfrblueprint2024,zhu2026leanarchitect}.  Collins et
-al. separately study initial human--AI formalization workflows, and Ilin and
-Nugent compare a semi-autonomous development before and after expert review
-\citep{collins2026workflows,ilin2026sorries}.
+\section{Limitations}
+\label{sec:limitations}
+
+This paper is a retrospective experience report about one formalization project
+in one area of operator theory.  The workflow emerged while the project was in
+progress; we did not prospectively define treatments, baselines, or success
+metrics, and therefore cannot conclude that it is more reliable than a simpler
+``LLM + compile + manual spot check'' process, human-only review, or another
+agentic workflow.  The retained acceptance reversals show that compilation and
+prior internal acceptance were insufficient in this project, not that the
+particular review process is optimal.
+
+The source-correspondence judgments are also not independently calibrated.  The
+human supervisors were not Davis--Kahan specialists, targets were not reviewed
+blindly by multiple independent raters, no inter-rater agreement was measured,
+and we did not obtain external subject-matter-expert adjudication for a fixed
+subset.  Fresh model sessions and repeated hostile reviews supplied useful
+checks, but they do not substitute for those forms of validation.  We therefore
+report current correspondence status and review history without an alignment
+accuracy or residual-error estimate.
+
+The 29-result denominator is a defined register of named and headline results,
+not a proof that every semantic aspect of the 1970 paper has been captured.
+Later review has repeatedly returned previously accepted rows to review.  To mitigate
+that risk for downstream users, the artifact keeps compiler status, formal
+disposition, and source-correspondence status separate; records the source
+boundary used for each result; and requires explicit bridges for non-obvious
+representation changes.  These practices make later correction auditable, but
+they do not make the current semantic judgments infallible.
+
+Finally, the practitioner-account collection is opportunistic and
+nonrepresentative.  Its value is archival and contextual: it centralizes public
+first-person reports and retains enough provenance for readers to inspect the
+coding.  It should not support population-level claims about AI-assisted
+formalization practice.
 
 \section{Conclusion}
 
 \paragraph{Did we formalize Davis--Kahan?}
-The development contains checked formal treatments addressing all 29 tracked
-results, with Proposition~4.4 handled by a counterexample
-and a proved repair.  The three sine-theta signatures separate mathematical
-strength from correspondence with a particular source statement.  One is a
-strict specialization because its gap hypothesis is too narrow; another has
-weaker operator-side hypotheses than Davis--Kahan; and the closest current
-boundary restores the source's separable scope and where-defined norm convention
-while retaining two operator-side generalizations.  The project still has no
-calibrated stopping rule that certifies that every source-to-statement comparison
-is complete.
+All Lean code reported here compiles, and the maintained register has a checked
+formal treatment for each of the 29 tracked results: 28 proved results and one
+formal refutation, Proposition~4.4, with a separate proved repair.  The three
+sine-theta signatures separate mathematical strength from correspondence with
+a particular source statement.  One is a strict specialization because its gap
+hypothesis is too narrow; another has weaker operator-side hypotheses than
+Davis--Kahan; and the closest current boundary restores the source's separable
+scope and where-defined norm convention while retaining two operator-side
+generalizations.  What remains unmeasured is semantic residual risk: the
+project has no calibrated stopping rule or independent expert audit establishing
+that every current source-to-statement judgment is correct.
 
 The case study therefore supports reviewing each conclusion together with the
 hypotheses and definitions that determine its scope.  A matching inequality,
