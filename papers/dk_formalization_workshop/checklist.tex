@@ -20,7 +20,7 @@
 \item {\bf Limitations}
     \item[] Question: Does the paper discuss the limitations of the work performed by the authors?
     \item[] Answer: \answerYes{}
-    \item[] Justification: The main text exhibits a remaining domain-scope mismatch, distinguishes the unvalidated replacement from checked artifacts, and states that no calibrated stopping rule or residual-error estimate is available.
+    \item[] Justification: The paper explicitly states that the workflow is a retrospective single-project case study without a controlled baseline, blind review, inter-rater agreement, independent Davis--Kahan expert adjudication, or a calibrated residual-error estimate.  It also treats the practitioner-account collection as an opportunistic convenience sample rather than a representative survey.
     \item[] Guidelines:
     \begin{itemize}
         \item The answer \answerNA{} means that the paper has no limitation while the answer \answerNo{} means that the paper has limitations, but those are not discussed in the paper. 
@@ -35,8 +35,8 @@
 
 \item {\bf Theory assumptions and proofs}
     \item[] Question: For each theoretical result, does the paper provide the full set of assumptions and a complete (and correct) proof?
-    \item[] Answer: \answerNo{}
-    \item[] Justification: The paper reports existing formalization artifacts and their source correspondence. The common-domain replacement is accompanied by a mathematical derivation and Lean proof code, but its compiler validation is pending; it is not presented as an established new formal result. This answer remains No until that validation is complete.
+    \item[] Answer: \answerYes{}
+    \item[] Justification: Every theoretical result reported as established in the paper has a complete Lean proof in the supplementary artifact, and the relevant repository code compiles.  The theorem signatures expose the formal assumptions checked by Lean.  This includes Formalization~3 and the common-domain-to-trial-residual bridge, as well as the complete Proposition~4.4 pipeline: the printed proposition is represented formally, an explicit counterexample proves its negation, and the $Q$-norm repair is a separate checked theorem.
     \item[] Guidelines:
     \begin{itemize}
         \item The answer \answerNA{} means that the paper does not include theoretical results. 

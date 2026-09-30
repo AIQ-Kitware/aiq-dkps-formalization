@@ -586,6 +586,71 @@ def build_sin_theta_alignment_example():
         if stale.exists():
             stale.unlink()
 
+
+def build_result_status_table():
+    """Render the maintained 29-result register as a compact appendix index."""
+    register_path = REPO / 'dev' / 'davis-kahan-1970-formalization-result-inventory.json'
+    doc = json.loads(register_path.read_text(encoding='utf8'))
+    results = doc.get('results', [])
+    if doc.get('result_count') != 29 or len(results) != 29:
+        raise SystemExit('expected the maintained Davis--Kahan result register to contain 29 rows')
+
+    disposition_label = {
+        'proved_exact': 'proved at accepted source boundary',
+        'refuted_as_transcribed': 'refuted as printed',
+    }
+    alignment_label = {
+        'locally_exact': 'accepted; local statement boundary',
+        'paper_faithful_nonlocal_source_interpretation': 'accepted; inherited source context',
+        'refuted_as_transcribed': 'accepted refutation',
+    }
+
+    rows = []
+    for result in results:
+        if result.get('verification') != 'proved_in_build':
+            raise SystemExit(
+                f"result {result.get('id')} is not recorded as proved_in_build"
+            )
+        if result.get('semantic_certification') != 'accepted':
+            raise SystemExit(
+                f"result {result.get('id')} is not recorded as semantically accepted"
+            )
+        canonical = result.get('canonical_evidence') or []
+        if not canonical:
+            raise SystemExit(f"result {result.get('id')} has no canonical evidence")
+        primary = canonical[0].get('declaration', '')
+        if not primary:
+            raise SystemExit(f"result {result.get('id')} has no canonical declaration")
+        disp = disposition_label.get(result.get('disposition'), result.get('disposition', ''))
+        align = alignment_label.get(
+            result.get('semantic_alignment'), result.get('semantic_alignment', '')
+        )
+        rows.append(
+            f"\\path{{{tex_escape(result['id'])}}} & "
+            f"{tex_escape(result['source_anchor'])} & "
+            f"{tex_escape(disp)} & {tex_escape(align)} & "
+            f"\\path{{{primary}}} \\\\"  # noqa: W605
+        )
+
+    lines = [
+        r'\begin{longtable}{@{}p{0.125\linewidth}p{0.13\linewidth}p{0.18\linewidth}p{0.19\linewidth}p{0.305\linewidth}@{}}',
+        r'\caption{Final status index for the 29 tracked Davis--Kahan results. The full source clauses, supporting declarations, and review notes are retained in the machine-readable result register.}\label{tab:target-status}\\',
+        r'\toprule',
+        r'Target & Source anchor & Formal treatment & Final source review & Canonical Lean evidence \\',
+        r'\midrule',
+        r'\endfirsthead',
+        r'\toprule',
+        r'Target & Source anchor & Formal treatment & Final source review & Canonical Lean evidence \\',
+        r'\midrule',
+        r'\endhead',
+        *rows,
+        r'\bottomrule',
+        r'\end{longtable}',
+    ]
+    (PAPER / 'generated' / 'result_status_table.tex').write_text(
+        '\n'.join(lines) + '\n', encoding='utf8'
+    )
+
 def build_manifest():
     relpaths = [
         'papers/dk_formalization_workshop/paper.tex',
@@ -723,6 +788,7 @@ def main():
     build_resource_table()
     build_model_tables()
     build_sin_theta_alignment_example()
+    build_result_status_table()
     build_manifest()
     print(f'validated {len(timeline)} Git timeline events against {REPO}')
     print('wrote generated evidence, timeline, model, resource, and hash artifacts')
