@@ -43,15 +43,6 @@ open TauCeti.DavisKahan.ExactSinTheta
 
 open scoped InnerProductSpace
 
--- Real functional calculus on endomorphisms over an abstract `RCLike` field
--- uses the same local restriction-of-scalars instances as
--- `Geometry/Angle/OperatorAngleGeneric.lean`.  They are deliberately local;
--- `OperatorRealAlgebra.lean` documents why registering them globally changes
--- unrelated scalar-multiplication elaboration.
-attribute [local instance 100] ContinuousLinearMap.realAlgebra
-  ContinuousLinearMap.realIsScalarTower ContinuousLinearMap.continuousFunctionalCalculusReal
-attribute [local instance] ContinuousLinearMap.instStarOrderedRingRCLike
-
 noncomputable section
 
 universe u v
@@ -64,6 +55,29 @@ variable {E F G H : Type v}
   [NormedAddCommGroup F] [InnerProductSpace 𝕜 F] [CompleteSpace F]
   [NormedAddCommGroup G] [InnerProductSpace 𝕜 G] [CompleteSpace G]
   [NormedAddCommGroup H] [InnerProductSpace 𝕜 H] [CompleteSpace H]
+
+-- Real functional calculus on endomorphisms over an abstract `RCLike` field
+-- uses the same local restriction-of-scalars instances as
+-- `Geometry/Angle/OperatorAngleGeneric.lean`.  They are deliberately local;
+-- `OperatorRealAlgebra.lean` documents why registering them globally changes
+-- unrelated scalar-multiplication elaboration.  The normed-algebra instance
+-- mirrors the `Proposition35` pattern; the spectrum theorems below need it
+-- for `NormedAlgebra ℝ (F →L[𝕜] F)`, which Mathlib does not provide.
+local instance realAlgebra : Algebra ℝ (F →L[𝕜] F) :=
+  ContinuousLinearMap.realAlgebra (𝕜 := 𝕜) (E := F)
+
+local instance realIsScalarTower : IsScalarTower ℝ 𝕜 (F →L[𝕜] F) :=
+  ContinuousLinearMap.realIsScalarTower (𝕜 := 𝕜) (E := F)
+
+local instance realNormedAlgebra : NormedAlgebra ℝ (F →L[𝕜] F) :=
+  { realAlgebra with
+    norm_smul_le := by
+      intro r T
+      rw [← IsScalarTower.algebraMap_smul 𝕜]
+      simpa using norm_smul_le (algebraMap ℝ 𝕜 r) T }
+
+attribute [local instance 100] ContinuousLinearMap.continuousFunctionalCalculusReal
+attribute [local instance] ContinuousLinearMap.instStarOrderedRingRCLike
 
 /-- The trial-coordinate part of the Davis--Kahan Section 2 setup.
 
@@ -225,33 +239,57 @@ noncomputable def sourceDirectedSinThetaOperator
   cfc Real.sin (sourceDirectedThetaOperator E₀ F₀)
 
 /-- For isometric trial and exact coordinate maps, the positive directed sine
-modulus is a contraction. -/
+modulus is a contraction.
+
+The block is `(1 - F₀ F₀*) E₀`; `E₀` is a contraction, and the
+complementary projection `1 - F₀ F₀*` is one too because its residual is
+Pythagorean.  With `y = F₀* a` the adjoint identity makes `a - F₀ y`
+orthogonal to `F₀ y`, so `‖a - F₀ y‖² = ‖a‖² - ‖y‖² ≤ ‖a‖²`.  The estimate
+is the operator norm's composition law applied to that factorization.  The
+argument is pointwise and uses the adjoint only through the single identity
+`⟪x, A* y⟫ = ⟪A x, y⟫`, keeping the term cheap for downstream consumers. -/
 theorem norm_sourceDirectedSineModulus_le_one
     (E₀ : F →L[𝕜] E) (F₀ : H →L[𝕜] E)
     (hE₀ : IsometricEmbedding E₀) (hF₀ : IsometricEmbedding F₀) :
     ‖sourceDirectedSineModulus E₀ F₀‖ ≤ 1 := by
-  rw [sourceDirectedSineModulus, ContinuousLinearMap.norm_modulus]
-  let V : Submodule 𝕜 E := LinearMap.range F₀.toLinearMap
-  let : V.HasOrthogonalProjection :=
-    TauCeti.DavisKahan.BoundedOperator.rangeHasOrthogonalProjection F₀ hF₀
-  have hproj : V.starProjection = F₀ ∘L F₀.adjoint :=
-    TauCeti.DavisKahan.BoundedOperator.starProjection_range_eq_comp_adjoint F₀ hF₀
-  have hcomp :
-      ContinuousLinearMap.id 𝕜 E - F₀ ∘L F₀.adjoint = Vᗮ.starProjection := by
-    rw [← hproj]
-    change (1 : E →L[𝕜] E) - V.starProjection = Vᗮ.starProjection
-    exact (Submodule.starProjection_orthogonal' V).symm
-  rw [sourceDirectedSineBlock, hcomp]
+  have hres : ‖ContinuousLinearMap.id 𝕜 E - F₀ ∘L F₀.adjoint‖ ≤ 1 := by
+    refine ContinuousLinearMap.opNorm_le_bound _ zero_le_one fun a => ?_
+    set y := F₀.adjoint a
+    have hswap : RCLike.re (⟪a, F₀ y⟫_𝕜) = RCLike.re (⟪F₀ y, a⟫_𝕜) := by
+      rw [← inner_conj_symm, RCLike.conj_re]
+    have hcross : RCLike.re (⟪a, F₀ y⟫_𝕜) = RCLike.re (⟪y, y⟫_𝕜) := by
+      rw [hswap, ← (ContinuousLinearMap.adjoint_inner_right F₀ y a)]
+    have hsq : ‖a - F₀ y‖ ^ 2 ≤ ‖a‖ ^ 2 := by
+      calc
+        ‖a - F₀ y‖ ^ 2 = RCLike.re (⟪a - F₀ y, a - F₀ y⟫_𝕜) :=
+          InnerProductSpace.norm_sq_eq_re_inner (𝕜 := 𝕜) _
+        _ = ‖a‖ ^ 2 - 2 * RCLike.re (⟪a, F₀ y⟫_𝕜) +
+              RCLike.re (⟪F₀ y, F₀ y⟫_𝕜) := by
+          simp only [inner_sub_right, inner_sub_left, map_sub]
+          rw [hswap, inner_self_eq_norm_sq, inner_self_eq_norm_sq]
+          ring
+        _ = ‖a‖ ^ 2 - 2 * RCLike.re (⟪a, F₀ y⟫_𝕜) + ‖y‖ ^ 2 := by
+          rw [inner_self_eq_norm_sq, hF₀ y]
+        _ = ‖a‖ ^ 2 - ‖y‖ ^ 2 := by
+          rw [hcross, inner_self_eq_norm_sq]
+          ring
+        _ ≤ ‖a‖ ^ 2 := by
+          nlinarith [sq_nonneg ‖y‖]
+    simpa [mul_one, sub_apply, ContinuousLinearMap.comp_apply,
+        ContinuousLinearMap.id_apply] using
+      (sq_le_sq₀ (norm_nonneg _) (norm_nonneg _)).mp hsq
+  rw [sourceDirectedSineModulus, ContinuousLinearMap.norm_modulus,
+      sourceDirectedSineBlock]
   calc
-    ‖Vᗮ.starProjection ∘L E₀‖ ≤ ‖Vᗮ.starProjection‖ * ‖E₀‖ :=
+    ‖(ContinuousLinearMap.id 𝕜 E - F₀ ∘L F₀.adjoint) ∘L E₀‖ ≤
+        ‖ContinuousLinearMap.id 𝕜 E - F₀ ∘L F₀.adjoint‖ * ‖E₀‖ :=
       ContinuousLinearMap.opNorm_comp_le _ _
     _ ≤ 1 * 1 :=
-      mul_le_mul Vᗮ.starProjection_norm_le
+      mul_le_mul hres
         (TauCeti.DavisKahan.ExactSinTheta.opNorm_le_one_of_isometry hE₀)
         (norm_nonneg _) zero_le_one
     _ = 1 := by ring
 
-set_option maxHeartbeats 1000000 in
 /-- The spectrum of the positive directed sine modulus lies in `[0,1]`. -/
 theorem spectrum_sourceDirectedSineModulus_subset_Icc
     (E₀ : F →L[𝕜] E) (F₀ : H →L[𝕜] E)
@@ -272,7 +310,6 @@ theorem spectrum_sourceDirectedSineModulus_subset_Icc
         hone (norm_nonneg _) zero_le_one
     _ = 1 := by ring
 
-set_option maxHeartbeats 1000000 in
 /-- Applying sine to the source-directed angle recovers exactly the modulus of
 the rectangular complementary-projection block.  This is the bridge used by
 the analytic proof of the sine-theta inequality. -/
