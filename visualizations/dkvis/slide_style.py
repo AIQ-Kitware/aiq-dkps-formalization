@@ -22,8 +22,6 @@ familiar Beamer look, so prose and formulas share one engine.
 
 from __future__ import annotations
 
-import os
-
 from manim import (
     DOWN,
     LEFT,
@@ -41,30 +39,18 @@ from manim import (
 )
 from manim_slides import Slide
 
-THEME = os.environ.get("DKVIS_THEME", "dark").lower()
+from dkvis.palette import PALETTE
 
-if THEME == "light":
-    BG = "#FBFBF8"
-    FG = "#1B1F24"
-    MUTED = "#6B7280"
-    FAINT = "#D5D9DE"
-    PANEL = "#EEF0F2"
-    EXACT = "#1F6FD1"
-    TRIAL = "#C77C00"
-    SINE = "#D12A7B"
-    RESID = "#138A4B"
-    GAP = "#6E4BD8"
-else:
-    BG = "#0E1319"
-    FG = "#ECEFF3"
-    MUTED = "#8B95A3"
-    FAINT = "#2A323D"
-    PANEL = "#161D26"
-    EXACT = "#5AA9FF"
-    TRIAL = "#FFC24B"
-    SINE = "#FF5CA8"
-    RESID = "#4ADE80"
-    GAP = "#B69CFF"
+BG = PALETTE["BG"]
+FG = PALETTE["FG"]
+MUTED = PALETTE["MUTED"]
+FAINT = PALETTE["FAINT"]
+PANEL = PALETTE["PANEL"]
+EXACT = PALETTE["EXACT"]
+TRIAL = PALETTE["TRIAL"]
+SINE = PALETTE["SINE"]
+RESID = PALETTE["RESID"]
+GAP = PALETTE["GAP"]
 
 config.background_color = BG
 
@@ -203,8 +189,12 @@ class DeckSlide(Slide):
         self.chrome = self.make_chrome()
         if self.chrome is not None:
             self.add(self.chrome)
+        self._ended_on_src = False
         self.body()
-        self.wait(self.wait_time_between_slides)
+        # A scene that ends on an external-video slide must not get a trailing
+        # wait, which would become an extra (static) slide after the video.
+        if not self._ended_on_src:
+            self.wait(self.wait_time_between_slides)
 
     # -- chrome ---------------------------------------------------------------
     def make_chrome(self) -> VGroup | None:
@@ -243,6 +233,7 @@ class DeckSlide(Slide):
         opening build.
         """
         self.next_slide(notes=notes, **kwargs)
+        self._ended_on_src = kwargs.get("src") is not None
 
     def fade_all_but_chrome(self, run_time: float = 0.6) -> None:
         keep = {id(self.chrome)}
