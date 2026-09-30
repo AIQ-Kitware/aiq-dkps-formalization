@@ -38,10 +38,12 @@ What the four ask for, in the vocabulary of the subject:
   displayed operators belong to its domain.  Older convenience and tangent APIs
   in this file also use `SymmetricNormingFunction`; those stronger interfaces
   retain explicit ideal-membership conclusions;
-* **the angle** in the conclusion is a paper object:
-  `(I - F₀F₀⋆) E₀` for `sin Θ`, the directed and ambient
-  `sinTwoAngleOperator` constructions for `sin 2Θ`, and the corresponding
-  tangent operators for the tangent theorems.
+* **the angle** in the conclusion is a paper object: the literal
+  `sourceDirectedSinThetaOperator` for directed `sin Θ₀`, the literal
+  `sourceDirectedSinTwoThetaOperator` for directed `sin 2Θ₀`, the ambient
+  `sinTwoAngleOperator` for `sin 2Θ`, and the corresponding tangent operators
+  for the tangent theorems.  Lower-level rectangular/product representatives
+  remain proof-facing implementation details behind explicit bridge theorems.
 
 Structural facts are carried by objects with constructors, so they never become
 proof obligations for the caller:
@@ -105,9 +107,9 @@ theorem sinTwoTheta_from_shared_reducing_setup
     (∀ R : P →L[𝕜] H,
       (∀ p : P, ∀ hp : (p : H) ∈ T.domain,
         T ⟨(p : H), hp⟩ = A ⟨(p : H), by rw [← hdom]; exact hp⟩ + R p) →
-      N.Mem (TauCeti.DavisKahan.Angle.directedSinTwoAngleOperator P Q) →
+      N.Mem (sourceDirectedSinTwoThetaOperator P Q) →
       N.Mem R →
-        δ * N.gaugeReal (TauCeti.DavisKahan.Angle.directedSinTwoAngleOperator P Q) ≤
+        δ * N.gaugeReal (sourceDirectedSinTwoThetaOperator P Q) ≤
           2 * N.gaugeReal R) ∧
     (∀ Hop : H →L[𝕜] H, Hop.IsSymmetric →
       T = TauCeti.LinearPMap.addBounded A Hop →

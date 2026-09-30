@@ -18,6 +18,7 @@ import DavisKahan.Sources.DavisKahan1970.TanThetaDirectedUnbounded
 import DavisKahan.Sources.DavisKahan1970.TanTwoThetaUnboundedAmbientExact
 import DavisKahan.Sources.DavisKahan1970.TanTwoThetaUnboundedExactReal
 import DavisKahan.Sources.DavisKahan1970.TanTwoThetaScalarGeneric
+import DavisKahan.Sources.DavisKahan1970.DirectedTrigonometricPresentation
 
 open TauCeti.DavisKahan.Angle
 
@@ -136,10 +137,12 @@ alias sinTheta_real := DavisKahan1970.sinTheta_unbounded_formGap_whereDefinedUIN
 
 /-! ## `tan Θ` -/
 
-/-- Scalar-generic full-unbounded directed `tan Θ₀` clause, with the tangent representative
-constructed and characterized by its complete approximation-number sequence. -/
+/-- Scalar-generic full-unbounded directed `tan Θ₀` clause, stated directly on
+`sourceDirectedTanThetaOperator Z V = cfc tan Θ₀`.  The rectangular tangent
+representative remains an implementation engine; an explicit complete-singular-sequence
+bridge transports its ideal membership and gauge to this literal presentation object. -/
 alias tanTheta_directed :=
-  DavisKahan1970.tanTheta_directed_unboundedRitz_symmetricNorming_exists_rclike
+  DavisKahan1970.tanTheta_directed_unboundedRitz_symmetricNorming_presentation_rclike
 
 /-- Scalar-generic full-unbounded ambient `tan Θ` clause.  Definedness is stated through the
 generic `Angle.HasDefinedTangent` predicate and the conclusion uses the generic
@@ -188,15 +191,17 @@ bounded extension of the trial residual on the common domain; the ambient branch
 quantifies a bounded symmetric perturbation `H` with `T = A + H`. Thus neither branch
 inherits assumptions belonging only to the other. The norm inequalities are asserted where
 the displayed norms are defined. -/
-alias sinTwoTheta := DavisKahan1970.sinTwoTheta_commonDomain_whereDefinedUIN_rclike
+alias sinTwoTheta :=
+  DavisKahan1970.sinTwoTheta_commonDomain_presentation_whereDefinedUIN_rclike
 
 /-- Scalar-generic directed clause `δ N(sin 2Θ₀) ≤ 2 N(R)` with no bounded trial
-compression or globally bounded perturbation hypothesis.  This reusable directed endpoint is
-slightly stronger than the paper's standing setup because it does not require self-adjointness
-of the unperturbed operator `A`; `sinTwoTheta` above retains that standing assumption for the
-complete source-facing theorem, whose ambient branch genuinely uses it. -/
+compression or globally bounded perturbation hypothesis.  Its displayed angle object is now
+literally `sourceDirectedSinTwoThetaOperator P Q = cfc (fun t => sin (2*t)) Θ₀`;
+an exact operator identity bridges it to the positive `2 sin Θ₀ cos Θ₀` object used by the
+analytic proof.  This reusable endpoint remains slightly stronger than the paper's standing
+setup because it does not require self-adjointness of the unperturbed operator `A`. -/
 alias sinTwoTheta_directed :=
-  DavisKahan1970.sinTwoTheta_directed_commonDomain_whereDefinedUIN_rclike
+  DavisKahan1970.sinTwoTheta_directed_commonDomain_presentation_whereDefinedUIN_rclike
 
 /-- **Davis--Kahan 1970, the `sin 2Θ` theorem, over `ℂ` -- the DIRECTED clause.**
 
