@@ -156,6 +156,55 @@ class Prop44Model:
         plane_basis = np.asarray(plane_basis, dtype=float)
         return plane_basis.T @ np.asarray(operator, dtype=float) @ plane_basis
 
+    def plane_coordinates(self, vectors: np.ndarray, plane_basis: np.ndarray) -> np.ndarray:
+        """Express one or more ambient vectors in an orthonormal plane basis.
+
+        Parameters
+        ----------
+        vectors:
+            Either a single ambient vector of shape ``(4,)`` or a column matrix of
+            ambient vectors of shape ``(4, k)``.
+        plane_basis:
+            A ``(4, 2)`` orthonormal basis whose columns span the plane.
+
+        Returns
+        -------
+        np.ndarray
+            Local coordinates of shape ``(2, k)`` (or ``(2, 1)`` for a single
+            vector).
+        """
+        plane_basis = np.asarray(plane_basis, dtype=float)
+        vectors = np.asarray(vectors, dtype=float)
+        if vectors.ndim == 1:
+            vectors = vectors[:, None]
+        return plane_basis.T @ vectors
+
+    @property
+    def direct_source_local_frames(self) -> tuple[np.ndarray, np.ndarray]:
+        """Coordinates of the source basis vectors inside the two R planes."""
+        return tuple(self.plane_coordinates(self.u_basis, basis) for basis in self.direct_plane_bases)
+
+    @property
+    def direct_endpoint_local_frames(self) -> tuple[np.ndarray, np.ndarray]:
+        """Coordinates of ``R(e0)`` and ``R(e1)`` inside the two R planes."""
+        return tuple(
+            self.plane_coordinates(self.R @ self.u_basis, basis) for basis in self.direct_plane_bases
+        )
+
+    @property
+    def competitor_source_local_frames(self) -> tuple[np.ndarray, np.ndarray]:
+        """Coordinates of the source basis vectors inside the two W planes."""
+        return tuple(
+            self.plane_coordinates(self.u_basis, basis) for basis in self.competitor_plane_bases
+        )
+
+    @property
+    def competitor_endpoint_local_frames(self) -> tuple[np.ndarray, np.ndarray]:
+        """Coordinates of ``W(e0)`` and ``W(e1)`` inside the two W planes."""
+        return tuple(
+            self.plane_coordinates(self.W @ self.u_basis, basis) for basis in self.competitor_plane_bases
+        )
+
     @property
     def principal_cosines(self) -> np.ndarray:
         return np.linalg.svd(self.u_basis.T @ self.v_basis, compute_uv=False)
@@ -269,6 +318,25 @@ class Prop44Model:
             assert np.allclose(
                 self.local_operator(self.W, basis),
                 _rotation_block(angle),
+                atol=atol,
+            )
+
+        for idx, (frame, angle) in enumerate(
+            zip(self.direct_source_local_frames, self.direct_plane_angles)
+        ):
+            expected = _rotation_block(angle) @ frame
+            assert np.allclose(
+                expected,
+                self.direct_endpoint_local_frames[idx],
+                atol=atol,
+            )
+        for idx, (frame, angle) in enumerate(
+            zip(self.competitor_source_local_frames, self.competitor_plane_angles)
+        ):
+            expected = _rotation_block(angle) @ frame
+            assert np.allclose(
+                expected,
+                self.competitor_endpoint_local_frames[idx],
                 atol=atol,
             )
 
