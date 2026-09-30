@@ -220,33 +220,75 @@ cd visualizations
 uv run python -m dkvis.prop44 --verify
 ```
 
-### Interactive 4D-to-3D VTK explorer
+### Interactive four-plane VTK explorer
 
 ```bash
 uv run --extra vtk python -m dkvis.vtk_prop44
 ```
 
-The window shows the direct rotation and competitor side by side under the
-same `R^4 -> R^3` orthogonal projection.  There are two controls:
+The VTK scene intentionally uses **no 4D-to-3D projection**.  Instead it shows
+four exact two-dimensional invariant-plane restrictions of the actual `R^4`
+operators:
 
-- `motion t`: interpolates from the identity to the endpoint operator;
-- `4D view angle`: rotates one visible coordinate into the hidden fourth
-  coordinate before projecting to 3D.
+```text
+left column -- direct rotation R
+  span(e0,e3): +45 deg
+  span(e1,e2): -45 deg
 
-The four colored arrows use the same orthonormal `m` basis in both panels.  At
-the endpoint, the competitor rotates `span(m0,m1)` by `90` degrees and fixes
-`span(m2,m3)`.  The direct rotation moves all four directions by the same
-full-displacement chord length.  The gray loop is `U`; the red loop is its
-current image.  At `t=1`, both endpoint loops represent the same target
-subspace `V` even though the ambient orthogonal transformations differ.
+right column -- competitor W
+  span(m0,m1): +90 deg
+  span(m2,m3):   0 deg (fixed)
+```
 
-The motion for `0 < t < 1` is explanatory only.  Proposition 4.4 compares the
-endpoint operators at `t=1`.
+These are different decompositions of `R^4`.  The direct-rotation planes are
+principal/invariant planes for `R`; the `m` planes are the moving and fixed
+invariant planes for `W`.  The display does not identify them with one another.
 
-A 4D-to-3D projection cannot preserve all lengths and angles.  The geometry in
-the VTK viewport is therefore explicitly a shadow of the 4D configuration;
-the singular values and trace norms printed in the window are computed in the
-original four-dimensional space.
+A single `MOTION t` slider animates all four local rotations from the identity
+to the endpoint.  Only `t=1` is the Proposition 4.4 comparison.  Each panel
+reports:
+
+- its exact local rotation angle;
+- the two singular values of `I-T` on that 2-plane;
+- that plane's contribution to the trace norm.
+
+For a real 2D rotation through angle `alpha`, both singular values of
+`I-Rot(alpha)` equal
+
+```text
+2 |sin(alpha / 2)|,
+```
+
+so one plane contributes
+
+```text
+4 |sin(alpha / 2)|
+```
+
+to the full trace norm.  At the endpoint this makes the counterexample visible
+without any projection artifact:
+
+```text
+R:  45 deg + 45 deg
+    1.530734 + 1.530734 = 3.061467
+
+W:  90 deg + 0 deg
+    2.828427 + 0        = 2.828427
+```
+
+The competitor panels also state how the original source basis splits across
+its two invariant planes:
+
+```text
+P_M e0       = m0 / sqrt(2)
+P_M e1       = m1 / sqrt(2)
+P_Mperp e0   = m2 / sqrt(2)
+P_Mperp e1   = m3 / sqrt(2).
+```
+
+Thus the quarter-turn-plus-identity picture is not claiming that `U` itself is
+one line in each `W` plane; it shows the exact invariant decomposition through
+which `W` redistributes the ambient motion.
 
 Generate a deterministic endpoint PNG:
 
@@ -254,7 +296,6 @@ Generate a deterministic endpoint PNG:
 mkdir -p renders
 uv run --extra vtk python -m dkvis.vtk_prop44 \
     --t 1 \
-    --view-angle 24 \
     --no-interact \
     --screenshot renders/prop44.png
 ```
