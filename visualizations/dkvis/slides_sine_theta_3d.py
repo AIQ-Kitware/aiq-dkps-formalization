@@ -90,7 +90,8 @@ class D01Planes(D3Slide):
     def body(self) -> None:
         top = self.content_top - 0.2
         paras = [
-            r"$A=\operatorname{diag}(\lambda_1,\lambda_2,\lambda_3)$ on $\mathbb{R}^3$ is an ellipsoid. "
+            r"With positive eigenvalues, $A=\operatorname{diag}(\lambda_1,\lambda_2,\lambda_3)$ maps the unit "
+            r"sphere of $\mathbb{R}^3$ to an ellipsoid. "
             r"The wanted subspace $\cx{exact}{U}=\operatorname{span}(f_1,f_2)$ is the plane of its two short axes; "
             r"$\cx{exact}{f_3}$ spans $U^{\perp}$ and $\Lambda_1=[\lambda_3]$.",
             r"A trial plane $\cx{trial}{V}=\operatorname{ran}E_0$, tilted by $\theta$ about a line in $U$. "
@@ -103,7 +104,8 @@ class D01Planes(D3Slide):
         texts = text_block(*paras, top=top, size=25)
 
         self.say(
-            "Same story, one dimension up. A diagonal A on R^3 is an ellipsoid. The wanted "
+            "Same story, one dimension up. This A has positive eigenvalues, so it maps the unit sphere "
+            "to an ellipsoid. The wanted "
             "invariant subspace U is the plane of the two short axes, f1 and f2; f3 is the unwanted direction."
         )
         img = self.swap_picture(None, "still-exact.png", texts[0])
@@ -134,6 +136,7 @@ class D01Planes(D3Slide):
 
 
 class D02Tilt(D3Slide):
+    depth = "*"
     title = "Watching the theorem"
     kicker = r"Tilt the trial plane; compare $\delta\norm{\sin\Theta_0}$ with $\norm{R}$"
 
@@ -185,6 +188,7 @@ class D02Tilt(D3Slide):
 
 
 class D03Gap(D3Slide):
+    depth = "*"
     title = r"Moving the unwanted eigenvalue"
     kicker = r"Same tilt, $\lambda_3$ slides down past the wanted eigenvalues"
 
@@ -216,6 +220,7 @@ class D03Gap(D3Slide):
 
 
 class D04Perturb(D3Slide):
+    depth = "*"
     title = "Perturbing the matrix, in 3D"
     kicker = r"Trial $=$ the old eigenspace; now the ellipsoid and the exact plane move"
 
@@ -263,6 +268,7 @@ class D04Perturb(D3Slide):
 
 
 class D05TryIt(D3Slide):
+    depth = "*"
     title = "Try it live"
     kicker = "The interactive VTK demo behind these slides"
 

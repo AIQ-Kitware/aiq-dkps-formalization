@@ -30,6 +30,8 @@ import math as pymath
 
 import numpy as np
 from manim import (
+    LaggedStart,
+    RoundedRectangle,
     Text,
     DOWN,
     LEFT,
@@ -215,6 +217,7 @@ def text_col(body: str, size: float = 28, width: float = RIGHT_COL_W, color: str
 
 class S00Title(DeckSlide):
     section = ""
+    show_depth_legend = True
 
     def body(self) -> None:
         self.say(
@@ -250,6 +253,117 @@ class S00Title(DeckSlide):
             run_time=1.4,
         )
         self.play(Create(arc), FadeIn(theta), FadeIn(ref))
+        if self.show_depth_legend:
+            legend = tex(
+                r"Unmarked slides form the core talk; $\ast$ marks optional technical depth, $\ast\ast$ backup.",
+                size=20,
+                color=MUTED,
+            ).next_to(ref, UP, buff=0.18)
+            self.play(FadeIn(legend), run_time=0.5)
+
+
+class S00TitleShort(S00Title):
+    """The title slide of the short deck, which has no optional slides."""
+
+    show_depth_legend = False
+
+
+# ----------------------------------------------------------------------------
+# 0b. The setting
+# ----------------------------------------------------------------------------
+
+
+class S00bSetting(DeckSlide):
+    title = "The setting: self-adjoint operators"
+    kicker = r"A real symmetric matrix is the simplest instance, but not the only one"
+
+    def body(self) -> None:
+        levels = [
+            (r"unbounded self-adjoint operators, e.g.\ $-\tfrac{d^2}{dx^2}$, quantum Hamiltonians", MUTED),
+            (r"bounded self-adjoint operators on a Hilbert space, any dimension", MUTED),
+            (r"complex Hermitian matrices, $\ A=A^{*}$", FG),
+            (r"real symmetric matrices, $\ A=A^{\mathsf T}$", EXACT),
+        ]
+        # Explicit nesting: (left, right, top, bottom) of each box.
+        x_l, x_r = -6.8, 0.25
+        tops = [self.content_top - 0.15, self.content_top - 1.05, self.content_top - 1.55, self.content_top - 2.05]
+        bottoms = [-3.35, -3.15, -2.95, -2.75]
+        boxes, labels = VGroup(), VGroup()
+        for i, (label, color) in enumerate(levels):
+            left, right = x_l + 0.25 * i, x_r - 0.25 * i
+            box = RoundedRectangle(
+                corner_radius=0.18,
+                width=right - left,
+                height=tops[i] - bottoms[i],
+                stroke_color=color,
+                stroke_width=2.6 if i == 3 else 1.8,
+                fill_color=EXACT,
+                fill_opacity=0.12 if i == 3 else 0.0,
+            ).move_to([(left + right) / 2, (tops[i] + bottoms[i]) / 2, 0])
+            lab = tex(label, size=22, color=color)
+            lab.move_to([left + 0.2, tops[i] - 0.25, 0], aligned_edge=LEFT)
+            if lab.width > right - left - 0.35:
+                lab.scale((right - left - 0.35) / lab.width, about_edge=LEFT)
+            boxes.add(box)
+            labels.add(lab)
+        outer_note = tex(r"$\uparrow$ the scope of Davis--Kahan (1970) and of our Lean theorem", size=22, color=FG)
+        outer_note.move_to([x_l + 0.2, tops[0] - 0.6, 0], aligned_edge=LEFT)
+        inner = boxes[3]
+        mini = math(r"A=\begin{pmatrix}2&0.3\\0.3&1\end{pmatrix}", size=30, color=EXACT).move_to(
+            inner.get_center() + np.array([0, 0.1, 0])
+        )
+        pictures = tex(r"every picture in this talk: $2\times2$ and $3\times3$", size=22, color=EXACT).move_to(
+            [inner.get_center()[0], bottoms[3] + 0.35, 0]
+        )
+
+        x0, w = 0.75, 6.1
+        t1 = para(
+            r"Throughout, $A$ is \textbf{self-adjoint}: $\langle Ax,y\rangle=\langle x,Ay\rangle$ for all $x,y$. "
+            r"For a real matrix that just means \emph{symmetric}, $A=A^{\mathsf T}$.",
+            width=w,
+            size=27,
+        )
+        t2 = para(
+            r"Such an $A$ has real eigenvalues and, in finite dimensions, \emph{perpendicular} eigenvectors "
+            r"(the spectral theorem): it is a pure stretch along perpendicular axes. In infinite dimensions "
+            r"the same role is played by \emph{spectral subspaces}.",
+            width=w,
+            size=27,
+        )
+        t3 = para(
+            r"Where it shows up: covariance matrices (PCA), graph Laplacians (spectral clustering), "
+            r"Hamiltonians in quantum mechanics, vibration modes. The eigenspaces carry the meaning, "
+            r"and the operator is only ever known approximately.",
+            width=w,
+            size=25,
+            color=MUTED,
+        )
+        col = VGroup(t1, t2, t3).arrange(DOWN, aligned_edge=LEFT, buff=0.4)
+        col.move_to([x0, self.content_top - 0.25, 0], aligned_edge=UP + LEFT)
+
+        self.say(
+            "First, the setting. Everything today is about self-adjoint operators: <Ax, y> = <x, Ay>. "
+            "For a real matrix that is just a symmetric matrix. That is the innermost box here."
+        )
+        self.play(FadeIn(boxes[3]), FadeIn(labels[3]), FadeIn(mini), FadeIn(t1))
+
+        self.say(
+            "Self-adjoint operators are pure stretches along perpendicular axes: real eigenvalues, "
+            "orthogonal eigenvectors. The class grows: complex Hermitian matrices, bounded operators "
+            "on a Hilbert space of any dimension, and unbounded ones like differential operators."
+        )
+        self.play(
+            LaggedStart(*[FadeIn(VGroup(boxes[i], labels[i])) for i in (2, 1, 0)], lag_ratio=0.4),
+            FadeIn(t2),
+            run_time=2.0,
+        )
+
+        self.say(
+            "All the pictures in this talk live in the innermost box, 2 by 2 and 3 by 3 real symmetric "
+            "matrices. Davis and Kahan, and our Lean theorem, cover the outermost box. And these objects "
+            "are everywhere: covariance matrices, graph Laplacians, quantum Hamiltonians."
+        )
+        self.play(FadeIn(pictures), FadeIn(outer_note), FadeIn(t3))
 
 
 # ----------------------------------------------------------------------------
@@ -260,8 +374,8 @@ ELLIPSE_BASE = np.radians(20.0)
 
 
 class S01Ellipse(DeckSlide):
-    title = "A symmetric matrix is an ellipse"
-    kicker = "Its eigenvectors are the directions it only stretches"
+    title = "Picturing a symmetric matrix"
+    kicker = "For a positive-definite matrix, the unit circle maps to an ellipse"
 
     def body(self) -> None:
         lam1, lam2 = story.ELLIPSE_EIGENVALUES
@@ -269,8 +383,9 @@ class S01Ellipse(DeckSlide):
         A = np.diag([lam1, lam2])
 
         self.say(
-            "Picture a symmetric matrix by what it does to the unit circle. "
-            "Grey arrows are arbitrary unit vectors, blue arrows the two eigenvectors."
+            "Picture a symmetric matrix by what it does to the unit circle. This example is "
+            "positive definite, with eigenvalues 2 and 1. Grey arrows are arbitrary unit "
+            "vectors, blue arrows the two eigenvectors."
         )
         circle = ellipse(plane, np.eye(2), color=MUTED, width=2)
         sample_dirs = [story.unit(np.radians(22.5 + 45 * k)) for k in range(8)]
@@ -282,17 +397,21 @@ class S01Ellipse(DeckSlide):
         )
         e1 = vec(plane.origin, plane(f1), EXACT, width=7)
         e2 = vec(plane.origin, plane(f2), EXACT, width=7)
-        intro = text_col(r"Take a symmetric matrix $A$ and watch where it sends the unit circle.")
+        intro = text_col(
+            r"Take this positive-definite example, $A$ with eigenvalues $2$ and $1$, "
+            r"and watch where it sends the unit circle."
+        )
         turned = text_col(
             r"Most vectors are stretched \emph{and turned}.\\[0.5em]"
             r"Eigenvectors are only stretched: "
             r"$A\cx{exact}{f_i}=\lambda_i\cx{exact}{f_i}$."
         )
         axes_text = text_col(
-            r"Axes of the ellipse $=$ \cx{exact}{eigenvectors}.\\"
-            r"Semi-axis lengths $=$ eigenvalues.\\[0.5em]"
-            r"\cx{muted}{In $n$ dimensions: an ellipsoid, and an \emph{eigenspace} "
-            r"is spanned by some of its principal axes.}"
+            r"The ellipse's axes point along the \cx{exact}{eigenvectors}; in this example "
+            r"the semi-axis lengths are the eigenvalues $2$ and $1$.\\[0.5em]"
+            r"\cx{muted}{(For a general symmetric matrix the semi-axes are $|\lambda_i|$. "
+            r"In $n$ dimensions the picture is an ellipsoid, and an \emph{eigenspace} "
+            r"is spanned by some of its principal axes.)}"
         )
         column(intro, turned, axes_text, top=self.content_top - 0.2, buff=0.5)
         self.play(Create(circle), FadeIn(eig_lines), run_time=1.0)
@@ -316,9 +435,9 @@ class S01Ellipse(DeckSlide):
         )
 
         self.say(
-            "So the ellipse's axes are the eigenvectors and the semi-axis lengths are "
-            "the eigenvalues. In n dimensions it is an ellipsoid, and an eigenspace "
-            "is a subspace spanned by principal axes."
+            "So the ellipse's axes point along the eigenvectors, and here the semi-axis lengths "
+            "are the eigenvalues. For a general symmetric matrix they are the absolute values. "
+            "In n dimensions it is an ellipsoid, and an eigenspace is spanned by principal axes."
         )
         l1 = math(r"\lambda_1 = 2", size=32, color=EXACT).next_to(plane(lam1 * f1), RIGHT, buff=0.12)
         l2 = math(r"\lambda_2 = 1", size=32, color=EXACT).next_to(plane(lam2 * f2), UP, buff=0.12)
@@ -589,39 +708,122 @@ class S04Angle(DeckSlide):
         self.play(th.animate.set_value(np.radians(35)), run_time=1.8, rate_func=rate_functions.ease_in_out_sine)
 
         self.say(
-            "Same idea for k-dimensional subspaces. With orthonormal bases E0 for the "
-            "trial subspace and F0, F1 for the exact subspace and its complement, "
-            "the k principal angles are encoded by one operator sin Theta0, whose singular "
-            "values are sin theta_i. Its size is measured by any unitarily invariant "
-            "norm: largest angle, root-sum-square, and so on."
+            "Same idea for k-dimensional subspaces: there are k principal angles, and "
+            "sin Theta0 is the operator whose eigenvalues are their sines. The rectangular "
+            "blocks (I - F0 F0*) E0 and F1* E0 have exactly the same singular values, so they "
+            "have the same size in every unitarily invariant norm; proofs compute with them."
         )
         general = text_col(
             r"For $k$-dimensional subspaces there are $k$ \emph{principal angles} "
-            r"$\theta_1\ge\dots\ge\theta_k$. Collect them in one operator:"
+            r"$\theta_1\ge\dots\ge\theta_k$, and"
+        )
+        definition = boxed(
+            para(
+                r"$\cx{sine}{\sin\Theta_0}$ is the operator whose eigenvalues are "
+                r"$\sin\theta_1,\dots,\sin\theta_k$.",
+                width=RIGHT_COL_W - 0.5,
+                size=28,
+            ),
+            color=SINE,
+            pad=0.18,
         )
         g_eq = math(
-            r"\norm{\cx{sine}{\sin\Theta_0}} = \norm{\cx{exact}{F_1}^{*}\cx{trial}{E_0}}"
-            r"= \norm{(I-\cx{exact}{F_0F_0^{*}})\,\cx{trial}{E_0}}",
+            r"\norm{\cx{sine}{\sin\Theta_0}} = \norm{(I-\cx{exact}{F_0F_0^{*}})\,\cx{trial}{E_0}}"
+            r"= \norm{\cx{exact}{F_1}^{*}\cx{trial}{E_0}}",
             size=32,
         )
-        g_sv = tex(
-            r"singular values of $\cx{sine}{\sin\Theta_0}$: $\ \sin\theta_1,\dots,\sin\theta_k$",
-            size=26,
+        g_note = para(
+            r"The rectangular blocks have the same singular values as $\sin\Theta_0$, hence the same "
+            r"size in every unitarily invariant norm, e.g.\ "
+            r"$\norm{\sin\Theta_0}_{2}=\sin\theta_1$, $\ \norm{\sin\Theta_0}_{F}=(\sum_i\sin^2\theta_i)^{1/2}$.",
+            width=RIGHT_COL_W,
+            size=24,
+            color=MUTED,
         )
-        norms = math(
-            r"\norm{\sin\Theta_0}_{2}=\sin\theta_1,\qquad"
-            r"\norm{\sin\Theta_0}_{F}=\big(\textstyle\sum_i\sin^2\theta_i\big)^{1/2},\ \dots",
-            size=28,
-        )
-        norms_note = tex(r"any unitarily invariant norm $\norm{\cdot}$", size=24, color=MUTED)
         legend = tex(
             r"\cx{trial}{$E_0$}: trial basis, \ \cx{exact}{$F_0$}: basis of $U$,"
             r" \ \cx{exact}{$F_1$}: basis of $U^\perp$",
             size=24,
             color=MUTED,
         )
-        column(f1, general, g_eq, g_sv, norms, norms_note, legend, top=self.content_top - 0.25, buff=0.28)
-        self.play(FadeIn(VGroup(general, g_eq, g_sv, norms, norms_note, legend), shift=UP * 0.1))
+        column(f1, general, definition, g_eq, g_note, legend, top=self.content_top - 0.25, buff=0.28)
+        self.play(FadeIn(VGroup(general, definition, g_eq, g_note, legend), shift=UP * 0.1))
+
+
+class S04bSinThetaOperator(DeckSlide):
+    title = r"What $\sin\Theta_0$ is, exactly"
+    kicker = "The operator in the theorem, and the block the proof computes with"
+    depth = "*"
+
+    def body(self) -> None:
+        x0, w = -6.5, 13.0
+        top = self.content_top - 0.3
+
+        notes1 = (
+            "The paper defines the angle operator from the cosines. On the trial coordinates, "
+            "E0* F0 F0* E0 has eigenvalues cos^2 theta_i; Theta0 is its arccos square root, and "
+            "sin Theta0 is sine applied to that operator: eigenvalues sin theta_i."
+        )
+        cos_line = math(
+            r"\cos^2\Theta_0=\cx{trial}{E_0}^{*}\cx{exact}{F_0F_0^{*}}\cx{trial}{E_0},\qquad"
+            r"\Theta_0=\arccos\sqrt{\cx{trial}{E_0}^{*}\cx{exact}{F_0F_0^{*}}\cx{trial}{E_0}},\qquad"
+            r"\cx{sine}{\sin\Theta_0}=\sin(\Theta_0)",
+            size=34,
+        )
+        cos_note = tex(
+            r"operators on the trial coordinates (Davis--Kahan (1.16)); eigenvalues "
+            r"$\cos^2\theta_i$, $\theta_i$, $\sin\theta_i$",
+            size=24,
+            color=MUTED,
+        )
+
+        notes2 = (
+            "The rectangular block S = (I - F0 F0*) E0 satisfies S* S = I - E0* F0 F0* E0 = sin^2 Theta0, "
+            "so its modulus |S| is exactly sin Theta0. Same singular values, so the same value in "
+            "every unitarily invariant norm. The same holds for F1* E0, because F1 F1* = I - F0 F0*."
+        )
+        s_line = math(
+            r"S=(I-\cx{exact}{F_0F_0^{*}})\cx{trial}{E_0}:\qquad "
+            r"S^{*}S=I-\cx{trial}{E_0}^{*}\cx{exact}{F_0F_0^{*}}\cx{trial}{E_0}=\cx{sine}{\sin^2\Theta_0}"
+            r"\quad\Longrightarrow\quad |S|=\cx{sine}{\sin\Theta_0}",
+            size=34,
+        )
+        s_note = para(
+            r"So $S$ (and $\cx{exact}{F_1}^{*}\cx{trial}{E_0}$, since $F_1F_1^{*}=I-F_0F_0^{*}$) has the "
+            r"singular values $\sin\theta_i$ and the same value as $\sin\Theta_0$ in every unitarily "
+            r"invariant norm. The operator is the \emph{statement}; the block is what a proof can compute with.",
+            width=w,
+            size=26,
+        )
+
+        notes3 = (
+            "In Lean the theorem is stated on the literal sin Theta0: sourceDirectedSinThetaOperator, "
+            "defined as cfc sin of an angle operator reconstructed from |S|. The bridge theorem "
+            "sourceDirectedSinThetaOperator_eq_modulus proves it equals |S|, and the analysis runs on S."
+        )
+        lean = VGroup(
+            tex(r"In Lean:", size=26, color=MUTED),
+            mono("sourceDirectedSinThetaOperator E₀ F₀  :=  cfc sin Θ₀,     Θ₀ := cfc arcsin |S|", size=19),
+            mono("sourceDirectedSinThetaOperator_eq_modulus :  sin Θ₀ = |S|", size=19),
+            para(
+                r"The theorem's conclusion is stated on $\sin\Theta_0$ itself; this bridge moves it to $S$ "
+                r"for the analysis. (Reconstructing $\Theta_0$ as $\arcsin|S|$ agrees with the paper's "
+                r"$\arccos$ form because $S^{*}S=I-E_0^{*}F_0F_0^{*}E_0$.)",
+                width=w,
+                size=24,
+                color=MUTED,
+            ),
+        ).arrange(DOWN, aligned_edge=LEFT, buff=0.16)
+
+        blocks = VGroup(VGroup(cos_line, cos_note).arrange(DOWN, aligned_edge=LEFT, buff=0.15),
+                        VGroup(s_line, s_note).arrange(DOWN, aligned_edge=LEFT, buff=0.18),
+                        lean).arrange(DOWN, aligned_edge=LEFT, buff=0.5)
+        blocks.move_to([x0, top, 0], aligned_edge=UP + LEFT)
+        for b in blocks:
+            fit_right(b)
+        for notes, block in zip((notes1, notes2, notes3), blocks):
+            self.say(notes)
+            self.play(FadeIn(block))
 
 
 # ----------------------------------------------------------------------------
@@ -630,86 +832,157 @@ class S04Angle(DeckSlide):
 
 
 class S05Residual(DeckSlide):
-    title = "The residual: a certificate you can compute"
-    kicker = r"We do not know $U$. We do know $A$ and the trial vector $v$."
+    """The residual, and why it is computable when the angle is not.
+
+    The right column keeps a small "recall" panel (what A, U and v are) and swaps
+    one explanation per build, so the audience never has to remember the cast.
+    """
+
+    title = "The residual: checking a guess without knowing the answer"
+    kicker = r"Test the guess: does $A$ only stretch it, as it would an eigenvector?"
 
     def body(self) -> None:
         lam1, lam2 = story.RESIDUAL_EIGENVALUES
         phi = ValueTracker(np.radians(40.0))
-        plane = Plane([-5.6, -2.55, 0], 2.55)
+        plane = Plane([-5.8, -2.6, 0], 2.55)
 
         def model() -> story.RayleighResidual:
             return story.RayleighResidual(lam1, lam2, phi.get_value())
 
+        # The answer we do not have: drawn faint and dashed.
         e_lines = VGroup(
             DashedVMobject(Line(plane([-0.2, 0]), plane([2.1, 0]), color=EXACT, stroke_width=2), num_dashes=24),
             DashedVMobject(Line(plane([0, -0.1]), plane([0, 1.85]), color=EXACT, stroke_width=2), num_dashes=20),
-        )
-        e_lbl = tex(r"eigenvectors of $A$ (unknown)", size=22, color=EXACT).next_to(plane([1.1, 0]), DOWN, buff=0.15)
+        ).set_opacity(0.7)
+        u_lbl = tex(r"$U$: true eigenvector (unknown)", size=22, color=EXACT).next_to(plane([1.2, 0]), DOWN, buff=0.15)
         v = always_redraw(lambda: vec(plane.origin, plane(model().v), TRIAL, width=7))
         v_lbl = always_redraw(lambda: math(r"v", size=32, color=TRIAL).next_to(plane(model().v), UL, buff=0.05))
         Av = always_redraw(lambda: vec(plane.origin, plane(model().Av), FG, width=5))
         Av_lbl = always_redraw(lambda: math(r"Av", size=30).next_to(plane(model().Av), RIGHT, buff=0.1))
-        rho_v = always_redraw(
-            lambda: segment(plane.origin, plane(model().rho_v), TRIAL, width=12).set_opacity(0.35)
-        )
-        rho_lbl = always_redraw(
-            lambda: math(r"\rho v", size=28, color=TRIAL).next_to(plane(model().rho_v), LEFT, buff=0.12)
-        )
+        rho_v = always_redraw(lambda: segment(plane.origin, plane(model().rho_v), TRIAL, width=12).set_opacity(0.35))
+        rho_lbl = always_redraw(lambda: math(r"\rho v", size=28, color=TRIAL).next_to(plane(model().rho_v), LEFT, buff=0.12))
         r = always_redraw(lambda: vec(plane(model().rho_v), plane(model().Av), RESID, width=7))
         r_lbl = always_redraw(
             lambda: math(r"r", size=32, color=RESID).next_to(plane((model().rho_v + model().Av) / 2), UR, buff=0.06)
         )
+        arc = always_redraw(lambda: angle_arc(plane, [1, 0], model().v, 0.55, SINE, width=4))
+        th_lbl = always_redraw(
+            lambda: math(r"\theta", size=30, color=SINE).move_to(plane(0.72 * story.unit(max(phi.get_value(), 0.12) / 2)))
+        )
+
+        # Right column: a persistent recap, then one explanation per build.
+        x0, w = RIGHT_COL_X - 0.15, RIGHT_COL_W + 0.2
+        rows = [
+            (r"$A$", r"the matrix. We can multiply any vector by it.", FG),
+            (r"$\cx{exact}{U}$", r"its true eigenvector: the answer we want, but finding it is the hard part.", EXACT),
+            (r"$\cx{trial}{v}$", r"our guess for it, e.g.\ from an iterative solver or an older calculation.", TRIAL),
+        ]
+        recap = VGroup()
+        for sym, text, color in rows:
+            key = tex(sym, size=30, color=color)
+            body = para(text, width=w - 1.0, size=23)
+            row = VGroup(key, body).arrange(RIGHT, aligned_edge=UP, buff=0.25)
+            key.align_to(body, UP).shift(DOWN * 0.02)
+            recap.add(row)
+        recap.arrange(DOWN, aligned_edge=LEFT, buff=0.14)
+        recap_title = tex(r"Recall", size=22, color=MUTED)
+        recap_box = VGroup(recap_title, recap).arrange(DOWN, aligned_edge=LEFT, buff=0.12)
+        recap_box.move_to([x0 + 0.15, self.content_top - 0.2, 0], aligned_edge=UP + LEFT)
+        recap_bg = Rectangle(
+            width=recap_box.width + 0.35, height=recap_box.height + 0.3, fill_color=PANEL, fill_opacity=1, stroke_width=0
+        ).move_to(recap_box)
+        area_top = recap_bg.get_bottom()[1] - 0.3
+
+        def place(*mobs, buff=0.28):
+            g = VGroup(*mobs).arrange(DOWN, aligned_edge=LEFT, buff=buff)
+            g.move_to([x0, area_top, 0], aligned_edge=UP + LEFT)
+            for m in g:
+                fit_right(m)
+            return g
 
         self.say(
-            "In practice we have a trial vector v and the matrix A, but not the true "
-            "eigenvectors (dashed). Apply A to v."
+            "A reminder of the cast. A is the matrix: we can multiply vectors by it. U is its true "
+            "eigenvector, the answer we are after, which we do not have. v is our guess."
         )
-        f_rho = math(r"\rho = v^{*}Av \quad(\text{Rayleigh quotient})", size=30)
-        f_r = math(r"\cx{resid}{r} = Av - \rho\,v", size=34)
-        col = column(f_rho, f_r, top=self.content_top - 0.25)
-        self.play(FadeIn(e_lines), FadeIn(e_lbl))
-        self.add(v, v_lbl)
-        self.play(FadeIn(VGroup(v, v_lbl)))
+        e1 = place(
+            para(
+                r"We cannot measure the error $\cx{sine}{\theta}$ of the guess directly: that needs $\cx{exact}{U}$.",
+                width=w,
+                size=26,
+            )
+        )
+        self.play(FadeIn(recap_bg), FadeIn(recap_box), FadeIn(e_lines), FadeIn(u_lbl))
+        self.add(v, v_lbl, arc, th_lbl)
+        self.play(FadeIn(VGroup(v, v_lbl, arc, th_lbl)), FadeIn(e1))
+
+        self.say(
+            "But we can test the guess. From the ellipse slide: an eigenvector is a direction A only "
+            "stretches. So multiply: if v were an eigenvector, Av would point exactly along v. Here it does not."
+        )
+        e2 = place(
+            para(
+                r"But we can \emph{test} it. An eigenvector is a direction $A$ only stretches, so apply $A$: "
+                r"if $v$ were an eigenvector, $Av$ would point exactly along $v$.",
+                width=w,
+                size=26,
+            )
+        )
         self.add(Av, Av_lbl)
-        self.play(FadeIn(VGroup(Av, Av_lbl)))
+        self.play(FadeOut(e1), FadeIn(e2), FadeIn(VGroup(Av, Av_lbl)))
 
         self.say(
-            "If v were an eigenvector, Av would be a multiple of v. The best multiple is "
-            "the Rayleigh quotient rho, and what is left over is the residual r."
+            "Split Av into the part along v, rho v, and the leftover r. The recipe needs one "
+            "multiplication by A and one dot product. U never appears: that is why r is computable."
         )
+        recipe = math(
+            r"\begin{aligned}&1.\ \ w=Av\\ &2.\ \ \rho=v^{*}w\\ &3.\ \ \cx{resid}{r}=w-\rho\,v\end{aligned}",
+            size=32,
+        )
+        recipe_note = para(
+            r"$\rho v$ is the part of $Av$ along $v$; the \cx{resid}{residual} $r$ is what is left over. "
+            r"One multiplication and one dot product: $\cx{exact}{U}$ never appears.",
+            width=w - 2.0,
+            size=24,
+        )
+        e3 = place(VGroup(recipe, recipe_note).arrange(RIGHT, aligned_edge=UP, buff=0.4))
         self.add(rho_v, rho_lbl, r, r_lbl)
-        self.play(FadeIn(VGroup(rho_v, rho_lbl, r, r_lbl)), FadeIn(col))
-        norm_row = readout_rows([(r"\norm{r} =", lambda: model().residual_norm, RESID, 3, None)], size=32)
-        norm_row.next_to(col, DOWN, aligned_edge=LEFT, buff=0.35)
-        zero = tex(r"$\cx{resid}{r}=0$ exactly when $v$ is an eigenvector.", size=28)
-        zero.next_to(norm_row, DOWN, aligned_edge=LEFT, buff=0.35)
-        self.play(FadeIn(norm_row), FadeIn(zero))
+        self.play(FadeOut(e2), FadeIn(e3), FadeIn(VGroup(rho_v, rho_lbl, r, r_lbl)))
 
         self.say(
-            "Rotate v onto an eigenvector: the residual shrinks to zero. The residual is "
-            "computable from A and v alone; the angle to the true eigenvector is not."
+            "Improve the guess: the angle theta and the residual shrink together, and r is zero exactly "
+            "when v is an eigenvector. We can watch r; we cannot watch theta. The theorem will say how "
+            "much a small r guarantees about theta."
         )
+        readouts = readout_rows(
+            [
+                (r"\cx{sine}{\theta}\ \text{(needs } U) =", lambda: np.degrees(phi.get_value()), SINE, 1, r"^\circ"),
+                (r"\norm{\cx{resid}{r}}\ \text{(needs } A, v) =", lambda: model().residual_norm, RESID, 3, None),
+            ],
+            size=28,
+        )
+        zero = tex(r"$\cx{resid}{r}=0$ exactly when $v$ is an eigenvector.", size=26)
+        e4 = place(readouts, zero, buff=0.3)
+        self.play(FadeOut(e3), FadeIn(e4))
         self.play(phi.animate.set_value(np.radians(6.0)), run_time=3.5, rate_func=rate_functions.ease_in_out_sine)
 
         self.say(
-            "For a whole trial subspace, E0 holds orthonormal trial vectors and A0 is a "
-            "trial matrix (for instance E0* A E0, but any self-adjoint choice is allowed). "
-            "The residual is R = A E0 - E0 A0. The question: does a small R force a small sin Theta0?"
+            "The same works for several trial vectors at once: E0 holds them as orthonormal columns and "
+            "A0 is a small trial matrix, for instance E0* A E0. The residual is R = A E0 - E0 A0, still "
+            "computable from A and the guess. The question for the theorem: does a small R force a small angle?"
         )
-        block = math(r"\cx{resid}{R} = A\,\cx{trial}{E_0} - \cx{trial}{E_0}\,\cx{trial}{A_0}", size=36)
+        block = math(r"\cx{resid}{R} = A\,\cx{trial}{E_0} - \cx{trial}{E_0}\,\cx{trial}{A_0}", size=34)
         block_note = para(
-            r"$\cx{trial}{E_0}$: orthonormal trial vectors; $\cx{trial}{A_0}$: any self-adjoint trial matrix, e.g.\ $E_0^{*}AE_0$",
-            width=RIGHT_COL_W,
-            size=24,
+            r"several guesses at once: $\cx{trial}{E_0}$ holds them as orthonormal columns, $\cx{trial}{A_0}$ is a "
+            r"small trial matrix (e.g.\ $E_0^{*}AE_0$; for one vector it is just $\rho$)",
+            width=w,
+            size=22,
             color=MUTED,
         )
-        q = boxed(tex(r"Does a small $\cx{resid}{R}$ force a small $\cx{sine}{\sin\Theta_0}$?", size=30), color=FG)
-        grp = VGroup(block, block_note, q).arrange(DOWN, aligned_edge=LEFT, buff=0.3)
-        grp.next_to(zero, DOWN, aligned_edge=LEFT, buff=0.5)
-        for mob in grp:
-            fit_right(mob)
-        self.play(phi.animate.set_value(np.radians(40.0)), FadeIn(grp), run_time=1.5)
+        q = boxed(tex(r"Does a small $\cx{resid}{R}$ force a small $\cx{sine}{\sin\Theta_0}$?", size=28), color=FG)
+        e5 = place(block, block_note, q, buff=0.25)
+        # Freeze the live readouts first: their digit count would change mid-fade.
+        e4.clear_updaters()
+        self.play(FadeOut(e4), FadeIn(e5), phi.animate.set_value(np.radians(40.0)), run_time=1.5)
 
 
 # ----------------------------------------------------------------------------
@@ -740,7 +1013,10 @@ class S06Gap(DeckSlide):
         )
         interval = Line(X(beta), X(alpha), color=TRIAL, stroke_width=8).set_opacity(0.45)
         ritz = VGroup(*[Dot(X(a), color=TRIAL, radius=0.1) for a in g["ritz"]])
-        ritz_lbl = math(r"\operatorname{spec}(A_0)\subset[\beta,\alpha]", size=30, color=TRIAL).next_to(interval, UP, buff=0.55)
+        ritz_lbl = VGroup(
+            tex(r"our estimates", size=22, color=TRIAL),
+            math(r"\operatorname{spec}(A_0)\subset[\beta,\alpha]", size=30, color=TRIAL),
+        ).arrange(DOWN, buff=0.06).next_to(interval, UP, buff=0.4)
         ab = VGroup(
             math(r"\beta", size=28, color=TRIAL).next_to(X(beta), DOWN, buff=0.2),
             math(r"\alpha", size=28, color=TRIAL).next_to(X(alpha), DOWN, buff=0.2),
@@ -750,8 +1026,14 @@ class S06Gap(DeckSlide):
         d_l = math(r"\delta", size=30, color=GAP).next_to(br_l, DOWN, buff=0.08)
         d_r = math(r"\delta", size=30, color=GAP).next_to(br_r, DOWN, buff=0.08)
         unwanted = VGroup(*[Dot(X(lam), color=EXACT, radius=0.1) for lam in g["unwanted"]])
-        un_lbl_l = math(r"\operatorname{spec}(\Lambda_1)", size=30, color=EXACT).next_to(VGroup(*unwanted[:3]), UP, buff=0.55)
-        un_lbl_r = math(r"\operatorname{spec}(\Lambda_1)", size=30, color=EXACT).next_to(VGroup(*unwanted[3:]), UP, buff=0.55)
+        un_lbl_l = VGroup(
+            tex(r"unwanted eigenvalues of $A$", size=22, color=EXACT),
+            math(r"\operatorname{spec}(\Lambda_1)", size=30, color=EXACT),
+        ).arrange(DOWN, buff=0.06).next_to(VGroup(*unwanted[:3]), UP, buff=0.4)
+        un_lbl_r = VGroup(
+            tex(r"unwanted eigenvalues of $A$", size=22, color=EXACT),
+            math(r"\operatorname{spec}(\Lambda_1)", size=30, color=EXACT),
+        ).arrange(DOWN, buff=0.06).next_to(VGroup(*unwanted[3:]), UP, buff=0.4)
 
         self.say(
             "The number line is the real axis of eigenvalues. Amber: the eigenvalues "
@@ -857,8 +1139,16 @@ class S07Theorem(DeckSlide):
 
 
 class S08Components(DeckSlide):
+    """The one-vector proof as a bar chart.
+
+    ``short = True`` gives the condensed version for the short deck: the same
+    picture, plain-language captions instead of the equations, three builds.
+    """
+
     title = "Why it is true: one trial vector"
     kicker = r"Write $v$ in the eigenbasis of $A$ (the proof uses it; the bound does not need it)"
+    depth = "*"
+    short = False
 
     def body(self) -> None:
         ex = story.COMPONENT_EXAMPLE
@@ -896,7 +1186,28 @@ class S08Components(DeckSlide):
         coef_bars = bars(np.abs(c), coef_colors)
         bar_lbl = tex(r"bars: $|c_j|$", size=26).move_to([X(-3.0)[0], 1.1, 0], aligned_edge=LEFT)
 
+        # The stretch factor |lambda - rho| is drawn on its own vertical scale:
+        # screen height = wscale * |lambda - rho|.
+        wscale = 0.55
+
+        def W(t: float, value: float) -> np.ndarray:
+            return X(t, wscale * value / sy)
+
+        weight = VMobject()
+        weight.set_points_as_corners([W(-3.0, abs(-3.0 - rho)), W(rho, 0.0), W(3.0, abs(3.0 - rho))])
+        weight.set_stroke(GAP, width=3)
+        delta_line = DashedVMobject(Line(W(-3.0, delta), W(3.0, delta), color=GAP, stroke_width=2), num_dashes=50)
+        w_lbl = math(r"|\lambda-\rho|", size=26, color=GAP).next_to(W(3.0, abs(3.0 - rho)), UP, buff=0.08)
+        d_lbl = math(r"\delta", size=26, color=GAP).next_to(W(3.0, delta), RIGHT, buff=0.08)
+        res_bars = bars(np.abs(ex.residual_coefficients), [RESID] * len(lam))
+        res_lbl = tex(r"bars: \cx{resid}{$|\lambda_j-\rho|\,|c_j|$}", size=26).move_to(bar_lbl, aligned_edge=LEFT)
         rx = -0.45
+
+        if self.short:
+            self._short_body(ex, rx, axis, lam_lbl, ticks, window, win_lbl, rho_mark, rho_lbl, coef_bars, bar_lbl,
+                             weight, delta_line, w_lbl, d_lbl, res_bars, res_lbl)
+            return
+
         v_eq = math(r"v=\sum_j c_j f_j,\qquad A f_j=\lambda_j f_j", size=30)
         sin_eq = math(r"\cx{sine}{\sin^2\theta}=\sum_{\lambda_j\notin\text{window}}\cx{sine}{c_j^2}", size=30)
         u_note = tex(r"$\cx{exact}{U}$ = span of the $f_j$ with $\lambda_j$ in the window", size=24, color=MUTED)
@@ -931,27 +1242,12 @@ class S08Components(DeckSlide):
             "Now apply A - rho. Each component is multiplied by lambda_j - rho: the V-shaped "
             "curve. Outside the window it is at least delta."
         )
-        # The stretch factor |lambda - rho| is drawn on its own vertical scale:
-        # screen height = wscale * |lambda - rho|.
-        wscale = 0.55
-
-        def W(t: float, value: float) -> np.ndarray:
-            return X(t, wscale * value / sy)
-
-        weight = VMobject()
-        weight.set_points_as_corners([W(-3.0, abs(-3.0 - rho)), W(rho, 0.0), W(3.0, abs(3.0 - rho))])
-        weight.set_stroke(GAP, width=3)
-        delta_line = DashedVMobject(Line(W(-3.0, delta), W(3.0, delta), color=GAP, stroke_width=2), num_dashes=50)
-        w_lbl = math(r"|\lambda-\rho|", size=26, color=GAP).next_to(W(3.0, abs(3.0 - rho)), UP, buff=0.08)
-        d_lbl = math(r"\delta", size=26, color=GAP).next_to(W(3.0, delta), RIGHT, buff=0.08)
         self.play(Create(weight), Create(delta_line), FadeIn(w_lbl, d_lbl), FadeIn(r_eq), FadeIn(outside))
 
         self.say(
             "Multiply. Components near rho are crushed; every pink component is "
             "multiplied by at least delta. Green bars are the residual's components."
         )
-        res_bars = bars(np.abs(ex.residual_coefficients), [RESID] * len(lam))
-        res_lbl = tex(r"bars: \cx{resid}{$|\lambda_j-\rho|\,|c_j|$}", size=26).move_to(bar_lbl, aligned_edge=LEFT)
         self.play(Transform(coef_bars, res_bars), Transform(bar_lbl, res_lbl), run_time=2.0)
 
         self.say(
@@ -960,6 +1256,63 @@ class S08Components(DeckSlide):
             "picture on the right."
         )
         self.play(FadeIn(tail_bg), FadeIn(tail))
+
+    def _short_body(self, ex, rx, axis, lam_lbl, ticks, window, win_lbl, rho_mark, rho_lbl, coef_bars, bar_lbl,
+                    weight, delta_line, w_lbl, d_lbl, res_bars, res_lbl) -> None:
+        w = 7.2
+        t1 = para(
+            r"The bars are the trial vector's components along the eigenvectors of $A$, placed at "
+            r"their eigenvalues. \cx{exact}{Blue}: inside the window around $\rho$; they span $U$. "
+            r"\cx{sine}{Pink}: outside; together they measure $\sin\theta$.",
+            width=w,
+            size=27,
+        )
+        t2 = para(
+            r"The residual multiplies each component by its eigenvalue's distance from $\rho$ "
+            r"(\cx{gap}{violet}). Outside the window that factor is at least $\cx{gap}{\delta}$.",
+            width=w,
+            size=27,
+        )
+        verdict = boxed(math(r"\cx{gap}{\delta}\,\cx{sine}{\sin\theta}\ \le\ \norm{\cx{resid}{r}}", size=40), color=FG)
+        t3 = para(
+            rf"So the pink part of the residual alone is at least $\delta\sin\theta$ "
+            rf"(here ${ex.theorem_lhs:.3f}\le{ex.residual_norm:.3f}$). With many trial vectors the same "
+            r"argument runs block by block, through a Sylvester equation.",
+            width=w,
+            size=25,
+            color=MUTED,
+        )
+        col = VGroup(t1, t2, verdict, t3).arrange(DOWN, aligned_edge=LEFT, buff=0.35)
+        col.move_to([rx, self.content_top - 0.2, 0], aligned_edge=UP + LEFT)
+        for m in col:
+            fit_right(m)
+
+        self.say(
+            "Why should it be true? Write the trial vector in the eigenvectors of A. Blue bars are "
+            "the components we want; pink bars are the components outside U, and their total size is sin theta."
+        )
+        self.play(Create(axis), FadeIn(lam_lbl, ticks, window, win_lbl, rho_mark, rho_lbl))
+        self.play(LaggedStartMapGrow(coef_bars), FadeIn(bar_lbl), FadeIn(t1))
+
+        self.say(
+            "The residual multiplies every component by how far its eigenvalue is from rho. Near rho "
+            "that is small, so the wanted components nearly vanish. Outside the window it is at least delta."
+        )
+        self.play(Create(weight), Create(delta_line), FadeIn(w_lbl, d_lbl), FadeIn(t2))
+        self.play(Transform(coef_bars, res_bars), Transform(bar_lbl, res_lbl), run_time=2.0)
+
+        self.say(
+            "So the residual is at least delta times sin theta. That is the whole idea; the "
+            "general case runs the same argument on blocks."
+        )
+        self.play(FadeIn(verdict), FadeIn(t3))
+
+
+class S08WhyShort(S08Components):
+    title = "Why it is true, in one picture"
+    kicker = r"Write the trial vector $v$ in the eigenvectors of $A$"
+    depth = ""
+    short = True
 
 
 def LaggedStartMapGrow(bars: VGroup):
@@ -976,6 +1329,7 @@ def LaggedStartMapGrow(bars: VGroup):
 class S09Sylvester(DeckSlide):
     title = "Many trial vectors: a Sylvester equation"
     kicker = "The same argument, one block at a time"
+    depth = "*"
 
     def body(self) -> None:
         ex = story.SYLVESTER_EXAMPLE
@@ -1077,6 +1431,7 @@ def ReplacementTransformFromCopy(a, b):
 class S10Sharp(DeckSlide):
     title = "The constant 1 cannot be improved"
     kicker = "A two-dimensional example with equality at every angle"
+    depth = "*"
 
     def body(self) -> None:
         delta = story.SHARP_DELTA
@@ -1258,13 +1613,15 @@ class S11Payoff(DeckSlide):
         self.play(g.animate.set_value(story.PERTURBATION_END_GAP), run_time=5.0, rate_func=rate_functions.ease_in_out_sine)
 
         self.say(
-            "Note where delta is measured: from the old wanted eigenvalue to the new unwanted "
-            "one. The perturbed eigenvalues split, so delta stays positive even when A itself "
-            "has no gap, and the bound tends to 1 instead of blowing up."
+            "Note where delta is measured in this example: from the old wanted eigenvalue to the new "
+            "unwanted one. The perturbed eigenvalues split apart, so here the bound stays finite, "
+            "tending to 1, even as the original gap collapses. That is a property of this example, "
+            "not a general promise."
         )
         remark = para(
-            r"$\cx{gap}{\delta}$ is measured against the \emph{perturbed} spectrum, so it stays positive "
-            r"even when $A$ has no gap: the bound tends to $1$ instead of blowing up.",
+            r"In this example $\cx{gap}{\delta}$ is measured against the \emph{perturbed} unwanted "
+            r"eigenvalue, which splits away from the old one, so the bound stays informative "
+            r"(it tends to $1$) even as $A$'s own gap collapses.",
             width=11.5,
             size=24,
         ).move_to(note)
@@ -1275,76 +1632,115 @@ class S11Payoff(DeckSlide):
 # 12. What Lean proves
 # ----------------------------------------------------------------------------
 
-LEAN_SNIPPET = """\
-theorem TauCeti.DavisKahan1970.SectionTwo.sinTheta
-    [RCLike 𝕜] [SeparableSpace E]     -- plus Hilbert-space instances
-    (N : NormalizedSymmetricOperatorIdealFamily 𝕜)
-    (A : E →ₗ.[𝕜] E) (A₀ : F →ₗ.[𝕜] F) (Λ₁ : G →ₗ.[𝕜] G)
-    (E₀ : F →L[𝕜] E) (F₀ : H →L[𝕜] E) (F₁ : G →L[𝕜] E) (R : F →L[𝕜] E) :
-    IsSelfAdjoint A → IsSelfAdjoint A₀ → IsSelfAdjoint Λ₁ →
-    IsTrialResidual A A₀ E₀ R →                  -- R = A E₀ - E₀ A₀
-    IsExactSpectralDecomposition A Λ₁ F₀ F₁ →    -- A F₁ = F₁ Λ₁
-    0 < δ → FormBoundedSylvesterGap A₀ Λ₁ δ →
-    N.Mem (sin Θ₀) → N.Mem R →
-      δ * N.gaugeReal (sin Θ₀) ≤ N.gaugeReal R"""
+# The statement exactly as `#check @TauCeti.DavisKahan1970.SectionTwo.sinTheta` prints
+# it, with only instance-binder names dropped and the lines re-broken.  Re-check
+# after any change to the alias (see the README).
+LEAN_SIGNATURE = [
+    "theorem TauCeti.DavisKahan1970.SectionTwo.sinTheta",
+    "    {𝕜 : Type u_1} [RCLike 𝕜] {E F G H : Type u_2}",
+    "    [NormedAddCommGroup E] [InnerProductSpace 𝕜 E] [CompleteSpace E]",
+    "    [NormedAddCommGroup F] [InnerProductSpace 𝕜 F] [CompleteSpace F]",
+    "    [NormedAddCommGroup G] [InnerProductSpace 𝕜 G] [CompleteSpace G]",
+    "    [NormedAddCommGroup H] [InnerProductSpace 𝕜 H] [CompleteSpace H]",
+    "    [TopologicalSpace.SeparableSpace E]",
+    "    (N : TauCeti.DavisKahan.ExactSinTheta.NormalizedSymmetricOperatorIdealFamily 𝕜)",
+    "    (A : E →ₗ.[𝕜] E) (A₀ : F →ₗ.[𝕜] F) (Λ₁ : G →ₗ.[𝕜] G)",
+    "    (E₀ : F →L[𝕜] E) (F₀ : H →L[𝕜] E) (F₁ : G →L[𝕜] E) (R : F →L[𝕜] E) :",
+    "    IsSelfAdjoint A → IsSelfAdjoint A₀ → IsSelfAdjoint Λ₁ →",
+    "    TauCeti.DavisKahan1970.IsTrialResidual A A₀ E₀ R →",
+    "    TauCeti.DavisKahan1970.IsExactSpectralDecomposition A Λ₁ F₀ F₁ →",
+    "    ∀ {δ : ℝ}, 0 < δ →",
+    "    TauCeti.DavisKahan.Sylvester.FormBoundedSylvesterGap A₀ Λ₁ δ →",
+    "    N.Mem (TauCeti.DavisKahan1970.sourceDirectedSinThetaOperator E₀ F₀) → N.Mem R →",
+    "    δ * N.gaugeReal (TauCeti.DavisKahan1970.sourceDirectedSinThetaOperator E₀ F₀)",
+    "      ≤ N.gaugeReal R",
+]
+
+# (first line, last line, label, colour) for the "reading it" build.
+LEAN_READING = [
+    (1, 1, r"scalars: $\mathbb{R}$ or $\mathbb{C}$", FG),
+    (2, 6, r"separable Hilbert spaces, any dimension", FG),
+    (7, 7, r"every unitarily invariant norm", FG),
+    (8, 8, r"possibly unbounded operators", EXACT),
+    (10, 10, r"all self-adjoint", EXACT),
+    (11, 11, r"$\cx{resid}{R}=A\cx{trial}{E_0}-\cx{trial}{E_0}\cx{trial}{A_0}$", RESID),
+    (12, 12, r"$A\cx{exact}{F_1}=\cx{exact}{F_1}\cx{exact}{\Lambda_1}$", EXACT),
+    (14, 14, r"the gap $\cx{gap}{\delta}$", GAP),
+    (15, 15, r"where the norms are defined", MUTED),
+    (16, 17, r"$\cx{gap}{\delta}\norm{\cx{sine}{\sin\Theta_0}}\le\norm{\cx{resid}{R}}$, on $\sin\Theta_0$ itself", SINE),
+]
 
 
 class S12Lean(DeckSlide):
-    title = "What the Lean theorem states"
-    kicker = "The paper's full scope, not a matrix special case"
+    title = "What we formalized: the full Lean theorem"
+    kicker = "The complete statement, shown for its reach; not meant to be read token by token"
+    section = ""
 
     def body(self) -> None:
-        self.say(
-            "This is the statement as checked by Lean (abridged: typeclass instances "
-            "folded, and 'sin Θ₀' stands for sourceDirectedSinThetaOperator E₀ F₀)."
-        )
-        code = Text(
-            LEAN_SNIPPET,
-            font=MONO_FONT,
-            font_size=15.5,
-            color=FG,
-            line_spacing=1.05,
-            t2c={
-                "-- plus Hilbert-space instances": MUTED,
-                "-- R = A E₀ - E₀ A₀": MUTED,
-                "-- A F₁ = F₁ Λ₁": MUTED,
-                "theorem": EXACT,
-                "sin Θ₀": SINE,
-                " R\n": RESID,
-            },
-        )
-        code.move_to([LEFT_X() + 0.1, self.content_top - 0.3, 0], aligned_edge=UP + LEFT)
-        bg = Rectangle(width=code.width + 0.4, height=code.height + 0.35, fill_color=PANEL, fill_opacity=1, stroke_width=0).move_to(code)
-        abridged = Text(
-            "abridged: instances folded; `sin Θ₀` abbreviates `sourceDirectedSinThetaOperator E₀ F₀`",
-            font=MONO_FONT,
-            font_size=14,
+        size = 14
+        probe = Text("M" * 20, font=MONO_FONT, font_size=size)
+        char_w = probe.width / 20
+        line_h = 0.275
+        x0, top = -6.75, self.content_top - 0.15
+        lines = VGroup()
+        for i, raw in enumerate(LEAN_SIGNATURE):
+            indent = len(raw) - len(raw.lstrip(" "))
+            t = Text(raw.strip(), font=MONO_FONT, font_size=size, color=FG)
+            t.move_to([x0 + indent * char_w, top - i * line_h, 0], aligned_edge=LEFT)
+            lines.add(t)
+        right_edge = 2.95
+        if lines.get_right()[0] > right_edge:
+            lines.scale((right_edge - x0) / (lines.get_right()[0] - x0), about_point=[x0, top, 0])
+        bg = Rectangle(
+            width=lines.width + 0.4, height=lines.height + 0.35, fill_color=PANEL, fill_opacity=1, stroke_width=0
+        ).move_to(lines)
+        caption = para(
+            r"As \texttt{\#check} prints it, with instance-binder names dropped and lines re-broken; "
+            r"$\sin\Theta_0$ is \texttt{sourceDirectedSinThetaOperator E$_0$ F$_0$}.",
+            width=13.3,
+            size=19,
             color=MUTED,
-        ).next_to(bg, DOWN, aligned_edge=LEFT, buff=0.12)
-        self.play(FadeIn(bg), FadeIn(code), FadeIn(abridged))
+        ).next_to(bg, DOWN, aligned_edge=LEFT, buff=0.1)
 
         self.say(
-            "Reading it: any real or complex separable Hilbert space, any dimension; "
-            "A self-adjoint and possibly unbounded, as a partial linear map; every "
-            "unitarily invariant norm, wherever it is defined; the paper's gap, including "
-            "half-infinite ordered forms. It depends only on Lean's standard axioms."
+            "This is the actual Lean statement of the sin Theta theorem, complete. Nobody should read it "
+            "token by token; the point is that this is the real object the proof checker accepted."
         )
-        items = [
-            (r"scalars", r"$\mathbb{R}$ or $\mathbb{C}$ (\texttt{RCLike})"),
-            (r"operator", r"self-adjoint, possibly unbounded (\texttt{LinearPMap})"),
-            (r"space", r"separable Hilbert space, any dimension"),
-            (r"norm", r"every unitarily invariant norm, where defined"),
-            (r"gap", r"interval/exterior, or half-infinite ordered"),
-            (r"axioms", r"propext, Classical.choice, Quot.sound only"),
-        ]
-        cells = VGroup(*[tex(rf"\cx{{fg}}{{{k}}}\quad {v}", size=23, color=MUTED) for k, v in items])
-        scope = VGroup(
-            VGroup(*cells[0::2]).arrange(DOWN, aligned_edge=LEFT, buff=0.14),
-            VGroup(*cells[1::2]).arrange(DOWN, aligned_edge=LEFT, buff=0.14),
-        ).arrange(RIGHT, aligned_edge=UP, buff=0.6)
-        scope.next_to(abridged, DOWN, aligned_edge=LEFT, buff=0.25)
-        fit_right(scope)
-        self.play(FadeIn(scope, lag_ratio=0.15))
+        self.play(FadeIn(bg), FadeIn(lines, lag_ratio=0.03), FadeIn(caption))
+
+        self.say(
+            "Reading it: real or complex scalars; separable Hilbert spaces of any dimension; every "
+            "unitarily invariant norm; possibly unbounded self-adjoint operators; the paper's residual, "
+            "spectral decomposition and gap; and the conclusion delta times norm of sin Theta0 at most norm of R."
+        )
+        highlights, labels = VGroup(), VGroup()
+        for first, last, label, color in LEAN_READING:
+            block = VGroup(*lines[first : last + 1])
+            box = Rectangle(
+                width=block.width + 0.14, height=block.height + 0.1, stroke_color=color, stroke_width=1.6
+            ).move_to(block)
+            lab = tex(label, size=21, color=color)
+            lab.move_to([right_edge + 0.35, block.get_center()[1], 0], aligned_edge=LEFT)
+            fit_right(lab)
+            highlights.add(box)
+            labels.add(lab)
+        highlighted = {i for first, last, _, _ in LEAN_READING for i in range(first, last + 1)}
+        dim = [line.animate.set_opacity(0.4) for i, line in enumerate(lines) if i not in highlighted and i != 0]
+        self.play(*dim, FadeIn(highlights, lag_ratio=0.1), FadeIn(labels, lag_ratio=0.1), run_time=1.6)
+
+        self.say(
+            "And it is trustworthy in the usual sense: print axioms shows only Lean's three standard "
+            "axioms. The same holds for the Proposition 4.4 refutation later in the talk."
+        )
+        trust = para(
+            r"\texttt{\#print axioms}: \texttt{propext}, \texttt{Classical.choice}, \texttt{Quot.sound} "
+            r"--- Lean's standard axioms, nothing assumed.",
+            width=13.3,
+            size=22,
+            color=FG,
+        ).next_to(caption, DOWN, aligned_edge=LEFT, buff=0.12)
+        fit_right(trust)
+        self.play(FadeIn(trust))
 
 
 # ----------------------------------------------------------------------------
@@ -1355,6 +1751,7 @@ class S12Lean(DeckSlide):
 class S13Family(DeckSlide):
     title = "The family: four theorems"
     kicker = r"Davis \& Kahan (1970), Section 2; this deck covered the first"
+    depth = "*"
 
     def body(self) -> None:
         self.say(
@@ -1408,19 +1805,64 @@ class S13Family(DeckSlide):
         self.play(FadeIn(foot))
 
 
+# ----------------------------------------------------------------------------
+# 14. Summary
+# ----------------------------------------------------------------------------
+
+
+class S14Summary(DeckSlide):
+    title = "What to take away"
+    kicker = ""
+
+    def body(self) -> None:
+        items = [
+            (
+                r"\cx{sine}{1}",
+                r"\textbf{The $\sin\Theta$ theorem.} How far a subspace is from the true eigenspace is bounded "
+                r"by something you can compute: $\ \norm{\cx{sine}{\sin\Theta_0}}\le\norm{\cx{resid}{R}}/\cx{gap}{\delta}$, "
+                r"residual over gap.",
+            ),
+            (
+                r"\cx{exact}{2}",
+                r"\textbf{Formalized at the paper's full scope.} Real or complex Hilbert spaces of any dimension, "
+                r"possibly unbounded operators, every unitarily invariant norm, checked by Lean with only its "
+                r"standard axioms.",
+            ),
+            (
+                r"\cx{gap}{3}",
+                r"\textbf{Proposition 4.4 is false as printed.} An explicit counterexample in $\mathbb{R}^4$, "
+                r"refuted in Lean, together with a proved repair: the claim holds for the $Q$-norms "
+                r"(e.g.\ operator and Frobenius).",
+            ),
+        ]
+        rows = VGroup()
+        for num, text in items:
+            n = tex(num, size=60)
+            body = para(text, width=11.4, size=30)
+            rows.add(VGroup(n, body).arrange(RIGHT, aligned_edge=UP, buff=0.45))
+        rows.arrange(DOWN, aligned_edge=LEFT, buff=0.55)
+        rows.move_to([-6.3, self.content_top - 0.35, 0], aligned_edge=UP + LEFT)
+        self.say("Three things to remember.")
+        for row in rows:
+            self.play(FadeIn(row, shift=UP * 0.1), run_time=0.7)
+
+
 SCENES = [
     S00Title,
+    S00bSetting,
     S01Ellipse,
     S02Perturb,
     S03NoGap,
     S04Angle,
+    S04bSinThetaOperator,
     S05Residual,
     S06Gap,
     S07Theorem,
+    S11Payoff,
     S08Components,
     S09Sylvester,
     S10Sharp,
-    S11Payoff,
     S12Lean,
     S13Family,
+    S14Summary,
 ]
