@@ -8,8 +8,7 @@ import DavisKahan.SinTheta.Canonical
 import DavisKahan.SinTheta.Real.Canonical
 import DavisKahan.Sources.DavisKahan1970.SymmetricNormingFanDominance
 import DavisKahan.OperatorIdeal.CanonicalRealView
-import DavisKahan.Geometry.Angle.OperatorAngleGeneric
-import DavisKahan.BoundedOperator.IsometricRangeProjection
+import ForTauCeti.Analysis.RCLike.ScalarTransportFunctionalCalculus
 
 open TauCeti.DavisKahan.Sylvester
 
@@ -24,9 +23,12 @@ half-infinite configurations. The complex and real versions specialize it.
 `IsTrialResidual` records the isometric trial map and its bounded residual on
 the trial operator's domain. `IsExactSpectralDecomposition` records the exact
 orthogonal coordinate maps and the complementary operator. The ambient, trial,
-and complementary operators may all be unbounded. The source-directed angle `Theta₀` is represented on trial coordinates by continuous
-functional calculus, and its literal sine is proved equal to the modulus of the
-rectangular block `(I - F₀ F₀*) E₀`.  The two forms therefore have the same
+and complementary operators may all be unbounded.  On trial coordinates we
+reconstruct the directed angle on the canonical interval `[0, π/2]` from the
+positive sine modulus by continuous functional calculus.  The canonical
+subspace development proves that this is the same angle as Davis--Kahan's
+cosine-defined `Theta₀`.  Its literal sine is proved equal to the modulus of
+the rectangular block `(I - F₀ F₀*) E₀`, so the two forms have the same
 operator-ideal gauge whenever that gauge is defined.
 
 The `symmetricNorming` theorems also prove ideal membership for their
@@ -218,22 +220,23 @@ noncomputable def sourceDirectedSineModulus
     (E₀ : F →L[𝕜] E) (F₀ : H →L[𝕜] E) : F →L[𝕜] F :=
   ContinuousLinearMap.modulus (sourceDirectedSineBlock E₀ F₀)
 
-/-- The source-directed angle `Θ₀` on trial coordinates.
+/-- The sine-reconstructed directed angle on trial coordinates.
 
 As in `SineTheta/OperatorAngleBridge.lean`, the angle is reconstructed on the
 canonical interval `[0, π/2]` by applying `arcsin` to the positive directed
 sine.  `SineTheta/AngleIdentity.lean` proves, for the canonical subspace
-coordinates, that this sine-defined angle is exactly Davis--Kahan's
-cosine-defined `arccos |C₀|` angle. -/
+coordinates, that this construction is exactly Davis--Kahan's cosine-defined
+`Θ₀ = arccos |C₀|`. -/
 noncomputable def sourceDirectedThetaOperator
     (E₀ : F →L[𝕜] E) (F₀ : H →L[𝕜] E) : F →L[𝕜] F :=
   cfc Real.arcsin (sourceDirectedSineModulus E₀ F₀)
 
-/-- **The source's literal positive directed `sin Θ₀` on trial coordinates.**
+/-- **The literal positive directed sine on trial coordinates.**
 
 Unlike the rectangular analytic representative, this definition spells out
-`sin Θ₀`: apply sine by continuous functional calculus to the source-directed
-angle operator. -/
+`sin Θ₀`: apply sine by continuous functional calculus to the reconstructed
+angle operator.  The canonical angle-identity theorem identifies that angle
+with Davis--Kahan's cosine-defined `Θ₀`. -/
 noncomputable def sourceDirectedSinThetaOperator
     (E₀ : F →L[𝕜] E) (F₀ : H →L[𝕜] E) : F →L[𝕜] F :=
   cfc Real.sin (sourceDirectedThetaOperator E₀ F₀)
@@ -334,16 +337,6 @@ theorem sourceDirectedSinThetaOperator_eq_modulus
       exact Real.sin_arcsin (by linarith [hxi.1]) hxi.2
     _ = sourceDirectedSineModulus E₀ F₀ := cfc_id' ℝ _
     _ = ContinuousLinearMap.modulus (sourceDirectedSineBlock E₀ F₀) := rfl
-
-/-- The literal source `sin Θ₀` and its rectangular complementary-projection
-representative have the same complete approximation-number sequence. -/
-theorem sourceDirectedSinThetaOperator_hasSameApproximationNumbers
-    (E₀ : F →L[𝕜] E) (F₀ : H →L[𝕜] E)
-    (hE₀ : IsometricEmbedding E₀) (hF₀ : IsometricEmbedding F₀) :
-    (sourceDirectedSinThetaOperator E₀ F₀).HasSameApproximationNumbers
-      (sourceDirectedSineBlock E₀ F₀) := by
-  rw [sourceDirectedSinThetaOperator_eq_modulus E₀ F₀ hE₀ hF₀]
-  exact TauCeti.DavisKahan.Angle.modulus_hasSameApproximationNumbers_rclike _
 
 /-- **Davis--Kahan 1970, Section 2 sine-theta theorem, presentation form.**
 
