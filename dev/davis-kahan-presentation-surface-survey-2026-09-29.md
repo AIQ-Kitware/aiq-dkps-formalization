@@ -50,20 +50,6 @@ directed angle is reconstructed from the positive sine on `[0, pi/2]`.  The cano
 subspace development in `SineTheta/AngleIdentity.lean` proves that this sine-defined
 angle is exactly the cosine-defined `arccos |C0|` angle used by Davis and Kahan.
 
-**Compiler status (2026-09-30).**  The overlay above now compiles: the whole
-`DavisKahan` and `ForTauCeti` default build is green with the file building in
-about 11 s at the default heartbeat, with no `set_option maxHeartbeats` bump.  The
-earlier build failure (a kernel `whnf` timeout above 1,000,000 heartbeats on the
-`spectrum` containment theorem) was diagnosed as an instance-search explosion:
-the spectrum theorems need a `NormedAlgebra ℝ (F →L[𝕜] F)` instance, which
-Mathlib does not provide for operator endomorphisms; synthesizing the missing
-instance forced the search to normalize the whole instance database, including
-the heavy functional-calculus constants.  The fix is the local
-`realNormedAlgebra` instance in the file (the established `Proposition35`
-pattern), plus a lighter Pythagorean proof of the contraction bound
-`‖sourceDirectedSineModulus E₀ F₀‖ ≤ 1`.  All public names and statements in
-this section of the survey are unchanged.
-
 The overlay also retains the generic symmetric-ideal transport lemmas
 `gauge_modulus_eq`, `modulus_mem_iff`, and `gaugeReal_modulus_eq`, and preserves the
 raw analytic endpoint as
@@ -72,6 +58,20 @@ raw analytic endpoint as
 The fixed real and complex public specializations inherit the literal source-facing
 conclusion.  `SectionTwo.sinTheta` therefore names `cfc sin Theta_0`, not a renamed
 rectangular representative.
+
+### Cleanup after the compile-fix pass
+
+The compile-fix pass briefly produced a standalone
+`ForTauCeti/Analysis/InnerProductSpace/SelfAdjointIdempotent.lean` theorem asserting that a
+self-adjoint idempotent is contractive.  That file is not retained: the repository already
+has the generic abstraction `IsStarProjection.norm_le`, and no consumer used the new theorem.
+The useful part of the compile fix is the direct Pythagorean contraction proof for the
+complementary block in `SineTheta/Presentation.lean`; keeping that proof local avoids
+introducing closed-range/projection machinery into the downstream functional-calculus term.
+
+The presentation module also imports the scalar-transport functional-calculus foundation
+directly.  It does not depend on `OperatorAngleGeneric` merely to obtain local real-algebra
+and functional-calculus instances.
 
 ## Already in the preferred presentation form
 
