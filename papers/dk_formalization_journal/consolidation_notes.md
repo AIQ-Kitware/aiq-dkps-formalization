@@ -109,7 +109,7 @@ functional calculus needed to support the source results.
 
 The old draft2 resource-accounting/process narrative is retained only as
 historical development material. It should not be reintroduced into the journal
-manuscript. The separate `formalization_process` paper owns that research
+manuscript. The separate `dk_formalization_workshop` paper owns that research
 question.
 
 Likewise, old dependency-count snapshots are not journal evidence unless they

@@ -1,18 +1,18 @@
 # Development notes
 
-> **Journal-scope reset, 2026-09-29.** The current `formalization_draft2`
+> **Journal-scope reset, 2026-09-29.** The current `dk_formalization_journal`
 > manuscript is focused on Davis--Kahan, with YWS only as a secondary
 > specialization/audit case. The journal paper retains a concise discussion of
 > the primary author's starting background, AI-assisted formalization, observed
 > source-matching failure modes, the changing tooling landscape, and an explicit
 > AI-use disclosure. The detailed resource-accounting, practitioner, and
 > interaction-study material below remains historical research material for the
-> separate `formalization_process` paper. See `README.md` and
+> separate `dk_formalization_workshop` paper. See `README.md` and
 > `consolidation_notes.md` for the current editorial decisions.
 
 ## Historical process/accounting notes
 
-# Development/process notes for formalization_draft2
+# Development/process notes for dk_formalization_journal
 
 These notes record observations that may or may not survive into the submitted
 paper. They are deliberately separated from polished manuscript claims so that
@@ -99,7 +99,7 @@ provenance evidence:
 - `dev/external-literature-references.md`;
 - module-level `## Provenance` blocks throughout `ForTauCeti`, `DavisKahan`,
   `YuWangSamworth2015`, and `DkpsQuench2026`;
-- `papers/formalization_draft1/model_provenance.md`.
+- `papers/old/formalization_draft1/model_provenance.md`.
 
 `generated/proof_provenance_inventory.csv` inventories the module-level blocks
 for paper review. This is only a seed for a declaration-level citation audit.
@@ -158,11 +158,12 @@ Git history available in this checkout. The paper must keep those denominators
 and numerators visibly distinct.
 
 Paper production should not inflate the formalization cost as the snapshot moves
-forward. The configured exclusion removes a commit only if *all* paths touched by
-that commit lie under `papers/formalization_draft2/`. A mixed commit remains in
-scope. This is a simple blocklist policy rather than an attempt to infer intent
-from commit messages, and it can be expanded if future clearly non-research path
-families need exclusion.
+forward. The configured exclusions cover both the historical
+`papers/formalization_draft2/` path and its renamed
+`papers/dk_formalization_journal/` path. A commit is removed only if every touched
+path lies under one of those manuscript prefixes; mixed commits remain in scope.
+This is a path blocklist rather than an attempt to infer intent from commit
+messages.
 
 Presentation rule: the manuscript should display a human-readable snapshot date.
 The exact Git hash remains in generated source metadata and can appear as a PDF

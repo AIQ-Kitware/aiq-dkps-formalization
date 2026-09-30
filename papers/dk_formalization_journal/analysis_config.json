@@ -12,7 +12,8 @@
     "aiq-gpu-docs"
   ],
   "exclude_commits_if_only_touch": [
-    "papers/formalization_draft2/"
+    "papers/formalization_draft2/",
+    "papers/dk_formalization_journal/"
   ],
   "gpt_chat_trailer_rule": {
     "start_date": "2026-06-03",
@@ -39,7 +40,7 @@
     "davis_kahan": [
       "DavisKahan/",
       "ForTauCeti/Analysis/InnerProductSpace/DavisKahan/",
-      "papers/davis_kahan_prop_4_4/davis_kahan_prop_4_4_counterexample.tex"
+      "papers/old/davis_kahan_prop_4_4/davis_kahan_prop_4_4_counterexample.tex"
     ],
     "quench": [
       "DkpsQuench2026/"

@@ -208,7 +208,7 @@ environment remains the appropriate independent confirmation:
 
 ```bash
 lake build DavisKahan.Sources.DavisKahan1970.SineTheta.Presentation
-make -C papers/formalization_process paper public check-prose check-layout
+make -C papers/dk_formalization_workshop paper public check-prose check-layout
 ```
 
 The resource-accounting publisher ran and reported nothing to publish. No

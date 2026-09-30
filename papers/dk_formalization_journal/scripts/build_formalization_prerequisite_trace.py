@@ -677,14 +677,14 @@ def main() -> None:
     with zipfile.ZipFile(bundle_path, "w", compression=zipfile.ZIP_DEFLATED) as zf:
         for path in bundle_members:
             if path.is_relative_to(PAPER_DIR):
-                arcname = pathlib.PurePosixPath("papers/formalization_draft2") / path.relative_to(PAPER_DIR)
+                arcname = pathlib.PurePosixPath("papers/dk_formalization_journal") / path.relative_to(PAPER_DIR)
             else:
                 arcname = pathlib.PurePosixPath(path.name)
             zf.write(path, arcname.as_posix())
 
     print("\nCompiler-traced prerequisite artifacts written:", file=sys.stderr)
     for output in manifest["outputs"]:
-        print(f"  papers/formalization_draft2/{output}", file=sys.stderr)
+        print(f"  papers/dk_formalization_journal/{output}", file=sys.stderr)
 
 
 if __name__ == "__main__":

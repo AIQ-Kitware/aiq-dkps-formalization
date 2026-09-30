@@ -133,11 +133,11 @@ $Q$-norms.
 The single-angle sine theorem illustrates the analytic scope of the
 formalization.  Its formal statement permits unbounded self-adjoint operators,
 finite and half-infinite spectral separation, and where-defined unitarily
-invariant norms.  Relating this statement to Davis and Kahan's notation also
-requires a mathematical identification: the rectangular operator
-$(I-F_0F_0^*)E_0$ used in Lean has modulus equal to the positive
-$\sin\Theta_0$ operator of the paper, so the two have the same supported
-unitarily invariant norms.
+invariant norms.  The public Lean statement is written on a positive trial-coordinate
+$\sin\Theta_0$ operator.  Its proof reduces to the rectangular complementary
+block $(I-F_0F_0^*)E_0$: Lean proves that the positive sine is exactly the
+modulus of this block, and the two have the same supported unitarily invariant
+norms.
 
 Reaching this scope required formal theory for principal angles and direct
 rotations, approximation numbers and symmetric operator ideals, Borel spectral
@@ -291,14 +291,14 @@ $P=F_0F_0^*$ is the orthogonal projection onto the desired exact subspace, then
   \qquad
   \sin\Theta_0 = (I-E_0^*PE_0)^{1/2}.
 \]
-The Lean theorem places the following rectangular map directly inside the
-operator ideal:
+The analytic proof uses the rectangular complementary block
 \begin{equation}
   S=(I-P)E_0.
   \label{eq:rectangular-sine}
 \end{equation}
-The two operators have different codomains:
-$\sin\Theta_0:F\to F$ and $S:F\to E$.  Their relationship is
+The source-facing Lean theorem is stated on a positive operator on the
+trial-coordinate space.  The rectangular block has codomain $E$, while the
+positive sine has codomain $F$.  Their relationship is
 \[
   S^*S
   = E_0^*(I-P)E_0
@@ -309,14 +309,17 @@ so
   |S|=(S^*S)^{1/2}=\sin\Theta_0.
   \label{eq:modulus-sine}
 \end{equation}
-A polar decomposition $S=U|S|$ and the ideal laws imply that $S$ and $|S|$
-have the same singular-value data and the same value under every supported
-unitarily invariant norm.  Consequently
+The Lean API constructs the directed angle on trial coordinates by functional
+calculus and defines its sine by applying $\sin$ through the same calculus.
+Under the isometry hypotheses, Lean proves that this operator is exactly the
+modulus $|S|$ in \cref{eq:modulus-sine}.  A polar decomposition $S=U|S|$ and
+the ideal laws then imply
 \[
   N(S)=N(\sin\Theta_0)
 \]
-whenever the norm is defined.  This modulus identity is the semantic bridge
-between the source operator and the Lean conclusion.
+whenever the norm is defined.  The rectangular theorem is the analytic proof
+engine; the selected source-facing theorem transports its conclusion to the
+positive sine operator.
 
 \subsection{Gap geometry and the inequality}
 
@@ -334,27 +337,27 @@ configuration.  That equality discharges the forward domain condition consumed
 by \texttt{IsTrialResidual}.  Source correspondence is checked from the combined
 hypotheses, with this equality supplying the required domain condition.
 
-With these definitions, the formal theorem states the
+With these definitions, the selected formal theorem states the
 where-defined inequality
 \begin{equation}
-  \delta\,N(S)\leq N(R),
-  \qquad S=(I-F_0F_0^*)E_0,
+  \delta\,N(\sin\Theta_0)\leq N(R),
   \label{eq:dk-sine}
 \end{equation}
 for real or complex separable Hilbert spaces and possibly unbounded
 self-adjoint $A$, $A_0$, and $\Lambda_1$.  ``Where-defined'' means that the
-operator-ideal gauge is finite on both displayed operators.  This matches the
-source convention and leaves membership transfer for arbitrary symmetric
-operator ideals as a separate theorem.
+operator-ideal gauge is finite on both displayed operators.  The implementation
+first proves the corresponding estimate for $S=(I-F_0F_0^*)E_0$ and then uses
+\cref{eq:modulus-sine} together with modulus invariance of the symmetric ideal
+gauge.
 
 Appendix~\ref{app:lean-guide} summarizes the general Lean notation used in the
 displayed signatures.
 
 \begin{lstlisting}[style=leanpaper,
   caption={Lean signature for the full sine-theta theorem, abbreviated for
-  readability.  Here \texttt{S} denotes the inlined rectangular map
-  $(I-F_0F_0^*)E_0$; the exact Lean source uses the same theorem name and
-  expands \texttt{S} in both membership and gauge expressions.},
+  readability.  The left-hand side is the positive trial-coordinate
+  \texttt{sourceDirectedSinThetaOperator E0 F0}; the rectangular complementary
+  block appears in the implementation theorem used by its proof.},
   label={lst:dk-sintheta-headline}]
 theorem sinTheta_unbounded_formGap_whereDefinedUIN_rclike
     [TopologicalSpace.SeparableSpace E]
@@ -373,9 +376,10 @@ theorem sinTheta_unbounded_formGap_whereDefinedUIN_rclike
     (hexact : IsExactSpectralDecomposition A Lambda1 F0 F1)
     (delta : Real) (hdelta : 0 < delta)
     (hgap : FormBoundedSylvesterGap A0 Lambda1 delta) :
-    N.Mem S ->
+    N.Mem (sourceDirectedSinThetaOperator E0 F0) ->
     N.Mem R ->
-      delta * N.gaugeReal S <= N.gaugeReal R := by
+      delta * N.gaugeReal (sourceDirectedSinThetaOperator E0 F0) <=
+        N.gaugeReal R := by
 \end{lstlisting}
 
 The theorem contains all three separation configurations encoded by its gap
@@ -754,10 +758,10 @@ The project also clarifies several formalization choices that are easy to hide
 in a matrix-only restatement.  Approximation numbers carry singular-value
 arguments into infinite-dimensional operator ideals.  Domain-carrying partial
 maps make the unbounded hypotheses visible.  Form-bounded Sylvester gaps encode
-both finite and half-infinite spectral separation.  The rectangular sine map
-used in the Lean theorem agrees with Davis and Kahan's positive angle operator
-at the level required by the norm inequality because its modulus is exactly
-$\sin\Theta_0$.
+both finite and half-infinite spectral separation.  The selected Lean theorem
+is stated on a positive trial-coordinate $\sin\Theta_0$ operator; the
+rectangular complementary block remains the Sylvester proof representative,
+and its modulus is exactly that positive sine.
 
 The reusable layer now contains much of the mathematics needed to express these
 statements, so the paper-specific proofs can depend on general operator theory.  The YWS development

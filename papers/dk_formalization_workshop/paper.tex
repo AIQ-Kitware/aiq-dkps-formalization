@@ -340,8 +340,11 @@ $$
   N(S)=N(\sin\Theta_0)
 $$
 
-for every unitarily invariant norm $N$. The Lean statements below use $S$ as
-this norm representative.
+for every unitarily invariant norm $N$. Formalizations~1 and~2 use $S$ directly.
+Formalization~3 states the bound on a positive trial-coordinate operator obtained
+as the functional-calculus sine of the directed angle.  Lean proves that this
+operator is exactly $|S|$, and the symmetric ideal gauge is invariant under
+passing from $S$ to $|S|$.
 
 If the trial block $A_0$ and complementary block $\Lambda_1$ are separated by
 $\delta>0$, Davis--Kahan prove, for every unitarily invariant norm for which the
@@ -465,10 +468,11 @@ the norm interface is a separate difference from the source convention.
 \paragraph{Formalization 3.}
 Formalization~3 is the closest of the three to the target statement.
 \Cref{lst:current-sintheta} restores the source's separable ambient scope and
-models its convention that a displayed unitarily invariant norm statement is
-vacuous when either norm is undefined.  There is no residual-membership binder
-before the colon.  The two \texttt{N.Mem} implications after the colon restrict
-the numerical comparison to the cases in which both displayed norms exist.
+states the left-hand side on \texttt{sourceDirectedSinThetaOperator E0 F0}, the
+positive trial-coordinate sine operator.  It also models the source convention
+that a displayed unitarily invariant norm statement is vacuous when either norm
+is undefined.  The two \texttt{N.Mem} implications after the colon restrict the
+numerical comparison to the cases in which both displayed norms exist.
 
 % Editor provenance (not rendered): this display is generated verbatim from
 % sinTheta_unbounded_formGap_whereDefinedUIN_rclike in
@@ -481,7 +485,7 @@ the numerical comparison to the cases in which both displayed norms exist.
 \lstinputlisting[
   style=leanpaper,
   firstline=6,
-  caption={The statement closest to Davis--Kahan restores ambient separability and states the norm comparison where both gauges are defined.  Its inlined map $S=(I-F_0F_0^*)E_0$ is the rectangular sine representative named by \texttt{hSinTheta0} in Formalization~1 and explained in \cref{eq:sin-theta-representative}.},
+  caption={The statement closest to Davis--Kahan restores ambient separability, states the norm comparison where both gauges are defined, and places the left-hand side on the positive trial-coordinate $\sin\Theta_0$ operator.  The implementation identifies that operator with $|S|$ for $S=(I-F_0F_0^*)E_0$.},
   label={lst:current-sintheta}
 ]{generated/current_sin_theta_presentation.lean}
 \end{minipage}

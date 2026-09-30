@@ -82,11 +82,11 @@ exact-coordinate hypotheses say that the ranges of $F_0$ and $F_1$ are
 orthogonal and complete and that $F_1$ intertwines $\Lambda_1$ with $A$.
 
 The source's positive operator $\sin\Theta_0$ acts on the trial-coordinate
-space.  The Lean signatures use the rectangular map
+space.  The rectangular map
 \[
-  S=(I-F_0F_0^*)E_0,
+  S=(I-F_0F_0^*)E_0
 \]
-which sends trial coordinates into the ambient space and extracts the component
+sends trial coordinates into the ambient space and extracts the component
 orthogonal to the desired exact subspace.  Davis--Kahan explicitly observe that
 their corresponding rectangular operator is $\sin\Theta_0$ followed by an
 isometry.  It therefore has the same singular values
@@ -95,7 +95,9 @@ invariant norm:
 \[
   N(S)=N(\sin\Theta_0).
 \]
-Thus \cref{eq:sin-theta} can be written using either operator.
+Formalizations~1 and~2 express the angle term through $S$.  Formalization~3 uses
+a positive trial-coordinate operator defined as the functional-calculus sine of
+the directed angle and proves that this operator equals $|S|$.
 
 Formalization~1 makes this representation visible by introducing a variable
 named \texttt{sinTheta0} and the hypothesis \texttt{hSinTheta0}.  The hypothesis
@@ -267,15 +269,16 @@ adds the separable ambient hypothesis stated by Davis--Kahan, and uses a norm
 object with an explicit domain of definition.  Its conclusion is written as two
 implications,
 \[
-  N(S)\ \text{defined},\qquad N(R)\ \text{defined}
+  N(\sin\Theta_0)\ \text{defined},\qquad N(R)\ \text{defined}
   \quad\Longrightarrow\quad
-  \delta N(S)\le N(R).
+  \delta N(\sin\Theta_0)\le N(R).
 \]
-The Lean term \texttt{N.gaugeReal S} is the real-valued gauge of the rectangular
-operator $S$ on this domain.  Because unitarily invariant norms depend on the
-singular values and $S$ has the same singular values as the source's positive
-$\sin\Theta_0$, this term corresponds to $N(\sin\Theta_0)$ in Davis--Kahan's
-inequality.
+The Lean term \texttt{sourceDirectedSinThetaOperator E0 F0} is the positive
+trial-coordinate sine operator.  It is defined by applying sine through
+continuous functional calculus to the directed angle reconstructed on
+$[0,\pi/2]$.  Lean proves that it equals $|S|$ for
+$S=(I-F_0F_0^*)E_0$.  Polar decomposition then gives the same symmetric ideal
+membership and gauge for $S$ and $|S|$.
 
 \begin{table}[H]
 \centering

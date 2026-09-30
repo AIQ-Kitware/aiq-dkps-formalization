@@ -1,5 +1,5 @@
 __doc__="
-bash ~/code/aiq-dkps-formalization/papers/formalization_process/scripts/split_pdf.sh /home/joncrall/Downloads/AIQ_Formalization___VeriCodeGen_Neurips_Workshop.pdf 11
+bash ~/code/aiq-dkps-formalization/papers/dk_formalization_workshop/scripts/split_pdf.sh /home/joncrall/Downloads/AIQ_Formalization___VeriCodeGen_Neurips_Workshop.pdf 11
 
 python ~/code/shitspotter/papers/wacv_2026/scripts/compress_pdf.py main_part1.pdf --quality=default
 python ~/code/shitspotter/papers/wacv_2026/scripts/compress_pdf.py main_part2.pdf --quality=default

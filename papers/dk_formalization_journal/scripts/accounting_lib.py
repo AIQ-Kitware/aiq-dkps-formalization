@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Shared accounting utilities for the formalization_draft2 paper.
+"""Shared accounting utilities for the dk_formalization_journal paper.
 
 The code is deliberately stdlib-only so the accounting snapshot can be rebuilt
 without adding a Python dependency stack to the Lean repository.
