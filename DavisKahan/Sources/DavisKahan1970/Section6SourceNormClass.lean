@@ -53,18 +53,18 @@ theorem proposition6_1_sourceExact_complex
       (DavisKahanExt.PartialMap.boundedReducingBlock B V hV)
       (DavisKahanExt.PartialMap.boundedReducingBlockCompl A U hU) δ)
     (hMem : N.Mem (B - A)) :
-    N.Mem (DavisKahan.Angle.sinAngleOperatorC U V) ∧
-      δ * N.gauge (DavisKahan.Angle.sinAngleOperatorC U V) ≤ N.gauge (B - A) :=
+    N.Mem (cfc Real.sin (DavisKahan.Angle.angleOperator U V)) ∧
+      δ * N.gauge (cfc Real.sin (DavisKahan.Angle.angleOperator U V)) ≤ N.gauge (B - A) :=
   normalizedUnitaryInvariant_of_symmetricNorming
-    (X := DavisKahan.Angle.sinAngleOperatorC U V) (Y := B - A)
+    (X := cfc Real.sin (DavisKahan.Angle.angleOperator U V)) (Y := B - A)
     N hδ hMem fun M hM =>
       proposition6_1_complex M hA hB hU hV hδ hgapUV hgapVU hM
 
 /-- **Davis--Kahan 1970, Proposition 6.1 over the literal source norm class, over
 `ℝ`.**
 
-The real conclusion is on the projector difference `P_V − P_U`, which is the
-repository's real directed sine object. -/
+The real conclusion is on the source expression
+`cfc Real.sin (DavisKahan.Angle.angleOperator U V)`. -/
 theorem proposition6_1_sourceExact_real
     {E : Type v} [NormedAddCommGroup E] [InnerProductSpace ℝ E] [CompleteSpace E]
     (N : NormalizedUnitaryInvariantNorm.{0, v} ℝ)
@@ -79,10 +79,10 @@ theorem proposition6_1_sourceExact_real
       (DavisKahanExt.PartialMap.boundedReducingBlock B V hV)
       (DavisKahanExt.PartialMap.boundedReducingBlockCompl A U hU) δ)
     (hMem : N.Mem (B - A)) :
-    N.Mem (V.starProjection - U.starProjection) ∧
-      δ * N.gauge (V.starProjection - U.starProjection) ≤ N.gauge (B - A) :=
+    N.Mem (cfc Real.sin (DavisKahan.Angle.angleOperator U V)) ∧
+      δ * N.gauge (cfc Real.sin (DavisKahan.Angle.angleOperator U V)) ≤ N.gauge (B - A) :=
   normalizedUnitaryInvariant_of_symmetricNorming
-    (X := V.starProjection - U.starProjection) (Y := B - A)
+    (X := cfc Real.sin (DavisKahan.Angle.angleOperator U V)) (Y := B - A)
     N hδ hMem fun M hM =>
       proposition6_1_real M hA hB hU hV hδ hgapUV hgapVU hM
 

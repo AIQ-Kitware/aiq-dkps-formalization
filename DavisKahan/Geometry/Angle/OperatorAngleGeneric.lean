@@ -78,6 +78,17 @@ def sinTwoAngleOperator (U V : Submodule 𝕜 E)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] : E →L[𝕜] E :=
   cfc (fun t : ℝ => Real.sin (2 * t)) (angleOperator U V)
 
+/-- **Literal ambient `sin Θ` presentation object.**
+
+Unlike `sinAngleOperator`, whose convenient proof representation is the modulus
+`|P_U - P_V|`, this definition records the source expression itself: apply
+`sin` by continuous functional calculus to the formal angle operator.  The
+exact theorem `ambientSinThetaOperator_eq_sinAngleOperator` below proves the
+two coincide. -/
+def ambientSinThetaOperator (U V : Submodule 𝕜 E)
+    [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] : E →L[𝕜] E :=
+  cfc Real.sin (angleOperator U V)
+
 variable (U V : Submodule 𝕜 E) [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
 
 /-- **`sin Θ` is symmetric in the two subspaces.**  `|P_U - P_V| = |P_V - P_U|`,
@@ -118,6 +129,87 @@ theorem norm_sinAngleOperator : ‖sinAngleOperator U V‖ = U.projectionGap V :
 /-- `sin Θ` is self-adjoint. -/
 theorem isSelfAdjoint_sinAngleOperator : IsSelfAdjoint (sinAngleOperator U V) :=
   ContinuousLinearMap.modulus_isSelfAdjoint _
+
+/-- The ambient sine operator is a contraction. -/
+theorem norm_sinAngleOperator_le_one : ‖sinAngleOperator U V‖ ≤ 1 := by
+  rw [sinAngleOperator, ContinuousLinearMap.norm_modulus,
+    Submodule.norm_starProjection_sub_eq_max]
+  apply max_le
+  · calc
+      ‖(1 - V.starProjection) ∘L U.starProjection‖
+          ≤ ‖1 - V.starProjection‖ * ‖U.starProjection‖ :=
+        ContinuousLinearMap.opNorm_comp_le _ _
+      _ ≤ 1 * 1 := by
+        rw [show (1 - V.starProjection : E →L[𝕜] E) = Vᗮ.starProjection from
+          (Submodule.starProjection_orthogonal' V).symm]
+        exact mul_le_mul Vᗮ.starProjection_norm_le U.starProjection_norm_le
+          (norm_nonneg _) zero_le_one
+      _ = 1 := by ring
+  · calc
+      ‖(1 - U.starProjection) ∘L V.starProjection‖
+          ≤ ‖1 - U.starProjection‖ * ‖V.starProjection‖ :=
+        ContinuousLinearMap.opNorm_comp_le _ _
+      _ ≤ 1 * 1 := by
+        rw [show (1 - U.starProjection : E →L[𝕜] E) = Uᗮ.starProjection from
+          (Submodule.starProjection_orthogonal' U).symm]
+        exact mul_le_mul Uᗮ.starProjection_norm_le V.starProjection_norm_le
+          (norm_nonneg _) zero_le_one
+      _ = 1 := by ring
+
+/-- The real spectrum of the generic positive sine lies in `[0,1]`. -/
+theorem spectrum_sinAngleOperator_subset_Icc :
+    spectrum ℝ (sinAngleOperator U V) ⊆ Set.Icc 0 1 := by
+  intro x hx
+  have hx0 : 0 ≤ x :=
+    (StarOrderedRing.nonneg_iff_spectrum_nonneg
+      (R := ℝ) _ (isSelfAdjoint_sinAngleOperator U V)).mp
+        (sinAngleOperator_nonneg U V) x hx
+  have hnormK : ‖((x : 𝕜))‖ ≤
+      ‖sinAngleOperator U V‖ * ‖(1 : E →L[𝕜] E)‖ :=
+    spectrum.norm_le_norm_mul_of_mem hx
+  have hnorm : |x| ≤
+      ‖sinAngleOperator U V‖ * ‖(1 : E →L[𝕜] E)‖ := by
+    rwa [RCLike.norm_ofReal] at hnormK
+  have hone : ‖(1 : E →L[𝕜] E)‖ ≤ 1 := ContinuousLinearMap.norm_id_le
+  have habs : |x| ≤ ‖sinAngleOperator U V‖ := by
+    calc
+      |x| ≤ ‖sinAngleOperator U V‖ * ‖(1 : E →L[𝕜] E)‖ := hnorm
+      _ ≤ ‖sinAngleOperator U V‖ * 1 :=
+        mul_le_mul_of_nonneg_left hone (norm_nonneg _)
+      _ = ‖sinAngleOperator U V‖ := mul_one _
+  exact ⟨hx0, ((le_abs_self x).trans habs).trans
+    (norm_sinAngleOperator_le_one U V)⟩
+
+/-- Applying sine to the literal generic angle recovers exactly the positive
+ambient sine.  This is the semantic bridge between the paper expression
+`sin Θ` and the modulus representation used by many proofs. -/
+theorem cfc_sin_angleOperator :
+    cfc Real.sin (angleOperator U V) = sinAngleOperator U V := by
+  have hsa : IsSelfAdjoint (sinAngleOperator U V) :=
+    isSelfAdjoint_sinAngleOperator U V
+  have harcsin : ContinuousOn Real.arcsin
+      (spectrum ℝ (sinAngleOperator U V)) :=
+    Real.continuous_arcsin.continuousOn
+  have hsin : ContinuousOn Real.sin
+      (Real.arcsin '' spectrum ℝ (sinAngleOperator U V)) :=
+    Real.continuous_sin.continuousOn
+  rw [angleOperator,
+    ← cfc_comp Real.sin Real.arcsin (sinAngleOperator U V)
+      hsa hsin harcsin]
+  calc
+    cfc (Real.sin ∘ Real.arcsin) (sinAngleOperator U V) =
+        cfc (fun x : ℝ => x) (sinAngleOperator U V) := by
+      apply cfc_congr
+      intro x hx
+      have hxi := spectrum_sinAngleOperator_subset_Icc U V hx
+      exact Real.sin_arcsin (by linarith [hxi.1]) hxi.2
+    _ = sinAngleOperator U V := cfc_id' ℝ _
+
+/-- The literal ambient `sin Θ` presentation object is exactly the positive
+modulus representation used by the proof API. -/
+theorem ambientSinThetaOperator_eq_sinAngleOperator :
+    ambientSinThetaOperator U V = sinAngleOperator U V := by
+  exact cfc_sin_angleOperator U V
 
 /-- The operator angle is self-adjoint. -/
 theorem isSelfAdjoint_angleOperator : IsSelfAdjoint (angleOperator U V) :=
@@ -578,6 +670,21 @@ theorem modulus_hasSameApproximationNumbers_rclike {F : Type v} [NormedAddCommGr
     [InnerProductSpace 𝕜 F] [CompleteSpace F] (T : E →L[𝕜] F) :
     (ContinuousLinearMap.modulus T).HasSameApproximationNumbers T :=
   ContinuousLinearMap.hasSameApproximationNumbers_of_norm_apply_eq _ _ T.norm_modulus_apply
+
+/-- The literal ambient sine and either orientation of the projector difference
+have the same complete approximation-number sequence.  This is a proof-facing
+transport lemma; `cfc_sin_angleOperator` is the stronger semantic identity that
+identifies the presentation object with the positive sine itself. -/
+theorem sinAngleOperator_hasSameApproximationNumbers_projectorDifference :
+    (sinAngleOperator U V).HasSameApproximationNumbers
+      (V.starProjection - U.starProjection) := by
+  rw [sinAngleOperator]
+  refine (modulus_hasSameApproximationNumbers_rclike
+    (U.starProjection - V.starProjection)).trans ?_
+  have hneg : (V.starProjection - U.starProjection : E →L[𝕜] E) =
+      -(U.starProjection - V.starProjection) := by abel
+  intro n
+  rw [hneg, ContinuousLinearMap.approximationNumber_neg]
 
 /-- The consequence the ambient `sin 2Θ` theorem uses: `sin 2Θ` and the reflected projector
 difference have the same complete singular-value sequence, so no unitarily invariant norm can

@@ -154,14 +154,14 @@
           "role": "fixed_field_api",
           "scalar_scope": "complex",
           "source_fidelity": "not_ledger_witness",
-          "reason": "Public directed convenience alias; the ledger separately identifies the fixed-field source witness."
+          "reason": "Public complex directed convenience alias on literal `sourceDirectedTanThetaOperator = cfc tan Theta_0`; the fixed-field ledger witness remains recorded separately."
         },
         {
           "declaration": "TauCeti.DavisKahan1970.SectionTwo.tanTheta_directed_real",
           "role": "fixed_field_api",
           "scalar_scope": "real",
           "source_fidelity": "not_ledger_witness",
-          "reason": "Real directed convenience alias."
+          "reason": "Public real directed convenience alias on literal `sourceDirectedTanThetaOperator = cfc tan Theta_0`."
         },
         {
           "declaration": "TauCeti.DavisKahan1970.tanTheta_directed_unboundedRitz_symmetricNorming_exists_rclike",
@@ -329,14 +329,14 @@
           "role": "fixed_field_api",
           "scalar_scope": "complex",
           "source_fidelity": "not_ledger_witness",
-          "reason": "Public complex specialization of the fixed-field directed where-defined API; the ledger witness is the complete RCLike theorem."
+          "reason": "Public complex fixed-field alias to the literal functional-calculus directed presentation theorem; the ledger witness is the complete RCLike theorem."
         },
         {
           "declaration": "TauCeti.DavisKahan1970.SectionTwo.sinTwoTheta_directed_real",
           "role": "fixed_field_api",
           "scalar_scope": "real",
           "source_fidelity": "not_ledger_witness",
-          "reason": "Public real specialization of the fixed-field directed where-defined API; the ledger witness is the complete RCLike theorem."
+          "reason": "Public real fixed-field alias to the literal functional-calculus directed presentation theorem; the ledger witness is the complete RCLike theorem."
         },
         {
           "declaration": "TauCeti.DavisKahan1970.sinTwoTheta_ambient_unbounded_perturbedGap_whereDefinedUIN_complex",
@@ -407,6 +407,20 @@
           "scalar_scope": "rclike",
           "source_fidelity": "not_ledger_witness",
           "reason": "Presentation theorem stated directly on `sourceDirectedSinTwoThetaOperator = cfc (fun t => sin (2*t)) Theta_0`, transported by an exact operator equality to the existing directed double-angle sine engine."
+        },
+        {
+          "declaration": "TauCeti.DavisKahan1970.sinTwoTheta_directed_unboundedResidual_presentation_whereDefinedUIN_complex",
+          "role": "fixed_field_api",
+          "scalar_scope": "complex",
+          "source_fidelity": "not_ledger_witness",
+          "reason": "Fixed-field complex presentation theorem on literal `sourceDirectedSinTwoThetaOperator = cfc (fun t => sin (2*t)) Theta_0`; exact operator equality transports the existing proof endpoint."
+        },
+        {
+          "declaration": "TauCeti.DavisKahan1970.sinTwoTheta_directed_unboundedResidual_presentation_whereDefinedUIN_real",
+          "role": "fixed_field_api",
+          "scalar_scope": "real",
+          "source_fidelity": "not_ledger_witness",
+          "reason": "Fixed-field real presentation theorem on literal `sourceDirectedSinTwoThetaOperator = cfc (fun t => sin (2*t)) Theta_0`; exact operator equality transports the existing proof endpoint."
         }
       ],
       "review_status": "accepted",
@@ -418,7 +432,7 @@
       "short_api": {
         "declaration": "TauCeti.DavisKahan1970.SectionTwo.tanTwoTheta",
         "status": "unbound",
-        "reason": "No single scalar-generic declaration currently carries the ledger-selected directed and ambient clauses at their source-facing boundaries. The strong RCLike clauses are exposed separately as `SectionTwo.tanTwoTheta_directed` and `SectionTwo.tanTwoTheta_ambient`."
+        "reason": "No single combined scalar-generic declaration currently packages both printed clauses, but the two public clause APIs are now presentation-facing: the directed clause is stated on literal `cfc (fun t => tan (2*t)) Theta_0`, and the ambient clause on literal signed `cfc (fun t => tan (2*t)) Theta`. Proof representatives remain separate implementation theorems."
       },
       "ledger_witnesses": [
         "TauCeti.DavisKahan1970.tanTwoTheta_ambient_unbounded_normalizedUIN_complex",
@@ -460,56 +474,98 @@
           "role": "fixed_field_api",
           "scalar_scope": "complex",
           "source_fidelity": "not_ledger_witness",
-          "reason": "Public directed fixed-field convenience API."
+          "reason": "Public complex fixed-field alias on literal trial-side `sourceDirectedTanTwoThetaOperator V U = cfc (fun t => tan (2*t)) Theta_0`."
         },
         {
           "declaration": "TauCeti.DavisKahan1970.SectionTwo.tanTwoTheta_directed_real",
           "role": "fixed_field_api",
           "scalar_scope": "real",
           "source_fidelity": "not_ledger_witness",
-          "reason": "Real directed fixed-field convenience API."
+          "reason": "Public real fixed-field alias on literal trial-side `sourceDirectedTanTwoThetaOperator V U = cfc (fun t => tan (2*t)) Theta_0`."
         },
         {
           "declaration": "TauCeti.DavisKahan1970.SectionTwo.tanTwoTheta_ambient_complex",
           "role": "fixed_field_api",
           "scalar_scope": "complex",
           "source_fidelity": "not_ledger_witness",
-          "reason": "Public ambient fixed-field convenience API."
+          "reason": "Public complex ambient alias on signed literal `Angle.tanTwoAngleOperator = cfc (fun t => tan (2*t)) Theta`."
         },
         {
           "declaration": "TauCeti.DavisKahan1970.SectionTwo.tanTwoTheta_ambient_real",
           "role": "fixed_field_api",
           "scalar_scope": "real",
           "source_fidelity": "not_ledger_witness",
-          "reason": "Real ambient fixed-field convenience API."
+          "reason": "Public real ambient alias on signed literal `Angle.tanTwoAngleOperator = cfc (fun t => tan (2*t)) Theta`."
         },
         {
           "declaration": "TauCeti.DavisKahan1970.tanTwoTheta_directed_unboundedResidual_reducing_symmetricNorming_rclike",
-          "role": "scalar_generic_api",
+          "role": "implementation_engine",
           "scalar_scope": "rclike",
           "source_fidelity": "not_ledger_witness",
-          "reason": "Full-unbounded scalar-generic strong directed API at an arbitrary reducing subspace. It constructs a bounded representative, identifies its complete approximation-number sequence with tan(arcsin a_n(sin 2Theta_0)), and gives SymmetricNormingFunction membership/gauge control."
+          "reason": "Proof-facing scalar-generic directed endpoint constructing a bounded corner representative with the required complete approximation-number sequence."
         },
         {
           "declaration": "TauCeti.DavisKahan1970.tanTwoTheta_ambient_unbounded_reducing_symmetricNorming_rclike",
+          "role": "implementation_engine",
+          "scalar_scope": "rclike",
+          "source_fidelity": "not_ledger_witness",
+          "reason": "Proof-facing scalar-generic ambient endpoint on the positive branch-free `Angle.absTanTwoAngleOperator`; the presentation theorem transports it to signed literal `tan 2Theta` through the proved modulus identity."
+        },
+        {
+          "declaration": "TauCeti.DavisKahan1970.tanTwoTheta_directed_unboundedResidual_reducing_symmetricNorming_presentation_rclike",
           "role": "scalar_generic_api",
           "scalar_scope": "rclike",
           "source_fidelity": "not_ledger_witness",
-          "reason": "Full-unbounded scalar-generic strong ambient API at an arbitrary reducing subspace. It derives double-tangent pole exclusion internally and proves the sharp factor-two SymmetricNormingFunction estimate."
+          "reason": "Presentation endpoint on the trial-side `sourceDirectedTanTwoThetaOperator V U = cfc (fun t => tan (2*t)) Theta_0`; complete approximation-number transport proves equivalence to the rectangular corner engine, whose block orientation is `(U,V)`."
+        },
+        {
+          "declaration": "TauCeti.DavisKahan1970.tanTwoTheta_ambient_unbounded_reducing_symmetricNorming_presentation_rclike",
+          "role": "scalar_generic_api",
+          "scalar_scope": "rclike",
+          "source_fidelity": "not_ledger_witness",
+          "reason": "Presentation endpoint on signed `Angle.tanTwoAngleOperator = cfc (fun t => tan (2*t)) Theta`; exact modulus equality plus UIN singular-value transport connects it to the positive proof representative."
         },
         {
           "declaration": "TauCeti.DavisKahan1970.SectionTwo.tanTwoTheta_directed",
           "role": "scalar_generic_api",
           "scalar_scope": "rclike",
           "source_fidelity": "not_ledger_witness",
-          "reason": "Public Section Two clause alias to the full-unbounded scalar-generic directed API."
+          "reason": "Public Section Two alias to the literal trial-side functional-calculus directed presentation theorem `sourceDirectedTanTwoThetaOperator V U`."
         },
         {
           "declaration": "TauCeti.DavisKahan1970.SectionTwo.tanTwoTheta_ambient",
           "role": "scalar_generic_api",
           "scalar_scope": "rclike",
           "source_fidelity": "not_ledger_witness",
-          "reason": "Public Section Two clause alias to the full-unbounded scalar-generic ambient API."
+          "reason": "Public Section Two alias to the signed literal functional-calculus ambient presentation theorem."
+        },
+        {
+          "declaration": "TauCeti.DavisKahan1970.tanTwoTheta_directed_unboundedResidual_reducing_symmetricNorming_presentation_complex",
+          "role": "fixed_field_api",
+          "scalar_scope": "complex",
+          "source_fidelity": "not_ledger_witness",
+          "reason": "Fixed-field complex presentation specialization on literal trial-side `tan 2Theta_0`."
+        },
+        {
+          "declaration": "TauCeti.DavisKahan1970.tanTwoTheta_directed_unboundedResidual_reducing_symmetricNorming_presentation_real",
+          "role": "fixed_field_api",
+          "scalar_scope": "real",
+          "source_fidelity": "not_ledger_witness",
+          "reason": "Fixed-field real presentation specialization on literal trial-side `tan 2Theta_0`."
+        },
+        {
+          "declaration": "TauCeti.DavisKahan1970.tanTwoTheta_ambient_unbounded_reducing_symmetricNorming_presentation_complex",
+          "role": "fixed_field_api",
+          "scalar_scope": "complex",
+          "source_fidelity": "not_ledger_witness",
+          "reason": "Fixed-field complex presentation specialization on signed literal ambient `tan 2Theta`."
+        },
+        {
+          "declaration": "TauCeti.DavisKahan1970.tanTwoTheta_ambient_unbounded_reducing_symmetricNorming_presentation_real",
+          "role": "fixed_field_api",
+          "scalar_scope": "real",
+          "source_fidelity": "not_ledger_witness",
+          "reason": "Fixed-field real presentation specialization on signed literal ambient `tan 2Theta`."
         }
       ]
     }

@@ -210,11 +210,11 @@ The printed `sin 2Θ` theorem has two boxed conclusions.  This name is the first
 ambient one, `δ N(sin 2Θ) ≤ 2 N(H)`, is `sinTwoTheta_ambient_complex`.
 `sinTwoTheta_bothConclusions_complex` below states both together.
 
-The public alias uses the where-defined norm boundary on `Angle.directedSinTwoAngleOperator V U` with `V` the trial
-subspace and `U` the spectral subspace whose two blocks the gap separates: that is
-the paper's `Θ₀`, whose sine is `Q^⊥ E₀` in the source's own notation, and it is
-the trial-side object.  Not the proof's overlap block, and not the other ordering
-of the pair.
+The public alias uses the where-defined norm boundary on the literal
+`sourceDirectedSinTwoThetaOperator V U = cfc (fun t => sin (2*t)) Θ₀`, with `V`
+the trial subspace and `U` the spectral subspace whose two blocks the gap separates.
+The exact CFC/product bridge proves that this is the same source object represented
+by `Angle.directedSinTwoAngleOperator V U` in the analytic proof.
 
 Until 2026-09-04 this alias named
 `sinTwoTheta_directed_unbounded_addBounded_symmetricNorming_complex`, whose
@@ -223,7 +223,8 @@ different source quantity from the printed residual `R`; that theorem is retaine
 as a derived perturbation-norm corollary and is no longer presented as this
 clause. -/
 @[deprecated "The unqualified clause names are not uniform; use `sinTwoTheta_directed_complex`, which says which of the two printed conclusions it is." (since := "2026-09-05")]
-alias sinTwoTheta_complex := sinTwoTheta_directed_unboundedResidual_symmetricNorming_complex
+alias sinTwoTheta_complex :=
+  DavisKahan1970.sinTwoTheta_directed_unboundedResidual_presentation_whereDefinedUIN_complex
 
 /-- **Davis--Kahan 1970, the `sin 2Θ` theorem, over `ℝ` -- the DIRECTED clause.**
 
@@ -235,7 +236,8 @@ The real sibling of `sinTwoTheta_complex`: the printed trial residual on the rig
 double-angle sine of the real pair in the trial-side ordering.  Nothing here is read
 in a complexification. -/
 @[deprecated "The unqualified clause names are not uniform; use `sinTwoTheta_directed_real`, which says which of the two printed conclusions it is." (since := "2026-09-05")]
-alias sinTwoTheta_real := sinTwoTheta_directed_unboundedResidual_symmetricNorming_real
+alias sinTwoTheta_real :=
+  DavisKahan1970.sinTwoTheta_directed_unboundedResidual_presentation_whereDefinedUIN_real
 
 /-! ## The two printed clauses, named
 
@@ -258,8 +260,9 @@ alias tanTheta_ambient_complex := tanTheta_ambient_unboundedRitz_definedTangent_
 /-- **`tan Θ`, ambient clause, over `ℝ`**. -/
 alias tanTheta_ambient_real := tanTheta_ambient_unboundedRitz_definedTangent_symmetricNorming_real
 
-/-- **`tan Θ`, directed clause, over `ℂ`**: `δ N(tan Θ₀) ≤ N(R)` with the paper's residual
-`R` of (1.8) on the right, and with the representative *constructed* rather than supplied.
+/-- **`tan Θ`, directed clause, over `ℂ`**: the fixed-field specialization of the
+literal presentation `δ N(cfc tan Θ₀) ≤ N(R)`.  The constructed rectangular tangent
+remains available through the proof-facing long theorem.
 
 Retargeted 2026-09-05.  Until then this named
 `tanTheta_directed_unboundedTrial_symmetricNorming_complex`, which assumes the perturbed
@@ -267,11 +270,11 @@ operator has no spectrum in `(α, α + δ)` and compares against the spectral su
 `α` -- a specialization the printed theorem does not impose (finding F1 of the 2026-09-04
 hostile review). -/
 alias tanTheta_directed_complex :=
-  tanTheta_directed_unboundedRitz_symmetricNorming_exists_complex
+  DavisKahan1970.tanTheta_directed_unboundedRitz_symmetricNorming_presentation_complex
 
-/-- **`tan Θ`, directed clause, over `ℝ`**, likewise with the representative constructed. -/
+/-- **`tan Θ`, directed clause, over `ℝ`**, on the literal functional-calculus tangent. -/
 alias tanTheta_directed_real :=
-  tanTheta_directed_unboundedRitz_symmetricNorming_exists_real
+  DavisKahan1970.tanTheta_directed_unboundedRitz_symmetricNorming_presentation_real
 
 /-- **`sin 2Θ`, directed clause, over `ℂ`**: `δ N(sin 2Θ₀) ≤ 2 N(R)`, on the paper's
 own trial-side directed double-angle sine.
@@ -288,14 +291,14 @@ and requires the whole trial subspace to lie in the operator domain. It is there
 valid specialization, not the canonical source-scope witness; use
 `sinTwoTheta_directed` when the Appendix common-domain scope matters. -/
 alias sinTwoTheta_directed_complex :=
-  sinTwoTheta_directed_unboundedResidual_whereDefinedUIN_complex
+  DavisKahan1970.sinTwoTheta_directed_unboundedResidual_presentation_whereDefinedUIN_complex
 
 /-- **`sin 2Θ`, directed clause, over `ℝ`**, on the paper's own trial-side directed
 double-angle sine. This is the real fixed-field specialization of
 `sinTwoTheta_directed_complex`; use scalar-generic `sinTwoTheta_directed` for the
 accepted common-domain source scope. -/
 alias sinTwoTheta_directed_real :=
-  sinTwoTheta_directed_unboundedResidual_whereDefinedUIN_real
+  DavisKahan1970.sinTwoTheta_directed_unboundedResidual_presentation_whereDefinedUIN_real
 
 /-- **`sin 2Θ`, directed clause, over `ℂ`, in the proof's block form**:
 `δ N(P_U P_{J_V Uᗮ}) ≤ 2 N(R)`.  The estimate is proved here and transported to the
@@ -307,27 +310,29 @@ alias sinTwoTheta_directed_blockRepresentative_complex :=
 alias sinTwoTheta_directed_blockRepresentative_real :=
   sinTwoTheta_directed_unboundedResidual_blockRepresentative_symmetricNorming_real
 
-/-- **`tan 2Θ`, directed clause, over `ℂ`**: `(b − a) N(tan 2Θ₀) ≤ 2 N(R)`, on the
-paper's directed object -- the `U → Uᗮ` projection block of the doubled tangent
-expression -- for a subspace `V` reducing `A + B`, with the block's singular values
-identified as `tan (arcsin aₙ(sin 2Θ₀))` in the statement itself.
+/-- **`tan 2Θ`, directed clause, over `ℂ`**: `(b − a) N(tan 2Θ₀) ≤ 2 N(R)`,
+stated on the literal trial-side `sourceDirectedTanTwoThetaOperator V U =
+cfc (fun t => tan (2*t)) Θ₀`.  The rectangular `U → Uᗮ` tangent corner is the
+proof representative and is connected by a complete singular-sequence theorem.
 
 Until 2026-09-02 this alias named
 `tanTwoTheta_directed_unboundedResidual_blockRepresentative_symmetricNorming_complex`,
 which quantifies over an arbitrary self-adjoint involution `Z` and concludes on
 `reflectionTangentCorner U Z`; that theorem remains as the general result. -/
 alias tanTwoTheta_directed_complex :=
-  tanTwoTheta_directed_unboundedResidual_symmetricNorming_complex
+  DavisKahan1970.tanTwoTheta_directed_unboundedResidual_reducing_symmetricNorming_presentation_complex
 
-/-- **`tan 2Θ`, directed clause, over `ℝ`**, on `tanTwoDirectedCornerR U V`. -/
+/-- **`tan 2Θ`, directed clause, over `ℝ`**, on the literal trial-side functional-calculus tangent. -/
 alias tanTwoTheta_directed_real :=
-  tanTwoTheta_directed_unboundedResidual_symmetricNorming_real
+  DavisKahan1970.tanTwoTheta_directed_unboundedResidual_reducing_symmetricNorming_presentation_real
 
-/-- **`tan 2Θ`, ambient clause, over `ℂ`**: `(b − a) N(|tan 2Θ|) ≤ 2 N(B)`. -/
-alias tanTwoTheta_ambient_complex := tanTwoTheta_ambient_unbounded_symmetricNorming_complex
+/-- **`tan 2Θ`, ambient clause, over `ℂ`**: `(b − a) N(tan 2Θ) ≤ 2 N(B)` on the signed literal CFC operator. -/
+alias tanTwoTheta_ambient_complex :=
+  DavisKahan1970.tanTwoTheta_ambient_unbounded_reducing_symmetricNorming_presentation_complex
 
-/-- **`tan 2Θ`, ambient clause, over `ℝ`**. -/
-alias tanTwoTheta_ambient_real := tanTwoTheta_ambient_unbounded_symmetricNorming_real
+/-- **`tan 2Θ`, ambient clause, over `ℝ`**, on the signed literal CFC operator. -/
+alias tanTwoTheta_ambient_real :=
+  DavisKahan1970.tanTwoTheta_ambient_unbounded_reducing_symmetricNorming_presentation_real
 
 /-- **`sin 2Θ`, ambient clause, scalar-generic over `RCLike`**:
 `δ N(sin 2Θ) ≤ 2 N(H)` at the where-defined norm boundary selected by the ledger.
@@ -348,24 +353,28 @@ alias sinTwoTheta_ambient_real :=
 /-! ## `tan 2Θ` -/
 
 /-- Scalar-generic full-unbounded directed `tan 2Θ₀` clause at an arbitrary reducing
-subspace.  The theorem constructs a bounded corner representative whose complete
-approximation-number sequence is `tan (arcsin aₙ(sin 2Θ₀))`. -/
+subspace, stated on the literal functional-calculus
+`sourceDirectedTanTwoThetaOperator V U = cfc (fun t => tan (2*t)) Θ₀`, with
+`V` the trial subspace and `U` the gap-carrying subspace.  The rectangular
+corner representative remains available through the underlying implementation theorem. -/
 alias tanTwoTheta_directed :=
-  DavisKahan1970.tanTwoTheta_directed_unboundedResidual_reducing_symmetricNorming_rclike
+  DavisKahan1970.tanTwoTheta_directed_unboundedResidual_reducing_symmetricNorming_presentation_rclike
 
 /-- Scalar-generic full-unbounded ambient `tan 2Θ` clause at an arbitrary reducing subspace.
-The ordered form gap derives pole exclusion; the conclusion is on the generic branch-free
-`Angle.absTanTwoAngleOperator`. -/
+The ordered form gap derives pole exclusion, and the conclusion is on the signed literal
+`Angle.tanTwoAngleOperator = cfc (fun t => tan (2*t)) Θ`.  The positive
+`Angle.absTanTwoAngleOperator` is retained only as the proof representative. -/
 alias tanTwoTheta_ambient :=
-  DavisKahan1970.tanTwoTheta_ambient_unbounded_reducing_symmetricNorming_rclike
+  DavisKahan1970.tanTwoTheta_ambient_unbounded_reducing_symmetricNorming_presentation_rclike
 
 /-- **Davis--Kahan 1970, the `tan 2Θ` theorem, over `ℂ` -- the AMBIENT clause.**
 
 The printed `tan 2Θ` theorem has two boxed conclusions.  This name is the second,
-`(b − a) N(|tan 2Θ|) ≤ 2 N(B)`; the directed one is `tanTwoTheta_directed_complex`.
+`(b − a) N(tan 2Θ) ≤ 2 N(B)`; the directed one is `tanTwoTheta_directed_complex`.
 
-`(b - a) · N(|tan 2Θ|) ≤ 2 N(B)` on the paper's ambient branch-free double-angle
-tangent, with ideal membership, for an unbounded self-adjoint `A`, a bounded
+The public conclusion is on the signed literal functional-calculus `tan 2Θ`.
+The positive `|tan 2Θ|` operator remains only the proof representative, with its
+exact modulus relation to the literal tangent proved explicitly.  The theorem has ideal membership, for an unbounded self-adjoint `A`, a bounded
 self-adjoint perturbation `B` odd for the selected spectral subspace, and a
 subspace `V` whose reflection intertwines `A + B`
 (`DavisKahan.ReflectionIntertwines`, built from a `ReducesSubspace` by
@@ -374,17 +383,19 @@ subspace `V` whose reflection intertwines `A + B`
 No pole certificate is asked for: the ordered gap forces the reflection's diagonal
 block to be a unit, and that unit excludes the quarter-turn poles. -/
 @[deprecated "The unqualified clause names are not uniform; use `tanTwoTheta_ambient_complex`, which says which of the two printed conclusions it is." (since := "2026-09-05")]
-alias tanTwoTheta_complex := tanTwoTheta_ambient_unbounded_symmetricNorming_complex
+alias tanTwoTheta_complex :=
+  DavisKahan1970.tanTwoTheta_ambient_unbounded_reducing_symmetricNorming_presentation_complex
 
 /-- **Davis--Kahan 1970, the `tan 2Θ` theorem, over `ℝ` -- the AMBIENT clause.**
 
 Its directed partner is `tanTwoTheta_directed_real`.
 
-The real sibling of `tanTwoTheta_ambient_complex`, on the real ambient `|tan 2Θ|`.  The real
-statement is transported from the complex one through the complexification, with
-no loss of constant or norm class and no second analytic proof. -/
+The real sibling of `tanTwoTheta_ambient_complex`, on the real signed literal
+`tan 2Θ`.  The positive modulus remains an internal proof representative; the
+presentation bridge is scalar-generic. -/
 @[deprecated "The unqualified clause names are not uniform; use `tanTwoTheta_ambient_real`, which says which of the two printed conclusions it is." (since := "2026-09-05")]
-alias tanTwoTheta_real := tanTwoTheta_ambient_unbounded_symmetricNorming_real
+alias tanTwoTheta_real :=
+  DavisKahan1970.tanTwoTheta_ambient_unbounded_reducing_symmetricNorming_presentation_real
 
 /-! ## Fixed-field combined presentations retained for compatibility
 
@@ -430,9 +441,9 @@ theorem sinTwoTheta_bothConclusions_complex
         (hVdom : ∀ v : V, ((v : V) : Hc) ∈ A.domain),
         (∀ v : V, A ⟨((v : V) : Hc), hVdom v⟩ = R v + ((M v : V) : Hc)) →
         N.Mem R →
-          N.Mem (Angle.directedSinTwoAngleOperator V
+          N.Mem (DavisKahan1970.sourceDirectedSinTwoThetaOperator V
               (selfAdjointSpectralSubspace A hA B hB)) ∧
-            δ * N.gauge (Angle.directedSinTwoAngleOperator V
+            δ * N.gauge (DavisKahan1970.sourceDirectedSinTwoThetaOperator V
                 (selfAdjointSpectralSubspace A hA B hB)) ≤ 2 * N.gauge R) ∧
       (∀ (Eop : Hc →L[ℂ] Hc) (_hEop : Eop.IsSymmetric)
         (W : Submodule ℂ Hc) [W.HasOrthogonalProjection]
@@ -441,8 +452,9 @@ theorem sinTwoTheta_bothConclusions_complex
           N.Mem (sinTwoAngleOperatorC (selfAdjointSpectralSubspace A hA B hB) W) ∧
             δ * N.gauge (sinTwoAngleOperatorC
                 (selfAdjointSpectralSubspace A hA B hB) W) ≤ 2 * N.gauge Eop) :=
-  ⟨fun hVdom hres hR =>
-      sinTwoTheta_directed_unboundedResidual_symmetricNorming_complex
+  ⟨fun hVdom hres hR => by
+      rw [DavisKahan1970.sourceDirectedSinTwoThetaOperator_eq_directedSinTwoAngleOperator]
+      exact sinTwoTheta_directed_unboundedResidual_symmetricNorming_complex
         N hA B hB hVdom hres hδ hgap hR,
     fun Eop hEop W _ hW hEmem =>
       sinTwoTheta_ambient_unbounded_reducing_symmetricNorming_complex N hA Eop hEop
@@ -473,9 +485,9 @@ theorem sinTwoTheta_bothConclusions_real
         (hVdom : ∀ v : V, ((v : V) : Er) ∈ A.domain),
         (∀ v : V, A ⟨((v : V) : Er), hVdom v⟩ = R v + ((M v : V) : Er)) →
         N.Mem R →
-          N.Mem (Angle.directedSinTwoAngleOperator V
+          N.Mem (DavisKahan1970.sourceDirectedSinTwoThetaOperator V
               (RealSpectralRestriction.realSelfAdjointSpectralSubspace A hA B hB)) ∧
-            δ * N.gauge (Angle.directedSinTwoAngleOperator V
+            δ * N.gauge (DavisKahan1970.sourceDirectedSinTwoThetaOperator V
                 (RealSpectralRestriction.realSelfAdjointSpectralSubspace A hA B hB)) ≤
               2 * N.gauge R) ∧
       (∀ (Eop : Er →L[ℝ] Er) (_hEop : Eop.IsSymmetric)
@@ -487,8 +499,9 @@ theorem sinTwoTheta_bothConclusions_real
             δ * N.gauge (sinTwoAngleOperatorR
                 (RealSpectralRestriction.realSelfAdjointSpectralSubspace A hA B hB) W) ≤
               2 * N.gauge Eop) :=
-  ⟨fun hVdom hres hR =>
-      sinTwoTheta_directed_unboundedResidual_symmetricNorming_real
+  ⟨fun hVdom hres hR => by
+      rw [DavisKahan1970.sourceDirectedSinTwoThetaOperator_eq_directedSinTwoAngleOperator]
+      exact sinTwoTheta_directed_unboundedResidual_symmetricNorming_real
         N hA B hB hVdom hres hδ hgap hR,
     fun Eop hEop W _ hW hEmem => by
       rw [← Angle.sinTwoAngleOperator_real]

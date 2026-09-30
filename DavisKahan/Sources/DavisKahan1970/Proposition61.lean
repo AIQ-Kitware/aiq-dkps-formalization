@@ -6,7 +6,9 @@ Authors: Jon Crall, Claude Opus 5
 import DavisKahan.Sources.DavisKahan1970.SineTheta.Symmetric
 import DavisKahan.Sources.DavisKahan1970.SineTheta.SymmetricReal
 import DavisKahan.Geometry.Angle.AngleFunctionalCalculus
+import DavisKahan.Geometry.Angle.OperatorAngleGeneric
 import DavisKahan.Sources.DavisKahan1970.SineTheta.CommonDomainSymmetric
+import DavisKahan.Sources.DavisKahan1970.SineTheta.Norms.HeterogeneousRepresentative
 import DavisKahan.Sylvester.ScalarTransport
 import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.ScalarTransport
 
@@ -40,24 +42,20 @@ complement partner are what make the separation hypotheses readable; before
 them, each was a four-line inline composite, and that unreadability is most of
 why the record existed.
 
-## The two conclusions, and why they are the same theorem
+## Presentation object and proof representatives
 
-Over `ℂ` the conclusion is the paper's literal object,
-`sinAngleOperatorC U V = cfc Real.sin (angleOperatorC U V)`.
+The canonical complex and real declarations are both stated on the paper's
+literal expression `cfc Real.sin (Angle.angleOperator U V)`.  The exact theorem
+`Angle.cfc_sin_angleOperator` identifies this functional-calculus expression with
+the positive ambient sine operator.
 
-The real conclusion is stated on the **projector difference** `P_V − P_U`, whose
-approximation numbers are the sines of the principal angles.  The development now has the
-real continuous functional calculus uniformly over `RCLike`, but this theorem does not need
-to choose a second angle-operator presentation: a unitarily invariant norm sees the same
-singular-value sequence.  The statement is therefore not weaker:
-`sinAngleOperatorC` is by definition `|P_U − P_V|`, so `proposition6_1_projectorDifference_complex`
-below states the *same* conclusion over `ℂ`, and the complex and real surfaces
-are visibly one theorem.
-
-`crossSineSum` -- the implementation representative `P_Uᗮ P_V + P_U P_Vᗮ` --
-does not appear in any statement here.  It remains the object the real proof
-computes with, and `RealSymmetricSinThetaProblem.crossSineSum_normingMem_iff_and_gauge_eq`
-is the compiled transport from it to the projector difference.
+The proof engines remain representation-oriented.  Over `ℂ` they use
+`sinAngleOperatorC = |P_U - P_V|`; over `ℝ` they pass through the projector
+difference `P_V - P_U`, whose complete approximation-number sequence is proved
+to agree with the positive sine.  `crossSineSum` -- the still lower-level
+representative `P_Uᗮ P_V + P_U P_Vᗮ` -- remains the object the real proof computes
+with.  These correspondences are explicit theorems and are used only to transport
+the proof result back to the literal source object.
 
 ## References
 
@@ -94,11 +92,11 @@ variable {E : Type v} [NormedAddCommGroup E] [InnerProductSpace ℂ E] [Complete
 block.  Then the ambient `sin Θ` between `U` and `V` lies in the ideal of every
 source unitarily invariant norm and satisfies `δ · N(sin Θ) ≤ N(B − A)`.
 
-The conclusion is on the paper's literal `sin Θ`,
-`cfc Real.sin (angleOperatorC U V)`.  Nothing about the proof's
-organisation is visible: no `SymmetricSinThetaProblem`, no
-`UnboundedSinThetaData`, no Ky Fan family. -/
-theorem proposition6_1_complex
+This proof-facing theorem concludes on the positive sine representative
+`sinAngleOperatorC U V`.  The canonical source-facing theorem immediately
+below rewrites it to the paper's literal `cfc Real.sin (Angle.angleOperator U V)`
+through an exact functional-calculus identity. -/
+theorem proposition6_1_sinAngleOperator_complex
     (N : SymmetricNormingFunction)
     {A B : E →L[ℂ] E} (hA : A.IsSymmetric) (hB : B.IsSymmetric)
     {U V : Submodule ℂ E} [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
@@ -132,6 +130,31 @@ theorem proposition6_1_complex
     simpa [P, SymmetricSinThetaProblem.perturbation] using hMem)
   simpa [P, SymmetricSinThetaProblem.perturbation] using hsource
 
+/-- **Davis--Kahan 1970, Proposition 6.1, over `ℂ`, literal presentation.**
+
+The theorem is stated on the expression printed in the source,
+`sin Θ = cfc Real.sin (Angle.angleOperator U V)`.  The proof-facing positive
+sine `sinAngleOperatorC` remains underneath, and `Angle.cfc_sin_angleOperator`
+proves the two operators are exactly equal. -/
+theorem proposition6_1_complex
+    (N : SymmetricNormingFunction)
+    {A B : E →L[ℂ] E} (hA : A.IsSymmetric) (hB : B.IsSymmetric)
+    {U V : Submodule ℂ E} [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
+    (hU : A.Reduces U) (hV : B.Reduces V)
+    {δ : ℝ} (hδ : 0 < δ)
+    (hgapUV : FormBoundedSylvesterGap
+      (PartialMap.boundedReducingBlock A U hU)
+      (PartialMap.boundedReducingBlockCompl B V hV) δ)
+    (hgapVU : FormBoundedSylvesterGap
+      (PartialMap.boundedReducingBlock B V hV)
+      (PartialMap.boundedReducingBlockCompl A U hU) δ)
+    (hMem : N.Mem (B - A)) :
+    N.Mem (cfc Real.sin (Angle.angleOperator U V)) ∧
+      δ * N.gauge (cfc Real.sin (Angle.angleOperator U V)) ≤ N.gauge (B - A) := by
+  rw [Angle.cfc_sin_angleOperator, Angle.sinAngleOperator_complex]
+  exact proposition6_1_sinAngleOperator_complex
+    N hA hB hU hV hδ hgapUV hgapVU hMem
+
 /-- **Proposition 6.1 over `ℂ`, read on the projector difference.**
 
 `sinAngleOperatorC U V` is `|P_U − P_V|` by definition, and a modulus has the
@@ -154,7 +177,7 @@ theorem proposition6_1_projectorDifference_complex
     N.Mem (V.starProjection - U.starProjection) ∧
       δ * N.gauge (V.starProjection - U.starProjection) ≤ N.gauge (B - A) := by
   obtain ⟨hmem, hle⟩ :=
-    proposition6_1_complex N hA hB hU hV hδ hgapUV hgapVU hMem
+    proposition6_1_sinAngleOperator_complex N hA hB hU hV hδ hgapUV hgapVU hMem
   have hflip : U.starProjection - V.starProjection
       = -(V.starProjection - U.starProjection) := by abel
   have hext : N.extendedGauge (sinAngleOperatorC U V)
@@ -192,7 +215,7 @@ No functional calculus, no complexification and no representative supplied by
 the caller occurs in the statement.  The proof runs through
 `crossSineSum`, which the source real development computes with, and
 transports the conclusion off it. -/
-theorem proposition6_1_real
+theorem proposition6_1_projectorDifference_real
     (N : SymmetricNormingFunction)
     {A B : E →L[ℝ] E} (hA : A.IsSymmetric) (hB : B.IsSymmetric)
     {U V : Submodule ℝ E} [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
@@ -233,6 +256,39 @@ theorem proposition6_1_real
   rw [hgauge] at hle
   simpa [P, RealSymmetricSinThetaProblem.perturbation] using hle
 
+/-- **Davis--Kahan 1970, Proposition 6.1, over `ℝ`, literal presentation.**
+
+The conclusion is on `cfc Real.sin (Angle.angleOperator U V)`.  The real proof
+continues to compute with the projector difference; the complete
+approximation-number bridge and the exact identity
+`Angle.cfc_sin_angleOperator` make the presentation transport explicit. -/
+theorem proposition6_1_real
+    (N : SymmetricNormingFunction)
+    {A B : E →L[ℝ] E} (hA : A.IsSymmetric) (hB : B.IsSymmetric)
+    {U V : Submodule ℝ E} [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
+    (hU : A.Reduces U) (hV : B.Reduces V)
+    {δ : ℝ} (hδ : 0 < δ)
+    (hgapUV : FormBoundedSylvesterGap
+      (PartialMap.boundedReducingBlock A U hU)
+      (PartialMap.boundedReducingBlockCompl B V hV) δ)
+    (hgapVU : FormBoundedSylvesterGap
+      (PartialMap.boundedReducingBlock B V hV)
+      (PartialMap.boundedReducingBlockCompl A U hU) δ)
+    (hMem : N.Mem (B - A)) :
+    N.Mem (cfc Real.sin (Angle.angleOperator U V)) ∧
+      δ * N.gauge (cfc Real.sin (Angle.angleOperator U V)) ≤ N.gauge (B - A) := by
+  obtain ⟨hprojMem, hprojBound⟩ :=
+    proposition6_1_projectorDifference_real
+      N hA hB hU hV hδ hgapUV hgapVU hMem
+  have hseq := Angle.sinAngleOperator_hasSameApproximationNumbers_projectorDifference U V
+  have htransport :=
+    TauCeti.DavisKahan.ExactSinTheta.SameApproximationSingularSequence.normingMem_iff_and_gauge_eq
+      N hseq
+  rw [Angle.cfc_sin_angleOperator]
+  refine ⟨htransport.1.mpr hprojMem, ?_⟩
+  rw [htransport.2]
+  exact hprojBound
+
 end Real
 
 /-! ## The Appendix common-domain relaxation
@@ -265,7 +321,7 @@ conclusion is the same as in the bounded case, on the paper's literal `sin Θ`.
 
 `proposition6_1_commonDomain_ofBounded` records that the bounded inputs are an
 instance, so this is a genuine relaxation rather than a parallel statement. -/
-theorem proposition6_1_commonDomain_complex
+theorem proposition6_1_commonDomain_sinAngleOperator_complex
     (N : SymmetricNormingFunction)
     {A B : E →ₗ.[ℂ] E} (hA : IsSelfAdjoint A) (hB : IsSelfAdjoint B)
     {U V : Submodule ℂ E} [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
@@ -301,13 +357,41 @@ theorem proposition6_1_commonDomain_complex
       gap_V_to_Uperp := hgapVU }
   exact P.result_every_unitarilyInvariantNorm N hMem
 
+/-- **Proposition 6.1 under the Appendix common-domain relaxation, over `ℂ`,
+literal presentation.** -/
+theorem proposition6_1_commonDomain_complex
+    (N : SymmetricNormingFunction)
+    {A B : E →ₗ.[ℂ] E} (hA : IsSelfAdjoint A) (hB : IsSelfAdjoint B)
+    {U V : Submodule ℂ E} [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
+    (hU : TauCeti.LinearPMap.ReducesSubspace A U)
+    (hV : TauCeti.LinearPMap.ReducesSubspace B V)
+    (Hop : E →L[ℂ] E)
+    (hdomain : A.domain = B.domain)
+    (hperturbation : ∀ (x : E) (hxA : x ∈ A.domain) (hxB : x ∈ B.domain),
+      B ⟨x, hxB⟩ - A ⟨x, hxA⟩ = Hop x)
+    {δ : ℝ} (hδ : 0 < δ)
+    (hgapUV : FormBoundedSylvesterGap
+      (TauCeti.LinearPMap.reducingRestriction A U hU)
+      (TauCeti.LinearPMap.reducingRestriction B Vᗮ hV.orthogonal) δ)
+    (hgapVU : FormBoundedSylvesterGap
+      (TauCeti.LinearPMap.reducingRestriction B V hV)
+      (TauCeti.LinearPMap.reducingRestriction A Uᗮ hU.orthogonal) δ)
+    (hMem : N.Mem Hop) :
+    N.Mem (cfc Real.sin (Angle.angleOperator U V)) ∧
+      δ * N.gauge (cfc Real.sin (Angle.angleOperator U V)) ≤ N.gauge Hop := by
+  rw [Angle.cfc_sin_angleOperator, Angle.sinAngleOperator_complex]
+  exact proposition6_1_commonDomain_sinAngleOperator_complex
+    N hA hB hU hV Hop hdomain hperturbation hδ hgapUV hgapVU hMem
+
 /-- **Davis--Kahan 1970, Proposition 6.1 under the Appendix common-domain
 relaxation, over `ℝ`.**
 
-The real sibling, with the conclusion on the projector difference `P_V − P_U`,
-matching `proposition6_1_real`.  The proof runs through
-`crossSineSum` and transports the conclusion off it. -/
-theorem proposition6_1_commonDomain_real
+The real proof-facing sibling, with the conclusion on the projector difference
+`P_V − P_U`.  The canonical `proposition6_1_commonDomain_real` immediately below
+transports this to literal `cfc Real.sin (Angle.angleOperator U V)`.  The proof
+runs through `crossSineSum` and transports the conclusion off it in two explicit
+steps. -/
+theorem proposition6_1_commonDomain_projectorDifference_real
     {Er : Type v} [NormedAddCommGroup Er] [InnerProductSpace ℝ Er] [CompleteSpace Er]
     (N : SymmetricNormingFunction)
     {A B : Er →ₗ.[ℝ] Er} (hA : IsSelfAdjoint A) (hB : IsSelfAdjoint B)
@@ -348,13 +432,52 @@ theorem proposition6_1_commonDomain_real
   rw [hgauge] at hle
   exact hle
 
+/-- **Proposition 6.1 under the Appendix common-domain relaxation, over `ℝ`,
+literal presentation.** -/
+theorem proposition6_1_commonDomain_real
+    {Er : Type v} [NormedAddCommGroup Er] [InnerProductSpace ℝ Er] [CompleteSpace Er]
+    (N : SymmetricNormingFunction)
+    {A B : Er →ₗ.[ℝ] Er} (hA : IsSelfAdjoint A) (hB : IsSelfAdjoint B)
+    {U V : Submodule ℝ Er} [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
+    (hU : TauCeti.LinearPMap.ReducesSubspace A U)
+    (hV : TauCeti.LinearPMap.ReducesSubspace B V)
+    (Hop : Er →L[ℝ] Er)
+    (hdomain : A.domain = B.domain)
+    (hperturbation : ∀ (x : Er) (hxA : x ∈ A.domain) (hxB : x ∈ B.domain),
+      B ⟨x, hxB⟩ - A ⟨x, hxA⟩ = Hop x)
+    {δ : ℝ} (hδ : 0 < δ)
+    (hgapUV : FormBoundedSylvesterGap
+      (TauCeti.LinearPMap.reducingRestriction A U hU)
+      (TauCeti.LinearPMap.reducingRestriction B Vᗮ hV.orthogonal) δ)
+    (hgapVU : FormBoundedSylvesterGap
+      (TauCeti.LinearPMap.reducingRestriction B V hV)
+      (TauCeti.LinearPMap.reducingRestriction A Uᗮ hU.orthogonal) δ)
+    (hMem : N.Mem Hop) :
+    N.Mem (cfc Real.sin (Angle.angleOperator U V)) ∧
+      δ * N.gauge (cfc Real.sin (Angle.angleOperator U V)) ≤ N.gauge Hop := by
+  obtain ⟨hprojMem, hprojBound⟩ :=
+    proposition6_1_commonDomain_projectorDifference_real
+      N hA hB hU hV Hop hdomain hperturbation hδ hgapUV hgapVU hMem
+  have hseq := Angle.sinAngleOperator_hasSameApproximationNumbers_projectorDifference U V
+  have htransport :=
+    TauCeti.DavisKahan.ExactSinTheta.SameApproximationSingularSequence.normingMem_iff_and_gauge_eq
+      N hseq
+  rw [Angle.cfc_sin_angleOperator]
+  refine ⟨htransport.1.mpr hprojMem, ?_⟩
+  rw [htransport.2]
+  exact hprojBound
+
 /-! ### The common-domain relaxation over any `RCLike` field
 
-The two fixed-field statements above are this one at `ℝ` and at `ℂ`; it is stated
-separately because the conclusion has to be carried by the projector difference,
-the one spelling of the paper's whole-space sine that exists over both fields.
-`crossSineSum_normingMem_iff_and_gauge_eq` is the compiled dictionary saying that
-every source norm evaluates it exactly as it evaluates the paper's `sin Θ`. -/
+The two fixed-field statements above are specializations of the same generic
+mathematics.  The proof-facing theorem is stated on the projector difference,
+while `proposition6_1_commonDomain_presentation_rclike` below is the canonical
+source-facing endpoint on `Angle.ambientSinThetaOperator U V`.  That object is
+*defined* as the literal functional-calculus expression
+`cfc Real.sin (Angle.angleOperator U V)` inside the generic angle module, where
+the required real-calculus instances are installed.  Its exact bridge to the
+positive sine and the complete approximation-number bridge to the projector
+difference make every semantic step explicit. -/
 
 section CommonDomainGeneric
 
@@ -407,6 +530,46 @@ theorem proposition6_1_commonDomain_projectorDifference
   refine ⟨hiff.mp hmem, ?_⟩
   rw [hgauge] at hle
   exact hle
+
+/-- **Davis--Kahan 1970, Proposition 6.1 under the Appendix common-domain
+relaxation, scalar-generic literal presentation.**
+
+This is the generic source-facing endpoint.  The projector-difference theorem
+above remains the proof API; the statement here is on
+`Angle.ambientSinThetaOperator U V`, whose definition is literally
+`cfc Real.sin (Angle.angleOperator U V)`, and crosses the boundary through the
+proved sine/modulus and approximation-number identities. -/
+theorem proposition6_1_commonDomain_presentation_rclike
+    (N : SymmetricNormingFunction)
+    {A B : E →ₗ.[𝕜] E} (hA : IsSelfAdjoint A) (hB : IsSelfAdjoint B)
+    {U V : Submodule 𝕜 E} [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
+    (hU : TauCeti.LinearPMap.ReducesSubspace A U)
+    (hV : TauCeti.LinearPMap.ReducesSubspace B V)
+    (Hop : E →L[𝕜] E)
+    (hdomain : A.domain = B.domain)
+    (hperturbation : ∀ (x : E) (hxA : x ∈ A.domain) (hxB : x ∈ B.domain),
+      B ⟨x, hxB⟩ - A ⟨x, hxA⟩ = Hop x)
+    {δ : ℝ} (hδ : 0 < δ)
+    (hgapUV : FormBoundedSylvesterGap
+      (TauCeti.LinearPMap.reducingRestriction A U hU)
+      (TauCeti.LinearPMap.reducingRestriction B Vᗮ hV.orthogonal) δ)
+    (hgapVU : FormBoundedSylvesterGap
+      (TauCeti.LinearPMap.reducingRestriction B V hV)
+      (TauCeti.LinearPMap.reducingRestriction A Uᗮ hU.orthogonal) δ)
+    (hMem : N.Mem Hop) :
+    N.Mem (Angle.ambientSinThetaOperator U V) ∧
+      δ * N.gauge (Angle.ambientSinThetaOperator U V) ≤ N.gauge Hop := by
+  obtain ⟨hprojMem, hprojBound⟩ :=
+    proposition6_1_commonDomain_projectorDifference
+      N hA hB hU hV Hop hdomain hperturbation hδ hgapUV hgapVU hMem
+  have hseq := Angle.sinAngleOperator_hasSameApproximationNumbers_projectorDifference U V
+  have htransport :=
+    TauCeti.DavisKahan.ExactSinTheta.SameApproximationSingularSequence.normingMem_iff_and_gauge_eq
+      N hseq
+  rw [Angle.ambientSinThetaOperator_eq_sinAngleOperator]
+  refine ⟨htransport.1.mpr hprojMem, ?_⟩
+  rw [htransport.2]
+  exact hprojBound
 
 end CommonDomainGeneric
 
