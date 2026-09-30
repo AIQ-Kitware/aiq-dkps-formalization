@@ -2,7 +2,7 @@
 name = "dkps-visualizations"
 version = "0.1.0"
 description = "Executable geometric visualizations for the Davis--Kahan formalization"
-requires-python = ">=3.11"
+requires-python = ">=3.11,<3.14"
 dependencies = [
   "numpy>=2.0",
 ]

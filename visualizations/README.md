@@ -90,6 +90,20 @@ For Manim as well:
 uv sync --extra vtk --extra manim --extra test
 ```
 
+The visualization project currently targets Python 3.11--3.13.  In particular,
+Python 3.13 avoids warnings from Manim's current transitive `pydub` dependency
+under Python 3.14.  If an older `.venv` was created with Python 3.14, recreate it:
+
+```bash
+rm -rf .venv
+uv venv --python 3.13
+uv sync --extra vtk --extra manim --extra test
+```
+
+If another uv-managed environment is already active, uv may print a
+`VIRTUAL_ENV ... does not match ... .venv` warning.  That is expected: these
+commands deliberately use the local `visualizations/.venv`.
+
 Manim may require the usual system packages for Cairo, Pango, FFmpeg, and LaTeX
 on the host distribution.
 
@@ -144,8 +158,12 @@ uv run --extra vtk python -m dkvis.vtk_sine_theta \
 
 ```bash
 cd visualizations
-uv run --extra manim manim -pql dkvis/manim_sine_theta.py SineThetaScene
+uv run --extra manim python -m manim -pql dkvis/manim_sine_theta.py SineThetaScene
 ```
+
+Invoke Manim through `python -m manim`, not the `.venv/bin/manim` console
+script.  Manim loads scene files by path, and the module invocation keeps the
+`visualizations/` project root on `sys.path`, so `from dkvis...` imports resolve.
 
 The Manim scene uses the same `SineThetaModel`.  It animates the trial line while
 keeping the exact subspace fixed, then displays the two identities that explain

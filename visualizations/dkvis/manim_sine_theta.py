@@ -2,7 +2,7 @@
 
 Render from ``visualizations/`` with:
 
-    uv run --extra manim manim -pql dkvis/manim_sine_theta.py SineThetaScene
+    uv run --extra manim python -m manim -pql dkvis/manim_sine_theta.py SineThetaScene
 
 The animation uses the same mathematical model as the VTK explorer.
 """
