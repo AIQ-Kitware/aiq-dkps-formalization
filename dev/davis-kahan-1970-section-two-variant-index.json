@@ -98,7 +98,7 @@
       "short_api": {
         "declaration": "TauCeti.DavisKahan1970.SectionTwo.tanTheta",
         "status": "unbound",
-        "reason": "No single scalar-generic declaration currently carries both ledger-selected clauses at the intended statement boundary. The strong RCLike clauses are exposed separately as `SectionTwo.tanTheta_directed` and `SectionTwo.tanTheta_ambient`."
+        "reason": "No single scalar-generic declaration currently carries both ledger-selected clauses at the intended statement boundary. The directed short API is now a literal functional-calculus presentation theorem on `sourceDirectedTanThetaOperator`; the ambient clause remains separate."
       },
       "ledger_witnesses": [
         "TauCeti.DavisKahan1970.tanTheta_ambient_unboundedRitz_definedTangent_normalizedUIN_complex",
@@ -182,7 +182,7 @@
           "role": "scalar_generic_api",
           "scalar_scope": "rclike",
           "source_fidelity": "not_ledger_witness",
-          "reason": "Public Section Two clause alias to the full-unbounded scalar-generic directed API."
+          "reason": "Public scalar-generic directed API on the literal `cfc tan Theta_0` presentation object; the rectangular representative is retained as the implementation engine and connected by an explicit complete approximation-number bridge."
         },
         {
           "declaration": "TauCeti.DavisKahan1970.SectionTwo.tanTheta_ambient",
@@ -190,6 +190,13 @@
           "scalar_scope": "rclike",
           "source_fidelity": "not_ledger_witness",
           "reason": "Public Section Two clause alias to the full-unbounded scalar-generic ambient API."
+        },
+        {
+          "declaration": "TauCeti.DavisKahan1970.tanTheta_directed_unboundedRitz_symmetricNorming_presentation_rclike",
+          "role": "scalar_generic_api",
+          "scalar_scope": "rclike",
+          "source_fidelity": "not_ledger_witness",
+          "reason": "Presentation theorem whose inequality is stated directly on `sourceDirectedTanThetaOperator = cfc tan Theta_0`; it transports the existing representative theorem through proved equality of the complete approximation-number sequence."
         }
       ]
     },
@@ -199,7 +206,7 @@
       "short_api": {
         "declaration": "TauCeti.DavisKahan1970.SectionTwo.sinTwoTheta",
         "status": "bound",
-        "reason": "Public scalar-generic alias to the accepted common-domain source witness."
+        "reason": "Public scalar-generic whole-result presentation alias. Its directed clause is stated on the literal functional-calculus `sin (2 Theta_0)` object and transported through an exact operator identity; its ambient clause is unchanged."
       },
       "ledger_witnesses": [
         "TauCeti.DavisKahan1970.sinTwoTheta_commonDomain_whereDefinedUIN_rclike"
@@ -252,14 +259,21 @@
           "role": "scalar_generic_api",
           "scalar_scope": "rclike",
           "source_fidelity": "not_ledger_witness",
-          "reason": "Public short alias to the accepted common-domain whole-result ledger witness."
+          "reason": "Public short alias to the whole-result presentation theorem. The directed clause exposes literal `cfc (fun t => sin (2*t)) Theta_0`; the ambient clause is unchanged."
         },
         {
           "declaration": "TauCeti.DavisKahan1970.SectionTwo.sinTwoTheta_directed",
           "role": "scalar_generic_api",
           "scalar_scope": "rclike",
           "source_fidelity": "not_ledger_witness",
-          "reason": "Public short alias to the common-domain directed residual clause."
+          "reason": "Public scalar-generic directed API on the literal functional-calculus `sin (2 Theta_0)` object. An exact operator identity rewrites it to the existing positive `2 sin Theta_0 cos Theta_0` proof object."
+        },
+        {
+          "declaration": "TauCeti.DavisKahan1970.sinTwoTheta_commonDomain_presentation_whereDefinedUIN_rclike",
+          "role": "scalar_generic_api",
+          "scalar_scope": "rclike",
+          "source_fidelity": "not_ledger_witness",
+          "reason": "Whole-result presentation theorem. Its directed branch uses the literal functional-calculus `sin (2 Theta_0)` object; the existing accepted common-domain theorem remains the analytic/source-scope witness underneath."
         },
         {
           "declaration": "TauCeti.DavisKahan1970.sinTwoTheta_directed_unboundedResidual_whereDefinedUIN_complex",
@@ -386,6 +400,13 @@
           "scalar_scope": "rclike",
           "source_fidelity": "superseded_by_production",
           "reason": "Compiled on 2026-09-09 and was promoted to the production generic ambient endpoint."
+        },
+        {
+          "declaration": "TauCeti.DavisKahan1970.sinTwoTheta_directed_commonDomain_presentation_whereDefinedUIN_rclike",
+          "role": "scalar_generic_api",
+          "scalar_scope": "rclike",
+          "source_fidelity": "not_ledger_witness",
+          "reason": "Presentation theorem stated directly on `sourceDirectedSinTwoThetaOperator = cfc (fun t => sin (2*t)) Theta_0`, transported by an exact operator equality to the existing directed double-angle sine engine."
         }
       ],
       "review_status": "accepted",
