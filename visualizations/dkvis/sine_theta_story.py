@@ -161,6 +161,54 @@ class PerturbedPair:
         """The sine-theta bound ``||R|| / delta`` on ``sin(theta)``."""
         return self.residual_norm / self.delta if self.delta > 0 else math.inf
 
+    # -- the other three Section 2 theorems on the same example ------------------
+    # Each measures its gap between a different pair of eigenvalues.  With the
+    # default off-diagonal ``H`` (``phi = pi/2``) the tan theta, sin 2theta and
+    # tan 2theta bounds hold with equality; the sin theta bound is strict.
+
+    @property
+    def off_diagonal(self) -> bool:
+        """``H_0 = H_1 = 0``: ``H`` only couples ``e1`` with ``e2``."""
+        return abs(math.cos(self.phi)) < 1e-12
+
+    @property
+    def tan_theta(self) -> float:
+        return math.tan(self.line_angle)
+
+    @property
+    def sin_two_theta(self) -> float:
+        return abs(math.sin(2 * self.line_angle))
+
+    @property
+    def tan_two_theta(self) -> float:
+        return abs(math.tan(2 * self.line_angle))
+
+    @property
+    def delta_tan(self) -> float:
+        """tan theta: Ritz value ``c + g/2`` (Rayleigh--Ritz when ``H_0 = 0``) to the
+        unwanted eigenvalue ``c - s`` of ``A + H``, all on one side."""
+        return self.delta
+
+    @property
+    def delta_sin_two(self) -> float:
+        """sin 2theta: between the two eigenvalues of ``A + H`` itself, ``2 s``."""
+        return 2 * self.half_split
+
+    @property
+    def delta_tan_two(self) -> float:
+        """tan 2theta: between the two eigenvalues of ``A`` itself, ``g``."""
+        return self.gap
+
+    def family(self) -> dict[str, tuple[float, float, float]]:
+        """``name -> (delta, delta * f(theta), bound)`` for the four theorems."""
+        eps = self.residual_norm
+        return {
+            "sin": (self.delta, self.delta * self.sin_theta, eps),
+            "tan": (self.delta_tan, self.delta_tan * self.tan_theta, eps),
+            "sin2": (self.delta_sin_two, self.delta_sin_two * self.sin_two_theta, 2 * eps),
+            "tan2": (self.delta_tan_two, self.delta_tan_two * self.tan_two_theta, 2 * eps),
+        }
+
     def verify(self, *, atol: float = 1e-12) -> None:
         evals, evecs = np.linalg.eigh(self.perturbed)
         np.testing.assert_allclose(
@@ -176,6 +224,13 @@ class PerturbedPair:
         assert weyl <= np.linalg.norm(self.H, 2) + atol
         assert math.isclose(weyl, self.eigenvalue_shift, abs_tol=1e-9)
         assert self.sin_theta <= self.bound + atol
+        lhs_sin2 = self.delta_sin_two * self.sin_two_theta
+        assert lhs_sin2 <= 2 * self.residual_norm + 1e-9
+        if self.off_diagonal and self.gap > 0:
+            assert math.isclose(self.delta_tan * self.tan_theta, self.residual_norm, rel_tol=1e-9)
+            assert math.isclose(lhs_sin2, 2 * self.residual_norm, rel_tol=1e-9)
+            assert math.isclose(self.delta_tan_two * self.tan_two_theta, 2 * self.residual_norm, rel_tol=1e-9)
+            assert self.line_angle <= math.pi / 4 + 1e-12
 
 
 @dataclass(frozen=True)
@@ -401,12 +456,73 @@ class TwoDirections:
     def sin_theta(self) -> float:
         return math.sin(self.theta)
 
+    @property
+    def tan_theta(self) -> float:
+        return math.tan(self.theta)
+
+    @property
+    def residual_norm(self) -> float:
+        return self.model.residual_norm
+
     def verify(self, *, atol: float = 1e-12) -> None:
         self.model.verify(atol=atol)
+        # The tan theta theorem's hypotheses hold (Rayleigh--Ritz value, the one
+        # unwanted eigenvalue on one side), and in two dimensions it is an equality:
+        # delta = (lam_w - lam_u) cos^2 theta and ||r|| = (lam_w - lam_u) sin theta cos theta.
+        if 0 <= self.theta < math.pi / 2:
+            assert math.isclose(self.delta * self.tan_theta, self.residual_norm, rel_tol=1e-9, abs_tol=atol)
         assert math.isclose(self.w_part, (self.lam_w - self.rho) * self.sin_theta, abs_tol=atol)
         assert math.isclose(self.u_part, (self.lam_u - self.rho) * math.cos(self.theta), abs_tol=atol)
         assert abs(self.w_part) >= self.delta * self.sin_theta - atol
         assert self.model.residual_norm >= abs(self.w_part) - atol
+
+
+@dataclass(frozen=True)
+class TwoSidedTrial:
+    """Why the tan theta theorem needs the unwanted spectrum on one side.
+
+    ``A = diag(-1, 0, 1)``; the wanted eigenvector is ``e2`` (eigenvalue 0) and the
+    unwanted eigenvalues ``-1`` and ``+1`` sit on *both* sides of it.  The trial
+    vector ``v = cos(theta) e2 + sin(theta) (e1 + e3) / sqrt 2`` has Rayleigh
+    quotient ``rho = 0`` and residual ``r = sin(theta) (e3 - e1) / sqrt 2``.
+
+    Every hypothesis of the tan theta theorem holds except one-sidedness
+    (``spec A0 = {0}``, ``delta = 1``), and its conclusion ``delta tan(theta) <=
+    ||r|| = sin(theta)`` fails for every ``0 < theta < pi/2``.  The sin theta
+    theorem, whose gap may be two-sided, holds with equality.  (Davis and Kahan
+    make the same point with their Example 6.1.)
+    """
+
+    theta: float
+    delta: float = 1.0
+
+    @property
+    def A(self) -> np.ndarray:
+        return np.diag([-self.delta, 0.0, self.delta])
+
+    @property
+    def v(self) -> np.ndarray:
+        c, s = math.cos(self.theta), math.sin(self.theta)
+        return np.array([s / math.sqrt(2), c, s / math.sqrt(2)])
+
+    @property
+    def rho(self) -> float:
+        return float(self.v @ self.A @ self.v)
+
+    @property
+    def residual(self) -> np.ndarray:
+        return self.A @ self.v - self.rho * self.v
+
+    @property
+    def residual_norm(self) -> float:
+        return float(np.linalg.norm(self.residual))
+
+    def verify(self, *, atol: float = 1e-12) -> None:
+        assert abs(self.rho) <= atol
+        assert math.isclose(line_angle(self.v, np.array([0.0, 1.0, 0.0])), self.theta, abs_tol=1e-9)
+        assert math.isclose(self.residual_norm, self.delta * math.sin(self.theta), abs_tol=atol)
+        if 0 < self.theta < math.pi / 2:
+            assert self.delta * math.tan(self.theta) > self.residual_norm
 
 
 # The concrete instances drawn on the slides.  Keeping them here lets the tests
@@ -429,6 +545,10 @@ COMPONENT_EXAMPLE = SpectralComponents(
 SHARP_DELTA = 1.25
 
 TWO_DIRECTIONS = TwoDirections(lam_u=0.8, lam_w=2.6, theta=math.radians(35.0))
+TWO_SIDED = TwoSidedTrial(theta=math.pi / 4)
+# The family comparison slide uses the gap example at g = 0.1, where the four
+# theorems' gaps (0.18, 0.18, 0.26, 0.10) are far enough apart to see.
+FAMILY_EXAMPLE_GAP = 0.1
 
 SYLVESTER_EXAMPLE = SylvesterGrid(
     lam=(-1.9, -1.35, 1.4, 2.05),

@@ -2241,14 +2241,14 @@ class S12Lean(DeckSlide):
 
 class S13Family(DeckSlide):
     title = "The family: four theorems"
-    kicker = r"Davis \& Kahan (1970), Section 2; this deck covered the first"
+    kicker = r"Davis \& Kahan (1970), Section 2; all four are proved in Lean"
     depth = "*"
 
     def body(self) -> None:
         self.say(
-            "The sin Theta theorem is the first of four. Each has a directed, residual "
-            "form with sin Theta0 or tan Theta0; three also have an ambient form in H. "
-            "The next decks cover tan Theta, sin 2 Theta and tan 2 Theta."
+            "The four theorems side by side. Each has a directed, residual form; three also have an "
+            "ambient form in H. What changes from row to row is which spectra the gap separates, and "
+            "whether the gap may be on both sides."
         )
         rows = [
             (r"\textbf{theorem}", r"\textbf{conclusions}", r"\textbf{hypotheses beyond self-adjointness}"),
@@ -2256,7 +2256,7 @@ class S13Family(DeckSlide):
             (
                 r"$\tan\Theta$",
                 r"$\delta\norm{\tan\Theta_0}\le\norm{R}$, \ $\delta\norm{\tan\Theta}\le\norm{H}$",
-                r"one-sided gap; $A_0=E_0^{*}(A+H)E_0$",
+                r"one-sided gap, $A_0$ vs $\Lambda_1$; $A_0=E_0^{*}(A+H)E_0$",
             ),
             (
                 r"$\sin2\Theta$",
@@ -2271,10 +2271,10 @@ class S13Family(DeckSlide):
         ]
         cells = [[tex(c, size=26, color=FG if i else MUTED) for c in row] for i, row in enumerate(rows)]
         col_w = [max(r[j].width for r in cells) for j in range(3)]
-        gutter, row_h = 0.55, 0.78
+        gutter, row_h = 0.55, 0.64
         total_w = sum(col_w) + 2 * gutter
         x_left = -total_w / 2
-        y_top = 2.1
+        y_top = 2.2
         for i, row in enumerate(cells):
             x = x_left
             for j, cell in enumerate(row):
@@ -2287,13 +2287,37 @@ class S13Family(DeckSlide):
         ).move_to([0, y_top - row_h, 0])
         self.play(FadeIn(table), Create(rule))
         self.play(Create(highlight))
-        foot = tex(
+        foot = para(
             r"All constants are best possible. All hold for every unitarily invariant norm, in infinite "
             r"dimensions, and for unbounded self-adjoint operators under the paper's domain conditions.",
-            size=24,
+            width=12.6,
+            size=22,
             color=MUTED,
-        ).to_edge(DOWN, buff=0.75)
+            align="centering",
+        ).to_edge(DOWN, buff=0.7)
         self.play(FadeIn(foot))
+
+        self.say(
+            "All four are proved in Lean, each for real or complex scalars, possibly unbounded self-adjoint "
+            "operators and every unitarily invariant norm, with only Lean's standard axioms."
+        )
+        lean = VGroup(
+            tex(r"In Lean, \texttt{TauCeti.DavisKahan1970.SectionTwo}:", size=22),
+            mono("sinTheta    tanTheta_directed    tanTheta_ambient", size=17),
+            mono("sinTwoTheta    tanTwoTheta_directed    tanTwoTheta_ambient", size=17),
+            para(
+                r"real or complex scalars, possibly unbounded operators, every unitarily invariant norm; "
+                r"\texttt{\#print axioms}: \texttt{propext}, \texttt{Classical.choice}, \texttt{Quot.sound}",
+                width=8.6,
+                size=19,
+                color=MUTED,
+            ),
+        ).arrange(DOWN, aligned_edge=LEFT, buff=0.12)
+        lean.next_to(foot, UP, buff=0.3)
+        lean_bg = Rectangle(
+            width=lean.width + 0.4, height=lean.height + 0.3, fill_color=PANEL, fill_opacity=1, stroke_width=0
+        ).move_to(lean)
+        self.play(FadeIn(lean_bg), FadeIn(lean))
 
 
 # ----------------------------------------------------------------------------

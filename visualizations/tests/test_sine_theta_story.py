@@ -100,3 +100,42 @@ def test_two_directions_example():
     # The residual has a wanted-direction part too, so the bound is strict here.
     assert abs(ex.u_part) > 0.1
     assert ex.model.residual_norm > ex.delta * ex.sin_theta + 0.05
+
+
+@pytest.mark.parametrize("gap", [0.02, 0.24, 0.5, 1.0, 3.0])
+def test_family_on_the_perturbed_pair(gap):
+    pair = story.PerturbedPair(gap=gap, eps=story.PERTURBATION_EPS)
+    pair.verify()
+    fam = pair.family()
+    for name in ("tan", "sin2", "tan2"):
+        _, lhs, rhs = fam[name]
+        assert lhs == pytest.approx(rhs)
+    _, lhs, rhs = fam["sin"]
+    assert lhs < rhs
+
+
+def test_tan_two_theta_keeps_the_matching_eigenvector_within_45_degrees():
+    for gap in (1.0, 0.1, 1e-3, 1e-6):
+        pair = story.PerturbedPair(gap=gap, eps=story.PERTURBATION_EPS)
+        assert pair.line_angle < math.pi / 4
+        assert pair.gap * pair.tan_two_theta == pytest.approx(2 * story.PERTURBATION_EPS)
+
+
+@pytest.mark.parametrize("theta_degrees", [5.0, 20.0, 35.0, 60.0, 85.0])
+def test_tan_theta_is_exact_for_two_directions(theta_degrees):
+    ex = story.TwoDirections(0.8, 2.6, math.radians(theta_degrees))
+    ex.verify()
+    assert ex.delta * ex.tan_theta == pytest.approx(ex.residual_norm)
+    assert ex.delta * ex.sin_theta < ex.residual_norm
+
+
+@pytest.mark.parametrize("theta_degrees", [10.0, 45.0, 80.0])
+def test_two_sided_trial_breaks_tan_but_not_sin(theta_degrees):
+    ex = story.TwoSidedTrial(math.radians(theta_degrees))
+    ex.verify()
+
+
+def test_two_sided_slide_numbers():
+    ex = story.TWO_SIDED
+    assert ex.residual_norm == pytest.approx(1 / math.sqrt(2))
+    assert ex.delta * math.tan(ex.theta) == pytest.approx(1.0)
