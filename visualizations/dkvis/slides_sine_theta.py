@@ -540,26 +540,76 @@ def TransformFromCopySafe(source, target, **kwargs):
 
 
 class S03NoGap(DeckSlide):
-    title = "Without a gap, eigenvectors are unstable"
-    kicker = r"Same perturbation $H$; shrink the eigenvalue gap $g=\lambda_1-\lambda_2$"
+    title = "How far can an eigenvector turn? It depends on whether there is a gap"
+    kicker = r"Without a gap, eigenvectors are unstable"
 
     def body(self) -> None:
         eps = story.PERTURBATION_EPS
         g_start, g_end = story.PERTURBATION_START_GAP, story.PERTURBATION_END_GAP
         g = ValueTracker(g_start)
-        plane = Plane([-3.6, -0.8, 0], 1.25, rotate=ELLIPSE_BASE)
+        plane = Plane([-3.75, -0.25, 0], 1.1, rotate=ELLIPSE_BASE)
 
         def pair() -> story.PerturbedPair:
             return story.PerturbedPair(gap=g.get_value(), eps=eps)
 
-        old = always_redraw(lambda: DashedVMobject(ellipse(plane, pair().A, color=MUTED, width=2), num_dashes=60))
-        new = always_redraw(lambda: ellipse(plane, pair().perturbed, color=FG, width=3))
-        old_axis = DashedVMobject(through_origin(plane, [1, 0], 2.2, MUTED, width=2), num_dashes=26)
-        new_axis = always_redraw(lambda: through_origin(plane, pair().perturbed_top_eigenvector, 2.2, EXACT, width=4))
-        arc = always_redraw(lambda: angle_arc(plane, [1, 0], pair().perturbed_top_eigenvector, 2.75, SINE, width=4))
-        theta_lbl = always_redraw(
-            lambda: math(r"\theta", size=32, color=SINE).move_to(plane(2.35 * story.unit(max(pair().theta, 0.12) / 2)))
+        def lam() -> tuple[float, float]:
+            l1, l2 = pair().A.diagonal()
+            return float(l1), float(l2)
+
+        # A: dashed blue ellipse and its eigenvectors, arrows as long as the eigenvalues.
+        old = always_redraw(
+            lambda: DashedVMobject(ellipse(plane, pair().A, color=EXACT, width=2), num_dashes=60).set_opacity(0.8)
         )
+        f1 = always_redraw(lambda: vec(plane.origin, plane([lam()[0], 0.0]), EXACT, width=6))
+        f2 = always_redraw(lambda: vec(plane.origin, plane([0.0, lam()[1]]), EXACT, width=6))
+        f1_lbl = always_redraw(lambda: math(r"\lambda_1", size=28, color=EXACT).next_to(plane([lam()[0], 0.0]), DOWN, buff=0.08))
+        f2_lbl = always_redraw(lambda: math(r"\lambda_2", size=28, color=EXACT).next_to(plane([0.0, lam()[1]]), LEFT, buff=0.08))
+        # A + H: solid white ellipse and its top eigenvector, which turns by theta.
+        new = always_redraw(lambda: ellipse(plane, pair().perturbed, color=FG, width=3))
+        new_axis = always_redraw(lambda: through_origin(plane, pair().perturbed_top_eigenvector, 2.3, FG, width=3))
+        new_lbl = always_redraw(
+            lambda: tex(r"$A+H$", size=22, color=FG).next_to(plane(2.3 * pair().perturbed_top_eigenvector), UR, buff=0.05)
+        )
+        arc = always_redraw(lambda: angle_arc(plane, [1, 0], pair().perturbed_top_eigenvector, 0.95, SINE, width=4))
+        theta_lbl = always_redraw(
+            lambda: math(r"\theta", size=30, color=SINE).move_to(plane(1.2 * story.unit(max(pair().theta, 0.14) / 2)))
+        )
+
+        # The eigenvalues of A on a number line, with the gap between them.
+        lo, hi, x_lo, x_hi, y_nl = 0.75, 2.25, -6.4, -1.1, -3.0
+
+        def X(v: float) -> np.ndarray:
+            return np.array([x_lo + (v - lo) / (hi - lo) * (x_hi - x_lo), y_nl, 0.0])
+
+        nl = Line(X(lo), X(hi), color=MUTED, stroke_width=2)
+        nl_lbl = VGroup(
+            tex(r"eigenvalues", size=20, color=MUTED),
+            tex(r"\cx{exact}{dots: $A$} \ \cx{fg}{ticks: $A+H$}", size=18, color=MUTED),
+        ).arrange(DOWN, aligned_edge=LEFT, buff=0.04).next_to(X(hi), RIGHT, buff=0.1)
+        lam_dots = always_redraw(lambda: VGroup(*[Dot(X(v), radius=0.09, color=EXACT) for v in lam()]))
+        lam_lbls = always_redraw(
+            lambda: VGroup(
+                math(r"\lambda_2", size=24, color=EXACT).next_to(X(lam()[1]), DOWN, buff=0.12).shift(LEFT * 0.12),
+                math(r"\lambda_1", size=24, color=EXACT).next_to(X(lam()[0]), DOWN, buff=0.12).shift(RIGHT * 0.12),
+            )
+        )
+        new_ticks = always_redraw(
+            lambda: VGroup(
+                *[Line(X(v) + UP * 0.16, X(v) + DOWN * 0.16, color=FG, stroke_width=3) for v in pair().perturbed_eigenvalues]
+            )
+        )
+
+        def gap_marker():
+            l1, l2 = lam()
+            a, b = X(l2) + UP * 0.2, X(l1) + UP * 0.2
+            if b[0] - a[0] > 0.3:
+                mark = BraceBetweenPoints(a, b, direction=UP, color=GAP)
+            else:
+                mark = Line(a + UP * 0.1, b + UP * 0.1, color=GAP, stroke_width=4)
+            label = tex(r"gap $g$", size=24, color=GAP).next_to(mark, UP, buff=0.06)
+            return VGroup(mark, label)
+
+        gap = always_redraw(gap_marker)
 
         axes = Axes(
             x_range=[0, 1.0, 0.25],
@@ -592,12 +642,15 @@ class S03NoGap(DeckSlide):
         rows.move_to([3.6, -2.35, 0])
 
         self.say(
-            "Left: A dashed, A + H solid, blue is the top eigenvector of A + H. "
-            "Right: the rotation angle as a function of the gap g, with epsilon fixed at 0.12."
+            "Blue: A, drawn as its ellipse with its two eigenvectors, each arrow as long as its eigenvalue. "
+            "Below, the same two eigenvalues on a number line; the violet bracket is the gap g between them. "
+            "White: A + H for a fixed small H, with its top eigenvector, turned by theta. "
+            "Right: theta as a function of the gap."
         )
-        self.add(old, new, old_axis, new_axis, arc, theta_lbl)
+        left = VGroup(old, f1, f2, f1_lbl, f2_lbl, new, new_axis, new_lbl, arc, theta_lbl, nl, nl_lbl, lam_dots, lam_lbls, new_ticks, gap)
+        self.add(left)
         self.play(
-            FadeIn(VGroup(old, new, old_axis, new_axis, arc, theta_lbl)),
+            FadeIn(left),
             Create(axes),
             FadeIn(x_lbl, y_lbl, y_ticks, x_ticks),
             Create(curve),
@@ -606,9 +659,9 @@ class S03NoGap(DeckSlide):
         self.add(dot)
 
         self.say(
-            "Shrink the gap. The ellipse of A becomes a circle; the eigenvalues still "
-            "move by at most 0.12. But the eigenvector swings towards 45 degrees, and "
-            "that limit does not depend on how small epsilon is."
+            "Now make A more and more round: its two eigenvalues slide together and the gap closes. "
+            "The white ticks, the eigenvalues of A + H, never move more than 0.12 from the blue dots. "
+            "But the eigenvector of A + H swings toward 45 degrees, however small H is."
         )
         self.play(g.animate.set_value(g_end), run_time=6.0, rate_func=rate_functions.ease_in_out_sine)
 
