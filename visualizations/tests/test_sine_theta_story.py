@@ -61,3 +61,11 @@ def test_sylvester_example():
     # The grid uses the gap slide's spectra, so the two pictures agree.
     assert set(ex.a) == set(g["ritz"])
     assert set(ex.lam) <= set(g["unwanted"])
+
+
+def test_two_directions_example():
+    ex = story.TWO_DIRECTIONS
+    ex.verify()
+    # The residual has a wanted-direction part too, so the bound is strict here.
+    assert abs(ex.u_part) > 0.1
+    assert ex.model.residual_norm > ex.delta * ex.sin_theta + 0.05
