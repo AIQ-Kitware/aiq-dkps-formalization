@@ -267,8 +267,10 @@ theorem theorem8_2_perturbationHalfGap_complex
       rw [show (A0 + t • E) - A0 = t • E by abel]
       exact hnormE t ht
     rw [hdiff] at hsin
-    have hlowbnd : Real.sqrt 2 * f t ≤ ‖sinTwoAngleOperator Q (R t)‖ :=
-      sqrt_two_mul_directedGap_le_norm_sinTwoAngleOperator Q (R t) hclose
+    have hlowbnd : Real.sqrt 2 * f t ≤
+        ‖TauCeti.DavisKahanExt.sinTwoAngleOperator Q (R t)‖ :=
+      TauCeti.DavisKahan.Angle.sqrt_two_mul_directedGap_le_norm_sinTwoAngleOperator
+        Q (R t) hclose
     have h2 : Real.sqrt 2 * f t * delta ≤ 2 * (t * gam) := by nlinarith [hsin, hlowbnd]
     have htg : t * gam ≤ gam := by nlinarith [ht.1, ht.2, hgam0]
     have hstrict : Real.sqrt 2 * f t * delta < delta := by nlinarith [h2, htg, hsmall]
