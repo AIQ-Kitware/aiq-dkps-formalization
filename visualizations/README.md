@@ -161,7 +161,12 @@ presenter notes on every build. There are two presentation paths:
 | `D01Planes` | yes | yes | the 3D picture (VTK), ending on an orbit video |
 | `D02Tilt` ... `D05TryIt` | | `*` | the 3D sweeps and the live demo |
 | `S12Lean` | yes | yes | the complete Lean statement, with an orienting caption and a "reading it" build |
-| `S13Family` | | `*` | the four Section 2 theorems |
+| `F01Setup` | | `*` | the shared setup of the four Section 2 theorems: old `A`, new `A+H`, their blocks, and which spectra each theorem separates |
+| `F02TanTheta` | | `*` | the `tan Theta` theorem: Rayleigh--Ritz values and a one-sided gap; exact in two dimensions; fails with a two-sided gap (`diag(-1, 0, 1)`) |
+| `F03SinTwoTheta` | | `*` | the `sin 2Theta` theorem: a gap inside `A+H` alone; equality on the 2x2 example; `theta` vs `90 - theta` and Theorem 8.2 |
+| `F04TanTwoTheta` | | `*` | the `tan 2Theta` theorem: a gap in `A` alone and off-diagonal `H`; the gap example is an equality at every gap; Theorem 8.1's 45-degree ceiling |
+| `F05OneExample` | | `*` | one 2x2 example (`g = 0.1`), four gaps, four bounds: three equalities |
+| `S13Family` | | `*` | summary table of the four theorems, with their Lean names |
 | `P01Claim` | yes | yes | Proposition 4.4: what it claims and why it is plausible |
 | `P02Counterexample` | yes | yes | the `R^4` counterexample: chords, trace norm, the norms table, the Lean repair |
 | `P03Why` | | `*` | concavity of chord length explains the failure and the `Q`-norm repair |
@@ -169,7 +174,8 @@ presenter notes on every build. There are two presentation paths:
 | `S14Summary` | yes | yes | three takeaways |
 
 The modules are `dkvis/slides_sine_theta.py` (2D), `dkvis/slides_sine_theta_3d.py`
-(3D, see below) and `dkvis/slides_prop44.py` (Proposition 4.4). Deck order lives in
+(3D, see below), `dkvis/slides_family.py` (the other three Section 2 theorems)
+and `dkvis/slides_prop44.py` (Proposition 4.4). Deck order lives in
 `dkvis/build_slides.py` (`DECK_SCENES`). There are also `sine-theta` (the full deck
 without the VTK scenes), `sine-theta-3d` and `prop44`.
 
@@ -177,6 +183,8 @@ The Lean facts quoted on the slides were checked against a fresh build with
 `#check` and `#print axioms`:
 
 - `TauCeti.DavisKahan1970.SectionTwo.sinTheta`
+- `SectionTwo.tanTheta_directed`, `tanTheta_ambient`, `sinTwoTheta`,
+  `tanTwoTheta_directed` and `tanTwoTheta_ambient` (all scalar-generic)
 - `proposition4_4_refuted` and `proposition4_4_refutingPair`
 - `directRotation_fullDisplacement_qnorm` and `kyFan_not_isQNorm`
 - `sourceDirectedSinThetaOperator_eq_modulus`

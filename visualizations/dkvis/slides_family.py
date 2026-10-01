@@ -1,0 +1,698 @@
+"""Slides: the other three Davis--Kahan theorems (tan Theta, sin 2Theta, tan 2Theta).
+
+Full deck only.  The four Section 2 theorems share one setup -- an old matrix
+``A``, a new one ``A + H``, and an invariant subspace of each -- and differ in
+*which* two parts of the spectrum the gap separates.  Every number on these
+slides comes from the checked models in :mod:`dkvis.sine_theta_story`:
+
+* :class:`~dkvis.sine_theta_story.TwoDirections` -- tan Theta is exact in two
+  dimensions with a Rayleigh--Ritz value;
+* :class:`~dkvis.sine_theta_story.TwoSidedTrial` -- tan Theta fails when the
+  unwanted spectrum lies on both sides;
+* :class:`~dkvis.sine_theta_story.PerturbedPair` -- the 2x2 example of the gap
+  slides, where tan Theta, sin 2Theta and tan 2Theta are all equalities.
+
+The statements follow the repository's source specification
+(``prose/distilled_literature/DavisKahan1970_part_III.tex``, Section 2 and
+Theorems 8.1--8.2).
+"""
+
+from __future__ import annotations
+
+import math as pymath
+
+import numpy as np
+from manim import (
+    DOWN,
+    LEFT,
+    RIGHT,
+    UP,
+    Arc,
+    BraceBetweenPoints,
+    Create,
+    DashedVMobject,
+    Dot,
+    FadeIn,
+    GrowArrow,
+    Line,
+    Rectangle,
+    Triangle,
+    ValueTracker,
+    VGroup,
+    always_redraw,
+    rate_functions,
+)
+
+from dkvis import sine_theta_story as story
+from dkvis.slide_style import (
+    EXACT,
+    FAINT,
+    FG,
+    GAP,
+    MUTED,
+    RESID,
+    SINE,
+    TRIAL,
+    DeckSlide,
+    boxed,
+    dashed,
+    math,
+    para,
+    tex,
+)
+from dkvis.slides_sine_theta import (
+    ELLIPSE_BASE,
+    RIGHT_COL_X,
+    RIGHT_COL_W,
+    Plane,
+    angle_arc,
+    ellipse,
+    fit_right,
+    readout_rows,
+    segment,
+    through_origin,
+    vec,
+)
+
+TEXT_X = RIGHT_COL_X - 0.2
+TEXT_W = RIGHT_COL_W + 0.3
+FLOOR = -3.4
+
+
+def text_column(*mobs, top: float, buff: float = 0.24) -> VGroup:
+    """The right-hand column, laid out once in its final form (builds only add)."""
+    col = VGroup(*mobs).arrange(DOWN, aligned_edge=LEFT, buff=buff)
+    col.move_to([TEXT_X, top, 0], aligned_edge=UP + LEFT)
+    if col.get_bottom()[1] < FLOOR:
+        col.scale((col.get_top()[1] - FLOOR) / col.height, about_edge=UP + LEFT)
+    for m in col:
+        fit_right(m)
+    return col
+
+
+def axis(lo: float, hi: float, x_lo: float, x_hi: float, y: float):
+    """A number line and its value-to-point map."""
+
+    def X(t: float) -> np.ndarray:
+        return np.array([x_lo + (t - lo) / (hi - lo) * (x_hi - x_lo), y, 0.0])
+
+    return Line(X(lo), X(hi), color=MUTED, stroke_width=2), X
+
+
+def gap_mark(a: np.ndarray, b: np.ndarray, label: str, direction=UP, size: float = 22) -> VGroup:
+    """A violet brace (or a bar when too short for a brace) labelled ``label``."""
+    a, b = (a, b) if a[0] <= b[0] else (b, a)
+    if b[0] - a[0] > 0.3:
+        mark = BraceBetweenPoints(a, b, direction=direction, color=GAP)
+    else:
+        mark = Line(a + direction * 0.1, b + direction * 0.1, color=GAP, stroke_width=4)
+    return VGroup(mark, tex(label, size=size, color=GAP).next_to(mark, direction, buff=0.05))
+
+
+def rho_marker(point: np.ndarray) -> Triangle:
+    return Triangle(color=TRIAL, fill_color=TRIAL, fill_opacity=1).scale(0.09).rotate(np.pi).move_to(point + UP * 0.13)
+
+
+def two_by_two(plane: Plane, pair: story.PerturbedPair, reach: float = 2.3) -> VGroup:
+    """The 2x2 example in the family's colours: old ``A`` amber (dashed), new ``A + H`` blue."""
+    top = pair.perturbed_top_eigenvector
+    return VGroup(
+        DashedVMobject(ellipse(plane, pair.A, color=TRIAL, width=2), num_dashes=56).set_opacity(0.85),
+        through_origin(plane, [1.0, 0.0], reach, TRIAL, width=3, opacity=0.85),
+        ellipse(plane, pair.perturbed, color=EXACT, width=3),
+        through_origin(plane, top, reach, EXACT, width=3.5),
+        angle_arc(plane, [1.0, 0.0], top, 0.9 * plane.scale, SINE, width=4),
+    )
+
+
+# ----------------------------------------------------------------------------
+# F1. The shared setup
+# ----------------------------------------------------------------------------
+
+
+class F01Setup(DeckSlide):
+    depth = "*"
+    title = "Four theorems, one setup"
+    kicker = r"An old matrix $A$, a new one $A+H$, and an invariant subspace of each"
+
+    def body(self) -> None:
+        line_old, X_old = axis(0.3, 3.2, -6.5, -0.9, 1.45)
+        line_new, X_new = axis(0.3, 3.2, -6.5, -0.9, 0.05)
+
+        def spectrum(line, X, wanted, rest, color, caption, w_name, r_name) -> VGroup:
+            y = X(0.0)[1]
+            box = Rectangle(
+                width=X(wanted[-1])[0] - X(wanted[0])[0] + 0.45, height=0.42,
+                stroke_color=color, stroke_width=2, fill_color=color, fill_opacity=0.12,
+            ).move_to((X(wanted[0]) + X(wanted[-1])) / 2)
+            dots = VGroup(
+                *[Dot(X(t), radius=0.08, color=color) for t in wanted],
+                *[Dot(X(t), radius=0.08, color=MUTED) for t in rest],
+            )
+            cap = tex(caption, size=22, color=color).move_to([X(0.3)[0], y + 0.5, 0], aligned_edge=LEFT)
+            w = math(w_name, size=28, color=color).next_to(box, DOWN, buff=0.08)
+            r = math(r_name, size=28, color=MUTED).next_to((X(rest[0]) + X(rest[-1])) / 2, DOWN, buff=0.22)
+            return VGroup(line, box, dots, cap, w, r)
+
+        old = spectrum(line_old, X_old, (0.6, 0.95), (2.0, 2.45, 2.9), TRIAL, r"eigenvalues of the old $A$", r"A_0", r"A_1")
+        new = spectrum(line_new, X_new, (0.7, 1.1), (1.85, 2.55, 2.8), EXACT, r"eigenvalues of the new $A+H$", r"\Lambda_0", r"\Lambda_1")
+
+        head = tex(r"Which eigenvalues each theorem keeps apart:", size=24)
+        rows = [
+            (r"$\sin\Theta$", r"$\cx{trial}{A_0}$ vs $\Lambda_1$", r"interval/exterior"),
+            (r"$\tan\Theta$", r"$\cx{trial}{A_0}$ vs $\Lambda_1$", r"one-sided; $A_0$ Rayleigh--Ritz"),
+            (r"$\sin2\Theta$", r"$\cx{exact}{\Lambda_0}$ vs $\Lambda_1$", r"interval/exterior"),
+            (r"$\tan2\Theta$", r"$\cx{trial}{A_0}$ vs $A_1$", r"one-sided; $H_0=H_1=0$"),
+        ]
+        cells = [[tex(c, size=22, color=SINE if j == 0 else FG) for j, c in enumerate(r)] for r in rows]
+        xs = (-6.4, -5.1, -3.3)
+        table = VGroup()
+        for i, row in enumerate(cells):
+            for x, cell in zip(xs, row):
+                cell.move_to([x, -1.45 - 0.45 * i, 0], aligned_edge=LEFT)
+                table.add(cell)
+        head.move_to([-6.4, -0.95, 0], aligned_edge=LEFT)
+
+        size, w = 21, TEXT_W
+        p_old = para(
+            r"\cx{trial}{Amber, the old $A$:} $\cx{trial}{E_0}$ is an orthonormal basis of an invariant subspace "
+            r"of $A$ (its wanted eigenvectors), with block $\cx{trial}{A_0}=E_0^*AE_0$; $A_1$ is the rest of $A$.",
+            width=w, size=size,
+        )
+        p_new = para(
+            r"\cx{exact}{Blue, the new $A+H$:} $\cx{exact}{F_0}$ spans the corresponding invariant subspace of $A+H$, "
+            r"with block $\cx{exact}{\Lambda_0}$; $\Lambda_1$ is the rest.",
+            width=w, size=size,
+        )
+        p_ang = para(
+            r"$\cx{sine}{\Theta_0}$: the angles between the two subspaces. $\cx{sine}{\Theta}$: the same angles seen "
+            r"from both subspaces, so each nonzero angle appears twice.",
+            width=w, size=size,
+        )
+        p_res = para(
+            r"The residual $\cx{resid}{R}=(A+H)E_0-E_0A_0$ equals $HE_0$. In $A$'s eigenbasis "
+            r"$H=\left(\begin{smallmatrix}H_0&B^*\\ B&H_1\end{smallmatrix}\right)$: $B$ couples wanted with unwanted "
+            r"directions, $H_0$ and $H_1$ act within them.",
+            width=w, size=size,
+        )
+        p_forms = para(
+            r"Each theorem has a \emph{directed} form, with $\Theta_0$ and $\norm{R}$; the last three also have an "
+            r"\emph{ambient} form, with $\Theta$ and $\norm{H}$.",
+            width=w, size=size,
+        )
+        p_bridge = para(
+            r"This is the earlier setting renamed: there the matrix we have was called $A$ and $E_0$ was any "
+            r"orthonormal trial basis; here the matrix we have is $A+H$.",
+            width=w, size=size - 1, color=MUTED,
+        )
+        col = text_column(p_old, p_new, p_ang, p_res, p_forms, p_bridge, top=self.content_top - 0.1)
+
+        self.say(
+            "The sin Theta theorem is the first of four in Section 2 of the paper. All four share one setup: "
+            "an old matrix A with an invariant subspace spanned by E0, in amber, and a new matrix A + H with "
+            "the corresponding invariant subspace spanned by F0, in blue. Their blocks are A0, A1 and Lambda0, Lambda1."
+        )
+        self.play(FadeIn(old), FadeIn(new), FadeIn(col[0]), FadeIn(col[1]))
+
+        self.say(
+            "Theta0 is the angles between the two subspaces; the residual is H E0; and H splits into the part B "
+            "that couples wanted with unwanted directions and the parts H0, H1 that act within them. "
+            "Each theorem has a directed form with Theta0 and R, and three have an ambient form with Theta and H. "
+            "Notation warning: earlier the matrix we have was called A; here it is A + H."
+        )
+        self.play(FadeIn(col[2]), FadeIn(col[3]), FadeIn(col[4]), FadeIn(col[5]))
+
+        self.say(
+            "What distinguishes the four theorems is which two parts of the spectrum the gap keeps apart. "
+            "sin Theta and tan Theta compare the trial values A0 with the new unwanted eigenvalues; sin 2 Theta "
+            "compares the new matrix with itself; tan 2 Theta compares the old matrix with itself."
+        )
+        self.play(FadeIn(head), FadeIn(table))
+
+
+# ----------------------------------------------------------------------------
+# F2. tan Theta
+# ----------------------------------------------------------------------------
+
+
+class F02TanTheta(DeckSlide):
+    depth = "*"
+    title = r"The $\tan\Theta$ theorem: a one-sided gap"
+    kicker = r"Rayleigh--Ritz trial values, and every unwanted eigenvalue on the same side"
+
+    def body(self) -> None:
+        ex = story.TWO_DIRECTIONS
+        ex.verify()
+        bad = story.TWO_SIDED
+        bad.verify()
+        th = ex.theta
+        plane = Plane([-5.75, -0.75, 0], 2.05)
+        v = np.array([pymath.cos(th), pymath.sin(th)])
+        tan_pt = np.array([1.0, ex.tan_theta])
+
+        u_axis = Line(plane([-0.15, 0]), plane([1.3, 0]), color=EXACT, stroke_width=3)
+        w_axis = Line(plane([0, -0.1]), plane([0, 1.15]), color=MUTED, stroke_width=3)
+        u_lbl = tex(r"$u$: wanted eigenvector", size=20, color=EXACT).next_to(plane([1.3, 0]), RIGHT, buff=0.1)
+        w_lbl = tex(r"$w$: unwanted", size=20, color=MUTED).next_to(plane([0, 1.15]), UP, buff=0.06)
+        circle = Arc(radius=plane.scale, start_angle=0, angle=np.radians(62), arc_center=plane.origin, color=FAINT, stroke_width=2)
+        v_arrow = vec(plane.origin, plane(v), TRIAL, width=6)
+        v_lbl = math(r"v", size=30, color=TRIAL).next_to(plane(v), UP, buff=0.08).shift(LEFT * 0.12)
+        ray = dashed(plane(v), plane(tan_pt), TRIAL, 1.5)
+        arc = angle_arc(plane, [1, 0], v, 0.42, FG, width=3)
+        th_lbl = math(r"\theta", size=26).move_to(plane(0.3 * story.unit(th / 2)))
+        sin_seg = segment(plane([v[0], 0]), plane(v), SINE, width=7)
+        sin_lbl = math(r"\sin\theta", size=24, color=SINE).next_to(plane([v[0], v[1] / 2]), LEFT, buff=0.08)
+        tan_seg = segment(plane([1.0, 0]), plane(tan_pt), SINE, width=7)
+        tan_lbl = math(r"\tan\theta", size=24, color=SINE).next_to(plane([1.0, tan_pt[1] / 2]), RIGHT, buff=0.08)
+        one = math(r"1", size=22, color=MUTED).next_to(plane([1.0, 0]), DOWN, buff=0.08)
+        r_arrow = vec(plane.origin, plane(ex.r), RESID, width=5)
+        r_lbl = math(r"r", size=28, color=RESID).next_to(plane(ex.r), UP, buff=0.06)
+
+        nl, X = axis(0.5, 2.9, -6.6, -1.3, -1.85)
+        spectrum = VGroup(
+            nl,
+            Dot(X(ex.lam_u), radius=0.08, color=EXACT),
+            Dot(X(ex.lam_w), radius=0.08, color=MUTED),
+            math(r"\lambda_u", size=22, color=EXACT).next_to(X(ex.lam_u), DOWN, buff=0.1),
+            math(r"\lambda_w", size=22, color=MUTED).next_to(X(ex.lam_w), DOWN, buff=0.1),
+            rho_marker(X(ex.rho)),
+            math(r"\rho", size=22, color=TRIAL).next_to(X(ex.rho), DOWN, buff=0.1),
+        )
+        one_sided = VGroup(
+            gap_mark(X(ex.rho) + UP * 0.25, X(ex.lam_w) + UP * 0.25, r"$\delta$", size=19),
+            tex(r"one-sided", size=19, color=MUTED).next_to(X(2.9), RIGHT, buff=0.12),
+        )
+
+        # The two-sided counterexample, on its own small number line.
+        nl2, X2 = axis(-1.35, 1.35, -6.4, -2.4, -3.0)
+        both = VGroup(
+            nl2,
+            Dot(X2(-1.0), radius=0.08, color=MUTED),
+            Dot(X2(0.0), radius=0.08, color=EXACT),
+            Dot(X2(1.0), radius=0.08, color=MUTED),
+            rho_marker(X2(0.0)),
+            math(r"-1", size=20, color=MUTED).next_to(X2(-1.0), DOWN, buff=0.08),
+            math(r"0", size=20, color=EXACT).next_to(X2(0.0), DOWN, buff=0.08),
+            math(r"1", size=20, color=MUTED).next_to(X2(1.0), DOWN, buff=0.08),
+            gap_mark(X2(-1.0) + UP * 0.22, X2(0.0) + UP * 0.22, r"$\delta$", size=19),
+            gap_mark(X2(0.0) + UP * 0.22, X2(1.0) + UP * 0.22, r"$\delta$", size=19),
+            tex(r"two-sided", size=19, color=MUTED).next_to(X2(1.35), RIGHT, buff=0.12),
+        )
+
+        size, w = 22, TEXT_W
+        hyp = para(
+            r"\textbf{Hypotheses.} The trial matrix is the Rayleigh--Ritz one, $\cx{trial}{A_0}=E_0^*(A+H)E_0$ "
+            r"(equivalently $H_0=0$), with eigenvalues in $[\beta,\alpha]$, and every unwanted eigenvalue of $A+H$ "
+            r"is at least $\alpha+\delta$: all on one side.",
+            width=w, size=size,
+        )
+        box = boxed(
+            math(
+                r"\cx{gap}{\delta}\norm{\cx{sine}{\tan\Theta_0}}\le\norm{\cx{resid}{R}},\qquad"
+                r"\cx{gap}{\delta}\norm{\cx{sine}{\tan\Theta}}\le\norm{H}",
+                size=32,
+            ),
+            color=SINE,
+            pad=0.18,
+        )
+        why = para(
+            r"$\tan\theta\ge\sin\theta$, so this is stronger than the $\sin\Theta$ theorem, by a lot for large angles, "
+            r"and it rules out $\theta=90^\circ$. In two dimensions it is exact:",
+            width=w, size=size,
+        )
+        nums = math(
+            rf"\delta\sin\theta={ex.delta * ex.sin_theta:.3f}\ <\ \delta\tan\theta={ex.delta * ex.tan_theta:.3f}"
+            rf"\ =\ \norm{{\cx{{resid}}{{r}}}}={ex.residual_norm:.3f}",
+            size=28,
+        )
+        bad_txt = para(
+            r"\textbf{One-sidedness is essential.} Take $A=\operatorname{diag}(-1,0,1)$, wanted eigenvalue $0$, and "
+            r"$v=\cos\theta\,e_2+\sin\theta\,(e_1+e_3)/\sqrt2$. Then $\rho=0$, $\delta=1$ on \emph{both} sides and "
+            rf"$\norm{{r}}=\sin\theta$: the $\sin\Theta$ bound is an equality, but $\delta\tan\theta\le\norm{{r}}$ fails "
+            rf"for every $\theta>0$ (at $45^\circ$: $1>{bad.residual_norm:.3f}$).",
+            width=w, size=size - 1,
+        )
+        cite = para(r"Davis and Kahan make the same point with their Example~6.1.", width=w, size=size - 2, color=MUTED)
+        col = text_column(hyp, box, VGroup(why, nums).arrange(DOWN, aligned_edge=LEFT, buff=0.12), VGroup(bad_txt, cite).arrange(DOWN, aligned_edge=LEFT, buff=0.08), top=self.content_top - 0.1)
+
+        self.say(
+            "The tan Theta theorem. One wanted eigenvector u and one unwanted w, a trial vector v at angle theta. "
+            "On the unit circle sin theta is the height of v; tan theta is the height where the ray through v "
+            "meets the vertical line at 1. tan theta is always the larger, and it blows up at 90 degrees."
+        )
+        self.play(Create(u_axis), Create(w_axis), FadeIn(u_lbl, w_lbl, circle))
+        self.play(GrowArrow(v_arrow), FadeIn(v_lbl, arc, th_lbl, sin_seg, sin_lbl, ray, tan_seg, tan_lbl, one), FadeIn(col[0]))
+
+        self.say(
+            "The hypotheses: the trial value is the Rayleigh quotient, and all unwanted eigenvalues lie on one side, "
+            "at least delta beyond it. Then tan replaces sin, both for the residual and for H."
+        )
+        self.play(FadeIn(spectrum), FadeIn(one_sided), FadeIn(col[1]))
+
+        self.say(
+            "In two dimensions the tan Theta bound is exact: delta tan theta equals the length of the residual, "
+            "while delta sin theta falls short."
+        )
+        self.play(GrowArrow(r_arrow), FadeIn(r_lbl), FadeIn(col[2]))
+
+        self.say(
+            "Why one-sided? Put unwanted eigenvalues on both sides, at minus 1 and plus 1, and a trial vector "
+            "leaning equally toward both. The Rayleigh quotient stays at 0, the residual is sin theta, so the sin "
+            "Theta theorem holds with equality, but tan theta is bigger than sin theta, so the tan Theta "
+            "conclusion fails. Davis and Kahan's Example 6.1 makes the same point."
+        )
+        self.play(FadeIn(both), FadeIn(col[3]))
+
+
+# ----------------------------------------------------------------------------
+# F3. sin 2Theta
+# ----------------------------------------------------------------------------
+
+
+class F03SinTwoTheta(DeckSlide):
+    depth = "*"
+    title = r"The $\sin2\Theta$ theorem: a gap inside the new matrix"
+    kicker = r"No condition on the trial values; the price is the double angle"
+
+    def body(self) -> None:
+        eps = story.PERTURBATION_EPS
+        pair = story.PerturbedPair(gap=story.PERTURBATION_START_GAP, eps=eps)
+        pair.verify()
+        plane = Plane([-4.2, 0.55, 0], 0.82, rotate=ELLIPSE_BASE)
+        picture = two_by_two(plane, pair)
+        th_lbl = math(r"\theta", size=26, color=SINE).move_to(plane(1.2 * story.unit(pair.theta / 2 + 0.12)))
+        key = VGroup(
+            tex(r"\cx{trial}{dashed: old $A$ and its top eigenvector}", size=18),
+            tex(r"\cx{exact}{solid: new $A+H$ and its top eigenvector}", size=18),
+        ).arrange(DOWN, aligned_edge=LEFT, buff=0.05).move_to([-6.9, 2.3, 0], aligned_edge=UP + LEFT)
+
+        lam1, lam0 = pair.perturbed_eigenvalues[1], pair.perturbed_eigenvalues[0]
+        nl, X = axis(0.8, 2.2, -6.5, -1.9, -1.45)
+        spectrum = VGroup(
+            nl,
+            Dot(X(lam0), radius=0.08, color=EXACT),
+            Dot(X(lam1), radius=0.08, color=MUTED),
+            math(r"\Lambda_0", size=24, color=EXACT).next_to(X(lam0), DOWN, buff=0.1),
+            math(r"\Lambda_1", size=24, color=MUTED).next_to(X(lam1), DOWN, buff=0.1),
+            tex(r"eigenvalues of $A+H$", size=19, color=MUTED).next_to(X(2.2), RIGHT, buff=0.1),
+        )
+        sep = gap_mark(X(lam1) + UP * 0.22, X(lam0) + UP * 0.22, rf"$\delta={pair.delta_sin_two:.3f}$", size=20)
+
+        # theta and 90 - theta have the same sin 2theta.
+        small = Plane([-6.45, -3.2, 0], 1.05)
+        a, b = np.radians(20.0), np.radians(70.0)
+        twin = VGroup(
+            Line(small([0, 0]), small([1.25, 0]), color=EXACT, stroke_width=3),
+            Line(small([0, 0]), small(1.15 * story.unit(a)), color=TRIAL, stroke_width=3),
+            Line(small([0, 0]), small(1.15 * story.unit(b)), color=TRIAL, stroke_width=3),
+            angle_arc(small, [1, 0], story.unit(a), 0.55, SINE, width=3),
+            angle_arc(small, [1, 0], story.unit(b), 0.32, SINE, width=3),
+            math(r"20^\circ", size=19, color=SINE).next_to(small(1.15 * story.unit(a)), RIGHT, buff=0.06),
+            math(r"70^\circ", size=19, color=SINE).next_to(small(1.15 * story.unit(b)), RIGHT, buff=0.06),
+        )
+        twin_txt = para(
+            rf"$\theta$ and $90^\circ-\theta$ have the same $\sin2\theta$ (here ${pymath.sin(2 * a):.2f}$)",
+            width=3.4, size=20, color=MUTED,
+        ).move_to([-4.6, -2.75, 0], aligned_edge=LEFT)
+
+        size, w = 22, TEXT_W
+        hyp = para(
+            r"\textbf{Hypotheses.} Only the new matrix's own spectrum: $\cx{exact}{\Lambda_0}$ in $[\beta,\alpha]$ and "
+            r"$\Lambda_1$ outside $(\beta-\delta,\alpha+\delta)$. Nothing about the trial values $A_0$.",
+            width=w, size=size,
+        )
+        box = boxed(
+            math(
+                r"\cx{gap}{\delta}\norm{\cx{sine}{\sin2\Theta_0}}\le2\norm{\cx{resid}{R}},\qquad"
+                r"\cx{gap}{\delta}\norm{\cx{sine}{\sin2\Theta}}\le2\norm{H}",
+                size=32,
+            ),
+            color=SINE,
+            pad=0.18,
+        )
+        _, lhs, rhs = pair.family()["sin2"]
+        example = para(
+            rf"In the $2\times2$ example ($g={pair.gap:g}$, $\varepsilon={eps:g}$) the gap of $A+H$ is "
+            rf"$\delta={pair.delta_sin_two:.3f}$, and $\delta\sin2\theta={lhs:.3f}=2\norm{{R}}$: an equality.",
+            width=w, size=size,
+        )
+        price = para(
+            r"\textbf{The price.} $\sin2\theta$ cannot tell $\theta$ from $90^\circ-\theta$, and the theorem accepts "
+            r"\emph{any} invariant subspace $F_0$ of $A+H$ whose spectrum splits this way. Even with $H=0$ a "
+            r"mismatched $F_0$ can be $90^\circ$ away, where $\sin2\theta=0$.",
+            width=w, size=size,
+        )
+        thm82 = para(
+            r"Theorem 8.2 adds $\norm{H}_2<\delta/2$ (or $\norm{R}_2<\delta/2$) and "
+            r"$\operatorname{spec}A_0\subset[\beta-\delta/2,\alpha+\delta/2]$. Then every angle is below $45^\circ$, "
+            r"so a small $\sin2\Theta$ does mean a small $\Theta$.",
+            width=w, size=size - 1, color=MUTED,
+        )
+        col = text_column(hyp, box, example, price, thm82, top=self.content_top - 0.1)
+
+        self.say(
+            "The sin 2 Theta theorem asks for a gap inside the new matrix alone: its wanted eigenvalues Lambda0 "
+            "separated from the rest, Lambda1. Nothing is assumed about the trial values. The conclusion bounds "
+            "sin 2 Theta, with a factor 2."
+        )
+        self.play(FadeIn(picture, th_lbl, key), FadeIn(col[0]))
+        self.play(FadeIn(spectrum), FadeIn(sep), FadeIn(col[1]))
+
+        self.say(
+            "On the 2 by 2 example from the gap slides the bound is an equality: delta here is the gap between "
+            "the two eigenvalues of A + H."
+        )
+        self.play(FadeIn(col[2]))
+
+        self.say(
+            "The price of the double angle: sin 2 theta is the same for theta and 90 minus theta. And the theorem "
+            "lets F0 be any invariant subspace with that spectral split, so a small sin 2 Theta does not by itself "
+            "say the angle is small. Theorem 8.2 adds a smallness condition that pins it to the acute branch."
+        )
+        self.play(FadeIn(twin, twin_txt), FadeIn(col[3]), FadeIn(col[4]))
+
+
+# ----------------------------------------------------------------------------
+# F4. tan 2Theta
+# ----------------------------------------------------------------------------
+
+
+class F04TanTwoTheta(DeckSlide):
+    depth = "*"
+    title = r"The $\tan2\Theta$ theorem: a gap in the old matrix"
+    kicker = r"An a priori bound: only $A$'s spectrum matters, and $H$ is off-diagonal"
+
+    def body(self) -> None:
+        eps = story.PERTURBATION_EPS
+        g = ValueTracker(story.PERTURBATION_START_GAP)
+        plane = Plane([-4.2, 0.6, 0], 0.82, rotate=ELLIPSE_BASE)
+
+        def pair() -> story.PerturbedPair:
+            return story.PerturbedPair(gap=g.get_value(), eps=eps)
+
+        picture = always_redraw(lambda: two_by_two(plane, pair()))
+        th_lbl = always_redraw(
+            lambda: math(r"\theta", size=26, color=SINE).move_to(plane(1.1 * story.unit(max(pair().theta, 0.2) / 2)))
+        )
+        key = VGroup(
+            tex(r"\cx{trial}{dashed: old $A$ and its top eigenvector}", size=18),
+            tex(r"\cx{exact}{solid: new $A+H$ and its top eigenvector}", size=18),
+        ).arrange(DOWN, aligned_edge=LEFT, buff=0.05).move_to([-6.9, 2.3, 0], aligned_edge=UP + LEFT)
+
+        nl, X = axis(0.8, 2.2, -6.5, -1.9, -1.45)
+
+        def old_spectrum():
+            lam0, lam1 = pair().A.diagonal()
+            return VGroup(
+                Dot(X(lam0), radius=0.08, color=TRIAL),
+                Dot(X(lam1), radius=0.08, color=MUTED),
+                math(r"A_0", size=24, color=TRIAL).next_to(X(lam0), DOWN, buff=0.1).shift(RIGHT * 0.2),
+                math(r"A_1", size=24, color=MUTED).next_to(X(lam1), DOWN, buff=0.1).shift(LEFT * 0.2),
+                gap_mark(X(lam1) + UP * 0.22, X(lam0) + UP * 0.22, r"$\delta=g$", size=20),
+            )
+
+        spectrum = VGroup(nl, always_redraw(old_spectrum), tex(r"eigenvalues of $A$", size=19, color=MUTED).next_to(X(2.2), RIGHT, buff=0.1))
+        rows_l = readout_rows([(r"g =", lambda: g.get_value(), FG, 2, None), (r"\norm{H}_2 =", lambda: eps, FG, 2, None)], size=24)
+        rows_r = readout_rows(
+            [
+                (r"\theta =", lambda: pymath.degrees(pair().line_angle), SINE, 1, r"^\circ"),
+                (r"g\tan2\theta =", lambda: g.get_value() * pair().tan_two_theta, FG, 3, None),
+            ],
+            size=24,
+        )
+        rows_l.move_to([-5.4, -2.65, 0])
+        rows_r.move_to([-2.5, -2.65, 0])
+
+        size, w = 22, TEXT_W
+        hyp = para(
+            r"\textbf{Hypotheses.} Only the old matrix's own spectrum, one-sided: every eigenvalue of $A_1$ at least "
+            r"$\delta$ beyond those of $\cx{trial}{A_0}$. And $H_0=H_1=0$: in $A$'s eigenbasis $H$ only couples "
+            r"wanted with unwanted directions.",
+            width=w, size=size,
+        )
+        box = boxed(
+            math(
+                r"\cx{gap}{\delta}\norm{\cx{sine}{\tan2\Theta_0}}\le2\norm{\cx{resid}{R}},\qquad"
+                r"\cx{gap}{\delta}\norm{\cx{sine}{\tan2\Theta}}\le2\norm{H}",
+                size=32,
+            ),
+            color=SINE,
+            pad=0.18,
+        )
+        prior = para(r"Nothing is assumed about $A+H$: an \emph{a priori} bound, from $A$ and $H$ alone.", width=w, size=size)
+        example = para(
+            r"The gap example from the start is exactly this case, and the bound is an equality at every gap: "
+            rf"$g\tan2\theta=2\varepsilon={2 * eps:.2f}$. As $g\to0$, $\tan2\theta\to\infty$, so $2\theta\to90^\circ$ "
+            r"and $\theta\to45^\circ$, never beyond.",
+            width=w, size=size,
+        )
+        thm81 = para(
+            r"Theorem 8.1: if $F_0$ is the matching spectral subspace of $A+H$ (its wanted eigenvalues on $A_0$'s side "
+            r"of the gap, the rest on $A_1$'s), every angle is at most $45^\circ$, however large $H$ is. That is the "
+            r"$45^\circ$ ceiling seen at the start.",
+            width=w, size=size - 1, color=MUTED,
+        )
+        col = text_column(hyp, box, prior, example, thm81, top=self.content_top - 0.1)
+
+        self.say(
+            "The tan 2 Theta theorem needs a gap in the old matrix only, one-sided, and a perturbation with no "
+            "diagonal blocks: it only couples wanted with unwanted directions. Then tan 2 Theta is bounded by "
+            "2 norm H over delta. Nothing about the new spectrum is needed: an a priori bound."
+        )
+        self.add(picture, th_lbl)
+        self.play(FadeIn(picture, th_lbl, key), FadeIn(spectrum), FadeIn(rows_l, rows_r), FadeIn(col[0]), FadeIn(col[1]), FadeIn(col[2]))
+
+        self.say(
+            "This is the example from the gap slides. Close the gap of A: g times tan 2 theta stays at 0.24, "
+            "twice the size of H, the whole way down. The bound is an equality. tan 2 theta grows without bound, "
+            "so 2 theta approaches 90 degrees and theta approaches 45, never more."
+        )
+        self.play(g.animate.set_value(story.PERTURBATION_END_GAP), run_time=6.0, rate_func=rate_functions.ease_in_out_sine)
+        self.play(FadeIn(col[3]))
+
+        self.say(
+            "Theorem 8.1 makes that general: when F0 is the matching spectral subspace of A + H, every angle is at "
+            "most 45 degrees, however large H is. That is the ceiling we saw at the start."
+        )
+        self.play(FadeIn(col[4]))
+
+
+# ----------------------------------------------------------------------------
+# F5. One example, four theorems
+# ----------------------------------------------------------------------------
+
+
+class F05OneExample(DeckSlide):
+    depth = "*"
+    title = r"One $2\times2$ example, four theorems"
+    kicker = r"Same $A$, $H$ and angle; each theorem measures a different gap"
+
+    def body(self) -> None:
+        eps = story.PERTURBATION_EPS
+        pair = story.PerturbedPair(gap=story.FAMILY_EXAMPLE_GAP, eps=eps)
+        pair.verify()
+        fam = pair.family()
+        a0, a1 = pair.A.diagonal()
+        l0, l1 = pair.perturbed_eigenvalues
+        lo, hi, x_lo, x_hi = 1.3, 1.7, -5.55, -0.75
+        line_old, X_old = axis(lo, hi, x_lo, x_hi, 1.75)
+        line_new, X_new = axis(lo, hi, x_lo, x_hi, 0.75)
+
+        def X(t: float, y: float) -> np.ndarray:
+            return np.array([X_old(t)[0], y, 0.0])
+
+        old = VGroup(
+            line_old,
+            Dot(X_old(a0), radius=0.08, color=TRIAL),
+            Dot(X_old(a1), radius=0.08, color=MUTED),
+            math(rf"{a0:.2f}", size=20, color=TRIAL).next_to(X_old(a0), UP, buff=0.1),
+            math(rf"{a1:.2f}", size=20, color=MUTED).next_to(X_old(a1), UP, buff=0.1),
+            tex(r"old $A$", size=22, color=TRIAL).next_to(X_old(lo), LEFT, buff=0.15),
+        )
+        new = VGroup(
+            line_new,
+            Dot(X_new(l0), radius=0.08, color=EXACT),
+            Dot(X_new(l1), radius=0.08, color=MUTED),
+            math(rf"{l0:.2f}", size=20, color=EXACT).next_to(X_new(l0), UP, buff=0.1),
+            math(rf"{l1:.2f}", size=20, color=MUTED).next_to(X_new(l1), UP, buff=0.1),
+            tex(r"new $A+H$", size=22, color=EXACT).next_to(X_new(lo), LEFT, buff=0.15),
+        )
+
+        def span_row(t_from: float, y_from: float, t_to: float, y_to: float, y: float, label: str) -> VGroup:
+            """A violet interval at height ``y`` between two eigenvalues, with dashed guides up to them."""
+            a, b = X(t_from, y), X(t_to, y)
+            bar = VGroup(
+                Line(a, b, color=GAP, stroke_width=4),
+                Line(a + UP * 0.1, a + DOWN * 0.1, color=GAP, stroke_width=3),
+                Line(b + UP * 0.1, b + DOWN * 0.1, color=GAP, stroke_width=3),
+            )
+            guides = VGroup(dashed(X(t_from, y_from), a, FAINT, 1.2), dashed(X(t_to, y_to), b, FAINT, 1.2))
+            text = tex(label, size=21, color=GAP).next_to(bar, UP, buff=0.1)
+            return VGroup(guides, bar, text)
+
+        y_old, y_new = 1.75, 0.75
+        row_sin = span_row(l1, y_new, a0, y_old, -0.45, rf"$\sin\Theta,\ \tan\Theta$: $\cx{{trial}}{{A_0}}$ to $\Lambda_1$, $\delta={fam['sin'][0]:.2f}$")
+        row_sin2 = span_row(l1, y_new, l0, y_new, -1.45, rf"$\sin2\Theta$: $\Lambda_1$ to $\cx{{exact}}{{\Lambda_0}}$, $\delta={fam['sin2'][0]:.2f}$")
+        row_tan2 = span_row(a1, y_old, a0, y_old, -2.45, rf"$\tan2\Theta$: $A_1$ to $\cx{{trial}}{{A_0}}$, $\delta={fam['tan2'][0]:.2f}$")
+
+        def row(name: str, key: str, fn: str, factor: str) -> list:
+            delta, lhs, rhs = fam[key]
+            rel = "=" if pymath.isclose(lhs, rhs, rel_tol=1e-9) else "<"
+            return [
+                math(name, size=24, color=SINE),
+                math(rf"{delta:.2f}", size=24, color=GAP),
+                math(rf"\delta\,{fn}={lhs:.3f}", size=24),
+                math(rel, size=24, color=RESID if rel == "=" else FG),
+                math(rf"{factor}\norm{{R}}={rhs:.2f}", size=24, color=RESID if rel == "=" else FG),
+            ]
+
+        header = [tex(h, size=21, color=MUTED) for h in ("theorem", r"$\delta$", "left side", "", "right side")]
+        table_rows = [
+            header,
+            row(r"\sin\Theta", "sin", r"\sin\theta", ""),
+            row(r"\tan\Theta", "tan", r"\tan\theta", ""),
+            row(r"\sin2\Theta", "sin2", r"\sin2\theta", "2"),
+            row(r"\tan2\Theta", "tan2", r"\tan2\theta", "2"),
+        ]
+        xs = (0.75, 2.0, 2.9, 4.85, 5.25)
+        top = self.content_top - 0.45
+        table = VGroup()
+        for i, cells in enumerate(table_rows):
+            for x, cell in zip(xs, cells):
+                cell.move_to([x, top - 0.55 * i, 0], aligned_edge=LEFT)
+            table.add(VGroup(*cells))
+        rule = Line([0.7, top - 0.27, 0], [6.85, top - 0.27, 0], color=FAINT, stroke_width=2)
+        caption = tex(
+            rf"$g={pair.gap:g}$, $\norm{{H}}_2=\norm{{R}}=\varepsilon={eps:g}$, $\theta={pymath.degrees(pair.line_angle):.1f}^\circ$",
+            size=21, color=MUTED,
+        ).next_to(table, DOWN, buff=0.2, aligned_edge=LEFT)
+        takeaway = para(
+            r"Three of the four are equalities here. The $\sin\Theta$ bound is the only one with room to spare in "
+            r"this example; it is sharp on another (``The constant 1 cannot be improved''). Davis and Kahan state "
+            r"that all four constants are best possible.",
+            width=6.1, size=21,
+        ).next_to(caption, DOWN, buff=0.3, aligned_edge=LEFT)
+
+        self.say(
+            "Put the four side by side on one example: the 2 by 2 from the gap slides, with gap 0.1 and H of size 0.12. "
+            "Old eigenvalues in amber, new in blue. Same matrices, same angle, about 34 degrees."
+        )
+        self.play(FadeIn(old), FadeIn(new), FadeIn(table[0]), Create(rule), FadeIn(caption))
+
+        self.say(
+            "sin Theta and tan Theta measure delta from the trial value, the old wanted eigenvalue, to the new unwanted "
+            "one. With that delta, tan Theta is exact; sin Theta has room to spare."
+        )
+        self.play(FadeIn(row_sin), FadeIn(table[1]), FadeIn(table[2]))
+
+        self.say("sin 2 Theta measures the gap inside the new matrix. Exact again.")
+        self.play(FadeIn(row_sin2), FadeIn(table[3]))
+
+        self.say("tan 2 Theta measures the gap inside the old matrix, the smallest of the three. Exact again.")
+        self.play(FadeIn(row_tan2), FadeIn(table[4]))
+
+        self.say(
+            "So three of the four are equalities on this example, and sin Theta is sharp on another. "
+            "The paper states all four constants are best possible."
+        )
+        self.play(FadeIn(takeaway))
