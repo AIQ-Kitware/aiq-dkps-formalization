@@ -30,6 +30,7 @@ import math as pymath
 
 import numpy as np
 from manim import (
+    GrowFromCenter,
     TransformFromCopy,
     GrowArrow,
     LaggedStart,
@@ -737,6 +738,96 @@ class S03NoGap(DeckSlide):
         plot = VGroup(axes, x_lbl, y_lbl, y_ticks, x_ticks, curve, dot)
         self.play(FadeOut(plot))
         self.play(FadeIn(takeaway, shift=UP * 0.1))
+
+
+# ----------------------------------------------------------------------------
+# 3b. Which eigenvectors do we want?
+# ----------------------------------------------------------------------------
+
+
+class S03bWanted(DeckSlide):
+    """Where "wanted" and "unwanted" come from: a choice made by eigenvalue."""
+
+    title = "Which eigenvectors do we want?"
+    kicker = "Rarely all of them: the ones belonging to a chosen part of the spectrum"
+
+    def body(self) -> None:
+        eigs = [0.35, 0.6, 0.95, 1.3, 1.6, 2.55, 2.85]
+        wanted = [False] * 5 + [True, True]
+        lo, hi, x_lo, x_hi, y_nl = 0.1, 3.1, -6.4, -0.6, 1.25
+
+        def X(t: float) -> np.ndarray:
+            return np.array([x_lo + (t - lo) / (hi - lo) * (x_hi - x_lo), y_nl, 0.0])
+
+        nl = Line(X(lo), X(hi), color=MUTED, stroke_width=2)
+        nl_lbl = tex(r"eigenvalues of $A$", size=22, color=MUTED).next_to(X(lo), DOWN, buff=0.2).align_to(nl, LEFT)
+        dots = VGroup(*[Dot(X(t), radius=0.1, color=EXACT if w else MUTED) for t, w in zip(eigs, wanted)])
+        w_idx = [i for i, w in enumerate(wanted) if w]
+        u_idx = [i for i, w in enumerate(wanted) if not w]
+        w_box = Rectangle(
+            width=X(eigs[w_idx[-1]])[0] - X(eigs[w_idx[0]])[0] + 0.5, height=0.6,
+            stroke_color=EXACT, stroke_width=2, fill_color=EXACT, fill_opacity=0.12,
+        ).move_to((X(eigs[w_idx[0]]) + X(eigs[w_idx[-1]])) / 2)
+        w_lbl = tex(r"\cx{exact}{wanted}", size=26).next_to(w_box, UP, buff=0.12)
+        u_lbl = tex(r"unwanted", size=26, color=MUTED).next_to(
+            (X(eigs[u_idx[0]]) + X(eigs[u_idx[-1]])) / 2, UP, buff=0.42
+        )
+        gap = BraceBetweenPoints(X(eigs[u_idx[-1]]) + DOWN * 0.2, X(eigs[w_idx[0]]) + DOWN * 0.2, direction=DOWN, color=GAP)
+        gap_lbl = tex(r"the gap", size=24, color=GAP).next_to(gap, DOWN, buff=0.06)
+        spaces = VGroup(
+            tex(r"their eigenvectors span $\cx{exact}{U}$, the \emph{wanted} subspace", size=24),
+            tex(r"the rest span $U^{\perp}$, the \emph{unwanted} directions", size=24, color=MUTED),
+        ).arrange(DOWN, aligned_edge=LEFT, buff=0.15).move_to([x_lo, y_nl - 1.15, 0], aligned_edge=UP + LEFT)
+
+        # The same split in a picture: a covariance-like ellipse, its long axis wanted.
+        pic = Plane([-4.4, -2.2, 0], 0.62, rotate=np.radians(20))
+        ell = ellipse(pic, np.diag([2.6, 0.95]), color=FG, width=2.5)
+        ax_u = vec(pic.origin, pic([2.6, 0.0]), EXACT, width=6)
+        ax_w = vec(pic.origin, pic([0.0, 0.95]), MUTED, width=5)
+        ax_u_lbl = tex(r"$U$ (wanted)", size=22, color=EXACT).next_to(pic([2.6, 0.0]), RIGHT, buff=0.12)
+        ax_w_lbl = tex(r"$U^{\perp}$", size=22, color=MUTED).next_to(pic([0.0, 0.95]), LEFT, buff=0.1)
+        picture = VGroup(ell, ax_u, ax_w, ax_u_lbl, ax_w_lbl)
+
+        x0, w = 0.6, 6.2
+        t1 = para(
+            r"A matrix has many eigenvectors, but an application usually needs only a few: "
+            r"those whose eigenvalues lie in a chosen part of the spectrum.",
+            width=w,
+            size=26,
+        )
+        examples = VGroup(
+            tex(r"\textbf{PCA}: the largest eigenvalues of a covariance matrix", size=23),
+            tex(r"\textbf{quantum mechanics}: the lowest-energy states", size=23),
+            tex(r"\textbf{spectral clustering}: the smallest Laplacian eigenvalues", size=23),
+        ).arrange(DOWN, aligned_edge=LEFT, buff=0.14)
+        t2 = para(
+            r"``Wanted'' and ``unwanted'' is that choice, made by eigenvalue. Davis--Kahan asks how well a "
+            r"trial subspace approximates the wanted subspace $\cx{exact}{U}$, and the answer depends on how "
+            r"far the wanted eigenvalues are from the rest: \cx{gap}{the gap}.",
+            width=w,
+            size=24,
+        )
+        col = VGroup(t1, examples, t2).arrange(DOWN, aligned_edge=LEFT, buff=0.35)
+        col.move_to([x0, self.content_top - 0.2, 0], aligned_edge=UP + LEFT)
+        for m in col:
+            fit_right(m)
+
+        self.say(
+            "Before measuring errors: which eigenvectors are we even after? Rarely all of them. An application "
+            "picks a part of the spectrum: in PCA the largest eigenvalues of a covariance matrix, in quantum "
+            "mechanics the lowest energies, in spectral clustering the smallest Laplacian eigenvalues."
+        )
+        self.play(Create(nl), FadeIn(nl_lbl), FadeIn(dots, lag_ratio=0.1), FadeIn(t1), FadeIn(examples))
+
+        self.say(
+            "Those chosen eigenvalues are the wanted ones; their eigenvectors span the wanted subspace U. "
+            "Everything else is unwanted and spans U-perp. In the PCA picture below, U is the long axis of the "
+            "data's ellipse. The gap is the distance between the wanted cluster "
+            "and the rest. That is the setting for the rest of the talk: how well does a trial subspace "
+            "approximate U?"
+        )
+        self.play(FadeIn(w_box), FadeIn(w_lbl), FadeIn(u_lbl))
+        self.play(GrowFromCenter(gap), FadeIn(gap_lbl), FadeIn(spaces), FadeIn(picture), FadeIn(t2))
 
 
 # ----------------------------------------------------------------------------
@@ -2079,6 +2170,7 @@ SCENES = [
     S01Ellipse,
     S02Perturb,
     S03NoGap,
+    S03bWanted,
     S04Angle,
     S04bSinThetaOperator,
     S05Residual,
