@@ -30,6 +30,8 @@ import math as pymath
 
 import numpy as np
 from manim import (
+    TransformFromCopy,
+    GrowArrow,
     LaggedStart,
     RoundedRectangle,
     Text,
@@ -80,6 +82,7 @@ from dkvis.slide_style import (
     DeckSlide,
     MONO_FONT,
     boxed,
+    dashed,
     math,
     mono,
     para,
@@ -965,7 +968,7 @@ class S05Residual(DeckSlide):
             [
                 (r"$A$", r"the matrix whose eigenvectors we want; we can multiply any vector by it "
                          r"(in a perturbation problem, the perturbed $A+H$)", FG),
-                (r"$\cx{exact}{U}$", r"the exact eigendirection we want; in computation we usually have only an approximation", EXACT),
+                (r"$\cx{exact}{U}$", r"the exact eigendirection: the answer we are trying to find", EXACT),
                 (r"$\cx{trial}{v}$", r"our approximation, e.g.\ from an iterative eigensolver", TRIAL),
             ],
             x=-6.75,
@@ -995,18 +998,21 @@ class S05Residual(DeckSlide):
 
         # The right column, laid out once in its final form; builds only add.
         x0, w, size = RIGHT_COL_X - 0.4, RIGHT_COL_W + 0.5, 24
-        p1 = para(r"The error $\cx{sine}{\theta}$ needs $\cx{exact}{U}$, which we do not have.", width=w, size=size)
         p2 = para(
             r"The residual asks: \emph{``If I pretend $v$ is an eigenvector, how badly does that claim fail?''} "
             r"If the claim were true, $Av$ would point exactly along $v$.",
             width=w,
             size=size,
         )
-        p3a = math(r"\rho=v^{*}Av,\qquad \cx{resid}{r}=Av-\rho\,v", size=32)
+        p3a = math(
+            r"Av=\underbrace{\rho\,v}_{\text{best scaling}}+\underbrace{\cx{resid}{r}}_{\text{leftover}},"
+            r"\qquad \rho=v^{*}Av",
+            size=30,
+        )
         p3b = para(
-            r"$\rho v$ is the part of $Av$ along $v$; the \cx{resid}{residual} $r$ is the part that leaves the "
-            r"line through $v$. \textbf{Computable} from $A$ and $v$ alone; a small $\norm{r}$ is a standard "
-            r"stopping criterion for iterative eigensolvers.",
+            r"An eigenvector should only be scaled: $\rho$ is the best scale, $\cx{resid}{r}$ what scaling cannot "
+            r"explain. \textbf{Computable} from $A$ and $v$ alone; a standard eigensolver stopping test. "
+            r"Under a perturbation, $\rho$ absorbs the change of scale and $r$ is the part trying to turn $v$.",
             width=w,
             size=size - 2,
             color=MUTED,
@@ -1028,7 +1034,7 @@ class S05Residual(DeckSlide):
             color=MUTED,
         )
         p5b = boxed(tex(r"Does a small $\cx{resid}{R}$ force a small $\cx{sine}{\sin\Theta_0}$?", size=26), color=FG, pad=0.18)
-        col = VGroup(p1, p2, VGroup(p3a, p3b).arrange(DOWN, aligned_edge=LEFT, buff=0.1),
+        col = VGroup(p2, VGroup(p3a, p3b).arrange(DOWN, aligned_edge=LEFT, buff=0.1),
                      VGroup(p4, p4b).arrange(DOWN, aligned_edge=LEFT, buff=0.12),
                      VGroup(p5a, p5c, p5b).arrange(DOWN, aligned_edge=LEFT, buff=0.12))
         col.arrange(DOWN, aligned_edge=LEFT, buff=0.26)
@@ -1050,7 +1056,7 @@ class S05Residual(DeckSlide):
         )
         self.play(FadeIn(recall.show(3)), FadeIn(e_lines), FadeIn(u_lbl))
         self.add(v, v_lbl, arc, th_lbl)
-        self.play(FadeIn(VGroup(v, v_lbl, arc, th_lbl)), FadeIn(p1))
+        self.play(FadeIn(VGroup(v, v_lbl, arc, th_lbl)))
 
         self.say(
             "But we can test v. The residual asks: if I pretend v is an eigenvector, how badly does that claim "
@@ -1058,22 +1064,23 @@ class S05Residual(DeckSlide):
             "exactly along v. Here it does not."
         )
         self.add(Av, Av_lbl)
-        self.play(FadeIn(VGroup(Av, Av_lbl)), FadeIn(p2))
+        self.play(FadeIn(VGroup(Av, Av_lbl)), FadeIn(col[0]))
 
         self.say(
-            "Split Av into its part along v, rho v, and the rest, the residual r: the part of Av that leaves the "
-            "line through v. That takes one "
+            "An eigenvector should only be scaled. Split Av into the best scaling of v, rho v, and the leftover, "
+            "the residual r: the part of Av that leaves the line through v. Under a perturbation, rho absorbs the "
+            "change of scale and r is the part trying to turn v. Computing r takes one "
             "multiplication by A and one dot product; U never appears, which is why r is computable. "
             "A small residual is a standard stopping criterion for iterative eigensolvers."
         )
         self.add(rho_v, rho_lbl, r, r_lbl)
-        self.play(FadeIn(VGroup(rho_v, rho_lbl, r, r_lbl)), FadeIn(col[2]))
+        self.play(FadeIn(VGroup(rho_v, rho_lbl, r, r_lbl)), FadeIn(col[1]))
 
         self.say(
             "Improve the approximation: theta and the residual shrink together, and r is zero exactly when "
             "v is an eigenvector. We can watch r; we cannot watch theta."
         )
-        self.play(FadeIn(col[3]))
+        self.play(FadeIn(col[2]))
         self.play(phi.animate.set_value(np.radians(6.0)), run_time=3.5, rate_func=rate_functions.ease_in_out_sine)
 
         self.say(
@@ -1083,7 +1090,7 @@ class S05Residual(DeckSlide):
             "of A applied to V that sticks out of V, and it is still computable. The question for the theorem: "
             "does a small R force a small angle?"
         )
-        self.play(FadeIn(col[4]), phi.animate.set_value(np.radians(40.0)), run_time=1.5)
+        self.play(FadeIn(col[3]), phi.animate.set_value(np.radians(40.0)), run_time=1.5)
 
 
 # ----------------------------------------------------------------------------
@@ -1240,17 +1247,173 @@ class S07Theorem(DeckSlide):
 # ----------------------------------------------------------------------------
 
 
-class S08Components(DeckSlide):
-    """The one-vector proof as a bar chart.
+class S08Why(DeckSlide):
+    """Why the theorem holds, with one wanted and one unwanted eigendirection.
 
-    ``short = True`` gives the condensed version for the short deck: the same
-    picture, plain-language captions instead of the equations, three builds.
+    v splits into a part along the wanted eigenvector u and a part along an
+    unwanted eigenvector w, of length sin(theta).  The residual multiplies the
+    w-part by (lambda_w - rho), which the gap makes at least delta in size, and
+    the residual's length is at least its w-part.  rho is the Rayleigh quotient,
+    not lambda_u, so the residual also has a u-part and the first inequality is
+    strict: nothing here relies on the wanted component vanishing.
     """
 
-    title = "Why it is true: one trial vector"
-    kicker = r"Write $v$ in the eigenbasis of $A$ (the proof uses it; the bound does not need it)"
+    title = "Why it is true"
+    kicker = r"Follow the part of $v$ that points the wrong way"
+
+    def body(self) -> None:
+        ex = story.TWO_DIRECTIONS
+        ex.verify()
+        th, s_th = ex.theta, ex.sin_theta
+        plane = Plane([-5.2, -1.55, 0], 2.55)
+        e_u, e_w = np.array([1.0, 0.0]), np.array([0.0, 1.0])
+        v = np.array([np.cos(th), s_th])
+
+        u_axis = Line(plane([-0.35, 0]), plane([1.25, 0]), color=EXACT, stroke_width=3)
+        w_axis = Line(plane([0, -0.15]), plane([0, 1.2]), color=MUTED, stroke_width=3)
+        u_lbl = tex(r"$u$: wanted eigenvector", size=22, color=EXACT).next_to(plane([1.25, 0]), DOWN, buff=0.12).shift(LEFT * 0.6)
+        w_lbl = tex(r"$w$: unwanted eigenvector", size=22, color=MUTED).next_to(plane([0, 1.2]), UP, buff=0.08)
+        v_arrow = vec(plane.origin, plane(v), TRIAL, width=7)
+        v_lbl = math(r"v", size=32, color=TRIAL).next_to(plane(v), UR, buff=0.05)
+        arc = angle_arc(plane, e_u, v, 0.45, FG, width=3)
+        th_lbl = math(r"\theta", size=28).move_to(plane(0.6 * story.unit(th / 2)))
+        cos_part = segment(plane.origin, plane(np.cos(th) * e_u), EXACT, width=9).set_opacity(0.55)
+        left = np.array([-0.045, 0.0])
+        sin_part = segment(plane(left), plane(left + s_th * e_w), SINE, width=10)
+        sin_lbl = math(r"\sin\theta", size=28, color=SINE).next_to(plane(left + s_th * e_w), LEFT, buff=0.12)
+        guides = VGroup(
+            dashed(plane(v), plane(np.cos(th) * e_u), MUTED, 1.5),
+            dashed(plane(v), plane(s_th * e_w), MUTED, 1.5),
+        )
+
+        # The residual's w-part, drawn beside the w-axis so it can be compared with sin(theta).
+        off = np.array([0.045, 0.0])
+        w_res = segment(plane(off), plane(off + ex.w_part * e_w), RESID, width=10)
+        w_res_lbl = math(r"(\lambda_w-\rho)\sin\theta", size=26, color=RESID).next_to(
+            plane(off + ex.w_part * e_w), RIGHT, buff=0.12
+        )
+        r_arrow = vec(plane.origin, plane(ex.r), RESID, width=6)
+        r_lbl = math(r"r", size=30, color=RESID).next_to(plane(ex.r), UL, buff=0.05)
+        r_guide = dashed(plane(ex.r), plane(ex.w_part * e_w), RESID, 1.5)
+
+        # Eigenvalues on a number line under the picture.
+        lo, hi, x_lo, x_hi, y_nl = 0.5, 2.9, -6.6, -1.6, -3.0
+
+        def X(t: float) -> np.ndarray:
+            return np.array([x_lo + (t - lo) / (hi - lo) * (x_hi - x_lo), y_nl, 0.0])
+
+        nl = Line(X(lo), X(hi), color=MUTED, stroke_width=2)
+        dots = VGroup(
+            Dot(X(ex.lam_u), radius=0.08, color=EXACT),
+            Dot(X(ex.lam_w), radius=0.08, color=MUTED),
+        )
+        dot_lbls = VGroup(
+            math(r"\lambda_u", size=24, color=EXACT).next_to(X(ex.lam_u), DOWN, buff=0.12),
+            math(r"\lambda_w", size=24, color=MUTED).next_to(X(ex.lam_w), DOWN, buff=0.12),
+        )
+        rho_mark = Triangle(color=TRIAL, fill_color=TRIAL, fill_opacity=1).scale(0.09).rotate(np.pi).move_to(X(ex.rho) + UP * 0.12)
+        rho_lbl = math(r"\rho", size=24, color=TRIAL).next_to(X(ex.rho), DOWN, buff=0.12)
+        gap_brace = BraceBetweenPoints(X(ex.rho) + UP * 0.2, X(ex.lam_w) + UP * 0.2, direction=UP, color=GAP)
+        gap_lbl = tex(r"at least $\cx{gap}{\delta}$", size=22, color=GAP).next_to(gap_brace, UP, buff=0.04)
+        spectrum = VGroup(nl, dots, dot_lbls, rho_mark, rho_lbl)
+
+        # Right column, laid out once in final form; builds only add.
+        x0, w, size = RIGHT_COL_X - 0.2, RIGHT_COL_W + 0.3, 25
+        t1 = para(
+            r"Split $v$ into its part along the wanted eigenvector $\cx{exact}{u}$ and its part along an "
+            r"unwanted eigenvector $w$.",
+            width=w,
+            size=size,
+        )
+        t1b = boxed(tex(r"$\cx{sine}{\sin\theta}$ = how much of $v$ points the wrong way", size=size), color=SINE, pad=0.15)
+        t2 = para(
+            r"The residual $\cx{resid}{r}=(A-\rho)v$ weights each eigendirection by how far its eigenvalue is "
+            r"from $\rho$. Its $w$-part is $(\lambda_w-\rho)\sin\theta$, and the gap says $\lambda_w$ is at "
+            r"least $\cx{gap}{\delta}$ from $\rho$.",
+            width=w,
+            size=size,
+        )
+        t3 = para(
+            r"The residual may also have a $u$-part, so it is at least as long as its $w$-part:",
+            width=w,
+            size=size,
+        )
+        chain = math(
+            r"\norm{\cx{resid}{r}}\ \ge\ |\lambda_w-\rho|\,\cx{sine}{\sin\theta}\ \ge\ \cx{gap}{\delta}\,\cx{sine}{\sin\theta}",
+            size=32,
+        )
+        nums = tex(
+            rf"here: $\norm{{r}}={ex.model.residual_norm:.3f}\ \ge\ {abs(ex.w_part):.3f}"
+            rf"=\delta\sin\theta$",
+            size=22,
+            color=MUTED,
+        )
+        verdict = para(
+            r"\textbf{The part of $v$ pointing the wrong way always shows up in the residual, "
+            r"scaled by at least $\cx{gap}{\delta}$.}",
+            width=w,
+            size=size,
+        )
+        bridge = para(
+            r"That is the one-vector mechanism. For whole subspaces the same spectral-separation idea becomes "
+            r"a Sylvester equation; getting the sharp constant for every unitarily invariant norm is the "
+            r"technical part of the full theorem.",
+            width=w,
+            size=size - 4,
+            color=MUTED,
+        )
+        col = VGroup(
+            VGroup(t1, t1b).arrange(DOWN, aligned_edge=LEFT, buff=0.15),
+            t2,
+            VGroup(t3, chain, nums).arrange(DOWN, aligned_edge=LEFT, buff=0.12),
+            VGroup(verdict, bridge).arrange(DOWN, aligned_edge=LEFT, buff=0.15),
+        ).arrange(DOWN, aligned_edge=LEFT, buff=0.3)
+        col.move_to([x0, self.content_top - 0.1, 0], aligned_edge=UP + LEFT)
+        floor = -3.45
+        if col.get_bottom()[1] < floor:
+            col.scale((col.get_top()[1] - floor) / col.height, about_edge=UP + LEFT)
+        for m in col:
+            fit_right(m)
+
+        self.say(
+            "Why should a small residual force a small angle? Take one wanted eigenvector u and one unwanted "
+            "eigenvector w. Split the trial vector v into its parts along them. The pink part, along the "
+            "unwanted direction, has length sin theta: it is how much of v points the wrong way."
+        )
+        self.play(Create(u_axis), Create(w_axis), FadeIn(u_lbl, w_lbl))
+        self.play(GrowArrow(v_arrow), FadeIn(v_lbl, arc, th_lbl))
+        self.play(Create(guides), FadeIn(cos_part), FadeIn(sin_part), FadeIn(sin_lbl), FadeIn(col[0]))
+
+        self.say(
+            "Now the residual. A minus rho multiplies every eigendirection by how far its eigenvalue is from "
+            "rho. So the pink part becomes lambda w minus rho times sin theta, in green. And the gap says "
+            "lambda w is at least delta away from rho: the number line below."
+        )
+        self.play(FadeIn(spectrum), FadeIn(col[1]))
+        self.play(GrowFromEdge(gap_brace, LEFT), FadeIn(gap_lbl))
+        self.play(TransformFromCopy(sin_part, w_res), FadeIn(w_res_lbl), run_time=1.5)
+
+        self.say(
+            "The whole residual may also have a part along u, since rho need not be the wanted eigenvalue. "
+            "That can only make it longer. So the length of r is at least its w-part, which is at least delta "
+            "sin theta. The wrong part of v cannot hide from the residual when there is a gap. For whole "
+            "subspaces this becomes a Sylvester equation, and getting the sharp constant for every unitarily "
+            "invariant norm is the technical part of the full theorem."
+        )
+        self.play(GrowArrow(r_arrow), FadeIn(r_lbl), Create(r_guide), FadeIn(col[2]))
+        self.play(FadeIn(col[3]))
+
+
+class S08Components(DeckSlide):
+    """The one-vector argument over many eigendirections, as a bar chart.
+
+    Follows :class:`S08Why`, which makes the same argument with one wanted and
+    one unwanted direction.
+    """
+
+    title = "The same mechanism across the whole spectrum"
+    kicker = r"Each bar is one eigendirection of $A$; the pink bars together are the wrong part of $v$"
     depth = "*"
-    short = False
 
     def body(self) -> None:
         ex = story.COMPONENT_EXAMPLE
@@ -1305,11 +1468,6 @@ class S08Components(DeckSlide):
         res_lbl = tex(r"bars: \cx{resid}{$|\lambda_j-\rho|\,|c_j|$}", size=26).move_to(bar_lbl, aligned_edge=LEFT)
         rx = -0.45
 
-        if self.short:
-            self._short_body(ex, rx, axis, lam_lbl, ticks, window, win_lbl, rho_mark, rho_lbl, coef_bars, bar_lbl,
-                             weight, delta_line, w_lbl, d_lbl, res_bars, res_lbl)
-            return
-
         v_eq = math(r"v=\sum_j c_j f_j,\qquad A f_j=\lambda_j f_j", size=30)
         sin_eq = math(r"\cx{sine}{\sin^2\theta}=\sum_{\lambda_j\notin\text{window}}\cx{sine}{c_j^2}", size=30)
         u_note = tex(r"$\cx{exact}{U}$ = span of the $f_j$ with $\lambda_j$ in the window", size=24, color=MUTED)
@@ -1332,9 +1490,9 @@ class S08Components(DeckSlide):
         ).move_to(tail)
 
         self.say(
-            "Expand v in eigenvectors f_j of A; the bars are |c_j|, placed at their "
-            "eigenvalues. The window around rho contains the wanted eigenvalues, blue; "
-            "the rest, pink, is Lambda1. The pink mass is exactly sin^2 theta."
+            "The same argument with many eigendirections. Expand v in eigenvectors f_j of A; each bar is "
+            "|c_j|, placed at its eigenvalue. The window around rho contains the wanted eigenvalues, blue; "
+            "the rest, pink, is Lambda1. The combined Euclidean length of the pink components is sin theta."
         )
         self.play(Create(axis), FadeIn(lam_lbl, ticks, window, win_lbl, rho_mark, rho_lbl))
         self.play(LaggedStartMapGrow(coef_bars), FadeIn(bar_lbl))
@@ -1359,63 +1517,6 @@ class S08Components(DeckSlide):
         )
         self.play(FadeIn(tail_bg), FadeIn(tail))
 
-    def _short_body(self, ex, rx, axis, lam_lbl, ticks, window, win_lbl, rho_mark, rho_lbl, coef_bars, bar_lbl,
-                    weight, delta_line, w_lbl, d_lbl, res_bars, res_lbl) -> None:
-        w = 7.2
-        t1 = para(
-            r"The bars are the trial vector's components along the eigenvectors of $A$, placed at "
-            r"their eigenvalues. \cx{exact}{Blue}: inside the window around $\rho$; they span $U$. "
-            r"\cx{sine}{Pink}: outside; together they measure $\sin\theta$.",
-            width=w,
-            size=27,
-        )
-        t2 = para(
-            r"The residual multiplies each component by its eigenvalue's distance from $\rho$ "
-            r"(\cx{gap}{violet}). Outside the window that factor is at least $\cx{gap}{\delta}$.",
-            width=w,
-            size=27,
-        )
-        verdict = boxed(math(r"\cx{gap}{\delta}\,\cx{sine}{\sin\theta}\ \le\ \norm{\cx{resid}{r}}", size=40), color=FG)
-        t3 = para(
-            rf"So the pink part of the residual alone is at least $\delta\sin\theta$ "
-            rf"(here ${ex.theorem_lhs:.3f}\le{ex.residual_norm:.3f}$). With many trial vectors the same "
-            r"argument runs block by block, through a Sylvester equation.",
-            width=w,
-            size=25,
-            color=MUTED,
-        )
-        col = VGroup(t1, t2, verdict, t3).arrange(DOWN, aligned_edge=LEFT, buff=0.35)
-        col.move_to([rx, self.content_top - 0.2, 0], aligned_edge=UP + LEFT)
-        for m in col:
-            fit_right(m)
-
-        self.say(
-            "Why should it be true? Write the trial vector in the eigenvectors of A. Blue bars are "
-            "the components we want; pink bars are the components outside U, and their total size is sin theta."
-        )
-        self.play(Create(axis), FadeIn(lam_lbl, ticks, window, win_lbl, rho_mark, rho_lbl))
-        self.play(LaggedStartMapGrow(coef_bars), FadeIn(bar_lbl), FadeIn(t1))
-
-        self.say(
-            "The residual multiplies every component by how far its eigenvalue is from rho. Near rho "
-            "that is small, so the wanted components nearly vanish. Outside the window it is at least delta."
-        )
-        self.play(Create(weight), Create(delta_line), FadeIn(w_lbl, d_lbl), FadeIn(t2))
-        self.play(Transform(coef_bars, res_bars), Transform(bar_lbl, res_lbl), run_time=2.0)
-
-        self.say(
-            "So the residual is at least delta times sin theta. That is the whole idea; the "
-            "general case runs the same argument on blocks."
-        )
-        self.play(FadeIn(verdict), FadeIn(t3))
-
-
-class S08WhyShort(S08Components):
-    title = "Why it is true, in one picture"
-    kicker = r"Write the trial vector $v$ in the eigenvectors of $A$"
-    depth = ""
-    short = True
-
 
 def LaggedStartMapGrow(bars: VGroup):
     from manim import LaggedStart
@@ -1430,7 +1531,7 @@ def LaggedStartMapGrow(bars: VGroup):
 
 class S09Sylvester(DeckSlide):
     title = "Many trial vectors: a Sylvester equation"
-    kicker = "The same argument, one block at a time"
+    kicker = "In eigenvector coordinates the Sylvester equation acts entry by entry"
     depth = "*"
 
     def body(self) -> None:
@@ -1457,41 +1558,63 @@ class S09Sylvester(DeckSlide):
         self.play(FadeIn(lines[2]))
 
         self.say(
-            "In eigenbases of Lambda1 and A0 the Sylvester map acts entrywise: "
-            "entry x_ij is multiplied by lambda_i - a_j, and the gap makes every such factor at "
-            "least delta. That already proves the Frobenius-norm case."
+            "Choose eigenvector coordinates: rows are unwanted eigendirections with eigenvalues lambda_i, "
+            "columns are trial directions with eigenvalues mu_j. Entry x_ij is how much trial direction j "
+            "overlaps unwanted eigendirection i. Multiplying by Lambda1 on the left scales row i by lambda_i; "
+            "multiplying by A0 on the right scales column j by mu_j. So the Sylvester map multiplies each "
+            "entry by lambda_i - mu_j, and the gap makes every such factor at least delta in size. Entry by "
+            "entry, that already proves the Frobenius-norm case."
         )
-        grid_left = self._grid(ex.X, ex, label=r"\cx{sine}{X}", color=SINE).move_to([-5.35, -1.8, 0])
+        grid_left = self._grid(ex.X, ex, label=r"\cx{sine}{X}", color=SINE).move_to([-5.35, -1.45, 0])
         grid_right = self._grid(
             ex.C, ex, label=r"\cx{exact}{\Lambda_1}X-X\cx{trial}{A_0}", color=RESID, rows_right=True
-        ).move_to([-0.45, -1.8, 0])
+        ).move_to([-0.45, -1.45, 0])
         arrow = Arrow(grid_left[0].get_right(), grid_right[0].get_left(), buff=0.2, color=MUTED, stroke_width=4)
-        arrow_lbl = math(r"x_{ij}\mapsto(\lambda_i-a_j)\,x_{ij}", size=22, color=MUTED).next_to(arrow, UP, buff=0.12)
-        self.play(FadeIn(grid_left))
-        self.play(Create(arrow), FadeIn(arrow_lbl), ReplacementTransformFromCopy(grid_left, grid_right))
+        arrow_lbl = math(r"x_{ij}\mapsto(\lambda_i-\mu_j)\,x_{ij}", size=22, color=MUTED).next_to(arrow, UP, buff=0.12)
+        grid_caption = tex(
+            r"rows: unwanted eigenvalues \cx{exact}{$\lambda_i$}; \ columns: trial eigenvalues \cx{trial}{$\mu_j$}",
+            size=20,
+            color=MUTED,
+        ).next_to(VGroup(grid_left, grid_right), DOWN, buff=0.15).align_to(grid_left, LEFT)
+        entry_text = para(
+            r"In eigenvector coordinates, entry $x_{ij}$ of $\cx{sine}{X}$ is how much trial direction $j$ "
+            r"overlaps unwanted eigendirection $i$. $\cx{exact}{\Lambda_1}$ scales row $i$ by $\lambda_i$ and "
+            r"$\cx{trial}{A_0}$ scales column $j$ by $\mu_j$, so",
+            width=4.5,
+            size=21,
+        )
+        entry_eq = math(r"(\cx{exact}{\Lambda_1}X-X\cx{trial}{A_0})_{ij}=(\lambda_i-\mu_j)\,x_{ij}", size=26)
+        sep = math(
+            r"\text{gap}\ \Longrightarrow\ \norm{\cx{exact}{\Lambda_1}X-X\cx{trial}{A_0}}\ \ge\ \cx{gap}{\delta}\,\norm{X}",
+            size=30,
+        )
+        sep_note = para(
+            r"Entry by entry gives the Frobenius norm at once; \emph{every} unitarily invariant norm "
+            r"needs the separating interval (\S5).",
+            width=4.5,
+            size=19,
+            color=MUTED,
+        )
+        qed = boxed(math(r"\cx{gap}{\delta}\,\norm{\cx{sine}{\sin\Theta_0}}\le\norm{\cx{resid}{R}}", size=28), color=FG, pad=0.15)
+        sep.scale(0.85)
+        right = VGroup(VGroup(entry_text, entry_eq).arrange(DOWN, aligned_edge=LEFT, buff=0.12),
+                       VGroup(sep, sep_note, qed).arrange(DOWN, aligned_edge=LEFT, buff=0.2))
+        right.arrange(DOWN, aligned_edge=LEFT, buff=0.22)
+        right.move_to([2.3, lines.get_bottom()[1] - 0.2, 0], aligned_edge=UP + LEFT)
+        floor = -3.45
+        if right.get_bottom()[1] < floor:
+            right.scale((right.get_top()[1] - floor) / right.height, about_edge=UP + LEFT)
+        for mob in right:
+            fit_right(mob)
+        self.play(FadeIn(grid_left), FadeIn(grid_caption))
+        self.play(Create(arrow), FadeIn(arrow_lbl), ReplacementTransformFromCopy(grid_left, grid_right), FadeIn(right[0]))
 
         self.say(
             "For every unitarily invariant norm, entrywise is not enough; that is exactly "
             "where the interval shape of the gap is used, through Davis and Kahan's "
             "Sylvester-equation theorems in Section 5. Conclusion: delta ||sin Theta0|| <= ||R||."
         )
-        sep = math(
-            r"\text{gap}\ \Longrightarrow\ \norm{\cx{exact}{\Lambda_1}X-X\cx{trial}{A_0}}\ \ge\ \cx{gap}{\delta}\,\norm{X}",
-            size=30,
-        )
-        sep_note = para(
-            r"entrywise $\Rightarrow$ Frobenius norm at once;\\ \emph{every} unitarily invariant norm needs the "
-            r"separating interval (Davis--Kahan \S5, Thms~5.1--5.2)",
-            width=4.4,
-            size=22,
-            color=MUTED,
-        )
-        qed = boxed(math(r"\cx{gap}{\delta}\,\norm{\cx{sine}{\sin\Theta_0}}\le\norm{\cx{resid}{R}}", size=36), color=FG)
-        right = VGroup(sep, sep_note, qed).arrange(DOWN, aligned_edge=LEFT, buff=0.3)
-        right.move_to([2.45, -1.75, 0], aligned_edge=LEFT)
-        for mob in right:
-            fit_right(mob)
-        self.play(FadeIn(right, shift=UP * 0.1))
+        self.play(FadeIn(right[1], shift=UP * 0.1))
 
     def _grid(self, M: np.ndarray, ex, label: str, color: str, rows_right: bool = False) -> VGroup:
         rows, cols = M.shape
@@ -1962,6 +2085,7 @@ SCENES = [
     S06Gap,
     S07Theorem,
     S11Payoff,
+    S08Why,
     S08Components,
     S09Sylvester,
     S10Sharp,

@@ -321,6 +321,65 @@ class SylvesterGrid:
         assert np.linalg.norm(self.C) >= self.delta * np.linalg.norm(self.X) - atol
 
 
+@dataclass(frozen=True)
+class TwoDirections:
+    """The one-vector argument with one wanted and one unwanted eigendirection.
+
+    ``A = diag(lam_u, lam_w)`` with wanted eigenvector ``u = e1`` and unwanted
+    eigenvector ``w = e2``; the trial vector is ``v = cos(theta) u + sin(theta) w``
+    and ``rho = v^T A v`` (Rayleigh quotient).  Then
+
+        r = (A - rho) v = (lam_u - rho) cos(theta) u + (lam_w - rho) sin(theta) w,
+
+    the gap is ``delta = |lam_w - rho|`` (the single unwanted eigenvalue's
+    distance from ``spec(A0) = {rho}``), and
+
+        ||r|| >= |w-part of r| = |lam_w - rho| sin(theta) >= delta sin(theta).
+
+    ``rho`` is not ``lam_u``, so ``r`` also has a ``u``-part: the first
+    inequality is strict, which is the honest general picture.
+    """
+
+    lam_u: float
+    lam_w: float
+    theta: float
+
+    @property
+    def model(self) -> "RayleighResidual":
+        return RayleighResidual(self.lam_u, self.lam_w, self.theta)
+
+    @property
+    def rho(self) -> float:
+        return self.model.rho
+
+    @property
+    def r(self) -> np.ndarray:
+        return self.model.residual
+
+    @property
+    def u_part(self) -> float:
+        return float(self.r[0])
+
+    @property
+    def w_part(self) -> float:
+        return float(self.r[1])
+
+    @property
+    def delta(self) -> float:
+        return abs(self.lam_w - self.rho)
+
+    @property
+    def sin_theta(self) -> float:
+        return math.sin(self.theta)
+
+    def verify(self, *, atol: float = 1e-12) -> None:
+        self.model.verify(atol=atol)
+        assert math.isclose(self.w_part, (self.lam_w - self.rho) * self.sin_theta, abs_tol=atol)
+        assert math.isclose(self.u_part, (self.lam_u - self.rho) * math.cos(self.theta), abs_tol=atol)
+        assert abs(self.w_part) >= self.delta * self.sin_theta - atol
+        assert self.model.residual_norm >= abs(self.w_part) - atol
+
+
 # The concrete instances drawn on the slides.  Keeping them here lets the tests
 # check exactly the numbers the audience sees.
 
@@ -339,6 +398,8 @@ COMPONENT_EXAMPLE = SpectralComponents(
 )
 
 SHARP_DELTA = 1.25
+
+TWO_DIRECTIONS = TwoDirections(lam_u=0.8, lam_w=2.6, theta=math.radians(35.0))
 
 SYLVESTER_EXAMPLE = SylvesterGrid(
     lam=(-1.9, -1.35, 1.4, 2.05),

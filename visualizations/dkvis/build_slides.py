@@ -46,13 +46,13 @@ PROP44 = "dkvis.slides_prop44"
 DECK_SCENES = {
     "sine-theta-short": [
         "S00TitleShort", "S00bSetting", "S01Ellipse", "S02Perturb", "S03NoGap", "S04Angle", "S05Residual",
-        "S06Gap", "S07Theorem", "S11Payoff", "S08WhyShort", "D01Planes", "S12Lean",
+        "S06Gap", "S07Theorem", "S08Why", "S11Payoff", "D01Planes", "S12Lean",
         "P01Claim", "P02Counterexample", "S14Summary",
     ],
     "sine-theta-full": [
         "S00Title", "S00bSetting", "S01Ellipse", "S02Perturb", "S03NoGap", "S04Angle", "S04bSinThetaOperator",
-        "S05Residual", "S06Gap", "S07Theorem", "S11Payoff", "S08Components", "S09Sylvester",
-        "S10Sharp", "D01Planes", "D02Tilt", "D03Gap", "D04Perturb", "D05TryIt", "S12Lean",
+        "S05Residual", "S06Gap", "S07Theorem", "S08Why", "S08Components", "S09Sylvester",
+        "S11Payoff", "S10Sharp", "D01Planes", "D02Tilt", "D03Gap", "D04Perturb", "D05TryIt", "S12Lean",
         "S13Family", "P01Claim", "P02Counterexample", "P03Why", "P04Details", "S14Summary",
     ],
     "sine-theta-3d": ["D01Planes", "D02Tilt", "D03Gap", "D04Perturb", "D05TryIt"],
