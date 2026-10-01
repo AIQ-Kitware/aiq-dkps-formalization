@@ -39,6 +39,9 @@ from manim import (
     VGroup,
     config,
 )
+import os
+from pathlib import Path
+
 from manim_slides import Slide
 
 from dkvis.palette import PALETTE
@@ -189,6 +192,25 @@ class DeckSlide(Slide):
     # ending on a staggered FadeIn would otherwise freeze one frame short.
     wait_time_between_slides = 0.1
 
+    def __init__(self, *args, **kwargs) -> None:
+        # ``dkvis.build_slides`` sets DKVIS_DECK so that each deck renders into
+        # its own folder and numbers its slides by its own order.
+        deck = os.environ.get("DKVIS_DECK")
+        if deck:
+            kwargs.setdefault("output_folder", Path(f"slides-{deck}"))
+        super().__init__(*args, **kwargs)
+
+    def slide_number(self) -> tuple[int, int] | None:
+        """``(k, N)``: this scene's position in the deck being built, if any."""
+        deck = os.environ.get("DKVIS_DECK")
+        if not deck:
+            return None
+        from dkvis.build_slides import DECK_SCENES
+
+        order = DECK_SCENES.get(deck, [])
+        name = type(self).__name__
+        return (order.index(name) + 1, len(order)) if name in order else None
+
     def construct(self) -> None:
         self.chrome = self.make_chrome()
         if self.chrome is not None:
@@ -203,6 +225,7 @@ class DeckSlide(Slide):
     # -- chrome ---------------------------------------------------------------
     def make_chrome(self) -> VGroup | None:
         items = VGroup()
+        self._head = VGroup()  # title and kicker: what content is laid out below
         if self.title:
             title = tex(self.title, size=44)
             max_w = FRAME_W - 2 * 0.55 - (1.9 if self.depth else 0.0)
@@ -210,11 +233,13 @@ class DeckSlide(Slide):
                 title.scale_to_fit_width(max_w)
             title.move_to([LEFT_EDGE, TOP_EDGE, 0], aligned_edge=UL)
             items.add(title)
+            self._head.add(title)
             if self.kicker:
                 kick = tex(self.kicker, size=26, color=MUTED).next_to(
                     title, DOWN, aligned_edge=LEFT, buff=0.18
                 )
                 items.add(kick)
+                self._head.add(kick)
         if self.depth:
             label = {"*": r"$\ast$\ optional depth", "**": r"$\ast\ast$\ backup"}[self.depth]
             badge = tex(label, size=20, color=MUTED).move_to(
@@ -226,7 +251,13 @@ class DeckSlide(Slide):
                 [LEFT_EDGE, -FRAME_H / 2 + 0.3, 0], aligned_edge=LEFT
             )
             items.add(footer)
-        self._has_footer = bool(self.section)
+        number = self.slide_number()
+        if number is not None:
+            k, n = number
+            label = tex(rf"{k} / {n}", size=20, color=MUTED).move_to(
+                [FRAME_W / 2 - 0.45, -FRAME_H / 2 + 0.3, 0], aligned_edge=RIGHT
+            )
+            items.add(label)
         return items
 
     @property
@@ -234,8 +265,7 @@ class DeckSlide(Slide):
         """y coordinate just below the title block."""
         if self.chrome is None or not self.title:
             return TOP_EDGE
-        head = self.chrome[:-1] if self._has_footer else self.chrome
-        return head.get_bottom()[1] - 0.25
+        return self._head.get_bottom()[1] - 0.25
 
     # -- builds ---------------------------------------------------------------
     def say(self, notes: str, **kwargs) -> None:

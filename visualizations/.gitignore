@@ -6,3 +6,4 @@ renders/
 *.png
 *.mp4
 slides/
+slides-*/
