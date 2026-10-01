@@ -318,7 +318,7 @@ class S00bSetting(DeckSlide):
     def body(self) -> None:
         levels = [
             (r"unbounded self-adjoint operators, e.g.\ $-\tfrac{d^2}{dx^2}$, quantum Hamiltonians", MUTED),
-            (r"bounded self-adjoint operators on a Hilbert space, any dimension", MUTED),
+            (r"bounded self-adjoint operators, possibly infinite-dimensional", MUTED),
             (r"complex Hermitian matrices, $\ A=A^{*}$", FG),
             (r"real symmetric matrices, $\ A=A^{\mathsf T}$", EXACT),
         ]
@@ -344,13 +344,15 @@ class S00bSetting(DeckSlide):
                 lab.scale((right - left - 0.35) / lab.width, about_edge=LEFT)
             boxes.add(box)
             labels.add(lab)
-        outer_note = tex(r"$\uparrow$ the scope of Davis--Kahan (1970) and of our Lean theorem", size=22, color=FG)
+        outer_note = tex(r"$\uparrow$ scope of Davis--Kahan and our Lean theorem (separable spaces)", size=22, color=FG)
+        if outer_note.width > x_r - x_l - 0.35:
+            outer_note.scale((x_r - x_l - 0.35) / outer_note.width)
         outer_note.move_to([x_l + 0.2, tops[0] - 0.6, 0], aligned_edge=LEFT)
         inner = boxes[3]
         mini = math(r"A=\begin{pmatrix}2&0.3\\0.3&1\end{pmatrix}", size=30, color=EXACT).move_to(
             inner.get_center() + np.array([0, 0.1, 0])
         )
-        pictures = tex(r"every picture in this talk: $2\times2$ and $3\times3$", size=22, color=EXACT).move_to(
+        pictures = tex(r"the $\sin\Theta$ pictures in this talk: $2\times2$ and $3\times3$", size=22, color=EXACT).move_to(
             [inner.get_center()[0], bottoms[3] + 0.35, 0]
         )
 
@@ -371,7 +373,7 @@ class S00bSetting(DeckSlide):
         t3 = para(
             r"Where it shows up: covariance matrices (PCA), graph Laplacians (spectral clustering), "
             r"Hamiltonians in quantum mechanics, vibration modes. The eigenspaces carry the meaning, "
-            r"and the operator is only ever known approximately.",
+            r"and the operator is often known only approximately.",
             width=w,
             size=25,
             color=MUTED,
@@ -388,7 +390,7 @@ class S00bSetting(DeckSlide):
         self.say(
             "Self-adjoint operators are pure stretches along perpendicular axes: real eigenvalues, "
             "orthogonal eigenvectors. The class grows: complex Hermitian matrices, bounded operators "
-            "on a Hilbert space of any dimension, and unbounded ones like differential operators."
+            "on a Hilbert space, possibly infinite-dimensional, and unbounded ones like differential operators."
         )
         self.play(
             LaggedStart(*[FadeIn(VGroup(boxes[i], labels[i])) for i in (2, 1, 0)], lag_ratio=0.4),
@@ -397,8 +399,9 @@ class S00bSetting(DeckSlide):
         )
 
         self.say(
-            "All the pictures in this talk live in the innermost box, 2 by 2 and 3 by 3 real symmetric "
-            "matrices. Davis and Kahan, and our Lean theorem, cover the outermost box. And these objects "
+            "The sin Theta pictures in this talk live in the innermost box, 2 by 2 and 3 by 3 real symmetric "
+            "matrices; the Proposition 4.4 counterexample at the end lives in R^4. Davis and Kahan, and our "
+            "Lean theorem, cover the outermost box, on separable Hilbert spaces. And these objects "
             "are everywhere: covariance matrices, graph Laplacians, quantum Hamiltonians."
         )
         self.play(FadeIn(pictures), FadeIn(outer_note), FadeIn(t3))
@@ -579,7 +582,7 @@ def TransformFromCopySafe(source, target, **kwargs):
 
 class S03NoGap(DeckSlide):
     title = "How far can an eigenvector turn? It depends on whether there is a gap"
-    kicker = r"Without a gap, eigenvectors are unstable"
+    kicker = r"Without separation, individual eigenvectors can be unstable"
 
     def body(self) -> None:
         eps = story.PERTURBATION_EPS
@@ -709,9 +712,9 @@ class S03NoGap(DeckSlide):
             "says it is also sufficient, quantitatively."
         )
         msg = para(
-            r"Eigenvalues are stable.\\ Eigenvectors are stable only \emph{with a gap}.",
-            width=RIGHT_COL_W,
-            size=32,
+            r"Eigenvalues are stable.\\ Individual eigenvectors are stable only \emph{with a gap}.",
+            width=RIGHT_COL_W + 0.4,
+            size=29,
         )
         classic_note = tex(r"the classic example: for every $\varepsilon>0$", size=24, color=MUTED)
         classic = math(
@@ -721,7 +724,13 @@ class S03NoGap(DeckSlide):
             r"\qquad \cx{sine}{\theta = 45^\circ}",
             size=30,
         )
-        takeaway = column(msg, classic_note, classic, top=self.content_top - 0.4, x=RIGHT_COL_X + 0.2, buff=0.3)
+        subspaces = para(
+            r"So Davis--Kahan works with \emph{subspaces}: all the eigenvectors of an isolated cluster of eigenvalues.",
+            width=RIGHT_COL_W + 0.4,
+            size=23,
+            color=MUTED,
+        )
+        takeaway = column(msg, classic_note, classic, subspaces, top=self.content_top - 0.3, x=RIGHT_COL_X + 0.2, buff=0.24)
         plot = VGroup(axes, x_lbl, y_lbl, y_ticks, x_ticks, curve, dot)
         self.play(FadeOut(plot))
         self.play(FadeIn(takeaway, shift=UP * 0.1))
@@ -956,7 +965,7 @@ class S05Residual(DeckSlide):
             [
                 (r"$A$", r"the matrix whose eigenvectors we want; we can multiply any vector by it "
                          r"(in a perturbation problem, the perturbed $A+H$)", FG),
-                (r"$\cx{exact}{U}$", r"its true eigenvector; any computation only approximates it", EXACT),
+                (r"$\cx{exact}{U}$", r"the exact eigendirection we want; in computation we usually have only an approximation", EXACT),
                 (r"$\cx{trial}{v}$", r"our approximation, e.g.\ from an iterative eigensolver", TRIAL),
             ],
             x=-6.75,
@@ -998,7 +1007,7 @@ class S05Residual(DeckSlide):
         p3b = para(
             r"$\rho v$ is the part of $Av$ along $v$; the \cx{resid}{residual} $r$ is the rest. "
             r"\textbf{Computable}: one product with $A$ and one dot product, no $U$. "
-            r"Iterative eigensolvers stop when $\norm{r}$ is small.",
+            r"A small residual is a standard stopping criterion for iterative eigensolvers.",
             width=w,
             size=size - 2,
             color=MUTED,
@@ -1029,9 +1038,9 @@ class S05Residual(DeckSlide):
 
         self.say(
             "The cast, top left. A is the matrix whose eigenvectors we want, and we can multiply vectors by it; "
-            "in a perturbation problem it is the perturbed A + H. U is its true eigenvector. We never have U "
-            "exactly: no formula exists beyond 4 by 4, solvers iterate, matrices can be huge or "
-            "infinite-dimensional. v is the approximation we have. Its error theta needs U."
+            "in a perturbation problem it is the perturbed A + H. In a numerical problem U is the answer we "
+            "are trying to find: for a large matrix or operator we generally do not know it in advance, and an "
+            "eigensolver gives us an approximation v. Its error theta needs U."
         )
         self.play(FadeIn(recall.show(3)), FadeIn(e_lines), FadeIn(u_lbl))
         self.add(v, v_lbl, arc, th_lbl)
@@ -1047,7 +1056,7 @@ class S05Residual(DeckSlide):
         self.say(
             "Split Av into its part along v, rho v, and the rest, the residual r. That takes one "
             "multiplication by A and one dot product; U never appears, which is why r is computable. "
-            "It is how iterative eigensolvers decide to stop."
+            "A small residual is a standard stopping criterion for iterative eigensolvers."
         )
         self.add(rho_v, rho_lbl, r, r_lbl)
         self.play(FadeIn(VGroup(rho_v, rho_lbl, r, r_lbl)), FadeIn(col[2]))
@@ -1201,8 +1210,8 @@ class S07Theorem(DeckSlide):
         self.play(FadeIn(rows, lag_ratio=0.3))
 
         self.say(
-            "Rearranged: the subspace error is at most residual over gap. Any dimension, "
-            "including infinite, and any unitarily invariant norm."
+            "Rearranged: the subspace error is at most residual over gap. Finite dimension or separable "
+            "infinite dimension, and any unitarily invariant norm."
         )
         slogan = boxed(
             math(
@@ -1649,7 +1658,7 @@ class S11Payoff(DeckSlide):
         ).next_to(derivation, DOWN, buff=0.2)
         self.play(FadeIn(derivation), FadeIn(note))
 
-        plane = Plane([-4.3, -1.75, 0], 0.82, rotate=ELLIPSE_BASE)
+        plane = Plane([-4.3, -1.95, 0], 0.82, rotate=ELLIPSE_BASE)
         old = always_redraw(lambda: DashedVMobject(ellipse(plane, pair().A, color=MUTED, width=2), num_dashes=50))
         new = always_redraw(lambda: ellipse(plane, pair().perturbed, color=FG, width=3))
         old_axis = DashedVMobject(through_origin(plane, [1, 0], 2.3, MUTED, width=2), num_dashes=24)
@@ -1701,12 +1710,12 @@ class S11Payoff(DeckSlide):
             "not a general promise."
         )
         remark = para(
-            r"In this example $\cx{gap}{\delta}$ is measured against the \emph{perturbed} unwanted "
-            r"eigenvalue, which splits away from the old one, so the bound stays informative "
-            r"(it tends to $1$) even as $A$'s own gap collapses.",
-            width=11.5,
-            size=24,
-        ).move_to(note)
+            r"In this example $\cx{gap}{\delta}$ is measured against the \emph{perturbed} unwanted eigenvalue, "
+            r"which splits away from the old one, so the bound stays informative even as $A$'s own gap $g$ "
+            r"collapses. No contradiction with the previous slides: the theorem's $\cx{gap}{\delta}$ is not $g$.",
+            width=12.2,
+            size=22,
+        ).move_to(note.get_top(), aligned_edge=UP)
         self.play(FadeOut(note), FadeIn(remark))
 
 
@@ -1741,7 +1750,7 @@ LEAN_SIGNATURE = [
 # (first line, last line, label, colour) for the "reading it" build.
 LEAN_READING = [
     (1, 1, r"scalars: $\mathbb{R}$ or $\mathbb{C}$", FG),
-    (2, 6, r"separable Hilbert spaces, any dimension", FG),
+    (2, 6, r"separable Hilbert spaces", FG),
     (7, 7, r"every unitarily invariant norm", FG),
     (8, 8, r"possibly unbounded operators", EXACT),
     (10, 10, r"all self-adjoint", EXACT),
@@ -1791,7 +1800,7 @@ class S12Lean(DeckSlide):
         self.play(FadeIn(bg), FadeIn(lines, lag_ratio=0.03), FadeIn(caption))
 
         self.say(
-            "Reading it: real or complex scalars; separable Hilbert spaces of any dimension; every "
+            "Reading it: real or complex scalars; separable Hilbert spaces, finite- or infinite-dimensional; every "
             "unitarily invariant norm; possibly unbounded self-adjoint operators; the paper's residual, "
             "spectral decomposition and gap; and the conclusion delta times norm of sin Theta0 at most norm of R."
         )
@@ -1906,7 +1915,8 @@ class S14Summary(DeckSlide):
             ),
             (
                 r"\cx{exact}{2}",
-                r"\textbf{Formalized at the paper's full scope.} Real or complex Hilbert spaces of any dimension, "
+                r"\textbf{Formalized at the paper's full scope.} Real or complex, finite-dimensional or separable "
+                r"infinite-dimensional Hilbert spaces, "
                 r"possibly unbounded operators, every unitarily invariant norm, checked by Lean with only its "
                 r"standard axioms.",
             ),
