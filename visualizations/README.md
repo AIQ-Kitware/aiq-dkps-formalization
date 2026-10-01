@@ -189,7 +189,20 @@ Every number on a slide comes from `dkvis/sine_theta_story.py` (or the existing
 meaning on every slide: blue = exact eigenspace, amber = trial, pink = angle,
 green = residual, violet = gap.
 
-Build and present from `visualizations/`:
+Build and present from `visualizations/`. The `Makefile` wraps the common
+cases (`make` lists the targets):
+
+```bash
+make setup                         # uv sync with the vtk, slides and test extras
+make all                           # short + full decks, 1080p60, HTML + PDF in renders/
+make rebuild                       # clean re-render of both decks from scratch
+make short QUALITY=l PDF=0         # quick 480p draft of one deck (also: full, deck-2d, 3d, prop44)
+make full SCENES="S05Residual"     # re-render only some scenes, then reconvert the whole deck
+make clean-full && make full       # clean re-render of one deck
+make present-short                 # present live with manim-slides
+```
+
+The underlying commands:
 
 ```bash
 uv sync --extra slides --extra test          # needs LaTeX, and Pango/Cairo headers to build manimpango
