@@ -594,7 +594,7 @@ def TransformFromCopySafe(source, target, **kwargs):
 
 
 class S03NoGap(DeckSlide):
-    title = "How far can an eigenvector turn? It depends on whether there is a gap"
+    title = "How far can an eigenvector turn? It depends if there is a gap"
     kicker = r"Keep the perturbation fixed and shrink the gap"
 
     def body(self) -> None:
@@ -623,14 +623,24 @@ class S03NoGap(DeckSlide):
         e_dots = always_redraw(
             lambda: VGroup(Dot(plane([lam()[0], 0.0]), radius=0.07, color=EXACT), Dot(plane([0.0, lam()[1]]), radius=0.07, color=EXACT))
         )
-        f1_lbl = always_redraw(lambda: math(r"\lambda_1", size=28, color=EXACT).next_to(plane([lam()[0], 0.0]), DOWN + RIGHT * 0.3, buff=0.1))
+        f1_lbl = always_redraw(lambda: math(r"\lambda_1", size=28, color=EXACT).next_to(plane([lam()[0], 0.0]), DOWN + LEFT * 0.6, buff=0.1))
         f2_lbl = always_redraw(lambda: math(r"\lambda_2", size=28, color=EXACT).next_to(plane([0.0, lam()[1]]), LEFT, buff=0.12))
         # A + H: solid white ellipse and its top eigenvector line, turned by theta.
         new = always_redraw(lambda: ellipse(plane, pair().perturbed, color=FG, width=3))
         new_axis = always_redraw(lambda: through_origin(plane, pair().perturbed_top_eigenvector, reach, FG, width=3))
         new_lbl = always_redraw(
-            lambda: tex(r"$A+H$", size=22, color=FG).next_to(plane(reach * pair().perturbed_top_eigenvector), RIGHT, buff=0.08)
+            lambda: tex(r"top eigenvector of $A+H$", size=20, color=FG).next_to(
+                plane(reach * pair().perturbed_top_eigenvector), RIGHT, buff=0.08
+            )
         )
+        e_lbls = VGroup(
+            tex(r"top eigenvector of $A$", size=20, color=EXACT).next_to(plane([reach, 0.0]), DOWN, aligned_edge=LEFT, buff=0.1),
+            tex(r"other eigenvector of $A$", size=20, color=EXACT).next_to(plane([0.0, reach]), UP, buff=0.08),
+        )
+        ellipse_key = VGroup(
+            tex(r"\cx{exact}{dashed: $A$}", size=20),
+            tex(r"solid: $A+H$", size=20),
+        ).arrange(DOWN, aligned_edge=LEFT, buff=0.06).move_to([-6.9, -2.05, 0], aligned_edge=UP + LEFT)
         arc = always_redraw(lambda: angle_arc(plane, [1, 0], pair().perturbed_top_eigenvector, 0.95, SINE, width=4))
         theta_lbl = always_redraw(
             lambda: math(r"\theta", size=30, color=SINE).move_to(plane(1.22 * story.unit(max(pair().theta, 0.16) / 2)))
@@ -716,7 +726,7 @@ class S03NoGap(DeckSlide):
             "turned by theta. Right: theta as a function of the gap."
         )
         left = VGroup(
-            old, e_lines, e_dots, f1_lbl, f2_lbl, new, new_axis, new_lbl, arc, theta_lbl,
+            old, e_lines, e_dots, e_lbls, f1_lbl, f2_lbl, new, new_axis, new_lbl, ellipse_key, arc, theta_lbl,
             nl, nl_lbl, lam_dots, lam_lbls, new_ticks, gap,
         )
         self.add(left)
@@ -820,10 +830,11 @@ class S03cUnstable(DeckSlide):
         with_gap = Panel(-5.0, story.PERTURBATION_START_GAP, rf"with a gap: $\cx{{gap}}{{g={story.PERTURBATION_START_GAP:g}}}$")
         no_gap = Panel(-1.55, story.PERTURBATION_END_GAP, rf"almost no gap: $\cx{{gap}}{{g={story.PERTURBATION_END_GAP:g}}}$")
         legend = VGroup(
-            tex(r"\cx{exact}{blue: $A$} \quad white: $A+H$ \quad \cx{muted}{dashed: $H$'s own direction}", size=18),
-            tex(r"\cx{sine}{pink: every direction the eigenvector of $A+H$ took}", size=18),
+            tex(r"\cx{exact}{blue: $A$ and its eigenvectors} \quad \cx{muted}{dashed: $H$'s own direction}", size=18),
+            tex(r"white: $A+H$ and its top eigenvector", size=18),
+            tex(r"\cx{sine}{pink: every direction the top eigenvector of $A+H$ took}", size=18),
             tex(r"\cx{muted}{number lines: eigenvalues, \cx{exact}{dots $A$}, ticks $A+H$}", size=18),
-        ).arrange(DOWN, buff=0.07).move_to([-3.3, -2.85, 0])
+        ).arrange(DOWN, buff=0.06).move_to([-3.3, -2.9, 0])
 
         text_w = RIGHT_COL_W - 0.5
         x0, top = RIGHT_COL_X + 0.55, self.content_top - 0.25
@@ -2153,7 +2164,7 @@ LEAN_READING = [
 
 class S12Lean(DeckSlide):
     title = "What we formalized: the full Lean theorem"
-    kicker = "The complete statement, shown for its reach; not meant to be read token by token"
+    kicker = "The complete statement"
     section = ""
 
     def body(self) -> None:
