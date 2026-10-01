@@ -195,9 +195,14 @@ uv sync --extra slides --extra test          # needs LaTeX, and Pango/Cairo head
 uv run --extra vtk python -m dkvis.build_slides sine-theta-short -q l   # quick draft (480p)
 uv run --extra vtk python -m dkvis.build_slides sine-theta-short --pdf  # 1080p60 -> renders/sine-theta-short.html (+ .pdf)
 uv run --extra vtk python -m dkvis.build_slides sine-theta-full --pdf
-uv run manim-slides present $(uv run python -m dkvis.build_slides sine-theta-short --list)
+uv run manim-slides present --folder slides-sine-theta-short $(uv run python -m dkvis.build_slides sine-theta-short --list)
 ```
 
+- Every slide shows its number in its deck bottom-right ("7 / 16"). The number
+  is the same on all of a slide's builds, so in the PDF a repeated number means
+  "same slide, next animation step". Because the same scene sits at different
+  positions in different decks, each deck renders into its own `slides-<deck>/`
+  folder. The full-frame VTK video builds carry no number.
 - `renders/<deck>.html` is a reveal.js deck: arrow keys advance builds, and `S`
   opens the speaker view with the notes. Keep `renders/<deck>_assets/` next to
   it, or pass `--one-file` to embed the videos.

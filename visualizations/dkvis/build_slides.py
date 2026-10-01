@@ -18,6 +18,9 @@ Decks:
 
 A deck module may define ``prepare(refresh)`` to render assets it needs (the 3D
 deck renders its VTK stills and movies); ``--refresh-assets`` forces that.
+Each deck renders into its own ``slides-<deck>/`` folder, and every slide
+carries its number in that deck bottom-right ("7 / 16"), the same on all of a
+slide's builds.
 ``--scenes`` re-renders only the named scenes; conversion always uses the whole
 deck.  Set ``DKVIS_THEME=light`` for a light-background deck.
 """
@@ -26,6 +29,7 @@ from __future__ import annotations
 
 import argparse
 import importlib
+import os
 import subprocess
 import sys
 from pathlib import Path
@@ -81,10 +85,14 @@ def deck(name: str) -> list[tuple[str, list[str]]]:
     return list(grouped.items())
 
 
-def _run(*args: str) -> None:
+def _run(*args: str, deck: str | None = None) -> None:
     cmd = [sys.executable, "-m", "manim_slides", *args]
     print("+", " ".join(cmd), flush=True)
-    subprocess.run(cmd, cwd=ROOT, check=True)
+    env = dict(os.environ)
+    if deck:
+        # Read by DeckSlide: render into slides-<deck>/ and number by this deck's order.
+        env["DKVIS_DECK"] = deck
+    subprocess.run(cmd, cwd=ROOT, check=True, env=env)
 
 
 def main() -> None:
@@ -119,20 +127,21 @@ def main() -> None:
                 mod.prepare(refresh=args.refresh_assets)
             source = Path(mod.__file__).relative_to(ROOT)
             # ``--quality=h``, not ``-qh``: manim-slides would read ``-qh`` as ``-q -h`` and print help.
-            _run("render", f"--quality={args.quality}", str(source), *scenes)
+            _run("render", f"--quality={args.quality}", str(source), *scenes, deck=args.deck)
 
     renders = ROOT / "renders"
     renders.mkdir(exist_ok=True)
     html = args.html or renders / f"{args.deck}.html"
-    convert = ["convert", "--to", "html", *names, str(html), "-cslide_number=true", "-ccontrols=true"]
+    folder = ["--folder", f"slides-{args.deck}"]
+    convert = ["convert", *folder, "--to", "html", *names, str(html), "-cslide_number=true", "-ccontrols=true"]
     if args.one_file:
-        convert.insert(3, "--one-file")
+        convert.insert(1, "--one-file")
     _run(*convert)
     if args.pdf:
-        _run("convert", "--to", "pdf", *names, str(renders / f"{args.deck}.pdf"))
+        _run("convert", *folder, "--to", "pdf", *names, str(renders / f"{args.deck}.pdf"))
     if args.pptx:
-        _run("convert", "--to", "pptx", *names, str(renders / f"{args.deck}.pptx"))
-    print(f"\nPresent live:  manim-slides present {' '.join(names)}")
+        _run("convert", *folder, "--to", "pptx", *names, str(renders / f"{args.deck}.pptx"))
+    print(f"\nPresent live:  manim-slides present --folder slides-{args.deck} {' '.join(names)}")
     print(f"Or open:       {html}")
 
 
