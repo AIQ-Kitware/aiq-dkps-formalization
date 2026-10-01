@@ -46,7 +46,8 @@ remains is the claim-by-claim map itself.
   Delivers full spectral repulsion, both sharp form bounds, both spectral
   orientations, and the *strict* quarter-angle bound.
 * `theorem8_1_characterization` -- the printed `iff` between the closed
-  condition `Θ ≤ π/4` and `Λ₀ ≤ α`, `Λ₁ ≥ α + δ`.
+  condition `Θ ≤ π/4` and `Λ₀ ≤ α`, `Λ₁ ≥ α + δ`, stated directly on the
+  literal source block angle `Theta = diag(Theta_0,Theta_1)`.
 * `theorem8_1_uniqueness` -- "there always exists a reducing projector
   `Q` with these properties" is sharpened: it is unique.
 
@@ -73,8 +74,9 @@ stronger than any single gauge inequality and are exported too.  The paper's
 increasing index order is available as the `..._rev_source` wrappers.
 
 **Theorem 8.2.**  `theorem8_2_complex` is the whole printed theorem: both
-`sin 2Θ` estimates and the strict quarter angle, under either printed smallness
-alternative and the Section 1 standing convention (1.5).  The two alternatives
+`sin 2Θ` estimates and the strict quarter angle, with the latter stated directly
+on the literal source block angle `Theta = diag(Theta_0,Theta_1)`, under either
+printed smallness alternative and the Section 1 standing convention (1.5).  The two alternatives
 are separately available, and so is the strongest dimension-free form:
 
 * `theorem8_2_branch_directed_complex` -- `directedGap P Q < √2/2` from the
@@ -82,8 +84,9 @@ are separately available, and so is the strongest dimension-free form:
   *not* superseded by `theorem8_2_complex`; see `Section8SourceTheorem82.lean`
   for why the symmetric reading needs a standing convention and why (1.5) at
   either reading does not by itself supply one.
-* `theorem8_2_branch_maximalAngle_lt_of_crossedDefects` -- the printed
-  `Θ < π/4` in **any** dimension, under Section 3's other standing assumption
+* `theorem8_2_branch_sourceFullAngle_lt_of_crossedDefects` -- the printed
+  `Θ < π/4` in **any** dimension, stated on the literal source full angle,
+  under Section 3's other standing assumption
   (3.5) in place of any dimension count.
 
 ## The source dictionary
@@ -102,9 +105,10 @@ namespace Section8
 /-! ### Theorem 8.2
 
 `theorem8_2_branch_directed_complex` is the strongest statement obtainable from
-the explicit printed hypotheses; the `maximalAngle` forms add the Section 1
-standing convention (1.5) and deliver the printed `Θ < π/4`.  The distinction is
-deliberate and must not be collapsed. -/
+the explicit printed hypotheses; the source-full-angle forms add the Section 1
+standing convention (1.5) and deliver the printed `Θ < π/4` directly on the
+source `Theta`.  The `maximalAngle` forms remain the proof-facing scalar bridge.
+The distinction is deliberate and must not be collapsed. -/
 
 /-! `theorem8_2_perturbationHalfGap_complex` and `theorem8_2_residualHalfGap_complex`
 need no alias: they are declared in this namespace by
@@ -124,8 +128,9 @@ at every source unitarily invariant norm -- exactly the scope available over
 /-- **Theorem 8.2's printed disjunction, dimension-free.**  Either smallness
 alternative gives `directedGap P Q < √2/2`.  This is the strongest conclusion
 available from the explicit printed hypotheses alone, and it is deliberately
-distinct from the `maximalAngle` forms, which add the Section 1 standing
-convention (1.5) to deliver the printed `Θ < π/4`. -/
+distinct from the source-full-angle forms, which add the Section 1 standing
+convention (1.5) to deliver the printed `Θ < π/4`; the `maximalAngle` theorems
+remain their scalar proof bridge. -/
 alias theorem8_2_branch_directed_complex :=
   theorem8_2_branch
 

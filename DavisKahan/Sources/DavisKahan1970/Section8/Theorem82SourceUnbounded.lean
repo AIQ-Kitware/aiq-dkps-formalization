@@ -6,6 +6,7 @@ Authors: Jon Crall, Claude Opus 5
 import DavisKahan.Sources.DavisKahan1970.Section8.Theorem82UnboundedPath
 import DavisKahan.Sources.DavisKahan1970.SinTwoThetaAmbientUnbounded
 import DavisKahan.Sources.DavisKahan1970.SinTwoThetaDirectedAngle
+import DavisKahan.Sources.DavisKahan1970.SineTheta.FullAnglePresentation
 import DavisKahan.SpectralTheory.BoundedFromSpectrum
 import DavisKahan.SpectralTheory.PartialMap.RealSpectrum
 
@@ -221,11 +222,13 @@ theorem theorem8_2_perturbation_sourceExact_unbounded_complex
     (N.Mem (TauCeti.DavisKahan.Angle.sinTwoAngleOperator P Q) ∧
         delta * N.gauge (TauCeti.DavisKahan.Angle.sinTwoAngleOperator P Q) ≤
           2 * N.gauge Hop) ∧
-      TauCeti.DavisKahanExt.maximalAngle P Q < Real.pi / 4 := by
-  refine ⟨?_, theorem8_2_perturbationHalfGap_maximalAngle_lt_unbounded_complex hA Hop hHop
-    hdelta hab hPred hQred hQspec hQperp hPspec hcross hsmall⟩
-  exact sinTwoTheta_ambient_unbounded_perturbedGap_normalizedUIN_complex N hA Hop hHop
-    hPred hQred hdelta (.intervalExterior hab (Or.inl ⟨hQspec, hQperp⟩)) hHmem
+      sourceFullAngleLtC P Q (Real.pi / 4) := by
+  refine ⟨?_, ?_⟩
+  · exact sinTwoTheta_ambient_unbounded_perturbedGap_normalizedUIN_complex N hA Hop hHop
+      hPred hQred hdelta (.intervalExterior hab (Or.inl ⟨hQspec, hQperp⟩)) hHmem
+  · exact (sourceFullAngleLtC_iff_maximalAngle_lt P Q (by positivity)).2
+      (theorem8_2_perturbationHalfGap_maximalAngle_lt_unbounded_complex hA Hop hHop
+        hdelta hab hPred hQred hQspec hQperp hPspec hcross hsmall)
 
 /-- **Davis--Kahan 1970, Theorem 8.2, perturbation alternative, at the printed
 source scope over `ℝ`.** -/
@@ -255,11 +258,13 @@ theorem theorem8_2_perturbation_sourceExact_unbounded_real
     (N.Mem (TauCeti.DavisKahan.Angle.sinTwoAngleOperator P Q) ∧
         delta * N.gauge (TauCeti.DavisKahan.Angle.sinTwoAngleOperator P Q) ≤
           2 * N.gauge Hop) ∧
-      TauCeti.DavisKahanExt.maximalAngle P Q < Real.pi / 4 := by
-  refine ⟨?_, theorem8_2_perturbationHalfGap_maximalAngle_lt_unbounded_real hA Hop hHop
-    hdelta hab hPred hQred hQspec hQperp hPspec hcross hsmall⟩
-  exact sinTwoTheta_ambient_unbounded_perturbedGap_normalizedUIN_real N hA Hop hHop
-    hPred hQred hdelta (.intervalExterior hab (Or.inl ⟨hQspec, hQperp⟩)) hHmem
+      sourceFullAngleLtR P Q (Real.pi / 4) := by
+  refine ⟨?_, ?_⟩
+  · exact sinTwoTheta_ambient_unbounded_perturbedGap_normalizedUIN_real N hA Hop hHop
+      hPred hQred hdelta (.intervalExterior hab (Or.inl ⟨hQspec, hQperp⟩)) hHmem
+  · exact (sourceFullAngleLtR_iff_maximalAngle_lt P Q (by positivity)).2
+      (theorem8_2_perturbationHalfGap_maximalAngle_lt_unbounded_real hA Hop hHop
+        hdelta hab hPred hQred hQspec hQperp hPspec hcross hsmall)
 
 /-! ### The residual alternative -/
 
@@ -294,7 +299,7 @@ theorem theorem8_2_residual_sourceExact_unbounded_complex
     (N.Mem (TauCeti.DavisKahan.Angle.directedSinTwoAngleOperator P Q) ∧
         delta * N.gauge (TauCeti.DavisKahan.Angle.directedSinTwoAngleOperator P Q) ≤
           2 * N.gauge (sourceResidual Hop P)) ∧
-      TauCeti.DavisKahanExt.maximalAngle P Q < Real.pi / 4 := by
+      sourceFullAngleLtC P Q (Real.pi / 4) := by
   have hAH : IsSelfAdjoint (TauCeti.LinearPMap.addBounded A Hop) :=
     DavisKahan.addBounded_isSelfAdjoint A hA Hop hHop
   have hgap : FormBoundedSylvesterGap
@@ -315,8 +320,9 @@ theorem theorem8_2_residual_sourceExact_unbounded_complex
       fun Msnf hM =>
         sinTwoTheta_directed_unboundedResidual_reducing_symmetricNorming_complex Msnf
           hAH hQred hPdom hres hdelta hgap hM
-  · exact theorem8_2_residualHalfGap_maximalAngle_lt_unbounded_complex hA Hop hHop
-      hdelta hab hPred hQred hQspec hQperp hPspec hcross hsmall
+  · exact (sourceFullAngleLtC_iff_maximalAngle_lt P Q (by positivity)).2
+      (theorem8_2_residualHalfGap_maximalAngle_lt_unbounded_complex hA Hop hHop
+        hdelta hab hPred hQred hQspec hQperp hPspec hcross hsmall)
 
 /-- **Davis--Kahan 1970, Theorem 8.2, residual alternative, at the printed source
 scope over `ℝ`.** -/
@@ -346,7 +352,7 @@ theorem theorem8_2_residual_sourceExact_unbounded_real
     (N.Mem (TauCeti.DavisKahan.Angle.directedSinTwoAngleOperator P Q) ∧
         delta * N.gauge (TauCeti.DavisKahan.Angle.directedSinTwoAngleOperator P Q) ≤
           2 * N.gauge (sourceResidual Hop P)) ∧
-      TauCeti.DavisKahanExt.maximalAngle P Q < Real.pi / 4 := by
+      sourceFullAngleLtR P Q (Real.pi / 4) := by
   have hAH : IsSelfAdjoint (TauCeti.LinearPMap.addBounded A Hop) :=
     DavisKahan.addBounded_isSelfAdjoint A hA Hop hHop
   have hgap : FormBoundedSylvesterGap
@@ -367,8 +373,9 @@ theorem theorem8_2_residual_sourceExact_unbounded_real
       fun Msnf hM =>
         sinTwoTheta_directed_unboundedResidual_reducing_symmetricNorming_real Msnf
           hAH hQred hPdom hres hdelta hgap hM
-  · exact theorem8_2_residualHalfGap_maximalAngle_lt_unbounded_real hA Hop hHop
-      hdelta hab hPred hQred hQspec hQperp hPspec hcross hsmall
+  · exact (sourceFullAngleLtR_iff_maximalAngle_lt P Q (by positivity)).2
+      (theorem8_2_residualHalfGap_maximalAngle_lt_unbounded_real hA Hop hHop
+        hdelta hab hPred hQred hQspec hQperp hPspec hcross hsmall)
 
 end
 

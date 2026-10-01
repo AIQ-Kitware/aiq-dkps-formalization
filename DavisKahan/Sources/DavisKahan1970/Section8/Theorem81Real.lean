@@ -39,6 +39,7 @@ open scoped InnerProductSpace
 open DavisKahanExt
 open TauCeti.DavisKahan
 open TauCeti.DavisKahan.Foundation
+open TauCeti.DavisKahan.ExactSinTheta
 open TauCeti.RealComplexification
 open TauCeti.DavisKahan.Foundation.RealComplexification
 
@@ -70,7 +71,10 @@ structure Theorem81ConclusionReal
   branch_spectrum_high : SpectrumIn (A + H) Qᗮ (Set.Ici (alpha + delta))
   /-- The selected branch is strictly inside the quarter turn. -/
   quarter_acute : IsQuarterAcute P Q
-  /-- Equivalent scalar maximal-angle statement. -/
+  /-- The literal real source full angle is strictly below a quarter turn. -/
+  source_full_angle_lt_pi_div_four :
+    sourceFullAngleLtR P Q (Real.pi / 4)
+  /-- Equivalent scalar maximal-angle proof representative. -/
   maximal_angle_lt_pi_div_four : maximalAngle P Q < Real.pi / 4
 
 /-- **Davis--Kahan 1970, Theorem 8.1, existence over a REAL Hilbert space.**
@@ -168,6 +172,8 @@ theorem theorem8_1_canonicalBranch_real
       branch_spectrum_high :=
         spectrumIn_Ici_of_le_re_inner_generic hreduces.2 hhigh
       quarter_acute := hquarter
+      source_full_angle_lt_pi_div_four :=
+        (sourceFullAngleLtR_iff_maximalAngle_lt P Q (by positivity)).2 hangle
       maximal_angle_lt_pi_div_four := hangle }
 
 
@@ -305,6 +311,50 @@ theorem theorem8_1_maximalAngle_le_iff_spectrumIn_real
         (Set.Ici (alpha + delta)) := by
       simpa only [hsum, complexifySubmodule_orthogonal M] using hhighC0
     exact hangle_iff.1 (hcharC.2 ⟨hlowC, hhighC⟩)
+
+/-- Real Theorem 8.1 uniqueness with the printed closed condition stated on
+the literal source full angle. -/
+theorem theorem8_1_eq_of_sourceFullAngle_le_real
+    (A H : E →L[ℝ] E) (P : Submodule ℝ E) [P.HasOrthogonalProjection]
+    {alpha delta : ℝ}
+    (hdelta : 0 < delta)
+    (hA : IsSelfAdjoint A) (hH : IsSelfAdjoint H)
+    (hAP : ∀ x ∈ P, A x ∈ P)
+    (hPlow : ∀ x ∈ P, ⟪A x, x⟫_ℝ ≤ alpha * ‖x‖ ^ 2)
+    (hPhigh : ∀ x ∈ Pᗮ, (alpha + delta) * ‖x‖ ^ 2 ≤ ⟪A x, x⟫_ℝ)
+    (hHP : ∀ x ∈ P, H x ∈ Pᗮ)
+    (hHPperp : ∀ x ∈ Pᗮ, H x ∈ P)
+    (M N : Submodule ℝ E) [M.HasOrthogonalProjection] [N.HasOrthogonalProjection]
+    (hMreduces : (A + H).Reduces M) (hNreduces : (A + H).Reduces N)
+    (hMangle : sourceFullAngleLeR P M (Real.pi / 4))
+    (hNangle : sourceFullAngleLeR P N (Real.pi / 4)) :
+    M = N := by
+  apply theorem8_1_eq_of_maximalAngle_le_real A H P hdelta hA hH hAP hPlow hPhigh
+    hHP hHPperp M N hMreduces hNreduces
+  · exact (sourceFullAngleLeR_iff_maximalAngle_le P M (by positivity)).1 hMangle
+  · exact (sourceFullAngleLeR_iff_maximalAngle_le P N (by positivity)).1 hNangle
+
+/-- Real Theorem 8.1 characterization with `Theta <= pi/4` stated directly on
+the literal real source full angle. -/
+theorem theorem8_1_sourceFullAngle_le_iff_spectrumIn_real
+    (A H : E →L[ℝ] E) (P : Submodule ℝ E) [P.HasOrthogonalProjection]
+    {alpha delta : ℝ}
+    (hdelta : 0 < delta)
+    (hA : IsSelfAdjoint A) (hH : IsSelfAdjoint H)
+    (hAP : ∀ x ∈ P, A x ∈ P)
+    (hPlow : ∀ x ∈ P, ⟪A x, x⟫_ℝ ≤ alpha * ‖x‖ ^ 2)
+    (hPhigh : ∀ x ∈ Pᗮ, (alpha + delta) * ‖x‖ ^ 2 ≤ ⟪A x, x⟫_ℝ)
+    (hHP : ∀ x ∈ P, H x ∈ Pᗮ)
+    (hHPperp : ∀ x ∈ Pᗮ, H x ∈ P)
+    (M : Submodule ℝ E) [M.HasOrthogonalProjection]
+    (hMreduces : (A + H).Reduces M) :
+    sourceFullAngleLeR P M (Real.pi / 4) ↔
+      (SpectrumIn (A + H) M (Set.Iic alpha) ∧
+        SpectrumIn (A + H) Mᗮ (Set.Ici (alpha + delta))) := by
+  rw [sourceFullAngleLeR_iff_maximalAngle_le P M (by positivity)]
+  exact theorem8_1_maximalAngle_le_iff_spectrumIn_real A H P hdelta hA hH hAP hPlow
+    hPhigh hHP hHPperp M hMreduces
+
 
 end
 

@@ -7,6 +7,7 @@ import DavisKahan.SpectralTheory.SpectralGapFormBounds
 import DavisKahan.InfiniteDimensional.TanTwoTheta.OffDiagonalSpectralRepulsion
 import DavisKahan.Geometry.Polar.DirectRotation
 import DavisKahan.SpectralTheory.OperatorAngle
+import DavisKahan.Sources.DavisKahan1970.SineTheta.FullAnglePresentation
 import ForTauCeti.Analysis.InnerProductSpace.SpectralOrder
 
 open TauCeti.DavisKahan.Angle
@@ -58,6 +59,7 @@ open scoped InnerProductSpace
 open DavisKahanExt
 open TauCeti.DavisKahan
 open TauCeti.DavisKahan.Foundation
+open TauCeti.DavisKahan.ExactSinTheta
 open TauCeti.SpectralOrder
 
 noncomputable section
@@ -135,7 +137,11 @@ structure Theorem81Conclusion (A H : E →L[ℂ] E) (P Q : Submodule ℂ E)
   branch_spectrum_high : SpectrumIn (A + H) Qᗮ (Set.Ici (alpha + delta))
   /-- The branch is strictly inside the quarter turn. -/
   quarter_acute : IsQuarterAcute P Q
-  /-- Equivalently, in the printed scalar form. -/
+  /-- The source's literal full angle `Theta = diag(Theta_0,Theta_1)` is strictly
+  below a quarter turn, stated directly on that operator. -/
+  source_full_angle_lt_pi_div_four :
+    sourceFullAngleLtC P Q (Real.pi / 4)
+  /-- Equivalent scalar proof representative. -/
   maximal_angle_lt_pi_div_four : maximalAngle P Q < Real.pi / 4
 
 section Theorem81
@@ -225,6 +231,9 @@ theorem theorem8_1_canonicalBranch
       branch_spectrum_low := spectrumIn_Iic_of_re_inner_le hQreduces.1 hlow
       branch_spectrum_high := spectrumIn_Ici_of_le_re_inner hQreduces.2 hhigh
       quarter_acute := hquarter
+      source_full_angle_lt_pi_div_four :=
+        (sourceFullAngleLtC_iff_maximalAngle_lt P Q (by positivity)).2
+          ((maximalAngle_lt_pi_div_four_iff P Q).2 hquarter)
       maximal_angle_lt_pi_div_four :=
         (maximalAngle_lt_pi_div_four_iff P Q).2 hquarter }
 
@@ -466,6 +475,47 @@ theorem theorem8_1_maximalAngle_le_iff_spectrumIn
       exact hquarterPerp
     exact le_of_lt ((maximalAngle_lt_pi_div_four_iff P M).2 hquarter)
 
+/-- **Theorem 8.1 uniqueness, presentation form.**  The hypothesis is stated
+directly on Davis--Kahan's literal full angle `Theta = diag(Theta_0,Theta_1)`.
+The `maximalAngle` theorem remains the proof engine, and the exact norm identity
+proved in `FullAnglePresentation.lean` is the bridge. -/
+theorem theorem8_1_eq_canonicalBranch_of_sourceFullAngle_le
+    (hdelta : 0 < delta)
+    (hA : IsSelfAdjoint A) (hH : IsSelfAdjoint H)
+    (hAP : ∀ x ∈ P, A x ∈ P)
+    (hPlow : ∀ x ∈ P, RCLike.re ⟪A x, x⟫_ℂ ≤ alpha * ‖x‖ ^ 2)
+    (hPhigh : ∀ x ∈ Pᗮ, (alpha + delta) * ‖x‖ ^ 2 ≤ RCLike.re ⟪A x, x⟫_ℂ)
+    (hHP : ∀ x ∈ P, H x ∈ Pᗮ)
+    (hHPperp : ∀ x ∈ Pᗮ, H x ∈ P)
+    (M : Submodule ℂ E) [M.HasOrthogonalProjection]
+    (hMreduces : ContinuousLinearMap.Reduces (A + H) M)
+    (hMangle : sourceFullAngleLeC P M (Real.pi / 4)) :
+    M = canonicalLowBranch (A + H)
+      (ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mp (hA.add hH)) alpha := by
+  apply theorem8_1_eq_canonicalBranch_of_maximalAngle_le A H P
+    hdelta hA hH hAP hPlow hPhigh hHP hHPperp M hMreduces
+  exact (sourceFullAngleLeC_iff_maximalAngle_le P M (by positivity)).1 hMangle
+
+/-- **Davis--Kahan 1970, Theorem 8.1 characterization, presentation form.**
+The closed quarter-angle condition is written on the paper's literal full
+operator angle, rather than the scalar `maximalAngle` proxy. -/
+theorem theorem8_1_sourceFullAngle_le_iff_spectrumIn
+    (hdelta : 0 < delta)
+    (hA : IsSelfAdjoint A) (hH : IsSelfAdjoint H)
+    (hAP : ∀ x ∈ P, A x ∈ P)
+    (hPlow : ∀ x ∈ P, RCLike.re ⟪A x, x⟫_ℂ ≤ alpha * ‖x‖ ^ 2)
+    (hPhigh : ∀ x ∈ Pᗮ, (alpha + delta) * ‖x‖ ^ 2 ≤ RCLike.re ⟪A x, x⟫_ℂ)
+    (hHP : ∀ x ∈ P, H x ∈ Pᗮ)
+    (hHPperp : ∀ x ∈ Pᗮ, H x ∈ P)
+    (M : Submodule ℂ E) [M.HasOrthogonalProjection]
+    (hMreduces : ContinuousLinearMap.Reduces (A + H) M) :
+    sourceFullAngleLeC P M (Real.pi / 4) ↔
+      (SpectrumIn (A + H) M (Set.Iic alpha) ∧
+        SpectrumIn (A + H) Mᗮ (Set.Ici (alpha + delta))) := by
+  rw [sourceFullAngleLeC_iff_maximalAngle_le P M (by positivity)]
+  exact theorem8_1_maximalAngle_le_iff_spectrumIn A H P hdelta hA hH hAP hPlow
+    hPhigh hHP hHPperp M hMreduces
+
 end Uniqueness
 
 
@@ -481,10 +531,10 @@ Takes only the printed hypotheses. -/
 alias theorem8_1 := theorem8_1_canonicalBranch
 
 /-- **Davis--Kahan 1970, Theorem 8.1: the printed characterization.** -/
-alias theorem8_1_characterization := theorem8_1_maximalAngle_le_iff_spectrumIn
+alias theorem8_1_characterization := theorem8_1_sourceFullAngle_le_iff_spectrumIn
 
 /-- **Davis--Kahan 1970, Theorem 8.1: uniqueness of the branch.** -/
-alias theorem8_1_uniqueness := theorem8_1_eq_canonicalBranch_of_maximalAngle_le
+alias theorem8_1_uniqueness := theorem8_1_eq_canonicalBranch_of_sourceFullAngle_le
 
 
 end Section8

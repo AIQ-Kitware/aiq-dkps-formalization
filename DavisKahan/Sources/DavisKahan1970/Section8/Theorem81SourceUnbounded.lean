@@ -4,6 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, Claude Opus 5
 -/
 import DavisKahan.Sources.DavisKahan1970.Section8.Theorem81UnboundedReal
+import DavisKahan.Sources.DavisKahan1970.SineTheta.FullAnglePresentation
 
 /-!
 # Theorem 8.1 on the source's own objects, at unbounded ambient scope
@@ -52,6 +53,7 @@ namespace DavisKahan1970
 namespace Section8
 
 open DavisKahan
+open TauCeti.DavisKahan.ExactSinTheta
 
 noncomputable section
 
@@ -131,8 +133,11 @@ variable {Hc : Type v} [NormedAddCommGroup Hc] [InnerProductSpace ℂ Hc]
 variable {A : Hc →ₗ.[ℂ] Hc} {Hop : Hc →L[ℂ] Hc} {P : Submodule ℂ Hc}
   [P.HasOrthogonalProjection] {alpha delta : ℝ}
 
-/-- **Davis--Kahan 1970, Theorem 8.1's printed characterization, on the source's
-own blocks, at unbounded ambient scope over `ℂ`.**
+/-- **Scalar proof bridge for Davis--Kahan 1970, Theorem 8.1's characterization,
+at unbounded ambient scope over `ℂ`.**
+
+The presentation theorem immediately below states the source's literal `Theta ≤ pi/4`;
+this theorem keeps the equivalent `maximalAngle` condition used by the analytic engine.
 
 `Θ ≤ π/4` if and only if the chosen reducing blocks of `A + H` satisfy
 `Λ₀ ≤ α` and `Λ₁ ≥ α + δ`.  `Λ₀` and `Λ₁` are the two reducing restrictions of
@@ -166,6 +171,35 @@ theorem theorem8_1_maximalAngle_le_iff_blockPlacement_unbounded_complex
     ((semiboundedBelow_reducingRestriction_iff hPred.orthogonal (alpha + delta)).mp hPhigh)
     hHP hHPperp hdelta Q hQred
 
+/-- **Davis--Kahan 1970, Theorem 8.1's printed characterization, stated
+on the literal source full-angle operator `Theta`.**
+
+This is the presentation-facing form of the scalar `maximalAngle` theorem above. -/
+theorem theorem8_1_sourceFullAngle_le_iff_blockPlacement_unbounded_complex
+    [TopologicalSpace.SeparableSpace Hc]
+    (hA : IsSelfAdjoint A) (hH : Hop.IsSymmetric)
+    (hPred : TauCeti.LinearPMap.ReducesSubspace A P)
+    (hPlow : TauCeti.LinearPMap.SemiboundedAbove
+      (TauCeti.LinearPMap.reducingRestriction A P hPred) alpha)
+    (hPhigh : TauCeti.LinearPMap.SemiboundedBelow
+      (TauCeti.LinearPMap.reducingRestriction A Pᗮ hPred.orthogonal) (alpha + delta))
+    (hHP : ∀ x ∈ P, Hop x ∈ Pᗮ) (hHPperp : ∀ x ∈ Pᗮ, Hop x ∈ P)
+    (hdelta : 0 < delta)
+    (Q : Submodule ℂ Hc) [Q.HasOrthogonalProjection]
+    (hQred : TauCeti.LinearPMap.ReducesSubspace (TauCeti.LinearPMap.addBounded A Hop) Q)
+    (hcross : DavisKahan.CrossedDefectsEquivalent P Q) :
+    sourceFullAngleLeC P Q (Real.pi / 4) ↔
+      (TauCeti.LinearPMap.SemiboundedAbove
+          (TauCeti.LinearPMap.reducingRestriction
+            (TauCeti.LinearPMap.addBounded A Hop) Q hQred) alpha ∧
+        TauCeti.LinearPMap.SemiboundedBelow
+          (TauCeti.LinearPMap.reducingRestriction
+            (TauCeti.LinearPMap.addBounded A Hop) Qᗮ hQred.orthogonal)
+          (alpha + delta)) := by
+  rw [sourceFullAngleLeC_iff_maximalAngle_le P Q (by positivity)]
+  exact theorem8_1_maximalAngle_le_iff_blockPlacement_unbounded_complex hA hH hPred hPlow hPhigh
+    hHP hHPperp hdelta Q hQred hcross
+
 /-- **Davis--Kahan 1970, Theorem 8.1's existence clause, on the source's own
 blocks, at unbounded ambient scope over `ℂ`.**
 
@@ -193,7 +227,7 @@ theorem theorem8_1_exists_branch_blockPlacement_unbounded_complex
             (TauCeti.LinearPMap.reducingRestriction
               (TauCeti.LinearPMap.addBounded A Hop) Qᗮ hQred.orthogonal)
             (alpha + delta) ∧
-          TauCeti.DavisKahanExt.maximalAngle P Q ≤ Real.pi / 4 := by
+          sourceFullAngleLeC P Q (Real.pi / 4) := by
   obtain ⟨hred, hlow, hhigh, hangle⟩ :=
     theorem8_1_canonicalBranchUnbounded_printed (A := A) (Hop := Hop) (P := P)
       (alpha := alpha) (delta := delta) hA hH hPred.orthogonal
@@ -201,7 +235,7 @@ theorem theorem8_1_exists_branch_blockPlacement_unbounded_complex
       ((semiboundedBelow_reducingRestriction_iff hPred.orthogonal (alpha + delta)).mp hPhigh)
       hHP hHPperp hdelta
   refine ⟨canonicalLowBranchUnbounded (isSelfAdjoint_perturbed hA hH) alpha, _, hred,
-    ?_, ?_, hangle⟩
+    ?_, ?_, (sourceFullAngleLeC_iff_maximalAngle_le P _ (by positivity)).2 hangle⟩
   · exact (semiboundedAbove_reducingRestriction_iff hred alpha).mpr hlow
   · exact (semiboundedBelow_reducingRestriction_iff hred.orthogonal (alpha + delta)).mpr hhigh
 
@@ -312,7 +346,7 @@ theorem theorem8_1_upperCompressionRepulsion_sourceExact_unbounded_complex
     (_hQhigh : TauCeti.LinearPMap.SemiboundedBelow
       (TauCeti.LinearPMap.reducingRestriction
         (TauCeti.LinearPMap.addBounded A Hop) Qᗮ hQred.orthogonal) (alpha + delta))
-    (_hQangle : TauCeti.DavisKahanExt.maximalAngle P Q ≤ Real.pi / 4)
+    (_hQangle : sourceFullAngleLeC P Q (Real.pi / 4))
     (_hcross : DavisKahan.CrossedDefectsEquivalent P Q)
     (x : (TauCeti.LinearPMap.addBounded A Hop).domain) (hx : (x : Hc) ∈ Pᗮ) :
     RCLike.re ⟪A ⟨(x : Hc), x.2⟩, (x : Hc)⟫_ℂ - alpha * ‖(x : Hc)‖ ^ 2 ≤
@@ -346,7 +380,7 @@ theorem theorem8_1_lowerCompressionRepulsion_sourceExact_unbounded_complex
     (hQhigh : TauCeti.LinearPMap.SemiboundedBelow
       (TauCeti.LinearPMap.reducingRestriction
         (TauCeti.LinearPMap.addBounded A Hop) Qᗮ hQred.orthogonal) (alpha + delta))
-    (_hQangle : TauCeti.DavisKahanExt.maximalAngle P Q ≤ Real.pi / 4)
+    (_hQangle : sourceFullAngleLeC P Q (Real.pi / 4))
     (_hcross : DavisKahan.CrossedDefectsEquivalent P Q)
     (x : (TauCeti.LinearPMap.addBounded A Hop).domain) (hx : (x : Hc) ∈ P) :
     (alpha + delta) * ‖(x : Hc)‖ ^ 2 - RCLike.re ⟪A ⟨(x : Hc), x.2⟩, (x : Hc)⟫_ℂ ≤
@@ -385,7 +419,7 @@ theorem theorem8_1_exists_branch_withCompression_unbounded_complex
             (TauCeti.LinearPMap.reducingRestriction
               (TauCeti.LinearPMap.addBounded A Hop) Qᗮ hQred.orthogonal)
             (alpha + delta) ∧
-          TauCeti.DavisKahanExt.maximalAngle P Q ≤ Real.pi / 4) ∧
+          sourceFullAngleLeC P Q (Real.pi / 4)) ∧
         (∀ x : (TauCeti.LinearPMap.addBounded A Hop).domain, (x : Hc) ∈ Pᗮ →
           RCLike.re ⟪A ⟨(x : Hc), x.2⟩, (x : Hc)⟫_ℂ - alpha * ‖(x : Hc)‖ ^ 2 ≤
             RCLike.re ⟪TauCeti.LinearPMap.addBounded A Hop
@@ -407,7 +441,8 @@ theorem theorem8_1_exists_branch_withCompression_unbounded_complex
   refine ⟨canonicalLowBranchUnbounded (isSelfAdjoint_perturbed hA hH) alpha, _, hred,
     ⟨(semiboundedAbove_reducingRestriction_iff hred alpha).mpr hlow,
       (semiboundedBelow_reducingRestriction_iff hred.orthogonal (alpha + delta)).mpr hhigh,
-      hangle⟩, fun x hx => ?_, fun x hx => ?_⟩
+      (sourceFullAngleLeC_iff_maximalAngle_le P _ (by positivity)).2 hangle⟩,
+    fun x hx => ?_, fun x hx => ?_⟩
   · exact theorem8_1_upperCompressionRepulsion_ofBlockPlacement_unbounded_complex hHPperp _ hred
       ((semiboundedAbove_reducingRestriction_iff hred alpha).mpr hlow) x hx
   · exact theorem8_1_lowerCompressionRepulsion_ofBlockPlacement_unbounded_complex hHP _ hred
@@ -447,8 +482,9 @@ theorem semiboundedBelow_reducingRestriction_real_iff
   rw [semiboundedBelow_reducingRestriction_iff]
   simp only [RCLike.re_to_real]
 
-/-- **Davis--Kahan 1970, Theorem 8.1's printed characterization, on the source's
-own blocks, at unbounded ambient scope over `ℝ`.** -/
+/-- **Scalar proof bridge for Davis--Kahan 1970, Theorem 8.1's characterization,
+at unbounded ambient scope over `ℝ`.**  The presentation theorem immediately below
+uses the literal real source full-angle condition. -/
 theorem theorem8_1_maximalAngle_le_iff_blockPlacement_unbounded_real
     [TopologicalSpace.SeparableSpace Er]
     (hA : IsSelfAdjoint A) (hH : Hop.IsSymmetric)
@@ -477,6 +513,33 @@ theorem theorem8_1_maximalAngle_le_iff_blockPlacement_unbounded_real
     ((semiboundedBelow_reducingRestriction_real_iff hPred.orthogonal (alpha + delta)).mp hPhigh)
     hHP hHPperp hdelta Q hQred
 
+/-- **Real source-full-angle presentation of Theorem 8.1's printed
+characterization.**  The scalar `maximalAngle` theorem above remains the proof bridge. -/
+theorem theorem8_1_sourceFullAngle_le_iff_blockPlacement_unbounded_real
+    [TopologicalSpace.SeparableSpace Er]
+    (hA : IsSelfAdjoint A) (hH : Hop.IsSymmetric)
+    (hPred : TauCeti.LinearPMap.ReducesSubspace A P)
+    (hPlow : TauCeti.LinearPMap.SemiboundedAbove
+      (TauCeti.LinearPMap.reducingRestriction A P hPred) alpha)
+    (hPhigh : TauCeti.LinearPMap.SemiboundedBelow
+      (TauCeti.LinearPMap.reducingRestriction A Pᗮ hPred.orthogonal) (alpha + delta))
+    (hHP : ∀ x ∈ P, Hop x ∈ Pᗮ) (hHPperp : ∀ x ∈ Pᗮ, Hop x ∈ P)
+    (hdelta : 0 < delta)
+    (Q : Submodule ℝ Er) [Q.HasOrthogonalProjection]
+    (hQred : TauCeti.LinearPMap.ReducesSubspace (TauCeti.LinearPMap.addBounded A Hop) Q)
+    (hcross : DavisKahan.CrossedDefectsEquivalent P Q) :
+    sourceFullAngleLeR P Q (Real.pi / 4) ↔
+      (TauCeti.LinearPMap.SemiboundedAbove
+          (TauCeti.LinearPMap.reducingRestriction
+            (TauCeti.LinearPMap.addBounded A Hop) Q hQred) alpha ∧
+        TauCeti.LinearPMap.SemiboundedBelow
+          (TauCeti.LinearPMap.reducingRestriction
+            (TauCeti.LinearPMap.addBounded A Hop) Qᗮ hQred.orthogonal)
+          (alpha + delta)) := by
+  rw [sourceFullAngleLeR_iff_maximalAngle_le P Q (by positivity)]
+  exact theorem8_1_maximalAngle_le_iff_blockPlacement_unbounded_real hA hH hPred hPlow hPhigh
+    hHP hHPperp hdelta Q hQred hcross
+
 /-- **Davis--Kahan 1970, Theorem 8.1's existence clause, on the source's own
 blocks, at unbounded ambient scope over `ℝ`.** -/
 theorem theorem8_1_exists_branch_blockPlacement_unbounded_real
@@ -500,7 +563,7 @@ theorem theorem8_1_exists_branch_blockPlacement_unbounded_real
             (TauCeti.LinearPMap.reducingRestriction
               (TauCeti.LinearPMap.addBounded A Hop) Qᗮ hQred.orthogonal)
             (alpha + delta) ∧
-          TauCeti.DavisKahanExt.maximalAngle P Q ≤ Real.pi / 4 := by
+          sourceFullAngleLeR P Q (Real.pi / 4) := by
   obtain ⟨hred, hlow, hhigh, hangle⟩ :=
     theorem8_1_canonicalBranchUnbounded_printed_real (A := A) (Hop := Hop) (P := P)
       (alpha := alpha) (delta := delta) hA hH hPred.orthogonal
@@ -509,7 +572,8 @@ theorem theorem8_1_exists_branch_blockPlacement_unbounded_real
         hPhigh)
       hHP hHPperp hdelta
   refine ⟨canonicalLowBranchUnboundedReal
-    (DavisKahan.addBounded_isSelfAdjoint A hA Hop hH) alpha, _, hred, ?_, ?_, hangle⟩
+    (DavisKahan.addBounded_isSelfAdjoint A hA Hop hH) alpha, _, hred, ?_, ?_,
+    (sourceFullAngleLeR_iff_maximalAngle_le P _ (by positivity)).2 hangle⟩
   · exact (semiboundedAbove_reducingRestriction_real_iff hred alpha).mpr hlow
   · exact (semiboundedBelow_reducingRestriction_real_iff hred.orthogonal (alpha + delta)).mpr
       hhigh
@@ -607,7 +671,7 @@ theorem theorem8_1_upperCompressionRepulsion_sourceExact_unbounded_real
     (_hQhigh : TauCeti.LinearPMap.SemiboundedBelow
       (TauCeti.LinearPMap.reducingRestriction
         (TauCeti.LinearPMap.addBounded A Hop) Qᗮ hQred.orthogonal) (alpha + delta))
-    (_hQangle : TauCeti.DavisKahanExt.maximalAngle P Q ≤ Real.pi / 4)
+    (_hQangle : sourceFullAngleLeR P Q (Real.pi / 4))
     (_hcross : DavisKahan.CrossedDefectsEquivalent P Q)
     (x : (TauCeti.LinearPMap.addBounded A Hop).domain) (hx : (x : Er) ∈ Pᗮ) :
     ⟪A ⟨(x : Er), x.2⟩, (x : Er)⟫_ℝ - alpha * ‖(x : Er)‖ ^ 2 ≤
@@ -639,7 +703,7 @@ theorem theorem8_1_lowerCompressionRepulsion_sourceExact_unbounded_real
     (hQhigh : TauCeti.LinearPMap.SemiboundedBelow
       (TauCeti.LinearPMap.reducingRestriction
         (TauCeti.LinearPMap.addBounded A Hop) Qᗮ hQred.orthogonal) (alpha + delta))
-    (_hQangle : TauCeti.DavisKahanExt.maximalAngle P Q ≤ Real.pi / 4)
+    (_hQangle : sourceFullAngleLeR P Q (Real.pi / 4))
     (_hcross : DavisKahan.CrossedDefectsEquivalent P Q)
     (x : (TauCeti.LinearPMap.addBounded A Hop).domain) (hx : (x : Er) ∈ P) :
     (alpha + delta) * ‖(x : Er)‖ ^ 2 - ⟪A ⟨(x : Er), x.2⟩, (x : Er)⟫_ℝ ≤
@@ -674,7 +738,7 @@ theorem theorem8_1_exists_branch_withCompression_unbounded_real
             (TauCeti.LinearPMap.reducingRestriction
               (TauCeti.LinearPMap.addBounded A Hop) Qᗮ hQred.orthogonal)
             (alpha + delta) ∧
-          TauCeti.DavisKahanExt.maximalAngle P Q ≤ Real.pi / 4) ∧
+          sourceFullAngleLeR P Q (Real.pi / 4)) ∧
         (∀ x : (TauCeti.LinearPMap.addBounded A Hop).domain, (x : Er) ∈ Pᗮ →
           ⟪A ⟨(x : Er), x.2⟩, (x : Er)⟫_ℝ - alpha * ‖(x : Er)‖ ^ 2 ≤
             ⟪TauCeti.LinearPMap.addBounded A Hop
@@ -699,7 +763,8 @@ theorem theorem8_1_exists_branch_withCompression_unbounded_real
     ⟨(semiboundedAbove_reducingRestriction_real_iff hred alpha).mpr hlow,
       (semiboundedBelow_reducingRestriction_real_iff hred.orthogonal (alpha + delta)).mpr
         hhigh,
-      hangle⟩, fun x hx => ?_, fun x hx => ?_⟩
+      (sourceFullAngleLeR_iff_maximalAngle_le P _ (by positivity)).2 hangle⟩,
+    fun x hx => ?_, fun x hx => ?_⟩
   · exact theorem8_1_upperCompressionRepulsion_ofBlockPlacement_unbounded_real hHPperp _ hred
       ((semiboundedAbove_reducingRestriction_real_iff hred alpha).mpr hlow) x hx
   · exact theorem8_1_lowerCompressionRepulsion_ofBlockPlacement_unbounded_real hHP _ hred

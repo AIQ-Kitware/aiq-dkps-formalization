@@ -9,6 +9,7 @@ import DavisKahan.Sources.DavisKahan1970.SinTwoThetaAmbient
 import ForTauCeti.Analysis.InnerProductSpace.AngleGeometry
 import DavisKahan.DoubleAngle.DirectedAngleGeneric
 import DavisKahan.Sources.DavisKahan1970.SymmetricNormingFanDominance
+import DavisKahan.Sources.DavisKahan1970.SineTheta.FullAnglePresentation
 
 open TauCeti.DavisKahan.Angle
 
@@ -174,6 +175,7 @@ namespace Section8
 open DavisKahanExt
 open TauCeti.DavisKahan
 open TauCeti.DavisKahan.Foundation
+open TauCeti.DavisKahan.ExactSinTheta
 open TauCeti.ApproximationNumber
 open scoped TauCeti.CompleteSubspace
 
@@ -692,6 +694,44 @@ theorem theorem8_2_branch_maximalAngle_lt_of_crossedDefects
   maximalAngle_lt_pi_div_four_of_crossedDefects hcross
     (theorem8_2_branch hA hK hdelta hab hQ hQperp hPred hP hsmall)
 
+/-- **Theorem 8.2's printed strict quarter-angle conclusion, presentation
+form.**  The conclusion is stated directly on Davis--Kahan's literal full angle
+`Theta = diag(Theta_0,Theta_1)`; the `maximalAngle` theorem is the proof
+representative underneath. -/
+theorem theorem8_2_branch_sourceFullAngle_lt [FiniteDimensional ℂ H]
+    {A K : H →L[ℂ] H} (hA : A.IsSymmetric) (hK : K.IsSymmetric)
+    {P Q : Submodule ℂ H} [P.HasOrthogonalProjection] [Q.HasOrthogonalProjection]
+    {alpha beta delta : ℝ} (hdelta : 0 < delta) (hab : beta ≤ alpha)
+    (hQ : Foundation.SpectrumIn (A + K) Q (Set.Icc beta alpha))
+    (hQperp : Foundation.SpectrumIn (A + K) Qᗮ (gapExterior beta alpha delta))
+    (hPred : A.Reduces P)
+    (hP : Foundation.SpectrumIn A P (Set.Icc (beta - delta / 2) (alpha + delta / 2)))
+    (hrank : finrank ℂ P = finrank ℂ Q)
+    (hsmall : ‖K‖ < delta / 2 ∨
+      ‖residual (A + K) P.subtypeL (compressOperator P A)‖ < delta / 2) :
+    sourceFullAngleLtC P Q (Real.pi / 4) := by
+  apply (sourceFullAngleLtC_iff_maximalAngle_lt P Q (by positivity)).2
+  exact theorem8_2_branch_maximalAngle_lt hA hK hdelta hab hQ hQperp hPred hP
+    hrank hsmall
+
+/-- Dimension-free presentation form under the source's crossed-defect standing
+assumption (3.5). -/
+theorem theorem8_2_branch_sourceFullAngle_lt_of_crossedDefects
+    {A K : H →L[ℂ] H} (hA : A.IsSymmetric) (hK : K.IsSymmetric)
+    {P Q : Submodule ℂ H} [P.HasOrthogonalProjection] [Q.HasOrthogonalProjection]
+    {alpha beta delta : ℝ} (hdelta : 0 < delta) (hab : beta ≤ alpha)
+    (hQ : Foundation.SpectrumIn (A + K) Q (Set.Icc beta alpha))
+    (hQperp : Foundation.SpectrumIn (A + K) Qᗮ (gapExterior beta alpha delta))
+    (hPred : A.Reduces P)
+    (hP : Foundation.SpectrumIn A P (Set.Icc (beta - delta / 2) (alpha + delta / 2)))
+    (hcross : CrossedDefectsEquivalent P Q)
+    (hsmall : ‖K‖ < delta / 2 ∨
+      ‖residual (A + K) P.subtypeL (compressOperator P A)‖ < delta / 2) :
+    sourceFullAngleLtC P Q (Real.pi / 4) := by
+  apply (sourceFullAngleLtC_iff_maximalAngle_lt P Q (by positivity)).2
+  exact theorem8_2_branch_maximalAngle_lt_of_crossedDefects hA hK hdelta hab hQ hQperp
+    hPred hP hcross hsmall
+
 /-! ### 4. The whole printed theorem -/
 
 /-- **Davis--Kahan 1970, Theorem 8.2.**
@@ -723,10 +763,10 @@ theorem theorem8_2_complex [FiniteDimensional ℂ H]
     delta * ‖DavisKahanExt.sinTwoAngleOperator Q P‖ ≤ 2 * ‖K‖ ∧
       delta * ‖DavisKahanExt.sinTwoAngleOperator Q P‖ ≤
         2 * ‖residual (A + K) P.subtypeL (compressOperator P A)‖ ∧
-      maximalAngle P Q < Real.pi / 4 :=
+      sourceFullAngleLtC P Q (Real.pi / 4) :=
   ⟨theorem8_2_sinTwoTheta_perturbation_complex hA hK hdelta hab hQ hQperp hPred,
     theorem8_2_sinTwoTheta_residual_complex hA hK hdelta hab hQ hQperp hPred,
-    theorem8_2_branch_maximalAngle_lt hA hK hdelta hab hQ hQperp hPred hP
+    theorem8_2_branch_sourceFullAngle_lt hA hK hdelta hab hQ hQperp hPred hP
       hrank hsmall⟩
 
 end Section8

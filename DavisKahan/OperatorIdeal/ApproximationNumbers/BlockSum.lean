@@ -82,6 +82,44 @@ theorem continuousOrthogonalBlockSum_apply
       WithLp.toLp 2 (A x.fst, B x.snd) :=
   rfl
 
+/-- Symmetry of square operators is preserved by continuous orthogonal block sum. -/
+theorem continuousOrthogonalBlockSum_isSymmetric
+    {E₀ E₁ : Type v}
+    [NormedAddCommGroup E₀] [InnerProductSpace 𝕜 E₀] [CompleteSpace E₀]
+    [NormedAddCommGroup E₁] [InnerProductSpace 𝕜 E₁] [CompleteSpace E₁]
+    {A : E₀ →L[𝕜] E₀} {B : E₁ →L[𝕜] E₁}
+    (hA : A.IsSymmetric) (hB : B.IsSymmetric) :
+    (continuousOrthogonalBlockSum A B).IsSymmetric := by
+  intro x y
+  change
+    ⟪WithLp.toLp 2 (A x.fst, B x.snd), y⟫_𝕜 =
+      ⟪x, WithLp.toLp 2 (A y.fst, B y.snd)⟫_𝕜
+  simp only [WithLp.prod_inner_apply, WithLp.ofLp_fst, WithLp.ofLp_snd]
+  have hAx : ⟪A x.fst, y.fst⟫_𝕜 = ⟪x.fst, A y.fst⟫_𝕜 :=
+    hA x.fst y.fst
+  have hBx : ⟪B x.snd, y.snd⟫_𝕜 = ⟪x.snd, B y.snd⟫_𝕜 :=
+    hB x.snd y.snd
+  exact congrArg₂ (fun a b => a + b) hAx hBx
+
+/-- Positivity of square operators is preserved by continuous orthogonal block sum. -/
+theorem continuousOrthogonalBlockSum_isPositive
+    {E₀ E₁ : Type v}
+    [NormedAddCommGroup E₀] [InnerProductSpace 𝕜 E₀] [CompleteSpace E₀]
+    [NormedAddCommGroup E₁] [InnerProductSpace 𝕜 E₁] [CompleteSpace E₁]
+    {A : E₀ →L[𝕜] E₀} {B : E₁ →L[𝕜] E₁}
+    (hA : A.IsPositive) (hB : B.IsPositive) :
+    (continuousOrthogonalBlockSum A B).IsPositive := by
+  refine ⟨continuousOrthogonalBlockSum_isSymmetric hA.isSymmetric hB.isSymmetric, ?_⟩
+  intro x
+  rw [ContinuousLinearMap.reApplyInnerSelf_apply]
+  change
+    0 ≤ RCLike.re ⟪WithLp.toLp 2 (A x.fst, B x.snd), x⟫_𝕜
+  rw [WithLp.prod_inner_apply]
+  have hsum :
+      0 ≤ RCLike.re ⟪A x.fst, x.fst⟫_𝕜 + RCLike.re ⟪B x.snd, x.snd⟫_𝕜 :=
+    add_nonneg (hA.re_inner_nonneg_left x.fst) (hB.re_inner_nonneg_left x.snd)
+  simpa only [WithLp.ofLp_fst, WithLp.ofLp_snd, map_add] using hsum
+
 /-- A block sum with zero first block keeps only the second block. -/
 @[simp]
 theorem continuousOrthogonalBlockSum_zero_left
@@ -264,6 +302,21 @@ theorem norm_continuousOrthogonalBlockSum_le
       nlinarith [h1, h2]
     exact le_of_sq_le_sq hsq (mul_nonneg hM (norm_nonneg x))
   exact_mod_cast hgoal
+
+/-- The operator norm of an orthogonal block sum is exactly the larger
+of the two block norms. -/
+theorem norm_continuousOrthogonalBlockSum
+    (A : E₀ →L[𝕜] F₀) (B : E₁ →L[𝕜] F₁) :
+    ‖continuousOrthogonalBlockSum A B‖ = max ‖A‖ ‖B‖ := by
+  apply le_antisymm
+  · exact norm_continuousOrthogonalBlockSum_le A B
+  · apply max_le
+    · rw [← A.approximationNumber_index_zero,
+        ← (continuousOrthogonalBlockSum A B).approximationNumber_index_zero]
+      exact approximationNumber_le_blockSum_left A B 0
+    · rw [← B.approximationNumber_index_zero,
+        ← (continuousOrthogonalBlockSum A B).approximationNumber_index_zero]
+      exact approximationNumber_le_blockSum_right A B 0
 
 /-- A block sum splits as a sum of two compressions, one per summand. -/
 theorem continuousOrthogonalBlockSum_eq_add
