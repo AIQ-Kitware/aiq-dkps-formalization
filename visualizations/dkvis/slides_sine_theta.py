@@ -873,9 +873,14 @@ class S05Residual(DeckSlide):
         # Right column: a persistent recap, then one explanation per build.
         x0, w = RIGHT_COL_X - 0.15, RIGHT_COL_W + 0.2
         rows = [
-            (r"$A$", r"the matrix. We can multiply any vector by it.", FG),
-            (r"$\cx{exact}{U}$", r"its true eigenvector: the answer we want, but finding it is the hard part.", EXACT),
-            (r"$\cx{trial}{v}$", r"our guess for it, e.g.\ from an iterative solver or an older calculation.", TRIAL),
+            (
+                r"$A$",
+                r"the matrix whose eigenvectors we want; we can multiply any vector by it. "
+                r"(In a perturbation problem: the perturbed $A+H$.)",
+                FG,
+            ),
+            (r"$\cx{exact}{U}$", r"its true eigenvector. Any computation only ever gives an approximation of it.", EXACT),
+            (r"$\cx{trial}{v}$", r"our approximation, e.g.\ from an iterative eigensolver.", TRIAL),
         ]
         recap = VGroup()
         for sym, text, color in rows:
@@ -901,8 +906,10 @@ class S05Residual(DeckSlide):
             return g
 
         self.say(
-            "A reminder of the cast. A is the matrix: we can multiply vectors by it. U is its true "
-            "eigenvector, the answer we are after, which we do not have. v is our guess."
+            "A reminder of the cast. A is the matrix whose eigenvectors we want, and we can multiply vectors "
+            "by it; in a perturbation problem it is the perturbed matrix A + H. U is its true eigenvector. "
+            "We can never compute U exactly: no formula exists beyond 4 by 4, solvers iterate, matrices can be "
+            "huge or infinite-dimensional. v is the approximation we have."
         )
         e1 = place(
             para(
@@ -932,7 +939,8 @@ class S05Residual(DeckSlide):
 
         self.say(
             "Split Av into the part along v, rho v, and the leftover r. The recipe needs one "
-            "multiplication by A and one dot product. U never appears: that is why r is computable."
+            "multiplication by A and one dot product. U never appears: that is why r is computable. "
+            "It is exactly how iterative eigensolvers decide to stop: iterate until the residual is small."
         )
         recipe = math(
             r"\begin{aligned}&1.\ \ w=Av\\ &2.\ \ \rho=v^{*}w\\ &3.\ \ \cx{resid}{r}=w-\rho\,v\end{aligned}",
@@ -940,7 +948,8 @@ class S05Residual(DeckSlide):
         )
         recipe_note = para(
             r"$\rho v$ is the part of $Av$ along $v$; the \cx{resid}{residual} $r$ is what is left over. "
-            r"One multiplication and one dot product: $\cx{exact}{U}$ never appears.",
+            r"One multiplication and one dot product: $\cx{exact}{U}$ never appears. "
+            r"This is the stopping test iterative eigensolvers use.",
             width=w - 2.0,
             size=24,
         )
@@ -1084,7 +1093,7 @@ class S06Gap(DeckSlide):
 
 class S07Theorem(DeckSlide):
     title = r"The $\sin\Theta$ theorem"
-    kicker = r"Davis \& Kahan (1970), Section 2"
+    kicker = r"Davis \& Kahan (1970). $A$ is the matrix we have, e.g.\ the perturbed $A+H$"
 
     def body(self) -> None:
         self.say(
