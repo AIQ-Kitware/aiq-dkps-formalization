@@ -204,9 +204,11 @@ class DeckSlide(Slide):
     def make_chrome(self) -> VGroup | None:
         items = VGroup()
         if self.title:
-            title = tex(self.title, size=44).to_corner(UL, buff=0).move_to(
-                [LEFT_EDGE, TOP_EDGE, 0], aligned_edge=UL
-            )
+            title = tex(self.title, size=44)
+            max_w = FRAME_W - 2 * 0.55 - (1.9 if self.depth else 0.0)
+            if title.width > max_w:
+                title.scale_to_fit_width(max_w)
+            title.move_to([LEFT_EDGE, TOP_EDGE, 0], aligned_edge=UL)
             items.add(title)
             if self.kicker:
                 kick = tex(self.kicker, size=26, color=MUTED).next_to(

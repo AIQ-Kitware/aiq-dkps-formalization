@@ -145,7 +145,7 @@ presenter notes on every build. There are two presentation paths:
 | `S00bSetting` | yes | yes | the setting: self-adjoint operators, from real symmetric matrices to unbounded operators |
 | `S01Ellipse` | yes | yes | a positive-definite example maps the circle to an ellipse; axes are eigenvectors |
 | `S02Perturb` | yes | yes | `A -> A+H`: eigenvalues barely move (Weyl), axes turn |
-| `S03NoGap` | yes | yes | same `H`, shrinking gap: the turn tends to 45 degrees |
+| `S03NoGap` | yes | yes | "How far can an eigenvector turn? It depends on whether there is a gap": A's eigenvectors in the ellipse and its eigenvalues on a number line; as the ellipse rounds out the gap closes and the eigenvector of `A+H` turns toward 45 degrees |
 | `S04Angle` | yes | yes | `sin theta = dist(v, U)`; `sin Theta0` is the operator whose eigenvalues are the sines |
 | `S04bSinThetaOperator` | | `*` | `sin Theta0` exactly: definition, `|S| = sin Theta0`, and the Lean bridge |
 | `S05Residual` | yes | yes | recap of `A`, `U`, `v`; why `r = Av - rho v` needs only `A` and `v` (the recipe) while the angle needs `U` |
