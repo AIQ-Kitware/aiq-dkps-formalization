@@ -994,20 +994,19 @@ class S05Residual(DeckSlide):
         )
 
         # The right column, laid out once in its final form; builds only add.
-        x0, w, size = RIGHT_COL_X - 0.15, RIGHT_COL_W + 0.2, 24
-        p1 = para(r"The error $\cx{sine}{\theta}$ of our approximation needs $\cx{exact}{U}$, which we do not have.",
-                  width=w, size=size)
+        x0, w, size = RIGHT_COL_X - 0.4, RIGHT_COL_W + 0.5, 24
+        p1 = para(r"The error $\cx{sine}{\theta}$ needs $\cx{exact}{U}$, which we do not have.", width=w, size=size)
         p2 = para(
-            r"But an eigenvector is a direction $A$ only stretches. So apply $A$ to $v$: "
-            r"if $v$ were an eigenvector, $Av$ would point exactly along $v$.",
+            r"The residual asks: \emph{``If I pretend $v$ is an eigenvector, how badly does that claim fail?''} "
+            r"If the claim were true, $Av$ would point exactly along $v$.",
             width=w,
             size=size,
         )
         p3a = math(r"\rho=v^{*}Av,\qquad \cx{resid}{r}=Av-\rho\,v", size=32)
         p3b = para(
-            r"$\rho v$ is the part of $Av$ along $v$; the \cx{resid}{residual} $r$ is the rest. "
-            r"\textbf{Computable}: one product with $A$ and one dot product, no $U$. "
-            r"A small residual is a standard stopping criterion for iterative eigensolvers.",
+            r"$\rho v$ is the part of $Av$ along $v$; the \cx{resid}{residual} $r$ is the part that leaves the "
+            r"line through $v$. \textbf{Computable} from $A$ and $v$ alone; a small $\norm{r}$ is a standard "
+            r"stopping criterion for iterative eigensolvers.",
             width=w,
             size=size - 2,
             color=MUTED,
@@ -1021,10 +1020,17 @@ class S05Residual(DeckSlide):
         )
         p4b = tex(r"$\cx{resid}{r}=0$ exactly when $v$ is an eigenvector.", size=size)
         p5a = math(r"\text{several vectors at once:}\quad \cx{resid}{R}=A\cx{trial}{E_0}-\cx{trial}{E_0}\cx{trial}{A_0}", size=28)
+        p5c = para(
+            r"For a subspace $V$ the claim is ``$V$ is \emph{invariant}'' ($A$ maps $V$ into $V$). "
+            r"With $A_0=E_0^{*}AE_0$, $\cx{resid}{R}$ is the part of $A(V)$ that sticks out of $V$.",
+            width=w,
+            size=size - 2,
+            color=MUTED,
+        )
         p5b = boxed(tex(r"Does a small $\cx{resid}{R}$ force a small $\cx{sine}{\sin\Theta_0}$?", size=26), color=FG, pad=0.18)
         col = VGroup(p1, p2, VGroup(p3a, p3b).arrange(DOWN, aligned_edge=LEFT, buff=0.1),
                      VGroup(p4, p4b).arrange(DOWN, aligned_edge=LEFT, buff=0.12),
-                     VGroup(p5a, p5b).arrange(DOWN, aligned_edge=LEFT, buff=0.15))
+                     VGroup(p5a, p5c, p5b).arrange(DOWN, aligned_edge=LEFT, buff=0.12))
         col.arrange(DOWN, aligned_edge=LEFT, buff=0.26)
         col.move_to([x0, self.content_top - 0.1, 0], aligned_edge=UP + LEFT)
         floor = -3.45
@@ -1047,14 +1053,16 @@ class S05Residual(DeckSlide):
         self.play(FadeIn(VGroup(v, v_lbl, arc, th_lbl)), FadeIn(p1))
 
         self.say(
-            "But we can test v. An eigenvector is a direction A only stretches, so multiply: if v were an "
-            "eigenvector, Av would point exactly along v. Here it does not."
+            "But we can test v. The residual asks: if I pretend v is an eigenvector, how badly does that claim "
+            "fail? An eigenvector is a direction A only stretches, so if the claim were true, Av would point "
+            "exactly along v. Here it does not."
         )
         self.add(Av, Av_lbl)
         self.play(FadeIn(VGroup(Av, Av_lbl)), FadeIn(p2))
 
         self.say(
-            "Split Av into its part along v, rho v, and the rest, the residual r. That takes one "
+            "Split Av into its part along v, rho v, and the rest, the residual r: the part of Av that leaves the "
+            "line through v. That takes one "
             "multiplication by A and one dot product; U never appears, which is why r is computable. "
             "A small residual is a standard stopping criterion for iterative eigensolvers."
         )
@@ -1070,8 +1078,10 @@ class S05Residual(DeckSlide):
 
         self.say(
             "The same works for several vectors at once: E0 holds them as orthonormal columns and A0 is a "
-            "small trial matrix, for instance E0* A E0. The residual R = A E0 - E0 A0 is still computable. "
-            "The question for the theorem: does a small R force a small angle?"
+            "small trial matrix, for instance E0* A E0. For a subspace the claim we pretend is that V is "
+            "invariant: A maps V into V, as it does an eigenspace. With that choice of A0, R is exactly the part "
+            "of A applied to V that sticks out of V, and it is still computable. The question for the theorem: "
+            "does a small R force a small angle?"
         )
         self.play(FadeIn(col[4]), phi.animate.set_value(np.radians(40.0)), run_time=1.5)
 
@@ -1198,12 +1208,13 @@ class S07Theorem(DeckSlide):
 
         self.say(
             "Read each factor. sin Theta0: how far the trial subspace is from the true one "
-            "(not computable). R: how far the trial is from being invariant (computable). "
+            "(not computable). R: if we pretend the trial subspace is invariant, how badly that claim fails "
+            "(computable). "
             "delta: how isolated the wanted part of the spectrum is."
         )
         rows = VGroup(
             tex(r"\cx{sine}{$\norm{\sin\Theta_0}$}\quad how far the trial subspace is from the true one", size=30),
-            tex(r"\cx{resid}{$\norm{R}$}\quad how far the trial is from invariant \cx{muted}{(computable)}", size=30),
+            tex(r"\cx{resid}{$\norm{R}$}\quad if we pretend the trial is invariant, how badly that fails \cx{muted}{(computable)}", size=30),
             tex(r"\cx{gap}{$\delta$}\quad how isolated the wanted eigenvalues are", size=30),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.25)
         rows.next_to(hyp, DOWN, buff=0.4)
