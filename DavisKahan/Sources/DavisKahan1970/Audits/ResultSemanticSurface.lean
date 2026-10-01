@@ -930,6 +930,8 @@ Status: **TERMINAL EXACT**.
 #check @TauCeti.DavisKahan1970.Section8.semiboundedBelow_reducingRestriction_real_iff
 #check @TauCeti.DavisKahan1970.Section8.theorem8_1_maximalAngle_le_iff_blockPlacement_unbounded_complex
 #check @TauCeti.DavisKahan1970.Section8.theorem8_1_maximalAngle_le_iff_blockPlacement_unbounded_real
+#check @TauCeti.DavisKahan1970.Section8.theorem8_1_sourceFullAngle_le_iff_blockPlacement_unbounded_complex
+#check @TauCeti.DavisKahan1970.Section8.theorem8_1_sourceFullAngle_le_iff_blockPlacement_unbounded_real
 #check @TauCeti.DavisKahan1970.Section8.theorem8_1_exists_branch_blockPlacement_unbounded_complex
 #check @TauCeti.DavisKahan1970.Section8.theorem8_1_exists_branch_blockPlacement_unbounded_real
 #check @TauCeti.DavisKahan1970.Section8.theorem8_1_upperCompressionRepulsion_sourceExact_unbounded_complex
@@ -1016,6 +1018,12 @@ Status: **TERMINAL EXACT**.
 #check @TauCeti.DavisKahan1970.Section8.theorem8_2_perturbation_sourceExact_unbounded_real
 #check @TauCeti.DavisKahan1970.Section8.theorem8_2_residual_sourceExact_unbounded_complex
 #check @TauCeti.DavisKahan1970.Section8.theorem8_2_residual_sourceExact_unbounded_real
+#check @TauCeti.DavisKahan.ExactSinTheta.sourceFullAngleLeC
+#check @TauCeti.DavisKahan.ExactSinTheta.sourceFullAngleLtC
+#check @TauCeti.DavisKahan.ExactSinTheta.sourceFullAngleLeR
+#check @TauCeti.DavisKahan.ExactSinTheta.sourceFullAngleLtR
+#check @TauCeti.DavisKahan.ExactSinTheta.sourceFullAngleLeC_iff_intrinsicAngle_spectrum_le
+#check @TauCeti.DavisKahan.ExactSinTheta.sourceFullAngleLtC_iff_intrinsicAngle_spectrum_lt
 #check @TauCeti.DavisKahan1970.Section8.sourceResidual
 #check @TauCeti.DavisKahan1970.Section8.sourceResidual_eq_sub_ritzBlock
 #check @TauCeti.DavisKahan1970.Section8.exists_ritzBlock_of_realSpectrum_subset_Icc_complex

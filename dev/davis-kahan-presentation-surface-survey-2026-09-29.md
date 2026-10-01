@@ -155,12 +155,38 @@ false printed inequality.
 
 ### Section 8: angle-order statements
 
-**Separate non-trigonometric presentation follow-up remains.**
+**Presentation complete.**
 
-The Section 8 source writes conditions such as `Theta <= pi/4`, whereas some Lean surfaces
-expose scalar `maximalAngle` inequalities.  That is the same general source-fidelity question,
-but it is an angle-order/spectral presentation issue rather than part of this trigonometric
-facade campaign.
+The source's ambient angle is now exposed through the literal block-diagonal object
+`fullAngleBlockC U V = diag(Theta_0, Theta_1)` over `C`, and `sourceFullAngleR U V` over
+`R`.  The presentation layer states the paper's comparisons directly on those operators:
+
+* `sourceFullAngleLeC U V c` means the real spectrum of the literal source `Theta` lies in
+  `(-infinity, c]`, i.e. the spectral-order reading of `Theta <= c`;
+* `sourceFullAngleLtC U V c` means every spectral angle of that same literal `Theta` is
+  strictly below `c`;
+* `sourceFullAngleLeR` / `sourceFullAngleLtR` are the real-source complexification forms.
+
+`SineTheta/FullAnglePresentation.lean` proves, rather than assumes, that these direct source
+conditions are equivalent to the norm bounds on the positive source angle and then to the
+scalar proof representation `maximalAngle`.  In particular it proves
+
+`‖fullAngleBlockC U V‖ = maximalAngle U V`
+
+and the real analogue.  It also proves that the literal source full angle and the modern
+intrinsic `Angle.angleOperator` have the same exact maximal-angle norm.  More strongly, for
+every nonnegative threshold `c`, `sourceFullAngleLeC U V c` is equivalent to the intrinsic
+angle's spectrum lying in `(-infinity, c]`, with the analogous theorem for strict `< c`.
+The two operators live on different coordinate Hilbert spaces, so raw equality is not a
+well-typed statement; these threshold-equivalence theorems make the correspondence used by
+Section 8 explicit instead of identifying them by notation.
+
+The canonical Theorem 8.1 characterization and uniqueness façades now use
+`sourceFullAngleLeC ... (pi/4)` directly.  The Theorem 8.1 existence conclusions carry
+`sourceFullAngleLtC` / `sourceFullAngleLtR` alongside the scalar proof representative.  The
+canonical complex and real Theorem 8.2 statements likewise conclude with the direct strict
+source-angle predicates.  Named `maximalAngle`, norm, and directed-gap results remain
+available underneath as proof-facing APIs.
 
 ### Low priority / ergonomic, not a fidelity defect: Theorems 6.1 and 6.2
 
@@ -179,12 +205,13 @@ the former Section 2 `sin Theta` headline.
 
 ## Remaining presentation work
 
-The trigonometric facade campaign is complete at the public surfaces surveyed here.  The main
-remaining presentation question identified by this audit is Section 8's direct angle-order
-surface.  The generalized Section 6 representative freedom remains intentional because the
-source itself permits singular-value representatives.
+No further proxy-versus-source-object defect remains among the public surfaces surveyed here.
+The trigonometric campaign and the Section 8 quarter-angle campaign are both closed.  The
+generalized Section 6 representative freedom remains intentional because the source itself
+permits singular-value representatives.
 
-The recurring design rule is: the source theorem names the mathematical object the paper
-names; representation-changing equalities and singular-value transport belong immediately
-below that surface, and the analytic proof may continue to use whichever block is most
-convenient.
+A future audit may still find ordinary naming or ergonomics improvements, but those should not
+be conflated with the semantic defect targeted here.  The recurring design rule is: the source
+theorem names the mathematical object the paper names; representation-changing equalities and
+singular-value transport belong immediately below that surface, and the analytic proof may
+continue to use whichever block is most convenient.

@@ -112,6 +112,7 @@ open DavisKahanExt
 open TauCeti.DavisKahan
 open TauCeti.RealComplexification
 open TauCeti.DavisKahan.Foundation
+open TauCeti.DavisKahan.ExactSinTheta
 open TauCeti.DavisKahan.Foundation.RealComplexification
 open scoped TauCeti.CompleteSubspace
 
@@ -682,6 +683,41 @@ theorem theorem8_2_sinTwoTheta_residual_directedAngle_real_symmetricNorming
   refine ⟨(Angle.mem_directedSinTwoAngleOperator_trialSide_iff _ _ N).mpr hmem, ?_⟩
   rwa [Angle.gauge_directedSinTwoAngleOperator_trialSide]
 
+/-- Real presentation form of Theorem 8.2's strict quarter-angle
+conclusion, stated directly on the literal source full angle. -/
+theorem theorem8_2_branch_real_sourceFullAngle_lt [FiniteDimensional ℝ E]
+    {A K : E →L[ℝ] E} (hA : A.IsSymmetric) (hK : K.IsSymmetric)
+    {P Q : Submodule ℝ E} [P.HasOrthogonalProjection] [Q.HasOrthogonalProjection]
+    {alpha beta delta : ℝ} (hdelta : 0 < delta) (hab : beta ≤ alpha)
+    (hQ : Foundation.SpectrumIn (A + K) Q (Set.Icc beta alpha))
+    (hQperp : Foundation.SpectrumIn (A + K) Qᗮ (gapExterior beta alpha delta))
+    (hPred : A.Reduces P)
+    (hP : Foundation.SpectrumIn A P (Set.Icc (beta - delta / 2) (alpha + delta / 2)))
+    (hrank : Module.finrank ℝ P = Module.finrank ℝ Q)
+    (hsmall : ‖K‖ < delta / 2 ∨
+      ‖residual (A + K) P.subtypeL (compressOperator P A)‖ < delta / 2) :
+    sourceFullAngleLtR P Q (Real.pi / 4) := by
+  apply (sourceFullAngleLtR_iff_maximalAngle_lt P Q (by positivity)).2
+  exact theorem8_2_branch_real_maximalAngle_lt hA hK hdelta hab hQ hQperp hPred hP
+    hrank hsmall
+
+/-- Dimension-free real presentation form under standing assumption (3.5). -/
+theorem theorem8_2_branch_real_sourceFullAngle_lt_of_crossedDefects
+    {A K : E →L[ℝ] E} (hA : A.IsSymmetric) (hK : K.IsSymmetric)
+    {P Q : Submodule ℝ E} [P.HasOrthogonalProjection] [Q.HasOrthogonalProjection]
+    {alpha beta delta : ℝ} (hdelta : 0 < delta) (hab : beta ≤ alpha)
+    (hQ : Foundation.SpectrumIn (A + K) Q (Set.Icc beta alpha))
+    (hQperp : Foundation.SpectrumIn (A + K) Qᗮ (gapExterior beta alpha delta))
+    (hPred : A.Reduces P)
+    (hP : Foundation.SpectrumIn A P (Set.Icc (beta - delta / 2) (alpha + delta / 2)))
+    (hcross : CrossedDefectsEquivalent P Q)
+    (hsmall : ‖K‖ < delta / 2 ∨
+      ‖residual (A + K) P.subtypeL (compressOperator P A)‖ < delta / 2) :
+    sourceFullAngleLtR P Q (Real.pi / 4) := by
+  apply (sourceFullAngleLtR_iff_maximalAngle_lt P Q (by positivity)).2
+  exact theorem8_2_branch_real_maximalAngle_lt_of_crossedDefects hA hK hdelta hab hQ hQperp
+    hPred hP hcross hsmall
+
 /-! ### 6. The whole printed theorem over `ℝ` -/
 
 /-- **Davis--Kahan 1970, Theorem 8.2, over a REAL Hilbert space.**
@@ -713,10 +749,10 @@ theorem theorem8_2_real [FiniteDimensional ℝ E]
     delta * ‖DavisKahanExt.sinTwoAngleOperator Q P‖ ≤ 2 * ‖K‖ ∧
       delta * ‖DavisKahanExt.sinTwoAngleOperator Q P‖ ≤
         2 * ‖residual (A + K) P.subtypeL (compressOperator P A)‖ ∧
-      maximalAngle P Q < Real.pi / 4 :=
+      sourceFullAngleLtR P Q (Real.pi / 4) :=
   ⟨theorem8_2_sinTwoTheta_perturbation_real hA hK hdelta hab hQ hQperp hPred,
     theorem8_2_sinTwoTheta_residual_real hA hK hdelta hab hQ hQperp hPred,
-    theorem8_2_branch_real_maximalAngle_lt hA hK hdelta hab hQ hQperp hPred
+    theorem8_2_branch_real_sourceFullAngle_lt hA hK hdelta hab hQ hQperp hPred
       hP hrank hsmall⟩
 
 /-! ### Source-exact façades over `ℝ` -/

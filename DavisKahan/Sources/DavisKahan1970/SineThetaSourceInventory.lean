@@ -81,6 +81,23 @@ alias ambientEquivalentAngle := DavisKahan.Angle.angleOperatorC
 alias ambientEquivalentSinAngle := DavisKahan.Angle.sinAngleOperatorC
 alias fullAngleCoordinates_real := sourceFullAngleR
 alias fullSinAngleCoordinates_real := sourceFullSinR
+/-- Literal closed comparison `Theta ≤ c` on the complex source full angle. -/
+alias fullAngle_le_complex := sourceFullAngleLeC
+/-- Literal strict comparison `Theta < c` on the complex source full angle. -/
+alias fullAngle_lt_complex := sourceFullAngleLtC
+/-- Literal closed comparison `Theta ≤ c` on the real source full angle. -/
+alias fullAngle_le_real := sourceFullAngleLeR
+/-- Literal strict comparison `Theta < c` on the real source full angle. -/
+alias fullAngle_lt_real := sourceFullAngleLtR
+alias fullAngle_le_iff_maximalAngle_le_complex := sourceFullAngleLeC_iff_maximalAngle_le
+alias fullAngle_lt_iff_maximalAngle_lt_complex := sourceFullAngleLtC_iff_maximalAngle_lt
+alias fullAngle_le_iff_maximalAngle_le_real := sourceFullAngleLeR_iff_maximalAngle_le
+alias fullAngle_lt_iff_maximalAngle_lt_real := sourceFullAngleLtR_iff_maximalAngle_lt
+alias fullAngle_norm_eq_intrinsicAngle_norm_complex := norm_fullAngleBlockC_eq_angleOperator
+alias fullAngle_le_iff_intrinsicAngle_spectrum_le_complex :=
+  sourceFullAngleLeC_iff_intrinsicAngle_spectrum_le
+alias fullAngle_lt_iff_intrinsicAngle_spectrum_lt_complex :=
+  sourceFullAngleLtC_iff_intrinsicAngle_spectrum_lt
 
 /-! ## Lemmas 6.1 and 6.2 -/
 
