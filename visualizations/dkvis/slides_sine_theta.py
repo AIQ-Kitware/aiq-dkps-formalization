@@ -206,6 +206,44 @@ def column(*mobs, top: float, x: float = RIGHT_COL_X, buff: float = 0.35) -> VGr
     return group
 
 
+class RecallPanel(VGroup):
+    """A "Recall" box of ``(symbol, meaning, colour)`` rows on a panel background.
+
+    ``backgrounds[k]`` is the background sized to the first ``k`` rows, so a
+    slide can show some rows first and grow the box later without moving them.
+    """
+
+    def __init__(self, rows, *, x: float, top: float, width: float = 5.9, size: float = 21):
+        super().__init__()
+        title = tex(r"Recall", size=size - 1, color=MUTED)
+        keys = [tex(sym, size=size + 5, color=color) for sym, _, color in rows]
+        keys_w = max(k.width for k in keys)
+        self.rows = VGroup()
+        for key, (_, text, _) in zip(keys, rows):
+            body = para(text, width=width - keys_w - 0.45, size=size)
+            self.rows.add(VGroup(key, body).arrange(RIGHT, aligned_edge=UP, buff=0.22))
+        self.rows.arrange(DOWN, aligned_edge=LEFT, buff=0.1)
+        for row in self.rows:  # align the meanings in one column
+            row[1].align_to(self.rows[0][0], LEFT).shift(RIGHT * (keys_w + 0.22))
+        self.content = VGroup(title, self.rows).arrange(DOWN, aligned_edge=LEFT, buff=0.1)
+        self.content.move_to([x + 0.18, top - 0.15, 0], aligned_edge=UP + LEFT)
+        self.backgrounds = {}
+        for k in range(1, len(self.rows) + 1):
+            part = VGroup(title, *self.rows[:k])
+            self.backgrounds[k] = Rectangle(
+                width=width + 0.2,
+                height=part.height + 0.3,
+                fill_color=PANEL,
+                fill_opacity=1,
+                stroke_width=0,
+            ).move_to([x + (width + 0.2) / 2, top - (part.height + 0.3) / 2, 0])
+        self.title = title
+
+    def show(self, k: int):
+        """Background, title and the first ``k`` rows."""
+        return VGroup(self.backgrounds[k], self.title, *self.rows[:k])
+
+
 def text_col(body: str, size: float = 28, width: float = RIGHT_COL_W, color: str = FG) -> VMobject:
     return para(body, width=width, size=size, color=color)
 
@@ -700,10 +738,23 @@ class S04Angle(DeckSlide):
 
     def body(self) -> None:
         th = ValueTracker(np.radians(35.0))
-        plane = Plane([-4.6, -2.2, 0], 3.3)
+        plane = Plane([-5.0, -2.55, 0], 3.0)
 
         def model() -> SineThetaModel:
             return SineThetaModel(th.get_value())
+
+        recall = RecallPanel(
+            [
+                (r"$\cx{exact}{U}$", r"the true eigenspace (here a line)", EXACT),
+                (r"$\cx{trial}{V}$", r"the trial subspace, spanned by our guess $v$", TRIAL),
+                (r"$\theta$", r"the angle between them: the error", FG),
+                (r"$\cx{trial}{E_0}$", r"orthonormal basis of $V$, as columns", TRIAL),
+                (r"$\cx{exact}{F_0},\cx{exact}{F_1}$", r"orthonormal bases of $U$ and $U^{\perp}$", EXACT),
+            ],
+            x=-6.75,
+            top=self.content_top - 0.1,
+            width=5.6,
+        )
 
         U = through_origin(plane, [1, 0], 1.25, EXACT, width=4)
         U.put_start_and_end_on(plane([-0.35, 0]), plane([1.25, 0]))
@@ -725,7 +776,7 @@ class S04Angle(DeckSlide):
             "Blue: the true subspace U (here a line). Amber: a trial subspace V, "
             "spanned by the unit vector v. theta is the angle between them."
         )
-        self.play(Create(U), FadeIn(U_lbl))
+        self.play(FadeIn(recall.show(3)), Create(U), FadeIn(U_lbl))
         self.add(V, V_lbl, v, v_lbl, arc, th_lbl)
         self.play(FadeIn(VGroup(V, V_lbl, v, v_lbl, arc, th_lbl)))
 
@@ -756,8 +807,8 @@ class S04Angle(DeckSlide):
             "when V = U and is 1 when V is orthogonal to U. (This build loops.)",
             loop=True,
         )
-        self.play(th.animate.set_value(np.radians(70)), run_time=2.2, rate_func=rate_functions.ease_in_out_sine)
-        self.play(th.animate.set_value(np.radians(8)), run_time=3.0, rate_func=rate_functions.ease_in_out_sine)
+        self.play(th.animate.set_value(np.radians(62)), run_time=2.0, rate_func=rate_functions.ease_in_out_sine)
+        self.play(th.animate.set_value(np.radians(8)), run_time=2.8, rate_func=rate_functions.ease_in_out_sine)
         self.play(th.animate.set_value(np.radians(35)), run_time=1.8, rate_func=rate_functions.ease_in_out_sine)
 
         self.say(
@@ -793,14 +844,12 @@ class S04Angle(DeckSlide):
             size=24,
             color=MUTED,
         )
-        legend = tex(
-            r"\cx{trial}{$E_0$}: trial basis, \ \cx{exact}{$F_0$}: basis of $U$,"
-            r" \ \cx{exact}{$F_1$}: basis of $U^\perp$",
-            size=24,
-            color=MUTED,
+        column(f1, general, definition, g_eq, g_note, top=self.content_top - 0.25, buff=0.28)
+        self.play(
+            Transform(recall.backgrounds[3], recall.backgrounds[5].copy()),
+            FadeIn(recall.rows[3:]),
+            FadeIn(VGroup(general, definition, g_eq, g_note), shift=UP * 0.1),
         )
-        column(f1, general, definition, g_eq, g_note, legend, top=self.content_top - 0.25, buff=0.28)
-        self.play(FadeIn(VGroup(general, definition, g_eq, g_note, legend), shift=UP * 0.1))
 
 
 class S04bSinThetaOperator(DeckSlide):
@@ -887,27 +936,39 @@ class S04bSinThetaOperator(DeckSlide):
 class S05Residual(DeckSlide):
     """The residual, and why it is computable when the angle is not.
 
-    The right column keeps a small "recall" panel (what A, U and v are) and swaps
-    one explanation per build, so the audience never has to remember the cast.
+    Every build adds to the slide and nothing fades away, so the last build is
+    the complete slide.  The "Recall" panel sits in the empty upper-left of the
+    picture.
     """
 
-    title = "The residual: checking a guess without knowing the answer"
-    kicker = r"Test the guess: does $A$ only stretch it, as it would an eigenvector?"
+    title = "The residual"
+    kicker = r"It can be computed from $A$ and $v$ alone; the angle to $U$ cannot"
 
     def body(self) -> None:
         lam1, lam2 = story.RESIDUAL_EIGENVALUES
         phi = ValueTracker(np.radians(40.0))
-        plane = Plane([-5.8, -2.6, 0], 2.55)
+        plane = Plane([-5.8, -2.7, 0], 2.45)
 
         def model() -> story.RayleighResidual:
             return story.RayleighResidual(lam1, lam2, phi.get_value())
 
-        # The answer we do not have: drawn faint and dashed.
+        recall = RecallPanel(
+            [
+                (r"$A$", r"the matrix whose eigenvectors we want; we can multiply any vector by it "
+                         r"(in a perturbation problem, the perturbed $A+H$)", FG),
+                (r"$\cx{exact}{U}$", r"its true eigenvector; any computation only approximates it", EXACT),
+                (r"$\cx{trial}{v}$", r"our approximation, e.g.\ from an iterative eigensolver", TRIAL),
+            ],
+            x=-6.75,
+            top=self.content_top - 0.1,
+            width=6.0,
+        )
+
         e_lines = VGroup(
             DashedVMobject(Line(plane([-0.2, 0]), plane([2.1, 0]), color=EXACT, stroke_width=2), num_dashes=24),
-            DashedVMobject(Line(plane([0, -0.1]), plane([0, 1.85]), color=EXACT, stroke_width=2), num_dashes=20),
+            DashedVMobject(Line(plane([0, -0.1]), plane([0, 1.2]), color=EXACT, stroke_width=2), num_dashes=14),
         ).set_opacity(0.7)
-        u_lbl = tex(r"$U$: true eigenvector (unknown)", size=22, color=EXACT).next_to(plane([1.2, 0]), DOWN, buff=0.15)
+        u_lbl = tex(r"$U$ (unknown)", size=22, color=EXACT).next_to(plane([1.6, 0]), DOWN, buff=0.12)
         v = always_redraw(lambda: vec(plane.origin, plane(model().v), TRIAL, width=7))
         v_lbl = always_redraw(lambda: math(r"v", size=32, color=TRIAL).next_to(plane(model().v), UL, buff=0.05))
         Av = always_redraw(lambda: vec(plane.origin, plane(model().Av), FG, width=5))
@@ -923,128 +984,87 @@ class S05Residual(DeckSlide):
             lambda: math(r"\theta", size=30, color=SINE).move_to(plane(0.72 * story.unit(max(phi.get_value(), 0.12) / 2)))
         )
 
-        # Right column: a persistent recap, then one explanation per build.
-        x0, w = RIGHT_COL_X - 0.15, RIGHT_COL_W + 0.2
-        rows = [
-            (
-                r"$A$",
-                r"the matrix whose eigenvectors we want; we can multiply any vector by it. "
-                r"(In a perturbation problem: the perturbed $A+H$.)",
-                FG,
-            ),
-            (r"$\cx{exact}{U}$", r"its true eigenvector. Any computation only ever gives an approximation of it.", EXACT),
-            (r"$\cx{trial}{v}$", r"our approximation, e.g.\ from an iterative eigensolver.", TRIAL),
-        ]
-        recap = VGroup()
-        for sym, text, color in rows:
-            key = tex(sym, size=30, color=color)
-            body = para(text, width=w - 1.0, size=23)
-            row = VGroup(key, body).arrange(RIGHT, aligned_edge=UP, buff=0.25)
-            key.align_to(body, UP).shift(DOWN * 0.02)
-            recap.add(row)
-        recap.arrange(DOWN, aligned_edge=LEFT, buff=0.14)
-        recap_title = tex(r"Recall", size=22, color=MUTED)
-        recap_box = VGroup(recap_title, recap).arrange(DOWN, aligned_edge=LEFT, buff=0.12)
-        recap_box.move_to([x0 + 0.15, self.content_top - 0.2, 0], aligned_edge=UP + LEFT)
-        recap_bg = Rectangle(
-            width=recap_box.width + 0.35, height=recap_box.height + 0.3, fill_color=PANEL, fill_opacity=1, stroke_width=0
-        ).move_to(recap_box)
-        area_top = recap_bg.get_bottom()[1] - 0.3
-
-        def place(*mobs, buff=0.28):
-            g = VGroup(*mobs).arrange(DOWN, aligned_edge=LEFT, buff=buff)
-            g.move_to([x0, area_top, 0], aligned_edge=UP + LEFT)
-            for m in g:
-                fit_right(m)
-            return g
+        # The right column, laid out once in its final form; builds only add.
+        x0, w, size = RIGHT_COL_X - 0.15, RIGHT_COL_W + 0.2, 24
+        p1 = para(r"The error $\cx{sine}{\theta}$ of our approximation needs $\cx{exact}{U}$, which we do not have.",
+                  width=w, size=size)
+        p2 = para(
+            r"But an eigenvector is a direction $A$ only stretches. So apply $A$ to $v$: "
+            r"if $v$ were an eigenvector, $Av$ would point exactly along $v$.",
+            width=w,
+            size=size,
+        )
+        p3a = math(r"\rho=v^{*}Av,\qquad \cx{resid}{r}=Av-\rho\,v", size=32)
+        p3b = para(
+            r"$\rho v$ is the part of $Av$ along $v$; the \cx{resid}{residual} $r$ is the rest. "
+            r"\textbf{Computable}: one product with $A$ and one dot product, no $U$. "
+            r"Iterative eigensolvers stop when $\norm{r}$ is small.",
+            width=w,
+            size=size - 2,
+            color=MUTED,
+        )
+        p4 = readout_rows(
+            [
+                (r"\cx{sine}{\theta}\ (\text{needs } U) =", lambda: np.degrees(phi.get_value()), SINE, 1, r"^\circ"),
+                (r"\norm{\cx{resid}{r}}\ (\text{needs only } A, v) =", lambda: model().residual_norm, RESID, 3, None),
+            ],
+            size=26,
+        )
+        p4b = tex(r"$\cx{resid}{r}=0$ exactly when $v$ is an eigenvector.", size=size)
+        p5a = math(r"\text{several vectors at once:}\quad \cx{resid}{R}=A\cx{trial}{E_0}-\cx{trial}{E_0}\cx{trial}{A_0}", size=28)
+        p5b = boxed(tex(r"Does a small $\cx{resid}{R}$ force a small $\cx{sine}{\sin\Theta_0}$?", size=26), color=FG, pad=0.18)
+        col = VGroup(p1, p2, VGroup(p3a, p3b).arrange(DOWN, aligned_edge=LEFT, buff=0.1),
+                     VGroup(p4, p4b).arrange(DOWN, aligned_edge=LEFT, buff=0.12),
+                     VGroup(p5a, p5b).arrange(DOWN, aligned_edge=LEFT, buff=0.15))
+        col.arrange(DOWN, aligned_edge=LEFT, buff=0.26)
+        col.move_to([x0, self.content_top - 0.1, 0], aligned_edge=UP + LEFT)
+        floor = -3.45
+        if col.get_bottom()[1] < floor:
+            col.scale((col.get_top()[1] - floor) / col.height, about_edge=UP + LEFT)
+        for m in col:
+            fit_right(m)
+        # Readout values were positioned by updaters before scaling; re-attach them.
+        for label, value in zip(p4[0], p4[1]):
+            value.add_updater(lambda m, label=label: m.next_to(label, RIGHT, buff=0.15))
 
         self.say(
-            "A reminder of the cast. A is the matrix whose eigenvectors we want, and we can multiply vectors "
-            "by it; in a perturbation problem it is the perturbed matrix A + H. U is its true eigenvector. "
-            "We can never compute U exactly: no formula exists beyond 4 by 4, solvers iterate, matrices can be "
-            "huge or infinite-dimensional. v is the approximation we have."
+            "The cast, top left. A is the matrix whose eigenvectors we want, and we can multiply vectors by it; "
+            "in a perturbation problem it is the perturbed A + H. U is its true eigenvector. We never have U "
+            "exactly: no formula exists beyond 4 by 4, solvers iterate, matrices can be huge or "
+            "infinite-dimensional. v is the approximation we have. Its error theta needs U."
         )
-        e1 = place(
-            para(
-                r"We cannot measure the error $\cx{sine}{\theta}$ of the guess directly: that needs $\cx{exact}{U}$.",
-                width=w,
-                size=26,
-            )
-        )
-        self.play(FadeIn(recap_bg), FadeIn(recap_box), FadeIn(e_lines), FadeIn(u_lbl))
+        self.play(FadeIn(recall.show(3)), FadeIn(e_lines), FadeIn(u_lbl))
         self.add(v, v_lbl, arc, th_lbl)
-        self.play(FadeIn(VGroup(v, v_lbl, arc, th_lbl)), FadeIn(e1))
+        self.play(FadeIn(VGroup(v, v_lbl, arc, th_lbl)), FadeIn(p1))
 
         self.say(
-            "But we can test the guess. From the ellipse slide: an eigenvector is a direction A only "
-            "stretches. So multiply: if v were an eigenvector, Av would point exactly along v. Here it does not."
-        )
-        e2 = place(
-            para(
-                r"But we can \emph{test} it. An eigenvector is a direction $A$ only stretches, so apply $A$: "
-                r"if $v$ were an eigenvector, $Av$ would point exactly along $v$.",
-                width=w,
-                size=26,
-            )
+            "But we can test v. An eigenvector is a direction A only stretches, so multiply: if v were an "
+            "eigenvector, Av would point exactly along v. Here it does not."
         )
         self.add(Av, Av_lbl)
-        self.play(FadeOut(e1), FadeIn(e2), FadeIn(VGroup(Av, Av_lbl)))
+        self.play(FadeIn(VGroup(Av, Av_lbl)), FadeIn(p2))
 
         self.say(
-            "Split Av into the part along v, rho v, and the leftover r. The recipe needs one "
-            "multiplication by A and one dot product. U never appears: that is why r is computable. "
-            "It is exactly how iterative eigensolvers decide to stop: iterate until the residual is small."
+            "Split Av into its part along v, rho v, and the rest, the residual r. That takes one "
+            "multiplication by A and one dot product; U never appears, which is why r is computable. "
+            "It is how iterative eigensolvers decide to stop."
         )
-        recipe = math(
-            r"\begin{aligned}&1.\ \ w=Av\\ &2.\ \ \rho=v^{*}w\\ &3.\ \ \cx{resid}{r}=w-\rho\,v\end{aligned}",
-            size=32,
-        )
-        recipe_note = para(
-            r"$\rho v$ is the part of $Av$ along $v$; the \cx{resid}{residual} $r$ is what is left over. "
-            r"One multiplication and one dot product: $\cx{exact}{U}$ never appears. "
-            r"This is the stopping test iterative eigensolvers use.",
-            width=w - 2.0,
-            size=24,
-        )
-        e3 = place(VGroup(recipe, recipe_note).arrange(RIGHT, aligned_edge=UP, buff=0.4))
         self.add(rho_v, rho_lbl, r, r_lbl)
-        self.play(FadeOut(e2), FadeIn(e3), FadeIn(VGroup(rho_v, rho_lbl, r, r_lbl)))
+        self.play(FadeIn(VGroup(rho_v, rho_lbl, r, r_lbl)), FadeIn(col[2]))
 
         self.say(
-            "Improve the guess: the angle theta and the residual shrink together, and r is zero exactly "
-            "when v is an eigenvector. We can watch r; we cannot watch theta. The theorem will say how "
-            "much a small r guarantees about theta."
+            "Improve the approximation: theta and the residual shrink together, and r is zero exactly when "
+            "v is an eigenvector. We can watch r; we cannot watch theta."
         )
-        readouts = readout_rows(
-            [
-                (r"\cx{sine}{\theta}\ \text{(needs } U) =", lambda: np.degrees(phi.get_value()), SINE, 1, r"^\circ"),
-                (r"\norm{\cx{resid}{r}}\ \text{(needs } A, v) =", lambda: model().residual_norm, RESID, 3, None),
-            ],
-            size=28,
-        )
-        zero = tex(r"$\cx{resid}{r}=0$ exactly when $v$ is an eigenvector.", size=26)
-        e4 = place(readouts, zero, buff=0.3)
-        self.play(FadeOut(e3), FadeIn(e4))
+        self.play(FadeIn(col[3]))
         self.play(phi.animate.set_value(np.radians(6.0)), run_time=3.5, rate_func=rate_functions.ease_in_out_sine)
 
         self.say(
-            "The same works for several trial vectors at once: E0 holds them as orthonormal columns and "
-            "A0 is a small trial matrix, for instance E0* A E0. The residual is R = A E0 - E0 A0, still "
-            "computable from A and the guess. The question for the theorem: does a small R force a small angle?"
+            "The same works for several vectors at once: E0 holds them as orthonormal columns and A0 is a "
+            "small trial matrix, for instance E0* A E0. The residual R = A E0 - E0 A0 is still computable. "
+            "The question for the theorem: does a small R force a small angle?"
         )
-        block = math(r"\cx{resid}{R} = A\,\cx{trial}{E_0} - \cx{trial}{E_0}\,\cx{trial}{A_0}", size=34)
-        block_note = para(
-            r"several guesses at once: $\cx{trial}{E_0}$ holds them as orthonormal columns, $\cx{trial}{A_0}$ is a "
-            r"small trial matrix (e.g.\ $E_0^{*}AE_0$; for one vector it is just $\rho$)",
-            width=w,
-            size=22,
-            color=MUTED,
-        )
-        q = boxed(tex(r"Does a small $\cx{resid}{R}$ force a small $\cx{sine}{\sin\Theta_0}$?", size=28), color=FG)
-        e5 = place(block, block_note, q, buff=0.25)
-        # Freeze the live readouts first: their digit count would change mid-fade.
-        e4.clear_updaters()
-        self.play(FadeOut(e4), FadeIn(e5), phi.animate.set_value(np.radians(40.0)), run_time=1.5)
+        self.play(FadeIn(col[4]), phi.animate.set_value(np.radians(40.0)), run_time=1.5)
 
 
 # ----------------------------------------------------------------------------
