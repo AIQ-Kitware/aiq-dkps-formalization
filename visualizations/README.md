@@ -195,6 +195,7 @@ cases (`make` lists the targets):
 ```bash
 make setup                         # uv sync with the vtk, slides and test extras
 make all                           # short + full decks, 1080p60, HTML + PDF in renders/
+make standalone                    # renders/<deck>.standalone.html: one file, videos embedded, easy to share
 make rebuild                       # clean re-render of both decks from scratch
 make short QUALITY=l PDF=0         # quick 480p draft of one deck (also: full, deck-2d, 3d, prop44)
 make full SCENES="S05Residual"     # re-render only some scenes, then reconvert the whole deck
