@@ -8,8 +8,9 @@
 #   make short QUALITY=l # fast 480p draft
 #   make clean-short     # remove one deck's outputs so the next build starts fresh
 #   make standalone      # single-file HTML (videos embedded) of the built short + full decks
+#   make handout         # one-page-per-scene PDFs of the built short + full decks
 #
-# Every deck writes renders/<deck>.html (+ .pdf, + <deck>_assets/) and keeps
+# Every deck writes renders/<deck>.html (+ .pdf, .handout.pdf, <deck>_assets/) and keeps
 # its rendered scenes in slides-<deck>/.  renders/<deck>.html needs the
 # <deck>_assets/ folder beside it; renders/<deck>.standalone.html does not.
 
@@ -19,7 +20,7 @@ QUALITY ?= h
 PDF     ?= 1
 SCENES  ?=
 
-BUILD_FLAGS := --quality $(QUALITY) $(if $(filter 1,$(PDF)),--pdf) $(if $(SCENES),--scenes $(SCENES))
+BUILD_FLAGS := --quality $(QUALITY) $(if $(filter 1,$(PDF)),--pdf --handout) $(if $(SCENES),--scenes $(SCENES))
 
 # Short target name -> deck name in dkvis/build_slides.py.
 DECK_short   := sine-theta-short
@@ -31,7 +32,7 @@ DECKS        := short full deck-2d 3d prop44
 
 .DEFAULT_GOAL := help
 .PHONY: help setup all rebuild $(DECKS) $(addprefix clean-,$(DECKS)) $(addprefix present-,$(DECKS)) \
-        $(addprefix standalone-,$(DECKS)) standalone draft assets app test clean distclean
+        $(addprefix standalone-,$(DECKS)) standalone $(addprefix handout-,$(DECKS)) handout draft assets app test clean distclean
 
 help:
 	@awk '/^#/ { sub(/^# ?/, ""); print; next } { exit }' $(firstword $(MAKEFILE_LIST))
@@ -46,13 +47,15 @@ help:
 	@echo '  present-<deck>     present a built deck live with manim-slides'
 	@echo '  standalone-<deck>  write renders/<deck>.standalone.html with the videos embedded (no re-render)'
 	@echo '  standalone         standalone-short + standalone-full'
+	@echo '  handout-<deck>     write renders/<deck>.handout.pdf, one page per scene (no re-render)'
+	@echo '  handout            handout-short + handout-full'
 	@echo '  draft              short + full at 480p, no PDF'
 	@echo '  assets             re-render the VTK stills and movies the 3D slides use'
 	@echo '  app                open the interactive 3D sin-theta demo'
 	@echo '  test               run the model tests'
 	@echo '  clean              remove all renders, scene folders and manim videos'
 	@echo '  distclean          clean, plus the LaTeX and VTK asset caches'
-	@echo 'Variables: QUALITY=l|m|h|p|k (default h)  PDF=0|1 (default 1)  SCENES="S05Residual ..."'
+	@echo 'Variables: QUALITY=l|m|h|p|k (default h)  PDF=0|1 (default 1; also the handout)  SCENES="S05Residual ..."'
 
 setup:
 	$(UV) sync --extra vtk --extra slides --extra test
@@ -82,6 +85,11 @@ standalone: standalone-short standalone-full
 $(addprefix standalone-,$(DECKS)):
 	$(RUN) python -m dkvis.build_slides $(DECK_$(@:standalone-%=%)) --no-render --one-file \
 	    --html renders/$(DECK_$(@:standalone-%=%)).standalone.html
+
+handout: handout-short handout-full
+
+$(addprefix handout-,$(DECKS)):
+	$(RUN) python -m dkvis.build_slides $(DECK_$(@:handout-%=%)) --no-render --handout
 
 assets:
 	$(RUN) python -m dkvis.vtk_sine_theta_3d --slide-assets media/vtk3d
