@@ -528,16 +528,25 @@ class S02Perturb(DeckSlide):
             size=30,
         )
         weyl = tex(
-            rf"Eigenvalues moved by ${pair.eigenvalue_shift:.3f} \le \norm{{H}}_2 = {eps}$ (Weyl).",
+            rf"Eigenvalues moved by ${pair.eigenvalue_shift:.3f} \le \norm{{H}}_2 = {eps}$ (Weyl$^{{\ast}}$).",
             size=26,
+        )
+        weyl_note = para(
+            r"$^{\ast}$\,\textbf{Weyl's inequality:} sort the eigenvalues of $A$ and of $A+H$; each moves by "
+            r"at most $\norm{H}_2$ (the most $H$ stretches any unit vector). It holds for every symmetric $A$, "
+            r"with no gap needed. Eigenvectors get no such guarantee.",
+            width=RIGHT_COL_W,
+            size=20,
+            color=MUTED,
         )
         turn = tex(
             rf"Eigenvectors turned by \cx{{sine}}{{$\theta = {pymath.degrees(pair.theta):.1f}^\circ$}}.",
             size=26,
         )
         question = boxed(tex(r"How far can an eigenvector turn?", size=32), color=SINE)
-        column(eq, basis_note, table, weyl, turn, question, top=self.content_top - 0.2, buff=0.32)
+        column(eq, basis_note, table, weyl, turn, question, top=self.content_top - 0.2, buff=0.24)
         basis_note.next_to(eq, DOWN, aligned_edge=LEFT, buff=0.12)
+        weyl_note.move_to([RIGHT_COL_X, -3.28, 0], aligned_edge=DOWN + LEFT)
         self.play(Create(old), Create(old_axis), Create(old_axis2), FadeIn(eq), FadeIn(basis_note))
 
         self.say(
@@ -564,7 +573,7 @@ class S02Perturb(DeckSlide):
             Create(new_axis2),
             run_time=1.6,
         )
-        self.play(Create(arc), FadeIn(theta), FadeIn(table), FadeIn(weyl), FadeIn(turn))
+        self.play(Create(arc), FadeIn(theta), FadeIn(table), FadeIn(weyl), FadeIn(weyl_note), FadeIn(turn))
 
         self.say(
             "That is the question of the talk. Eigenvalue perturbation is easy "
