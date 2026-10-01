@@ -329,7 +329,7 @@ class P02Counterexample(P4Slide):
                 r"\texttt{directRotation\_fullDisplacement\_qnorm}:", size=20, color=MUTED),
             para(
                 r"for every $Q$-norm (e.g.\ operator, Frobenius) the direct rotation \emph{does} minimize "
-                r"$\norm{I-W}$, with no angle threshold, over $\mathbb{R}$ or $\mathbb{C}$.",
+                r"$\norm{I-W}$ for acute pairs, with no $\pi/3$ threshold, over $\mathbb{R}$ or $\mathbb{C}$.",
                 width=w,
                 size=21,
                 color=FG,
@@ -342,7 +342,9 @@ class P02Counterexample(P4Slide):
 
         self.say(
             "We proved the refutation in Lean, and a repair: for Q-norms, which include the operator "
-            "and Frobenius norms, the direct rotation really is optimal, with no angle threshold at all."
+            "and Frobenius norms, the direct rotation really is optimal. The repair removes the printed "
+            "60-degree cutoff completely; the usual acuteness condition, under which the direct rotation is "
+            "defined, remains."
         )
         self.play(FadeIn(lean))
 
@@ -384,9 +386,9 @@ class P03Why(P4Slide):
 
         x0, w = 0.35, 6.4
         t1 = para(
-            rf"Per pair of singular values: the direct rotation pays two $45^\circ$ chords, "
-            rf"$2\times{c45:.3f}={2 * c45:.3f}$; the competitor pays one $90^\circ$ chord and one $0^\circ$ chord, "
-            rf"${c90:.3f}+0$.",
+            rf"At the level of invariant planes, the direct rotation spreads the turn as $45^\circ+45^\circ$; "
+            rf"the competitor concentrates it as $90^\circ+0^\circ$. Each plane contributes its chord twice, "
+            rf"so drop that common factor and compare $2\times{c45:.3f}={2 * c45:.3f}$ with ${c90:.3f}+0$.",
             width=w,
             size=26,
         )
@@ -399,9 +401,10 @@ class P03Why(P4Slide):
         )
         t3 = para(
             rf"Squared chords $4\sin^2(\alpha/2)=2(1-\cos\alpha)$ are convex here: "
-            rf"$2\times{c45**2:.3f}<{c90**2:.3f}+0$. Norms that only see $(I-W)^{{*}}(I-W)$, the "
-            r"$Q$-norms, reward spreading, which is exactly why the repair holds. Its Lean proof goes "
-            r"through the paper's squared-displacement result (Proposition 4.3).",
+            rf"$2\times{c45**2:.3f}<{c90**2:.3f}+0$. For a $Q$-norm, squaring the norm turns the comparison "
+            r"into a unitarily invariant norm of the squared displacement $(I-W)^{*}(I-W)$, which rewards "
+            r"spreading; that is why the repair holds. Its Lean proof goes through the paper's "
+            r"squared-displacement result (Proposition 4.3).",
             width=w,
             size=24,
             color=MUTED,
@@ -411,7 +414,8 @@ class P03Why(P4Slide):
 
         self.say(
             "Why does this happen? Each rotated plane contributes chord lengths 2 sin of half the angle. "
-            "The direct rotation pays two 45-degree chords per pair; the competitor pays one 90-degree chord and a zero."
+            "Each plane contributes its chord twice, so compare plane by plane: the direct rotation turns "
+            "45 and 45 degrees, the competitor 90 and 0."
         )
         self.play(Create(axes), FadeIn(xt, yt, x_lbl), Create(f), FadeIn(f_lbl), FadeIn(pts), FadeIn(t1))
         self.say(
@@ -420,8 +424,8 @@ class P03Why(P4Slide):
         )
         self.play(Create(secant), FadeIn(mid), Create(gap_line), FadeIn(t2))
         self.say(
-            "Squared chords behave the other way, and norms that see only squares, the Q-norms, "
-            "therefore favour the direct rotation. That is the repair we proved."
+            "Squared chords behave the other way. For a Q-norm, squaring the norm turns the comparison into one "
+            "about the squared displacement, so the direct rotation wins. That is the repair we proved."
         )
         self.play(FadeIn(t3))
 
