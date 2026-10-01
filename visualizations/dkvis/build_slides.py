@@ -5,6 +5,7 @@ Run from ``visualizations/``::
     uv run python -m dkvis.build_slides sine-theta             # 1080p60 + HTML
     uv run python -m dkvis.build_slides sine-theta -q l        # fast draft
     uv run python -m dkvis.build_slides sine-theta-full --pdf  # + one page per build
+    uv run python -m dkvis.build_slides sine-theta-full --handout  # + one page per scene
     uv run python -m dkvis.build_slides sine-theta --list      # scene names, in order
 
 Decks:
@@ -22,7 +23,12 @@ Each deck renders into its own ``slides-<deck>/`` folder, and every slide
 carries its number in that deck bottom-right ("7 / 16"), the same on all of a
 slide's builds.
 ``--scenes`` re-renders only the named scenes; conversion always uses the whole
-deck.  Set ``DKVIS_THEME=light`` for a light-background deck.
+deck.
+
+The handout (``--handout``) has one page per scene: the final frame of its last
+build, so every scene's last build must hold everything the slide says.  A
+build that plays an external video (``src``, e.g. a looping VTK movie) is a
+live demo, not a page, so the handout uses the last build before it.  Set ``DKVIS_THEME=light`` for a light-background deck.
 """
 
 from __future__ import annotations
@@ -30,8 +36,10 @@ from __future__ import annotations
 import argparse
 import importlib
 import os
+import json
 import subprocess
 import sys
+import tempfile
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
@@ -45,12 +53,12 @@ PROP44 = "dkvis.slides_prop44"
 # deck contains only unmarked (core) slides.
 DECK_SCENES = {
     "sine-theta-short": [
-        "S00TitleShort", "S00bSetting", "S01Ellipse", "S02Perturb", "S03NoGap", "S03bWanted", "S04Angle", "S05Residual",
+        "S00TitleShort", "S00bSetting", "S01Ellipse", "S02Perturb", "S03NoGap", "S03cUnstable", "S03bWanted", "S04Angle", "S05Residual",
         "S06Gap", "S07Theorem", "S08Why", "S11Payoff", "D01Planes", "S12Lean",
         "P01Claim", "P02Counterexample", "S14Summary",
     ],
     "sine-theta-full": [
-        "S00Title", "S00bSetting", "S01Ellipse", "S02Perturb", "S03NoGap", "S03bWanted", "S04Angle", "S04bSinThetaOperator",
+        "S00Title", "S00bSetting", "S01Ellipse", "S02Perturb", "S03NoGap", "S03cUnstable", "S03bWanted", "S04Angle", "S04bSinThetaOperator",
         "S05Residual", "S06Gap", "S07Theorem", "S08Why", "S08Components", "S09Sylvester",
         "S11Payoff", "S10Sharp", "D01Planes", "D02Tilt", "D03Gap", "D04Perturb", "D05TryIt", "S12Lean",
         "S13Family", "P01Claim", "P02Counterexample", "P03Why", "P04Details", "S14Summary",
@@ -95,6 +103,30 @@ def _run(*args: str, deck: str | None = None) -> None:
     subprocess.run(cmd, cwd=ROOT, check=True, env=env)
 
 
+def write_handout(deck_name: str, out: Path) -> None:
+    """One PDF page per scene: the last frame of its last manim-drawn build."""
+    from PIL import Image
+
+    folder = ROOT / f"slides-{deck_name}"
+    pages = []
+    with tempfile.TemporaryDirectory() as tmp:
+        for k, scene in enumerate(DECK_SCENES[deck_name]):
+            slides = json.loads((folder / f"{scene}.json").read_text())["slides"]
+            drawn = [s for s in slides if not s.get("src")]
+            frame = Path(tmp) / f"{k:03d}.png"
+            # -sseof seeks near the end; -update keeps overwriting, leaving the last frame.
+            subprocess.run(
+                ["ffmpeg", "-loglevel", "error", "-sseof", "-0.5", "-i", str(ROOT / drawn[-1]["file"]),
+                 "-update", "1", "-y", str(frame)],
+                check=True,
+            )
+            pages.append(Image.open(frame).convert("RGB"))
+    first, *rest = pages
+    # 13.33 in wide, the size of a 16:9 presentation slide.
+    first.save(out, save_all=True, append_images=rest, resolution=first.width / 13.333)
+    print(f"wrote {out} ({len(pages)} pages)")
+
+
 def main() -> None:
     parser = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     parser.add_argument("deck", choices=DECKS)
@@ -107,6 +139,7 @@ def main() -> None:
     parser.add_argument("--one-file", action="store_true", help="embed the videos in the HTML file")
     parser.add_argument("--pdf", action="store_true", help="also write renders/<deck>.pdf (last frame of each build)")
     parser.add_argument("--pptx", action="store_true", help="also write renders/<deck>.pptx")
+    parser.add_argument("--handout", action="store_true", help="also write renders/<deck>.handout.pdf (one page per scene)")
     args = parser.parse_args()
 
     segments = deck(args.deck)
@@ -141,6 +174,8 @@ def main() -> None:
         _run("convert", *folder, "--to", "pdf", *names, str(renders / f"{args.deck}.pdf"))
     if args.pptx:
         _run("convert", *folder, "--to", "pptx", *names, str(renders / f"{args.deck}.pptx"))
+    if args.handout:
+        write_handout(args.deck, renders / f"{args.deck}.handout.pdf")
     print(f"\nPresent live:  manim-slides present --folder slides-{args.deck} {' '.join(names)}")
     print(f"Or open:       {html}")
 

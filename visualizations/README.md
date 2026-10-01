@@ -145,7 +145,8 @@ presenter notes on every build. There are two presentation paths:
 | `S00bSetting` | yes | yes | the setting: self-adjoint operators, from real symmetric matrices to unbounded operators |
 | `S01Ellipse` | yes | yes | a positive-definite example maps the circle to an ellipse; axes are eigenvectors |
 | `S02Perturb` | yes | yes | `A -> A+H`: eigenvalues barely move (Weyl), axes turn |
-| `S03NoGap` | yes | yes | "How far can an eigenvector turn? It depends on whether there is a gap": A's eigenvectors in the ellipse and its eigenvalues on a number line; as the ellipse rounds out the gap closes and the eigenvector of `A+H` turns toward 45 degrees |
+| `S03NoGap` | yes | yes | "How far can an eigenvector turn? It depends on whether there is a gap": A's eigenvectors (drawn as lines) in the ellipse and its eigenvalues on a number line; for a fixed small `H`, as the gap closes the eigenvector of `A+H` turns toward 45 degrees while the eigenvalues move at most `‖H‖` |
+| `S03cUnstable` | yes | yes | "Without a gap, an eigenvector can point anywhere": `H` of fixed size turned once round; the traced eigenvector directions form a thin wedge (at most 7 degrees) with a gap and fill every direction without one; `A ± εσ_x` example; why Davis--Kahan works with subspaces |
 | `S03bWanted` | yes | yes | which eigenvectors are "wanted": a chosen part of the spectrum (PCA, ground states, clustering); they span `U`, the rest `U^perp`, and the gap separates them |
 | `S04Angle` | yes | yes | with a "Recall" panel for `U`, `V`, `theta`, `E0`, `F0`, `F1`: `sin theta = dist(v, U)`; `sin Theta0` is the operator whose eigenvalues are the sines |
 | `S04bSinThetaOperator` | | `*` | `sin Theta0` exactly: definition, `|S| = sin Theta0`, and the Lean bridge |
@@ -194,7 +195,8 @@ cases (`make` lists the targets):
 
 ```bash
 make setup                         # uv sync with the vtk, slides and test extras
-make all                           # short + full decks, 1080p60, HTML + PDF in renders/
+make all                           # short + full decks, 1080p60, HTML + PDF + handout PDF in renders/
+make handout                       # renders/<deck>.handout.pdf: one page per slide, from the existing renders
 make standalone                    # renders/<deck>.standalone.html: one file, videos embedded, easy to share
 make rebuild                       # clean re-render of both decks from scratch
 make short QUALITY=l PDF=0         # quick 480p draft of one deck (also: full, deck-2d, 3d, prop44)
@@ -223,8 +225,15 @@ uv run manim-slides present --folder slides-sine-theta-short $(uv run python -m 
   it, or pass `--one-file` to embed the videos.
 - `manim-slides present` is the most robust option for a live talk. Looping
   builds (angle sweep, sharpness sweep) repeat until you advance.
-- `--pdf` writes the last frame of every build, for handouts or for pasting
-  into other slide software; `--pptx` writes PowerPoint.
+- `--pdf` writes the last frame of every build, for pasting into other slide
+  software; `--pptx` writes PowerPoint.
+- `--handout` writes `renders/<deck>.handout.pdf`, one page per slide: the
+  final frame of its last build (skipping a trailing VTK video, which is a live
+  demo rather than a page). **Design rule:** a slide's last build must stand
+  alone as a static page. Builds may animate and remove things along the way,
+  but whatever the slide argues has to be on screen at the end; when the
+  argument is a motion (a sweep, a turn), the end state shows it statically,
+  e.g. as traces, a plot, or before/after panels.
 - `--scenes S08Components` re-renders one scene; conversion always uses the
   whole deck.
 - `DKVIS_THEME=light` renders a light-background deck for bright rooms.
