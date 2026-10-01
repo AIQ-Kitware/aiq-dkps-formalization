@@ -47,16 +47,27 @@ class PerturbedPair:
     """The canonical 2x2 picture of eigenvector rotation.
 
     ``A = diag(c + g/2, c - g/2)`` has eigenvalue gap ``g`` and eigenvectors
-    ``e1, e2``.  The symmetric perturbation ``H = eps * [[0, 1], [1, 0]]`` has
-    operator norm ``eps``, and its own eigenvectors lie on the diagonals.
+    ``e1, e2``.  The symmetric, trace-free perturbation
 
-    With ``s = sqrt(g^2/4 + eps^2)`` the perturbed matrix ``A + H`` has
-    eigenvalues ``c +- s`` and its top eigenvector makes the angle
+        H = eps * [[cos phi, sin phi], [sin phi, -cos phi]]
 
-        theta = 1/2 * atan2(2 eps, g)
+    has operator norm ``eps`` for every ``phi`` (its eigenvalues are ``+-eps``),
+    and its own top eigenvector points along the line at angle ``phi / 2``.  The
+    default ``phi = pi/2`` is ``eps * [[0, 1], [1, 0]]``, whose eigenvectors lie
+    on the diagonals.
 
-    with ``e1``.  As ``g -> 0`` this tends to 45 degrees however small ``eps``
-    is, while the eigenvalues move by at most ``eps`` (Weyl).
+    With ``a = g/2 + eps cos phi``, ``b = eps sin phi`` and ``s = hypot(a, b)``,
+    the perturbed matrix ``A + H`` has eigenvalues ``c +- s`` and its top
+    eigenvector spans the line at the signed angle
+
+        theta = 1/2 * atan2(b, a)      in (-pi/2, pi/2]
+
+    from ``e1``.  For ``phi = pi/2`` this is ``1/2 atan2(2 eps, g)``, which tends
+    to 45 degrees as ``g -> 0`` however small ``eps`` is, while the eigenvalues
+    move by at most ``eps`` (Weyl).  Turning ``phi`` once round shows the
+    instability outright: when ``g/2 > eps`` the line only wobbles, by at most
+    ``1/2 asin(2 eps / g)``, but when ``g/2 < eps`` it turns through every
+    direction, following the line of ``H``.
 
     For the sine-theta theorem take the trial vector ``E0 = e1`` with
     ``A0 = [c + g/2]`` (the unperturbed eigenpair).  Then ``R = H e1 = (0, eps)``
@@ -69,6 +80,7 @@ class PerturbedPair:
     gap: float
     eps: float
     center: float = 1.5
+    phi: float = math.pi / 2
 
     def __post_init__(self) -> None:
         if self.gap < 0.0:
@@ -82,15 +94,25 @@ class PerturbedPair:
 
     @property
     def H(self) -> np.ndarray:
-        return self.eps * np.array([[0.0, 1.0], [1.0, 0.0]])
+        c, s = math.cos(self.phi), math.sin(self.phi)
+        return self.eps * np.array([[c, s], [s, -c]])
+
+    @property
+    def perturbation_direction(self) -> np.ndarray:
+        """Unit vector along the top eigenvector of ``H`` (angle ``phi / 2``)."""
+        return unit(self.phi / 2)
 
     @property
     def perturbed(self) -> np.ndarray:
         return self.A + self.H
 
     @property
+    def _split(self) -> tuple[float, float]:
+        return self.gap / 2 + self.eps * math.cos(self.phi), self.eps * math.sin(self.phi)
+
+    @property
     def half_split(self) -> float:
-        return math.hypot(self.gap / 2, self.eps)
+        return math.hypot(*self._split)
 
     @property
     def perturbed_eigenvalues(self) -> tuple[float, float]:
@@ -99,12 +121,18 @@ class PerturbedPair:
     @property
     def eigenvalue_shift(self) -> float:
         """Largest eigenvalue movement; Weyl bounds it by ``||H||_2 = eps``."""
-        return self.half_split - self.gap / 2
+        return abs(self.half_split - self.gap / 2)
 
     @property
     def theta(self) -> float:
-        """Angle between the top eigenvectors of ``A`` and ``A + H``."""
-        return 0.5 * math.atan2(2 * self.eps, self.gap)
+        """Signed angle in ``(-pi/2, pi/2]`` from ``e1`` to the top eigenvector line of ``A + H``."""
+        a, b = self._split
+        return 0.5 * math.atan2(b, a)
+
+    @property
+    def line_angle(self) -> float:
+        """Angle in ``[0, pi/2]`` between the top eigenvector lines of ``A`` and ``A + H``."""
+        return abs(self.theta)
 
     @property
     def perturbed_top_eigenvector(self) -> np.ndarray:
@@ -112,7 +140,7 @@ class PerturbedPair:
 
     @property
     def sin_theta(self) -> float:
-        return math.sin(self.theta)
+        return math.sin(self.line_angle)
 
     @property
     def residual(self) -> np.ndarray:
@@ -138,11 +166,12 @@ class PerturbedPair:
         np.testing.assert_allclose(
             sorted(evals, reverse=True), self.perturbed_eigenvalues, atol=atol
         )
-        if self.eps > 0 or self.gap > 0:
+        if self.half_split > 1e-9:
             top = evecs[:, int(np.argmax(evals))]
             assert math.isclose(
-                line_angle(top, np.array([1.0, 0.0])), self.theta, abs_tol=1e-9
+                line_angle(top, np.array([1.0, 0.0])), self.line_angle, abs_tol=1e-9
             )
+            assert math.isclose(line_angle(top, unit(self.theta)), 0.0, abs_tol=1e-6)
         weyl = np.max(np.abs(np.sort(evals) - np.sort(np.diag(self.A))))
         assert weyl <= np.linalg.norm(self.H, 2) + atol
         assert math.isclose(weyl, self.eigenvalue_shift, abs_tol=1e-9)

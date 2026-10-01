@@ -592,33 +592,57 @@ class S03NoGap(DeckSlide):
         eps = story.PERTURBATION_EPS
         g_start, g_end = story.PERTURBATION_START_GAP, story.PERTURBATION_END_GAP
         g = ValueTracker(g_start)
+        # Direction of H: H = eps [[cos phi, sin phi], [sin phi, -cos phi]], so ||H|| = eps for every phi.
+        ph = ValueTracker(pymath.pi / 2)
         plane = Plane([-3.75, -0.25, 0], 1.1, rotate=ELLIPSE_BASE)
+        reach = 2.3
 
         def pair() -> story.PerturbedPair:
-            return story.PerturbedPair(gap=g.get_value(), eps=eps)
+            return story.PerturbedPair(gap=g.get_value(), eps=eps, phi=ph.get_value())
 
         def lam() -> tuple[float, float]:
             l1, l2 = pair().A.diagonal()
             return float(l1), float(l2)
 
-        # A: dashed blue ellipse and its eigenvectors, arrows as long as the eigenvalues.
+        # A: dashed blue ellipse.  Its eigenvectors are drawn as the lines they span (u and -u are
+        # the same eigendirection); the dots where the ellipse crosses them mark the eigenvalues.
         old = always_redraw(
             lambda: DashedVMobject(ellipse(plane, pair().A, color=EXACT, width=2), num_dashes=60).set_opacity(0.8)
         )
-        f1 = always_redraw(lambda: vec(plane.origin, plane([lam()[0], 0.0]), EXACT, width=6))
-        f2 = always_redraw(lambda: vec(plane.origin, plane([0.0, lam()[1]]), EXACT, width=6))
-        f1_lbl = always_redraw(lambda: math(r"\lambda_1", size=28, color=EXACT).next_to(plane([lam()[0], 0.0]), DOWN, buff=0.08))
-        f2_lbl = always_redraw(lambda: math(r"\lambda_2", size=28, color=EXACT).next_to(plane([0.0, lam()[1]]), LEFT, buff=0.08))
-        # A + H: solid white ellipse and its top eigenvector, which turns by theta.
+        e_lines = VGroup(
+            through_origin(plane, [1.0, 0.0], reach, EXACT, width=4, opacity=0.75),
+            through_origin(plane, [0.0, 1.0], reach, EXACT, width=4, opacity=0.75),
+        )
+        e_dots = always_redraw(
+            lambda: VGroup(Dot(plane([lam()[0], 0.0]), radius=0.07, color=EXACT), Dot(plane([0.0, lam()[1]]), radius=0.07, color=EXACT))
+        )
+        f1_lbl = always_redraw(lambda: math(r"\lambda_1", size=28, color=EXACT).next_to(plane([lam()[0], 0.0]), DOWN + RIGHT * 0.3, buff=0.1))
+        f2_lbl = always_redraw(lambda: math(r"\lambda_2", size=28, color=EXACT).next_to(plane([0.0, lam()[1]]), LEFT, buff=0.12))
+        # A + H: solid white ellipse and its top eigenvector line, turned by theta.
         new = always_redraw(lambda: ellipse(plane, pair().perturbed, color=FG, width=3))
-        new_axis = always_redraw(lambda: through_origin(plane, pair().perturbed_top_eigenvector, 2.3, FG, width=3))
+        new_axis = always_redraw(lambda: through_origin(plane, pair().perturbed_top_eigenvector, reach, FG, width=3))
+        new_name = {"tex": r"$A+H$"}
         new_lbl = always_redraw(
-            lambda: tex(r"$A+H$", size=22, color=FG).next_to(plane(2.3 * pair().perturbed_top_eigenvector), UR, buff=0.05)
+            lambda: tex(new_name["tex"], size=22, color=FG).next_to(plane(reach * pair().perturbed_top_eigenvector), RIGHT, buff=0.08)
         )
         arc = always_redraw(lambda: angle_arc(plane, [1, 0], pair().perturbed_top_eigenvector, 0.95, SINE, width=4))
-        theta_lbl = always_redraw(
-            lambda: math(r"\theta", size=30, color=SINE).move_to(plane(1.2 * story.unit(max(pair().theta, 0.14) / 2)))
+
+        def theta_label():
+            t = pair().theta
+            half = pymath.copysign(max(abs(t), 0.16), t) / 2
+            return math(r"\theta", size=30, color=SINE).move_to(plane(1.22 * story.unit(half)))
+
+        theta_lbl = always_redraw(theta_label)
+
+        # H's own top eigenvector line (dashed), labeled at its left-hand end so it never meets the A+H label.
+        def h_direction() -> np.ndarray:
+            d = pair().perturbation_direction
+            return d if d[0] < 0 else -d
+
+        h_line = always_redraw(
+            lambda: DashedVMobject(through_origin(plane, pair().perturbation_direction, reach, MUTED, width=2.5), num_dashes=28)
         )
+        h_lbl = always_redraw(lambda: math(r"H", size=26, color=MUTED).next_to(plane(reach * h_direction()), LEFT, buff=0.08))
 
         # The eigenvalues of A on a number line, with the gap between them.
         lo, hi, x_lo, x_hi, y_nl = 0.75, 2.25, -6.4, -1.1, -3.0
@@ -674,25 +698,29 @@ class S03NoGap(DeckSlide):
             color=SINE,
             stroke_width=3,
         )
-        dot = always_redraw(lambda: Dot(axes.c2p(g.get_value(), pymath.degrees(pair().theta)), color=SINE, radius=0.07))
+        dot = always_redraw(lambda: Dot(axes.c2p(g.get_value(), pymath.degrees(pair().line_angle)), color=SINE, radius=0.07))
         rows = readout_rows(
             [
                 (r"g =", lambda: g.get_value(), FG, 2, None),
                 (r"\norm{H}_2 =", lambda: eps, FG, 2, None),
                 (r"\max|\Delta\lambda| =", lambda: pair().eigenvalue_shift, FG, 3, None),
-                (r"\theta =", lambda: pymath.degrees(pair().theta), SINE, 1, r"^\circ"),
+                (r"\theta =", lambda: pymath.degrees(pair().line_angle), SINE, 1, r"^\circ"),
             ],
             size=28,
         )
-        rows.move_to([3.6, -2.35, 0])
+        rows.move_to([3.6, -2.5, 0])
 
         self.say(
-            "Blue: A, drawn as its ellipse with its two eigenvectors, each arrow as long as its eigenvalue. "
-            "Below, the same two eigenvalues on a number line; the violet bracket is the gap g between them. "
-            "White: A + H for a fixed small H, with its top eigenvector, turned by theta. "
-            "Right: theta as a function of the gap."
+            "Blue: A, drawn as its ellipse. Its eigenvectors are drawn as the lines they span, because "
+            "an eigenvector only matters up to sign and length; the dots where the ellipse crosses them "
+            "are the eigenvalues. Below, the same two eigenvalues on a number line; the violet bracket is "
+            "the gap g between them. White: A + H for a small H of size 0.12, with its top eigenvector line, "
+            "turned by theta. Right: theta as a function of the gap."
         )
-        left = VGroup(old, f1, f2, f1_lbl, f2_lbl, new, new_axis, new_lbl, arc, theta_lbl, nl, nl_lbl, lam_dots, lam_lbls, new_ticks, gap)
+        left = VGroup(
+            old, e_lines, e_dots, f1_lbl, f2_lbl, new, new_axis, new_lbl, arc, theta_lbl,
+            nl, nl_lbl, lam_dots, lam_lbls, new_ticks, gap,
+        )
         self.add(left)
         self.play(
             FadeIn(left),
@@ -704,40 +732,83 @@ class S03NoGap(DeckSlide):
         self.add(dot)
 
         self.say(
+            "First, with a clear gap. Keep the size of H fixed at 0.12 but turn its direction all the way "
+            "round; the dashed line is H's own top eigenvector. The eigenvector of A + H barely wobbles, "
+            "never more than 7 degrees. With a gap, small perturbations make small turns."
+        )
+        self.play(FadeIn(h_line, h_lbl))
+        self.play(ph.animate.set_value(pymath.pi / 2 + TAU), run_time=6.0, rate_func=rate_functions.linear)
+
+        self.say(
             "Now make A more and more round: its two eigenvalues slide together and the gap closes. "
             "The white ticks, the eigenvalues of A + H, never move more than 0.12 from the blue dots. "
-            "But the eigenvector of A + H swings toward 45 degrees, however small H is."
+            "But the eigenvector of A + H swings toward H's own direction, 45 degrees here."
         )
         self.play(g.animate.set_value(g_end), run_time=6.0, rate_func=rate_functions.ease_in_out_sine)
 
         self.say(
-            "The classic example: diag(1+eps, 1-eps) versus [[1, eps],[eps, 1]]. Every "
-            "eps > 0 gives a 45-degree turn. So a gap is necessary; the sin Theta theorem "
-            "says it is also sufficient, quantitatively."
+            "And now turn H round again, same size. With no gap, the eigenvector of A + H follows H "
+            "wherever it points: every direction is reachable by a perturbation of size 0.12, while "
+            "the eigenvalues still move by at most 0.12. That is what unstable means."
         )
+        text_w = RIGHT_COL_W - 0.12
         msg = para(
             r"Eigenvalues are stable.\\ Individual eigenvectors are stable only \emph{with a gap}.",
-            width=RIGHT_COL_W + 0.4,
-            size=29,
+            width=text_w,
+            size=27,
         )
-        classic_note = tex(r"the classic example: for every $\varepsilon>0$", size=24, color=MUTED)
-        classic = math(
-            r"\begin{pmatrix}1+\varepsilon&0\\0&1-\varepsilon\end{pmatrix}"
-            r"\ \longrightarrow\ "
+        plot = VGroup(axes, x_lbl, y_lbl, y_ticks, x_ticks, curve, dot)
+        top = self.content_top - 0.3
+        msg.move_to([RIGHT_COL_X + 0.2, top, 0], aligned_edge=UP + LEFT)
+        self.play(FadeOut(plot), FadeIn(msg, shift=UP * 0.1))
+        self.play(ph.animate.set_value(pymath.pi / 2 + 2 * TAU), run_time=7.0, rate_func=rate_functions.linear)
+
+        self.say(
+            "Freeze one perturbation and flip its sign. A + H and A - H differ by 2 epsilon, 0.24, "
+            "yet their top eigenvectors are about 90 degrees apart. With A exactly round this holds for "
+            "every epsilon, however small."
+        )
+        ghost = VGroup(
+            through_origin(plane, pair().perturbed_top_eigenvector, reach, FG, width=2.5, opacity=0.45),
+            tex(r"$A+H$", size=22, color=MUTED).next_to(plane(reach * pair().perturbed_top_eigenvector), RIGHT, buff=0.08),
+        )
+        self.add(ghost)
+        new_name["tex"] = r"$A-H$"
+        self.play(ph.animate.set_value(pymath.pi / 2 + 2 * TAU + pymath.pi), run_time=3.0, rate_func=rate_functions.ease_in_out_sine)
+        between = pymath.degrees(story.line_angle(
+            story.PerturbedPair(gap=g_end, eps=eps).perturbed_top_eigenvector,
+            pair().perturbed_top_eigenvector,
+        ))
+        flip_note = tex(r"the same small $H$, with opposite signs:", size=22, color=MUTED)
+        flip = math(
             r"\begin{pmatrix}1&\varepsilon\\ \varepsilon&1\end{pmatrix}"
-            r"\qquad \cx{sine}{\theta = 45^\circ}",
-            size=30,
+            r"\quad\text{vs}\quad"
+            r"\begin{pmatrix}1&-\varepsilon\\ -\varepsilon&1\end{pmatrix}",
+            size=25,
+        )
+        flip_res = tex(
+            rf"differ by $2\varepsilon$, eigenvectors \cx{{sine}}{{$90^\circ$ apart}} "
+            rf"\cx{{muted}}{{(here {between:.0f}$^\circ$)}}",
+            size=22,
+        )
+        flip_group = VGroup(flip_note, flip, flip_res).arrange(DOWN, aligned_edge=LEFT, buff=0.1)
+        flip_group.next_to(msg, DOWN, buff=0.22, aligned_edge=LEFT)
+        self.play(FadeIn(flip_group, shift=UP * 0.1))
+
+        self.say(
+            "With A exactly round, A is a multiple of the identity and every line is an eigenvector: "
+            "there is no 'the' eigenvector to be stable. What is stable is the whole eigenspace. "
+            "So Davis-Kahan works with subspaces: all the eigenvectors of an isolated cluster of eigenvalues."
         )
         subspaces = para(
+            r"At $g=0$ every line is an eigenvector of $A$; only the eigenspace is well defined. "
             r"So Davis--Kahan works with \emph{subspaces}: all the eigenvectors of an isolated cluster of eigenvalues.",
-            width=RIGHT_COL_W + 0.4,
-            size=23,
+            width=text_w,
+            size=21,
             color=MUTED,
         )
-        takeaway = column(msg, classic_note, classic, subspaces, top=self.content_top - 0.3, x=RIGHT_COL_X + 0.2, buff=0.24)
-        plot = VGroup(axes, x_lbl, y_lbl, y_ticks, x_ticks, curve, dot)
-        self.play(FadeOut(plot))
-        self.play(FadeIn(takeaway, shift=UP * 0.1))
+        subspaces.next_to(flip_group, DOWN, buff=0.22, aligned_edge=LEFT)
+        self.play(FadeIn(subspaces, shift=UP * 0.1))
 
 
 # ----------------------------------------------------------------------------
@@ -782,8 +853,8 @@ class S03bWanted(DeckSlide):
         # The same split in a picture: a covariance-like ellipse, its long axis wanted.
         pic = Plane([-4.4, -2.2, 0], 0.62, rotate=np.radians(20))
         ell = ellipse(pic, np.diag([2.6, 0.95]), color=FG, width=2.5)
-        ax_u = vec(pic.origin, pic([2.6, 0.0]), EXACT, width=6)
-        ax_w = vec(pic.origin, pic([0.0, 0.95]), MUTED, width=5)
+        ax_u = through_origin(pic, [1.0, 0.0], 2.6, EXACT, width=5)
+        ax_w = through_origin(pic, [0.0, 1.0], 0.95, MUTED, width=4)
         ax_u_lbl = tex(r"$U$ (wanted)", size=22, color=EXACT).next_to(pic([2.6, 0.0]), RIGHT, buff=0.12)
         ax_w_lbl = tex(r"$U^{\perp}$", size=22, color=MUTED).next_to(pic([0.0, 0.95]), LEFT, buff=0.1)
         picture = VGroup(ell, ax_u, ax_w, ax_u_lbl, ax_w_lbl)
@@ -848,7 +919,8 @@ class S04Angle(DeckSlide):
 
         recall = RecallPanel(
             [
-                (r"$\cx{exact}{U}$", r"the true eigenspace (here a line)", EXACT),
+                (r"$\cx{exact}{U}$", r"the true eigenspace; here the line spanned by an eigenvector $u$ "
+                                     r"($u$ and $-u$ are the same eigendirection)", EXACT),
                 (r"$\cx{trial}{V}$", r"the trial subspace, spanned by our guess $v$", TRIAL),
                 (r"$\theta$", r"the angle between them: the error", FG),
                 (r"$\cx{trial}{E_0}$", r"orthonormal basis of $V$, as columns", TRIAL),
@@ -1059,7 +1131,7 @@ class S05Residual(DeckSlide):
             [
                 (r"$A$", r"the matrix whose eigenvectors we want; we can multiply any vector by it "
                          r"(in a perturbation problem, the perturbed $A+H$)", FG),
-                (r"$\cx{exact}{U}$", r"the exact eigendirection: the answer we are trying to find", EXACT),
+                (r"$\cx{exact}{U}$", r"the exact eigendirection (a line, not an arrow): the answer we are trying to find", EXACT),
                 (r"$\cx{trial}{v}$", r"our approximation, e.g.\ from an iterative eigensolver", TRIAL),
             ],
             x=-6.75,
