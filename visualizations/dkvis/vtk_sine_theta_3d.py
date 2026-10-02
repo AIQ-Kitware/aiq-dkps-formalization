@@ -466,15 +466,16 @@ class SineTheta3D:
         r.AutomaticLightCreationOn()
 
         # Translucent context (planes, ellipsoid, axes) in the base layer ...
-        self.ellipsoid = Ellipsoid(r, C["EXACT"])
-        self.axis_lines = [Segment(r, C["EXACT"], radius=0.006, opacity=0.55) for _ in range(3)]
-        self.U = Disk(r, C["EXACT"])
+        # The operator itself is neutral; only its wanted and unwanted parts carry role colors.
+        self.ellipsoid = Ellipsoid(r, C["MUTED"])
+        self.axis_lines = [Segment(r, C["WANTED"], radius=0.006, opacity=0.55) for _ in range(3)]
+        self.U = Disk(r, C["WANTED"])
         self.V = Disk(r, C["TRIAL"])
         self.hinge = Segment(r, C["FG"], radius=0.008, opacity=0.8)
         # ... and the vectors the argument is about in the top layer, so the
         # disks they lie in never tint or hide them.
         f = self.labels
-        self.f3 = Arrow(f, C["EXACT"], radius=0.02)
+        self.f3 = Arrow(f, C["UNWANTED"], radius=0.02)
         self.u1 = Arrow(f, C["TRIAL"])
         self.u2 = Arrow(f, C["TRIAL"])
         self.proj = Segment(f, C["MUTED"], radius=0.012)
@@ -485,9 +486,9 @@ class SineTheta3D:
 
         lr = self.labels
         s = self.px(0.03)
-        self.lbl_U = Label3D(lr, "U", C["EXACT"], s)
+        self.lbl_U = Label3D(lr, "U", C["WANTED"], s)
         self.lbl_V = Label3D(lr, "V", C["TRIAL"], s)
-        self.lbl_f3 = Label3D(lr, "f₃", C["EXACT"], s)
+        self.lbl_f3 = Label3D(lr, "f₃", C["UNWANTED"], s)
         self.lbl_hinge = Label3D(lr, "U ∩ V", C["FG"], self.px(0.022))
         self.lbl_sin = Label3D(lr, "sin θ", C["SINE"], self.px(0.026))
         self.lbl_theta = Label3D(lr, "θ", C["FG"], self.px(0.024))
@@ -523,9 +524,9 @@ class SineTheta3D:
             r.AddActor(a)
             return src
 
-        self.spec_wanted = [disc(C["EXACT"]) for _ in range(2)]
-        self.spec_unwanted = disc(C["EXACT"], filled=False)
-        self.spec_unwanted_lbl = Label3D(r, "λ₃", C["EXACT"], self.px(0.019))
+        self.spec_wanted = [disc(C["WANTED"]) for _ in range(2)]
+        self.spec_unwanted = disc(C["UNWANTED"], filled=False)
+        self.spec_unwanted_lbl = Label3D(r, "λ₃", C["UNWANTED"], self.px(0.019))
 
         def tri(color):
             src = vtk.vtkRegularPolygonSource()
@@ -558,7 +559,7 @@ class SineTheta3D:
             ("angle", C["SINE"]),
             ("angles", C["MUTED"]),
             ("ritz", C["TRIAL"]),
-            ("lambda", C["EXACT"]),
+            ("lambda", C["FG"]),
             ("delta", C["GAP"]),
             ("resid", C["RESID"]),
         ]

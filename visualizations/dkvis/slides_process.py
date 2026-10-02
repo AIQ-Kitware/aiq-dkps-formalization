@@ -24,6 +24,7 @@ from manim import (
     RIGHT,
     UP,
     Arrow,
+    Circle,
     Create,
     Dot,
     FadeIn,
@@ -34,19 +35,19 @@ from manim import (
 )
 
 from dkvis.slide_style import (
-    EXACT,
     FG,
-    GAP,
     MUTED,
-    RESID,
-    SINE,
-    TRIAL,
     DeckSlide,
     math,
     para,
     tex,
 )
 from dkvis.slides_sine_theta import fit_right
+
+# This part is about the process, not the mathematics, so it uses neutral colors only:
+# the role colors (blue, amber, cyan, pink, green, violet) keep their mathematical meaning.
+STAGE = FG
+FRAME = MUTED
 
 SECTION = r"The Davis--Kahan formalization $\cdot$ how it was built"
 
@@ -113,43 +114,43 @@ class W01Workflow(DeckSlide):
         h_all = top + 2.05  # height down to y = -2.05
 
         inputs = VGroup(
-            card(2.3, h_all, SINE, fill=0.06).move_to([-5.85, top - h_all / 2, 0]),
+            card(2.3, h_all, FRAME, fill=0.04).move_to([-5.85, top - h_all / 2, 0]),
         )
         in_items = VGroup(
-            tex(r"\textbf{Inputs}", size=24, color=SINE),
+            tex(r"\textbf{Inputs}", size=24, color=FG),
             para(r"\textbf{target theorem}, e.g.\ the $\sin\Theta$ theorem", width=2.0, size=18),
             para(r"\textbf{fidelity criteria}: scope and stop conditions", width=2.0, size=18),
             para(r"\textbf{references}: paper PDFs and transcriptions", width=2.0, size=18),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.3).move_to([-6.85, top - 0.15, 0], aligned_edge=UP + LEFT)
         inputs.add(in_items)
 
-        loop_box = card(8.5, h_all, EXACT, fill=0.04).move_to([-0.25, top - h_all / 2, 0])
-        loop_title = tex(r"\textbf{Formalization loop}", size=24, color=EXACT).move_to(loop_box.get_corner(UP + LEFT) + np.array([0.2, -0.12, 0]), aligned_edge=UP + LEFT)
+        loop_box = card(8.5, h_all, FRAME, fill=0.03).move_to([-0.25, top - h_all / 2, 0])
+        loop_title = tex(r"\textbf{Formalization loop}", size=24, color=FG).move_to(loop_box.get_corner(UP + LEFT) + np.array([0.2, -0.12, 0]), aligned_edge=UP + LEFT)
 
         w, h = 2.55, 1.3
         y_top, y_bot = top - 1.2, top - 3.2
-        decompose = titled_card("Decompose", r"intermediate results and their dependencies", w, h, EXACT).move_to([-3.05, y_top, 0])
-        find = titled_card("Find foundations", r"search Mathlib, other Lean libraries and the literature before building", w, h, GAP).move_to([-0.25, y_top, 0])
-        formalize = titled_card("Formalize", r"an orchestrator (human or LLM) hands Lean tasks to agents", w, h, RESID).move_to([2.55, y_top, 0])
+        decompose = titled_card("Decompose", r"intermediate results and their dependencies", w, h, STAGE).move_to([-3.05, y_top, 0])
+        find = titled_card("Find foundations", r"search Mathlib, other Lean libraries and the literature before building", w, h, STAGE).move_to([-0.25, y_top, 0])
+        formalize = titled_card("Formalize", r"an orchestrator (human or LLM) hands Lean tasks to agents", w, h, STAGE).move_to([2.55, y_top, 0])
         compile_ = titled_card(
-            "Compile \\& revise", r"fix errors, record failed attempts; mechanical checks: clean build, axioms", w, h + 0.15, TRIAL
+            "Compile \\& revise", r"fix errors, record failed attempts; mechanical checks: clean build, axioms", w, h + 0.15, STAGE
         ).move_to([2.55, y_bot, 0])
         review = titled_card(
             "Skeptical review",
             r"a separate pass compares statement and source. Proof-producing LLMs often overclaim success.",
-            4.9, h + 0.15, TRIAL,
+            4.9, h + 0.15, STAGE,
         ).move_to([-1.85, y_bot, 0])
 
         a1 = arrow(decompose.get_right(), find.get_left())
         a2 = arrow(find.get_right(), formalize.get_left())
         a3 = arrow(formalize.get_bottom(), compile_.get_top())
         a4 = arrow(compile_.get_left(), review.get_right())
-        back = arrow(np.array([decompose.get_center()[0], review[0].get_top()[1], 0]), decompose.get_bottom(), SINE)
-        back_lbl = tex(r"mismatch: back to an earlier stage", size=17, color=SINE).next_to(back, RIGHT, buff=0.12)
+        back = arrow(np.array([decompose.get_center()[0], review[0].get_top()[1], 0]), decompose.get_bottom(), FRAME)
+        back_lbl = tex(r"mismatch: back to an earlier stage", size=17, color=FRAME).next_to(back, RIGHT, buff=0.12)
 
-        outputs = card(2.3, h_all, RESID, fill=0.06).move_to([5.85, top - h_all / 2, 0])
+        outputs = card(2.3, h_all, FRAME, fill=0.04).move_to([5.85, top - h_all / 2, 0])
         out_items = VGroup(
-            tex(r"\textbf{Outputs}", size=24, color=RESID),
+            tex(r"\textbf{Outputs}", size=24, color=FG),
             para(r"\textbf{checked theorem}: a validated Lean endpoint", width=2.0, size=18),
             para(r"\textbf{reusable foundations}: contributions upstream (Tau Ceti)", width=2.0, size=18),
             para(
@@ -161,10 +162,10 @@ class W01Workflow(DeckSlide):
         y_acc = review[0].get_bottom()[1] - 0.28
         x_acc = review[0].get_center()[0]
         accepted = VGroup(
-            Line(np.array([x_acc, review[0].get_bottom()[1], 0]), np.array([x_acc, y_acc, 0]), color=RESID, stroke_width=4),
-            arrow(np.array([x_acc, y_acc, 0]), np.array([outputs.get_left()[0], y_acc, 0]), RESID),
+            Line(np.array([x_acc, review[0].get_bottom()[1], 0]), np.array([x_acc, y_acc, 0]), color=FG, stroke_width=4),
+            arrow(np.array([x_acc, y_acc, 0]), np.array([outputs.get_left()[0], y_acc, 0]), FG),
         )
-        acc_lbl = tex(r"accepted", size=19, color=RESID).next_to(accepted[1], DOWN, buff=0.05)
+        acc_lbl = tex(r"accepted", size=19, color=FG).next_to(accepted[1], DOWN, buff=0.05)
 
         roles = VGroup(
             para(
@@ -230,14 +231,14 @@ class W02TwoChecks(DeckSlide):
             "Lean's kernel",
             r"Does this proof establish this proposition?\\[0.3em]"
             r"Mechanical, and done for every result reported. It says nothing about which informal theorem was encoded.",
-            6.5, 2.15, RESID, size=21,
+            6.5, 2.15, STAGE, size=21,
         ).move_to([-3.45, top - 1.075, 0])
         review = titled_card(
             "Source comparison",
             r"Is this proposition the paper's claim? Compare, clause by clause: hypotheses, mathematical objects, "
             r"real or complex scalars, dimension, bounded or unbounded operators, norm class, gap assumptions, "
             r"constants, direction.",
-            6.5, 2.15, TRIAL, size=21,
+            6.5, 2.15, STAGE, size=21,
         ).move_to([3.45, top - 1.075, 0])
 
         head = tex(r"Ways a checked statement drifted from its source:", size=24).move_to([-6.75, top - 2.6, 0], aligned_edge=LEFT)
@@ -260,7 +261,7 @@ class W02TwoChecks(DeckSlide):
         ]
         lines = VGroup()
         for key, text in rows:
-            k = tex(key, size=21, color=SINE)
+            k = tex(key, size=21, color=FG)
             b = para(text, width=10.4, size=21)
             lines.add(VGroup(k, b))
         key_w = max(r[0].width for r in lines)
@@ -325,7 +326,8 @@ class W03ThreeStatements(DeckSlide):
         ("angle operator", r"positive $\sin\Theta_0$",
          [(r"$S=(I-F_0F_0^*)E_0$, same norms", "form"), (r"$S$, same norms", "form"), (r"positive $\sin\Theta_0$", "same")]),
     ]
-    KIND_COLOR = {"same": None, "broad": RESID, "narrow": SINE, "form": TRIAL}
+    # Each cell says how the Lean hypothesis compares with the paper's, by a mark and a shade.
+    KIND_MARK = {"broad": (r"$+$", 0.10), "narrow": (r"$-$", 0.32), "form": (r"$\approx$", 0.0)}
 
     def body(self) -> None:
         xs = [-6.9, -4.15, -1.4, 1.35, 4.1]  # left edges: label, paper, 1, 2, 3
@@ -334,17 +336,18 @@ class W03ThreeStatements(DeckSlide):
 
         def cell(text: str, col: int, row: int, kind: str | None, color: str = FG) -> VGroup:
             y = y0 - row * row_h
-            fill = self.KIND_COLOR.get(kind) if kind else None
+            mark, shade = self.KIND_MARK.get(kind, ("", 0.0))
             box = RoundedRectangle(
                 width=col_w - 0.08, height=row_h - 0.08, corner_radius=0.08,
-                stroke_width=0 if fill is None else 1.5, stroke_color=fill or FG,
-                fill_color=fill or FG, fill_opacity=0.16 if fill else 0.0,
+                stroke_width=1.5 if kind in self.KIND_MARK else 0, stroke_color=FG,
+                fill_color=FG, fill_opacity=shade,
             ).move_to([xs[col] + col_w / 2, y, 0])
-            words = para(text, width=col_w - 0.25, size=17, color=color, align="centering").move_to(box)
+            words = para((mark + r"\ " if mark else "") + text, width=col_w - 0.25, size=17, color=color,
+                         align="centering").move_to(box)
             return VGroup(box, words)
 
         headers = VGroup(
-            cell(r"\textbf{Davis--Kahan}", 1, 0, None, EXACT),
+            cell(r"\textbf{Davis--Kahan}", 1, 0, None, FG),
             cell(r"\textbf{1}\ (earlier)", 2, 0, None),
             cell(r"\textbf{2}", 3, 0, None),
             cell(r"\textbf{3}\ (current)", 4, 0, None),
@@ -353,13 +356,13 @@ class W03ThreeStatements(DeckSlide):
             para(rf"\textbf{{{name}}}", width=2.5, size=18, color=MUTED).move_to([xs[0], y0 - (i + 1) * row_h, 0], aligned_edge=LEFT)
             for i, (name, _, _) in enumerate(self.ROWS)
         ])
-        paper = VGroup(*[cell(src, 1, i + 1, None, EXACT) for i, (_, src, _) in enumerate(self.ROWS)])
+        paper = VGroup(*[cell(src, 1, i + 1, None, FG) for i, (_, src, _) in enumerate(self.ROWS)])
         cols = [VGroup(*[cell(entries[j][0], j + 2, i + 1, entries[j][1]) for i, (_, _, entries) in enumerate(self.ROWS)]) for j in range(3)]
         rule = Line([xs[0], y0 - row_h / 2, 0], [xs[4] + col_w, y0 - row_h / 2, 0], color=MUTED, stroke_width=1.5)
 
         legend = para(
-            r"\cx{resid}{green: broader than the paper (more cases)} \quad \cx{sine}{pink: narrower (misses cases)} "
-            r"\quad \cx{trial}{amber: a different formulation}",
+            r"$+$ broader than the paper (more cases) \quad $-$ narrower (misses cases, shaded) "
+            r"\quad $\approx$ a different formulation",
             width=13.0, size=18, align="centering",
         ).move_to([0, y0 - 5.85 * row_h, 0])
         foot = para(
@@ -369,13 +372,13 @@ class W03ThreeStatements(DeckSlide):
 
         size, w = 19, 13.6
         t1 = para(
-            r"\cx{sine}{\textbf{1}} is broader on two hypotheses but misses the half-infinite gaps (Appendix to "
+            r"\textbf{1} is broader on two hypotheses but misses the half-infinite gaps (Appendix to "
             r"Section~6), so it does not give the paper's theorem. It was once recorded as the match.",
             width=w, size=size,
         )
         t23 = para(
             r"\textbf{2} and \textbf{3} cover every case in the paper, with bridge theorems for $S$ and the norm "
-            r"conventions. \cx{trial}{\textbf{3}} uses the paper's own terms except for two hypotheses the paper's imply.",
+            r"conventions. \textbf{3} uses the paper's own terms except for two hypotheses the paper's imply.",
             width=w, size=size,
         )
         moral = para(
@@ -387,8 +390,9 @@ class W03ThreeStatements(DeckSlide):
 
         self.say(
             "From the workshop paper: three Lean theorems in the repository, all checked, all with the same conclusion. "
-            "Compare each with Davis and Kahan, one hypothesis at a time. Green means the Lean statement assumes less "
-            "than the paper, so it covers more cases; pink means it covers fewer; amber means it is formulated differently."
+            "Compare each with Davis and Kahan, one hypothesis at a time. A plus means the Lean statement assumes less "
+            "than the paper, so it covers more cases; a shaded minus means it covers fewer; approximately-equal means it "
+            "is formulated differently."
         )
         self.play(FadeIn(headers[0], labels, paper, legend), Create(rule))
 
@@ -441,28 +445,28 @@ class W04Reversals(DeckSlide):
         flags = VGroup()
         for i, (day, label) in enumerate(CHECKPOINTS.items()):
             h = 0.6 + 0.4 * (i % 2)
-            stem = Line(X(day), X(day) + UP * h, color=RESID, stroke_width=3)
-            tip = Dot(X(day) + UP * h, radius=0.07, color=RESID)
-            txt = tex(label, size=18, color=RESID).next_to(tip, UP, buff=0.06)
+            stem = Line(X(day), X(day) + UP * h, color=FG, stroke_width=3)
+            tip = Dot(X(day) + UP * h, radius=0.07, color=FG)
+            txt = tex(label, size=18, color=FG).next_to(tip, UP, buff=0.06)
             fit_right(txt)
             flags.add(VGroup(stem, tip, txt))
 
         stacks = VGroup()
         for day, results in REVERSALS.items():
-            dots = VGroup(*[Dot(X(day) + DOWN * (0.6 + 0.24 * k), radius=0.08, color=SINE) for k in range(len(results))])
+            dots = VGroup(*[Circle(radius=0.075, color=FG, stroke_width=2.5).move_to(X(day) + DOWN * (0.6 + 0.24 * k)) for k in range(len(results))])
             counts = Counter(results)
             text = ", ".join(n if k == 1 else rf"{n} $\times{k}$" for n, k in counts.items())
             names = VGroup(
-                tex(rf"\textbf{{{len(results)}}} on {day.strftime('%-d %b')}", size=18, color=SINE),
-                tex(text, size=17, color=SINE),
+                tex(rf"\textbf{{{len(results)}}} on {day.strftime('%-d %b')}", size=18, color=FG),
+                tex(text, size=17, color=MUTED),
             ).arrange(DOWN, aligned_edge=LEFT, buff=0.05)
             # 31 August and 2 September are close together: label the first on its left.
             side = LEFT if day == dt.date(2026, 8, 31) else RIGHT
             names.next_to(dots, side, buff=0.15, aligned_edge=UP)
             stacks.add(VGroup(dots, names))
         legend = VGroup(
-            tex(r"\cx{resid}{green}: the register reported every result accepted", size=18),
-            tex(r"\cx{sine}{pink}: one accepted source comparison withdrawn", size=18),
+            tex(r"flags above the line: the register reported every result accepted", size=18),
+            tex(r"circles below the line: one accepted source comparison withdrawn", size=18),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.06).move_to([-6.85, 2.35, 0], aligned_edge=UP + LEFT)
 
         size, w = 20, 13.6
@@ -482,14 +486,14 @@ class W04Reversals(DeckSlide):
 
         self.say(
             "The project's register tracked, for each of the 29 results, whether its source comparison had been accepted. "
-            "Green: the points where every result was accepted. Twelfth of August, seventeenth of August, second of September, "
+            "The flags above the line: the points where every result was accepted. Twelfth of August, seventeenth of August, second of September, "
             "and an eighth hostile review passing on the eighth."
         )
         self.play(Create(axis), FadeIn(ticks), FadeIn(legend))
         self.play(FadeIn(flags))
 
         self.say(
-            "Pink: each time an accepted result was taken back. Fourteen times, in ten different results, up to the "
+            "The circles below: each time an accepted result was taken back. Fourteen times, in ten different results, up to the "
             "fourth of September. sin 2 Theta alone was reopened four times."
         )
         self.play(FadeIn(stacks))
@@ -517,7 +521,7 @@ class W05Scale(DeckSlide):
     def body(self) -> None:
         top = self.content_top - 0.15
         size = 20
-        found_head = tex(r"\textbf{Mathematics built along the way}", size=24, color=EXACT)
+        found_head = tex(r"\textbf{Mathematics built along the way}", size=24, color=FG)
         found = VGroup(*[
             para(t, width=6.2, size=size) for t in (
                 r"principal angles, projections and direct rotations",
@@ -541,7 +545,7 @@ class W05Scale(DeckSlide):
         left = VGroup(found_head, found, found_note, yws).arrange(DOWN, aligned_edge=LEFT, buff=0.22)
         left.move_to([-6.85, top, 0], aligned_edge=UP + LEFT)
 
-        eff_head = tex(r"\textbf{Effort} \cx{muted}{(retained telemetry, incomplete)}", size=24, color=TRIAL)
+        eff_head = tex(r"\textbf{Effort} \cx{muted}{(retained telemetry, incomplete)}", size=24, color=FG)
         nums = VGroup(
             VGroup(math(TELEMETRY["turns"], size=40, color=FG), tex(r"model turns", size=20, color=MUTED)),
             VGroup(math(r"\text{" + TELEMETRY["output_tokens"] + r"}", size=40, color=FG), tex(r"output tokens", size=20, color=MUTED)),
@@ -610,7 +614,7 @@ class W06Claims(DeckSlide):
             r"$\bullet$ compilation and source comparison were tracked separately, and the comparison caught real "
             r"mismatches in checked statements\\[0.25em]"
             r"$\bullet$ repeated failure to prove Proposition~4.4 led to analyzing the claim, and to the counterexample",
-            6.6, 4.0, RESID, size=size,
+            6.6, 4.0, STAGE, size=size,
         ).move_to([-3.45, top - 2.0, 0])
         nots = titled_card(
             "Not established",
@@ -618,7 +622,7 @@ class W06Claims(DeckSlide):
             r"$\bullet$ no blind or independent expert review of the 29 source comparisons\\[0.25em]"
             r"$\bullet$ no residual error rate: ``29/29'' is the project's own current judgment\\[0.25em]"
             r"$\bullet$ the workflow emerged during the project; it was not designed in advance",
-            6.6, 4.0, SINE, size=size,
+            6.6, 4.0, FRAME, size=size,
         ).move_to([3.45, top - 2.0, 0])
         moral = para(
             r"Read each conclusion together with the hypotheses and definitions that set its scope. Deciding whether a "

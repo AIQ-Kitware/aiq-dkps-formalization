@@ -7,3 +7,4 @@ renders/
 *.mp4
 slides/
 slides-*/
+.venv-*/

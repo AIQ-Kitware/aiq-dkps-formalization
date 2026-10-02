@@ -11,7 +11,6 @@ from __future__ import annotations
 from manim import DOWN, LEFT, RIGHT, UP, FadeIn, Line, Rectangle, VGroup
 
 from dkvis.slide_style import (
-    EXACT,
     FG,
     GAP,
     MUTED,
@@ -19,6 +18,8 @@ from dkvis.slide_style import (
     RESID,
     SINE,
     TRIAL,
+    UNWANTED,
+    WANTED,
     DeckSlide,
     math,
     para,
@@ -53,6 +54,7 @@ class GlossarySlide(DeckSlide):
     LEFT_HEAD = ""
     RIGHT_HEAD = ""
     NOTES = ""
+    ROW_BUFF = 0.2
 
     def header(self, text: str, x: float, top: float) -> VGroup:
         head = tex(rf"\textbf{{{text}}}", size=21, color=MUTED).move_to([x, top, 0], aligned_edge=[-1, 1, 0])
@@ -64,7 +66,7 @@ class GlossarySlide(DeckSlide):
         out = VGroup()
         for x, head, rows in ((COL_X[0], self.LEFT_HEAD, self.LEFT), (COL_X[1], self.RIGHT_HEAD, self.RIGHT)):
             h = self.header(head, x, top)
-            out.add(VGroup(h, glossary_column(rows, x, h.get_bottom()[1] - 0.15)))
+            out.add(VGroup(h, glossary_column(rows, x, h.get_bottom()[1] - 0.15, self.ROW_BUFF)))
         return out
 
     def body(self) -> None:
@@ -74,13 +76,15 @@ class GlossarySlide(DeckSlide):
 
 class G01Matrices(GlossarySlide):
     title = r"Notation (1/3): colors, matrices, subspaces"
-    kicker = r"Each symbol in its role color; the decks should use them exactly this way"
+    kicker = r"Each symbol in its role color; gray only de-emphasizes and never carries a role"
     NOTES = (
-        "The glossary. Colors carry roles: blue for the target, the exact eigenspace; amber for the trial; pink "
-        "for angles; green for residuals; violet for gaps; gray for the unwanted part. Then the matrices and the "
-        "subspaces, with one meaning each."
+        "The glossary. Colors carry roles: blue is what we want, amber what we computed, cyan the exact part "
+        "we do not want, pink how much of the computation points into it, green the residual that exposes it, "
+        "violet the separation that keeps it from hiding. Operators are neutral, and gray only de-emphasizes. "
+        "Then the matrices and the subspaces, with one meaning each."
     )
     LEFT_HEAD = "Matrices and operators"
+    ROW_BUFF = 0.13
     LEFT = [
         (r"A", FG, r"the old (unperturbed) self-adjoint matrix or operator"),
         (r"H", FG, r"the perturbation, self-adjoint; $\norm{H}_2$ is its size"),
@@ -90,24 +94,26 @@ class G01Matrices(GlossarySlide):
         (r"A_0", TRIAL, r"the trial matrix on $V$: $E_0^*\tilde AE_0$ (Rayleigh--Ritz), or $A$'s wanted block "
                         r"$E_0^*AE_0$ in the perturbation reading"),
         (r"A_1", FG, r"$A$'s unwanted block, $E_1^*AE_1$ (Part 3)"),
-        (r"\Lambda_0,\ \Lambda_1", EXACT, r"$\tilde A$ on $U$ and on $U^\perp$: $\tilde AF_j=F_j\Lambda_j$"),
+        (r"\Lambda_0", WANTED, r"$\tilde A$ on $U$: $\tilde AF_0=F_0\Lambda_0$"),
+        (r"\Lambda_1", UNWANTED, r"$\tilde A$ on $U^\perp$: $\tilde AF_1=F_1\Lambda_1$"),
     ]
     RIGHT_HEAD = "Subspaces, bases, vectors"
     RIGHT = [
-        (r"U", EXACT, r"the target subspace: spanned by $\tilde A$'s wanted eigenvectors (exact, usually unknown)"),
-        (r"F_0,\ F_1", EXACT, r"orthonormal bases of $U$ and $U^\perp$"),
-        (r"V", TRIAL, r"the trial subspace, e.g.\ from an eigensolver"),
+        (r"U", WANTED, r"the wanted subspace: spanned by $\tilde A$'s wanted eigenvectors (exact, usually unknown)"),
+        (r"U^\perp", UNWANTED, r"the unwanted directions: spanned by the rest of $\tilde A$'s eigenvectors"),
+        (r"F_0", WANTED, r"an orthonormal basis of $U$"),
+        (r"F_1", UNWANTED, r"an orthonormal basis of $U^\perp$"),
+        (r"V,\ v", TRIAL, r"the trial subspace (e.g.\ from an eigensolver); $v$ a single trial vector"),
         (r"E_0,\ E_1", TRIAL, r"orthonormal bases of $V$ and $V^\perp$"),
-        (r"v", TRIAL, r"a single trial vector, $V=\operatorname{span}(v)$"),
         (r"P,\ Q", FG, r"projectors onto $V$ and $U$: $P=E_0E_0^*$, $Q=F_0F_0^*$"),
-        (r"u,\ w", EXACT, r"a wanted and an unwanted eigenvector of $\tilde A$ (``Why it is true''); $w$ drawn gray"),
-        (r"f_j", EXACT, r"eigenvectors of $\tilde A$, $\tilde Af_j=\lambda_jf_j$"),
+        (r"u,\ w", FG, r"a wanted eigenvector $u$ (blue) and an unwanted one $w$ (cyan) of $\tilde A$"),
+        (r"f_j", FG, r"eigenvectors of $\tilde A$, $\tilde Af_j=\lambda_jf_j$; blue when wanted, cyan when not"),
     ]
 
     def body(self) -> None:
         roles = [
-            (EXACT, "target, exact"), (TRIAL, "trial"), (SINE, "angle"), (RESID, "residual"),
-            (GAP, "gap"), (FG, "matrices"), (MUTED, "unwanted"),
+            (WANTED, "wanted"), (TRIAL, "trial"), (UNWANTED, "unwanted"), (SINE, "angle, error"),
+            (RESID, "residual"), (GAP, "gap"), (FG, "neutral"),
         ]
         swatches = VGroup()
         for color, name in roles:
@@ -130,10 +136,10 @@ class G02Spectra(GlossarySlide):
     )
     LEFT_HEAD = "Spectra and gaps"
     LEFT = [
-        (r"\lambda,\ \lambda_j", FG, r"eigenvalues of $\tilde A$; $\lambda_0,\lambda_1$ its two eigenvalues in "
-                                     r"the $2\times2$ examples"),
-        (r"a_0,\ a_1", MUTED, r"the two eigenvalues of the old $A$ in the $2\times2$ examples; $a_0$ the "
-                               r"top (wanted) one"),
+        (r"\lambda,\ \lambda_j", FG, r"eigenvalues of $\tilde A$; in the $2\times2$ examples \cx{wanted}{$\lambda_0$} "
+                                     r"(wanted) and \cx{unwanted}{$\lambda_1$} (unwanted)"),
+        (r"a_0,\ a_1", FG, r"the two eigenvalues of the old $A$ in the $2\times2$ examples; $a_0$, the top one, "
+                            r"is the trial value (amber) when $A$'s top eigenvector is the trial"),
         (r"\mu_j", TRIAL, r"trial values: the eigenvalues of $A_0$ (Ritz values)"),
         (r"\rho", TRIAL, r"the Rayleigh quotient $v^*\tilde Av$ of a unit trial vector"),
         (r"[\beta,\alpha]", FG, r"an interval containing the spectrum of $A_0$ (or of the separated block)"),
