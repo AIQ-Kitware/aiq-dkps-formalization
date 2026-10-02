@@ -179,6 +179,13 @@ presenter notes on every build. There are two presentation paths:
 | `F01Setup` | | `*` | the shared setup of the four Section 2 theorems: old `A`, new `A+H`, their blocks, and which spectra each theorem separates |
 | `F01bAngles` | | `*` | directed `Theta0` vs ambient `Theta` (each angle twice, `||sin Theta|| = ||P - Q||`), `R` vs `H`, and why `sin Theta` has no one-gap ambient form (Proposition 6.1) |
 | `F01cTwoByTwo` | | `*` | one 2x2 rotation: `tan 2theta`, `sin 2theta`, `tan theta` are `b` over the old gap, the new gap and the mixed gap; `sin theta` is smaller |
+| `F02bTanBuys` | | `*` | the largest angle each of `sin Theta` and `tan Theta` allows for the same `||R||/delta` (arcsin vs arctan), and the price of `tan` |
+| `F02cTanWhy` | | `*` | the `tan Theta` proof: Davis--Kahan (6.6) along each pair of principal vectors; why the gap must be one-sided (averages of eigenvalues; Example 6.1) |
+| `F03bReflect` | | `*` | the `sin 2Theta` proof: `A + XHX` is `A + H` in a mirror, with eigenvectors `2 theta` apart; apply the two-gap `sin Theta` theorem (7.5) |
+| `F03cPrice` | | `*` | a bound on `sin 2theta` allows small angles and angles near 90 degrees; Theorem 8.2 picks the small branch |
+| `F04bJacobi` | | `*` | the `tan 2Theta` proof: turn the basis until the coupling vanishes (Jacobi), then (7.6) pair by pair |
+| `F04cRepulsion` | | `*` | `lambda0 - lambda1 = (a0 - a1)/cos 2theta`; Theorem 8.1: the matching subspace, the 45-degree ceiling, eigenvalue repulsion |
+| `F09WhichOne` | | `*` | which theorem to use given what you know |
 | `F02TanTheta` | | `*` | the `tan Theta` theorem: Rayleigh--Ritz values and a one-sided gap; exact in two dimensions; fails with a two-sided gap (`diag(-1, 0, 1)`) |
 | `F03SinTwoTheta` | | `*` | the `sin 2Theta` theorem: a gap inside `A+H` alone; equality on the 2x2 example; `theta` vs `90 - theta` and Theorem 8.2 |
 | `F04TanTwoTheta` | | `*` | the `tan 2Theta` theorem: a gap in `A` alone and off-diagonal `H`; the gap example is an equality at every gap; Theorem 8.1's 45-degree ceiling |

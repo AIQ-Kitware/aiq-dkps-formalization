@@ -153,3 +153,33 @@ def test_two_by_two_identities_behind_the_four_theorems(gap):
     assert math.tan(th) == pytest.approx(b / (a0 - l1))
     assert l0 - a1 == pytest.approx(a0 - l1)
     assert math.sin(th) < b / (a0 - l1)
+
+
+@pytest.mark.parametrize("gap", [story.FAMILY_EXAMPLE_GAP, story.REFLECT_EXAMPLE_GAP, 1.0])
+def test_reflection_doubles_the_angle(gap):
+    pair = story.PerturbedPair(gap=gap, eps=story.PERTURBATION_EPS)
+    M, N = pair.perturbed, pair.reflected
+    np.testing.assert_allclose(np.linalg.eigvalsh(M), np.linalg.eigvalsh(N), atol=1e-12)
+    top_M = np.linalg.eigh(M)[1][:, -1]
+    top_N = np.linalg.eigh(N)[1][:, -1]
+    assert math.degrees(story.line_angle(top_M, top_N)) == pytest.approx(math.degrees(2 * pair.line_angle))
+    assert np.linalg.norm(M - N, 2) == pytest.approx(2 * story.PERTURBATION_EPS)
+    l0, l1 = pair.perturbed_eigenvalues
+    assert (l0 - l1) * math.sin(2 * pair.line_angle) == pytest.approx(np.linalg.norm(M - N, 2))
+
+
+@pytest.mark.parametrize("gap", [story.FAMILY_EXAMPLE_GAP, story.REFLECT_EXAMPLE_GAP, 1.0])
+def test_jacobi_coupling_vanishes_at_the_eigenvector_angle(gap):
+    pair = story.PerturbedPair(gap=gap, eps=story.PERTURBATION_EPS)
+    assert pair.coupling(0.0) == pytest.approx(story.PERTURBATION_EPS)
+    assert pair.coupling(pair.line_angle) == pytest.approx(0.0, abs=1e-12)
+    a0, a1 = pair.A.diagonal()
+    l0, l1 = pair.perturbed_eigenvalues
+    assert l0 - l1 == pytest.approx((a0 - a1) / math.cos(2 * pair.line_angle))
+
+
+def test_price_of_doubling_bound_allows_two_ranges():
+    t = story.SIN2_PRICE_BOUND
+    small = 0.5 * math.asin(t)
+    assert math.sin(2 * small) == pytest.approx(t)
+    assert math.sin(2 * (math.pi / 2 - small)) == pytest.approx(t)
