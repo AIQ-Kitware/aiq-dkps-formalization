@@ -25,6 +25,11 @@ part renders its VTK stills and movies); ``--refresh-assets`` forces that.
 ``--scenes`` re-renders only the named scenes; conversion always uses the whole
 deck.
 
+Scenes render in parallel, one process per scene and ``--jobs`` at a time
+(default: one per CPU); each scene's manim output goes to
+``renders/logs/<deck>--<scene>.log``.  ``--fps`` overrides the quality's frame
+rate, e.g. ``-q h --fps 30`` for 1080p at half the frames of the 60 fps default.
+
 The handout (``--handout``) has one page per scene: the final frame of its last
 build, so every scene's last build must hold everything the slide says.  A
 build that plays an external video (``src``, e.g. a looping VTK movie) is a
@@ -36,11 +41,13 @@ from __future__ import annotations
 
 import argparse
 import importlib
-import os
 import json
+import os
 import subprocess
 import sys
 import tempfile
+import time
+from concurrent.futures import ThreadPoolExecutor, as_completed
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
@@ -132,18 +139,58 @@ def _run(*args: str, deck: str | None = None) -> None:
     subprocess.run(cmd, cwd=ROOT, check=True, env=env)
 
 
-def render(deck_name: str, quality: str, only: list[str] | None = None, refresh_assets: bool = False) -> None:
-    """Render a (non-composite) deck's scenes, or only those in ``only``, into ``slides-<deck>/``."""
-    for module, scenes in deck(deck_name):
-        scenes = [s for s in scenes if not only or s in only]
-        if not scenes:
-            continue
+def _render_scene(deck_name: str, module: str, scene: str, quality: str, fps: float | None) -> float:
+    """Render one scene of ``deck_name`` in its own process; return the seconds it took."""
+    source = Path(importlib.import_module(module).__file__).relative_to(ROOT)
+    # ``--quality=h``, not ``-qh``: manim-slides would read ``-qh`` as ``-q -h`` and print help.
+    cmd = [sys.executable, "-m", "manim_slides", "render", f"--quality={quality}"]
+    if fps:
+        cmd.append(f"--fps={fps:g}")
+    cmd += [str(source), scene]
+    log = ROOT / "renders" / "logs" / f"{deck_name}--{scene}.log"
+    log.parent.mkdir(parents=True, exist_ok=True)
+    # Read by DeckSlide: render into slides-<deck>/ and number by this deck's order.
+    env = {**os.environ, "DKVIS_DECK": deck_name}
+    start = time.monotonic()
+    with open(log, "w") as out:
+        result = subprocess.run(cmd, cwd=ROOT, env=env, stdout=out, stderr=subprocess.STDOUT)
+    if result.returncode:
+        tail = "\n".join(log.read_text(errors="replace").splitlines()[-25:])
+        raise RuntimeError(f"{deck_name}/{scene} failed (log: {log}):\n{tail}")
+    return time.monotonic() - start
+
+
+def render(
+    deck_names: list[str],
+    quality: str,
+    fps: float | None = None,
+    only: list[str] | None = None,
+    refresh_assets: bool = False,
+    jobs: int | None = None,
+) -> None:
+    """Render the (non-composite) decks' scenes, or only those in ``only``, ``jobs`` at a time."""
+    tasks = [
+        (name, module, scene)
+        for name in deck_names
+        for module, scenes in deck(name)
+        for scene in scenes
+        if not only or scene in only
+    ]
+    for module in dict.fromkeys(module for _, module, _ in tasks):
         mod = importlib.import_module(module)
         if hasattr(mod, "prepare"):
             mod.prepare(refresh=refresh_assets)
-        source = Path(mod.__file__).relative_to(ROOT)
-        # ``--quality=h``, not ``-qh``: manim-slides would read ``-qh`` as ``-q -h`` and print help.
-        _run("render", f"--quality={quality}", str(source), *scenes, deck=deck_name)
+    jobs = jobs or os.cpu_count() or 1
+    print(f"rendering {len(tasks)} scenes, {jobs} at a time", flush=True)
+    with ThreadPoolExecutor(jobs) as pool:
+        futures = {pool.submit(_render_scene, *task, quality, fps): task for task in tasks}
+        try:
+            for done, future in enumerate(as_completed(futures), 1):
+                name, _, scene = futures[future]
+                print(f"[{done}/{len(tasks)}] {name}/{scene} ({future.result():.0f} s)", flush=True)
+        except BaseException:
+            pool.shutdown(cancel_futures=True)
+            raise
 
 
 def assemble(deck_name: str) -> None:
@@ -188,6 +235,8 @@ def main() -> None:
     parser = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     parser.add_argument("deck", choices=DECKS)
     parser.add_argument("-q", "--quality", default="h", choices=list("lmhpk"), help="manim quality (default h = 1080p60)")
+    parser.add_argument("--fps", type=float, help="frame rate, overriding the quality's (e.g. 30 with -q h)")
+    parser.add_argument("-j", "--jobs", type=int, help="scenes to render at once (default: one per CPU)")
     parser.add_argument("--scenes", nargs="+", help="render only these scenes")
     parser.add_argument("--list", action="store_true", help="print scene names in order and exit")
     parser.add_argument("--no-render", action="store_true", help="only convert already-rendered scenes")
@@ -204,10 +253,15 @@ def main() -> None:
         print(" ".join(names))
         return
 
-    parts = COMPOSITES.get(args.deck, [args.deck])
     if not args.no_render:
-        for part in parts:
-            render(part, args.quality, only=args.scenes, refresh_assets=args.refresh_assets)
+        render(
+            COMPOSITES.get(args.deck, [args.deck]),
+            args.quality,
+            fps=args.fps,
+            only=args.scenes,
+            refresh_assets=args.refresh_assets,
+            jobs=args.jobs,
+        )
     if args.deck in COMPOSITES:
         assemble(args.deck)
 

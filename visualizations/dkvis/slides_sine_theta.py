@@ -56,7 +56,7 @@ from manim import (
     FadeOut,
     GrowFromEdge,
     Line,
-    ParametricFunction,
+    Circle,
     Rectangle,
     ReplacementTransform,
     Transform,
@@ -146,13 +146,17 @@ def through_origin(plane: Plane, direction, half_length: float, color: str, widt
     ).set_opacity(opacity)
 
 
-def ellipse(plane: Plane, M: np.ndarray, color: str = FG, width: float = 3.0) -> ParametricFunction:
-    return ParametricFunction(
-        lambda t: plane(M @ np.array([np.cos(t), np.sin(t)])),
-        t_range=[0, TAU],
-        color=color,
-        stroke_width=width,
-    )
+def ellipse(plane: Plane, M: np.ndarray, color: str = FG, width: float = 3.0) -> Circle:
+    """The image ``{plane(M u) : |u| = 1}`` of the unit circle under ``M``.
+
+    Built by applying the linear map to a unit circle's Bezier points, which is
+    exact and much cheaper than sampling a parametric curve; it matters because
+    ``always_redraw`` rebuilds the ellipses of animated slides every frame.
+    """
+    linear = np.eye(3)
+    linear[:2, :2] = plane.scale * plane.rot @ np.asarray(M, dtype=float)
+    curve = Circle(radius=1.0, color=color, stroke_width=width)
+    return curve.apply_matrix(linear, about_point=ORIGIN).shift(plane.origin)
 
 
 def angle_arc(plane: Plane, start_dir, end_dir, radius: float, color: str, width=3.0) -> Arc:
@@ -174,7 +178,14 @@ def live(getter, decimals: int = 3, size: float = 30, color: str = FG, unit: str
     num = DecimalNumber(
         getter(), num_decimal_places=decimals, font_size=size, color=color, unit=unit
     )
-    num.add_updater(lambda m: m.set_value(getter()))
+
+    def update(m: DecimalNumber) -> None:
+        # Rebuilding the digits is costly, so only do it when the shown value changes.
+        value = getter()
+        if round(value, decimals) != round(m.get_value(), decimals):
+            m.set_value(value)
+
+    num.add_updater(update)
     return num
 
 
