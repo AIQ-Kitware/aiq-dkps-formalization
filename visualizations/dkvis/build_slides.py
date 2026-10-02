@@ -48,6 +48,7 @@ MAIN = "dkvis.slides_sine_theta"
 THREE_D = "dkvis.slides_sine_theta_3d"
 PROP44 = "dkvis.slides_prop44"
 FAMILY = "dkvis.slides_family"
+PROCESS = "dkvis.slides_process"
 
 # Presentation order of each deck, by scene name.  Every name must be defined in
 # one of MODULES.  Slides with ``depth`` "*" or "**" carry a badge; the short
@@ -63,7 +64,8 @@ DECK_SCENES = {
         "S05Residual", "S06Gap", "S07Theorem", "S08Why", "S08Components", "S09Sylvester",
         "S11Payoff", "S10Sharp", "D01Planes", "D02Tilt", "D03Gap", "D04Perturb", "D05TryIt", "S12Lean",
         "F01Setup", "F02TanTheta", "F03SinTwoTheta", "F04TanTwoTheta", "F05OneExample",
-        "S13Family", "P01Claim", "P02Counterexample", "P03Why", "P04Details", "S14Summary",
+        "S13Family", "P01Claim", "P02Counterexample", "P03Why", "P04Details",
+        "W01Workflow", "W02TwoChecks", "W03ThreeStatements", "W04Reversals", "W05Scale", "W06Claims", "S14Summary",
     ],
     "sine-theta-3d": ["D01Planes", "D02Tilt", "D03Gap", "D04Perturb", "D05TryIt"],
     "prop44": ["P01Claim", "P02Counterexample", "P03Why", "P04Details"],
@@ -71,7 +73,7 @@ DECK_SCENES = {
 # The full deck without the VTK scenes, for machines without VTK.
 DECK_SCENES["sine-theta"] = [n for n in DECK_SCENES["sine-theta-full"] if not n.startswith("D")]
 
-MODULES = [MAIN, THREE_D, FAMILY, PROP44]
+MODULES = [MAIN, THREE_D, FAMILY, PROP44, PROCESS]
 DECKS = list(DECK_SCENES)
 
 
