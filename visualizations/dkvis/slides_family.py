@@ -139,7 +139,7 @@ class F01Setup(DeckSlide):
         line_old, X_old = axis(0.3, 3.2, -6.5, -0.9, 1.45)
         line_new, X_new = axis(0.3, 3.2, -6.5, -0.9, 0.05)
 
-        def spectrum(line, X, wanted, rest, color, caption, w_name, r_name) -> VGroup:
+        def spectrum(line, X, wanted, rest, color, caption, w_name, r_name, r_color=MUTED) -> VGroup:
             y = X(0.0)[1]
             box = Rectangle(
                 width=X(wanted[-1])[0] - X(wanted[0])[0] + 0.45, height=0.42,
@@ -151,11 +151,11 @@ class F01Setup(DeckSlide):
             )
             cap = tex(caption, size=22, color=color).move_to([X(0.3)[0], y + 0.5, 0], aligned_edge=LEFT)
             w = math(w_name, size=28, color=color).next_to(box, DOWN, buff=0.08)
-            r = math(r_name, size=28, color=MUTED).next_to((X(rest[0]) + X(rest[-1])) / 2, DOWN, buff=0.22)
+            r = math(r_name, size=28, color=r_color).next_to((X(rest[0]) + X(rest[-1])) / 2, DOWN, buff=0.22)
             return VGroup(line, box, dots, cap, w, r)
 
         old = spectrum(line_old, X_old, (0.6, 0.95), (2.0, 2.45, 2.9), TRIAL, r"eigenvalues of the old $A$", r"A_0", r"A_1")
-        new = spectrum(line_new, X_new, (0.7, 1.1), (1.85, 2.55, 2.8), EXACT, r"eigenvalues of the new $A+H$", r"\Lambda_0", r"\Lambda_1")
+        new = spectrum(line_new, X_new, (0.7, 1.1), (1.85, 2.55, 2.8), EXACT, r"eigenvalues of the new $A+H$", r"\Lambda_0", r"\Lambda_1", EXACT)
 
         head = tex(r"Which eigenvalues each theorem keeps apart:", size=24)
         rows = [
@@ -396,7 +396,7 @@ class F03SinTwoTheta(DeckSlide):
             Dot(X(lam0), radius=0.08, color=EXACT),
             Dot(X(lam1), radius=0.08, color=MUTED),
             math(r"\Lambda_0", size=24, color=EXACT).next_to(X(lam0), DOWN, buff=0.1),
-            math(r"\Lambda_1", size=24, color=MUTED).next_to(X(lam1), DOWN, buff=0.1),
+            math(r"\Lambda_1", size=24, color=EXACT).next_to(X(lam1), DOWN, buff=0.1),
             tex(r"eigenvalues of $A+H$", size=19, color=MUTED).next_to(X(2.2), RIGHT, buff=0.1),
         )
         sep = gap_mark(X(lam1) + UP * 0.22, X(lam0) + UP * 0.22, rf"$\delta={pair.delta_sin_two:.3f}$", size=20)

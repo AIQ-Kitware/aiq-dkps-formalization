@@ -221,7 +221,7 @@ class P02Counterexample(P4Slide):
         t = ValueTracker(0.0)
 
         heads = VGroup(
-            tex(r"direct rotation $R$", size=26, color=EXACT).move_to(centers[(0, 0)] + p3(0, 1.3)),
+            tex(r"direct rotation $\mathcal R$", size=26, color=EXACT).move_to(centers[(0, 0)] + p3(0, 1.3)),
             tex(r"competitor $W$", size=26, color=TRIAL).move_to(centers[(1, 0)] + p3(0, 1.3)),
         )
         panels = VGroup()
@@ -280,7 +280,7 @@ class P02Counterexample(P4Slide):
         y_r, y_w = intro.get_bottom()[1] - 0.65, intro.get_bottom()[1] - 1.1
         r_sv, w_sv = MODEL.direct_singular_values, MODEL.competitor_singular_values
         bars = VGroup(
-            tex(r"$R$", size=26, color=EXACT).move_to([x0 + 0.2, y_r, 0]),
+            tex(r"$\mathcal R$", size=26, color=EXACT).move_to([x0 + 0.2, y_r, 0]),
             stacked(r_sv, EXACT, y_r),
             tex(rf"${R_NORMS['trace']:.3f}$", size=26, color=EXACT).move_to([x0 + 0.75 + unit * R_NORMS["trace"], y_r, 0], aligned_edge=LEFT),
             tex(r"$W$", size=26, color=TRIAL).move_to([x0 + 0.2, y_w, 0]),
@@ -304,9 +304,9 @@ class P02Counterexample(P4Slide):
             (r"sum of chords (trace)", "trace", True),
         ]
         body = r"\renewcommand{\arraystretch}{1.3}\begin{array}{l|cc|c}"
-        body += r"\norm{I-\,\cdot\,} & \cx{exact}{R} & \cx{trial}{W} & \text{less motion}\\ \hline"
+        body += r"\norm{I-\,\cdot\,} & \cx{exact}{\mathcal R} & \cx{trial}{W} & \text{less motion}\\ \hline"
         for label, key, flip in rows:
-            winner = r"\cx{trial}{W}" if W_NORMS[key] < R_NORMS[key] else r"\cx{exact}{R}"
+            winner = r"\cx{trial}{W}" if W_NORMS[key] < R_NORMS[key] else r"\cx{exact}{\mathcal R}"
             body += rf"\text{{{label}}} & {R_NORMS[key]:.3f} & {W_NORMS[key]:.3f} & {winner}\\"
         body += r"\end{array}"
         table = math(body, size=24)
@@ -441,22 +441,22 @@ class P04Details(P4Slide):
             size=34,
         )
         R = math(
-            r"R=\tfrac1{\sqrt2}\begin{pmatrix}1&0&0&-1\\0&1&1&0\\0&-1&1&0\\1&0&0&1\end{pmatrix}",
+            r"\mathcal R=\tfrac1{\sqrt2}\begin{pmatrix}1&0&0&-1\\0&1&1&0\\0&-1&1&0\\1&0&0&1\end{pmatrix}",
             size=34,
         )
         mats = VGroup(R, W).arrange(RIGHT, buff=0.9).move_to([-2.3, self.content_top - 1.35, 0])
         pa = MODEL.principal_angles_degrees
         facts = VGroup(
             math(
-                rf"\text{{principal angles}}(U,V)=({pa[0]:.0f}^\circ,{pa[1]:.0f}^\circ)\le60^\circ,\qquad W(U)=R(U)=V",
+                rf"\text{{principal angles}}(U,V)=({pa[0]:.0f}^\circ,{pa[1]:.0f}^\circ)\le60^\circ,\qquad W(U)=\mathcal R(U)=V",
                 size=28,
             ),
             math(
-                rf"\sigma(I-R)=({chord(np.pi / 4):.3f})^{{\times4}},\qquad \sigma(I-W)=({chord(np.pi / 2):.3f},{chord(np.pi / 2):.3f},0,0)",
+                rf"\sigma(I-\mathcal R)=({chord(np.pi / 4):.3f})^{{\times4}},\qquad \sigma(I-W)=({chord(np.pi / 2):.3f},{chord(np.pi / 2):.3f},0,0)",
                 size=28,
             ),
             math(
-                rf"\norm{{I-W}}_{{*}}=2\sqrt2={W_NORMS['trace']:.4f}\ <\ 4\sqrt{{2-\sqrt2}}={R_NORMS['trace']:.4f}=\norm{{I-R}}_{{*}}",
+                rf"\norm{{I-W}}_{{*}}=2\sqrt2={W_NORMS['trace']:.4f}\ <\ 4\sqrt{{2-\sqrt2}}={R_NORMS['trace']:.4f}=\norm{{I-\mathcal R}}_{{*}}",
                 size=30,
                 color=FG,
             ),
