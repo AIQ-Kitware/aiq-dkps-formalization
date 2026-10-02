@@ -291,7 +291,7 @@ class F03bReflect(DeckSlide):
         reach = 2.15
 
         mirror = through_origin(plane, [1.0, 0.0], reach, TRIAL, width=3)
-        mirror_lbl = tex(r"$U$, the mirror", size=20, color=TRIAL).next_to(plane([-reach, 0.0]), DOWN, buff=0.1).shift(RIGHT * 0.5)
+        mirror_lbl = tex(r"$V$, the mirror", size=20, color=TRIAL).next_to(plane([-reach, 0.0]), DOWN, buff=0.1).shift(RIGHT * 0.5)
         perp = DashedVMobject(through_origin(plane, [0.0, 1.0], 1.6, TRIAL, width=2), num_dashes=18)
 
         new = VGroup(
@@ -315,13 +315,14 @@ class F03bReflect(DeckSlide):
 
         w = TEXT_W
         p_x = para(
-            r"$X=P-P^\perp$ is $+1$ on the old subspace $U$ and $-1$ on $U^\perp$: a mirror. Since $XAX=A$, "
+            r"$X=P-P^\perp$ is $+1$ on the old (trial) subspace $V$ and $-1$ on $V^\perp$: a mirror. Since $XAX=A$, "
             r"$A+XHX=X(A+H)X$ is $A+H$ seen in the mirror. In $A$'s eigenbasis only the coupling block $B$ changes sign.",
             width=w, size=SIZE,
         )
         p_same = para(
             r"So $A+XHX$ has the same eigenvalues as $A+H$, and mirror-image eigenvectors, at $\theta$ and $-\theta$: "
-            r"$2\theta$ apart. In general $(A+H)U^2=U^2(A+XHX)$, and $U^2$ turns by $2\Theta$ (7.3--7.4).",
+            r"$2\theta$ apart. In general, with $\mathcal R$ the direct rotation from $V$ to $U$, "
+            r"$(A+H)\mathcal R^2=\mathcal R^2(A+XHX)$, and $\mathcal R^2$ turns by $2\Theta$ (7.3--7.4).",
             width=w, size=SIZE,
         )
         p_apply = para(

@@ -58,6 +58,7 @@ from manim import (
     Line,
     Circle,
     Rectangle,
+    Square,
     ReplacementTransform,
     Transform,
     Triangle,
@@ -379,9 +380,9 @@ class S00bSetting(DeckSlide):
             size=27,
         )
         t2 = para(
-            r"Such an $A$ has real eigenvalues and, in finite dimensions, \emph{perpendicular} eigenvectors "
-            r"(the spectral theorem): it is a pure stretch along perpendicular axes. In infinite dimensions "
-            r"the same role is played by \emph{spectral subspaces}.",
+            r"In finite dimensions the spectral theorem gives real eigenvalues and \emph{perpendicular} "
+            r"eigenvectors: a pure stretch along perpendicular axes. In infinite dimensions the corresponding "
+            r"object is a decomposition into \emph{spectral subspaces}; eigenvectors need not span the space.",
             width=w,
             size=27,
         )
@@ -403,8 +404,10 @@ class S00bSetting(DeckSlide):
         self.play(FadeIn(boxes[3]), FadeIn(labels[3]), FadeIn(mini), FadeIn(t1))
 
         self.say(
-            "Self-adjoint operators are pure stretches along perpendicular axes: real eigenvalues, "
-            "orthogonal eigenvectors. The class grows: complex Hermitian matrices, bounded operators "
+            "For a finite-dimensional symmetric or Hermitian matrix, the spectral theorem gives real eigenvalues "
+            "and orthogonal eigendirections. In infinite dimensions the corresponding object is a decomposition "
+            "into spectral subspaces; eigenvectors need not span the space. The class grows: complex Hermitian "
+            "matrices, bounded operators "
             "on a Hilbert space, possibly infinite-dimensional, and unbounded ones like differential operators."
         )
         self.play(
@@ -507,7 +510,7 @@ class S01Ellipse(DeckSlide):
 
 class S02Perturb(DeckSlide):
     title = "Perturb the matrix"
-    kicker = r"$A \to A+H$ with $H$ small and symmetric"
+    kicker = r"$A\to\tilde A=A+H$, with $H$ small and symmetric; $\tilde A$ is the matrix we have"
 
     def body(self) -> None:
         eps = story.PERTURBATION_EPS
@@ -938,7 +941,7 @@ class S03bWanted(DeckSlide):
             return np.array([x_lo + (t - lo) / (hi - lo) * (x_hi - x_lo), y_nl, 0.0])
 
         nl = Line(X(lo), X(hi), color=MUTED, stroke_width=2)
-        nl_lbl = tex(r"eigenvalues of $A$", size=22, color=MUTED).next_to(X(lo), DOWN, buff=0.2).align_to(nl, LEFT)
+        nl_lbl = tex(r"eigenvalues of $\tilde A$, the matrix we have", size=22, color=MUTED).next_to(X(lo), DOWN, buff=0.2).align_to(nl, LEFT)
         dots = VGroup(*[Dot(X(t), radius=0.1, color=EXACT if w else MUTED) for t, w in zip(eigs, wanted)])
         w_idx = [i for i, w in enumerate(wanted) if w]
         u_idx = [i for i, w in enumerate(wanted) if not w]
@@ -1006,6 +1009,120 @@ class S03bWanted(DeckSlide):
         )
         self.play(FadeIn(w_box), FadeIn(w_lbl), FadeIn(u_lbl))
         self.play(GrowFromCenter(gap), FadeIn(gap_lbl), FadeIn(spaces), FadeIn(picture), FadeIn(t2))
+
+
+# ----------------------------------------------------------------------------
+# 3d. Why not compute every eigenvector?
+# ----------------------------------------------------------------------------
+
+
+class S03dCompute(DeckSlide):
+    """Why the talk is about approximate subspaces: large problems are solved iteratively."""
+
+    depth = "*"
+    title = "Why not compute every eigenvector?"
+    kicker = "Large problems are solved for a few eigenvectors, and only approximately"
+
+    # Grid Laplacian on a k x k grid: the five-point stencil, a typical sparse matrix.
+    GRID = 6
+
+    def sparsity(self, cell: float = 0.085) -> VGroup:
+        k = self.GRID
+        n = k * k
+        squares = VGroup()
+        for i in range(n):
+            for j in range(n):
+                ri, ci = divmod(i, k)
+                rj, cj = divmod(j, k)
+                if abs(ri - rj) + abs(ci - cj) <= 1:
+                    squares.add(
+                        Square(cell * 0.9, stroke_width=0, fill_color=EXACT if i == j else FG, fill_opacity=1)
+                        .move_to([j * cell, -i * cell, 0])
+                    )
+        frame = Rectangle(width=n * cell, height=n * cell, stroke_color=MUTED, stroke_width=1.5).move_to(squares)
+        return VGroup(frame, squares)
+
+    def body(self) -> None:
+        k = self.GRID
+        pattern = self.sparsity().move_to([-4.6, 0.75, 0])
+        pattern_lbl = para(
+            rf"A {k * k}$\times${k * k} grid Laplacian: each row has at most 5 nonzeros. Real models have "
+            r"millions of rows and the same few nonzeros per row.",
+            width=3.6, size=19, color=MUTED,
+        ).next_to(pattern, RIGHT, buff=0.3)
+
+        rows = [
+            (r"n", r"\text{all eigenvectors } (n^2\text{ numbers})", r"\text{dense eigensolver } (\sim n^3)"),
+            (r"10^3", r"8\ \text{MB}", r"10^9\ \text{operations}"),
+            (r"10^6", r"8\ \text{TB}", r"10^{18}\ \text{operations}"),
+            (r"10^9", r"8\ \text{EB}", r"10^{27}\ \text{operations}"),
+        ]
+        cells = [[math(c, size=24, color=MUTED if i == 0 else FG) for c in row] for i, row in enumerate(rows)]
+        xs = (-6.75, -5.75, -2.95)
+        table = VGroup()
+        for i, row in enumerate(cells):
+            for x, cell in zip(xs, row):
+                cell.move_to([x, -1.6 - 0.48 * i, 0], aligned_edge=LEFT)
+            table.add(VGroup(*row))
+        rule = Line([-6.8, -1.84, 0], [-0.2, -1.84, 0], color=MUTED, stroke_width=1.5)
+        table_note = tex(r"8 bytes per number; orders of magnitude only", size=17, color=MUTED).next_to(table, DOWN, buff=0.12, aligned_edge=LEFT)
+
+        w, size = RIGHT_COL_W + 0.2, 23
+        p_small = para(
+            r"For a small dense matrix we can and do compute every eigenvector: about $n^3$ operations and "
+            r"$n^2$ numbers to store.",
+            width=w, size=size,
+        )
+        p_large = para(
+            r"Many problems are far larger: finite-element models of structures, graph Laplacians of large "
+            r"networks, discretized quantum Hamiltonians. Their matrices are \emph{sparse}: multiplying a vector by "
+            r"$\tilde A$ is cheap, the full eigendecomposition is not.",
+            width=w, size=size,
+        )
+        p_inf = para(
+            r"Some begin as differential operators on infinite-dimensional spaces (a vibrating membrane, the "
+            r"Schr\"odinger operator) and are discretized ever more finely.",
+            width=w, size=size,
+        )
+        p_few = para(
+            r"And the application asks for only a few eigenvectors: the lowest vibration modes, the lowest-energy "
+            r"states, the leading principal components, the smallest Laplacian eigenvalues.",
+            width=w, size=size,
+        )
+        p_iter = para(
+            r"Iterative eigensolvers (Lanczos, subspace iteration, LOBPCG) use only products $\tilde Av$ and return "
+            r"an approximate subspace: a trial subspace $\cx{trial}{V}$. The rest of the talk asks how close "
+            r"$\cx{trial}{V}$ is to the true one, $\cx{exact}{U}$, without knowing $\cx{exact}{U}$.",
+            width=w, size=size,
+        )
+        col = column(p_small, p_large, p_inf, p_few, p_iter, top=self.content_top - 0.15, x=RIGHT_COL_X - 0.1, buff=0.22)
+
+        self.say(
+            "Why not just compute every eigenvector? For a small dense matrix we do: it costs about n cubed "
+            "operations and n squared numbers of storage."
+        )
+        self.play(FadeIn(cells[0][0], cells[0][1], cells[0][2]), Create(rule), FadeIn(table[1]), FadeIn(col[0]))
+
+        self.say(
+            "But the matrices that matter are often huge and sparse, like this grid Laplacian: a few nonzeros per "
+            "row, millions of rows. Multiplying by them is cheap; storing all the eigenvectors of a million by "
+            "million matrix takes 8 terabytes, and computing them about 10 to the 18 operations."
+        )
+        self.play(FadeIn(pattern, pattern_lbl), FadeIn(table[2], table[3], table_note), FadeIn(col[1]))
+
+        self.say(
+            "Some problems start infinite-dimensional, as differential operators, and the matrices come from "
+            "discretizing them. And the application only needs a few eigenvectors anyway: the lowest vibration "
+            "modes, the ground states, the leading principal components."
+        )
+        self.play(FadeIn(col[2]), FadeIn(col[3]))
+
+        self.say(
+            "So iterative eigensolvers multiply by the matrix over and over and return an approximate subspace. "
+            "That is our trial subspace V, and the question for the rest of the talk is how close it is to the true "
+            "U, which we do not know."
+        )
+        self.play(FadeIn(col[4]))
 
 
 # ----------------------------------------------------------------------------
@@ -1224,7 +1341,7 @@ class S05Residual(DeckSlide):
     """
 
     title = "The residual"
-    kicker = r"It can be computed from $A$ and $v$ alone; the angle to $U$ cannot"
+    kicker = r"It can be computed from $\tilde A$ and $v$ alone; the angle to $U$ cannot"
 
     def body(self) -> None:
         lam1, lam2 = story.RESIDUAL_EIGENVALUES
@@ -1236,8 +1353,8 @@ class S05Residual(DeckSlide):
 
         recall = RecallPanel(
             [
-                (r"$A$", r"the matrix whose eigenvectors we want; we can multiply any vector by it "
-                         r"(in a perturbation problem, the perturbed $A+H$)", FG),
+                (r"$\tilde A$", r"the matrix we have, whose eigenvectors we want; we can multiply any vector by "
+                               r"it (in a perturbation problem $\tilde A=A+H$)", FG),
                 (r"$\cx{exact}{U}$", r"the exact eigendirection (a line, not an arrow): the answer we are trying to find", EXACT),
                 (r"$\cx{trial}{v}$", r"our approximation, e.g.\ from an iterative eigensolver", TRIAL),
             ],
@@ -1254,7 +1371,7 @@ class S05Residual(DeckSlide):
         v = always_redraw(lambda: vec(plane.origin, plane(model().v), TRIAL, width=7))
         v_lbl = always_redraw(lambda: math(r"v", size=32, color=TRIAL).next_to(plane(model().v), UL, buff=0.05))
         Av = always_redraw(lambda: vec(plane.origin, plane(model().Av), FG, width=5))
-        Av_lbl = always_redraw(lambda: math(r"Av", size=30).next_to(plane(model().Av), RIGHT, buff=0.1))
+        Av_lbl = always_redraw(lambda: math(r"\tilde Av", size=30).next_to(plane(model().Av), RIGHT, buff=0.1))
         rho_v = always_redraw(lambda: segment(plane.origin, plane(model().rho_v), TRIAL, width=12).set_opacity(0.35))
         rho_lbl = always_redraw(lambda: math(r"\rho v", size=28, color=TRIAL).next_to(plane(model().rho_v), LEFT, buff=0.12))
         r = always_redraw(lambda: vec(plane(model().rho_v), plane(model().Av), RESID, width=7))
@@ -1270,18 +1387,18 @@ class S05Residual(DeckSlide):
         x0, w, size = RIGHT_COL_X - 0.4, RIGHT_COL_W + 0.5, 24
         p2 = para(
             r"The residual asks: \emph{``If I pretend $v$ is an eigenvector, how badly does that claim fail?''} "
-            r"If the claim were true, $Av$ would point exactly along $v$.",
+            r"If the claim were true, $\tilde Av$ would point exactly along $v$.",
             width=w,
             size=size,
         )
         p3a = math(
-            r"Av=\underbrace{\rho\,v}_{\text{best scaling}}+\underbrace{\cx{resid}{r}}_{\text{leftover}},"
-            r"\qquad \rho=v^{*}Av",
+            r"\tilde Av=\underbrace{\rho\,v}_{\text{best scaling}}+\underbrace{\cx{resid}{r}}_{\text{leftover}},"
+            r"\qquad \rho=v^{*}\tilde Av",
             size=30,
         )
         p3b = para(
             r"An eigenvector should only be scaled: $\rho$ is the best scale, $\cx{resid}{r}$ what scaling cannot "
-            r"explain. \textbf{Computable} from $A$ and $v$ alone; a standard eigensolver stopping test. "
+            r"explain. \textbf{Computable} from $\tilde A$ and $v$ alone; a standard eigensolver stopping test. "
             r"Under a perturbation, $\rho$ absorbs the change of scale and $r$ is the part trying to turn $v$.",
             width=w,
             size=size - 2,
@@ -1290,15 +1407,16 @@ class S05Residual(DeckSlide):
         p4 = readout_rows(
             [
                 (r"\cx{sine}{\theta}\ (\text{needs } U) =", lambda: np.degrees(phi.get_value()), SINE, 1, r"^\circ"),
-                (r"\norm{\cx{resid}{r}}\ (\text{needs only } A, v) =", lambda: model().residual_norm, RESID, 3, None),
+                (r"\norm{\cx{resid}{r}}\ (\text{needs only } \tilde A, v) =", lambda: model().residual_norm, RESID, 3, None),
             ],
             size=26,
         )
         p4b = tex(r"$\cx{resid}{r}=0$ exactly when $v$ is an eigenvector.", size=size)
-        p5a = math(r"\text{several vectors at once:}\quad \cx{resid}{R}=A\cx{trial}{E_0}-\cx{trial}{E_0}\cx{trial}{A_0}", size=28)
+        p5a = math(r"\text{several vectors at once:}\quad \cx{resid}{R}=\tilde A\cx{trial}{E_0}-\cx{trial}{E_0}\cx{trial}{A_0}", size=28)
         p5c = para(
-            r"For a subspace $V$ the claim is ``$V$ is \emph{invariant}'' ($A$ maps $V$ into $V$). "
-            r"With $A_0=E_0^{*}AE_0$, $\cx{resid}{R}$ is the part of $A(V)$ that sticks out of $V$.",
+            r"For a subspace $V$ the claim is ``$V$ is \emph{invariant}'' ($\tilde A$ maps $V$ into $V$). "
+            r"With the trial matrix $A_0=E_0^{*}\tilde AE_0$, $\cx{resid}{R}$ is the part of $\tilde A(V)$ that "
+            r"sticks out of $V$.",
             width=w,
             size=size - 2,
             color=MUTED,
@@ -1319,8 +1437,8 @@ class S05Residual(DeckSlide):
             value.add_updater(lambda m, label=label: m.next_to(label, RIGHT, buff=0.15))
 
         self.say(
-            "The cast, top left. A is the matrix whose eigenvectors we want, and we can multiply vectors by it; "
-            "in a perturbation problem it is the perturbed A + H. In a numerical problem U is the answer we "
+            "The cast, top left. A tilde is the matrix we have, whose eigenvectors we want, and we can multiply "
+            "vectors by it; in a perturbation problem it is A plus H. In a numerical problem U is the answer we "
             "are trying to find: for a large matrix or operator we generally do not know it in advance, and an "
             "eigensolver gives us an approximation v. Its error theta needs U."
         )
@@ -1330,17 +1448,18 @@ class S05Residual(DeckSlide):
 
         self.say(
             "But we can test v. The residual asks: if I pretend v is an eigenvector, how badly does that claim "
-            "fail? An eigenvector is a direction A only stretches, so if the claim were true, Av would point "
+            "fail? An eigenvector is a direction A tilde only stretches, so if the claim were true, A tilde v "
+            "would point "
             "exactly along v. Here it does not."
         )
         self.add(Av, Av_lbl)
         self.play(FadeIn(VGroup(Av, Av_lbl)), FadeIn(col[0]))
 
         self.say(
-            "An eigenvector should only be scaled. Split Av into the best scaling of v, rho v, and the leftover, "
-            "the residual r: the part of Av that leaves the line through v. Under a perturbation, rho absorbs the "
+            "An eigenvector should only be scaled. Split A tilde v into the best scaling of v, rho v, and the "
+            "leftover, the residual r: the part of A tilde v that leaves the line through v. Under a perturbation, rho absorbs the "
             "change of scale and r is the part trying to turn v. Computing r takes one "
-            "multiplication by A and one dot product; U never appears, which is why r is computable. "
+            "multiplication by A tilde and one dot product; U never appears, which is why r is computable. "
             "A small residual is a standard stopping criterion for iterative eigensolvers."
         )
         self.add(rho_v, rho_lbl, r, r_lbl)
@@ -1405,11 +1524,11 @@ class S06Gap(DeckSlide):
         d_r = math(r"\delta", size=30, color=GAP).next_to(br_r, DOWN, buff=0.08)
         unwanted = VGroup(*[Dot(X(lam), color=EXACT, radius=0.1) for lam in g["unwanted"]])
         un_lbl_l = VGroup(
-            tex(r"unwanted eigenvalues of $A$", size=22, color=EXACT),
+            tex(r"unwanted eigenvalues of $\tilde A$", size=22, color=EXACT),
             math(r"\operatorname{spec}(\Lambda_1)", size=30, color=EXACT),
         ).arrange(DOWN, buff=0.06).next_to(VGroup(*unwanted[:3]), UP, buff=0.4)
         un_lbl_r = VGroup(
-            tex(r"unwanted eigenvalues of $A$", size=22, color=EXACT),
+            tex(r"unwanted eigenvalues of $\tilde A$", size=22, color=EXACT),
             math(r"\operatorname{spec}(\Lambda_1)", size=30, color=EXACT),
         ).arrange(DOWN, buff=0.06).next_to(VGroup(*unwanted[3:]), UP, buff=0.4)
 
@@ -1431,7 +1550,7 @@ class S06Gap(DeckSlide):
             size=32,
         ).move_to([0, -1.25, 0])
         lam_note = tex(
-            r"$\cx{exact}{\Lambda_1}$: $A$ restricted to $U^{\perp}$, i.e.\ $A\cx{exact}{F_1}=\cx{exact}{F_1}\cx{exact}{\Lambda_1}$."
+            r"$\cx{exact}{\Lambda_1}$: $\tilde A$ restricted to $U^{\perp}$, i.e.\ $\tilde A\cx{exact}{F_1}=\cx{exact}{F_1}\cx{exact}{\Lambda_1}$."
             r"\quad Or the same with the roles of $A_0$ and $\Lambda_1$ exchanged.",
             size=24,
             color=MUTED,
@@ -1462,7 +1581,7 @@ class S06Gap(DeckSlide):
 
 class S07Theorem(DeckSlide):
     title = r"The $\sin\Theta$ theorem"
-    kicker = r"Davis \& Kahan (1970). $A$ is the matrix we have, e.g.\ the perturbed $A+H$"
+    kicker = r"Davis \& Kahan (1970). $\tilde A$ is the matrix we have, e.g.\ $\tilde A=A+H$"
 
     def body(self) -> None:
         self.say(
@@ -1597,8 +1716,9 @@ class S08Why(DeckSlide):
         )
         t1b = boxed(tex(r"$\cx{sine}{\sin\theta}$ = how much of $v$ points the wrong way", size=size), color=SINE, pad=0.15)
         t2 = para(
-            r"The residual $\cx{resid}{r}=(A-\rho)v$ weights each eigendirection by how far its eigenvalue is "
-            r"from $\rho$. Its $w$-part is $(\lambda_w-\rho)\sin\theta$, and the gap says $\lambda_w$ is at "
+            r"The residual $\cx{resid}{r}=(\tilde A-\rho)v$ multiplies an eigendirection with eigenvalue "
+            r"$\lambda$ by $\lambda-\rho$, whose size is the distance between them. Its $w$-part is "
+            r"$(\lambda_w-\rho)\sin\theta$, and the gap says $\lambda_w$ is at "
             r"least $\cx{gap}{\delta}$ from $\rho$.",
             width=w,
             size=size,
@@ -1655,8 +1775,8 @@ class S08Why(DeckSlide):
         self.play(Create(guides), FadeIn(cos_part), FadeIn(sin_part), FadeIn(sin_lbl), FadeIn(col[0]))
 
         self.say(
-            "Now the residual. A minus rho multiplies every eigendirection by how far its eigenvalue is from "
-            "rho. So the pink part becomes lambda w minus rho times sin theta, in green. And the gap says "
+            "Now the residual. A tilde minus rho multiplies an eigendirection by lambda minus rho; its size is "
+            "the distance between those two numbers. So the pink part becomes lambda w minus rho times sin theta, in green. And the gap says "
             "lambda w is at least delta away from rho: the number line below."
         )
         self.play(FadeIn(spectrum), FadeIn(col[1]))
@@ -1682,7 +1802,7 @@ class S08Components(DeckSlide):
     """
 
     title = "The same mechanism across the whole spectrum"
-    kicker = r"Each bar is one eigendirection of $A$; the pink bars together are the wrong part of $v$"
+    kicker = r"Each bar is one eigendirection of $\tilde A$; the pink bars together are the wrong part of $v$"
     depth = "*"
 
     def body(self) -> None:
@@ -1738,10 +1858,10 @@ class S08Components(DeckSlide):
         res_lbl = tex(r"bars: \cx{resid}{$|\lambda_j-\rho|\,|c_j|$}", size=26).move_to(bar_lbl, aligned_edge=LEFT)
         rx = -0.45
 
-        v_eq = math(r"v=\sum_j c_j f_j,\qquad A f_j=\lambda_j f_j", size=30)
+        v_eq = math(r"v=\sum_j c_j f_j,\qquad \tilde A f_j=\lambda_j f_j", size=30)
         sin_eq = math(r"\cx{sine}{\sin^2\theta}=\sum_{\lambda_j\notin\text{window}}\cx{sine}{c_j^2}", size=30)
         u_note = tex(r"$\cx{exact}{U}$ = span of the $f_j$ with $\lambda_j$ in the window", size=24, color=MUTED)
-        r_eq = math(r"\cx{resid}{r}=Av-\rho v=\sum_j(\lambda_j-\rho)\,c_j f_j", size=30)
+        r_eq = math(r"\cx{resid}{r}=\tilde Av-\rho v=\sum_j(\lambda_j-\rho)\,c_j f_j", size=30)
         outside = tex(r"outside the window: $|\lambda_j-\rho|\ge\cx{gap}{\delta}$", size=26)
         chain = math(
             r"\begin{aligned}\norm{\cx{resid}{r}}^2&\ge\sum_{\lambda_j\notin\text{window}}(\lambda_j-\rho)^2c_j^2\\"
@@ -1760,7 +1880,7 @@ class S08Components(DeckSlide):
         ).move_to(tail)
 
         self.say(
-            "The same argument with many eigendirections. Expand v in eigenvectors f_j of A; each bar is "
+            "The same argument with many eigendirections. Expand v in eigenvectors f_j of A tilde; each bar is "
             "|c_j|, placed at its eigenvalue. The window around rho contains the wanted eigenvalues, blue; "
             "the rest, pink, is Lambda1. The combined Euclidean length of the pink components is sin theta."
         )
@@ -1813,9 +1933,9 @@ class S09Sylvester(DeckSlide):
             "F1* R is a Sylvester expression in X = F1* E0, and the singular values of X are the sines."
         )
         lines = VGroup(
-            math(r"A\cx{exact}{F_1}=\cx{exact}{F_1\Lambda_1}\ \Longrightarrow\ \cx{exact}{F_1^{*}}A=\cx{exact}{\Lambda_1F_1^{*}}", size=32),
+            math(r"\tilde A\cx{exact}{F_1}=\cx{exact}{F_1\Lambda_1}\ \Longrightarrow\ \cx{exact}{F_1^{*}}\tilde A=\cx{exact}{\Lambda_1F_1^{*}}", size=32),
             math(
-                r"\cx{exact}{F_1^{*}}\cx{resid}{R}=\cx{exact}{F_1^{*}}A\cx{trial}{E_0}-\cx{exact}{F_1^{*}}\cx{trial}{E_0A_0}"
+                r"\cx{exact}{F_1^{*}}\cx{resid}{R}=\cx{exact}{F_1^{*}}\tilde A\cx{trial}{E_0}-\cx{exact}{F_1^{*}}\cx{trial}{E_0A_0}"
                 r"=\cx{exact}{\Lambda_1}\cx{sine}{X}-\cx{sine}{X}\cx{trial}{A_0},"
                 r"\qquad \cx{sine}{X}=\cx{exact}{F_1^{*}}\cx{trial}{E_0}",
                 size=32,
@@ -1842,12 +1962,14 @@ class S09Sylvester(DeckSlide):
         arrow = Arrow(grid_left[0].get_right(), grid_right[0].get_left(), buff=0.2, color=MUTED, stroke_width=4)
         arrow_lbl = math(r"x_{ij}\mapsto(\lambda_i-\mu_j)\,x_{ij}", size=22, color=MUTED).next_to(arrow, UP, buff=0.12)
         grid_caption = tex(
-            r"rows: unwanted eigenvalues \cx{exact}{$\lambda_i$}; \ columns: trial eigenvalues \cx{trial}{$\mu_j$}",
+            r"rows: unwanted eigenvalues \cx{exact}{$\lambda_i$}; \ columns: trial eigenvalues \cx{trial}{$\mu_j$}; "
+            r"\ each square is one entry of $X$, not a block",
             size=20,
             color=MUTED,
         ).next_to(VGroup(grid_left, grid_right), DOWN, buff=0.15).align_to(grid_left, LEFT)
         entry_text = para(
-            r"In eigenvector coordinates, entry $x_{ij}$ of $\cx{sine}{X}$ is how much trial direction $j$ "
+            r"$\cx{sine}{X}$ is the whole rectangular overlap matrix. In eigenvector coordinates, entry $x_{ij}$ "
+            r"is how much trial direction $j$ "
             r"overlaps unwanted eigendirection $i$. $\cx{exact}{\Lambda_1}$ scales row $i$ by $\lambda_i$ and "
             r"$\cx{trial}{A_0}$ scales column $j$ by $\mu_j$, so",
             width=4.5,
@@ -1960,9 +2082,9 @@ class S10Sharp(DeckSlide):
             "from the eigenvector e1, with A0 = rho. The gap is exactly delta."
         )
         eqs = VGroup(
-            math(r"A=\begin{pmatrix}\rho&0\\0&\rho+\delta\end{pmatrix},\quad A_0=[\rho],\quad v_\theta=(\cos\theta,\sin\theta)", size=30),
+            math(r"\tilde A=\begin{pmatrix}\rho&0\\0&\rho+\delta\end{pmatrix},\quad A_0=[\rho],\quad v_\theta=(\cos\theta,\sin\theta)", size=30),
             math(
-                r"\cx{resid}{r}=Av_\theta-\rho v_\theta=(0,\ \cx{gap}{\delta}\cx{sine}{\sin\theta})"
+                r"\cx{resid}{r}=\tilde Av_\theta-\rho v_\theta=(0,\ \cx{gap}{\delta}\cx{sine}{\sin\theta})"
                 r"\ \Longrightarrow\ \norm{\cx{resid}{r}}=\cx{gap}{\delta}\,\cx{sine}{\sin\theta}",
                 size=30,
             ),
@@ -2198,7 +2320,8 @@ class S12Lean(DeckSlide):
         ).move_to(lines)
         caption = para(
             r"As \texttt{\#check} prints it, with instance-binder names dropped and lines re-broken; "
-            r"$\sin\Theta_0$ is \texttt{sourceDirectedSinThetaOperator E$_0$ F$_0$}.",
+            r"$\sin\Theta_0$ is \texttt{sourceDirectedSinThetaOperator E$_0$ F$_0$}. Lean's \texttt{A} is the matrix "
+            r"we have, our $\tilde A$ (Davis and Kahan's $A+H$).",
             width=13.3,
             size=19,
             color=MUTED,
