@@ -227,8 +227,11 @@ lines. Re-check it whenever the `sinTheta` alias moves.
 
 Every number on a slide comes from `dkvis/sine_theta_story.py` (or the existing
 `dkvis/sine_theta.py`), whose models are checked by `tests/`. Colors carry
-meaning on every slide: blue = exact eigenspace, amber = trial, pink = angle,
-green = residual, violet = gap.
+meaning on every slide, by role in the Davis--Kahan story (`dkvis/palette.py`): blue = wanted
+(`U`, `F0`, `Lambda0`), amber = trial (`V`, `E0`, `A0`, `v`, Ritz values), cyan = unwanted (`U-perp`, `F1`,
+`Lambda1`), pink = angle / the part of the trial outside `U`, green = residual, violet = gap. Operators
+(`A`, `A~`, `H`) are neutral, gray only de-emphasizes, and the process and Proposition 4.4 comparison slides
+use neutral colors so the roles keep their meaning. The glossary (part 7) is the reference.
 
 Build and present from `visualizations/`. The `Makefile` wraps the common
 cases (`make` lists the targets):

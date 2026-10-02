@@ -61,8 +61,8 @@ TEXT_W = 6.1
 
 def picture(name: str) -> ImageMobject:
     img = ImageMobject(str(asset(name)))
-    img.height = 6.3
-    img.move_to([-3.35, -0.5, 0])
+    img.height = 6.1
+    img.move_to([-3.35, -0.45, 0])
     return img
 
 
@@ -92,11 +92,11 @@ class D01Planes(D3Slide):
         paras = [
             r"With positive eigenvalues, $\tilde A=\operatorname{diag}(\lambda_1,\lambda_2,\lambda_3)$ maps the unit "
             r"sphere of $\mathbb{R}^3$ to an ellipsoid. "
-            r"The wanted subspace $\cx{exact}{U}=\operatorname{span}(f_1,f_2)$ is the plane of its two short axes; "
-            r"$\cx{exact}{f_3}$ spans $U^{\perp}$ and $\Lambda_1=[\lambda_3]$.",
+            r"The wanted subspace $\cx{wanted}{U}=\operatorname{span}(f_1,f_2)$ is the plane of its two short axes; "
+            r"$\cx{unwanted}{f_3}$ spans $\cx{unwanted}{U^{\perp}}$ and $\cx{unwanted}{\Lambda_1}=[\cx{unwanted}{\lambda_3}]$.",
             r"A trial plane $\cx{trial}{V}=\operatorname{ran}E_0$, tilted by $\theta$ about a line in $U$. "
             r"Two planes in $\mathbb{R}^3$ always share a line, so the principal angles are $(\theta,0)$.",
-            r"One nonzero sine: $\norm{\cx{sine}{\sin\Theta_0}}=\norm{\cx{exact}{F_1}^{\mathsf T}\cx{trial}{E_0}}=\sin\theta$, "
+            r"One nonzero sine: $\norm{\cx{sine}{\sin\Theta_0}}=\norm{\cx{unwanted}{F_1}^{\mathsf T}\cx{trial}{E_0}}=\sin\theta$, "
             r"the pink drop from $V$ to $U$.",
             r"With the Rayleigh--Ritz choice $A_0=E_0^{\mathsf T}\tilde AE_0$ we get $E_0^{\mathsf T}R=0$: "
             r"the \cx{resid}{residuals} leave $V$ at right angles.",
@@ -159,7 +159,7 @@ class D02Tilt(D3Slide):
         caption = tex(rf"$\lambda_3={lam3}$; \ $\mu_2$ is the larger Ritz value, $\delta=|\mu_2-\lambda_3|$", size=24, color=MUTED)
         points = [
             r"\textbf{Small tilt:} the bound is nearly tight.",
-            r"\textbf{Large tilt:} $V$ leans into $f_3$, so the Ritz value $\cx{trial}{\mu_2}$ climbs toward $\lambda_3$. "
+            r"\textbf{Large tilt:} $V$ leans into $\cx{unwanted}{f_3}$, so the Ritz value $\cx{trial}{\mu_2}$ climbs toward $\cx{unwanted}{\lambda_3}$. "
             r"The gap $\cx{gap}{\delta}$ closes and the bound says less.",
             r"It never fails: $\cx{gap}{\delta}\norm{\cx{sine}{\sin\Theta_0}}\le\norm{\cx{resid}{R}}$ at every angle.",
         ]

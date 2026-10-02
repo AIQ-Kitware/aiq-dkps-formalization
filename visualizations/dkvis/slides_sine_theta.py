@@ -72,17 +72,18 @@ from manim import (
 from dkvis import sine_theta_story as story
 from dkvis.sine_theta import SineThetaModel
 from dkvis.slide_style import (
-    EXACT,
     FAINT,
     FG,
     GAP,
+    MONO_FONT,
     MUTED,
     PANEL,
     RESID,
     SINE,
     TRIAL,
+    UNWANTED,
+    WANTED,
     DeckSlide,
-    MONO_FONT,
     boxed,
     dashed,
     math,
@@ -294,7 +295,7 @@ class S00Title(DeckSlide):
         old = ellipse(plane, pair.A, color=MUTED, width=2)
         new = ellipse(plane, pair.perturbed, color=FG, width=3)
         axis_old = through_origin(plane, [1, 0], 2.6, MUTED, width=2)
-        axis_new = through_origin(plane, pair.perturbed_top_eigenvector, 2.6, EXACT, width=4)
+        axis_new = through_origin(plane, pair.perturbed_top_eigenvector, 2.6, WANTED, width=4)
         arc = angle_arc(plane, [1, 0], pair.perturbed_top_eigenvector, 1.6, SINE, width=4)
         theta = math(r"\theta", size=32, color=SINE).move_to(
             plane(2.05 * story.unit(pair.theta / 2 - 0.08))
@@ -336,7 +337,7 @@ class S00bSetting(DeckSlide):
             (r"unbounded self-adjoint operators, e.g.\ $-\tfrac{d^2}{dx^2}$, quantum Hamiltonians", MUTED),
             (r"bounded self-adjoint operators, possibly infinite-dimensional", MUTED),
             (r"complex Hermitian matrices, $\ A=A^{*}$", FG),
-            (r"real symmetric matrices, $\ A=A^{\mathsf T}$", EXACT),
+            (r"real symmetric matrices, $\ A=A^{\mathsf T}$", FG),
         ]
         # Explicit nesting: (left, right, top, bottom) of each box.
         x_l, x_r = -6.8, 0.25
@@ -351,8 +352,8 @@ class S00bSetting(DeckSlide):
                 height=tops[i] - bottoms[i],
                 stroke_color=color,
                 stroke_width=2.6 if i == 3 else 1.8,
-                fill_color=EXACT,
-                fill_opacity=0.12 if i == 3 else 0.0,
+                fill_color=FG,
+                fill_opacity=0.07 if i == 3 else 0.0,
             ).move_to([(left + right) / 2, (tops[i] + bottoms[i]) / 2, 0])
             lab = tex(label, size=22, color=color)
             lab.move_to([left + 0.2, tops[i] - 0.25, 0], aligned_edge=LEFT)
@@ -365,10 +366,10 @@ class S00bSetting(DeckSlide):
             outer_note.scale((x_r - x_l - 0.35) / outer_note.width)
         outer_note.move_to([x_l + 0.2, tops[0] - 0.6, 0], aligned_edge=LEFT)
         inner = boxes[3]
-        mini = math(r"A=\begin{pmatrix}2&0.3\\0.3&1\end{pmatrix}", size=30, color=EXACT).move_to(
+        mini = math(r"A=\begin{pmatrix}2&0.3\\0.3&1\end{pmatrix}", size=30, color=FG).move_to(
             inner.get_center() + np.array([0, 0.1, 0])
         )
-        pictures = tex(r"the $\sin\Theta$ pictures in this talk: $2\times2$ and $3\times3$", size=22, color=EXACT).move_to(
+        pictures = tex(r"the $\sin\Theta$ pictures in this talk: $2\times2$ and $3\times3$", size=22, color=MUTED).move_to(
             [inner.get_center()[0], bottoms[3] + 0.35, 0]
         )
 
@@ -451,11 +452,11 @@ class S01Ellipse(DeckSlide):
         samples = VGroup(*[vec(plane.origin, plane(d), FG, width=3).set_opacity(0.55) for d in sample_dirs])
         f1, f2 = np.array([1.0, 0.0]), np.array([0.0, 1.0])
         eig_lines = VGroup(
-            through_origin(plane, f1, 2.6, EXACT, width=2, opacity=0.35),
-            through_origin(plane, f2, 2.3, EXACT, width=2, opacity=0.35),
+            through_origin(plane, f1, 2.6, WANTED, width=2, opacity=0.35),
+            through_origin(plane, f2, 2.3, WANTED, width=2, opacity=0.35),
         )
-        e1 = vec(plane.origin, plane(f1), EXACT, width=7)
-        e2 = vec(plane.origin, plane(f2), EXACT, width=7)
+        e1 = vec(plane.origin, plane(f1), WANTED, width=7)
+        e2 = vec(plane.origin, plane(f2), WANTED, width=7)
         intro = text_col(
             r"Take this positive-definite example, $A$ with eigenvalues $2$ and $1$, "
             r"and watch where it sends the unit circle."
@@ -463,10 +464,10 @@ class S01Ellipse(DeckSlide):
         turned = text_col(
             r"Most vectors are stretched \emph{and turned}.\\[0.5em]"
             r"Eigenvectors are only stretched: "
-            r"$A\cx{exact}{f_i}=\lambda_i\cx{exact}{f_i}$."
+            r"$A\cx{wanted}{f_i}=\lambda_i\cx{wanted}{f_i}$."
         )
         axes_text = text_col(
-            r"The ellipse's axes point along the \cx{exact}{eigenvectors}; in this example "
+            r"The ellipse's axes point along the \cx{wanted}{eigenvectors}; in this example "
             r"the semi-axis lengths are the eigenvalues $2$ and $1$.\\[0.5em]"
             r"\cx{muted}{(For a general symmetric matrix the semi-axes are $|\lambda_i|$. "
             r"In $n$ dimensions the picture is an ellipsoid, and an \emph{eigenspace} "
@@ -482,8 +483,8 @@ class S01Ellipse(DeckSlide):
         )
         image = ellipse(plane, A, color=FG, width=3)
         new_samples = VGroup(*[vec(plane.origin, plane(A @ d), FG, width=3).set_opacity(0.55) for d in sample_dirs])
-        new_e1 = vec(plane.origin, plane(lam1 * f1), EXACT, width=7)
-        new_e2 = vec(plane.origin, plane(lam2 * f2), EXACT, width=7)
+        new_e1 = vec(plane.origin, plane(lam1 * f1), WANTED, width=7)
+        new_e2 = vec(plane.origin, plane(lam2 * f2), WANTED, width=7)
         self.play(
             ReplacementTransform(circle, image),
             ReplacementTransform(samples, new_samples),
@@ -498,8 +499,8 @@ class S01Ellipse(DeckSlide):
             "are the eigenvalues. For a general symmetric matrix they are the absolute values. "
             "In n dimensions it is an ellipsoid, and an eigenspace is spanned by principal axes."
         )
-        l1 = math(r"\lambda_1 = 2", size=32, color=EXACT).next_to(plane(lam1 * f1), RIGHT, buff=0.12)
-        l2 = math(r"\lambda_2 = 1", size=32, color=EXACT).next_to(plane(lam2 * f2), UP, buff=0.12)
+        l1 = math(r"\lambda_1 = 2", size=32, color=WANTED).next_to(plane(lam1 * f1), RIGHT, buff=0.12)
+        l2 = math(r"\lambda_2 = 1", size=32, color=WANTED).next_to(plane(lam2 * f2), UP, buff=0.12)
         self.play(FadeOut(new_samples), FadeIn(l1), FadeIn(l2), FadeIn(axes_text))
 
 
@@ -523,8 +524,8 @@ class S02Perturb(DeckSlide):
             "Start from the same ellipse, drawn with its axes. Now add a small symmetric H."
         )
         old = ellipse(plane, pair.A, color=MUTED, width=2)
-        old_axis = through_origin(plane, [1, 0], 3.0, EXACT, width=3)
-        old_axis2 = through_origin(plane, [0, 1], 2.0, EXACT, width=3)
+        old_axis = through_origin(plane, [1, 0], 3.0, FG, width=3)
+        old_axis2 = through_origin(plane, [0, 1], 2.0, FG, width=3)
         eq = math(
             r"A=\begin{pmatrix}2&0\\0&1\end{pmatrix},\qquad "
             r"H=\varepsilon\begin{pmatrix}0&1\\1&0\end{pmatrix},\ \ \varepsilon=0.12",
@@ -571,8 +572,8 @@ class S02Perturb(DeckSlide):
         new = ellipse(plane, pair.perturbed, color=FG, width=3)
         v_new = pair.perturbed_top_eigenvector
         w_new = np.array([-v_new[1], v_new[0]])
-        new_axis = through_origin(plane, v_new, 3.0, EXACT, width=4)
-        new_axis2 = through_origin(plane, w_new, 2.0, EXACT, width=4)
+        new_axis = through_origin(plane, v_new, 3.0, WANTED, width=4)
+        new_axis2 = through_origin(plane, w_new, 2.0, UNWANTED, width=4)
         dashed_old = VGroup(
             DashedVMobject(through_origin(plane, [1, 0], 3.0, MUTED, width=2), num_dashes=30),
             DashedVMobject(through_origin(plane, [0, 1], 2.0, MUTED, width=2), num_dashes=20),
@@ -642,9 +643,9 @@ class S03NoGap(DeckSlide):
         f2_lbl = always_redraw(lambda: math(r"a_1", size=28, color=MUTED).next_to(plane([0.0, lam()[1]]), LEFT, buff=0.12))
         # A + H: solid white ellipse; its top eigenvector (the target) is blue, turned by theta.
         new = always_redraw(lambda: ellipse(plane, pair().perturbed, color=FG, width=3))
-        new_axis = always_redraw(lambda: through_origin(plane, pair().perturbed_top_eigenvector, reach, EXACT, width=3.5))
+        new_axis = always_redraw(lambda: through_origin(plane, pair().perturbed_top_eigenvector, reach, WANTED, width=3.5))
         new_lbl = always_redraw(
-            lambda: tex(r"top eigenvector of $A+H$", size=20, color=EXACT).next_to(
+            lambda: tex(r"top eigenvector of $A+H$", size=20, color=WANTED).next_to(
                 plane(reach * pair().perturbed_top_eigenvector), RIGHT, buff=0.08
             )
         )
@@ -670,7 +671,7 @@ class S03NoGap(DeckSlide):
         nl = Line(X(lo), X(hi), color=MUTED, stroke_width=2)
         nl_lbl = VGroup(
             tex(r"eigenvalues", size=20, color=MUTED),
-            tex(r"\cx{muted}{dots: $A$} \ \cx{exact}{ticks: $A+H$}", size=18, color=MUTED),
+            tex(r"\cx{muted}{dots: $A$} \ \cx{wanted}{ticks: $A+H$}", size=18, color=MUTED),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.04).next_to(X(hi), RIGHT, buff=0.1)
         lam_dots = always_redraw(lambda: VGroup(*[Dot(X(v), radius=0.09, color=MUTED) for v in lam()]))
         lam_lbls = always_redraw(
@@ -681,7 +682,8 @@ class S03NoGap(DeckSlide):
         )
         new_ticks = always_redraw(
             lambda: VGroup(
-                *[Line(X(v) + UP * 0.16, X(v) + DOWN * 0.16, color=EXACT, stroke_width=3) for v in pair().perturbed_eigenvalues]
+                *[Line(X(v) + UP * 0.16, X(v) + DOWN * 0.16, color=c, stroke_width=3)
+                  for v, c in zip(pair().perturbed_eigenvalues, (WANTED, UNWANTED))]
             )
         )
 
@@ -797,7 +799,7 @@ class S03cUnstable(DeckSlide):
                     lambda: DashedVMobject(through_origin(plane, pair().perturbation_direction, reach, FG, width=2), num_dashes=22)
                 )
                 panel.new = always_redraw(lambda: ellipse(plane, pair().perturbed, color=FG, width=2.5))
-                panel.axis = always_redraw(lambda: through_origin(plane, pair().perturbed_top_eigenvector, reach, EXACT, width=3.5))
+                panel.axis = always_redraw(lambda: through_origin(plane, pair().perturbed_top_eigenvector, reach, WANTED, width=3.5))
                 # Leave a pink copy of the eigenvector line every few degrees of H's turn.
                 steps = 72
                 panel.trace = VGroup()
@@ -826,7 +828,8 @@ class S03cUnstable(DeckSlide):
                     *[Dot(X(v), radius=0.07, color=MUTED) for v in A.diagonal()],
                 )
                 panel.ticks = always_redraw(
-                    lambda: VGroup(*[Line(X(v) + UP * 0.13, X(v) + DOWN * 0.13, color=EXACT, stroke_width=2.5) for v in pair().perturbed_eigenvalues])
+                    lambda: VGroup(*[Line(X(v) + UP * 0.13, X(v) + DOWN * 0.13, color=c, stroke_width=2.5)
+                                     for v, c in zip(pair().perturbed_eigenvalues, (WANTED, UNWANTED))])
                 )
 
                 def widest() -> float:
@@ -846,9 +849,9 @@ class S03cUnstable(DeckSlide):
         no_gap = Panel(-1.55, story.PERTURBATION_END_GAP, rf"almost no gap: $\cx{{gap}}{{g={story.PERTURBATION_END_GAP:g}}}$")
         legend = VGroup(
             tex(r"\cx{muted}{gray: $A$ and its eigenvectors} \quad white: $A+H$; dashed: $H$'s own direction", size=18),
-            tex(r"\cx{exact}{blue: the top eigenvector of $A+H$}", size=18),
+            tex(r"\cx{wanted}{blue: the top eigenvector of $A+H$}", size=18),
             tex(r"\cx{sine}{pink: every direction the top eigenvector of $A+H$ took}", size=18),
-            tex(r"\cx{muted}{number lines: eigenvalues, dots $A$, \cx{exact}{ticks $A+H$}}", size=18),
+            tex(r"\cx{muted}{number lines: eigenvalues, dots $A$, \cx{wanted}{ticks $A+H$}}", size=18),
         ).arrange(DOWN, buff=0.06).move_to([-3.3, -2.9, 0])
 
         text_w = RIGHT_COL_W - 0.5
@@ -934,82 +937,101 @@ class S03bWanted(DeckSlide):
     kicker = "Rarely all of them: the ones belonging to a chosen part of the spectrum"
 
     def body(self) -> None:
-        eigs = [0.35, 0.6, 0.95, 1.3, 1.6, 2.55, 2.85]
-        wanted = [False] * 5 + [True, True]
+        # Wanted: the two lowest eigenvalues, as for vibration modes and ground states.
+        eigs = [0.35, 0.6, 1.45, 1.8, 2.2, 2.55, 2.85]
+        wanted = [True, True] + [False] * 5
         lo, hi, x_lo, x_hi, y_nl = 0.1, 3.1, -6.4, -0.6, 1.25
 
         def X(t: float) -> np.ndarray:
             return np.array([x_lo + (t - lo) / (hi - lo) * (x_hi - x_lo), y_nl, 0.0])
 
         nl = Line(X(lo), X(hi), color=MUTED, stroke_width=2)
-        nl_lbl = tex(r"eigenvalues of $\tilde A$, the matrix we have", size=22, color=MUTED).next_to(X(lo), DOWN, buff=0.2).align_to(nl, LEFT)
-        dots = VGroup(*[Dot(X(t), radius=0.1, color=EXACT if w else MUTED) for t, w in zip(eigs, wanted)])
+        nl_lbl = tex(r"eigenvalues of $\tilde A$", size=22, color=MUTED).next_to(X(hi), DOWN, buff=0.2).align_to(nl, RIGHT)
+        # Wanted eigenvalues are filled blue dots, unwanted ones hollow cyan circles.
+        dots = VGroup(*[
+            Dot(X(t), radius=0.1, color=WANTED) if w else Circle(radius=0.09, color=UNWANTED, stroke_width=3).move_to(X(t))
+            for t, w in zip(eigs, wanted)
+        ])
         w_idx = [i for i, w in enumerate(wanted) if w]
         u_idx = [i for i, w in enumerate(wanted) if not w]
         w_box = Rectangle(
             width=X(eigs[w_idx[-1]])[0] - X(eigs[w_idx[0]])[0] + 0.5, height=0.6,
-            stroke_color=EXACT, stroke_width=2, fill_color=EXACT, fill_opacity=0.12,
+            stroke_color=WANTED, stroke_width=2, fill_color=WANTED, fill_opacity=0.12,
         ).move_to((X(eigs[w_idx[0]]) + X(eigs[w_idx[-1]])) / 2)
-        w_lbl = tex(r"\cx{exact}{wanted}", size=26).next_to(w_box, UP, buff=0.12)
-        u_lbl = tex(r"unwanted", size=26, color=MUTED).next_to(
+        w_lbl = tex(r"\cx{wanted}{wanted}", size=26).next_to(w_box, UP, buff=0.12)
+        u_lbl = tex(r"\cx{unwanted}{unwanted}", size=26).next_to(
             (X(eigs[u_idx[0]]) + X(eigs[u_idx[-1]])) / 2, UP, buff=0.42
         )
-        gap = BraceBetweenPoints(X(eigs[u_idx[-1]]) + DOWN * 0.2, X(eigs[w_idx[0]]) + DOWN * 0.2, direction=DOWN, color=GAP)
+        gap = BraceBetweenPoints(X(eigs[w_idx[-1]]) + DOWN * 0.2, X(eigs[u_idx[0]]) + DOWN * 0.2, direction=DOWN, color=GAP)
         gap_lbl = tex(r"the gap", size=24, color=GAP).next_to(gap, DOWN, buff=0.06)
         spaces = VGroup(
-            tex(r"their eigenvectors span $\cx{exact}{U}$, the \emph{wanted} subspace", size=24),
-            tex(r"the rest span $U^{\perp}$, the \emph{unwanted} directions", size=24, color=MUTED),
+            tex(r"their eigenvectors span $\cx{wanted}{U}$, the \emph{wanted} subspace", size=24),
+            tex(r"the rest span $\cx{unwanted}{U^{\perp}}$, the \emph{unwanted} directions", size=24),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.15).move_to([x_lo, y_nl - 1.15, 0], aligned_edge=UP + LEFT)
 
-        # The same split in a picture: a covariance-like ellipse, its long axis wanted.
-        pic = Plane([-4.4, -2.2, 0], 0.62, rotate=np.radians(20))
-        ell = ellipse(pic, np.diag([2.6, 0.95]), color=FG, width=2.5)
-        ax_u = through_origin(pic, [1.0, 0.0], 2.6, EXACT, width=5)
-        ax_w = through_origin(pic, [0.0, 1.0], 0.95, MUTED, width=4)
-        ax_u_lbl = tex(r"$U$ (wanted)", size=22, color=EXACT).next_to(pic([2.6, 0.0]), RIGHT, buff=0.12)
-        ax_w_lbl = tex(r"$U^{\perp}$", size=22, color=MUTED).next_to(pic([0.0, 0.95]), LEFT, buff=0.1)
-        picture = VGroup(ell, ax_u, ax_w, ax_u_lbl, ax_w_lbl)
+        # A vibrating string: its lowest modes are the wanted eigenvectors.
+        modes = VGroup()
+        s = np.linspace(0.0, 1.0, 80)
+        for k in range(1, 5):
+            y = -1.3 - 0.56 * (k - 1)
+            color = WANTED if k <= 2 else UNWANTED
+            pts = [np.array([-6.2 + 3.4 * t, y + 0.2 * np.sin(k * np.pi * t), 0.0]) for t in s]
+            curve = VMobject(color=color, stroke_width=3.5).set_points_smoothly(pts)
+            ends = VGroup(Dot(pts[0], radius=0.04, color=MUTED), Dot(pts[-1], radius=0.04, color=MUTED))
+            lbl = tex(rf"mode {k}" + (r" (lowest)" if k == 1 else ""), size=19, color=color).next_to(pts[-1], RIGHT, buff=0.2)
+            modes.add(VGroup(curve, ends, lbl))
+        modes_title = tex(r"a vibrating string: the lowest modes are wanted", size=19, color=MUTED).next_to(modes, UP, buff=0.12).align_to(modes, LEFT)
 
         x0, w = 0.6, 6.2
         t1 = para(
             r"A matrix has many eigenvectors, but an application usually needs only a few: "
             r"those whose eigenvalues lie in a chosen part of the spectrum.",
             width=w,
-            size=26,
+            size=25,
+        )
+        t1b = para(
+            r"For a small dense matrix we can compute every eigenvector. But many applications produce enormous "
+            r"sparse matrices, often by discretizing a differential operator, so eigensolvers compute only the few "
+            r"modes the application asks for:",
+            width=w,
+            size=23,
+            color=MUTED,
         )
         examples = VGroup(
-            tex(r"\textbf{PCA}: the largest eigenvalues of a covariance matrix", size=23),
-            tex(r"\textbf{quantum mechanics}: the lowest-energy states", size=23),
-            tex(r"\textbf{spectral clustering}: the smallest Laplacian eigenvalues", size=23),
-        ).arrange(DOWN, aligned_edge=LEFT, buff=0.14)
+            tex(r"\textbf{structures}: the lowest vibration modes", size=23),
+            tex(r"\textbf{quantum mechanics}: the lowest-energy states of a Hamiltonian", size=23),
+            tex(r"\textbf{spectral clustering}: the smallest graph-Laplacian modes", size=23),
+            tex(r"\textbf{PCA}: the leading directions (largest eigenvalues)", size=23),
+        ).arrange(DOWN, aligned_edge=LEFT, buff=0.12)
         t2 = para(
             r"``Wanted'' and ``unwanted'' is that choice, made by eigenvalue. Davis--Kahan asks how well a "
-            r"trial subspace approximates the wanted subspace $\cx{exact}{U}$, and the answer depends on how "
+            r"trial subspace approximates the wanted subspace $\cx{wanted}{U}$, and the answer depends on how "
             r"far the wanted eigenvalues are from the rest: \cx{gap}{the gap}.",
             width=w,
-            size=24,
+            size=23,
         )
-        col = VGroup(t1, examples, t2).arrange(DOWN, aligned_edge=LEFT, buff=0.35)
+        col = VGroup(t1, t1b, examples, t2).arrange(DOWN, aligned_edge=LEFT, buff=0.28)
         col.move_to([x0, self.content_top - 0.2, 0], aligned_edge=UP + LEFT)
         for m in col:
             fit_right(m)
 
         self.say(
-            "Before measuring errors: which eigenvectors are we even after? Rarely all of them. An application "
-            "picks a part of the spectrum: in PCA the largest eigenvalues of a covariance matrix, in quantum "
-            "mechanics the lowest energies, in spectral clustering the smallest Laplacian eigenvalues."
+            "Before measuring errors: which eigenvectors are we even after? Rarely all of them. For a small dense "
+            "matrix we could compute every eigenvector, but many applications produce enormous sparse matrices, "
+            "often by discretizing a differential operator, so eigensolvers compute only the few modes the "
+            "application asks for: the lowest vibration modes of a structure, the lowest-energy states in quantum "
+            "mechanics, the smallest Laplacian modes in spectral clustering, the leading directions in PCA."
         )
-        self.play(Create(nl), FadeIn(nl_lbl), FadeIn(dots, lag_ratio=0.1), FadeIn(t1), FadeIn(examples))
+        self.play(Create(nl), FadeIn(nl_lbl), FadeIn(dots, lag_ratio=0.1), FadeIn(t1), FadeIn(t1b), FadeIn(examples))
 
         self.say(
-            "Those chosen eigenvalues are the wanted ones; their eigenvectors span the wanted subspace U. "
-            "Everything else is unwanted and spans U-perp. In the PCA picture below, U is the long axis of the "
-            "data's ellipse. The gap is the distance between the wanted cluster "
-            "and the rest. That is the setting for the rest of the talk: how well does a trial subspace "
-            "approximate U?"
+            "Those chosen eigenvalues are the wanted ones, in blue; their eigenvectors span the wanted subspace U. "
+            "Everything else is unwanted, in cyan, and spans U-perp. For a vibrating string, the lowest modes are "
+            "wanted. The gap is the distance between the wanted eigenvalues and the rest. That is the setting for "
+            "the rest of the talk: how well does a trial subspace approximate U?"
         )
         self.play(FadeIn(w_box), FadeIn(w_lbl), FadeIn(u_lbl))
-        self.play(GrowFromCenter(gap), FadeIn(gap_lbl), FadeIn(spaces), FadeIn(picture), FadeIn(t2))
+        self.play(GrowFromCenter(gap), FadeIn(gap_lbl), FadeIn(spaces), FadeIn(modes, modes_title), FadeIn(t2))
 
 
 # ----------------------------------------------------------------------------
@@ -1037,7 +1059,7 @@ class S03dCompute(DeckSlide):
                 rj, cj = divmod(j, k)
                 if abs(ri - rj) + abs(ci - cj) <= 1:
                     squares.add(
-                        Square(cell * 0.9, stroke_width=0, fill_color=EXACT if i == j else FG, fill_opacity=1)
+                        Square(cell * 0.9, stroke_width=0, fill_color=FG, fill_opacity=1)
                         .move_to([j * cell, -i * cell, 0])
                     )
         frame = Rectangle(width=n * cell, height=n * cell, stroke_color=MUTED, stroke_width=1.5).move_to(squares)
@@ -1053,20 +1075,20 @@ class S03dCompute(DeckSlide):
         ).next_to(pattern, RIGHT, buff=0.25)
 
         rows = [
-            (r"n", r"\text{store all } (n^2)", r"\text{compute all } (\sim n^3)"),
+            (r"n", r"\text{store all eigenvectors}", r"\text{dense full eigendecomposition}"),
             (r"10^3", r"8\ \text{MB}", r"10^9\ \text{operations}"),
             (r"10^6", r"8\ \text{TB}", r"10^{18}\ \text{operations}"),
             (r"10^9", r"8\ \text{EB}", r"10^{27}\ \text{operations}"),
         ]
         cells = [[math(c, size=24, color=MUTED if i == 0 else FG) for c in row] for i, row in enumerate(rows)]
-        xs = (-6.75, -5.75, -3.4)
+        xs = (-6.75, -5.95, -3.55)
         table = VGroup()
         for i, row in enumerate(cells):
             for x, cell in zip(xs, row):
                 cell.move_to([x, -1.6 - 0.48 * i, 0], aligned_edge=LEFT)
             table.add(VGroup(*row))
         rule = Line([-6.8, -1.84, 0], [-0.2, -1.84, 0], color=MUTED, stroke_width=1.5)
-        table_note = tex(r"8 bytes per number; orders of magnitude only", size=17, color=MUTED).next_to(table, DOWN, buff=0.12, aligned_edge=LEFT)
+        table_note = tex(r"$n^2$ numbers at 8 bytes each; about $n^3$ operations; orders of magnitude only", size=17, color=MUTED).next_to(table, DOWN, buff=0.12, aligned_edge=LEFT)
 
         w, size = RIGHT_COL_W + 0.2, 23
         p_small = para(
@@ -1093,7 +1115,7 @@ class S03dCompute(DeckSlide):
         p_iter = para(
             r"Iterative eigensolvers (Lanczos, subspace iteration, LOBPCG) use only products $\tilde Av$ and return "
             r"an approximate subspace: a trial subspace $\cx{trial}{V}$. The rest of the talk asks how close "
-            r"$\cx{trial}{V}$ is to the true one, $\cx{exact}{U}$, without knowing $\cx{exact}{U}$.",
+            r"$\cx{trial}{V}$ is to the true one, $\cx{wanted}{U}$, without knowing $\cx{wanted}{U}$.",
             width=w, size=size,
         )
         col = column(p_small, p_large, p_inf, p_few, p_iter, top=self.content_top - 0.15, x=RIGHT_COL_X - 0.1, buff=0.22)
@@ -1144,21 +1166,21 @@ class S04Angle(DeckSlide):
 
         recall = RecallPanel(
             [
-                (r"$\cx{exact}{U}$", r"the true eigenspace; here the line spanned by an eigenvector $u$ "
-                                     r"($u$ and $-u$ are the same eigendirection)", EXACT),
+                (r"$\cx{wanted}{U}$", r"the true eigenspace; here the line spanned by an eigenvector $u$ "
+                                     r"($u$ and $-u$ are the same eigendirection)", WANTED),
                 (r"$\cx{trial}{V}$", r"the trial subspace, spanned by our guess $v$", TRIAL),
                 (r"$\theta$", r"the angle between them: the error", FG),
                 (r"$\cx{trial}{E_0}$", r"orthonormal basis of $V$, as columns", TRIAL),
-                (r"$\cx{exact}{F_0},\cx{exact}{F_1}$", r"orthonormal bases of $U$ and $U^{\perp}$", EXACT),
+                (r"$\cx{wanted}{F_0},\cx{unwanted}{F_1}$", r"orthonormal bases of $\cx{wanted}{U}$ and $\cx{unwanted}{U^{\perp}}$", WANTED),
             ],
             x=-6.75,
             top=self.content_top - 0.1,
             width=5.6,
         )
 
-        U = through_origin(plane, [1, 0], 1.25, EXACT, width=4)
+        U = through_origin(plane, [1, 0], 1.25, WANTED, width=4)
         U.put_start_and_end_on(plane([-0.35, 0]), plane([1.25, 0]))
-        U_lbl = math(r"U", size=36, color=EXACT).next_to(plane([1.25, 0]), DOWN, buff=0.15)
+        U_lbl = math(r"U", size=36, color=WANTED).next_to(plane([1.25, 0]), DOWN, buff=0.15)
         V = always_redraw(
             lambda: Line(plane(-0.3 * model().trial_vector), plane(1.25 * model().trial_vector), color=TRIAL, stroke_width=3).set_opacity(0.6)
         )
@@ -1197,8 +1219,8 @@ class S04Angle(DeckSlide):
         proj_lbl = always_redraw(
             lambda: math(r"Qv", size=28, color=MUTED).next_to(plane(model().desired_projection / 2), DOWN, buff=0.12)
         )
-        f1 = math(r"\cx{sine}{\sin\theta} = \norm{(I-Q)\,\cx{trial}{v}} = \operatorname{dist}(\cx{trial}{v},\cx{exact}{U})", size=32)
-        f1_note = tex(r"$Q$: the orthogonal projector onto $\cx{exact}{U}$", size=22, color=MUTED)
+        f1 = math(r"\cx{sine}{\sin\theta} = \norm{(I-Q)\,\cx{trial}{v}} = \operatorname{dist}(\cx{trial}{v},\cx{wanted}{U})", size=32)
+        f1_note = tex(r"$Q$: the orthogonal projector onto $\cx{wanted}{U}$", size=22, color=MUTED)
         column(f1, f1_note, top=self.content_top - 0.25, buff=0.1)
         self.add(proj, perp, corner, perp_lbl, proj_lbl)
         self.play(FadeIn(VGroup(proj, perp, corner, perp_lbl, proj_lbl)), FadeIn(f1, f1_note))
@@ -1233,8 +1255,8 @@ class S04Angle(DeckSlide):
             pad=0.18,
         )
         g_eq = math(
-            r"\norm{\cx{sine}{\sin\Theta_0}} = \norm{(I-\cx{exact}{F_0F_0^{*}})\,\cx{trial}{E_0}}"
-            r"= \norm{\cx{exact}{F_1}^{*}\cx{trial}{E_0}}",
+            r"\norm{\cx{sine}{\sin\Theta_0}} = \norm{(I-\cx{wanted}{F_0F_0^{*}})\,\cx{trial}{E_0}}"
+            r"= \norm{\cx{unwanted}{F_1}^{*}\cx{trial}{E_0}}",
             size=32,
         )
         g_note = para(
@@ -1269,8 +1291,8 @@ class S04bSinThetaOperator(DeckSlide):
             "sin Theta0 is sine applied to that operator: eigenvalues sin theta_i."
         )
         cos_line = math(
-            r"\cos^2\Theta_0=\cx{trial}{E_0}^{*}\cx{exact}{F_0F_0^{*}}\cx{trial}{E_0},\qquad"
-            r"\Theta_0=\arccos\sqrt{\cx{trial}{E_0}^{*}\cx{exact}{F_0F_0^{*}}\cx{trial}{E_0}},\qquad"
+            r"\cos^2\Theta_0=\cx{trial}{E_0}^{*}\cx{wanted}{F_0F_0^{*}}\cx{trial}{E_0},\qquad"
+            r"\Theta_0=\arccos\sqrt{\cx{trial}{E_0}^{*}\cx{wanted}{F_0F_0^{*}}\cx{trial}{E_0}},\qquad"
             r"\cx{sine}{\sin\Theta_0}=\sin(\Theta_0)",
             size=34,
         )
@@ -1287,13 +1309,13 @@ class S04bSinThetaOperator(DeckSlide):
             "every unitarily invariant norm. The same holds for F1* E0, because F1 F1* = I - F0 F0*."
         )
         s_line = math(
-            r"S=(I-\cx{exact}{F_0F_0^{*}})\cx{trial}{E_0}:\qquad "
-            r"S^{*}S=I-\cx{trial}{E_0}^{*}\cx{exact}{F_0F_0^{*}}\cx{trial}{E_0}=\cx{sine}{\sin^2\Theta_0}"
+            r"S=(I-\cx{wanted}{F_0F_0^{*}})\cx{trial}{E_0}:\qquad "
+            r"S^{*}S=I-\cx{trial}{E_0}^{*}\cx{wanted}{F_0F_0^{*}}\cx{trial}{E_0}=\cx{sine}{\sin^2\Theta_0}"
             r"\quad\Longrightarrow\quad |S|=\cx{sine}{\sin\Theta_0}",
             size=34,
         )
         s_note = para(
-            r"So $S$ (and $\cx{exact}{F_1}^{*}\cx{trial}{E_0}$, since $F_1F_1^{*}=I-F_0F_0^{*}$) has the "
+            r"So $S$ (and $\cx{unwanted}{F_1}^{*}\cx{trial}{E_0}$, since $F_1F_1^{*}=I-F_0F_0^{*}$) has the "
             r"singular values $\sin\theta_i$ and the same value as $\sin\Theta_0$ in every unitarily "
             r"invariant norm. The operator is the \emph{statement}; the block is what a proof can compute with.",
             width=w,
@@ -1358,7 +1380,7 @@ class S05Residual(DeckSlide):
             [
                 (r"$\tilde A$", r"the matrix we have, whose eigenvectors we want; we can multiply any vector by "
                                r"it (in a perturbation problem $\tilde A=A+H$)", FG),
-                (r"$\cx{exact}{U}$", r"the exact eigendirection (a line, not an arrow): the answer we are trying to find", EXACT),
+                (r"$\cx{wanted}{U}$", r"the exact eigendirection (a line, not an arrow): the answer we are trying to find", WANTED),
                 (r"$\cx{trial}{v}$", r"our approximation, e.g.\ from an iterative eigensolver", TRIAL),
             ],
             x=-6.75,
@@ -1367,10 +1389,10 @@ class S05Residual(DeckSlide):
         )
 
         e_lines = VGroup(
-            DashedVMobject(Line(plane([-0.2, 0]), plane([2.1, 0]), color=EXACT, stroke_width=2), num_dashes=24),
-            DashedVMobject(Line(plane([0, -0.1]), plane([0, 1.2]), color=EXACT, stroke_width=2), num_dashes=14),
+            DashedVMobject(Line(plane([-0.2, 0]), plane([2.1, 0]), color=WANTED, stroke_width=2), num_dashes=24),
+            DashedVMobject(Line(plane([0, -0.1]), plane([0, 1.2]), color=UNWANTED, stroke_width=2), num_dashes=14),
         ).set_opacity(0.7)
-        u_lbl = tex(r"$U$ (unknown)", size=22, color=EXACT).next_to(plane([1.6, 0]), DOWN, buff=0.12)
+        u_lbl = tex(r"$U$ (unknown)", size=22, color=WANTED).next_to(plane([1.6, 0]), DOWN, buff=0.12)
         v = always_redraw(lambda: vec(plane.origin, plane(model().v), TRIAL, width=7))
         v_lbl = always_redraw(lambda: math(r"v", size=32, color=TRIAL).next_to(plane(model().v), UL, buff=0.05))
         Av = always_redraw(lambda: vec(plane.origin, plane(model().Av), FG, width=5))
@@ -1477,9 +1499,9 @@ class S05Residual(DeckSlide):
 
         self.say(
             "The same works for several vectors at once: E0 holds them as orthonormal columns and A0 is a "
-            "small trial matrix, for instance E0* A E0. For a subspace the claim we pretend is that V is "
-            "invariant: A maps V into V, as it does an eigenspace. With that choice of A0, R is exactly the part "
-            "of A applied to V that sticks out of V, and it is still computable. The question for the theorem: "
+            "small trial matrix, for instance E0* A tilde E0. For a subspace the claim we pretend is that V is "
+            "invariant: A tilde maps V into V, as it does an eigenspace. With that choice of A0, R is exactly the "
+            "part of A tilde applied to V that sticks out of V, and it is still computable. The question for the theorem: "
             "does a small R force a small angle?"
         )
         self.play(FadeIn(col[3]), phi.animate.set_value(np.radians(40.0)), run_time=1.5)
@@ -1525,14 +1547,14 @@ class S06Gap(DeckSlide):
         br_r = BraceBetweenPoints(X(alpha), X(alpha + delta), direction=DOWN, color=GAP).shift(DOWN * 0.45)
         d_l = math(r"\delta", size=30, color=GAP).next_to(br_l, DOWN, buff=0.08)
         d_r = math(r"\delta", size=30, color=GAP).next_to(br_r, DOWN, buff=0.08)
-        unwanted = VGroup(*[Dot(X(lam), color=EXACT, radius=0.1) for lam in g["unwanted"]])
+        unwanted = VGroup(*[Dot(X(lam), color=UNWANTED, radius=0.1) for lam in g["unwanted"]])
         un_lbl_l = VGroup(
-            tex(r"unwanted eigenvalues of $\tilde A$", size=22, color=EXACT),
-            math(r"\operatorname{spec}(\Lambda_1)", size=30, color=EXACT),
+            tex(r"unwanted eigenvalues of $\tilde A$", size=22, color=UNWANTED),
+            math(r"\operatorname{spec}(\Lambda_1)", size=30, color=UNWANTED),
         ).arrange(DOWN, buff=0.06).next_to(VGroup(*unwanted[:3]), UP, buff=0.4)
         un_lbl_r = VGroup(
-            tex(r"unwanted eigenvalues of $\tilde A$", size=22, color=EXACT),
-            math(r"\operatorname{spec}(\Lambda_1)", size=30, color=EXACT),
+            tex(r"unwanted eigenvalues of $\tilde A$", size=22, color=UNWANTED),
+            math(r"\operatorname{spec}(\Lambda_1)", size=30, color=UNWANTED),
         ).arrange(DOWN, buff=0.06).next_to(VGroup(*unwanted[3:]), UP, buff=0.4)
 
         self.say(
@@ -1543,17 +1565,17 @@ class S06Gap(DeckSlide):
 
         self.say(
             "Widen the interval by delta on each side: the violet window. "
-            "Lambda1 is A restricted to the unwanted part U-perp. The hypothesis: no "
-            "eigenvalue of Lambda1 enters the window. Everything of A inside the window "
+            "Lambda1 is A tilde restricted to the unwanted part U-perp. The hypothesis: no "
+            "eigenvalue of Lambda1 enters the window. Everything of A tilde inside the window "
             "belongs to U."
         )
         hyp = math(
             r"\cx{trial}{\operatorname{spec}(A_0)}\subset[\beta,\alpha],\qquad"
-            r"\cx{exact}{\operatorname{spec}(\Lambda_1)}\cap(\beta-\cx{gap}{\delta},\,\alpha+\cx{gap}{\delta})=\varnothing",
+            r"\cx{unwanted}{\operatorname{spec}(\Lambda_1)}\cap(\beta-\cx{gap}{\delta},\,\alpha+\cx{gap}{\delta})=\varnothing",
             size=32,
         ).move_to([0, -1.25, 0])
         lam_note = tex(
-            r"$\cx{exact}{\Lambda_1}$: $\tilde A$ restricted to $U^{\perp}$, i.e.\ $\tilde A\cx{exact}{F_1}=\cx{exact}{F_1}\cx{exact}{\Lambda_1}$."
+            r"$\cx{unwanted}{\Lambda_1}$: $\tilde A$ restricted to $\cx{unwanted}{U^{\perp}}$, i.e.\ $\tilde A\cx{unwanted}{F_1}=\cx{unwanted}{F_1}\cx{unwanted}{\Lambda_1}$."
             r"\quad Or the same with the roles of $A_0$ and $\Lambda_1$ exchanged.",
             size=24,
             color=MUTED,
@@ -1598,7 +1620,7 @@ class S07Theorem(DeckSlide):
         box = boxed(stmt, color=FG, pad=0.3).move_to([0, 1.7, 0])
         hyp = tex(
             r"whenever $\cx{trial}{\operatorname{spec}(A_0)}\subset[\beta,\alpha]$ and "
-            r"$\cx{exact}{\operatorname{spec}(\Lambda_1)}$ avoids $(\beta-\cx{gap}{\delta},\alpha+\cx{gap}{\delta})$, "
+            r"$\cx{unwanted}{\operatorname{spec}(\Lambda_1)}$ avoids $(\beta-\cx{gap}{\delta},\alpha+\cx{gap}{\delta})$, "
             r"for \emph{every} unitarily invariant norm",
             size=26,
             color=MUTED,
@@ -1661,15 +1683,15 @@ class S08Why(DeckSlide):
         e_u, e_w = np.array([1.0, 0.0]), np.array([0.0, 1.0])
         v = np.array([np.cos(th), s_th])
 
-        u_axis = Line(plane([-0.35, 0]), plane([1.25, 0]), color=EXACT, stroke_width=3)
-        w_axis = Line(plane([0, -0.15]), plane([0, 1.2]), color=MUTED, stroke_width=3)
-        u_lbl = tex(r"$u$: wanted eigenvector", size=22, color=EXACT).next_to(plane([1.25, 0]), DOWN, buff=0.12).shift(LEFT * 0.6)
-        w_lbl = tex(r"$w$: unwanted eigenvector", size=22, color=MUTED).next_to(plane([0, 1.2]), UP, buff=0.08)
+        u_axis = Line(plane([-0.35, 0]), plane([1.25, 0]), color=WANTED, stroke_width=3)
+        w_axis = Line(plane([0, -0.15]), plane([0, 1.2]), color=UNWANTED, stroke_width=3)
+        u_lbl = tex(r"$u$: wanted eigenvector", size=22, color=WANTED).next_to(plane([1.25, 0]), DOWN, buff=0.12).shift(LEFT * 0.6)
+        w_lbl = tex(r"$w$: unwanted eigenvector", size=22, color=UNWANTED).next_to(plane([0, 1.2]), UP, buff=0.08)
         v_arrow = vec(plane.origin, plane(v), TRIAL, width=7)
         v_lbl = math(r"v", size=32, color=TRIAL).next_to(plane(v), UR, buff=0.05)
         arc = angle_arc(plane, e_u, v, 0.45, FG, width=3)
         th_lbl = math(r"\theta", size=28).move_to(plane(0.6 * story.unit(th / 2)))
-        cos_part = segment(plane.origin, plane(np.cos(th) * e_u), EXACT, width=9).set_opacity(0.55)
+        cos_part = segment(plane.origin, plane(np.cos(th) * e_u), WANTED, width=9).set_opacity(0.55)
         left = np.array([-0.045, 0.0])
         sin_part = segment(plane(left), plane(left + s_th * e_w), SINE, width=10)
         sin_lbl = math(r"\sin\theta", size=28, color=SINE).next_to(plane(left + s_th * e_w), LEFT, buff=0.12)
@@ -1696,12 +1718,12 @@ class S08Why(DeckSlide):
 
         nl = Line(X(lo), X(hi), color=MUTED, stroke_width=2)
         dots = VGroup(
-            Dot(X(ex.lam_u), radius=0.08, color=EXACT),
-            Dot(X(ex.lam_w), radius=0.08, color=MUTED),
+            Dot(X(ex.lam_u), radius=0.08, color=WANTED),
+            Dot(X(ex.lam_w), radius=0.08, color=UNWANTED),
         )
         dot_lbls = VGroup(
-            math(r"\lambda_u", size=24, color=EXACT).next_to(X(ex.lam_u), DOWN, buff=0.12),
-            math(r"\lambda_w", size=24, color=MUTED).next_to(X(ex.lam_w), DOWN, buff=0.12),
+            math(r"\lambda_u", size=24, color=WANTED).next_to(X(ex.lam_u), DOWN, buff=0.12),
+            math(r"\lambda_w", size=24, color=UNWANTED).next_to(X(ex.lam_w), DOWN, buff=0.12),
         )
         rho_mark = Triangle(color=TRIAL, fill_color=TRIAL, fill_opacity=1).scale(0.09).rotate(np.pi).move_to(X(ex.rho) + UP * 0.12)
         rho_lbl = math(r"\rho", size=24, color=TRIAL).next_to(X(ex.rho), DOWN, buff=0.12)
@@ -1712,7 +1734,7 @@ class S08Why(DeckSlide):
         # Right column, laid out once in final form; builds only add.
         x0, w, size = RIGHT_COL_X - 0.2, RIGHT_COL_W + 0.3, 25
         t1 = para(
-            r"Split $v$ into its part along the wanted eigenvector $\cx{exact}{u}$ and its part along an "
+            r"Split $v$ into its part along the wanted eigenvector $\cx{wanted}{u}$ and its part along an "
             r"unwanted eigenvector $w$.",
             width=w,
             size=size,
@@ -1805,7 +1827,7 @@ class S08Components(DeckSlide):
     """
 
     title = "The same mechanism across the whole spectrum"
-    kicker = r"Each bar is one eigendirection of $\tilde A$; the pink bars together are the wrong part of $v$"
+    kicker = r"Each bar is one eigendirection of $\tilde A$: first $v$'s components, then the residual's"
     depth = "*"
 
     def body(self) -> None:
@@ -1827,7 +1849,8 @@ class S08Components(DeckSlide):
         win_lbl = math(r"(\rho-\delta,\rho+\delta)", size=24, color=GAP).next_to(window, UP, buff=0.08)
         rho_mark = Triangle(color=TRIAL, fill_color=TRIAL, fill_opacity=1).scale(0.09).rotate(np.pi).next_to(X(rho), DOWN, buff=0.04)
         rho_lbl = math(r"\rho", size=28, color=TRIAL).next_to(rho_mark, DOWN, buff=0.06)
-        ticks = VGroup(*[Dot(X(t), radius=0.05, color=MUTED) for t in lam])
+        # Spectral marks: wanted eigenvalues blue, unwanted (Lambda_1) cyan.
+        ticks = VGroup(*[Dot(X(t), radius=0.06, color=WANTED if w else UNWANTED) for t, w in zip(lam, ex.wanted)])
         bar_w = 0.34
 
         def bars(heights, colors) -> VGroup:
@@ -1840,7 +1863,7 @@ class S08Components(DeckSlide):
                 ]
             )
 
-        coef_colors = [EXACT if w else SINE for w in ex.wanted]
+        coef_colors = [WANTED if w else SINE for w in ex.wanted]
         coef_bars = bars(np.abs(c), coef_colors)
         bar_lbl = tex(r"bars: $|c_j|$", size=26).move_to([X(-3.0)[0], 1.1, 0], aligned_edge=LEFT)
 
@@ -1863,7 +1886,7 @@ class S08Components(DeckSlide):
 
         v_eq = math(r"v=\sum_j c_j f_j,\qquad \tilde A f_j=\lambda_j f_j", size=30)
         sin_eq = math(r"\cx{sine}{\sin^2\theta}=\sum_{\lambda_j\notin\text{window}}\cx{sine}{c_j^2}", size=30)
-        u_note = tex(r"$\cx{exact}{U}$ = span of the $f_j$ with $\lambda_j$ in the window", size=24, color=MUTED)
+        u_note = tex(r"$\cx{wanted}{U}$ = span of the $f_j$ with $\lambda_j$ in the window", size=24, color=MUTED)
         r_eq = math(r"\cx{resid}{r}=\tilde Av-\rho v=\sum_j(\lambda_j-\rho)\,c_j f_j", size=30)
         outside = tex(r"outside the window: $|\lambda_j-\rho|\ge\cx{gap}{\delta}$", size=26)
         chain = math(
@@ -1876,7 +1899,7 @@ class S08Components(DeckSlide):
             rf"\ \le\ \norm{{\cx{{resid}}{{r}}}}={ex.residual_norm:.3f}",
             size=28,
         )
-        column(v_eq, sin_eq, u_note, r_eq, outside, chain, nums, top=self.content_top - 0.2, x=rx, buff=0.22)
+        column(v_eq, sin_eq, u_note, r_eq, outside, chain, nums, top=self.content_top - 0.1, x=rx, buff=0.15)
         tail = VGroup(chain, nums)
         tail_bg = Rectangle(
             width=tail.width + 0.3, height=tail.height + 0.3, fill_color=PANEL, fill_opacity=0.95, stroke_width=0
@@ -1884,15 +1907,16 @@ class S08Components(DeckSlide):
 
         self.say(
             "The same argument with many eigendirections. Expand v in eigenvectors f_j of A tilde; each bar is "
-            "|c_j|, placed at its eigenvalue. The window around rho contains the wanted eigenvalues, blue; "
-            "the rest, pink, is Lambda1. The combined Euclidean length of the pink components is sin theta."
+            "|c_j|, placed at its eigenvalue. The window around rho contains the wanted eigenvalues, blue marks; "
+            "the cyan marks outside it are the Lambda1 eigendirections. The pink bars are the components of v "
+            "on those unwanted directions; their combined Euclidean length is sin theta."
         )
         self.play(Create(axis), FadeIn(lam_lbl, ticks, window, win_lbl, rho_mark, rho_lbl))
         self.play(LaggedStartMapGrow(coef_bars), FadeIn(bar_lbl))
         self.play(FadeIn(v_eq, sin_eq, u_note))
 
         self.say(
-            "Now apply A - rho. Each component is multiplied by lambda_j - rho: the V-shaped "
+            "Now apply A tilde minus rho. Each component is multiplied by lambda_j - rho: the V-shaped "
             "curve. Outside the window it is at least delta."
         )
         self.play(Create(weight), Create(delta_line), FadeIn(w_lbl, d_lbl), FadeIn(r_eq), FadeIn(outside))
@@ -1924,7 +1948,7 @@ def LaggedStartMapGrow(bars: VGroup):
 
 class S09Sylvester(DeckSlide):
     title = "Many trial vectors: a Sylvester equation"
-    kicker = "In eigenvector coordinates the Sylvester equation acts entry by entry"
+    kicker = "In the finite-dimensional picture, eigenvector coordinates make it act entry by entry"
     depth = "*"
 
     def body(self) -> None:
@@ -1932,18 +1956,18 @@ class S09Sylvester(DeckSlide):
         ex.verify()
 
         self.say(
-            "Project the residual onto the unwanted eigenvectors F1. Because A F1 = F1 Lambda1, "
+            "Project the residual onto the unwanted eigenvectors F1. Because A tilde F1 = F1 Lambda1, "
             "F1* R is a Sylvester expression in X = F1* E0, and the singular values of X are the sines."
         )
         lines = VGroup(
-            math(r"\tilde A\cx{exact}{F_1}=\cx{exact}{F_1\Lambda_1}\ \Longrightarrow\ \cx{exact}{F_1^{*}}\tilde A=\cx{exact}{\Lambda_1F_1^{*}}", size=32),
+            math(r"\tilde A\cx{unwanted}{F_1}=\cx{unwanted}{F_1\Lambda_1}\ \Longrightarrow\ \cx{unwanted}{F_1^{*}}\tilde A=\cx{unwanted}{\Lambda_1F_1^{*}}", size=32),
             math(
-                r"\cx{exact}{F_1^{*}}\cx{resid}{R}=\cx{exact}{F_1^{*}}\tilde A\cx{trial}{E_0}-\cx{exact}{F_1^{*}}\cx{trial}{E_0A_0}"
-                r"=\cx{exact}{\Lambda_1}\cx{sine}{X}-\cx{sine}{X}\cx{trial}{A_0},"
-                r"\qquad \cx{sine}{X}=\cx{exact}{F_1^{*}}\cx{trial}{E_0}",
+                r"\cx{unwanted}{F_1^{*}}\cx{resid}{R}=\cx{unwanted}{F_1^{*}}\tilde A\cx{trial}{E_0}-\cx{unwanted}{F_1^{*}}\cx{trial}{E_0A_0}"
+                r"=\cx{unwanted}{\Lambda_1}\cx{sine}{X}-\cx{sine}{X}\cx{trial}{A_0},"
+                r"\qquad \cx{sine}{X}=\cx{unwanted}{F_1^{*}}\cx{trial}{E_0}",
                 size=32,
             ),
-            math(r"\norm{\cx{sine}{X}}=\norm{\cx{sine}{\sin\Theta_0}},\qquad \norm{\cx{exact}{F_1^{*}}\cx{resid}{R}}\le\norm{\cx{resid}{R}}", size=32),
+            math(r"\norm{\cx{sine}{X}}=\norm{\cx{sine}{\sin\Theta_0}},\qquad \norm{\cx{unwanted}{F_1^{*}}\cx{resid}{R}}\le\norm{\cx{resid}{R}}", size=32),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.3)
         lines.move_to([LEFT_X(), self.content_top - 0.25, 0], aligned_edge=UP + LEFT)
         self.play(FadeIn(lines[0]))
@@ -1951,7 +1975,7 @@ class S09Sylvester(DeckSlide):
         self.play(FadeIn(lines[2]))
 
         self.say(
-            "Choose eigenvector coordinates: rows are unwanted eigendirections with eigenvalues lambda_i, "
+            "In the finite-dimensional picture, choose eigenvector coordinates: rows are unwanted eigendirections with eigenvalues lambda_i, "
             "columns are trial directions with eigenvalues mu_j. Entry x_ij is how much trial direction j "
             "overlaps unwanted eigendirection i. Multiplying by Lambda1 on the left scales row i by lambda_i; "
             "multiplying by A0 on the right scales column j by mu_j. So the Sylvester map multiplies each "
@@ -1960,32 +1984,33 @@ class S09Sylvester(DeckSlide):
         )
         grid_left = self._grid(ex.X, ex, label=r"\cx{sine}{X}", color=SINE).move_to([-5.35, -1.45, 0])
         grid_right = self._grid(
-            ex.C, ex, label=r"\cx{exact}{\Lambda_1}X-X\cx{trial}{A_0}", color=RESID, rows_right=True
+            ex.C, ex, label=r"\cx{unwanted}{\Lambda_1}X-X\cx{trial}{A_0}", color=RESID, rows_right=True
         ).move_to([-0.45, -1.45, 0])
         arrow = Arrow(grid_left[0].get_right(), grid_right[0].get_left(), buff=0.2, color=MUTED, stroke_width=4)
         arrow_lbl = math(r"x_{ij}\mapsto(\lambda_i-\mu_j)\,x_{ij}", size=22, color=MUTED).next_to(arrow, UP, buff=0.12)
         grid_caption = tex(
-            r"rows: unwanted eigenvalues \cx{exact}{$\lambda_i$}; \ columns: trial eigenvalues \cx{trial}{$\mu_j$}",
+            r"rows: unwanted eigenvalues \cx{unwanted}{$\lambda_i$}; \ columns: trial eigenvalues \cx{trial}{$\mu_j$}",
             size=20,
             color=MUTED,
         ).next_to(VGroup(grid_left, grid_right), DOWN, buff=0.15).align_to(grid_left, LEFT)
         entry_text = para(
             r"$\cx{sine}{X}$ is the whole rectangular overlap matrix; each square is one entry, not a block. "
-            r"In eigenvector coordinates, entry $x_{ij}$ "
+            r"In the finite-dimensional picture, in eigenvector coordinates, entry $x_{ij}$ "
             r"is how much trial direction $j$ "
-            r"overlaps unwanted eigendirection $i$. $\cx{exact}{\Lambda_1}$ scales row $i$ by $\lambda_i$ and "
+            r"overlaps unwanted eigendirection $i$. $\cx{unwanted}{\Lambda_1}$ scales row $i$ by $\lambda_i$ and "
             r"$\cx{trial}{A_0}$ scales column $j$ by $\mu_j$, so",
             width=4.5,
             size=21,
         )
-        entry_eq = math(r"(\cx{exact}{\Lambda_1}X-X\cx{trial}{A_0})_{ij}=(\lambda_i-\mu_j)\,x_{ij}", size=26)
+        entry_eq = math(r"(\cx{unwanted}{\Lambda_1}X-X\cx{trial}{A_0})_{ij}=(\lambda_i-\mu_j)\,x_{ij}", size=26)
         sep = math(
-            r"\text{gap}\ \Longrightarrow\ \norm{\cx{exact}{\Lambda_1}X-X\cx{trial}{A_0}}\ \ge\ \cx{gap}{\delta}\,\norm{X}",
+            r"\text{gap}\ \Longrightarrow\ \norm{\cx{unwanted}{\Lambda_1}X-X\cx{trial}{A_0}}\ \ge\ \cx{gap}{\delta}\,\norm{X}",
             size=30,
         )
         sep_note = para(
             r"Entry by entry gives the Frobenius norm at once; \emph{every} unitarily invariant norm "
-            r"needs the separating interval (\S5).",
+            r"needs the separating interval (\S5). The full theorem replaces this entrywise picture with "
+            r"spectral-operator machinery.",
             width=4.5,
             size=19,
             color=MUTED,
@@ -2024,7 +2049,7 @@ class S09Sylvester(DeckSlide):
                 cells.add(sq)
         row_lbls = VGroup(
             *[
-                math(rf"{l:+.1f}", size=20, color=EXACT).next_to(
+                math(rf"{l:+.1f}", size=20, color=UNWANTED).next_to(
                     cells[i * cols + (cols - 1 if rows_right else 0)], RIGHT if rows_right else LEFT, buff=0.1
                 )
                 for i, l in enumerate(ex.lam)
@@ -2061,8 +2086,8 @@ class S10Sharp(DeckSlide):
         def model() -> SineThetaModel:
             return SineThetaModel(th.get_value(), delta=delta)
 
-        U = Line(plane([-0.15, 0]), plane([1.3, 0]), color=EXACT, stroke_width=4)
-        U_lbl = math(r"U=\operatorname{span}(e_1)", size=28, color=EXACT).next_to(plane([1.3, 0]), DOWN, buff=0.15).shift(LEFT * 0.6)
+        U = Line(plane([-0.15, 0]), plane([1.3, 0]), color=WANTED, stroke_width=4)
+        U_lbl = math(r"U=\operatorname{span}(e_1)", size=28, color=WANTED).next_to(plane([1.3, 0]), DOWN, buff=0.15).shift(LEFT * 0.6)
         v = always_redraw(lambda: vec(plane.origin, plane(model().trial_vector), TRIAL, width=7))
         v_lbl = always_redraw(lambda: math(r"v_\theta", size=30, color=TRIAL).next_to(plane(model().trial_vector), UL, buff=0.08))
         leg = always_redraw(lambda: segment(plane(model().desired_projection), plane(model().trial_vector), SINE, width=8))
@@ -2190,8 +2215,8 @@ class S11Payoff(DeckSlide):
         plane = Plane([-4.7, -1.6, 0], 0.62, rotate=ELLIPSE_BASE)
         old = always_redraw(lambda: DashedVMobject(ellipse(plane, pair().A, color=MUTED, width=2), num_dashes=50))
         new = always_redraw(lambda: ellipse(plane, pair().perturbed, color=FG, width=3))
-        old_axis = DashedVMobject(through_origin(plane, [1, 0], 2.3, MUTED, width=2), num_dashes=24)
-        new_axis = always_redraw(lambda: through_origin(plane, pair().perturbed_top_eigenvector, 2.0, EXACT, width=4))
+        old_axis = DashedVMobject(through_origin(plane, [1, 0], 2.3, TRIAL, width=2.5), num_dashes=24)
+        new_axis = always_redraw(lambda: through_origin(plane, pair().perturbed_top_eigenvector, 2.0, WANTED, width=4))
         arc = always_redraw(lambda: angle_arc(plane, [1, 0], pair().perturbed_top_eigenvector, 1.35, SINE, width=4))
 
         axes = Axes(
@@ -2221,9 +2246,10 @@ class S11Payoff(DeckSlide):
             "for large gaps it is essentially exact."
         )
         legend = VGroup(
-            tex(r"\cx{muted}{dashed: $A$, its top eigenvector}", size=20),
+            tex(r"\cx{muted}{dashed: the old $A$}", size=20),
+            tex(r"\cx{trial}{amber: $A$'s top eigenvector, the trial}", size=20),
             tex(r"white: $A+H$", size=20),
-            tex(r"\cx{exact}{blue: top eigenvector of $A+H$}", size=20),
+            tex(r"\cx{wanted}{blue: top eigenvector of $A+H$}", size=20),
             tex(r"\cx{sine}{arc: the turn $\theta$}", size=20),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.1).move_to([-2.45, -0.75, 0], aligned_edge=UP + LEFT)
         self.add(old, new, old_axis, new_axis, arc)
@@ -2288,10 +2314,10 @@ LEAN_READING = [
     (1, 1, r"scalars: $\mathbb{R}$ or $\mathbb{C}$", FG),
     (2, 6, r"separable Hilbert spaces", FG),
     (7, 7, r"every unitarily invariant norm", FG),
-    (8, 8, r"possibly unbounded operators", EXACT),
-    (10, 10, r"all self-adjoint", EXACT),
+    (8, 8, r"possibly unbounded operators", FG),
+    (10, 10, r"all self-adjoint", FG),
     (11, 11, r"$\cx{resid}{R}=A\cx{trial}{E_0}-\cx{trial}{E_0}\cx{trial}{A_0}$", RESID),
-    (12, 12, r"$A\cx{exact}{F_1}=\cx{exact}{F_1}\cx{exact}{\Lambda_1}$", EXACT),
+    (12, 12, r"$A\cx{unwanted}{F_1}=\cx{unwanted}{F_1}\cx{unwanted}{\Lambda_1}$", UNWANTED),
     (14, 14, r"the gap $\cx{gap}{\delta}$", GAP),
     (15, 15, r"where the norms are defined", MUTED),
     (16, 17, r"$\cx{gap}{\delta}\norm{\cx{sine}{\sin\Theta_0}}\le\norm{\cx{resid}{R}}$, on $\sin\Theta_0$ itself", SINE),
@@ -2389,21 +2415,21 @@ class S13Family(DeckSlide):
         )
         rows = [
             (r"\textbf{theorem}", r"\textbf{conclusions}", r"\textbf{hypotheses beyond self-adjointness}"),
-            (r"$\sin\Theta$", r"$\delta\norm{\sin\Theta_0}\le\norm{R}$", r"interval/exterior gap, $A_0$ vs $\Lambda_1$"),
+            (r"$\sin\Theta$", r"$\delta\norm{\sin\Theta_0}\le\norm{R}$", r"interval/exterior gap, $\cx{trial}{A_0}$ vs $\cx{unwanted}{\Lambda_1}$"),
             (
                 r"$\tan\Theta$",
                 r"$\delta\norm{\tan\Theta_0}\le\norm{R}$, \ $\delta\norm{\tan\Theta}\le\norm{H}$",
-                r"one-sided gap, $A_0$ vs $\Lambda_1$; $A_0=E_0^{*}(A+H)E_0$",
+                r"one-sided gap, $\cx{trial}{A_0}$ vs $\cx{unwanted}{\Lambda_1}$; $\cx{trial}{A_0}=E_0^{*}(A+H)E_0$",
             ),
             (
                 r"$\sin2\Theta$",
                 r"$\delta\norm{\sin2\Theta_0}\le2\norm{R}$, \ $\delta\norm{\sin2\Theta}\le2\norm{H}$",
-                r"interval/exterior gap, $\Lambda_0$ vs $\Lambda_1$",
+                r"interval/exterior gap, $\cx{wanted}{\Lambda_0}$ vs $\cx{unwanted}{\Lambda_1}$",
             ),
             (
                 r"$\tan2\Theta$",
                 r"$\delta\norm{\tan2\Theta_0}\le2\norm{R}$, \ $\delta\norm{\tan2\Theta}\le2\norm{H}$",
-                r"one-sided gap, $A_0$ vs $A_1$; $H_0=H_1=0$",
+                r"one-sided gap, $\cx{trial}{A_0}$ vs $A_1$; $H_0=H_1=0$",
             ),
         ]
         cells = [[tex(c, size=26, color=FG if i else MUTED) for c in row] for i, row in enumerate(rows)]
@@ -2469,20 +2495,20 @@ class S14Summary(DeckSlide):
     def body(self) -> None:
         items = [
             (
-                r"\cx{sine}{1}",
+                r"\cx{muted}{1}",
                 r"\textbf{The $\sin\Theta$ theorem.} How far a subspace is from the true eigenspace is bounded "
                 r"by something you can compute: $\ \norm{\cx{sine}{\sin\Theta_0}}\le\norm{\cx{resid}{R}}/\cx{gap}{\delta}$, "
                 r"residual over gap.",
             ),
             (
-                r"\cx{exact}{2}",
+                r"\cx{muted}{2}",
                 r"\textbf{Formalized at the paper's full scope.} Real or complex, finite-dimensional or separable "
                 r"infinite-dimensional Hilbert spaces, "
                 r"possibly unbounded operators, every unitarily invariant norm, checked by Lean with only its "
                 r"standard axioms.",
             ),
             (
-                r"\cx{gap}{3}",
+                r"\cx{muted}{3}",
                 r"\textbf{Proposition 4.4 is false as printed.} An explicit counterexample in $\mathbb{R}^4$, "
                 r"refuted in Lean, together with a proved repair: the claim holds for the $Q$-norms "
                 r"(e.g.\ operator and Frobenius).",

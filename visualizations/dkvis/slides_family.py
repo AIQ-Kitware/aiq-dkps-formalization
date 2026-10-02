@@ -45,7 +45,6 @@ from manim import (
 
 from dkvis import sine_theta_story as story
 from dkvis.slide_style import (
-    EXACT,
     FAINT,
     FG,
     GAP,
@@ -53,6 +52,8 @@ from dkvis.slide_style import (
     RESID,
     SINE,
     TRIAL,
+    UNWANTED,
+    WANTED,
     DeckSlide,
     boxed,
     dashed,
@@ -114,13 +115,14 @@ def rho_marker(point: np.ndarray) -> Triangle:
 
 
 def two_by_two(plane: Plane, pair: story.PerturbedPair, reach: float = 2.3) -> VGroup:
-    """The 2x2 example in the family's colours: old ``A`` amber (dashed), new ``A + H`` blue."""
+    """The 2x2 example: both operators neutral (old ``A`` dashed); A's top eigenvector, the trial, amber;
+    the target, ``A + H``'s top eigenvector, blue."""
     top = pair.perturbed_top_eigenvector
     return VGroup(
-        DashedVMobject(ellipse(plane, pair.A, color=TRIAL, width=2), num_dashes=56).set_opacity(0.85),
+        DashedVMobject(ellipse(plane, pair.A, color=MUTED, width=2), num_dashes=56),
         through_origin(plane, [1.0, 0.0], reach, TRIAL, width=3, opacity=0.85),
-        ellipse(plane, pair.perturbed, color=EXACT, width=3),
-        through_origin(plane, top, reach, EXACT, width=3.5),
+        ellipse(plane, pair.perturbed, color=FG, width=3),
+        through_origin(plane, top, reach, WANTED, width=3.5),
         angle_arc(plane, [1.0, 0.0], top, 0.9 * plane.scale, SINE, width=4),
     )
 
@@ -147,21 +149,21 @@ class F01Setup(DeckSlide):
             ).move_to((X(wanted[0]) + X(wanted[-1])) / 2)
             dots = VGroup(
                 *[Dot(X(t), radius=0.08, color=color) for t in wanted],
-                *[Dot(X(t), radius=0.08, color=MUTED) for t in rest],
+                *[Dot(X(t), radius=0.08, color=r_color) for t in rest],
             )
-            cap = tex(caption, size=22, color=color).move_to([X(0.3)[0], y + 0.5, 0], aligned_edge=LEFT)
+            cap = tex(caption, size=22, color=FG).move_to([X(0.3)[0], y + 0.5, 0], aligned_edge=LEFT)
             w = math(w_name, size=28, color=color).next_to(box, DOWN, buff=0.08)
             r = math(r_name, size=28, color=r_color).next_to((X(rest[0]) + X(rest[-1])) / 2, DOWN, buff=0.22)
             return VGroup(line, box, dots, cap, w, r)
 
         old = spectrum(line_old, X_old, (0.6, 0.95), (2.0, 2.45, 2.9), TRIAL, r"eigenvalues of the old $A$", r"A_0", r"A_1")
-        new = spectrum(line_new, X_new, (0.7, 1.1), (1.85, 2.55, 2.8), EXACT, r"eigenvalues of the new $A+H$", r"\Lambda_0", r"\Lambda_1", EXACT)
+        new = spectrum(line_new, X_new, (0.7, 1.1), (1.85, 2.55, 2.8), WANTED, r"eigenvalues of the new $A+H$", r"\Lambda_0", r"\Lambda_1", UNWANTED)
 
         head = tex(r"Which eigenvalues each theorem keeps apart:", size=24)
         rows = [
-            (r"$\sin\Theta$", r"$\cx{trial}{A_0}$ vs $\Lambda_1$", r"interval/exterior"),
-            (r"$\tan\Theta$", r"$\cx{trial}{A_0}$ vs $\Lambda_1$", r"one-sided; $A_0$ Rayleigh--Ritz"),
-            (r"$\sin2\Theta$", r"$\cx{exact}{\Lambda_0}$ vs $\Lambda_1$", r"interval/exterior"),
+            (r"$\sin\Theta$", r"$\cx{trial}{A_0}$ vs $\cx{unwanted}{\Lambda_1}$", r"interval/exterior"),
+            (r"$\tan\Theta$", r"$\cx{trial}{A_0}$ vs $\cx{unwanted}{\Lambda_1}$", r"one-sided; $A_0$ Rayleigh--Ritz"),
+            (r"$\sin2\Theta$", r"$\cx{wanted}{\Lambda_0}$ vs $\cx{unwanted}{\Lambda_1}$", r"interval/exterior"),
             (r"$\tan2\Theta$", r"$\cx{trial}{A_0}$ vs $A_1$", r"one-sided; $H_0=H_1=0$"),
         ]
         cells = [[tex(c, size=22, color=SINE if j == 0 else FG) for j, c in enumerate(r)] for r in rows]
@@ -175,14 +177,14 @@ class F01Setup(DeckSlide):
 
         size, w = 21, TEXT_W
         p_old = para(
-            r"\cx{trial}{Amber, the old $A$:} $\cx{trial}{E_0}$ is an orthonormal basis of an invariant subspace "
+            r"\textbf{The old $A$:} $\cx{trial}{E_0}$ is an orthonormal basis of an invariant subspace "
             r"$\cx{trial}{V}$ of $A$ (its wanted eigenvectors), with block $\cx{trial}{A_0}=E_0^*AE_0$; $A_1$ is the "
             r"rest of $A$.",
             width=w, size=size,
         )
         p_new = para(
-            r"\cx{exact}{Blue, the new $\tilde A=A+H$:} $\cx{exact}{F_0}$ spans the corresponding invariant subspace "
-            r"$\cx{exact}{U}$ of $\tilde A$, with block $\cx{exact}{\Lambda_0}$; $\Lambda_1$ is the rest.",
+            r"\textbf{The new $\tilde A=A+H$:} $\cx{wanted}{F_0}$ spans the corresponding invariant subspace "
+            r"$\cx{wanted}{U}$ of $\tilde A$, with block $\cx{wanted}{\Lambda_0}$; $\cx{unwanted}{\Lambda_1}$ is the rest.",
             width=w, size=size,
         )
         p_ang = para(
@@ -202,7 +204,7 @@ class F01Setup(DeckSlide):
             width=w, size=size,
         )
         p_bridge = para(
-            r"Same notation as before: $\cx{exact}{U}$ is the target subspace of the matrix we have, $\tilde A$, and "
+            r"Same notation as before: $\cx{wanted}{U}$ is the target subspace of the matrix we have, $\tilde A$, and "
             r"$\cx{trial}{V}$ the trial subspace; in the trial reading $E_0$ is any orthonormal trial basis.",
             width=w, size=size - 1, color=MUTED,
         )
@@ -210,8 +212,9 @@ class F01Setup(DeckSlide):
 
         self.say(
             "The sin Theta theorem is the first of four in Section 2 of the paper. All four share one setup: "
-            "an old matrix A with an invariant subspace spanned by E0, in amber, and a new matrix A + H with "
-            "the corresponding invariant subspace spanned by F0, in blue. Their blocks are A0, A1 and Lambda0, Lambda1."
+            "an old matrix A with an invariant subspace spanned by E0, the trial side in amber, and a new matrix A + H "
+            "with the corresponding invariant subspace spanned by F0, the wanted side in blue. Their blocks are A0, A1 "
+            "and Lambda0, Lambda1; Lambda1, the unwanted part of the new matrix, is cyan."
         )
         self.play(FadeIn(old), FadeIn(new), FadeIn(col[0]), FadeIn(col[1]))
 
@@ -252,10 +255,10 @@ class F02TanTheta(DeckSlide):
         v = np.array([pymath.cos(th), pymath.sin(th)])
         tan_pt = np.array([1.0, ex.tan_theta])
 
-        u_axis = Line(plane([-0.15, 0]), plane([1.3, 0]), color=EXACT, stroke_width=3)
-        w_axis = Line(plane([0, -0.1]), plane([0, 1.15]), color=MUTED, stroke_width=3)
-        u_lbl = tex(r"$u$: wanted eigenvector", size=20, color=EXACT).next_to(plane([1.3, 0]), RIGHT, buff=0.1)
-        w_lbl = tex(r"$w$: unwanted", size=20, color=MUTED).next_to(plane([0, 1.15]), UP, buff=0.06)
+        u_axis = Line(plane([-0.15, 0]), plane([1.3, 0]), color=WANTED, stroke_width=3)
+        w_axis = Line(plane([0, -0.1]), plane([0, 1.15]), color=UNWANTED, stroke_width=3)
+        u_lbl = tex(r"$u$: wanted eigenvector", size=20, color=WANTED).next_to(plane([1.3, 0]), RIGHT, buff=0.1)
+        w_lbl = tex(r"$w$: unwanted", size=20, color=UNWANTED).next_to(plane([0, 1.15]), UP, buff=0.06)
         circle = Arc(radius=plane.scale, start_angle=0, angle=np.radians(62), arc_center=plane.origin, color=FAINT, stroke_width=2)
         v_arrow = vec(plane.origin, plane(v), TRIAL, width=6)
         v_lbl = math(r"v", size=30, color=TRIAL).next_to(plane(v), UP, buff=0.08).shift(LEFT * 0.12)
@@ -273,10 +276,10 @@ class F02TanTheta(DeckSlide):
         nl, X = axis(0.5, 2.9, -6.6, -1.3, -1.85)
         spectrum = VGroup(
             nl,
-            Dot(X(ex.lam_u), radius=0.08, color=EXACT),
-            Dot(X(ex.lam_w), radius=0.08, color=MUTED),
-            math(r"\lambda_u", size=22, color=EXACT).next_to(X(ex.lam_u), DOWN, buff=0.1),
-            math(r"\lambda_w", size=22, color=MUTED).next_to(X(ex.lam_w), DOWN, buff=0.1),
+            Dot(X(ex.lam_u), radius=0.08, color=WANTED),
+            Dot(X(ex.lam_w), radius=0.08, color=UNWANTED),
+            math(r"\lambda_u", size=22, color=WANTED).next_to(X(ex.lam_u), DOWN, buff=0.1),
+            math(r"\lambda_w", size=22, color=UNWANTED).next_to(X(ex.lam_w), DOWN, buff=0.1),
             rho_marker(X(ex.rho)),
             math(r"\rho", size=22, color=TRIAL).next_to(X(ex.rho), DOWN, buff=0.1),
         )
@@ -289,13 +292,13 @@ class F02TanTheta(DeckSlide):
         nl2, X2 = axis(-1.35, 1.35, -6.4, -2.4, -3.0)
         both = VGroup(
             nl2,
-            Dot(X2(-1.0), radius=0.08, color=MUTED),
-            Dot(X2(0.0), radius=0.08, color=EXACT),
-            Dot(X2(1.0), radius=0.08, color=MUTED),
+            Dot(X2(-1.0), radius=0.08, color=UNWANTED),
+            Dot(X2(0.0), radius=0.08, color=TRIAL),
+            Dot(X2(1.0), radius=0.08, color=UNWANTED),
             rho_marker(X2(0.0)),
-            math(r"-1", size=20, color=MUTED).next_to(X2(-1.0), DOWN, buff=0.08),
-            math(r"0", size=20, color=EXACT).next_to(X2(0.0), DOWN, buff=0.08),
-            math(r"1", size=20, color=MUTED).next_to(X2(1.0), DOWN, buff=0.08),
+            math(r"-1", size=20, color=UNWANTED).next_to(X2(-1.0), DOWN, buff=0.08),
+            math(r"0", size=20, color=TRIAL).next_to(X2(0.0), DOWN, buff=0.08),
+            math(r"1", size=20, color=UNWANTED).next_to(X2(1.0), DOWN, buff=0.08),
             gap_mark(X2(-1.0) + UP * 0.22, X2(0.0) + UP * 0.22, r"$\delta$", size=19),
             gap_mark(X2(0.0) + UP * 0.22, X2(1.0) + UP * 0.22, r"$\delta$", size=19),
             tex(r"two-sided", size=19, color=MUTED).next_to(X2(1.35), RIGHT, buff=0.12),
@@ -385,18 +388,18 @@ class F03SinTwoTheta(DeckSlide):
         picture = two_by_two(plane, pair)
         th_lbl = math(r"\theta", size=26, color=SINE).move_to(plane(1.2 * story.unit(pair.theta / 2 + 0.12)))
         key = VGroup(
-            tex(r"\cx{trial}{dashed: old $A$ and its top eigenvector}", size=18),
-            tex(r"\cx{exact}{solid: new $A+H$ and its top eigenvector}", size=18),
+            tex(r"dashed: old $A$; \cx{trial}{amber: its top eigenvector}", size=18),
+            tex(r"solid: new $A+H$; \cx{wanted}{blue: its top eigenvector}", size=18),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.05).move_to([-6.9, 2.3, 0], aligned_edge=UP + LEFT)
 
         lam1, lam0 = pair.perturbed_eigenvalues[1], pair.perturbed_eigenvalues[0]
         nl, X = axis(0.8, 2.2, -6.5, -1.9, -1.45)
         spectrum = VGroup(
             nl,
-            Dot(X(lam0), radius=0.08, color=EXACT),
-            Dot(X(lam1), radius=0.08, color=MUTED),
-            math(r"\Lambda_0", size=24, color=EXACT).next_to(X(lam0), DOWN, buff=0.1),
-            math(r"\Lambda_1", size=24, color=EXACT).next_to(X(lam1), DOWN, buff=0.1),
+            Dot(X(lam0), radius=0.08, color=WANTED),
+            Dot(X(lam1), radius=0.08, color=UNWANTED),
+            math(r"\Lambda_0", size=24, color=WANTED).next_to(X(lam0), DOWN, buff=0.1),
+            math(r"\Lambda_1", size=24, color=UNWANTED).next_to(X(lam1), DOWN, buff=0.1),
             tex(r"eigenvalues of $A+H$", size=19, color=MUTED).next_to(X(2.2), RIGHT, buff=0.1),
         )
         sep = gap_mark(X(lam1) + UP * 0.22, X(lam0) + UP * 0.22, rf"$\delta={pair.delta_sin_two:.3f}$", size=20)
@@ -405,7 +408,7 @@ class F03SinTwoTheta(DeckSlide):
         small = Plane([-6.45, -3.2, 0], 1.05)
         a, b = np.radians(20.0), np.radians(70.0)
         twin = VGroup(
-            Line(small([0, 0]), small([1.25, 0]), color=EXACT, stroke_width=3),
+            Line(small([0, 0]), small([1.25, 0]), color=WANTED, stroke_width=3),
             Line(small([0, 0]), small(1.15 * story.unit(a)), color=TRIAL, stroke_width=3),
             Line(small([0, 0]), small(1.15 * story.unit(b)), color=TRIAL, stroke_width=3),
             angle_arc(small, [1, 0], story.unit(a), 0.55, SINE, width=3),
@@ -420,7 +423,7 @@ class F03SinTwoTheta(DeckSlide):
 
         size, w = 22, TEXT_W
         hyp = para(
-            r"\textbf{Hypotheses.} Only the new matrix's own spectrum: $\cx{exact}{\Lambda_0}$ in $[\beta,\alpha]$ and "
+            r"\textbf{Hypotheses.} Only the new matrix's own spectrum: $\cx{wanted}{\Lambda_0}$ in $[\beta,\alpha]$ and "
             r"$\Lambda_1$ outside $(\beta-\delta,\alpha+\delta)$. Nothing about the trial values $A_0$: useful when "
             r"the new matrix's eigenvalues are known to split but the trial values are not controlled.",
             width=w, size=size,
@@ -499,8 +502,8 @@ class F04TanTwoTheta(DeckSlide):
             lambda: math(r"\theta", size=26, color=SINE).move_to(plane(1.1 * story.unit(max(pair().theta, 0.2) / 2)))
         )
         key = VGroup(
-            tex(r"\cx{trial}{dashed: old $A$ and its top eigenvector}", size=18),
-            tex(r"\cx{exact}{solid: new $A+H$ and its top eigenvector}", size=18),
+            tex(r"dashed: old $A$; \cx{trial}{amber: its top eigenvector}", size=18),
+            tex(r"solid: new $A+H$; \cx{wanted}{blue: its top eigenvector}", size=18),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.05).move_to([-6.9, 2.3, 0], aligned_edge=UP + LEFT)
 
         nl, X = axis(0.8, 2.2, -6.5, -1.9, -1.45)
@@ -600,16 +603,16 @@ class F01bAngles(DeckSlide):
         v, v_perp = story.unit(th), story.unit(th + np.pi / 2)
 
         V = through_origin(plane, e1, reach, TRIAL, width=4)
-        U = through_origin(plane, v, reach, EXACT, width=4)
+        U = through_origin(plane, v, reach, WANTED, width=4)
         V_lbl = tex(r"$V=\operatorname{ran}E_0$", size=22, color=TRIAL).next_to(plane(reach * e1), DOWN, buff=0.1)
-        U_lbl = tex(r"$U=\operatorname{ran}F_0$", size=22, color=EXACT).next_to(plane(reach * v), RIGHT, buff=0.1)
+        U_lbl = tex(r"$U=\operatorname{ran}F_0$", size=22, color=WANTED).next_to(plane(reach * v), RIGHT, buff=0.1)
         arc = angle_arc(plane, e1, v, 1.15, SINE, width=4)
         th_lbl = math(r"\theta", size=28, color=SINE).move_to(plane(0.72 * story.unit(th / 2)))
 
         V_perp = DashedVMobject(through_origin(plane, e2, reach, TRIAL, width=3), num_dashes=24)
-        U_perp = DashedVMobject(through_origin(plane, v_perp, reach, EXACT, width=3), num_dashes=24)
+        U_perp = DashedVMobject(through_origin(plane, v_perp, reach, UNWANTED, width=3), num_dashes=24)
         Vp_lbl = math(r"V^{\perp}", size=24, color=TRIAL).next_to(plane(reach * e2), UP, buff=0.08)
-        Up_lbl = math(r"U^{\perp}", size=24, color=EXACT).next_to(plane(reach * v_perp), LEFT, buff=0.08)
+        Up_lbl = math(r"U^{\perp}", size=24, color=UNWANTED).next_to(plane(reach * v_perp), LEFT, buff=0.08)
         arc2 = angle_arc(plane, e2, v_perp, 0.8, SINE, width=4)
         th2_lbl = math(r"\theta", size=28, color=SINE).move_to(plane(0.52 * story.unit(np.pi / 2 + th / 2)))
         caption = para(
@@ -620,7 +623,7 @@ class F01bAngles(DeckSlide):
         size, w = 21, TEXT_W
         p_dir = para(
             r"\textbf{Directed} $\cx{sine}{\Theta_0}$: the angles from the trial subspace $\cx{trial}{V}$ to "
-            r"the target $\cx{exact}{U}$, one per direction of $V$. With $Q$ the projector onto $U$: "
+            r"the target $\cx{wanted}{U}$, one per direction of $V$. With $Q$ the projector onto $U$: "
             r"$\norm{\sin\Theta_0}=\norm{(I-Q)E_0}$.",
             width=w, size=size,
         )
@@ -650,8 +653,8 @@ class F01bAngles(DeckSlide):
 
         self.say(
             "Two ways to measure how far a subspace moved. Directed: stand in the trial subspace V and measure the "
-            "angle of each of its directions to the target U. That is Theta0, and its sine is the length of the part of E0 "
-            "outside V."
+            "angle of each of its directions to the target U. That is Theta0, and its sine measures the amount of the "
+            "trial subspace V lying outside the target U: the part of E0 outside U."
         )
         self.play(Create(U), Create(V), FadeIn(U_lbl, V_lbl), Create(arc), FadeIn(th_lbl), FadeIn(col[0]))
 
@@ -701,15 +704,15 @@ class F01cTwoByTwo(DeckSlide):
             Dot(X_old(a1), radius=0.08, color=MUTED),
             math(rf"a_0={a0:.2f}", size=20, color=TRIAL).next_to(X_old(a0), UP, buff=0.1),
             math(rf"a_1={a1:.2f}", size=20, color=MUTED).next_to(X_old(a1), UP, buff=0.1),
-            tex(r"old $A$", size=22, color=TRIAL).next_to(X_old(lo), LEFT, buff=0.15),
+            tex(r"old $A$", size=22, color=FG).next_to(X_old(lo), LEFT, buff=0.15),
         )
         new = VGroup(
             line_new,
-            Dot(X_new(l0), radius=0.08, color=EXACT),
-            Dot(X_new(l1), radius=0.08, color=MUTED),
-            math(rf"\lambda_0={l0:.2f}", size=20, color=EXACT).next_to(X_new(l0), UP, buff=0.1),
-            math(rf"\lambda_1={l1:.2f}", size=20, color=MUTED).next_to(X_new(l1), UP, buff=0.1),
-            tex(r"new $A+H$", size=22, color=EXACT).next_to(X_new(lo), LEFT, buff=0.15),
+            Dot(X_new(l0), radius=0.08, color=WANTED),
+            Dot(X_new(l1), radius=0.08, color=UNWANTED),
+            math(rf"\lambda_0={l0:.2f}", size=20, color=WANTED).next_to(X_new(l0), UP, buff=0.1),
+            math(rf"\lambda_1={l1:.2f}", size=20, color=UNWANTED).next_to(X_new(l1), UP, buff=0.1),
+            tex(r"new $A+H$", size=22, color=FG).next_to(X_new(lo), LEFT, buff=0.15),
         )
 
         def span_row(t_from: float, y_from: float, t_to: float, y_to: float, y: float, label: str) -> VGroup:
@@ -781,7 +784,8 @@ class F01cTwoByTwo(DeckSlide):
         self.say(
             "Why these four functions, and why four different gaps? Take the 2 by 2 matrix A plus H written in A's "
             "eigenbasis: A on the diagonal, H off the diagonal. Diagonalizing it turns the eigenvector by theta. "
-            "Old eigenvalues in amber, new ones in blue: the new ones are pushed apart."
+            "The old eigenvalues on top, the trial value a0 in amber; the new ones below, lambda0 blue and lambda1 "
+            "cyan: the new ones are pushed apart."
         )
         self.play(FadeIn(old), FadeIn(new), FadeIn(col[0]))
 

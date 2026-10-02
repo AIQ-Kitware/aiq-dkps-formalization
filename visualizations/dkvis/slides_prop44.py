@@ -39,7 +39,7 @@ from manim import (
 
 from dkvis.prop44 import Prop44Model
 from dkvis.slide_style import (
-    EXACT,
+    WANTED,
     FAINT,
     FG,
     MUTED,
@@ -98,10 +98,10 @@ class P01Claim(P4Slide):
 
         def panel(center):
             c = np.asarray(center, float)
-            U = Line(c + p3(-1.35, 0) * scale, c + p3(1.35, 0) * scale, color=EXACT, stroke_width=4)
+            U = Line(c + p3(-1.35, 0) * scale, c + p3(1.35, 0) * scale, color=WANTED, stroke_width=4)
             d = np.array([np.cos(theta), np.sin(theta), 0.0])
             V = Line(c - 1.35 * scale * d, c + 1.35 * scale * d, color=TRIAL, stroke_width=4)
-            lu = math(r"U", size=28, color=EXACT).next_to(c + p3(1.35, 0) * scale, DOWN, buff=0.08)
+            lu = math(r"U", size=28, color=WANTED).next_to(c + p3(1.35, 0) * scale, DOWN, buff=0.08)
             lv = math(r"V", size=28, color=TRIAL).next_to(c + 1.35 * scale * d, UP, buff=0.05)
             return VGroup(U, V, lu, lv)
 
@@ -131,7 +131,7 @@ class P01Claim(P4Slide):
 
         x_text, w_text = 0.2, 6.6
         t1 = para(
-            r"Many orthogonal maps carry the subspace $\cx{exact}{U}$ onto $\cx{trial}{V}$. "
+            r"Many orthogonal maps carry the subspace $\cx{wanted}{U}$ onto $\cx{trial}{V}$. "
             r"The \emph{direct rotation} turns by exactly the principal angles and does nothing else.",
             width=w_text,
             size=25,
@@ -202,12 +202,14 @@ class P01Claim(P4Slide):
 # The counterexample
 # ----------------------------------------------------------------------------
 
+# The two candidate maps are told apart by neutral styling (the direct rotation white, the
+# competitor gray), not by blue and amber, which mean U and V everywhere in the talk.
 PLANES = [
     # (column, row, label, angle, colour)
-    (0, 0, r"plane $\langle e_0,e_3\rangle$", np.pi / 4, EXACT),
-    (0, 1, r"plane $\langle e_1,e_2\rangle$", np.pi / 4, EXACT),
-    (1, 0, r"moving plane", np.pi / 2, TRIAL),
-    (1, 1, r"fixed plane", 0.0, TRIAL),
+    (0, 0, r"plane $\langle e_0,e_3\rangle$", np.pi / 4, FG),
+    (0, 1, r"plane $\langle e_1,e_2\rangle$", np.pi / 4, FG),
+    (1, 0, r"moving plane", np.pi / 2, MUTED),
+    (1, 1, r"fixed plane", 0.0, MUTED),
 ]
 
 
@@ -221,8 +223,8 @@ class P02Counterexample(P4Slide):
         t = ValueTracker(0.0)
 
         heads = VGroup(
-            tex(r"direct rotation $\mathcal R$", size=26, color=EXACT).move_to(centers[(0, 0)] + p3(0, 1.3)),
-            tex(r"competitor $W$", size=26, color=TRIAL).move_to(centers[(1, 0)] + p3(0, 1.3)),
+            tex(r"direct rotation $\mathcal R$", size=26, color=FG).move_to(centers[(0, 0)] + p3(0, 1.3)),
+            tex(r"competitor $W$", size=26, color=MUTED).move_to(centers[(1, 0)] + p3(0, 1.3)),
         )
         panels = VGroup()
         for col, row, label, alpha, color in PLANES:
@@ -280,12 +282,12 @@ class P02Counterexample(P4Slide):
         y_r, y_w = intro.get_bottom()[1] - 0.65, intro.get_bottom()[1] - 1.1
         r_sv, w_sv = MODEL.direct_singular_values, MODEL.competitor_singular_values
         bars = VGroup(
-            tex(r"$\mathcal R$", size=26, color=EXACT).move_to([x0 + 0.2, y_r, 0]),
-            stacked(r_sv, EXACT, y_r),
-            tex(rf"${R_NORMS['trace']:.3f}$", size=26, color=EXACT).move_to([x0 + 0.75 + unit * R_NORMS["trace"], y_r, 0], aligned_edge=LEFT),
-            tex(r"$W$", size=26, color=TRIAL).move_to([x0 + 0.2, y_w, 0]),
-            stacked(w_sv, TRIAL, y_w),
-            tex(rf"${W_NORMS['trace']:.3f}$", size=26, color=TRIAL).move_to([x0 + 0.75 + unit * W_NORMS["trace"], y_w, 0], aligned_edge=LEFT),
+            tex(r"$\mathcal R$", size=26, color=FG).move_to([x0 + 0.2, y_r, 0]),
+            stacked(r_sv, FG, y_r),
+            tex(rf"${R_NORMS['trace']:.3f}$", size=26, color=FG).move_to([x0 + 0.75 + unit * R_NORMS["trace"], y_r, 0], aligned_edge=LEFT),
+            tex(r"$W$", size=26, color=MUTED).move_to([x0 + 0.2, y_w, 0]),
+            stacked(w_sv, MUTED, y_w),
+            tex(rf"${W_NORMS['trace']:.3f}$", size=26, color=MUTED).move_to([x0 + 0.75 + unit * W_NORMS["trace"], y_w, 0], aligned_edge=LEFT),
         )
         bars_title = tex(r"trace norm $=$ all chords laid end to end", size=24, color=MUTED).move_to(
             [x0, y_r + 0.45, 0], aligned_edge=LEFT
@@ -304,16 +306,16 @@ class P02Counterexample(P4Slide):
             (r"sum of chords (trace)", "trace", True),
         ]
         body = r"\renewcommand{\arraystretch}{1.3}\begin{array}{l|cc|c}"
-        body += r"\norm{I-\,\cdot\,} & \cx{exact}{\mathcal R} & \cx{trial}{W} & \text{less motion}\\ \hline"
+        body += r"\norm{I-\,\cdot\,} & \cx{fg}{\mathcal R} & \cx{muted}{W} & \text{less motion}\\ \hline"
         for label, key, flip in rows:
-            winner = r"\cx{trial}{W}" if W_NORMS[key] < R_NORMS[key] else r"\cx{exact}{\mathcal R}"
+            winner = r"\cx{muted}{W}" if W_NORMS[key] < R_NORMS[key] else r"\cx{fg}{\mathcal R}"
             body += rf"\text{{{label}}} & {R_NORMS[key]:.3f} & {W_NORMS[key]:.3f} & {winner}\\"
         body += r"\end{array}"
         table = math(body, size=24)
         table.move_to([x0, y_w - 0.35, 0], aligned_edge=UP + LEFT)
         if table.get_right()[0] > 6.85:
             table.scale((6.85 - x0) / (table.get_right()[0] - x0), about_edge=LEFT)
-        hl = Rectangle(width=table.width + 0.16, height=0.42, stroke_color=SINE, stroke_width=2).move_to(
+        hl = Rectangle(width=table.width + 0.16, height=0.42, stroke_color=FG, stroke_width=2).move_to(
             [table.get_center()[0], table.get_bottom()[1] + 0.22, 0]
         )
 
@@ -376,12 +378,12 @@ class P03Why(P4Slide):
 
         c45, c90 = chord(np.pi / 4), chord(np.pi / 2)
         pts = VGroup(
-            Dot(axes.c2p(0, 0), color=TRIAL),
-            Dot(axes.c2p(90, c90), color=TRIAL),
-            Dot(axes.c2p(45, c45), color=EXACT),
+            Dot(axes.c2p(0, 0), color=MUTED),
+            Dot(axes.c2p(90, c90), color=MUTED),
+            Dot(axes.c2p(45, c45), color=FG),
         )
-        secant = DashedLine(axes.c2p(0, 0), axes.c2p(90, c90), color=TRIAL, stroke_width=3)
-        mid = Dot(axes.c2p(45, c90 / 2), color=TRIAL, radius=0.06)
+        secant = DashedLine(axes.c2p(0, 0), axes.c2p(90, c90), color=MUTED, stroke_width=3)
+        mid = Dot(axes.c2p(45, c90 / 2), color=MUTED, radius=0.06)
         gap_line = Line(axes.c2p(45, c90 / 2), axes.c2p(45, c45), color=FG, stroke_width=3)
 
         x0, w = 0.35, 6.4

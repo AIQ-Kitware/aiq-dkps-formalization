@@ -41,13 +41,15 @@ from manim import (
 
 from dkvis import sine_theta_story as story
 from dkvis.slide_style import (
-    EXACT,
     FG,
+    GAP,
     MUTED,
     PANEL,
     RESID,
     SINE,
     TRIAL,
+    UNWANTED,
+    WANTED,
     DeckSlide,
     boxed,
     math,
@@ -196,24 +198,24 @@ class F02cTanWhy(DeckSlide):
         one_sided = VGroup(
             nl1,
             band(X1, 0.1, 0.5, TRIAL),
-            band(X1, 1.4, 2.5, FG, opacity=0.16),
+            band(X1, 1.4, 2.5, UNWANTED, opacity=0.16),
             *[Dot(X1(t), radius=0.07, color=TRIAL) for t in (0.1, 0.5)],
-            *[Dot(X1(t), radius=0.07, color=MUTED) for t in (1.4, 1.9, 2.5)],
+            *[Dot(X1(t), radius=0.07, color=UNWANTED) for t in (1.4, 1.9, 2.5)],
             math(r"x^*A_0x", size=19, color=TRIAL).next_to(X1(0.3), DOWN, buff=0.2),
-            math(r"y^*\Lambda_1y", size=19, color=FG).next_to(X1(1.95), DOWN, buff=0.2),
+            math(r"y^*\Lambda_1y", size=19, color=UNWANTED).next_to(X1(1.95), DOWN, buff=0.2),
             gap_mark(X1(0.5) + UP * 0.2, X1(1.4) + UP * 0.2, r"$\ge\delta$", size=19),
             tex(r"one-sided", size=19, color=MUTED).next_to(X1(2.8), RIGHT, buff=0.12),
         )
         nl2, X2 = axis(-1.4, 2.8, -6.3, -0.9, -2.95)
         two_sided = VGroup(
             nl2,
-            band(X2, -1.0, 1.0, FG, opacity=0.16),
-            Dot(X2(-1.0), radius=0.07, color=MUTED),
-            Dot(X2(1.0), radius=0.07, color=MUTED),
+            band(X2, -1.0, 1.0, UNWANTED, opacity=0.16),
+            Dot(X2(-1.0), radius=0.07, color=UNWANTED),
+            Dot(X2(1.0), radius=0.07, color=UNWANTED),
             Dot(X2(0.0), radius=0.08, color=TRIAL),
             math(r"x^*A_0x=0=y^*\Lambda_1y", size=19).next_to(X2(0.0), DOWN, buff=0.2),
-            math(r"-1", size=18, color=MUTED).next_to(X2(-1.0), UP, buff=0.12),
-            math(r"1", size=18, color=MUTED).next_to(X2(1.0), UP, buff=0.12),
+            math(r"-1", size=18, color=UNWANTED).next_to(X2(-1.0), UP, buff=0.12),
+            math(r"1", size=18, color=UNWANTED).next_to(X2(1.0), UP, buff=0.12),
             tex(r"two-sided", size=19, color=MUTED).next_to(X2(2.8), RIGHT, buff=0.12),
         )
 
@@ -295,10 +297,10 @@ class F03bReflect(DeckSlide):
         perp = DashedVMobject(through_origin(plane, [0.0, 1.0], 1.6, TRIAL, width=2), num_dashes=18)
 
         new = VGroup(
-            ellipse(plane, pair.perturbed, color=EXACT, width=3),
-            through_origin(plane, story.unit(th), reach, EXACT, width=3.5),
+            ellipse(plane, pair.perturbed, color=FG, width=3),
+            through_origin(plane, story.unit(th), reach, WANTED, width=3.5),
         )
-        new_lbl = tex(r"$A+H$", size=22, color=EXACT).next_to(plane(reach * story.unit(th)), RIGHT, buff=0.08)
+        new_lbl = tex(r"$A+H$", size=22, color=FG).next_to(plane(reach * story.unit(th)), RIGHT, buff=0.08)
         reflected = VGroup(
             DashedVMobject(ellipse(plane, pair.reflected, color=FG, width=3), num_dashes=56),
             through_origin(plane, story.unit(-th), reach, FG, width=3.5),
@@ -308,7 +310,7 @@ class F03bReflect(DeckSlide):
         arc_lbl = math(r"2\theta", size=28, color=SINE).move_to(plane.origin + RIGHT * 0.95)
 
         mats = VGroup(
-            math(r"A+H=\begin{pmatrix}a_0&b\\ b&a_1\end{pmatrix}", size=26, color=EXACT),
+            math(r"A+H=\begin{pmatrix}a_0&b\\ b&a_1\end{pmatrix}", size=26, color=FG),
             math(r"A+\Sigma H\Sigma=\begin{pmatrix}a_0&-b\\ -b&a_1\end{pmatrix}", size=26),
         ).arrange(RIGHT, buff=0.5).move_to([-4.0, -2.65, 0])
         same = tex(rf"same eigenvalues ${l0:.2f}$ and ${l1:.2f}$; the eigenvectors are mirror images", size=19, color=MUTED).next_to(mats, DOWN, buff=0.12)
@@ -472,7 +474,7 @@ class F04bJacobi(DeckSlide):
         plane = Plane([-4.3, 0.25, 0], 1.2)
         reach = 2.1
 
-        ell = ellipse(plane, pair.perturbed, color=EXACT, width=3)
+        ell = ellipse(plane, pair.perturbed, color=FG, width=3)
         old_axes = VGroup(
             DashedVMobject(through_origin(plane, [1.0, 0.0], reach, MUTED, width=2), num_dashes=24),
             DashedVMobject(through_origin(plane, [0.0, 1.0], 1.7, MUTED, width=2), num_dashes=20),
@@ -485,7 +487,7 @@ class F04bJacobi(DeckSlide):
         )
         arc = always_redraw(lambda: angle_arc(plane, [1.0, 0.0], story.unit(max(phi.get_value(), 1e-3)), 1.0, SINE, width=4))
         key = VGroup(
-            tex(r"\cx{exact}{$A+H$}", size=19),
+            tex(r"\cx{wanted}{$A+H$}", size=19),
             tex(r"\cx{trial}{the basis, turned by $\varphi$}", size=19),
             tex(r"\cx{muted}{dashed: $A$'s eigenbasis}", size=19),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.05).move_to([-6.9, 2.35, 0], aligned_edge=UP + LEFT)
@@ -582,22 +584,22 @@ class F04cRepulsion(DeckSlide):
         def new_marks():
             l0, l1 = pair().perturbed_eigenvalues
             return VGroup(
-                Dot(X_new(l0), radius=0.08, color=EXACT), Dot(X_new(l1), radius=0.08, color=MUTED),
-                math(r"\lambda_0", size=22, color=EXACT).next_to(X_new(l0), DOWN, buff=0.1),
-                math(r"\lambda_1", size=22, color=MUTED).next_to(X_new(l1), DOWN, buff=0.1),
+                Dot(X_new(l0), radius=0.08, color=WANTED), Dot(X_new(l1), radius=0.08, color=UNWANTED),
+                math(r"\lambda_0", size=22, color=WANTED).next_to(X_new(l0), DOWN, buff=0.1),
+                math(r"\lambda_1", size=22, color=UNWANTED).next_to(X_new(l1), DOWN, buff=0.1),
             )
 
         lines = VGroup(
-            line_old, tex(r"old $A$", size=20, color=TRIAL).next_to(X_old(0.85), LEFT, buff=0.12),
-            line_new, tex(r"new $A+H$", size=20, color=EXACT).next_to(X_new(0.85), LEFT, buff=0.12),
+            line_old, tex(r"old $A$", size=20, color=FG).next_to(X_old(0.85), LEFT, buff=0.12),
+            line_new, tex(r"new $A+H$", size=20, color=FG).next_to(X_new(0.85), LEFT, buff=0.12),
         )
         marks = VGroup(always_redraw(old_marks), always_redraw(new_marks))
         rows = readout_rows(
             [
-                (r"\text{old gap } a_0-a_1 =", lambda: g.get_value(), TRIAL, 3, None),
-                (r"\text{new gap } \lambda_0-\lambda_1 =", lambda: pair().delta_sin_two, EXACT, 3, None),
+                (r"\text{old gap } a_0-a_1 =", lambda: g.get_value(), GAP, 3, None),
+                (r"\text{new gap } \lambda_0-\lambda_1 =", lambda: pair().delta_sin_two, GAP, 3, None),
                 (r"\theta =", lambda: pymath.degrees(pair().line_angle), SINE, 1, r"^\circ"),
-                (r"(\lambda_0-\lambda_1)\cos2\theta =", lambda: pair().delta_sin_two * pymath.cos(2 * pair().line_angle), TRIAL, 3, None),
+                (r"(\lambda_0-\lambda_1)\cos2\theta =", lambda: pair().delta_sin_two * pymath.cos(2 * pair().line_angle), GAP, 3, None),
             ],
             size=24,
         ).move_to([-3.6, -1.85, 0])

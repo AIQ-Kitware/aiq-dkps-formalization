@@ -1,17 +1,32 @@
 """Shared look for the manim-slides decks.
 
 One color per mathematical role, used identically on every slide, so the
-audience can read a picture by color before reading any label:
+audience can read a picture by color before reading any label.  The roles
+follow the Davis--Kahan story: blue is what we want, amber is what we
+computed, cyan is the exact part we do not want, pink is how much of our
+computation points into it, green is the residual that exposes that error,
+and violet is the separation that keeps it from hiding.
 
-========  ==============================================  ==================
-role      object                                          constant
-========  ==============================================  ==================
-exact     the true eigenspace ``U = ran F0``, eigenvectors ``EXACT``
-trial     the trial subspace ``V = ran E0``, ``v``, ``A0``  ``TRIAL``
-angle     ``sin Theta0``, the part of ``v`` outside ``U``    ``SINE``
-residual  ``R = A E0 - E0 A0``                              ``RESID``
-gap       ``delta`` and the separating window               ``GAP``
-========  ==============================================  ==================
+========  ==================================================  ============
+role      objects                                             constant
+========  ==================================================  ============
+wanted    ``U``, ``F0``, ``Lambda0``, wanted eigenvectors       ``WANTED``
+trial     ``V``, ``E0``, ``A0``, ``v``, Ritz values, ``rho``    ``TRIAL``
+unwanted  ``U-perp``, ``F1``, ``Lambda1``, unwanted eigen-      ``UNWANTED``
+          vectors and eigenvalues (exact, but not wanted)
+angle     ``theta``, ``sin Theta0``, ``X``, the part of a trial   ``SINE``
+          vector outside ``U``
+residual  ``r``, ``R``, residual components                     ``RESID``
+gap       ``delta`` and the separating window                   ``GAP``
+neutral   ``A``, ``A~``, ``H``, axes, helper geometry, prose      ``FG``
+========  ==================================================  ============
+
+``MUTED`` and ``FAINT`` are presentation only (secondary labels, guides, context)
+and never mean a role.  The same names exist as LaTeX colors for ``\\cx``:
+``wanted``, ``trial``, ``unwanted``, ``sine``, ``resid``, ``gap``, ``fg``, ``muted``.
+Parts that are not about the mathematics (the formalization process, the
+comparison of maps in Proposition 4.4) use neutral colors only, so the roles
+keep their meaning.
 
 Set ``DKVIS_THEME=light`` before rendering for a light-background deck (useful
 for bright rooms and for printing); the default is dark.
@@ -86,7 +101,8 @@ FG = PALETTE["FG"]
 MUTED = PALETTE["MUTED"]
 FAINT = PALETTE["FAINT"]
 PANEL = PALETTE["PANEL"]
-EXACT = PALETTE["EXACT"]
+WANTED = PALETTE["WANTED"]
+UNWANTED = PALETTE["UNWANTED"]
 TRIAL = PALETTE["TRIAL"]
 SINE = PALETTE["SINE"]
 RESID = PALETTE["RESID"]
@@ -113,7 +129,8 @@ TEMPLATE.add_to_preamble(
 \usepackage{{xcolor}}
 \definecolor{{fg}}{{HTML}}{{{_hex(FG)}}}
 \definecolor{{muted}}{{HTML}}{{{_hex(MUTED)}}}
-\definecolor{{exact}}{{HTML}}{{{_hex(EXACT)}}}
+\definecolor{{wanted}}{{HTML}}{{{_hex(WANTED)}}}
+\definecolor{{unwanted}}{{HTML}}{{{_hex(UNWANTED)}}}
 \definecolor{{trial}}{{HTML}}{{{_hex(TRIAL)}}}
 \definecolor{{sine}}{{HTML}}{{{_hex(SINE)}}}
 \definecolor{{resid}}{{HTML}}{{{_hex(RESID)}}}
