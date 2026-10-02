@@ -303,7 +303,8 @@ class F02TanTheta(DeckSlide):
         hyp = para(
             r"\textbf{Hypotheses.} The trial matrix is the Rayleigh--Ritz one, $\cx{trial}{A_0}=E_0^*(A+H)E_0$ "
             r"(equivalently $H_0=0$), with eigenvalues in $[\beta,\alpha]$, and every unwanted eigenvalue of $A+H$ "
-            r"is at least $\alpha+\delta$: all on one side.",
+            r"is at least $\alpha+\delta$: all on one side. This is the situation when Rayleigh--Ritz targets the "
+            r"lowest (or, mirrored, the highest) eigenvalues.",
             width=w, size=size,
         )
         box = boxed(
@@ -418,7 +419,8 @@ class F03SinTwoTheta(DeckSlide):
         size, w = 22, TEXT_W
         hyp = para(
             r"\textbf{Hypotheses.} Only the new matrix's own spectrum: $\cx{exact}{\Lambda_0}$ in $[\beta,\alpha]$ and "
-            r"$\Lambda_1$ outside $(\beta-\delta,\alpha+\delta)$. Nothing about the trial values $A_0$.",
+            r"$\Lambda_1$ outside $(\beta-\delta,\alpha+\delta)$. Nothing about the trial values $A_0$: useful when "
+            r"the new matrix's eigenvalues are known to split but the trial values are not controlled.",
             width=w, size=size,
         )
         box = boxed(
@@ -541,7 +543,8 @@ class F04TanTwoTheta(DeckSlide):
         )
         prior = para(r"Nothing is assumed about $A+H$: an \emph{a priori} bound, from $A$ and $H$ alone.", width=w, size=size)
         example = para(
-            r"The gap example from the start is exactly this case, and the bound is an equality at every gap: "
+            r"The gap example from the start is exactly this case. In $2\times2$ the bound is the Jacobi rotation "
+            r"formula $\tan2\theta=2b/(a_0-a_1)$, an equality at every gap: "
             rf"$g\tan2\theta=2\varepsilon={2 * eps:.2f}$. As $g\to0$, $\tan2\theta\to\infty$, so $2\theta\to90^\circ$ "
             r"and $\theta\to45^\circ$, never beyond.",
             width=w, size=size,
@@ -578,14 +581,101 @@ class F04TanTwoTheta(DeckSlide):
 
 
 # ----------------------------------------------------------------------------
-# F5. One example, four theorems
+# F1b. Directed and ambient angles
 # ----------------------------------------------------------------------------
 
 
-class F05OneExample(DeckSlide):
+class F01bAngles(DeckSlide):
     depth = "*"
-    title = r"One $2\times2$ example, four theorems"
-    kicker = r"Same $A$, $H$ and angle; each theorem measures a different gap"
+    title = "Directed and ambient angles"
+    kicker = r"$\Theta_0$ looks from the trial subspace; $\Theta$ looks at the whole rotation"
+
+    def body(self) -> None:
+        th = np.radians(28.0)
+        plane = Plane([-4.4, -0.35, 0], 2.0)
+        reach = 1.15
+        e1, e2 = np.array([1.0, 0.0]), np.array([0.0, 1.0])
+        v, v_perp = story.unit(th), story.unit(th + np.pi / 2)
+
+        U = through_origin(plane, e1, reach, TRIAL, width=4)
+        V = through_origin(plane, v, reach, EXACT, width=4)
+        U_lbl = tex(r"$U=\operatorname{ran}E_0$", size=22, color=TRIAL).next_to(plane(reach * e1), DOWN, buff=0.1)
+        V_lbl = tex(r"$V=\operatorname{ran}F_0$", size=22, color=EXACT).next_to(plane(reach * v), RIGHT, buff=0.1)
+        arc = angle_arc(plane, e1, v, 1.15, SINE, width=4)
+        th_lbl = math(r"\theta", size=28, color=SINE).move_to(plane(0.72 * story.unit(th / 2)))
+
+        U_perp = DashedVMobject(through_origin(plane, e2, reach, TRIAL, width=3), num_dashes=24)
+        V_perp = DashedVMobject(through_origin(plane, v_perp, reach, EXACT, width=3), num_dashes=24)
+        Up_lbl = math(r"U^{\perp}", size=24, color=TRIAL).next_to(plane(reach * e2), UP, buff=0.08)
+        Vp_lbl = math(r"V^{\perp}", size=24, color=EXACT).next_to(plane(reach * v_perp), LEFT, buff=0.08)
+        arc2 = angle_arc(plane, e2, v_perp, 0.8, SINE, width=4)
+        th2_lbl = math(r"\theta", size=28, color=SINE).move_to(plane(0.52 * story.unit(np.pi / 2 + th / 2)))
+        caption = para(
+            r"The rotation that takes $U$ to $V$ also takes $U^\perp$ to $V^\perp$, by the same angle.",
+            width=5.0, size=19, color=MUTED, align="centering",
+        ).move_to([-4.4, -3.2, 0])
+
+        size, w = 21, TEXT_W
+        p_dir = para(
+            r"\textbf{Directed} $\cx{sine}{\Theta_0}$: the angles from the trial subspace $\cx{trial}{U}$ to "
+            r"$\cx{exact}{V}$, one per direction of $U$. With $Q$ the projector onto $V$: "
+            r"$\norm{\sin\Theta_0}=\norm{(I-Q)E_0}$.",
+            width=w, size=size,
+        )
+        p_amb = para(
+            r"\textbf{Ambient} $\cx{sine}{\Theta}$: the angles of the whole rotation, so each nonzero angle appears "
+            r"twice. With $P$ the projector onto $U$: $\norm{\sin\Theta}=\norm{P-Q}$.",
+            width=w, size=size,
+        )
+        p_norms = para(
+            r"They agree in the operator norm; in the Frobenius norm $\norm{\sin\Theta}_F=\sqrt2\,\norm{\sin\Theta_0}_F$ "
+            r"(here $\sqrt2\sin\theta$ against $\sin\theta$).",
+            width=w, size=size,
+        )
+        p_rh = para(
+            r"Directed bounds compare with the residual $\cx{resid}{R}=HE_0$, the part of $H$ acting on $U$; ambient "
+            r"bounds compare with all of $H$. Always $\norm{R}\le\norm{H}$.",
+            width=w, size=size,
+        )
+        p_sin = para(
+            r"With one gap, $\sin\Theta$ has no ambient form in every norm: Davis and Kahan's $2\times2$ example has "
+            r"$\delta\norm{\sin\Theta}_F=2>\sqrt3=\norm{H}_F$. Proposition~6.1 recovers $\delta\norm{\sin\Theta}\le\norm{H}$ "
+            r"with a second gap, between $A_1$ and $\Lambda_0$.",
+            width=w, size=size - 1, color=MUTED,
+        )
+        col = text_column(p_dir, p_amb, p_norms, p_rh, p_sin, top=self.content_top - 0.1)
+
+        self.say(
+            "Two ways to measure how far a subspace moved. Directed: stand in the trial subspace U and measure the "
+            "angle of each of its directions to V. That is Theta0, and its sine is the length of the part of E0 "
+            "outside V."
+        )
+        self.play(Create(U), Create(V), FadeIn(U_lbl, V_lbl), Create(arc), FadeIn(th_lbl), FadeIn(col[0]))
+
+        self.say(
+            "Ambient: look at the whole rotation. Turning U onto V also turns the complement U perp onto V perp, by "
+            "the same angle, so every angle shows up twice. Its sine is the difference of the two projectors. In the "
+            "operator norm the two agree; in the Frobenius norm the ambient one is root 2 larger."
+        )
+        self.play(Create(U_perp), Create(V_perp), FadeIn(Up_lbl, Vp_lbl), Create(arc2), FadeIn(th2_lbl, caption), FadeIn(col[1]), FadeIn(col[2]))
+
+        self.say(
+            "Directed bounds pay with the residual, the part of H that acts on the trial subspace; ambient bounds pay "
+            "with all of H. The sin Theta theorem only has the directed form: with one gap, the ambient form fails in "
+            "some norms, and Proposition 6.1 needs a second gap to get it back."
+        )
+        self.play(FadeIn(col[3]), FadeIn(col[4]))
+
+
+# ----------------------------------------------------------------------------
+# F1c. One rotation, four trigonometric functions
+# ----------------------------------------------------------------------------
+
+
+class F01cTwoByTwo(DeckSlide):
+    depth = "*"
+    title = r"One rotation, four trigonometric functions"
+    kicker = r"For a $2\times2$ matrix all four are exact identities, each with its own gap"
 
     def body(self) -> None:
         eps = story.PERTURBATION_EPS
@@ -594,7 +684,8 @@ class F05OneExample(DeckSlide):
         fam = pair.family()
         a0, a1 = pair.A.diagonal()
         l0, l1 = pair.perturbed_eigenvalues
-        lo, hi, x_lo, x_hi = 1.3, 1.7, -5.55, -0.75
+        th = pair.line_angle
+        lo, hi, x_lo, x_hi = 1.3, 1.7, -5.55, -0.95
         line_old, X_old = axis(lo, hi, x_lo, x_hi, 1.75)
         line_new, X_new = axis(lo, hi, x_lo, x_hi, 0.75)
 
@@ -605,16 +696,16 @@ class F05OneExample(DeckSlide):
             line_old,
             Dot(X_old(a0), radius=0.08, color=TRIAL),
             Dot(X_old(a1), radius=0.08, color=MUTED),
-            math(rf"{a0:.2f}", size=20, color=TRIAL).next_to(X_old(a0), UP, buff=0.1),
-            math(rf"{a1:.2f}", size=20, color=MUTED).next_to(X_old(a1), UP, buff=0.1),
+            math(rf"a_0={a0:.2f}", size=20, color=TRIAL).next_to(X_old(a0), UP, buff=0.1),
+            math(rf"a_1={a1:.2f}", size=20, color=MUTED).next_to(X_old(a1), UP, buff=0.1),
             tex(r"old $A$", size=22, color=TRIAL).next_to(X_old(lo), LEFT, buff=0.15),
         )
         new = VGroup(
             line_new,
             Dot(X_new(l0), radius=0.08, color=EXACT),
             Dot(X_new(l1), radius=0.08, color=MUTED),
-            math(rf"{l0:.2f}", size=20, color=EXACT).next_to(X_new(l0), UP, buff=0.1),
-            math(rf"{l1:.2f}", size=20, color=MUTED).next_to(X_new(l1), UP, buff=0.1),
+            math(rf"\lambda_0={l0:.2f}", size=20, color=EXACT).next_to(X_new(l0), UP, buff=0.1),
+            math(rf"\lambda_1={l1:.2f}", size=20, color=MUTED).next_to(X_new(l1), UP, buff=0.1),
             tex(r"new $A+H$", size=22, color=EXACT).next_to(X_new(lo), LEFT, buff=0.15),
         )
 
@@ -631,68 +722,84 @@ class F05OneExample(DeckSlide):
             return VGroup(guides, bar, text)
 
         y_old, y_new = 1.75, 0.75
-        row_sin = span_row(l1, y_new, a0, y_old, -0.45, rf"$\sin\Theta,\ \tan\Theta$: $\cx{{trial}}{{A_0}}$ to $\Lambda_1$, $\delta={fam['sin'][0]:.2f}$")
-        row_sin2 = span_row(l1, y_new, l0, y_new, -1.45, rf"$\sin2\Theta$: $\Lambda_1$ to $\cx{{exact}}{{\Lambda_0}}$, $\delta={fam['sin2'][0]:.2f}$")
-        row_tan2 = span_row(a1, y_old, a0, y_old, -2.45, rf"$\tan2\Theta$: $A_1$ to $\cx{{trial}}{{A_0}}$, $\delta={fam['tan2'][0]:.2f}$")
+        row_tan2 = span_row(a1, y_old, a0, y_old, -0.45, rf"old gap $a_0-a_1={fam['tan2'][0]:.2f}$")
+        row_sin2 = span_row(l1, y_new, l0, y_new, -1.45, rf"new gap $\lambda_0-\lambda_1={fam['sin2'][0]:.2f}$")
+        row_tan = span_row(l1, y_new, a0, y_old, -2.45, rf"trial value to new unwanted $a_0-\lambda_1={fam['tan'][0]:.2f}$")
 
-        def row(name: str, key: str, fn: str, factor: str) -> list:
-            delta, lhs, rhs = fam[key]
-            rel = "=" if pymath.isclose(lhs, rhs, rel_tol=1e-9) else "<"
-            return [
+        size = 20
+        mat = VGroup(
+            math(r"A+H=\begin{pmatrix}a_0&b\\ b&a_1\end{pmatrix}", size=30),
+            para(
+                rf"in $A$'s eigenbasis: $A=\operatorname{{diag}}(a_0,a_1)$, $H$ off-diagonal with $b={eps:g}$. "
+                rf"The top eigenvector of $A+H$ is turned by $\theta={pymath.degrees(th):.1f}^\circ$; its "
+                r"eigenvalues are $\lambda_0>\lambda_1$.",
+                width=3.9, size=size - 1,
+            ),
+        ).arrange(RIGHT, buff=0.25)
+
+        def ident(name: str, lhs: str, rhs: str, value: str, rel: str = "=") -> VGroup:
+            return VGroup(
                 math(name, size=24, color=SINE),
-                math(rf"{delta:.2f}", size=24, color=GAP),
-                math(rf"\delta\,{fn}={lhs:.3f}", size=24),
-                math(rel, size=24, color=RESID if rel == "=" else FG),
-                math(rf"{factor}\norm{{R}}={rhs:.2f}", size=24, color=RESID if rel == "=" else FG),
-            ]
+                math(rf"{lhs}{rel}{rhs}", size=28),
+                math(value, size=22, color=MUTED),
+            )
 
-        header = [tex(h, size=21, color=MUTED) for h in ("theorem", r"$\delta$", "left side", "", "right side")]
-        table_rows = [
-            header,
-            row(r"\sin\Theta", "sin", r"\sin\theta", ""),
-            row(r"\tan\Theta", "tan", r"\tan\theta", ""),
-            row(r"\sin2\Theta", "sin2", r"\sin2\theta", "2"),
-            row(r"\tan2\Theta", "tan2", r"\tan2\theta", "2"),
-        ]
-        xs = (0.75, 2.0, 2.9, 4.85, 5.25)
-        top = self.content_top - 0.45
-        table = VGroup()
-        for i, cells in enumerate(table_rows):
-            for x, cell in zip(xs, cells):
-                cell.move_to([x, top - 0.55 * i, 0], aligned_edge=LEFT)
-            table.add(VGroup(*cells))
-        rule = Line([0.7, top - 0.27, 0], [6.85, top - 0.27, 0], color=FAINT, stroke_width=2)
-        caption = tex(
-            rf"$g={pair.gap:g}$, $\norm{{H}}_2=\norm{{R}}=\varepsilon={eps:g}$, $\theta={pymath.degrees(pair.line_angle):.1f}^\circ$",
-            size=21, color=MUTED,
-        ).next_to(table, DOWN, buff=0.2, aligned_edge=LEFT)
-        takeaway = para(
-            r"Three of the four are equalities here. The $\sin\Theta$ bound is the only one with room to spare in "
-            r"this example; it is sharp on another (``The constant 1 cannot be improved''). Davis and Kahan state "
-            r"that all four constants are best possible.",
-            width=6.1, size=21,
-        ).next_to(caption, DOWN, buff=0.3, aligned_edge=LEFT)
+        b = eps
+        rows = VGroup(
+            ident(r"\tan2\Theta", r"\tan2\theta", r"\frac{2b}{\cx{gap}{a_0-a_1}}", rf"={2 * b / fam['tan2'][0]:.3f}"),
+            ident(r"\sin2\Theta", r"\sin2\theta", r"\frac{2b}{\cx{gap}{\lambda_0-\lambda_1}}", rf"={2 * b / fam['sin2'][0]:.3f}"),
+            ident(r"\tan\Theta", r"\tan\theta", r"\frac{b}{\cx{gap}{a_0-\lambda_1}}", rf"={b / fam['tan'][0]:.3f}"),
+            ident(r"\sin\Theta", r"\sin\theta", r"\frac{b}{\cx{gap}{a_0-\lambda_1}}", rf"\sin\theta={pymath.sin(th):.3f}", rel="<"),
+        )
+        for r in rows:
+            r[1].move_to([2.05, 0, 0], aligned_edge=LEFT)
+            r[0].move_to([0.6, 0, 0], aligned_edge=LEFT)
+            r[2].move_to([4.95, 0, 0], aligned_edge=LEFT)
+        rows.arrange(DOWN, aligned_edge=LEFT, buff=0.18)
+        for r in rows:  # re-align columns after arranging rows
+            y = r.get_center()[1]
+            r[0].move_to([0.6, y, 0], aligned_edge=LEFT)
+            r[1].move_to([2.05, y, 0], aligned_edge=LEFT)
+            r[2].move_to([4.95, y, 0], aligned_edge=LEFT)
+        derive = para(
+            r"From the eigenvector equation's second row, $b\cos\theta+a_1\sin\theta=\lambda_0\sin\theta$, so "
+            r"$\tan\theta=b/(\lambda_0-a_1)$, and $\lambda_0-a_1=a_0-\lambda_1$. The double-angle lines are the "
+            r"Jacobi rotation formula and its companion.",
+            width=TEXT_W, size=size - 2, color=MUTED,
+        )
+        close = para(
+            r"With $\norm{H}=\norm{R}=|b|$, multiplying out gives the four theorems' conclusions, three of them with "
+            r"equality. The theorems make these $2\times2$ identities into inequalities for subspaces of any dimension, "
+            r"in every unitarily invariant norm.",
+            width=TEXT_W, size=size,
+        )
+        col = text_column(mat, rows, derive, close, top=self.content_top - 0.1, buff=0.28)
 
         self.say(
-            "Put the four side by side on one example: the 2 by 2 from the gap slides, with gap 0.1 and H of size 0.12. "
-            "Old eigenvalues in amber, new in blue. Same matrices, same angle, about 34 degrees."
+            "Why these four functions, and why four different gaps? Take the 2 by 2 matrix A plus H written in A's "
+            "eigenbasis: A on the diagonal, H off the diagonal. Diagonalizing it turns the eigenvector by theta. "
+            "Old eigenvalues in amber, new ones in blue: the new ones are pushed apart."
         )
-        self.play(FadeIn(old), FadeIn(new), FadeIn(table[0]), Create(rule), FadeIn(caption))
+        self.play(FadeIn(old), FadeIn(new), FadeIn(col[0]))
 
         self.say(
-            "sin Theta and tan Theta measure delta from the trial value, the old wanted eigenvalue, to the new unwanted "
-            "one. With that delta, tan Theta is exact; sin Theta has room to spare."
+            "The Jacobi rotation formula: tan 2 theta is 2b over the old gap. Exactly the tan 2 Theta theorem, with "
+            "equality."
         )
-        self.play(FadeIn(row_sin), FadeIn(table[1]), FadeIn(table[2]))
+        self.play(FadeIn(row_tan2), FadeIn(rows[0]))
 
-        self.say("sin 2 Theta measures the gap inside the new matrix. Exact again.")
-        self.play(FadeIn(row_sin2), FadeIn(table[3]))
-
-        self.say("tan 2 Theta measures the gap inside the old matrix, the smallest of the three. Exact again.")
-        self.play(FadeIn(row_tan2), FadeIn(table[4]))
+        self.say("sin 2 theta is 2b over the new gap, the gap of A plus H: the sin 2 Theta theorem, with equality.")
+        self.play(FadeIn(row_sin2), FadeIn(rows[1]))
 
         self.say(
-            "So three of the four are equalities on this example, and sin Theta is sharp on another. "
-            "The paper states all four constants are best possible."
+            "tan theta is b over the distance from the trial value a0 to the new unwanted eigenvalue: the tan Theta "
+            "theorem, with equality. And sin theta is smaller than tan theta, which is the sin Theta theorem."
         )
-        self.play(FadeIn(takeaway))
+        self.play(FadeIn(row_tan), FadeIn(rows[2]), FadeIn(rows[3]))
+
+        self.say(
+            "So in two dimensions the four theorems are four exact facts about one rotation, each needing a different "
+            "gap. The general theorems turn them into inequalities for subspaces of any dimension, in every unitarily "
+            "invariant norm. The paper states all four constants are best possible."
+        )
+        self.play(FadeIn(col[2]), FadeIn(col[3]))

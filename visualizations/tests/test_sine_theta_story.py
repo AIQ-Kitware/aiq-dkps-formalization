@@ -139,3 +139,17 @@ def test_two_sided_slide_numbers():
     ex = story.TWO_SIDED
     assert ex.residual_norm == pytest.approx(1 / math.sqrt(2))
     assert ex.delta * math.tan(ex.theta) == pytest.approx(1.0)
+
+
+@pytest.mark.parametrize("gap", [0.02, story.FAMILY_EXAMPLE_GAP, 0.5, 1.0])
+def test_two_by_two_identities_behind_the_four_theorems(gap):
+    """[[a0, b], [b, a1]]: each trigonometric function of the turn is b over its own gap."""
+    pair = story.PerturbedPair(gap=gap, eps=story.PERTURBATION_EPS)
+    a0, a1 = pair.A.diagonal()
+    l0, l1 = pair.perturbed_eigenvalues
+    b, th = story.PERTURBATION_EPS, pair.line_angle
+    assert math.tan(2 * th) == pytest.approx(2 * b / (a0 - a1))
+    assert math.sin(2 * th) == pytest.approx(2 * b / (l0 - l1))
+    assert math.tan(th) == pytest.approx(b / (a0 - l1))
+    assert l0 - a1 == pytest.approx(a0 - l1)
+    assert math.sin(th) < b / (a0 - l1)
