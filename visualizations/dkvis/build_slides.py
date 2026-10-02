@@ -49,6 +49,7 @@ MAIN = "dkvis.slides_sine_theta"
 THREE_D = "dkvis.slides_sine_theta_3d"
 PROP44 = "dkvis.slides_prop44"
 FAMILY = "dkvis.slides_family"
+FAMILY_DETAIL = "dkvis.slides_family_detail"
 PROCESS = "dkvis.slides_process"
 
 # Presentation order of each deck, by scene name.  Every name must be defined in
@@ -66,7 +67,11 @@ PARTS = {
     ],
     "part2-3d": ["D01Planes", "D02Tilt", "D03Gap", "D04Perturb", "D05TryIt"],
     "part3-family": [
-        "F01Setup", "F01bAngles", "F01cTwoByTwo", "F02TanTheta", "F03SinTwoTheta", "F04TanTwoTheta", "S13Family",
+        "F01Setup", "F01bAngles", "F01cTwoByTwo",
+        "F02TanTheta", "F02bTanBuys", "F02cTanWhy",
+        "F03SinTwoTheta", "F03bReflect", "F03cPrice",
+        "F04TanTwoTheta", "F04bJacobi", "F04cRepulsion",
+        "F09WhichOne", "S13Family",
     ],
     "part4-prop44": ["P01Claim", "P02Counterexample", "P03Why", "P04Details"],
     "part5-process": ["W01Workflow", "W02TwoChecks", "W03ThreeStatements", "W04Reversals", "W05Scale", "W06Claims"],
@@ -93,7 +98,7 @@ DECK_SCENES = {
 # Decks assembled from other decks' renders rather than rendered themselves.
 COMPOSITES = {FULL: list(PARTS)}
 
-MODULES = [MAIN, THREE_D, FAMILY, PROP44, PROCESS]
+MODULES = [MAIN, THREE_D, FAMILY, FAMILY_DETAIL, PROP44, PROCESS]
 DECKS = list(DECK_SCENES)
 
 

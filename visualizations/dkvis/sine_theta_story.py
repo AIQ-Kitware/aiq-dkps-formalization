@@ -199,6 +199,26 @@ class PerturbedPair:
         """tan 2theta: between the two eigenvalues of ``A`` itself, ``g``."""
         return self.gap
 
+    @property
+    def reflected(self) -> np.ndarray:
+        """``A + XHX`` with ``X = diag(1, -1)``: the coupling flips sign, the eigenvalues do not move.
+
+        Its top eigenvector is the mirror image of that of ``A + H``, at ``-theta``, so
+        the two are ``2 theta`` apart (the reflection step of the sin 2theta proof).
+        """
+        X = np.diag([1.0, -1.0])
+        return self.A + X @ self.H @ X
+
+    def coupling(self, turn: float) -> float:
+        """Off-diagonal entry of ``A + H`` in the basis turned by ``turn``.
+
+        ``(a1 - a0) sin(turn) cos(turn) + b cos(2 turn)``; it vanishes at the Jacobi angle,
+        the eigenvector angle ``theta`` (for the off-diagonal ``H``).
+        """
+        a0, a1 = self.A.diagonal()
+        b = float(self.H[0, 1])
+        return 0.5 * (a1 - a0) * math.sin(2 * turn) + b * math.cos(2 * turn)
+
     def family(self) -> dict[str, tuple[float, float, float]]:
         """``name -> (delta, delta * f(theta), bound)`` for the four theorems."""
         eps = self.residual_norm
@@ -517,8 +537,16 @@ class TwoSidedTrial:
     def residual_norm(self) -> float:
         return float(np.linalg.norm(self.residual))
 
+    @property
+    def mixed_unwanted_rayleigh(self) -> float:
+        """Rayleigh quotient of ``A`` along ``y = (e3 - e1)/sqrt 2``, the unwanted direction ``v`` leans
+        into: it averages the unwanted eigenvalues ``-delta`` and ``+delta`` to ``0``, the trial value."""
+        y = np.array([-1.0, 0.0, 1.0]) / math.sqrt(2)
+        return float(y @ self.A @ y)
+
     def verify(self, *, atol: float = 1e-12) -> None:
         assert abs(self.rho) <= atol
+        assert abs(self.mixed_unwanted_rayleigh - self.rho) <= atol
         assert math.isclose(line_angle(self.v, np.array([0.0, 1.0, 0.0])), self.theta, abs_tol=1e-9)
         assert math.isclose(self.residual_norm, self.delta * math.sin(self.theta), abs_tol=atol)
         if 0 < self.theta < math.pi / 2:
@@ -549,6 +577,10 @@ TWO_SIDED = TwoSidedTrial(theta=math.pi / 4)
 # The family comparison slide uses the gap example at g = 0.1, where the four
 # theorems' gaps (0.18, 0.18, 0.26, 0.10) are far enough apart to see.
 FAMILY_EXAMPLE_GAP = 0.1
+# The reflection and Jacobi slides use a larger gap, so the two ellipses differ visibly.
+REFLECT_EXAMPLE_GAP = 0.3
+# The "price of doubling" slide: a bound sin 2theta <= 0.6 allows two angle ranges.
+SIN2_PRICE_BOUND = 0.6
 
 SYLVESTER_EXAMPLE = SylvesterGrid(
     lam=(-1.9, -1.35, 1.4, 2.05),
