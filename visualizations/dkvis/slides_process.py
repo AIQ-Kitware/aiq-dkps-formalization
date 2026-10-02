@@ -634,7 +634,7 @@ class W06Claims(DeckSlide):
         self.play(FadeIn(sup))
 
         self.say(
-            "What it does not establish: there was no baseline, no blind or independent expert review, and no error "
+            "What it does not establish: there was no baseline, no blind or independent human expert review (there was blind LLM review), and no error "
             "rate. 29 out of 29 is our own current judgment. This is one project's experience."
         )
         self.play(FadeIn(nots))
