@@ -535,7 +535,7 @@ class S02Perturb(DeckSlide):
         l_new = pair.perturbed_eigenvalues
         table = math(
             r"\begin{array}{lcc}"
-            r" & \lambda_1 & \lambda_2\\ \hline "
+            r" & \text{top} & \text{other}\\ \hline "
             rf"A & {l_old[0]:.3f} & {l_old[1]:.3f}\\"
             rf"A+H & {l_new[0]:.3f} & {l_new[1]:.3f}"
             r"\end{array}",
@@ -625,34 +625,35 @@ class S03NoGap(DeckSlide):
             l1, l2 = pair().A.diagonal()
             return float(l1), float(l2)
 
-        # A: dashed blue ellipse.  Its eigenvectors are drawn as the lines they span (u and -u are
-        # the same eigendirection); the dots where the ellipse crosses them mark the eigenvalues.
+        # A: dashed gray ellipse (the old matrix is neutral).  Its eigenvectors are drawn as the lines
+        # they span (u and -u are the same eigendirection); the dots where the ellipse crosses them mark
+        # its eigenvalues a_0 (top) and a_1.
         old = always_redraw(
-            lambda: DashedVMobject(ellipse(plane, pair().A, color=EXACT, width=2), num_dashes=60).set_opacity(0.8)
+            lambda: DashedVMobject(ellipse(plane, pair().A, color=MUTED, width=2), num_dashes=60)
         )
         e_lines = VGroup(
-            through_origin(plane, [1.0, 0.0], reach, EXACT, width=4, opacity=0.75),
-            through_origin(plane, [0.0, 1.0], reach, EXACT, width=4, opacity=0.75),
+            through_origin(plane, [1.0, 0.0], reach, MUTED, width=3),
+            through_origin(plane, [0.0, 1.0], reach, MUTED, width=3),
         )
         e_dots = always_redraw(
-            lambda: VGroup(Dot(plane([lam()[0], 0.0]), radius=0.07, color=EXACT), Dot(plane([0.0, lam()[1]]), radius=0.07, color=EXACT))
+            lambda: VGroup(Dot(plane([lam()[0], 0.0]), radius=0.07, color=MUTED), Dot(plane([0.0, lam()[1]]), radius=0.07, color=MUTED))
         )
-        f1_lbl = always_redraw(lambda: math(r"\lambda_1", size=28, color=EXACT).next_to(plane([lam()[0], 0.0]), DOWN + LEFT * 0.6, buff=0.1))
-        f2_lbl = always_redraw(lambda: math(r"\lambda_2", size=28, color=EXACT).next_to(plane([0.0, lam()[1]]), LEFT, buff=0.12))
-        # A + H: solid white ellipse and its top eigenvector line, turned by theta.
+        f1_lbl = always_redraw(lambda: math(r"a_0", size=28, color=MUTED).next_to(plane([lam()[0], 0.0]), DOWN + LEFT * 0.6, buff=0.1))
+        f2_lbl = always_redraw(lambda: math(r"a_1", size=28, color=MUTED).next_to(plane([0.0, lam()[1]]), LEFT, buff=0.12))
+        # A + H: solid white ellipse; its top eigenvector (the target) is blue, turned by theta.
         new = always_redraw(lambda: ellipse(plane, pair().perturbed, color=FG, width=3))
-        new_axis = always_redraw(lambda: through_origin(plane, pair().perturbed_top_eigenvector, reach, FG, width=3))
+        new_axis = always_redraw(lambda: through_origin(plane, pair().perturbed_top_eigenvector, reach, EXACT, width=3.5))
         new_lbl = always_redraw(
-            lambda: tex(r"top eigenvector of $A+H$", size=20, color=FG).next_to(
+            lambda: tex(r"top eigenvector of $A+H$", size=20, color=EXACT).next_to(
                 plane(reach * pair().perturbed_top_eigenvector), RIGHT, buff=0.08
             )
         )
         e_lbls = VGroup(
-            tex(r"top eigenvector of $A$", size=20, color=EXACT).next_to(plane([reach, 0.0]), DOWN, aligned_edge=LEFT, buff=0.1),
-            tex(r"other eigenvector of $A$", size=20, color=EXACT).next_to(plane([0.0, reach]), UP, buff=0.08),
+            tex(r"top eigenvector of $A$", size=20, color=MUTED).next_to(plane([reach, 0.0]), DOWN, aligned_edge=LEFT, buff=0.1),
+            tex(r"other eigenvector of $A$", size=20, color=MUTED).next_to(plane([0.0, reach]), UP, buff=0.08),
         )
         ellipse_key = VGroup(
-            tex(r"\cx{exact}{dashed: $A$}", size=20),
+            tex(r"\cx{muted}{dashed: $A$}", size=20),
             tex(r"solid: $A+H$", size=20),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.06).move_to([-6.9, -2.05, 0], aligned_edge=UP + LEFT)
         arc = always_redraw(lambda: angle_arc(plane, [1, 0], pair().perturbed_top_eigenvector, 0.95, SINE, width=4))
@@ -669,18 +670,18 @@ class S03NoGap(DeckSlide):
         nl = Line(X(lo), X(hi), color=MUTED, stroke_width=2)
         nl_lbl = VGroup(
             tex(r"eigenvalues", size=20, color=MUTED),
-            tex(r"\cx{exact}{dots: $A$} \ \cx{fg}{ticks: $A+H$}", size=18, color=MUTED),
+            tex(r"\cx{muted}{dots: $A$} \ \cx{exact}{ticks: $A+H$}", size=18, color=MUTED),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.04).next_to(X(hi), RIGHT, buff=0.1)
-        lam_dots = always_redraw(lambda: VGroup(*[Dot(X(v), radius=0.09, color=EXACT) for v in lam()]))
+        lam_dots = always_redraw(lambda: VGroup(*[Dot(X(v), radius=0.09, color=MUTED) for v in lam()]))
         lam_lbls = always_redraw(
             lambda: VGroup(
-                math(r"\lambda_2", size=24, color=EXACT).next_to(X(lam()[1]), DOWN, buff=0.12).shift(LEFT * 0.12),
-                math(r"\lambda_1", size=24, color=EXACT).next_to(X(lam()[0]), DOWN, buff=0.12).shift(RIGHT * 0.12),
+                math(r"a_1", size=24, color=MUTED).next_to(X(lam()[1]), DOWN, buff=0.12).shift(LEFT * 0.12),
+                math(r"a_0", size=24, color=MUTED).next_to(X(lam()[0]), DOWN, buff=0.12).shift(RIGHT * 0.12),
             )
         )
         new_ticks = always_redraw(
             lambda: VGroup(
-                *[Line(X(v) + UP * 0.16, X(v) + DOWN * 0.16, color=FG, stroke_width=3) for v in pair().perturbed_eigenvalues]
+                *[Line(X(v) + UP * 0.16, X(v) + DOWN * 0.16, color=EXACT, stroke_width=3) for v in pair().perturbed_eigenvalues]
             )
         )
 
@@ -733,10 +734,10 @@ class S03NoGap(DeckSlide):
         rows_r.move_to([5.0, -1.2, 0])
 
         self.say(
-            "Blue: A, drawn as its ellipse. Its eigenvectors are drawn as the lines they span, because "
+            "Gray: the old A, drawn as its ellipse. Its eigenvectors are drawn as the lines they span, because "
             "an eigenvector only matters up to sign and length; the dots where the ellipse crosses them "
             "are the eigenvalues. Below, the same two eigenvalues on a number line; the violet bracket is "
-            "the gap g between them. White: A + H for a small H of size 0.12, with its top eigenvector line, "
+            "the gap g between them. White: A + H for a small H of size 0.12; its top eigenvector line, in blue, is "
             "turned by theta. Right: theta as a function of the gap."
         )
         left = VGroup(
@@ -755,7 +756,7 @@ class S03NoGap(DeckSlide):
 
         self.say(
             "Now make A more and more round: its two eigenvalues slide together and the gap closes. "
-            "The white ticks, the eigenvalues of A + H, never move more than 0.12 from the blue dots. "
+            "The blue ticks, the eigenvalues of A + H, never move more than 0.12 from the gray dots. "
             "But the eigenvector of A + H swings toward 45 degrees, however small H is."
         )
         self.play(g.animate.set_value(g_end), run_time=6.0, rate_func=rate_functions.ease_in_out_sine)
@@ -788,15 +789,15 @@ class S03cUnstable(DeckSlide):
                 A = story.PerturbedPair(gap=gap, eps=0.0).A
                 panel.header = tex(header, size=26).move_to([cx, 2.15, 0])
                 panel.base = VGroup(
-                    DashedVMobject(ellipse(plane, A, color=EXACT, width=2), num_dashes=50).set_opacity(0.8),
-                    through_origin(plane, [1.0, 0.0], reach, EXACT, width=3, opacity=0.6),
-                    through_origin(plane, [0.0, 1.0], reach, EXACT, width=3, opacity=0.6),
+                    DashedVMobject(ellipse(plane, A, color=MUTED, width=2), num_dashes=50),
+                    through_origin(plane, [1.0, 0.0], reach, MUTED, width=2.5),
+                    through_origin(plane, [0.0, 1.0], reach, MUTED, width=2.5),
                 )
                 panel.h_line = always_redraw(
-                    lambda: DashedVMobject(through_origin(plane, pair().perturbation_direction, reach, MUTED, width=2), num_dashes=22)
+                    lambda: DashedVMobject(through_origin(plane, pair().perturbation_direction, reach, FG, width=2), num_dashes=22)
                 )
                 panel.new = always_redraw(lambda: ellipse(plane, pair().perturbed, color=FG, width=2.5))
-                panel.axis = always_redraw(lambda: through_origin(plane, pair().perturbed_top_eigenvector, reach, FG, width=3))
+                panel.axis = always_redraw(lambda: through_origin(plane, pair().perturbed_top_eigenvector, reach, EXACT, width=3.5))
                 # Leave a pink copy of the eigenvector line every few degrees of H's turn.
                 steps = 72
                 panel.trace = VGroup()
@@ -822,10 +823,10 @@ class S03cUnstable(DeckSlide):
 
                 panel.line = VGroup(
                     Line(X(lo), X(hi), color=MUTED, stroke_width=2),
-                    *[Dot(X(v), radius=0.07, color=EXACT) for v in A.diagonal()],
+                    *[Dot(X(v), radius=0.07, color=MUTED) for v in A.diagonal()],
                 )
                 panel.ticks = always_redraw(
-                    lambda: VGroup(*[Line(X(v) + UP * 0.13, X(v) + DOWN * 0.13, color=FG, stroke_width=2.5) for v in pair().perturbed_eigenvalues])
+                    lambda: VGroup(*[Line(X(v) + UP * 0.13, X(v) + DOWN * 0.13, color=EXACT, stroke_width=2.5) for v in pair().perturbed_eigenvalues])
                 )
 
                 def widest() -> float:
@@ -844,10 +845,10 @@ class S03cUnstable(DeckSlide):
         with_gap = Panel(-5.0, story.PERTURBATION_START_GAP, rf"with a gap: $\cx{{gap}}{{g={story.PERTURBATION_START_GAP:g}}}$")
         no_gap = Panel(-1.55, story.PERTURBATION_END_GAP, rf"almost no gap: $\cx{{gap}}{{g={story.PERTURBATION_END_GAP:g}}}$")
         legend = VGroup(
-            tex(r"\cx{exact}{blue: $A$ and its eigenvectors} \quad \cx{muted}{dashed: $H$'s own direction}", size=18),
-            tex(r"white: $A+H$ and its top eigenvector", size=18),
+            tex(r"\cx{muted}{gray: $A$ and its eigenvectors} \quad white: $A+H$; dashed: $H$'s own direction", size=18),
+            tex(r"\cx{exact}{blue: the top eigenvector of $A+H$}", size=18),
             tex(r"\cx{sine}{pink: every direction the top eigenvector of $A+H$ took}", size=18),
-            tex(r"\cx{muted}{number lines: eigenvalues, \cx{exact}{dots $A$}, ticks $A+H$}", size=18),
+            tex(r"\cx{muted}{number lines: eigenvalues, dots $A$, \cx{exact}{ticks $A+H$}}", size=18),
         ).arrange(DOWN, buff=0.06).move_to([-3.3, -2.9, 0])
 
         text_w = RIGHT_COL_W - 0.5
@@ -1194,12 +1195,13 @@ class S04Angle(DeckSlide):
             )
         )
         proj_lbl = always_redraw(
-            lambda: math(r"P_U v", size=28, color=MUTED).next_to(plane(model().desired_projection / 2), DOWN, buff=0.12)
+            lambda: math(r"Qv", size=28, color=MUTED).next_to(plane(model().desired_projection / 2), DOWN, buff=0.12)
         )
-        f1 = math(r"\cx{sine}{\sin\theta} = \norm{(I-P_U)\,\cx{trial}{v}} = \operatorname{dist}(\cx{trial}{v},\cx{exact}{U})", size=32)
-        column(f1, top=self.content_top - 0.25)
+        f1 = math(r"\cx{sine}{\sin\theta} = \norm{(I-Q)\,\cx{trial}{v}} = \operatorname{dist}(\cx{trial}{v},\cx{exact}{U})", size=32)
+        f1_note = tex(r"$Q$: the orthogonal projector onto $\cx{exact}{U}$", size=22, color=MUTED)
+        column(f1, f1_note, top=self.content_top - 0.25, buff=0.1)
         self.add(proj, perp, corner, perp_lbl, proj_lbl)
-        self.play(FadeIn(VGroup(proj, perp, corner, perp_lbl, proj_lbl)), FadeIn(f1))
+        self.play(FadeIn(VGroup(proj, perp, corner, perp_lbl, proj_lbl)), FadeIn(f1, f1_note))
 
         self.say(
             "Move V around: the pink leg is the size of the error. It vanishes exactly "
@@ -1243,7 +1245,8 @@ class S04Angle(DeckSlide):
             size=24,
             color=MUTED,
         )
-        column(f1, general, definition, g_eq, g_note, top=self.content_top - 0.25, buff=0.28)
+        column(VGroup(f1, f1_note).arrange(DOWN, aligned_edge=LEFT, buff=0.1), general, definition, g_eq, g_note,
+               top=self.content_top - 0.25, buff=0.28)
         self.play(
             Transform(recall.backgrounds[3], recall.backgrounds[5].copy()),
             FadeIn(recall.rows[3:]),

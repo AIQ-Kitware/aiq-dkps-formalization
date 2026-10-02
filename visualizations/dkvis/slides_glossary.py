@@ -132,7 +132,8 @@ class G02Spectra(GlossarySlide):
     LEFT = [
         (r"\lambda,\ \lambda_j", FG, r"eigenvalues of $\tilde A$; $\lambda_0,\lambda_1$ its two eigenvalues in "
                                      r"the $2\times2$ examples"),
-        (r"a_0,\ a_1", TRIAL, r"the two eigenvalues of the old $A$ in the $2\times2$ examples"),
+        (r"a_0,\ a_1", MUTED, r"the two eigenvalues of the old $A$ in the $2\times2$ examples; $a_0$ the "
+                               r"top (wanted) one"),
         (r"\mu_j", TRIAL, r"trial values: the eigenvalues of $A_0$ (Ritz values)"),
         (r"\rho", TRIAL, r"the Rayleigh quotient $v^*\tilde Av$ of a unit trial vector"),
         (r"[\beta,\alpha]", FG, r"an interval containing the spectrum of $A_0$ (or of the separated block)"),
@@ -174,9 +175,10 @@ class G03Other(GlossarySlide):
     ]
     RIGHT_HEAD = "Local to one part or proof"
     RIGHT = [
-        (r"\mathcal R", FG, r"the direct rotation from $V$ to $U$ (Part 3); its square turns by $2\Theta$"),
-        (r"R,\ W", FG, r"Part 4 only: the direct rotation and a competing orthogonal map, $W(U)=V$"),
-        (r"X=P-P^\perp", FG, r"the reflection across $V$ in the $\sin2\Theta$ proof (Part 3)"),
+        (r"\mathcal R", FG, r"the direct rotation between the two subspaces (Parts 3 and 4); its square turns "
+                            r"by $2\Theta$"),
+        (r"W", FG, r"Part 4: a competing orthogonal map with $W(U)=V$"),
+        (r"\Sigma=P-P^\perp", FG, r"the reflection across $V$ in the $\sin2\Theta$ proof (Davis and Kahan's $X$)"),
         (r"C_0,\ C_1,\ J_0", FG, r"the cosine blocks and the partial isometry of the direct rotation (Part 3 proofs)"),
         (r"x_j,\ y_j", FG, r"a pair of principal vectors: $x_j$ on the trial side, $y_j$ on the unwanted side"),
         (r"\varphi", FG, r"a turning angle: of $H$ (instability slide), of the basis (Jacobi slide), of the hinge (3D)"),

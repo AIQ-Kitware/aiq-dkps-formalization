@@ -7,7 +7,7 @@ buys and why it holds.  The arguments follow Davis and Kahan's own proofs
 ``ForMathlib/prose/non-distributable/davis-kahan-1970-modernized-transcription.tex``):
 
 * tan Theta: equation (6.6) along paired principal vectors, and Example 6.1;
-* sin 2Theta: the symmetric perturbation ``A + XHX`` and equation (7.5);
+* sin 2Theta: the symmetric perturbation ``A + Sigma H Sigma`` (Davis and Kahan's ``A + XHX``) and (7.5);
 * tan 2Theta: equation (7.6), which "imitates the tan theta proof";
 * Theorems 8.1 and 8.2: branch selection and eigenvalue repulsion.
 
@@ -279,7 +279,7 @@ class F02cTanWhy(DeckSlide):
 class F03bReflect(DeckSlide):
     depth = "*"
     title = r"Why the angle doubles: reflect the coupling"
-    kicker = r"Davis and Kahan regard $A+H$ as a perturbation not of $A$, but of $A+XHX$"
+    kicker = r"Davis and Kahan regard $A+H$ as a perturbation not of $A$, but of $A+\Sigma H\Sigma$"
 
     def body(self) -> None:
         eps = story.PERTURBATION_EPS
@@ -303,38 +303,39 @@ class F03bReflect(DeckSlide):
             DashedVMobject(ellipse(plane, pair.reflected, color=FG, width=3), num_dashes=56),
             through_origin(plane, story.unit(-th), reach, FG, width=3.5),
         )
-        refl_lbl = tex(r"$A+XHX$", size=22, color=FG).next_to(plane(reach * story.unit(-th)), RIGHT, buff=0.08)
+        refl_lbl = tex(r"$A+\Sigma H\Sigma$", size=22, color=FG).next_to(plane(reach * story.unit(-th)), RIGHT, buff=0.08)
         arc = angle_arc(plane, story.unit(-th), story.unit(th), 1.35, SINE, width=4)
         arc_lbl = math(r"2\theta", size=28, color=SINE).move_to(plane.origin + RIGHT * 0.95)
 
         mats = VGroup(
             math(r"A+H=\begin{pmatrix}a_0&b\\ b&a_1\end{pmatrix}", size=26, color=EXACT),
-            math(r"A+XHX=\begin{pmatrix}a_0&-b\\ -b&a_1\end{pmatrix}", size=26),
+            math(r"A+\Sigma H\Sigma=\begin{pmatrix}a_0&-b\\ -b&a_1\end{pmatrix}", size=26),
         ).arrange(RIGHT, buff=0.5).move_to([-4.0, -2.65, 0])
         same = tex(rf"same eigenvalues ${l0:.2f}$ and ${l1:.2f}$; the eigenvectors are mirror images", size=19, color=MUTED).next_to(mats, DOWN, buff=0.12)
 
         w = TEXT_W
         p_x = para(
-            r"$X=P-P^\perp$ is $+1$ on the old (trial) subspace $V$ and $-1$ on $V^\perp$: a mirror. Since $XAX=A$, "
-            r"$A+XHX=X(A+H)X$ is $A+H$ seen in the mirror. In $A$'s eigenbasis only the coupling block $B$ changes sign.",
+            r"$\Sigma=P-P^\perp$ is $+1$ on the old (trial) subspace $V$ and $-1$ on $V^\perp$: a mirror. Since "
+            r"$\Sigma A\Sigma=A$, "
+            r"$A+\Sigma H\Sigma=\Sigma(A+H)\Sigma$ is $A+H$ seen in the mirror. In $A$'s eigenbasis only the coupling block $B$ changes sign.",
             width=w, size=SIZE,
         )
         p_same = para(
-            r"So $A+XHX$ has the same eigenvalues as $A+H$, and mirror-image eigenvectors, at $\theta$ and $-\theta$: "
+            r"So $A+\Sigma H\Sigma$ has the same eigenvalues as $A+H$, and mirror-image eigenvectors, at $\theta$ and $-\theta$: "
             r"$2\theta$ apart. In general, with $\mathcal R$ the direct rotation from $V$ to $U$, "
-            r"$(A+H)\mathcal R^2=\mathcal R^2(A+XHX)$, and $\mathcal R^2$ turns by $2\Theta$ (7.3--7.4).",
+            r"$(A+H)\mathcal R^2=\mathcal R^2(A+\Sigma H\Sigma)$, and $\mathcal R^2$ turns by $2\Theta$ (7.3--7.4).",
             width=w, size=SIZE,
         )
         p_apply = para(
             r"Now apply the two-gap $\sin\Theta$ theorem (Proposition 6.1) to this pair. Both matrices have the spectral "
-            r"split $\Lambda_0\,|\,\Lambda_1$ with gap $\delta$, and they differ by $H-XHX$, the coupling twice:",
+            r"split $\Lambda_0\,|\,\Lambda_1$ with gap $\delta$, and they differ by $H-\Sigma H\Sigma$, the coupling twice:",
             width=w, size=SIZE,
         )
         box = boxed(
-            math(r"\cx{gap}{\delta}\norm{\cx{sine}{\sin2\Theta}}\le\norm{H-XHX}\le2\norm{H}", size=30), color=SINE, pad=0.15
+            math(r"\cx{gap}{\delta}\norm{\cx{sine}{\sin2\Theta}}\le\norm{H-\Sigma H\Sigma}\le2\norm{H}", size=30), color=SINE, pad=0.15
         )
         p_two = para(
-            r"In $2\times2$: $\norm{H-XHX}=2|b|$ and the gap is $\lambda_0-\lambda_1$, so $\sin2\theta=2b/(\lambda_0-\lambda_1)$ exactly. "
+            r"In $2\times2$: $\norm{H-\Sigma H\Sigma}=2|b|$ and the gap is $\lambda_0-\lambda_1$, so $\sin2\theta=2b/(\lambda_0-\lambda_1)$ exactly. "
             r"For the directed form Section 7 obtains $\delta\norm{\sin2\Theta_0}\le\norm{B}\le\norm{R}$; Section 2 prints "
             r"the weaker $2\norm{R}$.",
             width=w, size=SIZE - 1, color=MUTED,
@@ -342,8 +343,8 @@ class F03bReflect(DeckSlide):
         col = text_column(p_x, p_same, p_apply, box, p_two, top=self.content_top - 0.1)
 
         self.say(
-            "Why does the double angle appear, and why the gap of A plus H? Davis and Kahan's idea: reflect. X is the "
-            "mirror that fixes the old subspace and flips its complement. A plus XHX is A plus H seen in that mirror: "
+            "Why does the double angle appear, and why the gap of A plus H? Davis and Kahan's idea: reflect. Sigma is the "
+            "mirror that fixes the old subspace and flips its complement. A plus Sigma H Sigma is A plus H seen in that mirror: "
             "only the coupling changes sign."
         )
         self.play(Create(mirror), Create(perp), FadeIn(mirror_lbl), Create(new), FadeIn(new_lbl), FadeIn(col[0]))
