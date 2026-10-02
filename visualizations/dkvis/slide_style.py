@@ -39,12 +39,47 @@ from manim import (
     VGroup,
     config,
 )
+import contextlib
+import fcntl
+import functools
 import os
 from pathlib import Path
 
+from manim.mobject.svg.svg_mobject import SVGMobject
+from manim.mobject.text import tex_mobject
 from manim_slides import Slide
 
 from dkvis.palette import PALETTE
+
+
+# ``dkvis.build_slides`` renders scenes in parallel processes that share manim's
+# LaTeX and text caches under ``media/``.  manim touches those directories
+# without any locking: after each LaTeX run it deletes every non-SVG file there,
+# including other processes' half-finished ones, and it parses a cached SVG by
+# writing, reading and deleting a fixed-name temporary copy next to it.  So run
+# each of these steps under one cross-process lock; a cache hit holds it only
+# for a moment, and each process parses a given SVG only once.
+@contextlib.contextmanager
+def _media_cache_lock():
+    lock = Path(config.media_dir) / ".cache.lock"
+    lock.parent.mkdir(parents=True, exist_ok=True)
+    with open(lock, "w") as handle:
+        fcntl.flock(handle, fcntl.LOCK_EX)
+        yield
+
+
+def _under_media_cache_lock(fill):
+    @functools.wraps(fill)
+    def locked(*args, **kwargs):
+        with _media_cache_lock():
+            return fill(*args, **kwargs)
+
+    return locked
+
+
+tex_mobject.tex_to_svg_file = _under_media_cache_lock(tex_mobject.tex_to_svg_file)
+Text._text2svg = _under_media_cache_lock(Text._text2svg)
+SVGMobject.generate_mobject = _under_media_cache_lock(SVGMobject.generate_mobject)
 
 BG = PALETTE["BG"]
 FG = PALETTE["FG"]

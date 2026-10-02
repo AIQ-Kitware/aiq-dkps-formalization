@@ -233,7 +233,8 @@ cases (`make` lists the targets):
 
 ```bash
 make setup                         # uv sync with the vtk, slides and test extras
-make all                           # short deck, every part, and the full deck: 1080p60 HTML + PDF + handout in renders/
+make all                           # short deck, every part, and the full deck: 1080p30 HTML + PDF + handout in renders/
+make final                         # the same at the full 1080p60
 make part3 QUALITY=l               # one part of the full talk at 480p, with its own HTML (part1 ... part6)
 make handout                       # renders/<deck>.handout.pdf: one page per slide, from the existing renders
 make standalone                    # renders/<deck>.standalone.html: one file, videos embedded, easy to share
@@ -277,6 +278,13 @@ $RUN manim-slides present --folder slides-sine-theta-short $($RUN python -m dkvi
   e.g. as traces, a plot, or before/after panels.
 - `--scenes S08Components` re-renders one scene; conversion always uses the
   whole deck.
+- Scenes render in parallel, one process per scene (`--jobs`, `make JOBS=n`;
+  default one per CPU), and `make full` renders every part in one pool. Each
+  scene's manim output is in `renders/logs/<deck>--<scene>.log`. The processes
+  share manim's LaTeX and text caches, which manim fills without locking, so
+  `dkvis/slide_style.py` wraps those cache fills in a file lock.
+- `make` renders 1080p at 30 fps (`FPS=30`); `make final` or `FPS=60` gives the
+  full 60 fps. Drafts (`QUALITY=l`) keep 15 fps.
 - `DKVIS_THEME=light` renders a light-background deck for bright rooms.
 
 ## Interactive 3D demo (VTK) and its slides

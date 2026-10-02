@@ -1,7 +1,8 @@
 # Build the Davis--Kahan slide decks and demos.  Run from visualizations/.
 #
 #   make                 # list targets
-#   make all             # short deck + every part + the full deck, 1080p60, HTML + standalone HTML + PDF
+#   make all             # short deck + every part + the full deck, 1080p30, HTML + standalone HTML + PDF
+#   make final           # the same at the full 1080p60
 #   make rebuild         # clean, then make all
 #   make short           # the 15-minute deck
 #   make part3           # one part of the full talk, with its own HTML (part1 ... part6)
@@ -19,10 +20,14 @@
 UV      ?= uv
 RUN     := $(UV) run --extra vtk --extra slides --extra test
 QUALITY ?= h
+# 1080p renders at 30 fps unless asked for more (FPS=60, or `make final`); drafts keep the quality's own rate.
+FPS     ?= $(if $(filter l m,$(QUALITY)),,30)
+JOBS    ?=
 PDF     ?= 1
 SCENES  ?=
 
-BUILD_FLAGS := --quality $(QUALITY) $(if $(filter 1,$(PDF)),--pdf --handout) $(if $(SCENES),--scenes $(SCENES))
+BUILD_FLAGS := --quality $(QUALITY) $(if $(FPS),--fps $(FPS)) $(if $(JOBS),--jobs $(JOBS)) \
+               $(if $(filter 1,$(PDF)),--pdf --handout) $(if $(SCENES),--scenes $(SCENES))
 
 # Short target name -> deck name in dkvis/build_slides.py.
 DECK_short := sine-theta-short
@@ -38,13 +43,14 @@ DECKS      := short full $(PARTS)
 
 .DEFAULT_GOAL := help
 .PHONY: help setup all rebuild $(DECKS) $(addprefix clean-,$(DECKS)) $(addprefix present-,$(DECKS)) \
-        $(addprefix standalone-,$(DECKS)) standalone $(addprefix handout-,$(DECKS)) handout parts draft assets app test clean distclean
+        $(addprefix standalone-,$(DECKS)) standalone $(addprefix handout-,$(DECKS)) handout parts final draft assets app test clean distclean
 
 help:
 	@awk '/^#/ { sub(/^# ?/, ""); print; next } { exit }' $(firstword $(MAKEFILE_LIST))
 	@echo; echo 'Targets:'
 	@echo '  setup              uv sync with the vtk, slides and test extras'
 	@echo '  all                short, every part and full, then standalone HTML for each'
+	@echo '  final              all at the full 1080p60 (all renders 1080p30)'
 	@echo '  rebuild            clean, then all (a from-scratch re-render)'
 	@echo '  short              the 15-minute deck'
 	@echo '  part1 ... part6    one part of the full talk, rendered and converted on its own:'
@@ -62,13 +68,17 @@ help:
 	@echo '  test               run the model tests'
 	@echo '  clean              remove all renders, scene folders and manim videos'
 	@echo '  distclean          clean, plus the LaTeX and VTK asset caches'
-	@echo 'Variables: QUALITY=l|m|h|p|k (default h)  PDF=0|1 (default 1; also the handout)  SCENES="S05Residual ..."'
+	@echo 'Variables: QUALITY=l|m|h|p|k (default h)  FPS=30|60 (default 30 at h)  JOBS=n (default: one per CPU)'
+	@echo '           PDF=0|1 (default 1; also the handout)  SCENES="S05Residual ..."'
 
 setup:
 	$(UV) sync --extra vtk --extra slides --extra test
 
 all: short full
 	$(MAKE) standalone
+
+final:
+	$(MAKE) all FPS=60
 
 rebuild:
 	$(MAKE) clean
@@ -82,9 +92,13 @@ short $(PARTS):
 
 parts: $(PARTS)
 
-# The full deck renders nothing itself: it is assembled from the parts' renders.
-full: $(PARTS)
-	$(RUN) python -m dkvis.build_slides $(DECK_full) --no-render $(if $(filter 1,$(PDF)),--pdf --handout)
+# Render every part's scenes in one parallel pool, assemble the full deck from them,
+# then convert each part to its own HTML (and PDF/handout) without rendering again.
+full:
+	$(RUN) python -m dkvis.build_slides $(DECK_full) $(BUILD_FLAGS)
+	for part in $(foreach p,$(PARTS),$(DECK_$(p))); do \
+	    $(RUN) python -m dkvis.build_slides $$part --no-render $(if $(filter 1,$(PDF)),--pdf --handout) || exit 1; \
+	done
 
 $(addprefix clean-,$(DECKS)):
 	rm -rf slides-$(DECK_$(@:clean-%=%)) renders/$(DECK_$(@:clean-%=%)).* renders/$(DECK_$(@:clean-%=%))_assets
