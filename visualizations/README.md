@@ -171,11 +171,19 @@ presenter notes on every build. There are two presentation paths:
 | `P02Counterexample` | yes | yes | the `R^4` counterexample: chords, trace norm, the norms table, the Lean repair |
 | `P03Why` | | `*` | concavity of chord length explains the failure and the `Q`-norm repair |
 | `P04Details` | | `**` | the explicit matrices and Lean declarations |
+| `W01Workflow` | | `*` | how the formalization was built: the workflow from the workshop paper, with who did what |
+| `W02TwoChecks` | | `*` | Lean checks the proof; source comparison checks the statement; three kinds of drift seen in practice |
+| `W03ThreeStatements` | | `*` | three checked sine-theta statements with the same conclusion and different scope |
+| `W04Reversals` | | `*` | timeline of accepted source comparisons that were withdrawn (14 in 10 results, to 4 Sep 2026) |
+| `W05Scale` | | `*` | foundations built, YWS, retained telemetry, and the starting point |
+| `W06Claims` | | `*` | what the evidence supports and what it does not |
 | `S14Summary` | yes | yes | three takeaways |
 
 The modules are `dkvis/slides_sine_theta.py` (2D), `dkvis/slides_sine_theta_3d.py`
-(3D, see below), `dkvis/slides_family.py` (the other three Section 2 theorems)
-and `dkvis/slides_prop44.py` (Proposition 4.4). Deck order lives in
+(3D, see below), `dkvis/slides_family.py` (the other three Section 2 theorems),
+`dkvis/slides_prop44.py` (Proposition 4.4) and `dkvis/slides_process.py` (how the
+formalization was built, from the workshop and journal papers in `papers/`; its
+dated numbers are pinned to those papers' evidence snapshots). Deck order lives in
 `dkvis/build_slides.py` (`DECK_SCENES`). There are also `sine-theta` (the full deck
 without the VTK scenes), `sine-theta-3d` and `prop44`.
 
