@@ -176,12 +176,13 @@ class F01Setup(DeckSlide):
         size, w = 21, TEXT_W
         p_old = para(
             r"\cx{trial}{Amber, the old $A$:} $\cx{trial}{E_0}$ is an orthonormal basis of an invariant subspace "
-            r"of $A$ (its wanted eigenvectors), with block $\cx{trial}{A_0}=E_0^*AE_0$; $A_1$ is the rest of $A$.",
+            r"$\cx{trial}{V}$ of $A$ (its wanted eigenvectors), with block $\cx{trial}{A_0}=E_0^*AE_0$; $A_1$ is the "
+            r"rest of $A$.",
             width=w, size=size,
         )
         p_new = para(
-            r"\cx{exact}{Blue, the new $A+H$:} $\cx{exact}{F_0}$ spans the corresponding invariant subspace of $A+H$, "
-            r"with block $\cx{exact}{\Lambda_0}$; $\Lambda_1$ is the rest.",
+            r"\cx{exact}{Blue, the new $\tilde A=A+H$:} $\cx{exact}{F_0}$ spans the corresponding invariant subspace "
+            r"$\cx{exact}{U}$ of $\tilde A$, with block $\cx{exact}{\Lambda_0}$; $\Lambda_1$ is the rest.",
             width=w, size=size,
         )
         p_ang = para(
@@ -201,8 +202,8 @@ class F01Setup(DeckSlide):
             width=w, size=size,
         )
         p_bridge = para(
-            r"This is the earlier setting renamed: there the matrix we have was called $A$ and $E_0$ was any "
-            r"orthonormal trial basis; here the matrix we have is $A+H$.",
+            r"Same notation as before: $\cx{exact}{U}$ is the target subspace of the matrix we have, $\tilde A$, and "
+            r"$\cx{trial}{V}$ the trial subspace; in the trial reading $E_0$ is any orthonormal trial basis.",
             width=w, size=size - 1, color=MUTED,
         )
         col = text_column(p_old, p_new, p_ang, p_res, p_forms, p_bridge, top=self.content_top - 0.1)
@@ -218,7 +219,8 @@ class F01Setup(DeckSlide):
             "Theta0 is the angles between the two subspaces; the residual is H E0; and H splits into the part B "
             "that couples wanted with unwanted directions and the parts H0, H1 that act within them. "
             "Each theorem has a directed form with Theta0 and R, and three have an ambient form with Theta and H. "
-            "Notation warning: earlier the matrix we have was called A; here it is A + H."
+            "Same notation as before: U is the target subspace of A tilde, the matrix we have, and V the "
+            "trial subspace."
         )
         self.play(FadeIn(col[2]), FadeIn(col[3]), FadeIn(col[4]), FadeIn(col[5]))
 
@@ -597,34 +599,35 @@ class F01bAngles(DeckSlide):
         e1, e2 = np.array([1.0, 0.0]), np.array([0.0, 1.0])
         v, v_perp = story.unit(th), story.unit(th + np.pi / 2)
 
-        U = through_origin(plane, e1, reach, TRIAL, width=4)
-        V = through_origin(plane, v, reach, EXACT, width=4)
-        U_lbl = tex(r"$U=\operatorname{ran}E_0$", size=22, color=TRIAL).next_to(plane(reach * e1), DOWN, buff=0.1)
-        V_lbl = tex(r"$V=\operatorname{ran}F_0$", size=22, color=EXACT).next_to(plane(reach * v), RIGHT, buff=0.1)
+        V = through_origin(plane, e1, reach, TRIAL, width=4)
+        U = through_origin(plane, v, reach, EXACT, width=4)
+        V_lbl = tex(r"$V=\operatorname{ran}E_0$", size=22, color=TRIAL).next_to(plane(reach * e1), DOWN, buff=0.1)
+        U_lbl = tex(r"$U=\operatorname{ran}F_0$", size=22, color=EXACT).next_to(plane(reach * v), RIGHT, buff=0.1)
         arc = angle_arc(plane, e1, v, 1.15, SINE, width=4)
         th_lbl = math(r"\theta", size=28, color=SINE).move_to(plane(0.72 * story.unit(th / 2)))
 
-        U_perp = DashedVMobject(through_origin(plane, e2, reach, TRIAL, width=3), num_dashes=24)
-        V_perp = DashedVMobject(through_origin(plane, v_perp, reach, EXACT, width=3), num_dashes=24)
-        Up_lbl = math(r"U^{\perp}", size=24, color=TRIAL).next_to(plane(reach * e2), UP, buff=0.08)
-        Vp_lbl = math(r"V^{\perp}", size=24, color=EXACT).next_to(plane(reach * v_perp), LEFT, buff=0.08)
+        V_perp = DashedVMobject(through_origin(plane, e2, reach, TRIAL, width=3), num_dashes=24)
+        U_perp = DashedVMobject(through_origin(plane, v_perp, reach, EXACT, width=3), num_dashes=24)
+        Vp_lbl = math(r"V^{\perp}", size=24, color=TRIAL).next_to(plane(reach * e2), UP, buff=0.08)
+        Up_lbl = math(r"U^{\perp}", size=24, color=EXACT).next_to(plane(reach * v_perp), LEFT, buff=0.08)
         arc2 = angle_arc(plane, e2, v_perp, 0.8, SINE, width=4)
         th2_lbl = math(r"\theta", size=28, color=SINE).move_to(plane(0.52 * story.unit(np.pi / 2 + th / 2)))
         caption = para(
-            r"The rotation that takes $U$ to $V$ also takes $U^\perp$ to $V^\perp$, by the same angle.",
+            r"The rotation that takes $V$ to $U$ also takes $V^\perp$ to $U^\perp$, by the same angle.",
             width=5.0, size=19, color=MUTED, align="centering",
         ).move_to([-4.4, -3.2, 0])
 
         size, w = 21, TEXT_W
         p_dir = para(
-            r"\textbf{Directed} $\cx{sine}{\Theta_0}$: the angles from the trial subspace $\cx{trial}{U}$ to "
-            r"$\cx{exact}{V}$, one per direction of $U$. With $Q$ the projector onto $V$: "
+            r"\textbf{Directed} $\cx{sine}{\Theta_0}$: the angles from the trial subspace $\cx{trial}{V}$ to "
+            r"the target $\cx{exact}{U}$, one per direction of $V$. With $Q$ the projector onto $U$: "
             r"$\norm{\sin\Theta_0}=\norm{(I-Q)E_0}$.",
             width=w, size=size,
         )
         p_amb = para(
             r"\textbf{Ambient} $\cx{sine}{\Theta}$: the angles of the whole rotation, so each nonzero angle appears "
-            r"twice. With $P$ the projector onto $U$: $\norm{\sin\Theta}=\norm{P-Q}$.",
+            r"twice. With $P$ the projector onto $V$, every unitarily invariant norm has "
+            r"$\norm{\sin\Theta}=\norm{P-Q}$.",
             width=w, size=size,
         )
         p_norms = para(
@@ -633,7 +636,7 @@ class F01bAngles(DeckSlide):
             width=w, size=size,
         )
         p_rh = para(
-            r"Directed bounds compare with the residual $\cx{resid}{R}=HE_0$, the part of $H$ acting on $U$; ambient "
+            r"Directed bounds compare with the residual $\cx{resid}{R}=HE_0$, the part of $H$ acting on $V$; ambient "
             r"bounds compare with all of $H$. Always $\norm{R}\le\norm{H}$.",
             width=w, size=size,
         )
@@ -646,15 +649,15 @@ class F01bAngles(DeckSlide):
         col = text_column(p_dir, p_amb, p_norms, p_rh, p_sin, top=self.content_top - 0.1)
 
         self.say(
-            "Two ways to measure how far a subspace moved. Directed: stand in the trial subspace U and measure the "
-            "angle of each of its directions to V. That is Theta0, and its sine is the length of the part of E0 "
+            "Two ways to measure how far a subspace moved. Directed: stand in the trial subspace V and measure the "
+            "angle of each of its directions to the target U. That is Theta0, and its sine is the length of the part of E0 "
             "outside V."
         )
         self.play(Create(U), Create(V), FadeIn(U_lbl, V_lbl), Create(arc), FadeIn(th_lbl), FadeIn(col[0]))
 
         self.say(
-            "Ambient: look at the whole rotation. Turning U onto V also turns the complement U perp onto V perp, by "
-            "the same angle, so every angle shows up twice. Its sine is the difference of the two projectors. In the "
+            "Ambient: look at the whole rotation. Turning V onto U also turns the complement V perp onto U perp, by "
+            "the same angle, so every angle shows up twice. Its sine has the same norms as the difference of the two projectors. In the "
             "operator norm the two agree; in the Frobenius norm the ambient one is root 2 larger."
         )
         self.play(Create(U_perp), Create(V_perp), FadeIn(Up_lbl, Vp_lbl), Create(arc2), FadeIn(th2_lbl, caption), FadeIn(col[1]), FadeIn(col[2]))

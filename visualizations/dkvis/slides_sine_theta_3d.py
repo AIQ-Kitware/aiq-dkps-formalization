@@ -90,7 +90,7 @@ class D01Planes(D3Slide):
     def body(self) -> None:
         top = self.content_top - 0.2
         paras = [
-            r"With positive eigenvalues, $A=\operatorname{diag}(\lambda_1,\lambda_2,\lambda_3)$ maps the unit "
+            r"With positive eigenvalues, $\tilde A=\operatorname{diag}(\lambda_1,\lambda_2,\lambda_3)$ maps the unit "
             r"sphere of $\mathbb{R}^3$ to an ellipsoid. "
             r"The wanted subspace $\cx{exact}{U}=\operatorname{span}(f_1,f_2)$ is the plane of its two short axes; "
             r"$\cx{exact}{f_3}$ spans $U^{\perp}$ and $\Lambda_1=[\lambda_3]$.",
@@ -98,13 +98,13 @@ class D01Planes(D3Slide):
             r"Two planes in $\mathbb{R}^3$ always share a line, so the principal angles are $(\theta,0)$.",
             r"One nonzero sine: $\norm{\cx{sine}{\sin\Theta_0}}=\norm{\cx{exact}{F_1}^{\mathsf T}\cx{trial}{E_0}}=\sin\theta$, "
             r"the pink drop from $V$ to $U$.",
-            r"With the Rayleigh--Ritz choice $A_0=E_0^{\mathsf T}AE_0$ we get $E_0^{\mathsf T}R=0$: "
+            r"With the Rayleigh--Ritz choice $A_0=E_0^{\mathsf T}\tilde AE_0$ we get $E_0^{\mathsf T}R=0$: "
             r"the \cx{resid}{residuals} leave $V$ at right angles.",
         ]
         texts = text_block(*paras, top=top, size=25)
 
         self.say(
-            "Same story, one dimension up. This A has positive eigenvalues, so it maps the unit sphere "
+            "Same story, one dimension up. This A tilde has positive eigenvalues, so it maps the unit sphere "
             "to an ellipsoid. The wanted "
             "invariant subspace U is the plane of the two short axes, f1 and f2; f3 is the unwanted direction."
         )

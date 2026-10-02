@@ -163,6 +163,7 @@ presenter notes on every build. There are two presentation paths:
 | `S03NoGap` | yes | yes | "How far can an eigenvector turn? It depends on whether there is a gap": A's eigenvectors (drawn as lines) in the ellipse and its eigenvalues on a number line; for a fixed small `H`, as the gap closes the eigenvector of `A+H` turns toward 45 degrees while the eigenvalues move at most `‖H‖` |
 | `S03cUnstable` | yes | yes | "Without a gap, an eigenvector can point anywhere": `H` of fixed size turned once round; the traced eigenvector directions form a thin wedge (at most 7 degrees) with a gap and fill every direction without one; `A ± εσ_x` example; why Davis--Kahan works with subspaces |
 | `S03bWanted` | yes | yes | which eigenvectors are "wanted": a chosen part of the spectrum (PCA, ground states, clustering); they span `U`, the rest `U^perp`, and the gap separates them |
+| `S03dCompute` | | `*` | why not compute every eigenvector: sparse matrices, cost table, differential operators, a few modes, iterative eigensolvers return a trial subspace |
 | `S04Angle` | yes | yes | with a "Recall" panel for `U`, `V`, `theta`, `E0`, `F0`, `F1`: `sin theta = dist(v, U)`; `sin Theta0` is the operator whose eigenvalues are the sines |
 | `S04bSinThetaOperator` | | `*` | `sin Theta0` exactly: definition, `|S| = sin Theta0`, and the Lean bridge |
 | `S05Residual` | yes | yes | "The residual": a "Recall" panel for `A`, `U`, `v`; why `r = Av - rho v` is computable from `A` and `v` while the angle needs `U`; every build adds, so the last build is the complete slide |
@@ -170,7 +171,7 @@ presenter notes on every build. There are two presentation paths:
 | `S07Theorem` | yes | yes | `delta ||sin Theta0|| <= ||R||`: error <= residual / gap |
 | `S08Why` | yes | yes | why it is true, with one wanted direction `u` and one unwanted `w`: the wrong part of `v` (length `sin theta`) is scaled by at least `delta` in the residual |
 | `S08Components` | | `*` | the same mechanism across the whole spectrum (bar chart, with the equations) |
-| `S09Sylvester` | | `*` | the block proof: a Sylvester equation |
+| `S09Sylvester` | | `*` | the subspace proof via a Sylvester equation, entry by entry in eigenvector coordinates |
 | `S11Payoff` | yes | yes | `||sin Theta0|| <= ||H|| / delta` against the true rotation |
 | `S10Sharp` | | `*` | the constant 1 is sharp |
 | `D01Planes` | yes | yes | the 3D picture (VTK), ending on an orbit video |

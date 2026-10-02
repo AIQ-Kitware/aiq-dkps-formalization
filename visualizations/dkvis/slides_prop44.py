@@ -172,7 +172,7 @@ class P01Claim(P4Slide):
                 m.scale((6.85 - x_text) / (m.get_right()[0] - x_text), about_edge=LEFT)
 
         self.say(
-            "The second result of the project. Take two subspaces U and V. Many rotations carry U onto V. "
+            "The second result of the project. Take two subspaces U and V. Many orthogonal maps carry U onto V. "
             "Davis and Kahan single out the direct rotation: it turns by exactly the principal angles."
         )
         f_top = frame(top_c)
