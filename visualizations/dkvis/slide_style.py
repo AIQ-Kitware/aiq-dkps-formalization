@@ -211,6 +211,16 @@ class DeckSlide(Slide):
         name = type(self).__name__
         return (order.index(name) + 1, len(order)) if name in order else None
 
+    def footer_text(self) -> str:
+        """The part's title when rendering a part of the full talk, else the scene's own section."""
+        deck = os.environ.get("DKVIS_DECK")
+        if deck:
+            from dkvis.build_slides import PART_TITLES
+
+            if deck in PART_TITLES:
+                return PART_TITLES[deck]
+        return self.section
+
     def construct(self) -> None:
         self.chrome = self.make_chrome()
         if self.chrome is not None:
@@ -246,8 +256,9 @@ class DeckSlide(Slide):
                 [FRAME_W / 2 - 0.45, TOP_EDGE - 0.05, 0], aligned_edge=UP + RIGHT
             )
             items.add(badge)
-        if self.section:
-            footer = tex(self.section, size=18, color=MUTED).move_to(
+        footer_text = self.footer_text()
+        if footer_text:
+            footer = tex(footer_text, size=18, color=MUTED).move_to(
                 [LEFT_EDGE, -FRAME_H / 2 + 0.3, 0], aligned_edge=LEFT
             )
             items.add(footer)

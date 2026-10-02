@@ -135,9 +135,24 @@ presenter notes on every build. There are two presentation paths:
 - **`sine-theta-short`: the 15-minute core talk.** It is for a technical but
   non-mathematical audience: the intuition, the theorem, what was formalized, and
   the Proposition 4.4 counterexample.
-- **`sine-theta-full`: everything.** Slides beyond the core talk carry a badge in
-  the top-right corner: `*` = optional technical depth, `**` = backup. Unmarked
-  slides are the core talk. The title slide states this convention.
+- **`sine-theta-full`: everything**, in six parts that are rendered separately
+  and each get their own HTML, PDF and handout (`renders/part<k>-*.html`):
+
+  | part | deck | content |
+  | --- | --- | --- |
+  | 1 | `part1-sine-theta` | the `sin Theta` theorem: setting, intuition, theorem, proof idea, Lean |
+  | 2 | `part2-3d` | `sin Theta` in three dimensions (VTK) |
+  | 3 | `part3-family` | the `tan Theta`, `sin 2Theta` and `tan 2Theta` theorems |
+  | 4 | `part4-prop44` | Proposition 4.4: refutation and repair |
+  | 5 | `part5-process` | how the formalization was built |
+  | 6 | `part6-summary` | what to take away |
+
+  Slides are numbered within their part ("3 / 7") and the footer names the part.
+  The full deck is assembled from the parts' renders, so it renders nothing
+  itself and re-rendering one part leaves the others alone. Slides beyond the
+  core talk carry a badge in the top-right corner: `*` = optional technical
+  depth, `**` = backup. Unmarked slides are the core talk. The title slide states
+  this convention.
 
 | slide | short | full | idea |
 | --- | :-: | :-: | --- |
@@ -162,10 +177,11 @@ presenter notes on every build. There are two presentation paths:
 | `D02Tilt` ... `D05TryIt` | | `*` | the 3D sweeps and the live demo |
 | `S12Lean` | yes | yes | the complete Lean statement, with an orienting caption and a "reading it" build |
 | `F01Setup` | | `*` | the shared setup of the four Section 2 theorems: old `A`, new `A+H`, their blocks, and which spectra each theorem separates |
+| `F01bAngles` | | `*` | directed `Theta0` vs ambient `Theta` (each angle twice, `||sin Theta|| = ||P - Q||`), `R` vs `H`, and why `sin Theta` has no one-gap ambient form (Proposition 6.1) |
+| `F01cTwoByTwo` | | `*` | one 2x2 rotation: `tan 2theta`, `sin 2theta`, `tan theta` are `b` over the old gap, the new gap and the mixed gap; `sin theta` is smaller |
 | `F02TanTheta` | | `*` | the `tan Theta` theorem: Rayleigh--Ritz values and a one-sided gap; exact in two dimensions; fails with a two-sided gap (`diag(-1, 0, 1)`) |
 | `F03SinTwoTheta` | | `*` | the `sin 2Theta` theorem: a gap inside `A+H` alone; equality on the 2x2 example; `theta` vs `90 - theta` and Theorem 8.2 |
 | `F04TanTwoTheta` | | `*` | the `tan 2Theta` theorem: a gap in `A` alone and off-diagonal `H`; the gap example is an equality at every gap; Theorem 8.1's 45-degree ceiling |
-| `F05OneExample` | | `*` | one 2x2 example (`g = 0.1`), four gaps, four bounds: three equalities |
 | `S13Family` | | `*` | summary table of the four theorems, with their Lean names |
 | `P01Claim` | yes | yes | Proposition 4.4: what it claims and why it is plausible |
 | `P02Counterexample` | yes | yes | the `R^4` counterexample: chords, trace norm, the norms table, the Lean repair |
@@ -184,8 +200,7 @@ The modules are `dkvis/slides_sine_theta.py` (2D), `dkvis/slides_sine_theta_3d.p
 `dkvis/slides_prop44.py` (Proposition 4.4) and `dkvis/slides_process.py` (how the
 formalization was built, from the workshop and journal papers in `papers/`; its
 dated numbers are pinned to those papers' evidence snapshots). Deck order lives in
-`dkvis/build_slides.py` (`DECK_SCENES`). There are also `sine-theta` (the full deck
-without the VTK scenes), `sine-theta-3d` and `prop44`.
+`dkvis/build_slides.py` (`PARTS` and `DECK_SCENES`).
 
 The Lean facts quoted on the slides were checked against a fresh build with
 `#check` and `#print axioms`:
@@ -211,31 +226,34 @@ cases (`make` lists the targets):
 
 ```bash
 make setup                         # uv sync with the vtk, slides and test extras
-make all                           # short + full decks, 1080p60, HTML + PDF + handout PDF in renders/
+make all                           # short deck, every part, and the full deck: 1080p60 HTML + PDF + handout in renders/
+make part3 QUALITY=l               # one part of the full talk at 480p, with its own HTML (part1 ... part6)
 make handout                       # renders/<deck>.handout.pdf: one page per slide, from the existing renders
 make standalone                    # renders/<deck>.standalone.html: one file, videos embedded, easy to share
 make rebuild                       # clean re-render of both decks from scratch
-make short QUALITY=l PDF=0         # quick 480p draft of one deck (also: full, deck-2d, 3d, prop44)
-make full SCENES="S05Residual"     # re-render only some scenes, then reconvert the whole deck
-make clean-full && make full       # clean re-render of one deck
+make short QUALITY=l PDF=0         # quick 480p draft of the short deck
+make full SCENES="S05Residual"     # re-render only some scenes, then reconvert every part and the full deck
+make clean-part3 && make part3     # clean re-render of one part
 make present-short                 # present live with manim-slides
 ```
 
 The underlying commands:
 
 ```bash
-uv sync --extra slides --extra test          # needs LaTeX, and Pango/Cairo headers to build manimpango
-uv run --extra vtk python -m dkvis.build_slides sine-theta-short -q l   # quick draft (480p)
-uv run --extra vtk python -m dkvis.build_slides sine-theta-short --pdf  # 1080p60 -> renders/sine-theta-short.html (+ .pdf)
-uv run --extra vtk python -m dkvis.build_slides sine-theta-full --pdf
-uv run manim-slides present --folder slides-sine-theta-short $(uv run python -m dkvis.build_slides sine-theta-short --list)
+uv sync --extra vtk --extra slides --extra test   # needs LaTeX, and Pango/Cairo headers to build manimpango
+RUN="uv run --extra vtk --extra slides --extra test"   # always pass the extras: a bare `uv run` re-syncs them away
+$RUN python -m dkvis.build_slides sine-theta-short -q l          # quick draft (480p)
+$RUN python -m dkvis.build_slides part3-family --pdf --handout   # one part, 1080p60
+$RUN python -m dkvis.build_slides sine-theta-full                # every part, then the assembled full deck
+$RUN manim-slides present --folder slides-sine-theta-short $($RUN python -m dkvis.build_slides sine-theta-short --list)
 ```
 
-- Every slide shows its number in its deck bottom-right ("7 / 16"). The number
-  is the same on all of a slide's builds, so in the PDF a repeated number means
-  "same slide, next animation step". Because the same scene sits at different
-  positions in different decks, each deck renders into its own `slides-<deck>/`
-  folder. The full-frame VTK video builds carry no number.
+- Every slide shows its number bottom-right: its position in the short deck, or
+  in its part ("7 / 16"). The number is the same on all of a slide's builds, so
+  in the PDF a repeated number means "same slide, next animation step". Because
+  the same scene sits at different positions in the short deck and in its part,
+  each renders into its own `slides-<deck>/` folder; the full deck reuses the
+  parts' folders. The full-frame VTK video builds carry no number.
 - `renders/<deck>.html` is a reveal.js deck: arrow keys advance builds, and `S`
   opens the speaker view with the notes. Keep `renders/<deck>_assets/` next to
   it, or pass `--one-file` to embed the videos.
@@ -302,8 +320,8 @@ uv run --extra vtk python -m dkvis.vtk_sine_theta_3d --slide-assets media/vtk3d
 `--refresh-assets` redoes them):
 
 ```bash
-uv run --extra vtk --extra slides python -m dkvis.build_slides sine-theta-3d    # 3D deck alone
-uv run --extra vtk --extra slides python -m dkvis.build_slides sine-theta-full  # 2D deck + 3D, spliced before the Lean slide
+uv run --extra vtk --extra slides python -m dkvis.build_slides part2-3d         # the 3D part alone
+uv run --extra vtk --extra slides python -m dkvis.build_slides sine-theta-full  # every part, 3D as part 2
 ```
 
 In a talk, the video slides loop until you advance. To go live instead, switch

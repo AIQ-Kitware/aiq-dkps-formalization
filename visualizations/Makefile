@@ -1,14 +1,16 @@
 # Build the Davis--Kahan slide decks and demos.  Run from visualizations/.
 #
 #   make                 # list targets
-#   make all             # short + full decks, 1080p60, HTML + standalone HTML + PDF
+#   make all             # short deck + every part + the full deck, 1080p60, HTML + standalone HTML + PDF
 #   make rebuild         # clean, then make all
-#   make short           # one deck (also: full, deck-2d, 3d, prop44)
-#   make full SCENES="S05Residual S08Why"   # re-render only those scenes, reconvert the deck
+#   make short           # the 15-minute deck
+#   make part3           # one part of the full talk, with its own HTML (part1 ... part6)
+#   make full            # every part, then the full deck assembled from them
+#   make full SCENES="S05Residual S08Why"   # re-render only those scenes, reconvert
 #   make short QUALITY=l # fast 480p draft
 #   make clean-short     # remove one deck's outputs so the next build starts fresh
-#   make standalone      # single-file HTML (videos embedded) of the built short + full decks
-#   make handout         # one-page-per-scene PDFs of the built short + full decks
+#   make standalone      # single-file HTML (videos embedded) of every built deck and part
+#   make handout         # one-page-per-scene PDFs of every built deck and part
 #
 # Every deck writes renders/<deck>.html (+ .pdf, .handout.pdf, <deck>_assets/) and keeps
 # its rendered scenes in slides-<deck>/.  renders/<deck>.html needs the
@@ -23,32 +25,37 @@ SCENES  ?=
 BUILD_FLAGS := --quality $(QUALITY) $(if $(filter 1,$(PDF)),--pdf --handout) $(if $(SCENES),--scenes $(SCENES))
 
 # Short target name -> deck name in dkvis/build_slides.py.
-DECK_short   := sine-theta-short
-DECK_full    := sine-theta-full
-DECK_deck-2d := sine-theta
-DECK_3d      := sine-theta-3d
-DECK_prop44  := prop44
-DECKS        := short full deck-2d 3d prop44
+DECK_short := sine-theta-short
+DECK_full  := sine-theta-full
+DECK_part1 := part1-sine-theta
+DECK_part2 := part2-3d
+DECK_part3 := part3-family
+DECK_part4 := part4-prop44
+DECK_part5 := part5-process
+DECK_part6 := part6-summary
+PARTS      := part1 part2 part3 part4 part5 part6
+DECKS      := short full $(PARTS)
 
 .DEFAULT_GOAL := help
 .PHONY: help setup all rebuild $(DECKS) $(addprefix clean-,$(DECKS)) $(addprefix present-,$(DECKS)) \
-        $(addprefix standalone-,$(DECKS)) standalone $(addprefix handout-,$(DECKS)) handout draft assets app test clean distclean
+        $(addprefix standalone-,$(DECKS)) standalone $(addprefix handout-,$(DECKS)) handout parts draft assets app test clean distclean
 
 help:
 	@awk '/^#/ { sub(/^# ?/, ""); print; next } { exit }' $(firstword $(MAKEFILE_LIST))
 	@echo; echo 'Targets:'
 	@echo '  setup              uv sync with the vtk, slides and test extras'
-	@echo '  all                build the short and full decks, then their standalone HTML'
+	@echo '  all                short, every part and full, then standalone HTML for each'
 	@echo '  rebuild            clean, then all (a from-scratch re-render)'
-	@echo '  short | full       the 15-minute deck | the full deck'
-	@echo '  deck-2d            the full deck without the VTK scenes'
-	@echo '  3d | prop44        the 3D section | the Proposition 4.4 section alone'
+	@echo '  short              the 15-minute deck'
+	@echo '  part1 ... part6    one part of the full talk, rendered and converted on its own:'
+	@echo '                       1 sin Theta, 2 3D, 3 tan/sin2/tan2 Theta, 4 Prop 4.4, 5 process, 6 summary'
+	@echo '  full               every part, then the full deck assembled from their renders'
 	@echo '  clean-<deck>       remove one deck'"'"'s renders and scene folder'
 	@echo '  present-<deck>     present a built deck live with manim-slides'
 	@echo '  standalone-<deck>  write renders/<deck>.standalone.html with the videos embedded (no re-render)'
-	@echo '  standalone         standalone-short + standalone-full'
+	@echo '  standalone         standalone HTML for short, full and every part'
 	@echo '  handout-<deck>     write renders/<deck>.handout.pdf, one page per scene (no re-render)'
-	@echo '  handout            handout-short + handout-full'
+	@echo '  handout            handouts for short, full and every part'
 	@echo '  draft              short + full at 480p, no PDF'
 	@echo '  assets             re-render the VTK stills and movies the 3D slides use'
 	@echo '  app                open the interactive 3D sin-theta demo'
@@ -70,8 +77,14 @@ rebuild:
 draft:
 	$(MAKE) all QUALITY=l PDF=0
 
-$(DECKS):
+short $(PARTS):
 	$(RUN) python -m dkvis.build_slides $(DECK_$@) $(BUILD_FLAGS)
+
+parts: $(PARTS)
+
+# The full deck renders nothing itself: it is assembled from the parts' renders.
+full: $(PARTS)
+	$(RUN) python -m dkvis.build_slides $(DECK_full) --no-render $(if $(filter 1,$(PDF)),--pdf --handout)
 
 $(addprefix clean-,$(DECKS)):
 	rm -rf slides-$(DECK_$(@:clean-%=%)) renders/$(DECK_$(@:clean-%=%)).* renders/$(DECK_$(@:clean-%=%))_assets
@@ -80,13 +93,13 @@ $(addprefix present-,$(DECKS)):
 	$(RUN) manim-slides present --folder slides-$(DECK_$(@:present-%=%)) \
 	    $$($(RUN) python -m dkvis.build_slides $(DECK_$(@:present-%=%)) --list)
 
-standalone: standalone-short standalone-full
+standalone: standalone-short standalone-full $(addprefix standalone-,$(PARTS))
 
 $(addprefix standalone-,$(DECKS)):
 	$(RUN) python -m dkvis.build_slides $(DECK_$(@:standalone-%=%)) --no-render --one-file \
 	    --html renders/$(DECK_$(@:standalone-%=%)).standalone.html
 
-handout: handout-short handout-full
+handout: handout-short handout-full $(addprefix handout-,$(PARTS))
 
 $(addprefix handout-,$(DECKS)):
 	$(RUN) python -m dkvis.build_slides $(DECK_$(@:handout-%=%)) --no-render --handout
