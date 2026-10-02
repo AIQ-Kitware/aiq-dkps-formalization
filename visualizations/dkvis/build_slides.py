@@ -11,7 +11,7 @@ Decks:
 
 * ``sine-theta-short`` -- the 15-minute core talk (intuition, theorem, what was
   formalized, and the Proposition 4.4 counterexample), rendered on its own;
-* ``part1-sine-theta`` ... ``part6-summary`` -- the parts of the full talk.  Each
+* ``part1-sine-theta`` ... ``part7-glossary`` -- the parts of the full talk.  Each
   renders on its own into ``slides-<part>/`` and gets its own HTML, so a part can
   be rebuilt and shared without touching the others.  Slides are numbered within
   their part ("3 / 7"), and the footer names the part;
@@ -58,6 +58,7 @@ PROP44 = "dkvis.slides_prop44"
 FAMILY = "dkvis.slides_family"
 FAMILY_DETAIL = "dkvis.slides_family_detail"
 PROCESS = "dkvis.slides_process"
+GLOSSARY = "dkvis.slides_glossary"
 
 # Presentation order of each deck, by scene name.  Every name must be defined in
 # one of MODULES.  Slides with ``depth`` "*" or "**" carry a badge; the short
@@ -83,6 +84,7 @@ PARTS = {
     "part4-prop44": ["P01Claim", "P02Counterexample", "P03Why", "P04Details"],
     "part5-process": ["W01Workflow", "W02TwoChecks", "W03ThreeStatements", "W04Reversals", "W05Scale", "W06Claims"],
     "part6-summary": ["S14Summary"],
+    "part7-glossary": ["G01Matrices", "G02Spectra", "G03Other"],
 }
 PART_TITLES = {
     "part1-sine-theta": r"Part 1 $\cdot$ the Davis--Kahan $\sin\Theta$ theorem",
@@ -91,6 +93,7 @@ PART_TITLES = {
     "part4-prop44": r"Part 4 $\cdot$ Proposition 4.4, a printed claim that is false",
     "part5-process": r"Part 5 $\cdot$ how the formalization was built",
     "part6-summary": r"Part 6 $\cdot$ summary",
+    "part7-glossary": r"Part 7 $\cdot$ notation",
 }
 
 DECK_SCENES = {
@@ -105,7 +108,7 @@ DECK_SCENES = {
 # Decks assembled from other decks' renders rather than rendered themselves.
 COMPOSITES = {FULL: list(PARTS)}
 
-MODULES = [MAIN, THREE_D, FAMILY, FAMILY_DETAIL, PROP44, PROCESS]
+MODULES = [MAIN, THREE_D, FAMILY, FAMILY_DETAIL, PROP44, PROCESS, GLOSSARY]
 DECKS = list(DECK_SCENES)
 
 

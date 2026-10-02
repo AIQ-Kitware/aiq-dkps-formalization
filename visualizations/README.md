@@ -146,6 +146,7 @@ presenter notes on every build. There are two presentation paths:
   | 4 | `part4-prop44` | Proposition 4.4: refutation and repair |
   | 5 | `part5-process` | how the formalization was built |
   | 6 | `part6-summary` | what to take away |
+  | 7 | `part7-glossary` | notation: every symbol in its role color, with its meaning (backup, for checking the other slides against) |
 
   Slides are numbered within their part ("3 / 7") and the footer names the part.
   The full deck is assembled from the parts' renders, so it renders nothing

@@ -5,7 +5,7 @@
 #   make final           # the same at the full 1080p60
 #   make rebuild         # clean, then make all
 #   make short           # the 15-minute deck
-#   make part3           # one part of the full talk, with its own HTML (part1 ... part6)
+#   make part3           # one part of the full talk, with its own HTML (part1 ... part7)
 #   make full            # every part, then the full deck assembled from them
 #   make full SCENES="S05Residual S08Why"   # re-render only those scenes, reconvert
 #   make short QUALITY=l # fast 480p draft
@@ -38,7 +38,8 @@ DECK_part3 := part3-family
 DECK_part4 := part4-prop44
 DECK_part5 := part5-process
 DECK_part6 := part6-summary
-PARTS      := part1 part2 part3 part4 part5 part6
+DECK_part7 := part7-glossary
+PARTS      := part1 part2 part3 part4 part5 part6 part7
 DECKS      := short full $(PARTS)
 
 .DEFAULT_GOAL := help
@@ -53,8 +54,8 @@ help:
 	@echo '  final              all at the full 1080p60 (all renders 1080p30)'
 	@echo '  rebuild            clean, then all (a from-scratch re-render)'
 	@echo '  short              the 15-minute deck'
-	@echo '  part1 ... part6    one part of the full talk, rendered and converted on its own:'
-	@echo '                       1 sin Theta, 2 3D, 3 tan/sin2/tan2 Theta, 4 Prop 4.4, 5 process, 6 summary'
+	@echo '  part1 ... part7    one part of the full talk, rendered and converted on its own:'
+	@echo '                       1 sin Theta, 2 3D, 3 tan/sin2/tan2 Theta, 4 Prop 4.4, 5 process, 6 summary, 7 notation'
 	@echo '  full               every part, then the full deck assembled from their renders'
 	@echo '  clean-<deck>       remove one deck'"'"'s renders and scene folder'
 	@echo '  present-<deck>     present a built deck live with manim-slides'
