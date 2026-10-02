@@ -1044,21 +1044,21 @@ class S03dCompute(DeckSlide):
 
     def body(self) -> None:
         k = self.GRID
-        pattern = self.sparsity().move_to([-4.6, 0.75, 0])
+        pattern = self.sparsity().move_to([-5.15, 0.8, 0])
         pattern_lbl = para(
             rf"A {k * k}$\times${k * k} grid Laplacian: each row has at most 5 nonzeros. Real models have "
             r"millions of rows and the same few nonzeros per row.",
-            width=3.6, size=19, color=MUTED,
-        ).next_to(pattern, RIGHT, buff=0.3)
+            width=2.6, size=19, color=MUTED,
+        ).next_to(pattern, RIGHT, buff=0.25)
 
         rows = [
-            (r"n", r"\text{all eigenvectors } (n^2\text{ numbers})", r"\text{dense eigensolver } (\sim n^3)"),
+            (r"n", r"\text{store all } (n^2)", r"\text{compute all } (\sim n^3)"),
             (r"10^3", r"8\ \text{MB}", r"10^9\ \text{operations}"),
             (r"10^6", r"8\ \text{TB}", r"10^{18}\ \text{operations}"),
             (r"10^9", r"8\ \text{EB}", r"10^{27}\ \text{operations}"),
         ]
         cells = [[math(c, size=24, color=MUTED if i == 0 else FG) for c in row] for i, row in enumerate(rows)]
-        xs = (-6.75, -5.75, -2.95)
+        xs = (-6.75, -5.75, -3.4)
         table = VGroup()
         for i, row in enumerate(cells):
             for x, cell in zip(xs, row):
@@ -1962,13 +1962,13 @@ class S09Sylvester(DeckSlide):
         arrow = Arrow(grid_left[0].get_right(), grid_right[0].get_left(), buff=0.2, color=MUTED, stroke_width=4)
         arrow_lbl = math(r"x_{ij}\mapsto(\lambda_i-\mu_j)\,x_{ij}", size=22, color=MUTED).next_to(arrow, UP, buff=0.12)
         grid_caption = tex(
-            r"rows: unwanted eigenvalues \cx{exact}{$\lambda_i$}; \ columns: trial eigenvalues \cx{trial}{$\mu_j$}; "
-            r"\ each square is one entry of $X$, not a block",
+            r"rows: unwanted eigenvalues \cx{exact}{$\lambda_i$}; \ columns: trial eigenvalues \cx{trial}{$\mu_j$}",
             size=20,
             color=MUTED,
         ).next_to(VGroup(grid_left, grid_right), DOWN, buff=0.15).align_to(grid_left, LEFT)
         entry_text = para(
-            r"$\cx{sine}{X}$ is the whole rectangular overlap matrix. In eigenvector coordinates, entry $x_{ij}$ "
+            r"$\cx{sine}{X}$ is the whole rectangular overlap matrix; each square is one entry, not a block. "
+            r"In eigenvector coordinates, entry $x_{ij}$ "
             r"is how much trial direction $j$ "
             r"overlaps unwanted eigendirection $i$. $\cx{exact}{\Lambda_1}$ scales row $i$ by $\lambda_i$ and "
             r"$\cx{trial}{A_0}$ scales column $j$ by $\mu_j$, so",
