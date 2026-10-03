@@ -15,9 +15,10 @@ obvious from the picture (``Vperp`` is neutral, not amber) should ask here.  To 
 what a role looks like, change :mod:`dkvis.palette`.  ``\\cx{role}{...}`` remains
 for legend prose that names a role directly ("blue: ...").
 
-Operators (``A``, ``Ã``, ``H``, the projectors) are neutral.  So are the blocks
-that belong to no role: ``A1`` (the complementary block of the old ``A``) and
-``E1`` (a basis of ``V-perp``).
+The operators take the quieter second tier of :mod:`dkvis.palette`: the old
+``A`` and its blocks are tan (``A0``, the trial block, stays amber), ``Ã`` is
+steel and ``H`` with its blocks and its entry ``b`` is vermilion.  The
+projectors, ``E1`` and ``V-perp`` belong to no role and are neutral.
 """
 
 from __future__ import annotations
@@ -36,20 +37,29 @@ ROLES = {
     "sine": "SINE",
     "resid": "RESID",
     "gap": "GAP",
+    "old": "OLD",
+    "current": "CURRENT",
+    "perturb": "PERTURB",
+    "refuted": "REFUTED",
 }
 
 #: key: (LaTeX, role)
 SYMBOLS: dict[str, tuple[str, str]] = {
-    # Operators and blocks with no role.
-    "A": (r"A", "fg"),
-    "H": (r"H", "fg"),
-    "At": (r"\tilde A", "fg"),
-    "A1": (r"A_1", "fg"),
+    # The operators, each in a muted relative of its eigenvectors' color.
+    "A": (r"A", "old"),
+    "A1": (r"A_1", "old"),
+    "a1": (r"a_1", "old"),
+    "At": (r"\tilde A", "current"),
+    "H": (r"H", "perturb"),
+    "H0": (r"H_0", "perturb"),
+    "H1": (r"H_1", "perturb"),
+    "B": (r"B", "perturb"),
+    "b": (r"b", "perturb"),
+    # No role.
     "P": (r"P", "fg"),
     "Q": (r"Q", "fg"),
     "E1": (r"E_1", "fg"),
     "Vperp": (r"V^{\perp}", "fg"),
-    "a1": (r"a_1", "fg"),
     # What we want: the exact invariant subspace and its spectrum.
     "U": (r"U", "wanted"),
     "F0": (r"F_0", "wanted"),
@@ -124,6 +134,138 @@ def check_keys(source: str) -> None:
             raise KeyError(f"unknown notation key {key!r} in {source!r}; see dkvis.notation.SYMBOLS")
 
 
+# Relations, operations and delimiters: the "verbs" of a formula, which stay
+# neutral while the symbols around them take their colors.
+_NEUTRAL_CMDS = {
+    "le", "ge", "leq", "geq", "lt", "gt", "ne", "neq", "approx", "sim", "equiv", "subset", "subseteq",
+    "supset", "supseteq", "cap", "cup", "in", "notin", "setminus", "cdot", "times", "pm", "mp", "to",
+    "mapsto", "implies", "Longrightarrow", "Rightarrow", "iff", "quad", "qquad", "left", "right", "bigl",
+    "bigr", "Bigl", "Bigr", "big", "Big", "lVert", "rVert", "lvert", "rvert", "langle", "rangle", "sum",
+    "max", "min", "inf", "sup", "lim", "int", "circ", "mid", "colon", ",", ";", ":", "!", " ", "\\", "&",
+}
+# Macros whose name is an operation and whose arguments are colored as usual.
+_NEUTRAL_ARG_CMDS = {"norm": 1, "frac": 2, "tfrac": 2, "dfrac": 2, "sqrt": 1, "overline": 1}
+# Macros that are neutral together with their argument.
+_NEUTRAL_WHOLE_CMDS = {"operatorname", "text", "mathrm", "textbf", "texttt", "mathsf"}
+# Macros that take the next token as part of the same symbol.
+_ACCENTS = {"tilde", "hat", "bar", "vec", "mathcal", "mathbb", "widetilde", "widehat", "dot"}
+_NEUTRAL_CHARS = set("+-=<>/|,()[];:!&")
+
+
+def _group(src: str, i: int) -> int:
+    """Index just past the brace group starting at ``src[i] == '{'``."""
+    depth = 0
+    for j in range(i, len(src)):
+        if src[j] == "{":
+            depth += 1
+        elif src[j] == "}":
+            depth -= 1
+            if depth == 0:
+                return j + 1
+    return len(src)
+
+
+def _token(src: str, i: int) -> int:
+    """Index just past the token at ``i``: a macro, a brace group or one character."""
+    if src[i] == "{":
+        return _group(src, i)
+    if src[i] == "\\":
+        j = i + 1
+        if j < len(src) and src[j].isalpha():
+            while j < len(src) and src[j].isalpha():
+                j += 1
+            return j
+        return min(j + 1, len(src))
+    return i + 1
+
+
+def color_nouns(src: str, color: str) -> str:
+    """Wrap the symbols of ``src`` in ``\\textcolor{color}``, leaving its verbs neutral.
+
+    ``color`` is a LaTeX color name or ``[HTML]{RRGGBB}``.  Relations, operations,
+    delimiters, norm bars, ``\\operatorname{...}`` and text stay in the
+    surrounding color; runs of symbols (letters, digits, Greek, accents, and
+    their sub- and superscripts) are colored.
+    """
+    spec = color if color.startswith("[") else "{" + color + "}"
+    out, run, i = [], [], 0
+
+    def flush():
+        if run:
+            body = "".join(run).strip()
+            lead = "".join(run)[: len("".join(run)) - len("".join(run).lstrip())]
+            out.append(lead + (rf"\textcolor{spec}{{{body}}}" if body else ""))
+            run.clear()
+
+    while i < len(src):
+        c = src[i]
+        if c in "^_" and (run or out):
+            # a script belongs to whatever it follows
+            j = _token(src, i + 1)
+            (run if run else out).append(src[i:j])
+            i = j
+            continue
+        if c.isspace():
+            (run if run else out).append(c)
+            i += 1
+            continue
+        j = _token(src, i)
+        tok = src[i:j]
+        name = tok[1:] if tok.startswith("\\") else None
+        if c in _NEUTRAL_CHARS or (name is not None and name in _NEUTRAL_CMDS):
+            flush()
+            out.append(tok)
+            i = j
+        elif name in _NEUTRAL_WHOLE_CMDS:
+            flush()
+            k = _group(src, j) if j < len(src) and src[j] == "{" else j
+            out.append(src[i:k])
+            i = k
+        elif name in _NEUTRAL_ARG_CMDS:
+            flush()
+            out.append(tok)
+            for _ in range(_NEUTRAL_ARG_CMDS[name]):
+                if j < len(src) and src[j] == "{":
+                    k = _group(src, j)
+                    out.append("{" + color_nouns(src[j + 1 : k - 1], color) + "}")
+                    j = k
+            i = j
+        elif name == "textcolor":
+            # already colored: keep it whole, as its own symbol
+            flush()
+            k = j
+            while k < len(src) and src[k] == "{":
+                k = _group(src, k)
+            out.append(src[i:k])
+            i = k
+        elif name in _ACCENTS:
+            k = _token(src, j) if j < len(src) else j
+            run.append(src[i:k])
+            i = k
+        else:
+            run.append(tok)
+            i = j
+    flush()
+    return "".join(out)
+
+
+_LIKE_USE = re.compile(r"\\like\{(\w+)\}\{")
+
+
+def _expand_likes(source: str) -> str:
+    out, i = [], 0
+    for m in _LIKE_USE.finditer(source):
+        if m.start() < i:
+            continue
+        end = _group(source, m.end() - 1)
+        body = source[m.end() : end - 1]
+        out.append(source[i : m.start()])
+        out.append(color_nouns(body, SYMBOLS[m.group(1)][1]))
+        i = end
+    out.append(source[i:])
+    return "".join(out)
+
+
 def expand(source: str) -> str:
     """Write each ``\\sym{key}`` out as its colored symbol.
 
@@ -136,4 +278,4 @@ def expand(source: str) -> str:
         body, name = SYMBOLS[match.group(1)]
         return rf"\textcolor{{{name}}}{{{body}{match.group(2)}}}"
 
-    return _SYM_USE.sub(colored, source)
+    return _expand_likes(_SYM_USE.sub(colored, source))

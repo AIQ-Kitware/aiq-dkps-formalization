@@ -91,15 +91,15 @@ class D01Planes(D3Slide):
     def body(self) -> None:
         top = self.content_top - 0.2
         paras = [
-            r"With positive eigenvalues, $\tilde A=\operatorname{diag}(\lambda_1,\lambda_2,\lambda_3)$ maps the unit "
+            r"With positive eigenvalues, $\sym{At}=\operatorname{diag}(\lambda_1,\lambda_2,\lambda_3)$ maps the unit "
             r"sphere of $\mathbb{R}^3$ to an ellipsoid. "
             r"The wanted subspace $\sym{U}=\operatorname{span}(f_1,f_2)$ is the plane of its two short axes; "
             r"$\like{w}{f_3}$ spans $\sym{Uperp}$ and $\sym{Lambda1}=[\like{Lambda1}{\lambda_3}]$.",
-            r"A trial plane $\sym{V}=\operatorname{ran}E_0$, tilted by $\theta$ about a line in $U$. "
+            r"A trial plane $\sym{V}=\operatorname{range}E_0$, tilted by $\theta$ about a line in $U$. "
             r"Two planes in $\mathbb{R}^3$ always share a line, so the principal angles are $(\theta,0)$.",
             r"One nonzero sine: $\norm{\sym{sinTheta0}}=\norm{\sym{F1}^{\mathsf T}\sym{E0}}=\sin\theta$, "
             r"the pink drop from $V$ to $U$.",
-            r"With the Rayleigh--Ritz choice $A_0=E_0^{\mathsf T}\tilde AE_0$ we get $E_0^{\mathsf T}R=0$: "
+            r"With the Rayleigh--Ritz choice $A_0=E_0^{\mathsf T}\sym{At}E_0$ we get $E_0^{\mathsf T}R=0$: "
             r"the \cx{resid}{residuals} leave $V$ at right angles.",
         ]
         texts = text_block(*paras, top=top, size=25)
@@ -227,7 +227,7 @@ class D04Perturb(D3Slide):
 
     def body(self) -> None:
         eq = math(
-            r"\sym{R}=(A+\varepsilon H)\sym{E0}-\sym{E0}\sym{A0}=\varepsilon H\sym{E0}",
+            r"\sym{R}=(\sym{A}+\varepsilon \sym{H})\sym{E0}-\sym{E0}\sym{A0}=\varepsilon \sym{H}\sym{E0}",
             size=32,
         )
         bound = boxed(
@@ -236,7 +236,7 @@ class D04Perturb(D3Slide):
         )
         note = para(
             r"$E_0=[e_1\ e_2]$ and $A_0=\operatorname{diag}(\lambda_1,\lambda_2)$ are the \emph{unperturbed} "
-            r"eigenpairs; $H$ is a fixed symmetric direction with $\norm{H}_2=1$, and $\delta$ is measured "
+            r"eigenpairs; $\sym{H}$ is a fixed symmetric direction with $\norm{\sym{H}}_2=1$, and $\delta$ is measured "
             r"to the perturbed $\lambda_3(\varepsilon)$.",
             width=TEXT_W,
             size=24,

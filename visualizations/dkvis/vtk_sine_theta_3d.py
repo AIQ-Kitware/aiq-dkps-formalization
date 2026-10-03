@@ -8,7 +8,7 @@ Run from ``visualizations/``::
 The scene lives in ``R^3``.  ``A`` is drawn as the ellipsoid ``{A x : |x| = c}``;
 the exact invariant subspace ``U`` (blue disk) is the plane of its two wanted
 axes ``f1, f2``, and ``f3`` spans the unwanted direction ``U-perp``.  The trial
-plane ``V = ran E0`` (amber disk) meets ``U`` in a line, so the principal angles
+plane ``V = range E0`` (amber disk) meets ``U`` in a line, so the principal angles
 are ``(theta, 0)``; the pink segment is the one nonzero sine.  Green arrows are
 the residuals ``R c`` of the two principal trial vectors, drawn from their tips.
 
@@ -467,7 +467,7 @@ class SineTheta3D:
 
         # Translucent context (planes, ellipsoid, axes) in the base layer ...
         # The operator itself is neutral; only its wanted and unwanted parts carry role colors.
-        self.ellipsoid = Ellipsoid(r, C["MUTED"])
+        self.ellipsoid = Ellipsoid(r, C["CURRENT"])
         self.axis_lines = [Segment(r, C["WANTED"], radius=0.006, opacity=0.55) for _ in range(3)]
         self.U = Disk(r, C["WANTED"])
         self.V = Disk(r, C["TRIAL"])

@@ -47,10 +47,12 @@ from manim import (
 from dkvis import sine_theta_story as story
 from dkvis.notation import concept_color
 from dkvis.slide_style import (
+    CURRENT,
     FAINT,
     FG,
     GAP,
     MUTED,
+    OLD,
     RESID,
     SINE,
     TRIAL,
@@ -121,9 +123,9 @@ def two_by_two(plane: Plane, pair: story.PerturbedPair, reach: float = 2.3) -> V
     the target, ``A + H``'s top eigenvector, blue."""
     top = pair.perturbed_top_eigenvector
     return VGroup(
-        DashedVMobject(ellipse(plane, pair.A, color=MUTED, width=2), num_dashes=56),
+        DashedVMobject(ellipse(plane, pair.A, color=OLD, width=2), num_dashes=56),
         through_origin(plane, [1.0, 0.0], reach, TRIAL, width=3, opacity=0.85),
-        ellipse(plane, pair.perturbed, color=FG, width=3),
+        ellipse(plane, pair.perturbed, color=CURRENT, width=3),
         through_origin(plane, top, reach, WANTED, width=3.5),
         angle_arc(plane, [1.0, 0.0], top, 0.9 * plane.scale, SINE, width=4),
     )
@@ -137,7 +139,7 @@ def two_by_two(plane: Plane, pair: story.PerturbedPair, reach: float = 2.3) -> V
 class F01Setup(DeckSlide):
     depth = "*"
     title = "Four theorems, one setup"
-    kicker = r"An old matrix $A$, a new one $A+H$, and an invariant subspace of each"
+    kicker = r"An old matrix $\sym{A}$, a new one $\sym{A}+\sym{H}$, and an invariant subspace of each"
 
     def body(self) -> None:
         line_old, X_old = axis(0.3, 3.2, -6.5, -0.9, 1.45)
@@ -160,15 +162,15 @@ class F01Setup(DeckSlide):
             r = math(rf"\sym{{{r_key}}}", size=28).next_to((X(rest[0]) + X(rest[-1])) / 2, DOWN, buff=0.22)
             return VGroup(line, box, dots, cap, w, r)
 
-        old = spectrum(line_old, X_old, (0.6, 0.95), (2.0, 2.45, 2.9), r"eigenvalues of the old $A$", "A0", "A1")
-        new = spectrum(line_new, X_new, (0.7, 1.1), (1.85, 2.55, 2.8), r"eigenvalues of the new $A+H$", "Lambda0", "Lambda1")
+        old = spectrum(line_old, X_old, (0.6, 0.95), (2.0, 2.45, 2.9), r"eigenvalues of the old $\sym{A}$", "A0", "A1")
+        new = spectrum(line_new, X_new, (0.7, 1.1), (1.85, 2.55, 2.8), r"eigenvalues of the new $\sym{A}+\sym{H}$", "Lambda0", "Lambda1")
 
         head = tex(r"Which eigenvalues each theorem keeps apart:", size=24)
         rows = [
             (r"$\sin\Theta$", r"$\sym{A0}$ vs $\sym{Lambda1}$", r"interval/exterior"),
             (r"$\tan\Theta$", r"$\sym{A0}$ vs $\sym{Lambda1}$", r"one-sided; $A_0$ Rayleigh--Ritz"),
             (r"$\sin2\Theta$", r"$\sym{Lambda0}$ vs $\sym{Lambda1}$", r"interval/exterior"),
-            (r"$\tan2\Theta$", r"$\sym{A0}$ vs $A_1$", r"one-sided; $H_0=H_1=0$"),
+            (r"$\tan2\Theta$", r"$\sym{A0}$ vs $A_1$", r"one-sided; $\sym{H0}=\sym{H1}=0$"),
         ]
         cells = [[tex(c, size=22, color=SINE if j == 0 else FG) for j, c in enumerate(r)] for r in rows]
         xs = (-6.4, -5.1, -3.3)
@@ -181,14 +183,14 @@ class F01Setup(DeckSlide):
 
         size, w = 21, TEXT_W
         p_old = para(
-            r"\textbf{The old $A$:} $\sym{E0}$ is an orthonormal basis of an invariant subspace "
-            r"$\sym{V}$ of $A$ (its wanted eigenvectors), with block $\sym{A0}=E_0^*AE_0$; $A_1$ is the "
-            r"rest of $A$.",
+            r"\textbf{The old $\sym{A}$:} $\sym{E0}$ is an orthonormal basis of an invariant subspace "
+            r"$\sym{V}$ of $\sym{A}$ (its wanted eigenvectors), with block $\sym{A0}=E_0^*\sym{A}E_0$; $A_1$ is the "
+            r"rest of $\sym{A}$.",
             width=w, size=size,
         )
         p_new = para(
-            r"\textbf{The new $\tilde A=A+H$:} $\sym{F0}$ spans the corresponding invariant subspace "
-            r"$\sym{U}$ of $\tilde A$, with block $\sym{Lambda0}$; $\sym{Lambda1}$ is the rest.",
+            r"\textbf{The new $\sym{At}=\sym{A}+\sym{H}$:} $\sym{F0}$ spans the corresponding invariant subspace "
+            r"$\sym{U}$ of $\sym{At}$, with block $\sym{Lambda0}$; $\sym{Lambda1}$ is the rest.",
             width=w, size=size,
         )
         p_ang = para(
@@ -197,18 +199,18 @@ class F01Setup(DeckSlide):
             width=w, size=size,
         )
         p_res = para(
-            r"The residual $\sym{R}=(A+H)E_0-E_0A_0$ equals $HE_0$. In $A$'s eigenbasis "
-            r"$H=\left(\begin{smallmatrix}H_0&B^*\\ B&H_1\end{smallmatrix}\right)$: $B$ couples wanted with unwanted "
-            r"directions, $H_0$ and $H_1$ act within them.",
+            r"The residual $\sym{R}=(\sym{A}+\sym{H})E_0-E_0A_0$ equals $\sym{H}E_0$. In $\sym{A}$'s eigenbasis "
+            r"$\sym{H}=\left(\begin{smallmatrix}\sym{H0}&\sym{B}^*\\ \sym{B}&\sym{H1}\end{smallmatrix}\right)$: $\sym{B}$ couples wanted with unwanted "
+            r"directions, $\sym{H0}$ and $\sym{H1}$ act within them.",
             width=w, size=size,
         )
         p_forms = para(
             r"Each theorem has a \emph{directed} form, with $\Theta_0$ and $\norm{R}$; the last three also have an "
-            r"\emph{ambient} form, with $\Theta$ and $\norm{H}$.",
+            r"\emph{ambient} form, with $\Theta$ and $\norm{\sym{H}}$.",
             width=w, size=size,
         )
         p_bridge = para(
-            r"Same notation as before: $\sym{U}$ is the target subspace of the matrix we have, $\tilde A$, and "
+            r"Same notation as before: $\sym{U}$ is the target subspace of the matrix we have, $\sym{At}$, and "
             r"$\sym{V}$ the trial subspace; in the trial reading $E_0$ is any orthonormal trial basis.",
             width=w, size=size - 1, color=MUTED,
         )
@@ -310,8 +312,8 @@ class F02TanTheta(DeckSlide):
 
         size, w = 22, TEXT_W
         hyp = para(
-            r"\textbf{Hypotheses.} The trial matrix is the Rayleigh--Ritz one, $\sym{A0}=E_0^*(A+H)E_0$ "
-            r"(equivalently $H_0=0$), with eigenvalues in $[\beta,\alpha]$, and every unwanted eigenvalue of $A+H$ "
+            r"\textbf{Hypotheses.} The trial matrix is the Rayleigh--Ritz one, $\sym{A0}=E_0^*(\sym{A}+\sym{H})E_0$ "
+            r"(equivalently $\sym{H0}=0$), with eigenvalues in $[\beta,\alpha]$, and every unwanted eigenvalue of $\sym{A}+\sym{H}$ "
             r"is at least $\alpha+\delta$: all on one side. This is the situation when Rayleigh--Ritz targets the "
             r"lowest (or, mirrored, the highest) eigenvalues.",
             width=w, size=size,
@@ -319,7 +321,7 @@ class F02TanTheta(DeckSlide):
         box = boxed(
             math(
                 r"\sym{delta}\norm{\like{theta}{\tan\Theta_0}}\le\norm{\sym{R}},\qquad"
-                r"\sym{delta}\norm{\like{theta}{\tan\Theta}}\le\norm{H}",
+                r"\sym{delta}\norm{\like{theta}{\tan\Theta}}\le\norm{\sym{H}}",
                 size=32,
             ),
             color=SINE,
@@ -336,7 +338,7 @@ class F02TanTheta(DeckSlide):
             size=28,
         )
         bad_txt = para(
-            r"\textbf{One-sidedness is essential.} Take $A=\operatorname{diag}(-1,0,1)$, wanted eigenvalue $0$, and "
+            r"\textbf{One-sidedness is essential.} Take $\sym{A}=\operatorname{diag}(-1,0,1)$, wanted eigenvalue $0$, and "
             r"$v=\cos\theta\,e_2+\sin\theta\,(e_1+e_3)/\sqrt2$. Then $\rho=0$, $\delta=1$ on \emph{both} sides and "
             rf"$\norm{{r}}=\sin\theta$: the $\sin\Theta$ bound is an equality, but $\delta\tan\theta\le\norm{{r}}$ fails "
             rf"for every $\theta>0$ (at $45^\circ$: $1>{bad.residual_norm:.3f}$).",
@@ -392,8 +394,8 @@ class F03SinTwoTheta(DeckSlide):
         picture = two_by_two(plane, pair)
         th_lbl = math(r"\sym{theta}", size=26).move_to(plane(1.2 * story.unit(pair.theta / 2 + 0.12)))
         key = VGroup(
-            tex(r"dashed: old $A$; \cx{trial}{amber: its top eigenvector}", size=18),
-            tex(r"solid: new $A+H$; \cx{wanted}{blue: its top eigenvector}", size=18),
+            tex(r"\cx{old}{dashed: old $\sym{A}$}; \cx{trial}{amber: its top eigenvector}", size=18),
+            tex(r"\cx{current}{solid: new $\sym{At}$}; \cx{wanted}{blue: its top eigenvector}", size=18),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.05).move_to([-6.9, 2.3, 0], aligned_edge=UP + LEFT)
 
         lam1, lam0 = pair.perturbed_eigenvalues[1], pair.perturbed_eigenvalues[0]
@@ -404,7 +406,7 @@ class F03SinTwoTheta(DeckSlide):
             Dot(X(lam1), radius=0.08, color=UNWANTED),
             math(r"\sym{Lambda0}", size=24).next_to(X(lam0), DOWN, buff=0.1),
             math(r"\sym{Lambda1}", size=24).next_to(X(lam1), DOWN, buff=0.1),
-            tex(r"eigenvalues of $A+H$", size=19, color=MUTED).next_to(X(2.2), RIGHT, buff=0.1),
+            tex(r"eigenvalues of $\sym{A}+\sym{H}$", size=19, color=MUTED).next_to(X(2.2), RIGHT, buff=0.1),
         )
         sep = gap_mark(X(lam1) + UP * 0.22, X(lam0) + UP * 0.22, rf"$\delta={pair.delta_sin_two:.3f}$", size=20)
 
@@ -435,7 +437,7 @@ class F03SinTwoTheta(DeckSlide):
         box = boxed(
             math(
                 r"\sym{delta}\norm{\like{theta}{\sin2\Theta_0}}\le2\norm{\sym{R}},\qquad"
-                r"\sym{delta}\norm{\like{theta}{\sin2\Theta}}\le2\norm{H}",
+                r"\sym{delta}\norm{\like{theta}{\sin2\Theta}}\le2\norm{\sym{H}}",
                 size=32,
             ),
             color=SINE,
@@ -449,12 +451,12 @@ class F03SinTwoTheta(DeckSlide):
         )
         price = para(
             r"\textbf{The price.} $\sin2\theta$ cannot tell $\theta$ from $90^\circ-\theta$, and the theorem accepts "
-            r"\emph{any} invariant subspace $F_0$ of $A+H$ whose spectrum splits this way. Even with $H=0$ a "
+            r"\emph{any} invariant subspace $F_0$ of $\sym{A}+\sym{H}$ whose spectrum splits this way. Even with $\sym{H}=0$ a "
             r"mismatched $F_0$ can be $90^\circ$ away, where $\sin2\theta=0$.",
             width=w, size=size,
         )
         thm82 = para(
-            r"Theorem 8.2 adds $\norm{H}_2<\delta/2$ (or $\norm{R}_2<\delta/2$) and "
+            r"Theorem 8.2 adds $\norm{\sym{H}}_2<\delta/2$ (or $\norm{R}_2<\delta/2$) and "
             r"$\operatorname{spec}\sym{A0}\subset[\beta-\delta/2,\alpha+\delta/2]$. Then every angle is below $45^\circ$, "
             r"so a small $\sin2\Theta$ does mean a small $\Theta$.",
             width=w, size=size - 1, color=MUTED,
@@ -491,7 +493,7 @@ class F03SinTwoTheta(DeckSlide):
 class F04TanTwoTheta(DeckSlide):
     depth = "*"
     title = r"The $\tan2\Theta$ theorem: a gap in the old matrix"
-    kicker = r"An a priori bound: only $A$'s spectrum matters, and $H$ is off-diagonal"
+    kicker = r"An a priori bound: only $\sym{A}$'s spectrum matters, and $\sym{H}$ is off-diagonal"
 
     def body(self) -> None:
         eps = story.PERTURBATION_EPS
@@ -506,8 +508,8 @@ class F04TanTwoTheta(DeckSlide):
             lambda: math(r"\sym{theta}", size=26).move_to(plane(1.1 * story.unit(max(pair().theta, 0.2) / 2)))
         )
         key = VGroup(
-            tex(r"dashed: old $A$; \cx{trial}{amber: its top eigenvector}", size=18),
-            tex(r"solid: new $A+H$; \cx{wanted}{blue: its top eigenvector}", size=18),
+            tex(r"\cx{old}{dashed: old $\sym{A}$}; \cx{trial}{amber: its top eigenvector}", size=18),
+            tex(r"\cx{current}{solid: new $\sym{At}$}; \cx{wanted}{blue: its top eigenvector}", size=18),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.05).move_to([-6.9, 2.3, 0], aligned_edge=UP + LEFT)
 
         nl, X = axis(0.8, 2.2, -6.5, -1.9, -1.45)
@@ -522,12 +524,12 @@ class F04TanTwoTheta(DeckSlide):
                 gap_mark(X(lam1) + UP * 0.22, X(lam0) + UP * 0.22, r"$\delta=g$", size=20),
             )
 
-        spectrum = VGroup(nl, always_redraw(old_spectrum), tex(r"eigenvalues of $A$", size=19, color=MUTED).next_to(X(2.2), RIGHT, buff=0.1))
-        rows_l = readout_rows([(r"g =", lambda: g.get_value(), FG, 2, None), (r"\norm{H}_2 =", lambda: eps, FG, 2, None)], size=24)
+        spectrum = VGroup(nl, always_redraw(old_spectrum), tex(r"eigenvalues of $\sym{A}$", size=19, color=MUTED).next_to(X(2.2), RIGHT, buff=0.1))
+        rows_l = readout_rows([(r"\sym{g} =", lambda: g.get_value(), FG, 2, None), (r"\norm{\sym{H}}_2 =", lambda: eps, FG, 2, None)], size=24)
         rows_r = readout_rows(
             [
                 (r"\theta =", lambda: pymath.degrees(pair().line_angle), SINE, 1, r"^\circ"),
-                (r"g\tan2\theta =", lambda: g.get_value() * pair().tan_two_theta, FG, 3, None),
+                (r"\sym{g}\tan2\sym{theta} =", lambda: g.get_value() * pair().tan_two_theta, FG, 3, None),
             ],
             size=24,
         )
@@ -537,30 +539,30 @@ class F04TanTwoTheta(DeckSlide):
         size, w = 22, TEXT_W
         hyp = para(
             r"\textbf{Hypotheses.} Only the old matrix's own spectrum, one-sided: every eigenvalue of $A_1$ at least "
-            r"$\delta$ beyond those of $\sym{A0}$. And $H_0=H_1=0$: in $A$'s eigenbasis $H$ only couples "
+            r"$\delta$ beyond those of $\sym{A0}$. And $\sym{H0}=\sym{H1}=0$: in $\sym{A}$'s eigenbasis $\sym{H}$ only couples "
             r"wanted with unwanted directions.",
             width=w, size=size,
         )
         box = boxed(
             math(
                 r"\sym{delta}\norm{\like{theta}{\tan2\Theta_0}}\le2\norm{\sym{R}},\qquad"
-                r"\sym{delta}\norm{\like{theta}{\tan2\Theta}}\le2\norm{H}",
+                r"\sym{delta}\norm{\like{theta}{\tan2\Theta}}\le2\norm{\sym{H}}",
                 size=32,
             ),
             color=SINE,
             pad=0.18,
         )
-        prior = para(r"Nothing is assumed about $A+H$: an \emph{a priori} bound, from $A$ and $H$ alone.", width=w, size=size)
+        prior = para(r"Nothing is assumed about $\sym{A}+\sym{H}$: an \emph{a priori} bound, from $\sym{A}$ and $\sym{H}$ alone.", width=w, size=size)
         example = para(
             r"The gap example from the start is exactly this case. In $2\times2$ the bound is the Jacobi rotation "
-            r"formula $\tan2\theta=2b/(a_0-a_1)$, an equality at every gap: "
+            r"formula $\tan2\theta=2\sym{b}/(a_0-a_1)$, an equality at every gap: "
             rf"$g\tan2\theta=2\varepsilon={2 * eps:.2f}$. As $g\to0$, $\tan2\theta\to\infty$, so $2\theta\to90^\circ$ "
             r"and $\theta\to45^\circ$, never beyond.",
             width=w, size=size,
         )
         thm81 = para(
-            r"Theorem 8.1: if $F_0$ is the matching spectral subspace of $A+H$ (its wanted eigenvalues on $\sym{A0}$'s side "
-            r"of the gap, the rest on $A_1$'s), every angle is at most $45^\circ$, however large $H$ is. That is the "
+            r"Theorem 8.1: if $F_0$ is the matching spectral subspace of $\sym{A}+\sym{H}$ (its wanted eigenvalues on $\sym{A0}$'s side "
+            r"of the gap, the rest on $A_1$'s), every angle is at most $45^\circ$, however large $\sym{H}$ is. That is the "
             r"$45^\circ$ ceiling seen at the start.",
             width=w, size=size - 1, color=MUTED,
         )
@@ -608,8 +610,8 @@ class F01bAngles(DeckSlide):
 
         V = through_origin(plane, e1, reach, concept_color("V"), width=4)
         U = through_origin(plane, v, reach, concept_color("U"), width=4)
-        V_lbl = tex(r"$V=\operatorname{ran}E_0$", size=22, color=concept_color("V")).next_to(plane(reach * e1), DOWN, buff=0.1)
-        U_lbl = tex(r"$U=\operatorname{ran}F_0$", size=22, color=concept_color("U")).next_to(plane(reach * v), RIGHT, buff=0.1)
+        V_lbl = tex(r"$V=\operatorname{range}E_0$", size=22, color=concept_color("V")).next_to(plane(reach * e1), DOWN, buff=0.1)
+        U_lbl = tex(r"$U=\operatorname{range}F_0$", size=22, color=concept_color("U")).next_to(plane(reach * v), RIGHT, buff=0.1)
         arc = angle_arc(plane, e1, v, 1.15, SINE, width=4)
         th_lbl = math(r"\sym{theta}", size=28).move_to(plane(0.72 * story.unit(th / 2)))
 
@@ -643,13 +645,13 @@ class F01bAngles(DeckSlide):
             width=w, size=size,
         )
         p_rh = para(
-            r"Directed bounds compare with the residual $\sym{R}=HE_0$, the part of $H$ acting on $V$; ambient "
-            r"bounds compare with all of $H$. Always $\norm{R}\le\norm{H}$.",
+            r"Directed bounds compare with the residual $\sym{R}=\sym{H}E_0$, the part of $\sym{H}$ acting on $V$; ambient "
+            r"bounds compare with all of $\sym{H}$. Always $\norm{R}\le\norm{\sym{H}}$.",
             width=w, size=size,
         )
         p_sin = para(
             r"With one gap, $\sin\Theta$ has no ambient form in every norm: Davis and Kahan's $2\times2$ example has "
-            r"$\delta\norm{\sin\Theta}_F=2>\sqrt3=\norm{H}_F$. Proposition~6.1 recovers $\delta\norm{\sin\Theta}\le\norm{H}$ "
+            r"$\delta\norm{\sin\Theta}_F=2>\sqrt3=\norm{\sym{H}}_F$. Proposition~6.1 recovers $\delta\norm{\sin\Theta}\le\norm{\sym{H}}$ "
             r"with a second gap, between $A_1$ and $\sym{Lambda0}$.",
             width=w, size=size - 1, color=MUTED,
         )
@@ -708,7 +710,7 @@ class F01cTwoByTwo(DeckSlide):
             Circle(radius=0.075, color=concept_color("a1"), stroke_width=3).move_to(X_old(a1)),
             math(rf"\sym{{a0}}={a0:.2f}", size=20).next_to(X_old(a0), UP, buff=0.1),
             math(rf"\sym{{a1}}={a1:.2f}", size=20).next_to(X_old(a1), UP, buff=0.1),
-            tex(r"old $A$", size=22, color=FG).next_to(X_old(lo), LEFT, buff=0.15),
+            tex(r"old $\sym{A}$", size=22, color=FG).next_to(X_old(lo), LEFT, buff=0.15),
         )
         new = VGroup(
             line_new,
@@ -716,7 +718,7 @@ class F01cTwoByTwo(DeckSlide):
             Circle(radius=0.075, color=concept_color("lambda1"), stroke_width=3).move_to(X_new(l1)),
             math(rf"\sym{{lambda0}}={l0:.2f}", size=20).next_to(X_new(l0), UP, buff=0.1),
             math(rf"\sym{{lambda1}}={l1:.2f}", size=20).next_to(X_new(l1), UP, buff=0.1),
-            tex(r"new $A+H$", size=22, color=FG).next_to(X_new(lo), LEFT, buff=0.15),
+            tex(r"new $\sym{A}+\sym{H}$", size=22, color=FG).next_to(X_new(lo), LEFT, buff=0.15),
         )
 
         def span_row(t_from: float, y_from: float, t_to: float, y_to: float, y: float, label: str) -> VGroup:
@@ -738,7 +740,7 @@ class F01cTwoByTwo(DeckSlide):
 
         size = 20
         mat = VGroup(
-            math(r"A+H=\begin{pmatrix}a_0&b\\ b&a_1\end{pmatrix}", size=30),
+            math(r"\sym{A}+\sym{H}=\begin{pmatrix}a_0&\sym{b}\\ \sym{b}&a_1\end{pmatrix}", size=30),
             para(
                 rf"in $A$'s eigenbasis: $A=\operatorname{{diag}}(a_0,a_1)$, $H$ off-diagonal with $b={eps:g}$. "
                 rf"The top eigenvector of $A+H$ is turned by $\theta={pymath.degrees(th):.1f}^\circ$; its "
@@ -772,13 +774,13 @@ class F01cTwoByTwo(DeckSlide):
             r[1].move_to([2.05, y, 0], aligned_edge=LEFT)
             r[2].move_to([4.95, y, 0], aligned_edge=LEFT)
         derive = para(
-            r"From the eigenvector equation's second row, $b\cos\theta+a_1\sin\theta=\lambda_0\sin\theta$, so "
-            r"$\tan\theta=b/(\lambda_0-a_1)$, and $\lambda_0-a_1=a_0-\lambda_1$. The double-angle lines are the "
+            r"From the eigenvector equation's second row, $\sym{b}\cos\theta+a_1\sin\theta=\lambda_0\sin\theta$, so "
+            r"$\tan\theta=\sym{b}/(\lambda_0-a_1)$, and $\lambda_0-a_1=a_0-\lambda_1$. The double-angle lines are the "
             r"Jacobi rotation formula and its companion.",
             width=TEXT_W, size=size - 2, color=MUTED,
         )
         close = para(
-            r"With $\norm{H}=\norm{R}=|b|$, multiplying out gives the four theorems' conclusions, three of them with "
+            r"With $\norm{\sym{H}}=\norm{R}=|\sym{b}|$, multiplying out gives the four theorems' conclusions, three of them with "
             r"equality. The theorems make these $2\times2$ identities into inequalities for subspaces of any dimension, "
             r"in every unitarily invariant norm.",
             width=TEXT_W, size=size,

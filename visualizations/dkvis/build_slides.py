@@ -78,7 +78,7 @@ FULL = "sine-theta-full"
 PARTS = {
     "part1-sine-theta": [
         "S00Title", "S00bSetting", "S01Ellipse", "S02Perturb", "S03bWanted", "S03dCompute", "S03NoGap",
-        "S03cUnstable", "S04Angle", "S04bSinThetaOperator", "S05Residual", "S06Gap", "S07Theorem", "S08Why", "S08Components",
+        "S03cUnstable", "S04Angle", "S04bSinThetaOperator", "S05Residual", "S06Gap", "S07Theorem", "S07bReading", "S08Why", "S08Components",
         "S09Sylvester", "S11Payoff", "S10Sharp", "S12Lean",
     ],
     "part2-3d": ["D01Planes", "D02Tilt", "D03Gap", "D04Perturb", "D05TryIt"],

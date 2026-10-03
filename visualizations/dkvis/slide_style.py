@@ -18,15 +18,25 @@ angle     ``theta``, ``sin Theta0``, ``X``, the part of a trial   ``SINE``
           vector outside ``U``
 residual  ``r``, ``R``, residual components                     ``RESID``
 gap       ``delta`` and the separating window                   ``GAP``
-neutral   ``A``, ``A~``, ``H``, axes, helper geometry, prose      ``FG``
+neutral   projectors, axes, helper geometry, prose              ``FG``
+========  ==================================================  ============
+
+A quieter second tier says where an operator comes from, each a muted relative
+of its eigenvectors' color:
+
+========  ==================================================  ============
+old       ``A`` (dashed when drawn), its block ``A1``           ``OLD``
+current   ``A~`` (solid when drawn)                            ``CURRENT``
+perturb   ``H``, its blocks and entries                         ``PERTURB``
+refuted   a claim shown false, and nothing else                 ``REFUTED``
 ========  ==================================================  ============
 
 ``MUTED`` and ``FAINT`` are presentation only (secondary labels, guides, context)
-and never mean a role.  The same names exist as LaTeX colors for ``\\cx``:
-``wanted``, ``trial``, ``unwanted``, ``sine``, ``resid``, ``gap``, ``fg``, ``muted``.
-Parts that are not about the mathematics (the formalization process, the
-comparison of maps in Proposition 4.4) use neutral colors only, so the roles
-keep their meaning.
+and never mean a role.  The same names exist as LaTeX colors for ``\\cx``.
+A box outlined in a role color gets a faint surface of that color (``boxed``,
+``panel(role=...)``), which adds color without adding a meaning.  The process
+slides use neutral colors only; the Proposition 4.4 slides draw the two
+competing maps neutrally.
 
 Set ``DKVIS_THEME=light`` before rendering for a light-background deck (useful
 for bright rooms and for printing); the default is dark.
@@ -64,8 +74,8 @@ from manim.mobject.svg.svg_mobject import SVGMobject
 from manim.mobject.text import tex_mobject
 from manim_slides import Slide
 
-from dkvis.notation import expand, latex_preamble
-from dkvis.palette import OUTPUT_SUFFIX, PALETTE
+from dkvis.notation import color_nouns, expand, latex_preamble
+from dkvis.palette import OUTPUT_SUFFIX, PALETTE, tint
 
 
 # ``dkvis.build_slides`` renders scenes in parallel processes that share manim's
@@ -108,6 +118,10 @@ TRIAL = PALETTE["TRIAL"]
 SINE = PALETTE["SINE"]
 RESID = PALETTE["RESID"]
 GAP = PALETTE["GAP"]
+OLD = PALETTE["OLD"]
+CURRENT = PALETTE["CURRENT"]
+PERTURB = PALETTE["PERTURB"]
+REFUTED = PALETTE["REFUTED"]
 
 config.background_color = BG
 
@@ -146,7 +160,15 @@ def tex(body: str, size: float = 30, color: str = FG, **kwargs) -> Tex:
 
 
 def math(*parts: str, size: float = 36, color: str = FG, **kwargs) -> MathTex:
-    return MathTex(*[expand(part) for part in parts], font_size=size, color=color, tex_template=TEMPLATE, **kwargs)
+    """Display math.  A role ``color`` colors the symbols and leaves the verbs
+    (relations, operations, norm bars, delimiters) neutral; ``FG`` and the
+    presentation grays color the whole formula."""
+    parts = [expand(part) for part in parts]
+    if color not in (FG, MUTED, FAINT):
+        spec = f"[HTML]{{{_hex(color)}}}"
+        parts = [color_nouns(part, spec) for part in parts]
+        color = FG
+    return MathTex(*parts, font_size=size, color=color, tex_template=TEMPLATE, **kwargs)
 
 
 def colored_math(*parts: tuple[str, str | None], size: float = 36) -> MathTex:
@@ -183,25 +205,27 @@ def bullets(*lines: str, size: float = 28, buff: float = 0.28, color: str = FG) 
     return group
 
 
-def panel(mob, pad: float = 0.3) -> Rectangle:
-    """A subtle rounded-looking backing card for a formula block."""
+def panel(mob, pad: float = 0.3, role: str | None = None) -> Rectangle:
+    """A backing card for a formula block, neutral or in the tint of ``role``'s color."""
     rect = Rectangle(
         width=mob.width + 2 * pad,
         height=mob.height + 2 * pad,
         stroke_width=0,
-        fill_color=PANEL,
+        fill_color=PANEL if role is None else tint(role),
         fill_opacity=1.0,
     ).move_to(mob)
     return rect
 
 
 def boxed(mob, color: str = FG, pad: float = 0.25) -> VGroup:
+    """``mob`` in a box outlined in ``color``; the surface takes that role's tint
+    (a neutral outline keeps the neutral panel)."""
     rect = Rectangle(
         width=mob.width + 2 * pad,
         height=mob.height + 2 * pad,
         stroke_color=color,
         stroke_width=2,
-        fill_color=PANEL,
+        fill_color=PANEL if color in (FG, MUTED) else tint(color),
         fill_opacity=1.0,
     ).move_to(mob)
     return VGroup(rect, mob)
