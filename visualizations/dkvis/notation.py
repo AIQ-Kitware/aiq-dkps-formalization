@@ -8,8 +8,10 @@ plays.  Slides never pick a color for a symbol themselves: in LaTeX they write
 * ``\\like{Lambda1}{\\operatorname{spec}(\\Lambda_1)}`` for an expression that
   takes that symbol's color,
 
-and in Python, ``concept_color("Lambda1")`` gives the color for a mobject that
-stands for the symbol.  To recolor a symbol, change its role here; to change
+and in Python, ``concept_color("Lambda1")`` gives the color for a label or a
+mobject that stands for the symbol.  Plain geometry may use the role constants
+of :mod:`dkvis.slide_style`, but anything drawn for a symbol whose role is not
+obvious from the picture (``Vperp`` is neutral, not amber) should ask here.  To recolor a symbol, change its role here; to change
 what a role looks like, change :mod:`dkvis.palette`.  ``\\cx{role}{...}`` remains
 for legend prose that names a role directly ("blue: ...").
 

@@ -261,8 +261,8 @@ class F02TanTheta(DeckSlide):
 
         u_axis = Line(plane([-0.15, 0]), plane([1.3, 0]), color=WANTED, stroke_width=3)
         w_axis = Line(plane([0, -0.1]), plane([0, 1.15]), color=UNWANTED, stroke_width=3)
-        u_lbl = tex(r"$u$: wanted eigenvector", size=20, color=WANTED).next_to(plane([1.3, 0]), RIGHT, buff=0.1)
-        w_lbl = tex(r"$w$: unwanted", size=20, color=UNWANTED).next_to(plane([0, 1.15]), UP, buff=0.06)
+        u_lbl = tex(r"$u$: wanted eigenvector", size=20, color=concept_color("u")).next_to(plane([1.3, 0]), RIGHT, buff=0.1)
+        w_lbl = tex(r"$w$: unwanted", size=20, color=concept_color("w")).next_to(plane([0, 1.15]), UP, buff=0.06)
         circle = Arc(radius=plane.scale, start_angle=0, angle=np.radians(62), arc_center=plane.origin, color=FAINT, stroke_width=2)
         v_arrow = vec(plane.origin, plane(v), TRIAL, width=6)
         v_lbl = math(r"\sym{v}", size=30).next_to(plane(v), UP, buff=0.08).shift(LEFT * 0.12)
@@ -272,7 +272,7 @@ class F02TanTheta(DeckSlide):
         sin_seg = segment(plane([v[0], 0]), plane(v), SINE, width=7)
         sin_lbl = math(r"\sym{sintheta}", size=24).next_to(plane([v[0], v[1] / 2]), LEFT, buff=0.08)
         tan_seg = segment(plane([1.0, 0]), plane(tan_pt), SINE, width=7)
-        tan_lbl = math(r"\tan\theta", size=24, color=SINE).next_to(plane([1.0, tan_pt[1] / 2]), RIGHT, buff=0.08)
+        tan_lbl = math(r"\tan\theta", size=24, color=concept_color("theta")).next_to(plane([1.0, tan_pt[1] / 2]), RIGHT, buff=0.08)
         one = math(r"1", size=22, color=MUTED).next_to(plane([1.0, 0]), DOWN, buff=0.08)
         r_arrow = vec(plane.origin, plane(ex.r), RESID, width=5)
         r_lbl = math(r"\sym{r}", size=28).next_to(plane(ex.r), UP, buff=0.06)
@@ -300,9 +300,9 @@ class F02TanTheta(DeckSlide):
             Dot(X2(0.0), radius=0.08, color=TRIAL),
             Dot(X2(1.0), radius=0.08, color=UNWANTED),
             rho_marker(X2(0.0)),
-            math(r"-1", size=20, color=UNWANTED).next_to(X2(-1.0), DOWN, buff=0.08),
-            math(r"0", size=20, color=TRIAL).next_to(X2(0.0), DOWN, buff=0.08),
-            math(r"1", size=20, color=UNWANTED).next_to(X2(1.0), DOWN, buff=0.08),
+            math(r"-1", size=20, color=concept_color("Lambda1")).next_to(X2(-1.0), DOWN, buff=0.08),
+            math(r"0", size=20, color=concept_color("rho")).next_to(X2(0.0), DOWN, buff=0.08),
+            math(r"1", size=20, color=concept_color("Lambda1")).next_to(X2(1.0), DOWN, buff=0.08),
             gap_mark(X2(-1.0) + UP * 0.22, X2(0.0) + UP * 0.22, r"$\delta$", size=19),
             gap_mark(X2(0.0) + UP * 0.22, X2(1.0) + UP * 0.22, r"$\delta$", size=19),
             tex(r"two-sided", size=19, color=MUTED).next_to(X2(1.35), RIGHT, buff=0.12),
@@ -417,8 +417,8 @@ class F03SinTwoTheta(DeckSlide):
             Line(small([0, 0]), small(1.15 * story.unit(b)), color=TRIAL, stroke_width=3),
             angle_arc(small, [1, 0], story.unit(a), 0.55, SINE, width=3),
             angle_arc(small, [1, 0], story.unit(b), 0.32, SINE, width=3),
-            math(r"20^\circ", size=19, color=SINE).next_to(small(1.15 * story.unit(a)), RIGHT, buff=0.06),
-            math(r"70^\circ", size=19, color=SINE).next_to(small(1.15 * story.unit(b)), RIGHT, buff=0.06),
+            math(r"20^\circ", size=19, color=concept_color("theta")).next_to(small(1.15 * story.unit(a)), RIGHT, buff=0.06),
+            math(r"70^\circ", size=19, color=concept_color("theta")).next_to(small(1.15 * story.unit(b)), RIGHT, buff=0.06),
         )
         twin_txt = para(
             rf"$\theta$ and $90^\circ-\theta$ have the same $\sin2\theta$ (here ${pymath.sin(2 * a):.2f}$)",
@@ -606,16 +606,16 @@ class F01bAngles(DeckSlide):
         e1, e2 = np.array([1.0, 0.0]), np.array([0.0, 1.0])
         v, v_perp = story.unit(th), story.unit(th + np.pi / 2)
 
-        V = through_origin(plane, e1, reach, TRIAL, width=4)
-        U = through_origin(plane, v, reach, WANTED, width=4)
-        V_lbl = tex(r"$V=\operatorname{ran}E_0$", size=22, color=TRIAL).next_to(plane(reach * e1), DOWN, buff=0.1)
-        U_lbl = tex(r"$U=\operatorname{ran}F_0$", size=22, color=WANTED).next_to(plane(reach * v), RIGHT, buff=0.1)
+        V = through_origin(plane, e1, reach, concept_color("V"), width=4)
+        U = through_origin(plane, v, reach, concept_color("U"), width=4)
+        V_lbl = tex(r"$V=\operatorname{ran}E_0$", size=22, color=concept_color("V")).next_to(plane(reach * e1), DOWN, buff=0.1)
+        U_lbl = tex(r"$U=\operatorname{ran}F_0$", size=22, color=concept_color("U")).next_to(plane(reach * v), RIGHT, buff=0.1)
         arc = angle_arc(plane, e1, v, 1.15, SINE, width=4)
         th_lbl = math(r"\sym{theta}", size=28).move_to(plane(0.72 * story.unit(th / 2)))
 
-        V_perp = DashedVMobject(through_origin(plane, e2, reach, TRIAL, width=3), num_dashes=24)
-        U_perp = DashedVMobject(through_origin(plane, v_perp, reach, UNWANTED, width=3), num_dashes=24)
-        Vp_lbl = math(r"V^{\perp}", size=24, color=TRIAL).next_to(plane(reach * e2), UP, buff=0.08)
+        V_perp = DashedVMobject(through_origin(plane, e2, reach, concept_color("Vperp"), width=3), num_dashes=24)
+        U_perp = DashedVMobject(through_origin(plane, v_perp, reach, concept_color("Uperp"), width=3), num_dashes=24)
+        Vp_lbl = math(r"\sym{Vperp}", size=24).next_to(plane(reach * e2), UP, buff=0.08)
         Up_lbl = math(r"\sym{Uperp}", size=24).next_to(plane(reach * v_perp), LEFT, buff=0.08)
         arc2 = angle_arc(plane, e2, v_perp, 0.8, SINE, width=4)
         th2_lbl = math(r"\sym{theta}", size=28).move_to(plane(0.52 * story.unit(np.pi / 2 + th / 2)))

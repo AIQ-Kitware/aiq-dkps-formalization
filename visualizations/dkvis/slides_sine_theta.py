@@ -70,6 +70,7 @@ from manim import (
 )
 
 from dkvis import sine_theta_story as story
+from dkvis.notation import concept_color
 from dkvis.sine_theta import SineThetaModel
 from dkvis.slide_style import (
     FAINT,
@@ -572,8 +573,8 @@ class S02Perturb(DeckSlide):
         new = ellipse(plane, pair.perturbed, color=FG, width=3)
         v_new = pair.perturbed_top_eigenvector
         w_new = np.array([-v_new[1], v_new[0]])
-        new_axis = through_origin(plane, v_new, 3.0, WANTED, width=4)
-        new_axis2 = through_origin(plane, w_new, 2.0, UNWANTED, width=4)
+        new_axis = through_origin(plane, v_new, 3.0, FG, width=4)
+        new_axis2 = through_origin(plane, w_new, 2.0, FG, width=4)
         dashed_old = VGroup(
             DashedVMobject(through_origin(plane, [1, 0], 3.0, MUTED, width=2), num_dashes=30),
             DashedVMobject(through_origin(plane, [0, 1], 2.0, MUTED, width=2), num_dashes=20),
@@ -645,7 +646,7 @@ class S03NoGap(DeckSlide):
         new = always_redraw(lambda: ellipse(plane, pair().perturbed, color=FG, width=3))
         new_axis = always_redraw(lambda: through_origin(plane, pair().perturbed_top_eigenvector, reach, WANTED, width=3.5))
         new_lbl = always_redraw(
-            lambda: tex(r"top eigenvector of $A+H$", size=20, color=WANTED).next_to(
+            lambda: tex(r"top eigenvector of $A+H$", size=20, color=concept_color("u")).next_to(
                 plane(reach * pair().perturbed_top_eigenvector), RIGHT, buff=0.08
             )
         )
@@ -671,7 +672,7 @@ class S03NoGap(DeckSlide):
         nl = Line(X(lo), X(hi), color=MUTED, stroke_width=2)
         nl_lbl = VGroup(
             tex(r"eigenvalues", size=20, color=MUTED),
-            tex(r"\cx{muted}{dots: $A$} \ \cx{wanted}{ticks: $A+H$}", size=18, color=MUTED),
+            tex(r"\cx{muted}{dots: $A$} \ ticks: $A+H$, \cx{wanted}{top} and \cx{unwanted}{other}", size=18, color=MUTED),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.04).next_to(X(hi), RIGHT, buff=0.1)
         lam_dots = always_redraw(lambda: VGroup(*[Dot(X(v), radius=0.09, color=MUTED) for v in lam()]))
         lam_lbls = always_redraw(
@@ -694,7 +695,7 @@ class S03NoGap(DeckSlide):
                 mark = BraceBetweenPoints(a, b, direction=UP, color=GAP)
             else:
                 mark = Line(a + UP * 0.1, b + UP * 0.1, color=GAP, stroke_width=4)
-            label = tex(r"gap $g$", size=24, color=GAP).next_to(mark, UP, buff=0.06)
+            label = tex(r"gap $g$", size=24, color=concept_color("g")).next_to(mark, UP, buff=0.06)
             return VGroup(mark, label)
 
         gap = always_redraw(gap_marker)
@@ -758,7 +759,7 @@ class S03NoGap(DeckSlide):
 
         self.say(
             "Now make A more and more round: its two eigenvalues slide together and the gap closes. "
-            "The blue ticks, the eigenvalues of A + H, never move more than 0.12 from the gray dots. "
+            "The blue and cyan ticks, the eigenvalues of A + H, never move more than 0.12 from the gray dots. "
             "But the eigenvector of A + H swings toward 45 degrees, however small H is."
         )
         self.play(g.animate.set_value(g_end), run_time=6.0, rate_func=rate_functions.ease_in_out_sine)
@@ -851,7 +852,7 @@ class S03cUnstable(DeckSlide):
             tex(r"\cx{muted}{gray: $A$ and its eigenvectors} \quad white: $A+H$; dashed: $H$'s own direction", size=18),
             tex(r"\cx{wanted}{blue: the top eigenvector of $A+H$}", size=18),
             tex(r"\cx{sine}{pink: every direction the top eigenvector of $A+H$ took}", size=18),
-            tex(r"\cx{muted}{number lines: eigenvalues, dots $A$, \cx{wanted}{ticks $A+H$}}", size=18),
+            tex(r"\cx{muted}{number lines: eigenvalues, dots $A$,} ticks $A+H$ (\cx{wanted}{top}, \cx{unwanted}{other})", size=18),
         ).arrange(DOWN, buff=0.06).move_to([-3.3, -2.9, 0])
 
         text_w = RIGHT_COL_W - 0.5
@@ -963,7 +964,7 @@ class S03bWanted(DeckSlide):
             (X(eigs[u_idx[0]]) + X(eigs[u_idx[-1]])) / 2, UP, buff=0.42
         )
         gap = BraceBetweenPoints(X(eigs[w_idx[-1]]) + DOWN * 0.2, X(eigs[u_idx[0]]) + DOWN * 0.2, direction=DOWN, color=GAP)
-        gap_lbl = tex(r"the gap", size=24, color=GAP).next_to(gap, DOWN, buff=0.06)
+        gap_lbl = tex(r"the gap", size=24, color=concept_color("delta")).next_to(gap, DOWN, buff=0.06)
         spaces = VGroup(
             tex(r"their eigenvectors span $\sym{U}$, the \emph{wanted} subspace", size=24),
             tex(r"the rest span $\sym{Uperp}$, the \emph{unwanted} directions", size=24),
@@ -1392,13 +1393,13 @@ class S05Residual(DeckSlide):
             DashedVMobject(Line(plane([-0.2, 0]), plane([2.1, 0]), color=WANTED, stroke_width=2), num_dashes=24),
             DashedVMobject(Line(plane([0, -0.1]), plane([0, 1.2]), color=UNWANTED, stroke_width=2), num_dashes=14),
         ).set_opacity(0.7)
-        u_lbl = tex(r"$U$ (unknown)", size=22, color=WANTED).next_to(plane([1.6, 0]), DOWN, buff=0.12)
+        u_lbl = tex(r"$U$ (unknown)", size=22, color=concept_color("U")).next_to(plane([1.6, 0]), DOWN, buff=0.12)
         v = always_redraw(lambda: vec(plane.origin, plane(model().v), TRIAL, width=7))
         v_lbl = always_redraw(lambda: math(r"\sym{v}", size=32).next_to(plane(model().v), UL, buff=0.05))
         Av = always_redraw(lambda: vec(plane.origin, plane(model().Av), FG, width=5))
         Av_lbl = always_redraw(lambda: math(r"\tilde Av", size=30).next_to(plane(model().Av), RIGHT, buff=0.1))
         rho_v = always_redraw(lambda: segment(plane.origin, plane(model().rho_v), TRIAL, width=12).set_opacity(0.35))
-        rho_lbl = always_redraw(lambda: math(r"\rho v", size=28, color=TRIAL).next_to(plane(model().rho_v), LEFT, buff=0.12))
+        rho_lbl = always_redraw(lambda: math(r"\rho v", size=28, color=concept_color("rho")).next_to(plane(model().rho_v), LEFT, buff=0.12))
         r = always_redraw(lambda: vec(plane(model().rho_v), plane(model().Av), RESID, width=7))
         r_lbl = always_redraw(
             lambda: math(r"\sym{r}", size=32).next_to(plane((model().rho_v + model().Av) / 2), UR, buff=0.06)
@@ -1536,12 +1537,12 @@ class S06Gap(DeckSlide):
         interval = Line(X(beta), X(alpha), color=TRIAL, stroke_width=8).set_opacity(0.45)
         ritz = VGroup(*[Dot(X(a), color=TRIAL, radius=0.1) for a in g["ritz"]])
         ritz_lbl = VGroup(
-            tex(r"our estimates", size=22, color=TRIAL),
-            math(r"\operatorname{spec}(A_0)\subset[\beta,\alpha]", size=30, color=TRIAL),
+            tex(r"our estimates", size=22, color=concept_color("A0")),
+            math(r"\operatorname{spec}(A_0)\subset[\beta,\alpha]", size=30, color=concept_color("A0")),
         ).arrange(DOWN, buff=0.06).next_to(interval, UP, buff=0.4)
         ab = VGroup(
-            math(r"\beta", size=28, color=TRIAL).next_to(X(beta), DOWN, buff=0.2),
-            math(r"\alpha", size=28, color=TRIAL).next_to(X(alpha), DOWN, buff=0.2),
+            math(r"\beta", size=28, color=concept_color("A0")).next_to(X(beta), DOWN, buff=0.2),
+            math(r"\alpha", size=28, color=concept_color("A0")).next_to(X(alpha), DOWN, buff=0.2),
         )
         br_l = BraceBetweenPoints(X(beta - delta), X(beta), direction=DOWN, color=GAP).shift(DOWN * 0.45)
         br_r = BraceBetweenPoints(X(alpha), X(alpha + delta), direction=DOWN, color=GAP).shift(DOWN * 0.45)
@@ -1549,12 +1550,12 @@ class S06Gap(DeckSlide):
         d_r = math(r"\sym{delta}", size=30).next_to(br_r, DOWN, buff=0.08)
         unwanted = VGroup(*[Dot(X(lam), color=UNWANTED, radius=0.1) for lam in g["unwanted"]])
         un_lbl_l = VGroup(
-            tex(r"unwanted eigenvalues of $\tilde A$", size=22, color=UNWANTED),
-            math(r"\operatorname{spec}(\Lambda_1)", size=30, color=UNWANTED),
+            tex(r"unwanted eigenvalues of $\tilde A$", size=22, color=concept_color("Lambda1")),
+            math(r"\operatorname{spec}(\Lambda_1)", size=30, color=concept_color("Lambda1")),
         ).arrange(DOWN, buff=0.06).next_to(VGroup(*unwanted[:3]), UP, buff=0.4)
         un_lbl_r = VGroup(
-            tex(r"unwanted eigenvalues of $\tilde A$", size=22, color=UNWANTED),
-            math(r"\operatorname{spec}(\Lambda_1)", size=30, color=UNWANTED),
+            tex(r"unwanted eigenvalues of $\tilde A$", size=22, color=concept_color("Lambda1")),
+            math(r"\operatorname{spec}(\Lambda_1)", size=30, color=concept_color("Lambda1")),
         ).arrange(DOWN, buff=0.06).next_to(VGroup(*unwanted[3:]), UP, buff=0.4)
 
         self.say(
@@ -1685,8 +1686,8 @@ class S08Why(DeckSlide):
 
         u_axis = Line(plane([-0.35, 0]), plane([1.25, 0]), color=WANTED, stroke_width=3)
         w_axis = Line(plane([0, -0.15]), plane([0, 1.2]), color=UNWANTED, stroke_width=3)
-        u_lbl = tex(r"$u$: wanted eigenvector", size=22, color=WANTED).next_to(plane([1.25, 0]), DOWN, buff=0.12).shift(LEFT * 0.6)
-        w_lbl = tex(r"$w$: unwanted eigenvector", size=22, color=UNWANTED).next_to(plane([0, 1.2]), UP, buff=0.08)
+        u_lbl = tex(r"$u$: wanted eigenvector", size=22, color=concept_color("u")).next_to(plane([1.25, 0]), DOWN, buff=0.12).shift(LEFT * 0.6)
+        w_lbl = tex(r"$w$: unwanted eigenvector", size=22, color=concept_color("w")).next_to(plane([0, 1.2]), UP, buff=0.08)
         v_arrow = vec(plane.origin, plane(v), TRIAL, width=7)
         v_lbl = math(r"\sym{v}", size=32).next_to(plane(v), UR, buff=0.05)
         arc = angle_arc(plane, e_u, v, 0.45, FG, width=3)
@@ -1703,7 +1704,7 @@ class S08Why(DeckSlide):
         # The residual's w-part, drawn beside the w-axis so it can be compared with sin(theta).
         off = np.array([0.045, 0.0])
         w_res = segment(plane(off), plane(off + ex.w_part * e_w), RESID, width=10)
-        w_res_lbl = math(r"(\lambda_w-\rho)\sin\theta", size=26, color=RESID).next_to(
+        w_res_lbl = math(r"(\lambda_w-\rho)\sin\theta", size=26, color=concept_color("r")).next_to(
             plane(off + ex.w_part * e_w), RIGHT, buff=0.12
         )
         r_arrow = vec(plane.origin, plane(ex.r), RESID, width=6)
@@ -1728,7 +1729,7 @@ class S08Why(DeckSlide):
         rho_mark = Triangle(color=TRIAL, fill_color=TRIAL, fill_opacity=1).scale(0.09).rotate(np.pi).move_to(X(ex.rho) + UP * 0.12)
         rho_lbl = math(r"\sym{rho}", size=24).next_to(X(ex.rho), DOWN, buff=0.12)
         gap_brace = BraceBetweenPoints(X(ex.rho) + UP * 0.2, X(ex.lam_w) + UP * 0.2, direction=UP, color=GAP)
-        gap_lbl = tex(r"at least $\sym{delta}$", size=22, color=GAP).next_to(gap_brace, UP, buff=0.04)
+        gap_lbl = tex(r"at least $\sym{delta}$", size=22, color=concept_color("delta")).next_to(gap_brace, UP, buff=0.04)
         spectrum = VGroup(nl, dots, dot_lbls, rho_mark, rho_lbl)
 
         # Right column, laid out once in final form; builds only add.
@@ -1846,7 +1847,7 @@ class S08Components(DeckSlide):
         window = Rectangle(
             width=sx * 2 * delta, height=sy * 1.0, fill_color=GAP, fill_opacity=0.13, stroke_width=0
         ).move_to(X(rho, 0.5))
-        win_lbl = math(r"(\rho-\delta,\rho+\delta)", size=24, color=GAP).next_to(window, UP, buff=0.08)
+        win_lbl = math(r"(\rho-\delta,\rho+\delta)", size=24, color=concept_color("delta")).next_to(window, UP, buff=0.08)
         rho_mark = Triangle(color=TRIAL, fill_color=TRIAL, fill_opacity=1).scale(0.09).rotate(np.pi).next_to(X(rho), DOWN, buff=0.04)
         rho_lbl = math(r"\sym{rho}", size=28).next_to(rho_mark, DOWN, buff=0.06)
         # Spectral marks: wanted eigenvalues blue, unwanted (Lambda_1) cyan.
@@ -1878,7 +1879,7 @@ class S08Components(DeckSlide):
         weight.set_points_as_corners([W(-3.0, abs(-3.0 - rho)), W(rho, 0.0), W(3.0, abs(3.0 - rho))])
         weight.set_stroke(GAP, width=3)
         delta_line = DashedVMobject(Line(W(-3.0, delta), W(3.0, delta), color=GAP, stroke_width=2), num_dashes=50)
-        w_lbl = math(r"|\lambda-\rho|", size=26, color=GAP).next_to(W(3.0, abs(3.0 - rho)), UP, buff=0.08)
+        w_lbl = math(r"|\lambda-\rho|", size=26, color=concept_color("delta")).next_to(W(3.0, abs(3.0 - rho)), UP, buff=0.08)
         d_lbl = math(r"\sym{delta}", size=26).next_to(W(3.0, delta), RIGHT, buff=0.08)
         res_bars = bars(np.abs(ex.residual_coefficients), [RESID] * len(lam))
         res_lbl = tex(r"bars: $\like{R}{|\lambda_j-\rho|\,|c_j|}$", size=26).move_to(bar_lbl, aligned_edge=LEFT)
@@ -2049,13 +2050,13 @@ class S09Sylvester(DeckSlide):
                 cells.add(sq)
         row_lbls = VGroup(
             *[
-                math(rf"{l:+.1f}", size=20, color=UNWANTED).next_to(
+                math(rf"{l:+.1f}", size=20, color=concept_color("Lambda1")).next_to(
                     cells[i * cols + (cols - 1 if rows_right else 0)], RIGHT if rows_right else LEFT, buff=0.1
                 )
                 for i, l in enumerate(ex.lam)
             ]
         )
-        col_lbls = VGroup(*[math(rf"{a:+.1f}", size=20, color=TRIAL).next_to(cells[j], UP, buff=0.08) for j, a in enumerate(ex.a)])
+        col_lbls = VGroup(*[math(rf"{a:+.1f}", size=20, color=concept_color("mu")).next_to(cells[j], UP, buff=0.08) for j, a in enumerate(ex.a)])
         name = math(label, size=26).next_to(VGroup(cells, col_lbls), UP, buff=0.12)
         return VGroup(cells, row_lbls, col_lbls, name)
 
@@ -2087,9 +2088,9 @@ class S10Sharp(DeckSlide):
             return SineThetaModel(th.get_value(), delta=delta)
 
         U = Line(plane([-0.15, 0]), plane([1.3, 0]), color=WANTED, stroke_width=4)
-        U_lbl = math(r"U=\operatorname{span}(e_1)", size=28, color=WANTED).next_to(plane([1.3, 0]), DOWN, buff=0.15).shift(LEFT * 0.6)
+        U_lbl = math(r"U=\operatorname{span}(e_1)", size=28, color=concept_color("U")).next_to(plane([1.3, 0]), DOWN, buff=0.15).shift(LEFT * 0.6)
         v = always_redraw(lambda: vec(plane.origin, plane(model().trial_vector), TRIAL, width=7))
-        v_lbl = always_redraw(lambda: math(r"v_\theta", size=30, color=TRIAL).next_to(plane(model().trial_vector), UL, buff=0.08))
+        v_lbl = always_redraw(lambda: math(r"v_\theta", size=30, color=concept_color("v")).next_to(plane(model().trial_vector), UL, buff=0.08))
         leg = always_redraw(lambda: segment(plane(model().desired_projection), plane(model().trial_vector), SINE, width=8))
         leg_lbl = always_redraw(
             lambda: math(r"\sym{sintheta}", size=28).next_to(plane(model().desired_projection + model().sine_block_vector / 2), LEFT, buff=0.1)
@@ -2236,7 +2237,7 @@ class S11Payoff(DeckSlide):
             num_dashes=45,
         )
         a_lbl = math(r"\sym{sintheta}", size=26).next_to(axes.c2p(0.9, story.PerturbedPair(0.9, eps).sin_theta), DOWN, buff=0.12)
-        b_lbl = math(r"\norm{R}/\delta", size=26, color=RESID).next_to(axes.c2p(0.25, story.PerturbedPair(0.25, eps).bound), UR, buff=0.08)
+        b_lbl = math(r"\norm{R}/\delta", size=26, color=concept_color("R")).next_to(axes.c2p(0.25, story.PerturbedPair(0.25, eps).bound), UR, buff=0.08)
         d_actual = always_redraw(lambda: Dot(axes.c2p(g.get_value(), pair().sin_theta), color=SINE, radius=0.07))
         d_bound = always_redraw(lambda: Dot(axes.c2p(g.get_value(), pair().bound), color=RESID, radius=0.07))
 
