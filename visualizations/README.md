@@ -235,11 +235,14 @@ slides use neutral colors only; the Proposition 4.4 slides keep `U` blue, `V` am
 pink, but draw the two competing maps neutrally.
 
 Colors have two single sources. `dkvis/palette.py` says what each role looks like, per theme (dark and
-light). `dkvis/notation.py` says which role each symbol plays. Slides never choose a symbol's color: LaTeX
-writes `\sym{Lambda1}` for the symbol or `\like{Lambda1}{\operatorname{spec}(\Lambda_1)}` for an expression
-in its color, Python uses `concept_color("Lambda1")`, and an unknown key is an error. Recolor a symbol by
-changing its role in `notation.py`; retune a role in `palette.py`. The glossary (part 7) draws its symbols
-the same way, so it cannot disagree with the slides.
+light). `dkvis/notation.py` is the canonical map from symbol to role. Symbols and the labels that name
+them take their color from it: LaTeX writes `\sym{Lambda1}` for the symbol or
+`\like{Lambda1}{\operatorname{spec}(\Lambda_1)}` for an expression in its color, Python uses
+`concept_color("Lambda1")`, and an unknown key is an error. Plain geometry (arrows, arcs, braces, shading)
+still uses the role constants of `dkvis/slide_style.py` directly, so when a drawn object stands for a
+symbol whose role is not obvious (`V-perp` is neutral, not amber), use `concept_color` there too. Recolor
+a symbol by changing its role in `notation.py`; retune a role in `palette.py`. The glossary (part 7) draws
+its symbols the same way, so it cannot disagree with the slides.
 
 Build and present from `visualizations/`. The `Makefile` wraps the common
 cases (`make` lists the targets):

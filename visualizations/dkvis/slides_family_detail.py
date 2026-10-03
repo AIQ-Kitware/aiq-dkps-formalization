@@ -216,8 +216,8 @@ class F02cTanWhy(DeckSlide):
             Dot(X2(1.0), radius=0.07, color=UNWANTED),
             Dot(X2(0.0), radius=0.08, color=TRIAL),
             math(r"\like{A0}{x^*A_0x}=0=\like{Lambda1}{y^*\Lambda_1y}", size=19).next_to(X2(0.0), DOWN, buff=0.2),
-            math(r"-1", size=18, color=UNWANTED).next_to(X2(-1.0), UP, buff=0.12),
-            math(r"1", size=18, color=UNWANTED).next_to(X2(1.0), UP, buff=0.12),
+            math(r"-1", size=18, color=concept_color("Lambda1")).next_to(X2(-1.0), UP, buff=0.12),
+            math(r"1", size=18, color=concept_color("Lambda1")).next_to(X2(1.0), UP, buff=0.12),
             tex(r"two-sided", size=19, color=MUTED).next_to(X2(2.8), RIGHT, buff=0.12),
         )
 
@@ -295,7 +295,7 @@ class F03bReflect(DeckSlide):
         reach = 2.15
 
         mirror = through_origin(plane, [1.0, 0.0], reach, TRIAL, width=3)
-        mirror_lbl = tex(r"$V$, the mirror", size=20, color=TRIAL).next_to(plane([-reach, 0.0]), DOWN, buff=0.1).shift(RIGHT * 0.5)
+        mirror_lbl = tex(r"$V$, the mirror", size=20, color=concept_color("V")).next_to(plane([-reach, 0.0]), DOWN, buff=0.1).shift(RIGHT * 0.5)
         perp = DashedVMobject(through_origin(plane, [0.0, 1.0], 1.6, TRIAL, width=2), num_dashes=18)
 
         new = VGroup(
@@ -309,7 +309,7 @@ class F03bReflect(DeckSlide):
         )
         refl_lbl = tex(r"$A+\Sigma H\Sigma$", size=22, color=FG).next_to(plane(reach * story.unit(-th)), RIGHT, buff=0.08)
         arc = angle_arc(plane, story.unit(-th), story.unit(th), 1.35, SINE, width=4)
-        arc_lbl = math(r"2\theta", size=28, color=SINE).move_to(plane.origin + RIGHT * 0.95)
+        arc_lbl = math(r"2\theta", size=28, color=concept_color("theta")).move_to(plane.origin + RIGHT * 0.95)
 
         mats = VGroup(
             math(r"A+H=\begin{pmatrix}a_0&b\\ b&a_1\end{pmatrix}", size=26, color=FG),
@@ -394,18 +394,18 @@ class F03cPrice(DeckSlide):
             *[math(f"{v:g}", size=19, color=MUTED).next_to(axes.c2p(0, v), LEFT, buff=0.1) for v in (0.5, 1)],
         )
         curve = axes.plot(lambda d: pymath.sin(2 * pymath.radians(d)), x_range=[0, 90, 0.5], color=SINE, stroke_width=4)
-        curve_lbl = math(r"\sin2\theta", size=24, color=SINE).next_to(axes.c2p(45, 1), UP, buff=0.1)
+        curve_lbl = math(r"\sin2\theta", size=24, color=concept_color("theta")).next_to(axes.c2p(45, 1), UP, buff=0.1)
         bound = DashedLine(axes.c2p(0, t), axes.c2p(90, t), color=RESID, stroke_width=3, dash_length=0.1)
         bound_lbl = tex(rf"\cx{{resid}}{{bound $t={t:g}$}}", size=20).next_to(axes.c2p(90, t), UP, buff=0.08).shift(LEFT * 0.4)
 
         def shade(d0: float, d1: float) -> Rectangle:
             a, b = axes.c2p(d0, 0), axes.c2p(d1, 1)
-            return Rectangle(width=b[0] - a[0], height=b[1] - a[1], stroke_width=0, fill_color=RESID, fill_opacity=0.16).move_to((a + b) / 2)
+            return Rectangle(width=b[0] - a[0], height=b[1] - a[1], stroke_width=0, fill_color=FG, fill_opacity=0.08).move_to((a + b) / 2)
 
         allowed = VGroup(shade(0, small), shade(90 - small, 90))
         allowed_lbls = VGroup(
-            tex(r"allowed", size=19, color=RESID).move_to(axes.c2p(small / 2, 0.12)),
-            tex(r"allowed", size=19, color=RESID).move_to(axes.c2p(90 - small / 2, 0.12)),
+            tex(r"allowed", size=19, color=FG).move_to(axes.c2p(small / 2, 0.12)),
+            tex(r"allowed", size=19, color=FG).move_to(axes.c2p(90 - small / 2, 0.12)),
             tex(r"excluded", size=19, color=MUTED).move_to(axes.c2p(45, 0.3)),
         )
         cut = VGroup(

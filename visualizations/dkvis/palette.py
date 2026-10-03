@@ -41,8 +41,11 @@ LIGHT = {
     "GAP": "#6E4BD8",
 }
 
+THEMES = {"dark": DARK, "light": LIGHT}
 THEME = os.environ.get("DKVIS_THEME", "dark").lower()
-PALETTE = LIGHT if THEME == "light" else DARK
+if THEME not in THEMES:
+    raise ValueError(f"DKVIS_THEME={THEME!r}: expected one of {', '.join(THEMES)}")
+PALETTE = THEMES[THEME]
 #: Appended to every output name (``slides-<deck>-light/``, ``renders/<deck>-light.html``,
 #: ``media/vtk3d-light/``) so the themes never overwrite each other's renders.
 OUTPUT_SUFFIX = "" if THEME == "dark" else f"-{THEME}"

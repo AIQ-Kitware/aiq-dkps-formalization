@@ -37,6 +37,7 @@ from manim import (
     rate_functions,
 )
 
+from dkvis.notation import concept_color
 from dkvis.prop44 import Prop44Model
 from dkvis.slide_style import (
     WANTED,
@@ -373,7 +374,7 @@ class P03Why(P4Slide):
         xt = VGroup(*[tex(rf"${v}^\circ$", size=20, color=MUTED).next_to(axes.c2p(v, 0), DOWN, buff=0.1) for v in (45, 90, 135, 180)])
         yt = VGroup(*[tex(rf"${v:g}$", size=20, color=MUTED).next_to(axes.c2p(0, v), LEFT, buff=0.1) for v in (0.5, 1.0, 1.5, 2.0)])
         f = axes.plot(lambda a: chord(np.radians(a)), x_range=[0, 180], color=SINE, stroke_width=4)
-        f_lbl = math(r"2\sin(\alpha/2)", size=26, color=SINE).next_to(axes.c2p(150, chord(np.radians(150))), UP, buff=0.1)
+        f_lbl = math(r"2\sin(\alpha/2)", size=26, color=concept_color("theta")).next_to(axes.c2p(150, chord(np.radians(150))), UP, buff=0.1)
         x_lbl = math(r"\alpha", size=26, color=MUTED).next_to(axes.x_axis, RIGHT, buff=0.1)
 
         c45, c90 = chord(np.pi / 4), chord(np.pi / 2)
