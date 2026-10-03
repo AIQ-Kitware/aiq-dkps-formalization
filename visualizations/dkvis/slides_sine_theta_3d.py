@@ -21,10 +21,11 @@ from pathlib import Path
 from manim import DOWN, LEFT, UP, FadeIn, FadeOut, ImageMobject, Rectangle, VGroup
 
 from dkvis import sine_theta_3d as m3
+from dkvis.palette import OUTPUT_SUFFIX
 from dkvis.slide_style import MUTED, PANEL, DeckSlide, boxed, math, mono, para, tex
 
 ROOT = Path(__file__).resolve().parent.parent
-ASSETS = ROOT / "media" / "vtk3d"
+ASSETS = ROOT / "media" / f"vtk3d{OUTPUT_SUFFIX}"
 ASSET_NAMES = [
     "still-exact.png",
     "still-planes.png",
@@ -51,7 +52,7 @@ def prepare(refresh: bool = False) -> None:
 def asset(name: str) -> Path:
     path = ASSETS / name
     if not path.exists():
-        raise FileNotFoundError(f"{path} is missing; run `python -m dkvis.build_slides sine-theta-3d` to render it")
+        raise FileNotFoundError(f"{path} is missing; run `make assets` (with the same DKVIS_THEME) to render it")
     return path
 
 
@@ -92,11 +93,11 @@ class D01Planes(D3Slide):
         paras = [
             r"With positive eigenvalues, $\tilde A=\operatorname{diag}(\lambda_1,\lambda_2,\lambda_3)$ maps the unit "
             r"sphere of $\mathbb{R}^3$ to an ellipsoid. "
-            r"The wanted subspace $\cx{wanted}{U}=\operatorname{span}(f_1,f_2)$ is the plane of its two short axes; "
-            r"$\cx{unwanted}{f_3}$ spans $\cx{unwanted}{U^{\perp}}$ and $\cx{unwanted}{\Lambda_1}=[\cx{unwanted}{\lambda_3}]$.",
-            r"A trial plane $\cx{trial}{V}=\operatorname{ran}E_0$, tilted by $\theta$ about a line in $U$. "
+            r"The wanted subspace $\sym{U}=\operatorname{span}(f_1,f_2)$ is the plane of its two short axes; "
+            r"$\like{w}{f_3}$ spans $\sym{Uperp}$ and $\sym{Lambda1}=[\like{Lambda1}{\lambda_3}]$.",
+            r"A trial plane $\sym{V}=\operatorname{ran}E_0$, tilted by $\theta$ about a line in $U$. "
             r"Two planes in $\mathbb{R}^3$ always share a line, so the principal angles are $(\theta,0)$.",
-            r"One nonzero sine: $\norm{\cx{sine}{\sin\Theta_0}}=\norm{\cx{unwanted}{F_1}^{\mathsf T}\cx{trial}{E_0}}=\sin\theta$, "
+            r"One nonzero sine: $\norm{\sym{sinTheta0}}=\norm{\sym{F1}^{\mathsf T}\sym{E0}}=\sin\theta$, "
             r"the pink drop from $V$ to $U$.",
             r"With the Rayleigh--Ritz choice $A_0=E_0^{\mathsf T}\tilde AE_0$ we get $E_0^{\mathsf T}R=0$: "
             r"the \cx{resid}{residuals} leave $V$ at right angles.",
@@ -151,7 +152,7 @@ class D02Tilt(D3Slide):
         lam3 = m3.DEFAULT_EIGENVALUES[2]
         table = math(
             r"\renewcommand{\arraystretch}{1.35}\begin{array}{c|cc|cc}"
-            r"\theta & \cx{trial}{\mu_2} & \cx{gap}{\delta} & \cx{gap}{\delta}\cx{sine}{\sin\theta} & \norm{\cx{resid}{R}}_2\\ \hline"
+            r"\theta & \like{mu}{\mu_2} & \sym{delta} & \sym{delta}\sym{sintheta} & \norm{\sym{R}}_2\\ \hline"
             + "".join(rows)
             + r"\end{array}",
             size=34,
@@ -159,9 +160,9 @@ class D02Tilt(D3Slide):
         caption = tex(rf"$\lambda_3={lam3}$; \ $\mu_2$ is the larger Ritz value, $\delta=|\mu_2-\lambda_3|$", size=24, color=MUTED)
         points = [
             r"\textbf{Small tilt:} the bound is nearly tight.",
-            r"\textbf{Large tilt:} $V$ leans into $\cx{unwanted}{f_3}$, so the Ritz value $\cx{trial}{\mu_2}$ climbs toward $\cx{unwanted}{\lambda_3}$. "
-            r"The gap $\cx{gap}{\delta}$ closes and the bound says less.",
-            r"It never fails: $\cx{gap}{\delta}\norm{\cx{sine}{\sin\Theta_0}}\le\norm{\cx{resid}{R}}$ at every angle.",
+            r"\textbf{Large tilt:} $V$ leans into $\like{w}{f_3}$, so the Ritz value $\like{mu}{\mu_2}$ climbs toward $\like{Lambda1}{\lambda_3}$. "
+            r"The gap $\sym{delta}$ closes and the bound says less.",
+            r"It never fails: $\sym{delta}\norm{\sym{sinTheta0}}\le\norm{\sym{R}}$ at every angle.",
         ]
         block = VGroup(table, caption).arrange(DOWN, buff=0.2)
         block.move_to([-3.2, 0.1, 0])
@@ -197,7 +198,7 @@ class D03Gap(D3Slide):
             r"Here $\Lambda_1=[\lambda_3]$ is a single point, so the gap hypothesis holds in its "
             r"exchanged form ($\operatorname{spec}\Lambda_1$ in an interval, $\operatorname{spec}A_0$ outside "
             r"its $\delta$-neighbourhood) with",
-            r"$$\cx{gap}{\delta}=\min_i\,|\cx{trial}{\mu_i}-\lambda_3|,$$",
+            r"$$\sym{delta}=\min_i\,|\like{mu}{\mu_i}-\lambda_3|,$$",
             r"wherever $\lambda_3$ sits, even between $\lambda_1$ and $\lambda_2$.",
             r"When $\lambda_3$ nears a Ritz value, $\delta\to0$ and the theorem is silent, "
             r"though $\sin\theta$ has not changed.",
@@ -226,11 +227,11 @@ class D04Perturb(D3Slide):
 
     def body(self) -> None:
         eq = math(
-            r"\cx{resid}{R}=(A+\varepsilon H)\cx{trial}{E_0}-\cx{trial}{E_0A_0}=\varepsilon H\cx{trial}{E_0}",
+            r"\sym{R}=(A+\varepsilon H)\sym{E0}-\sym{E0}\sym{A0}=\varepsilon H\sym{E0}",
             size=32,
         )
         bound = boxed(
-            math(r"\norm{\cx{sine}{\sin\Theta_0}}\le\frac{\norm{\cx{resid}{R}}}{\cx{gap}{\delta}}\le\frac{\varepsilon}{\cx{gap}{\delta}}", size=36),
+            math(r"\norm{\sym{sinTheta0}}\le\frac{\norm{\sym{R}}}{\sym{delta}}\le\frac{\varepsilon}{\sym{delta}}", size=36),
             color=MUTED,
         )
         note = para(

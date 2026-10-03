@@ -10,11 +10,12 @@
 #   make full SCENES="S05Residual S08Why"   # re-render only those scenes, reconvert
 #   make short QUALITY=l # fast 480p draft
 #   make clean-short     # remove one deck's outputs so the next build starts fresh
+#   make full THEME=light  # light background; outputs get a -light suffix beside the dark ones
 #   make standalone      # single-file HTML (videos embedded) of every built deck and part
 #   make handout         # one-page-per-scene PDFs of every built deck and part
 #
 # Every deck writes renders/<deck>.html (+ .pdf, .handout.pdf, <deck>_assets/) and keeps
-# its rendered scenes in slides-<deck>/.  renders/<deck>.html needs the
+# its rendered scenes in slides-<deck>/ (with THEME=light: <deck>-light).  renders/<deck>.html needs the
 # <deck>_assets/ folder beside it; renders/<deck>.standalone.html does not.
 
 UV      ?= uv
@@ -25,6 +26,11 @@ FPS     ?= $(if $(filter l m,$(QUALITY)),,30)
 JOBS    ?=
 PDF     ?= 1
 SCENES  ?=
+# dark or light.  Colors come from dkvis/palette.py (per role and theme) and
+# dkvis/notation.py (the role of each symbol).
+THEME   ?= dark
+export DKVIS_THEME := $(THEME)
+SUFFIX  := $(if $(filter dark,$(THEME)),,-$(THEME))
 
 BUILD_FLAGS := --quality $(QUALITY) $(if $(FPS),--fps $(FPS)) $(if $(JOBS),--jobs $(JOBS)) \
                $(if $(filter 1,$(PDF)),--pdf --handout) $(if $(SCENES),--scenes $(SCENES))
@@ -70,7 +76,7 @@ help:
 	@echo '  clean              remove all renders, scene folders and manim videos'
 	@echo '  distclean          clean, plus the LaTeX and VTK asset caches'
 	@echo 'Variables: QUALITY=l|m|h|p|k (default h)  FPS=30|60 (default 30 at h)  JOBS=n (default: one per CPU)'
-	@echo '           PDF=0|1 (default 1; also the handout)  SCENES="S05Residual ..."'
+	@echo '           PDF=0|1 (default 1; also the handout)  SCENES="S05Residual ..."  THEME=dark|light'
 
 setup:
 	$(UV) sync --extra vtk --extra slides --extra test
@@ -102,17 +108,18 @@ full:
 	done
 
 $(addprefix clean-,$(DECKS)):
-	rm -rf slides-$(DECK_$(@:clean-%=%)) renders/$(DECK_$(@:clean-%=%)).* renders/$(DECK_$(@:clean-%=%))_assets
+	rm -rf slides-$(DECK_$(@:clean-%=%))$(SUFFIX) renders/$(DECK_$(@:clean-%=%))$(SUFFIX).* \
+	    renders/$(DECK_$(@:clean-%=%))$(SUFFIX)_assets
 
 $(addprefix present-,$(DECKS)):
-	$(RUN) manim-slides present --folder slides-$(DECK_$(@:present-%=%)) \
+	$(RUN) manim-slides present --folder slides-$(DECK_$(@:present-%=%))$(SUFFIX) \
 	    $$($(RUN) python -m dkvis.build_slides $(DECK_$(@:present-%=%)) --list)
 
 standalone: standalone-short standalone-full $(addprefix standalone-,$(PARTS))
 
 $(addprefix standalone-,$(DECKS)):
 	$(RUN) python -m dkvis.build_slides $(DECK_$(@:standalone-%=%)) --no-render --one-file \
-	    --html renders/$(DECK_$(@:standalone-%=%)).standalone.html
+	    --html renders/$(DECK_$(@:standalone-%=%))$(SUFFIX).standalone.html
 
 handout: handout-short handout-full $(addprefix handout-,$(PARTS))
 
@@ -120,7 +127,7 @@ $(addprefix handout-,$(DECKS)):
 	$(RUN) python -m dkvis.build_slides $(DECK_$(@:handout-%=%)) --no-render --handout
 
 assets:
-	$(RUN) python -m dkvis.vtk_sine_theta_3d --slide-assets media/vtk3d
+	$(RUN) python -m dkvis.vtk_sine_theta_3d --slide-assets media/vtk3d$(SUFFIX)
 
 app:
 	$(RUN) python -m dkvis.vtk_sine_theta_3d

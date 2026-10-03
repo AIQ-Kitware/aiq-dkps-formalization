@@ -3,7 +3,8 @@
 One color per mathematical role (see :mod:`dkvis.slide_style`): blue is what
 we want, amber what we computed, cyan the exact part we do not want, pink how
 much of the computation points into it, green the residual that exposes that,
-violet the separation that keeps it from hiding.  ``MUTED`` and ``FAINT`` are
+violet the separation that keeps it from hiding.  Which role each *symbol* plays
+is set in :mod:`dkvis.notation`.  ``MUTED`` and ``FAINT`` are
 presentation only (secondary labels, guides) and never carry a role.  Set
 ``DKVIS_THEME=light`` for the light variant.
 """
@@ -42,6 +43,9 @@ LIGHT = {
 
 THEME = os.environ.get("DKVIS_THEME", "dark").lower()
 PALETTE = LIGHT if THEME == "light" else DARK
+#: Appended to every output name (``slides-<deck>-light/``, ``renders/<deck>-light.html``,
+#: ``media/vtk3d-light/``) so the themes never overwrite each other's renders.
+OUTPUT_SUFFIX = "" if THEME == "dark" else f"-{THEME}"
 
 
 def rgb(hex_value: str) -> tuple[float, float, float]:

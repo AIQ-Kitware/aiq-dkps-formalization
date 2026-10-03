@@ -64,7 +64,8 @@ from manim.mobject.svg.svg_mobject import SVGMobject
 from manim.mobject.text import tex_mobject
 from manim_slides import Slide
 
-from dkvis.palette import PALETTE
+from dkvis.notation import expand, latex_preamble
+from dkvis.palette import OUTPUT_SUFFIX, PALETTE
 
 
 # ``dkvis.build_slides`` renders scenes in parallel processes that share manim's
@@ -127,16 +128,8 @@ TEMPLATE.add_to_preamble(
 \renewcommand{{\familydefault}}{{\sfdefault}}
 \usepackage{{amsmath,amssymb}}
 \usepackage{{xcolor}}
-\definecolor{{fg}}{{HTML}}{{{_hex(FG)}}}
-\definecolor{{muted}}{{HTML}}{{{_hex(MUTED)}}}
-\definecolor{{wanted}}{{HTML}}{{{_hex(WANTED)}}}
-\definecolor{{unwanted}}{{HTML}}{{{_hex(UNWANTED)}}}
-\definecolor{{trial}}{{HTML}}{{{_hex(TRIAL)}}}
-\definecolor{{sine}}{{HTML}}{{{_hex(SINE)}}}
-\definecolor{{resid}}{{HTML}}{{{_hex(RESID)}}}
-\definecolor{{gap}}{{HTML}}{{{_hex(GAP)}}}
 \newcommand{{\norm}}[1]{{\lVert #1\rVert}}
-\newcommand{{\cx}}[2]{{\textcolor{{#1}}{{#2}}}}
+{latex_preamble()}
 """
 )
 
@@ -149,11 +142,11 @@ MONO_FONT = "JetBrains Mono"
 
 def tex(body: str, size: float = 30, color: str = FG, **kwargs) -> Tex:
     """Prose with inline ``$math$``."""
-    return Tex(body, font_size=size, color=color, tex_template=TEMPLATE, **kwargs)
+    return Tex(expand(body), font_size=size, color=color, tex_template=TEMPLATE, **kwargs)
 
 
 def math(*parts: str, size: float = 36, color: str = FG, **kwargs) -> MathTex:
-    return MathTex(*parts, font_size=size, color=color, tex_template=TEMPLATE, **kwargs)
+    return MathTex(*[expand(part) for part in parts], font_size=size, color=color, tex_template=TEMPLATE, **kwargs)
 
 
 def colored_math(*parts: tuple[str, str | None], size: float = 36) -> MathTex:
@@ -249,7 +242,7 @@ class DeckSlide(Slide):
         # its own folder and numbers its slides by its own order.
         deck = os.environ.get("DKVIS_DECK")
         if deck:
-            kwargs.setdefault("output_folder", Path(f"slides-{deck}"))
+            kwargs.setdefault("output_folder", Path(f"slides-{deck}{OUTPUT_SUFFIX}"))
         super().__init__(*args, **kwargs)
 
     def slide_number(self) -> tuple[int, int] | None:

@@ -161,10 +161,10 @@ presenter notes on every build. There are two presentation paths:
 | `S00bSetting` | yes | yes | the setting: self-adjoint operators, from real symmetric matrices to unbounded operators |
 | `S01Ellipse` | yes | yes | a positive-definite example maps the circle to an ellipse; axes are eigenvectors |
 | `S02Perturb` | yes | yes | `A -> A+H`: eigenvalues barely move (Weyl), axes turn |
+| `S03bWanted` | yes | yes | which eigenvectors are "wanted": a chosen part of the spectrum (vibration modes, ground states, clustering, PCA), and why only a few are computed; they span `U`, the rest `U^perp`, and the gap separates them |
+| `S03dCompute` | | `*` | why not compute every eigenvector: sparse matrices, cost table, differential operators, a few modes, iterative eigensolvers return a trial subspace |
 | `S03NoGap` | yes | yes | "How far can an eigenvector turn? It depends on whether there is a gap": A's eigenvectors (drawn as lines) in the ellipse and its eigenvalues on a number line; for a fixed small `H`, as the gap closes the eigenvector of `A+H` turns toward 45 degrees while the eigenvalues move at most `‖H‖` |
 | `S03cUnstable` | yes | yes | "Without a gap, an eigenvector can point anywhere": `H` of fixed size turned once round; the traced eigenvector directions form a thin wedge (at most 7 degrees) with a gap and fill every direction without one; `A ± εσ_x` example; why Davis--Kahan works with subspaces |
-| `S03bWanted` | yes | yes | which eigenvectors are "wanted": a chosen part of the spectrum (PCA, ground states, clustering); they span `U`, the rest `U^perp`, and the gap separates them |
-| `S03dCompute` | | `*` | why not compute every eigenvector: sparse matrices, cost table, differential operators, a few modes, iterative eigensolvers return a trial subspace |
 | `S04Angle` | yes | yes | with a "Recall" panel for `U`, `V`, `theta`, `E0`, `F0`, `F1`: `sin theta = dist(v, U)`; `sin Theta0` is the operator whose eigenvalues are the sines |
 | `S04bSinThetaOperator` | | `*` | `sin Theta0` exactly: definition, `|S| = sin Theta0`, and the Lean bridge |
 | `S05Residual` | yes | yes | "The residual": a "Recall" panel for `A`, `U`, `v`; why `r = Av - rho v` is computable from `A` and `v` while the angle needs `U`; every build adds, so the last build is the complete slide |
@@ -227,11 +227,19 @@ lines. Re-check it whenever the `sinTheta` alias moves.
 
 Every number on a slide comes from `dkvis/sine_theta_story.py` (or the existing
 `dkvis/sine_theta.py`), whose models are checked by `tests/`. Colors carry
-meaning on every slide, by role in the Davis--Kahan story (`dkvis/palette.py`): blue = wanted
-(`U`, `F0`, `Lambda0`), amber = trial (`V`, `E0`, `A0`, `v`, Ritz values), cyan = unwanted (`U-perp`, `F1`,
-`Lambda1`), pink = angle / the part of the trial outside `U`, green = residual, violet = gap. Operators
-(`A`, `A~`, `H`) are neutral, gray only de-emphasizes, and the process and Proposition 4.4 comparison slides
-use neutral colors so the roles keep their meaning. The glossary (part 7) is the reference.
+meaning on every slide, by role in the Davis--Kahan story: blue = wanted (`U`, `F0`, `Lambda0`),
+amber = trial (`V`, `E0`, `A0`, `v`, Ritz values), cyan = unwanted (`U-perp`, `F1`, `Lambda1`), pink =
+angle / the part of the trial outside `U`, green = residual, violet = gap. Operators (`A`, `A~`, `H`, the
+projectors) and the blocks with no role (`A1`, `E1`) are neutral, and gray only de-emphasizes. The process
+slides use neutral colors only; the Proposition 4.4 slides keep `U` blue, `V` amber and the displacement
+pink, but draw the two competing maps neutrally.
+
+Colors have two single sources. `dkvis/palette.py` says what each role looks like, per theme (dark and
+light). `dkvis/notation.py` says which role each symbol plays. Slides never choose a symbol's color: LaTeX
+writes `\sym{Lambda1}` for the symbol or `\like{Lambda1}{\operatorname{spec}(\Lambda_1)}` for an expression
+in its color, Python uses `concept_color("Lambda1")`, and an unknown key is an error. Recolor a symbol by
+changing its role in `notation.py`; retune a role in `palette.py`. The glossary (part 7) draws its symbols
+the same way, so it cannot disagree with the slides.
 
 Build and present from `visualizations/`. The `Makefile` wraps the common
 cases (`make` lists the targets):
@@ -290,7 +298,9 @@ $RUN manim-slides present --folder slides-sine-theta-short $($RUN python -m dkvi
   `dkvis/slide_style.py` wraps those cache fills in a file lock.
 - `make` renders 1080p at 30 fps (`FPS=30`); `make final` or `FPS=60` gives the
   full 60 fps. Drafts (`QUALITY=l`) keep 15 fps.
-- `DKVIS_THEME=light` renders a light-background deck for bright rooms.
+- `make <target> THEME=light` (or `DKVIS_THEME=light`) renders a light-background deck for bright rooms
+  and printing. Its outputs carry a `-light` suffix (`slides-<deck>-light/`, `renders/<deck>-light.*`,
+  `media/vtk3d-light/`), so the dark and light renders sit side by side.
 
 ## Interactive 3D demo (VTK) and its slides
 

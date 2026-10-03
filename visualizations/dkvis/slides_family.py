@@ -29,6 +29,7 @@ from manim import (
     UP,
     Arc,
     BraceBetweenPoints,
+    Circle,
     Create,
     DashedVMobject,
     Dot,
@@ -44,6 +45,7 @@ from manim import (
 )
 
 from dkvis import sine_theta_story as story
+from dkvis.notation import concept_color
 from dkvis.slide_style import (
     FAINT,
     FG,
@@ -141,7 +143,9 @@ class F01Setup(DeckSlide):
         line_old, X_old = axis(0.3, 3.2, -6.5, -0.9, 1.45)
         line_new, X_new = axis(0.3, 3.2, -6.5, -0.9, 0.05)
 
-        def spectrum(line, X, wanted, rest, color, caption, w_name, r_name, r_color=MUTED) -> VGroup:
+        def spectrum(line, X, wanted, rest, caption, w_key, r_key) -> VGroup:
+            """The kept block filled and boxed, the rest hollow, each in its symbol's color."""
+            color, r_color = concept_color(w_key), concept_color(r_key)
             y = X(0.0)[1]
             box = Rectangle(
                 width=X(wanted[-1])[0] - X(wanted[0])[0] + 0.45, height=0.42,
@@ -149,22 +153,22 @@ class F01Setup(DeckSlide):
             ).move_to((X(wanted[0]) + X(wanted[-1])) / 2)
             dots = VGroup(
                 *[Dot(X(t), radius=0.08, color=color) for t in wanted],
-                *[Dot(X(t), radius=0.08, color=r_color) for t in rest],
+                *[Circle(radius=0.075, color=r_color, stroke_width=3).move_to(X(t)) for t in rest],
             )
             cap = tex(caption, size=22, color=FG).move_to([X(0.3)[0], y + 0.5, 0], aligned_edge=LEFT)
-            w = math(w_name, size=28, color=color).next_to(box, DOWN, buff=0.08)
-            r = math(r_name, size=28, color=r_color).next_to((X(rest[0]) + X(rest[-1])) / 2, DOWN, buff=0.22)
+            w = math(rf"\sym{{{w_key}}}", size=28).next_to(box, DOWN, buff=0.08)
+            r = math(rf"\sym{{{r_key}}}", size=28).next_to((X(rest[0]) + X(rest[-1])) / 2, DOWN, buff=0.22)
             return VGroup(line, box, dots, cap, w, r)
 
-        old = spectrum(line_old, X_old, (0.6, 0.95), (2.0, 2.45, 2.9), TRIAL, r"eigenvalues of the old $A$", r"A_0", r"A_1")
-        new = spectrum(line_new, X_new, (0.7, 1.1), (1.85, 2.55, 2.8), WANTED, r"eigenvalues of the new $A+H$", r"\Lambda_0", r"\Lambda_1", UNWANTED)
+        old = spectrum(line_old, X_old, (0.6, 0.95), (2.0, 2.45, 2.9), r"eigenvalues of the old $A$", "A0", "A1")
+        new = spectrum(line_new, X_new, (0.7, 1.1), (1.85, 2.55, 2.8), r"eigenvalues of the new $A+H$", "Lambda0", "Lambda1")
 
         head = tex(r"Which eigenvalues each theorem keeps apart:", size=24)
         rows = [
-            (r"$\sin\Theta$", r"$\cx{trial}{A_0}$ vs $\cx{unwanted}{\Lambda_1}$", r"interval/exterior"),
-            (r"$\tan\Theta$", r"$\cx{trial}{A_0}$ vs $\cx{unwanted}{\Lambda_1}$", r"one-sided; $A_0$ Rayleigh--Ritz"),
-            (r"$\sin2\Theta$", r"$\cx{wanted}{\Lambda_0}$ vs $\cx{unwanted}{\Lambda_1}$", r"interval/exterior"),
-            (r"$\tan2\Theta$", r"$\cx{trial}{A_0}$ vs $A_1$", r"one-sided; $H_0=H_1=0$"),
+            (r"$\sin\Theta$", r"$\sym{A0}$ vs $\sym{Lambda1}$", r"interval/exterior"),
+            (r"$\tan\Theta$", r"$\sym{A0}$ vs $\sym{Lambda1}$", r"one-sided; $A_0$ Rayleigh--Ritz"),
+            (r"$\sin2\Theta$", r"$\sym{Lambda0}$ vs $\sym{Lambda1}$", r"interval/exterior"),
+            (r"$\tan2\Theta$", r"$\sym{A0}$ vs $A_1$", r"one-sided; $H_0=H_1=0$"),
         ]
         cells = [[tex(c, size=22, color=SINE if j == 0 else FG) for j, c in enumerate(r)] for r in rows]
         xs = (-6.4, -5.1, -3.3)
@@ -177,23 +181,23 @@ class F01Setup(DeckSlide):
 
         size, w = 21, TEXT_W
         p_old = para(
-            r"\textbf{The old $A$:} $\cx{trial}{E_0}$ is an orthonormal basis of an invariant subspace "
-            r"$\cx{trial}{V}$ of $A$ (its wanted eigenvectors), with block $\cx{trial}{A_0}=E_0^*AE_0$; $A_1$ is the "
+            r"\textbf{The old $A$:} $\sym{E0}$ is an orthonormal basis of an invariant subspace "
+            r"$\sym{V}$ of $A$ (its wanted eigenvectors), with block $\sym{A0}=E_0^*AE_0$; $A_1$ is the "
             r"rest of $A$.",
             width=w, size=size,
         )
         p_new = para(
-            r"\textbf{The new $\tilde A=A+H$:} $\cx{wanted}{F_0}$ spans the corresponding invariant subspace "
-            r"$\cx{wanted}{U}$ of $\tilde A$, with block $\cx{wanted}{\Lambda_0}$; $\cx{unwanted}{\Lambda_1}$ is the rest.",
+            r"\textbf{The new $\tilde A=A+H$:} $\sym{F0}$ spans the corresponding invariant subspace "
+            r"$\sym{U}$ of $\tilde A$, with block $\sym{Lambda0}$; $\sym{Lambda1}$ is the rest.",
             width=w, size=size,
         )
         p_ang = para(
-            r"$\cx{sine}{\Theta_0}$: the angles between the two subspaces. $\cx{sine}{\Theta}$: the same angles seen "
+            r"$\sym{Theta0}$: the angles between the two subspaces. $\sym{Theta}$: the same angles seen "
             r"from both subspaces, so each nonzero angle appears twice.",
             width=w, size=size,
         )
         p_res = para(
-            r"The residual $\cx{resid}{R}=(A+H)E_0-E_0A_0$ equals $HE_0$. In $A$'s eigenbasis "
+            r"The residual $\sym{R}=(A+H)E_0-E_0A_0$ equals $HE_0$. In $A$'s eigenbasis "
             r"$H=\left(\begin{smallmatrix}H_0&B^*\\ B&H_1\end{smallmatrix}\right)$: $B$ couples wanted with unwanted "
             r"directions, $H_0$ and $H_1$ act within them.",
             width=w, size=size,
@@ -204,8 +208,8 @@ class F01Setup(DeckSlide):
             width=w, size=size,
         )
         p_bridge = para(
-            r"Same notation as before: $\cx{wanted}{U}$ is the target subspace of the matrix we have, $\tilde A$, and "
-            r"$\cx{trial}{V}$ the trial subspace; in the trial reading $E_0$ is any orthonormal trial basis.",
+            r"Same notation as before: $\sym{U}$ is the target subspace of the matrix we have, $\tilde A$, and "
+            r"$\sym{V}$ the trial subspace; in the trial reading $E_0$ is any orthonormal trial basis.",
             width=w, size=size - 1, color=MUTED,
         )
         col = text_column(p_old, p_new, p_ang, p_res, p_forms, p_bridge, top=self.content_top - 0.1)
@@ -261,27 +265,27 @@ class F02TanTheta(DeckSlide):
         w_lbl = tex(r"$w$: unwanted", size=20, color=UNWANTED).next_to(plane([0, 1.15]), UP, buff=0.06)
         circle = Arc(radius=plane.scale, start_angle=0, angle=np.radians(62), arc_center=plane.origin, color=FAINT, stroke_width=2)
         v_arrow = vec(plane.origin, plane(v), TRIAL, width=6)
-        v_lbl = math(r"v", size=30, color=TRIAL).next_to(plane(v), UP, buff=0.08).shift(LEFT * 0.12)
+        v_lbl = math(r"\sym{v}", size=30).next_to(plane(v), UP, buff=0.08).shift(LEFT * 0.12)
         ray = dashed(plane(v), plane(tan_pt), TRIAL, 1.5)
         arc = angle_arc(plane, [1, 0], v, 0.42, FG, width=3)
         th_lbl = math(r"\theta", size=26).move_to(plane(0.3 * story.unit(th / 2)))
         sin_seg = segment(plane([v[0], 0]), plane(v), SINE, width=7)
-        sin_lbl = math(r"\sin\theta", size=24, color=SINE).next_to(plane([v[0], v[1] / 2]), LEFT, buff=0.08)
+        sin_lbl = math(r"\sym{sintheta}", size=24).next_to(plane([v[0], v[1] / 2]), LEFT, buff=0.08)
         tan_seg = segment(plane([1.0, 0]), plane(tan_pt), SINE, width=7)
         tan_lbl = math(r"\tan\theta", size=24, color=SINE).next_to(plane([1.0, tan_pt[1] / 2]), RIGHT, buff=0.08)
         one = math(r"1", size=22, color=MUTED).next_to(plane([1.0, 0]), DOWN, buff=0.08)
         r_arrow = vec(plane.origin, plane(ex.r), RESID, width=5)
-        r_lbl = math(r"r", size=28, color=RESID).next_to(plane(ex.r), UP, buff=0.06)
+        r_lbl = math(r"\sym{r}", size=28).next_to(plane(ex.r), UP, buff=0.06)
 
         nl, X = axis(0.5, 2.9, -6.6, -1.3, -1.85)
         spectrum = VGroup(
             nl,
             Dot(X(ex.lam_u), radius=0.08, color=WANTED),
             Dot(X(ex.lam_w), radius=0.08, color=UNWANTED),
-            math(r"\lambda_u", size=22, color=WANTED).next_to(X(ex.lam_u), DOWN, buff=0.1),
-            math(r"\lambda_w", size=22, color=UNWANTED).next_to(X(ex.lam_w), DOWN, buff=0.1),
+            math(r"\sym{lambdau}", size=22).next_to(X(ex.lam_u), DOWN, buff=0.1),
+            math(r"\sym{lambdaw}", size=22).next_to(X(ex.lam_w), DOWN, buff=0.1),
             rho_marker(X(ex.rho)),
-            math(r"\rho", size=22, color=TRIAL).next_to(X(ex.rho), DOWN, buff=0.1),
+            math(r"\sym{rho}", size=22).next_to(X(ex.rho), DOWN, buff=0.1),
         )
         one_sided = VGroup(
             gap_mark(X(ex.rho) + UP * 0.25, X(ex.lam_w) + UP * 0.25, r"$\delta$", size=19),
@@ -306,7 +310,7 @@ class F02TanTheta(DeckSlide):
 
         size, w = 22, TEXT_W
         hyp = para(
-            r"\textbf{Hypotheses.} The trial matrix is the Rayleigh--Ritz one, $\cx{trial}{A_0}=E_0^*(A+H)E_0$ "
+            r"\textbf{Hypotheses.} The trial matrix is the Rayleigh--Ritz one, $\sym{A0}=E_0^*(A+H)E_0$ "
             r"(equivalently $H_0=0$), with eigenvalues in $[\beta,\alpha]$, and every unwanted eigenvalue of $A+H$ "
             r"is at least $\alpha+\delta$: all on one side. This is the situation when Rayleigh--Ritz targets the "
             r"lowest (or, mirrored, the highest) eigenvalues.",
@@ -314,8 +318,8 @@ class F02TanTheta(DeckSlide):
         )
         box = boxed(
             math(
-                r"\cx{gap}{\delta}\norm{\cx{sine}{\tan\Theta_0}}\le\norm{\cx{resid}{R}},\qquad"
-                r"\cx{gap}{\delta}\norm{\cx{sine}{\tan\Theta}}\le\norm{H}",
+                r"\sym{delta}\norm{\like{theta}{\tan\Theta_0}}\le\norm{\sym{R}},\qquad"
+                r"\sym{delta}\norm{\like{theta}{\tan\Theta}}\le\norm{H}",
                 size=32,
             ),
             color=SINE,
@@ -386,7 +390,7 @@ class F03SinTwoTheta(DeckSlide):
         pair.verify()
         plane = Plane([-4.2, 0.55, 0], 0.82, rotate=ELLIPSE_BASE)
         picture = two_by_two(plane, pair)
-        th_lbl = math(r"\theta", size=26, color=SINE).move_to(plane(1.2 * story.unit(pair.theta / 2 + 0.12)))
+        th_lbl = math(r"\sym{theta}", size=26).move_to(plane(1.2 * story.unit(pair.theta / 2 + 0.12)))
         key = VGroup(
             tex(r"dashed: old $A$; \cx{trial}{amber: its top eigenvector}", size=18),
             tex(r"solid: new $A+H$; \cx{wanted}{blue: its top eigenvector}", size=18),
@@ -398,8 +402,8 @@ class F03SinTwoTheta(DeckSlide):
             nl,
             Dot(X(lam0), radius=0.08, color=WANTED),
             Dot(X(lam1), radius=0.08, color=UNWANTED),
-            math(r"\Lambda_0", size=24, color=WANTED).next_to(X(lam0), DOWN, buff=0.1),
-            math(r"\Lambda_1", size=24, color=UNWANTED).next_to(X(lam1), DOWN, buff=0.1),
+            math(r"\sym{Lambda0}", size=24).next_to(X(lam0), DOWN, buff=0.1),
+            math(r"\sym{Lambda1}", size=24).next_to(X(lam1), DOWN, buff=0.1),
             tex(r"eigenvalues of $A+H$", size=19, color=MUTED).next_to(X(2.2), RIGHT, buff=0.1),
         )
         sep = gap_mark(X(lam1) + UP * 0.22, X(lam0) + UP * 0.22, rf"$\delta={pair.delta_sin_two:.3f}$", size=20)
@@ -423,15 +427,15 @@ class F03SinTwoTheta(DeckSlide):
 
         size, w = 22, TEXT_W
         hyp = para(
-            r"\textbf{Hypotheses.} Only the new matrix's own spectrum: $\cx{wanted}{\Lambda_0}$ in $[\beta,\alpha]$ and "
-            r"$\Lambda_1$ outside $(\beta-\delta,\alpha+\delta)$. Nothing about the trial values $A_0$: useful when "
+            r"\textbf{Hypotheses.} Only the new matrix's own spectrum: $\sym{Lambda0}$ in $[\beta,\alpha]$ and "
+            r"$\sym{Lambda1}$ outside $(\beta-\delta,\alpha+\delta)$. Nothing about the trial values $\sym{A0}$: useful when "
             r"the new matrix's eigenvalues are known to split but the trial values are not controlled.",
             width=w, size=size,
         )
         box = boxed(
             math(
-                r"\cx{gap}{\delta}\norm{\cx{sine}{\sin2\Theta_0}}\le2\norm{\cx{resid}{R}},\qquad"
-                r"\cx{gap}{\delta}\norm{\cx{sine}{\sin2\Theta}}\le2\norm{H}",
+                r"\sym{delta}\norm{\like{theta}{\sin2\Theta_0}}\le2\norm{\sym{R}},\qquad"
+                r"\sym{delta}\norm{\like{theta}{\sin2\Theta}}\le2\norm{H}",
                 size=32,
             ),
             color=SINE,
@@ -451,7 +455,7 @@ class F03SinTwoTheta(DeckSlide):
         )
         thm82 = para(
             r"Theorem 8.2 adds $\norm{H}_2<\delta/2$ (or $\norm{R}_2<\delta/2$) and "
-            r"$\operatorname{spec}A_0\subset[\beta-\delta/2,\alpha+\delta/2]$. Then every angle is below $45^\circ$, "
+            r"$\operatorname{spec}\sym{A0}\subset[\beta-\delta/2,\alpha+\delta/2]$. Then every angle is below $45^\circ$, "
             r"so a small $\sin2\Theta$ does mean a small $\Theta$.",
             width=w, size=size - 1, color=MUTED,
         )
@@ -499,7 +503,7 @@ class F04TanTwoTheta(DeckSlide):
 
         picture = always_redraw(lambda: two_by_two(plane, pair()))
         th_lbl = always_redraw(
-            lambda: math(r"\theta", size=26, color=SINE).move_to(plane(1.1 * story.unit(max(pair().theta, 0.2) / 2)))
+            lambda: math(r"\sym{theta}", size=26).move_to(plane(1.1 * story.unit(max(pair().theta, 0.2) / 2)))
         )
         key = VGroup(
             tex(r"dashed: old $A$; \cx{trial}{amber: its top eigenvector}", size=18),
@@ -512,9 +516,9 @@ class F04TanTwoTheta(DeckSlide):
             lam0, lam1 = pair().A.diagonal()
             return VGroup(
                 Dot(X(lam0), radius=0.08, color=TRIAL),
-                Dot(X(lam1), radius=0.08, color=MUTED),
-                math(r"A_0", size=24, color=TRIAL).next_to(X(lam0), DOWN, buff=0.1).shift(RIGHT * 0.2),
-                math(r"A_1", size=24, color=MUTED).next_to(X(lam1), DOWN, buff=0.1).shift(LEFT * 0.2),
+                Circle(radius=0.075, color=concept_color("A1"), stroke_width=3).move_to(X(lam1)),
+                math(r"\sym{A0}", size=24).next_to(X(lam0), DOWN, buff=0.1).shift(RIGHT * 0.2),
+                math(r"\sym{A1}", size=24).next_to(X(lam1), DOWN, buff=0.1).shift(LEFT * 0.2),
                 gap_mark(X(lam1) + UP * 0.22, X(lam0) + UP * 0.22, r"$\delta=g$", size=20),
             )
 
@@ -533,14 +537,14 @@ class F04TanTwoTheta(DeckSlide):
         size, w = 22, TEXT_W
         hyp = para(
             r"\textbf{Hypotheses.} Only the old matrix's own spectrum, one-sided: every eigenvalue of $A_1$ at least "
-            r"$\delta$ beyond those of $\cx{trial}{A_0}$. And $H_0=H_1=0$: in $A$'s eigenbasis $H$ only couples "
+            r"$\delta$ beyond those of $\sym{A0}$. And $H_0=H_1=0$: in $A$'s eigenbasis $H$ only couples "
             r"wanted with unwanted directions.",
             width=w, size=size,
         )
         box = boxed(
             math(
-                r"\cx{gap}{\delta}\norm{\cx{sine}{\tan2\Theta_0}}\le2\norm{\cx{resid}{R}},\qquad"
-                r"\cx{gap}{\delta}\norm{\cx{sine}{\tan2\Theta}}\le2\norm{H}",
+                r"\sym{delta}\norm{\like{theta}{\tan2\Theta_0}}\le2\norm{\sym{R}},\qquad"
+                r"\sym{delta}\norm{\like{theta}{\tan2\Theta}}\le2\norm{H}",
                 size=32,
             ),
             color=SINE,
@@ -555,7 +559,7 @@ class F04TanTwoTheta(DeckSlide):
             width=w, size=size,
         )
         thm81 = para(
-            r"Theorem 8.1: if $F_0$ is the matching spectral subspace of $A+H$ (its wanted eigenvalues on $A_0$'s side "
+            r"Theorem 8.1: if $F_0$ is the matching spectral subspace of $A+H$ (its wanted eigenvalues on $\sym{A0}$'s side "
             r"of the gap, the rest on $A_1$'s), every angle is at most $45^\circ$, however large $H$ is. That is the "
             r"$45^\circ$ ceiling seen at the start.",
             width=w, size=size - 1, color=MUTED,
@@ -607,14 +611,14 @@ class F01bAngles(DeckSlide):
         V_lbl = tex(r"$V=\operatorname{ran}E_0$", size=22, color=TRIAL).next_to(plane(reach * e1), DOWN, buff=0.1)
         U_lbl = tex(r"$U=\operatorname{ran}F_0$", size=22, color=WANTED).next_to(plane(reach * v), RIGHT, buff=0.1)
         arc = angle_arc(plane, e1, v, 1.15, SINE, width=4)
-        th_lbl = math(r"\theta", size=28, color=SINE).move_to(plane(0.72 * story.unit(th / 2)))
+        th_lbl = math(r"\sym{theta}", size=28).move_to(plane(0.72 * story.unit(th / 2)))
 
         V_perp = DashedVMobject(through_origin(plane, e2, reach, TRIAL, width=3), num_dashes=24)
         U_perp = DashedVMobject(through_origin(plane, v_perp, reach, UNWANTED, width=3), num_dashes=24)
         Vp_lbl = math(r"V^{\perp}", size=24, color=TRIAL).next_to(plane(reach * e2), UP, buff=0.08)
-        Up_lbl = math(r"U^{\perp}", size=24, color=UNWANTED).next_to(plane(reach * v_perp), LEFT, buff=0.08)
+        Up_lbl = math(r"\sym{Uperp}", size=24).next_to(plane(reach * v_perp), LEFT, buff=0.08)
         arc2 = angle_arc(plane, e2, v_perp, 0.8, SINE, width=4)
-        th2_lbl = math(r"\theta", size=28, color=SINE).move_to(plane(0.52 * story.unit(np.pi / 2 + th / 2)))
+        th2_lbl = math(r"\sym{theta}", size=28).move_to(plane(0.52 * story.unit(np.pi / 2 + th / 2)))
         caption = para(
             r"The rotation that takes $V$ to $U$ also takes $V^\perp$ to $U^\perp$, by the same angle.",
             width=5.0, size=19, color=MUTED, align="centering",
@@ -622,13 +626,13 @@ class F01bAngles(DeckSlide):
 
         size, w = 21, TEXT_W
         p_dir = para(
-            r"\textbf{Directed} $\cx{sine}{\Theta_0}$: the angles from the trial subspace $\cx{trial}{V}$ to "
-            r"the target $\cx{wanted}{U}$, one per direction of $V$. With $Q$ the projector onto $U$: "
+            r"\textbf{Directed} $\sym{Theta0}$: the angles from the trial subspace $\sym{V}$ to "
+            r"the target $\sym{U}$, one per direction of $V$. With $Q$ the projector onto $U$: "
             r"$\norm{\sin\Theta_0}=\norm{(I-Q)E_0}$.",
             width=w, size=size,
         )
         p_amb = para(
-            r"\textbf{Ambient} $\cx{sine}{\Theta}$: the angles of the whole rotation, so each nonzero angle appears "
+            r"\textbf{Ambient} $\sym{Theta}$: the angles of the whole rotation, so each nonzero angle appears "
             r"twice. With $P$ the projector onto $V$, every unitarily invariant norm has "
             r"$\norm{\sin\Theta}=\norm{P-Q}$.",
             width=w, size=size,
@@ -639,14 +643,14 @@ class F01bAngles(DeckSlide):
             width=w, size=size,
         )
         p_rh = para(
-            r"Directed bounds compare with the residual $\cx{resid}{R}=HE_0$, the part of $H$ acting on $V$; ambient "
+            r"Directed bounds compare with the residual $\sym{R}=HE_0$, the part of $H$ acting on $V$; ambient "
             r"bounds compare with all of $H$. Always $\norm{R}\le\norm{H}$.",
             width=w, size=size,
         )
         p_sin = para(
             r"With one gap, $\sin\Theta$ has no ambient form in every norm: Davis and Kahan's $2\times2$ example has "
             r"$\delta\norm{\sin\Theta}_F=2>\sqrt3=\norm{H}_F$. Proposition~6.1 recovers $\delta\norm{\sin\Theta}\le\norm{H}$ "
-            r"with a second gap, between $A_1$ and $\Lambda_0$.",
+            r"with a second gap, between $A_1$ and $\sym{Lambda0}$.",
             width=w, size=size - 1, color=MUTED,
         )
         col = text_column(p_dir, p_amb, p_norms, p_rh, p_sin, top=self.content_top - 0.1)
@@ -700,18 +704,18 @@ class F01cTwoByTwo(DeckSlide):
 
         old = VGroup(
             line_old,
-            Dot(X_old(a0), radius=0.08, color=TRIAL),
-            Dot(X_old(a1), radius=0.08, color=MUTED),
-            math(rf"a_0={a0:.2f}", size=20, color=TRIAL).next_to(X_old(a0), UP, buff=0.1),
-            math(rf"a_1={a1:.2f}", size=20, color=MUTED).next_to(X_old(a1), UP, buff=0.1),
+            Dot(X_old(a0), radius=0.08, color=concept_color("a0")),
+            Circle(radius=0.075, color=concept_color("a1"), stroke_width=3).move_to(X_old(a1)),
+            math(rf"\sym{{a0}}={a0:.2f}", size=20).next_to(X_old(a0), UP, buff=0.1),
+            math(rf"\sym{{a1}}={a1:.2f}", size=20).next_to(X_old(a1), UP, buff=0.1),
             tex(r"old $A$", size=22, color=FG).next_to(X_old(lo), LEFT, buff=0.15),
         )
         new = VGroup(
             line_new,
-            Dot(X_new(l0), radius=0.08, color=WANTED),
-            Dot(X_new(l1), radius=0.08, color=UNWANTED),
-            math(rf"\lambda_0={l0:.2f}", size=20, color=WANTED).next_to(X_new(l0), UP, buff=0.1),
-            math(rf"\lambda_1={l1:.2f}", size=20, color=UNWANTED).next_to(X_new(l1), UP, buff=0.1),
+            Dot(X_new(l0), radius=0.08, color=concept_color("lambda0")),
+            Circle(radius=0.075, color=concept_color("lambda1"), stroke_width=3).move_to(X_new(l1)),
+            math(rf"\sym{{lambda0}}={l0:.2f}", size=20).next_to(X_new(l0), UP, buff=0.1),
+            math(rf"\sym{{lambda1}}={l1:.2f}", size=20).next_to(X_new(l1), UP, buff=0.1),
             tex(r"new $A+H$", size=22, color=FG).next_to(X_new(lo), LEFT, buff=0.15),
         )
 
@@ -752,10 +756,10 @@ class F01cTwoByTwo(DeckSlide):
 
         b = eps
         rows = VGroup(
-            ident(r"\tan2\Theta", r"\tan2\theta", r"\frac{2b}{\cx{gap}{a_0-a_1}}", rf"={2 * b / fam['tan2'][0]:.3f}"),
-            ident(r"\sin2\Theta", r"\sin2\theta", r"\frac{2b}{\cx{gap}{\lambda_0-\lambda_1}}", rf"={2 * b / fam['sin2'][0]:.3f}"),
-            ident(r"\tan\Theta", r"\tan\theta", r"\frac{b}{\cx{gap}{a_0-\lambda_1}}", rf"={b / fam['tan'][0]:.3f}"),
-            ident(r"\sin\Theta", r"\sin\theta", r"\frac{b}{\cx{gap}{a_0-\lambda_1}}", rf"\sin\theta={pymath.sin(th):.3f}", rel="<"),
+            ident(r"\tan2\Theta", r"\tan2\theta", r"\frac{2b}{\like{delta}{a_0-a_1}}", rf"={2 * b / fam['tan2'][0]:.3f}"),
+            ident(r"\sin2\Theta", r"\sin2\theta", r"\frac{2b}{\like{delta}{\lambda_0-\lambda_1}}", rf"={2 * b / fam['sin2'][0]:.3f}"),
+            ident(r"\tan\Theta", r"\tan\theta", r"\frac{b}{\like{delta}{a_0-\lambda_1}}", rf"={b / fam['tan'][0]:.3f}"),
+            ident(r"\sin\Theta", r"\sin\theta", r"\frac{b}{\like{delta}{a_0-\lambda_1}}", rf"\sin\theta={pymath.sin(th):.3f}", rel="<"),
         )
         for r in rows:
             r[1].move_to([2.05, 0, 0], aligned_edge=LEFT)
