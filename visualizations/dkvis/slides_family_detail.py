@@ -25,6 +25,7 @@ from manim import (
     RIGHT,
     UP,
     Axes,
+    Circle,
     Create,
     DashedLine,
     DashedVMobject,
@@ -40,6 +41,7 @@ from manim import (
 )
 
 from dkvis import sine_theta_story as story
+from dkvis.notation import concept_color
 from dkvis.slide_style import (
     FG,
     GAP,
@@ -186,8 +188,8 @@ class F02cTanWhy(DeckSlide):
         general = VGroup(
             tex(r"In general, along each pair of principal vectors $x_j$ (trial side), $y_j$ (unwanted side), (6.6):", size=20, color=MUTED),
             math(
-                r"\cos\theta_j\,y_j^*Bx_j=\sin\theta_j\,\bigl(\cx{fg}{y_j^*\Lambda_1y_j}-\cx{trial}{x_j^*A_0x_j}\bigr)"
-                r"\ \ge\ \cx{gap}{\delta}\sin\theta_j",
+                r"\cos\theta_j\,y_j^*Bx_j=\sin\theta_j\,\bigl(\like{Lambda1}{y_j^*\Lambda_1y_j}-\like{A0}{x_j^*A_0x_j}\bigr)"
+                r"\ \ge\ \sym{delta}\sin\theta_j",
                 size=26,
             ),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.12)
@@ -201,8 +203,8 @@ class F02cTanWhy(DeckSlide):
             band(X1, 1.4, 2.5, UNWANTED, opacity=0.16),
             *[Dot(X1(t), radius=0.07, color=TRIAL) for t in (0.1, 0.5)],
             *[Dot(X1(t), radius=0.07, color=UNWANTED) for t in (1.4, 1.9, 2.5)],
-            math(r"x^*A_0x", size=19, color=TRIAL).next_to(X1(0.3), DOWN, buff=0.2),
-            math(r"y^*\Lambda_1y", size=19, color=UNWANTED).next_to(X1(1.95), DOWN, buff=0.2),
+            math(r"\like{A0}{x^*A_0x}", size=19).next_to(X1(0.3), DOWN, buff=0.2),
+            math(r"\like{Lambda1}{y^*\Lambda_1y}", size=19).next_to(X1(1.95), DOWN, buff=0.2),
             gap_mark(X1(0.5) + UP * 0.2, X1(1.4) + UP * 0.2, r"$\ge\delta$", size=19),
             tex(r"one-sided", size=19, color=MUTED).next_to(X1(2.8), RIGHT, buff=0.12),
         )
@@ -213,7 +215,7 @@ class F02cTanWhy(DeckSlide):
             Dot(X2(-1.0), radius=0.07, color=UNWANTED),
             Dot(X2(1.0), radius=0.07, color=UNWANTED),
             Dot(X2(0.0), radius=0.08, color=TRIAL),
-            math(r"x^*A_0x=0=y^*\Lambda_1y", size=19).next_to(X2(0.0), DOWN, buff=0.2),
+            math(r"\like{A0}{x^*A_0x}=0=\like{Lambda1}{y^*\Lambda_1y}", size=19).next_to(X2(0.0), DOWN, buff=0.2),
             math(r"-1", size=18, color=UNWANTED).next_to(X2(-1.0), UP, buff=0.12),
             math(r"1", size=18, color=UNWANTED).next_to(X2(1.0), UP, buff=0.12),
             tex(r"two-sided", size=19, color=MUTED).next_to(X2(2.8), RIGHT, buff=0.12),
@@ -227,11 +229,11 @@ class F02cTanWhy(DeckSlide):
         )
         p_gen = para(
             r"In general, Davis and Kahan read the same entry along each pair of principal vectors. "
-            r"$x^*A_0x$ and $y^*\Lambda_1y$ are Rayleigh quotients: weighted averages of eigenvalues.",
+            r"$\like{A0}{x^*A_0x}$ and $\like{Lambda1}{y^*\Lambda_1y}$ are Rayleigh quotients: weighted averages of eigenvalues.",
             width=w, size=SIZE,
         )
         p_one = para(
-            r"\textbf{One-sided:} every average of $A_0$ is at most $\alpha$ and every average of $\Lambda_1$ at least "
+            r"\textbf{One-sided:} every average of $\sym{A0}$ is at most $\alpha$ and every average of $\sym{Lambda1}$ at least "
             r"$\alpha+\delta$, so $\cos\theta_j|y_j^*Bx_j|\ge\delta\sin\theta_j$. Then $\cos\theta_j>0$ and "
             r"$\tan\theta_j\le|y_j^*Bx_j|/\delta\le\norm{R}/\delta$ (with $H_0=0$, $\norm{R}=\norm{B}$). Summing over "
             r"pairs (Ky Fan) gives every unitarily invariant norm.",
@@ -330,11 +332,11 @@ class F03bReflect(DeckSlide):
         )
         p_apply = para(
             r"Now apply the two-gap $\sin\Theta$ theorem (Proposition 6.1) to this pair. Both matrices have the spectral "
-            r"split $\Lambda_0\,|\,\Lambda_1$ with gap $\delta$, and they differ by $H-\Sigma H\Sigma$, the coupling twice:",
+            r"split $\sym{Lambda0}\,|\,\sym{Lambda1}$ with gap $\delta$, and they differ by $H-\Sigma H\Sigma$, the coupling twice:",
             width=w, size=SIZE,
         )
         box = boxed(
-            math(r"\cx{gap}{\delta}\norm{\cx{sine}{\sin2\Theta}}\le\norm{H-\Sigma H\Sigma}\le2\norm{H}", size=30), color=SINE, pad=0.15
+            math(r"\sym{delta}\norm{\like{theta}{\sin2\Theta}}\le\norm{H-\Sigma H\Sigma}\le2\norm{H}", size=30), color=SINE, pad=0.15
         )
         p_two = para(
             r"In $2\times2$: $\norm{H-\Sigma H\Sigma}=2|b|$ and the gap is $\lambda_0-\lambda_1$, so $\sin2\theta=2b/(\lambda_0-\lambda_1)$ exactly. "
@@ -422,14 +424,14 @@ class F03cPrice(DeckSlide):
         )
         p_which = para(
             r"Which one occurs depends on the invariant subspace $F_0$ of $A+H$ being compared. The theorem accepts any "
-            r"subspace with the spectral split $\Lambda_0\,|\,\Lambda_1$; it does not require the ``right'' one, belonging "
-            r"to eigenvalues near those of $A_0$. Even with $H=0$ a mismatched $F_0$ can be $90^\circ$ away, and "
+            r"subspace with the spectral split $\sym{Lambda0}\,|\,\sym{Lambda1}$; it does not require the ``right'' one, belonging "
+            r"to eigenvalues near those of $\sym{A0}$. Even with $H=0$ a mismatched $F_0$ can be $90^\circ$ away, and "
             r"different angles of $\Theta_0$ can fall on different sides.",
             width=w, size=SIZE,
         )
         p_82 = para(
             r"\textbf{Theorem 8.2} removes the ambiguity: if also $\norm{H}_2<\delta/2$ (or $\norm{R}_2<\delta/2$) and "
-            r"$\operatorname{spec}A_0\subset[\beta-\delta/2,\alpha+\delta/2]$, every angle is below $45^\circ$, so "
+            r"$\operatorname{spec}\sym{A0}\subset[\beta-\delta/2,\alpha+\delta/2]$, every angle is below $45^\circ$, so "
             r"$\theta\le\tfrac12\arcsin(2\norm{H}_2/\delta)$.",
             width=w, size=SIZE,
         )
@@ -487,7 +489,7 @@ class F04bJacobi(DeckSlide):
         )
         arc = always_redraw(lambda: angle_arc(plane, [1.0, 0.0], story.unit(max(phi.get_value(), 1e-3)), 1.0, SINE, width=4))
         key = VGroup(
-            tex(r"\cx{wanted}{$A+H$}", size=19),
+            tex(r"ellipse: $A+H$", size=19),
             tex(r"\cx{trial}{the basis, turned by $\varphi$}", size=19),
             tex(r"\cx{muted}{dashed: $A$'s eigenbasis}", size=19),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.05).move_to([-6.9, 2.35, 0], aligned_edge=UP + LEFT)
@@ -517,7 +519,7 @@ class F04bJacobi(DeckSlide):
             width=w, size=SIZE,
         )
         ineq = math(
-            r"\pm2\cos2\theta_j\,\operatorname{Re}(y_j^*Bx_j)\ \ge\ \cx{gap}{\delta}\sin2\theta_j",
+            r"\pm2\cos2\theta_j\,\operatorname{Re}(y_j^*Bx_j)\ \ge\ \sym{delta}\sin2\theta_j",
             size=30,
         )
         p_concl = para(
@@ -526,7 +528,7 @@ class F04bJacobi(DeckSlide):
             width=w, size=SIZE,
         )
         p_why = para(
-            r"Without $H_0=H_1=0$ the diagonal blocks would be $A_0+H_0$ and $A_1+H_1$, whose gap $A$'s gap does not "
+            r"Without $H_0=H_1=0$ the diagonal blocks would be $\sym{A0}+H_0$ and $A_1+H_1$, whose gap $A$'s gap does not "
             r"control. Without one-sidedness the two Rayleigh quotients could average to the same value, as for $\tan\Theta$.",
             width=w, size=SIZE - 1, color=MUTED,
         )
@@ -576,17 +578,19 @@ class F04cRepulsion(DeckSlide):
         def old_marks():
             a0, a1 = pair().A.diagonal()
             return VGroup(
-                Dot(X_old(a0), radius=0.08, color=TRIAL), Dot(X_old(a1), radius=0.08, color=MUTED),
-                math(r"a_0", size=22, color=TRIAL).next_to(X_old(a0), UP, buff=0.1).shift(RIGHT * 0.12),
-                math(r"a_1", size=22, color=MUTED).next_to(X_old(a1), UP, buff=0.1).shift(LEFT * 0.12),
+                Dot(X_old(a0), radius=0.08, color=concept_color("a0")),
+                Circle(radius=0.075, color=concept_color("a1"), stroke_width=3).move_to(X_old(a1)),
+                math(r"\sym{a0}", size=22).next_to(X_old(a0), UP, buff=0.1).shift(RIGHT * 0.12),
+                math(r"\sym{a1}", size=22).next_to(X_old(a1), UP, buff=0.1).shift(LEFT * 0.12),
             )
 
         def new_marks():
             l0, l1 = pair().perturbed_eigenvalues
             return VGroup(
-                Dot(X_new(l0), radius=0.08, color=WANTED), Dot(X_new(l1), radius=0.08, color=UNWANTED),
-                math(r"\lambda_0", size=22, color=WANTED).next_to(X_new(l0), DOWN, buff=0.1),
-                math(r"\lambda_1", size=22, color=UNWANTED).next_to(X_new(l1), DOWN, buff=0.1),
+                Dot(X_new(l0), radius=0.08, color=concept_color("lambda0")),
+                Circle(radius=0.075, color=concept_color("lambda1"), stroke_width=3).move_to(X_new(l1)),
+                math(r"\sym{lambda0}", size=22).next_to(X_new(l0), DOWN, buff=0.1),
+                math(r"\sym{lambda1}", size=22).next_to(X_new(l1), DOWN, buff=0.1),
             )
 
         lines = VGroup(
@@ -614,13 +618,13 @@ class F04cRepulsion(DeckSlide):
         )
         p_81 = para(
             r"\textbf{Theorem 8.1}, under the $\tan2\Theta$ hypotheses: every angle is at most $45^\circ$ exactly when "
-            r"$F_0$ is the matching spectral subspace of $A+H$ ($\Lambda_0\le\alpha$, $\Lambda_1\ge\alpha+\delta$), "
+            r"$F_0$ is the matching spectral subspace of $A+H$ ($\sym{Lambda0}\le\alpha$, $\sym{Lambda1}\ge\alpha+\delta$), "
             r"and that subspace always exists. This is the $45^\circ$ ceiling of the gap slides.",
             width=w, size=SIZE,
         )
         p_ii = para(
             r"For it, eigenvalues repel. In finite dimensions, with $\alpha_k$ and $\lambda_k$ the ordered eigenvalues "
-            r"of $A_1$ and $\Lambda_1$, and $\norm{C_1}_1$ the largest cosine of the angles:",
+            r"of $A_1$ and $\sym{Lambda1}$, and $\norm{C_1}_1$ the largest cosine of the angles:",
             width=w, size=SIZE,
         )
         ineq = math(r"\alpha_k-\alpha\ \le\ \norm{C_1}_1^2\,(\lambda_k-\alpha)", size=30)
@@ -674,7 +678,7 @@ class F09WhichOne(DeckSlide):
         ),
         (
             r"\sin2\Theta",
-            r"Only that the eigenvalues of $A+H$ split into $\Lambda_0\,|\,\Lambda_1$ with gap $\delta$; nothing about "
+            r"Only that the eigenvalues of $A+H$ split into $\sym{Lambda0}\,|\,\sym{Lambda1}$ with gap $\delta$; nothing about "
             r"the trial values.",
             r"$\norm{\sin2\Theta}\le2\norm{H}/\delta$ (and with $R$): a small angle or one near $90^\circ$, unless "
             r"Theorem 8.2 applies.",

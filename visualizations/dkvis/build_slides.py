@@ -34,7 +34,8 @@ The handout (``--handout``) has one page per scene: the final frame of its last
 build, so every scene's last build must hold everything the slide says.  A
 build that plays an external video (``src``, e.g. a looping VTK movie) is a
 live demo, not a page, so the handout uses the last build before it.  Set
-``DKVIS_THEME=light`` for a light-background deck.
+``DKVIS_THEME=light`` for a light-background deck; its outputs carry a ``-light``
+suffix (``slides-<deck>-light/``, ``renders/<deck>-light.html``) beside the dark ones.
 """
 
 from __future__ import annotations
@@ -51,6 +52,13 @@ from concurrent.futures import ThreadPoolExecutor, as_completed
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
+
+
+def output_name(deck_name: str) -> str:
+    """``deck_name`` plus the theme suffix: the name of its scene folder and renders."""
+    from dkvis.palette import OUTPUT_SUFFIX
+
+    return f"{deck_name}{OUTPUT_SUFFIX}"
 
 MAIN = "dkvis.slides_sine_theta"
 THREE_D = "dkvis.slides_sine_theta_3d"
@@ -69,8 +77,8 @@ FULL = "sine-theta-full"
 # The parts of the full talk, in order, with the footer each part's slides carry.
 PARTS = {
     "part1-sine-theta": [
-        "S00Title", "S00bSetting", "S01Ellipse", "S02Perturb", "S03NoGap", "S03cUnstable", "S03bWanted",
-        "S03dCompute", "S04Angle", "S04bSinThetaOperator", "S05Residual", "S06Gap", "S07Theorem", "S08Why", "S08Components",
+        "S00Title", "S00bSetting", "S01Ellipse", "S02Perturb", "S03bWanted", "S03dCompute", "S03NoGap",
+        "S03cUnstable", "S04Angle", "S04bSinThetaOperator", "S05Residual", "S06Gap", "S07Theorem", "S08Why", "S08Components",
         "S09Sylvester", "S11Payoff", "S10Sharp", "S12Lean",
     ],
     "part2-3d": ["D01Planes", "D02Tilt", "D03Gap", "D04Perturb", "D05TryIt"],
@@ -98,7 +106,7 @@ PART_TITLES = {
 
 DECK_SCENES = {
     SHORT: [
-        "S00TitleShort", "S00bSetting", "S01Ellipse", "S02Perturb", "S03NoGap", "S03cUnstable", "S03bWanted", "S04Angle", "S05Residual",
+        "S00TitleShort", "S00bSetting", "S01Ellipse", "S02Perturb", "S03bWanted", "S03NoGap", "S03cUnstable", "S04Angle", "S05Residual",
         "S06Gap", "S07Theorem", "S08Why", "S11Payoff", "D01Planes", "S12Lean",
         "P01Claim", "P02Counterexample", "S14Summary",
     ],
@@ -150,7 +158,7 @@ def _render_scene(deck_name: str, module: str, scene: str, quality: str, fps: fl
     if fps:
         cmd.append(f"--fps={fps:g}")
     cmd += [str(source), scene]
-    log = ROOT / "renders" / "logs" / f"{deck_name}--{scene}.log"
+    log = ROOT / "renders" / "logs" / f"{output_name(deck_name)}--{scene}.log"
     log.parent.mkdir(parents=True, exist_ok=True)
     # Read by DeckSlide: render into slides-<deck>/ and number by this deck's order.
     env = {**os.environ, "DKVIS_DECK": deck_name}
@@ -198,13 +206,13 @@ def render(
 
 def assemble(deck_name: str) -> None:
     """Point ``slides-<deck>/`` at its parts' rendered scenes (the JSON files name the videos)."""
-    folder = ROOT / f"slides-{deck_name}"
+    folder = ROOT / f"slides-{output_name(deck_name)}"
     folder.mkdir(exist_ok=True)
     for stale in folder.glob("*.json"):
         stale.unlink()
     for part in COMPOSITES[deck_name]:
         for scene in DECK_SCENES[part]:
-            src = ROOT / f"slides-{part}" / f"{scene}.json"
+            src = ROOT / f"slides-{output_name(part)}" / f"{scene}.json"
             if not src.exists():
                 raise FileNotFoundError(f"{src} is missing; render {part} first")
             (folder / src.name).write_text(src.read_text())
@@ -214,7 +222,7 @@ def write_handout(deck_name: str, out: Path) -> None:
     """One PDF page per scene: the last frame of its last manim-drawn build."""
     from PIL import Image
 
-    folder = ROOT / f"slides-{deck_name}"
+    folder = ROOT / f"slides-{output_name(deck_name)}"
     pages = []
     with tempfile.TemporaryDirectory() as tmp:
         for k, scene in enumerate(DECK_SCENES[deck_name]):
@@ -270,19 +278,20 @@ def main() -> None:
 
     renders = ROOT / "renders"
     renders.mkdir(exist_ok=True)
-    html = args.html or renders / f"{args.deck}.html"
-    folder = ["--folder", f"slides-{args.deck}"]
+    out = output_name(args.deck)
+    html = args.html or renders / f"{out}.html"
+    folder = ["--folder", f"slides-{out}"]
     convert = ["convert", *folder, "--to", "html", *names, str(html), "-cslide_number=true", "-ccontrols=true"]
     if args.one_file:
         convert.insert(1, "--one-file")
     _run(*convert)
     if args.pdf:
-        _run("convert", *folder, "--to", "pdf", *names, str(renders / f"{args.deck}.pdf"))
+        _run("convert", *folder, "--to", "pdf", *names, str(renders / f"{out}.pdf"))
     if args.pptx:
-        _run("convert", *folder, "--to", "pptx", *names, str(renders / f"{args.deck}.pptx"))
+        _run("convert", *folder, "--to", "pptx", *names, str(renders / f"{out}.pptx"))
     if args.handout:
-        write_handout(args.deck, renders / f"{args.deck}.handout.pdf")
-    print(f"\nPresent live:  manim-slides present --folder slides-{args.deck} {' '.join(names)}")
+        write_handout(args.deck, renders / f"{out}.handout.pdf")
+    print(f"\nPresent live:  manim-slides present --folder slides-{out} {' '.join(names)}")
     print(f"Or open:       {html}")
 
 

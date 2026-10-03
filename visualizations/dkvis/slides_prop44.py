@@ -101,8 +101,8 @@ class P01Claim(P4Slide):
             U = Line(c + p3(-1.35, 0) * scale, c + p3(1.35, 0) * scale, color=WANTED, stroke_width=4)
             d = np.array([np.cos(theta), np.sin(theta), 0.0])
             V = Line(c - 1.35 * scale * d, c + 1.35 * scale * d, color=TRIAL, stroke_width=4)
-            lu = math(r"U", size=28, color=WANTED).next_to(c + p3(1.35, 0) * scale, DOWN, buff=0.08)
-            lv = math(r"V", size=28, color=TRIAL).next_to(c + 1.35 * scale * d, UP, buff=0.05)
+            lu = math(r"\sym{U}", size=28).next_to(c + p3(1.35, 0) * scale, DOWN, buff=0.08)
+            lv = math(r"\sym{V}", size=28).next_to(c + 1.35 * scale * d, UP, buff=0.05)
             return VGroup(U, V, lu, lv)
 
         top_c, bot_c = p3(-3.9, 0.85), p3(-3.9, -2.05)
@@ -131,7 +131,7 @@ class P01Claim(P4Slide):
 
         x_text, w_text = 0.2, 6.6
         t1 = para(
-            r"Many orthogonal maps carry the subspace $\cx{wanted}{U}$ onto $\cx{trial}{V}$. "
+            r"Many orthogonal maps carry the subspace $\sym{U}$ onto $\sym{V}$. "
             r"The \emph{direct rotation} turns by exactly the principal angles and does nothing else.",
             width=w_text,
             size=25,
