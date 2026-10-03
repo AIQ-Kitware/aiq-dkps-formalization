@@ -43,9 +43,11 @@ from manim import (
 from dkvis import sine_theta_story as story
 from dkvis.notation import concept_color
 from dkvis.slide_style import (
+    CURRENT,
     FG,
     GAP,
     MUTED,
+    OLD,
     PANEL,
     RESID,
     SINE,
@@ -128,14 +130,14 @@ class F02bTanBuys(DeckSlide):
             width=w, size=SIZE,
         )
         p_price = para(
-            r"\textbf{The price:} Rayleigh--Ritz trial values ($H_0=0$) and every unwanted eigenvalue on one side. "
+            r"\textbf{The price:} Rayleigh--Ritz trial values ($\sym{H0}=0$) and every unwanted eigenvalue on one side. "
             r"That is the usual situation when an eigensolver computes the lowest (or highest) eigenvalues: whatever "
             r"has not been computed lies above (below).",
             width=w, size=SIZE,
         )
         p_amb = para(
             r"The same estimate on both off-diagonal corners of the rotation gives the ambient form "
-            r"$\delta\norm{\tan\Theta}\le\norm{H}$.",
+            r"$\delta\norm{\tan\Theta}\le\norm{\sym{H}}$.",
             width=w, size=SIZE - 1, color=MUTED,
         )
         col = text_column(p_same, p_small, p_large, p_price, p_amb, top=self.content_top - 0.1)
@@ -179,16 +181,16 @@ class F02cTanWhy(DeckSlide):
         two = VGroup(
             tex(r"In $2\times2$, with the trial value $a_0$ below the unwanted eigenvalue $\lambda_1$:", size=20, color=MUTED),
             math(
-                r"(A+H)\begin{pmatrix}-\sin\theta\\ \cos\theta\end{pmatrix}=\lambda_1\begin{pmatrix}-\sin\theta\\ \cos\theta\end{pmatrix}"
+                r"(\sym{A}+\sym{H})\begin{pmatrix}-\sin\theta\\ \cos\theta\end{pmatrix}=\lambda_1\begin{pmatrix}-\sin\theta\\ \cos\theta\end{pmatrix}"
                 r"\ \Rightarrow",
                 size=26,
             ),
-            math(r"\cos\theta\,|b|=\sin\theta\,(\lambda_1-a_0)", size=26),
+            math(r"\cos\theta\,|\sym{b}|=\sin\theta\,(\lambda_1-a_0)", size=26),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.12)
         general = VGroup(
             tex(r"In general, along each pair of principal vectors $x_j$ (trial side), $y_j$ (unwanted side), (6.6):", size=20, color=MUTED),
             math(
-                r"\cos\theta_j\,y_j^*Bx_j=\sin\theta_j\,\bigl(\like{Lambda1}{y_j^*\Lambda_1y_j}-\like{A0}{x_j^*A_0x_j}\bigr)"
+                r"\cos\theta_j\,y_j^*\sym{B}x_j=\sin\theta_j\,\bigl(\like{Lambda1}{y_j^*\Lambda_1y_j}-\like{A0}{x_j^*A_0x_j}\bigr)"
                 r"\ \ge\ \sym{delta}\sin\theta_j",
                 size=26,
             ),
@@ -234,8 +236,8 @@ class F02cTanWhy(DeckSlide):
         )
         p_one = para(
             r"\textbf{One-sided:} every average of $\sym{A0}$ is at most $\alpha$ and every average of $\sym{Lambda1}$ at least "
-            r"$\alpha+\delta$, so $\cos\theta_j|y_j^*Bx_j|\ge\delta\sin\theta_j$. Then $\cos\theta_j>0$ and "
-            r"$\tan\theta_j\le|y_j^*Bx_j|/\delta\le\norm{R}/\delta$ (with $H_0=0$, $\norm{R}=\norm{B}$). Summing over "
+            r"$\alpha+\delta$, so $\cos\theta_j|y_j^*\sym{B}x_j|\ge\delta\sin\theta_j$. Then $\cos\theta_j>0$ and "
+            r"$\tan\theta_j\le|y_j^*\sym{B}x_j|/\delta\le\norm{R}/\delta$ (with $\sym{H0}=0$, $\norm{R}=\norm{\sym{B}}$). Summing over "
             r"pairs (Ky Fan) gives every unitarily invariant norm.",
             width=w, size=SIZE,
         )
@@ -283,7 +285,7 @@ class F02cTanWhy(DeckSlide):
 class F03bReflect(DeckSlide):
     depth = "*"
     title = r"Why the angle doubles: reflect the coupling"
-    kicker = r"Davis and Kahan regard $A+H$ as a perturbation not of $A$, but of $A+\Sigma H\Sigma$"
+    kicker = r"Davis and Kahan regard $\sym{A}+\sym{H}$ as a perturbation not of $\sym{A}$, but of $\sym{A}+\Sigma \sym{H}\Sigma$"
 
     def body(self) -> None:
         eps = story.PERTURBATION_EPS
@@ -299,48 +301,48 @@ class F03bReflect(DeckSlide):
         perp = DashedVMobject(through_origin(plane, [0.0, 1.0], 1.6, TRIAL, width=2), num_dashes=18)
 
         new = VGroup(
-            ellipse(plane, pair.perturbed, color=FG, width=3),
+            ellipse(plane, pair.perturbed, color=CURRENT, width=3),
             through_origin(plane, story.unit(th), reach, WANTED, width=3.5),
         )
-        new_lbl = tex(r"$A+H$", size=22, color=FG).next_to(plane(reach * story.unit(th)), RIGHT, buff=0.08)
+        new_lbl = tex(r"$\sym{A}+\sym{H}$", size=22, color=FG).next_to(plane(reach * story.unit(th)), RIGHT, buff=0.08)
         reflected = VGroup(
             DashedVMobject(ellipse(plane, pair.reflected, color=FG, width=3), num_dashes=56),
             through_origin(plane, story.unit(-th), reach, FG, width=3.5),
         )
-        refl_lbl = tex(r"$A+\Sigma H\Sigma$", size=22, color=FG).next_to(plane(reach * story.unit(-th)), RIGHT, buff=0.08)
+        refl_lbl = tex(r"$\sym{A}+\Sigma \sym{H}\Sigma$", size=22, color=FG).next_to(plane(reach * story.unit(-th)), RIGHT, buff=0.08)
         arc = angle_arc(plane, story.unit(-th), story.unit(th), 1.35, SINE, width=4)
         arc_lbl = math(r"2\theta", size=28, color=concept_color("theta")).move_to(plane.origin + RIGHT * 0.95)
 
         mats = VGroup(
-            math(r"A+H=\begin{pmatrix}a_0&b\\ b&a_1\end{pmatrix}", size=26, color=FG),
-            math(r"A+\Sigma H\Sigma=\begin{pmatrix}a_0&-b\\ -b&a_1\end{pmatrix}", size=26),
+            math(r"\sym{A}+\sym{H}=\begin{pmatrix}a_0&\sym{b}\\ \sym{b}&a_1\end{pmatrix}", size=26, color=FG),
+            math(r"\sym{A}+\Sigma \sym{H}\Sigma=\begin{pmatrix}a_0&-\sym{b}\\ -\sym{b}&a_1\end{pmatrix}", size=26),
         ).arrange(RIGHT, buff=0.5).move_to([-4.0, -2.65, 0])
         same = tex(rf"same eigenvalues ${l0:.2f}$ and ${l1:.2f}$; the eigenvectors are mirror images", size=19, color=MUTED).next_to(mats, DOWN, buff=0.12)
 
         w = TEXT_W
         p_x = para(
             r"$\Sigma=P-P^\perp$ is $+1$ on the old (trial) subspace $V$ and $-1$ on $V^\perp$: a mirror. Since "
-            r"$\Sigma A\Sigma=A$, "
-            r"$A+\Sigma H\Sigma=\Sigma(A+H)\Sigma$ is $A+H$ seen in the mirror. In $A$'s eigenbasis only the coupling block $B$ changes sign.",
+            r"$\Sigma \sym{A}\Sigma=\sym{A}$, "
+            r"$\sym{A}+\Sigma \sym{H}\Sigma=\Sigma(\sym{A}+\sym{H})\Sigma$ is $\sym{A}+\sym{H}$ seen in the mirror. In $\sym{A}$'s eigenbasis only the coupling block $\sym{B}$ changes sign.",
             width=w, size=SIZE,
         )
         p_same = para(
-            r"So $A+\Sigma H\Sigma$ has the same eigenvalues as $A+H$, and mirror-image eigenvectors, at $\theta$ and $-\theta$: "
+            r"So $\sym{A}+\Sigma \sym{H}\Sigma$ has the same eigenvalues as $\sym{A}+\sym{H}$, and mirror-image eigenvectors, at $\theta$ and $-\theta$: "
             r"$2\theta$ apart. In general, with $\mathcal R$ the direct rotation from $V$ to $U$, "
-            r"$(A+H)\mathcal R^2=\mathcal R^2(A+\Sigma H\Sigma)$, and $\mathcal R^2$ turns by $2\Theta$ (7.3--7.4).",
+            r"$(\sym{A}+\sym{H})\mathcal R^2=\mathcal R^2(\sym{A}+\Sigma \sym{H}\Sigma)$, and $\mathcal R^2$ turns by $2\Theta$ (7.3--7.4).",
             width=w, size=SIZE,
         )
         p_apply = para(
             r"Now apply the two-gap $\sin\Theta$ theorem (Proposition 6.1) to this pair. Both matrices have the spectral "
-            r"split $\sym{Lambda0}\,|\,\sym{Lambda1}$ with gap $\delta$, and they differ by $H-\Sigma H\Sigma$, the coupling twice:",
+            r"split $\sym{Lambda0}\,|\,\sym{Lambda1}$ with gap $\delta$, and they differ by $\sym{H}-\Sigma \sym{H}\Sigma$, the coupling twice:",
             width=w, size=SIZE,
         )
         box = boxed(
-            math(r"\sym{delta}\norm{\like{theta}{\sin2\Theta}}\le\norm{H-\Sigma H\Sigma}\le2\norm{H}", size=30), color=SINE, pad=0.15
+            math(r"\sym{delta}\norm{\like{theta}{\sin2\Theta}}\le\norm{\sym{H}-\Sigma \sym{H}\Sigma}\le2\norm{\sym{H}}", size=30), color=SINE, pad=0.15
         )
         p_two = para(
-            r"In $2\times2$: $\norm{H-\Sigma H\Sigma}=2|b|$ and the gap is $\lambda_0-\lambda_1$, so $\sin2\theta=2b/(\lambda_0-\lambda_1)$ exactly. "
-            r"For the directed form Section 7 obtains $\delta\norm{\sin2\Theta_0}\le\norm{B}\le\norm{R}$; Section 2 prints "
+            r"In $2\times2$: $\norm{\sym{H}-\Sigma \sym{H}\Sigma}=2|\sym{b}|$ and the gap is $\lambda_0-\lambda_1$, so $\sin2\theta=2\sym{b}/(\lambda_0-\lambda_1)$ exactly. "
+            r"For the directed form Section 7 obtains $\delta\norm{\sin2\Theta_0}\le\norm{\sym{B}}\le\norm{R}$; Section 2 prints "
             r"the weaker $2\norm{R}$.",
             width=w, size=SIZE - 1, color=MUTED,
         )
@@ -423,20 +425,20 @@ class F03cPrice(DeckSlide):
             width=w, size=SIZE,
         )
         p_which = para(
-            r"Which one occurs depends on the invariant subspace $F_0$ of $A+H$ being compared. The theorem accepts any "
+            r"Which one occurs depends on the invariant subspace $F_0$ of $\sym{A}+\sym{H}$ being compared. The theorem accepts any "
             r"subspace with the spectral split $\sym{Lambda0}\,|\,\sym{Lambda1}$; it does not require the ``right'' one, belonging "
-            r"to eigenvalues near those of $\sym{A0}$. Even with $H=0$ a mismatched $F_0$ can be $90^\circ$ away, and "
+            r"to eigenvalues near those of $\sym{A0}$. Even with $\sym{H}=0$ a mismatched $F_0$ can be $90^\circ$ away, and "
             r"different angles of $\Theta_0$ can fall on different sides.",
             width=w, size=SIZE,
         )
         p_82 = para(
-            r"\textbf{Theorem 8.2} removes the ambiguity: if also $\norm{H}_2<\delta/2$ (or $\norm{R}_2<\delta/2$) and "
+            r"\textbf{Theorem 8.2} removes the ambiguity: if also $\norm{\sym{H}}_2<\delta/2$ (or $\norm{R}_2<\delta/2$) and "
             r"$\operatorname{spec}\sym{A0}\subset[\beta-\delta/2,\alpha+\delta/2]$, every angle is below $45^\circ$, so "
-            r"$\theta\le\tfrac12\arcsin(2\norm{H}_2/\delta)$.",
+            r"$\theta\le\tfrac12\arcsin(2\norm{\sym{H}}_2/\delta)$.",
             width=w, size=SIZE,
         )
         p_proof = para(
-            r"Its proof follows the path $A+H-\sigma H$ from $A+H$ ($\sigma=0$) back to $A$ ($\sigma=1$) and uses the "
+            r"Its proof follows the path $\sym{A}+\sym{H}-\sigma \sym{H}$ from $\sym{A}+\sym{H}$ ($\sigma=0$) back to $\sym{A}$ ($\sigma=1$) and uses the "
             r"$\sin2\Theta$ bound along the way: the angle starts at $0$ and can never jump past $45^\circ$.",
             width=w, size=SIZE - 1, color=MUTED,
         )
@@ -476,10 +478,10 @@ class F04bJacobi(DeckSlide):
         plane = Plane([-4.3, 0.25, 0], 1.2)
         reach = 2.1
 
-        ell = ellipse(plane, pair.perturbed, color=FG, width=3)
+        ell = ellipse(plane, pair.perturbed, color=CURRENT, width=3)
         old_axes = VGroup(
-            DashedVMobject(through_origin(plane, [1.0, 0.0], reach, MUTED, width=2), num_dashes=24),
-            DashedVMobject(through_origin(plane, [0.0, 1.0], 1.7, MUTED, width=2), num_dashes=20),
+            DashedVMobject(through_origin(plane, [1.0, 0.0], reach, OLD, width=2), num_dashes=24),
+            DashedVMobject(through_origin(plane, [0.0, 1.0], 1.7, OLD, width=2), num_dashes=20),
         )
         frame = always_redraw(
             lambda: VGroup(
@@ -489,12 +491,12 @@ class F04bJacobi(DeckSlide):
         )
         arc = always_redraw(lambda: angle_arc(plane, [1.0, 0.0], story.unit(max(phi.get_value(), 1e-3)), 1.0, SINE, width=4))
         key = VGroup(
-            tex(r"ellipse: $A+H$", size=19),
+            tex(r"\cx{current}{ellipse: $\sym{At}$}", size=19),
             tex(r"\cx{trial}{the basis, turned by $\varphi$}", size=19),
-            tex(r"\cx{muted}{dashed: $A$'s eigenbasis}", size=19),
+            tex(r"\cx{old}{dashed: $\sym{A}$'s eigenbasis}", size=19),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.05).move_to([-6.9, 2.35, 0], aligned_edge=UP + LEFT)
         formula = math(
-            r"\text{coupling}(\varphi)=\tfrac12(a_1-a_0)\sin2\varphi+b\cos2\varphi",
+            r"\text{coupling}(\varphi)=\tfrac12(a_1-a_0)\sin2\varphi+\sym{b}\cos2\varphi",
             size=24,
         ).move_to([-4.0, -2.3, 0])
         rows = readout_rows(
@@ -507,28 +509,28 @@ class F04bJacobi(DeckSlide):
 
         w = TEXT_W
         p_turn = para(
-            r"Write $A+H$ in $A$'s eigenbasis turned by $\varphi$. Its off-diagonal (coupling) entry is "
-            r"$\tfrac12(a_1-a_0)\sin2\varphi+b\cos2\varphi$. The eigenvectors of $A+H$ are the basis where it "
-            r"vanishes: $\tan2\theta=2b/(a_0-a_1)$, the Jacobi rotation.",
+            r"Write $\sym{A}+\sym{H}$ in $\sym{A}$'s eigenbasis turned by $\varphi$. Its off-diagonal (coupling) entry is "
+            r"$\tfrac12(a_1-a_0)\sin2\varphi+\sym{b}\cos2\varphi$. The eigenvectors of $\sym{A}+\sym{H}$ are the basis where it "
+            r"vanishes: $\tan2\theta=2\sym{b}/(a_0-a_1)$, the Jacobi rotation.",
             width=w, size=SIZE,
         )
         p_pair = para(
-            r"Davis and Kahan's proof ``imitates the $\tan\theta$ proof'': it reads $F_0^*(A+H)F_1=0$ along each pair "
-            r"of principal vectors $x_j$, $y_j$ (7.6). Because $H_0=H_1=0$, the diagonal entries are Rayleigh "
-            r"quotients of $A$ itself, at least $\delta$ apart by the one-sided gap:",
+            r"Davis and Kahan's proof ``imitates the $\tan\theta$ proof'': it reads $F_0^*(\sym{A}+\sym{H})F_1=0$ along each pair "
+            r"of principal vectors $x_j$, $y_j$ (7.6). Because $\sym{H0}=\sym{H1}=0$, the diagonal entries are Rayleigh "
+            r"quotients of $\sym{A}$ itself, at least $\delta$ apart by the one-sided gap:",
             width=w, size=SIZE,
         )
         ineq = math(
-            r"\pm2\cos2\theta_j\,\operatorname{Re}(y_j^*Bx_j)\ \ge\ \sym{delta}\sin2\theta_j",
+            r"\pm2\cos2\theta_j\,\operatorname{Re}(y_j^*\sym{B}x_j)\ \ge\ \sym{delta}\sin2\theta_j",
             size=30,
         )
         p_concl = para(
             r"So $\cos2\theta_j\neq0$ (no angle equals $45^\circ$: a conclusion, not a hypothesis), and "
-            r"$\delta|\tan2\theta_j|\le2|y_j^*Bx_j|\le2\norm{B}=2\norm{R}$. Ky Fan sums give every unitarily invariant norm.",
+            r"$\delta|\tan2\theta_j|\le2|y_j^*\sym{B}x_j|\le2\norm{\sym{B}}=2\norm{R}$. Ky Fan sums give every unitarily invariant norm.",
             width=w, size=SIZE,
         )
         p_why = para(
-            r"Without $H_0=H_1=0$ the diagonal blocks would be $\sym{A0}+H_0$ and $A_1+H_1$, whose gap $A$'s gap does not "
+            r"Without $\sym{H0}=\sym{H1}=0$ the diagonal blocks would be $\sym{A0}+\sym{H0}$ and $A_1+\sym{H1}$, whose gap $\sym{A}$'s gap does not "
             r"control. Without one-sidedness the two Rayleigh quotients could average to the same value, as for $\tan\Theta$.",
             width=w, size=SIZE - 1, color=MUTED,
         )
@@ -594,16 +596,16 @@ class F04cRepulsion(DeckSlide):
             )
 
         lines = VGroup(
-            line_old, tex(r"old $A$", size=20, color=FG).next_to(X_old(0.85), LEFT, buff=0.12),
-            line_new, tex(r"new $A+H$", size=20, color=FG).next_to(X_new(0.85), LEFT, buff=0.12),
+            line_old, tex(r"old $\sym{A}$", size=20, color=FG).next_to(X_old(0.85), LEFT, buff=0.12),
+            line_new, tex(r"new $\sym{A}+\sym{H}$", size=20, color=FG).next_to(X_new(0.85), LEFT, buff=0.12),
         )
         marks = VGroup(always_redraw(old_marks), always_redraw(new_marks))
         rows = readout_rows(
             [
-                (r"\text{old gap } a_0-a_1 =", lambda: g.get_value(), GAP, 3, None),
-                (r"\text{new gap } \lambda_0-\lambda_1 =", lambda: pair().delta_sin_two, GAP, 3, None),
+                (r"\text{old gap } \sym{a0}-\sym{a1} =", lambda: g.get_value(), GAP, 3, None),
+                (r"\text{new gap } \sym{lambda0}-\sym{lambda1} =", lambda: pair().delta_sin_two, GAP, 3, None),
                 (r"\theta =", lambda: pymath.degrees(pair().line_angle), SINE, 1, r"^\circ"),
-                (r"(\lambda_0-\lambda_1)\cos2\theta =", lambda: pair().delta_sin_two * pymath.cos(2 * pair().line_angle), GAP, 3, None),
+                (r"(\sym{lambda0}-\sym{lambda1})\cos2\sym{theta} =", lambda: pair().delta_sin_two * pymath.cos(2 * pair().line_angle), GAP, 3, None),
             ],
             size=24,
         ).move_to([-3.6, -1.85, 0])
@@ -612,13 +614,13 @@ class F04cRepulsion(DeckSlide):
         w = TEXT_W
         p_rep = para(
             r"Divide the two double-angle identities: $\lambda_0-\lambda_1=(a_0-a_1)/\cos2\theta$. The more the "
-            r"eigenvectors turn, the further the eigenvalues of $A+H$ are pushed apart: here the old gap shrinks "
-            r"towards $0$ while the new gap stays above $2\norm{H}_2$.",
+            r"eigenvectors turn, the further the eigenvalues of $\sym{A}+\sym{H}$ are pushed apart: here the old gap shrinks "
+            r"towards $0$ while the new gap stays above $2\norm{\sym{H}}_2$.",
             width=w, size=SIZE,
         )
         p_81 = para(
             r"\textbf{Theorem 8.1}, under the $\tan2\Theta$ hypotheses: every angle is at most $45^\circ$ exactly when "
-            r"$F_0$ is the matching spectral subspace of $A+H$ ($\sym{Lambda0}\le\alpha$, $\sym{Lambda1}\ge\alpha+\delta$), "
+            r"$F_0$ is the matching spectral subspace of $\sym{A}+\sym{H}$ ($\sym{Lambda0}\le\alpha$, $\sym{Lambda1}\ge\alpha+\delta$), "
             r"and that subspace always exists. This is the $45^\circ$ ceiling of the gap slides.",
             width=w, size=SIZE,
         )
@@ -665,7 +667,7 @@ class F09WhichOne(DeckSlide):
     ROWS = [
         (
             r"\sin\Theta",
-            r"Trial vectors and any trial matrix; the unwanted eigenvalues of $A+H$ are outside an interval around the "
+            r"Trial vectors and any trial matrix; the unwanted eigenvalues of $\sym{A}+\sym{H}$ are outside an interval around the "
             r"trial values, on either side.",
             r"$\norm{\sin\Theta_0}\le\norm{R}/\delta$: residual over gap.",
         ),
@@ -674,20 +676,20 @@ class F09WhichOne(DeckSlide):
             r"As above, with Rayleigh--Ritz trial values and every unwanted eigenvalue on one side (e.g.\ computing "
             r"the lowest eigenvalues).",
             r"$\norm{\tan\Theta_0}\le\norm{R}/\delta$: never $90^\circ$, tighter for large angles; also "
-            r"$\norm{\tan\Theta}\le\norm{H}/\delta$.",
+            r"$\norm{\tan\Theta}\le\norm{\sym{H}}/\delta$.",
         ),
         (
             r"\sin2\Theta",
-            r"Only that the eigenvalues of $A+H$ split into $\sym{Lambda0}\,|\,\sym{Lambda1}$ with gap $\delta$; nothing about "
+            r"Only that the eigenvalues of $\sym{A}+\sym{H}$ split into $\sym{Lambda0}\,|\,\sym{Lambda1}$ with gap $\delta$; nothing about "
             r"the trial values.",
-            r"$\norm{\sin2\Theta}\le2\norm{H}/\delta$ (and with $R$): a small angle or one near $90^\circ$, unless "
+            r"$\norm{\sin2\Theta}\le2\norm{\sym{H}}/\delta$ (and with $R$): a small angle or one near $90^\circ$, unless "
             r"Theorem 8.2 applies.",
         ),
         (
             r"\tan2\Theta",
-            r"Only $A$'s spectrum, split on one side by $\delta$, and an $H$ that only couples wanted with unwanted "
+            r"Only $\sym{A}$'s spectrum, split on one side by $\delta$, and an $\sym{H}$ that only couples wanted with unwanted "
             r"directions.",
-            r"$\norm{\tan2\Theta}\le2\norm{H}/\delta$ before computing anything about $A+H$; at most $45^\circ$ on the "
+            r"$\norm{\tan2\Theta}\le2\norm{\sym{H}}/\delta$ before computing anything about $\sym{A}+\sym{H}$; at most $45^\circ$ on the "
             r"matching subspace (Theorem 8.1).",
         ),
     ]

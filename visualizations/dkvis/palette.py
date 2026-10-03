@@ -4,7 +4,16 @@ One color per mathematical role (see :mod:`dkvis.slide_style`): blue is what
 we want, amber what we computed, cyan the exact part we do not want, pink how
 much of the computation points into it, green the residual that exposes that,
 violet the separation that keeps it from hiding.  Which role each *symbol* plays
-is set in :mod:`dkvis.notation`.  ``MUTED`` and ``FAINT`` are
+is set in :mod:`dkvis.notation`.
+
+A second, quieter tier says where an operator comes from, each a muted relative
+of its eigenvectors' color: ``OLD`` (tan, the old ``A``, whose eigenvectors are
+the amber trial), ``CURRENT`` (steel, ``Ã``, whose eigenvectors are the blue and
+cyan wanted and unwanted directions) and ``PERTURB`` (vermilion, ``H``, the one new
+hue).  ``REFUTED`` (red) marks a claim shown false and nothing else; it is close
+to vermilion, so the two do not share a slide.  Every other pair of colors here is at
+least 15 apart in CIEDE2000 in both themes; check a new color against all of
+them before adding it.  ``MUTED`` and ``FAINT`` are
 presentation only (secondary labels, guides) and never carry a role.  Set
 ``DKVIS_THEME=light`` for the light variant.
 """
@@ -25,6 +34,10 @@ DARK = {
     "SINE": "#FF5CA8",
     "RESID": "#4ADE80",
     "GAP": "#B69CFF",
+    "OLD": "#A38848",
+    "CURRENT": "#4096B2",
+    "PERTURB": "#F26B3A",
+    "REFUTED": "#E8484E",
 }
 
 LIGHT = {
@@ -39,6 +52,10 @@ LIGHT = {
     "SINE": "#D12A7B",
     "RESID": "#138A4B",
     "GAP": "#6E4BD8",
+    "OLD": "#705519",
+    "CURRENT": "#054669",
+    "PERTURB": "#D9541E",
+    "REFUTED": "#C62828",
 }
 
 THEMES = {"dark": DARK, "light": LIGHT}
@@ -49,6 +66,13 @@ PALETTE = THEMES[THEME]
 #: Appended to every output name (``slides-<deck>-light/``, ``renders/<deck>-light.html``,
 #: ``media/vtk3d-light/``) so the themes never overwrite each other's renders.
 OUTPUT_SUFFIX = "" if THEME == "dark" else f"-{THEME}"
+
+
+def tint(hex_value: str, amount: float = 0.12) -> str:
+    """``hex_value`` mixed into the background: a panel surface in that role's tint."""
+    bg = rgb(PALETTE["BG"])
+    mixed = [amount * c + (1 - amount) * b for c, b in zip(rgb(hex_value), bg)]
+    return "#" + "".join(f"{round(255 * c):02X}" for c in mixed)
 
 
 def rgb(hex_value: str) -> tuple[float, float, float]:

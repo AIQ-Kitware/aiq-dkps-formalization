@@ -170,6 +170,7 @@ presenter notes on every build. There are two presentation paths:
 | `S05Residual` | yes | yes | "The residual": a "Recall" panel for `A`, `U`, `v`; why `r = Av - rho v` is computable from `A` and `v` while the angle needs `U`; every build adds, so the last build is the complete slide |
 | `S06Gap` | yes | yes | the separating window; why an interval |
 | `S07Theorem` | yes | yes | `delta ||sin Theta0|| <= ||R||`: error <= residual / gap |
+| `S07bReading` | | `*` | how I read the theorem: `δ‖sin Θ0(E0,F0)‖ ≤ ‖ÃE0 − E0A0‖` with every symbol defined on the slide; `sin Θ0(E0,F0) = |(I − F0F0*)E0|`, the gap as chosen bounds `β ≤ α` and a clearance `δ`; the left side needs the unknown `F0`, the right side is computable; matches the Lean construction |
 | `S08Why` | yes | yes | why it is true, with one wanted direction `u` and one unwanted `w`: the wrong part of `v` (length `sin theta`) is scaled by at least `delta` in the residual |
 | `S08Components` | | `*` | the same mechanism across the whole spectrum (bar chart, with the equations) |
 | `S09Sylvester` | | `*` | the subspace proof via a Sylvester equation, entry by entry in eigenvector coordinates |
@@ -229,10 +230,16 @@ Every number on a slide comes from `dkvis/sine_theta_story.py` (or the existing
 `dkvis/sine_theta.py`), whose models are checked by `tests/`. Colors carry
 meaning on every slide, by role in the Davis--Kahan story: blue = wanted (`U`, `F0`, `Lambda0`),
 amber = trial (`V`, `E0`, `A0`, `v`, Ritz values), cyan = unwanted (`U-perp`, `F1`, `Lambda1`), pink =
-angle / the part of the trial outside `U`, green = residual, violet = gap. Operators (`A`, `A~`, `H`, the
-projectors) and the blocks with no role (`A1`, `E1`) are neutral, and gray only de-emphasizes. The process
-slides use neutral colors only; the Proposition 4.4 slides keep `U` blue, `V` amber and the displacement
-pink, but draw the two competing maps neutrally.
+angle / the part of the trial outside `U`, green = residual, violet = gap. A quieter second tier says where
+an operator comes from, each a muted relative of its eigenvectors' color: tan = the old `A` (its
+eigenvectors are the amber trial; dashed when drawn), steel = `A~` (its eigenvectors are the blue and cyan
+directions; solid when drawn), vermilion = the perturbation `H` with its blocks and entries. Red marks a
+refuted claim and nothing else (Proposition 4.4 as printed); it is close to vermilion, so the two do not
+share a slide. The projectors, `E1` and `V-perp` are neutral, gray only de-emphasizes, and a box outlined in
+a role color gets a faint surface of that color. The process slides use neutral colors only; the
+Proposition 4.4 slides keep `U` blue, `V` amber and the displacement pink, but draw the two competing maps
+neutrally. All the colors that can share a slide are at least 15 apart in CIEDE2000, in both themes; check
+a new color against them before adding it.
 
 Colors have two single sources. `dkvis/palette.py` says what each role looks like, per theme (dark and
 light). `dkvis/notation.py` is the canonical map from symbol to role. Symbols and the labels that name
@@ -242,7 +249,9 @@ them take their color from it: LaTeX writes `\sym{Lambda1}` for the symbol or
 still uses the role constants of `dkvis/slide_style.py` directly, so when a drawn object stands for a
 symbol whose role is not obvious (`V-perp` is neutral, not amber), use `concept_color` there too. Recolor
 a symbol by changing its role in `notation.py`; retune a role in `palette.py`. The glossary (part 7) draws
-its symbols the same way, so it cannot disagree with the slides.
+its symbols the same way, so it cannot disagree with the slides. Only the symbols in a formula are colored: relations,
+operations, norm bars, delimiters and named operations such as `spec` stay neutral. `\like{...}` and a
+role-colored `math(...)` label get this automatically (`color_nouns` in `dkvis/notation.py`).
 
 Build and present from `visualizations/`. The `Makefile` wraps the common
 cases (`make` lists the targets):

@@ -4,9 +4,9 @@ The smallest setting in which the *subspace* (not just vector) content of the
 theorem is visible is ``R^3`` with a two-dimensional exact invariant subspace:
 
 * ``A`` is symmetric with eigenvectors ``f1, f2, f3``;
-* the exact subspace is ``U = ran F0 = span(f1, f2)``, and ``F1 = f3`` with
+* the exact subspace is ``U = range F0 = span(f1, f2)``, and ``F1 = f3`` with
   ``Lambda1 = [lambda3]`` is the unwanted part;
-* the trial subspace is a plane ``V = ran E0`` with orthonormal basis ``E0``
+* the trial subspace is a plane ``V = range E0`` with orthonormal basis ``E0``
   and a symmetric 2x2 trial matrix ``A0``;
 * ``R = A E0 - E0 A0`` and ``sin Theta0`` has the singular values of
   ``F1^T E0``, a 1x2 matrix, so ``||sin Theta0|| = ||F1^T E0||_2`` in every

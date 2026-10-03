@@ -45,6 +45,7 @@ from dkvis.slide_style import (
     FG,
     MUTED,
     PANEL,
+    REFUTED,
     SINE,
     TRIAL,
     DeckSlide,
@@ -163,7 +164,7 @@ class P01Claim(P4Slide):
         )
         verdict = boxed(
             tex(r"False as printed: there is a counterexample in $\mathbb{R}^4$.", size=27),
-            color=SINE,
+            color=REFUTED,
             pad=0.2,
         )
         col = VGroup(t1, t2, claim, t3, verdict).arrange(DOWN, aligned_edge=LEFT, buff=0.26)
@@ -316,7 +317,7 @@ class P02Counterexample(P4Slide):
         table.move_to([x0, y_w - 0.35, 0], aligned_edge=UP + LEFT)
         if table.get_right()[0] > 6.85:
             table.scale((6.85 - x0) / (table.get_right()[0] - x0), about_edge=LEFT)
-        hl = Rectangle(width=table.width + 0.16, height=0.42, stroke_color=FG, stroke_width=2).move_to(
+        hl = Rectangle(width=table.width + 0.16, height=0.42, stroke_color=REFUTED, stroke_width=2.5).move_to(
             [table.get_center()[0], table.get_bottom()[1] + 0.22, 0]
         )
 

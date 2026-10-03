@@ -315,7 +315,7 @@ class SpectralComponents:
 
     ``A`` is diagonal with eigenvalues ``eigenvalues`` and eigenvectors ``f_j``;
     the unit trial vector is ``v = sum_j c_j f_j`` and the trial scalar is
-    ``A0 = [rho]``.  The exact subspace ``U = ran F0`` is spanned by the
+    ``A0 = [rho]``.  The exact subspace ``U = range F0`` is spanned by the
     eigenvectors whose eigenvalues lie in the window ``(rho - delta, rho + delta)``;
     the others form ``F1``, so the gap hypothesis holds by construction.
 
