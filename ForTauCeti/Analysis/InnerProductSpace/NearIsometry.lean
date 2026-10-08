@@ -41,7 +41,7 @@ Because `W` is an isometry and `M x = W (S x)`,
 
 so the operator estimate *is* the scalar estimate `|√μ - 1| ≤ |μ - 1| ≤ δ` on the
 eigenvalues
-`μ` of the Gram operator (`TauCeti.Real.abs_sqrt_sub_one_le_abs_sub_one`), with no loss.
+`μ` of the Gram operator (`Real.abs_sqrt_sub_one_le_abs_sub_one`), with no loss.
 Estimating instead through `M ∘ (1 - S⁻¹)` — the route that gives the constant `2 * δ` —
 pays
 an avoidable `‖M‖ ≤ √(1 + δ)` factor and needs `δ ≤ 1 / 2`.
@@ -419,7 +419,7 @@ theorem exists_linearIsometryEquiv_comp_polarFactor (M : E →ₗ[ℝ] E) {δ : 
     intro x
     rw [hS]
     exact norm_diagonal_apply_sub_self_le b _ hδ0
-      (fun k => (Real.abs_sqrt_sub_one_le_abs_sub_one (le_of_lt (hμpos k))).trans (hμbound k)) x
+      (fun k => (Real.abs_sqrt_sub_one_le_abs_sub_one).trans (hμbound k)) x
   -- Bundle `W₀` as a linear isometry equivalence and read off the factorization.
   obtain ⟨U, hU⟩ := exists_linearIsometryEquiv_coe_eq (inner_map_eq_of_inner_basis b hWortho)
   refine ⟨U, S, fun x => ?_, hS ▸ isSymmetric_diagonal b _, hSS, hSest⟩

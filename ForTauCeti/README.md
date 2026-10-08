@@ -35,12 +35,11 @@ The import firewall is enforced by `dev/policy/import-layers.yaml`.
 
 ## Namespace and API ownership
 
-Declarations use their intended final `TauCeti.*` names from the start. The
-module path is temporarily rooted at `ForTauCeti/`, but the declaration namespace
-is not `ForTauCeti`.
-
-When extending a Mathlib type namespace, keep the declaration under `TauCeti`,
-for example:
+Declarations use their intended final names from the start. The module path
+is temporarily rooted at `ForTauCeti/`, but the declaration namespace is not
+`ForTauCeti`. Tau Ceti-owned constructions generally live under `TauCeti`;
+lemmas extending Mathlib's scalar APIs (such as `Real.sqrt`) use the canonical
+Mathlib namespace when required by Tau Ceti's naming rules. For example:
 
 ```lean
 namespace TauCeti
@@ -53,7 +52,7 @@ end TauCeti
 ```
 
 Use `open TauCeti` where dot notation or unqualified lookup requires it. Avoid
-creating new declarations in root Mathlib namespaces.
+unrelated declarations in root Mathlib namespaces.
 
 The maintained architecture has one canonical owner for each reusable concept.
 When duplicate local APIs are found, compare their actual types and consumers,
