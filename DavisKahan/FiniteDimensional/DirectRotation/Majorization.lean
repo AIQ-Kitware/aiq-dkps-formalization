@@ -223,7 +223,7 @@ theorem eigenvalues_hermitianPart_le_singularValues
       (hermitianPart_isSymmetric A) rfl i
   have htaildim : finrank 𝕜 tail = finrank 𝕜 E - (i : ℕ) := by
     dsimp [tail]
-    rw [b.finrank_spanIndices_set, ← Fin.card_Ici i]
+    rw [b.finrank_spanIndices_set, Set.ncard_eq_toFinset_card', ← Fin.card_Ici i]
     congr 1
     ext j
     simp

@@ -76,8 +76,7 @@ theorem basisDiagonal_apply_basis (b : OrthonormalBasis ι 𝕜 E) (c : ι → �
 theorem isInvariant_basisDiagonal_spanIndices (b : OrthonormalBasis ι 𝕜 E)
     (c : ι → ℝ) (S : Set ι) : IsInvariant (basisDiagonal b c) (b.spanIndices S) := by
   intro x hx
-  change basisDiagonal b c x ∈ Submodule.span 𝕜 (b '' S)
-  change x ∈ Submodule.span 𝕜 (b '' S) at hx
+  rw [OrthonormalBasis.spanIndices_eq_span] at hx ⊢
   refine Submodule.span_induction ?_ ?_ ?_ ?_ hx
   · rintro y ⟨i, hi, rfl⟩
     rw [basisDiagonal_apply_basis]
@@ -158,7 +157,8 @@ theorem finrank_eigenspace_basisDiagonal (b : OrthonormalBasis ι 𝕜 E)
     finrank 𝕜 (eigenspace (basisDiagonal b c) μ) =
       ({i | (c i : 𝕜) = μ} : Finset ι).card := by
   classical
-  rw [eigenspace_basisDiagonal, OrthonormalBasis.finrank_spanIndices_set]
+  rw [eigenspace_basisDiagonal, OrthonormalBasis.finrank_spanIndices_set,
+    Set.ncard_eq_toFinset_card']
   congr 1
   ext i
   simp
@@ -278,6 +278,7 @@ theorem card_filter_lt_eigenvalues_basisDiagonal {n : ℕ}
   have h1 := (hsym.eigenvectorBasis hn).finrank_spanIndices_set
     {i : Fin n | α < hsym.eigenvalues hn i}
   rw [hspan, b.finrank_spanIndices_set {i : ι | α < c i}] at h1
+  simp only [Set.ncard_eq_toFinset_card'] at h1
   simpa using h1.symm
 
 open scoped Classical in

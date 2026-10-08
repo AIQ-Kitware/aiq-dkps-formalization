@@ -85,7 +85,7 @@ theorem spanIndices_eigenvalueLevel (hT : T.IsSymmetric) (hn : finrank 𝕜 E = 
     have := (hT.hasEigenvector_eigenvectorBasis hn i).1
     rwa [(by exact hi : (hT.eigenvalues hn i : 𝕜) = μ)] at this
   refine (Submodule.eq_of_le_of_finrank_eq hle ?_)
-  rw [OrthonormalBasis.finrank_spanIndices_set]
+  rw [OrthonormalBasis.finrank_spanIndices_set, Set.ncard_eq_toFinset_card']
   rw [← hT.card_filter_eigenvalues_eq hn μ]
   congr 1
   ext i
