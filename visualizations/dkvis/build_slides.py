@@ -19,6 +19,12 @@ Decks:
   renders without rendering anything itself, so its slides carry their parts'
   numbers and footers.  Optional slides are badged ``*`` (technical depth) or
   ``**`` (backup).
+* ``friday`` -- a working composition for the short talk about the mathematics,
+  LLM-assisted formalization, and how confidence was built;
+* ``study`` -- a long-form learning composition using the reusable scenes.
+
+Deck composition lives in :mod:`dkvis.decks`; this module only renders and
+converts those specifications.  Optional/backup depth is presentation-specific.
 
 A deck module may define ``prepare(refresh)`` to render assets it needs (the 3D
 part renders its VTK stills and movies); ``--refresh-assets`` forces that.
@@ -51,6 +57,8 @@ import time
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from pathlib import Path
 
+from dkvis.decks import DECKS as DECK_REGISTRY, get_deck
+
 ROOT = Path(__file__).resolve().parent.parent
 
 
@@ -60,84 +68,25 @@ def output_name(deck_name: str) -> str:
 
     return f"{deck_name}{OUTPUT_SUFFIX}"
 
-MAIN = "dkvis.slides_sine_theta"
-THREE_D = "dkvis.slides_sine_theta_3d"
-PROP44 = "dkvis.slides_prop44"
-FAMILY = "dkvis.slides_family"
-FAMILY_DETAIL = "dkvis.slides_family_detail"
-PROCESS = "dkvis.slides_process"
-GLOSSARY = "dkvis.slides_glossary"
-
-# Presentation order of each deck, by scene name.  Every name must be defined in
-# one of MODULES.  Slides with ``depth`` "*" or "**" carry a badge; the short
-# deck contains only unmarked (core) slides.
-SHORT = "sine-theta-short"
-FULL = "sine-theta-full"
-
-# The parts of the full talk, in order, with the footer each part's slides carry.
-PARTS = {
-    "part1-sine-theta": [
-        "S00Title", "S00bSetting", "S01Ellipse", "S02Perturb", "S03bWanted", "S03dCompute", "S03NoGap",
-        "S03cUnstable", "S04Angle", "S04bSinThetaOperator", "S05Residual", "S06Gap", "S07Theorem", "S07bReading", "S08Why", "S08Components",
-        "S09Sylvester", "S11Payoff", "S10Sharp", "S12Lean",
-    ],
-    "part2-3d": ["D01Planes", "D02Tilt", "D03Gap", "D04Perturb", "D05TryIt"],
-    "part3-family": [
-        "F01Setup", "F01bAngles", "F01cTwoByTwo",
-        "F02TanTheta", "F02bTanBuys", "F02cTanWhy",
-        "F03SinTwoTheta", "F03bReflect", "F03cPrice",
-        "F04TanTwoTheta", "F04bJacobi", "F04cRepulsion",
-        "F09WhichOne", "S13Family",
-    ],
-    "part4-prop44": ["P01Claim", "P02Counterexample", "P03Why", "P04Details"],
-    "part5-process": ["W01Workflow", "W02TwoChecks", "W03ThreeStatements", "W04Reversals", "W05Scale", "W06Claims"],
-    "part6-summary": ["S14Summary"],
-    "part7-glossary": ["G01Matrices", "G02Spectra", "G03Other"],
+# Compatibility views for old scripts that imported these names from this
+# module.  New code should use ``dkvis.decks`` and ``DeckSpec`` directly.
+DECKS = list(DECK_REGISTRY)
+DECK_SCENES = {name: get_deck(name).scene_names for name in DECKS}
+COMPOSITES = {
+    name: list(get_deck(name).composite_parts)
+    for name in DECKS
+    if get_deck(name).composite_parts
 }
 PART_TITLES = {
-    "part1-sine-theta": r"Part 1 $\cdot$ the Davis--Kahan $\sin\Theta$ theorem",
-    "part2-3d": r"Part 2 $\cdot$ $\sin\Theta$ in three dimensions",
-    "part3-family": r"Part 3 $\cdot$ the $\tan\Theta$, $\sin2\Theta$ and $\tan2\Theta$ theorems",
-    "part4-prop44": r"Part 4 $\cdot$ Proposition 4.4, a printed claim that is false",
-    "part5-process": r"Part 5 $\cdot$ how the formalization was built",
-    "part6-summary": r"Part 6 $\cdot$ summary",
-    "part7-glossary": r"Part 7 $\cdot$ notation",
+    name: spec.footer
+    for name, spec in DECK_REGISTRY.items()
+    if spec.footer and name.startswith("part")
 }
-
-DECK_SCENES = {
-    SHORT: [
-        "S00TitleShort", "S00bSetting", "S01Ellipse", "S02Perturb", "S03bWanted", "S03NoGap", "S03cUnstable", "S04Angle", "S05Residual",
-        "S06Gap", "S07Theorem", "S08Why", "S11Payoff", "D01Planes", "S12Lean",
-        "P01Claim", "P02Counterexample", "S14Summary",
-    ],
-    **PARTS,
-    FULL: [scene for scenes in PARTS.values() for scene in scenes],
-}
-# Decks assembled from other decks' renders rather than rendered themselves.
-COMPOSITES = {FULL: list(PARTS)}
-
-MODULES = [MAIN, THREE_D, FAMILY, FAMILY_DETAIL, PROP44, PROCESS, GLOSSARY]
-DECKS = list(DECK_SCENES)
-
-
-def _module_of() -> dict[str, str]:
-    owner = {}
-    for module in MODULES:
-        for name, obj in vars(importlib.import_module(module)).items():
-            if isinstance(obj, type) and getattr(obj, "__module__", None) == module and hasattr(obj, "construct"):
-                owner[name] = module
-    return owner
 
 
 def deck(name: str) -> list[tuple[str, list[str]]]:
-    """``[(module, [scene, ...]), ...]`` grouped by module, in first-use order."""
-    owner = _module_of()
-    grouped: dict[str, list[str]] = {}
-    for scene in DECK_SCENES[name]:
-        if scene not in owner:
-            raise KeyError(f"deck {name!r} names unknown scene {scene!r}")
-        grouped.setdefault(owner[scene], []).append(scene)
-    return list(grouped.items())
+    """``[(module, [scene, ...]), ...]`` grouped in first-use order."""
+    return get_deck(name).grouped_by_module()
 
 
 def _run(*args: str, deck: str | None = None) -> None:
@@ -161,7 +110,14 @@ def _render_scene(deck_name: str, module: str, scene: str, quality: str, fps: fl
     log = ROOT / "renders" / "logs" / f"{output_name(deck_name)}--{scene}.log"
     log.parent.mkdir(parents=True, exist_ok=True)
     # Read by DeckSlide: render into slides-<deck>/ and number by this deck's order.
-    env = {**os.environ, "DKVIS_DECK": deck_name}
+    slide_use = get_deck(deck_name).slide(scene)
+    env = {
+        **os.environ,
+        "DKVIS_DECK": deck_name,
+        # Presence of the variable matters: an empty value explicitly makes a
+        # historically optional scene core in this particular presentation.
+        "DKVIS_DEPTH": slide_use.depth,
+    }
     start = time.monotonic()
     with open(log, "w") as out:
         result = subprocess.run(cmd, cwd=ROOT, env=env, stdout=out, stderr=subprocess.STDOUT)
@@ -210,8 +166,8 @@ def assemble(deck_name: str) -> None:
     folder.mkdir(exist_ok=True)
     for stale in folder.glob("*.json"):
         stale.unlink()
-    for part in COMPOSITES[deck_name]:
-        for scene in DECK_SCENES[part]:
+    for part in get_deck(deck_name).composite_parts:
+        for scene in get_deck(part).scene_names:
             src = ROOT / f"slides-{output_name(part)}" / f"{scene}.json"
             if not src.exists():
                 raise FileNotFoundError(f"{src} is missing; render {part} first")
@@ -225,7 +181,7 @@ def write_handout(deck_name: str, out: Path) -> None:
     folder = ROOT / f"slides-{output_name(deck_name)}"
     pages = []
     with tempfile.TemporaryDirectory() as tmp:
-        for k, scene in enumerate(DECK_SCENES[deck_name]):
+        for k, scene in enumerate(get_deck(deck_name).scene_names):
             slides = json.loads((folder / f"{scene}.json").read_text())["slides"]
             drawn = [s for s in slides if not s.get("src")]
             frame = Path(tmp) / f"{k:03d}.png"
@@ -259,21 +215,21 @@ def main() -> None:
     parser.add_argument("--handout", action="store_true", help="also write renders/<deck>.handout.pdf (one page per scene)")
     args = parser.parse_args()
 
-    names = DECK_SCENES[args.deck]
+    names = get_deck(args.deck).scene_names
     if args.list:
         print(" ".join(names))
         return
 
     if not args.no_render:
         render(
-            COMPOSITES.get(args.deck, [args.deck]),
+            list(get_deck(args.deck).composite_parts) or [args.deck],
             args.quality,
             fps=args.fps,
             only=args.scenes,
             refresh_assets=args.refresh_assets,
             jobs=args.jobs,
         )
-    if args.deck in COMPOSITES:
+    if get_deck(args.deck).composite_parts:
         assemble(args.deck)
 
     renders = ROOT / "renders"

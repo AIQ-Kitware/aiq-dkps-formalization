@@ -42,7 +42,7 @@ from dkvis.slide_style import (
     para,
     tex,
 )
-from dkvis.slides_sine_theta import fit_right
+from dkvis.components.common.layout import fit_right
 
 # This part is about the process, not the mathematics, so it uses neutral colors only:
 # the role colors (blue, amber, cyan, pink, green, violet) keep their mathematical meaning.

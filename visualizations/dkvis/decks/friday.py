@@ -1,0 +1,41 @@
+"""Working Friday-talk composition.
+
+This is intentionally a composition, not a second implementation of the slide
+scenes.  It should evolve quickly as the rendered narrative is reviewed.
+"""
+
+from __future__ import annotations
+
+from dkvis.deck_spec import DeckSpec
+from dkvis.decks.reference import ref_use
+
+FRIDAY = DeckSpec(
+    name="friday",
+    description=(
+        "Working talk: introduce the mathematics of sine-theta, then explain what "
+        "Lean checked, what source review checked, and how those checks changed confidence."
+    ),
+    footer=r"Davis--Kahan $\sin\Theta$ $\cdot$ LLM-assisted formalization and justified confidence",
+    slides=tuple(ref_use(scene, core=True) for scene in [
+        "S00TitleShort",
+        "W01Workflow",
+        "S01Ellipse",
+        "S02Perturb",
+        "S03NoGap",
+        "S03cUnstable",
+        "S04Angle",
+        "S05Residual",
+        "S06Gap",
+        "S07Theorem",
+        "S08Why",
+        "S11Payoff",
+        "S12Lean",
+        "W02TwoChecks",
+        "W04Reversals",
+        "P01Claim",
+        "P02Counterexample",
+        "P03Why",
+        "W06Claims",
+        "S14Summary",
+    ]),
+)

@@ -4,7 +4,9 @@
 #   make all             # short deck + every part + the full deck, 1080p30, HTML + standalone HTML + PDF
 #   make final           # the same at the full 1080p60
 #   make rebuild         # clean, then make all
-#   make short           # the 15-minute deck
+#   make short           # the preserved 15-minute reference deck
+#   make friday          # working Friday composition
+#   make study           # long-form learning composition
 #   make part3           # one part of the full talk, with its own HTML (part1 ... part7)
 #   make full            # every part, then the full deck assembled from them
 #   make full SCENES="S05Residual S08Why"   # re-render only those scenes, reconvert
@@ -45,11 +47,14 @@ DECK_part4 := part4-prop44
 DECK_part5 := part5-process
 DECK_part6 := part6-summary
 DECK_part7 := part7-glossary
+DECK_friday := friday
+DECK_study  := study
 PARTS      := part1 part2 part3 part4 part5 part6 part7
-DECKS      := short full $(PARTS)
+WORKING    := friday study
+DECKS      := short full $(PARTS) $(WORKING)
 
 .DEFAULT_GOAL := help
-.PHONY: help setup all rebuild $(DECKS) $(addprefix clean-,$(DECKS)) $(addprefix present-,$(DECKS)) \
+.PHONY: help setup all rebuild working $(DECKS) $(addprefix clean-,$(DECKS)) $(addprefix present-,$(DECKS)) \
         $(addprefix standalone-,$(DECKS)) standalone $(addprefix handout-,$(DECKS)) handout parts final draft assets app test clean distclean
 
 help:
@@ -59,7 +64,10 @@ help:
 	@echo '  all                short, every part and full, then standalone HTML for each'
 	@echo '  final              all at the full 1080p60 (all renders 1080p30)'
 	@echo '  rebuild            clean, then all (a from-scratch re-render)'
-	@echo '  short              the 15-minute deck'
+	@echo '  short              the preserved 15-minute reference deck'
+	@echo '  friday             working Friday composition'
+	@echo '  study              long-form self-study composition'
+	@echo '  working            build friday + study'
 	@echo '  part1 ... part7    one part of the full talk, rendered and converted on its own:'
 	@echo '                       1 sin Theta, 2 3D, 3 tan/sin2/tan2 Theta, 4 Prop 4.4, 5 process, 6 summary, 7 notation'
 	@echo '  full               every part, then the full deck assembled from their renders'
@@ -94,8 +102,10 @@ rebuild:
 draft:
 	$(MAKE) all QUALITY=l PDF=0
 
-short $(PARTS):
+short $(WORKING) $(PARTS):
 	$(RUN) python -m dkvis.build_slides $(DECK_$@) $(BUILD_FLAGS)
+
+working: $(WORKING)
 
 parts: $(PARTS)
 

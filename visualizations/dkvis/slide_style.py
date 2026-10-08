@@ -269,25 +269,32 @@ class DeckSlide(Slide):
             kwargs.setdefault("output_folder", Path(f"slides-{deck}{OUTPUT_SUFFIX}"))
         super().__init__(*args, **kwargs)
 
+    def deck_depth(self) -> str:
+        """Depth for this use of the scene, with the class value as a compatibility fallback."""
+        if "DKVIS_DEPTH" in os.environ:
+            return os.environ["DKVIS_DEPTH"]
+        return self.depth
+
     def slide_number(self) -> tuple[int, int] | None:
         """``(k, N)``: this scene's position in the deck being built, if any."""
         deck = os.environ.get("DKVIS_DECK")
         if not deck:
             return None
-        from dkvis.build_slides import DECK_SCENES
+        from dkvis.decks import get_deck
 
-        order = DECK_SCENES.get(deck, [])
+        order = get_deck(deck).scene_names
         name = type(self).__name__
         return (order.index(name) + 1, len(order)) if name in order else None
 
     def footer_text(self) -> str:
-        """The part's title when rendering a part of the full talk, else the scene's own section."""
+        """Deck-specific footer when supplied, otherwise the scene's own section."""
         deck = os.environ.get("DKVIS_DECK")
         if deck:
-            from dkvis.build_slides import PART_TITLES
+            from dkvis.decks import get_deck
 
-            if deck in PART_TITLES:
-                return PART_TITLES[deck]
+            footer = get_deck(deck).footer
+            if footer:
+                return footer
         return self.section
 
     def construct(self) -> None:
@@ -305,9 +312,10 @@ class DeckSlide(Slide):
     def make_chrome(self) -> VGroup | None:
         items = VGroup()
         self._head = VGroup()  # title and kicker: what content is laid out below
+        depth = self.deck_depth()
         if self.title:
             title = tex(self.title, size=44)
-            max_w = FRAME_W - 2 * 0.55 - (1.9 if self.depth else 0.0)
+            max_w = FRAME_W - 2 * 0.55 - (1.9 if depth else 0.0)
             if title.width > max_w:
                 title.scale_to_fit_width(max_w)
             title.move_to([LEFT_EDGE, TOP_EDGE, 0], aligned_edge=UL)
@@ -319,8 +327,8 @@ class DeckSlide(Slide):
                 )
                 items.add(kick)
                 self._head.add(kick)
-        if self.depth:
-            label = {"*": r"$\ast$\ optional depth", "**": r"$\ast\ast$\ backup"}[self.depth]
+        if depth:
+            label = {"*": r"$\ast$\ optional depth", "**": r"$\ast\ast$\ backup"}[depth]
             badge = tex(label, size=20, color=MUTED).move_to(
                 [FRAME_W / 2 - 0.45, TOP_EDGE - 0.05, 0], aligned_edge=UP + RIGHT
             )

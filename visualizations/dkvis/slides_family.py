@@ -65,19 +65,10 @@ from dkvis.slide_style import (
     para,
     tex,
 )
-from dkvis.slides_sine_theta import (
-    ELLIPSE_BASE,
-    RIGHT_COL_X,
-    RIGHT_COL_W,
-    Plane,
-    angle_arc,
-    ellipse,
-    fit_right,
-    readout_rows,
-    segment,
-    through_origin,
-    vec,
-)
+from dkvis.components.common.geometry import DEFAULT_ELLIPSE_ROTATION, Plane, angle_arc, ellipse, segment, through_origin, vec
+from dkvis.components.common.layout import RIGHT_COL_W, RIGHT_COL_X, fit_right
+from dkvis.components.common.readouts import readout_rows
+ELLIPSE_BASE = DEFAULT_ELLIPSE_ROTATION
 
 TEXT_X = RIGHT_COL_X - 0.2
 TEXT_W = RIGHT_COL_W + 0.3

@@ -127,15 +127,24 @@ uv run python -m dkvis.sine_theta \
     --lambda-desired -0.6
 ```
 
-## Slide decks: the sine-theta theorem, in pictures
+## Slide decks: reusable components and multiple compositions
 
 The decks are [manim-slides](https://manim-slides.eertmans.be) scenes with
-presenter notes on every build. There are two presentation paths:
+presenter notes on every build.  Deck composition is now separate from scene
+implementation so the same mathematical component can play different roles in
+different presentations.
 
-- **`sine-theta-short`: the 15-minute core talk.** It is for a technical but
-  non-mathematical audience: the intuition, the theorem, what was formalized, and
-  the Proposition 4.4 counterexample.
-- **`sine-theta-full`: everything**, in six parts that are rendered separately
+The immediate working compositions are:
+
+- **`friday`**: mathematics of the sine-theta theorem plus the LLM/formalization
+  and confidence-building story.  See `briefs/friday-talk.md`.
+- **`study`**: a long-form curriculum for learning the theorem family, Lean
+  correspondence and evidence in detail.  See `briefs/deep-study.md`.
+
+The old decks remain deliberately preserved as reference/regression compositions:
+
+- **`sine-theta-short`**: the previous 15-minute core talk.
+- **`sine-theta-full`: everything**, in seven parts that are rendered separately
   and each get their own HTML, PDF and handout (`renders/part<k>-*.html`):
 
   | part | deck | content |
@@ -205,12 +214,15 @@ presenter notes on every build. There are two presentation paths:
 | `W06Claims` | | `*` | what the evidence supports and what it does not |
 | `S14Summary` | yes | yes | three takeaways |
 
-The modules are `dkvis/slides_sine_theta.py` (2D), `dkvis/slides_sine_theta_3d.py`
-(3D, see below), `dkvis/slides_family.py` (the other three Section 2 theorems),
-`dkvis/slides_prop44.py` (Proposition 4.4) and `dkvis/slides_process.py` (how the
-formalization was built, from the workshop and journal papers in `papers/`; its
-dated numbers are pinned to those papers' evidence snapshots). Deck order lives in
-`dkvis/build_slides.py` (`PARTS` and `DECK_SCENES`).
+The existing scene implementations remain in `dkvis/slides_*.py` during the
+incremental migration.  Reusable cross-module geometry/layout/readout primitives
+now live in `dkvis/components/common/`; further conceptual scene groups should move
+behind `dkvis/components/` without breaking the reference decks.
+
+Deck order and presentation-specific depth metadata live in `dkvis/decks/`.
+`dkvis/build_slides.py` is the renderer/converter rather than the canonical home
+for a presentation narrative.  See `visualizations/AGENTS.md` and
+`briefs/slide-authoring.md` before reorganizing scene code.
 
 The Lean facts quoted on the slides were checked against a fresh build with
 `#check` and `#print axioms`:
