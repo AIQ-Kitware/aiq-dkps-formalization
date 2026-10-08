@@ -51,4 +51,7 @@ def test_working_decks_have_distinct_purposes():
     assert "P02Counterexample" in friday
     assert "F04TanTwoTheta" not in friday
     assert "F04TanTwoTheta" in study
+    # Friday states the general theorem, immediately reconnects it to A + H,
+    # then explains the residual-over-gap mechanism.
+    assert friday.index("S07Theorem") < friday.index("S11Payoff") < friday.index("S08Why")
     assert len(study) > len(friday)

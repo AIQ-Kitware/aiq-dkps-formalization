@@ -245,8 +245,8 @@ class W02TwoChecks(DeckSlide):
         rows = [
             (
                 r"\textbf{Weaker claim.}",
-                r"``all doohickeys are excellent'' becomes ``all special doohickeys are quasi-excellent'' "
-                r"(Chow's illustration). It still compiles.",
+                r"``all doohickeys are excellent'' becomes ``all special doohickeys are quasi-excellent.'' "
+                r"The new theorem may be true and compile while no longer matching the source.",
             ),
             (
                 r"\textbf{Reported done too early.}",
@@ -285,8 +285,9 @@ class W02TwoChecks(DeckSlide):
         self.play(FadeIn(review))
 
         self.say(
-            "Examples of drift. Chow's illustration: an agent turns all doohickeys are excellent into all special "
-            "doohickeys are quasi-excellent, which still compiles. In this project agents proved valid bounded or "
+            "A deliberately silly example of drift: an agent turns all doohickeys are excellent into all special "
+            "doohickeys are quasi-excellent. That new statement may be true and compile while no longer being the "
+            "source theorem. In this project agents proved valid bounded or "
             "finite-dimensional versions and reported the job done. And one early tan Theta statement asked for an "
             "extra hypothesis from a later section of the paper; the repaired statement derives it."
         )
