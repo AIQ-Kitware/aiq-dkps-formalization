@@ -135,6 +135,7 @@ theorem reduces_spanIndices {n : ℕ} {B : E →ₗ[𝕜] E} (hB : B.IsSymmetric
     (hn : finrank 𝕜 E = n) (s : Set (Fin n)) :
     IsInvariant B ((hB.eigenvectorBasis hn).spanIndices s) := by
   intro x hx
+  rw [OrthonormalBasis.spanIndices_eq_span] at hx ⊢
   refine Submodule.span_induction ?_ ?_ ?_ ?_ hx
   · rintro y ⟨i, hip, rfl⟩
     rw [hB.apply_eigenvectorBasis hn i]
@@ -471,15 +472,12 @@ theorem yuWangSamworth_sinTheta_le
     · refine mem_restrictedPointSpectrum ?_
         ((hA.eigenvectorBasis hn).orthonormal.ne_zero j)
         (hA.apply_eigenvectorBasis hn j)
-      rw [OrthonormalBasis.spanIndices]
-      exact Submodule.subset_span ⟨j, hj, rfl⟩
+      exact (hA.eigenvectorBasis hn).mem_spanIndices_of_mem hj
     · refine mem_restrictedPointSpectrum ?_
         ((hA.eigenvectorBasis hn).orthonormal.ne_zero k)
         (hA.apply_eigenvectorBasis hn k)
-      rw [OrthonormalBasis.orthogonal_spanIndices, OrthonormalBasis.spanIndices]
-      apply Submodule.subset_span
-      refine ⟨k, ?_, rfl⟩
-      simpa using hk
+      rw [OrthonormalBasis.orthogonal_spanIndices]
+      exact (hA.eigenvectorBasis hn).mem_spanIndices_of_mem hk
   set e : Fin d ↪ Fin n := (s.orderEmbOfFin hcard).toEmbedding with he
   have hrange : Set.range (⇑e) = (↑s : Set (Fin n)) := by
     rw [he]

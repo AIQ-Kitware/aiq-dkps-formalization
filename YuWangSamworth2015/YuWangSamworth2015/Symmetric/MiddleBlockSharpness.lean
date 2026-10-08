@@ -305,7 +305,8 @@ theorem finrank_eigenspace_middleSharpnessPopulation (hdp : 2 * d ≤ p) :
     finrank 𝕜 (eigenspace (middleSharpnessPopulation b d) ((3 : ℝ) : 𝕜)) = d := by
   classical
   rw [eigenspace_middleSharpnessPopulation b,
-    OrthonormalBasis.finrank_spanIndices_set, Set.toFinset_ofPred,
+    OrthonormalBasis.finrank_spanIndices_set, Set.ncard_eq_toFinset_card',
+    Set.toFinset_ofPred,
     card_filter_val_Ico p (p - 2 * d) (p - d) (by omega)]
   omega
 

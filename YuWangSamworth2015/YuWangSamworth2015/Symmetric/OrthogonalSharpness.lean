@@ -212,7 +212,7 @@ theorem finrank_eigenspace_orthogonalSharpnessPopulation (hdp : d ≤ p) :
     finrank 𝕜 (eigenspace (orthogonalSharpnessPopulation b d) ((3 : ℝ) : 𝕜)) = d := by
   classical
   rw [eigenspace_orthogonalSharpnessPopulation,
-    OrthonormalBasis.finrank_spanIndices_set]
+    OrthonormalBasis.finrank_spanIndices_set, Set.ncard_eq_toFinset_card']
   refine Eq.trans (congrArg Finset.card ?_) (card_filter_val_lt p d hdp)
   ext i
   simp
@@ -223,7 +223,7 @@ theorem finrank_eigenspace_orthogonalSharpnessSample (hε : 0 < ε) (hdp : d ≤
     finrank 𝕜 (eigenspace (orthogonalSharpnessSample b d ε) ((2 : ℝ) : 𝕜)) = d := by
   classical
   rw [eigenspace_orthogonalSharpnessSample b hε,
-    OrthonormalBasis.finrank_spanIndices_set]
+    OrthonormalBasis.finrank_spanIndices_set, Set.ncard_eq_toFinset_card']
   refine Eq.trans (congrArg Finset.card ?_) (card_filter_not_val_lt p d hdp)
   ext i
   simp
