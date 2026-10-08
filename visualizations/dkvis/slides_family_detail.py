@@ -61,7 +61,8 @@ from dkvis.slide_style import (
     tex,
 )
 from dkvis.slides_family import TEXT_W, axis, gap_mark, text_column
-from dkvis.slides_sine_theta import Plane, angle_arc, ellipse, readout_rows, through_origin
+from dkvis.components.common.geometry import Plane, angle_arc, ellipse, through_origin
+from dkvis.components.common.readouts import readout_rows
 
 SIZE = 21
 
