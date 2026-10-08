@@ -274,7 +274,7 @@ theorem empiricalCovariance_quadratic_floor_of_entrywise
   have hl1 :
       ∑ a : Fin d, |x a| ≤ Real.sqrt d * ‖x‖ := by
     simpa [Real.norm_eq_abs, Fintype.card_fin] using
-      (TauCeti.sum_norm_le_sqrt_card_mul_norm x)
+      (EuclideanSpace.sum_norm_le_sqrt_card_mul_norm x)
 
   have hl1_sq :
       (∑ a : Fin d, |x a|) ^ 2 ≤ (d : Real) * ‖x‖ ^ 2 := by

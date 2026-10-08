@@ -71,7 +71,7 @@ theorem abs_eigenvalues₀_sub_le_of_entry_le {𝕜 : Type*} [RCLike 𝕜]
     rw [← map_sub]
     have hentry' : ∀ i j, ‖(Ahat - A) i j‖ ≤ ε := by
       intro i j; simpa [Matrix.sub_apply] using hentry i j
-    exact TauCeti.norm_toEuclideanLin_le_of_entry_le hentry' x
+    exact Matrix.norm_toEuclideanLin_le_of_entry_le_fin hentry' x
   -- Weyl on the symmetric operators.
   exact abs_eigenvalue_sub_eigenvalue_le (opSym hAhat) (opSym hA) finrank_euclideanSpace hop k
 

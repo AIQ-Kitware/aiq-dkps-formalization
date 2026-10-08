@@ -133,7 +133,7 @@ theorem abs_eigenvalues₀_le_of_entry_le {𝕜 : Type*} [RCLike 𝕜]
     rw [hu]
     exact (opSym hB).apply_eigenvectorBasis finrank_euclideanSpace k
   have hle : ‖Matrix.toEuclideanLin B (u k)‖ ≤ (n : ℝ) * β * ‖u k‖ :=
-    TauCeti.norm_toEuclideanLin_le_of_entry_le hβ (u k)
+    Matrix.norm_toEuclideanLin_le_of_entry_le_fin hβ (u k)
   rwa [happly, norm_smul, RCLike.norm_ofReal, hnorm1, mul_one, mul_one] at hle
 
 /-- One-sided form of the entrywise eigenvalue bound.  A consumer that only needs a
