@@ -49,7 +49,7 @@ theorem abs_one_sub_inv_sqrt_le {μ δ : ℝ}
     (hμ : |μ - 1| ≤ δ) :      -- hypothesis: `μ` lies within `δ` of 1
     -- Conclusion: the inverse-square-root rescaling moves `1` by at most `δ`.
     |1 - (Real.sqrt μ)⁻¹| ≤ δ :=
-  TauCeti.Real.abs_one_sub_inv_sqrt_le hδ hμ
+  Real.abs_one_sub_inv_sqrt_le hδ hμ
 
 /-! ### The quantitative polar factor -/
 

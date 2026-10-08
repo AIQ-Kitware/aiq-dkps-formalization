@@ -26,10 +26,11 @@ them without either importing the other.
 
 ## Main results
 
-* `TauCeti.Real.abs_sqrt_sub_one_le_abs_sub_one`: `|√μ - 1| ≤ |μ - 1|`, for all
-  `μ ≥ 0`.  This is the sharp form — no smallness hypothesis on `μ - 1` — and it
-  is what makes the operator estimate `‖|M| - 1‖ ≤ ‖M⋆ M - 1‖` lossless.
-* `TauCeti.Real.abs_one_sub_inv_sqrt_le`: `|1 - (√μ)⁻¹| ≤ δ` when
+* `Real.abs_sqrt_sub_one_le_abs_sub_one`: `|√μ - 1| ≤ |μ - 1|` for every
+  real `μ`.  For `μ ≤ 0` the square root vanishes; for `μ ≥ 0` the estimate
+  follows from `(√μ - 1) (√μ + 1) = μ - 1`.  It makes the operator estimate
+  `‖|M| - 1‖ ≤ ‖M⋆ M - 1‖` lossless.
+* `Real.abs_one_sub_inv_sqrt_le`: `|1 - (√μ)⁻¹| ≤ δ` when
   `|μ - 1| ≤ δ ≤ 1 / 2`.  The *inverse* square root genuinely needs a smallness
   hypothesis (as `μ ↓ 0` the left-hand side blows up), which is why the
   factorization-based proofs prefer the first lemma.
@@ -40,39 +41,41 @@ them without either importing the other.
 * `abs_one_sub_inv_sqrt_le` was originally
   `ForMathlib.Real.abs_one_sub_inv_sqrt_le` in
   `ForMathlib/Analysis/InnerProductSpace/NearIsometry.lean` at Davis--Kahan
-  commit `fc38eb4` (formalized by Claude Fable 5, golf pass by Claude Opus 4.8),
-  moved here per the signature-polish backlog, which asked for it
-  to be placed with the `Real.sqrt` API rather than inside near-isometry
-  operator theory.
+  commit `9b69db43` (formalized by Claude Fable 5; refined in `3329b60e`
+  by Claude Opus 4.8), then moved here with the `Real.sqrt` API.
 * `abs_sqrt_sub_one_le_abs_sub_one` is **new**.
 * Spectra influence: **none** — this module imports only Mathlib.
 -/
 
 public section
 
-namespace TauCeti.Real
+namespace Real
 
-/-- The square root contracts the distance to `1`: `|√μ - 1| ≤ |μ - 1|`.
-
-The identity `(√μ - 1) (√μ + 1) = μ - 1` exhibits `√μ - 1` as `μ - 1` divided by
-`√μ + 1 ≥ 1`.  No hypothesis beyond `0 ≤ μ` is needed, and the estimate is sharp
-at `μ = 1`. -/
-theorem abs_sqrt_sub_one_le_abs_sub_one {μ : ℝ} (hμ : 0 ≤ μ) :
+/-- For every real `μ`, the square root is no farther from `1` than `μ` is:
+`|√μ - 1| ≤ |μ - 1|`. -/
+theorem abs_sqrt_sub_one_le_abs_sub_one {μ : ℝ} :
     |Real.sqrt μ - 1| ≤ |μ - 1| := by
-  have hs : 0 ≤ Real.sqrt μ := Real.sqrt_nonneg μ
-  have hsq : Real.sqrt μ * Real.sqrt μ = μ := Real.mul_self_sqrt hμ
-  have key : |Real.sqrt μ - 1| * (Real.sqrt μ + 1) = |μ - 1| := by
-    rw [← abs_of_nonneg (by linarith : (0 : ℝ) ≤ Real.sqrt μ + 1), ← abs_mul]
-    congr 1
-    nlinarith [hsq]
-  nlinarith [key, mul_nonneg (abs_nonneg (Real.sqrt μ - 1)) hs]
+  rcases le_total 0 μ with hμ | hμ
+  · have hs : 0 ≤ Real.sqrt μ := Real.sqrt_nonneg μ
+    have hsq : Real.sqrt μ * Real.sqrt μ = μ := Real.mul_self_sqrt hμ
+    have key : |Real.sqrt μ - 1| * (Real.sqrt μ + 1) = |μ - 1| := by
+      rw [← abs_of_nonneg (by linarith : (0 : ℝ) ≤ Real.sqrt μ + 1), ← abs_mul]
+      congr 1
+      nlinarith [hsq]
+    nlinarith [key, mul_nonneg (abs_nonneg (Real.sqrt μ - 1)) hs]
+  · have hsqrt : Real.sqrt μ = 0 := Real.sqrt_eq_zero_of_nonpos hμ
+    calc
+      |Real.sqrt μ - 1| = 1 := by rw [hsqrt]; norm_num
+      _ ≤ |μ - 1| := by
+        rw [abs_of_nonpos (by linarith : μ - 1 ≤ 0)]
+        linarith
 
 /-- If `|μ - 1| ≤ δ ≤ 1 / 2`, then `|1 - (√μ)⁻¹| ≤ δ`.
 
 The point: `1 - (√μ)⁻¹ = (μ - 1) / (μ + √μ)` and the denominator `μ + √μ ≥ 1`
 when `μ ≥ 1 / 2`.
 
-Unlike `TauCeti.Real.abs_sqrt_sub_one_le_abs_sub_one`, a smallness hypothesis on
+Unlike `Real.abs_sqrt_sub_one_le_abs_sub_one`, a smallness hypothesis on
 `δ` is unavoidable here: `(√μ)⁻¹ → ∞` as `μ ↓ 0`.  Nonnegativity of `δ` is not
 assumed separately — it is forced by `hμ`, since `0 ≤ |μ - 1| ≤ δ`. -/
 theorem abs_one_sub_inv_sqrt_le {μ δ : ℝ} (hδ : δ ≤ 1 / 2) (hμ : |μ - 1| ≤ δ) :
@@ -106,6 +109,6 @@ theorem abs_one_sub_inv_sqrt_le {μ δ : ℝ} (hδ : δ ≤ 1 / 2) (hμ : |μ - 
     rw [inv_eq_one_div, le_div_iff₀ hs0]; linarith [hhigh]
   exact ⟨by linarith [hinv_le], by linarith [hle_inv]⟩
 
-end TauCeti.Real
+end Real
 
 end

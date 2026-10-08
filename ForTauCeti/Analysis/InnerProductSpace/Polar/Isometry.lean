@@ -32,7 +32,7 @@ so the isometry property turns the distance from `M` to the isometry
 `M.polarIsometryOfIsUnitModulus` into the *scalar* problem of estimating `‖|M| - 1‖`.  That in
 turn is bounded by `‖M⋆ M - 1‖` through the continuous functional calculus and
 the elementary square-root contraction `|√μ - 1| ≤ |μ - 1|`
-(`TauCeti.Real.abs_sqrt_sub_one_le_abs_sub_one`).  The resulting estimate
+(`Real.abs_sqrt_sub_one_le_abs_sub_one`).  The resulting estimate
 
     `‖M - M.polarIsometryOfIsUnitModulus‖ ≤ ‖M⋆ M - 1‖`
 
@@ -247,9 +247,8 @@ theorem norm_modulus_sub_one_le (M : E →L[ℂ] F) :
       CFC.sqrt_eq_real_sqrt a ha, cfcₙ_eq_cfc]
   rw [← hmod, ← hshift]
   refine norm_cfc_le (norm_nonneg _) fun t ht => ?_
-  have ht0 : 0 ≤ t := spectrum_nonneg_of_nonneg ha ht
   calc ‖Real.sqrt t - 1‖ = |Real.sqrt t - 1| := Real.norm_eq_abs _
-    _ ≤ |t - 1| := TauCeti.Real.abs_sqrt_sub_one_le_abs_sub_one ht0
+    _ ≤ |t - 1| := Real.abs_sqrt_sub_one_le_abs_sub_one
     _ = ‖t - 1‖ := (Real.norm_eq_abs _).symm
     _ ≤ ‖cfc (fun s : ℝ => s - 1) a‖ := norm_apply_le_norm_cfc (fun s : ℝ => s - 1) a ht
 
