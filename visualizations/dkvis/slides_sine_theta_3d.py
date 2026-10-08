@@ -91,35 +91,35 @@ class D01Planes(D3Slide):
     def body(self) -> None:
         top = self.content_top - 0.2
         paras = [
-            r"With positive eigenvalues, $\sym{At}=\operatorname{diag}(\lambda_1,\lambda_2,\lambda_3)$ maps the unit "
+            r"With positive eigenvalues, $\sym{Ahat}=\operatorname{diag}(\lambda_1,\lambda_2,\lambda_3)$ maps the unit "
             r"sphere of $\mathbb{R}^3$ to an ellipsoid. "
-            r"The wanted subspace $\sym{U}=\operatorname{span}(f_1,f_2)$ is the plane of its two short axes; "
-            r"$\like{w}{f_3}$ spans $\sym{Uperp}$ and $\sym{Lambda1}=[\like{Lambda1}{\lambda_3}]$.",
-            r"A trial plane $\sym{V}=\operatorname{range}E_0$, tilted by $\theta$ about a line in $U$. "
+            r"The exact wanted frame $\sym{F0}=[f_1\ f_2]$ spans the plane of the two short axes; "
+            r"$\sym{F1}=[f_3]$ spans the exact unwanted direction and $\sym{Lambda1}=[\like{Lambda1}{\lambda_3}]$.",
+            r"A trial plane $\operatorname{range}(\sym{E0})$, tilted by $\sym{theta}$ about a line in $\operatorname{range}(\sym{F0})$. "
             r"Two planes in $\mathbb{R}^3$ always share a line, so the principal angles are $(\theta,0)$.",
             r"One nonzero sine: $\norm{\sym{sinTheta0}}=\norm{\sym{F1}^{\mathsf T}\sym{E0}}=\sin\theta$, "
-            r"the pink drop from $V$ to $U$.",
-            r"With the Rayleigh--Ritz choice $A_0=E_0^{\mathsf T}\sym{At}E_0$ we get $E_0^{\mathsf T}R=0$: "
-            r"the \cx{resid}{residuals} leave $V$ at right angles.",
+            r"the pink drop from $\operatorname{range}(\sym{E0})$ to $\operatorname{range}(\sym{F0})$.",
+            r"With the Rayleigh--Ritz choice $A_0=E_0^{\mathsf T}\sym{Ahat}E_0$ we get $E_0^{\mathsf T}R=0$: "
+            r"the \cx{resid}{residuals} leave $\operatorname{range}(\sym{E0})$ at right angles.",
         ]
         texts = text_block(*paras, top=top, size=25)
 
         self.say(
-            "Same story, one dimension up. This A tilde has positive eigenvalues, so it maps the unit sphere "
+            "Same story, one dimension up. This A hat has positive eigenvalues, so it maps the unit sphere "
             "to an ellipsoid. The wanted "
-            "invariant subspace U is the plane of the two short axes, f1 and f2; f3 is the unwanted direction."
+            "exact wanted frame F0 spans the plane of the two short axes, f1 and f2; F1 is the unwanted direction."
         )
         img = self.swap_picture(None, "still-exact.png", texts[0])
 
         self.say(
-            "Now a trial plane V, tilted by theta about a line in U. Two planes in R^3 always "
+            "Now range E0 is a trial plane, tilted by theta about a line in range F0. Two planes in R^3 always "
             "meet in a line, so one principal angle is zero and the other is theta."
         )
         img = self.swap_picture(img, "still-planes.png", texts[1])
 
         self.say(
             "So sin Theta0 has one nonzero singular value: sin theta, the pink drop from the "
-            "tilted trial vector to U. Its norm is the same in every unitarily invariant norm."
+            "tilted trial vector to range F0. Its norm is the same in every unitarily invariant norm."
         )
         img = self.swap_picture(img, "still-sine.png", texts[2])
 
@@ -160,8 +160,8 @@ class D02Tilt(D3Slide):
         caption = tex(rf"$\lambda_3={lam3}$; \ $\mu_2$ is the larger Ritz value, $\delta=|\mu_2-\lambda_3|$", size=24, color=MUTED)
         points = [
             r"\textbf{Small tilt:} the bound is nearly tight.",
-            r"\textbf{Large tilt:} $V$ leans into $\like{w}{f_3}$, so the Ritz value $\like{mu}{\mu_2}$ climbs toward $\like{Lambda1}{\lambda_3}$. "
-            r"The gap $\sym{delta}$ closes and the bound says less.",
+            r"\textbf{Large tilt:} $\operatorname{range}(\sym{E0})$ leans into $\like{w}{f_3}$, so the Ritz value $\like{mu}{\mu_2}$ climbs toward $\like{Lambda1}{\lambda_3}$. "
+            r"The certified separation $\sym{delta}$ closes and the bound says less.",
             r"It never fails: $\sym{delta}\norm{\sym{sinTheta0}}\le\norm{\sym{R}}$ at every angle.",
         ]
         block = VGroup(table, caption).arrange(DOWN, buff=0.2)
@@ -169,7 +169,7 @@ class D02Tilt(D3Slide):
         texts = text_block(*points, top=self.content_top - 0.35, size=27)
 
         self.say(
-            "Before the movie, the numbers at three tilts. Note that the gap is measured "
+            "Before the movie, the numbers at three tilts. Note that the theorem separation is measured "
             "from the Ritz values of this trial plane, and it moves as the plane tilts."
         )
         self.play(FadeIn(block), FadeIn(texts[0]))
@@ -195,7 +195,7 @@ class D03Gap(D3Slide):
 
     def body(self) -> None:
         points = [
-            r"Here $\Lambda_1=[\lambda_3]$ is a single point, so the gap hypothesis holds in its "
+            r"Here $\Lambda_1=[\lambda_3]$ is a single point, so the separation hypothesis holds in its "
             r"exchanged form ($\operatorname{spec}\Lambda_1$ in an interval, $\operatorname{spec}A_0$ outside "
             r"its $\delta$-neighbourhood) with",
             r"$$\sym{delta}=\min_i\,|\like{mu}{\mu_i}-\lambda_3|,$$",
@@ -208,7 +208,7 @@ class D03Gap(D3Slide):
 
         self.say(
             "Keep the tilt fixed and move lambda3 instead. With a single unwanted eigenvalue "
-            "the gap is simply the distance from lambda3 to the nearest Ritz value."
+            "delta is simply the distance from lambda3 to the nearest Ritz value."
         )
         self.play(FadeIn(img), FadeIn(texts))
 
@@ -223,20 +223,21 @@ class D03Gap(D3Slide):
 class D04Perturb(D3Slide):
     depth = "*"
     title = "Perturbing the matrix, in 3D"
-    kicker = r"Trial $=$ the old eigenspace; now the ellipsoid and the exact plane move"
+    kicker = r"$\operatorname{range}(\sym{E0})$ is the original eigenspace; exact $\operatorname{range}(\sym{F0})$ moves"
 
     def body(self) -> None:
         eq = math(
-            r"\sym{R}=(\sym{A}+\varepsilon \sym{H})\sym{E0}-\sym{E0}\sym{A0}=\varepsilon \sym{H}\sym{E0}",
+            r"\sym{Ahat}=\sym{A}+\varepsilon\sym{H},\qquad "
+            r"\sym{R}=\sym{Ahat}\sym{E0}-\sym{E0}\sym{A0}=\varepsilon\sym{H}\sym{E0}",
             size=32,
         )
         bound = boxed(
-            math(r"\norm{\sym{sinTheta0}}\le\frac{\norm{\sym{R}}}{\sym{delta}}\le\frac{\varepsilon}{\sym{delta}}", size=36),
+            math(r"\norm{\sym{sinTheta0}(\sym{E0},\sym{F0})}\le\frac{\norm{\sym{R}}}{\sym{delta}}\le\frac{\varepsilon}{\sym{delta}}", size=34),
             color=MUTED,
         )
         note = para(
-            r"$E_0=[e_1\ e_2]$ and $A_0=\operatorname{diag}(\lambda_1,\lambda_2)$ are the \emph{unperturbed} "
-            r"eigenpairs; $\sym{H}$ is a fixed symmetric direction with $\norm{\sym{H}}_2=1$, and $\delta$ is measured "
+            r"$\sym{E0}=[e_1\ e_2]$ and $\sym{A0}=\operatorname{diag}(\lambda_1,\lambda_2)$ are the \emph{unperturbed} "
+            r"eigenpairs; $\sym{H}$ is a fixed symmetric direction with $\norm{\sym{H}}_2=1$, and $\sym{delta}$ is measured "
             r"to the perturbed $\lambda_3(\varepsilon)$.",
             width=TEXT_W,
             size=24,
@@ -245,7 +246,7 @@ class D04Perturb(D3Slide):
         cfg = m3.perturbed(0.8)
         numbers = math(
             rf"\varepsilon=0.8:\quad \cx{{sine}}{{\sin\theta}}={cfg.sin_theta:.3f}\ \le\ "
-            rf"\frac{{\norm{{R}}_2}}{{\delta}}={cfg.residual_norm_2 / cfg.delta:.3f}",
+            rf"\frac{{\norm{{\sym{{R}}}}_2}}{{\sym{{delta}}}}={cfg.residual_norm_2 / cfg.delta:.3f}",
             size=30,
         )
         col = VGroup(eq, bound, note, numbers).arrange(DOWN, aligned_edge=LEFT, buff=0.35)
@@ -254,7 +255,7 @@ class D04Perturb(D3Slide):
 
         self.say(
             "The payoff slide again, in 3D. The trial plane is the old eigenspace; the operator "
-            "becomes A + eps H, so the residual is eps H E0 and the exact plane tilts away."
+            "becomes A hat = A + eps H, so the residual is eps H E0 and the exact frame F0 tilts away."
         )
         self.play(FadeIn(img), FadeIn(eq), FadeIn(bound))
         self.say("Here are the numbers at eps = 0.8.")

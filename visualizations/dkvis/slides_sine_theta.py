@@ -14,7 +14,7 @@ The story:
 2. perturbing it barely moves the eigenvalues but can turn the axes, and
    without an eigenvalue gap the turn can be 45 degrees however small the
    perturbation;
-3. the three ingredients: the angle ``sin Theta0``, the residual ``R``, the gap
+3. the three ingredients: the angle ``sin Theta0``, the residual ``R``, the spectral separation
    ``delta``;
 4. the theorem ``delta ||sin Theta0|| <= ||R||``;
 5. why it holds (one vector, then the Sylvester equation), why the constant is
@@ -414,7 +414,7 @@ class S01Ellipse(DeckSlide):
 
 class S02Perturb(DeckSlide):
     title = "Perturb the matrix"
-    kicker = r"\cx{perturb}{PERTURBATION SETUP} --- $\sym{A}\to\sym{At}=\sym{A}+\sym{H}$, with $\sym{H}$ small and symmetric"
+    kicker = r"\cx{perturb}{PERTURBATION SETUP} --- $\sym{A}\to\sym{Ahat}=\sym{A}+\sym{H}$, with $\sym{H}$ small and symmetric"
 
     def body(self) -> None:
         eps = story.PERTURBATION_EPS
@@ -431,7 +431,7 @@ class S02Perturb(DeckSlide):
         old_axis2 = through_origin(plane, [0, 1], 2.0, OLD, width=3)
         eq = math(
             r"\sym{A}=\begin{pmatrix}2&0\\0&1\end{pmatrix},\qquad "
-            r"H=\varepsilon\begin{pmatrix}0&1\\1&0\end{pmatrix},\ \ \varepsilon=0.12",
+            r"\sym{H}=\varepsilon\begin{pmatrix}0&1\\1&0\end{pmatrix},\ \ \varepsilon=0.12",
             size=30,
         )
         basis_note = tex(r"(written in the eigenbasis of $\sym{A}$)", size=22, color=MUTED)
@@ -440,17 +440,17 @@ class S02Perturb(DeckSlide):
         table = math(
             r"\begin{array}{lcc}"
             r" & \text{top} & \text{other}\\ \hline "
-            rf"A & {l_old[0]:.3f} & {l_old[1]:.3f}\\"
-            rf"A+H & {l_new[0]:.3f} & {l_new[1]:.3f}"
+            rf"\sym{{A}} & {l_old[0]:.3f} & {l_old[1]:.3f}\\"
+            rf"\sym{{Ahat}} & {l_new[0]:.3f} & {l_new[1]:.3f}"
             r"\end{array}",
             size=30,
         )
         weyl = tex(
-            rf"Eigenvalues moved by ${pair.eigenvalue_shift:.3f} \le \norm{{H}}_2 = {eps}$ (Weyl$^{{\ast}}$).",
+            rf"Eigenvalues moved by ${pair.eigenvalue_shift:.3f} \le \norm{{\sym{{H}}}}_2 = {eps}$ (Weyl$^{{\ast}}$).",
             size=26,
         )
         weyl_note = para(
-            r"$^{\ast}$\,\textbf{Weyl's inequality:} sort the eigenvalues of $\sym{A}$ and of $\sym{A}+\sym{H}$; each moves by "
+            r"$^{\ast}$\,\textbf{Weyl's inequality:} sort the eigenvalues of $\sym{A}$ and $\sym{Ahat}$; each moves by "
             r"at most $\norm{\sym{H}}_2$ (the most $\sym{H}$ stretches any unit vector). It holds for every symmetric $\sym{A}$, "
             r"with no gap needed. Eigenvectors get no such guarantee.",
             width=RIGHT_COL_W,
@@ -468,7 +468,7 @@ class S02Perturb(DeckSlide):
         self.play(Create(old), Create(old_axis), Create(old_axis2), FadeIn(eq), FadeIn(basis_note))
 
         self.say(
-            "The ellipse of A + H is almost the same ellipse: the eigenvalues barely "
+            "The ellipse of A hat is almost the same ellipse: the eigenvalues barely "
             "move. Weyl's inequality says they move by at most the norm of H. "
             "But the axes turn, by an angle theta."
         )
@@ -544,11 +544,11 @@ class S03NoGap(DeckSlide):
         )
         f1_lbl = always_redraw(lambda: math(r"a_0", size=28, color=OLD).next_to(plane([lam()[0], 0.0]), DOWN + LEFT * 0.6, buff=0.1))
         f2_lbl = always_redraw(lambda: math(r"a_1", size=28, color=OLD).next_to(plane([0.0, lam()[1]]), LEFT, buff=0.12))
-        # A + H: solid steel ellipse; its top eigenvector (the target) is blue, turned by theta.
+        # A-hat: solid steel ellipse; its top eigenvector (the target) is blue, turned by theta.
         new = always_redraw(lambda: ellipse(plane, pair().perturbed, color=CURRENT, width=3))
         new_axis = always_redraw(lambda: through_origin(plane, pair().perturbed_top_eigenvector, reach, WANTED, width=3.5))
         new_lbl = always_redraw(
-            lambda: tex(r"top eigenvector of $\sym{A}+\sym{H}$", size=20, color=concept_color("u")).next_to(
+            lambda: tex(r"top eigenvector of $\sym{Ahat}$", size=20, color=concept_color("u")).next_to(
                 plane(reach * pair().perturbed_top_eigenvector), RIGHT, buff=0.08
             )
         )
@@ -558,7 +558,7 @@ class S03NoGap(DeckSlide):
         )
         ellipse_key = VGroup(
             tex(r"\cx{old}{dashed: $\sym{A}$}", size=20),
-            tex(r"\cx{current}{solid: $\sym{At}$}", size=20),
+            tex(r"\cx{current}{solid: $\sym{Ahat}$}", size=20),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.06).move_to([-6.9, -2.05, 0], aligned_edge=UP + LEFT)
         arc = always_redraw(lambda: angle_arc(plane, [1, 0], pair().perturbed_top_eigenvector, 0.95, SINE, width=4))
         theta_lbl = always_redraw(
@@ -574,7 +574,7 @@ class S03NoGap(DeckSlide):
         nl = Line(X(lo), X(hi), color=MUTED, stroke_width=2)
         nl_lbl = VGroup(
             tex(r"eigenvalues", size=20, color=MUTED),
-            tex(r"\cx{old}{dots: $\sym{A}$} \ ticks: $\sym{A}+\sym{H}$, \cx{wanted}{top} and \cx{unwanted}{other}", size=18, color=MUTED),
+            tex(r"\cx{old}{dots: $\sym{A}$} \ ticks: $\sym{Ahat}$, \cx{wanted}{top} and \cx{unwanted}{other}", size=18, color=MUTED),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.04).next_to(X(hi), RIGHT, buff=0.1)
         lam_dots = always_redraw(lambda: VGroup(*[Dot(X(v), radius=0.09, color=OLD) for v in lam()]))
         lam_lbls = always_redraw(
@@ -610,8 +610,8 @@ class S03NoGap(DeckSlide):
             tips=False,
             axis_config={"color": MUTED, "stroke_width": 2, "include_ticks": True},
         ).move_to([4.0, 0.75, 0])
-        x_lbl = math(r"g", size=28, color=MUTED).next_to(axes.x_axis, RIGHT, buff=0.15)
-        y_lbl = math(r"\theta\ (\text{deg})", size=26, color=MUTED).next_to(axes.y_axis, UP, buff=0.2)
+        x_lbl = math(r"\sym{g}", size=28).next_to(axes.x_axis, RIGHT, buff=0.15)
+        y_lbl = math(r"\sym{theta}\ (\text{deg})", size=26).next_to(axes.y_axis, UP, buff=0.2)
         y_ticks = VGroup(*[math(str(v), size=22, color=MUTED).next_to(axes.c2p(0, v), LEFT, buff=0.1) for v in (15, 30, 45)])
         x_ticks = VGroup(*[math(f"{v:g}", size=22, color=MUTED).next_to(axes.c2p(v, 0), DOWN, buff=0.1) for v in (0.5, 1.0)])
         curve = axes.plot(
@@ -631,7 +631,7 @@ class S03NoGap(DeckSlide):
         rows_r = readout_rows(
             [
                 (r"\max|\Delta\lambda| =", lambda: pair().eigenvalue_shift, FG, 3, None),
-                (r"\theta =", lambda: pymath.degrees(pair().theta), SINE, 1, r"^\circ"),
+                (r"\sym{theta} =", lambda: pymath.degrees(pair().theta), SINE, 1, r"^\circ"),
             ],
             size=26,
         )
@@ -639,10 +639,10 @@ class S03NoGap(DeckSlide):
         rows_r.move_to([5.0, -1.2, 0])
 
         self.say(
-            "Gray: the old A, drawn as its ellipse. Its eigenvectors are drawn as the lines they span, because "
+            "Tan dashed: the original A, drawn as its ellipse. Its eigenvectors are drawn as the lines they span, because "
             "an eigenvector only matters up to sign and length; the dots where the ellipse crosses them "
             "are the eigenvalues. Below, the same two eigenvalues on a number line; the violet bracket is "
-            "the gap g between them. Solid steel blue: A tilde, that is A + H, for a small H of size 0.12; its top eigenvector line, in blue, is "
+            "the gap g between them. Solid steel: A hat, that is A + H, for a small H of size 0.12; its top eigenvector line, in blue, is "
             "turned by theta. Right: theta as a function of the gap."
         )
         left = VGroup(
@@ -661,8 +661,8 @@ class S03NoGap(DeckSlide):
 
         self.say(
             "Now make A more and more round: its two eigenvalues slide together and the gap closes. "
-            "The blue and cyan ticks, the eigenvalues of A + H, never move more than 0.12 from the tan dots, the eigenvalues of A. "
-            "But the eigenvector of A + H swings toward 45 degrees, however small H is."
+            "The blue and cyan ticks, the eigenvalues of A hat, never move more than 0.12 from the tan dots, the eigenvalues of A. "
+            "But the wanted eigenvector of A hat swings toward 45 degrees, however small H is."
         )
         self.play(g.animate.set_value(g_end), run_time=6.0, rate_func=rate_functions.ease_in_out_sine)
         takeaway = para(
@@ -720,7 +720,7 @@ class S03cUnstable(DeckSlide):
 
                 panel.trace.add_updater(grow)
 
-                # The two eigenvalues: dots for A, ticks for A + H.
+                # The two eigenvalues: dots for A, ticks for A-hat.
                 lo, hi, half = 0.8, 2.2, 1.35
                 y = -1.55
 
@@ -752,10 +752,10 @@ class S03cUnstable(DeckSlide):
         with_gap = Panel(-5.0, story.PERTURBATION_START_GAP, rf"with a gap: $\sym{{g}}={story.PERTURBATION_START_GAP:g}$")
         no_gap = Panel(-1.55, story.PERTURBATION_END_GAP, rf"almost no gap: $\sym{{g}}={story.PERTURBATION_END_GAP:g}$")
         legend = VGroup(
-            tex(r"\cx{old}{$\sym{A}$ and its eigenvectors} \quad \cx{current}{$\sym{At}$}; \cx{perturb}{dashed: $\sym{H}$'s own direction}", size=18),
-            tex(r"\cx{wanted}{blue: the top eigenvector of $\sym{A}+\sym{H}$}", size=18),
-            tex(r"\cx{sine}{pink: every direction the top eigenvector of $\sym{A}+\sym{H}$ took}", size=18),
-            tex(r"\cx{muted}{number lines: eigenvalues,} \cx{old}{dots $\sym{A}$,} ticks $\sym{A}+\sym{H}$ (\cx{wanted}{top}, \cx{unwanted}{other})", size=18),
+            tex(r"\cx{old}{$\sym{A}$ and its eigenvectors} \quad \cx{current}{$\sym{Ahat}$}; \cx{perturb}{dashed: $\sym{H}$'s own direction}", size=18),
+            tex(r"\cx{wanted}{blue: the top eigenvector of $\sym{Ahat}$}", size=18),
+            tex(r"\cx{sine}{pink: every direction the top eigenvector of $\sym{Ahat}$ took}", size=18),
+            tex(r"\cx{muted}{number lines: eigenvalues,} \cx{old}{dots $\sym{A}$,} ticks $\sym{Ahat}$ (\cx{wanted}{top}, \cx{unwanted}{other})", size=18),
         ).arrange(DOWN, buff=0.06).move_to([-3.3, -2.9, 0])
 
         text_w = RIGHT_COL_W - 0.5
@@ -774,7 +774,7 @@ class S03cUnstable(DeckSlide):
         )
         h_note = tex(r"same $\sym{H}(\phi)$ in both panels", size=18, color=MUTED)
         h_display = VGroup(h_matrix, h_note).arrange(DOWN, aligned_edge=LEFT, buff=0.06)
-        t_gap = para(r"\textbf{With a gap}, the top eigenvector of $\sym{A}+\sym{H}$ stays within $7^\circ$.", width=text_w, size=22)
+        t_gap = para(r"\textbf{With a gap}, the top eigenvector of $\sym{Ahat}$ stays within $7^\circ$.", width=text_w, size=22)
         t_nogap = para(
             r"\textbf{Without one}, it can point in \emph{any} direction: its direction is decided by $\sym{H}$, not by $\sym{A}$.",
             width=text_w, size=22,
@@ -804,13 +804,13 @@ class S03cUnstable(DeckSlide):
             "almost round. In both, H has size 0.12; the live matrix shows its actual entries as "
             "we turn it, and the dashed line is the direction H itself prefers. We will turn H once "
             "round and leave a pink line at every direction the top "
-            "eigenvector of A + H points."
+            "eigenvector of A hat points."
         )
         self.add(with_gap.trace, no_gap.trace)
         self.play(FadeIn(with_gap.parts(), no_gap.parts(), legend, t_intro, h_display))
 
         self.say(
-            "With a gap: H turns all the way round, and the eigenvector of A + H barely moves. "
+            "With a gap: H turns all the way round, and the wanted eigenvector of A hat barely moves. "
             "The pink fan is a thin wedge, at most 7 degrees either side."
         )
         self.play(
@@ -870,7 +870,7 @@ class S03bWanted(DeckSlide):
             return np.array([x_lo + (t - lo) / (hi - lo) * (x_hi - x_lo), y_nl, 0.0])
 
         nl = Line(X(lo), X(hi), color=MUTED, stroke_width=2)
-        nl_lbl = tex(r"eigenvalues of $\sym{At}$", size=22, color=MUTED).next_to(X(hi), DOWN, buff=0.2).align_to(nl, RIGHT)
+        nl_lbl = tex(r"eigenvalues of $\sym{Ahat}$", size=22, color=MUTED).next_to(X(hi), DOWN, buff=0.2).align_to(nl, RIGHT)
         # Wanted eigenvalues are filled blue dots, unwanted ones hollow cyan circles.
         dots = VGroup(*[
             Dot(X(t), radius=0.1, color=WANTED) if w else Circle(radius=0.09, color=UNWANTED, stroke_width=3).move_to(X(t))
@@ -887,10 +887,10 @@ class S03bWanted(DeckSlide):
             (X(eigs[u_idx[0]]) + X(eigs[u_idx[-1]])) / 2, UP, buff=0.42
         )
         gap = BraceBetweenPoints(X(eigs[w_idx[-1]]) + DOWN * 0.2, X(eigs[u_idx[0]]) + DOWN * 0.2, direction=DOWN, color=GAP)
-        gap_lbl = tex(r"the gap", size=24, color=concept_color("delta")).next_to(gap, DOWN, buff=0.06)
+        gap_lbl = tex(r"wanted / unwanted split", size=21, color=concept_color("delta")).next_to(gap, DOWN, buff=0.06)
         spaces = VGroup(
-            tex(r"their eigenvectors span $\sym{U}$, the \emph{wanted} subspace", size=24),
-            tex(r"the rest span $\sym{Uperp}$, the \emph{unwanted} directions", size=24),
+            tex(r"wanted eigenvectors are the columns of $\sym{F0}$", size=24),
+            tex(r"unwanted eigenvectors are the columns of $\sym{F1}$", size=24),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.15).move_to([x_lo, y_nl - 1.15, 0], aligned_edge=UP + LEFT)
 
         # A vibrating string: its lowest modes are the wanted eigenvectors.
@@ -928,9 +928,9 @@ class S03bWanted(DeckSlide):
             tex(r"\textbf{PCA}: the leading directions (largest eigenvalues)", size=23),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.12)
         t2 = para(
-            r"``Wanted'' and ``unwanted'' is that choice, made by eigenvalue. Davis--Kahan asks how well a "
-            r"trial subspace approximates the wanted subspace $\sym{U}$, and the answer depends on how "
-            r"far the wanted eigenvalues are from the rest: \cx{gap}{the gap}.",
+            r"``Wanted'' and ``unwanted'' is that choice, made by eigenvalue. Davis--Kahan compares a "
+            r"trial frame $\sym{E0}$ with the exact wanted frame $\sym{F0}$, and the answer depends on how "
+            r"well the relevant spectra are separated.",
             width=w,
             size=23,
         )
@@ -949,10 +949,10 @@ class S03bWanted(DeckSlide):
         self.play(Create(nl), FadeIn(nl_lbl), FadeIn(dots, lag_ratio=0.1), FadeIn(t1), FadeIn(t1b), FadeIn(examples))
 
         self.say(
-            "Those chosen eigenvalues are the wanted ones, in blue; their eigenvectors span the wanted subspace U. "
-            "Everything else is unwanted, in cyan, and spans U-perp. For a vibrating string, the lowest modes are "
-            "wanted. The gap is the distance between the wanted eigenvalues and the rest. That is the setting for "
-            "the rest of the talk: how well does a trial subspace approximate U?"
+            "Those chosen eigenvalues are the wanted ones, in blue; collect their exact eigenvectors as the "
+            "columns of F0. Everything else is unwanted, in cyan; collect those exact eigenvectors as F1. "
+            "For a vibrating string, the lowest modes are wanted. The next step is to compare a trial frame E0 "
+            "against the exact wanted frame F0."
         )
         self.play(FadeIn(w_box), FadeIn(w_lbl), FadeIn(u_lbl))
         self.play(GrowFromCenter(gap), FadeIn(gap_lbl), FadeIn(spaces), FadeIn(modes, modes_title), FadeIn(t2))
@@ -1023,7 +1023,7 @@ class S03dCompute(DeckSlide):
         p_large = para(
             r"Many problems are far larger: finite-element models of structures, graph Laplacians of large "
             r"networks, discretized quantum Hamiltonians. Their matrices are \emph{sparse}: multiplying a vector by "
-            r"$\sym{At}$ is cheap, the full eigendecomposition is not.",
+            r"$\sym{Ahat}$ is cheap, the full eigendecomposition is not.",
             width=w, size=size,
         )
         p_inf = para(
@@ -1037,9 +1037,9 @@ class S03dCompute(DeckSlide):
             width=w, size=size,
         )
         p_iter = para(
-            r"Iterative eigensolvers (Lanczos, subspace iteration, LOBPCG) use only products $\sym{At}v$ and return "
-            r"an approximate subspace: a trial subspace $\sym{V}$. The rest of the talk asks how close "
-            r"$\sym{V}$ is to the true one, $\sym{U}$, without knowing $\sym{U}$.",
+            r"Iterative eigensolvers (Lanczos, subspace iteration, LOBPCG) use only products $\sym{Ahat}v$ and return "
+            r"an orthonormal trial frame $\sym{E0}$. The rest of the talk asks how close "
+            r"$\operatorname{range}(\sym{E0})$ is to the exact wanted $\operatorname{range}(\sym{F0})$, without knowing $\sym{F0}$.",
             width=w, size=size,
         )
         col = column(p_small, p_large, p_inf, p_few, p_iter, top=self.content_top - 0.15, x=RIGHT_COL_X - 0.1, buff=0.22)
@@ -1065,9 +1065,9 @@ class S03dCompute(DeckSlide):
         self.play(FadeIn(col[2]), FadeIn(col[3]))
 
         self.say(
-            "So iterative eigensolvers multiply by the matrix over and over and return an approximate subspace. "
-            "That is our trial subspace V, and the question for the rest of the talk is how close it is to the true "
-            "U, which we do not know."
+            "So iterative eigensolvers multiply by the matrix over and over and return an orthonormal trial frame E0. "
+            "The question for the rest of the talk is how close its range is to the exact wanted range of F0, "
+            "even though F0 itself is unknown."
         )
         self.play(FadeIn(col[4]))
 
@@ -1078,8 +1078,8 @@ class S03dCompute(DeckSlide):
 
 
 class S04Angle(DeckSlide):
-    title = "Measuring how far a subspace moved"
-    kicker = r"\cx{muted}{GENERAL THEOREM SETUP} --- angles between subspaces; no perturbation $\sym{H}$ is needed"
+    title = "Measuring the error from two frames"
+    kicker = r"\cx{muted}{GENERAL THEOREM SETUP} --- compare the ranges of $\sym{E0}$ and $\sym{F0}$; no perturbation $\sym{H}$ is needed"
 
     def body(self) -> None:
         th = ValueTracker(np.radians(35.0))
@@ -1090,48 +1090,63 @@ class S04Angle(DeckSlide):
 
         recall = RecallPanel(
             [
-                (r"$\sym{U}$", r"the true eigenspace; here the line spanned by an eigenvector $\sym{u}$ "
-                                     r"($\sym{u}$ and $-\sym{u}$ are the same eigendirection)", None),
-                (r"$\sym{V}$", r"the trial subspace, spanned by our guess $\sym{v}$", None),
-                (r"$\sym{theta}$", r"the angle between them: the error", None),
-                (r"$\sym{E0}$", r"orthonormal basis of $\sym{V}$, as columns", None),
-                (r"$\sym{F0},\sym{F1}$", r"orthonormal bases of $\sym{U}$ and $\sym{Uperp}$", None),
+                (r"$\sym{E0}$", r"orthonormal trial frame: known or chosen", None),
+                (r"$\sym{F0}$", r"orthonormal exact wanted frame of $\sym{Ahat}$: the target", None),
+                (r"$\sym{F1}$", r"orthonormal exact unwanted frame; together $F_0,F_1$ fill the ambient space", None),
+                (r"$\sym{Theta0}(\sym{E0},\sym{F0})$", r"principal angles between $\operatorname{range}(E_0)$ and $\operatorname{range}(F_0)$", None),
             ],
             x=-6.75,
             top=self.content_top - 0.1,
-            width=5.6,
+            width=6.05,
         )
 
-        U = through_origin(plane, [1, 0], 1.25, WANTED, width=4)
-        U.put_start_and_end_on(plane([-0.35, 0]), plane([1.25, 0]))
-        U_lbl = math(r"\sym{U}", size=36).next_to(plane([1.25, 0]), DOWN, buff=0.15)
-        V = always_redraw(
-            lambda: Line(plane(-0.3 * model().trial_vector), plane(1.25 * model().trial_vector), color=TRIAL, stroke_width=3).set_opacity(0.6)
+        exact = through_origin(plane, [1, 0], 1.25, WANTED, width=4)
+        exact.put_start_and_end_on(plane([-0.35, 0]), plane([1.25, 0]))
+        exact_lbl = math(r"\operatorname{range}(\sym{F0})", size=31).next_to(plane([1.25, 0]), DOWN, buff=0.15)
+        trial = always_redraw(
+            lambda: Line(
+                plane(-0.3 * model().trial_vector),
+                plane(1.25 * model().trial_vector),
+                color=TRIAL,
+                stroke_width=3,
+            ).set_opacity(0.65)
         )
-        V_lbl = always_redraw(lambda: math(r"\sym{V}", size=36).next_to(plane(1.25 * model().trial_vector), UP, buff=0.1))
-        v = always_redraw(lambda: vec(plane.origin, plane(model().trial_vector), TRIAL, width=7))
-        v_lbl = always_redraw(
-            lambda: math(r"\sym{v}", size=34).next_to(plane(model().trial_vector), UL, buff=0.05)
+        trial_lbl = always_redraw(
+            lambda: math(r"\operatorname{range}(\sym{E0})", size=31).next_to(
+                plane(1.25 * model().trial_vector), UP, buff=0.1
+            )
+        )
+        e0 = always_redraw(lambda: vec(plane.origin, plane(model().trial_vector), TRIAL, width=7))
+        e0_lbl = always_redraw(
+            lambda: math(r"\sym{E0}\ \text{(one column here)}", size=24).next_to(
+                plane(model().trial_vector), UL, buff=0.05
+            )
         )
         arc = always_redraw(lambda: angle_arc(plane, [1, 0], model().trial_vector, 0.9, SINE, width=3))
         th_lbl = always_redraw(
-            lambda: math(r"\sym{theta}", size=32).move_to(plane(0.36 * story.unit(model().theta / 2)))
+            lambda: math(r"\sym{theta}(\sym{E0},\sym{F0})", size=28).move_to(
+                plane(0.38 * story.unit(model().theta / 2))
+            )
         )
 
         self.say(
-            "Blue: the true subspace U (here a line). Amber: a trial subspace V, "
-            "spanned by the unit vector v. theta is the angle between them."
+            "The two geometric objects are represented by frames, not by extra subspace names. E0 is the trial "
+            "frame we have. F0 is the exact wanted frame of A hat. Their ranges are the two subspaces, and theta "
+            "is the angle between those ranges."
         )
-        self.play(FadeIn(recall.show(3)), Create(U), FadeIn(U_lbl))
-        self.add(V, V_lbl, v, v_lbl, arc, th_lbl)
-        self.play(FadeIn(VGroup(V, V_lbl, v, v_lbl, arc, th_lbl)))
+        self.play(FadeIn(recall.show(2)), Create(exact), FadeIn(exact_lbl))
+        self.add(trial, trial_lbl, e0, e0_lbl, arc, th_lbl)
+        self.play(FadeIn(VGroup(trial, trial_lbl, e0, e0_lbl, arc, th_lbl)))
 
         self.say(
-            "Split v into its part in U and its part orthogonal to U. The orthogonal part "
-            "has length sin theta: it is the distance from v to U."
+            "In this one-dimensional picture, project the trial column E0 onto the exact wanted line spanned by F0. "
+            "The part left outside that line has length sin theta. This already has the same algebraic form as the "
+            "operator used in the theorem."
         )
         proj = always_redraw(lambda: segment(plane.origin, plane(model().desired_projection), MUTED, width=5))
-        perp = always_redraw(lambda: segment(plane(model().desired_projection), plane(model().trial_vector), SINE, width=8))
+        perp = always_redraw(
+            lambda: segment(plane(model().desired_projection), plane(model().trial_vector), SINE, width=8)
+        )
         corner = always_redraw(
             lambda: right_angle(plane(model().desired_projection), [-1, 0], [0, 1], size=0.16)
         )
@@ -1141,17 +1156,28 @@ class S04Angle(DeckSlide):
             )
         )
         proj_lbl = always_redraw(
-            lambda: math(r"\sym{Q}\sym{v}", size=28).next_to(plane(model().desired_projection / 2), DOWN, buff=0.12)
+            lambda: math(r"\sym{F0}\sym{F0}^{*}\sym{E0}", size=24).next_to(
+                plane(model().desired_projection / 2), DOWN, buff=0.12
+            )
         )
-        f1 = math(r"\sym{sintheta} = \norm{(I-\sym{Q})\,\sym{v}} = \operatorname{dist}(\sym{v},\sym{U})", size=32)
-        f1_note = tex(r"$\sym{Q}$: the orthogonal projector onto $\sym{U}$", size=22, color=MUTED)
+        f1 = math(
+            r"\sym{sintheta}(\sym{E0},\sym{F0})"
+            r"=\norm{(I-\sym{F0}\sym{F0}^{*})\sym{E0}}",
+            size=30,
+        )
+        f1_note = tex(
+            r"$\sym{F0}\sym{F0}^{*}$ projects onto $\operatorname{range}(\sym{F0})$",
+            size=21,
+            color=MUTED,
+        )
         column(f1, f1_note, top=self.content_top - 0.25, buff=0.1)
         self.add(proj, perp, corner, perp_lbl, proj_lbl)
         self.play(FadeIn(VGroup(proj, perp, corner, perp_lbl, proj_lbl)), FadeIn(f1, f1_note))
 
         self.say(
-            "Move V around: the pink leg is the size of the error. It vanishes exactly "
-            "when V = U and is 1 when V is orthogonal to U. (This build loops.)",
+            "Move the trial frame around: the pink leg is the error. It vanishes when the two ranges agree and "
+            "reaches 1 when they are orthogonal. The same definition works without ever giving the ranges separate names."
+            ,
             loop=True,
         )
         self.play(th.animate.set_value(np.radians(62)), run_time=2.0, rate_func=rate_functions.ease_in_out_sine)
@@ -1159,43 +1185,43 @@ class S04Angle(DeckSlide):
         self.play(th.animate.set_value(np.radians(35)), run_time=1.8, rate_func=rate_functions.ease_in_out_sine)
 
         self.say(
-            "Same idea for k-dimensional subspaces: there are k principal angles, and "
-            "sin Theta0 is the operator whose eigenvalues are their sines. The rectangular "
-            "blocks (I - F0 F0*) E0 and F1* E0 have exactly the same singular values, so they "
-            "have the same size in every unitarily invariant norm; proofs compute with them."
+            "For k columns, E0 and F0 determine k principal angles. The directed sin Theta0 operator is a function "
+            "of those two frames. The rectangular blocks (I minus F0 F0 star) E0 and F1 star E0 have the same "
+            "singular values, so proofs can compute with either block."
         )
         general = text_col(
-            r"For $k$-dimensional subspaces there are $k$ \emph{principal angles} "
-            r"$\like{theta}{\theta_1}\ge\dots\ge\like{theta}{\theta_k}$, and"
+            r"For $k$ columns there are $k$ \emph{principal angles} between "
+            r"$\operatorname{range}(\sym{E0})$ and $\operatorname{range}(\sym{F0})$."
         )
         definition = boxed(
             para(
-                r"$\sym{sinTheta0}$ is the operator whose eigenvalues are "
+                r"$\sym{sinTheta0}(\sym{E0},\sym{F0})$ has eigenvalues "
                 r"$\like{theta}{\sin\theta_1},\dots,\like{theta}{\sin\theta_k}$.",
                 width=RIGHT_COL_W - 0.5,
-                size=28,
+                size=27,
             ),
             color=SINE,
             pad=0.18,
         )
         g_eq = math(
-            r"\norm{\sym{sinTheta0}} = \norm{(I-\sym{F0}\sym{F0}^{*})\,\sym{E0}}"
-            r"= \norm{\sym{F1}^{*}\sym{E0}}",
-            size=32,
+            r"\norm{\sym{sinTheta0}(\sym{E0},\sym{F0})}"
+            r"=\norm{(I-\sym{F0}\sym{F0}^{*})\sym{E0}}"
+            r"=\norm{\sym{F1}^{*}\sym{E0}}",
+            size=29,
         )
         g_note = para(
-            r"Those rectangular blocks have the same singular values as $\sym{sinTheta0}$, so every "
-            r"unitarily invariant norm gives them the same size.",
+            r"The three expressions have the same singular values, hence the same value in every "
+            r"unitarily invariant norm.",
             width=RIGHT_COL_W,
-            size=21,
+            size=20,
             color=MUTED,
         )
         bridge = boxed(
             para(
-                r"\textbf{The practical problem:} the angle is what we care about, but it uses the unknown "
-                r"$\sym{U}$. We now need a quantity we can compute from the matrix we have and the trial $\sym{V}$.",
+                r"\textbf{Information model:} $\sym{E0}$ is the trial frame we have; $\sym{F0}$ is the exact frame "
+                r"we usually do not know. So the angle is the target quantity. Next we need evidence formed without $\sym{F0}$.",
                 width=RIGHT_COL_W - 0.45,
-                size=21,
+                size=20,
             ),
             color=FG,
             pad=0.14,
@@ -1208,22 +1234,20 @@ class S04Angle(DeckSlide):
             g_note,
             bridge,
             top=self.content_top - 0.25,
-            buff=0.16,
+            buff=0.14,
         )
         if right_col.get_bottom()[1] < -3.45:
             right_col.scale((right_col.get_top()[1] + 3.45) / right_col.height, about_edge=UP + LEFT)
         self.play(
-            Transform(recall.backgrounds[3], recall.backgrounds[5].copy()),
-            FadeIn(recall.rows[3:]),
+            Transform(recall.backgrounds[2], recall.backgrounds[4].copy()),
+            FadeIn(recall.rows[2:]),
             FadeIn(VGroup(general, definition, g_eq, g_note), shift=UP * 0.1),
         )
         self.say(
-            "That defines the error, but it also exposes the next problem: computing the angle requires "
-            "the exact subspace U, which is the answer we are trying to learn. We need a signal available "
-            "from the matrix we have and the trial subspace alone."
+            "This is the unknown we want to bound: sin Theta0 of E0 and F0. E0 is ours; F0 is exact and generally "
+            "unavailable. The next slide introduces the residual, which uses A hat, E0 and A0 but not F0."
         )
         self.play(FadeIn(bridge, shift=UP * 0.08))
-
 
 class S04bSinThetaOperator(DeckSlide):
     title = r"What $\sin\Theta_0$ is, exactly"
@@ -1307,15 +1331,10 @@ class S04bSinThetaOperator(DeckSlide):
 
 
 class S05Residual(DeckSlide):
-    """The residual, and why it is computable when the angle is not.
-
-    Every build adds to the slide and nothing fades away, so the last build is
-    the complete slide.  The "Recall" panel sits in the empty upper-left of the
-    picture.
-    """
+    """Motivate the residual from the information model before defining it."""
 
     title = "A computable signal: the residual"
-    kicker = r"\cx{muted}{GENERAL THEOREM SETUP} --- $\sym{theta}$ needs unknown $\sym{U}$; residual uses only $\sym{At}$ and the trial"
+    kicker = r"\cx{muted}{GENERAL THEOREM SETUP} --- the error needs exact $\sym{F0}$; the residual does not"
 
     def body(self) -> None:
         lam1, lam2 = story.RESIDUAL_EIGENVALUES
@@ -1327,27 +1346,33 @@ class S05Residual(DeckSlide):
 
         recall = RecallPanel(
             [
-                (r"$\sym{At}$", r"the matrix we have, whose eigenvectors we want; in a perturbation problem "
-                               r"$\sym{At}=\sym{A}+\sym{H}$, but the residual does not require that form", None),
-                (r"$\sym{U}$", r"the exact eigendirection: the unknown answer we are trying to find", None),
-                (r"$\sym{v}$", r"our approximation, e.g.\ from an iterative eigensolver", None),
+                (r"$\sym{Ahat}$", r"the matrix/operator whose invariant frame we want", None),
+                (r"$\sym{v}$", r"a trial unit vector we already have; in one dimension $\sym{E0}=[\sym{v}]$", None),
+                (r"$\sym{rho}$", r"the one-dimensional trial operator: $\sym{A0}=[\sym{rho}]$", None),
+                (r"$\sym{F0}$", r"the exact wanted frame of $\sym{Ahat}$; needed for the true angle, usually unknown", None),
             ],
             x=-6.75,
             top=self.content_top - 0.1,
-            width=6.0,
+            width=6.15,
         )
 
         e_lines = VGroup(
             DashedVMobject(Line(plane([-0.2, 0]), plane([2.1, 0]), color=WANTED, stroke_width=2), num_dashes=24),
             DashedVMobject(Line(plane([0, -0.1]), plane([0, 1.2]), color=UNWANTED, stroke_width=2), num_dashes=14),
         ).set_opacity(0.7)
-        u_lbl = tex(r"$\sym{U}$ (unknown)", size=22).next_to(plane([1.6, 0]), DOWN, buff=0.12)
+        exact_lbl = tex(r"$\operatorname{range}(\sym{F0})$ (exact, unknown)", size=20).next_to(
+            plane([1.6, 0]), DOWN, buff=0.12
+        )
         v = always_redraw(lambda: vec(plane.origin, plane(model().v), TRIAL, width=7))
         v_lbl = always_redraw(lambda: math(r"\sym{v}", size=32).next_to(plane(model().v), UL, buff=0.05))
         Av = always_redraw(lambda: vec(plane.origin, plane(model().Av), FG, width=5))
-        Av_lbl = always_redraw(lambda: math(r"\sym{At}\sym{v}", size=30).next_to(plane(model().Av), RIGHT, buff=0.1))
+        Av_lbl = always_redraw(
+            lambda: math(r"\sym{Ahat}\sym{v}", size=30).next_to(plane(model().Av), RIGHT, buff=0.1)
+        )
         rho_v = always_redraw(lambda: segment(plane.origin, plane(model().rho_v), TRIAL, width=12).set_opacity(0.35))
-        rho_lbl = always_redraw(lambda: math(r"\sym{rho}\,\sym{v}", size=28).next_to(plane(model().rho_v), LEFT, buff=0.12))
+        rho_lbl = always_redraw(
+            lambda: math(r"\sym{rho}\,\sym{v}", size=28).next_to(plane(model().rho_v), LEFT, buff=0.12)
+        )
         r = always_redraw(lambda: vec(plane(model().rho_v), plane(model().Av), RESID, width=7))
         r_lbl = always_redraw(
             lambda: math(r"\sym{r}", size=32).next_to(plane((model().rho_v + model().Av) / 2), UR, buff=0.06)
@@ -1357,13 +1382,12 @@ class S05Residual(DeckSlide):
             lambda: math(r"\sym{theta}", size=30).move_to(plane(0.72 * story.unit(max(phi.get_value(), 0.12) / 2)))
         )
 
-        # The right column, laid out once in its final form; builds only add.
         x0, w, size = RIGHT_COL_X - 0.4, RIGHT_COL_W + 0.5, 24
         p2 = boxed(
             para(
-                r"\textbf{Why introduce a residual?} $\sym{theta}$ is the error we care about, but computing it needs the unknown $\sym{U}$. "
-                r"So ask a question we \emph{can} test: if $\sym{v}$ were really an eigenvector, would "
-                r"$\sym{At}\sym{v}$ point along $\sym{v}$?",
+                r"\textbf{Why introduce a residual?} The error $\sym{theta}(\sym{E0},\sym{F0})$ needs the exact "
+                r"frame $\sym{F0}$. But we can test the trial using only $\sym{Ahat}$ and what we already have: "
+                r"if $\sym{v}$ were an eigenvector, would $\sym{Ahat}\sym{v}$ point along $\sym{v}$?",
                 width=w - 0.35,
                 size=size - 1,
             ),
@@ -1371,101 +1395,105 @@ class S05Residual(DeckSlide):
             pad=0.14,
         )
         p3a = math(
-            r"\sym{At}\sym{v}=\underbrace{\sym{rho}\,\sym{v}}_{\text{best scaling}}"
-            r"+\underbrace{\sym{r}}_{\text{leftover}}",
+            r"\sym{Ahat}\sym{v}=\underbrace{\sym{rho}\,\sym{v}}_{\text{best scaling}}"
+            r"+\underbrace{\sym{r}}_{\text{residual}}",
             size=30,
         )
         rho_name = para(
-            r"$\sym{rho}=\sym{v}^{*}\sym{At}\sym{v}$ is the \textbf{Rayleigh quotient} "
-            r"(the one-dimensional Rayleigh--Ritz value): the scalar eigenvalue estimate for this trial line.",
+            r"$\sym{rho}=\sym{v}^{*}\sym{Ahat}\sym{v}$ is the \textbf{Rayleigh quotient}: the scalar "
+            r"trial operator for this one-dimensional frame.",
             width=w,
             size=size - 2,
         )
         p3b = para(
-            r"The \textbf{residual} $\sym{r}=\sym{At}\sym{v}-\sym{rho}\sym{v}$ is what scaling cannot explain. "
-            r"It is computable from $\sym{At}$ and $\sym{v}$ alone; under a perturbation it is the part that "
-            r"can turn the trial direction.",
+            r"$\sym{r}=\sym{Ahat}\sym{v}-\sym{rho}\sym{v}$ is the part the trial line cannot explain. "
+            r"It uses no exact eigenvector or exact frame.",
             width=w,
             size=size - 2,
             color=MUTED,
         )
         p4 = readout_rows(
             [
-                (r"\sym{theta}\ (\text{needs } \sym{U}) =", lambda: np.degrees(phi.get_value()), SINE, 1, r"^\circ"),
-                (r"\norm{\sym{r}}\ (\text{needs only } \sym{At}, \sym{v}) =", lambda: model().residual_norm, RESID, 3, None),
+                (r"\sym{theta}(\sym{E0},\sym{F0})\ (\text{needs exact }\sym{F0}) =", lambda: np.degrees(phi.get_value()), SINE, 1, r"^\circ"),
+                (r"\norm{\sym{r}}\ (\text{from }\sym{Ahat},\sym{v}) =", lambda: model().residual_norm, RESID, 3, None),
             ],
-            size=26,
+            size=24,
         )
-        p4b = tex(r"$\sym{r}=0$ exactly when $\sym{v}$ is an eigenvector.", size=size)
-        p5a = math(r"\text{several vectors at once:}\quad \sym{R}=\sym{At}\sym{E0}-\sym{E0}\sym{A0}", size=28)
+        p4b = tex(r"$\sym{r}=0$ exactly when the trial line is invariant.", size=size)
+        p5a = math(
+            r"\text{several columns:}\qquad \sym{R}=\sym{Ahat}\sym{E0}-\sym{E0}\sym{A0}",
+            size=28,
+        )
         p5c = para(
-            r"For a subspace $\sym{V}$ the claim is ``$\sym{V}$ is \emph{invariant}'' "
-            r"($\sym{At}$ maps $\sym{V}$ into $\sym{V}$). With the Rayleigh--Ritz compression "
-            r"$\sym{A0}=\sym{E0}^{*}\sym{At}\sym{E0}$, $\sym{R}$ is the part of "
-            r"$\sym{At}(\sym{V})$ that sticks out of $\sym{V}$.",
+            r"For $\sym{Ahat}\in\mathbb C^{n\times n}$ and a $k$-column trial frame "
+            r"$\sym{E0}\in\mathbb C^{n\times k}$, the trial operator $\sym{A0}$ is $k\times k$ and "
+            r"$\sym{R}$ is $n\times k$. A common eigensolver choice is the Rayleigh--Ritz compression "
+            r"$\sym{A0}=\sym{E0}^{*}\sym{Ahat}\sym{E0}$. In the perturbation application later, $\sym{A0}$ "
+            r"instead comes from the exact wanted eigensystem of the original $\sym{A}$. In either case, $\sym{R}$ measures how much "
+            r"$\sym{Ahat}\operatorname{range}(\sym{E0})$ leaves $\operatorname{range}(\sym{E0})$.",
             width=w,
             size=size - 2,
             color=MUTED,
         )
-        p5b = boxed(tex(r"Does a small $\sym{R}$ force a small $\sym{sinTheta0}$?", size=26), color=FG, pad=0.18)
-        col = VGroup(p2, VGroup(p3a, rho_name, p3b).arrange(DOWN, aligned_edge=LEFT, buff=0.08),
-                     VGroup(p4, p4b).arrange(DOWN, aligned_edge=LEFT, buff=0.12),
-                     VGroup(p5a, p5c, p5b).arrange(DOWN, aligned_edge=LEFT, buff=0.12))
-        col.arrange(DOWN, aligned_edge=LEFT, buff=0.26)
+        p5b = boxed(
+            tex(r"Does a small $\sym{R}$ force a small $\sym{sinTheta0}(\sym{E0},\sym{F0})$?", size=25),
+            color=FG,
+            pad=0.18,
+        )
+        col = VGroup(
+            p2,
+            VGroup(p3a, rho_name, p3b).arrange(DOWN, aligned_edge=LEFT, buff=0.08),
+            VGroup(p4, p4b).arrange(DOWN, aligned_edge=LEFT, buff=0.12),
+            VGroup(p5a, p5c, p5b).arrange(DOWN, aligned_edge=LEFT, buff=0.12),
+        )
+        col.arrange(DOWN, aligned_edge=LEFT, buff=0.24)
         col.move_to([x0, self.content_top - 0.1, 0], aligned_edge=UP + LEFT)
         floor = -3.45
         if col.get_bottom()[1] < floor:
             col.scale((col.get_top()[1] - floor) / col.height, about_edge=UP + LEFT)
         for m in col:
             fit_right(m)
-        # Readout values were positioned by updaters before scaling; re-attach them.
         for label, value in zip(p4[0], p4[1]):
             value.add_updater(lambda m, label=label: m.next_to(label, RIGHT, buff=0.15))
 
         self.say(
-            "The cast, top left. A tilde is the matrix we have, whose eigenvectors we want, and we can multiply "
-            "vectors by it; in a perturbation problem it is A plus H. In a numerical problem U is the answer we "
-            "are trying to find: for a large matrix or operator we generally do not know it in advance, and an "
-            "eigensolver gives us an approximation v. Its error theta needs U."
+            "The information model is the point. A hat is the operator we are studying. The trial vector v is ours; "
+            "in one dimension it is the single column of E0. The exact frame F0 is what we do not know, so the true "
+            "angle is not available directly."
         )
-        self.play(FadeIn(recall.show(3)), FadeIn(e_lines), FadeIn(u_lbl))
+        self.play(FadeIn(recall.show(4)), FadeIn(e_lines), FadeIn(exact_lbl))
         self.add(v, v_lbl, arc, th_lbl)
         self.play(FadeIn(VGroup(v, v_lbl, arc, th_lbl)))
 
         self.say(
-            "The previous slide gave us the error theta, but theta needs the unknown exact eigenspace U. "
-            "So before defining anything new, ask what we can test using only what we have: A tilde and the "
-            "trial vector v. If v were really an eigenvector, A tilde v would point exactly along v. Here it does not."
+            "So ask something testable. If v were an exact eigenvector of A hat, A hat v would point along v. "
+            "The failure of that statement is the residual."
         )
         self.add(Av, Av_lbl)
         self.play(FadeIn(VGroup(Av, Av_lbl)), FadeIn(col[0]))
 
         self.say(
-            "An eigenvector should only be scaled. The scalar rho = v star A tilde v is the Rayleigh quotient. "
-            "Split A tilde v into rho v and the leftover residual r: the part that leaves the line through v. "
-            "Under a perturbation, rho absorbs the change of scale and r is the part trying to turn v. Computing r takes one "
-            "multiplication by A tilde and one dot product; U never appears, which is why r is computable. "
-            "A small residual is a standard stopping criterion for iterative eigensolvers."
+            "For this eigensolver-style example, the Rayleigh quotient rho is the natural scalar action on the trial line. "
+            "Other applications can supply A0 differently. Split A hat v into rho v and "
+            "the leftover r. Computing r needs A hat and v, but no F0. This is why residuals are useful as "
+            "a posteriori information from an eigensolver."
         )
         self.add(rho_v, rho_lbl, r, r_lbl)
         self.play(FadeIn(VGroup(rho_v, rho_lbl, r, r_lbl)), FadeIn(col[1]))
 
         self.say(
-            "Improve the approximation: theta and the residual shrink together, and r is zero exactly when "
-            "v is an eigenvector. We can watch r; we cannot watch theta."
+            "Improve the trial direction: theta and the residual shrink together. We can monitor the residual; "
+            "we cannot directly monitor the angle to F0."
         )
         self.play(FadeIn(col[2]))
         self.play(phi.animate.set_value(np.radians(6.0)), run_time=3.5, rate_func=rate_functions.ease_in_out_sine)
 
         self.say(
-            "The same works for several vectors at once: E0 holds them as orthonormal columns and A0 is a "
-            "small trial matrix. The standard E0* A tilde E0 is the Rayleigh-Ritz compression. For a subspace the claim we pretend is that V is "
-            "invariant: A tilde maps V into V, as it does an eigenspace. With that choice of A0, R is exactly the "
-            "part of A tilde applied to V that sticks out of V, and it is still computable. The question for the theorem: "
-            "does a small R force a small angle?"
+            "For several columns, replace v by the trial frame E0 and rho by the small trial operator A0. "
+            "The residual is A hat E0 minus E0 A0. With Rayleigh--Ritz, A0 is E0 star A hat E0. The theorem asks "
+            "whether a small, directly formed R plus spectral separation certifies a small angle to the exact frame F0."
         )
         self.play(FadeIn(col[3]), phi.animate.set_value(np.radians(40.0)), run_time=1.5)
-
 
 # ----------------------------------------------------------------------------
 # 6. The gap
@@ -1473,8 +1501,8 @@ class S05Residual(DeckSlide):
 
 
 class S06Gap(DeckSlide):
-    title = r"The gap $\sym{delta}$"
-    kicker = r"\cx{muted}{GENERAL THEOREM SETUP} --- trial spectrum vs. unwanted spectrum of $\sym{At}$; no $\sym{H}$ required"
+    title = r"The spectral separation $\sym{delta}$"
+    kicker = r"\cx{muted}{GENERAL THEOREM SETUP} --- $\operatorname{spec}(\sym{A0})$ vs. the exact unwanted block $\sym{Lambda1}$ of $\sym{Ahat}$"
 
     def body(self) -> None:
         g = story.gap_picture_example()
@@ -1509,11 +1537,11 @@ class S06Gap(DeckSlide):
         d_r = math(r"\sym{delta}", size=30).next_to(br_r, DOWN, buff=0.08)
         unwanted = VGroup(*[Dot(X(lam), color=UNWANTED, radius=0.1) for lam in g["unwanted"]])
         un_lbl_l = VGroup(
-            tex(r"unwanted eigenvalues of $\sym{At}$", size=22),
+            tex(r"exact unwanted spectrum of $\sym{Ahat}$", size=22),
             math(r"\operatorname{spec}(\sym{Lambda1})", size=30),
         ).arrange(DOWN, buff=0.06).next_to(VGroup(*unwanted[:3]), UP, buff=0.4)
         un_lbl_r = VGroup(
-            tex(r"unwanted eigenvalues of $\sym{At}$", size=22),
+            tex(r"exact unwanted spectrum of $\sym{Ahat}$", size=22),
             math(r"\operatorname{spec}(\sym{Lambda1})", size=30),
         ).arrange(DOWN, buff=0.06).next_to(VGroup(*unwanted[3:]), UP, buff=0.4)
 
@@ -1524,10 +1552,9 @@ class S06Gap(DeckSlide):
         self.play(Create(line), FadeIn(interval), FadeIn(ritz), FadeIn(ritz_lbl), FadeIn(ab))
 
         self.say(
-            "Widen the interval by delta on each side: the violet window. "
-            "Lambda1 is A tilde restricted to the unwanted part U-perp. The hypothesis: no "
-            "eigenvalue of Lambda1 enters the window. Everything of A tilde inside the window "
-            "belongs to U."
+            "Widen the trial-spectrum interval by delta on each side: the violet window. F1 is the exact unwanted "
+            "frame of A hat, and Lambda1 is the operator on those unwanted coordinates: A hat F1 equals F1 Lambda1. "
+            "The hypothesis says that the exact unwanted spectrum stays out of this window."
         )
         hyp = math(
             r"\like{A0}{\operatorname{spec}(A_0)}\subset[\like{A0}{\beta},\like{A0}{\alpha}],\qquad"
@@ -1536,22 +1563,24 @@ class S06Gap(DeckSlide):
             size=32,
         ).move_to([0, -1.25, 0])
         lam_note = tex(
-            r"$\sym{Lambda1}$: $\sym{At}$ restricted to $\sym{Uperp}$, i.e.\ $\sym{At}\sym{F1}=\sym{F1}\sym{Lambda1}$."
-            r"\quad Or the same with the roles of $\sym{A0}$ and $\sym{Lambda1}$ exchanged.",
-            size=24,
+            r"$\sym{F1}$: exact unwanted frame; $\sym{Ahat}\sym{F1}=\sym{F1}\sym{Lambda1}$. "
+            r"The theorem needs a certified lower separation, not necessarily the exact value of $\sym{delta}$."
+            r"\quad The roles of $\sym{A0}$ and $\sym{Lambda1}$ may also be exchanged.",
+            size=23,
             color=MUTED,
         ).next_to(hyp, DOWN, buff=0.25)
         self.play(FadeIn(window), FadeIn(window_edges), FadeIn(br_l, br_r, d_l, d_r))
         self.play(FadeIn(unwanted, lag_ratio=0.15), FadeIn(un_lbl_l), FadeIn(un_lbl_r), FadeIn(hyp), FadeIn(lam_note))
 
         self.say(
+            "Delta is a spectral-separation certificate, not the original eigengap g from the perturbation example. "
             "Why an interval and not just 'every pair of eigenvalues is delta apart'? "
             "If the two spectra interleave, constant 1 survives only in the Frobenius "
             "norm (Davis-Kahan Theorem 6.2); in the operator norm it fails, and "
             "Section 5 of the paper gives an explicit 2x2 example."
         )
         warn = para(
-            r"\cx{muted}{Why an interval?} If the spectra are merely $\sym{delta}$ apart pairwise but "
+            r"\cx{muted}{$\sym{delta}$ is not $\sym{g}$. Why an interval?} If the spectra are merely $\sym{delta}$ apart pairwise but "
             r"\emph{interleaved}, the bound with constant $1$ holds only in the Frobenius norm "
             r"(Davis--Kahan Thm~6.2); in the operator norm it can fail (\S5).",
             width=12.2,
@@ -1567,77 +1596,84 @@ class S06Gap(DeckSlide):
 
 class S07Theorem(DeckSlide):
     title = r"The $\like{theta}{\sin\Theta}$ theorem"
-    kicker = r"\cx{muted}{GENERAL THEOREM} --- no perturbation $\sym{H}$ is assumed; $\sym{At}=\sym{A}+\sym{H}$ is a specialization"
+    kicker = r"\cx{muted}{GENERAL THEOREM} --- $\sym{Ahat}$, trial pair $(\sym{E0},\sym{A0})$, exact frame $\sym{F0}$, separation $\sym{delta}$; no $\sym{H}$ assumed"
 
     def body(self) -> None:
         self.say(
-            "Put the three pieces together. Under the gap hypothesis, for every "
-            "unitarily invariant norm: delta times the norm of sin Theta0 is at most the norm of R."
+            "Now the relationship becomes useful. E0 and A0 are the trial data, F0 is the exact wanted frame, "
+            "and R is the residual A hat E0 minus E0 A0. If the trial spectrum is separated from the exact unwanted "
+            "spectrum by delta, Davis-Kahan bounds the unknown angle to F0."
         )
         stmt = math(
-            r"\sym{delta}\,\norm{\sym{sinTheta0}}\ \le\ \norm{\sym{R}}",
-            size=64,
+            r"\sym{delta}\,\norm{\sym{sinTheta0}(\sym{E0},\sym{F0})}"
+            r"\ \le\ \norm{\sym{R}},\qquad "
+            r"\sym{R}=\sym{Ahat}\sym{E0}-\sym{E0}\sym{A0}",
+            size=48,
         )
-        box = boxed(stmt, color=FG, pad=0.3).move_to([0, 1.7, 0])
+        box = boxed(stmt, color=FG, pad=0.3).move_to([0, 1.65, 0])
         hyp = tex(
-            r"whenever $\like{A0}{\operatorname{spec}(A_0)}\subset[\like{A0}{\beta},\like{A0}{\alpha}]$ and "
-            r"$\like{Lambda1}{\operatorname{spec}(\Lambda_1)}$ avoids "
-            r"$(\like{A0}{\beta}-\sym{delta},\like{A0}{\alpha}+\sym{delta})$, "
-            r"for \emph{every} unitarily invariant norm",
-            size=26,
+            r"$\operatorname{spec}(\sym{A0})\subset[\like{A0}{\beta},\like{A0}{\alpha}]$ and "
+            r"$\operatorname{spec}(\sym{Lambda1})$ avoids "
+            r"$(\like{A0}{\beta}-\sym{delta},\like{A0}{\alpha}+\sym{delta})$; "
+            r"every unitarily invariant norm",
+            size=25,
             color=MUTED,
-        ).next_to(box, DOWN, buff=0.3)
+        ).next_to(box, DOWN, buff=0.28)
         self.play(FadeIn(box, scale=0.95), FadeIn(hyp))
 
         self.say(
-            "Read each factor. sin Theta0: how far the trial subspace is from the true one "
-            "(not computable). R: if we pretend the trial subspace is invariant, how badly that claim fails "
-            "(computable). "
-            "delta: how isolated the wanted part of the spectrum is."
+            "Read this as an information-flow statement. The angle needs F0, the exact frame we usually do not have. "
+            "The residual is formed directly from A hat, E0 and A0. Delta is different: it is a spectral-separation "
+            "hypothesis or certificate that must be established separately."
         )
         rows = VGroup(
-            tex(r"$\norm{\sym{sinTheta0}}$\quad how far the trial subspace is from the true one", size=28),
-            tex(r"$\norm{\sym{R}}$\quad if we pretend the trial is invariant, how badly that fails \cx{muted}{(computable)}", size=28),
-            tex(r"$\sym{delta}$\quad how isolated the wanted eigenvalues are", size=28),
-        ).arrange(DOWN, aligned_edge=LEFT, buff=0.20)
-        rows.next_to(hyp, DOWN, buff=0.4)
+            tex(
+                r"$\norm{\sym{sinTheta0}(\sym{E0},\sym{F0})}$\quad target error; needs exact $\sym{F0}$",
+                size=27,
+            ),
+            tex(
+                r"$\norm{\sym{R}}$\quad directly formed from $\sym{Ahat},\sym{E0},\sym{A0}$",
+                size=27,
+            ),
+            tex(
+                r"$\sym{delta}$\quad certified separation of $\operatorname{spec}(\sym{A0})$ from $\operatorname{spec}(\sym{Lambda1})$",
+                size=27,
+            ),
+        ).arrange(DOWN, aligned_edge=LEFT, buff=0.18)
+        rows.next_to(hyp, DOWN, buff=0.35)
         self.play(FadeIn(rows, lag_ratio=0.3))
 
         self.say(
-            "Rearranged: the subspace error is at most residual over gap. Finite dimension or separable "
-            "infinite dimension, and any unitarily invariant norm."
+            "Rearranged: error is at most residual over separation. Notice what is absent: there is no original A "
+            "and no perturbation H in the theorem itself. A hat is simply the operator whose exact frame F0 we want. "
+            "On the next slide we add the extra perturbation structure A hat equals A plus H."
         )
         slogan = boxed(
             math(
-                r"\norm{\sym{sinTheta0}}\ \le\ \frac{\norm{\sym{R}}}{\sym{delta}}"
-                r"\qquad\text{subspace error}\ \le\ \frac{\text{residual}}{\text{gap}}",
-                size=34,
+                r"\norm{\sym{sinTheta0}(\sym{E0},\sym{F0})}"
+                r"\ \le\ \frac{\norm{\sym{R}}}{\sym{delta}}"
+                r"\qquad\text{error}\ \le\ \frac{\text{residual}}{\text{separation}}",
+                size=31,
             ),
             color=SINE,
-        ).next_to(rows, DOWN, buff=0.26)
+        ).next_to(rows, DOWN, buff=0.24)
         scope = para(
-            r"\textbf{GENERAL:} $\sym{At}$ + trial $\sym{V}$ + residual $\sym{R}$ + gap $\sym{delta}$; "
-            r"no $\sym{H}$ is needed. \textbf{PERTURBATION SPECIALIZATION (next):} set "
-            r"$\sym{At}=\sym{A}+\sym{H}$ and use an eigenspace of $\sym{A}$ as the trial.",
+            r"\textbf{GENERAL:} $\sym{Ahat}$, $\sym{E0}$, $\sym{A0}$, exact $\sym{F0}$/$\sym{F1}$, and $\sym{delta}$. "
+            r"\textbf{PERTURBATION SPECIALIZATION (next):} additionally set $\sym{Ahat}=\sym{A}+\sym{H}$ and choose "
+            r"$\sym{E0},\sym{A0}$ from an exact wanted eigensystem of the original $\sym{A}$.",
             width=12.5,
-            size=21,
+            size=20,
             color=MUTED,
-        ).next_to(slogan, DOWN, buff=0.18)
+        ).next_to(slogan, DOWN, buff=0.16)
         self.play(FadeIn(slogan, shift=UP * 0.1))
-        self.say(
-            "This theorem is more general than the perturbation story we started with. It does not mention H. "
-            "It needs only the matrix or operator we have, a trial subspace, a residual, and a spectral gap. "
-            "On the next slide we specialize back to A plus H and recover the original perturbation question."
-        )
         self.play(FadeIn(scope, shift=UP * 0.08))
-
 
 class S07bReading(DeckSlide):
     """The theorem with every symbol defined on the slide, the angle as a function of ``E0`` and ``F0``.
 
     The left side is written the way the Lean statement builds it
     (``sourceDirectedSinThetaOperator E₀ F₀``, proved equal to the modulus of
-    ``(1 - F₀F₀*)E₀``); the gap is the interval/exterior form of
+    ``(1 - F₀F₀*)E₀``); the separation hypothesis is the interval/exterior form of
     ``FormBoundedSylvesterGap``, whose other forms the note names.
     """
 
@@ -1659,36 +1695,36 @@ class S07bReading(DeckSlide):
     def body(self) -> None:
         stmt = math(
             r"\sym{delta}\,\underbrace{\norm{\sym{sinTheta0}(\sym{E0},\sym{F0})}}_{\text{needs the unknown }\sym{F0}}"
-            r"\ \le\ \underbrace{\norm{\sym{At}\sym{E0}-\sym{E0}\sym{A0}}}_{\text{computable from }\sym{At},\,\sym{E0},\,\sym{A0}}",
+            r"\ \le\ \underbrace{\norm{\sym{Ahat}\sym{E0}-\sym{E0}\sym{A0}}}_{\text{computable from }\sym{Ahat},\,\sym{E0},\,\sym{A0}}",
             size=44,
         )
         box = boxed(stmt, color=SINE, pad=0.25).move_to([0, self.content_top - 0.15, 0], aligned_edge=UP)
 
         left = VGroup(
-            self.entry(r"\sym{E0},\ \sym{F0}", r"orthonormal columns: $\sym{V}=\operatorname{range}E_0$ is the trial "
-                                              r"subspace, $\sym{U}=\operatorname{range}F_0$ the exact wanted one"),
-            self.entry(r"\sym{F1},\ \sym{Lambda1}", r"$\operatorname{range}F_1=\sym{Uperp}$ and $\sym{At}F_1=F_1\Lambda_1$: "
-                                                    r"$\sym{Lambda1}$ is $\sym{At}$ on the unwanted directions"),
+            self.entry(r"\sym{E0},\ \sym{F0}", r"orthonormal frames: $\operatorname{range}(E_0)$ is the trial "
+                                              r"subspace; $\operatorname{range}(F_0)$ is the exact wanted one"),
+            self.entry(r"\sym{F1},\ \sym{Lambda1}", r"$\operatorname{range}(F_1)$ is the exact unwanted complement and "
+                                                    r"$\sym{Ahat}F_1=F_1\Lambda_1$"),
             self.entry(r"\sym{sinTheta0}(\sym{E0},\sym{F0})",
-                       r"$\lvert(I-F_0F_0^*)E_0\rvert$, where $\lvert X\rvert=(X^*X)^{1/2}$ and $F_0F_0^*$ projects "
-                       r"onto $\sym{U}$: the part of $\sym{V}$ that lies outside $\sym{U}$"),
+                       r"$\lvert(I-F_0F_0^*)E_0\rvert$: the part of the trial frame outside "
+                       r"$\operatorname{range}(F_0)$"),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.24)
         right = VGroup(
-            self.entry(r"\sym{A0}", r"any operator on the trial coordinates; usually Rayleigh--Ritz, "
-                                    r"$A_0=E_0^*\tilde AE_0$"),
-            self.entry(r"\sym{R}", r"$\tilde AE_0-E_0A_0$, the residual: zero exactly when $\sym{V}$ is invariant "
-                                   r"and $\sym{A0}$ is $\sym{At}$ on it"),
+            self.entry(r"\sym{A0}", r"the operator on trial coordinates; in an eigensolver application often "
+                                    r"$A_0=E_0^*\widehat A E_0$ (Rayleigh--Ritz)"),
+            self.entry(r"\sym{R}", r"$\widehat A E_0-E_0A_0$, the residual: zero when the trial frame intertwines "
+                                   r"$\sym{A0}$ with $\sym{Ahat}$ exactly"),
             self.entry(r"\beta\le\alpha", r"chosen bounds around the trial spectrum: "
                                           r"$\operatorname{spec}A_0\subset[\beta,\alpha]$"),
             self.entry(r"\sym{delta}>0", r"a clearance: $\operatorname{spec}\Lambda_1\subset"
-                                         r"(-\infty,\beta-\delta]\cup[\alpha+\delta,\infty)$"),
+                                         r"(-\infty,\like{A0}{\beta}-\sym{delta}]\cup[\like{A0}{\alpha}+\sym{delta},\infty)$"),
             self.entry(r"\norm{\cdot},\ \operatorname{spec}", r"any unitarily invariant norm; the spectrum"),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.2)
         top = box.get_bottom()[1] - 0.35
         left.move_to([-6.85, top, 0], aligned_edge=UP + LEFT)
         right.move_to([0.35, top, 0], aligned_edge=UP + LEFT)
         note = para(
-            r"Shown: the interval/exterior gap. The Lean theorem also takes it with the roles of $A_0$ and "
+            r"Shown: the interval/exterior separation condition. The Lean theorem also takes it with the roles of $A_0$ and "
             r"$\Lambda_1$ exchanged, and two one-sided forms. Lean builds the angle as "
             r"$\Theta_0(E_0,F_0)=\arcsin\lvert(I-F_0F_0^*)E_0\rvert$ and proves it equal to Davis and Kahan's "
             r"cosine-defined angle, so the left side above is their $\sin\Theta_0$.",
@@ -1699,16 +1735,16 @@ class S07bReading(DeckSlide):
 
         self.say(
             "This is how I think about the theorem. The angle is not a primitive object: it is a function of two "
-            "things, E0, whose columns span the trial subspace, and F0, whose columns span the exact wanted "
-            "subspace. The left side needs F0, which is the answer we do not have. The right side needs only "
-            "A tilde, E0 and A0: it is computable."
+            "frames: E0, whose range is the trial subspace, and F0, whose range is the exact wanted subspace. "
+            "The left side needs F0, which is the answer we do not have. The right side needs only "
+            "A hat, E0 and A0: it is computable."
         )
         self.play(FadeIn(box, scale=0.97))
 
         self.say(
-            "The subspaces and the angle. Read the sine from right to left: E0 puts trial coordinates into V, "
-            "F0 F0 star projects onto U, and I minus that keeps what lies outside U. Its absolute value is the "
-            "sine operator. F1 spans the unwanted directions, and Lambda1 is A tilde on them."
+            "The frames and the angle. Read the sine from right to left: E0 embeds trial coordinates, F0 F0 star "
+            "projects onto range F0, and I minus that keeps the part outside range F0. Its absolute value is the "
+            "sine operator. F1 spans the exact unwanted complement, and Lambda1 is A hat on those coordinates."
         )
         self.play(FadeIn(left, lag_ratio=0.25))
 
@@ -1721,7 +1757,7 @@ class S07bReading(DeckSlide):
         self.play(FadeIn(right, lag_ratio=0.2))
 
         self.say(
-            "Two honest footnotes. The gap shown is the interval-exterior form; the Lean theorem accepts more. "
+            "Two honest footnotes. The separation shown is the interval-exterior form; the Lean theorem accepts more. "
             "And Lean builds the angle by an arcsine of this operator and proves it equals Davis and Kahan's "
             "cosine-defined angle, so this is their theorem, written so that every piece is visible."
         )
@@ -1734,14 +1770,11 @@ class S07bReading(DeckSlide):
 
 
 class S08Why(DeckSlide):
-    """Why the theorem holds, with one wanted and one unwanted eigendirection.
+    """Why the theorem holds in one dimension of the exact spectral split.
 
-    v splits into a part along the wanted eigenvector u and a part along an
-    unwanted eigenvector w, of length sin(theta).  The residual multiplies the
-    w-part by (lambda_w - rho), which the gap makes at least delta in size, and
-    the residual's length is at least its w-part.  rho is the Rayleigh quotient,
-    not lambda_u, so the residual also has a u-part and the first inequality is
-    strict: nothing here relies on the wanted component vanishing.
+    A trial vector ``v`` splits into the exact wanted direction ``f0`` and an
+    exact unwanted direction ``f1``.  The residual scales the unwanted component
+    by ``lambda1 - rho``; spectral separation makes that factor at least delta.
     """
 
     title = "Why it is true"
@@ -1757,8 +1790,8 @@ class S08Why(DeckSlide):
 
         u_axis = Line(plane([-0.35, 0]), plane([1.25, 0]), color=WANTED, stroke_width=3)
         w_axis = Line(plane([0, -0.15]), plane([0, 1.2]), color=UNWANTED, stroke_width=3)
-        u_lbl = tex(r"$\sym{u}$: wanted eigenvector", size=22).next_to(plane([1.25, 0]), DOWN, buff=0.12).shift(LEFT * 0.6)
-        w_lbl = tex(r"$\sym{w}$: unwanted eigenvector", size=22).next_to(plane([0, 1.2]), UP, buff=0.08)
+        u_lbl = tex(r"$\sym{f0}$: exact wanted eigenvector", size=22).next_to(plane([1.25, 0]), DOWN, buff=0.12).shift(LEFT * 0.6)
+        w_lbl = tex(r"$\sym{f1}$: exact unwanted eigenvector", size=22).next_to(plane([0, 1.2]), UP, buff=0.08)
         v_arrow = vec(plane.origin, plane(v), TRIAL, width=7)
         v_lbl = math(r"\sym{v}", size=32).next_to(plane(v), UR, buff=0.05)
         arc = angle_arc(plane, e_u, v, 0.45, SINE, width=3)
@@ -1775,7 +1808,7 @@ class S08Why(DeckSlide):
         # The residual's w-part, drawn beside the w-axis so it can be compared with sin(theta).
         off = np.array([0.045, 0.0])
         w_res = segment(plane(off), plane(off + ex.w_part * e_w), RESID, width=10)
-        w_res_lbl = math(r"(\sym{lambdaw}-\sym{rho})\sym{sintheta}", size=26).next_to(
+        w_res_lbl = math(r"(\sym{lambda1}-\sym{rho})\sym{sintheta}", size=26).next_to(
             plane(off + ex.w_part * e_w), RIGHT, buff=0.12
         )
         r_arrow = vec(plane.origin, plane(ex.r), RESID, width=6)
@@ -1794,8 +1827,8 @@ class S08Why(DeckSlide):
             Dot(X(ex.lam_w), radius=0.08, color=UNWANTED),
         )
         dot_lbls = VGroup(
-            math(r"\sym{lambdau}", size=24).next_to(X(ex.lam_u), DOWN, buff=0.12),
-            math(r"\sym{lambdaw}", size=24).next_to(X(ex.lam_w), DOWN, buff=0.12),
+            math(r"\sym{lambda0}", size=24).next_to(X(ex.lam_u), DOWN, buff=0.12),
+            math(r"\sym{lambda1}", size=24).next_to(X(ex.lam_w), DOWN, buff=0.12),
         )
         rho_mark = Triangle(color=TRIAL, fill_color=TRIAL, fill_opacity=1).scale(0.09).rotate(np.pi).move_to(X(ex.rho) + UP * 0.12)
         rho_lbl = math(r"\sym{rho}", size=24).next_to(X(ex.rho), DOWN, buff=0.12)
@@ -1806,27 +1839,27 @@ class S08Why(DeckSlide):
         # Right column, laid out once in final form; builds only add.
         x0, w, size = RIGHT_COL_X - 0.2, RIGHT_COL_W + 0.3, 25
         t1 = para(
-            r"Split $\sym{v}$ into its part along the wanted eigenvector $\sym{u}$ and its part along an "
-            r"unwanted eigenvector $\sym{w}$.",
+            r"Split the trial vector $\sym{v}$ into the exact wanted direction $\sym{f0}$ and an exact "
+            r"unwanted direction $\sym{f1}$.",
             width=w,
             size=size,
         )
         t1b = boxed(tex(r"$\sym{sintheta}$ = how much of $\sym{v}$ points the wrong way", size=size), color=SINE, pad=0.15)
         t2 = para(
-            r"The residual $\sym{r}=(\sym{At}-\sym{rho})\sym{v}$ multiplies an eigendirection with eigenvalue "
-            r"$\lambda$ by $\lambda-\sym{rho}$, whose size is the distance between them. Its $\sym{w}$-part is "
-            r"$(\sym{lambdaw}-\sym{rho})\sym{sintheta}$, and the gap says $\sym{lambdaw}$ is at "
+            r"The residual $\sym{r}=(\sym{Ahat}-\sym{rho})\sym{v}$ multiplies each exact eigendirection by "
+            r"its eigenvalue minus $\sym{rho}$. The $\sym{f1}$ component becomes "
+            r"$(\sym{lambda1}-\sym{rho})\sym{sintheta}$, and the separation says $\sym{lambda1}$ is at "
             r"least $\sym{delta}$ from $\sym{rho}$.",
             width=w,
             size=size,
         )
         t3 = para(
-            r"The residual may also have a $\sym{u}$-part, so it is at least as long as its $\sym{w}$-part:",
+            r"The residual may also have a $\sym{f0}$ component, so it is at least as long as its $\sym{f1}$ component:",
             width=w,
             size=size,
         )
         chain = math(
-            r"\norm{\sym{r}}\ \ge\ |\sym{lambdaw}-\sym{rho}|\,\sym{sintheta}\ \ge\ \sym{delta}\,\sym{sintheta}",
+            r"\norm{\sym{r}}\ \ge\ |\sym{lambda1}-\sym{rho}|\,\sym{sintheta}\ \ge\ \sym{delta}\,\sym{sintheta}",
             size=32,
         )
         nums = tex(
@@ -1863,27 +1896,27 @@ class S08Why(DeckSlide):
             fit_right(m)
 
         self.say(
-            "Why should a small residual force a small angle? Take one wanted eigenvector u and one unwanted "
-            "eigenvector w. Split the trial vector v into its parts along them. The pink part, along the "
-            "unwanted direction, has length sin theta: it is how much of v points the wrong way."
+            "Why should a small residual force a small angle? In the one-dimensional exact split, call the wanted "
+            "eigenvector f0 and an unwanted one f1. Split the trial vector v into those exact directions. The pink "
+            "unwanted component has length sin theta."
         )
         self.play(Create(u_axis), Create(w_axis), FadeIn(u_lbl, w_lbl))
         self.play(GrowArrow(v_arrow), FadeIn(v_lbl, arc, th_lbl))
         self.play(Create(guides), FadeIn(cos_part), FadeIn(sin_part), FadeIn(sin_lbl), FadeIn(col[0]))
 
         self.say(
-            "Now the residual. A tilde minus rho multiplies an eigendirection by lambda minus rho; its size is "
-            "the distance between those two numbers. So the pink part becomes lambda w minus rho times sin theta, in green. And the gap says "
-            "lambda w is at least delta away from rho: the number line below."
+            "Now the residual. A hat minus rho multiplies each exact eigendirection by its eigenvalue minus rho. "
+            "So the unwanted component becomes lambda1 minus rho times sin theta. The separation certificate says "
+            "that factor has magnitude at least delta."
         )
         self.play(FadeIn(spectrum), FadeIn(col[1]))
         self.play(GrowFromEdge(gap_brace, LEFT), FadeIn(gap_lbl))
         self.play(TransformFromCopy(sin_part, w_res), FadeIn(w_res_lbl), run_time=1.5)
 
         self.say(
-            "The whole residual may also have a part along u, since rho need not be the wanted eigenvalue. "
-            "That can only make it longer. So the length of r is at least its w-part, which is at least delta "
-            "sin theta. The wrong part of v cannot hide from the residual when there is a gap. For whole "
+            "The whole residual may also have a wanted component along f0, since rho need not equal lambda0. "
+            "That can only make it longer. So the length of r is at least its f1 component, which is at least delta "
+            "sin theta. The wrong part of v cannot hide from the residual when the unwanted spectrum is separated. For whole "
             "subspaces this becomes a Sylvester equation, and getting the sharp constant for every unitarily "
             "invariant norm is the technical part of the full theorem."
         )
@@ -1899,7 +1932,7 @@ class S08Components(DeckSlide):
     """
 
     title = "The same mechanism across the whole spectrum"
-    kicker = r"Each bar is one eigendirection of $\sym{At}$: first $v$'s components, then the residual's"
+    kicker = r"Each bar is one eigendirection of $\sym{Ahat}$: first $v$'s components, then the residual's"
     depth = "*"
 
     def body(self) -> None:
@@ -1956,10 +1989,10 @@ class S08Components(DeckSlide):
         res_lbl = tex(r"bars: $\like{R}{|\lambda_j-\rho|\,|c_j|}$", size=26).move_to(bar_lbl, aligned_edge=LEFT)
         rx = -0.45
 
-        v_eq = math(r"v=\sum_j c_j f_j,\qquad \sym{At} f_j=\lambda_j f_j", size=30)
+        v_eq = math(r"v=\sum_j c_j f_j,\qquad \sym{Ahat} f_j=\lambda_j f_j", size=30)
         sin_eq = math(r"\like{theta}{\sin^2\theta}=\sum_{\lambda_j\notin\text{window}}\like{theta}{c_j^2}", size=30)
-        u_note = tex(r"$\sym{U}$ = span of the $f_j$ with $\lambda_j$ in the window", size=24, color=MUTED)
-        r_eq = math(r"\sym{r}=\sym{At}v-\rho v=\sum_j(\lambda_j-\rho)\,c_j f_j", size=30)
+        u_note = tex(r"$\operatorname{range}(\sym{F0})$ = span of the exact $f_j$ in the wanted window", size=24, color=MUTED)
+        r_eq = math(r"\sym{r}=\sym{Ahat}v-\rho v=\sum_j(\lambda_j-\rho)\,c_j f_j", size=30)
         outside = tex(r"outside the window: $|\lambda_j-\rho|\ge\sym{delta}$", size=26)
         chain = math(
             r"\begin{aligned}\norm{\sym{r}}^2&\ge\sum_{\lambda_j\notin\text{window}}(\lambda_j-\rho)^2c_j^2\\"
@@ -1967,7 +2000,7 @@ class S08Components(DeckSlide):
             size=30,
         )
         nums = math(
-            rf"\cx{{gap}}{{\delta}}\cx{{sine}}{{\sin\theta}}={ex.theorem_lhs:.3f}\ \le\ {ex.unwanted_residual_norm:.3f}"
+            rf"\sym{{delta}}\sym{{sintheta}}={ex.theorem_lhs:.3f}\ \le\ {ex.unwanted_residual_norm:.3f}"
             rf"\ \le\ \norm{{\cx{{resid}}{{r}}}}={ex.residual_norm:.3f}",
             size=28,
         )
@@ -1978,7 +2011,7 @@ class S08Components(DeckSlide):
         ).move_to(tail)
 
         self.say(
-            "The same argument with many eigendirections. Expand v in eigenvectors f_j of A tilde; each bar is "
+            "The same argument with many eigendirections. Expand v in eigenvectors f_j of A hat; each bar is "
             "|c_j|, placed at its eigenvalue. The window around rho contains the wanted eigenvalues, blue marks; "
             "the cyan marks outside it are the Lambda1 eigendirections. The pink bars are the components of v "
             "on those unwanted directions; their combined Euclidean length is sin theta."
@@ -1988,7 +2021,7 @@ class S08Components(DeckSlide):
         self.play(FadeIn(v_eq, sin_eq, u_note))
 
         self.say(
-            "Now apply A tilde minus rho. Each component is multiplied by lambda_j - rho: the V-shaped "
+            "Now apply A hat minus rho. Each component is multiplied by lambda_j - rho: the V-shaped "
             "curve. Outside the window it is at least delta."
         )
         self.play(Create(weight), Create(delta_line), FadeIn(w_lbl, d_lbl), FadeIn(r_eq), FadeIn(outside))
@@ -2028,13 +2061,13 @@ class S09Sylvester(DeckSlide):
         ex.verify()
 
         self.say(
-            "Project the residual onto the unwanted eigenvectors F1. Because A tilde F1 = F1 Lambda1, "
+            "Project the residual onto the unwanted eigenvectors F1. Because A hat F1 = F1 Lambda1, "
             "F1* R is a Sylvester expression in X = F1* E0, and the singular values of X are the sines."
         )
         lines = VGroup(
-            math(r"\sym{At}\sym{F1}=\sym{F1}\sym{Lambda1}\ \Longrightarrow\ \sym{F1}^{*}\sym{At}=\sym{Lambda1}\sym{F1}^{*}", size=32),
+            math(r"\sym{Ahat}\sym{F1}=\sym{F1}\sym{Lambda1}\ \Longrightarrow\ \sym{F1}^{*}\sym{Ahat}=\sym{Lambda1}\sym{F1}^{*}", size=32),
             math(
-                r"\sym{F1}^{*}\sym{R}=\sym{F1}^{*}\sym{At}\sym{E0}-\sym{F1}^{*}\sym{E0}\sym{A0}"
+                r"\sym{F1}^{*}\sym{R}=\sym{F1}^{*}\sym{Ahat}\sym{E0}-\sym{F1}^{*}\sym{E0}\sym{A0}"
                 r"=\sym{Lambda1}\sym{X}-\sym{X}\sym{A0},"
                 r"\qquad \sym{X}=\sym{F1}^{*}\sym{E0}",
                 size=32,
@@ -2051,7 +2084,7 @@ class S09Sylvester(DeckSlide):
             "columns are trial directions with eigenvalues mu_j. Entry x_ij is how much trial direction j "
             "overlaps unwanted eigendirection i. Multiplying by Lambda1 on the left scales row i by lambda_i; "
             "multiplying by A0 on the right scales column j by mu_j. So the Sylvester map multiplies each "
-            "entry by lambda_i - mu_j, and the gap makes every such factor at least delta in size. Entry by "
+            "entry by lambda_i - mu_j, and the separation hypothesis makes every such factor at least delta in size. Entry by "
             "entry, that already proves the Frobenius-norm case."
         )
         grid_left = self._grid(ex.X, ex, label=r"\sym{X}", color=SINE).move_to([-5.35, -1.45, 0])
@@ -2076,7 +2109,7 @@ class S09Sylvester(DeckSlide):
         )
         entry_eq = math(r"(\sym{Lambda1}X-X\sym{A0})_{ij}=(\lambda_i-\mu_j)\,x_{ij}", size=26)
         sep = math(
-            r"\text{gap}\ \Longrightarrow\ \norm{\sym{Lambda1}X-X\sym{A0}}\ \ge\ \sym{delta}\,\norm{X}",
+            r"\text{separation}\ \Longrightarrow\ \norm{\sym{Lambda1}X-X\sym{A0}}\ \ge\ \sym{delta}\,\norm{X}",
             size=30,
         )
         sep_note = para(
@@ -2103,7 +2136,7 @@ class S09Sylvester(DeckSlide):
 
         self.say(
             "For every unitarily invariant norm, entrywise is not enough; that is exactly "
-            "where the interval shape of the gap is used, through Davis and Kahan's "
+            "where the interval shape of the separation hypothesis is used, through Davis and Kahan's "
             "Sylvester-equation theorems in Section 5. Conclusion: delta ||sin Theta0|| <= ||R||."
         )
         self.play(FadeIn(right[1], shift=UP * 0.1))
@@ -2159,7 +2192,7 @@ class S10Sharp(DeckSlide):
             return SineThetaModel(th.get_value(), delta=delta)
 
         U = Line(plane([-0.15, 0]), plane([1.3, 0]), color=WANTED, stroke_width=4)
-        U_lbl = math(r"U=\operatorname{span}(e_1)", size=28, color=concept_color("U")).next_to(plane([1.3, 0]), DOWN, buff=0.15).shift(LEFT * 0.6)
+        U_lbl = math(r"\operatorname{range}(\sym{F0})=\operatorname{span}(e_1)", size=26).next_to(plane([1.3, 0]), DOWN, buff=0.15).shift(LEFT * 0.6)
         v = always_redraw(lambda: vec(plane.origin, plane(model().trial_vector), TRIAL, width=7))
         v_lbl = always_redraw(lambda: math(r"v_\theta", size=30, color=concept_color("v")).next_to(plane(model().trial_vector), UL, buff=0.08))
         leg = always_redraw(lambda: segment(plane(model().desired_projection), plane(model().trial_vector), SINE, width=8))
@@ -2179,12 +2212,16 @@ class S10Sharp(DeckSlide):
 
         self.say(
             "Take A = diag(rho, rho + delta) and the trial vector v_theta at angle theta "
-            "from the eigenvector e1, with A0 = rho. The gap is exactly delta."
+            "from the eigenvector e1, with A0 = rho. The spectral separation is exactly delta."
         )
         eqs = VGroup(
-            math(r"\sym{At}=\begin{pmatrix}\rho&0\\0&\rho+\delta\end{pmatrix},\quad A_0=[\rho],\quad v_\theta=(\cos\theta,\sin\theta)", size=30),
             math(
-                r"\sym{r}=\sym{At}v_\theta-\rho v_\theta=(0,\ \sym{delta}\sym{sintheta})"
+                r"\sym{Ahat}=\begin{pmatrix}\sym{rho}&0\\0&\sym{rho}+\sym{delta}\end{pmatrix},\quad "
+                r"\sym{A0}=[\sym{rho}],\quad \like{v}{v_\theta}=(\cos\sym{theta},\sin\sym{theta})",
+                size=30,
+            ),
+            math(
+                r"\sym{r}=\sym{Ahat}\like{v}{v_\theta}-\sym{rho}\like{v}{v_\theta}=(0,\ \sym{delta}\sym{sintheta})"
                 r"\ \Longrightarrow\ \norm{\sym{r}}=\sym{delta}\,\sym{sintheta}",
                 size=30,
             ),
@@ -2250,7 +2287,7 @@ class S10Sharp(DeckSlide):
 
 class S11Payoff(DeckSlide):
     title = r"Back to perturbations: where $\sym{H}$ enters"
-    kicker = r"\cx{perturb}{PERTURBATION SPECIALIZATION} --- set $\sym{At}=\sym{A}+\sym{H}$; old eigenspace of $\sym{A}$ is the trial"
+    kicker = r"\cx{perturb}{PERTURBATION SPECIALIZATION} --- $\sym{Ahat}=\sym{A}+\sym{H}$ and $\sym{A}\sym{E0}=\sym{E0}\sym{A0}$"
 
     def body(self) -> None:
         eps = story.PERTURBATION_EPS
@@ -2260,33 +2297,44 @@ class S11Payoff(DeckSlide):
             return story.PerturbedPair(gap=g.get_value(), eps=eps)
 
         self.say(
-            "Now specialize the general theorem back to the perturbation problem. Take E0 to be the old "
-            "eigenvectors of A and A0 their eigenvalues. Then the residual for A + H is exactly H E0. "
-            "Because E0 is an isometry, its norm cannot exceed the norm of H. This is the explicit bridge "
-            "from residual over gap back to perturbation size over gap."
+            "Now add the extra structure of the perturbation problem. A is the original matrix and A hat equals "
+            "A plus H. Choose E0 to be the exact wanted eigenframe of the original A, with A E0 = E0 A0. "
+            "F0 is the exact wanted frame of A hat; that is the frame whose range we want to compare with range E0."
         )
-        derivation = VGroup(
+        setup = math(
+            r"\sym{Ahat}=\sym{A}+\sym{H},\qquad "
+            r"\sym{A}\sym{E0}=\sym{E0}\sym{A0}",
+            size=31,
+        )
+        residual = math(
+            r"\sym{R}=\sym{Ahat}\sym{E0}-\sym{E0}\sym{A0}"
+            r"=(\sym{A}+\sym{H})\sym{E0}-\sym{E0}\sym{A0}"
+            r"=\sym{H}\sym{E0}",
+            size=30,
+        )
+        consequence = boxed(
             math(
-                r"\sym{R}=(\sym{A}+\sym{H})\sym{E0}-\sym{E0}\sym{A0}=\sym{H}\sym{E0}"
-                r"\ \Longrightarrow\ \norm{\sym{R}}\le\norm{\sym{H}}",
-                size=32,
+                r"\norm{\sym{sinTheta0}(\sym{E0},\sym{F0})}"
+                r"\le\frac{\norm{\sym{R}}}{\sym{delta}}"
+                r"\le\frac{\norm{\sym{H}}}{\sym{delta}}",
+                size=35,
             ),
-            boxed(
-                math(r"\norm{\sym{sinTheta0}}\ \le\ \frac{\norm{\sym{H}}}{\sym{delta}}", size=40),
-                color=SINE,
-            ),
-        ).arrange(RIGHT, buff=0.6)
+            color=SINE,
+        )
+        derivation = VGroup(setup, residual, consequence).arrange(RIGHT, buff=0.42)
         derivation.move_to([0, self.content_top - 0.2, 0], aligned_edge=UP)
+        if derivation.width > 13.0:
+            derivation.scale(13.0 / derivation.width)
+
         note = para(
-            r"\textbf{This is where $\sym{H}$ enters.} Because $\sym{E0}$ has orthonormal columns, "
-            r"multiplying by $\sym{E0}$ cannot increase the corresponding unitarily invariant norm: "
-            r"$\norm{\sym{R}}=\norm{\sym{H}\sym{E0}}\le\norm{\sym{H}}$. Thus the general residual bound "
-            r"immediately gives a perturbation bound. Here $\sym{delta}$ separates the old wanted eigenvalues "
-            r"from the new unwanted eigenvalues of $\sym{A}+\sym{H}$.",
+            r"\textbf{Why $\norm{\sym{R}}\le\norm{\sym{H}}$:} $\sym{E0}$ has orthonormal columns, so "
+            r"right-multiplying $\sym{H}$ by $\sym{E0}$ cannot increase a unitarily invariant norm. "
+            r"Here $\sym{delta}$ separates $\operatorname{spec}(\sym{A0})$ --- the original wanted values --- "
+            r"from $\operatorname{spec}(\sym{Lambda1})$, the exact unwanted values of $\sym{Ahat}$.",
             width=12.7,
-            size=22,
+            size=21,
             color=MUTED,
-        ).next_to(derivation, DOWN, buff=0.18)
+        ).next_to(derivation, DOWN, buff=0.16)
         self.play(FadeIn(derivation), FadeIn(note))
 
         plane = Plane([-4.7, -2.02, 0], 0.62, rotate=ELLIPSE_BASE)
@@ -2304,7 +2352,9 @@ class S11Payoff(DeckSlide):
             tips=False,
             axis_config={"color": MUTED, "stroke_width": 2},
         ).move_to([3.95, -1.8, 0])
-        x_lbl = math(r"\text{gap of }\sym{A}:\ \sym{g}", size=22, color=MUTED).next_to(axes.c2p(0.75, 0), DOWN, buff=0.1)
+        x_lbl = math(r"\text{original eigengap }\sym{g}\text{ of }\sym{A}", size=21, color=MUTED).next_to(
+            axes.c2p(0.72, 0), DOWN, buff=0.1
+        )
         y_ticks = VGroup(*[math(f"{v:g}", size=20, color=MUTED).next_to(axes.c2p(0, v), LEFT, buff=0.08) for v in (0.5, 1.0)])
         x_ticks = VGroup(*[math(f"{v:g}", size=20, color=MUTED).next_to(axes.c2p(v, 0), DOWN, buff=0.08) for v in (0.5, 1.0)])
         actual = axes.plot(lambda x: story.PerturbedPair(gap=x, eps=eps).sin_theta, x_range=[0.0, 1.0], color=SINE, stroke_width=4)
@@ -2312,22 +2362,26 @@ class S11Payoff(DeckSlide):
             axes.plot(lambda x: story.PerturbedPair(gap=x, eps=eps).bound, x_range=[0.0, 1.0], color=RESID, stroke_width=3),
             num_dashes=45,
         )
-        a_lbl = math(r"\sym{sintheta}", size=26).next_to(axes.c2p(0.9, story.PerturbedPair(0.9, eps).sin_theta), DOWN, buff=0.12)
-        b_lbl = math(r"\norm{\sym{R}}/\sym{delta}", size=26).next_to(axes.c2p(0.25, story.PerturbedPair(0.25, eps).bound), UR, buff=0.08)
+        a_lbl = math(r"\norm{\sym{sinTheta0}(\sym{E0},\sym{F0})}", size=23).next_to(
+            axes.c2p(0.9, story.PerturbedPair(0.9, eps).sin_theta), DOWN, buff=0.12
+        )
+        b_lbl = math(r"\norm{\sym{R}}/\sym{delta}", size=26).next_to(
+            axes.c2p(0.25, story.PerturbedPair(0.25, eps).bound), UR, buff=0.08
+        )
         d_actual = always_redraw(lambda: Dot(axes.c2p(g.get_value(), pair().sin_theta), color=SINE, radius=0.07))
         d_bound = always_redraw(lambda: Dot(axes.c2p(g.get_value(), pair().bound), color=RESID, radius=0.07))
 
         self.say(
-            "Back to the 2x2 example with epsilon = 0.12. Pink: the true sin theta as the gap "
-            "of A shrinks. Green dashed: the bound ||R|| / delta. The bound always holds, and "
-            "for large gaps it is essentially exact."
+            "Back to the two by two example with epsilon equals 0.12. Pink is the actual angle between range E0, "
+            "the original wanted frame, and range F0, the exact wanted frame of A hat. Green dashed is the "
+            "general residual-over-separation bound. The horizontal variable g is a different quantity: the original eigengap of A."
         )
         legend = VGroup(
-            tex(r"\cx{old}{dashed: the old $\sym{A}$}", size=20),
-            tex(r"\cx{trial}{amber: $\sym{A}$'s top eigenvector, the trial}", size=20),
-            tex(r"\cx{current}{solid: $\sym{At}$, the new matrix}", size=20),
-            tex(r"\cx{wanted}{blue: top eigenvector of $\sym{A}+\sym{H}$}", size=20),
-            tex(r"\cx{sine}{arc: the turn $\sym{theta}$}", size=20),
+            tex(r"\cx{old}{dashed: original $\sym{A}$}", size=20),
+            tex(r"\cx{trial}{amber: $\operatorname{range}(\sym{E0})$ of $\sym{A}$}", size=20),
+            tex(r"\cx{current}{solid: $\sym{Ahat}=\sym{A}+\sym{H}$}", size=20),
+            tex(r"\cx{wanted}{blue: $\operatorname{range}(\sym{F0})$ of $\sym{Ahat}$}", size=20),
+            tex(r"\cx{sine}{arc: $\Theta_0(\sym{E0},\sym{F0})$}", size=20),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.1).move_to([-2.45, -0.75, 0], aligned_edge=UP + LEFT)
         self.add(old, new, old_axis, new_axis, arc)
         self.play(
@@ -2342,19 +2396,19 @@ class S11Payoff(DeckSlide):
         self.play(g.animate.set_value(story.PERTURBATION_END_GAP), run_time=5.0, rate_func=rate_functions.ease_in_out_sine)
 
         self.say(
-            "Note where delta is measured in this example: from the old wanted eigenvalue to the new "
-            "unwanted one. The perturbed eigenvalues split apart, so here the bound stays finite, "
-            "tending to 1, even as the original gap collapses. That is a property of this example, "
-            "not a general promise."
+            "Keep g and delta separate. Here g compares wanted and unwanted eigenvalues of the original A. "
+            "Delta compares spec A0, the old wanted block, with spec Lambda1, the new unwanted block of A hat. "
+            "In this example those behave differently as g collapses."
         )
         remark = para(
-            r"In this example $\sym{delta}$ is measured against the \emph{perturbed} unwanted eigenvalue, "
-            r"which splits away from the old one, so the bound stays informative even as $\sym{A}$'s own gap $\sym{g}$ "
-            r"collapses. No contradiction with the previous slides: the theorem's $\sym{delta}$ is not $\sym{g}$.",
+            r"$\sym{g}$: wanted vs. unwanted spectrum of the original $\sym{A}$.\qquad "
+            r"$\sym{delta}$: $\operatorname{spec}(\sym{A0})$ vs. exact unwanted "
+            r"$\operatorname{spec}(\sym{Lambda1})$ of $\sym{Ahat}$. "
+            r"A certified lower bound on $\sym{delta}$ is enough for the theorem.",
             width=12.6,
             size=21,
             color=MUTED,
-        ).next_to(note, DOWN, buff=0.15)
+        ).next_to(note, DOWN, buff=0.14)
         self.play(FadeIn(remark))
 
 
@@ -2393,17 +2447,17 @@ LEAN_READING = [
     (7, 7, r"every unitarily invariant norm", FG),
     (8, 8, r"possibly unbounded operators", FG),
     (10, 10, r"all self-adjoint", FG),
-    (11, 11, r"$\sym{R}=\sym{A}\sym{E0}-\sym{E0}\sym{A0}$", RESID),
-    (12, 12, r"$\sym{A}\sym{F1}=\sym{F1}\sym{Lambda1}$", UNWANTED),
-    (14, 14, r"the gap $\sym{delta}$", GAP),
+    (11, 11, r"slides: $\sym{R}=\sym{Ahat}\sym{E0}-\sym{E0}\sym{A0}$", RESID),
+    (12, 12, r"slides: $\sym{Ahat}\sym{F1}=\sym{F1}\sym{Lambda1}$", UNWANTED),
+    (14, 14, r"spectral separation $\sym{delta}$", GAP),
     (15, 15, r"where the norms are defined", MUTED),
-    (16, 17, r"$\sym{delta}\norm{\sym{sinTheta0}}\le\norm{\sym{R}}$, on $\sin\Theta_0$ itself", SINE),
+    (16, 17, r"$\sym{delta}\norm{\sym{sinTheta0}(\sym{E0},\sym{F0})}\le\norm{\sym{R}}$", SINE),
 ]
 
 
 class S12Lean(DeckSlide):
     title = "What we formalized: the full Lean theorem"
-    kicker = r"\cx{muted}{GENERAL THEOREM IN LEAN} --- Lean's $A$ is our $\sym{At}$; $\sym{H}$ is not an input"
+    kicker = r"\cx{muted}{GENERAL THEOREM IN LEAN} --- Lean's $A$ is our $\sym{Ahat}$; $\sym{H}$ is not an input"
     section = ""
 
     def body(self) -> None:
@@ -2426,8 +2480,9 @@ class S12Lean(DeckSlide):
         ).move_to(lines)
         caption = para(
             r"As \texttt{\#check} prints it, with instance-binder names dropped and lines re-broken; "
-            r"$\sin\Theta_0$ is \texttt{sourceDirectedSinThetaOperator E$_0$ F$_0$}. Lean's \texttt{A} is the matrix "
-            r"we have, our $\sym{At}$ (Davis and Kahan's $\sym{A}+\sym{H}$).",
+            r"$\sin\Theta_0$ is \texttt{sourceDirectedSinThetaOperator E$_0$ F$_0$}. "
+            r"\textbf{Notation translation:} Lean's \texttt{A} is this talk's $\sym{Ahat}$. "
+            r"The talk's original $\sym{A}$ and perturbation $\sym{H}$ exist only in the perturbation specialization.",
             width=13.3,
             size=19,
             color=MUTED,
@@ -2442,7 +2497,8 @@ class S12Lean(DeckSlide):
         self.say(
             "Reading it: real or complex scalars; separable Hilbert spaces, finite- or infinite-dimensional; every "
             "unitarily invariant norm; possibly unbounded self-adjoint operators; the paper's residual, "
-            "spectral decomposition and gap; and the conclusion delta times norm of sin Theta0 at most norm of R."
+            "spectral decomposition and separation; and the conclusion delta times the norm of sin Theta0 of E0 and F0 at most the norm of R. "
+            "The highlighted labels translate Lean's ambient A into the talk's A hat without changing the Lean source text."
         )
         highlights, labels = VGroup(), VGroup()
         for first, last, label, color in LEAN_READING:
@@ -2487,26 +2543,26 @@ class S13Family(DeckSlide):
     def body(self) -> None:
         self.say(
             "The four theorems side by side. Each has a directed, residual form; three also have an "
-            "ambient form in H. What changes from row to row is which spectra the gap separates, and "
-            "whether the gap may be on both sides."
+            "ambient form in H. What changes from row to row is which spectra the separation condition keeps apart, and "
+            "whether that separation may be on both sides."
         )
         rows = [
             (r"\textbf{theorem}", r"\textbf{conclusions}", r"\textbf{hypotheses beyond self-adjointness}"),
-            (r"$\sin\Theta$", r"$\delta\norm{\sin\Theta_0}\le\norm{R}$", r"interval/exterior gap, $\sym{A0}$ vs $\sym{Lambda1}$"),
+            (r"$\like{theta}{\sin\Theta}$", r"$\sym{delta}\norm{\like{theta}{\sin\Theta_0}}\le\norm{\sym{R}}$", r"interval/exterior separation, $\sym{A0}$ vs $\sym{Lambda1}$"),
             (
                 r"$\tan\Theta$",
-                r"$\delta\norm{\tan\Theta_0}\le\norm{R}$, \ $\delta\norm{\tan\Theta}\le\norm{\sym{H}}$",
-                r"one-sided gap, $\sym{A0}$ vs $\sym{Lambda1}$; $\sym{A0}=E_0^{*}(\sym{A}+\sym{H})E_0$",
+                r"$\sym{delta}\norm{\like{theta}{\tan\Theta_0}}\le\norm{\sym{R}}$, \ $\sym{delta}\norm{\like{theta}{\tan\Theta}}\le\norm{\sym{H}}$",
+                r"one-sided separation, $\sym{A0}$ vs $\sym{Lambda1}$; $\sym{A0}=E_0^{*}\sym{Ahat}E_0$",
             ),
             (
                 r"$\sin2\Theta$",
-                r"$\delta\norm{\sin2\Theta_0}\le2\norm{R}$, \ $\delta\norm{\sin2\Theta}\le2\norm{\sym{H}}$",
-                r"interval/exterior gap, $\sym{Lambda0}$ vs $\sym{Lambda1}$",
+                r"$\sym{delta}\norm{\like{theta}{\sin2\Theta_0}}\le2\norm{\sym{R}}$, \ $\sym{delta}\norm{\like{theta}{\sin2\Theta}}\le2\norm{\sym{H}}$",
+                r"interval/exterior separation, $\sym{Lambda0}$ vs $\sym{Lambda1}$",
             ),
             (
                 r"$\tan2\Theta$",
-                r"$\delta\norm{\tan2\Theta_0}\le2\norm{R}$, \ $\delta\norm{\tan2\Theta}\le2\norm{\sym{H}}$",
-                r"one-sided gap, $\sym{A0}$ vs $A_1$; $\sym{H0}=\sym{H1}=0$",
+                r"$\sym{delta}\norm{\like{theta}{\tan2\Theta_0}}\le2\norm{\sym{R}}$, \ $\sym{delta}\norm{\like{theta}{\tan2\Theta}}\le2\norm{\sym{H}}$",
+                r"one-sided separation, $\sym{A0}$ vs $A_1$; $\sym{H0}=\sym{H1}=0$",
             ),
         ]
         cells = [[tex(c, size=26, color=FG if i else MUTED) for c in row] for i, row in enumerate(rows)]
@@ -2573,9 +2629,9 @@ class S14Summary(DeckSlide):
         items = [
             (
                 r"\cx{muted}{1}",
-                r"\textbf{The $\sin\Theta$ theorem.} How far a subspace is from the true eigenspace is bounded "
-                r"by something you can compute: $\ \norm{\sym{sinTheta0}}\le\norm{\sym{R}}/\sym{delta}$, "
-                r"residual over gap.",
+                r"\textbf{The $\sin\Theta$ theorem.} A trial frame $\sym{E0}$ with small residual is close to the "
+                r"exact frame $\sym{F0}$ when the unwanted spectrum is certified far enough away: "
+                r"$\norm{\sym{sinTheta0}(\sym{E0},\sym{F0})}\le\norm{\sym{R}}/\sym{delta}$, residual over separation.",
             ),
             (
                 r"\cx{muted}{2}",

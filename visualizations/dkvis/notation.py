@@ -16,9 +16,9 @@ what a role looks like, change :mod:`dkvis.palette`.  ``\\cx{role}{...}`` remain
 for legend prose that names a role directly ("blue: ...").
 
 The operators take the quieter second tier of :mod:`dkvis.palette`: the old
-``A`` and its blocks are tan (``A0``, the trial block, stays amber), ``Ã`` is
+``A`` and its blocks are tan (``A0``, the trial block, stays amber), ``A-hat`` is
 steel and ``H`` with its blocks and its entry ``b`` is vermilion.  The
-projectors, ``E1`` and ``V-perp`` belong to no role and are neutral.
+projectors and ``E1`` are neutral.  ``U``/``V`` keys remain only for local statements such as Proposition 4.4; the core sine-theta slides name the frames ``E0``, ``F0`` and ``F1`` directly.
 """
 
 from __future__ import annotations
@@ -49,7 +49,7 @@ SYMBOLS: dict[str, tuple[str, str]] = {
     "A": (r"A", "old"),
     "A1": (r"A_1", "old"),
     "a1": (r"a_1", "old"),
-    "At": (r"\tilde A", "current"),
+    "Ahat": (r"\widehat A", "current"),
     "H": (r"H", "perturb"),
     "H0": (r"H_0", "perturb"),
     "H1": (r"H_1", "perturb"),
@@ -60,21 +60,25 @@ SYMBOLS: dict[str, tuple[str, str]] = {
     "Q": (r"Q", "fg"),
     "E1": (r"E_1", "fg"),
     "Vperp": (r"V^{\perp}", "fg"),
-    # What we want: the exact invariant subspace and its spectrum.
+    # Local named-subspace notation (not used in the core sine-theta exposition).
     "U": (r"U", "wanted"),
+    # Exact wanted frame / spectrum.
+
     "F0": (r"F_0", "wanted"),
     "Lambda0": (r"\Lambda_0", "wanted"),
     "u": (r"u", "wanted"),
+    "f0": (r"f_0", "wanted"),
     "lambda0": (r"\lambda_0", "wanted"),
     "lambdau": (r"\lambda_u", "wanted"),
-    # The exact part we do not want.
+    # Exact unwanted frame / spectrum; Uperp remains for local named-subspace slides.
     "Uperp": (r"U^{\perp}", "unwanted"),
     "F1": (r"F_1", "unwanted"),
     "Lambda1": (r"\Lambda_1", "unwanted"),
     "w": (r"w", "unwanted"),
+    "f1": (r"f_1", "unwanted"),
     "lambda1": (r"\lambda_1", "unwanted"),
     "lambdaw": (r"\lambda_w", "unwanted"),
-    # What we computed.
+    # Local trial-subspace name V; the core exposition names E0 directly.
     "V": (r"V", "trial"),
     "v": (r"v", "trial"),
     "E0": (r"E_0", "trial"),

@@ -80,50 +80,44 @@ class GlossarySlide(DeckSlide):
 
 
 class G01Matrices(GlossarySlide):
-    title = r"Notation (1/3): colors, matrices, subspaces"
-    kicker = r"Each symbol in its role color; gray only de-emphasizes and never carries a role"
+    title = r"Notation (1/3): operators and frames"
+    kicker = r"In the $\sin\Theta$ story, name the frames we can operate on; take their ranges only when needed"
     NOTES = (
-        "The glossary. Colors carry roles: blue is what we want, amber what we computed, cyan the exact part "
-        "we do not want, pink how much of the computation points into it, green the residual that exposes it, "
-        "violet the separation that keeps it from hiding. A quieter second row says where an operator comes from: "
-        "tan for the old A, whose eigenvectors are the trial; steel for A tilde, whose eigenvectors are the "
-        "wanted and unwanted directions; vermilion for the perturbation H. Red marks only a refuted claim, and "
-        "gray only de-emphasizes. "
-        "Then the matrices and the subspaces, with one meaning each."
+        "The core notation now names frames rather than assigning extra letters to their ranges. Amber E0 and A0 "
+        "are the trial pair. Blue F0 is the exact wanted frame; cyan F1 and Lambda1 are the exact unwanted pair. "
+        "Steel A hat is the operator under study. Only in the perturbation application do we additionally introduce "
+        "the original tan A and vermilion H with A hat equal to A plus H. Lean calls the ambient operator A; that "
+        "source name corresponds to A hat on these slides."
     )
-    LEFT_HEAD = "Matrices and operators"
+    LEFT_HEAD = "Operators"
     ROW_BUFF = 0.13
     LEFT = [
-        (r"\sym{A}", r"the old (unperturbed) self-adjoint matrix or operator"),
-        (r"\sym{H}", r"the perturbation, self-adjoint; $\norm{\sym{H}}_2$ is its size"),
-        (r"\sym{At}=A+H", r"the matrix we have. Lean's \texttt{A}; Davis and Kahan's $\sym{A}+\sym{H}$"),
-        (r"\sym{H0},\ \sym{B},\ \sym{H1}", r"blocks of $\sym{H}$ in $\sym{A}$'s eigenbasis: within the wanted part, the coupling "
-                           r"between wanted and unwanted, within the unwanted part"),
-        (r"\sym{A0}", r"the trial matrix on $\sym{V}$: $E_0^*\sym{At}E_0$ (Rayleigh--Ritz), or $\sym{A}$'s wanted block "
-                      r"$E_0^*\sym{A}E_0$ in the perturbation reading"),
-        (r"\sym{A1}", r"the complementary block of the old $\sym{A}$, $E_1^*\sym{A}E_1$ (Part 3)"),
-        (r"\sym{Lambda0}", r"$\sym{At}$ on $\sym{U}$: $\sym{At}F_0=F_0\Lambda_0$"),
-        (r"\sym{Lambda1}", r"$\sym{At}$ on $\sym{Uperp}$: $\sym{At}F_1=F_1\Lambda_1$"),
-        (r"\sym{P},\ \sym{Q}", r"projectors onto $\sym{V}$ and $\sym{U}$: $P=E_0E_0^*$, $Q=F_0F_0^*$; "
-                               r"they belong to no role, so neutral"),
+        (r"\sym{Ahat}", r"operator under study in the general theorem; Lean/source name: \texttt{A}"),
+        (r"\sym{A0}", r"operator on trial coordinates paired with $\sym{E0}$; residual tests whether they intertwine"),
+        (r"\sym{Lambda1}", r"exact unwanted block: $\sym{Ahat}\sym{F1}=\sym{F1}\sym{Lambda1}$"),
+        (r"\sym{Lambda0}", r"exact wanted block when needed: $\sym{Ahat}\sym{F0}=\sym{F0}\sym{Lambda0}$"),
+        (r"\sym{A}", r"original operator in the perturbation application only"),
+        (r"\sym{H}", r"perturbation, with $\sym{Ahat}=\sym{A}+\sym{H}$"),
+        (r"\sym{H0},\ \sym{B},\ \sym{H1}", r"blocks of $\sym{H}$ in the original $\sym{A}$ eigenbasis (Part 3)"),
+        (r"\sym{A1}", r"exact complementary block of original $\sym{A}$ when Part 3 needs it"),
     ]
-    RIGHT_HEAD = "Subspaces, bases, vectors"
+    RIGHT_HEAD = "Frames and vectors"
     RIGHT = [
-        (r"\sym{U}", r"the wanted subspace: spanned by $\sym{At}$'s wanted eigenvectors (exact, usually unknown)"),
-        (r"\sym{Uperp}", r"the unwanted directions: spanned by the rest of $\sym{At}$'s eigenvectors"),
-        (r"\sym{F0},\ \sym{F1}", r"orthonormal bases of $\sym{U}$ and $\sym{Uperp}$"),
-        (r"\sym{u},\ \sym{w}", r"a wanted and an unwanted eigenvector of $\sym{At}$"),
-        (r"\sym{V},\ \sym{v}", r"the trial subspace (e.g.\ from an eigensolver); a single trial vector"),
-        (r"\sym{E0}", r"an orthonormal basis of $\sym{V}$, as columns"),
-        (r"\sym{Vperp},\ \sym{E1}", r"the complement of $\sym{V}$ and a basis of it; neutral, since neither is "
-                                    r"computed or wanted"),
+        (r"\sym{E0}", r"orthonormal trial frame; its range is the trial subspace"),
+        (r"\sym{F0}", r"orthonormal exact wanted frame of $\sym{Ahat}$; its range is the target"),
+        (r"\sym{F1}", r"orthonormal exact unwanted frame of $\sym{Ahat}$; its range is the unwanted complement"),
+        (r"\sym{v}", r"a unit trial vector; the one-column version of $\sym{E0}$"),
+        (r"\sym{f0},\ \sym{f1}", r"exact wanted / unwanted eigenvectors in the one-vector proof picture"),
+        (r"\sym{P}=E_0E_0^*", r"projector onto $\operatorname{range}(\sym{E0})$; neutral"),
+        (r"\sym{Q}=F_0F_0^*", r"projector onto $\operatorname{range}(\sym{F0})$; neutral"),
+        (r"\sym{E1}", r"a complementary frame used in some Part 3 perturbation decompositions"),
     ]
 
     def body(self) -> None:
         tiers = [
-            [(WANTED, "wanted"), (TRIAL, "trial"), (UNWANTED, "unwanted"), (SINE, "angle, error"),
-             (RESID, "residual"), (GAP, "gap"), (FG, "neutral")],
-            [(OLD, r"old $\sym{A}$"), (CURRENT, r"current $\sym{At}$"), (PERTURB, r"perturbation $\sym{H}$"),
+            [(WANTED, "exact wanted"), (TRIAL, "trial"), (UNWANTED, "exact unwanted"), (SINE, "angle, error"),
+             (RESID, "residual"), (GAP, "separation"), (FG, "neutral")],
+            [(OLD, r"original $\sym{A}$"), (CURRENT, r"operator $\sym{Ahat}$"), (PERTURB, r"perturbation $\sym{H}$"),
              (REFUTED, "refuted claim")],
         ]
         rows = VGroup()
@@ -141,39 +135,35 @@ class G01Matrices(GlossarySlide):
 
 
 class G02Spectra(GlossarySlide):
-    title = r"Notation (2/3): spectra, gaps, angles, residuals"
-    kicker = r"What is separated, what is measured, and what is computed"
+    title = r"Notation (2/3): spectra, separation, angles, residuals"
+    kicker = r"What the theorem can form, what it targets, and what must be certified"
     NOTES = (
-        "Spectra and gaps on the left: eigenvalues, the trial values, the Rayleigh quotient, the interval and "
-        "the gap. Angles and residuals on the right: the principal angles, the directed and ambient angle "
-        "operators, and the two residuals."
+        "On the left are the two spectra the sine-theta theorem separates. A0 belongs to the trial coordinates; "
+        "Lambda1 is the exact unwanted block of A hat. Delta is a certified lower separation between those spectra, "
+        "not the original perturbation eigengap g. On the right are the target angle and the residual that can be "
+        "formed without knowing F0."
     )
-    LEFT_HEAD = "Spectra and gaps"
+    LEFT_HEAD = "Spectra and separation"
     LEFT = [
-        (r"\lambda,\ \lambda_j", r"eigenvalues of $\sym{At}$; in the $2\times2$ examples $\sym{lambda0}$ "
-                                 r"(wanted) and $\sym{lambda1}$ (unwanted)"),
-        (r"f_j", r"eigenvectors of $\sym{At}$, $\sym{At}f_j=\lambda_jf_j$; drawn blue when wanted, cyan when not"),
-        (r"\sym{a0},\ \sym{a1}", r"the two eigenvalues of the old $\sym{A}$ in the $2\times2$ examples; $a_0$, the top "
-                                 r"one, is the trial value"),
-        (r"\like{mu}{\mu_j}", r"trial values: the eigenvalues of $\sym{A0}$ (Ritz values)"),
-        (r"\sym{rho}", r"the Rayleigh quotient $v^*\sym{At}v$ of a unit trial vector"),
-        (r"[\beta,\alpha]", r"an interval containing the spectrum of $\sym{A0}$ (or of the separated block)"),
-        (r"\sym{delta}", r"the gap: how far the separated spectra are apart; which spectra depends on the theorem"),
-        (r"\sym{g}", r"the gap between the two eigenvalues of $\sym{A}$ in the $2\times2$ examples"),
+        (r"\operatorname{spec}(\sym{A0})", r"trial-coordinate spectrum; Ritz values for Rayleigh--Ritz $A_0=E_0^*\sym{Ahat}E_0$"),
+        (r"\operatorname{spec}(\sym{Lambda1})", r"exact unwanted spectrum of $\sym{Ahat}$"),
+        (r"[\beta,\alpha]", r"interval containing $\operatorname{spec}(\sym{A0})$ in the interval/exterior form"),
+        (r"\sym{delta}", r"certified separation: unwanted exact spectrum stays outside the expanded trial interval"),
+        (r"\sym{g}", r"original wanted/unwanted eigengap of $\sym{A}$ in the perturbation examples; not $\sym{delta}$"),
+        (r"\sym{rho}", r"one-vector Rayleigh quotient $\sym{v}^{*}\sym{Ahat}\sym{v}$; the $1\times1$ analogue of $\sym{A0}$"),
+        (r"\sym{a0},\ \sym{a1}", r"the two original eigenvalues of $\sym{A}$ in the $2\times2$ examples"),
+        (r"\lambda_j", r"exact eigenvalues of $\sym{Ahat}$ in finite-dimensional explanatory pictures"),
     ]
     RIGHT_HEAD = "Angles and residuals"
     RIGHT = [
-        (r"\sym{theta},\ \like{theta}{\theta_j}", r"the angle(s) between $\sym{V}$ and $\sym{U}$: the principal "
-                                                  r"angles, each in $[0^\circ,90^\circ]$"),
-        (r"\sym{Theta0}", r"the directed angle operator, a function of the two bases: "
-                          r"$\Theta_0(E_0,F_0)=\arcsin\lvert(I-F_0F_0^*)E_0\rvert$, the angles from $\sym{V}$ to $\sym{U}$"),
-        (r"\sym{Theta}", r"the ambient angle operator of the whole rotation; each nonzero angle appears twice"),
-        (r"\sym{sinTheta0}", r"its sine: $\sin\Theta_0(E_0,F_0)=\lvert(I-F_0F_0^*)E_0\rvert$, with "
-                             r"$\lvert X\rvert=(X^*X)^{1/2}$; and $\norm{\sin\Theta}=\norm{P-Q}$"),
-        (r"\sym{S}", r"$(I-F_0F_0^*)E_0$, the rectangular block with the norms of $\sin\Theta_0$"),
-        (r"\sym{r}", r"the residual of one vector: $\sym{At}v-\rho v$"),
-        (r"\sym{R}", r"the residual of a subspace: $\sym{At}E_0-E_0A_0$; $=\sym{H}E_0$ in the perturbation reading"),
-        (r"\sym{X}", r"the overlap matrix $F_1^*E_0$ of the Sylvester equation, $\norm{X}=\norm{\sin\Theta_0}$"),
+        (r"\sym{Theta0}(\sym{E0},\sym{F0})", r"principal-angle operator between $\operatorname{range}(\sym{E0})$ and $\operatorname{range}(\sym{F0})$"),
+        (r"\sym{sinTheta0}(\sym{E0},\sym{F0})", r"$\lvert(I-F_0F_0^*)E_0\rvert$; the directed subspace error"),
+        (r"\sym{theta}", r"one principal angle in a one-vector / $2\times2$ picture"),
+        (r"\sym{R}", r"$\sym{Ahat}\sym{E0}-\sym{E0}\sym{A0}$; invariance defect of the trial pair"),
+        (r"\sym{r}", r"one-vector residual $\sym{Ahat}\sym{v}-\sym{rho}\sym{v}$"),
+        (r"\sym{X}=F_1^*E_0", r"overlap with exact unwanted directions; $\norm{X}=\norm{\sym{sinTheta0}}$"),
+        (r"\sym{Theta}", r"ambient angle operator; each nonzero principal angle appears twice"),
+        (r"\sym{S}", r"$(I-F_0F_0^*)E_0$, the rectangular directed-sine block"),
     ]
 
 
@@ -197,6 +187,7 @@ class G03Other(GlossarySlide):
     ]
     RIGHT_HEAD = "Local to one part or proof"
     RIGHT = [
+        (r"U,\ V", r"named subspaces used locally in Proposition 4.4 / direct-rotation statements; not the core $\sin\Theta$ frame notation"),
         (r"\mathcal R", r"the direct rotation between the two subspaces (Parts 3 and 4); its square turns "
                             r"by $2\Theta$"),
         (r"W", r"Part 4: a competing orthogonal map with $W(U)=V$"),

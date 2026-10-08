@@ -7,9 +7,9 @@ assistance, but they do not yet understand the mathematics or what the
 formalization establishes.  The talk should leave them able to explain:
 
 1. the geometric question behind Davis--Kahan: how far can an eigenspace move?;
-2. why angle/error, residual and spectral gap are the three quantities in the
+2. why angle/error, residual and certified spectral separation are the three quantities in the
    sine-theta theorem;
-3. the intuitive content of `error <= residual / gap`;
+3. the intuitive content of `error <= residual / separation`;
 4. what Lean's kernel checked and, separately, what source-fidelity review had
    to establish;
 5. why the Proposition 4.4 episode is evidence that this distinction matters;
@@ -27,10 +27,10 @@ A good progression is:
 - what was attempted and how the formalization loop worked;
 - a visual introduction to eigenvectors/eigenspaces;
 - **perturbation motivation:** start with `A`, add `H`, and watch the eigenspace of `A + H` move;
-- **general theorem language:** temporarily stop assuming an `H` exists and define principal angle, residual, and spectral gap for a matrix/operator `A~` and a trial subspace;
-- state the general sine-theta inequality `error <= residual / gap`, explicitly noting that it does not require `A~ = A + H`;
-- **return immediately to perturbations:** choose the old eigenspace of `A` as the trial for `A~ = A + H`, derive `R = H E0`, and state in words that `||R|| <= ||H||`; this is the bridge from residual-over-gap to perturbation-over-gap;
-- explain why the general residual-over-gap theorem works;
+- **general theorem language:** temporarily stop assuming an `H` exists.  Use `Ahat` for the operator under study, the trial pair `(E0,A0)`, exact frames `F0,F1`, residual `R = Ahat E0 - E0 A0`, and spectral separation `delta`; do not add `U,V` names for the frame ranges;
+- state `delta ||sin Theta0(E0,F0)|| <= ||R||`, explicitly noting that the general theorem does not require `Ahat = A + H`;
+- **return immediately to perturbations:** keep `A` fixed as the original operator, set `Ahat = A + H`, choose `E0,A0` from an exact wanted eigensystem of original `A`, derive `R = H E0`, and state `||R|| <= ||H||`; this is the bridge from residual-over-separation to perturbation size over separation;
+- explain why the general residual-over-separation theorem works;
 - show the corresponding Lean statement;
 - proof checking versus statement/source checking;
 - evidence from reversals and re-review;
@@ -65,8 +65,9 @@ handout page.
 
 The Friday deck deliberately switches viewpoints.  The audience should never have to infer which one is active.
 
-- Slides motivating instability should visibly identify themselves as **PERTURBATION SETUP** and use `A`, `H`, and `A~ = A + H`.
-- Slides defining angle, residual, gap, and the theorem should visibly identify themselves as **GENERAL THEOREM SETUP**.  These concepts apply to `A~` and a trial subspace without assuming that `A~` arose by adding an `H`.
-- Immediately after the theorem, a **PERTURBATION SPECIALIZATION** slide must reconnect the two stories: old eigenspace of `A` as the trial, `R = H E0`, hence `||R|| <= ||H||`.
+- Slides motivating instability should visibly identify themselves as **PERTURBATION SETUP** and use `A`, `H`, and `A-hat = A + H`.
+- Slides defining angle, residual, spectral separation, and the theorem should visibly identify themselves as **GENERAL THEOREM SETUP**.  `Ahat` is simply the operator under study there; `E0,A0` are the trial pair and `F0,F1` exact frames.  Do not imply an `H` exists.
+- Immediately after the theorem, a **PERTURBATION SPECIALIZATION** slide must reconnect the stories without changing symbol meanings: original `A`, `Ahat = A + H`, `A E0 = E0 A0`, hence `R = H E0` and `||R|| <= ||H||`.
+- Keep `g` and `delta` distinct: `g` is an original eigengap of `A`; `delta` is the Davis--Kahan separation between the trial spectrum and the exact unwanted spectrum of `Ahat`.
 
 Use the centralized notation/color table for every mathematical object.  Do not color the same symbol ad hoc on individual slides.

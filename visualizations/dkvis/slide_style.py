@@ -10,14 +10,13 @@ and violet is the separation that keeps it from hiding.
 ========  ==================================================  ============
 role      objects                                             constant
 ========  ==================================================  ============
-wanted    ``U``, ``F0``, ``Lambda0``, wanted eigenvectors       ``WANTED``
-trial     ``V``, ``E0``, ``A0``, ``v``, Ritz values, ``rho``    ``TRIAL``
-unwanted  ``U-perp``, ``F1``, ``Lambda1``, unwanted eigen-      ``UNWANTED``
-          vectors and eigenvalues (exact, but not wanted)
-angle     ``theta``, ``sin Theta0``, ``X``, the part of a trial   ``SINE``
-          vector outside ``U``
-residual  ``r``, ``R``, residual components                     ``RESID``
-gap       ``delta`` and the separating window                   ``GAP``
+wanted    ``F0``, ``Lambda0``, wanted eigenvectors              ``WANTED``
+trial     ``E0``, ``A0``, ``v``, Ritz values, ``rho``           ``TRIAL``
+unwanted  ``F1``, ``Lambda1``, unwanted eigenvectors and         ``UNWANTED``
+          eigenvalues (exact, but not wanted)
+angle     ``theta``, ``sin Theta0(E0,F0)``, ``X``                 ``SINE``
+residual  ``r``, ``R``, residual components                       ``RESID``
+separate  ``delta`` and the separating window                     ``GAP``
 neutral   projectors, axes, helper geometry, prose              ``FG``
 ========  ==================================================  ============
 
@@ -26,7 +25,7 @@ of its eigenvectors' color:
 
 ========  ==================================================  ============
 old       ``A`` (dashed when drawn), its block ``A1``           ``OLD``
-current   ``A~`` (solid when drawn)                            ``CURRENT``
+current   ``A-hat`` (solid when drawn)                            ``CURRENT``
 perturb   ``H``, its blocks and entries                         ``PERTURB``
 refuted   a claim shown false, and nothing else                 ``REFUTED``
 ========  ==================================================  ============
