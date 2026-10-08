@@ -4,9 +4,9 @@ The smallest setting in which the *subspace* (not just vector) content of the
 theorem is visible is ``R^3`` with a two-dimensional exact invariant subspace:
 
 * ``A`` is symmetric with eigenvectors ``f1, f2, f3``;
-* the exact subspace is ``U = range F0 = span(f1, f2)``, and ``F1 = f3`` with
+* the exact subspace is ``range(F0) = span(f1, f2)``, and ``F1 = f3`` with
   ``Lambda1 = [lambda3]`` is the unwanted part;
-* the trial subspace is a plane ``V = range E0`` with orthonormal basis ``E0``
+* the trial subspace is a plane ``range(E0)`` with orthonormal basis ``E0``
   and a symmetric 2x2 trial matrix ``A0``;
 * ``R = A E0 - E0 A0`` and ``sin Theta0`` has the singular values of
   ``F1^T E0``, a 1x2 matrix, so ``||sin Theta0|| = ||F1^T E0||_2`` in every
@@ -15,7 +15,7 @@ theorem is visible is ``R^3`` with a two-dimensional exact invariant subspace:
 Two planes in ``R^3`` always share a line, so their principal angles are
 ``(0, theta)``: one of the two sines is always zero.
 
-Because ``spec(Lambda1) = {lambda3}`` is a single point, the gap hypothesis in
+Because ``spec(Lambda1) = {lambda3}`` is a single point, the separation hypothesis in
 its exchanged form (``spec(Lambda1)`` in an interval, ``spec(A0)`` outside its
 ``delta``-neighbourhood) holds exactly with
 
@@ -25,13 +25,13 @@ wherever ``lambda3`` sits relative to the other eigenvalues.
 
 Two configurations are provided, sharing :class:`Configuration`:
 
-* :func:`tilted_trial` -- ``A`` diagonal and fixed; the trial plane is ``U``
-  tilted by ``theta`` about a hinge line in ``U``; ``A0 = E0^T A E0``
-  (Rayleigh--Ritz), so ``E0^T R = 0``: the residual leaves ``V`` at right
+* :func:`tilted_trial` -- ``A`` diagonal and fixed; the trial plane ``range(E0)`` is the exact ``range(F0)``
+  tilted by ``theta`` about a hinge line in that exact plane; ``A0 = E0^T A E0``
+  (Rayleigh--Ritz), so ``E0^T R = 0``: the residual leaves ``range(E0)`` at right
   angles.
 * :func:`perturbed` -- the trial plane is the *old* eigenspace
   ``span(e1, e2)`` with ``A0 = diag(lambda1, lambda2)``, and the operator is
-  ``A + eps H``; then ``R = eps H E0`` and the exact plane moves instead.
+  ``Ahat = A + eps H``; then ``R = eps H E0`` and the exact plane moves instead.
 """
 
 from __future__ import annotations
@@ -66,7 +66,7 @@ class Configuration:
     """Everything the 3D scene draws, computed from ``(A, E0, A0)``.
 
     ``unwanted`` is the index (into ``eigh(A)``) of the eigenvector that plays
-    the role of ``F1``; the other two span the exact subspace ``U``.
+    the role of ``F1``; the other two span the exact wanted plane ``range(F0)``.
     """
 
     A: np.ndarray
@@ -107,7 +107,7 @@ class Configuration:
 
     @property
     def normal_U(self) -> np.ndarray:
-        """Unit normal of the exact plane ``U`` (which is ``F1``)."""
+        """Unit normal of the exact wanted plane ``range(F0)`` (namely ``F1``)."""
         return self.F1
 
     # -- trial data ------------------------------------------------------------
@@ -146,22 +146,22 @@ class Configuration:
 
     @property
     def principal_angles(self) -> np.ndarray:
-        """Principal angles between ``U`` and ``V``, largest first."""
+        """Principal angles between ``range(F0)`` and ``range(E0)``, largest first."""
         cos = np.linalg.svd(self.F0.T @ self.E0, compute_uv=False)
         return np.sort(np.arccos(np.clip(cos, -1.0, 1.0)))[::-1]
 
     @property
     def principal_vectors(self) -> tuple[np.ndarray, np.ndarray]:
-        """Orthonormal ``(hinge, tilted)`` basis of ``V``.
+        """Orthonormal ``(hinge, tilted)`` basis of ``range(E0)``.
 
-        ``hinge`` spans ``U n V`` (the zero principal angle) and ``tilted`` is
-        the direction of ``V`` that makes the angle ``theta`` with ``U``.
+        ``hinge`` spans the intersection of the exact and trial planes (the zero principal angle) and ``tilted`` is
+        the direction of ``range(E0)`` that makes the angle ``theta`` with ``range(F0)``.
         """
         _, _, vt = np.linalg.svd(self.F0.T @ self.E0)
         coords = vt.T  # columns: right singular vectors, largest cosine first
         hinge = self.E0 @ coords[:, 0]
         tilted = self.E0 @ coords[:, 1]
-        # Orient ``tilted`` away from U along +F1 so pictures are stable.
+        # Orient ``tilted`` away from range(F0) along +F1 so pictures are stable.
         if tilted @ self.F1 < 0:
             tilted = -tilted
         return hinge, tilted
@@ -169,7 +169,7 @@ class Configuration:
     # -- gap and theorem -------------------------------------------------------
     @property
     def delta(self) -> float:
-        """``min_i |mu_i - lambda3|`` (exchanged form of the gap hypothesis)."""
+        """``min_i |mu_i - lambda3|`` (exchanged form of the separation hypothesis)."""
         return float(np.min(np.abs(self.ritz_values - self.lambda_unwanted)))
 
     @property
@@ -211,9 +211,9 @@ def tilted_trial(
     phi: float = 0.0,
     eigenvalues: tuple[float, float, float] = DEFAULT_EIGENVALUES,
 ) -> Configuration:
-    """``A = diag(eigenvalues)``, ``U = span(e1, e2)``, ``V`` = ``U`` tilted by ``theta``.
+    """``A = diag(eigenvalues)`` with exact ``range(F0)=span(e1,e2)`` and trial ``range(E0)`` tilted by ``theta``.
 
-    The hinge line ``U n V`` points along ``(cos phi, sin phi, 0)``.  ``A0`` is
+    The hinge line shared by the exact and trial planes points along ``(cos phi, sin phi, 0)``.  ``A0`` is
     the Rayleigh--Ritz matrix ``E0^T A E0``.
     """
     if not 0.0 <= theta <= math.pi / 2 + 1e-12:

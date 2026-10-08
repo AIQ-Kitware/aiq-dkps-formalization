@@ -492,7 +492,7 @@ class F04bJacobi(DeckSlide):
         )
         arc = always_redraw(lambda: angle_arc(plane, [1.0, 0.0], story.unit(max(phi.get_value(), 1e-3)), 1.0, SINE, width=4))
         key = VGroup(
-            tex(r"\cx{current}{ellipse: $\sym{At}$}", size=19),
+            tex(r"\cx{current}{ellipse: $\sym{Ahat}$}", size=19),
             tex(r"\cx{trial}{the basis, turned by $\varphi$}", size=19),
             tex(r"\cx{old}{dashed: $\sym{A}$'s eigenbasis}", size=19),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.05).move_to([-6.9, 2.35, 0], aligned_edge=UP + LEFT)
@@ -670,7 +670,7 @@ class F09WhichOne(DeckSlide):
             r"\sin\Theta",
             r"Trial vectors and any trial matrix; the unwanted eigenvalues of $\sym{A}+\sym{H}$ are outside an interval around the "
             r"trial values, on either side.",
-            r"$\norm{\sin\Theta_0}\le\norm{R}/\delta$: residual over gap.",
+            r"$\norm{\sin\Theta_0}\le\norm{R}/\delta$: residual over spectral separation.",
         ),
         (
             r"\tan\Theta",

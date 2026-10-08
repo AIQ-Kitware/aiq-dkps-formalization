@@ -130,7 +130,7 @@ def two_by_two(plane: Plane, pair: story.PerturbedPair, reach: float = 2.3) -> V
 class F01Setup(DeckSlide):
     depth = "*"
     title = "Four theorems, one setup"
-    kicker = r"An old matrix $\sym{A}$, a new one $\sym{A}+\sym{H}$, and an invariant subspace of each"
+    kicker = r"Original $\sym{A}$, perturbed $\sym{Ahat}=\sym{A}+\sym{H}$, and exact frames on each side"
 
     def body(self) -> None:
         line_old, X_old = axis(0.3, 3.2, -6.5, -0.9, 1.45)
@@ -154,7 +154,7 @@ class F01Setup(DeckSlide):
             return VGroup(line, box, dots, cap, w, r)
 
         old = spectrum(line_old, X_old, (0.6, 0.95), (2.0, 2.45, 2.9), r"eigenvalues of the old $\sym{A}$", "A0", "A1")
-        new = spectrum(line_new, X_new, (0.7, 1.1), (1.85, 2.55, 2.8), r"eigenvalues of the new $\sym{A}+\sym{H}$", "Lambda0", "Lambda1")
+        new = spectrum(line_new, X_new, (0.7, 1.1), (1.85, 2.55, 2.8), r"eigenvalues of $\sym{Ahat}=\sym{A}+\sym{H}$", "Lambda0", "Lambda1")
 
         head = tex(r"Which eigenvalues each theorem keeps apart:", size=24)
         rows = [
@@ -174,23 +174,22 @@ class F01Setup(DeckSlide):
 
         size, w = 21, TEXT_W
         p_old = para(
-            r"\textbf{The old $\sym{A}$:} $\sym{E0}$ is an orthonormal basis of an invariant subspace "
-            r"$\sym{V}$ of $\sym{A}$ (its wanted eigenvectors), with block $\sym{A0}=E_0^*\sym{A}E_0$; $A_1$ is the "
-            r"rest of $\sym{A}$.",
+            r"\textbf{Original $\sym{A}$:} $\sym{E0}$ is its exact wanted eigenframe, with "
+            r"$\sym{A}\sym{E0}=\sym{E0}\sym{A0}$; $\sym{A0}$ is the wanted block and $A_1$ the remainder.",
             width=w, size=size,
         )
         p_new = para(
-            r"\textbf{The new $\sym{At}=\sym{A}+\sym{H}$:} $\sym{F0}$ spans the corresponding invariant subspace "
-            r"$\sym{U}$ of $\sym{At}$, with block $\sym{Lambda0}$; $\sym{Lambda1}$ is the rest.",
+            r"\textbf{Perturbed $\sym{Ahat}=\sym{A}+\sym{H}$:} $\sym{F0}$ is the exact wanted frame, with block "
+            r"$\sym{Lambda0}$; $\sym{F1}$ is the exact unwanted frame, with block $\sym{Lambda1}$.",
             width=w, size=size,
         )
         p_ang = para(
-            r"$\sym{Theta0}$: the angles between the two subspaces. $\sym{Theta}$: the same angles seen "
-            r"from both subspaces, so each nonzero angle appears twice.",
+            r"$\sym{Theta0}(\sym{E0},\sym{F0})$: principal angles between the ranges of the two frames. "
+            r"$\sym{Theta}$: the ambient rotation, so each nonzero angle appears twice.",
             width=w, size=size,
         )
         p_res = para(
-            r"The residual $\sym{R}=(\sym{A}+\sym{H})E_0-E_0A_0$ equals $\sym{H}E_0$. In $\sym{A}$'s eigenbasis "
+            r"The residual $\sym{R}=\sym{Ahat}\sym{E0}-\sym{E0}\sym{A0}$ equals $\sym{H}E_0$. In $\sym{A}$'s eigenbasis "
             r"$\sym{H}=\left(\begin{smallmatrix}\sym{H0}&\sym{B}^*\\ \sym{B}&\sym{H1}\end{smallmatrix}\right)$: $\sym{B}$ couples wanted with unwanted "
             r"directions, $\sym{H0}$ and $\sym{H1}$ act within them.",
             width=w, size=size,
@@ -201,8 +200,8 @@ class F01Setup(DeckSlide):
             width=w, size=size,
         )
         p_bridge = para(
-            r"Same notation as before: $\sym{U}$ is the target subspace of the matrix we have, $\sym{At}$, and "
-            r"$\sym{V}$ the trial subspace; in the trial reading $E_0$ is any orthonormal trial basis.",
+            r"Same notation as before: work with the frames directly. $\operatorname{range}(\sym{E0})$ is the trial/original "
+            r"side and $\operatorname{range}(\sym{F0})$ the exact wanted side of $\sym{Ahat}$.",
             width=w, size=size - 1, color=MUTED,
         )
         col = text_column(p_old, p_new, p_ang, p_res, p_forms, p_bridge, top=self.content_top - 0.1)
@@ -219,13 +218,12 @@ class F01Setup(DeckSlide):
             "Theta0 is the angles between the two subspaces; the residual is H E0; and H splits into the part B "
             "that couples wanted with unwanted directions and the parts H0, H1 that act within them. "
             "Each theorem has a directed form with Theta0 and R, and three have an ambient form with Theta and H. "
-            "Same notation as before: U is the target subspace of A tilde, the matrix we have, and V the "
-            "trial subspace."
+            "We keep the frames themselves as the named objects: range E0 is the original or trial side, and range F0 is the exact wanted side of A hat."
         )
         self.play(FadeIn(col[2]), FadeIn(col[3]), FadeIn(col[4]), FadeIn(col[5]))
 
         self.say(
-            "What distinguishes the four theorems is which two parts of the spectrum the gap keeps apart. "
+            "What distinguishes the four theorems is which two parts of the spectrum the separation hypothesis keeps apart. "
             "sin Theta and tan Theta compare the trial values A0 with the new unwanted eigenvalues; sin 2 Theta "
             "compares the new matrix with itself; tan 2 Theta compares the old matrix with itself."
         )
@@ -386,7 +384,7 @@ class F03SinTwoTheta(DeckSlide):
         th_lbl = math(r"\sym{theta}", size=26).move_to(plane(1.2 * story.unit(pair.theta / 2 + 0.12)))
         key = VGroup(
             tex(r"\cx{old}{dashed: old $\sym{A}$}; \cx{trial}{amber: its top eigenvector}", size=18),
-            tex(r"\cx{current}{solid: new $\sym{At}$}; \cx{wanted}{blue: its top eigenvector}", size=18),
+            tex(r"\cx{current}{solid: new $\sym{Ahat}$}; \cx{wanted}{blue: its top eigenvector}", size=18),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.05).move_to([-6.9, 2.3, 0], aligned_edge=UP + LEFT)
 
         lam1, lam0 = pair.perturbed_eigenvalues[1], pair.perturbed_eigenvalues[0]
@@ -397,7 +395,7 @@ class F03SinTwoTheta(DeckSlide):
             Dot(X(lam1), radius=0.08, color=UNWANTED),
             math(r"\sym{Lambda0}", size=24).next_to(X(lam0), DOWN, buff=0.1),
             math(r"\sym{Lambda1}", size=24).next_to(X(lam1), DOWN, buff=0.1),
-            tex(r"eigenvalues of $\sym{A}+\sym{H}$", size=19, color=MUTED).next_to(X(2.2), RIGHT, buff=0.1),
+            tex(r"eigenvalues of $\sym{Ahat}$", size=19, color=MUTED).next_to(X(2.2), RIGHT, buff=0.1),
         )
         sep = gap_mark(X(lam1) + UP * 0.22, X(lam0) + UP * 0.22, rf"$\delta={pair.delta_sin_two:.3f}$", size=20)
 
@@ -436,7 +434,7 @@ class F03SinTwoTheta(DeckSlide):
         )
         _, lhs, rhs = pair.family()["sin2"]
         example = para(
-            rf"In the $2\times2$ example ($g={pair.gap:g}$, $\varepsilon={eps:g}$) the gap of $A+H$ is "
+            rf"In the $2\times2$ example ($g={pair.gap:g}$, $\varepsilon={eps:g}$) the exact wanted/unwanted separation of $\widehat A$ is "
             rf"$\delta={pair.delta_sin_two:.3f}$, and $\delta\sin2\theta={lhs:.3f}=2\norm{{R}}$: an equality.",
             width=w, size=size,
         )
@@ -464,7 +462,7 @@ class F03SinTwoTheta(DeckSlide):
 
         self.say(
             "On the 2 by 2 example from the gap slides the bound is an equality: delta here is the gap between "
-            "the two eigenvalues of A + H."
+            "the two eigenvalues of A hat."
         )
         self.play(FadeIn(col[2]))
 
@@ -500,7 +498,7 @@ class F04TanTwoTheta(DeckSlide):
         )
         key = VGroup(
             tex(r"\cx{old}{dashed: old $\sym{A}$}; \cx{trial}{amber: its top eigenvector}", size=18),
-            tex(r"\cx{current}{solid: new $\sym{At}$}; \cx{wanted}{blue: its top eigenvector}", size=18),
+            tex(r"\cx{current}{solid: new $\sym{Ahat}$}; \cx{wanted}{blue: its top eigenvector}", size=18),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.05).move_to([-6.9, 2.3, 0], aligned_edge=UP + LEFT)
 
         nl, X = axis(0.8, 2.2, -6.5, -1.9, -1.45)
@@ -576,7 +574,7 @@ class F04TanTwoTheta(DeckSlide):
         self.play(FadeIn(col[3]))
 
         self.say(
-            "Theorem 8.1 makes that general: when F0 is the matching spectral subspace of A + H, every angle is at "
+            "Theorem 8.1 makes that general: when F0 is the matching exact frame of A hat, every angle is at "
             "most 45 degrees, however large H is. That is the ceiling we saw at the start."
         )
         self.play(FadeIn(col[4]))
@@ -599,35 +597,35 @@ class F01bAngles(DeckSlide):
         e1, e2 = np.array([1.0, 0.0]), np.array([0.0, 1.0])
         v, v_perp = story.unit(th), story.unit(th + np.pi / 2)
 
-        V = through_origin(plane, e1, reach, concept_color("V"), width=4)
-        U = through_origin(plane, v, reach, concept_color("U"), width=4)
-        V_lbl = tex(r"$V=\operatorname{range}E_0$", size=22, color=concept_color("V")).next_to(plane(reach * e1), DOWN, buff=0.1)
-        U_lbl = tex(r"$U=\operatorname{range}F_0$", size=22, color=concept_color("U")).next_to(plane(reach * v), RIGHT, buff=0.1)
+        V = through_origin(plane, e1, reach, concept_color("E0"), width=4)
+        U = through_origin(plane, v, reach, concept_color("F0"), width=4)
+        V_lbl = tex(r"$\operatorname{range}(\sym{E0})$", size=22).next_to(plane(reach * e1), DOWN, buff=0.1)
+        U_lbl = tex(r"$\operatorname{range}(\sym{F0})$", size=22).next_to(plane(reach * v), RIGHT, buff=0.1)
         arc = angle_arc(plane, e1, v, 1.15, SINE, width=4)
         th_lbl = math(r"\sym{theta}", size=28).move_to(plane(0.72 * story.unit(th / 2)))
 
-        V_perp = DashedVMobject(through_origin(plane, e2, reach, concept_color("Vperp"), width=3), num_dashes=24)
-        U_perp = DashedVMobject(through_origin(plane, v_perp, reach, concept_color("Uperp"), width=3), num_dashes=24)
-        Vp_lbl = math(r"\sym{Vperp}", size=24).next_to(plane(reach * e2), UP, buff=0.08)
-        Up_lbl = math(r"\sym{Uperp}", size=24).next_to(plane(reach * v_perp), LEFT, buff=0.08)
+        V_perp = DashedVMobject(through_origin(plane, e2, reach, FG, width=3), num_dashes=24)
+        U_perp = DashedVMobject(through_origin(plane, v_perp, reach, UNWANTED, width=3), num_dashes=24)
+        Vp_lbl = math(r"\operatorname{range}(\sym{E0})^{\perp}", size=22).next_to(plane(reach * e2), UP, buff=0.08)
+        Up_lbl = math(r"\operatorname{range}(\sym{F1})", size=22).next_to(plane(reach * v_perp), LEFT, buff=0.08)
         arc2 = angle_arc(plane, e2, v_perp, 0.8, SINE, width=4)
         th2_lbl = math(r"\sym{theta}", size=28).move_to(plane(0.52 * story.unit(np.pi / 2 + th / 2)))
         caption = para(
-            r"The rotation that takes $V$ to $U$ also takes $V^\perp$ to $U^\perp$, by the same angle.",
+            r"The rotation from $\operatorname{range}(\sym{E0})$ to $\operatorname{range}(\sym{F0})$ rotates the complements by the same angle.",
             width=5.0, size=19, color=MUTED, align="centering",
         ).move_to([-4.4, -3.2, 0])
 
         size, w = 21, TEXT_W
         p_dir = para(
-            r"\textbf{Directed} $\sym{Theta0}$: the angles from the trial subspace $\sym{V}$ to "
-            r"the target $\sym{U}$, one per direction of $V$. With $Q$ the projector onto $U$: "
-            r"$\norm{\sin\Theta_0}=\norm{(I-Q)E_0}$.",
+            r"\textbf{Directed} $\sym{Theta0}(\sym{E0},\sym{F0})$: the principal angles from "
+            r"$\operatorname{range}(\sym{E0})$ to $\operatorname{range}(\sym{F0})$. With "
+            r"$\sym{Q}=\sym{F0}\sym{F0}^{*}$: $\norm{\sin\Theta_0}=\norm{(I-\sym{Q})\sym{E0}}$.",
             width=w, size=size,
         )
         p_amb = para(
             r"\textbf{Ambient} $\sym{Theta}$: the angles of the whole rotation, so each nonzero angle appears "
-            r"twice. With $P$ the projector onto $V$, every unitarily invariant norm has "
-            r"$\norm{\sin\Theta}=\norm{P-Q}$.",
+            r"twice. With $\sym{P}=\sym{E0}\sym{E0}^{*}$ and $\sym{Q}=\sym{F0}\sym{F0}^{*}$, "
+            r"every unitarily invariant norm has $\norm{\sin\Theta}=\norm{\sym{P}-\sym{Q}}$.",
             width=w, size=size,
         )
         p_norms = para(
@@ -636,7 +634,7 @@ class F01bAngles(DeckSlide):
             width=w, size=size,
         )
         p_rh = para(
-            r"Directed bounds compare with the residual $\sym{R}=\sym{H}E_0$, the part of $\sym{H}$ acting on $V$; ambient "
+            r"Directed bounds compare with the residual $\sym{R}=\sym{H}\sym{E0}$, the part of $\sym{H}$ acting on $\operatorname{range}(\sym{E0})$; ambient "
             r"bounds compare with all of $\sym{H}$. Always $\norm{R}\le\norm{\sym{H}}$.",
             width=w, size=size,
         )
@@ -649,14 +647,13 @@ class F01bAngles(DeckSlide):
         col = text_column(p_dir, p_amb, p_norms, p_rh, p_sin, top=self.content_top - 0.1)
 
         self.say(
-            "Two ways to measure how far a subspace moved. Directed: stand in the trial subspace V and measure the "
-            "angle of each of its directions to the target U. That is Theta0, and its sine measures the amount of the "
-            "trial subspace V lying outside the target U: the part of E0 outside U."
+            "Two ways to measure how far the frame moved. Directed: start in range E0 and measure principal angles to range F0. "
+            "That is Theta0 of E0 and F0; its sine is exactly the part of E0 outside range F0."
         )
         self.play(Create(U), Create(V), FadeIn(U_lbl, V_lbl), Create(arc), FadeIn(th_lbl), FadeIn(col[0]))
 
         self.say(
-            "Ambient: look at the whole rotation. Turning V onto U also turns the complement V perp onto U perp, by "
+            "Ambient: look at the whole rotation. Turning range E0 onto range F0 also turns their orthogonal complements by "
             "the same angle, so every angle shows up twice. Its sine has the same norms as the difference of the two projectors. In the "
             "operator norm the two agree; in the Frobenius norm the ambient one is root 2 larger."
         )

@@ -3,25 +3,27 @@
 Run from ``visualizations/``::
 
     uv run --extra vtk python -m dkvis.vtk_sine_theta_3d                # trial mode
-    uv run --extra vtk python -m dkvis.vtk_sine_theta_3d --mode perturb # A -> A + eps H
+    uv run --extra vtk python -m dkvis.vtk_sine_theta_3d --mode perturb # Ahat = A + eps H
 
-The scene lives in ``R^3``.  ``A`` is drawn as the ellipsoid ``{A x : |x| = c}``;
-the exact invariant subspace ``U`` (blue disk) is the plane of its two wanted
-axes ``f1, f2``, and ``f3`` spans the unwanted direction ``U-perp``.  The trial
-plane ``V = range E0`` (amber disk) meets ``U`` in a line, so the principal angles
-are ``(theta, 0)``; the pink segment is the one nonzero sine.  Green arrows are
-the residuals ``R c`` of the two principal trial vectors, drawn from their tips.
+The scene lives in ``R^3``.  The operator under study is drawn as an ellipsoid.
+The exact wanted plane ``range(F0)`` is blue; ``F1 = f3`` spans its exact unwanted
+complement.  The amber trial plane is ``range(E0)``.  The two planes meet in a
+line, so the principal angles are ``(theta, 0)``; the pink segment is the one
+nonzero sine.  Green arrows are the residuals ``R c`` of the two principal trial
+vectors, drawn from their tips.
 
-* **trial mode** -- tilt ``V`` by ``theta`` about a hinge line at azimuth
-  ``phi``; ``A0 = E0^T A E0`` (Rayleigh--Ritz), so the residuals leave ``V`` at
-  right angles.  Moving ``lambda3`` shows how the gap controls the bound.
-* **perturb mode** -- keep ``V`` = the old eigenspace and perturb
-  ``A -> A + eps H``; now the ellipsoid and the exact plane move, and
+* **trial mode** -- keep one operator fixed and tilt ``range(E0)`` by ``theta``;
+  ``A0 = E0^T A E0`` is the Rayleigh--Ritz choice, so the residuals leave the
+  trial plane at right angles.  Moving ``lambda3`` shows how the certified
+  separation controls the bound.
+* **perturb mode** -- take ``Ahat = A + eps H`` and keep ``E0`` as the old exact
+  eigensystem of ``A``; the ellipsoid and exact ``range(F0)`` move, and
   ``R = eps H E0``.
 
 The strip under the 3D view is the spectrum: filled blue dots are the wanted
-eigenvalues, the hollow blue dot is ``lambda3``, amber triangles are
-``spec(A0)``, and the violet bar is the gap ``delta = min |mu_i - lambda3|``.
+exact eigenvalues, the hollow blue dot is ``lambda3``, amber triangles are
+``spec(A0)``, and the violet bar is the separation
+``delta = min |mu_i - lambda3|``.
 
 Mouse: drag to rotate, scroll to zoom, shift-drag to pan.
 Keys:  ``m`` mode, ``space`` play/pause, ``e`` ellipsoid, ``x`` residuals,
@@ -486,10 +488,10 @@ class SineTheta3D:
 
         lr = self.labels
         s = self.px(0.03)
-        self.lbl_U = Label3D(lr, "U", C["WANTED"], s)
-        self.lbl_V = Label3D(lr, "V", C["TRIAL"], s)
+        self.lbl_U = Label3D(lr, "range(F₀)", C["WANTED"], self.px(0.024))
+        self.lbl_V = Label3D(lr, "range(E₀)", C["TRIAL"], self.px(0.024))
         self.lbl_f3 = Label3D(lr, "f₃", C["UNWANTED"], s)
-        self.lbl_hinge = Label3D(lr, "U ∩ V", C["FG"], self.px(0.022))
+        self.lbl_hinge = Label3D(lr, "shared line", C["FG"], self.px(0.020))
         self.lbl_sin = Label3D(lr, "sin θ", C["SINE"], self.px(0.026))
         self.lbl_theta = Label3D(lr, "θ", C["FG"], self.px(0.024))
         self.lbl_r = Label3D(lr, "R", C["RESID"], self.px(0.026))
@@ -828,11 +830,11 @@ class SineTheta3D:
         s = self.state
         if s.mode == "trial":
             self.title.set("sin Θ in three dimensions: tilting the trial plane")
-            self.subtitle.set("A fixed;  trial plane V tilted about a line in U;  A₀ = E₀ᵀAE₀ (Rayleigh–Ritz)")
+            self.subtitle.set("one operator fixed;  range(E₀) tilted from exact range(F₀);  A₀ = E₀ᵀAE₀ (Rayleigh–Ritz)")
             self.rows["mode"].set(f"tilt θ = {s.theta_deg:.1f}°,  hinge azimuth φ = {s.phi_deg:.0f}°")
         else:
             self.title.set("sin Θ in three dimensions: perturbing the matrix")
-            self.subtitle.set("A → A + εH;  trial V = old eigenspace span(e₁, e₂);  A₀ = diag(λ₁, λ₂);  R = εHE₀")
+            self.subtitle.set("A-hat = A + εH;  E₀ = old exact frame of A;  A₀ = diag(λ₁, λ₂);  R = εHE₀")
             self.rows["mode"].set(f"perturbation ε = ‖H‖₂ = {s.eps:.2f}")
         th = np.degrees(cfg.principal_angles)
         self.rows["angle"].set(f"‖sin Θ₀‖ = ‖F₁ᵀE₀‖ = {cfg.sin_theta:.3f}")
@@ -841,7 +843,7 @@ class SineTheta3D:
         self.rows["ritz"].set(f"spec(A₀) = {{{mu[0]:.3f}, {mu[1]:.3f}}}")
         lw = sorted(cfg.lambda_wanted)
         self.rows["lambda"].set(f"wanted λ₁, λ₂ = {lw[0]:.3f}, {lw[1]:.3f};  unwanted λ₃ = {cfg.lambda_unwanted:.3f}")
-        self.rows["delta"].set(f"gap δ = min ∣μᵢ − λ₃∣ = {cfg.delta:.3f}")
+        self.rows["delta"].set(f"separation δ = min ∣μᵢ − λ₃∣ = {cfg.delta:.3f}")
         self.rows["resid"].set(f"‖R‖₂ = {cfg.residual_norm_2:.3f},   ‖R‖_F = {cfg.residual_norm_F:.3f}")
         lhs, rhs = cfg.theorem_lhs, cfg.residual_norm_2
         scale = max(rhs, lhs, 1e-9)
@@ -851,8 +853,8 @@ class SineTheta3D:
             self.meter_fill[k].update(self.meter_x[0], yc - self._bar, self.meter_x[0] + full * value / scale, yc + self._bar)
             self.meter_val[k].set(f"{value:.3f}")
         self.legend.set(
-            "blue: exact U = span(f₁, f₂), with f₃ spanning U⊥\n"
-            "amber: trial plane V;  pink: sin θ;  green: residuals"
+            "blue: exact range(F₀), with f₃ spanning range(F₁)\n"
+            "amber: trial range(E₀);  pink: sin θ;  green: residuals"
         )
 
     # -- output ----------------------------------------------------------------

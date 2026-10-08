@@ -169,16 +169,16 @@ The old decks remain deliberately preserved as reference/regression compositions
 | `S00Title` | yes | yes | how far can an eigenvector turn? |
 | `S00bSetting` | yes | yes | the setting: self-adjoint operators, from real symmetric matrices to unbounded operators |
 | `S01Ellipse` | yes | yes | a positive-definite example maps the circle to an ellipse; axes are eigenvectors |
-| `S02Perturb` | yes | yes | `A -> A+H`: eigenvalues barely move (Weyl), axes turn |
-| `S03bWanted` | yes | yes | which eigenvectors are "wanted": a chosen part of the spectrum (vibration modes, ground states, clustering, PCA), and why only a few are computed; they span `U`, the rest `U^perp`, and the gap separates them |
+| `S02Perturb` | yes | yes | `A -> Ahat = A+H`: eigenvalues barely move (Weyl), axes turn |
+| `S03bWanted` | yes | yes | which eigenvectors are "wanted": a chosen part of the spectrum; exact wanted/unwanted frames are `F0/F1`, without adding separate subspace names |
 | `S03dCompute` | | `*` | why not compute every eigenvector: sparse matrices, cost table, differential operators, a few modes, iterative eigensolvers return a trial subspace |
-| `S03NoGap` | yes | yes | "How far can an eigenvector turn? It depends on whether there is a gap": A's eigenvectors (drawn as lines) in the ellipse and its eigenvalues on a number line; for a fixed small `H`, as the gap closes the eigenvector of `A+H` turns toward 45 degrees while the eigenvalues move at most `‖H‖` |
+| `S03NoGap` | yes | yes | original eigengap `g` of `A`: for fixed small `H`, as `g` closes the eigenframe of `Ahat=A+H` can turn strongly while eigenvalues move at most `‖H‖` |
 | `S03cUnstable` | yes | yes | "Without a gap, an eigenvector can point anywhere": `H` of fixed size turned once round; the traced eigenvector directions form a thin wedge (at most 7 degrees) with a gap and fill every direction without one; `A ± εσ_x` example; why Davis--Kahan works with subspaces |
-| `S04Angle` | yes | yes | with a "Recall" panel for `U`, `V`, `theta`, `E0`, `F0`, `F1`: `sin theta = dist(v, U)`; `sin Theta0` is the operator whose eigenvalues are the sines |
+| `S04Angle` | yes | yes | define `Theta0(E0,F0)` directly from the trial/exact frames and their ranges; no `U/V` naming layer |
 | `S04bSinThetaOperator` | | `*` | `sin Theta0` exactly: definition, `|S| = sin Theta0`, and the Lean bridge |
-| `S05Residual` | yes | yes | "The residual": a "Recall" panel for `A`, `U`, `v`; why `r = Av - rho v` is computable from `A` and `v` while the angle needs `U`; every build adds, so the last build is the complete slide |
+| `S05Residual` | yes | yes | motivate `R = Ahat E0 - E0 A0` from the information model; show one-vector Rayleigh quotient and distinguish eigensolver versus perturbation choices of `A0` |
 | `S06Gap` | yes | yes | the separating window; why an interval |
-| `S07Theorem` | yes | yes | `delta ||sin Theta0|| <= ||R||`: error <= residual / gap |
+| `S07Theorem` | yes | yes | `delta ||sin Theta0(E0,F0)|| <= ||R||`: error <= residual / certified spectral separation |
 | `S07bReading` | | `*` | how I read the theorem: `δ‖sin Θ0(E0,F0)‖ ≤ ‖ÃE0 − E0A0‖` with every symbol defined on the slide; `sin Θ0(E0,F0) = |(I − F0F0*)E0|`, the gap as chosen bounds `β ≤ α` and a clearance `δ`; the left side needs the unknown `F0`, the right side is computable; matches the Lean construction |
 | `S08Why` | yes | yes | why it is true, with one wanted direction `u` and one unwanted `w`: the wrong part of `v` (length `sin theta`) is scaled by at least `delta` in the residual |
 | `S08Components` | | `*` | the same mechanism across the whole spectrum (bar chart, with the equations) |
@@ -239,19 +239,35 @@ All use only `propext`, `Classical.choice` and `Quot.sound`. `S12Lean` prints
 lines. Re-check it whenever the `sinTheta` alias moves.
 
 Every number on a slide comes from `dkvis/sine_theta_story.py` (or the existing
-`dkvis/sine_theta.py`), whose models are checked by `tests/`. Colors carry
-meaning on every slide, by role in the Davis--Kahan story: blue = wanted (`U`, `F0`, `Lambda0`),
-amber = trial (`V`, `E0`, `A0`, `v`, Ritz values), cyan = unwanted (`U-perp`, `F1`, `Lambda1`), pink =
-angle / the part of the trial outside `U`, green = residual, violet = gap. A quieter second tier says where
-an operator comes from, each a muted relative of its eigenvectors' color: tan = the old `A` (its
-eigenvectors are the amber trial; dashed when drawn), steel = `A~` (its eigenvectors are the blue and cyan
-directions; solid when drawn), vermilion = the perturbation `H` with its blocks and entries. Red marks a
-refuted claim and nothing else (Proposition 4.4 as printed); it is close to vermilion, so the two do not
-share a slide. The projectors, `E1` and `V-perp` are neutral, gray only de-emphasizes, and a box outlined in
-a role color gets a faint surface of that color. The process slides use neutral colors only; the
-Proposition 4.4 slides keep `U` blue, `V` amber and the displacement pink, but draw the two competing maps
-neutrally. All the colors that can share a slide are at least 15 apart in CIEDE2000, in both themes; check
-a new color against them before adding it.
+`dkvis/sine_theta.py`), whose models are checked by `tests/`.
+
+The sine-theta exposition names **frames rather than assigning extra letters to
+their ranges**.  Its canonical notation is:
+
+- `Ahat`: the operator under study in the general theorem.  Lean/source calls
+  this ambient operator `A`.
+- `E0, A0`: the trial pair.  `E0` is an orthonormal trial frame and `A0` acts on
+  its coordinate space; `R = Ahat E0 - E0 A0` is their invariance defect.
+- `F0`: the exact wanted frame of `Ahat`; `F1, Lambda1`: the exact unwanted
+  frame/block, with `Ahat F1 = F1 Lambda1`.
+- `Theta0(E0,F0)`: principal angles between the ranges of the two frames.
+- `delta`: a certified spectral separation between `spec(A0)` and the exact
+  unwanted spectrum `spec(Lambda1)`.  It is not generically "the eigengap".
+- In the perturbation application only, `A` is the original operator,
+  `Ahat = A + H`, and `E0,A0` are chosen from an exact wanted eigensystem of
+  original `A`.  Then `R = H E0` and `||R|| <= ||H||`.  The original eigengap
+  of `A` is `g`, distinct from `delta`.
+
+Colors carry those roles consistently: blue = exact wanted (`F0`, `Lambda0`,
+`f0`), amber = trial (`E0`, `A0`, `v`, Ritz values), cyan = exact unwanted
+(`F1`, `Lambda1`, `f1`), pink = angle/error, green = residual, violet = spectral
+separation.  A quieter second tier says where an operator comes from: tan =
+original `A`, steel = `Ahat`, vermilion = perturbation `H`.  `U` and `V` remain
+local notation for statements such as Proposition 4.4; they are deliberately
+not an extra naming layer in the core sine-theta slides.  Red marks a refuted
+claim and nothing else.  Neutral projectors and supporting geometry remain gray.
+All the colors that can share a slide are at least 15 apart in CIEDE2000, in
+both themes; check a new color against them before adding it.
 
 Colors have two single sources. `dkvis/palette.py` says what each role looks like, per theme (dark and
 light). `dkvis/notation.py` is the canonical map from symbol to role. Symbols and the labels that name

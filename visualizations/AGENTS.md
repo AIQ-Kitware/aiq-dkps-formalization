@@ -40,3 +40,21 @@ A good next sequence is:
 4. render again and compare;
 5. then begin creating alternative explanatory components where the current
    material is weak.
+## Canonical sine-theta notation
+
+Do not reintroduce `U`/`V` as aliases for the ranges of the sine-theta frames.
+The core exposition names the objects the theorem operates on directly:
+
+- `Ahat`: operator under study in the general theorem; Lean/source names this `A`;
+- `E0, A0`: trial frame and trial-coordinate operator;
+- `F0`: exact wanted frame; `F1, Lambda1`: exact unwanted frame/block;
+- `R = Ahat E0 - E0 A0`;
+- `Theta0(E0,F0)` / `sinTheta0(E0,F0)`: angles/error between their ranges;
+- `delta`: certified spectral separation, not a generic eigengap.
+
+In perturbation slides only, keep `A` permanently equal to the original operator
+and write `Ahat = A + H`.  Choose the trial pair from original `A`, so
+`A E0 = E0 A0`, `R = H E0`, and `||R|| <= ||H||`.  Use `g` for an original
+eigengap of `A`; never silently identify it with `delta`.  `U,V` may still be
+used when they are genuinely the notation of another statement, such as
+Proposition 4.4.
