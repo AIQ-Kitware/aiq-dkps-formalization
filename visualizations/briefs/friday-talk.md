@@ -26,10 +26,12 @@ A good progression is:
 
 - what was attempted and how the formalization loop worked;
 - a visual introduction to eigenvectors/eigenspaces;
-- perturbation and instability without a gap;
-- principal angle, residual and gap;
-- the sine-theta inequality and why it works;
-- the corresponding Lean statement;
+- **perturbation motivation:** start with `A`, add `H`, and watch the eigenspace of `A + H` move;
+- **general theorem language:** temporarily stop assuming an `H` exists and define principal angle, residual, and spectral gap for a matrix/operator `A~` and a trial subspace;
+- state the general sine-theta inequality `error <= residual / gap`, explicitly noting that it does not require `A~ = A + H`;
+- **return immediately to perturbations:** choose the old eigenspace of `A` as the trial for `A~ = A + H`, derive `R = H E0`, and state in words that `||R|| <= ||H||`; this is the bridge from residual-over-gap to perturbation-over-gap;
+- explain why the general residual-over-gap theorem works;
+- show the corresponding Lean statement;
 - proof checking versus statement/source checking;
 - evidence from reversals and re-review;
 - Proposition 4.4: plausible printed claim, counterexample, repaired statement;
@@ -58,3 +60,13 @@ closing a gap, adding a perturbation, decomposing a residual, or comparing two
 statements.  Static explanations should be fully visible without waiting for a
 sequence of decorative fades.  Every final build must be complete enough for a
 handout page.
+
+## Keep the two viewpoints visually distinct
+
+The Friday deck deliberately switches viewpoints.  The audience should never have to infer which one is active.
+
+- Slides motivating instability should visibly identify themselves as **PERTURBATION SETUP** and use `A`, `H`, and `A~ = A + H`.
+- Slides defining angle, residual, gap, and the theorem should visibly identify themselves as **GENERAL THEOREM SETUP**.  These concepts apply to `A~` and a trial subspace without assuming that `A~` arose by adding an `H`.
+- Immediately after the theorem, a **PERTURBATION SPECIALIZATION** slide must reconnect the two stories: old eigenspace of `A` as the trial, `R = H E0`, hence `||R|| <= ||H||`.
+
+Use the centralized notation/color table for every mathematical object.  Do not color the same symbol ad hoc on individual slides.
