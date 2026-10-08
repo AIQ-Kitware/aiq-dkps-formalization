@@ -214,7 +214,7 @@ theorem measure_forall_norm_toEuclideanLin_sub_le_ge
         ⊆ {ω | ∀ x : EuclideanSpace ℝ (Fin n),
             ‖Matrix.toEuclideanLin (Shat ω - A) x‖ ≤ (n : ℝ) * η * ‖x‖} := by
     intro ω hω x
-    exact norm_toEuclideanLin_le_of_entry_le (fun i j => by simpa using hω i j) x
+    exact Matrix.norm_toEuclideanLin_le_of_entry_le_fin (fun i j => by simpa using hω i j) x
   -- the bad (some-entry-far) event, bounded above by the shared entrywise estimate
   have hbad : P {ω | ∃ k l, η < |Shat ω k l - A k l|}
       ≤ ENNReal.ofReal ((n : ℝ) ^ 2 * v / η ^ 2) :=

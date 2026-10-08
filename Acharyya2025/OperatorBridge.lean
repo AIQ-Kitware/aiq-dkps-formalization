@@ -58,7 +58,7 @@ theorem sum_abs_le_sqrt_card_mul_norm {n : Nat} (x : EuclideanSpace Real (Fin n)
     ∑ j : Fin n, |x j| ≤ Real.sqrt n * ‖x‖ := by
   -- Thin ℝ-instantiation of the Mathlib-staged RCLike version.
   simpa [Real.norm_eq_abs, Fintype.card_fin] using
-    TauCeti.sum_norm_le_sqrt_card_mul_norm x
+    EuclideanSpace.sum_norm_le_sqrt_card_mul_norm x
 
 /--
 Entrywise closeness gives honest `ℓ² → ℓ²` operator-norm closeness with
@@ -88,7 +88,7 @@ theorem matrixL2OperatorClose_of_entrywise
   -- applied to the difference matrix `A - B`.
   have hentry' : ∀ i j, |(A - B) i j| ≤ ε := by
     intro i j; rw [Matrix.sub_apply]; exact hentry i j
-  exact TauCeti.norm_toEuclideanLin_le_of_entry_le
+  exact Matrix.norm_toEuclideanLin_le_of_entry_le_fin
     (fun i j => by simpa only [Real.norm_eq_abs] using hentry' i j) x
 
 /--
