@@ -31,7 +31,6 @@ FRIDAY = DeckSpec(
         "S12Lean",
         "P01Claim",
         "P02Counterexample",
-        "P03Why",
         "P04LeanRefutation",
         "W02TwoChecks",
         "W04Reversals",

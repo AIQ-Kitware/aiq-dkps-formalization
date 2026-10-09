@@ -156,8 +156,9 @@ class P01Claim(P4Slide):
             pad=0.2,
         )
         t3 = para(
-            r"$\norm{I-W}$ measures how much $W$ moves space. Plausible: in the plane the direct rotation "
-            r"beats the reflection below $\pi/3$ (checked in Lean for the paper's example).",
+            r"A \emph{norm} turns $I-W$, the displacement matrix, into a measure of size. "
+            r"Different norms combine motion across directions differently; the printed claim "
+            r"says the direct rotation wins for \emph{every} one.",
             width=w_text,
             size=22,
             color=MUTED,
@@ -252,103 +253,171 @@ class P02Counterexample(P4Slide):
 
         x0, w = 0.05, 6.7
         intro = para(
-            r"Each map turns two perpendicular planes. A plane turned by $\alpha$ contributes two "
-            r"singular values of $I-W$, both equal to the \cx{sine}{chord} $2\sin(\alpha/2)$.",
+            r"Measure each map by $\norm{I-T}$, the size of its displacement. "
+            r"Norms differ in how they combine motion across directions. "
+            r"A plane turned by $\alpha$ contributes two equal singular values "
+            r"of $I-T$: the \cx{sine}{chord} $2\sin(\alpha/2)$.",
             width=w,
-            size=24,
+            size=22,
         )
         intro.move_to([x0, self.content_top - 0.15, 0], aligned_edge=UP + LEFT)
 
         self.say(
-            "Here are both maps, one 2-plane at a time. The direct rotation turns two planes by 45 degrees "
-            "each. The competitor turns one plane by 90 degrees and leaves the other fixed. Both carry U onto V."
+            "Here are both maps, one two-dimensional plane at a time. The direct rotation turns two "
+            "planes by 45 degrees each. The competitor turns one plane by 90 degrees and "
+            "leaves the other fixed. Both carry U onto V. A norm measures the size of the "
+            "displacement matrix I minus T. Different norms emphasize different aspects "
+            "of the same motion."
         )
         self.play(FadeIn(heads), *[FadeIn(p) for p in panels], FadeIn(intro))
         self.play(t.animate.set_value(1.0), run_time=2.5, rate_func=rate_functions.ease_in_out_sine)
 
-        # Trace norm = sum of all chords: stack them end to end.
-        unit = 1.55
-        bar_h = 0.3
+        # A rotation through alpha contributes TWO copies of the chord to the
+        # singular values of I - T. The trace norm adds all four values.
+        unit = 1.50
+        bar_h = 0.28
 
         def stacked(lengths, color, y):
             segs, x = VGroup(), x0 + 0.55
-            for L in lengths:
-                if L < 1e-9:
+            for length in lengths:
+                if length < 1e-9:
                     continue
-                seg = Rectangle(width=unit * L, height=bar_h, fill_color=color, fill_opacity=0.85, stroke_color=PANEL, stroke_width=2)
+                seg = Rectangle(
+                    width=unit * length,
+                    height=bar_h,
+                    fill_color=color,
+                    fill_opacity=0.85,
+                    stroke_color=PANEL,
+                    stroke_width=2,
+                )
                 seg.move_to([x, y, 0], aligned_edge=LEFT)
                 segs.add(seg)
-                x += unit * L
+                x += unit * length
             return segs
 
-        y_r, y_w = intro.get_bottom()[1] - 0.65, intro.get_bottom()[1] - 1.1
+        y_r, y_w = intro.get_bottom()[1] - 0.68, intro.get_bottom()[1] - 1.12
         r_sv, w_sv = MODEL.direct_singular_values, MODEL.competitor_singular_values
         bars = VGroup(
-            tex(r"$\mathcal R$", size=26, color=FG).move_to([x0 + 0.2, y_r, 0]),
+            tex(r"$\mathcal R$", size=24, color=FG).move_to([x0 + 0.2, y_r, 0]),
             stacked(r_sv, FG, y_r),
-            tex(rf"${R_NORMS['trace']:.3f}$", size=26, color=FG).move_to([x0 + 0.75 + unit * R_NORMS["trace"], y_r, 0], aligned_edge=LEFT),
-            tex(r"$W$", size=26, color=MUTED).move_to([x0 + 0.2, y_w, 0]),
+            tex(rf"${R_NORMS['trace']:.3f}$", size=24, color=FG).move_to(
+                [x0 + 0.75 + unit * R_NORMS["trace"], y_r, 0], aligned_edge=LEFT
+            ),
+            tex(r"$W$", size=24, color=MUTED).move_to([x0 + 0.2, y_w, 0]),
             stacked(w_sv, MUTED, y_w),
-            tex(rf"${W_NORMS['trace']:.3f}$", size=26, color=MUTED).move_to([x0 + 0.75 + unit * W_NORMS["trace"], y_w, 0], aligned_edge=LEFT),
+            tex(rf"${W_NORMS['trace']:.3f}$", size=24, color=MUTED).move_to(
+                [x0 + 0.75 + unit * W_NORMS["trace"], y_w, 0], aligned_edge=LEFT
+            ),
         )
-        bars_title = tex(r"trace norm $=$ all chords laid end to end", size=24, color=MUTED).move_to(
-            [x0, y_r + 0.45, 0], aligned_edge=LEFT
-        )
+        bars_title = tex(
+            r"Trace norm $=$ sum of all four chord lengths",
+            size=23,
+            color=MUTED,
+        ).move_to([x0, y_r + 0.40, 0], aligned_edge=LEFT)
 
         self.say(
-            "The trace norm adds up all the singular values: lay every chord end to end. The direct "
-            "rotation has four chords of 0.765; the competitor has two of 1.414 and two of zero. "
-            "The competitor's total is shorter."
+            "Each two-dimensional rotated plane contributes two identical chord lengths "
+            "as singular values of I minus T. The trace norm adds all four. The direct "
+            "rotation has four chords of about zero point seven six five. The competitor "
+            "has two chords of about one point four one four, plus two zeros."
         )
         self.play(FadeIn(bars_title), FadeIn(bars, lag_ratio=0.15))
 
-        rows = [
-            (r"largest chord (operator)", "op", False),
-            (r"root sum of squares (Frobenius)", "fro", False),
-            (r"sum of chords (trace)", "trace", True),
-        ]
-        body = r"\renewcommand{\arraystretch}{1.3}\begin{array}{l|cc|c}"
-        body += r"\norm{I-\,\cdot\,} & \cx{fg}{\mathcal R} & \cx{muted}{W} & \text{less motion}\\ \hline"
-        for label, key, flip in rows:
-            winner = r"\cx{muted}{W}" if W_NORMS[key] < R_NORMS[key] else r"\cx{fg}{\mathcal R}"
-            body += rf"\text{{{label}}} & {R_NORMS[key]:.3f} & {W_NORMS[key]:.3f} & {winner}\\"
-        body += r"\end{array}"
-        table = math(body, size=24)
-        table.move_to([x0, y_w - 0.35, 0], aligned_edge=UP + LEFT)
-        if table.get_right()[0] > 6.85:
-            table.scale((6.85 - x0) / (table.get_right()[0] - x0), about_edge=LEFT)
-        hl = Rectangle(width=table.width + 0.16, height=0.42, stroke_color=REFUTED, stroke_width=2.5).move_to(
-            [table.get_center()[0], table.get_bottom()[1] + 0.22, 0]
+        # Build the comparison from individual cells: the red outline hugs the
+        # actual trace row rather than assuming an array row's rendered height.
+        title = tex(
+            r"Norm choice matters: the trace norm refutes the claim",
+            size=23,
+            color=FG,
         )
-
-        self.say(
-            "In the operator and Frobenius norms the direct rotation still wins. In the trace norm the "
-            "competitor moves space less. The angles are 45 degrees, below the pi over 3 threshold, so "
-            "Proposition 4.4 as printed is false."
+        if title.width > w:
+            title.scale_to_fit_width(w)
+        title.move_to([x0, bars.get_bottom()[1] - 0.28, 0], aligned_edge=UP + LEFT)
+        norm_x = x0 + 0.12
+        r_x, sign_x, w_x = x0 + 3.39, x0 + 4.48, x0 + 5.60
+        header_y = title.get_bottom()[1] - 0.32
+        header = VGroup(
+            tex(r"norm", size=21, color=MUTED).move_to(
+                [norm_x, header_y, 0], aligned_edge=LEFT
+            ),
+            math(r"\norm{I-\mathcal R}", size=23).move_to([r_x, header_y, 0]),
+            math(r"\norm{I-W}", size=23).move_to([w_x, header_y, 0]),
         )
-        self.play(FadeIn(table), Create(hl))
+        rule_y = header.get_bottom()[1] - 0.13
+        rule = Line(p3(x0 + 0.02, rule_y), p3(x0 + 6.4, rule_y), color=FAINT, stroke_width=2)
+        labels = (
+            ("operator", "op"),
+            ("Frobenius", "fro"),
+            ("trace", "trace"),
+        )
+        table_rows = VGroup()
+        for i, (label, key) in enumerate(labels):
+            y = rule_y - 0.32 - i * 0.38
+            sign = "<" if R_NORMS[key] < W_NORMS[key] else ">"
+            table_rows.add(VGroup(
+                tex(label, size=22).move_to([norm_x, y, 0], aligned_edge=LEFT),
+                math(rf"{R_NORMS[key]:.3f}", size=23).move_to([r_x, y, 0]),
+                math(sign, size=25, color=REFUTED if key == "trace" else FG).move_to([sign_x, y, 0]),
+                math(rf"{W_NORMS[key]:.3f}", size=23).move_to([w_x, y, 0]),
+            ))
+        failure_outline = Rectangle(
+            width=6.42,
+            height=table_rows[2].height + 0.14,
+            stroke_color=REFUTED,
+            stroke_width=2.7,
+            fill_opacity=0.0,
+        ).move_to([x0 + 3.23, table_rows[2].get_center()[1], 0])
 
         lean = VGroup(
-            tex(r"In Lean (standard axioms only): \texttt{proposition4\_4\_refuted}, and the repair "
-                r"\texttt{directRotation\_fullDisplacement\_qnorm}:", size=20, color=MUTED),
+            tex(
+                r"Lean: \texttt{proposition4\_4\_refuted}; repair: "
+                r"\texttt{directRotation\_fullDisplacement\_qnorm}.",
+                size=19,
+                color=MUTED,
+            ),
             para(
-                r"for every $Q$-norm (e.g.\ operator, Frobenius) the direct rotation \emph{does} minimize "
-                r"$\norm{I-W}$ for acute pairs, with no $\pi/3$ threshold, over $\mathbb{R}$ or $\mathbb{C}$.",
+                r"For $Q$-norms (including operator and Frobenius), the direct rotation "
+                r"\emph{does} minimize $\norm{I-W}$ for acute pairs over $\mathbb{R}$ "
+                r"or $\mathbb{C}$, without the printed $\pi/3$ cutoff.",
                 width=w,
-                size=21,
+                size=20,
                 color=FG,
             ),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.08)
-        lean.move_to([x0, table.get_bottom()[1] - 0.18, 0], aligned_edge=UP + LEFT)
-        for m in lean:
-            if m.get_right()[0] > 6.85:
-                m.scale((6.85 - x0) / (m.get_right()[0] - x0), about_edge=LEFT)
+        lean.move_to([x0, table_rows.get_bottom()[1] - 0.23, 0], aligned_edge=UP + LEFT)
+        for mob in lean:
+            if mob.get_right()[0] > 6.8:
+                mob.scale((6.8 - x0) / (mob.get_right()[0] - x0), about_edge=LEFT)
+
+        # Keep the explanatory material above the footer at any supported theme
+        # while keeping the numerical comparison and all highlight geometry aligned.
+        right_content = VGroup(intro, bars_title, bars, title, header, rule, table_rows, failure_outline, lean)
+        floor = -3.13
+        if right_content.get_bottom()[1] < floor:
+            right_content.scale(
+                (right_content.get_top()[1] - floor) / right_content.height,
+                about_edge=UP + LEFT,
+            )
 
         self.say(
-            "We proved the refutation in Lean, and a repair: for Q-norms, which include the operator "
-            "and Frobenius norms, the direct rotation really is optimal. The repair removes the printed "
-            "60-degree cutoff completely; the usual acuteness condition, under which the direct rotation is "
-            "defined, remains."
+            "Operator norm looks at the worst single displacement, Frobenius norm at "
+            "the root sum of squared displacements, and trace norm at their sum. "
+            "The first two norms favor the direct rotation. The choice of norm matters."
+        )
+        self.play(FadeIn(title), FadeIn(header), Create(rule), FadeIn(table_rows[0]), FadeIn(table_rows[1]))
+
+        self.say(
+            "The highlighted trace norm is where the printed proposition fails: "
+            "three point zero six one is greater than two point eight two eight. "
+            "Both maps send U onto V, and both principal angles are 45 degrees, "
+            "within the claimed 60-degree limit."
+        )
+        self.play(FadeIn(table_rows[2]), Create(failure_outline))
+
+        self.say(
+            "Lean checked this counterexample. It also checked a repaired statement "
+            "for Q-norms, including the operator and Frobenius norms. "
+            "That repair does not require the printed 60-degree cutoff."
         )
         self.play(FadeIn(lean))
 
