@@ -24,7 +24,7 @@ def test_friday_order_and_new_refutation_statement():
     assert names.index('P04LeanRefutation') < names.index('W02TwoChecks')
     assert names.index('W02TwoChecks') < names.index('W04Reversals')
     assert names.index('W04Reversals') < names.index('W06Claims')
-    assert names[-2:] == ['S14Summary', 'V01VTKFinale']
+    assert names[-3:] == ['S14Summary', 'V00Manim3DFinale', 'V01VTKFinale']
 
 
 def test_friday_overview_is_source_oriented_and_unique_to_friday():
@@ -125,9 +125,17 @@ def test_takeaways_state_count_intuition_and_limited_counterexample_scope():
 
 def test_vtk_finale_reuses_project_renderer_without_replacing_summary():
     names = get_deck('friday').scene_names
-    assert names[-2:] == ['S14Summary', 'V01VTKFinale']
+    assert names[-3:] == ['S14Summary', 'V00Manim3DFinale', 'V01VTKFinale']
+    assert 'V00Manim3DFinale' not in get_deck('study').scene_names
     assert 'V01VTKFinale' not in get_deck('study').scene_names
+    assert 'V00Manim3DFinale' not in get_deck('sine-theta-short').scene_names
     assert 'V01VTKFinale' not in get_deck('sine-theta-short').scene_names
+    manim = source('slides_manim_3d_finale.py')
+    assert 'class Manim3DFinaleAsset(ThreeDScene)' in manim
+    assert 'class V00Manim3DFinale(DeckSlide)' in manim
+    assert 'model.tilted_trial(' in manim
+    assert 'always_redraw(trial_plane)' in manim
+    assert 'src=MOVIE, loop=True' in manim
     vtk = source('slides_vtk_finale.py')
     assert 'vtk_sine_theta_3d' in vtk
     assert 'vtk3d.write_still' in vtk
