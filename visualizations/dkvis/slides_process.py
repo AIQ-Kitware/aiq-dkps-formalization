@@ -171,10 +171,12 @@ class W00Overview(DeckSlide):
                  width=theory_w - 2 * pad, size=20),
         )
         apps = panel(
-            apps_x, mid_top, apps_w, mid_h, "APPLICATIONS ENABLED",
-            para(r"Reusable operator theory can support formalization of "
-                 r"statistical PCA, numerical eigensolvers, and mathematical research.",
-                 width=apps_w - 2 * pad, size=21),
+            apps_x, mid_top, apps_w, mid_h, "WHAT THE FOUNDATIONS ENABLE",
+            para(r"\textbf{Mathematical research in functional analysis:} "
+                 r"a basis for new formal Hilbert-space theorems.",
+                 width=apps_w - 2 * pad, size=19),
+            para(r"\textbf{Applications:} formalize statistical PCA and eigensolver guarantees.",
+                 width=apps_w - 2 * pad, size=18, color=MUTED),
         )
 
         challenge_w, when_w = 4.85, 3.28
@@ -183,16 +185,21 @@ class W00Overview(DeckSlide):
         status_w = x_right - status_x
         challenges = panel(
             x_left, bottom_top, challenge_w, bottom_h, "CHALLENGES",
-            para(r"Semantic alignment: implementation moved faster than understanding. "
-                 r"Lean checked proofs before source-statement equivalence was reliably established.",
-                 width=challenge_w - 2 * pad, size=19),
+            para(r"\textbf{Semantic alignment:} code outpaced understanding "
+                 r"of the source.",
+                 width=challenge_w - 2 * pad, size=18),
+            para(r"\textbf{Agent orchestration:} coordinating tasks, "
+                 r"handoffs, and reviews.",
+                 width=challenge_w - 2 * pad, size=18, color=MUTED),
         )
         when = panel(
             when_x, bottom_top, when_w, bottom_h, "WHEN: 2026",
-            para(r"\textbf{July--August:} heavy formalization push.",
-                 width=when_w - 2 * pad, size=20),
-            para(r"September--October: semantic review and upstream ports.",
-                 width=when_w - 2 * pad, size=18, color=MUTED),
+            para(r"\textbf{Jan--Feb:} exploration.",
+                 width=when_w - 2 * pad, size=19),
+            para(r"\textbf{June:} serious progress.",
+                 width=when_w - 2 * pad, size=19),
+            para(r"\textbf{July--August:} heavy push.",
+                 width=when_w - 2 * pad, size=19),
         )
         status = panel(
             status_x, bottom_top, status_w, bottom_h, "STATUS (OCTOBER 2026)",
@@ -212,11 +219,16 @@ class W00Overview(DeckSlide):
             "decomposition and direct rotations, Borel spectral calculus, unbounded self-adjoint "
             "operators, and real-complex transfer. Some spectral foundations were adapted or "
             "generalized from Spectra; not all are wholly new results. Those foundations "
-            "enable later formalizations in applications such as statistical inference and "
-            "numerical eigensolvers, as well as formal mathematical research itself. The main "
-            "formalization push was July and August 2026. The central challenge was semantic "
-            "alignment: implementation raced ahead of understanding, and proof checking alone "
-            "could not establish correspondence to the 1970 paper. As of October 2026, the "
+            "support mathematical research in functional analysis, "
+            "including new formal Hilbert-space theorems, and for applications such as "
+            "statistical PCA and numerical eigensolvers. Work began as an exploration in "
+            "January and February 2026, made serious progress in June, and saw its heavy "
+            "formalization push in July and August. September and October brought semantic "
+            "review and upstream porting work. Challenges included semantic alignment: "
+            "implementation raced ahead of understanding, and proof checking alone could "
+            "not establish correspondence to the 1970 paper. Agent orchestration was "
+            "another challenge, including coordination of multi-stage work, handoffs, "
+            "and repeated reviews. As of October 2026, the "
             "Palomar formalization and TauCetiRoadmap are accepted and Hilbert-space operator "
             "theory is being ported upstream."
         )
