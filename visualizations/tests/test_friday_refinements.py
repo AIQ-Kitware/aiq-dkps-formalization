@@ -17,8 +17,9 @@ def test_friday_order_and_new_refutation_statement():
     names = get_deck('friday').scene_names
     assert 'S08Why' not in names
     assert names.index('P01Claim') < names.index('P02Counterexample')
-    assert names.index('P02Counterexample') < names.index('P03Why')
-    assert names.index('P03Why') < names.index('P04LeanRefutation')
+    assert 'P03Why' not in names  # Keep the chord-curve explanation for study only.
+    assert 'P03Why' in get_deck('study').scene_names
+    assert names.index('P02Counterexample') < names.index('P04LeanRefutation')
     assert names.index('P04LeanRefutation') < names.index('W02TwoChecks')
     assert names.index('W02TwoChecks') < names.index('W04Reversals')
     assert names.index('W04Reversals') < names.index('W06Claims')
@@ -59,3 +60,16 @@ def test_slides_avoid_old_clutter_and_note_telemetry_limits():
     assert 'telemetry is absent from many commits' in process
     assert 'self.play(FadeIn(moral))' not in process.split('class W06Claims(DeckSlide):')[1]
     assert 'https://mathoverflow.net/a/513567' in process
+
+
+def test_prop44_counterexample_explains_and_compares_displacement_norms():
+    source_text = source('slides_prop44.py')
+    counterexample = source_text.split('class P02Counterexample(P4Slide):')[1].split('class P03Why(P4Slide):')[0]
+    claim = source_text.split('class P01Claim(P4Slide):')[1].split('class P02Counterexample(P4Slide):')[0]
+    assert r'A \emph{norm} turns $I-W$' in claim
+    assert r'\norm{I-\mathcal R}' in counterexample
+    assert r'\norm{I-W}' in counterexample
+    assert 'Norm choice matters: the trace norm refutes the claim' in counterexample
+    assert 'standard axioms only' not in counterexample
+    assert 'less motion' not in counterexample
+    assert 'failure_outline' in counterexample

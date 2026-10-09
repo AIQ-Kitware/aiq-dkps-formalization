@@ -56,7 +56,9 @@ def test_working_decks_have_distinct_purposes():
     # presents Proposition 4.4 before the source-audit retrospective.
     assert friday.index("S07Theorem") < friday.index("S11Payoff") < friday.index("S12Lean")
     assert "S08Why" not in friday
-    assert friday.index("P03Why") < friday.index("P04LeanRefutation") < friday.index("W02TwoChecks")
+    assert "P03Why" not in friday
+    assert "P03Why" in study
+    assert friday.index("P02Counterexample") < friday.index("P04LeanRefutation") < friday.index("W02TwoChecks")
     assert friday.index("W02TwoChecks") < friday.index("W04Reversals") < friday.index("W06Claims")
     assert len(study) > len(friday)
 
