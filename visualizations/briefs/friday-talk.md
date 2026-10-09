@@ -19,6 +19,19 @@ formalization establishes.  The talk should leave them able to explain:
 This is not a claim that Lean proved the whole printed paper correct.  The
 project itself contains a formally refuted printed proposition.
 
+## Opening overview
+
+Immediately after the title, the Friday manifest includes a single, static
+`W00Overview` scene. It gives the audience the destination before teaching the
+notation: Davis and Kahan's 1970 paper and a representative sine-theta bound;
+DARPA AIQ's need for the theorem; the upstream-quality motivation for reaching
+full operator-theoretic source scope; the July--August 2026 implementation push;
+semantic alignment as a separate source-fidelity problem; and the October 2026
+status of Palomar, TauCetiRoadmap and ongoing Hilbert-space operator-theory ports.
+Treat the October statuses as dated, presenter-supplied snapshots, not permanent
+repository facts. Keep this introduction specific to Friday rather than changing
+the study and reference compositions.
+
 ## Narrative spine
 
 Treat `dkvis.decks.friday.FRIDAY` as a working hypothesis, not a sacred order.

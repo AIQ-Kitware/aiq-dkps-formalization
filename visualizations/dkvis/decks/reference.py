@@ -36,7 +36,7 @@ MODULE_OF = {
     **{name: FAMILY for name in ["F01Setup", "F01bAngles", "F01cTwoByTwo", "F02TanTheta", "F03SinTwoTheta", "F04TanTwoTheta"]},
     **{name: FAMILY_DETAIL for name in ["F02bTanBuys", "F02cTanWhy", "F03bReflect", "F03cPrice", "F04bJacobi", "F04cRepulsion", "F09WhichOne"]},
     **{name: PROP44 for name in ["P01Claim", "P02Counterexample", "P03Why", "P04Details", "P04LeanRefutation"]},
-    **{name: PROCESS for name in ["W01Workflow", "W02TwoChecks", "W03ThreeStatements", "W04Reversals", "W05Scale", "W06Claims"]},
+    **{name: PROCESS for name in ["W00Overview", "W01Workflow", "W02TwoChecks", "W03ThreeStatements", "W04Reversals", "W05Scale", "W06Claims"]},
     **{name: GLOSSARY for name in ["G01Matrices", "G02Spectra", "G03Other"]},
 }
 
