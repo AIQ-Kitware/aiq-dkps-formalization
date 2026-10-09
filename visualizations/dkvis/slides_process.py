@@ -144,7 +144,7 @@ class W00Overview(DeckSlide):
         aiq_x = x_left + paper_w + gap
         aiq_w = x_right - aiq_x
         paper = panel(
-            x_left, top, paper_w, top_h, "WHAT WE FORMALIZED",
+            x_left, top, paper_w, top_h, "WHAT WE FORMALIZED IN LEAN",
             tex(r"Davis \& Kahan (1970), \emph{Rotation of eigenvectors, III}", size=21),
             math(r"\sym{delta}\,\norm{\sym{sinTheta0}(\sym{E0},\sym{F0})}"
                  r"\ \le\ \norm{\sym{R}}", size=36),
@@ -174,10 +174,11 @@ class W00Overview(DeckSlide):
                  width=theory_w - 2 * pad, size=20),
         )
         apps = panel(
-            apps_x, mid_top, apps_w, mid_h, "WHAT THE FOUNDATIONS ENABLE",
-            tex(r"\textbf{Research:} Hilbert-space theorems", size=19),
-            tex(r"\textbf{Statistics:} PCA and eigensolvers", size=19, color=MUTED),
-            tex(r"\textbf{Physics:} quantum Hamiltonians", size=19, color=MUTED),
+            apps_x, mid_top, apps_w, mid_h, "WHAT FORMALIZATIONS THE FOUNDATIONS ENABLE",
+            para(r"\textbf{Mathematics:} new results in functional analysis", size=19, width=apps_w - 2 * pad),
+            para(r"\textbf{Statistics:} PCA under sampling noise", size=19, color=MUTED, width=apps_w - 2 * pad),
+            para(r"\textbf{Physics:} stability of quantum eigenspaces", size=19, color=MUTED, width=apps_w - 2 * pad),
+            para(r"\textbf{Machine learning:} robust spectral clustering", size=19, color=MUTED, width=apps_w - 2 * pad),
             spacing=0.07,
         )
 
@@ -202,13 +203,14 @@ class W00Overview(DeckSlide):
                  width=when_w - 2 * pad, size=18),
             para(r"\textbf{Jul--Aug:} heavy push.",
                  width=when_w - 2 * pad, size=18),
-            para(r"\textbf{Sep--Oct:} polish.",
+            para(r"\textbf{Sep--Oct:} polish, publication.",
                  width=when_w - 2 * pad, size=18),
             spacing=0.065,
         )
         status = panel(
             status_x, bottom_top, status_w, bottom_h, "STATUS (OCTOBER 2026)",
             para(r"Palomar formalization: \textbf{accepted}\\ "
+                 r"LeanPool: \textbf{ingested}\\ "
                  r"TauCetiRoadmap: \textbf{accepted}\\ "
                  r"Hilbert-space operator-theory ports: \textbf{underway, first PRs have landed}",
                  width=status_w - 2 * pad, size=19),
