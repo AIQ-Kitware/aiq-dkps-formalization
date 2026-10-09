@@ -18,7 +18,7 @@ import subprocess
 import sys
 from pathlib import Path
 
-from manim import DOWN, LEFT, UP, FadeIn, FadeOut, ImageMobject, Rectangle, VGroup
+from manim import DOWN, LEFT, UP, FadeIn, FadeOut, Group, ImageMobject, Rectangle, VGroup
 
 from dkvis import sine_theta_3d as m3
 from dkvis.palette import OUTPUT_SUFFIX
@@ -60,11 +60,24 @@ TEXT_X = 0.75
 TEXT_W = 6.1
 
 
-def picture(name: str) -> ImageMobject:
+def picture(name: str) -> Group:
+    """An uncropped still within the actual left column of the 3D slides.
+
+    Earlier versions set the *height* to 6.1 units.  At the VTK stills' wide
+    aspect ratio that produced an 11-unit-wide image, cropping the left edge
+    and overlapping the explanatory text.  Fit the width instead, with a
+    quiet outline; the full-screen movie builds retain their native size.
+    """
     img = ImageMobject(str(asset(name)))
-    img.height = 6.1
-    img.move_to([-3.35, -0.45, 0])
-    return img
+    img.width = 6.65
+    img.move_to([-3.35, -0.35, 0])
+    border = Rectangle(
+        width=img.width + 0.06,
+        height=img.height + 0.06,
+        stroke_color=MUTED,
+        stroke_width=1.0,
+    ).move_to(img)
+    return Group(border, img)
 
 
 def text_block(*paras: str, top: float, size: float = 27) -> VGroup:
@@ -77,7 +90,7 @@ def text_block(*paras: str, top: float, size: float = 27) -> VGroup:
 class D3Slide(DeckSlide):
     section = "The Davis--Kahan $\\sin\\Theta$ theorem $\\cdot$ in three dimensions"
 
-    def swap_picture(self, old: ImageMobject | None, name: str, *extra) -> ImageMobject:
+    def swap_picture(self, old: Group | None, name: str, *extra) -> Group:
         new = picture(name)
         anims = [FadeIn(new)] + ([FadeOut(old)] if old is not None else []) + [FadeIn(m) for m in extra]
         self.play(*anims, run_time=0.8)
@@ -271,8 +284,8 @@ class D04Perturb(D3Slide):
 
 class D05TryIt(D3Slide):
     depth = "*"
-    title = "Try it live"
-    kicker = "The interactive VTK demo behind these slides"
+    title = "Inside the 3D explorer"
+    kicker = "The interactive VTK application behind the animated examples"
 
     def body(self) -> None:
         shot = ImageMobject(str(asset("app.png")))

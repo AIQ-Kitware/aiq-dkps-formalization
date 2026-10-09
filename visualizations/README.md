@@ -134,17 +134,40 @@ presenter notes on every build.  Deck composition is now separate from scene
 implementation so the same mathematical component can play different roles in
 different presentations.
 
-The immediate working compositions are:
+Current presentations (in addition to the preserved reference decks):
 
-- **`friday`**: mathematics of the sine-theta theorem plus the LLM/formalization
-  and confidence-building story.  See `briefs/friday-talk.md`.
-- **`study`**: a long-form curriculum for learning the theorem family, Lean
-  correspondence and evidence in detail.  See `briefs/deep-study.md`.
+- **`kitware-talk`**: the completed 21-scene presentation formerly named
+  `friday`. The scene order and the underlying finished-talk slides are preserved;
+  the filename is now stable. See `briefs/kitware-talk.md`.
+- **`comprehensive`**: all the distinct mathematical/evidence scenes in a new
+  62-scene narrative order, with a broader cover, six chapter transitions, and
+  the full-frame VTK finale. The content runs through the sine-theta theorem,
+  3D subspaces, the other three angle bounds, Proposition 4.4, source-fidelity
+  review and the notation reference. See `briefs/comprehensive.md`.
+- **`study`**: the earlier long-form curriculum, kept as an independent
+  composition. See `briefs/deep-study.md`.
+
+To build the complete collection at 1080p/30 FPS and generate a **single HTML
+file with embedded videos**, run from this directory:
+
+```bash
+make comprehensive
+```
+
+The shareable output is `renders/comprehensive.standalone.html` (just one file).
+`renders/comprehensive.html` also exists but needs its `comprehensive_assets/`
+directory. The build additionally writes `renders/comprehensive.pdf` and
+`renders/comprehensive.handout.pdf`. For a quick draft use
+`make comprehensive QUALITY=l PDF=0`; for the completed short talk use
+`make kitware` (produces `renders/kitware-talk.standalone.html`). Rendering the
+complete collection is substantially more expensive than the short talk;
+`make comprehensive` defaults to `JOBS=2` to avoid launching dozens of heavy
+renderers simultaneously. You can override it explicitly.
 
 The old decks remain deliberately preserved as reference/regression compositions:
 
 - **`sine-theta-short`**: the previous 15-minute core talk.
-- **`sine-theta-full`: everything**, in seven parts that are rendered separately
+- **`sine-theta-full`: the historical seven-part reference collection**, in seven parts that are rendered separately
   and each get their own HTML, PDF and handout (`renders/part<k>-*.html`):
 
   | part | deck | content |

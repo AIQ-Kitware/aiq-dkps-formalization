@@ -6,6 +6,7 @@ Run from ``visualizations/`` (or use the Makefile)::
     uv run --extra vtk --extra slides python -m dkvis.build_slides sine-theta-full      # all parts, 1080p60 + HTML
     uv run --extra vtk --extra slides python -m dkvis.build_slides sine-theta-full --pdf --handout
     uv run --extra vtk --extra slides python -m dkvis.build_slides part1-sine-theta --list
+    uv run --extra vtk --extra slides python -m dkvis.build_slides comprehensive --one-file --html renders/comprehensive.standalone.html
 
 Decks:
 
@@ -19,9 +20,10 @@ Decks:
   renders without rendering anything itself, so its slides carry their parts'
   numbers and footers.  Optional slides are badged ``*`` (technical depth) or
   ``**`` (backup).
-* ``friday`` -- a working composition for the short talk about the mathematics,
-  LLM-assisted formalization, and how confidence was built;
-* ``study`` -- a long-form learning composition using the reusable scenes.
+* ``kitware-talk`` -- the completed, unchanged 21-scene presentation;
+* ``comprehensive`` -- an ordered collection of all distinct mathematical
+  scenes, including six chapter transitions and a single VTK finale;
+* ``study`` -- the previous long-form learning composition using reusable scenes.
 
 Deck composition lives in :mod:`dkvis.decks`; this module only renders and
 converts those specifications.  Optional/backup depth is presentation-specific.

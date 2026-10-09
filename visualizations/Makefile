@@ -5,8 +5,9 @@
 #   make final           # the same at the full 1080p60
 #   make rebuild         # clean, then make all
 #   make short           # the preserved 15-minute reference deck
-#   make friday          # working Friday composition
-#   make study           # long-form learning composition
+#   make kitware         # completed short talk, plus portable standalone HTML
+#   make comprehensive   # complete narrative collection, plus portable standalone HTML
+#   make study           # earlier long-form learning composition
 #   make part3           # one part of the full talk, with its own HTML (part1 ... part7)
 #   make full            # every part, then the full deck assembled from them
 #   make full SCENES="S05Residual S08Why"   # re-render only those scenes, reconvert
@@ -47,10 +48,11 @@ DECK_part4 := part4-prop44
 DECK_part5 := part5-process
 DECK_part6 := part6-summary
 DECK_part7 := part7-glossary
-DECK_friday := friday
-DECK_study  := study
-PARTS      := part1 part2 part3 part4 part5 part6 part7
-WORKING    := friday study
+DECK_kitware       := kitware-talk
+DECK_comprehensive := comprehensive
+DECK_study         := study
+PARTS             := part1 part2 part3 part4 part5 part6 part7
+WORKING           := kitware comprehensive study
 DECKS      := short full $(PARTS) $(WORKING)
 
 .DEFAULT_GOAL := help
@@ -65,9 +67,10 @@ help:
 	@echo '  final              all at the full 1080p60 (all renders 1080p30)'
 	@echo '  rebuild            clean, then all (a from-scratch re-render)'
 	@echo '  short              the preserved 15-minute reference deck'
-	@echo '  friday             working Friday composition'
-	@echo '  study              long-form self-study composition'
-	@echo '  working            build friday + study'
+	@echo '  kitware            completed short talk; also build a portable standalone HTML'
+	@echo '  comprehensive      all unique scenes, ordered by topic; also build standalone HTML'
+	@echo '  study              previous long-form self-study composition'
+	@echo '  working            build kitware, comprehensive, and study'
 	@echo '  part1 ... part7    one part of the full talk, rendered and converted on its own:'
 	@echo '                       1 sin Theta, 2 3D, 3 tan/sin2/tan2 Theta, 4 Prop 4.4, 5 process, 6 summary, 7 notation'
 	@echo '  full               every part, then the full deck assembled from their renders'
@@ -83,7 +86,8 @@ help:
 	@echo '  test               run the model tests'
 	@echo '  clean              remove all renders, scene folders and manim videos'
 	@echo '  distclean          clean, plus the LaTeX and VTK asset caches'
-	@echo 'Variables: QUALITY=l|m|h|p|k (default h)  FPS=30|60 (default 30 at h)  JOBS=n (default: one per CPU)'
+	@echo 'Variables: QUALITY=l|m|h|p|k (default h)  FPS=30|60 (default 30 at h)'
+	@echo '           JOBS=n (comprehensive defaults to 2; other decks: one per CPU)'
 	@echo '           PDF=0|1 (default 1; also the handout)  SCENES="S05Residual ..."  THEME=dark|light'
 
 setup:
@@ -102,8 +106,19 @@ rebuild:
 draft:
 	$(MAKE) all QUALITY=l PDF=0
 
-short $(WORKING) $(PARTS):
+short study $(PARTS):
 	$(RUN) python -m dkvis.build_slides $(DECK_$@) $(BUILD_FLAGS)
+
+# Long and completed talk decks always produce portable, single-file HTML.
+# The comprehensive deck is large: default to a modest two render processes
+# rather than starting one Manim/LaTeX/VTK pipeline per CPU. JOBS overrides it.
+kitware:
+	$(RUN) python -m dkvis.build_slides $(DECK_$@) $(BUILD_FLAGS)
+	$(MAKE) standalone-kitware THEME=$(THEME)
+
+comprehensive:
+	$(RUN) python -m dkvis.build_slides $(DECK_$@) $(BUILD_FLAGS) $(if $(JOBS),,--jobs 2)
+	$(MAKE) standalone-comprehensive THEME=$(THEME)
 
 working: $(WORKING)
 

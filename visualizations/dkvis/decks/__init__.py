@@ -1,18 +1,17 @@
-"""Deck registry.
-
-Scene implementations live outside this package.  Decks only compose them.
-"""
+"""Named presentation compositions of reusable Manim slide scenes."""
 
 from __future__ import annotations
 
 from dkvis.deck_spec import DeckSpec
-from dkvis.decks.friday import FRIDAY
+from dkvis.decks.comprehensive import COMPREHENSIVE
+from dkvis.decks.kitware_talk import KITWARE_TALK
 from dkvis.decks.reference import REFERENCE_DECKS
 from dkvis.decks.study import STUDY
 
 DECKS: dict[str, DeckSpec] = {
     **REFERENCE_DECKS,
-    FRIDAY.name: FRIDAY,
+    KITWARE_TALK.name: KITWARE_TALK,
+    COMPREHENSIVE.name: COMPREHENSIVE,
     STUDY.name: STUDY,
 }
 
