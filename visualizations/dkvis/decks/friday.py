@@ -37,6 +37,7 @@ FRIDAY = DeckSpec(
         "W04Reversals",
         "W06Claims",
         "S14Summary",
+        "V00Manim3DFinale",
         "V01VTKFinale",
     ]),
 )

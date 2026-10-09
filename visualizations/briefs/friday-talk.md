@@ -117,11 +117,17 @@ The "What to take away" slide is organized around three lessons:
    printed 60-degree limit and also over complex spaces. Do not imply the
    full printed claim was commonly used incorrectly downstream.
 
-The Friday deck retains `S14Summary` and appends a new `V01VTKFinale` scene
-using the existing VTK 3D sine-theta model (`still-residual.png` and `orbit.mp4`).
-The VTK loop is eye candy after the conclusion, not a 3D representation of the
-Proposition 4.4 four-dimensional witness. This is Friday-only and does not
-change the existing 3D reference or study sequences.
+The Friday deck retains `S14Summary` and adds two extra visual slides after
+it. First, `V00Manim3DFinale` uses native Manim 3D to animate a trial plane
+rotating relative to the exact plane, together with the sine-theta drop and
+Rayleigh--Ritz residual computed from the shared `sine_theta_3d.py` model.
+Second, `V01VTKFinale` displays the established VTK sine-theta demo and
+**remains the final slide**, fitting the Kitware audience. Both visualizations
+show the three-dimensional sine-theta model, not the four-dimensional
+Proposition 4.4 witness. Study and reference compositions are unaffected.
+
+`DKVIS_MANIM3D_QUALITY=l` permits fast, lower-resolution Manim asset rendering;
+the default is `m`. Cached assets must be refreshed if changing quality.
 
 The 2D+2D Proposition 4.4 comparison owns the numerical counterexample; the
 following `P04LeanRefutation` scene uses literal Lean source text and explains

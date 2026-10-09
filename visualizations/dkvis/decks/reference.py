@@ -15,6 +15,7 @@ FAMILY = "dkvis.slides_family"
 FAMILY_DETAIL = "dkvis.slides_family_detail"
 PROCESS = "dkvis.slides_process"
 GLOSSARY = "dkvis.slides_glossary"
+MANIM_FINALE = "dkvis.slides_manim_3d_finale"
 VTK_FINALE = "dkvis.slides_vtk_finale"
 
 TECHNICAL = {
@@ -39,6 +40,7 @@ MODULE_OF = {
     **{name: PROP44 for name in ["P01Claim", "P02Counterexample", "P03Why", "P04Details", "P04LeanRefutation"]},
     **{name: PROCESS for name in ["W00Overview", "W01Workflow", "W02TwoChecks", "W03ThreeStatements", "W04Reversals", "W05Scale", "W06Claims"]},
     **{name: GLOSSARY for name in ["G01Matrices", "G02Spectra", "G03Other"]},
+    "V00Manim3DFinale": MANIM_FINALE,
     "V01VTKFinale": VTK_FINALE,
 }
 
