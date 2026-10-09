@@ -1,20 +1,23 @@
 # Agent instructions for `visualizations/`
 
-The immediate goal is not generic cleanup.  It is to make the visualizations a
-reusable component library from which multiple explanations can be composed,
-then improve two presentations: `friday` and `study`.
+The visualizations are reusable Manim/VTK scenes composed into several decks.
+The completed presentation is now named `kitware-talk`; **do not change its
+scene order or change a scene just to improve the new `comprehensive` deck**.
+The `comprehensive` deck is the editable long presentation and should include
+every distinct source-grounded mathematical visualization in a coherent order.
+The older reference decks and `study` continue as regression/learning surfaces.
 
 Read these before substantial slide work:
 
-- `briefs/friday-talk.md`
+- `briefs/kitware-talk.md`
+- `briefs/comprehensive.md`
 - `briefs/deep-study.md`
 - `briefs/slide-authoring.md`
 - `dkvis/components/README.md`
 
 The old `sine-theta-short`, part decks and `sine-theta-full` are reference
-compositions.  Preserve their behavior while migrating scene implementations.
-Do not improve them in place when the goal is to test a different narrative;
-create/change a manifest in `dkvis/decks/` instead.
+compositions. Preserve their behavior. Use `dkvis/decks/comprehensive.py` to
+reorganize the long presentation, rather than modifying the frozen Kitware talk.
 
 Render and inspect slides before claiming a visual improvement.  Use draft
 quality while iterating.  Static scenes should appear complete without
@@ -31,15 +34,17 @@ change them to make a picture prettier.  If a new visualization needs a new
 specialization, implement and test it in the model layer first.
 
 Prefer small conceptual migrations over a mechanical rename of the whole tree.
-A good next sequence is:
+For future visual work, use short incremental passes:
 
-1. render the reference, `friday` and `study` manifests at draft quality;
-2. inspect the resulting decks and record narrative/visual problems;
-3. move one conceptual group (for example sine-theta geometry) behind
-   `dkvis/components/`, keeping class names stable;
-4. render again and compare;
-5. then begin creating alternative explanatory components where the current
-   material is weak.
+1. list and render the affected scenes at draft quality;
+2. inspect them for clipping, unreadable math, duplicated material and color drift;
+3. improve reusable scenes outside `kitware-talk` (or create alternatives);
+4. render again before claiming a visual improvement;
+5. rebuild `comprehensive` and its standalone HTML when the sequence is ready.
+
+Do not write brittle tests asserting text labels, slide captions, or paragraphs.
+Tests should cover numerical model behavior, deck integrity, and actual helper
+behavior. Inspect rendered outputs for visual correctness.
 ## Canonical sine-theta notation
 
 Do not reintroduce `U`/`V` as aliases for the ranges of the sine-theta frames.

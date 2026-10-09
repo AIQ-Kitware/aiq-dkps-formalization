@@ -10,10 +10,11 @@ from dkvis.build_slides import handout_frame_file
 from dkvis.decks import get_deck
 
 
-def test_friday_ends_with_one_vtk_scene_after_summary():
-    names = get_deck("friday").scene_names
-    assert names[-2:] == ["S14Summary", "V01VTKFinale"]
-    assert "V00Manim3DFinale" not in names
+def test_talks_end_with_one_vtk_scene_after_summary():
+    for deck_name in ("kitware-talk", "comprehensive"):
+        names = get_deck(deck_name).scene_names
+        assert names[-2:] == ["S14Summary", "V01VTKFinale"]
+        assert "V00Manim3DFinale" not in names
 
 
 def test_vtk_finale_has_only_one_external_video_build():

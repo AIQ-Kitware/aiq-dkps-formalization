@@ -72,6 +72,14 @@ class GlossarySlide(DeckSlide):
         for x, head, rows in ((COL_X[0], self.LEFT_HEAD, self.LEFT), (COL_X[1], self.RIGHT_HEAD, self.RIGHT)):
             h = self.header(head, x, top)
             out.add(VGroup(h, glossary_column(rows, x, h.get_bottom()[1] - 0.15, self.ROW_BUFF)))
+        # Glossary lines have different heights and sometimes wrap after an
+        # editorial change.  Scale only if needed, keeping all entries clear
+        # of the slide number and the footer rather than cropping the last row.
+        bottom_margin = -3.35
+        available_height = top - bottom_margin
+        if out.height > available_height:
+            out.scale_to_fit_height(available_height)
+            out.shift(UP * (top - out.get_top()[1]))
         return out
 
     def body(self) -> None:
