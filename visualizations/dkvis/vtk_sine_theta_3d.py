@@ -921,6 +921,7 @@ MOVIES = {
     "sweep-theta": (State(theta_deg=4), 10.0, lambda s, t: replace(s, theta_deg=4 + 78 * _smooth(t)), 0.0),
     "sweep-lambda3": (State(theta_deg=35), 10.0, lambda s, t: replace(s, lambda3=2.8 - 2.2 * _smooth(t)), 0.0),
     "perturb": (State(mode="perturb", eps=0.0), 10.0, lambda s, t: replace(s, eps=1.1 * _smooth(t)), 0.0),
+    "finale-tilt": (State(theta_deg=4), 12.0, lambda s, t: replace(s, theta_deg=4 + 78 * _smooth(t)), 360.0),
 }
 
 

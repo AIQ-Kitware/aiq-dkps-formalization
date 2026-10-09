@@ -19,25 +19,25 @@ ASSETS = ROOT / "media" / f"vtk3d{OUTPUT_SUFFIX}"
 
 def prepare(refresh: bool = False) -> None:
     """Build just the needed VTK assets, reusing cached study-deck media."""
-    still = ASSETS / "finale-residual.png"
-    movie = ASSETS / "orbit.mp4"
+    still = ASSETS / "finale-residual-e0f0.png"
+    movie = ASSETS / "finale-tilt.mp4"
     if (refresh or not still.exists()) or (refresh or not movie.exists()):
         from dkvis import vtk_sine_theta_3d as vtk3d
         ASSETS.mkdir(parents=True, exist_ok=True)
         if refresh or not still.exists():
             vtk3d.write_still("still-residual", still, width=1800, height=1000)
         if refresh or not movie.exists():
-            vtk3d.write_movie("orbit", movie)
+            vtk3d.write_movie("finale-tilt", movie)
 
 
 class V01VTKFinale(DeckSlide):
-    title = "A final look: spectral subspaces in 3D"
-    kicker = r"VTK rendering of a trial plane, exact eigenspace, residuals, and the ellipsoid"
+    title = "A final look: the sine-theta geometry in 3D"
+    kicker = r"VTK rendering of $\operatorname{range}(\sym{E0})$, $\operatorname{range}(\sym{F0})$, residuals, and the ellipsoid"
     section = "Davis--Kahan: a geometric closing view"
 
     def body(self) -> None:
-        still = ASSETS / "finale-residual.png"
-        movie = ASSETS / "orbit.mp4"
+        still = ASSETS / "finale-residual-e0f0.png"
+        movie = ASSETS / "finale-tilt.mp4"
         if not still.is_file() or not movie.is_file():
             raise FileNotFoundError("Missing VTK finale assets; build with dkvis.build_slides to run prepare()")
         image = ImageMobject(str(still))
@@ -50,13 +50,15 @@ class V01VTKFinale(DeckSlide):
         self.say(
             "One final look at the actual VTK visualization. This is the three-dimensional "
             "sine-theta model, not a projection of the four-dimensional Proposition 4.4 "
-            "counterexample. The ellipsoid, subspace planes and residual geometry all come "
+            "counterexample. The labels now match the deck notation: the exact plane is "
+            "range F zero, the trial plane is range E zero, and the residual geometry comes "
             "from the project's numerical model."
         )
         self.play(FadeIn(image))
         self.say(
-            "The camera now orbits the spectral geometry. The animation loops until we advance. "
-            "This is an extra closing slide after the summary, not a replacement for it.",
+            "Instead of a static model with the camera simply orbiting, the trial plane now tilts "
+            "through the sine-theta geometry while the scene rotates. The animation loops until we "
+            "advance. This is an extra closing slide after the summary, not a replacement for it.",
             src=movie,
             loop=True,
         )
