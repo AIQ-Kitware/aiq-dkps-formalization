@@ -36,10 +36,9 @@ Scenes render in parallel, one process per scene and ``--jobs`` at a time
 ``renders/logs/<deck>--<scene>.log``.  ``--fps`` overrides the quality's frame
 rate, e.g. ``-q h --fps 30`` for 1080p at half the frames of the 60 fps default.
 
-The handout (``--handout``) has one page per scene: the final frame of its last
-build, so every scene's last build must hold everything the slide says.  A
-build that plays an external video (``src``, e.g. a looping VTK movie) is a
-live demo, not a page, so the handout uses the last build before it.  Set
+The handout (``--handout``) has one page per scene.  When a scene has ordinary Manim
+builds, its last drawn build is used.  For a video-only scene (e.g. the VTK
+finale), the handout uses a frame of the external video.  Set
 ``DKVIS_THEME=light`` for a light-background deck; its outputs carry a ``-light``
 suffix (``slides-<deck>-light/``, ``renders/<deck>-light.html``) beside the dark ones.
 """
@@ -174,8 +173,21 @@ def assemble(deck_name: str) -> None:
             (folder / src.name).write_text(src.read_text())
 
 
+def handout_frame_file(slides: list[dict]) -> str:
+    """Select the last drawn build, or the movie for a video-only scene.
+
+    The external ``src`` is still a genuine slide, with its own generated
+    ``file`` in the Manim Slides scene JSON.  We must not add an extra static
+    build just to give the handout something to sample.
+    """
+    if not slides:
+        raise ValueError("scene contains no slides")
+    last_drawn = next((slide for slide in reversed(slides) if not slide.get("src")), None)
+    return (last_drawn or slides[-1])["file"]
+
+
 def write_handout(deck_name: str, out: Path) -> None:
-    """One PDF page per scene: the last frame of its last manim-drawn build."""
+    """One PDF page per scene; video-only scenes contribute a movie frame."""
     from PIL import Image
 
     folder = ROOT / f"slides-{output_name(deck_name)}"
@@ -183,11 +195,10 @@ def write_handout(deck_name: str, out: Path) -> None:
     with tempfile.TemporaryDirectory() as tmp:
         for k, scene in enumerate(get_deck(deck_name).scene_names):
             slides = json.loads((folder / f"{scene}.json").read_text())["slides"]
-            drawn = [s for s in slides if not s.get("src")]
             frame = Path(tmp) / f"{k:03d}.png"
             # -sseof seeks near the end; -update keeps overwriting, leaving the last frame.
             subprocess.run(
-                ["ffmpeg", "-loglevel", "error", "-sseof", "-0.5", "-i", str(ROOT / drawn[-1]["file"]),
+                ["ffmpeg", "-loglevel", "error", "-sseof", "-0.5", "-i", str(ROOT / handout_frame_file(slides)),
                  "-update", "1", "-y", str(frame)],
                 check=True,
             )

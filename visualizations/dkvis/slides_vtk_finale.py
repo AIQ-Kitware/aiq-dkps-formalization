@@ -1,64 +1,52 @@
-"""Friday-only VTK closing slide (adds a scene, does not replace the summary).
+"""Friday-only VTK video finale, without a static lead-in slide.
 
-Reuses the mathematical model and offscreen renderer from vtk_sine_theta_3d.
-Unlike the longer 3D study deck, it only prepares the still + loop it displays.
+Manim Slides accepts an external movie as a single presentation slide via
+``next_slide(src=...)``.  Do not ``play`` or ``wait`` before it: any rendered
+animation becomes an unwanted extra slide before the eye-candy finale.
 """
 
 from __future__ import annotations
 
 from pathlib import Path
 
-from manim import FadeIn, ImageMobject
-
 from dkvis.palette import OUTPUT_SUFFIX
 from dkvis.slide_style import DeckSlide
 
 ROOT = Path(__file__).resolve().parent.parent
 ASSETS = ROOT / "media" / f"vtk3d{OUTPUT_SUFFIX}"
+# New filename intentionally invalidates the earlier caption-less cached movie.
+MOVIE = ASSETS / "finale-tilt-vtk-caption.mp4"
 
 
 def prepare(refresh: bool = False) -> None:
-    """Build just the needed VTK assets, reusing cached study-deck media."""
-    still = ASSETS / "finale-residual-e0f0.png"
-    movie = ASSETS / "finale-tilt.mp4"
-    if (refresh or not still.exists()) or (refresh or not movie.exists()):
+    """Generate only the VTK video that this one-slide finale displays."""
+    if refresh or not MOVIE.exists():
         from dkvis import vtk_sine_theta_3d as vtk3d
-        ASSETS.mkdir(parents=True, exist_ok=True)
-        if refresh or not still.exists():
-            vtk3d.write_still("still-residual", still, width=1800, height=1000)
-        if refresh or not movie.exists():
-            vtk3d.write_movie("finale-tilt", movie)
+
+        MOVIE.parent.mkdir(parents=True, exist_ok=True)
+        vtk3d.write_movie("finale-tilt", MOVIE)
 
 
 class V01VTKFinale(DeckSlide):
-    title = "A final look: the sine-theta geometry in 3D"
-    kicker = r"VTK rendering of $\operatorname{range}(\sym{E0})$, $\operatorname{range}(\sym{F0})$, residuals, and the ellipsoid"
-    section = "Davis--Kahan: a geometric closing view"
+    """Exactly one looping external-video slide; no still, title or lead-in."""
+
+    title = ""
+    kicker = ""
+    section = ""
+
+    def make_chrome(self):
+        # The external movie already contains its labels and the VTK credit.
+        # No footer/number/title should be typeset over (or before) it.
+        return None
 
     def body(self) -> None:
-        still = ASSETS / "finale-residual-e0f0.png"
-        movie = ASSETS / "finale-tilt.mp4"
-        if not still.is_file() or not movie.is_file():
-            raise FileNotFoundError("Missing VTK finale assets; build with dkvis.build_slides to run prepare()")
-        image = ImageMobject(str(still))
-        # The finale still is 1800x1000; retain aspect ratio and keep clear of
-        # the deck chrome. The looping video itself is full-frame.
-        image.height = 5.35
-        image.move_to([0, -0.43, 0])
-        if image.width > 11.0:
-            image.scale_to_fit_width(11.0)
+        if not MOVIE.is_file():
+            raise FileNotFoundError("Missing VTK finale video; render through dkvis.build_slides")
+        # src creates the slide directly; never insert a FadeIn before it.
         self.say(
-            "One final look at the actual VTK visualization. This is the three-dimensional "
-            "sine-theta model, not a projection of the four-dimensional Proposition 4.4 "
-            "counterexample. The labels now match the deck notation: the exact plane is "
-            "range F zero, the trial plane is range E zero, and the residual geometry comes "
-            "from the project's numerical model."
-        )
-        self.play(FadeIn(image))
-        self.say(
-            "Instead of a static model with the camera simply orbiting, the trial plane now tilts "
-            "through the sine-theta geometry while the scene rotates. The animation loops until we "
-            "advance. This is an extra closing slide after the summary, not a replacement for it.",
-            src=movie,
+            "The final slide is a VTK rendering of the three-dimensional sine-theta model. "
+            "The exact plane is range F zero and the trial plane range E zero. "
+            "The trial plane tilts while the camera moves, and the movie loops.",
+            src=MOVIE,
             loop=True,
         )
