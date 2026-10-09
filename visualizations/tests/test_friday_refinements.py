@@ -25,6 +25,21 @@ def test_friday_order_and_new_refutation_statement():
     assert names.index('W04Reversals') < names.index('W06Claims')
 
 
+def test_friday_overview_is_source_oriented_and_unique_to_friday():
+    friday = get_deck('friday').scene_names
+    assert friday[:3] == ['S00TitleShort', 'W00Overview', 'W01Workflow']
+    assert 'W00Overview' not in get_deck('study').scene_names
+    assert 'W00Overview' not in get_deck('sine-theta-short').scene_names
+    overview = source('slides_process.py').split('class W00Overview(DeckSlide):')[1].split('class W01Workflow(DeckSlide):')[0]
+    for phrase in ('DAVIS', '1970', 'DARPA AIQ', 'July--August', 'semantic review',
+                   'Palomar formalization', 'TauCetiRoadmap', 'Hilbert-space operator theory',
+                   'self.add(', 'self.say('):
+        assert phrase in overview
+    assert r'\sym{delta}' in overview
+    assert r'\sym{sinTheta0}' in overview
+    assert 'FadeIn(' not in overview  # Overview is fully visible, without staged decoration.
+
+
 def test_robot_is_svg_and_disclosure_is_title_only():
     icon = ROOT / 'dkvis/assets/robot.svg'
     assert ET.parse(icon).getroot().tag == '{http://www.w3.org/2000/svg}svg'

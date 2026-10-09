@@ -18,6 +18,7 @@ FRIDAY = DeckSpec(
     footer=r"Davis--Kahan $\sin\Theta$ $\cdot$ LLM-assisted formalization",
     slides=tuple(ref_use(scene, core=True) for scene in [
         "S00TitleShort",
+        "W00Overview",
         "W01Workflow",
         "S01Ellipse",
         "S02Perturb",

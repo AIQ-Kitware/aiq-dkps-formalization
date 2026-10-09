@@ -48,6 +48,7 @@ def test_depth_is_presentation_specific():
 def test_working_decks_have_distinct_purposes():
     friday = get_deck("friday").scene_names
     study = get_deck("study").scene_names
+    assert friday[:3] == ["S00TitleShort", "W00Overview", "W01Workflow"]
     assert "W02TwoChecks" in friday
     assert "P02Counterexample" in friday
     assert "F04TanTwoTheta" not in friday
