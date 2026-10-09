@@ -25,11 +25,12 @@ Immediately after the title, the Friday manifest includes a single, static
 `W00Overview` scene. It gives the audience the destination before teaching the
 notation: Davis and Kahan's 1970 paper and a representative sine-theta bound;
 DARPA AIQ's need for the theorem; the upstream-quality motivation for reaching
-full operator-theoretic source scope; the timeline from January--February 2026
-exploration, through serious progress in June, to the intensive July--August
-formalization push; semantic alignment and agent orchestration as distinct
+full operator-theoretic source scope; the timeline from January--May 2026
+exploration, through serious progress in June and the intensive July--August
+formalization push, to September--October polish; semantic alignment and agent orchestration as distinct
 challenges; and the October 2026 status of Palomar, TauCetiRoadmap and ongoing
 Hilbert-space operator-theory ports.
+The Hilbert-space operator-theory ports are underway and first PRs have landed.
 Treat the October statuses as dated, presenter-supplied snapshots, not permanent
 repository facts. Keep this introduction specific to Friday rather than changing
 the study and reference compositions.
@@ -40,10 +41,12 @@ that every declaration in these areas was first-of-its-kind), and an
 **What the foundations enable** section that explicitly identifies future
 mathematical research in functional analysis (new Hilbert-space theorems) as
 well as downstream applications such as statistical PCA and numerical
-eigensolvers. These are possibilities enabled by reusable foundations, not
+eigensolvers, and spectral reasoning about self-adjoint Hamiltonians in
+mathematical physics. These are possibilities enabled by reusable foundations, not
 claims that those downstream projects are completed. The source journal
 identifies the six areas; some Spectra foundations were adapted or generalized,
-with attribution retained. A separate **Challenges** box covers the
+with attribution retained. The formalization scope is the major statements
+explicitly proved in the original paper. A separate **Challenges** box covers the
 semantic-alignment problem and agent orchestration: multi-stage work,
 handoffs, and review cycles.
 
