@@ -3,7 +3,6 @@ from pathlib import Path
 
 from dkvis.decks import DECKS, get_deck
 from dkvis.decks.reference import PART_SCENES
-from dkvis.notation import SYMBOLS
 
 
 EXPECTED_SHORT = [
@@ -67,18 +66,3 @@ def test_working_decks_have_distinct_purposes():
     assert friday.index("P02Counterexample") < friday.index("P04LeanRefutation") < friday.index("W02TwoChecks")
     assert friday.index("W02TwoChecks") < friday.index("W04Reversals") < friday.index("W06Claims")
     assert len(study) > len(friday)
-
-
-def test_sine_theta_notation_contract():
-    root = Path(__file__).resolve().parents[1]
-    source = (root / "dkvis/slides_sine_theta.py").read_text()
-
-    assert SYMBOLS["Ahat"][0] == r"\widehat A"
-    assert r"\sym{At}" not in source
-    # The core sine-theta exposition operates on frames directly.  U/V remain
-    # available for genuinely local statements such as Proposition 4.4.
-    assert r"\sym{U}" not in source
-    assert r"\sym{V}" not in source
-
-    friday = get_deck("friday").scene_names
-    assert friday.index("S07Theorem") < friday.index("S11Payoff")

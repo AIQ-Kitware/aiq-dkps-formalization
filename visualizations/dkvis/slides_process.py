@@ -124,14 +124,14 @@ class W00Overview(DeckSlide):
         mid_top = top - top_h - gap
         bottom_top = mid_top - mid_h - gap
 
-        def panel(left, upper, width, height, heading, *contents):
+        def panel(left, upper, width, height, heading, *contents, spacing=0.105):
             background = RoundedRectangle(
                 corner_radius=0.12, width=width, height=height,
                 stroke_color=FRAME, stroke_width=1.35,
                 fill_color=PANEL, fill_opacity=0.50,
             ).move_to([left + width / 2, upper - height / 2, 0])
             header = tex(r"\textbf{" + heading + "}", size=21)
-            group = VGroup(header, *contents).arrange(DOWN, aligned_edge=LEFT, buff=0.105)
+            group = VGroup(header, *contents).arrange(DOWN, aligned_edge=LEFT, buff=spacing)
             available_w, available_h = width - 2 * pad, height - 2 * pad
             if group.width > available_w:
                 group.scale(available_w / group.width)
@@ -149,6 +149,9 @@ class W00Overview(DeckSlide):
             math(r"\sym{delta}\,\norm{\sym{sinTheta0}(\sym{E0},\sym{F0})}"
                  r"\ \le\ \norm{\sym{R}}", size=36),
             tex(r"29 source results: 28 proved; Proposition 4.4 refuted and repaired", size=18, color=MUTED),
+            tex(r"\textbf{scope:} all major statements explicitly proved in the paper",
+                size=17, color=MUTED),
+            spacing=0.065,
         )
         aiq = panel(
             aiq_x, top, aiq_w, top_h, "DARPA AIQ MOTIVATION",
@@ -172,11 +175,10 @@ class W00Overview(DeckSlide):
         )
         apps = panel(
             apps_x, mid_top, apps_w, mid_h, "WHAT THE FOUNDATIONS ENABLE",
-            para(r"\textbf{Mathematical research in functional analysis:} "
-                 r"a basis for new formal Hilbert-space theorems.",
-                 width=apps_w - 2 * pad, size=19),
-            para(r"\textbf{Applications:} formalize statistical PCA and eigensolver guarantees.",
-                 width=apps_w - 2 * pad, size=18, color=MUTED),
+            tex(r"\textbf{Research:} Hilbert-space theorems", size=19),
+            tex(r"\textbf{Statistics:} PCA and eigensolvers", size=19, color=MUTED),
+            tex(r"\textbf{Physics:} quantum Hamiltonians", size=19, color=MUTED),
+            spacing=0.07,
         )
 
         challenge_w, when_w = 4.85, 3.28
@@ -194,18 +196,21 @@ class W00Overview(DeckSlide):
         )
         when = panel(
             when_x, bottom_top, when_w, bottom_h, "WHEN: 2026",
-            para(r"\textbf{Jan--Feb:} exploration.",
-                 width=when_w - 2 * pad, size=19),
+            para(r"\textbf{Jan--May:} exploration.",
+                 width=when_w - 2 * pad, size=18),
             para(r"\textbf{June:} serious progress.",
-                 width=when_w - 2 * pad, size=19),
-            para(r"\textbf{July--August:} heavy push.",
-                 width=when_w - 2 * pad, size=19),
+                 width=when_w - 2 * pad, size=18),
+            para(r"\textbf{Jul--Aug:} heavy push.",
+                 width=when_w - 2 * pad, size=18),
+            para(r"\textbf{Sep--Oct:} polish.",
+                 width=when_w - 2 * pad, size=18),
+            spacing=0.065,
         )
         status = panel(
             status_x, bottom_top, status_w, bottom_h, "STATUS (OCTOBER 2026)",
             para(r"Palomar formalization: \textbf{accepted}\\ "
                  r"TauCetiRoadmap: \textbf{accepted}\\ "
-                 r"Foundational Hilbert-space operator-theory ports: \textbf{underway}",
+                 r"Hilbert-space operator-theory ports: \textbf{underway, first PRs have landed}",
                  width=status_w - 2 * pad, size=19),
         )
         self.say(
@@ -221,16 +226,20 @@ class W00Overview(DeckSlide):
             "generalized from Spectra; not all are wholly new results. Those foundations "
             "support mathematical research in functional analysis, "
             "including new formal Hilbert-space theorems, and for applications such as "
-            "statistical PCA and numerical eigensolvers. Work began as an exploration in "
-            "January and February 2026, made serious progress in June, and saw its heavy "
-            "formalization push in July and August. September and October brought semantic "
+            "statistical PCA and numerical eigensolvers, and could also support spectral "
+            "reasoning for self-adjoint quantum Hamiltonians in mathematical physics. "
+            "These are potential uses of reusable foundations, not completed downstream formalizations. "
+            "The scope was all major statements explicitly proved in the paper. "
+            "Work began as an exploration from January through May 2026, made serious "
+            "progress in June, and saw its heavy formalization push in July and August. "
+            "September and October were primarily a polish phase, including semantic "
             "review and upstream porting work. Challenges included semantic alignment: "
             "implementation raced ahead of understanding, and proof checking alone could "
             "not establish correspondence to the 1970 paper. Agent orchestration was "
             "another challenge, including coordination of multi-stage work, handoffs, "
             "and repeated reviews. As of October 2026, the "
             "Palomar formalization and TauCetiRoadmap are accepted and Hilbert-space operator "
-            "theory is being ported upstream."
+            "theory is being ported upstream; the first PRs have landed."
         )
         # One static build: all boxes appear together, including in the handout.
         self.add(paper, aiq, theory, apps, challenges, when, status)
@@ -312,7 +321,7 @@ class W01Workflow(DeckSlide):
                 width=13.6, size=19,
             ),
             para(
-                r"\textbf{Agents} (ChatGPT, Claude Code, Codex) transcribed and explained sources, proposed decompositions, "
+                r"\textbf{Agents} (ChatGPT, Claude) transcribed and explained sources, proposed decompositions, "
                 r"searched libraries, wrote Lean, repaired it from compiler errors and compared statements with the source.",
                 width=13.6, size=19, color=MUTED,
             ),
@@ -349,7 +358,7 @@ class W01Workflow(DeckSlide):
 
         self.say(
             "Who did what: the humans chose targets and judged statements, and could intervene at every return "
-            "through the loop. ChatGPT, Claude Code and Codex agents did the transcription, search, Lean writing, "
+            "through the loop. ChatGPT and Claude agents did the transcription, search, Lean writing, "
             "repair and source comparison. The workflow emerged during the project; it was not designed as an experiment."
         )
         self.play(FadeIn(roles))
