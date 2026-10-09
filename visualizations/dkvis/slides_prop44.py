@@ -13,6 +13,7 @@ model the VTK and Manim Proposition 4.4 scenes use.
 from __future__ import annotations
 
 import math as pymath
+from pathlib import Path
 
 import numpy as np
 from manim import (
@@ -30,6 +31,7 @@ from manim import (
     FadeIn,
     Line,
     Rectangle,
+    Text,
     Transform,
     ValueTracker,
     VGroup,
@@ -44,6 +46,7 @@ from dkvis.slide_style import (
     FAINT,
     FG,
     MUTED,
+    MONO_FONT,
     PANEL,
     REFUTED,
     SINE,
@@ -368,30 +371,9 @@ class P02Counterexample(P4Slide):
             fill_opacity=0.0,
         ).move_to([x0 + 3.23, table_rows[2].get_center()[1], 0])
 
-        lean = VGroup(
-            tex(
-                r"Lean: \texttt{proposition4\_4\_refuted}; repair: "
-                r"\texttt{directRotation\_fullDisplacement\_qnorm}.",
-                size=19,
-                color=MUTED,
-            ),
-            para(
-                r"For $Q$-norms (including operator and Frobenius), the direct rotation "
-                r"\emph{does} minimize $\norm{I-W}$ for acute pairs over $\mathbb{R}$ "
-                r"or $\mathbb{C}$, without the printed $\pi/3$ cutoff.",
-                width=w,
-                size=20,
-                color=FG,
-            ),
-        ).arrange(DOWN, aligned_edge=LEFT, buff=0.08)
-        lean.move_to([x0, table_rows.get_bottom()[1] - 0.23, 0], aligned_edge=UP + LEFT)
-        for mob in lean:
-            if mob.get_right()[0] > 6.8:
-                mob.scale((6.8 - x0) / (mob.get_right()[0] - x0), about_edge=LEFT)
-
         # Keep the explanatory material above the footer at any supported theme
         # while keeping the numerical comparison and all highlight geometry aligned.
-        right_content = VGroup(intro, bars_title, bars, title, header, rule, table_rows, failure_outline, lean)
+        right_content = VGroup(intro, bars_title, bars, title, header, rule, table_rows, failure_outline)
         floor = -3.13
         if right_content.get_bottom()[1] < floor:
             right_content.scale(
@@ -414,12 +396,7 @@ class P02Counterexample(P4Slide):
         )
         self.play(FadeIn(table_rows[2]), Create(failure_outline))
 
-        self.say(
-            "Lean checked this counterexample. It also checked a repaired statement "
-            "for Q-norms, including the operator and Frobenius norms. "
-            "That repair does not require the printed 60-degree cutoff."
-        )
-        self.play(FadeIn(lean))
+
 
 
 # ----------------------------------------------------------------------------
@@ -503,72 +480,180 @@ class P03Why(P4Slide):
         self.play(FadeIn(t3))
 
 
-class P04LeanRefutation(P4Slide):
-    """Friday: the checked witness and the refuted printed proposition."""
+# Pull the displayed theorem *verbatim* from Lean, rather than retyping it in
+# TeX (which can silently change Lean syntax or binder interpretation).
+LEAN_ROOT = Path(__file__).resolve().parents[2]
+COUNTEREXAMPLE_SOURCE = (
+    LEAN_ROOT / "DavisKahan/FiniteDimensional/DirectRotation/ShortRotationCounterexample.lean"
+)
+QNORM_SOURCE = LEAN_ROOT / "DavisKahan/FiniteDimensional/DirectRotation/QNorm.lean"
 
-    title = "The Lean signature: Proposition 4.4 refuted"
-    kicker = r"A concrete witness in $\mathbb{R}^4$, then a proof that the printed claim is false"
+
+def _lean_statement(path: Path, name: str, *, include_witness: bool = False) -> list[str]:
+    """Literal source lines of a Lean theorem through its `:=` declaration.
+
+    The shortRotation witness has a one-line proof that is worth showing as
+    well; for other theorems only show the declaration header.
+    """
+    lines = path.read_text().splitlines()
+    start = next(i for i, line in enumerate(lines) if line.startswith(f"theorem {name}") and (len(line) == len(name) + 8 or line[len(name) + 8] in " :"))
+    end = next(
+        i for i in range(start, len(lines))
+        if lines[i].rstrip().endswith(":=") or lines[i].rstrip().endswith(":= by")
+    )
+    if include_witness:
+        assert lines[end].rstrip().endswith(":=")
+        end += 1
+    return lines[start : end + 1]
+
+
+def _lean_text_block(lines: list[str], *, size: float, step: float) -> VGroup:
+    """Use the same source-preserving monospaced layout as S12Lean."""
+    probe = Text("M" * 20, font=MONO_FONT, font_size=size)
+    char_w = probe.width / 20
+    code = VGroup()
+    for i, line in enumerate(lines):
+        indentation = len(line) - len(line.lstrip(" "))
+        glyph = Text(line.strip(), font=MONO_FONT, font_size=size, color=FG)
+        glyph.move_to([indentation * char_w, -i * step, 0], aligned_edge=LEFT)
+        code.add(glyph)
+    return code
+
+
+class P04LeanRefutation(P4Slide):
+    """Friday: literal Lean witness, explanation, and the Q-norm repair."""
+
+    title = "Lean checked the refutation and its repair"
+    kicker = r"Literal Lean witness from ShortRotationCounterexample.lean; Q-norm repair in QNorm.lean"
 
     def body(self) -> None:
-        # This reproduces the witness theorem's statement, omitting only its
-        # surrounding namespace. The short corollary is quoted verbatim too.
-        signature = [
-            "theorem shortRotation_fullDisplacement_refuted :",
-            "  ∃ (U V : Submodule ℝ (EuclideanSpace ℝ (Fin 4)))",
-            "    (hacute : IsAcute U V)",
-            "    (W : EuclideanSpace ℝ (Fin 4) ≃ₗᵢ[ℝ] EuclideanSpace ℝ (Fin 4)),",
-            "    U.map W.toLinearMap = V ∧",
-            "    principalAngles U V 0 ≤ Real.pi / 3 ∧",
-            "    kyFanSum 4 (LinearMap.id - W.toLinearMap) <",
-            "      kyFanSum 4 (LinearMap.id - (directRotation U V hacute).toLinearMap)",
-        ]
-        heading = tex(r"The formal witness (from ShortRotationCounterexample.lean)", size=25)
-        code = VGroup(*[mono(line, size=17) for line in signature]).arrange(
-            DOWN, aligned_edge=LEFT, buff=0.065
+        witness_lines = _lean_statement(
+            COUNTEREXAMPLE_SOURCE, "shortRotation_fullDisplacement_refuted",
+            include_witness=True,
         )
-        block = VGroup(heading, code).arrange(DOWN, aligned_edge=LEFT, buff=0.17)
-        if block.width > 12.5:
-            block.scale_to_fit_width(12.5)
-        block.move_to([-6.3, self.content_top - 0.20, 0], aligned_edge=UP + LEFT)
-        bg = Rectangle(
-            width=block.width + 0.30, height=block.height + 0.26,
-            fill_color=PANEL, fill_opacity=1, stroke_width=0,
-        ).move_to(block)
+        # This is a literal Lean statement, including its one-line witness term.
+        witness = _lean_text_block(witness_lines, size=17, step=0.32)
+        left, top = -6.55, self.content_top - 0.12
+        left_w, right_x, right_w = 8.45, 2.08, 4.42
+        upper_h, lower_h = 3.22, 2.03
 
-        interpretation = math(
-            r"\underbrace{\|I-W\|_{\mathrm{trace}}}_{\mathrm{competitor}}"
-            r"\;<\;"
-            r"\underbrace{\|I-\mathcal R\|_{\mathrm{trace}}}_{\mathrm{direct\ rotation}}",
-            size=33,
-        ).next_to(bg, DOWN, buff=0.22)
+        head = tex(r"\textbf{THE WITNESS (LITERAL LEAN SOURCE)}", size=20)
+        witness.move_to([left + 0.18, top - 0.63, 0], aligned_edge=UP + LEFT)
+        if witness.width > left_w - 0.38:
+            witness.scale_to_fit_width(left_w - 0.38)
+        if witness.height > upper_h - 0.98:
+            witness.scale_to_fit_height(upper_h - 0.98)
+        witness.move_to([left + 0.18, top - 0.63, 0], aligned_edge=UP + LEFT)
+        head.move_to([left + 0.18, top - 0.18, 0], aligned_edge=UP + LEFT)
+        upper_bg = Rectangle(
+            width=left_w, height=upper_h, stroke_width=0,
+            fill_color=PANEL, fill_opacity=1,
+        ).move_to([left + left_w / 2, top - upper_h / 2, 0])
 
-        verdict = mono(
-            "theorem not_davisKahanProposition4_4_Finite :",
-            size=21,
+        # Highlight the two critical assumptions/conclusions in the source text.
+        angles = VGroup(*witness[5:6])
+        comparison = VGroup(*witness[6:8])
+        angle_box = Rectangle(
+            width=angles.width + 0.13, height=angles.height + 0.1,
+            stroke_color=MUTED, stroke_width=1.6,
+        ).move_to(angles)
+        comparison_box = Rectangle(
+            width=comparison.width + 0.13, height=comparison.height + 0.12,
+            stroke_color=REFUTED, stroke_width=1.8,
+        ).move_to(comparison)
+
+        right_bg = Rectangle(
+            width=right_w, height=upper_h, stroke_width=0,
+            fill_color=PANEL, fill_opacity=1,
+        ).move_to([right_x + right_w / 2, top - upper_h / 2, 0])
+        explain_head = tex(r"\textbf{HOW TO READ IT}", size=20)
+        explain1 = para(
+            r"An acute pair of subspaces in $\mathbb{R}^4$; "
+            r"a competitor $W$ with $W(U)=V$.",
+            width=right_w - 0.4, size=21,
         )
-        conclusion = mono(
-            "  ¬ DavisKahanProposition4_4_Finite.{0}", size=21,
+        explain2 = para(
+            r"Principal angles $\leq 60^\circ$; the actual witness has two $45^\circ$ angles.",
+            width=right_w - 0.4, size=21,
         )
-        final = VGroup(verdict, conclusion).arrange(DOWN, aligned_edge=LEFT, buff=0.06)
-        final.next_to(interpretation, DOWN, buff=0.26).align_to(block, LEFT)
-        if final.get_bottom()[1] < -3.13:
-            content = VGroup(block, bg, interpretation, final)
-            content.scale_to_fit_height(content.height + (final.get_bottom()[1] + 3.13))
-            content.move_to([-6.25, self.content_top - 0.18, 0], aligned_edge=UP + LEFT)
+        explain3 = para(
+            r"\textbf{Trace norm:} the competitor has strictly smaller "
+            r"$\norm{I-W}$ than the direct rotation.",
+            width=right_w - 0.4, size=21,
+        )
+        # Show the actual two-line source declaration that negates the printed
+        # proposition, not just its identifier.
+        negation = _lean_text_block(
+            _lean_statement(COUNTEREXAMPLE_SOURCE, "not_davisKahanProposition4_4_Finite"),
+            size=15, step=0.28,
+        )
+        if negation.width > right_w - 0.4:
+            negation.scale_to_fit_width(right_w - 0.4)
+        explanation = VGroup(explain_head, explain1, explain2, explain3, negation).arrange(
+            DOWN, aligned_edge=LEFT, buff=0.16,
+        )
+        if explanation.height > upper_h - 0.34:
+            explanation.scale_to_fit_height(upper_h - 0.34)
+        explanation.move_to([right_x + 0.20, top - 0.17, 0], aligned_edge=UP + LEFT)
+
+        repair_top = top - upper_h - 0.16
+        repair_bg = Rectangle(
+            width=13.05, height=lower_h, stroke_width=0,
+            fill_color=PANEL, fill_opacity=1,
+        ).move_to([0, repair_top - lower_h / 2, 0])
+        repair_head = tex(r"\textbf{THE REPAIR (ALSO PROVED IN LEAN)}", size=22)
+        repair_head.move_to([left + 0.18, repair_top - 0.14, 0], aligned_edge=UP + LEFT)
+        # The changed hypothesis is an exact source line, not paraphrased code.
+        # The block deliberately excerpts the binder rather than pretending
+        # that two lines reproduce the entire theorem statement.
+        repair_lines = _lean_statement(QNORM_SOURCE, "directRotation_fullDisplacement_qnorm")
+        restriction = next(line for line in repair_lines if "(hN : IsQNorm N)" in line)
+        repair_code = _lean_text_block(
+            ["theorem directRotation_fullDisplacement_qnorm", restriction],
+            size=19, step=0.31,
+        )
+        repair_code.move_to([left + 0.20, repair_top - 0.59, 0], aligned_edge=UP + LEFT)
+        repair_formula = math(
+            r"N(I-\mathcal R)\ \le\ N(I-W)", size=33,
+        )
+        repair_formula.move_to([right_x + 1.90, repair_top - 0.90, 0])
+        repair_note = para(
+            r"Restricted to $Q$-norms (e.g. operator and Frobenius), "
+            r"the direct rotation minimizes full displacement: "
+            r"real or complex, with no $60^\circ$ cutoff.",
+            width=12.55, size=19, color=MUTED,
+        )
+        repair_note.move_to([left + 0.22, repair_top - 1.31, 0], aligned_edge=UP + LEFT)
+        # Keep the repair above the footer even if a font fallback changes widths.
+        repair_items = VGroup(repair_head, repair_code, repair_formula, repair_note)
+        if repair_items.get_bottom()[1] < repair_bg.get_bottom()[1] + 0.12:
+            repair_items.scale(
+                (repair_items.get_top()[1] - repair_bg.get_bottom()[1] - 0.12)
+                / repair_items.height,
+                about_edge=UP + LEFT,
+            )
 
         self.say(
-            "The source-facing refutation is a theorem in Lean, not merely a numerical plot. "
-            "It constructs acute subspaces U and V in R four and an orthogonal competitor W mapping U to V. "
-            "All principal angles are at most sixty degrees, but the Ky Fan four sum, which is "
-            "the trace norm in dimension four, is strictly smaller for W than for the direct rotation."
+            "This is the literal theorem and witness term from ShortRotationCounterexample dot Lean, "
+            "typeset in the same monospace style as the earlier sine-theta Lean slide. "
+            "It constructs two acute subspaces in R four and an orthogonal competitor W carrying "
+            "U to V. Both principal angles are 45 degrees, within the source's 60-degree limit."
         )
-        self.play(FadeIn(bg, heading, code))
-        self.play(FadeIn(interpretation))
+        self.play(FadeIn(upper_bg), FadeIn(witness), FadeIn(head), FadeIn(right_bg), FadeIn(explanation))
         self.say(
-            "A separate Lean theorem negates the formal finite-dimensional version of the printed "
-            "Proposition four point four. Its source is ShortRotationCounterexample dot Lean."
+            "The decisive line is the inequality: the Ky Fan four norm, which in R four is "
+            "the trace norm, is smaller for the competitor than the direct rotation. "
+            "Therefore the printed all-norm claim is false. Lean also proves the explicit "
+            "negation in not davis Kahan Proposition four four finite."
         )
-        self.play(FadeIn(final))
+        self.play(Create(angle_box), Create(comparison_box))
+        self.say(
+            "We also proved a repair. Notice the extra Lean hypothesis IsQNorm N, which "
+            "limits the norm class. For this class the direct rotation minimizes the full "
+            "displacement, without the source's 60-degree cutoff, and over real or complex "
+            "Hilbert spaces. This is the theorem directRotation fullDisplacement qnorm."
+        )
+        self.play(FadeIn(repair_bg), FadeIn(repair_items))
 
 
 class P04Details(P4Slide):

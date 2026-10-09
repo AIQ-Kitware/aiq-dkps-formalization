@@ -32,6 +32,14 @@ Treat the October statuses as dated, presenter-supplied snapshots, not permanent
 repository facts. Keep this introduction specific to Friday rather than changing
 the study and reference compositions.
 
+The overview now includes a **Developments** section: six classical operator-theory
+prerequisite areas that required new or generalized Lean interfaces (not a claim
+that every declaration in these areas was first-of-its-kind), and an
+**Applications enabled** section naming statistical PCA, numerical eigensolvers,
+and formal mathematical research. The source journal identifies the six areas;
+some Spectra foundations were adapted or generalized, with attribution retained.
+A separate **Challenges** box carries the semantic-alignment problem.
+
 ## Narrative spine
 
 Treat `dkvis.decks.friday.FRIDAY` as a working hypothesis, not a sacred order.
@@ -84,3 +92,31 @@ The Friday deck deliberately switches viewpoints.  The audience should never hav
 - Keep `g` and `delta` distinct: `g` is an original eigengap of `A`; `delta` is the Davis--Kahan separation between the trial spectrum and the exact unwanted spectrum of `Ahat`.
 
 Use the centralized notation/color table for every mathematical object.  Do not color the same symbol ad hoc on individual slides.
+
+## Ending
+
+The "What to take away" slide is organized around three lessons:
+
+1. LLMs can sustain a serious Hilbert-space functional-analysis formalization:
+   all 29 selected source results were addressed, 28 proved at the source scope,
+   the remaining printed proposition refuted and repaired.
+2. Sine-theta intuition: a small perturbation/residual gives a small eigenspace
+   error *when there is adequate certified spectral separation*. This is useful
+   even when the underlying true eigenspace is latent.
+3. LLM-assisted source review located a counterexample to the 1970 paper's
+   all-unitarily-invariant-norm version of Proposition 4.4. Its consequence is
+   restricted: for acute pairs, direct rotation retains its full-displacement
+   minimality for Q-norms such as the operator and Frobenius norms, without the
+   printed 60-degree limit and also over complex spaces. Do not imply the
+   full printed claim was commonly used incorrectly downstream.
+
+The Friday deck retains `S14Summary` and appends a new `V01VTKFinale` scene
+using the existing VTK 3D sine-theta model (`still-residual.png` and `orbit.mp4`).
+The VTK loop is eye candy after the conclusion, not a 3D representation of the
+Proposition 4.4 four-dimensional witness. This is Friday-only and does not
+change the existing 3D reference or study sequences.
+
+The 2D+2D Proposition 4.4 comparison owns the numerical counterexample; the
+following `P04LeanRefutation` scene uses literal Lean source text and explains
+the independently checked Q-norm repair. Do not duplicate the Lean repair note
+on the numerical counterexample slide.
