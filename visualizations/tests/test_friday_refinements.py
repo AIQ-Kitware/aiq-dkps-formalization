@@ -1,6 +1,7 @@
 """Guard the small presentation-specific contracts agreed for the Friday deck."""
 
 from pathlib import Path
+import ast
 import xml.etree.ElementTree as ET
 
 from dkvis.decks import get_deck
@@ -23,6 +24,7 @@ def test_friday_order_and_new_refutation_statement():
     assert names.index('P04LeanRefutation') < names.index('W02TwoChecks')
     assert names.index('W02TwoChecks') < names.index('W04Reversals')
     assert names.index('W04Reversals') < names.index('W06Claims')
+    assert names[-2:] == ['S14Summary', 'V01VTKFinale']
 
 
 def test_friday_overview_is_source_oriented_and_unique_to_friday():
@@ -31,13 +33,18 @@ def test_friday_overview_is_source_oriented_and_unique_to_friday():
     assert 'W00Overview' not in get_deck('study').scene_names
     assert 'W00Overview' not in get_deck('sine-theta-short').scene_names
     overview = source('slides_process.py').split('class W00Overview(DeckSlide):')[1].split('class W01Workflow(DeckSlide):')[0]
-    for phrase in ('DAVIS', '1970', 'DARPA AIQ', 'July--August', 'semantic review',
-                   'Palomar formalization', 'TauCetiRoadmap', 'Hilbert-space operator theory',
+    for phrase in ('Davis', '1970', 'DARPA AIQ', 'July--August', 'semantic review',
+                   'Palomar formalization', 'TauCetiRoadmap', 'Hilbert-space operator-theory',
                    'self.add(', 'self.say('):
         assert phrase in overview
     assert r'\sym{delta}' in overview
     assert r'\sym{sinTheta0}' in overview
     assert 'FadeIn(' not in overview  # Overview is fully visible, without staged decoration.
+    assert 'CHALLENGES' in overview
+    assert 'DEVELOPMENTS: CLASSICAL OPERATOR THEORY' in overview
+    assert 'Six prerequisite theory areas' in overview
+    assert 'APPLICATIONS ENABLED' in overview
+    assert 'mathematical research' in overview
 
 
 def test_robot_is_svg_and_disclosure_is_title_only():
@@ -57,12 +64,72 @@ def test_theorem_is_anchored_to_real_lean_declarations():
     prop44 = source('slides_prop44.py')
     lean = (ROOT.parent / 'DavisKahan/FiniteDimensional/DirectRotation/'
             'ShortRotationCounterexample.lean').read_text()
+    qnorm = (ROOT.parent / 'DavisKahan/FiniteDimensional/DirectRotation/'
+             'QNorm.lean').read_text()
     for declaration in ('shortRotation_fullDisplacement_refuted',
                         'not_davisKahanProposition4_4_Finite'):
         assert declaration in prop44
         assert f'theorem {declaration}' in lean
-    assert 'kyFanSum 4 (LinearMap.id - W.toLinearMap) <' in prop44
-    assert '¬ DavisKahanProposition4_4_Finite.{0}' in prop44
+    assert 'theorem directRotation_fullDisplacement_qnorm' in qnorm
+    assert 'QNORM_SOURCE' in prop44
+    assert '_lean_statement(' in prop44
+    assert '(hN : IsQNorm N)' in qnorm
+    assert 'literal Lean' in prop44 or 'LITERAL LEAN' in prop44
+    # The counterexample displays numbers only; repair discussion belongs on
+    # the next Lean slide, rather than repeated in the comparison animation.
+    counterexample = prop44.split('class P02Counterexample(P4Slide):')[1].split('class P03Why(P4Slide):')[0]
+    assert 'directRotation_fullDisplacement_qnorm' not in counterexample
+    assert 'lean = VGroup' not in counterexample
+
+
+def test_literal_prop44_theorem_headers_are_extractable_from_source():
+    """Exercise the exact-source reader without importing optional Manim."""
+    module_ast = ast.parse(source('slides_prop44.py'))
+    func = next(node for node in module_ast.body
+                if isinstance(node, ast.FunctionDef) and node.name == '_lean_statement')
+    namespace = {'Path': Path}
+    exec(compile(ast.Module(body=[func], type_ignores=[]), '<lean-excerpt>', 'exec'), namespace)
+    excerpt = namespace['_lean_statement']
+    dk = ROOT.parent / 'DavisKahan/FiniteDimensional/DirectRotation/ShortRotationCounterexample.lean'
+    qn = ROOT.parent / 'DavisKahan/FiniteDimensional/DirectRotation/QNorm.lean'
+    witness = excerpt(dk, 'shortRotation_fullDisplacement_refuted', include_witness=True)
+    assert witness[0] == 'theorem shortRotation_fullDisplacement_refuted :'
+    assert 'kyFanSum 4 (LinearMap.id - W.toLinearMap) <' in '\n'.join(witness)
+    assert 'principalAngles U V 0 ≤ Real.pi / 3' in '\n'.join(witness)
+    assert witness[-1].strip().startswith('⟨U4, V4, acute, Wequiv')
+    negation = excerpt(dk, 'not_davisKahanProposition4_4_Finite')
+    assert negation == ['theorem not_davisKahanProposition4_4_Finite :',
+                        '    ¬ DavisKahanProposition4_4_Finite.{0} := by']
+    repair = excerpt(qn, 'directRotation_fullDisplacement_qnorm')
+    assert repair[0] == 'theorem directRotation_fullDisplacement_qnorm'
+    assert any('(hN : IsQNorm N)' in line for line in repair)
+    assert repair[-1].rstrip().endswith(':= by')
+
+
+def test_takeaways_state_count_intuition_and_limited_counterexample_scope():
+    section = source('slides_sine_theta.py').split('class S14Summary(DeckSlide):')[1].split('SCENES = [')[0]
+    assert r'All \textbf{29}' in section
+    assert r'\textbf{28 proved}' in section
+    assert 'Hilbert-space functional analysis' in section
+    assert 'subspace error is bounded by residual over separation' in section
+    assert 'unobserved' in section
+    assert 'LLM-assisted review found a counterexample' in section
+    assert 'for acute pairs' in section
+    assert '$Q$-norms' in section
+    assert r"without the source's $60^\circ$ cutoff" in section
+
+
+def test_vtk_finale_reuses_project_renderer_without_replacing_summary():
+    names = get_deck('friday').scene_names
+    assert names[-2:] == ['S14Summary', 'V01VTKFinale']
+    assert 'V01VTKFinale' not in get_deck('study').scene_names
+    assert 'V01VTKFinale' not in get_deck('sine-theta-short').scene_names
+    vtk = source('slides_vtk_finale.py')
+    assert 'vtk_sine_theta_3d' in vtk
+    assert 'vtk3d.write_still' in vtk
+    assert 'vtk3d.write_movie' in vtk
+    assert 'loop=True' in vtk
+    assert 'orbit.mp4' in vtk
 
 
 def test_slides_avoid_old_clutter_and_note_telemetry_limits():

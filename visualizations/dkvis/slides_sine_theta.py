@@ -2610,40 +2610,75 @@ class S13Family(DeckSlide):
 
 class S14Summary(DeckSlide):
     title = "What to take away"
-    kicker = ""
+    kicker = "Three lessons from a source-faithful formalization"
 
     def body(self) -> None:
+        # A compact conclusion, with the mathematical qualifications carried
+        # through in the text instead of hidden behind a generic success count.
         items = [
             (
-                r"\cx{muted}{1}",
-                r"\textbf{The $\sin\Theta$ theorem.} A trial frame $\sym{E0}$ with small residual is close to the "
-                r"exact frame $\sym{F0}$ when the unwanted spectrum is certified far enough away: "
-                r"$\norm{\sym{sinTheta0}(\sym{E0},\sym{F0})}\le\norm{\sym{R}}/\sym{delta}$, residual over separation.",
+                "1",
+                r"LLMs can sustain serious formalization",
+                r"All \textbf{29} selected results from Davis--Kahan (1970) were addressed: "
+                r"\textbf{28 proved} in Lean, and one refuted as printed (then repaired). "
+                r"The work reaches Hilbert-space functional analysis, including "
+                r"infinite-dimensional and unbounded-operator results.",
             ),
             (
-                r"\cx{muted}{2}",
-                r"\textbf{Formalized at the paper's full scope.} Real or complex, finite-dimensional or separable "
-                r"infinite-dimensional Hilbert spaces, "
-                r"possibly unbounded operators, every unitarily invariant norm, checked by Lean with only its "
-                r"standard axioms.",
+                "2",
+                r"Sine-theta: stability needs separation",
+                r"A small perturbation need not imply a small eigenspace change. "
+                r"When the relevant spectra are sufficiently separated, however, "
+                r"\textbf{subspace error is bounded by residual over separation}: "
+                r"$\norm{\sym{sinTheta0}(\sym{E0},\sym{F0})}"
+                r"\le\norm{\sym{R}}/\sym{delta}$. "
+                r"This can bound error relative to an \emph{unobserved} true eigenspace.",
             ),
             (
-                r"\cx{muted}{3}",
-                r"\textbf{Proposition 4.4 is false as printed.} An explicit counterexample in $\mathbb{R}^4$, "
-                r"refuted in Lean, together with a proved repair: the claim holds for the $Q$-norms "
-                r"(e.g.\ operator and Frobenius).",
+                "3",
+                r"A classical claim was too broad",
+                r"LLM-assisted review found a counterexample to Proposition~4.4's "
+                r"claim for \emph{every} unitarily invariant norm. The failure is "
+                r"limited to that breadth: for \textbf{$Q$-norms} (including operator "
+                r"and Frobenius), direct rotation remains optimal for acute pairs "
+                r"over $\mathbb{R}$ or $\mathbb{C}$, without the source's $60^\circ$ cutoff.",
             ),
         ]
         rows = VGroup()
-        for num, text in items:
-            n = tex(num, size=60)
-            body = para(text, width=11.4, size=30)
-            rows.add(VGroup(n, body).arrange(RIGHT, aligned_edge=UP, buff=0.45))
-        rows.arrange(DOWN, aligned_edge=LEFT, buff=0.55)
-        rows.move_to([-6.3, self.content_top - 0.35, 0], aligned_edge=UP + LEFT)
-        self.say("Three things to remember.")
-        for row in rows:
-            self.play(FadeIn(row, shift=UP * 0.1), run_time=0.7)
+        for number, headline, details in items:
+            n = tex(number, size=52, color=MUTED)
+            head = tex(r"\textbf{" + headline + "}", size=28, color=FG)
+            body = para(details, width=11.1, size=24)
+            block = VGroup(head, body).arrange(DOWN, aligned_edge=LEFT, buff=0.08)
+            rows.add(VGroup(n, block).arrange(RIGHT, aligned_edge=UP, buff=0.34))
+        rows.arrange(DOWN, aligned_edge=LEFT, buff=0.32)
+        # Keep all three takeaways above the deck footer on both themes.
+        max_height = self.content_top + 2.90
+        if rows.height > max_height:
+            rows.scale_to_fit_height(max_height)
+        if rows.width > 12.55:
+            rows.scale_to_fit_width(12.55)
+        rows.move_to([-6.30, self.content_top - 0.18, 0], aligned_edge=UP + LEFT)
+        self.say(
+            "Three takeaways. First, this was a substantial LLM-assisted formalization: "
+            "the explicit inventory contains twenty-nine Davis-Kahan results. "
+            "Lean proves twenty-eight at source scope. The remaining printed Proposition four point four "
+            "is false and has a checked counterexample and repair. The work is functional analysis "
+            "in Hilbert spaces, not just finite matrices. Second, the intuition for sine theta is "
+            "that a perturbation only gives a useful guarantee when the wanted and unwanted "
+            "spectra are separated. The bound controls an eigenspace error by a residual "
+            "divided by separation, and can even certify closeness to an underlying true "
+            "eigenspace whose vectors are unknown. Third, the agent-assisted search "
+            "found a counterexample to a claim in a classical, widely cited paper. "
+            "The consequence is limited: the failure is of the universal choice of "
+            "unitarily invariant norm. The direct rotation remains optimal for "
+            "Q norms, including operator and Frobenius norms, for acute pairs "
+            "over real or complex spaces, without the claimed sixty-degree threshold. "
+            "An application genuinely requiring every unitarily invariant norm "
+            "would have to confront that invalid generalization."
+        )
+        # Complete static content is available in the handout.
+        self.add(rows)
 
 
 SCENES = [

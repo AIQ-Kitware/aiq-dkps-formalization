@@ -15,6 +15,7 @@ FAMILY = "dkvis.slides_family"
 FAMILY_DETAIL = "dkvis.slides_family_detail"
 PROCESS = "dkvis.slides_process"
 GLOSSARY = "dkvis.slides_glossary"
+VTK_FINALE = "dkvis.slides_vtk_finale"
 
 TECHNICAL = {
     "S03dCompute", "S04bSinThetaOperator", "S07bReading", "S08Components", "S09Sylvester", "S10Sharp", "S13Family",
@@ -38,6 +39,7 @@ MODULE_OF = {
     **{name: PROP44 for name in ["P01Claim", "P02Counterexample", "P03Why", "P04Details", "P04LeanRefutation"]},
     **{name: PROCESS for name in ["W00Overview", "W01Workflow", "W02TwoChecks", "W03ThreeStatements", "W04Reversals", "W05Scale", "W06Claims"]},
     **{name: GLOSSARY for name in ["G01Matrices", "G02Spectra", "G03Other"]},
+    "V01VTKFinale": VTK_FINALE,
 }
 
 

@@ -50,6 +50,9 @@ def test_working_decks_have_distinct_purposes():
     study = get_deck("study").scene_names
     assert friday[:3] == ["S00TitleShort", "W00Overview", "W01Workflow"]
     assert "W02TwoChecks" in friday
+    assert friday[-2:] == ["S14Summary", "V01VTKFinale"]
+    assert "V01VTKFinale" not in study
+    assert "V01VTKFinale" not in get_deck("sine-theta-short").scene_names
     assert "P02Counterexample" in friday
     assert "F04TanTwoTheta" not in friday
     assert "F04TanTwoTheta" in study

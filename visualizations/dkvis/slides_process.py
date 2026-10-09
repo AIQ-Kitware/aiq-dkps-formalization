@@ -37,6 +37,7 @@ from manim import (
 from dkvis.slide_style import (
     FG,
     MUTED,
+    PANEL,
     DeckSlide,
     math,
     para,
@@ -104,138 +105,123 @@ def arrow(a, b, color: str = FG) -> Arrow:
 
 
 class W00Overview(DeckSlide):
-    """Single-build orientation: paper, theorem, motivation, timeline and status.
+    """The complete Friday-talk orientation in a single static frame.
 
-    Keep this scene static.  It is a one-slide roadmap, not an animation whose
-    delayed text competes with the speaker's opening summary.
+    Source counts are from the DK 1970 result inventory.  The six foundation
+    areas are a *classification* from the journal paper, not six new theorems,
+    and are not a claim that no previous Lean work existed on these topics.
     """
 
     section = SECTION
     title = "Davis--Kahan: the project in one slide"
-    kicker = r"From the 1970 paper to DARPA AIQ, source review, and upstream mathematics"
+    kicker = r"1970 mathematical theory, DARPA AIQ, source alignment, and reusable operator theory"
 
     def body(self) -> None:
-        # The title/chrome already reserves the top and bottom bands.  Fit the
-        # entire five-part overview into the remaining content area.
         x_left, x_right = -6.55, 6.55
-        gap = 0.18
-        top = self.content_top - 0.04
-        top_h, mid_h, bottom_h = 2.35, 1.15, 1.65
-        mid_top = top - top_h - 0.17
-        bottom_top = mid_top - mid_h - 0.17
+        gap, pad = 0.15, 0.19
+        top = self.content_top - 0.06
+        top_h, mid_h, bottom_h = 1.73, 1.69, 1.68
+        mid_top = top - top_h - gap
+        bottom_top = mid_top - mid_h - gap
 
-        def backdrop(left: float, upper: float, width: float, height: float):
-            return RoundedRectangle(
+        def panel(left, upper, width, height, heading, *contents):
+            background = RoundedRectangle(
                 corner_radius=0.12, width=width, height=height,
-                stroke_color=FRAME, stroke_width=1.4,
-                fill_color=PANEL, fill_opacity=0.5,
+                stroke_color=FRAME, stroke_width=1.35,
+                fill_color=PANEL, fill_opacity=0.50,
             ).move_to([left + width / 2, upper - height / 2, 0])
+            header = tex(r"\textbf{" + heading + "}", size=21)
+            group = VGroup(header, *contents).arrange(DOWN, aligned_edge=LEFT, buff=0.105)
+            available_w, available_h = width - 2 * pad, height - 2 * pad
+            if group.width > available_w:
+                group.scale(available_w / group.width)
+            if group.height > available_h:
+                group.scale(available_h / group.height)
+            group.move_to([left + pad, upper - pad, 0], aligned_edge=UP + LEFT)
+            return VGroup(background, group)
 
-        def place(mob, left: float, upper: float):
-            return mob.move_to([left, upper, 0], aligned_edge=UP + LEFT)
-
-        left_w, right_w = 7.2, x_right - x_left - 7.2 - gap
-        right_x = x_left + left_w + gap
-        paper_box = backdrop(x_left, top, left_w, top_h)
-        aiq_box = backdrop(right_x, top, right_w, top_h)
-        pad = 0.22
-
-        paper_head = place(tex(r"\textbf{DAVIS \& KAHAN (1970)}", size=21), x_left + pad, top - 0.14)
-        citation = place(
-            para(r"\emph{The rotation of eigenvectors by a perturbation. III}", width=left_w - 2 * pad, size=21),
-            x_left + pad, top - 0.52,
+        paper_w = 6.85
+        aiq_x = x_left + paper_w + gap
+        aiq_w = x_right - aiq_x
+        paper = panel(
+            x_left, top, paper_w, top_h, "WHAT WE FORMALIZED",
+            tex(r"Davis \& Kahan (1970), \emph{Rotation of eigenvectors, III}", size=21),
+            math(r"\sym{delta}\,\norm{\sym{sinTheta0}(\sym{E0},\sym{F0})}"
+                 r"\ \le\ \norm{\sym{R}}", size=36),
+            tex(r"29 source results: 28 proved; Proposition 4.4 refuted and repaired", size=18, color=MUTED),
         )
-        statement = math(
-            r"\sym{delta}\,\norm{\sym{sinTheta0}(\sym{E0},\sym{F0})}"
-            r"\ \le\ \norm{\sym{R}}",
-            size=39,
-        ).move_to([x_left + left_w / 2, top - 1.30, 0])
-        description = place(
-            tex(r"Eigenspace error $\times$ separation $\leq$ residual", size=20, color=MUTED),
-            x_left + pad, top - 1.70,
-        )
-        coverage = place(
-            tex(r"29 results: 28 proved; Prop.~4.4 refuted and repaired", size=18, color=MUTED),
-            x_left + pad, top - 2.07,
-        )
-
-        aiq_head = place(tex(r"\textbf{WHY DARPA AIQ?}", size=21), right_x + pad, top - 0.14)
-        aiq_motive = place(
-            para(
-                r"A team needed spectral-subspace stability bounds as foundational mathematics.",
-                width=right_w - 2 * pad, size=22,
-            ), right_x + pad, top - 0.58,
-        )
-        aiq_scope = place(
-            para(
-                r"The push for an upstream-quality contribution led to the full 1970 "
-                r"Hilbert-space scope: real/complex scalars, unbounded operators, "
-                r"and general unitarily invariant norms.",
-                width=right_w - 2 * pad, size=20,
-            ), right_x + pad, top - 1.28,
+        aiq = panel(
+            aiq_x, top, aiq_w, top_h, "DARPA AIQ MOTIVATION",
+            para(r"A team needed eigenspace stability as foundational mathematics.",
+                 width=aiq_w - 2 * pad, size=22),
+            para(r"Pursuing an upstream-quality contribution pushed us from familiar "
+                 r"matrix statements to the paper's Hilbert-space and unbounded-operator scope.",
+                 width=aiq_w - 2 * pad, size=19, color=MUTED),
         )
 
-        alignment_box = backdrop(x_left, mid_top, x_right - x_left, mid_h)
-        alignment_head = place(
-            tex(r"\textbf{SEMANTIC ALIGNMENT}", size=21),
-            x_left + pad, mid_top - 0.13,
+        theory_w = 8.18
+        apps_x = x_left + theory_w + gap
+        apps_w = x_right - apps_x
+        theory = panel(
+            x_left, mid_top, theory_w, mid_h, "DEVELOPMENTS: CLASSICAL OPERATOR THEORY",
+            tex(r"\textbf{Six prerequisite theory areas} needed new or more general Lean interfaces:", size=19),
+            para(r"Principal angles/projections; approximation numbers/operator ideals; "
+                 r"polar decomposition/direct rotations; Borel spectral calculus; "
+                 r"unbounded self-adjoint maps; real/complex transfer.",
+                 width=theory_w - 2 * pad, size=20),
         )
-        alignment = place(
-            para(
-                r"Implementation outpaced understanding: Lean checked formal proofs before "
-                r"we could reliably judge whether each statement matched the 1970 source.",
-                width=x_right - x_left - 2 * pad, size=22,
-            ), x_left + pad, mid_top - 0.50,
+        apps = panel(
+            apps_x, mid_top, apps_w, mid_h, "APPLICATIONS ENABLED",
+            para(r"Reusable operator theory can support formalization of "
+                 r"statistical PCA, numerical eigensolvers, and mathematical research.",
+                 width=apps_w - 2 * pad, size=21),
         )
 
-        timeline_w = 5.55
-        status_x = x_left + timeline_w + gap
+        challenge_w, when_w = 4.85, 3.28
+        when_x = x_left + challenge_w + gap
+        status_x = when_x + when_w + gap
         status_w = x_right - status_x
-        timeline_box = backdrop(x_left, bottom_top, timeline_w, bottom_h)
-        status_box = backdrop(status_x, bottom_top, status_w, bottom_h)
-        timeline_head = place(tex(r"\textbf{WHEN: 2026}", size=21), x_left + pad, bottom_top - 0.13)
-        timeline_main = place(
-            tex(r"\textbf{July--August:} heavy formalization push", size=22),
-            x_left + pad, bottom_top - 0.57,
+        challenges = panel(
+            x_left, bottom_top, challenge_w, bottom_h, "CHALLENGES",
+            para(r"Semantic alignment: implementation moved faster than understanding. "
+                 r"Lean checked proofs before source-statement equivalence was reliably established.",
+                 width=challenge_w - 2 * pad, size=19),
         )
-        timeline_later = place(
-            para(r"September--October: semantic review, packaging, and upstream ports", width=timeline_w - 2 * pad, size=20),
-            x_left + pad, bottom_top - 1.02,
+        when = panel(
+            when_x, bottom_top, when_w, bottom_h, "WHEN: 2026",
+            para(r"\textbf{July--August:} heavy formalization push.",
+                 width=when_w - 2 * pad, size=20),
+            para(r"September--October: semantic review and upstream ports.",
+                 width=when_w - 2 * pad, size=18, color=MUTED),
         )
-
-        status_head = place(tex(r"\textbf{STATUS (OCTOBER 2026)}", size=21), status_x + pad, bottom_top - 0.13)
-        status_palomar = place(tex(r"Palomar formalization: \textbf{accepted}", size=21), status_x + pad, bottom_top - 0.51)
-        status_roadmap = place(tex(r"TauCetiRoadmap: \textbf{accepted}", size=21), status_x + pad, bottom_top - 0.86)
-        status_port = place(
-            tex(r"Hilbert-space operator theory: ports underway", size=20),
-            status_x + pad, bottom_top - 1.22,
+        status = panel(
+            status_x, bottom_top, status_w, bottom_h, "STATUS (OCTOBER 2026)",
+            para(r"Palomar formalization: \textbf{accepted}\\ "
+                 r"TauCetiRoadmap: \textbf{accepted}\\ "
+                 r"Foundational Hilbert-space operator-theory ports: \textbf{underway}",
+                 width=status_w - 2 * pad, size=19),
         )
-
         self.say(
-            "Here is the whole project in one slide. Davis and Kahan's 1970 paper establishes "
-            "how far spectral subspaces can rotate under perturbation. Its sine-theta theorem "
-            "bounds angular error using a residual and certified spectral separation. We "
-            "formalized the source's 29 tracked results: 28 were proved at the stated scope, "
-            "and Proposition 4.4 was found false, refuted in Lean, and repaired. The DARPA AIQ "
-            "effort needed the foundational theorem for a team. The search for a reusable, "
-            "upstream-quality contribution pushed the development beyond the common matrix "
-            "specialization to the general Hilbert-space and operator-theoretic setting. "
-            "Most of the implementation push was in July and August 2026, followed by intensive "
-            "semantic review. The difficult lesson was that LLMs could implement proofs faster "
-            "than we could develop sufficient understanding to validate that the formalized "
-            "statements still meant what the 1970 paper said. At this October 2026 update, "
-            "the Palomar formalization and the TauCetiRoadmap have been accepted, and ports "
-            "of foundational Hilbert-space operator theory are underway."
+            "Davis and Kahan's 1970 paper gives bounds on the motion of spectral subspaces. "
+            "We tracked 29 results: 28 proved in Lean at the reviewed scope, and Proposition 4.4 "
+            "refuted as printed and repaired. This was motivated by the DARPA AIQ effort, where "
+            "a team needed foundational spectral stability mathematics. Seeking a contribution "
+            "of sufficient quality for upstreaming led us well beyond matrix theorems. The "
+            "formalization developed or generalized interfaces in six classical operator-theory "
+            "areas: principal angles and projections, approximation numbers and ideals, polar "
+            "decomposition and direct rotations, Borel spectral calculus, unbounded self-adjoint "
+            "operators, and real-complex transfer. Some spectral foundations were adapted or "
+            "generalized from Spectra; not all are wholly new results. Those foundations "
+            "enable later formalizations in applications such as statistical inference and "
+            "numerical eigensolvers, as well as formal mathematical research itself. The main "
+            "formalization push was July and August 2026. The central challenge was semantic "
+            "alignment: implementation raced ahead of understanding, and proof checking alone "
+            "could not establish correspondence to the 1970 paper. As of October 2026, the "
+            "Palomar formalization and TauCetiRoadmap are accepted and Hilbert-space operator "
+            "theory is being ported upstream."
         )
-        # Static overview: all elements are visible in the first build/handout.
-        self.add(
-            paper_box, aiq_box, alignment_box, timeline_box, status_box,
-            paper_head, citation, statement, description, coverage,
-            aiq_head, aiq_motive, aiq_scope,
-            alignment_head, alignment,
-            timeline_head, timeline_main, timeline_later,
-            status_head, status_palomar, status_roadmap, status_port,
-        )
+        # One static build: all boxes appear together, including in the handout.
+        self.add(paper, aiq, theory, apps, challenges, when, status)
 
 
 # ----------------------------------------------------------------------------
