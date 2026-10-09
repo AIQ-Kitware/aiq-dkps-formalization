@@ -27,6 +27,7 @@ All numbers shown come from :mod:`dkvis.sine_theta_story` and
 from __future__ import annotations
 
 import math as pymath
+from pathlib import Path
 
 import numpy as np
 from manim import (
@@ -60,6 +61,7 @@ from manim import (
     Rectangle,
     Square,
     ReplacementTransform,
+    SVGMobject,
     Transform,
     Triangle,
     ValueTracker,
@@ -186,6 +188,12 @@ class S00Title(DeckSlide):
         title = tex(r"How far can an eigenvector turn?", size=64).move_to(UP * 1.9)
         sub = tex(r"The Davis--Kahan $\sin\Theta$ theorem, in pictures", size=38, color=MUTED)
         sub.next_to(title, DOWN, buff=0.35)
+        # The emoji is a vector graphic. Unicode emoji in tex() would be sent
+        # to LaTeX and fail with the default font/engine.
+        robot = SVGMobject(str(Path(__file__).resolve().parent / "assets" / "robot.svg"), height=0.36)
+        assistance = VGroup(
+            robot, tex(r"Slides prepared with LLM assistance.", size=20, color=MUTED),
+        ).arrange(RIGHT, buff=0.15).next_to(sub, DOWN, buff=0.18)
         ref = tex(
             r"C.~Davis and W.~M.~Kahan, \emph{The rotation of eigenvectors by a perturbation.~III},"
             r" SIAM J.~Numer.~Anal.~7 (1970)",
@@ -203,7 +211,7 @@ class S00Title(DeckSlide):
         theta = math(r"\sym{theta}", size=32).move_to(
             plane(2.05 * story.unit(pair.theta / 2 - 0.08))
         )
-        self.play(FadeIn(title, shift=DOWN * 0.2), FadeIn(sub))
+        self.play(FadeIn(title, shift=DOWN * 0.2), FadeIn(sub), FadeIn(assistance))
         self.play(Create(old), Create(axis_old), run_time=1.0)
         self.play(
             ReplacementTransform(old.copy(), new),
@@ -414,7 +422,7 @@ class S01Ellipse(DeckSlide):
 
 class S02Perturb(DeckSlide):
     title = "Perturb the matrix"
-    kicker = r"\cx{perturb}{PERTURBATION SETUP} --- $\sym{A}\to\sym{Ahat}=\sym{A}+\sym{H}$, with $\sym{H}$ small and symmetric"
+    kicker = r"\cx{perturb}{PERTURBATION SETUP} --- $\sym{Ahat}=\sym{A}+\sym{H}$, with $\sym{H}$ small and symmetric"
 
     def body(self) -> None:
         eps = story.PERTURBATION_EPS
@@ -793,46 +801,33 @@ class S03cUnstable(DeckSlide):
             width=text_w, size=21, color=MUTED,
         )
         t_sub = para(
-            r"At $\sym{g}=0$ every line is an eigenvector of $\sym{A}$; only the eigenspace is well defined. "
-            r"So Davis--Kahan works with \emph{subspaces}: all the eigenvectors of an isolated cluster of eigenvalues.",
-            width=text_w, size=21, color=MUTED,
+            r"At $\sym{g}=0$ no single eigenvector is distinguished. "
+            r"Davis--Kahan compares \emph{subspaces}.",
+            width=text_w, size=20, color=MUTED,
         )
         column(t_intro, h_display, t_gap, t_nogap, t_flip, t_rule, t_sub, top=top, x=x0, buff=0.18)
 
         self.say(
-            "Two copies of the same experiment. Left: an A with a clear gap. Right: an A that is "
-            "almost round. In both, H has size 0.12; the live matrix shows its actual entries as "
-            "we turn it, and the dashed line is the direction H itself prefers. We will turn H once "
-            "round and leave a pink line at every direction the top "
-            "eigenvector of A hat points."
+            "Two copies of the same experiment. Left: A has a clear gap. Right: A is almost round. "
+            "Both use the same rotating H, with norm 0.12. The live matrix shows H's entries. "
+            "Watch the two wanted eigendirections rotate at the same time."
         )
         self.add(with_gap.trace, no_gap.trace)
         self.play(FadeIn(with_gap.parts(), no_gap.parts(), legend, t_intro, h_display))
 
         self.say(
-            "With a gap: H turns all the way round, and the wanted eigenvector of A hat barely moves. "
-            "The pink fan is a thin wedge, at most 7 degrees either side."
+            "With a gap, the top eigenvector of A hat moves only slightly; its traced fan is narrow. "
+            "With almost no gap, it can turn in every direction. The same rotating H produces both "
+            "outcomes. The eigenvalues in either panel still move by at most 0.12."
         )
         self.play(
             with_gap.ph.animate.set_value(phi0 + TAU),
-            h_phi.animate.set_value(phi0 + TAU),
-            run_time=6.0,
-            rate_func=rate_functions.linear,
-        )
-        self.play(FadeIn(t_gap))
-
-        self.say(
-            "Now the almost-round A. Same size of H, same turn. The eigenvector follows H "
-            "wherever it points: the pink lines fill every direction. The eigenvalues, the ticks, "
-            "still move by at most 0.12. That is what unstable means."
-        )
-        self.play(
             no_gap.ph.animate.set_value(phi0 + TAU),
-            h_phi.animate.set_value(phi0 + 2 * TAU),
+            h_phi.animate.set_value(phi0 + TAU),
             run_time=7.0,
             rate_func=rate_functions.linear,
         )
-        self.play(FadeIn(t_nogap))
+        self.play(FadeIn(t_gap), FadeIn(t_nogap))
 
         self.say(
             "Two members of that family, as matrices: plus and minus epsilon off the diagonal. They "
@@ -1079,25 +1074,25 @@ class S03dCompute(DeckSlide):
 
 class S04Angle(DeckSlide):
     title = "Measuring the error from two frames"
-    kicker = r"\cx{muted}{GENERAL THEOREM SETUP} --- compare the ranges of $\sym{E0}$ and $\sym{F0}$; no perturbation $\sym{H}$ is needed"
+    kicker = r"\cx{muted}{GENERAL SETUP} --- $\sym{Ahat}=\sym{A}+\sym{H}$ is one case; the theorem studies any $\sym{Ahat}$"
 
     def body(self) -> None:
         th = ValueTracker(np.radians(35.0))
-        plane = Plane([-5.0, -2.55, 0], 3.0)
+        plane = Plane([-5.12, -2.69, 0], 2.75)
 
         def model() -> SineThetaModel:
             return SineThetaModel(th.get_value())
 
         recall = RecallPanel(
             [
-                (r"$\sym{E0}$", r"orthonormal trial frame: known or chosen", None),
+                (r"$\sym{E0}$", r"comparison frame for the operator under study", None),
                 (r"$\sym{F0}$", r"orthonormal exact wanted frame of $\sym{Ahat}$: the target", None),
                 (r"$\sym{F1}$", r"orthonormal exact unwanted frame; together $F_0,F_1$ fill the ambient space", None),
                 (r"$\sym{Theta0}(\sym{E0},\sym{F0})$", r"principal angles between $\operatorname{range}(E_0)$ and $\operatorname{range}(F_0)$", None),
             ],
             x=-6.75,
             top=self.content_top - 0.1,
-            width=6.05,
+            width=5.75,
         )
 
         exact = through_origin(plane, [1, 0], 1.25, WANTED, width=4)
@@ -1118,7 +1113,7 @@ class S04Angle(DeckSlide):
         )
         e0 = always_redraw(lambda: vec(plane.origin, plane(model().trial_vector), TRIAL, width=7))
         e0_lbl = always_redraw(
-            lambda: math(r"\sym{E0}\ \text{(one column here)}", size=24).next_to(
+            lambda: math(r"\sym{E0}", size=24).next_to(
                 plane(model().trial_vector), UL, buff=0.05
             )
         )
@@ -1130,9 +1125,12 @@ class S04Angle(DeckSlide):
         )
 
         self.say(
-            "The two geometric objects are represented by frames, not by extra subspace names. E0 is the trial "
-            "frame we have. F0 is the exact wanted frame of A hat. Their ranges are the two subspaces, and theta "
-            "is the angle between those ranges."
+            "The perturbation model, A hat equals A plus H, was one way to obtain two subspaces. "
+            "The general sine theta theorem does not require an original A or any H. Start with an operator "
+            "A hat and a comparison frame E zero. The exact wanted invariant frame F zero of A hat is the "
+            "reference for the theorem's conclusion. The comparison frame might be a numerical guess, "
+            "or the true eigenspace of a latent A in the perturbation application. Either way, we want "
+            "to compare the ranges of E zero and F zero. How should we measure their error?"
         )
         self.play(FadeIn(recall.show(2)), Create(exact), FadeIn(exact_lbl))
         self.add(trial, trial_lbl, e0, e0_lbl, arc, th_lbl)
@@ -1218,8 +1216,8 @@ class S04Angle(DeckSlide):
         )
         bridge = boxed(
             para(
-                r"\textbf{Information model:} $\sym{E0}$ is the trial frame we have; $\sym{F0}$ is the exact frame "
-                r"we usually do not know. So the angle is the target quantity. Next we need evidence formed without $\sym{F0}$.",
+                r"\textbf{General setting:} $\sym{E0}$ is a candidate/reference frame for $\sym{Ahat}$; "
+                r"$\sym{F0}$ is exact. Their angle measures the discrepancy. Next: how can a residual bound it?",
                 width=RIGHT_COL_W - 0.45,
                 size=20,
             ),
@@ -1244,8 +1242,9 @@ class S04Angle(DeckSlide):
             FadeIn(VGroup(general, definition, g_eq, g_note), shift=UP * 0.1),
         )
         self.say(
-            "This is the unknown we want to bound: sin Theta0 of E0 and F0. E0 is ours; F0 is exact and generally "
-            "unavailable. The next slide introduces the residual, which uses A hat, E0 and A0 but not F0."
+            "That is the error we seek to bound. In a computed residual problem E zero can be known, "
+            "while in a latent-truth perturbation problem E zero can be unknown. The formula for the "
+            "angle applies to both. Next we will study the invariance defect, or residual."
         )
         self.play(FadeIn(bridge, shift=UP * 0.08))
 
@@ -2297,9 +2296,10 @@ class S11Payoff(DeckSlide):
             return story.PerturbedPair(gap=g.get_value(), eps=eps)
 
         self.say(
-            "Now add the extra structure of the perturbation problem. A is the original matrix and A hat equals "
-            "A plus H. Choose E0 to be the exact wanted eigenframe of the original A, with A E0 = E0 A0. "
-            "F0 is the exact wanted frame of A hat; that is the frame whose range we want to compare with range E0."
+            "Now add the perturbation relationship: A hat equals A plus H. In a statistical application, "
+            "A is the latent true matrix and A hat is the observed estimate. E zero is a true eigenframe "
+            "of A, even if we do not know it, and F zero is the eigenframe calculated from A hat. "
+            "The proof uses A E zero equals E zero A zero, whether or not those objects are observable."
         )
         setup = math(
             r"\sym{Ahat}=\sym{A}+\sym{H},\qquad "
@@ -2351,9 +2351,9 @@ class S11Payoff(DeckSlide):
             y_length=2.15,
             tips=False,
             axis_config={"color": MUTED, "stroke_width": 2},
-        ).move_to([3.95, -1.8, 0])
-        x_lbl = math(r"\text{original eigengap }\sym{g}\text{ of }\sym{A}", size=21, color=MUTED).next_to(
-            axes.c2p(0.72, 0), DOWN, buff=0.1
+        ).move_to([3.95, -1.64, 0])
+        x_lbl = tex(r"original gap $\sym{g}$ of $\sym{A}$", size=18, color=MUTED).next_to(
+            axes, DOWN, buff=0.36
         )
         y_ticks = VGroup(*[math(f"{v:g}", size=20, color=MUTED).next_to(axes.c2p(0, v), LEFT, buff=0.08) for v in (0.5, 1.0)])
         x_ticks = VGroup(*[math(f"{v:g}", size=20, color=MUTED).next_to(axes.c2p(v, 0), DOWN, buff=0.08) for v in (0.5, 1.0)])
@@ -2362,12 +2362,12 @@ class S11Payoff(DeckSlide):
             axes.plot(lambda x: story.PerturbedPair(gap=x, eps=eps).bound, x_range=[0.0, 1.0], color=RESID, stroke_width=3),
             num_dashes=45,
         )
-        a_lbl = math(r"\norm{\sym{sinTheta0}(\sym{E0},\sym{F0})}", size=23).next_to(
-            axes.c2p(0.9, story.PerturbedPair(0.9, eps).sin_theta), DOWN, buff=0.12
-        )
-        b_lbl = math(r"\norm{\sym{R}}/\sym{delta}", size=26).next_to(
-            axes.c2p(0.25, story.PerturbedPair(0.25, eps).bound), UR, buff=0.08
-        )
+        # The theorem's full formula is above. This plot uses a compact legend,
+        # keeping label geometry outside the curves and the axis tick labels.
+        plot_legend = tex(
+            r"\cx{sine}{solid: angle error} \quad \cx{resid}{dashed: bound}",
+            size=19,
+        ).next_to(axes, UP, buff=0.08)
         d_actual = always_redraw(lambda: Dot(axes.c2p(g.get_value(), pair().sin_theta), color=SINE, radius=0.07))
         d_bound = always_redraw(lambda: Dot(axes.c2p(g.get_value(), pair().bound), color=RESID, radius=0.07))
 
@@ -2390,7 +2390,7 @@ class S11Payoff(DeckSlide):
             FadeIn(x_lbl, y_ticks, x_ticks),
             Create(actual),
             Create(bound),
-            FadeIn(a_lbl, b_lbl),
+            FadeIn(plot_legend),
         )
         self.add(d_actual, d_bound)
         self.play(g.animate.set_value(story.PERTURBATION_END_GAP), run_time=5.0, rate_func=rate_functions.ease_in_out_sine)
@@ -2479,7 +2479,7 @@ class S12Lean(DeckSlide):
             width=lines.width + 0.4, height=lines.height + 0.35, fill_color=PANEL, fill_opacity=1, stroke_width=0
         ).move_to(lines)
         caption = para(
-            r"As \texttt{\#check} prints it, with instance-binder names dropped and lines re-broken; "
+            r"The theorem statement, with instance-binder names dropped and lines re-broken; "
             r"$\sin\Theta_0$ is \texttt{sourceDirectedSinThetaOperator E$_0$ F$_0$}. "
             r"\textbf{Notation translation:} Lean's \texttt{A} is this talk's $\sym{Ahat}$. "
             r"The talk's original $\sym{A}$ and perturbation $\sym{H}$ exist only in the perturbation specialization.",
@@ -2515,19 +2515,6 @@ class S12Lean(DeckSlide):
         dim = [line.animate.set_opacity(0.4) for i, line in enumerate(lines) if i not in highlighted and i != 0]
         self.play(*dim, FadeIn(highlights, lag_ratio=0.1), FadeIn(labels, lag_ratio=0.1), run_time=1.6)
 
-        self.say(
-            "And it is trustworthy in the usual sense: print axioms shows only Lean's three standard "
-            "axioms. The same holds for the Proposition 4.4 refutation later in the talk."
-        )
-        trust = para(
-            r"\texttt{\#print axioms}: \texttt{propext}, \texttt{Classical.choice}, \texttt{Quot.sound} "
-            r"--- Lean's standard axioms, nothing assumed.",
-            width=13.3,
-            size=22,
-            color=FG,
-        ).next_to(caption, DOWN, aligned_edge=LEFT, buff=0.12)
-        fit_right(trust)
-        self.play(FadeIn(trust))
 
 
 # ----------------------------------------------------------------------------

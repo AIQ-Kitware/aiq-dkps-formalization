@@ -434,6 +434,74 @@ class P03Why(P4Slide):
         self.play(FadeIn(t3))
 
 
+class P04LeanRefutation(P4Slide):
+    """Friday: the checked witness and the refuted printed proposition."""
+
+    title = "The Lean signature: Proposition 4.4 refuted"
+    kicker = r"A concrete witness in $\mathbb{R}^4$, then a proof that the printed claim is false"
+
+    def body(self) -> None:
+        # This reproduces the witness theorem's statement, omitting only its
+        # surrounding namespace. The short corollary is quoted verbatim too.
+        signature = [
+            "theorem shortRotation_fullDisplacement_refuted :",
+            "  ∃ (U V : Submodule ℝ (EuclideanSpace ℝ (Fin 4)))",
+            "    (hacute : IsAcute U V)",
+            "    (W : EuclideanSpace ℝ (Fin 4) ≃ₗᵢ[ℝ] EuclideanSpace ℝ (Fin 4)),",
+            "    U.map W.toLinearMap = V ∧",
+            "    principalAngles U V 0 ≤ Real.pi / 3 ∧",
+            "    kyFanSum 4 (LinearMap.id - W.toLinearMap) <",
+            "      kyFanSum 4 (LinearMap.id - (directRotation U V hacute).toLinearMap)",
+        ]
+        heading = tex(r"The formal witness (from ShortRotationCounterexample.lean)", size=25)
+        code = VGroup(*[mono(line, size=17) for line in signature]).arrange(
+            DOWN, aligned_edge=LEFT, buff=0.065
+        )
+        block = VGroup(heading, code).arrange(DOWN, aligned_edge=LEFT, buff=0.17)
+        if block.width > 12.5:
+            block.scale_to_fit_width(12.5)
+        block.move_to([-6.3, self.content_top - 0.20, 0], aligned_edge=UP + LEFT)
+        bg = Rectangle(
+            width=block.width + 0.30, height=block.height + 0.26,
+            fill_color=PANEL, fill_opacity=1, stroke_width=0,
+        ).move_to(block)
+
+        interpretation = math(
+            r"\underbrace{\|I-W\|_{\mathrm{trace}}}_{\mathrm{competitor}}"
+            r"\;<\;"
+            r"\underbrace{\|I-\mathcal R\|_{\mathrm{trace}}}_{\mathrm{direct\ rotation}}",
+            size=33,
+        ).next_to(bg, DOWN, buff=0.22)
+
+        verdict = mono(
+            "theorem not_davisKahanProposition4_4_Finite :",
+            size=21,
+        )
+        conclusion = mono(
+            "  ¬ DavisKahanProposition4_4_Finite.{0}", size=21,
+        )
+        final = VGroup(verdict, conclusion).arrange(DOWN, aligned_edge=LEFT, buff=0.06)
+        final.next_to(interpretation, DOWN, buff=0.26).align_to(block, LEFT)
+        if final.get_bottom()[1] < -3.13:
+            content = VGroup(block, bg, interpretation, final)
+            content.scale_to_fit_height(content.height + (final.get_bottom()[1] + 3.13))
+            content.move_to([-6.25, self.content_top - 0.18, 0], aligned_edge=UP + LEFT)
+
+        self.say(
+            "The source-facing refutation is a theorem in Lean, not merely a numerical plot. "
+            "It constructs acute subspaces U and V in R four and an orthogonal competitor W mapping U to V. "
+            "All principal angles are at most sixty degrees, but the Ky Fan four sum, which is "
+            "the trace norm in dimension four, is strictly smaller for W than for the direct rotation."
+        )
+        self.play(FadeIn(bg, heading, code))
+        self.play(FadeIn(interpretation))
+        self.say(
+            "A separate Lean theorem negates the formal finite-dimensional version of the printed "
+            "Proposition four point four. Its source is ShortRotationCounterexample dot Lean."
+        )
+        self.play(FadeIn(final))
+
+
 class P04Details(P4Slide):
     title = r"The $\mathbb{R}^4$ witness, explicitly"
     kicker = r"$U=\langle e_0,e_1\rangle$, $\ V=W(U)$; both principal angles $\pi/4$"
@@ -491,4 +559,4 @@ class P04Details(P4Slide):
         self.play(FadeIn(bg), FadeIn(lean))
 
 
-SCENES = [P01Claim, P02Counterexample, P03Why, P04Details]
+SCENES = [P01Claim, P02Counterexample, P03Why, P04Details, P04LeanRefutation]

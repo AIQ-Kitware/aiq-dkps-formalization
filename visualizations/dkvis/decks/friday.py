@@ -15,7 +15,7 @@ FRIDAY = DeckSpec(
         "Working talk: introduce the mathematics of sine-theta, then explain what "
         "Lean checked, what source review checked, and how those checks changed confidence."
     ),
-    footer=r"Davis--Kahan $\sin\Theta$ $\cdot$ LLM-assisted formalization and justified confidence",
+    footer=r"Davis--Kahan $\sin\Theta$ $\cdot$ LLM-assisted formalization",
     slides=tuple(ref_use(scene, core=True) for scene in [
         "S00TitleShort",
         "W01Workflow",
@@ -28,13 +28,13 @@ FRIDAY = DeckSpec(
         "S06Gap",
         "S07Theorem",
         "S11Payoff",
-        "S08Why",
         "S12Lean",
-        "W02TwoChecks",
-        "W04Reversals",
         "P01Claim",
         "P02Counterexample",
         "P03Why",
+        "P04LeanRefutation",
+        "W02TwoChecks",
+        "W04Reversals",
         "W06Claims",
         "S14Summary",
     ]),
