@@ -33,7 +33,7 @@ def test_friday_overview_is_source_oriented_and_unique_to_friday():
     assert 'W00Overview' not in get_deck('study').scene_names
     assert 'W00Overview' not in get_deck('sine-theta-short').scene_names
     overview = source('slides_process.py').split('class W00Overview(DeckSlide):')[1].split('class W01Workflow(DeckSlide):')[0]
-    for phrase in ('Davis', '1970', 'DARPA AIQ', 'July--August', 'semantic review',
+    for phrase in ('Davis', '1970', 'DARPA AIQ', 'July--August', 'Semantic alignment:',
                    'Palomar formalization', 'TauCetiRoadmap', 'Hilbert-space operator-theory',
                    'self.add(', 'self.say('):
         assert phrase in overview
@@ -43,8 +43,12 @@ def test_friday_overview_is_source_oriented_and_unique_to_friday():
     assert 'CHALLENGES' in overview
     assert 'DEVELOPMENTS: CLASSICAL OPERATOR THEORY' in overview
     assert 'Six prerequisite theory areas' in overview
-    assert 'APPLICATIONS ENABLED' in overview
-    assert 'mathematical research' in overview
+    assert 'WHAT THE FOUNDATIONS ENABLE' in overview
+    assert 'Mathematical research in functional analysis' in overview
+    assert 'Jan--Feb:' in overview
+    assert 'June:' in overview
+    assert 'July--August:' in overview
+    assert 'Agent orchestration:' in overview
 
 
 def test_robot_is_svg_and_disclosure_is_title_only():
@@ -129,7 +133,7 @@ def test_vtk_finale_reuses_project_renderer_without_replacing_summary():
     assert 'vtk3d.write_still' in vtk
     assert 'vtk3d.write_movie' in vtk
     assert 'loop=True' in vtk
-    assert 'orbit.mp4' in vtk
+    assert 'finale-tilt.mp4' in vtk
 
 
 def test_slides_avoid_old_clutter_and_note_telemetry_limits():
