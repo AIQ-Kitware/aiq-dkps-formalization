@@ -186,14 +186,17 @@ class S00Title(DeckSlide):
             "answer it with four theorems; this deck is about the first, the sin Theta theorem."
         )
         title = tex(r"How far can an eigenvector turn?", size=64).move_to(UP * 1.9)
-        sub = tex(r"The Davis--Kahan $\sin\Theta$ theorem, in pictures", size=38, color=MUTED)
+        sub = tex(r"Lean formalization of the Davis--Kahan $\sin\Theta$ theorem", size=38, color=MUTED)
         sub.next_to(title, DOWN, buff=0.35)
         # The emoji is a vector graphic. Unicode emoji in tex() would be sent
         # to LaTeX and fail with the default font/engine.
         robot = SVGMobject(str(Path(__file__).resolve().parent / "assets" / "robot.svg"), height=0.36)
         assistance = VGroup(
-            robot, tex(r"Slides prepared with LLM assistance.", size=20, color=MUTED),
+            tex(r"Presented by Jon Crall.", size=20, color=MUTED), robot, tex(r"Slides prepared with LLM assistance.", size=20, color=MUTED),
         ).arrange(RIGHT, buff=0.15).next_to(sub, DOWN, buff=0.18)
+        link = VGroup(
+            tex(r"https://github.com/AIQ-Kitware/aiq-dkps-formalization", size=14, color=MUTED)
+        ).arrange(RIGHT, buff=0.15).next_to(assistance, DOWN, buff=0.18)
         ref = tex(
             r"C.~Davis and W.~M.~Kahan, \emph{The rotation of eigenvectors by a perturbation.~III},"
             r" SIAM J.~Numer.~Anal.~7 (1970)",
@@ -211,7 +214,7 @@ class S00Title(DeckSlide):
         theta = math(r"\sym{theta}", size=32).move_to(
             plane(2.05 * story.unit(pair.theta / 2 - 0.08))
         )
-        self.play(FadeIn(title, shift=DOWN * 0.2), FadeIn(sub), FadeIn(assistance))
+        self.play(FadeIn(title, shift=DOWN * 0.2), FadeIn(sub), FadeIn(assistance), FadeIn(link))
         self.play(Create(old), Create(axis_old), run_time=1.0)
         self.play(
             ReplacementTransform(old.copy(), new),
