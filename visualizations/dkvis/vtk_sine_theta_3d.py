@@ -929,6 +929,16 @@ def write_movie(name: str, out: Path, *, width: int = 1920, height: int = 1080, 
     """Render one of :data:`MOVIES` offscreen and encode it with ffmpeg."""
     state, seconds, step, orbit = MOVIES[name]
     scene = SineTheta3D(state, width=width, height=height, offscreen=True, interactive=False)
+    if name == "finale-tilt":
+        # Credit appears on the animated VTK frames, not on a duplicate intro
+        # slide. The right panel has open space below the theorem meter.
+        # Plane names are already spelled out in the HUD; hiding their 3D
+        # labels avoids collisions while the camera completes its full orbit.
+        scene.vtk_credit = Text2D(
+            scene.overlay, PANEL_X, 0.105,
+            size=scene.px(0.023), color=C["MUTED"],
+        )
+        scene.vtk_credit.set("Visualization rendered with VTK")
     n = int(round(seconds * fps))
     out.parent.mkdir(parents=True, exist_ok=True)
     cmd = [
@@ -945,6 +955,9 @@ def write_movie(name: str, out: Path, *, width: int = 1920, height: int = 1080, 
                 scene.update()
             if k and orbit:
                 scene.orbit(orbit / n)
+            if name == "finale-tilt":
+                scene.lbl_U.visible(False)
+                scene.lbl_V.visible(False)
             proc.stdin.write(scene.grab().tobytes())
     finally:
         proc.stdin.close()

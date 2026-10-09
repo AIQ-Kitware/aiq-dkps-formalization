@@ -1643,7 +1643,7 @@ class S07Theorem(DeckSlide):
         self.play(FadeIn(rows, lag_ratio=0.3))
 
         self.say(
-            "Rearranged: error is at most residual over separation. Notice what is absent: there is no original A "
+            "Rearranged: the subspace error is at most the residual norm divided by spectral separation. Notice what is absent: there is no original A "
             "and no perturbation H in the theorem itself. A hat is simply the operator whose exact frame F0 we want. "
             "On the next slide we add the extra perturbation structure A hat equals A plus H."
         )
@@ -1658,7 +1658,7 @@ class S07Theorem(DeckSlide):
         ).next_to(rows, DOWN, buff=0.24)
         scope = para(
             r"\textbf{GENERAL:} $\sym{Ahat}$, $\sym{E0}$, $\sym{A0}$, exact $\sym{F0}$/$\sym{F1}$, and $\sym{delta}$. "
-            r"\textbf{PERTURBATION SPECIALIZATION (next):} additionally set $\sym{Ahat}=\sym{A}+\sym{H}$ and choose "
+            r"\cx{perturb}{\textbf{PERTURBATION SPECIALIZATION (next):}} additionally set $\sym{Ahat}=\sym{A}+\sym{H}$ and choose "
             r"$\sym{E0},\sym{A0}$ from an exact wanted eigensystem of the original $\sym{A}$.",
             width=12.5,
             size=20,
@@ -2618,30 +2618,30 @@ class S14Summary(DeckSlide):
         items = [
             (
                 "1",
-                r"LLMs can sustain serious formalization",
-                r"All \textbf{29} selected results from Davis--Kahan (1970) were addressed: "
-                r"\textbf{28 proved} in Lean, and one refuted as printed (then repaired). "
-                r"The work reaches Hilbert-space functional analysis, including "
-                r"infinite-dimensional and unbounded-operator results.",
+                r"LLMs can formalize substantial mathematics",
+                r"Of the \textbf{29} major results explicitly proved in Davis--Kahan (1970), "
+                r"\textbf{28 are formalized in Lean}; the remaining proposition was "
+                r"refuted as printed and repaired. This is Hilbert-space functional analysis, "
+                r"including infinite-dimensional and unbounded operators.",
             ),
             (
                 "2",
-                r"Sine-theta: stability needs separation",
-                r"A small perturbation need not imply a small eigenspace change. "
-                r"When the relevant spectra are sufficiently separated, however, "
-                r"\textbf{subspace error is bounded by residual over separation}: "
+                r"Sine-theta gives an error bound",
+                r"When the trial eigenvalues are separated from the unwanted exact eigenvalues "
+                r"by $\sym{delta}>0$, the \textbf{subspace error is at most the residual "
+                r"norm divided by that separation}: "
                 r"$\norm{\sym{sinTheta0}(\sym{E0},\sym{F0})}"
                 r"\le\norm{\sym{R}}/\sym{delta}$. "
-                r"This can bound error relative to an \emph{unobserved} true eigenspace.",
+                r"This limits how far the trial eigenspace can deviate, even if the exact one is unknown.",
             ),
             (
                 "3",
-                r"A classical claim was too broad",
-                r"LLM-assisted review found a counterexample to Proposition~4.4's "
-                r"claim for \emph{every} unitarily invariant norm. The failure is "
-                r"limited to that breadth: for \textbf{$Q$-norms} (including operator "
-                r"and Frobenius), direct rotation remains optimal for acute pairs "
-                r"over $\mathbb{R}$ or $\mathbb{C}$, without the source's $60^\circ$ cutoff.",
+                r"A classical statement was too broad",
+                r"LLM-assisted review found a counterexample to Proposition~4.4's claim "
+                r"for \emph{every} unitarily invariant norm. The impact is limited: "
+                r"direct rotation is still optimal for acute pairs and \textbf{$Q$-norms} "
+                r"(including operator and Frobenius norms), over $\mathbb{R}$ or $\mathbb{C}$, "
+                r"without the paper's $60^\circ$ cutoff.",
             ),
         ]
         rows = VGroup()
@@ -2665,9 +2665,10 @@ class S14Summary(DeckSlide):
             "Lean proves twenty-eight at source scope. The remaining printed Proposition four point four "
             "is false and has a checked counterexample and repair. The work is functional analysis "
             "in Hilbert spaces, not just finite matrices. Second, the intuition for sine theta is "
-            "that a perturbation only gives a useful guarantee when the wanted and unwanted "
-            "spectra are separated. The bound controls an eigenspace error by a residual "
-            "divided by separation, and can even certify closeness to an underlying true "
+            "that a perturbation only gives a useful guarantee when the trial eigenvalues "
+            "are separated from the exact unwanted eigenvalues. The error in the eigenspace "
+            "is at most the residual norm divided by that positive spectral separation, "
+            "and can even certify closeness to an underlying true "
             "eigenspace whose vectors are unknown. Third, the agent-assisted search "
             "found a counterexample to a claim in a classical, widely cited paper. "
             "The consequence is limited: the failure is of the universal choice of "
