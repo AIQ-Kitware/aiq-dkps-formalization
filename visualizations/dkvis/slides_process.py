@@ -118,7 +118,7 @@ class W01Workflow(DeckSlide):
         )
         in_items = VGroup(
             tex(r"\textbf{Inputs}", size=24, color=FG),
-            para(r"\textbf{target theorem}, e.g.\ the $\sin\Theta$ theorem", width=2.0, size=18),
+            para(r"\textbf{target theorem}, e.g.\ the Davis--Kahan $\sin\Theta$ theorem", width=2.0, size=18),
             para(r"\textbf{fidelity criteria}: scope and stop conditions", width=2.0, size=18),
             para(r"\textbf{references}: paper PDFs and transcriptions", width=2.0, size=18),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.3).move_to([-6.85, top - 0.15, 0], aligned_edge=UP + LEFT)
@@ -165,7 +165,7 @@ class W01Workflow(DeckSlide):
             Line(np.array([x_acc, review[0].get_bottom()[1], 0]), np.array([x_acc, y_acc, 0]), color=FG, stroke_width=4),
             arrow(np.array([x_acc, y_acc, 0]), np.array([outputs.get_left()[0], y_acc, 0]), FG),
         )
-        acc_lbl = tex(r"accepted", size=19, color=FG).next_to(accepted[1], DOWN, buff=0.05)
+        acc_lbl = tex(r"accepted", size=18, color=FG).move_to([2.6, y_acc + 0.18, 0])
 
         roles = VGroup(
             para(
@@ -185,16 +185,19 @@ class W01Workflow(DeckSlide):
             "what scope counts as done, and the source paper. A target is decomposed into intermediate results, we "
             "search existing libraries before building, and agents write the Lean."
         )
-        self.play(FadeIn(inputs), Create(loop_box), FadeIn(loop_title))
-        self.play(FadeIn(decompose), GrowArrow(a1), FadeIn(find), GrowArrow(a2), FadeIn(formalize))
+        self.play(FadeIn(inputs, loop_box, loop_title))
+        # Show the stages first, then connect them: simultaneous arrow growth
+        # alongside box entrances previously obscured the order of the loop.
+        self.play(FadeIn(decompose, find, formalize))
+        self.play(FadeIn(a1, a2))
 
         self.say(
             "Lean's compiler drives revision. Then a separate review compares the theorem statement with the source. "
             "That step exists because proof-producing models often report success on a statement that is not the "
             "paper's. A mismatch sends the target back to an earlier stage."
         )
-        self.play(GrowArrow(a3), FadeIn(compile_), GrowArrow(a4), FadeIn(review))
-        self.play(Create(back), FadeIn(back_lbl))
+        self.play(FadeIn(compile_, review))
+        self.play(FadeIn(a3, a4, back, back_lbl))
 
         self.say(
             "Accepted targets become checked theorems, and the general mathematics built along the way becomes "
@@ -204,7 +207,7 @@ class W01Workflow(DeckSlide):
             "libraries. Lean's Comparator tool checks that the proofs establish exactly those statements with only "
             "the standard axioms. Yu, Wang and Samworth are packaged the same way."
         )
-        self.play(Create(accepted), FadeIn(acc_lbl), FadeIn(outputs), FadeIn(out_items))
+        self.play(FadeIn(accepted, acc_lbl, outputs, out_items))
 
         self.say(
             "Who did what: the humans chose targets and judged statements, and could intervene at every return "
@@ -246,31 +249,41 @@ class W02TwoChecks(DeckSlide):
             (
                 r"\textbf{Weaker claim.}",
                 r"``all doohickeys are excellent'' becomes ``all special doohickeys are quasi-excellent.'' "
-                r"The new theorem may be true and compile while no longer matching the source.",
+                r"A valid proof can establish a different claim.",
             ),
             (
                 r"\textbf{Reported done too early.}",
-                r"an agent proves a valid theorem for bounded operators only, or finite dimensions, or a narrower gap, "
-                r"and describes the task as complete.",
+                r"an agent proves only a bounded, finite-dimensional, or narrower-gap version, "
+                r"then reports completion.",
             ),
             (
                 r"\textbf{Extra hypothesis.}",
-                r"an early $\tan\Theta$ endpoint asked its caller for a dimension condition the paper imposes only from "
-                r"Section~3 on; the repaired endpoint derives it from the tangent being defined.",
+                r"an early $\tan\Theta$ statement required a dimension condition "
+                r"that the repaired proof derives.",
             ),
         ]
         lines = VGroup()
         for key, text in rows:
-            k = tex(key, size=21, color=FG)
-            b = para(text, width=10.4, size=21)
+            k = tex(key, size=20, color=FG)
+            b = para(text, width=10.7, size=20)
             lines.add(VGroup(k, b))
         key_w = max(r[0].width for r in lines)
         for r in lines:
             r[1].next_to(r[0], RIGHT, buff=0.25, aligned_edge=UP)
             r[1].shift(RIGHT * (key_w - r[0].width))
-        lines.arrange(DOWN, aligned_edge=LEFT, buff=0.22).next_to(head, DOWN, aligned_edge=LEFT, buff=0.25)
+        lines.arrange(DOWN, aligned_edge=LEFT, buff=0.14).next_to(head, DOWN, aligned_edge=LEFT, buff=0.18)
         for r in lines:
             fit_right(r)
+
+        # IEEE-style credit for the specific illustrative example. Put it
+        # above the footer, with a short persistent answer URL.
+        chow_citation = tex(
+            r"Adapted from [1] T. Y. Chow, ``Should We Trust AI-Generated Formal Proofs in Lean 4?,'' "
+            r"MathOverflow (2026). https://mathoverflow.net/a/513567",
+            size=14, color=MUTED,
+        )
+        chow_citation.move_to([-6.58, -3.05, 0], aligned_edge=UP + LEFT)
+        fit_right(chow_citation)
 
         self.say(
             "Two different questions. Lean's kernel answers whether the proof establishes the stated proposition; "
@@ -291,7 +304,7 @@ class W02TwoChecks(DeckSlide):
             "finite-dimensional versions and reported the job done. And one early tan Theta statement asked for an "
             "extra hypothesis from a later section of the paper; the repaired statement derives it."
         )
-        self.play(FadeIn(head), FadeIn(lines))
+        self.play(FadeIn(head), FadeIn(lines), FadeIn(chow_citation))
 
 
 # ----------------------------------------------------------------------------
@@ -479,8 +492,7 @@ class W04Reversals(DeckSlide):
             width=w, size=size,
         )
         caveat = para(
-            r"No error taxonomy was fixed in advance and the reviews were not blinded, so these counts are a "
-            r"retrospective record, not an error rate.",
+            r"The review categories emerged during the project, and the reviews were not blinded.",
             width=w, size=size - 1, color=MUTED,
         )
         bottom = VGroup(causes, caveat).arrange(DOWN, aligned_edge=LEFT, buff=0.12).move_to([-6.85, -1.75, 0], aligned_edge=UP + LEFT)
@@ -502,8 +514,8 @@ class W04Reversals(DeckSlide):
         self.say(
             "None of these were broken proofs. The proofs stayed valid; the claim that they were the paper's theorem "
             "did not. Typical causes: a gap hypothesis narrower than the paper's, a directed angle where the paper "
-            "meant the ambient one, or the review record pointing at the wrong declaration. This is a record, not a "
-            "measured error rate."
+            "meant the ambient one, or the review record pointing at the wrong declaration. "
+            "Review categories were developed as the work progressed."
         )
         self.play(FadeIn(bottom))
 
@@ -607,45 +619,39 @@ class W06Claims(DeckSlide):
 
     def body(self) -> None:
         top = self.content_top - 0.15
-        size = 21
+        size = 19
         sup = titled_card(
             "Supported",
             r"$\bullet$ every result reported here is checked by Lean's kernel\\[0.25em]"
             r"$\bullet$ 28 of the 29 results proved at the paper's scope; Proposition~4.4 refuted, with a proved repair\\[0.25em]"
             r"$\bullet$ compilation and source comparison were tracked separately, and the comparison caught real "
             r"mismatches in checked statements\\[0.25em]"
-            r"$\bullet$ repeated failure to prove Proposition~4.4 led to analyzing the claim, and to the counterexample",
-            6.6, 4.0, STAGE, size=size,
-        ).move_to([-3.45, top - 2.0, 0])
+            r"$\bullet$ repeated failure on Proposition~4.4 led to the counterexample\\[0.25em]"
+            r"$\bullet$ many commits retain token telemetry, allowing partial estimates of LLM use",
+            6.6, 4.75, STAGE, size=size,
+        ).move_to([-3.45, top - 2.375, 0])
         nots = titled_card(
-            "Not established",
-            r"$\bullet$ no baseline: no comparison with compile-only, human-only or other workflows\\[0.25em]"
+            "Limitations",
+            r"$\bullet$ no baseline comparison with compile-only, human-only or other workflows\\[0.25em]"
             r"$\bullet$ no blind or independent expert review of the 29 source comparisons\\[0.25em]"
-            r"$\bullet$ no residual error rate: ``29/29'' is the project's own current judgment\\[0.25em]"
-            r"$\bullet$ the workflow emerged during the project; it was not designed in advance",
-            6.6, 4.0, FRAME, size=size,
-        ).move_to([3.45, top - 2.0, 0])
-        moral = para(
-            r"Read each conclusion together with the hypotheses and definitions that set its scope. Deciding whether a "
-            r"checked statement is the intended mathematics stays with the people responsible for it.",
-            width=13.4, size=22, align="centering",
-        ).move_to([0, top - 4.55, 0], aligned_edge=UP)
-
+            r"$\bullet$ ``29/29'' is the project's own current judgment, without external validation\\[0.25em]"
+            r"$\bullet$ the workflow emerged during the project; it was not designed in advance\\[0.25em]"
+            r"$\bullet$ token telemetry is absent from many commits, limiting cost estimates",
+            6.6, 4.75, FRAME, size=size,
+        ).move_to([3.45, top - 2.375, 0])
         self.say(
             "What the evidence supports: every reported result is kernel checked; 28 of 29 are proved at the paper's "
             "scope and Proposition 4.4 is refuted and repaired; keeping compilation and source comparison separate "
-            "caught real mismatches; and failing to prove 4.4 is what led to the counterexample."
+            "caught real mismatches; failing to prove 4.4 led to the counterexample; and telemetry from many "
+            "commits gives partial evidence of LLM usage and cost."
         )
         self.play(FadeIn(sup))
 
         self.say(
-            "What it does not establish: there was no baseline, no blind or independent human expert review (there was blind LLM review), and no error "
-            "rate. 29 out of 29 is our own current judgment. This is one project's experience."
+            "Limitations: no baseline comparison, no blind or independent expert review of the 29 source comparisons, "
+            "and no external validation of the project's own 29 out of 29 assessment. The workflow was developed during the project, "
+            "and token telemetry is missing for many commits, making cost estimates incomplete."
         )
         self.play(FadeIn(nots))
 
-        self.say(
-            "The practical advice: read each conclusion with the hypotheses and definitions that set its scope. "
-            "Whether a checked statement is the intended mathematics remains a human responsibility."
-        )
-        self.play(FadeIn(moral))
+

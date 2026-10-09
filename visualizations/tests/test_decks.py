@@ -52,9 +52,12 @@ def test_working_decks_have_distinct_purposes():
     assert "P02Counterexample" in friday
     assert "F04TanTwoTheta" not in friday
     assert "F04TanTwoTheta" in study
-    # Friday states the general theorem, immediately reconnects it to A + H,
-    # then explains the residual-over-separation mechanism.
-    assert friday.index("S07Theorem") < friday.index("S11Payoff") < friday.index("S08Why")
+    # Friday states the general theorem and reconnects it to A + H, then
+    # presents Proposition 4.4 before the source-audit retrospective.
+    assert friday.index("S07Theorem") < friday.index("S11Payoff") < friday.index("S12Lean")
+    assert "S08Why" not in friday
+    assert friday.index("P03Why") < friday.index("P04LeanRefutation") < friday.index("W02TwoChecks")
+    assert friday.index("W02TwoChecks") < friday.index("W04Reversals") < friday.index("W06Claims")
     assert len(study) > len(friday)
 
 
@@ -70,4 +73,4 @@ def test_sine_theta_notation_contract():
     assert r"\sym{V}" not in source
 
     friday = get_deck("friday").scene_names
-    assert friday.index("S07Theorem") < friday.index("S11Payoff") < friday.index("S08Why")
+    assert friday.index("S07Theorem") < friday.index("S11Payoff")
