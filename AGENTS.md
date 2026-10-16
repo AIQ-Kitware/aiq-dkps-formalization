@@ -83,7 +83,15 @@ compile at all. Counts of rows are not counts of progress.
 When this repo is a virtiofs share (AIVM guest VMs), put `.lake` on VM-local ext4
 with `submodules/aiq-lean-formalization-tools/scripts/setup-lake-cache.sh` (caches
 under `/var/cache/lake`); the mount does not survive a reboot, so re-apply with
-its `--all`.
+its `--all`. Verify the current state with `scripts/setup-lake-cache.sh --status`
+(run from the repo root): it must print `.lake: bind-mounted` over a local
+filesystem — `plain directory ... NOT cached` means the policy is not in
+effect, and `SYMLINK` is the old pattern the script refuses. Use `--unmount`
+to restore the shared `.lake`. Verify the current state with `scripts/setup-lake-cache.sh --status`
+(run from the repo root): it must print `.lake: bind-mounted` over a local
+filesystem — `plain directory ... NOT cached` means the policy is not in
+effect, and `SYMLINK` is the old pattern the script refuses. Use `--unmount`
+to restore the shared `.lake`.
 
 ## Lean proof-engineering rules
 
