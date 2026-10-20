@@ -19,6 +19,7 @@ import DavisKahan.Sources.DavisKahan1970.GeneralSinThetaExtensions
 import DavisKahan.Sources.DavisKahan1970.PartIII
 import DavisKahan.Sources.DavisKahan1970.PartIIIPresentation
 import DavisKahan.Sources.DavisKahan1970.SineTheta.Presentation
+import DavisKahan.Sources.DavisKahan1970.SineTheta.ExplicitSeparationPresentation
 import DavisKahan.Sources.DavisKahan1970.Proposition61
 import DavisKahan.Sources.DavisKahan1970.ScalarGenericFinite
 import DavisKahan.Sources.DavisKahan1970.Section1
