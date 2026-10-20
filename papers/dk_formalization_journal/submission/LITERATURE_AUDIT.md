@@ -57,19 +57,23 @@ particular item. This is evidence that the assertion was repeated; it is not
 a claim that the paper's main Grassmann-metric theorems fail. The cited
 bibliographic year is 2005, with the online date recorded separately.
 
-## 4. Zhang and Qiu (2010): unresolved exact passage
+## 4. Zhang and Qiu (2010): checked direct-rotation norm comparison
 
 Y. Zhang and L. Qiu, From subadditive inequalities of singular values to triangle
 inequalities of canonical angles, SIAM Journal on Matrix Analysis and
 Applications 31(4), 1606--1620.
 https://doi.org/10.1137/09074841X
 
-The earlier conversation attributed an explicit trace-norm-failure remark to
-Section 4. Metadata and the article's broad subject were confirmed in this
-revision, but that exact passage was not independently retrieved. An accessible
-item under a related search result was an author's lecture slide set, not the
-article. The manuscript does not cite that unverified passage as evidence.
-Checking the full article could further narrow the novelty description.
+The published article was inspected directly (Section 4, printed p. 1615; PDF
+page 10). The authors state that direct rotations minimize Frobenius-norm
+displacement among unitary maps between two subspaces. They note explicitly
+that trace-norm displacement is not generally minimized by direct rotations;
+for spectral-norm displacement, additional minimizers may exist. The passage
+attributes the underlying direct-rotation theory to Davis and Kahan [5],
+but does not identify Proposition 4.4 as false or examine the specific real
+pi/3 angle restriction. The passage establishes that the general trace-norm
+limitation was known by 2010; it does not establish priority for the
+short-angle refutation.
 
 ## Claims the manuscript makes
 
