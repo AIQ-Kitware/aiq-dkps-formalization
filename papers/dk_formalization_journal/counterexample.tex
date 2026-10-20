@@ -1,0 +1,220 @@
+\section{Proposition 4.4: failure at arbitrarily small angles}
+\label{sec:prop44}
+
+Write $P$ and $Q$ for the orthogonal projections onto two subspaces $U$ and
+$V$. In the finite-dimensional acute case the canonical direct rotation is
+the orthogonal factor in the polar decomposition of
+\[
+ T=QP+(I-Q)(I-P).
+\]
+A unitarily invariant norm depends only on singular values; in particular,
+the trace norm is $\|X\|_1=\sum_j s_j(X)$. Proposition~4.4 of
+\citet{davis1970rotation} asserts that, for real subspaces with largest
+principal angle at most $\pi/3$, the direct rotation minimizes $\|I-W\|$
+over orthogonal maps $W$ satisfying $WU=V$, for every such norm.
+A real finite-dimensional counterexample therefore refutes the printed claim.
+
+\subsection{An explicit one-parameter family}
+
+\begin{theorem}[Trace-norm failure throughout the acute angle range]
+\label{thm:small-angle}
+For every $0<\theta<\pi/2$, there are two-dimensional subspaces
+$U,V_\theta\subset\mathbb R^4$ and an orthogonal map $W_\theta$ with
+$W_\theta U=V_\theta$, such that both principal angles equal $\theta$ and
+the canonical direct rotation $R_\theta$ satisfies
+\begin{align}
+ \|I-W_\theta\|_1&=4\sin\theta,\label{eq:competitor-trace}\\
+ \|I-R_\theta\|_1&=8\sin(\theta/2)>4\sin\theta.
+ \label{eq:direct-trace}
+\end{align}
+\end{theorem}
+
+\begin{proof}
+Put $c=\cos\theta$, $s=\sin\theta$, and let
+\[
+ J=\begin{pmatrix}0&-1\\1&0\end{pmatrix},\quad
+ C=\cos(2\theta)I_2+\sin(2\theta)J,\quad
+ H=\frac{1}{\sqrt2}\begin{pmatrix}I_2&I_2\\I_2&-I_2\end{pmatrix}.
+\]
+Define
+\begin{equation}
+ W_\theta=H\begin{pmatrix}C&0\\0&I_2\end{pmatrix}H^T
+ =\begin{pmatrix}c^2I_2+scJ&-s^2I_2+scJ\\
+                  -s^2I_2+scJ&c^2I_2+scJ\end{pmatrix}.
+ \label{eq:wtheta}
+\end{equation}
+Both $H$ and $C$ are orthogonal, so $W_\theta$ is orthogonal. Let
+$U=\mathbb R^2\oplus\{0\}$ and $V_\theta=W_\theta U$.
+The first two columns of $W_\theta$ factor as
+\[
+ \begin{pmatrix}c^2I_2+scJ\\-s^2I_2+scJ\end{pmatrix}
+ =\begin{pmatrix}cI_2\\sJ\end{pmatrix}(cI_2+sJ).
+\]
+Since $cI_2+sJ$ is orthogonal, the columns of
+$Y=\binom{cI_2}{sJ}$ form an orthonormal basis of $V_\theta$.
+With $X=\binom{I_2}{0}$, one has $X^TY=cI_2$.
+Thus both principal cosines are $c>0$, and both principal angles are
+$\theta$.
+
+The corresponding projections and canonical intertwiner are
+\[
+ P=\begin{pmatrix}I_2&0\\0&0\end{pmatrix},\qquad
+ Q=YY^T=\begin{pmatrix}c^2I_2&-scJ\\scJ&s^2I_2\end{pmatrix},
+\]
+\begin{equation}
+ T=QP+(I-Q)(I-P)
+   =c\begin{pmatrix}cI_2&sJ\\sJ&cI_2\end{pmatrix}.
+ \label{eq:intertwiner-theta}
+\end{equation}
+The last block matrix is orthogonal and $c>0$, so $|T|=cI_4$ and
+its polar factor is exactly
+\[
+ R_\theta=\begin{pmatrix}cI_2&sJ\\sJ&cI_2\end{pmatrix}.
+\]
+In particular, this calculation identifies the canonical direct rotation
+of the constructed pair. Since $R_\theta+R_\theta^T=2cI_4$,
+\[
+ (I-R_\theta)^T(I-R_\theta)=(2-2c)I_4.
+\]
+Consequently all four displacement singular values equal
+$\sqrt{2-2c}=2\sin(\theta/2)$.
+
+On the other hand, \cref{eq:wtheta} shows that the singular values of
+$I-W_\theta$ are those of $(I_2-C)\oplus0_2$.
+The identity
+$(I_2-C)^T(I_2-C)=4s^2I_2$ gives the list
+$(2s,2s,0,0)$. The two trace formulas follow. Finally,
+\[
+ 4\sin\theta
+ =8\sin(\theta/2)\cos(\theta/2)
+ <8\sin(\theta/2),
+\]
+because $0<\theta/2<\pi/4$.
+\end{proof}
+
+\begin{corollary}[No positive short-angle threshold]
+\label{cor:no-threshold}
+For every $\varepsilon>0$, there are real two-dimensional subspaces of
+$\mathbb R^4$ whose largest principal angle is strictly between zero and
+$\varepsilon$ and is at most $\pi/3$, together with an orthogonal competitor
+having strictly smaller trace-norm displacement than the direct rotation.
+\end{corollary}
+
+\begin{proof}
+Apply \cref{thm:small-angle} with
+$\theta=\min\{\varepsilon/2,\pi/4\}$.
+\end{proof}
+
+The direct rotation distributes its rotation over two principal planes;
+$W_\theta$ rotates the diagonal plane $\{(x,x):x\in\mathbb R^2\}$ by
+$2\theta$ and fixes its orthogonal complement. The latter displacement has
+rank two, whereas the direct displacement has rank four. For this pair,
+\[
+ \frac{\|I-W_\theta\|_1}{\|I-R_\theta\|_1}=\cos(\theta/2).
+\]
+The ratio tends to one as $\theta$ tends to zero, but the inequality is strict
+at every positive angle in the construction. The competitor is used only to
+refute minimality; no claim that it is a global trace-norm minimizer is needed.
+The operator norm exhibits the opposite comparison:
+$\|I-W_\theta\|_{\rm op}=2\sin\theta$
+exceeds $\|I-R_\theta\|_{\rm op}=2\sin(\theta/2)$.
+The failure therefore depends on the norm class.
+
+\subsection{The checked short-angle witness and the failed proof step}
+
+At $\theta=\pi/4$, the family gives
+\[
+ W_{\pi/4}=\frac12
+ \begin{pmatrix}
+ 1&-1&-1&-1\\1&1&1&-1\\-1&-1&1&-1\\1&-1&1&1
+ \end{pmatrix}.
+\]
+The two trace norms are
+\[
+ \|I-W_{\pi/4}\|_1=2\sqrt2
+ <4\sqrt{2-\sqrt2}=\|I-R_{\pi/4}\|_1.
+\]
+The construction, acuteness, principal-angle bound, singular-value
+calculations, and strict inequality for this witness are checked in Lean.
+Appendix~\ref{app:small-angle-artifact} identifies the corresponding files
+and the separate parameterized proof source.
+
+For $K=I-W_{\pi/4}$, let $\Omega_1$ and $\Omega_2$ be the projections onto
+$\operatorname{span}\{e_0,e_3\}$ and
+$\operatorname{span}\{e_1,e_2\}$. These are principal planes for the pair.
+Davis and Kahan's equation~(4.3), applied to this configuration, requires
+\begin{equation}
+ \|K\|_{(4)}\geq
+ \|K\Omega_1\|_{(2)}+\|K\Omega_2\|_{(2)},
+ \label{eq:dk43-false}
+\end{equation}
+where $\|\cdot\|_{(j)}$ denotes the Ky Fan $j$-norm.
+The checked calculations give
+\[
+ \|K\|_{(4)}=2\sqrt2,\qquad
+ \|K\Omega_1\|_{(2)}=\|K\Omega_2\|_{(2)}=2.
+\]
+Thus \cref{eq:dk43-false} would imply $2\sqrt2\geq4$.
+The domain planes are orthogonal, but their images under $K$ need not be;
+the singular-value sums of these restrictions cannot be added in the
+asserted direction.
+
+\subsection{What the squared-displacement theorem does imply}
+
+Call a unitarily invariant norm $N$ a $Q$-norm when there is a unitarily
+invariant norm $M$ satisfying
+\begin{equation}
+ N(Z)^2=M(Z^*Z)\qquad\text{for every }Z.
+ \label{eq:qnorm-def}
+\end{equation}
+
+\begin{proposition}[$Q$-norm consequence of Davis--Kahan Proposition~4.3]
+\label{prop:qnorm-repair}
+Let $U,V$ be an acute pair of subspaces of a finite-dimensional real or
+complex Hilbert space, and let $R$ be their canonical direct rotation.
+For every $Q$-norm $N$ and every orthogonal or unitary map $W$ with $WU=V$,
+\begin{equation}
+ N(I-R)\leq N(I-W).
+ \label{eq:qnorm-repair}
+\end{equation}
+No $\pi/3$ restriction is required.
+\end{proposition}
+
+\begin{proof}
+The valid squared-displacement theorem gives
+\[
+ M((I-R)^*(I-R))\leq M((I-W)^*(I-W)).
+\]
+By \cref{eq:qnorm-def}, these quantities are $N(I-R)^2$ and $N(I-W)^2$.
+Both norm values are nonnegative, so taking square roots proves the claim.
+\end{proof}
+
+This implication is formalized for the finite-dimensional real/complex
+unitarily invariant seminorm interface. The trace norm on the counterexample
+space is also formally shown to fail the $Q$-norm predicate. The formal
+result makes no identification of that predicate with additional named norm
+families unless the corresponding identity is proved.
+
+\subsection{Relationship to prior norm-minimization results}
+
+Bolotnikov, Li, and Rodman \citep[Theorem~3.1]{bolotnikov2001minimal}
+study unitary completion and prove a $Q$-norm minimization principle.
+Their Lemma~3.3 gives a $2\times2$ example with a right-angle rotation and
+complex diagonal competitors showing failure for Schatten $p$-norms with
+$1\leq p<2$. These results already establish the need to distinguish
+norm classes. The $Q$-norm principle therefore precedes the present
+formalization. The right-angle example with complex diagonal competitors
+does not itself contradict the real short-angle restriction.
+
+Qiu, Zhang, and Li \citep[Section~5]{qiu2006grassmann} list three extremal
+properties attributed to Davis and Kahan. Their third item asserts
+full-displacement minimality under the $\pi/3$ bound for every unitarily
+invariant norm. The real family in \cref{thm:small-angle} contradicts that
+item as well as the original proposition. Its conclusion concerns this
+specific extremal assertion; it does not refute the sine-theta bounds or
+assert a failure of the main Grassmann-metric results in that article.
+
+The correction established here gives explicit real witnesses under every
+positive angle threshold and identifies the failed equation~(4.3).
+We do not assert historical priority for the underlying trace-norm failure.
+The $Q$-norm repair follows from established squared-displacement theory.
