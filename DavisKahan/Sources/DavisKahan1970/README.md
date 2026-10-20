@@ -36,6 +36,20 @@ unqualified short names `sinTheta`, `tanTheta`, `sinTwoTheta`, and `tanTwoTheta`
 are reserved for scalar-generic endpoints carrying the ledger-selected statement
 boundary and remain unbound when no such endpoint has been promoted.
 
+## Expert-readable sine-theta statement
+
+`SineTheta/ExplicitSeparationPresentation.lean` states the real/complex,
+possibly unbounded sine-theta estimate with the residual and exact-block
+relations explicit. Its separation assumption spells out the interval/exterior
+and two ordered semibounded alternatives without introducing an extra
+presentation-specific gap alias. The short proof packages the hypotheses for
+the previously proved estimate in `SineTheta/Presentation.lean`.
+
+The accompanying review questions are in
+`docs/semantic-alignment/davis-kahan-sin-theta-sme-review.md`. Compilation
+establishes the stated implication, but does not by itself establish exact
+correspondence with the 1970 source, in particular the complete norm class.
+
 ## Production source aggregate
 
 `DavisKahan/Sources/DavisKahan1970/All.lean` is the stable aggregate for the
